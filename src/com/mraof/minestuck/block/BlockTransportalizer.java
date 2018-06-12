@@ -2,10 +2,11 @@ package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiHandler;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.TabMinestuck;
 import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,7 +26,7 @@ public class BlockTransportalizer extends BlockContainer
 	public BlockTransportalizer()
 	{
 		super(Material.IRON);
-		this.setCreativeTab(MinestuckItems.tabMinestuck);
+		this.setCreativeTab(TabMinestuck.instance);
 		this.setUnlocalizedName("transportalizer");
 		this.setHardness(3.0F);
 		setHarvestLevel("pickaxe", 0);
@@ -84,4 +85,9 @@ public class BlockTransportalizer extends BlockContainer
 		return true;
 	}
 	
+	@Override
+	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face)
+	{
+		return BlockFaceShape.UNDEFINED;
+	}
 }

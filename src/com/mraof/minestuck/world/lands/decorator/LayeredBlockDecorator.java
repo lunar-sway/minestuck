@@ -81,8 +81,8 @@ public class LayeredBlockDecorator implements ILandDecorator
 		
 		if(height == 8)
 		{
-			IBlockState fullBlock = ((BlockLayered) block).fullBlock;
-			world.setBlockState(pos, fullBlock, 2);
+			IBlockState full_block = ((BlockLayered) block).full_block;
+			world.setBlockState(pos, full_block, 2);
 		}
 		else
 		{

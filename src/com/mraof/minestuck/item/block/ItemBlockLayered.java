@@ -21,7 +21,7 @@ public class ItemBlockLayered extends ItemBlock
 	public ItemBlockLayered(Block par1)
 	{
 		super(par1);
-		theBlock = ((BlockLayered)par1).fullBlock;
+		theBlock = ((BlockLayered)par1).full_block;
 	}
 	
 	@Override

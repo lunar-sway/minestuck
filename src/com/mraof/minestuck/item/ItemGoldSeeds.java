@@ -17,7 +17,7 @@ public class ItemGoldSeeds extends ItemSeeds
 	public ItemGoldSeeds()
 	{
 		super(MinestuckBlocks.blockGoldSeeds, Blocks.FARMLAND);
-		setCreativeTab(MinestuckItems.tabMinestuck);
+		setCreativeTab(TabMinestuck.instance);
 	}
 	
 	@Override

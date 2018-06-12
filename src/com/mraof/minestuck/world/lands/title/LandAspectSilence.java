@@ -1,18 +1,19 @@
 package com.mraof.minestuck.world.lands.title;
 
-import java.util.Random;
-
+import com.mraof.minestuck.world.lands.decorator.SingleBlockDecorator;
+import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
+import net.minecraft.block.BlockColored;
 import net.minecraft.block.BlockPumpkin;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-import com.mraof.minestuck.world.lands.decorator.SingleBlockDecorator;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
+import java.util.Random;
 
 public class LandAspectSilence extends TitleLandAspect
 {
@@ -30,7 +31,7 @@ public class LandAspectSilence extends TitleLandAspect
 	}
 	
 	@Override
-	protected void prepareChunkProvider(ChunkProviderLands chunkProvider)
+	public void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.dayCycle = 2;
 		
@@ -39,8 +40,9 @@ public class LandAspectSilence extends TitleLandAspect
 	}
 	
 	@Override
-	protected void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
+	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
+		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.BLACK));
 		chunkProvider.decorators.add(new PumpkinDecorator());
 		if(chunkProvider.blockRegistry.getCustomBlock("torch") == null)
 			chunkProvider.blockRegistry.setBlockState("torch", Blocks.REDSTONE_TORCH.getDefaultState());
@@ -49,7 +51,7 @@ public class LandAspectSilence extends TitleLandAspect
 	@Override
 	public boolean isAspectCompatible(TerrainLandAspect aspect)
 	{
-		return (aspect.getWeatherType() == -1 || (aspect.getWeatherType() & 1) != 0)/*rain is noisy*/ && aspect.getDayCycleMode() != 1;
+		return (aspect.getWeatherType() == -1 || (aspect.getWeatherType() & 1) == 1)/*snow is quiet, rain is noisy*/ && aspect.getDayCycleMode() != 1;
 	}
 	
 	private static class PumpkinDecorator extends SingleBlockDecorator

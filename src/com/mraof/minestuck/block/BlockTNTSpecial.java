@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.TabMinestuck;
 import net.minecraft.block.BlockTNT;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -23,7 +23,7 @@ public class BlockTNTSpecial extends BlockTNT
 	public BlockTNTSpecial(boolean primed, boolean unstable, boolean instant)
 	{
 		super();
-		setCreativeTab(MinestuckItems.tabMinestuck);
+		setCreativeTab(TabMinestuck.instance);
 		setHardness(0.0F);
 		setSoundType(SoundType.PLANT);
 		this.primed = primed;

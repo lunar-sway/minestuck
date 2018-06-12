@@ -11,11 +11,6 @@ import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 
 public abstract class TitleLandAspect implements ILandAspect<TitleLandAspect>
 {
-	
-	protected abstract void prepareChunkProvider(ChunkProviderLands chunkProvider);
-
-	protected abstract void prepareChunkProviderServer(ChunkProviderLands chunkProvider);
-	
 	public boolean isAspectCompatible(TerrainLandAspect aspect)
 	{
 		return true;
@@ -24,9 +19,15 @@ public abstract class TitleLandAspect implements ILandAspect<TitleLandAspect>
 	public ChunkProviderLands createChunkProvider(WorldProviderLands land)
 	{
 		ChunkProviderLands chunkProvider = new ChunkProviderLands(land.getWorld(), land, land.getWorld().isRemote);
+		TerrainLandAspect terrain = land.landAspects.aspectTerrain;
+		
 		prepareChunkProvider(chunkProvider);
+		terrain.prepareChunkProvider(chunkProvider);
 		if(!land.getWorld().isRemote)
+		{
 			prepareChunkProviderServer(chunkProvider);
+			terrain.prepareChunkProviderServer(chunkProvider);
+		}
 		chunkProvider.createBiomeGen();
 		return chunkProvider;
 	}
@@ -50,5 +51,10 @@ public abstract class TitleLandAspect implements ILandAspect<TitleLandAspect>
 	{
 		return null;
 	}
+	
+	@Override
+	public void prepareChunkProvider(ChunkProviderLands chunkProvider){}
+	@Override
+	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider){}
 	
 }

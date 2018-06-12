@@ -5,16 +5,20 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
+import java.util.function.BiConsumer;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.util.CoordPair;
+import com.mraof.minestuck.world.lands.decorator.MesaDecorator.BlockRestorer;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 public class RockDecorator extends BiomeSpecificDecorator
 {
+	private boolean stomps=false;
 	
 	@Override
 	public int getCount(Random random)
@@ -33,6 +37,7 @@ public class RockDecorator extends BiomeSpecificDecorator
 		float plateauSize = 0.2F + random.nextFloat()*(height/25F);
 		
 		BlockPos nodePos = generateRock(pos.up(height), height, plateauSize, world, random, provider);
+		stomps = false;
 		
 /*		float rockRarity = plateauSize + height/15F + random.nextFloat()*0.5F - 0.5F;
 		
@@ -55,6 +60,7 @@ public class RockDecorator extends BiomeSpecificDecorator
 		float plateauSize = rand.nextFloat()*plateauOld*0.75F;
 		
 		generateRock(newPos, height, plateauSize, world, rand, provider);
+		stomps = false;
 	}
 	
 	private BlockPos generateRock(BlockPos rockPos, int height, float plateauSize, World world, Random random, ChunkProviderLands provider)
@@ -64,8 +70,12 @@ public class RockDecorator extends BiomeSpecificDecorator
 		
 		Map<CoordPair, Integer> heightMap = new HashMap<CoordPair, Integer>();
 		Queue<BlockPos> toProcess = new LinkedList<BlockPos>();
+		Map<BlockPos, IBlockState> was = new HashMap<BlockPos, IBlockState>();
 		toProcess.add(rockPos);
 		toProcess.add(null);
+		
+		stomps = false;
+		
 		while(!toProcess.isEmpty())	//place the top layer of blocks
 		{
 			BlockPos pos = toProcess.remove();
@@ -78,6 +88,12 @@ public class RockDecorator extends BiomeSpecificDecorator
 					toProcess.add(null);
 					continue;
 				}
+			
+			if(provider.villageHandler.isPositionInStructure(world, pos) || provider.structureHandler.isPositionInStructure(world, pos))
+			{
+				stomps = true;
+				break;
+			}
 			
 			if(random.nextFloat()*xSlope < plateauSize)
 				toProcess.add(pos.west());
@@ -97,11 +113,11 @@ public class RockDecorator extends BiomeSpecificDecorator
 		int h = 1;
 		
 		for(CoordPair coord : heightMap.keySet())
-			if(checkCoord(coord, heightMap))
+			if(checkCoord(coord, heightMap) && stomps==false)
 				toProcess2.add(new BlockEntry(coord, plateauSize + 0.2F));
 		toProcess2.add(null);
 		
-		while(!toProcess2.isEmpty())
+		while(!toProcess2.isEmpty() && stomps==false)
 		{
 			BlockEntry entry = toProcess2.remove();
 			if(entry == null)
@@ -124,6 +140,12 @@ public class RockDecorator extends BiomeSpecificDecorator
 				entry.spreadChance -= Math.min(0.5F, (2F*h)/height);
 				if(!heightMap.containsKey(coord))
 				{
+					BlockPos pos = new BlockPos(coord.x, rockPos.getY() - h, coord.z);
+					if(provider.villageHandler.isPositionInStructure(world, pos) || provider.structureHandler.isPositionInStructure(world, pos))
+					{
+						stomps=true;
+						break;
+					}
 					heightMap.put(coord, rockPos.getY() - h);
 					if(checkCoord(coord, heightMap))
 						toProcess2.add(new BlockEntry(coord, entry.spreadChance));
@@ -139,6 +161,12 @@ public class RockDecorator extends BiomeSpecificDecorator
 			BlockPos pos = new BlockPos(entry.getKey().x, entry.getValue(), entry.getKey().z);
 			do
 			{
+				if(provider.villageHandler.isPositionInStructure(world, pos) || provider.structureHandler.isPositionInStructure(world, pos) || stomps==true)
+				{
+					stomps=true;
+					break;
+				}
+				was.put(pos, world.getBlockState(pos));
 				world.setBlockState(pos, block, 2);
 				pos = pos.down();
 			} while(!world.getBlockState(pos).equals(block));
@@ -146,7 +174,7 @@ public class RockDecorator extends BiomeSpecificDecorator
 		
 		CoordPair nodePos = new CoordPair(rockPos.getX(), rockPos.getZ());
 		int maxBlocks = 0;
-		for(int i = 0; i < 9; i++)
+		for(int i = 0; i < 9 && stomps==false; i++)
 		{
 			CoordPair coords = new CoordPair(rockPos.getX() + (i % 3) - 1, rockPos.getZ() + i/3 - 1);
 			int blockCount = 0;
@@ -163,7 +191,27 @@ public class RockDecorator extends BiomeSpecificDecorator
 			}
 		}
 		
-		return new BlockPos(nodePos.x, rockPos.getY() + 1, nodePos.z);
+		BlockPos corePosition = new BlockPos(nodePos.x, rockPos.getY() + 1, nodePos.z);
+		
+		if(stomps)
+		{
+			BiConsumer<? super BlockPos, ? super IBlockState> action = new BlockRestorer().setWorld(world);
+			was.forEach(action);
+		}
+		
+		return corePosition;
+	}
+	
+	public class BlockRestorer implements BiConsumer<BlockPos, IBlockState>
+	{
+		World world = null;
+		public BlockRestorer setWorld(World w) {world = w; return this;}
+		
+		@Override
+		public void accept(BlockPos t, IBlockState u)
+		{
+			world.setBlockState(t, u);
+		}
 	}
 	
 	private static boolean checkCoord(CoordPair pair, Map<CoordPair, Integer> map)

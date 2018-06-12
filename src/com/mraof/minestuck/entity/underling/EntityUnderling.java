@@ -8,10 +8,7 @@ import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.entity.item.EntityVitalityGel;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
-import com.mraof.minestuck.util.Echeladder;
-import com.mraof.minestuck.util.GristAmount;
-import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.GristType;
+import com.mraof.minestuck.util.*;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -47,8 +44,6 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	protected EntityListFilter attackEntitySelector;
 	//The type of the underling
 	protected GristType type;
-	//Name of underling, used in getting the texture and actually naming it
-	public String underlingName;
 	public boolean fromSpawner;
 	public boolean dropCandy;
 	
@@ -57,13 +52,12 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	protected Map<EntityPlayerMP, Double> damageMap = new HashMap<EntityPlayerMP, Double>();	//Map that stores how much damage each player did to this to this underling. Null is used for environmental or other non-player damage
 	
 	//random used in randomly choosing a type of creature
-	protected static Random randStatic = new Random();
+	protected static Random randStatic = MinestuckRandom.getRandom();
 	
-	public EntityUnderling(World par1World, String underlingName) 
+	public EntityUnderling(World par1World)
 	{
 		super(par1World);
 		
-		this.underlingName = underlingName;
 		enemyClasses = new ArrayList<Class<? extends EntityLivingBase>>();
 		setEnemies();
 
@@ -116,6 +110,8 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	
 	protected abstract int getVitalityGel();
 	
+	protected abstract String getUnderlingName();
+	
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn)
 	{
@@ -144,7 +140,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 					int candy = (gristType.getAmount() + 2)/4;
 					int gristAmount = gristType.getAmount() - candy*2;
 					if(candy > 0)
-						this.world.spawnEntity(new EntityItem(world, randX(), this.posY, randZ(), new ItemStack(MinestuckItems.candy, candy, gristType.getType().ordinal() + 1)));
+						this.world.spawnEntity(new EntityItem(world, randX(), this.posY, randZ(), new ItemStack(MinestuckItems.candy, candy, gristType.getType().getId() + 1)));
 					if(gristAmount > 0)
 						this.world.spawnEntity(new EntityGrist(world, randX(), this.posY, randZ(),new GristAmount(gristType.getType(), gristAmount)));
 				}
@@ -169,16 +165,16 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	public String getTexture() 
 	{
 		if(type == null)
-			return "textures/mobs/underlings/" + GristType.Shale.getName() + '_' + underlingName + ".png";
-		return "textures/mobs/underlings/" + type.getName() + '_' + underlingName + ".png";
+			return "textures/mobs/underlings/" + GristType.Shale.getName() + '_' + getUnderlingName() + ".png";
+		return "textures/mobs/underlings/" + type.getName() + '_' + getUnderlingName() + ".png";
 	}
 	
 	@Override
 	public String getName() 
 	{
 		if(type != null)
-			return I18n.translateToLocalFormatted("entity.minestuck." + underlingName + ".type", type.getDisplayName());
-		else return I18n.translateToFallback("entity.minestuck." + underlingName + ".name");
+			return I18n.translateToLocalFormatted("entity.minestuck." + getUnderlingName() + ".type", type.getDisplayName());
+		else return I18n.translateToFallback("entity.minestuck." + getUnderlingName() + ".name");
 	}
 	
 	@Override
@@ -213,7 +209,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	public void writeEntityToNBT(NBTTagCompound tagCompound) 
 	{
 		super.writeEntityToNBT(tagCompound);
-		tagCompound.setString("type", this.type.getName());
+		tagCompound.setString("type", type.getRegistryName().toString());
 		tagCompound.setBoolean("spawned", fromSpawner);
 		if(hasHome())
 		{
@@ -253,13 +249,13 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	@Override
 	public void writeSpawnData(ByteBuf buffer)
 	{
-		buffer.writeInt(type.ordinal());
+		buffer.writeInt(type.getId());
 	}
 	
 	@Override
 	public void readSpawnData(ByteBuf additionalData)
 	{
-		applyGristType(GristType.values()[additionalData.readInt()], false);
+		applyGristType(GristType.REGISTRY.getValue(additionalData.readInt()), false);
 		this.textureResource = new ResourceLocation("minestuck", this.getTexture());
 	}
 	
@@ -345,6 +341,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 			totalModifier += modifiers[i];
 		}
 		
+		Debug.debugf("%s players are splitting on %s progress from %s", playerList.length, progress, getUnderlingName());
 		if(totalModifier > maxSharedProgress)
 			for(int i = 0; i < playerList.length; i++)
 				Echeladder.increaseProgress(playerList[i], (int) (maxProgress*modifiers[i]/totalModifier));
