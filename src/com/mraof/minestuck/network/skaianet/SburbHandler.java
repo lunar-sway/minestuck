@@ -2,7 +2,6 @@ package com.mraof.minestuck.network.skaianet;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.command.CommandSburbSession;
 import com.mraof.minestuck.entity.underling.*;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
@@ -16,13 +15,10 @@ import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.LandAspectRegistry.AspectCombination;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
-
-import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.command.ServerCommandManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
@@ -50,15 +46,15 @@ public class SburbHandler
 {
 	static Map<EntityPlayer, Vec3d> titleSelectionMap = new HashMap<EntityPlayer, Vec3d>();
 	
-	private static Title produceTitle(PlayerIdentifier player)
+	private static void generateTitle(PlayerIdentifier player)
 	{
 		if(MinestuckPlayerData.getTitle(player) != null)
 			if(MinestuckConfig.playerSelectedTitle)
-				return null;	//Should be generated using the title-selection gui
+				return;	//Should be generated using the title-selection gui
 			else
 			{
 				Debug.warnf("Trying to generate a title for %s when a title is already assigned!", player.getUsername());
-				return null;
+				return;
 			}
 		
 		Session session = getPlayerSession(player);
@@ -68,7 +64,7 @@ public class SburbHandler
 			else
 			{
 				Debug.logger.warn(String.format("Trying to generate a title for %s before creating a session!", player.getUsername()), new Throwable().fillInStackTrace());
-				return null;
+				return;
 			}
 		
 		Title title = null;
@@ -80,7 +76,7 @@ public class SburbHandler
 		
 		if(title == null)
 		{
-			Random rand = MinestuckRandom.getPlayerSpecificRandom(player);
+			Random rand = new Random(Minestuck.worldSeed^player.hashCode());
 			rand.nextInt();	//Avoid using same data as the artifact generation
 			
 			ArrayList<Title> usedTitles = new ArrayList<Title>();
@@ -113,20 +109,16 @@ public class SburbHandler
 			{
 				
 				int[] classFrequency = new int[12];
-				int specialClasses = 0;
 				for(Title usedTitle : usedTitles)
-				{
 					if(usedTitle.getHeroClass().ordinal() < 12)
 						classFrequency[usedTitle.getHeroClass().ordinal()]++;
-					else specialClasses++;
-				}
 				
 				EnumClass titleClass = null;
-				int titleIndex = rand.nextInt(144 - (usedTitles.size() - specialClasses));
+				int titleIndex = rand.nextInt(144 - usedTitles.size());
 				for(int classIndex = 0; classIndex < 12; classIndex++)
 				{
 					int classChance = 12 - classFrequency[classIndex];
-					if(titleIndex < classChance)
+					if(titleIndex <= classChance)
 					{
 						titleClass = EnumClass.getClassFromInt(classIndex);
 						break;
@@ -157,14 +149,7 @@ public class SburbHandler
 				title = new Title(titleClass, titleAspect);
 			}
 		}
-		return title;
-	}
-	
-	private static void generateTitle(PlayerIdentifier player)
-	{
-		Title title = produceTitle(player);
-		if(title==null)
-			return;
+		
 		MinestuckPlayerData.setTitle(player, title);
 		MinestuckPlayerTracker.updateTitle(player.getPlayer());
 	}
@@ -418,7 +403,7 @@ public class SburbHandler
 	//Continue if you think you can do it.
 	static void finishSession(ICommandSender sender, ICommand command, Session session) throws CommandException
 	{
-		Random rand = MinestuckRandom.getRandom();
+		Random rand = new Random();	//What seed?	//How about Minestuck.worldSeed?
 		Set<PlayerIdentifier> unregisteredPlayers = session.getPlayerList();
 		unregisteredPlayers.removeAll(session.predefinedPlayers.keySet());
 		if(!unregisteredPlayers.isEmpty())
@@ -660,27 +645,13 @@ public class SburbHandler
 		
 	}
 	
-	static void onLandCreated(SburbConnection c)
+	static void onGameEntered(SburbConnection connection)
 	{
-//		Session session = getPlayerSession(c.clientIdentifier);
-//		PlayerIdentifier identifier = c.clientIdentifier;
-//		Title title = produceTitle(identifier);
-//		
-//		Title playerTitle = MinestuckPlayerData.getTitle(identifier);
-//		if(playerTitle == null)
-//		{
-//			PredefineData data = session.predefinedPlayers.get(identifier);
-//			data.title = title;
-//		}
+		generateTitle(connection.getClientIdentifier());
+		getPlayerSession(connection.getClientIdentifier()).checkIfCompleted();
+		genLandAspects(connection);
 		
-		generateTitle(c.getClientIdentifier());
-		genLandAspects(c);		//This is where the Land dimension is actually registered, but it also needs the player's Title to be determined.
-	}
-	
-	static void onGameEntered(SburbConnection c)
-	{
-		generateTitle(c.getClientIdentifier());
-		getPlayerSession(c.getClientIdentifier()).checkIfCompleted();
+		
 	}
 	
 	public static boolean canSelectColor(EntityPlayerMP player)
@@ -691,17 +662,10 @@ public class SburbHandler
 				return false;
 		return true;
 	}
-	
-	public static boolean hasEntered(EntityPlayerMP player)
-	{
-		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		SburbConnection c = SkaianetHandler.getMainConnection(identifier, true);
-		return c != null && c.enteredGame();
-	}
 
 	static void onConnectionCreated(SburbConnection c)
 	{
-		Random rand = MinestuckRandom.getPlayerSpecificRandom(c.getClientIdentifier());
+		Random rand = new Random(Minestuck.worldSeed^c.getClientIdentifier().hashCode());
 		c.artifactType = rand.nextInt(2);
 		Debug.infof("Randomized artifact type to be: %d for player %s.", c.artifactType, c.getClientIdentifier().getUsername());
 	}
@@ -763,7 +727,7 @@ public class SburbHandler
 			Vec3d pos = titleSelectionMap.remove(player);
 			
 			player.setPosition(pos.x, pos.y, pos.z);
-			MinestuckItems.cruxiteApple.onArtifactActivated(player);
+			MinestuckItems.cruxiteApple.onArtifactActivated(player.world, player);
 			
 		} else Debug.warnf("%s tried to select a title without entering.", player.getName());
 	}

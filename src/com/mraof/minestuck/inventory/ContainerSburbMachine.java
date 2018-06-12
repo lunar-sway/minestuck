@@ -100,7 +100,7 @@ public class ContainerSburbMachine extends Container
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotNumber)
 	{
 		ItemStack itemstack = ItemStack.EMPTY;
-		Slot slot = this.inventorySlots.get(slotNumber);
+		Slot slot = (Slot)this.inventorySlots.get(slotNumber);
 		int allSlots = this.inventorySlots.size();
 		
 		if (slot != null && slot.getHasStack())

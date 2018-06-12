@@ -14,7 +14,7 @@ public class ItemModus extends Item
 	{
 		this.maxStackSize = 1;
 		this.setHasSubtypes(true);
-		this.setCreativeTab(TabMinestuck.instance);
+		this.setCreativeTab(MinestuckItems.tabMinestuck);
 		this.setUnlocalizedName("modusCard");
 	}
 	

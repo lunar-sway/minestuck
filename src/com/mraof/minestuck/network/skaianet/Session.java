@@ -75,7 +75,7 @@ public class Session
 	 * @param player The username of the player.
 	 * @return If the player was found.
 	 */
-	public boolean containsPlayer(PlayerIdentifier player)
+	boolean containsPlayer(PlayerIdentifier player)
 	{
 		if(player.equals(IdentifierHandler.nullIdentifier))
 			return false;
@@ -91,7 +91,7 @@ public class Session
 	 * Creates a list with all players in the session.
 	 * @return Returns a list with the players identifiers.
 	 */
-	public Set<PlayerIdentifier> getPlayerList()
+	Set<PlayerIdentifier> getPlayerList()
 	{
 		Set<PlayerIdentifier> list = new HashSet<PlayerIdentifier>();
 		for(SburbConnection c : this.connections)
@@ -171,7 +171,7 @@ public class Session
 		return this;
 	}
 	
-	public boolean isCustom()
+	boolean isCustom()
 	{
 		return name != null;
 	}

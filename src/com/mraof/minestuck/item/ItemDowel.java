@@ -19,7 +19,7 @@ public class ItemDowel extends Item
 	
 	public ItemDowel()
 	{
-		this.setCreativeTab(TabMinestuck.instance);
+		this.setCreativeTab(MinestuckItems.tabMinestuck);
 		this.setUnlocalizedName("dowelCruxite");
 		this.setHasSubtypes(true);
 	}

@@ -459,7 +459,7 @@ public class ConsortVillageComponents
 			
 			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
 			IBlockState wallBlock = provider.blockRegistry.getBlockState("structure_primary");
-			IBlockState floorBlock = provider.blockRegistry.getBlockState("salamander_floor");
+			IBlockState floorBlock = provider.blockRegistry.getBlockState("upper");
 			IBlockState doorBlock = provider.blockRegistry.getBlockState("village_door");
 			
 			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 2, 4, 5, 5);
@@ -520,7 +520,7 @@ public class ConsortVillageComponents
 			
 			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
 			IBlockState wallBlock = provider.blockRegistry.getBlockState("structure_primary");
-			IBlockState floorBlock = provider.blockRegistry.getBlockState("salamander_floor");
+			IBlockState floorBlock = provider.blockRegistry.getBlockState("upper");
 			IBlockState doorBlock = provider.blockRegistry.getBlockState("village_door");
 			
 			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 2, 5, 13, 6);

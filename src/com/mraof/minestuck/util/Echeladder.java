@@ -68,7 +68,6 @@ public class Echeladder
 		
 		int prevRung = rung;
 		int prevExp = exp;
-		Debug.debugf("Adding %s exp to player %s's echeladder (previously at rung %s progress %s)", exp, identifier.getUsername(), rung, progress);
 		
 		increasment:
 		{
@@ -83,16 +82,11 @@ public class Echeladder
 					break increasment;
 				if(rung > prevRung + 1)
 					exp = (int) (exp/1.5);
-				Debug.debugf("Increased rung to %s, remaining exp is %s", rung, exp);
 			}
 			if(exp >= expReq/50)
-			{
 				progress += exp;
-				Debug.debugf("Added remainder exp to progress, which is now at %s", progress);
-			} else Debug.debugf("Remaining exp %s is below the threshold of 1/50 out of the exp requirement, which is %s, and will therefore be ignored", exp, expReq/50);
 		}
 		
-		Debug.debugf("Finished echeladder climbing for %s at %s with progress %s", identifier.getUsername(), rung, progress);
 		EntityPlayer player = identifier.getPlayer();
 		if(player != null)
 		{

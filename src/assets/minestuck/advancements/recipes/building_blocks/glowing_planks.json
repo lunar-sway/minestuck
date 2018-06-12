@@ -2,16 +2,16 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "minestuck:computer_standard"
+      "minestuck:glowing_planks"
     ]
   },
   "criteria": {
-    "has_block": {
+    "has_log": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "minestuck:cruxite_block"
+            "item": "minestuck:glowing_log"
           }
         ]
       }
@@ -19,13 +19,13 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "minestuck:computer_standard"
+        "recipe": "minestuck:glowing_planks"
       }
     }
   },
   "requirements": [
     [
-      "has_block",
+      "has_log",
       "has_the_recipe"
     ]
   ]

@@ -1,8 +1,0 @@
-{
-    "variants": {
-        "facing=north": { "model": "minestuck:uranium_cooker" },
-        "facing=east": { "model": "minestuck:uranium_cooker", "y": 90 },
-        "facing=south": { "model": "minestuck:uranium_cooker", "y": 180 },
-        "facing=west": { "model": "minestuck:uranium_cooker", "y": 270 }
-    }
-}

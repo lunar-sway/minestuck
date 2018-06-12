@@ -339,7 +339,7 @@ public class ServerEditHandler
 			EditData data = getData(event.getEntityPlayer());
 			IBlockState block = event.getWorld().getBlockState(event.getPos());
 			if(block.getBlockHardness(event.getWorld(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
-					|| (GristHelper.getGrist(data.connection.getClientIdentifier(), GristType.Build) <= 0 && !MinestuckConfig.gristRefund))
+					|| GristHelper.getGrist(data.connection.getClientIdentifier(), GristType.Build) <= 0)
 				event.setCanceled(true);
 		}
 	}
@@ -359,16 +359,7 @@ public class ServerEditHandler
 		if(!event.getEntity().world.isRemote && getData(event.getEntityPlayer()) != null)
 		{
 			EditData data = getData(event.getEntityPlayer());
-			if(!MinestuckConfig.gristRefund)
-				GristHelper.decrease(data.connection.getClientIdentifier(), new GristSet(GristType.Build,1));
-			else
-			{
-				IBlockState block = event.getWorld().getBlockState(event.getPos());
-				ItemStack stack = block.getBlock().getPickBlock(block, null, event.getWorld(), event.getPos(), event.getEntityPlayer());
-				GristSet set = GristRegistry.getGristConversion(stack);
-				if(set != null && !set.isEmpty())
-					GristHelper.increase(data.connection.getClientIdentifier(), set);
-			}
+			GristHelper.decrease(data.connection.getClientIdentifier(), new GristSet(GristType.Build,1));
 			MinestuckPlayerTracker.updateGristCache(data.connection.getClientIdentifier());
 		}
 	}

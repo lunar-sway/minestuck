@@ -1,7 +1,6 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.client.gui.GuiScreenMinestuck;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.inventory.ContainerHandler;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
@@ -24,7 +23,7 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 
-public abstract class GuiPlayerStats extends GuiScreenMinestuck
+public abstract class GuiPlayerStats extends GuiScreen
 {
 	
 	static final ResourceLocation icons = new ResourceLocation("minestuck", "textures/gui/icons.png");
@@ -271,6 +270,10 @@ public abstract class GuiPlayerStats extends GuiScreenMinestuck
 		}
 		else if(mc.currentScreen instanceof GuiPlayerStats || mc.currentScreen instanceof GuiPlayerStatsContainer)
 			mc.displayGuiScreen(null);
+	}
+	
+	protected boolean isPointInRegion(int regionX, int regionY, int regionWidth, int regionHeight, int pointX, int pointY) {
+		return pointX >= regionX && pointX < regionX + regionWidth && pointY >= regionY && pointY < regionY + regionHeight;
 	}
 	
 }
