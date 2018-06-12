@@ -746,8 +746,13 @@ land.shade=Shade
 land.wood=Wood
 land.oak=Oak
 land.lumber=Lumber
+land.flora=Flora
+land.flowers=Flowers
+land.thorns=Thorns
 land.rainbow=Rainbow
 land.colors=Colors
+land.rain=Rain
+land.islands=Islands
 land.end=End
 land.dimension=Dimension
 
