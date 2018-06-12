@@ -1,18 +1,15 @@
 package com.mraof.minestuck.world.lands.title;
 
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.world.lands.decorator.SingleBlockDecorator;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import java.util.Random;
+
 import net.minecraft.block.BlockCake;
-import net.minecraft.block.BlockColored;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-import java.util.Random;
+import com.mraof.minestuck.world.lands.decorator.SingleBlockDecorator;
+import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 public class LandAspectCake extends TitleLandAspect
 {
@@ -30,42 +27,25 @@ public class LandAspectCake extends TitleLandAspect
 	}
 	
 	@Override
-	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
+	protected void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
-		
-		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.ORANGE));
-		
-		chunkProvider.decorators.add(new CakeDecorator(chunkProvider.temperature));
+	}
+	
+	@Override
+	protected void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
+	{
+		chunkProvider.decorators.add(new CakeDecorator());
 		chunkProvider.sortDecorators();
 	}
 	
 	private static class CakeDecorator extends SingleBlockDecorator
 	{
-		public float redCakeChance;
-		public CakeDecorator(float temperature)
-		{
-			redCakeChance = MathHelper.clamp(temperature/2, 0, 1);
-		}
-		
 		@Override
 		public IBlockState pickBlock(Random random)
 		{
 			int bites = Math.max(0, (int) (random.nextDouble()*10) - 6);
-			float f = random.nextFloat();
-			if(f < 0.1F)
-			{
-				if(random.nextFloat() < redCakeChance)
-					return (f < 0.05F ? MinestuckBlocks.redCake : MinestuckBlocks.hotCake).getDefaultState().withProperty(BlockCake.BITES, bites);
-				else return (f < 0.05F ? MinestuckBlocks.blueCake : MinestuckBlocks.coldCake).getDefaultState().withProperty(BlockCake.BITES, bites);
-			}
-			else if(f < 0.4F)
-				return MinestuckBlocks.appleCake.getDefaultState().withProperty(BlockCake.BITES, bites);
-			else if(random.nextFloat() < 0.01)
-				return MinestuckBlocks.reverseCake.getDefaultState().withProperty(BlockCake.BITES, bites);
-			else
-				return Blocks.CAKE.getDefaultState().withProperty(BlockCake.BITES, bites);
+			return Blocks.CAKE.getDefaultState().withProperty(BlockCake.BITES, bites);
 		}
-		
 		@Override
 		public int getCount(Random random)
 		{

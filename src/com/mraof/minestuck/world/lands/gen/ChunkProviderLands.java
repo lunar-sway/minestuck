@@ -38,9 +38,6 @@ public class ChunkProviderLands implements IChunkGenerator
 {
 	List<SpawnListEntry> consortList;
 	public List<SpawnListEntry> monsterList;
-	public List<SpawnListEntry> animalList;
-	public List<SpawnListEntry> waterMobsList;
-	public List<SpawnListEntry> ambientMobsList;
 	public World landWorld;
 	Random random;
 	Vec3d skyColor;
@@ -76,9 +73,6 @@ public class ChunkProviderLands implements IChunkGenerator
 		
 		this.consortList = new ArrayList<SpawnListEntry>();
 		this.monsterList = new ArrayList<SpawnListEntry>();
-		this.animalList = new ArrayList<SpawnListEntry>();
-		this.ambientMobsList = new ArrayList<SpawnListEntry>();
-		this.waterMobsList = new ArrayList<SpawnListEntry>();
 		this.consortList.add(new SpawnListEntry(aspect1.getConsortType().getConsortClass(), 2, 1, 10));
 		
 		this.dayCycle = aspect1.getDayCycleMode();
@@ -240,29 +234,14 @@ public class ChunkProviderLands implements IChunkGenerator
 	@Override
 	public List getPossibleCreatures(EnumCreatureType creatureType, BlockPos pos)	//This was called "getPossibleCreatures" for future reference
 	{
-		List<SpawnListEntry> list = new ArrayList<SpawnListEntry>();
-		
-		switch(creatureType)
+		if(creatureType == EnumCreatureType.MONSTER)
 		{
-		case MONSTER:
+			List<SpawnListEntry> list = new ArrayList<SpawnListEntry>();
 			list.addAll(this.monsterList);
 			list.addAll(SburbHandler.getUnderlingList(pos, landWorld));
-			break;
-		case CREATURE:
-			list.addAll(this.consortList);
-			list.addAll(animalList);
-			break;
-		case AMBIENT:
-			list.addAll(this.ambientMobsList);
-			break;
-		case WATER_CREATURE:
-			list.addAll(this.waterMobsList);
-			break;
-		default:
-			list = null;
-			break;
+			return list;
 		}
-		return list;
+		return creatureType == EnumCreatureType.CREATURE ? this.consortList : null;
 	}
 	
 	@Nullable

@@ -1,19 +1,28 @@
 package com.mraof.minestuck.command;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
-import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.util.GristAmount;
+import com.mraof.minestuck.util.GristSet;
+import com.mraof.minestuck.util.GristType;
+import com.mraof.minestuck.util.MinestuckPlayerData;
+import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import net.minecraft.command.*;
+
+import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.command.PlayerNotFoundException;
+import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class CommandGristSend extends CommandBase
 {
@@ -123,17 +132,8 @@ public class CommandGristSend extends CommandBase
 	@Override
 	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos)
 	{
-		if (args.length == 1)
-		{
-			return getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames());
-		}
-		else if ((args.length > 1) && ((args.length % 2) == 1))
-		{
-			return getListOfStringsMatchingLastWord(args, GristType.REGISTRY.getKeys());
-		}
-		else
-		{
-			return Collections.emptyList();
-		}
+		return args.length == 1 ? getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames()) :
+			(args.length > 1 && (args.length%2 == 1) ? getListOfStringsMatchingLastWord(args, GristType.getNames())
+					: Collections.<String>emptyList());
 	}
 }

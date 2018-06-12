@@ -4,7 +4,7 @@
         "normal": {
             "model": "forge:fluid",
             "custom": {
-                "fluid": "brain_juice"
+                "fluid": "brainjuice"
             }
         }
     }

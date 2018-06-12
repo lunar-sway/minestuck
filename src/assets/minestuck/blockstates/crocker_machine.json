@@ -1,12 +1,8 @@
 {
     "variants": {
-        "facing=south,has_item=false,machine_type=grist_widget":    { "model": "minestuck:grist_widget" },
-        "facing=west,has_item=false,machine_type=grist_widget":     { "model": "minestuck:grist_widget", "y": 90 },
-        "facing=north,has_item=false,machine_type=grist_widget":    { "model": "minestuck:grist_widget", "y": 180 },
-        "facing=east,has_item=false,machine_type=grist_widget":     { "model": "minestuck:grist_widget", "y": 270 },
-        "facing=south,has_item=true,machine_type=grist_widget":     { "model": "minestuck:grist_widget_with_card" },
-        "facing=west,has_item=true,machine_type=grist_widget":      { "model": "minestuck:grist_widget_with_card", "y": 90 },
-        "facing=north,has_item=true,machine_type=grist_widget":     { "model": "minestuck:grist_widget_with_card", "y": 180 },
-        "facing=east,has_item=true,machine_type=grist_widget":      { "model": "minestuck:grist_widget_with_card", "y": 270 }
+        "facing=south,machine_type=grist_widget":   { "model": "minestuck:machine_grist_widget" },
+        "facing=west,machine_type=grist_widget":    { "model": "minestuck:machine_grist_widget", "y": 90 },
+        "facing=north,machine_type=grist_widget":   { "model": "minestuck:machine_grist_widget", "y": 180 },
+        "facing=east,machine_type=grist_widget":    { "model": "minestuck:machine_grist_widget", "y": 270 }
     }
 }

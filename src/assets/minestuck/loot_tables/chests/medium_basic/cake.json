@@ -7,44 +7,8 @@
                 {
                     "type": "item",
                     "name": "minecraft:cake",
-                    "weight": 8,
+                    "weight": 10,
                     "quality": -1
-                },
-                {
-                    "type": "item",
-                    "name": "minestuck:reverse_cake",
-                    "weight": 1,
-                    "quality": 0
-                },
-                {
-                    "type": "item",
-                    "name": "minestuck:apple_cake",
-                    "weight": 7,
-                    "quality": -1
-                },
-                {
-                    "type": "item",
-                    "name": "minestuck:cold_cake",
-                    "weight": 5,
-                    "quality": -2
-                },
-                {
-                    "type": "item",
-                    "name": "minestuck:hot_cake",
-                    "weight": 5,
-                    "quality": -2
-                },
-                {
-                    "type": "item",
-                    "name": "minestuck:blue_cake",
-                    "weight": 3,
-                    "quality": 1
-                },
-                {
-                    "type": "item",
-                    "name": "minestuck:red_cake",
-                    "weight": 3,
-                    "quality": 1
                 },
                 {
                     "type": "item",
@@ -102,19 +66,6 @@
                     "name": "minestuck:candy",
                     "weight": 3,
                     "quality": 0
-                },
-                {
-                    "entryName": "cocoa_beans",
-                    "type": "item",
-                    "name": "minecraft:dye",
-                    "weight": 3,
-                    "quality": 0,
-                    "functions": [
-                        {
-                            "function": "set_data",
-                            "data": 3
-                        }
-                    ]
                 },
                 {
                     "type": "item",

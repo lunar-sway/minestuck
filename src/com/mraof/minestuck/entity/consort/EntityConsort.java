@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 public abstract class EntityConsort extends EntityMinestuck
 {
 	
-	ConsortDialogue.DialogueWrapper message;
+	ConsortDialogue.ConditionedMessage message;
 	int messageTicksLeft;
 	NBTTagCompound messageData;
 	EnumConsort.MerchantType merchantType = EnumConsort.MerchantType.NONE;

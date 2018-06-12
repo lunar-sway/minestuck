@@ -24,7 +24,7 @@ public abstract class ItemCustomBoat extends Item
 	public ItemCustomBoat()
 	{
 		this.maxStackSize = 1;
-		setCreativeTab(TabMinestuck.instance);
+		setCreativeTab(MinestuckItems.tabMinestuck);
 		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, new BehaivorDispenseCustomBoat());
 	}
 	

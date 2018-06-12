@@ -2,7 +2,6 @@ package com.mraof.minestuck.world.lands;
 
 import java.util.List;
 
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.structure.IGateStructure;
 
 public interface ILandAspect<A extends ILandAspect>
@@ -20,9 +19,6 @@ public interface ILandAspect<A extends ILandAspect>
 	public String[] getNames();
 	
 	public IGateStructure getGateStructure();
-	
-	void prepareChunkProvider(ChunkProviderLands chunkProvider);
-	void prepareChunkProviderServer(ChunkProviderLands chunkProvider);
 	
 	List<A> getVariations();
 	
