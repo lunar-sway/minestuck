@@ -1,0 +1,121 @@
+{
+	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
+	"textures": {
+		"0": "minestuck:machines/punch_designix/multi_use",
+		"1": "minestuck:machines/punch_designix/table_Surface",
+		"2": "minestuck:machines/punch_designix/body_segment",
+		"3": "minestuck:machines/punch_designix/body_spirograph",
+		"4": "minestuck:machines/punch_designix/wire"
+	},
+	"elements": [
+		{
+			"name": "Leg 1",
+			"from": [10, 0, 0],
+			"to": [13, 8, 9],
+			"faces": {
+				"north": {
+					"uv": [5.5, 11.5, 15.5, 16],
+					"texture": "#1",
+					"rotation": 90
+				},
+				"east": {
+					"uv": [0, 12.3, 16, 15.754687500000001],
+					"texture": "#1"
+				},
+				"south": {
+					"uv": [5.5, 11.5, 15.5, 16],
+					"texture": "#1",
+					"rotation": 90
+				},
+				"west": {"uv": [0, 4, 16, 16], "texture": "#0"},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#-1"},
+				"down": {
+					"uv": [0, 11.5, 16, 16],
+					"texture": "#1",
+					"rotation": 90
+				}
+			}
+		},
+		{
+			"name": "Table",
+			"from": [0, 15, 6],
+			"to": [13.4, 16, 11],
+			"faces": {
+				"north": {
+					"uv": [
+						2.7755575615628914e-17,
+						11.500000000000002,
+						16.000000011920932,
+						16
+					],
+					"texture": "#1"
+				},
+				"east": {
+					"uv": [0, 11.500000000000002, 16, 16],
+					"texture": "#1"
+				},
+				"south": {
+					"uv": [1.5, 11.5, 15.5, 16],
+					"texture": "#1"
+				},
+				"west": {
+					"uv": [3, 12, 13.5, 14.5],
+					"texture": "#1"
+				},
+				"up": {
+					"uv": [2.5, 11.5, 15.5, 16],
+					"texture": "#1"
+				},
+				"down": {
+					"uv": [1.5, 11.5, 15.5, 16],
+					"texture": "#1"
+				}
+			}
+		},
+		{
+			"name": "Body 1",
+			"from": [0, 8, 6],
+			"to": [13, 15, 9],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#-1"},
+				"east": {
+					"uv": [1.5, 13.5, 14.5, 16],
+					"texture": "#1",
+					"rotation": 90
+				},
+				"south": {
+					"uv": [6.82, 9.5, 15.219999999999999, 16],
+					"texture": "#2"
+				},
+				"west": {"uv": [10.5, 2, 5.5, 12], "texture": "#0"},
+				"up": {"uv": [0, 0, 24, 3], "texture": "#0"},
+				"down": {"uv": [2, 0, 15, 5], "texture": "#0"}
+			}
+		},
+		{
+			"name": "Body 2",
+			"from": [0, 8, 0],
+			"to": [13, 16, 6],
+			"faces": {
+				"north": {
+					"uv": [0.7799999999999994, 9.5, 9.18, 16],
+					"texture": "#2"
+				},
+				"east": {"uv": [7.8, 4, 16, 16], "texture": "#3"},
+				"south": {
+					"uv": [
+						0.5000000000000001,
+						15.8,
+						15.500000000000002,
+						11.499999999999998
+					],
+					"texture": "#1"
+				},
+				"west": {"uv": [5, 4.25, 0, 15.5], "texture": "#3"},
+				"up": {"uv": [0, 0, 24, 6], "texture": "#4"},
+				"down": {"uv": [4, 12, 16, 16], "texture": "#1"}
+			}
+		}
+	],
+	"groups": [0, 1, 2, 3]
+}
