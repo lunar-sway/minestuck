@@ -5,16 +5,13 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -26,12 +23,10 @@ public class BlockPunchDesignix extends BlockLargeMachine
 	
 	public BlockPunchDesignix()
 	{
-		super(2,2,1);
-		this.setUnlocalizedName("punch_designix");
-		this.setDefaultState(this.blockState.getBaseState());
-		
+		setUnlocalizedName("punch_designix");
+		setDefaultState(blockState.getBaseState());
 	} 
-	//not sure how to do this.
+	
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
 	{
@@ -39,12 +34,6 @@ public class BlockPunchDesignix extends BlockLargeMachine
 		EnumFacing facing = state.getValue(DIRECTION);
 		
 		return parts.BOUNDING_BOX[facing.getHorizontalIndex()];
-	}
-	
-	@Override
-	public boolean isFullCube(IBlockState state)
-	{
-		return false;
 	}
 	
 	@Override
@@ -70,20 +59,6 @@ public class BlockPunchDesignix extends BlockLargeMachine
 		if(meta % 4 == EnumParts.TOP_LEFT.ordinal())
 			return new TileEntityPunchDesignix();
 		else return null;
-	}
-	
-	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
-	{
-		EnumFacing facing = EnumFacing.getHorizontal(MathHelper.floor((double)(placer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3).getOpposite();
-		state = state.withProperty(DIRECTION, facing);
-		if(!(worldIn.isRemote))
-		{
-			worldIn.setBlockState(pos, state.withProperty(PART, EnumParts.BOTTOM_LEFT));
-			worldIn.setBlockState(pos.offset(facing.rotateYCCW()), state.withProperty(PART, EnumParts.BOTTOM_RIGHT));
-			worldIn.setBlockState(pos.up(),state.withProperty(PART, EnumParts.TOP_LEFT));
-			worldIn.setBlockState(pos.up().offset(facing.rotateYCCW()), state.withProperty(PART, EnumParts.TOP_RIGHT));
-		}
 	}
 	
 	@Override
@@ -113,7 +88,7 @@ public class BlockPunchDesignix extends BlockLargeMachine
 	@Override
 	public IBlockState getStateFromMeta(int meta)
 	{
-		IBlockState defaultState = this.getDefaultState();
+		IBlockState defaultState = getDefaultState();
 		EnumParts part = EnumParts.values()[meta % 4];
 		EnumFacing facing = EnumFacing.getHorizontal(meta/4);
 		
@@ -128,6 +103,11 @@ public class BlockPunchDesignix extends BlockLargeMachine
 		return part.ordinal() + facing.getHorizontalIndex()*4;
 	}
 	
+	
+    /**
+     *returns the block position of the "Main" block
+     *aka the block with the TileEntity for the machine
+     */
 	public BlockPos getMainPos(IBlockState state, BlockPos pos)
 	{
 		EnumFacing facing = state.getValue(DIRECTION);
@@ -162,13 +142,13 @@ public class BlockPunchDesignix extends BlockLargeMachine
 		@Override
 		public String toString()
 		{
-			return this.getName();
+			return getName();
 		}
 		
 		@Override
 		public String getName()
 		{
-			return this.name().toLowerCase();
+			return name().toLowerCase();
 		}
 	}
 }
