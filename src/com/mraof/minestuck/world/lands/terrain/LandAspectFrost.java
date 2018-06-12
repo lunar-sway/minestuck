@@ -8,7 +8,6 @@ import com.mraof.minestuck.world.lands.decorator.*;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.*;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.ArrayList;
@@ -34,8 +33,6 @@ public class LandAspectFrost extends TerrainLandAspect
 		registry.setBlockState("light_block", Blocks.SEA_LANTERN.getDefaultState());
 		registry.setBlockState("bucket1", Blocks.SNOW.getDefaultState());
 		registry.setBlockState("bush", Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.FERN));
-		registry.setBlockState("structure_wool_1", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.WHITE));
-		registry.setBlockState("structure_wool_3", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.CYAN));
 	}
 	
 	@Override

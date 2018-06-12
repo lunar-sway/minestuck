@@ -132,11 +132,9 @@ public class CaptchaDeckHandler
 		{
 			if(modus == null)
 			{
-				MinestuckPlayerData.PlayerData data = MinestuckPlayerData.getData(player);
 				modus = createInstance(type, Side.SERVER);
 				modus.player = player;
-				modus.initModus(null, data.givenModus ? 0 : MinestuckConfig.initialModusSize);
-				data.givenModus = true;
+				modus.initModus(null, MinestuckConfig.initialModusSize);
 				setModus(player, modus);
 				container.inventory.setInventorySlotContents(0, ItemStack.EMPTY);
 			}
@@ -301,14 +299,13 @@ public class CaptchaDeckHandler
 						size--;
 					} else player.dropItem(stack, true, false);
 		
-		int stackLimit = MinestuckItems.captchaCard.getItemStackLimit(new ItemStack(MinestuckItems.captchaCard));
 		if(MinestuckConfig.sylladexDropMode >= 1)
-			for(; size > cardsToKeep; size = Math.max(size - stackLimit, cardsToKeep))
-				player.dropItem(new ItemStack(MinestuckItems.captchaCard, Math.min(stackLimit, size - cardsToKeep)), true, false);
+			for(; size > cardsToKeep; size = Math.max(size - 16, cardsToKeep))
+				player.dropItem(new ItemStack(MinestuckItems.captchaCard, Math.min(16, size - cardsToKeep)), true, false);
 		
 		if(MinestuckConfig.sylladexDropMode == 2)
 		{
-			player.dropItem(getItem(getType(modus.getClass())), true, false);	//TODO Add a method to the modus to get the itemstack instead
+			player.dropItem(getItem(getType(modus.getClass())), true, false);
 			setModus(player, null);
 		} else modus.initModus(null, size);
 		

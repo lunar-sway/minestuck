@@ -109,20 +109,16 @@ public class SburbHandler
 			{
 				
 				int[] classFrequency = new int[12];
-				int specialClasses = 0;
 				for(Title usedTitle : usedTitles)
-				{
 					if(usedTitle.getHeroClass().ordinal() < 12)
 						classFrequency[usedTitle.getHeroClass().ordinal()]++;
-					else specialClasses++;
-				}
 				
 				EnumClass titleClass = null;
-				int titleIndex = rand.nextInt(144 - (usedTitles.size() - specialClasses));
+				int titleIndex = rand.nextInt(144 - usedTitles.size());
 				for(int classIndex = 0; classIndex < 12; classIndex++)
 				{
 					int classChance = 12 - classFrequency[classIndex];
-					if(titleIndex < classChance)
+					if(titleIndex <= classChance)
 					{
 						titleClass = EnumClass.getClassFromInt(classIndex);
 						break;
@@ -665,13 +661,6 @@ public class SburbHandler
 			if(c.getClientIdentifier().equals(identifier))
 				return false;
 		return true;
-	}
-	
-	public static boolean hasEntered(EntityPlayerMP player)
-	{
-		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		SburbConnection c = SkaianetHandler.getMainConnection(identifier, true);
-		return c != null && c.enteredGame();
 	}
 
 	static void onConnectionCreated(SburbConnection c)

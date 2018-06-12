@@ -3,8 +3,6 @@ package com.mraof.minestuck.network.skaianet;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.editmode.EditData;
 import com.mraof.minestuck.editmode.ServerEditHandler;
-import com.mraof.minestuck.event.ConnectionClosedEvent;
-import com.mraof.minestuck.event.ConnectionCreatedEvent;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
@@ -25,7 +23,6 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.util.*;
@@ -223,10 +220,6 @@ public class SkaianetHandler {
 					if(c.isMain)
 						c.isActive = false;	//That's everything that is neccesary.
 					else connections.remove(c);
-					
-					ConnectionCreatedEvent.ConnectionType type = !c.isMain && getMainConnection(c.getClientIdentifier(), true) != null
-							? ConnectionCreatedEvent.ConnectionType.SECONDARY : ConnectionCreatedEvent.ConnectionType.REGULAR;
-					MinecraftForge.EVENT_BUS.post(new ConnectionClosedEvent(c, SessionHandler.getPlayerSession(c.getClientIdentifier()), type));
 				} else if(getAssociatedPartner(player, isClient).equals(otherPlayer))
 				{
 					if(movingComputers.contains(isClient?resumingClients.get(player):resumingServers.get(player)))
@@ -276,13 +269,6 @@ public class SkaianetHandler {
 			c.server = player;
 			c.isActive = true;
 		}
-		
-		//Get session type for event
-		Session s1 = SessionHandler.getPlayerSession(c.getClientIdentifier()), s2 = SessionHandler.getPlayerSession(c.getServerIdentifier());
-		ConnectionCreatedEvent.SessionJoinType joinType = s1 == null || s2 == null ? ConnectionCreatedEvent.SessionJoinType.JOIN
-				: s1 == s2 ? ConnectionCreatedEvent.SessionJoinType.INTERNAL : ConnectionCreatedEvent.SessionJoinType.MERGE;
-		ConnectionCreatedEvent.ConnectionType type = ConnectionCreatedEvent.ConnectionType.REGULAR;
-		
 		if(newConnection)
 		{
 			SburbConnection conn = getMainConnection(c.getClientIdentifier(), true);
@@ -294,7 +280,6 @@ public class SkaianetHandler {
 				conn.serverIdentifier = c.getServerIdentifier();
 				conn.isActive = true;
 				c = conn;
-				type = ConnectionCreatedEvent.ConnectionType.RESUME;
 			} else
 			{
 				String s = SessionHandler.onConnectionCreated(c);
@@ -321,17 +306,14 @@ public class SkaianetHandler {
 					c.artifactType = conn.artifactType;
 					if(c.inventory != null)
 						c.inventory = (NBTTagList) conn.inventory.copy();
-					type = ConnectionCreatedEvent.ConnectionType.SECONDARY;
 				}
 			}
-		} else type = ConnectionCreatedEvent.ConnectionType.RESUME;
+		}
 		
 		c1.connected(otherPlayer, isClient);
 		c2.connected(player.owner, !isClient);
 		if(c1 != c2)
 			c2.markBlockForUpdate();
-		
-		MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(c, SessionHandler.getPlayerSession(c.getClientIdentifier()), type, joinType));
 	}
 	
 	public static void requestInfo(EntityPlayer player, PlayerIdentifier p1)

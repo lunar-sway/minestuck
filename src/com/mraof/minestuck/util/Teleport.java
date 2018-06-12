@@ -13,8 +13,8 @@ import net.minecraft.server.management.PlayerList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 import java.lang.reflect.Field;
 import java.util.Iterator;
@@ -180,21 +180,59 @@ public class Teleport
 	private static void setPortalInvincibilityWithReflection(EntityPlayerMP player) throws Exception
 	{
 		if(portalInvincibilityField == null)
-		{
+		fieldSearch: {
+			FakePlayer fake = new FakePlayer(player.getServerWorld(), player.getGameProfile());
+			player.getServer().getPlayerList().getPlayerAdvancements(player);
+			//Fixes annoying NullPointerException when unlocking advancement, caused by just creating the fake player
 			try
-			{
-				portalInvincibilityField = ReflectionHelper.findField(EntityPlayerMP.class, "invulnerableDimensionChange", "field_184851_cj");
-			} catch (ReflectionHelper.UnableToFindFieldException e)
-			{
-				Debug.warn("Couldn't find portal invincibility field.");
-				return;
-			}
+			{	//For dev environments with patch similar to 
+				if(checkFieldForBoolean(EntityPlayerMP.class.getDeclaredField("invulnerableDimensionChange"), fake))
+				{
+					portalInvincibilityField = EntityPlayerMP.class.getDeclaredField("invulnerableDimensionChange");
+					break fieldSearch;
+				}
+			} catch(NoSuchFieldException e) {}
+			
+			try
+			{	//For obfuscated code
+				if(checkFieldForBoolean(EntityPlayerMP.class.getDeclaredField("field_184851_cj"), fake))
+				{
+					portalInvincibilityField = EntityPlayerMP.class.getDeclaredField("field_184851_cj");
+					break fieldSearch;
+				}
+			} catch(NoSuchFieldException e) {}
+			
+			Debug.warn("Couldn't find portal invincibility field by the normal names. Searching all fields based on type...");
+			
+			for(Field field : EntityPlayerMP.class.getDeclaredFields())	//There should only be one boolean field which is by default false
+				if(checkFieldForBoolean(field, fake))
+				{
+					if(portalInvincibilityField != null)
+					{
+						portalInvincibilityField = null;
+						throw new NoSuchFieldException("Found more than one field. Can't determine which one that is the portal cooldown.");
+					}
+					portalInvincibilityField = field;
+				}
+			
+			if(portalInvincibilityField == null)
+				throw new NoSuchFieldException("Couldn't find any fields that fits the portal cooldown field");
+			else Debug.warn("Found possible field: "+ portalInvincibilityField.getName());
 		}
-		
+		portalInvincibilityField.setAccessible(true);
 		portalInvincibilityField.setBoolean(player, true);
+		portalInvincibilityField.setAccessible(false);
 	}
 	
-	public interface ITeleporter
+	private static boolean checkFieldForBoolean(Field field, FakePlayer player) throws Exception
+	{
+		field.setAccessible(true);
+		boolean b = field.getType().equals(boolean.class) && !field.getBoolean(player);	//Field is false by default
+		field.setAccessible(false);
+		return b;
+	}
+	
+	public static interface ITeleporter
 	{
 		void makeDestination(Entity entity, WorldServer worldserver, WorldServer worldserver1);
 	}

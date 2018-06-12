@@ -1,12 +1,10 @@
 package com.mraof.minestuck.world.lands.title;
 
+import net.minecraft.util.math.Vec3d;
+
 import com.mraof.minestuck.world.lands.decorator.RockDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.gen.DefaultTerrainGen;
-import net.minecraft.block.BlockColored;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumDyeColor;
-import net.minecraft.util.math.Vec3d;
 
 public class LandAspectWind extends TitleLandAspect
 {
@@ -35,7 +33,6 @@ public class LandAspectWind extends TitleLandAspect
 	@Override
 	protected void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
-		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.LIGHT_BLUE));
 		chunkProvider.decorators.add(new RockDecorator());
 		if(chunkProvider.terrainGenerator instanceof DefaultTerrainGen)
 		{

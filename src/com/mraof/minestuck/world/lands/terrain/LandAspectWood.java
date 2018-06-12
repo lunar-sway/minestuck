@@ -8,9 +8,11 @@ import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
 import com.mraof.minestuck.world.lands.decorator.SurfaceMushroomGenerator;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
-import net.minecraft.block.*;
+import net.minecraft.block.BlockLog;
+import net.minecraft.block.BlockNewLog;
+import net.minecraft.block.BlockOldLog;
+import net.minecraft.block.BlockPlanks;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.ArrayList;
@@ -37,8 +39,6 @@ public class LandAspectWood extends TerrainLandAspect
 		registry.setBlockState("fall_fluid", Blocks.WATER.getDefaultState());
 		registry.setBlockState("light_block", MinestuckBlocks.glowingLog.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE));
 		registry.setBlockState("bush", Blocks.RED_MUSHROOM.getDefaultState());
-		registry.setBlockState("structure_wool_1", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.PURPLE));
-		registry.setBlockState("structure_wool_3", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.GREEN));
 	}
 	
 	@Override

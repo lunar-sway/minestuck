@@ -1,16 +1,5 @@
 package com.mraof.minestuck.event;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.client.gui.GuiColorSelector;
-import com.mraof.minestuck.client.gui.playerStats.GuiDataChecker;
-import com.mraof.minestuck.client.gui.playerStats.GuiEcheladder;
-import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
-import com.mraof.minestuck.inventory.ContainerEditmode;
-import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
-import com.mraof.minestuck.network.skaianet.SkaiaClient;
-import com.mraof.minestuck.util.ColorCollector;
-import com.mraof.minestuck.util.MinestuckPlayerData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.translation.I18n;
@@ -22,6 +11,18 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.client.gui.GuiColorSelector;
+import com.mraof.minestuck.client.gui.playerStats.GuiDataChecker;
+import com.mraof.minestuck.client.gui.playerStats.GuiEcheladder;
+import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
+import com.mraof.minestuck.inventory.ContainerEditmode;
+import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
+import com.mraof.minestuck.network.skaianet.SkaiaClient;
+import com.mraof.minestuck.util.ColorCollector;
+import com.mraof.minestuck.util.MinestuckPlayerData;
 
 /**
  * Used to track mixed client sided events.
@@ -50,7 +51,7 @@ public class ClientEventHandler
 	@SubscribeEvent
 	public void onClientTick(TickEvent.ClientTickEvent event)
 	{
-		if(event.phase == TickEvent.Phase.END)
+		if(event.phase == TickEvent.Phase.START)
 		{
 			if(ColorCollector.displaySelectionGui && Minecraft.getMinecraft().currentScreen == null)
 			{

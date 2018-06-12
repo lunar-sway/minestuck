@@ -124,7 +124,7 @@
                     ],
                     "type": "loot_table",
                     "name": "minestuck:chests/medium_basic/cake",
-                    "weight": 7
+                    "weight": 5
                 },
                 {
                     "conditions": [

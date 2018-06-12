@@ -13,17 +13,11 @@ public class EntityOgre extends EntityUnderling
 	private EntityAIAttackOnCollideWithRate entityAIAttackOnCollideWithRate;
 	public EntityOgre(World world)
 	{
-		super(world);
+		super(world, "ogre");
 		setSize(3.0F, 4.5F);
 		this.stepHeight = 1.0F;
 	}
-	
-	@Override
-	protected String getUnderlingName()
-	{
-		return "ogre";
-	}
-	
+
 	@Override
 	public GristSet getGristSpoils()
 	{

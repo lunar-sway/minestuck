@@ -1,14 +1,10 @@
 package com.mraof.minestuck.tileentity;
 
-import com.mraof.minestuck.block.BlockComputerOn;
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.client.gui.GuiComputer;
-import com.mraof.minestuck.network.skaianet.ComputerData;
-import com.mraof.minestuck.network.skaianet.SburbConnection;
-import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.ComputerProgram;
-import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -19,10 +15,15 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
+import com.mraof.minestuck.block.BlockComputerOn;
+import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.client.gui.GuiComputer;
+import com.mraof.minestuck.network.skaianet.ComputerData;
+import com.mraof.minestuck.network.skaianet.SburbConnection;
+import com.mraof.minestuck.network.skaianet.SkaianetHandler;
+import com.mraof.minestuck.util.ComputerProgram;
+import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 
 public class TileEntityComputer extends TileEntity
 {
@@ -111,8 +112,7 @@ public class TileEntityComputer extends TileEntity
 		tagCompound.removeTag("owner");
 		tagCompound.removeTag("ownerMost");
 		tagCompound.removeTag("ownerLeast");
-		if(owner != null)
-			tagCompound.setInteger("ownerId", owner.getId());
+		tagCompound.setInteger("ownerId", owner.getId());
 		if(hasProgram(1))
 		{
 			SburbConnection c = SkaianetHandler.getServerConnection(ComputerData.createData(this));

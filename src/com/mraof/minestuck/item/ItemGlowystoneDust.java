@@ -15,7 +15,7 @@ public class ItemGlowystoneDust extends Item
 {
     public ItemGlowystoneDust()
     {
-        this.setCreativeTab(TabMinestuck.instance);
+        this.setCreativeTab(MinestuckItems.tabMinestuck);
     }
 
     /**

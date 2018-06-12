@@ -11,9 +11,7 @@ import com.mraof.minestuck.entity.consort.ConsortDialogue;
 import com.mraof.minestuck.event.MinestuckFluidHandler;
 import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
-import com.mraof.minestuck.item.ItemMinestuckCandy;
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.modSupport.crafttweaker.CraftTweakerSupport;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.tileentity.*;
@@ -99,11 +97,14 @@ public class Minestuck
 		//register Tile Entities
 		GameRegistry.registerTileEntity(TileEntitySkaiaPortal.class, "minestuck:gate_portal");
 		GameRegistry.registerTileEntity(TileEntitySburbMachine.class, "minestuck:sburb_machine");
+		GameRegistry.registerTileEntity(TileEntityPunchDesignix.class, "Minestuck:punch_designix");
+		GameRegistry.registerTileEntity(TileEntityTotemlathe.class, "Minestuck:totem_lathe");
+		GameRegistry.registerTileEntity(TileEntityAlchemiter.class,"Minestuck:alchemiter");
+		GameRegistry.registerTileEntity(TileEntityCruxtruder.class, "Minestuck:cruxtruder");
 		GameRegistry.registerTileEntity(TileEntityCrockerMachine.class, "minestuck:crocker_machine");
 		GameRegistry.registerTileEntity(TileEntityComputer.class, "minestuck:computer_sburb");
-		GameRegistry.registerTileEntity(TileEntityTransportalizer.class, "minestuck:transportalizer");
+		GameRegistry.registerTileEntity(TileEntityTransportalizer.class, ",minestuck:transportalizer");
 		GameRegistry.registerTileEntity(TileEntityGate.class, "minestuck:gate");
-		GameRegistry.registerTileEntity(TileEntityUraniumCooker.class, "minestuck:uranium_cooker");
 		
 		MinestuckDimensionHandler.register();
 		
@@ -141,9 +142,6 @@ public class Minestuck
 		MapGenLandStructure.registerStructures();
 		ConsortVillageComponents.registerComponents();
 		
-		//update candy
-		((ItemMinestuckCandy) MinestuckItems.candy).updateCandy();
-		
 		//register recipes
 		AlchemyRecipeHandler.registerVanillaRecipes();
 		AlchemyRecipeHandler.registerMinestuckRecipes();
@@ -163,17 +161,20 @@ public class Minestuck
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) 
-	{		
-		if(Loader.isModLoaded("crafttweaker"))
-			CraftTweakerSupport.applyRecipes();
-		
+	{
 		AlchemyRecipeHandler.registerDynamicRecipes();
+
+		//register NEI stuff
+		if (Loader.isModLoaded("NotEnoughItems")) {
+//			NEIModContainer.plugins.add(new NEIMinestuckConfig());
+		}
 	}
 
 	@EventHandler 
 	public void serverAboutToStart(FMLServerAboutToStartEvent event)
 	{
 		isServerRunning = true;
+		AlchemyRecipeHandler.addOrRemoveRecipes(MinestuckConfig.cardRecipe);
 		TileEntityTransportalizer.transportalizers.clear();
 		DeployList.applyConfigValues(MinestuckConfig.deployConfigurations);
 	}

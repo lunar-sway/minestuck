@@ -11,7 +11,6 @@ import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.gen.feature.WorldGenDeadBush;
 
@@ -33,7 +32,7 @@ public class LandAspectSandstone extends TerrainLandAspect
 	
 	public LandAspectSandstone(Variant type)
 	{
-		variations = new ArrayList<>();
+		variations = new ArrayList<TerrainLandAspect>();
 		this.type = type;
 		if(type == Variant.SANDSTONE)
 		{
@@ -72,8 +71,6 @@ public class LandAspectSandstone extends TerrainLandAspect
 		registry.setBlockState("structure_planks", Blocks.PLANKS.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.ACACIA));
 		registry.setBlockState("structure_planks_slab", Blocks.WOODEN_SLAB.getDefaultState().withProperty(BlockWoodSlab.VARIANT, BlockPlanks.EnumType.ACACIA));
 		registry.setBlockState("torch", Blocks.REDSTONE_TORCH.getDefaultState());
-		registry.setBlockState("structure_wool_1", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.WHITE));
-		registry.setBlockState("structure_wool_3", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.MAGENTA));
 	}
 	
 	@Override
