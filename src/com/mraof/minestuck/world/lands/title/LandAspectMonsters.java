@@ -1,18 +1,20 @@
 package com.mraof.minestuck.world.lands.title;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.entity.monster.EntitySpider;
-import net.minecraft.entity.monster.EntityZombie;import net.minecraft.init.Blocks;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.biome.Biome.SpawnListEntry;
-
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
+import net.minecraft.block.BlockColored;
+import net.minecraft.entity.monster.EntityCreeper;
+import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.monster.EntitySpider;
+import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.EnumDyeColor;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.biome.Biome.SpawnListEntry;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class LandAspectMonsters extends TitleLandAspect
 {
@@ -28,9 +30,9 @@ public class LandAspectMonsters extends TitleLandAspect
 	
 	public LandAspectMonsters(Variant type)
 	{
-		this.variations = new ArrayList<TitleLandAspect>();
+		this.variations = new ArrayList<>();
 		this.type = type;
-		this.monsterList = new ArrayList<SpawnListEntry>();
+		this.monsterList = new ArrayList<>();
 		if(this.type == Variant.MONSTERS)
 		{
 			monsterList.add(new SpawnListEntry(EntityCreeper.class, 1, 1, 1));
@@ -59,7 +61,7 @@ public class LandAspectMonsters extends TitleLandAspect
 	}
 	
 	@Override
-	protected void prepareChunkProvider(ChunkProviderLands chunkProvider)
+	public void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.dayCycle = 2;
 		chunkProvider.monsterList.addAll(this.monsterList);
@@ -68,8 +70,9 @@ public class LandAspectMonsters extends TitleLandAspect
 	}
 	
 	@Override
-	protected void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
+	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
+		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.SILVER));
 		if(chunkProvider.blockRegistry.getCustomBlock("torch") == null)
 			chunkProvider.blockRegistry.setBlockState("torch", Blocks.REDSTONE_TORCH.getDefaultState());
 	}

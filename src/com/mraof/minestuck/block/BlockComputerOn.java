@@ -1,15 +1,11 @@
 package com.mraof.minestuck.block;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Random;
-
-import net.minecraft.block.Block;
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.client.gui.GuiHandler;
+import com.mraof.minestuck.network.skaianet.SkaiaClient;
+import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.util.ComputerProgram;
 import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -24,25 +20,17 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.client.gui.GuiHandler;
-import com.mraof.minestuck.network.skaianet.SkaiaClient;
-import com.mraof.minestuck.tileentity.TileEntityComputer;
-import com.mraof.minestuck.util.ComputerProgram;
+import java.util.*;
+import java.util.Map.Entry;
 
-public class BlockComputerOn extends Block implements ITileEntityProvider
+public class BlockComputerOn extends BlockComputerOff implements ITileEntityProvider
 {
-	
 	public static final PropertyBool BSOD = PropertyBool.create("bsod");
 	
 	public BlockComputerOn()
 	{
-		super(Material.ROCK);
-		
+		super();
 		setDefaultState(getDefaultState().withProperty(BSOD, false));
-		setUnlocalizedName("sburbComputer");
-		setHardness(4.0F);
-		setHarvestLevel("pickaxe", 0);
 	}
 	
 	@Override
@@ -54,7 +42,8 @@ public class BlockComputerOn extends Block implements ITileEntityProvider
 	@Override
 	public int getMetaFromState(IBlockState state)
 	{
-		return ((Boolean) state.getValue(BSOD) ? 1 : 0) + MinestuckBlocks.blockComputerOff.getMetaFromState(state)*2;	//TODO: Now that I know about block.getActualState, the bsod doesn't have to be part of the block.
+		return (state.getValue(BSOD) ? 1 : 0) + MinestuckBlocks.blockComputerOff.getMetaFromState(state)*2;
+			//TODO: Now that I know about block.getActualState, the bsod doesn't have to be part of the block.
 			//Fix that when there is no need to worry about breaking existing save files
 	}
 	
@@ -137,7 +126,7 @@ public class BlockComputerOn extends Block implements ITileEntityProvider
 			Map.Entry<Integer, Boolean> pairs = it.next();
 			if(!pairs.getValue())
 				continue;
-			int program = (Integer) pairs.getKey();
+			int program = pairs.getKey();
 
 			float rx = rand.nextFloat() * 0.8F + 0.1F;
 			float ry = rand.nextFloat() * 0.8F + 0.1F;
@@ -148,7 +137,7 @@ public class BlockComputerOn extends Block implements ITileEntityProvider
 			entityItem.motionZ = rand.nextGaussian() * factor;
 			world.spawnEntity(entityItem);
 		}
-		if((Boolean) state.getValue(BSOD))
+		if(state.getValue(BSOD))
 		{
 			float rx = rand.nextFloat() * 0.8F + 0.1F;
 			float ry = rand.nextFloat() * 0.8F + 0.1F;
@@ -165,5 +154,4 @@ public class BlockComputerOn extends Block implements ITileEntityProvider
 	{
 		return new ItemStack(MinestuckBlocks.blockComputerOff);
 	}
-	
 }

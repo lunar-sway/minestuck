@@ -1,0 +1,20 @@
+{
+    "variants": {
+        "variant=aspect_blood":  { "model": "minestuck:aspect_blood_planks" },
+        "variant=aspect_breath":  { "model": "minestuck:aspect_breath_planks" },
+        "variant=aspect_doom":  { "model": "minestuck:aspect_doom_planks" },
+        "variant=aspect_heart":  { "model": "minestuck:aspect_heart_planks" },
+        "variant=aspect_hope":  { "model": "minestuck:aspect_hope_planks" },
+        "variant=aspect_life":  { "model": "minestuck:aspect_life_planks" },
+        "variant=aspect_light":  { "model": "minestuck:aspect_light_planks" },
+        "variant=aspect_mind":  { "model": "minestuck:aspect_mind_planks" },
+        "variant=aspect_rage":  { "model": "minestuck:aspect_rage_planks" },
+        "variant=aspect_time":  { "model": "minestuck:aspect_time_planks" },
+        "variant=aspect_space":  { "model": "minestuck:aspect_space_planks" },
+        "variant=aspect_void":  { "model": "minestuck:aspect_void_planks" },
+        "variant=vine_oak":  { "model": "minestuck:vine_oak_planks" },
+        "variant=flowery_vine_oak":  { "model": "minestuck:flowery_vine_oak_planks" },
+        "variant=frost":  { "model": "minestuck:frost_planks" },
+        "variant=rainbow":  { "model": "minestuck:rainbow_planks" }
+    }
+}

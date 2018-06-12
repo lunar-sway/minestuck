@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.TabMinestuck;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -22,7 +22,7 @@ import net.minecraftforge.common.IPlantable;
 public class BlockColoredDirt extends Block
 {
 	
-	public static enum BlockType implements IStringSerializable
+	public enum BlockType implements IStringSerializable
 	{
 		BLUE("blue"),
 		THOUGHT("thought");
@@ -45,7 +45,7 @@ public class BlockColoredDirt extends Block
 	public BlockColoredDirt()
 	{
 		super(Material.GROUND);
-		this.setCreativeTab(MinestuckItems.tabMinestuck);
+		this.setCreativeTab(TabMinestuck.instance);
 		setSoundType(SoundType.GROUND);
 		setDefaultState(getBlockState().getBaseState().withProperty(BLOCK_TYPE, BlockType.BLUE));
 	}

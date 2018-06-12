@@ -13,8 +13,14 @@ public class EntityLich extends EntityUnderling
 
 	public EntityLich(World world) 
 	{
-		super(world, "lich");
+		super(world);
 		setSize(1.0F, 2.0F);
+	}
+	
+	@Override
+	protected String getUnderlingName()
+	{
+		return "lich";
 	}
 	
 	@Override

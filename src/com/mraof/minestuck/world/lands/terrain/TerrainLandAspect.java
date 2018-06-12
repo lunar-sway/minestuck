@@ -19,7 +19,6 @@ import net.minecraft.util.math.Vec3d;
 
 public abstract class TerrainLandAspect implements ILandAspect<TerrainLandAspect>
 {
-	
 	public abstract void registerBlocks(StructureBlockRegistry registry);
 	
 	public abstract List<ILandDecorator> getDecorators();	//TODO Add a Random as parameter
@@ -87,6 +86,11 @@ public abstract class TerrainLandAspect implements ILandAspect<TerrainLandAspect
 	{
 		return new GateStructurePillar();
 	}
+	
+	@Override
+	public void prepareChunkProvider(ChunkProviderLands chunkProvider){}
+	@Override
+	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider){}
 	
 	public abstract EnumConsort getConsortType();
 }

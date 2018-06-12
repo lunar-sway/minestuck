@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class GristRegistry {
-	private static Hashtable<List<Object>, GristSet> gristRecipes = new Hashtable<List<Object>, GristSet>();
+	private static Hashtable<List<Object>, GristSet> gristRecipes = new Hashtable<>();
 	
 	/**
 	 * Creates a item-grist conversion ratio for an ItemStack. Used in the Alchemiter and GristWidget.
@@ -37,9 +37,25 @@ public class GristRegistry {
 	
 	public static void addGristConversion(String name, GristSet grist)
 	{
-		gristRecipes.put(Arrays.asList((Object) name, OreDictionary.WILDCARD_VALUE), grist);
+		gristRecipes.put(Arrays.asList(name, OreDictionary.WILDCARD_VALUE), grist);
 	}
 	
+	public static void removeGristConversion(@Nonnull ItemStack stack)
+	{
+		removeGristConversion(stack, stack.getItem().isDamageable());
+	}
+	
+	public static void removeGristConversion(@Nonnull ItemStack stack, boolean useDamage)
+	{
+		if(gristRecipes.remove(Arrays.asList(stack.getItem(), useDamage ? stack.getItemDamage() : OreDictionary.WILDCARD_VALUE)) == null)
+			Debug.warnf("Tried removing grist conversion for %s, but couldn't find grist conversion", stack);
+	}
+	
+	public static void removeGristConversion(String name)
+	{
+		if(gristRecipes.remove(Arrays.asList(name, OreDictionary.WILDCARD_VALUE)) == null)
+			Debug.warnf("Tried removing grist conversion for oredict %s, but couldn't find grist conversion", name);
+	}
 	/**
 	 * Returns a item-grist conversion ratio, given an ItemStack. Used in the Alchemiter and GristWidget.
 	 */

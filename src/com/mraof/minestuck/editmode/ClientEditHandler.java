@@ -18,13 +18,13 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.InventoryEffectRenderer;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
@@ -110,18 +110,18 @@ public class ClientEditHandler {
 		
 		if(cost == null)
 		{
-			toolTip.add(TextFormatting.RED + I18n.translateToLocal("gui.notAvailable"));
+			toolTip.add(TextFormatting.RED + I18n.format("gui.notAvailable"));
 			return;
 		}
 		
-		for(Entry<Integer, Integer> entry : cost.getHashtable().entrySet())
+		for(Entry<GristType, Integer> entry : cost.getMap().entrySet())
 		{
-			GristType grist = GristType.values()[entry.getKey()];
+			GristType grist = entry.getKey();
 			String s = "" + (entry.getValue() <= have.getGrist(grist) ? TextFormatting.GREEN : TextFormatting.RED);
 			toolTip.add(s + entry.getValue() + " " + grist.getDisplayName() + " (" + have.getGrist(grist) + ")");
 		}
 		if(cost.isEmpty())
-			toolTip.add(TextFormatting.GREEN + I18n.translateToLocal("gui.free"));
+			toolTip.add(TextFormatting.GREEN + I18n.format("gui.free"));
 	}
 	
 	@SubscribeEvent

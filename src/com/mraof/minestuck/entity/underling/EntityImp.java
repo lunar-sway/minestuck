@@ -13,8 +13,14 @@ public class EntityImp extends EntityUnderling
 
 	public EntityImp(World world) 
 	{
-		super(world, "imp");
+		super(world);
 		setSize(0.75F, 1.5F);
+	}
+	
+	@Override
+	protected String getUnderlingName()
+	{
+		return "imp";
 	}
 	
 	@Override
