@@ -1,8 +1,5 @@
 package com.mraof.minestuck.util;
 
-/**
- * A simple x/z coordinate pair
- */
 public class CoordPair
 {
 	public final int x;

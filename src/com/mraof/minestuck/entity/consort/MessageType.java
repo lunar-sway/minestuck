@@ -129,7 +129,7 @@ public abstract class MessageType
 			{
 				NBTTagCompound nbt = consort.getMessageTagForPlayer(player);
 				ItemStack stack = new ItemStack(nbt.getCompoundTag(args[i].substring(8)));
-				if(!stack.isEmpty())
+				if(stack != null)
 					obj[i] = new TextComponentTranslation(stack.getUnlocalizedName() + ".name");
 				else obj[i] = "Item";
 			}
@@ -412,53 +412,6 @@ public abstract class MessageType
 			if(text != null) //Only update if everything is correctly performed
 				nbt.setInteger(this.getString(), index);
 			return text;
-		}
-	}
-	
-	public static class ConditionedMessage extends MessageType
-	{
-		String nbtName;
-		Condition condition;
-		MessageType message1, message2;
-		
-		public ConditionedMessage(MessageType message1, MessageType message2, Condition condition)
-		{
-			this(message1.getString(), message1, message2, condition);
-		}
-		
-		public ConditionedMessage(String nbtName, MessageType message1, MessageType message2, Condition condition)
-		{
-			this.nbtName = nbtName;
-			this.condition = condition;
-			this.message1 = message1;
-			this.message2 = message2;
-		}
-		
-		@Override
-		public String getString()
-		{
-			return nbtName;
-		}
-		
-		@Override
-		public ITextComponent getMessage(EntityConsort consort, EntityPlayer player, String chainIdentifier)
-		{
-			if (condition.testFor(consort, player))
-				return message1.getMessage(consort, player, chainIdentifier);
-			else return message2.getMessage(consort, player, chainIdentifier);
-		}
-		
-		@Override
-		public ITextComponent getFromChain(EntityConsort consort, EntityPlayer player, String chainIdentifier, String fromChain)
-		{
-			if (condition.testFor(consort, player))
-				return message1.getFromChain(consort, player, chainIdentifier, fromChain);
-			else return message2.getFromChain(consort, player, chainIdentifier, fromChain);
-		}
-		
-		public interface Condition
-		{
-			boolean testFor(EntityConsort consort, EntityPlayer player);
 		}
 	}
 	

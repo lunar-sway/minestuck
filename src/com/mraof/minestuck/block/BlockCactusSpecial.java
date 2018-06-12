@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.item.TabMinestuck;
+import com.mraof.minestuck.item.MinestuckItems;
 import net.minecraft.block.BlockCactus;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -18,7 +18,7 @@ public class BlockCactusSpecial extends BlockCactus
 	public BlockCactusSpecial(SoundType soundType, String effectiveTool)
 	{
 		super();
-		this.setCreativeTab(TabMinestuck.instance);
+		this.setCreativeTab(MinestuckItems.tabMinestuck);
 		setSoundType(soundType);
 		this.toolType = effectiveTool;
 	}

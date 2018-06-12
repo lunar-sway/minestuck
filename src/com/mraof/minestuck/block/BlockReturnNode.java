@@ -20,7 +20,7 @@ public class BlockReturnNode extends BlockGate
 				if(x != 0 || z != 0)
 				{
 					IBlockState block = world.getBlockState(pos.add(x, 0, z));
-					if(block.getBlock() != this || block.getValue(isMainComponent))
+					if(block.getBlock() != this || (Boolean) block.getValue(isMainComponent))
 						return false;
 				}
 		

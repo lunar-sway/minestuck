@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.item.TabMinestuck;
+import com.mraof.minestuck.item.MinestuckItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -17,7 +17,7 @@ import net.minecraft.world.IBlockAccess;
 
 public class BlockChessTile extends Block
 {
-	public enum BlockType implements IStringSerializable
+	public static enum BlockType implements IStringSerializable
 	{
 		BLACK("black"),
 		WHITE("white"),
@@ -44,7 +44,7 @@ public class BlockChessTile extends Block
 		
 		setUnlocalizedName("chessTile");
 		setDefaultState(getDefaultState().withProperty(BLOCK_TYPE, BlockType.BLACK));
-		this.setCreativeTab(TabMinestuck.instance);
+		this.setCreativeTab(MinestuckItems.tabMinestuck);
 	}
 	
 	@Override

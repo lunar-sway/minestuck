@@ -4,8 +4,6 @@ import com.mraof.minestuck.block.BlockChessTile;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.util.Location;
 import com.mraof.minestuck.util.Teleport;
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -59,14 +57,7 @@ public class TileEntitySkaiaPortal extends TileEntity implements Teleport.ITelep
 	}
 	
 	@Override
-	public boolean prepareDestination(BlockPos pos, Entity entity, WorldServer worldserver)
-	{
-		entity.setPosition(pos.getX(), pos.getY(), pos.getZ());
-		return true;
-	}
-
-	@Override
-	public void finalizeDestination(Entity entity, WorldServer worldserver, WorldServer worldserver1)
+	public void makeDestination(Entity entity, WorldServer worldserver, WorldServer worldserver1)
 	{
 		double x = entity.posX;
 		double y = entity.posY;

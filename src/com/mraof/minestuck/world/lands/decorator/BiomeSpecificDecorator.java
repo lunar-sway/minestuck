@@ -11,11 +11,6 @@ import net.minecraft.world.biome.Biome;
 
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
-/**
- * Randomly selects a single block in the central 16x16 blocks amongst 2x2 chunks, and, if that block is in an accepted biome, runs <code>generate()</code> on that block.
- * This process is repeated <code>getCount()</code> times.
- * <code>BiomeSpecificDecorator</code> shouldn't be used for decorators that iterate through every block in a chunk.
- */
 public abstract class BiomeSpecificDecorator implements ILandDecorator
 {
 	

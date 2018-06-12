@@ -16,8 +16,7 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
 public class BucketDecorator extends SimpleStructureDecorator
 {
 	
-	private Block[] liquidBlocks = {Blocks.AIR, Blocks.WATER, Blocks.LAVA, MinestuckBlocks.blockBlood, MinestuckBlocks.blockOil, MinestuckBlocks.blockBrainJuice,
-			MinestuckBlocks.blockWatercolors, MinestuckBlocks.blockEnder};
+	private Block[] liquidBlocks = {Blocks.AIR, Blocks.WATER, Blocks.LAVA, MinestuckBlocks.blockBlood, MinestuckBlocks.blockOil, MinestuckBlocks.blockBrainJuice};
 	
 	public BucketDecorator(Biome... biomes)
 	{

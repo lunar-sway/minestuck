@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.item.TabMinestuck;
+import com.mraof.minestuck.item.MinestuckItems;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.IProperty;
@@ -23,7 +23,7 @@ public class BlockMinestuckLog extends BlockLog
 	public BlockMinestuckLog()
 	{
 		super();
-		setCreativeTab(TabMinestuck.instance);
+		setCreativeTab(MinestuckItems.tabMinestuck);
 		setDefaultState(blockState.getBaseState().withProperty(VARIANT, BlockType.VINE_OAK).withProperty(LOG_AXIS, BlockLog.EnumAxis.Y));
 		setUnlocalizedName("logMinestuck");
 	}
@@ -97,8 +97,7 @@ public class BlockMinestuckLog extends BlockLog
 	{
 		VINE_OAK("vine_oak", "vineOak", MapColor.WOOD, MapColor.OBSIDIAN),
 		FLOWERY_VINE_OAK("flowery_vine_oak", "floweryVineOak", MapColor.WOOD, MapColor.OBSIDIAN),
-		FROST("frost", "frost", MapColor.ICE, MapColor.ICE),
-		RAINBOW("rainbow", "rainbow", MapColor.WOOD, MapColor.WOOD);
+		FROST("frost", "frost", MapColor.ICE, MapColor.ICE);
 		
 		private final String name;
 		private final String unlocalizedName;

@@ -1,6 +1,5 @@
 package com.mraof.minestuck.item.weapon;
 
-import net.minecraft.item.Item;
 import net.minecraft.potion.PotionEffect;
 
 /**
@@ -13,12 +12,6 @@ public class ItemPotionWeapon extends ItemWeapon
     public ItemPotionWeapon(int maxUses, double damageVsEntity, double weaponSpeed, int enchantability, String name, PotionEffect effect)
     {
         super(maxUses, damageVsEntity, weaponSpeed, enchantability, name);
-        this.effect = effect;
-    }
-
-    public ItemPotionWeapon(Item.ToolMaterial material, int maxUses, double damageVsEntity, double weaponSpeed, int enchantability, String name, PotionEffect effect)
-    {
-        super(material, maxUses, damageVsEntity, weaponSpeed, enchantability, name);
         this.effect = effect;
     }
 
