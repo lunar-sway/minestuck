@@ -10,9 +10,7 @@ import com.mraof.minestuck.block.BlockMinestuckStone;
 import com.mraof.minestuck.block.BlockVanityLaptopOff;
 import com.mraof.minestuck.entity.item.EntityCrewPoster;
 import com.mraof.minestuck.entity.item.EntitySbahjPoster;
-import com.mraof.minestuck.item.block.ItemBlockCraftingTab;
-import com.mraof.minestuck.item.block.ItemBlockLayered;
-import com.mraof.minestuck.item.block.ItemSburbMachine;
+import com.mraof.minestuck.item.block.*;
 import com.mraof.minestuck.item.weapon.*;
 import com.mraof.minestuck.util.MinestuckSoundHandler;
 
@@ -146,7 +144,9 @@ public class MinestuckItems
 	public static Item onion = new ItemFood(2, 0.2F, false).setUnlocalizedName("onion").setCreativeTab(TabMinestuck.instance);
 	public static Item salad = new ItemSoup(1).setUnlocalizedName("salad").setCreativeTab(TabMinestuck.instance);
 	public static Item irradiatedSteak = new ItemFood(4, 0.4F, true).setPotionEffect(new PotionEffect(MobEffects.WITHER, 100, 1), 0.9F).setUnlocalizedName("irradiatedSteak").setCreativeTab(TabMinestuck.instance);
+	public static Item rockCookie = new Item().setUnlocalizedName("rockCookie").setCreativeTab(TabMinestuck.instance);
 	//Other
+	public static Item boondollars = new ItemBoondollars();
 	public static Item rawCruxite = new Item().setUnlocalizedName("rawCruxite").setCreativeTab(TabMinestuck.instance);
 	public static Item rawUranium = new Item().setUnlocalizedName("rawUranium").setCreativeTab(TabMinestuck.instance);
 	public static Item energyCore = new Item().setUnlocalizedName("energyCore").setCreativeTab(TabMinestuck.instance);
@@ -228,6 +228,12 @@ public class MinestuckItems
 				(ItemStack input) -> BlockCrockerMachine.MachineType.values()[input.getItemDamage() % BlockCrockerMachine.MachineType.values().length].getUnlocalizedName()));
 		registerItemBlock(registry, new ItemBlock(blockComputerOff));
 		registerItemBlock(registry, new ItemBlock(transportalizer));
+		
+		registerItemBlock(registry, new ItemPunchDesignix(punchDesignix));
+		registerItemBlock(registry, new ItemTotemLathe(totemlathe[0]));
+		registerItemBlock(registry, new ItemAlchemiter(alchemiter[0]));
+		registerItemBlock(registry, new ItemCruxtruder(cruxtruder));
+		registerItemBlock(registry, new ItemBlock(cruxtruderLid));
 		
 		registerItemBlock(registry, new ItemBlockLayered(layeredSand));
 		registerItemBlock(registry, new ItemMultiTexture(coloredDirt, coloredDirt,
@@ -390,8 +396,10 @@ public class MinestuckItems
 		registry.register(onion.setRegistryName("onion"));
 		registry.register(salad.setRegistryName("salad"));
 		registry.register(irradiatedSteak.setRegistryName("irradiated_steak"));
+		registry.register(rockCookie.setRegistryName("rock_cookie"));
 
 		//misc
+		registry.register(boondollars.setRegistryName("boondollars"));
 		registry.register(rawCruxite.setRegistryName("raw_cruxite"));
 		registry.register(rawUranium.setRegistryName("raw_uranium"));
 		registry.register(energyCore.setRegistryName("energy_core"));
