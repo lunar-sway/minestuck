@@ -56,7 +56,14 @@ public class TileEntityTotemLathe extends TileEntity
 	public void setCard2(ItemStack stack)
 	{
 		if(stack.getItem() == MinestuckItems.captchaCard || stack.isEmpty())
+		{
 			card2 = stack;
+			if(world != null)
+			{
+				IBlockState state = world.getBlockState(pos);
+				world.notifyBlockUpdate(pos, state, state, 2);
+			}
+		}
 	}
 	
 	public ItemStack getCard2()
@@ -94,83 +101,79 @@ public class TileEntityTotemLathe extends TileEntity
 	
 	public void onRightClick(EntityPlayer player, IBlockState clickedState)
 	{
-		if(checkStates(clickedState))
+		boolean working = checkStates(clickedState);
+		
+		ItemStack heldStack = player.getHeldItemMainhand();
+		BlockTotemLathe.EnumParts part = BlockTotemLathe.getPart(clickedState);
+		if(part == null)
+			return;
+		//if they have clicked on the part that holds the chapta cards.
+		if(part.isBottomLeft())
 		{
-			ItemStack heldStack = player.getHeldItemMainhand();
-			BlockTotemLathe.EnumParts part = BlockTotemLathe.getPart(clickedState);
-			//if they have clicked on the part that holds the chapta cards.
-			if(part.isBottomLeft())
+			if(!card1.isEmpty())
 			{
-				if(!card1.isEmpty())
+				if(!card2.isEmpty())
 				{
-					if(!card2.isEmpty())
-					{
-						player.inventory.addItemStackToInventory(card2);
-						setCard2(ItemStack.EMPTY);
-					} else if(heldStack.getItem() == MinestuckItems.captchaCard)
-					{
-						setCard2(heldStack.splitStack(1));
-					} else
-					{
-						player.inventory.addItemStackToInventory(card1);
-						setCard1(ItemStack.EMPTY);
-					}
-				} else if(heldStack.getItem() == MinestuckItems.captchaCard)
+					player.inventory.addItemStackToInventory(card2);
+					setCard2(ItemStack.EMPTY);
+				} else if(working && heldStack.getItem() == MinestuckItems.captchaCard)
 				{
-					setCard1(heldStack.splitStack(1));
-				}
-			}			
-			
-			//if they have clicked the dowel block
-			if (part == BlockTotemLathe.EnumParts.MID_MIDLEFT || part == BlockTotemLathe.EnumParts.MID_MIDRIGHT)
-			{
-				if (dowel.isEmpty())
-				{
-					if(heldStack.getItem() == MinestuckItems.cruxiteDowel)
-					{
-						setDowel(heldStack.splitStack(1));
-					}
+					setCard2(heldStack.splitStack(1));
 				} else
 				{
-					player.inventory.addItemStackToInventory(dowel);
-					setDowel(ItemStack.EMPTY);
+					player.inventory.addItemStackToInventory(card1);
+					setCard1(ItemStack.EMPTY);
 				}
-			}
-			
-			//if they have clicked on the lever
-			if (part == BlockTotemLathe.EnumParts.TOP_MIDRIGHT)
+			} else if(working && heldStack.getItem() == MinestuckItems.captchaCard)
 			{
-				//carve the dowel.
-				processContents();
+				setCard1(heldStack.splitStack(1));
 			}
 		}
 		
+		//if they have clicked the dowel block
+		if (part == BlockTotemLathe.EnumParts.MID_MIDLEFT || part == BlockTotemLathe.EnumParts.MID_MIDRIGHT)
+		{
+			if (dowel.isEmpty())
+			{
+				if(working && heldStack.getItem() == MinestuckItems.cruxiteDowel)
+				{
+					setDowel(heldStack.splitStack(1));
+				}
+			} else
+			{
+				player.inventory.addItemStackToInventory(dowel);
+				setDowel(ItemStack.EMPTY);
+			}
+		}
+		
+		//if they have clicked on the lever
+		if(working && part == BlockTotemLathe.EnumParts.TOP_MIDRIGHT)
+		{
+			//carve the dowel.
+			processContents();
+		}
 	}
 	
 	private boolean checkStates(IBlockState state)
 	{
 		if(isBroken())
 			return false;
-		EnumFacing hOffset = this.getWorld().getBlockState(this.getPos()).getValue(BlockTotemLathe.DIRECTION).rotateY();
-		Block Block1 = MinestuckBlocks.totemlathe[0];
-		Block Block2 = MinestuckBlocks.totemlathe[1];
-		Block Block3 = MinestuckBlocks.totemlathe[2];
+		EnumFacing facing = this.getWorld().getBlockState(this.getPos()).getValue(BlockTotemLathe.DIRECTION);
 		
-		if(	!world.getBlockState(getPos()).getBlock().equals(Block1) ||
-			!world.getBlockState(getPos().offset(hOffset,1)).getBlock().equals(Block1) ||
-			!world.getBlockState(getPos().offset(hOffset,2)).getBlock().equals(Block1) ||
-			!world.getBlockState(getPos().offset(hOffset,3)).getBlock().equals(Block1)||
+		if(	!world.getBlockState(getPos()).equals(BlockTotemLathe.getState(BlockTotemLathe.EnumParts.BOTTOM_LEFT, facing)) ||
+			!world.getBlockState(getPos().offset(facing.rotateYCCW(),1)).equals(BlockTotemLathe.getState(BlockTotemLathe.EnumParts.BOTTOM_MIDLEFT, facing)) ||
+			!world.getBlockState(getPos().offset(facing.rotateYCCW(),2)).equals(BlockTotemLathe.getState(BlockTotemLathe.EnumParts.BOTTOM_MIDRIGHT, facing)) ||
+			!world.getBlockState(getPos().offset(facing.rotateYCCW(),3)).equals(BlockTotemLathe.getState(BlockTotemLathe.EnumParts.BOTTOM_RIGHT, facing)) ||
 			
-			!world.getBlockState(getPos().up()).getBlock().equals(Block2)||
-			!world.getBlockState(getPos().up().offset(hOffset,1)).getBlock().equals(Block2)||
-			!world.getBlockState(getPos().up().offset(hOffset,2)).getBlock().equals(Block2)||
-			!world.getBlockState(getPos().up().offset(hOffset,3)).getBlock().equals(Block2)||
+			!world.getBlockState(getPos().up()).equals(BlockTotemLathe.getState(BlockTotemLathe.EnumParts.MID_LEFT, facing)) ||
+			!world.getBlockState(getPos().up().offset(facing.rotateYCCW(),1)).equals(BlockTotemLathe.getState(BlockTotemLathe.EnumParts.MID_MIDLEFT, facing)) ||
+			!world.getBlockState(getPos().up().offset(facing.rotateYCCW(),2)).equals(BlockTotemLathe.getState(BlockTotemLathe.EnumParts.MID_MIDRIGHT, facing)) ||
+			!world.getBlockState(getPos().up().offset(facing.rotateYCCW(),3)).equals(BlockTotemLathe.getState(BlockTotemLathe.EnumParts.MID_RIGHT, facing)) ||
 			
-			!world.getBlockState(getPos().up(2)).getBlock().equals(Block3)||
-			!world.getBlockState(getPos().up(2).offset(hOffset,1)).getBlock().equals(Block3)||
-			!world.getBlockState(getPos().up(2).offset(hOffset,2)).getBlock().equals( Block3))
+			!world.getBlockState(getPos().up(2)).equals(BlockTotemLathe.getState(BlockTotemLathe.EnumParts.TOP_LEFT, facing)) ||
+			!world.getBlockState(getPos().up(2).offset(facing.rotateYCCW(),1)).equals(BlockTotemLathe.getState(BlockTotemLathe.EnumParts.TOP_MIDLEFT, facing)) ||
+			!world.getBlockState(getPos().up(2).offset(facing.rotateYCCW(),2)).equals(BlockTotemLathe.getState(BlockTotemLathe.EnumParts.TOP_MIDRIGHT, facing)))
 		{
-			Debug.info(world.getBlockState(getPos().offset(hOffset))+","+world.getBlockState(getPos().down())+","+world.getBlockState(getPos().down().offset(hOffset)));
 			return false;
 		}
 		

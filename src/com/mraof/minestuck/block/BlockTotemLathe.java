@@ -140,7 +140,7 @@ public class BlockTotemLathe extends BlockLargeMachine
 				if(!lathe.getCard2().isEmpty())
 					return state.withProperty(PART, EnumParts.BOTTOM_LEFT_CARD_2);
 				else if(!lathe.getCard1().isEmpty())
-					return state.withProperty(PART, EnumParts.BOTTOM_LEFT_CARD_2);
+					return state.withProperty(PART, EnumParts.BOTTOM_LEFT_CARD_1);
 			} else if(index == 1)
 			{
 				if(!lathe.getDowel().isEmpty())
@@ -170,25 +170,25 @@ public class BlockTotemLathe extends BlockLargeMachine
 		{
 		
 			case BOTTOM_RIGHT:
-				return pos.offset(facing.rotateYCCW(),3);
+				return pos.offset(facing.rotateY(),3);
 			case BOTTOM_MIDRIGHT:
-				return pos.offset(facing.rotateYCCW(),2);
+				return pos.offset(facing.rotateY(),2);
 			case BOTTOM_MIDLEFT:
-				return pos.offset(facing.rotateYCCW(),1);
+				return pos.offset(facing.rotateY(),1);
 			case BOTTOM_LEFT: case BOTTOM_LEFT_CARD_1: case BOTTOM_LEFT_CARD_2:
 				return pos;
 			case MID_RIGHT:
-				return pos.down(1).offset(facing.rotateYCCW(),3);
+				return pos.down(1).offset(facing.rotateY(),3);
 			case MID_MIDRIGHT:
-				return pos.down(1).offset(facing.rotateYCCW(),2);
+				return pos.down(1).offset(facing.rotateY(),2);
 			case MID_MIDLEFT:
-				return pos.down(1).offset(facing.rotateYCCW(),1);
+				return pos.down(1).offset(facing.rotateY(),1);
 			case MID_LEFT:
 				return pos.down(1);
 			case TOP_MIDRIGHT:
-				return pos.down(2).offset(facing.rotateYCCW(),2);
+				return pos.down(2).offset(facing.rotateY(),2);
 			case TOP_MIDLEFT:
-				return pos.down(2).offset(facing.rotateYCCW(),1);
+				return pos.down(2).offset(facing.rotateY(),1);
 			case TOP_LEFT:
 				return pos.down(2);
 			}

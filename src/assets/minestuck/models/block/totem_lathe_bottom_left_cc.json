@@ -87,6 +87,15 @@
                 "north": { "uv": [0, 2, 6, 4], "texture": "#top" },
                 "south": { "uv": [6, 2, 0, 4], "texture": "#top" }
             }
+        },
+        {
+            "name": "card_2",
+            "from": [1, 13, 4],
+            "to": [7, 15, 4],
+            "faces": {
+                "north": { "uv": [0, 2, 6, 4], "texture": "#top" },
+                "south": { "uv": [6, 2, 0, 4], "texture": "#top" }
+            }
         }
     ]
 }
