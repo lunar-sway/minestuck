@@ -18,6 +18,17 @@
                     "conditions": [
                         {
                             "condition": "minestuck:land_aspect",
+                            "land_aspect": "end"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/end",
+                    "weight": 10
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
                             "land_aspect": "forest"
                         }
                     ],
@@ -45,6 +56,17 @@
                     ],
                     "type": "loot_table",
                     "name": "minestuck:chests/medium_basic/heat",
+                    "weight": 10
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "rainbow"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/rainbow",
                     "weight": 10
                 },
                 {
@@ -124,7 +146,7 @@
                     ],
                     "type": "loot_table",
                     "name": "minestuck:chests/medium_basic/cake",
-                    "weight": 5
+                    "weight": 7
                 },
                 {
                     "conditions": [

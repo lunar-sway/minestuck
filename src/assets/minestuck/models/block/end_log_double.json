@@ -1,0 +1,7 @@
+{
+    "parent": "block/cube_column",
+    "textures": {
+        "end": "minestuck:blocks/log_end",
+        "side": "minestuck:blocks/log_end_top"
+    }
+}
