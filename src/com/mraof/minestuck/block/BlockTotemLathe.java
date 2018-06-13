@@ -215,7 +215,7 @@ public class BlockTotemLathe extends BlockLargeMachine
 		BOTTOM_MIDRIGHT(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 12/16D, 12/16D)),
 		BOTTOM_RIGHT(	new AxisAlignedBB(0.0D, 0.0D, 1/16D, 12/16D, 1.0D, 11/16D)),
 		
-		MID_LEFT(		new AxisAlignedBB(0/16D, 0/16D,  5/16D, 14/16D,  1.0D, 14/16D)),
+		MID_LEFT(		new AxisAlignedBB(0.0D, 0.0D,  1/16D, 1.0D,  1.0D, 12/16D)),
 		MID_MIDLEFT(	new AxisAlignedBB(0/16D, 0/16D,  5/16D, 16/16D,  1.0D, 14/16D)),
 		MID_MIDRIGHT(	new AxisAlignedBB(9/16D, 12/16D, 7/16D, 16/16D,  1.0D, 12/16D)),
 		MID_RIGHT(		new AxisAlignedBB(1/16D, 0/16D,  7/16D, 14/16D, 4/16D, 12/16D)),
