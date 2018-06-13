@@ -30,9 +30,6 @@ public class LandAspectEnd extends TerrainLandAspect
 {
 	static Vec3d skyColor = new Vec3d(0.0D, 0.4D, 0.2D);
 	
-	//TODO:
-	//Custom consort dialogue
-	//Shulker stuff
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{

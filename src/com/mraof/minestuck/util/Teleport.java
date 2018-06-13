@@ -234,7 +234,22 @@ public class Teleport
 	
 	public interface ITeleporter
 	{
+		/**
+		 * Attempts to begin the teleportation process. Unless there are conditions in which teleportation should fail, this method tends to do very little.
+		 * This method returns false if teleportation should not occur, and will return true at other times.
+		 * @param pos The block position to which the entity will be moved on teleportation, or the player's current block position.
+		 * Know which one this version of the method uses before calling it.
+		 * @param entity The entity that will be teleported.
+		 * @param worldserver The WorldServer <i>from</i> which the entity is teleporting
+		 * @return True if the entity should be allowed to teleport under these conditions, or false if not.
+		 */
 		boolean prepareDestination(BlockPos pos, Entity entity, WorldServer worldserver);
+		/**
+		 * Finalizes the teleportation process. This method is in charge of actually transporting the entity.
+		 * @param entity The entity being teleported.
+		 * @param worldserver The world from which the entity is being teleported
+		 * @param worldserver1 The world to which the entity is being teleported
+		 */
 		void finalizeDestination(Entity entity, WorldServer worldserver, WorldServer worldserver1);
 	}
 	
