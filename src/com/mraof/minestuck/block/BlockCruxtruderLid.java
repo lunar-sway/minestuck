@@ -17,6 +17,7 @@ public class BlockCruxtruderLid extends Block
 		super(Material.IRON);
 		setCreativeTab(TabMinestuck.instance);
 		setUnlocalizedName("cruxtruderLid");
+		setHardness(1.0F);
 	}
 	
 	@Override
