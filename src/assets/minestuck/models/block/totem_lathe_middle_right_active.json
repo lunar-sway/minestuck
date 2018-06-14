@@ -1,6 +1,6 @@
 {
     "textures": {
-        "particle": "minestuck:machines/totem_lathe/bottom_right_inside",
+        "particle": "minestuck:machines/totem_lathe/middle_right_upper",
         "lower":    "minestuck:machines/totem_lathe/middle_right_lower",
         "upper":    "minestuck:machines/totem_lathe/middle_right_upper",
         "bottom":   "minestuck:machines/totem_lathe/bottom_right_inside",
