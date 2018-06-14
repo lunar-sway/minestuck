@@ -39,6 +39,7 @@ public class LandAspectCake extends TitleLandAspect
 	{
 		
 		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.ORANGE));
+		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.CARPET.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.MAGENTA));
 		
 		chunkProvider.decorators.add(new CakeDecorator(chunkProvider.temperature));
 		chunkProvider.sortDecorators();

@@ -1,0 +1,24 @@
+{
+    "variants": {
+        "facing=north,part=bottom_right": { "model": "minestuck:punch_designix_bottom_right" },
+        "facing=north,part=bottom_left":  { "model": "minestuck:punch_designix_bottom_left" },
+        "facing=north,part=top_right":    { "model": "minestuck:punch_designix_top_right" },
+        "facing=north,part=top_left":     { "model": "minestuck:punch_designix_top_left" },
+        "facing=north,part=top_left_card":{ "model": "minestuck:punch_designix_top_left_card" },
+        "facing=east,part=bottom_right":  { "model": "minestuck:punch_designix_bottom_right", "y": 90 },
+        "facing=east,part=bottom_left":   { "model": "minestuck:punch_designix_bottom_left", "y": 90 },
+        "facing=east,part=top_right":     { "model": "minestuck:punch_designix_top_right", "y": 90 },
+        "facing=east,part=top_left":      { "model": "minestuck:punch_designix_top_left", "y": 90 },
+        "facing=east,part=top_left_card": { "model": "minestuck:punch_designix_top_left_card", "y": 90 },
+        "facing=south,part=bottom_right": { "model": "minestuck:punch_designix_bottom_right", "y": 180 },
+        "facing=south,part=bottom_left":  { "model": "minestuck:punch_designix_bottom_left", "y": 180 },
+        "facing=south,part=top_right":    { "model": "minestuck:punch_designix_top_right", "y": 180 },
+        "facing=south,part=top_left":     { "model": "minestuck:punch_designix_top_left", "y": 180 },
+        "facing=south,part=top_left_card":{ "model": "minestuck:punch_designix_top_left_card", "y": 180 },
+        "facing=west,part=bottom_right":  { "model": "minestuck:punch_designix_bottom_right", "y": 270 },
+        "facing=west,part=bottom_left":   { "model": "minestuck:punch_designix_bottom_left", "y": 270 },
+        "facing=west,part=top_right":     { "model": "minestuck:punch_designix_top_right", "y": 270 },
+        "facing=west,part=top_left":      { "model": "minestuck:punch_designix_top_left", "y": 270 },
+        "facing=west,part=top_left_card": { "model": "minestuck:punch_designix_top_left_card", "y": 270 }
+    }
+}

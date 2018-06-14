@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockMinestuckStone extends Block
@@ -75,6 +76,12 @@ public class BlockMinestuckStone extends Block
 	{
 		for(BlockType type : BlockType.values())
 			items.add(new ItemStack(this, 1, type.getMetadata()));
+	}
+	
+	@Override
+	public MapColor getMapColor(IBlockState state, IBlockAccess worldIn, BlockPos pos)
+	{
+		return state.getValue(VARIANT).color;
 	}
 	
 	public enum BlockType implements IStringSerializable

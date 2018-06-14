@@ -1,0 +1,31 @@
+{
+    "variants": {
+        "facing=south,part=totem_corner":    { "model": "minestuck:alchemiter_totem_corner" },
+        "facing=south,part=totem_pad":       { "model": "minestuck:alchemiter_totem_pad" },
+        "facing=south,part=totem_pad_dowel": { "model": "minestuck:alchemiter_totem_pad_dowel" },
+        "facing=south,part=totem_pad_totem": { "model": "minestuck:alchemiter_totem_pad_totem" },
+        "facing=south,part=lower_rod":       { "model": "minestuck:alchemiter_lower_rod" },
+        "facing=south,part=upper_rod":       { "model": "minestuck:alchemiter_upper_rod" },
+        
+        "facing=west,part=totem_corner":     { "model": "minestuck:alchemiter_totem_corner", "y": 90 },
+        "facing=west,part=totem_pad":        { "model": "minestuck:alchemiter_totem_pad", "y": 90 },
+        "facing=west,part=totem_pad_dowel":  { "model": "minestuck:alchemiter_totem_pad_dowel", "y": 90 },
+        "facing=west,part=totem_pad_totem":  { "model": "minestuck:alchemiter_totem_pad_totem", "y": 90 },
+        "facing=west,part=lower_rod":        { "model": "minestuck:alchemiter_lower_rod", "y": 90 },
+        "facing=west,part=upper_rod":        { "model": "minestuck:alchemiter_upper_rod", "y": 90 },
+        
+        "facing=north,part=totem_corner":    { "model": "minestuck:alchemiter_totem_corner", "y": 180 },
+        "facing=north,part=totem_pad":       { "model": "minestuck:alchemiter_totem_pad", "y": 180 },
+        "facing=north,part=totem_pad_dowel": { "model": "minestuck:alchemiter_totem_pad_dowel", "y": 180 },
+        "facing=north,part=totem_pad_totem": { "model": "minestuck:alchemiter_totem_pad_totem", "y": 180 },
+        "facing=north,part=lower_rod":       { "model": "minestuck:alchemiter_lower_rod", "y": 180 },
+        "facing=north,part=upper_rod":       { "model": "minestuck:alchemiter_upper_rod", "y": 180 },
+        
+        "facing=east,part=totem_corner":     { "model": "minestuck:alchemiter_totem_corner", "y": 270 },
+        "facing=east,part=totem_pad":        { "model": "minestuck:alchemiter_totem_pad", "y": 270 },
+        "facing=east,part=totem_pad_dowel":  { "model": "minestuck:alchemiter_totem_pad_dowel", "y": 270 },
+        "facing=east,part=totem_pad_totem":  { "model": "minestuck:alchemiter_totem_pad_totem", "y": 270 },
+        "facing=east,part=lower_rod":        { "model": "minestuck:alchemiter_lower_rod", "y": 270 },
+        "facing=east,part=upper_rod":        { "model": "minestuck:alchemiter_upper_rod", "y": 270 }
+    }
+}

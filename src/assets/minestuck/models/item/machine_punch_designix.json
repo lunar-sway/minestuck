@@ -1,6 +1,3 @@
 {
-    "parent": "item/generated",
-    "textures": {
-        "layer0": "minestuck:items/punch_designix"
-    }
+    "parent": "minestuck:block/machine_designix"
 }

@@ -32,6 +32,7 @@ public class LandAspectClockwork extends TitleLandAspect
 	protected void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.SILVER));
+		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.CARPET.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.RED));
 		chunkProvider.decorators.add(new CogDecorator());
 		chunkProvider.sortDecorators();
 	}

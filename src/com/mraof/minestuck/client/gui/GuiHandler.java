@@ -1,13 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mraof.minestuck.inventory.ContainerCrockerMachine;
-import com.mraof.minestuck.inventory.ContainerSburbMachine;
-import com.mraof.minestuck.inventory.ContainerUraniumCooker;
-import com.mraof.minestuck.tileentity.TileEntityComputer;
-import com.mraof.minestuck.tileentity.TileEntityCrockerMachine;
-import com.mraof.minestuck.tileentity.TileEntitySburbMachine;
-import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
-import com.mraof.minestuck.tileentity.TileEntityUraniumCooker;
+import com.mraof.minestuck.inventory.*;
+import com.mraof.minestuck.tileentity.*;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,12 +12,14 @@ import net.minecraftforge.fml.common.network.IGuiHandler;
 
 public class GuiHandler implements IGuiHandler 
 {
-	public static enum GuiId
+	public enum GuiId
 	{
 		MACHINE,
 		COMPUTER,
 		TRANSPORTALIZER,
 		COLOR,
+		MERCHANT,
+		ALCHEMITER,
 	}
 	
 	@Override
@@ -31,12 +27,15 @@ public class GuiHandler implements IGuiHandler
 	{
 		TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
 		if(id == GuiId.MACHINE.ordinal())
-			if(tileEntity instanceof TileEntitySburbMachine)
+		{
+			if (tileEntity instanceof TileEntitySburbMachine)
 				return new ContainerSburbMachine(player.inventory, (TileEntitySburbMachine) tileEntity);
 			else if(tileEntity instanceof TileEntityCrockerMachine)
 				return new ContainerCrockerMachine(player.inventory, (TileEntityCrockerMachine) tileEntity);
 			else if(tileEntity instanceof TileEntityUraniumCooker)
 				return new ContainerUraniumCooker(player.inventory, (TileEntityUraniumCooker) tileEntity);
+		} else if(id == GuiId.MERCHANT.ordinal())
+			return new ContainerConsortMerchant(player);
 		
 		return null;
 	}
@@ -63,6 +62,12 @@ public class GuiHandler implements IGuiHandler
 		
 		if(id == GuiId.COLOR.ordinal())
 			return new GuiColorSelector(false);
+		
+		if(id == GuiId.MERCHANT.ordinal())
+			return new GuiConsortShop(player);
+		
+		if(tileEntity instanceof TileEntityAlchemiter && id == GuiId.ALCHEMITER.ordinal())
+			return new GuiAlchemiter((TileEntityAlchemiter) tileEntity);
 		
 		return null;
 		

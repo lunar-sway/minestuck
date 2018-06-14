@@ -5,15 +5,11 @@ import com.mraof.minestuck.block.BlockCrockerMachine.MachineType;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.inventory.ContainerCrockerMachine;
 import com.mraof.minestuck.tileentity.TileEntityCrockerMachine;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.GristAmount;
-import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
-import net.minecraft.client.gui.GuiButton;
+import com.mraof.minestuck.util.MinestuckPlayerData;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 
@@ -74,32 +70,27 @@ public class GuiCrockerMachine extends GuiMachine
 		if (type == MachineType.GRIST_WIDGET && !te.getStackInSlot(0).isEmpty())
 		{
 			//Render grist requirements
-			ItemStack stack = AlchemyRecipeHandler.getDecodedItem(te.getStackInSlot(0));
-
-			GristSet set = GristRegistry.getGristConversion(stack);
-			if (set != null)
-			{
-				float multiplier = stack.getCount();
-				if (multiplier != 1)
-				{
-					set = set.scaleGrist(multiplier);
-				}
-				set.scaleGrist(0.9F);
-			}
-			if (set != null && stack.isItemDamaged())
-			{
-				float multiplier = 1 - stack.getItem().getDamage(stack) / ((float) stack.getMaxDamage());
-				for (GristAmount amount : set.getArray())
-				{
-					set.setGrist(amount.getType(), (int) (amount.getAmount() * multiplier));
-				}
-			}
+			GristSet set = te.getGristWidgetResult();
 
 			GuiUtil.drawGristBoard(set, GuiUtil.GristboardMode.GRIST_WIDGET, 9, 45, fontRenderer);
-
+			
+			int cost = te.getGristWidgetBoondollarValue();
+			int has = MinestuckPlayerData.boondollars;
+			String costText = GuiUtil.addSuffix(cost)+"£("+GuiUtil.addSuffix(has)+")";
+			fontRenderer.drawString(costText, xSize - 9 - fontRenderer.getStringWidth(costText), ySize - 96 + 3, cost > has ? 0xFF0000 : 0x00FF00);
+			
 			List<String> tooltip = GuiUtil.getGristboardTooltip(set, mouseX - this.guiLeft, mouseY - this.guiTop, 9, 45, fontRenderer);
 			if (tooltip != null)
 				this.drawHoveringText(tooltip, mouseX - this.guiLeft, mouseY - this.guiTop, fontRenderer);
+			else if(mouseY - guiTop >= ySize - 96 + 3 && mouseY - guiTop < ySize - 96 + 3 + fontRenderer.FONT_HEIGHT)
+			{
+				if(!GuiUtil.addSuffix(cost).equals(String.valueOf(cost)) && mouseX - guiLeft < xSize - 9 - fontRenderer.getStringWidth("£("+GuiUtil.addSuffix(has)+")")
+						&& mouseX - guiLeft >= xSize - 9 - fontRenderer.getStringWidth(costText))
+					drawHoveringText(String.valueOf(cost), mouseX - this.guiLeft, mouseY - this.guiTop);
+				else if(!GuiUtil.addSuffix(has).equals(String.valueOf(has)) && mouseX - guiLeft < xSize - 9 - fontRenderer.getStringWidth(")")
+						&& mouseX - guiLeft >= xSize - 9 - fontRenderer.getStringWidth(GuiUtil.addSuffix(has)+")"))
+					drawHoveringText(String.valueOf(has), mouseX - this.guiLeft, mouseY - this.guiTop);
+			}
 		}
 	}
 
