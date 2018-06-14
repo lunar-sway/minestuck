@@ -216,32 +216,25 @@ public class TileEntityAlchemiter extends TileEntity
 		//set the stack size
 		newItem.setCount(quantity);
 		//get the grist cost
-		GristSet cost =getGristCost(quantity);
+		GristSet cost = getGristCost(quantity);
 		
 		
-		boolean canAfford = true;
+		boolean canAfford = GristHelper.canAfford(MinestuckPlayerData.getGristSet(player), cost);
 		
-		for (GristAmount amount : cost.getArray())
-		{
-			GristType type = amount.getType();
-			//if they dont have enough of said grist type
-			if (!(cost.getGrist(type) <= MinestuckPlayerData.getClientGrist().getGrist(type)))
-				canAfford = false;
-		}
 		
-		if (canAfford)
+		if(canAfford)
 		{
 			EntityItem item = new EntityItem(world, spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), newItem);
 			world.spawnEntity(item);
-			if (player != null)
-				MinestuckAchievementHandler.onAlchemizedItem(newItem, player);
 			
-			if (newItem.getItem() == MinestuckItems.captchaCard)
+			MinestuckAchievementHandler.onAlchemizedItem(newItem, player);
+			
+			if(newItem.getItem() == MinestuckItems.captchaCard)
 				cost = new GristSet(getSelectedGrist(), MinestuckConfig.cardCost);
-			if (newItem.isItemDamaged())
+			if(newItem.isItemDamaged())
 			{
 				float multiplier = 1 - newItem.getItem().getDamage(newItem) / ((float) newItem.getMaxDamage());
-				for (GristAmount amount : cost.getArray())
+				for(GristAmount amount : cost.getArray())
 				{
 					cost.setGrist(amount.getType(), (int) Math.ceil(amount.getAmount() * multiplier));
 				}
