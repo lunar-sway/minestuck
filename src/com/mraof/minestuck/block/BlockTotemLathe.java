@@ -8,7 +8,11 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Enchantments;
+import net.minecraft.item.ItemStack;
+import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -17,6 +21,10 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BlockTotemLathe extends BlockLargeMachine
 {
@@ -40,8 +48,8 @@ public class BlockTotemLathe extends BlockLargeMachine
 		PART = part;
 		setUnlocalizedName("totem_lathe");
 		
-	} 
-	//not sure how to do this.
+	}
+	
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state,IBlockAccess source,BlockPos pos)
 	{
@@ -83,21 +91,50 @@ public class BlockTotemLathe extends BlockLargeMachine
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
 	{
-		if(!state.getValue(PART).isRodRight())
+		if(!state.getValue(PART).isRodRight() && !state.getValue(PART).isBottomLeft())
 		{
 			BlockPos mainPos = getMainPos(state, pos);
 			TileEntity te = worldIn.getTileEntity(mainPos);
-			if(te instanceof TileEntityTotemLathe)
+			IBlockState otherState = worldIn.getBlockState(mainPos);
+			if(te instanceof TileEntityTotemLathe && otherState.getValue(DIRECTION) == state.getValue(DIRECTION))
 			{
-				TileEntityTotemLathe lathe = (TileEntityTotemLathe) te;
-				lathe.setBroken();
-				lathe.dropCard1(true, pos);
-				lathe.dropCard2(true, pos);
-				lathe.dropDowel(true, pos);
+				((TileEntityTotemLathe) te).setBroken();
 			}
 		}
 		
 		super.breakBlock(worldIn, pos, state);
+	}
+	
+	@Override
+	public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, ItemStack stack)
+	{
+		player.addStat(StatList.getBlockStats(this));
+		player.addExhaustion(0.005F);
+		
+		if(te instanceof TileEntityItemStack)
+		{
+			int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, stack);
+			List<ItemStack> items = new ArrayList<>();
+			items.add(((TileEntityItemStack) te).getStack());
+			net.minecraftforge.event.ForgeEventFactory.fireBlockHarvesting(items, worldIn, pos, state, fortune, 1.0f, false, harvesters.get());
+			
+			for (ItemStack item : items)
+			{
+				spawnAsEntity(worldIn, pos, item);
+			}
+		} else if(te instanceof TileEntityTotemLathe)
+		{
+			int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, stack);
+			List<ItemStack> items = new ArrayList<>();
+			items.add(((TileEntityTotemLathe) te).getCard1());
+			items.add(((TileEntityTotemLathe) te).getCard2());
+			net.minecraftforge.event.ForgeEventFactory.fireBlockHarvesting(items, worldIn, pos, state, fortune, 1.0f, false, harvesters.get());
+			
+			for (ItemStack item : items)
+			{
+				spawnAsEntity(worldIn, pos, item);
+			}
+		}
 	}
 	
 	//Block state handling
@@ -136,32 +173,33 @@ public class BlockTotemLathe extends BlockLargeMachine
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos)
 	{
-		BlockPos mainPos = getMainPos(state, pos);
-		TileEntity te = worldIn.getTileEntity(mainPos);
-		
-		if(te instanceof TileEntityTotemLathe)
+		EnumParts part = state.getValue(PART);
+		EnumFacing facing = state.getValue(DIRECTION);
+		if(part.isBottomLeft())
 		{
-			TileEntityTotemLathe lathe = (TileEntityTotemLathe) te;
-			EnumParts part = state.getValue(PART);
-			if(part.isBottomLeft())
+			BlockPos mainPos = getMainPos(state, pos);
+			TileEntity te = worldIn.getTileEntity(mainPos);
+			if(te instanceof TileEntityTotemLathe)
 			{
+				TileEntityTotemLathe lathe = (TileEntityTotemLathe) te;
 				if(!lathe.getCard2().isEmpty())
 					return state.withProperty(PART, EnumParts.BOTTOM_LEFT_CARD_2);
 				else if(!lathe.getCard1().isEmpty())
 					return state.withProperty(PART, EnumParts.BOTTOM_LEFT_CARD_1);
-			} else if(part.isRodLeft())
-			{
-				if(!lathe.getDowel().isEmpty())
-					return state.withProperty(PART, EnumParts.ROD_LEFT_ACTIVE);
-			} else if(part.isMiddleRight())
-			{
-				if(!lathe.getDowel().isEmpty())
-					return state.withProperty(PART, EnumParts.MID_RIGHT_ACTIVE);
-			} else if(part.isRodRight())
-			{
-				if(AlchemyRecipeHandler.hasDecodedItem(lathe.getDowel()))
-					return state.withProperty(PART, EnumParts.ROD_RIGHT_CARVED);
 			}
+		} else if(part.isRodLeft())
+		{
+			if(worldIn.getBlockState(pos.offset(facing.rotateYCCW())).equals(getState(EnumParts.ROD_RIGHT, facing)))
+				return state.withProperty(PART, EnumParts.ROD_LEFT_ACTIVE);
+		} else if(part.isMiddleRight())
+		{
+			if(worldIn.getBlockState(pos.offset(facing.rotateY())).equals(getState(EnumParts.ROD_RIGHT, facing)))
+				return state.withProperty(PART, EnumParts.MID_RIGHT_ACTIVE);
+		} else if(part.isRodRight())
+		{
+			TileEntity te = worldIn.getTileEntity(pos);
+			if(te instanceof TileEntityItemStack && AlchemyRecipeHandler.hasDecodedItem(((TileEntityItemStack) te).getStack()))
+				return state.withProperty(PART, EnumParts.ROD_RIGHT_CARVED);
 		}
 		
 		return state;
