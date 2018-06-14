@@ -1,10 +1,9 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.tileentity.TileEntityItemStack;
 import com.mraof.minestuck.tileentity.TileEntityTotemLathe;
 
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import net.minecraft.block.Block;
-import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -23,11 +22,10 @@ public class BlockTotemLathe extends BlockLargeMachine
 {
 	
 	public static final PropertyEnum<EnumParts> PART1 = PropertyEnum.create("part", EnumParts.class, EnumParts.BOTTOM_LEFT, EnumParts.BOTTOM_MIDLEFT, EnumParts.BOTTOM_MIDRIGHT, EnumParts.BOTTOM_RIGHT, EnumParts.BOTTOM_LEFT_CARD_1, EnumParts.BOTTOM_LEFT_CARD_2);
-	public static final PropertyEnum<EnumParts> PART2 = PropertyEnum.create("part", EnumParts.class, EnumParts.MID_LEFT, EnumParts.MID_MIDLEFT, EnumParts.MID_MIDRIGHT, EnumParts.MID_RIGHT);
+	public static final PropertyEnum<EnumParts> PART2 = PropertyEnum.create("part", EnumParts.class, EnumParts.MID_LEFT, EnumParts.ROD_LEFT, EnumParts.ROD_RIGHT, EnumParts.MID_RIGHT, EnumParts.ROD_LEFT_ACTIVE, EnumParts.ROD_RIGHT_CARVED, EnumParts.MID_RIGHT_ACTIVE);
 	public static final PropertyEnum<EnumParts> PART3 = PropertyEnum.create("part", EnumParts.class, EnumParts.TOP_LEFT, EnumParts.TOP_MIDLEFT, EnumParts.TOP_MIDRIGHT);
 	public final PropertyEnum<EnumParts> PART;
 	public static final PropertyDirection DIRECTION = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-	public static final PropertyEnum<EnumDowel> HAS_DOWEL = PropertyEnum.create("dowel", EnumDowel.class);
 	
 	private int index;
 	
@@ -69,7 +67,7 @@ public class BlockTotemLathe extends BlockLargeMachine
 	@Override
 	public boolean hasTileEntity(IBlockState state)
 	{
-		return state.getValue(PART).isBottomLeft();
+		return state.getValue(PART).isBottomLeft() || state.getValue(PART).isRodRight();
 	}
 	
 	@Override
@@ -77,23 +75,26 @@ public class BlockTotemLathe extends BlockLargeMachine
 	{
 		if(meta / 4 + index * 4 == EnumParts.BOTTOM_LEFT.ordinal())
 			return new TileEntityTotemLathe();
+		else if(meta / 4 + index * 4 == EnumParts.ROD_RIGHT.ordinal())
+			return new TileEntityItemStack();
 		else return null;
 	}
 	
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
 	{
-	
-		BlockPos mainPos = getMainPos(state, pos);
-		TileEntity te = worldIn.getTileEntity(mainPos);
-		if(te instanceof TileEntityTotemLathe)
+		if(!state.getValue(PART).isRodRight())
 		{
-			TileEntityTotemLathe lathe = (TileEntityTotemLathe) te;
-			lathe.setBroken();
-			lathe.dropCard1(true, pos);
-			lathe.dropCard2(true, pos);
-			lathe.dropDowel(true, pos);
-
+			BlockPos mainPos = getMainPos(state, pos);
+			TileEntity te = worldIn.getTileEntity(mainPos);
+			if(te instanceof TileEntityTotemLathe)
+			{
+				TileEntityTotemLathe lathe = (TileEntityTotemLathe) te;
+				lathe.setBroken();
+				lathe.dropCard1(true, pos);
+				lathe.dropCard2(true, pos);
+				lathe.dropDowel(true, pos);
+			}
 		}
 		
 		super.breakBlock(worldIn, pos, state);
@@ -122,6 +123,12 @@ public class BlockTotemLathe extends BlockLargeMachine
 		EnumParts part = state.getValue(PART);
 		if(part.isBottomLeft())
 			part = EnumParts.BOTTOM_LEFT;
+		else if(part.isRodLeft())
+			part = EnumParts.ROD_LEFT;
+		else if(part.isRodRight())
+			part = EnumParts.ROD_RIGHT;
+		else if(part.isMiddleRight())
+			part = EnumParts.MID_RIGHT;
 		EnumFacing facing = state.getValue(DIRECTION);
 		return (part.ordinal() % 4) * 4 + facing.getHorizontalIndex();
 	}
@@ -135,24 +142,25 @@ public class BlockTotemLathe extends BlockLargeMachine
 		if(te instanceof TileEntityTotemLathe)
 		{
 			TileEntityTotemLathe lathe = (TileEntityTotemLathe) te;
-			if(state.getValue(PART).isBottomLeft())
+			EnumParts part = state.getValue(PART);
+			if(part.isBottomLeft())
 			{
 				if(!lathe.getCard2().isEmpty())
 					return state.withProperty(PART, EnumParts.BOTTOM_LEFT_CARD_2);
 				else if(!lathe.getCard1().isEmpty())
 					return state.withProperty(PART, EnumParts.BOTTOM_LEFT_CARD_1);
-			} else if(index == 1)
+			} else if(part.isRodLeft())
 			{
 				if(!lathe.getDowel().isEmpty())
-				{
-					if(AlchemyRecipeHandler.hasDecodedItem(lathe.getDowel()))
-					{
-						return state.withProperty(HAS_DOWEL, EnumDowel.CARVED_DOWEL);
-					} else
-					{
-						return state.withProperty(HAS_DOWEL, EnumDowel.UNCARVED_DOWEL);
-					}
-				} else return state.withProperty(HAS_DOWEL, EnumDowel.NO_DOWEL);
+					return state.withProperty(PART, EnumParts.ROD_LEFT_ACTIVE);
+			} else if(part.isMiddleRight())
+			{
+				if(!lathe.getDowel().isEmpty())
+					return state.withProperty(PART, EnumParts.MID_RIGHT_ACTIVE);
+			} else if(part.isRodRight())
+			{
+				if(AlchemyRecipeHandler.hasDecodedItem(lathe.getDowel()))
+					return state.withProperty(PART, EnumParts.ROD_RIGHT_CARVED);
 			}
 		}
 		
@@ -177,11 +185,11 @@ public class BlockTotemLathe extends BlockLargeMachine
 				return pos.offset(facing.rotateY(),1);
 			case BOTTOM_LEFT: case BOTTOM_LEFT_CARD_1: case BOTTOM_LEFT_CARD_2:
 				return pos;
-			case MID_RIGHT:
+			case MID_RIGHT: case MID_RIGHT_ACTIVE:
 				return pos.down(1).offset(facing.rotateY(),3);
-			case MID_MIDRIGHT:
+			case ROD_RIGHT: case ROD_RIGHT_CARVED:
 				return pos.down(1).offset(facing.rotateY(),2);
-			case MID_MIDLEFT:
+			case ROD_LEFT: case ROD_LEFT_ACTIVE:
 				return pos.down(1).offset(facing.rotateY(),1);
 			case MID_LEFT:
 				return pos.down(1);
@@ -216,16 +224,19 @@ public class BlockTotemLathe extends BlockLargeMachine
 		BOTTOM_RIGHT(	new AxisAlignedBB(0.0D, 0.0D, 1/16D, 12/16D, 1.0D, 11/16D)),
 		
 		MID_LEFT(		new AxisAlignedBB(0.0D, 0.0D,  1/16D, 1.0D,  1.0D, 12/16D)),
-		MID_MIDLEFT(	new AxisAlignedBB(0.0D, 0.0D,  3/16D, 1.0D,  1.0D, 9/16D)),
-		MID_MIDRIGHT(	new AxisAlignedBB(9/16D, 12/16D, 7/16D, 16/16D,  1.0D, 12/16D)),
-		MID_RIGHT(		new AxisAlignedBB(1/16D, 0/16D,  7/16D, 14/16D, 4/16D, 12/16D)),
+		ROD_LEFT(		new AxisAlignedBB(0.0D, 4/16D,  3/16D, 1.0D,  10/16D, 9/16D)),
+		ROD_RIGHT(		new AxisAlignedBB(0.0D, 4/16D, 3/16D, 1.0D,  10/16D, 9/16D)),
+		MID_RIGHT(		new AxisAlignedBB(0.0D, 0.0D,  3/16D, 14/16D, 10/16D, 9/16D)),
 		
 		TOP_MIDRIGHT(	new AxisAlignedBB(8/16D, 0/16D, 6/16D, 16/16D,  12/16D, 14/16D)),
 		TOP_MIDLEFT(	new AxisAlignedBB(0/16D, 0/16D, 6/16D, 16/16D,  12/16D, 14/16D)),
 		TOP_LEFT(		new AxisAlignedBB(0/16D, 0/16D, 6/16D, 16/16D,  12/16D, 14/16D)),
 		
 		BOTTOM_LEFT_CARD_1(new AxisAlignedBB(0.0D, 0.0D, 1/16D, 1.0D, 1.0D, 13/16D)),
-		BOTTOM_LEFT_CARD_2(new AxisAlignedBB(0.0D, 0.0D, 1/16D, 1.0D, 1.0D, 13/16D));
+		BOTTOM_LEFT_CARD_2(new AxisAlignedBB(0.0D, 0.0D, 1/16D, 1.0D, 1.0D, 13/16D)),
+		ROD_LEFT_ACTIVE(new AxisAlignedBB(0.0D, 0.0D,  3/16D, 1.0D,  1.0D, 9/16D)),
+		ROD_RIGHT_CARVED(new AxisAlignedBB(0.0D, 4/16D, 3/16D, 1.0D,  10/16D, 9/16D)),
+		MID_RIGHT_ACTIVE(new AxisAlignedBB(0.0D, 0.0D,  3/16D, 14/16D, 10/16D, 9/16D));
 		
 		private final AxisAlignedBB[] BOUNDING_BOX;
 		
@@ -254,24 +265,20 @@ public class BlockTotemLathe extends BlockLargeMachine
 		{
 			return this == BOTTOM_LEFT || this == BOTTOM_LEFT_CARD_1 || this == BOTTOM_LEFT_CARD_2;
 		}
-	}
-	
-	public enum EnumDowel implements IStringSerializable
-	{
-		NO_DOWEL,
-		UNCARVED_DOWEL,
-		CARVED_DOWEL;
 		
-		@Override
-		public String toString()
+		public boolean isRodLeft()
 		{
-			return getName();
+			return this == ROD_LEFT || this == ROD_LEFT_ACTIVE;
 		}
 		
-		@Override
-		public String getName()
+		public boolean isRodRight()
 		{
-			return name().toLowerCase();
+			return this == ROD_RIGHT || this == ROD_RIGHT_CARVED;
+		}
+		
+		public boolean isMiddleRight()
+		{
+			return this == MID_RIGHT || this == MID_RIGHT_ACTIVE;
 		}
 	}
 	
@@ -290,7 +297,7 @@ public class BlockTotemLathe extends BlockLargeMachine
 		@Override
 		protected BlockStateContainer createBlockState()
 		{
-			return new BlockStateContainer(this, PART2, DIRECTION, HAS_DOWEL);
+			return new BlockStateContainer(this, PART2, DIRECTION);
 		}
 	}
 	

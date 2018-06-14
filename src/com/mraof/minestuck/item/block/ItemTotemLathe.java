@@ -12,7 +12,6 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 public class ItemTotemLathe extends ItemBlock
@@ -91,8 +90,7 @@ public class ItemTotemLathe extends ItemBlock
 			world.setBlockState(pos.offset(facing.rotateYCCW(),2), BlockTotemLathe.getState(EnumParts.BOTTOM_MIDRIGHT, facing));
 			world.setBlockState(pos.offset(facing.rotateYCCW(),3), BlockTotemLathe.getState(EnumParts.BOTTOM_RIGHT, facing));
 			world.setBlockState(pos.up(1), BlockTotemLathe.getState(EnumParts.MID_LEFT, facing));
-			world.setBlockState(pos.offset(facing.rotateYCCW(),1).up(1), BlockTotemLathe.getState(EnumParts.MID_MIDLEFT, facing));
-			world.setBlockState(pos.offset(facing.rotateYCCW(),2).up(1), BlockTotemLathe.getState(EnumParts.MID_MIDRIGHT, facing));
+			world.setBlockState(pos.offset(facing.rotateYCCW(),1).up(1), BlockTotemLathe.getState(EnumParts.ROD_LEFT, facing));
 			world.setBlockState(pos.offset(facing.rotateYCCW(),3).up(1), BlockTotemLathe.getState(EnumParts.MID_RIGHT, facing));
 			world.setBlockState(pos.up(2), BlockTotemLathe.getState(EnumParts.TOP_LEFT, facing));
 			world.setBlockState(pos.offset(facing.rotateYCCW(),1).up(2), BlockTotemLathe.getState(EnumParts.TOP_MIDLEFT, facing));

@@ -27,12 +27,11 @@ public class BlockColorCruxite implements IBlockColor
 				TileEntity tileEntity = worldIn.getTileEntity(pos);
 				if(state.getValue(BlockAlchemiter.PART1).isTotemPad() && tileEntity instanceof TileEntityAlchemiter)
 					dowel = ((TileEntityAlchemiter) tileEntity).getDowel();
-			} else if(state.getBlock() == MinestuckBlocks.totemlathe[1])
+			} else if(state.getBlock() == MinestuckBlocks.totemlathe[1] && state.getValue(BlockTotemLathe.PART2).isRodRight())
 			{
-				BlockPos mainPos = ((BlockTotemLathe) state.getBlock()).getMainPos(state, pos);
-				TileEntity tileEntity = worldIn.getTileEntity(mainPos);
-				if(tileEntity instanceof TileEntityTotemLathe)
-					dowel = ((TileEntityTotemLathe) tileEntity).getDowel();
+				TileEntity tileEntity = worldIn.getTileEntity(pos);
+				if(tileEntity instanceof TileEntityItemStack)
+					dowel = ((TileEntityItemStack) tileEntity).getStack();
 			} else if(state.getBlock() == MinestuckBlocks.blockCruxiteDowel)
 			{
 				TileEntity tileEntity = worldIn.getTileEntity(pos);

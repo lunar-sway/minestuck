@@ -1,5 +1,6 @@
 package com.mraof.minestuck.tileentity;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -58,5 +59,10 @@ public class TileEntityItemStack extends TileEntity
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt)
 	{
 		handleUpdateTag(pkt.getNbtCompound());
+		if(world != null)
+		{
+			IBlockState state = world.getBlockState(pos);
+			world.notifyBlockUpdate(pos, state, state, 2);
+		}
 	}
 }

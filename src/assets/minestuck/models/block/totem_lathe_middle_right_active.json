@@ -4,7 +4,7 @@
         "lower":    "minestuck:machines/totem_lathe/middle_right_lower",
         "upper":    "minestuck:machines/totem_lathe/middle_right_upper",
         "bottom":   "minestuck:machines/totem_lathe/bottom_right_inside",
-        "rod":      "minestuck:machines/totem_lathe/rod_right_1"
+        "rod":      "minestuck:machines/totem_lathe/rod_right_2"
     },
     "elements": [
         {
@@ -125,11 +125,11 @@
             "from": [ 13, 5, 8 ],
             "to": [ 16, 9, 12 ],
             "faces": {
-                "north": { "uv": [  0, 12,  3, 16 ], "texture": "#rod" },
-                "east":  { "uv": [ 12, 12, 16, 16 ], "texture": "#rod", "cullface": "east" },
-                "south": { "uv": [  6, 12,  9, 16 ], "texture": "#rod" },
-                "up":    { "uv": [  3, 12,  6, 16 ], "texture": "#rod" },
-                "down":  { "uv": [  9, 12, 12, 16 ], "texture": "#rod" }
+                "north": { "uv": [ 5, 0,  8, 4 ], "texture": "#rod" },
+                "east":  { "uv": [ 8, 0, 12, 4 ], "texture": "#rod", "cullface": "east" },
+                "south": { "uv": [ 0, 4,  3, 8 ], "texture": "#rod" },
+                "up":    { "uv": [ 8, 4, 11, 8 ], "texture": "#rod" },
+                "down":  { "uv": [ 8, 4, 11, 8 ], "texture": "#rod" }
             }
         }
     ]
