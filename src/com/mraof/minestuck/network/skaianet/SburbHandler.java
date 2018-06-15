@@ -679,7 +679,6 @@ public class SburbHandler
 	
 	static void onGameEntered(SburbConnection c)
 	{
-		generateTitle(c.getClientIdentifier());
 		getPlayerSession(c.getClientIdentifier()).checkIfCompleted();
 	}
 	

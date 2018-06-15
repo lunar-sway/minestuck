@@ -52,8 +52,9 @@ public class WorldGenEndTree extends WorldGenAbstractTree
 				return false;
 			}
 			
-			if(subGenerate(worldIn, rand, position, position, BlockEndLog.LEAF_SUSTAIN_DISTANCE-1, 0, rand.nextInt(maxMax - minMax + 1) + minMax - 1))
+			if(subGenerate(worldIn, rand, position, position, BlockEndLog.LEAF_SUSTAIN_DISTANCE, 0, rand.nextInt(maxMax - minMax + 1) + minMax - 1))
 			{
+				worldIn.setBlockState(position, LOG);
 				return true;
 			}
 		}
@@ -65,14 +66,14 @@ public class WorldGenEndTree extends WorldGenAbstractTree
 	//It's not necessary to fix this for end trees to exist and be enjoyed, but fixing it would be a good idea.
 	private boolean subGenerate(World worldIn, Random rand, BlockPos curr, BlockPos origin, int range, int age, int maxAge)
 	{
-		int i = rand.nextInt(4) + 1;
+		int i = rand.nextInt(Math.max(1, 4 - age)) + 1;
 		
 		if (age == 0)
 		{
 			++i;
 		}
 		
-		for (int j = 0; j < i; ++j)
+		for (int j = 1; j < i; ++j)
 		{
 			BlockPos blockpos = curr.up(j);
 			
@@ -81,7 +82,7 @@ public class WorldGenEndTree extends WorldGenAbstractTree
 				return false;
 			}
 			
-			worldIn.setBlockState(blockpos, MinestuckBlocks.endLog.getDefaultState(), 2);
+			worldIn.setBlockState(blockpos, LOG, 2);
 		}
 		
 		boolean flag = false;
@@ -95,7 +96,7 @@ public class WorldGenEndTree extends WorldGenAbstractTree
 				++buds;
 			}
 			
-			for (int k = 0; k < buds; ++k)		//TODO: Change this to prioritize north/south growth over east/west growth, and to lock growth into one direction
+			for (int k = 0; k < buds; ++k)		//TODO: Change this to prioritize north/south growth over east/west growth, and to lock growth into one axis
 			{
 				EnumFacing enumfacing = EnumFacing.Plane.HORIZONTAL.random(rand);
 				BlockPos blockpos1 = curr.up(i).offset(enumfacing);
@@ -107,7 +108,7 @@ public class WorldGenEndTree extends WorldGenAbstractTree
 						&& areAllNeighborsEmpty(worldIn, blockpos1, enumfacing.getOpposite()))
 				{
 					flag = true;
-					worldIn.setBlockState(blockpos1, MinestuckBlocks.endLog.getDefaultState().withProperty(BlockEndLog.LOG_AXIS, BlockLog.EnumAxis.fromFacingAxis(enumfacing.getAxis())), 2);
+					worldIn.setBlockState(blockpos1, LOG.withProperty(BlockEndLog.SECOND_AXIS, BlockLog.EnumAxis.fromFacingAxis(enumfacing.getAxis())), 2);
 					subGenerate(worldIn, rand, blockpos1, origin, range, age + 1, maxAge);
 					((BlockEndLog) MinestuckBlocks.endLog).generateLeaves(worldIn, blockpos1, worldIn.getBlockState(blockpos1));
 					blockpos1 = curr.up(i);
@@ -118,7 +119,7 @@ public class WorldGenEndTree extends WorldGenAbstractTree
 		
 		if (!flag)
 		{
-			worldIn.setBlockState(curr.up(i), MinestuckBlocks.endLog.getDefaultState(), 2);
+			worldIn.setBlockState(curr.up(i), LOG, 2);
 			((BlockEndLog) MinestuckBlocks.endLog).generateLeaves(worldIn, curr.up(i), worldIn.getBlockState(curr.up(i)));
 		}
 		return true;
@@ -128,7 +129,7 @@ public class WorldGenEndTree extends WorldGenAbstractTree
 	{
 		for (EnumFacing enumfacing : EnumFacing.Plane.HORIZONTAL)
 		{
-			if (enumfacing != excludingSide && !(worldIn.isAirBlock(pos.offset(enumfacing)) || worldIn.getBlockState(pos.offset(enumfacing)) == MinestuckBlocks.endLeaves))
+			if (enumfacing != excludingSide && (!(worldIn.isAirBlock(pos.offset(enumfacing)) || worldIn.getBlockState(pos.offset(enumfacing)).getBlock() == MinestuckBlocks.endLeaves)))
 			{
 				return false;
 			}

@@ -60,7 +60,7 @@ public class BlockEndLeaves extends BlockMinestuckLeaves
 	@Override
 	public IBlockState getStateFromMeta(int meta)
 	{
-		return this.getDefaultState().withProperty(DISTANCE, meta % BlockEndLog.LEAF_SUSTAIN_DISTANCE);
+		return this.getDefaultState().withProperty(DISTANCE, Math.min(meta, BlockEndLog.LEAF_SUSTAIN_DISTANCE));
 	}
 
 	/**
@@ -118,7 +118,7 @@ public class BlockEndLeaves extends BlockMinestuckLeaves
 			{
 				if(u.getBlock() == MinestuckBlocks.endLeaves)
 				{
-					distance = Math.min(u.getValue(DISTANCE) + 2, distance);
+					distance = Math.min(u.getValue(DISTANCE) + 1, distance);
 				}
 				if(d.getBlock() == MinestuckBlocks.endLeaves)
 				{
@@ -142,7 +142,7 @@ public class BlockEndLeaves extends BlockMinestuckLeaves
 				}
 			}
 			
-			if (distance < BlockEndLog.LEAF_SUSTAIN_DISTANCE)
+			if (distance <= BlockEndLog.LEAF_SUSTAIN_DISTANCE)
 			{
 				worldIn.setBlockState(pos, state.withProperty(DISTANCE, distance), 3);
 			}
