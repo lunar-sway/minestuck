@@ -36,32 +36,32 @@ public class ModelSalamander extends ModelBase
 		textureWidth = 64;
 		textureHeight = 32;
 		
-		this.rightLeg = new ModelRenderer(this, 0, 16);
-		this.rightLeg.setRotationPoint(-1.0F, 20.0F, 0.0F);
-		this.rightLeg.addBox(-2.0F, 0.0F, -2.0F, 2, 4, 3, 0.0F);
-		this.body = new ModelRenderer(this, 16, 16);
+		this.body = new ModelRenderer(this, 10, 18);
 		this.body.setRotationPoint(0.0F, 12.0F, 0.0F);
 		this.body.addBox(-3.0F, 0.0F, -3.0F, 6, 8, 6, 0.0F);
-		this.leftLeg = new ModelRenderer(this, 0, 16);
+		this.rightLeg = new ModelRenderer(this, 0, 18);
+		this.rightLeg.setRotationPoint(-1.0F, 20.0F, 0.0F);
+		this.rightLeg.addBox(-2.0F, 0.0F, -2.0F, 2, 4, 3, 0.0F);
+		this.leftLeg = new ModelRenderer(this, 0, 25);
 		this.leftLeg.setRotationPoint(3.0F, 20.0F, 0.0F);
 		this.leftLeg.addBox(-2.0F, 0.0F, -2.0F, 2, 4, 3, 0.0F);
 		this.head = new ModelRenderer(this, 0, 0);
 		this.head.setRotationPoint(0.0F, 12.0F, 0.0F);
 		this.head.addBox(-3.0F, -4.0F, -3.5F, 6, 4, 7, 0.0F);
-		this.upperJaw = new ModelRenderer(this, 0, 0);
+		this.upperJaw = new ModelRenderer(this, 0, 11);
 		this.upperJaw.setRotationPoint(0.0F, 11.0F, 0.0F);
 		this.upperJaw.addBox(-2.0F, -2.0F, -6.0F, 4, 2, 3, 0.0F);
-		this.lowerJaw = new ModelRenderer(this, 48, 26);
+		this.lowerJaw = new ModelRenderer(this, 14, 11);
 		this.lowerJaw.setRotationPoint(0.0F, 13.0F, 0.0F);
 		this.lowerJaw.addBox(-2.0F, -2.0F, -6.0F, 4, 1, 3, 0.0F);
-		this.hood = new ModelRenderer(this, 32, 0);
+		this.hood = new ModelRenderer(this, 26, 0);
 		this.hood.setRotationPoint(0.0F, 12.0F, 0.0F);
 		this.hood.addBox(-4.0F, -5.0F, -4.0F, 8, 5, 8, 0.0F);
-		this.upperTail = new ModelRenderer(this, 0, 16);
+		this.upperTail = new ModelRenderer(this, 34, 18);
 		this.upperTail.setRotationPoint(0.0F, 18.0F, 3.0F);
 		this.upperTail.addBox(-1.0F, 0.0F, -1.0F, 2, 4, 2, 0.0F);
 		this.setRotation(upperTail, 0.22307169437408447F, 0.0F, 0.0F);
-		this.lowerTail = new ModelRenderer(this, 0, 16);
+		this.lowerTail = new ModelRenderer(this, 34, 24);
 		this.lowerTail.setRotationPoint(0.0F, 22.0F, 6.0F);
 		this.lowerTail.addBox(-1.0F, 0.0F, -3.0F, 2, 2, 6, 0.0F);
 		
@@ -127,16 +127,16 @@ public class ModelSalamander extends ModelBase
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;
 	}
+	
 	@Override
-	public void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6, Entity par7Entity) {
-		this.head.rotateAngleY = par4 / (180F / (float)Math.PI);
-		this.head.rotateAngleX = par5 / (180F / (float)Math.PI);
-		this.upperJaw.rotateAngleY = par4 / (180F / (float)Math.PI);
-		this.upperJaw.rotateAngleX = par5 / (180F / (float)Math.PI);
-		this.lowerJaw.rotateAngleY = par4 / (180F / (float)Math.PI);
-		this.lowerJaw.rotateAngleX = par5 / (180F / (float)Math.PI);
-		this.leftLeg.rotateAngleX = MathHelper.cos(par1 * 0.6662F) * 1.4F * par2;
-		this.rightLeg.rotateAngleX = MathHelper.cos(par1 * 0.6662F + (float)Math.PI) * 1.4F * par2;
+	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn)
+	{
+		float angleY = netHeadYaw / (180F / (float)Math.PI);
+		float angleX = headPitch / (180F / (float)Math.PI);
+		head.rotateAngleY = hood.rotateAngleY = upperJaw.rotateAngleY = lowerJaw.rotateAngleY = angleY;
+		head.rotateAngleX = hood.rotateAngleX = upperJaw.rotateAngleX = lowerJaw.rotateAngleX = angleX;
+		this.leftLeg.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+		this.rightLeg.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
 	}
 
 }
