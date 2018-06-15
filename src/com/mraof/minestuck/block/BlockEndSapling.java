@@ -44,7 +44,7 @@ public class BlockEndSapling extends BlockBush implements IGrowable
 	@Override
 	public boolean canGrow(World worldIn, BlockPos pos, IBlockState state, boolean isClient)
 	{
-		return worldIn.getMoonPhase()!=0;	//Zero should be the new moon. If zero is the full moon, change this value to 4.
+		return worldIn.getMoonPhase()!=4;
 	}
 	
 	@Override
@@ -134,7 +134,7 @@ public class BlockEndSapling extends BlockBush implements IGrowable
 	{
 		IBlockState soil = worldIn.getBlockState(pos.down());
 		boolean out = super.canPlaceBlockAt(worldIn, pos) && soil.getBlock().canSustainPlant(soil, worldIn, pos.down(), net.minecraft.util.EnumFacing.UP, this); 
-		if(!out && (soil.getBlock()==Blocks.END_STONE || soil.getBlock()==MinestuckBlocks.coarseEndStone))
+		if(!out && (soil.getBlock()==Blocks.END_STONE || soil.getBlock()==MinestuckBlocks.coarseEndStone || soil.getBlock()==MinestuckBlocks.endGrass))
 			out = true;
 		return out;
 	}
@@ -142,7 +142,7 @@ public class BlockEndSapling extends BlockBush implements IGrowable
 	@Override
 	protected boolean canSustainBush(IBlockState state)
 	{
-		return state.getBlock() == Blocks.END_STONE || state.getBlock() == MinestuckBlocks.coarseEndStone;
+		return state.getBlock() == Blocks.END_STONE || state.getBlock() == MinestuckBlocks.coarseEndStone || state.getBlock()==MinestuckBlocks.endGrass;
 	}
 	
 	@Override

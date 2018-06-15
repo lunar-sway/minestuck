@@ -1,8 +1,13 @@
 package com.mraof.minestuck.item;
 
+import static com.mraof.minestuck.MinestuckConfig.artifactRange;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.block.BlockComputerOn;
 import com.mraof.minestuck.block.BlockGate;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.editmode.ServerEditHandler;
@@ -16,6 +21,7 @@ import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.util.PostEntryTask;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.GateHandler;
@@ -35,7 +41,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
@@ -43,12 +48,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
-
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-
-import static com.mraof.minestuck.MinestuckConfig.artifactRange;
 
 public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITeleporter
 {
@@ -107,13 +106,13 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 					}
 					else
 					{
-						c = SburbHandler.getConnectionForDimension(player.dimension);	//This is viable as we know the player was not in any Land dimension prior to the Entry attempt.
-						if(c != null)
+						c = SburbHandler.getConnectionForDimension(player.dimension);
+						if(c != null && c.getClientIdentifier().equals(IdentifierHandler.encode(player)))
 						{
 							MinestuckPlayerTracker.sendLandEntryMessage(player);
 						} else
 						{
-							player.sendMessage(new TextComponentString("Something went wrong taking you to your Land. Don't worry: it's still there, and you can try again."));
+							player.sendMessage(new TextComponentString("Something went wrong taking you to your Land."));
 						}
 					}
 					
@@ -147,7 +146,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 			topY = MinestuckConfig.adaptEntryBlockHeight ? getTopHeight(worldserver0, x, y, z) : y + artifactRange;
 			yDiff = 127 - topY;
 			
-			Debug.debug("Placing blocks...");
+			Debug.debug("Loading block movements...");
 			long time = System.currentTimeMillis();
 			int bl = 0;
 			boolean foundComputer = false;
@@ -176,15 +175,16 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 						{
 							((EntityPlayerMP) player).sendStatusMessage(new TextComponentString("You are not allowed to move command blocks."), false);
 							return false;
-						} else if(gotBlock == MinestuckBlocks.blockComputerOn)
+						} else if(te instanceof TileEntityComputer)		//If the block is a computer
 						{
-							if(((TileEntityComputer)te).owner.getPlayer() != player)
+							if(((TileEntityComputer)te).owner.equals(IdentifierHandler.encode((EntityPlayer) player)))
+							{
+								blockMoves.add(new BlockMove(chunk2, blockX, blockY + yDiff, blockY, blockZ));
+								foundComputer = true;
+							} else
 							{
 								((EntityPlayerMP) player).sendStatusMessage(new TextComponentString("You are not allowed to move other players' computers."), false);
 								return false;
-							} else
-							{
-								foundComputer = true;
 							}
 						} else
 						{
@@ -192,6 +192,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 						}
 						bl += System.currentTimeMillis() - t;
 					}
+					
 					for(int blockY = Math.min(topY, y + height) + yDiff + 1; blockY < 256; blockY++)
 					{
 						blockMoves.add(new BlockMove(chunk2, blockX, blockY + yDiff, blockY, blockZ, Blocks.AIR.getDefaultState()));
@@ -219,11 +220,11 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 		if(player instanceof EntityPlayerMP)
 		{
 			Debug.debug("Loading spawn chunks...");
-			for(int chunkX = ((x - artifactRange) >> 4) - 1; chunkX <= ((x + artifactRange) >> 4) + 2; chunkX++)	//Prevent anything to generate on the piece that we move
+			for(int chunkX = ((x - artifactRange) >> 4) - 1; chunkX <= ((x + artifactRange) >> 4) + 2; chunkX++)	//Prevent anything generating on the piece that we move
 				for(int chunkZ = ((z - artifactRange) >> 4) - 1; chunkZ <= ((z + artifactRange) >> 4) + 2; chunkZ++)	//from the overworld.
 					worldserver1.getChunkProvider().provideChunk(chunkX, chunkZ);
 			
-			MinestuckDimensionHandler.setSpawn(worldserver1.provider.getDimension(), new BlockPos(x, y + yDiff, z));	//Set again, but with a more precise now that the y-coordinate is properly decided.
+			MinestuckDimensionHandler.setSpawn(worldserver1.provider.getDimension(), new BlockPos(x, y + yDiff, z));	//Set again, but with a more precise value now that the y-coordinate is properly decided.
 			
 			for(BlockMove move : blockMoves)
 			{
@@ -267,6 +268,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 			}
 			
 			Debug.debug("Removing old blocks...");
+			
 			for(int blockX = x - artifactRange; blockX <= x + artifactRange; blockX++)
 			{
 				int zWidth = (int) Math.sqrt(artifactRange * artifactRange - (blockX - x) * (blockX - x));
@@ -294,13 +296,14 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 									tileEntity.writeToNBT(nbt);
 									nbt.setInteger("y", pos1.getY());
 									TileEntity te1 = TileEntity.create(worldserver1, nbt);
-									worldserver1.removeTileEntity(pos1);
+									//worldserver1.removeTileEntity(pos1);
 									worldserver1.setTileEntity(pos1, te1);
 									if(tileEntity instanceof TileEntityComputer)
 										SkaianetHandler.movingComputer((TileEntityComputer) tileEntity, (TileEntityComputer) te1);
-
+									
 									try {
-										worldserver0.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
+										worldserver0.removeTileEntity(pos);
+										worldserver0.setBlockToAir(pos);
 									} catch (NullPointerException e) {e.printStackTrace();}
 								} else if(isEdgeX || isEdgeZ || blockY == minY || blockY == maxY-1)
 								{
@@ -314,7 +317,10 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 						{
 							if(tileEntity != null)
 								if(!creative)
-									worldserver0.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
+								{
+									worldserver0.removeTileEntity(pos);
+									worldserver0.setBlockToAir(pos);
+								}
 								else if(tileEntity instanceof TileEntityComputer)	//Avoid duplicating computer data when a computer is kept in the overworld
 									((TileEntityComputer) tileEntity).programData = new NBTTagCompound();
 								else if(tileEntity instanceof TileEntityTransportalizer)

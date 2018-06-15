@@ -21,7 +21,7 @@ import net.minecraft.world.World;
 public class BlockEndLog extends BlockLog
 {
 	public static final PropertyEnum<EnumAxis> SECOND_AXIS = PropertyEnum.<EnumAxis>create("axis2", EnumAxis.class);
-	public static final int LEAF_SUSTAIN_DISTANCE = 6;
+	public static final int LEAF_SUSTAIN_DISTANCE = 5;
 	
 	public BlockEndLog()
 	{
@@ -146,10 +146,7 @@ public class BlockEndLog extends BlockLog
 		IBlockState blockState = world.getBlockState(curr);
 		if(blockState.getBlock().canBeReplacedByLeaves(blockState, world, curr))
 		{
-			if(distance > LEAF_SUSTAIN_DISTANCE - 1)
-			{
-				return;
-			} else if(distance < LEAF_SUSTAIN_DISTANCE - 1)
+			if(distance <= LEAF_SUSTAIN_DISTANCE)
 			{
 				world.setBlockState(curr, MinestuckBlocks.endLeaves.getDefaultState().withProperty(BlockEndLeaves.DISTANCE, distance), 2);
 				leaves(world, curr.south(),	distance + 1);
@@ -158,10 +155,6 @@ public class BlockEndLog extends BlockLog
 				leaves(world, curr.down(),	distance + 1);
 				leaves(world, curr.east(),	distance + 2);
 				leaves(world, curr.west(),	distance + 2);
-			} else
-			{
-				world.setBlockState(curr, MinestuckBlocks.endLeaves.getDefaultState().withProperty(BlockEndLeaves.DISTANCE, distance), 2);
-				return;
 			}
 		} else if (blockState.getBlock() == MinestuckBlocks.endLeaves)
 		{
