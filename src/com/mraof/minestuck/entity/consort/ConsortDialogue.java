@@ -220,7 +220,7 @@ public class ConsortDialogue
 		addMessage(new SingleMessage("hats")).consort(EnumConsort.SALAMANDER);
 		addMessage(new SingleMessage("wwizard")).consort(EnumConsort.TURTLE);
 		addMessage(new SingleMessage("stockMarket")).consort(EnumConsort.NAKAGATOR);
-		addMessage(new SingleMessage("identity", "playerTitleLand", "playerNameLand")).consort(EnumConsort.SALAMANDER);
+		addMessage(new SingleMessage("identity", "playerTitleLand", "playerNameLand")).consort(EnumConsort.SALAMANDER).reqLand();
 		addMessage(new ChainMessage(0, new SingleMessage("college.1"), new SingleMessage("college.2")));
 		addMessage(new ChainMessage(1, new SingleMessage("unknown.1"), new SingleMessage("unknown.2"))).consort(EnumConsort.TURTLE);
 		addMessage(new ChainMessage(1, new SingleMessage("cult.1", "playerTitle"), new SingleMessage("cult.2"))).consort(EnumConsort.TURTLE, EnumConsort.SALAMANDER);
