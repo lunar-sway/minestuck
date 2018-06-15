@@ -218,9 +218,7 @@ public class TileEntityAlchemiter extends TileEntity
 		//get the grist cost
 		GristSet cost = getGristCost(quantity);
 		
-		
 		boolean canAfford = GristHelper.canAfford(MinestuckPlayerData.getGristSet(player), cost);
-		
 		
 		if(canAfford)
 		{
@@ -245,16 +243,20 @@ public class TileEntityAlchemiter extends TileEntity
 		}
 	}
 	
-	public GristSet getGristCost(int quantity) {
+	public GristSet getGristCost(int quantity)
+	{
+		ItemStack dowel = getDowel();
 		GristSet set;
 		ItemStack stack;
 		boolean useSelectedType;
-
+		if(dowel.isEmpty())
+			return null;
+		
 		//get the item in the dowel
 		stack = AlchemyRecipeHandler.getDecodedItem(getDowel());
 		
 		//set the item as a generic object if there is nothing in the dowel
-		if( !(getDowel().hasTagCompound() && getDowel().getTagCompound().hasKey("contentID")))
+		if( !(dowel.hasTagCompound() && dowel.getTagCompound().hasKey("contentID")))
 			stack = new ItemStack(MinestuckBlocks.genericObject);
 		
 		//get the grist cost of stack
@@ -265,21 +267,19 @@ public class TileEntityAlchemiter extends TileEntity
 		if (useSelectedType)
 			set = new GristSet(getSelectedGrist(), MinestuckConfig.clientCardCost);
 		
-		//remove damage from the item
-		if (set != null && stack.isItemDamaged())
+		if (set != null)
 		{
-			float multiplier = 1 - stack.getItem().getDamage(stack) / ((float) stack.getMaxDamage());
-			for (GristAmount amount : set.getArray())
+			//remove damage from the item
+			if(stack.isItemDamaged())
 			{
-				set.setGrist(amount.getType(), (int)( Math.ceil(amount.getAmount() * multiplier)));
+				float multiplier = 1 - stack.getItem().getDamage(stack) / ((float) stack.getMaxDamage());
+				for(GristAmount amount : set.getArray())
+				{
+					set.setGrist(amount.getType(), (int) (Math.ceil(amount.getAmount() * multiplier)));
+				}
 			}
-			
-		}
-		
-		//multiply cost by quantity
-		for (GristAmount amount : set.getArray())
-		{
-			set.setGrist(amount.getType(), amount.getAmount()*quantity);
+			//multiply cost by quantity
+			set.scaleGrist(quantity);
 		}
 		
 		return set;
