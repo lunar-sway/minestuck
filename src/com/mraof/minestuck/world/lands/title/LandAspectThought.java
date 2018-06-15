@@ -41,6 +41,7 @@ public class LandAspectThought extends TitleLandAspect
 		chunkProvider.blockRegistry.setBlockState("ocean", MinestuckBlocks.blockBrainJuice.getDefaultState());
 		chunkProvider.blockRegistry.setBlockState("river", MinestuckBlocks.blockBrainJuice.getDefaultState());
 		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.LIME));
+		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.CARPET.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.LIME));
 		
 		chunkProvider.decorators.add(new SmallLibraryDecorator(BiomeMinestuck.mediumNormal));
 		chunkProvider.sortDecorators();

@@ -1,46 +1,85 @@
 package com.mraof.minestuck.tileentity;
 
+import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.block.BlockCruxtiteDowel;
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 
-public class TileEntityCruxtruder extends TileEntityMachine
+public class TileEntityCruxtruder extends TileEntity
 {
 	private int color = -1;
-	private boolean destroyed=false;
+	private boolean broken = false;
+	private int material = 0;
 	
-	public int getColor(){
+	public int getColor()
+	{
 		return color;
 	}
-	public void setColor(int Color){
+	
+	public void setColor(int Color)
+	{
 		color = Color;
 	}
-	public boolean isDestroyed(){
-		return destroyed;
-	}
-	public void destroy(){
-		destroyed=true;
-	}
 	
-	
-	
-	
-	@Override
-	public boolean isAutomatic()
+	public boolean isBroken()
 	{
-		return true;
+		return broken;
 	}
-	
-	@Override
-	public boolean allowOverrideStop()
+	public void destroy()
 	{
-		return false;
+		broken = true;
 	}
-	
-	@Override
-	public int getSizeInventory()
+
+	public void onRightClick(EntityPlayer player, boolean top)
 	{
-		return 2;		
+		if(!isBroken())
+		{
+			BlockPos pos = getPos().up();
+			IBlockState state = getWorld().getBlockState(pos);
+			if(top && MinestuckConfig.cruxtruderIntake && state.getBlock().isReplaceable(getWorld(), pos) && material < 64 && material > -1)
+			{
+				ItemStack stack = player.getHeldItemMainhand();
+				if(stack.getItem() != MinestuckItems.rawCruxite)
+					stack = player.getHeldItemOffhand();
+				if(stack.getItem() == MinestuckItems.rawCruxite)
+				{
+					int count = 1;
+					if(player.isSneaking())	//Doesn't actually work just yet
+						count = Math.min(64 - material, stack.getCount());
+					stack.shrink(count);
+					material += count;
+				}
+			} else if(!top)
+			{
+				if(state.getBlock() == MinestuckBlocks.blockCruxiteDowel)
+				{
+					BlockCruxtiteDowel.dropDowel(getWorld(), pos);
+				} else if(state.getBlock().isReplaceable(getWorld(), pos))
+				{
+					if(MinestuckConfig.cruxtruderIntake && material == 0)
+					{
+						world.playEvent(1001, pos, 0);
+					} else
+					{
+						world.setBlockState(pos, MinestuckBlocks.blockCruxiteDowel.getDefaultState());
+						TileEntity te = world.getTileEntity(pos);
+						if(te instanceof TileEntityItemStack)
+							((TileEntityItemStack) te).getStack().setItemDamage(color + 1);
+						if(material > 0)
+							material--;
+					}
+				}
+			}
+		}
 	}
 	
 	@Override
@@ -49,74 +88,36 @@ public class TileEntityCruxtruder extends TileEntityMachine
 		super.readFromNBT(tagCompound);
 		
 		if(tagCompound.hasKey("color"))
-			this.color = tagCompound.getInteger("color");
+			color = tagCompound.getInteger("color");
+		if(tagCompound.hasKey("broken"))
+			broken = tagCompound.getBoolean("broken");
+		material = tagCompound.getInteger("material");
 	}
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound tagCompound)
 	{
 		super.writeToNBT(tagCompound);
-		//tagCompound.setInteger("color", color);
+		tagCompound.setInteger("color", color);
+		tagCompound.setBoolean("broken", broken);
+		tagCompound.setInteger("material", material);
 		return tagCompound;
 	}
 	
 	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack)
+	public NBTTagCompound getUpdateTag()
 	{
-		return i == 0 ? itemstack.getItem() == MinestuckItems.rawCruxite : false;
-		
+		return writeToNBT(new NBTTagCompound());
+	}
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket()
+	{
+		return new SPacketUpdateTileEntity(this.pos, 0, getUpdateTag());
 	}
 	
 	@Override
-	public boolean contentsValid()
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt)
 	{
-			ItemStack stack1 = this.inv.get(1);
-			return (!world.isBlockPowered(this.getPos()) && !this.inv.get(0).isEmpty() && (stack1.isEmpty() || stack1.getCount() < stack1.getMaxStackSize() && stack1.getItemDamage() == this.color + 1));
-		
+		handleUpdateTag(pkt.getNbtCompound());
 	}
-	
-	public int comparatorValue()
-	{
-		return 0;
-	}
-	
-	// We're going to want to trigger a block update every 20 ticks to have comparators pull data from the Alchemeter.
-	@Override
-	public void update()
-	{
-		if(world.isRemote)
-			return;
-		
-		super.update();
-	}
-
-	@Override
-	public void processContents()
-	{
-			// Process the Raw Cruxite
-			
-			if (this.inv.get(1).isEmpty())
-				setInventorySlotContents(1, new ItemStack(MinestuckItems.cruxiteDowel, 1, color + 1));
-			else this.inv.get(1).grow(1);
-			decrStackSize(0, 1);
-			
-			this.progress++;
-		
-	}
-	
-	@Override
-	public void markDirty()
-	{
-
-		super.markDirty();
-	}
-
-	@Override
-	public String getName()
-	{
-		return "tile.sburbMachine.cruxtruder.name";
-	}
-	
-
-	
 }

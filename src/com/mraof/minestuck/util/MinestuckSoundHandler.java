@@ -12,14 +12,18 @@ public class MinestuckSoundHandler
 	public static SoundEvent soundEmissaryOfDance;
 	public static SoundEvent soundDanceStabDance;
 	
-	@SubscribeEvent
-	public void registerSound(RegistryEvent.Register<SoundEvent> event)
+	public static void initSound()
 	{
 		ResourceLocation soundLocation = new ResourceLocation("minestuck", "record.emissary");
 		soundEmissaryOfDance = new SoundEvent(soundLocation).setRegistryName(soundLocation);
-		event.getRegistry().register(soundEmissaryOfDance);
 		soundLocation = new ResourceLocation("minestuck", "record.danceStab");
 		soundDanceStabDance = new SoundEvent(soundLocation).setRegistryName(soundLocation);
+	}
+	
+	@SubscribeEvent
+	public void registerSound(RegistryEvent.Register<SoundEvent> event)
+	{
+		event.getRegistry().register(soundEmissaryOfDance);
 		event.getRegistry().register(soundDanceStabDance);
 	}
 }

@@ -208,7 +208,7 @@ public class CommandSburbSession extends CommandBase	//TODO properly localize al
 	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos)
 	{
 		if(args.length == 1) return getListOfStringsMatchingLastWord(args, SessionHandler.getSessionNames());
-		else if(args.length == 2) return getListOfStringsMatchingLastWord(args, "add", "name", "title", "landTerrain", "landTitle");
+		else if(args.length == 2) return getListOfStringsMatchingLastWord(args, "add", "name", "title", "landTerrain", "landTitle", "define");
 		else if(args.length > 2)
 		{
 			String command = args[1];
@@ -250,6 +250,18 @@ public class CommandSburbSession extends CommandBase	//TODO properly localize al
 					return IdentifierHandler.getCommandAutocomplete(server, args);
 				if(args.length == 4)
 					return getListOfStringsMatchingLastWord(args, LandAspectRegistry.getNamesTitle());
+			} else if(command.equalsIgnoreCase("define"))
+			{
+				if(args.length == 3)
+					return IdentifierHandler.getCommandAutocomplete(server, args);
+				if(args.length == 4)
+					return getListOfStringsMatchingLastWord(args, Arrays.asList(EnumClass.values()));
+				if(args.length == 5)
+					return getListOfStringsMatchingLastWord(args, Arrays.asList(EnumAspect.values()));
+				if(args.length == 6)
+					return getListOfStringsMatchingLastWord(args, LandAspectRegistry.getNamesTitle());
+				if(args.length == 7)
+					return getListOfStringsMatchingLastWord(args, LandAspectRegistry.getNamesTerrain());
 			}
 		}
 		

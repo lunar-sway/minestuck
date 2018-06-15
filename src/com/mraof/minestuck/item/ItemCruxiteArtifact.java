@@ -1,5 +1,11 @@
 package com.mraof.minestuck.item;
 
+import static com.mraof.minestuck.MinestuckConfig.artifactRange;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.BlockComputerOn;
@@ -43,12 +49,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
-
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-
-import static com.mraof.minestuck.MinestuckConfig.artifactRange;
 
 public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITeleporter
 {

@@ -24,6 +24,14 @@ public class GristAmount
 		return amount;
 	}
 	
+	/**
+	 * @return a value estimate for this grist amount
+	 */
+	public float getValue()
+	{
+		return type.getValue()*amount;
+	}
+	
 	@Override
 	public String toString()
 	{

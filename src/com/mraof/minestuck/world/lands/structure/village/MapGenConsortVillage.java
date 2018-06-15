@@ -22,6 +22,7 @@ import java.util.Random;
 
 public class MapGenConsortVillage extends MapGenStructure
 {
+	
 	private static final List<Biome> BIOMES = Arrays.asList(BiomeMinestuck.mediumNormal);
 	
 	private static final int VILLAGE_DISTANCE = 24;
@@ -66,7 +67,7 @@ public class MapGenConsortVillage extends MapGenStructure
 		
 		if(i == k && j == l)
 		{
-			boolean flag = this.world.getBiomeProvider().areBiomesViable(i * 16 + 8, j * 16 + 8, 0, BIOMES);
+			boolean flag = this.world.getBiomeProvider().areBiomesViable(i * 16 + 8, j * 16 + 8, 16, BIOMES);
 			if(flag)
 			{
 				return true;

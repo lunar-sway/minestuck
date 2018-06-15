@@ -401,6 +401,60 @@
                     "quality": 2
                 }
             ]
+        },
+        {
+            "name": "boondollars",
+            "rolls": 1,
+            "entries": [
+                {
+                    "entryName": "boondollars0",
+                    "type": "item",
+                    "name": "minestuck:boondollars",
+                    "functions": [
+                        {
+                            "function": "minestuck:set_boondollar_count",
+                            "count": {
+                                "min": 5,
+                                "max": 50
+                            }
+                        }
+                    ],
+                    "weight": 10,
+                    "quality": -1
+                },
+                {
+                    "entryName": "boondollars1",
+                    "type": "item",
+                    "name": "minestuck:boondollars",
+                    "functions": [
+                        {
+                            "function": "minestuck:set_boondollar_count",
+                            "count": {
+                                "min": 50,
+                                "max": 250
+                            }
+                        }
+                    ],
+                    "weight": 5,
+                    "quality": 0
+                },
+                {
+                    "entryName": "boondollars2",
+                    "type": "item",
+                    "name": "minestuck:boondollars",
+                    "functions": [
+                        {
+                            "function": "minestuck:set_boondollar_count",
+                            "count": {
+                                "min": 250,
+                                "max": 1000
+                            }
+                        }
+                    ],
+                    "weight": 2,
+                    "quality": 0
+                }
+            ]
         }
     ]
 }

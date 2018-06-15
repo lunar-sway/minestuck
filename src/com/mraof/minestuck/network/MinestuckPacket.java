@@ -15,6 +15,7 @@ public abstract class MinestuckPacket
 		GRISTCACHE(GristCachePacket.class),
 		MACHINE_STATE(MachineStatePacket.class),
 		GOBUTTON(GoButtonPacket.class),
+		ALCHEMITER_PACKET(AlchemiterPacket.class),
 		PLAYER_DATA(PlayerDataPacket.class),
 		SBURB_CONNECT(SburbConnectPacket.class),
 		SBURB_CLOSE(SburbConnectClosedPacket.class),

@@ -31,7 +31,7 @@ public class MapGenLandStructure extends MapGenStructure
 	public static void registerStructures()
 	{
 		genericStructures.add(new StructureEntry(SmallRuinStart.class, 3, BiomeMinestuck.mediumNormal));
-		genericStructures.add(new StructureEntry(ImpDungeonStart.class, 1, BiomeMinestuck.mediumNormal, BiomeMinestuck.mediumRough));
+		genericStructures.add(new StructureEntry(ImpDungeonStart.class, 2, BiomeMinestuck.mediumNormal, BiomeMinestuck.mediumRough));
 		MapGenStructureIO.registerStructure(SmallRuinStart.class, "MinestuckSmallRuin");
 		MapGenStructureIO.registerStructureComponent(SmallRuinStart.SmallRuin.class, "MinestuckSmallRuinCompo");
 		MapGenStructureIO.registerStructure(ImpDungeonStart.class, "MinestuckImpDungeon");

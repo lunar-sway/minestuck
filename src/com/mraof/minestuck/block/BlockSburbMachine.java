@@ -42,7 +42,7 @@ public class BlockSburbMachine extends BlockContainer
 	protected static final AxisAlignedBB ALCHMITER_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1/2D, 1.0D);
 	protected static final AxisAlignedBB[] ALCHEMITER_POLE_AABB = {new AxisAlignedBB(0.0D, 2/16D, 0.0D, 4.5/16D, 1.0D, 1/8D), new AxisAlignedBB(7/8D, 2/16D, 0.0D, 1.0D, 1.0D, 4.5/16D), new AxisAlignedBB(11.5/16D, 2/16D, 7/8D, 1.0D, 1.0D, 1.0D), new AxisAlignedBB(0.0D, 2/16D, 11.5/16D, 1/8D, 1.0D, 1.0D)};
 
-	public static enum MachineType implements IStringSerializable
+	public enum MachineType implements IStringSerializable
 	{
 		CRUXTRUDER("cruxtruder"),
 		PUNCH_DESIGNIX("punchDesignix"),

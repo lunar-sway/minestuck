@@ -1,0 +1,22 @@
+{
+    "textures": {
+        "particle": "minestuck:machines/totem_lathe/rod_left_1",
+        "rod_1":    "minestuck:machines/totem_lathe/rod_left_1",
+        "rod_2":    "minestuck:machines/totem_lathe/rod_left_2",
+        "inside":   "minestuck:machines/totem_lathe/middle_left_inside"
+    },
+    "elements": [
+        {
+            "from": [ 8, 4, 7 ],
+            "to": [ 16, 10, 13 ],
+            "faces": {
+                "north": { "uv": [  0, 0,  8,  6 ], "texture": "#rod_1" },
+                "east":  { "uv": [ 10, 6, 16, 12 ], "texture": "#rod_2", "cullface": "east" },
+                "south": { "uv": [  8, 0, 16,  6 ], "texture": "#rod_1" },
+                "west":  { "uv": [ 10, 0, 16,  6 ], "texture": "#rod_2" },
+                "up":    { "uv": [  0, 6,  8, 12 ], "texture": "#rod_1" },
+                "down":  { "uv": [  8, 6, 16, 12 ], "texture": "#rod_1" }
+            }
+        }
+    ]
+}
