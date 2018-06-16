@@ -29,17 +29,6 @@
                     "conditions": [
                         {
                             "condition": "minestuck:land_aspect",
-                            "land_aspect": "flora"
-                        }
-                    ],
-                    "type": "loot_table",
-                    "name": "minestuck:chests/medium_basic/flora",
-                    "weight": 10
-                },
-                {
-                    "conditions": [
-                        {
-                            "condition": "minestuck:land_aspect",
                             "land_aspect": "forest"
                         }
                     ],
@@ -67,17 +56,6 @@
                     ],
                     "type": "loot_table",
                     "name": "minestuck:chests/medium_basic/heat",
-                    "weight": 10
-                },
-                {
-                    "conditions": [
-                        {
-                            "condition": "minestuck:land_aspect",
-                            "land_aspect": "rain"
-                        }
-                    ],
-                    "type": "loot_table",
-                    "name": "minestuck:chests/medium_basic/rain",
                     "weight": 10
                 },
                 {
