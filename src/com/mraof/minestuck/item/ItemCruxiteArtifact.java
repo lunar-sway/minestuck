@@ -51,6 +51,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 //TODO: Fix the bug where blocks that require an "anchor" (doors, redstone dust, torches, rails, etc) sometimes break on Entry.
+// This bug did not exist prior to the Entry Overhaul, meaning that it is my responsibility to fix. -BenjaminK
 public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITeleporter
 {
 	private int x;
