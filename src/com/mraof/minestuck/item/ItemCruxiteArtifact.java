@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
 import com.mraof.minestuck.block.BlockGate;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.editmode.ServerEditHandler;
@@ -92,6 +93,8 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 						MinestuckPlayerTracker.sendLandEntryMessage(player);
 					}
 				}
+				
+				MinestuckCriteriaTriggers.CRUXITE_ARTIFACT.trigger((EntityPlayerMP) player);
 			}
 		} catch(Exception e)
 		{
@@ -105,7 +108,6 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 	{
 		if(entity instanceof EntityPlayerMP)
 		{
-			//((EntityPlayerMP) entity).addStat(MinestuckAchievementHandler.enterMedium);
 			Debug.infof("Starting entry for player %s", entity.getName());
 			int x = (int) entity.posX;
 			if(entity.posX < 0) x--;

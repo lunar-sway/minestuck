@@ -6,6 +6,7 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -43,7 +44,7 @@ public class BlockPunchDesignix extends BlockLargeMachine
 		BlockPos mainPos = getMainPos(state, pos);
 		TileEntity te = worldIn.getTileEntity(mainPos);
 		if (te != null && te instanceof TileEntityPunchDesignix)
-			((TileEntityPunchDesignix) te).onRightClick(playerIn, state);
+			((TileEntityPunchDesignix) te).onRightClick((EntityPlayerMP) playerIn, state);
 		return true;
 	}
 	

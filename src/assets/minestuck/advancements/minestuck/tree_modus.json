@@ -1,0 +1,23 @@
+{
+    "display": {
+        "icon": {
+            "item": "minestuck:modus_card",
+            "data": 3
+        },
+        "title": {
+            "translate": "advancements.minestuck.tree_modus.title"
+        },
+        "description": {
+            "translate": "advancements.minestuck.alchemy.description"
+        }
+    },
+    "parent": "minestuck:minestuck/new_modus",
+    "criteria": {
+        "tree_root": {
+            "trigger": "minestuck:tree_modus_root",
+            "count": {
+                "min": 16
+            }
+        }
+    }
+}

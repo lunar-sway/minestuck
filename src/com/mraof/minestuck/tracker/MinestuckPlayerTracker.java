@@ -1,6 +1,7 @@
 package com.mraof.minestuck.tracker;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalouge.Modus;
@@ -10,6 +11,7 @@ import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.PlayerDataPacket;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
+import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
@@ -33,14 +35,15 @@ import net.minecraftforge.fml.relauncher.Side;
 import java.util.HashSet;
 import java.util.Set;
 
-public class MinestuckPlayerTracker {
+public class MinestuckPlayerTracker
+{
 	
 	public static MinestuckPlayerTracker instance = new MinestuckPlayerTracker();
 	
 	@SubscribeEvent
 	public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) 
 	{
-		EntityPlayer player = event.player;
+		EntityPlayerMP player = (EntityPlayerMP) event.player;
 		Debug.debug(player.getName()+" joined the game. Sending packets.");
 		MinecraftServer server = player.getServer();
 		if(!server.isDedicatedServer() && IdentifierHandler.host == null)
@@ -49,8 +52,8 @@ public class MinestuckPlayerTracker {
 		IdentifierHandler.playerLoggedIn(player);
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		
-		sendConfigPacket((EntityPlayerMP) player, true);
-		sendConfigPacket((EntityPlayerMP) player, false);
+		sendConfigPacket(player, true);
+		sendConfigPacket(player, false);
 		
 		SkaianetHandler.playerConnected(player);
 		boolean firstTime = false;
@@ -86,7 +89,7 @@ public class MinestuckPlayerTracker {
 		updateTitle(player);
 		updateEcheladder(player, true);
 		MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.BOONDOLLAR, MinestuckPlayerData.getData(identifier).boondollars), player);
-		ServerEditHandler.onPlayerLoggedIn((EntityPlayerMP) player);
+		ServerEditHandler.onPlayerLoggedIn(player);
 		
 		if(firstTime)
 			MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.COLOR), player);

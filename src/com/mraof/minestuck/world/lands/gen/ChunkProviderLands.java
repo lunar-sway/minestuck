@@ -254,7 +254,12 @@ public class ChunkProviderLands implements IChunkGenerator
 	@Override
 	public boolean isInsideStructure(World worldIn, String structureName, BlockPos pos)
 	{
-		return false;	//TODO
+		if(structureName.equals(villageHandler.getStructureName()))
+			return villageHandler.isInsideStructure(pos);
+		if(structureName.equals(structureHandler.getStructureName()))
+			return structureHandler.isInsideStructure(pos);
+		
+		return structureHandler.isInsideStructure(structureName, pos);
 	}
 	
 	@Override

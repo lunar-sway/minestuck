@@ -1,0 +1,23 @@
+{
+    "display": {
+        "icon": {
+            "item": "minecraft:bed",
+            "data": 14
+        },
+        "title": {
+            "translate": "advancements.minestuck.return_node.title"
+        },
+        "description": {
+            "translate": "advancements.minestuck.return_node.description"
+        }
+    },
+    "parent": "minestuck:minestuck/entry",
+    "criteria": {
+        "touch_node": {
+            "trigger": "minecraft:enter_block",
+            "conditions": {
+                "block": "minestuck:return_node"
+            }
+        }
+    }
+}

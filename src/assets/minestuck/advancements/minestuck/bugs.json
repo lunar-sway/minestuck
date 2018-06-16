@@ -1,0 +1,65 @@
+{
+    "display": {
+        "icon": {
+            "item": "minestuck:chocolate_beetle"
+        },
+        "title": {
+            "translate": "advancements.minestuck.bugs.title"
+        },
+        "description": {
+            "translate": "advancements.minestuck.bugs.description"
+        }
+    },
+    "parent": "minestuck:minestuck/commune",
+    "criteria": {
+        "bug_on_a_stick": {
+            "trigger": "minecraft:consume_item",
+            "conditions": {
+                "item": {
+                    "item": "minestuck:bug_on_stick"
+                }
+            }
+        },
+        "chocolate_beetle": {
+            "trigger": "minecraft:consume_item",
+            "conditions": {
+                "item": {
+                    "item": "minestuck:chocolate_beetle"
+                }
+            }
+        },
+        "cone_of_flies": {
+            "trigger": "minecraft:consume_item",
+            "conditions": {
+                "item": {
+                    "item": "minestuck:cone_of_flies"
+                }
+            }
+        },
+        "grasshopper": {
+            "trigger": "minecraft:consume_item",
+            "conditions": {
+                "item": {
+                    "item": "minestuck:grasshopper"
+                }
+            }
+        },
+        "jar_of_bugs": {
+            "trigger": "minecraft:consume_item",
+            "conditions": {
+                "item": {
+                    "item": "minestuck:jar_of_bugs"
+                }
+            }
+        }
+    },
+    "requirements": [
+        [
+            "bug_on_a_stick",
+            "chocolate_beetle",
+            "cone_of_flies",
+            "grasshopper",
+            "jar_of_bugs"
+        ]
+    ]
+}

@@ -1,0 +1,22 @@
+{
+    "display": {
+        "icon": {
+            "item": "minestuck:gold_seeds"
+        },
+        "title": {
+            "translate": "advancements.minestuck.gold_seeds.title"
+        },
+        "description": {
+            "translate": "advancements.minestuck.gold_seeds.description"
+        }
+    },
+    "parent": "minestuck:minestuck/alchemy",
+    "criteria": {
+        "plant_seeds": {
+            "trigger": "minecraft:placed_block",
+            "conditions": {
+                "block": "minestuck:gold_seeds"
+            }
+        }
+    }
+}

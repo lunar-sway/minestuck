@@ -225,7 +225,7 @@ public class TileEntityAlchemiter extends TileEntity
 			EntityItem item = new EntityItem(world, spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), newItem);
 			world.spawnEntity(item);
 			
-			MinestuckAchievementHandler.onAlchemizedItem(newItem, player);
+			AlchemyRecipeHandler.onAlchemizedItem(newItem, player);
 			
 			if(newItem.getItem() == MinestuckItems.captchaCard)
 				cost = new GristSet(getSelectedGrist(), MinestuckConfig.cardCost);

@@ -1,6 +1,7 @@
 package com.mraof.minestuck.network.skaianet;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
 import com.mraof.minestuck.editmode.EditData;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.event.ConnectionClosedEvent;
@@ -459,7 +460,7 @@ public class SkaianetHandler {
 		for(SburbConnection c : connections)
 			if(c.isActive && (c.getClientIdentifier().equals(player) || c.getServerIdentifier().equals(player)))
 			{
-				//playerMP.addStat(MinestuckAchievementHandler.setupConnection);
+				MinestuckCriteriaTriggers.SBURB_CONNECTION.trigger(playerMP);
 				break;
 			}
 		for(PlayerIdentifier i : iden)

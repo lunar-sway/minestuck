@@ -57,5 +57,13 @@ public enum EnumConsort
 		SHADY,
 		FOOD,
 		GENERAL,
+		;
+		public static MerchantType getFromString(String str)
+		{
+			for(MerchantType type : MerchantType.values())
+				if(type.name().toLowerCase().equals(str))
+					return type;
+			throw new IllegalArgumentException("Invalid merchant type " + str);
+		}
 	}
 }
