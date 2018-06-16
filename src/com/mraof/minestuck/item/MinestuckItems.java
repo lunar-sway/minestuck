@@ -430,11 +430,11 @@ public class MinestuckItems
 		registry.register(recordEmissaryOfDance.setRegistryName("record_emissary"));
 		registry.register(recordDanceStab.setRegistryName("record_dance_stab"));
 		
-		minestuckBucket.addBlock(blockOil.getDefaultState());
-		minestuckBucket.addBlock(blockBlood.getDefaultState());
-		minestuckBucket.addBlock(blockBrainJuice.getDefaultState());
-		minestuckBucket.addBlock(blockWatercolors.getDefaultState());
-		minestuckBucket.addBlock(blockEnder.getDefaultState());
+		((ItemMinestuckBucket) minestuckBucket).addBlock(blockOil.getDefaultState());
+		((ItemMinestuckBucket) minestuckBucket).addBlock(blockBlood.getDefaultState());
+		((ItemMinestuckBucket) minestuckBucket).addBlock(blockBrainJuice.getDefaultState());
+		((ItemMinestuckBucket) minestuckBucket).addBlock(blockWatercolors.getDefaultState());
+		((ItemMinestuckBucket) minestuckBucket).addBlock(blockEnder.getDefaultState());
 		/*for(Block block : liquidGrists)
 		{
 			minestuckBucket.addBlock(block.getDefaultState());
