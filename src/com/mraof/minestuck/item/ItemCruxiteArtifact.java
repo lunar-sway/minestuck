@@ -48,6 +48,7 @@ import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Logger;
 
 public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITeleporter
 {
@@ -220,7 +221,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 		if(player instanceof EntityPlayerMP)
 		{
 			Debug.debug("Loading spawn chunks...");
-			for(int chunkX = ((x - artifactRange) >> 4) - 1; chunkX <= ((x + artifactRange) >> 4) + 2; chunkX++)	//Prevent anything generating on the piece that we move
+			for(int chunkX = ((x - artifactRange) >> 4) - 1; chunkX <= ((x + artifactRange) >> 4) + 2; chunkX++)		//Prevent anything generating on the piece that we move
 				for(int chunkZ = ((z - artifactRange) >> 4) - 1; chunkZ <= ((z + artifactRange) >> 4) + 2; chunkZ++)	//from the overworld.
 					worldserver1.getChunkProvider().provideChunk(chunkX, chunkZ);
 			
@@ -229,6 +230,21 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 			for(BlockMove move : blockMoves)
 			{
 				move.copy(worldserver1.getChunkFromBlockCoords(move.getPosDest()));
+				
+				BlockPos pos = new BlockPos(move.x, move.y1, move.z);
+				TileEntity tileEntity = worldserver0.getTileEntity(pos);
+				if(tileEntity != null)
+				{
+					BlockPos pos1 = pos.up(yDiff);
+					NBTTagCompound nbt = new NBTTagCompound();
+					tileEntity.writeToNBT(nbt);
+					nbt.setInteger("y", pos1.getY());
+					TileEntity te1 = TileEntity.create(worldserver1, nbt);
+					//worldserver1.removeTileEntity(pos1);
+					worldserver1.setTileEntity(pos1, te1);
+					if(tileEntity instanceof TileEntityComputer)
+						SkaianetHandler.movingComputer((TileEntityComputer) tileEntity, (TileEntityComputer) te1);
+				}
 			}
 			
 			Debug.debug("Teleporting entities...");
@@ -267,7 +283,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 				}
 			}
 			
-			Debug.debug("Removing old blocks...");
+			Debug.debug("Moving blocks...");
 			
 			for(int blockX = x - artifactRange; blockX <= x + artifactRange; blockX++)
 			{
@@ -285,30 +301,29 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 					{
 						BlockPos pos = new BlockPos(blockX, blockY, blockZ);
 						TileEntity tileEntity = worldserver0.getTileEntity(pos);
+						Block block = worldserver0.getBlockState(pos).getBlock();
 						if(MinestuckConfig.entryCrater)
 						{
 							if(worldserver0.getBlockState(pos).getBlock() != Blocks.BEDROCK)
 							{
 								if(tileEntity != null)
 								{
-									BlockPos pos1 = pos.up(yDiff);
-									NBTTagCompound nbt = new NBTTagCompound();
-									tileEntity.writeToNBT(nbt);
-									nbt.setInteger("y", pos1.getY());
-									TileEntity te1 = TileEntity.create(worldserver1, nbt);
-									//worldserver1.removeTileEntity(pos1);
-									worldserver1.setTileEntity(pos1, te1);
-									if(tileEntity instanceof TileEntityComputer)
-										SkaianetHandler.movingComputer((TileEntityComputer) tileEntity, (TileEntityComputer) te1);
-									
 									try {
-										worldserver0.removeTileEntity(pos);
-										worldserver0.setBlockToAir(pos);
-									} catch (NullPointerException e) {e.printStackTrace();}
-								} else if(isEdgeX || isEdgeZ || blockY == minY || blockY == maxY-1)
+											worldserver0.removeTileEntity(pos);
+											worldserver0.setBlockToAir(pos);
+									} catch (NullPointerException e) {
+										Logger.getGlobal().warning("Null Pointer Exception encountered when removing " + block.getRegistryName() + ". "
+												+ "Notify the mod author that the block should make a null check on its tile entity when broken.");
+									} catch (Exception e) {
+										Logger.getGlobal().warning("Unknown Exception encountered when removing " + block.getRegistryName() + ". "
+												+ "Notify a Minestuck dev of this error.");
+									}
+								}
+								else if(isEdgeX || isEdgeZ || blockY == minY || blockY == maxY-1)
 								{
 									worldserver0.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
-								} else
+								}
+								else
 								{
 									worldserver0.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
 								}
@@ -316,15 +331,25 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 						} else
 						{
 							if(tileEntity != null)
+							{
 								if(!creative)
 								{
-									worldserver0.removeTileEntity(pos);
-									worldserver0.setBlockToAir(pos);
+									try {
+										worldserver0.removeTileEntity(pos);
+										worldserver0.setBlockToAir(pos);
+									} catch (NullPointerException e) {
+										Logger.getGlobal().warning("Null Pointer Exception encountered when removing " + block.getRegistryName() + ". "
+												+ "Notify the mod author that the block should make a null check on its tile entity when broken.");
+									} catch (Exception e) {
+										Logger.getGlobal().warning("Unknown Exception encountered when removing " + block.getRegistryName() + ". "
+												+ "Notify a Minestuck dev of this error.");
+									}
 								}
 								else if(tileEntity instanceof TileEntityComputer)	//Avoid duplicating computer data when a computer is kept in the overworld
 									((TileEntityComputer) tileEntity).programData = new NBTTagCompound();
 								else if(tileEntity instanceof TileEntityTransportalizer)
 									worldserver0.removeTileEntity(pos);
+							}
 						}
 					}
 				}
