@@ -71,6 +71,12 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 				
 				if(c == null || !c.enteredGame() || !MinestuckDimensionHandler.isLandDimension(player.world.provider.getDimension()))
 				{
+					if(!canModifyEntryBlocks(player.world, player))
+					{
+						player.sendMessage(new TextComponentString("You are not allowed to enter here."));
+						return;
+					}
+					
 					
 					int destinationId;
 					if(c != null && c.enteredGame())
@@ -118,12 +124,12 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 			boolean creative = ((EntityPlayerMP) entity).interactionManager.isCreative();
 			
 			int topY = MinestuckConfig.adaptEntryBlockHeight ? getTopHeight(worldserver0, x, y, z) : y + artifactRange;
-			int yDiff = 127 - topY;
-			MinestuckDimensionHandler.setSpawn(worldserver1.provider.getDimension(), new BlockPos(x, y + yDiff, z));	//Set again, but with a more precise now that the y-coordinate is properly decided.
+			int yDiff = 127 - topY, xDiff = 0 - x, zDiff = 0 - z;
+			MinestuckDimensionHandler.setSpawn(worldserver1.provider.getDimension(), new BlockPos(x + xDiff, y + yDiff, z + zDiff));	//Set again, but with a more precise now that the y-coordinate is properly decided.
 			
 			Debug.debug("Loading spawn chunks...");
-			for(int chunkX = ((x - artifactRange) >> 4) - 1; chunkX <= ((x + artifactRange) >> 4) + 2; chunkX++)	//Prevent anything to generate on the piece that we move
-				for(int chunkZ = ((z - artifactRange) >> 4) - 1; chunkZ <= ((z + artifactRange) >> 4) + 2; chunkZ++)	//from the overworld.
+			for(int chunkX = ((x + xDiff - artifactRange) >> 4) - 1; chunkX <= ((x + xDiff + artifactRange) >> 4) + 2; chunkX++)	//Prevent anything to generate on the piece that we move
+				for(int chunkZ = ((z + zDiff - artifactRange) >> 4) - 1; chunkZ <= ((z + zDiff + artifactRange) >> 4) + 2; chunkZ++)	//from the overworld.
 					worldserver1.getChunkProvider().provideChunk(chunkX, chunkZ);
 			
 			Debug.debug("Placing blocks...");
@@ -134,30 +140,32 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 				int zWidth = (int) Math.sqrt((artifactRange+0.5) * (artifactRange+0.5) - (blockX - x) * (blockX - x));
 				for(int blockZ = z - zWidth; blockZ <= z + zWidth; blockZ++)
 				{
-					Chunk chunk = worldserver1.getChunkFromChunkCoords(blockX >> 4, blockZ >> 4);
+					Chunk chunk = worldserver1.getChunkFromChunkCoords((blockX + xDiff) >> 4, (blockZ + zDiff) >> 4);
 					Chunk chunk2 = worldserver0.getChunkFromChunkCoords(blockX >> 4, blockZ >> 4);
 					int height = (int) Math.sqrt(artifactRange * artifactRange - (((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2));
 					for(int blockY = Math.max(0, y - height); blockY <= Math.min(topY, y + height); blockY++)
 					{
 						BlockPos pos = new BlockPos(blockX, blockY, blockZ);
-						BlockPos pos1 = pos.up(yDiff);
+						BlockPos pos1 = pos.add(xDiff, yDiff, zDiff);
 						IBlockState block = worldserver0.getBlockState(pos);
 						TileEntity te = worldserver0.getTileEntity(pos);
 						long t = System.currentTimeMillis();
 						if(block.getBlock() != Blocks.BEDROCK && block.getBlock() != Blocks.PORTAL)
 						{
-							copyBlockDirect(chunk, chunk2, blockX & 15, blockY + yDiff, blockY, blockZ & 15);
+							copyBlockDirect(chunk, chunk2, (blockX + xDiff) & 15, blockY + yDiff, (blockZ + zDiff) & 15, blockX & 15, blockY, blockZ & 15);
 						}
 						else
 						{
-							worldserver1.setBlockState(new BlockPos(blockX, blockY + yDiff, blockZ), Blocks.AIR.getDefaultState(), 3);
+							worldserver1.setBlockState(new BlockPos(blockX + xDiff, blockY + yDiff, blockZ + zDiff), Blocks.AIR.getDefaultState(), 3);
 						}
 						bl += System.currentTimeMillis() - t;
 						if((te) != null)
 						{
 							NBTTagCompound nbt = new NBTTagCompound();
 							te.writeToNBT(nbt);
+							nbt.setInteger("x", pos1.getX());
 							nbt.setInteger("y", pos1.getY());
+							nbt.setInteger("z", pos1.getZ());
 							TileEntity te1 = TileEntity.create(worldserver1, nbt);
 							worldserver1.removeTileEntity(pos1);
 							worldserver1.setTileEntity(pos1, te1);
@@ -166,7 +174,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 						}
 					}
 					for(int blockY = Math.min(topY, y + height) + yDiff + 1; blockY < 256; blockY++)
-						worldserver1.setBlockState(new BlockPos(blockX, blockY, blockZ), Blocks.AIR.getDefaultState(), 0);
+						worldserver1.setBlockState(new BlockPos(blockX + xDiff, blockY, blockZ + zDiff), Blocks.AIR.getDefaultState(), 0);
 				}
 			}
 			
@@ -178,7 +186,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 			List<Entity> list = worldserver0.getEntitiesWithinAABBExcludingEntity(entity, entityTeleportBB);
 			Iterator<Entity> iterator = list.iterator();
 			
-			entity.setPositionAndUpdate(entity.posX, entity.posY + yDiff, entity.posZ);
+			entity.setPositionAndUpdate(entity.posX + xDiff, entity.posY + yDiff, entity.posZ + zDiff);
 			while (iterator.hasNext())
 			{
 				Entity e = iterator.next();
@@ -188,7 +196,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 						ServerEditHandler.reset(ServerEditHandler.getData((EntityPlayer) e));
 					else
 					{
-						Teleport.teleportEntity(e, worldserver1.provider.getDimension(), null, e.posX, e.posY + yDiff, e.posZ);
+						Teleport.teleportEntity(e, worldserver1.provider.getDimension(), null, e.posX + xDiff, e.posY + yDiff, e.posZ + zDiff);
 					}
 				}
 				else	//Copy instead of teleport
@@ -201,7 +209,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 						nbttagcompound.removeTag("Dimension");
 						newEntity.readFromNBT(nbttagcompound);
 						newEntity.dimension = worldserver1.provider.getDimension();
-						newEntity.setPosition(newEntity.posX, newEntity.posY + yDiff, newEntity.posZ);
+						newEntity.setPosition(newEntity.posX + xDiff, newEntity.posY + yDiff, newEntity.posZ + zDiff);
 						worldserver1.spawnEntity(newEntity);
 					}
 				}
@@ -270,10 +278,10 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 			Debug.debug("Placing gates...");
 			
 			GateHandler.findGatePlacement(worldserver1);
-			placeGate(1, new BlockPos(x, GateHandler.gateHeight1, z), worldserver1);
-			placeGate(2, new BlockPos(x, GateHandler.gateHeight2, z), worldserver1);
+			placeGate(1, new BlockPos(x + xDiff, GateHandler.gateHeight1, z + zDiff), worldserver1);
+			placeGate(2, new BlockPos(x + xDiff, GateHandler.gateHeight2, z + zDiff), worldserver1);
 			
-			ServerEventHandler.tickTasks.add(new PostEntryTask(worldserver1.provider.getDimension(), x, y + yDiff, z, artifactRange, (byte) 0));
+			ServerEventHandler.tickTasks.add(new PostEntryTask(worldserver1.provider.getDimension(), x + xDiff, y + yDiff, z + zDiff, artifactRange, (byte) 0));
 			
 			Debug.info("Entry finished");
 		}
@@ -290,23 +298,23 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 		{
 			int zWidth = (int) Math.sqrt(artifactRange * artifactRange - (blockX - x) * (blockX - x));
 			for(int blockZ = z - zWidth; blockZ <= z + zWidth; blockZ++)
-				if(world.isBlockModifiable(player, new BlockPos(blockX, y, blockZ)))
+				if(!world.isBlockModifiable(player, new BlockPos(blockX, y, blockZ)))
 					return false;
 		}
 		
 		return true;
 	}
 	
-	private static void copyBlockDirect(Chunk c, Chunk c2, int x, int y, int y2, int z)
+	private static void copyBlockDirect(Chunk c, Chunk c2, int x, int y, int z, int x2, int y2, int z2)
 	{
 		int j = y & 15, j2 = y2 & 15;
 		ExtendedBlockStorage blockStorage = getBlockStorage(c, y >> 4);
 		ExtendedBlockStorage blockStorage2 = getBlockStorage(c2, y2 >> 4);
 		
-		blockStorage.set(x, j, z, blockStorage2.get(x, j2, z));
-		blockStorage.setBlockLight(x, j, z, blockStorage2.getBlockLight(x, j2, z));
+		blockStorage.set(x, j, z, blockStorage2.get(x2, j2, z2));
+		blockStorage.setBlockLight(x, j, z, blockStorage2.getBlockLight(x2, j2, z2));
 		if(blockStorage2.getSkyLight() != null)
-			blockStorage.setSkyLight(x, j, z, blockStorage2.getSkyLight(x, j2, z));
+			blockStorage.setSkyLight(x, j, z, blockStorage2.getSkyLight(x2, j2, z2));
 	}
 	
 	private static ExtendedBlockStorage getBlockStorage(Chunk c, int y)
