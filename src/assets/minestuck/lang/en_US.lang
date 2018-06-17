@@ -1081,6 +1081,7 @@ tile.chessTile.white.name=White Chess Tile
 tile.chessTile.lightgrey.name=Light Grey Chess Tile
 tile.chessTile.darkgrey.name=Dark Grey Chess Tile
 tile.cruxiteBlock.name=Cruxite Block
+tile.uraniumBlock.name=Uranium Block
 tile.genericObject.name=Perfectly Generic Object
 tile.skaiaPortal.name=Skaia Portal
 tile.oreCruxite.name=Cruxite Ore
