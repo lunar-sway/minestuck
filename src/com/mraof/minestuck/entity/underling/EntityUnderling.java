@@ -131,8 +131,10 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 				{
 					int candy = (gristType.getAmount() + 2)/4;
 					int gristAmount = gristType.getAmount() - candy*2;
+					ItemStack candyItem = gristType.getType().getCandyItem();
+					candyItem.setCount(candy);
 					if(candy > 0)
-						this.world.spawnEntity(new EntityItem(world, randX(), this.posY, randZ(), new ItemStack(MinestuckItems.candy, candy, gristType.getType().getId() + 1)));
+						this.world.spawnEntity(new EntityItem(world, randX(), this.posY, randZ(), candyItem));
 					if(gristAmount > 0)
 						this.world.spawnEntity(new EntityGrist(world, randX(), this.posY, randZ(),new GristAmount(gristType.getType(), gristAmount)));
 				}
