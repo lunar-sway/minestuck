@@ -91,7 +91,7 @@ public class MinestuckPlayerTracker
 		MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.BOONDOLLAR, MinestuckPlayerData.getData(identifier).boondollars), player);
 		ServerEditHandler.onPlayerLoggedIn(player);
 		
-		if(firstTime)
+		if(firstTime && !player.isSpectator())
 			MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.COLOR), player);
 		else
 		{

@@ -251,9 +251,22 @@ public abstract class GuiPlayerStats extends GuiScreenMinestuck
 	public static void openGui(boolean reload)
 	{
 		Minecraft mc = Minecraft.getMinecraft();
+		
+		if(mc.player.isSpectator())
+		{
+			if(MinestuckConfig.dataCheckerAccess)
+			{
+				if(mc.currentScreen instanceof GuiDataChecker)
+					mc.displayGuiScreen(null);
+				else mc.displayGuiScreen(new GuiDataChecker());
+			}
+			
+			return;
+		}
+		
 		if(reload || mc.currentScreen == null)
 		{
-			if(mc.currentScreen != null && mc.currentScreen instanceof GuiContainer)
+			if(mc.currentScreen instanceof GuiContainer)
 			{
 				mc.player.connection.sendPacket(new CPacketCloseWindow(mc.player.openContainer.windowId));
 				mc.player.inventory.setItemStack(ItemStack.EMPTY);
