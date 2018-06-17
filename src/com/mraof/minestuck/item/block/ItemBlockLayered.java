@@ -1,6 +1,5 @@
 package com.mraof.minestuck.item.block;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
@@ -17,11 +16,11 @@ import com.mraof.minestuck.block.BlockLayered;
 public class ItemBlockLayered extends ItemBlock
 {
 	
-	public IBlockState theBlock;
-	public ItemBlockLayered(Block par1)
+	public IBlockState sourceBlock;
+	public ItemBlockLayered(BlockLayered block)
 	{
-		super(par1);
-		theBlock = ((BlockLayered)par1).fullBlock;
+		super(block);
+		sourceBlock = block.sourceBlock;
 	}
 	
 	@Override
