@@ -59,26 +59,8 @@ public class ClientProxy extends CommonProxy
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySkaiaPortal.class, new RenderSkaiaPortal());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGate.class, new RenderGate());
 //		MinecraftForgeClient.registerItemRenderer(Minestuck.captchaCard, new RenderCard());
-		mc.getItemColors().registerItemColorHandler(new IItemColor()
-		{
-			@Override
-			public int colorMultiplier(ItemStack stack, int tintIndex)
-			{
-				if(tintIndex == 0 || tintIndex == 1)
-				{
-					int color = stack.getMetadata() == 0 ? -1 : ColorCollector.getColor(stack.getMetadata() - 1);
-					if(tintIndex == 1)
-					{
-						int i0 = ((color & 255) + 255)/2;
-						int i1 = (((color >> 8) & 255) + 255)/2;
-						int i2 = (((color >> 16) & 255) + 255)/2;
-						color = i0 | (i1 << 8) | (i2 << 16);
-					}
-					return color;
-				}
-				else return -1;
-			}
-		}, MinestuckItems.cruxiteDowel, MinestuckItems.cruxiteApple, MinestuckItems.cruxitePotion);
+		mc.getItemColors().registerItemColorHandler((stack, tintIndex) -> BlockColorCruxite.handleColorTint(stack.getMetadata() == 0 ? -1 : ColorCollector.getColor(stack.getMetadata() - 1), tintIndex),
+				MinestuckItems.cruxiteDowel, MinestuckItems.cruxiteApple, MinestuckItems.cruxitePotion);
 		mc.getBlockColors().registerBlockColorHandler(new BlockColorCruxite(), MinestuckBlocks.alchemiter[0], MinestuckBlocks.totemlathe[1], MinestuckBlocks.blockCruxiteDowel);
 	}
 	
@@ -97,78 +79,15 @@ public class ClientProxy extends CommonProxy
 		RenderingRegistry.registerEntityRenderingHandler(EntityGiclops.class, RenderEntityMinestuck.getFactory(new ModelGiclops(), 7.6F));
 		RenderingRegistry.registerEntityRenderingHandler(EntityBishop.class, RenderEntityMinestuck.getFactory(new ModelBishop(), 1.8F));
 		RenderingRegistry.registerEntityRenderingHandler(EntityRook.class, RenderEntityMinestuck.getFactory(new ModelRook(), 2.5F));
-		RenderingRegistry.registerEntityRenderingHandler(EntityUnderlingPart.class, new IRenderFactory<EntityUnderlingPart>()
-		{
-			@Override
-			public Render<EntityUnderlingPart> createRenderFor(RenderManager manager)
-			{
-				return new RenderShadow(manager, 2.8F);
-			}
-		});
-		RenderingRegistry.registerEntityRenderingHandler(EntityBigPart.class, new IRenderFactory<EntityBigPart>()
-		{
-			@Override
-			public Render<EntityBigPart> createRenderFor(RenderManager manager)
-			{
-				return new RenderShadow(manager, 0F);
-			}
-		});
-		RenderingRegistry.registerEntityRenderingHandler(EntityPawn.class, new IRenderFactory<EntityPawn>()
-		{
-			@Override
-			public Render<EntityPawn> createRenderFor(RenderManager manager)
-			{
-				return new RenderPawn(manager, new ModelBiped(), 0.5F);
-			}
-		});
-		RenderingRegistry.registerEntityRenderingHandler(EntityGrist.class, new IRenderFactory<EntityGrist>()
-		{
-			@Override
-			public Render<EntityGrist> createRenderFor(RenderManager manager)
-			{
-				return new RenderGrist(manager);
-			}
-		});
-		RenderingRegistry.registerEntityRenderingHandler(EntityVitalityGel.class, new IRenderFactory<EntityVitalityGel>()
-		{
-			@Override
-			public Render<EntityVitalityGel> createRenderFor(RenderManager manager)
-			{
-				return new RenderVitalityGel(manager);
-			}
-		});
-		RenderingRegistry.registerEntityRenderingHandler(EntityDecoy.class, new IRenderFactory<EntityDecoy>()
-		{
-			@Override
-			public Render<EntityDecoy> createRenderFor(RenderManager manager)
-			{
-				return new RenderDecoy(manager);
-			}
-		});
-		RenderingRegistry.registerEntityRenderingHandler(EntityMetalBoat.class, new IRenderFactory<EntityBoat>()
-		{
-			@Override
-			public Render<EntityBoat> createRenderFor(RenderManager manager)
-			{
-				return new RenderMetalBoat(manager);
-			}
-		});
-		RenderingRegistry.registerEntityRenderingHandler(EntityCrewPoster.class, new IRenderFactory<EntityCrewPoster>()
-		{
-			@Override
-			public Render<EntityCrewPoster> createRenderFor(RenderManager manager)
-			{
-				return new RenderHangingArt<>(manager, "midnight_poster");
-			}
-		});
-		RenderingRegistry.registerEntityRenderingHandler(EntitySbahjPoster.class, new IRenderFactory<EntitySbahjPoster>()
-		{
-			@Override
-			public Render<EntitySbahjPoster> createRenderFor(RenderManager manager)
-			{
-				return new RenderHangingArt<>(manager, "sbahj_poster");
-			}
-		});
+		RenderingRegistry.registerEntityRenderingHandler(EntityUnderlingPart.class, manager -> new RenderShadow<>(manager, 2.8F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityBigPart.class, manager -> new RenderShadow<>(manager, 0F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityPawn.class, manager -> new RenderPawn(manager, new ModelBiped(), 0.5F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityGrist.class, RenderGrist::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityVitalityGel.class, RenderVitalityGel::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityDecoy.class, RenderDecoy::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityMetalBoat.class, RenderMetalBoat::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityCrewPoster.class, manager -> new RenderHangingArt<>(manager, "midnight_poster"));
+		RenderingRegistry.registerEntityRenderingHandler(EntitySbahjPoster.class, manager -> new RenderHangingArt<>(manager, "sbahj_poster"));
 		
 		MinecraftForge.EVENT_BUS.register(new MinestuckKeyHandler());
 		MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
