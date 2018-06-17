@@ -1,7 +1,6 @@
 package com.mraof.minestuck.editmode;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
@@ -139,7 +138,7 @@ public class ClientEditHandler {
 	@SubscribeEvent
 	public void onTossEvent(ItemTossEvent event)
 	{
-		if(event.getEntity().world.isRemote && event.getPlayer() == ClientProxy.getClientPlayer() && isActive())
+		if(event.getEntity().world.isRemote && event.getPlayer().isUser() && isActive())
 		{
 			InventoryPlayer inventory = event.getPlayer().inventory;
 			ItemStack stack = event.getEntityItem().getItem();
@@ -171,7 +170,7 @@ public class ClientEditHandler {
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public void onRightClickEvent(PlayerInteractEvent.RightClickBlock event)
 	{
-		if(event.getWorld().isRemote && event.getEntityPlayer() == ClientProxy.getClientPlayer() && isActive())
+		if(event.getWorld().isRemote && event.getEntityPlayer().isUser() && isActive())
 		{
 			Block block = event.getWorld().getBlockState(event.getPos()).getBlock();
 			ItemStack stack = event.getEntityPlayer().getHeldItemMainhand();
@@ -212,7 +211,7 @@ public class ClientEditHandler {
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public void onLeftClickEvent(PlayerInteractEvent.LeftClickBlock event)
 	{
-		if(event.getWorld().isRemote && event.getEntityPlayer() == ClientProxy.getClientPlayer() && isActive())
+		if(event.getWorld().isRemote && event.getEntityPlayer().isUser() && isActive())
 		{
 			IBlockState block = event.getWorld().getBlockState(event.getPos());
 			if(block.getBlockHardness(event.getWorld(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
@@ -224,7 +223,7 @@ public class ClientEditHandler {
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public void onRightClickAir(PlayerInteractEvent.RightClickItem event)
 	{
-		if(event.getWorld().isRemote && event.getEntityPlayer() == ClientProxy.getClientPlayer() && isActive())
+		if(event.getWorld().isRemote && event.getEntityPlayer().isUser() && isActive())
 		{
 			event.setCanceled(true);
 		}
@@ -244,7 +243,7 @@ public class ClientEditHandler {
 	@SubscribeEvent
 	public void onAttackEvent(AttackEntityEvent event)
 	{
-		if(event.getEntity().world.isRemote && event.getEntityPlayer() == ClientProxy.getClientPlayer() && isActive())
+		if(event.getEntity().world.isRemote && event.getEntityPlayer().isUser() && isActive())
 			event.setCanceled(true);
 	}
 	

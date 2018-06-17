@@ -10,6 +10,7 @@ import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.client.FMLClientHandler;
 
 public class GuiInventoryEditmode extends GuiPlayerStatsContainer
 {
@@ -23,7 +24,7 @@ public class GuiInventoryEditmode extends GuiPlayerStatsContainer
 	
 	public GuiInventoryEditmode()
 	{
-		super(new ContainerEditmode());
+		super(new ContainerEditmode(FMLClientHandler.instance().getClientPlayerEntity()));
 		guiWidth = 176;
 		guiHeight = 98;
 	}

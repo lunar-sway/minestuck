@@ -28,7 +28,7 @@ public class MinestuckChannelHandler extends FMLIndexedMessageToMessageCodec<Min
 	public static MinestuckChannelHandler instance = new MinestuckChannelHandler();
 	public static EnumMap<Side, FMLEmbeddedChannel> channels;
 	
-	private static LinkedList<MinestuckPacket> serverQueue = new LinkedList<MinestuckPacket>(), clientQueue = new LinkedList<MinestuckPacket>();
+	private static final LinkedList<MinestuckPacket> serverQueue = new LinkedList<>(), clientQueue = new LinkedList<>();
 	private static LinkedList<EntityPlayer> serverPlayers = new LinkedList<EntityPlayer>();
 	
 	public MinestuckChannelHandler() {
