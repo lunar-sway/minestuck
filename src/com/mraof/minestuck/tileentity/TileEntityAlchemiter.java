@@ -215,6 +215,9 @@ public class TileEntityAlchemiter extends TileEntity
 		BlockPos spawnPos = this.getPos().offset(facing).offset(facing.rotateY()).up();
 		//set the stack size
 		newItem.setCount(quantity);
+		//remove item damage
+		if(newItem.isItemStackDamageable())
+			newItem.setItemDamage(0);
 		//get the grist cost
 		GristSet cost = getGristCost(quantity);
 		
@@ -227,16 +230,6 @@ public class TileEntityAlchemiter extends TileEntity
 			
 			AlchemyRecipeHandler.onAlchemizedItem(newItem, player);
 			
-			if(newItem.getItem() == MinestuckItems.captchaCard)
-				cost = new GristSet(getSelectedGrist(), MinestuckConfig.cardCost);
-			if(newItem.isItemDamaged())
-			{
-				float multiplier = 1 - newItem.getItem().getDamage(newItem) / ((float) newItem.getMaxDamage());
-				for(GristAmount amount : cost.getArray())
-				{
-					cost.setGrist(amount.getType(), (int) Math.ceil(amount.getAmount() * multiplier));
-				}
-			}
 			PlayerIdentifier pid = IdentifierHandler.encode(player);
 			GristHelper.decrease(pid, cost);
 			MinestuckPlayerTracker.updateGristCache(pid);
@@ -265,19 +258,10 @@ public class TileEntityAlchemiter extends TileEntity
 		//if the item is a captcha card do other stuff
 		useSelectedType = stack.getItem() == MinestuckItems.captchaCard;
 		if (useSelectedType)
-			set = new GristSet(getSelectedGrist(), MinestuckConfig.clientCardCost);
+			set = new GristSet(getSelectedGrist(), MinestuckConfig.cardCost);
 		
 		if (set != null)
 		{
-			//remove damage from the item
-			if(stack.isItemDamaged())
-			{
-				float multiplier = 1 - stack.getItem().getDamage(stack) / ((float) stack.getMaxDamage());
-				for(GristAmount amount : set.getArray())
-				{
-					set.setGrist(amount.getType(), (int) (Math.ceil(amount.getAmount() * multiplier)));
-				}
-			}
 			//multiply cost by quantity
 			set.scaleGrist(quantity);
 		}
