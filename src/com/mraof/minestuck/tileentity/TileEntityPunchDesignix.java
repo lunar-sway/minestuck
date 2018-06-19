@@ -70,7 +70,7 @@ public class TileEntityPunchDesignix extends TileEntity
 			return;
 		}
 		
-		if (checkStates(clickedState))
+		if (isUseable(clickedState))
 		{
 			ItemStack heldStack = player.getHeldItemMainhand();
 			if (part.equals(EnumParts.TOP_LEFT) && card.isEmpty())
@@ -128,25 +128,33 @@ public class TileEntityPunchDesignix extends TileEntity
 		}
 	}
 	
-	private boolean checkStates(IBlockState state)
+	private boolean isUseable(IBlockState state)
+	{
+		IBlockState currentState = getWorld().getBlockState(getPos());
+		if(!broken)
+		{
+			checkStates();
+			if(broken)
+				Debug.warnf("Failed to notice a block being broken or misplaced at the punch designix at %s", getPos());
+		}
+		if(!state.getValue(DIRECTION).equals(currentState.getValue(DIRECTION)))
+			return false;
+		return !broken;
+	}
+	
+	public void checkStates()
 	{
 		if (broken)
-			return false;
-		IBlockState currentState = this.getWorld().getBlockState(this.getPos());
+			return;
+		
+		IBlockState currentState = getWorld().getBlockState(getPos());
 		EnumFacing hOffset = currentState.getValue(DIRECTION).rotateYCCW();
 		if (!world.getBlockState(getPos().offset(hOffset)).equals(currentState.withProperty(PART, EnumParts.TOP_RIGHT)) ||
 				!world.getBlockState(getPos().down()).equals(currentState.withProperty(PART, EnumParts.BOTTOM_LEFT)) ||
 				!world.getBlockState(getPos().down().offset(hOffset)).equals(currentState.withProperty(PART, EnumParts.BOTTOM_RIGHT)))
 		{
 			broken = true;
-			Debug.warnf("Failed to notice a block being broken or misplaced at the punch designix at %s", getPos());
-			return false;
 		}
-		
-		if (!state.getValue(DIRECTION).equals(currentState.getValue(DIRECTION)))
-			return false;
-		
-		return true;
 	}
 	
 	public void dropItem(boolean inBlock)

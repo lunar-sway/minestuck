@@ -84,10 +84,21 @@ public class TileEntityAlchemiter extends TileEntity
 		setDowel(ItemStack.EMPTY);
 	}
 	
-	private boolean checkStates(IBlockState state)
+	private boolean isUseable(IBlockState state)
+	{
+		if(!broken)
+		{
+			checkStates();
+			if(broken)
+				Debug.warnf("Failed to notice a block being broken or misplaced at the alchemiter at %s", getPos());
+		}
+		return !broken;
+	}
+	
+	public void checkStates()
 	{
 		if(this.broken)
-			return false;
+			return;
 		
 		EnumFacing facing = getWorld().getBlockState(this.getPos()).getValue(BlockAlchemiter.DIRECTION);
 		BlockPos pos = getPos().down();
@@ -112,11 +123,10 @@ public class TileEntityAlchemiter extends TileEntity
 				!world.getBlockState(pos.offset(facing, 2).offset(facing.rotateY(), 1)).equals(BlockAlchemiter.getBlockState(EnumParts.CENTER_PAD, facing.rotateY())))
 		{
 			breakMachine();
-			Debug.warnf("Failed to notice a block being broken or misplaced at the alchemiter at %s", getPos());
-			return false;
+			return;
 		}
 		
-		return true;
+		return;
 	}
 	
 	@Override
@@ -179,7 +189,7 @@ public class TileEntityAlchemiter extends TileEntity
 	
 	public void onRightClick(EntityPlayer player, IBlockState clickedState)
 	{
-		if (checkStates(clickedState))
+		if (isUseable(clickedState))
 		{
 			BlockAlchemiter alchemiter = (BlockAlchemiter) clickedState.getBlock();
 			EnumParts part = clickedState.getValue(alchemiter.PART);

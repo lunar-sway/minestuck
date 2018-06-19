@@ -7,6 +7,7 @@ import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.CombinationRegistry;
 
+import com.mraof.minestuck.util.Debug;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
@@ -144,7 +145,7 @@ public class TileEntityTotemLathe extends TileEntity
 	
 	public void onRightClick(EntityPlayer player, IBlockState clickedState)
 	{
-		boolean working = checkStates(clickedState);
+		boolean working = isUseable(clickedState);
 		
 		ItemStack heldStack = player.getHeldItemMainhand();
 		BlockTotemLathe.EnumParts part = BlockTotemLathe.getPart(clickedState);
@@ -201,10 +202,25 @@ public class TileEntityTotemLathe extends TileEntity
 		}
 	}
 	
-	private boolean checkStates(IBlockState state)
+	private boolean isUseable(IBlockState state)
+	{
+		IBlockState currentState = getWorld().getBlockState(getPos());
+		if(!isBroken())
+		{
+			checkStates();
+			if(isBroken())
+				Debug.warnf("Failed to notice a block being broken or misplaced at the totem lathe at %s", getPos());
+		}
+		
+		if(!state.getValue(BlockTotemLathe.DIRECTION).equals(currentState.getValue(BlockTotemLathe.DIRECTION)))
+			return false;
+		return !isBroken();
+	}
+	
+	public void checkStates()
 	{
 		if(isBroken())
-			return false;
+			return;
 		EnumFacing facing = getFacing();
 		
 		if(	!world.getBlockState(getPos()).equals(BlockTotemLathe.getState(BlockTotemLathe.EnumParts.BOTTOM_LEFT, facing)) ||
@@ -220,10 +236,9 @@ public class TileEntityTotemLathe extends TileEntity
 			!world.getBlockState(getPos().up(2).offset(facing.rotateYCCW(),1)).equals(BlockTotemLathe.getState(BlockTotemLathe.EnumParts.TOP_MIDLEFT, facing)) ||
 			!world.getBlockState(getPos().up(2).offset(facing.rotateYCCW(),2)).equals(BlockTotemLathe.getState(BlockTotemLathe.EnumParts.TOP_MIDRIGHT, facing)))
 		{
-			return false;
+			setBroken();
 		}
 		
-		return true;
 	}
 	
 	

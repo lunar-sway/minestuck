@@ -124,6 +124,14 @@ public class BlockAlchemiter extends BlockLargeMachine
 		super.breakBlock(worldIn, pos, state);
 	}
 	
+	@Override
+	public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor)
+	{
+		TileEntity te = world.getTileEntity(pos);
+		if(te instanceof TileEntityAlchemiter)
+			((TileEntityAlchemiter) te).checkStates();
+	}
+	
 	//Block state handling
 	@Override
 	protected BlockStateContainer createBlockState()

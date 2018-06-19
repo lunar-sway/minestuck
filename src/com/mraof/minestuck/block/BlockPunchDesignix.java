@@ -1,6 +1,7 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.tileentity.TileEntityPunchDesignix;
+import net.minecraft.block.Block;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -77,6 +78,14 @@ public class BlockPunchDesignix extends BlockLargeMachine
 		}
 		
 		super.breakBlock(worldIn, pos, state);
+	}
+	
+	@Override
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos)
+	{
+		TileEntity te = worldIn.getTileEntity(pos);
+		if(te instanceof TileEntityPunchDesignix)
+			((TileEntityPunchDesignix) te).checkStates();
 	}
 	
 	//Block state handling
