@@ -30,6 +30,7 @@ public class LandAspectRabbits extends TitleLandAspect
 	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.PINK));
+		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.CARPET.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.SILVER));
 		
 		chunkProvider.decorators.add(new RabbitSpawner(6, BiomeMinestuck.mediumNormal));
 		chunkProvider.decorators.add(new RabbitSpawner(3, BiomeMinestuck.mediumRough));

@@ -20,7 +20,6 @@ import net.minecraftforge.common.ForgeHooks;
 
 public class EntityGiclops extends EntityUnderling implements IBigEntity
 {
-	private EntityAIAttackOnCollideWithRate entityAIAttackOnCollideWithRate;
 	private PartGroup partGroup;
 
 	public EntityGiclops(World world)
@@ -43,19 +42,18 @@ public class EntityGiclops extends EntityUnderling implements IBigEntity
 	}
 	
 	@Override
-	public GristSet getGristSpoils()
+	protected void initEntityAI()
 	{
-		return GristHelper.getRandomDrop(type, 10);
+		super.initEntityAI();
+		EntityAIAttackOnCollideWithRate aiAttack = new EntityAIAttackOnCollideWithRate(this, .3F, 50, false);
+		aiAttack.setDistanceMultiplier(1.1F);
+		this.tasks.addTask(3, aiAttack);
 	}
 
 	@Override
-	protected void setCombatTask() 
+	public GristSet getGristSpoils()
 	{
-		if(entityAIAttackOnCollideWithRate == null)
-			entityAIAttackOnCollideWithRate = new EntityAIAttackOnCollideWithRate(this, .3F, 50, false);
-		entityAIAttackOnCollideWithRate.setDistanceMultiplier(1.1F);
-		this.tasks.removeTask(this.entityAIAttackOnCollideWithRate);
-		this.tasks.addTask(4, entityAIAttackOnCollideWithRate);
+		return GristHelper.getRandomDrop(type, 10);
 	}
 
 	@Override

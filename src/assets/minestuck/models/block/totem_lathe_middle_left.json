@@ -1,0 +1,49 @@
+{
+    "textures": {
+        "particle": "minestuck:machines/totem_lathe/middle_left_front",
+        "front":    "minestuck:machines/totem_lathe/middle_left_front",
+        "side":     "minestuck:machines/totem_lathe/middle_left_side",
+        "back":     "minestuck:machines/totem_lathe/middle_left_back",
+        "inside":   "minestuck:machines/totem_lathe/middle_left_inside",
+        "top":      "minestuck:machines/totem_lathe/middle_left_top",
+        "bottom":   "minestuck:machines/totem_lathe/bottom_left_top"
+    },
+    "elements": [
+        {
+            "from": [ 0, 0, 6 ],
+            "to": [ 8, 16, 14 ],
+            "faces": {
+                "north": { "uv": [ 8,  0, 16, 16 ], "texture": "#front" },
+                "east":  { "uv": [ 2,  0, 10, 16 ], "texture": "#side" },
+                "south": { "uv": [ 0,  0,  8, 16 ], "texture": "#back" },
+                "west":  { "uv": [ 6,  0, 14, 16 ], "texture": "#inside", "cullface": "west" },
+                "up":    { "uv": [ 0,  6,  8, 14 ], "texture": "#top", "cullface": "up" },
+                "down":  { "uv": [ 0, 15,  8,  7 ], "texture": "#bottom", "cullface": "down" }
+            }
+        },
+        {
+            "from": [ 8, 0, 4 ],
+            "to": [ 16, 12, 14 ],
+            "faces": {
+                "north": { "uv": [ 0,  4,  8, 16 ], "texture": "#front" },
+                "east":  { "uv": [ 2,  4, 12, 16 ], "texture": "#side", "cullface": "east" },
+                "south": { "uv": [ 8,  4, 16, 16 ], "texture": "#back" },
+                "west":  { "uv": [ 4,  4, 14, 16 ], "texture": "#inside" },
+                "up":    { "uv": [ 8,  4, 16, 14 ], "texture": "#top" },
+                "down":  { "uv": [ 8, 15, 16,  5 ], "texture": "#bottom", "cullface": "down" }
+            }
+        },
+        {
+            "from": [ 8, 12, 7 ],
+            "to": [ 16, 16, 15 ],
+            "faces": {
+                "north": { "uv": [ 0,  0,  8,  4 ], "texture": "#front" },
+                "east":  { "uv": [ 1,  0,  9,  4 ], "texture": "#side", "cullface": "east" },
+                "south": { "uv": [ 8,  0, 16,  4 ], "texture": "#back" },
+                "west":  { "uv": [ 7,  0, 15,  4 ], "texture": "#inside" },
+                "up":    { "uv": [ 8,  7, 16, 15 ], "texture": "#top", "cullface": "up" },
+                "down":  { "uv": [ 8, 16, 16,  8 ], "texture": "#bottom" }
+            }
+        }
+    ]
+}

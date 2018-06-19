@@ -48,9 +48,11 @@ public class GoButtonPacket extends MinestuckPacket
 		
 		if (te == null)
 		{
+			System.out.println("Invalid TE in container for player %s");
 			Debug.warnf("Invalid TE in container for player %s!", player.getName());
 		} else
 		{
+			System.out.println("Button pressed. Alchemiter going!");
 			Debug.debug("Button pressed. Alchemiter going!");
 			te.ready = newMode;
 			te.overrideStop = overrideStop;

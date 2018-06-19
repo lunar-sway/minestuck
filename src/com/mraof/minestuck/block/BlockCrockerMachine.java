@@ -5,6 +5,7 @@ import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.item.TabMinestuck;
 import com.mraof.minestuck.tileentity.TileEntityCrockerMachine;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
+import com.mraof.minestuck.util.IdentifierHandler;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
@@ -65,7 +66,7 @@ public class BlockCrockerMachine extends BlockContainer
 		setUnlocalizedName("crockerMachine");
 		setHardness(3.0F);
 		setHarvestLevel("pickaxe", 0);
-		setDefaultState(getDefaultState().withProperty(FACING, EnumFacing.SOUTH).withProperty(HAS_ITEM, false));
+		setDefaultState(getDefaultState().withProperty(FACING, EnumFacing.SOUTH));
 		this.setCreativeTab(TabMinestuck.instance);
 	}
 	
@@ -122,7 +123,11 @@ public class BlockCrockerMachine extends BlockContainer
 			return false;
 		
 		if(!worldIn.isRemote)
+		{
+			if(state.getValue(MACHINE_TYPE) == MachineType.GRIST_WIDGET)
+				((TileEntityCrockerMachine) tileEntity).owner = IdentifierHandler.encode(playerIn);
 			playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.MACHINE.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
+		}
 		return true;
 	}
 	

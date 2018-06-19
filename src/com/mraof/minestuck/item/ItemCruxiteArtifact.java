@@ -112,7 +112,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 							MinestuckPlayerTracker.sendLandEntryMessage(player);
 						} else
 						{
-							player.sendMessage(new TextComponentString("Something went wrong taking you to your Land."));
+							player.sendMessage(new TextComponentString("Entry failed!"));
 						}
 					}
 					

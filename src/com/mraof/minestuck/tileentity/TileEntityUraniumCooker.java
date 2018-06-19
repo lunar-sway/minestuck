@@ -47,7 +47,8 @@ public class TileEntityUraniumCooker extends TileEntityMachine
 	@Override
 	public int getSizeInventory()
 	{
-		switch (getMachineType()) {
+		switch (getMachineType())
+		{
 		case URANIUM_COOKER:
 			return 3;
 		default:
@@ -58,7 +59,7 @@ public class TileEntityUraniumCooker extends TileEntityMachine
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack)
 	{
-		if(i == 0 && itemstack.getItem()!= MinestuckItems.rawUranium)
+		if(i == 0 && itemstack.getItem() != MinestuckItems.rawUranium)
 		{
 			return false;
 		}
@@ -196,7 +197,7 @@ public class TileEntityUraniumCooker extends TileEntityMachine
 	{
 		return true;
 	}
-	
+
 	@Override
 	public String getName()
 	{

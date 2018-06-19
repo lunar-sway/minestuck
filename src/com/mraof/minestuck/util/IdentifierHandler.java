@@ -73,6 +73,11 @@ public class IdentifierHandler {
 		return identifier;
 	}
 	
+	public static boolean hasIdentifier(NBTTagCompound nbt, String key)
+	{
+		return nbt.hasKey("owner") || nbt.hasKey("ownerMost") && nbt.hasKey("ownerLeast");
+	}
+	
 	public static PlayerIdentifier load(NBTBase nbt, String key)
 	{
 		PlayerIdentifier identifier = new PlayerIdentifier(nbt, key);
@@ -144,8 +149,6 @@ public class IdentifierHandler {
 		} else	//Refer to an online player
 		{
 			EntityPlayer player = CommandBase.getPlayer(server, sender, playerName);
-			if(player == null)
-				throw new CommandException("Couldn't find player \""+playerName+"\". Player must be online when referred directly.");
 			
 			return encode(player);
 		}

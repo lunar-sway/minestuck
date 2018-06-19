@@ -127,6 +127,11 @@ public class MinestuckDimensionHandler
 		return lands.containsKey(dimensionId);
 	}
 	
+	public static boolean isSkaia(int dimensionId)
+	{
+		return dimensionId == skaiaDimensionId;
+	}
+	
 	public static Set<Map.Entry<Integer, LandAspectRegistry.AspectCombination>> getLandSet()
 	{
 		return lands.entrySet();

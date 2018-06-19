@@ -29,6 +29,7 @@ public class LandAspectFlora extends TerrainLandAspect
 	//Consort dialogue
 	//Blood oceans? Some kind of tie between the plants and blood or death. Blood oceans are good, actually.
 	//Custom dungeon loot
+	//Uranium blocks, maybe as viable fuel for the uranium cooker
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{

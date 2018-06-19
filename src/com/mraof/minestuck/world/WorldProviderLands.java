@@ -6,6 +6,8 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
@@ -107,16 +109,30 @@ public class WorldProviderLands extends WorldProvider
 	}
 	
 	@Override
-	public int getRespawnDimension(EntityPlayerMP player)	//actually only called when the provider says that you can't respawn in that dimension, which also causes beds to explode
+	public int getRespawnDimension(EntityPlayerMP player)
 	{
+		int dimOut = 0;
 		SburbConnection c = SkaianetHandler.getMainConnection(IdentifierHandler.encode(player), true);
-		return c == null || !c.enteredGame() ? getDimension() : c.getClientDimension();
+		if(c == null || !c.enteredGame())
+			dimOut = player.getSpawnDimension();	//Method outputs 0 when no spawn dimension is set, sending players to the overworld.
+		else
+		{
+			dimOut = c.getClientDimension();
+		}
+		
+		return dimOut;
+	}
+	
+	@Override
+	public WorldSleepResult canSleepAt(EntityPlayer player, BlockPos pos)
+	{
+		return WorldSleepResult.ALLOW;
 	}
 	
 	@Override
 	public boolean canRespawnHere()
 	{
-		return true;
+		return false;
 	}
 	
 	@Override

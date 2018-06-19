@@ -9,8 +9,7 @@ import net.minecraft.world.World;
 
 public class EntityLich extends EntityUnderling
 {
-	private EntityAIAttackOnCollideWithRate entityAIAttackOnCollideWithRate = new EntityAIAttackOnCollideWithRate(this, .4F, 20, false);
-
+	
 	public EntityLich(World world) 
 	{
 		super(world);
@@ -24,24 +23,25 @@ public class EntityLich extends EntityUnderling
 	}
 	
 	@Override
+	protected void initEntityAI()
+	{
+		super.initEntityAI();
+		EntityAIAttackOnCollideWithRate aiAttack = new EntityAIAttackOnCollideWithRate(this, .4F, 20, false);
+		this.tasks.addTask(3, aiAttack);
+	}
+	
+	@Override
 	public GristSet getGristSpoils()
 	{
 		return GristHelper.getRandomDrop(type, 8);
 	}
 	
 	@Override
-	protected void setCombatTask() 
-	{
-		if(entityAIAttackOnCollideWithRate == null)
-			entityAIAttackOnCollideWithRate = new EntityAIAttackOnCollideWithRate(this, .4F, 20, false);
-		this.tasks.removeTask(this.entityAIAttackOnCollideWithRate);
-		this.tasks.addTask(4, entityAIAttackOnCollideWithRate);
-	}
-	@Override
 	protected double getWanderSpeed() 
 	{
 		return 0.4;
 	}
+	
 	@Override
 	protected float getMaximumHealth() 
 	{
