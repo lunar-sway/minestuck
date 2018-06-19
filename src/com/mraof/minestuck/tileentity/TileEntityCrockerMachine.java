@@ -6,9 +6,12 @@ import com.mraof.minestuck.block.BlockCrockerMachine.MachineType;
 import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.*;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import java.util.Map.Entry;
 
@@ -207,7 +210,13 @@ public class TileEntityCrockerMachine extends TileEntityMachine
 	{
 		return "tile.crockerMachine." + getMachineType().getUnlocalizedName() + ".name";
 	}
-
+	
+	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate)
+	{
+		return oldState.getBlock() != newSate.getBlock() || oldState.getValue(BlockCrockerMachine.MACHINE_TYPE) != newSate.getValue(BlockCrockerMachine.MACHINE_TYPE);
+	}
+	
 	public MachineType getMachineType()
 	{
 		return MachineType.values()[getBlockMetadata() % 4];

@@ -171,6 +171,12 @@ public class TileEntityAlchemiter extends TileEntity
 		handleUpdateTag(pkt.getNbtCompound());
 	}
 	
+	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate)
+	{
+		return oldState.getBlock() != newSate.getBlock() || oldState.getValue(BlockAlchemiter.PART1) != newSate.getValue(BlockAlchemiter.PART1);
+	}
+	
 	public void onRightClick(EntityPlayer player, IBlockState clickedState)
 	{
 		if (checkStates(clickedState))

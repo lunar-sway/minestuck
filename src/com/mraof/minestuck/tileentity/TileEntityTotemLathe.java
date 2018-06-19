@@ -18,6 +18,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 
@@ -293,6 +294,13 @@ public class TileEntityTotemLathe extends TileEntity
 	{
 		handleUpdateTag(pkt.getNbtCompound());
 	}
+	
+	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate)
+	{
+		return oldState.getBlock() != newSate.getBlock() || oldState.getValue(BlockTotemLathe.PART1) != newSate.getValue(BlockTotemLathe.PART1);
+	}
+	
 	
 	public void processContents()
 	{

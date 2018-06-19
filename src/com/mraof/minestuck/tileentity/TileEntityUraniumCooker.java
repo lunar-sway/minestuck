@@ -2,12 +2,15 @@ package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.block.BlockUraniumCooker.MachineType;
 import com.mraof.minestuck.item.MinestuckItems;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -202,6 +205,12 @@ public class TileEntityUraniumCooker extends TileEntityMachine
 	public String getName()
 	{
 		return "tile.cooker." + getMachineType().getUnlocalizedName() + ".name";
+	}
+	
+	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate)
+	{
+		return oldState.getBlock() != newSate.getBlock();
 	}
 	
 	public MachineType getMachineType()
