@@ -33,6 +33,7 @@ public class MinestuckBlocks
 	
 	public static Block coloredDirt = new BlockColoredDirt().setUnlocalizedName("coloredDirt").setHardness(0.5F);
 	public static Block cruxiteBlock = new Block(Material.ROCK, MapColor.LIGHT_BLUE).setUnlocalizedName("cruxiteBlock").setHardness(3.0F).setCreativeTab(TabMinestuck.instance);
+	public static Block uraniumBlock = new Block(Material.ROCK, MapColor.GREEN).setLightLevel(0.5F).setUnlocalizedName("uraniumBlock").setHardness(3.0F).setCreativeTab(TabMinestuck.instance);
 	public static Block genericObject = new BlockCustom(Material.GOURD, MapColor.LIME, SoundType.WOOD).setUnlocalizedName("genericObject").setHardness(1.0F).setCreativeTab(TabMinestuck.instance);
 	public static Block sburbMachine = new BlockSburbMachine();
 	public static Block crockerMachine = new BlockCrockerMachine();
@@ -199,6 +200,7 @@ public class MinestuckBlocks
 		registry.register(redstoneOreEndStone.setRegistryName("redstone_ore_end_stone"));
 		
 		registry.register(cruxiteBlock.setRegistryName("cruxite_block"));
+		registry.register(uraniumBlock.setRegistryName("uranium_block"));
 		registry.register(genericObject.setRegistryName("generic_object"));
 		registry.register(blockCruxiteDowel.setRegistryName("cruxite_dowel"));
 		
@@ -274,6 +276,7 @@ public class MinestuckBlocks
 		}*/
 
 		cruxiteBlock.setHarvestLevel("pickaxe", 0);
+		uraniumBlock.setHarvestLevel("pickaxe", 1);
 	}
 	
 	private static Fluid createFluid(String name, ResourceLocation still, ResourceLocation flowing, String unlocalizedName)

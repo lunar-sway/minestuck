@@ -1,7 +1,18 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mraof.minestuck.inventory.*;
-import com.mraof.minestuck.tileentity.*;
+import com.mraof.minestuck.inventory.ContainerConsortMerchant;
+import com.mraof.minestuck.inventory.ContainerCrockerMachine;
+import com.mraof.minestuck.inventory.ContainerSburbMachine;
+import com.mraof.minestuck.inventory.ContainerUraniumCooker;
+import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
+import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.tileentity.TileEntityCrockerMachine;
+import com.mraof.minestuck.tileentity.TileEntityCruxtruder;
+import com.mraof.minestuck.tileentity.TileEntitySburbMachine;
+import com.mraof.minestuck.tileentity.TileEntityTotemLathe;
+import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
+import com.mraof.minestuck.tileentity.TileEntityUraniumCooker;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;

@@ -132,15 +132,15 @@ public class Teleport
 			newEntity.readFromNBT(nbt);
 			newEntity.timeUntilPortal = entity.timeUntilPortal;
 			newEntity.setPosition(x, y, z);
-						
+			
 			boolean flag = newEntity.forceSpawn;
 			newEntity.forceSpawn = true;
 			worldDest.spawnEntity(newEntity);
 			newEntity.forceSpawn = flag;
 			worldDest.updateEntityWithOptionalForce(newEntity, false);
 			
+			entity.setDropItemsWhenDead(false);
 			entity.world.removeEntity(entity);
-			entity.isDead = true;
 			worldFrom.resetUpdateEntityTick();
 			worldDest.resetUpdateEntityTick();
 			

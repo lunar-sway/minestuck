@@ -232,6 +232,7 @@ public class MinestuckModelManager
 		register(oreUranium, 4, "uranium_sandstone_red");
 		register(oreUranium, 5, "uranium_end_stone");
 		register(cruxiteBlock);
+		register(uraniumBlock);
 		register(genericObject);
 		register(coalOreNetherrack);
 		register(ironOreEndStone);

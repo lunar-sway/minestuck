@@ -1,29 +1,58 @@
 package com.mraof.minestuck.network.skaianet;
 
+import static com.mraof.minestuck.network.skaianet.SessionHandler.GLOBAL_SESSION_NAME;
+import static com.mraof.minestuck.network.skaianet.SessionHandler.getPlayerSession;
+import static com.mraof.minestuck.network.skaianet.SessionHandler.maxSize;
+import static com.mraof.minestuck.network.skaianet.SessionHandler.merge;
+import static com.mraof.minestuck.network.skaianet.SessionHandler.sessions;
+import static com.mraof.minestuck.network.skaianet.SessionHandler.sessionsByName;
+import static com.mraof.minestuck.network.skaianet.SessionHandler.singleSession;
+import static com.mraof.minestuck.network.skaianet.SessionHandler.split;
+
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.command.CommandSburbSession;
-import com.mraof.minestuck.entity.underling.*;
+import com.mraof.minestuck.entity.underling.EntityBasilisk;
+import com.mraof.minestuck.entity.underling.EntityGiclops;
+import com.mraof.minestuck.entity.underling.EntityImp;
+import com.mraof.minestuck.entity.underling.EntityLich;
+import com.mraof.minestuck.entity.underling.EntityOgre;
+import com.mraof.minestuck.entity.underling.EntityUnderling;
 import com.mraof.minestuck.item.ItemCruxiteArtifact;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.PlayerDataPacket;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
-import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.EnumAspect;
+import com.mraof.minestuck.util.EnumClass;
+import com.mraof.minestuck.util.GristHelper;
+import com.mraof.minestuck.util.GristType;
+import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
+import com.mraof.minestuck.util.MinestuckPlayerData;
+import com.mraof.minestuck.util.MinestuckRandom;
+import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.LandAspectRegistry.AspectCombination;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.command.ServerCommandManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
@@ -37,10 +66,6 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
-
-import java.util.*;
-
-import static com.mraof.minestuck.network.skaianet.SessionHandler.*;
 
 /**
  * A class for managing sbrub-related stuff from outside this package that is dependent on connections and sessions.
