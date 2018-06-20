@@ -80,8 +80,6 @@ public class TileEntityCruxtruder extends TileEntity
 							((TileEntityItemStack) te).getStack().setItemDamage(color + 1);
 						if(material > 0)
 							material--;
-						EnumFacing facing = Rotation.CLOCKWISE_90.rotate(world.getBlockState(getPos()).getValue(BlockCruxtruder.DIRECTION));
-						world.setBlockState(getPos(), world.getBlockState(getPos()).withProperty(BlockCruxtruder.DIRECTION, facing), 3);
 					}
 				}
 			}
