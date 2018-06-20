@@ -2,6 +2,7 @@ package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.BlockCruxtiteDowel;
+import com.mraof.minestuck.block.BlockCruxtruder;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
 
@@ -12,7 +13,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class TileEntityCruxtruder extends TileEntity
 {
@@ -76,6 +80,8 @@ public class TileEntityCruxtruder extends TileEntity
 							((TileEntityItemStack) te).getStack().setItemDamage(color + 1);
 						if(material > 0)
 							material--;
+						EnumFacing facing = Rotation.CLOCKWISE_90.rotate(world.getBlockState(getPos()).getValue(BlockCruxtruder.DIRECTION));
+						world.setBlockState(getPos(), world.getBlockState(getPos()).withProperty(BlockCruxtruder.DIRECTION, facing), 3);
 					}
 				}
 			}
@@ -119,5 +125,11 @@ public class TileEntityCruxtruder extends TileEntity
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt)
 	{
 		handleUpdateTag(pkt.getNbtCompound());
+	}
+	
+	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate)
+	{
+		return oldState.getBlock() != newSate.getBlock() || oldState.getValue(BlockCruxtruder.PART) != newSate.getValue(BlockCruxtruder.PART);
 	}
 }

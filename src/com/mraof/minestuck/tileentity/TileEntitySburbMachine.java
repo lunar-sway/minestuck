@@ -1,17 +1,21 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.block.BlockSburbMachine;
 import com.mraof.minestuck.block.BlockSburbMachine.MachineType;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class TileEntitySburbMachine extends TileEntityMachine
 {
@@ -441,7 +445,13 @@ public class TileEntitySburbMachine extends TileEntityMachine
 	{
 		return "tile.sburbMachine." + getMachineType().getUnlocalizedName() + ".name";
 	}
-
+	
+	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate)
+	{
+		return oldState.getBlock() != newSate.getBlock() || oldState.getValue(BlockSburbMachine.MACHINE_TYPE) != newSate.getValue(BlockSburbMachine.MACHINE_TYPE);
+	}
+	
 	public MachineType getMachineType()
 	{
 		return MachineType.values()[getBlockMetadata() % 4];

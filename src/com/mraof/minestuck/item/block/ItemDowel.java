@@ -1,26 +1,34 @@
-package com.mraof.minestuck.item;
+package com.mraof.minestuck.item.block;
 
+import com.mraof.minestuck.item.TabMinestuck;
+import com.mraof.minestuck.tileentity.TileEntityItemStack;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagString;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemDowel extends Item
+public class ItemDowel extends ItemBlock
 {
 	
-	public ItemDowel()
+	public ItemDowel(Block block)
 	{
-		this.setCreativeTab(TabMinestuck.instance);
-		this.setUnlocalizedName("dowelCruxite");
+		super(block);
 		this.setHasSubtypes(true);
 	}
 	
@@ -53,4 +61,16 @@ public class ItemDowel extends Item
 		}
 	}
 	
+	@Override
+	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState)
+	{
+		if(super.placeBlockAt(stack, player, world, pos, side, hitX, hitY, hitZ, newState))
+		{
+			TileEntityItemStack te = (TileEntityItemStack) world.getTileEntity(pos);
+			ItemStack newStack = stack.copy();
+			newStack.setCount(1);
+			te.setStack(newStack);
+			return true;
+		} else return false;
+	}
 }

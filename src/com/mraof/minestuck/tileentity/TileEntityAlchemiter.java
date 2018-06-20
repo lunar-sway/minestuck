@@ -84,10 +84,21 @@ public class TileEntityAlchemiter extends TileEntity
 		setDowel(ItemStack.EMPTY);
 	}
 	
-	private boolean checkStates(IBlockState state)
+	private boolean isUseable(IBlockState state)
+	{
+		if(!broken)
+		{
+			checkStates();
+			if(broken)
+				Debug.warnf("Failed to notice a block being broken or misplaced at the alchemiter at %s", getPos());
+		}
+		return !broken;
+	}
+	
+	public void checkStates()
 	{
 		if(this.broken)
-			return false;
+			return;
 		
 		EnumFacing facing = getWorld().getBlockState(this.getPos()).getValue(BlockAlchemiter.DIRECTION);
 		BlockPos pos = getPos().down();
@@ -112,11 +123,10 @@ public class TileEntityAlchemiter extends TileEntity
 				!world.getBlockState(pos.offset(facing, 2).offset(facing.rotateY(), 1)).equals(BlockAlchemiter.getBlockState(EnumParts.CENTER_PAD, facing.rotateY())))
 		{
 			breakMachine();
-			Debug.warnf("Failed to notice a block being broken or misplaced at the alchemiter at %s", getPos());
-			return false;
+			return;
 		}
 		
-		return true;
+		return;
 	}
 	
 	@Override
@@ -171,9 +181,15 @@ public class TileEntityAlchemiter extends TileEntity
 		handleUpdateTag(pkt.getNbtCompound());
 	}
 	
+	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate)
+	{
+		return oldState.getBlock() != newSate.getBlock() || oldState.getValue(BlockAlchemiter.PART1) != newSate.getValue(BlockAlchemiter.PART1);
+	}
+	
 	public void onRightClick(EntityPlayer player, IBlockState clickedState)
 	{
-		if (checkStates(clickedState))
+		if (isUseable(clickedState))
 		{
 			BlockAlchemiter alchemiter = (BlockAlchemiter) clickedState.getBlock();
 			EnumParts part = clickedState.getValue(alchemiter.PART);
@@ -215,6 +231,9 @@ public class TileEntityAlchemiter extends TileEntity
 		BlockPos spawnPos = this.getPos().offset(facing).offset(facing.rotateY()).up();
 		//set the stack size
 		newItem.setCount(quantity);
+		//remove item damage
+		if(newItem.isItemStackDamageable())
+			newItem.setItemDamage(0);
 		//get the grist cost
 		GristSet cost = getGristCost(quantity);
 		
@@ -227,16 +246,6 @@ public class TileEntityAlchemiter extends TileEntity
 			
 			AlchemyRecipeHandler.onAlchemizedItem(newItem, player);
 			
-			if(newItem.getItem() == MinestuckItems.captchaCard)
-				cost = new GristSet(getSelectedGrist(), MinestuckConfig.cardCost);
-			if(newItem.isItemDamaged())
-			{
-				float multiplier = 1 - newItem.getItem().getDamage(newItem) / ((float) newItem.getMaxDamage());
-				for(GristAmount amount : cost.getArray())
-				{
-					cost.setGrist(amount.getType(), (int) Math.ceil(amount.getAmount() * multiplier));
-				}
-			}
 			PlayerIdentifier pid = IdentifierHandler.encode(player);
 			GristHelper.decrease(pid, cost);
 			MinestuckPlayerTracker.updateGristCache(pid);
@@ -265,19 +274,10 @@ public class TileEntityAlchemiter extends TileEntity
 		//if the item is a captcha card do other stuff
 		useSelectedType = stack.getItem() == MinestuckItems.captchaCard;
 		if (useSelectedType)
-			set = new GristSet(getSelectedGrist(), MinestuckConfig.clientCardCost);
+			set = new GristSet(getSelectedGrist(), MinestuckConfig.cardCost);
 		
 		if (set != null)
 		{
-			//remove damage from the item
-			if(stack.isItemDamaged())
-			{
-				float multiplier = 1 - stack.getItem().getDamage(stack) / ((float) stack.getMaxDamage());
-				for(GristAmount amount : set.getArray())
-				{
-					set.setGrist(amount.getType(), (int) (Math.ceil(amount.getAmount() * multiplier)));
-				}
-			}
 			//multiply cost by quantity
 			set.scaleGrist(quantity);
 		}

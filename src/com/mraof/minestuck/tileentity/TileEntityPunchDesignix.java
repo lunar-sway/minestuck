@@ -1,6 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
+import com.mraof.minestuck.block.BlockPunchDesignix;
 import com.mraof.minestuck.block.BlockPunchDesignix.EnumParts;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
@@ -18,6 +19,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 
@@ -68,7 +70,7 @@ public class TileEntityPunchDesignix extends TileEntity
 			return;
 		}
 		
-		if (checkStates(clickedState))
+		if (isUseable(clickedState))
 		{
 			ItemStack heldStack = player.getHeldItemMainhand();
 			if (part.equals(EnumParts.TOP_LEFT) && card.isEmpty())
@@ -126,25 +128,33 @@ public class TileEntityPunchDesignix extends TileEntity
 		}
 	}
 	
-	private boolean checkStates(IBlockState state)
+	private boolean isUseable(IBlockState state)
+	{
+		IBlockState currentState = getWorld().getBlockState(getPos());
+		if(!broken)
+		{
+			checkStates();
+			if(broken)
+				Debug.warnf("Failed to notice a block being broken or misplaced at the punch designix at %s", getPos());
+		}
+		if(!state.getValue(DIRECTION).equals(currentState.getValue(DIRECTION)))
+			return false;
+		return !broken;
+	}
+	
+	public void checkStates()
 	{
 		if (broken)
-			return false;
-		IBlockState currentState = this.getWorld().getBlockState(this.getPos());
+			return;
+		
+		IBlockState currentState = getWorld().getBlockState(getPos());
 		EnumFacing hOffset = currentState.getValue(DIRECTION).rotateYCCW();
 		if (!world.getBlockState(getPos().offset(hOffset)).equals(currentState.withProperty(PART, EnumParts.TOP_RIGHT)) ||
 				!world.getBlockState(getPos().down()).equals(currentState.withProperty(PART, EnumParts.BOTTOM_LEFT)) ||
 				!world.getBlockState(getPos().down().offset(hOffset)).equals(currentState.withProperty(PART, EnumParts.BOTTOM_RIGHT)))
 		{
 			broken = true;
-			Debug.warnf("Failed to notice a block being broken or misplaced at the punch designix at %s", getPos());
-			return false;
 		}
-		
-		if (!state.getValue(DIRECTION).equals(currentState.getValue(DIRECTION)))
-			return false;
-		
-		return true;
 	}
 	
 	public void dropItem(boolean inBlock)
@@ -201,5 +211,11 @@ public class TileEntityPunchDesignix extends TileEntity
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt)
 	{
 		handleUpdateTag(pkt.getNbtCompound());
+	}
+	
+	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate)
+	{
+		return oldState.getBlock() != newSate.getBlock() || oldState.getValue(BlockPunchDesignix.PART) != newSate.getValue(BlockPunchDesignix.PART);
 	}
 }
