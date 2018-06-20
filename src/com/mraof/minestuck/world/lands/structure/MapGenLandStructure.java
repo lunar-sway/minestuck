@@ -39,11 +39,18 @@ public class MapGenLandStructure extends MapGenStructure
 		ImpDungeonComponents.registerComponents();
 	}
 	
-	public boolean isInsideDungeon(BlockPos pos)
+	public boolean isInsideStructure(String structureName, BlockPos pos)
 	{
-		this.initializeStructureData(this.world);
-		StructureStart structure = this.getStructureAt(pos);
-		return structure != null && (structure instanceof ImpDungeonStart);
+		if (this.world == null)
+		{
+			return false;
+		}
+		else
+		{
+			this.initializeStructureData(this.world);
+			StructureStart structure = this.getStructureAt(pos);
+			return structure != null && structureName.equals(MapGenStructureIO.getStructureStartName(structure));
+		}
 	}
 	
 	public MapGenLandStructure(ChunkProviderLands chunkProvider)

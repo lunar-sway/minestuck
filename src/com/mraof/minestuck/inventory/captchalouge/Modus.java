@@ -30,6 +30,15 @@ public abstract class Modus
 	
 	public abstract NonNullList<ItemStack> getItems();
 	
+	public int getNonEmptyCards()
+	{
+		int count = 0;
+		for(ItemStack stack : getItems())
+			if(!stack.isEmpty())
+				count++;
+		return count;
+	}
+	
 	public abstract boolean increaseSize();
 	
 	public abstract ItemStack getItem(int id, boolean asCard);

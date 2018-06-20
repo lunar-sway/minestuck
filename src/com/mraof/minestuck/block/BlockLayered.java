@@ -19,7 +19,7 @@ public class BlockLayered extends Block
 {
 	protected static final AxisAlignedBB[] LAYERED_AABB = {new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1/8D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 2/8D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 3/8D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 4/8D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 5/8D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 6/8D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 7/8D, 1.0D)};
 	
-	public IBlockState full_block;	//Not named fullBlock because that creates confusion when using Minestuck as a development library.
+	public IBlockState sourceBlock;
 	public static final PropertyInteger SIZE = PropertyInteger.create("size", 1, 7);
 	
 	public BlockLayered(IBlockState iconBlock)
@@ -27,8 +27,8 @@ public class BlockLayered extends Block
 		super(iconBlock.getMaterial());
 		
 		this.setCreativeTab(TabMinestuck.instance);
-		this.full_block = iconBlock;
-		setSoundType(full_block.getBlock().getSoundType());
+		this.sourceBlock = iconBlock;
+		setSoundType(sourceBlock.getBlock().getSoundType());
 	}
 	
 	@Override
@@ -40,7 +40,7 @@ public class BlockLayered extends Block
 	@Override
 	public int getMetaFromState(IBlockState state)
 	{
-		return (Integer) state.getValue(SIZE) - 1;
+		return state.getValue(SIZE) - 1;
 	}
 	
 	@Override
@@ -52,7 +52,7 @@ public class BlockLayered extends Block
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
 	{
-		int size = (Integer) state.getValue(SIZE);
+		int size = state.getValue(SIZE);
 		
 		return LAYERED_AABB[size - 1];
 	}
@@ -93,19 +93,19 @@ public class BlockLayered extends Block
 	@Override
 	public int quantityDropped(IBlockState state, int fortune, Random random)
 	{
-		return ((Integer) state.getValue(SIZE)) & 7;
+		return state.getValue(SIZE) & 7;
 	}
 	
 	@Override
 	public boolean isReplaceable(IBlockAccess worldIn, BlockPos pos)
 	{
-		int meta = (Integer) worldIn.getBlockState(pos).getValue(SIZE);
-		return (meta > 7 ? false : blockMaterial.isReplaceable());
+		int meta = worldIn.getBlockState(pos).getValue(SIZE);
+		return meta >= 7 && blockMaterial.isReplaceable();
 	}
 
 	public boolean changeHeight(World world, BlockPos pos, int metadata)
 	{
-		IBlockState block = (metadata <= 7 ? getDefaultState().withProperty(SIZE, metadata) : this.full_block);
+		IBlockState block = (metadata <= 7 ? getDefaultState().withProperty(SIZE, metadata) : this.sourceBlock);
 		return  world.setBlockState(pos, block, 3);
 	}
 

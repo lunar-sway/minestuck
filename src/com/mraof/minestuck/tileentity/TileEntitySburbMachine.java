@@ -361,7 +361,7 @@ public class TileEntitySburbMachine extends TileEntityMachine
 
 				EntityPlayerMP player = owner.getPlayer();
 				if (player != null)
-					MinestuckAchievementHandler.onAlchemizedItem(newItem, player);
+					AlchemyRecipeHandler.onAlchemizedItem(newItem, player);
 
 				GristSet cost = GristRegistry.getGristConversion(newItem);
 				if (newItem.getItem() == MinestuckItems.captchaCard)

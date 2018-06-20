@@ -29,12 +29,17 @@ public class ItemMinestuckCandy extends ItemFood
 		candyMap.put(0, new Candy(2, 0.3F, "Corn"));
 	}
 	
-	public void updateCandy() {
+	public void updateCandy()
+	{
 		for (GristType type : GristType.REGISTRY.getValues())
 		{
-			float saturationModifier = type == GristType.Build ? 0.0F : 0.6F - type.getRarity(); //Perhaps change build to 0.1 or 0.05
-			String name = type.getName();
-			candyMap.put(type.getId() + 1, new Candy(2, saturationModifier, name.substring(0, 1).toUpperCase() + name.substring(1)));
+			if(type.getCandyItem().isEmpty())
+			{
+				float saturationModifier = type == GristType.Build ? 0.0F : 0.6F - type.getRarity(); //Perhaps change build to 0.1 or 0.05
+				String name = type.getName();
+				candyMap.put(type.getId() + 1, new Candy(2, saturationModifier, name.substring(0, 1).toUpperCase() + name.substring(1)));
+				type.setCandyItem(new ItemStack(this, 1, type.getId() + 1));
+			}
 		}
 	}
 	

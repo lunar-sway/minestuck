@@ -1,8 +1,10 @@
 package com.mraof.minestuck.util;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
 import com.mraof.minestuck.block.BlockMinestuckStone;
 import com.mraof.minestuck.entity.consort.ConsortRewardHandler;
+import com.mraof.minestuck.item.ItemCruxiteArtifact;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.modSupport.*;
 import com.mraof.minestuck.tileentity.TileEntityUraniumCooker;
@@ -12,6 +14,7 @@ import com.mraof.minestuck.world.storage.loot.functions.SetBoondollarCount;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPrismarine;
 import net.minecraft.block.BlockStoneBrick;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
@@ -1154,6 +1157,34 @@ public class AlchemyRecipeHandler
 		registerRecipes(new ExtraUtilitiesSupport(), "extrautils2", false);
 		registerRecipes(new TinkersConstructSupport(), "TConstruct", false);
 		
+	}
+	
+	public static void onAlchemizedItem(ItemStack stack, EntityPlayer player)
+	{
+		if(!(stack.getItem() instanceof ItemCruxiteArtifact))
+		{
+			Echeladder e = MinestuckPlayerData.getData(player).echeladder;
+			e.checkBonus(Echeladder.ALCHEMY_BONUS_OFFSET);
+		}
+		
+		GristSet set = GristRegistry.getGristConversion(stack);
+		if(set != null) //The only time the grist set should be null here is if it was a captchalouge card that was alchemized
+		{
+			double value = 0;
+			for(GristType type : GristType.values())
+			{
+				int v = set.getGrist(type);
+				float f = type == GristType.Build || type == GristType.Artifact ? 0.5F : type == GristType.Zillium ? 20 : type.getPower();
+				if(v > 0)
+					value += f*v/2;
+			}
+			
+			Echeladder e = MinestuckPlayerData.getData(player).echeladder;
+			if(value >= 50)
+				e.checkBonus((byte) (Echeladder.ALCHEMY_BONUS_OFFSET + 1));
+			if(value >= 500)
+				e.checkBonus((byte) (Echeladder.ALCHEMY_BONUS_OFFSET + 2));
+		}
 	}
 	
 	@Nonnull

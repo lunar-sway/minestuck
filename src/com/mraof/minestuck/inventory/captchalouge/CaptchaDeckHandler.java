@@ -2,6 +2,7 @@ package com.mraof.minestuck.inventory.captchalouge;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.item.ItemBoondollars;
 import com.mraof.minestuck.item.MinestuckItems;
@@ -73,6 +74,11 @@ public class CaptchaDeckHandler
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public static boolean isInRegistry(ResourceLocation type)
+	{
+		return modusClassMap.containsKey(type);
 	}
 	
 	public static ResourceLocation getType(Class<? extends Modus> modus)
@@ -163,8 +169,9 @@ public class CaptchaDeckHandler
 				container.inventory.setInventorySlotContents(0, getItem(oldType));
 			}
 			
+			MinestuckCriteriaTriggers.CHANGE_MODUS.trigger(player, modus);
 		}
-		else if(item.getItem().equals(MinestuckItems.captchaCard) && (!item.hasTagCompound() || !item.getTagCompound().getBoolean("punched"))
+		else if(item.getItem().equals(MinestuckItems.captchaCard) && !AlchemyRecipeHandler.isPunchedCard(item)
 				&& modus != null)
 		{
 			ItemStack content = AlchemyRecipeHandler.getDecodedItem(item);
@@ -179,6 +186,7 @@ public class CaptchaDeckHandler
 					ItemStack toPut = content.copy();
 					if(!modus.putItemStack(toPut))
 						launchItem(player, toPut);
+					else MinestuckCriteriaTriggers.CAPTCHALOGUE.trigger(player, modus, toPut);
 				}
 			
 			if(failed == 0)
@@ -208,7 +216,8 @@ public class CaptchaDeckHandler
 		if(modus != null && !stack.isEmpty())
 		{
 			boolean card1 = false, card2 = true;
-			if(stack.getItem() == MinestuckItems.captchaCard && stack.hasTagCompound() && !stack.getTagCompound().getBoolean("punched"))
+			if(stack.getItem() == MinestuckItems.captchaCard && AlchemyRecipeHandler.hasDecodedItem(stack)
+					&& !AlchemyRecipeHandler.isPunchedCard(stack))
 			{
 				ItemStack newStack = AlchemyRecipeHandler.getDecodedItem(stack);
 				if(!newStack.isEmpty())
@@ -220,6 +229,7 @@ public class CaptchaDeckHandler
 			}
 			if(modus.putItemStack(stack))
 			{
+				MinestuckCriteriaTriggers.CAPTCHALOGUE.trigger(player, modus, stack);
 				if(!card2)
 					launchAnyItem(player, new ItemStack(MinestuckItems.captchaCard, 1));
 				

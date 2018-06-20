@@ -55,12 +55,14 @@ public class BlockGoldSeeds extends Block
 	{
 	}
 	
-	public boolean isOpaqueCube()
+	@Override
+	public boolean isOpaqueCube(IBlockState state)
 	{
 		return false;
 	}
 	
-	public boolean isFullCube()
+	@Override
+	public boolean isFullCube(IBlockState state)
 	{
 		return false;
 	}

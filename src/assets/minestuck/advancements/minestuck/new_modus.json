@@ -1,0 +1,20 @@
+{
+    "display": {
+        "icon": {
+            "item": "minestuck:modus_card",
+            "data": 4
+        },
+        "title": {
+            "translate": "advancements.minestuck.new_modus.title"
+        },
+        "description": {
+            "translate": "advancements.minestuck.new_modus.description"
+        }
+    },
+    "parent": "minestuck:minestuck/alchemy",
+    "criteria": {
+        "punch": {
+            "trigger": "minestuck:change_modus"
+        }
+    }
+}

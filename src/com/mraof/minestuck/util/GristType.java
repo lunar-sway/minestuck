@@ -1,6 +1,7 @@
 package com.mraof.minestuck.util;
 
 import com.mraof.minestuck.Minestuck;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.RegistryNamespaced;
 import net.minecraft.util.text.translation.I18n;
@@ -43,6 +44,7 @@ public class GristType extends IForgeRegistryEntry.Impl<GristType> implements Co
 	final float rarity;
 	final float value;
 	private final ResourceLocation icon;
+	private ItemStack candyItem = ItemStack.EMPTY;
 
 	public GristType(String name, float rarity, ResourceLocation icon)
 	{
@@ -117,7 +119,18 @@ public class GristType extends IForgeRegistryEntry.Impl<GristType> implements Co
 	{
 		return icon;
 	}
-
+	
+	public ItemStack getCandyItem()
+	{
+		return candyItem.copy();
+	}
+	
+	public GristType setCandyItem(ItemStack stack)
+	{
+		candyItem = stack;
+		return this;
+	}
+	
 	public int getId()
 	{
 		return REGISTRY.getID(this);

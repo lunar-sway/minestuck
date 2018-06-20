@@ -25,7 +25,7 @@ public class RenderEntityMinestuck<T extends EntityMinestuck> extends RenderLivi
 	
 	public static<T extends EntityMinestuck> Factory<T> getFactory(ModelBase model, float shadowSize)
 	{
-		Factory<T> factory = new Factory<T>();
+		Factory<T> factory = new Factory<>();
 		factory.modelBase = model;
 		factory.shadowSize = shadowSize;
 		return factory;
@@ -38,7 +38,7 @@ public class RenderEntityMinestuck<T extends EntityMinestuck> extends RenderLivi
 		@Override
 		public Render<? super T> createRenderFor(RenderManager manager)
 		{
-			return new RenderEntityMinestuck<T>(manager, modelBase, shadowSize);
+			return new RenderEntityMinestuck<>(manager, modelBase, shadowSize);
 		}
 	}
 }

@@ -82,90 +82,18 @@ public class Minestuck
 		//(new UpdateChecker()).start();
 		
 		proxy.preInit();
-		
-		MinecraftForge.EVENT_BUS.register(MinestuckSoundHandler.instance);
-		MinecraftForge.EVENT_BUS.register(MinestuckBlocks.class);
-		MinecraftForge.EVENT_BUS.register(MinestuckItems.class);
-		MinecraftForge.EVENT_BUS.register(BiomeMinestuck.class);
-		
-		MinestuckSoundHandler.initSound();
-		
-		MinestuckAchievementHandler.prepareAchievementPage();
-		
 	}
 	
 	@EventHandler
 	public void load(FMLInitializationEvent event) 
 	{
-		MinestuckEntities.registerEntities();
-		//register Tile Entities
-		GameRegistry.registerTileEntity(TileEntitySkaiaPortal.class, "minestuck:gate_portal");
-		GameRegistry.registerTileEntity(TileEntitySburbMachine.class, "minestuck:sburb_machine");
-		GameRegistry.registerTileEntity(TileEntityPunchDesignix.class, "Minestuck:punch_designix");
-		GameRegistry.registerTileEntity(TileEntityTotemLathe.class, "Minestuck:totem_lathe");
-		GameRegistry.registerTileEntity(TileEntityAlchemiter.class,"Minestuck:alchemiter");
-		GameRegistry.registerTileEntity(TileEntityCruxtruder.class, "Minestuck:cruxtruder");
-		GameRegistry.registerTileEntity(TileEntityItemStack.class, "Minestuck:item_stack");
-		GameRegistry.registerTileEntity(TileEntityCrockerMachine.class, "minestuck:crocker_machine");
-		GameRegistry.registerTileEntity(TileEntityComputer.class, "minestuck:computer_sburb");
-		GameRegistry.registerTileEntity(TileEntityTransportalizer.class, "minestuck:transportalizer");
-		GameRegistry.registerTileEntity(TileEntityGate.class, "minestuck:gate");
-		GameRegistry.registerTileEntity(TileEntityUraniumCooker.class, "minestuck:uranium_cooker");
-		
-		MinestuckDimensionHandler.register();
-		
-		//register ore generation
-		OreHandler oreHandler = new OreHandler();
-		GameRegistry.registerWorldGenerator(oreHandler, 0);
-		
-		//register GUI handler
-		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
-		
 		//Register textures and renders
 		if(isClientRunning)
 		{
 			ClientProxy.registerRenderers();
 		}
 		
-		//Register event handlers
-		MinecraftForge.EVENT_BUS.register(new MinestuckSaveHandler());
-		MinecraftForge.EVENT_BUS.register(new MinestuckFluidHandler());
-		MinecraftForge.EVENT_BUS.register(ServerEditHandler.instance);
-		MinecraftForge.EVENT_BUS.register(MinestuckAchievementHandler.instance);
-		MinecraftForge.EVENT_BUS.register(MinestuckPlayerTracker.instance);
-		MinecraftForge.EVENT_BUS.register(ServerEventHandler.instance);
-		MinecraftForge.EVENT_BUS.register(MinestuckChannelHandler.instance);
-		MinecraftForge.EVENT_BUS.register(new ConnectionListener());
-		
 		proxy.init();
-		
-		//register channel handler
-		MinestuckChannelHandler.setupChannel();
-		
-		//Register structures
-		MapGenStructureIO.registerStructure(StructureCastleStart.class, "SkaiaCastle");
-		StructureCastlePieces.registerComponents();
-		MapGenLandStructure.registerStructures();
-		ConsortVillageComponents.registerComponents();
-		
-		//update candy
-		((ItemMinestuckCandy) MinestuckItems.candy).updateCandy();
-		
-		//register recipes
-		AlchemyRecipeHandler.registerVanillaRecipes();
-		AlchemyRecipeHandler.registerMinestuckRecipes();
-		AlchemyRecipeHandler.registerModRecipes();
-		
-		LandAspectRegistry.registerLandAspects();
-		ConsortDialogue.init();
-		
-		KindAbstratusList.registerTypes();
-		DeployList.registerItems();
-		
-		ComputerProgram.registerProgram(0, SburbClient.class, new ItemStack(MinestuckItems.disk, 1, 0));	//This idea was kind of bad and should be replaced
-		ComputerProgram.registerProgram(1, SburbServer.class, new ItemStack(MinestuckItems.disk, 1, 1));
-		
-		SessionHandler.maxSize = 144;//acceptTitleCollision?(generateSpecialClasses?168:144):12;
 	}
 
 	@EventHandler

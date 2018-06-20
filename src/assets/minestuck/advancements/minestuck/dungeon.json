@@ -1,0 +1,23 @@
+{
+    "display": {
+        "icon": {
+            "item": "minestuck:stone",
+            "data": 4
+        },
+        "title": {
+            "translate": "advancements.minestuck.find_dungeon.title"
+        },
+        "description": {
+            "translate": "advancements.minestuck.find_dungeon.description"
+        }
+    },
+    "parent": "minestuck:minestuck/return_node",
+    "criteria": {
+        "imp_dungeon": {
+            "trigger": "minecraft:location",
+            "conditions": {
+                "feature": "MinestuckImpDungeon"
+            }
+        }
+    }
+}

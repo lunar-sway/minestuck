@@ -1,7 +1,6 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import net.minecraft.client.renderer.GlStateManager;
@@ -161,7 +160,7 @@ public class GuiEcheladder extends GuiPlayerStats
 		mc.fontRenderer.drawString(I18n.format("gui.echeladder.attack.name"), xOffset + 24, yOffset + 30, 0x404040);
 		mc.fontRenderer.drawString(attack+"%", xOffset + 26, yOffset + 39, 0x0094FF);
 		
-		double health = ClientProxy.getClientPlayer().getMaxHealth()/2;	//10 + Echeladder.healthBoost(currentRung)/2.0;
+		double health = mc.player.getMaxHealth()/2;	//10 + Echeladder.healthBoost(currentRung)/2.0;
 		mc.fontRenderer.drawString(I18n.format("gui.echeladder.health.name"), xOffset + 24, yOffset + 84, 0x404040);
 		mc.fontRenderer.drawString(String.valueOf(health), xOffset + 26, yOffset + 93, 0x0094FF);
 		

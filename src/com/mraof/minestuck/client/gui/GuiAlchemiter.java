@@ -62,8 +62,10 @@ public class GuiAlchemiter extends GuiScreen
 		onesDown = new GuiButton(6,(width-guiWidth)/2+10,(height-guiHeight)/2+74,18,18,"v");
 
 		buttonList.add(alchemize);
-		//dont add the buttons if the item is free
-		if(!alchemiter.getGristCost(itemQuantity).isEmpty()) {
+		GristSet cost = alchemiter.getGristCost(1);
+		//don't add the buttons if the item is free or unalchemizeable
+		if(cost != null && !cost.isEmpty())
+		{
 			buttonList.add(onesUp);
 			buttonList.add(tensUp);
 			buttonList.add(hundredsUp);
@@ -97,7 +99,7 @@ public class GuiAlchemiter extends GuiScreen
 			
 			//Calculate the grist set
 			GristSet set;
-			set=alchemiter.getGristCost(itemQuantity);
+			set = alchemiter.getGristCost(itemQuantity);
 			//draw the grist board
 			GuiUtil.drawGristBoard(set, AlchemyRecipeHandler.getDecodedItem(alchemiter.getDowel()).getItem() == MinestuckItems.captchaCard ? GuiUtil.GristboardMode.LARGE_ALCHEMITER_SELECT : GuiUtil.GristboardMode.LARGE_ALCHEMITER, (width-guiWidth)/2+88,(height-guiHeight)/2+13, fontRenderer);
 			//draw the grist

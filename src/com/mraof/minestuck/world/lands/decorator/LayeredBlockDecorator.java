@@ -2,13 +2,13 @@ package com.mraof.minestuck.world.lands.decorator;
 
 import java.util.Random;
 
+import com.mraof.minestuck.block.BlockLayered;
+import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import com.mraof.minestuck.block.BlockLayered;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 public class LayeredBlockDecorator implements ILandDecorator
 {
@@ -81,8 +81,8 @@ public class LayeredBlockDecorator implements ILandDecorator
 		
 		if(height == 8)
 		{
-			IBlockState full_block = ((BlockLayered) block).full_block;
-			world.setBlockState(pos, full_block, 2);
+			IBlockState fullBlock = ((BlockLayered) block).sourceBlock;
+			world.setBlockState(pos, fullBlock, 2);
 		}
 		else
 		{

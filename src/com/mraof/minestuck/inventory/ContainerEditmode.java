@@ -1,7 +1,6 @@
 package com.mraof.minestuck.inventory;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.item.ItemCruxiteArtifact;
@@ -35,12 +34,6 @@ public class ContainerEditmode extends Container
 	public ArrayList<ItemStack> items  = new ArrayList<ItemStack>();
 	public int scroll;
 	public static int clientScroll;
-	
-	public ContainerEditmode()
-	{
-		this.player = ClientProxy.getClientPlayer();
-		addSlots();
-	}
 	
 	public ContainerEditmode(EntityPlayer player)
 	{

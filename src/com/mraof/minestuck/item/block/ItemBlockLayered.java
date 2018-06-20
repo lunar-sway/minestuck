@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item.block;
 
-import net.minecraft.block.Block;
+import com.mraof.minestuck.block.BlockLayered;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
@@ -12,16 +13,14 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import com.mraof.minestuck.block.BlockLayered;
-
 public class ItemBlockLayered extends ItemBlock
 {
 	
-	public IBlockState theBlock;
-	public ItemBlockLayered(Block par1)
+	public IBlockState sourceBlock;
+	public ItemBlockLayered(BlockLayered block)
 	{
-		super(par1);
-		theBlock = ((BlockLayered)par1).full_block;
+		super(block);
+		sourceBlock = block.sourceBlock;
 	}
 	
 	@Override

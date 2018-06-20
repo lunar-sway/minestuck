@@ -1,6 +1,7 @@
 package com.mraof.minestuck.entity.consort;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.inventory.ContainerConsortMerchant;
 import com.mraof.minestuck.inventory.InventoryConsortMerchant;
@@ -14,6 +15,7 @@ import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
@@ -872,6 +874,7 @@ public abstract class MessageType
 						.generateLootForPools(consort.world.rand, contextBuilder.build()))
 				{
 					player.entityDropItem(itemstack, 0.0F);
+					MinestuckCriteriaTriggers.CONSORT_ITEM.trigger((EntityPlayerMP) player, item.toString(), itemstack, consort);
 				}
 				
 				return message.getMessage(consort, player, chainIdentifier);

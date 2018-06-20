@@ -38,7 +38,7 @@ public class MapGenConsortVillage extends MapGenStructure
 	@Override
 	public String getStructureName()
 	{
-		return "ConsortVillagePiece";
+		return "ConsortVillage";
 	}
 	
 	@Override

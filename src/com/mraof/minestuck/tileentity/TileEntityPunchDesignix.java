@@ -1,5 +1,6 @@
 package com.mraof.minestuck.tileentity;
 
+import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
 import com.mraof.minestuck.block.BlockPunchDesignix.EnumParts;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
@@ -7,6 +8,7 @@ import com.mraof.minestuck.util.CombinationRegistry;
 import com.mraof.minestuck.util.Debug;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -51,7 +53,7 @@ public class TileEntityPunchDesignix extends TileEntity
 		return card;
 	}
 	
-	public void onRightClick(EntityPlayer player, IBlockState clickedState)
+	public void onRightClick(EntityPlayerMP player, IBlockState clickedState)
 	{
 		EnumParts part = clickedState.getValue(PART);
 		if (part.equals(EnumParts.TOP_LEFT) && !card.isEmpty())
@@ -88,17 +90,19 @@ public class TileEntityPunchDesignix extends TileEntity
 						if(output.getItem().isDamageable())
 							output.setItemDamage(0);
 						
-						if (card.hasTagCompound() && card.getTagCompound().getBoolean("punched"))
+						if(AlchemyRecipeHandler.isPunchedCard(card))
 						{    //|| combination
 							output = CombinationRegistry.getCombination(output, AlchemyRecipeHandler.getDecodedItem(card), CombinationRegistry.Mode.MODE_OR);
-							if (!output.isEmpty())
+							if(!output.isEmpty())
 							{
+								MinestuckCriteriaTriggers.PUNCH_DESIGNIX.trigger(player, AlchemyRecipeHandler.getDecodedItem(heldStack), AlchemyRecipeHandler.getDecodedItem(card), output);
 								setCard(AlchemyRecipeHandler.createCard(output, true));
 								effects(true);
 								return;
 							}
 						} else    //Just punch the card regularly
 						{
+							MinestuckCriteriaTriggers.PUNCH_DESIGNIX.trigger(player, output, ItemStack.EMPTY, output);
 							setCard(AlchemyRecipeHandler.createCard(output, true));
 							effects(true);
 							

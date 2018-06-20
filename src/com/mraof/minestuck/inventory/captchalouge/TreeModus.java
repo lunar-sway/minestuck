@@ -1,6 +1,7 @@
 package com.mraof.minestuck.inventory.captchalouge;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
 import com.mraof.minestuck.client.gui.captchalouge.SylladexGuiHandler;
 import com.mraof.minestuck.client.gui.captchalouge.TreeGuiHandler;
 import com.mraof.minestuck.item.MinestuckItems;
@@ -8,6 +9,7 @@ import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -105,6 +107,12 @@ public class TreeModus extends Modus
 	}
 	
 	@Override
+	public int getNonEmptyCards()
+	{
+		return node.getSize();
+	}
+	
+	@Override
 	public boolean increaseSize()
 	{
 		if(MinestuckConfig.modusMaxSize > 0 && size >= MinestuckConfig.modusMaxSize)
@@ -135,9 +143,8 @@ public class TreeModus extends Modus
 			return ItemStack.EMPTY;
 		}
 		
-		/*if(id == 0 && node.getSize() >= 16)
-			player.addStat(MinestuckAchievementHandler.treeModus);*/
-		
+		if(id == 0)
+			MinestuckCriteriaTriggers.TREE_MODUS_ROOT.trigger((EntityPlayerMP) player, node.getSize());
 		
 		ArrayList<ItemStack> list = node.removeItems(id);
 		if(list.isEmpty())

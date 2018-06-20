@@ -1,5 +1,6 @@
 package com.mraof.minestuck.entity.consort;
 
+import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
 import com.mraof.minestuck.entity.EntityMinestuck;
 import com.mraof.minestuck.inventory.InventoryConsortMerchant;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
@@ -7,6 +8,7 @@ import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -73,6 +75,7 @@ public abstract class EntityConsort extends EntityMinestuck
 				ITextComponent text = message.getMessage(this, player);    //TODO Make sure to catch any issues here
 				if (text != null)
 					player.sendMessage(text);
+				MinestuckCriteriaTriggers.CONSORT_TALK.trigger((EntityPlayerMP) player, message.getString(), this);
 			}
 			
 			return true;
