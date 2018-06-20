@@ -1,9 +1,6 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.block.BlockColoredDirt;
-import com.mraof.minestuck.block.BlockCrockerMachine;
-import com.mraof.minestuck.block.BlockMinestuckLog;
-import com.mraof.minestuck.block.BlockMinestuckStone;
+import com.mraof.minestuck.block.*;
 import com.mraof.minestuck.entity.item.EntityCrewPoster;
 import com.mraof.minestuck.entity.item.EntitySbahjPoster;
 import com.mraof.minestuck.item.block.*;
@@ -135,7 +132,7 @@ public class MinestuckItems
 	public static Item rawCruxite = new Item().setUnlocalizedName("rawCruxite").setCreativeTab(TabMinestuck.instance);
 	public static Item rawUranium = new Item().setUnlocalizedName("rawUranium").setCreativeTab(TabMinestuck.instance);
 	public static Item energyCore = new Item().setUnlocalizedName("energyCore").setCreativeTab(TabMinestuck.instance);
-	public static Item cruxiteDowel = new ItemDowel();
+	public static ItemDowel cruxiteDowel = new ItemDowel(MinestuckBlocks.blockCruxiteDowel);
 	public static Item captchaCard = new ItemCaptchaCard();
 	public static ItemCruxiteArtifact cruxiteApple = (ItemCruxiteArtifact) new ItemCruxiteApple();
 	public static Item cruxitePotion = new ItemCruxitePotion();
@@ -216,6 +213,7 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemAlchemiter(alchemiter[0]));
 		registerItemBlock(registry, new ItemCruxtruder(cruxtruder));
 		registerItemBlock(registry, new ItemBlock(cruxtruderLid));
+		registerItemBlock(registry, cruxiteDowel);
 
 		registerItemBlock(registry, new ItemBlockLayered(layeredSand));
 		registerItemBlock(registry, new ItemMultiTexture(coloredDirt, coloredDirt,
@@ -353,7 +351,6 @@ public class MinestuckItems
 		registry.register(rawCruxite.setRegistryName("raw_cruxite"));
 		registry.register(rawUranium.setRegistryName("raw_uranium"));
 		registry.register(energyCore.setRegistryName("energy_core"));
-		registry.register(cruxiteDowel.setRegistryName("cruxite_dowel"));
 		registry.register(captchaCard.setRegistryName("captcha_card"));
 		registry.register(cruxiteApple.setRegistryName("cruxite_apple"));
 		registry.register(cruxitePotion.setRegistryName("cruxite_potion"));

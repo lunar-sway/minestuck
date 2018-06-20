@@ -1093,6 +1093,7 @@ tile.instantTnt.name=Instant TNT
 tile.buttonTnt.name=TNT Button
 tile.uraniumCooker.name=Cookalyzer
 tile.cruxtruderLid.name=Cruxtruder Lid
+tile.dowelCruxite.name=Cruxite Dowel
 
 title.format=%1$s of %2$s
 title.bard=Bard
