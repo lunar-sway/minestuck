@@ -257,7 +257,8 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemMultiTexture(leaves1, leaves1,
 				(ItemStack input) -> BlockMinestuckLeaves1.BlockType.values()[input.getItemDamage() % BlockMinestuckLeaves1.BlockType.values().length].getUnlocalizedName()));
 		registerItemBlock(registry, new ItemMultiTexture(planks, planks,
-				(ItemStack input) -> BlockMinestuckPlanks.BlockType.values()[input.getItemDamage() % BlockMinestuckPlanks.BlockType.values().length].getUnlocalizedName()));
+				(ItemStack input) -> BlockMinestuckPlanks.BlockType.values()[Math.min(input.getItemDamage(), BlockMinestuckPlanks.BlockType.values().length - 1)].getUnlocalizedName()));
+				//Temporarily changed to this mechanism for handling larger inputs so that any leftover blocks at value 15 will convert properly.
 		
 		registerItemBlock(registry, new ItemMultiTexture(aspectSapling, aspectSapling,
 				(ItemStack input) -> BlockAspectSapling.BlockType.values()[input.getItemDamage() % BlockAspectSapling.BlockType.values().length].getUnlocalizedName()));

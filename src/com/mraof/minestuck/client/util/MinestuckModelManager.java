@@ -265,9 +265,10 @@ public class MinestuckModelManager
 		
 		for(BlockMinestuckLog.BlockType type : BlockMinestuckLog.BlockType.values())
 			register(log, type.ordinal(), type.getName()+"_log");
-
+		
 		for(BlockMinestuckPlanks.BlockType type : BlockMinestuckPlanks.BlockType.values())
 			register(planks, type.ordinal(), type.getName()+"_planks");
+		
 		for(BlockMinestuckLeaves1.BlockType type : BlockMinestuckLeaves1.BlockType.values())
 			register(leaves1, type.ordinal(), type.getName()+"_leaves");
 		

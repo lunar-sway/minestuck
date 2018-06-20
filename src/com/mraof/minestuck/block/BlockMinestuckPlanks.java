@@ -28,7 +28,7 @@ public class BlockMinestuckPlanks extends Block
 	{
 		super(Material.WOOD);
 		setCreativeTab(TabMinestuck.instance);
-		setDefaultState(blockState.getBaseState().withProperty(VARIANT, BlockType.VINE_OAK));
+		setDefaultState(blockState.getBaseState().withProperty(VARIANT, BlockType.RAINBOW));
 		setUnlocalizedName("planksMinestuck");
 		this.setHardness(2.0F);
 		this.setSoundType(SoundType.WOOD);
@@ -43,7 +43,7 @@ public class BlockMinestuckPlanks extends Block
 	@Override
 	public IBlockState getStateFromMeta(int meta)
 	{
-		IBlockState iblockstate = this.getDefaultState().withProperty(VARIANT, BlockType.values()[meta]);
+		IBlockState iblockstate = this.getDefaultState().withProperty(VARIANT, BlockType.values()[Math.min(meta, 12)]);
 		return iblockstate;
 	}
 	
@@ -64,12 +64,10 @@ public class BlockMinestuckPlanks extends Block
 	@Override
 	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items)
 	{
-		for(int i=0; i<12; i++)
+		for(BlockType type : BlockType.values())
 		{
-			BlockType type = BlockType.values()[i];
 			items.add(new ItemStack(this, 1, type.ordinal()));
 		}
-		items.add(new ItemStack(this, 1, BlockType.values()[15].ordinal()));
 	}
 	
 	@Override
@@ -110,9 +108,6 @@ public class BlockMinestuckPlanks extends Block
 		ASPECT_SPACE("aspect_space", "aspectSpace", MapColor.WOOD),
 		ASPECT_TIME("aspect_time", "aspectTime", MapColor.WOOD),
 		ASPECT_VOID("aspect_void", "aspectVoid", MapColor.WOOD),
-		VINE_OAK("vine_oak", "vineOak", MapColor.WOOD),
-		FLOWERY_VINE_OAK("flowery_vine_oak", "floweryVineOak", MapColor.WOOD),
-		FROST("frost", "frost", MapColor.WOOD),
 		RAINBOW("rainbow", "rainbow", MapColor.WOOD);
 		
 		private final String name;
