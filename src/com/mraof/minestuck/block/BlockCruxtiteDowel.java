@@ -138,7 +138,7 @@ public class BlockCruxtiteDowel extends Block
 		{
 			ItemStack dowel = ((TileEntityItemStack) te).getStack();
 			if(!dowel.isEmpty())
-				return dowel;
+				return dowel.copy();
 		}
 		return super.getPickBlock(state, target, world, pos, player);
 	}
