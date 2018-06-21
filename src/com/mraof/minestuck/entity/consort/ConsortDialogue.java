@@ -121,10 +121,11 @@ public class ConsortDialogue
 		addMessage(new ChoiceMessage(new SingleMessage("mushroomPizza"),
 				new SingleMessage[]{new SingleMessage("mushroomPizza.on"), new SingleMessage("mushroomPizza.off")},
 				new MessageType[]{new SingleMessage("mushroomPizza.on.consortReply"), new SingleMessage("mushroomPizza.off.consortReply")})).landTerrain(fromNameTerrain("shade"));
-		addMessage("fireHazard").landTerrain(fromNameTerrain("shade"), fromNameTerrain("wood")).landTitle(allExcept(fromNameTitle("thunder")));
+		addMessage("fireHazard").landTerrain(fromNameTerrain("shade")).landTitle(allExcept(fromNameTitle("thunder")));
 		addMessage("gettingHot").landTerrain(fromNameTerrain("heat"));
 		addMessage("stepIntoFire").landTerrain(fromNameTerrain("heat"));
 		addMessage("lavaCrickets").landTerrain(fromNameTerrain("heat"));
+		
 		addMessage("woodTreatments").landTerrain(fromNameTerrain("wood"));
 		addMessage(new ChainMessage(new SingleMessage("splinters.1"), new SingleMessage("splinters.2"))).landTerrain(fromNameTerrain("wood"));
 		

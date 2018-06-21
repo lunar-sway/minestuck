@@ -167,7 +167,9 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 				Chunk c = worldserver0.getChunkFromChunkCoords(blockX >> 4, blockZ >> 4);
 				
 				int height = (int) Math.sqrt(artifactRange * artifactRange - (((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2));
-				for(int blockY = Math.max(0, y - height); blockY <= Math.min(topY, y + height); blockY++)
+				
+				int blockY;
+				for(blockY = Math.max(0, y - height); blockY <= Math.min(topY, y + height); blockY++)
 				{
 					BlockPos pos = new BlockPos(blockX, blockY, blockZ);
 					BlockPos pos1 = pos.add(xDiff, yDiff, zDiff);
@@ -196,14 +198,15 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 						foundComputer = true;	//You have a computer in range. That means you're taking your computer with you when you Enter. Smart move.
 					}
 					
+					//Shouldn't this line check if the block is an edge block?
 					blockMoves.add(new BlockMove(c, pos, pos1, block, false));
 				}
 				
 				//What does this code accomplish?
-				for(int blockY = Math.min(topY, y + height) + yDiff + 1; blockY <= 255; blockY++)
+				for(blockY += yDiff; blockY <= 255; blockY++)
 				{
 					//The first BlockPos isn't used for this operation.
-					blockMoves.add(new BlockMove(c, BlockPos.ORIGIN, new BlockPos(blockX + xDiff, blockY + yDiff, blockZ + zDiff), Blocks.AIR.getDefaultState(), false));
+					blockMoves.add(new BlockMove(c, BlockPos.ORIGIN, new BlockPos(blockX + xDiff, blockY, blockZ + zDiff), Blocks.AIR.getDefaultState(), false));
 				}
 			}
 		}
@@ -403,18 +406,16 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 		return true;
 	}
 	
-	private static void copyBlockDirect(Chunk cSrc, Chunk cDst, BlockPos src, BlockPos dst)
+	private static void copyBlockDirect(Chunk cSrc, Chunk cDst, int xSrc, int ySrc, int zSrc, int xDst, int yDst, int zDst)
 	{
-		int x1 = src.getX() & 15, y1 = src.getY(), z1 = src.getZ() & 15;
-		int x2 = dst.getX() & 15, y2 = dst.getY(), z2 = dst.getZ() & 15;
-		int j1 = src.getY() & 15, j2 = dst.getY() & 15;
-		ExtendedBlockStorage blockStorage = getBlockStorage(cDst, y1 >> 4);
-		ExtendedBlockStorage blockStorage2 = getBlockStorage(cSrc, y2 >> 4);
+		ExtendedBlockStorage blockStorageSrc = getBlockStorage(cSrc, ySrc >> 4);
+		ExtendedBlockStorage blockStorageDst = getBlockStorage(cDst, yDst >> 4);
+		xSrc &= 15; ySrc &= 15; zSrc &= 15; xDst &= 15; yDst &= 15; zDst &= 15;
 		
-		blockStorage.set(x2, j2, z2, blockStorage2.get(x1, j1, z1));
-		blockStorage.setBlockLight(x2, j2, z2, blockStorage2.getBlockLight(x1, j1, z1));
-		if(blockStorage2.getSkyLight() != null)
-			blockStorage.setSkyLight(x2, j2, z2, blockStorage2.getSkyLight(x1, j1, z1));
+		blockStorageDst.set(xDst, yDst, zDst, blockStorageSrc.get(xSrc, ySrc, zSrc));
+		blockStorageDst.setBlockLight(xDst, yDst, zDst, blockStorageSrc.getBlockLight(xSrc, ySrc, zSrc));
+		if(blockStorageSrc.getSkyLight() != null)
+			blockStorageDst.setSkyLight(xDst, yDst, zDst, blockStorageSrc.getSkyLight(xSrc, ySrc, zSrc));
 	}
 	
 	private static ExtendedBlockStorage getBlockStorage(Chunk c, int y)
@@ -482,6 +483,11 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 		
 		void copy(Chunk chunkTo)
 		{
+			if(chunkTo.getBlockState(dest).getBlock() == Blocks.BEDROCK)
+			{
+				return;
+			}
+			
 			if(update)
 			{
 				chunkTo.setBlockState(dest, block);
@@ -490,7 +496,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 				chunkTo.getWorld().setBlockState(dest, block, 0);
 			} else
 			{
-				ItemCruxiteArtifact.copyBlockDirect(chunkFrom, chunkTo, source, dest);
+				ItemCruxiteArtifact.copyBlockDirect(chunkFrom, chunkTo, source.getX(), source.getY(), source.getZ(), dest.getX(), dest.getY(), dest.getZ());
 			}
 			
 			TileEntity tileEntity = chunkFrom.getTileEntity(source, EnumCreateEntityType.CHECK);
