@@ -4,10 +4,12 @@ import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
+import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -129,8 +131,6 @@ public class SburbConnection
 			if(enteredGame)
 			{
 				nbt.setInteger("clientLand", clientHomeLand);
-				nbt.setInteger("centerX", centerX);
-				nbt.setInteger("centerZ", centerZ);
 			}
 		}
 		if(isActive)
@@ -159,8 +159,9 @@ public class SburbConnection
 			if(enteredGame)
 			{
 				clientHomeLand = nbt.getInteger("clientLand");
-				centerX = nbt.getInteger("centerX");
-				centerZ = nbt.getInteger("centerZ");
+				BlockPos spawn = MinestuckDimensionHandler.getSpawn(clientHomeLand);
+				centerX = spawn.getX();
+				centerZ = spawn.getZ();
 			}
 			if(nbt.hasKey("canSplit"))
 				canSplit = nbt.getBoolean("canSplit");

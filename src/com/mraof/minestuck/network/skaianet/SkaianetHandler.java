@@ -550,12 +550,6 @@ public class SkaianetHandler {
 						sc.markBlockForUpdate();
 					}
 				}
-				if(cc != null && c.enteredGame && c.inventory == null && c.centerX == 0 && c.centerZ == 0)	//If the center location isn't defined
-				{
-					c.centerX = cc.getPos().getX();
-					c.centerZ = cc.getPos().getZ();
-					c.inventory = new NBTTagList();
-				}
 				if(cc != null && c.enteredGame && !MinestuckDimensionHandler.isLandDimension(c.clientHomeLand))
 					c.clientHomeLand = c.client.dimension;
 			}
@@ -687,8 +681,8 @@ public class SkaianetHandler {
 		c.enteredGame = true;
 		SburbHandler.onGameEntered(c);
 		
-		c.centerX = (int)player.posX;
-		c.centerZ = (int)player.posZ;
+		c.centerX = 0;
+		c.centerZ = 0;
 		updateAll();
 		return dimensionId;
 	}

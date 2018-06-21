@@ -122,9 +122,10 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 			if(entity.posZ < 0) z--;
 			
 			boolean creative = ((EntityPlayerMP) entity).interactionManager.isCreative();
+			SburbConnection c = SkaianetHandler.getMainConnection(IdentifierHandler.encode((EntityPlayer) entity), true);
 			
 			int topY = MinestuckConfig.adaptEntryBlockHeight ? getTopHeight(worldserver0, x, y, z) : y + artifactRange;
-			int yDiff = 127 - topY, xDiff = 0 - x, zDiff = 0 - z;
+			int yDiff = 127 - topY, xDiff = c.centerX - x, zDiff = c.centerZ - z;
 			MinestuckDimensionHandler.setSpawn(worldserver1.provider.getDimension(), new BlockPos(x + xDiff, y + yDiff, z + zDiff));	//Set again, but with a more precise now that the y-coordinate is properly decided.
 			
 			Debug.debug("Loading spawn chunks...");
