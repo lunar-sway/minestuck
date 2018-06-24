@@ -94,6 +94,12 @@ public class GristHelper {
 	 */
 	public static GristSet getRandomDrop(GristType primary, double multiplier)
 	{
+		if(primary == null)
+		{
+			Debug.warn("Got an underling grist drop call with a null grist type. (multiplier:"+multiplier+")");
+			return null;
+		}
+		
 		GristSet set = new GristSet();
 		set.addGrist(GristType.Build, (int)(2*multiplier + random.nextDouble()*18*multiplier));
 		set.addGrist(primary, (int)(1*multiplier + random.nextDouble()*9*multiplier));
