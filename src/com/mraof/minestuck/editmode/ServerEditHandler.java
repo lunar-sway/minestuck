@@ -162,7 +162,7 @@ public class ServerEditHandler
 				player.inventory.readFromNBT(c.inventory);
 			decoy.world.spawnEntity(decoy);
 			list.add(data);
-			MinestuckPacket packet = MinestuckPacket.makePacket(Type.SERVER_EDIT, computerTarget, c.centerX, c.centerZ, c.givenItems());
+			MinestuckPacket packet = MinestuckPacket.makePacket(Type.SERVER_EDIT, computerTarget, c.centerX, c.centerZ, c.givenItems(), DeployList.getDeployListTag(c));
 			MinestuckChannelHandler.sendToPlayer(packet, player);
 			MinestuckPlayerTracker.updateGristCache(c.getClientIdentifier());
 		}
@@ -234,7 +234,7 @@ public class ServerEditHandler
 		SburbConnection c = data.connection;
 		int range = MinestuckDimensionHandler.isLandDimension(player.dimension) ? MinestuckConfig.landEditRange : MinestuckConfig.overworldEditRange;
 		
-		updateInventory(player, c.givenItems(), c.enteredGame(), c.getClientIdentifier());
+		updateInventory(player, c.givenItems(), c);
 		updatePosition(player, range, c.centerX, c.centerZ);
 		
 		player.timeUntilPortal = player.getPortalCooldown();
@@ -248,15 +248,17 @@ public class ServerEditHandler
 		{
 			EditData data = getData(event.getPlayer());
 			ItemStack stack = event.getEntityItem().getItem();
-			if(DeployList.containsItemStack(stack) && !isBlockItem(stack.getItem()))
+			DeployList.DeployEntry entry = DeployList.getEntryForItem(stack, data.connection);
+			if(entry != null && !isBlockItem(stack.getItem()))
 			{
-				GristSet cost = data.connection.givenItems()[DeployList.getOrdinal(stack)]
-						?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack);
+				int i = DeployList.getOrdinal(entry.getName());
+				GristSet cost = data.connection.givenItems()[i]
+						? entry.getSecondaryGristCost(data.connection) : entry.getPrimaryGristCost(data.connection);
 				if(GristHelper.canAfford(MinestuckPlayerData.getGristSet(data.connection.getClientIdentifier()), cost))
 				{
 					GristHelper.decrease(data.connection.getClientIdentifier(), cost);
 					MinestuckPlayerTracker.updateGristCache(data.connection.getClientIdentifier());
-					data.connection.givenItems()[DeployList.getOrdinal(stack)] = true;
+					data.connection.givenItems()[i] = true;
 					if(!data.connection.isMain())
 						SkaianetHandler.giveItems(data.connection.getClientIdentifier());
 				}
@@ -302,10 +304,11 @@ public class ServerEditHandler
 			
 			cleanStackNBT(stack);
 			
-			if(DeployList.containsItemStack(stack))
+			DeployList.DeployEntry entry = DeployList.getEntryForItem(stack, data.connection);
+			if(entry != null)
 			{
-				GristSet cost = data.connection.givenItems()[DeployList.getOrdinal(stack)]
-						? DeployList.getSecondaryCost(stack) : DeployList.getPrimaryCost(stack);
+				GristSet cost = data.connection.givenItems()[DeployList.getOrdinal(entry.getName())]
+						? entry.getSecondaryGristCost(data.connection) : entry.getPrimaryGristCost(data.connection);
 				if(!GristHelper.canAfford(MinestuckPlayerData.getGristSet(data.connection.getClientIdentifier()), cost))
 				{
 					StringBuilder str = new StringBuilder();
@@ -387,12 +390,14 @@ public class ServerEditHandler
 			}
 			
 			ItemStack stack = event.getItemInHand();
-			if(DeployList.containsItemStack(stack))
+			SburbConnection c = data.connection;
+			DeployList.DeployEntry entry = DeployList.getEntryForItem(stack, c);
+			if(entry != null)
 			{
-				SburbConnection c = data.connection;
-				GristSet cost = c.givenItems()[DeployList.getOrdinal(stack)]
-						? DeployList.getSecondaryCost(stack) : DeployList.getPrimaryCost(stack);
-				c.givenItems()[DeployList.getOrdinal(stack)] = true;
+				int index = DeployList.getOrdinal(entry.getName());
+				GristSet cost = c.givenItems()[index]
+						? entry.getSecondaryGristCost(c) : entry.getPrimaryGristCost(c);
+				c.givenItems()[index] = true;
 				if(!c.isMain())
 					SkaianetHandler.giveItems(c.getClientIdentifier());
 				if(!cost.isEmpty())
@@ -454,18 +459,29 @@ public class ServerEditHandler
 		}
 	}
 	
-	public static void updateInventory(EntityPlayerMP player, boolean[] givenItems, boolean enteredGame, PlayerIdentifier client)
+	public static void updateInventory(EntityPlayerMP player, boolean[] givenItems, SburbConnection connection)
 	{
+		List<DeployList.DeployEntry> deployList = DeployList.getItemList(connection);
+		deployList.removeIf(entry -> givenItems[DeployList.getOrdinal(entry.getName())] && entry.getSecondaryGristCost(connection) == null);
+		List<ItemStack> itemList = new ArrayList<>();
+		deployList.forEach(deployEntry -> itemList.add(deployEntry.getItemStack(connection)));
+		
 		boolean inventoryChanged = false;
 		for(int i = 0; i < player.inventory.mainInventory.size(); i++)
 		{
 			ItemStack stack = player.inventory.mainInventory.get(i);
-			if(!stack.isEmpty() &&
-					(stack.getItem() == MinestuckItems.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack).getItem() instanceof ItemCruxiteArtifact && enteredGame
-					|| !DeployList.containsItemStack(stack) && (GristRegistry.getGristConversion(stack) == null || !isBlockItem(stack.getItem()))))
+			if(stack.isEmpty())
+				continue;
+			if(GristRegistry.getGristConversion(stack) == null || !isBlockItem(stack.getItem()))
 			{
-				player.inventory.mainInventory.set(i, ItemStack.EMPTY);
-				inventoryChanged = true;
+				listSearch :
+				{
+					for(ItemStack deployStack : itemList)
+						if(ItemStack.areItemStacksEqual(deployStack, stack))
+							break listSearch;
+					player.inventory.mainInventory.set(i, ItemStack.EMPTY);
+					inventoryChanged = true;
+				}
 			}
 			if(stack.getCount() > 1)
 			{
@@ -474,44 +490,13 @@ public class ServerEditHandler
 			}
 		}
 		
-		ArrayList<ItemStack> itemsToRemove = new ArrayList<ItemStack>();
-		int availableTier = SburbHandler.availableTier(client);
-		for(ItemStack stack : DeployList.getItemList())
-			if(givenItems[DeployList.getOrdinal(stack)] && DeployList.getSecondaryCost(stack) == null
-					|| DeployList.getTier(stack) > availableTier)
-				itemsToRemove.add(stack);
-		
-		if(!player.inventory.getItemStack().isEmpty())
-			for(ItemStack stack : itemsToRemove)
-				if(player.inventory.getItemStack().equals(stack))
-				{
-					player.inventory.setItemStack(ItemStack.EMPTY);
-					inventoryChanged = true;
-					break;
-				}
-		
-		for(int i = 0; i < player.inventory.mainInventory.size(); i++)
-		{
-			ItemStack stack = player.inventory.mainInventory.get(i);
-			if(stack.isEmpty())
-				continue;
-			cleanStackNBT(stack);
-			for(ItemStack stack1 : itemsToRemove)
-				if(stack.isItemEqual(stack1))
-				{
-					player.inventory.mainInventory.set(i, ItemStack.EMPTY);
-					inventoryChanged = true;
-					break;
-				}
-		}
-		
 		if(inventoryChanged)
 			player.getServer().getPlayerList().syncPlayerInventory(player);
 	}
 	
 	public static void onServerStopping()
 	{	
-		for(EditData data : new ArrayList<EditData>(list))
+		for(EditData data : new ArrayList<>(list))
 			reset(data);
 	}
 	

@@ -496,6 +496,12 @@ public class SburbHandler
 		return new ItemStack(artifact, 1, colorIndex + 1);
 	}
 	
+	public static GristType getPrimaryGristType(PlayerIdentifier player)
+	{
+		
+		return GristType.Shale;
+	}
+	
 	public static int getColorForDimension(int dim)
 	{
 		SburbConnection c = getConnectionForDimension(dim);
