@@ -302,7 +302,7 @@ public class ServerEditHandler
 				return;
 			}
 			
-			cleanStackNBT(stack);
+			cleanStackNBT(stack, data.connection);
 			
 			DeployList.DeployEntry entry = DeployList.getEntryForItem(stack, data.connection);
 			if(entry != null)
@@ -482,6 +482,16 @@ public class ServerEditHandler
 					player.inventory.mainInventory.set(i, ItemStack.EMPTY);
 					inventoryChanged = true;
 				}
+			} else if(stack.hasTagCompound())
+			{
+				listSearch :
+				{
+					for(ItemStack deployStack : itemList)
+						if(ItemStack.areItemStacksEqual(deployStack, stack))
+							break listSearch;
+					stack.setTagCompound(null);
+					inventoryChanged = true;
+				}
 			}
 			if(stack.getCount() > 1)
 			{
@@ -579,18 +589,10 @@ public class ServerEditHandler
 		return item instanceof ItemBlock || item instanceof ItemDoor || item instanceof ItemBlockSpecial;
 	}
 	
-	public static void cleanStackNBT(ItemStack stack)
+	public static void cleanStackNBT(ItemStack stack, SburbConnection c)
 	{
-		NBTTagCompound nbt = stack.getTagCompound();
-		if(nbt != null)
-		{
-			nbt.removeTag("BlockEntityTag");
-			nbt.removeTag("ench");
-			nbt.removeTag("display");
-			
-			if(nbt.hasNoTags())
-				stack.setTagCompound(null);
-		}
+		if(!DeployList.containsItemStack(stack, c))
+			stack.setTagCompound(null);
 	}
 	
 	private static List<NBTTagCompound> recoverData = new ArrayList<NBTTagCompound>();
