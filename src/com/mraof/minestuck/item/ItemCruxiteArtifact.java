@@ -155,8 +155,8 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 		
 		topY = MinestuckConfig.adaptEntryBlockHeight ? getTopHeight(worldserver0, x, y, z) : y + artifactRange;
 		yDiff = 127 - topY;
-		xDiff = conn.centerX - x;
-		zDiff = conn.centerZ - z;
+		xDiff = 0 - x;
+		zDiff = 0 - z;
 		
 		Debug.debug("Loading block movements...");
 		long time = System.currentTimeMillis();
