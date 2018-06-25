@@ -683,6 +683,7 @@ public class SkaianetHandler {
 		
 		c.centerX = 0;
 		c.centerZ = 0;
+		c.useCoordinates = false;
 		updateAll();
 		return dimensionId;
 	}
