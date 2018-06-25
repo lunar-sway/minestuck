@@ -2,6 +2,7 @@ package com.mraof.minestuck.network.skaianet;
 
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.network.MinestuckPacket;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
@@ -157,13 +158,7 @@ public class SburbConnection
 		{
 			isActive = nbt.getBoolean("isActive");
 			enteredGame = nbt.getBoolean("enteredGame");
-			if(enteredGame)
-			{
-				clientHomeLand = nbt.getInteger("clientLand");
-				BlockPos spawn = MinestuckDimensionHandler.getSpawn(clientHomeLand);
-				centerX = spawn.getX();
-				centerZ = spawn.getZ();
-			}
+			
 			if(nbt.hasKey("canSplit"))
 				canSplit = nbt.getBoolean("canSplit");
 			NBTTagList list = nbt.getTagList("givenItems", 8);
@@ -185,6 +180,27 @@ public class SburbConnection
 		{
 			clientIdentifier = IdentifierHandler.load(nbt, "client");
 			serverIdentifier = IdentifierHandler.load(nbt, "server");
+		}
+		if(enteredGame)
+		{
+			clientHomeLand = nbt.getInteger("clientLand");
+			if(MinestuckDimensionHandler.isLandDimension(clientHomeLand))
+			{
+				BlockPos spawn = MinestuckDimensionHandler.getSpawn(clientHomeLand);
+				if(spawn != null)
+				{
+					centerX = spawn.getX();
+					centerZ = spawn.getZ();
+				} else
+				{
+					Debug.errorf("While loading skaianet, the dimension %s was registered as a land dimension, but without a spawn point. This should not happen!", clientHomeLand);
+					centerX = centerZ = 0;
+				}
+			} else
+			{
+				Debug.errorf("The connection between %s and %s had a home dimension %s that isn't a land dimension. For safety measures, the connection will be loaded as if the player had not yet entered.", getClientDisplayName(), getServerDisplayName(), clientHomeLand);
+				enteredGame = false;
+			}
 		}
 		artifactType = nbt.getInteger("artifact");
 		
