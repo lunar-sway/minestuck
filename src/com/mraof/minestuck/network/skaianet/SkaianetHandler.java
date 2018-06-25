@@ -694,6 +694,8 @@ public class SkaianetHandler {
 			
 			c.centerX = 0;
 			c.centerZ = 0;
+			//A similar solution to this line of code will appear upstream in the near future. In any way it may be important, defer to that version.
+			c.useCoordinates = false;	//This is a different set of coordinates from the ones defined immediately above.
 			updateAll();
 		} else
 			Debug.errorf("Couldn't move %s to their Land. Stopping entry.", player.getName());
