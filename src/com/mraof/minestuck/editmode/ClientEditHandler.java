@@ -21,6 +21,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
@@ -65,7 +66,8 @@ public class ClientEditHandler {
 		MinestuckChannelHandler.sendToServer(packet);
 	}
 	
-	public static void onClientPackage(String target, int posX, int posZ, boolean[] items) {
+	public static void onClientPackage(String target, int posX, int posZ, boolean[] items, NBTTagCompound deployList)
+	{
 		Minecraft mc = Minecraft.getMinecraft();
 		EntityPlayerSP player = mc.player;
 		if(target != null) {	//Enable edit mode
@@ -81,6 +83,10 @@ public class ClientEditHandler {
 		{
 			player.fallDistance = 0;
 			activated = false;
+		}
+		if(deployList != null)
+		{
+			DeployList.loadClientDeployList(deployList);
 		}
 	}
 	
@@ -100,9 +106,10 @@ public class ClientEditHandler {
 	{
 		
 		GristSet cost;
-		if(DeployList.containsItemStack(stack))
-			cost = givenItems[DeployList.getOrdinal(stack)]
-					? DeployList.getSecondaryCost(stack) : DeployList.getPrimaryCost(stack);
+		DeployList.ClientDeployEntry deployEntry = DeployList.getEntryClient(stack);
+		if(deployEntry != null)
+			cost = givenItems[deployEntry.getIndex()]
+					? deployEntry.getSecondaryCost() : deployEntry.getPrimaryCost();
 		else if(stack.getItem().equals(MinestuckItems.captchaCard))
 			cost = new GristSet();
 		else cost = GristRegistry.getGristConversion(stack);
@@ -142,12 +149,12 @@ public class ClientEditHandler {
 		{
 			InventoryPlayer inventory = event.getPlayer().inventory;
 			ItemStack stack = event.getEntityItem().getItem();
-			int ordinal = DeployList.getOrdinal(stack);
-			if(ordinal >= 0)
+			DeployList.ClientDeployEntry entry = DeployList.getEntryClient(stack);
+			if(entry != null)
 			{
-				if(!ServerEditHandler.isBlockItem(stack.getItem()) && GristHelper.canAfford(MinestuckPlayerData.getClientGrist(), givenItems[ordinal]
-						? DeployList.getSecondaryCost(stack) : DeployList.getPrimaryCost(stack)))
-					givenItems[ordinal] = true;
+				if(!ServerEditHandler.isBlockItem(stack.getItem()) && GristHelper.canAfford(MinestuckPlayerData.getClientGrist(), givenItems[entry.getIndex()]
+						? entry.getSecondaryCost() : entry.getPrimaryCost()))
+					givenItems[entry.getIndex()] = true;
 				else event.setCanceled(true);
 				
 			}
@@ -184,10 +191,11 @@ public class ClientEditHandler {
 			}
 			
 			GristSet cost;
-			if(DeployList.containsItemStack(stack))
-				if(givenItems[DeployList.getOrdinal(stack)])
-					cost = DeployList.getSecondaryCost(stack);
-				else cost = DeployList.getPrimaryCost(stack);
+			DeployList.ClientDeployEntry entry = DeployList.getEntryClient(stack);
+			if(entry != null)
+				if(givenItems[entry.getIndex()])
+					cost = entry.getSecondaryCost();
+				else cost = entry.getPrimaryCost();
 			else cost = GristRegistry.getGristConversion(stack);
 			if(!GristHelper.canAfford(MinestuckPlayerData.getClientGrist(), cost)) {
 				StringBuilder str = new StringBuilder();
@@ -235,8 +243,9 @@ public class ClientEditHandler {
 		if(event.getWorld().isRemote && isActive() && event.getEntityPlayer().equals(Minecraft.getMinecraft().player)
 				&& event.getUseItem() == Result.ALLOW) {
 			ItemStack stack = event.getEntityPlayer().getHeldItemMainhand();
-			if(DeployList.containsItemStack(stack))
-				givenItems[DeployList.getOrdinal(stack)] = true;
+			DeployList.ClientDeployEntry entry = DeployList.getEntryClient(stack);
+			if(entry != null)
+				givenItems[entry.getIndex()] = true;
 		}
 	}
 	

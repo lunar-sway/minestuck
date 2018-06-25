@@ -6,6 +6,7 @@ import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -65,6 +66,20 @@ public class BlockAlchemiter extends BlockLargeMachine
 	public boolean isFullCube(IBlockState state)
 	{
 		return state.getValue(PART) == EnumParts.CENTER_PAD;
+	}
+	
+	@Override
+	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face)
+	{
+		EnumParts parts = state.getValue(PART);
+		EnumFacing facing = state.getValue(DIRECTION);
+		if(parts == EnumParts.CENTER_PAD)
+			return BlockFaceShape.SOLID;
+		if(face == facing.getOpposite() && (parts == EnumParts.SIDE_RIGHT || parts == EnumParts.SIDE_LEFT))
+			return BlockFaceShape.SOLID;
+		if(face == EnumFacing.DOWN && (parts == EnumParts.SIDE_RIGHT || parts == EnumParts.SIDE_LEFT || parts == EnumParts.CORNER || parts == EnumParts.TOTEM_CORNER))
+			return BlockFaceShape.SOLID;
+		return BlockFaceShape.UNDEFINED;
 	}
 	
 	@Override

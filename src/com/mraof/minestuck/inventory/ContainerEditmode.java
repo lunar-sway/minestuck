@@ -25,6 +25,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class ContainerEditmode extends Container
 {
@@ -93,32 +94,14 @@ public class ContainerEditmode extends Container
 		ArrayList<ItemStack> tools = new ArrayList<ItemStack>();
 		//Fill list with tool items when implemented
 		
-		ArrayList<ItemStack> deployItems = DeployList.getItemList();
-		Iterator<ItemStack> iter = deployItems.iterator();
-		int playerTier = SburbHandler.availableTier(c.getClientIdentifier());
-		while(iter.hasNext())
-		{
-			ItemStack stack = iter.next();
-			if(DeployList.getTier(stack) > playerTier)
-				iter.remove();
-			else if(DeployList.getSecondaryCost(stack) == null && c.givenItems()[DeployList.getOrdinal(stack)])
-				iter.remove();
-			else if(stack.getItem().equals(MinestuckItems.captchaCard) && AlchemyRecipeHandler.getDecodedItem(stack).getItem() instanceof ItemCruxiteArtifact)
-				if(c.enteredGame())
-					iter.remove();
-				else stack.setTagCompound(AlchemyRecipeHandler.createCard(SburbHandler.getEntryItem(c.getClientIdentifier()), true).getTagCompound());
-			else if(stack.getItem().equals(Item.getItemFromBlock(MinestuckBlocks.sburbMachine)) && stack.getMetadata() == 0)
-			{
-				NBTTagCompound nbt = new NBTTagCompound();
-				nbt.setInteger("color", MinestuckPlayerData.getData(c.getClientIdentifier()).color);
-				stack.setTagCompound(nbt);
-			}
-		}
+		List<DeployList.DeployEntry> deployItems = DeployList.getItemList(c);
+		deployItems.removeIf(deployEntry -> c.givenItems()[DeployList.getOrdinal(deployEntry.getName())] &&
+				deployEntry.getSecondaryGristCost(c) == null);
 		
 		for(int i = 0; i < Math.max(tools.size(), deployItems.size()); i++)
 		{
-			itemList.add(i >= tools.size()? ItemStack.EMPTY:tools.get(i));
-			itemList.add(i >= deployItems.size()? ItemStack.EMPTY:deployItems.get(i));
+			itemList.add(i >= tools.size() ? ItemStack.EMPTY : tools.get(i));
+			itemList.add(i >= deployItems.size() ? ItemStack.EMPTY : deployItems.get(i).getItemStack(c));
 		}
 		
 		boolean changed = false;

@@ -118,6 +118,8 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 		if(this.deathTime == 20 && !this.world.isRemote)
 		{
 			GristSet grist = this.getGristSpoils();
+			if(grist == null)
+				return;
 			if(fromSpawner)
 				grist.scaleGrist(0.5F);
 			

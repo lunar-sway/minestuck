@@ -4,10 +4,13 @@ import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
+import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -47,7 +50,7 @@ public class SburbConnection
 	/**
 	 * If the client will have frog breeding as quest, the array will be extended and the new positions will hold the gear.
 	 */
-	boolean[] givenItemList = new boolean[DeployList.getItemList().size()];
+	boolean[] givenItemList = new boolean[DeployList.getEntryCount()];
 	NBTTagList unregisteredItems = new NBTTagList();
 	
 	//Only used by the edit handler
@@ -118,19 +121,17 @@ public class SburbConnection
 			nbt.setBoolean("enteredGame", enteredGame);
 			nbt.setBoolean("canSplit", canSplit);
 			NBTTagList list = unregisteredItems.copy();
-			for(ItemStack stack : DeployList.getItemList())
+			String[] deployNames = DeployList.getNameList();
+			for(int i = 0; i < givenItemList.length; i++)
 			{
-				NBTTagCompound itemData = stack.writeToNBT(new NBTTagCompound());
-				itemData.setBoolean("given", givenItemList[DeployList.getOrdinal(stack)]);
-				list.appendTag(itemData);
+				if(givenItemList[i])
+					list.appendTag(new NBTTagString(deployNames[i]));
 			}
 			
 			nbt.setTag("givenItems", list);
 			if(enteredGame)
 			{
 				nbt.setInteger("clientLand", clientHomeLand);
-				nbt.setInteger("centerX", centerX);
-				nbt.setInteger("centerZ", centerZ);
 			}
 		}
 		if(isActive)
@@ -159,19 +160,20 @@ public class SburbConnection
 			if(enteredGame)
 			{
 				clientHomeLand = nbt.getInteger("clientLand");
-				centerX = nbt.getInteger("centerX");
-				centerZ = nbt.getInteger("centerZ");
+				BlockPos spawn = MinestuckDimensionHandler.getSpawn(clientHomeLand);
+				centerX = spawn.getX();
+				centerZ = spawn.getZ();
 			}
 			if(nbt.hasKey("canSplit"))
 				canSplit = nbt.getBoolean("canSplit");
-			NBTTagList list = nbt.getTagList("givenItems", 10);
+			NBTTagList list = nbt.getTagList("givenItems", 8);
 			for(int i = 0; i < list.tagCount(); i++)
 			{
-				NBTTagCompound itemTag = list.getCompoundTagAt(i);
-				int ordinal = DeployList.getOrdinal(new ItemStack(itemTag));
+				String name = list.getStringTagAt(i);
+				int ordinal = DeployList.getOrdinal(name);
 				if(ordinal == -1)
-					unregisteredItems.appendTag(itemTag);
-				else givenItemList[ordinal] = itemTag.getBoolean("given");
+					unregisteredItems.appendTag(new NBTTagString(name));
+				else givenItemList[ordinal] = true;
 			}
 		}
 		if(isActive)

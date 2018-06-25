@@ -151,13 +151,16 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 		this.origin = origin;
 		
 		creative = ((EntityPlayerMP) player).interactionManager.isCreative();
+		SburbConnection conn = SkaianetHandler.getMainConnection(IdentifierHandler.encode((EntityPlayer) player), true);
 		
 		topY = MinestuckConfig.adaptEntryBlockHeight ? getTopHeight(worldserver0, x, y, z) : y + artifactRange;
-		xDiff = 0 - x;
 		yDiff = 127 - topY;
-		zDiff = 0 - z;
+		xDiff = conn.centerX - x;
+		zDiff = conn.centerZ - z;
 		
 		Debug.debug("Loading block movements...");
+		long time = System.currentTimeMillis();
+		int bl = 0;
 		boolean foundComputer = false;
 		for(int blockX = x - artifactRange; blockX <= x + artifactRange; blockX++)
 		{

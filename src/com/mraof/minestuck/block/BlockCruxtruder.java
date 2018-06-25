@@ -4,6 +4,7 @@ import com.mraof.minestuck.tileentity.TileEntityCruxtruder;
 
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -78,6 +79,20 @@ public class BlockCruxtruder extends BlockLargeMachine
 		return state.getValue(PART) == EnumParts.CENTER;
 	}
 	
+	@Override
+	public boolean isFullCube(IBlockState state)
+	{
+		return state.getValue(PART) == EnumParts.CENTER;
+	}
+	
+	@Override
+	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face)
+	{
+		if(state.getValue(PART) == EnumParts.CENTER)
+			return BlockFaceShape.SOLID;
+		return BlockFaceShape.UNDEFINED;
+	}
+	
 	public enum EnumParts implements IStringSerializable
 	{
 		BASE_CORNER(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1D, 1D, 1D)),
@@ -150,4 +165,3 @@ public class BlockCruxtruder extends BlockLargeMachine
 			}
 	}
 }
-
