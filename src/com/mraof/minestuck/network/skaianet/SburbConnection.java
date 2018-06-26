@@ -193,12 +193,12 @@ public class SburbConnection
 					centerZ = spawn.getZ();
 				} else
 				{
-					Debug.errorf("While loading skaianet, the dimension %s was registered as a land dimension, but without a spawn point. This should not happen!", clientHomeLand);
+					Debug.errorf("While loading skaianet, the dimension %d was registered as a land dimension, but without having a spawn point. This should not happen!", clientHomeLand);
 					centerX = centerZ = 0;
 				}
 			} else
 			{
-				Debug.errorf("The connection between %s and %s had a home dimension %s that isn't a land dimension. For safety measures, the connection will be loaded as if the player had not yet entered.", getClientIdentifier().getUsername(), getServerIdentifier().getUsername(), clientHomeLand);
+				Debug.errorf("The connection between %s and %s had a home dimension %d that isn't a land dimension. For safety measures, the connection will be loaded as if the player had not yet entered.", getClientIdentifier().getUsername(), getServerIdentifier().getUsername(), clientHomeLand);
 				enteredGame = false;
 			}
 		}
