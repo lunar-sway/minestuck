@@ -15,7 +15,7 @@ public class Debug
 	
 	public static void errorf(String text, Object... args)
 	{
-		logger.info(String.format(text, args));
+		logger.error(String.format(text, args));
 	}
 	
 	public static void warn(Object text)

@@ -3,6 +3,7 @@ package com.mraof.minestuck.world;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.network.LandRegisterPacket;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -93,8 +94,10 @@ public class MinestuckDimensionHandler
 				lands.put(dim, aspects);
 				spawnpoints.put(dim, spawn);
 				DimensionManager.registerDimension(dim, landDimensionType);
-			}
+				Debug.debugf("Loaded minestuck info on land dimension %d", dim);
+			} else Debug.warnf("Found data on a non-land dimension in the minestuck data (%d). Are you running a newer world on an older version?", dim);
 		}
+		Debug.debugf("Loaded minestuck data for %d land dimensions out of %d entries.", lands.size(), list.tagCount());
 		GateHandler.loadData(list);
 	}
 	

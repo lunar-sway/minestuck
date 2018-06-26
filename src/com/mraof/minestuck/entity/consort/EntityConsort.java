@@ -92,7 +92,7 @@ public abstract class EntityConsort extends EntityMinestuck
 		
 		if(messageTicksLeft > 0)
 			messageTicksLeft--;
-		else
+		else if(messageTicksLeft == 0)
 		{
 			message = null;
 			messageData = null;
