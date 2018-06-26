@@ -198,7 +198,7 @@ public class SburbConnection
 				}
 			} else
 			{
-				Debug.errorf("The connection between %s and %s had a home dimension %s that isn't a land dimension. For safety measures, the connection will be loaded as if the player had not yet entered.", getClientDisplayName(), getServerDisplayName(), clientHomeLand);
+				Debug.errorf("The connection between %s and %s had a home dimension %s that isn't a land dimension. For safety measures, the connection will be loaded as if the player had not yet entered.", getClientIdentifier().getUsername(), getServerIdentifier().getUsername(), clientHomeLand);
 				enteredGame = false;
 			}
 		}
