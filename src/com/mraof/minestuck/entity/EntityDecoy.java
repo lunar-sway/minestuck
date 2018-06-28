@@ -5,6 +5,7 @@ import com.mraof.minestuck.util.Debug;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -79,6 +80,10 @@ public class EntityDecoy extends EntityLiving {
 		this.renderYawOffset = player.renderYawOffset;
 		this.gameType = player.interactionManager.getGameType();
 		initInventory(player);
+		player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getModifiers().forEach(attributeModifier ->
+				this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).applyModifier(attributeModifier));
+		player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getModifiers().forEach(attributeModifier ->
+				this.player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).applyModifier(attributeModifier));
 		this.setHealth(player.getHealth());
 		username = player.getName();
 		isFlying = player.capabilities.isFlying;
@@ -251,7 +256,8 @@ public class EntityDecoy extends EntityLiving {
 	}
 	
 	@Override
-	public void setHealth(float par1) {
+	public void setHealth(float par1)
+	{
 		if(player != null)
 			player.setHealth(par1);
 		super.setHealth(par1);
