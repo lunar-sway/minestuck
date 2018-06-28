@@ -77,7 +77,7 @@ public class InventoryChangedPacket extends MinestuckPacket
 				}
 			}
 			else if(!player.world.isRemote && player.openContainer instanceof ContainerEditmode)
-				((ContainerEditmode)player.openContainer).scroll += b1 ? 1 : -1;
+				((ContainerEditmode)player.openContainer).updateScroll(b1);
 			break;
 		}
 		

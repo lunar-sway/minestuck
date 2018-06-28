@@ -22,6 +22,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.MathHelper;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -33,7 +34,7 @@ public class ContainerEditmode extends Container
 	private EntityPlayer player;
 	public InventoryBasic inventory = new InventoryBasic("InventoryEditmode", false, 14);
 	public ArrayList<ItemStack> items  = new ArrayList<ItemStack>();
-	public int scroll;
+	private int scroll;
 	public static int clientScroll;
 	
 	public ContainerEditmode(EntityPlayer player)
@@ -44,6 +45,14 @@ public class ContainerEditmode extends Container
 		{
 			updateInventory();
 		}
+	}
+	
+	public void updateScroll(boolean increase)
+	{
+		scroll += increase ? 1 : -1;
+		scroll = MathHelper.clamp(scroll, 0, items.size()/2-7);
+		
+		sendPacket();
 	}
 	
 	@Override
@@ -121,7 +130,7 @@ public class ContainerEditmode extends Container
 		}
 	}
 	
-	public void sendPacket()
+	private void sendPacket()
 	{
 		ArrayList<ItemStack> itemList = new ArrayList<ItemStack>();
 		for(int i = 0; i < 14; i++)
