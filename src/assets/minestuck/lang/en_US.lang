@@ -931,6 +931,8 @@ minestuck.config.giveItems.tooltip=If this is set to true, the 'Activate Editmod
 
 minestuck.config.deployCard=Card In Deploylist
 minestuck.config.deployCard.tooltip=Turn this to true to add a punched card (with a card punched to it) to the deploy list.
+minestuck.config.portableMachines=Portable Machines In Deploylist
+minestuck.config.portableMachines.tooltip=Determines if the small portable machines should be included in the deploy list.
 minestuck.config.cardCost=Card Cost
 minestuck.config.cardCost.tooltip=An integer to control the cost of captchalouge cards.
 minestuck.config.cardRecipe=Include Captcha Card Recipe

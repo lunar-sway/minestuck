@@ -6,16 +6,14 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import com.mraof.minestuck.item.block.ItemSburbMachine;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
-import com.mraof.minestuck.util.GristHelper;
+import com.mraof.minestuck.util.*;
 import net.minecraft.item.ItemStack;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.GristType;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -42,12 +40,6 @@ public class DeployList
 		registerItem("alchemiter", new ItemStack(MinestuckBlocks.alchemiter[0], 1, 0), new GristSet(), new GristSet(GristType.Build, 100), 0);
 		registerItem("punch_designix", 0,null, connection -> new ItemStack(MinestuckBlocks.punchDesignix, 1, 0),
 				(isPrimary, connection) -> new GristSet(SburbHandler.getPrimaryGristType(connection.getClientIdentifier()), 4));
-		
-//		registerItem(new ItemStack(MinestuckBlocks.sburbMachine,1,0), new GristSet(), new GristSet(GristType.Build, 100), 0);
-//		registerItem(new ItemStack(MinestuckBlocks.sburbMachine,1,2), new GristSet(), new GristSet(GristType.Build, 100), 0);
-//		registerItem(new ItemStack(MinestuckBlocks.sburbMachine,1,3), new GristSet(), new GristSet(GristType.Build, 100), 0);
-//		registerItem(new ItemStack(MinestuckBlocks.sburbMachine,1,1), new GristSet(GristType.Shale, 4), 0);
-		
 	}
 	
 	public static void registerItem(String name, ItemStack stack, GristSet cost, int tier)
@@ -68,6 +60,11 @@ public class DeployList
 	public static void registerItem(String name, ItemStack stack, GristSet cost1, GristSet cost2, int tier)
 	{
 		registerItem(name, cost1, cost2, tier, null, connection -> stack);
+	}
+	
+	public static void registerItem(String name, GristSet cost, int tier, IAvailabilityCondition condition, IItemProvider item)
+	{
+		registerItem(name, tier, condition, item, (isPrimary, connection) -> cost);
 	}
 	
 	public static void registerItem(String name, GristSet cost1, GristSet cost2, int tier, IAvailabilityCondition condition, IItemProvider item)
@@ -163,6 +160,23 @@ public class DeployList
 			if(booleans[0])
 				registerItem("card_punched_card", AlchemyRecipeHandler.createCard(new ItemStack(MinestuckItems.captchaCard), true), new GristSet(GristType.Build, 25), null, 0);
 			else removeEntry("card_punched_card");
+		}
+		if(booleans[1] != containsEntry("portable_cruxtuder"))
+		{
+			if(booleans[1])
+			{
+				registerItem("portable_cruxtruder", new GristSet(GristType.Build, 200), 1, null,
+						connection -> ItemSburbMachine.getCruxtruderWithColor(MinestuckPlayerData.getData(connection.getClientIdentifier()).color));
+				registerItem("portable_punch_designix", new ItemStack(MinestuckBlocks.sburbMachine, 1, 1), new GristSet(GristType.Build, 200), 1);
+				registerItem("portable_totem_lathe", new ItemStack(MinestuckBlocks.sburbMachine, 1, 2), new GristSet(GristType.Build, 200), 1);
+				registerItem("portable_alchemiter", new ItemStack(MinestuckBlocks.sburbMachine, 1, 3), new GristSet(GristType.Build, 300), 1);
+			} else
+			{
+				removeEntry("portable_cruxtruder");
+				removeEntry("portable_totem_lathe");
+				removeEntry("portable_alchemiter");
+				removeEntry("portable_punch_designix");
+			}
 		}
 	}
 	
