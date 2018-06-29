@@ -90,7 +90,7 @@ public class ServerEventHandler
 		cachedCooledAttackStrength = event.getEntityPlayer().getCooledAttackStrength(0.5F);
 	}
 
-	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=false)
+	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public void onEntityAttack(LivingHurtEvent event)
 	{
 		if(event.getSource().getTrueSource() != null)
@@ -117,7 +117,16 @@ public class ServerEventHandler
 			}
 		}
 	}
-
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
+	public void onEntityDamage(LivingHurtEvent event)
+	{
+		if(event.getEntityLiving() instanceof EntityUnderling)
+		{
+			((EntityUnderling) event.getEntityLiving()).onEntityDamaged(event.getSource(), event.getAmount());
+		}
+	}
+	
 	@SubscribeEvent
 	public void playerChangedDimension(PlayerChangedDimensionEvent event)
 	{

@@ -6,7 +6,6 @@ import com.mraof.minestuck.entity.ai.EntityAIHurtByTargetAllied;
 import com.mraof.minestuck.entity.ai.EntityAINearestAttackableTargetWithHeight;
 import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.entity.item.EntityVitalityGel;
-import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.util.*;
 import io.netty.buffer.ByteBuf;
@@ -268,34 +267,14 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 		return !this.hasHome();
 	}
 	
-	@Override
-	protected void damageEntity(DamageSource damageSrc, float damageAmount)
+	public void onEntityDamaged(DamageSource source, float amount)
 	{
-		if (!this.isEntityInvulnerable(damageSrc))
-		{
-			damageAmount = net.minecraftforge.common.ForgeHooks.onLivingHurt(this, damageSrc, damageAmount);
-			if (damageAmount <= 0) return;
-			damageAmount = this.applyArmorCalculations(damageSrc, damageAmount);
-			damageAmount = this.applyPotionDamageCalculations(damageSrc, damageAmount);
-			float f1 = damageAmount;
-			damageAmount = Math.max(damageAmount - this.getAbsorptionAmount(), 0.0F);
-			this.setAbsorptionAmount(this.getAbsorptionAmount() - (f1 - damageAmount));
-			
-			EntityPlayerMP player = null;
-			if(damageSrc.getTrueSource() instanceof EntityPlayerMP)
-				player = (EntityPlayerMP) damageSrc.getTrueSource();
-			if(damageMap.containsKey(player))
-					damageMap.put(player, damageMap.get(player) + f1);
-			else damageMap.put(player, (double) f1);
-			
-			if (damageAmount != 0.0F)
-			{
-				float f2 = this.getHealth();
-				this.setHealth(f2 - damageAmount);
-				this.getCombatTracker().trackDamage(damageSrc, f2, damageAmount);
-				this.setAbsorptionAmount(this.getAbsorptionAmount() - damageAmount);
-			}
-		}
+		EntityPlayerMP player = null;
+		if(source.getTrueSource() instanceof EntityPlayerMP)
+			player = (EntityPlayerMP) source.getTrueSource();
+		if(damageMap.containsKey(player))
+			damageMap.put(player, damageMap.get(player) + amount);
+		else damageMap.put(player, (double) amount);
 	}
 	
 	@Override
