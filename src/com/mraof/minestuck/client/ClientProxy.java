@@ -1,6 +1,7 @@
 package com.mraof.minestuck.client;
 
 import com.mraof.minestuck.CommonProxy;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.client.model.*;
@@ -51,6 +52,11 @@ public class ClientProxy extends CommonProxy
 	public static EntityPlayer getClientPlayer()	//Note: can't get the client player directly from FMLClientHandler either, as the server side will still crash because of the return type
 	{
 		return FMLClientHandler.instance().getClientPlayerEntity();
+	}
+	
+	public static void addScheduledTask(Runnable runnable)
+	{
+		Minecraft.getMinecraft().addScheduledTask(runnable);
 	}
 	
 	public static void registerRenderers() 
