@@ -95,6 +95,7 @@ public class MinestuckSaveHandler
 		}
 		
 		ServerEventHandler.tickTasks.clear();
+		MinestuckDimensionHandler.loadData(null);
 		SkaianetHandler.loadData(null);
 		MinestuckPlayerData.readFromNBT(null);
 		ServerEditHandler.loadData(null);

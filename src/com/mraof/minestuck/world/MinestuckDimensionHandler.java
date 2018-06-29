@@ -26,6 +26,7 @@ public class MinestuckDimensionHandler
 	public static int landDimensionIdStart;
 	public static int biomeIdStart;
 	
+	private static Exception unregisterTrace;
 	private static Hashtable<Integer, LandAspectRegistry.AspectCombination> lands = new Hashtable<Integer, LandAspectRegistry.AspectCombination>();
 	private static Hashtable<Integer, BlockPos> spawnpoints = new Hashtable<Integer, BlockPos>();
 	
@@ -51,6 +52,15 @@ public class MinestuckDimensionHandler
 				DimensionManager.unregisterDimension(b);
 			}
 		}
+		
+		if(Minestuck.isServerRunning)
+			try
+			{
+				throw new Exception();
+			} catch(Exception e)
+			{
+				unregisterTrace = e;
+			}
 		lands.clear();
 		spawnpoints.clear();
 		GateHandler.gateData.clear();
@@ -58,6 +68,11 @@ public class MinestuckDimensionHandler
 	
 	public static void saveData(NBTTagCompound nbt)
 	{
+		if(unregisterTrace != null)
+		{
+			throw new IllegalStateException("Saving minestuck dimension data after unregistering dimensions. This is bad!", unregisterTrace);
+		}
+		
 		NBTTagList list = new NBTTagList();
 		for(Map.Entry<Integer, LandAspectRegistry.AspectCombination> entry : lands.entrySet())
 		{
@@ -78,6 +93,12 @@ public class MinestuckDimensionHandler
 	
 	public static void loadData(NBTTagCompound nbt)
 	{
+		unregisterTrace = null;
+		if(nbt == null)
+		{
+			return;
+		}
+		
 		NBTTagList list = nbt.getTagList("dimensionData", new NBTTagCompound().getId());
 		for(int i = 0; i < list.tagCount(); i++)
 		{
@@ -144,6 +165,7 @@ public class MinestuckDimensionHandler
 	{
 		if(Minestuck.isServerRunning)
 			return;
+		unregisterTrace = null;
 		lands.clear();
 		spawnpoints.clear();
 		
