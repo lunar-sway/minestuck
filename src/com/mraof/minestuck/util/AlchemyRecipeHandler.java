@@ -1,6 +1,5 @@
 package com.mraof.minestuck.util;
 
-import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
 import com.mraof.minestuck.block.BlockMinestuckStone;
 import com.mraof.minestuck.entity.consort.ConsortRewardHandler;
 import com.mraof.minestuck.item.ItemCruxiteArtifact;
@@ -29,8 +28,6 @@ import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -1297,9 +1294,6 @@ public class AlchemyRecipeHandler
 	
 	private static boolean checkRecipe(IRecipe recipe)
 	{
-		if(recipe.getRecipeOutput().getItem().equals(Item.getItemFromBlock(cruxiteBlock)))
-			Debug.info("Cruxite block!");
-		
 		if(GristRegistry.getGristConversion(recipe.getRecipeOutput()) != null)
 			return true;
 		if(lookedOver.get(RecipeItemHelper.pack(recipe.getRecipeOutput())) != null)
