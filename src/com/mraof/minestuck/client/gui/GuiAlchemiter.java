@@ -26,12 +26,10 @@ public class GuiAlchemiter extends GuiScreen
 	private static final int guiWidth = 159, guiHeight = 102;
 	private TileEntityAlchemiter alchemiter;
 	private int itemQuantity;
-	public static int maxAlchemitable;
 	public GuiAlchemiter(TileEntityAlchemiter te)
 	{
 		alchemiter = te;
 		itemQuantity = 1;
-		maxAlchemitable=MinestuckConfig.maxAlchemitable;
 	}
 	
 	public TileEntityAlchemiter getAlchemiter() {
@@ -126,35 +124,38 @@ public class GuiAlchemiter extends GuiScreen
 			MinestuckChannelHandler.sendToServer(packet);
 			this.mc.displayGuiScreen(null);
 			
-		} else {
+		} else
+		{
 			//the amount the button changes the amount
 			int change;
-			
-			if (button.id <= 3)	{
-				change=(int)Math.pow(10, button.id-1);
+			int maxCount = Math.min(999, alchemiter.getOutput().getMaxStackSize() * MinestuckConfig.clientAlchemiterStacks);
+			if(button.id <= 3)
+			{
+				change = (int) Math.pow(10, button.id - 1);
 				//custom modulo function
-			
-				if(itemQuantity+change>maxAlchemitable) {
-					int powTen=(int)Math.pow(10,button.id-1);
-					change= 0-(maxAlchemitable/powTen)*powTen;
+				
+				if(itemQuantity + change > maxCount)
+				{
+					int powTen = (int) Math.pow(10, button.id - 1);
+					change = 0 - (maxCount / powTen) * powTen;
 					//because it's only a problem about half the time
-					if(itemQuantity+change<0) {
-						itemQuantity+=powTen;
-					}
+					if(itemQuantity + change <= 0)
+						itemQuantity += powTen;
 				}
-			} else{
-				change=0-(int)Math.pow(10, button.id - 4);
+			} else
+			{
+				change = 0 - (int) Math.pow(10, button.id - 4);
 				//custom modulo function
-				if(itemQuantity+change<=0) {
-					int powTen=(int)Math.pow(10,button.id-4);
-					change=(maxAlchemitable/powTen)*powTen;
+				if(itemQuantity + change <= 0)
+				{
+					int powTen = (int) Math.pow(10, button.id - 4);
+					change = (maxCount / powTen) * powTen;
 					//because it's only a problem about half the time
-					if(itemQuantity+change>maxAlchemitable) {
-						itemQuantity-=powTen;
-					}
-				}				
+					if(itemQuantity + change > maxCount)
+						itemQuantity -= powTen;
+				}
 			}
-			itemQuantity=(itemQuantity+change);
+			itemQuantity = (itemQuantity + change);
 		}
 	}
 	

@@ -994,6 +994,8 @@ minestuck.config.gristRefund=Grist Refund
 minestuck.config.gristRefund.tooltip=Enable this and players will get a (full) grist refund from breaking blocks in editmode.
 minestuck.config.cruxtruderIntake=Cruxtruder Intake
 minestuck.config.cruxtruderIntake.tooltip=If enabled, the regular cruxtruder will require raw cruxite to function, which is inserted through the pipe.
+minestuck.config.alchemiterMaxStacks=Alchemiter Max Stacks
+minestuck.config.alchemiterMaxStacks.tooltip=The number of stacks that can be alchemized at the same time with the alchemiter.
 
 message.selectDefaultColor=Default color selected. You can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!
 message.selectColor=If you want to change the color, you can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!

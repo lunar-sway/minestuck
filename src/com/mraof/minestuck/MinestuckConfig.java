@@ -31,6 +31,8 @@ public class MinestuckConfig
 	@SideOnly(Side.CLIENT)
 	public static int clientCardCost;
 	@SideOnly(Side.CLIENT)
+	public static int clientAlchemiterStacks;
+	@SideOnly(Side.CLIENT)
 	public static byte clientTreeAutobalance;
 	@SideOnly(Side.CLIENT)
 	public static byte clientHashmapChat;
@@ -87,7 +89,7 @@ public class MinestuckConfig
 	public static int modusMaxSize;
 	public static int cardCost;
 	public static int oreMultiplier;
-	public static int maxAlchemitable;
+	public static int alchemiterMaxStacks;
 	/**
 	 * 0: Make the player's new server player his/her old server player's server player
 	 * 1: The player that lost his/her server player will have an idle main connection until someone without a client player connects to him/her.
@@ -200,7 +202,7 @@ public class MinestuckConfig
 		stopSecondEntry = config.get("General", "stopSecondEntry", false, "If this is true, players may only use an artifact once, even if they end up in the overworld again.").setLanguageKey("minestuck.config.stopSecondEntry").getBoolean();
 		gristRefund = config.get("General", "gristRefund", false, "Enable this and players will get a (full) grist refund from breaking blocks in editmode.").setLanguageKey("minestuck.config.gristRefund").getBoolean();
 		cruxtruderIntake = config.get("General", "cruxtruderIntake", false, "If enabled, the regular cruxtruder will require raw cruxite to function, which is inserted through the pipe.").setLanguageKey("minestuck.config.cruxtruderIntake").getBoolean();
-		maxAlchemitable=config.get("General", "maxAlchemitable", 999,"the maximum number of items alchemitable in a single go").setLanguageKey("minestuck.config.maxAlchemitable").getInt();
+		alchemiterMaxStacks = config.get("General", "alchemiterMaxStacks", 16,"The number of stacks that can be alchemized at the same time with the alchemiter.", 1, 999).setLanguageKey("minestuck.config.alchemiterMaxStacks").getInt();
 		
 		if(config.hasKey("General", "hardMode"))
 			hardMode = config.get("General", "hardMode", false).getBoolean();	//Not fully fleshed out yet
