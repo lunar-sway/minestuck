@@ -25,6 +25,7 @@ public class TileEntityTransportalizer extends TileEntity implements ITickable
 	public static HashMap<String, Location> transportalizers = new HashMap<String, Location>();
 	private static Random rand = new Random();
 	private boolean enabled = true;
+	private boolean active = true;
 	String id = "";
 	private String destId = "";
 	
@@ -32,7 +33,7 @@ public class TileEntityTransportalizer extends TileEntity implements ITickable
 	public void validate()
 	{
 		super.validate();
-		if(!world.isRemote)
+		if(!world.isRemote && active)
 		{
 			if(id.isEmpty())
 				id = getUnusedId();
@@ -44,7 +45,7 @@ public class TileEntityTransportalizer extends TileEntity implements ITickable
 	public void invalidate()
 	{
 		super.invalidate();
-		if(!world.isRemote)
+		if(!world.isRemote && active)
 		{
 			Location location = transportalizers.get(id);
 			if(location.equals(new Location(this.pos, this.world.provider.getDimension())))
@@ -177,7 +178,22 @@ public class TileEntityTransportalizer extends TileEntity implements ITickable
 	{
 		return id;
 	}
-
+	
+	public void setId(String id)
+	{
+		if(active && !this.id.isEmpty())
+			transportalizers.remove(this.id);
+		Location location = transportalizers.get(id);
+		this.id = id;
+		if(location == null || this.hasWorld() && location.dim == getWorld().provider.getDimension() && location.pos.equals(this.getPos()))
+		{
+			transportalizers.put(id, new Location(getPos(), getWorld().provider.getDimension()));
+		} else
+		{
+			active = false;
+		}
+	}
+	
 	public String getDestId()
 	{
 		return destId;
@@ -192,7 +208,12 @@ public class TileEntityTransportalizer extends TileEntity implements ITickable
 	}
 
 	public boolean getEnabled() { return enabled; }
-
+	
+	public boolean getActive()
+	{
+		return active;
+	}
+	
 	public void setEnabled(boolean enabled)
 	{
 		this.enabled = enabled;
@@ -207,6 +228,8 @@ public class TileEntityTransportalizer extends TileEntity implements ITickable
 		super.readFromNBT(tagCompound);
 		this.destId = tagCompound.getString("destId");
 		this.id = tagCompound.getString("idString");
+		if(tagCompound.hasKey("active"))
+			this.active = tagCompound.getBoolean("active");
 	}
 
 	@Override
@@ -216,6 +239,7 @@ public class TileEntityTransportalizer extends TileEntity implements ITickable
 		
 		tagCompound.setString("idString", id);
 		tagCompound.setString("destId", destId);
+		tagCompound.setBoolean("active", active);
 		
 		return tagCompound;
 	}

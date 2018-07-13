@@ -34,13 +34,13 @@ public class GuiUtil
 	{
 		if (grist == null)
 		{
-			fontRenderer.drawString(I18n.format("gui.notAlchemizable"), boardX, boardY, 16711680);
+			fontRenderer.drawString(I18n.format("gui.notAlchemizable"), boardX, boardY, 0xFF0000);
 			return;
 		}
 		
 		if (grist.isEmpty())
 		{
-			fontRenderer.drawString(I18n.format("gui.free"), boardX, boardY, 65280);
+			fontRenderer.drawString(I18n.format("gui.free"), boardX, boardY, 0x00FF00);
 			return;
 		}
 		
