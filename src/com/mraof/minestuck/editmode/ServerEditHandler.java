@@ -123,9 +123,7 @@ public class ServerEditHandler
 		player.sendPlayerAbilities();
 		player.fallDistance = 0;
 		player.setHealth(decoy.getHealth());
-		NBTTagCompound nbt = new NBTTagCompound();
-		decoy.foodStats.writeNBT(nbt);
-		player.getFoodStats().readNBT(nbt);
+		player.getFoodStats().readNBT(decoy.getFoodStatsNBT());
 		data.connection.inventory = player.inventory.writeToNBT(new NBTTagList());
 		player.inventory.copyInventory(decoy.inventory);
 		
@@ -620,9 +618,7 @@ public class ServerEditHandler
 			nbtTag.setInteger("gamemode", data.decoy.gameType.getID());
 			nbtTag.setTag("capabilities", data.decoy.capabilities);
 			nbtTag.setFloat("health", data.decoy.getHealth());
-			NBTTagCompound foodNBT = new NBTTagCompound();
-			data.decoy.foodStats.writeNBT(foodNBT);
-			nbtTag.setTag("food", foodNBT);
+			nbtTag.setTag("food", data.decoy.getFoodStatsNBT());
 			nbtTag.setTag("inv", data.decoy.inventory.writeToNBT(new NBTTagList()));
 			
 			data.connection.inventory = data.player.inventory.writeToNBT(new NBTTagList());
