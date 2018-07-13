@@ -8,9 +8,11 @@ import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.tileentity.TileEntityCruxtruder;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MinestuckPlayerData;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -128,6 +130,9 @@ public class ItemCruxtruder extends ItemBlock
 				
 				((TileEntityCruxtruder) te).setColor(color);
 			} else Debug.warnf("Placed cruxtruder, but can't find tile entity. Instead found %s.", te);
+			
+			if(player instanceof EntityPlayerMP)
+				CriteriaTriggers.PLACED_BLOCK.trigger((EntityPlayerMP) player, pos, stack);
 		}
 		
 		return true;
