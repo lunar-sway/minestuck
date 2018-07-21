@@ -46,7 +46,13 @@ public class TileEntityAlchemiter extends TileEntity
 	public ItemStack getDowel()
 	{
 		return dowel;
-		
+	}
+	
+	public ItemStack getOutput()
+	{
+		if (!AlchemyRecipeHandler.hasDecodedItem(dowel))
+			return new ItemStack(MinestuckBlocks.genericObject);
+		else return AlchemyRecipeHandler.getDecodedItem(dowel);
 	}
 	
 	/**
@@ -216,17 +222,11 @@ public class TileEntityAlchemiter extends TileEntity
 	
 	public void processContents(int quantity, EntityPlayer player)
 	{
-		//prevent null errors
-		if (quantity == 0)
-		{
-			return;
-		}
+		ItemStack newItem = getOutput();
+		//Clamp quantity
+		quantity = Math.min(newItem.getMaxStackSize() * MinestuckConfig.alchemiterMaxStacks, Math.max(1, quantity));
 		
 		EnumFacing facing = world.getBlockState(pos).getValue(BlockAlchemiter.DIRECTION);
-		ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(dowel);
-		//set the item as a generic object if it's otherwise null
-		if (!(dowel.hasTagCompound() && dowel.getTagCompound().hasKey("contentID")))
-			newItem = new ItemStack(MinestuckBlocks.genericObject);
 		//get the position to spawn the item
 		BlockPos spawnPos = this.getPos().offset(facing).offset(facing.rotateY()).up();
 		//set the stack size
@@ -256,17 +256,10 @@ public class TileEntityAlchemiter extends TileEntity
 	{
 		ItemStack dowel = getDowel();
 		GristSet set;
-		ItemStack stack;
+		ItemStack stack = getOutput();
 		boolean useSelectedType;
 		if(dowel.isEmpty())
 			return null;
-		
-		//get the item in the dowel
-		stack = AlchemyRecipeHandler.getDecodedItem(getDowel());
-		
-		//set the item as a generic object if there is nothing in the dowel
-		if( !(dowel.hasTagCompound() && dowel.getTagCompound().hasKey("contentID")))
-			stack = new ItemStack(MinestuckBlocks.genericObject);
 		
 		//get the grist cost of stack
 		set = GristRegistry.getGristConversion(stack);

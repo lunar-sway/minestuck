@@ -31,6 +31,8 @@ public class MinestuckConfig
 	@SideOnly(Side.CLIENT)
 	public static int clientCardCost;
 	@SideOnly(Side.CLIENT)
+	public static int clientAlchemiterStacks;
+	@SideOnly(Side.CLIENT)
 	public static byte clientTreeAutobalance;
 	@SideOnly(Side.CLIENT)
 	public static byte clientHashmapChat;
@@ -87,7 +89,7 @@ public class MinestuckConfig
 	public static int modusMaxSize;
 	public static int cardCost;
 	public static int oreMultiplier;
-	public static int maxAlchemitable;
+	public static int alchemiterMaxStacks;
 	/**
 	 * 0: Make the player's new server player his/her old server player's server player
 	 * 1: The player that lost his/her server player will have an idle main connection until someone without a client player connects to him/her.
@@ -175,8 +177,9 @@ public class MinestuckConfig
 		
 		privateComputers = config.get("General", "privateComputers", true, "True if computers should only be able to be used by the owner.").setLanguageKey("minestuck.config.privateComputers").getBoolean();
 
-		deployConfigurations = new boolean[1];
+		deployConfigurations = new boolean[2];
 		deployConfigurations[0] = config.get("General", "deployCard", false, "Determines if a card with a captcha card punched on it should be added to the deploy list or not.").setLanguageKey("minestuck.config.deployCard").setRequiresWorldRestart(true).getBoolean();
+		deployConfigurations[1] = config.get("General", "portableMachines", false, "Determines if the small portable machines should be included in the deploy list.").setLanguageKey("minestuck.config.portableMachines").setRequiresWorldRestart(true).getBoolean();
 		cardCost = config.get("General", "cardCost", 1, "An integer that determines how much a captchalouge card costs to alchemize").setMinValue(1).setLanguageKey("minestuck.config.cardCost").setRequiresWorldRestart(true).getInt();
 
 		generateCruxiteOre = config.get("General", "generateCruxiteOre", true, "If cruxite ore should be generated in the overworld.").setRequiresWorldRestart(true).setLanguageKey("minestuck.config.generateCruxiteOre").getBoolean();
@@ -200,7 +203,7 @@ public class MinestuckConfig
 		gristRefund = config.get("General", "gristRefund", false, "Enable this and players will get a (full) grist refund from breaking blocks in editmode.").setLanguageKey("minestuck.config.gristRefund").getBoolean();
 		needComputer = config.get("General", "needComputer", false, "If this is true, players need to have a computer nearby to Enter").setLanguageKey("minestuck.config.needComputer").getBoolean();
 		cruxtruderIntake = config.get("General", "cruxtruderIntake", false, "If enabled, the regular cruxtruder will require raw cruxite to function, which is inserted through the pipe.").setLanguageKey("minestuck.config.cruxtruderIntake").getBoolean();
-		maxAlchemitable=config.get("General", "maxAlchemitable", 999,"the maximum number of items alchemitable in a single go").setLanguageKey("minestuck.config.maxAlchemitable").getInt();
+		alchemiterMaxStacks = config.get("General", "alchemiterMaxStacks", 16,"The number of stacks that can be alchemized at the same time with the alchemiter.", 1, 999).setLanguageKey("minestuck.config.alchemiterMaxStacks").getInt();
 		
 		if(config.hasKey("General", "hardMode"))
 			hardMode = config.get("General", "hardMode", false).getBoolean();	//Not fully fleshed out yet

@@ -21,6 +21,7 @@ public class MinestuckConfigPacket extends MinestuckPacket
 	int overWorldEditRange;
 	int landEditRange;
 	int cardCost;
+	int alchemiterStacks;
 	int windowIdStart;
 	byte treeModusSetting;
 	byte hashmapModusSetting;
@@ -38,7 +39,7 @@ public class MinestuckConfigPacket extends MinestuckPacket
 	{
 		boolean mode = (Boolean) dat[0];
 		data.writeBoolean(mode);
-		if(mode)	//Values that shouldn't be changed while the game is running, and should because of that only be sent once
+		if(mode)	//Values that shouldn't be changed while the game is running, and should therefore only be sent once
 		{
 			data.writeInt(MinestuckConfig.overworldEditRange);
 			data.writeInt(MinestuckConfig.landEditRange);
@@ -51,6 +52,7 @@ public class MinestuckConfigPacket extends MinestuckPacket
 		} else
 		{
 			data.writeInt(MinestuckConfig.cardCost);
+			data.writeInt(MinestuckConfig.alchemiterMaxStacks);
 			data.writeBoolean(MinestuckConfig.disableGristWidget);
 			data.writeByte(MinestuckConfig.treeModusSetting);
 			data.writeByte(MinestuckConfig.hashmapChatModusSetting);
@@ -80,6 +82,7 @@ public class MinestuckConfigPacket extends MinestuckPacket
 		} else
 		{
 			cardCost = data.readInt();
+			alchemiterStacks = data.readInt();
 			disableGristWidget = data.readBoolean();
 			treeModusSetting = data.readByte();
 			hashmapModusSetting = data.readByte();
@@ -108,6 +111,7 @@ public class MinestuckConfigPacket extends MinestuckPacket
 		} else
 		{
 			MinestuckConfig.clientCardCost = cardCost;
+			MinestuckConfig.clientAlchemiterStacks = alchemiterStacks;
 			MinestuckConfig.clientDisableGristWidget = disableGristWidget;
 			MinestuckConfig.clientTreeAutobalance = treeModusSetting;
 			MinestuckConfig.clientHashmapChat = hashmapModusSetting;

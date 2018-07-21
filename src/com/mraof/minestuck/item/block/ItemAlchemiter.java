@@ -3,9 +3,11 @@ package com.mraof.minestuck.item.block;
 import com.mraof.minestuck.block.BlockAlchemiter;
 import com.mraof.minestuck.block.BlockAlchemiter.EnumParts;
 import com.mraof.minestuck.block.MinestuckBlocks;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
@@ -107,6 +109,9 @@ public class ItemAlchemiter extends ItemBlock
 			world.setBlockState(pos.offset(facing,3).offset(facing.rotateY(),1), BlockAlchemiter.getBlockState(EnumParts.SIDE_RIGHT, facing.getOpposite()));
 			world.setBlockState(pos.offset(facing,3).offset(facing.rotateY(),2), BlockAlchemiter.getBlockState(EnumParts.SIDE_LEFT, facing.getOpposite()));
 			world.setBlockState(pos.offset(facing,3).offset(facing.rotateY(),3), BlockAlchemiter.getBlockState(EnumParts.CORNER, facing.rotateYCCW()));
+			
+			if(player instanceof EntityPlayerMP)
+				CriteriaTriggers.PLACED_BLOCK.trigger((EntityPlayerMP) player, pos, stack);
 		}
 		return true;
 	}

@@ -2,9 +2,11 @@ package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.block.BlockPunchDesignix;
 import com.mraof.minestuck.block.MinestuckBlocks;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
@@ -86,6 +88,9 @@ public class ItemPunchDesignix extends ItemBlock
 		world.setBlockState(pos.up().offset(facing.rotateYCCW()), newState.withProperty(BlockPunchDesignix.PART, BlockPunchDesignix.EnumParts.TOP_RIGHT), 11);
 		
 		world.setBlockState(pos.up(), newState.withProperty(BlockPunchDesignix.PART, BlockPunchDesignix.EnumParts.TOP_LEFT), 11);
+		
+		if(player instanceof EntityPlayerMP)
+			CriteriaTriggers.PLACED_BLOCK.trigger((EntityPlayerMP) player, pos, stack);
 		
 		return true;
 	}

@@ -8,7 +8,7 @@
             "translate": "advancements.minestuck.tree_modus.title"
         },
         "description": {
-            "translate": "advancements.minestuck.alchemy.description"
+            "translate": "advancements.minestuck.tree_modus.description"
         }
     },
     "parent": "minestuck:minestuck/new_modus",

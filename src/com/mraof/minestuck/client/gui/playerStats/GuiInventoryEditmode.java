@@ -9,6 +9,8 @@ import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 
+import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
@@ -56,9 +58,14 @@ public class GuiInventoryEditmode extends GuiPlayerStatsContainer
 		{
 			MinestuckPacket packet = null;
 			if(less && xcor >= xOffset + leftArrowX && xcor < xOffset + leftArrowX + 18)
+			{
+				mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 				packet = MinestuckPacket.makePacket(Type.INVENTORY, 0, false);
-			else if(more && xcor >= xOffset + rightArrowX && xcor < xOffset + rightArrowX + 18)
+			} else if(more && xcor >= xOffset + rightArrowX && xcor < xOffset + rightArrowX + 18)
+			{
+				mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 				packet = MinestuckPacket.makePacket(Type.INVENTORY, 0, true);
+			}
 			if(packet != null)
 				MinestuckChannelHandler.sendToServer(packet);
 		}

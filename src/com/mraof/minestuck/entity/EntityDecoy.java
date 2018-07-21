@@ -5,6 +5,7 @@ import com.mraof.minestuck.util.Debug;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -17,6 +18,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.FoodStats;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.GameType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -34,7 +36,8 @@ public class EntityDecoy extends EntityLiving {
 	public boolean isFlying;
 	public GameType gameType;
 	public String username;
-	public FoodStats foodStats;
+	private FoodStats foodStats;
+	private NBTTagCompound foodStatsNBT;
 	public NBTTagCompound capabilities = new NBTTagCompound();
 	
 	public boolean markedForDespawn;
@@ -79,14 +82,17 @@ public class EntityDecoy extends EntityLiving {
 		this.renderYawOffset = player.renderYawOffset;
 		this.gameType = player.interactionManager.getGameType();
 		initInventory(player);
+		player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getModifiers().forEach(attributeModifier ->
+				this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).applyModifier(attributeModifier));
+		player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getModifiers().forEach(attributeModifier ->
+				this.player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).applyModifier(attributeModifier));
 		this.setHealth(player.getHealth());
 		username = player.getName();
 		isFlying = player.capabilities.isFlying;
 		player.capabilities.writeCapabilitiesToNBT(this.capabilities);
-		NBTTagCompound nbt = new NBTTagCompound();
-		player.getFoodStats().writeNBT(nbt);
-		initFoodStats();
-		foodStats.readNBT(nbt);	//Exact copy of food stack
+		foodStatsNBT = new NBTTagCompound();
+		player.getFoodStats().writeNBT(foodStatsNBT);
+		initFoodStats(player);
 		dataManager.set(USERNAME, username);
 		dataManager.set(ROTATION_YAW_HEAD, this.rotationYawHead);	//Due to rotationYawHead didn't update correctly
 		dataManager.set(FLYING, isFlying);
@@ -113,28 +119,42 @@ public class EntityDecoy extends EntityLiving {
 		inventory.copyInventory(player.inventory);
 	}
 	
-	private void initFoodStats()
+	private void initFoodStats(EntityPlayerMP sourcePlayer)
 	{
 		try
 		{
-			foodStats = new FoodStats();
-		}
-		catch(NoSuchMethodError e)
-		{
-			Debug.info("Custom constructor detected for FoodStats. Trying with player as parameter...");
 			try
 			{
-				foodStats = FoodStats.class.getConstructor(EntityPlayer.class).newInstance(player);
-			}
-			catch(NoSuchMethodException ex)
+				foodStats = new FoodStats();
+			} catch(NoSuchMethodError e)
 			{
-				throw new NoSuchMethodError("Found no known constructor for net.minecraft.util.FoodStats.");
+				Debug.info("Custom constructor detected for FoodStats. Trying with player as parameter...");
+				try
+				{
+					foodStats = FoodStats.class.getConstructor(EntityPlayer.class).newInstance(player);
+				}
+				catch(NoSuchMethodException ex)
+				{
+					throw new NoSuchMethodException("Found no known constructor for net.minecraft.util.FoodStats.");
+				}
 			}
-			catch(Exception ex)
-			{
-				throw new RuntimeException(ex);	//No idea what sort of exception that should go here
-			}
+			foodStats.readNBT(foodStatsNBT);	//Exact copy of food stack
+		} catch(Exception e)
+		{
+			foodStats = null;
+			Debug.logger.error("Couldn't initiate food stats for player decoy. Proceeding to not stimulate food stats.", e);
+			sourcePlayer.sendMessage(new TextComponentString("An issue came up while creating the decoy. More info in the server logs."));
 		}
+	}
+	
+	public NBTTagCompound getFoodStatsNBT()
+	{
+		if(foodStats != null)
+		{
+			NBTTagCompound nbt = new NBTTagCompound();
+			foodStats.writeNBT(nbt);
+			return nbt;
+		} else return foodStatsNBT;
 	}
 	
 	@Override
@@ -200,7 +220,8 @@ public class EntityDecoy extends EntityLiving {
 		
 		if(!world.isRemote)
 		{
-			foodStats.onUpdate(player);
+			if(foodStats != null)
+				foodStats.onUpdate(player);
 			if(this.locationChanged())
 				ServerEditHandler.reset(ServerEditHandler.getData(this));
 		}
@@ -251,7 +272,8 @@ public class EntityDecoy extends EntityLiving {
 	}
 	
 	@Override
-	public void setHealth(float par1) {
+	public void setHealth(float par1)
+	{
 		if(player != null)
 			player.setHealth(par1);
 		super.setHealth(par1);

@@ -223,7 +223,7 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemMultiTexture(crockerMachine, crockerMachine,
 				(ItemStack input) -> BlockCrockerMachine.MachineType.values()[input.getItemDamage() % BlockCrockerMachine.MachineType.values().length].getUnlocalizedName()));
 		registerItemBlock(registry, new ItemBlock(blockComputerOff));
-		registerItemBlock(registry, new ItemBlock(transportalizer));
+		registerItemBlock(registry, new ItemTransportalizer(transportalizer));
 		
 		registerItemBlock(registry, new ItemPunchDesignix(punchDesignix));
 		registerItemBlock(registry, new ItemTotemLathe(totemlathe[0]));
@@ -231,7 +231,7 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemCruxtruder(cruxtruder));
 		registerItemBlock(registry, new ItemBlock(cruxtruderLid));
 		registerItemBlock(registry, cruxiteDowel);
-
+		
 		registerItemBlock(registry, new ItemBlockLayered(layeredSand));
 		registerItemBlock(registry, new ItemMultiTexture(coloredDirt, coloredDirt,
 				(ItemStack input) -> BlockColoredDirt.BlockType.values()[input.getItemDamage() % BlockColoredDirt.BlockType.values().length].getName()));

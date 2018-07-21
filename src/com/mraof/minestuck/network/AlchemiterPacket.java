@@ -40,11 +40,14 @@ public class AlchemiterPacket extends MinestuckPacket
 	@Override
 	public void execute(EntityPlayer player)
 	{
-		TileEntity te;
-		te = player.getEntityWorld().getTileEntity(tePos);
-		if (te instanceof TileEntityAlchemiter)
+		if(player.getEntityWorld().isBlockLoaded(tePos))
 		{
-			((TileEntityAlchemiter) te).processContents(quantity, player);
+			TileEntity te;
+			te = player.getEntityWorld().getTileEntity(tePos);
+			if(te instanceof TileEntityAlchemiter)
+			{
+				((TileEntityAlchemiter) te).processContents(quantity, player);
+			}
 		}
 	}
 	

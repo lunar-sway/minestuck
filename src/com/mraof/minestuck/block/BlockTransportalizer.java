@@ -8,8 +8,12 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Enchantments;
+import net.minecraft.item.ItemStack;
+import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -18,6 +22,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 public class BlockTransportalizer extends BlockContainer
 {
@@ -83,6 +89,40 @@ public class BlockTransportalizer extends BlockContainer
 			playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.TRANSPORTALIZER.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
 
 		return true;
+	}
+	
+	@Override
+	public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, ItemStack stack)
+	{
+		player.addStat(StatList.getBlockStats(this));
+		player.addExhaustion(0.005F);
+		
+		if (EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, stack) > 0)
+		{
+			java.util.List<ItemStack> items = new java.util.ArrayList<ItemStack>();
+			ItemStack itemstack = this.getSilkTouchDrop(state);
+			
+			if (!itemstack.isEmpty())
+			{
+				if(te instanceof TileEntityTransportalizer)
+					itemstack.setStackDisplayName(((TileEntityTransportalizer) te).getId());
+				
+				items.add(itemstack);
+			}
+			
+			net.minecraftforge.event.ForgeEventFactory.fireBlockHarvesting(items, worldIn, pos, state, 0, 1.0f, true, player);
+			for (ItemStack item : items)
+			{
+				spawnAsEntity(worldIn, pos, item);
+			}
+		}
+		else
+		{
+			harvesters.set(player);
+			int i = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, stack);
+			this.dropBlockAsItem(worldIn, pos, state, i);
+			harvesters.set(null);
+		}
 	}
 	
 	@Override

@@ -152,8 +152,8 @@ consort.frogImitation=Ribbit, ribbit! I'm a frog! I don't care what you say!
 consort.lewdBuckets=Some may call our land lewd, but the buckets are just so fun to swim in!
 consort.waterBuckets=The buckets are a great source of water, as long as you pick the ones with water...
 consort.warmBuckets=Did you know that some buckets provide warmth? I tend to curl up next to one from time to time.
-consort.oilBucket.1=Did you know that the buckets sometimes hold something other than oil?
-consort.oilBucket.2=In some cases, they even contain something drinkable!
+consort.oilBuckets.1=Did you know that the buckets sometimes hold something other than oil?
+consort.oilBuckets.2=In some cases, they even contain something drinkable!
 
 consort.blindness=God, it's bright. Half of our village is blind. It's beginning to become a serious problem.
 consort.doctorsInside=Our best village doctors found that staying outside in the blinding light for too long is not good for us. Most of us stay inside all our lives. It's sad.
@@ -975,6 +975,8 @@ minestuck.config.giveItems.tooltip=If this is set to true, the 'Activate Editmod
 
 minestuck.config.deployCard=Card In Deploylist
 minestuck.config.deployCard.tooltip=Turn this to true to add a punched card (with a card punched to it) to the deploy list.
+minestuck.config.portableMachines=Portable Machines In Deploylist
+minestuck.config.portableMachines.tooltip=Determines if the small portable machines should be included in the deploy list.
 minestuck.config.cardCost=Card Cost
 minestuck.config.cardCost.tooltip=An integer to control the cost of captchalouge cards.
 minestuck.config.cardRecipe=Include Captcha Card Recipe
@@ -1036,6 +1038,8 @@ minestuck.config.gristRefund=Grist Refund
 minestuck.config.gristRefund.tooltip=Enable this and players will get a (full) grist refund from breaking blocks in editmode.
 minestuck.config.cruxtruderIntake=Cruxtruder Intake
 minestuck.config.cruxtruderIntake.tooltip=If enabled, the regular cruxtruder will require raw cruxite to function, which is inserted through the pipe.
+minestuck.config.alchemiterMaxStacks=Alchemiter Max Stacks
+minestuck.config.alchemiterMaxStacks.tooltip=The number of stacks that can be alchemized at the same time with the alchemiter.
 
 message.selectDefaultColor=Default color selected. You can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!
 message.selectColor=If you want to change the color, you can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!

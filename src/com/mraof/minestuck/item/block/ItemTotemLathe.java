@@ -3,9 +3,11 @@ package com.mraof.minestuck.item.block;
 import com.mraof.minestuck.block.BlockTotemLathe;
 import com.mraof.minestuck.block.BlockTotemLathe.EnumParts;
 import com.mraof.minestuck.block.MinestuckBlocks;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
@@ -95,6 +97,9 @@ public class ItemTotemLathe extends ItemBlock
 			world.setBlockState(pos.up(2), BlockTotemLathe.getState(EnumParts.TOP_LEFT, facing));
 			world.setBlockState(pos.offset(facing.rotateYCCW(),1).up(2), BlockTotemLathe.getState(EnumParts.TOP_MIDLEFT, facing));
 			world.setBlockState(pos.offset(facing.rotateYCCW(),2).up(2), BlockTotemLathe.getState(EnumParts.TOP_MIDRIGHT, facing));
+			
+			if(player instanceof EntityPlayerMP)
+				CriteriaTriggers.PLACED_BLOCK.trigger((EntityPlayerMP) player, pos, stack);
 		}
 		return true;
 	}

@@ -279,7 +279,7 @@ public class IdentifierHandler {
 		public String getUsername()
 		{
 			if(this.useUUID)
-				return UsernameCache.containsUUID(uuid) ? UsernameCache.getLastKnownUsername(uuid) : "Unknown Player";
+				return UsernameCache.containsUUID(uuid) ? UsernameCache.getLastKnownUsername(uuid) : "Unknown ("+getId()+")";
 			else return usernameDecode(username);
 		}
 		

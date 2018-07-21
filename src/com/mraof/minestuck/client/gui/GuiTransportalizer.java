@@ -44,7 +44,7 @@ public class GuiTransportalizer extends GuiScreen
 		this.destinationTextField.setFocused(true);
 		this.destinationTextField.setText(this.te.getDestId());
 		
-		this.doneButton = new GuiButton(0, this.width / 2 - 20, yOffset + 50, 40, 20, I18n.format("gui.done", new Object[0]));
+		this.doneButton = new GuiButton(0, this.width / 2 - 20, yOffset + 50, 40, 20, I18n.format("gui.done"));
 		this.buttonList.add(doneButton);
 	}
 	@Override
@@ -55,7 +55,7 @@ public class GuiTransportalizer extends GuiScreen
 		this.mc.getTextureManager().bindTexture(guiBackground);
 		int yOffset = (this.height / 2) - (guiHeight / 2);
 		this.drawTexturedModalRect((this.width / 2) - (guiWidth / 2), yOffset, 0, 0, guiWidth, guiHeight);
-		fontRenderer.drawString(te.getId(), (this.width / 2) - fontRenderer.getStringWidth(te.getId()) / 2, yOffset + 10, 0x404040);
+		fontRenderer.drawString(te.getId(), (this.width / 2) - fontRenderer.getStringWidth(te.getId()) / 2, yOffset + 10, te.getActive() ? 0x404040 : 0xFF0000);
 		this.destinationTextField.drawTextBox();
 		super.drawScreen(x, y, f1);
 	}

@@ -481,12 +481,11 @@ public class SessionHandler
 		NBTTagCompound nbt = new NBTTagCompound();
 		NBTTagList sessionList = new NBTTagList();
 		nbt.setTag("sessions", sessionList);
-		int nameIndex = 1;
 		for(int i = 0; i < sessions.size(); i++)
 		{
 			Session session = sessions.get(i);
 			NBTTagList connectionList = new NBTTagList();
-			Set<PlayerIdentifier> playerSet = new HashSet<PlayerIdentifier>();
+			Set<PlayerIdentifier> playerSet = new HashSet<>();
 			for(SburbConnection c :session.connections)
 			{
 				if(c.isMain)
