@@ -150,7 +150,7 @@ public class GristHelper {
 			for (Entry<GristType, Integer> pairs : reqs.entrySet())
 			{
 				setGrist(player, pairs.getKey(), getGrist(player, pairs.getKey()) - pairs.getValue());
-				notifyServer(player, pairs.getKey().getName(), pairs.getValue(), "spent");
+				notifyServer(player, pairs.getKey().getDisplayName(), pairs.getValue(), "spent");
 			}
 		}
 	}
@@ -183,7 +183,7 @@ public class GristHelper {
 			for (Entry<GristType, Integer> pairs : reqs.entrySet())
 			{
 				setGrist(player, pairs.getKey(), getGrist(player, pairs.getKey()) + pairs.getValue());
-				notify(player, pairs.getKey().getName(), pairs.getValue(), "gained");
+				notify(player, pairs.getKey().getDisplayName(), pairs.getValue(), "gained");
 			}
 		}
 	}
