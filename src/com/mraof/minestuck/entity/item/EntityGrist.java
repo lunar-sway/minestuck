@@ -217,26 +217,28 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	 * Called by a player entity when they collide with an entity
 	 */
 	@Override
-	public void onCollideWithPlayer(EntityPlayer par1EntityPlayer)
+	public void onCollideWithPlayer(EntityPlayer entityIn)
 	{
-		if(this.world.isRemote?ClientEditHandler.isActive():ServerEditHandler.getData(par1EntityPlayer) != null)
+		if(this.world.isRemote?ClientEditHandler.isActive():ServerEditHandler.getData(entityIn) != null)
 			return;
 		
 		if (!this.world.isRemote)
 		{
-			this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.1F, 0.5F * ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.8F));
-			par1EntityPlayer.onItemPickup(this, 1);
-			this.addGrist(par1EntityPlayer);
-			this.setDead();
+			consumeGrist(IdentifierHandler.encode(entityIn), true);
 		}
 		else  
 			this.setDead();
 	}
 	
-	public void addGrist(EntityPlayer entityPlayer)
+	public void consumeGrist(IdentifierHandler.PlayerIdentifier identifier, boolean sound)
 	{
-		GristHelper.increase(IdentifierHandler.encode(entityPlayer), new GristSet(gristType, gristValue));
-		MinestuckPlayerTracker.updateGristCache(IdentifierHandler.encode(entityPlayer));
+		if(this.world.isRemote)
+			throw new IllegalStateException("Grist entities shouldn't be consumed client-side.");
+		if(sound)
+			this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.1F, 0.5F * ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.8F));
+		GristHelper.increase(identifier, new GristSet(gristType, gristValue));
+		MinestuckPlayerTracker.updateGristCache(identifier);
+		this.setDead();
 	}
 	
 	@Override
@@ -248,6 +250,11 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	public GristType getType() 
 	{
 		return gristType;
+	}
+	
+	public GristAmount getAmount()
+	{
+		return new GristAmount(gristType, gristValue);
 	}
 	
 	public static int typeInt(GristType type)
