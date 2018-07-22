@@ -142,7 +142,7 @@ public class EntityDecoy extends EntityLiving {
 		} catch(Exception e)
 		{
 			foodStats = null;
-			Debug.logger.error("Couldn't initiate food stats for player decoy. Proceeding to not stimulate food stats.", e);
+			Debug.logger.error("Couldn't initiate food stats for player decoy. Proceeding to not simulate food stats.", e);
 			sourcePlayer.sendMessage(new TextComponentString("An issue came up while creating the decoy. More info in the server logs."));
 		}
 	}
