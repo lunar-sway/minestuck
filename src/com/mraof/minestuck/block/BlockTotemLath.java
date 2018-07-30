@@ -1,7 +1,7 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.tileentity.TileEntityItemStack;
-import com.mraof.minestuck.tileentity.TileEntityTotemLathe;
+import com.mraof.minestuck.tileentity.TileEntityTotemLath;
 
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import net.minecraft.block.Block;
@@ -27,7 +27,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlockTotemLathe extends BlockLargeMachine
+public class BlockTotemLath extends BlockLargeMachine
 {
 	
 	public static final PropertyEnum<EnumParts> PART1 = PropertyEnum.create("part", EnumParts.class, EnumParts.BOTTOM_LEFT, EnumParts.BOTTOM_MIDLEFT, EnumParts.BOTTOM_MIDRIGHT, EnumParts.BOTTOM_RIGHT, EnumParts.BOTTOM_LEFT_CARD_1, EnumParts.BOTTOM_LEFT_CARD_2);
@@ -38,12 +38,12 @@ public class BlockTotemLathe extends BlockLargeMachine
 	
 	private int index;
 	
-	public BlockTotemLathe()
+	public BlockTotemLath()
 	{
 		this(0, PART1);
 	}
 	
-	public BlockTotemLathe(int index, PropertyEnum<EnumParts> part)
+	public BlockTotemLath(int index, PropertyEnum<EnumParts> part)
 	{
 		this.index = index;
 		PART = part;
@@ -68,8 +68,8 @@ public class BlockTotemLathe extends BlockLargeMachine
 		
 		BlockPos mainPos = getMainPos(state, pos);
 		TileEntity te = worldIn.getTileEntity(mainPos);
-		if(te instanceof TileEntityTotemLathe)
-			((TileEntityTotemLathe) te).onRightClick(playerIn, state);
+		if(te instanceof TileEntityTotemLath)
+			((TileEntityTotemLath) te).onRightClick(playerIn, state);
 		return true;
 	}
 	
@@ -83,7 +83,7 @@ public class BlockTotemLathe extends BlockLargeMachine
 	public TileEntity createNewTileEntity(World worldIn, int meta)
 	{
 		if(meta / 4 + index * 4 == EnumParts.BOTTOM_LEFT.ordinal())
-			return new TileEntityTotemLathe();
+			return new TileEntityTotemLath();
 		else if(meta / 4 + index * 4 == EnumParts.ROD_RIGHT.ordinal())
 			return new TileEntityItemStack();
 		else return null;
@@ -97,9 +97,9 @@ public class BlockTotemLathe extends BlockLargeMachine
 			BlockPos mainPos = getMainPos(state, pos);
 			TileEntity te = worldIn.getTileEntity(mainPos);
 			IBlockState otherState = worldIn.getBlockState(mainPos);
-			if(te instanceof TileEntityTotemLathe && otherState.getValue(DIRECTION) == state.getValue(DIRECTION))
+			if(te instanceof TileEntityTotemLath && otherState.getValue(DIRECTION) == state.getValue(DIRECTION))
 			{
-				((TileEntityTotemLathe) te).setBroken();
+				((TileEntityTotemLath) te).setBroken();
 			}
 		}
 		
@@ -110,8 +110,8 @@ public class BlockTotemLathe extends BlockLargeMachine
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos)
 	{
 		TileEntity te = worldIn.getTileEntity(pos);
-		if(te instanceof TileEntityTotemLathe)
-			((TileEntityTotemLathe) te).checkStates();
+		if(te instanceof TileEntityTotemLath)
+			((TileEntityTotemLath) te).checkStates();
 	}
 	
 	@Override
@@ -131,12 +131,12 @@ public class BlockTotemLathe extends BlockLargeMachine
 			{
 				spawnAsEntity(worldIn, pos, item);
 			}
-		} else if(te instanceof TileEntityTotemLathe)
+		} else if(te instanceof TileEntityTotemLath)
 		{
 			int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, stack);
 			List<ItemStack> items = new ArrayList<>();
-			items.add(((TileEntityTotemLathe) te).getCard1());
-			items.add(((TileEntityTotemLathe) te).getCard2());
+			items.add(((TileEntityTotemLath) te).getCard1());
+			items.add(((TileEntityTotemLath) te).getCard2());
 			net.minecraftforge.event.ForgeEventFactory.fireBlockHarvesting(items, worldIn, pos, state, fortune, 1.0f, false, harvesters.get());
 			
 			for (ItemStack item : items)
@@ -188,9 +188,9 @@ public class BlockTotemLathe extends BlockLargeMachine
 		{
 			BlockPos mainPos = getMainPos(state, pos);
 			TileEntity te = worldIn.getTileEntity(mainPos);
-			if(te instanceof TileEntityTotemLathe)
+			if(te instanceof TileEntityTotemLath)
 			{
-				TileEntityTotemLathe lathe = (TileEntityTotemLathe) te;
+				TileEntityTotemLath lathe = (TileEntityTotemLath) te;
 				if(!lathe.getCard2().isEmpty())
 					return state.withProperty(PART, EnumParts.BOTTOM_LEFT_CARD_2);
 				else if(!lathe.getCard1().isEmpty())
@@ -252,14 +252,14 @@ public class BlockTotemLathe extends BlockLargeMachine
 	
 	public static EnumParts getPart(IBlockState state)
 	{
-		if(state.getBlock() instanceof BlockTotemLathe)
-			return state.getValue(((BlockTotemLathe) state.getBlock()).PART);
+		if(state.getBlock() instanceof BlockTotemLath)
+			return state.getValue(((BlockTotemLath) state.getBlock()).PART);
 		else return null;
 	}
 	
 	public static IBlockState getState(EnumParts parts, EnumFacing facing)
 	{
-		BlockTotemLathe block = MinestuckBlocks.totemlathe[PART1.getAllowedValues().contains(parts) ? 0 : PART2.getAllowedValues().contains(parts) ? 1 : 2];
+		BlockTotemLath block = MinestuckBlocks.totemlathe[PART1.getAllowedValues().contains(parts) ? 0 : PART2.getAllowedValues().contains(parts) ? 1 : 2];
 		return block.getDefaultState().withProperty(block.PART, parts).withProperty(DIRECTION, facing);
 	}
 	
@@ -329,12 +329,12 @@ public class BlockTotemLathe extends BlockLargeMachine
 		}
 	}
 	
-	public static BlockTotemLathe[] createBlocks()
+	public static BlockTotemLath[] createBlocks()
 	{
-		return new BlockTotemLathe[] {new BlockTotemLathe(), new BlockTotemLathe2(), new BlockTotemLathe3()};
+		return new BlockTotemLath[] {new BlockTotemLath(), new BlockTotemLathe2(), new BlockTotemLathe3()};
 	}
 	
-	private static class BlockTotemLathe2 extends BlockTotemLathe
+	private static class BlockTotemLathe2 extends BlockTotemLath
 	{
 		public BlockTotemLathe2()
 		{
@@ -348,7 +348,7 @@ public class BlockTotemLathe extends BlockLargeMachine
 		}
 	}
 	
-	private static class BlockTotemLathe3 extends BlockTotemLathe
+	private static class BlockTotemLathe3 extends BlockTotemLath
 	{
 		public BlockTotemLathe3()
 		{

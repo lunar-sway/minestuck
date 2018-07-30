@@ -1,7 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
 
-import com.mraof.minestuck.block.BlockTotemLathe;
+import com.mraof.minestuck.block.BlockTotemLath;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
@@ -24,14 +24,14 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 
-public class TileEntityTotemLathe extends TileEntity
+public class TileEntityTotemLath extends TileEntity
 {
 	private boolean broken = false;
 	//two cards so that we can preform the && alchemy operation
 	protected ItemStack card1 = ItemStack.EMPTY;
 	protected ItemStack card2 = ItemStack.EMPTY;
 	//constructor
-	public TileEntityTotemLathe() {}
+	public TileEntityTotemLath() {}
 	//data checking
 
 	public void setCard1(ItemStack stack)
@@ -90,12 +90,12 @@ public class TileEntityTotemLathe extends TileEntity
 		IBlockState state = world.getBlockState(pos);
 		if(stack.isEmpty())
 		{
-			if(state.equals(BlockTotemLathe.getState(BlockTotemLathe.EnumParts.ROD_RIGHT, facing)))
+			if(state.equals(BlockTotemLath.getState(BlockTotemLath.EnumParts.ROD_RIGHT, facing)))
 				world.setBlockToAir(pos);
 			return true;
 		} else if (stack.getItem() == MinestuckItems.cruxiteDowel)
 		{
-			if(state.equals(BlockTotemLathe.getState(BlockTotemLathe.EnumParts.ROD_RIGHT, facing)))
+			if(state.equals(BlockTotemLath.getState(BlockTotemLath.EnumParts.ROD_RIGHT, facing)))
 			{
 				TileEntity te = world.getTileEntity(pos);
 				if(!(te instanceof TileEntityItemStack))
@@ -109,7 +109,7 @@ public class TileEntityTotemLathe extends TileEntity
 				return true;
 			} else if(state.getBlock().isReplaceable(world, pos))
 			{
-				world.setBlockState(pos, BlockTotemLathe.getState(BlockTotemLathe.EnumParts.ROD_RIGHT, facing));
+				world.setBlockState(pos, BlockTotemLath.getState(BlockTotemLath.EnumParts.ROD_RIGHT, facing));
 				TileEntity te = world.getTileEntity(pos);
 				if(!(te instanceof TileEntityItemStack))
 				{
@@ -127,7 +127,7 @@ public class TileEntityTotemLathe extends TileEntity
 	public ItemStack getDowel()
 	{
 		BlockPos pos = getPos().up().offset(getFacing().rotateYCCW(), 2);
-		if(world.getBlockState(pos).equals(BlockTotemLathe.getState(BlockTotemLathe.EnumParts.ROD_RIGHT, getFacing())))
+		if(world.getBlockState(pos).equals(BlockTotemLath.getState(BlockTotemLath.EnumParts.ROD_RIGHT, getFacing())))
 		{
 			TileEntity te = world.getTileEntity(pos);
 			if(te instanceof TileEntityItemStack)
@@ -149,7 +149,7 @@ public class TileEntityTotemLathe extends TileEntity
 		boolean working = isUseable(clickedState);
 		
 		ItemStack heldStack = player.getHeldItemMainhand();
-		BlockTotemLathe.EnumParts part = BlockTotemLathe.getPart(clickedState);
+		BlockTotemLath.EnumParts part = BlockTotemLath.getPart(clickedState);
 		if(part == null)
 			return;
 		//if they have clicked on the part that holds the chapta cards.
@@ -184,7 +184,7 @@ public class TileEntityTotemLathe extends TileEntity
 		}
 		
 		//if they have clicked the dowel block
-		if (part == BlockTotemLathe.EnumParts.ROD_LEFT || part == BlockTotemLathe.EnumParts.ROD_RIGHT)
+		if (part == BlockTotemLath.EnumParts.ROD_LEFT || part == BlockTotemLath.EnumParts.ROD_RIGHT)
 		{
 			ItemStack dowel = getDowel();
 			if (dowel.isEmpty())
@@ -211,7 +211,7 @@ public class TileEntityTotemLathe extends TileEntity
 		}
 		
 		//if they have clicked on the lever
-		if(working && part == BlockTotemLathe.EnumParts.TOP_MIDRIGHT)
+		if(working && part == BlockTotemLath.EnumParts.TOP_MIDRIGHT)
 		{
 			//carve the dowel.
 			processContents();
@@ -228,7 +228,7 @@ public class TileEntityTotemLathe extends TileEntity
 				Debug.warnf("Failed to notice a block being broken or misplaced at the totem lathe at %s", getPos());
 		}
 		
-		if(!state.getValue(BlockTotemLathe.DIRECTION).equals(currentState.getValue(BlockTotemLathe.DIRECTION)))
+		if(!state.getValue(BlockTotemLath.DIRECTION).equals(currentState.getValue(BlockTotemLath.DIRECTION)))
 			return false;
 		return !isBroken();
 	}
@@ -239,18 +239,18 @@ public class TileEntityTotemLathe extends TileEntity
 			return;
 		EnumFacing facing = getFacing();
 		
-		if(	!world.getBlockState(getPos()).equals(BlockTotemLathe.getState(BlockTotemLathe.EnumParts.BOTTOM_LEFT, facing)) ||
-			!world.getBlockState(getPos().offset(facing.rotateYCCW(),1)).equals(BlockTotemLathe.getState(BlockTotemLathe.EnumParts.BOTTOM_MIDLEFT, facing)) ||
-			!world.getBlockState(getPos().offset(facing.rotateYCCW(),2)).equals(BlockTotemLathe.getState(BlockTotemLathe.EnumParts.BOTTOM_MIDRIGHT, facing)) ||
-			!world.getBlockState(getPos().offset(facing.rotateYCCW(),3)).equals(BlockTotemLathe.getState(BlockTotemLathe.EnumParts.BOTTOM_RIGHT, facing)) ||
+		if(	!world.getBlockState(getPos()).equals(BlockTotemLath.getState(BlockTotemLath.EnumParts.BOTTOM_LEFT, facing)) ||
+			!world.getBlockState(getPos().offset(facing.rotateYCCW(),1)).equals(BlockTotemLath.getState(BlockTotemLath.EnumParts.BOTTOM_MIDLEFT, facing)) ||
+			!world.getBlockState(getPos().offset(facing.rotateYCCW(),2)).equals(BlockTotemLath.getState(BlockTotemLath.EnumParts.BOTTOM_MIDRIGHT, facing)) ||
+			!world.getBlockState(getPos().offset(facing.rotateYCCW(),3)).equals(BlockTotemLath.getState(BlockTotemLath.EnumParts.BOTTOM_RIGHT, facing)) ||
 			
-			!world.getBlockState(getPos().up()).equals(BlockTotemLathe.getState(BlockTotemLathe.EnumParts.MID_LEFT, facing)) ||
-			!world.getBlockState(getPos().up().offset(facing.rotateYCCW(),1)).equals(BlockTotemLathe.getState(BlockTotemLathe.EnumParts.ROD_LEFT, facing)) ||
-			!world.getBlockState(getPos().up().offset(facing.rotateYCCW(),3)).equals(BlockTotemLathe.getState(BlockTotemLathe.EnumParts.MID_RIGHT, facing)) ||
+			!world.getBlockState(getPos().up()).equals(BlockTotemLath.getState(BlockTotemLath.EnumParts.MID_LEFT, facing)) ||
+			!world.getBlockState(getPos().up().offset(facing.rotateYCCW(),1)).equals(BlockTotemLath.getState(BlockTotemLath.EnumParts.ROD_LEFT, facing)) ||
+			!world.getBlockState(getPos().up().offset(facing.rotateYCCW(),3)).equals(BlockTotemLath.getState(BlockTotemLath.EnumParts.MID_RIGHT, facing)) ||
 			
-			!world.getBlockState(getPos().up(2)).equals(BlockTotemLathe.getState(BlockTotemLathe.EnumParts.TOP_LEFT, facing)) ||
-			!world.getBlockState(getPos().up(2).offset(facing.rotateYCCW(),1)).equals(BlockTotemLathe.getState(BlockTotemLathe.EnumParts.TOP_MIDLEFT, facing)) ||
-			!world.getBlockState(getPos().up(2).offset(facing.rotateYCCW(),2)).equals(BlockTotemLathe.getState(BlockTotemLathe.EnumParts.TOP_MIDRIGHT, facing)))
+			!world.getBlockState(getPos().up(2)).equals(BlockTotemLath.getState(BlockTotemLath.EnumParts.TOP_LEFT, facing)) ||
+			!world.getBlockState(getPos().up(2).offset(facing.rotateYCCW(),1)).equals(BlockTotemLath.getState(BlockTotemLath.EnumParts.TOP_MIDLEFT, facing)) ||
+			!world.getBlockState(getPos().up(2).offset(facing.rotateYCCW(),2)).equals(BlockTotemLath.getState(BlockTotemLath.EnumParts.TOP_MIDRIGHT, facing)))
 		{
 			setBroken();
 		}
@@ -309,7 +309,7 @@ public class TileEntityTotemLathe extends TileEntity
 	@Override
 	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate)
 	{
-		return oldState.getBlock() != newSate.getBlock() || oldState.getValue(BlockTotemLathe.PART1) != newSate.getValue(BlockTotemLathe.PART1);
+		return oldState.getBlock() != newSate.getBlock() || oldState.getValue(BlockTotemLath.PART1) != newSate.getValue(BlockTotemLath.PART1);
 	}
 	
 	
