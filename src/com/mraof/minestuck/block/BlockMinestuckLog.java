@@ -97,7 +97,8 @@ public class BlockMinestuckLog extends BlockLog
 	{
 		VINE_OAK("vine_oak", "vineOak", MapColor.WOOD, MapColor.OBSIDIAN),
 		FLOWERY_VINE_OAK("flowery_vine_oak", "floweryVineOak", MapColor.WOOD, MapColor.OBSIDIAN),
-		FROST("frost", "frost", MapColor.ICE, MapColor.ICE);
+		FROST("frost", "frost", MapColor.ICE, MapColor.ICE),
+		RAINBOW("rainbow", "rainbow", MapColor.WOOD, MapColor.WOOD);
 		
 		private final String name;
 		private final String unlocalizedName;

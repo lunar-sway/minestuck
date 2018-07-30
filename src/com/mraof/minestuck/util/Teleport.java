@@ -50,6 +50,21 @@ public class Teleport
 		{
 			PlayerList playerList = mcServer.getPlayerList();
 			EntityPlayerMP player = (EntityPlayerMP) entity;
+			
+			if(teleporter != null)
+			{
+				if(teleporter.prepareDestination(new BlockPos(x, y, z), entity, worldFrom))
+				{
+					teleporter.finalizeDestination(entity, worldFrom, worldDest);
+				} else
+				{
+					return false;
+				}
+			} else
+			{
+				player.setPosition(x, y, z);
+			}
+			
 			try
 			{
 				setPortalInvincibilityWithReflection(player);
@@ -65,9 +80,8 @@ public class Teleport
 			worldFrom.removeEntityDangerously(player);
 			player.isDead = false;
 			
-			player.setPosition(x, y, z);
-			if(teleporter != null)
-				teleporter.makeDestination(player, worldFrom, worldDest);
+			//player.setPosition(x, y, z);
+			
 			worldDest.spawnEntity(player);
 			worldDest.updateEntityWithOptionalForce(entity, false);
 			player.setWorld(worldDest);
@@ -103,22 +117,30 @@ public class Teleport
 			entity.writeToNBT(nbt);
 			
 			if(teleporter != null)
-				teleporter.makeDestination(entity, worldFrom, worldDest);
+			{
+				if(teleporter.prepareDestination(new BlockPos(x, y, z), entity, worldFrom))
+				{
+					teleporter.finalizeDestination(entity, worldFrom, worldDest);
+				} else
+				{
+					return false;
+				}
+			}
 			worldDest.updateEntityWithOptionalForce(entity, false);
 			
 			nbt.removeTag("Dimension");
 			newEntity.readFromNBT(nbt);
 			newEntity.timeUntilPortal = entity.timeUntilPortal;
 			newEntity.setPosition(x, y, z);
-						
+			
 			boolean flag = newEntity.forceSpawn;
 			newEntity.forceSpawn = true;
 			worldDest.spawnEntity(newEntity);
 			newEntity.forceSpawn = flag;
 			worldDest.updateEntityWithOptionalForce(newEntity, false);
 			
+			entity.setDropItemsWhenDead(false);
 			entity.world.removeEntity(entity);
-			entity.isDead = true;
 			worldFrom.resetUpdateEntityTick();
 			worldDest.resetUpdateEntityTick();
 			
@@ -151,9 +173,17 @@ public class Teleport
 //			player.connection.sendPacket(respawnPacket);
 //			playerList.updatePermissionLevel(player);
 			
-			player.setPosition(x, y, z);
 			if(teleporter != null)
-				teleporter.makeDestination(player, world, world);
+			{
+				if (teleporter.prepareDestination(new BlockPos(x, y, z), entity, world))
+				{
+					teleporter.finalizeDestination(entity, world, world);
+				} else
+				{
+					return false;
+				}
+			}
+			player.setPosition(x, y, z);
 //			world.updateEntityWithOptionalForce(entity, false);
 			
 //			playerList.preparePlayer(player, world);
@@ -165,10 +195,18 @@ public class Teleport
 			return true;
 		} else if(!entity.isDead)
 		{
-			entity.setPosition(x, y, z);
 			if(teleporter != null)
-				teleporter.makeDestination(entity, (WorldServer) entity.world, (WorldServer) entity.world);
+			{
+				if (teleporter.prepareDestination(new BlockPos(x, y, z), entity, (WorldServer) entity.world))
+				{
+					teleporter.finalizeDestination(entity, (WorldServer) entity.world, (WorldServer) entity.world);
+				} else
+				{
+					return false;
+				}
+			}
 			
+			entity.setPosition(x, y, z);
 			return true;
 		}
 		
@@ -196,7 +234,23 @@ public class Teleport
 	
 	public interface ITeleporter
 	{
-		void makeDestination(Entity entity, WorldServer worldserver, WorldServer worldserver1);
+		/**
+		 * Attempts to begin the teleportation process. Unless there are conditions in which teleportation should fail, this method tends to do very little.
+		 * This method returns false if teleportation should not occur, and will return true at other times.
+		 * @param pos The block position to which the entity will be moved on teleportation, or the player's current block position.
+		 * Know which one this version of the method uses before calling it.
+		 * @param entity The entity that will be teleported.
+		 * @param worldserver The WorldServer <i>from</i> which the entity is teleporting
+		 * @return True if the entity should be allowed to teleport under these conditions, or false if not.
+		 */
+		boolean prepareDestination(BlockPos pos, Entity entity, WorldServer worldserver);
+		/**
+		 * Finalizes the teleportation process. This method is in charge of actually transporting the entity.
+		 * @param entity The entity being teleported.
+		 * @param worldserver The world from which the entity is being teleported
+		 * @param worldserver1 The world to which the entity is being teleported
+		 */
+		void finalizeDestination(Entity entity, WorldServer worldserver, WorldServer worldserver1);
 	}
 	
 }

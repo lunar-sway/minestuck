@@ -24,7 +24,7 @@ public class LandAspectWind extends TitleLandAspect
 	}
 	
 	@Override
-	protected void prepareChunkProvider(ChunkProviderLands chunkProvider)
+	public void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
 		if(chunkProvider.weatherType == -1)
 			chunkProvider.weatherType = 0;
@@ -33,7 +33,7 @@ public class LandAspectWind extends TitleLandAspect
 	}
 	
 	@Override
-	protected void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
+	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.LIGHT_BLUE));
 		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.CARPET.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.CYAN));

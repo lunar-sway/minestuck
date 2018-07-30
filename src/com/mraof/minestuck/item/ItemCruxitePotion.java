@@ -29,7 +29,7 @@ public class ItemCruxitePotion extends ItemCruxiteArtifact
 	{
 		stack.shrink(1);
 		if(entityLiving instanceof EntityPlayer)
-			onArtifactActivated(worldIn, (EntityPlayer) entityLiving);
+			onArtifactActivated((EntityPlayer) entityLiving);
 		
 		return stack;
 	}

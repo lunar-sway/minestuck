@@ -28,13 +28,13 @@ public class LandAspectThought extends TitleLandAspect
 	}
 	
 	@Override
-	protected void prepareChunkProvider(ChunkProviderLands chunkProvider)
+	public void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.mergeFogColor(new Vec3d(0.8, 0.3, 0.8), 0.8F);
 	}
 	
 	@Override
-	protected void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
+	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.oceanChance = Math.max(chunkProvider.oceanChance, 0.2F);
 		

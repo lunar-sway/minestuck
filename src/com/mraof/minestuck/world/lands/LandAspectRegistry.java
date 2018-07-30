@@ -5,6 +5,7 @@ import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.EnumAspect;
+import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.terrain.*;
 import com.mraof.minestuck.world.lands.title.*;
@@ -39,6 +40,10 @@ public class LandAspectRegistry
 		registerLandAspect(new LandAspectForest());
 		registerLandAspect(new LandAspectRock());
 		registerLandAspect(new LandAspectWood());
+		//registerLandAspect(new LandAspectRain());
+		registerLandAspect(new LandAspectRainbow());
+		//registerLandAspect(new LandAspectFlora());
+		registerLandAspect(new LandAspectEnd());
 		
 		registerLandAspect(new LandAspectWind(), EnumAspect.BREATH);
 		registerLandAspect(new LandAspectLight(), EnumAspect.LIGHT);
@@ -239,10 +244,13 @@ public class LandAspectRegistry
 	
 	/**
 	 * Registers a new dimension for a land. Returns the ID of the nearest open land ID.
-	 * @param player 
-	 * 
+	 * @param player The player whose Land is being created
+	 * @param teleport The teleporter in charge of carrying the player into the Land.
+	 * If this value is null, the Land will be created, and the player will be left behind.
+	 * <code>ItemCruxiteArtifact</code> is the recommended teleporter for Entry.
+	 * @return Returns the dimension of the player's Land, or -1 if Entry fails.
 	 */
-	public static int createLand(EntityPlayer player)
+	public static int createLand(EntityPlayer player, Teleport.ITeleporter teleport)
 	{
 		
 		int newLandId = MinestuckDimensionHandler.landDimensionIdStart;
@@ -264,20 +272,13 @@ public class LandAspectRegistry
 			}
 		}
 		
-		int id = SkaianetHandler.enterMedium((EntityPlayerMP)player, newLandId);
-		if(id == -1)
-			return -1;	//Something happened at skaianet preventing you from entering
+		int id = SkaianetHandler.enterMedium((EntityPlayerMP)player, newLandId, teleport);
 		
-		if(id != newLandId)
+		if(id == -1)
+			return -1;	//Something happened at skaianet preventing the Land from being made
+		
+		if(id != newLandId)			//This happens iff the player has a "home dimension" Land already registered
 			newLandId = id;
-		else
-		{
-			int x = (int) player.posX;
-			if(player.posX < 0) x--;
-			int z = (int) player.posZ;
-			if (player.posZ < 0) z--;
-			MinestuckDimensionHandler.setSpawn(newLandId, new BlockPos(x, 128 - MinestuckConfig.artifactRange, z));
-		}
 		
 		MinestuckPlayerTracker.updateLands();
 		

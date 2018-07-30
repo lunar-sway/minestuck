@@ -2,6 +2,8 @@ package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.item.TabMinestuck;
+import com.mraof.minestuck.util.MinestuckRandom;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
@@ -20,9 +22,8 @@ import java.util.Random;
 
 public class BlockCruxiteOre extends Block 
 {
-	public static final PropertyInteger BLOCK_TYPE = PropertyInteger.create("block_type", 0, 4);
+	public static final PropertyInteger BLOCK_TYPE = PropertyInteger.create("block_type", 0, 5);
 	
-	private Random rand = new Random();
 	public BlockCruxiteOre()
 	{
 		super(Material.ROCK);
@@ -81,7 +82,7 @@ public class BlockCruxiteOre extends Block
 	@Override
 	public int getExpDrop(IBlockState state, IBlockAccess world, BlockPos pos, int fortune)
 	{
-		return MathHelper.getInt(rand, 2, 5);
+		return MathHelper.getInt(MinestuckRandom.getRandom(), 2, 5);
 	}
 	
 	@Override
@@ -103,6 +104,8 @@ public class BlockCruxiteOre extends Block
 			meta = 3;
 		else if(ground.getBlock() == Blocks.RED_SANDSTONE)
 			meta = 4;
+		else if(ground.getBlock() == Blocks.END_STONE)
+			meta = 5;
 		
 		return MinestuckBlocks.oreCruxite.getBlockState().getBaseState().withProperty(BLOCK_TYPE, meta);
 	}
@@ -110,7 +113,7 @@ public class BlockCruxiteOre extends Block
 	@Override
 	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items)
 	{
-		for(int i = 0; i < 5; i++)
+		for(int i = 0; i < 6; i++)
 			items.add(new ItemStack(this, 1, i));
 	}
 }

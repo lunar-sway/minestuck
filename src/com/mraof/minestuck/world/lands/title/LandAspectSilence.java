@@ -31,7 +31,7 @@ public class LandAspectSilence extends TitleLandAspect
 	}
 	
 	@Override
-	protected void prepareChunkProvider(ChunkProviderLands chunkProvider)
+	public void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.dayCycle = 2;
 		
@@ -40,7 +40,7 @@ public class LandAspectSilence extends TitleLandAspect
 	}
 	
 	@Override
-	protected void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
+	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.BLACK));
 		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.CARPET.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.BLUE));
@@ -52,7 +52,7 @@ public class LandAspectSilence extends TitleLandAspect
 	@Override
 	public boolean isAspectCompatible(TerrainLandAspect aspect)
 	{
-		return (aspect.getWeatherType() == -1 || (aspect.getWeatherType() & 1) != 0)/*rain is noisy*/ && aspect.getDayCycleMode() != 1;
+		return (aspect.getWeatherType() == -1 || (aspect.getWeatherType() & 1) == 1)/*snow is quiet, rain is noisy*/ && aspect.getDayCycleMode() != 1;
 	}
 	
 	private static class PumpkinDecorator extends SingleBlockDecorator

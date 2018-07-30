@@ -25,7 +25,7 @@ public class LandAspectWood extends TerrainLandAspect
 	{
 		registry.setBlockState("ground", Blocks.STONE.getDefaultState());
 		registry.setBlockState("upper", Blocks.LOG.getDefaultState());
-		registry.setBlockState("surface", Blocks.PLANKS.getDefaultState());
+		registry.setBlockState("surface", MinestuckBlocks.treatedPlanks.getDefaultState());
 		registry.setBlockState("ocean", Blocks.WATER.getDefaultState());
 		registry.setBlockState("river", Blocks.WATER.getDefaultState());
 		registry.setBlockState("structure_primary", Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.JUNGLE).withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE));

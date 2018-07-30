@@ -10,9 +10,11 @@ import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
+import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -630,7 +632,7 @@ public class SkaianetHandler {
 		return null;
 	}
 	
-	public static int enterMedium(EntityPlayerMP player, int dimensionId)
+	public static int enterMedium(EntityPlayerMP player, int dimensionId, Teleport.ITeleporter teleport)
 	{
 		PlayerIdentifier username = IdentifierHandler.encode(player);
 		SburbConnection c = getMainConnection(username, true);
@@ -677,14 +679,25 @@ public class SkaianetHandler {
 		else if(c.enteredGame)
 			return c.clientHomeLand;
 		
+		int x = (int) player.posX;
+		if(player.posX < 0) x--;
+		int z = (int) player.posZ;
+		if (player.posZ < 0) z--;
+		MinestuckDimensionHandler.setSpawn(dimensionId, new BlockPos(x, 128 - MinestuckConfig.artifactRange, z));
 		c.clientHomeLand = dimensionId;
-		c.enteredGame = true;
-		SburbHandler.onGameEntered(c);
+		SburbHandler.onLandCreated(c);
 		
-		c.centerX = 0;
-		c.centerZ = 0;
-		c.useCoordinates = false;
-		updateAll();
+		if(teleport != null && Teleport.teleportEntity(player, dimensionId, teleport))
+		{
+			c.enteredGame = true;
+			SburbHandler.onGameEntered(c);
+			
+			c.centerX = 0;
+			c.centerZ = 0;
+			c.useCoordinates = false;
+			updateAll();
+		} else
+			Debug.errorf("Couldn't move %s to their Land. Stopping entry.", player.getName());
 		return dimensionId;
 	}
 	

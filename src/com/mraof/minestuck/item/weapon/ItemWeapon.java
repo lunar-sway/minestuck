@@ -1,9 +1,16 @@
 package com.mraof.minestuck.item.weapon;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.item.TabMinestuck;
+
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -25,6 +32,7 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 	private final int enchantability;
 	private float efficiency;
 	private boolean unbreakable = false;
+	private static final HashMap<String, Set<Material>> toolMaterials = new HashMap<String, Set<Material>>();
 	
 	public ItemWeapon(int maxUses, double damageVsEntity, double weaponSpeed, int enchantability, String name)
 	{
@@ -104,20 +112,20 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 		this.setHarvestLevel(toolClass, harvestLevel);
 		return this;
 	}
-	
+
 	@Override
 	public float getDestroySpeed(ItemStack stack, IBlockState state)
 	{
+		Material material = state.getMaterial();
 		for(String tool : getToolClasses(stack))
 		{
-			if(state.getBlock().isToolEffective(tool, state))
+			if(state.getBlock().isToolEffective(tool, state) || toolMaterials.get(tool).contains(material))
 			{
 				return efficiency;
 			}
 		}
 		return super.getDestroySpeed(stack, state);
 	}
-
 
 	@Override
 	public void onCreated(ItemStack stack, World world, EntityPlayer player)
@@ -132,20 +140,39 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 	@Override
 	public boolean canHarvestBlock(IBlockState state, ItemStack stack)
 	{
-		String tool = state.getBlock().getHarvestTool(state);
-		if(getToolClasses(stack).contains(tool))
-		{
-			int blockHarvestLevel = state.getBlock().getHarvestLevel(state);
-			int toolHarvestLevel = getHarvestLevel(stack, tool, null, state);
-			return toolHarvestLevel >= blockHarvestLevel;
-		} else
-		{
-			return state.getMaterial().isToolNotRequired();
-		}
+        String tool = state.getBlock().getHarvestTool(state);
+        if(getToolClasses(stack).contains(tool))
+        {
+            int blockHarvestLevel = state.getBlock().getHarvestLevel(state);
+            int toolHarvestLevel = getHarvestLevel(stack, tool, null, state);
+            return toolHarvestLevel >= blockHarvestLevel;
+        } else		//We know that no specific tool is specified, meaning any tool efficiency is defined in the tool itself.
+        {			//This also means that there's no tool *level* specified, so any tool of that class is sufficient.
+        	Material mat = state.getMaterial();
+        	if(mat.isToolNotRequired())
+        		return true;
+        	for(String tool2 : getToolClasses(stack))
+        	{
+        		if(toolMaterials.get(tool2) != null && toolMaterials.get(tool2).contains(mat))
+        		{
+        			return true;
+        		}
+        	}
+        }
+        return super.canHarvestBlock(state, stack);
+	}
+	
+	public static void addToolMaterial(String tool, Collection<Material> materials)
+	{
+		if(!toolMaterials.containsKey(tool))
+			toolMaterials.put(tool, new HashSet<Material>());
+		toolMaterials.get(tool).addAll(materials);
 	}
 	
 	@Override
 	public boolean isDamageable()		{return !unbreakable;}
 	public ItemWeapon setBreakable()	{unbreakable=false;	return this;}
 	public ItemWeapon setUnbreakable()	{unbreakable=true;	return this;}
+	
+	public float getEfficiency()		{return efficiency;}
 }

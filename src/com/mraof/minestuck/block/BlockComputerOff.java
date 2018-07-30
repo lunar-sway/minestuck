@@ -29,8 +29,8 @@ import java.util.List;
 public class BlockComputerOff extends Block
 {
 	protected static final AxisAlignedBB COMPUTER_AABB = new AxisAlignedBB(1/16D, 0.0D, 1/16D, 15/16D, 1/8D, 15/16D);
-	protected static final AxisAlignedBB[] COMPUTER_SCREEN_AABB = {new AxisAlignedBB(0.5/16D, 0.0D, 6/16D, 15.5/16D, 13/16D, 7.2/16D), new AxisAlignedBB(8.8/16D, 0.0D, 0.5/16D, 10/16D, 13/16D, 15.5/16), new AxisAlignedBB(0.5/16D, 0.0D, 8.8/16D, 15.5/16D, 13/16D, 10/16D), new AxisAlignedBB(6/16D, 0.0D, 0.5/16D, 7.2/16D, 13/16D, 15.5/16D)};
-
+	protected static final AxisAlignedBB COMPUTER_SCREEN_AABB = new AxisAlignedBB(0.5/16D, 0.0D, 6/16D, 15.5/16D, 13/16D, 7.2/16D);
+	
 	public static final PropertyDirection DIRECTION = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 	
 	public BlockComputerOff()
@@ -42,6 +42,27 @@ public class BlockComputerOff extends Block
 		this.setCreativeTab(TabMinestuck.instance);
 		lightOpacity = 1;
 		this.translucent = true;
+	}
+	
+	public AxisAlignedBB modifyAABBForDirection(EnumFacing facing, AxisAlignedBB bb)
+	{
+		AxisAlignedBB out = null;
+		switch(facing.ordinal())
+		{
+		case 2:	//North
+			out = new AxisAlignedBB(bb.minX, bb.minY, bb.minZ, bb.maxX, bb.maxY, bb.maxZ);
+			break;
+		case 3:	//South
+			out = new AxisAlignedBB(1-bb.maxX, bb.minY, 1-bb.maxZ, 1-bb.minX, bb.maxY, 1-bb.minZ);
+			break;
+		case 4:	//West
+			out = new AxisAlignedBB(bb.minZ, bb.minY, 1-bb.maxX, bb.maxZ, bb.maxY, 1-bb.minX);
+			break;
+		case 5:	//East
+			out = new AxisAlignedBB(1-bb.maxZ, bb.minY, bb.minX, 1-bb.minZ, bb.maxY, bb.maxX);
+			break;
+		}
+		return out;
 	}
 	
 	@Override
@@ -157,10 +178,12 @@ public class BlockComputerOff extends Block
 	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_)
 	{
 		super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn, p_185477_7_);
-		EnumFacing rotation = state.getValue(DIRECTION);
-		AxisAlignedBB bb = COMPUTER_SCREEN_AABB[rotation.getHorizontalIndex()].offset(pos);
-		if(entityBox.intersects(bb))
-			collidingBoxes.add(bb);
+		if(state.getBlock() == MinestuckBlocks.blockComputerOff)
+		{
+			AxisAlignedBB bb = modifyAABBForDirection(state.getValue(DIRECTION), COMPUTER_SCREEN_AABB).offset(pos);
+			if(entityBox.intersects(bb))
+				collidingBoxes.add(bb);
+		}
 	}
 	
 	@Override

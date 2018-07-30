@@ -1,5 +1,7 @@
 package com.mraof.minestuck.item.block;
 
+import com.mraof.minestuck.block.BlockLayered;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
@@ -10,8 +12,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import com.mraof.minestuck.block.BlockLayered;
 
 public class ItemBlockLayered extends ItemBlock
 {

@@ -2,16 +2,16 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "minestuck:glowing_planks"
+      "minecraft:sugar"
     ]
   },
   "criteria": {
-    "has_log": {
+    "has_block": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "minestuck:glowing_log"
+            "item": "minestuck:sugar_cube"
           }
         ]
       }
@@ -19,13 +19,13 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "minestuck:glowing_planks"
+        "recipe": "minecraft:sugar"
       }
     }
   },
   "requirements": [
     [
-      "has_log",
+      "has_block",
       "has_the_recipe"
     ]
   ]

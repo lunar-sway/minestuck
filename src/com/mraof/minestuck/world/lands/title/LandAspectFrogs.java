@@ -16,16 +16,4 @@ public class LandAspectFrogs extends TitleLandAspect
 	{
 		return new String[]{"frog"};
 	}
-	
-	@Override
-	protected void prepareChunkProvider(ChunkProviderLands chunkProvider)
-	{
-		
-	}
-	
-	@Override
-	protected void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
-	{
-		
-	}
 }

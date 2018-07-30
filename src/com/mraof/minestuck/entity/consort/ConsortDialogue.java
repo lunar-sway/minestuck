@@ -121,11 +121,12 @@ public class ConsortDialogue
 		addMessage(new ChoiceMessage(new SingleMessage("mushroomPizza"),
 				new SingleMessage[]{new SingleMessage("mushroomPizza.on"), new SingleMessage("mushroomPizza.off")},
 				new MessageType[]{new SingleMessage("mushroomPizza.on.consortReply"), new SingleMessage("mushroomPizza.off.consortReply")})).landTerrain(fromNameTerrain("shade"));
-		addMessage("fireHazard").landTerrain(fromNameTerrain("shade"), fromNameTerrain("wood")).landTitle(allExcept(fromNameTitle("thunder")));
+		addMessage("fireHazard").landTerrain(fromNameTerrain("shade")).landTitle(allExcept(fromNameTitle("thunder")));
 		addMessage("gettingHot").landTerrain(fromNameTerrain("heat"));
 		addMessage("stepIntoFire").landTerrain(fromNameTerrain("heat"));
 		addMessage("lavaCrickets").landTerrain(fromNameTerrain("heat"));
-		addMessage("properFuneral").landTerrain(fromNameTerrain("wood"));
+		
+		addMessage("woodTreatments").landTerrain(fromNameTerrain("wood"));
 		addMessage(new ChainMessage(new SingleMessage("splinters.1"), new SingleMessage("splinters.2"))).landTerrain(fromNameTerrain("wood"));
 		
 		addMessage("sandSurfing").landTerrain(fromNameTerrain("sand"));
@@ -145,6 +146,41 @@ public class ConsortDialogue
 		addMessage("rockfu", "landName").landTerrain(fromNameTerrain("rock"));
 		addMessage("allTrees").landTerrain(fromNameTerrain("forest"));
 		addMessage("reallyLikesTrees").landTerrain(fromNameTerrain("forest"));
+		addMessage("genericGreen").landTerrain(fromNameTerrain("rainbow"));
+		addMessage("overwhelmingColors").landTerrain(fromNameTerrain("rainbow"));
+		addMessage("sawRainbow").landTerrain(fromNameTerrain("rainbow"));
+		addMessage("sunglasses").landTerrain(fromNameTerrain("rainbow"));
+		addMessage("whatIsWool").landTerrain(fromNameTerrain("rainbow"));
+		addMessage("loveColors").landTerrain(fromNameTerrain("rainbow"));
+		addMessage(new ChainMessage(new SingleMessage("typesOfColors.1"), new SingleMessage("typesOfColors.2"), new SingleMessage("typesOfColors.3"),
+				new SingleMessage("typesOfColors.4"), new SingleMessage("typesOfColors.5"), new SingleMessage("typesOfColors.6"), new SingleMessage("typesOfColors.7"), new SingleMessage("typesOfColors.8"),
+				new SingleMessage("typesOfColors.9"), new SingleMessage("typesOfColors.10"), new SingleMessage("typesOfColors.11"), new SingleMessage("typesOfColors.12"), new SingleMessage("typesOfColors.13"),
+				new SingleMessage("typesOfColors.14"), new SingleMessage("typesOfColors.15"), new SingleMessage("typesOfColors.16"), new SingleMessage("typesOfColors.17"), new SingleMessage("typesOfColors.18")))
+				.landTerrain(fromNameTerrain("rainbow"));
+		addMessage("atTheEnd").landTerrain(fromNameTerrain("end"));
+		addMessage("chorusFruit").landTerrain(fromNameTerrain("end"));
+		addMessage("endGrass").landTerrain(fromNameTerrain("end"));
+		addMessage("grassCurse", "denizen").landTerrain(fromNameTerrain("end"));
+		addMessage("uselessPogo").landTerrain(fromNameTerrain("end"));
+		addMessage("uselessElytra").landTerrain(fromNameTerrain("end"));
+		
+		addMessage("genericGreen").landTerrain(fromNameTerrain("rainbow"));
+		addMessage("overwhelmingColors").landTerrain(fromNameTerrain("rainbow"));
+		addMessage("sawRainbow").landTerrain(fromNameTerrain("rainbow"));
+		addMessage("sunglasses").landTerrain(fromNameTerrain("rainbow"));
+		addMessage("whatIsWool").landTerrain(fromNameTerrain("rainbow"));
+		addMessage("loveColors").landTerrain(fromNameTerrain("rainbow"));
+		addMessage(new ChainMessage(new SingleMessage("typesOfColors.1"), new SingleMessage("typesOfColors.2"), new SingleMessage("typesOfColors.3"), new SingleMessage("typesOfColors.4"),
+				new SingleMessage("typesOfColors.5"), new SingleMessage("typesOfColors.6"), new SingleMessage("typesOfColors.7"), new SingleMessage("typesOfColors.8"),
+				new SingleMessage("typesOfColors.9"), new SingleMessage("typesOfColors.10"), new SingleMessage("typesOfColors.11"), new SingleMessage("typesOfColors.12"),
+				new SingleMessage("typesOfColors.13"), new SingleMessage("typesOfColors.14"), new SingleMessage("typesOfColors.15"), new SingleMessage("typesOfColors.16"),
+				new SingleMessage("typesOfColors.17"), new SingleMessage("typesOfColors.18"))).landTerrain(fromNameTerrain("rainbow"));
+		addMessage("atTheEnd").landTerrain(fromNameTerrain("rainbow"));
+		addMessage("chorusFruit").landTerrain(fromNameTerrain("rainbow"));
+		addMessage("endGrass").landTerrain(fromNameTerrain("rainbow"));
+		addMessage("grassCurse", "denizen").landTerrain(fromNameTerrain("rainbow"));
+		addMessage("uselessPogo").landTerrain(fromNameTerrain("rainbow"));
+		addMessage("uselessElytra").landTerrain(fromNameTerrain("rainbow"));
 		
 		addMessage("denizenMention").reqLand();
 		addMessage("floatingIsland").consortReq(consort -> consort.getDistanceSq(consort.world.getSpawnPoint()) < 65536).reqLand();

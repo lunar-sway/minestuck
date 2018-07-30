@@ -1,6 +1,9 @@
 package com.mraof.minestuck.event;
 
 import com.mraof.minestuck.block.BlockFluidGrist;
+import com.mraof.minestuck.item.ItemMinestuckBucket;
+import com.mraof.minestuck.item.MinestuckItems;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -10,8 +13,6 @@ import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import com.mraof.minestuck.item.MinestuckItems;
 
 public class MinestuckFluidHandler
 {
@@ -34,13 +35,14 @@ public class MinestuckFluidHandler
 	
 	private ItemStack fillCustomBucket(World world, RayTraceResult pos)
 	{
-		
+		ItemMinestuckBucket bucket = (ItemMinestuckBucket)(MinestuckItems.minestuckBucket);
 		IBlockState block = world.getBlockState(pos.getBlockPos());
+		
 		//TODO add same checks as used in buckets class
-		if (MinestuckItems.minestuckBucket.fillFluids.contains(block)) 
+		if (bucket.fillFluids.contains(block)) 
 		{
 			world.setBlockToAir(pos.getBlockPos());
-			return new ItemStack(MinestuckItems.minestuckBucket, 1, MinestuckItems.minestuckBucket.fillFluids.indexOf(block));
+			return new ItemStack(MinestuckItems.minestuckBucket, 1, bucket.fillFluids.indexOf(block));
 		} else
 			return null;
 		

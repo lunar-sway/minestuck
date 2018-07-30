@@ -155,6 +155,8 @@ public class MinestuckModelManager
 		register(minestuckBucket, 0, "bucket_oil");
 		register(minestuckBucket, 1, "bucket_blood");
 		register(minestuckBucket, 2, "bucket_brain_juice");
+		register(minestuckBucket, 3, "bucket_watercolors");
+		register(minestuckBucket, 4, "bucket_ender");
 		for(int i = 0; i < ItemModus.NAMES.length; i++)
 			register(modusCard, i, "modus_" + ItemModus.NAMES[i]);
 		register(goldSeeds);
@@ -222,18 +224,23 @@ public class MinestuckModelManager
 		register(oreCruxite, 2, "cruxite_cobblestone");
 		register(oreCruxite, 3, "cruxite_sandstone");
 		register(oreCruxite, 4, "cruxite_sandstone_red");
+		register(oreCruxite, 5, "cruxite_end_stone");
 		register(oreUranium, 0, "uranium_stone");
 		register(oreUranium, 1, "uranium_netherrack");
 		register(oreUranium, 2, "uranium_cobblestone");
 		register(oreUranium, 3, "uranium_sandstone");
 		register(oreUranium, 4, "uranium_sandstone_red");
+		register(oreUranium, 5, "uranium_end_stone");
 		register(cruxiteBlock);
+		register(uraniumBlock);
 		register(genericObject);
 		register(coalOreNetherrack);
+		register(ironOreEndStone);
 		register(ironOreSandstone);
 		register(ironOreSandstoneRed);
 		register(goldOreSandstone);
 		register(goldOreSandstoneRed);
+		register(redstoneOreEndStone);
 		for(BlockColoredDirt.BlockType type : BlockColoredDirt.BlockType.values())
 			register(coloredDirt, type.ordinal(), "colored_dirt_"+type.name);
 		register(layeredSand);
@@ -255,8 +262,31 @@ public class MinestuckModelManager
 		register(shadeBrickStairs);
 		register(frostBrickStairs);
 		register(castIronStairs);
+		
 		for(BlockMinestuckLog.BlockType type : BlockMinestuckLog.BlockType.values())
 			register(log, type.ordinal(), type.getName()+"_log");
+		
+		for(BlockMinestuckPlanks.BlockType type : BlockMinestuckPlanks.BlockType.values())
+			register(planks, type.ordinal(), type.getName()+"_planks");
+		
+		for(BlockMinestuckLeaves1.BlockType type : BlockMinestuckLeaves1.BlockType.values())
+			register(leaves1, type.ordinal(), type.getName()+"_leaves");
+		
+		for(BlockAspectSapling.BlockType type : BlockAspectSapling.BlockType.values())
+			register(aspectSapling, type.ordinal(), type.getName()+"_sapling");
+		
+		register(rainbowSapling);
+		
+		for(BlockAspectLog.BlockType type : BlockAspectLog.BlockType.values())
+			register(aspectLog1, type.ordinal(), type.getName()+"_log");
+		for(BlockAspectLog2.BlockType type : BlockAspectLog2.BlockType.values())
+			register(aspectLog2, type.ordinal(), type.getName()+"_log");
+		for(BlockAspectLog3.BlockType type : BlockAspectLog3.BlockType.values())
+			register(aspectLog3, type.ordinal(), type.getName()+"_log");
+		
+		for(BlockVanityLaptopOff.BlockType type : BlockVanityLaptopOff.BlockType.values())
+			register(blockLaptopOff, type.ordinal(), type.getName()+"_computer");
+		
 		register(woodenCactus);
 		register(sugarCube);
 		register(appleCake);
@@ -265,6 +295,16 @@ public class MinestuckModelManager
 		register(redCake);
 		register(hotCake);
 		register(reverseCake);
+		
+		register(floweryMossBrick);
+		register(floweryMossStone);
+		register(treatedPlanks);
+		register(coarseEndStone);
+		register(endLog);
+		register(endLeaves);
+		register(endPlanks);
+		register(endSapling);
+		register(endGrass);
 		
 		register(primedTnt);
 		register(unstableTnt);
@@ -277,10 +317,17 @@ public class MinestuckModelManager
 		ModelLoader.setCustomStateMapper(blockOil, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
 		ModelLoader.setCustomStateMapper(blockBlood, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
 		ModelLoader.setCustomStateMapper(blockBrainJuice, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
+		ModelLoader.setCustomStateMapper(blockWatercolors, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
+		ModelLoader.setCustomStateMapper(blockEnder, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
 		ModelLoader.setCustomStateMapper(primedTnt, (new StateMap.Builder()).ignore(BlockTNT.EXPLODE).build());
 		ModelLoader.setCustomStateMapper(unstableTnt, (new StateMap.Builder()).ignore(BlockTNT.EXPLODE).build());
 		ModelLoader.setCustomStateMapper(instantTnt, (new StateMap.Builder()).ignore(BlockTNT.EXPLODE).build());
 		ModelLoader.setCustomStateMapper(log, (new StateMap.Builder()).withName(BlockMinestuckLog.VARIANT).withSuffix("_log").build());
+		ModelLoader.setCustomStateMapper(leaves1, (new StateMap.Builder()).withName(BlockMinestuckLeaves1.VARIANT).withSuffix("_leaves").build());
+		ModelLoader.setCustomStateMapper(aspectSapling, (new StateMap.Builder()).withName(BlockAspectSapling.VARIANT).withSuffix("_sapling").build());
+		ModelLoader.setCustomStateMapper(aspectLog1, (new StateMap.Builder()).withName(BlockAspectLog.VARIANT).withSuffix("_log").build());
+		ModelLoader.setCustomStateMapper(aspectLog2, (new StateMap.Builder()).withName(BlockAspectLog2.VARIANT).withSuffix("_log").build());
+		ModelLoader.setCustomStateMapper(aspectLog3, (new StateMap.Builder()).withName(BlockAspectLog3.VARIANT).withSuffix("_log").build());
 		ModelLoader.setCustomStateMapper(woodenCactus, new StateMap.Builder().ignore(BlockCactus.AGE).build());
 		ModelLoader.setCustomStateMapper(returnNode, (Block block) -> Collections.emptyMap());
 		ModelLoader.setCustomStateMapper(gate, (Block block) -> Collections.emptyMap());
