@@ -64,10 +64,11 @@ public class BlockMinestuckPlanks extends Block
 	@Override
 	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items)
 	{
-		for(BlockType type : BlockType.values())
+		/*for(BlockType type : BlockType.values())
 		{
 			items.add(new ItemStack(this, 1, type.ordinal()));
-		}
+		}*/
+		items.add(new ItemStack(this, 1, BlockType.RAINBOW.ordinal()));
 	}
 	
 	@Override
