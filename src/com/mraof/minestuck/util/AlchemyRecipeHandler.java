@@ -49,7 +49,7 @@ public class AlchemyRecipeHandler
 	public static final ResourceLocation CONSORT_GENERAL_STOCK = new ResourceLocation("minestuck", "gameplay/consort_general");
 	
 	private static HashMap<Integer, List<IRecipe>> recipeList;
-	private static HashMap<Integer, Boolean> lookedOver;
+	private static HashSet<Integer> lookedOver;
 	private static int returned = 0;
 
 	public static void registerVanillaRecipes() {
@@ -550,18 +550,20 @@ public class AlchemyRecipeHandler
 		OreDictionary.registerOre("oreGold", goldOreSandstone);
 		OreDictionary.registerOre("oreGold", goldOreSandstoneRed);
 		OreDictionary.registerOre("oreRedstone", redstoneOreEndStone);
-
-		OreDictionary.registerOre("plankWood",	endPlanks);
-		OreDictionary.registerOre("logWood",	endLog);
-		OreDictionary.registerOre("treeSapling",endSapling);
-		OreDictionary.registerOre("treeLeaves",	endLeaves);
-		OreDictionary.registerOre("plankWood",	glowingPlanks);
+		
+		OreDictionary.registerOre("dirt", new ItemStack(coloredDirt, 1, WILDCARD_VALUE));
+		
+		OreDictionary.registerOre("plankWood", glowingPlanks);
+		OreDictionary.registerOre("plankWood", endPlanks);
+		OreDictionary.registerOre("plankWood", treatedPlanks);
+		OreDictionary.registerOre("plankWood",	new ItemStack(planks, 1, WILDCARD_VALUE));
 		OreDictionary.registerOre("logWood",	glowingLog);
-		OreDictionary.registerOre("treeLeaves",	new ItemStack(leaves1, 1, OreDictionary.WILDCARD_VALUE));
-		OreDictionary.registerOre("logWood",	new ItemStack(log, 1, OreDictionary.WILDCARD_VALUE));
-		OreDictionary.registerOre("plankWood",	new ItemStack(planks, 1, OreDictionary.WILDCARD_VALUE));
+		OreDictionary.registerOre("logWood", endLog);
+		OreDictionary.registerOre("logWood",	new ItemStack(log, 1, WILDCARD_VALUE));
+		OreDictionary.registerOre("treeSapling",endSapling);
 		OreDictionary.registerOre("treeSapling",rainbowSapling);
-		OreDictionary.registerOre("plankWood",	treatedPlanks);
+		OreDictionary.registerOre("treeLeaves",	endLeaves);
+		OreDictionary.registerOre("treeLeaves",	new ItemStack(leaves1, 1, WILDCARD_VALUE));
 		
 		coalOreNetherrack.setHarvestLevel("pickaxe", Blocks.COAL_ORE.getHarvestLevel(Blocks.COAL_ORE.getDefaultState()));
 		ironOreEndStone.setHarvestLevel("pickaxe", Blocks.IRON_ORE.getHarvestLevel(Blocks.IRON_ORE.getDefaultState()));
@@ -1321,7 +1323,7 @@ public class AlchemyRecipeHandler
 			boolean b = false;
 			for(IRecipe recipe : pairs.getValue())
 			{
-				lookedOver = new HashMap<>();
+				lookedOver = new HashSet<>();
 				try
 				{
 					b = checkRecipe(recipe);
@@ -1341,13 +1343,14 @@ public class AlchemyRecipeHandler
 	
 	private static boolean checkRecipe(IRecipe recipe)
 	{
-		if(GristRegistry.getGristConversion(recipe.getRecipeOutput()) != null)
+		ItemStack output = recipe.getRecipeOutput();
+		if(GristRegistry.getGristConversion(output) != null)
 			return true;
-		if(lookedOver.get(RecipeItemHelper.pack(recipe.getRecipeOutput())) != null)
+		if(lookedOver.contains(RecipeItemHelper.pack(output)))
 		{
 			return false;
 		} else {
-			lookedOver.put(RecipeItemHelper.pack(recipe.getRecipeOutput()), true);
+			lookedOver.add(RecipeItemHelper.pack(output));
 		}
 		
 		GristSet set = new GristSet();
@@ -1366,8 +1369,8 @@ public class AlchemyRecipeHandler
 			set.addGrist(ingrCost);
 		}
 		
-		set.scaleGrist(1/(float)recipe.getRecipeOutput().getCount());
-		GristRegistry.addGristConversion(recipe.getRecipeOutput(),recipe.getRecipeOutput().getHasSubtypes(),set);
+		set.scaleGrist(1/ (float) output.getCount());
+		GristRegistry.addGristConversion(output, output.getHasSubtypes(), set);
 		
 		returned ++;
 		return true;
