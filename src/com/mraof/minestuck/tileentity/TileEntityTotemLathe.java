@@ -4,8 +4,8 @@ package com.mraof.minestuck.tileentity;
 import com.mraof.minestuck.block.BlockTotemLathe;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.CombinationRegistry;
+import com.mraof.minestuck.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.alchemy.CombinationRegistry;
 
 import com.mraof.minestuck.util.Debug;
 import net.minecraft.block.state.IBlockState;
@@ -318,23 +318,23 @@ public class TileEntityTotemLathe extends TileEntity
 		ItemStack dowel = getDowel();
 		ItemStack output;
 		boolean success = false;
-		if(!dowel.isEmpty() && !AlchemyRecipeHandler.hasDecodedItem(dowel) &&  (!card1.isEmpty() || !card2.isEmpty()))
+		if(!dowel.isEmpty() && !AlchemyRecipes.hasDecodedItem(dowel) &&  (!card1.isEmpty() || !card2.isEmpty()))
 		{
 			if(!card1.isEmpty() && !card2.isEmpty())
 				if(!card1.hasTagCompound() || !card1.getTagCompound().getBoolean("punched") || !card2.hasTagCompound() || !card2.getTagCompound().getBoolean("punched"))
 					output = new ItemStack(MinestuckBlocks.genericObject);
-				else output = CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(card1), AlchemyRecipeHandler.getDecodedItem(card2), CombinationRegistry.Mode.MODE_AND);
+				else output = CombinationRegistry.getCombination(AlchemyRecipes.getDecodedItem(card1), AlchemyRecipes.getDecodedItem(card2), CombinationRegistry.Mode.MODE_AND);
 			else
 			{
 				ItemStack input = card1.isEmpty() ? card2 : card1;
 				if(!input.hasTagCompound() || !input.getTagCompound().getBoolean("punched"))
 					output = new ItemStack(MinestuckBlocks.genericObject);
-				else output = AlchemyRecipeHandler.getDecodedItem(input);
+				else output = AlchemyRecipes.getDecodedItem(input);
 			}
 			
 			if(!output.isEmpty())
 			{
-				ItemStack outputDowel = output.getItem().equals(Item.getItemFromBlock(MinestuckBlocks.genericObject)) ? new ItemStack(MinestuckItems.cruxiteDowel) : AlchemyRecipeHandler.createEncodedItem(output, false);
+				ItemStack outputDowel = output.getItem().equals(Item.getItemFromBlock(MinestuckBlocks.genericObject)) ? new ItemStack(MinestuckItems.cruxiteDowel) : AlchemyRecipes.createEncodedItem(output, false);
 				outputDowel.setItemDamage(dowel.getItemDamage());
 				
 				setDowel(outputDowel);

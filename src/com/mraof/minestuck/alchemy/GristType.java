@@ -1,4 +1,4 @@
-package com.mraof.minestuck.util;
+package com.mraof.minestuck.alchemy;
 
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.item.ItemStack;

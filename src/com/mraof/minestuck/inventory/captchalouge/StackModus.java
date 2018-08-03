@@ -4,7 +4,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.captchalouge.StackGuiHandler;
 import com.mraof.minestuck.client.gui.captchalouge.SylladexGuiHandler;
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
@@ -161,7 +161,7 @@ public class StackModus extends Modus
 		if(asCard)
 		{
 			size--;
-			return AlchemyRecipeHandler.createCard(list.removeFirst(), false);
+			return AlchemyRecipes.createCard(list.removeFirst(), false);
 		}
 		else return list.removeFirst();
 	}

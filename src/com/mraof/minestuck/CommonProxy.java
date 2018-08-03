@@ -1,12 +1,14 @@
 package com.mraof.minestuck;
 
 import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
+import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.MinestuckEntities;
 import com.mraof.minestuck.entity.consort.ConsortDialogue;
+import com.mraof.minestuck.entity.consort.ConsortRewardHandler;
 import com.mraof.minestuck.event.MinestuckFluidHandler;
 import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.item.ItemMinestuckCandy;
@@ -26,8 +28,14 @@ import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.structure.MapGenLandStructure;
 import com.mraof.minestuck.world.lands.structure.village.ConsortVillageComponents;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
+import com.mraof.minestuck.world.storage.loot.MinestuckLoot;
+import com.mraof.minestuck.world.storage.loot.conditions.ConsortLootCondition;
+import com.mraof.minestuck.world.storage.loot.conditions.LandAspectLootCondition;
+import com.mraof.minestuck.world.storage.loot.functions.SetBoondollarCount;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
+import net.minecraft.world.storage.loot.conditions.LootConditionManager;
+import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -94,10 +102,20 @@ public class CommonProxy
 		//update candy
 		((ItemMinestuckCandy) MinestuckItems.candy).updateCandy();
 		
-		//register recipes
-		AlchemyRecipeHandler.registerVanillaRecipes();
-		AlchemyRecipeHandler.registerMinestuckRecipes();
-		AlchemyRecipeHandler.registerModRecipes();
+		//register grist costs and combination recipes
+		AlchemyRecipes.registerVanillaRecipes();
+		AlchemyRecipes.registerMinestuckRecipes();
+		AlchemyRecipes.registerModRecipes();
+		
+		//register smelting recipes and oredictionary
+		CraftingRecipes.registerSmelting();
+		CraftingRecipes.addOredictionary();
+		
+		//register consort shop prices
+		ConsortRewardHandler.registerMinestuckPrices();
+		
+		//Register loot functionality objects
+		MinestuckLoot.registerLootClasses();
 		
 		LandAspectRegistry.registerLandAspects();
 		ConsortDialogue.init();

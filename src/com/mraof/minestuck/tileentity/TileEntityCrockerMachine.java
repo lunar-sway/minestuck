@@ -1,6 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.block.BlockCrockerMachine;
 import com.mraof.minestuck.block.BlockCrockerMachine.MachineType;
 import com.mraof.minestuck.entity.item.EntityGrist;
@@ -22,9 +23,9 @@ public class TileEntityCrockerMachine extends TileEntityMachine
 	
 	public GristSet getGristWidgetResult()
 	{
-		ItemStack item = AlchemyRecipeHandler.getDecodedItem(inv.get(0));
+		ItemStack item = AlchemyRecipes.getDecodedItem(inv.get(0));
 		GristSet gristSet = GristRegistry.getGristConversion(item);
-		if(inv.get(0).getItem() != MinestuckItems.captchaCard || AlchemyRecipeHandler.isPunchedCard(inv.get(0))
+		if(inv.get(0).getItem() != MinestuckItems.captchaCard || AlchemyRecipes.isPunchedCard(inv.get(0))
 				|| item.getItem() == MinestuckItems.captchaCard || gristSet == null)
 			return null;
 		
@@ -85,7 +86,7 @@ public class TileEntityCrockerMachine extends TileEntityMachine
 				else
 				{
 					return (!itemstack.getTagCompound().getBoolean("punched")
-					&& AlchemyRecipeHandler.getDecodedItem(itemstack).getItem() != MinestuckItems.captchaCard);
+					&& AlchemyRecipes.getDecodedItem(itemstack).getItem() != MinestuckItems.captchaCard);
 				}
 			default:
 				return true;

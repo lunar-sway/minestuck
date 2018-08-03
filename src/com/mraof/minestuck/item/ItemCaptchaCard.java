@@ -1,6 +1,6 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -40,7 +40,7 @@ public class ItemCaptchaCard extends Item
 		if(this.isInCreativeTab(tab))
 		{
 			items.add(new ItemStack(this));
-			items.add(AlchemyRecipeHandler.createCard(new ItemStack(MinestuckItems.cruxiteApple), true));
+			items.add(AlchemyRecipes.createCard(new ItemStack(MinestuckItems.cruxiteApple), true));
 		}
 	}
 	
@@ -56,7 +56,7 @@ public class ItemCaptchaCard extends Item
 			if (contentID != null && contentMeta != null && Item.REGISTRY.containsKey(new ResourceLocation(contentID.getString())))
 			{
 				String stackSize = nbttagcompound.getBoolean("punched") ? "" : nbttagcompound.getInteger("contentSize") + "x";
-				tooltip.add("(" + stackSize + (AlchemyRecipeHandler.getDecodedItem(stack)).getDisplayName() + ")");
+				tooltip.add("(" + stackSize + (AlchemyRecipes.getDecodedItem(stack)).getDisplayName() + ")");
 				if(nbttagcompound.getBoolean("punched"))
 					tooltip.add("("+I18n.translateToLocal("item.captchaCard.punched")+")");
 				return;

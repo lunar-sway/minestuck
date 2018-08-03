@@ -6,27 +6,89 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.tileentity.TileEntityUraniumCooker;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IRecipeFactory;
 import net.minecraftforge.common.crafting.JsonContext;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.Map;
 import java.util.Set;
 
+import static com.mraof.minestuck.block.MinestuckBlocks.*;
+import static com.mraof.minestuck.item.MinestuckItems.*;
+
 /**
- * Contains classes for custom recipe types.
+ * Contains classes for custom recipe types, and for smelting, oredict and similar registering
  */
 public class CraftingRecipes
 {
+	
+	public static void registerSmelting()
+	{
+		GameRegistry.addSmelting(goldSeeds, new ItemStack(Items.GOLD_NUGGET), 0.1F);
+		GameRegistry.addSmelting(ironOreEndStone, new ItemStack(Items.IRON_INGOT), 0.7F);
+		GameRegistry.addSmelting(ironOreSandstone, new ItemStack(Items.IRON_INGOT), 0.7F);
+		GameRegistry.addSmelting(ironOreSandstoneRed, new ItemStack(Items.IRON_INGOT), 0.7F);
+		GameRegistry.addSmelting(goldOreSandstone, new ItemStack(Items.GOLD_INGOT), 1.0F);
+		GameRegistry.addSmelting(goldOreSandstoneRed, new ItemStack(Items.GOLD_INGOT), 1.0F);
+		GameRegistry.addSmelting(redstoneOreEndStone, new ItemStack(Items.REDSTONE), 0.7F);
+		GameRegistry.addSmelting(woodenCactus, new ItemStack(Items.COAL, 1, 1), 0.15F);
+		if(MinestuckConfig.cruxtruderIntake)
+			GameRegistry.addSmelting(cruxiteDowel, new ItemStack(MinestuckItems.rawCruxite), 0.0F);
+		
+		GameRegistry.addSmelting(log, new ItemStack(Items.COAL, 1, 1), 0.15F);
+		GameRegistry.addSmelting(endLog, new ItemStack(Items.COAL, 1, 1), 0.15F);
+		
+		TileEntityUraniumCooker.setRadiation(Items.BEEF, new ItemStack(irradiatedSteak));
+		TileEntityUraniumCooker.setRadiation(Items.STICK, new ItemStack(upStick));
+		TileEntityUraniumCooker.setRadiation(Items.MUSHROOM_STEW, new ItemStack(Items.SLIME_BALL));
+		Item ectoSlime = Item.REGISTRY.getObject(new ResourceLocation("minestuckarsenal", "blue_ecto_slime"));
+		if(ectoSlime != null)
+		{
+			TileEntityUraniumCooker.setRadiation(ectoSlime, new ItemStack(Items.SLIME_BALL));
+		}
+	}
+	
+	public static void addOredictionary()
+	{
+		//Register ore dictionary entries
+		OreDictionary.registerOre("oreCoal", coalOreNetherrack);
+		OreDictionary.registerOre("oreIron", ironOreEndStone);
+		OreDictionary.registerOre("oreIron", ironOreSandstone);
+		OreDictionary.registerOre("oreIron", ironOreSandstoneRed);
+		OreDictionary.registerOre("oreGold", goldOreSandstone);
+		OreDictionary.registerOre("oreGold", goldOreSandstoneRed);
+		OreDictionary.registerOre("oreRedstone", redstoneOreEndStone);
+		
+		OreDictionary.registerOre("dirt", new ItemStack(coloredDirt, 1, OreDictionary.WILDCARD_VALUE));
+		
+		OreDictionary.registerOre("plankWood", glowingPlanks);
+		OreDictionary.registerOre("plankWood", endPlanks);
+		OreDictionary.registerOre("plankWood", treatedPlanks);
+		OreDictionary.registerOre("plankWood",	new ItemStack(planks, 1, OreDictionary.WILDCARD_VALUE));
+		OreDictionary.registerOre("logWood",	glowingLog);
+		OreDictionary.registerOre("logWood", endLog);
+		OreDictionary.registerOre("logWood",	new ItemStack(log, 1, OreDictionary.WILDCARD_VALUE));
+		OreDictionary.registerOre("treeSapling",endSapling);
+		OreDictionary.registerOre("treeSapling",rainbowSapling);
+		OreDictionary.registerOre("treeLeaves",	endLeaves);
+		OreDictionary.registerOre("treeLeaves",	new ItemStack(leaves1, 1, OreDictionary.WILDCARD_VALUE));
+	}
 	
 	/**
 	 * Regular recipes can typically be made independent on if the ingredients are put to the left or the right, as long as the shape remains.

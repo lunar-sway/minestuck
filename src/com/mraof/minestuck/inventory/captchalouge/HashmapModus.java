@@ -7,7 +7,7 @@ import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
@@ -177,7 +177,7 @@ public class HashmapModus extends Modus
 			list.remove(id);
 			if(item.isEmpty())
 				return new ItemStack(MinestuckItems.captchaCard);
-			else return AlchemyRecipeHandler.createCard(item, false);
+			else return AlchemyRecipes.createCard(item, false);
 		} else
 		{
 			list.set(id, ItemStack.EMPTY);

@@ -2,7 +2,7 @@ package com.mraof.minestuck.jei;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.util.ColorCollector;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
@@ -66,21 +66,21 @@ public class TotemLatheRecipeCategory implements IRecipeCategory<TotemLatheRecip
 		List<ItemStack> first = new ArrayList<>();
 		for(ItemStack stack : inputs.get(0))
 		{
-			first.add(AlchemyRecipeHandler.createCard(stack, true));
+			first.add(AlchemyRecipes.createCard(stack, true));
 		}
 		stackGroup.set(0, first);
 
 		List<ItemStack> second = new ArrayList<>();
 		for(ItemStack stack : inputs.get(1))
 		{
-			second.add(AlchemyRecipeHandler.createCard(stack, true));
+			second.add(AlchemyRecipes.createCard(stack, true));
 		}
 		stackGroup.set(1, second);
 		
 		stackGroup.set(2, new ItemStack(MinestuckItems.cruxiteDowel, 1, ColorCollector.playerColor + 1));
 		
 		List<ItemStack> outputs = new ArrayList<>(ingredients.getOutputs(ItemStack.class).get(0));
-		ItemStack outputDowel = AlchemyRecipeHandler.createEncodedItem(outputs.get(0), false);
+		ItemStack outputDowel = AlchemyRecipes.createEncodedItem(outputs.get(0), false);
 		outputDowel.setItemDamage(ColorCollector.playerColor + 1);
 		outputs.add(outputDowel);
 		stackGroup.set(3, outputs);

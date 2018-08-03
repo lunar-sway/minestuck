@@ -3,7 +3,7 @@ package com.mraof.minestuck.network;
 import com.mraof.minestuck.inventory.ContainerSburbMachine;
 import com.mraof.minestuck.tileentity.TileEntitySburbMachine;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.GristType;
+import com.mraof.minestuck.alchemy.GristType;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;

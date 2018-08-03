@@ -2,6 +2,7 @@ package com.mraof.minestuck.tileentity;
 
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.block.BlockAlchemiter;
 import com.mraof.minestuck.block.BlockAlchemiter.EnumParts;
 import com.mraof.minestuck.block.MinestuckBlocks;
@@ -9,7 +10,6 @@ import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -50,9 +50,9 @@ public class TileEntityAlchemiter extends TileEntity
 	
 	public ItemStack getOutput()
 	{
-		if (!AlchemyRecipeHandler.hasDecodedItem(dowel))
+		if (!AlchemyRecipes.hasDecodedItem(dowel))
 			return new ItemStack(MinestuckBlocks.genericObject);
-		else return AlchemyRecipeHandler.getDecodedItem(dowel);
+		else return AlchemyRecipes.getDecodedItem(dowel);
 	}
 	
 	/**
@@ -244,7 +244,7 @@ public class TileEntityAlchemiter extends TileEntity
 			EntityItem item = new EntityItem(world, spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), newItem);
 			world.spawnEntity(item);
 			
-			AlchemyRecipeHandler.onAlchemizedItem(newItem, player);
+			AlchemyRecipes.onAlchemizedItem(newItem, player);
 			
 			PlayerIdentifier pid = IdentifierHandler.encode(player);
 			GristHelper.decrease(pid, cost);

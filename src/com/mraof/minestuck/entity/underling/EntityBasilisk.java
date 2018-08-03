@@ -1,5 +1,8 @@
 package com.mraof.minestuck.entity.underling;
 
+import com.mraof.minestuck.alchemy.GristHelper;
+import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.entity.IEntityMultiPart;
 import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
 import com.mraof.minestuck.util.*;
@@ -36,7 +39,7 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	}
 	
 	@Override
-	public GristSet getGristSpoils() 
+	public GristSet getGristSpoils()
 	{
 		return GristHelper.getRandomDrop(type, 6);
 	}

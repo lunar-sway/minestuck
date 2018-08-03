@@ -1,20 +1,13 @@
-package com.mraof.minestuck.util;
+package com.mraof.minestuck.alchemy;
 
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
 import com.mraof.minestuck.block.BlockMinestuckStone;
-import com.mraof.minestuck.entity.consort.ConsortRewardHandler;
 import com.mraof.minestuck.item.ItemCruxiteArtifact;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.modSupport.*;
-import com.mraof.minestuck.tileentity.TileEntityUraniumCooker;
-import com.mraof.minestuck.world.storage.loot.conditions.ConsortLootCondition;
-import com.mraof.minestuck.world.storage.loot.conditions.LandAspectLootCondition;
-import com.mraof.minestuck.world.storage.loot.functions.SetBoondollarCount;
+import com.mraof.minestuck.util.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPrismarine;
 import net.minecraft.block.BlockStoneBrick;
-import net.minecraft.client.util.RecipeItemHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -22,38 +15,24 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.conditions.LootConditionManager;
-import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nonnull;
 import java.util.*;
-import java.util.Map.Entry;
 
 import static com.mraof.minestuck.MinestuckConfig.oreMultiplier;
 import static com.mraof.minestuck.block.MinestuckBlocks.*;
 import static com.mraof.minestuck.item.MinestuckItems.*;
-import static com.mraof.minestuck.util.CombinationRegistry.Mode.*;
+import static com.mraof.minestuck.alchemy.CombinationRegistry.Mode.*;
 import static net.minecraftforge.oredict.OreDictionary.WILDCARD_VALUE;
 
-public class AlchemyRecipeHandler
+public class AlchemyRecipes
 {
-	public static final ResourceLocation BASIC_MEDIUM_CHEST = new ResourceLocation("minestuck", "chests/medium_basic");
-	public static final ResourceLocation CONSORT_JUNK_REWARD = new ResourceLocation("minestuck", "gameplay/consort_junk");
-	public static final ResourceLocation CONSORT_FOOD_STOCK = new ResourceLocation("minestuck", "gameplay/consort_food");
-	public static final ResourceLocation CONSORT_GENERAL_STOCK = new ResourceLocation("minestuck", "gameplay/consort_general");
-	
-	private static HashMap<Integer, List<IRecipe>> recipeList;
-	private static HashSet<Integer> lookedOver;
-	private static int returned = 0;
-
-	public static void registerVanillaRecipes() {
-		
+	public static void registerVanillaRecipes()
+	{
 		//Set up Alchemiter recipes
 		//Blocks
 		GristRegistry.addGristConversion(new ItemStack(Blocks.COBBLESTONE), false, new GristSet(new GristType[] {GristType.Build}, new int[] {2}));
@@ -517,62 +496,8 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Items.FEATHER), new ItemStack(Items.ENDER_PEARL), MODE_OR, new ItemStack(Items.ELYTRA));
 	}
 	
-	public static void registerMinestuckRecipes() {
-		
-		//set up crafting recipes
-		/*RecipeSorter.register("minestuck:notmirrored", CraftingRecipes.NonMirroredRecipe.class, RecipeSorter.Category.SHAPED, "before:minecraft:shaped");
-		RecipeSorter.register("minestuck:emptycard", CraftingRecipes.EmptyCardRecipe.class, RecipeSorter.Category.SHAPED, "before:minecraft:shaped");
-		
-		ItemStack crux = new ItemStack(rawCruxite);
-		ItemStack cruxBl = new ItemStack(cruxiteBlock);
-		ItemStack card = new ItemStack(captchaCard);
-		GameRegistry.addRecipe(new CraftingRecipes.EmptyCardRecipe(3, 1, new ItemStack[]{cruxBl.copy(), card.copy(), crux.copy()}, new ItemStack(modusCard, 1, 0)));
-		GameRegistry.addRecipe(new CraftingRecipes.EmptyCardRecipe(3, 1, new ItemStack[]{crux.copy(), card.copy(), cruxBl.copy()}, new ItemStack(modusCard, 1, 1)));*///TODO Figure out recipe names and groups
-		GameRegistry.addSmelting(goldSeeds, new ItemStack(Items.GOLD_NUGGET), 0.1F);
-		GameRegistry.addSmelting(ironOreEndStone, new ItemStack(Items.IRON_INGOT), 0.7F);
-		GameRegistry.addSmelting(ironOreSandstone, new ItemStack(Items.IRON_INGOT), 0.7F);
-		GameRegistry.addSmelting(ironOreSandstoneRed, new ItemStack(Items.IRON_INGOT), 0.7F);
-		GameRegistry.addSmelting(goldOreSandstone, new ItemStack(Items.GOLD_INGOT), 1.0F);
-		GameRegistry.addSmelting(goldOreSandstoneRed, new ItemStack(Items.GOLD_INGOT), 1.0F);
-		GameRegistry.addSmelting(redstoneOreEndStone, new ItemStack(Items.REDSTONE), 0.7F);
-		GameRegistry.addSmelting(woodenCactus, new ItemStack(Items.COAL, 1, 1), 0.15F);
-		if(MinestuckConfig.cruxtruderIntake)
-			GameRegistry.addSmelting(cruxiteDowel, new ItemStack(MinestuckItems.rawCruxite), 0.0F);
-		
-		GameRegistry.addSmelting(log, new ItemStack(Items.COAL, 1, 1), 0.15F);
-		GameRegistry.addSmelting(endLog, new ItemStack(Items.COAL, 1, 1), 0.15F);
-		
-		//Register ore dictionary entries
-		OreDictionary.registerOre("oreCoal", coalOreNetherrack);
-		OreDictionary.registerOre("oreIron", ironOreEndStone);
-		OreDictionary.registerOre("oreIron", ironOreSandstone);
-		OreDictionary.registerOre("oreIron", ironOreSandstoneRed);
-		OreDictionary.registerOre("oreGold", goldOreSandstone);
-		OreDictionary.registerOre("oreGold", goldOreSandstoneRed);
-		OreDictionary.registerOre("oreRedstone", redstoneOreEndStone);
-		
-		OreDictionary.registerOre("dirt", new ItemStack(coloredDirt, 1, WILDCARD_VALUE));
-		
-		OreDictionary.registerOre("plankWood", glowingPlanks);
-		OreDictionary.registerOre("plankWood", endPlanks);
-		OreDictionary.registerOre("plankWood", treatedPlanks);
-		OreDictionary.registerOre("plankWood",	new ItemStack(planks, 1, WILDCARD_VALUE));
-		OreDictionary.registerOre("logWood",	glowingLog);
-		OreDictionary.registerOre("logWood", endLog);
-		OreDictionary.registerOre("logWood",	new ItemStack(log, 1, WILDCARD_VALUE));
-		OreDictionary.registerOre("treeSapling",endSapling);
-		OreDictionary.registerOre("treeSapling",rainbowSapling);
-		OreDictionary.registerOre("treeLeaves",	endLeaves);
-		OreDictionary.registerOre("treeLeaves",	new ItemStack(leaves1, 1, WILDCARD_VALUE));
-		
-		coalOreNetherrack.setHarvestLevel("pickaxe", Blocks.COAL_ORE.getHarvestLevel(Blocks.COAL_ORE.getDefaultState()));
-		ironOreEndStone.setHarvestLevel("pickaxe", Blocks.IRON_ORE.getHarvestLevel(Blocks.IRON_ORE.getDefaultState()));
-		ironOreSandstone.setHarvestLevel("pickaxe", Blocks.IRON_ORE.getHarvestLevel(Blocks.IRON_ORE.getDefaultState()));
-		ironOreSandstoneRed.setHarvestLevel("pickaxe", Blocks.IRON_ORE.getHarvestLevel(Blocks.IRON_ORE.getDefaultState()));
-		goldOreSandstone.setHarvestLevel("pickaxe", Blocks.GOLD_ORE.getHarvestLevel(Blocks.GOLD_ORE.getDefaultState()));
-		goldOreSandstoneRed.setHarvestLevel("pickaxe", Blocks.GOLD_ORE.getHarvestLevel(Blocks.GOLD_ORE.getDefaultState()));
-		redstoneOreEndStone.setHarvestLevel("pickaxe", Blocks.REDSTONE_ORE.getHarvestLevel(Blocks.REDSTONE_ORE.getDefaultState()));
-		
+	public static void registerMinestuckRecipes()
+	{
 		//add grist conversions
 		GristRegistry.addGristConversion(new ItemStack(coloredDirt, 1, 0), new GristSet(new GristType[] {GristType.Build, GristType.Shale}, new int[] {1, 1}));
 		GristRegistry.addGristConversion(new ItemStack(coloredDirt, 1, 1), new GristSet(new GristType[] {GristType.Build, GristType.Caulk}, new int[] {1, 1}));
@@ -926,15 +851,6 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(rawUranium), new ItemStack(Items.COOKED_BEEF), MODE_OR, new ItemStack(irradiatedSteak));
 		CombinationRegistry.addCombination(new ItemStack(upStick), new ItemStack(energyCore), MODE_AND, new ItemStack(quantumSabre));
 		
-		TileEntityUraniumCooker.setRadiation(Items.BEEF, new ItemStack(irradiatedSteak));
-		TileEntityUraniumCooker.setRadiation(Items.STICK, new ItemStack(upStick));
-		TileEntityUraniumCooker.setRadiation(Items.MUSHROOM_STEW, new ItemStack(Items.SLIME_BALL));
-		Item ectoSlime = Item.REGISTRY.getObject(new ResourceLocation("minestuckarsenal", "blue_ecto_slime"));
-		if(ectoSlime != null)
-		{
-			TileEntityUraniumCooker.setRadiation(ectoSlime, new ItemStack(Items.SLIME_BALL));
-		}
-		
 		//CombinationRegistry.addCombination(new ItemStack(Items.POTIONITEM, 1, 0), new ItemStack(Items.SUGAR), MODE_OR, false, false, new ItemStack(beverage, 1, 0));		//Tab
 		//CombinationRegistry.addCombination(new ItemStack(Items.POTIONITEM, 1, 0), new ItemStack(Items.DYE, 1, 14), MODE_OR, false, true, new ItemStack(beverage, 1, 1));	//Orange F
 		//CombinationRegistry.addCombination(new ItemStack(beverage, 1, 1), new ItemStack(Items.APPLE), MODE_OR, true, false, new ItemStack(beverage, 1, 2));				//CandyApple F
@@ -945,152 +861,6 @@ public class AlchemyRecipeHandler
 		//CombinationRegistry.addCombination(new ItemStack(beverage, 1, 1), new ItemStack(Items.DYE, 1, 10), MODE_OR, true, true, new ItemStack(beverage, 1, 7));			//Moonmist F
 		//CombinationRegistry.addCombination(new ItemStack(beverage, 1, 2), new ItemStack(Items.DYE, 1, 9), MODE_AND, true, true, new ItemStack(beverage, 1, 8));			//Peach F
 		//CombinationRegistry.addCombination(new ItemStack(beverage, 1, 1), new ItemStack(Blocks.TNT), MODE_OR, true, false, new ItemStack(beverage, 1, 9));				//Redpop F
-		
-		ConsortRewardHandler.registerPrice(new ItemStack(onion), 9, 15);
-		ConsortRewardHandler.registerPrice(new ItemStack(jarOfBugs), 12, 18);
-		ConsortRewardHandler.registerPrice(new ItemStack(bugOnAStick), 4, 6);
-		ConsortRewardHandler.registerPrice(new ItemStack(coneOfFlies), 4, 6);
-		ConsortRewardHandler.registerPrice(new ItemStack(grasshopper), 90, 110);
-		ConsortRewardHandler.registerPrice(new ItemStack(salad), 10, 14);
-		ConsortRewardHandler.registerPrice(new ItemStack(chocolateBeetle), 30, 35);
-		ConsortRewardHandler.registerPrice(new ItemStack(glowingMushroom), 10, 15);
-		ConsortRewardHandler.registerPrice(new ItemStack(coldCake), 400, 400);
-		ConsortRewardHandler.registerPrice(new ItemStack(blueCake), 400, 400);
-		ConsortRewardHandler.registerPrice(new ItemStack(hotCake), 400, 400);
-		ConsortRewardHandler.registerPrice(new ItemStack(redCake), 400, 400);
-		ConsortRewardHandler.registerPrice(new ItemStack(rockCookie), 15, 20);
-		ConsortRewardHandler.registerPrice(new ItemStack(beverage, 1, 0), 200, 200);
-		for(int i = 1; i <= 9; i++)
-			ConsortRewardHandler.registerPrice(new ItemStack(beverage, 1, i), 100, 100);
-		ConsortRewardHandler.registerPrice(new ItemStack(goldSeeds), 300, 400);
-		ConsortRewardHandler.registerPrice(new ItemStack(appleCake), 100, 140);
-		ConsortRewardHandler.registerPrice(new ItemStack(irradiatedSteak), 70, 80);
-		ConsortRewardHandler.registerPrice(new ItemStack(candy,1 ,0), 100, 150);
-		for(GristType type : GristType.values())
-			if(type.equals(GristType.Build))
-				ConsortRewardHandler.registerPrice(new ItemStack(candy, 1, type.getId()), 90, 120);
-			else ConsortRewardHandler.registerPrice(new ItemStack(candy, 1, type.getId()), (int) ((1 - type.getRarity())*250), (int) ((1 - type.getRarity())*300));
-		
-		ConsortRewardHandler.registerPrice(new ItemStack(carvingTool), 60, 90);
-		ConsortRewardHandler.registerPrice(new ItemStack(frogStatueReplica), 200, 250);
-		ConsortRewardHandler.registerPrice(new ItemStack(stoneSlab), 20, 30);
-		ConsortRewardHandler.registerPrice(new ItemStack(threshDvd), 350, 400);
-		ConsortRewardHandler.registerPrice(new ItemStack(crewPoster), 350, 400);
-		ConsortRewardHandler.registerPrice(new ItemStack(sbahjPoster), 350, 400);
-		ConsortRewardHandler.registerPrice(new ItemStack(recordEmissaryOfDance), 1000, 1000);
-		ConsortRewardHandler.registerPrice(new ItemStack(recordDanceStab), 1000, 1000);
-		ConsortRewardHandler.registerPrice(new ItemStack(crumplyHat), 80, 100);
-		ConsortRewardHandler.registerPrice(new ItemStack(pogoClub), 900, 1200);
-		ConsortRewardHandler.registerPrice(new ItemStack(metalBat), 400, 500);
-		ConsortRewardHandler.registerPrice(new ItemStack(firePoker), 1500, 2000);
-		ConsortRewardHandler.registerPrice(new ItemStack(copseCrusher), 1000, 1500);
-		ConsortRewardHandler.registerPrice(new ItemStack(katana), 400, 500);
-		ConsortRewardHandler.registerPrice(new ItemStack(cactusCutlass), 500, 700);
-		ConsortRewardHandler.registerPrice(new ItemStack(glowystoneDust), 20, 40);
-		ConsortRewardHandler.registerPrice(new ItemStack(ironCane), 300, 400);
-		ConsortRewardHandler.registerPrice(new ItemStack(glowingLog), 20, 32);
-		ConsortRewardHandler.registerPrice(new ItemStack(glowingPlanks), 5, 8);
-		ConsortRewardHandler.registerPrice(new ItemStack(stone, 1, 0), 5, 8);
-		ConsortRewardHandler.registerPrice(new ItemStack(stone, 1, 1), 8, 15);
-		ConsortRewardHandler.registerPrice(new ItemStack(stone, 1, 2), 5, 8);
-		ConsortRewardHandler.registerPrice(new ItemStack(stone, 1, 3), 5, 8);
-		ConsortRewardHandler.registerPrice(new ItemStack(stone, 1, 4), 5, 8);
-		ConsortRewardHandler.registerPrice(new ItemStack(stone, 1, 5), 5, 8);
-		ConsortRewardHandler.registerPrice(new ItemStack(stone, 1, 7), 5, 8);
-		ConsortRewardHandler.registerPrice(new ItemStack(stone, 1, 8), 8, 15);
-		ConsortRewardHandler.registerPrice(new ItemStack(log, 1, 0), 20, 32);
-		ConsortRewardHandler.registerPrice(new ItemStack(log, 1, 1), 25, 40);
-		ConsortRewardHandler.registerPrice(new ItemStack(log, 1, 2), 20, 32);
-		ConsortRewardHandler.registerPrice(new ItemStack(woodenCactus), 50, 60);
-		ConsortRewardHandler.registerPrice(new ItemStack(sugarCube), 200, 240);
-		
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.POTATO), 12, 15);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.MUSHROOM_STEW), 95, 130);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.CARROT), 15, 18);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.APPLE), 25, 30);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.WHEAT), 10, 15);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.WHEAT_SEEDS), 15, 20);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.BEETROOT_SOUP), 70, 90);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.BEETROOT), 10, 15);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.BEEF), 110, 130);
-		ConsortRewardHandler.registerPrice(new ItemStack(Blocks.RED_MUSHROOM), 15, 20);
-		ConsortRewardHandler.registerPrice(new ItemStack(Blocks.BROWN_MUSHROOM), 10, 15);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.DYE, 1, 3), 25, 35);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.POTIONITEM), 5, 10);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.FISH, 1, 1), 40, 60);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.MILK_BUCKET), 40, 50);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.EGG), 30, 45);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.SUGAR), 50, 80);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.RABBIT_STEW), 130, 150);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.POISONOUS_POTATO), 50, 60);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.MELON), 70, 80);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.FISH, 1, 0), 90, 100);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.COOKIE), 120, 150);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.PUMPKIN_PIE), 120, 160);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.GOLDEN_APPLE), 2500, 2500);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.DYE, 1, 4), 25, 35);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.FEATHER), 25, 35);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.FLINT), 5, 10);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.STONE_AXE), 250, 300);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.EMERALD), 400, 500);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.SLIME_BALL), 30, 40);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.COAL, 1, 0), 70, 90);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.COAL, 1, 1), 50, 70);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.CLAY_BALL), 5, 10);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.IRON_INGOT), 90, 120);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.QUARTZ), 60, 80);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.BLAZE_POWDER), 80, 100);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.NETHERBRICK), 5, 10);
-		ConsortRewardHandler.registerPrice(new ItemStack(Blocks.SAPLING, 1, 0), 60, 90);
-		ConsortRewardHandler.registerPrice(new ItemStack(Blocks.SAPLING, 1, 1), 60, 90);
-		ConsortRewardHandler.registerPrice(new ItemStack(Blocks.SAPLING, 1, 2), 60, 90);
-		ConsortRewardHandler.registerPrice(new ItemStack(Blocks.SAPLING, 1, 3), 60, 90);
-		ConsortRewardHandler.registerPrice(new ItemStack(Blocks.SAPLING, 1, 4), 60, 90);
-		ConsortRewardHandler.registerPrice(new ItemStack(Blocks.SAPLING, 1, 5), 60, 90);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.DIAMOND), 800, 1200);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.PRISMARINE_CRYSTALS), 100, 150);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.PRISMARINE_SHARD), 10, 15);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.GOLD_INGOT), 120, 180);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.LEATHER), 65, 80);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.GOLDEN_SWORD), 900, 1200);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.REDSTONE), 30, 40);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.GUNPOWDER), 50, 65);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.BUCKET), 50, 65);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.CLOCK), 150, 200);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.RABBIT_FOOT), 80, 100);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.BOOK), 50, 65);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.ROTTEN_FLESH), 1, 5);
-		ConsortRewardHandler.registerPrice(new ItemStack(Blocks.LOG, 1, 0), 20, 32);
-		ConsortRewardHandler.registerPrice(new ItemStack(Blocks.LOG, 1, 1), 20, 32);
-		ConsortRewardHandler.registerPrice(new ItemStack(Blocks.LOG, 1, 2), 20, 32);
-		ConsortRewardHandler.registerPrice(new ItemStack(Blocks.LOG, 1, 3), 20, 32);
-		ConsortRewardHandler.registerPrice(new ItemStack(Blocks.STONE, 1, 2), 5, 10);
-		ConsortRewardHandler.registerPrice(new ItemStack(Blocks.STONE, 1, 6), 5, 10);
-		ConsortRewardHandler.registerPrice(new ItemStack(Blocks.NETHER_BRICK), 5, 10);
-		ConsortRewardHandler.registerPrice(new ItemStack(Blocks.RED_NETHER_BRICK), 10, 15);
-		ConsortRewardHandler.registerPrice(new ItemStack(Blocks.PLANKS, 1, 0), 5, 8);
-		ConsortRewardHandler.registerPrice(new ItemStack(Blocks.PRISMARINE, 1, 0), 5, 10);
-		ConsortRewardHandler.registerPrice(new ItemStack(Blocks.PRISMARINE, 1, 1), 10, 15);
-		ConsortRewardHandler.registerPrice(new ItemStack(Blocks.CACTUS), 30, 40);
-		ConsortRewardHandler.registerPrice(new ItemStack(Blocks.SANDSTONE, 1, 0), 5, 10);
-		ConsortRewardHandler.registerPrice(new ItemStack(Blocks.SANDSTONE, 1, 1), 10, 15);
-		ConsortRewardHandler.registerPrice(new ItemStack(Blocks.RED_SANDSTONE, 1, 2), 5, 10);
-		ConsortRewardHandler.registerPrice(new ItemStack(Blocks.RED_SANDSTONE, 1, 0), 5, 10);
-		ConsortRewardHandler.registerPrice(new ItemStack(Blocks.RED_SANDSTONE, 1, 1), 10, 15);
-		ConsortRewardHandler.registerPrice(new ItemStack(Blocks.RED_SANDSTONE, 1, 2), 5, 10);
-		ConsortRewardHandler.registerPrice(new ItemStack(Blocks.STONEBRICK, 1, 0), 5, 10);
-		ConsortRewardHandler.registerPrice(new ItemStack(Blocks.STONEBRICK, 1, 3), 10, 15);
-		
-		//Register chest loot
-		LootConditionManager.registerCondition(new LandAspectLootCondition.Serializer());
-		LootConditionManager.registerCondition(new ConsortLootCondition.Serializer());
-		LootFunctionManager.registerFunction(new SetBoondollarCount.Serializer());
-		/*if(MinestuckConfig.cardLoot)
-		{
-			ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(new WeightedRandomChestContent(captchaCard, 0, 1, 3, 10));
-			ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_CROSSING).addItem(new WeightedRandomChestContent(captchaCard, 0, 1, 2, 8));
-			ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_CORRIDOR).addItem(new WeightedRandomChestContent(captchaCard, 0, 1, 4, 10));
-		}*/
 		
 	}
 	
@@ -1158,6 +928,14 @@ public class AlchemyRecipeHandler
 		registerRecipes(new ExtraUtilitiesSupport(), "extrautils2", false);
 		registerRecipes(new TinkersConstructSupport(), "TConstruct", false);
 		
+	}
+	
+	public static void registerAutomaticRecipes()
+	{
+		AutoGristGenerator autogrist = new AutoGristGenerator();
+		autogrist.excecute();
+		
+		registerRecipes(new Minegicka3Support(), "minegicka3", true);
 	}
 	
 	public static void onAlchemizedItem(ItemStack stack, EntityPlayer player)
@@ -1285,148 +1063,6 @@ public class AlchemyRecipeHandler
 		return stack;
 	}
 	
-	/**
-	 * Adds all the recipes that are based on the existing vanilla crafting registries, like grist conversions of items composed of oither things.
-	 */
-	public static void registerDynamicRecipes() {
-		
-		recipeList = new HashMap<>();
-		
-		Debug.debug("Looking for dynamic grist conversions...");
-		for (IRecipe recipe : CraftingManager.REGISTRY)
-		{
-			try
-			{
-				if(recipe.isDynamic())
-					continue;
-				ItemStack output = recipe.getRecipeOutput();
-				if(output.isEmpty())
-					continue;
-				int param = RecipeItemHelper.pack(output);
-				
-				if(!recipeList.containsKey(param))
-					recipeList.put(param, new ArrayList<>());
-				recipeList.get(param).add(recipe);
-				
-			} catch(NullPointerException e)
-			{
-				Debug.logger.warn(String.format("A null pointer exception was thrown for %s. This was not expected. Stacktrace: ", recipe), e);
-			}
-		}
-		Debug.info("Found "+recipeList.size()+" nondynamic recipes.");
-		
-		Debug.debug("Calculating grist conversion...");
-		Iterator<Entry<Integer, List<IRecipe>>> it = recipeList.entrySet().iterator();
-		while(it.hasNext())
-		{
-			Entry<Integer, List<IRecipe>> pairs = it.next();
-			boolean b = false;
-			for(IRecipe recipe : pairs.getValue())
-			{
-				lookedOver = new HashSet<>();
-				try
-				{
-					b = checkRecipe(recipe);
-				} catch(Exception e)
-				{
-					Debug.logger.warn(String.format("Failed to look over recipe \"%s\" for \"%s\". Cause:", pairs.getValue(), RecipeItemHelper.unpack(pairs.getKey())), e);
-				}
-				if(b)
-					break;
-			}
-		}
-		
-		registerRecipes(new Minegicka3Support(), "minegicka3", true);
-		
-		Debug.info("Added "+returned+" grist conversions.");
-	}
-	
-	private static boolean checkRecipe(IRecipe recipe)
-	{
-		ItemStack output = recipe.getRecipeOutput();
-		if(GristRegistry.getGristConversion(output) != null)
-			return true;
-		if(lookedOver.contains(RecipeItemHelper.pack(output)))
-		{
-			return false;
-		} else {
-			lookedOver.add(RecipeItemHelper.pack(output));
-		}
-		
-		GristSet set = new GristSet();
-		for(Ingredient ingredient : recipe.getIngredients())
-		{
-			if(!ingredient.isSimple())
-			{
-				return false;
-			}
-			
-			GristSet ingrCost = findCostForIngredient(ingredient);
-			
-			if(ingrCost == null)
-				return false;
-			
-			set.addGrist(ingrCost);
-		}
-		
-		set.scaleGrist(1/ (float) output.getCount());
-		GristRegistry.addGristConversion(output, output.getHasSubtypes(), set);
-		
-		returned ++;
-		return true;
-	}
-	
-	private static GristSet findCostForIngredient(Ingredient ingredient)
-	{
-		if(ingredient == Ingredient.EMPTY)
-			return new GristSet();
-		
-		GristSet ingrCost = null;
-		for(ItemStack stack : ingredient.getMatchingStacks())
-		{
-			GristSet itemCost = findCostForItem(stack, true);
-			if(itemCost != null && (ingrCost == null || itemCost.getValue() < ingrCost.getValue()))
-				ingrCost = itemCost;
-		}
-		
-		return ingrCost;
-	}
-	
-	private static GristSet findCostForItem(ItemStack item, boolean withoutContainer)
-	{
-		if(GristRegistry.getGristConversion(item) != null)
-		{
-			return withoutContainer ? getCostWithoutContainer(item) : GristRegistry.getGristConversion(item);
-		} else if(!item.isEmpty())
-		{
-			List<IRecipe> subrecipes = recipeList.get(RecipeItemHelper.pack(item));
-			if(subrecipes != null)
-			{
-				for(IRecipe recipe : subrecipes)
-					if(checkRecipe(recipe))
-					{
-						return withoutContainer ? getCostWithoutContainer(item) : GristRegistry.getGristConversion(item);
-					}
-			}
-		}
-		return null;
-	}
-	
-	//Assumes that the grist cost for the stack has been checked to not be null beforehand
-	private static GristSet getCostWithoutContainer(ItemStack stack)
-	{
-		GristSet cost = GristRegistry.getGristConversion(stack);
-		if(stack.getItem().hasContainerItem(stack))
-		{
-			ItemStack container = stack.getItem().getContainerItem(stack);
-			GristSet containerCost = findCostForItem(container, false);
-			if(containerCost != null)
-				for(GristAmount amount : containerCost.getArray())
-					cost.setGrist(amount.getType(), Math.max(0, cost.getGrist(amount.getType()) - amount.getAmount()));
-		}
-		return cost;
-	}
-	
 	private static void registerRecipes(ModSupport modSupport, String modname, boolean dynamic)
 	{
 		try
@@ -1455,16 +1091,6 @@ public class AlchemyRecipeHandler
 			List<ItemStack> list = OreDictionary.getOres((String) item);
 			return list;
 		}
-	}
-	
-	public static void checkRegistered(Block block, String name)
-	{
-		checkRegistered(new ItemStack(block, 1, WILDCARD_VALUE), name);
-	}
-	
-	public static void checkRegistered(Item item, String name)
-	{
-		checkRegistered(new ItemStack(item, 1, WILDCARD_VALUE), name);
 	}
 	
 	public static void checkRegistered(ItemStack item, String name)

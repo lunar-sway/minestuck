@@ -3,13 +3,12 @@ package com.mraof.minestuck.block;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -166,7 +165,7 @@ public class BlockAlchemiter extends BlockLargeMachine
 				ItemStack dowel = ((TileEntityAlchemiter) te).getDowel();
 				EnumParts type = EnumParts.TOTEM_PAD;
 				if(!dowel.isEmpty())
-					if(AlchemyRecipeHandler.hasDecodedItem(dowel))
+					if(AlchemyRecipes.hasDecodedItem(dowel))
 						type = EnumParts.TOTEM_PAD_TOTEM;
 					else type = EnumParts.TOTEM_PAD_DOWEL;
 				return state.withProperty(PART, type);

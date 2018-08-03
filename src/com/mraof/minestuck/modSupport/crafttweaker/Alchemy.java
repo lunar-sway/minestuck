@@ -1,8 +1,8 @@
 package com.mraof.minestuck.modSupport.crafttweaker;
 
-import com.mraof.minestuck.util.GristRegistry;
-import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.GristType;
+import com.mraof.minestuck.alchemy.GristRegistry;
+import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristType;
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.IAction;
 import crafttweaker.annotations.ZenRegister;

@@ -3,7 +3,7 @@ package com.mraof.minestuck.inventory.captchalouge;
 import com.mraof.minestuck.client.gui.captchalouge.QueueGuiHandler;
 import com.mraof.minestuck.client.gui.captchalouge.SylladexGuiHandler;
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
@@ -41,7 +41,7 @@ public class QueueModus extends StackModus
 		if(asCard && !(item.getItem() == MinestuckItems.captchaCard && item.hasTagCompound() && !item.getTagCompound().getBoolean("punched") && item.getTagCompound().hasKey("id")))
 		{
 			size--;
-			return AlchemyRecipeHandler.createCard(item, false);
+			return AlchemyRecipes.createCard(item, false);
 		}
 		else return item;
 	}

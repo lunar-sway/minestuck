@@ -1,9 +1,9 @@
 package com.mraof.minestuck.modSupport;
 
-import com.mraof.minestuck.util.CombinationRegistry;
-import com.mraof.minestuck.util.GristRegistry;
-import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.GristType;
+import com.mraof.minestuck.alchemy.CombinationRegistry;
+import com.mraof.minestuck.alchemy.GristRegistry;
+import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristType;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;

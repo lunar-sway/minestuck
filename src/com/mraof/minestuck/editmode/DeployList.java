@@ -6,6 +6,9 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import com.mraof.minestuck.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.item.block.ItemSburbMachine;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
@@ -36,7 +39,7 @@ public class DeployList
 		registerItem("cruxtruder", new ItemStack(MinestuckBlocks.cruxtruder, 1, 0), new GristSet(), new GristSet(GristType.Build, 100), 0);
 		registerItem("totem_lathe", new ItemStack(MinestuckBlocks.totemlathe[0], 1, 0), new GristSet(), new GristSet(GristType.Build, 100), 0);
 		registerItem("artifact_card", new GristSet(), null, 0, connection -> !connection.enteredGame(),
-				connection -> AlchemyRecipeHandler.createCard(SburbHandler.getEntryItem(connection.getClientIdentifier()), true));
+				connection -> AlchemyRecipes.createCard(SburbHandler.getEntryItem(connection.getClientIdentifier()), true));
 		registerItem("alchemiter", new ItemStack(MinestuckBlocks.alchemiter[0], 1, 0), new GristSet(), new GristSet(GristType.Build, 100), 0);
 		registerItem("punch_designix", 0,null, connection -> new ItemStack(MinestuckBlocks.punchDesignix, 1, 0),
 				(isPrimary, connection) -> new GristSet(SburbHandler.getPrimaryGristType(connection.getClientIdentifier()), 4));
@@ -158,7 +161,7 @@ public class DeployList
 		if(booleans[0] != containsEntry("card_punched_card"))
 		{
 			if(booleans[0])
-				registerItem("card_punched_card", AlchemyRecipeHandler.createCard(new ItemStack(MinestuckItems.captchaCard), true), new GristSet(GristType.Build, 25), null, 0);
+				registerItem("card_punched_card", AlchemyRecipes.createCard(new ItemStack(MinestuckItems.captchaCard), true), new GristSet(GristType.Build, 25), null, 0);
 			else removeEntry("card_punched_card");
 		}
 		if(booleans[1] != containsEntry("portable_cruxtuder"))

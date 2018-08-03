@@ -1,5 +1,7 @@
 package com.mraof.minestuck.util;
 
+import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalouge.Modus;

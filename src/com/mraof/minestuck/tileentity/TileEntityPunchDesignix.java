@@ -4,11 +4,10 @@ import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
 import com.mraof.minestuck.block.BlockPunchDesignix;
 import com.mraof.minestuck.block.BlockPunchDesignix.EnumParts;
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.CombinationRegistry;
+import com.mraof.minestuck.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.alchemy.CombinationRegistry;
 import com.mraof.minestuck.util.Debug;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
@@ -86,26 +85,26 @@ public class TileEntityPunchDesignix extends TileEntity
 				if (!card.isEmpty() && card.getItem() == MinestuckItems.captchaCard &&
 						heldStack.hasTagCompound() && heldStack.getTagCompound().hasKey("contentID"))
 				{
-					ItemStack output = AlchemyRecipeHandler.getDecodedItem(heldStack);
+					ItemStack output = AlchemyRecipes.getDecodedItem(heldStack);
 					if (!output.isEmpty())
 					{
 						if(output.getItem().isDamageable())
 							output.setItemDamage(0);
 						
-						if(AlchemyRecipeHandler.isPunchedCard(card))
+						if(AlchemyRecipes.isPunchedCard(card))
 						{    //|| combination
-							output = CombinationRegistry.getCombination(output, AlchemyRecipeHandler.getDecodedItem(card), CombinationRegistry.Mode.MODE_OR);
+							output = CombinationRegistry.getCombination(output, AlchemyRecipes.getDecodedItem(card), CombinationRegistry.Mode.MODE_OR);
 							if(!output.isEmpty())
 							{
-								MinestuckCriteriaTriggers.PUNCH_DESIGNIX.trigger(player, AlchemyRecipeHandler.getDecodedItem(heldStack), AlchemyRecipeHandler.getDecodedItem(card), output);
-								setCard(AlchemyRecipeHandler.createCard(output, true));
+								MinestuckCriteriaTriggers.PUNCH_DESIGNIX.trigger(player, AlchemyRecipes.getDecodedItem(heldStack), AlchemyRecipes.getDecodedItem(card), output);
+								setCard(AlchemyRecipes.createCard(output, true));
 								effects(true);
 								return;
 							}
 						} else    //Just punch the card regularly
 						{
 							MinestuckCriteriaTriggers.PUNCH_DESIGNIX.trigger(player, output, ItemStack.EMPTY, output);
-							setCard(AlchemyRecipeHandler.createCard(output, true));
+							setCard(AlchemyRecipes.createCard(output, true));
 							effects(true);
 							
 							return;

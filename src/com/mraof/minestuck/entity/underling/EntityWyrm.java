@@ -1,8 +1,8 @@
 package com.mraof.minestuck.entity.underling;
 
 import com.mraof.minestuck.entity.IEntityMultiPart;
-import com.mraof.minestuck.util.GristHelper;
-import com.mraof.minestuck.util.GristSet;
+import com.mraof.minestuck.alchemy.GristHelper;
+import com.mraof.minestuck.alchemy.GristSet;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;

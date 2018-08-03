@@ -1,14 +1,12 @@
 package com.mraof.minestuck.editmode;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.entity.EntityDecoy;
-import com.mraof.minestuck.item.ItemCruxiteArtifact;
-import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
-import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.*;
