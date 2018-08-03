@@ -10,6 +10,9 @@ import net.minecraft.item.crafting.Ingredient;
 
 import java.util.*;
 
+/**
+ * Adds all the recipes that are based on the existing vanilla crafting registries, like grist conversions of items composed of other things.
+ */
 public class AutoGristGenerator
 {
 	
@@ -17,15 +20,13 @@ public class AutoGristGenerator
 	private HashSet<Integer> lookedOver;
 	private int returned = 0;
 	
-	/**
-	 * Adds all the recipes that are based on the existing vanilla crafting registries, like grist conversions of items composed of oither things.
-	 */
-	public void excecute() {
-		
+	
+	public void prepare()
+	{
 		recipeList = new HashMap<>();
 		
 		Debug.debug("Looking for dynamic grist conversions...");
-		for (IRecipe recipe : CraftingManager.REGISTRY)
+		for(IRecipe recipe : CraftingManager.REGISTRY)
 		{
 			try
 			{
@@ -45,8 +46,11 @@ public class AutoGristGenerator
 				Debug.logger.warn(String.format("A null pointer exception was thrown for %s. This was not expected. Stacktrace: ", recipe), e);
 			}
 		}
-		Debug.info("Found "+recipeList.size()+" nondynamic recipes.");
-		
+		Debug.info("Found " + recipeList.size() + " nondynamic recipes.");
+	}
+	
+	public void excecute()
+	{
 		Debug.debug("Calculating grist conversion...");
 		Iterator<Map.Entry<Integer, List<IRecipe>>> it = recipeList.entrySet().iterator();
 		while(it.hasNext())
@@ -61,7 +65,7 @@ public class AutoGristGenerator
 					b = checkRecipe(recipe);
 				} catch(Exception e)
 				{
-					Debug.logger.warn(String.format("Failed to look over recipe \"%s\" for \"%s\". Cause:", pairs.getValue(), RecipeItemHelper.unpack(pairs.getKey())), e);
+					Debug.logger.warn(String.format("Failed to look over recipe \"%s\" for \"%s\". Cause:", recipe, RecipeItemHelper.unpack(pairs.getKey())), e);
 				}
 				if(b)
 					break;
@@ -69,6 +73,36 @@ public class AutoGristGenerator
 		}
 		
 		Debug.info("Added "+returned+" grist conversions.");
+	}
+	
+	public GristSet lookupCostForItem(ItemStack item)
+	{
+		GristSet cost = GristRegistry.getGristConversion(item);
+		if(cost != null)
+			return cost;
+		
+		int i = RecipeItemHelper.pack(item);
+		if(recipeList.containsKey(i))
+		{
+			List<IRecipe> recipes = recipeList.get(i);
+			if(recipes == null)
+				return null;
+			boolean b = false;
+			for(IRecipe recipe : recipes)
+			{
+				lookedOver = new HashSet<>();
+				try
+				{
+					b = checkRecipe(recipe);
+				} catch(Exception e)
+				{
+					Debug.logger.warn(String.format("Failed to look over recipe \"%s\" for \"%s\". Cause:", recipe, item), e);
+				}
+				if(b)
+					return GristRegistry.getGristConversion(item);
+			}
+		}
+		return null;
 	}
 	
 	private boolean checkRecipe(IRecipe recipe)
