@@ -66,12 +66,6 @@ public class LandAspectForest extends TerrainLandAspect
 	}
 	
 	@Override
-	public int getDayCycleMode()
-	{
-		return 0;
-	}
-	
-	@Override
 	public Vec3d getFogColor()
 	{
 		return new Vec3d(0.0D, 1.0D, 0.6D);

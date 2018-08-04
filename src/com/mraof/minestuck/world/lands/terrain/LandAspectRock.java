@@ -76,9 +76,9 @@ public class LandAspectRock extends TerrainLandAspect
 	}
 	
 	@Override
-	public int getDayCycleMode()
+	public float getSkylightBase()
 	{
-		return 0;
+		return 7/8F;
 	}
 	
 	@Override

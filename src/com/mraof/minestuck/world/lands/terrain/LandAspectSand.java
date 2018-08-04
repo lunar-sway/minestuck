@@ -112,12 +112,6 @@ public class LandAspectSand extends TerrainLandAspect
 	}
 	
 	@Override
-	public int getDayCycleMode()
-	{
-		return 1;
-	}
-	
-	@Override
 	public float getTemperature()
 	{
 		return 2.0F;

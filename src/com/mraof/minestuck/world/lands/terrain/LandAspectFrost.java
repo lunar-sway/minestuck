@@ -71,10 +71,11 @@ public class LandAspectFrost extends TerrainLandAspect
 	}
 	
 	@Override
-	public int getDayCycleMode() {
-		return 0;
+	public float getSkylightBase()
+	{
+		return 7/8F;
 	}
-
+	
 	@Override
 	public Vec3d getFogColor() 
 	{

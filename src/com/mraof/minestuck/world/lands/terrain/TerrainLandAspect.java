@@ -24,13 +24,12 @@ public abstract class TerrainLandAspect implements ILandAspect<TerrainLandAspect
 	public abstract List<ILandDecorator> getDecorators();	//TODO Add a Random as parameter
 	
 	/**
-	 *  Returns a integer representing how they land's day cycle will proceed.
-	 *  
-	 *  0 = Normal day cycle;
-	 *  1 = Always day;
-	 *  2 = Always night.
+	 * @return
 	 */
-	public abstract int getDayCycleMode();
+	public float getSkylightBase()
+	{
+		return 1F;
+	}
 	
 	public abstract Vec3d getFogColor();
 	

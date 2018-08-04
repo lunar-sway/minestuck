@@ -74,9 +74,9 @@ public class LandAspectWood extends TerrainLandAspect
 	}
 	
 	@Override
-	public int getDayCycleMode()
+	public float getSkylightBase()
 	{
-		return 2;
+		return 1/2F;
 	}
 	
 	@Override

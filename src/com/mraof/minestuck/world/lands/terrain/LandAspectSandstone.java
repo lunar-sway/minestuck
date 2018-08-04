@@ -111,9 +111,9 @@ public class LandAspectSandstone extends TerrainLandAspect
 	}
 	
 	@Override
-	public int getDayCycleMode()
+	public float getSkylightBase()
 	{
-		return 0;
+		return 3/4F;
 	}
 	
 	@Override

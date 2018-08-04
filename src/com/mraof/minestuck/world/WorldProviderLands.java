@@ -23,6 +23,7 @@ public class WorldProviderLands extends WorldProvider
 {
 	public ChunkProviderLands chunkProvider;
 	public LandAspectRegistry.AspectCombination landAspects;
+	public float skylightBase;
 	
 	@Override
 	public DimensionType getDimensionType()
@@ -33,24 +34,22 @@ public class WorldProviderLands extends WorldProvider
 	@Override
 	public float calculateCelestialAngle(long par1, float par3)
 	{
-		if (chunkProvider != null) 
-		{
-			switch(chunkProvider.dayCycle) 
-			{
-			case (0):
-				return super.calculateCelestialAngle(par1,par3);
-			case (1):
-				return 1.0F;
-			case (2):
-				return 0.5F;
-			}
-			return 1.0F; //We should never reach this
-		}
-		else 
-		{
-			createChunkGenerator();
-			return this.calculateCelestialAngle(par1,par3);
-		}
+		return 1.0F;
+	}
+	
+	@Override
+	public float getSunBrightnessFactor(float partialTicks)
+	{
+		float skylight = skylightBase;
+		skylight = (float)((double)skylight * (1.0D - (double)(world.getRainStrength(partialTicks) * 5.0F) / 16.0D));
+		skylight = (float)((double)skylight * (1.0D - (double)(world.getThunderStrength(partialTicks) * 5.0F) / 16.0D));
+		return skylight;
+	}
+	
+	@Override
+	public float getSunBrightness(float par1)
+	{
+		return this.getSunBrightnessFactor(par1) * 0.8F + 0.2F;
 	}
 	
 	@Override
@@ -136,24 +135,6 @@ public class WorldProviderLands extends WorldProvider
 	}
 	
 	@Override
-	public boolean isDaytime() {
-		if (chunkProvider != null) {
-			switch (chunkProvider.dayCycle) {
-			case (0):
-				return super.isDaytime();
-			case (1):
-				return true;
-			case (2):
-				return false;
-			}
-			return true; //We should never reach this
-		} else {
-			createChunkGenerator();
-			return this.isDaytime();
-		}
-	}
-
-	@Override
 	public boolean isSurfaceWorld()
 	{
 		return true;
@@ -168,6 +149,9 @@ public class WorldProviderLands extends WorldProvider
 			createChunkGenerator();
 		this.biomeProvider = new WorldChunkManagerLands(world, chunkProvider.rainfall, chunkProvider.oceanChance, chunkProvider.roughChance);
 		this.nether = false;
+		
+		skylightBase = landAspects.aspectTerrain.getSkylightBase();
+		landAspects.aspectTitle.prepareWorldProvider(this);
 	}
 	
 	@Override

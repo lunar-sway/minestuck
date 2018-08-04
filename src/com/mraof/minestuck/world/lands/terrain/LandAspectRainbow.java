@@ -107,12 +107,6 @@ public class LandAspectRainbow extends TerrainLandAspect
 	}
 	
 	@Override
-	public int getDayCycleMode()
-	{
-		return 1;
-	}
-	
-	@Override
 	public Vec3d getFogColor() 
 	{
 		return skyColor;
