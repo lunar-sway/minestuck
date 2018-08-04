@@ -35,13 +35,12 @@ public class LandAspectSilence extends TitleLandAspect
 	public void prepareWorldProvider(WorldProviderLands worldProvider)
 	{
 		worldProvider.skylightBase = Math.min(1/2F, worldProvider.skylightBase);
+		worldProvider.mergeFogColor(new Vec3d(0, 0, 0.1), 0.5F);
 	}
 	
 	@Override
 	public void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
-		chunkProvider.mergeFogColor(new Vec3d(0, 0, 0.1), 0.5F);
-		
 	}
 	
 	@Override

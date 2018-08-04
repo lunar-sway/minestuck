@@ -29,12 +29,12 @@ public class LandAspectLight extends TitleLandAspect
 	public void prepareWorldProvider(WorldProviderLands worldProvider)
 	{
 		worldProvider.skylightBase = 1.0F;
+		worldProvider.mergeFogColor(new Vec3d(1, 1, 0.8), 0.5F);
 	}
 	
 	@Override
 	public void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
-		chunkProvider.mergeFogColor(new Vec3d(1, 1, 0.8), 0.5F);
 	}
 	
 	@Override

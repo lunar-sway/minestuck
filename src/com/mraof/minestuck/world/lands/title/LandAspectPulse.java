@@ -1,6 +1,7 @@
 package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
@@ -26,10 +27,15 @@ public class LandAspectPulse extends TitleLandAspect
 	}
 	
 	@Override
+	public void prepareWorldProvider(WorldProviderLands worldProvider)
+	{
+		worldProvider.mergeFogColor(new Vec3d(0.8, 0, 0), 0.8F);
+	}
+	
+	@Override
 	public void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
-		
-		chunkProvider.mergeFogColor(new Vec3d(0.8, 0, 0), 0.8F);
+	
 	}
 	
 	@Override

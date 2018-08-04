@@ -65,14 +65,13 @@ public class LandAspectMonsters extends TitleLandAspect
 	public void prepareWorldProvider(WorldProviderLands worldProvider)
 	{
 		worldProvider.skylightBase = Math.min(1/4F, worldProvider.skylightBase);
+		worldProvider.mergeFogColor(new Vec3d(0.1, 0, 0), 0.5F);
 	}
 	
 	@Override
 	public void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.monsterList.addAll(this.monsterList);
-		
-		chunkProvider.mergeFogColor(new Vec3d(0.1, 0, 0), 0.5F);
 	}
 	
 	@Override

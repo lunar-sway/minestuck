@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world;
 
+import com.mraof.minestuck.client.renderer.LandSkyRender;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
@@ -7,6 +8,7 @@ import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagList;
@@ -24,6 +26,7 @@ public class WorldProviderLands extends WorldProvider
 	public ChunkProviderLands chunkProvider;
 	public LandAspectRegistry.AspectCombination landAspects;
 	public float skylightBase;
+	Vec3d skyColor;
 	
 	@Override
 	public DimensionType getDimensionType()
@@ -150,7 +153,11 @@ public class WorldProviderLands extends WorldProvider
 		this.biomeProvider = new WorldChunkManagerLands(world, chunkProvider.rainfall, chunkProvider.oceanChance, chunkProvider.roughChance);
 		this.nether = false;
 		
+		if(world.isRemote)
+			setSkyRenderer(new LandSkyRender(this));
+		
 		skylightBase = landAspects.aspectTerrain.getSkylightBase();
+		this.skyColor = landAspects.aspectTerrain.getFogColor();
 		landAspects.aspectTitle.prepareWorldProvider(this);
 	}
 	
@@ -182,17 +189,15 @@ public class WorldProviderLands extends WorldProvider
 	}
 	
 	@Override
+	public Vec3d getSkyColor(Entity cameraEntity, float partialTicks)
+	{
+		return skyColor;
+	}
+	
+	@Override
 	public Vec3d getFogColor(float par1, float par2)
 	{
-		if(chunkProvider != null)
-		{
-			return chunkProvider.getFogColor();
-		}
-		else
-		{
-			Debug.debug("Getting superclass fog color");
-			return super.getFogColor(par1, par2);
-		}
+		return getFogColor();
 	}
 	
 	public World getWorld()
@@ -222,5 +227,18 @@ public class WorldProviderLands extends WorldProvider
 			return chunkProvider.villageHandler.findAndMarkNextVillage(player, type, tags);
 		Debug.warnf("Couldn't identify %s", type);
 		return null;
+	}
+	
+	public void mergeFogColor(Vec3d fogColor, float strength)
+	{
+		double d1 = (this.skyColor.x + fogColor.x*strength)/(1 + strength);
+		double d2 = (this.skyColor.y + fogColor.y*strength)/(1 + strength);
+		double d3 = (this.skyColor.z + fogColor.z*strength)/(1 + strength);
+		this.skyColor = new Vec3d(d1, d2, d3);
+	}
+	
+	public Vec3d getFogColor()
+	{
+		return this.skyColor;
 	}
 }
