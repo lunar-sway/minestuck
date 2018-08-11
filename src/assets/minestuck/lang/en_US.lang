@@ -268,6 +268,14 @@ consort.grassCurse=Rumors say that %s got mad one day and cursed the world with 
 consort.uselessPogo=I once found this piece of junk that launched me upward when I hit the ground with it. It really hurt when I came back down, and I didn't get anywhere!
 consort.uselessElytra=One time, I saw a guy with some weird wing-looking things on his back. He could glide with them, but without being able to stay in the air, what's the point?
 
+consort.battleSite=This land was the site of a battle ages and ages and ages ago.
+consort.immortalityHerb.1=I have a herb that grants immortality! I’m going to eat it right now!
+consort.immortalityHerb.2=However, they are easily confused with an explosion-causing herb… 
+consort.immortalityHerb.3=I’m taking the risk.
+consort.spices.1=A good chef cooks with the spices found throughout the land. 
+consort.spices.2=Other chefs are envious that they don’t live in %s.
+consort.sharpSlide=Don’t use the sharp sides of giant swords as slides. May her beautiful soul rest in pieces.
+
 consort.zazzerpan=Old wizard Zazzerpan would be turning in his grave if he saw the horrors that walk these lands. Those giclopes sure are terrifying!
 consort.texasHistory=The place was %s, the year, was 20XX.
 
@@ -1101,6 +1109,10 @@ tile.sburbMachine.totemLathe.name=Totem Lathe
 tile.sburbMachine.alchemiter.name=Alchemiter
 tile.crockerMachine.gristWidget.name=GristWidget 12000
 tile.sburbComputer.name=SBURB Computer
+tile.vanityLaptop.crockertop.name=Crockertop
+tile.vanityLaptop.hubtop.name=Hubtop
+tile.vanityLaptop.laptop.name=Laptop
+tile.vanityLaptop.lunchtop.name=Lunchtop
 tile.oil.name=Oil
 tile.blood.name=Blood
 tile.watercolors.name=Paint

@@ -27,20 +27,20 @@ public class LandAspectFlora extends TerrainLandAspect
 	//Swords
 	//Strawberries
 	//Consort dialogue
-	//Blood oceans? Some kind of tie between the plants and blood or death. Blood oceans are good, actually.
 	//Custom dungeon loot
-	//Uranium blocks, maybe as viable fuel for the uranium cooker
+	//Not related to this, but Uranium blocks
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
 		registry.setBlockState("surface", Blocks.GRASS.getDefaultState());
 		registry.setBlockState("upper", Blocks.DIRT.getDefaultState());
+		registry.setBlockState("ocean", MinestuckBlocks.blockBlood.getDefaultState());
 		registry.setBlockState("structure_primary", Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.MOSSY));
 		registry.setBlockState("structure_primary_decorative", MinestuckBlocks.floweryMossBrick.getDefaultState());
-		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState());
+		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.MOSSY));
 		registry.setBlockState("structure_secondary", Blocks.MOSSY_COBBLESTONE.getDefaultState());
 		registry.setBlockState("structure_secondary_decorative", MinestuckBlocks.floweryMossStone.getDefaultState());
-		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_STAIRS.getDefaultState());
+		registry.setBlockState("structure_secondary_stairs", Blocks.DARK_OAK_STAIRS.getDefaultState());
 		registry.setBlockState("village_path", Blocks.GRASS_PATH.getDefaultState());
 		registry.setBlockState("bush", Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.FERN));
 		registry.setBlockState("structure_wool_1", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.YELLOW));
@@ -73,6 +73,7 @@ public class LandAspectFlora extends TerrainLandAspect
 		list.add(new UndergroundDecoratorVein(Blocks.GRAVEL.getDefaultState(), 2, 28, 64));
 		list.add(new UndergroundDecoratorVein(Blocks.COAL_ORE.getDefaultState(), 13, 17, 64));
 		list.add(new UndergroundDecoratorVein(Blocks.EMERALD_ORE.getDefaultState(), 8, 3, 32));
+		list.add(new UndergroundDecoratorVein(Blocks.DIAMOND_ORE.getDefaultState(), 8, 3, 32));
 		list.add(new UndergroundDecoratorVein(Blocks.LAPIS_ORE.getDefaultState(), 8, 3, 32));
 		list.add(new SurfaceDecoratorVein(Blocks.CLAY.getDefaultState(), 15, 10, BiomeMinestuck.mediumOcean));
 		return list;

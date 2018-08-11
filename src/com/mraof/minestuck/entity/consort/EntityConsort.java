@@ -3,6 +3,7 @@ package com.mraof.minestuck.entity.consort;
 import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
 import com.mraof.minestuck.entity.EntityMinestuck;
 import com.mraof.minestuck.inventory.InventoryConsortMerchant;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.IEntityLivingData;
@@ -29,6 +30,7 @@ public abstract class EntityConsort extends EntityMinestuck
 	boolean visitedSkaia;
 	MessageType.DelayMessage updatingMessage; //Change to an interface/array if more message components need tick updates
 	public InventoryConsortMerchant stocks;
+	private int eventTimer = -1;
 	
 	public EntityConsort(World world)
 	{
@@ -74,7 +76,10 @@ public abstract class EntityConsort extends EntityMinestuck
 				}
 				ITextComponent text = message.getMessage(this, player);    //TODO Make sure to catch any issues here
 				if (text != null)
+				{
 					player.sendMessage(text);
+					onSendMessage(player, text, this);
+				}
 				MinestuckCriteriaTriggers.CONSORT_TALK.trigger((EntityPlayerMP) player, message.getString(), this);
 			}
 			
@@ -83,6 +88,11 @@ public abstract class EntityConsort extends EntityMinestuck
 			return super.processInteract(player, hand);
 	}
 	
+	public void onSendMessage(EntityPlayer player, ITextComponent text, EntityConsort entityConsort)
+	{
+		Debug.debug(text.getUnformattedText());
+	}
+
 	@Override
 	public void onLivingUpdate()
 	{
