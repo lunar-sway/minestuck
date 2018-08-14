@@ -228,7 +228,11 @@ public class TileEntityAlchemiter extends TileEntity
 		
 		EnumFacing facing = world.getBlockState(pos).getValue(BlockAlchemiter.DIRECTION);
 		//get the position to spawn the item
-		BlockPos spawnPos = this.getPos().offset(facing).offset(facing.rotateY()).up();
+		BlockPos spawnPos = this.getPos().offset(facing).offset(facing.rotateY());
+		if(facing.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE)
+			spawnPos = spawnPos.offset(facing);
+		if(facing.rotateY().getAxisDirection() == EnumFacing.AxisDirection.POSITIVE)
+			spawnPos = spawnPos.offset(facing.rotateY());
 		//set the stack size
 		newItem.setCount(quantity);
 		//remove item damage
@@ -241,7 +245,7 @@ public class TileEntityAlchemiter extends TileEntity
 		
 		if(canAfford)
 		{
-			EntityItem item = new EntityItem(world, spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), newItem);
+			EntityItem item = new EntityItem(world, spawnPos.getX(), spawnPos.getY() + 0.5, spawnPos.getZ(), newItem);
 			world.spawnEntity(item);
 			
 			AlchemyRecipes.onAlchemizedItem(newItem, player);
