@@ -3,7 +3,7 @@ package com.mraof.minestuck.block;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.item.TabMinestuck;
 import com.mraof.minestuck.tileentity.TileEntityItemStack;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -161,7 +161,7 @@ public class BlockCruxtiteDowel extends Block
 		if(te instanceof TileEntityItemStack)
 		{
 			ItemStack dowel = ((TileEntityItemStack) te).getStack();
-			if(state.getValue(TYPE) == Type.DOWEL && AlchemyRecipeHandler.hasDecodedItem(dowel))
+			if(state.getValue(TYPE) == Type.DOWEL && AlchemyRecipes.hasDecodedItem(dowel))
 				return state.withProperty(TYPE, Type.TOTEM);
 		}
 		

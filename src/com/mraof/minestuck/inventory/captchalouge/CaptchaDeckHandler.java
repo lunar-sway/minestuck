@@ -9,7 +9,7 @@ import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import net.minecraft.entity.item.EntityItem;
@@ -171,10 +171,10 @@ public class CaptchaDeckHandler
 			
 			MinestuckCriteriaTriggers.CHANGE_MODUS.trigger(player, modus);
 		}
-		else if(item.getItem().equals(MinestuckItems.captchaCard) && !AlchemyRecipeHandler.isPunchedCard(item)
+		else if(item.getItem().equals(MinestuckItems.captchaCard) && !AlchemyRecipes.isPunchedCard(item)
 				&& modus != null)
 		{
-			ItemStack content = AlchemyRecipeHandler.getDecodedItem(item);
+			ItemStack content = AlchemyRecipes.getDecodedItem(item);
 			int failed = 0;
 			for(int i = 0; i < item.getCount(); i++)
 				if(!modus.increaseSize())
@@ -216,10 +216,10 @@ public class CaptchaDeckHandler
 		if(modus != null && !stack.isEmpty())
 		{
 			boolean card1 = false, card2 = true;
-			if(stack.getItem() == MinestuckItems.captchaCard && AlchemyRecipeHandler.hasDecodedItem(stack)
-					&& !AlchemyRecipeHandler.isPunchedCard(stack))
+			if(stack.getItem() == MinestuckItems.captchaCard && AlchemyRecipes.hasDecodedItem(stack)
+					&& !AlchemyRecipes.isPunchedCard(stack))
 			{
-				ItemStack newStack = AlchemyRecipeHandler.getDecodedItem(stack);
+				ItemStack newStack = AlchemyRecipes.getDecodedItem(stack);
 				if(!newStack.isEmpty())
 				{
 					card1 = true;
@@ -315,7 +315,7 @@ public class CaptchaDeckHandler
 				if(!stack.isEmpty())
 					if(size > cardsToKeep)
 					{
-						ItemStack card = AlchemyRecipeHandler.createCard(stack, false);
+						ItemStack card = AlchemyRecipes.createCard(stack, false);
 						player.dropItem(card, true, false);
 						size--;
 					} else player.dropItem(stack, true, false);

@@ -5,12 +5,12 @@ import com.google.common.collect.Sets;
 import com.mraof.minestuck.entity.consort.EnumConsort.MerchantType;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
+import com.mraof.minestuck.world.storage.loot.MinestuckLoot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
@@ -21,8 +21,8 @@ import net.minecraft.util.text.ITextComponent;
 import java.util.*;
 
 import static com.mraof.minestuck.entity.consort.MessageType.*;
-import static com.mraof.minestuck.util.AlchemyRecipeHandler.CONSORT_FOOD_STOCK;
-import static com.mraof.minestuck.util.AlchemyRecipeHandler.CONSORT_GENERAL_STOCK;
+import static com.mraof.minestuck.world.storage.loot.MinestuckLoot.CONSORT_FOOD_STOCK;
+import static com.mraof.minestuck.world.storage.loot.MinestuckLoot.CONSORT_GENERAL_STOCK;
 import static com.mraof.minestuck.world.lands.LandAspectRegistry.fromNameTerrain;
 import static com.mraof.minestuck.world.lands.LandAspectRegistry.fromNameTitle;
 
@@ -139,13 +139,14 @@ public class ConsortDialogue
 		
 		addMessage(new ChainMessage(new SingleMessage("frozen1"), new DescriptionMessage("frozen2"))).landTerrain(fromNameTerrain("frost"));
 		addMessage(new ChoiceMessage(new SingleMessage("furCoat"), new SingleMessage[]{new SingleMessage("furCoat.pay"), new SingleMessage("furCoat.ignore")},
-				new MessageType[]{new PurchaseMessage(AlchemyRecipeHandler.CONSORT_JUNK_REWARD, 100, new ChainMessage(1, new SingleMessage("furCoat.grattitude"), new SingleMessage("thankYou"))),
+				new MessageType[]{new PurchaseMessage(MinestuckLoot.CONSORT_JUNK_REWARD, 100, new ChainMessage(1, new SingleMessage("furCoat.grattitude"), new SingleMessage("thankYou"))),
 						new SingleMessage("furCoat.death")})).landTerrain(fromNameTerrain("frost"));
 		addMessage("tentProtection").landTerrain(fromNameTerrain("frost")).consortReq((EntityConsort::hasHome));
 		addMessage("allOres").landTerrain(fromNameTerrain("rock"));
 		addMessage("rockfu", "landName").landTerrain(fromNameTerrain("rock"));
 		addMessage("allTrees").landTerrain(fromNameTerrain("forest"));
 		addMessage("reallyLikesTrees").landTerrain(fromNameTerrain("forest"));
+		
 		addMessage("genericGreen").landTerrain(fromNameTerrain("rainbow"));
 		addMessage("overwhelmingColors").landTerrain(fromNameTerrain("rainbow"));
 		addMessage("sawRainbow").landTerrain(fromNameTerrain("rainbow"));
@@ -163,13 +164,14 @@ public class ConsortDialogue
 		addMessage("grassCurse", "denizen").landTerrain(fromNameTerrain("end"));
 		addMessage("uselessPogo").landTerrain(fromNameTerrain("end"));
 		addMessage("uselessElytra").landTerrain(fromNameTerrain("end"));
-
+		
 		addMessage("battleSite").landTerrain(fromNameTerrain("flora"));
 		addMessage("sharpSlide").landTerrain(fromNameTerrain("flora"));
-		addMessage(new ChainMessage(new SingleMessage("immortalityHerb.1"), new SingleMessage("immortalityHerb.2"), new SingleMessage("immortalityHerb.3"))).landTerrain(fromNameTerrain("flora"));
-		// have consort explode a second after line 3
-		addMessage(new ChainMessage(new SingleMessage("spices.1"), new SingleMessage("spices.2", "denizen"))).landTerrain(fromNameTerrain("flora"));
 		
+		// have consort explode a second after line 3
+		addMessage(new ChainMessage(new SingleMessage("immortalityHerb.1"), new SingleMessage("immortalityHerb.2"), new SingleMessage("immortalityHerb.3"))).landTerrain(fromNameTerrain("flora"));
+		addMessage(new ChainMessage(new SingleMessage("spices.1"), new SingleMessage("spices.2", "denizen"))).landTerrain(fromNameTerrain("flora"));
+
 		addMessage("denizenMention").reqLand();
 		addMessage("floatingIsland").consortReq(consort -> consort.getDistanceSq(consort.world.getSpawnPoint()) < 65536).reqLand();
 		addMessage("ringFishing").consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
@@ -252,12 +254,12 @@ public class ConsortDialogue
 		addMessage(new ChoiceMessage(new DescriptionMessage("peppyOffer"),
 				new SingleMessage[] { new SingleMessage("peppyOffer.buy"), new SingleMessage("peppyOffer.deny") },
 				new MessageType[] {
-						new PurchaseMessage(false, AlchemyRecipeHandler.CONSORT_JUNK_REWARD, 1000, "purchase",
+						new PurchaseMessage(false, MinestuckLoot.CONSORT_JUNK_REWARD, 1000, "purchase",
 								new ChainMessage(1, new SingleMessage("peppyOffer.item"), new SingleMessage("peppyOffer.purchase"))),
 						new ChoiceMessage(new SingleMessage("peppyOffer.next"),
 								new SingleMessage[] { new SingleMessage("peppyOffer.denyAgain"), new SingleMessage("peppyOffer.buy2") },
 								new MessageType[] { new SingleMessage("dots"),
-										new PurchaseMessage(false, AlchemyRecipeHandler.CONSORT_JUNK_REWARD, 500, "purchase",
+										new PurchaseMessage(false, MinestuckLoot.CONSORT_JUNK_REWARD, 500, "purchase",
 												new SingleMessage("peppyOffer.purchase")) }) })).type(MerchantType.SHADY).consort(EnumConsort.NAKAGATOR, EnumConsort.IGUANA);
 
 
@@ -272,7 +274,7 @@ public class ConsortDialogue
 								new SingleMessage("shadyOffer.deny")
 						},
 				new MessageType[] {
-						new PurchaseMessage(false, AlchemyRecipeHandler.CONSORT_JUNK_REWARD, 1000, "purchase",
+						new PurchaseMessage(false, MinestuckLoot.CONSORT_JUNK_REWARD, 1000, "purchase",
 								new ChainMessage(1,
 										new SingleMessage("shadyOffer.item"),
 										new SingleMessage("shadyOffer.purchase")
@@ -287,7 +289,7 @@ public class ConsortDialogue
 								new MessageType[]
 								{
 										new SingleMessage("dots"),
-										new PurchaseMessage(false, AlchemyRecipeHandler.CONSORT_JUNK_REWARD, 500, "purchase",
+										new PurchaseMessage(false, MinestuckLoot.CONSORT_JUNK_REWARD, 500, "purchase",
 												new SingleMessage("shadyOffer.purchase")
 										)
 								}

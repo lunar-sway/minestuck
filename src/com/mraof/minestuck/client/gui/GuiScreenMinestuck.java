@@ -1,8 +1,8 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.client.util.GuiUtil;
-import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.GristType;
+import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.BufferBuilder;

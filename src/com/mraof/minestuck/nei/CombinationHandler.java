@@ -16,8 +16,8 @@ import codechicken.nei.api.stack.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.CombinationRegistry;
+import com.mraof.minestuck.alchemy.AlchemyRecipeHandler;
+import com.mraof.minestuck.alchemy.CombinationRegistry;
 
 public class CombinationHandler extends TemplateRecipeHandler
 {

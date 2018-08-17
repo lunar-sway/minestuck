@@ -1,4 +1,4 @@
-package com.mraof.minestuck.util;
+package com.mraof.minestuck.alchemy;
 
 
 import java.util.ArrayList;

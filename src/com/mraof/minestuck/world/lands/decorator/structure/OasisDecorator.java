@@ -1,9 +1,9 @@
 package com.mraof.minestuck.world.lands.decorator.structure;
 
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.decorator.BiomeSpecificDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockUtil;
+import com.mraof.minestuck.world.storage.loot.MinestuckLoot;
 import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -163,7 +163,7 @@ public class OasisDecorator extends BiomeSpecificDecorator
 			
 			if(chestPos != null)
 			{
-				StructureBlockUtil.placeLootChest(chestPos, world, null, EnumFacing.getHorizontal(random.nextInt(4)), AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, random);
+				StructureBlockUtil.placeLootChest(chestPos, world, null, EnumFacing.getHorizontal(random.nextInt(4)), MinestuckLoot.BASIC_MEDIUM_CHEST, random);
 			}
 		}
 		

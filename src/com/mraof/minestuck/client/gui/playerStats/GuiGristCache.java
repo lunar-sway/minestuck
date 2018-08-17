@@ -1,7 +1,7 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mraof.minestuck.editmode.ClientEditHandler;
-import com.mraof.minestuck.util.GristType;
+import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;

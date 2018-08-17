@@ -1,4 +1,4 @@
-package com.mraof.minestuck.util;
+package com.mraof.minestuck.alchemy;
 
 /**
  * Container for a GristType + integer combination that might be useful when iterating through a GristSet.

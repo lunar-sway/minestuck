@@ -11,7 +11,6 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.inventory.ContainerHandler;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
 
 public class MinestuckConfigPacket extends MinestuckPacket
 {

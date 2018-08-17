@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.List;
 
 import com.mraof.minestuck.network.skaianet.SessionHandler;
-import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 

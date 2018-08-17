@@ -1,4 +1,4 @@
-package com.mraof.minestuck.util;
+package com.mraof.minestuck.alchemy;
 
 import java.util.Arrays;
 import java.util.Hashtable;
@@ -8,10 +8,10 @@ import javax.annotation.Nonnull;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
 
+import com.mraof.minestuck.util.Debug;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class CombinationRegistry {
@@ -105,7 +105,7 @@ public class CombinationRegistry {
 		if(input == null)
 			throw new IllegalArgumentException("Input is null");
 		if(input instanceof String)
-			if(AlchemyRecipeHandler.getItems(input, 0).isEmpty())
+			if(AlchemyRecipes.getItems(input, 0).isEmpty())
 				throw new IllegalArgumentException("No oredict item found for \""+input+"\"");
 	}
 	

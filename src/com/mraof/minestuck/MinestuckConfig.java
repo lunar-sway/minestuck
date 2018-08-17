@@ -80,6 +80,7 @@ public class MinestuckConfig
 	public static boolean gristRefund;
 	public static boolean needComputer;
 	public static boolean cruxtruderIntake;
+	public static boolean skaianetCheck;
 	public static int artifactRange;
 	public static int overworldEditRange;
 	public static int landEditRange;
@@ -204,6 +205,7 @@ public class MinestuckConfig
 		needComputer = config.get("General", "needComputer", false, "If this is true, players need to have a computer nearby to Enter").setLanguageKey("minestuck.config.needComputer").getBoolean();
 		cruxtruderIntake = config.get("General", "cruxtruderIntake", false, "If enabled, the regular cruxtruder will require raw cruxite to function, which is inserted through the pipe.").setLanguageKey("minestuck.config.cruxtruderIntake").getBoolean();
 		alchemiterMaxStacks = config.get("General", "alchemiterMaxStacks", 16,"The number of stacks that can be alchemized at the same time with the alchemiter.", 1, 999).setLanguageKey("minestuck.config.alchemiterMaxStacks").getInt();
+		skaianetCheck = config.get("General", "skaianetCheck", true, "If enabled, will during certain moments perform a check on all connections and computers that are in use. Recommended to turn off if there is a need to improve performance, however skaianet-related bugs might appear when done so.").setLanguageKey("minestuck.config.skaianetCheck").getBoolean();
 		
 		if(config.hasKey("General", "hardMode"))
 			hardMode = config.get("General", "hardMode", false).getBoolean();	//Not fully fleshed out yet

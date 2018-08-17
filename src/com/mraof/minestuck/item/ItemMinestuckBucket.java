@@ -28,6 +28,7 @@ public class ItemMinestuckBucket extends ItemBucket	//Unsure if anything more sh
 		setUnlocalizedName("minestuckBucket");
 		setCreativeTab(TabMinestuck.instance);
 		setContainerItem(Items.BUCKET);
+		setHasSubtypes(true);
 	}
 	
 	@Override

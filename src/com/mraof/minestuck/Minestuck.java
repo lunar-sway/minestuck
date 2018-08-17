@@ -1,52 +1,30 @@
 package com.mraof.minestuck;
 
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.client.ClientProxy;
-import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.command.*;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
-import com.mraof.minestuck.entity.MinestuckEntities;
-import com.mraof.minestuck.entity.consort.ConsortDialogue;
-import com.mraof.minestuck.event.MinestuckFluidHandler;
 import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
-import com.mraof.minestuck.item.ItemMinestuckCandy;
-import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.modSupport.crafttweaker.CraftTweakerSupport;
-import com.mraof.minestuck.network.MinestuckChannelHandler;
-import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.tileentity.*;
-import com.mraof.minestuck.tracker.ConnectionListener;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
-import com.mraof.minestuck.world.biome.BiomeMinestuck;
-import com.mraof.minestuck.world.gen.OreHandler;
-import com.mraof.minestuck.world.gen.structure.StructureCastlePieces;
-import com.mraof.minestuck.world.gen.structure.StructureCastleStart;
-import com.mraof.minestuck.world.lands.LandAspectRegistry;
-import com.mraof.minestuck.world.lands.structure.MapGenLandStructure;
-import com.mraof.minestuck.world.lands.structure.village.ConsortVillageComponents;
-import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.gen.structure.MapGenStructureIO;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.Random;
 
 import static com.mraof.minestuck.Minestuck.MOD_ID;
 import static com.mraof.minestuck.Minestuck.MOD_NAME;
 
-@Mod(modid = MOD_ID, name = MOD_NAME, version = "@VERSION@", guiFactory = "com.mraof.minestuck.client.gui.MinestuckGuiFactory", acceptedMinecraftVersions = "[1.12,1.12.2]")
+@Mod(modid = MOD_ID, name = MOD_NAME, version = "1.12.2-1.3.270", guiFactory = "com.mraof.minestuck.client.gui.MinestuckGuiFactory", acceptedMinecraftVersions = "[1.12,1.12.2]")
 public class Minestuck
 {
 	public static final String MOD_NAME = "Minestuck";
@@ -102,7 +80,7 @@ public class Minestuck
 		if(Loader.isModLoaded("crafttweaker"))
 			CraftTweakerSupport.applyRecipes();
 		
-		AlchemyRecipeHandler.registerDynamicRecipes();
+		AlchemyRecipes.registerAutomaticRecipes();
 	}
 
 	@EventHandler 

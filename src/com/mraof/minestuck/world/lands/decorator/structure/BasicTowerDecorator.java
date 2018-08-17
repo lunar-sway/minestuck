@@ -2,8 +2,8 @@ package com.mraof.minestuck.world.lands.decorator.structure;
 
 import java.util.Random;
 
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockUtil;
+import com.mraof.minestuck.world.storage.loot.MinestuckLoot;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -203,7 +203,7 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 		
 		if(random.nextInt(50) == 0)
 		{
-			StructureBlockUtil.placeLootChest(chestPos, world, null, facing, AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, random);
+			StructureBlockUtil.placeLootChest(chestPos, world, null, facing, MinestuckLoot.BASIC_MEDIUM_CHEST, random);
 		}
 		
 		return new BlockPos(xCoord + offset.getX(), yCoord + height + 2, zCoord + offset.getZ());

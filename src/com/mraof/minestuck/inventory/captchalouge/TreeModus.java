@@ -8,7 +8,7 @@ import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -155,7 +155,7 @@ public class TreeModus extends Modus
 		if(asCard)
 		{
 			size--;
-			stack = AlchemyRecipeHandler.createCard(stack, false);
+			stack = AlchemyRecipes.createCard(stack, false);
 		}
 		if(id == 0)
 			node = null;

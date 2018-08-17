@@ -1048,6 +1048,8 @@ minestuck.config.cruxtruderIntake=Cruxtruder Intake
 minestuck.config.cruxtruderIntake.tooltip=If enabled, the regular cruxtruder will require raw cruxite to function, which is inserted through the pipe.
 minestuck.config.alchemiterMaxStacks=Alchemiter Max Stacks
 minestuck.config.alchemiterMaxStacks.tooltip=The number of stacks that can be alchemized at the same time with the alchemiter.
+minestuck.config.skaianetCheck=Skaianet Check
+minestuck.config.skaianetCheck.tooltip=If enabled, will during certain moments perform a check on all connections and computers that are in use. Recommended to turn off if there is a need to improve performance, however skaianet-related bugs might appear when done so.
 
 message.selectDefaultColor=Default color selected. You can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!
 message.selectColor=If you want to change the color, you can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!

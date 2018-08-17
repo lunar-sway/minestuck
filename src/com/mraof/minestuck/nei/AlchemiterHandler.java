@@ -17,10 +17,10 @@ import codechicken.nei.recipe.TemplateRecipeHandler;
 
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.client.util.GuiUtil.GristboardMode;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.GristRegistry;
-import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.GristType;
+import com.mraof.minestuck.alchemy.AlchemyRecipeHandler;
+import com.mraof.minestuck.alchemy.GristRegistry;
+import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristType;
 
 public class AlchemiterHandler extends TemplateRecipeHandler
 {

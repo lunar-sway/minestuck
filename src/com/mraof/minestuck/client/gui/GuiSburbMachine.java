@@ -7,10 +7,10 @@ import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.inventory.ContainerSburbMachine;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tileentity.TileEntitySburbMachine;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.GristAmount;
-import com.mraof.minestuck.util.GristRegistry;
-import com.mraof.minestuck.util.GristSet;
+import com.mraof.minestuck.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.alchemy.GristAmount;
+import com.mraof.minestuck.alchemy.GristRegistry;
+import com.mraof.minestuck.alchemy.GristSet;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -102,7 +102,7 @@ public class GuiSburbMachine extends GuiMachine
 		if (type == MachineType.ALCHEMITER && !te.getStackInSlot(0).isEmpty())
 		{
 			//Render grist requirements
-			ItemStack stack = AlchemyRecipeHandler.getDecodedItem(te.getStackInSlot(0));
+			ItemStack stack = AlchemyRecipes.getDecodedItem(te.getStackInSlot(0));
 			if (type == MachineType.ALCHEMITER && !(te.getStackInSlot(0).hasTagCompound() && te.getStackInSlot(0).getTagCompound().hasKey("contentID")))
 				stack = new ItemStack(MinestuckBlocks.genericObject);
 
@@ -181,7 +181,7 @@ public class GuiSburbMachine extends GuiMachine
 			}
 		}
 		else if (te.getMachineType() == MachineType.ALCHEMITER && par3 == 0 && mc.player.inventory.getItemStack().isEmpty()
-				&& te.getStackInSlot(0) != null && AlchemyRecipeHandler.getDecodedItem(te.getStackInSlot(0)).getItem() == MinestuckItems.captchaCard
+				&& te.getStackInSlot(0) != null && AlchemyRecipes.getDecodedItem(te.getStackInSlot(0)).getItem() == MinestuckItems.captchaCard
 				&& par1 >= guiLeft + 9 && par1 < guiLeft + 167 && par2 >= guiTop + 45 && par2 < guiTop + 70)
 		{
 			mc.currentScreen = new GuiGristSelector(this);

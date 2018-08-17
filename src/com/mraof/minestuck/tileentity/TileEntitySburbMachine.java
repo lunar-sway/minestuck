@@ -1,6 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.block.BlockSburbMachine;
 import com.mraof.minestuck.block.BlockSburbMachine.MachineType;
 import com.mraof.minestuck.block.MinestuckBlocks;
@@ -118,17 +119,17 @@ public class TileEntitySburbMachine extends TileEntityMachine
 			case PUNCH_DESIGNIX:
 				if (!this.inv.get(0).isEmpty() && !inv.get(1).isEmpty())
 				{
-					ItemStack output = AlchemyRecipeHandler.getDecodedItemDesignix(inv.get(0));
+					ItemStack output = AlchemyRecipes.getDecodedItemDesignix(inv.get(0));
 					if (inv.get(1).hasTagCompound() && inv.get(1).getTagCompound().getBoolean("punched"))
 					{
 						output = CombinationRegistry.getCombination(output,
-								AlchemyRecipeHandler.getDecodedItem(inv.get(1)), CombinationRegistry.Mode.MODE_OR);
+								AlchemyRecipes.getDecodedItem(inv.get(1)), CombinationRegistry.Mode.MODE_OR);
 					}
 					if (output.isEmpty())
 						return false;
 					if (output.getItem().isDamageable())
 						output.setItemDamage(0);
-					output = AlchemyRecipeHandler.createCard(output, true);
+					output = AlchemyRecipes.createCard(output, true);
 					return (inv.get(2).isEmpty() || inv.get(2).getCount() < 16 && ItemStack.areItemStackTagsEqual(inv.get(2), output));
 				}
 				else
@@ -145,14 +146,14 @@ public class TileEntitySburbMachine extends TileEntityMachine
 							return inv.get(3).isEmpty() || !(inv.get(3).hasTagCompound() && inv.get(3).getTagCompound().hasKey("contentID"));
 						else
 						{
-							ItemStack output = CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(inv.get(0)), AlchemyRecipeHandler.getDecodedItem(inv.get(1)), CombinationRegistry.Mode.MODE_AND);
-							return !output.isEmpty() && (inv.get(3).isEmpty() || AlchemyRecipeHandler.getDecodedItem(inv.get(3)).isItemEqual(output));
+							ItemStack output = CombinationRegistry.getCombination(AlchemyRecipes.getDecodedItem(inv.get(0)), AlchemyRecipes.getDecodedItem(inv.get(1)), CombinationRegistry.Mode.MODE_AND);
+							return !output.isEmpty() && (inv.get(3).isEmpty() || AlchemyRecipes.getDecodedItem(inv.get(3)).isItemEqual(output));
 						}
 					}
 					else
 					{
 						ItemStack input = inv.get(0).isEmpty() ? inv.get(1) : inv.get(0);
-						return (inv.get(3).isEmpty() || (AlchemyRecipeHandler.getDecodedItem(inv.get(3)).isItemEqual(AlchemyRecipeHandler.getDecodedItem(input))
+						return (inv.get(3).isEmpty() || (AlchemyRecipes.getDecodedItem(inv.get(3)).isItemEqual(AlchemyRecipes.getDecodedItem(input))
 								|| !(input.hasTagCompound() && input.getTagCompound().getBoolean("punched")) && !(inv.get(3).hasTagCompound() && inv.get(3).getTagCompound().hasKey("contentID"))));
 					}
 				}
@@ -161,7 +162,7 @@ public class TileEntitySburbMachine extends TileEntityMachine
 				if (!world.isBlockPowered(this.getPos()) && !this.inv.get(0).isEmpty() && this.owner != null)
 				{
 					//Check owner's cache: Do they have everything they need?
-					ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(this.inv.get(0));
+					ItemStack newItem = AlchemyRecipes.getDecodedItem(this.inv.get(0));
 					if (newItem.isEmpty())
 						if (!inv.get(0).hasTagCompound() || !inv.get(0).getTagCompound().hasKey("contentID"))
 							newItem = new ItemStack(MinestuckBlocks.genericObject);
@@ -204,7 +205,7 @@ public class TileEntitySburbMachine extends TileEntityMachine
 			case ALCHEMITER:
 				if (getStackInSlot(0) != null && owner != null)
 				{
-					ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(getStackInSlot(0));
+					ItemStack newItem = AlchemyRecipes.getDecodedItem(getStackInSlot(0));
 					if (newItem.isEmpty())
 						if (!getStackInSlot(0).hasTagCompound() || !getStackInSlot(0).getTagCompound().hasKey("contentID"))
 							newItem = new ItemStack(MinestuckBlocks.genericObject);
@@ -304,15 +305,15 @@ public class TileEntitySburbMachine extends TileEntityMachine
 					break;
 				}
 
-				ItemStack outputItem = AlchemyRecipeHandler.getDecodedItemDesignix(inv.get(0));
+				ItemStack outputItem = AlchemyRecipes.getDecodedItemDesignix(inv.get(0));
 
 				if (inv.get(1).hasTagCompound() && inv.get(1).getTagCompound().getBoolean("punched"))
-					outputItem = CombinationRegistry.getCombination(outputItem, AlchemyRecipeHandler.getDecodedItem(inv.get(1)), CombinationRegistry.Mode.MODE_OR);
+					outputItem = CombinationRegistry.getCombination(outputItem, AlchemyRecipes.getDecodedItem(inv.get(1)), CombinationRegistry.Mode.MODE_OR);
 				if (outputItem.getItem().isDamageable())
 					outputItem.setItemDamage(0);
 
 				//Create card
-				outputItem = AlchemyRecipeHandler.createCard(outputItem, true);
+				outputItem = AlchemyRecipes.createCard(outputItem, true);
 
 				setInventorySlotContents(2, outputItem);
 				if (!(inv.get(0).hasTagCompound() && inv.get(0).getTagCompound().hasKey("contentID")))
@@ -332,24 +333,24 @@ public class TileEntitySburbMachine extends TileEntityMachine
 					if (!inv.get(0).hasTagCompound() || !inv.get(0).getTagCompound().getBoolean("punched") || !inv.get(1).hasTagCompound() || !inv.get(1).getTagCompound().getBoolean("punched"))
 						output = new ItemStack(MinestuckBlocks.genericObject);
 					else
-						output = CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(inv.get(0)), AlchemyRecipeHandler.getDecodedItem(inv.get(1)), CombinationRegistry.Mode.MODE_AND);
+						output = CombinationRegistry.getCombination(AlchemyRecipes.getDecodedItem(inv.get(0)), AlchemyRecipes.getDecodedItem(inv.get(1)), CombinationRegistry.Mode.MODE_AND);
 				else
 				{
 					ItemStack input = inv.get(0).isEmpty() ? inv.get(1) : inv.get(0);
 					if (!input.hasTagCompound() || !input.getTagCompound().getBoolean("punched"))
 						output = new ItemStack(MinestuckBlocks.genericObject);
-					else output = AlchemyRecipeHandler.getDecodedItem(input);
+					else output = AlchemyRecipes.getDecodedItem(input);
 				}
 
 				ItemStack outputDowel = output.getItem().equals(Item.getItemFromBlock(MinestuckBlocks.genericObject))
-						? new ItemStack(MinestuckItems.cruxiteDowel) : AlchemyRecipeHandler.createEncodedItem(output, false);
+						? new ItemStack(MinestuckItems.cruxiteDowel) : AlchemyRecipes.createEncodedItem(output, false);
 				outputDowel.setItemDamage(inv.get(2).getItemDamage());
 
 				setInventorySlotContents(3, outputDowel);
 				decrStackSize(2, 1);
 				break;
 			case ALCHEMITER:
-				ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(this.inv.get(0));
+				ItemStack newItem = AlchemyRecipes.getDecodedItem(this.inv.get(0));
 
 				if (newItem.isEmpty())
 					newItem = new ItemStack(MinestuckBlocks.genericObject);
@@ -365,7 +366,7 @@ public class TileEntitySburbMachine extends TileEntityMachine
 
 				EntityPlayerMP player = owner.getPlayer();
 				if (player != null)
-					AlchemyRecipeHandler.onAlchemizedItem(newItem, player);
+					AlchemyRecipes.onAlchemizedItem(newItem, player);
 
 				GristSet cost = GristRegistry.getGristConversion(newItem);
 				if (newItem.getItem() == MinestuckItems.captchaCard)

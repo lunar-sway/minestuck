@@ -10,8 +10,8 @@ import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.GristSet;
+import com.mraof.minestuck.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.alchemy.GristSet;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -99,7 +99,7 @@ public class GuiAlchemiter extends GuiScreen
 			GristSet set;
 			set = alchemiter.getGristCost(itemQuantity);
 			//draw the grist board
-			GuiUtil.drawGristBoard(set, AlchemyRecipeHandler.getDecodedItem(alchemiter.getDowel()).getItem() == MinestuckItems.captchaCard ? GuiUtil.GristboardMode.LARGE_ALCHEMITER_SELECT : GuiUtil.GristboardMode.LARGE_ALCHEMITER, (width-guiWidth)/2+88,(height-guiHeight)/2+13, fontRenderer);
+			GuiUtil.drawGristBoard(set, AlchemyRecipes.getDecodedItem(alchemiter.getDowel()).getItem() == MinestuckItems.captchaCard ? GuiUtil.GristboardMode.LARGE_ALCHEMITER_SELECT : GuiUtil.GristboardMode.LARGE_ALCHEMITER, (width-guiWidth)/2+88,(height-guiHeight)/2+13, fontRenderer);
 			//draw the grist
 			List<String> tooltip = GuiUtil.getGristboardTooltip(set, mouseX , mouseY , 9, 45, fontRenderer);
 			if (tooltip != null)
@@ -174,7 +174,7 @@ public class GuiAlchemiter extends GuiScreen
 			}
 		}
 		else if ( par3 == 0 && mc.player.inventory.getItemStack().isEmpty()
-				&& alchemiter.getDowel() != null && AlchemyRecipeHandler.getDecodedItem(alchemiter.getDowel()).getItem() == MinestuckItems.captchaCard
+				&& alchemiter.getDowel() != null && AlchemyRecipes.getDecodedItem(alchemiter.getDowel()).getItem() == MinestuckItems.captchaCard
 				&& par1 >= (width-guiWidth)/2 +80  && par1 < (width-guiWidth)/2 + 150 && par2 >= (height-guiHeight)/2 + 8 && par2 < (height-guiHeight)/2 + 93)
 		{
 			mc.currentScreen = new GuiGristSelector(this);

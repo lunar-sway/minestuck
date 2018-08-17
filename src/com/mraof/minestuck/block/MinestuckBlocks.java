@@ -39,7 +39,7 @@ public class MinestuckBlocks
 	public static Block crockerMachine = new BlockCrockerMachine();
 	public static Block blockComputerOff = new BlockComputerOff();
 	public static Block blockComputerOn = new BlockComputerOn();
-	public static Block blockLaptopOff = new BlockVanityLaptopOff();
+	public static Block blockLaptopOff = new BlockVanityLaptopOff().setCreativeTab(null);
 	public static Block blockLaptopOn = new BlockVanityLaptopOn();
 	public static Block transportalizer = new BlockTransportalizer();
 	
@@ -62,13 +62,13 @@ public class MinestuckBlocks
 	public static Block frostBrickStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.FROST_BRICK)).setUnlocalizedName("stairsMinestuck.frostBrick");
 	public static Block castIronStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.CAST_IRON)).setUnlocalizedName("stairsMinestuck.castIron");
 	public static Block log = new BlockMinestuckLog();
-	public static Block leaves1 = new BlockMinestuckLeaves1();
+	public static Block leaves1 = new BlockMinestuckLeaves1().setCreativeTab(null);
 	public static Block planks = new BlockMinestuckPlanks();
-	public static Block aspectSapling = new BlockAspectSapling();
+	public static Block aspectSapling = new BlockAspectSapling().setCreativeTab(null);
 	public static Block rainbowSapling = new BlockRainbowSapling();
-	public static Block aspectLog1 = new BlockAspectLog();
-	public static Block aspectLog2 = new BlockAspectLog2();
-	public static Block aspectLog3 = new BlockAspectLog3();
+	public static Block aspectLog1 = new BlockAspectLog().setCreativeTab(null);
+	public static Block aspectLog2 = new BlockAspectLog2().setCreativeTab(null);
+	public static Block aspectLog3 = new BlockAspectLog3().setCreativeTab(null);
 	public static Block woodenCactus = new BlockCactusSpecial(SoundType.WOOD, "axe").setHardness(1.0F).setResistance(2.5F).setUnlocalizedName("woodenCactus");
 	public static Block sugarCube = new BlockCustom(Material.SAND, MapColor.SNOW, SoundType.SAND).setUnlocalizedName("sugarCube").setHardness(0.4F).setCreativeTab(TabMinestuck.instance);
 	public static Block rabbitSpawner = new BlockMobSpawner().setUnlocalizedName("rabbitSpawner");
@@ -277,6 +277,14 @@ public class MinestuckBlocks
 
 		cruxiteBlock.setHarvestLevel("pickaxe", 0);
 		uraniumBlock.setHarvestLevel("pickaxe", 1);
+		coalOreNetherrack.setHarvestLevel("pickaxe", Blocks.COAL_ORE.getHarvestLevel(Blocks.COAL_ORE.getDefaultState()));
+		ironOreEndStone.setHarvestLevel("pickaxe", Blocks.IRON_ORE.getHarvestLevel(Blocks.IRON_ORE.getDefaultState()));
+		ironOreSandstone.setHarvestLevel("pickaxe", Blocks.IRON_ORE.getHarvestLevel(Blocks.IRON_ORE.getDefaultState()));
+		ironOreSandstoneRed.setHarvestLevel("pickaxe", Blocks.IRON_ORE.getHarvestLevel(Blocks.IRON_ORE.getDefaultState()));
+		goldOreSandstone.setHarvestLevel("pickaxe", Blocks.GOLD_ORE.getHarvestLevel(Blocks.GOLD_ORE.getDefaultState()));
+		goldOreSandstoneRed.setHarvestLevel("pickaxe", Blocks.GOLD_ORE.getHarvestLevel(Blocks.GOLD_ORE.getDefaultState()));
+		redstoneOreEndStone.setHarvestLevel("pickaxe", Blocks.REDSTONE_ORE.getHarvestLevel(Blocks.REDSTONE_ORE.getDefaultState()));
+		
 	}
 	
 	private static Fluid createFluid(String name, ResourceLocation still, ResourceLocation flowing, String unlocalizedName)
