@@ -40,10 +40,10 @@ public class LandAspectRegistry
 		registerLandAspect(new LandAspectForest());
 		registerLandAspect(new LandAspectRock());
 		registerLandAspect(new LandAspectWood());
-		//registerLandAspect(new LandAspectRain());
-		//registerLandAspect(new LandAspectRainbow());
-		//registerLandAspect(new LandAspectFlora());
-		//registerLandAspect(new LandAspectEnd());
+		registerLandAspect(new LandAspectRain());
+		registerLandAspect(new LandAspectRainbow());
+		registerLandAspect(new LandAspectFlora());
+		registerLandAspect(new LandAspectEnd());
 		
 		registerLandAspect(new LandAspectWind(), EnumAspect.BREATH);
 		registerLandAspect(new LandAspectLight(), EnumAspect.LIGHT);

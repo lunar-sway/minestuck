@@ -62,7 +62,7 @@ public class MinestuckBlocks
 	public static Block frostBrickStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.FROST_BRICK)).setUnlocalizedName("stairsMinestuck.frostBrick");
 	public static Block castIronStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.CAST_IRON)).setUnlocalizedName("stairsMinestuck.castIron");
 	public static Block log = new BlockMinestuckLog();
-	public static Block leaves1 = new BlockMinestuckLeaves1().setCreativeTab(null);
+	public static Block leaves1 = new BlockMinestuckLeaves1();
 	public static Block planks = new BlockMinestuckPlanks();
 	public static Block aspectSapling = new BlockAspectSapling().setCreativeTab(null);
 	public static Block rainbowSapling = new BlockRainbowSapling();
