@@ -170,7 +170,7 @@ public class ConsortDialogue
 		
 		// have consort explode a second after line 3
 		addMessage(new ChainMessage(new SingleMessage("immortalityHerb.1"), new SingleMessage("immortalityHerb.2"), new SingleMessage("immortalityHerb.3"))).landTerrain(fromNameTerrain("flora"));
-		addMessage(new ChainMessage(new SingleMessage("spices.1"), new SingleMessage("spices.2", "denizen"))).landTerrain(fromNameTerrain("flora"));
+		addMessage(new ChainMessage(new SingleMessage("spices.1"), new SingleMessage("spices.2", "landName"))).landTerrain(fromNameTerrain("flora"));
 
 		addMessage("denizenMention").reqLand();
 		addMessage("floatingIsland").consortReq(consort -> consort.getDistanceSq(consort.world.getSpawnPoint()) < 65536).reqLand();

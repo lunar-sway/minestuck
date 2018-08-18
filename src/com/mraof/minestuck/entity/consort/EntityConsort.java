@@ -1,7 +1,10 @@
 package com.mraof.minestuck.entity.consort;
 
+import java.util.Iterator;
+
 import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
 import com.mraof.minestuck.entity.EntityMinestuck;
+import com.mraof.minestuck.entity.consort.MessageType.SingleMessage;
 import com.mraof.minestuck.inventory.InventoryConsortMerchant;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
@@ -15,6 +18,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
@@ -31,6 +35,7 @@ public abstract class EntityConsort extends EntityMinestuck
 	MessageType.DelayMessage updatingMessage; //Change to an interface/array if more message components need tick updates
 	public InventoryConsortMerchant stocks;
 	private int eventTimer = -1;
+	private float explosionRadius = 2.0f;
 	
 	public EntityConsort(World world)
 	{
@@ -64,7 +69,7 @@ public abstract class EntityConsort extends EntityMinestuck
 	@Override
 	protected boolean processInteract(EntityPlayer player, EnumHand hand)
 	{
-		if(this.isEntityAlive() && !player.isSneaking())
+		if(this.isEntityAlive() && !player.isSneaking() && eventTimer < 0)
 		{
 			if(!world.isRemote)
 			{
@@ -74,7 +79,7 @@ public abstract class EntityConsort extends EntityMinestuck
 					messageTicksLeft = 24000 + world.rand.nextInt(24000);
 					messageData = new NBTTagCompound();
 				}
-				ITextComponent text = message.getMessage(this, player);    //TODO Make sure to catch any issues here
+				ITextComponent text = message.getMessage(this, player);	//TODO Make sure to catch any issues here
 				if (text != null)
 				{
 					player.sendMessage(text);
@@ -90,9 +95,16 @@ public abstract class EntityConsort extends EntityMinestuck
 	
 	public void onSendMessage(EntityPlayer player, ITextComponent text, EntityConsort entityConsort)
 	{
-		Debug.debug(text.getUnformattedText());
+		Iterator<ITextComponent> i = text.iterator();
+		String explosionMessage = new SingleMessage("immortalityHerb.3").getMessage(this, player, null).getUnformattedComponentText();
+		
+		if(text.getUnformattedComponentText().equals(explosionMessage))
+		{
+			eventTimer = 20;
+			tasks.setControlFlag(1, true);
+		}
 	}
-
+	
 	@Override
 	public void onLivingUpdate()
 	{
@@ -117,6 +129,26 @@ public abstract class EntityConsort extends EntityMinestuck
 		
 		if(MinestuckDimensionHandler.isSkaia(dimension))
 			visitedSkaia = true;
+		
+		if(eventTimer > 0)
+		{
+			eventTimer--;
+		}
+		else if(eventTimer == 0)
+		{
+			explode();
+		}
+	}
+	
+	private void explode()
+	{
+		if (!this.world.isRemote)
+		{
+			boolean flag = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this);
+			this.dead = true;
+			this.world.createExplosion(this, this.posX, this.posY, this.posZ, (float)this.explosionRadius, flag);
+			this.setDead();
+		}
 	}
 	
 	@Override

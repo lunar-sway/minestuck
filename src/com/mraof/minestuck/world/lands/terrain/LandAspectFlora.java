@@ -37,7 +37,7 @@ public class LandAspectFlora extends TerrainLandAspect
 		registry.setBlockState("ocean", MinestuckBlocks.blockBlood.getDefaultState());
 		registry.setBlockState("structure_primary", Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.MOSSY));
 		registry.setBlockState("structure_primary_decorative", MinestuckBlocks.floweryMossBrick.getDefaultState());
-		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.MOSSY));
+		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState());
 		registry.setBlockState("structure_secondary", Blocks.MOSSY_COBBLESTONE.getDefaultState());
 		registry.setBlockState("structure_secondary_decorative", MinestuckBlocks.floweryMossStone.getDefaultState());
 		registry.setBlockState("structure_secondary_stairs", Blocks.DARK_OAK_STAIRS.getDefaultState());
