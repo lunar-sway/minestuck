@@ -106,6 +106,12 @@ public class LandAspectRock extends TerrainLandAspect
 	}
 	
 	@Override
+	public Vec3d getSkyColor()
+	{
+		return new Vec3d(0.6D, 0.8D, 0.7D);
+	}
+	
+	@Override
 	public ILandTerrainGen createTerrainGenerator(ChunkProviderLands chunkProvider, Random rand)
 	{
 		DefaultTerrainGen terrainGen = new DefaultTerrainGen(chunkProvider, rand);

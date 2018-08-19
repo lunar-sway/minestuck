@@ -26,7 +26,7 @@ import java.util.Random;
 
 public class LandAspectSand extends TerrainLandAspect
 {
-	private final Vec3d skyColor;
+	private final Vec3d fogColor, skyColor;
 	private final Variant type;
 	private final List<TerrainLandAspect> variations;
 	
@@ -42,13 +42,15 @@ public class LandAspectSand extends TerrainLandAspect
 		
 		if(type == Variant.SAND)
 		{
-			skyColor = new Vec3d(0.99D, 0.8D, 0.05D);
+			fogColor = new Vec3d(0.99D, 0.8D, 0.05D);
+			skyColor = new Vec3d(0.8D, 0.8D, 0.1D);
 			
 			variations.add(this);
 			variations.add(new LandAspectSand(Variant.SAND_RED));
 		} else
 		{
-			skyColor = new Vec3d(0.99D, 0.6D, 0.05D);
+			fogColor = new Vec3d(0.99D, 0.6D, 0.05D);
+			skyColor = new Vec3d(0.8D, 0.6D, 0.1D);
 		}
 		
 	}
@@ -131,6 +133,12 @@ public class LandAspectSand extends TerrainLandAspect
 	
 	@Override
 	public Vec3d getFogColor() 
+	{
+		return fogColor;
+	}
+	
+	@Override
+	public Vec3d getSkyColor()
 	{
 		return skyColor;
 	}

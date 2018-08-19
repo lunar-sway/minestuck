@@ -33,6 +33,11 @@ public abstract class TerrainLandAspect implements ILandAspect<TerrainLandAspect
 	
 	public abstract Vec3d getFogColor();
 	
+	public Vec3d getSkyColor()
+	{
+		return new Vec3d(0, 0, 0);
+	}
+	
 	public int getWeatherType()
 	{
 		return -1;

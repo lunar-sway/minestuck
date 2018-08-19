@@ -13,6 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.GameType;
@@ -27,17 +28,12 @@ public class WorldProviderLands extends WorldProvider
 	public LandAspectRegistry.AspectCombination landAspects;
 	public float skylightBase;
 	Vec3d skyColor;
+	Vec3d fogColor;
 	
 	@Override
 	public DimensionType getDimensionType()
 	{
 		return MinestuckDimensionHandler.landDimensionType;
-	}
-	
-	@Override
-	public float calculateCelestialAngle(long par1, float par3)
-	{
-		return 1.0F;
 	}
 	
 	@Override
@@ -47,6 +43,13 @@ public class WorldProviderLands extends WorldProvider
 		skylight = (float)((double)skylight * (1.0D - (double)(world.getRainStrength(partialTicks) * 5.0F) / 16.0D));
 		skylight = (float)((double)skylight * (1.0D - (double)(world.getThunderStrength(partialTicks) * 5.0F) / 16.0D));
 		return skylight;
+	}
+	
+	@Override
+	public float getStarBrightness(float par1)
+	{
+		float f = 1 - skylightBase;
+		return f * f * 0.5F;
 	}
 	
 	@Override
@@ -157,7 +160,8 @@ public class WorldProviderLands extends WorldProvider
 			setSkyRenderer(new LandSkyRender(this));
 		
 		skylightBase = landAspects.aspectTerrain.getSkylightBase();
-		this.skyColor = landAspects.aspectTerrain.getFogColor();
+		skyColor = landAspects.aspectTerrain.getSkyColor();
+		fogColor = landAspects.aspectTerrain.getFogColor();
 		landAspects.aspectTitle.prepareWorldProvider(this);
 	}
 	
@@ -200,6 +204,41 @@ public class WorldProviderLands extends WorldProvider
 		return getFogColor();
 	}
 	
+	@Override
+	public Vec3d getCloudColor(float partialTicks)
+	{
+		float f1 = 1 - skylightBase;
+		float f2 = 1.0F;
+		float f3 = 1.0F;
+		float f4 = 1.0F;
+		float f5 = world.getRainStrength(partialTicks);
+		
+		if (f5 > 0.0F)
+		{
+			float f6 = (f2 * 0.3F + f3 * 0.59F + f4 * 0.11F) * 0.6F;
+			float f7 = 1.0F - f5 * 0.95F;
+			f2 = f2 * f7 + f6 * (1.0F - f7);
+			f3 = f3 * f7 + f6 * (1.0F - f7);
+			f4 = f4 * f7 + f6 * (1.0F - f7);
+		}
+		
+		f2 = f2 * (f1 * 0.9F + 0.1F);
+		f3 = f3 * (f1 * 0.9F + 0.1F);
+		f4 = f4 * (f1 * 0.85F + 0.15F);
+		float f9 = world.getThunderStrength(partialTicks);
+		
+		if (f9 > 0.0F)
+		{
+			float f10 = (f2 * 0.3F + f3 * 0.59F + f4 * 0.11F) * 0.2F;
+			float f8 = 1.0F - f9 * 0.95F;
+			f2 = f2 * f8 + f10 * (1.0F - f8);
+			f3 = f3 * f8 + f10 * (1.0F - f8);
+			f4 = f4 * f8 + f10 * (1.0F - f8);
+		}
+		
+		return new Vec3d((double)f2, (double)f3, (double)f4);
+	}
+	
 	public World getWorld()
 	{
 		return world;
@@ -239,6 +278,6 @@ public class WorldProviderLands extends WorldProvider
 	
 	public Vec3d getFogColor()
 	{
-		return this.skyColor;
+		return this.fogColor;
 	}
 }

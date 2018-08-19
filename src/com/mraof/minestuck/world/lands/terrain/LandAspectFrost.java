@@ -16,7 +16,7 @@ import java.util.List;
 
 public class LandAspectFrost extends TerrainLandAspect 
 {
-	static Vec3d skyColor = new Vec3d(0.45D, 0.5D, 0.98D);
+	static Vec3d fogColor = new Vec3d(0.5D, 0.6D, 0.98D);
 	
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
@@ -79,7 +79,13 @@ public class LandAspectFrost extends TerrainLandAspect
 	@Override
 	public Vec3d getFogColor() 
 	{
-		return skyColor;
+		return fogColor;
+	}
+	
+	@Override
+	public Vec3d getSkyColor()
+	{
+		return new Vec3d(0.6D, 0.7D, 0.9D);
 	}
 	
 	@Override

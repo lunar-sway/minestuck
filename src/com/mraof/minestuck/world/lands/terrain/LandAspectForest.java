@@ -72,6 +72,12 @@ public class LandAspectForest extends TerrainLandAspect
 	}
 	
 	@Override
+	public Vec3d getSkyColor()
+	{
+		return new Vec3d(0.4D, 0.7D, 1.0D);
+	}
+	
+	@Override
 	public float getRainfall()	//Same as vanilla forest
 	{
 		return 0.8F;
