@@ -36,6 +36,7 @@ public abstract class EntityConsort extends EntityMinestuck
 	public InventoryConsortMerchant stocks;
 	private int eventTimer = -1;
 	private float explosionRadius = 2.0f;
+	static private SingleMessage explosionMessage = new SingleMessage("immortalityHerb.3");
 	
 	public EntityConsort(World world)
 	{
@@ -96,12 +97,14 @@ public abstract class EntityConsort extends EntityMinestuck
 	public void onSendMessage(EntityPlayer player, ITextComponent text, EntityConsort entityConsort)
 	{
 		Iterator<ITextComponent> i = text.iterator();
-		String explosionMessage = new SingleMessage("immortalityHerb.3").getMessage(this, player, null).getUnformattedComponentText();
+		String explosionMessage = this.explosionMessage.getMessageForTesting(this, player).getUnformattedComponentText();
 		
+		//This block triggers when the consort from Flora Lands eats the "immortality" herb.
 		if(text.getUnformattedComponentText().equals(explosionMessage))
 		{
+			//Start a timer of one second: 20 ticks.
+			//Consorts explode when the timer hits zero.
 			eventTimer = 20;
-			tasks.setControlFlag(1, true);
 		}
 	}
 	

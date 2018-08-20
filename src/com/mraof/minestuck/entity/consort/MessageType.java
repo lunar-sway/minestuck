@@ -174,6 +174,17 @@ public abstract class MessageType
 			return unlocalizedMessage;
 		}
 		
+		/**
+		 * Like getMessage(), but does not set the consort's message tag for the player.
+		 * Useful for comparing values in post-localized, post-formatted messages.
+		 * Note that this may format the text with information subject to change, like the name of the current Land.
+		 * @return The value getMessage() would return
+		 */
+		public ITextComponent getMessageForTesting(EntityConsort consort, EntityPlayer player)
+		{
+			return createMessage(consort, player, unlocalizedMessage, args, true);
+		}
+		
 		@Override
 		public ITextComponent getMessage(EntityConsort consort, EntityPlayer player, String chainIdentifier)
 		{
