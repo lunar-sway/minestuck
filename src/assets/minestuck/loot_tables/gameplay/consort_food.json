@@ -341,7 +341,7 @@
                 {
                     "type": "item",
                     "name": "minecraft:red_mushroom",
-                    "weight": 8,
+                    "weight": 4,
                     "functions": [
                         {
                             "function": "set_count",
@@ -361,7 +361,7 @@
                 {
                     "type": "item",
                     "name": "minecraft:brown_mushroom",
-                    "weight": 8,
+                    "weight": 4,
                     "functions": [
                         {
                             "function": "set_count",

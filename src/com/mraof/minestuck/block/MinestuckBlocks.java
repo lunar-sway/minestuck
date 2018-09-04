@@ -11,6 +11,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemSeedFood;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -88,6 +90,8 @@ public class MinestuckBlocks
 	public static Block endSapling = new BlockEndSapling();
 	public static Block endGrass = new BlockEndGrass();
 	public static Block coarseEndStone = new BlockEndStoneCoarse();
+	public static Block strawberry = new BlockStrawberry();
+	public static Block strawberryStem = new BlockMinestuckStem(strawberry).setUnlocalizedName("strawberryStem").setCreativeTab(null);
 	
 	//Ores
 	public static Block oreCruxite = new BlockCruxiteOre();
@@ -99,6 +103,7 @@ public class MinestuckBlocks
 	public static Block goldOreSandstone = new BlockVanillaOre(BlockVanillaOre.OreType.GOLD).setUnlocalizedName("oreGold");
 	public static Block goldOreSandstoneRed = new BlockVanillaOre(BlockVanillaOre.OreType.GOLD).setUnlocalizedName("oreGold");
 	public static Block redstoneOreEndStone = new BlockVanillaOre(BlockVanillaOre.OreType.REDSTONE).setUnlocalizedName("oreRedstone");
+	public static Block quartzOreStone = new BlockVanillaOre(BlockVanillaOre.OreType.QUARTZ).setUnlocalizedName("oreQuartz");
 	
 	public static Block uraniumCooker = new BlockUraniumCooker().setUnlocalizedName("uraniumCooker");
 
@@ -244,11 +249,12 @@ public class MinestuckBlocks
 		
 		registry.register(coarseEndStone.setRegistryName("coarse_end_stone"));
 		registry.register(endGrass.setRegistryName("end_grass"));
-		registry.register(treatedPlanks.setRegistryName("treated_planks"));
 		registry.register(endLog.setRegistryName("end_log"));
 		registry.register(endLeaves.setRegistryName("end_leaves"));
 		registry.register(endPlanks.setRegistryName("end_planks"));
 		registry.register(endSapling.setRegistryName("end_sapling"));
+
+		registry.register(treatedPlanks.setRegistryName("treated_planks"));
 		registry.register(floweryMossStone.setRegistryName("flowery_moss_stone"));
 		registry.register(floweryMossBrick.setRegistryName("flowery_moss_brick"));
 		
