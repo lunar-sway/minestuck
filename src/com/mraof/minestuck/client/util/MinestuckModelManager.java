@@ -198,6 +198,7 @@ public class MinestuckModelManager
 		register(salad);
 		register(irradiatedSteak);
 		register(rockCookie);
+		register(strawberryChunk);
 		
 		register(threshDvd);
 		register(crewPoster);
@@ -241,6 +242,7 @@ public class MinestuckModelManager
 		register(goldOreSandstone);
 		register(goldOreSandstoneRed);
 		register(redstoneOreEndStone);
+		register(quartzOreStone);
 		for(BlockColoredDirt.BlockType type : BlockColoredDirt.BlockType.values())
 			register(coloredDirt, type.ordinal(), "colored_dirt_"+type.name);
 		register(layeredSand);
@@ -305,6 +307,7 @@ public class MinestuckModelManager
 		register(endPlanks);
 		register(endSapling);
 		register(endGrass);
+		register(strawberry);
 		
 		register(primedTnt);
 		register(unstableTnt);
@@ -332,6 +335,7 @@ public class MinestuckModelManager
 		ModelLoader.setCustomStateMapper(returnNode, (Block block) -> Collections.emptyMap());
 		ModelLoader.setCustomStateMapper(gate, (Block block) -> Collections.emptyMap());
 		ModelLoader.setCustomStateMapper(rabbitSpawner, (Block block) -> Collections.emptyMap());
+		ModelLoader.setCustomStateMapper(strawberryStem, (new StateMap.Builder()).build());
 	}
 	
 	private static void register(Item item)

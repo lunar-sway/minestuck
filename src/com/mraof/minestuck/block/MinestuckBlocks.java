@@ -3,6 +3,7 @@ package com.mraof.minestuck.block;
 import com.mraof.minestuck.item.TabMinestuck;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -91,7 +92,7 @@ public class MinestuckBlocks
 	public static Block endGrass = new BlockEndGrass();
 	public static Block coarseEndStone = new BlockEndStoneCoarse();
 	public static Block strawberry = new BlockStrawberry();
-	public static Block strawberryStem = new BlockMinestuckStem(strawberry).setUnlocalizedName("strawberryStem").setCreativeTab(null);
+	public static Block strawberryStem = new BlockMinestuckStem((BlockDirectional) strawberry).setUnlocalizedName("strawberryStem").setCreativeTab(null);
 	
 	//Ores
 	public static Block oreCruxite = new BlockCruxiteOre();
@@ -203,6 +204,7 @@ public class MinestuckBlocks
 		registry.register(goldOreSandstone.setRegistryName("gold_ore_sandstone"));
 		registry.register(goldOreSandstoneRed.setRegistryName("gold_ore_sandstone_red"));
 		registry.register(redstoneOreEndStone.setRegistryName("redstone_ore_end_stone"));
+		registry.register(quartzOreStone.setRegistryName("quartz_ore_stone"));
 		
 		registry.register(cruxiteBlock.setRegistryName("cruxite_block"));
 		registry.register(uraniumBlock.setRegistryName("uranium_block"));
@@ -257,6 +259,8 @@ public class MinestuckBlocks
 		registry.register(treatedPlanks.setRegistryName("treated_planks"));
 		registry.register(floweryMossStone.setRegistryName("flowery_moss_stone"));
 		registry.register(floweryMossBrick.setRegistryName("flowery_moss_brick"));
+		registry.register(strawberry.setRegistryName("strawberry"));
+		registry.register(strawberryStem.setRegistryName("strawberry_stem"));
 		
 		registry.register(primedTnt.setRegistryName("primed_tnt"));
 		registry.register(unstableTnt.setRegistryName("unstable_tnt"));
@@ -280,7 +284,7 @@ public class MinestuckBlocks
 			FluidRegistry.registerFluid(gristFluids[grist.getId()]);
 			liquidGrists[grist.getId()] = GameRegistry.register(new BlockFluidGrist(gristFluids[grist.getId()], Material.WATER).setRegistryName("liquid_" + grist.getName())).setUnlocalizedName("liquid_" + grist.getName());
 		}*/
-
+		
 		cruxiteBlock.setHarvestLevel("pickaxe", 0);
 		uraniumBlock.setHarvestLevel("pickaxe", 1);
 		coalOreNetherrack.setHarvestLevel("pickaxe", Blocks.COAL_ORE.getHarvestLevel(Blocks.COAL_ORE.getDefaultState()));

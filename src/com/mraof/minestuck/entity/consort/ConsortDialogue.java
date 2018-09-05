@@ -166,9 +166,10 @@ public class ConsortDialogue
 		addMessage("uselessElytra").landTerrain(fromNameTerrain("end"));
 		
 		addMessage("battleSite").landTerrain(fromNameTerrain("flora"));
+		addMessage("bloodOceans").landTerrain(fromNameTerrain("flora"));
+		addMessage("giantSwords").landTerrain(fromNameTerrain("flora"));
+		addMessage(new ChainMessage(new SingleMessage("bloodberries.1"), new SingleMessage("bloodberries.2"))).landTerrain(fromNameTerrain("flora"));
 		addMessage("sharpSlide").landTerrain(fromNameTerrain("flora"));
-		
-		// have consort explode a second after line 3
 		addMessage(new ChainMessage(new SingleMessage("immortalityHerb.1"), new SingleMessage("immortalityHerb.2"), new SingleMessage("immortalityHerb.3"))).landTerrain(fromNameTerrain("flora"));
 		addMessage(new ChainMessage(new SingleMessage("spices.1"), new SingleMessage("spices.2", "landName"))).landTerrain(fromNameTerrain("flora"));
 
@@ -363,6 +364,8 @@ public class ConsortDialogue
 		addMessage(new MerchantGuiMessage(new SingleMessage("voidGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("silence"));
 		addMessage(new MerchantGuiMessage(new SingleMessage("rageGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("monsters"));
 		addMessage(new MerchantGuiMessage(new DescriptionMessage("hopeGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("towers"));
+		
+		addMessage(new MerchantGuiMessage(new SingleMessage("boringShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTerrain(fromNameTerrain("rainbow"));
 	}
 	
 	public static DialogueWrapper addMessage(String message, String... args)

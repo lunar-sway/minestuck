@@ -139,7 +139,7 @@ public class MinestuckItems
 	public static Item salad = new ItemSoup(1).setUnlocalizedName("salad").setCreativeTab(TabMinestuck.instance);
 	public static Item irradiatedSteak = new ItemFood(4, 0.4F, true).setPotionEffect(new PotionEffect(MobEffects.WITHER, 100, 1), 0.9F).setUnlocalizedName("irradiatedSteak").setCreativeTab(TabMinestuck.instance);
 	public static Item rockCookie = new Item().setUnlocalizedName("rockCookie").setCreativeTab(TabMinestuck.instance);
-	public static Item strawberryChunk = new ItemSeedFood(4, 0.5F, strawberryStem, Blocks.FARMLAND).setUnlocalizedName("strawberryChunk").setCreativeTab(TabMinestuck.instance);
+	public static Item strawberryChunk = new ItemMinestuckSeedFood(4, 0.5F).setUnlocalizedName("strawberryChunk").setCreativeTab(TabMinestuck.instance);
 	//Other
 	public static Item boondollars = new ItemBoondollars();
 	public static Item rawCruxite = new Item().setUnlocalizedName("rawCruxite").setCreativeTab(TabMinestuck.instance);
@@ -189,6 +189,7 @@ public class MinestuckItems
 	public static void registerItems(RegistryEvent.Register<Item> event)
 	{
 		armorPrismarine.repairMaterial = new ItemStack(Items.PRISMARINE_SHARD);
+		((ItemMinestuckSeedFood) strawberryChunk).setPlant(strawberryStem.getDefaultState());
 		
 		IForgeRegistry<Item> registry = event.getRegistry();
 		registerItemBlock(registry, new ItemMultiTexture(chessTile, chessTile, new String[]{"black", "white", "darkgrey", "lightgrey"}));
@@ -217,6 +218,7 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemBlock(goldOreSandstone));
 		registerItemBlock(registry, new ItemBlock(goldOreSandstoneRed));
 		registerItemBlock(registry, new ItemBlock(redstoneOreEndStone));
+		registerItemBlock(registry, new ItemBlock(quartzOreStone));
 		
 		registerItemBlock(registry, new ItemBlockCraftingTab(cruxiteBlock, CreativeTabs.BUILDING_BLOCKS));
 		registerItemBlock(registry, new ItemBlockCraftingTab(uraniumBlock, CreativeTabs.BUILDING_BLOCKS));
@@ -289,6 +291,7 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemBlock(endPlanks));
 		registerItemBlock(registry, new ItemBlock(endSapling));
 		registerItemBlock(registry, new ItemBlock(endGrass));
+		registerItemBlock(registry, new ItemBlock(strawberry));
 		
 		registerItemBlock(registry, new ItemBlock(primedTnt));
 		registerItemBlock(registry, new ItemBlock(unstableTnt));
@@ -397,6 +400,7 @@ public class MinestuckItems
 		registry.register(salad.setRegistryName("salad"));
 		registry.register(irradiatedSteak.setRegistryName("irradiated_steak"));
 		registry.register(rockCookie.setRegistryName("rock_cookie"));
+		registry.register(strawberryChunk.setRegistryName("strawberry_chunk"));
 		
 		//misc
 		registry.register(boondollars.setRegistryName("boondollars"));
