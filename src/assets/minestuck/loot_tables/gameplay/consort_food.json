@@ -537,6 +537,26 @@
                 },
                 {
                     "type": "item",
+                    "name": "minecraft:melon",
+                    "weight": 5,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 8,
+                                "max": 12
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "rain"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
                     "name": "minecraft:bread",
                     "weight": 5,
                     "functions": [
