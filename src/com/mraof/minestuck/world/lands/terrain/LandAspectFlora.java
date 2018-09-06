@@ -99,7 +99,7 @@ public class LandAspectFlora extends TerrainLandAspect
 		list.add(new UndergroundDecoratorVein(Blocks.EMERALD_ORE.getDefaultState(), 8, 3, 32));
 		list.add(new UndergroundDecoratorVein(Blocks.DIAMOND_ORE.getDefaultState(), 8, 3, 32));
 		list.add(new UndergroundDecoratorVein(Blocks.LAPIS_ORE.getDefaultState(), 8, 3, 32));
-		list.add(new UndergroundDecoratorVein(MinestuckBlocks.quartzOreStone.getDefaultState(), 8, 3, 32));
+		list.add(new UndergroundDecoratorVein(MinestuckBlocks.quartzOreStone.getDefaultState(), 8, 5, 32));
 		list.add(new SurfaceDecoratorVein(Blocks.CLAY.getDefaultState(), 15, 10, BiomeMinestuck.mediumOcean));
 		return list;
 	}

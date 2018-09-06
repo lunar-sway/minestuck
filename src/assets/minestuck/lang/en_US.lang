@@ -1125,6 +1125,7 @@ tile.genericObject.name=Perfectly Generic Object
 tile.skaiaPortal.name=Skaia Portal
 tile.oreCruxite.name=Cruxite Ore
 tile.oreUranium.name=Uranium Ore
+tile.oreQuartz.name=Quartz Ore
 tile.cruxtruder.name=Cruxtruder
 tile.punch_designix.name=Punch Designix
 tile.totem_lathe.name=Totem lathe
