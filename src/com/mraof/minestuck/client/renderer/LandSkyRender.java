@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.renderer;
 
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.WorldProviderLands;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -19,9 +20,9 @@ public class LandSkyRender extends IRenderHandler
 {
 	
 	private static final ResourceLocation SKAIA_TEXTURE = new ResourceLocation("minestuck", "textures/environment/skaia.png");
+	private static final ResourceLocation LAND_TEXTURE = new ResourceLocation("minestuck", "textures/environment/land_wood.png");
 	
 	private WorldProviderLands providerLands;
-	
 	public LandSkyRender(WorldProviderLands provider)
 	{
 		providerLands = provider;
@@ -62,7 +63,7 @@ public class LandSkyRender extends IRenderHandler
 		GlStateManager.disableFog();
 		GlStateManager.disableAlpha();
 		GlStateManager.enableBlend();
-		//GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 		RenderHelper.disableStandardItemLighting();
 		//
 		
@@ -70,19 +71,6 @@ public class LandSkyRender extends IRenderHandler
 		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 		float skyClearness = 1.0F - world.getRainStrength(partialTicks);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, skyClearness);
-		
-		
-		
-		float starBrightness = world.getStarBrightness(partialTicks) * skyClearness;
-		starBrightness += (1 - starBrightness)*heightModifier;
-		if(starBrightness > 0)
-		{
-			GlStateManager.color(starBrightness, starBrightness, starBrightness, starBrightness);
-			
-			drawVeil(partialTicks, world);
-		}
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		
 		float skaiaSize = 20.0F;
 		mc.getTextureManager().bindTexture(SKAIA_TEXTURE);
 		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
@@ -92,6 +80,27 @@ public class LandSkyRender extends IRenderHandler
 		bufferbuilder.pos((double)(-skaiaSize), 100.0D, (double)skaiaSize).tex(0.0D, 1.0D).endVertex();
 		tessellator.draw();
 		GlStateManager.disableTexture2D();
+		
+		float starBrightness = world.getStarBrightness(partialTicks) * skyClearness;
+		starBrightness += (0.5 - starBrightness)*heightModifier;
+		if(starBrightness > 0)
+		{
+			GlStateManager.color(starBrightness, starBrightness, starBrightness, starBrightness);
+			
+			GlStateManager.pushMatrix();
+			//GlStateManager.rotate(45, 0, 1, 0);
+			
+			
+			GlStateManager.pushMatrix();
+			GlStateManager.rotate(world.getCelestialAngle(partialTicks) * 360.0F, 0, 0, 1);
+			drawVeil(partialTicks, world);
+			GlStateManager.popMatrix();
+			GlStateManager.color(starBrightness*2, starBrightness*2, starBrightness*2, starBrightness*2);
+			
+			drawLands(mc);
+			GlStateManager.popMatrix();
+		}
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		
 		GlStateManager.disableBlend();
 		GlStateManager.enableAlpha();
@@ -127,11 +136,6 @@ public class LandSkyRender extends IRenderHandler
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		Random random = new Random(10842L);
-		
-		GlStateManager.pushMatrix();
-		
-		GlStateManager.rotate(45, 0, 1, 0);
-		GlStateManager.rotate(world.getCelestialAngle(partialTicks) * 360.0F, 0, 0, 1);
 		
 		bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
 		
@@ -180,7 +184,23 @@ public class LandSkyRender extends IRenderHandler
 			}
 		}
 		tessellator.draw();
+	}
+	
+	public void drawLands(Minecraft mc)
+	{
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		
-		GlStateManager.popMatrix();
+		GlStateManager.rotate(45.0F, 0, 0, 1);
+		GlStateManager.enableTexture2D();
+		float planetSize = 10.0F;
+		mc.getTextureManager().bindTexture(LAND_TEXTURE);
+		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+		bufferbuilder.pos((double)(-planetSize), 100.0D, (double)(-planetSize)).tex(0.0D, 0.0D).endVertex();
+		bufferbuilder.pos((double)planetSize, 100.0D, (double)(-planetSize)).tex(1.0D, 0.0D).endVertex();
+		bufferbuilder.pos((double)planetSize, 100.0D, (double)planetSize).tex(1.0D, 1.0D).endVertex();
+		bufferbuilder.pos((double)(-planetSize), 100.0D, (double)planetSize).tex(0.0D, 1.0D).endVertex();
+		tessellator.draw();
+		GlStateManager.disableTexture2D();
 	}
 }
