@@ -3,6 +3,6 @@
         "axis=y":  { "model": "minestuck:dead_log" },
         "axis=z":   { "model": "minestuck:dead_log", "x": 90 },
         "axis=x":   { "model": "minestuck:dead_log", "x": 90, "y": 90 },
-        "axis=none": { "model": "minestuck:dead_log_bark" }
+        "axis=none": { "model": "minestuck:dead_bark" }
     }
 }
