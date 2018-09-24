@@ -1,0 +1,8 @@
+{
+    "parent": "block/stairs",
+    "textures": {
+        "bottom": "minestuck:blocks/rainbow_planks",
+        "top": "minestuck:blocks/rainbow_planks",
+        "side": "minestuck:blocks/rainbow_planks"
+    }
+}

@@ -5,6 +5,7 @@
         "block_type=2": { "model": "minestuck:cruxite_cobblestone" },
         "block_type=3": { "model": "minestuck:cruxite_sandstone" },
         "block_type=4": { "model": "minestuck:cruxite_sandstone_red" },
-        "block_type=5": { "model": "minestuck:cruxite_end_stone" }
+        "block_type=5": { "model": "minestuck:cruxite_end_stone" },
+        "block_type=6": { "model": "minestuck:cruxite_pink_stone" }
     }
 }

@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "half=bottom": { "model": "minestuck:half_slab_treated_planks" },
+        "half=top": { "model": "minestuck:half_slab_treated_planks", "x": 180, "uvlock": true }
+    }
+}

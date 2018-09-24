@@ -5,6 +5,7 @@
         "block_type=2": { "model": "minestuck:uranium_cobblestone" },
         "block_type=3": { "model": "minestuck:uranium_sandstone" },
         "block_type=4": { "model": "minestuck:uranium_sandstone_red" },
-        "block_type=5": { "model": "minestuck:uranium_end_stone" }
+        "block_type=5": { "model": "minestuck:uranium_end_stone" },
+        "block_type=6": { "model": "minestuck:uranium_pink_stone" }
     }
 }
