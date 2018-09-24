@@ -81,16 +81,17 @@ public class MinestuckBlocks
 	public static Block redCake = new BlockSimpleCake(2, 0.1F, (EntityPlayer player) -> player.heal(1)).setUnlocalizedName("redCake");
 	public static Block hotCake = new BlockSimpleCake(2, 0.1F, (EntityPlayer player) -> player.setFire(4)).setUnlocalizedName("hotCake");
 	public static Block reverseCake = new BlockSimpleCake(2, 0.1F, null).setUnlocalizedName("cake");
-	
-	public static Block floweryMossStone = new BlockCustom(Material.ROCK, MapColor.GRAY, SoundType.STONE).setUnlocalizedName("floweryMossStone").setHardness(1.0F).setCreativeTab(TabMinestuck.instance);
-	public static Block floweryMossBrick = new BlockCustom(Material.ROCK, MapColor.GRAY, SoundType.STONE).setUnlocalizedName("floweryMossBrick").setHardness(1.0F).setCreativeTab(TabMinestuck.instance);
 	public static Block treatedPlanks = new BlockCustom(Material.WOOD, MapColor.WOOD, SoundType.WOOD).setFireInfo(1, 0).setUnlocalizedName("treatedPlanks").setHardness(1.0F).setCreativeTab(TabMinestuck.instance);
+	
 	public static Block endLog = new BlockEndLog();
 	public static Block endLeaves = new BlockEndLeaves();
 	public static Block endPlanks = new BlockCustom(Material.WOOD, MapColor.SAND, SoundType.WOOD).setFireInfo(1, 250).setUnlocalizedName("endPlanks").setHardness(1.0F).setCreativeTab(TabMinestuck.instance);
 	public static Block endSapling = new BlockEndSapling();
 	public static Block endGrass = new BlockEndGrass();
-	public static Block coarseEndStone = new BlockEndStoneCoarse();
+	public static Block coarseEndStone = new BlockCustomStone(MapColor.SAND).setHardness(3.0F).setUnlocalizedName("coarseEndStone").setCreativeTab(TabMinestuck.instance);
+	
+	public static Block floweryMossStone = new BlockCustomStone(MapColor.GRAY).setUnlocalizedName("floweryMossStone").setCreativeTab(TabMinestuck.instance);
+	public static Block floweryMossBrick = new BlockCustomStone(MapColor.GRAY).setUnlocalizedName("floweryMossBrick").setCreativeTab(TabMinestuck.instance);
 	public static Block strawberry = new BlockStrawberry();
 	public static Block strawberryStem = new BlockMinestuckStem((BlockDirectional) strawberry).setUnlocalizedName("strawberryStem").setCreativeTab(null);
 	
@@ -107,7 +108,7 @@ public class MinestuckBlocks
 	public static Block quartzOreStone = new BlockVanillaOre(BlockVanillaOre.OreType.QUARTZ).setUnlocalizedName("oreQuartz");
 	
 	public static Block uraniumCooker = new BlockUraniumCooker().setUnlocalizedName("uraniumCooker");
-
+	
 	public static Block primedTnt = new BlockTNTSpecial(true, false, false).setUnlocalizedName("primedTnt");
 	public static Block unstableTnt = new BlockTNTSpecial(false, true, false).setUnlocalizedName("unstableTnt");
 	public static Block instantTnt = new BlockTNTSpecial(false, false, true).setUnlocalizedName("instantTnt");
