@@ -219,6 +219,10 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemBlock(goldOreSandstoneRed));
 		registerItemBlock(registry, new ItemBlock(redstoneOreEndStone));
 		registerItemBlock(registry, new ItemBlock(quartzOreStone));
+		registerItemBlock(registry, new ItemBlock(coalOrePinkStone));
+		registerItemBlock(registry, new ItemBlock(goldOrePinkStone));
+		registerItemBlock(registry, new ItemBlock(diamondOrePinkStone));
+		registerItemBlock(registry, new ItemBlock(lapisOrePinkStone));
 		
 		registerItemBlock(registry, new ItemBlockCraftingTab(cruxiteBlock, CreativeTabs.BUILDING_BLOCKS));
 		registerItemBlock(registry, new ItemBlockCraftingTab(uraniumBlock, CreativeTabs.BUILDING_BLOCKS));
@@ -292,6 +296,17 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemBlock(endSapling));
 		registerItemBlock(registry, new ItemBlock(endGrass));
 		registerItemBlock(registry, new ItemBlock(strawberry));
+		registerItemBlock(registry, new ItemBlock(chalk));
+		registerItemBlock(registry, new ItemBlock(chalkBricks));
+		registerItemBlock(registry, new ItemBlock(chalkChisel));
+		registerItemBlock(registry, new ItemBlock(chalkPolish));
+		registerItemBlock(registry, new ItemBlock(pinkStoneSmooth));
+		registerItemBlock(registry, new ItemBlock(pinkStoneCobble));
+		registerItemBlock(registry, new ItemBlock(pinkStoneBricks));
+		registerItemBlock(registry, new ItemBlock(pinkStoneChisel));
+		registerItemBlock(registry, new ItemBlock(pinkStoneCracked));
+		registerItemBlock(registry, new ItemBlock(pinkStoneMossy));
+		registerItemBlock(registry, new ItemBlock(pinkStonePolish));
 		
 		registerItemBlock(registry, new ItemBlock(primedTnt));
 		registerItemBlock(registry, new ItemBlock(unstableTnt));

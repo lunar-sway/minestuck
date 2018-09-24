@@ -226,12 +226,14 @@ public class MinestuckModelManager
 		register(oreCruxite, 3, "cruxite_sandstone");
 		register(oreCruxite, 4, "cruxite_sandstone_red");
 		register(oreCruxite, 5, "cruxite_end_stone");
+		register(oreCruxite, 6, "cruxite_pink_stone");
 		register(oreUranium, 0, "uranium_stone");
 		register(oreUranium, 1, "uranium_netherrack");
 		register(oreUranium, 2, "uranium_cobblestone");
 		register(oreUranium, 3, "uranium_sandstone");
 		register(oreUranium, 4, "uranium_sandstone_red");
 		register(oreUranium, 5, "uranium_end_stone");
+		register(oreUranium, 6, "uranium_pink_stone");
 		register(cruxiteBlock);
 		register(uraniumBlock);
 		register(genericObject);
@@ -243,6 +245,10 @@ public class MinestuckModelManager
 		register(goldOreSandstoneRed);
 		register(redstoneOreEndStone);
 		register(quartzOreStone);
+		register(coalOrePinkStone);
+		register(lapisOrePinkStone);
+		register(goldOrePinkStone);
+		register(diamondOrePinkStone);
 		for(BlockColoredDirt.BlockType type : BlockColoredDirt.BlockType.values())
 			register(coloredDirt, type.ordinal(), "colored_dirt_"+type.name);
 		register(layeredSand);
@@ -309,12 +315,24 @@ public class MinestuckModelManager
 		register(endGrass);
 		register(strawberry);
 		
+		register(chalk);
+		register(chalkBricks);
+		register(chalkChisel);
+		register(chalkPolish);
+		register(pinkStoneSmooth);
+		register(pinkStoneCobble);
+		register(pinkStoneBricks);
+		register(pinkStoneChisel);
+		register(pinkStoneMossy);
+		register(pinkStoneCracked);
+		register(pinkStonePolish);
+		
 		register(primedTnt);
 		register(unstableTnt);
 		register(instantTnt);
 		register(woodenExplosiveButton);
 		register(stoneExplosiveButton);
-
+		
 		register(uraniumCooker);
 		
 		ModelLoader.setCustomStateMapper(blockOil, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());

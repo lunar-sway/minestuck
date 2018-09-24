@@ -95,17 +95,33 @@ public class MinestuckBlocks
 	public static Block strawberry = new BlockStrawberry();
 	public static Block strawberryStem = new BlockMinestuckStem((BlockDirectional) strawberry).setUnlocalizedName("strawberryStem").setCreativeTab(null);
 	
+	public static Block chalk = new BlockCustomStone(MapColor.SNOW).setUnlocalizedName("chalk")	.setCreativeTab(TabMinestuck.instance);
+	public static Block chalkBricks = new BlockCustomStone(MapColor.SNOW).setUnlocalizedName("chalkBricks")	.setCreativeTab(TabMinestuck.instance);
+	public static Block chalkChisel = new BlockCustomStone(MapColor.SNOW).setUnlocalizedName("chalkChisel")	.setCreativeTab(TabMinestuck.instance);
+	public static Block chalkPolish = new BlockCustomStone(MapColor.SNOW).setUnlocalizedName("chalkPolish")	.setCreativeTab(TabMinestuck.instance);
+	public static Block pinkStoneSmooth = new BlockCustomStone(MapColor.PINK).setUnlocalizedName("pinkStoneSmooth")	.setCreativeTab(TabMinestuck.instance);
+	public static Block pinkStoneCobble = new BlockCustomStone(MapColor.PINK).setUnlocalizedName("pinkStoneCobble")	.setCreativeTab(TabMinestuck.instance);
+	public static Block pinkStoneBricks = new BlockCustomStone(MapColor.PINK).setUnlocalizedName("pinkStoneBricks")	.setCreativeTab(TabMinestuck.instance);
+	public static Block pinkStoneChisel = new BlockCustomStone(MapColor.PINK).setUnlocalizedName("pinkStoneChisel")	.setCreativeTab(TabMinestuck.instance);
+	public static Block pinkStoneCracked= new BlockCustomStone(MapColor.PINK).setUnlocalizedName("pinkStoneCracked").setCreativeTab(TabMinestuck.instance);
+	public static Block pinkStoneMossy = new BlockCustomStone(MapColor.PINK).setUnlocalizedName("pinkStoneMossy")	.setCreativeTab(TabMinestuck.instance);
+	public static Block pinkStonePolish = new BlockCustomStone(MapColor.PINK).setUnlocalizedName("pinkStonePolish")	.setCreativeTab(TabMinestuck.instance);
+	
 	//Ores
 	public static Block oreCruxite = new BlockCruxiteOre();
 	public static BlockUraniumOre oreUranium = (BlockUraniumOre) new BlockUraniumOre().setUnlocalizedName("oreUranium");
 	public static Block coalOreNetherrack = new BlockVanillaOre(BlockVanillaOre.OreType.COAL).setUnlocalizedName("oreCoal");
+	public static Block coalOrePinkStone = new BlockVanillaOre(BlockVanillaOre.OreType.COAL).setUnlocalizedName("oreCoal");
 	public static Block ironOreEndStone = new BlockVanillaOre(BlockVanillaOre.OreType.IRON).setUnlocalizedName("oreIron");
 	public static Block ironOreSandstone = new BlockVanillaOre(BlockVanillaOre.OreType.IRON).setUnlocalizedName("oreIron");
 	public static Block ironOreSandstoneRed = new BlockVanillaOre(BlockVanillaOre.OreType.IRON).setUnlocalizedName("oreIron");
 	public static Block goldOreSandstone = new BlockVanillaOre(BlockVanillaOre.OreType.GOLD).setUnlocalizedName("oreGold");
 	public static Block goldOreSandstoneRed = new BlockVanillaOre(BlockVanillaOre.OreType.GOLD).setUnlocalizedName("oreGold");
+	public static Block goldOrePinkStone = new BlockVanillaOre(BlockVanillaOre.OreType.GOLD).setUnlocalizedName("oreGold");
 	public static Block redstoneOreEndStone = new BlockVanillaOre(BlockVanillaOre.OreType.REDSTONE).setUnlocalizedName("oreRedstone");
 	public static Block quartzOreStone = new BlockVanillaOre(BlockVanillaOre.OreType.QUARTZ).setUnlocalizedName("oreQuartz");
+	public static Block lapisOrePinkStone = new BlockVanillaOre(BlockVanillaOre.OreType.LAPIS).setUnlocalizedName("oreLapis");
+	public static Block diamondOrePinkStone = new BlockVanillaOre(BlockVanillaOre.OreType.DIAMOND).setUnlocalizedName("oreDiamond");
 	
 	public static Block uraniumCooker = new BlockUraniumCooker().setUnlocalizedName("uraniumCooker");
 	
@@ -199,13 +215,17 @@ public class MinestuckBlocks
 		registry.register(oreCruxite.setRegistryName("ore_cruxite"));
 		registry.register(oreUranium.setRegistryName("ore_uranium"));
 		registry.register(coalOreNetherrack.setRegistryName("coal_ore_netherrack"));
+		registry.register(coalOrePinkStone.setRegistryName("coal_ore_pink_stone"));
 		registry.register(ironOreEndStone.setRegistryName("iron_ore_end_stone"));
 		registry.register(ironOreSandstone.setRegistryName("iron_ore_sandstone"));
 		registry.register(ironOreSandstoneRed.setRegistryName("iron_ore_sandstone_red"));
 		registry.register(goldOreSandstone.setRegistryName("gold_ore_sandstone"));
 		registry.register(goldOreSandstoneRed.setRegistryName("gold_ore_sandstone_red"));
+		registry.register(goldOrePinkStone.setRegistryName("gold_ore_pink_stone"));
 		registry.register(redstoneOreEndStone.setRegistryName("redstone_ore_end_stone"));
 		registry.register(quartzOreStone.setRegistryName("quartz_ore_stone"));
+		registry.register(lapisOrePinkStone.setRegistryName("lapis_ore_pink_stone"));
+		registry.register(diamondOrePinkStone.setRegistryName("diamond_ore_pink_stone"));
 		
 		registry.register(cruxiteBlock.setRegistryName("cruxite_block"));
 		registry.register(uraniumBlock.setRegistryName("uranium_block"));
@@ -256,12 +276,24 @@ public class MinestuckBlocks
 		registry.register(endLeaves.setRegistryName("end_leaves"));
 		registry.register(endPlanks.setRegistryName("end_planks"));
 		registry.register(endSapling.setRegistryName("end_sapling"));
-
+		
 		registry.register(treatedPlanks.setRegistryName("treated_planks"));
 		registry.register(floweryMossStone.setRegistryName("flowery_moss_stone"));
 		registry.register(floweryMossBrick.setRegistryName("flowery_moss_brick"));
 		registry.register(strawberry.setRegistryName("strawberry"));
 		registry.register(strawberryStem.setRegistryName("strawberry_stem"));
+		
+		registry.register(chalk.setRegistryName("chalk"));
+		registry.register(chalkBricks.setRegistryName("chalk_bricks"));
+		registry.register(chalkChisel.setRegistryName("chiseled_chalk_bricks"));
+		registry.register(chalkPolish.setRegistryName("polished_chalk"));
+		registry.register(pinkStoneSmooth.setRegistryName("pink_stone"));
+		registry.register(pinkStoneCobble.setRegistryName("pink_cobblestone"));
+		registry.register(pinkStoneBricks.setRegistryName("pink_stone_bricks"));
+		registry.register(pinkStoneChisel.setRegistryName("pink_chiseled_stone"));
+		registry.register(pinkStoneCracked.setRegistryName("pink_cracked_stone"));
+		registry.register(pinkStoneMossy.setRegistryName("pink_moss_stone_bricks"));
+		registry.register(pinkStonePolish.setRegistryName("pink_polished_stone"));
 		
 		registry.register(primedTnt.setRegistryName("primed_tnt"));
 		registry.register(unstableTnt.setRegistryName("unstable_tnt"));
@@ -289,13 +321,17 @@ public class MinestuckBlocks
 		cruxiteBlock.setHarvestLevel("pickaxe", 0);
 		uraniumBlock.setHarvestLevel("pickaxe", 1);
 		coalOreNetherrack.setHarvestLevel("pickaxe", Blocks.COAL_ORE.getHarvestLevel(Blocks.COAL_ORE.getDefaultState()));
+		coalOrePinkStone.setHarvestLevel("pickaxe", Blocks.COAL_ORE.getHarvestLevel(Blocks.COAL_ORE.getDefaultState()));
 		ironOreEndStone.setHarvestLevel("pickaxe", Blocks.IRON_ORE.getHarvestLevel(Blocks.IRON_ORE.getDefaultState()));
 		ironOreSandstone.setHarvestLevel("pickaxe", Blocks.IRON_ORE.getHarvestLevel(Blocks.IRON_ORE.getDefaultState()));
 		ironOreSandstoneRed.setHarvestLevel("pickaxe", Blocks.IRON_ORE.getHarvestLevel(Blocks.IRON_ORE.getDefaultState()));
 		goldOreSandstone.setHarvestLevel("pickaxe", Blocks.GOLD_ORE.getHarvestLevel(Blocks.GOLD_ORE.getDefaultState()));
 		goldOreSandstoneRed.setHarvestLevel("pickaxe", Blocks.GOLD_ORE.getHarvestLevel(Blocks.GOLD_ORE.getDefaultState()));
+		goldOrePinkStone.setHarvestLevel("pickaxe", Blocks.GOLD_ORE.getHarvestLevel(Blocks.GOLD_ORE.getDefaultState()));
 		redstoneOreEndStone.setHarvestLevel("pickaxe", Blocks.REDSTONE_ORE.getHarvestLevel(Blocks.REDSTONE_ORE.getDefaultState()));
-		
+		quartzOreStone.setHarvestLevel("pickaxe", Blocks.QUARTZ_ORE.getHarvestLevel(Blocks.QUARTZ_ORE.getDefaultState()));
+		lapisOrePinkStone.setHarvestLevel("pickaxe", Blocks.LAPIS_ORE.getHarvestLevel(Blocks.LAPIS_ORE.getDefaultState()));
+		diamondOrePinkStone.setHarvestLevel("pickaxe", Blocks.DIAMOND_ORE.getHarvestLevel(Blocks.DIAMOND_ORE.getDefaultState()));
 	}
 	
 	private static Fluid createFluid(String name, ResourceLocation still, ResourceLocation flowing, String unlocalizedName)
