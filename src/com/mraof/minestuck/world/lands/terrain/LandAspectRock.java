@@ -110,7 +110,7 @@ public class LandAspectRock extends TerrainLandAspect
 	{
 		DefaultTerrainGen terrainGen = new DefaultTerrainGen(chunkProvider, rand);
 		terrainGen.normalVariation = 0.6F;
-		terrainGen.roughtVariation = 0.9F;
+		terrainGen.roughVariation = 0.9F;
 		terrainGen.oceanVariation = 0.4F;
 		return terrainGen;
 	}

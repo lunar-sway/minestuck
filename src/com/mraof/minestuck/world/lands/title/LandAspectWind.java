@@ -42,7 +42,7 @@ public class LandAspectWind extends TitleLandAspect
 		{
 			DefaultTerrainGen terrainGen = (DefaultTerrainGen) chunkProvider.terrainGenerator;
 			terrainGen.normalVariation *= 0.6F;
-			terrainGen.roughtVariation *= 0.6F;
+			terrainGen.roughVariation *= 0.6F;
 			terrainGen.roughHeight = (terrainGen.roughHeight + terrainGen.normalHeight)/2;
 		}
 	}
