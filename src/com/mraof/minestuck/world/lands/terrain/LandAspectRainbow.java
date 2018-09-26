@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.mraof.minestuck.block.BlockMinestuckLeaves1;
-import com.mraof.minestuck.block.BlockMinestuckLog;
+import com.mraof.minestuck.block.BlockMinestuckLog1;
 import com.mraof.minestuck.block.BlockMinestuckPlanks;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.consort.EnumConsort;
@@ -44,7 +44,7 @@ public class LandAspectRainbow extends TerrainLandAspect
 		registry.setBlockState("surface", Blocks.WOOL.getDefaultState());
 		registry.setBlockState("ocean", MinestuckBlocks.blockWatercolors.getDefaultState());
 		registry.setBlockState("river", MinestuckBlocks.blockWatercolors.getDefaultState());
-		registry.setBlockState("structure_primary", MinestuckBlocks.log.getDefaultState().withProperty(BlockMinestuckLog.VARIANT, BlockMinestuckLog.BlockType.RAINBOW).withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE));
+		registry.setBlockState("structure_primary", MinestuckBlocks.log.getDefaultState().withProperty(BlockMinestuckLog1.VARIANT, BlockMinestuckLog1.BlockType.RAINBOW).withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE));
 		registry.setBlockState("structure_primary_decorative", Blocks.LOG2.getDefaultState().withProperty(BlockNewLog.VARIANT, BlockPlanks.EnumType.ACACIA));
 		registry.setBlockState("structure_primary_stairs", Blocks.DARK_OAK_STAIRS.getDefaultState());
 		registry.setBlockState("structure_secondary", MinestuckBlocks.planks.getDefaultState().withProperty(BlockMinestuckPlanks.VARIANT, BlockMinestuckPlanks.BlockType.RAINBOW));

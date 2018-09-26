@@ -271,7 +271,7 @@ public class MinestuckModelManager
 		register(frostBrickStairs);
 		register(castIronStairs);
 		
-		for(BlockMinestuckLog.BlockType type : BlockMinestuckLog.BlockType.values())
+		for(BlockMinestuckLog1.BlockType type : BlockMinestuckLog1.BlockType.values())
 			register(log, type.ordinal(), type.getName()+"_log");
 		
 		for(BlockMinestuckPlanks.BlockType type : BlockMinestuckPlanks.BlockType.values())
@@ -315,6 +315,7 @@ public class MinestuckModelManager
 		register(endGrass);
 		register(strawberry);
 		
+		register(deadLog);
 		register(chalk);
 		register(chalkBricks);
 		register(chalkChisel);
@@ -343,7 +344,7 @@ public class MinestuckModelManager
 		ModelLoader.setCustomStateMapper(primedTnt, (new StateMap.Builder()).ignore(BlockTNT.EXPLODE).build());
 		ModelLoader.setCustomStateMapper(unstableTnt, (new StateMap.Builder()).ignore(BlockTNT.EXPLODE).build());
 		ModelLoader.setCustomStateMapper(instantTnt, (new StateMap.Builder()).ignore(BlockTNT.EXPLODE).build());
-		ModelLoader.setCustomStateMapper(log, (new StateMap.Builder()).withName(BlockMinestuckLog.VARIANT).withSuffix("_log").build());
+		ModelLoader.setCustomStateMapper(log, (new StateMap.Builder()).withName(BlockMinestuckLog1.VARIANT).withSuffix("_log").build());
 		ModelLoader.setCustomStateMapper(leaves1, (new StateMap.Builder()).withName(BlockMinestuckLeaves1.VARIANT).withSuffix("_leaves").build());
 		ModelLoader.setCustomStateMapper(aspectSapling, (new StateMap.Builder()).withName(BlockAspectSapling.VARIANT).withSuffix("_sapling").build());
 		ModelLoader.setCustomStateMapper(aspectLog1, (new StateMap.Builder()).withName(BlockAspectLog.VARIANT).withSuffix("_log").build());

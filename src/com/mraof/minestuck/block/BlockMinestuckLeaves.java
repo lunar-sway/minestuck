@@ -11,6 +11,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
@@ -27,7 +28,9 @@ public abstract class BlockMinestuckLeaves extends Block implements net.minecraf
 	public static final PropertyBool DECAYABLE = PropertyBool.create("decayable");
 	public static final PropertyBool CHECK_DECAY = PropertyBool.create("check_decay");
 	
-	protected boolean leavesFancy;
+	@SideOnly(Side.CLIENT)
+	public static boolean leavesFancy = Minecraft.isFancyGraphicsEnabled();
+	
 	int[] surroundings;
 	
 	public BlockMinestuckLeaves()

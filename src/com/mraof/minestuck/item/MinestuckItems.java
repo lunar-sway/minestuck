@@ -254,7 +254,7 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemBlockCraftingTab(castIronStairs, CreativeTabs.BUILDING_BLOCKS));
 		
 		registerItemBlock(registry, new ItemMultiTexture(log, log,
-				(ItemStack input) -> BlockMinestuckLog.BlockType.values()[input.getItemDamage() % BlockMinestuckLog.BlockType.values().length].getUnlocalizedName()));
+				(ItemStack input) -> BlockMinestuckLog1.BlockType.values()[input.getItemDamage() % BlockMinestuckLog1.BlockType.values().length].getUnlocalizedName()));
 		
 		registerItemBlock(registry, new ItemMultiTexture(leaves1, leaves1,
 				(ItemStack input) -> BlockMinestuckLeaves1.BlockType.values()[input.getItemDamage() % BlockMinestuckLeaves1.BlockType.values().length].getUnlocalizedName()));
@@ -296,12 +296,12 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemBlock(endSapling));
 		registerItemBlock(registry, new ItemBlock(endGrass));
 		registerItemBlock(registry, new ItemBlock(strawberry));
+		registerItemBlock(registry, new ItemBlock(deadLog));
 		registerItemBlock(registry, new ItemBlock(chalk));
 		registerItemBlock(registry, new ItemBlock(chalkBricks));
 		registerItemBlock(registry, new ItemBlock(chalkChisel));
 		registerItemBlock(registry, new ItemBlock(chalkPolish));
 		registerItemBlock(registry, new ItemBlock(pinkStoneSmooth));
-		registerItemBlock(registry, new ItemBlock(pinkStoneCobble));
 		registerItemBlock(registry, new ItemBlock(pinkStoneBricks));
 		registerItemBlock(registry, new ItemBlock(pinkStoneChisel));
 		registerItemBlock(registry, new ItemBlock(pinkStoneCracked));

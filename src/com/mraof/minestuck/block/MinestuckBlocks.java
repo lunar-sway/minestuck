@@ -64,7 +64,7 @@ public class MinestuckBlocks
 	public static Block shadeBrickStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.SHADE_BRICK)).setUnlocalizedName("stairsMinestuck.shadeBrick");
 	public static Block frostBrickStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.FROST_BRICK)).setUnlocalizedName("stairsMinestuck.frostBrick");
 	public static Block castIronStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.CAST_IRON)).setUnlocalizedName("stairsMinestuck.castIron");
-	public static Block log = new BlockMinestuckLog();
+	public static Block log = new BlockMinestuckLog1();
 	public static Block leaves1 = new BlockMinestuckLeaves1();
 	public static Block planks = new BlockMinestuckPlanks();
 	public static Block aspectSapling = new BlockAspectSapling().setCreativeTab(null);
@@ -95,12 +95,12 @@ public class MinestuckBlocks
 	public static Block strawberry = new BlockStrawberry();
 	public static Block strawberryStem = new BlockMinestuckStem((BlockDirectional) strawberry).setUnlocalizedName("strawberryStem").setCreativeTab(null);
 	
+	public static Block deadLog = new BlockMinestuckLog().setUnlocalizedName("logDead").setCreativeTab(TabMinestuck.instance);
 	public static Block chalk = new BlockCustomStone(MapColor.SNOW).setUnlocalizedName("chalk")	.setCreativeTab(TabMinestuck.instance);
 	public static Block chalkBricks = new BlockCustomStone(MapColor.SNOW).setUnlocalizedName("chalkBricks")	.setCreativeTab(TabMinestuck.instance);
 	public static Block chalkChisel = new BlockCustomStone(MapColor.SNOW).setUnlocalizedName("chalkChisel")	.setCreativeTab(TabMinestuck.instance);
 	public static Block chalkPolish = new BlockCustomStone(MapColor.SNOW).setUnlocalizedName("chalkPolish")	.setCreativeTab(TabMinestuck.instance);
 	public static Block pinkStoneSmooth = new BlockCustomStone(MapColor.PINK).setUnlocalizedName("pinkStoneSmooth")	.setCreativeTab(TabMinestuck.instance);
-	public static Block pinkStoneCobble = new BlockCustomStone(MapColor.PINK).setUnlocalizedName("pinkStoneCobble")	.setCreativeTab(TabMinestuck.instance);
 	public static Block pinkStoneBricks = new BlockCustomStone(MapColor.PINK).setUnlocalizedName("pinkStoneBricks")	.setCreativeTab(TabMinestuck.instance);
 	public static Block pinkStoneChisel = new BlockCustomStone(MapColor.PINK).setUnlocalizedName("pinkStoneChisel")	.setCreativeTab(TabMinestuck.instance);
 	public static Block pinkStoneCracked= new BlockCustomStone(MapColor.PINK).setUnlocalizedName("pinkStoneCracked").setCreativeTab(TabMinestuck.instance);
@@ -283,12 +283,12 @@ public class MinestuckBlocks
 		registry.register(strawberry.setRegistryName("strawberry"));
 		registry.register(strawberryStem.setRegistryName("strawberry_stem"));
 		
+		registry.register(deadLog.setRegistryName("dead_log"));
 		registry.register(chalk.setRegistryName("chalk"));
 		registry.register(chalkBricks.setRegistryName("chalk_bricks"));
 		registry.register(chalkChisel.setRegistryName("chiseled_chalk_bricks"));
 		registry.register(chalkPolish.setRegistryName("polished_chalk"));
 		registry.register(pinkStoneSmooth.setRegistryName("pink_stone"));
-		registry.register(pinkStoneCobble.setRegistryName("pink_cobblestone"));
 		registry.register(pinkStoneBricks.setRegistryName("pink_stone_bricks"));
 		registry.register(pinkStoneChisel.setRegistryName("pink_chiseled_stone"));
 		registry.register(pinkStoneCracked.setRegistryName("pink_cracked_stone"));
