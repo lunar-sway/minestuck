@@ -4,6 +4,7 @@ import com.mraof.minestuck.item.TabMinestuck;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
+import net.minecraft.block.BlockSlab;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -12,9 +13,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemSeedFood;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemSlab;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -311,6 +313,13 @@ public class MinestuckBlocks
 		
 		registry.register(rabbitSpawner.setRegistryName("rabbit_spawner"));
 		
+		for(EnumSlabStairMaterial material : EnumSlabStairMaterial.values())
+		{
+			registry.register(material.getSlab().setRegistryName(material.getName() + "_slab"));
+			registry.register(material.getSlabFull().setRegistryName(material.getName() + "_slab_full"));
+			registry.register(material.getStair().setRegistryName(material.getName() + "_stairs"));
+		}
+		
 		//fluids
 		/*liquidGrists = new Block[GristType.allGrists];
 		gristFluids = new Fluid[GristType.allGrists];
@@ -347,5 +356,66 @@ public class MinestuckBlocks
 		else fluid = FluidRegistry.getFluid(name);
 		
 		return fluid;
+	}
+	
+	public static enum EnumSlabStairMaterial implements IStringSerializable
+	{
+		TREATED	(treatedPlanks.getDefaultState(),	"treated_planks"),
+		RAINBOW	(planks.getDefaultState(),		"rainbow_planks"),
+		END		(endPlanks.getDefaultState(),	"end_planks"),
+		DEAD	(deadPlanks.getDefaultState(),	"dead_planks"),
+		CHALK	(chalk.getDefaultState(),		"chalk"),
+		CHALK_BRICK	(chalkBricks.getDefaultState(),	"chalk_bricks"),
+		PINK_BRICK	(pinkStoneBricks.getDefaultState(),	"pink_stone_bricks");
+		
+		private final String name;
+		private final String unlocalizedName;
+		
+		private final Block stair;
+		private final Block slab;
+		private final Block slabF;
+		private final ItemBlock slabItem;
+		
+		EnumSlabStairMaterial(IBlockState modelState, String name)
+		{
+			this.name = name;
+			String[] nameParts = name.split("_");
+			StringBuilder unlocName = new StringBuilder(nameParts[0]);
+			for(int i=1; i<nameParts.length; i++)
+			{
+				unlocName.append(nameParts[i].substring(0, 1).toUpperCase());
+				unlocName.append(nameParts[i].substring(1));
+			}
+			this.unlocalizedName = unlocName.toString();
+			
+			stair = new BlockMinestuckStairs(modelState).setUnlocalizedName("stairsMinestuck." + unlocalizedName);
+			slab = new BlockMinestuckSlab(modelState, this, false).setUnlocalizedName("slabMinestuck." + unlocalizedName);
+			slabF = new BlockMinestuckSlab(modelState, this, true).setUnlocalizedName("slabMinestuckFull." + unlocalizedName);
+			
+			if(modelState.getBlock().getHarvestLevel(modelState) >= 0)
+			{
+				slab .setHarvestLevel("pickaxe", modelState.getBlock().getHarvestLevel(modelState));
+				slabF.setHarvestLevel("pickaxe", modelState.getBlock().getHarvestLevel(modelState));
+			}
+			
+			slabItem = new ItemSlab(getSlab(), (BlockSlab) getSlab(), (BlockSlab) getSlabFull());
+			slabItem.setUnlocalizedName("slabMinestuck." + unlocalizedName);
+		}
+		
+		public Block getStair()	{	return stair;	}
+		public Block getSlab()	{	return slab;	}
+		public Block getSlabFull()		{	return slabF;	}
+		public ItemBlock getSlabItem()	{	return slabItem;}
+		
+		public String getUnlocalizedName()
+		{
+			return unlocalizedName;
+		}
+		
+		@Override
+		public String getName()
+		{
+			return name;
+		}
 	}
 }

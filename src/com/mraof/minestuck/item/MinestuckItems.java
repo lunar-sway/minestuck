@@ -7,6 +7,7 @@ import com.mraof.minestuck.item.block.*;
 import com.mraof.minestuck.item.weapon.*;
 import com.mraof.minestuck.util.MinestuckSoundHandler;
 
+import net.minecraft.block.BlockSlab;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityHanging;
@@ -297,6 +298,7 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemBlock(endGrass));
 		registerItemBlock(registry, new ItemBlock(strawberry));
 		registerItemBlock(registry, new ItemBlock(deadLog));
+		registerItemBlock(registry, new ItemBlock(deadPlanks));
 		registerItemBlock(registry, new ItemBlock(chalk));
 		registerItemBlock(registry, new ItemBlock(chalkBricks));
 		registerItemBlock(registry, new ItemBlock(chalkChisel));
@@ -307,6 +309,12 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemBlock(pinkStoneCracked));
 		registerItemBlock(registry, new ItemBlock(pinkStoneMossy));
 		registerItemBlock(registry, new ItemBlock(pinkStonePolish));
+		
+		for(EnumSlabStairMaterial mat : EnumSlabStairMaterial.values())
+		{
+			registerItemBlock(registry, new ItemBlock(mat.getStair()));
+			registerItemBlock(registry, mat.getSlabItem());
+		}
 		
 		registerItemBlock(registry, new ItemBlock(primedTnt));
 		registerItemBlock(registry, new ItemBlock(unstableTnt));
