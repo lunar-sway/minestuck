@@ -96,6 +96,7 @@ public class MinestuckBlocks
 	public static Block strawberryStem = new BlockMinestuckStem((BlockDirectional) strawberry).setUnlocalizedName("strawberryStem").setCreativeTab(null);
 	
 	public static Block deadLog = new BlockMinestuckLog().setUnlocalizedName("logDead").setCreativeTab(TabMinestuck.instance);
+	public static Block deadPlanks = new BlockCustom(Material.WOOD, MapColor.WOOD, SoundType.WOOD).setFireInfo(5, 5).setUnlocalizedName("deadPlanks").setHardness(1.0F).setCreativeTab(TabMinestuck.instance);
 	public static Block chalk = new BlockCustomStone(MapColor.SNOW).setUnlocalizedName("chalk")	.setCreativeTab(TabMinestuck.instance);
 	public static Block chalkBricks = new BlockCustomStone(MapColor.SNOW).setUnlocalizedName("chalkBricks")	.setCreativeTab(TabMinestuck.instance);
 	public static Block chalkChisel = new BlockCustomStone(MapColor.SNOW).setUnlocalizedName("chalkChisel")	.setCreativeTab(TabMinestuck.instance);
@@ -284,6 +285,7 @@ public class MinestuckBlocks
 		registry.register(strawberryStem.setRegistryName("strawberry_stem"));
 		
 		registry.register(deadLog.setRegistryName("dead_log"));
+		registry.register(deadPlanks.setRegistryName("dead_planks"));
 		registry.register(chalk.setRegistryName("chalk"));
 		registry.register(chalkBricks.setRegistryName("chalk_bricks"));
 		registry.register(chalkChisel.setRegistryName("chiseled_chalk_bricks"));

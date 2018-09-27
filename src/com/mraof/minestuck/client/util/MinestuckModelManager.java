@@ -316,12 +316,12 @@ public class MinestuckModelManager
 		register(strawberry);
 		
 		register(deadLog);
+		register(deadPlanks);
 		register(chalk);
 		register(chalkBricks);
 		register(chalkChisel);
 		register(chalkPolish);
 		register(pinkStoneSmooth);
-		register(pinkStoneCobble);
 		register(pinkStoneBricks);
 		register(pinkStoneChisel);
 		register(pinkStoneMossy);
