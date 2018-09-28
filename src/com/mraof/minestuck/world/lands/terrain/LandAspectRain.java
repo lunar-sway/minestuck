@@ -34,17 +34,16 @@ public class LandAspectRain extends TerrainLandAspect
 	static Vec3d skyColor = new Vec3d(0.2D, 0.5D, 0.98D);
 	
 	//TODO:
-	//Craftable terrain materials
+	//Craftable stone/chalk variants
 	//Pink stone brick temples
-	//Light water bucket textures, light water for lands with Light?
+	//Light water bucket textures
 	//Light Clouds (Dungeons?)
 	//Custom dungeon loot
 	//Custom consort dialogue
 	//Custom names and descriptions
 	//Probably something underwater
 	
-	//Unrelated, there should be a way to use events to make leaves update their appearance when the client's settings change.
-	//This would be good to make them synchronize with fast/fancy
+	//Oredict and alchemy on dead wood, pink stone, and chalk
 	
 	//Don't forget the weapons that Winter made. There should be two in particular that stand out.
 	@Override
