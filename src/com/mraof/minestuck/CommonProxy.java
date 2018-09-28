@@ -33,6 +33,7 @@ import com.mraof.minestuck.world.storage.loot.conditions.ConsortLootCondition;
 import com.mraof.minestuck.world.storage.loot.conditions.LandAspectLootCondition;
 import com.mraof.minestuck.world.storage.loot.functions.SetBoondollarCount;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.storage.loot.conditions.LootConditionManager;
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;
@@ -67,18 +68,18 @@ public class CommonProxy
 		
 		MinestuckEntities.registerEntities();
 		//register Tile Entities
-		GameRegistry.registerTileEntity(TileEntitySkaiaPortal.class, "minestuck:gate_portal");
-		GameRegistry.registerTileEntity(TileEntitySburbMachine.class, "minestuck:sburb_machine");
-		GameRegistry.registerTileEntity(TileEntityPunchDesignix.class, "Minestuck:punch_designix");
-		GameRegistry.registerTileEntity(TileEntityTotemLathe.class, "Minestuck:totem_lathe");
-		GameRegistry.registerTileEntity(TileEntityAlchemiter.class,"Minestuck:alchemiter");
-		GameRegistry.registerTileEntity(TileEntityCruxtruder.class, "Minestuck:cruxtruder");
-		GameRegistry.registerTileEntity(TileEntityItemStack.class, "Minestuck:item_stack");
-		GameRegistry.registerTileEntity(TileEntityCrockerMachine.class, "minestuck:crocker_machine");
-		GameRegistry.registerTileEntity(TileEntityComputer.class, "minestuck:computer_sburb");
-		GameRegistry.registerTileEntity(TileEntityTransportalizer.class, "minestuck:transportalizer");
-		GameRegistry.registerTileEntity(TileEntityGate.class, "minestuck:gate");
-		GameRegistry.registerTileEntity(TileEntityUraniumCooker.class, "minestuck:uranium_cooker");
+		GameRegistry.registerTileEntity(TileEntitySkaiaPortal.class,	new ResourceLocation("minestuck", "gate_portal"));
+		GameRegistry.registerTileEntity(TileEntitySburbMachine.class,	new ResourceLocation("minestuck", "sburb_machine"));
+		GameRegistry.registerTileEntity(TileEntityPunchDesignix.class,	new ResourceLocation("minestuck", "punch_designix"));
+		GameRegistry.registerTileEntity(TileEntityTotemLathe.class,		new ResourceLocation("minestuck", "totem_lathe"));
+		GameRegistry.registerTileEntity(TileEntityAlchemiter.class,		new ResourceLocation("minestuck", "alchemiter"));
+		GameRegistry.registerTileEntity(TileEntityCruxtruder.class,		new ResourceLocation("minestuck", "cruxtruder"));
+		GameRegistry.registerTileEntity(TileEntityItemStack.class,		new ResourceLocation("minestuck", "item_stack"));
+		GameRegistry.registerTileEntity(TileEntityCrockerMachine.class,	new ResourceLocation("minestuck", "crocker_machine"));
+		GameRegistry.registerTileEntity(TileEntityComputer.class,		new ResourceLocation("minestuck", "computer_sburb"));
+		GameRegistry.registerTileEntity(TileEntityTransportalizer.class,new ResourceLocation("minestuck", "transportalizer"));
+		GameRegistry.registerTileEntity(TileEntityGate.class,			new ResourceLocation("minestuck", "gate"));
+		GameRegistry.registerTileEntity(TileEntityUraniumCooker.class,	new ResourceLocation("minestuck", "uranium_cooker"));
 		
 		//Register event handlers
 		MinecraftForge.EVENT_BUS.register(new MinestuckSaveHandler());
