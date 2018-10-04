@@ -145,6 +145,7 @@ public class MinestuckModelManager
 		ModelLoader.setCustomMeshDefinition(cruxiteDowel, new CruxiteDowelDefinition());
 		ModelLoader.registerItemVariants(captchaCard, new ResourceLocation("minestuck:card_empty"), new ResourceLocation("minestuck:card_full"), new ResourceLocation("minestuck:card_punched"));
 		ModelLoader.setCustomMeshDefinition(captchaCard, new CaptchaCardDefinition());
+		ModelLoader.setCustomMeshDefinition(shunt, new ShuntDefinition());
 		ModelLoader.registerItemVariants(cruxiteApple, new ResourceLocation("minestuck:cruxite_apple"), new ResourceLocation("minestuck:cruxite_apple_blank"));
 		ModelLoader.setCustomMeshDefinition(cruxiteApple, new ColoredItemDefinition("minestuck:cruxite_apple"));
 		ModelLoader.registerItemVariants(cruxitePotion, new ResourceLocation("minestuck:cruxite_potion"), new ResourceLocation("minestuck:cruxite_potion_blank"));
@@ -202,14 +203,20 @@ public class MinestuckModelManager
 		register(threshDvd);
 		register(crewPoster);
 		register(sbahjPoster);
+		//TODO
+		register(shopPoster, 0, "shop_poster_1");
 		register(carvingTool);
 		register(crumplyHat);
 		register(frogStatueReplica);
 		register(stoneSlab);
 		register(recordEmissaryOfDance);
 		register(recordDanceStab);
+		register(recordRetroBattle);
 		register(glowystoneDust);
 		register(fakeArms);
+		
+		for(EnumShopPoster type : EnumShopPoster.values())
+			register(shopPoster, type.ordinal(), "shop_poster"+type.ordinal());
 	}
 	
 	private static void blockModels()
@@ -251,6 +258,9 @@ public class MinestuckModelManager
 		register(punchDesignix);
 		register(totemlathe[0]);
 		register(alchemiter[0]);
+		register(jumperBlockExtension[0]);
+		register(shunt);
+		register(blender);
 		register(cruxtruder);
 		register(cruxtruderLid);
 		register(glowingMushroom);
@@ -360,6 +370,7 @@ public class MinestuckModelManager
 		register(item, meta, modelResource);
 	}
 	
+	
 	private static class CrockerSporkDefinition implements ItemMeshDefinition
 	{
 		@Override
@@ -428,6 +439,24 @@ public class MinestuckModelManager
 				else str = "card_full";
 			}
 			else str = "card_empty";
+			return new ModelResourceLocation("minestuck:" + str, "inventory");
+		}
+	}
+	
+	private static class ShuntDefinition implements ItemMeshDefinition
+	{
+		@Override
+		public ModelResourceLocation getModelLocation(ItemStack stack)
+		{
+			NBTTagCompound nbt = stack.getTagCompound();
+			String str;
+			if(nbt != null && nbt.hasKey("contentID"))
+			{
+				if(nbt.getBoolean("punched") && !(Item.REGISTRY.getObject(new ResourceLocation(nbt.getString("contentID"))) == Item.getItemFromBlock(genericObject)))
+					str = "shunt_full";
+				else str = "shunt_full";
+			}
+			else str = "shunt_empty";
 			return new ModelResourceLocation("minestuck:" + str, "inventory");
 		}
 	}

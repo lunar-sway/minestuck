@@ -35,6 +35,9 @@ public class MinestuckBlocks
 	public static Block cruxiteBlock = new Block(Material.ROCK, MapColor.LIGHT_BLUE).setUnlocalizedName("cruxiteBlock").setHardness(3.0F).setCreativeTab(TabMinestuck.instance);
 	public static Block uraniumBlock = new Block(Material.ROCK, MapColor.GREEN).setLightLevel(0.5F).setUnlocalizedName("uraniumBlock").setHardness(3.0F).setCreativeTab(TabMinestuck.instance);
 	public static Block genericObject = new BlockCustom(Material.GOURD, MapColor.LIME, SoundType.WOOD).setUnlocalizedName("genericObject").setHardness(1.0F).setCreativeTab(TabMinestuck.instance);
+	
+	public static Block blender = new BlockBlender();
+	
 	public static Block sburbMachine = new BlockSburbMachine();
 	public static Block crockerMachine = new BlockCrockerMachine();
 	public static Block blockComputerOff = new BlockComputerOff();
@@ -44,10 +47,12 @@ public class MinestuckBlocks
 	public static Block transportalizer = new BlockTransportalizer();
 	
 	public static Block punchDesignix = new BlockPunchDesignix();
-	public static BlockTotemLathe totemlathe[] = BlockTotemLathe.createBlocks();
+	public static BlockTotemLathe[] totemlathe = BlockTotemLathe.createBlocks();
 	public static BlockAlchemiter[] alchemiter = BlockAlchemiter.createBlocks();
 	public static Block cruxtruder = new BlockCruxtruder();
 	public static Block cruxtruderLid = new BlockCruxtruderLid();
+	public static BlockJumperBlock[] jumperBlockExtension = BlockJumperBlock.createBlocks();
+	public static BlockAlchemiterUpgrades[] alchemiterUpgrades = BlockAlchemiterUpgrades.createBlocks();
 	
 	public static Block blockCruxiteDowel = new BlockCruxtiteDowel();
 	public static Block blockGoldSeeds = new BlockGoldSeeds();
@@ -226,6 +231,17 @@ public class MinestuckBlocks
 		registry.register(alchemiter[1].setRegistryName("alchemiter2"));
 		registry.register(cruxtruder.setRegistryName("cruxtruder"));
 		registry.register(cruxtruderLid.setRegistryName("cruxtruder_lid"));
+		registry.register(jumperBlockExtension[0].setRegistryName("jumper_block_extension"));
+		registry.register(jumperBlockExtension[1].setRegistryName("jumper_block_extension2"));
+		registry.register(jumperBlockExtension[2].setRegistryName("jumper_block_extension3"));
+		registry.register(jumperBlockExtension[3].setRegistryName("jumper_block_extension4"));
+		
+		registry.register(alchemiterUpgrades[0].setRegistryName("alchemiter_upgrade"));
+		registry.register(alchemiterUpgrades[1].setRegistryName("alchemiter_upgrade2"));
+		registry.register(alchemiterUpgrades[2].setRegistryName("alchemiter_upgrade3"));
+		registry.register(alchemiterUpgrades[3].setRegistryName("alchemiter_upgrade4"));
+		
+		registry.register(blender.setRegistryName("blender"));
 		
 		registry.register(blockComputerOff.setRegistryName("computer_standard"));
 		registry.register(blockComputerOn.setRegistryName("computer_standard_on"));
@@ -299,4 +315,6 @@ public class MinestuckBlocks
 		
 		return fluid;
 	}
+	
+	
 }

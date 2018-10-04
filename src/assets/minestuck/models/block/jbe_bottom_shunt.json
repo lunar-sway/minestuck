@@ -1,0 +1,134 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "minestuck:machines/jumper_block_extension/down_center",
+		"1": "minestuck:machines/jumper_block_extension/top",
+		"2": "minestuck:machines/jumper_block_extension/inside",
+		"4": "minestuck:machines/jumper_block_extension/plug",
+		"5": "minestuck:machines/jumper_block_extension/punch_card_shunt",
+		"6": "minestuck:machines/jumper_block_extension/card",
+		"particle": "minestuck:machines/jumper_block_extension/down_center"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [16, 6, 16],
+			"faces": {
+				"north": {"uv": [0, 10, 16, 16], "texture": "#2"},
+				"east": {"uv": [0, 10, 16, 16], "texture": "#2"},
+				"south": {"uv": [0, 10, 16, 16], "texture": "#2"},
+				"west": {"uv": [0, 10, 16, 16], "texture": "#2"},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#1"},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#0", "rotation": 180}
+			}
+		},
+		{
+			"from": [-8, 5, -3],
+			"to": [4, 8, 3],
+			"faces": {
+				"north": {"uv": [6, 0, 9, 11], "texture": "#4", "rotation": 90},
+				"east": {"uv": [0, 12, 6, 15], "texture": "#4"},
+				"south": {"uv": [6, 0, 9, 12], "texture": "#4", "rotation": 90},
+				"west": {"uv": [0, 12, 6, 15], "texture": "#4"},
+				"up": {"uv": [0, 0, 6, 12], "texture": "#4", "rotation": 90},
+				"down": {"uv": [0, 0, 6, 12], "texture": "#4", "rotation": 90}
+			}
+		},
+		{
+			"from": [-12, 6, -5],
+			"to": [5, 14, -4],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 8], "texture": "#5"},
+				"east": {"uv": [0, 0, 1, 8], "texture": "#5"},
+				"south": {"uv": [0, 0, 16, 8], "texture": "#5"},
+				"west": {"uv": [0, 0, 1, 8], "texture": "#5"},
+				"up": {"uv": [0, 0, 16, 1], "texture": "#5"},
+				"down": {"uv": [0, 0, 16, 1], "texture": "#5"}
+			}
+		},
+		{
+			"from": [-12, 6, -4],
+			"to": [7, 14, -3],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 8], "texture": "#5"},
+				"east": {"uv": [0, 0, 1, 8], "texture": "#5"},
+				"south": {"uv": [0, 0, 16, 8], "texture": "#5"},
+				"west": {"uv": [0, 0, 1, 8], "texture": "#5"},
+				"up": {"uv": [0, 0, 16, 1], "texture": "#5"},
+				"down": {"uv": [0, 0, 16, 1], "texture": "#5"}
+			}
+		},
+		{
+			"from": [-12, 6, 7],
+			"to": [8, 14, 8],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 8], "texture": "#5"},
+				"east": {"uv": [0, 0, 1, 8], "texture": "#5"},
+				"south": {"uv": [0, 0, 16, 8], "texture": "#5"},
+				"west": {"uv": [0, 0, 1, 8], "texture": "#5"},
+				"up": {"uv": [0, 0, 16, 1], "texture": "#5"},
+				"down": {"uv": [0, 0, 16, 1], "texture": "#5"}
+			}
+		},
+		{
+			"from": [7, 10, -3],
+			"to": [8, 14, 7],
+			"faces": {
+				"north": {"uv": [0, 0, 1, 4], "texture": "#5"},
+				"east": {"uv": [0, 0, 10, 4], "texture": "#5"},
+				"south": {"uv": [0, 0, 1, 4], "texture": "#5"},
+				"west": {"uv": [0, 0, 10, 4], "texture": "#5"},
+				"up": {"uv": [0, 0, 1, 10], "texture": "#5"},
+				"down": {"uv": [0, 0, 1, 10], "texture": "#5"}
+			}
+		},
+		{
+			"from": [-12, 10.25, -3],
+			"to": [7, 14, 7],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 3.75], "texture": "#5"},
+				"east": {"uv": [0, 0, 10, 3.75], "texture": "#5"},
+				"south": {"uv": [0, 0, 16, 3.75], "texture": "#5"},
+				"west": {"uv": [0, 0, 10, 3.75], "texture": "#5"},
+				"up": {"uv": [0, 0, 16, 10], "texture": "#5"},
+				"down": {"uv": [0, 0, 16, 10], "texture": "#5"}
+			}
+		},
+		{
+			"from": [-12, 6, -3],
+			"to": [8, 10, 7],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 4], "texture": "#5"},
+				"east": {"uv": [0, 0, 10, 4], "texture": "#5"},
+				"south": {"uv": [0, 0, 16, 4], "texture": "#5"},
+				"west": {"uv": [0, 0, 10, 4], "texture": "#5"},
+				"up": {"uv": [0, 0, 16, 10], "texture": "#5"},
+				"down": {"uv": [0, 0, 16, 10], "texture": "#5"}
+			}
+		},
+		{
+			"from": [-14, 10.25, -3],
+			"to": [-10, 10.25, 7],
+			"faces": {
+				"north": {"uv": [0, 0, 2, 0], "texture": "#6"},
+				"east": {"uv": [0, 0, 4, 0], "texture": "#6"},
+				"south": {"uv": [0, 0, 2, 0], "texture": "#6"},
+				"west": {"uv": [6, 0, 8, 1], "texture": "#6", "rotation": 90},
+				"up": {"uv": [0, 0, 10, 4], "texture": "#6", "rotation": 270},
+				"down": {"uv": [0, 4, 10, 8], "texture": "#6", "rotation": 90}
+			}
+		}
+	],
+	"groups": [0, 1,
+		{
+			"name": "shunt",
+			"isOpen": true,
+			"shade": true,
+			"display": {
+				"visibility": true,
+				"autouv": true
+			},
+			"children": [2, 3, 4, 5, 6, 7, 8]
+		}
+	]
+}

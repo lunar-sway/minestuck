@@ -1,0 +1,25 @@
+{
+	"variants": {
+		"facing=south,part=border_left": { "model":"minestuck:jbe_left_border_corner" },
+        "facing=south,part=border_side":    { "model":"minestuck:jbe_border_side" },
+        "facing=south,part=border_right":        { "model":"minestuck:jbe_right_border_corner" },
+        "facing=south,part=small_corner": { "model":"minestuck:jbe_small_corner" },
+        
+        "facing=west,part=border_left":   { "model":"minestuck:jbe_left_border_corner", "y":90  },
+        "facing=west,part=border_side":    { "model":"minestuck:jbe_border_side", "y":90 },
+        "facing=west,part=border_right":        { "model":"minestuck:jbe_right_border_corner", "y":90 },
+        "facing=west,part=small_corner": { "model":"minestuck:jbe_small_corner", "y":90 },
+        
+        "facing=north,part=border_left":   { "model":"minestuck:jbe_left_border_corner", "y":180  },
+        "facing=north,part=border_side":    { "model":"minestuck:jbe_border_side", "y":180 },
+        "facing=north,part=border_right":        { "model":"minestuck:jbe_right_border_corner", "y":180 },
+        "facing=north,part=small_corner": { "model":"minestuck:jbe_small_corner", "y":180 },
+        
+        "facing=east,part=border_left":   { "model":"minestuck:jbe_left_border_corner", "y":270  },
+        "facing=east,part=border_side":    { "model":"minestuck:jbe_border_side", "y":270 },
+        "facing=east,part=border_right":        { "model":"minestuck:jbe_right_border_corner", "y":270 },
+        "facing=east,part=small_corner": { "model":"minestuck:jbe_small_corner", "y":270 }
+        
+        
+	}
+}
