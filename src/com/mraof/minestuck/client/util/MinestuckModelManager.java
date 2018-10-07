@@ -261,6 +261,7 @@ public class MinestuckModelManager
 		register(coarseStoneStairs);
 		register(shadeBrickStairs);
 		register(frostBrickStairs);
+		register(petrifiedPoppy);
 		register(castIronStairs);
 		
 		for(BlockMinestuckLog.BlockType type : BlockMinestuckLog.BlockType.values())
