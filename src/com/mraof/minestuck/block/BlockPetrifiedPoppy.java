@@ -28,7 +28,7 @@ public class BlockPetrifiedPoppy extends BlockBush {
 	@Override
 	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
 		IBlockState soil = worldIn.getBlockState(pos.down());
-		return soil.getBlock() == Blocks.STONE || soil.getBlock() == Blocks.GRAVEL || soil.getBlock() == Blocks.COBBLESTONE;
+		return canSustainBush(soil);
 	}
 	
 	@Override
