@@ -253,6 +253,7 @@ public class MinestuckModelManager
 		register(alchemiter[0]);
 		register(cruxtruder);
 		register(cruxtruderLid);
+		register(petrifiedPoppy);
 		register(glowingMushroom);
 		register(glowingLog);
 		register(glowingPlanks);
@@ -261,7 +262,6 @@ public class MinestuckModelManager
 		register(coarseStoneStairs);
 		register(shadeBrickStairs);
 		register(frostBrickStairs);
-		register(petrifiedPoppy);
 		register(castIronStairs);
 		
 		for(BlockMinestuckLog.BlockType type : BlockMinestuckLog.BlockType.values())
