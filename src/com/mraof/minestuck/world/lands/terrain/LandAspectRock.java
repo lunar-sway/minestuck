@@ -6,7 +6,9 @@ import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.decorator.BlockBlobDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
+import com.mraof.minestuck.world.lands.decorator.LeaflessTreeDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
+import com.mraof.minestuck.world.lands.decorator.SurfaceMushroomGenerator;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.gen.DefaultTerrainGen;
@@ -69,6 +71,9 @@ public class LandAspectRock extends TerrainLandAspect
 		list.add(new UndergroundDecoratorVein(Blocks.GRAVEL.getDefaultState(), 10, 33, 256));
 		list.add(new UndergroundDecoratorVein(Blocks.MONSTER_EGG.getDefaultState().withProperty(BlockSilverfish.VARIANT, BlockSilverfish.EnumType.STONE), 7, 9, 64));
 		list.add(new SurfaceDecoratorVein(Blocks.CLAY.getDefaultState(), 25, 20, BiomeMinestuck.mediumOcean));
+		
+		list.add(new SurfaceMushroomGenerator(MinestuckBlocks.petrifiedPoppy, true, 10, 32, BiomeMinestuck.mediumNormal));
+		list.add(new SurfaceMushroomGenerator(MinestuckBlocks.petrifiedPoppy, true, 5, 48, BiomeMinestuck.mediumRough));
 		
 		list.add(new BlockBlobDecorator(Blocks.COBBLESTONE.getDefaultState(), 0, 3, BiomeMinestuck.mediumNormal));
 		list.add(new BlockBlobDecorator(Blocks.COBBLESTONE.getDefaultState(), 1, 4, BiomeMinestuck.mediumRough));
