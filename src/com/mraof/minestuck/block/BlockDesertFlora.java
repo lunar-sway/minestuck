@@ -11,12 +11,12 @@ import net.minecraft.init.Items;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class BlockBloomingCactus extends BlockBush {
-	public BlockBloomingCactus() 
+public class BlockDesertFlora extends BlockBush {
+	public BlockDesertFlora(String name) 
 	{
 	super(Material.PLANTS);
 	setCreativeTab(TabMinestuck.instance);
-	setUnlocalizedName("bloomingCactus");
+	setUnlocalizedName(name);
 	setSoundType(SoundType.PLANT);
 	}
 	
