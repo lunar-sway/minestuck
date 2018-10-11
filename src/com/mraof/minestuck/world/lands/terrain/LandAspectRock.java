@@ -54,8 +54,9 @@ public class LandAspectRock extends TerrainLandAspect
 		if(type == Variant.PETRIFICATION) {
 			registry.setBlockState("surface", Blocks.STONE.getDefaultState());	
 		} else {
-		registry.setBlockState("surface", Blocks.GRAVEL.getDefaultState());
+			registry.setBlockState("surface", Blocks.GRAVEL.getDefaultState());
 		}
+		registry.setBlockState("upper", Blocks.COBBLESTONE.getDefaultState());
 		registry.setBlockState("structure_primary_decorative", Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED));
 		registry.setBlockState("structure_primary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState());
 		registry.setBlockState("structure_secondary", MinestuckBlocks.stone.getDefaultState());
