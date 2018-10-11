@@ -254,7 +254,9 @@ public class MinestuckModelManager
 		register(alchemiter[0]);
 		register(cruxtruder);
 		register(cruxtruderLid);
+		register(petrifiedGrass);
 		register(petrifiedPoppy);
+		register(petrifiedLog);
 		register(bloomingCactus);
 		register(glowingMushroom);
 		register(glowingLog);
