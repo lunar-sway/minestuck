@@ -205,6 +205,7 @@ public class MinestuckModelManager
 		register(carvingTool);
 		register(crumplyHat);
 		register(frogStatueReplica);
+		register(stoneEyeballs);
 		register(stoneSlab);
 		register(recordEmissaryOfDance);
 		register(recordDanceStab);
@@ -254,6 +255,7 @@ public class MinestuckModelManager
 		register(cruxtruder);
 		register(cruxtruderLid);
 		register(petrifiedPoppy);
+		register(bloomingCactus);
 		register(glowingMushroom);
 		register(glowingLog);
 		register(glowingPlanks);
