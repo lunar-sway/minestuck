@@ -240,6 +240,7 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemBlock(petrifiedPoppy));
 		registerItemBlock(registry, new ItemBlock(petrifiedGrass));
 		registerItemBlock(registry, new ItemBlock(bloomingCactus));
+		registerItemBlock(registry, new ItemBlock(desertBush));
 		registerItemBlock(registry, new ItemBlock(glowingMushroom));
 		registerItemBlock(registry, new ItemBlock(glowingLog));
 		registerItemBlock(registry, new ItemBlockCraftingTab(glowingPlanks, CreativeTabs.BUILDING_BLOCKS));

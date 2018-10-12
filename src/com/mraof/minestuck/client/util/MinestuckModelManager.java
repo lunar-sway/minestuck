@@ -258,6 +258,7 @@ public class MinestuckModelManager
 		register(petrifiedPoppy);
 		register(petrifiedLog);
 		register(bloomingCactus);
+		register(desertBush);
 		register(glowingMushroom);
 		register(glowingLog);
 		register(glowingPlanks);
