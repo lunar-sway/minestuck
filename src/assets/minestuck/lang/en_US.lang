@@ -1,4 +1,4 @@
-ï»¿advancements.minestuck.root.title=Minestuck
+advancements.minestuck.root.title=Minestuck
 advancements.minestuck.root.description=The Beginning of Something Really Excellent
 advancements.minestuck.setup_connection.title=Connect
 advancements.minestuck.setup_connection.description=Create a connection with someone.
@@ -1122,6 +1122,7 @@ tile.petrifiedPoppy.name=Petrified Poppy
 tile.petrifiedGrass.name=Petrified Grass
 tile.petrifiedLog.name=Petrified Log
 tile.bloomingCactus.name=Blooming Cactus
+tile.desertBush.name=Desert Bush
 tile.glowingMushroom.name=Glowing Mushroom
 tile.glowingLog.name=Glowing Log
 tile.glowingPlanks.name=Glowing Planks
