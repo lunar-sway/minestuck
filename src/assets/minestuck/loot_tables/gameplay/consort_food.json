@@ -431,7 +431,7 @@
                 {
                     "type": "item",
                     "name": "minestuck:desert_fruit",
-                    "weight": 5,
+                    "weight": 8,
                     "functions": [
                         {
                             "function": "set_count",
