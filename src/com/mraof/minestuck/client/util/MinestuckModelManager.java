@@ -196,6 +196,7 @@ public class MinestuckModelManager
 		register(jarOfBugs);
 		register(onion);
 		register(salad);
+		register(desertFruit);
 		register(irradiatedSteak);
 		register(rockCookie);
 		
