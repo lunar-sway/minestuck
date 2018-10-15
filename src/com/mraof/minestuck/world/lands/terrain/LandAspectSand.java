@@ -95,7 +95,11 @@ public class LandAspectSand extends TerrainLandAspect
 	@Override
 	public String[] getNames()
 	{
-		return new String[] {"sand", "dune", "desert"};
+		if(type == Variant.LUSH_DESERTS) {
+			return new String[] {"lush_deserts"};
+		} else {
+			return new String[] {"sand", "dune", "desert"};
+		}
 	}
 	
 	@Override

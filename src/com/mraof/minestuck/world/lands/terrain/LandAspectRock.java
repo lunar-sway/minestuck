@@ -4,6 +4,7 @@ import com.mraof.minestuck.block.BlockMinestuckStone;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
+import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.BlockBlobDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.LeaflessTreeDecorator;
@@ -78,7 +79,11 @@ public class LandAspectRock extends TerrainLandAspect
 	@Override
 	public String[] getNames()
 	{
-		return new String[] {"rock", "stone", "ore"};
+		if(type == Variant.PETRIFICATION) {
+			return new String[] {"petrification"};
+		} else {
+			return new String[] {"rock", "stone", "ore"};
+		}
 	}
 	
 	@Override
@@ -156,6 +161,12 @@ public class LandAspectRock extends TerrainLandAspect
 	public List<TerrainLandAspect> getVariations()
 	{
 		return variations;
+	}
+	
+	@Override
+	public TerrainLandAspect getPrimaryVariant()
+	{
+		return LandAspectRegistry.fromNameTerrain("rock");
 	}
 	
 	@Override
