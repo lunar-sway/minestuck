@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.block.BlockAlchemiter;
+import com.mraof.minestuck.block.BlockAlchemiterUpgrades;
 import com.mraof.minestuck.block.BlockJumperBlock.EnumParts;
 import com.mraof.minestuck.editmode.EditData;
 import com.mraof.minestuck.editmode.ServerEditHandler;
@@ -28,6 +29,8 @@ import net.minecraft.world.World;
 
 public class ItemJumperBlock extends ItemBlock
 {
+	static boolean flip = false;
+	
 	public ItemJumperBlock(Block block)
 	{
 		super(block);
@@ -94,12 +97,35 @@ public class ItemJumperBlock extends ItemBlock
 				}
 			}
 		}
+		for(int z = 0; z < 4; z++)
+		{
+			if(!(world.getBlockState(pos.offset(facing.getOpposite(), z).offset(facing.rotateYCCW(), -1)).getBlock() instanceof BlockAlchemiter) || 
+					!(world.getBlockState(pos.offset(facing.getOpposite(), z).offset(facing.rotateYCCW(), -1)).getBlock() instanceof BlockAlchemiter))
+			{
+				for(int z2 = 0; z2 < 4; z2++)
+				{
+					if(!(world.getBlockState(pos.offset(facing.getOpposite(), z2).offset(facing.rotateYCCW(), 5)).getBlock() instanceof BlockAlchemiter) || 
+							!(world.getBlockState(pos.offset(facing.getOpposite(), z2).offset(facing.rotateYCCW(), 5)).getBlock() instanceof BlockAlchemiter))
+						return false;
+				}
+				flip = true;
+				return true;
+			}
+		}
+		flip = false;
 		return true;
 	}
 	@Override
 	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState)
 	{
 		EnumFacing facing = player.getHorizontalFacing();
+		
+		if(flip)
+		{
+			pos = pos.offset(facing,3).offset(facing.rotateY(),4);
+			facing = facing.getOpposite();
+		}
+		
 		if(!world.isRemote)
 		{
 			world.setBlockState(pos.up(0), BlockJumperBlock.getState(EnumParts.TOP_CORNER_PLUG, facing.rotateYCCW()));

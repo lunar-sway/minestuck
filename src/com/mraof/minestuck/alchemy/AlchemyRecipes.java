@@ -1086,6 +1086,29 @@ public class AlchemyRecipes
 	}
 	
 	@Nonnull
+	public static ItemStack createEncodedItem(ItemStack itemIn, ItemStack itemOut)
+	{
+		NBTTagCompound nbt = null;
+		if(!itemIn.isEmpty())
+		{
+			nbt = new NBTTagCompound();
+			nbt.setString("contentID", Item.REGISTRY.getNameForObject(itemIn.getItem()).toString());
+			nbt.setInteger("contentMeta", itemIn.getItemDamage());
+		}
+		ItemStack stack = itemOut;
+		
+		
+		stack.setTagCompound(nbt);
+		return stack;
+	}
+	
+	@Nonnull
+	public static ItemStack createEncodedItem(ItemStack itemIn, Item itemOut)
+	{
+		return createEncodedItem(itemIn, new ItemStack(itemOut));
+	}
+	
+	@Nonnull
 	public static ItemStack createCard(ItemStack item, boolean punched)
 	{
 		ItemStack stack = createEncodedItem(item, true);
@@ -1098,6 +1121,21 @@ public class AlchemyRecipes
 				stack.getTagCompound().setTag("contentTags", item.getTagCompound());
 			stack.getTagCompound().setInteger("contentSize", item.getCount());
 		}
+		
+		return stack;
+	}
+	
+	public static ItemStack createShunt(ItemStack item)
+	{
+		ItemStack stack = createEncodedItem(item, shunt);
+		if(!stack.hasTagCompound())
+			stack.setTagCompound(new NBTTagCompound());
+		stack.getTagCompound().setBoolean("punched", true);
+		
+			if(item.hasTagCompound())
+				stack.getTagCompound().setTag("contentTags", item.getTagCompound());
+			stack.getTagCompound().setInteger("contentSize", item.getCount());
+		
 		
 		return stack;
 	}

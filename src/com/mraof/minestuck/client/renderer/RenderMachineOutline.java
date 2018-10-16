@@ -110,17 +110,21 @@ public class RenderMachineOutline
 				placeable = ItemCruxtruder.canPlaceAt(stack, player, player.world, placementPos, placedFacing);
 			} else if(stack.getItem() == Item.getItemFromBlock(MinestuckBlocks.jumperBlockExtension[0]))
 			{
-pos = pos.offset(placedFacing.rotateY());
+				pos = pos.offset(placedFacing.rotateY());
 				
 				if (placedFacing.getFrontOffsetX() > 0 && hitZ >= 0.5F || placedFacing.getFrontOffsetX() < 0 && hitZ < 0.5F
 						|| placedFacing.getFrontOffsetZ() > 0 && hitX < 0.5F || placedFacing.getFrontOffsetZ() < 0 && hitX >= 0.5F)
 					pos = pos.offset(placedFacing.rotateY());
 				
 				BlockPos placementPos = pos;
+				if(placedFacing == EnumFacing.WEST)
+					pos = pos.offset(placedFacing, 0);
 				if (placedFacing == EnumFacing.SOUTH)
-					pos = pos.offset(placedFacing.rotateYCCW(), 4);    
-				if (placedFacing == EnumFacing.EAST || placedFacing == EnumFacing.NORTH)
-					pos = pos.offset(placedFacing.rotateYCCW(), 3);    
+					pos = pos.offset(placedFacing.getOpposite(), 3);    
+				if (placedFacing == EnumFacing.EAST)
+					pos = pos.offset(placedFacing.getOpposite(), 3).offset(placedFacing.rotateYCCW(), 4);    
+				if(placedFacing == EnumFacing.NORTH)
+					pos = pos.offset(placedFacing.rotateYCCW(), 4);
 				
 				boundingBox = new AxisAlignedBB(0, 0, 0, (r ? 5 : 4), 1, (r ? 4 : 5)).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
 				placeable = ItemJumperBlock.canPlaceAt(stack, player, player.world, placementPos, placedFacing);

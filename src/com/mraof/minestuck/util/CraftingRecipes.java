@@ -7,6 +7,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tileentity.TileEntityUraniumCooker;
 import net.minecraft.init.Items;
@@ -19,7 +20,9 @@ import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.RegistryNamespaced;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IRecipeFactory;
 import net.minecraftforge.common.crafting.JsonContext;
@@ -32,11 +35,15 @@ import java.util.Set;
 import static com.mraof.minestuck.block.MinestuckBlocks.*;
 import static com.mraof.minestuck.item.MinestuckItems.*;
 
+
+
 /**
  * Contains classes for custom recipe types, and for smelting, oredict and similar registering
  */
 public class CraftingRecipes
 {
+	private static int nextAvailableId;
+	public static final RegistryNamespaced<ResourceLocation, IRecipe> REGISTRY = net.minecraftforge.registries.GameData.getWrapper(IRecipe.class);
 	
 	public static void registerSmelting()
 	{
@@ -62,8 +69,33 @@ public class CraftingRecipes
 		{
 			TileEntityUraniumCooker.setRadiation(ectoSlime, new ItemStack(Items.SLIME_BALL));
 		}
+		
+		
 	}
-	
+
+    
+  //Forge: Made private use GameData/Registry events!
+    private static void register(String name, IRecipe recipe)
+    {
+    	
+        register(new ResourceLocation(name), recipe);
+    }
+
+    //Forge: Made private use GameData/Registry events!
+    private static void register(ResourceLocation name, IRecipe recipe)
+    {
+        if (REGISTRY.containsKey(name))
+        {
+            throw new IllegalStateException("Duplicate recipe ignored with ID " + name);
+        }
+        else
+        {
+            REGISTRY.register(nextAvailableId++, name, recipe);
+        }
+    }
+
+    
+    
 	public static void addOredictionary()
 	{
 		//Register ore dictionary entries
@@ -178,6 +210,122 @@ public class CraftingRecipes
 			public IRecipe initRecipe(String group, int width, int height, NonNullList<Ingredient> ingredients, ItemStack result)
 			{
 				return new EmptyCardRecipe(group, width, height, ingredients, result);
+			}
+		}
+	}
+	
+	public static class AddEncodeRecipe extends NonMirroredRecipe
+	{
+		
+		public AddEncodeRecipe(String group, int width, int height, NonNullList<Ingredient> ingredients, ItemStack result)
+		{
+			super(group, width, height, ingredients, result);
+		}
+		
+		public ItemStack getCraftingResult(final InventoryCrafting crafting) 
+		{
+			ItemStack decode = new ItemStack(Items.AIR);
+			final ItemStack output = super.getCraftingResult(crafting);
+			ItemStack stack = output;
+			
+			for(int i = 0; i < crafting.getSizeInventory(); i++)
+			{
+				stack = crafting.getStackInSlot(i);
+				if(stack.getItem() == MinestuckItems.captchaCard && stack.hasTagCompound() && stack.getTagCompound().hasKey("contentID") && stack.getTagCompound().getBoolean("punched"))
+				{
+					decode = AlchemyRecipes.getDecodedItem(stack);
+					break;
+				}
+					
+			}
+			
+			return AlchemyRecipes.createEncodedItem(decode, output);
+			
+		}
+		
+		public static class Factory extends ShapedFactory
+		{
+			@Override
+			public IRecipe initRecipe(String group, int width, int height, NonNullList<Ingredient> ingredients, ItemStack result)
+			{
+				return new AddEncodeRecipe(group, width, height, ingredients, result);
+			}
+		}
+	}
+	
+	public static class RemoveCardRecipe extends NonMirroredRecipe
+	{
+		
+		public RemoveCardRecipe(String group, int width, int height, NonNullList<Ingredient> ingredients, ItemStack result)
+		{
+			super(group, width, height, ingredients, result);
+		}
+		
+		/* 
+		 * [Server thread/FATAL] [net.minecraft.server.MinecraftServer]: Error executing task
+		 * java.util.concurrent.ExecutionException: java.lang.NullPointerException
+		@Override
+		public boolean matches(InventoryCrafting crafting, World world)
+		{
+			for(int i = 0; i < crafting.getSizeInventory(); i++)
+			{
+				ItemStack stack = crafting.getStackInSlot(i);
+				if(stack.getItem() == MinestuckItems.shunt && !stack.hasTagCompound() && !stack.getTagCompound().hasKey("contentID"))
+					return false;
+			}
+			return super.matches(crafting, world);
+		}
+		*/
+		
+		public ItemStack getCraftingResult(final InventoryCrafting crafting) 
+		{
+			ItemStack encode = new ItemStack(Items.AIR);
+			ItemStack output = new ItemStack(Items.AIR);
+			ItemStack stack =  super.getCraftingResult(crafting);
+			
+			for(int i = 0; i < crafting.getSizeInventory(); i++)
+			{
+				stack = crafting.getStackInSlot(i);
+				if(AlchemyRecipes.hasDecodedItem(stack))
+				{
+					encode = AlchemyRecipes.getDecodedItem(stack);
+					System.out.println("found encoded item at slot " + i + ", item " + stack + " contains " + encode);
+					break;
+				}
+				else
+					System.out.println("couldn't find an encoded item at slot " + i + ", found " + stack + " instead");
+					
+			}
+			output = AlchemyRecipes.createCard(encode, true);
+			return output;
+			
+		}
+		
+		@Override
+		public NonNullList<ItemStack> getRemainingItems(InventoryCrafting crafting) {
+			final NonNullList<ItemStack> remainingItems = NonNullList.withSize(crafting.getSizeInventory(), ItemStack.EMPTY);
+			
+			for(int i = 0; i < remainingItems.size(); ++i)
+			{
+				final ItemStack stack = crafting.getStackInSlot(i);
+				
+				if(AlchemyRecipes.hasDecodedItem(stack))
+					remainingItems.set(i, new ItemStack(stack.getItem()));
+				else
+					remainingItems.set(i, ForgeHooks.getContainerItem(stack));
+				
+				System.out.println("changing item in slot " + i + " from " + stack + " to " + remainingItems.get(i));
+			}
+			
+			return remainingItems;
+		}
+		
+		public static class Factory extends ShapedFactory
+		{
+			@Override
+			public IRecipe initRecipe(String group, int width, int height, NonNullList<Ingredient> ingredients, ItemStack result)
+			{
+				return new RemoveCardRecipe(group, width, height, ingredients, result);
 			}
 		}
 	}

@@ -1,8 +1,11 @@
 package com.mraof.minestuck.tileentity;
 
 
+import com.mraof.minestuck.block.BlockAlchemiter;
+import com.mraof.minestuck.block.BlockAlchemiterUpgrades;
 import com.mraof.minestuck.block.BlockJumperBlock;
 import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.block.BlockAlchemiter.EnumParts;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.alchemy.CombinationRegistry;
@@ -48,7 +51,7 @@ public class TileEntityJumperBlock extends TileEntity
 
 	public void setUpgrade(ItemStack stack, int id)
 	{
-		if(stack.getItem() == MinestuckItems.shunt || stack.isEmpty())
+		if((stack.getItem() == MinestuckItems.shunt && stack.hasTagCompound() && stack.getTagCompound().hasKey("contentID")) || stack.isEmpty())
 		{
 			upgrade[id] = stack;
 			if(world != null)
@@ -213,7 +216,60 @@ public class TileEntityJumperBlock extends TileEntity
 		if(isBroken())
 			return;
 		EnumFacing facing = getFacing();
+		BlockPos alchemMainPos = pos;
+		BlockPos alchemPos = getPos().offset(facing.rotateY()).offset(facing);
 		
+		
+		for(int i = 0; i <= 5; i++)
+		{
+			if(world.getBlockState(alchemPos).equals(BlockAlchemiter.getBlockState(EnumParts.TOTEM_CORNER, facing)))
+			{	
+				System.out.println("found pad base at " + alchemPos);
+				alchemMainPos = alchemPos;
+				break;
+			}
+			else
+				System.out.println("failed to find pad base at current location: " + alchemPos);
+			alchemPos = alchemPos.offset(facing.rotateYCCW(), 3);
+			if(world.getBlockState(alchemMainPos.offset(facing.rotateYCCW(), 3)).equals(BlockAlchemiter.getBlockState(EnumParts.TOTEM_CORNER, facing)))
+			{
+				System.out.println("found pad base at " + alchemPos);
+				alchemMainPos = alchemPos;
+				break;
+			}
+			if(world.getBlockState(alchemPos).getBlock() instanceof BlockAlchemiter || world.getBlockState(alchemPos).getBlock() instanceof BlockAlchemiterUpgrades)
+				facing = world.getBlockState(alchemPos).getValue(BlockAlchemiter.DIRECTION);
+			else
+				facing = facing.rotateY();
+			System.out.println("failed to find pad base at " + alchemMainPos);
+		}
+		
+		if(alchemMainPos == pos)
+		{
+			System.out.println("no pad base was found");
+			setBroken();
+			return;
+		}
+		else
+			alchemMainPos = alchemMainPos.up();
+		
+		TileEntity alchemTe = world.getTileEntity(alchemMainPos);
+		
+		
+		if(!(alchemTe instanceof TileEntityAlchemiter))
+		{
+			System.out.println("no alchemiter te found, found " + alchemTe + " instead");
+			setBroken();
+			return;
+		} else
+		{
+			if(((TileEntityAlchemiter) alchemTe).isBroken())
+			{
+				System.out.println("alchemiter broken");
+				setBroken();
+				return;
+			}
+		}
 		if(		!world.getBlockState(getPos()).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.CABLE, facing)) ||
 				!world.getBlockState(getPos().offset(facing.getOpposite(),1)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.CENTER, facing)) ||
 				!world.getBlockState(getPos().offset(facing.getOpposite(),2)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.CENTER, facing)) ||
@@ -232,13 +288,16 @@ public class TileEntityJumperBlock extends TileEntity
 				!world.getBlockState(getPos().offset(facing.rotateYCCW(),2).offset(facing.getOpposite(),3)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.TOP_PLUG, facing)) ||
 				!world.getBlockState(getPos().offset(facing.rotateYCCW(),2).offset(facing.getOpposite(),4)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.BORDER_RIGHT, facing)) ||
 				
-				!world.getBlockState(getPos().offset(facing.rotateY(),1)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.BASE_CORNER, facing.rotateYCCW())) ||
-				!world.getBlockState(getPos().offset(facing.rotateY(),1).offset(facing.getOpposite(),1)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.BASE_SIDE, facing.rotateYCCW())) ||
-				!world.getBlockState(getPos().offset(facing.rotateY(),1).offset(facing.getOpposite(),2)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.BASE_SIDE, facing.rotateYCCW())) ||
+				!world.getBlockState(getPos().offset(facing.rotateY(),1)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.BASE_CORNER, facing.rotateY())) ||
+				!world.getBlockState(getPos().offset(facing.rotateY(),1).offset(facing.getOpposite(),1)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.BASE_SIDE, facing.rotateY())) ||
+				!world.getBlockState(getPos().offset(facing.rotateY(),1).offset(facing.getOpposite(),2)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.BASE_SIDE, facing.rotateY())) ||
 				!world.getBlockState(getPos().offset(facing.rotateY(),1).offset(facing.getOpposite(),3)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.BASE_CORNER, facing)) ||
-				!world.getBlockState(getPos().offset(facing.rotateY(),1).offset(facing.getOpposite(),4)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.SMALL_CORNER, facing)))
+				!world.getBlockState(getPos().offset(facing.rotateY(),1).offset(facing.getOpposite(),4)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.SMALL_CORNER, facing))  
+
+				)
 
 		{
+			System.out.println("JBE broke");
 			setBroken();
 		}
 		

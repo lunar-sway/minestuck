@@ -1,0 +1,16 @@
+{
+  "type": "minestuck:remove_card",
+  "pattern": [
+    "O"
+  ],
+  "key": {
+    "O": {
+      "item": "minestuck:cruxite_dowel"
+    }
+  },
+  "result": {
+    "item": "minestuck:captcha_card",
+    "data": 1,
+    "count": 1
+  }
+}

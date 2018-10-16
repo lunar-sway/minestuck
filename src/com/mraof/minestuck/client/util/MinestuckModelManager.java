@@ -145,6 +145,7 @@ public class MinestuckModelManager
 		ModelLoader.setCustomMeshDefinition(cruxiteDowel, new CruxiteDowelDefinition());
 		ModelLoader.registerItemVariants(captchaCard, new ResourceLocation("minestuck:card_empty"), new ResourceLocation("minestuck:card_full"), new ResourceLocation("minestuck:card_punched"));
 		ModelLoader.setCustomMeshDefinition(captchaCard, new CaptchaCardDefinition());
+		ModelLoader.registerItemVariants(shunt, new ResourceLocation("minestuck:shunt_empty"), new ResourceLocation("minestuck:shunt_full"));
 		ModelLoader.setCustomMeshDefinition(shunt, new ShuntDefinition());
 		ModelLoader.registerItemVariants(cruxiteApple, new ResourceLocation("minestuck:cruxite_apple"), new ResourceLocation("minestuck:cruxite_apple_blank"));
 		ModelLoader.setCustomMeshDefinition(cruxiteApple, new ColoredItemDefinition("minestuck:cruxite_apple"));
@@ -259,7 +260,6 @@ public class MinestuckModelManager
 		register(totemlathe[0]);
 		register(alchemiter[0]);
 		register(jumperBlockExtension[0]);
-		register(shunt);
 		register(blender);
 		register(cruxtruder);
 		register(cruxtruderLid);
@@ -451,11 +451,8 @@ public class MinestuckModelManager
 			NBTTagCompound nbt = stack.getTagCompound();
 			String str;
 			if(nbt != null && nbt.hasKey("contentID"))
-			{
-				if(nbt.getBoolean("punched") && !(Item.REGISTRY.getObject(new ResourceLocation(nbt.getString("contentID"))) == Item.getItemFromBlock(genericObject)))
-					str = "shunt_full";
-				else str = "shunt_full";
-			}
+				str = "shunt_full";
+			
 			else str = "shunt_empty";
 			return new ModelResourceLocation("minestuck:" + str, "inventory");
 		}
