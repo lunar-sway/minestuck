@@ -101,6 +101,8 @@ public class LandAspectRock extends TerrainLandAspect
 		list.add(new SurfaceDecoratorVein(Blocks.CLAY.getDefaultState(), 25, 20, BiomeMinestuck.mediumOcean));
 		
 		if(type == Variant.ROCK) {
+			list.add(new BlockBlobDecorator(Blocks.COBBLESTONE.getDefaultState(), 0, 3, BiomeMinestuck.mediumNormal));
+			list.add(new BlockBlobDecorator(Blocks.COBBLESTONE.getDefaultState(), 1, 4, BiomeMinestuck.mediumRough));
 			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.petrifiedGrass, true, 25, 32, BiomeMinestuck.mediumRough));
 			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.petrifiedGrass, true, 10, 48, BiomeMinestuck.mediumNormal));
 			list.add(new LeaflessTreeDecorator(MinestuckBlocks.petrifiedLog.getDefaultState(), 0.05F, BiomeMinestuck.mediumRough));
@@ -112,8 +114,6 @@ public class LandAspectRock extends TerrainLandAspect
 			list.add(new LeaflessTreeDecorator(MinestuckBlocks.petrifiedLog.getDefaultState(), 0.1F, BiomeMinestuck.mediumNormal));
 			list.add(new LeaflessTreeDecorator(MinestuckBlocks.petrifiedLog.getDefaultState(), 2.5F, BiomeMinestuck.mediumRough));
 		}
-		list.add(new BlockBlobDecorator(Blocks.COBBLESTONE.getDefaultState(), 0, 3, BiomeMinestuck.mediumNormal));
-		list.add(new BlockBlobDecorator(Blocks.COBBLESTONE.getDefaultState(), 1, 4, BiomeMinestuck.mediumRough));
 		return list;
 	}
 	
