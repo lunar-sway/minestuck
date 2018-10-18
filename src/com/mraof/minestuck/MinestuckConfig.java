@@ -110,6 +110,21 @@ public class MinestuckConfig
 	
 	public static boolean[] deployConfigurations;
 	
+	//Secret configuration options
+	public static boolean secretConfig = false;
+	public static boolean disableCruxite = false;
+	public static boolean disableUranium = false;
+	public static int cruxiteVeinsPerChunk = 10;
+	public static int uraniumVeinsPerChunk = 10;
+	public static int baseCruxiteVeinSize = 6;
+	public static int baseUraniumVeinSize = 3;
+	public static int bonusCruxiteVeinSize = 3;
+	public static int bonusUraniumVeinSize = 3;
+	public static int cruxiteStratumMin = 0;
+	public static int uraniumStratumMin = 0;
+	public static int cruxiteStratumMax = 60;
+	public static int uraniumStratumMax = 30;
+	
 	static void loadConfigFile(File file, Side side)
 	{
 		gameSide = side;
@@ -209,6 +224,24 @@ public class MinestuckConfig
 		
 		if(config.hasKey("General", "hardMode"))
 			hardMode = config.get("General", "hardMode", false).getBoolean();	//Not fully fleshed out yet
+		
+		if(config.hasKey("General", "secret"))
+			secretConfig = config.get("General", "secret", false).getBoolean();
+		if(secretConfig)
+		{
+			disableCruxite = config.get("Secret", "disableCruxite", false).getBoolean();
+			disableUranium = config.get("Secret", "disableUranium", false).getBoolean();
+			cruxiteVeinsPerChunk = config.get("Secret", "cruxiteVeinsPerChunk", 10).getInt();
+			uraniumVeinsPerChunk = config.get("Secret", "uraniumVeinsPerChunk", 10).getInt();
+			baseCruxiteVeinSize = config.get("Secret", "baseCruxiteVeinSize", 6).getInt();
+			baseUraniumVeinSize = config.get("Secret", "baseUraniumVeinSize", 3).getInt();
+			bonusCruxiteVeinSize = config.get("Secret", "bonusCruxiteVeinSize", 3).getInt();
+			bonusUraniumVeinSize = config.get("Secret", "bonusUraniumVeinSize", 3).getInt();
+			cruxiteStratumMin = config.get("Secret", "cruxiteStratumMin", 0).getInt();
+			uraniumStratumMin = config.get("Secret", "uraniumStratumMin", 0).getInt();
+			cruxiteStratumMax = config.get("Secret", "cruxiteStratumMax", 60).getInt();
+			uraniumStratumMax = config.get("Secret", "uraniumStratumMax", 30).getInt();
+		}
 		
 		setting = config.get("General", "dataCheckerPermission", "opsAndGamemode", "Determines who's allowed to access the data checker. \"none\": No one is allowed. \"ops\": only those with a command permission of level 2 or more may access the data ckecker. (for single player, that would be if cheats are turned on) \"gamemode\": Only players with the creative or spectator gamemode may view the data checker. \"opsAndGamemode\": Combination of \"ops\" and \"gamemode\". \"anyone\": No access restrictions are used.",
 				new String[] {"none", "ops", "gamemode", "opsAndGamemode", "anyone"}).setLanguageKey("minestuck.config.dataCheckerPermission").getString();
