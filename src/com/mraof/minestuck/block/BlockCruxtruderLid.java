@@ -2,6 +2,7 @@ package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.item.TabMinestuck;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -30,6 +31,12 @@ public class BlockCruxtruderLid extends Block
 	public boolean isFullCube(IBlockState state)
 	{
 		return false;
+	}
+	
+	@Override
+	public EnumPushReaction getMobilityFlag(IBlockState state)
+	{
+		return EnumPushReaction.DESTROY;
 	}
 	
 	@Override
