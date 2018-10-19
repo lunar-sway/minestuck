@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "facing=up": { "model": "minestuck:vein" },
+        "facing=down": { "model": "minestuck:vein", "x": 180 },
+        "facing=east": { "model": "minestuck:vein", "y": 90, "x": 90 },
+        "facing=south": { "model": "minestuck:vein", "y": 180, "x": 90 },
+        "facing=west": { "model": "minestuck:vein", "y": 270, "x": 90 },
+        "facing=north": { "model": "minestuck:vein", "y": 0, "x": 90 }
+    }
+}

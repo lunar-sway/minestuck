@@ -316,6 +316,9 @@ public class MinestuckModelManager
 		register(endSapling);
 		register(endGrass);
 		
+		register(vein);
+		register(veinCorner);
+		
 		register(primedTnt);
 		register(unstableTnt);
 		register(instantTnt);

@@ -23,6 +23,7 @@ import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemStack;
@@ -41,6 +42,8 @@ public abstract class BlockJumperBlock extends BlockLargeMachine {
 	public static final PropertyEnum<EnumParts> PART2 = PropertyEnum.create("part", EnumParts.class, EnumParts.TOP_CORNER_PLUG, EnumParts.BOTTOM_CORNER_PLUG, EnumParts.BOTTOM_CORNER_SHUNT, EnumParts.TOP_CORNER_SHUNT);
 	public static final PropertyEnum<EnumParts> PART3 = PropertyEnum.create("part", EnumParts.class, EnumParts.BORDER_LEFT, EnumParts.BORDER_SIDE, EnumParts.BORDER_RIGHT, EnumParts.SMALL_CORNER);
 	public static final PropertyEnum<EnumParts> PART4 = PropertyEnum.create("part", EnumParts.class, EnumParts.BASE_SIDE, EnumParts.BASE_CORNER, EnumParts.CENTER, EnumParts.CABLE);
+	protected static final AxisAlignedBB SHUNT_AABB = new AxisAlignedBB(-6/16D, 6/16D, -5/16D, 13/16D, 13/16D, 7/16D);
+	protected static final AxisAlignedBB PLUG_AABB = new AxisAlignedBB(-2/16D, 6/16D, -3/16D, 9/16D, 7/16D, 2/16D);
 	
 	public final PropertyEnum<EnumParts> PART;
 	public static final PropertyDirection DIRECTION = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
@@ -469,17 +472,58 @@ public abstract class BlockJumperBlock extends BlockLargeMachine {
      */
 	
 	
+	@Override
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_)
+	{
+		super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn, p_185477_7_);
+		if(state.getValue(PART).isShunt())
+		{
+			AxisAlignedBB bb = modifyAABBForDirection(state.getValue(DIRECTION), SHUNT_AABB).offset(pos);
+			if(entityBox.intersects(bb))
+				collidingBoxes.add(bb);
+		}
+		else if(state.getValue(PART).isPlug())
+		{
+			AxisAlignedBB bb = modifyAABBForDirection(state.getValue(DIRECTION), PLUG_AABB).offset(pos);
+			if(entityBox.intersects(bb))
+				collidingBoxes.add(bb);
+		}
+		
+		
+	}
+	
+	public AxisAlignedBB modifyAABBForDirection(EnumFacing facing, AxisAlignedBB bb)
+	{
+		AxisAlignedBB out = null;
+		switch(facing.ordinal())
+		{
+		case 2:	//North
+			out = new AxisAlignedBB(bb.minX, bb.minY, bb.minZ, bb.maxX, bb.maxY, bb.maxZ);
+			break;
+		case 3:	//South
+			out = new AxisAlignedBB(1-bb.maxX, bb.minY, 1-bb.maxZ, 1-bb.minX, bb.maxY, 1-bb.minZ);
+			break;
+		case 4:	//West
+			out = new AxisAlignedBB(bb.minZ, bb.minY, 1-bb.maxX, bb.maxZ, bb.maxY, 1-bb.minX);
+			break;
+		case 5:	//East
+			out = new AxisAlignedBB(1-bb.maxZ, bb.minY, bb.minX, 1-bb.minZ, bb.maxY, bb.maxX);
+			break;
+		}
+		return out;
+	}
+	
 	public enum EnumParts implements IStringSerializable
 	{
-		TOP_PLUG(	new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
-		BOTTOM_PLUG(	new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
-		TOP_SHUNT(		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D)),
-		BOTTOM_SHUNT(		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D)),
+		TOP_PLUG(				new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
+		BOTTOM_PLUG(			new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
+		TOP_SHUNT(				new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
+		BOTTOM_SHUNT(			new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
 		
-		BOTTOM_CORNER_PLUG(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
-		TOP_CORNER_PLUG(	new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D)),
-		BOTTOM_CORNER_SHUNT(		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
-		TOP_CORNER_SHUNT(		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D)),
+		BOTTOM_CORNER_PLUG(		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
+		TOP_CORNER_PLUG(		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
+		BOTTOM_CORNER_SHUNT(	new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
+		TOP_CORNER_SHUNT(		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
 		
 		BORDER_LEFT(	new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
 		BORDER_SIDE(	new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),

@@ -258,6 +258,9 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemBlockCraftingTab(frostBrickStairs, CreativeTabs.BUILDING_BLOCKS));
 		registerItemBlock(registry, new ItemBlockCraftingTab(castIronStairs, CreativeTabs.BUILDING_BLOCKS));
 		
+		registerItemBlock(registry, new ItemBlock(vein));
+		registerItemBlock(registry, new ItemBlock(veinCorner));
+		
 		registerItemBlock(registry, new ItemMultiTexture(log, log,
 				(ItemStack input) -> BlockMinestuckLog.BlockType.values()[input.getItemDamage() % BlockMinestuckLog.BlockType.values().length].getUnlocalizedName()));
 		
