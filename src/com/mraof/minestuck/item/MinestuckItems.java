@@ -149,7 +149,6 @@ public class MinestuckItems
 	public static Item cruxiteApple = new ItemCruxiteApple();
 	public static Item cruxitePotion = new ItemCruxitePotion();
 	public static Item disk = new ItemDisk();
-	public static Item chessboard = new Item().setUnlocalizedName("chessboard").setMaxStackSize(1).setCreativeTab(TabMinestuck.instance);
 	public static Item minestuckBucket = new ItemMinestuckBucket();
 	public static Item obsidianBucket = new ItemObsidianBucket();
 	public static Item modusCard = new ItemModus();
@@ -244,6 +243,7 @@ public class MinestuckItems
 		registerItemBlock(registry, cruxiteDowel);
 		registerItemBlock(registry, new ItemJumperBlock(jumperBlockExtension[0]));
 		registerItemBlock(registry, new ItemBlock(blender));
+		registerItemBlock(registry, new ItemBlock(chessboard));
 		
 		registerItemBlock(registry, new ItemBlockLayered(layeredSand));
 		registerItemBlock(registry, new ItemMultiTexture(coloredDirt, coloredDirt,
@@ -421,7 +421,7 @@ public class MinestuckItems
 		registry.register(cruxiteApple.setRegistryName("cruxite_apple"));
 		registry.register(cruxitePotion.setRegistryName("cruxite_potion"));
 		registry.register(disk.setRegistryName("computer_disk"));
-		registry.register(chessboard.setRegistryName("chessboard"));
+		//registry.register(chessboard.setRegistryName("chessboard"));
 		registry.register(minestuckBucket.setRegistryName("minestuck_bucket"));
 		registry.register(obsidianBucket.setRegistryName("bucket_obsidian"));
 		registry.register(modusCard.setRegistryName("modus_card"));
