@@ -1,8 +1,7 @@
 {	"parent": "block/thin_block",
     "textures": {
         "particle": "minestuck:blocks/chessboard",
-        "texture": "minestuck:blocks/chessboard",
-        "item": "minestuck:items/chessboard"
+        "texture": "minestuck:blocks/chessboard"
     },
     "elements": [
         {   "from": [ 0, 0, 0 ],

@@ -38,7 +38,7 @@ public class MinestuckBlocks
 	public static Block genericObject = new BlockCustom(Material.GOURD, MapColor.LIME, SoundType.WOOD).setUnlocalizedName("genericObject").setHardness(1.0F).setCreativeTab(TabMinestuck.instance);
 	
 	public static Block blender = new BlockBlender();
-	public static Block chessboard = new BlockDecor(EnumBB.CHESSBOARD);
+	public static Block chessboard = new BlockDecor("chessboard");
 	
 	public static Block sburbMachine = new BlockSburbMachine();
 	public static Block crockerMachine = new BlockCrockerMachine();

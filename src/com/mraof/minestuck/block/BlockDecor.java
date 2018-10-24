@@ -1,13 +1,21 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.block.BlockJumperBlock.EnumParts;
+import java.util.Random;
 
+import com.mraof.minestuck.block.BlockJumperBlock.EnumParts;
+import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.TabMinestuck;
+
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.Item;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.Mirror;
@@ -17,22 +25,47 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockDecor extends BlockDirectional{
+public class BlockDecor extends Block{
 
 	private EnumBB bb = EnumBB.CHESSBOARD;
-	
-	protected BlockDecor(Material materialIn,EnumBB boundingBox) {
+	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+	protected BlockDecor(Material materialIn, String unlocalizedName) {
 		super(materialIn);
-		bb = boundingBox;
+		setUnlocalizedName(unlocalizedName);
+		setCreativeTab(TabMinestuck.instance);
 	}
 	
-	protected BlockDecor(EnumBB boundingBox)
+	protected BlockDecor(String unlocalizedName)
 	{
 		super(Material.ROCK);
-		bb = boundingBox;
-		setUnlocalizedName("chessboard");
+		setUnlocalizedName(unlocalizedName);
 	}
 
+	@Override
+	public boolean isFullCube(IBlockState state)
+	{
+		return false;
+	}
+	
+	@Override
+	public EnumBlockRenderType getRenderType(IBlockState state)
+	{
+		return EnumBlockRenderType.MODEL;
+	}
+	
+	@Override
+	public boolean isOpaqueCube(IBlockState state)
+	{
+		return false;
+	}
+	
+	@Override
+	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+		String itemName = getUnlocalizedName();
+		itemName.replace("tile.", "");
+		
+		return Item.getByNameOrId("minestuck:" + itemName);
+	}
 	
 	/**
      * Returns the blockstate with the given rotation from the passed blockstate. If inapplicable, returns the passed
@@ -94,10 +127,9 @@ public class BlockDecor extends BlockDirectional{
 	{
 		EnumFacing facing = state.getValue(FACING);
 		
-		System.out.println("thing");
-		System.out.println(facing.getHorizontalIndex());
-		System.out.println(bb.BOUNDING_BOX[facing.getHorizontalIndex()]);
-		return bb.BOUNDING_BOX[facing.getHorizontalIndex()];
+		EnumBB boundingBox = getBBFromName();
+		
+		return boundingBox.BOUNDING_BOX[facing.getHorizontalIndex()];
 	}
     
     public AxisAlignedBB modifyAABBForDirection(EnumFacing facing, AxisAlignedBB bb)
@@ -121,9 +153,23 @@ public class BlockDecor extends BlockDirectional{
 		return out;
 	}
 	
+    public EnumBB getBBFromName()
+    {
+    	String unlocalizedName = getUnlocalizedName();
+    	EnumBB boundingBox = EnumBB.CHESSBOARD;
+    	
+    	switch(unlocalizedName)
+    	{
+    	case "tile.chessboard": boundingBox = EnumBB.CHESSBOARD;
+    	}
+		return boundingBox;
+    	
+    }
+    
 	public enum EnumBB implements IStringSerializable
 	{
-		CHESSBOARD(				new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1/16D, 1.0D));
+		DEFAULT		(FULL_BLOCK_AABB),
+		CHESSBOARD	(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1/16D, 1.0D));
 		
 		private final AxisAlignedBB[] BOUNDING_BOX;
 		
