@@ -61,6 +61,7 @@ public class MinestuckBlocks
 	public static Block blockGoldSeeds = new BlockGoldSeeds();
 	public static Block returnNode = new BlockReturnNode();
 	public static Block gate = new BlockGate();
+	public static Block petrifiedPoppy = new BlockPetrifiedPoppy();
 	public static Block glowingMushroom = new BlockGlowingMushroom();
 	public static Block glowingLog = new BlockGlowingLog();
 	public static Block glowingPlanks = new BlockCustom(Material.WOOD, MapColor.LIGHT_BLUE, SoundType.WOOD).setFireInfo(5, 20).setUnlocalizedName("glowingPlanks").setLightLevel(0.5F).setHardness(2.0F).setResistance(5.0F).setCreativeTab(TabMinestuck.instance);
@@ -197,6 +198,7 @@ public class MinestuckBlocks
 		registry.register(glowingLog.setRegistryName("glowing_log"));
 		registry.register(glowingPlanks.setRegistryName("glowing_planks"));
 		registry.register(glowingMushroom.setRegistryName("glowing_mushroom"));
+		registry.register(petrifiedPoppy.setRegistryName("petrified_poppy"));
 		registry.register(woodenCactus.setRegistryName("wooden_cactus"));
 		
 		registry.register(oreCruxite.setRegistryName("ore_cruxite"));

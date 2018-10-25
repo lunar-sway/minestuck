@@ -29,6 +29,9 @@ public class TileEntityAlchemiter extends TileEntity
 	private GristType selectedGrist = GristType.Build;
 	private boolean broken = false;
 	private ItemStack dowel = ItemStack.EMPTY;
+	private ItemStack upgrade[] = {ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY,ItemStack.EMPTY,ItemStack.EMPTY};
+	public boolean upgraded = false;
+	private TileEntity jbe = null;
 	
 	public void setDowel(ItemStack newDowel)
 	{
@@ -90,6 +93,42 @@ public class TileEntityAlchemiter extends TileEntity
 		setDowel(ItemStack.EMPTY);
 	}
 	
+	//JBE upgrades
+	public void setUpgraded(boolean bool, TileEntity te)
+	{
+		
+		if(te instanceof TileEntityJumperBlock)
+			jbe = te;
+		else
+		{
+			Debug.warnf("%s is not a jbe tile entity", te);
+			return;
+		}
+		
+		TileEntityJumperBlock jbeTe = (TileEntityJumperBlock) te;
+		upgraded = bool;
+		
+		if(bool == true)
+		{
+			for(int i = 0; i < upgrade.length; i++)
+			{
+				upgrade[i] = jbeTe.getUpgrade(i);
+			}
+		}
+		else
+		{
+			for(int i = 0; i < upgrade.length; i++)
+			{
+				upgrade[i] = ItemStack.EMPTY;
+			}
+		}
+	}
+	
+	public boolean isUpgraded()
+	{
+		return upgraded;
+	}
+	
 	private boolean isUseable(IBlockState state)
 	{
 		if(!broken)
@@ -101,8 +140,22 @@ public class TileEntityAlchemiter extends TileEntity
 		return !broken;
 	}
 	
+	public ItemStack getUpgrade(int id)
+	{
+		return upgrade[id];
+	}
+	
 	public void checkStates()
 	{
+		if(isUpgraded())
+		{
+			for(int i = 0; i < upgrade.length; i++)
+			{
+				System.out.println(getUpgrade(i));
+			}
+		}
+		else System.out.println("no upgrades were found");
+		
 		if(this.broken)
 			return;
 		
@@ -127,6 +180,7 @@ public class TileEntityAlchemiter extends TileEntity
 				!world.getBlockState(pos.offset(facing, 2)).equals(BlockAlchemiter.getBlockState(EnumParts.SIDE_LEFT, facing.rotateY())) ||
 				!world.getBlockState(pos.offset(facing)).equals(BlockAlchemiter.getBlockState(EnumParts.SIDE_RIGHT, facing.rotateY())) ||
 				!world.getBlockState(pos.offset(facing, 2).offset(facing.rotateY(), 1)).equals(BlockAlchemiter.getBlockState(EnumParts.CENTER_PAD, facing.rotateY())))
+			
 		{
 			breakMachine();
 			return;

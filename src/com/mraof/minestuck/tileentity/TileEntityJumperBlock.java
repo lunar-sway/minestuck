@@ -79,65 +79,6 @@ public class TileEntityJumperBlock extends TileEntity
 		broken = true;
 	}
 	
-	/*public boolean setDowel(ItemStack stack)
-	{
-		if(world == null)
-			return false;
-		EnumFacing facing = getFacing();
-		BlockPos pos = getPos().up().offset(facing.rotateYCCW(), 2);
-		IBlockState state = world.getBlockState(pos);
-		if(stack.isEmpty())
-		{
-			if(state.equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.ROD_RIGHT, facing)))
-				world.setBlockToAir(pos);
-			return true;
-		} else if (stack.getItem() == MinestuckItems.cruxiteDowel)
-		{
-			if(state.equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.ROD_RIGHT, facing)))
-			{
-				TileEntity te = world.getTileEntity(pos);
-				if(!(te instanceof TileEntityItemStack))
-				{
-					te = new TileEntityItemStack();
-					world.setTileEntity(pos, te);
-				}
-				TileEntityItemStack teItem = (TileEntityItemStack) te;
-				teItem.setStack(stack);
-				world.notifyBlockUpdate(pos, state, state, 2);
-				return true;
-			} else if(state.getBlock().isReplaceable(world, pos))
-			{
-				world.setBlockState(pos, BlockJumperBlock.getState(BlockJumperBlock.EnumParts.ROD_RIGHT, facing));
-				TileEntity te = world.getTileEntity(pos);
-				if(!(te instanceof TileEntityItemStack))
-				{
-					te = new TileEntityItemStack();
-					world.setTileEntity(pos, te);
-				}
-				TileEntityItemStack teItem = (TileEntityItemStack) te;
-				teItem.setStack(stack);
-				
-				return true;
-			}
-		}
-		return false;
-	}
-	public ItemStack getDowel()
-	{
-		BlockPos pos = getPos().up().offset(getFacing().rotateYCCW(), 2);
-		if(world.getBlockState(pos).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.ROD_RIGHT, getFacing())))
-		{
-			TileEntity te = world.getTileEntity(pos);
-			if(te instanceof TileEntityItemStack)
-			{
-				return ((TileEntityItemStack) te).getStack();
-			}
-		}
-		return ItemStack.EMPTY;
-		
-	}*/
-	
-	//TODO
 	public BlockPos idToPos(int id)
 	{
 		EnumFacing facing = getFacing();
@@ -224,16 +165,13 @@ public class TileEntityJumperBlock extends TileEntity
 		{
 			if(world.getBlockState(alchemPos).equals(BlockAlchemiter.getBlockState(EnumParts.TOTEM_CORNER, facing)))
 			{	
-				System.out.println("found pad base at " + alchemPos);
 				alchemMainPos = alchemPos;
 				break;
 			}
 			else
-				System.out.println("failed to find pad base at current location: " + alchemPos);
 			alchemPos = alchemPos.offset(facing.rotateYCCW(), 3);
 			if(world.getBlockState(alchemMainPos.offset(facing.rotateYCCW(), 3)).equals(BlockAlchemiter.getBlockState(EnumParts.TOTEM_CORNER, facing)))
 			{
-				System.out.println("found pad base at " + alchemPos);
 				alchemMainPos = alchemPos;
 				break;
 			}
@@ -241,12 +179,10 @@ public class TileEntityJumperBlock extends TileEntity
 				facing = world.getBlockState(alchemPos).getValue(BlockAlchemiter.DIRECTION);
 			else
 				facing = facing.rotateY();
-			System.out.println("failed to find pad base at " + alchemMainPos);
 		}
 		
 		if(alchemMainPos == pos)
 		{
-			System.out.println("no pad base was found");
 			setBroken();
 			return;
 		}
@@ -258,48 +194,49 @@ public class TileEntityJumperBlock extends TileEntity
 		
 		if(!(alchemTe instanceof TileEntityAlchemiter))
 		{
-			System.out.println("no alchemiter te found, found " + alchemTe + " instead");
 			setBroken();
 			return;
 		} else
 		{
 			if(((TileEntityAlchemiter) alchemTe).isBroken())
 			{
-				System.out.println("alchemiter broken");
 				setBroken();
 				return;
 			}
 		}
+		facing = getFacing();
 		if(		!world.getBlockState(getPos()).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.CABLE, facing)) ||
 				!world.getBlockState(getPos().offset(facing.getOpposite(),1)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.CENTER, facing)) ||
 				!world.getBlockState(getPos().offset(facing.getOpposite(),2)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.CENTER, facing)) ||
 				!world.getBlockState(getPos().offset(facing.getOpposite(),3)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.CENTER, facing)) ||
-				!world.getBlockState(getPos().offset(facing.getOpposite(),4)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.BORDER_LEFT, facing)) ||
+				!world.getBlockState(getPos().offset(facing.getOpposite(),4)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.BORDER_LEFT, facing)) ||				
 				
-				!world.getBlockState(getPos().offset(facing.rotateYCCW(),1)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.BOTTOM_CORNER_PLUG, facing)) ||
-				!world.getBlockState(getPos().offset(facing.rotateYCCW(),1).offset(facing.getOpposite(),1)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.BOTTOM_PLUG, facing)) ||
-				!world.getBlockState(getPos().offset(facing.rotateYCCW(),1).offset(facing.getOpposite(),2)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.BOTTOM_PLUG, facing)) ||
-				!world.getBlockState(getPos().offset(facing.rotateYCCW(),1).offset(facing.getOpposite(),3)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.BOTTOM_PLUG, facing)) ||
+				!(world.getBlockState(getPos().offset(facing.rotateYCCW(),1)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.BOTTOM_CORNER_PLUG, facing)) || world.getBlockState(getPos().offset(facing.rotateYCCW(),1)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.BOTTOM_CORNER_SHUNT, facing))) ||
+				!(world.getBlockState(getPos().offset(facing.rotateYCCW(),1).offset(facing.getOpposite(),1)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.BOTTOM_PLUG, facing)) || world.getBlockState(getPos().offset(facing.rotateYCCW(),1)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.BOTTOM_SHUNT, facing))) ||
+				!(world.getBlockState(getPos().offset(facing.rotateYCCW(),1).offset(facing.getOpposite(),2)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.BOTTOM_PLUG, facing)) || world.getBlockState(getPos().offset(facing.rotateYCCW(),1)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.BOTTOM_SHUNT, facing))) ||
+				!(world.getBlockState(getPos().offset(facing.rotateYCCW(),1).offset(facing.getOpposite(),3)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.BOTTOM_PLUG, facing)) || world.getBlockState(getPos().offset(facing.rotateYCCW(),1)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.BOTTOM_SHUNT, facing))) ||
 				!world.getBlockState(getPos().offset(facing.rotateYCCW(),1).offset(facing.getOpposite(),4)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.BORDER_SIDE, facing)) ||
 				
-				!world.getBlockState(getPos().offset(facing.rotateYCCW(),2)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.TOP_CORNER_PLUG, facing)) ||
-				!world.getBlockState(getPos().offset(facing.rotateYCCW(),2).offset(facing.getOpposite(),1)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.TOP_PLUG, facing)) ||
-				!world.getBlockState(getPos().offset(facing.rotateYCCW(),2).offset(facing.getOpposite(),2)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.TOP_PLUG, facing)) ||
-				!world.getBlockState(getPos().offset(facing.rotateYCCW(),2).offset(facing.getOpposite(),3)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.TOP_PLUG, facing)) ||
+				!(world.getBlockState(getPos().offset(facing.rotateYCCW(),2)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.TOP_CORNER_PLUG, facing)) || world.getBlockState(getPos().offset(facing.rotateYCCW(),1)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.TOP_CORNER_SHUNT, facing))) ||
+				!(world.getBlockState(getPos().offset(facing.rotateYCCW(),2).offset(facing.getOpposite(),1)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.TOP_PLUG, facing)) || world.getBlockState(getPos().offset(facing.rotateYCCW(),1)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.TOP_SHUNT, facing))) ||
+				!(world.getBlockState(getPos().offset(facing.rotateYCCW(),2).offset(facing.getOpposite(),2)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.TOP_PLUG, facing)) || world.getBlockState(getPos().offset(facing.rotateYCCW(),1)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.TOP_SHUNT, facing))) ||
+				!(world.getBlockState(getPos().offset(facing.rotateYCCW(),2).offset(facing.getOpposite(),3)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.TOP_PLUG, facing)) || world.getBlockState(getPos().offset(facing.rotateYCCW(),1)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.TOP_SHUNT, facing))) ||
 				!world.getBlockState(getPos().offset(facing.rotateYCCW(),2).offset(facing.getOpposite(),4)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.BORDER_RIGHT, facing)) ||
 				
-				!world.getBlockState(getPos().offset(facing.rotateY(),1)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.BASE_CORNER, facing.rotateY())) ||
-				!world.getBlockState(getPos().offset(facing.rotateY(),1).offset(facing.getOpposite(),1)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.BASE_SIDE, facing.rotateY())) ||
-				!world.getBlockState(getPos().offset(facing.rotateY(),1).offset(facing.getOpposite(),2)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.BASE_SIDE, facing.rotateY())) ||
+				!world.getBlockState(getPos().offset(facing.rotateY(),1)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.BASE_CORNER, facing.rotateYCCW())) ||
+				!world.getBlockState(getPos().offset(facing.rotateY(),1).offset(facing.getOpposite(),1)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.BASE_SIDE, facing.rotateYCCW())) ||
+				!world.getBlockState(getPos().offset(facing.rotateY(),1).offset(facing.getOpposite(),2)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.BASE_SIDE, facing.rotateYCCW())) ||
 				!world.getBlockState(getPos().offset(facing.rotateY(),1).offset(facing.getOpposite(),3)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.BASE_CORNER, facing)) ||
 				!world.getBlockState(getPos().offset(facing.rotateY(),1).offset(facing.getOpposite(),4)).equals(BlockJumperBlock.getState(BlockJumperBlock.EnumParts.SMALL_CORNER, facing))  
 
 				)
 
 		{
-			System.out.println("JBE broke");
 			setBroken();
 		}
+		
+		if(isBroken())((TileEntityAlchemiter) alchemTe).setUpgraded(false, world.getTileEntity(pos));
+		else ((TileEntityAlchemiter) alchemTe).setUpgraded(true, world.getTileEntity(pos));
 		
 	}
 	
@@ -365,38 +302,6 @@ public class TileEntityJumperBlock extends TileEntity
 		return oldState.getBlock() != newSate.getBlock() || oldState.getValue(BlockJumperBlock.PART1) != newSate.getValue(BlockJumperBlock.PART1);
 	}
 	
-	
-	/*public void processContents()
-	{
-		ItemStack dowel = getDowel();
-		ItemStack output;
-		boolean success = false;
-		if(!dowel.isEmpty() && !AlchemyRecipes.hasDecodedItem(dowel) &&  (!card1.isEmpty() || !card2.isEmpty()))
-		{
-			if(!card1.isEmpty() && !card2.isEmpty())
-				if(!card1.hasTagCompound() || !card1.getTagCompound().getBoolean("punched") || !card2.hasTagCompound() || !card2.getTagCompound().getBoolean("punched"))
-					output = new ItemStack(MinestuckBlocks.genericObject);
-				else output = CombinationRegistry.getCombination(AlchemyRecipes.getDecodedItem(card1), AlchemyRecipes.getDecodedItem(card2), CombinationRegistry.Mode.MODE_AND);
-			else
-			{
-				ItemStack input = card1.isEmpty() ? card2 : card1;
-				if(!input.hasTagCompound() || !input.getTagCompound().getBoolean("punched"))
-					output = new ItemStack(MinestuckBlocks.genericObject);
-				else output = AlchemyRecipes.getDecodedItem(input);
-			}
-			
-			if(!output.isEmpty())
-			{
-				ItemStack outputDowel = output.getItem().equals(Item.getItemFromBlock(MinestuckBlocks.genericObject)) ? new ItemStack(MinestuckItems.cruxiteDowel) : AlchemyRecipes.createEncodedItem(output, false);
-				outputDowel.setItemDamage(dowel.getItemDamage());
-				
-				setDowel(outputDowel);
-				success = true;
-			}
-		}
-		
-		effects(success);
-	}*/
 	
 	private void effects(boolean success)
 	{
