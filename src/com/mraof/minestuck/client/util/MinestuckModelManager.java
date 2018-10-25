@@ -208,7 +208,6 @@ public class MinestuckModelManager
 		register(shopPoster, 0, "shop_poster_1");
 		register(carvingTool);
 		register(crumplyHat);
-		register(frogStatueReplica);
 		register(stoneSlab);
 		register(recordEmissaryOfDance);
 		register(recordDanceStab);
@@ -272,6 +271,9 @@ public class MinestuckModelManager
 		register(shadeBrickStairs);
 		register(frostBrickStairs);
 		register(castIronStairs);
+		
+
+		register(frogStatueReplica);
 		
 		for(BlockMinestuckLog.BlockType type : BlockMinestuckLog.BlockType.values())
 			register(log, type.ordinal(), type.getName()+"_log");

@@ -160,7 +160,8 @@ public class BlockDecor extends Block{
     	
     	switch(unlocalizedName)
     	{
-    	case "tile.chessboard": boundingBox = EnumBB.CHESSBOARD;
+    	case "tile.chessboard": boundingBox = EnumBB.CHESSBOARD; break;
+    	case "tile.frogStatueReplica": boundingBox = EnumBB.FROG_STATUE; break;
     	}
 		return boundingBox;
     	
@@ -169,7 +170,8 @@ public class BlockDecor extends Block{
 	public enum EnumBB implements IStringSerializable
 	{
 		DEFAULT		(FULL_BLOCK_AABB),
-		CHESSBOARD	(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1/16D, 1.0D));
+		CHESSBOARD	(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1/16D, 1.0D)),
+		FROG_STATUE	(new AxisAlignedBB(1/32D,0.0D,3/32D,31/32D,15/16D,29/32D));
 		
 		private final AxisAlignedBB[] BOUNDING_BOX;
 		

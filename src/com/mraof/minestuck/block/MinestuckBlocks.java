@@ -38,7 +38,8 @@ public class MinestuckBlocks
 	public static Block genericObject = new BlockCustom(Material.GOURD, MapColor.LIME, SoundType.WOOD).setUnlocalizedName("genericObject").setHardness(1.0F).setCreativeTab(TabMinestuck.instance);
 	
 	public static Block blender = new BlockBlender();
-	public static Block chessboard = new BlockDecor("chessboard");
+	public static Block chessboard = new BlockDecor("chessboard").setCreativeTab(TabMinestuck.instance);
+	public static Block frogStatueReplica = new BlockDecor("frogStatueReplica").setCreativeTab(TabMinestuck.instance);
 	
 	public static Block sburbMachine = new BlockSburbMachine();
 	public static Block crockerMachine = new BlockCrockerMachine();
@@ -247,6 +248,7 @@ public class MinestuckBlocks
 		
 		registry.register(blender.setRegistryName("blender"));
 		registry.register(chessboard.setRegistryName("chessboard"));
+		registry.register(frogStatueReplica.setRegistryName("frog_statue_replica"));
 		
 		registry.register(blockComputerOff.setRegistryName("computer_standard"));
 		registry.register(blockComputerOn.setRegistryName("computer_standard_on"));
