@@ -55,10 +55,12 @@ public class ItemCaptchaCard extends Item
 			
 			if (contentID != null && contentMeta != null && Item.REGISTRY.containsKey(new ResourceLocation(contentID.getString())))
 			{
-				String stackSize = nbttagcompound.getBoolean("punched") ? "" : nbttagcompound.getInteger("contentSize") + "x";
+				String stackSize = (nbttagcompound.getBoolean("punched") || nbttagcompound.getInteger("contentSize") <= 0) ? "" : nbttagcompound.getInteger("contentSize") + "x";
 				tooltip.add("(" + stackSize + (AlchemyRecipes.getDecodedItem(stack)).getDisplayName() + ")");
 				if(nbttagcompound.getBoolean("punched"))
 					tooltip.add("("+I18n.translateToLocal("item.captchaCard.punched")+")");
+				else if(nbttagcompound.getInteger("contentSize") <= 0)
+					tooltip.add("("+I18n.translateToLocal("item.captchaCard.ghost")+")");
 				return;
 			}
 			else {

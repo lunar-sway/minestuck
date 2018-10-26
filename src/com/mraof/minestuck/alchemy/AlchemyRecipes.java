@@ -1037,7 +1037,7 @@ public class AlchemyRecipes
 		
 		if(tag.hasKey("contentTags"))
 			newItem.setTagCompound(tag.getCompoundTag("contentTags"));
-		if(tag.hasKey("contentSize"))
+		if(tag.hasKey("contentSize") && tag.getInteger("contentSize") >= 1)
 			newItem.setCount(tag.getInteger("contentSize"));
 		
 		return newItem;

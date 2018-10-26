@@ -781,6 +781,7 @@ item.captchaCard.name=Captchalogue Card
 item.captchaCard.empty=empty
 item.captchaCard.invalid=invalid data
 item.captchaCard.punched=punched
+item.captchaCard.ghost=ghost
 item.cruxiteArtifact.name=Cruxite Artifact
 item.disk.Client.name=SBURB Client Disk
 item.disk.Server.name=SBURB Server Disk
