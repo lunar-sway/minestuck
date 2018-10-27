@@ -3,11 +3,16 @@ package com.mraof.minestuck.item;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagString;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
@@ -42,6 +47,20 @@ public class ItemCaptchaCard extends Item
 			items.add(new ItemStack(this));
 			items.add(AlchemyRecipes.createCard(new ItemStack(MinestuckItems.cruxiteApple), true));
 		}
+	}
+	
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+		
+		NBTTagCompound nbt = playerIn.getHeldItem(handIn).getTagCompound();
+		ItemStack stack = playerIn.getHeldItem(handIn);
+		
+		if(playerIn.isSneaking() && nbt.getInteger("contentSize") <= 0 && !nbt.getBoolean("punched") && AlchemyRecipes.getDecodedItem(stack) != ItemStack.EMPTY)
+		{
+			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, new ItemStack(playerIn.getHeldItem(handIn).getItem(), playerIn.getHeldItem(handIn).getCount()));
+		}
+		else
+			return new ActionResult<ItemStack>(EnumActionResult.PASS, playerIn.getHeldItem(handIn));
 	}
 	
 	@Override
