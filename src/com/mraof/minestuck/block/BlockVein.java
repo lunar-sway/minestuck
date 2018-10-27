@@ -43,7 +43,7 @@ public class BlockVein extends BlockDirectional
 	public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, ItemStack stack)
     {
         player.addStat(StatList.getBlockStats(this));
-        //player.addExhaustion(0.005F);
+        player.addExhaustion(0.005F);
 
         if (this.canSilkHarvest(worldIn, pos, state, player) && EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, stack) > 0)
         {
@@ -64,7 +64,7 @@ public class BlockVein extends BlockDirectional
 
             int i = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, stack);
             harvesters.set(player);
-            this.dropBlockAsItem(worldIn, pos, state, i);
+            //this.dropBlockAsItem(worldIn, pos, state, i);
             harvesters.set(null);
             Material material = worldIn.getBlockState(pos.down()).getMaterial();
 

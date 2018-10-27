@@ -15,6 +15,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
@@ -24,12 +25,14 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockDecor extends Block{
 
 	private EnumBB bb = EnumBB.CHESSBOARD;
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-	protected BlockDecor(Material materialIn, String unlocalizedName) {
+	protected BlockDecor(String unlocalizedName, Material materialIn) {
 		super(materialIn);
 		setUnlocalizedName(unlocalizedName);
 		setCreativeTab(TabMinestuck.instance);
@@ -59,13 +62,12 @@ public class BlockDecor extends Block{
 		return false;
 	}
 	
-	@Override
-	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-		String itemName = getUnlocalizedName();
-		itemName.replace("tile.", "");
-		
-		return Item.getByNameOrId("minestuck:" + itemName);
-	}
+	 @SideOnly(Side.CLIENT)
+	    public BlockRenderLayer getBlockLayer()
+	    {
+	        return BlockRenderLayer.TRANSLUCENT;
+	    }
+	
 	
 	/**
      * Returns the blockstate with the given rotation from the passed blockstate. If inapplicable, returns the passed
@@ -162,6 +164,7 @@ public class BlockDecor extends Block{
     	{
     	case "tile.chessboard": boundingBox = EnumBB.CHESSBOARD; break;
     	case "tile.frogStatueReplica": boundingBox = EnumBB.FROG_STATUE; break;
+    	case "tile.blender": boundingBox = EnumBB.BLENDER; break;
     	}
 		return boundingBox;
     	
@@ -171,7 +174,8 @@ public class BlockDecor extends Block{
 	{
 		DEFAULT		(FULL_BLOCK_AABB),
 		CHESSBOARD	(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1/16D, 1.0D)),
-		FROG_STATUE	(new AxisAlignedBB(1/32D,0.0D,3/32D,31/32D,15/16D,29/32D));
+		FROG_STATUE	(new AxisAlignedBB(1/32D,0.0D,3/32D,31/32D,15/16D,29/32D)),
+		BLENDER		(new AxisAlignedBB(3/16D,0D,3/16D,13/16D,1.0D,13/16D));
 		
 		private final AxisAlignedBB[] BOUNDING_BOX;
 		

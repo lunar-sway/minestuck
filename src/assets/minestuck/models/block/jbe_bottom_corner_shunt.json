@@ -1,15 +1,15 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "minestuck:machines/jumper_block_extension/jumper_block_extension/down_side",
-		"1": "minestuck:machines/jumper_block_extension/jumper_block_extension/inside",
-		"2": "minestuck:machines/jumper_block_extension/jumper_block_extension/side",
-		"3": "minestuck:machines/jumper_block_extension/jumper_block_extension/top_border",
+		"0": "minestuck:machines/jumper_block_extension/down_side",
+		"1": "minestuck:machines/jumper_block_extension/inside",
+		"2": "minestuck:machines/jumper_block_extension/side",
+		"3": "minestuck:machines/jumper_block_extension/top_border",
 		"4": "minestuck:machines/jumper_block_extension/punch_card_shunt",
-		"5": "minestuck:machines/jumper_block_extension/jumper_block_extension/card",
-		"6": "minestuck:machines/jumper_block_extension/jumper_block_extension/plug",
-		"8": "minestuck:machines/jumper_block_extension/jumper_block_extension/top_side",
-		"particle": "minestuck:machines/jumper_block_extension/jumper_block_extension/down_side"
+		"5": "minestuck:machines/jumper_block_extension/card",
+		"6": "minestuck:machines/jumper_block_extension/plug",
+		"8": "minestuck:machines/jumper_block_extension/top_side",
+		"particle": "minestuck:machines/jumper_block_extension/down_side"
 	},
 	"elements": [
 		{

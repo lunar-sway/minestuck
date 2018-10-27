@@ -32,7 +32,7 @@ public abstract class ItemShopPoster  extends ItemHanging
 	        if (this.isInCreativeTab(tab))
 	        {
 	        	//TODO
-	            for (int i = 0; i < 5; ++i)
+	            for (int i = 1; i < 5; i += 2)
 	            {
 	                items.add(new ItemStack(this, 1, i));
 	            }

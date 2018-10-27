@@ -12,6 +12,7 @@ import com.mraof.minestuck.block.BlockJumperBlock.EnumParts;
 //import com.mraof.minestuck.block.BlockJumperBlock.BlockJumperBlock2;
 //import com.mraof.minestuck.block.BlockJumperBlock.BlockJumperBlock3;
 import com.mraof.minestuck.client.gui.GuiHandler;
+import com.mraof.minestuck.item.TabMinestuck;
 import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
 import com.mraof.minestuck.tileentity.TileEntityItemStack;
 import com.mraof.minestuck.tileentity.TileEntityJumperBlock;
@@ -36,6 +37,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import com.mraof.minestuck.item.TabMinestuck;
 
 public abstract class BlockJumperBlock extends BlockLargeMachine {
 	public static final PropertyEnum<EnumParts> PART1 = PropertyEnum.create("part", EnumParts.class, EnumParts.TOP_PLUG, EnumParts.BOTTOM_PLUG, EnumParts.TOP_SHUNT, EnumParts.BOTTOM_SHUNT);
@@ -60,6 +62,7 @@ public abstract class BlockJumperBlock extends BlockLargeMachine {
 		this.index = index;
 		PART = part;
 		setUnlocalizedName("jumper_block_extension");
+		setCreativeTab(null);
 		
 	}
 	

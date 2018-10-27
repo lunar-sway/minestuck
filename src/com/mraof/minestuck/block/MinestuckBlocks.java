@@ -37,7 +37,7 @@ public class MinestuckBlocks
 	public static Block uraniumBlock = new Block(Material.ROCK, MapColor.GREEN).setLightLevel(0.5F).setUnlocalizedName("uraniumBlock").setHardness(3.0F).setCreativeTab(TabMinestuck.instance);
 	public static Block genericObject = new BlockCustom(Material.GOURD, MapColor.LIME, SoundType.WOOD).setUnlocalizedName("genericObject").setHardness(1.0F).setCreativeTab(TabMinestuck.instance);
 	
-	public static Block blender = new BlockBlender();
+	public static Block blender = new BlockDecor("blender",Material.IRON).setCreativeTab(TabMinestuck.instance);
 	public static Block chessboard = new BlockDecor("chessboard").setCreativeTab(TabMinestuck.instance);
 	public static Block frogStatueReplica = new BlockDecor("frogStatueReplica").setCreativeTab(TabMinestuck.instance);
 	
@@ -87,8 +87,8 @@ public class MinestuckBlocks
 	public static Block redCake = new BlockSimpleCake(2, 0.1F, (EntityPlayer player) -> player.heal(1)).setUnlocalizedName("redCake");
 	public static Block hotCake = new BlockSimpleCake(2, 0.1F, (EntityPlayer player) -> player.setFire(4)).setUnlocalizedName("hotCake");
 	public static Block reverseCake = new BlockSimpleCake(2, 0.1F, null).setUnlocalizedName("cake");
-	public static Block vein = new BlockVein("vein");
-	public static Block veinCorner = new BlockVein("vein_corner");
+	public static Block vein = new BlockVein("vein").setCreativeTab(null);
+	public static Block veinCorner = new BlockVein("vein_corner").setCreativeTab(null);
 	
 	public static Block floweryMossStone = new BlockCustom(Material.ROCK, MapColor.GRAY, SoundType.STONE).setUnlocalizedName("floweryMossStone").setHardness(1.0F).setCreativeTab(TabMinestuck.instance);
 	public static Block floweryMossBrick = new BlockCustom(Material.ROCK, MapColor.GRAY, SoundType.STONE).setUnlocalizedName("floweryMossBrick").setHardness(1.0F).setCreativeTab(TabMinestuck.instance);

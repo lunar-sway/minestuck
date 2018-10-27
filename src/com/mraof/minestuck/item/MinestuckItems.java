@@ -155,7 +155,7 @@ public class MinestuckItems
 	public static Item modusCard = new ItemModus();
 	public static Item goldSeeds = new ItemGoldSeeds();
 	public static Item metalBoat = new ItemMetalBoat();
-	public static Item shunt = new ItemShunt();
+	public static Item shunt = new ItemShunt().setCreativeTab(null);
 	public static Item threshDvd = new Item().setUnlocalizedName("threshDvd").setMaxStackSize(1).setCreativeTab(TabMinestuck.instance);
 	public static Item crewPoster = new ItemHanging()
 	{
