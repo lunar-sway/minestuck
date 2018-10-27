@@ -719,7 +719,7 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(new ItemStack(clawHammer), new ItemStack(chessboard), MODE_AND, false, true, new ItemStack(regiHammer));
 		CombinationRegistry.addCombination(new ItemStack(blacksmithHammer), new ItemStack(Items.CLOCK), MODE_OR, false, false, new ItemStack(fearNoAnvil));
 		CombinationRegistry.addCombination(new ItemStack(sledgeHammer), new ItemStack(Items.BOOK), MODE_AND, false, false, new ItemStack(telescopicSassacrusher));
-		CombinationRegistry.addCombination(new ItemStack(zillyhooHammer), new ItemStack(fluoriteOctet), MODE_AND, false, false, new ItemStack(popamaticVrillyhoo));
+		//CombinationRegistry.addCombination(new ItemStack(zillyhooHammer), new ItemStack(fluoriteOctet), MODE_AND, false, false, new ItemStack(popamaticVrillyhoo));
 		
 		//canes
 		CombinationRegistry.addCombination(new ItemStack(cane), new ItemStack(Items.IRON_SWORD), MODE_OR, false, false, new ItemStack(spearCane));
@@ -1025,6 +1025,12 @@ public class AlchemyRecipes
 	@Nonnull
 	public static ItemStack getDecodedItem(ItemStack card)
 	{
+		return getDecodedItem(card, false);
+	}
+	
+	@Nonnull
+	public static ItemStack getDecodedItem(ItemStack card, boolean ignoreGhost)
+	{
 		if (!hasDecodedItem(card))
 		{
 			return ItemStack.EMPTY;
@@ -1037,7 +1043,10 @@ public class AlchemyRecipes
 		
 		if(tag.hasKey("contentTags"))
 			newItem.setTagCompound(tag.getCompoundTag("contentTags"));
-		if(tag.hasKey("contentSize") && tag.getInteger("contentSize") >= 1)
+		
+		if(ignoreGhost && tag.hasKey("contentSize") && tag.getInteger("contentSize") <= 0)
+			newItem.setCount(0);
+		else if(tag.hasKey("contentSize") && tag.getInteger("contentSize") >= 1)
 			newItem.setCount(tag.getInteger("contentSize"));
 		
 		return newItem;
