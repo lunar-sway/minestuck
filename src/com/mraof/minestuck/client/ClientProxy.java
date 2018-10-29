@@ -15,6 +15,7 @@ import com.mraof.minestuck.client.util.MinestuckModelManager;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.entity.EntityBigPart;
 import com.mraof.minestuck.entity.EntityDecoy;
+import com.mraof.minestuck.entity.EntityFrog;
 import com.mraof.minestuck.entity.carapacian.EntityBishop;
 import com.mraof.minestuck.entity.carapacian.EntityPawn;
 import com.mraof.minestuck.entity.carapacian.EntityRook;
@@ -74,6 +75,8 @@ public class ClientProxy extends CommonProxy
 	public void preInit()
 	{
 		super.preInit();
+		RenderingRegistry.registerEntityRenderingHandler(EntityFrog.class, RenderEntityMinestuck.getFactory(new ModelFrog(), 0.5F));
+		
 		RenderingRegistry.registerEntityRenderingHandler(EntityNakagator.class, RenderEntityMinestuck.getFactory(new ModelNakagator(), 0.5F));
 		RenderingRegistry.registerEntityRenderingHandler(EntitySalamander.class, RenderEntityMinestuck.getFactory(new ModelSalamander(), 0.5F));
 		RenderingRegistry.registerEntityRenderingHandler(EntityIguana.class, RenderEntityMinestuck.getFactory(new ModelIguana(), 0.5F));
