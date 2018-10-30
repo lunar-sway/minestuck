@@ -6,6 +6,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.GL11;
 
+import com.mraof.minestuck.entity.EntityFrog;
+
 public class ModelFrog extends ModelBase {
     public ModelRenderer head;
     public ModelRenderer left_eye;
@@ -106,4 +108,39 @@ public class ModelFrog extends ModelBase {
         modelRenderer.rotateAngleY = y;
         modelRenderer.rotateAngleZ = z;
     }
+    
+    
+    /*TODO
+    public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn)
+    {
+        float f = ageInTicks - (float)entityIn.ticksExisted;
+        EntityFrog entityfrog = (EntityFrog)entityIn;
+        this.rabbitNose.rotateAngleX = headPitch * 0.017453292F;
+        this.rabbitHead.rotateAngleX = headPitch * 0.017453292F;
+        this.rabbitRightEar.rotateAngleX = headPitch * 0.017453292F;
+        this.rabbitLeftEar.rotateAngleX = headPitch * 0.017453292F;
+        this.rabbitNose.rotateAngleY = netHeadYaw * 0.017453292F;
+        this.rabbitHead.rotateAngleY = netHeadYaw * 0.017453292F;
+        this.rabbitRightEar.rotateAngleY = this.rabbitNose.rotateAngleY - 0.2617994F;
+        this.rabbitLeftEar.rotateAngleY = this.rabbitNose.rotateAngleY + 0.2617994F;
+        this.jumpRotation = MathHelper.sin(entityfrog.setJumpCompletion(f) * (float)Math.PI);
+        this.rabbitLeftThigh.rotateAngleX = (this.jumpRotation * 50.0F - 21.0F) * 0.017453292F;
+        this.rabbitRightThigh.rotateAngleX = (this.jumpRotation * 50.0F - 21.0F) * 0.017453292F;
+        this.rabbitLeftFoot.rotateAngleX = this.jumpRotation * 50.0F * 0.017453292F;
+        this.rabbitRightFoot.rotateAngleX = this.jumpRotation * 50.0F * 0.017453292F;
+        this.rabbitLeftArm.rotateAngleX = (this.jumpRotation * -40.0F - 11.0F) * 0.017453292F;
+        this.rabbitRightArm.rotateAngleX = (this.jumpRotation * -40.0F - 11.0F) * 0.017453292F;
+    }
+    
+
+    /**
+     * Used for easily adding entity-dependent animations. The second and third float params here are the same second
+     * and third as in the setRotationAngles method.
+     *
+    public void setLivingAnimations(EntityLivingBase entitylivingbaseIn, float p_78086_2_, float p_78086_3_, float partialTickTime)
+    {
+        super.setLivingAnimations(entitylivingbaseIn, p_78086_2_, p_78086_3_, partialTickTime);
+        this.jumpRotation = MathHelper.sin(((EntityFrog)entitylivingbaseIn).setJumpCompletion(partialTickTime) * (float)Math.PI);
+    }
+    */
 }
