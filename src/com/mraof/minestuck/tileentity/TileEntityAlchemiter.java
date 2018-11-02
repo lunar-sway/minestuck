@@ -14,6 +14,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -29,7 +30,8 @@ public class TileEntityAlchemiter extends TileEntity
 	private GristType selectedGrist = GristType.Build;
 	private boolean broken = false;
 	private ItemStack dowel = ItemStack.EMPTY;
-	private ItemStack upgrade[] = {ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY,ItemStack.EMPTY,ItemStack.EMPTY};
+	private ItemStack upgradeItem[] = {ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY,ItemStack.EMPTY,ItemStack.EMPTY};
+	private Item upgradeCheck[] = new Item[7];
 	public boolean upgraded = false;
 	private TileEntity jbe = null;
 	
@@ -55,6 +57,7 @@ public class TileEntityAlchemiter extends TileEntity
 	{
 		if (!AlchemyRecipes.hasDecodedItem(dowel))
 			return new ItemStack(MinestuckBlocks.genericObject);
+		else if(checkUpgrade(MinestuckItems.captchaCard)) return AlchemyRecipes.createEncodedItem(AlchemyRecipes.getDecodedItem(dowel), true);
 		else return AlchemyRecipes.getDecodedItem(dowel);
 	}
 	
@@ -94,8 +97,10 @@ public class TileEntityAlchemiter extends TileEntity
 	}
 	
 	//JBE upgrades
-	public void setUpgraded(boolean bool, TileEntity te)
+	public void setUpgraded(boolean bool, BlockPos pos)
 	{
+		
+		TileEntity te = world.getTileEntity(pos);
 		
 		if(te instanceof TileEntityJumperBlock)
 			jbe = te;
@@ -110,18 +115,51 @@ public class TileEntityAlchemiter extends TileEntity
 		
 		if(bool == true)
 		{
-			for(int i = 0; i < upgrade.length; i++)
+			for(int i = 0; i < upgradeItem.length; i++)
 			{
-				upgrade[i] = jbeTe.getUpgrade(i);
+				upgradeItem[i] = jbeTe.getUpgrade(i);
 			}
 		}
 		else
 		{
-			for(int i = 0; i < upgrade.length; i++)
+			for(int i = 0; i < upgradeItem.length; i++)
 			{
-				upgrade[i] = ItemStack.EMPTY;
+				upgradeItem[i] = ItemStack.EMPTY;
 			}
 		}
+		
+		refreshUpgrades();
+	}
+	
+	//TODO
+	public void refreshUpgrades()
+	{
+		Item item = null;
+		for(int i = 0; i < upgradeCheck.length; i++)
+		{
+			upgradeCheck[i] = null;
+		}
+		for(int i = 0; i < upgradeItem.length; i++)
+		{
+			for(int c = 0; c < upgradeCheck.length; c++)
+			{
+				if(upgradeCheck[c] == upgradeItem[i].getItem()) break;
+				if(upgradeCheck[c] == null)
+					{
+					upgradeCheck[c] = upgradeItem[i].getItem();
+						break;
+					}
+			}
+		}
+	}
+	
+	public boolean checkUpgrade(Item itemToCheck)
+	{
+		for(int i = 0; i < upgradeCheck.length; i++)
+		{
+			if(upgradeCheck[i] == itemToCheck) return true;
+		}
+		return false;
 	}
 	
 	public boolean isUpgraded()
@@ -142,14 +180,14 @@ public class TileEntityAlchemiter extends TileEntity
 	
 	public ItemStack getUpgrade(int id)
 	{
-		return upgrade[id];
+		return upgradeItem[id];
 	}
 	
 	public void checkStates()
 	{
 		if(isUpgraded())
 		{
-			for(int i = 0; i < upgrade.length; i++)
+			for(int i = 0; i < upgradeItem.length; i++)
 			{
 				System.out.println(getUpgrade(i));
 			}

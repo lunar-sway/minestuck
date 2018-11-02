@@ -5,6 +5,8 @@ import com.mraof.minestuck.block.BlockAlchemiterUpgrades;
 import com.mraof.minestuck.block.BlockJumperBlock.EnumParts;
 import com.mraof.minestuck.editmode.EditData;
 import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
 import com.mraof.minestuck.tileentity.TileEntityCruxtruder;
 import com.mraof.minestuck.tileentity.TileEntityJumperBlock;
 import com.mraof.minestuck.util.Debug;
@@ -16,6 +18,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -39,7 +42,6 @@ public class ItemJumperBlock extends ItemBlock
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
-		
 		if (worldIn.isRemote)
 		{
 			return EnumActionResult.SUCCESS;
@@ -128,6 +130,8 @@ public class ItemJumperBlock extends ItemBlock
 		
 		if(!world.isRemote)
 		{
+			BlockPos cablePos = pos.offset(facing,2).offset(facing.rotateY(),0);
+			
 			world.setBlockState(pos.up(0), BlockJumperBlock.getState(EnumParts.TOP_CORNER_PLUG, facing.rotateYCCW()));
 			world.setBlockState(pos.offset(facing,0).offset(facing.rotateY(),1), BlockJumperBlock.getState(EnumParts.TOP_PLUG, facing.rotateYCCW()));
 			world.setBlockState(pos.offset(facing,0).offset(facing.rotateY(),2), BlockJumperBlock.getState(EnumParts.TOP_PLUG, facing.rotateYCCW()));
@@ -138,7 +142,7 @@ public class ItemJumperBlock extends ItemBlock
 			world.setBlockState(pos.offset(facing,1).offset(facing.rotateY(),2), BlockJumperBlock.getState(EnumParts.BOTTOM_PLUG, facing.rotateYCCW()));
 			world.setBlockState(pos.offset(facing,1).offset(facing.rotateY(),3), BlockJumperBlock.getState(EnumParts.BOTTOM_PLUG, facing.rotateYCCW()));
 			world.setBlockState(pos.offset(facing,1).offset(facing.rotateY(),4), BlockJumperBlock.getState(EnumParts.BORDER_SIDE, facing.rotateYCCW()));
-			world.setBlockState(pos.offset(facing,2).offset(facing.rotateY(),0), BlockJumperBlock.getState(EnumParts.CABLE, facing.rotateYCCW()));
+			world.setBlockState(cablePos, BlockJumperBlock.getState(EnumParts.CABLE, facing.rotateYCCW()));
 			world.setBlockState(pos.offset(facing,2).offset(facing.rotateY(),1), BlockJumperBlock.getState(EnumParts.CENTER, facing.rotateYCCW()));
 			world.setBlockState(pos.offset(facing,2).offset(facing.rotateY(),2), BlockJumperBlock.getState(EnumParts.CENTER, facing.rotateYCCW()));
 			world.setBlockState(pos.offset(facing,2).offset(facing.rotateY(),3), BlockJumperBlock.getState(EnumParts.CENTER, facing.rotateYCCW()));
@@ -149,9 +153,10 @@ public class ItemJumperBlock extends ItemBlock
 			world.setBlockState(pos.offset(facing,3).offset(facing.rotateY(),3), BlockJumperBlock.getState(EnumParts.BASE_CORNER, facing.rotateYCCW()));
 			world.setBlockState(pos.offset(facing,3).offset(facing.rotateY(),4), BlockJumperBlock.getState(EnumParts.SMALL_CORNER, facing.rotateYCCW()));
 			
-			TileEntity te = world.getTileEntity(pos.offset(facing,2).offset(facing.rotateY(),0));
+			TileEntity te = world.getTileEntity(cablePos);
 			if(te instanceof TileEntityJumperBlock)
 			{
+				
 				int color;
 				EditData editData = ServerEditHandler.getData(player);
 				if(editData != null)
@@ -159,6 +164,16 @@ public class ItemJumperBlock extends ItemBlock
 				else color = MinestuckPlayerData.getData(player).color;
 				
 				((TileEntityJumperBlock) te).setColor(color);
+				
+				TileEntity alchemTe = world.getTileEntity(((TileEntityJumperBlock) te).alchemiterMainPos());
+				if(alchemTe instanceof TileEntityAlchemiter)
+				{
+					TileEntityAlchemiter alchemiter = (TileEntityAlchemiter) alchemTe;
+					
+					alchemiter.setUpgraded(true, cablePos);
+				}
+				else Debug.warnf("Couldn't find Alchemiter. Instead found %s.", alchemTe);
+				
 			} else Debug.warnf("Placed JBE, but can't find tile entity. Instead found %s.", te);
 			
 			if(player instanceof EntityPlayerMP)
