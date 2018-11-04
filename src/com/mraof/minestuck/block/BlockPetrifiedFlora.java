@@ -16,12 +16,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
 
-public class BlockPetrifiedPoppy extends BlockBush {
-	public BlockPetrifiedPoppy()
+public class BlockPetrifiedFlora extends BlockBush {
+	public BlockPetrifiedFlora(String name)
 	{
 		super(Material.ROCK);
 		setCreativeTab(TabMinestuck.instance);
-		setUnlocalizedName("petrifiedPoppy");
+		setUnlocalizedName(name);
 		setSoundType(SoundType.STONE);
 	}
 

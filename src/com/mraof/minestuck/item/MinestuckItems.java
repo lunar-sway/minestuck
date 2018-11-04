@@ -136,6 +136,7 @@ public class MinestuckItems
 	public static Item jarOfBugs = new ItemFood(3, 0.2F, false).setUnlocalizedName("jarOfBugs").setCreativeTab(TabMinestuck.instance);
 	public static Item onion = new ItemFood(2, 0.2F, false).setUnlocalizedName("onion").setCreativeTab(TabMinestuck.instance);
 	public static Item salad = new ItemSoup(1).setUnlocalizedName("salad").setCreativeTab(TabMinestuck.instance);
+	public static Item desertFruit = new ItemFood(1, 0.1F, false).setUnlocalizedName("desertFruit").setCreativeTab(TabMinestuck.instance);
 	public static Item irradiatedSteak = new ItemFood(4, 0.4F, true).setPotionEffect(new PotionEffect(MobEffects.WITHER, 100, 1), 0.9F).setUnlocalizedName("irradiatedSteak").setCreativeTab(TabMinestuck.instance);
 	public static Item rockCookie = new Item().setUnlocalizedName("rockCookie").setCreativeTab(TabMinestuck.instance);
 	//Other
@@ -175,6 +176,7 @@ public class MinestuckItems
 	public static Item carvingTool = new Item().setUnlocalizedName("carvingTool").setMaxStackSize(1).setCreativeTab(TabMinestuck.instance);
 	public static Item crumplyHat = new Item().setUnlocalizedName("crumplyHat").setMaxStackSize(1).setCreativeTab(TabMinestuck.instance);
 	public static Item frogStatueReplica = new Item().setUnlocalizedName("frogStatueReplica").setCreativeTab(TabMinestuck.instance);
+	public static Item stoneEyeballs = new Item().setUnlocalizedName("stoneEyeballs").setCreativeTab(TabMinestuck.instance);
 	public static Item stoneSlab = new Item().setUnlocalizedName("stoneSlab").setCreativeTab(TabMinestuck.instance);
 	public static Item glowystoneDust = new ItemGlowystoneDust().setUnlocalizedName("glowystoneDust").setCreativeTab(TabMinestuck.instance);
 	public static Item fakeArms = new Item().setUnlocalizedName("fakeArms").setCreativeTab(null);
@@ -235,7 +237,11 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemBlockLayered(layeredSand));
 		registerItemBlock(registry, new ItemMultiTexture(coloredDirt, coloredDirt,
 				(ItemStack input) -> BlockColoredDirt.BlockType.values()[input.getItemDamage() % BlockColoredDirt.BlockType.values().length].getName()));
+		registerItemBlock(registry, new ItemBlock(petrifiedLog));
 		registerItemBlock(registry, new ItemBlock(petrifiedPoppy));
+		registerItemBlock(registry, new ItemBlock(petrifiedGrass));
+		registerItemBlock(registry, new ItemBlock(bloomingCactus));
+		registerItemBlock(registry, new ItemBlock(desertBush));
 		registerItemBlock(registry, new ItemBlock(glowingMushroom));
 		registerItemBlock(registry, new ItemBlock(glowingLog));
 		registerItemBlock(registry, new ItemBlockCraftingTab(glowingPlanks, CreativeTabs.BUILDING_BLOCKS));
@@ -394,6 +400,7 @@ public class MinestuckItems
 		registry.register(jarOfBugs.setRegistryName("jar_of_bugs"));
 		registry.register(onion.setRegistryName("onion"));
 		registry.register(salad.setRegistryName("salad"));
+		registry.register(desertFruit.setRegistryName("desert_fruit"));
 		registry.register(irradiatedSteak.setRegistryName("irradiated_steak"));
 		registry.register(rockCookie.setRegistryName("rock_cookie"));
 		
@@ -418,6 +425,7 @@ public class MinestuckItems
 		registry.register(carvingTool.setRegistryName("carving_tool"));
 		registry.register(crumplyHat.setRegistryName("crumply_hat"));
 		registry.register(frogStatueReplica.setRegistryName("frog_statue_replica"));
+		registry.register(stoneEyeballs.setRegistryName("stone_eyeballs"));
 		registry.register(stoneSlab.setRegistryName("stone_slab"));
 		registry.register(glowystoneDust.setRegistryName("glowystone_dust"));
 		registry.register(fakeArms.setRegistryName("fake_arms"));

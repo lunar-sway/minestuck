@@ -90,6 +90,7 @@ public class CraftingRecipes
 		OreDictionary.registerOre("treeSapling",rainbowSapling);
 		OreDictionary.registerOre("treeLeaves",	endLeaves);
 		OreDictionary.registerOre("treeLeaves",	new ItemStack(leaves1, 1, OreDictionary.WILDCARD_VALUE));
+		OreDictionary.registerOre("blockCactus", bloomingCactus);
 	}
 	
 	/**

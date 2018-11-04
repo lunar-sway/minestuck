@@ -4,6 +4,7 @@ import com.mraof.minestuck.block.BlockMinestuckStone;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
+import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.BlockBlobDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.LeaflessTreeDecorator;
@@ -28,11 +29,34 @@ import java.util.Random;
 
 public class LandAspectRock extends TerrainLandAspect
 {
+	private final Variant type;
+	private final List<TerrainLandAspect> variations;
+
+	public LandAspectRock()
+	{
+		this(Variant.ROCK);
+	}
 	
+	public LandAspectRock(Variant variation)
+	{
+		variations = new ArrayList<>();
+		type = variation;
+		
+		if(type == Variant.ROCK)
+		{
+			variations.add(this);
+			variations.add(new LandAspectRock(Variant.PETRIFICATION));
+		}
+	}
+
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("surface", Blocks.GRAVEL.getDefaultState());
+		if(type == Variant.PETRIFICATION) {
+			registry.setBlockState("surface", Blocks.STONE.getDefaultState());	
+		} else {
+			registry.setBlockState("surface", Blocks.GRAVEL.getDefaultState());
+		}
 		registry.setBlockState("upper", Blocks.COBBLESTONE.getDefaultState());
 		registry.setBlockState("structure_primary_decorative", Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED));
 		registry.setBlockState("structure_primary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState());
@@ -49,13 +73,17 @@ public class LandAspectRock extends TerrainLandAspect
 	@Override
 	public String getPrimaryName()
 	{
-		return "rock";
+		return type.getName();
 	}
 	
 	@Override
 	public String[] getNames()
 	{
-		return new String[] {"rock", "stone", "ore"};
+		if(type == Variant.PETRIFICATION) {
+			return new String[] {"petrification"};
+		} else {
+			return new String[] {"rock", "stone", "ore"};
+		}
 	}
 	
 	@Override
@@ -72,9 +100,18 @@ public class LandAspectRock extends TerrainLandAspect
 		list.add(new UndergroundDecoratorVein(Blocks.MONSTER_EGG.getDefaultState().withProperty(BlockSilverfish.VARIANT, BlockSilverfish.EnumType.STONE), 7, 9, 64));
 		list.add(new SurfaceDecoratorVein(Blocks.CLAY.getDefaultState(), 25, 20, BiomeMinestuck.mediumOcean));
 		
-		list.add(new SurfaceMushroomGenerator(MinestuckBlocks.petrifiedPoppy, true, 10, 32, BiomeMinestuck.mediumNormal));
-		list.add(new SurfaceMushroomGenerator(MinestuckBlocks.petrifiedPoppy, true, 5, 48, BiomeMinestuck.mediumRough));
-		
+		if(type == Variant.ROCK) {
+			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.petrifiedGrass, true, 25, 32, BiomeMinestuck.mediumRough));
+			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.petrifiedGrass, true, 10, 48, BiomeMinestuck.mediumNormal));
+			list.add(new LeaflessTreeDecorator(MinestuckBlocks.petrifiedLog.getDefaultState(), 0.05F, BiomeMinestuck.mediumRough));
+		} else {
+			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.petrifiedPoppy, true, 10, 25, BiomeMinestuck.mediumNormal));
+			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.petrifiedPoppy, true, 5, 25, BiomeMinestuck.mediumRough));
+			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.petrifiedGrass, true, 35, 35, BiomeMinestuck.mediumNormal));
+			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.petrifiedGrass, true, 55, 55, BiomeMinestuck.mediumRough));
+			list.add(new LeaflessTreeDecorator(MinestuckBlocks.petrifiedLog.getDefaultState(), 0.1F, BiomeMinestuck.mediumNormal));
+			list.add(new LeaflessTreeDecorator(MinestuckBlocks.petrifiedLog.getDefaultState(), 2.5F, BiomeMinestuck.mediumRough));
+		}
 		list.add(new BlockBlobDecorator(Blocks.COBBLESTONE.getDefaultState(), 0, 3, BiomeMinestuck.mediumNormal));
 		list.add(new BlockBlobDecorator(Blocks.COBBLESTONE.getDefaultState(), 1, 4, BiomeMinestuck.mediumRough));
 		return list;
@@ -121,8 +158,30 @@ public class LandAspectRock extends TerrainLandAspect
 	}
 	
 	@Override
+	public List<TerrainLandAspect> getVariations()
+	{
+		return variations;
+	}
+	
+	@Override
+	public TerrainLandAspect getPrimaryVariant()
+	{
+		return LandAspectRegistry.fromNameTerrain("rock");
+	}
+	
+	@Override
 	public EnumConsort getConsortType()
 	{
 		return EnumConsort.NAKAGATOR;
+	}
+	
+	public static enum Variant
+	{
+		ROCK,
+		PETRIFICATION;
+		public String getName()
+		{
+			return this.toString().toLowerCase();
+		}
 	}
 }

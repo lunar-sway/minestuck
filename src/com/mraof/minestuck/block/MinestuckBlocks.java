@@ -53,7 +53,11 @@ public class MinestuckBlocks
 	public static Block blockGoldSeeds = new BlockGoldSeeds();
 	public static Block returnNode = new BlockReturnNode();
 	public static Block gate = new BlockGate();
-	public static Block petrifiedPoppy = new BlockPetrifiedPoppy();
+	public static Block petrifiedLog = new BlockPetrifiedLog();
+	public static Block petrifiedPoppy = new BlockPetrifiedFlora("petrifiedPoppy");
+	public static Block petrifiedGrass = new BlockPetrifiedFlora("petrifiedGrass");
+	public static Block bloomingCactus = new BlockDesertFlora("bloomingCactus"); 
+	public static Block desertBush = new BlockDesertBush("desertBush");
 	public static Block glowingMushroom = new BlockGlowingMushroom();
 	public static Block glowingLog = new BlockGlowingLog();
 	public static Block glowingPlanks = new BlockCustom(Material.WOOD, MapColor.LIGHT_BLUE, SoundType.WOOD).setFireInfo(5, 20).setUnlocalizedName("glowingPlanks").setLightLevel(0.5F).setHardness(2.0F).setResistance(5.0F).setCreativeTab(TabMinestuck.instance);
@@ -188,7 +192,11 @@ public class MinestuckBlocks
 		registry.register(glowingLog.setRegistryName("glowing_log"));
 		registry.register(glowingPlanks.setRegistryName("glowing_planks"));
 		registry.register(glowingMushroom.setRegistryName("glowing_mushroom"));
+		registry.register(petrifiedLog.setRegistryName("petrified_log"));
 		registry.register(petrifiedPoppy.setRegistryName("petrified_poppy"));
+		registry.register(petrifiedGrass.setRegistryName("petrified_grass"));
+		registry.register(bloomingCactus.setRegistryName("blooming_cactus"));
+		registry.register(desertBush.setRegistryName("desert_bush"));
 		registry.register(woodenCactus.setRegistryName("wooden_cactus"));
 		
 		registry.register(oreCruxite.setRegistryName("ore_cruxite"));
@@ -286,6 +294,7 @@ public class MinestuckBlocks
 		goldOreSandstone.setHarvestLevel("pickaxe", Blocks.GOLD_ORE.getHarvestLevel(Blocks.GOLD_ORE.getDefaultState()));
 		goldOreSandstoneRed.setHarvestLevel("pickaxe", Blocks.GOLD_ORE.getHarvestLevel(Blocks.GOLD_ORE.getDefaultState()));
 		redstoneOreEndStone.setHarvestLevel("pickaxe", Blocks.REDSTONE_ORE.getHarvestLevel(Blocks.REDSTONE_ORE.getDefaultState()));
+		petrifiedLog.setHarvestLevel("pickaxe", 0);
 		
 	}
 	
