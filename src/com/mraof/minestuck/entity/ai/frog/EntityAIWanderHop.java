@@ -1,5 +1,7 @@
 package com.mraof.minestuck.entity.ai.frog;
 
+import com.mraof.minestuck.entity.EntityFrog;
+
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -75,7 +77,7 @@ public class EntityAIWanderHop extends EntityAIWander
     {
         if (this.entity.getRNG().nextFloat() < 0.8F && shouldHop)
         {
-            this.entity.getJumpHelper().setJumping();
+            ((EntityFrog) this.entity).setJump(true);
         }
     }
 }
