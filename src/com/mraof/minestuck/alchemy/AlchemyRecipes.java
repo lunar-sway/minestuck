@@ -627,6 +627,7 @@ public class AlchemyRecipes
 		GristRegistry.addGristConversion(new ItemStack(onion), new GristSet(new GristType[] {GristType.Iodine}, new int[] {3}));
 		GristRegistry.addGristConversion(new ItemStack(irradiatedSteak), false, new GristSet(new GristType[] {GristType.Iodine, GristType.Uranium}, new int[] {12, 1}));
 		GristRegistry.addGristConversion(new ItemStack(rockCookie), false, new GristSet(new GristType[] {GristType.Build, GristType.Marble}, new int[] {10, 5}));
+		GristRegistry.addGristConversion(new ItemStack(desertFruit), false, new GristSet(new GristType[] {GristType.Amber, GristType.Caulk}, new int[] {1, 1}));
 		GristRegistry.addGristConversion(new ItemStack(frenchFry), new GristSet(new GristType[] {GristType.Build, GristType.Iodine}, new int[] {1, 1}));
 		
 		GristRegistry.addGristConversion(primedTnt, new GristSet(new GristType[] {GristType.Build, GristType.Chalk, GristType.Sulfur}, new int[] {8, 10, 14}));
