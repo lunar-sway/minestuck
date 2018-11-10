@@ -80,6 +80,7 @@ public class MinestuckModelManager
 		register(cobaltSabre);
 		register(quantumSabre);
 		
+		register(batleacks);
 		register(blacksmithBane);
 		register(scraxe);
 		register(rubyCroak);

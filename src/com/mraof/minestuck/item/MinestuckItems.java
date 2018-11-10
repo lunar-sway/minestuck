@@ -75,6 +75,7 @@ public class MinestuckItems
 	public static Item cobaltSabre = new ItemFireWeapon(300, 7, -2.4D, 10, "cobaltSabre", 30).setTool("sword", 0, 15.0F);
 	public static Item quantumSabre = new ItemPotionWeapon(toolUranium, 600, 8, -2.4D, 5, "quantumSabre", new PotionEffect(MobEffects.WITHER, 100, 1)).setTool("sword", 0, 15.0F);
 	//axes
+	public static Item batleacks = new ItemSord(64, 4, -1.2D, 5, "batleacks");
 	public static Item copseCrusher = new ItemFarmine(400, 6.0D, -3.0D, 20, "copseCrusher", Integer.MAX_VALUE, 20).setTool("axe", 2, 6.0F);
 	public static Item blacksmithBane = new ItemWeapon(413, 9.0D, -3.0D, 15, "blacksmithBane").setTool("axe", 2, 6.0F);
 	public static Item scraxe = new ItemWeapon(500, 10.0D, -3.0D, 20, "scraxe").setTool("axe", 2, 7.0F);
@@ -335,6 +336,7 @@ public class MinestuckItems
 		registry.register(quantumSabre.setRegistryName("quantum_sabre"));
 		
 		//axes
+		registry.register(batleacks.setRegistryName("batleacks"));
 		registry.register(copseCrusher.setRegistryName("copse_crusher"));
 		registry.register(blacksmithBane.setRegistryName("blacksmith_bane"));
 		registry.register(scraxe.setRegistryName("scraxe"));
