@@ -37,9 +37,9 @@ public class LandAspectRegistry
 		registerLandAspect(new LandAspectFrost());
 		registerLandAspect(new LandAspectHeat());
 		registerLandAspect(new LandAspectRock());
-		registerLandAspect(new LandAspectShade());
 		registerLandAspect(new LandAspectSand());
 		//registerLandAspect(new LandAspectSandstone());
+		registerLandAspect(new LandAspectShade());
 		registerLandAspect(new LandAspectWood());
 		//registerLandAspect(new LandAspectRain());
 		//registerLandAspect(new LandAspectRainbow());
