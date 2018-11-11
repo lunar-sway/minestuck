@@ -884,6 +884,9 @@ key.statsGui=View General Minestuck Gui
 key.captchalouge=Captchalouge Held Item
 
 land.format=Land of %s and %s
+land.dank=Dank
+land.must=Must
+land.fungus=Fungus
 land.forest=Forests
 land.tree=Trees
 land.frost=Frost
@@ -1136,6 +1139,7 @@ tile.desertBush.name=Desert Bush
 tile.glowingMushroom.name=Glowing Mushroom
 tile.glowingLog.name=Glowing Log
 tile.glowingPlanks.name=Glowing Planks
+tile.glowyGoop.name=Glowy Goop
 tile.rainbowSapling.name=Rainbow Sapling
 tile.stoneMinestuck.coarse.name=Coarse Stone
 tile.stoneMinestuck.coarseChiseled.name=Chiseled Coarse Stone

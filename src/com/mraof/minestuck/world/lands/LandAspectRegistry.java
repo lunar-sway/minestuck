@@ -40,6 +40,7 @@ public class LandAspectRegistry
 		registerLandAspect(new LandAspectForest());
 		registerLandAspect(new LandAspectRock());
 		registerLandAspect(new LandAspectWood());
+		registerLandAspect(new LandAspectDank());
 		//registerLandAspect(new LandAspectRain());
 		//registerLandAspect(new LandAspectRainbow());
 		//registerLandAspect(new LandAspectFlora());

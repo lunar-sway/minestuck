@@ -62,6 +62,7 @@ public class MinestuckBlocks
 	public static Block glowingLog = new BlockGlowingLog();
 	public static Block glowingPlanks = new BlockCustom(Material.WOOD, MapColor.LIGHT_BLUE, SoundType.WOOD).setFireInfo(5, 20).setUnlocalizedName("glowingPlanks").setLightLevel(0.5F).setHardness(2.0F).setResistance(5.0F).setCreativeTab(TabMinestuck.instance);
 	public static Block stone = new BlockMinestuckStone();
+	public static Block glowyGoop = new BlockGlowyGoop();
 	public static Block coarseStoneStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.COARSE)).setUnlocalizedName("stairsMinestuck.coarse");
 	public static Block shadeBrickStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.SHADE_BRICK)).setUnlocalizedName("stairsMinestuck.shadeBrick");
 	public static Block frostBrickStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.FROST_BRICK)).setUnlocalizedName("stairsMinestuck.frostBrick");
@@ -192,6 +193,7 @@ public class MinestuckBlocks
 		registry.register(glowingLog.setRegistryName("glowing_log"));
 		registry.register(glowingPlanks.setRegistryName("glowing_planks"));
 		registry.register(glowingMushroom.setRegistryName("glowing_mushroom"));
+		registry.register(glowyGoop.setRegistryName("glowy_goop"));
 		registry.register(petrifiedLog.setRegistryName("petrified_log"));
 		registry.register(petrifiedPoppy.setRegistryName("petrified_poppy"));
 		registry.register(petrifiedGrass.setRegistryName("petrified_grass"));
