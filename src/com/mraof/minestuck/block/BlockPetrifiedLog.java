@@ -46,6 +46,12 @@ public class BlockPetrifiedLog extends BlockLog {
 	}
 	
 	@Override
+	public Material getMaterial(IBlockState state)
+	{
+		return Material.ROCK;
+	}
+	
+	@Override
 	protected BlockStateContainer createBlockState()
 	{
 		return new BlockStateContainer(this, new IProperty[] {LOG_AXIS});
