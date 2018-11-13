@@ -73,6 +73,7 @@ public class MinestuckModelManager
 		register(caledscratch);
 		register(caledfwlch);
 		register(royalDeringer);
+		register(claymore);
 		register(zillywairCutlass);
 		register(regisword);
 		register(scarletRibbitar);
@@ -81,6 +82,7 @@ public class MinestuckModelManager
 		register(quantumSabre);
 		
 		register(batleacks);
+		register(battleaxe);
 		register(blacksmithBane);
 		register(scraxe);
 		register(rubyCroak);
