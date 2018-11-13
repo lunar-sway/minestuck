@@ -162,13 +162,13 @@ public class ConsortDialogue
 		addMessage("allTrees").landTerrain(fromNameTerrain("forest"));
 		addMessage("reallyLikesTrees").landTerrain(fromNameTerrain("forest"));
 		
-		//Dank
-		addMessage(new ChainMessage(new SingleMessage("mycelium1"), new SingleMessage("mycelium2"))).landTerrain(fromNameTerrain("dank"));
-		addMessage(new ChainMessage(new SingleMessage("adaptation1"), new SingleMessage("adaptation2"))).landTerrain(fromNameTerrain("dank"));
-		addMessage("mushroomCurse", "denizen").landTerrain(fromNameTerrain("dank"));
-		addMessage("jacket").landTerrain(fromNameTerrain("dank"));
-		addMessage("mildew").landTerrain(fromNameTerrain("dank"));
-		addMessage("fungusDestroyer", "playerTitle", "denizen").landTerrain(fromNameTerrain("dank"));
+		//Fungi
+		addMessage(new ChainMessage(new SingleMessage("mycelium1"), new SingleMessage("mycelium2"))).landTerrain(fromNameTerrain("fungi"));
+		addMessage(new ChainMessage(new SingleMessage("adaptation1"), new SingleMessage("adaptation2"))).landTerrain(fromNameTerrain("fungi"));
+		addMessage("mushroomCurse", "denizen").landTerrain(fromNameTerrain("fungi"));
+		addMessage("jacket").landTerrain(fromNameTerrain("fungi"));
+		addMessage("mildew").landTerrain(fromNameTerrain("fungi"));
+		addMessage("fungusDestroyer", "playerTitle", "denizen").landTerrain(fromNameTerrain("fungi"));
 		
 		/*addMessage("genericGreen").landTerrain(fromNameTerrain("rainbow"));
 		addMessage("overwhelmingColors").landTerrain(fromNameTerrain("rainbow"));

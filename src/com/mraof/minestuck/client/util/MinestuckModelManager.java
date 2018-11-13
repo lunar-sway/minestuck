@@ -114,6 +114,7 @@ public class MinestuckModelManager
 		register(cane);
 		register(ironCane);
 		register(spearCane);
+		register(paradisesPortabello);
 		register(regiCane);
 		register(dragonCane);
 		register(pogoCane);

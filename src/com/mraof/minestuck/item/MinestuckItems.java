@@ -107,6 +107,7 @@ public class MinestuckItems
 	public static Item cane = new ItemWeapon(100, 2.0D, -2.0D, 15, "cane");
 	public static Item ironCane = new ItemWeapon(450, 3.5D, -2.0D, 10, "ironCane");
 	public static Item spearCane = new ItemWeapon(300, 5.0D, -2.0D, 13, "spearCane");
+	public static Item paradisesPortabello = new ItemWeapon(175, 3.0D, -2.0D, 10, "paradisesPortabello");
 	public static Item regiCane = new ItemWeapon(812, 6.0D, -2.0D, 7, "regiCane");
 	public static Item dragonCane = new ItemWeapon(300, 6.5D, -2.0D, 20, "dragonCane");
 	public static Item pogoCane = new ItemPogoWeapon(500, 3.0D, -2.0D, 15, "pogoCane", 0.6);
@@ -377,6 +378,7 @@ public class MinestuckItems
 		registry.register(cane.setRegistryName("cane"));
 		registry.register(ironCane.setRegistryName("iron_cane"));
 		registry.register(spearCane.setRegistryName("spear_cane"));
+		registry.register(paradisesPortabello.setRegistryName("paradises_portabello"));
 		registry.register(regiCane.setRegistryName("regi_cane"));
 		registry.register(dragonCane.setRegistryName("dragon_cane"));
 		registry.register(pogoCane.setRegistryName("pogo_cane"));
