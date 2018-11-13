@@ -8,14 +8,15 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
 
-public class LayerFrogSkin implements LayerRenderer<EntityFrog>
+public class LayerFrogEyes implements LayerRenderer<EntityFrog>
 {
 	private final ModelBase frogModel = new ModelFrog();
 	private final RenderFrog frogRender;
-	private float colorOffset = 0.25f;
+	private float colorOffset = 0;
+	private int type = 0;
 	private String name;
 	
-	public LayerFrogSkin(RenderFrog renderIn)
+	public LayerFrogEyes(RenderFrog renderIn)
 	{
 		this.frogRender = renderIn;
 	}
@@ -24,15 +25,15 @@ public class LayerFrogSkin implements LayerRenderer<EntityFrog>
 	public void doRenderLayer(EntityFrog frog, float limbSwing, float limbSwingAmount, float partialTicks,
 			float ageInTicks, float netHeadYaw, float headPitch, float scale) 
 	{
-		int type = frog.getType();
-		if (!frog.isInvisible() && (type > 2 && type < 1))
+		if (!frog.isInvisible() && (frog.getType() > 2 && frog.getType() < 1))
         {
 			this.frogRender.bindTexture(this.getTexture());
-			int skinColor = frog.getSkinColor();
+			int eyeColor = frog.getEyeColor();
+			type = frog.getEyeType();
 			
-			float r = (float) ((skinColor & 16711680) >> 16) / 255f;
-			float g = (float) ((skinColor & 65280) >> 8) / 255f;
-			float b = (float) ((skinColor & 255) >> 0) / 255f;
+			float r = (float) ((eyeColor & 16711680) >> 16) / 255f;
+			float g = (float) ((eyeColor & 65280) >> 8) / 255f;
+			float b = (float) ((eyeColor & 255) >> 0) / 255f;
 			
 			GlStateManager.color(r+ this.colorOffset, g + this.colorOffset, b + this.colorOffset, 1f);
 			
@@ -44,7 +45,12 @@ public class LayerFrogSkin implements LayerRenderer<EntityFrog>
 
 	public ResourceLocation getTexture() 
 	{
-		return new ResourceLocation("minestuck:textures/mobs/frog/skin.png");
+		int id = this.type;
+		
+		if(id < 0) id = 0;
+		else if(id > 3) id = 3;
+		
+		return new ResourceLocation("minestuck:textures/mobs/frog/eyes_" + id + ".png");
 	}
 	
 	@Override

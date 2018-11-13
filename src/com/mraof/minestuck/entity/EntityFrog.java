@@ -25,9 +25,15 @@ public class EntityFrog extends EntityMinestuck
 	private int jumpTicks;
     private int jumpDuration;
     private boolean shouldJump = false;
-    private static final DataParameter<Integer> FROG_SIZE = EntityDataManager.<Integer>createKey(EntityFrog.class, DataSerializers.VARINT);
-	private static final DataParameter<Integer> SKIN_COLOR = EntityDataManager.<Integer>createKey(EntityFrog.class, DataSerializers.VARINT);
+    private static final DataParameter<Float> FROG_SIZE = EntityDataManager.<Float>createKey(EntityFrog.class, DataSerializers.FLOAT);
+    private static final DataParameter<Integer> SKIN_COLOR = EntityDataManager.<Integer>createKey(EntityFrog.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> EYE_COLOR = EntityDataManager.<Integer>createKey(EntityFrog.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> BELLY_COLOR = EntityDataManager.<Integer>createKey(EntityFrog.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> EYE_TYPE = EntityDataManager.<Integer>createKey(EntityFrog.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> BELLY_TYPE = EntityDataManager.<Integer>createKey(EntityFrog.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> TYPE = EntityDataManager.<Integer>createKey(EntityFrog.class, DataSerializers.VARINT);
     
+	
 	public EntityFrog(World world)
 	{
 		super(world);
@@ -36,14 +42,30 @@ public class EntityFrog extends EntityMinestuck
 	protected void entityInit()
     {
         super.entityInit();
-        this.dataManager.register(FROG_SIZE, Integer.valueOf(1));
+        this.dataManager.register(FROG_SIZE, 1f);
         this.dataManager.register(SKIN_COLOR, 0);
+        this.dataManager.register(EYE_COLOR, 0);
+        this.dataManager.register(BELLY_COLOR, 0);
+        this.dataManager.register(EYE_TYPE, 0);
+        this.dataManager.register(BELLY_TYPE, 0);
+        this.dataManager.register(TYPE, 0);
+        
     }
 	
 	@Override
 	public String getTexture()
 	{
-		return "textures/mobs/frog/base.png";
+		String path;
+		switch(getType())
+		{
+			default: case 0: path = "textures/mobs/frog/base.png";
+			break;
+			case 1: path = "textures/mobs/frog/totally_normal_frog.png";
+			break;
+			case 2: path = "textures/mobs/frog/ruby_contraband.png";
+			break;
+		}
+		return path;
 	}
 	
 	@Override
@@ -79,26 +101,6 @@ public class EntityFrog extends EntityMinestuck
         }
     }
 	
-	protected void setFrogSize(int size, boolean p_70799_2_)
-    {
-        this.dataManager.set(FROG_SIZE, Integer.valueOf(size));
-        this.setSize(0.51000005F * (float)size, 0.51000005F * (float)size);
-        this.setPosition(this.posX, this.posY, this.posZ);
-        //this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue((double)(size * size));
-        //this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue((double)(0.2F + 0.1F * (float)size));
-
-        if (p_70799_2_)
-        {
-            this.setHealth(this.getMaxHealth());
-        }
-
-        this.experienceValue = size;
-    }
-	
-	public int getFrogSize()
-    {
-        return ((Integer)this.dataManager.get(FROG_SIZE)).intValue();
-    }
 
     public static void registerFixesFrog(DataFixer fixer)
     {
@@ -107,38 +109,78 @@ public class EntityFrog extends EntityMinestuck
 	
 	public void writeEntityToNBT(NBTTagCompound compound)
     {
-		System.out.println("write");
         super.writeEntityToNBT(compound);
-        compound.setInteger("Size", this.getFrogSize() - 1);
+        compound.setInteger("Type", this.getType());
+        compound.setFloat("Size", this.getFrogSize()+0.4f);
         compound.setInteger("skinColor", this.getSkinColor());
-       // compound.setBoolean("wasOnGround", this.wasOnGround);
+        compound.setInteger("eyeColor", this.getEyeColor());
+        compound.setInteger("bellyColor", this.getBellyColor());
+        compound.setInteger("eyeType", this.getEyeType());
+        compound.setInteger("bellyType", this.getBellyType());
+        //compound.setBoolean("wasOnGround", this.wasOnGround);
     }
 
     public void readEntityFromNBT(NBTTagCompound compound)
     {
-    	System.out.println("read");
         super.readEntityFromNBT(compound);
-        int i = compound.getInteger("Size");
-
-        if (i < 0)
-            i = 0;
-
-        if (compound.hasKey("skinColor")) {
-        	System.out.println("found skin color");
-			if (compound.getInteger("skinColor") == 0) {
-				System.out.println("skin color == 0");
-				this.setSkinColor(0);
-			} else {
-				System.out.println("skin color != 0");
-				this.setSkinColor(compound.getInteger("skinColor"));
-			}
-		}
-		else {
-			System.out.println("couldn't find skin color");
-			this.setSkinColor(0);
-		}
         
-        this.setFrogSize(i + 1, false);
+        if(compound.hasKey("Type")) setType(compound.getInteger("Type"));
+        else setType(1);
+        
+        if(compound.hasKey("Size"))
+        {
+	        float i = compound.getFloat("Size");
+	        if (i <= 0) i = 0;
+	        this.setFrogSize(i-0.4f, false);
+        }
+        else this.setFrogSize(0.6f, false);
+        if (compound.hasKey("skinColor")) 
+        {
+			if (compound.getInteger("skinColor") == 0) 
+				this.setSkinColor(0);
+			
+			else this.setSkinColor(compound.getInteger("skinColor"));
+		}
+		else this.setSkinColor(0);
+
+        if (compound.hasKey("eyeColor")) 
+        {
+        	if (compound.getInteger("eyeColor") == 0) 
+				this.setEyeColor(0);
+			
+			else this.setEyeColor(compound.getInteger("eyeColor"));
+		}
+		else this.setEyeColor(0);
+        
+        if (compound.hasKey("eyeType")) 
+        {
+        	if (compound.getInteger("eyeType") == 0) 
+				this.setEyeType(0);
+			
+			else this.setEyeType(compound.getInteger("eyeType"));
+		}
+		else this.setEyeType(0);
+        
+
+        if (compound.hasKey("bellyColor")) 
+        {
+        	if (compound.getInteger("bellyColor") == 0) 
+				this.setBellyColor(0);
+			
+			else this.setBellyColor(compound.getInteger("bellyColor"));
+		}
+		else this.setBellyColor(0);
+        
+        if (compound.hasKey("bellyType")) 
+        {
+        	if (compound.getInteger("bellyType") == 0) 
+				this.setBellyType(0);
+			
+			else this.setBellyType(compound.getInteger("bellyType"));
+		}
+		else this.setBellyType(0);
+        
+        
         //this.wasOnGround = compound.getBoolean("wasOnGround");
     }
 	
@@ -146,7 +188,7 @@ public class EntityFrog extends EntityMinestuck
     {
         if (FROG_SIZE.equals(key))
         {
-            int i = this.getFrogSize();
+            float i = this.getFrogSize();
             this.setSize(0.51000005F * (float)i, 0.51000005F * (float)i);
             this.rotationYaw = this.rotationYawHead;
             this.renderYawOffset = this.rotationYawHead;
@@ -205,13 +247,85 @@ public class EntityFrog extends EntityMinestuck
 
     private void setSkinColor(int i) 
     {
-    	System.out.println("setting skin color to " + i);
     	this.dataManager.set(SKIN_COLOR, i);
-    	System.out.println("skin color set to " + i);
 	}
 
-	public int getSkinColor() {
-		// TODO Auto-generated method stub
-		return 0;
+	public int getSkinColor() 
+	{
+		return this.dataManager.get(SKIN_COLOR);
 	}
+	
+	private void setEyeColor(int i)
+	{
+		this.dataManager.set(EYE_COLOR, i);
+	}
+	
+	public int getEyeColor() 
+	{
+		return this.dataManager.get(EYE_COLOR);
+	}
+
+	private void setBellyColor(int i)
+	{
+		this.dataManager.set(BELLY_COLOR, i);
+	}
+	
+	public int getBellyColor() 
+	{
+		return this.dataManager.get(BELLY_COLOR);
+	}
+	
+
+	private void setEyeType(int i)
+	{
+		this.dataManager.set(EYE_TYPE, i);
+	}
+	
+	public int getEyeType() 
+	{
+		return this.dataManager.get(EYE_TYPE);
+	}
+
+	private void setBellyType(int i)
+	{
+		this.dataManager.set(BELLY_TYPE, i);
+	}
+	
+	public int getBellyType() 
+	{
+		return this.dataManager.get(BELLY_TYPE);
+	}
+	
+
+	protected void setFrogSize(float size, boolean p_70799_2_)
+    {
+        this.dataManager.set(FROG_SIZE, Float.valueOf(size));
+        this.setSize(0.51000005F * (float)size, 0.51000005F * (float)size);
+        this.setPosition(this.posX, this.posY, this.posZ);
+        //this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue((double)(size * size));
+        //this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue((double)(0.2F + 0.1F * (float)size));
+
+        if (p_70799_2_)
+        {
+            this.setHealth(this.getMaxHealth());
+        }
+
+        this.experienceValue = (int)size;
+    }
+	
+	public float getFrogSize()
+    {
+        return this.dataManager.get(FROG_SIZE);
+    }
+	
+	private void setType(int i)
+	{
+		this.dataManager.set(TYPE, i);
+	}
+	
+	public int getType()
+	{
+		return this.dataManager.get(TYPE);
+	}
+	
 }
