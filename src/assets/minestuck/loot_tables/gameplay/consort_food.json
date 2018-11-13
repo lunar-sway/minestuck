@@ -354,7 +354,7 @@
                     "conditions": [
                         {
                             "condition": "minestuck:land_aspect",
-                            "land_aspect": "wood"
+                            "land_aspect": [ "wood", "fungi" ]
                         }
                     ]
                 },
@@ -374,7 +374,7 @@
                     "conditions": [
                         {
                             "condition": "minestuck:land_aspect",
-                            "land_aspect": "wood"
+                            "land_aspect": [ "wood", "fungi" ]
                         }
                     ]
                 },
@@ -512,6 +512,86 @@
                         {
                             "condition": "minestuck:land_aspect",
                             "land_aspect": "rock"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:fungal_spore",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 4,
+                                "max": 11
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "fungi"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:sporeo",
+                    "weight": 5,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 5
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "fungi"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:morel_mushroom",
+                    "weight": 5,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 1
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "fungi"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:mushroom_stew",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 1
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "fungi"
                         }
                     ]
                 },

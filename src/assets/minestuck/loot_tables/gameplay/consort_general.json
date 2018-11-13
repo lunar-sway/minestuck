@@ -1056,6 +1056,66 @@
                     ]
                 },
                 {
+                    "type": "item",
+                    "name": "minestuck:paradises_portabello",
+                    "weight": 5,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 1
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "fungi"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:mycelium",
+                    "weight": 7,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 3,
+                                "max": 12
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "fungi"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:vine",
+                    "weight": 6,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 3,
+                                "max": 12
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "fungi"
+                        }
+                    ]
+                },
+                {
                     "entryName": "cast_iron",
                     "type": "item",
                     "name": "minestuck:stone",
