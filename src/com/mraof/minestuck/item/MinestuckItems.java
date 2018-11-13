@@ -145,7 +145,6 @@ public class MinestuckItems
 	public static Item rockCookie = new Item().setUnlocalizedName("rockCookie").setCreativeTab(TabMinestuck.instance);
 	public static Item fungalSpore = new ItemFood(1, 0.2F, false).setPotionEffect(new PotionEffect(MobEffects.POISON, 60, 3), 0.7F).setUnlocalizedName("fungalSpore").setCreativeTab(TabMinestuck.instance);
 	public static Item sporeo = new ItemFood(3, 0.4F, false).setUnlocalizedName("sporeo").setCreativeTab(TabMinestuck.instance);
-	public static Item morelMushroom = new ItemFood(1, 1F, false).setUnlocalizedName("morelMushroom").setCreativeTab(TabMinestuck.instance);
 	public static Item frenchFry = new ItemFood(1, 0.1F, false).setUnlocalizedName("frenchFry").setCreativeTab(TabMinestuck.instance);
 	//Other
 	public static Item boondollars = new ItemBoondollars();
@@ -419,7 +418,6 @@ public class MinestuckItems
 		registry.register(rockCookie.setRegistryName("rock_cookie"));
 		registry.register(fungalSpore.setRegistryName("fungal_spore"));
 		registry.register(sporeo.setRegistryName("sporeo"));
-		registry.register(morelMushroom.setRegistryName("morel_mushroom"));
 		registry.register(frenchFry.setRegistryName("french_fry"));
 		
 		//misc

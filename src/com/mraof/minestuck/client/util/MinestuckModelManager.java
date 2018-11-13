@@ -205,7 +205,6 @@ public class MinestuckModelManager
 		register(rockCookie);
 		register(fungalSpore);
 		register(sporeo);
-		register(morelMushroom);
 		register(frenchFry);
 		
 		register(threshDvd);
