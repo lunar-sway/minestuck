@@ -10,9 +10,11 @@ import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.LeaflessTreeDecorator;
+import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorRegistryVein;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
 import com.mraof.minestuck.world.lands.decorator.SurfaceMushroomGenerator;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
+import com.mraof.minestuck.world.lands.decorator.WorldGenDecorator;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
 import net.minecraft.block.BlockColored;
@@ -63,13 +65,15 @@ public class LandAspectDank extends TerrainLandAspect
 	public List<ILandDecorator> getDecorators()
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
-		list.add(new SurfaceDecoratorVein(Blocks.SLIME_BLOCK.getDefaultState(), 15, 64, BiomeMinestuck.mediumNormal));
-		list.add(new SurfaceDecoratorVein(Blocks.SLIME_BLOCK.getDefaultState(), 15, 100, BiomeMinestuck.mediumRough));
+		list.add(new SurfaceDecoratorRegistryVein("slime", 15, 64, BiomeMinestuck.mediumNormal));
+		list.add(new SurfaceDecoratorRegistryVein("slime", 15, 100, BiomeMinestuck.mediumRough));
 		list.add(new SurfaceMushroomGenerator(Blocks.BROWN_MUSHROOM, true, 10, 64, BiomeMinestuck.mediumRough));
 		list.add(new SurfaceMushroomGenerator(Blocks.BROWN_MUSHROOM, true, 10, 64, BiomeMinestuck.mediumNormal));
 		list.add(new SurfaceMushroomGenerator(Blocks.RED_MUSHROOM, true, 10, 64, BiomeMinestuck.mediumRough));
 		list.add(new SurfaceMushroomGenerator(Blocks.RED_MUSHROOM, true, 10, 64, BiomeMinestuck.mediumNormal));
-
+		list.add(new WorldGenDecorator(new WorldGenBigMushroom(), 200, 0.6F, BiomeMinestuck.mediumNormal));
+		list.add(new WorldGenDecorator(new WorldGenBigMushroom(), 120, 0.6F, BiomeMinestuck.mediumRough));
+		
 		list.add(new UndergroundDecoratorVein(Blocks.GRAVEL.getDefaultState(), 8, 33, 256));
 		list.add(new UndergroundDecoratorVein(Blocks.IRON_ORE.getDefaultState(), 24, 9, 64));
 		list.add(new UndergroundDecoratorVein(Blocks.REDSTONE_ORE.getDefaultState(), 12, 8, 32));

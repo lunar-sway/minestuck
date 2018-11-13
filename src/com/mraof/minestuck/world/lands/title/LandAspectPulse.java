@@ -41,6 +41,7 @@ public class LandAspectPulse extends TitleLandAspect
 		
 		chunkProvider.blockRegistry.setBlockState("ocean", MinestuckBlocks.blockBlood.getDefaultState());
 		chunkProvider.blockRegistry.setBlockState("river", MinestuckBlocks.blockBlood.getDefaultState());
+		chunkProvider.blockRegistry.setBlockState("slime", MinestuckBlocks.coagulatedBlood.getDefaultState());
 	}
 	
 	@Override

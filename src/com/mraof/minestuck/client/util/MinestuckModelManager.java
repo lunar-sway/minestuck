@@ -268,6 +268,7 @@ public class MinestuckModelManager
 		for(BlockMinestuckStone.BlockType type : BlockMinestuckStone.BlockType.values())
 			register(stone, type.getMetadata(), type.getName());
 		register(glowyGoop);
+		register(coagulatedBlood);
 		register(coarseStoneStairs);
 		register(shadeBrickStairs);
 		register(frostBrickStairs);

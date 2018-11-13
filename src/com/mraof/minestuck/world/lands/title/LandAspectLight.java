@@ -1,16 +1,25 @@
 package com.mraof.minestuck.world.lands.title;
 
+import com.mraof.minestuck.block.BlockMinestuckStone;
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.decorator.PillarDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import net.minecraft.block.BlockColored;
+import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.math.Vec3d;
 
 public class LandAspectLight extends TitleLandAspect
 {
+	
+	public void registerBlocks(StructureBlockRegistry registry)
+	{
+		registry.setBlockState("slime", MinestuckBlocks.glowyGoop.getDefaultState());
+	}
 	
 	@Override
 	public String getPrimaryName()
