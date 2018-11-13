@@ -32,9 +32,9 @@ public class LandAspectRegistry
 	
 	public static void registerLandAspects()
 	{
-		registerLandAspect(new LandAspectDank());
 		registerLandAspect(new LandAspectForest());
 		registerLandAspect(new LandAspectFrost());
+		registerLandAspect(new LandAspectFungi());
 		registerLandAspect(new LandAspectHeat());
 		registerLandAspect(new LandAspectRock());
 		registerLandAspect(new LandAspectSand());

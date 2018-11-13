@@ -901,9 +901,12 @@ key.statsGui=View General Minestuck Gui
 key.captchalouge=Captchalouge Held Item
 
 land.format=Land of %s and %s
+land.fungui=Fungi
 land.dank=Dank
 land.must=Must
-land.fungus=Fungus
+land.mycelium=Mycelium
+land.mold=Mold
+land.mildew=Mildew
 land.forest=Forests
 land.tree=Trees
 land.frost=Frost

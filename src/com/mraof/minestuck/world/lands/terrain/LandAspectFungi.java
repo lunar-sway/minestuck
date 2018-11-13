@@ -25,7 +25,7 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.gen.feature.WorldGenBigMushroom;
 
-public class LandAspectDank extends TerrainLandAspect 
+public class LandAspectFungi extends TerrainLandAspect 
 {
 	
 	static Vec3d skyColor = new Vec3d(0.69D, 0.76D, 0.61D);
@@ -53,12 +53,12 @@ public class LandAspectDank extends TerrainLandAspect
 	@Override
 	public String getPrimaryName()
 	{
-		return "dank";
+		return "fungi";
 	}
 	
 	@Override
 	public String[] getNames() {
-		return new String[] {"dank", "fungus", "must"};
+		return new String[] {"fungi", "dank", "must", "mold", "mildew", "mycelium"};
 	}
 	
 	@Override
