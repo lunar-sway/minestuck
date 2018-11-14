@@ -97,6 +97,7 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 	{
 		if(!unbreakable)
 			stack.damageItem(1, player);
+		System.out.println("boop");
 		return true;
 	}
 
