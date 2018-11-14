@@ -1,23 +1,28 @@
 package com.mraof.minestuck.entity;
 
+import java.util.Random;
+
 import com.mraof.minestuck.entity.ai.frog.EntityAIPanicHop;
 import com.mraof.minestuck.entity.ai.frog.EntityAIStopHopping;
 import com.mraof.minestuck.entity.ai.frog.EntityAIWanderHop;
+import com.mraof.minestuck.item.MinestuckItems;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
-import net.minecraft.entity.monster.EntitySlime;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.datafix.DataFixer;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem;
 
 public class EntityFrog extends EntityMinestuck
 {
@@ -42,14 +47,33 @@ public class EntityFrog extends EntityMinestuck
 	protected void entityInit()
     {
         super.entityInit();
-        this.dataManager.register(FROG_SIZE, 1f);
-        this.dataManager.register(SKIN_COLOR, 0);
-        this.dataManager.register(EYE_COLOR, 0);
-        this.dataManager.register(BELLY_COLOR, 0);
-        this.dataManager.register(EYE_TYPE, 0);
-        this.dataManager.register(BELLY_TYPE, 0);
+        this.dataManager.register(FROG_SIZE, randomFloat(1)+0.6F);
+        this.dataManager.register(SKIN_COLOR, random(16777215));
+        this.dataManager.register(EYE_COLOR, random(16777215));
+        this.dataManager.register(BELLY_COLOR, random(16777215));
+        this.dataManager.register(EYE_TYPE, random(2));
+        this.dataManager.register(BELLY_TYPE, random(3));
         this.dataManager.register(TYPE, 0);
         
+    }
+	
+	@Override
+	protected boolean processInteract(EntityPlayer player, EnumHand hand) {
+		ItemStack itemstack = player.getHeldItem(hand);
+		
+		if(itemstack.getItem() == MinestuckItems.rawCruxite && player.getDistanceSq(this) < 9.0D)
+		{
+			
+		}
+		return super.processInteract(player, hand);
+	}
+	
+	public EntityItem entityDropItem(ItemStack stack, float offsetY)
+    {
+        EntityItem entityitem = new EntityItem(this.world, this.posX, this.posY, this.posZ, stack);
+        entityitem.setDefaultPickupDelay();
+        this.world.spawnEntity(entityitem);
+        return entityitem;
     }
 	
 	@Override
@@ -125,12 +149,12 @@ public class EntityFrog extends EntityMinestuck
         super.readEntityFromNBT(compound);
         
         if(compound.hasKey("Type")) setType(compound.getInteger("Type"));
-        else setType(1);
+        else setType(0);
         
         if(compound.hasKey("Size"))
         {
 	        float i = compound.getFloat("Size");
-	        if (i <= 0) i = 0;
+	        if (i <= 0.2f) i = 0.2f;
 	        this.setFrogSize(i-0.4f, false);
         }
         else this.setFrogSize(0.6f, false);
@@ -141,7 +165,7 @@ public class EntityFrog extends EntityMinestuck
 			
 			else this.setSkinColor(compound.getInteger("skinColor"));
 		}
-		else this.setSkinColor(0);
+		else this.setSkinColor(random(16777215));
 
         if (compound.hasKey("eyeColor")) 
         {
@@ -150,7 +174,7 @@ public class EntityFrog extends EntityMinestuck
 			
 			else this.setEyeColor(compound.getInteger("eyeColor"));
 		}
-		else this.setEyeColor(0);
+		else this.setEyeColor(random(16777215));
         
         if (compound.hasKey("eyeType")) 
         {
@@ -159,7 +183,7 @@ public class EntityFrog extends EntityMinestuck
 			
 			else this.setEyeType(compound.getInteger("eyeType"));
 		}
-		else this.setEyeType(0);
+		else this.setEyeType(random(2));
         
 
         if (compound.hasKey("bellyColor")) 
@@ -169,7 +193,7 @@ public class EntityFrog extends EntityMinestuck
 			
 			else this.setBellyColor(compound.getInteger("bellyColor"));
 		}
-		else this.setBellyColor(0);
+		else this.setBellyColor(random(16777215));
         
         if (compound.hasKey("bellyType")) 
         {
@@ -178,7 +202,7 @@ public class EntityFrog extends EntityMinestuck
 			
 			else this.setBellyType(compound.getInteger("bellyType"));
 		}
-		else this.setBellyType(0);
+		else this.setBellyType(random(3));
         
         
         //this.wasOnGround = compound.getBoolean("wasOnGround");
@@ -328,4 +352,16 @@ public class EntityFrog extends EntityMinestuck
 		return this.dataManager.get(TYPE);
 	}
 	
+	
+	public int random(int max)
+	{
+		Random rand = new Random();
+		return rand.nextInt(max);
+	}
+	
+	public float randomFloat(int max)
+	{
+		Random rand = new Random();
+		return (float)(rand.nextInt(max*10))/10;
+	}
 }

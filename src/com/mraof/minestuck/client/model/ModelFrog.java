@@ -110,7 +110,7 @@ public class ModelFrog extends ModelBase {
         modelRenderer.rotateAngleZ = z;
     }
     
-    
+    /*
     public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn)
     {
         float f = ageInTicks - (float)entityIn.ticksExisted;
@@ -130,7 +130,7 @@ public class ModelFrog extends ModelBase {
         this.right_foot.rotateAngleX = this.jumpRotation * 50.0F * 0.017453292F;
         this.left_arm.rotateAngleX = (this.jumpRotation * -40.0F - 11.0F) * 0.017453292F;
         this.right_arm.rotateAngleX = (this.jumpRotation * -40.0F - 11.0F) * 0.017453292F;
-    }
+    }*/
     
 
     /*

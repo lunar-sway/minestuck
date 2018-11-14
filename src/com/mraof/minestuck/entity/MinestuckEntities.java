@@ -36,7 +36,7 @@ public final class MinestuckEntities
 	public static void registerEntities()
 	{
 		//register entities
-		registerEntity(EntityFrog.class, "frog");
+		registerEntity(EntityFrog.class, "frog", 1100060, 11656884);
 		registerEntity(EntitySalamander.class, EnumConsort.SALAMANDER.getName());
 		registerEntity(EntityNakagator.class, EnumConsort.NAKAGATOR.getName());
 		registerEntity(EntityIguana.class, EnumConsort.IGUANA.getName());
@@ -60,11 +60,18 @@ public final class MinestuckEntities
 		registerEntity(EntityCrewPoster.class, "midnightCrewPoster", "midnight_crew_poster");
 		registerEntity(EntitySbahjPoster.class, "sbahjPoster", "sbahj_poster");
 		registerEntity(EntityShopPoster.class, "shopPoster", "shop_poster");
+		
 	}
+	
 	
 	public static void registerEntity(Class<? extends Entity> entityClass, String name)
 	{
 		registerEntity(entityClass, name, name, 80, 3, true);
+	}
+	
+	public static void registerEntity(Class<? extends Entity> entityClass, String name, int eggPrimary, int eggSecondary)
+	{
+		registerEntity(entityClass, name, name, 80, 3, true, eggPrimary, eggSecondary);
 	}
 	
 	//registers entity with forge and minecraft, and increases currentEntityIdOffset by one in order to prevent id collision
@@ -79,4 +86,10 @@ public final class MinestuckEntities
 		currentEntityIdOffset++;
 	}
 
+	public static void registerEntity(Class<? extends Entity> entityClass, String name, String registryName, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates, int eggPrimary, int eggSecondary)
+	{
+		EntityRegistry.registerModEntity(new ResourceLocation("minestuck", registryName), entityClass, "minestuck." + name, currentEntityIdOffset, Minestuck.instance, trackingRange, updateFrequency, sendsVelocityUpdates, eggPrimary, eggSecondary);
+		currentEntityIdOffset++;
+	}
+	
 }

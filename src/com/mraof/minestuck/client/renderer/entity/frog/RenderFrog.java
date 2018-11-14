@@ -34,6 +34,9 @@ public class RenderFrog extends RenderLivingBase<EntityFrog>
 		return ((EntityMinestuck) entity).getTextureResource();
 	}
 	
-	
+	protected boolean canRenderName(EntityFrog entity)
+    {
+        return super.canRenderName(entity) && (entity.getAlwaysRenderNameTagForRender() || entity.hasCustomName() && entity == this.renderManager.pointedEntity);
+    }
 
 }
