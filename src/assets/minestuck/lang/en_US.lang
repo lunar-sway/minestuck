@@ -592,6 +592,7 @@ entity.minestuck.prospitianBishop.name=Prospitan Bishop
 entity.minestuck.prospitianPawn.name=Prospitian Pawn
 entity.minestuck.prospitianRook.name=Prospitian Rook
 
+entity.minestuck.frog.name=Frog
 entity.minestuck.salamander.name=Salamander
 entity.minestuck.nakagator.name=Nakagator
 entity.minestuck.iguana.name=Iguana
@@ -886,6 +887,7 @@ item.rockCookie.name=Rock Cookie
 item.rockCookie.tooltip=It's as edible as a rock
 item.boondollars.name=Boondollars
 item.boondollars.amount=Amount: %s
+item.shatterBeacon.name=ShatterBeacon
 
 itemGroup.tabMinestuck=Minestuck
 
