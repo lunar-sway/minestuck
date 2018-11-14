@@ -25,7 +25,7 @@ public class LayerFrogSkin implements LayerRenderer<EntityFrog>
 			float ageInTicks, float netHeadYaw, float headPitch, float scale) 
 	{
 		int type = frog.getType();
-		if (!frog.isInvisible() && (type > 2 || type < 1))
+		if (!frog.isInvisible() && (type > frog.maxTypes() || type < 1))
         {
 			this.frogRender.bindTexture(this.getTexture());
 			int skinColor = frog.getSkinColor();

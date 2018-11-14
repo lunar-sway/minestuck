@@ -25,7 +25,7 @@ public class LayerFrogBelly implements LayerRenderer<EntityFrog>
 	public void doRenderLayer(EntityFrog frog, float limbSwing, float limbSwingAmount, float partialTicks,
 			float ageInTicks, float netHeadYaw, float headPitch, float scale) 
 	{
-		if (!frog.isInvisible() && (frog.getType() > 2 || frog.getType() < 1))
+		if (!frog.isInvisible() && (frog.getType() > frog.maxTypes() || frog.getType() < 1))
         {
 			this.frogRender.bindTexture(this.getTexture());
 			int bellyColor;
