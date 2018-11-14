@@ -76,6 +76,11 @@ public class EntityFrog extends EntityMinestuck
         return entityitem;
     }
 	
+	public int maxTypes() 
+	{
+		return 3;
+	}
+	
 	@Override
 	public String getTexture()
 	{
@@ -87,6 +92,8 @@ public class EntityFrog extends EntityMinestuck
 			case 1: path = "textures/mobs/frog/totally_normal_frog.png";
 			break;
 			case 2: path = "textures/mobs/frog/ruby_contraband.png";
+			break;
+			case 3: path = "textures/mobs/frog/genesis_frog.png";
 			break;
 		}
 		return path;
