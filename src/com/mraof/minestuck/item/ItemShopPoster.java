@@ -1,5 +1,7 @@
 package com.mraof.minestuck.item;
 
+import com.mraof.minestuck.item.enums.EnumShopPoster;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityHanging;
 import net.minecraft.item.EnumDyeColor;
@@ -32,7 +34,7 @@ public abstract class ItemShopPoster  extends ItemHanging
 	        if (this.isInCreativeTab(tab))
 	        {
 	        	//TODO
-	            for (int i = 1; i < 5; i += 2)
+	            for (int i = 1; i < 5; /*i += 2*/ ++i)
 	            {
 	                items.add(new ItemStack(this, 1, i));
 	            }
