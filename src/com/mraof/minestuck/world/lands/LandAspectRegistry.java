@@ -38,6 +38,7 @@ public class LandAspectRegistry
 		registerLandAspect(new LandAspectHeat());
 		registerLandAspect(new LandAspectRock());
 		registerLandAspect(new LandAspectSand());
+		registerLandAspectHidden(new LandAspectSandstone());
 		registerLandAspect(new LandAspectShade());
 		registerLandAspect(new LandAspectWood());
 		//registerLandAspect(new LandAspectRain());
@@ -75,6 +76,13 @@ public class LandAspectRegistry
 	public static void registerLandAspect(TerrainLandAspect newAspect)
 	{
 		landAspects.add(newAspect);
+		landNames.put(newAspect.getPrimaryName(),newAspect);
+		for(ILandAspect variant : newAspect.getVariations())
+			landNames.put(variant.getPrimaryName(), (TerrainLandAspect) variant);
+	}
+	
+	public static void registerLandAspectHidden(TerrainLandAspect newAspect)
+	{
 		landNames.put(newAspect.getPrimaryName(),newAspect);
 		for(ILandAspect variant : newAspect.getVariations())
 			landNames.put(variant.getPrimaryName(), (TerrainLandAspect) variant);

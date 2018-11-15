@@ -146,8 +146,8 @@ public class ConsortDialogue
 		addMessage("sandSurfing").landTerrain(fromNameTerrain("sand"));
 		addMessage(new ChoiceMessage(new SingleMessage("camel"), new SingleMessage[]{new SingleMessage("camel.yes"), new SingleMessage("camel.no")},
 				new MessageType[]{new SingleMessage("camel.noCamel"), new SingleMessage("camel.dancingCamel")})).landTerrain(fromNameTerrain("sand"));
-		// addMessage("knockoff").landTerrain(fromNameTerrain("sandstone"));
-		// addMessage(new ChainMessage(new SingleMessage("sandless.1", "denizen"), new SingleMessage("sandless.2"))).landTerrain(fromNameTerrain("sandstone"));
+		addMessage("knockoff").landTerrain(fromNameTerrain("sandstone"));
+		addMessage(new ChainMessage(new SingleMessage("sandless.1", "denizen"), new SingleMessage("sandless.2"))).landTerrain(fromNameTerrain("sandstone"));
 		addMessage("redBetter").landTerrainSpecific(fromNameTerrain("sand_red"), fromNameTerrain("sandstone_red"));
 		addMessage("yellowBetter").landTerrainSpecific(fromNameTerrain("sand"), fromNameTerrain("sandstone"));
 		
