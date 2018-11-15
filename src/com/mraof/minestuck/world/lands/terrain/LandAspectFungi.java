@@ -35,11 +35,11 @@ public class LandAspectFungi extends TerrainLandAspect
 	{
 		registry.setBlockState("upper", Blocks.MYCELIUM.getDefaultState());
 		registry.setBlockState("ocean", Blocks.WATER.getDefaultState());
-		registry.setBlockState("structure_primary_decorative", Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED));
+		registry.setBlockState("structure_primary_decorative", Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.MOSSY));
 		registry.setBlockState("structure_primary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState());
-		registry.setBlockState("structure_secondary", Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.MOSSY));
-		registry.setBlockState("structure_secondary_decorative", Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.MOSSY));
-		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState());
+		registry.setBlockState("structure_secondary", MinestuckBlocks.stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.MYCELIUM_BRICK));
+		registry.setBlockState("structure_secondary_decorative", Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED));
+		registry.setBlockState("structure_secondary_stairs", MinestuckBlocks.myceliumBrickStairs.getDefaultState());
 		registry.setBlockState("village_path", Blocks.GRASS_PATH.getDefaultState());
 		registry.setBlockState("light_block", MinestuckBlocks.glowyGoop.getDefaultState());
 		registry.setBlockState("torch", Blocks.REDSTONE_TORCH.getDefaultState());
@@ -66,7 +66,7 @@ public class LandAspectFungi extends TerrainLandAspect
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
 		list.add(new SurfaceDecoratorRegistryVein("slime", 30, 30, BiomeMinestuck.mediumNormal));
-		list.add(new SurfaceDecoratorRegistryVein("slime", 5, 30, BiomeMinestuck.mediumRough));
+		list.add(new SurfaceDecoratorRegistryVein("slime", 70, 30, BiomeMinestuck.mediumRough));
 		list.add(new SurfaceMushroomGenerator(Blocks.BROWN_MUSHROOM, true, 10, 64, BiomeMinestuck.mediumRough));
 		list.add(new SurfaceMushroomGenerator(Blocks.BROWN_MUSHROOM, true, 10, 64, BiomeMinestuck.mediumNormal));
 		list.add(new SurfaceMushroomGenerator(Blocks.RED_MUSHROOM, true, 10, 64, BiomeMinestuck.mediumRough));
