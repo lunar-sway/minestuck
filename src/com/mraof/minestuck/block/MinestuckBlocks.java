@@ -68,6 +68,7 @@ public class MinestuckBlocks
 	public static Block shadeBrickStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.SHADE_BRICK)).setUnlocalizedName("stairsMinestuck.shadeBrick");
 	public static Block frostBrickStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.FROST_BRICK)).setUnlocalizedName("stairsMinestuck.frostBrick");
 	public static Block castIronStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.CAST_IRON)).setUnlocalizedName("stairsMinestuck.castIron");
+	public static Block myceliumBrickStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.MYCELIUM_BRICK)).setUnlocalizedName("stairsMinestuck.myceliumBrick");
 	public static Block log = new BlockMinestuckLog();
 	public static Block leaves1 = new BlockMinestuckLeaves1().setCreativeTab(null);
 	public static Block planks = new BlockMinestuckPlanks();
@@ -222,6 +223,7 @@ public class MinestuckBlocks
 		registry.register(shadeBrickStairs.setRegistryName("shade_brick_stairs"));
 		registry.register(frostBrickStairs.setRegistryName("frost_brick_stairs"));
 		registry.register(castIronStairs.setRegistryName("cast_iron_stairs"));
+		registry.register(myceliumBrickStairs.setRegistryName("mycelium_brick_stairs"));
 		
 		registry.register(skaiaPortal.setRegistryName("skaia_portal"));
 		registry.register(returnNode.setRegistryName("return_node"));
