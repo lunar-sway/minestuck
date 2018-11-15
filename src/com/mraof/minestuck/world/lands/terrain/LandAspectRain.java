@@ -37,11 +37,12 @@ public class LandAspectRain extends TerrainLandAspect
 	//Craftable stone/chalk variants
 	//Pink stone brick temples
 	//Light water bucket textures
-	//Light Clouds (Dungeons?)
+	//Light Cloud Dungeons
 	//Custom dungeon loot
 	//Custom consort dialogue
 	//Custom names and descriptions
-	//Probably something underwater
+	//Definitely nothing underwater
+	//Giant beanstalks? Maybe some Paper Mario reference here
 	
 	//Oredict and alchemy on dead wood, pink stone, and chalk
 	
@@ -85,7 +86,7 @@ public class LandAspectRain extends TerrainLandAspect
 	
 	@Override
 	public String[] getNames() {
-		return new String[] {"rain", "islands"};
+		return new String[] {"rain", "islands", "sky"};
 	}
 	
 	@Override

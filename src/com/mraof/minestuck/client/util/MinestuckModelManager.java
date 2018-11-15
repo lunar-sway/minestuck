@@ -158,6 +158,7 @@ public class MinestuckModelManager
 		register(minestuckBucket, 2, "bucket_brain_juice");
 		register(minestuckBucket, 3, "bucket_watercolors");
 		register(minestuckBucket, 4, "bucket_ender");
+		register(minestuckBucket, 5, "bucket_light_water");
 		for(int i = 0; i < ItemModus.NAMES.length; i++)
 			register(modusCard, i, "modus_" + ItemModus.NAMES[i]);
 		register(goldSeeds);
@@ -350,6 +351,8 @@ public class MinestuckModelManager
 		ModelLoader.setCustomStateMapper(blockBrainJuice, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
 		ModelLoader.setCustomStateMapper(blockWatercolors, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
 		ModelLoader.setCustomStateMapper(blockEnder, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
+		ModelLoader.setCustomStateMapper(blockLightWater, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
+		
 		ModelLoader.setCustomStateMapper(primedTnt, (new StateMap.Builder()).ignore(BlockTNT.EXPLODE).build());
 		ModelLoader.setCustomStateMapper(unstableTnt, (new StateMap.Builder()).ignore(BlockTNT.EXPLODE).build());
 		ModelLoader.setCustomStateMapper(instantTnt, (new StateMap.Builder()).ignore(BlockTNT.EXPLODE).build());

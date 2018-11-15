@@ -142,6 +142,7 @@ public class MinestuckBlocks
 	public static Fluid fluidBrainJuice = createFluid("brain_juice", new ResourceLocation("minestuck", "blocks/brain_juice_still"), new ResourceLocation("minestuck", "blocks/brain_juice_flowing"), "tile.brainJuice");
 	public static Fluid fluidWatercolors = createFluid("watercolors", new ResourceLocation("minestuck", "blocks/watercolors_still"), new ResourceLocation("minestuck", "blocks/watercolors_flowing"), "tile.watercolors");
 	public static Fluid fluidEnder = createFluid("ender", new ResourceLocation("minestuck", "blocks/ender_still"), new ResourceLocation("minestuck", "blocks/ender_flowing"), "tile.ender");
+	public static Fluid fluidLightWater = createFluid("light_water", new ResourceLocation("minestuck", "blocks/light_water_still"), new ResourceLocation("minestuck", "blocks/light_water_flowing"), "tile.lightWater");
 	
 	public static Block blockOil = new BlockFluidClassic(fluidOil, Material.WATER){
 		@SideOnly (Side.CLIENT)
@@ -187,6 +188,15 @@ public class MinestuckBlocks
 	}.setUnlocalizedName("watercolors").setLightOpacity(1);
 	
 	public static Block blockEnder = new BlockFluidEnder(fluidEnder, Material.WATER).setUnlocalizedName("ender").setLightOpacity(1);
+	
+	public static Block blockLightWater = new BlockFluidClassic(fluidLightWater, Material.WATER){
+		@SideOnly (Side.CLIENT)
+		@Override
+		public Vec3d getFogColor(World world, BlockPos pos, IBlockState state, Entity entity, Vec3d originalColor, float partialTicks)
+		{
+			return new Vec3d(0.2, 0.3, 1.0);
+		}
+	}.setUnlocalizedName("lightWater").setLightOpacity(1);
 	
 	public static Block[] liquidGrists;
 	public static Fluid[] gristFluids;
@@ -310,6 +320,7 @@ public class MinestuckBlocks
 		registry.register(blockBrainJuice.setRegistryName("block_brain_juice"));
 		registry.register(blockWatercolors.setRegistryName("block_watercolors"));
 		registry.register(blockEnder.setRegistryName("block_ender"));
+		registry.register(blockLightWater.setRegistryName("block_light_water"));
 		
 		registry.register(rabbitSpawner.setRegistryName("rabbit_spawner"));
 		
@@ -399,7 +410,7 @@ public class MinestuckBlocks
 			}
 			
 			slabItem = new ItemSlab(getSlab(), (BlockSlab) getSlab(), (BlockSlab) getSlabFull());
-			slabItem.setUnlocalizedName("slabMinestuck." + unlocalizedName);
+			slabItem.setUnlocalizedName("slabMinestuck." + unlocalizedName).setHasSubtypes(false);
 		}
 		
 		public Block getStair()	{	return stair;	}
