@@ -1,4 +1,4 @@
-package com.mraof.minestuck.item;
+package com.mraof.minestuck.item.enums;
 
 import net.minecraft.util.IStringSerializable;
 import net.minecraftforge.fml.relauncher.Side;

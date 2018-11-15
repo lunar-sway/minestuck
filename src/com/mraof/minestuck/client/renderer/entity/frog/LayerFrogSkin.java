@@ -43,6 +43,7 @@ public class LayerFrogSkin implements LayerRenderer<EntityFrog>
 			this.frogModel.setModelAttributes(this.frogRender.getMainModel());
 	        this.frogModel.render(frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 			GlStateManager.disableBlend();
+			this.frogModel.setLivingAnimations(frog, limbSwing, limbSwingAmount, partialTicks);
         }
 	}
 

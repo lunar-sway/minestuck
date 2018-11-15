@@ -27,7 +27,7 @@ public class LayerFrogBelly implements LayerRenderer<EntityFrog>
 	{
 		if (!frog.isInvisible() && (frog.getType() > frog.maxTypes() || frog.getType() < 1))
         {
-			this.frogRender.bindTexture(this.getTexture());
+			this.frogRender.bindTexture(this.getTexture(frog));
 			int bellyColor;
 			type = frog.getBellyType();
 			if(type == 0)
@@ -50,12 +50,13 @@ public class LayerFrogBelly implements LayerRenderer<EntityFrog>
 			this.frogModel.setModelAttributes(this.frogRender.getMainModel());
 	        this.frogModel.render(frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 			GlStateManager.disableBlend();
+            this.frogModel.setLivingAnimations(frog, limbSwing, limbSwingAmount, partialTicks);
         }
 	}
 
-	public ResourceLocation getTexture() 
+	public ResourceLocation getTexture(EntityFrog frog) 
 	{
-		int id = this.type;
+		int id = frog.getBellyType();
 		
 		if(id <= 0) id = 1;
 		else if(id > 3) id = 3;

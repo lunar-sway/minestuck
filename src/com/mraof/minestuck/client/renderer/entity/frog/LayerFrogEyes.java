@@ -30,6 +30,8 @@ public class LayerFrogEyes implements LayerRenderer<EntityFrog>
 	{
 		if(!frog.isInvisible())
 		{
+
+			this.frogRender.bindTexture(this.getTexture(frog));
 			if (frog.getType() == 6)
 	        {
 				this.isSusan = true;
@@ -41,11 +43,16 @@ public class LayerFrogEyes implements LayerRenderer<EntityFrog>
 	            float f = ((float)(frog.ticksExisted % 25) + partialTicks) / 25.0F;
 	            float[] afloat1 = EntitySheep.getDyeRgb(EnumDyeColor.byMetadata(k));
 	            float[] afloat2 = EntitySheep.getDyeRgb(EnumDyeColor.byMetadata(l));
+	            
 	            GlStateManager.color(afloat1[0] * (1.0F - f) + afloat2[0] * f, afloat1[1] * (1.0F - f) + afloat2[1] * f, afloat1[2] * (1.0F - f) + afloat2[2] * f);
+	            
+	            this.frogModel.setModelAttributes(this.frogRender.getMainModel());
+		        this.frogModel.render(frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+				GlStateManager.disableBlend();
+	            this.frogModel.setLivingAnimations(frog, limbSwing, limbSwingAmount, partialTicks);
 	        }
 			else if (frog.getType() > frog.maxTypes() || frog.getType() < 1 || frog.getType() == 6)
 	        {
-				this.frogRender.bindTexture(this.getTexture());
 				int eyeColor = frog.getEyeColor();
 				type = frog.getEyeType();
 				
@@ -62,15 +69,16 @@ public class LayerFrogEyes implements LayerRenderer<EntityFrog>
 				this.frogModel.setModelAttributes(this.frogRender.getMainModel());
 		        this.frogModel.render(frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 				GlStateManager.disableBlend();
+	            this.frogModel.setLivingAnimations(frog, limbSwing, limbSwingAmount, partialTicks);
 	        }
 		}
 	}
 
-	public ResourceLocation getTexture() 
+	public ResourceLocation getTexture(EntityFrog frog) 
 	{
-		int id = this.type;
+		int id = frog.getEyeType();
 		
-		if(this.isSusan) return new ResourceLocation("minestuck:textures/mobs/frog/susan_eyes.png");
+		if(frog.getType() == 6) return new ResourceLocation("minestuck:textures/mobs/frog/susan_eyes.png");
 		else if(id < 0) id = 0;
 		else if(id > 3) id = 3;
 		

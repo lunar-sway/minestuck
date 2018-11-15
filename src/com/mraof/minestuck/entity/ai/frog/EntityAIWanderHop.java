@@ -77,7 +77,7 @@ public class EntityAIWanderHop extends EntityAIWander
     {
         if (this.entity.getRNG().nextFloat() < 0.8F && shouldHop)
         {
-            ((EntityFrog) this.entity).setJump(true);
+            //((EntityFrog) this.entity).setJump(true);
         }
     }
 }
