@@ -38,7 +38,6 @@ public class LandAspectRegistry
 		registerLandAspect(new LandAspectHeat());
 		registerLandAspect(new LandAspectRock());
 		registerLandAspect(new LandAspectSand());
-		//registerLandAspect(new LandAspectSandstone());
 		registerLandAspect(new LandAspectShade());
 		registerLandAspect(new LandAspectWood());
 		//registerLandAspect(new LandAspectRain());
@@ -59,6 +58,7 @@ public class LandAspectRegistry
 		registerLandAspect(new LandAspectMonsters(), EnumAspect.RAGE);
 		registerLandAspect(new LandAspectTowers(), EnumAspect.HOPE);
 		
+
 		landNames2.put(nullAspect.getPrimaryName(), nullAspect);
 		landNames2.put(frogAspect.getPrimaryName(), frogAspect);
 	}
