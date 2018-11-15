@@ -6,6 +6,8 @@ import com.mraof.minestuck.entity.EntityFrog;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.ResourceLocation;
 
 public class LayerFrogEyes implements LayerRenderer<EntityFrog>
@@ -14,6 +16,7 @@ public class LayerFrogEyes implements LayerRenderer<EntityFrog>
 	private final RenderFrog frogRender;
 	private float colorMin = 0;
 	private int type = 0;
+	private boolean isSusan = false;
 	private String name;
 	
 	public LayerFrogEyes(RenderFrog renderIn)
@@ -25,33 +28,50 @@ public class LayerFrogEyes implements LayerRenderer<EntityFrog>
 	public void doRenderLayer(EntityFrog frog, float limbSwing, float limbSwingAmount, float partialTicks,
 			float ageInTicks, float netHeadYaw, float headPitch, float scale) 
 	{
-		if (!frog.isInvisible() && (frog.getType() > frog.maxTypes() || frog.getType() < 1))
-        {
-			this.frogRender.bindTexture(this.getTexture());
-			int eyeColor = frog.getEyeColor();
-			type = frog.getEyeType();
-			
-			float r = (float) ((eyeColor & 16711680) >> 16) / 255f;
-			float g = (float) ((eyeColor & 65280) >> 8) / 255f;
-			float b = (float) ((eyeColor & 255) >> 0) / 255f;
-
-			if(r < this.colorMin) r = this.colorMin;
-			if(g < this.colorMin) g = this.colorMin;
-			if(b < this.colorMin) b = this.colorMin;
-			
-			GlStateManager.color(r, g, b, 1f);
-			
-			this.frogModel.setModelAttributes(this.frogRender.getMainModel());
-	        this.frogModel.render(frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-			GlStateManager.disableBlend();
-        }
+		if(!frog.isInvisible())
+		{
+			if (frog.getType() == 6)
+	        {
+				this.isSusan = true;
+	            int i1 = 25;
+	            int i = frog.ticksExisted / 25 + frog.getEntityId();
+	            int j = EnumDyeColor.values().length;
+	            int k = i % j;
+	            int l = (i + 1) % j;
+	            float f = ((float)(frog.ticksExisted % 25) + partialTicks) / 25.0F;
+	            float[] afloat1 = EntitySheep.getDyeRgb(EnumDyeColor.byMetadata(k));
+	            float[] afloat2 = EntitySheep.getDyeRgb(EnumDyeColor.byMetadata(l));
+	            GlStateManager.color(afloat1[0] * (1.0F - f) + afloat2[0] * f, afloat1[1] * (1.0F - f) + afloat2[1] * f, afloat1[2] * (1.0F - f) + afloat2[2] * f);
+	        }
+			else if (frog.getType() > frog.maxTypes() || frog.getType() < 1 || frog.getType() == 6)
+	        {
+				this.frogRender.bindTexture(this.getTexture());
+				int eyeColor = frog.getEyeColor();
+				type = frog.getEyeType();
+				
+				float r = (float) ((eyeColor & 16711680) >> 16) / 255f;
+				float g = (float) ((eyeColor & 65280) >> 8) / 255f;
+				float b = (float) ((eyeColor & 255) >> 0) / 255f;
+	
+				if(r < this.colorMin) r = this.colorMin;
+				if(g < this.colorMin) g = this.colorMin;
+				if(b < this.colorMin) b = this.colorMin;
+				
+				GlStateManager.color(r, g, b, 1f);
+				
+				this.frogModel.setModelAttributes(this.frogRender.getMainModel());
+		        this.frogModel.render(frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+				GlStateManager.disableBlend();
+	        }
+		}
 	}
 
 	public ResourceLocation getTexture() 
 	{
 		int id = this.type;
 		
-		if(id < 0) id = 0;
+		if(this.isSusan) return new ResourceLocation("minestuck:textures/mobs/frog/susan_eyes.png");
+		else if(id < 0) id = 0;
 		else if(id > 3) id = 3;
 		
 		return new ResourceLocation("minestuck:textures/mobs/frog/eyes_" + id + ".png");

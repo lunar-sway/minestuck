@@ -2,34 +2,52 @@ package com.mraof.minestuck.entity;
 
 import java.util.Random;
 
-import com.mraof.minestuck.entity.ai.frog.EntityAIPanicHop;
 import com.mraof.minestuck.entity.ai.frog.EntityAIStopHopping;
-import com.mraof.minestuck.entity.ai.frog.EntityAIWanderHop;
 import com.mraof.minestuck.item.MinestuckItems;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.EntityAILookIdle;
+import net.minecraft.entity.ai.EntityAIMate;
 import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
+import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAITempt;
+import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.EntityJumpHelper;
+import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.pathfinding.Path;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.datafix.DataFixer;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityFrog extends EntityMinestuck
 {
 	
 	private int jumpTicks;
     private int jumpDuration;
-    private boolean shouldJump = false;
+    private boolean wasOnGround;
+    private int currentMoveTypeDuration;
+    private int carrotTicks;
     private static final DataParameter<Float> FROG_SIZE = EntityDataManager.<Float>createKey(EntityFrog.class, DataSerializers.FLOAT);
     private static final DataParameter<Integer> SKIN_COLOR = EntityDataManager.<Integer>createKey(EntityFrog.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> EYE_COLOR = EntityDataManager.<Integer>createKey(EntityFrog.class, DataSerializers.VARINT);
@@ -42,6 +60,9 @@ public class EntityFrog extends EntityMinestuck
 	public EntityFrog(World world)
 	{
 		super(world);
+		this.jumpHelper = new EntityFrog.FrogJumpHelper(this);
+        this.moveHelper = new EntityFrog.FrogMoveHelper(this);
+        this.setMovementSpeed(0.0D);
 	}
 	
 	protected void entityInit()
@@ -78,7 +99,17 @@ public class EntityFrog extends EntityMinestuck
 	
 	public int maxTypes() 
 	{
+		return 6;
+	}
+	
+	public int maxEyes()
+	{
 		return 3;
+	}
+	
+	public int maxBelly()
+	{
+		return 2;
 	}
 	
 	@Override
@@ -95,6 +126,12 @@ public class EntityFrog extends EntityMinestuck
 			break;
 			case 3: path = "textures/mobs/frog/genesis_frog.png";
 			break;
+			case 4: path = "textures/mobs/frog/null_frog.png";
+			break;
+			case 5: path = "textures/mobs/frog/golden_frog.png";
+			break;
+			case 6: path = "textures/mobs/frog/susan.png";
+			break;
 		}
 		return path;
 	}
@@ -105,26 +142,131 @@ public class EntityFrog extends EntityMinestuck
 		return 5;
 	}
 	
+	//Entity AI
 	@Override
 	protected void initEntityAI()
 	{
-		tasks.addTask(0, new EntityAISwimming(this));
-		tasks.addTask(1, new EntityAIPanicHop(this, 1.0D));
+		/*tasks.addTask(0, new EntityAISwimming(this));
+		tasks.addTask(1, new EntityAIPanic(this, 1.0D));
 		tasks.addTask(4, new EntityAIMoveTowardsRestriction(this, 0.6F));
-		tasks.addTask(5, new EntityAIWanderHop(this, 0.6D));
+		tasks.addTask(5, new EntityAIWander(this, 0.6D));
 		tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
 		tasks.addTask(7, new EntityAILookIdle(this));
-		tasks.addTask(8, new EntityAIStopHopping(this));
+		*/
+		
+		this.tasks.addTask(1, new EntityAISwimming(this));
+        this.tasks.addTask(1, new EntityFrog.AIPanic(this, 2.2D));
+        //this.tasks.addTask(2, new EntityAIMate(this, 0.8D));
+        this.tasks.addTask(3, new EntityAITempt(this, 1.0D, MinestuckItems.coneOfFlies, false));
+        this.tasks.addTask(3, new EntityAITempt(this, 1.0D, MinestuckItems.bugOnAStick, false));
+        this.tasks.addTask(3, new EntityAITempt(this, 1.0D, MinestuckItems.grasshopper, false));
+        this.tasks.addTask(3, new EntityAITempt(this, 1.0D, MinestuckItems.jarOfBugs, false));
+        //this.tasks.addTask(3, new EntityAITempt(this, 1.0D, MinestuckItems.chocolateBeetle, false)); I honestly don't think that frogs are to fond of chocolate :p
+        this.tasks.addTask(4, new EntityFrog.AIAvoidEntity(this, EntityPlayer.class, 8.0F, 2.2D, 2.2D));
+        //this.tasks.addTask(4, new EntityFrog.AIAvoidEntity(this, EntityWolf.class, 10.0F, 2.2D, 2.2D));
+        this.tasks.addTask(4, new EntityFrog.AIAvoidEntity(this, EntityMob.class, 4.0F, 2.2D, 2.2D));
+        //this.tasks.addTask(5, new EntityFrog.AIRaidFarm(this));
+        this.tasks.addTask(6, new EntityAIWanderAvoidWater(this, 0.6D));
+        this.tasks.addTask(11, new EntityAIWatchClosest(this, EntityPlayer.class, 10.0F));
+		
 		
 	}
+	
+	static class AIAvoidEntity<T extends Entity> extends EntityAIAvoidEntity<T>
+    {
+        private final EntityFrog frog;
+
+        public AIAvoidEntity(EntityFrog frog, Class<T> p_i46403_2_, float p_i46403_3_, double p_i46403_4_, double p_i46403_6_)
+        {
+            super(frog, p_i46403_2_, p_i46403_3_, p_i46403_4_, p_i46403_6_);
+            this.frog = frog;
+        }
+
+        /**
+         * Returns whether the EntityAIBase should begin execution.
+         */
+        public boolean shouldExecute()
+        {
+            return super.shouldExecute();
+        }
+    }
+	
+	static class AIPanic extends EntityAIPanic
+    {
+        private final EntityFrog frog;
+
+        public AIPanic(EntityFrog frog, double speedIn)
+        {
+            super(frog, speedIn);
+            this.frog = frog;
+        }
+
+        /**
+         * Keep ticking a continuous task that has already been started
+         */
+        public void updateTask()
+        {
+            super.updateTask();
+            this.frog.setMovementSpeed(this.speed);
+        }
+    }
+	
+	//Making the frog jump
+	protected float getJumpUpwardsMotion()
+    {
+        if (!this.collidedHorizontally && (!this.moveHelper.isUpdating() || this.moveHelper.getY() <= this.posY + 0.5D))
+        {
+            Path path = this.navigator.getPath();
+
+            if (path != null && path.getCurrentPathIndex() < path.getCurrentPathLength())
+            {
+                Vec3d vec3d = path.getPosition(this);
+
+                if (vec3d.y > this.posY + 0.5D)
+                {
+                    return 0.5F;
+                }
+            }
+
+            return this.moveHelper.getSpeed() <= 0.6D ? 0.2F : 0.3F;
+        }
+        else
+        {
+            return 0.5F;
+        }
+    }
+
+    /**
+     * Causes this entity to do an upwards motion (jumping).
+     */
+    protected void jump()
+    {
+        super.jump();
+        double d0 = this.moveHelper.getSpeed();
+
+        if (d0 > 0.0D)
+        {
+            double d1 = this.motionX * this.motionX + this.motionZ * this.motionZ;
+
+            if (d1 < 0.010000000000000002D)
+            {
+                this.moveRelative(0.0F, 0.0F, 1.0F, 0.1F);
+            }
+        }
+
+        if (!this.world.isRemote)
+        {
+            this.world.setEntityState(this, (byte)1);
+        }
+    }
 	
 	public void handleStatusUpdate(byte id)
     {
         if (id == 1)
         {
             //this.createRunningParticles();
-            this.jumpDuration = 10;
-            this.jumpTicks = 0;
+            //this.jumpDuration = 10;
+            //this.jumpTicks = 0;
         }
         else
         {
@@ -133,11 +275,150 @@ public class EntityFrog extends EntityMinestuck
     }
 	
 
+    @SideOnly(Side.CLIENT)
+    public float setJumpCompletion(float p_175521_1_)
+    {
+        return this.jumpDuration == 0 ? 0.0F : ((float)this.jumpTicks + p_175521_1_) / (float)this.jumpDuration;
+    }
+
+    public void setMovementSpeed(double newSpeed)
+    {
+        this.getNavigator().setSpeed(newSpeed);
+        this.moveHelper.setMoveTo(this.moveHelper.getX(), this.moveHelper.getY(), this.moveHelper.getZ(), newSpeed);
+    }
+
+    public void setJumping(boolean jumping)
+    {
+        super.setJumping(jumping);
+
+        if (jumping)
+        {
+            //this.playSound(this.getJumpSound(), this.getSoundVolume(), ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) * 0.8F);
+        }
+    }
+
+    public void startJumping()
+    {
+        this.setJumping(true);
+        this.jumpDuration = 10;
+        this.jumpTicks = 0;
+    }
+
+    public void updateAITasks()
+    {
+        if (this.currentMoveTypeDuration > 0)
+        {
+            --this.currentMoveTypeDuration;
+        }
+
+        if (this.carrotTicks > 0)
+        {
+            this.carrotTicks -= this.rand.nextInt(3);
+
+            if (this.carrotTicks < 0)
+            {
+                this.carrotTicks = 0;
+            }
+        }
+
+        if (this.onGround)
+        {
+            if (!this.wasOnGround)
+            {
+                this.setJumping(false);
+                this.checkLandingDelay();
+            }
+
+
+            EntityFrog.FrogJumpHelper entityfrog$frogjumphelper = (EntityFrog.FrogJumpHelper)this.jumpHelper;
+
+            if (!entityfrog$frogjumphelper.getIsJumping())
+            {
+                if (this.moveHelper.isUpdating() && this.currentMoveTypeDuration == 0)
+                {
+                    Path path = this.navigator.getPath();
+                    Vec3d vec3d = new Vec3d(this.moveHelper.getX(), this.moveHelper.getY(), this.moveHelper.getZ());
+
+                    if (path != null && path.getCurrentPathIndex() < path.getCurrentPathLength())
+                    {
+                        vec3d = path.getPosition(this);
+                    }
+
+                    this.calculateRotationYaw(vec3d.x, vec3d.z);
+                    this.startJumping();
+                }
+            }
+            else if (!entityfrog$frogjumphelper.canJump())
+            {
+                this.enableJumpControl();
+            }
+        }
+
+        this.wasOnGround = this.onGround;
+    }
+
+    private void calculateRotationYaw(double x, double z)
+    {
+        this.rotationYaw = (float)(MathHelper.atan2(z - this.posZ, x - this.posX) * (180D / Math.PI)) - 90.0F;
+    }
+
+    private void enableJumpControl()
+    {
+        ((FrogJumpHelper)this.jumpHelper).setCanJump(true);
+    }
+
+    private void disableJumpControl()
+    {
+        ((FrogJumpHelper) this.jumpHelper).setCanJump(false);
+    }
+
+    private void updateMoveTypeDuration()
+    {
+        if (this.moveHelper.getSpeed() < 2.2D)
+        {
+            this.currentMoveTypeDuration = 10;
+        }
+        else
+        {
+            this.currentMoveTypeDuration = 1;
+        }
+    }
+
+    private void checkLandingDelay()
+    {
+        this.updateMoveTypeDuration();
+        this.disableJumpControl();
+    }
+
+    /**
+     * Called frequently so the entity can update its state every tick as required. For example, zombies and skeletons
+     * use this to react to sunlight and start to burn.
+     */
+    public void onLivingUpdate()
+    {
+        super.onLivingUpdate();
+
+        if (this.jumpTicks != this.jumpDuration)
+        {
+            ++this.jumpTicks;
+        }
+        else if (this.jumpDuration != 0)
+        {
+            this.jumpTicks = 0;
+            this.jumpDuration = 0;
+            this.setJumping(false);
+        }
+    }
+    
+    
+    
     public static void registerFixesFrog(DataFixer fixer)
     {
         EntityLiving.registerFixesMob(fixer, EntityFrog.class);
     }
 	
+    
+    //NBT
 	public void writeEntityToNBT(NBTTagCompound compound)
     {
         super.writeEntityToNBT(compound);
@@ -233,48 +514,6 @@ public class EntityFrog extends EntityMinestuck
         super.notifyDataManagerChange(key);
     }
     
-	public void startJumping()
-    {
-        //this.setJumping(true);
-        this.getJumpHelper().setJumping();
-        this.jumpDuration = 10;
-        this.jumpTicks = 0;
-        //System.out.println("startJumping");
-        //System.out.println(jumpDuration);
-    }
-	
-	public void setJump(boolean jump)
-	{
-		shouldJump = jump;
-	}
-	
-	public void onLivingUpdate()
-    {
-        super.onLivingUpdate();
-
-        if (this.jumpTicks != this.jumpDuration)
-        {
-            ++this.jumpTicks;
-        }
-        else if (this.jumpDuration != 0)
-        {
-            this.jumpTicks = 0;
-            this.jumpDuration = 0;
-            this.setJumping(false);
-        }
-        //System.out.println(jumpTicks + " / " + jumpDuration);
-        if(shouldJump)
-		{
-			startJumping();
-			setJump(false);
-		}
-    }
-	
-	public float setJumpCompletion(float f)
-    {
-        //System.out.println(jumpDuration != 0);
-        return this.jumpDuration == 0 ? 0.0F : ((float)this.jumpTicks + f) / (float)this.jumpDuration;
-    }
 
     private void setSkinColor(int i) 
     {
@@ -371,4 +610,89 @@ public class EntityFrog extends EntityMinestuck
 		Random rand = new Random();
 		return (float)(rand.nextInt(max*10))/10;
 	}
+	
+	
+	public class FrogJumpHelper extends EntityJumpHelper
+    {
+        private final EntityFrog frog;
+        private boolean canJump;
+
+        public FrogJumpHelper(EntityFrog frog)
+        {
+            super(frog);
+            this.frog = frog;
+        }
+
+        public boolean getIsJumping()
+        {
+            return this.isJumping;
+        }
+
+        public boolean canJump()
+        {
+            return this.canJump;
+        }
+
+        public void setCanJump(boolean canJumpIn)
+        {
+            this.canJump = canJumpIn;
+        }
+
+        /**
+         * Called to actually make the entity jump if isJumping is true.
+         */
+        public void doJump()
+        {
+            if (this.isJumping)
+            {
+                this.frog.startJumping();
+                this.isJumping = false;
+            }
+        }
+    }
+
+    static class FrogMoveHelper extends EntityMoveHelper
+        {
+            private final EntityFrog frog;
+            private double nextJumpSpeed;
+
+            public FrogMoveHelper(EntityFrog frog)
+            {
+                super(frog);
+                this.frog = frog;
+            }
+
+            public void onUpdateMoveHelper()
+            {
+                if (this.frog.onGround && !this.frog.isJumping && !((EntityFrog.FrogJumpHelper)this.frog.jumpHelper).getIsJumping())
+                {
+                    this.frog.setMovementSpeed(0.0D);
+                }
+                else if (this.isUpdating())
+                {
+                    this.frog.setMovementSpeed(this.nextJumpSpeed);
+                }
+
+                super.onUpdateMoveHelper();
+            }
+
+            /**
+             * Sets the speed and location to move to
+             */
+            public void setMoveTo(double x, double y, double z, double speedIn)
+            {
+                if (this.frog.isInWater())
+                {
+                    speedIn = 1.5D;
+                }
+
+                super.setMoveTo(x, y, z, speedIn);
+
+                if (speedIn > 0.0D)
+                {
+                    this.nextJumpSpeed = speedIn;
+                }
+            }
+        }
+
 }
