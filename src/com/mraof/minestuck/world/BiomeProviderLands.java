@@ -7,12 +7,12 @@ import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.gen.layer.GenLayer;
 
-public class WorldChunkManagerLands extends BiomeProvider
+public class BiomeProviderLands extends BiomeProvider
 {
 	private float rainfall;
 	private GenLayerLands layerLands;
 	
-	public WorldChunkManagerLands(World world, float rainfall, float oceanChance, float roughChance)
+	public BiomeProviderLands(World world, float rainfall, float oceanChance, float roughChance)
 	{
 		super(world.getWorldInfo());
 		this.rainfall = rainfall;
