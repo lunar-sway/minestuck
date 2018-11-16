@@ -33,6 +33,10 @@ public class LandSkyRender extends IRenderHandler
 	{
 		float heightModifier = (float) MathHelper.clamp((mc.player.posY - 144)/112, 0, 1);
 		float heightModifierDiminish = (1 - heightModifier/2);
+		float skyClearness = 1.0F - world.getRainStrength(partialTicks);
+		float starBrightness = world.getStarBrightness(partialTicks) * skyClearness;
+		starBrightness += (0.5 - starBrightness)*heightModifier;
+		float skaiaBrightness = 0.5F +0.5F*skyClearness*heightModifier;
 		
 		GlStateManager.disableTexture2D();
 		Vec3d vec3d = world.getSkyColor(mc.getRenderViewEntity(), partialTicks);
@@ -69,8 +73,7 @@ public class LandSkyRender extends IRenderHandler
 		
 		GlStateManager.enableTexture2D();
 		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-		float skyClearness = 1.0F - world.getRainStrength(partialTicks);
-		GlStateManager.color(1.0F, 1.0F, 1.0F, skyClearness);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, skaiaBrightness);
 		float skaiaSize = 20.0F;
 		mc.getTextureManager().bindTexture(SKAIA_TEXTURE);
 		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
@@ -81,8 +84,6 @@ public class LandSkyRender extends IRenderHandler
 		tessellator.draw();
 		GlStateManager.disableTexture2D();
 		
-		float starBrightness = world.getStarBrightness(partialTicks) * skyClearness;
-		starBrightness += (0.5 - starBrightness)*heightModifier;
 		if(starBrightness > 0)
 		{
 			GlStateManager.color(starBrightness, starBrightness, starBrightness, starBrightness);
