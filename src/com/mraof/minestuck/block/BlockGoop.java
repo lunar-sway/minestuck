@@ -22,6 +22,7 @@ public class BlockGoop extends BlockBreakable
 		setUnlocalizedName(name);
 	}
 	
+	@Override
 	public void onEntityWalk(World worldIn, BlockPos pos, Entity entityIn)
     {
         if (Math.abs(entityIn.motionY) < 0.1D && !entityIn.isSneaking())
@@ -34,6 +35,7 @@ public class BlockGoop extends BlockBreakable
         super.onEntityWalk(worldIn, pos, entityIn);
     }
 	
+	@Override
 	public void onFallenUpon(World worldIn, BlockPos pos, Entity entityIn, float fallDistance)
     {
         if (entityIn.isSneaking())
@@ -45,7 +47,8 @@ public class BlockGoop extends BlockBreakable
             entityIn.fall(fallDistance, 0.0F);
         }
     }
-
+	
+	@Override
     public void onLanded(World worldIn, Entity entityIn)
     {
         if (entityIn.isSneaking())
