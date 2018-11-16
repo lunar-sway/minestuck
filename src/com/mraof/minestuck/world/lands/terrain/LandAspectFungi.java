@@ -101,7 +101,7 @@ public class LandAspectFungi extends TerrainLandAspect
 	@Override
 	public EnumConsort getConsortType()
 	{
-		return EnumConsort.TURTLE;
+		return EnumConsort.SALAMANDER;
 	}
 
 }
