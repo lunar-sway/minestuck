@@ -2,8 +2,8 @@ package com.mraof.minestuck.entity;
 
 import java.util.Random;
 
-import com.mraof.minestuck.entity.ai.frog.EntityAIStopHopping;
 import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.util.MinestuckSoundHandler;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -25,6 +25,7 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -33,6 +34,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.datafix.DataFixer;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -164,7 +166,7 @@ public class EntityFrog extends EntityMinestuck
         //this.tasks.addTask(3, new EntityAITempt(this, 1.0D, MinestuckItems.chocolateBeetle, false)); I honestly don't think that frogs are to fond of chocolate :p
         this.tasks.addTask(4, new EntityFrog.AIAvoidEntity(this, EntityPlayer.class, 8.0F, 2.2D, 2.2D));
         //this.tasks.addTask(4, new EntityFrog.AIAvoidEntity(this, EntityWolf.class, 10.0F, 2.2D, 2.2D));
-        this.tasks.addTask(4, new EntityFrog.AIAvoidEntity(this, EntityMob.class, 4.0F, 2.2D, 2.2D));
+        //this.tasks.addTask(4, new EntityFrog.AIAvoidEntity(this, EntityMob.class, 4.0F, 2.2D, 2.2D));
         //this.tasks.addTask(5, new EntityFrog.AIRaidFarm(this));
         this.tasks.addTask(6, new EntityAIWanderAvoidWater(this, 0.6D));
         this.tasks.addTask(11, new EntityAIWatchClosest(this, EntityPlayer.class, 10.0F));
@@ -417,6 +419,17 @@ public class EntityFrog extends EntityMinestuck
         EntityLiving.registerFixesMob(fixer, EntityFrog.class);
     }
 	
+    //Frog Sounds
+    
+    protected SoundEvent getAmbientSound()
+    {
+        return MinestuckSoundHandler.soundFrogAmbient;
+    }
+    
+    protected float getSoundPitch()
+    {
+        return (this.rand.nextFloat() - this.rand.nextFloat()) / (this.getFrogSize()+0.4f) * 0.2F + 1.0F;
+    }
     
     //NBT
 	public void writeEntityToNBT(NBTTagCompound compound)
