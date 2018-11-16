@@ -1,6 +1,7 @@
 package com.mraof.minestuck.alchemy;
 
 import com.mraof.minestuck.block.BlockMinestuckStone;
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.ItemCruxiteArtifact;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.modSupport.*;
@@ -564,6 +565,7 @@ public class AlchemyRecipes
 		GristRegistry.addGristConversion(new ItemStack(pogoCane), false, new GristSet(new GristType[] {GristType.Build, GristType.Shale}, new int[] {18, 14}));
 		GristRegistry.addGristConversion(new ItemStack(upStick), false, new GristSet(new GristType[] {GristType.Uranium}, new int[] {1}));
 		
+		GristRegistry.addGristConversion(new ItemStack(captcharoidCamera), false, new GristSet(new GristType[] {GristType.Build, GristType.Caulk, GristType.Gold, GristType.Marble, GristType.Mercury, GristType.Shale}, new int[] {5000, 500, 500, 500, 500, 500}));
 		GristRegistry.addGristConversion(new ItemStack(transportalizer), false, new GristSet(new GristType[] {GristType.Build, GristType.Amethyst, GristType.Rust, GristType.Uranium}, new int[] {350, 27, 36, 18}));
 		GristRegistry.addGristConversion(new ItemStack(modusCard, 1, 2), true, new GristSet(GristType.Build, 140));
 		GristRegistry.addGristConversion(new ItemStack(modusCard, 1, 3), true, new GristSet(new GristType[] {GristType.Build, GristType.Amber}, new int[] {400, 35}));
@@ -747,6 +749,8 @@ public class AlchemyRecipes
 		
 		CombinationRegistry.addCombination(new ItemStack(crockerSpork), new ItemStack(captchaCard), MODE_OR, false, true, new ItemStack(crockerMachine, 1, 0));
 		CombinationRegistry.addCombination(new ItemStack(Items.ENDER_PEARL), new ItemStack(Blocks.IRON_BLOCK), MODE_AND, false, false, new ItemStack(transportalizer));
+		CombinationRegistry.addCombination(new ItemStack(captchaCard), new ItemStack(MinestuckBlocks.blockComputerOff), MODE_AND, false, false, new ItemStack(transportalizer));
+		CombinationRegistry.addCombination(new ItemStack(captchaCard), new ItemStack(Items.ENDER_EYE), MODE_OR, false, false, new ItemStack(transportalizer));
 		
 		CombinationRegistry.addCombination(new ItemStack(modusCard, 1, 0), new ItemStack(modusCard, 1, 1), MODE_AND, true, true, new ItemStack(modusCard, 1, 2));
 		CombinationRegistry.addCombination("stickWood", modusCard, OreDictionary.WILDCARD_VALUE, MODE_OR, new ItemStack(modusCard, 1, 3));
@@ -1134,6 +1138,31 @@ public class AlchemyRecipes
 				stack.getTagCompound().setTag("contentTags", item.getTagCompound());
 			stack.getTagCompound().setInteger("contentSize", item.getCount());
 		}
+		
+		return stack;
+	}
+	
+	@Nonnull
+	public static ItemStack createGhostCard(ItemStack item)
+	{
+		ItemStack stack = createEncodedItem(item, true);
+		if(!stack.hasTagCompound())
+			stack.setTagCompound(new NBTTagCompound());
+		stack.getTagCompound().setBoolean("punched", false);
+			if(item.hasTagCompound())
+				stack.getTagCompound().setTag("contentTags", item.getTagCompound());
+			stack.getTagCompound().setInteger("contentSize", 0);
+		return stack;
+	}
+	
+	public static ItemStack changeEncodeSize(ItemStack stack, int size)
+	{
+		
+		if(!stack.hasTagCompound())
+			stack.setTagCompound(new NBTTagCompound());
+		
+			stack.getTagCompound().setInteger("contentSize", size);
+		
 		
 		return stack;
 	}

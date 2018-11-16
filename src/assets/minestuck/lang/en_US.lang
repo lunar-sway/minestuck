@@ -865,6 +865,7 @@ item.shopPoster.food.name=Food Shop Sign
 item.shopPoster.hats.name=Crumply Hats Shop Sign
 item.shopPoster.general.name=General Shop Sign
 item.shopPoster.candy.name=Candy Shop Sign
+item.captcharoidCamera.name=Captcharoid Camera
 item.shunt.name = Punch Card Shunt
 item.shunt.empty=empty
 item.shunt.full=

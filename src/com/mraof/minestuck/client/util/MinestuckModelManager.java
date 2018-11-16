@@ -217,6 +217,7 @@ public class MinestuckModelManager
 		register(recordRetroBattle);
 		register(glowystoneDust);
 		register(fakeArms);
+		register(captcharoidCamera);
 		
 		for(EnumShopPoster type : EnumShopPoster.values())
 			register(shopPoster, type.ordinal(), "shop_poster"+type.ordinal());
