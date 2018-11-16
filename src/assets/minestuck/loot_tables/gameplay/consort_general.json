@@ -584,7 +584,7 @@
                     "conditions": [
                         {
                             "condition": "minestuck:land_aspect",
-                            "land_aspect": "sand"
+                            "land_aspect": "sandstone"
                         }
                     ]
                 },
@@ -604,7 +604,7 @@
                     "conditions": [
                         {
                             "condition": "minestuck:land_aspect",
-                            "land_aspect": "fungi"
+                            "land_aspect": [ "sandstone", "fungi" ]
                         }
                     ]
                 },
@@ -624,7 +624,7 @@
                     "conditions": [
                         {
                             "condition": "minestuck:land_aspect",
-                            "land_aspect": "sand"
+                            "land_aspect": "sandstone"
                         }
                     ]
                 },
@@ -1483,7 +1483,7 @@
                     "conditions": [
                         {
                             "condition": "minestuck:land_aspect",
-                            "land_aspect": [ "sand", "lush_deserts" ],
+                            "land_aspect": [ "sand", "lush_deserts", "sandstone" ],
                             "subtypes": false
                         }
                     ]
@@ -1509,7 +1509,7 @@
                     "conditions": [
                         {
                             "condition": "minestuck:land_aspect",
-                            "land_aspect": "sand_red",
+                            "land_aspect": [ "sand_red", "sandstone_red" ],
                             "subtypes": false
                         }
                     ]
@@ -1535,7 +1535,7 @@
                     "conditions": [
                         {
                             "condition": "minestuck:land_aspect",
-                            "land_aspect": "sand",
+                            "land_aspect": "sandstone",
                             "subtypes": false
                         }
                     ]
@@ -1561,7 +1561,7 @@
                     "conditions": [
                         {
                             "condition": "minestuck:land_aspect",
-                            "land_aspect": "sand_red",
+                            "land_aspect": "sandstone_red",
                             "subtypes": false
                         }
                     ]
@@ -1587,7 +1587,7 @@
                     "conditions": [
                         {
                             "condition": "minestuck:land_aspect",
-                            "land_aspect": "sand"
+                            "land_aspect": "sandstone"
                         }
                     ]
                 },
@@ -1612,7 +1612,7 @@
                     "conditions": [
                         {
                             "condition": "minestuck:land_aspect",
-                            "land_aspect": "sand"
+                            "land_aspect": "sandstone"
                         }
                     ]
                 },
