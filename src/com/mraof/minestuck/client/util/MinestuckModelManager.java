@@ -198,7 +198,7 @@ public class MinestuckModelManager
 		register(jarOfBugs);
 		register(onion);
 		register(salad);
-		register(desertFruit);
+//		register(desertFruit);
 		register(irradiatedSteak);
 		register(rockCookie);
 		register(strawberryChunk);
@@ -209,7 +209,7 @@ public class MinestuckModelManager
 		register(carvingTool);
 		register(crumplyHat);
 		register(frogStatueReplica);
-		register(stoneEyeballs);
+//		register(stoneEyeballs);
 		register(stoneSlab);
 		register(recordEmissaryOfDance);
 		register(recordDanceStab);
@@ -265,11 +265,11 @@ public class MinestuckModelManager
 		register(alchemiter[0]);
 		register(cruxtruder);
 		register(cruxtruderLid);
-		register(petrifiedGrass);
-		register(petrifiedPoppy);
-		register(petrifiedLog);
-		register(bloomingCactus);
-		register(desertBush);
+//		register(petrifiedGrass);
+//		register(petrifiedPoppy);
+//		register(petrifiedLog);
+//		register(bloomingCactus);
+//		register(desertBush);
 		register(glowingMushroom);
 		register(glowingLog);
 		register(glowingPlanks);
