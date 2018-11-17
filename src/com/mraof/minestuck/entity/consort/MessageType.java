@@ -108,7 +108,7 @@ public abstract class MessageType
 			} else if(args[i].equals("consortSound2"))
 			{
 				obj[i] = new TextComponentTranslation("consort.sound2." + s);
-			} else if(args[i].equals("consort"))
+			} else if(args[i].equals("consortType"))
 			{
 				obj[i] = new TextComponentTranslation("entity." + s + ".name");
 			} else if(args[i].equals("consortTypes"))

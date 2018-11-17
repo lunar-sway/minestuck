@@ -29,6 +29,7 @@ import net.minecraft.world.biome.Biome.SpawnListEntry;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.IChunkGenerator;
+import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 
 import javax.annotation.Nullable;
@@ -56,6 +57,7 @@ public class ChunkProviderLands implements IChunkGenerator
 	public ILandTerrainGen terrainGenerator;
 	public MapGenLandStructure structureHandler;
 	public MapGenConsortVillage villageHandler;
+	public MapGenStructure customHandler;
 	public int dayCycle; //0 = Normal day cycle; 1 = Always day; 2 = Always night.
 	public int weatherType;	//-1:No weather &1: Force rain &2: If thunder &4: Force thunder
 	public float rainfall, temperature;
@@ -105,6 +107,7 @@ public class ChunkProviderLands implements IChunkGenerator
 			this.terrainGenerator = aspect1.createTerrainGenerator(this, random);
 			this.structureHandler = new MapGenLandStructure(this);
 			this.villageHandler = new MapGenConsortVillage(this);
+			this.customHandler = aspect1.customMapGenStructure();
 			aspect1.registerBlocks(blockRegistry);
 			this.decorators = new ArrayList<ILandDecorator>();
 			this.decorators.addAll(aspect1.getDecorators());
@@ -154,6 +157,8 @@ public class ChunkProviderLands implements IChunkGenerator
 		
 		structureHandler.generate(landWorld, x, z, primer);
 		villageHandler.generate(landWorld, x, z, primer);
+		if(customHandler != null)
+			customHandler.generate(landWorld, x, z, primer);
 		return chunk;
 	}
 	
@@ -174,8 +179,10 @@ public class ChunkProviderLands implements IChunkGenerator
 		
 		this.random.setSeed(getSeedFor(chunkX, chunkZ));
 		
-		this.generatingStructure = structureHandler.generateStructure(landWorld, random, new ChunkPos(chunkX, chunkZ));
-		this.generatingStructure |= villageHandler.generateStructure(landWorld, random, new ChunkPos(chunkX, chunkZ));
+		this.generatingStructure = structureHandler.generateStructure(landWorld, random, coord);
+		this.generatingStructure |= villageHandler.generateStructure(landWorld, random, coord);
+		if(customHandler != null)
+			this.generatingStructure |= customHandler.generateStructure(landWorld, random, coord);
 		
 		BlockPos pos = null;
 		for (Object decorator : decorators)
@@ -186,7 +193,7 @@ public class ChunkProviderLands implements IChunkGenerator
 		}
 		
 		if(!generatingGate)
-			structureHandler.placeReturnNodes(landWorld, random, new ChunkPos(chunkX, chunkZ), pos);
+			structureHandler.placeReturnNodes(landWorld, random, coord, pos);
 		else if(gatePos.getX() >= (chunkX << 4) + 8 && gatePos.getX() < (chunkX << 4) + 24 && gatePos.getZ() >= (chunkZ << 4) + 8 && gatePos.getZ() < (chunkZ << 4) + 24)
 		{
 			IGateStructure gate1 = aspect1.getGateStructure();
