@@ -34,19 +34,11 @@ public class LandAspectRain extends TerrainLandAspect
 	static Vec3d skyColor = new Vec3d(0.2D, 0.5D, 0.98D);
 	
 	//TODO:
-	//Craftable stone/chalk variants
-	//Pink stone brick temples
-	//Light water bucket textures
+	//Pink stone brick temples		Monsters in these temples tend to guard living trees, Magic Beans, and Fertile Soil.
 	//Light Cloud Dungeons
 	//Custom dungeon loot
-	//Custom consort dialogue
-	//Custom names and descriptions
 	//Definitely nothing underwater
 	//Giant beanstalks? Maybe some Paper Mario reference here
-	
-	//Oredict and alchemy on dead wood, pink stone, and chalk
-	
-	//Don't forget the weapons that Winter made. There should be two in particular that stand out.
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
