@@ -164,6 +164,7 @@ public class MinestuckItems
 	public static Item obsidianBucket = new ItemObsidianBucket();
 	public static Item modusCard = new ItemModus();
 	public static Item goldSeeds = new ItemGoldSeeds();
+	public static Item razorBlade = new ItemRazorBlade();
 	public static Item metalBoat = new ItemMetalBoat();
 	public static Item threshDvd = new Item().setUnlocalizedName("threshDvd").setMaxStackSize(1).setCreativeTab(TabMinestuck.instance);
 	public static Item crewPoster = new ItemHanging()
@@ -441,6 +442,7 @@ public class MinestuckItems
 		registry.register(obsidianBucket.setRegistryName("bucket_obsidian"));
 		registry.register(modusCard.setRegistryName("modus_card"));
 		registry.register(goldSeeds.setRegistryName("gold_seeds"));
+		registry.register(razorBlade.setRegistryName("razor_blade"));
 		registry.register(metalBoat.setRegistryName("metal_boat"));
 		registry.register(threshDvd.setRegistryName("thresh_dvd"));
 		registry.register(crewPoster.setRegistryName("crew_poster"));
