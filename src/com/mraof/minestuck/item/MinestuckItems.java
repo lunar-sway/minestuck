@@ -96,6 +96,7 @@ public class MinestuckItems
 	public static Item fudgeSickle = new ItemWeapon(450, 5.5D, -2.4D, 10, "fudgeSickle").setTool("sickle", 0, 1.0F);
 	public static Item regiSickle = new ItemWeapon(812, 6.0D, -2.4D, 5, "regiSickle").setTool("sickle", 0, 4.0F);
 	public static Item clawSickle = new ItemWeapon(2048, 7.0D, -2.4D, 15, "clawSickle").setTool("sickle", 0, 4.0F);
+	public static Item clawOfNrubyiglith = new ItemHorrorterrorWeapon(1600, 9.5D, -2.4D, 15, "clawOfNrubyiglith").setTool("sickle", 0, 4.0F);
 	public static Item candySickle = new ItemCandyWeapon(96, 6.0D, -2.4D, 15, "candySickle").setTool("sickle", 0, 2.5F);
 	//clubs
 	public static Item deuceClub = new ItemWeapon(1024, 2.5D, -2.2D, 15, "deuceClub");
@@ -157,6 +158,7 @@ public class MinestuckItems
 	public static Item cruxiteApple = new ItemCruxiteApple();
 	public static Item cruxitePotion = new ItemCruxitePotion();
 	public static Item disk = new ItemDisk();
+	public static Item grimoire = new ItemGrimoire().setUnlocalizedName("grimoire");
 	public static Item chessboard = new Item().setUnlocalizedName("chessboard").setMaxStackSize(1).setCreativeTab(TabMinestuck.instance);
 	public static Item minestuckBucket = new ItemMinestuckBucket();
 	public static Item obsidianBucket = new ItemObsidianBucket();
@@ -367,6 +369,7 @@ public class MinestuckItems
 		registry.register(fudgeSickle.setRegistryName("fudgesickle"));
 		registry.register(regiSickle.setRegistryName("regisickle"));
 		registry.register(clawSickle.setRegistryName("claw_sickle"));
+		registry.register(clawOfNrubyiglith.setRegistryName("claw_of_nrubyiglith"));
 		registry.register(candySickle.setRegistryName("candy_sickle"));
 		
 		//clubs
@@ -433,6 +436,7 @@ public class MinestuckItems
 		registry.register(cruxitePotion.setRegistryName("cruxite_potion"));
 		registry.register(disk.setRegistryName("computer_disk"));
 		registry.register(chessboard.setRegistryName("chessboard"));
+		registry.register(grimoire.setRegistryName("grimoire"));
 		registry.register(minestuckBucket.setRegistryName("minestuck_bucket"));
 		registry.register(obsidianBucket.setRegistryName("bucket_obsidian"));
 		registry.register(modusCard.setRegistryName("modus_card"));

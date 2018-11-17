@@ -333,6 +333,12 @@
                 },
                 {
                     "type": "item",
+                    "name": "minestuck:grimoire",
+                    "weight": 1,
+                    "quality": 1
+                },
+                {
+                    "type": "item",
                     "name": "minestuck:generic_object",
                     "weight": 10,
                     "quality": -1
