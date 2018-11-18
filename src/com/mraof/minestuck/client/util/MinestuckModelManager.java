@@ -66,6 +66,7 @@ public class MinestuckModelManager
 		
 		register(sord);
 		register(cactusCutlass);
+		register(steakSword);
 		register(katana);
 		register(unbreakableKatana);
 		register(firePoker);

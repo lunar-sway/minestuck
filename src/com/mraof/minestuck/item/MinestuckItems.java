@@ -61,6 +61,7 @@ public class MinestuckItems
 	//blades
 	public static Item sord = new ItemSord(59, 2, -2.4D, 5, "sord");
 	public static Item cactusCutlass = new ItemWeapon(104, 4, -2.4D, 10, "cactaceaeCutlass").setTool("sword", 0, 15.0F);	//The sword tool is only used against webs, hence the high efficiency.
+	public static Item steakSword = new ItemConsumableWeapon(250, 4, -2.4D, 5, "steakSword", 8, 1F);
 	public static Item katana = new ItemWeapon(250, 5, -2.4D, 15, "ninjaSword").setTool("sword", 0, 15.0F);
 	public static Item unbreakableKatana = new ItemWeapon(2200, 7, -2.4D, 20, "katana").setTool("sword", 0, 15.0F);    //Not actually unbreakable
 	public static Item firePoker = new ItemFireWeapon(250, 6, -2.4D, 15, "firePoker", 30).setTool("sword", 0, 15.0F);
@@ -319,6 +320,7 @@ public class MinestuckItems
 		//blades
 		registry.register(sord.setRegistryName("sord"));
 		registry.register(cactusCutlass.setRegistryName("cactaceae_cutlass"));
+		registry.register(steakSword.setRegistryName("steak_sword"));
 		registry.register(katana.setRegistryName("katana"));
 		registry.register(unbreakableKatana.setRegistryName("unbreakable_katana"));
 		registry.register(firePoker.setRegistryName("fire_poker"));
