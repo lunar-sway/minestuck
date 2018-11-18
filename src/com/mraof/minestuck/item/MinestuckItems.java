@@ -85,12 +85,12 @@ public class MinestuckItems
 	//Dice
 	public static Item dice = new ItemWeapon(51, 6, 3, 6, "dice");
 	public static Item fluoriteOctet = new ItemWeapon(67, 15, 6, 8, "fluoriteOctet");
-	//mic weapons
+	//misc weapons
 	public static Item catClaws = new ItemDualWeapon(500, 4.0D, 1.0D, -1.5D, -1.0D, 6, "catclaws");
 	//sickles
 	public static Item sickle = new ItemWeapon(220, 4.0D, -2.4D, 8, "sickle").setTool("sickle", 0, 1.5F);
 	public static Item homesSmellYaLater = new ItemWeapon(400, 5.5D, -2.4D, 10, "homesSmellYaLater").setTool("sickle", 0, 3.0F);
-	public static Item fudgeSickle = new ItemWeapon(450, 5.5D, -2.4D, 10, "fudgeSickle").setTool("sickle", 0, 1.0F);
+	public static Item fudgeSickle = new ItemConsumableWeapon(450, 5.5D, -2.4D, 10, "fudgeSickle", 7, 0.6F).setTool("sickle", 0, 1.0F);
 	public static Item regiSickle = new ItemWeapon(812, 6.0D, -2.4D, 5, "regiSickle").setTool("sickle", 0, 4.0F);
 	public static Item clawSickle = new ItemWeapon(2048, 7.0D, -2.4D, 15, "clawSickle").setTool("sickle", 0, 4.0F);
 	public static Item candySickle = new ItemCandyWeapon(96, 6.0D, -2.4D, 15, "candySickle").setTool("sickle", 0, 2.5F);
