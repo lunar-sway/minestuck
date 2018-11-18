@@ -68,29 +68,39 @@ public class CraftingRecipes
 	{
 		//Register ore dictionary entries
 		OreDictionary.registerOre("oreCoal", coalOreNetherrack);
+		OreDictionary.registerOre("oreCoal", coalOrePinkStone);
 		OreDictionary.registerOre("oreIron", ironOreEndStone);
 		OreDictionary.registerOre("oreIron", ironOreSandstone);
 		OreDictionary.registerOre("oreIron", ironOreSandstoneRed);
 		OreDictionary.registerOre("oreGold", goldOreSandstone);
 		OreDictionary.registerOre("oreGold", goldOreSandstoneRed);
+		OreDictionary.registerOre("oreGold", goldOrePinkStone);
 		OreDictionary.registerOre("oreRedstone", redstoneOreEndStone);
-		OreDictionary.registerOre("oreCruxite", oreCruxite);
-		OreDictionary.registerOre("oreUranium", oreUranium);
+		OreDictionary.registerOre("oreLapis", lapisOrePinkStone);
+		OreDictionary.registerOre("oreDiamond", diamondOrePinkStone);
 		
 		OreDictionary.registerOre("dirt", new ItemStack(coloredDirt, 1, OreDictionary.WILDCARD_VALUE));
 		
+		OreDictionary.registerOre("stone", pinkStoneSmooth);
+		OreDictionary.registerOre("chalk", chalk);
+		OreDictionary.registerOre("stoneChalk", chalk);
+		OreDictionary.registerOre("blockChalk", chalk);
+		
 		OreDictionary.registerOre("plankWood", glowingPlanks);
 		OreDictionary.registerOre("plankWood", endPlanks);
+		OreDictionary.registerOre("plankWood", deadPlanks);
 		OreDictionary.registerOre("plankWood", treatedPlanks);
 		OreDictionary.registerOre("plankWood",	new ItemStack(planks, 1, OreDictionary.WILDCARD_VALUE));
-		OreDictionary.registerOre("logWood",	glowingLog);
+		OreDictionary.registerOre("logWood", glowingLog);
 		OreDictionary.registerOre("logWood", endLog);
+		OreDictionary.registerOre("logWood", deadLog);
 		OreDictionary.registerOre("logWood",	new ItemStack(log, 1, OreDictionary.WILDCARD_VALUE));
 		OreDictionary.registerOre("treeSapling",endSapling);
 		OreDictionary.registerOre("treeSapling",rainbowSapling);
 		OreDictionary.registerOre("treeLeaves",	endLeaves);
 		OreDictionary.registerOre("treeLeaves",	new ItemStack(leaves1, 1, OreDictionary.WILDCARD_VALUE));
-//		OreDictionary.registerOre("blockCactus", bloomingCactus);
+		
+		OreDictionary.registerOre("cropStrawberry", strawberry);
 	}
 	
 	/**

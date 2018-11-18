@@ -429,26 +429,6 @@
                     ]
                 },
                 {
-                    "type": "item",
-                    "name": "minestuck:desert_fruit",
-                    "weight": 8,
-                    "functions": [
-                        {
-                            "function": "set_count",
-                            "count": {
-                                "min": 15,
-                                "max": 20
-                            }
-                        }
-                    ],
-                    "conditions": [
-                        {
-                            "condition": "minestuck:land_aspect",
-                            "land_aspect": "sand"
-                        }
-                    ]
-                },
-                {
                     "entryName": "salmon",
                     "type": "item",
                     "name": "minecraft:fish",
