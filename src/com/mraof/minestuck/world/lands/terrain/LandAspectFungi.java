@@ -15,6 +15,9 @@ import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
 import com.mraof.minestuck.world.lands.decorator.SurfaceMushroomGenerator;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 import com.mraof.minestuck.world.lands.decorator.WorldGenDecorator;
+import com.mraof.minestuck.world.lands.structure.GateStructurePillar;
+import com.mraof.minestuck.world.lands.structure.IGateStructure;
+import com.mraof.minestuck.world.lands.structure.GateStructureMushroom;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
 import net.minecraft.block.BlockColored;
@@ -96,6 +99,12 @@ public class LandAspectFungi extends TerrainLandAspect
 	public int getWeatherType()
 	{
 		return 1;
+	}
+	
+	@Override
+	public IGateStructure getGateStructure()
+	{
+		return new GateStructureMushroom();
 	}
 	
 	@Override
