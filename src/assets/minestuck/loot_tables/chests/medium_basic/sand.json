@@ -9,7 +9,7 @@
                     "conditions": [
                         {
                             "condition": "minestuck:land_aspect",
-                            "land_aspect": [ "sand", "lush_deserts" ],
+                            "land_aspect": "sand",
                             "subtypes": false
                         }
                     ],
@@ -82,7 +82,7 @@
                     "conditions": [
                         {
                             "condition": "minestuck:land_aspect",
-                            "land_aspect": [ "sand", "lush_deserts" ],
+                            "land_aspect": "sand",
                             "subtypes": false
                         }
                     ],
@@ -109,7 +109,7 @@
                     "conditions": [
                         {
                             "condition": "minestuck:land_aspect",
-                            "land_aspect": [ "sand", "lush_deserts" ],
+                            "land_aspect": "sand",
                             "subtypes": false
                         }
                     ],
@@ -132,7 +132,7 @@
                     "conditions": [
                         {
                             "condition": "minestuck:land_aspect",
-                            "land_aspect": [ "sand", "lush_deserts" ],
+                            "land_aspect": "sand",
                             "subtypes": false
                         }
                     ],
@@ -159,7 +159,7 @@
                     "conditions": [
                         {
                             "condition": "minestuck:land_aspect",
-                            "land_aspect": [ "sand", "lush_deserts" ],
+                            "land_aspect": "sand",
                             "subtypes": false
                         }
                     ],

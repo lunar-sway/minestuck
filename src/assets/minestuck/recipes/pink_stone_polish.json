@@ -6,11 +6,11 @@
   ],
   "key": {
     "#": {
-      "item": "minestuck:pink_stone_bricks"
+      "item": "minestuck:pink_stone"
     }
   },
   "result": {
-    "item": "minestuck:pink_stone_polish",
+    "item": "minestuck:pink_polished_stone",
     "count": 4
   }
 }

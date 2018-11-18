@@ -1,17 +1,17 @@
 {
-  "type": "forge:ore_shapeless",
+  "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "type": "forge:ore_dict",
-      "ore": "stickWood"
+      "item": "minecraft:stick",
+      "data": 0
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "stickWood"
+      "item": "minecraft:stick",
+      "data": 0
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "stickWood"
+      "item": "minecraft:stick",
+      "data": 0
     },
     {
       "item": "minestuck:jar_of_bugs",

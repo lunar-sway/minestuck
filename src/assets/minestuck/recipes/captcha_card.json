@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "XXX",
     "X#X",
@@ -10,8 +10,7 @@
       "item": "minestuck:raw_cruxite"
     },
     "X": {
-      "type": "forge:ore_dict",
-      "ore": "paper"
+      "item": "minecraft:paper"
     }
   },
   "result": {

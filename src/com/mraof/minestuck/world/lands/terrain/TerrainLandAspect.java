@@ -16,8 +16,6 @@ import com.mraof.minestuck.world.lands.structure.MapGenLandStructure;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.gen.MapGenBase;
-import net.minecraft.world.gen.structure.MapGenStructure;
 
 public abstract class TerrainLandAspect implements ILandAspect<TerrainLandAspect>
 {
@@ -95,9 +93,4 @@ public abstract class TerrainLandAspect implements ILandAspect<TerrainLandAspect
 	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider){}
 	
 	public abstract EnumConsort getConsortType();
-	
-	public MapGenStructure customMapGenStructure()
-	{
-		return null;
-	}
 }

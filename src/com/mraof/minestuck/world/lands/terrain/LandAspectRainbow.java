@@ -132,6 +132,6 @@ public class LandAspectRainbow extends TerrainLandAspect
 	@Override
 	public EnumConsort getConsortType()
 	{
-		return EnumConsort.SALAMANDER;
+		return EnumConsort.TURTLE;
 	}
 }

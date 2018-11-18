@@ -2,7 +2,6 @@ package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.item.TabMinestuck;
 import net.minecraft.block.BlockContainer;
-import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
@@ -65,12 +64,6 @@ public abstract class BlockLargeMachine extends BlockContainer
 	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face)
 	{
 		return BlockFaceShape.UNDEFINED;
-	}
-	
-	@Override
-	public EnumPushReaction getMobilityFlag(IBlockState state)
-	{
-		return EnumPushReaction.BLOCK;
 	}
 	
 	@Override

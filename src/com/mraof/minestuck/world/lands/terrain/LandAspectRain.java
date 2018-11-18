@@ -34,18 +34,20 @@ public class LandAspectRain extends TerrainLandAspect
 	static Vec3d skyColor = new Vec3d(0.2D, 0.5D, 0.98D);
 	
 	//TODO:
-	//Pink stone brick temples		Monsters in these temples tend to guard living trees, Magic Beans, and Fertile Soil.
+	//Pink stone brick temples
 	//Light Cloud Dungeons
 	//Custom dungeon loot
 	//Definitely nothing underwater
 	//Giant beanstalks? Maybe some Paper Mario reference here
+	//Don't forget the weapons that Winter made. There should be two in particular that stand out.
+	
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
 		registry.setBlockState("surface", MinestuckBlocks.chalk.getDefaultState());
 		registry.setBlockState("upper", MinestuckBlocks.chalk.getDefaultState());
 		registry.setBlockState("ground", MinestuckBlocks.pinkStoneSmooth.getDefaultState());
-		registry.setBlockState("ocean", Blocks.WATER.getDefaultState());
+		registry.setBlockState("ocean", MinestuckBlocks.blockLightWater.getDefaultState());
 		registry.setBlockState("structure_primary", MinestuckBlocks.pinkStoneBricks.getDefaultState());
 		registry.setBlockState("structure_primary_stairs", EnumSlabStairMaterial.PINK_BRICK.getStair().getDefaultState());
 		registry.setBlockState("structure_primary_decorative", MinestuckBlocks.pinkStoneChisel.getDefaultState());
@@ -78,7 +80,7 @@ public class LandAspectRain extends TerrainLandAspect
 	
 	@Override
 	public String[] getNames() {
-		return new String[] {"rain", "islands", "sky"};
+		return new String[] {"rain", "islands", "sky", "clouds"};
 	}
 	
 	@Override
@@ -122,7 +124,7 @@ public class LandAspectRain extends TerrainLandAspect
 	@Override
 	public float getRainfall()
 	{
-		return 0.6F;
+		return 0.9F;
 	}
 	
 	@Override
