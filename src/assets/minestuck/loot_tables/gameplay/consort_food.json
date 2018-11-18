@@ -300,6 +300,17 @@
                 },
                 {
                     "type": "item",
+                    "name": "minestuck:steak_sword",
+                    "weight": 3,
+                    "conditions": [
+                        {
+                            "condition": "minestuck:consort",
+                            "consort": "nakagator"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
                     "name": "minecraft:beetroot",
                     "weight": 8,
                     "functions": [

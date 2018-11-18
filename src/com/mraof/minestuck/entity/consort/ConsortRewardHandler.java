@@ -69,6 +69,7 @@ public class ConsortRewardHandler
 		ConsortRewardHandler.registerPrice(new ItemStack(copseCrusher), 1000, 1500);
 		ConsortRewardHandler.registerPrice(new ItemStack(katana), 400, 500);
 		ConsortRewardHandler.registerPrice(new ItemStack(cactusCutlass), 500, 700);
+		ConsortRewardHandler.registerPrice(new ItemStack(steakSword), 350, 650);
 		ConsortRewardHandler.registerPrice(new ItemStack(glowystoneDust), 20, 40);
 		ConsortRewardHandler.registerPrice(new ItemStack(ironCane), 300, 400);
 		ConsortRewardHandler.registerPrice(new ItemStack(glowingLog), 20, 32);
