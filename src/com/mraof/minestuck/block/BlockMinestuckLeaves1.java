@@ -148,4 +148,21 @@ public class BlockMinestuckLeaves1 extends BlockMinestuckLeaves
 	{
 		return new BlockStateContainer(this, new IProperty[] {DECAYABLE, CHECK_DECAY, VARIANT});
 	}
+	
+	@Override
+    @SideOnly(Side.CLIENT)
+    public BlockRenderLayer getBlockLayer() {
+             return Blocks.LEAVES.getBlockLayer();
+    }
+
+    @Override
+    public boolean isOpaqueCube(IBlockState state)
+    {
+                        return Blocks.LEAVES.isOpaqueCube(state);
+    }
+    
+    @Override
+    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+        return true;
+    }
 }
