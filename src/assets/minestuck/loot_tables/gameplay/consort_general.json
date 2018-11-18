@@ -901,7 +901,7 @@
                     "conditions": [
                         {
                             "condition": "minestuck:land_aspect",
-                            "land_aspect": "wood"
+                            "land_aspect": [ "wood", "taiga" ]
                         }
                     ]
                 },
