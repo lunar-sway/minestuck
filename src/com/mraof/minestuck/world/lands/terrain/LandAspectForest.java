@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.lands.terrain;
 
+import com.mraof.minestuck.block.BlockMinestuckLeaves1;
 import com.mraof.minestuck.block.BlockMinestuckLog;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.consort.EnumConsort;
@@ -11,6 +12,8 @@ import com.mraof.minestuck.world.lands.terrain.LandAspectSand.Variant;
 
 import net.minecraft.block.BlockColored;
 import net.minecraft.block.BlockDirt;
+import net.minecraft.block.BlockLeaves;
+import net.minecraft.block.BlockOldLeaf;
 import net.minecraft.block.BlockOldLog;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockLog.EnumAxis;
@@ -95,8 +98,8 @@ public class LandAspectForest extends TerrainLandAspect
 			list.add(new BasicTreeDecorator(5, BiomeMinestuck.mediumNormal));
 			list.add(new BasicTreeDecorator(8, BiomeMinestuck.mediumRough));
 		} else {
-			list.add(new NonFrostSpruceDecorator(BiomeMinestuck.mediumNormal));
-			list.add(new NonFrostSpruceDecorator(BiomeMinestuck.mediumRough));
+			list.add(new SpruceTreeDecorator(Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.SPRUCE), Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.SPRUCE).withProperty(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false)), BiomeMinestuck.mediumNormal));
+			list.add(new SpruceTreeDecorator(Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.SPRUCE), Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.SPRUCE).withProperty(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false)), BiomeMinestuck.mediumRough));
 			list.add(new SurfaceDecoratorVein(Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.PODZOL), 25, 40, BiomeMinestuck.mediumNormal, BiomeMinestuck.mediumRough));
 		}
 		list.add(new TallGrassDecorator(0.3F, BiomeMinestuck.mediumNormal));
