@@ -200,6 +200,7 @@ public class MinestuckModelManager
 		register(desertFruit);
 		register(irradiatedSteak);
 		register(rockCookie);
+		register(surpriseEmbryo);
 		
 		register(threshDvd);
 		register(crewPoster);

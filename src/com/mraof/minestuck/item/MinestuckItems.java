@@ -140,6 +140,7 @@ public class MinestuckItems
 	public static Item desertFruit = new ItemFood(1, 0.1F, false).setUnlocalizedName("desertFruit").setCreativeTab(TabMinestuck.instance);
 	public static Item irradiatedSteak = new ItemFood(4, 0.4F, true).setPotionEffect(new PotionEffect(MobEffects.WITHER, 100, 1), 0.9F).setUnlocalizedName("irradiatedSteak").setCreativeTab(TabMinestuck.instance);
 	public static Item rockCookie = new Item().setUnlocalizedName("rockCookie").setCreativeTab(TabMinestuck.instance);
+	public static Item surpriseEmbryo = new ItemSurpriseEmbryo(3, 0.2F, false);
 	//Other
 	public static Item boondollars = new ItemBoondollars();
 	public static Item rawCruxite = new Item().setUnlocalizedName("rawCruxite").setCreativeTab(TabMinestuck.instance);
@@ -405,6 +406,7 @@ public class MinestuckItems
 		registry.register(desertFruit.setRegistryName("desert_fruit"));
 		registry.register(irradiatedSteak.setRegistryName("irradiated_steak"));
 		registry.register(rockCookie.setRegistryName("rock_cookie"));
+		registry.register(surpriseEmbryo.setRegistryName("surprise_embryo"));
 		
 		//misc
 		registry.register(boondollars.setRegistryName("boondollars"));
