@@ -583,6 +583,7 @@ public class AlchemyRecipes
 		GristRegistry.addGristConversion(new ItemStack(glowingLog), new GristSet(new GristType[] {GristType.Build, GristType.Amber, GristType.Mercury}, new int[] {8, 4, 4}));
 		GristRegistry.addGristConversion(new ItemStack(glowingPlanks), new GristSet(new GristType[] {GristType.Build, GristType.Amber, GristType.Mercury}, new int[] {2, 1, 1}));
 		GristRegistry.addGristConversion(new ItemStack(petrifiedLog), new GristSet(GristType.Build, 4));
+		GristRegistry.addGristConversion(new ItemStack(frostPlanks), new GristSet(GristType.Build, 1));
 		GristRegistry.addGristConversion(new ItemStack(petrifiedGrass), new GristSet(GristType.Build, 1));
 		GristRegistry.addGristConversion(new ItemStack(petrifiedPoppy), new GristSet(new GristType[] {GristType.Build, GristType.Iodine}, new int[] {1, 1}));
 		GristRegistry.addGristConversion(new ItemStack(bloomingCactus), new GristSet(new GristType[] {GristType.Amber, GristType.Iodine}, new int[] {1, 2}));
@@ -848,6 +849,12 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(new ItemStack(log, 1, 0), new ItemStack(Blocks.YELLOW_FLOWER), MODE_OR, true, false, new ItemStack(log, 1, 1));
 		CombinationRegistry.addCombination(new ItemStack(log, 1, 0), new ItemStack(Blocks.RED_FLOWER), MODE_OR, true, false, new ItemStack(log, 1, 1));
 		CombinationRegistry.addCombination("plankWood", new ItemStack(Blocks.NETHERRACK), false, MODE_OR, new ItemStack(treatedPlanks));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.SNOW), new ItemStack(Blocks.PLANKS), MODE_OR, false, true, new ItemStack(frostPlanks));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.SNOW_LAYER), new ItemStack(Blocks.PLANKS), MODE_OR, false, true, new ItemStack(frostPlanks));
+		CombinationRegistry.addCombination(new ItemStack(Items.SNOWBALL), new ItemStack(Blocks.PLANKS), MODE_OR, false, true, new ItemStack(frostPlanks));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.SNOW), new ItemStack(Blocks.LOG), MODE_OR, false, true, new ItemStack(log, 1, 2));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.SNOW_LAYER), new ItemStack(Blocks.LOG), MODE_OR, false, true, new ItemStack(log, 1, 2));
+		CombinationRegistry.addCombination(new ItemStack(Items.SNOWBALL), new ItemStack(Blocks.LOG), MODE_OR, false, true, new ItemStack(log, 1, 2));
 		CombinationRegistry.addCombination(new ItemStack(Items.WOODEN_SWORD), new ItemStack(Blocks.CACTUS), MODE_OR, false, true, new ItemStack(woodenCactus));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.PLANKS), new ItemStack(Blocks.CACTUS), MODE_OR, false, true, new ItemStack(woodenCactus));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.LOG), new ItemStack(Blocks.CACTUS), MODE_OR, false, true, new ItemStack(woodenCactus));
