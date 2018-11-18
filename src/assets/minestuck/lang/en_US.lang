@@ -1162,6 +1162,7 @@ tile.logEnd.name=End Log
 tile.logMinestuck.vineOak.name=Vine Oak Logs
 tile.logMinestuck.floweryVineOak.name=Flowery Vine Oak Logs
 tile.logMinestuck.frost.name=Frost Logs
+tile.frostPlanks.name=Frost Planks
 tile.logMinestuck.rainbow.name=Rainbow Logs
 tile.planksMinestuck.rainbow.name=Rainbow Planks
 tile.woodenCactus.name=Wooden Cactus
