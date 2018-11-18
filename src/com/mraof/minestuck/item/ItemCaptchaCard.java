@@ -55,7 +55,7 @@ public class ItemCaptchaCard extends Item
 		NBTTagCompound nbt = playerIn.getHeldItem(handIn).getTagCompound();
 		ItemStack stack = playerIn.getHeldItem(handIn);
 		
-		if(playerIn.isSneaking() && nbt.getInteger("contentSize") <= 0 && !nbt.getBoolean("punched") && AlchemyRecipes.getDecodedItem(stack) != ItemStack.EMPTY)
+		if(playerIn.isSneaking() && stack.hasTagCompound() && ((nbt.getInteger("contentSize") <= 0 && !nbt.getBoolean("punched") && AlchemyRecipes.getDecodedItem(stack) != ItemStack.EMPTY) || nbt.getTag("contentID") == null || nbt.getTag("contentMeta") == null))
 		{
 			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, new ItemStack(playerIn.getHeldItem(handIn).getItem(), playerIn.getHeldItem(handIn).getCount()));
 		}

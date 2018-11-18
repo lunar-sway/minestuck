@@ -565,6 +565,7 @@ public class AlchemyRecipes
 		GristRegistry.addGristConversion(new ItemStack(pogoCane), false, new GristSet(new GristType[] {GristType.Build, GristType.Shale}, new int[] {18, 14}));
 		GristRegistry.addGristConversion(new ItemStack(upStick), false, new GristSet(new GristType[] {GristType.Uranium}, new int[] {1}));
 		
+		
 		GristRegistry.addGristConversion(new ItemStack(captcharoidCamera), false, new GristSet(new GristType[] {GristType.Build, GristType.Caulk, GristType.Gold, GristType.Marble, GristType.Mercury, GristType.Shale}, new int[] {5000, 500, 500, 500, 500, 500}));
 		GristRegistry.addGristConversion(new ItemStack(transportalizer), false, new GristSet(new GristType[] {GristType.Build, GristType.Amethyst, GristType.Rust, GristType.Uranium}, new int[] {350, 27, 36, 18}));
 		GristRegistry.addGristConversion(new ItemStack(modusCard, 1, 2), true, new GristSet(GristType.Build, 140));
@@ -749,8 +750,8 @@ public class AlchemyRecipes
 		
 		CombinationRegistry.addCombination(new ItemStack(crockerSpork), new ItemStack(captchaCard), MODE_OR, false, true, new ItemStack(crockerMachine, 1, 0));
 		CombinationRegistry.addCombination(new ItemStack(Items.ENDER_PEARL), new ItemStack(Blocks.IRON_BLOCK), MODE_AND, false, false, new ItemStack(transportalizer));
-		CombinationRegistry.addCombination(new ItemStack(captchaCard), new ItemStack(MinestuckBlocks.blockComputerOff), MODE_AND, false, false, new ItemStack(transportalizer));
-		CombinationRegistry.addCombination(new ItemStack(captchaCard), new ItemStack(Items.ENDER_EYE), MODE_OR, false, false, new ItemStack(transportalizer));
+		CombinationRegistry.addCombination(new ItemStack(captchaCard), new ItemStack(MinestuckBlocks.blockComputerOff), MODE_AND, false, false, new ItemStack(captcharoidCamera));
+		CombinationRegistry.addCombination(new ItemStack(captchaCard), new ItemStack(Items.ENDER_EYE), MODE_OR, false, false, new ItemStack(captcharoidCamera));
 		
 		CombinationRegistry.addCombination(new ItemStack(modusCard, 1, 0), new ItemStack(modusCard, 1, 1), MODE_AND, true, true, new ItemStack(modusCard, 1, 2));
 		CombinationRegistry.addCombination("stickWood", modusCard, OreDictionary.WILDCARD_VALUE, MODE_OR, new ItemStack(modusCard, 1, 3));
