@@ -124,15 +124,10 @@ public class BlockMinestuckLeaves1 extends BlockMinestuckLeaves
 	}
 
 	@Override
-	public Item getItemDropped(IBlockState state, Random rand, int fortune)
-	{
-		Block drop = MinestuckBlocks.aspectSapling;
-		if(state.getValue(VARIANT)==BlockType.RAINBOW)
-		{
-			drop = MinestuckBlocks.rainbowSapling;
-		}
-		return Item.getItemFromBlock(drop);
-	}
+    public Item getItemDropped(IBlockState state, Random rand, int fortune)
+    {
+        return ItemStack.EMPTY.getItem();
+    }
 	
 	@Override
     public int damageDropped(IBlockState state)
