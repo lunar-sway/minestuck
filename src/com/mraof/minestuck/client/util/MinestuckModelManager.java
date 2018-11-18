@@ -124,6 +124,7 @@ public class MinestuckModelManager
 		register(skaiaFork);
 		register(fork);
 		register(spork);
+		register(goldenSpork);
 		
 		register(emeraldSword);
 		register(emeraldAxe);

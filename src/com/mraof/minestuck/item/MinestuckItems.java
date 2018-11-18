@@ -116,6 +116,7 @@ public class MinestuckItems
 	public static Item skaiaFork = new ItemWeapon(2048, 8.5D, -2.2D, 10, "skaiaFork");
 	public static Item fork = new ItemWeapon(100, 4.0D, -2.2D, 3, "fork");
 	public static Item spork = new ItemWeapon(120, 4.5D, -2.3D, 5, "spork");
+	public static Item goldenSpork = new ItemWeapon(45, 5D, -2.3D, 22, "goldenSpork");
 	//Material tools
 	public static Item emeraldSword = new ItemSword(toolEmerald).setUnlocalizedName("swordEmerald").setCreativeTab(TabMinestuck.instance);
 	public static Item emeraldAxe = new ItemMinestuckAxe(toolEmerald, 9.0F, -3.0F).setUnlocalizedName("hatchetEmerald").setCreativeTab(TabMinestuck.instance);
@@ -381,6 +382,7 @@ public class MinestuckItems
 		registry.register(skaiaFork.setRegistryName("skaia_fork"));
 		registry.register(fork.setRegistryName("fork"));
 		registry.register(spork.setRegistryName("spork"));
+		registry.register(goldenSpork.setRegistryName("golden_spork"));
 		
 		registry.register(emeraldSword.setRegistryName("emerald_sword"));
 		registry.register(emeraldAxe.setRegistryName("emerald_axe"));
