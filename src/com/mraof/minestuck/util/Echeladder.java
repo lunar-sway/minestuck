@@ -15,8 +15,12 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.client.event.sound.PlaySoundEvent;
+import net.minecraftforge.event.entity.PlaySoundAtEntityEvent;
 
 import java.util.Set;
 import java.util.UUID;
@@ -83,7 +87,10 @@ public class Echeladder
 					break increasment;
 				if(rung > prevRung + 1)
 					exp = (int) (exp/1.5);
+				EntityPlayer player = identifier.getPlayer();
+				player.world.playSound((EntityPlayer)null, player.posX, player.posY, player.posZ, MinestuckSoundHandler.soundEcheladderUp, SoundCategory.AMBIENT, 1F, 1.0F);
 				Debug.debugf("Increased rung to %s, remaining exp is %s", rung, exp);
+				
 			}
 			if(exp >= expReq/50)
 			{

@@ -61,6 +61,8 @@ commands.porkhollow.sendSuccess=Successfully sent %s boondollars to %s.
 commands.porkhollow.takeSuccess=Successfully took out %s boondollars from your porkhollow.
 commands.porkhollow.notEnough=You don't have enough boondollars.
 
+subtitle.echeladderUp=Echeladder levels up
+
 computer.buttonClear=Clear message
 computer.buttonClose=Disconnect
 computer.buttonConnect=%s

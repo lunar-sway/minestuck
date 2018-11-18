@@ -14,5 +14,15 @@
             "stream": true
         }
       ]
+    },
+    "echeladderUp": {
+      "category": "ambient",
+      "subtitle": "subtitle.echeladderUp",
+      "sounds": [
+        {
+            "name": "minestuck:soundeffects/echeladder_up",
+            "stream": false
+        }
+      ]
     }
 }

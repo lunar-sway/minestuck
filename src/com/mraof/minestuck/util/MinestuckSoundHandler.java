@@ -11,6 +11,7 @@ public class MinestuckSoundHandler
 	
 	public static SoundEvent soundEmissaryOfDance;
 	public static SoundEvent soundDanceStabDance;
+	public static SoundEvent soundEcheladderUp;
 	
 	public static void initSound()
 	{
@@ -18,6 +19,8 @@ public class MinestuckSoundHandler
 		soundEmissaryOfDance = new SoundEvent(soundLocation).setRegistryName(soundLocation);
 		soundLocation = new ResourceLocation("minestuck", "record.danceStab");
 		soundDanceStabDance = new SoundEvent(soundLocation).setRegistryName(soundLocation);
+		soundLocation = new ResourceLocation("minestuck", "echeladderUp");
+		soundEcheladderUp = new SoundEvent(soundLocation).setRegistryName(soundLocation);
 	}
 	
 	@SubscribeEvent
@@ -25,5 +28,6 @@ public class MinestuckSoundHandler
 	{
 		event.getRegistry().register(soundEmissaryOfDance);
 		event.getRegistry().register(soundDanceStabDance);
+		event.getRegistry().register(soundEcheladderUp);
 	}
 }
