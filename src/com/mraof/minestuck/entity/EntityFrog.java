@@ -2,6 +2,8 @@ package com.mraof.minestuck.entity;
 
 import java.util.Random;
 
+import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.item.ItemFrog;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.MinestuckSoundHandler;
 
@@ -84,9 +86,19 @@ public class EntityFrog extends EntityMinestuck
 	protected boolean processInteract(EntityPlayer player, EnumHand hand) {
 		ItemStack itemstack = player.getHeldItem(hand);
 		
-		if(itemstack.getItem() == MinestuckItems.rawCruxite && player.getDistanceSq(this) < 9.0D)
+		System.out.println(getEntityData());
+		
+		if(itemstack.getItem() == MinestuckItems.bugNet && player.getDistanceSq(this) < 9.0D && !this.world.isRemote)
 		{
+			itemstack.damageItem(1, player);
+			ItemStack frogItem = new ItemStack(MinestuckItems.itemFrog,1);
 			
+			frogItem.setTagCompound(getFrogData());
+			
+			System.out.println(getEntityData());
+			
+			entityDropItem(frogItem, 0);
+			this.setDead();
 		}
 		return super.processInteract(player, hand);
 	}
@@ -99,43 +111,41 @@ public class EntityFrog extends EntityMinestuck
         return entityitem;
     }
 	
-	public int maxTypes() 
+	//TODO
+	protected NBTTagCompound getFrogData()
+	{
+		NBTTagCompound compound = new NBTTagCompound();
+		
+		compound.setInteger("Type", this.getType());
+        compound.setFloat("Size", this.getFrogSize()+0.4f);
+        compound.setInteger("skinColor", this.getSkinColor());
+        compound.setInteger("eyeColor", this.getEyeColor());
+        compound.setInteger("bellyColor", this.getBellyColor());
+        compound.setInteger("eyeType", this.getEyeType());
+        compound.setInteger("bellyType", this.getBellyType());
+		
+		return compound;
+	}
+	
+	public static int maxTypes() 
 	{
 		return 6;
 	}
 	
 	public int maxEyes()
 	{
-		return 3;
+		return 2;
 	}
 	
 	public int maxBelly()
 	{
-		return 2;
+		return 3;
 	}
 	
 	@Override
 	public String getTexture()
 	{
-		String path;
-		switch(getType())
-		{
-			default: case 0: path = "textures/mobs/frog/base.png";
-			break;
-			case 1: path = "textures/mobs/frog/totally_normal_frog.png";
-			break;
-			case 2: path = "textures/mobs/frog/ruby_contraband.png";
-			break;
-			case 3: path = "textures/mobs/frog/genesis_frog.png";
-			break;
-			case 4: path = "textures/mobs/frog/null_frog.png";
-			break;
-			case 5: path = "textures/mobs/frog/golden_frog.png";
-			break;
-			case 6: path = "textures/mobs/frog/susan.png";
-			break;
-		}
-		return path;
+		return "textures/mobs/frog/base.png";
 	}
 	
 	@Override
@@ -164,7 +174,7 @@ public class EntityFrog extends EntityMinestuck
         this.tasks.addTask(3, new EntityAITempt(this, 1.0D, MinestuckItems.grasshopper, false));
         this.tasks.addTask(3, new EntityAITempt(this, 1.0D, MinestuckItems.jarOfBugs, false));
         //this.tasks.addTask(3, new EntityAITempt(this, 1.0D, MinestuckItems.chocolateBeetle, false)); I honestly don't think that frogs are to fond of chocolate :p
-        this.tasks.addTask(4, new EntityFrog.AIAvoidEntity(this, EntityPlayer.class, 8.0F, 2.2D, 2.2D));
+        //this.tasks.addTask(4, new EntityFrog.AIAvoidEntity(this, EntityPlayer.class, 8.0F, 2.2D, 2.2D));
         //this.tasks.addTask(4, new EntityFrog.AIAvoidEntity(this, EntityWolf.class, 10.0F, 2.2D, 2.2D));
         //this.tasks.addTask(4, new EntityFrog.AIAvoidEntity(this, EntityMob.class, 4.0F, 2.2D, 2.2D));
         //this.tasks.addTask(5, new EntityFrog.AIRaidFarm(this));
@@ -432,6 +442,7 @@ public class EntityFrog extends EntityMinestuck
     }
     
     //NBT
+    //TODO
 	public void writeEntityToNBT(NBTTagCompound compound)
     {
         super.writeEntityToNBT(compound);

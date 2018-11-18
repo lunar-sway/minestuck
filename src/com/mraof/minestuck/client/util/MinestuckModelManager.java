@@ -138,6 +138,9 @@ public class MinestuckModelManager
 		register(prismarineLeggings);
 		register(prismarineBoots);
 		
+		register(bugNet);
+		register(itemFrog);
+		
 		register(rawCruxite);
 		register(rawUranium);
 		register(energyCore);

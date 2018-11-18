@@ -24,32 +24,53 @@ public class LayerFrogSkin implements LayerRenderer<EntityFrog>
 	public void doRenderLayer(EntityFrog frog, float limbSwing, float limbSwingAmount, float partialTicks,
 			float ageInTicks, float netHeadYaw, float headPitch, float scale) 
 	{
-		int type = frog.getType();
-		if (!frog.isInvisible() && (type > frog.maxTypes() || type < 1))
-        {
-			this.frogRender.bindTexture(this.getTexture());
-			int skinColor = frog.getSkinColor();
-			
-			float r = (float) ((skinColor & 16711680) >> 16) / 255f;
-			float g = (float) ((skinColor & 65280) >> 8) / 255f;
-			float b = (float) ((skinColor & 255) >> 0) / 255f;
-			
-			if(r < this.colorMin) r = this.colorMin;
-			if(g < this.colorMin) g = this.colorMin;
-			if(b < this.colorMin) b = this.colorMin;
-			
-			GlStateManager.color(r, g, b, 1f);
-			
+		if(!frog.isInvisible())
+		{
+			int type = frog.getType();
+			this.frogRender.bindTexture(this.getTexture(type));
+			if ((type > frog.maxTypes() || type < 1))
+	        {
+				int skinColor = frog.getSkinColor();
+				
+				float r = (float) ((skinColor & 16711680) >> 16) / 255f;
+				float g = (float) ((skinColor & 65280) >> 8) / 255f;
+				float b = (float) ((skinColor & 255) >> 0) / 255f;
+				
+				if(r < this.colorMin) r = this.colorMin;
+				if(g < this.colorMin) g = this.colorMin;
+				if(b < this.colorMin) b = this.colorMin;
+				
+				GlStateManager.color(r, g, b, 1f);
+	        }
 			this.frogModel.setModelAttributes(this.frogRender.getMainModel());
 	        this.frogModel.render(frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 			GlStateManager.disableBlend();
 			this.frogModel.setLivingAnimations(frog, limbSwing, limbSwingAmount, partialTicks);
-        }
+		}
+        
 	}
 
-	public ResourceLocation getTexture() 
+	public ResourceLocation getTexture(int type) 
 	{
-		return new ResourceLocation("minestuck:textures/mobs/frog/skin.png");
+		String path;
+		switch(type)
+		{
+			default: case 0: path = "minestuck:textures/mobs/frog/skin.png";
+			break;
+			case 1: path = "minestuck:textures/mobs/frog/totally_normal_frog.png";
+			break;
+			case 2: path = "minestuck:textures/mobs/frog/ruby_contraband.png";
+			break;
+			case 3: path = "minestuck:textures/mobs/frog/genesis_frog.png";
+			break;
+			case 4: path = "minestuck:textures/mobs/frog/null_frog.png";
+			break;
+			case 5: path = "minestuck:textures/mobs/frog/golden_frog.png";
+			break;
+			case 6: path = "minestuck:textures/mobs/frog/susan.png";
+			break;
+		}
+		return new ResourceLocation(path);
 	}
 	
 	@Override
