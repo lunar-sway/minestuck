@@ -21,12 +21,14 @@ import net.minecraft.world.gen.feature.WorldGenTaiga2;
 public class SpruceTreeDecorator extends TreeDecoratorBase
 {
    
-    private static final IBlockState TRUNK = MinestuckBlocks.log.getDefaultState().withProperty(BlockMinestuckLog.VARIANT, BlockMinestuckLog.BlockType.FROST);
-    private static final IBlockState LEAF = MinestuckBlocks.leaves1.getDefaultState().withProperty(BlockMinestuckLeaves1.VARIANT, BlockMinestuckLeaves1.BlockType.FROST).withProperty(BlockMinestuckLeaves1.CHECK_DECAY, Boolean.valueOf(false));
+    public static IBlockState TRUNK; 
+    public static IBlockState LEAF;
     private Biome biome;
    
-    public SpruceTreeDecorator(Biome biome) {
+    public SpruceTreeDecorator(IBlockState trunk, IBlockState leaf, Biome biome) {
         this.biome = biome;
+        this.TRUNK = trunk;
+        this.LEAF = leaf;
     }
    
    
