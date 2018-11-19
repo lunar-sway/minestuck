@@ -5,9 +5,9 @@
         "down": "minestuck:blocks/vein_top",
         "up": "minestuck:blocks/vein_side",
         "north": "minestuck:blocks/vein_top",
-        "east": "minestuck:blocks/vein_corner",
+        "east": "minestuck:blocks/vein_corner_inverted",
         "south": "minestuck:blocks/vein_side",
-        "west": "minestuck:blocks/vein_corner"
+        "west": "minestuck:blocks/vein_corner_inverted"
     }
 }
 

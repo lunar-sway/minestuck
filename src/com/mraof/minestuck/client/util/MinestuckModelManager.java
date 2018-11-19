@@ -328,6 +328,7 @@ public class MinestuckModelManager
 		
 		register(vein);
 		register(veinCorner);
+		register(veinCornerInverted);
 		
 		register(primedTnt);
 		register(unstableTnt);

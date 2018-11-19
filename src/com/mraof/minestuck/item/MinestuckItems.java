@@ -270,6 +270,7 @@ public class MinestuckItems
 		
 		registerItemBlock(registry, new ItemBlock(vein));
 		registerItemBlock(registry, new ItemBlock(veinCorner));
+		registerItemBlock(registry, new ItemBlock(veinCornerInverted));
 		
 		registerItemBlock(registry, new ItemMultiTexture(log, log,
 				(ItemStack input) -> BlockMinestuckLog.BlockType.values()[input.getItemDamage() % BlockMinestuckLog.BlockType.values().length].getUnlocalizedName()));
