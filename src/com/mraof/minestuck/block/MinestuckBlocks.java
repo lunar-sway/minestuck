@@ -87,8 +87,9 @@ public class MinestuckBlocks
 	public static Block redCake = new BlockSimpleCake(2, 0.1F, (EntityPlayer player) -> player.heal(1)).setUnlocalizedName("redCake");
 	public static Block hotCake = new BlockSimpleCake(2, 0.1F, (EntityPlayer player) -> player.setFire(4)).setUnlocalizedName("hotCake");
 	public static Block reverseCake = new BlockSimpleCake(2, 0.1F, null).setUnlocalizedName("cake");
-	public static Block vein = new BlockVein("vein").setCreativeTab(null);
-	public static Block veinCorner = new BlockVein("vein_corner").setCreativeTab(null);
+	public static Block vein = new BlockVein("vein");
+	public static Block veinCorner = new BlockVeinCorner("veinCorner");
+	public static Block veinCornerInverted = new BlockVeinCorner("veinCornerInverted");
 	
 	public static Block floweryMossStone = new BlockCustom(Material.ROCK, MapColor.GRAY, SoundType.STONE).setUnlocalizedName("floweryMossStone").setHardness(1.0F).setCreativeTab(TabMinestuck.instance);
 	public static Block floweryMossBrick = new BlockCustom(Material.ROCK, MapColor.GRAY, SoundType.STONE).setUnlocalizedName("floweryMossBrick").setHardness(1.0F).setCreativeTab(TabMinestuck.instance);
@@ -279,6 +280,7 @@ public class MinestuckBlocks
 		
 		registry.register(vein.setRegistryName("vein"));
 		registry.register(veinCorner.setRegistryName("vein_corner"));
+		registry.register(veinCornerInverted.setRegistryName("vein_corner_inverted"));
 		
 		registry.register(primedTnt.setRegistryName("primed_tnt"));
 		registry.register(unstableTnt.setRegistryName("unstable_tnt"));

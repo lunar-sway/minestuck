@@ -1205,6 +1205,12 @@ tile.uraniumCooker.name=Cookalyzer
 tile.cruxtruderLid.name=Cruxtruder Lid
 tile.dowelCruxite.name=Cruxite Dowel
 tile.blender.name=Blender
+tile.vein.name=Vein
+tile.veinCorner.name=Vein
+tile.corner.name=Vein
+
+tile.veinCorner.tooltip=Corner
+tile.veinCornerInverted.tooltip=Corner (Inverted Flow)
 
 title.format=%1$s of %2$s
 title.bard=Bard

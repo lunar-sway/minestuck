@@ -1,44 +1,42 @@
 package com.mraof.minestuck.block;
 
-import java.util.Random;
-
 import javax.annotation.Nullable;
 
 import com.mraof.minestuck.item.TabMinestuck;
 
-import net.minecraft.block.BlockDirectional;
-import net.minecraft.block.BlockLog;
+import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class BlockVein extends BlockDirectional
+public class BlockVeinCorner extends Block
 {
 
-	protected BlockVein(String unlocalizedName) {
+	public static final PropertyBool VERTICAL = PropertyBool.create("top");
+	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+	
+	protected BlockVeinCorner(String unlocalizedName) {
 		super(Material.WOOD);
 		setCreativeTab(TabMinestuck.instance);
 		setUnlocalizedName(unlocalizedName);
-		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(VERTICAL, false));
 		setHardness(0.45F);
 		setSoundType(SoundType.SLIME);
 	}
@@ -111,7 +109,12 @@ public class BlockVein extends BlockDirectional
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
     {
         IBlockState iblockstate = worldIn.getBlockState(pos.offset(facing.getOpposite()));
+        boolean top = facing == EnumFacing.UP;
 
+        int l = MathHelper.floor((double)(placer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		
+		EnumFacing hFacing = new EnumFacing[]{EnumFacing.NORTH, EnumFacing.EAST, EnumFacing.SOUTH, EnumFacing.WEST}[l];
+        
        /* if (iblockstate.getBlock() == MinestuckBlocks.vein || iblockstate.getBlock() == MinestuckBlocks.veinCorner)
         {
             EnumFacing enumfacing = (EnumFacing)iblockstate.getValue(FACING);
@@ -122,7 +125,7 @@ public class BlockVein extends BlockDirectional
             }
         }*/
 
-        return this.getDefaultState().withProperty(FACING, facing);
+        return this.getDefaultState().withProperty(FACING, hFacing).withProperty(VERTICAL, top);
     }
     
     /**
@@ -131,17 +134,17 @@ public class BlockVein extends BlockDirectional
     public IBlockState getStateFromMeta(int meta)
     {
         IBlockState iblockstate = this.getDefaultState();
-        iblockstate = iblockstate.withProperty(FACING, EnumFacing.getFront(meta));
+        iblockstate = iblockstate.withProperty(FACING, EnumFacing.getHorizontal(meta % 4)).withProperty(VERTICAL, meta / 2 == 1);
         return iblockstate;
     }
     
     public int getMetaFromState(IBlockState state)
     {
-        return ((EnumFacing)state.getValue(FACING)).getIndex();
+        return ((EnumFacing)state.getValue(FACING)).getIndex() * (state.getValue(VERTICAL) ? 2 : 1);
     }
 
     protected BlockStateContainer createBlockState()
     {
-        return new BlockStateContainer(this, new IProperty[] {FACING});
+        return new BlockStateContainer(this, new IProperty[] {FACING, VERTICAL});
     }
 }
