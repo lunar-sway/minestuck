@@ -12,7 +12,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class LayerFrogEyes implements LayerRenderer<EntityFrog>
 {
-	private final ModelBase frogModel = new ModelFrog();
+	private final ModelFrog frogModel = new ModelFrog();
 	private final RenderFrog frogRender;
 	private float colorMin = 0;
 	private int type = 0;
@@ -45,11 +45,6 @@ public class LayerFrogEyes implements LayerRenderer<EntityFrog>
 	            float[] afloat2 = EntitySheep.getDyeRgb(EnumDyeColor.byMetadata(l));
 	            
 	            GlStateManager.color(afloat1[0] * (1.0F - f) + afloat2[0] * f, afloat1[1] * (1.0F - f) + afloat2[1] * f, afloat1[2] * (1.0F - f) + afloat2[2] * f);
-	            
-	            this.frogModel.setModelAttributes(this.frogRender.getMainModel());
-		        this.frogModel.render(frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-				GlStateManager.disableBlend();
-	            this.frogModel.setLivingAnimations(frog, limbSwing, limbSwingAmount, partialTicks);
 	        }
 			else if (frog.getType() > frog.maxTypes() || frog.getType() < 1 || frog.getType() == 6)
 	        {
@@ -65,12 +60,14 @@ public class LayerFrogEyes implements LayerRenderer<EntityFrog>
 				if(b < this.colorMin) b = this.colorMin;
 				
 				GlStateManager.color(r, g, b, 1f);
-				
-				this.frogModel.setModelAttributes(this.frogRender.getMainModel());
-		        this.frogModel.render(frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-				GlStateManager.disableBlend();
-	            this.frogModel.setLivingAnimations(frog, limbSwing, limbSwingAmount, partialTicks);
 	        }
+			
+			this.frogModel.setModelAttributes(this.frogRender.getMainModel());
+            this.frogModel.setLivingAnimations(frog, limbSwing, limbSwingAmount, partialTicks);
+            this.frogModel.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, 1f, frog);
+	        this.frogModel.render(frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+	        
+			GlStateManager.disableBlend();
 		}
 	}
 

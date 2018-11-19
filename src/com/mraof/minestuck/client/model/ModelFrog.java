@@ -11,7 +11,7 @@ import org.lwjgl.opengl.GL11;
 import com.mraof.minestuck.entity.EntityFrog;
 
 /**
- * ModelRabbit - Either Mojang or a mod author
+ * ModelFrog - Cibernet
  * Created using Tabula 7.0.0
  */
 public class ModelFrog extends ModelBase {
