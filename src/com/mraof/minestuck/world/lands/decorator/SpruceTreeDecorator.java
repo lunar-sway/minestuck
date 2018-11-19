@@ -21,14 +21,14 @@ import net.minecraft.world.gen.feature.WorldGenTaiga2;
 public class SpruceTreeDecorator extends TreeDecoratorBase
 {
    
-    public static IBlockState TRUNK; 
-    public static IBlockState LEAF;
+    public IBlockState trunk;
+    public IBlockState leaf;
     private Biome biome;
    
     public SpruceTreeDecorator(IBlockState trunk, IBlockState leaf, Biome biome) {
         this.biome = biome;
-        this.TRUNK = trunk;
-        this.LEAF = leaf;
+        this.trunk = trunk;
+        this.leaf = leaf;
     }
    
    
@@ -120,7 +120,7 @@ public class SpruceTreeDecorator extends TreeDecoratorBase
  
                                             if (state.getBlock().canBeReplacedByLeaves(state, worldIn, blockpos))
                                             {
-                                                this.setBlockAndNotifyAdequately(worldIn, blockpos, LEAF);
+                                                this.setBlockAndNotifyAdequately(worldIn, blockpos, leaf);
                                             }
                                         }
                                     }
@@ -143,7 +143,7 @@ public class SpruceTreeDecorator extends TreeDecoratorBase
  
                                 if (state.getBlock().isAir(state, worldIn, upN) || state.getBlock().isLeaves(state, worldIn, upN) || state.getBlock() == Blocks.SNOW_LAYER)
                                 {
-                                    this.setBlockAndNotifyAdequately(worldIn, position.up(i3), TRUNK);
+                                    this.setBlockAndNotifyAdequately(worldIn, position.up(i3), trunk);
                                 }
                             }
  
@@ -250,7 +250,7 @@ public class SpruceTreeDecorator extends TreeDecoratorBase
  
                                             if (state.getBlock().canBeReplacedByLeaves(state, worldIn, blockpos))
                                             {
-                                                this.setBlockAndNotifyAdequately(worldIn, blockpos, LEAF);
+                                                this.setBlockAndNotifyAdequately(worldIn, blockpos, leaf);
                                             }
                                         }
                                     }
@@ -273,7 +273,7 @@ public class SpruceTreeDecorator extends TreeDecoratorBase
  
                                 if (state.getBlock().isAir(state, worldIn, upN) || state.getBlock().isLeaves(state, worldIn, upN) || state.getBlock() == Blocks.SNOW_LAYER)
                                 {
-                                    this.setBlockAndNotifyAdequately(worldIn, position.up(i3), TRUNK);
+                                    this.setBlockAndNotifyAdequately(worldIn, position.up(i3), trunk);
                                 }
                             }
  
