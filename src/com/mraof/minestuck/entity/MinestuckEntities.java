@@ -14,6 +14,7 @@ import com.mraof.minestuck.entity.consort.EntityTurtle;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.entity.item.EntityCrewPoster;
 import com.mraof.minestuck.entity.item.EntityGrist;
+import com.mraof.minestuck.entity.item.EntityHologram;
 import com.mraof.minestuck.entity.item.EntityMetalBoat;
 import com.mraof.minestuck.entity.item.EntitySbahjPoster;
 import com.mraof.minestuck.entity.item.EntityShopPoster;
@@ -60,6 +61,7 @@ public final class MinestuckEntities
 		registerEntity(EntityCrewPoster.class, "midnightCrewPoster", "midnight_crew_poster");
 		registerEntity(EntitySbahjPoster.class, "sbahjPoster", "sbahj_poster");
 		registerEntity(EntityShopPoster.class, "shopPoster", "shop_poster");
+		registerEntity(EntityHologram.class, "holoItem", "holo_item");
 		
 	}
 	

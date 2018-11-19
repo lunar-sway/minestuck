@@ -1,12 +1,10 @@
 package com.mraof.minestuck.client;
 
 import com.mraof.minestuck.CommonProxy;
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.client.model.ModelBasilisk;
 import com.mraof.minestuck.client.model.ModelBishop;
-import com.mraof.minestuck.client.model.ModelFrog;
 import com.mraof.minestuck.client.model.ModelGiclops;
 import com.mraof.minestuck.client.model.ModelIguana;
 import com.mraof.minestuck.client.model.ModelImp;
@@ -22,6 +20,7 @@ import com.mraof.minestuck.client.renderer.entity.RenderDecoy;
 import com.mraof.minestuck.client.renderer.entity.RenderEntityMinestuck;
 import com.mraof.minestuck.client.renderer.entity.RenderGrist;
 import com.mraof.minestuck.client.renderer.entity.RenderHangingArt;
+import com.mraof.minestuck.client.renderer.entity.RenderHologram;
 import com.mraof.minestuck.client.renderer.entity.RenderMetalBoat;
 import com.mraof.minestuck.client.renderer.entity.RenderPawn;
 import com.mraof.minestuck.client.renderer.entity.RenderShadow;
@@ -44,6 +43,7 @@ import com.mraof.minestuck.entity.consort.EntitySalamander;
 import com.mraof.minestuck.entity.consort.EntityTurtle;
 import com.mraof.minestuck.entity.item.EntityCrewPoster;
 import com.mraof.minestuck.entity.item.EntityGrist;
+import com.mraof.minestuck.entity.item.EntityHologram;
 import com.mraof.minestuck.entity.item.EntityMetalBoat;
 import com.mraof.minestuck.entity.item.EntitySbahjPoster;
 import com.mraof.minestuck.entity.item.EntityShopPoster;
@@ -62,7 +62,6 @@ import com.mraof.minestuck.util.ColorCollector;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -103,6 +102,7 @@ public class ClientProxy extends CommonProxy
 		
 		super.preInit();
 		RenderingRegistry.registerEntityRenderingHandler(EntityFrog.class, manager -> new RenderFrog(manager, new ModelBiped(), 0.5F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityHologram.class, manager -> new RenderHologram(manager));
 		RenderingRegistry.registerEntityRenderingHandler(EntityNakagator.class, RenderEntityMinestuck.getFactory(new ModelNakagator(), 0.5F));
 		RenderingRegistry.registerEntityRenderingHandler(EntitySalamander.class, RenderEntityMinestuck.getFactory(new ModelSalamander(), 0.5F));
 		RenderingRegistry.registerEntityRenderingHandler(EntityIguana.class, RenderEntityMinestuck.getFactory(new ModelIguana(), 0.5F));
