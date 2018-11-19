@@ -1,4 +1,4 @@
-advancements.minestuck.root.title=Minestuck
+﻿advancements.minestuck.root.title=Minestuck
 advancements.minestuck.root.description=The Beginning of Something Really Excellent
 advancements.minestuck.setup_connection.title=Connect
 advancements.minestuck.setup_connection.description=Create a connection with someone.
@@ -875,6 +875,7 @@ item.rockCookie.name=Rock Cookie
 item.rockCookie.tooltip=It's as edible as a rock
 item.surpriseEmbryo.name=Kundler Shelled Surprise Embryo
 item.surpriseEmbryo.tooltip=Oh boy! You sure can't wait to find out what's contained inside the Surprise Embryo!
+item.surpriseEmbryo.message=WOW! NO WAY! You found a %s inside your Surprise Embryo!
 item.boondollars.name=Boondollars
 item.boondollars.amount=Amount: %s
 

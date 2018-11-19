@@ -37,33 +37,16 @@ public class ItemSurpriseEmbryo extends ItemFood {
             worldIn.playSound((EntityPlayer)null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
             this.onFoodEaten(stack, worldIn, entityplayer);
             entityplayer.addStat(StatList.getObjectUseStats(this));
-            Random ran = new Random();
-            int coinflip = ran.nextInt(2);
-            int num = ran.nextInt(3);
-            if(coinflip == 0) {
-            	Item[]  items = new Item[] {Items.MELON, 
-                        Items.STICK, 
-                        Items.EGG};
-            	String[]  itemsString = new String[] {"Melon", 
-                        "Stick", 
-                        "Egg"};
-            	if(!entityplayer.world.isRemote) {
-            		entityplayer.inventory.addItemStackToInventory(new ItemStack(items[num], 1));
-            		ITextComponent message = new TextComponentTranslation("WOW! NO WAY! You found a " + itemsString[num] +" inside your Surprise Embryo!");       
-            		message.getStyle().setColor(TextFormatting.GOLD);
-            		entityplayer.sendMessage(message);
-            	}
-            } else {
-            	Block[]  blocks = new Block[] {Blocks.DIRT,
-                    Blocks.PUMPKIN,
-                    Blocks.COBBLESTONE};
-            	if(!entityplayer.world.isRemote) {
-            		entityplayer.inventory.addItemStackToInventory(new ItemStack(blocks[num], 1));
-            		ITextComponent message = new TextComponentTranslation("WOW! NO WAY! You found a " + blocks[num].getLocalizedName() + " inside your Surprise Embryo!");      
-            		message.getStyle().setColor(TextFormatting.GOLD);
-            		entityplayer.sendMessage(message);
-            	}
-            }
+			if(!entityplayer.world.isRemote) {
+				Random ran = new Random();
+				ItemStack[] items = new ItemStack[] {new ItemStack(Items.MELON), new ItemStack(Items.STICK), new ItemStack(Items.EGG),
+						new ItemStack(Blocks.DIRT), new ItemStack(Blocks.PUMPKIN), new ItemStack(Blocks.COBBLESTONE)};
+				int num = ran.nextInt(items.length);
+				entityplayer.inventory.addItemStackToInventory(items[num].copy());
+				ITextComponent message = new TextComponentTranslation("item.surpriseEmbryo.message", new TextComponentTranslation(items[num].getUnlocalizedName()+".name"));
+				message.getStyle().setColor(TextFormatting.GOLD);
+				entityplayer.sendMessage(message);
+			}
             if (entityplayer instanceof EntityPlayerMP)
             {
                 CriteriaTriggers.CONSUME_ITEM.trigger((EntityPlayerMP)entityplayer, stack);
