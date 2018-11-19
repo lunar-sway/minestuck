@@ -66,6 +66,7 @@ public class MinestuckModelManager
 		
 		register(sord);
 		register(cactusCutlass);
+		register(steakSword);
 		register(katana);
 		register(unbreakableKatana);
 		register(firePoker);
@@ -123,6 +124,7 @@ public class MinestuckModelManager
 		register(skaiaFork);
 		register(fork);
 		register(spork);
+		register(goldenSpork);
 		
 		register(emeraldSword);
 		register(emeraldAxe);
@@ -199,6 +201,7 @@ public class MinestuckModelManager
 		register(desertFruit);
 		register(irradiatedSteak);
 		register(rockCookie);
+		register(surpriseEmbryo);
 		
 		register(threshDvd);
 		register(crewPoster);
@@ -263,6 +266,7 @@ public class MinestuckModelManager
 		register(glowingMushroom);
 		register(glowingLog);
 		register(glowingPlanks);
+		register(frostPlanks);
 		for(BlockMinestuckStone.BlockType type : BlockMinestuckStone.BlockType.values())
 			register(stone, type.getMetadata(), type.getName());
 		register(coarseStoneStairs);
