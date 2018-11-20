@@ -137,8 +137,8 @@ public class ModelFrog extends ModelBase {
 		this.right_bottom_leg.rotateAngleX = this.jumpRotation * 50.0F * 0.017453292F + 1.0471975511965976F;
 		this.left_foot.rotateAngleX = this.jumpRotation * 50.0F * 0.017453292F;
 		this.right_foot.rotateAngleX = this.jumpRotation * 50.0F * 0.017453292F;
-		this.left_arm.rotateAngleX = this.jumpRotation * 50.0F * 0.017453292F - 0.19198621771937624F;
-		this.right_arm.rotateAngleX = this.jumpRotation * 50.0F * 0.017453292F - 0.19198621771937624F;
+		this.left_arm.rotateAngleX = this.jumpRotation * -50.0F * 0.017453292F - 0.19198621771937624F;
+		this.right_arm.rotateAngleX = this.jumpRotation * -50.0F * 0.017453292F - 0.19198621771937624F;
 		
 		
 	}
