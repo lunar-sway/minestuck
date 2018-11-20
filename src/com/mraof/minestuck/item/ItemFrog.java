@@ -47,6 +47,15 @@ public class ItemFrog extends Item
 		this.setHasSubtypes(true);
 		setUnlocalizedName("frog");
 		setCreativeTab(TabMinestuck.instance);
+		
+	}
+	
+	@Override
+	public int getItemStackLimit(ItemStack stack)
+	{
+		if(stack.hasTagCompound())
+			return 1;
+		else return 16;
 	}
 	
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
@@ -64,45 +73,47 @@ public class ItemFrog extends Item
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
 	{
+		int dmg = stack.getMetadata();
+		
+		if(dmg < 1 || dmg > EntityFrog.maxTypes())
+		{
+			if(stack.hasTagCompound())
+			{
+				NBTTagCompound nbttagcompound = stack.getTagCompound();
+				NBTTagInt type = (NBTTagInt)nbttagcompound.getTag("Type");
+				NBTTagInt eyeType = (NBTTagInt)nbttagcompound.getTag("eyeType");
+				NBTTagInt bellyType = (NBTTagInt)nbttagcompound.getTag("bellyType");
+				
+					for(int i = 0; i <= EntityFrog.maxEyes(); i++)
+					{
+						if(eyeType.getInt() == i)tooltip.add(I18n.translateToLocal("item.frog.eyes"+i));
+					}
+					
+					for(int i = 0; i <= EntityFrog.maxBelly(); i++)
+					{
+						if(bellyType.getInt() == i)tooltip.add(I18n.translateToLocal("item.frog.belly"+i));
+					}
+			} 
+			else tooltip.add(I18n.translateToLocal("item.frog.random"));
+		}
+		else
+		{
+			for(int i = 1; i <= EntityFrog.maxTypes(); i++)
+			{
+				if(dmg == i)tooltip.add(I18n.translateToLocal("item.frog.type"+i));
+			}
+		}
+		
 		if(stack.hasTagCompound())
 		{
 			NBTTagCompound nbttagcompound = stack.getTagCompound();
-			NBTTagInt type = (NBTTagInt)nbttagcompound.getTag("Type");
-			NBTTagInt eyeType = (NBTTagInt)nbttagcompound.getTag("eyeType");
-			NBTTagInt bellyType = (NBTTagInt)nbttagcompound.getTag("bellyType");
 			NBTTagFloat size = (NBTTagFloat)nbttagcompound.getTag("Size");
-			
-			if(type.getInt() < 1 || type.getInt() > EntityFrog.maxTypes())
-			{
-				
-				for(int i = 0; i <= EntityFrog.maxEyes(); i++)
-				{
-					if(eyeType.getInt() == i)tooltip.add(I18n.translateToLocal("item.frog.eyes"+i));
-				}
-				
-				for(int i = 0; i <= EntityFrog.maxBelly(); i++)
-				{
-					if(bellyType.getInt() == i)tooltip.add(I18n.translateToLocal("item.frog.belly"+i));
-				}
-			}
-			else
-			{
-				for(int i = 1; i <= EntityFrog.maxTypes(); i++)
-				{
-					if(type.getInt() == i)tooltip.add(I18n.translateToLocal("item.frog.type"+i));
-				}
-			}
 			
 			if(size.getFloat() <= 0.4f) 	tooltip.add(I18n.translateToLocal("item.frog.size0"));
 			else if(size.getFloat() <= 0.8f) tooltip.add(I18n.translateToLocal("item.frog.size1"));
 			else if(size.getFloat() <= 1.4f) tooltip.add(I18n.translateToLocal("item.frog.size2"));
 			else							 tooltip.add(I18n.translateToLocal("item.frog.size3"));
-			
-		} else {
-			tooltip.add(I18n.translateToLocal("item.frog.random"));
 		}
-		
-		
 		
 	}
 	
@@ -114,7 +125,7 @@ public class ItemFrog extends Item
         ItemStack itemstack = player.getHeldItem(hand);
         int dmg = itemstack.getMetadata();
         
-        System.out.println(dmg);
+        System.out.println("dmg: " + dmg);
         
         if (worldIn.isRemote)
         {
@@ -132,7 +143,7 @@ public class ItemFrog extends Item
             
             BlockPos blockpos = pos.offset(facing);
             double d0 = this.getYOffset(worldIn, blockpos);
-            Entity entity =  spawnCreature(worldIn, (double)blockpos.getX() + 0.5D, (double)blockpos.getY() + d0, (double)blockpos.getZ() + 0.5D);
+            Entity entity =  spawnCreature(worldIn, (double)blockpos.getX() + 0.5D, (double)blockpos.getY() + d0, (double)blockpos.getZ() + 0.5D, dmg);
 
             if (entity != null)
             {
@@ -143,7 +154,7 @@ public class ItemFrog extends Item
                     entity.setCustomNameTag(itemstack.getDisplayName());
                 }
 
-                applyItemEntityDataToEntity(worldIn, player, itemstack, entity, dmg);
+                applyItemEntityDataToEntity(worldIn, player, itemstack,(EntityFrog) entity, dmg);
 
                 if (!player.capabilities.isCreativeMode)
                 {
@@ -156,13 +167,13 @@ public class ItemFrog extends Item
     }
     
     @Nullable
-    public static Entity spawnCreature(World worldIn, double x, double y, double z)
+    public static Entity spawnCreature(World worldIn, double x, double y, double z, int type)
     {
             Entity entity = null;
 
             for (int i = 0; i < 1; ++i)
             {
-                entity = new EntityFrog(worldIn);
+                entity = new EntityFrog(worldIn, type);
 
                 if (entity instanceof EntityLiving)
                 {
@@ -179,7 +190,7 @@ public class ItemFrog extends Item
             return entity;
     }
     
-    public static void applyItemEntityDataToEntity(World entityWorld, @Nullable EntityPlayer player, ItemStack stack, @Nullable Entity targetEntity, int dmg)
+    public static void applyItemEntityDataToEntity(World entityWorld, @Nullable EntityPlayer player, ItemStack stack, @Nullable EntityFrog targetEntity, int dmg)
     {
         MinecraftServer minecraftserver = entityWorld.getMinecraftServer();
 
@@ -196,11 +207,14 @@ public class ItemFrog extends Item
                 
                 nbttagcompound.setBoolean("canDespawn", false);
                 nbttagcompound.setInteger("Type", dmg);
+                if(dmg == 6) nbttagcompound.setFloat("Size", 0.5f);
                 NBTTagCompound nbttagcompound1 = targetEntity.writeToNBT(new NBTTagCompound());
                 UUID uuid = targetEntity.getUniqueID();
                 nbttagcompound1.merge(nbttagcompound);
                 targetEntity.setUniqueId(uuid);
-                targetEntity.readFromNBT(nbttagcompound1);
+                targetEntity.readEntityFromNBT(nbttagcompound1);
+
+                System.out.println("Type: " + nbttagcompound.getInteger("Type"));
             }
         }
     }
