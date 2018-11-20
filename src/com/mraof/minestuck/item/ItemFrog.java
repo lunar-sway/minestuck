@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.entity.EntityFrog;
+import com.mraof.minestuck.item.enums.EnumShopPoster;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -49,6 +50,11 @@ public class ItemFrog extends Item
 		setCreativeTab(TabMinestuck.instance);
 		
 	}
+	
+	public String getUnlocalizedName(ItemStack stack)
+    {
+        return super.getUnlocalizedName() + "." + stack.getMetadata();
+    }
 	
 	@Override
 	public int getItemStackLimit(ItemStack stack)
@@ -98,9 +104,10 @@ public class ItemFrog extends Item
 		}
 		else
 		{
-			for(int i = 1; i <= EntityFrog.maxTypes(); i++)
+			switch(dmg)
 			{
-				if(dmg == i)tooltip.add(I18n.translateToLocal("item.frog.type"+i));
+				case 4: tooltip.add(I18n.translateToLocal("item.frog.type4")); break;
+				case 6: tooltip.add(I18n.translateToLocal("item.frog.type6")); break;
 			}
 		}
 		

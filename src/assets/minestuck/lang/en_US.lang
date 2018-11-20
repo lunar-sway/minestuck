@@ -893,7 +893,16 @@ item.shatterBeacon.name=ShatterBeacon
 item.net.name=Net
 item.net.tooltip=Perfect for catching bugs and frogs!
 
-item.frog.name=Frog
+item.goldenGrasshopper.name=Golden Grasshopper
+
+item.frog.0.name=Frog
+item.frog.1.name=Totally Normal Frog
+item.frog.2.name=Ruby Contraband
+item.frog.3.name=Tiny Genesis Frog
+item.frog.4.name=Frog
+item.frog.5.name=Golden Frog
+item.frog.6.name=Frog
+
 item.frog.random=Random Frog
 item.frog.type0=Genetically Modified Frog
 item.frog.type1=Totally Normal Frog
