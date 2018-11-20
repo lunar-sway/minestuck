@@ -61,6 +61,7 @@ public class ConsortRewardHandler
 		ConsortRewardHandler.registerPrice(new ItemStack(sbahjPoster), 350, 400);
 		ConsortRewardHandler.registerPrice(new ItemStack(recordEmissaryOfDance), 1000, 1000);
 		ConsortRewardHandler.registerPrice(new ItemStack(recordDanceStab), 1000, 1000);
+		ConsortRewardHandler.registerPrice(new ItemStack(recordRetroBattle), 1000, 1000);
 		ConsortRewardHandler.registerPrice(new ItemStack(crumplyHat), 80, 100);
 		ConsortRewardHandler.registerPrice(new ItemStack(pogoClub), 900, 1200);
 		ConsortRewardHandler.registerPrice(new ItemStack(metalBat), 400, 500);
@@ -85,6 +86,7 @@ public class ConsortRewardHandler
 		ConsortRewardHandler.registerPrice(new ItemStack(log, 1, 2), 20, 32);
 		ConsortRewardHandler.registerPrice(new ItemStack(woodenCactus), 50, 60);
 		ConsortRewardHandler.registerPrice(new ItemStack(sugarCube), 200, 240);
+		ConsortRewardHandler.registerPrice(new ItemStack(bugNet), 500, 600);
 		
 		ConsortRewardHandler.registerPrice(new ItemStack(POTATO), 12, 15);
 		ConsortRewardHandler.registerPrice(new ItemStack(MUSHROOM_STEW), 95, 130);
