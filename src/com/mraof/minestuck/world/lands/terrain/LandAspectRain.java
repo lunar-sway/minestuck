@@ -39,7 +39,6 @@ public class LandAspectRain extends TerrainLandAspect
 	//Custom dungeon loot
 	//Definitely nothing underwater
 	//Giant beanstalks? Maybe some Paper Mario reference here
-	//Don't forget the weapons that Winter made. There should be two in particular that stand out.
 	
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
