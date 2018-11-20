@@ -103,6 +103,21 @@ public class LandAspectSand extends TerrainLandAspect
 		list.add(new WorldGenDecorator(new WorldGenCactus(), 5, 0.4F, BiomeMinestuck.mediumRough));
 		list.add(new WorldGenDecorator(new WorldGenDeadBush(), 1, 0.4F, BiomeMinestuck.mediumNormal, BiomeMinestuck.mediumRough));
 		list.add(new OasisDecorator());
+		if(type == Variant.LUSH_DESERTS) {
+			list.add(new WorldGenDecorator(new WorldGenCactus(), 45, 0.4F, BiomeMinestuck.mediumNormal));
+			list.add(new WorldGenDecorator(new WorldGenCactus(), 30, 0.4F, BiomeMinestuck.mediumRough));
+			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.bloomingCactus, true, 55, 15, BiomeMinestuck.mediumRough));
+			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.bloomingCactus, true, 65, 15, BiomeMinestuck.mediumNormal));
+			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.desertBush, true, 1, 1, BiomeMinestuck.mediumNormal));
+			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.desertBush, true, 1, 1, BiomeMinestuck.mediumRough));
+		} else {
+			list.add(new WorldGenDecorator(new WorldGenCactus(), 15, 0.4F, BiomeMinestuck.mediumNormal));
+			list.add(new WorldGenDecorator(new WorldGenCactus(), 5, 0.4F, BiomeMinestuck.mediumRough));
+			list.add(new WorldGenDecorator(new WorldGenDeadBush(), 1, 0.4F, BiomeMinestuck.mediumNormal, BiomeMinestuck.mediumRough));
+			list.add(new WorldGenDecorator(new WorldGenDeadBush(), 1, 0.4F, BiomeMinestuck.mediumNormal, BiomeMinestuck.mediumRough));
+			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.bloomingCactus, true, 5, 32, BiomeMinestuck.mediumRough));
+		}
+		list.add(new OasisDecorator(BiomeMinestuck.mediumNormal));
 		
 		list.add(new UndergroundDecoratorVein(Blocks.SAND.getDefaultState().withProperty(BlockSand.VARIANT, type == Variant.SAND_RED?BlockSand.EnumType.RED_SAND:BlockSand.EnumType.SAND), 8, 28, 256));
 		list.add(new UndergroundDecoratorVein((type == Variant.SAND_RED?MinestuckBlocks.ironOreSandstoneRed:MinestuckBlocks.ironOreSandstone).getDefaultState(), 24, 9, 64));

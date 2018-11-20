@@ -72,6 +72,20 @@ public class LandAspectRock extends TerrainLandAspect
 		
 		list.add(new BlockBlobDecorator(Blocks.COBBLESTONE.getDefaultState(), 0, 3, BiomeMinestuck.mediumNormal));
 		list.add(new BlockBlobDecorator(Blocks.COBBLESTONE.getDefaultState(), 1, 4, BiomeMinestuck.mediumRough));
+		if(type == Variant.ROCK) {
+			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.petrifiedGrass, true, 25, 32, BiomeMinestuck.mediumRough));
+			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.petrifiedGrass, true, 10, 48, BiomeMinestuck.mediumNormal));
+			list.add(new LeaflessTreeDecorator(MinestuckBlocks.petrifiedLog.getDefaultState(), 0.05F, BiomeMinestuck.mediumRough));
+			list.add(new BlockBlobDecorator(Blocks.COBBLESTONE.getDefaultState(), 0, 3, BiomeMinestuck.mediumNormal));
+			list.add(new BlockBlobDecorator(Blocks.COBBLESTONE.getDefaultState(), 1, 4, BiomeMinestuck.mediumRough));
+		} else {
+			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.petrifiedPoppy, true, 10, 25, BiomeMinestuck.mediumNormal));
+			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.petrifiedPoppy, true, 5, 25, BiomeMinestuck.mediumRough));
+			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.petrifiedGrass, true, 35, 35, BiomeMinestuck.mediumNormal));
+			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.petrifiedGrass, true, 55, 55, BiomeMinestuck.mediumRough));
+			list.add(new LeaflessTreeDecorator(MinestuckBlocks.petrifiedLog.getDefaultState(), 0.1F, BiomeMinestuck.mediumNormal));
+			list.add(new LeaflessTreeDecorator(MinestuckBlocks.petrifiedLog.getDefaultState(), 2.5F, BiomeMinestuck.mediumRough));
+		}
 		return list;
 	}
 	
