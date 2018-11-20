@@ -44,7 +44,7 @@ public class ItemNet extends Item
 				
 				if(!worldIn.isRemote)
 				{
-					if(rand.nextInt(100) == 0)
+					if(rand.nextInt(555) == 0)
 					{
 						EntityItem item = new EntityItem(worldIn, pos.getX(), pos.getY() + 0.5, pos.getZ(), new ItemStack(MinestuckItems.goldenGrasshopper, 1));
 						worldIn.spawnEntity(item);
