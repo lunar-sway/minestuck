@@ -2,6 +2,7 @@ package com.mraof.minestuck.client.util;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.*;
+import com.mraof.minestuck.entity.EntityFrog;
 import com.mraof.minestuck.item.*;
 import com.mraof.minestuck.item.enums.EnumShopPoster;
 //import com.mraof.minestuck.item.enums.EnumShopPoster;
@@ -140,6 +141,9 @@ public class MinestuckModelManager
 		
 		register(bugNet);
 		register(itemFrog);
+		
+		for(int type = 0; type <= EntityFrog.maxTypes(); type++)
+			register(itemFrog, type, "frog_"+type);
 		
 		register(rawCruxite);
 		register(rawUranium);
