@@ -46,7 +46,7 @@ public class LandAspectRain extends TerrainLandAspect
 		registry.setBlockState("surface", MinestuckBlocks.chalk.getDefaultState());
 		registry.setBlockState("upper", MinestuckBlocks.chalk.getDefaultState());
 		registry.setBlockState("ground", MinestuckBlocks.pinkStoneSmooth.getDefaultState());
-		registry.setBlockState("ocean", MinestuckBlocks.blockLightWater.getDefaultState());
+		registry.setBlockState("ocean", Blocks.WATER.getDefaultState());
 		registry.setBlockState("structure_primary", MinestuckBlocks.pinkStoneBricks.getDefaultState());
 		registry.setBlockState("structure_primary_stairs", EnumSlabStairMaterial.PINK_BRICK.getStair().getDefaultState());
 		registry.setBlockState("structure_primary_decorative", MinestuckBlocks.pinkStoneChisel.getDefaultState());
