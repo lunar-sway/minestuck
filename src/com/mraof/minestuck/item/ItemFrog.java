@@ -119,7 +119,8 @@ public class ItemFrog extends Item
 			if(size.getFloat() <= 0.4f) 	tooltip.add(I18n.translateToLocal("item.frog.size0"));
 			else if(size.getFloat() <= 0.8f) tooltip.add(I18n.translateToLocal("item.frog.size1"));
 			else if(size.getFloat() <= 1.4f) tooltip.add(I18n.translateToLocal("item.frog.size2"));
-			else							 tooltip.add(I18n.translateToLocal("item.frog.size3"));
+			else if(size.getFloat() <= 2f) tooltip.add(I18n.translateToLocal("item.frog.size3"));
+			else							 tooltip.add(I18n.translateToLocal("item.frog.size4"));
 		}
 		
 	}
