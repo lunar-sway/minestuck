@@ -52,13 +52,24 @@ public class EntityFrog extends EntityMinestuck
     private static final DataParameter<Integer> TYPE = EntityDataManager.<Integer>createKey(EntityFrog.class, DataSerializers.VARINT);
     //public static final DataParameter<Boolean> CAN_DESPAWN = EntityDataManager.<Boolean>createKey(EntityFrog.class, DataSerializers.BOOLEAN);
     
-	
-	public EntityFrog(World world)
+    public EntityFrog(World world, int type)
 	{
 		super(world);
 		this.jumpHelper = new EntityFrog.FrogJumpHelper(this);
         this.moveHelper = new EntityFrog.FrogMoveHelper(this);
         this.setMovementSpeed(0.0D);
+        
+
+    	int newType;
+        
+        if(type == 99) newType = getRandomFrogType();
+        else newType = type;
+        this.dataManager.register(TYPE, newType);
+	}
+    
+	public EntityFrog(World world)
+	{
+		this(world, 99);
 	}
 	
 	protected void entityInit()
@@ -70,7 +81,7 @@ public class EntityFrog extends EntityMinestuck
         this.dataManager.register(BELLY_COLOR, random(16777215));
         this.dataManager.register(EYE_TYPE, random(2));
         this.dataManager.register(BELLY_TYPE, random(3));
-        this.dataManager.register(TYPE, 0);
+        
         
         this.canDespawn = true;
     }
@@ -81,17 +92,25 @@ public class EntityFrog extends EntityMinestuck
 		
 		System.out.println(getEntityData());
 		
-		if(itemstack.getItem() == MinestuckItems.bugNet && player.getDistanceSq(this) < 9.0D && !this.world.isRemote)
+		if(player.getDistanceSq(this) < 9.0D && !this.world.isRemote)
 		{
-			itemstack.damageItem(1, player);
-			ItemStack frogItem = new ItemStack(MinestuckItems.itemFrog,1,this.dataManager.get(TYPE));
-			
-			frogItem.setTagCompound(getFrogData());
-			
-			System.out.println(getEntityData());
-			
-			entityDropItem(frogItem, 0);
-			this.setDead();
+			if(itemstack.getItem() == MinestuckItems.bugNet)
+			{
+				itemstack.damageItem(1, player);
+				ItemStack frogItem = new ItemStack(MinestuckItems.itemFrog,1,this.dataManager.get(TYPE));
+				
+				frogItem.setTagCompound(getFrogData());
+				
+				System.out.println(getEntityData());
+				
+				entityDropItem(frogItem, 0);
+				this.setDead();
+			}
+			else if(itemstack.getItem() == MinestuckItems.goldenGrasshopper)
+			{
+				itemstack.shrink(1);
+				this.setType(5);
+			}
 		}
 		return super.processInteract(player, hand);
 	}
@@ -427,7 +446,7 @@ public class EntityFrog extends EntityMinestuck
         super.readEntityFromNBT(compound);
         
         if(compound.hasKey("Type")) setType(compound.getInteger("Type"));
-        else setType(0);
+        else setType(getRandomFrogType());
         
         if(compound.hasKey("Size"))
         {
@@ -561,7 +580,8 @@ public class EntityFrog extends EntityMinestuck
 
 	protected void setFrogSize(float size, boolean p_70799_2_)
     {
-        this.dataManager.set(FROG_SIZE, Float.valueOf(size));
+        if(this.dataManager.get(TYPE) == 6) this.dataManager.set(FROG_SIZE, Float.valueOf(0.6f));
+        else this.dataManager.set(FROG_SIZE, Float.valueOf(size));
         this.setSize(0.51000005F * (float)size, 0.51000005F * (float)size);
         this.setPosition(this.posX, this.posY, this.posZ);
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue((double)(baseHealth * size));
@@ -603,6 +623,36 @@ public class EntityFrog extends EntityMinestuck
 		return (float)(rand.nextInt(max*10))/10;
 	}
 	
+	//TODO
+	public int getRandomFrogType(int chance1, int chance2, int chance3)
+	{
+		Random rand = new Random();
+    	int newType;
+    	
+    	if(rand.nextInt(chance1) == 1) //20
+    	{
+    		newType = 1;
+    		//System.out.println(rand.nextInt(chance1));
+    	}
+    	else if(rand.nextInt(chance2) == 1) //50
+    	{
+    		newType = 2;
+    		//System.out.println(rand.nextInt(chance2));
+    	}
+    	else if(rand.nextInt(chance3) == 1) //250
+    	{
+    		newType = 6;
+    		//System.out.println(rand.nextInt(chance3));
+    	}
+    	else newType = 0;
+    	
+    	return newType;
+	}
+	
+	public int getRandomFrogType()
+	{
+		return getRandomFrogType(20, 50, 250);
+	}
 	
 	public class FrogJumpHelper extends EntityJumpHelper
     {
