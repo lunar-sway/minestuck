@@ -95,7 +95,7 @@ public class ItemFrog extends Item
 						if(eyeType.getInt() == i)tooltip.add(I18n.translateToLocal("item.frog.eyes"+i));
 					}
 					
-					for(int i = 0; i <= EntityFrog.maxBelly(); i++)
+					for(int i = 1; i <= EntityFrog.maxBelly(); i++)
 					{
 						if(bellyType.getInt() == i)tooltip.add(I18n.translateToLocal("item.frog.belly"+i));
 					}
@@ -248,6 +248,62 @@ public class ItemFrog extends Item
 
             return d0 - (double)p_190909_2_.getY();
         }
+    }
+    
+    public int getSkinColor(ItemStack stack)
+    {
+        
+        NBTTagCompound nbttagcompound = stack.getTagCompound();
+
+        if (nbttagcompound != null)
+        {
+            if (nbttagcompound.hasKey("skinColor"))
+            {
+                return nbttagcompound.getInteger("skinColor");
+            }
+        }
+
+        return 4975635;
+    }
+    
+    public int getEyeColor(ItemStack stack)
+    {
+        
+        NBTTagCompound nbttagcompound = stack.getTagCompound();
+
+        if (nbttagcompound != null)
+        {
+            if (nbttagcompound.hasKey("eyeColor"))
+            {
+                return nbttagcompound.getInteger("eyeColor");
+            }
+        }
+
+        return 13097877;
+    }
+    
+    public int getBellyColor(ItemStack stack)
+    {
+        
+        NBTTagCompound nbttagcompound = stack.getTagCompound();
+
+        if (nbttagcompound != null)
+        {
+    		if(nbttagcompound.hasKey("bellyType") && nbttagcompound.getInteger("bellyType") == 0)
+    		{
+    			if(nbttagcompound.hasKey("skinColor"))
+    			{
+    				return nbttagcompound.getInteger("skinColor");
+    			}
+    			else return 4975635;
+    		}
+        	else if (nbttagcompound.hasKey("bellyColor"))
+            {
+                return nbttagcompound.getInteger("bellyColor");
+            }
+        }
+
+        return 14081667;
     }
     
     

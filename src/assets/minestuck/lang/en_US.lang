@@ -916,7 +916,15 @@ item.frog.eyes0=Lighter Eyes
 item.frog.eyes1=Darker Eyes
 item.frog.eyes2=Blank Eyes
 
+item.frog.belly1=Solid-Colored Belly
+item.frog.belly2=Spotted Belly
+item.frog.belly3=Striped Belly
 
+item.frog.size0=Tiny
+item.frog.size1=Small
+item.frog.size2=Normal Sized
+item.frog.size3=Big
+item.frog.size4=Huge
 
 itemGroup.tabMinestuck=Minestuck
 

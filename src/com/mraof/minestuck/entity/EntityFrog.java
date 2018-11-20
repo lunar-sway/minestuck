@@ -5,6 +5,7 @@ import java.util.Random;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.MinestuckSoundHandler;
 
+import net.minecraft.client.audio.Sound;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -18,6 +19,7 @@ import net.minecraft.entity.ai.EntityJumpHelper;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -25,6 +27,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.datafix.DataFixer;
 import net.minecraft.util.math.MathHelper;
@@ -90,8 +93,6 @@ public class EntityFrog extends EntityMinestuck
 	protected boolean processInteract(EntityPlayer player, EnumHand hand) {
 		ItemStack itemstack = player.getHeldItem(hand);
 		
-		System.out.println(getEntityData());
-		
 		if(player.getDistanceSq(this) < 9.0D && !this.world.isRemote)
 		{
 			if(itemstack.getItem() == MinestuckItems.bugNet)
@@ -101,14 +102,17 @@ public class EntityFrog extends EntityMinestuck
 				
 				frogItem.setTagCompound(getFrogData());
 				
-				System.out.println(getEntityData());
-				
 				entityDropItem(frogItem, 0);
 				this.setDead();
 			}
 			else if(itemstack.getItem() == MinestuckItems.goldenGrasshopper && this.getType() != 5)
 			{
-				itemstack.shrink(1);
+				if(!player.isCreative())itemstack.shrink(1);
+				
+				
+				
+				this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX, this.posY + (double)(this.height / 2.0F), this.posZ, 0.0D, 0.0D, 0.0D);
+				this.playSound(SoundEvents.BLOCK_ANVIL_HIT, this.getSoundVolume(), ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) * 0.8F);
 				this.setType(5);
 			}
 		}
@@ -431,7 +435,8 @@ public class EntityFrog extends EntityMinestuck
     {
         super.writeEntityToNBT(compound);
         compound.setInteger("Type", this.getType());
-        compound.setFloat("Size", this.getFrogSize()+0.4f);
+        if(getType() != 6) compound.setFloat("Size", this.getFrogSize()+0.4f);
+        else compound.setFloat("Size", 0.6f);
         compound.setInteger("skinColor", this.getSkinColor());
         compound.setInteger("eyeColor", this.getEyeColor());
         compound.setInteger("bellyColor", this.getBellyColor());
@@ -448,7 +453,7 @@ public class EntityFrog extends EntityMinestuck
         if(compound.hasKey("Type")) setType(compound.getInteger("Type"));
         else setType(getRandomFrogType());
         
-        if(compound.hasKey("Size"))
+        if(compound.hasKey("Size") && getType() != 6)
         {
 	        float i = compound.getFloat("Size");
 	        if (i <= 0.2f) i = 0.2f;
@@ -623,7 +628,6 @@ public class EntityFrog extends EntityMinestuck
 		return (float)(rand.nextInt(max*10))/10;
 	}
 	
-	//TODO
 	public int getRandomFrogType(int chance1, int chance2, int chance3)
 	{
 		Random rand = new Random();
