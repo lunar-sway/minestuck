@@ -141,6 +141,7 @@ public class MinestuckModelManager
 		
 		register(bugNet);
 		register(itemFrog);
+		register(goldenGrasshopper);
 		
 		for(int type = 0; type <= EntityFrog.maxTypes(); type++)
 			register(itemFrog, type, "frog_"+type);
