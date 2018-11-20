@@ -106,7 +106,7 @@ public class EntityFrog extends EntityMinestuck
 				entityDropItem(frogItem, 0);
 				this.setDead();
 			}
-			else if(itemstack.getItem() == MinestuckItems.goldenGrasshopper)
+			else if(itemstack.getItem() == MinestuckItems.goldenGrasshopper && this.getType() != 5)
 			{
 				itemstack.shrink(1);
 				this.setType(5);
