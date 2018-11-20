@@ -34,7 +34,7 @@ public class LandAspectRain extends TerrainLandAspect
 	static Vec3d skyColor = new Vec3d(0.2D, 0.5D, 0.98D);
 	
 	//TODO:
-	//Pink stone brick temples
+	//Pink stone brick temples		Monsters in these temples tend to guard living trees, Magic Beans, and Fertile Soil.
 	//Light Cloud Dungeons
 	//Custom dungeon loot
 	//Definitely nothing underwater
@@ -79,7 +79,7 @@ public class LandAspectRain extends TerrainLandAspect
 	
 	@Override
 	public String[] getNames() {
-		return new String[] {"rain", "islands", "sky", "clouds"};
+		return new String[] {"rain", "islands", "sky"};
 	}
 	
 	@Override

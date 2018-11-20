@@ -1522,7 +1522,7 @@
                     "conditions": [
                         {
                             "condition": "minestuck:land_aspect",
-                            "land_aspect": "sand",
+                            "land_aspect": [ "sand", "lush_deserts" ],
                             "subtypes": false
                         }
                     ]
@@ -1574,7 +1574,7 @@
                     "conditions": [
                         {
                             "condition": "minestuck:land_aspect",
-                            "land_aspect": [ "sand", "sandstone" ],
+                            "land_aspect": [ "sand", "lush_deserts", "sandstone" ],
                             "subtypes": false
                         }
                     ]

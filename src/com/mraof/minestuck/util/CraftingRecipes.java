@@ -78,6 +78,8 @@ public class CraftingRecipes
 		OreDictionary.registerOre("oreRedstone", redstoneOreEndStone);
 		OreDictionary.registerOre("oreLapis", lapisOrePinkStone);
 		OreDictionary.registerOre("oreDiamond", diamondOrePinkStone);
+		OreDictionary.registerOre("oreCruxite", oreCruxite);
+		OreDictionary.registerOre("oreUranium", oreUranium);
 		
 		OreDictionary.registerOre("dirt", new ItemStack(coloredDirt, 1, OreDictionary.WILDCARD_VALUE));
 		

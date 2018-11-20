@@ -5,7 +5,9 @@ import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
+import com.mraof.minestuck.world.lands.decorator.BasicTreeDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
+import com.mraof.minestuck.world.lands.decorator.SurfaceMushroomGenerator;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 import com.mraof.minestuck.world.lands.decorator.WorldGenDecorator;
 import com.mraof.minestuck.world.lands.decorator.structure.OasisDecorator;
@@ -46,6 +48,7 @@ public class LandAspectSand extends TerrainLandAspect
 			
 			variations.add(this);
 			variations.add(new LandAspectSand(Variant.SAND_RED));
+			variations.add(new LandAspectSand(Variant.LUSH_DESERTS));
 		} else
 		{
 			skyColor = new Vec3d(0.99D, 0.6D, 0.05D);
@@ -56,7 +59,7 @@ public class LandAspectSand extends TerrainLandAspect
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		if(type == Variant.SAND)
+		if(type == Variant.SAND || type == Variant.LUSH_DESERTS)
 		{
 			registry.setBlockState("upper", Blocks.SAND.getDefaultState());
 			registry.setBlockState("ground", Blocks.SANDSTONE.getDefaultState());
@@ -92,7 +95,11 @@ public class LandAspectSand extends TerrainLandAspect
 	@Override
 	public String[] getNames()
 	{
-		return new String[] {"sand", "dune", "desert"};
+		if(type == Variant.LUSH_DESERTS) {
+			return new String[] {"lush_deserts"};
+		} else {
+			return new String[] {"sand", "dune", "desert"};
+		}
 	}
 	
 	@Override
@@ -183,6 +190,7 @@ public class LandAspectSand extends TerrainLandAspect
 	public static enum Variant
 	{
 		SAND,
+		LUSH_DESERTS,
 		SAND_RED;
 		public String getName()
 		{
