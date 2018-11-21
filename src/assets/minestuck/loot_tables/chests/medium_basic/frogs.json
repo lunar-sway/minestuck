@@ -7,8 +7,8 @@
                 {
                     "type": "item",
                     "name": "minestuck:grasshopper",
-                    "weight": 10,
-                    "quality": 0,
+                    "weight": 11,
+                    "quality": -1,
                     "functions": [
                         {
                             "function": "set_count",
@@ -22,7 +22,7 @@
                 {
                     "type": "item",
                     "name": "minestuck:net",
-                    "weight": 4,
+                    "weight": 6,
                     "quality": 2,
                     "functions": [
                         {
@@ -37,8 +37,8 @@
                 {
                     "type": "item",
                     "name": "minecraft:lily_pad",
-                    "weight": 6,
-                    "quality": 0,
+                    "weight": 9,
+                    "quality": -2,
                     "functions": [
                         {
                             "function": "set_count",
@@ -52,8 +52,14 @@
                 {
                     "type": "item",
                     "name": "minestuck:frog_statue_replica",
+                    "weight": 5,
+	                    "quality": 3,
+	                },
+	                {
+                    "type": "item",
+                    "name": "minestuck:golden_grasshopper",
                     "weight": 1,
-                    "quality": 4,
+                    "quality": 2,
                 }
             ]
         }
