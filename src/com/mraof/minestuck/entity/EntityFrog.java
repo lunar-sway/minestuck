@@ -747,7 +747,7 @@ public class EntityFrog extends EntityMinestuck
 	@Override
 	protected boolean canDespawn() 
 	{
-		return this.canDespawn;
+		return false;
 	}
 
 }
