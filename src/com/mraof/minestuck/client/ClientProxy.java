@@ -107,13 +107,15 @@ public class ClientProxy extends CommonProxy
             	ItemFrog item = ((ItemFrog)stack.getItem());
             	int color = -1;
             	
-            	switch(tintIndex)
+            	if((stack.getMetadata() > EntityFrog.maxTypes() || stack.getMetadata() < 1))
             	{
-            	case 0: color = item.getSkinColor(stack); break;
-            	case 1: color = item.getEyeColor(stack); break;
-            	case 2: color = item.getBellyColor(stack); break; 
+	            	switch(tintIndex)
+	            	{
+	            	case 0: color = item.getSkinColor(stack); break;
+	            	case 1: color = item.getEyeColor(stack); break;
+	            	case 2: color = item.getBellyColor(stack); break; 
+	            	}
             	}
-            	
                 return color;
             }
         }, MinestuckItems.itemFrog);
