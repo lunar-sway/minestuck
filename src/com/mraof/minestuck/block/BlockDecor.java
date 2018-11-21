@@ -8,6 +8,7 @@ import com.mraof.minestuck.item.TabMinestuck;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
@@ -28,20 +29,22 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockDecor extends Block{
+public class BlockDecor extends Block
+{
 
 	private EnumBB bb = EnumBB.CHESSBOARD;
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-	protected BlockDecor(String unlocalizedName, Material materialIn) {
-		super(materialIn);
+	protected BlockDecor(String unlocalizedName, SoundType sound) {
+		super(Material.GOURD);
+		setSoundType(sound);
 		setUnlocalizedName(unlocalizedName);
 		setCreativeTab(TabMinestuck.instance);
+		setHardness(0.5f);
 	}
 	
 	protected BlockDecor(String unlocalizedName)
 	{
-		super(Material.ROCK);
-		setUnlocalizedName(unlocalizedName);
+		this(unlocalizedName, SoundType.STONE);
 	}
 
 	@Override

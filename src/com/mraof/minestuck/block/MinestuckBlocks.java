@@ -37,7 +37,7 @@ public class MinestuckBlocks
 	public static Block uraniumBlock = new Block(Material.ROCK, MapColor.GREEN).setLightLevel(0.5F).setUnlocalizedName("uraniumBlock").setHardness(3.0F).setCreativeTab(TabMinestuck.instance);
 	public static Block genericObject = new BlockCustom(Material.GOURD, MapColor.LIME, SoundType.WOOD).setUnlocalizedName("genericObject").setHardness(1.0F).setCreativeTab(TabMinestuck.instance);
 	
-	public static Block blender = new BlockDecor("blender",Material.IRON).setCreativeTab(TabMinestuck.instance);
+	public static Block blender = new BlockDecor("blender",SoundType.METAL).setCreativeTab(TabMinestuck.instance);
 	public static Block chessboard = new BlockDecor("chessboard").setCreativeTab(TabMinestuck.instance);
 	public static Block frogStatueReplica = new BlockDecor("frogStatueReplica").setCreativeTab(TabMinestuck.instance);
 	
