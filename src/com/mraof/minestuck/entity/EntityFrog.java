@@ -6,6 +6,7 @@ import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.MinestuckSoundHandler;
 
 import net.minecraft.client.audio.Sound;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -53,7 +54,6 @@ public class EntityFrog extends EntityMinestuck
     private static final DataParameter<Integer> EYE_TYPE = EntityDataManager.<Integer>createKey(EntityFrog.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> BELLY_TYPE = EntityDataManager.<Integer>createKey(EntityFrog.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> TYPE = EntityDataManager.<Integer>createKey(EntityFrog.class, DataSerializers.VARINT);
-    //public static final DataParameter<Boolean> CAN_DESPAWN = EntityDataManager.<Boolean>createKey(EntityFrog.class, DataSerializers.BOOLEAN);
     
     public EntityFrog(World world, int type)
 	{
@@ -108,8 +108,6 @@ public class EntityFrog extends EntityMinestuck
 			else if(itemstack.getItem() == MinestuckItems.goldenGrasshopper && this.getType() != 5)
 			{
 				if(!player.isCreative())itemstack.shrink(1);
-				
-				
 				
 				this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX, this.posY + (double)(this.height / 2.0F), this.posZ, 0.0D, 0.0D, 0.0D);
 				this.playSound(SoundEvents.BLOCK_ANVIL_HIT, this.getSoundVolume(), ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) * 0.8F);
@@ -170,12 +168,10 @@ public class EntityFrog extends EntityMinestuck
 		
 		this.tasks.addTask(1, new EntityAISwimming(this));
         this.tasks.addTask(1, new EntityFrog.AIPanic(this, 2.2D));
-        //this.tasks.addTask(2, new EntityAIMate(this, 0.8D));
         this.tasks.addTask(3, new EntityAITempt(this, 1.0D, MinestuckItems.coneOfFlies, false));
         this.tasks.addTask(3, new EntityAITempt(this, 1.0D, MinestuckItems.bugOnAStick, false));
         this.tasks.addTask(3, new EntityAITempt(this, 1.0D, MinestuckItems.grasshopper, false));
         this.tasks.addTask(3, new EntityAITempt(this, 1.0D, MinestuckItems.jarOfBugs, false));
-        //this.tasks.addTask(3, new EntityAITempt(this, 1.0D, MinestuckItems.chocolateBeetle, false));
         this.tasks.addTask(6, new EntityAIWander(this, 0.6D));
         this.tasks.addTask(11, new EntityAIWatchClosest(this, EntityPlayer.class, 10.0F));
 		
@@ -302,7 +298,7 @@ public class EntityFrog extends EntityMinestuck
 
         if (jumping)
         {
-            //this.playSound(this.getJumpSound(), this.getSoundVolume(), ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) * 0.8F);
+            this.playSound(this.getJumpSound(), this.getSoundVolume(), ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) * 0.8F);
         }
     }
 
@@ -425,6 +421,10 @@ public class EntityFrog extends EntityMinestuck
         return MinestuckSoundHandler.soundFrogAmbient;
     }
     
+    protected SoundEvent getJumpSound()
+    {
+    	return SoundEvents.ENTITY_RABBIT_JUMP;
+    }
     protected float getSoundPitch()
     {
         return (this.rand.nextFloat() - this.rand.nextFloat()) / (this.getFrogSize()+0.4f) * 0.2F + 1.0F;
@@ -633,20 +633,17 @@ public class EntityFrog extends EntityMinestuck
 		Random rand = new Random();
     	int newType;
     	
-    	if(rand.nextInt(chance1) == 1) //20
+    	if(rand.nextInt(chance1) == 1) 
     	{
     		newType = 1;
-    		//System.out.println(rand.nextInt(chance1));
     	}
-    	else if(rand.nextInt(chance2) == 1) //50
+    	else if(rand.nextInt(chance2) == 1) 
     	{
     		newType = 2;
-    		//System.out.println(rand.nextInt(chance2));
     	}
-    	else if(rand.nextInt(chance3) == 1) //250
+    	else if(rand.nextInt(chance3) == 1) 
     	{
     		newType = 6;
-    		//System.out.println(rand.nextInt(chance3));
     	}
     	else newType = 0;
     	
