@@ -71,7 +71,7 @@ public class ItemFrog extends Item
         	//TODO
             for (int i = 0; i <= EntityFrog.maxTypes(); ++i)
             {
-                items.add(new ItemStack(this, 1, i));
+                if(i != 3 && i != 4)items.add(new ItemStack(this, 1, i));
             }
         }
     }
