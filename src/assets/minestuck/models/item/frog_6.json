@@ -1,3 +1,6 @@
 {
-    "parent": "minestuck:block/frog_statue_block"
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "minestuck:items/frog_susan"
+    }
 }
