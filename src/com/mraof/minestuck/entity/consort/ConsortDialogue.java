@@ -88,8 +88,11 @@ public class ConsortDialogue
 		addMessage("evilGears").landTitleSpecific(fromNameTitle("clockwork")).consort(EnumConsort.NAKAGATOR, EnumConsort.IGUANA);
 		addMessage("ticking").landTitleSpecific(fromNameTitle("clockwork")).consort(EnumConsort.TURTLE, EnumConsort.SALAMANDER);
 		
-		addMessage("frogCreation").landTitleSpecific(LandAspectRegistry.frogAspect);
-		addMessage("frogImitation").landTitleSpecific(LandAspectRegistry.frogAspect);
+		addMessage("frogCreation").landTitleSpecific(fromNameTitle("frogs"));
+		addMessage("frogImitation").landTitleSpecific(fromNameTitle("frogs"));
+		addMessage(new ChainMessage(new SingleMessage("frogVariants1"), new SingleMessage("frogVariants2"))).landTitle(fromNameTitle("frogs")).landTitleSpecific(LandAspectRegistry.frogAspect);
+		addMessage("frogHatred").landTitleSpecific(fromNameTitle("frogs"));
+		
 		addMessage("lewdBuckets").landTitleSpecific(fromNameTitle("buckets"));
 		addMessage("waterBuckets").landTitleSpecific(fromNameTitle("buckets")).landTerrain(fromNameTerrain("sand"));
 		addMessage("warmBuckets").landTitleSpecific(fromNameTitle("buckets")).landTerrain(fromNameTerrain("frost"));
