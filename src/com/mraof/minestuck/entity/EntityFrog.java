@@ -82,8 +82,8 @@ public class EntityFrog extends EntityMinestuck
         this.dataManager.register(SKIN_COLOR, random(16777215));
         this.dataManager.register(EYE_COLOR, random(16777215));
         this.dataManager.register(BELLY_COLOR, random(16777215));
-        this.dataManager.register(EYE_TYPE, random(2));
-        this.dataManager.register(BELLY_TYPE, random(3));
+        this.dataManager.register(EYE_TYPE, random(maxEyes()));
+        this.dataManager.register(BELLY_TYPE, random(maxBelly()));
         
         
         this.canDespawn = true;
@@ -619,7 +619,7 @@ public class EntityFrog extends EntityMinestuck
 	public int random(int max)
 	{
 		Random rand = new Random();
-		return rand.nextInt(max);
+		return rand.nextInt(max+1);
 	}
 	
 	public float randomFloat(int max)
