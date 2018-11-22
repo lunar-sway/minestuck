@@ -34,14 +34,14 @@ import static com.mraof.minestuck.item.MinestuckItems.*;
 @SideOnly(Side.CLIENT)
 public class MinestuckModelManager
 {
-	
+
 	@SubscribeEvent
 	public static void handleModelRegistry(ModelRegistryEvent event)
 	{
 		itemModels();
 		blockModels();
 	}
-	
+
 	private static void itemModels()
 	{
 		//3D Models
@@ -55,7 +55,7 @@ public class MinestuckModelManager
 			register(clawHammer, 0, "claw_hammer_old");	//Until the issues with the model are fixed
 			register(zillyhooHammer);
 		}
-		
+
 		//Other
 		register(sledgeHammer);
 		register(blacksmithHammer);
@@ -66,9 +66,10 @@ public class MinestuckModelManager
 		register(popamaticVrillyhoo);
 		register(scarletZillyhoo);
 		register(mwrthwl);
-		
+
 		register(sord);
 		register(cactusCutlass);
+		register(steakSword);
 		register(katana);
 		register(unbreakableKatana);
 		register(firePoker);
@@ -83,7 +84,7 @@ public class MinestuckModelManager
 		register(cobaltSabre);
 		register(quantumSabre);
 		register(shatterBeacon);
-		
+
 		register(blacksmithBane);
 		register(scraxe);
 		register(rubyCroak);
@@ -91,27 +92,27 @@ public class MinestuckModelManager
 		register(copseCrusher);
 		register(qPHammerAxe);
 		register(qFHammerAxe);
-		
-		
+
+
 		register(dice);
 		register(fluoriteOctet);
-		
+
 		ModelLoader.registerItemVariants(catClaws, new ResourceLocation("minestuck:catclaws_sheathed"), new ResourceLocation("minestuck:catclaws_drawn"));
 		ModelLoader.setCustomMeshDefinition(catClaws, new DualWeaponDefinition(catClaws));
-		
+
 		register(sickle);
 		register(homesSmellYaLater);
 		register(fudgeSickle);
 		register(regiSickle);
 		register(clawSickle);
 		register(candySickle);
-		
+
 		register(deuceClub);
 		register(nightClub);
 		register(pogoClub);
 		register(metalBat);
 		register(spikedClub);
-		
+
 		register(cane);
 		register(ironCane);
 		register(spearCane);
@@ -119,7 +120,7 @@ public class MinestuckModelManager
 		register(dragonCane);
 		register(pogoCane);
 		register(upStick);
-		
+
 		register(woodenSpoon);
 		register(silverSpoon);
 		ModelLoader.registerItemVariants(crockerSpork, new ResourceLocation("minestuck:crocker_fork"), new ResourceLocation("minestuck:crocker_spoon"));
@@ -127,25 +128,26 @@ public class MinestuckModelManager
 		register(skaiaFork);
 		register(fork);
 		register(spork);
-		
+		register(goldenSpork);
+
 		register(emeraldSword);
 		register(emeraldAxe);
 		register(emeraldPickaxe);
 		register(emeraldShovel);
 		register(emeraldHoe);
-		
+
 		register(prismarineHelmet);
 		register(prismarineChestplate);
 		register(prismarineLeggings);
 		register(prismarineBoots);
-		
+
 		register(bugNet);
 		register(itemFrog);
 		register(goldenGrasshopper);
-		
+
 		for(int type = 0; type <= EntityFrog.maxTypes(); type++)
 			register(itemFrog, type, "frog_"+type);
-		
+
 		register(rawCruxite);
 		register(rawUranium);
 		register(energyCore);
@@ -199,7 +201,7 @@ public class MinestuckModelManager
 		register(candy, GristType.REGISTRY.getID(GristType.Tar) + 1, "tar_black_licorice");
 		register(candy, GristType.REGISTRY.getID(GristType.Uranium) + 1, "uranium_gummy_bear");
 		register(candy, GristType.REGISTRY.getID(GristType.Zillium) + 1, "zillium_skittles");
-		
+
 		for(int i = 0; i < ItemMinestuckBeverage.NAMES.length; i++)
 			register(beverage, i, ItemMinestuckBeverage.NAMES[i]);
 		register(bugOnAStick);
@@ -209,9 +211,11 @@ public class MinestuckModelManager
 		register(jarOfBugs);
 		register(onion);
 		register(salad);
+		register(desertFruit);
 		register(irradiatedSteak);
 		register(rockCookie);
-		
+		register(surpriseEmbryo);
+
 		register(threshDvd);
 		register(crewPoster);
 		register(sbahjPoster);
@@ -219,6 +223,8 @@ public class MinestuckModelManager
 		register(shopPoster, 0, "shop_poster_1");
 		register(carvingTool);
 		register(crumplyHat);
+		register(frogStatueReplica);
+		register(stoneEyeballs);
 		register(stoneSlab);
 		register(recordEmissaryOfDance);
 		register(recordDanceStab);
@@ -226,11 +232,11 @@ public class MinestuckModelManager
 		register(glowystoneDust);
 		register(fakeArms);
 		register(captcharoidCamera);
-		
+
 		for(EnumShopPoster type : EnumShopPoster.values())
 			register(shopPoster, type.ordinal(), "shop_poster"+type.ordinal());
 	}
-	
+
 	private static void blockModels()
 	{
 		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())
@@ -274,44 +280,46 @@ public class MinestuckModelManager
 		register(blender);
 		register(cruxtruder);
 		register(cruxtruderLid);
+		register(petrifiedGrass);
 		register(petrifiedPoppy);
+		register(petrifiedLog);
+		register(bloomingCactus);
+		register(desertBush);
 		register(glowingMushroom);
 		register(glowingLog);
 		register(glowingPlanks);
+		register(frostPlanks);
 		for(BlockMinestuckStone.BlockType type : BlockMinestuckStone.BlockType.values())
 			register(stone, type.getMetadata(), type.getName());
 		register(coarseStoneStairs);
 		register(shadeBrickStairs);
 		register(frostBrickStairs);
 		register(castIronStairs);
-		
 
-		register(frogStatueReplica);
-		
 		for(BlockMinestuckLog.BlockType type : BlockMinestuckLog.BlockType.values())
 			register(log, type.ordinal(), type.getName()+"_log");
-		
+
 		for(BlockMinestuckPlanks.BlockType type : BlockMinestuckPlanks.BlockType.values())
 			register(planks, type.ordinal(), type.getName()+"_planks");
-		
+
 		for(BlockMinestuckLeaves1.BlockType type : BlockMinestuckLeaves1.BlockType.values())
 			register(leaves1, type.ordinal(), type.getName()+"_leaves");
-		
+
 		for(BlockAspectSapling.BlockType type : BlockAspectSapling.BlockType.values())
 			register(aspectSapling, type.ordinal(), type.getName()+"_sapling");
-		
+
 		register(rainbowSapling);
-		
+
 		for(BlockAspectLog.BlockType type : BlockAspectLog.BlockType.values())
 			register(aspectLog1, type.ordinal(), type.getName()+"_log");
 		for(BlockAspectLog2.BlockType type : BlockAspectLog2.BlockType.values())
 			register(aspectLog2, type.ordinal(), type.getName()+"_log");
 		for(BlockAspectLog3.BlockType type : BlockAspectLog3.BlockType.values())
 			register(aspectLog3, type.ordinal(), type.getName()+"_log");
-		
+
 		for(BlockVanityLaptopOff.BlockType type : BlockVanityLaptopOff.BlockType.values())
 			register(blockLaptopOff, type.ordinal(), type.getName()+"_computer");
-		
+
 		register(woodenCactus);
 		register(sugarCube);
 		register(appleCake);
@@ -320,7 +328,7 @@ public class MinestuckModelManager
 		register(redCake);
 		register(hotCake);
 		register(reverseCake);
-		
+
 		register(floweryMossBrick);
 		register(floweryMossStone);
 		register(treatedPlanks);
@@ -330,11 +338,11 @@ public class MinestuckModelManager
 		register(endPlanks);
 		register(endSapling);
 		register(endGrass);
-		
+
 		register(vein);
 		register(veinCorner);
 		register(veinCornerInverted);
-		
+
 		register(primedTnt);
 		register(unstableTnt);
 		register(instantTnt);
@@ -342,7 +350,7 @@ public class MinestuckModelManager
 		register(stoneExplosiveButton);
 
 		register(uraniumCooker);
-		
+
 		ModelLoader.setCustomStateMapper(blockOil, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
 		ModelLoader.setCustomStateMapper(blockBlood, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
 		ModelLoader.setCustomStateMapper(blockBrainJuice, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
@@ -362,17 +370,17 @@ public class MinestuckModelManager
 		ModelLoader.setCustomStateMapper(gate, (Block block) -> Collections.emptyMap());
 		ModelLoader.setCustomStateMapper(rabbitSpawner, (Block block) -> Collections.emptyMap());
 	}
-	
+
 	private static void register(Item item)
 	{
 		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
 	}
-	
+
 	private static void register(Item item, int meta, String modelResource)
 	{
 		ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation("minestuck:"+modelResource, "inventory"));
 	}
-	
+
 	private static void register(Block block)
 	{
 		Item item = Item.getItemFromBlock(block);
@@ -380,7 +388,7 @@ public class MinestuckModelManager
 			throw new IllegalArgumentException("That block doesn't have an item, and this method is only intended for blocks with a connected itemblock.");
 		register(item);
 	}
-	
+
 	private static void register(Block block, int meta, String modelResource)
 	{
 		Item item = Item.getItemFromBlock(block);
@@ -388,8 +396,8 @@ public class MinestuckModelManager
 			throw new IllegalArgumentException("That block doesn't have an item, and this method is only intended for blocks with a connected itemblock.");
 		register(item, meta, modelResource);
 	}
-	
-	
+
+
 	private static class CrockerSporkDefinition implements ItemMeshDefinition
 	{
 		@Override
@@ -398,8 +406,8 @@ public class MinestuckModelManager
 			return new ModelResourceLocation("minestuck:" + (crockerSpork.isSpoon(stack) ? "crocker_spoon" : "crocker_fork"), "inventory");
 		}
 	}
-	
-	
+
+
 	private static class DualWeaponDefinition implements ItemMeshDefinition
 	{
 		private Item item;
@@ -410,14 +418,14 @@ public class MinestuckModelManager
 		public ModelResourceLocation getModelLocation(ItemStack stack)
 		{
 			if(((ItemDualWeapon)this.item).IsDrawn(stack)){
-				
+
 				return new ModelResourceLocation("minestuck:" + ((ItemDualWeapon)this.item).Prefex + "_drawn","inventory");
 			}else
 				return new ModelResourceLocation("minestuck:" + ((ItemDualWeapon)this.item).Prefex + "_sheathed","inventory");
-			
+
 		}
 	}
-	
+
 	private static class CruxiteDowelDefinition implements ItemMeshDefinition
 	{
 		@Override
@@ -427,7 +435,7 @@ public class MinestuckModelManager
 			return new ModelResourceLocation("minestuck:"+(stack.hasTagCompound() && stack.getTagCompound().hasKey("contentID") ? "dowel_carved" : "dowel_uncarved")+suffix, "inventory");
 		}
 	}
-	
+
 	private static class ColoredItemDefinition implements ItemMeshDefinition
 	{
 		private String name;
@@ -443,7 +451,7 @@ public class MinestuckModelManager
 			else return new ModelResourceLocation(name + "_blank", "inventory");
 		}
 	}
-	
+
 	private static class CaptchaCardDefinition implements ItemMeshDefinition
 	{
 		@Override
@@ -462,7 +470,7 @@ public class MinestuckModelManager
 			return new ModelResourceLocation("minestuck:" + str, "inventory");
 		}
 	}
-	
+
 	private static class ShuntDefinition implements ItemMeshDefinition
 	{
 		@Override
@@ -472,12 +480,12 @@ public class MinestuckModelManager
 			String str;
 			if(nbt != null && nbt.hasKey("contentID"))
 				str = "shunt_full";
-			
+
 			else str = "shunt_empty";
 			return new ModelResourceLocation("minestuck:" + str, "inventory");
 		}
 	}
-	
+
 	private static class BoondollarsDefinition implements ItemMeshDefinition
 	{
 		@Override
@@ -498,7 +506,7 @@ public class MinestuckModelManager
 			else if(size < 1000)
 				str = "boondollars5";
 			else str = "boondollars6";
-			
+
 			return new ModelResourceLocation("minestuck:" + str, "inventory");
 		}
 	}
