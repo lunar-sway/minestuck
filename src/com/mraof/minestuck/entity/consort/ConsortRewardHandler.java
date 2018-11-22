@@ -88,6 +88,7 @@ public class ConsortRewardHandler
 		ConsortRewardHandler.registerPrice(new ItemStack(sugarCube), 200, 240);
 		ConsortRewardHandler.registerPrice(new ItemStack(bugNet), 500, 600);
 		
+		ConsortRewardHandler.registerPrice(new ItemStack(WATERLILY), 24, 31);
 		ConsortRewardHandler.registerPrice(new ItemStack(POTATO), 12, 15);
 		ConsortRewardHandler.registerPrice(new ItemStack(MUSHROOM_STEW), 95, 130);
 		ConsortRewardHandler.registerPrice(new ItemStack(CARROT), 15, 18);
