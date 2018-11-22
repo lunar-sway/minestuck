@@ -10,7 +10,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class LayerFrogBelly implements LayerRenderer<EntityFrog>
 {
-	private final ModelBase frogModel = new ModelFrog();
+	private final ModelFrog frogModel = new ModelFrog();
 	private final RenderFrog frogRender;
 	private float colorMin = 0;
 	private int type = 0;
@@ -48,9 +48,11 @@ public class LayerFrogBelly implements LayerRenderer<EntityFrog>
 			GlStateManager.color(r, g, b, 1f);
 			
 			this.frogModel.setModelAttributes(this.frogRender.getMainModel());
-	        this.frogModel.render(frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-			GlStateManager.disableBlend();
             this.frogModel.setLivingAnimations(frog, limbSwing, limbSwingAmount, partialTicks);
+            this.frogModel.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, 1f, frog);
+	        this.frogModel.render(frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+	        
+			GlStateManager.disableBlend();
         }
 	}
 

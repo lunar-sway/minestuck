@@ -1,12 +1,10 @@
 package com.mraof.minestuck.client;
 
 import com.mraof.minestuck.CommonProxy;
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.client.model.ModelBasilisk;
 import com.mraof.minestuck.client.model.ModelBishop;
-import com.mraof.minestuck.client.model.ModelFrog;
 import com.mraof.minestuck.client.model.ModelGiclops;
 import com.mraof.minestuck.client.model.ModelIguana;
 import com.mraof.minestuck.client.model.ModelImp;
@@ -22,6 +20,7 @@ import com.mraof.minestuck.client.renderer.entity.RenderDecoy;
 import com.mraof.minestuck.client.renderer.entity.RenderEntityMinestuck;
 import com.mraof.minestuck.client.renderer.entity.RenderGrist;
 import com.mraof.minestuck.client.renderer.entity.RenderHangingArt;
+import com.mraof.minestuck.client.renderer.entity.RenderHologram;
 import com.mraof.minestuck.client.renderer.entity.RenderMetalBoat;
 import com.mraof.minestuck.client.renderer.entity.RenderPawn;
 import com.mraof.minestuck.client.renderer.entity.RenderShadow;
@@ -44,6 +43,7 @@ import com.mraof.minestuck.entity.consort.EntitySalamander;
 import com.mraof.minestuck.entity.consort.EntityTurtle;
 import com.mraof.minestuck.entity.item.EntityCrewPoster;
 import com.mraof.minestuck.entity.item.EntityGrist;
+import com.mraof.minestuck.entity.item.EntityHologram;
 import com.mraof.minestuck.entity.item.EntityMetalBoat;
 import com.mraof.minestuck.entity.item.EntitySbahjPoster;
 import com.mraof.minestuck.entity.item.EntityShopPoster;
@@ -55,6 +55,7 @@ import com.mraof.minestuck.entity.underling.EntityLich;
 import com.mraof.minestuck.entity.underling.EntityOgre;
 import com.mraof.minestuck.entity.underling.EntityUnderlingPart;
 import com.mraof.minestuck.event.ClientEventHandler;
+import com.mraof.minestuck.item.ItemFrog;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tileentity.TileEntityGate;
 import com.mraof.minestuck.tileentity.TileEntitySkaiaPortal;
@@ -62,8 +63,11 @@ import com.mraof.minestuck.util.ColorCollector;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -91,9 +95,30 @@ public class ClientProxy extends CommonProxy
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySkaiaPortal.class, new RenderSkaiaPortal());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGate.class, new RenderGate());
 //		MinecraftForgeClient.registerItemRenderer(Minestuck.captchaCard, new RenderCard());
+		
 		mc.getItemColors().registerItemColorHandler((stack, tintIndex) -> BlockColorCruxite.handleColorTint(stack.getMetadata() == 0 ? -1 : ColorCollector.getColor(stack.getMetadata() - 1), tintIndex),
 				MinestuckItems.cruxiteDowel, MinestuckItems.cruxiteApple, MinestuckItems.cruxitePotion);
 		mc.getBlockColors().registerBlockColorHandler(new BlockColorCruxite(), MinestuckBlocks.alchemiter[0], MinestuckBlocks.totemlathe[1], MinestuckBlocks.blockCruxiteDowel);
+
+		mc.getItemColors().registerItemColorHandler(new IItemColor()
+        {
+            public int colorMultiplier(ItemStack stack, int tintIndex)
+            {
+            	ItemFrog item = ((ItemFrog)stack.getItem());
+            	int color = -1;
+            	
+            	if((stack.getMetadata() > EntityFrog.maxTypes() || stack.getMetadata() < 1))
+            	{
+	            	switch(tintIndex)
+	            	{
+	            	case 0: color = item.getSkinColor(stack); break;
+	            	case 1: color = item.getEyeColor(stack); break;
+	            	case 2: color = item.getBellyColor(stack); break; 
+	            	}
+            	}
+                return color;
+            }
+        }, MinestuckItems.itemFrog);
 	}
 	
 	@Override
@@ -103,6 +128,7 @@ public class ClientProxy extends CommonProxy
 		
 		super.preInit();
 		RenderingRegistry.registerEntityRenderingHandler(EntityFrog.class, manager -> new RenderFrog(manager, new ModelBiped(), 0.5F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityHologram.class, manager -> new RenderHologram(manager));
 		RenderingRegistry.registerEntityRenderingHandler(EntityNakagator.class, RenderEntityMinestuck.getFactory(new ModelNakagator(), 0.5F));
 		RenderingRegistry.registerEntityRenderingHandler(EntitySalamander.class, RenderEntityMinestuck.getFactory(new ModelSalamander(), 0.5F));
 		RenderingRegistry.registerEntityRenderingHandler(EntityIguana.class, RenderEntityMinestuck.getFactory(new ModelIguana(), 0.5F));

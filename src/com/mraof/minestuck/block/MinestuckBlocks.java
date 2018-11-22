@@ -37,7 +37,7 @@ public class MinestuckBlocks
 	public static Block uraniumBlock = new Block(Material.ROCK, MapColor.GREEN).setLightLevel(0.5F).setUnlocalizedName("uraniumBlock").setHardness(3.0F).setCreativeTab(TabMinestuck.instance);
 	public static Block genericObject = new BlockCustom(Material.GOURD, MapColor.LIME, SoundType.WOOD).setUnlocalizedName("genericObject").setHardness(1.0F).setCreativeTab(TabMinestuck.instance);
 	
-	public static Block blender = new BlockDecor("blender",Material.IRON).setCreativeTab(TabMinestuck.instance);
+	public static Block blender = new BlockDecor("blender",SoundType.METAL).setCreativeTab(TabMinestuck.instance);
 	public static Block chessboard = new BlockDecor("chessboard").setCreativeTab(TabMinestuck.instance);
 	public static Block frogStatueReplica = new BlockDecor("frogStatueReplica").setCreativeTab(TabMinestuck.instance);
 	
@@ -61,7 +61,11 @@ public class MinestuckBlocks
 	public static Block blockGoldSeeds = new BlockGoldSeeds();
 	public static Block returnNode = new BlockReturnNode();
 	public static Block gate = new BlockGate();
-	public static Block petrifiedPoppy = new BlockPetrifiedPoppy();
+	public static Block petrifiedLog = new BlockPetrifiedLog();
+	public static Block petrifiedPoppy = new BlockPetrifiedFlora("petrifiedPoppy");
+	public static Block petrifiedGrass = new BlockPetrifiedFlora("petrifiedGrass");
+	public static Block bloomingCactus = new BlockDesertFlora("bloomingCactus"); 
+	public static Block desertBush = new BlockDesertBush("desertBush");
 	public static Block glowingMushroom = new BlockGlowingMushroom();
 	public static Block glowingLog = new BlockGlowingLog();
 	public static Block glowingPlanks = new BlockCustom(Material.WOOD, MapColor.LIGHT_BLUE, SoundType.WOOD).setFireInfo(5, 20).setUnlocalizedName("glowingPlanks").setLightLevel(0.5F).setHardness(2.0F).setResistance(5.0F).setCreativeTab(TabMinestuck.instance);
@@ -73,6 +77,7 @@ public class MinestuckBlocks
 	public static Block log = new BlockMinestuckLog();
 	public static Block leaves1 = new BlockMinestuckLeaves1().setCreativeTab(null);
 	public static Block planks = new BlockMinestuckPlanks();
+	public static Block frostPlanks = new BlockFrostPlanks();
 	public static Block aspectSapling = new BlockAspectSapling().setCreativeTab(null);
 	public static Block rainbowSapling = new BlockRainbowSapling();
 	public static Block aspectLog1 = new BlockAspectLog().setCreativeTab(null);
@@ -87,8 +92,9 @@ public class MinestuckBlocks
 	public static Block redCake = new BlockSimpleCake(2, 0.1F, (EntityPlayer player) -> player.heal(1)).setUnlocalizedName("redCake");
 	public static Block hotCake = new BlockSimpleCake(2, 0.1F, (EntityPlayer player) -> player.setFire(4)).setUnlocalizedName("hotCake");
 	public static Block reverseCake = new BlockSimpleCake(2, 0.1F, null).setUnlocalizedName("cake");
-	public static Block vein = new BlockVein("vein").setCreativeTab(null);
-	public static Block veinCorner = new BlockVein("vein_corner").setCreativeTab(null);
+	public static Block vein = new BlockVein("vein");
+	public static Block veinCorner = new BlockVeinCorner("veinCorner");
+	public static Block veinCornerInverted = new BlockVeinCorner("veinCornerInverted");
 	
 	public static Block floweryMossStone = new BlockCustom(Material.ROCK, MapColor.GRAY, SoundType.STONE).setUnlocalizedName("floweryMossStone").setHardness(1.0F).setCreativeTab(TabMinestuck.instance);
 	public static Block floweryMossBrick = new BlockCustom(Material.ROCK, MapColor.GRAY, SoundType.STONE).setUnlocalizedName("floweryMossBrick").setHardness(1.0F).setCreativeTab(TabMinestuck.instance);
@@ -190,6 +196,7 @@ public class MinestuckBlocks
 		registry.register(log.setRegistryName("log"));
 		registry.register(leaves1.setRegistryName("leaves"));
 		registry.register(planks.setRegistryName("planks"));
+		registry.register(frostPlanks.setRegistryName("frost_planks"));
 		registry.register(aspectSapling.setRegistryName("aspect_sapling"));
 		registry.register(rainbowSapling.setRegistryName("rainbow_sapling"));
 		registry.register(aspectLog1.setRegistryName("aspect_log_1"));
@@ -198,7 +205,11 @@ public class MinestuckBlocks
 		registry.register(glowingLog.setRegistryName("glowing_log"));
 		registry.register(glowingPlanks.setRegistryName("glowing_planks"));
 		registry.register(glowingMushroom.setRegistryName("glowing_mushroom"));
+		registry.register(petrifiedLog.setRegistryName("petrified_log"));
 		registry.register(petrifiedPoppy.setRegistryName("petrified_poppy"));
+		registry.register(petrifiedGrass.setRegistryName("petrified_grass"));
+		registry.register(bloomingCactus.setRegistryName("blooming_cactus"));
+		registry.register(desertBush.setRegistryName("desert_bush"));
 		registry.register(woodenCactus.setRegistryName("wooden_cactus"));
 		
 		registry.register(oreCruxite.setRegistryName("ore_cruxite"));
@@ -279,6 +290,7 @@ public class MinestuckBlocks
 		
 		registry.register(vein.setRegistryName("vein"));
 		registry.register(veinCorner.setRegistryName("vein_corner"));
+		registry.register(veinCornerInverted.setRegistryName("vein_corner_inverted"));
 		
 		registry.register(primedTnt.setRegistryName("primed_tnt"));
 		registry.register(unstableTnt.setRegistryName("unstable_tnt"));
@@ -312,6 +324,7 @@ public class MinestuckBlocks
 		goldOreSandstone.setHarvestLevel("pickaxe", Blocks.GOLD_ORE.getHarvestLevel(Blocks.GOLD_ORE.getDefaultState()));
 		goldOreSandstoneRed.setHarvestLevel("pickaxe", Blocks.GOLD_ORE.getHarvestLevel(Blocks.GOLD_ORE.getDefaultState()));
 		redstoneOreEndStone.setHarvestLevel("pickaxe", Blocks.REDSTONE_ORE.getHarvestLevel(Blocks.REDSTONE_ORE.getDefaultState()));
+		petrifiedLog.setHarvestLevel("pickaxe", 0);
 		
 	}
 	

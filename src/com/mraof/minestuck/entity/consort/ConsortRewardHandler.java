@@ -35,6 +35,7 @@ public class ConsortRewardHandler
 		ConsortRewardHandler.registerPrice(new ItemStack(grasshopper), 90, 110);
 		ConsortRewardHandler.registerPrice(new ItemStack(salad), 10, 14);
 		ConsortRewardHandler.registerPrice(new ItemStack(chocolateBeetle), 30, 35);
+		ConsortRewardHandler.registerPrice(new ItemStack(desertFruit), 2, 6);
 		ConsortRewardHandler.registerPrice(new ItemStack(glowingMushroom), 10, 15);
 		ConsortRewardHandler.registerPrice(new ItemStack(coldCake), 400, 400);
 		ConsortRewardHandler.registerPrice(new ItemStack(blueCake), 400, 400);
@@ -61,6 +62,7 @@ public class ConsortRewardHandler
 		ConsortRewardHandler.registerPrice(new ItemStack(sbahjPoster), 350, 400);
 		ConsortRewardHandler.registerPrice(new ItemStack(recordEmissaryOfDance), 1000, 1000);
 		ConsortRewardHandler.registerPrice(new ItemStack(recordDanceStab), 1000, 1000);
+		ConsortRewardHandler.registerPrice(new ItemStack(recordRetroBattle), 1000, 1000);
 		ConsortRewardHandler.registerPrice(new ItemStack(crumplyHat), 80, 100);
 		ConsortRewardHandler.registerPrice(new ItemStack(pogoClub), 900, 1200);
 		ConsortRewardHandler.registerPrice(new ItemStack(metalBat), 400, 500);
@@ -68,6 +70,7 @@ public class ConsortRewardHandler
 		ConsortRewardHandler.registerPrice(new ItemStack(copseCrusher), 1000, 1500);
 		ConsortRewardHandler.registerPrice(new ItemStack(katana), 400, 500);
 		ConsortRewardHandler.registerPrice(new ItemStack(cactusCutlass), 500, 700);
+		ConsortRewardHandler.registerPrice(new ItemStack(steakSword), 350, 650);
 		ConsortRewardHandler.registerPrice(new ItemStack(glowystoneDust), 20, 40);
 		ConsortRewardHandler.registerPrice(new ItemStack(ironCane), 300, 400);
 		ConsortRewardHandler.registerPrice(new ItemStack(glowingLog), 20, 32);
@@ -85,7 +88,9 @@ public class ConsortRewardHandler
 		ConsortRewardHandler.registerPrice(new ItemStack(log, 1, 2), 20, 32);
 		ConsortRewardHandler.registerPrice(new ItemStack(woodenCactus), 50, 60);
 		ConsortRewardHandler.registerPrice(new ItemStack(sugarCube), 200, 240);
+		ConsortRewardHandler.registerPrice(new ItemStack(bugNet), 500, 600);
 		
+		ConsortRewardHandler.registerPrice(new ItemStack(WATERLILY), 24, 31);
 		ConsortRewardHandler.registerPrice(new ItemStack(POTATO), 12, 15);
 		ConsortRewardHandler.registerPrice(new ItemStack(MUSHROOM_STEW), 95, 130);
 		ConsortRewardHandler.registerPrice(new ItemStack(CARROT), 15, 18);

@@ -8,6 +8,7 @@ import com.mraof.minestuck.item.TabMinestuck;
 
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.BlockLog;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
@@ -38,6 +39,8 @@ public class BlockVein extends BlockDirectional
 		setCreativeTab(TabMinestuck.instance);
 		setUnlocalizedName(unlocalizedName);
 		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+		setHardness(0.45F);
+		setSoundType(SoundType.SLIME);
 	}
 
 	public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, ItemStack stack)

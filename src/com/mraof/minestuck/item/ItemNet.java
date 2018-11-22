@@ -40,15 +40,26 @@ public class ItemNet extends Item
 			EntityPlayer playerIn = (EntityPlayer) entityLiving;
 			if(!playerIn.isCreative() && worldIn.getBlockState(pos).getBlock() == Blocks.TALLGRASS)
 			{
-				int rand = playerIn.getRNG().nextInt(5);
-				if(!worldIn.isRemote && rand == 0)
+				Random rand = playerIn.getRNG();
+				
+				if(!worldIn.isRemote)
 				{
-					
-					EntityItem item = new EntityItem(worldIn, pos.getX(), pos.getY() + 0.5, pos.getZ(), new ItemStack(MinestuckItems.grasshopper, 1));
-					worldIn.spawnEntity(item);
-					playerIn.getHeldItemMainhand().damageItem(1, playerIn);
-					
-					return true;
+					if(rand.nextInt(555) == 0)
+					{
+						EntityItem item = new EntityItem(worldIn, pos.getX(), pos.getY() + 0.5, pos.getZ(), new ItemStack(MinestuckItems.goldenGrasshopper, 1));
+						worldIn.spawnEntity(item);
+						playerIn.getHeldItemMainhand().damageItem(1, playerIn);
+						
+						return true;
+					}
+					else if(rand.nextInt(5) == 0)
+					{
+						EntityItem item = new EntityItem(worldIn, pos.getX(), pos.getY() + 0.5, pos.getZ(), new ItemStack(MinestuckItems.grasshopper, 1));
+						worldIn.spawnEntity(item);
+						playerIn.getHeldItemMainhand().damageItem(1, playerIn);
+						
+						return true;
+					}
 				}
 			}
 		}

@@ -2,33 +2,25 @@ package com.mraof.minestuck.entity;
 
 import java.util.Random;
 
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.item.ItemFrog;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.MinestuckSoundHandler;
 
+import net.minecraft.client.audio.Sound;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAIMate;
-import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
 import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAITempt;
 import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.EntityJumpHelper;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -36,6 +28,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.datafix.DataFixer;
 import net.minecraft.util.math.MathHelper;
@@ -50,8 +43,10 @@ public class EntityFrog extends EntityMinestuck
 	private int jumpTicks;
     private int jumpDuration;
     private boolean wasOnGround;
+    private boolean canDespawn = true;
     private int currentMoveTypeDuration;
-    private int carrotTicks;
+    private final int baseHealth = 5;
+    private final double baseSpeed = 0.30000001192092896D;
     private static final DataParameter<Float> FROG_SIZE = EntityDataManager.<Float>createKey(EntityFrog.class, DataSerializers.FLOAT);
     private static final DataParameter<Integer> SKIN_COLOR = EntityDataManager.<Integer>createKey(EntityFrog.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> EYE_COLOR = EntityDataManager.<Integer>createKey(EntityFrog.class, DataSerializers.VARINT);
@@ -60,13 +55,24 @@ public class EntityFrog extends EntityMinestuck
     private static final DataParameter<Integer> BELLY_TYPE = EntityDataManager.<Integer>createKey(EntityFrog.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> TYPE = EntityDataManager.<Integer>createKey(EntityFrog.class, DataSerializers.VARINT);
     
-	
-	public EntityFrog(World world)
+    public EntityFrog(World world, int type)
 	{
 		super(world);
 		this.jumpHelper = new EntityFrog.FrogJumpHelper(this);
         this.moveHelper = new EntityFrog.FrogMoveHelper(this);
         this.setMovementSpeed(0.0D);
+        
+
+    	int newType;
+        
+        if(type == 99) newType = getRandomFrogType();
+        else newType = type;
+        this.dataManager.register(TYPE, newType);
+	}
+    
+	public EntityFrog(World world)
+	{
+		this(world, 99);
 	}
 	
 	protected void entityInit()
@@ -76,29 +82,37 @@ public class EntityFrog extends EntityMinestuck
         this.dataManager.register(SKIN_COLOR, random(16777215));
         this.dataManager.register(EYE_COLOR, random(16777215));
         this.dataManager.register(BELLY_COLOR, random(16777215));
-        this.dataManager.register(EYE_TYPE, random(2));
-        this.dataManager.register(BELLY_TYPE, random(3));
-        this.dataManager.register(TYPE, 0);
+        this.dataManager.register(EYE_TYPE, random(maxEyes()));
+        this.dataManager.register(BELLY_TYPE, random(maxBelly()));
         
+        
+        this.canDespawn = true;
     }
 	
 	@Override
 	protected boolean processInteract(EntityPlayer player, EnumHand hand) {
 		ItemStack itemstack = player.getHeldItem(hand);
 		
-		System.out.println(getEntityData());
-		
-		if(itemstack.getItem() == MinestuckItems.bugNet && player.getDistanceSq(this) < 9.0D && !this.world.isRemote)
+		if(player.getDistanceSq(this) < 9.0D && !this.world.isRemote)
 		{
-			itemstack.damageItem(1, player);
-			ItemStack frogItem = new ItemStack(MinestuckItems.itemFrog,1);
-			
-			frogItem.setTagCompound(getFrogData());
-			
-			System.out.println(getEntityData());
-			
-			entityDropItem(frogItem, 0);
-			this.setDead();
+			if(itemstack.getItem() == MinestuckItems.bugNet)
+			{
+				itemstack.damageItem(1, player);
+				ItemStack frogItem = new ItemStack(MinestuckItems.itemFrog,1,this.dataManager.get(TYPE));
+				
+				frogItem.setTagCompound(getFrogData());
+				
+				entityDropItem(frogItem, 0);
+				this.setDead();
+			}
+			else if(itemstack.getItem() == MinestuckItems.goldenGrasshopper && this.getType() != 5)
+			{
+				if(!player.isCreative())itemstack.shrink(1);
+				
+				this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX, this.posY + (double)(this.height / 2.0F), this.posZ, 0.0D, 0.0D, 0.0D);
+				this.playSound(SoundEvents.BLOCK_ANVIL_HIT, this.getSoundVolume(), ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) * 0.8F);
+				this.setType(5);
+			}
 		}
 		return super.processInteract(player, hand);
 	}
@@ -111,7 +125,6 @@ public class EntityFrog extends EntityMinestuck
         return entityitem;
     }
 	
-	//TODO
 	protected NBTTagCompound getFrogData()
 	{
 		NBTTagCompound compound = new NBTTagCompound();
@@ -132,12 +145,12 @@ public class EntityFrog extends EntityMinestuck
 		return 6;
 	}
 	
-	public int maxEyes()
+	public static int maxEyes()
 	{
 		return 2;
 	}
 	
-	public int maxBelly()
+	public static int maxBelly()
 	{
 		return 3;
 	}
@@ -148,37 +161,18 @@ public class EntityFrog extends EntityMinestuck
 		return "textures/mobs/frog/base.png";
 	}
 	
-	@Override
-	protected float getMaximumHealth() 
-	{
-		return 5;
-	}
-	
 	//Entity AI
 	@Override
 	protected void initEntityAI()
 	{
-		/*tasks.addTask(0, new EntityAISwimming(this));
-		tasks.addTask(1, new EntityAIPanic(this, 1.0D));
-		tasks.addTask(4, new EntityAIMoveTowardsRestriction(this, 0.6F));
-		tasks.addTask(5, new EntityAIWander(this, 0.6D));
-		tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
-		tasks.addTask(7, new EntityAILookIdle(this));
-		*/
 		
 		this.tasks.addTask(1, new EntityAISwimming(this));
         this.tasks.addTask(1, new EntityFrog.AIPanic(this, 2.2D));
-        //this.tasks.addTask(2, new EntityAIMate(this, 0.8D));
         this.tasks.addTask(3, new EntityAITempt(this, 1.0D, MinestuckItems.coneOfFlies, false));
         this.tasks.addTask(3, new EntityAITempt(this, 1.0D, MinestuckItems.bugOnAStick, false));
         this.tasks.addTask(3, new EntityAITempt(this, 1.0D, MinestuckItems.grasshopper, false));
         this.tasks.addTask(3, new EntityAITempt(this, 1.0D, MinestuckItems.jarOfBugs, false));
-        //this.tasks.addTask(3, new EntityAITempt(this, 1.0D, MinestuckItems.chocolateBeetle, false)); I honestly don't think that frogs are to fond of chocolate :p
-        //this.tasks.addTask(4, new EntityFrog.AIAvoidEntity(this, EntityPlayer.class, 8.0F, 2.2D, 2.2D));
-        //this.tasks.addTask(4, new EntityFrog.AIAvoidEntity(this, EntityWolf.class, 10.0F, 2.2D, 2.2D));
-        //this.tasks.addTask(4, new EntityFrog.AIAvoidEntity(this, EntityMob.class, 4.0F, 2.2D, 2.2D));
-        //this.tasks.addTask(5, new EntityFrog.AIRaidFarm(this));
-        this.tasks.addTask(6, new EntityAIWanderAvoidWater(this, 0.6D));
+        this.tasks.addTask(6, new EntityAIWander(this, 0.6D));
         this.tasks.addTask(11, new EntityAIWatchClosest(this, EntityPlayer.class, 10.0F));
 		
 		
@@ -276,9 +270,8 @@ public class EntityFrog extends EntityMinestuck
     {
         if (id == 1)
         {
-            //this.createRunningParticles();
-            //this.jumpDuration = 10;
-            //this.jumpTicks = 0;
+            this.jumpDuration = 10;
+            this.jumpTicks = 0;
         }
         else
         {
@@ -305,7 +298,7 @@ public class EntityFrog extends EntityMinestuck
 
         if (jumping)
         {
-            //this.playSound(this.getJumpSound(), this.getSoundVolume(), ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) * 0.8F);
+            this.playSound(this.getJumpSound(), this.getSoundVolume(), ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) * 0.8F);
         }
     }
 
@@ -321,16 +314,6 @@ public class EntityFrog extends EntityMinestuck
         if (this.currentMoveTypeDuration > 0)
         {
             --this.currentMoveTypeDuration;
-        }
-
-        if (this.carrotTicks > 0)
-        {
-            this.carrotTicks -= this.rand.nextInt(3);
-
-            if (this.carrotTicks < 0)
-            {
-                this.carrotTicks = 0;
-            }
         }
 
         if (this.onGround)
@@ -429,6 +412,8 @@ public class EntityFrog extends EntityMinestuck
         EntityLiving.registerFixesMob(fixer, EntityFrog.class);
     }
 	
+    
+    
     //Frog Sounds
     
     protected SoundEvent getAmbientSound()
@@ -436,24 +421,29 @@ public class EntityFrog extends EntityMinestuck
         return MinestuckSoundHandler.soundFrogAmbient;
     }
     
+    protected SoundEvent getJumpSound()
+    {
+    	return SoundEvents.ENTITY_RABBIT_JUMP;
+    }
     protected float getSoundPitch()
     {
         return (this.rand.nextFloat() - this.rand.nextFloat()) / (this.getFrogSize()+0.4f) * 0.2F + 1.0F;
     }
     
     //NBT
-    //TODO
 	public void writeEntityToNBT(NBTTagCompound compound)
     {
         super.writeEntityToNBT(compound);
         compound.setInteger("Type", this.getType());
-        compound.setFloat("Size", this.getFrogSize()+0.4f);
+        if(getType() != 6) compound.setFloat("Size", this.getFrogSize()+0.4f);
+        else compound.setFloat("Size", 0.6f);
         compound.setInteger("skinColor", this.getSkinColor());
         compound.setInteger("eyeColor", this.getEyeColor());
         compound.setInteger("bellyColor", this.getBellyColor());
         compound.setInteger("eyeType", this.getEyeType());
         compound.setInteger("bellyType", this.getBellyType());
-        //compound.setBoolean("wasOnGround", this.wasOnGround);
+        compound.setBoolean("wasOnGround", this.wasOnGround);
+        compound.setBoolean("canDespawn", canDespawn);
     }
 
     public void readEntityFromNBT(NBTTagCompound compound)
@@ -461,9 +451,9 @@ public class EntityFrog extends EntityMinestuck
         super.readEntityFromNBT(compound);
         
         if(compound.hasKey("Type")) setType(compound.getInteger("Type"));
-        else setType(0);
+        else setType(getRandomFrogType());
         
-        if(compound.hasKey("Size"))
+        if(compound.hasKey("Size") && getType() != 6)
         {
 	        float i = compound.getFloat("Size");
 	        if (i <= 0.2f) i = 0.2f;
@@ -517,7 +507,9 @@ public class EntityFrog extends EntityMinestuck
 		else this.setBellyType(random(3));
         
         
-        //this.wasOnGround = compound.getBoolean("wasOnGround");
+        this.wasOnGround = compound.getBoolean("wasOnGround");
+        if(compound.hasKey("canDespawn"))this.canDespawn = compound.getBoolean("canDespawn");
+        else this.canDespawn = true;
     }
 	
 	public void notifyDataManagerChange(DataParameter<?> key)
@@ -593,11 +585,12 @@ public class EntityFrog extends EntityMinestuck
 
 	protected void setFrogSize(float size, boolean p_70799_2_)
     {
-        this.dataManager.set(FROG_SIZE, Float.valueOf(size));
+        if(this.dataManager.get(TYPE) == 6) this.dataManager.set(FROG_SIZE, Float.valueOf(0.6f));
+        else this.dataManager.set(FROG_SIZE, Float.valueOf(size));
         this.setSize(0.51000005F * (float)size, 0.51000005F * (float)size);
         this.setPosition(this.posX, this.posY, this.posZ);
-        //this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue((double)(size * size));
-        //this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue((double)(0.2F + 0.1F * (float)size));
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue((double)(baseHealth * size));
+        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue((double)(baseSpeed * (float)size));
 
         if (p_70799_2_)
         {
@@ -626,7 +619,7 @@ public class EntityFrog extends EntityMinestuck
 	public int random(int max)
 	{
 		Random rand = new Random();
-		return rand.nextInt(max);
+		return rand.nextInt(max+1);
 	}
 	
 	public float randomFloat(int max)
@@ -635,6 +628,32 @@ public class EntityFrog extends EntityMinestuck
 		return (float)(rand.nextInt(max*10))/10;
 	}
 	
+	public int getRandomFrogType(int chance1, int chance2, int chance3)
+	{
+		Random rand = new Random();
+    	int newType;
+    	
+    	if(rand.nextInt(chance1) == 1) 
+    	{
+    		newType = 1;
+    	}
+    	else if(rand.nextInt(chance2) == 1) 
+    	{
+    		newType = 2;
+    	}
+    	else if(rand.nextInt(chance3) == 1) 
+    	{
+    		newType = 6;
+    	}
+    	else newType = 0;
+    	
+    	return newType;
+	}
+	
+	public int getRandomFrogType()
+	{
+		return getRandomFrogType(20, 50, 500);
+	}
 	
 	public class FrogJumpHelper extends EntityJumpHelper
     {
@@ -718,5 +737,17 @@ public class EntityFrog extends EntityMinestuck
                 }
             }
         }
+
+	@Override
+	protected float getMaximumHealth() 
+	{
+		return baseHealth;
+	}
+	
+	@Override
+	protected boolean canDespawn() 
+	{
+		return false;
+	}
 
 }

@@ -1,4 +1,4 @@
-ï»¿advancements.minestuck.root.title=Minestuck
+﻿advancements.minestuck.root.title=Minestuck
 advancements.minestuck.root.description=The Beginning of Something Really Excellent
 advancements.minestuck.setup_connection.title=Connect
 advancements.minestuck.setup_connection.description=Create a connection with someone.
@@ -133,7 +133,8 @@ consort.bugTreasure=Legends say underneath the tower to the north is a Captain L
 consort.towerGone=That tower over there was built by my great grandpa Fjorgenheimer! You can tell by how its about to fall apa- oh it fell apart.
 consort.noTowerTreasure=I feel ripped off. I was born in a land full of magical towers but none of them have treasure!
 
-consort.glassBooks=Our smartest villager read all the books in the library and now knows how to make glass jars! He's a gift from the big frog above!
+consort.glassBoo
+ks=Our smartest villager read all the books in the library and now knows how to make glass jars! He's a gift from the big frog above!
 consort.bookFood=We ate all the books in the nearby college ruins. It turns out thousand-year-old leather doesn't make the best dinner.
 consort.toEat=To eat, or not to eat, that is the question.
 
@@ -149,6 +150,12 @@ consort.ticking=The ticking keeps me up all night. It keeps us all up all night.
 
 consort.frogCreation=We are thankful for all the frogs that They gave to us when the universe was created. They, of course, is the genesis frog. I feel bad for the fool who has to make another!
 consort.frogImitation=Ribbit, ribbit! I'm a frog! I don't care what you say!
+consort.frogVariants1=Most people believe there aren't that many types of frogs. 4740, maybe? Anything beyond that would be proposterous.
+consort.frogVariants2=Here in %s, however, we know that there are 9.444731276889531e+22 types of frogs.
+consort.frogHatred=For whatever reason, residents of Derse HATE frogs! Why would someone hate frogs?
+consort.grasshopperFishing1=My brother found a magic grasshopper while fishing recently!
+consort.grasshopperFishing2=Usually all we find are rings!
+
 consort.lewdBuckets=Some may call our land lewd, but the buckets are just so fun to swim in!
 consort.waterBuckets=The buckets are a great source of water, as long as you pick the ones with water...
 consort.warmBuckets=Did you know that some buckets provide warmth? I tend to curl up next to one from time to time.
@@ -220,10 +227,6 @@ consort.yellowBetter=In our village, we have tales of monsters that are atttract
 
 consort.frozen1=My neighbors were complaining the other night about the snow.
 consort.frozen2=Personally, the cold never really bothered me anyways.
-<<<<<<< HEAD
-consort.frozen2.desc=You hear a faint â€œba-dum tssâ€� in the distance.
-consort.furCoat=Darn! I only need 100 more boondollars for a nice, fur coat! Iâ€™m going to freeze!
-=======
 consort.frozen2.desc=You hear a faint "ba-dum tss" in the distance.
 consort.furCoat=Darn! I only need 100 more boondollars for a nice, fur coat! I'm going to freeze!
 >>>>>>> 0404aa84d62e611aefb3e5519b77dcec9aee5f90
@@ -421,12 +424,13 @@ consort.hungry.finally=Finally!
 consort.hungry.finally.desc=You are given 10 boondollars for the %s.
 consort.hungry.end=Fine. I will just go and find a real food store.
 
+
 consort.breathFoodShop=It's hard to catch our food with the Breeze carrying them away and whatnot!
 consort.bloodFoodShop=Hope you like red meat!
 consort.lifeFoodShop=Rabbit stew! Mmmm!
 consort.doomFoodShop=Lightning-smoked meat really adds to the flavor!
 consort.frogFoodShop=Frog legs are good but eating them is heresy! Buy some of our food instead!
-consort.spaceFoodShop=Ever soaked your grist candies in the liquids the buckets contain? It really enhances the taste!
+consort.bucketsFoodShop=Ever soaked your grist candies in the liquids the buckets contain? It really enhances the taste!
 consort.timeFoodShop=Tick Tock, time's a-wasting! Eat something or leave!
 consort.thymeFoodShop=Take your mind off of the limited time we have left alive with food!
 consort.mindFoodShop=I'm selling recipes I made from a nearby library's cookbook. Buy some!
@@ -436,21 +440,20 @@ consort.voidFoodShop=This place used to be filled with the sounds of crickets un
 consort.rageFoodShop=You're not you when you're hungry. Buy a snickers!
 consort.hopeFoodShop=I HOPE you're hungry!
 consort.hopeFoodShop.desc=You hear a faint ba-dum tss in the distance.
+consort.spaceFoodShop=We would never eat frogs here in the %s! Grasshoppers, though...
 consort.foodShop=You hungry? I bet you are! Why else would you be talking to me?
 consort.fastFood=Welcome to MacCricket's, what would you like?
 consort.groceryStore=Thank you for choosing Stop and Hop, this village's #1 one grocer!
 consort.tastyWelcome=Welcome. I hope you find something tasty among our wares.
 
 consort.breathGeneralShop=The breeze has brought me many fine wares.
-consort.bloodGeneralShop=Our goods are soaked in blood so the %s can reach their full potential!
+consort.bloodGeneralShop=I accept payment in blood. And boondollars. I also take checks.
 consort.lifeGeneralShop=Twenty years selling losers hats and shit really takes the life out of you.
 consort.doomGeneralShop=With my prices, my competitors are doomed!
-consort.spaceGeneralShop=Here's a witty one-liner tying in buckets and general stores!
-<<<<<<< HEAD
-consort.timeGeneralShop=Future me told me that some sucker would buy tons of â€œgoodsâ€� from me... will that sucker be you?
-=======
+consort.spaceGeneralShop=Get your frog merchandise here! Limited time only! ....Just kidding, I'm always here.
+consort.bucketsGeneralShop=Here's a witty one-liner tying in buckets and general stores!
 consort.timeGeneralShop=Future me told me that some sucker would buy tons of "goods" from me... will that sucker be you?
->>>>>>> 0404aa84d62e611aefb3e5519b77dcec9aee5f90
+
 consort.mindGeneralShop=Books have taught us how to sell as much useless crap as possible, want some?
 consort.heartGeneralShop=Don't buy goods here. Cake is our specialty, not general goods. Very low quality.
 consort.lightGeneralShop=You may be blind but I'm sure you can see our prices are fantastic!
@@ -491,6 +494,8 @@ store.item.apple.tooltip=Want something juicy, but not so juicy that it's juice?
 store.item.wheat.tooltip=This is a byproduct from our seed farm, but I can assure you that it's edible.
 store.item.rockCookie.name=Grey-Colored Cookie
 store.item.rockCookie.tooltip=This here is a true wonder-cookie! Totally! And they are even cheaper than regular cookies!
+store.item.desertFruit.name=Quenchy Berry
+store.item.desertFruit.tooltip=This berry helps beat the desert heat!
 store.item.cookie.tooltip=Cookies like these are quite hard to get, since there are very few who know the recipe.
 store.item.potato.tooltip=The staple food of any Irish %1$s, grown in %1$s Ireland.
 store.item.jarOfBugs.tooltip=It's like a bug on a stick but in a jar! What's not to love about it?
@@ -506,6 +511,7 @@ store.item.flint.tooltip=Imported from the Land of Gravel and Arrows! Probably. 
 store.item.diamond.tooltip=This looks kinda useless, but it's too shiny to sell for cheap!
 store.item.emerald.tooltip=This looks kinda useless. It probably is, actually. No one will notice if I sell it for a lot, right?
 store.item.cactaceaeCutlass.tooltip=It's not as quenchy, but if it comes down to it you can always drink the blood of your foes.
+store.item.steakSword.tooltip=A sword? Made of meat? That's like, double cool!
 store.item.copseCrusher.tooltip=Good for crushing trees and your enemies!
 store.item.firePoker.tooltip=Make sure you don't drop this like it's hot. Because it is hot.
 
@@ -699,6 +705,8 @@ item.sord.name=Sord.....
 item.sord.tooltip=A shitty sword. Not much more too it.
 item.cactaceaeCutlass.name=Cactaceae Cutlass
 item.cactaceaeCutlass.tooltip=A spiny sword made of cactus, you might hurt yourself more on the spines then the blade would your enemies
+item.steakSword.name=Steak Sword
+item.steakSword.tooltip=This item has two purposes: a weapon for slicing your foes AND an expensive dinner!
 item.ninjaSword.name=Katana
 item.ninjaSword.tooltip=A powerful Katana, once wielded by the most powerful of Otaku Masters
 item.katana.name=Unbreakable Katana
@@ -770,6 +778,8 @@ item.crockerFork.name=Junior Battlemaster's Bowlbuster Poking Solution 50000
 item.crockerFork.tooltip=Did something change?
 item.skaiaFork.name=Skaia War Fork
 item.skaiaFork.tooltip=The elegance and grace of skaia, and the ability to poke things of a fork!
+item.goldenSpork.name=Golden Spork
+item.goldenSpork.tooltip=A spoon and fork with all the awfulness of gold tools? Sign me up!
 item.dice.name=Dice
 item.dice.tooltip=Dungeons and Dragons anybody?
 item.fluoriteOctet.name=Fluorite Octet
@@ -852,6 +862,7 @@ item.bugOnAStick.name=Bug On a Stick
 item.chocolateBeetle.name=Chocolate Covered Beetle
 item.coneOfFlies.name=Cone Of Flies
 item.grasshopper.name=Grasshopper
+item.desertFruit.name=Desert Fruit
 item.jarOfBugs.name=Jar Of Bugs
 item.onion.name=Onion
 item.onion.tooltip=This "cool" vegetable is actually just an onion.
@@ -877,6 +888,7 @@ item.salad.tooltip=It's literally just salad, Gordon Ramsay would not approve.
 item.carvingTool.name=Carving Tool
 item.crumplyHat.name=Crumply Hat
 tile.frogStatueReplica.name=Frog Statue Replica
+item.stoneEyeballs.name=Stone Eyeballs
 item.stoneSlab.name=Stone Slab
 item.glowystoneDust.name=Glowystone Dust
 item.record.emissary.desc=Catboss - Emissary of Dance
@@ -886,6 +898,9 @@ item.fakeArms.name=Fake Arm
 item.fakeArms.tooltip=Fool your friends with this super-realistic fake arm!
 item.rockCookie.name=Rock Cookie
 item.rockCookie.tooltip=It's as edible as a rock
+item.surpriseEmbryo.name=Kundler Shelled Surprise Embryo
+item.surpriseEmbryo.tooltip=Oh boy! You sure can't wait to find out what's contained inside the Surprise Embryo!
+item.surpriseEmbryo.message=WOW! NO WAY! You found a %s inside your Surprise Embryo!
 item.boondollars.name=Boondollars
 item.boondollars.amount=Amount: %s
 item.shatterBeacon.name=ShatterBeacon
@@ -893,7 +908,16 @@ item.shatterBeacon.name=ShatterBeacon
 item.net.name=Net
 item.net.tooltip=Perfect for catching bugs and frogs!
 
-item.frog.name=Frog
+item.goldenGrasshopper.name=Golden Grasshopper
+
+item.frog.0.name=Frog
+item.frog.1.name=Totally Normal Frog
+item.frog.2.name=Ruby Contraband
+item.frog.3.name=Tiny Genesis Frog
+item.frog.4.name=Frog
+item.frog.5.name=Golden Frog
+item.frog.6.name=Frog
+
 item.frog.random=Random Frog
 item.frog.type0=Genetically Modified Frog
 item.frog.type1=Totally Normal Frog
@@ -907,7 +931,15 @@ item.frog.eyes0=Lighter Eyes
 item.frog.eyes1=Darker Eyes
 item.frog.eyes2=Blank Eyes
 
+item.frog.belly1=Solid-Colored Belly
+item.frog.belly2=Spotted Belly
+item.frog.belly3=Striped Belly
 
+item.frog.size0=Tiny
+item.frog.size1=Small
+item.frog.size2=Normal Sized
+item.frog.size3=Big
+item.frog.size4=Huge
 
 itemGroup.tabMinestuck=Minestuck
 
@@ -919,6 +951,9 @@ key.captchalouge=Captchalouge Held Item
 land.format=Land of %s and %s
 land.forest=Forests
 land.tree=Trees
+land.boreal_forest=Boreal Forests
+land.taiga=Taigas
+land.cold_forest=Cold Forests
 land.frost=Frost
 land.ice=Ice
 land.snow=Snow
@@ -928,9 +963,11 @@ land.fire=Fire
 land.rock=Rock
 land.stone=Stone
 land.ore=Ore
+land.petrification=Petrification
 land.sand=Sand
 land.dune=Dunes
 land.desert=Deserts
+land.lush_deserts=Lush Deserts
 land.sandstone=Sandstone
 land.desertStone=Stony Deserts
 land.shade=Shade
@@ -1158,8 +1195,13 @@ tile.coloredDirt.thought.name=Thought Dirt
 tile.endGrass.name=End Grass
 tile.endPlanks.name=End Planks
 tile.endSapling.name=End Sapling
-tile.goldSeeds.name=Golden seeds
+tile.goldSeeds.name=Golden Seeds
 item.goldSeeds.tooltip=These seeds are made out of 24-karat gold!
+tile.petrifiedPoppy.name=Petrified Poppy
+tile.petrifiedGrass.name=Petrified Grass
+tile.petrifiedLog.name=Petrified Log
+tile.bloomingCactus.name=Blooming Cactus
+tile.desertBush.name=Desert Bush
 tile.glowingMushroom.name=Glowing Mushroom
 tile.glowingLog.name=Glowing Log
 tile.glowingPlanks.name=Glowing Planks
@@ -1170,7 +1212,6 @@ tile.stoneMinestuck.shadeBrick.name=Shade Bricks
 tile.stoneMinestuck.shadeSmooth.name=Smooth Shade Stone
 tile.stoneMinestuck.frostBrick.name=Frostbricks
 tile.stoneMinestuck.frostTile.name=Frost Tiles
-tile.petrifiedPoppy.name=Petrified Poppy
 tile.stoneMinestuck.frostChiseled.name=Chiseled Frost Tiles
 tile.stoneMinestuck.castIron.name=Cast-Iron
 tile.stoneMinestuck.castIronChiseled.name=Chiseled Cast-Iron
@@ -1185,10 +1226,12 @@ tile.floweryMossBrick.name=Flowery Mossy Stone Bricks
 tile.floweryMossStone.name=Flowery Moss Stone
 tile.leavesEnd.name=End Leaves
 tile.leavesMinestuck.rainbow.name=Rainbow Leaves
+tile.leavesMinestuck.frost.name=Frost Leaves
 tile.logEnd.name=End Log
 tile.logMinestuck.vineOak.name=Vine Oak Logs
 tile.logMinestuck.floweryVineOak.name=Flowery Vine Oak Logs
 tile.logMinestuck.frost.name=Frost Logs
+tile.frostPlanks.name=Frost Planks
 tile.logMinestuck.rainbow.name=Rainbow Logs
 tile.planksMinestuck.rainbow.name=Rainbow Planks
 tile.woodenCactus.name=Wooden Cactus
@@ -1205,6 +1248,12 @@ tile.uraniumCooker.name=Cookalyzer
 tile.cruxtruderLid.name=Cruxtruder Lid
 tile.dowelCruxite.name=Cruxite Dowel
 tile.blender.name=Blender
+tile.vein.name=Vein
+tile.veinCorner.name=Vein
+tile.veinCornerInverted.name=Vein
+
+tile.veinCorner.tooltip=Corner
+tile.veinCornerInverted.tooltip=Corner (Inverted Flow)
 
 title.format=%1$s of %2$s
 title.bard=Bard
