@@ -440,7 +440,7 @@ consort.voidFoodShop=This place used to be filled with the sounds of crickets un
 consort.rageFoodShop=You're not you when you're hungry. Buy a snickers!
 consort.hopeFoodShop=I HOPE you're hungry!
 consort.hopeFoodShop.desc=You hear a faint ba-dum tss in the distance.
-consort.frogFoodShop=We would never eat frogs here in the Land of %s! Grasshoppers, though...
+consort.spaceFoodShop=We would never eat frogs here in the %s! Grasshoppers, though...
 consort.foodShop=You hungry? I bet you are! Why else would you be talking to me?
 consort.fastFood=Welcome to MacCricket's, what would you like?
 consort.groceryStore=Thank you for choosing Stop and Hop, this village's #1 one grocer!
@@ -450,7 +450,7 @@ consort.breathGeneralShop=The breeze has brought me many fine wares.
 consort.bloodGeneralShop=I accept payment in blood. And boondollars. I also take checks.
 consort.lifeGeneralShop=Twenty years selling losers hats and shit really takes the life out of you.
 consort.doomGeneralShop=With my prices, my competitors are doomed!
-consort.frogGeneralShop=Get your frog merchandise here! Limited time only! ....Just kidding, I'm always here.
+consort.spaceGeneralShop=Get your frog merchandise here! Limited time only! ....Just kidding, I'm always here.
 consort.bucketsGeneralShop=Here's a witty one-liner tying in buckets and general stores!
 consort.timeGeneralShop=Future me told me that some sucker would buy tons of "goods" from me... will that sucker be you?
 

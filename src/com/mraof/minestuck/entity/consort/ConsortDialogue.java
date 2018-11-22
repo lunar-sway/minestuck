@@ -90,7 +90,7 @@ public class ConsortDialogue
 		
 		addMessage("frogCreation").landTitleSpecific(fromNameTitle("frogs"));
 		addMessage("frogImitation").landTitleSpecific(fromNameTitle("frogs"));
-		addMessage(new ChainMessage(new SingleMessage("frogVariants1"), new SingleMessage("frogVariants2"))).landTitle(fromNameTitle("frogs")).landTitleSpecific(LandAspectRegistry.frogAspect);
+		addMessage(new ChainMessage(new SingleMessage("frogVariants1"), new SingleMessage("frogVariants2", "landName"))).landTitle(fromNameTitle("frogs")).landTitleSpecific(LandAspectRegistry.frogAspect);
 		addMessage("frogHatred").landTitleSpecific(fromNameTitle("frogs"));
 		addMessage(new ChainMessage(new SingleMessage("grasshopperFishing1"), new SingleMessage("grasshopperFishing2"))).landTitleSpecific(fromNameTitle("frogs")).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
 		
@@ -333,8 +333,8 @@ public class ConsortDialogue
 		addMessage(new MerchantGuiMessage(new SingleMessage("bloodFoodShop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("pulse"));
 		addMessage(new MerchantGuiMessage(new SingleMessage("lifeFoodShop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("rabbits"));
 		addMessage(new MerchantGuiMessage(new SingleMessage("doomFoodShop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("thunder"));
-		addMessage(new MerchantGuiMessage(new SingleMessage("frogFoodShop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(LandAspectRegistry.frogAspect);
-		addMessage(new MerchantGuiMessage(new SingleMessage("spaceFoodShop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("frogs"), fromNameTitle("frogs"));
+		//addMessage(new MerchantGuiMessage(new SingleMessage("frogFoodShop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(LandAspectRegistry.frogAspect);
+		addMessage(new MerchantGuiMessage(new SingleMessage("spaceFoodShop", "landName"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("frogs"), fromNameTitle("frogs"));
 		addMessage(new MerchantGuiMessage(new SingleMessage("timeFoodShop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("clockwork"));
 		addMessage(new MerchantGuiMessage(new SingleMessage("thymeFoodShop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("clockwork"), fromNameTitle("thought"));
 		addMessage(new MerchantGuiMessage(new SingleMessage("mindFoodShop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("thought"));
