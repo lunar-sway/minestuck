@@ -122,7 +122,7 @@
                     ],
                     "type": "loot_table",
                     "name": "minestuck:chests/medium_basic/frogs",
-                    "weight": 8
+                    "weight": 10
                 },
                 {
                     "conditions": [
