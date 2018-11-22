@@ -652,7 +652,7 @@ public class EntityFrog extends EntityMinestuck
 	
 	public int getRandomFrogType()
 	{
-		return getRandomFrogType(20, 50, 250);
+		return getRandomFrogType(20, 50, 500);
 	}
 	
 	public class FrogJumpHelper extends EntityJumpHelper
