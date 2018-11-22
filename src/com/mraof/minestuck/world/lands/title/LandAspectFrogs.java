@@ -1,12 +1,12 @@
 package com.mraof.minestuck.world.lands.title;
  import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.decorator.FrogSpawner;
-import com.mraof.minestuck.world.lands.decorator.RabbitSpawner;
-import com.mraof.minestuck.world.lands.decorator.structure.RabbitHoleDecorator;
+import com.mraof.minestuck.world.lands.decorator.LilypadDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
- import net.minecraft.block.BlockColored;
+
+import net.minecraft.block.BlockColored;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
@@ -32,6 +32,7 @@ import net.minecraft.item.EnumDyeColor;
 		
 		chunkProvider.decorators.add(new FrogSpawner(6, BiomeMinestuck.mediumNormal));
 		chunkProvider.decorators.add(new FrogSpawner(4, BiomeMinestuck.mediumRough));
+		chunkProvider.decorators.add(new LilypadDecorator(10,BiomeMinestuck.mediumOcean));
 		chunkProvider.sortDecorators();
 	}
 	
