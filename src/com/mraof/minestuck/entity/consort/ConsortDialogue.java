@@ -92,6 +92,7 @@ public class ConsortDialogue
 		addMessage("frogImitation").landTitleSpecific(fromNameTitle("frogs"));
 		addMessage(new ChainMessage(new SingleMessage("frogVariants1"), new SingleMessage("frogVariants2"))).landTitle(fromNameTitle("frogs")).landTitleSpecific(LandAspectRegistry.frogAspect);
 		addMessage("frogHatred").landTitleSpecific(fromNameTitle("frogs"));
+		addMessage(new ChainMessage(new SingleMessage("grasshopperFishing1"), new SingleMessage("grasshopperFishing2"))).landTitleSpecific(fromNameTitle("frogs")).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
 		
 		addMessage("lewdBuckets").landTitleSpecific(fromNameTitle("buckets"));
 		addMessage("waterBuckets").landTitleSpecific(fromNameTitle("buckets")).landTerrain(fromNameTerrain("sand"));
