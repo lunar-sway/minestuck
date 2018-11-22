@@ -101,6 +101,7 @@ public class ItemJumperBlock extends ItemBlock
 		}
 		for(int z = 0; z < 4; z++)
 		{
+			BlockPos alchemPos = TileEntityJumperBlock.staticAlchemiterMainPos(facing.getOpposite(), pos.offset(facing, 1).offset(facing.rotateYCCW(), 7), world);
 			if(!(world.getBlockState(pos.offset(facing.getOpposite(), z).offset(facing.rotateYCCW(), -1)).getBlock() instanceof BlockAlchemiter) || 
 					!(world.getBlockState(pos.offset(facing.getOpposite(), z).offset(facing.rotateYCCW(), -1)).getBlock() instanceof BlockAlchemiter))
 			{
@@ -109,6 +110,23 @@ public class ItemJumperBlock extends ItemBlock
 					if(!(world.getBlockState(pos.offset(facing.getOpposite(), z2).offset(facing.rotateYCCW(), 5)).getBlock() instanceof BlockAlchemiter) || 
 							!(world.getBlockState(pos.offset(facing.getOpposite(), z2).offset(facing.rotateYCCW(), 5)).getBlock() instanceof BlockAlchemiter))
 						return false;
+					else
+					{
+						TileEntity alchemTe = world.getTileEntity(alchemPos);
+						//System.out.println(((TileEntityAlchemiter) alchemTe).isUpgraded());
+						if(alchemTe instanceof TileEntityAlchemiter)
+						{
+							TileEntityAlchemiter alchemiterTe = (TileEntityAlchemiter) alchemTe;
+							if(alchemiterTe.isUpgraded()) 
+								{
+								System.out.println("upgrade detected");
+								return false;
+								}
+							else System.out.println("upgrade not detected");
+							
+						}
+						
+					}
 				}
 				flip = true;
 				return true;
@@ -171,8 +189,9 @@ public class ItemJumperBlock extends ItemBlock
 					TileEntityAlchemiter alchemiter = (TileEntityAlchemiter) alchemTe;
 					
 					alchemiter.setUpgraded(true, cablePos);
+					System.out.println("alchemiter upgrade now set to " + alchemiter.isUpgraded());
 				}
-				else Debug.warnf("Couldn't find Alchemiter. Instead found %s.", alchemTe);
+				else Debug.warnf("Couldn't find Alchemiter at %s. Instead found %s.", ((TileEntityJumperBlock) te).alchemiterMainPos(), alchemTe);
 				
 			} else Debug.warnf("Placed JBE, but can't find tile entity. Instead found %s.", te);
 			

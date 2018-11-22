@@ -65,7 +65,7 @@ public class TileEntityJumperBlock extends TileEntity
 	@Nonnull
 	public ItemStack getUpgrade(int id)
 	{
-		return upgrade[id];
+		return AlchemyRecipes.getDecodedItem(upgrade[id]);
 	}
 	
 	
@@ -76,6 +76,16 @@ public class TileEntityJumperBlock extends TileEntity
 	
 	public void setBroken()
 	{
+		System.out.println("thing!");
+		TileEntity te = world.getTileEntity(alchemiterMainPos());
+		if(te instanceof TileEntityAlchemiter)
+		{
+			TileEntityAlchemiter alchemTe = (TileEntityAlchemiter) te;
+			System.out.println("thing broke");
+			alchemTe.setUpgraded(false, pos);
+			System.out.println("alchemiter upgrade now set to " + alchemTe.isUpgraded());
+		}
+		else Debug.warnf("Couldn't find TileEntityAlchemiter at %s, found %s instead.", alchemiterMainPos(), te);
 		broken = true;
 	}
 	
@@ -167,6 +177,34 @@ public class TileEntityJumperBlock extends TileEntity
 		return alchemiterMainPos(getFacing(), pos);
 	}
 	
+	public static BlockPos staticAlchemiterMainPos(EnumFacing facing, BlockPos pos, World world)
+	{
+		BlockPos alchemPos = pos.offset(facing.rotateY()).offset(facing);
+		
+		
+		for(int i = 0; i <= 5; i++)
+		{
+			if(world.getBlockState(alchemPos).equals(BlockAlchemiter.getBlockState(EnumParts.TOTEM_CORNER, facing)))
+			{	
+				pos = alchemPos.up();
+				break;
+			}
+			else
+			alchemPos = alchemPos.offset(facing.rotateYCCW(), 3);
+			if(world.getBlockState(pos.offset(facing.rotateYCCW(), 3)).equals(BlockAlchemiter.getBlockState(EnumParts.TOTEM_CORNER, facing)))
+			{
+				pos = alchemPos.up();
+				break;
+			}
+			if(world.getBlockState(alchemPos).getBlock() instanceof BlockAlchemiter || world.getBlockState(alchemPos).getBlock() instanceof BlockAlchemiterUpgrades)
+				facing = world.getBlockState(alchemPos).getValue(BlockAlchemiter.DIRECTION);
+			else
+				facing = facing.rotateY();
+		}
+		
+		return pos;
+	}
+	
 	public BlockPos alchemiterMainPos(EnumFacing facing, BlockPos pos)
 	{
 		BlockPos alchemPos = getPos().offset(facing.rotateY()).offset(facing);
@@ -176,14 +214,14 @@ public class TileEntityJumperBlock extends TileEntity
 		{
 			if(world.getBlockState(alchemPos).equals(BlockAlchemiter.getBlockState(EnumParts.TOTEM_CORNER, facing)))
 			{	
-				pos = alchemPos;
+				pos = alchemPos.up();
 				break;
 			}
 			else
 			alchemPos = alchemPos.offset(facing.rotateYCCW(), 3);
 			if(world.getBlockState(pos.offset(facing.rotateYCCW(), 3)).equals(BlockAlchemiter.getBlockState(EnumParts.TOTEM_CORNER, facing)))
 			{
-				pos = alchemPos;
+				pos = alchemPos.up();
 				break;
 			}
 			if(world.getBlockState(alchemPos).getBlock() instanceof BlockAlchemiter || world.getBlockState(alchemPos).getBlock() instanceof BlockAlchemiterUpgrades)
@@ -207,8 +245,6 @@ public class TileEntityJumperBlock extends TileEntity
 			setBroken();
 			return;
 		}
-		else
-			alchemMainPos = alchemMainPos.up();
 		
 		TileEntity alchemTe = world.getTileEntity(alchemMainPos);
 		

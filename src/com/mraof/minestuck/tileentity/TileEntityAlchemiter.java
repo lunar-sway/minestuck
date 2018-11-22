@@ -1,10 +1,12 @@
 package com.mraof.minestuck.tileentity;
 
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.block.BlockAlchemiter;
 import com.mraof.minestuck.block.BlockAlchemiter.EnumParts;
+import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
@@ -31,7 +33,7 @@ public class TileEntityAlchemiter extends TileEntity
 	private boolean broken = false;
 	private ItemStack dowel = ItemStack.EMPTY;
 	private ItemStack upgradeItem[] = {ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY,ItemStack.EMPTY,ItemStack.EMPTY};
-	private Item upgradeCheck[] = new Item[7];
+	private int upgradeCheck[] = new int[7];
 	public boolean upgraded = false;
 	private TileEntity jbe = null;
 	
@@ -55,9 +57,14 @@ public class TileEntityAlchemiter extends TileEntity
 	
 	public ItemStack getOutput()
 	{
+		if(checkUpgrade(MinestuckItems.captchaCard))
+		{
 		if (!AlchemyRecipes.hasDecodedItem(dowel))
+			return AlchemyRecipes.createCard(new ItemStack(MinestuckBlocks.genericObject), false);
+		else return AlchemyRecipes.createCard(new ItemStack(AlchemyRecipes.getDecodedItem(dowel).getItem(), 1), false);
+		}
+		else if (!AlchemyRecipes.hasDecodedItem(dowel)) 
 			return new ItemStack(MinestuckBlocks.genericObject);
-		else if(checkUpgrade(MinestuckItems.captchaCard)) return AlchemyRecipes.createEncodedItem(AlchemyRecipes.getDecodedItem(dowel), true);
 		else return AlchemyRecipes.getDecodedItem(dowel);
 	}
 	
@@ -97,6 +104,19 @@ public class TileEntityAlchemiter extends TileEntity
 	}
 	
 	//JBE upgrades
+	public void setUpgrade(ItemStack stack, int id)
+	{
+		if(stack.isEmpty())
+		{
+			upgradeItem[id] = stack;
+			if(world != null)
+			{
+				IBlockState state = world.getBlockState(pos);
+				world.notifyBlockUpdate(pos, state, state, 2);
+			}
+		}
+	}
+	
 	public void setUpgraded(boolean bool, BlockPos pos)
 	{
 		
@@ -118,6 +138,7 @@ public class TileEntityAlchemiter extends TileEntity
 			for(int i = 0; i < upgradeItem.length; i++)
 			{
 				upgradeItem[i] = jbeTe.getUpgrade(i);
+				upgradeItem[i].setCount(1);
 			}
 		}
 		else
@@ -131,22 +152,22 @@ public class TileEntityAlchemiter extends TileEntity
 		refreshUpgrades();
 	}
 	
-	//TODO
 	public void refreshUpgrades()
 	{
-		Item item = null;
 		for(int i = 0; i < upgradeCheck.length; i++)
 		{
-			upgradeCheck[i] = null;
+			upgradeCheck[i] = -1;
 		}
 		for(int i = 0; i < upgradeItem.length; i++)
 		{
 			for(int c = 0; c < upgradeCheck.length; c++)
 			{
-				if(upgradeCheck[c] == upgradeItem[i].getItem()) break;
-				if(upgradeCheck[c] == null)
+				//upgradeCheck[c].setCount(1);
+				if(upgradeCheck[c] == Item.getIdFromItem(upgradeItem[i].getItem())) break;
+				if(upgradeCheck[c] == -1)
 					{
-					upgradeCheck[c] = upgradeItem[i].getItem();
+					upgradeCheck[c] = Item.getIdFromItem(upgradeItem[i].getItem());
+					System.out.println(upgradeCheck[c]);
 						break;
 					}
 			}
@@ -155,9 +176,13 @@ public class TileEntityAlchemiter extends TileEntity
 	
 	public boolean checkUpgrade(Item itemToCheck)
 	{
+		ItemStack stackToCheck = new ItemStack(itemToCheck, 1);
+		
 		for(int i = 0; i < upgradeCheck.length; i++)
 		{
-			if(upgradeCheck[i] == itemToCheck) return true;
+			if(upgradeCheck[i] == Item.getIdFromItem(itemToCheck)) return true;
+			//System.out.println(itemToCheck + " != " + upgradeCheck[i]);
+			
 		}
 		return false;
 	}
@@ -165,6 +190,17 @@ public class TileEntityAlchemiter extends TileEntity
 	public boolean isUpgraded()
 	{
 		return upgraded;
+	}
+	
+	//TODO
+	public void doTheBlenderThing()
+	{
+		System.out.println("B L E N D !");
+		if(!dowel.isEmpty())
+		{
+			InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(MinestuckItems.rawCruxite, 1));
+			setDowel(ItemStack.EMPTY);
+		}
 	}
 	
 	private boolean isUseable(IBlockState state)
@@ -227,16 +263,29 @@ public class TileEntityAlchemiter extends TileEntity
 		return;
 	}
 	
+	
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound)
 	{
 		super.readFromNBT(tagCompound);
+
+		System.out.println("read");
 		
 		if(tagCompound.hasKey("gristType"))
 			this.selectedGrist = GristType.getTypeFromString(tagCompound.getString("gristType"));
 		if(this.selectedGrist == null)
 		{
 			this.selectedGrist = GristType.Build;
+		}
+		
+		this.upgraded = tagCompound.getBoolean("upgraded");
+		
+		if(upgraded)
+		{
+			for(int i = 0; i < upgradeItem.length; i++)
+			{
+				setUpgrade(new ItemStack(tagCompound.getCompoundTag("upgrade" + i)), i);
+			}
 		}
 		
 		broken = tagCompound.getBoolean("broken");
@@ -249,10 +298,17 @@ public class TileEntityAlchemiter extends TileEntity
 	public NBTTagCompound writeToNBT(NBTTagCompound tagCompound)
 	{
 		super.writeToNBT(tagCompound);
+
+		System.out.println("write");
 		
 		tagCompound.setString("gristType", selectedGrist.getRegistryName().toString());
-		
+		tagCompound.setBoolean("upgraded", upgraded);
 		tagCompound.setBoolean("broken", isBroken());
+		
+		for(int i = 0; i < upgradeItem.length; i++)
+		{
+			tagCompound.setTag("upgrade" + i, upgradeItem[i].writeToNBT(new NBTTagCompound()));
+		}
 		
 		if(dowel!= null)
 			tagCompound.setTag("dowel", dowel.writeToNBT(new NBTTagCompound()));
@@ -285,7 +341,41 @@ public class TileEntityAlchemiter extends TileEntity
 		return oldState.getBlock() != newSate.getBlock() || oldState.getValue(BlockAlchemiter.PART1) != newSate.getValue(BlockAlchemiter.PART1);
 	}
 	
-	public void onRightClick(EntityPlayer player, IBlockState clickedState)
+
+	public void onRightClick(World worldIn, EntityPlayer playerIn, IBlockState state, EnumParts part) 
+	{
+		if(worldIn.isRemote)
+		{
+			if(part == EnumParts.CENTER_PAD || part == EnumParts.CORNER || part == EnumParts.SIDE_LEFT || part == EnumParts.SIDE_RIGHT || part == EnumParts.TOTEM_CORNER)
+			{
+				BlockPos mainPos = pos;
+				if(!isBroken())
+				{
+					System.out.println("blender check");
+					System.out.println(new ItemStack(Item.getItemFromBlock(MinestuckBlocks.blender)));
+					System.out.println(checkUpgrade(Item.getItemFromBlock(MinestuckBlocks.blender)));
+					if(checkUpgrade(Item.getItemFromBlock(MinestuckBlocks.blender)))
+						doTheBlenderThing();
+					else
+					{
+						System.out.println("thinh");
+					playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.ALCHEMITER.ordinal(), worldIn, mainPos.getX(), mainPos.getY(), mainPos.getZ());
+					}
+				}
+			}
+			return;
+		}
+		
+		BlockPos mainPos = pos;
+		TileEntity te = worldIn.getTileEntity(mainPos);
+		
+		if (te instanceof TileEntityAlchemiter && playerIn != null)
+		{
+			((TileEntityAlchemiter) te).onPadRightClick(playerIn, state);
+		}
+	}
+	
+	public void onPadRightClick(EntityPlayer player, IBlockState clickedState)
 	{
 		if (isUseable(clickedState))
 		{
@@ -338,8 +428,17 @@ public class TileEntityAlchemiter extends TileEntity
 			while(quantity > 0)
 			{
 				ItemStack stack = newItem.copy();
-				stack.setCount(Math.min(stack.getMaxStackSize(), quantity));
-				quantity -= stack.getCount();
+				//TODO
+				if(checkUpgrade(MinestuckItems.captchaCard)) {
+					int stackCount =  Math.min(AlchemyRecipes.getDecodedItem(stack).getMaxStackSize(), quantity);
+					
+					stack = AlchemyRecipes.changeEncodeSize(stack, stackCount);
+					quantity -=  Math.min(AlchemyRecipes.getDecodedItem(stack).getMaxStackSize(), quantity);
+				}
+				else{
+					stack.setCount(Math.min(stack.getMaxStackSize(), quantity));
+					quantity -= stack.getCount();
+				}
 				EntityItem item = new EntityItem(world, spawnPos.getX(), spawnPos.getY() + 0.5, spawnPos.getZ(), stack);
 				world.spawnEntity(item);
 			}
@@ -387,4 +486,5 @@ public class TileEntityAlchemiter extends TileEntity
 	{
 		this.selectedGrist = selectedGrist;
 	}
+
 }

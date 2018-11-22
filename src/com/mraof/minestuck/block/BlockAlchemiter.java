@@ -2,14 +2,18 @@ package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiHandler;
+import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.block.BlockAlchemiter.EnumParts;
+
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -84,26 +88,16 @@ public class BlockAlchemiter extends BlockLargeMachine
 	@Override
 	public  boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
-		if(worldIn.isRemote)
-		{
-			EnumParts part = state.getValue(PART);
-			if(part == EnumParts.CENTER_PAD || part == EnumParts.CORNER || part == EnumParts.SIDE_LEFT || part == EnumParts.SIDE_RIGHT || part == EnumParts.TOTEM_CORNER)
-			{
-				BlockPos mainPos = getMainPos(state, pos, worldIn);
-				TileEntity te = worldIn.getTileEntity(mainPos);
-				if(te instanceof TileEntityAlchemiter && !((TileEntityAlchemiter) te).isBroken())
-					playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.ALCHEMITER.ordinal(), worldIn, mainPos.getX(), mainPos.getY(), mainPos.getZ());
-			}
-			return true;
-		}
 		
 		BlockPos mainPos = getMainPos(state, pos, worldIn);
 		TileEntity te = worldIn.getTileEntity(mainPos);
+		EnumParts part = state.getValue(PART);
 		
-		if (te instanceof TileEntityAlchemiter && playerIn != null)
+		if (te instanceof TileEntityAlchemiter)
 		{
-			((TileEntityAlchemiter) te).onRightClick(playerIn, state);
+			((TileEntityAlchemiter) te).onRightClick(worldIn, playerIn, state, part);
 		}
+		
 		return true;
 	}
 	
