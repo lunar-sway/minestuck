@@ -427,12 +427,13 @@ consort.hungry.finally=Finally!
 consort.hungry.finally.desc=You are given 10 boondollars for the %s.
 consort.hungry.end=Fine. I will just go and find a real food store.
 
+
 consort.breathFoodShop=It's hard to catch our food with the Breeze carrying them away and whatnot!
 consort.bloodFoodShop=Hope you like red meat!
 consort.lifeFoodShop=Rabbit stew! Mmmm!
 consort.doomFoodShop=Lightning-smoked meat really adds to the flavor!
 consort.frogFoodShop=Frog legs are good but eating them is heresy! Buy some of our food instead!
-consort.spaceFoodShop=Ever soaked your grist candies in the liquids the buckets contain? It really enhances the taste!
+consort.bucketsFoodShop=Ever soaked your grist candies in the liquids the buckets contain? It really enhances the taste!
 consort.timeFoodShop=Tick Tock, time's a-wasting! Eat something or leave!
 consort.thymeFoodShop=Take your mind off of the limited time we have left alive with food!
 consort.mindFoodShop=I'm selling recipes I made from a nearby library's cookbook. Buy some!
@@ -442,6 +443,7 @@ consort.voidFoodShop=This place used to be filled with the sounds of crickets un
 consort.rageFoodShop=You're not you when you're hungry. Buy a snickers!
 consort.hopeFoodShop=I HOPE you're hungry!
 consort.hopeFoodShop.desc=You hear a faint ba-dum tss in the distance.
+consort.frogFoodShop=We would never eat frogs here in the Land of %s! Grasshoppers, though...
 consort.foodShop=You hungry? I bet you are! Why else would you be talking to me?
 consort.fastFood=Welcome to MacCricket's, what would you like?
 consort.groceryStore=Thank you for choosing Stop and Hop, this village's #1 one grocer!
@@ -451,7 +453,8 @@ consort.breathGeneralShop=The breeze has brought me many fine wares.
 consort.bloodGeneralShop=Our goods are soaked in blood so the %s can reach their full potential!
 consort.lifeGeneralShop=Twenty years selling losers hats and shit really takes the life out of you.
 consort.doomGeneralShop=With my prices, my competitors are doomed!
-consort.spaceGeneralShop=Here's a witty one-liner tying in buckets and general stores!
+consort.frogGeneralShop=Get your frog merchandise here! Limited time only! ....Just kidding, I'm always here.
+consort.bucketsGeneralShop=Here's a witty one-liner tying in buckets and general stores!
 <<<<<<< HEAD
 consort.timeGeneralShop=Future me told me that some sucker would buy tons of â€œgoodsâ€� from me... will that sucker be you?
 =======
