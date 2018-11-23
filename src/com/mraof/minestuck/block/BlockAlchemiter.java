@@ -38,6 +38,9 @@ public class BlockAlchemiter extends BlockLargeMachine
 		this(0, PART1);
 		
 	}
+	
+	
+	
 	public BlockAlchemiter(int index, PropertyEnum<EnumParts> property)
 	{
 		super();
@@ -46,6 +49,8 @@ public class BlockAlchemiter extends BlockLargeMachine
 		
 		setUnlocalizedName("alchemiter");
 	}
+	
+	
 	
 	//not sure how to do this.
 	@Override
@@ -294,5 +299,12 @@ public class BlockAlchemiter extends BlockLargeMachine
 		{
 			return this == TOTEM_PAD || this == TOTEM_PAD_DOWEL || this == TOTEM_PAD_TOTEM;
 		}
+	}
+
+	@Override
+	public Item getItemFromMachine() 
+	{
+		
+		return new ItemStack(MinestuckBlocks.alchemiter[0]).getItem();
 	}
 }

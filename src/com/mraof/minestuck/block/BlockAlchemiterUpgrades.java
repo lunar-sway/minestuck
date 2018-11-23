@@ -25,6 +25,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
@@ -455,6 +456,13 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
         BlockAlchemiterUpgrades block = MinestuckBlocks.alchemiterUpgrades[PART1.getAllowedValues().contains(parts) ? 0 : PART2.getAllowedValues().contains(parts) ? 1 : PART3.getAllowedValues().contains(parts) ? 2 : PART4.getAllowedValues().contains(parts) ? 3 : 4];
         return block.getDefaultState().withProperty(block.PART, parts).withProperty(DIRECTION, facing);
     }
+	
+	@Override
+	public Item getItemFromMachine() 
+	{
+		return new ItemStack(MinestuckBlocks.alchemiter[0]).getItem();
+	}
+	
 	
 	 /**
      *returns the block position of the "Main" block

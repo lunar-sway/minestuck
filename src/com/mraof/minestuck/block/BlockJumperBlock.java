@@ -27,6 +27,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
@@ -62,7 +63,7 @@ public abstract class BlockJumperBlock extends BlockLargeMachine {
 		this.index = index;
 		PART = part;
 		setUnlocalizedName("jumper_block_extension");
-		setCreativeTab(null);
+		//setCreativeTab(null);
 		
 	}
 	
@@ -516,6 +517,12 @@ public abstract class BlockJumperBlock extends BlockLargeMachine {
 		return out;
 	}
 	
+	@Override
+	public Item getItemFromMachine() 
+	{
+		return new ItemStack(MinestuckBlocks.jumperBlockExtension[0]).getItem();
+	}
+	
 	public enum EnumParts implements IStringSerializable
 	{
 		TOP_PLUG(				new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
@@ -576,6 +583,8 @@ public abstract class BlockJumperBlock extends BlockLargeMachine {
 		{
 			return this == CABLE;
 		}
+		
+		
 	}
 	
 	public static BlockJumperBlock[] createBlocks()

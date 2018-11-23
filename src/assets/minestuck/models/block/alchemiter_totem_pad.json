@@ -1,6 +1,7 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
+		"particle": "minestuck:machines/alchemiter/corner_top",
 		"2": "minestuck:machines/alchemiter/rods",
 		"3": "minestuck:machines/alchemiter/totem_pad"
 	},
