@@ -85,17 +85,17 @@ public class ItemFrog extends Item
 		{
 			if(stack.hasTagCompound())
 			{
-				NBTTagCompound nbttagcompound = stack.getTagCompound();
-				NBTTagInt type = (NBTTagInt)nbttagcompound.getTag("Type");
-				NBTTagInt eyeType = (NBTTagInt)nbttagcompound.getTag("eyeType");
-				NBTTagInt bellyType = (NBTTagInt)nbttagcompound.getTag("bellyType");
+				NBTTagCompound nbt = stack.getTagCompound();
+				NBTTagInt type = (NBTTagInt)nbt.getTag("Type");
+				NBTTagInt eyeType = (NBTTagInt)nbt.getTag("eyeType");
+				NBTTagInt bellyType = (NBTTagInt)nbt.getTag("bellyType");
 				
-					for(int i = 0; i <= EntityFrog.maxEyes(); i++)
+					if(nbt.hasKey("eyeType"))for(int i = 0; i <= EntityFrog.maxEyes(); i++)
 					{
 						if(eyeType.getInt() == i)tooltip.add(I18n.translateToLocal("item.frog.eyes"+i));
 					}
 					
-					for(int i = 1; i <= EntityFrog.maxBelly(); i++)
+					if(nbt.hasKey("eyeType"))for(int i = 1; i <= EntityFrog.maxBelly(); i++)
 					{
 						if(bellyType.getInt() == i)tooltip.add(I18n.translateToLocal("item.frog.belly"+i));
 					}
@@ -113,14 +113,17 @@ public class ItemFrog extends Item
 		
 		if(stack.hasTagCompound())
 		{
-			NBTTagCompound nbttagcompound = stack.getTagCompound();
-			NBTTagFloat size = (NBTTagFloat)nbttagcompound.getTag("Size");
+			NBTTagCompound nbt = stack.getTagCompound();
+			NBTTagFloat size = (NBTTagFloat)nbt.getTag("Size");
 			
-			if(size.getFloat() <= 0.4f) 	tooltip.add(I18n.translateToLocal("item.frog.size0"));
-			else if(size.getFloat() <= 0.8f) tooltip.add(I18n.translateToLocal("item.frog.size1"));
-			else if(size.getFloat() <= 1.4f) tooltip.add(I18n.translateToLocal("item.frog.size2"));
-			else if(size.getFloat() <= 2f) tooltip.add(I18n.translateToLocal("item.frog.size3"));
-			else							 tooltip.add(I18n.translateToLocal("item.frog.size4"));
+			if(nbt.hasKey("Size"))
+			{
+				if(size.getFloat() <= 0.4f) 	tooltip.add(I18n.translateToLocal("item.frog.size0"));
+				else if(size.getFloat() <= 0.8f) tooltip.add(I18n.translateToLocal("item.frog.size1"));
+				else if(size.getFloat() <= 1.4f) tooltip.add(I18n.translateToLocal("item.frog.size2"));
+				else if(size.getFloat() <= 2f) tooltip.add(I18n.translateToLocal("item.frog.size3"));
+				else							 tooltip.add(I18n.translateToLocal("item.frog.size4"));
+			}
 		}
 		
 	}

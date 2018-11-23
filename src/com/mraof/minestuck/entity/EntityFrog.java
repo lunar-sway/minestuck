@@ -101,6 +101,7 @@ public class EntityFrog extends EntityMinestuck
 				ItemStack frogItem = new ItemStack(MinestuckItems.itemFrog,1,this.dataManager.get(TYPE));
 				
 				frogItem.setTagCompound(getFrogData());
+				frogItem.setStackDisplayName(this.getCustomNameTag());
 				
 				entityDropItem(frogItem, 0);
 				this.setDead();
