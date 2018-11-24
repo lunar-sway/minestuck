@@ -21,6 +21,7 @@ public class LandSkyRender extends IRenderHandler
 	
 	private static final ResourceLocation SKAIA_TEXTURE = new ResourceLocation("minestuck", "textures/environment/skaia.png");
 	private static final ResourceLocation LAND_TEXTURE = new ResourceLocation("minestuck", "textures/environment/land_wood.png");
+	private static final ResourceLocation LAND_TEXTURE_2 = new ResourceLocation("minestuck", "textures/environment/land_wood_2.png");
 	
 	private WorldProviderLands providerLands;
 	public LandSkyRender(WorldProviderLands provider)
@@ -192,10 +193,18 @@ public class LandSkyRender extends IRenderHandler
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		
-		GlStateManager.rotate(45.0F, 0, 0, 1);
+		GlStateManager.rotate(-45.0F, 0, 0, 1);
 		GlStateManager.enableTexture2D();
 		float planetSize = 10.0F;
 		mc.getTextureManager().bindTexture(LAND_TEXTURE);
+		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+		bufferbuilder.pos((double)(-planetSize), 100.0D, (double)(-planetSize)).tex(0.0D, 0.0D).endVertex();
+		bufferbuilder.pos((double)planetSize, 100.0D, (double)(-planetSize)).tex(1.0D, 0.0D).endVertex();
+		bufferbuilder.pos((double)planetSize, 100.0D, (double)planetSize).tex(1.0D, 1.0D).endVertex();
+		bufferbuilder.pos((double)(-planetSize), 100.0D, (double)planetSize).tex(0.0D, 1.0D).endVertex();
+		tessellator.draw();
+		mc.getTextureManager().bindTexture(LAND_TEXTURE_2);
+		GlStateManager.rotate(90.0F, 0, 0, 1);
 		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
 		bufferbuilder.pos((double)(-planetSize), 100.0D, (double)(-planetSize)).tex(0.0D, 0.0D).endVertex();
 		bufferbuilder.pos((double)planetSize, 100.0D, (double)(-planetSize)).tex(1.0D, 0.0D).endVertex();
