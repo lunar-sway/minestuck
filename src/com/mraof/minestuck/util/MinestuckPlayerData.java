@@ -32,7 +32,7 @@ public class MinestuckPlayerData
 	@SideOnly(Side.CLIENT)
 	public static float rungProgress;
 	@SideOnly(Side.CLIENT)
-	public static int boondollars;
+	public static long boondollars;
 	@SideOnly(Side.CLIENT)
 	static GristSet playerGrist;
 	@SideOnly(Side.CLIENT)
@@ -128,12 +128,12 @@ public class MinestuckPlayerData
 		else return getGristSet(IdentifierHandler.encode(player));
 	}
 	
-	public static boolean addBoondollars(EntityPlayer player, int boons)
+	public static boolean addBoondollars(EntityPlayer player, long boons)
 	{
 		return addBoondollars(IdentifierHandler.encode(player), boons);
 	}
 	
-	public static boolean addBoondollars(PlayerIdentifier id, int boons)
+	public static boolean addBoondollars(PlayerIdentifier id, long boons)
 	{
 		PlayerData data = MinestuckPlayerData.getData(id);
 		if(data.boondollars + boons < 0)
@@ -155,7 +155,7 @@ public class MinestuckPlayerData
 		public Modus modus;
 		public boolean givenModus;
 		public int color = -1;
-		public int boondollars;
+		public long boondollars;
 		public Echeladder echeladder;
 
 		private void readFromNBT(NBTTagCompound nbt)
@@ -214,7 +214,7 @@ public class MinestuckPlayerData
 			else givenModus = nbt.getBoolean("givenModus");
 			if (nbt.hasKey("color"))
 				this.color = nbt.getInteger("color");
-			boondollars = nbt.getInteger("boondollars");
+			boondollars = nbt.getLong("boondollars");
 
 			echeladder = new Echeladder(player);
 			echeladder.loadEcheladder(nbt);
@@ -245,7 +245,7 @@ public class MinestuckPlayerData
 				nbt.setTag("modus", CaptchaDeckHandler.writeToNBT(modus));
 			else nbt.setBoolean("givenModus", givenModus);
 			nbt.setInteger("color", this.color);
-			nbt.setInteger("boondollars", boondollars);
+			nbt.setLong("boondollars", boondollars);
 
 			echeladder.saveEcheladder(nbt);
 			return nbt;
