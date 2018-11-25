@@ -74,7 +74,7 @@ public class TileEntityCruxtruder extends TileEntity
 						world.playEvent(1001, pos, 0);
 					} else
 					{
-						world.setBlockState(pos, MinestuckBlocks.blockCruxiteDowel.getDefaultState());
+						world.setBlockState(pos, MinestuckBlocks.blockCruxiteDowel.getDefaultState().withProperty(BlockCruxtiteDowel.TYPE, BlockCruxtiteDowel.Type.CRUXTRUDER));
 						TileEntity te = world.getTileEntity(pos);
 						if(te instanceof TileEntityItemStack)
 							((TileEntityItemStack) te).getStack().setItemDamage(color + 1);
