@@ -96,7 +96,7 @@ public abstract class TerrainLandAspect implements ILandAspect<TerrainLandAspect
 	
 	public abstract EnumConsort getConsortType();
 	
-	public MapGenStructure customMapGenStructure()
+	public MapGenStructure customMapGenStructure(ChunkProviderLands chunkProviderLands)
 	{
 		return null;
 	}

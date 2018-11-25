@@ -107,7 +107,7 @@ public class ChunkProviderLands implements IChunkGenerator
 			this.terrainGenerator = aspect1.createTerrainGenerator(this, random);
 			this.structureHandler = new MapGenLandStructure(this);
 			this.villageHandler = new MapGenConsortVillage(this);
-			this.customHandler = aspect1.customMapGenStructure();
+			this.customHandler = aspect1.customMapGenStructure(this);
 			aspect1.registerBlocks(blockRegistry);
 			this.decorators = new ArrayList<ILandDecorator>();
 			this.decorators.addAll(aspect1.getDecorators());
