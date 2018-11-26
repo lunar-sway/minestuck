@@ -14,6 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ReportedException;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
@@ -48,13 +49,19 @@ public class ItemShunt extends Item {
 		{
 			NBTTagCompound nbttagcompound = stack.getTagCompound();
 			NBTTagString contentID = (NBTTagString)nbttagcompound.getTag("contentID");
-			NBTTagInt contentMeta = (NBTTagInt)nbttagcompound.getTag("contentMeta");
+			NBTTagInt contentMeta;
+			try
+			{
+				contentMeta = (NBTTagInt)nbttagcompound.getTag("contentMeta");
+			}
+			catch(Throwable e)
+			{
+				contentMeta = null;
+			}
 			
 			if (contentID != null && contentMeta != null && Item.REGISTRY.containsKey(new ResourceLocation(contentID.getString())))
 			{
 				tooltip.add("(" + (AlchemyRecipes.getDecodedItem(stack)).getDisplayName() + ")");
-				if(nbttagcompound.getBoolean("punched"))
-					tooltip.add("("+I18n.translateToLocal("item.shunt.punched")+")");
 				return;
 			}
 			else {
