@@ -74,6 +74,8 @@ public class CraftingRecipes
 		OreDictionary.registerOre("oreGold", goldOreSandstone);
 		OreDictionary.registerOre("oreGold", goldOreSandstoneRed);
 		OreDictionary.registerOre("oreRedstone", redstoneOreEndStone);
+		OreDictionary.registerOre("oreCruxite", oreCruxite);
+		OreDictionary.registerOre("oreUranium", oreUranium);
 		
 		OreDictionary.registerOre("dirt", new ItemStack(coloredDirt, 1, OreDictionary.WILDCARD_VALUE));
 		
@@ -88,6 +90,7 @@ public class CraftingRecipes
 		OreDictionary.registerOre("treeSapling",rainbowSapling);
 		OreDictionary.registerOre("treeLeaves",	endLeaves);
 		OreDictionary.registerOre("treeLeaves",	new ItemStack(leaves1, 1, OreDictionary.WILDCARD_VALUE));
+		OreDictionary.registerOre("blockCactus", bloomingCactus);
 	}
 	
 	/**
