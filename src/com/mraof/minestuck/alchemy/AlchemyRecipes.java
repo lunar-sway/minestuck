@@ -197,10 +197,10 @@ public class AlchemyRecipes
 			GristRegistry.addGristConversion("oreIron", new GristSet(new GristType[] {GristType.Build, GristType.Rust}, new int[] {4, 9*oreMultiplier}));
 			GristRegistry.addGristConversion("oreGold", new GristSet(new GristType[] {GristType.Build, GristType.Gold}, new int[] {4, 9*oreMultiplier}));
 			GristRegistry.addGristConversion("oreRedstone", new GristSet(new GristType[] {GristType.Garnet, GristType.Build}, new int[] {16*oreMultiplier, 4}));
-			GristRegistry.addGristConversion(new ItemStack(Blocks.LAPIS_ORE), false, new GristSet(new GristType[] {GristType.Amethyst, GristType.Build}, new int[] {16*oreMultiplier, 4}));
-			GristRegistry.addGristConversion(new ItemStack(Blocks.DIAMOND_ORE), false, new GristSet(new GristType[] {GristType.Diamond, GristType.Build}, new int[] {18*oreMultiplier, 4}));
-			GristRegistry.addGristConversion(new ItemStack(Blocks.EMERALD_ORE), false, new GristSet(new GristType[] {GristType.Ruby, GristType.Diamond, GristType.Build}, new int[] {9*oreMultiplier, 9*oreMultiplier, 4}));
-			GristRegistry.addGristConversion(new ItemStack(Blocks.QUARTZ_ORE), false, new GristSet(new GristType[] {GristType.Quartz, GristType.Marble, GristType.Build}, new int[] {8*oreMultiplier, 2*oreMultiplier, 2}));
+			GristRegistry.addGristConversion("oreLapis", new GristSet(new GristType[] {GristType.Amethyst, GristType.Build}, new int[] {16*oreMultiplier, 4}));
+			GristRegistry.addGristConversion("oreDiamond", new GristSet(new GristType[] {GristType.Diamond, GristType.Build}, new int[] {18*oreMultiplier, 4}));
+			GristRegistry.addGristConversion("oreEmerald", new GristSet(new GristType[] {GristType.Ruby, GristType.Diamond, GristType.Build}, new int[] {9*oreMultiplier, 9*oreMultiplier, 4}));
+			GristRegistry.addGristConversion("oreQuartz", new GristSet(new GristType[] {GristType.Quartz, GristType.Marble, GristType.Build}, new int[] {8*oreMultiplier, 2*oreMultiplier, 2}));
 		}
 		GristRegistry.addGristConversion(new ItemStack(Items.COAL, 1, 0), true, new GristSet(new GristType[] {GristType.Tar}, new int[] {8}));
 		GristRegistry.addGristConversion(new ItemStack(Items.COAL, 1, 1), true, new GristSet(new GristType[] {GristType.Tar, GristType.Amber}, new int[] {6, 2}));
