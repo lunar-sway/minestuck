@@ -55,6 +55,7 @@ public class CraftingRecipes
 		GameRegistry.addSmelting(goldOreSandstoneRed, new ItemStack(Items.GOLD_INGOT), 1.0F);
 		GameRegistry.addSmelting(redstoneOreEndStone, new ItemStack(Items.REDSTONE), 0.7F);
 		GameRegistry.addSmelting(woodenCactus, new ItemStack(Items.COAL, 1, 1), 0.15F);
+		GameRegistry.addSmelting(beefSword, new ItemStack(steakSword), 0.5F);
 		if(MinestuckConfig.cruxtruderIntake)
 			GameRegistry.addSmelting(cruxiteDowel, new ItemStack(MinestuckItems.rawCruxite), 0.0F);
 		
@@ -62,6 +63,7 @@ public class CraftingRecipes
 		GameRegistry.addSmelting(endLog, new ItemStack(Items.COAL, 1, 1), 0.15F);
 		
 		TileEntityUraniumCooker.setRadiation(Items.BEEF, new ItemStack(irradiatedSteak));
+		TileEntityUraniumCooker.setRadiation(beefSword, new ItemStack(irradiatedSteakSword));
 		TileEntityUraniumCooker.setRadiation(Items.STICK, new ItemStack(upStick));
 		TileEntityUraniumCooker.setRadiation(Items.MUSHROOM_STEW, new ItemStack(Items.SLIME_BALL));
 		Item ectoSlime = Item.REGISTRY.getObject(new ResourceLocation("minestuckarsenal", "blue_ecto_slime"));
