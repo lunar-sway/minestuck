@@ -503,6 +503,7 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(new ItemStack(Items.QUARTZ), new ItemStack(Items.WATER_BUCKET), MODE_OR, new ItemStack(Items.PRISMARINE_CRYSTALS));
 		CombinationRegistry.addCombination(new ItemStack(Items.QUARTZ), new ItemStack(Items.WATER_BUCKET), MODE_AND, new ItemStack(Items.PRISMARINE_SHARD));
 		CombinationRegistry.addCombination(new ItemStack(Items.FEATHER), new ItemStack(Items.ENDER_PEARL), MODE_OR, new ItemStack(Items.ELYTRA));
+		CombinationRegistry.addCombination(new ItemStack(Items.COOKIE), new ItemStack(Items.REDSTONE), MODE_AND, new ItemStack(Items.SUGAR));
 	}
 	
 	public static void registerMinestuckRecipes()
@@ -676,13 +677,13 @@ public class AlchemyRecipes
 		GristRegistry.addGristConversion(new ItemStack(hotCake), new GristSet(new GristType[] {GristType.Sulfur, GristType.Iodine}, new int[] {17, 10}));
 		GristRegistry.addGristConversion(new ItemStack(reverseCake), new GristSet(new GristType[] {GristType.Amber, GristType.Chalk, GristType.Iodine}, new int[] {10, 24, 11}));
 		GristRegistry.addGristConversion(cruxtruderLid, new GristSet(GristType.Build, 8));
-		GristRegistry.addGristConversion((new ItemStack(blender)), new GristSet(new GristType[] {GristType.Artifact, GristType.Zillium}, new int[] {100000, 1}));
+		GristRegistry.addGristConversion((new ItemStack(blender)), new GristSet(new GristType[] {GristType.Build}, new int[] {16}));
 		GristRegistry.addGristConversion(new ItemStack(shopPoster, 1, 0), new GristSet(new GristType[] {GristType.Build, GristType.Cobalt, GristType.Shale}, new int[] {8, 2, 2}));
 		GristRegistry.addGristConversion(new ItemStack(shopPoster, 1, 1), new GristSet(new GristType[] {GristType.Build, GristType.Iodine}, new int[] {9, 3}));
 		GristRegistry.addGristConversion(new ItemStack(shopPoster, 1, 2), new GristSet(new GristType[] {GristType.Build, GristType.Chalk, GristType.Caulk}, new int[] {8, 2, 2}));
 		GristRegistry.addGristConversion(new ItemStack(shopPoster, 1, 3), new GristSet(new GristType[] {GristType.Build, GristType.Rust, GristType.Amber}, new int[] {7, 3, 2}));
 		GristRegistry.addGristConversion(new ItemStack(shopPoster, 1, 4), new GristSet(new GristType[] {GristType.Build, GristType.Iodine, GristType.Chalk}, new int[] {9, 2, 1}));
-		
+		GristRegistry.addGristConversion(new ItemStack(vein), new GristSet(new GristType[] {GristType.Garnet, GristType.Iodine}, new int[] {12, 8}));
 		
 		//add Designix and Lathe combinations
 		
@@ -690,6 +691,8 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(new ItemStack(Items.WOODEN_SWORD), new ItemStack(Blocks.CACTUS), MODE_AND, false, true, new ItemStack(cactusCutlass));
 		CombinationRegistry.addCombination(new ItemStack(Items.WOODEN_SWORD), new ItemStack(bloomingCactus), MODE_AND, false, true, new ItemStack(cactusCutlass));
 		CombinationRegistry.addCombination(new ItemStack(Items.WOODEN_SWORD), new ItemStack(Items.COOKED_BEEF), MODE_OR, false, true, new ItemStack(steakSword));
+		CombinationRegistry.addCombination(new ItemStack(Items.WOODEN_SWORD), new ItemStack(Items.BEEF), MODE_OR, false, true, new ItemStack(beefSword));
+		CombinationRegistry.addCombination(new ItemStack(Items.WOODEN_SWORD), new ItemStack(irradiatedSteak), MODE_OR, false, true, new ItemStack(irradiatedSteakSword));
 		CombinationRegistry.addCombination(new ItemStack(Items.STONE_SWORD), new ItemStack(Items.COOKED_BEEF), MODE_OR, false, true, new ItemStack(steakSword));
 		CombinationRegistry.addCombination(new ItemStack(Items.WOODEN_SWORD), new ItemStack(sbahjPoster), MODE_AND, false, true, new ItemStack(sord));
 		CombinationRegistry.addCombination(new ItemStack(Items.STONE_SWORD), new ItemStack(sbahjPoster), MODE_AND, false, true, new ItemStack(sord));
@@ -802,7 +805,8 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(new ItemStack(Items.SUGAR), new ItemStack(Items.WHEAT_SEEDS), MODE_AND, new ItemStack(candy, 1, 0));
 		CombinationRegistry.addCombination(new ItemStack(grasshopper), new ItemStack(Items.GOLD_INGOT), MODE_OR, false, false, new ItemStack(goldenGrasshopper));
 		CombinationRegistry.addCombination(new ItemStack(Items.STICK), new ItemStack(Blocks.WEB), MODE_OR, false, false, new ItemStack(bugNet));
-		
+		CombinationRegistry.addCombination(new ItemStack(Items.STRING), new ItemStack(Items.BUCKET), MODE_AND, new ItemStack(bugNet));
+		CombinationRegistry.addCombination(new ItemStack(Items.COOKIE), new ItemStack(Blocks.REDSTONE_BLOCK), MODE_AND, new ItemStack(sugarCube));
 		
 		if(oreMultiplier != 0)
 		{
