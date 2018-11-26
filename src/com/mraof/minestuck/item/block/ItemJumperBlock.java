@@ -120,9 +120,11 @@ public class ItemJumperBlock extends ItemBlock
 							if(alchemiterTe.isUpgraded()) 
 								{
 								System.out.println("upgrade detected");
+								System.out.println(alchemPos);
 								return false;
 								}
 							else System.out.println("upgrade not detected");
+							System.out.println(alchemPos);
 							
 						}
 						

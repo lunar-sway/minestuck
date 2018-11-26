@@ -82,8 +82,8 @@ public class TileEntityJumperBlock extends TileEntity
 		{
 			TileEntityAlchemiter alchemTe = (TileEntityAlchemiter) te;
 			//System.out.println("thing broke");
-			alchemTe.setUpgraded(false, pos);
-			//System.out.println("alchemiter upgrade now set to " + alchemTe.isUpgraded());
+			alchemTe.setUpgraded(false, getPos());
+			System.out.println("alchemiter upgrade now set to " + alchemTe.isUpgraded());
 		}
 		else Debug.warnf("Couldn't find TileEntityAlchemiter at %s, found %s instead.", alchemiterMainPos(), te);
 		broken = true;

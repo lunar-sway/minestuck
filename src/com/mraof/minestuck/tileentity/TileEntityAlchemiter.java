@@ -126,12 +126,13 @@ public class TileEntityAlchemiter extends TileEntity
 			jbe = te;
 		else
 		{
-			Debug.warnf("%s is not a jbe tile entity", te);
+			System.out.printf("%s is not a jbe tile entity \n", te);
 			return;
 		}
 		
 		TileEntityJumperBlock jbeTe = (TileEntityJumperBlock) te;
 		upgraded = bool;
+		System.out.println(bool);
 		
 		if(bool == true)
 		{
@@ -189,7 +190,7 @@ public class TileEntityAlchemiter extends TileEntity
 	
 	public boolean isUpgraded()
 	{
-		return upgraded;
+		return this.upgraded;
 	}
 	
 	//TODO

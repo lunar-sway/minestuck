@@ -38,10 +38,10 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
-	public static final PropertyEnum<EnumParts> PART1 = PropertyEnum.create("part", EnumParts.class, EnumParts.CHEST_LEFT, EnumParts.HOPPER_LEFT, EnumParts.CHEST_RIGHT, EnumParts.HOPPER_RIGHT);
-	public static final PropertyEnum<EnumParts> PART2 = PropertyEnum.create("part", EnumParts.class, EnumParts.LIBRARY_LEFT, EnumParts.CRAFTING_LEFT, EnumParts.CRAFTING_RIGHT, EnumParts.LIBRARY_RIGHT);
-	public static final PropertyEnum<EnumParts> PART3 = PropertyEnum.create("part", EnumParts.class, EnumParts.BORDER_LEFT, EnumParts.BORDER_SIDE, EnumParts.BORDER_RIGHT, EnumParts.SMALL_CORNER);
-	public static final PropertyEnum<EnumParts> PART4 = PropertyEnum.create("part", EnumParts.class, EnumParts.BLENDER, EnumParts.BASE_CORNER, EnumParts.CENTER, EnumParts.CABLE);
+	public static final PropertyEnum<EnumParts> PART1 = PropertyEnum.create("part", EnumParts.class, EnumParts.BASE_CORNER_LEFT, EnumParts.BASE_CORNER_RIGHT, EnumParts.BASE_SIDE_LEFT, EnumParts.BASE_SIDE_RIGHT);
+	public static final PropertyEnum<EnumParts> PART2 = PropertyEnum.create("part", EnumParts.class, EnumParts.CHEST, EnumParts.HOPPER, EnumParts.CRAFTING, EnumParts.LIBRARY);
+	public static final PropertyEnum<EnumParts> PART3 = PropertyEnum.create("part", EnumParts.class, EnumParts.GRISTWIDGET, EnumParts.CAPTCHA_CARD, EnumParts.DROPPER, EnumParts.BOONDOLLAR);
+	public static final PropertyEnum<EnumParts> PART4 = PropertyEnum.create("part", EnumParts.class, EnumParts.BLENDER, EnumParts.PLACEHOLDER_0, EnumParts.PLACEHOLDER_1, EnumParts.PLACEHOLDER_2);
 	
 	public final PropertyEnum<EnumParts> PART;
 	public static final PropertyDirection DIRECTION = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
@@ -77,36 +77,28 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 			return true;
 		if(index == 2||index == 3)
 			return true;
-		
-		
-		BlockPos mainPos = getMainPos(state, pos, worldIn);
-		TileEntity te = worldIn.getTileEntity(mainPos);
-		
-		int id = getUpgradeId(state, pos, worldIn);
-		if(te instanceof TileEntityJumperBlock)
-			((TileEntityJumperBlock) te).onRightClick(playerIn, state, id);
 		return true;
 	}
 	
 	@Override
 	public boolean hasTileEntity(IBlockState state)
 	{
-		return state.getValue(PART).isCable();
+		return state.getValue(PART).hasTileEntity();
 	}
 	
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta)
 	{
-		if(meta / 4 + index * 4 == EnumParts.CABLE.ordinal())
-			return new TileEntityJumperBlock();
-		else
+		//if(meta / 4 + index * 4 == EnumParts.CABLE.ordinal())
+		//	return new TileEntityJumperBlock();
+		//else
 			return null;
 	}
 	
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
 	{
-		if(!state.getValue(PART).isPlug() && !state.getValue(PART).isShunt() && !state.getValue(PART).isCable())
+		/*if(!state.getValue(PART).isPlug() && !state.getValue(PART).isShunt() && !state.getValue(PART).isCable())
 		{
 			BlockPos mainPos = getMainPos(state, pos, worldIn);
 			TileEntity te = worldIn.getTileEntity(mainPos);
@@ -116,7 +108,7 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 				((TileEntityJumperBlock) te).setBroken();
 			}
 		}
-		
+		*/
 		super.breakBlock(worldIn, pos, state);
 	}
 	
@@ -181,16 +173,6 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 	{
 		
 		EnumParts part = state.getValue(PART);
-		if(part.isCable())
-			part = EnumParts.CABLE;
-		else if(part == EnumParts.CHEST_RIGHT || part == EnumParts.CHEST_LEFT)
-			part = EnumParts.CHEST_LEFT;
-		else if(part == EnumParts.CRAFTING_RIGHT || part == EnumParts.CRAFTING_LEFT)
-			part = EnumParts.CRAFTING_LEFT;
-		else if(part == EnumParts.LIBRARY_RIGHT || part == EnumParts.LIBRARY_LEFT)
-			part = EnumParts.LIBRARY_LEFT;
-		else if(part == EnumParts.CHEST_RIGHT || part == EnumParts.CHEST_LEFT)
-			part = EnumParts.CHEST_LEFT;
 		
 		EnumFacing facing = state.getValue(DIRECTION);
 		return (part.ordinal() % 4) * 4 + facing.getHorizontalIndex();
@@ -202,44 +184,6 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 		EnumParts part = state.getValue(PART);
 		EnumFacing facing = state.getValue(DIRECTION);
 		
-		int id = getUpgradeId(state, pos, worldIn);
-		BlockPos mainPos = getMainPos(state, pos, worldIn);
-		
-		/*if(worldIn.getTileEntity(mainPos) instanceof TileEntityJumperBlock)
-		{
-			if(part.isPlug())
-			{
-				
-				TileEntity te = worldIn.getTileEntity(mainPos);
-				System.out.println("beep: " + te);
-				TileEntityJumperBlock cable = (TileEntityJumperBlock) te;
-				System.out.println("boop: " + cable);
-				
-				if(!cable.getUpgrade(id).isEmpty())
-				{
-					if(part == EnumParts.CHEST_LEFT) part = EnumParts.CHEST_RIGHT; 
-					if(part == EnumParts.HOPPER_LEFT) part = EnumParts.HOPPER_RIGHT; 
-					if(part == EnumParts.LIBRARY_LEFT) part = EnumParts.LIBRARY_RIGHT; 
-					if(part == EnumParts.CRAFTING_LEFT) part = EnumParts.CRAFTING_RIGHT; 
-				} 
-				
-			} else if(part.isShunt())
-			{
-				TileEntity te = worldIn.getTileEntity(mainPos);
-				TileEntityJumperBlock cable = (TileEntityJumperBlock) te;
-				
-				
-				if(cable.getUpgrade(id).isEmpty())
-				{
-					if(part == EnumParts.CHEST_RIGHT) part = EnumParts.CHEST_LEFT; 
-					if(part == EnumParts.HOPPER_RIGHT) part = EnumParts.HOPPER_LEFT; 
-					if(part == EnumParts.LIBRARY_RIGHT) part = EnumParts.LIBRARY_LEFT; 
-					if(part == EnumParts.CRAFTING_RIGHT) part = EnumParts.CRAFTING_LEFT; 
-				}
-					
-					
-				}
-		}*/
 		state = state.withProperty(PART, part);
 		return state;
 		} 
@@ -248,201 +192,36 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
      *returns the block position of the "Main" block
      *aka the block with the TileEntity for the machine
      */
-	public BlockPos getMainPos(IBlockState state, BlockPos pos, World worldIn)
+	public static BlockPos staticAlchemiterMainPos(EnumFacing facing, BlockPos pos, World world)
 	{
+		BlockPos alchemPos = pos.offset(facing.rotateY()).offset(facing);
 		
-		BlockPos mainPos = null;
 		
-		EnumParts part = state.getValue(PART);
-		EnumFacing facing = state.getValue(DIRECTION);
-		
-		if(index == 1)
+		for(int i = 0; i <= 5; i++)
 		{
-			if((part== EnumParts.CRAFTING_LEFT || part== EnumParts.CRAFTING_RIGHT) && isCable(state, pos.offset(facing.rotateY(), 1).offset(facing.rotateY(), 0), worldIn))
-				mainPos = pos.offset(facing.rotateY(), 1);
-			else if((part== EnumParts.LIBRARY_LEFT || part== EnumParts.LIBRARY_RIGHT) && isCable(state, pos.offset(facing.rotateY(), 2).offset(facing.rotateY(), 0), worldIn))
-				mainPos = pos.offset(facing.rotateY(), 2);
-		}
-		else if(index == 0)
-			if((part== EnumParts.CHEST_LEFT || part== EnumParts.CHEST_RIGHT))
-		{
-			for(int offset = 3; offset >= 1; offset--)
-			{
-				if(isCable(state, pos.offset(facing, offset).offset(facing.rotateY(), 2), worldIn))
-				{
-					mainPos = pos.offset(facing, offset).offset(facing.rotateY(), 2);
-					break;
-				}
+			if(world.getBlockState(alchemPos).equals(BlockAlchemiter.getBlockState(BlockAlchemiter.EnumParts.TOTEM_CORNER, facing)))
+			{	
+				pos = alchemPos.up();
+				break;
 			}
-		}
-		else if((part == EnumParts.HOPPER_LEFT || part== EnumParts.HOPPER_RIGHT))
-		{
-			for(int offset = 3; offset >= 1; offset--)
+			else
+			alchemPos = alchemPos.offset(facing.rotateYCCW(), 3);
+			if(world.getBlockState(pos.offset(facing.rotateYCCW(), 3)).equals(BlockAlchemiter.getBlockState(BlockAlchemiter.EnumParts.TOTEM_CORNER, facing)))
 			{
-				if(isCable(state, pos.offset(facing, offset).offset(facing.rotateY(), 1), worldIn))
-				{
-					mainPos = pos.offset(facing, offset).offset(facing.rotateY(), 1);
-					break;
-				}
+				pos = alchemPos.up();
+				break;
 			}
+			if(world.getBlockState(alchemPos).getBlock() instanceof BlockAlchemiter || world.getBlockState(alchemPos).getBlock() instanceof BlockAlchemiterUpgrades)
+				facing = world.getBlockState(alchemPos).getValue(BlockAlchemiter.DIRECTION);
+			else
+				facing = facing.rotateY();
 		}
-		else if(part == EnumParts.CABLE)
-			mainPos = pos;
-		return mainPos;	
 		
-	}
-	
-	public BlockPos getMainPos(IBlockState state, BlockPos pos, IBlockAccess worldIn)
-	{
-		
-		BlockPos mainPos = null;
-		
-		EnumParts part = state.getValue(PART);
-		EnumFacing facing = state.getValue(DIRECTION);
-		
-		if(index == 1)
-		{
-			if((part== EnumParts.CRAFTING_LEFT || part== EnumParts.CRAFTING_RIGHT) && isCable(state, pos.offset(facing.rotateY(), 1).offset(facing.rotateY(), 0), worldIn))
-				mainPos = pos.offset(facing.rotateY(), 1);
-			else if((part== EnumParts.LIBRARY_LEFT || part== EnumParts.LIBRARY_RIGHT) && isCable(state, pos.offset(facing.rotateY(), 2).offset(facing.rotateY(), 0), worldIn))
-				mainPos = pos.offset(facing.rotateY(), 2);
-		}
-		else if(index == 0)
-			if((part== EnumParts.CHEST_LEFT || part== EnumParts.CHEST_RIGHT))
-		{
-			for(int offset = 3; offset >= 1; offset--)
-			{
-				if(isCable(state, pos.offset(facing, offset).offset(facing.rotateY(), 2), worldIn))
-				{
-					mainPos = pos.offset(facing, offset).offset(facing.rotateY(), 2);
-					break;
-				}
-			}
-		}
-		else if((part == EnumParts.HOPPER_LEFT || part== EnumParts.HOPPER_RIGHT))
-		{
-			for(int offset = 3; offset >= 1; offset--)
-			{
-				if(isCable(state, pos.offset(facing, offset).offset(facing.rotateY(), 1), worldIn))
-				{
-					mainPos = pos.offset(facing, offset).offset(facing.rotateY(), 1);
-					break;
-				}
-			}
-		}
-		else if(part == EnumParts.CABLE)
-			mainPos = pos;
-		return mainPos;	
-		
+		return pos;
 	}
 	
 	
-	public int getUpgradeId(IBlockState state, BlockPos pos, World worldIn)
-	{
-		int id = 8;
-		
-		EnumParts part = state.getValue(PART);
-		EnumFacing facing = state.getValue(DIRECTION);
-		
-		
-		if(index == 1)
-		{
-			if(part == EnumParts.CRAFTING_LEFT || part== EnumParts.CRAFTING_RIGHT) 
-				id = 1;
-			else if(part== EnumParts.LIBRARY_LEFT || part== EnumParts.LIBRARY_RIGHT) 
-				id = 0;
-		}
-		else if(index == 0)
-		{
-			
-			if((part== EnumParts.CHEST_LEFT || part== EnumParts.CHEST_RIGHT))
-			{
-				for(int offset = 3; offset >= 1; offset--)
-				{
-					
-					if(isCable(state, pos.offset(facing, offset).offset(facing.rotateY(), 2), worldIn))
-					{
-						
-						id = offset + 1;
-						break;
-					}
-				}
-			}
-			else if((part== EnumParts.HOPPER_LEFT || part== EnumParts.HOPPER_RIGHT))
-			{
-				for(int offset = 3; offset >= 1; offset--)
-				{
-					
-					if(isCable(state, pos.offset(facing, offset).offset(facing.rotateY(), 1), worldIn))
-					{
-						id = offset + 4;
-						break;
-					}
-				}
-			}
-			
-		}
-		return id;
-	}
 	
-	public int getUpgradeId(IBlockState state, BlockPos pos, IBlockAccess worldIn)
-	{
-		int id = 8;
-		
-		EnumParts part = state.getValue(PART);
-		EnumFacing facing = state.getValue(DIRECTION);
-		
-		
-		if(index == 1)
-		{
-			
-			if(part == EnumParts.CRAFTING_LEFT || part== EnumParts.CRAFTING_RIGHT)
-				id = 1;
-			else if(part== EnumParts.LIBRARY_LEFT || part== EnumParts.LIBRARY_RIGHT)
-				id = 0;
-		}
-		else if(index == 0)
-		{
-			
-			if((part== EnumParts.CHEST_LEFT || part== EnumParts.CHEST_RIGHT))
-			{
-				for(int offset = 3; offset >= 1; offset--)
-				{
-					
-					if(isCable(state, pos.offset(facing, offset).offset(facing.rotateY(), 2), worldIn))
-					{
-						
-						id = offset + 1;
-						break;
-					}
-				}
-			}
-			else if((part== EnumParts.HOPPER_LEFT || part== EnumParts.HOPPER_RIGHT))
-			{
-				for(int offset = 3; offset >= 1; offset--)
-				{
-					
-					if(isCable(state, pos.offset(facing, offset).offset(facing.rotateY(), 1), worldIn))
-					{
-						id = offset + 4;
-						break;
-					}
-				}
-			}
-			
-		}
-		return id;
-	}
-	
-	public boolean isCable(IBlockState state, BlockPos pos, World worldIn)
-	{
-		return worldIn.getBlockState(pos).getBlock() == MinestuckBlocks.alchemiterUpgrades[3];
-	}
-	
-	public boolean isCable(IBlockState state, BlockPos pos, IBlockAccess worldIn)
-	{
-		return worldIn.getBlockState(pos).getBlock() == MinestuckBlocks.alchemiterUpgrades[3];
-	}
 	
 	public static EnumParts getPart(IBlockState state)
 	{
@@ -472,25 +251,25 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 	
 	public enum EnumParts implements IStringSerializable
 	{
-		CHEST_LEFT(	new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
-		HOPPER_LEFT(	new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
-		CHEST_RIGHT(		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
-		HOPPER_RIGHT(		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
+		BASE_CORNER_LEFT(	new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
+		BASE_CORNER_RIGHT(	new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
+		BASE_SIDE_LEFT(		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
+		BASE_SIDE_RIGHT(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
 		
-		CRAFTING_LEFT(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
-		LIBRARY_LEFT(	new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
-		CRAFTING_RIGHT(		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
-		LIBRARY_RIGHT(		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
+		CHEST(	new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
+		HOPPER(	new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
+		CRAFTING(		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
+		LIBRARY(		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
 		
-		BORDER_LEFT(	new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
-		BORDER_SIDE(	new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
-		BORDER_RIGHT(		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
-		SMALL_CORNER(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
+		CAPTCHA_CARD(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
+		GRISTWIDGET(	new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
+		DROPPER(		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
+		BOONDOLLAR(		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
 		
 		BLENDER(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
-		BASE_CORNER(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
-		CENTER(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
-		CABLE(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D));
+		PLACEHOLDER_0(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
+		PLACEHOLDER_1(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
+		PLACEHOLDER_2(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D));
 		
 		private final AxisAlignedBB[] BOUNDING_BOX;
 		
@@ -516,20 +295,11 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 			return name().toLowerCase();
 		}
 		
-		public boolean isPlug()
+		public boolean hasTileEntity()
 		{
-			return this == CHEST_LEFT || this == HOPPER_LEFT || this == LIBRARY_LEFT || this == CRAFTING_LEFT;
+			return false;
 		}
 		
-		public boolean isShunt()
-		{
-			return this == CHEST_RIGHT || this == HOPPER_RIGHT || this == LIBRARY_RIGHT || this == CRAFTING_RIGHT;
-		}
-		
-		public boolean isCable()
-		{
-			return this == CABLE;
-		}
 	}
 	
 	public static BlockAlchemiterUpgrades[] createBlocks()

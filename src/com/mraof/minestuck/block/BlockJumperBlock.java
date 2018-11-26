@@ -112,16 +112,13 @@ public abstract class BlockJumperBlock extends BlockLargeMachine {
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
 	{
-		if(!state.getValue(PART).isPlug() && !state.getValue(PART).isShunt() && !state.getValue(PART).isCable())
-		{
 			BlockPos mainPos = getMainPos(state, pos, worldIn);
 			TileEntity te = worldIn.getTileEntity(mainPos);
 			IBlockState otherState = worldIn.getBlockState(mainPos);
-			if(te instanceof TileEntityJumperBlock && otherState.getValue(DIRECTION) == state.getValue(DIRECTION))
+			if(te instanceof TileEntityJumperBlock)
 			{
 				((TileEntityJumperBlock) te).setBroken();
 			}
-		}
 		
 		super.breakBlock(worldIn, pos, state);
 	}
@@ -268,8 +265,42 @@ public abstract class BlockJumperBlock extends BlockLargeMachine {
 		
 		EnumParts part = state.getValue(PART);
 		EnumFacing facing = state.getValue(DIRECTION);
-		
-		if(index == 1)
+		if(index == 3)
+		{
+			if(part == EnumParts.BASE_SIDE)
+			{
+				mainPos = pos.offset(facing).offset(facing.rotateY());
+				if(!isCable(state, mainPos, worldIn)) 
+					mainPos = pos.offset(facing).offset(facing.rotateY(), 2);
+				System.out.println(isCable(state, mainPos, worldIn));
+			}
+			else if(part == EnumParts.BASE_CORNER)
+				{
+					mainPos = pos.offset(facing);
+					if(!isCable(state, mainPos, worldIn)) 
+						mainPos = pos.offset(facing, 3).offset(facing.rotateYCCW());
+				}
+			else if(part == EnumParts.CENTER) 
+			{
+				for(int offset = 3; offset >= 1; offset--)
+				{
+					if(isCable(state, pos.offset(facing, offset), worldIn))
+					{
+						mainPos = pos.offset(facing, offset);
+						break;
+					}
+				}
+			}
+			else if(part == EnumParts.CABLE) mainPos = pos;
+		}
+		else if(index == 2)
+		{
+			if(part == EnumParts.BORDER_LEFT) mainPos = pos.offset(facing, 4);
+			else if(part == EnumParts.BORDER_RIGHT) mainPos = pos.offset(facing, 4).offset(facing.rotateY(),2);
+			else if(part == EnumParts.BORDER_SIDE) mainPos = pos.offset(facing, 4).offset(facing.rotateY());
+			else if(part == EnumParts.SMALL_CORNER) mainPos = pos.offset(facing, 4).offset(facing.rotateYCCW());
+		}
+		else if(index == 1)
 		{
 			if((part== EnumParts.BOTTOM_CORNER_PLUG || part== EnumParts.BOTTOM_CORNER_SHUNT) && isCable(state, pos.offset(facing.rotateY(), 1).offset(facing.rotateY(), 0), worldIn))
 				mainPos = pos.offset(facing.rotateY(), 1);
@@ -301,6 +332,7 @@ public abstract class BlockJumperBlock extends BlockLargeMachine {
 		}
 		else
 			mainPos = pos;
+		System.out.println(mainPos);
 		return mainPos;	
 		
 	}
@@ -449,12 +481,14 @@ public abstract class BlockJumperBlock extends BlockLargeMachine {
 	
 	public boolean isCable(IBlockState state, BlockPos pos, World worldIn)
 	{
-		return worldIn.getBlockState(pos).getBlock() == MinestuckBlocks.jumperBlockExtension[3];
+		return worldIn.getBlockState(pos).getBlock() == MinestuckBlocks.jumperBlockExtension[3] && 
+				worldIn.getBlockState(pos).getBlock().hasTileEntity(worldIn.getBlockState(pos));
 	}
 	
 	public boolean isCable(IBlockState state, BlockPos pos, IBlockAccess worldIn)
 	{
-		return worldIn.getBlockState(pos).getBlock() == MinestuckBlocks.jumperBlockExtension[3];
+		return worldIn.getBlockState(pos).getBlock() == MinestuckBlocks.jumperBlockExtension[3] && 
+				worldIn.getBlockState(pos).getBlock().hasTileEntity(worldIn.getBlockState(pos));
 	}
 	
 	public static EnumParts getPart(IBlockState state)
