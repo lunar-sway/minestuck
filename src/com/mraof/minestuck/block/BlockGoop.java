@@ -20,6 +20,8 @@ public class BlockGoop extends BlockBreakable
 		setCreativeTab(TabMinestuck.instance);
 		setSoundType(SoundType.SLIME);
 		setUnlocalizedName(name);
+		setHardness(0.1F);
+		setHarvestLevel("Shovel", 0);
 	}
 	
 	@Override
