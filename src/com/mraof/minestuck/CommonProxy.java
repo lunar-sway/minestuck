@@ -111,7 +111,7 @@ public class CommonProxy
 		//register smelting recipes and oredictionary
 		CraftingRecipes.registerSmelting();
 		CraftingRecipes.addOredictionary();
-		
+
 		//register consort shop prices
 		ConsortRewardHandler.registerMinestuckPrices();
 		

@@ -1,6 +1,8 @@
 package com.mraof.minestuck.tileentity;
 
 
+import java.util.Arrays;
+
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
@@ -57,7 +59,8 @@ public class TileEntityAlchemiter extends TileEntity
 	
 	public ItemStack getOutput()
 	{
-		if(checkUpgrade(MinestuckItems.captchaCard))
+		//System.out.println(getUpgradeList());
+		if(hasUpgrade(AlchemiterUpgrades.captchaCard))
 		{
 		if (!AlchemyRecipes.hasDecodedItem(dowel))
 			return AlchemyRecipes.createCard(new ItemStack(MinestuckBlocks.genericObject), false);
@@ -106,8 +109,9 @@ public class TileEntityAlchemiter extends TileEntity
 	//JBE upgrades
 	public void setUpgrade(ItemStack stack, int id)
 	{
-		if(stack.isEmpty())
+		if(!stack.isEmpty())
 		{
+			System.out.println("setting upgrade " + " id to " + stack);
 			upgradeItem[id] = stack;
 			if(world != null)
 			{
@@ -175,17 +179,10 @@ public class TileEntityAlchemiter extends TileEntity
 		}
 	}
 	
-	public boolean checkUpgrade(Item itemToCheck)
+	
+	public boolean hasUpgrade(AlchemiterUpgrades upgrade)
 	{
-		ItemStack stackToCheck = new ItemStack(itemToCheck, 1);
-		
-		for(int i = 0; i < upgradeCheck.length; i++)
-		{
-			if(upgradeCheck[i] == Item.getIdFromItem(itemToCheck)) return true;
-			//System.out.println(itemToCheck + " != " + upgradeCheck[i]);
-			
-		}
-		return false;
+		return AlchemiterUpgrades.hasUpgrade(getUpgradeList(), upgrade);
 	}
 	
 	public boolean isUpgraded()
@@ -213,6 +210,11 @@ public class TileEntityAlchemiter extends TileEntity
 				Debug.warnf("Failed to notice a block being broken or misplaced at the alchemiter at %s", getPos());
 		}
 		return !broken;
+	}
+	
+	public ItemStack[] getUpgradeList()
+	{
+		return this.upgradeItem;
 	}
 	
 	public ItemStack getUpgrade(int id)
@@ -352,12 +354,12 @@ public class TileEntityAlchemiter extends TileEntity
 				BlockPos mainPos = pos;
 				if(!isBroken())
 				{
-					System.out.println("blender check");
-					System.out.println(new ItemStack(Item.getItemFromBlock(MinestuckBlocks.blender)));
-					System.out.println(checkUpgrade(Item.getItemFromBlock(MinestuckBlocks.blender)));
-					if(checkUpgrade(Item.getItemFromBlock(MinestuckBlocks.blender)))
-						doTheBlenderThing();
-					else
+					//System.out.println("blender check");
+					//System.out.println(new ItemStack(Item.getItemFromBlock(MinestuckBlocks.blender)));
+					//System.out.println(hasUpgradeCombo("blender"));
+					//if(hasUpgrade(AlchemiterUpgrades.blender))
+					//	doTheBlenderThing();
+					//else
 					{
 						System.out.println("thinh");
 					playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.ALCHEMITER.ordinal(), worldIn, mainPos.getX(), mainPos.getY(), mainPos.getZ());
@@ -430,7 +432,7 @@ public class TileEntityAlchemiter extends TileEntity
 			{
 				ItemStack stack = newItem.copy();
 				//TODO
-				if(checkUpgrade(MinestuckItems.captchaCard)) {
+				if(hasUpgrade(AlchemiterUpgrades.captchaCard)) {
 					int stackCount =  Math.min(AlchemyRecipes.getDecodedItem(stack).getMaxStackSize(), quantity);
 					
 					stack = AlchemyRecipes.changeEncodeSize(stack, stackCount);
