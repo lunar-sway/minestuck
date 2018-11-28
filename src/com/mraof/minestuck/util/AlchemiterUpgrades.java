@@ -9,22 +9,38 @@ import com.mraof.minestuck.block.BlockAlchemiterUpgrades.EnumParts;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.Debug;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 
 public class AlchemiterUpgrades
 {
+	protected String upgradeName;
+	protected ItemStack[] upgradeItem = new ItemStack[7];
+	protected EnumType upgradeType;
+	protected EnumParts[] upgradeBlock = new EnumParts[15];
+	protected boolean isCombo;
+	
 	
 	public static AlchemiterUpgrades captchaCard = new AlchemiterUpgrades(new ItemStack(MinestuckItems.captchaCard), EnumType.SINGLE, EnumParts.CAPTCHA_CARD);
 	public static AlchemiterUpgrades blender = new AlchemiterUpgrades(new ItemStack(MinestuckBlocks.blender), EnumType.TOTEM_PAD, EnumParts.BLENDER);
+	public static AlchemiterUpgrades crafting = new AlchemiterUpgrades(new ItemStack(Blocks.CRAFTING_TABLE), EnumType.SINGLE, EnumParts.CRAFTING);
+	public static AlchemiterUpgrades hopper = new AlchemiterUpgrades(new ItemStack(Blocks.HOPPER), EnumType.SINGLE, EnumParts.HOPPER);
+	public static AlchemiterUpgrades library = new AlchemiterUpgrades(new ItemStack(MinestuckItems.modusCard, 1, 3), EnumType.SINGLE, EnumParts.LIBRARY);
+	public static AlchemiterUpgrades gristWidget = new AlchemiterUpgrades(new ItemStack(MinestuckBlocks.crockerMachine), EnumType.SINGLE, EnumParts.GRISTWIDGET);
+	public static AlchemiterUpgrades dropper = new AlchemiterUpgrades(new ItemStack(Blocks.DROPPER), EnumType.SINGLE, EnumParts.DROPPER);
+	public static AlchemiterUpgrades gristToBoon = new AlchemiterUpgrades(new ItemStack(MinestuckItems.boondollars), EnumType.SINGLE, EnumParts.BOONDOLLAR);
+	public static AlchemiterUpgrades sbahjified = new AlchemiterUpgrades(new ItemStack(MinestuckItems.sbahjPoster), EnumType.NONE, EnumParts.PLACEHOLDER);
+	public static AlchemiterUpgrades holopad = new AlchemiterUpgrades(new ItemStack(MinestuckBlocks.frogStatueReplica), EnumType.TOTEM_PAD, EnumParts.PLACEHOLDER); //TODO
+	public static AlchemiterUpgrades cruxtruder = new AlchemiterUpgrades(new ItemStack(MinestuckBlocks.cruxtruder), EnumType.TOTEM_PAD, EnumParts.PLACEHOLDER);
+	public static AlchemiterUpgrades punchDesignix = new AlchemiterUpgrades(new ItemStack(MinestuckBlocks.punchDesignix), EnumType.DOUBLE, EnumParts.PLACEHOLDER, EnumParts.PLACEHOLDER);
+	public static AlchemiterUpgrades compactJBE = new AlchemiterUpgrades(new ItemStack(MinestuckBlocks.jumperBlockExtension[0]), EnumType.DOUBLE, EnumParts.PLACEHOLDER, EnumParts.PLACEHOLDER);
 	
+	//Upgrade Combos
+	public static AlchemiterUpgrades itemWidget = new AlchemiterUpgrades(new ItemStack[] {new ItemStack(MinestuckBlocks.crockerMachine), new ItemStack(Blocks.HOPPER)}, EnumType.DOUBLE, EnumParts.PLACEHOLDER, EnumParts.PLACEHOLDER);
+	public static AlchemiterUpgrades holoLathe = new AlchemiterUpgrades(new ItemStack[] {new ItemStack(MinestuckBlocks.totemlathe[0]), new ItemStack(MinestuckBlocks.frogStatueReplica)}, EnumType.DOUBLE, EnumParts.PLACEHOLDER, EnumParts.PLACEHOLDER); //TODO
+	public static AlchemiterUpgrades cruxiteBlender = new AlchemiterUpgrades(new ItemStack[] {new ItemStack(MinestuckBlocks.cruxtruder), new ItemStack(MinestuckBlocks.blender)}, EnumType.DOUBLE, EnumParts.PLACEHOLDER, EnumParts.PLACEHOLDER);
 	
-	
-	protected static String upgradeName;
-	protected static ItemStack[] upgradeItem = new ItemStack[7];
-	protected static EnumType upgradeType;
-	protected static EnumParts[] upgradeBlock = new EnumParts[15];
-	protected static boolean isCombo;
 	
 	public AlchemiterUpgrades(ItemStack item, EnumType type, EnumParts...block)
 	{
@@ -34,28 +50,25 @@ public class AlchemiterUpgrades
 	public AlchemiterUpgrades(ItemStack[] items, EnumType type, EnumParts...block)
 	{
 		setUpgradeItems(items);
-		setUpgradeType(type);
-		setUpgradeBlocks(block);
+		this.setUpgradeType(type);
+		this.setUpgradeBlocks(block);
 	}
 	
 	protected void setUpgradeItems(ItemStack[] items)
 	{
 		this.upgradeItem = items;
-		for(int i = 0; i < items.length; i++)
-		{
-		System.out.println(i + ") registered item upgrades: " + items[i]);
-		System.out.println("thing is now: " + this.getUpgradeItems()[i]);
-		}
 	}
 	
 	public ItemStack[] getUpgradeItems()
 	{
-		return this.upgradeItem;
+		return upgradeItem;
 	}
 
 	public EnumType getUpgradeType(AlchemiterUpgrades upgrade)
 	{
 		return this.upgradeType;
+		
+		
 	}
 
 	protected void setUpgradeType(EnumType type)
@@ -85,35 +98,32 @@ public class AlchemiterUpgrades
 	
 	public static boolean hasUpgrade(ItemStack[] list, AlchemiterUpgrades upgrade)
 	{
-		System.out.println(upgrade);
 		ItemStack[] stack = upgrade.getUpgradeItems();
 		
-		System.out.println(stack);
 		for(int i = 0; i < stack.length; i++)
 		{
 			if(stack[i] == null) continue;
-			System.out.println(stack[i]);
-			System.out.println(!Arrays.asList(list).contains(stack[i]));
-			
+				
 			boolean check = false;
 			for(ItemStack item : list)
 			{
 				if(item == null) continue;
+					
 				if(item.isItemEqual(stack[i])) check = true;
 			}
 			if(!check) return false;
 		}
-		
 		return true;
 	}
 	
 	public enum EnumType implements IStringSerializable
 	{
+		NONE,
 		SINGLE,
 		DOUBLE,
 		TRIPLE,
 		QUAD,
-		TOTEM_PAD
+		TOTEM_PAD,
 		;
 		
 		public int toInt()
