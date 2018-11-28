@@ -222,9 +222,7 @@ public abstract class BlockJumperBlock extends BlockLargeMachine {
 			if(part.isPlug())
 			{
 				
-				//System.out.println("beep: " + te);
 				TileEntityJumperBlock cable = (TileEntityJumperBlock) te;
-				//System.out.println("boop: " + cable);
 				
 				if(!cable.getUpgrade(id).isEmpty())
 				{
@@ -272,7 +270,6 @@ public abstract class BlockJumperBlock extends BlockLargeMachine {
 				mainPos = pos.offset(facing).offset(facing.rotateY());
 				if(!isCable(state, mainPos, worldIn)) 
 					mainPos = pos.offset(facing).offset(facing.rotateY(), 2);
-				System.out.println(isCable(state, mainPos, worldIn));
 			}
 			else if(part == EnumParts.BASE_CORNER)
 				{
@@ -332,7 +329,6 @@ public abstract class BlockJumperBlock extends BlockLargeMachine {
 		}
 		else
 			mainPos = pos;
-		System.out.println(mainPos);
 		return mainPos;	
 		
 	}
