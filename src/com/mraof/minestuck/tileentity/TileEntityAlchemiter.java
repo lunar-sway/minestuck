@@ -59,7 +59,6 @@ public class TileEntityAlchemiter extends TileEntity
 	
 	public ItemStack getOutput()
 	{
-		//System.out.println(getUpgradeList());
 		if(hasUpgrade(AlchemiterUpgrades.captchaCard))
 		{
 		if (!AlchemyRecipes.hasDecodedItem(dowel))
@@ -111,8 +110,7 @@ public class TileEntityAlchemiter extends TileEntity
 	{
 		if(!stack.isEmpty())
 		{
-			System.out.println("setting upgrade " + " id to " + stack);
-			upgradeItem[id] = stack;
+			this.upgradeItem[id] = stack;
 			if(world != null)
 			{
 				IBlockState state = world.getBlockState(pos);
@@ -130,31 +128,29 @@ public class TileEntityAlchemiter extends TileEntity
 			jbe = te;
 		else
 		{
-			System.out.printf("%s is not a jbe tile entity \n", te);
+			Debug.warnf("%s is not a jbe tile entity", te);
 			return;
 		}
 		
 		TileEntityJumperBlock jbeTe = (TileEntityJumperBlock) te;
-		upgraded = bool;
-		System.out.println(bool);
+		this.upgraded = bool;
 		
 		if(bool == true)
 		{
 			for(int i = 0; i < upgradeItem.length; i++)
 			{
-				upgradeItem[i] = jbeTe.getUpgrade(i);
-				upgradeItem[i].setCount(1);
+				this.upgradeItem[i] = jbeTe.getUpgrade(i);
+				this.upgradeItem[i].setCount(1);
 			}
 		}
 		else
 		{
 			for(int i = 0; i < upgradeItem.length; i++)
 			{
-				upgradeItem[i] = ItemStack.EMPTY;
+				this.upgradeItem[i] = ItemStack.EMPTY;
 			}
 		}
-		
-		refreshUpgrades();
+		//refreshUpgrades();
 	}
 	
 	public void refreshUpgrades()
@@ -172,7 +168,6 @@ public class TileEntityAlchemiter extends TileEntity
 				if(upgradeCheck[c] == -1)
 					{
 					upgradeCheck[c] = Item.getIdFromItem(upgradeItem[i].getItem());
-					System.out.println(upgradeCheck[c]);
 						break;
 					}
 			}
@@ -193,7 +188,6 @@ public class TileEntityAlchemiter extends TileEntity
 	//TODO
 	public void doTheBlenderThing()
 	{
-		System.out.println("B L E N D !");
 		if(!dowel.isEmpty())
 		{
 			InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(MinestuckItems.rawCruxite, 1));
@@ -224,15 +218,6 @@ public class TileEntityAlchemiter extends TileEntity
 	
 	public void checkStates()
 	{
-		if(isUpgraded())
-		{
-			for(int i = 0; i < upgradeItem.length; i++)
-			{
-				System.out.println(getUpgrade(i));
-			}
-		}
-		else System.out.println("no upgrades were found");
-		
 		if(this.broken)
 			return;
 		
@@ -272,8 +257,6 @@ public class TileEntityAlchemiter extends TileEntity
 	{
 		super.readFromNBT(tagCompound);
 
-		System.out.println("read");
-		
 		if(tagCompound.hasKey("gristType"))
 			this.selectedGrist = GristType.getTypeFromString(tagCompound.getString("gristType"));
 		if(this.selectedGrist == null)
@@ -302,8 +285,6 @@ public class TileEntityAlchemiter extends TileEntity
 	{
 		super.writeToNBT(tagCompound);
 
-		System.out.println("write");
-		
 		tagCompound.setString("gristType", selectedGrist.getRegistryName().toString());
 		tagCompound.setBoolean("upgraded", upgraded);
 		tagCompound.setBoolean("broken", isBroken());
@@ -354,21 +335,20 @@ public class TileEntityAlchemiter extends TileEntity
 				BlockPos mainPos = pos;
 				if(!isBroken())
 				{
-					//System.out.println("blender check");
-					//System.out.println(new ItemStack(Item.getItemFromBlock(MinestuckBlocks.blender)));
-					//System.out.println(hasUpgradeCombo("blender"));
-					//if(hasUpgrade(AlchemiterUpgrades.blender))
-					//	doTheBlenderThing();
-					//else
+					System.out.println(hasUpgrade(AlchemiterUpgrades.blender));
+					//if(!hasUpgrade(AlchemiterUpgrades.blender))
 					{
-						System.out.println("thinh");
-					playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.ALCHEMITER.ordinal(), worldIn, mainPos.getX(), mainPos.getY(), mainPos.getZ());
+						playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.ALCHEMITER.ordinal(), worldIn, mainPos.getX(), mainPos.getY(), mainPos.getZ());
 					}
 				}
 			}
 			return;
 		}
-		
+		else
+		{
+			if(hasUpgrade(AlchemiterUpgrades.blender) && !dowel.isEmpty())
+				doTheBlenderThing();
+		}
 		BlockPos mainPos = pos;
 		TileEntity te = worldIn.getTileEntity(mainPos);
 		
@@ -459,6 +439,8 @@ public class TileEntityAlchemiter extends TileEntity
 		ItemStack dowel = getDowel();
 		GristSet set;
 		ItemStack stack = getOutput();
+		if(hasUpgrade(AlchemiterUpgrades.captchaCard))
+			stack = AlchemyRecipes.getDecodedItem(getOutput());
 		boolean useSelectedType;
 		if(dowel.isEmpty())
 			return null;

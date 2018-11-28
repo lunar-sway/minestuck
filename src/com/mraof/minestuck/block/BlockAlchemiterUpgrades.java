@@ -38,7 +38,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
-	public static final PropertyEnum<EnumParts> PART1 = PropertyEnum.create("part", EnumParts.class, EnumParts.BASE_CORNER_LEFT, EnumParts.BASE_CORNER_RIGHT, EnumParts.BASE_SIDE_LEFT, EnumParts.BASE_SIDE_RIGHT);
+	public static final PropertyEnum<EnumParts> PART1 = PropertyEnum.create("part", EnumParts.class, EnumParts.BASE_CORNER_LEFT, EnumParts.BASE_CORNER_RIGHT, EnumParts.BASE_SIDE, EnumParts.PLACEHOLDER);
 	public static final PropertyEnum<EnumParts> PART2 = PropertyEnum.create("part", EnumParts.class, EnumParts.CHEST, EnumParts.HOPPER, EnumParts.CRAFTING, EnumParts.LIBRARY);
 	public static final PropertyEnum<EnumParts> PART3 = PropertyEnum.create("part", EnumParts.class, EnumParts.GRISTWIDGET, EnumParts.CAPTCHA_CARD, EnumParts.DROPPER, EnumParts.BOONDOLLAR);
 	public static final PropertyEnum<EnumParts> PART4 = PropertyEnum.create("part", EnumParts.class, EnumParts.BLENDER, EnumParts.PLACEHOLDER_0, EnumParts.PLACEHOLDER_1, EnumParts.PLACEHOLDER_2);
@@ -253,8 +253,8 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 	{
 		BASE_CORNER_LEFT(	new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
 		BASE_CORNER_RIGHT(	new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
-		BASE_SIDE_LEFT(		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
-		BASE_SIDE_RIGHT(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
+		BASE_SIDE(		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
+		PLACEHOLDER(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
 		
 		CHEST(	new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
 		HOPPER(	new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
