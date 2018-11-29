@@ -96,7 +96,7 @@ public class BlockDecor extends Block
      */
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos)
     {
-        return true;
+        return worldIn.getBlockState(pos.down()).isFullCube();
     }
 
     /**
