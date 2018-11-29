@@ -258,6 +258,7 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemCruxtruder(cruxtruder));
 		registerItemBlock(registry, new ItemBlock(cruxtruderLid));
 		registerItemBlock(registry, cruxiteDowel);
+		registerItemBlock(registry, new ItemBlock(holopad));
 		registerItemBlock(registry, new ItemJumperBlock(jumperBlockExtension[0]));
 		registerItemBlock(registry, new ItemBlock(blender));
 		registerItemBlock(registry, new ItemBlock(chessboard));

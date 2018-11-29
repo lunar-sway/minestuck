@@ -31,14 +31,14 @@ public class AlchemiterUpgrades
 	public static AlchemiterUpgrades dropper = new AlchemiterUpgrades(new ItemStack(Blocks.DROPPER), EnumType.SINGLE, EnumParts.DROPPER);
 	public static AlchemiterUpgrades gristToBoon = new AlchemiterUpgrades(new ItemStack(MinestuckItems.boondollars), EnumType.SINGLE, EnumParts.BOONDOLLAR);
 	public static AlchemiterUpgrades sbahjified = new AlchemiterUpgrades(new ItemStack(MinestuckItems.sbahjPoster), EnumType.NONE, EnumParts.PLACEHOLDER);
-	public static AlchemiterUpgrades holopad = new AlchemiterUpgrades(new ItemStack(MinestuckBlocks.frogStatueReplica), EnumType.TOTEM_PAD, EnumParts.PLACEHOLDER); //TODO
+	public static AlchemiterUpgrades holopad = new AlchemiterUpgrades(new ItemStack(MinestuckBlocks.holopad), EnumType.TOTEM_PAD, EnumParts.PLACEHOLDER);
 	public static AlchemiterUpgrades cruxtruder = new AlchemiterUpgrades(new ItemStack(MinestuckBlocks.cruxtruder), EnumType.TOTEM_PAD, EnumParts.PLACEHOLDER);
 	public static AlchemiterUpgrades punchDesignix = new AlchemiterUpgrades(new ItemStack(MinestuckBlocks.punchDesignix), EnumType.DOUBLE, EnumParts.PLACEHOLDER, EnumParts.PLACEHOLDER);
 	public static AlchemiterUpgrades compactJBE = new AlchemiterUpgrades(new ItemStack(MinestuckBlocks.jumperBlockExtension[0]), EnumType.DOUBLE, EnumParts.PLACEHOLDER, EnumParts.PLACEHOLDER);
 	
 	//Upgrade Combos
 	public static AlchemiterUpgrades itemWidget = new AlchemiterUpgrades(new ItemStack[] {new ItemStack(MinestuckBlocks.crockerMachine), new ItemStack(Blocks.HOPPER)}, EnumType.DOUBLE, EnumParts.PLACEHOLDER, EnumParts.PLACEHOLDER);
-	public static AlchemiterUpgrades holoLathe = new AlchemiterUpgrades(new ItemStack[] {new ItemStack(MinestuckBlocks.totemlathe[0]), new ItemStack(MinestuckBlocks.frogStatueReplica)}, EnumType.DOUBLE, EnumParts.PLACEHOLDER, EnumParts.PLACEHOLDER); //TODO
+	public static AlchemiterUpgrades holoLathe = new AlchemiterUpgrades(new ItemStack[] {new ItemStack(MinestuckBlocks.totemlathe[0]), new ItemStack(MinestuckBlocks.holopad)}, EnumType.DOUBLE, EnumParts.PLACEHOLDER, EnumParts.PLACEHOLDER);
 	public static AlchemiterUpgrades cruxiteBlender = new AlchemiterUpgrades(new ItemStack[] {new ItemStack(MinestuckBlocks.cruxtruder), new ItemStack(MinestuckBlocks.blender)}, EnumType.DOUBLE, EnumParts.PLACEHOLDER, EnumParts.PLACEHOLDER);
 	
 	

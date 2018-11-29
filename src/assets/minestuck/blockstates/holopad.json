@@ -1,0 +1,14 @@
+{
+    "variants": {
+        "card=false,facing=north": { "model": "minestuck:holopad" },
+        "card=false,facing=east": { "model": "minestuck:holopad", "y": 90 },
+        "card=false,facing=south": { "model": "minestuck:holopad", "y": 180 },
+        "card=false,facing=west": { "model": "minestuck:holopad", "y": 270 },
+
+		"card=true,facing=north": { "model": "minestuck:holopad_card" },
+        "card=true,facing=east": { "model": "minestuck:holopad_card", "y": 90 },
+        "card=true,facing=south": { "model": "minestuck:holopad_card", "y": 180 },
+        "card=true,facing=west": { "model": "minestuck:holopad_card", "y": 270 }
+       
+    }
+}

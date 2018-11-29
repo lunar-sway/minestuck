@@ -278,6 +278,7 @@ public class MinestuckModelManager
 		register(punchDesignix);
 		register(totemlathe[0]);
 		register(alchemiter[0]);
+		register(holopad);
 		register(jumperBlockExtension[0]);
 		register(blender);
 		register(cruxtruder);

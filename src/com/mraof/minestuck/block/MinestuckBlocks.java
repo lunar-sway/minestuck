@@ -1,6 +1,5 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.block.BlockDecor.EnumBB;
 import com.mraof.minestuck.item.TabMinestuck;
 
 import net.minecraft.block.Block;
@@ -54,6 +53,7 @@ public class MinestuckBlocks
 	public static BlockAlchemiter[] alchemiter = BlockAlchemiter.createBlocks();
 	public static Block cruxtruder = new BlockCruxtruder();
 	public static Block cruxtruderLid = new BlockCruxtruderLid();
+	public static Block holopad = new BlockHolopad();
 	public static BlockJumperBlock[] jumperBlockExtension = BlockJumperBlock.createBlocks();
 	public static BlockAlchemiterUpgrades[] alchemiterUpgrades = BlockAlchemiterUpgrades.createBlocks();
 	
@@ -249,6 +249,7 @@ public class MinestuckBlocks
 		registry.register(alchemiter[1].setRegistryName("alchemiter2"));
 		registry.register(cruxtruder.setRegistryName("cruxtruder"));
 		registry.register(cruxtruderLid.setRegistryName("cruxtruder_lid"));
+		registry.register(holopad.setRegistryName("holopad"));
 		registry.register(jumperBlockExtension[0].setRegistryName("jumper_block_extension"));
 		registry.register(jumperBlockExtension[1].setRegistryName("jumper_block_extension2"));
 		registry.register(jumperBlockExtension[2].setRegistryName("jumper_block_extension3"));
