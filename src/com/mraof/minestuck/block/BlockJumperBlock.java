@@ -80,9 +80,9 @@ public abstract class BlockJumperBlock extends BlockLargeMachine {
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
 		if(worldIn.isRemote)
-			return true;
+			return false;
 		if(index == 2||index == 3)
-			return true;
+			return false;
 		
 		
 		BlockPos mainPos = getMainPos(state, pos, worldIn);
@@ -204,7 +204,6 @@ public abstract class BlockJumperBlock extends BlockLargeMachine {
 	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos)
 	{
 		EnumParts part = state.getValue(PART);
-		EnumFacing facing = state.getValue(DIRECTION);
 		
 		int id = getUpgradeId(state, pos, worldIn);
 		BlockPos mainPos = getMainPos(state, pos, worldIn);
