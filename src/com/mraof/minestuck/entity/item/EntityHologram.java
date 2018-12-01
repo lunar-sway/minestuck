@@ -1,5 +1,6 @@
 package com.mraof.minestuck.entity.item;
 
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.EntityFrog;
 
 import io.netty.buffer.ByteBuf;
@@ -9,6 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializer;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.math.BlockPos;
@@ -16,17 +18,23 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldProviderEnd;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
-public class EntityHologram extends Entity implements IEntityAdditionalSpawnData{
+public class EntityHologram extends Entity{
 
-	private static final DataParameter<Integer> ITEM = EntityDataManager.<Integer>createKey(EntityFrog.class, DataSerializers.VARINT);
+	private static final DataParameter<ItemStack> ITEM = EntityDataManager.<ItemStack>createKey(EntityHologram.class, DataSerializers.ITEM_STACK);
 	public int innerRotation;
 	
-	public EntityHologram(World worldIn) 
+	public EntityHologram(World worldIn, ItemStack item) 
 	{
 		super(worldIn);
 		this.innerRotation = this.rand.nextInt(100000);
+		dataManager.set(ITEM, item);
 	}
 
+	public EntityHologram(World worldIn) 
+	{
+		this(worldIn, new ItemStack(MinestuckBlocks.genericObject));
+	}
+	
 	public void onUpdate()
     {
         this.prevPosX = this.posX;
@@ -45,21 +53,11 @@ public class EntityHologram extends Entity implements IEntityAdditionalSpawnData
         }
     }
 	
-	@Override
-	public void writeSpawnData(ByteBuf data) {
-		data.writeInt(dataManager.get(ITEM));
-		
-	}
 
-	@Override
-	public void readSpawnData(ByteBuf data) {
-		setItem(data.readInt());
-		
-	}
-
+	
 	@Override
 	protected void entityInit() {
-		this.dataManager.register(ITEM, 1);
+		this.dataManager.register(ITEM, new ItemStack(MinestuckBlocks.genericObject));
 	}
 
 	@Override
@@ -71,31 +69,26 @@ public class EntityHologram extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound compound) 
 	{
-		compound.setTag("Item", new ItemStack(this.getItem(),1).writeToNBT(new NBTTagCompound()));
+		compound.setTag("Item", this.getItem().writeToNBT(new NBTTagCompound()));
 		
 	}
 
-	public int getItemId()
+	public ItemStack getItem()
 	{
 		return dataManager.get(ITEM);
 	}
 	
-	public Item getItem()
+	public int getItemId()
 	{
-		return Item.getItemById(dataManager.get(ITEM));
+		return Item.getIdFromItem(dataManager.get(ITEM).getItem());
 	}
 	
-	public void setItem(Item item)
+	public void setItem(ItemStack item)
 	{
-		dataManager.set(ITEM,Item.getIdFromItem(item));
+		dataManager.set(ITEM,item);
 	}
 	
 	public void setItem(int id)
 	{
-	}
-	
-	public void setItem(ItemStack stack)
-	{
-		setItem(stack.getItem());
 	}
 }

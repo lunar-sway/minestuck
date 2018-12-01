@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.item.TabMinestuck;
 import com.mraof.minestuck.tileentity.TileEntityHolopad;
+import com.mraof.minestuck.tileentity.TileEntityJumperBlock;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.MapColor;
@@ -68,14 +69,31 @@ public class BlockHolopad extends BlockContainer
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
 			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) 
 	{
-		TileEntityHolopad tileEntity = (TileEntityHolopad) worldIn.getTileEntity(pos);
+		if(playerIn.isSneaking()) return false;
+		//if(worldIn.isRemote)
+			//return true;
+		TileEntity te = worldIn.getTileEntity(pos);
 		
-		//worldIn.setBlockState(pos, getActualState(state, worldIn, pos));
-		
-		return tileEntity.onRightClick(playerIn, worldIn);
+		if(te instanceof TileEntityHolopad)
+			((TileEntityHolopad) te).onRightClick(playerIn);
+		return true;
 	}
 	
-
+	
+	@Override
+	public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) 
+	{
+		TileEntityHolopad te = (TileEntityHolopad) worldIn.getTileEntity(pos);
+		
+		if(te != null && !worldIn.isRemote)
+		{
+			te.dropItem(true, worldIn, pos, te.getCard());
+			te.destroyHologram(pos);
+		}
+		
+		super.onBlockHarvested(worldIn, pos, state, player);
+	}
+	
 	
 	//Directional Placement
 	
