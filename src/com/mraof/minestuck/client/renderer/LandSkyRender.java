@@ -195,7 +195,7 @@ public class LandSkyRender extends IRenderHandler
 		
 		GlStateManager.rotate(-45.0F, 0, 0, 1);
 		GlStateManager.enableTexture2D();
-		float planetSize = 10.0F;
+		float planetSize = 5.0F;
 		mc.getTextureManager().bindTexture(LAND_TEXTURE);
 		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
 		bufferbuilder.pos((double)(-planetSize), 100.0D, (double)(-planetSize)).tex(0.0D, 0.0D).endVertex();
@@ -203,6 +203,7 @@ public class LandSkyRender extends IRenderHandler
 		bufferbuilder.pos((double)planetSize, 100.0D, (double)planetSize).tex(1.0D, 1.0D).endVertex();
 		bufferbuilder.pos((double)(-planetSize), 100.0D, (double)planetSize).tex(0.0D, 1.0D).endVertex();
 		tessellator.draw();
+		planetSize = 10.0F;
 		mc.getTextureManager().bindTexture(LAND_TEXTURE_2);
 		GlStateManager.rotate(90.0F, 0, 0, 1);
 		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
