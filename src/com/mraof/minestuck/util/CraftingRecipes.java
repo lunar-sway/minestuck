@@ -229,7 +229,7 @@ public class CraftingRecipes
 		
 		public ItemStack getCraftingResult(final InventoryCrafting crafting) 
 		{
-			ItemStack decode = new ItemStack(Items.AIR);
+			ItemStack decode = ItemStack.EMPTY;
 			final ItemStack output = super.getCraftingResult(crafting);
 			ItemStack stack = output;
 			
@@ -239,12 +239,12 @@ public class CraftingRecipes
 				if(stack.getItem() == MinestuckItems.captchaCard && stack.hasTagCompound() && stack.getTagCompound().hasKey("contentID") && stack.getTagCompound().getBoolean("punched"))
 				{
 					decode = AlchemyRecipes.getDecodedItem(stack);
-					break;
+					return AlchemyRecipes.createEncodedItem(decode, output);
 				}
 					
 			}
 			
-			return AlchemyRecipes.createEncodedItem(decode, output);
+			return ItemStack.EMPTY;
 			
 		}
 		
@@ -266,46 +266,26 @@ public class CraftingRecipes
 			super(group, width, height, ingredients, result);
 		}
 		
-		/* 
-		 * [Server thread/FATAL] [net.minecraft.server.MinecraftServer]: Error executing task
-		 * java.util.concurrent.ExecutionException: java.lang.NullPointerException
-		@Override
-		public boolean matches(InventoryCrafting crafting, World world)
-		{
-			for(int i = 0; i < crafting.getSizeInventory(); i++)
-			{
-				ItemStack stack = crafting.getStackInSlot(i);
-				if(stack.getItem() == MinestuckItems.shunt && !stack.hasTagCompound() && !stack.getTagCompound().hasKey("contentID"))
-					return false;
-			}
-			return super.matches(crafting, world);
-		}
-		*/
 		
 		public ItemStack getCraftingResult(final InventoryCrafting crafting) 
 		{
-			ItemStack encode = new ItemStack(Items.AIR);
-			ItemStack output = new ItemStack(Items.AIR);
-			ItemStack stack =  super.getCraftingResult(crafting);
+			ItemStack decode = ItemStack.EMPTY;
+			final ItemStack output = super.getCraftingResult(crafting);
+			ItemStack stack = output;
 			
 			for(int i = 0; i < crafting.getSizeInventory(); i++)
 			{
 				stack = crafting.getStackInSlot(i);
-				if(AlchemyRecipes.hasDecodedItem(stack))
+				if(stack.getItem() == MinestuckItems.shunt && stack.hasTagCompound() && stack.getTagCompound().hasKey("contentID"))
 				{
-					encode = AlchemyRecipes.getDecodedItem(stack);
-					System.out.println("found encoded item at slot " + i + ", item " + stack + " contains " + encode);
-					break;
+					decode = AlchemyRecipes.getDecodedItem(stack);
+					return AlchemyRecipes.createCard(decode, true);
 				}
-				else
-					System.out.println("couldn't find an encoded item at slot " + i + ", found " + stack + " instead");
 					
 			}
-			output = AlchemyRecipes.createCard(encode, true);
-			return output;
 			
+			return ItemStack.EMPTY;
 		}
-		
 		@Override
 		public NonNullList<ItemStack> getRemainingItems(InventoryCrafting crafting) {
 			final NonNullList<ItemStack> remainingItems = NonNullList.withSize(crafting.getSizeInventory(), ItemStack.EMPTY);
@@ -319,7 +299,6 @@ public class CraftingRecipes
 				else
 					remainingItems.set(i, ForgeHooks.getContainerItem(stack));
 				
-				System.out.println("changing item in slot " + i + " from " + stack + " to " + remainingItems.get(i));
 			}
 			
 			return remainingItems;
