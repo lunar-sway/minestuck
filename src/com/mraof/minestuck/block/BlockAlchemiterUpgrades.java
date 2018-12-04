@@ -188,46 +188,18 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 		return state;
 		} 
 	
-    /**
-     *returns the block position of the "Main" block
-     *aka the block with the TileEntity for the machine
-     */
-	public static BlockPos staticAlchemiterMainPos(EnumFacing facing, BlockPos pos, World world)
-	{
-		BlockPos alchemPos = pos.offset(facing.rotateY()).offset(facing);
-		
-		
-		for(int i = 0; i <= 5; i++)
-		{
-			if(world.getBlockState(alchemPos).equals(BlockAlchemiter.getBlockState(BlockAlchemiter.EnumParts.TOTEM_CORNER, facing)))
-			{	
-				pos = alchemPos.up();
-				break;
-			}
-			else
-			alchemPos = alchemPos.offset(facing.rotateYCCW(), 3);
-			if(world.getBlockState(pos.offset(facing.rotateYCCW(), 3)).equals(BlockAlchemiter.getBlockState(BlockAlchemiter.EnumParts.TOTEM_CORNER, facing)))
-			{
-				pos = alchemPos.up();
-				break;
-			}
-			if(world.getBlockState(alchemPos).getBlock() instanceof BlockAlchemiter || world.getBlockState(alchemPos).getBlock() instanceof BlockAlchemiterUpgrades)
-				facing = world.getBlockState(alchemPos).getValue(BlockAlchemiter.DIRECTION);
-			else
-				facing = facing.rotateY();
-		}
-		
-		return pos;
-	}
-	
-	
-	
-	
 	public static EnumParts getPart(IBlockState state)
 	{
 		if(state.getBlock() instanceof BlockAlchemiterUpgrades)
 			return state.getValue(((BlockAlchemiterUpgrades) state.getBlock()).PART);
 		else return null;
+	}
+	
+	public static IBlockState getBlockState(EnumParts parts, EnumFacing direction)
+	{
+		BlockAlchemiterUpgrades block = MinestuckBlocks.alchemiterUpgrades[PART1.getAllowedValues().contains(parts) ? 0 : PART2.getAllowedValues().contains(parts) ? 1 : PART3.getAllowedValues().contains(parts) ? 2 : 3];
+		IBlockState state = block.getDefaultState();
+		return state.withProperty(block.PART, parts).withProperty(DIRECTION, direction);
 	}
 	
 	public static IBlockState getState(EnumParts parts, EnumFacing facing)

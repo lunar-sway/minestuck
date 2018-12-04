@@ -335,8 +335,6 @@ public class TileEntityAlchemiter extends TileEntity
 				BlockPos mainPos = pos;
 				if(!isBroken())
 				{
-					System.out.println(hasUpgrade(AlchemiterUpgrades.blender));
-					//if(!hasUpgrade(AlchemiterUpgrades.blender))
 					{
 						playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.ALCHEMITER.ordinal(), worldIn, mainPos.getX(), mainPos.getY(), mainPos.getZ());
 					}

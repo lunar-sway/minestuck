@@ -9,8 +9,10 @@ import com.mraof.minestuck.block.BlockAlchemiter.EnumParts;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.alchemy.CombinationRegistry;
-
+import com.mraof.minestuck.util.AlchemiterUpgrades;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.AlchemiterUpgrades.EnumType;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
@@ -123,6 +125,8 @@ public class TileEntityJumperBlock extends TileEntity
 		EnumFacing facing = getFacing();
 		BlockPos alchemMainPos = alchemiterMainPos(facing, pos);
 		boolean working = isUseable(clickedState);
+		TileEntity te = world.getTileEntity(alchemMainPos);
+		
 		
 		ItemStack heldStack = player.getHeldItemMainhand();
 		BlockJumperBlock.EnumParts part = BlockJumperBlock.getPart(clickedState);
@@ -144,17 +148,74 @@ public class TileEntityJumperBlock extends TileEntity
 				{
 					setUpgrade(heldStack.splitStack(1), id);
 				} 
-		}
-		
-		TileEntity te = world.getTileEntity(alchemMainPos);
+				
+			}
 		if(te instanceof TileEntityAlchemiter)
-		{
-			TileEntityAlchemiter alchemTe = (TileEntityAlchemiter) te;
-			alchemTe.setUpgraded(true, pos);
-		}
+			updateUpgrades((TileEntityAlchemiter) te, alchemMainPos);
+		
 		else Debug.warnf("Couldn't find TileEntityAlchemiter at %s, found %s instead.", alchemMainPos, te);
 		
 		
+	}
+	
+	public void updateUpgrades(TileEntityAlchemiter alchemTe, BlockPos AlchemPos)
+	{
+		BlockPos alchemPos = alchemTe.getPos();
+		EnumFacing alchemFacing = alchemTe.getWorld().getBlockState(this.getPos()).getValue(BlockAlchemiter.DIRECTION);
+		alchemTe.setUpgraded(true, pos);
+		AlchemiterUpgrades[] alchemUpgrades = AlchemiterUpgrades.getUpgradesFromList(alchemTe.getUpgradeList());
+
+		if(!world.isRemote)
+		{
+			System.out.println("world not remote");
+
+			int offset = 0;
+			for(int i = 0; i < alchemUpgrades.length; i++)
+			{
+				if(alchemUpgrades[i] == null) continue;
+				System.out.println("upgrade: " + alchemUpgrades[i]);
+				int times = 0;
+				switch(alchemUpgrades[i].getUpgradeType())
+				{
+					default: times = 2; break;
+					case NONE: times = 0; break;
+					case SINGLE: times = 1; break;
+					case DOUBLE: times = 2; break;
+					case TRIPLE: times = 3; break;
+					case QUAD: times = 4; break;
+				}
+				System.out.println("times: " + times);
+				
+				for(int j = 0; j < alchemUpgrades[i].getUpgradeBlocks().length; j++)
+				{
+					EnumFacing offsetFacing = alchemFacing;
+					int offsetFromAlchem;
+					offset += j;
+					
+					switch((offset/4) % 4)
+					{
+						default: 
+						case 0: offsetFromAlchem = 4; break;
+						case 1: offsetFromAlchem = -1; break;
+						case 2: offsetFromAlchem = -4; break;
+						case 3: offsetFromAlchem = 1; break;
+					}
+					
+					switch((offset/4) % 4)
+					{
+						case 3: offsetFacing = offsetFacing.rotateY();
+						case 2: offsetFacing = offsetFacing.rotateY();
+						case 1: offsetFacing = offsetFacing.rotateY();
+						case 0: offsetFacing = offsetFacing.rotateY();
+						break;
+					}
+					
+					BlockAlchemiterUpgrades.EnumParts part = alchemUpgrades[i].getUpgradeBlocks()[j];
+					world.setBlockState(alchemPos.offset(alchemFacing, offset).offset(offsetFacing, offsetFromAlchem).down(), BlockAlchemiterUpgrades.getBlockState(part, alchemFacing));
+				
+				}
+			}
+		}
 	}
 	
 	private boolean isUseable(IBlockState state)
