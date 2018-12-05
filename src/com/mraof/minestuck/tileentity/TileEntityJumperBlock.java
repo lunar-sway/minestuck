@@ -160,6 +160,7 @@ public class TileEntityJumperBlock extends TileEntity
 	
 	public void updateUpgrades(TileEntityAlchemiter alchemTe, BlockPos AlchemPos)
 	{
+		int offset = 0;
 		BlockPos alchemPos = alchemTe.getPos();
 		EnumFacing alchemFacing = alchemTe.getWorld().getBlockState(this.getPos()).getValue(BlockAlchemiter.DIRECTION);
 		alchemTe.setUpgraded(true, pos);
@@ -167,9 +168,8 @@ public class TileEntityJumperBlock extends TileEntity
 
 		if(!world.isRemote)
 		{
-			System.out.println("world not remote");
 
-			int offset = 0;
+			
 			for(int i = 0; i < alchemUpgrades.length; i++)
 			{
 				if(alchemUpgrades[i] == null) continue;
@@ -184,12 +184,15 @@ public class TileEntityJumperBlock extends TileEntity
 					case TRIPLE: times = 3; break;
 					case QUAD: times = 4; break;
 				}
-				System.out.println("times: " + times);
+				//System.out.println("times: " + times);
 				
 				for(int j = 0; j < alchemUpgrades[i].getUpgradeBlocks().length; j++)
 				{
 					EnumFacing offsetFacing = alchemFacing;
+					EnumFacing offsetFacing2 = alchemFacing;
 					int offsetFromAlchem;
+					offset += j;
+					System.out.println("offset " + offset + " + " + j + " = " + (offset+j));
 					offset += j;
 					
 					switch((offset/4) % 4)
@@ -201,6 +204,10 @@ public class TileEntityJumperBlock extends TileEntity
 						case 3: offsetFromAlchem = 1; break;
 					}
 					
+					
+					
+					System.out.println("mod: " + ((offset/4)) + " offset: " + offsetFromAlchem);
+					
 					switch((offset/4) % 4)
 					{
 						case 3: offsetFacing = offsetFacing.rotateY();
@@ -209,11 +216,23 @@ public class TileEntityJumperBlock extends TileEntity
 						case 0: offsetFacing = offsetFacing.rotateY();
 						break;
 					}
+					switch((offset/4) % 4)
+					{
+						case 3: offsetFacing2 = offsetFacing2.rotateY().getOpposite();
+						case 2: offsetFacing2 = offsetFacing2.rotateY().getOpposite();
+						case 1: offsetFacing2 = offsetFacing2.rotateY().getOpposite();
+						case 0: offsetFacing2 = offsetFacing2.rotateY().getOpposite();
+						break;
+					}
 					
+					offset = offset % 4;
+					
+					System.out.println("offset: " + offset);
 					BlockAlchemiterUpgrades.EnumParts part = alchemUpgrades[i].getUpgradeBlocks()[j];
-					world.setBlockState(alchemPos.offset(alchemFacing, offset).offset(offsetFacing, offsetFromAlchem).down(), BlockAlchemiterUpgrades.getBlockState(part, alchemFacing));
+					world.setBlockState(alchemPos.offset(offsetFacing2, offset).offset(offsetFacing, offsetFromAlchem).down(), BlockAlchemiterUpgrades.getBlockState(part, alchemFacing));
 				
 				}
+				offset += i;
 			}
 		}
 	}
