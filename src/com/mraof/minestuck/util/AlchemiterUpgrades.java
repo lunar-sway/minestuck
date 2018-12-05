@@ -34,6 +34,7 @@ public class AlchemiterUpgrades
 	public static AlchemiterUpgrades blender = new AlchemiterUpgrades(new ItemStack(MinestuckBlocks.blender), EnumType.TOTEM_PAD, EnumParts.BLENDER);
 	public static AlchemiterUpgrades crafting = new AlchemiterUpgrades(new ItemStack(Blocks.CRAFTING_TABLE), EnumType.SINGLE, EnumParts.CRAFTING);
 	public static AlchemiterUpgrades hopper = new AlchemiterUpgrades(new ItemStack(Blocks.HOPPER), EnumType.SINGLE, EnumParts.HOPPER);
+	public static AlchemiterUpgrades chest = new AlchemiterUpgrades(new ItemStack(Blocks.HOPPER), EnumType.SINGLE, EnumParts.CHEST);
 	public static AlchemiterUpgrades library = new AlchemiterUpgrades(new ItemStack(MinestuckItems.modusCard, 1, 3), EnumType.SINGLE, EnumParts.LIBRARY);
 	public static AlchemiterUpgrades gristWidget = new AlchemiterUpgrades(new ItemStack(MinestuckBlocks.crockerMachine), EnumType.SINGLE, EnumParts.GRISTWIDGET);
 	public static AlchemiterUpgrades dropper = new AlchemiterUpgrades(new ItemStack(Blocks.DROPPER), EnumType.SINGLE, EnumParts.DROPPER);
