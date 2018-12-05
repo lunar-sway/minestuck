@@ -202,6 +202,13 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 		return state.withProperty(block.PART, parts).withProperty(DIRECTION, direction);
 	}
 	
+	public static IBlockState getBlockState(EnumParts parts)
+	{
+		BlockAlchemiterUpgrades block = MinestuckBlocks.alchemiterUpgrades[PART1.getAllowedValues().contains(parts) ? 0 : PART2.getAllowedValues().contains(parts) ? 1 : PART3.getAllowedValues().contains(parts) ? 2 : 3];
+		IBlockState state = block.getDefaultState();
+		return state.withProperty(block.PART, parts);
+	}
+	
 	public static IBlockState getState(EnumParts parts, EnumFacing facing)
     {
         BlockAlchemiterUpgrades block = MinestuckBlocks.alchemiterUpgrades[PART1.getAllowedValues().contains(parts) ? 0 : PART2.getAllowedValues().contains(parts) ? 1 : PART3.getAllowedValues().contains(parts) ? 2 : PART4.getAllowedValues().contains(parts) ? 3 : 4];

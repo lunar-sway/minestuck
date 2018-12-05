@@ -9,6 +9,7 @@ import com.mraof.minestuck.block.BlockAlchemiterUpgrades.EnumParts;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.Debug;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
@@ -18,7 +19,7 @@ public class AlchemiterUpgrades
 	protected String upgradeName;
 	protected ItemStack[] upgradeItem = new ItemStack[7];
 	protected EnumType upgradeType;
-	protected EnumParts[] upgradeBlock = new EnumParts[15];
+	protected IBlockState[] upgradeBlock = new IBlockState[15];
 	protected boolean isCombo;
 	
 	public static AlchemiterUpgrades[] upgradeList = new AlchemiterUpgrades[64];
@@ -34,8 +35,8 @@ public class AlchemiterUpgrades
 	public static AlchemiterUpgrades blender = new AlchemiterUpgrades(new ItemStack(MinestuckBlocks.blender), EnumType.TOTEM_PAD, EnumParts.BLENDER);
 	public static AlchemiterUpgrades crafting = new AlchemiterUpgrades(new ItemStack(Blocks.CRAFTING_TABLE), EnumType.SINGLE, EnumParts.CRAFTING);
 	public static AlchemiterUpgrades hopper = new AlchemiterUpgrades(new ItemStack(Blocks.HOPPER), EnumType.SINGLE, EnumParts.HOPPER);
-	public static AlchemiterUpgrades chest = new AlchemiterUpgrades(new ItemStack(Blocks.HOPPER), EnumType.SINGLE, EnumParts.CHEST);
-	public static AlchemiterUpgrades library = new AlchemiterUpgrades(new ItemStack(MinestuckItems.modusCard, 1, 3), EnumType.SINGLE, EnumParts.LIBRARY);
+	public static AlchemiterUpgrades chest = new AlchemiterUpgrades(new ItemStack(Blocks.CHEST), EnumType.SINGLE, EnumParts.CHEST);
+	public static AlchemiterUpgrades library = new AlchemiterUpgrades(new ItemStack(MinestuckItems.modusCard, 1, 5), EnumType.SINGLE, EnumParts.LIBRARY);
 	public static AlchemiterUpgrades gristWidget = new AlchemiterUpgrades(new ItemStack(MinestuckBlocks.crockerMachine), EnumType.SINGLE, EnumParts.GRISTWIDGET);
 	public static AlchemiterUpgrades dropper = new AlchemiterUpgrades(new ItemStack(Blocks.DROPPER), EnumType.SINGLE, EnumParts.DROPPER);
 	public static AlchemiterUpgrades gristToBoon = new AlchemiterUpgrades(new ItemStack(MinestuckItems.boondollars), EnumType.SINGLE, EnumParts.BOONDOLLAR);
@@ -113,17 +114,36 @@ public class AlchemiterUpgrades
 		this.upgradeType = type;
 	}
 	
-	public EnumParts[] getUpgradeBlocks()
+	public IBlockState[] getUpgradeBlocks()
 	{
 		return this.upgradeBlock;
 	}
 	
-	public void setUpgradeBlocks(EnumParts[] block)
+	public void setUpgradeBlocks(IBlockState[] block)
 	{
+		System.out.println("found blocks: ");
+		System.out.println(block);
 		this.upgradeBlock = block;
 	}
 	
-	public EnumParts getUpgradeBlock(int id)
+	public void setUpgradeBlocks(EnumParts[] block)
+	{
+		IBlockState[] states = new IBlockState[block.length];
+		
+		System.out.println(states);
+		System.out.println("length: " + states.length + " max index should be: " + (block.length));
+		
+		
+		for(int i = 0; i < states.length; i++)
+		{
+			states[i] = BlockAlchemiterUpgrades.getBlockState(block[i]);
+			System.out.println("Found EnumType: " + block[i]);
+			System.out.println("setting blockstate of block #" + i + " to " + states[i]);
+		}
+		setUpgradeBlocks(states);
+	}
+	
+	public IBlockState getUpgradeBlock(int id)
 	{
 		return this.upgradeBlock[id];
 	}

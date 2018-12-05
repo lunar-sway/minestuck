@@ -14,6 +14,7 @@ import com.mraof.minestuck.block.BlockJumperBlock.EnumParts;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.item.TabMinestuck;
 import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
+import com.mraof.minestuck.tileentity.TileEntityHolopad;
 import com.mraof.minestuck.tileentity.TileEntityItemStack;
 import com.mraof.minestuck.tileentity.TileEntityJumperBlock;
 
@@ -117,10 +118,27 @@ public abstract class BlockJumperBlock extends BlockLargeMachine {
 			IBlockState otherState = worldIn.getBlockState(mainPos);
 			if(te instanceof TileEntityJumperBlock)
 			{
-				((TileEntityJumperBlock) te).setBroken();
+				int id = getUpgradeId(state, pos, worldIn);
+				TileEntityJumperBlock jbe = ((TileEntityJumperBlock) te);
+				jbe.setBroken();
+				if(!worldIn.isRemote)jbe.dropItem(true, mainPos, jbe.getUpgrade(id));
 			}
 		
 		super.breakBlock(worldIn, pos, state);
+	}
+	
+	@Override
+	public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) 
+	{
+		TileEntityJumperBlock te = (TileEntityJumperBlock) worldIn.getTileEntity(pos);
+		
+		if(te != null && !worldIn.isRemote)
+		{
+			int id = getUpgradeId(state, pos, worldIn);
+			te.dropItem(true, pos, te.getUpgrade(id));
+		}
+		
+		super.onBlockHarvested(worldIn, pos, state, player);
 	}
 	
 	@Override

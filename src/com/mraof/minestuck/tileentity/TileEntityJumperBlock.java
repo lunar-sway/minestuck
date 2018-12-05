@@ -158,7 +158,7 @@ public class TileEntityJumperBlock extends TileEntity
 		
 	}
 	
-	public void updateUpgrades(TileEntityAlchemiter alchemTe, BlockPos AlchemPos)
+	private void updateUpgrades(TileEntityAlchemiter alchemTe, BlockPos AlchemPos)
 	{
 		int offset = 0;
 		BlockPos alchemPos = alchemTe.getPos();
@@ -168,7 +168,29 @@ public class TileEntityJumperBlock extends TileEntity
 
 		if(!world.isRemote)
 		{
+			for(int i = 0; i < alchemUpgrades.length; i++)
+			{
+				for(int j = 0; j < alchemUpgrades[i].getUpgradeBlocks().length; j++)
+				{
+					IBlockState part = alchemUpgrades[i].getUpgradeBlocks()[j];
+					
+					world.setBlockState(alchemPos.offset(alchemFacing.rotateY(), 4).offset(alchemFacing.getOpposite(), offset).down(), part);
+					offset++;
+				}
+			}
+		}
+	}
+	
+	/*public void updateUpgrades(TileEntityAlchemiter alchemTe, BlockPos AlchemPos)
+	{
+		int offset = 0;
+		BlockPos alchemPos = alchemTe.getPos();
+		EnumFacing alchemFacing = alchemTe.getWorld().getBlockState(this.getPos()).getValue(BlockAlchemiter.DIRECTION);
+		alchemTe.setUpgraded(true, pos);
+		AlchemiterUpgrades[] alchemUpgrades = AlchemiterUpgrades.getUpgradesFromList(alchemTe.getUpgradeList());
 
+		if(!world.isRemote)
+		{
 			
 			for(int i = 0; i < alchemUpgrades.length; i++)
 			{
@@ -186,12 +208,13 @@ public class TileEntityJumperBlock extends TileEntity
 				}
 				//System.out.println("times: " + times);
 				
+				System.out.println(alchemUpgrades[i].getUpgradeBlocks().length + " blocks found");
+				
 				for(int j = 0; j < alchemUpgrades[i].getUpgradeBlocks().length; j++)
 				{
 					EnumFacing offsetFacing = alchemFacing;
 					EnumFacing offsetFacing2 = alchemFacing;
 					int offsetFromAlchem;
-					offset += j;
 					System.out.println("offset " + offset + " + " + j + " = " + (offset+j));
 					offset += j;
 					
@@ -199,9 +222,9 @@ public class TileEntityJumperBlock extends TileEntity
 					{
 						default: 
 						case 0: offsetFromAlchem = 4; break;
-						case 1: offsetFromAlchem = -1; break;
-						case 2: offsetFromAlchem = -4; break;
-						case 3: offsetFromAlchem = 1; break;
+						case 1: offsetFromAlchem = 1; break;
+						case 2: offsetFromAlchem = 1; break;
+						case 3: offsetFromAlchem = 4; break;
 					}
 					
 					
@@ -218,24 +241,28 @@ public class TileEntityJumperBlock extends TileEntity
 					}
 					switch((offset/4) % 4)
 					{
-						case 3: offsetFacing2 = offsetFacing2.rotateY().getOpposite();
-						case 2: offsetFacing2 = offsetFacing2.rotateY().getOpposite();
-						case 1: offsetFacing2 = offsetFacing2.rotateY().getOpposite();
-						case 0: offsetFacing2 = offsetFacing2.rotateY().getOpposite();
-						break;
+						case 2: offsetFacing2 = offsetFacing2.rotateY();
+						case 3: offsetFacing2 = offsetFacing2.rotateY(); break;
+						case 1: offsetFacing2 = offsetFacing2.rotateYCCW();
+						case 0: offsetFacing2 = offsetFacing2.rotateYCCW(); break;
 					}
 					
 					offset = offset % 4;
 					
 					System.out.println("offset: " + offset);
-					BlockAlchemiterUpgrades.EnumParts part = alchemUpgrades[i].getUpgradeBlocks()[j];
-					world.setBlockState(alchemPos.offset(offsetFacing2, offset).offset(offsetFacing, offsetFromAlchem).down(), BlockAlchemiterUpgrades.getBlockState(part, alchemFacing));
-				
+					IBlockState part = alchemUpgrades[i].getUpgradeBlocks()[j];
+					
+					if(part.getBlock() instanceof BlockAlchemiterUpgrades) 
+						part = part.withProperty(BlockAlchemiterUpgrades.DIRECTION, offsetFacing);
+					
+					//world.setBlockState(alchemPos.offset(offsetFacing2, offset).offset(offsetFacing, offsetFromAlchem).down(), part);
+					world.setBlockState(alchemPos.offset(offsetFacing2, offset).offset(offsetFacing, offsetFromAlchem).down(), MinestuckBlocks.genericObject.getDefaultState());
+					
 				}
-				offset += i;
+				offset++;
 			}
 		}
-	}
+	}*/
 	
 	private boolean isUseable(IBlockState state)
 	{
@@ -244,7 +271,7 @@ public class TileEntityJumperBlock extends TileEntity
 		{
 			checkStates();
 			if(isBroken())
-				Debug.warnf("Failed to notice a block being broken or misplaced at the totem lathe at %s", getPos());
+				Debug.warnf("Failed to notice a block being broken or misplaced at the jumper block at %s", getPos());
 		}
 		
 		if(!state.getValue(BlockJumperBlock.DIRECTION).equals(currentState.getValue(BlockJumperBlock.DIRECTION)))
@@ -377,7 +404,7 @@ public class TileEntityJumperBlock extends TileEntity
 		
 	}
 	
-	private void dropItem(boolean inBlock, BlockPos pos, ItemStack stack)
+	public void dropItem(boolean inBlock, BlockPos pos, ItemStack stack)
 	{
 		EnumFacing direction = getFacing();
 		BlockPos dropPos;
