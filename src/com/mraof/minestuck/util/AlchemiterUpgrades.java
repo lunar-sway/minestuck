@@ -26,25 +26,25 @@ public class AlchemiterUpgrades
 	public static int upgradeCount = 0;
 	
 	//Upgrade Combos
-	public static AlchemiterUpgrades itemWidget = new AlchemiterUpgrades(new ItemStack[] {new ItemStack(MinestuckBlocks.crockerMachine), new ItemStack(Blocks.HOPPER)}, EnumType.DOUBLE, EnumParts.PLACEHOLDER, EnumParts.PLACEHOLDER);
-	public static AlchemiterUpgrades holoLathe = new AlchemiterUpgrades(new ItemStack[] {new ItemStack(MinestuckBlocks.totemlathe[0]), new ItemStack(MinestuckBlocks.holopad)}, EnumType.DOUBLE, EnumParts.PLACEHOLDER, EnumParts.PLACEHOLDER);
-	public static AlchemiterUpgrades cruxiteBlender = new AlchemiterUpgrades(new ItemStack[] {new ItemStack(MinestuckBlocks.cruxtruder), new ItemStack(MinestuckBlocks.blender)}, EnumType.DOUBLE, EnumParts.PLACEHOLDER, EnumParts.PLACEHOLDER);
+	public static AlchemiterUpgrades itemWidget = new AlchemiterUpgrades(new ItemStack[] {new ItemStack(MinestuckBlocks.crockerMachine), new ItemStack(Blocks.HOPPER)}, EnumType.HORIZONTAL, EnumParts.PLACEHOLDER, EnumParts.PLACEHOLDER);
+	public static AlchemiterUpgrades holoLathe = new AlchemiterUpgrades(new ItemStack[] {new ItemStack(MinestuckBlocks.totemlathe[0]), new ItemStack(MinestuckBlocks.holopad)}, EnumType.HORIZONTAL, EnumParts.PLACEHOLDER, EnumParts.PLACEHOLDER);
+	public static AlchemiterUpgrades cruxiteBlender = new AlchemiterUpgrades(new ItemStack[] {new ItemStack(MinestuckBlocks.cruxtruder), new ItemStack(MinestuckBlocks.blender)}, EnumType.HORIZONTAL, EnumParts.PLACEHOLDER, EnumParts.PLACEHOLDER);
 		
 	//Solo Upgrades
-	public static AlchemiterUpgrades captchaCard = new AlchemiterUpgrades(new ItemStack(MinestuckItems.captchaCard), EnumType.SINGLE, EnumParts.CAPTCHA_CARD);
+	public static AlchemiterUpgrades captchaCard = new AlchemiterUpgrades(new ItemStack(MinestuckItems.captchaCard), EnumType.HORIZONTAL, EnumParts.CAPTCHA_CARD);
 	public static AlchemiterUpgrades blender = new AlchemiterUpgrades(new ItemStack(MinestuckBlocks.blender), EnumType.TOTEM_PAD, EnumParts.BLENDER);
-	public static AlchemiterUpgrades crafting = new AlchemiterUpgrades(new ItemStack(Blocks.CRAFTING_TABLE), EnumType.SINGLE, EnumParts.CRAFTING);
-	public static AlchemiterUpgrades hopper = new AlchemiterUpgrades(new ItemStack(Blocks.HOPPER), EnumType.SINGLE, EnumParts.HOPPER);
-	public static AlchemiterUpgrades chest = new AlchemiterUpgrades(new ItemStack(Blocks.CHEST), EnumType.SINGLE, EnumParts.CHEST);
-	public static AlchemiterUpgrades library = new AlchemiterUpgrades(new ItemStack(MinestuckItems.modusCard, 1, 5), EnumType.SINGLE, EnumParts.LIBRARY);
-	public static AlchemiterUpgrades gristWidget = new AlchemiterUpgrades(new ItemStack(MinestuckBlocks.crockerMachine), EnumType.SINGLE, EnumParts.GRISTWIDGET);
-	public static AlchemiterUpgrades dropper = new AlchemiterUpgrades(new ItemStack(Blocks.DROPPER), EnumType.SINGLE, EnumParts.DROPPER);
-	public static AlchemiterUpgrades gristToBoon = new AlchemiterUpgrades(new ItemStack(MinestuckItems.boondollars), EnumType.SINGLE, EnumParts.BOONDOLLAR);
+	public static AlchemiterUpgrades crafting = new AlchemiterUpgrades(new ItemStack(Blocks.CRAFTING_TABLE), EnumType.HORIZONTAL, EnumParts.CRAFTING);
+	public static AlchemiterUpgrades hopper = new AlchemiterUpgrades(new ItemStack(Blocks.HOPPER), EnumType.HORIZONTAL, EnumParts.HOPPER);
+	public static AlchemiterUpgrades chest = new AlchemiterUpgrades(new ItemStack(Blocks.CHEST), EnumType.HORIZONTAL, EnumParts.CHEST);
+	public static AlchemiterUpgrades library = new AlchemiterUpgrades(new ItemStack(MinestuckItems.modusCard, 1, 5), EnumType.HORIZONTAL, EnumParts.LIBRARY);
+	public static AlchemiterUpgrades gristWidget = new AlchemiterUpgrades(new ItemStack(MinestuckBlocks.crockerMachine), EnumType.HORIZONTAL, EnumParts.GRISTWIDGET);
+	public static AlchemiterUpgrades dropper = new AlchemiterUpgrades(new ItemStack(Blocks.DROPPER), EnumType.HORIZONTAL, EnumParts.DROPPER);
+	public static AlchemiterUpgrades gristToBoon = new AlchemiterUpgrades(new ItemStack(MinestuckItems.boondollars), EnumType.HORIZONTAL, EnumParts.BOONDOLLAR);
 	public static AlchemiterUpgrades sbahjified = new AlchemiterUpgrades(new ItemStack(MinestuckItems.sbahjPoster), EnumType.NONE, EnumParts.PLACEHOLDER);
 	public static AlchemiterUpgrades holopad = new AlchemiterUpgrades(new ItemStack(MinestuckBlocks.holopad), EnumType.TOTEM_PAD, EnumParts.PLACEHOLDER);
 	public static AlchemiterUpgrades cruxtruder = new AlchemiterUpgrades(new ItemStack(MinestuckBlocks.cruxtruder), EnumType.TOTEM_PAD, EnumParts.PLACEHOLDER);
-	public static AlchemiterUpgrades punchDesignix = new AlchemiterUpgrades(new ItemStack(MinestuckBlocks.punchDesignix), EnumType.DOUBLE, EnumParts.PLACEHOLDER, EnumParts.PLACEHOLDER);
-	public static AlchemiterUpgrades compactJBE = new AlchemiterUpgrades(new ItemStack(MinestuckBlocks.jumperBlockExtension[0]), EnumType.DOUBLE, EnumParts.PLACEHOLDER, EnumParts.PLACEHOLDER);
+	public static AlchemiterUpgrades punchDesignix = new AlchemiterUpgrades(new ItemStack(MinestuckBlocks.punchDesignix), EnumType.HORIZONTAL, EnumParts.PLACEHOLDER, EnumParts.PLACEHOLDER);
+	public static AlchemiterUpgrades compactJBE = new AlchemiterUpgrades(new ItemStack(MinestuckBlocks.jumperBlockExtension[0]), EnumType.HORIZONTAL, EnumParts.PLACEHOLDER, EnumParts.PLACEHOLDER);
 	
 	
 	public AlchemiterUpgrades(ItemStack item, EnumType type, EnumParts...block)
@@ -121,8 +121,6 @@ public class AlchemiterUpgrades
 	
 	public void setUpgradeBlocks(IBlockState[] block)
 	{
-		System.out.println("found blocks: ");
-		System.out.println(block);
 		this.upgradeBlock = block;
 	}
 	
@@ -130,15 +128,9 @@ public class AlchemiterUpgrades
 	{
 		IBlockState[] states = new IBlockState[block.length];
 		
-		System.out.println(states);
-		System.out.println("length: " + states.length + " max index should be: " + (block.length));
-		
-		
 		for(int i = 0; i < states.length; i++)
 		{
 			states[i] = BlockAlchemiterUpgrades.getBlockState(block[i]);
-			System.out.println("Found EnumType: " + block[i]);
-			System.out.println("setting blockstate of block #" + i + " to " + states[i]);
 		}
 		setUpgradeBlocks(states);
 	}
@@ -173,13 +165,30 @@ public class AlchemiterUpgrades
 		return true;
 	}
 	
+	public static boolean hasUpgrade(AlchemiterUpgrades[] list, AlchemiterUpgrades upgrade)
+	{
+		return Arrays.asList(list).contains(upgrade);
+	}
+	
+	public static AlchemiterUpgrades getUpgradeFromBlock(EnumParts part)
+	{
+		for(AlchemiterUpgrades i : upgradeList)
+		{
+			for(IBlockState j : i.getUpgradeBlocks())
+			{
+				if(j.getBlock() instanceof BlockAlchemiterUpgrades)
+					if(BlockAlchemiterUpgrades.getPart(j) == part)
+						return i;
+			}
+		}
+		return null;
+	}
+	
 	public enum EnumType implements IStringSerializable
 	{
 		NONE,
-		SINGLE,
-		DOUBLE,
-		TRIPLE,
-		QUAD,
+		HORIZONTAL,
+		VERITCAL,
 		TOTEM_PAD,
 		;
 		

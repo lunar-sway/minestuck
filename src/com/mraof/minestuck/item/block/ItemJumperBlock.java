@@ -102,8 +102,8 @@ public class ItemJumperBlock extends ItemBlock
 		for(int z = 0; z < 4; z++)
 		{
 			BlockPos alchemPos = TileEntityJumperBlock.staticAlchemiterMainPos(facing.getOpposite(), pos.offset(facing, 1).offset(facing.rotateYCCW(), 7), world);
-			if(!(world.getBlockState(pos.offset(facing.getOpposite(), z).offset(facing.rotateYCCW(), -1)).getBlock() instanceof BlockAlchemiter) || 
-					!(world.getBlockState(pos.offset(facing.getOpposite(), z).offset(facing.rotateYCCW(), -1)).getBlock() instanceof BlockAlchemiter))
+			//System.out.println(alchemPos);
+			if(!(world.getBlockState(pos.offset(facing.getOpposite(), z).offset(facing.rotateYCCW(), -1)).getBlock() instanceof BlockAlchemiter))
 			{
 				for(int z2 = 0; z2 < 4; z2++)
 				{
@@ -113,18 +113,11 @@ public class ItemJumperBlock extends ItemBlock
 					else
 					{
 						TileEntity alchemTe = world.getTileEntity(alchemPos);
-						//System.out.println(((TileEntityAlchemiter) alchemTe).isUpgraded());
 						if(alchemTe instanceof TileEntityAlchemiter)
 						{
 							TileEntityAlchemiter alchemiterTe = (TileEntityAlchemiter) alchemTe;
-							if(alchemiterTe.isUpgraded()) 
-								{
-								System.out.println("upgrade detected");
-								System.out.println(alchemPos);
+							if(alchemiterTe.isUpgraded() || alchemiterTe.isBroken()) 
 								return false;
-								}
-							else System.out.println("upgrade not detected");
-							System.out.println(alchemPos);
 							
 						}
 						
@@ -191,7 +184,6 @@ public class ItemJumperBlock extends ItemBlock
 					TileEntityAlchemiter alchemiter = (TileEntityAlchemiter) alchemTe;
 					
 					alchemiter.setUpgraded(true, cablePos);
-					System.out.println("alchemiter upgrade now set to " + alchemiter.isUpgraded());
 				}
 				else Debug.warnf("Couldn't find Alchemiter at %s. Instead found %s.", ((TileEntityJumperBlock) te).alchemiterMainPos(), alchemTe);
 				

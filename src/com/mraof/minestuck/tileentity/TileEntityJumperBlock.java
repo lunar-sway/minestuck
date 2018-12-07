@@ -13,8 +13,11 @@ import com.mraof.minestuck.util.AlchemiterUpgrades;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.AlchemiterUpgrades.EnumType;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockAir;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -26,6 +29,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import scala.actors.threadpool.Arrays;
+import scala.reflect.internal.Trees.Super;
 
 import javax.annotation.Nonnull;
 
@@ -70,6 +75,10 @@ public class TileEntityJumperBlock extends TileEntity
 		return AlchemyRecipes.getDecodedItem(upgrade[id]);
 	}
 	
+	public ItemStack getShunt(int id)
+	{
+		return upgrade[id];
+	}
 	
 	public boolean isBroken()
 	{
@@ -78,14 +87,11 @@ public class TileEntityJumperBlock extends TileEntity
 	
 	public void setBroken()
 	{
-		//System.out.println("thing!");
 		TileEntity te = world.getTileEntity(alchemiterMainPos());
 		if(te instanceof TileEntityAlchemiter)
 		{
 			TileEntityAlchemiter alchemTe = (TileEntityAlchemiter) te;
-			//System.out.println("thing broke");
 			alchemTe.setUpgraded(false, getPos());
-			System.out.println("alchemiter upgrade now set to " + alchemTe.isUpgraded());
 		}
 		else Debug.warnf("Couldn't find TileEntityAlchemiter at %s, found %s instead.", alchemiterMainPos(), te);
 		broken = true;
@@ -160,109 +166,124 @@ public class TileEntityJumperBlock extends TileEntity
 	
 	private void updateUpgrades(TileEntityAlchemiter alchemTe, BlockPos AlchemPos)
 	{
-		int offset = 0;
+		int blockCount = 0;
+		int blockCountCheck = 0;
 		BlockPos alchemPos = alchemTe.getPos();
-		EnumFacing alchemFacing = alchemTe.getWorld().getBlockState(this.getPos()).getValue(BlockAlchemiter.DIRECTION);
+		EnumFacing alchemFacing = alchemTe.getFacing();
 		alchemTe.setUpgraded(true, pos);
-		AlchemiterUpgrades[] alchemUpgrades = AlchemiterUpgrades.getUpgradesFromList(alchemTe.getUpgradeList());
-
+		AlchemiterUpgrades[] alchemUpgrades = alchemTe.getUpgradeList();
+		IBlockState[] excludedBlocks = new IBlockState[16];
+		int EBCount = 0;
+		
 		if(!world.isRemote)
 		{
-			for(int i = 0; i < alchemUpgrades.length; i++)
+			
+			for(int i = 0; i < 16; i++)
 			{
-				for(int j = 0; j < alchemUpgrades[i].getUpgradeBlocks().length; j++)
+				EnumFacing offsetFacing = alchemFacing;
+				EnumFacing offsetFacing2 = offsetFacing.rotateY();
+				int offsetFromAlchemiter = 4;
+				int offset = blockCountCheck % 4;
+				
+				switch((blockCountCheck / 4) % 4)
 				{
-					IBlockState part = alchemUpgrades[i].getUpgradeBlocks()[j];
-					
-					world.setBlockState(alchemPos.offset(alchemFacing.rotateY(), 4).offset(alchemFacing.getOpposite(), offset).down(), part);
-					offset++;
+				case 3: offsetFacing = offsetFacing.rotateY();
+				case 2: offsetFacing = offsetFacing.rotateY();
+				case 1: offsetFacing = offsetFacing.rotateY();
+				case 0: offsetFacing = offsetFacing.rotateY(); 
 				}
+				
+				EnumFacing alchemFacing2 = alchemFacing;
+				if(offsetFacing == alchemFacing2 || offsetFacing == alchemFacing2.rotateY()) 
+					offsetFromAlchemiter = 4;
+				else 
+					offsetFromAlchemiter = 1;
+				
+				alchemFacing2 = alchemFacing;
+				
+				if(offsetFacing == alchemFacing2 || offsetFacing == alchemFacing2.rotateYCCW()) 
+				 	offsetFacing2 = offsetFacing.rotateY();
+				else 
+					offsetFacing2 = offsetFacing.rotateYCCW();
+				
+				BlockPos upgPos = alchemPos.offset(offsetFacing, offsetFromAlchemiter).offset(offsetFacing2, offset).down();
+				
+				IBlockState state = world.getBlockState(upgPos);
+				//System.out.println("old state: " + state.getBlock().getClass().getSuperclass());
+				//System.out.println(state.getBlock().getClass().getSuperclass().equals(BlockAlchemiterUpgrades.class));
+				if(state.getBlock().getClass().getSuperclass().equals(BlockAlchemiterUpgrades.class)) 
+				state = BlockAlchemiterUpgrades.checkForUpgrade(world, upgPos, state);
+				if(state.getBlock().getClass().getSuperclass().equals(BlockAlchemiterUpgrades.class)) 
+				{
+					excludedBlocks[EBCount] = state;
+					EBCount++;
+				}
+				
+				blockCountCheck++;
 			}
-		}
-	}
-	
-	/*public void updateUpgrades(TileEntityAlchemiter alchemTe, BlockPos AlchemPos)
-	{
-		int offset = 0;
-		BlockPos alchemPos = alchemTe.getPos();
-		EnumFacing alchemFacing = alchemTe.getWorld().getBlockState(this.getPos()).getValue(BlockAlchemiter.DIRECTION);
-		alchemTe.setUpgraded(true, pos);
-		AlchemiterUpgrades[] alchemUpgrades = AlchemiterUpgrades.getUpgradesFromList(alchemTe.getUpgradeList());
-
-		if(!world.isRemote)
-		{
 			
 			for(int i = 0; i < alchemUpgrades.length; i++)
 			{
 				if(alchemUpgrades[i] == null) continue;
-				System.out.println("upgrade: " + alchemUpgrades[i]);
-				int times = 0;
-				switch(alchemUpgrades[i].getUpgradeType())
-				{
-					default: times = 2; break;
-					case NONE: times = 0; break;
-					case SINGLE: times = 1; break;
-					case DOUBLE: times = 2; break;
-					case TRIPLE: times = 3; break;
-					case QUAD: times = 4; break;
-				}
-				//System.out.println("times: " + times);
-				
-				System.out.println(alchemUpgrades[i].getUpgradeBlocks().length + " blocks found");
 				
 				for(int j = 0; j < alchemUpgrades[i].getUpgradeBlocks().length; j++)
 				{
-					EnumFacing offsetFacing = alchemFacing;
-					EnumFacing offsetFacing2 = alchemFacing;
-					int offsetFromAlchem;
-					System.out.println("offset " + offset + " + " + j + " = " + (offset+j));
-					offset += j;
-					
-					switch((offset/4) % 4)
+					if(blockCount > 16)
 					{
-						default: 
-						case 0: offsetFromAlchem = 4; break;
-						case 1: offsetFromAlchem = 1; break;
-						case 2: offsetFromAlchem = 1; break;
-						case 3: offsetFromAlchem = 4; break;
-					}
-					
-					
-					
-					System.out.println("mod: " + ((offset/4)) + " offset: " + offsetFromAlchem);
-					
-					switch((offset/4) % 4)
-					{
-						case 3: offsetFacing = offsetFacing.rotateY();
-						case 2: offsetFacing = offsetFacing.rotateY();
-						case 1: offsetFacing = offsetFacing.rotateY();
-						case 0: offsetFacing = offsetFacing.rotateY();
+						/*TODO
+						 * JBE feedback message: "there's not enough space for this upgrade"
+						*/
+						Debug.warn("there's not enough space for that upgrade");
 						break;
 					}
-					switch((offset/4) % 4)
-					{
-						case 2: offsetFacing2 = offsetFacing2.rotateY();
-						case 3: offsetFacing2 = offsetFacing2.rotateY(); break;
-						case 1: offsetFacing2 = offsetFacing2.rotateYCCW();
-						case 0: offsetFacing2 = offsetFacing2.rotateYCCW(); break;
-					}
 					
-					offset = offset % 4;
-					
-					System.out.println("offset: " + offset);
 					IBlockState part = alchemUpgrades[i].getUpgradeBlocks()[j];
 					
-					if(part.getBlock() instanceof BlockAlchemiterUpgrades) 
-						part = part.withProperty(BlockAlchemiterUpgrades.DIRECTION, offsetFacing);
+					EnumFacing offsetFacing = alchemFacing;
+					EnumFacing offsetFacing2 = offsetFacing.rotateY();
+					int offsetFromAlchemiter = 4;
+					int offset = blockCount % 4;
 					
-					//world.setBlockState(alchemPos.offset(offsetFacing2, offset).offset(offsetFacing, offsetFromAlchem).down(), part);
-					world.setBlockState(alchemPos.offset(offsetFacing2, offset).offset(offsetFacing, offsetFromAlchem).down(), MinestuckBlocks.genericObject.getDefaultState());
+					switch((blockCount / 4) % 4)
+					{
+					case 3: offsetFacing = offsetFacing.rotateY();
+					case 2: offsetFacing = offsetFacing.rotateY();
+					case 1: offsetFacing = offsetFacing.rotateY();
+					case 0: offsetFacing = offsetFacing.rotateY(); 
+					}
 					
+					EnumFacing alchemFacing2 = alchemFacing;
+					if(offsetFacing == alchemFacing2 || offsetFacing == alchemFacing2.rotateY()) 
+						offsetFromAlchemiter = 4;
+					else 
+						offsetFromAlchemiter = 1;
+					
+					alchemFacing2 = alchemFacing;
+					
+					if(offsetFacing == alchemFacing2 || offsetFacing == alchemFacing2.rotateYCCW()) 
+					 	offsetFacing2 = offsetFacing.rotateY();
+					else 
+						offsetFacing2 = offsetFacing.rotateYCCW();
+					
+					if(part.getBlock() instanceof BlockAlchemiterUpgrades)part = part.withProperty(BlockAlchemiterUpgrades.DIRECTION, offsetFacing);
+					
+					BlockPos upgPos = alchemPos.offset(offsetFacing, offsetFromAlchemiter).offset(offsetFacing2, offset).down();
+					
+					if(!Arrays.asList(excludedBlocks).contains(part))
+					{
+					if(!world.getBlockState(upgPos).getBlock().equals(Blocks.AIR) && !(world.getBlockState(upgPos).getBlock() instanceof BlockAlchemiterUpgrades))
+						j--;
+					else
+					{
+						world.destroyBlock(upgPos, true);
+						world.setBlockState(upgPos, part);
+					}
+					}
+					blockCount++;
 				}
-				offset++;
 			}
 		}
-	}*/
+	}
 	
 	private boolean isUseable(IBlockState state)
 	{

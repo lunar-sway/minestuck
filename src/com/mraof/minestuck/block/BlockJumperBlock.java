@@ -121,7 +121,7 @@ public abstract class BlockJumperBlock extends BlockLargeMachine {
 				int id = getUpgradeId(state, pos, worldIn);
 				TileEntityJumperBlock jbe = ((TileEntityJumperBlock) te);
 				jbe.setBroken();
-				if(!worldIn.isRemote)jbe.dropItem(true, mainPos, jbe.getUpgrade(id));
+				if(!worldIn.isRemote)jbe.dropItem(true, pos, jbe.getShunt(id));
 			}
 		
 		super.breakBlock(worldIn, pos, state);

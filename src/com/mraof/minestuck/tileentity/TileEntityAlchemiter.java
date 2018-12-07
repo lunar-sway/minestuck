@@ -35,7 +35,7 @@ public class TileEntityAlchemiter extends TileEntity
 	private boolean broken = false;
 	private ItemStack dowel = ItemStack.EMPTY;
 	private ItemStack upgradeItem[] = {ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY,ItemStack.EMPTY,ItemStack.EMPTY};
-	private int upgradeCheck[] = new int[7];
+	private AlchemiterUpgrades upgrade[] = new AlchemiterUpgrades[7];
 	public boolean upgraded = false;
 	private TileEntity jbe = null;
 	
@@ -142,6 +142,7 @@ public class TileEntityAlchemiter extends TileEntity
 				this.upgradeItem[i] = jbeTe.getUpgrade(i);
 				this.upgradeItem[i].setCount(1);
 			}
+			
 		}
 		else
 		{
@@ -150,34 +151,14 @@ public class TileEntityAlchemiter extends TileEntity
 				this.upgradeItem[i] = ItemStack.EMPTY;
 			}
 		}
-		//refreshUpgrades();
+		
+		this.upgrade = AlchemiterUpgrades.getUpgradesFromList(getUpgradeItemsList());
 	}
 	
-	public void refreshUpgrades()
-	{
-		for(int i = 0; i < upgradeCheck.length; i++)
-		{
-			upgradeCheck[i] = -1;
-		}
-		for(int i = 0; i < upgradeItem.length; i++)
-		{
-			for(int c = 0; c < upgradeCheck.length; c++)
-			{
-				//upgradeCheck[c].setCount(1);
-				if(upgradeCheck[c] == Item.getIdFromItem(upgradeItem[i].getItem())) break;
-				if(upgradeCheck[c] == -1)
-					{
-					upgradeCheck[c] = Item.getIdFromItem(upgradeItem[i].getItem());
-						break;
-					}
-			}
-		}
-	}
-	
-	
+		
 	public boolean hasUpgrade(AlchemiterUpgrades upgrade)
 	{
-		return AlchemiterUpgrades.hasUpgrade(getUpgradeList(), upgrade);
+		return AlchemiterUpgrades.hasUpgrade(getUpgradeItemsList(), upgrade);
 	}
 	
 	public boolean isUpgraded()
@@ -206,7 +187,12 @@ public class TileEntityAlchemiter extends TileEntity
 		return !broken;
 	}
 	
-	public ItemStack[] getUpgradeList()
+	public AlchemiterUpgrades[] getUpgradeList()
+	{
+		return upgrade;
+	}
+	
+	public ItemStack[] getUpgradeItemsList()
 	{
 		return this.upgradeItem;
 	}
@@ -251,6 +237,10 @@ public class TileEntityAlchemiter extends TileEntity
 		return;
 	}
 	
+	public EnumFacing getFacing()
+	{
+		return EnumFacing.getHorizontal(getBlockMetadata()/4);
+	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound)

@@ -15,26 +15,39 @@ import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
 import com.mraof.minestuck.tileentity.TileEntityItemStack;
 import com.mraof.minestuck.tileentity.TileEntityJumperBlock;
+import com.mraof.minestuck.util.AlchemiterUpgrades;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockChest;
+import net.minecraft.block.BlockWorkbench;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.gui.GuiHopper;
+import net.minecraft.client.gui.inventory.GuiCrafting;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.inventory.InventoryLargeChest;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.tileentity.TileEntityDropper;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.ILockableContainer;
 import net.minecraft.world.World;
 
 public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
@@ -70,15 +83,85 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 		return parts.BOUNDING_BOX[facing.getHorizontalIndex()];
 	}
 	
-	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
-	{
-		if(worldIn.isRemote)
-			return true;
-		if(index == 2||index == 3)
-			return true;
-		return true;
-	}
+    {
+        if (worldIn.isRemote)
+        {
+            return true;
+        }
+        else
+        {
+        	if(index == 1)
+        	{
+        		System.out.println(getPart(state));
+        		if(getPart(state) == EnumParts.CHEST)
+	        	{
+	            ILockableContainer ilockablecontainer = this.getLockableContainer(worldIn, pos);
+	
+		            if (ilockablecontainer != null)
+		            {
+		                playerIn.displayGUIChest(ilockablecontainer);
+		            }
+	        	}
+        		if(getPart(state) == EnumParts.CRAFTING)
+        		{
+        			//TODO
+        			//playerIn.openGui(Minestuck.instance, [crafting gui], worldIn, pos.getX(), pos.getY(), pos.getZ());
+        		}
+        	}
+            return true;
+        	
+        }
+    }
+	
+	@Nullable
+    public ILockableContainer getLockableContainer(World worldIn, BlockPos pos)
+    {
+        return this.getContainer(worldIn, pos, false);
+    }
+
+	 @Nullable
+	    public ILockableContainer getContainer(World worldIn, BlockPos pos, boolean allowBlocking)
+	    {
+	        TileEntity tileentity = worldIn.getTileEntity(pos);
+
+	        if (!(tileentity instanceof TileEntityChest))
+	        {
+	            return null;
+	        }
+	        else
+	        {
+	            ILockableContainer ilockablecontainer = (TileEntityChest)tileentity;
+
+	            {
+	                for (EnumFacing enumfacing : EnumFacing.Plane.HORIZONTAL)
+	                {
+	                    BlockPos blockpos = pos.offset(enumfacing);
+	                    Block block = worldIn.getBlockState(blockpos).getBlock();
+
+	                    if (block == this)
+	                    {
+	                        
+	                        TileEntity tileentity1 = worldIn.getTileEntity(blockpos);
+
+	                        if (tileentity1 instanceof TileEntityChest)
+	                        {
+	                            if (enumfacing != EnumFacing.WEST && enumfacing != EnumFacing.NORTH)
+	                            {
+	                                ilockablecontainer = new InventoryLargeChest("container.chestDouble", ilockablecontainer, (TileEntityChest)tileentity1);
+	                            }
+	                            else
+	                            {
+	                                ilockablecontainer = new InventoryLargeChest("container.chestDouble", (TileEntityChest)tileentity1, ilockablecontainer);
+	                            }
+	                        }
+	                    }
+	                }
+
+	                return ilockablecontainer;
+	            }
+	        }
+	    }
 	
 	@Override
 	public boolean hasTileEntity(IBlockState state)
@@ -89,28 +172,46 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta)
 	{
-		//if(meta / 4 + index * 4 == EnumParts.CABLE.ordinal())
-		//	return new TileEntityJumperBlock();
-		//else
+		IBlockState state = getStateFromMeta(meta);
+			if(hasTileEntity(state))
+			{
+				switch(state.getValue(PART))
+				{
+				case CHEST: return new TileEntityChest();
+				case DROPPER: return new TileEntityDropper();
+				default: return new TileEntityFurnace();
+				}
+			}
+			
 			return null;
+	}
+	
+	
+	
+	public static BlockPos getAlchemiterPos(World worldIn, BlockPos pos)
+	{
+		IBlockState state = worldIn.getBlockState(pos);
+		if(state.getBlock() instanceof BlockAlchemiter)
+			pos = ((BlockAlchemiter) state.getBlock()).getMainPos(state, pos, worldIn);
+		
+		return pos;
 	}
 	
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
 	{
-		/*if(!state.getValue(PART).isPlug() && !state.getValue(PART).isShunt() && !state.getValue(PART).isCable())
-		{
-			BlockPos mainPos = getMainPos(state, pos, worldIn);
-			TileEntity te = worldIn.getTileEntity(mainPos);
-			IBlockState otherState = worldIn.getBlockState(mainPos);
-			if(te instanceof TileEntityJumperBlock && otherState.getValue(DIRECTION) == state.getValue(DIRECTION))
-			{
-				((TileEntityJumperBlock) te).setBroken();
-			}
-		}
-		*/
+
+		TileEntity tileentity = worldIn.getTileEntity(pos);
+
+        if (tileentity instanceof IInventory)
+        {
+            InventoryHelper.dropInventoryItems(worldIn, pos, (IInventory)tileentity);
+            worldIn.updateComparatorOutputLevel(pos, this);
+        }
+        
 		super.breakBlock(worldIn, pos, state);
 	}
+	
 	
 	@Override
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos)
@@ -149,6 +250,29 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 				spawnAsEntity(worldIn, pos, item);
 			}
 		}
+	}
+	
+	public static IBlockState checkForUpgrade(World worldIn, BlockPos pos, IBlockState state)
+	{
+		EnumParts part = BlockAlchemiterUpgrades.getPart(state);
+		EnumFacing facing = BlockAlchemiterUpgrades.getFacing(state);
+		BlockPos mainPos = getAlchemiterPos(worldIn, pos.offset(facing.getOpposite()));
+		TileEntity te = worldIn.getTileEntity(mainPos);
+		if(te instanceof TileEntityAlchemiter)
+		{
+			TileEntityAlchemiter alchem = (TileEntityAlchemiter) te;
+			
+			//System.out.println(AlchemiterUpgrades.getUpgradeFromBlock(part));
+			//System.out.println(alchem.getUpgradeList());
+			//System.out.println(AlchemiterUpgrades.hasUpgrade(alchem.getUpgradeList(), AlchemiterUpgrades.getUpgradeFromBlock(part)));
+			if(AlchemiterUpgrades.hasUpgrade(alchem.getUpgradeList(), AlchemiterUpgrades.getUpgradeFromBlock(part)))
+			{
+				return state;
+			}
+		}
+		worldIn.destroyBlock(pos, true);
+		worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
+		return Blocks.AIR.getDefaultState();
 	}
 	
 	//Block state handling
@@ -192,6 +316,13 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 	{
 		if(state.getBlock() instanceof BlockAlchemiterUpgrades)
 			return state.getValue(((BlockAlchemiterUpgrades) state.getBlock()).PART);
+		else return null;
+	}
+	
+	public static EnumFacing getFacing(IBlockState state)
+	{
+		if(state.getBlock() instanceof BlockAlchemiterUpgrades)
+			return state.getValue(((BlockAlchemiterUpgrades) state.getBlock()).DIRECTION);
 		else return null;
 	}
 	
@@ -276,7 +407,12 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 		
 		public boolean hasTileEntity()
 		{
-			return false;
+			return 
+				this == CHEST
+				|| this == HOPPER
+				|| this == DROPPER
+				|| this == CRAFTING
+				;
 		}
 		
 	}
