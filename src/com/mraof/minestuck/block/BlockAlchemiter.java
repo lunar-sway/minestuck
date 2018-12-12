@@ -227,6 +227,16 @@ public class BlockAlchemiter extends BlockLargeMachine
 		}
 	}
 	
+	public static EnumFacing getFacing(IBlockState state)
+	{
+		return state.getValue(DIRECTION);
+	}
+	
+	public EnumParts getPart(IBlockState state)
+	{
+		return state.getValue(PART);
+	}
+	
 	public static IBlockState getBlockState(EnumParts parts, EnumFacing direction)
 	{
 		BlockAlchemiter block = MinestuckBlocks.alchemiter[PART1.getAllowedValues().contains(parts) ? 0 : 1];

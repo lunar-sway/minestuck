@@ -1,23 +1,23 @@
 {
 	"variants": {
-		"facing=south,part=chest_left": { "model":"minestuck:alchemiter_upgrade_chest_left" },
-        "facing=south,part=hopper_left":    { "model":"minestuck:alchemiter_upgrade_hopper_left" },
-        "facing=south,part=crafting_left":        { "model":"minestuck:alchemiter_upgrade_crafting_left" },
-        "facing=south,part=library_left": { "model":"minestuck:alchemiter_upgrade_library_left" },
+		"facing=south,part=base_corner_left": { "model":"minestuck:alchemiter_upgrade_base_corner_left" },
+        "facing=south,part=base_corner_right":    { "model":"minestuck:alchemiter_upgrade_base_corner_right" },
+        "facing=south,part=base_side":        { "model":"minestuck:alchemiter_upgrade_base_side" },
+        "facing=south,part=placeholder": { "model":"minestuck:alchemiter_upgrade_placeholder" },
         
-        "facing=west,part=chest_left":   { "model":"minestuck:alchemiter_upgrade_chest_left", "y":90  },
-        "facing=west,part=hopper_left":    { "model":"minestuck:alchemiter_upgrade_hopper_left", "y":90 },
-        "facing=west,part=crafting_left":        { "model":"minestuck:alchemiter_upgrade_crafting_left", "y":90 },
-        "facing=west,part=library_left": { "model":"minestuck:alchemiter_upgrade_library_left", "y":90 },
+        "facing=west,part=base_corner_left":   { "model":"minestuck:alchemiter_upgrade_base_corner_left", "y":90  },
+        "facing=west,part=base_corner_right":    { "model":"minestuck:alchemiter_upgrade_base_corner_right", "y":90 },
+        "facing=west,part=base_side":        { "model":"minestuck:alchemiter_upgrade_base_side", "y":90 },
+        "facing=west,part=placeholder": { "model":"minestuck:alchemiter_upgrade_placeholder", "y":90 },
         
-        "facing=north,part=chest_left":   { "model":"minestuck:alchemiter_upgrade_chest_left", "y":180  },
-        "facing=north,part=hopper_left":    { "model":"minestuck:alchemiter_upgrade_hopper_left", "y":180 },
-        "facing=north,part=crafting_left":        { "model":"minestuck:alchemiter_upgrade_crafting_left", "y":180 },
-        "facing=north,part=library_left": { "model":"minestuck:alchemiter_upgrade_library_left", "y":180 },
+        "facing=north,part=base_corner_left":   { "model":"minestuck:alchemiter_upgrade_base_corner_left", "y":180  },
+        "facing=north,part=base_corner_right":    { "model":"minestuck:alchemiter_upgrade_base_corner_right", "y":180 },
+        "facing=north,part=base_side":        { "model":"minestuck:alchemiter_upgrade_base_side", "y":180 },
+        "facing=north,part=placeholder": { "model":"minestuck:alchemiter_upgrade_placeholder", "y":180 },
         
-        "facing=east,part=chest_left":   { "model":"minestuck:alchemiter_upgrade_chest_left", "y":270  },
-        "facing=east,part=hopper_left":    { "model":"minestuck:alchemiter_upgrade_hopper_left", "y":270 },
-        "facing=east,part=crafting_left":        { "model":"minestuck:alchemiter_upgrade_crafting_left", "y":270 },
-        "facing=east,part=library_left": { "model":"minestuck:alchemiter_upgrade_library_left", "y":270 }
+        "facing=east,part=base_corner_left":   { "model":"minestuck:alchemiter_upgrade_base_corner_left", "y":270  },
+        "facing=east,part=base_corner_right":    { "model":"minestuck:alchemiter_upgrade_base_corner_right", "y":270 },
+        "facing=east,part=base_side":        { "model":"minestuck:alchemiter_upgrade_base_side", "y":270 },
+        "facing=east,part=placeholder": { "model":"minestuck:alchemiter_upgrade_placeholder", "y":270 }
 	}
 }

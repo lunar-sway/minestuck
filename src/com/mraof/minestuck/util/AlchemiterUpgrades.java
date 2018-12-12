@@ -172,10 +172,14 @@ public class AlchemiterUpgrades
 	
 	public static AlchemiterUpgrades getUpgradeFromBlock(EnumParts part)
 	{
+		if(part == EnumParts.BASE_CORNER_LEFT || part == EnumParts.BASE_CORNER_RIGHT || part == EnumParts.BASE_SIDE)
+			return null;
 		for(AlchemiterUpgrades i : upgradeList)
 		{
 			for(IBlockState j : i.getUpgradeBlocks())
 			{
+				if(j.getBlock() == null) 
+					continue;
 				if(j.getBlock() instanceof BlockAlchemiterUpgrades)
 					if(BlockAlchemiterUpgrades.getPart(j) == part)
 						return i;

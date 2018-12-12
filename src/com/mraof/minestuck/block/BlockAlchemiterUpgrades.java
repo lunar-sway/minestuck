@@ -51,7 +51,7 @@ import net.minecraft.world.ILockableContainer;
 import net.minecraft.world.World;
 
 public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
-	public static final PropertyEnum<EnumParts> PART1 = PropertyEnum.create("part", EnumParts.class, EnumParts.BASE_CORNER_LEFT, EnumParts.BASE_CORNER_RIGHT, EnumParts.BASE_SIDE, EnumParts.PLACEHOLDER);
+	public static final PropertyEnum<EnumParts> PART1 = PropertyEnum.create("part", EnumParts.class, EnumParts.BASE_CORNER_LEFT, EnumParts.BASE_SIDE, EnumParts.BASE_CORNER_RIGHT, EnumParts.PLACEHOLDER);
 	public static final PropertyEnum<EnumParts> PART2 = PropertyEnum.create("part", EnumParts.class, EnumParts.CHEST, EnumParts.HOPPER, EnumParts.CRAFTING, EnumParts.LIBRARY);
 	public static final PropertyEnum<EnumParts> PART3 = PropertyEnum.create("part", EnumParts.class, EnumParts.GRISTWIDGET, EnumParts.CAPTCHA_CARD, EnumParts.DROPPER, EnumParts.BOONDOLLAR);
 	public static final PropertyEnum<EnumParts> PART4 = PropertyEnum.create("part", EnumParts.class, EnumParts.BLENDER, EnumParts.PLACEHOLDER_0, EnumParts.PLACEHOLDER_1, EnumParts.PLACEHOLDER_2);
@@ -166,7 +166,8 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 	@Override
 	public boolean hasTileEntity(IBlockState state)
 	{
-		return state.getValue(PART).hasTileEntity();
+		return false;
+		//return state.getValue(PART).hasTileEntity();
 	}
 	
 	@Override
@@ -254,25 +255,45 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 	
 	public static IBlockState checkForUpgrade(World worldIn, BlockPos pos, IBlockState state)
 	{
+		return checkForUpgrade(worldIn, pos, state, false);
+	}
+	
+	public static IBlockState checkForUpgrade(World worldIn, BlockPos pos, IBlockState state, boolean jbeBroken)
+	{
+		System.out.println("checkForUpgrade: ");
+		System.out.println(jbeBroken);
+		if(jbeBroken)
+		{
+			worldIn.destroyBlock(pos, true);
+			return Blocks.AIR.getDefaultState();
+		}
+			
 		EnumParts part = BlockAlchemiterUpgrades.getPart(state);
 		EnumFacing facing = BlockAlchemiterUpgrades.getFacing(state);
-		BlockPos mainPos = getAlchemiterPos(worldIn, pos.offset(facing.getOpposite()));
+		BlockPos mainPos = getAlchemiterPos(worldIn, pos.offset(facing));
 		TileEntity te = worldIn.getTileEntity(mainPos);
+		
 		if(te instanceof TileEntityAlchemiter)
 		{
 			TileEntityAlchemiter alchem = (TileEntityAlchemiter) te;
-			
-			//System.out.println(AlchemiterUpgrades.getUpgradeFromBlock(part));
-			//System.out.println(alchem.getUpgradeList());
-			//System.out.println(AlchemiterUpgrades.hasUpgrade(alchem.getUpgradeList(), AlchemiterUpgrades.getUpgradeFromBlock(part)));
-			if(AlchemiterUpgrades.hasUpgrade(alchem.getUpgradeList(), AlchemiterUpgrades.getUpgradeFromBlock(part)))
+			if(!alchem.isBroken() && AlchemiterUpgrades.hasUpgrade(alchem.getUpgradeList(), AlchemiterUpgrades.getUpgradeFromBlock(part)))
 			{
 				return state;
 			}
 		}
 		worldIn.destroyBlock(pos, true);
-		worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
 		return Blocks.AIR.getDefaultState();
+	}
+	
+	@Override
+	public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) 
+	{
+		boolean isUpgraded = false;
+		TileEntity te = world.getTileEntity(getAlchemiterPos((World)world, pos));
+		if(te instanceof TileEntityAlchemiter) isUpgraded = ((TileEntityAlchemiter)te).isUpgraded();
+		
+		checkForUpgrade((World) world, pos, world.getBlockState(pos), !isUpgraded);
+		super.onNeighborChange(world, pos, neighbor);
 	}
 	
 	//Block state handling
@@ -326,9 +347,19 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 		else return null;
 	}
 	
+	public static int getPartIndex(EnumParts parts)
+	{
+		return PART1.getAllowedValues().contains(parts) ? 0 : PART2.getAllowedValues().contains(parts) ? 1 : PART3.getAllowedValues().contains(parts) ? 2 : 3;
+	}
+	
+	public static int getPartIndex(IBlockState state)
+	{
+		return getPartIndex(getPart(state));
+	}
+	
 	public static IBlockState getBlockState(EnumParts parts, EnumFacing direction)
 	{
-		BlockAlchemiterUpgrades block = MinestuckBlocks.alchemiterUpgrades[PART1.getAllowedValues().contains(parts) ? 0 : PART2.getAllowedValues().contains(parts) ? 1 : PART3.getAllowedValues().contains(parts) ? 2 : 3];
+		BlockAlchemiterUpgrades block = MinestuckBlocks.alchemiterUpgrades[getPartIndex(parts)];
 		IBlockState state = block.getDefaultState();
 		return state.withProperty(block.PART, parts).withProperty(DIRECTION, direction);
 	}
@@ -362,8 +393,8 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 	public enum EnumParts implements IStringSerializable
 	{
 		BASE_CORNER_LEFT(	new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
-		BASE_CORNER_RIGHT(	new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
-		BASE_SIDE(		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
+		BASE_SIDE(	new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
+		BASE_CORNER_RIGHT(		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
 		PLACEHOLDER(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
 		
 		CHEST(	new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
@@ -419,12 +450,12 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 	
 	public static BlockAlchemiterUpgrades[] createBlocks()
 	{
-		return new BlockAlchemiterUpgrades[] {new BlockJumperBlock1(), new BlockJumperBlock2(), new BlockJumperBlock3(), new BlockJumperBlock4()};
+		return new BlockAlchemiterUpgrades[] {new BlockAlchemiterUpgrades1(), new BlockAlchemiterUpgrades2(), new BlockAlchemiterUpgrades3(), new BlockAlchemiterUpgrades4()};
 	}
 	
-	private static class BlockJumperBlock1 extends BlockAlchemiterUpgrades
+	private static class BlockAlchemiterUpgrades1 extends BlockAlchemiterUpgrades
 	{
-		public BlockJumperBlock1()
+		public BlockAlchemiterUpgrades1()
 		{
 			super(0, PART1);
 		}
@@ -436,9 +467,9 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 		}
 	}
 	
-	private static class BlockJumperBlock2 extends BlockAlchemiterUpgrades
+	private static class BlockAlchemiterUpgrades2 extends BlockAlchemiterUpgrades
 	{
-		public BlockJumperBlock2()
+		public BlockAlchemiterUpgrades2()
 		{
 			super(1, PART2);
 		}
@@ -450,9 +481,9 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 		}
 	}
 	
-	private static class BlockJumperBlock3 extends BlockAlchemiterUpgrades
+	private static class BlockAlchemiterUpgrades3 extends BlockAlchemiterUpgrades
 	{
-		public BlockJumperBlock3()
+		public BlockAlchemiterUpgrades3()
 		{
 			super(2, PART3);
 		}
@@ -465,9 +496,9 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 		}
 	}
 	
-	private static class BlockJumperBlock4 extends BlockAlchemiterUpgrades
+	private static class BlockAlchemiterUpgrades4 extends BlockAlchemiterUpgrades
 	{
-		public BlockJumperBlock4()
+		public BlockAlchemiterUpgrades4()
 		{
 			super(3, PART4);
 		}
