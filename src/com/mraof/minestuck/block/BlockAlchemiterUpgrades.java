@@ -93,7 +93,6 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
         {
         	if(index == 1)
         	{
-        		System.out.println(getPart(state));
         		if(getPart(state) == EnumParts.CHEST)
 	        	{
 	            ILockableContainer ilockablecontainer = this.getLockableContainer(worldIn, pos);
@@ -260,8 +259,6 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 	
 	public static IBlockState checkForUpgrade(World worldIn, BlockPos pos, IBlockState state, boolean jbeBroken)
 	{
-		System.out.println("checkForUpgrade: ");
-		System.out.println(jbeBroken);
 		if(jbeBroken)
 		{
 			worldIn.destroyBlock(pos, true);
