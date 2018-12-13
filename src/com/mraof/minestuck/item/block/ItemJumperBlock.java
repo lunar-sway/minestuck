@@ -101,33 +101,52 @@ public class ItemJumperBlock extends ItemBlock
 		}
 		for(int z = 0; z < 4; z++)
 		{
-			BlockPos alchemPos = TileEntityJumperBlock.staticAlchemiterMainPos(facing.getOpposite(), pos.offset(facing, 1).offset(facing.rotateYCCW(), 7), world);
-			//System.out.println(alchemPos);
-			if(!(world.getBlockState(pos.offset(facing.getOpposite(), z).offset(facing.rotateYCCW(), -1)).getBlock() instanceof BlockAlchemiter))
-			{
+			EnumFacing lookupFacing = facing.rotateY();
+			EnumFacing flipFacing = facing;
+			int flipOffset = 1;
+			int lookupOffset = 4;
+			if(!flip)
+				{
+					lookupFacing = lookupFacing.getOpposite();
+					flipFacing = flipFacing.getOpposite();
+					lookupOffset = 5;
+					flipOffset = 5;
+				}
+			
+			
+			
+			BlockPos lookupPos = (pos.offset(lookupFacing, lookupOffset));
+			BlockPos alchemPos = TileEntityJumperBlock.staticAlchemiterMainPos(lookupPos, world);
+			
 				for(int z2 = 0; z2 < 4; z2++)
 				{
-					if(!(world.getBlockState(pos.offset(facing.getOpposite(), z2).offset(facing.rotateYCCW(), 5)).getBlock() instanceof BlockAlchemiter) || 
-							!(world.getBlockState(pos.offset(facing.getOpposite(), z2).offset(facing.rotateYCCW(), 5)).getBlock() instanceof BlockAlchemiter))
-						return false;
+					
+					if(!(world.getBlockState(pos.offset(facing.getOpposite(), z2).offset(flipFacing.rotateY(), flipOffset)).getBlock() instanceof BlockAlchemiter))
+						{
+							
+							flip = !flip;
+							return false;
+						}
 					else
 					{
 						TileEntity alchemTe = world.getTileEntity(alchemPos);
+						
+						
 						if(alchemTe instanceof TileEntityAlchemiter)
 						{
+
 							TileEntityAlchemiter alchemiterTe = (TileEntityAlchemiter) alchemTe;
+							
 							if(alchemiterTe.isUpgraded() || alchemiterTe.isBroken()) 
 								return false;
 							
+							
 						}
-						
 					}
 				}
-				flip = true;
-				return true;
+				
 			}
-		}
-		flip = false;
+		
 		return true;
 	}
 	@Override
@@ -135,7 +154,7 @@ public class ItemJumperBlock extends ItemBlock
 	{
 		EnumFacing facing = player.getHorizontalFacing();
 		
-		if(flip)
+		if(!flip)
 		{
 			pos = pos.offset(facing,3).offset(facing.rotateY(),4);
 			facing = facing.getOpposite();
@@ -178,11 +197,14 @@ public class ItemJumperBlock extends ItemBlock
 				
 				((TileEntityJumperBlock) te).setColor(color);
 				
-				TileEntity alchemTe = world.getTileEntity(((TileEntityJumperBlock) te).alchemiterMainPos());
+				EnumFacing flipFacing = facing.rotateY();
+				if(!flip) flipFacing = flipFacing.getOpposite();
+				TileEntity alchemTe = world.getTileEntity(((TileEntityJumperBlock) te).staticAlchemiterMainPos(cablePos.offset(flipFacing), world));
 				if(alchemTe instanceof TileEntityAlchemiter)
 				{
 					TileEntityAlchemiter alchemiter = (TileEntityAlchemiter) alchemTe;
 					
+					//TODO
 					alchemiter.setUpgraded(true, cablePos);
 				}
 				else Debug.warnf("Couldn't find Alchemiter at %s. Instead found %s.", ((TileEntityJumperBlock) te).alchemiterMainPos(), alchemTe);

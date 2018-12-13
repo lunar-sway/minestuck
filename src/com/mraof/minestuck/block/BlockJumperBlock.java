@@ -126,7 +126,7 @@ public abstract class BlockJumperBlock extends BlockLargeMachine {
 					for(int i = 0; i < 8; i++)
 						if(!worldIn.isRemote)jbe.dropItem(true, pos, jbe.getShunt(i));
 				
-				else if(!worldIn.isRemote)jbe.dropItem(true, pos, jbe.getShunt(id));
+				else if(!worldIn.isRemote)jbe.dropItem(false, jbe.idToPos(i), jbe.getShunt(id));
 			}
 		
 		super.breakBlock(worldIn, pos, state);
