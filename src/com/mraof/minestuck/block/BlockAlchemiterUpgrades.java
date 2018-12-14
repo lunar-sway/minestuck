@@ -286,8 +286,12 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 	public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) 
 	{
 		boolean isUpgraded = false;
-		TileEntity te = world.getTileEntity(getAlchemiterPos((World)world, pos));
+		
+		
+		TileEntity te = world.getTileEntity(getAlchemiterPos((World)world, pos.offset(world.getBlockState(pos).getValue(DIRECTION))));
 		if(te instanceof TileEntityAlchemiter) isUpgraded = ((TileEntityAlchemiter)te).isUpgraded();
+		
+		System.out.println(isUpgraded);
 		
 		checkForUpgrade((World) world, pos, world.getBlockState(pos), !isUpgraded);
 		super.onNeighborChange(world, pos, neighbor);

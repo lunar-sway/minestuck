@@ -220,61 +220,96 @@ public class TileEntityJumperBlock extends TileEntity
 				blockCountCheck++;
 			}
 
-
+			
 			
 			for(int i = 0; i < alchemUpgrades.length; i++)
 			{
 				if(alchemUpgrades[i] == null) continue;
 				
-				int blockLength = alchemUpgrades[i].getUpgradeBlocks().length;
+				IBlockState[] upgradeBlocks = alchemUpgrades[i].getUpgradeBlocks();
 				
-				for(int j = 0; j < blockLength; j++)
+				int blockLength = upgradeBlocks.length;
+				
+				switch(alchemUpgrades[i].getUpgradeType())
 				{
-					if(blockCount > 16)
-					{
-						/*TODO
-						 * JBE feedback message: "there's not enough space for this upgrade"
-						*/
-						Debug.warn("there's not enough space for that upgrade");
-						break;
-					}
-					
-					IBlockState part = alchemUpgrades[i].getUpgradeBlocks()[j];
-					
-					EnumFacing offsetFacing = alchemFacing;
-					EnumFacing offsetFacing2 = offsetFacing.rotateY();
-					int offsetFromAlchemiter = 4;
-					int offset = blockCount % 4;
-					
-					offsetFacing = getOffsetFacing(offsetFacing, blockCount);
-					offsetFromAlchemiter = getOffsetFromAlchemiter(offsetFacing, alchemFacing);
-					offsetFacing2 = getOffsetFacing2(offsetFacing, alchemFacing);
-					
-					IBlockState checkPart = part;
-					if(part.getBlock() instanceof BlockAlchemiterUpgrades)
-						{
-							part = part.withProperty(BlockAlchemiterUpgrades.DIRECTION, offsetFacing.getOpposite());
-							checkPart = part.withProperty(BlockAlchemiterUpgrades.DIRECTION, EnumFacing.NORTH);
-						}
-					BlockPos upgPos = alchemPos.offset(offsetFacing, offsetFromAlchemiter).offset(offsetFacing2, offset).down();
-
-					if(!Arrays.asList(excludedBlocks).contains(checkPart))
-					{
-							
-						if((world.getBlockState(upgPos).getBlockHardness(world, upgPos) > 1 && 
-								!world.getBlockState(upgPos).getBlock().equals(MinestuckBlocks.alchemiterUpgrades[0])) || ((offset - j + blockLength-1) % 4) != (offset - j + blockLength-1))
-							j--;
-						else
-						{
-							world.destroyBlock(upgPos, true);
-							world.setBlockState(upgPos, part);
-							sideUpgraded[(blockCount / 4) % 4] = true;
-						}
-						blockCount++;
-					}
-					
-				}
+				case TOTEM_PAD:
 				
+					BlockPos pos = alchemPos.down();
+					
+					for(int j = 0; j < blockLength; j++)
+					{
+						if((world.getBlockState(pos).getBlockHardness(world, pos) > 1 && !(world.getBlockState(pos).getBlock().equals(MinestuckBlocks.alchemiter[0]))) 
+								&& (world.getBlockState(pos).getBlock() instanceof BlockAlchemiterUpgrades))
+						{
+							/*TODO
+							 * JBE feedback message: "there's not enough space for this upgrade"
+							*/
+							Debug.warn("there's not enough space for that upgrade");
+							break;
+						}
+							
+					}
+					
+					for(int j = 0; j < blockLength; j++)
+					{
+						if(upgradeBlocks[j] == null) continue;
+						
+						world.destroyBlock(pos, true);
+						world.setBlockState(pos, upgradeBlocks[j]);
+					}
+					
+				break;
+				default:
+					
+					
+					for(int j = 0; j < blockLength; j++)
+					{
+						if(blockCount > 16)
+						{
+							/*TODO
+							 * JBE feedback message: "there's not enough space for this upgrade"
+							*/
+							Debug.warn("there's not enough space for that upgrade");
+							break;
+						}
+						
+						IBlockState part = alchemUpgrades[i].getUpgradeBlocks()[j];
+						
+						EnumFacing offsetFacing = alchemFacing;
+						EnumFacing offsetFacing2 = offsetFacing.rotateY();
+						int offsetFromAlchemiter = 4;
+						int offset = blockCount % 4;
+						
+						offsetFacing = getOffsetFacing(offsetFacing, blockCount);
+						offsetFromAlchemiter = getOffsetFromAlchemiter(offsetFacing, alchemFacing);
+						offsetFacing2 = getOffsetFacing2(offsetFacing, alchemFacing);
+						
+						IBlockState checkPart = part;
+						if(part.getBlock() instanceof BlockAlchemiterUpgrades)
+							{
+								part = part.withProperty(BlockAlchemiterUpgrades.DIRECTION, offsetFacing.getOpposite());
+								checkPart = part.withProperty(BlockAlchemiterUpgrades.DIRECTION, EnumFacing.NORTH);
+							}
+						BlockPos upgPos = alchemPos.offset(offsetFacing, offsetFromAlchemiter).offset(offsetFacing2, offset).down();
+	
+						if(!Arrays.asList(excludedBlocks).contains(checkPart))
+						{
+								
+							if((world.getBlockState(upgPos).getBlockHardness(world, upgPos) > 1 && 
+									!world.getBlockState(upgPos).getBlock().equals(MinestuckBlocks.alchemiterUpgrades[0])) || ((offset - j + blockLength-1) % 4) != (offset - j + blockLength-1))
+								j--;
+							else
+							{
+								world.destroyBlock(upgPos, true);
+								world.setBlockState(upgPos, part);
+								sideUpgraded[(blockCount / 4) % 4] = true;
+							}
+							blockCount++;
+						}
+						
+					}
+					break;
+				}
 			}
 			
 			blockCount = 0;
@@ -326,6 +361,7 @@ public class TileEntityJumperBlock extends TileEntity
 				blockCount++;
 			}
 		}
+		
 	}
 	
 	public void updateUpgradeBlocks(EnumFacing alchemFacing, BlockPos alchemPos)
