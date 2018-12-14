@@ -15,6 +15,7 @@ import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
 import com.mraof.minestuck.tileentity.TileEntityItemStack;
 import com.mraof.minestuck.tileentity.TileEntityJumperBlock;
+import com.mraof.minestuck.tileentity.TileEntityUpgradedAlchemiter;
 import com.mraof.minestuck.util.AlchemiterUpgrades;
 
 import net.minecraft.block.Block;
@@ -51,10 +52,10 @@ import net.minecraft.world.ILockableContainer;
 import net.minecraft.world.World;
 
 public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
-	public static final PropertyEnum<EnumParts> PART1 = PropertyEnum.create("part", EnumParts.class, EnumParts.BASE_CORNER_LEFT, EnumParts.BASE_SIDE, EnumParts.BASE_CORNER_RIGHT, EnumParts.PLACEHOLDER);
+	public static final PropertyEnum<EnumParts> PART1 = PropertyEnum.create("part", EnumParts.class, EnumParts.BASE_CORNER_LEFT, EnumParts.BASE_SIDE, EnumParts.BASE_CORNER_RIGHT, EnumParts.BLANK);
 	public static final PropertyEnum<EnumParts> PART2 = PropertyEnum.create("part", EnumParts.class, EnumParts.CHEST, EnumParts.HOPPER, EnumParts.CRAFTING, EnumParts.LIBRARY);
 	public static final PropertyEnum<EnumParts> PART3 = PropertyEnum.create("part", EnumParts.class, EnumParts.GRISTWIDGET, EnumParts.CAPTCHA_CARD, EnumParts.DROPPER, EnumParts.BOONDOLLAR);
-	public static final PropertyEnum<EnumParts> PART4 = PropertyEnum.create("part", EnumParts.class, EnumParts.BLENDER, EnumParts.PLACEHOLDER_0, EnumParts.PLACEHOLDER_1, EnumParts.PLACEHOLDER_2);
+	public static final PropertyEnum<EnumParts> PART4 = PropertyEnum.create("part", EnumParts.class, EnumParts.UPGRADED_PAD, EnumParts.BLENDER, EnumParts.CRUXTRUDER, EnumParts.PLACEHOLDER_2);
 	
 	public final PropertyEnum<EnumParts> PART;
 	public static final PropertyDirection DIRECTION = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
@@ -165,8 +166,7 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 	@Override
 	public boolean hasTileEntity(IBlockState state)
 	{
-		return false;
-		//return state.getValue(PART).hasTileEntity();
+		return state.getValue(PART).hasTileEntity();
 	}
 	
 	@Override
@@ -179,6 +179,7 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 				{
 				case CHEST: return new TileEntityChest();
 				case DROPPER: return new TileEntityDropper();
+				case BLENDER: return new TileEntityUpgradedAlchemiter();
 				default: return new TileEntityFurnace();
 				}
 			}
@@ -396,7 +397,7 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 		BASE_CORNER_LEFT(	new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
 		BASE_SIDE(	new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
 		BASE_CORNER_RIGHT(		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
-		PLACEHOLDER(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
+		BLANK(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
 		
 		CHEST(	new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
 		HOPPER(	new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
@@ -408,9 +409,9 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 		DROPPER(		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
 		BOONDOLLAR(		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
 		
+		UPGRADED_PAD(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
 		BLENDER(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
-		PLACEHOLDER_0(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
-		PLACEHOLDER_1(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
+		CRUXTRUDER(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
 		PLACEHOLDER_2(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D));
 		
 		private final AxisAlignedBB[] BOUNDING_BOX;
@@ -444,6 +445,7 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 				|| this == HOPPER
 				|| this == DROPPER
 				|| this == CRAFTING
+				|| this == BLENDER
 				;
 		}
 		

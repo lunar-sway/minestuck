@@ -5,8 +5,7 @@
 		"1": "minestuck:machines/jumper_block_extension/top_side",
 		"2": "minestuck:machines/jumper_block_extension/inside",
 		"3": "minestuck:machines/jumper_block_extension/side",
-		"4": "minestuck:machines/jumper_block_extension/top_border",
-		"particle": "minestuck:machines/jumper_block_extension/down_side"
+		"4": "minestuck:machines/jumper_block_extension/top_border"
 	},
 	"elements": [
 		{

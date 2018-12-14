@@ -590,7 +590,7 @@ public abstract class BlockJumperBlock extends BlockLargeMachine {
 		BORDER_LEFT(	new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
 		BORDER_SIDE(	new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
 		BORDER_RIGHT(		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
-		SMALL_CORNER(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
+		SMALL_CORNER(new AxisAlignedBB(6/16D, 0.0D, 4/16D, 1.0D, 0.5D, 1.0D)),
 		
 		BASE_SIDE(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
 		BASE_CORNER(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),

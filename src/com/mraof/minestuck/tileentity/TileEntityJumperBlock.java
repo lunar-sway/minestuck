@@ -41,6 +41,7 @@ public class TileEntityJumperBlock extends TileEntity
 	private boolean broken = false;
 	private ItemStack upgrade[] = {ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY,ItemStack.EMPTY,ItemStack.EMPTY};
 	private int color = -1;
+	private int latheUpgradeId = -1;
 	
 	public int getColor()
 	{
@@ -180,11 +181,23 @@ public class TileEntityJumperBlock extends TileEntity
 		alchemTe.setUpgraded(true, pos);
 		AlchemiterUpgrades[] alchemUpgrades = alchemTe.getUpgradeList();
 		IBlockState[] excludedBlocks = new IBlockState[16];
+		IBlockState[] excludedLatheBlocks = new IBlockState[20];
 		int EBCount = 0;
 		
 		if(!world.isRemote)
 		{
 			
+			for(AlchemiterUpgrades i : alchemUpgrades)
+			{
+				if(i == null) continue;
+				
+				if(i.getUpgradeType().equals(AlchemiterUpgrades.EnumType.TOTEM_PAD))
+				{
+					setLatheUpgrade(-1);
+					break;
+				}
+			}
+				
 			for(int i = 0; i < 16; i++)
 			{
 				EnumFacing offsetFacing = alchemFacing;
@@ -208,8 +221,6 @@ public class TileEntityJumperBlock extends TileEntity
 					state = state.withProperty(BlockAlchemiterUpgrades.DIRECTION, EnumFacing.NORTH);
 				}
 				
-				//world.setBlockState(upgPos, MinestuckBlocks.genericObject.getDefaultState());
-				
 				if(state.getBlock().getClass().getSuperclass().equals(BlockAlchemiterUpgrades.class) && !isPlaceholder) 
 				{
 					excludedBlocks[EBCount] = state;
@@ -219,8 +230,31 @@ public class TileEntityJumperBlock extends TileEntity
 				
 				blockCountCheck++;
 			}
-
 			
+			EBCount = 0;
+			
+			for(int i = 0; i < 8; i++)
+			{
+				BlockPos upgPos = alchemPos.down().up(i);
+				IBlockState state = world.getBlockState(upgPos);
+				
+				if(state.getBlock().getClass().getSuperclass().equals(BlockAlchemiterUpgrades.class)) 
+				state = BlockAlchemiterUpgrades.checkForUpgrade(world, upgPos, state);
+				boolean isPlaceholder = false;
+				if(state.getBlock() instanceof BlockAlchemiterUpgrades)
+				{
+					isPlaceholder = (BlockAlchemiterUpgrades.getPartIndex(state) == 0);
+					state = state.withProperty(BlockAlchemiterUpgrades.DIRECTION, EnumFacing.NORTH);
+				}
+				
+				if(state.getBlock().getClass().getSuperclass().equals(BlockAlchemiterUpgrades.class) && !isPlaceholder) 
+				{
+					excludedLatheBlocks[EBCount] = state;
+					EBCount++;
+				}
+			}
+			
+			boolean br8k = false;
 			
 			for(int i = 0; i < alchemUpgrades.length; i++)
 			{
@@ -239,24 +273,48 @@ public class TileEntityJumperBlock extends TileEntity
 					for(int j = 0; j < blockLength; j++)
 					{
 						if((world.getBlockState(pos).getBlockHardness(world, pos) > 1 && !(world.getBlockState(pos).getBlock().equals(MinestuckBlocks.alchemiter[0]))) 
-								&& (world.getBlockState(pos).getBlock() instanceof BlockAlchemiterUpgrades))
+								|| (world.getBlockState(pos).getBlock() instanceof BlockAlchemiterUpgrades))
 						{
 							/*TODO
 							 * JBE feedback message: "there's not enough space for this upgrade"
-							*/
-							Debug.warn("there's not enough space for that upgrade");
-							break;
-						}
+							 */
+								Debug.warn("there's not enough space for that upgrade");
+								br8k = true;
+								break;
 							
+						}
+						
 					}
+					
+					System.out.println(br8k);
+					
+					if(br8k) break;
 					
 					for(int j = 0; j < blockLength; j++)
 					{
-						if(upgradeBlocks[j] == null) continue;
+						System.out.println(BlockAlchemiterUpgrades.getPart(upgradeBlocks[j]));
+					
+						if(BlockAlchemiterUpgrades.getPart(upgradeBlocks[j]) == BlockAlchemiterUpgrades.EnumParts.BLANK) 
+							continue;
 						
-						world.destroyBlock(pos, true);
-						world.setBlockState(pos, upgradeBlocks[j]);
+						System.out.println(getLatheUpgradeId());
+						
+						if(getLatheUpgradeId() == -1) setLatheUpgrade(alchemUpgrades[i]);
+						
+						System.out.println(j);
+						
+						if(!Arrays.asList(excludedLatheBlocks).contains(upgradeBlocks[j]) && getLatheUpgradeId() == Arrays.asList(AlchemiterUpgrades.upgradeList).indexOf(alchemUpgrades[i]))
+						{
+
+							System.out.println(pos.up(j) +" just died.");
+							world.destroyBlock(pos.up(j), true);
+							world.setBlockState(pos.up(j), upgradeBlocks[j]);
+						}
 					}
+					
+					TileEntity te = world.getTileEntity(alchemPos);
+					
+					if(te instanceof TileEntityUpgradedAlchemiter) ((TileEntityAlchemiter) te).setUpgraded(true, getPos());
 					
 				break;
 				default:
@@ -362,6 +420,26 @@ public class TileEntityJumperBlock extends TileEntity
 			}
 		}
 		
+	}
+	
+	public void setLatheUpgrade(AlchemiterUpgrades upg)
+	{
+		setLatheUpgrade(Arrays.asList(AlchemiterUpgrades.upgradeList).indexOf(upg));
+	}
+	
+	public void setLatheUpgrade(int i)
+	{
+		latheUpgradeId = i;
+	}
+	
+	public int getLatheUpgradeId()
+	{
+		return latheUpgradeId;
+	}
+	
+	public AlchemiterUpgrades getLatheUpgrade(int index)
+	{
+		return AlchemiterUpgrades.upgradeList[getLatheUpgradeId()];
 	}
 	
 	public void updateUpgradeBlocks(EnumFacing alchemFacing, BlockPos alchemPos)
@@ -566,6 +644,8 @@ public class TileEntityJumperBlock extends TileEntity
 	{
 		super.readFromNBT(tagCompound);
 		broken = tagCompound.getBoolean("broken");
+		latheUpgradeId = tagCompound.getInteger("latheUpgradeId");
+		System.out.println("reading lathe upgrade: " + latheUpgradeId);
 		
 		for(int i = 0; i < upgrade.length; i++)
 		{
@@ -580,6 +660,8 @@ public class TileEntityJumperBlock extends TileEntity
 	{
 		super.writeToNBT(tagCompound);
 		tagCompound.setBoolean("broken",broken);
+		tagCompound.setInteger("latheUpgradeId", latheUpgradeId);
+		System.out.println("writing lathe upgrade: " + latheUpgradeId);
 		for(int i = 0; i < upgrade.length; i++)
 		{
 			tagCompound.setTag("upgrade" + i, upgrade[i].writeToNBT(new NBTTagCompound()));

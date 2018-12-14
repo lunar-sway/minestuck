@@ -31,13 +31,13 @@ import net.minecraft.world.World;
 
 public class TileEntityAlchemiter extends TileEntity
 {
-	private GristType selectedGrist = GristType.Build;
-	private boolean broken = false;
-	private ItemStack dowel = ItemStack.EMPTY;
-	private ItemStack upgradeItem[] = {ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY,ItemStack.EMPTY,ItemStack.EMPTY};
-	private AlchemiterUpgrades upgrade[] = new AlchemiterUpgrades[7];
+	protected GristType selectedGrist = GristType.Build;
+	protected boolean broken = false;
+	protected ItemStack dowel = ItemStack.EMPTY;
+	protected ItemStack upgradeItem[] = {ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY,ItemStack.EMPTY,ItemStack.EMPTY};
+	protected AlchemiterUpgrades upgrade[] = new AlchemiterUpgrades[7];
 	public boolean upgraded = false;
-	private TileEntity jbe = null;
+	protected TileEntity jbe = null;
 	
 	public void setDowel(ItemStack newDowel)
 	{
