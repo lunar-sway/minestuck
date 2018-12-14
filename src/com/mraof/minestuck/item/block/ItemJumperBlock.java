@@ -83,7 +83,55 @@ public class ItemJumperBlock extends ItemBlock
 		}
 	}
 	
-	
+	public static boolean checkOutline(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing facing)
+	{
+		boolean outlineFlip = flip;
+		for (int x = 0; x < 5; x++)
+		{
+			if (!player.canPlayerEdit(pos.offset(facing.rotateYCCW(), x), EnumFacing.UP, stack))
+				return false;
+			for (int y = 0; y < 1; y++)
+			{
+				for(int z=0;z<4;z++) {
+					if (!world.mayPlace(MinestuckBlocks.jumperBlockExtension[0], pos.offset(facing.getOpposite(),z).offset(facing.rotateYCCW(), x).up(y), false, EnumFacing.UP, null))
+						return false;
+				}
+			}
+		}
+		for(int z = 0; z < 4; z++)
+		{
+			EnumFacing lookupFacing = facing.rotateY();
+			EnumFacing flipFacing = facing;
+			int flipOffset = 1;
+			int lookupOffset = 4;
+			if(!outlineFlip)
+				{
+					lookupFacing = lookupFacing.getOpposite();
+					flipFacing = flipFacing.getOpposite();
+					lookupOffset = 5;
+					flipOffset = 5;
+				}
+			
+			
+			
+			BlockPos lookupPos = (pos.offset(lookupFacing, lookupOffset));
+			BlockPos alchemPos = TileEntityJumperBlock.staticAlchemiterMainPos(lookupPos, world);
+			
+				for(int z2 = 0; z2 < 4; z2++)
+				{
+					
+					if(!(world.getBlockState(pos.offset(facing.getOpposite(), z2).offset(flipFacing.rotateY(), flipOffset)).getBlock() instanceof BlockAlchemiter))
+						{
+							
+						outlineFlip = !outlineFlip;
+							return false;
+						}
+				}
+				
+			}
+		
+		return true;
+	}
 	
 	public static boolean canPlaceAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing facing)
 	{

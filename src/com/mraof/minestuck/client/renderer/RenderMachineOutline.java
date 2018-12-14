@@ -127,7 +127,7 @@ public class RenderMachineOutline
 					pos = pos.offset(placedFacing.rotateYCCW(), 4);
 				
 				boundingBox = new AxisAlignedBB(0, 0, 0, (r ? 5 : 4), 1, (r ? 4 : 5)).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
-				placeable = ItemJumperBlock.canPlaceAt(stack, player, player.world, placementPos, placedFacing);
+				placeable = ItemJumperBlock.checkOutline(stack, player, player.world, placementPos, placedFacing);
 			} else	//Alchemiter
 			{
 				pos = pos.offset(placedFacing.rotateY());
