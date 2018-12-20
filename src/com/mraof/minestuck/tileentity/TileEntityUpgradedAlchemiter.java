@@ -7,6 +7,7 @@ import com.mraof.minestuck.block.BlockAlchemiterUpgrades;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.util.AlchemiterUpgrades;
+import com.mraof.minestuck.util.Debug;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,29 +19,40 @@ import net.minecraft.world.World;
 
 public class TileEntityUpgradedAlchemiter extends TileEntityAlchemiter
 {
-	/*
-	@Override
-	public void onRightClick(World worldIn, EntityPlayer playerIn, IBlockState state, EnumParts part) 
+	
+	public void onRightClick(World worldIn, EntityPlayer playerIn, IBlockState state) 
+	{	
+		if(state.getBlock() instanceof BlockAlchemiterUpgrades)
+			onRightClick(worldIn, playerIn, state, BlockAlchemiterUpgrades.getPart(state));
+		else if(state.getBlock() instanceof BlockAlchemiter)
+		{
+			if(!(jbe instanceof TileEntityJumperBlock))
+			{
+				Debug.warnf("could not find jbe at alchemiter in pos %s, this shouldn't be happening! (ref. line: TileEntityUpgradedAlchemiter.31)", getPos());
+				return;
+			}
+			
+			AlchemiterUpgrades latheUpg = ((TileEntityJumperBlock)jbe).getLatheUpgrade();
+			
+			if(!AlchemiterUpgrades.nullifiesAlchemiterFunc(latheUpg))
+				onRightClick(worldIn, playerIn, state, ((BlockAlchemiter)state.getBlock()).getPart(state));
+		}
+	}
+	
+	public void onRightClick(World worldIn, EntityPlayer playerIn, IBlockState state, BlockAlchemiterUpgrades.EnumParts part) 
 	{
 		if(worldIn.isRemote)
 		{
-			if(part == EnumParts.CENTER_PAD || part == EnumParts.CORNER || part == EnumParts.SIDE_LEFT || part == EnumParts.SIDE_RIGHT || part == EnumParts.TOTEM_CORNER)
+			switch(part)
 			{
-				BlockPos mainPos = pos;
-				if(!isBroken() && !(worldIn.getBlockState(mainPos).getBlock() == MinestuckBlocks.alchemiterUpgrades[3] && BlockAlchemiterUpgrades.getPart(worldIn.getBlockState(mainPos)) == BlockAlchemiterUpgrades.EnumParts.BLENDER))
-				{
-					{
-						playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.ALCHEMITER.ordinal(), worldIn, mainPos.getX(), mainPos.getY(), mainPos.getZ());
-					}
-				}
+			case BLENDER: System.out.println("B L E N D ! ! ! ! ! ! ! !"); break;
+			default: System.out.println("default"); break;
 			}
 			return;
 		}
 		
-		
-		super.onRightClick(worldIn, playerIn, state, part);
 	}
-	*/
+	
 	@Override
 	public void checkStates() {
 		if(this.isBroken())
@@ -50,32 +62,34 @@ public class TileEntityUpgradedAlchemiter extends TileEntityAlchemiter
 		
 		BlockPos pos = getPos().down();
 		TileEntityJumperBlock jbeTe = ((TileEntityJumperBlock) jbe);
-		EnumParts[] baseParts = {EnumParts.TOTEM_CORNER, EnumParts.TOTEM_PAD, EnumParts.LOWER_ROD, EnumParts.UPPER_ROD};
+		IBlockState[] baseParts = 
+			{
+				BlockAlchemiter.getBlockState(EnumParts.TOTEM_CORNER, facing),
+				BlockAlchemiter.getBlockState(EnumParts.TOTEM_PAD, facing),
+				BlockAlchemiter.getBlockState(EnumParts.LOWER_ROD, facing),
+				BlockAlchemiter.getBlockState(EnumParts.UPPER_ROD, facing)
+			};
 		
-		System.out.println(AlchemiterUpgrades.upgradeList);
-		System.out.println(jbeTe.getLatheUpgradeId());
+		IBlockState[] upgBlocks;
 		
-		AlchemiterUpgrades upg = AlchemiterUpgrades.upgradeList[jbeTe.getLatheUpgradeId()];
-		IBlockState[] upgBlocks = upg.getUpgradeBlocks();
-		
-		System.out.println(upgBlocks);
-		
+		if(jbeTe.getLatheUpgradeId() == -1)
+			upgBlocks = baseParts;
+		else
+		{
+			AlchemiterUpgrades upg = AlchemiterUpgrades.upgradeList[jbeTe.getLatheUpgradeId()];
+			upgBlocks = upg.getUpgradeBlocks();
+		}
 		for(int i = 0; i < upgBlocks.length; i++)
 		{
 			IBlockState state = upgBlocks[i];
 			IBlockState checkPart;
-			if(BlockAlchemiterUpgrades.getPart(state) == BlockAlchemiterUpgrades.EnumParts.BLANK) checkPart = BlockAlchemiter.getBlockState(baseParts[i], facing);
+			if(BlockAlchemiterUpgrades.getPart(state) == BlockAlchemiterUpgrades.EnumParts.NONE) checkPart = baseParts[i];
 			else if(state.getBlock() instanceof BlockAlchemiterUpgrades) checkPart = state.withProperty(BlockAlchemiterUpgrades.DIRECTION, facing);
 			else checkPart = state;
-			
-			System.out.println(pos.up(i));
-			System.out.println(world.getBlockState(pos.up(i)));
-			System.out.println(checkPart);
-			System.out.println();
+			if(BlockAlchemiterUpgrades.getPart(state) == BlockAlchemiterUpgrades.EnumParts.BLANK) continue;
 			
 			if(!world.getBlockState(pos.up(i)).equals(checkPart))
 			{
-				System.out.println("died at " + i);
 				breakMachine();
 				return;
 			}

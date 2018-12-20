@@ -1,6 +1,7 @@
 package com.mraof.minestuck.block;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -13,6 +14,7 @@ import com.mraof.minestuck.block.BlockAlchemiterUpgrades.EnumParts;
 //import com.mraof.minestuck.block.BlockJumperBlock.BlockJumperBlock3;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
+import com.mraof.minestuck.tileentity.TileEntityAlchemiterUpgrade;
 import com.mraof.minestuck.tileentity.TileEntityItemStack;
 import com.mraof.minestuck.tileentity.TileEntityJumperBlock;
 import com.mraof.minestuck.tileentity.TileEntityUpgradedAlchemiter;
@@ -52,10 +54,11 @@ import net.minecraft.world.ILockableContainer;
 import net.minecraft.world.World;
 
 public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
-	public static final PropertyEnum<EnumParts> PART1 = PropertyEnum.create("part", EnumParts.class, EnumParts.BASE_CORNER_LEFT, EnumParts.BASE_SIDE, EnumParts.BASE_CORNER_RIGHT, EnumParts.BLANK);
+	public static final PropertyEnum<EnumParts> PART1 = PropertyEnum.create("part", EnumParts.class, EnumParts.BASE_CORNER_LEFT, EnumParts.BASE_SIDE, EnumParts.BASE_CORNER_RIGHT, EnumParts.BASE);
 	public static final PropertyEnum<EnumParts> PART2 = PropertyEnum.create("part", EnumParts.class, EnumParts.CHEST, EnumParts.HOPPER, EnumParts.CRAFTING, EnumParts.LIBRARY);
 	public static final PropertyEnum<EnumParts> PART3 = PropertyEnum.create("part", EnumParts.class, EnumParts.GRISTWIDGET, EnumParts.CAPTCHA_CARD, EnumParts.DROPPER, EnumParts.BOONDOLLAR);
-	public static final PropertyEnum<EnumParts> PART4 = PropertyEnum.create("part", EnumParts.class, EnumParts.UPGRADED_PAD, EnumParts.BLENDER, EnumParts.CRUXTRUDER, EnumParts.PLACEHOLDER_2);
+	public static final PropertyEnum<EnumParts> PART4 = PropertyEnum.create("part", EnumParts.class, EnumParts.UPGRADED_PAD, EnumParts.BLENDER, EnumParts.CRUXTRUDER, EnumParts.HOLOPAD);
+	public static final PropertyEnum<EnumParts> BASE = PropertyEnum.create("part", EnumParts.class, EnumParts.BLANK, EnumParts.NONE, EnumParts.PLACEHOLDER_1, EnumParts.PLACEHOLDER_2);
 	
 	public final PropertyEnum<EnumParts> PART;
 	public static final PropertyDirection DIRECTION = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
@@ -86,33 +89,52 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 	
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
-        if (worldIn.isRemote)
+     /*   if (worldIn.isRemote)
         {
             return true;
         }
         else
+        	*/
         {
-        	if(index == 1)
+        	TileEntity te = worldIn.getTileEntity(getAlchemiterPos(worldIn, pos));
+        	if(!(te instanceof TileEntityAlchemiter)) return false;
+        	
+        	TileEntityAlchemiter alchemiter = (TileEntityAlchemiter) te;
+        	if(alchemiter.isBroken()) return false;
+        	
+        	switch(index)
         	{
-        		if(getPart(state) == EnumParts.CHEST)
-	        	{
-	            ILockableContainer ilockablecontainer = this.getLockableContainer(worldIn, pos);
-	
-		            if (ilockablecontainer != null)
-		            {
-		                playerIn.displayGUIChest(ilockablecontainer);
-		            }
-	        	}
-        		if(getPart(state) == EnumParts.CRAFTING)
+        	case 1:
+        		switch(getPart(state))
         		{
-        			//TODO
-        			//playerIn.openGui(Minestuck.instance, [crafting gui], worldIn, pos.getX(), pos.getY(), pos.getZ());
+        		case CHEST:
+        		{
+    	            ILockableContainer ilockablecontainer = this.getLockableContainer(worldIn, pos);
+    	
+    		            if (ilockablecontainer != null)
+    		            {
+    		                playerIn.displayGUIChest(ilockablecontainer);
+    		            }
+    	        	}
+        		break;
+        		case CRAFTING: /*TODO*/ break;
+        		default: defaultRightClick(alchemiter, worldIn, playerIn, state); break;
         		}
+        	break;
+        	default: defaultRightClick(alchemiter, worldIn, playerIn, state); break;
         	}
+        	
             return true;
         	
         }
+        
     }
+	
+	protected void defaultRightClick(TileEntityAlchemiter alchemiter, World worldIn, EntityPlayer playerIn, IBlockState state)
+	{
+		if(alchemiter instanceof TileEntityUpgradedAlchemiter)
+			((TileEntityUpgradedAlchemiter)alchemiter).onRightClick(worldIn, playerIn, state);
+	}
 	
 	@Nullable
     public ILockableContainer getLockableContainer(World worldIn, BlockPos pos)
@@ -173,15 +195,15 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 	public TileEntity createNewTileEntity(World worldIn, int meta)
 	{
 		IBlockState state = getStateFromMeta(meta);
+		EnumParts part = state.getValue(PART);
+		
+		AlchemiterUpgrades upg = AlchemiterUpgrades.getUpgradeFromBlock(part);
+		
 			if(hasTileEntity(state))
 			{
-				switch(state.getValue(PART))
-				{
-				case CHEST: return new TileEntityChest();
-				case DROPPER: return new TileEntityDropper();
-				case BLENDER: return new TileEntityUpgradedAlchemiter();
-				default: return new TileEntityFurnace();
-				}
+				if(part.isUpgradedAlchemiter()) 
+					return new TileEntityUpgradedAlchemiter();
+				else return new TileEntityAlchemiterUpgrade(upg);
 			}
 			
 			return null;
@@ -194,7 +216,15 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 		IBlockState state = worldIn.getBlockState(pos);
 		if(state.getBlock() instanceof BlockAlchemiter)
 			pos = ((BlockAlchemiter) state.getBlock()).getMainPos(state, pos, worldIn);
-		
+		else if(state.getBlock() instanceof BlockAlchemiterUpgrades)
+			if(AlchemiterUpgrades.getUpgradeFromBlock(getPart(state)).getUpgradeType() == AlchemiterUpgrades.EnumType.TOTEM_PAD)
+			{
+				IBlockState[] blocks = AlchemiterUpgrades.getUpgradeFromBlock(getPart(state)).getUpgradeBlocks();
+				
+				pos = pos.down(Arrays.asList(blocks).indexOf(state.withProperty(DIRECTION, EnumFacing.NORTH)) - 1);
+			}
+				
+				
 		return pos;
 	}
 	
@@ -207,7 +237,6 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
         if (tileentity instanceof IInventory)
         {
             InventoryHelper.dropInventoryItems(worldIn, pos, (IInventory)tileentity);
-            worldIn.updateComparatorOutputLevel(pos, this);
         }
         
 		super.breakBlock(worldIn, pos, state);
@@ -265,15 +294,23 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 			worldIn.destroyBlock(pos, true);
 			return Blocks.AIR.getDefaultState();
 		}
-			
+		
 		EnumParts part = BlockAlchemiterUpgrades.getPart(state);
 		EnumFacing facing = BlockAlchemiterUpgrades.getFacing(state);
-		BlockPos mainPos = getAlchemiterPos(worldIn, pos.offset(facing));
+		
+		BlockPos offset = (AlchemiterUpgrades.getUpgradeFromBlock(part) == null) ? pos.offset(facing) : (AlchemiterUpgrades.getUpgradeFromBlock(part).getUpgradeType() == AlchemiterUpgrades.EnumType.TOTEM_PAD) ? pos : pos.offset(facing);
+		BlockPos mainPos =  getAlchemiterPos(worldIn, offset);
+		
+		System.out.println("mainPos: " + mainPos);
+		
 		TileEntity te = worldIn.getTileEntity(mainPos);
+		System.out.println("te: " + te);
 		
 		if(te instanceof TileEntityAlchemiter)
 		{
 			TileEntityAlchemiter alchem = (TileEntityAlchemiter) te;
+			alchem.unbreakMachine();
+			alchem.checkStates();
 			if(!alchem.isBroken() && AlchemiterUpgrades.hasUpgrade(alchem.getUpgradeList(), AlchemiterUpgrades.getUpgradeFromBlock(part)))
 			{
 				return state;
@@ -287,12 +324,13 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 	public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) 
 	{
 		boolean isUpgraded = false;
+		boolean isPadUpg = AlchemiterUpgrades.getUpgradeFromBlock(getPart(world.getBlockState(pos))) != null;
+		if(isPadUpg) isPadUpg = world.getBlockState(pos).getBlock() instanceof BlockAlchemiterUpgrades ? (AlchemiterUpgrades.getUpgradeFromBlock(getPart(world.getBlockState(pos))).getUpgradeType() == AlchemiterUpgrades.EnumType.TOTEM_PAD) : false;
 		
+		BlockPos offset = isPadUpg ? pos : pos.offset(world.getBlockState(pos).getValue(DIRECTION));
+		TileEntity te = world.getTileEntity(getAlchemiterPos((World)world, offset));
 		
-		TileEntity te = world.getTileEntity(getAlchemiterPos((World)world, pos.offset(world.getBlockState(pos).getValue(DIRECTION))));
 		if(te instanceof TileEntityAlchemiter) isUpgraded = ((TileEntityAlchemiter)te).isUpgraded();
-		
-		System.out.println(isUpgraded);
 		
 		checkForUpgrade((World) world, pos, world.getBlockState(pos), !isUpgraded);
 		super.onNeighborChange(world, pos, neighbor);
@@ -368,14 +406,13 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 	
 	public static IBlockState getBlockState(EnumParts parts)
 	{
-		BlockAlchemiterUpgrades block = MinestuckBlocks.alchemiterUpgrades[PART1.getAllowedValues().contains(parts) ? 0 : PART2.getAllowedValues().contains(parts) ? 1 : PART3.getAllowedValues().contains(parts) ? 2 : 3];
-		IBlockState state = block.getDefaultState();
+		BlockAlchemiterUpgrades block = MinestuckBlocks.alchemiterUpgrades[PART1.getAllowedValues().contains(parts) ? 0 : PART2.getAllowedValues().contains(parts) ? 1 : PART3.getAllowedValues().contains(parts) ? 2 : PART4.getAllowedValues().contains(parts) ? 3 : BASE.getAllowedValues().contains(parts) ? 4 : 5];IBlockState state = block.getDefaultState();
 		return state.withProperty(block.PART, parts);
 	}
 	
 	public static IBlockState getState(EnumParts parts, EnumFacing facing)
     {
-        BlockAlchemiterUpgrades block = MinestuckBlocks.alchemiterUpgrades[PART1.getAllowedValues().contains(parts) ? 0 : PART2.getAllowedValues().contains(parts) ? 1 : PART3.getAllowedValues().contains(parts) ? 2 : PART4.getAllowedValues().contains(parts) ? 3 : 4];
+        BlockAlchemiterUpgrades block = MinestuckBlocks.alchemiterUpgrades[PART1.getAllowedValues().contains(parts) ? 0 : PART2.getAllowedValues().contains(parts) ? 1 : PART3.getAllowedValues().contains(parts) ? 2 : PART4.getAllowedValues().contains(parts) ? 3 : BASE.getAllowedValues().contains(parts) ? 4 : 5];
         return block.getDefaultState().withProperty(block.PART, parts).withProperty(DIRECTION, facing);
     }
 	
@@ -397,7 +434,7 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 		BASE_CORNER_LEFT(	new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
 		BASE_SIDE(	new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
 		BASE_CORNER_RIGHT(		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
-		BLANK(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
+		BASE(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
 		
 		CHEST(	new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
 		HOPPER(	new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
@@ -412,8 +449,14 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 		UPGRADED_PAD(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
 		BLENDER(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
 		CRUXTRUDER(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
-		PLACEHOLDER_2(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D));
+		HOLOPAD(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
 		
+		BLANK(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
+		NONE(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
+		PLACEHOLDER_1(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
+		PLACEHOLDER_2(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
+		
+		;
 		private final AxisAlignedBB[] BOUNDING_BOX;
 		
 		EnumParts(AxisAlignedBB bb)
@@ -449,11 +492,18 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 				;
 		}
 		
+		public boolean isUpgradedAlchemiter()
+		{
+			return
+				this == BLENDER
+				;
+		}
+		
 	}
 	
 	public static BlockAlchemiterUpgrades[] createBlocks()
 	{
-		return new BlockAlchemiterUpgrades[] {new BlockAlchemiterUpgrades1(), new BlockAlchemiterUpgrades2(), new BlockAlchemiterUpgrades3(), new BlockAlchemiterUpgrades4()};
+		return new BlockAlchemiterUpgrades[] {new BlockAlchemiterUpgrades1(), new BlockAlchemiterUpgrades2(), new BlockAlchemiterUpgrades3(), new BlockAlchemiterUpgrades4(), new BlockAlchemiterUpgradesSpecial()};
 	}
 	
 	private static class BlockAlchemiterUpgrades1 extends BlockAlchemiterUpgrades
@@ -511,6 +561,21 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 		protected BlockStateContainer createBlockState()
 		{
 			return new BlockStateContainer(this, PART4, DIRECTION);
+		}
+	}
+	
+	private static class BlockAlchemiterUpgradesSpecial extends BlockAlchemiterUpgrades
+	{
+		public BlockAlchemiterUpgradesSpecial()
+		{
+			super(3, BASE);
+		}
+		
+		
+		@Override
+		protected BlockStateContainer createBlockState()
+		{
+			return new BlockStateContainer(this, BASE, DIRECTION);
 		}
 	}
 	

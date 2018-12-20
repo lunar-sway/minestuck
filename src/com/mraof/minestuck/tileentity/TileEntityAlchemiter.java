@@ -89,6 +89,16 @@ public class TileEntityAlchemiter extends TileEntity
 		}
 	}
 
+	//tells the tile entity to not stop working
+		public void unbreakMachine()
+		{
+			broken = false;
+			if(world != null)
+			{
+				IBlockState state = world.getBlockState(pos);
+				world.notifyBlockUpdate(pos, state, state, 2);
+			}
+		}
 	
 	public void dropItem(boolean inBlock)
 	{
