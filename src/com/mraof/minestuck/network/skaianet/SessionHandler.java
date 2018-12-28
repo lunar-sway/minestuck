@@ -420,6 +420,7 @@ public class SessionHandler
 				throw new CommandException(merge);
 		}
 		
+		boolean updateLandChain = false;
 		if(cs != null)
 		{
 			if(cs.isActive)
@@ -427,6 +428,7 @@ public class SessionHandler
 			cs.serverIdentifier = IdentifierHandler.nullIdentifier;
 			if(sender.sendCommandFeedback())
 				sender.sendMessage(new TextComponentString(server.getUsername()+"'s old client player "+cs.getClientIdentifier().getUsername()+" is now without a server player.").setStyle(new Style().setColor(TextFormatting.YELLOW)));
+			updateLandChain |= cs.enteredGame();
 		}
 		
 		if(cc != null && cc.isActive)
@@ -457,9 +459,12 @@ public class SessionHandler
 				cc.server = connection.server;
 				cc.serverIdentifier = server;
 			} else cc.serverIdentifier = server;
+			updateLandChain |= cc.enteredGame();
 		}
 		
 		SkaianetHandler.updateAll();
+		if(updateLandChain)
+			SkaianetHandler.sendLandChainUpdate();
 		
 		CommandBase.notifyCommandListener(sender, command, "commands.sburbServer.success", client.getUsername(), server.getUsername());
 	}

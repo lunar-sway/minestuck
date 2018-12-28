@@ -48,6 +48,11 @@ public class SkaianetHandler {
 	private static Map<PlayerIdentifier, PlayerIdentifier[]> infoToSend = new HashMap<PlayerIdentifier, PlayerIdentifier[]>();	//Key: player, value: data to send to player
 	private static List<ComputerData> movingComputers = new ArrayList<ComputerData>();
 	
+	/**
+	 * Chains of lands to be used by the skybox render
+	 */
+	private static List<List<Integer>> landChains = new LinkedList<>();
+	
 	public static SburbConnection getClientConnection(PlayerIdentifier client)
 	{
 		for(SburbConnection c : connections)
@@ -286,6 +291,7 @@ public class SkaianetHandler {
 				: s1 == s2 ? ConnectionCreatedEvent.SessionJoinType.INTERNAL : ConnectionCreatedEvent.SessionJoinType.MERGE;
 		ConnectionCreatedEvent.ConnectionType type = ConnectionCreatedEvent.ConnectionType.REGULAR;
 		
+		boolean updateLandChain = false;
 		if(newConnection)
 		{
 			SburbConnection conn = getMainConnection(c.getClientIdentifier(), true);
@@ -298,6 +304,7 @@ public class SkaianetHandler {
 				conn.isActive = true;
 				c = conn;
 				type = ConnectionCreatedEvent.ConnectionType.RESUME;
+				updateLandChain = true;
 			} else
 			{
 				String s = SessionHandler.onConnectionCreated(c);
@@ -335,6 +342,8 @@ public class SkaianetHandler {
 			c2.markBlockForUpdate();
 		
 		MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(c, SessionHandler.getPlayerSession(c.getClientIdentifier()), type, joinType));
+		if(updateLandChain)
+			sendLandChainUpdate();
 	}
 	
 	public static void requestInfo(EntityPlayer player, PlayerIdentifier p1)
@@ -444,6 +453,62 @@ public class SkaianetHandler {
 		}
 		
 		SessionHandler.serverStarted();
+		
+		updateLandChain();
+	}
+	
+	public static MinestuckPacket createLandChainPacket()
+	{
+		return MinestuckPacket.makePacket(Type.SBURB_INFO, landChains);
+	}
+	
+	static void updateLandChain()
+	{
+		landChains.clear();
+		
+		Set<Integer> checked = new HashSet<>();
+		for(SburbConnection c : connections)
+		{
+			if(c.isMain() && c.enteredGame() && !checked.contains(c.clientHomeLand))
+			{
+				LinkedList<Integer> chain = new LinkedList<>();
+				chain.add(c.clientHomeLand);
+				checked.add(c.clientHomeLand);
+				while(true)
+				{
+					SburbConnection cc = getMainConnection(c.getClientIdentifier(), false);
+					if(cc != null && cc.enteredGame())
+					{
+						chain.addLast(cc.clientHomeLand);
+						checked.add(cc.clientHomeLand);
+					} else
+					{
+						chain.addLast(0);
+						break;
+					}
+				}
+				while(true)
+				{
+					SburbConnection cs = getMainConnection(c.getServerIdentifier(), true);
+					if(cs != null && cs.enteredGame())
+					{
+						chain.addFirst(cs.clientHomeLand);
+						checked.add(cs.clientHomeLand);
+					} else
+					{
+						break;
+					}
+				}
+				landChains.add(chain);
+			}
+		}
+	}
+	
+	static void sendLandChainUpdate()
+	{
+		updateLandChain();
+		MinestuckPacket packet = createLandChainPacket();
+		MinestuckChannelHandler.sendToAllPlayers(packet);
 	}
 	
 	static void updateAll()
@@ -466,11 +531,13 @@ public class SkaianetHandler {
 				break;
 			}
 		for(PlayerIdentifier i : iden)
+		{
 			if(i != null)
 			{
 				MinestuckPacket packet = MinestuckPacket.makePacket(Type.SBURB_INFO, generateClientInfo(i));
 				MinestuckChannelHandler.sendToPlayer(packet, playerMP);
 			}
+		}
 	}
 	
 	private static Object[] generateClientInfo(PlayerIdentifier player)
@@ -696,7 +763,8 @@ public class SkaianetHandler {
 			c.centerZ = 0;
 			c.useCoordinates = false;
 			updateAll();
-		} else
+			sendLandChainUpdate();
+		} else //TODO Look at effects of cancelling entry at this point
 			Debug.errorf("Couldn't move %s to their Land. Stopping entry.", player.getName());
 		return dimensionId;
 	}
