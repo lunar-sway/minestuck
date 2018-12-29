@@ -226,7 +226,13 @@ public class LandSkyRender extends IRenderHandler
 		bufferbuilder.pos((double)planetSize, 100.0D, (double)planetSize).tex(1.0D, 1.0D).endVertex();
 		bufferbuilder.pos((double)(-planetSize), 100.0D, (double)planetSize).tex(0.0D, 1.0D).endVertex();
 		tessellator.draw();
-		
+		mc.getTextureManager().bindTexture(textures[1]);
+		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+		bufferbuilder.pos((double)(-planetSize), 100.0D, (double)(-planetSize)).tex(0.0D, 0.0D).endVertex();
+		bufferbuilder.pos((double)planetSize, 100.0D, (double)(-planetSize)).tex(1.0D, 0.0D).endVertex();
+		bufferbuilder.pos((double)planetSize, 100.0D, (double)planetSize).tex(1.0D, 1.0D).endVertex();
+		bufferbuilder.pos((double)(-planetSize), 100.0D, (double)planetSize).tex(0.0D, 1.0D).endVertex();
+		tessellator.draw();
 		GlStateManager.popMatrix();
 	}
 	
@@ -235,7 +241,9 @@ public class LandSkyRender extends IRenderHandler
 		if(aspects == null)
 			return null;
 		
-		ResourceLocation terrain = new ResourceLocation("minestuck", "textures/environment/planets/planet_"+aspects.aspectTerrain.getPrimaryName()+"_"+random.nextInt(3)+".png");
-		return new ResourceLocation[] {terrain};
+		int index = random.nextInt(3);
+		ResourceLocation terrain = new ResourceLocation("minestuck", "textures/environment/planets/planet_"+aspects.aspectTerrain.getPrimaryName()+"_"+index+".png");
+		ResourceLocation title = new ResourceLocation("minestuck", "textures/environment/overlays/overlay_"+aspects.aspectTitle.getPrimaryName()+"_"+index+".png");
+		return new ResourceLocation[] {terrain, title};
 	}
 }
