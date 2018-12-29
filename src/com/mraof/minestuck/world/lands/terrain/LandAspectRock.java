@@ -108,7 +108,7 @@ public class LandAspectRock extends TerrainLandAspect
 	@Override
 	public Vec3d getSkyColor()
 	{
-		return new Vec3d(0.6D, 0.8D, 0.7D);
+		return new Vec3d(0.6D, 0.6D, 0.7D);
 	}
 	
 	@Override

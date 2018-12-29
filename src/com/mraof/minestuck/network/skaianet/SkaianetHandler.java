@@ -109,6 +109,8 @@ public class SkaianetHandler {
 		s[0] = identifier;
 		infoToSend.put(identifier, s);
 		updatePlayer(identifier);
+		MinestuckPacket packet = createLandChainPacket();
+		MinestuckChannelHandler.sendToPlayer(packet, player);
 	}
 	
 	public static void requestConnection(ComputerData player, PlayerIdentifier otherPlayer, boolean isClient)
@@ -474,26 +476,31 @@ public class SkaianetHandler {
 				LinkedList<Integer> chain = new LinkedList<>();
 				chain.add(c.clientHomeLand);
 				checked.add(c.clientHomeLand);
+				SburbConnection cIter = c;
 				while(true)
 				{
-					SburbConnection cc = getMainConnection(c.getClientIdentifier(), false);
-					if(cc != null && cc.enteredGame())
+					cIter = getMainConnection(cIter.getClientIdentifier(), false);
+					if(cIter != null && cIter.enteredGame())
 					{
-						chain.addLast(cc.clientHomeLand);
-						checked.add(cc.clientHomeLand);
+						if(!checked.contains(cIter.clientHomeLand))
+						{
+							chain.addLast(cIter.clientHomeLand);
+							checked.add(cIter.clientHomeLand);
+						} else break;
 					} else
 					{
 						chain.addLast(0);
 						break;
 					}
 				}
+				cIter = c;
 				while(true)
 				{
-					SburbConnection cs = getMainConnection(c.getServerIdentifier(), true);
-					if(cs != null && cs.enteredGame())
+					cIter = getMainConnection(cIter.getServerIdentifier(), true);
+					if(cIter != null && cIter.enteredGame() && !checked.contains(cIter.clientHomeLand))
 					{
-						chain.addFirst(cs.clientHomeLand);
-						checked.add(cs.clientHomeLand);
+						chain.addFirst(cIter.clientHomeLand);
+						checked.add(cIter.clientHomeLand);
 					} else
 					{
 						break;

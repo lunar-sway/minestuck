@@ -159,6 +159,7 @@ public class SkaiaClient
 			for(List<Integer> list : data.landChains)
 				for(int i : list)
 					landChainMap.put(i, list);
+			return;
 		}
 		
 		if(playerId == -1)

@@ -37,7 +37,7 @@ public class LandSkyRender extends IRenderHandler
 	public void render(float partialTicks, WorldClient world, Minecraft mc)
 	{
 		float heightModifier = (float) MathHelper.clamp((mc.player.posY - 144)/112, 0, 1);
-		float heightModifierDiminish = (1 - heightModifier/2);
+		float heightModifierDiminish = (1 - heightModifier/1.5F);
 		float skyClearness = 1.0F - world.getRainStrength(partialTicks);
 		float starBrightness = world.getStarBrightness(partialTicks) * skyClearness;
 		starBrightness += (0.5 - starBrightness)*heightModifier;
@@ -193,16 +193,20 @@ public class LandSkyRender extends IRenderHandler
 		if(list == null)
 			return;
 		int index = list.indexOf(dimId);
+		GlStateManager.enableTexture2D();
 		for(int i = 1; i < list.size(); i++)
 		{
 			int id = list.get((index + i)%list.size());
-			drawLand(mc, MinestuckDimensionHandler.getAspects(id), (i / list.size()));
+			Random random = new Random(mc.world.getSeed() + id);
+			if(id != 0)
+				drawLand(mc, getResourceLocations(MinestuckDimensionHandler.getAspects(id), random), (i / (float) list.size()), random);
 		}
+		GlStateManager.disableTexture2D();
 	}
 	
-	public void drawLand(Minecraft mc, LandAspectRegistry.AspectCombination aspect, float pos)
+	public void drawLand(Minecraft mc, ResourceLocation[] textures, float pos, Random random)
 	{
-		if(pos == 0.5F || aspect == null)
+		if(pos == 0.5F || textures == null)
 			return;
 		
 		float v = (float) Math.PI*(0.5F - pos);
@@ -212,10 +216,10 @@ public class LandSkyRender extends IRenderHandler
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		GlStateManager.pushMatrix();
 		GlStateManager.rotate((float) (180/Math.PI * v), 0, 0, 1);
+		GlStateManager.rotate((float) 90*random.nextInt(4), 0, 1, 0);
 		
-		GlStateManager.enableTexture2D();
 		float planetSize = 4.0F*scale;
-		mc.getTextureManager().bindTexture(LAND_TEXTURE);
+		mc.getTextureManager().bindTexture(textures[0]);
 		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
 		bufferbuilder.pos((double)(-planetSize), 100.0D, (double)(-planetSize)).tex(0.0D, 0.0D).endVertex();
 		bufferbuilder.pos((double)planetSize, 100.0D, (double)(-planetSize)).tex(1.0D, 0.0D).endVertex();
@@ -223,7 +227,15 @@ public class LandSkyRender extends IRenderHandler
 		bufferbuilder.pos((double)(-planetSize), 100.0D, (double)planetSize).tex(0.0D, 1.0D).endVertex();
 		tessellator.draw();
 		
-		GlStateManager.disableTexture2D();
 		GlStateManager.popMatrix();
+	}
+	
+	public ResourceLocation[] getResourceLocations(LandAspectRegistry.AspectCombination aspects, Random random)
+	{
+		if(aspects == null)
+			return null;
+		
+		ResourceLocation terrain = new ResourceLocation("minestuck", "textures/environment/planets/planet_"+aspects.aspectTerrain.getPrimaryName()+"_"+random.nextInt(3)+".png");
+		return new ResourceLocation[] {terrain};
 	}
 }
