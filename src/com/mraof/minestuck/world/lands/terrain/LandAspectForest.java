@@ -7,11 +7,7 @@ import com.mraof.minestuck.block.BlockMinestuckLog1;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
-import com.mraof.minestuck.world.lands.decorator.BasicTreeDecorator;
-import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
-import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
-import com.mraof.minestuck.world.lands.decorator.TallGrassDecorator;
-import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
+import com.mraof.minestuck.world.lands.decorator.*;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
 import net.minecraft.block.BlockColored;

@@ -83,12 +83,7 @@ public class LandAspectFungi extends TerrainLandAspect
 		
 		return list;
 	}
-
-	@Override
-	public int getDayCycleMode() {
-		return 2;
-	}
-
+	
 	@Override
 	public Vec3d getFogColor() 
 	{
