@@ -568,6 +568,9 @@ public class SkaianetHandler {
 	
 	private static void checkData()
 	{
+		if(!MinestuckConfig.skaianetCheck)
+			return;
+		
 		Iterator<PlayerIdentifier> iter0 = infoToSend.keySet().iterator();
 		while(iter0.hasNext())
 			if(iter0.next().getPlayer() == null)

@@ -188,7 +188,7 @@ public class Echeladder
 	
 	public static double attackBonus(int rung)
 	{
-		return Math.pow(1.035, rung);	//rung*0.05D;
+		return Math.pow(1.035, rung) - 1;	//rung*0.05D;
 	}
 	
 	public static int healthBoost(int rung)

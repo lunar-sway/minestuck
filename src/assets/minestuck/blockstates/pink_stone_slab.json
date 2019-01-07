@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "half=bottom": { "model": "minestuck:half_slab_pink_stone" },
+        "half=top": { "model": "minestuck:half_slab_pink_stone", "x": 180, "uvlock": true }
+    }
+}

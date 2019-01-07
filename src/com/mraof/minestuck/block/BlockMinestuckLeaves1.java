@@ -50,7 +50,8 @@ public class BlockMinestuckLeaves1 extends BlockMinestuckLeaves
 	@Override
 	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items)
 	{
-		for (BlockType blocktype : BlockType.values())
+//		for (BlockType blocktype : BlockType.values())		//keyword
+		BlockType blocktype = BlockType.RAINBOW;
 		{
 			items.add(new ItemStack(this, 1, blocktype.ordinal()));
 		}

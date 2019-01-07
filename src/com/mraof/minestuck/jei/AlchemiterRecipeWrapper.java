@@ -1,5 +1,6 @@
 package com.mraof.minestuck.jei;
 
+import com.mraof.minestuck.alchemy.GristAmount;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.alchemy.GristSet;
@@ -29,6 +30,7 @@ public class AlchemiterRecipeWrapper implements IRecipeWrapper
     public void getIngredients(IIngredients ingredients)
     {
         ingredients.setInput(ItemStack.class, AlchemyRecipes.createEncodedItem(stack, false));
+        ingredients.setInputs(GristAmount.class, grist.getArray());
         ingredients.setOutput(ItemStack.class, stack);
     }
 

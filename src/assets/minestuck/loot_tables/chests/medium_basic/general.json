@@ -360,6 +360,21 @@
                 },
                 {
                     "type": "item",
+                    "name": "minestuck:raw_uranium",
+                    "weight": 12,
+                    "quality": 1,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
                     "conditions": [
                         {
                             "condition": "minestuck:land_aspect",

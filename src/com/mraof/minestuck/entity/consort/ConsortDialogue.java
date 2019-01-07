@@ -147,7 +147,8 @@ public class ConsortDialogue
 		addMessage("allTrees").landTerrain(fromNameTerrain("forest"));
 		addMessage("reallyLikesTrees").landTerrain(fromNameTerrain("forest"));
 		
-		/*addMessage("genericGreen").landTerrain(fromNameTerrain("rainbow"));
+		//Rainbow Terrain
+		addMessage("genericGreen").landTerrain(fromNameTerrain("rainbow"));
 		addMessage("overwhelmingColors").landTerrain(fromNameTerrain("rainbow"));
 		addMessage("sawRainbow").landTerrain(fromNameTerrain("rainbow"));
 		addMessage("sunglasses").landTerrain(fromNameTerrain("rainbow"));
@@ -158,13 +159,32 @@ public class ConsortDialogue
 				new SingleMessage("typesOfColors.9"), new SingleMessage("typesOfColors.10"), new SingleMessage("typesOfColors.11"), new SingleMessage("typesOfColors.12"), new SingleMessage("typesOfColors.13"),
 				new SingleMessage("typesOfColors.14"), new SingleMessage("typesOfColors.15"), new SingleMessage("typesOfColors.16"), new SingleMessage("typesOfColors.17"), new SingleMessage("typesOfColors.18")))
 				.landTerrain(fromNameTerrain("rainbow"));
+		
+		//End Terrain
 		addMessage("atTheEnd").landTerrain(fromNameTerrain("end"));
 		addMessage("chorusFruit").landTerrain(fromNameTerrain("end"));
 		addMessage("endGrass").landTerrain(fromNameTerrain("end"));
 		addMessage("grassCurse", "denizen").landTerrain(fromNameTerrain("end"));
 		addMessage("uselessPogo").landTerrain(fromNameTerrain("end"));
-		addMessage("uselessElytra").landTerrain(fromNameTerrain("end"));*/
+		addMessage("uselessElytra").landTerrain(fromNameTerrain("end"));
 		
+		//Rain terrain
+		addMessage("emptyOcean", "denizen").landTerrain(fromNameTerrain("rain"));
+		addMessage("forbiddenSnack").landTerrain(fromNameTerrain("rain"));
+		addMessage("cottonCandy").landTerrain(fromNameTerrain("rain"));
+		addMessage("monstersBelow").landTerrain(fromNameTerrain("rain"));
+		addMessage("keepSwimming").landTerrain(fromNameTerrain("rain"));
+		
+		//Flora Terrain
+		addMessage("battleSite").landTerrain(fromNameTerrain("flora"));
+		addMessage("bloodOceans").landTerrain(fromNameTerrain("flora"));
+		addMessage("giantSwords").landTerrain(fromNameTerrain("flora"));
+		addMessage(new ChainMessage(new SingleMessage("bloodberries.1"), new SingleMessage("bloodberries.2"))).landTerrain(fromNameTerrain("flora"));
+		addMessage("sharpSlide").landTerrain(fromNameTerrain("flora"));
+		addMessage(new ChainMessage(new SingleMessage("immortalityHerb.1"), new SingleMessage("immortalityHerb.2"), new SingleMessage("immortalityHerb.3"))).landTerrain(fromNameTerrain("flora"));
+		addMessage(new ChainMessage(new SingleMessage("spices.1"), new SingleMessage("spices.2", "landName"))).landTerrain(fromNameTerrain("flora"));
+
+		//Misc
 		addMessage("denizenMention").reqLand();
 		addMessage("floatingIsland").consortReq(consort -> consort.getDistanceSq(consort.world.getSpawnPoint()) < 65536).reqLand();
 		addMessage("ringFishing").consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
@@ -356,6 +376,8 @@ public class ConsortDialogue
 		addMessage(new MerchantGuiMessage(new SingleMessage("voidGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("silence"));
 		addMessage(new MerchantGuiMessage(new SingleMessage("rageGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("monsters"));
 		addMessage(new MerchantGuiMessage(new DescriptionMessage("hopeGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("towers"));
+		
+		addMessage(new MerchantGuiMessage(new SingleMessage("boringShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTerrain(fromNameTerrain("rainbow"));
 	}
 	
 	public static DialogueWrapper addMessage(String message, String... args)

@@ -341,7 +341,7 @@
                 {
                     "type": "item",
                     "name": "minecraft:red_mushroom",
-                    "weight": 8,
+                    "weight": 4,
                     "functions": [
                         {
                             "function": "set_count",
@@ -361,7 +361,7 @@
                 {
                     "type": "item",
                     "name": "minecraft:brown_mushroom",
-                    "weight": 8,
+                    "weight": 4,
                     "functions": [
                         {
                             "function": "set_count",
@@ -419,6 +419,26 @@
                         {
                             "function": "set_nbt",
                             "tag": "{Potion:\"water\"}"
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "sand"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:desert_fruit",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 15,
+                                "max": 20
+                            }
                         }
                     ],
                     "conditions": [
@@ -492,6 +512,86 @@
                         {
                             "condition": "minestuck:land_aspect",
                             "land_aspect": "rock"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:chorus_fruit",
+                    "weight": 5,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 8,
+                                "max": 12
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "end"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:strawberry_chunk",
+                    "weight": 5,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 8,
+                                "max": 12
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "flora"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:melon",
+                    "weight": 5,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 8,
+                                "max": 12
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "rain"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:bread",
+                    "weight": 5,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 8,
+                                "max": 12
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "rainbow"
                         }
                     ]
                 },

@@ -22,7 +22,6 @@ public class BlockFluidEnder extends BlockFluidClassic
 	public BlockFluidEnder(Fluid fluid, Material material)
 	{
 		super(fluid, material);
-		setUnlocalizedName("ender");
 		setTickRandomly(true);
 	}
 	

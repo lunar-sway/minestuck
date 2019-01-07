@@ -1,0 +1,8 @@
+{
+    "parent": "block/cube_bottom_top",
+    "textures": {
+        "bottom": "minestuck:blocks/strawberry_bottom",
+        "top": "minestuck:blocks/strawberry_top",
+        "side": "minestuck:blocks/strawberry_side"
+    }
+}

@@ -7,9 +7,11 @@ import com.mraof.minestuck.item.block.*;
 import com.mraof.minestuck.item.weapon.*;
 import com.mraof.minestuck.util.MinestuckSoundHandler;
 
+import net.minecraft.block.BlockSlab;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityHanging;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
@@ -136,8 +138,10 @@ public class MinestuckItems
 	public static Item jarOfBugs = new ItemFood(3, 0.2F, false).setUnlocalizedName("jarOfBugs").setCreativeTab(TabMinestuck.instance);
 	public static Item onion = new ItemFood(2, 0.2F, false).setUnlocalizedName("onion").setCreativeTab(TabMinestuck.instance);
 	public static Item salad = new ItemSoup(1).setUnlocalizedName("salad").setCreativeTab(TabMinestuck.instance);
+	public static Item desertFruit = new ItemFood(1, 0.1F, false).setUnlocalizedName("desertFruit").setCreativeTab(TabMinestuck.instance);
 	public static Item irradiatedSteak = new ItemFood(4, 0.4F, true).setPotionEffect(new PotionEffect(MobEffects.WITHER, 100, 1), 0.9F).setUnlocalizedName("irradiatedSteak").setCreativeTab(TabMinestuck.instance);
 	public static Item rockCookie = new Item().setUnlocalizedName("rockCookie").setCreativeTab(TabMinestuck.instance);
+	public static Item strawberryChunk = new ItemMinestuckSeedFood(4, 0.5F).setUnlocalizedName("strawberryChunk").setCreativeTab(TabMinestuck.instance);
 	//Other
 	public static Item boondollars = new ItemBoondollars();
 	public static Item rawCruxite = new Item().setUnlocalizedName("rawCruxite").setCreativeTab(TabMinestuck.instance);
@@ -175,6 +179,7 @@ public class MinestuckItems
 	public static Item carvingTool = new Item().setUnlocalizedName("carvingTool").setMaxStackSize(1).setCreativeTab(TabMinestuck.instance);
 	public static Item crumplyHat = new Item().setUnlocalizedName("crumplyHat").setMaxStackSize(1).setCreativeTab(TabMinestuck.instance);
 	public static Item frogStatueReplica = new Item().setUnlocalizedName("frogStatueReplica").setCreativeTab(TabMinestuck.instance);
+    public static Item stoneEyeballs = new Item().setUnlocalizedName("stoneEyeballs").setCreativeTab(TabMinestuck.instance);
 	public static Item stoneSlab = new Item().setUnlocalizedName("stoneSlab").setCreativeTab(TabMinestuck.instance);
 	public static Item glowystoneDust = new ItemGlowystoneDust().setUnlocalizedName("glowystoneDust").setCreativeTab(TabMinestuck.instance);
 	public static Item fakeArms = new Item().setUnlocalizedName("fakeArms").setCreativeTab(null);
@@ -187,6 +192,7 @@ public class MinestuckItems
 	public static void registerItems(RegistryEvent.Register<Item> event)
 	{
 		armorPrismarine.repairMaterial = new ItemStack(Items.PRISMARINE_SHARD);
+		((ItemMinestuckSeedFood) strawberryChunk).setPlant(strawberryStem.getDefaultState());
 		
 		IForgeRegistry<Item> registry = event.getRegistry();
 		registerItemBlock(registry, new ItemMultiTexture(chessTile, chessTile, new String[]{"black", "white", "darkgrey", "lightgrey"}));
@@ -215,6 +221,11 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemBlock(goldOreSandstone));
 		registerItemBlock(registry, new ItemBlock(goldOreSandstoneRed));
 		registerItemBlock(registry, new ItemBlock(redstoneOreEndStone));
+		registerItemBlock(registry, new ItemBlock(quartzOreStone));
+		registerItemBlock(registry, new ItemBlock(coalOrePinkStone));
+		registerItemBlock(registry, new ItemBlock(goldOrePinkStone));
+		registerItemBlock(registry, new ItemBlock(diamondOrePinkStone));
+		registerItemBlock(registry, new ItemBlock(lapisOrePinkStone));
 		
 		registerItemBlock(registry, new ItemBlockCraftingTab(cruxiteBlock, CreativeTabs.BUILDING_BLOCKS));
 		registerItemBlock(registry, new ItemBlockCraftingTab(uraniumBlock, CreativeTabs.BUILDING_BLOCKS));
@@ -235,6 +246,11 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemBlockLayered(layeredSand));
 		registerItemBlock(registry, new ItemMultiTexture(coloredDirt, coloredDirt,
 				(ItemStack input) -> BlockColoredDirt.BlockType.values()[input.getItemDamage() % BlockColoredDirt.BlockType.values().length].getName()));
+		registerItemBlock(registry, new ItemBlock(petrifiedLog));
+		registerItemBlock(registry, new ItemBlock(petrifiedPoppy));
+		registerItemBlock(registry, new ItemBlock(petrifiedGrass));
+		registerItemBlock(registry, new ItemBlock(bloomingCactus));
+		registerItemBlock(registry, new ItemBlock(desertBush));
 		registerItemBlock(registry, new ItemBlock(glowingMushroom));
 		registerItemBlock(registry, new ItemBlock(glowingLog));
 		registerItemBlock(registry, new ItemBlockCraftingTab(glowingPlanks, CreativeTabs.BUILDING_BLOCKS));
@@ -246,7 +262,7 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemBlockCraftingTab(castIronStairs, CreativeTabs.BUILDING_BLOCKS));
 		
 		registerItemBlock(registry, new ItemMultiTexture(log, log,
-				(ItemStack input) -> BlockMinestuckLog.BlockType.values()[input.getItemDamage() % BlockMinestuckLog.BlockType.values().length].getUnlocalizedName()));
+				(ItemStack input) -> BlockMinestuckLog1.BlockType.values()[input.getItemDamage() % BlockMinestuckLog1.BlockType.values().length].getUnlocalizedName()));
 		
 		registerItemBlock(registry, new ItemMultiTexture(leaves1, leaves1,
 				(ItemStack input) -> BlockMinestuckLeaves1.BlockType.values()[input.getItemDamage() % BlockMinestuckLeaves1.BlockType.values().length].getUnlocalizedName()));
@@ -287,6 +303,25 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemBlock(endPlanks));
 		registerItemBlock(registry, new ItemBlock(endSapling));
 		registerItemBlock(registry, new ItemBlock(endGrass));
+		registerItemBlock(registry, new ItemBlock(strawberry));
+		registerItemBlock(registry, new ItemBlock(deadLog));
+		registerItemBlock(registry, new ItemBlock(deadPlanks));
+		registerItemBlock(registry, new ItemBlock(chalk));
+		registerItemBlock(registry, new ItemBlock(chalkBricks));
+		registerItemBlock(registry, new ItemBlock(chalkChisel));
+		registerItemBlock(registry, new ItemBlock(chalkPolish));
+		registerItemBlock(registry, new ItemBlock(pinkStoneSmooth));
+		registerItemBlock(registry, new ItemBlock(pinkStoneBricks));
+		registerItemBlock(registry, new ItemBlock(pinkStoneChisel));
+		registerItemBlock(registry, new ItemBlock(pinkStoneCracked));
+		registerItemBlock(registry, new ItemBlock(pinkStoneMossy));
+		registerItemBlock(registry, new ItemBlock(pinkStonePolish));
+		
+		for(EnumSlabStairMaterial mat : EnumSlabStairMaterial.values())
+		{
+			registerItemBlock(registry, new ItemBlock(mat.getStair()));
+			registerItemBlock(registry, mat.getSlabItem());
+		}
 		
 		registerItemBlock(registry, new ItemBlock(primedTnt));
 		registerItemBlock(registry, new ItemBlock(unstableTnt));
@@ -393,8 +428,10 @@ public class MinestuckItems
 		registry.register(jarOfBugs.setRegistryName("jar_of_bugs"));
 		registry.register(onion.setRegistryName("onion"));
 		registry.register(salad.setRegistryName("salad"));
+		registry.register(desertFruit.setRegistryName("desert_fruit"));
 		registry.register(irradiatedSteak.setRegistryName("irradiated_steak"));
 		registry.register(rockCookie.setRegistryName("rock_cookie"));
+		registry.register(strawberryChunk.setRegistryName("strawberry_chunk"));
 		
 		//misc
 		registry.register(boondollars.setRegistryName("boondollars"));
@@ -417,6 +454,7 @@ public class MinestuckItems
 		registry.register(carvingTool.setRegistryName("carving_tool"));
 		registry.register(crumplyHat.setRegistryName("crumply_hat"));
 		registry.register(frogStatueReplica.setRegistryName("frog_statue_replica"));
+		registry.register(stoneEyeballs.setRegistryName("stone_eyeballs"));
 		registry.register(stoneSlab.setRegistryName("stone_slab"));
 		registry.register(glowystoneDust.setRegistryName("glowystone_dust"));
 		registry.register(fakeArms.setRegistryName("fake_arms"));
@@ -430,6 +468,8 @@ public class MinestuckItems
 		((ItemMinestuckBucket) minestuckBucket).addBlock(blockBrainJuice.getDefaultState());
 		((ItemMinestuckBucket) minestuckBucket).addBlock(blockWatercolors.getDefaultState());
 		((ItemMinestuckBucket) minestuckBucket).addBlock(blockEnder.getDefaultState());
+		((ItemMinestuckBucket) minestuckBucket).addBlock(blockLightWater.getDefaultState());
+		
 		/*for(Block block : liquidGrists)
 		{
 			minestuckBucket.addBlock(block.getDefaultState());

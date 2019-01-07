@@ -1,12 +1,10 @@
 package com.mraof.minestuck.jei;
 
+import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.block.BlockSburbMachine;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.alchemy.CombinationRegistry;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.alchemy.GristRegistry;
-import com.mraof.minestuck.alchemy.GristSet;
 import mezz.jei.api.*;
 import mezz.jei.api.ingredients.IModIngredientRegistration;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
@@ -38,6 +36,7 @@ public class MinestuckJeiPlugin implements IModPlugin
     @Override
     public void registerIngredients(IModIngredientRegistration registry)
     {
+    	registry.register(GristAmount.class, GristIngredientHelper.createList(), new GristIngredientHelper(), new GristIngredientRenderer());
     }
 	
 	@Override
