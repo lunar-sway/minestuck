@@ -67,10 +67,13 @@ public class MinestuckBlocks
 	public static Block glowingLog = new BlockGlowingLog();
 	public static Block glowingPlanks = new BlockCustom(Material.WOOD, MapColor.LIGHT_BLUE, SoundType.WOOD).setFireInfo(5, 20).setUnlocalizedName("glowingPlanks").setLightLevel(0.5F).setHardness(2.0F).setResistance(5.0F).setCreativeTab(TabMinestuck.instance);
 	public static Block stone = new BlockMinestuckStone();
+	public static Block glowyGoop = new BlockGlowyGoop("glowyGoop");
+	public static Block coagulatedBlood = new BlockGoop("coagulatedBlood");
 	public static Block coarseStoneStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.COARSE)).setUnlocalizedName("stairsMinestuck.coarse");
 	public static Block shadeBrickStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.SHADE_BRICK)).setUnlocalizedName("stairsMinestuck.shadeBrick");
 	public static Block frostBrickStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.FROST_BRICK)).setUnlocalizedName("stairsMinestuck.frostBrick");
 	public static Block castIronStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.CAST_IRON)).setUnlocalizedName("stairsMinestuck.castIron");
+	public static Block myceliumBrickStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.MYCELIUM_BRICK)).setUnlocalizedName("stairsMinestuck.myceliumBrick");
 	public static Block log = new BlockMinestuckLog1();
 	public static Block leaves1 = new BlockMinestuckLeaves1();
 	public static Block planks = new BlockMinestuckPlanks();
@@ -228,6 +231,8 @@ public class MinestuckBlocks
 		registry.register(glowingLog.setRegistryName("glowing_log"));
 		registry.register(glowingPlanks.setRegistryName("glowing_planks"));
 		registry.register(glowingMushroom.setRegistryName("glowing_mushroom"));
+		registry.register(glowyGoop.setRegistryName("glowy_goop"));
+		registry.register(coagulatedBlood.setRegistryName("coagulated_blood"));
 		registry.register(petrifiedLog.setRegistryName("petrified_log"));
 		registry.register(petrifiedPoppy.setRegistryName("petrified_poppy"));
 		registry.register(petrifiedGrass.setRegistryName("petrified_grass"));
@@ -259,6 +264,7 @@ public class MinestuckBlocks
 		registry.register(shadeBrickStairs.setRegistryName("shade_brick_stairs"));
 		registry.register(frostBrickStairs.setRegistryName("frost_brick_stairs"));
 		registry.register(castIronStairs.setRegistryName("cast_iron_stairs"));
+		registry.register(myceliumBrickStairs.setRegistryName("mycelium_brick_stairs"));
 		
 		registry.register(skaiaPortal.setRegistryName("skaia_portal"));
 		registry.register(returnNode.setRegistryName("return_node"));

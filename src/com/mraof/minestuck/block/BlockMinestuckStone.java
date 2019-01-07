@@ -95,7 +95,8 @@ public class BlockMinestuckStone extends Block
 		FROST_CHISELED(6, "frost_chiseled", "frostChiseled", 1.5F, MapColor.ICE),
 		CAST_IRON(7, "cast_iron", "castIron", 3.0F, MapColor.IRON),
 		CAST_IRON_CHISELED(8, "cast_iron_chiseled", "castIronChiseled", 3.0F, MapColor.IRON),
-		BLACK_STONE(9, "black_stone", "blackStone", 2.5F, MapColor.BLACK);
+		BLACK_STONE(9, "black_stone", "blackStone", 2.5F, MapColor.BLACK),
+		MYCELIUM_BRICK(10, "mycelium_brick", "myceliumBrick", 1.5F, MapColor.MAGENTA);
 		
 		private final int metadata;
 		private final String name;

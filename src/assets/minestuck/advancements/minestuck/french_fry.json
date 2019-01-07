@@ -1,0 +1,24 @@
+{
+    "display": {
+        "icon": {
+            "item": "minestuck:french_fry"
+        },
+        "title": {
+            "translate": "advancements.minestuck.french_fry.title"
+        },
+        "description": {
+            "translate": "advancements.minestuck.french_fry.description"
+        }
+    },
+    "parent": "minestuck:minestuck/alchemy",
+    "criteria": {
+        "french_fry": {
+            "trigger": "minecraft:consume_item",
+            "conditions": {
+                "item": {
+                    "item": "minestuck:french_fry"
+                }
+            }
+        }
+    }
+}

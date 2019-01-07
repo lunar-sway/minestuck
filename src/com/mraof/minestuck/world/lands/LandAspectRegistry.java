@@ -32,13 +32,14 @@ public class LandAspectRegistry
 	
 	public static void registerLandAspects()
 	{
-		registerLandAspect(new LandAspectFrost());
-		registerLandAspect(new LandAspectHeat());
-		registerLandAspect(new LandAspectShade());
-		registerLandAspect(new LandAspectSand());
-		registerLandAspect(new LandAspectSandstone());
 		registerLandAspect(new LandAspectForest());
+		registerLandAspect(new LandAspectFrost());
+		registerLandAspect(new LandAspectFungi());
+		registerLandAspect(new LandAspectHeat());
 		registerLandAspect(new LandAspectRock());
+		registerLandAspect(new LandAspectSand());
+		registerLandAspectHidden(new LandAspectSandstone());
+		registerLandAspect(new LandAspectShade());
 		registerLandAspect(new LandAspectWood());
 		registerLandAspect(new LandAspectRain());
 		registerLandAspect(new LandAspectRainbow());
@@ -58,6 +59,7 @@ public class LandAspectRegistry
 		registerLandAspect(new LandAspectMonsters(), EnumAspect.RAGE);
 		registerLandAspect(new LandAspectTowers(), EnumAspect.HOPE);
 		
+
 		landNames2.put(nullAspect.getPrimaryName(), nullAspect);
 		landNames2.put(frogAspect.getPrimaryName(), frogAspect);
 	}
@@ -74,6 +76,13 @@ public class LandAspectRegistry
 	public static void registerLandAspect(TerrainLandAspect newAspect)
 	{
 		landAspects.add(newAspect);
+		landNames.put(newAspect.getPrimaryName(),newAspect);
+		for(ILandAspect variant : newAspect.getVariations())
+			landNames.put(variant.getPrimaryName(), (TerrainLandAspect) variant);
+	}
+	
+	public static void registerLandAspectHidden(TerrainLandAspect newAspect)
+	{
 		landNames.put(newAspect.getPrimaryName(),newAspect);
 		for(ILandAspect variant : newAspect.getVariations())
 			landNames.put(variant.getPrimaryName(), (TerrainLandAspect) variant);

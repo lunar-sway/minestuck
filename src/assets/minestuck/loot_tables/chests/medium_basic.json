@@ -62,6 +62,17 @@
                     "conditions": [
                         {
                             "condition": "minestuck:land_aspect",
+                            "land_aspect": "fungi"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/fungi",
+                    "weight": 10
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
                             "land_aspect": "heat"
                         }
                     ],
@@ -146,8 +157,6 @@
                     "name": "minestuck:chests/medium_basic/wood",
                     "weight": 10
                 },
-                
-                
                 {
                     "conditions": [
                         {

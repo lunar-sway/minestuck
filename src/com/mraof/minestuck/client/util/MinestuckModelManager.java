@@ -74,6 +74,7 @@ public class MinestuckModelManager
 		register(caledscratch);
 		register(caledfwlch);
 		register(royalDeringer);
+		register(claymore);
 		register(zillywairCutlass);
 		register(regisword);
 		register(scarletRibbitar);
@@ -81,6 +82,8 @@ public class MinestuckModelManager
 		register(cobaltSabre);
 		register(quantumSabre);
 		
+		register(batleacks);
+		register(battleaxe);
 		register(blacksmithBane);
 		register(scraxe);
 		register(rubyCroak);
@@ -112,6 +115,7 @@ public class MinestuckModelManager
 		register(cane);
 		register(ironCane);
 		register(spearCane);
+		register(paradisesPortabello);
 		register(regiCane);
 		register(dragonCane);
 		register(pogoCane);
@@ -201,6 +205,10 @@ public class MinestuckModelManager
 		register(desertFruit);
 		register(irradiatedSteak);
 		register(rockCookie);
+		register(fungalSpore);
+		register(sporeo);
+		register(morelMushroom);
+		register(frenchFry);
 		register(strawberryChunk);
 		
 		register(threshDvd);
@@ -275,10 +283,13 @@ public class MinestuckModelManager
 		register(glowingPlanks);
 		for(BlockMinestuckStone.BlockType type : BlockMinestuckStone.BlockType.values())
 			register(stone, type.getMetadata(), type.getName());
+		register(glowyGoop);
+		register(coagulatedBlood);
 		register(coarseStoneStairs);
 		register(shadeBrickStairs);
 		register(frostBrickStairs);
 		register(castIronStairs);
+		register(myceliumBrickStairs);
 		
 		for(BlockMinestuckLog1.BlockType type : BlockMinestuckLog1.BlockType.values())
 			register(log, type.ordinal(), type.getName()+"_log");

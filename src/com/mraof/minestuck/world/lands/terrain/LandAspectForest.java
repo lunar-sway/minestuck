@@ -21,6 +21,7 @@ import net.minecraft.block.BlockTallGrass;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.gen.feature.WorldGenBigTree;
 
 public class LandAspectForest extends TerrainLandAspect
 {
@@ -59,6 +60,8 @@ public class LandAspectForest extends TerrainLandAspect
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
 		list.add(new BasicTreeDecorator(5, BiomeMinestuck.mediumNormal));
 		list.add(new BasicTreeDecorator(8, BiomeMinestuck.mediumRough));
+		list.add(new WorldGenDecorator(new WorldGenBigTree(false), 15, 0.6F, BiomeMinestuck.mediumNormal));
+		list.add(new WorldGenDecorator(new WorldGenBigTree(false), 25, 0.6F, BiomeMinestuck.mediumRough));
 		list.add(new TallGrassDecorator(0.3F, BiomeMinestuck.mediumNormal));
 		list.add(new TallGrassDecorator(0.5F, 0.2F, BiomeMinestuck.mediumRough));
 		
