@@ -57,8 +57,8 @@ public class LandAspectForest extends TerrainLandAspect
 		registry.setBlockState("surface", Blocks.GRASS.getDefaultState());
 		registry.setBlockState("upper", Blocks.DIRT.getDefaultState());
 		if(type == Variant.TAIGA) {
-			registry.setBlockState("structure_primary", Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.SPRUCE).withProperty(BlockMinestuckLog.LOG_AXIS, EnumAxis.NONE));
-			registry.setBlockState("structure_primary_decorative", MinestuckBlocks.log.getDefaultState().withProperty(BlockMinestuckLog.VARIANT, BlockMinestuckLog.BlockType.FROST).withProperty(BlockMinestuckLog.LOG_AXIS, EnumAxis.NONE));
+			registry.setBlockState("structure_primary", Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.SPRUCE).withProperty(BlockMinestuckLog1.LOG_AXIS, EnumAxis.NONE));
+			registry.setBlockState("structure_primary_decorative", MinestuckBlocks.log.getDefaultState().withProperty(BlockMinestuckLog1.VARIANT, BlockMinestuckLog1.BlockType.FROST).withProperty(BlockMinestuckLog1.LOG_AXIS, EnumAxis.NONE));
 		} else {
 			registry.setBlockState("structure_primary", MinestuckBlocks.log.getDefaultState().withProperty(BlockMinestuckLog1.VARIANT, BlockMinestuckLog1.BlockType.VINE_OAK).withProperty(BlockMinestuckLog1.LOG_AXIS, EnumAxis.NONE));
 			registry.setBlockState("structure_primary_decorative", MinestuckBlocks.log.getDefaultState().withProperty(BlockMinestuckLog1.VARIANT, BlockMinestuckLog1.BlockType.FLOWERY_VINE_OAK).withProperty(BlockMinestuckLog1.LOG_AXIS, EnumAxis.NONE));

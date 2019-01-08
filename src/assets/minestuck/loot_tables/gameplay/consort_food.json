@@ -311,7 +311,7 @@
                 },
                 {
                     "type": "item",
-                    "name": "minestuck:steak_sword",
+                    "name": "minestuck:beef_sword",
                     "weight": 4,
                     "conditions": [
                         {
