@@ -329,4 +329,8 @@ public class ChunkProviderLands implements IChunkGenerator
 		return blockRegistry.getBlockState("surface");
 	}
 	
+	public IBlockState getOceanBlock()
+	{
+		return blockRegistry.getBlockState("ocean");
+	}
 }

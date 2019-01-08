@@ -161,23 +161,23 @@
                     "conditions": [
                         {
                             "condition": "minestuck:land_aspect",
-                            "land_aspect": "buckets"
-                        }
-                    ],
-                    "type": "loot_table",
-                    "name": "minestuck:chests/medium_basic/buckets",
-                    "weight": 5
-                },
-                {
-                    "conditions": [
-                        {
-                            "condition": "minestuck:land_aspect",
                             "land_aspect": "cake"
                         }
                     ],
                     "type": "loot_table",
                     "name": "minestuck:chests/medium_basic/cake",
                     "weight": 7
+                },
+				{
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "frogs"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/frogs",
+                    "weight": 10
                 },
                 {
                     "conditions": [

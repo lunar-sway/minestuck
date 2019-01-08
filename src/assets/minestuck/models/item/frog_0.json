@@ -1,0 +1,8 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "minestuck:items/frog_skin",
+        "layer1": "minestuck:items/frog_eyes",
+        "layer2": "minestuck:items/frog_belly"
+    }
+}

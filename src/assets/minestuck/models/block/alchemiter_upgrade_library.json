@@ -1,0 +1,107 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"1": "minestuck:machines/alchemiter/upgrades/inside",
+		"4": "minestuck:machines/alchemiter/corner_base_side",
+		"5": "minestuck:machines/alchemiter/upgrades/down_side",
+		"6": "minestuck:machines/alchemiter/side",
+		"7": "minestuck:machines/alchemiter/upgrades/base_top",
+		"8": "minestuck:machines/alchemiter/side",
+		"10": "minestuck:machines/alchemiter/upgrades/library_top",
+		"11": "minestuck:machines/alchemiter/upgrades/library_holo",
+		"particle": "minestuck:machines/alchemiter/corner_base_side"
+	},
+	"elements": [
+		{
+			"name": "base",
+			"from": [0, 0, 4],
+			"to": [16, 8, 16],
+			"faces": {
+				"north": {"uv": [0, 8, 16, 16], "texture": "#6"},
+				"east": {"uv": [4, 8, 16, 16], "texture": "#4"},
+				"south": {"uv": [0, 8, 16, 16], "texture": "#1"},
+				"west": {"uv": [4, 8, 16, 16], "texture": "#4"},
+				"up": {"uv": [16, 0, 0, 12], "texture": "#7"},
+				"down": {"uv": [16, 4, 0, 16], "texture": "#5"}
+			}
+		},
+		{
+			"from": [1, 8, 6],
+			"to": [15, 15, 20],
+			"faces": {
+				"north": {"uv": [1, 0, 15, 8], "texture": "#8"},
+				"east": {"uv": [1, 1, 15, 8], "texture": "#8"},
+				"south": {"uv": [1, 1, 15, 8], "texture": "#8"},
+				"west": {"uv": [1, 1, 15, 8], "texture": "#8"},
+				"up": {"uv": [1, 1, 15, 15], "texture": "#10"},
+				"down": {"uv": [0, 16, 16, 15], "texture": "#5"}
+			}
+		},
+		{
+			"from": [1, 15, 17],
+			"to": [15, 16, 20],
+			"faces": {
+				"north": {"uv": [1, 0, 15, 1], "texture": "#8"},
+				"east": {"uv": [1, 0, 15, 1], "texture": "#8"},
+				"south": {"uv": [1, 0, 15, 1], "texture": "#8"},
+				"west": {"uv": [1, 0, 15, 1], "texture": "#8"},
+				"up": {"uv": [1, 12, 15, 15], "texture": "#10"},
+				"down": {"uv": [0, 16, 16, 15], "texture": "#5"}
+			}
+		},
+		{
+			"from": [1, 15, 6],
+			"to": [15, 16, 9],
+			"faces": {
+				"north": {"uv": [1, 0, 15, 1], "texture": "#8"},
+				"east": {"uv": [1, 0, 15, 1], "texture": "#8"},
+				"south": {"uv": [1, 0, 15, 1], "texture": "#8"},
+				"west": {"uv": [1, 0, 15, 1], "texture": "#8"},
+				"up": {"uv": [1, 1, 15, 4], "texture": "#10"},
+				"down": {"uv": [0, 16, 16, 15], "texture": "#5"}
+			}
+		},
+		{
+			"from": [1, 15, 9],
+			"to": [4, 16, 17],
+			"faces": {
+				"north": {"uv": [1, 0, 15, 1], "texture": "#8"},
+				"east": {"uv": [1, 0, 15, 1], "texture": "#8"},
+				"south": {"uv": [1, 0, 15, 1], "texture": "#8"},
+				"west": {"uv": [1, 0, 15, 1], "texture": "#8"},
+				"up": {"uv": [1, 4, 4, 12], "texture": "#10"},
+				"down": {"uv": [0, 16, 16, 15], "texture": "#5"}
+			}
+		},
+		{
+			"from": [12, 15, 9],
+			"to": [15, 16, 17],
+			"faces": {
+				"north": {"uv": [1, 0, 15, 1], "texture": "#8"},
+				"east": {"uv": [1, 0, 15, 1], "texture": "#8"},
+				"south": {"uv": [1, 0, 15, 1], "texture": "#8"},
+				"west": {"uv": [1, 0, 15, 1], "texture": "#8"},
+				"up": {"uv": [12, 4, 15, 12], "texture": "#10"},
+				"down": {"uv": [0, 16, 16, 15], "texture": "#5"}
+			}
+		},
+		{
+			"from": [4, 15, 9],
+			"to": [12, 15.5, 17],
+			"faces": {
+				"north": {"uv": [0, 0, 8, 0.5], "texture": "#missing"},
+				"east": {"uv": [0, 0, 8, 0.5], "texture": "#missing"},
+				"south": {"uv": [0, 0, 8, 0.5], "texture": "#missing"},
+				"west": {"uv": [0, 0, 8, 0.5], "texture": "#missing"},
+				"up": {"uv": [4, 4, 12, 12], "texture": "#11"},
+				"down": {"uv": [0, 0, 8, 8], "texture": "#missing"}
+			}
+		}
+	],
+	"groups": [0,
+		{
+			"name": "group",
+			"children": [1, 2, 3, 4, 5, 6]
+		}
+	]
+}

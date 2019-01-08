@@ -1,0 +1,25 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"1": "minestuck:machines/alchemiter/upgrades/inside",
+		"3": "minestuck:machines/alchemiter/upgrades/corner_top",
+		"4": "minestuck:machines/alchemiter/corner_base_side",
+		"5": "minestuck:machines/alchemiter/down_corner",
+		"particle": "minestuck:machines/alchemiter/corner_base_side"
+	},
+	"elements": [
+		{
+			"name": "base",
+			"from": [0, 0, 4],
+			"to": [16, 8, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 8], "texture": "#4"},
+				"east": {"uv": [4, 8, 16, 16], "texture": "#4"},
+				"south": {"uv": [0, 8, 16, 16], "texture": "#1"},
+				"west": {"uv": [4, 8, 16, 16], "texture": "#1"},
+				"up": {"uv": [16, 0, 0, 12], "texture": "#3"},
+				"down": {"uv": [16, 4, 0, 16], "texture": "#5"}
+			}
+		}
+	]
+}

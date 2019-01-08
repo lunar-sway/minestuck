@@ -14,5 +14,21 @@
             "stream": true
         }
       ]
+    },
+    "record.retroBattle": {
+      "sounds": [
+        {
+            "name": "minestuck:records/retro_battle_theme",
+            "stream": true
+        }
+      ]
+    },
+    "mobs.frogAmbient": {
+    	"sounds":[
+    		{
+    			"name": "minestuck:mobs/frog_ambient",
+    			"stream": true 
+    		}
+    	]
     }
 }

@@ -27,6 +27,7 @@ public class LandAspectRegistry
 	private static Hashtable<String, TitleLandAspect> landNames2 = new Hashtable<String,TitleLandAspect>();
 	private static TitleLandAspect nullAspect = new LandAspectNull();
 	public static TitleLandAspect frogAspect = new LandAspectFrogs();
+	public static TitleLandAspect bucketAspect = new LandAspectBuckets();
 	
 	private Random random;
 	
@@ -53,7 +54,8 @@ public class LandAspectRegistry
 		registerLandAspect(new LandAspectThunder(), EnumAspect.DOOM);
 		registerLandAspect(new LandAspectPulse(), EnumAspect.BLOOD);
 		registerLandAspect(new LandAspectThought(), EnumAspect.MIND);
-		registerLandAspect(new LandAspectBuckets(), EnumAspect.SPACE);	//buckets -> containers -> space, right?
+		//registerLandAspect(new LandAspectBuckets(), EnumAspect.SPACE);
+		registerLandAspect(new LandAspectFrogs(), EnumAspect.SPACE);
 		registerLandAspect(new LandAspectCake(), EnumAspect.HEART);
 		registerLandAspect(new LandAspectRabbits(), EnumAspect.LIFE);
 		registerLandAspect(new LandAspectMonsters(), EnumAspect.RAGE);
@@ -62,6 +64,7 @@ public class LandAspectRegistry
 
 		landNames2.put(nullAspect.getPrimaryName(), nullAspect);
 		landNames2.put(frogAspect.getPrimaryName(), frogAspect);
+		landNames2.put(bucketAspect.getPrimaryName(), bucketAspect);
 	}
 	
 	public LandAspectRegistry(long seed)

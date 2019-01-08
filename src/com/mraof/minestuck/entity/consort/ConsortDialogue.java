@@ -95,9 +95,15 @@ public class ConsortDialogue
 		addMessage("evilGears").landTitleSpecific(fromNameTitle("clockwork")).consort(EnumConsort.NAKAGATOR, EnumConsort.IGUANA);
 		addMessage("ticking").landTitleSpecific(fromNameTitle("clockwork")).consort(EnumConsort.TURTLE, EnumConsort.SALAMANDER);
 		
-		//Buckets/Frogs
-		addMessage("frogCreation").landTitleSpecific(LandAspectRegistry.frogAspect);
-		addMessage("frogImitation").landTitleSpecific(LandAspectRegistry.frogAspect);
+		//Frogs
+		addMessage("frogCreation").landTitleSpecific(fromNameTitle("frogs"));
+		addMessage("frogImitation").landTitleSpecific(fromNameTitle("frogs"));
+		addMessage(new ChainMessage(new SingleMessage("frogVariants1"), new SingleMessage("frogVariants2", "landName"))).landTitle(fromNameTitle("frogs")).landTitleSpecific(LandAspectRegistry.frogAspect);
+		addMessage("frogHatred").landTitleSpecific(fromNameTitle("frogs"));
+		addMessage(new ChainMessage(new SingleMessage("grasshopperFishing1"), new SingleMessage("grasshopperFishing2"))).landTitleSpecific(fromNameTitle("frogs")).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
+		addMessage("gayFrogs").landTitleSpecific(fromNameTitle("frogs")).landTerrainSpecific(fromNameTerrain("rainbow"));
+		
+		//Buckets
 		addMessage("lewdBuckets").landTitleSpecific(fromNameTitle("buckets"));
 		addMessage("waterBuckets").landTitleSpecific(fromNameTitle("buckets")).landTerrain(fromNameTerrain("sand"));
 		addMessage("warmBuckets").landTitleSpecific(fromNameTitle("buckets")).landTerrain(fromNameTerrain("frost"));
@@ -372,8 +378,8 @@ public class ConsortDialogue
 		addMessage(new MerchantGuiMessage(new SingleMessage("bloodFoodShop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("pulse"));
 		addMessage(new MerchantGuiMessage(new SingleMessage("lifeFoodShop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("rabbits"));
 		addMessage(new MerchantGuiMessage(new SingleMessage("doomFoodShop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("thunder"));
-		addMessage(new MerchantGuiMessage(new SingleMessage("frogFoodShop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(LandAspectRegistry.frogAspect);
-		addMessage(new MerchantGuiMessage(new SingleMessage("spaceFoodShop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("buckets"));
+		//addMessage(new MerchantGuiMessage(new SingleMessage("frogFoodShop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(LandAspectRegistry.frogAspect);
+		addMessage(new MerchantGuiMessage(new SingleMessage("spaceFoodShop", "landName"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("frogs"));
 		addMessage(new MerchantGuiMessage(new SingleMessage("timeFoodShop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("clockwork"));
 		addMessage(new MerchantGuiMessage(new SingleMessage("thymeFoodShop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("clockwork"), fromNameTitle("thought"));
 		addMessage(new MerchantGuiMessage(new SingleMessage("mindFoodShop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("thought"));
@@ -382,6 +388,7 @@ public class ConsortDialogue
 		addMessage(new MerchantGuiMessage(new SingleMessage("voidFoodShop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("silence"));
 		addMessage(new MerchantGuiMessage(new SingleMessage("rageFoodShop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("monsters"));
 		addMessage(new MerchantGuiMessage(new DescriptionMessage("hopeFoodShop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("towers"));
+		addMessage(new MerchantGuiMessage(new SingleMessage("bucketsFoodShop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("buckets"));
 		
 		addMessage(new MerchantGuiMessage(new SingleMessage("generalShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL);
 		addMessage(new MerchantGuiMessage(new SingleMessage("gotTheGoods"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL);
@@ -391,7 +398,7 @@ public class ConsortDialogue
 		addMessage(new MerchantGuiMessage(new SingleMessage("lifeGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("rabbits"));
 		addMessage(new MerchantGuiMessage(new SingleMessage("doomGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("thunder"));
 		addMessage(new MerchantGuiMessage(new SingleMessage("frogGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(LandAspectRegistry.frogAspect);
-		addMessage(new MerchantGuiMessage(new SingleMessage("spaceGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("buckets"));
+		addMessage(new MerchantGuiMessage(new SingleMessage("spaceGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("frogs"));
 		addMessage(new MerchantGuiMessage(new SingleMessage("timeGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("clockwork"));
 		addMessage(new MerchantGuiMessage(new SingleMessage("mindGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("thought"));
 		addMessage(new MerchantGuiMessage(new SingleMessage("heartGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("cake"));
@@ -399,6 +406,7 @@ public class ConsortDialogue
 		addMessage(new MerchantGuiMessage(new SingleMessage("voidGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("silence"));
 		addMessage(new MerchantGuiMessage(new SingleMessage("rageGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("monsters"));
 		addMessage(new MerchantGuiMessage(new DescriptionMessage("hopeGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("towers"));
+		addMessage(new MerchantGuiMessage(new SingleMessage("bucketsGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("buckets"));
 		
 		addMessage(new MerchantGuiMessage(new SingleMessage("boringShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTerrain(fromNameTerrain("rainbow"));
 	}

@@ -12,6 +12,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
@@ -360,5 +361,10 @@ public class BlockTotemLathe extends BlockLargeMachine
 		{
 			return new BlockStateContainer(this, PART3, DIRECTION);
 		}
+	}
+
+	@Override
+	public Item getItemFromMachine() {
+		return new ItemStack(MinestuckBlocks.totemlathe[0]).getItem();
 	}
 }

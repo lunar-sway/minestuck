@@ -1,0 +1,13 @@
+{
+    "variants": {
+        "facing=east,top=false": { "model": "minestuck:vein_corner", "y": 90, "x": 270 },
+        "facing=south,top=false": { "model": "minestuck:vein_corner", "y": 180, "x": 270 },
+        "facing=west,top=false": { "model": "minestuck:vein_corner", "y": 270, "x": 270 },
+        "facing=north,top=false": { "model": "minestuck:vein_corner", "y": 0, "x": 270 },
+
+        "facing=east,top=true": { "model": "minestuck:vein_corner", "y": 90, "x": 90 },
+        "facing=south,top=true": { "model": "minestuck:vein_corner", "y": 180, "x": 90 },
+        "facing=west,top=true": { "model": "minestuck:vein_corner", "y": 270, "x": 90 },
+        "facing=north,top=true": { "model": "minestuck:vein_corner", "y": 0, "x": 90 }
+    }
+}

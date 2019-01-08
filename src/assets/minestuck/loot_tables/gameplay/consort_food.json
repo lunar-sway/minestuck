@@ -300,6 +300,32 @@
                 },
                 {
                     "type": "item",
+                    "name": "minestuck:steak_sword",
+                    "weight": 3,
+                    "conditions": [
+                        {
+                            "condition": "minestuck:consort",
+                            "consort": "nakagator"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:steak_sword",
+                    "weight": 4,
+                    "conditions": [
+                        {
+                            "condition": "minestuck:consort",
+                            "consort": "nakagator"
+                        },
+                        {
+                        	"condition": "minestuck:land_aspect",
+                        	"land_aspect": "pulse"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
                     "name": "minecraft:beetroot",
                     "weight": 8,
                     "functions": [
