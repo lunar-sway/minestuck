@@ -2,7 +2,6 @@ package com.mraof.minestuck.block;
 
 import java.util.Random;
 
-import com.mraof.minestuck.block.BlockJumperBlock.EnumParts;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.item.TabMinestuck;
 

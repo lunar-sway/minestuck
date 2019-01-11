@@ -168,7 +168,6 @@ public class MinestuckItems
 	public static Item modusCard = new ItemModus();
 	public static Item goldSeeds = new ItemGoldSeeds();
 	public static Item metalBoat = new ItemMetalBoat();
-	public static Item shunt = new ItemShunt();
 	public static Item captcharoidCamera = new ItemCaptcharoidCamera();
 	public static Item threshDvd = new Item().setUnlocalizedName("threshDvd").setMaxStackSize(1).setCreativeTab(TabMinestuck.instance);
 	public static Item crewPoster = new ItemHanging()
@@ -259,7 +258,6 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemBlock(cruxtruderLid));
 		registerItemBlock(registry, cruxiteDowel);
 		registerItemBlock(registry, new ItemBlock(holopad));
-		registerItemBlock(registry, new ItemJumperBlock(jumperBlockExtension[0]));
 		registerItemBlock(registry, new ItemBlock(blender));
 		registerItemBlock(registry, new ItemBlock(chessboard));
 		registerItemBlock(registry, new ItemBlock(frogStatueReplica));
@@ -473,7 +471,6 @@ public class MinestuckItems
 		registry.register(stoneSlab.setRegistryName("stone_slab"));
 		registry.register(glowystoneDust.setRegistryName("glowystone_dust"));
 		registry.register(fakeArms.setRegistryName("fake_arms"));
-		registry.register(shunt.setRegistryName("shunt"));
 		registry.register(captcharoidCamera.setRegistryName("captcharoid_camera"));
 
 		//Music disks

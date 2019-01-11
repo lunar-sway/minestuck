@@ -160,8 +160,6 @@ public class MinestuckModelManager
 		ModelLoader.setCustomMeshDefinition(cruxiteDowel, new CruxiteDowelDefinition());
 		ModelLoader.registerItemVariants(captchaCard, new ResourceLocation("minestuck:card_empty"), new ResourceLocation("minestuck:card_full"), new ResourceLocation("minestuck:card_punched"), new ResourceLocation("minestuck:card_ghost"));
 		ModelLoader.setCustomMeshDefinition(captchaCard, new CaptchaCardDefinition());
-		ModelLoader.registerItemVariants(shunt, new ResourceLocation("minestuck:shunt_empty"), new ResourceLocation("minestuck:shunt_full"));
-		ModelLoader.setCustomMeshDefinition(shunt, new ShuntDefinition());
 		ModelLoader.registerItemVariants(cruxiteApple, new ResourceLocation("minestuck:cruxite_apple"), new ResourceLocation("minestuck:cruxite_apple_blank"));
 		ModelLoader.setCustomMeshDefinition(cruxiteApple, new ColoredItemDefinition("minestuck:cruxite_apple"));
 		ModelLoader.registerItemVariants(cruxitePotion, new ResourceLocation("minestuck:cruxite_potion"), new ResourceLocation("minestuck:cruxite_potion_blank"));
@@ -279,7 +277,6 @@ public class MinestuckModelManager
 		register(totemlathe[0]);
 		register(alchemiter[0]);
 		register(holopad);
-		register(jumperBlockExtension[0]);
 		register(blender);
 		register(cruxtruder);
 		register(cruxtruderLid);

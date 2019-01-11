@@ -258,61 +258,6 @@ public class CraftingRecipes
 		}
 	}
 	
-	public static class RemoveCardRecipe extends NonMirroredRecipe
-	{
-		
-		public RemoveCardRecipe(String group, int width, int height, NonNullList<Ingredient> ingredients, ItemStack result)
-		{
-			super(group, width, height, ingredients, result);
-		}
-		
-		
-		public ItemStack getCraftingResult(final InventoryCrafting crafting) 
-		{
-			ItemStack decode = ItemStack.EMPTY;
-			final ItemStack output = super.getCraftingResult(crafting);
-			ItemStack stack = output;
-			
-			for(int i = 0; i < crafting.getSizeInventory(); i++)
-			{
-				stack = crafting.getStackInSlot(i);
-				if(stack.getItem() == MinestuckItems.shunt && stack.hasTagCompound() && stack.getTagCompound().hasKey("contentID"))
-				{
-					decode = AlchemyRecipes.getDecodedItem(stack);
-					return AlchemyRecipes.createCard(decode, true);
-				}
-					
-			}
-			
-			return ItemStack.EMPTY;
-		}
-		@Override
-		public NonNullList<ItemStack> getRemainingItems(InventoryCrafting crafting) {
-			final NonNullList<ItemStack> remainingItems = NonNullList.withSize(crafting.getSizeInventory(), ItemStack.EMPTY);
-			
-			for(int i = 0; i < remainingItems.size(); ++i)
-			{
-				final ItemStack stack = crafting.getStackInSlot(i);
-				
-				if(AlchemyRecipes.hasDecodedItem(stack))
-					remainingItems.set(i, new ItemStack(stack.getItem()));
-				else
-					remainingItems.set(i, ForgeHooks.getContainerItem(stack));
-				
-			}
-			
-			return remainingItems;
-		}
-		
-		public static class Factory extends ShapedFactory
-		{
-			@Override
-			public IRecipe initRecipe(String group, int width, int height, NonNullList<Ingredient> ingredients, ItemStack result)
-			{
-				return new RemoveCardRecipe(group, width, height, ingredients, result);
-			}
-		}
-	}
 	
 	public static abstract class ShapedFactory implements IRecipeFactory
 	{

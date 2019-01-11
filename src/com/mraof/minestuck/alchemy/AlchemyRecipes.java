@@ -1204,20 +1204,6 @@ public class AlchemyRecipes
 		return stack;
 	}
 	
-	public static ItemStack createShunt(ItemStack item)
-	{
-		ItemStack stack = createEncodedItem(item, shunt);
-		if(!stack.hasTagCompound())
-			stack.setTagCompound(new NBTTagCompound());
-		stack.getTagCompound().setBoolean("punched", true);
-		
-			if(item.hasTagCompound())
-				stack.getTagCompound().setTag("contentTags", item.getTagCompound());
-			stack.getTagCompound().setInteger("contentSize", item.getCount());
-		
-		
-		return stack;
-	}
 	
 	private static void registerRecipes(ModSupport modSupport, String modname, boolean dynamic)
 	{

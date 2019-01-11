@@ -79,9 +79,6 @@ public class CommonProxy
 		GameRegistry.registerTileEntity(TileEntityTransportalizer.class, "minestuck:transportalizer");
 		GameRegistry.registerTileEntity(TileEntityGate.class, "minestuck:gate");
 		GameRegistry.registerTileEntity(TileEntityUraniumCooker.class, "minestuck:uranium_cooker");
-		GameRegistry.registerTileEntity(TileEntityJumperBlock.class, "minestuck:jumper_block_extension");
-		GameRegistry.registerTileEntity(TileEntityUpgradedAlchemiter.class,  "minestuck:upgraded_alchemiter");
-		GameRegistry.registerTileEntity(TileEntityAlchemiterUpgrade.class,  "minestuck:alchemiter_upgrade");
 		GameRegistry.registerTileEntity(TileEntityHolopad.class, "minestuck:holopad");
 		
 		//Register event handlers

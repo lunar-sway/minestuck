@@ -7,7 +7,6 @@ import javax.annotation.Nullable;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.item.TabMinestuck;
 import com.mraof.minestuck.tileentity.TileEntityHolopad;
-import com.mraof.minestuck.tileentity.TileEntityJumperBlock;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.MapColor;
