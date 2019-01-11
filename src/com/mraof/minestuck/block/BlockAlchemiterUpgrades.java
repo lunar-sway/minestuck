@@ -59,6 +59,7 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 	public static final PropertyEnum<EnumParts> PART3 = PropertyEnum.create("part", EnumParts.class, EnumParts.GRISTWIDGET, EnumParts.CAPTCHA_CARD, EnumParts.DROPPER, EnumParts.BOONDOLLAR);
 	public static final PropertyEnum<EnumParts> PART4 = PropertyEnum.create("part", EnumParts.class, EnumParts.UPGRADED_PAD, EnumParts.BLENDER, EnumParts.CRUXTRUDER, EnumParts.HOLOPAD);
 	public static final PropertyEnum<EnumParts> BASE = PropertyEnum.create("part", EnumParts.class, EnumParts.BLANK, EnumParts.NONE, EnumParts.PLACEHOLDER_1, EnumParts.PLACEHOLDER_2);
+	public static final PropertyEnum<EnumParts> PART5 = PropertyEnum.create("part", EnumParts.class, EnumParts.REDSTONE);
 	
 	public final PropertyEnum<EnumParts> PART;
 	public static final PropertyDirection DIRECTION = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
@@ -301,10 +302,7 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 		BlockPos offset = (AlchemiterUpgrades.getUpgradeFromBlock(part) == null) ? pos.offset(facing) : (AlchemiterUpgrades.getUpgradeFromBlock(part).getUpgradeType() == AlchemiterUpgrades.EnumType.TOTEM_PAD) ? pos : pos.offset(facing);
 		BlockPos mainPos =  getAlchemiterPos(worldIn, offset);
 		
-		System.out.println("mainPos: " + mainPos);
-		
 		TileEntity te = worldIn.getTileEntity(mainPos);
-		System.out.println("te: " + te);
 		
 		if(te instanceof TileEntityAlchemiter)
 		{
@@ -387,11 +385,6 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 		else return null;
 	}
 	
-	public static int getPartIndex(EnumParts parts)
-	{
-		return PART1.getAllowedValues().contains(parts) ? 0 : PART2.getAllowedValues().contains(parts) ? 1 : PART3.getAllowedValues().contains(parts) ? 2 : 3;
-	}
-	
 	public static int getPartIndex(IBlockState state)
 	{
 		return getPartIndex(getPart(state));
@@ -404,15 +397,27 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 		return state.withProperty(block.PART, parts).withProperty(DIRECTION, direction);
 	}
 	
+	public static int getPartIndex(EnumParts parts)
+	{
+		return 
+			PART1.getAllowedValues().contains(parts) ? 0 : 
+			PART2.getAllowedValues().contains(parts) ? 1 : 
+			PART3.getAllowedValues().contains(parts) ? 2 : 
+			PART4.getAllowedValues().contains(parts) ? 3 :
+			 BASE.getAllowedValues().contains(parts) ? 4 : 
+			PART5.getAllowedValues().contains(parts) ? 5 : 6;
+	}
+	
 	public static IBlockState getBlockState(EnumParts parts)
 	{
-		BlockAlchemiterUpgrades block = MinestuckBlocks.alchemiterUpgrades[PART1.getAllowedValues().contains(parts) ? 0 : PART2.getAllowedValues().contains(parts) ? 1 : PART3.getAllowedValues().contains(parts) ? 2 : PART4.getAllowedValues().contains(parts) ? 3 : BASE.getAllowedValues().contains(parts) ? 4 : 5];IBlockState state = block.getDefaultState();
+		BlockAlchemiterUpgrades block = MinestuckBlocks.alchemiterUpgrades[getPartIndex(parts)];
+		IBlockState state = block.getDefaultState();
 		return state.withProperty(block.PART, parts);
 	}
 	
 	public static IBlockState getState(EnumParts parts, EnumFacing facing)
     {
-        BlockAlchemiterUpgrades block = MinestuckBlocks.alchemiterUpgrades[PART1.getAllowedValues().contains(parts) ? 0 : PART2.getAllowedValues().contains(parts) ? 1 : PART3.getAllowedValues().contains(parts) ? 2 : PART4.getAllowedValues().contains(parts) ? 3 : BASE.getAllowedValues().contains(parts) ? 4 : 5];
+        BlockAlchemiterUpgrades block = MinestuckBlocks.alchemiterUpgrades[getPartIndex(parts)];
         return block.getDefaultState().withProperty(block.PART, parts).withProperty(DIRECTION, facing);
     }
 	
@@ -454,7 +459,9 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 		BLANK(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
 		NONE(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
 		PLACEHOLDER_1(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
-		PLACEHOLDER_2(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)),
+		PLACEHOLDER_2(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)), 
+		
+		REDSTONE(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D)),
 		
 		;
 		private final AxisAlignedBB[] BOUNDING_BOX;
@@ -503,7 +510,15 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 	
 	public static BlockAlchemiterUpgrades[] createBlocks()
 	{
-		return new BlockAlchemiterUpgrades[] {new BlockAlchemiterUpgrades1(), new BlockAlchemiterUpgrades2(), new BlockAlchemiterUpgrades3(), new BlockAlchemiterUpgrades4(), new BlockAlchemiterUpgradesSpecial()};
+		return new BlockAlchemiterUpgrades[] 
+				{
+						new BlockAlchemiterUpgrades1(), 
+						new BlockAlchemiterUpgrades2(), 
+						new BlockAlchemiterUpgrades3(), 
+						new BlockAlchemiterUpgrades4(), 
+						new BlockAlchemiterUpgradesSpecial(),
+						new BlockAlchemiterUpgrades5(),
+						};
 	}
 	
 	private static class BlockAlchemiterUpgrades1 extends BlockAlchemiterUpgrades
@@ -564,11 +579,26 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 		}
 	}
 	
+	private static class BlockAlchemiterUpgrades5 extends BlockAlchemiterUpgrades
+	{
+		public BlockAlchemiterUpgrades5()
+		{
+			super(5, PART5);
+		}
+		
+		
+		@Override
+		protected BlockStateContainer createBlockState()
+		{
+			return new BlockStateContainer(this, PART5, DIRECTION);
+		}
+	}
+	
 	private static class BlockAlchemiterUpgradesSpecial extends BlockAlchemiterUpgrades
 	{
 		public BlockAlchemiterUpgradesSpecial()
 		{
-			super(3, BASE);
+			super(4, BASE);
 		}
 		
 		

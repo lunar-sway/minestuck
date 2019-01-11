@@ -80,8 +80,10 @@ public abstract class BlockJumperBlock extends BlockLargeMachine {
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
-		if(worldIn.isRemote)
-			return true;
+		
+		
+		//if(worldIn.isRemote)
+			//return true;
 		if(index == 2||index == 3)
 			return false;
 		
@@ -89,9 +91,12 @@ public abstract class BlockJumperBlock extends BlockLargeMachine {
 		BlockPos mainPos = getMainPos(state, pos, worldIn);
 		TileEntity te = worldIn.getTileEntity(mainPos);
 		
+		System.out.println("beejbee");
+		
 		int id = getUpgradeId(state, pos, worldIn);
 		if(te instanceof TileEntityJumperBlock)
 			((TileEntityJumperBlock) te).onRightClick(playerIn, state, id);
+		else System.out.println("pink lasagna");
 		return true;
 	}
 	

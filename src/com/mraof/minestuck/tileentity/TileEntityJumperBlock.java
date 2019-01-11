@@ -28,6 +28,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import scala.actors.threadpool.Arrays;
 import scala.reflect.internal.Trees.Super;
@@ -151,6 +152,9 @@ public class TileEntityJumperBlock extends TileEntity
 	
 	public void onRightClick(EntityPlayer player, IBlockState clickedState, int id)
 	{
+		
+		System.out.println("i should be 2");
+		
 		EnumFacing facing = getFacing();
 		BlockPos alchemMainPos = alchemiterMainPos(facing, pos);
 		boolean working = isUseable(clickedState);
@@ -180,14 +184,14 @@ public class TileEntityJumperBlock extends TileEntity
 				
 			}
 		if(te instanceof TileEntityAlchemiter)
-			updateUpgrades((TileEntityAlchemiter) te, alchemMainPos);
+			updateUpgrades((TileEntityAlchemiter) te, alchemMainPos, player);
 		
 		else Debug.warnf("Couldn't find TileEntityAlchemiter at %s, found %s instead.", alchemMainPos, te);
 		
 		
 	}
 	
-	private void updateUpgrades(TileEntityAlchemiter alchemTe, BlockPos AlchemPos)
+	private void updateUpgrades(TileEntityAlchemiter alchemTe, BlockPos AlchemPos, EntityPlayer notifiedPlayer)
 	{
 		
 		int blockCount = 0;
@@ -195,6 +199,9 @@ public class TileEntityJumperBlock extends TileEntity
 		boolean[] sideUpgraded = {false, false, false, false};
 		BlockPos alchemPos = alchemTe.getPos();
 		EnumFacing alchemFacing = alchemTe.getFacing();
+		
+		if(alchemTe instanceof TileEntityUpgradedAlchemiter)
+			alchemFacing = alchemFacing.getOpposite();
 		
 		alchemTe.setUpgraded(true, pos);
 		AlchemiterUpgrades[] alchemUpgrades = alchemTe.getUpgradeList();
@@ -297,10 +304,8 @@ public class TileEntityJumperBlock extends TileEntity
 						if((world.getBlockState(pos).getBlockHardness(world, pos) > 1 && !(world.getBlockState(pos).getBlock().equals(MinestuckBlocks.alchemiter[0]))) 
 								|| (world.getBlockState(pos).getBlock() instanceof BlockAlchemiterUpgrades))
 						{
-							/*TODO
-							 * JBE feedback message: "there's not enough space for this upgrade"
-							 */
-								Debug.warn("there's not enough space for that upgrade");
+							//"true" sends the message to the action bar (like bed messages), while "false" sends it to the chat.
+							notifiedPlayer.sendStatusMessage(new TextComponentTranslation("There's not enough space for that upgrade"), true);
 								br8k = true;
 								break;
 							
@@ -321,8 +326,12 @@ public class TileEntityJumperBlock extends TileEntity
 						if(state.getBlock() instanceof BlockAlchemiterUpgrades) state = state.withProperty(BlockAlchemiterUpgrades.DIRECTION, alchemFacing);
 						if(!Arrays.asList(excludedLatheBlocks).contains(upgradeBlocks[j]) && getLatheUpgradeId() == Arrays.asList(AlchemiterUpgrades.upgradeList).indexOf(alchemUpgrades[i]))
 						{
-							if(BlockAlchemiterUpgrades.getPart(upgradeBlocks[j]) == BlockAlchemiterUpgrades.EnumParts.BLANK && world.getBlockState(pos.up(j)).getBlock() instanceof BlockAlchemiter)
-								state = Blocks.AIR.getDefaultState();
+							if(BlockAlchemiterUpgrades.getPart(upgradeBlocks[j]) == BlockAlchemiterUpgrades.EnumParts.BLANK)
+							{
+									if(world.getBlockState(pos.up(j)).getBlock() instanceof BlockAlchemiter)
+										state = Blocks.AIR.getDefaultState();
+									else continue;
+							}
 							
 							if(state == null) continue;
 							
@@ -347,10 +356,8 @@ public class TileEntityJumperBlock extends TileEntity
 					{
 						if(blockCount > 16)
 						{
-							/*TODO
-							 * JBE feedback message: "there's not enough space for this upgrade"
-							*/
-							Debug.warn("there's not enough space for that upgrade");
+							//"true" sends the message to the action bar (like bed messages), while "false" sends it to the chat.
+							notifiedPlayer.sendStatusMessage(new TextComponentTranslation("There's not enough space for that upgrade"), true);
 							break;
 						}
 						
@@ -435,21 +442,17 @@ public class TileEntityJumperBlock extends TileEntity
 				else if(world.getBlockState(upgPos).getBlock() instanceof BlockAlchemiterUpgrades) world.destroyBlock(upgPos, true);
 				blockCount++;
 			}
-			EnumFacing checkFacing = alchemFacing;
-			
-			if(alchemTe instanceof TileEntityUpgradedAlchemiter)
-				checkFacing = alchemFacing.getOpposite();
-			
 			unbreakMachine();
 			
 			if(getLatheUpgradeId() == -1)
 			{
-				for(int i = 0; i < totemParts.length; i++)
-				{
-					if(world.getBlockState(alchemPos.down().up(i)).getBlockHardness(world, alchemPos.down().up(i)) <= 1)
-					world.destroyBlock(alchemPos.down().up(i), true);
-					world.setBlockState(alchemPos.down().up(i), BlockAlchemiter.getBlockState(totemParts[i], checkFacing));
-				}
+				if(!(world.getBlockState(alchemPos).getBlock() instanceof BlockAlchemiter))
+					for(int i = 0; i < totemParts.length; i++)
+					{
+						if(world.getBlockState(alchemPos.down().up(i)).getBlockHardness(world, alchemPos.down().up(i)) <= 1)
+						world.destroyBlock(alchemPos.down().up(i), true);
+						world.setBlockState(alchemPos.down().up(i), BlockAlchemiter.getBlockState(totemParts[i], alchemFacing));
+					}
 			}
 		}
 		

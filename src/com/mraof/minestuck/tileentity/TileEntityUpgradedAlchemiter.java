@@ -72,6 +72,9 @@ public class TileEntityUpgradedAlchemiter extends TileEntityAlchemiter
 		
 		IBlockState[] upgBlocks;
 		
+		
+		System.out.println(jbeTe);
+		
 		if(jbeTe.getLatheUpgradeId() == -1)
 			upgBlocks = baseParts;
 		else

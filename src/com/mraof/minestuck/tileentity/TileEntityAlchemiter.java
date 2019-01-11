@@ -2,6 +2,7 @@ package com.mraof.minestuck.tileentity;
 
 
 import java.util.Arrays;
+import java.util.Map.Entry;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
@@ -9,6 +10,7 @@ import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.block.BlockAlchemiter;
 import com.mraof.minestuck.block.BlockAlchemiter.EnumParts;
 import com.mraof.minestuck.client.gui.GuiHandler;
+import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
@@ -131,7 +133,6 @@ public class TileEntityAlchemiter extends TileEntity
 	
 	public void setUpgraded(boolean bool, BlockPos pos)
 	{
-		
 		TileEntity te = world.getTileEntity(pos);
 		
 		if(te instanceof TileEntityJumperBlock)
@@ -149,8 +150,14 @@ public class TileEntityAlchemiter extends TileEntity
 		{
 			for(int i = 0; i < upgradeItem.length; i++)
 			{
-				this.upgradeItem[i] = jbeTe.getUpgrade(i);
-				this.upgradeItem[i].setCount(1);
+				
+				getUpgradeItemsList()[i] = jbeTe.getUpgrade(i);
+				getUpgradeItemsList()[i].setCount(1);
+				
+				System.out.println(getUpgradeItemsList()[i]);
+				
+
+				System.out.println("aaaaa");
 			}
 			
 		}
@@ -158,7 +165,8 @@ public class TileEntityAlchemiter extends TileEntity
 		{
 			for(int i = 0; i < upgradeItem.length; i++)
 			{
-				this.upgradeItem[i] = ItemStack.EMPTY;
+				getUpgradeItemsList()[i] = ItemStack.EMPTY;
+				System.out.println("ee");
 			}
 		}
 		
@@ -204,7 +212,8 @@ public class TileEntityAlchemiter extends TileEntity
 	
 	public ItemStack[] getUpgradeItemsList()
 	{
-		return this.upgradeItem;
+		System.out.println(upgradeItem);
+		return upgradeItem;
 	}
 	
 	public ItemStack getUpgrade(int id)
@@ -404,8 +413,50 @@ public class TileEntityAlchemiter extends TileEntity
 		
 		boolean canAfford = GristHelper.canAfford(MinestuckPlayerData.getGristSet(player), cost);
 		
+		System.out.println(getUpgradeItemsList());
+
+		System.out.println(isUpgraded());
+		
 		if(canAfford)
 		{
+			if(hasUpgrade(AlchemiterUpgrades.gristWidget))
+			{
+				
+				System.out.println("woop");
+				
+				/*TODO add boondollar cost
+				 * if(!MinestuckPlayerData.addBoondollars(owner, -getGristWidgetBoondollarValue()))
+				{
+					Debug.warnf("Failed to remove boondollars for a grist widget from %s's porkhollow", owner.getUsername());
+					return;
+				}
+				*/
+				
+				for (Entry<GristType, Integer> entry : cost.getMap().entrySet())
+				{
+					int grist = entry.getValue();
+					while(true)
+					{
+						if(grist == 0)
+							break;
+						GristAmount gristAmount = new GristAmount(entry.getKey(),
+								grist <= 3 ? grist : (world.rand.nextInt(grist) + 1));
+						EntityGrist entity = new EntityGrist(world,
+								this.pos.getX()
+										+ 0.5 /* this.width - this.width / 2 */,
+								this.pos.getY() + 1, this.pos.getZ()
+								+ 0.5 /* this.width - this.width / 2 */,
+								gristAmount);
+						entity.motionX /= 2;
+						entity.motionY /= 2;
+						entity.motionZ /= 2;
+						world.spawnEntity(entity);
+						//Create grist entity of gristAmount
+						grist -= gristAmount.getAmount();
+					}
+				}
+			}
+			else
 			while(quantity > 0)
 			{
 				ItemStack stack = newItem.copy();
