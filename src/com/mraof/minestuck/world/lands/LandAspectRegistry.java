@@ -277,11 +277,6 @@ public class LandAspectRegistry
 			{
 				newLandId++;
 			}
-			if(newLandId > Byte.MAX_VALUE)
-			{
-				FMLLog.warning("[Minestuck] Ran out of land id's!");
-				return player.dimension;
-			}
 		}
 		
 		int id = SkaianetHandler.enterMedium((EntityPlayerMP)player, newLandId, teleport);
