@@ -273,8 +273,8 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemCruxtruder(cruxtruder));
 		registerItemBlock(registry, new ItemBlock(cruxtruderLid));
 		registerItemBlock(registry, cruxiteDowel);
-		registerItemBlock(registry, new ItemBlock(holopad));
-		registerItemBlock(registry, new ItemJumperBlock(jumperBlockExtension[0]));
+		/*registerItemBlock(registry, new ItemBlock(holopad));
+		registerItemBlock(registry, new ItemJumperBlock(jumperBlockExtension[0]));*/
 		registerItemBlock(registry, new ItemBlock(blender));
 		registerItemBlock(registry, new ItemBlock(chessboard));
 		registerItemBlock(registry, new ItemBlock(frogStatueReplica));
@@ -512,14 +512,14 @@ public class MinestuckItems
 		registry.register(threshDvd.setRegistryName("thresh_dvd"));
 		registry.register(crewPoster.setRegistryName("crew_poster"));
 		registry.register(sbahjPoster.setRegistryName("sbahj_poster"));
-		registry.register(shopPoster.setRegistryName("shop_poster"));
+		//registry.register(shopPoster.setRegistryName("shop_poster"));
 		registry.register(carvingTool.setRegistryName("carving_tool"));
 		registry.register(crumplyHat.setRegistryName("crumply_hat"));
 		registry.register(stoneEyeballs.setRegistryName("stone_eyeballs"));
 		registry.register(stoneSlab.setRegistryName("stone_slab"));
 		registry.register(glowystoneDust.setRegistryName("glowystone_dust"));
 		registry.register(fakeArms.setRegistryName("fake_arms"));
-		registry.register(shunt.setRegistryName("shunt"));
+		//registry.register(shunt.setRegistryName("shunt"));
 		registry.register(captcharoidCamera.setRegistryName("captcharoid_camera"));
 		
 		//Music disks

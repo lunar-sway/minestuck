@@ -230,8 +230,7 @@ public class MinestuckModelManager
 		register(threshDvd);
 		register(crewPoster);
 		register(sbahjPoster);
-		//TODO
-		register(shopPoster, 0, "shop_poster_1");
+		
 		register(carvingTool);
 		register(crumplyHat);
 		register(frogStatueReplica);
@@ -243,9 +242,10 @@ public class MinestuckModelManager
 		register(glowystoneDust);
 		register(fakeArms);
 		register(captcharoidCamera);
-
+		/*
 		for(EnumShopPoster type : EnumShopPoster.values())
 			register(shopPoster, type.ordinal(), "shop_poster"+type.ordinal());
+		*/
 	}
 	
 	private static void blockModels()
@@ -294,8 +294,8 @@ public class MinestuckModelManager
 		register(punchDesignix);
 		register(totemlathe[0]);
 		register(alchemiter[0]);
-		register(holopad);
-		register(jumperBlockExtension[0]);
+		/*register(holopad);
+		register(jumperBlockExtension[0]);*/
 		register(blender);
 		register(cruxtruder);
 		register(cruxtruderLid);
