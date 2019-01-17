@@ -14,6 +14,9 @@ public class MinestuckLoot
 	public static final ResourceLocation CONSORT_FOOD_STOCK = new ResourceLocation("minestuck", "gameplay/consort_food");
 	public static final ResourceLocation CONSORT_GENERAL_STOCK = new ResourceLocation("minestuck", "gameplay/consort_general");
 	
+	//TODO frog temple lotus loot
+	//public static final ResourceLocation FROG_TEMPLE_LOTUS = new ResourceLocation("minestuck", "gameplay/temple_lotus");
+	
 	public static void registerLootClasses()
 	{
 		LootConditionManager.registerCondition(new LandAspectLootCondition.Serializer());
