@@ -28,6 +28,7 @@ public class WorldProviderLands extends WorldProvider
 	public float skylightBase;
 	Vec3d skyColor;
 	Vec3d fogColor;
+	Vec3d cloudColor;
 	
 	@Override
 	public DimensionType getDimensionType()
@@ -161,6 +162,7 @@ public class WorldProviderLands extends WorldProvider
 		skylightBase = landAspects.aspectTerrain.getSkylightBase();
 		skyColor = landAspects.aspectTerrain.getSkyColor();
 		fogColor = landAspects.aspectTerrain.getFogColor();
+		cloudColor = landAspects.aspectTerrain.getCloudColor();
 		landAspects.aspectTitle.prepareWorldProvider(this);
 	}
 	
@@ -206,36 +208,7 @@ public class WorldProviderLands extends WorldProvider
 	@Override
 	public Vec3d getCloudColor(float partialTicks)
 	{
-		float f1 = 1 - skylightBase;
-		float f2 = 1.0F;
-		float f3 = 1.0F;
-		float f4 = 1.0F;
-		float f5 = world.getRainStrength(partialTicks);
-		
-		if (f5 > 0.0F)
-		{
-			float f6 = (f2 * 0.3F + f3 * 0.59F + f4 * 0.11F) * 0.6F;
-			float f7 = 1.0F - f5 * 0.95F;
-			f2 = f2 * f7 + f6 * (1.0F - f7);
-			f3 = f3 * f7 + f6 * (1.0F - f7);
-			f4 = f4 * f7 + f6 * (1.0F - f7);
-		}
-		
-		f2 = f2 * (f1 * 0.9F + 0.1F);
-		f3 = f3 * (f1 * 0.9F + 0.1F);
-		f4 = f4 * (f1 * 0.85F + 0.15F);
-		float f9 = world.getThunderStrength(partialTicks);
-		
-		if (f9 > 0.0F)
-		{
-			float f10 = (f2 * 0.3F + f3 * 0.59F + f4 * 0.11F) * 0.2F;
-			float f8 = 1.0F - f9 * 0.95F;
-			f2 = f2 * f8 + f10 * (1.0F - f8);
-			f3 = f3 * f8 + f10 * (1.0F - f8);
-			f4 = f4 * f8 + f10 * (1.0F - f8);
-		}
-		
-		return new Vec3d((double)f2, (double)f3, (double)f4);
+		return cloudColor;
 	}
 	
 	public World getWorld()
