@@ -39,9 +39,9 @@ import com.mraof.minestuck.util.SburbServer;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.gen.OreHandler;
+import com.mraof.minestuck.world.gen.StructureGeneratorOverworld;
 import com.mraof.minestuck.world.gen.structure.StructureCastlePieces;
 import com.mraof.minestuck.world.gen.structure.StructureCastleStart;
-import com.mraof.minestuck.world.gen.structure.temple.StructureTempleStart;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.structure.MapGenLandStructure;
 import com.mraof.minestuck.world.lands.structure.village.ConsortVillageComponents;
@@ -76,6 +76,9 @@ public class CommonProxy
 		OreHandler oreHandler = new OreHandler();
 		GameRegistry.registerWorldGenerator(oreHandler, 0);
 		
+		//register overworld generation
+		GameRegistry.registerWorldGenerator(new StructureGeneratorOverworld(), 0);
+		
 		//register GUI handler
 		NetworkRegistry.INSTANCE.registerGuiHandler(Minestuck.instance, new GuiHandler());
 		
@@ -109,7 +112,7 @@ public class CommonProxy
 		MinestuckChannelHandler.setupChannel();
 		
 		//Register structures
-		MapGenStructureIO.registerStructure(StructureTempleStart.class, "FrogTemple");
+		//MapGenStructureIO.registerStructure(StructureTempleStart.class, "FrogTemple");
 		MapGenStructureIO.registerStructure(StructureCastleStart.class, "SkaiaCastle");
 		StructureCastlePieces.registerComponents();
 		MapGenLandStructure.registerStructures();

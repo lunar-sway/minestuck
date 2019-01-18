@@ -1,0 +1,126 @@
+package com.mraof.minestuck.world.gen.structure;
+
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Random;
+
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.world.lands.structure.IStructure;
+import com.mraof.minestuck.world.storage.loot.MinestuckLoot;
+
+import net.minecraft.init.Blocks;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityShulkerBox;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Rotation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraft.world.gen.structure.template.PlacementSettings;
+import net.minecraft.world.gen.structure.template.Template;
+import net.minecraft.world.gen.structure.template.TemplateManager;
+import net.minecraft.world.storage.loot.LootTableList;
+
+public class StructureTemple extends WorldGenerator implements IStructure
+{
+
+	public static int rotation = 0;
+	
+	public StructureTemple() 
+	{
+	}
+
+	@Override
+	public boolean generate(World worldIn, Random rand, BlockPos pos) 
+	{
+		Debug.warnf("appearifying temple at: %s", pos);
+		rotation = new Random().nextInt(4);
+		this.generateStructure(worldIn, pos);
+		return true;
+	}
+	
+	public static void generateStructure(World world, BlockPos pos)
+	{
+		
+		if(pos.down(8).getY() <= 0)
+			pos = new BlockPos(pos.getX(),1,pos.getZ());
+		else
+			pos = pos.down(8);
+		
+		MinecraftServer server = world.getMinecraftServer();
+		TemplateManager manager = worldServer.getStructureTemplateManager();
+		ResourceLocation[] templateLoc = 
+				{
+						new ResourceLocation("minestuck:temple_base"),
+						new ResourceLocation("minestuck:temple_middle"),
+						new ResourceLocation("minestuck:temple_stairs"),
+						new ResourceLocation("minestuck:temple_top"),
+						new ResourceLocation("minestuck:pillar_bottom"),
+						new ResourceLocation("minestuck:pillar_top"),
+						new ResourceLocation("minestuck:pillar_derse")
+						
+				};
+		BlockPos[] pieceOffset = {new BlockPos(0,0,0), new BlockPos(0,32,0), new BlockPos(32,0,0), new BlockPos(12,48,12)};
+		BlockPos piecePos;
+		Rotation rot = Rotation.NONE;
+    	
+		for(int i = 0; i < rotation; i++)
+			rot = rot.add(Rotation.CLOCKWISE_90);
+		
+		
+			
+        final PlacementSettings settings = new PlacementSettings().setRotation(rot);
+		
+		Template[] templeTemplate = {manager.get(server, templateLoc[0]), manager.get(server, templateLoc[1]), manager.get(server, templateLoc[2]), manager.get(server, templateLoc[3])};
+		Template[] pillarTemplate = {manager.get(server, templateLoc[4]), manager.get(server, templateLoc[5])};
+		Template dersePillarTemplate = manager.get(server, templateLoc[6]);
+		
+		if(checkTemplateListNull(templeTemplate))
+		{
+			for(int i = 0; i < templeTemplate.length; i++)
+			{
+				switch(rot)
+				{
+					default: piecePos = pos.add(pieceOffset[i].getX(), pieceOffset[i].getY(), pieceOffset[i].getZ()); break;
+					case CLOCKWISE_90: piecePos = pos.add(-pieceOffset[i].getZ(), pieceOffset[i].getY(), pieceOffset[i].getX()); break;
+					case CLOCKWISE_180: piecePos = pos.add(-pieceOffset[i].getX(), pieceOffset[i].getY(), -pieceOffset[i].getZ()); break;
+					case COUNTERCLOCKWISE_90: piecePos = pos.add(pieceOffset[i].getZ(), pieceOffset[i].getY(), -pieceOffset[i].getX()); break;
+					
+				}
+				world.notifyBlockUpdate(piecePos, world.getBlockState(piecePos), world.getBlockState(piecePos), 3);
+				templeTemplate[i].addBlocksToWorldChunk(world, piecePos, settings);	
+				
+				
+				Map<BlockPos, String> datablocks = templeTemplate[i].getDataBlocks(piecePos, settings);
+				for (Entry<BlockPos, String> entry : datablocks.entrySet())
+	            {
+	                if ("lotus_loot".equals(entry.getValue()))
+	                {
+	                    BlockPos blockpos = entry.getKey();
+	                    world.setBlockState(blockpos, Blocks.WHITE_SHULKER_BOX.getDefaultState(), 3);
+	                    TileEntity tileentity = world.getTileEntity(blockpos);
+
+	                    if (tileentity instanceof TileEntityShulkerBox)
+	                    {
+	                    	//TODO frog temple lotus loot
+	                        ((TileEntityShulkerBox)tileentity).setLootTable(MinestuckLoot.FROG_TEMPLE_LOTUS, new Random().nextLong());
+	                    }
+	                }
+	            }
+			}
+			
+		}
+		
+	}
+	
+	public static boolean checkTemplateListNull(Template[] list)
+	{
+		for(Template i : list)
+			if(i == null)
+				return false;
+		return true;
+	}
+	
+	
+}
