@@ -4,10 +4,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.lands.structure.IStructure;
 import com.mraof.minestuck.world.storage.loot.MinestuckLoot;
 
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
@@ -20,12 +22,13 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraft.world.gen.structure.template.Template;
 import net.minecraft.world.gen.structure.template.TemplateManager;
-import net.minecraft.world.storage.loot.LootTableList;
 
 public class StructureTemple extends WorldGenerator implements IStructure
 {
 
 	public static int rotation = 0;
+	private static int lowestPointOffset = 8;
+	private static int craterRadius = 64;
 	
 	public StructureTemple() 
 	{
@@ -35,18 +38,15 @@ public class StructureTemple extends WorldGenerator implements IStructure
 	public boolean generate(World worldIn, Random rand, BlockPos pos) 
 	{
 		Debug.warnf("appearifying temple at: %s", pos);
-		rotation = new Random().nextInt(4);
-		this.generateStructure(worldIn, pos);
+		worldIn.setBlockState(pos, MinestuckBlocks.templePlacer.getDefaultState());
+		//this.generateStructure(worldIn, pos);
 		return true;
 	}
 	
 	public static void generateStructure(World world, BlockPos pos)
 	{
 		
-		if(pos.down(8).getY() <= 0)
-			pos = new BlockPos(pos.getX(),1,pos.getZ());
-		else
-			pos = pos.down(8);
+		rotation = new Random().nextInt(4);
 		
 		MinecraftServer server = world.getMinecraftServer();
 		TemplateManager manager = worldServer.getStructureTemplateManager();
@@ -61,11 +61,9 @@ public class StructureTemple extends WorldGenerator implements IStructure
 						new ResourceLocation("minestuck:pillar_derse")
 						
 				};
-		BlockPos[] pieceOffset = {new BlockPos(0,0,0), new BlockPos(0,32,0), new BlockPos(32,0,0), new BlockPos(12,48,12)};
-		BlockPos piecePos;
+		
 		Rotation rot = Rotation.NONE;
-    	
-		for(int i = 0; i < rotation; i++)
+		//for(int i = 0; i < rotation; i++)
 			rot = rot.add(Rotation.CLOCKWISE_90);
 		
 		
@@ -76,6 +74,61 @@ public class StructureTemple extends WorldGenerator implements IStructure
 		Template[] pillarTemplate = {manager.get(server, templateLoc[4]), manager.get(server, templateLoc[5])};
 		Template dersePillarTemplate = manager.get(server, templateLoc[6]);
 		
+		generateCrater(pos, world);
+		generateTemple(templeTemplate, settings, pos.add(-16,0,-16), world);
+		
+	}
+	
+	public static void generateCrater(BlockPos pos, World world)
+	{
+		int radius = craterRadius;
+		
+		Debug.warn("generating crater...");
+		
+		for(int i = 0; i < 16; i++)
+		{
+			world.setBlockState(pos.up(i), MinestuckBlocks.genericObject.getDefaultState());
+		}
+		
+		for(int y = 0; y > -lowestPointOffset ; y--)
+		{
+			System.out.print("r: " + radius);
+			System.out.println(" y: " + (pos.getY() + y));
+			System.out.println((Math.pow(y,2) / lowestPointOffset));
+			for(int x = -radius; x < radius; x++)
+			{
+				
+				int z2 = (int)Math.sqrt(Math.pow(radius, 2) - Math.pow(x, 2));
+				
+				for(int z = -z2; z < z2; z++)
+				{
+						BlockPos p = pos.add(x,y,z);
+						
+						world.setBlockState(p, Blocks.AIR.getDefaultState());
+				}
+			}
+			
+			radius = (int)(radius - (Math.pow(y,2) / lowestPointOffset));
+		}
+		
+		
+		//y = (x^2 - r^2) / (r^2 / abs(z / (r / (l)))
+		//
+	}
+	
+	public static void generateTemple(Template[] templeTemplate, PlacementSettings settings, BlockPos pos, World world)
+	{		
+		if(pos.down(lowestPointOffset+1).getY() <= 0)
+			pos = new BlockPos(pos.getX(),1,pos.getZ());
+		else
+			pos = pos.down(lowestPointOffset+1);
+		
+		BlockPos[] pieceOffset = {new BlockPos(0,0,0), new BlockPos(0,32,0), new BlockPos(32,0,0), new BlockPos(12,48,12)};
+		BlockPos piecePos;
+		Rotation rot = Rotation.NONE;
+		for(int i = 0; i < rotation; i++)
+			rot = rot.add(Rotation.CLOCKWISE_90);
+		
 		if(checkTemplateListNull(templeTemplate))
 		{
 			for(int i = 0; i < templeTemplate.length; i++)
@@ -83,9 +136,9 @@ public class StructureTemple extends WorldGenerator implements IStructure
 				switch(rot)
 				{
 					default: piecePos = pos.add(pieceOffset[i].getX(), pieceOffset[i].getY(), pieceOffset[i].getZ()); break;
-					case CLOCKWISE_90: piecePos = pos.add(-pieceOffset[i].getZ(), pieceOffset[i].getY(), pieceOffset[i].getX()); break;
+					case CLOCKWISE_90: piecePos = pos.add(-pieceOffset[i].getZ(), pieceOffset[i].getY(), -pieceOffset[i].getX()); break;
 					case CLOCKWISE_180: piecePos = pos.add(-pieceOffset[i].getX(), pieceOffset[i].getY(), -pieceOffset[i].getZ()); break;
-					case COUNTERCLOCKWISE_90: piecePos = pos.add(pieceOffset[i].getZ(), pieceOffset[i].getY(), -pieceOffset[i].getX()); break;
+					case COUNTERCLOCKWISE_90: piecePos = pos.add(pieceOffset[i].getZ(), pieceOffset[i].getY(), pieceOffset[i].getX()); break;
 					
 				}
 				world.notifyBlockUpdate(piecePos, world.getBlockState(piecePos), world.getBlockState(piecePos), 3);
@@ -103,7 +156,6 @@ public class StructureTemple extends WorldGenerator implements IStructure
 
 	                    if (tileentity instanceof TileEntityShulkerBox)
 	                    {
-	                    	//TODO frog temple lotus loot
 	                        ((TileEntityShulkerBox)tileentity).setLootTable(MinestuckLoot.FROG_TEMPLE_LOTUS, new Random().nextLong());
 	                    }
 	                }
@@ -111,7 +163,6 @@ public class StructureTemple extends WorldGenerator implements IStructure
 			}
 			
 		}
-		
 	}
 	
 	public static boolean checkTemplateListNull(Template[] list)

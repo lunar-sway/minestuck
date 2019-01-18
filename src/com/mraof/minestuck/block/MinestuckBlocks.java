@@ -104,6 +104,9 @@ public class MinestuckBlocks
 	public static Block endGrass = new BlockEndGrass();
 	public static Block coarseEndStone = new BlockEndStoneCoarse();
 	
+	//Structure Generators
+	public static Block templePlacer = new BlockTemplePlacer();
+	
 	//Ores
 	public static Block oreCruxite = new BlockCruxiteOre();
 	public static BlockUraniumOre oreUranium = (BlockUraniumOre) new BlockUraniumOre().setUnlocalizedName("oreUranium");
@@ -295,6 +298,7 @@ public class MinestuckBlocks
 		registry.register(blockEnder.setRegistryName("block_ender"));
 		
 		registry.register(rabbitSpawner.setRegistryName("rabbit_spawner"));
+		registry.register(templePlacer.setRegistryName("templePlacer"));
 		
 		//fluids
 		/*liquidGrists = new Block[GristType.allGrists];
