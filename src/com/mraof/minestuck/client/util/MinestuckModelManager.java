@@ -374,6 +374,8 @@ public class MinestuckModelManager
 		register(pinkStoneMossy);
 		register(pinkStoneCracked);
 		register(pinkStonePolish);
+		register(denseCloud, 0, "dense_cloud");
+		register(denseCloud, 1, "dense_cloud_bright");
 		
 		register(vein);
 		register(veinCorner);

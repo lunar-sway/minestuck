@@ -130,6 +130,7 @@ public class MinestuckBlocks
 	public static Block pinkStoneCracked= new BlockCustomStone(MapColor.PINK).setUnlocalizedName("pinkStoneCracked").setCreativeTab(TabMinestuck.instance);
 	public static Block pinkStoneMossy = new BlockCustomStone(MapColor.PINK).setUnlocalizedName("pinkStoneMossy")	.setCreativeTab(TabMinestuck.instance);
 	public static Block pinkStonePolish = new BlockCustomStone(MapColor.PINK).setUnlocalizedName("pinkStonePolish")	.setCreativeTab(TabMinestuck.instance);
+	public static Block denseCloud = new BlockDenseCloud();
 	
 	//Ores
 	public static Block oreCruxite = new BlockCruxiteOre();
@@ -353,6 +354,7 @@ public class MinestuckBlocks
 		registry.register(pinkStoneCracked.setRegistryName("pink_cracked_stone"));
 		registry.register(pinkStoneMossy.setRegistryName("pink_moss_stone_bricks"));
 		registry.register(pinkStonePolish.setRegistryName("pink_polished_stone"));
+		registry.register(denseCloud.setRegistryName("dense_cloud"));
 		
 		registry.register(vein.setRegistryName("vein"));
 		registry.register(veinCorner.setRegistryName("vein_corner"));

@@ -360,6 +360,13 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemBlock(pinkStoneCracked));
 		registerItemBlock(registry, new ItemBlock(pinkStoneMossy));
 		registerItemBlock(registry, new ItemBlock(pinkStonePolish));
+		registerItemBlock(registry, new ItemBlock(denseCloud) {
+			@Override
+			public int getMetadata(int damage)
+			{
+				return damage;
+			}
+		});
 		
 		for(EnumSlabStairMaterial mat : EnumSlabStairMaterial.values())
 		{
