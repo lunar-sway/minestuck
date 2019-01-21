@@ -27,7 +27,7 @@ public class StructureTemple extends WorldGenerator implements IStructure
 {
 
 	public static int rotation = 0;
-	private static int lowestPointOffset = 8;
+	private static int lowestPointOffset = 16;
 	private static int craterRadius = 64;
 	
 	public StructureTemple() 
@@ -38,7 +38,7 @@ public class StructureTemple extends WorldGenerator implements IStructure
 	public boolean generate(World worldIn, Random rand, BlockPos pos) 
 	{
 		Debug.warnf("appearifying temple at: %s", pos);
-		worldIn.setBlockState(pos, MinestuckBlocks.templePlacer.getDefaultState());
+		//worldIn.setBlockState(pos, MinestuckBlocks.templePlacer.getDefaultState());
 		//this.generateStructure(worldIn, pos);
 		return true;
 	}
@@ -47,6 +47,7 @@ public class StructureTemple extends WorldGenerator implements IStructure
 	{
 		
 		rotation = new Random().nextInt(4);
+		
 		
 		MinecraftServer server = world.getMinecraftServer();
 		TemplateManager manager = worldServer.getStructureTemplateManager();
@@ -63,7 +64,7 @@ public class StructureTemple extends WorldGenerator implements IStructure
 				};
 		
 		Rotation rot = Rotation.NONE;
-		//for(int i = 0; i < rotation; i++)
+		for(int i = 0; i < rotation; i++)
 			rot = rot.add(Rotation.CLOCKWISE_90);
 		
 		
@@ -74,8 +75,65 @@ public class StructureTemple extends WorldGenerator implements IStructure
 		Template[] pillarTemplate = {manager.get(server, templateLoc[4]), manager.get(server, templateLoc[5])};
 		Template dersePillarTemplate = manager.get(server, templateLoc[6]);
 		
+		for(int i = 0; i < 16; i++)
+		{
+			world.setBlockState(pos.up(i), MinestuckBlocks.genericObject.getDefaultState());
+		}
+		
 		generateCrater(pos, world);
-		generateTemple(templeTemplate, settings, pos.add(-16,0,-16), world);
+		generateTemple(templeTemplate, settings, pos, world);
+		generatePillars(pillarTemplate, settings, pos, world);
+		generateDersePillar(dersePillarTemplate, settings, pos, world);
+	}
+	
+	public static void generateDersePillar(Template dersePillarTemplate, PlacementSettings settings, BlockPos pos, World world)
+	{
+		int distance = craterRadius + 16;
+
+		
+		switch(rotation)
+		{
+			default: 
+				pos = pos.add(0,0,-distance);
+				break;
+			case 1:  
+				pos = pos.add(-distance,0,0);
+				break;
+			case 2:  
+				pos = pos.add(0,0,distance);
+				break;
+			case 3:  
+				pos = pos.add(distance,0,0);
+				break;
+		}
+		
+		world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
+		dersePillarTemplate.addBlocksToWorldChunk(world, pos, settings);
+	}
+	
+	public static void generatePillars(Template[] pillarTemplate, PlacementSettings settings, BlockPos pos, World world)
+	{
+		int radius = (craterRadius * 3) / 4;
+		int pillarCount = new Random().nextInt(9);
+		pillarCount = pillarCount + 4 - (pillarCount % 2);
+		
+		//pillarCount = 12;
+		
+		for(int i = 0; i < pillarCount; i++)
+		{
+			double angle = (360 / pillarCount * i) * Math.PI / 180;	
+			int x = (int)(Math.cos(angle) * radius) - 2;
+			int z = (int)(Math.sin(angle) * radius) - 2;
+			
+			BlockPos piecePos = new BlockPos(pos.getX()+x,pos.getY() - lowestPointOffset,pos.getZ()+z);
+			
+			world.notifyBlockUpdate(piecePos, world.getBlockState(piecePos), world.getBlockState(piecePos), 3);			
+			pillarTemplate[0].addBlocksToWorldChunk(world, piecePos, settings);
+			piecePos = piecePos.up(30);
+			world.notifyBlockUpdate(piecePos, world.getBlockState(piecePos), world.getBlockState(piecePos), 3);
+			pillarTemplate[1].addBlocksToWorldChunk(world, piecePos, settings);
+			
+		}
 		
 	}
 	
@@ -85,16 +143,8 @@ public class StructureTemple extends WorldGenerator implements IStructure
 		
 		Debug.warn("generating crater...");
 		
-		for(int i = 0; i < 16; i++)
-		{
-			world.setBlockState(pos.up(i), MinestuckBlocks.genericObject.getDefaultState());
-		}
-		
 		for(int y = 0; y > -lowestPointOffset ; y--)
 		{
-			System.out.print("r: " + radius);
-			System.out.println(" y: " + (pos.getY() + y));
-			System.out.println((Math.pow(y,2) / lowestPointOffset));
 			for(int x = -radius; x < radius; x++)
 			{
 				
@@ -135,10 +185,18 @@ public class StructureTemple extends WorldGenerator implements IStructure
 			{
 				switch(rot)
 				{
-					default: piecePos = pos.add(pieceOffset[i].getX(), pieceOffset[i].getY(), pieceOffset[i].getZ()); break;
-					case CLOCKWISE_90: piecePos = pos.add(-pieceOffset[i].getZ(), pieceOffset[i].getY(), -pieceOffset[i].getX()); break;
-					case CLOCKWISE_180: piecePos = pos.add(-pieceOffset[i].getX(), pieceOffset[i].getY(), -pieceOffset[i].getZ()); break;
-					case COUNTERCLOCKWISE_90: piecePos = pos.add(pieceOffset[i].getZ(), pieceOffset[i].getY(), pieceOffset[i].getX()); break;
+					default: 
+						piecePos = pos.add(pieceOffset[i].getX()-16, pieceOffset[i].getY(), pieceOffset[i].getZ()-16);
+						break;
+					case CLOCKWISE_90: 
+						piecePos = pos.add(-pieceOffset[i].getZ()+16, pieceOffset[i].getY(), pieceOffset[i].getX()-16);
+						break;
+					case CLOCKWISE_180: 
+						piecePos = pos.add(-pieceOffset[i].getX()+16, pieceOffset[i].getY(), -pieceOffset[i].getZ()+16);
+						break;
+					case COUNTERCLOCKWISE_90: 
+						piecePos = pos.add(pieceOffset[i].getZ()-16, pieceOffset[i].getY(), -pieceOffset[i].getX()+16);
+						break;
 					
 				}
 				world.notifyBlockUpdate(piecePos, world.getBlockState(piecePos), world.getBlockState(piecePos), 3);
