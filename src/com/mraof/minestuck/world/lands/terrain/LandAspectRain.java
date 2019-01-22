@@ -31,7 +31,8 @@ import net.minecraft.util.math.Vec3d;
 
 public class LandAspectRain extends TerrainLandAspect 
 {
-	static Vec3d skyColor = new Vec3d(0.2D, 0.5D, 0.98D);
+	static Vec3d skyColor = new Vec3d(0.3D, 0.5D, 0.98D);
+	static Vec3d fogColor = new Vec3d(0.9D, 0.8D, 0.6D);
 	
 	//TODO:
 	//Pink stone brick temples		Monsters in these temples tend to guard living trees, Magic Beans, and Fertile Soil.
@@ -99,6 +100,12 @@ public class LandAspectRain extends TerrainLandAspect
 	
 	@Override
 	public Vec3d getFogColor() 
+	{
+		return fogColor;
+	}
+	
+	@Override
+	public Vec3d getSkyColor()
 	{
 		return skyColor;
 	}
