@@ -34,7 +34,8 @@ import net.minecraft.world.biome.Biome.SpawnListEntry;
 
 public class LandAspectRainbow extends TerrainLandAspect 
 {
-	static Vec3d skyColor = new Vec3d(0.0D, 0.6D, 0.8D);
+	static Vec3d fogColor = new Vec3d(0.0D, 0.6D, 0.8D);
+	static Vec3d skyColor = new Vec3d(0.9D, 0.6D, 0.8D);
 	
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
@@ -107,6 +108,12 @@ public class LandAspectRainbow extends TerrainLandAspect
 	
 	@Override
 	public Vec3d getFogColor() 
+	{
+		return fogColor;
+	}
+	
+	@Override
+	public Vec3d getSkyColor()
 	{
 		return skyColor;
 	}

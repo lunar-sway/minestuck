@@ -30,7 +30,7 @@ import net.minecraft.world.gen.feature.WorldGenBigMushroom;
 
 public class LandAspectFungi extends TerrainLandAspect 
 {
-	
+	static Vec3d fogColor = new Vec3d(0.69D, 0.76D, 0.61D);
 	static Vec3d skyColor = new Vec3d(0.69D, 0.76D, 0.61D);
 	
 	@Override
@@ -86,6 +86,12 @@ public class LandAspectFungi extends TerrainLandAspect
 	
 	@Override
 	public Vec3d getFogColor() 
+	{
+		return fogColor;
+	}
+	
+	@Override
+	public Vec3d getSkyColor()
 	{
 		return skyColor;
 	}

@@ -242,10 +242,10 @@ public class WorldProviderLands extends WorldProvider
 	
 	public void mergeFogColor(Vec3d fogColor, float strength)
 	{
-		double d1 = (this.skyColor.x + fogColor.x*strength)/(1 + strength);
-		double d2 = (this.skyColor.y + fogColor.y*strength)/(1 + strength);
-		double d3 = (this.skyColor.z + fogColor.z*strength)/(1 + strength);
-		this.skyColor = new Vec3d(d1, d2, d3);
+		double d1 = (this.fogColor.x + fogColor.x*strength)/(1 + strength);
+		double d2 = (this.fogColor.y + fogColor.y*strength)/(1 + strength);
+		double d3 = (this.fogColor.z + fogColor.z*strength)/(1 + strength);
+		this.fogColor = new Vec3d(d1, d2, d3);
 	}
 	
 	public Vec3d getFogColor()
