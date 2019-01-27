@@ -229,7 +229,8 @@ public class MinestuckModelManager
 		register(frenchFry);
 		register(strawberryChunk);
 		register(surpriseEmbryo);
-		
+		register(unknowableEgg);
+
 		register(threshDvd);
 		register(crewPoster);
 		register(sbahjPoster);

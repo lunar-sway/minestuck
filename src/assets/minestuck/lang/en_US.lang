@@ -64,6 +64,7 @@ commands.porkhollow.takeSuccess=Successfully took out %s boondollars from your p
 commands.porkhollow.notEnough=You don't have enough boondollars.
 
 subtitle.warhorn=Warhorn sounds
+subtitle.whispers=Spooky whispers
 
 computer.buttonClear=Clear message
 computer.buttonClose=Disconnect
@@ -1000,6 +1001,8 @@ item.rockCookie.name=Rock Cookie
 item.rockCookie.tooltip=It's as edible as a rock
 item.surpriseEmbryo.name=Kundler Shelled Surprise Embryo
 item.surpriseEmbryo.tooltip=Oh boy! You sure can't wait to find out what's contained inside the Surprise Embryo!
+item.unknowableEgg.name=The Egg of Unknowable, Horrible Truths
+item.unknowableEgg.tooltip=This egg somehow knows your name.
 item.surpriseEmbryo.message=WOW! NO WAY! You found a %s inside your Surprise Embryo!
 item.boondollars.name=Boondollars
 item.boondollars.amount=Amount: %s
