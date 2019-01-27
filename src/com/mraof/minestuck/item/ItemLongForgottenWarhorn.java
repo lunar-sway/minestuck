@@ -27,7 +27,7 @@ public class ItemLongForgottenWarhorn extends Item {
         Random rand = new Random();
         int duration = rand.nextInt(1200);
         int amplifier = rand.nextInt(8);
-        int durability = rand.nextInt(100) + 10;
+        int durability = rand.nextInt(15);
         PotionEffect[] effect = new PotionEffect[] {new PotionEffect(MobEffects.BLINDNESS, duration, amplifier),
                 new PotionEffect(MobEffects.WITHER, duration, amplifier),
                 new PotionEffect(MobEffects.POISON, duration, amplifier),
