@@ -311,6 +311,21 @@
                 },
                 {
                     "type": "item",
+                    "name": "minestuck:beef_sword",
+                    "weight": 4,
+                    "conditions": [
+                        {
+                            "condition": "minestuck:consort",
+                            "consort": "nakagator"
+                        },
+                        {
+                        	"condition": "minestuck:land_aspect",
+                        	"land_aspect": "pulse"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
                     "name": "minecraft:beetroot",
                     "weight": 8,
                     "functions": [
@@ -352,7 +367,7 @@
                 {
                     "type": "item",
                     "name": "minecraft:red_mushroom",
-                    "weight": 8,
+                    "weight": 4,
                     "functions": [
                         {
                             "function": "set_count",
@@ -365,14 +380,14 @@
                     "conditions": [
                         {
                             "condition": "minestuck:land_aspect",
-                            "land_aspect": "wood"
+                            "land_aspect": [ "wood", "fungi" ]
                         }
                     ]
                 },
                 {
                     "type": "item",
                     "name": "minecraft:brown_mushroom",
-                    "weight": 8,
+                    "weight": 4,
                     "functions": [
                         {
                             "function": "set_count",
@@ -385,7 +400,7 @@
                     "conditions": [
                         {
                             "condition": "minestuck:land_aspect",
-                            "land_aspect": "wood"
+                            "land_aspect": [ "wood", "fungi" ]
                         }
                     ]
                 },
@@ -460,31 +475,6 @@
                     ]
                 },
                 {
-                    "entryName": "salmon",
-                    "type": "item",
-                    "name": "minecraft:fish",
-                    "weight": 8,
-                    "functions": [
-                        {
-                            "function": "set_count",
-                            "count": {
-                                "min": 3,
-                                "max": 6
-                            }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 1
-                        }
-                    ],
-                    "conditions": [
-                        {
-                            "condition": "minestuck:land_aspect",
-                            "land_aspect": "sandstone"
-                        }
-                    ]
-                },
-                {
                     "type": "loot_table",
                     "name": "minestuck:gameplay/special/cold_cake",
                     "weight": 2,
@@ -492,6 +482,46 @@
                         {
                             "condition": "minestuck:land_aspect",
                             "land_aspect": "frost"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:fungal_spore",
+                    "weight": 10,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 8,
+                                "max": 12
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "fungi"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:sporeo",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "fungi"
                         }
                     ]
                 },
@@ -523,6 +553,86 @@
                         {
                             "condition": "minestuck:land_aspect",
                             "land_aspect": "rock"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:chorus_fruit",
+                    "weight": 5,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 8,
+                                "max": 12
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "end"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:strawberry_chunk",
+                    "weight": 5,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 8,
+                                "max": 12
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "flora"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:melon",
+                    "weight": 5,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 8,
+                                "max": 12
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "rain"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:bread",
+                    "weight": 5,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 8,
+                                "max": 12
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "rainbow"
                         }
                     ]
                 },

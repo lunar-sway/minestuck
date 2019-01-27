@@ -1,6 +1,4 @@
 {
-    "parent": "item/generated",
-    "textures": {
-        "layer0": "minestuck:items/chessboard"
-    }
+    "parent": "minestuck:block/chessboard"
 }
+

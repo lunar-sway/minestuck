@@ -1,9 +1,8 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.block.BlockMinestuckLog.BlockType;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.TabMinestuck;
+
 import net.minecraft.block.BlockLog;
-import net.minecraft.block.BlockLog.EnumAxis;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
@@ -25,7 +24,7 @@ public class BlockAspectLog extends BlockLog
 	public BlockAspectLog()
 	{
 		super();
-		setCreativeTab(MinestuckItems.tabMinestuck);
+		setCreativeTab(TabMinestuck.instance);
 		setDefaultState(blockState.getBaseState().withProperty(VARIANT, BlockType.ASPECT_BLOOD).withProperty(LOG_AXIS, BlockLog.EnumAxis.Y));
 		setUnlocalizedName("logAspect");
 	}

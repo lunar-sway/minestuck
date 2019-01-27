@@ -71,12 +71,13 @@ public class LandAspectShade extends TerrainLandAspect
 		
 		return list;
 	}
-
+	
 	@Override
-	public int getDayCycleMode() {
-		return 2;
+	public float getSkylightBase()
+	{
+		return 0F;
 	}
-
+	
 	@Override
 	public Vec3d getFogColor() 
 	{

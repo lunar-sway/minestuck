@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world;
 
+import com.mraof.minestuck.client.renderer.LandSkyRender;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
@@ -7,6 +8,7 @@ import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagList;
@@ -23,6 +25,10 @@ public class WorldProviderLands extends WorldProvider
 {
 	public ChunkProviderLands chunkProvider;
 	public LandAspectRegistry.AspectCombination landAspects;
+	public float skylightBase;
+	Vec3d skyColor;
+	Vec3d fogColor;
+	Vec3d cloudColor;
 	
 	@Override
 	public DimensionType getDimensionType()
@@ -31,26 +37,25 @@ public class WorldProviderLands extends WorldProvider
 	}
 	
 	@Override
-	public float calculateCelestialAngle(long par1, float par3)
+	public float getSunBrightnessFactor(float partialTicks)
 	{
-		if (chunkProvider != null) 
-		{
-			switch(chunkProvider.dayCycle) 
-			{
-			case (0):
-				return super.calculateCelestialAngle(par1,par3);
-			case (1):
-				return 1.0F;
-			case (2):
-				return 0.5F;
-			}
-			return 1.0F; //We should never reach this
-		}
-		else 
-		{
-			createChunkGenerator();
-			return this.calculateCelestialAngle(par1,par3);
-		}
+		float skylight = skylightBase;
+		skylight = (float)((double)skylight * (1.0D - (double)(world.getRainStrength(partialTicks) * 5.0F) / 16.0D));
+		skylight = (float)((double)skylight * (1.0D - (double)(world.getThunderStrength(partialTicks) * 5.0F) / 16.0D));
+		return skylight;
+	}
+	
+	@Override
+	public float getStarBrightness(float par1)
+	{
+		float f = 1 - skylightBase;
+		return f * f * 0.5F;
+	}
+	
+	@Override
+	public float getSunBrightness(float par1)
+	{
+		return this.getSunBrightnessFactor(par1) * 0.8F + 0.2F;
 	}
 	
 	@Override
@@ -136,24 +141,6 @@ public class WorldProviderLands extends WorldProvider
 	}
 	
 	@Override
-	public boolean isDaytime() {
-		if (chunkProvider != null) {
-			switch (chunkProvider.dayCycle) {
-			case (0):
-				return super.isDaytime();
-			case (1):
-				return true;
-			case (2):
-				return false;
-			}
-			return true; //We should never reach this
-		} else {
-			createChunkGenerator();
-			return this.isDaytime();
-		}
-	}
-
-	@Override
 	public boolean isSurfaceWorld()
 	{
 		return true;
@@ -166,8 +153,17 @@ public class WorldProviderLands extends WorldProvider
 		doesWaterVaporize = false;
 		if(chunkProvider == null)
 			createChunkGenerator();
-		this.biomeProvider = new WorldChunkManagerLands(world, chunkProvider.rainfall, chunkProvider.oceanChance, chunkProvider.roughChance);
+		this.biomeProvider = new BiomeProviderLands(world, chunkProvider.rainfall, chunkProvider.oceanChance, chunkProvider.roughChance);
 		this.nether = false;
+		
+		if(world.isRemote)
+			setSkyRenderer(new LandSkyRender(this));
+		
+		skylightBase = landAspects.aspectTerrain.getSkylightBase();
+		skyColor = landAspects.aspectTerrain.getSkyColor();
+		fogColor = landAspects.aspectTerrain.getFogColor();
+		cloudColor = landAspects.aspectTerrain.getCloudColor();
+		landAspects.aspectTitle.prepareWorldProvider(this);
 	}
 	
 	@Override
@@ -198,17 +194,21 @@ public class WorldProviderLands extends WorldProvider
 	}
 	
 	@Override
+	public Vec3d getSkyColor(Entity cameraEntity, float partialTicks)
+	{
+		return skyColor;
+	}
+	
+	@Override
 	public Vec3d getFogColor(float par1, float par2)
 	{
-		if(chunkProvider != null)
-		{
-			return chunkProvider.getFogColor();
-		}
-		else
-		{
-			Debug.debug("Getting superclass fog color");
-			return super.getFogColor(par1, par2);
-		}
+		return getFogColor();
+	}
+	
+	@Override
+	public Vec3d getCloudColor(float partialTicks)
+	{
+		return cloudColor;
 	}
 	
 	public World getWorld()
@@ -238,5 +238,18 @@ public class WorldProviderLands extends WorldProvider
 			return chunkProvider.villageHandler.findAndMarkNextVillage(player, type, tags);
 		Debug.warnf("Couldn't identify %s", type);
 		return null;
+	}
+	
+	public void mergeFogColor(Vec3d fogColor, float strength)
+	{
+		double d1 = (this.fogColor.x + fogColor.x*strength)/(1 + strength);
+		double d2 = (this.fogColor.y + fogColor.y*strength)/(1 + strength);
+		double d3 = (this.fogColor.z + fogColor.z*strength)/(1 + strength);
+		this.fogColor = new Vec3d(d1, d2, d3);
+	}
+	
+	public Vec3d getFogColor()
+	{
+		return this.fogColor;
 	}
 }

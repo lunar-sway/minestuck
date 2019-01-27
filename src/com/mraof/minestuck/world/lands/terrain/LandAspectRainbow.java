@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.mraof.minestuck.block.BlockMinestuckLeaves1;
-import com.mraof.minestuck.block.BlockMinestuckLog;
+import com.mraof.minestuck.block.BlockMinestuckLog1;
 import com.mraof.minestuck.block.BlockMinestuckPlanks;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.consort.EnumConsort;
@@ -13,8 +13,8 @@ import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.gen.feature.WorldGenRainbowTree;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.MesaDecorator;
-import com.mraof.minestuck.world.lands.decorator.WorldgenTreeDecorator;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
+import com.mraof.minestuck.world.lands.decorator.WorldgenTreeDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.gen.ILandTerrainGen;
 import com.mraof.minestuck.world.lands.gen.SpecialTerrainGen;
@@ -26,7 +26,6 @@ import net.minecraft.block.BlockNewLog;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockStone;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
@@ -35,7 +34,8 @@ import net.minecraft.world.biome.Biome.SpawnListEntry;
 
 public class LandAspectRainbow extends TerrainLandAspect 
 {
-	static Vec3d skyColor = new Vec3d(0.0D, 0.6D, 0.8D);
+	static Vec3d fogColor = new Vec3d(0.0D, 0.6D, 0.8D);
+	static Vec3d skyColor = new Vec3d(0.9D, 0.6D, 0.8D);
 	
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
@@ -45,7 +45,7 @@ public class LandAspectRainbow extends TerrainLandAspect
 		registry.setBlockState("surface", Blocks.WOOL.getDefaultState());
 		registry.setBlockState("ocean", MinestuckBlocks.blockWatercolors.getDefaultState());
 		registry.setBlockState("river", MinestuckBlocks.blockWatercolors.getDefaultState());
-		registry.setBlockState("structure_primary", MinestuckBlocks.log.getDefaultState().withProperty(BlockMinestuckLog.VARIANT, BlockMinestuckLog.BlockType.RAINBOW).withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE));
+		registry.setBlockState("structure_primary", MinestuckBlocks.log.getDefaultState().withProperty(BlockMinestuckLog1.VARIANT, BlockMinestuckLog1.BlockType.RAINBOW).withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE));
 		registry.setBlockState("structure_primary_decorative", Blocks.LOG2.getDefaultState().withProperty(BlockNewLog.VARIANT, BlockPlanks.EnumType.ACACIA));
 		registry.setBlockState("structure_primary_stairs", Blocks.DARK_OAK_STAIRS.getDefaultState());
 		registry.setBlockState("structure_secondary", MinestuckBlocks.planks.getDefaultState().withProperty(BlockMinestuckPlanks.VARIANT, BlockMinestuckPlanks.BlockType.RAINBOW));
@@ -107,13 +107,13 @@ public class LandAspectRainbow extends TerrainLandAspect
 	}
 	
 	@Override
-	public int getDayCycleMode()
+	public Vec3d getFogColor() 
 	{
-		return 1;
+		return fogColor;
 	}
 	
 	@Override
-	public Vec3d getFogColor() 
+	public Vec3d getSkyColor()
 	{
 		return skyColor;
 	}
@@ -133,6 +133,6 @@ public class LandAspectRainbow extends TerrainLandAspect
 	@Override
 	public EnumConsort getConsortType()
 	{
-		return EnumConsort.SALAMANDER;
+		return EnumConsort.TURTLE;
 	}
 }

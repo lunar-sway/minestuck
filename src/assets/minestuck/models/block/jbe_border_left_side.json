@@ -1,0 +1,35 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "minestuck:machines/jumper_block_extension/top",
+		"1": "minestuck:machines/jumper_block_extension/top_side",
+		"2": "minestuck:machines/jumper_block_extension/inside",
+		"3": "minestuck:machines/jumper_block_extension/down_center"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [16, 6, 16],
+			"faces": {
+				"north": {"uv": [0, 10, 16, 16], "texture": "#2"},
+				"east": {"uv": [0, 10, 16, 16], "texture": "#2"},
+				"south": {"uv": [0, 10, 16, 16], "texture": "#2"},
+				"west": {"uv": [0, 10, 16, 16], "texture": "#2"},
+				"up": {"uv": [0, 0, 16, 16], "rotation": 270, "texture": "#0"},
+				"down": {"uv": [0, 0, 16, 16], "rotation": 90, "texture": "#3"}
+			}
+		},
+		{
+			"from": [0, 6, 0],
+			"to": [4, 8, 16],
+			"faces": {
+				"north": {"uv": [12, 8, 16, 10], "texture": "#2"},
+				"east": {"uv": [0, 0, 16, 2], "texture": "#1"},
+				"south": {"uv": [12, 8, 16, 10], "texture": "#2"},
+				"west": {"uv": [0, 8, 16, 10], "texture": "#2"},
+				"up": {"uv": [0, 0, 16, 4], "rotation": 270, "texture": "#0"},
+				"down": {"uv": [0, 0, 4, 16], "texture": "#3"}
+			}
+		}
+	]
+}

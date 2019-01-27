@@ -68,9 +68,9 @@ public class LandAspectHeat extends TerrainLandAspect
 	}
 	
 	@Override
-	public int getDayCycleMode()
+	public float getSkylightBase()
 	{
-		return 0;
+		return 1/2F;
 	}
 	
 	@Override

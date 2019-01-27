@@ -1,0 +1,23 @@
+{
+	"variants": {
+		"facing=south,part=upgraded_pad": { "model":"minestuck:alchemiter_totem_pad_totem" },
+        "facing=south,part=blender":    { "model":"minestuck:alchemiter_upgrade_blender" },
+        "facing=south,part=cruxtruder":        { "model":"minestuck:alchemiter_upgrade_cruxtruder" },
+        "facing=south,part=placeholder": { "model":"minestuck:alchemiter_upgrade_placeholder" },
+        
+        "facing=west,part=upgraded_pad":   { "model":"minestuck:alchemiter_totem_pad_totem", "y":90  },
+        "facing=west,part=blender":    { "model":"minestuck:alchemiter_upgrade_blender", "y":90 },
+        "facing=west,part=cruxtruder":        { "model":"minestuck:alchemiter_upgrade_cruxtruder", "y":90 },
+        "facing=west,part=placeholder": { "model":"minestuck:alchemiter_upgrade_placeholder", "y":90 },
+        
+        "facing=north,part=upgraded_pad":   { "model":"minestuck:alchemiter_totem_pad_totem", "y":180  },
+        "facing=north,part=blender":    { "model":"minestuck:alchemiter_upgrade_blender", "y":180 },
+        "facing=north,part=cruxtruder":        { "model":"minestuck:alchemiter_upgrade_cruxtruder", "y":180 },
+        "facing=north,part=placeholder": { "model":"minestuck:alchemiter_upgrade_placeholder", "y":180 },
+        
+        "facing=east,part=upgraded_pad":   { "model":"minestuck:alchemiter_totem_pad_totem", "y":270  },
+        "facing=east,part=blender":    { "model":"minestuck:alchemiter_upgrade_blender", "y":270 },
+        "facing=east,part=cruxtruder":        { "model":"minestuck:alchemiter_upgrade_cruxtruder", "y":270 },
+        "facing=east,part=placeholder": { "model":"minestuck:alchemiter_upgrade_placeholder", "y":270 }
+	}
+}

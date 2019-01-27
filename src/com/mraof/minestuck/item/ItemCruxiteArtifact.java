@@ -325,15 +325,19 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 				//We check if the old list contains the entity, because that means it was there before the entities were teleported and blocks removed.
 				// This can be caused by them being outside the Entry radius but still within the AABB,
 				// Or by the player being in creative mode, or having entryCrater disabled, etc.
-				// Ultimately, this means that the entity has already been taken care of as much as it needs to be, and no further action is required.
+				// Ultimately, this means that the entity has already been taken care of as much as it needs to be, and it is inappropriate to remove the entity.
 				removalList.removeAll(list);
 				
 				iterator = removalList.iterator();
-				while (iterator.hasNext())
+				if(MinestuckConfig.entryCrater)
 				{
-					if(MinestuckConfig.entryCrater)
+					while (iterator.hasNext())
+					{
 						iterator.next().setDead();
-					else
+					}
+				} else
+				{
+					while (iterator.hasNext())
 					{
 						Entity e = iterator.next();
 						if(e instanceof EntityItem)

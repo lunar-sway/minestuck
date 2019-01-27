@@ -2,6 +2,7 @@ package com.mraof.minestuck.network.skaianet;
 
 import com.google.common.collect.Lists;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
@@ -14,9 +15,11 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
@@ -143,6 +146,8 @@ public class SessionHandler
 	 */
 	public static Session getPlayerSession(PlayerIdentifier player)
 	{
+		if(singleSession)
+			return sessions.get(0);
 		for(Session s : sessions)
 			if(s.containsPlayer(player))
 				return s;
@@ -420,6 +425,7 @@ public class SessionHandler
 				throw new CommandException(merge);
 		}
 		
+		boolean updateLandChain = false;
 		if(cs != null)
 		{
 			if(cs.isActive)
@@ -427,6 +433,7 @@ public class SessionHandler
 			cs.serverIdentifier = IdentifierHandler.nullIdentifier;
 			if(sender.sendCommandFeedback())
 				sender.sendMessage(new TextComponentString(server.getUsername()+"'s old client player "+cs.getClientIdentifier().getUsername()+" is now without a server player.").setStyle(new Style().setColor(TextFormatting.YELLOW)));
+			updateLandChain |= cs.enteredGame();
 		}
 		
 		if(cc != null && cc.isActive)
@@ -444,6 +451,7 @@ public class SessionHandler
 				cc.clientIdentifier = client;
 				cc.serverIdentifier = server;
 				sc.connections.add(cc);
+				cc.isActive = false;
 				SburbHandler.onConnectionCreated(cc);
 			}
 			cc.isMain = true;
@@ -457,11 +465,113 @@ public class SessionHandler
 				cc.server = connection.server;
 				cc.serverIdentifier = server;
 			} else cc.serverIdentifier = server;
+			updateLandChain |= cc.enteredGame();
 		}
 		
 		SkaianetHandler.updateAll();
+		if(updateLandChain)
+			SkaianetHandler.sendLandChainUpdate();
 		
 		CommandBase.notifyCommandListener(sender, command, "commands.sburbServer.success", client.getUsername(), server.getUsername());
+	}
+	
+	public static void createDebugLandsChain(List<LandAspectRegistry.AspectCombination> landspects, EntityPlayer player) throws CommandException
+	{
+		PlayerIdentifier identifier = IdentifierHandler.encode(player);
+		Session s = getPlayerSession(identifier);
+		if(s != null && s.locked)
+			throw new CommandException("The session is locked, and can no longer be modified!");
+		
+		SburbConnection cc = SkaianetHandler.getMainConnection(identifier, true);
+		if(s == null || cc == null || !cc.enteredGame())
+			throw new CommandException("You should enter before using this.");
+		if(cc.isActive)
+			SkaianetHandler.closeConnection(identifier, cc.getServerIdentifier(), true);
+		
+		SburbConnection cs = SkaianetHandler.getMainConnection(identifier, false);
+		if(cs != null) {
+			if(cs.isActive)
+				SkaianetHandler.closeConnection(identifier, cs.getClientIdentifier(), false);
+			cs.serverIdentifier = IdentifierHandler.nullIdentifier;
+			if(player.sendCommandFeedback())
+				player.sendMessage(new TextComponentString(identifier.getUsername()+"'s old client player "+cs.getClientIdentifier().getUsername()+" is now without a server player.").setStyle(new Style().setColor(TextFormatting.YELLOW)));
+		}
+		
+		SburbConnection c = cc;
+		int i = 0;
+		for(; i < landspects.size(); i++)
+		{
+			LandAspectRegistry.AspectCombination land = landspects.get(i);
+			if(land == null)
+				break;
+			PlayerIdentifier fakePlayer = IdentifierHandler.createNewFakeIdentifier();
+			c.serverIdentifier = fakePlayer;
+			
+			c = new SburbConnection();
+			c.clientIdentifier = fakePlayer;
+			c.serverIdentifier = IdentifierHandler.nullIdentifier;
+			c.isActive = false;
+			c.isMain = true;
+			c.enteredGame = true;
+			c.clientHomeLand = createDebugLand(land);
+			
+			s.connections.add(c);
+			SkaianetHandler.connections.add(c);
+			SburbHandler.onConnectionCreated(c);
+			
+		}
+		
+		if(i == landspects.size())
+			c.serverIdentifier = identifier;
+		else
+		{
+			PlayerIdentifier lastIdentifier = identifier;
+			for(i = landspects.size() - 1; i >= 0; i++)
+			{
+				LandAspectRegistry.AspectCombination land = landspects.get(i);
+				if(land == null)
+					break;
+				PlayerIdentifier fakePlayer = IdentifierHandler.createNewFakeIdentifier();
+				
+				c = new SburbConnection();
+				c.clientIdentifier = fakePlayer;
+				c.serverIdentifier = lastIdentifier;
+				c.isActive = false;
+				c.isMain = true;
+				c.enteredGame = true;
+				c.clientHomeLand = createDebugLand(land);
+				
+				s.connections.add(c);
+				SkaianetHandler.connections.add(c);
+				SburbHandler.onConnectionCreated(c);
+				
+				lastIdentifier = fakePlayer;
+			}
+		}
+		
+		SkaianetHandler.updateAll();
+		MinestuckPlayerTracker.updateLands();
+		SkaianetHandler.sendLandChainUpdate();
+	}
+	
+	private static int createDebugLand(LandAspectRegistry.AspectCombination landspect) throws CommandException
+	{
+		int landId = MinestuckDimensionHandler.landDimensionIdStart;
+		while (true)
+		{
+			if (!DimensionManager.isDimensionRegistered(landId))
+			{
+				break;
+			}
+			else
+			{
+				landId++;
+			}
+		}
+		
+		MinestuckDimensionHandler.registerLandDimension(landId, landspect);
+		MinestuckDimensionHandler.setSpawn(landId, new BlockPos(0,0,0));
+		return landId;
 	}
 	
 	public static List<String> getSessionNames()

@@ -22,7 +22,7 @@ import java.util.Random;
 
 public class BlockUraniumOre extends Block 
 {
-	public static final PropertyInteger BLOCK_TYPE = PropertyInteger.create("block_type", 0, 5);
+	public static final PropertyInteger BLOCK_TYPE = PropertyInteger.create("block_type", 0, 6);
 	
 	public BlockUraniumOre()
 	{
@@ -107,6 +107,8 @@ public class BlockUraniumOre extends Block
 			meta = 4;
 		else if(ground.getBlock() == Blocks.END_STONE)
 			meta = 5;
+		else if(ground.getBlock() == MinestuckBlocks.pinkStoneSmooth)
+			meta = 6;
 		
 		return MinestuckBlocks.oreUranium.getBlockState().getBaseState().withProperty(BLOCK_TYPE, meta);
 	}
@@ -114,7 +116,7 @@ public class BlockUraniumOre extends Block
 	@Override
 	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items)
 	{
-		for(int i = 0; i < 6; i++)
+		for(int i = 0; i < 7; i++)
 			items.add(new ItemStack(this, 1, i));
 	}
 	

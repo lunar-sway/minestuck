@@ -131,7 +131,7 @@ public class MinestuckDimensionHandler
 			lands.put(dimensionId, landAspects);
 			DimensionManager.registerDimension(dimensionId, landDimensionType);
 		}
-		else FMLLog.warning("[Minestuck] Did not register land dimension with id %d.", dimensionId);
+		else Debug.warnf("Did not register land dimension with id %d. Appears to already be registered.", dimensionId);
 	}
 	
 	public static LandAspectRegistry.AspectCombination getAspects(int dimensionId)
@@ -140,7 +140,7 @@ public class MinestuckDimensionHandler
 		
 		if(aspects == null)
 		{
-			FMLLog.warning("[Minestuck] Tried to access land aspect for dimension %d, but didn't find any!", dimensionId);
+			Debug.warnf("Tried to access land aspect for dimension %d, but didn't find any!", dimensionId);
 		}
 		
 		return aspects;

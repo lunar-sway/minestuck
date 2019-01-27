@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "minestuck:stairs",
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minestuck:planks",
+      "data": 12
+    }
+  },
+  "result": {
+    "item": "minestuck:rainbow_planks_stairs",
+    "count": 4
+  }
+}

@@ -27,23 +27,25 @@ public class LandAspectRegistry
 	private static Hashtable<String, TitleLandAspect> landNames2 = new Hashtable<String,TitleLandAspect>();
 	private static TitleLandAspect nullAspect = new LandAspectNull();
 	public static TitleLandAspect frogAspect = new LandAspectFrogs();
+	public static TitleLandAspect bucketAspect = new LandAspectBuckets();
 	
 	private Random random;
 	
 	public static void registerLandAspects()
 	{
+		registerLandAspect(new LandAspectForest());
 		registerLandAspect(new LandAspectFrost());
+		registerLandAspect(new LandAspectFungi());
 		registerLandAspect(new LandAspectHeat());
-		registerLandAspect(new LandAspectShade());
+		registerLandAspect(new LandAspectRock());
 		registerLandAspect(new LandAspectSand());
 		registerLandAspect(new LandAspectSandstone());
-		registerLandAspect(new LandAspectForest());
-		registerLandAspect(new LandAspectRock());
+		registerLandAspect(new LandAspectShade());
 		registerLandAspect(new LandAspectWood());
-		//registerLandAspect(new LandAspectRain());
-		//registerLandAspect(new LandAspectRainbow());
-		//registerLandAspect(new LandAspectFlora());
-		//registerLandAspect(new LandAspectEnd());
+		registerLandAspectHidden(new LandAspectRain());
+		registerLandAspect(new LandAspectRainbow());
+		registerLandAspect(new LandAspectFlora());
+		registerLandAspect(new LandAspectEnd());
 		
 		registerLandAspect(new LandAspectWind(), EnumAspect.BREATH);
 		registerLandAspect(new LandAspectLight(), EnumAspect.LIGHT);
@@ -52,14 +54,17 @@ public class LandAspectRegistry
 		registerLandAspect(new LandAspectThunder(), EnumAspect.DOOM);
 		registerLandAspect(new LandAspectPulse(), EnumAspect.BLOOD);
 		registerLandAspect(new LandAspectThought(), EnumAspect.MIND);
-		registerLandAspect(new LandAspectBuckets(), EnumAspect.SPACE);	//buckets -> containers -> space, right?
+		//registerLandAspect(new LandAspectBuckets(), EnumAspect.SPACE);
+		registerLandAspect(new LandAspectFrogs(), EnumAspect.SPACE);
 		registerLandAspect(new LandAspectCake(), EnumAspect.HEART);
 		registerLandAspect(new LandAspectRabbits(), EnumAspect.LIFE);
 		registerLandAspect(new LandAspectMonsters(), EnumAspect.RAGE);
 		registerLandAspect(new LandAspectTowers(), EnumAspect.HOPE);
 		
+
 		landNames2.put(nullAspect.getPrimaryName(), nullAspect);
 		landNames2.put(frogAspect.getPrimaryName(), frogAspect);
+		landNames2.put(bucketAspect.getPrimaryName(), bucketAspect);
 	}
 	
 	public LandAspectRegistry(long seed)
@@ -74,6 +79,13 @@ public class LandAspectRegistry
 	public static void registerLandAspect(TerrainLandAspect newAspect)
 	{
 		landAspects.add(newAspect);
+		landNames.put(newAspect.getPrimaryName(),newAspect);
+		for(ILandAspect variant : newAspect.getVariations())
+			landNames.put(variant.getPrimaryName(), (TerrainLandAspect) variant);
+	}
+	
+	public static void registerLandAspectHidden(TerrainLandAspect newAspect)
+	{
 		landNames.put(newAspect.getPrimaryName(),newAspect);
 		for(ILandAspect variant : newAspect.getVariations())
 			landNames.put(variant.getPrimaryName(), (TerrainLandAspect) variant);
@@ -264,11 +276,6 @@ public class LandAspectRegistry
 			else
 			{
 				newLandId++;
-			}
-			if(newLandId > Byte.MAX_VALUE)
-			{
-				FMLLog.warning("[Minestuck] Ran out of land id's!");
-				return player.dimension;
 			}
 		}
 		
