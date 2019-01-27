@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "block_type=normal": { "model": "minestuck:dense_cloud" },
+        "block_type=bright": { "model": "minestuck:dense_cloud_bright" }
+    }
+}

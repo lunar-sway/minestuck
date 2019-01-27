@@ -115,8 +115,12 @@ public class SburbHandler
 			for(SburbConnection c : session.connections)
 				if(!c.getClientIdentifier().equals(player) && c.enteredGame)
 				{
-					usedTitles.add(MinestuckPlayerData.getTitle(c.getClientIdentifier()));
-					playersEntered.add(c.getClientIdentifier());
+					Title playerTitle = MinestuckPlayerData.getTitle(c.getClientIdentifier());
+					if(playerTitle != null)
+					{
+						usedTitles.add(playerTitle);
+						playersEntered.add(c.getClientIdentifier());
+					} else Debug.warnf("Player %s has entered, but lacks a title. This is not good!", c.getClientIdentifier().getUsername());
 				}
 			
 			for(Map.Entry<PlayerIdentifier, PredefineData> entry : session.predefinedPlayers.entrySet())

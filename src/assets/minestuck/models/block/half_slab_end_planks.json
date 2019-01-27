@@ -1,0 +1,8 @@
+{
+    "parent": "block/half_slab",
+    "textures": {
+        "bottom": "minestuck:blocks/end_planks",
+        "top": "minestuck:blocks/end_planks",
+        "side": "minestuck:blocks/end_planks"
+    }
+}

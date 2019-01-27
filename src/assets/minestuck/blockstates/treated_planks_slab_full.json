@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "normal": { "model": "minestuck:treated_planks" },
+        "all":    { "model": "minestuck:treated_planks" }
+    }
+}

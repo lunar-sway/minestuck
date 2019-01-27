@@ -23,7 +23,7 @@ public class TileEntityCrockerMachine extends TileEntityMachine
 	
 	public GristSet getGristWidgetResult()
 	{
-		ItemStack item = AlchemyRecipes.getDecodedItem(inv.get(0));
+		ItemStack item = AlchemyRecipes.getDecodedItem(inv.get(0), true);
 		GristSet gristSet = GristRegistry.getGristConversion(item);
 		if(inv.get(0).getItem() != MinestuckItems.captchaCard || AlchemyRecipes.isPunchedCard(inv.get(0))
 				|| item.getItem() == MinestuckItems.captchaCard || gristSet == null)
@@ -85,7 +85,7 @@ public class TileEntityCrockerMachine extends TileEntityMachine
 				}
 				else
 				{
-					return (!itemstack.getTagCompound().getBoolean("punched")
+					return (!itemstack.getTagCompound().getBoolean("punched") && itemstack.getTagCompound().getInteger("contentSize") > 0
 					&& AlchemyRecipes.getDecodedItem(itemstack).getItem() != MinestuckItems.captchaCard);
 				}
 			default:

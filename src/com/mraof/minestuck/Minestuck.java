@@ -121,6 +121,7 @@ public class Minestuck
 		event.registerServerCommand(new CommandConsortReply());
 		event.registerServerCommand(new CommandToStructure());
 		event.registerServerCommand(new CommandPorkhollow());
+		event.registerServerCommand(new CommandLandDebug());
 		
 		worldSeed = event.getServer().worlds[0].getSeed();
 		ServerEventHandler.lastDay = event.getServer().worlds[0].getWorldTime() / 24000L;

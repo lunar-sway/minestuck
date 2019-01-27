@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "minestuck:stairs",
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minestuck:chalk"
+    }
+  },
+  "result": {
+    "item": "minestuck:chalk_stairs",
+    "count": 4
+  }
+}

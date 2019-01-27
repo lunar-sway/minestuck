@@ -1,0 +1,6 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "all": "minestuck:blocks/coal_ore_pink_stone"
+    }
+}

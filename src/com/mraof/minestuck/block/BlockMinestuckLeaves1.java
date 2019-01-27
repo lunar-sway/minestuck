@@ -50,7 +50,8 @@ public class BlockMinestuckLeaves1 extends BlockMinestuckLeaves
 	@Override
 	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items)
 	{
-		for (BlockType blocktype : BlockType.values())
+//		for (BlockType blocktype : BlockType.values())		//keyword
+		BlockType blocktype = BlockType.RAINBOW;
 		{
 			items.add(new ItemStack(this, 1, blocktype.ordinal()));
 		}
@@ -124,15 +125,10 @@ public class BlockMinestuckLeaves1 extends BlockMinestuckLeaves
 	}
 
 	@Override
-	public Item getItemDropped(IBlockState state, Random rand, int fortune)
-	{
-		Block drop = MinestuckBlocks.aspectSapling;
-		if(state.getValue(VARIANT)==BlockType.RAINBOW)
-		{
-			drop = MinestuckBlocks.rainbowSapling;
-		}
-		return Item.getItemFromBlock(drop);
-	}
+    public Item getItemDropped(IBlockState state, Random rand, int fortune)
+    {
+        return ItemStack.EMPTY.getItem();
+    }
 	
 	@Override
     public int damageDropped(IBlockState state)
@@ -148,4 +144,21 @@ public class BlockMinestuckLeaves1 extends BlockMinestuckLeaves
 	{
 		return new BlockStateContainer(this, new IProperty[] {DECAYABLE, CHECK_DECAY, VARIANT});
 	}
+	
+	@Override
+    @SideOnly(Side.CLIENT)
+    public BlockRenderLayer getBlockLayer() {
+             return Blocks.LEAVES.getBlockLayer();
+    }
+
+    @Override
+    public boolean isOpaqueCube(IBlockState state)
+    {
+                        return Blocks.LEAVES.isOpaqueCube(state);
+    }
+    
+    @Override
+    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+        return true;
+    }
 }

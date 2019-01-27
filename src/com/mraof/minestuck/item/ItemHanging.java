@@ -22,7 +22,7 @@ public abstract class ItemHanging extends Item
 		
 		if (facing != EnumFacing.DOWN && facing != EnumFacing.UP && player.canPlayerEdit(blockPos, facing, stack))
 		{
-			EntityHanging entityhanging = this.createEntity(worldIn, blockPos, facing, stack);
+			EntityHanging entityhanging = this.createEntity(worldIn, blockPos, facing, stack, stack.getMetadata());
 			
 			if (entityhanging != null && entityhanging.onValidSurface())
 			{
@@ -43,5 +43,5 @@ public abstract class ItemHanging extends Item
 		}
 	}
 	
-	public abstract EntityHanging createEntity(World worldIn, BlockPos pos, EnumFacing facing, ItemStack stack);
+	public abstract EntityHanging createEntity(World worldIn, BlockPos pos, EnumFacing facing, ItemStack stack, int meta);
 }

@@ -1,0 +1,36 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "minestuck:machines/jumper_block_extension/down_center",
+		"1": "minestuck:machines/jumper_block_extension/top",
+		"2": "minestuck:machines/jumper_block_extension/inside",
+		"3": "minestuck:machines/jumper_block_extension/plug",
+		"particle": "minestuck:machines/jumper_block_extension/down_center"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [16, 6, 16],
+			"faces": {
+				"north": {"uv": [0, 10, 16, 16], "texture": "#2"},
+				"east": {"uv": [0, 10, 16, 16], "texture": "#2"},
+				"south": {"uv": [0, 10, 16, 16], "texture": "#2"},
+				"west": {"uv": [0, 10, 16, 16], "texture": "#2"},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#1", "rotation": 180},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#0", "rotation": 180}
+			}
+		},
+		{
+			"from": [-8, 5, -3],
+			"to": [4, 8, 3],
+			"faces": {
+				"north": {"uv": [6, 0, 9, 11], "texture": "#3", "rotation": 90},
+				"east": {"uv": [0, 12, 6, 15], "texture": "#3"},
+				"south": {"uv": [6, 0, 9, 12], "texture": "#3", "rotation": 90},
+				"west": {"uv": [0, 12, 6, 15], "texture": "#3"},
+				"up": {"uv": [0, 0, 6, 12], "texture": "#3", "rotation": 90},
+				"down": {"uv": [0, 0, 6, 12], "texture": "#3", "rotation": 90}
+			}
+		}
+	]
+}

@@ -15,6 +15,9 @@ import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
 import com.mraof.minestuck.world.lands.decorator.SurfaceMushroomGenerator;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 import com.mraof.minestuck.world.lands.decorator.WorldGenDecorator;
+import com.mraof.minestuck.world.lands.structure.GateStructurePillar;
+import com.mraof.minestuck.world.lands.structure.IGateStructure;
+import com.mraof.minestuck.world.lands.structure.GateStructureMushroom;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
 import net.minecraft.block.BlockColored;
@@ -27,7 +30,7 @@ import net.minecraft.world.gen.feature.WorldGenBigMushroom;
 
 public class LandAspectFungi extends TerrainLandAspect 
 {
-	
+	static Vec3d fogColor = new Vec3d(0.69D, 0.76D, 0.61D);
 	static Vec3d skyColor = new Vec3d(0.69D, 0.76D, 0.61D);
 	
 	@Override
@@ -80,14 +83,15 @@ public class LandAspectFungi extends TerrainLandAspect
 		
 		return list;
 	}
-
-	@Override
-	public int getDayCycleMode() {
-		return 2;
-	}
-
+	
 	@Override
 	public Vec3d getFogColor() 
+	{
+		return fogColor;
+	}
+	
+	@Override
+	public Vec3d getSkyColor()
 	{
 		return skyColor;
 	}
@@ -96,6 +100,12 @@ public class LandAspectFungi extends TerrainLandAspect
 	public int getWeatherType()
 	{
 		return 1;
+	}
+	
+	@Override
+	public IGateStructure getGateStructure()
+	{
+		return new GateStructureMushroom();
 	}
 	
 	@Override

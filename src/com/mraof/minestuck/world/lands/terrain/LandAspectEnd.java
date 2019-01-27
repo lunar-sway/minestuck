@@ -1,19 +1,14 @@
 package com.mraof.minestuck.world.lands.terrain;
 
-import com.mraof.minestuck.block.BlockMinestuckStone;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.gen.feature.WorldGenEndTree;
-import com.mraof.minestuck.world.lands.decorator.FireFieldDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
-import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 import com.mraof.minestuck.world.lands.decorator.WorldgenTreeDecorator;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
-import net.minecraft.block.BlockChorusFlower;
 import net.minecraft.block.BlockColored;
 import net.minecraft.block.BlockDirt;
 import net.minecraft.block.BlockRotatedPillar;
@@ -28,7 +23,8 @@ import java.util.List;
 
 public class LandAspectEnd extends TerrainLandAspect 
 {
-	static Vec3d skyColor = new Vec3d(0.0D, 0.4D, 0.2D);
+	static Vec3d fogColor = new Vec3d(0.0D, 0.4D, 0.2D);
+	static Vec3d skyColor = new Vec3d(0.3D, 0.1D, 0.5D);
 	
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
@@ -78,13 +74,13 @@ public class LandAspectEnd extends TerrainLandAspect
 	}
 	
 	@Override
-	public int getDayCycleMode()
+	public Vec3d getFogColor() 
 	{
-		return 0;
+		return fogColor;
 	}
 	
 	@Override
-	public Vec3d getFogColor() 
+	public Vec3d getSkyColor()
 	{
 		return skyColor;
 	}

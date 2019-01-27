@@ -1,0 +1,24 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "minestuck:machines/jumper_block_extension/down_small_corner",
+		"1": "minestuck:machines/jumper_block_extension/top_corner",
+		"2": "minestuck:machines/jumper_block_extension/inside",
+		"3": "minestuck:machines/jumper_block_extension/side",
+		"particle": "minestuck:machines/jumper_block_extension/down_small_corner"
+	},
+	"elements": [
+		{
+			"from": [6, 0, 4],
+			"to": [16, 8, 16],
+			"faces": {
+				"north": {"uv": [0, 8, 10, 16], "texture": "#3"},
+				"east": {"uv": [0, 8, 12, 16], "texture": "#2"},
+				"south": {"uv": [0, 8, 10, 16], "texture": "#2"},
+				"west": {"uv": [0, 8, 12, 16], "texture": "#3"},
+				"up": {"uv": [0, 0, 10, 12], "texture": "#1"},
+				"down": {"uv": [0, 4, 10, 16], "texture": "#0"}
+			}
+		}
+	]
+}

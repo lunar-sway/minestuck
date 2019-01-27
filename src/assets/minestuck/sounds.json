@@ -14,5 +14,13 @@
             "stream": true
         }
       ]
+    },
+    "record.retroBattle": {
+      "sounds": [
+        {
+            "name": "minestuck:records/retro_battle_theme",
+            "stream": true
+        }
+      ]
     }
 }

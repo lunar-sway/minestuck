@@ -108,7 +108,7 @@ public abstract class MessageType
 			} else if(args[i].equals("consortSound2"))
 			{
 				obj[i] = new TextComponentTranslation("consort.sound2." + s);
-			} else if(args[i].equals("consort"))
+			} else if(args[i].equals("consortType"))
 			{
 				obj[i] = new TextComponentTranslation("entity." + s + ".name");
 			} else if(args[i].equals("consortTypes"))
@@ -172,6 +172,17 @@ public abstract class MessageType
 		public String getString()
 		{
 			return unlocalizedMessage;
+		}
+		
+		/**
+		 * Like getMessage(), but does not set the consort's message tag for the player.
+		 * Useful for comparing values in post-localized, post-formatted messages.
+		 * Note that this may format the text with information subject to change, like the name of the current Land.
+		 * @return The value getMessage() would return
+		 */
+		public ITextComponent getMessageForTesting(EntityConsort consort, EntityPlayer player)
+		{
+			return createMessage(consort, player, unlocalizedMessage, args, true);
 		}
 		
 		@Override

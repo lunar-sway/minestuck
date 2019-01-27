@@ -42,6 +42,7 @@ public class ConsortRewardHandler
 		ConsortRewardHandler.registerPrice(new ItemStack(hotCake), 400, 400);
 		ConsortRewardHandler.registerPrice(new ItemStack(redCake), 400, 400);
 		ConsortRewardHandler.registerPrice(new ItemStack(rockCookie), 15, 20);
+		ConsortRewardHandler.registerPrice(new ItemStack(strawberryChunk), 100, 150);
 		ConsortRewardHandler.registerPrice(new ItemStack(beverage, 1, 0), 200, 200);
 		for(int i = 1; i <= 9; i++)
 			ConsortRewardHandler.registerPrice(new ItemStack(beverage, 1, i), 100, 100);
@@ -62,6 +63,7 @@ public class ConsortRewardHandler
 		ConsortRewardHandler.registerPrice(new ItemStack(sbahjPoster), 350, 400);
 		ConsortRewardHandler.registerPrice(new ItemStack(recordEmissaryOfDance), 1000, 1000);
 		ConsortRewardHandler.registerPrice(new ItemStack(recordDanceStab), 1000, 1000);
+		ConsortRewardHandler.registerPrice(new ItemStack(recordRetroBattle), 1000, 1000);
 		ConsortRewardHandler.registerPrice(new ItemStack(crumplyHat), 80, 100);
 		ConsortRewardHandler.registerPrice(new ItemStack(grimoire), 666, 666);
 		ConsortRewardHandler.registerPrice(new ItemStack(pogoClub), 900, 1200);
@@ -70,6 +72,8 @@ public class ConsortRewardHandler
 		ConsortRewardHandler.registerPrice(new ItemStack(copseCrusher), 1000, 1500);
 		ConsortRewardHandler.registerPrice(new ItemStack(katana), 400, 500);
 		ConsortRewardHandler.registerPrice(new ItemStack(cactusCutlass), 500, 700);
+		ConsortRewardHandler.registerPrice(new ItemStack(steakSword), 350, 650);
+		ConsortRewardHandler.registerPrice(new ItemStack(beefSword), 250, 625);
 		ConsortRewardHandler.registerPrice(new ItemStack(glowystoneDust), 20, 40);
 		ConsortRewardHandler.registerPrice(new ItemStack(ironCane), 300, 400);
 		ConsortRewardHandler.registerPrice(new ItemStack(glowingLog), 20, 32);
@@ -91,7 +95,9 @@ public class ConsortRewardHandler
 		ConsortRewardHandler.registerPrice(new ItemStack(sporeo), 15, 25);
 		ConsortRewardHandler.registerPrice(new ItemStack(morelMushroom), 40, 80);
 		ConsortRewardHandler.registerPrice(new ItemStack(paradisesPortabello), 400, 600);
+		ConsortRewardHandler.registerPrice(new ItemStack(bugNet), 500, 600);
 		
+		ConsortRewardHandler.registerPrice(new ItemStack(WATERLILY), 24, 31);
 		ConsortRewardHandler.registerPrice(new ItemStack(POTATO), 12, 15);
 		ConsortRewardHandler.registerPrice(new ItemStack(MUSHROOM_STEW), 95, 130);
 		ConsortRewardHandler.registerPrice(new ItemStack(CARROT), 15, 18);
@@ -168,6 +174,14 @@ public class ConsortRewardHandler
 		ConsortRewardHandler.registerPrice(new ItemStack(RED_SANDSTONE, 1, 2), 5, 10);
 		ConsortRewardHandler.registerPrice(new ItemStack(STONEBRICK, 1, 0), 5, 10);
 		ConsortRewardHandler.registerPrice(new ItemStack(STONEBRICK, 1, 3), 10, 15);
+		ConsortRewardHandler.registerPrice(new ItemStack(BREAD), 90, 130);
+		ConsortRewardHandler.registerPrice(new ItemStack(CHORUS_FRUIT), 420, 420);
+		ConsortRewardHandler.registerPrice(new ItemStack(DRAGON_BREATH), 50, 100);
+		ConsortRewardHandler.registerPrice(new ItemStack(EGG), 50, 100);
+		ConsortRewardHandler.registerPrice(new ItemStack(ELYTRA), 500, 1000);
+		ConsortRewardHandler.registerPrice(new ItemStack(OBSIDIAN), 8, 20);
+		ConsortRewardHandler.registerPrice(new ItemStack(PAPER), 5, 20);
+
 	}
 	
 	public static void registerPrice(ItemStack stack, int min, int max)	//Maybe add json support at some point too

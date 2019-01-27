@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.lands.title;
 
+import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.lands.decorator.SingleBlockDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
@@ -31,12 +32,15 @@ public class LandAspectSilence extends TitleLandAspect
 	}
 	
 	@Override
+	public void prepareWorldProvider(WorldProviderLands worldProvider)
+	{
+		worldProvider.skylightBase = Math.min(1/2F, worldProvider.skylightBase);
+		worldProvider.mergeFogColor(new Vec3d(0, 0, 0.1), 0.5F);
+	}
+	
+	@Override
 	public void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
-		chunkProvider.dayCycle = 2;
-		
-		chunkProvider.mergeFogColor(new Vec3d(0, 0, 0.1), 0.5F);
-		
 	}
 	
 	@Override
@@ -52,7 +56,7 @@ public class LandAspectSilence extends TitleLandAspect
 	@Override
 	public boolean isAspectCompatible(TerrainLandAspect aspect)
 	{
-		return (aspect.getWeatherType() == -1 || (aspect.getWeatherType() & 1) == 1)/*snow is quiet, rain is noisy*/ && aspect.getDayCycleMode() != 1;
+		return (aspect.getWeatherType() == -1 || (aspect.getWeatherType() & 1) == 1)/*snow is quiet, rain is noisy*/;
 	}
 	
 	private static class PumpkinDecorator extends SingleBlockDecorator

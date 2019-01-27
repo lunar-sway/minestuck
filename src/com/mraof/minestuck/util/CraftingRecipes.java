@@ -7,6 +7,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tileentity.TileEntityUraniumCooker;
 import net.minecraft.init.Items;
@@ -19,7 +20,9 @@ import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.RegistryNamespaced;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IRecipeFactory;
 import net.minecraftforge.common.crafting.JsonContext;
@@ -32,11 +35,15 @@ import java.util.Set;
 import static com.mraof.minestuck.block.MinestuckBlocks.*;
 import static com.mraof.minestuck.item.MinestuckItems.*;
 
+
+
 /**
  * Contains classes for custom recipe types, and for smelting, oredict and similar registering
  */
 public class CraftingRecipes
 {
+	private static int nextAvailableId;
+	public static final RegistryNamespaced<ResourceLocation, IRecipe> REGISTRY = net.minecraftforge.registries.GameData.getWrapper(IRecipe.class);
 	
 	public static void registerSmelting()
 	{
@@ -48,6 +55,7 @@ public class CraftingRecipes
 		GameRegistry.addSmelting(goldOreSandstoneRed, new ItemStack(Items.GOLD_INGOT), 1.0F);
 		GameRegistry.addSmelting(redstoneOreEndStone, new ItemStack(Items.REDSTONE), 0.7F);
 		GameRegistry.addSmelting(woodenCactus, new ItemStack(Items.COAL, 1, 1), 0.15F);
+		GameRegistry.addSmelting(beefSword, new ItemStack(steakSword), 0.5F);
 		if(MinestuckConfig.cruxtruderIntake)
 			GameRegistry.addSmelting(cruxiteDowel, new ItemStack(MinestuckItems.rawCruxite), 0.0F);
 		
@@ -55,6 +63,7 @@ public class CraftingRecipes
 		GameRegistry.addSmelting(endLog, new ItemStack(Items.COAL, 1, 1), 0.15F);
 		
 		TileEntityUraniumCooker.setRadiation(Items.BEEF, new ItemStack(irradiatedSteak));
+		TileEntityUraniumCooker.setRadiation(beefSword, new ItemStack(irradiatedSteakSword));
 		TileEntityUraniumCooker.setRadiation(Items.STICK, new ItemStack(upStick));
 		TileEntityUraniumCooker.setRadiation(Items.MUSHROOM_STEW, new ItemStack(Items.SLIME_BALL));
 		Item ectoSlime = Item.REGISTRY.getObject(new ResourceLocation("minestuckarsenal", "blue_ecto_slime"));
@@ -62,34 +71,72 @@ public class CraftingRecipes
 		{
 			TileEntityUraniumCooker.setRadiation(ectoSlime, new ItemStack(Items.SLIME_BALL));
 		}
+		
+		
 	}
-	
+
+    
+  //Forge: Made private use GameData/Registry events!
+    private static void register(String name, IRecipe recipe)
+    {
+    	
+        register(new ResourceLocation(name), recipe);
+    }
+
+    //Forge: Made private use GameData/Registry events!
+    private static void register(ResourceLocation name, IRecipe recipe)
+    {
+        if (REGISTRY.containsKey(name))
+        {
+            throw new IllegalStateException("Duplicate recipe ignored with ID " + name);
+        }
+        else
+        {
+            REGISTRY.register(nextAvailableId++, name, recipe);
+        }
+    }
+
+    
+    
 	public static void addOredictionary()
 	{
 		//Register ore dictionary entries
 		OreDictionary.registerOre("oreCoal", coalOreNetherrack);
+		OreDictionary.registerOre("oreCoal", coalOrePinkStone);
 		OreDictionary.registerOre("oreIron", ironOreEndStone);
 		OreDictionary.registerOre("oreIron", ironOreSandstone);
 		OreDictionary.registerOre("oreIron", ironOreSandstoneRed);
 		OreDictionary.registerOre("oreGold", goldOreSandstone);
 		OreDictionary.registerOre("oreGold", goldOreSandstoneRed);
+		OreDictionary.registerOre("oreGold", goldOrePinkStone);
 		OreDictionary.registerOre("oreRedstone", redstoneOreEndStone);
+		OreDictionary.registerOre("oreLapis", lapisOrePinkStone);
+		OreDictionary.registerOre("oreDiamond", diamondOrePinkStone);
 		OreDictionary.registerOre("oreCruxite", oreCruxite);
 		OreDictionary.registerOre("oreUranium", oreUranium);
 		
 		OreDictionary.registerOre("dirt", new ItemStack(coloredDirt, 1, OreDictionary.WILDCARD_VALUE));
 		
+		OreDictionary.registerOre("stone", pinkStoneSmooth);
+		OreDictionary.registerOre("chalk", chalk);
+		OreDictionary.registerOre("stoneChalk", chalk);
+		OreDictionary.registerOre("blockChalk", chalk);
+		
 		OreDictionary.registerOre("plankWood", glowingPlanks);
 		OreDictionary.registerOre("plankWood", endPlanks);
+		OreDictionary.registerOre("plankWood", deadPlanks);
 		OreDictionary.registerOre("plankWood", treatedPlanks);
 		OreDictionary.registerOre("plankWood",	new ItemStack(planks, 1, OreDictionary.WILDCARD_VALUE));
-		OreDictionary.registerOre("logWood",	glowingLog);
+		OreDictionary.registerOre("logWood", glowingLog);
 		OreDictionary.registerOre("logWood", endLog);
+		OreDictionary.registerOre("logWood", deadLog);
 		OreDictionary.registerOre("logWood",	new ItemStack(log, 1, OreDictionary.WILDCARD_VALUE));
 		OreDictionary.registerOre("treeSapling",endSapling);
 		OreDictionary.registerOre("treeSapling",rainbowSapling);
 		OreDictionary.registerOre("treeLeaves",	endLeaves);
 		OreDictionary.registerOre("treeLeaves",	new ItemStack(leaves1, 1, OreDictionary.WILDCARD_VALUE));
+		
+		OreDictionary.registerOre("cropStrawberry", strawberry);
 		OreDictionary.registerOre("blockCactus", bloomingCactus);
 	}
 	
@@ -181,6 +228,101 @@ public class CraftingRecipes
 			public IRecipe initRecipe(String group, int width, int height, NonNullList<Ingredient> ingredients, ItemStack result)
 			{
 				return new EmptyCardRecipe(group, width, height, ingredients, result);
+			}
+		}
+	}
+	
+	public static class AddEncodeRecipe extends NonMirroredRecipe
+	{
+		
+		public AddEncodeRecipe(String group, int width, int height, NonNullList<Ingredient> ingredients, ItemStack result)
+		{
+			super(group, width, height, ingredients, result);
+		}
+		
+		public ItemStack getCraftingResult(final InventoryCrafting crafting) 
+		{
+			ItemStack decode = ItemStack.EMPTY;
+			final ItemStack output = super.getCraftingResult(crafting);
+			ItemStack stack = output;
+			
+			for(int i = 0; i < crafting.getSizeInventory(); i++)
+			{
+				stack = crafting.getStackInSlot(i);
+				if(stack.getItem() == MinestuckItems.captchaCard && stack.hasTagCompound() && stack.getTagCompound().hasKey("contentID") && stack.getTagCompound().getBoolean("punched"))
+				{
+					decode = AlchemyRecipes.getDecodedItem(stack);
+					return AlchemyRecipes.createEncodedItem(decode, output);
+				}
+					
+			}
+			
+			return ItemStack.EMPTY;
+			
+		}
+		
+		public static class Factory extends ShapedFactory
+		{
+			@Override
+			public IRecipe initRecipe(String group, int width, int height, NonNullList<Ingredient> ingredients, ItemStack result)
+			{
+				return new AddEncodeRecipe(group, width, height, ingredients, result);
+			}
+		}
+	}
+	
+	public static class RemoveCardRecipe extends NonMirroredRecipe
+	{
+		
+		public RemoveCardRecipe(String group, int width, int height, NonNullList<Ingredient> ingredients, ItemStack result)
+		{
+			super(group, width, height, ingredients, result);
+		}
+		
+		
+		public ItemStack getCraftingResult(final InventoryCrafting crafting) 
+		{
+			ItemStack decode = ItemStack.EMPTY;
+			final ItemStack output = super.getCraftingResult(crafting);
+			ItemStack stack = output;
+			
+			for(int i = 0; i < crafting.getSizeInventory(); i++)
+			{
+				stack = crafting.getStackInSlot(i);
+				if(stack.getItem() == MinestuckItems.shunt && stack.hasTagCompound() && stack.getTagCompound().hasKey("contentID"))
+				{
+					decode = AlchemyRecipes.getDecodedItem(stack);
+					return AlchemyRecipes.createCard(decode, true);
+				}
+					
+			}
+			
+			return ItemStack.EMPTY;
+		}
+		@Override
+		public NonNullList<ItemStack> getRemainingItems(InventoryCrafting crafting) {
+			final NonNullList<ItemStack> remainingItems = NonNullList.withSize(crafting.getSizeInventory(), ItemStack.EMPTY);
+			
+			for(int i = 0; i < remainingItems.size(); ++i)
+			{
+				final ItemStack stack = crafting.getStackInSlot(i);
+				
+				if(AlchemyRecipes.hasDecodedItem(stack))
+					remainingItems.set(i, new ItemStack(stack.getItem()));
+				else
+					remainingItems.set(i, ForgeHooks.getContainerItem(stack));
+				
+			}
+			
+			return remainingItems;
+		}
+		
+		public static class Factory extends ShapedFactory
+		{
+			@Override
+			public IRecipe initRecipe(String group, int width, int height, NonNullList<Ingredient> ingredients, ItemStack result)
+			{
+				return new RemoveCardRecipe(group, width, height, ingredients, result);
 			}
 		}
 	}
