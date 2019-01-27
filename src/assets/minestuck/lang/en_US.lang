@@ -65,6 +65,7 @@ commands.porkhollow.notEnough=You don't have enough boondollars.
 
 subtitle.warhorn=Warhorn sounds
 subtitle.whispers=Spooky whispers
+subtitle.upcheladder=Echeladder levels up
 
 computer.buttonClear=Clear message
 computer.buttonClose=Disconnect

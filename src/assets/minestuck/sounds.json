@@ -35,6 +35,17 @@
       }
     ]
   },
+  "upcheladder": {
+    "category": "ambient",
+    "subtitle": "subtitle.upcheladder",
+    "sounds": [
+      {
+        "name": "minestuck:soundeffects/upcheladder",
+        "stream": false
+      }
+    ]
+  },
+
     "record.retroBattle": {
       "sounds": [
         {
