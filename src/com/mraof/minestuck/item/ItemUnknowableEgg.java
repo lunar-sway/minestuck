@@ -15,7 +15,6 @@ public class ItemUnknowableEgg extends ItemFood {
         super(amount, saturation, isWolfFood);
         setCreativeTab(TabMinestuck.instance);
         setMaxStackSize(16);
-        this.setUnlocalizedName("unknowableEgg");
     }
 
     @Override

@@ -161,7 +161,7 @@ public class MinestuckItems
 	public static Item frenchFry = new ItemFood(1, 0.1F, false).setUnlocalizedName("frenchFry").setCreativeTab(TabMinestuck.instance);
 	public static Item strawberryChunk = new ItemMinestuckSeedFood(4, 0.5F).setUnlocalizedName("strawberryChunk").setCreativeTab(TabMinestuck.instance);
 	public static Item surpriseEmbryo = new ItemSurpriseEmbryo(3, 0.2F, false);
-	public static Item unknowableEgg = new ItemUnknowableEgg(3, 0.3F, false);
+	public static Item unknowableEgg = new ItemUnknowableEgg(3, 0.3F, false).setUnlocalizedName("unknowableEgg");
 	//Other
 	public static Item goldenGrasshopper = new Item().setUnlocalizedName("goldenGrasshopper").setCreativeTab(TabMinestuck.instance);
 	public static Item bugNet = new ItemNet().setUnlocalizedName("net");
@@ -505,6 +505,7 @@ public class MinestuckItems
 		registry.register(strawberryChunk.setRegistryName("strawberry_chunk"));
 		registry.register(surpriseEmbryo.setRegistryName("surprise_embryo"));
 		registry.register(unknowableEgg.setRegistryName("unknowable_egg"));
+
 		//misc
 		registry.register(goldenGrasshopper.setRegistryName("golden_grasshopper"));
 		registry.register(bugNet.setRegistryName("net"));
