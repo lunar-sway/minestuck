@@ -39,6 +39,20 @@ public class ItemLongForgottenWarhorn extends Item {
                 new PotionEffect(MobEffects.STRENGTH, duration, amplifier),
                 new PotionEffect(MobEffects.RESISTANCE, duration, amplifier),
                 new PotionEffect(MobEffects.REGENERATION, duration, amplifier),
+                new PotionEffect(MobEffects.JUMP_BOOST, duration, amplifier),
+                new PotionEffect(MobEffects.SPEED, duration, amplifier),
+                new PotionEffect(MobEffects.HASTE, duration, amplifier),
+                new PotionEffect(MobEffects.ABSORPTION, duration, amplifier),
+                new PotionEffect(MobEffects.FIRE_RESISTANCE, duration, amplifier),
+                new PotionEffect(MobEffects.GLOWING, duration, amplifier),
+                new PotionEffect(MobEffects.INSTANT_HEALTH, duration, amplifier),
+                new PotionEffect(MobEffects.INSTANT_DAMAGE, duration, amplifier),
+                new PotionEffect(MobEffects.INVISIBILITY, duration, amplifier),
+                new PotionEffect(MobEffects.WATER_BREATHING, duration, amplifier),
+                new PotionEffect(MobEffects.NAUSEA, duration, amplifier),
+                new PotionEffect(MobEffects.WEAKNESS, duration, amplifier),
+                new PotionEffect(MobEffects.LEVITATION, duration, amplifier),
+                new PotionEffect(MobEffects.MINING_FATIGUE, duration, amplifier),
                 new PotionEffect(MobEffects.SATURATION, duration, amplifier)};
         int raneffect = rand.nextInt(effect.length);
         if(worldIn.isRemote != true) {
