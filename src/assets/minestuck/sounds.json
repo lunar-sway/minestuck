@@ -25,6 +25,16 @@
       }
     ]
     },
+  "whispers": {
+    "category": "ambient",
+    "subtitle": "subtitle.whispers",
+    "sounds": [
+      {
+        "name": "minestuck:soundeffects/whispers",
+        "stream": false
+      }
+    ]
+  },
     "record.retroBattle": {
       "sounds": [
         {
