@@ -13,6 +13,7 @@ public class MinestuckSoundHandler
 	public static SoundEvent soundDanceStabDance;
 	public static SoundEvent soundRetroBattleTheme;
 	public static SoundEvent soundFrogAmbient;
+	public static SoundEvent soundWarhorn;
 	
 	public static void initSound()
 	{
@@ -24,6 +25,8 @@ public class MinestuckSoundHandler
 		soundRetroBattleTheme = new SoundEvent(soundLocation).setRegistryName(soundLocation);
 		soundLocation = new ResourceLocation("minestuck","mobs.frogAmbient");
 		soundFrogAmbient = new SoundEvent(soundLocation).setRegistryName(soundLocation);
+		soundLocation = new ResourceLocation("minestuck", "warhorn");
+		soundWarhorn = new SoundEvent(soundLocation).setRegistryName(soundLocation);
 	}
 	
 	@SubscribeEvent

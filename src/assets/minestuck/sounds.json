@@ -15,6 +15,16 @@
         }
       ]
     },
+  "warhorn": {
+    "category": "ambient",
+    "subtitle": "subtitle.warhorn",
+    "sounds": [
+      {
+        "name": "minestuck:soundeffects/warhorn",
+        "stream": false
+      }
+    ]
+    },
     "record.retroBattle": {
       "sounds": [
         {

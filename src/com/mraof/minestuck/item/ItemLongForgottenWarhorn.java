@@ -1,5 +1,6 @@
 package com.mraof.minestuck.item;
 
+import com.mraof.minestuck.util.MinestuckSoundHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
@@ -9,6 +10,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
+import net.minecraft.util.SoundCategory;
 
 import java.util.Random;
 
@@ -45,6 +47,7 @@ public class ItemLongForgottenWarhorn extends Item {
                 playerIn.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 10, 1));
             }
             item.damageItem(durability, playerIn);
+            playerIn.world.playSound((EntityPlayer)null, playerIn.posX, playerIn.posY, playerIn.posZ, MinestuckSoundHandler.soundWarhorn, SoundCategory.AMBIENT, 1.5F, 1.0F);
         }
         return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, item);
     }
