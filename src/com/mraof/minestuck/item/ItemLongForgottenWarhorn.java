@@ -23,53 +23,28 @@ public class ItemLongForgottenWarhorn extends Item {
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
         ItemStack item = playerIn.getHeldItem(handIn);
         Random rand = new Random();
-        int duration = rand.nextInt(1199);
-        int amplifier = rand.nextInt(7);
-        int durability = rand.nextInt(99) + 10;
-        int raneffect = rand.nextInt(11);
+        int duration = rand.nextInt(1200);
+        int amplifier = rand.nextInt(8);
+        int durability = rand.nextInt(100) + 10;
+        PotionEffect[] effect = new PotionEffect[] {new PotionEffect(MobEffects.BLINDNESS, duration, amplifier),
+                new PotionEffect(MobEffects.WITHER, duration, amplifier),
+                new PotionEffect(MobEffects.POISON, duration, amplifier),
+                new PotionEffect(MobEffects.HUNGER, duration, amplifier),
+                new PotionEffect(MobEffects.SLOWNESS, duration, amplifier),
+                new PotionEffect(MobEffects.UNLUCK, duration, amplifier),
+                new PotionEffect(MobEffects.LUCK, duration, amplifier),
+                new PotionEffect(MobEffects.NIGHT_VISION, duration, amplifier),
+                new PotionEffect(MobEffects.STRENGTH, duration, amplifier),
+                new PotionEffect(MobEffects.RESISTANCE, duration, amplifier),
+                new PotionEffect(MobEffects.REGENERATION, duration, amplifier),
+                new PotionEffect(MobEffects.SATURATION, duration, amplifier)};
+        int raneffect = rand.nextInt(effect.length);
         if(worldIn.isRemote != true) {
-            switch(raneffect) {
-                case 1:
-                    playerIn.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, duration, amplifier));
-                    break;
-                case 2:
-                    playerIn.addPotionEffect(new PotionEffect(MobEffects.WITHER, duration, amplifier));
-                    break;
-                case 3:
-                    playerIn.addPotionEffect(new PotionEffect(MobEffects.POISON, duration, amplifier));
-                    break;
-                case 4:
-                    playerIn.addPotionEffect(new PotionEffect(MobEffects.HUNGER, duration, amplifier));
-                    break;
-                case 5:
-                    playerIn.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, duration, amplifier));
-                    break;
-                case 6:
-                    playerIn.addPotionEffect(new PotionEffect(MobEffects.UNLUCK, duration, amplifier));
-                    break;
-                case 7:
-                    playerIn.addPotionEffect(new PotionEffect(MobEffects.LUCK, duration, amplifier));
-                    break;
-                case 8:
-                    playerIn.addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, duration, amplifier));
-                    break;
-                case 9:
-                    playerIn.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, duration, amplifier));
-                    break;
-                case 10:
-                    playerIn.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, duration, amplifier));
-                    break;
-                case 11:
-                    playerIn.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, duration, amplifier));
-                    break;
-                case 12:
-                    playerIn.addPotionEffect(new PotionEffect(MobEffects.SATURATION, duration, amplifier));
-                    break;
-                default:
-                    playerIn.addPotionEffect(new PotionEffect(MobEffects.UNLUCK, duration, amplifier));
-                    break;
-             }
-             item.damageItem(durability, playerIn);
+            playerIn.addPotionEffect(effect[raneffect]);
+            if(raneffect != 0) {
+                playerIn.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 10, 1));
+            }
+            item.damageItem(durability, playerIn);
         }
         return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, item);
     }
