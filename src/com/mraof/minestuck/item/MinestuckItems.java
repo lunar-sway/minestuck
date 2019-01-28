@@ -235,8 +235,6 @@ public class MinestuckItems
 			}
 		});
 		
-		registerItemBlock(registry, new ItemBlock(templePlacer));
-		
 		registerItemBlock(registry, new ItemBlock(coalOreNetherrack));
 		registerItemBlock(registry, new ItemBlock(ironOreEndStone));
 		registerItemBlock(registry, new ItemBlock(ironOreSandstone));

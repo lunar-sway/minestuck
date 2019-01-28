@@ -350,8 +350,6 @@ public class MinestuckModelManager
 		register(stoneExplosiveButton);
 
 		register(uraniumCooker);
-
-		register(templePlacer);
 		
 		ModelLoader.setCustomStateMapper(blockOil, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
 		ModelLoader.setCustomStateMapper(blockBlood, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
