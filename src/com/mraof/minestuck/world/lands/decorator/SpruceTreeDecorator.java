@@ -1,14 +1,15 @@
 package com.mraof.minestuck.world.lands.decorator;
- 
+
 import java.util.Random;
- 
+
 import com.mraof.minestuck.block.BlockMinestuckLeaves1;
-import com.mraof.minestuck.block.BlockMinestuckLog;
+import com.mraof.minestuck.block.BlockMinestuckLog1;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
- 
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLeaves;
+import net.minecraft.block.BlockLog;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -17,7 +18,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import net.minecraft.world.gen.feature.WorldGenTaiga1;
 import net.minecraft.world.gen.feature.WorldGenTaiga2;
- 
+
 public class SpruceTreeDecorator extends TreeDecoratorBase
 {
    

@@ -1,12 +1,8 @@
 package com.mraof.minestuck.block;
 
-import java.util.Random;
-
-import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.item.TabMinestuck;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -14,8 +10,6 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -26,7 +20,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickEmpty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -36,13 +29,13 @@ public class BlockDecor extends Block
 	private EnumBB bb = EnumBB.CHESSBOARD;
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 	protected BlockDecor(String unlocalizedName, SoundType sound) {
-		super(Material.GOURD);
+		super(Material.ROCK);
 		setSoundType(sound);
 		setUnlocalizedName(unlocalizedName);
 		setCreativeTab(TabMinestuck.instance);
 		setHardness(0.5f);
 	}
-	
+
 	protected BlockDecor(String unlocalizedName)
 	{
 		this(unlocalizedName, SoundType.STONE);
@@ -53,25 +46,25 @@ public class BlockDecor extends Block
 	{
 		return false;
 	}
-	
+
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state)
 	{
 		return EnumBlockRenderType.MODEL;
 	}
-	
+
 	@Override
 	public boolean isOpaqueCube(IBlockState state)
 	{
 		return false;
 	}
-	
-	 @SideOnly(Side.CLIENT)
-	    public BlockRenderLayer getBlockLayer()
-	    {
-	        return BlockRenderLayer.TRANSLUCENT;
-	    }
-	
+
+	@SideOnly(Side.CLIENT)
+	public BlockRenderLayer getBlockLayer()
+	{
+		return BlockRenderLayer.CUTOUT;
+	}
+
 	/**
      * Returns the blockstate with the given rotation from the passed blockstate. If inapplicable, returns the passed
      * blockstate.
@@ -89,7 +82,7 @@ public class BlockDecor extends Block
     {
         return state.withProperty(FACING, mirrorIn.mirror((EnumFacing)state.getValue(FACING)));
     }
-    
+
     /**
      * Checks if this block can be placed exactly at the given position.
      */
@@ -106,7 +99,7 @@ public class BlockDecor extends Block
     {
         return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing());
     }
-    
+
     /**
      * Convert the given metadata into a BlockState for this Block
      */
@@ -116,7 +109,7 @@ public class BlockDecor extends Block
         iblockstate = iblockstate.withProperty(FACING, EnumFacing.getFront(meta));
         return iblockstate;
     }
-    
+
     public int getMetaFromState(IBlockState state)
     {
         return ((EnumFacing)state.getValue(FACING)).getIndex();
@@ -126,17 +119,17 @@ public class BlockDecor extends Block
     {
         return new BlockStateContainer(this, new IProperty[] {FACING});
     }
-    
+
     @Override
 	public AxisAlignedBB getBoundingBox(IBlockState state,IBlockAccess source,BlockPos pos)
 	{
 		EnumFacing facing = state.getValue(FACING);
-		
+
 		EnumBB boundingBox = getBBFromName();
-		
+
 		return boundingBox.BOUNDING_BOX[facing.getHorizontalIndex()];
 	}
-    
+
     public AxisAlignedBB modifyAABBForDirection(EnumFacing facing, AxisAlignedBB bb)
 	{
 		AxisAlignedBB out = null;
@@ -157,12 +150,12 @@ public class BlockDecor extends Block
 		}
 		return out;
 	}
-	
+
     public EnumBB getBBFromName()
     {
     	String unlocalizedName = getUnlocalizedName();
     	EnumBB boundingBox = EnumBB.CHESSBOARD;
-    	
+
     	switch(unlocalizedName)
     	{
     	case "tile.chessboard": boundingBox = EnumBB.CHESSBOARD; break;
@@ -170,18 +163,18 @@ public class BlockDecor extends Block
     	case "tile.blender": boundingBox = EnumBB.BLENDER; break;
     	}
 		return boundingBox;
-    	
+
     }
-    
+
 	public enum EnumBB implements IStringSerializable
 	{
 		DEFAULT		(FULL_BLOCK_AABB),
 		CHESSBOARD	(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1/16D, 1.0D)),
 		FROG_STATUE	(new AxisAlignedBB(1/32D,0.0D,3/32D,31/32D,15/16D,29/32D)),
 		BLENDER		(new AxisAlignedBB(3/16D,0D,3/16D,13/16D,1.0D,13/16D));
-		
+
 		private final AxisAlignedBB[] BOUNDING_BOX;
-		
+
 		EnumBB(AxisAlignedBB bb)
 		{
 			BOUNDING_BOX = new AxisAlignedBB[4];
@@ -189,15 +182,15 @@ public class BlockDecor extends Block
 			BOUNDING_BOX[1] = new AxisAlignedBB(1 - bb.maxZ, bb.minY, bb.minX, 1 - bb.minZ, bb.maxY, bb.maxX);
 			BOUNDING_BOX[2] = new AxisAlignedBB(1 - bb.maxX, bb.minY, 1- bb.maxZ, 1 - bb.minX, bb.maxY, 1 - bb.minZ);
 			BOUNDING_BOX[3] = new AxisAlignedBB(bb.minZ, bb.minY, 1 - bb.maxX, bb.maxZ, bb.maxY, 1 - bb.minX);
-			
+
 		}
-		
+
 		@Override
 		public String toString()
 		{
 			return getName();
 		}
-		
+
 		@Override
 		public String getName()
 		{
@@ -205,4 +198,3 @@ public class BlockDecor extends Block
 		}
 	}
 }
-

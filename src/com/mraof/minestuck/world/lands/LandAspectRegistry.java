@@ -33,18 +33,19 @@ public class LandAspectRegistry
 	
 	public static void registerLandAspects()
 	{
+		registerLandAspect(new LandAspectForest());
 		registerLandAspect(new LandAspectFrost());
+		registerLandAspect(new LandAspectFungi());
 		registerLandAspect(new LandAspectHeat());
-		registerLandAspect(new LandAspectShade());
+		registerLandAspect(new LandAspectRock());
 		registerLandAspect(new LandAspectSand());
 		registerLandAspect(new LandAspectSandstone());
-		registerLandAspect(new LandAspectForest());
-		registerLandAspect(new LandAspectRock());
+		registerLandAspect(new LandAspectShade());
 		registerLandAspect(new LandAspectWood());
-		//registerLandAspect(new LandAspectRain());
-		//registerLandAspect(new LandAspectRainbow());
-		//registerLandAspect(new LandAspectFlora());
-		//registerLandAspect(new LandAspectEnd());
+		registerLandAspectHidden(new LandAspectRain());
+		registerLandAspect(new LandAspectRainbow());
+		registerLandAspect(new LandAspectFlora());
+		registerLandAspect(new LandAspectEnd());
 		
 		registerLandAspect(new LandAspectWind(), EnumAspect.BREATH);
 		registerLandAspect(new LandAspectLight(), EnumAspect.LIGHT);
@@ -60,6 +61,7 @@ public class LandAspectRegistry
 		registerLandAspect(new LandAspectMonsters(), EnumAspect.RAGE);
 		registerLandAspect(new LandAspectTowers(), EnumAspect.HOPE);
 		
+
 		landNames2.put(nullAspect.getPrimaryName(), nullAspect);
 		landNames2.put(frogAspect.getPrimaryName(), frogAspect);
 		landNames2.put(bucketAspect.getPrimaryName(), bucketAspect);
@@ -77,6 +79,13 @@ public class LandAspectRegistry
 	public static void registerLandAspect(TerrainLandAspect newAspect)
 	{
 		landAspects.add(newAspect);
+		landNames.put(newAspect.getPrimaryName(),newAspect);
+		for(ILandAspect variant : newAspect.getVariations())
+			landNames.put(variant.getPrimaryName(), (TerrainLandAspect) variant);
+	}
+	
+	public static void registerLandAspectHidden(TerrainLandAspect newAspect)
+	{
 		landNames.put(newAspect.getPrimaryName(),newAspect);
 		for(ILandAspect variant : newAspect.getVariations())
 			landNames.put(variant.getPrimaryName(), (TerrainLandAspect) variant);
@@ -267,11 +276,6 @@ public class LandAspectRegistry
 			else
 			{
 				newLandId++;
-			}
-			if(newLandId > Byte.MAX_VALUE)
-			{
-				FMLLog.warning("[Minestuck] Ran out of land id's!");
-				return player.dimension;
 			}
 		}
 		

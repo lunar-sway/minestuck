@@ -21,10 +21,14 @@ public class SkaiaClient
 {
 	
 	//Variables
-	private static Map<Integer, Map<Integer, String>> openServers = new HashMap<Integer, Map<Integer, String>>();
-	private static List<SburbConnection> connections = new ArrayList<SburbConnection>();
-	private static Map<Integer, Boolean> serverWaiting = new HashMap<Integer, Boolean>();
-	private static Map<Integer, Boolean> resumingClient = new HashMap<Integer, Boolean>();
+	private static Map<Integer, Map<Integer, String>> openServers = new HashMap<>();
+	private static List<SburbConnection> connections = new ArrayList<>();
+	private static Map<Integer, Boolean> serverWaiting = new HashMap<>();
+	private static Map<Integer, Boolean> resumingClient = new HashMap<>();
+	/**
+	 * A map used to track chains of lands, to be used by the skybox render
+	 */
+	private static Map<Integer, List<Integer>> landChainMap = new HashMap<>();
 	private static TileEntityComputer te = null;
 	public static int playerId;	//The id that this player is expected to have.
 	
@@ -34,6 +38,7 @@ public class SkaiaClient
 		connections.clear();
 		serverWaiting.clear();
 		resumingClient.clear();
+		landChainMap.clear();
 		playerId = -1;
 	}
 	
@@ -78,6 +83,11 @@ public class SkaiaClient
 			if(c.isMain && c.clientId == player)
 				return c.enteredGame;
 		return false;
+	}
+	
+	public static List<Integer> getLandChain(int id)
+	{
+		return landChainMap.get(id);
 	}
 	
 	public static boolean isActive(int playerId, boolean isClient)
@@ -143,6 +153,15 @@ public class SkaiaClient
 	
 	public static void consumePacket(SkaianetInfoPacket data)
 	{
+		if(data.landChains != null)
+		{
+			landChainMap.clear();
+			for(List<Integer> list : data.landChains)
+				for(int i : list)
+					landChainMap.put(i, list);
+			return;
+		}
+		
 		if(playerId == -1)
 			playerId = data.playerId;	//The first info packet is expected to be regarding the receiving player.
 		openServers.put(data.playerId, data.openServers);
@@ -160,7 +179,7 @@ public class SkaiaClient
 		connections.addAll(data.connections);
 		
 		GuiScreen gui = Minecraft.getMinecraft().currentScreen;
-		if(gui != null && gui instanceof GuiComputer)
+		if(gui instanceof GuiComputer)
 			((GuiComputer)gui).updateGui();
 		else if(te != null && te.ownerId == data.playerId)
 		{

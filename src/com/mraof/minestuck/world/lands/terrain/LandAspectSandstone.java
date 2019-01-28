@@ -22,7 +22,7 @@ import java.util.Random;
 public class LandAspectSandstone extends TerrainLandAspect
 {
 	
-	private final Vec3d skyColor;
+	private final Vec3d fogColor, skyColor;
 	private final Variant type;
 	private final List<TerrainLandAspect> variations;
 	
@@ -37,13 +37,15 @@ public class LandAspectSandstone extends TerrainLandAspect
 		this.type = type;
 		if(type == Variant.SANDSTONE)
 		{
-			skyColor = new Vec3d(0.9D, 0.7D, 0.05D);
+			fogColor = new Vec3d(0.9D, 0.7D, 0.05D);
+			skyColor = new Vec3d(0.8D, 0.6D, 0.2D);
 			
 			variations.add(this);
 			variations.add(new LandAspectSandstone(Variant.SANDSTONE_RED));
 		} else
 		{
-			skyColor = new Vec3d(0.9D, 0.5D, 0.05D);
+			fogColor = new Vec3d(0.7D, 0.4D, 0.05D);
+			skyColor = new Vec3d(0.8D, 0.5D, 0.1D);
 			
 		}
 	}
@@ -111,9 +113,9 @@ public class LandAspectSandstone extends TerrainLandAspect
 	}
 	
 	@Override
-	public int getDayCycleMode()
+	public float getSkylightBase()
 	{
-		return 0;
+		return 3/4F;
 	}
 	
 	@Override
@@ -136,6 +138,12 @@ public class LandAspectSandstone extends TerrainLandAspect
 	
 	@Override
 	public Vec3d getFogColor()
+	{
+		return fogColor;
+	}
+	
+	@Override
+	public Vec3d getSkyColor()
 	{
 		return skyColor;
 	}

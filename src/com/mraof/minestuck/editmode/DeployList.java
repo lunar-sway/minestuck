@@ -30,12 +30,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public class DeployList
 {
-	
+
 	private static final ArrayList<DeployEntry> list = new ArrayList<DeployEntry>();
-	
+
 	public static void registerItems()
 	{
-		
+
 		registerItem("cruxtruder", new ItemStack(MinestuckBlocks.cruxtruder, 1, 0), new GristSet(), new GristSet(GristType.Build, 100), 0);
 		registerItem("totem_lathe", new ItemStack(MinestuckBlocks.totemlathe[0], 1, 0), new GristSet(), new GristSet(GristType.Build, 100), 0);
 		registerItem("artifact_card", new GristSet(), null, 0, connection -> !connection.enteredGame(),
@@ -43,14 +43,16 @@ public class DeployList
 		registerItem("alchemiter", new ItemStack(MinestuckBlocks.alchemiter[0], 1, 0), new GristSet(), new GristSet(GristType.Build, 100), 0);
 		registerItem("punch_designix", 0,null, connection -> new ItemStack(MinestuckBlocks.punchDesignix, 1, 0),
 				(isPrimary, connection) -> new GristSet(SburbHandler.getPrimaryGristType(connection.getClientIdentifier()), 4));
-		registerItem("holopad", new ItemStack(MinestuckBlocks.holopad), new GristSet(GristType.Build, 10000), 2);
+		/*registerItem("jumper_block_extension", new ItemStack(MinestuckBlocks.jumperBlockExtension[0]), new GristSet(GristType.Build, 1000), 1);
+		registerItem("punch_card_shunt", new ItemStack(MinestuckItems.shunt), new GristSet(GristType.Build, 100), 1);
+		registerItem("holopad", new ItemStack(MinestuckBlocks.holopad), new GristSet(GristType.Build, 10000), 2);*/
 	}
-	
+
 	public static void registerItem(String name, ItemStack stack, GristSet cost, int tier)
 	{
 		registerItem(name, stack, cost, cost, tier);
 	}
-	
+
 	/**
 	 * Register the specific item as deployable.
 	 * @param stack The item to be registered.
@@ -65,24 +67,24 @@ public class DeployList
 	{
 		registerItem(name, cost1, cost2, tier, null, connection -> stack);
 	}
-	
+
 	public static void registerItem(String name, GristSet cost, int tier, IAvailabilityCondition condition, IItemProvider item)
 	{
 		registerItem(name, tier, condition, item, (isPrimary, connection) -> cost);
 	}
-	
+
 	public static void registerItem(String name, GristSet cost1, GristSet cost2, int tier, IAvailabilityCondition condition, IItemProvider item)
 	{
 		registerItem(name, tier, condition, item, (isPrimary, connection) -> isPrimary ? cost1 : cost2);
 	}
-	
+
 	public static void registerItem(String name, int tier, IAvailabilityCondition condition, IItemProvider item, IGristCostProvider grist)
 	{
 		if(containsEntry(name))
 			throw new IllegalStateException("Item stack already added to the deploy list: "+name);
 		list.add(new DeployEntry(name, tier, condition, item, grist));
 	}
-	
+
 	public static void removeEntry(String name)
 	{
 		Iterator<DeployEntry> iterator = list.iterator();
@@ -93,7 +95,7 @@ public class DeployList
 				return;
 			}
 	}
-	
+
 	public static List<DeployEntry> getItemList(SburbConnection c)
 	{
 		int tier = SburbHandler.availableTier(c.getClientIdentifier());
@@ -101,10 +103,10 @@ public class DeployList
 		for(DeployEntry entry : list)
 			if(entry.tier <= tier && (entry.condition == null || entry.condition.test(c)))
 				itemList.add(entry);
-		
+
 		return itemList;
 	}
-	
+
 	@Nonnull
 	private static ItemStack cleanStack(ItemStack stack)
 	{
@@ -116,17 +118,17 @@ public class DeployList
 			stack.setTagCompound(null);
 		return stack;
 	}
-	
+
 	public static boolean containsEntry(String name)
 	{
 		return getEntryForName(name) != null;
 	}
-	
+
 	public static boolean containsItemStack(ItemStack stack, SburbConnection c)
 	{
 		return getEntryForItem(stack, c) != null;
 	}
-	
+
 	public static int getOrdinal(String name)
 	{
 		for(int i = 0; i < list.size(); i++)
@@ -134,7 +136,7 @@ public class DeployList
 				return i;
 		return -1;
 	}
-	
+
 	public static int getOrdinal(ItemStack stack, SburbConnection c)
 	{
 		stack = cleanStack(stack);
@@ -143,7 +145,7 @@ public class DeployList
 				return i;
 		return -1;
 	}
-	
+
 	public static String[] getNameList()
 	{
 		String[] str = new String[list.size()];
@@ -151,12 +153,12 @@ public class DeployList
 			str[i] = list.get(i).getName();
 		return str;
 	}
-	
+
 	public static int getEntryCount()
 	{
 		return list.size();
 	}
-	
+
 	public static void applyConfigValues(boolean[] booleans)
 	{
 		if(booleans[0] != containsEntry("card_punched_card"))
@@ -183,7 +185,7 @@ public class DeployList
 			}
 		}
 	}
-	
+
 	public static DeployEntry getEntryForName(String name)
 	{
 		for(DeployEntry entry : list)
@@ -191,7 +193,7 @@ public class DeployList
 				return entry;
 		return null;
 	}
-	
+
 	public static DeployEntry getEntryForItem(ItemStack stack, SburbConnection c)
 	{
 		stack = cleanStack(stack);
@@ -200,16 +202,16 @@ public class DeployList
 				return entry;
 		return null;
 	}
-	
+
 	public static class DeployEntry
 	{
 		private String name;
-		
+
 		private int tier;
 		private IAvailabilityCondition condition;
 		private IItemProvider item;
 		private IGristCostProvider grist;
-		
+
 		private DeployEntry(String name, int tier, IAvailabilityCondition condition, IItemProvider item, IGristCostProvider grist)
 		{
 			this.name  = name;
@@ -218,53 +220,53 @@ public class DeployList
 			this.item = item;
 			this.grist = grist;
 		}
-		
+
 		public String getName()
 		{
 			return name;
 		}
-		
+
 		public int getTier()
 		{
 			return tier;
 		}
-		
+
 		public boolean isAvailable(SburbConnection c, int tier)
 		{
 			return (condition == null || condition.test(c)) && this.tier <= tier;
 		}
-		
+
 		public ItemStack getItemStack(SburbConnection c)
 		{
 			return item.apply(c).copy();
 		}
-		
+
 		public GristSet getPrimaryGristCost(SburbConnection c)
 		{
 			return grist.apply(true, c);
 		}
-		
+
 		public GristSet getSecondaryGristCost(SburbConnection c)
 		{
 			return grist.apply(false, c);
 		}
 	}
-	
+
 	public interface IAvailabilityCondition
 	{
 		boolean test(SburbConnection connection);
 	}
-	
+
 	public interface IItemProvider
 	{
 		ItemStack apply(SburbConnection connection);
 	}
-	
+
 	public interface IGristCostProvider
 	{
 		GristSet apply(boolean isPrimary, SburbConnection connection);
 	}
-	
+
 	static NBTTagCompound getDeployListTag(SburbConnection c)
 	{
 		NBTTagCompound nbt = new NBTTagCompound();
@@ -312,9 +314,9 @@ public class DeployList
 		}
 		return nbt;
 	}
-	
+
 	//Clientside
-	
+
 	@SideOnly(Side.CLIENT)
 	static void loadClientDeployList(NBTTagCompound nbt)
 	{
@@ -350,10 +352,10 @@ public class DeployList
 			clientDeployList.add(entry);
 		}
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	private static List<ClientDeployEntry> clientDeployList;
-	
+
 	@SideOnly(Side.CLIENT)
 	public static ClientDeployEntry getEntryClient(ItemStack stack)
 	{
@@ -363,7 +365,7 @@ public class DeployList
 				return entry;
 		return null;
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	public static class ClientDeployEntry
 	{
@@ -371,17 +373,17 @@ public class DeployList
 		private GristSet cost1;
 		private GristSet cost2;
 		private int index;
-		
+
 		public GristSet getPrimaryCost()
 		{
 			return cost1;
 		}
-		
+
 		public GristSet getSecondaryCost()
 		{
 			return cost2;
 		}
-		
+
 		public int getIndex()
 		{
 			return index;

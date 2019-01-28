@@ -88,6 +88,7 @@ public class StructureBlockRegistry
 		registerBlock("glass", Blocks.GLASS.getDefaultState());
 		registerBlock("stained_glass_1", Blocks.STAINED_GLASS.getDefaultState().withProperty(BlockStainedGlass.COLOR, EnumDyeColor.GRAY));
 		registerBlock("stained_glass_2", Blocks.STAINED_GLASS.getDefaultState().withProperty(BlockStainedGlass.COLOR, EnumDyeColor.SILVER));
+		registerBlock("slime", Blocks.SLIME_BLOCK.getDefaultState());
 	}
 	
 	private static class BlockEntry

@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBuf;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -17,16 +18,29 @@ import com.mraof.minestuck.util.IdentifierHandler;
 
 public class SkaianetInfoPacket extends MinestuckPacket
 {
-	
 	public int playerId;
 	public boolean isClientResuming, isServerResuming;
 	public HashMap<Integer, String> openServers;
 	public ArrayList<SburbConnection> connections;
+	public List<List<Integer>> landChains;
 	
 	@Override
 	public MinestuckPacket generatePacket(Object... dat)
 	{
+		if(dat[0] instanceof List) //Land chain data
+		{
+			data.writeBoolean(true);
+			List<List<Integer>> chains = (List) dat[0];
+			for(List<Integer> list : chains)
+			{
+				data.writeInt(list.size());
+				for(int i : list)
+					data.writeInt(i);
+			}
+			return this;
+		}
 		
+		data.writeBoolean(false);
 		data.writeInt((Integer)dat[0]);
 		
 		if(dat.length == 1)	//If request from client
@@ -52,6 +66,20 @@ public class SkaianetInfoPacket extends MinestuckPacket
 	@Override
 	public MinestuckPacket consumePacket(ByteBuf data)
 	{
+		if(data.readBoolean())
+		{
+			landChains = new ArrayList<>();
+			while(data.readableBytes() > 0)
+			{
+				int l = data.readInt();
+				List<Integer> list = new ArrayList<>();
+				for(int k = 0; k < l; k++)
+					list.add(data.readInt());
+				landChains.add(list);
+			}
+			
+			return this;
+		}
 		
 		this.playerId = data.readInt();
 		if(data.readableBytes() == 0)
@@ -59,10 +87,10 @@ public class SkaianetInfoPacket extends MinestuckPacket
 		isClientResuming = data.readBoolean();
 		isServerResuming = data.readBoolean();
 		int size = data.readInt();
-		openServers = new HashMap<Integer, String>();
+		openServers = new HashMap<>();
 		for(int i = 0; i < size; i++)
 			openServers.put(data.readInt(), readLine(data));
-		connections = new ArrayList<SburbConnection>();
+		connections = new ArrayList<>();
 		try
 		{
 			while(data.readableBytes() > 0)

@@ -10,6 +10,7 @@ import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockLog.EnumAxis;
 import net.minecraft.block.BlockSapling;
 import net.minecraft.block.IGrowable;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
@@ -37,6 +38,7 @@ public class BlockAspectSapling extends BlockBush implements IGrowable
 		this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, BlockType.ASPECT_BLOOD));
 		this.setCreativeTab(MinestuckItems.tabMinestuck);
 		this.setUnlocalizedName("aspectSapling");
+		this.setSoundType(SoundType.PLANT);
 	}
 
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)

@@ -100,6 +100,8 @@ public class LandAspectRock extends TerrainLandAspect
 		list.add(new UndergroundDecoratorVein(Blocks.MONSTER_EGG.getDefaultState().withProperty(BlockSilverfish.VARIANT, BlockSilverfish.EnumType.STONE), 7, 9, 64));
 		list.add(new SurfaceDecoratorVein(Blocks.CLAY.getDefaultState(), 25, 20, BiomeMinestuck.mediumOcean));
 		
+		list.add(new BlockBlobDecorator(Blocks.COBBLESTONE.getDefaultState(), 0, 3, BiomeMinestuck.mediumNormal));
+		list.add(new BlockBlobDecorator(Blocks.COBBLESTONE.getDefaultState(), 1, 4, BiomeMinestuck.mediumRough));
 		if(type == Variant.ROCK) {
 			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.petrifiedGrass, true, 25, 32, BiomeMinestuck.mediumRough));
 			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.petrifiedGrass, true, 10, 48, BiomeMinestuck.mediumNormal));
@@ -118,9 +120,9 @@ public class LandAspectRock extends TerrainLandAspect
 	}
 	
 	@Override
-	public int getDayCycleMode()
+	public float getSkylightBase()
 	{
-		return 0;
+		return 7/8F;
 	}
 	
 	@Override
@@ -148,11 +150,17 @@ public class LandAspectRock extends TerrainLandAspect
 	}
 	
 	@Override
+	public Vec3d getSkyColor()
+	{
+		return new Vec3d(0.6D, 0.6D, 0.7D);
+	}
+	
+	@Override
 	public ILandTerrainGen createTerrainGenerator(ChunkProviderLands chunkProvider, Random rand)
 	{
 		DefaultTerrainGen terrainGen = new DefaultTerrainGen(chunkProvider, rand);
 		terrainGen.normalVariation = 0.6F;
-		terrainGen.roughtVariation = 0.9F;
+		terrainGen.roughVariation = 0.9F;
 		terrainGen.oceanVariation = 0.4F;
 		return terrainGen;
 	}

@@ -46,7 +46,7 @@ public class EntityFrog extends EntityMinestuck
     private boolean canDespawn = true;
     private int currentMoveTypeDuration;
     private final int baseHealth = 5;
-    private final double baseSpeed = 0.30000001192092896D;
+    private final double baseSpeed = 0.3D;
     private static final DataParameter<Float> FROG_SIZE = EntityDataManager.<Float>createKey(EntityFrog.class, DataSerializers.FLOAT);
     private static final DataParameter<Integer> SKIN_COLOR = EntityDataManager.<Integer>createKey(EntityFrog.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> EYE_COLOR = EntityDataManager.<Integer>createKey(EntityFrog.class, DataSerializers.VARINT);
@@ -419,7 +419,7 @@ public class EntityFrog extends EntityMinestuck
     
     protected SoundEvent getAmbientSound()
     {
-        return MinestuckSoundHandler.soundFrogAmbient;
+        return null; //MinestuckSoundHandler.soundFrogAmbient;
     }
     
     protected SoundEvent getJumpSound()

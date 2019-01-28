@@ -48,6 +48,7 @@ import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 import com.mraof.minestuck.world.storage.loot.MinestuckLoot;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.network.NetworkRegistry;

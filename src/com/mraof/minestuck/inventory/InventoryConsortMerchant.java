@@ -70,7 +70,7 @@ public class InventoryConsortMerchant implements IInventory
 			if (stack.isEmpty())
 				return;
 			MinestuckPlayerData.PlayerData playerData = MinestuckPlayerData.getData(player);
-			int amountPurchased = Math.min(prices[index] != 0 ? playerData.boondollars / prices[index] : Integer.MAX_VALUE, all ? stack.getCount() : 1);
+			int amountPurchased = (int) Math.min(prices[index] != 0 ? playerData.boondollars / prices[index] : Integer.MAX_VALUE, all ? stack.getCount() : 1);
 			if (amountPurchased == 0)
 			{
 				player.sendMessage(new TextComponentTranslation("consort.cantAfford"));

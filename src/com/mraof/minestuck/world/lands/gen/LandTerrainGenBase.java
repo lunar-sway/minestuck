@@ -15,6 +15,12 @@ public abstract class LandTerrainGenBase implements ILandTerrainGen
 		this.provider = chunkProvider;
 	}
 	
+	public void setSeaHeight(int sea)
+	{
+		this.seaHeight = sea;
+		provider.landWorld.setSeaLevel(this.seaHeight + 1);		//We add 1 to maintain the one-block discrepancy already present, which is required to ensure proper generation of villages.
+	}
+	
 	@Override
 	public ChunkPrimer createChunk(int chunkX, int chunkZ)
 	{
