@@ -3,10 +3,12 @@ package com.mraof.minestuck.block;
 import com.mraof.minestuck.item.TabMinestuck;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFence;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -36,11 +38,18 @@ public class BlockDecor extends Block
 		setHardness(0.5f);
 	}
 
+	
 	protected BlockDecor(String unlocalizedName)
 	{
 		this(unlocalizedName, SoundType.STONE);
 	}
 
+	@Override
+	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) 
+	{
+		return BlockFaceShape.UNDEFINED;
+	}
+	
 	@Override
 	public boolean isFullCube(IBlockState state)
 	{
@@ -53,6 +62,12 @@ public class BlockDecor extends Block
 		return EnumBlockRenderType.MODEL;
 	}
 
+	@Override
+	public boolean isFullBlock(IBlockState state) 
+	{
+		return false;
+	}
+	
 	@Override
 	public boolean isOpaqueCube(IBlockState state)
 	{

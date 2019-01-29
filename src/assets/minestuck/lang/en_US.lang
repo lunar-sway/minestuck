@@ -1,4 +1,5 @@
-﻿advancements.minestuck.root.title=Minestuck
+﻿//apparently this line will be disregarded by the Root Achievement, so don't type anything related to it here, k?
+advancements.minestuck.root.title=Minestuck
 advancements.minestuck.root.description=The Beginning of Something Really Excellent
 advancements.minestuck.setup_connection.title=Connect
 advancements.minestuck.setup_connection.description=Create a connection with someone.

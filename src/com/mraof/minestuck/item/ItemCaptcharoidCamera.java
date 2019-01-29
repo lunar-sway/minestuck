@@ -4,8 +4,9 @@ import java.util.List;
 
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.block.BlockLargeMachine;
-import com.mraof.minestuck.entity.item.EntityHologram;
-import com.mraof.minestuck.item.MinestuckItems;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,7 +16,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -59,7 +59,8 @@ public class ItemCaptcharoidCamera extends Item {
 		//pos.offset(facing).offset(facing.rotateY()).up(), pos.offset(facing.getOpposite()).offset(facing.rotateYCCW()).down()
 		if(!worldIn.isRemote) 
 		{
-			AxisAlignedBB bb = new AxisAlignedBB(pos.offset(facing).up().offset(facing.rotateY()), pos);
+			
+			AxisAlignedBB bb = new AxisAlignedBB(pos.offset(facing));
 			List<EntityItemFrame> list = worldIn.getEntitiesWithinAABB(EntityItemFrame.class, bb);
 			
 			if(!list.isEmpty())
@@ -72,13 +73,16 @@ public class ItemCaptcharoidCamera extends Item {
 			}
 			else
 			{
-				ItemStack block = new ItemStack(Item.getItemFromBlock(worldIn.getBlockState(pos).getBlock()));
+				IBlockState state = worldIn.getBlockState(pos);
+				ItemStack block = new ItemStack(Item.getItemFromBlock(state.getBlock()));
+				int meta = state.getBlock().damageDropped(state);
+				block.setItemDamage(meta);
 				
 				if(worldIn.getBlockState(pos).getBlock() instanceof BlockLargeMachine)
 					block = new ItemStack(((BlockLargeMachine) worldIn.getBlockState(pos).getBlock()).getItemFromMachine());
 				
-					player.inventory.addItemStackToInventory(AlchemyRecipes.createGhostCard(block));
-					player.getHeldItem(hand).damageItem(1, player);
+				player.inventory.addItemStackToInventory(AlchemyRecipes.createGhostCard(block));
+				player.getHeldItem(hand).damageItem(1, player);
 			}
 			return EnumActionResult.PASS;
 		}
