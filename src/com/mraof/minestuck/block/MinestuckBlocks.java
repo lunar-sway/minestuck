@@ -298,8 +298,8 @@ public class MinestuckBlocks
 		registry.register(alchemiter[1].setRegistryName("alchemiter2"));
 		registry.register(cruxtruder.setRegistryName("cruxtruder"));
 		registry.register(cruxtruderLid.setRegistryName("cruxtruder_lid"));
-		/*
 		registry.register(holopad.setRegistryName("holopad"));
+		
 		registry.register(jumperBlockExtension[0].setRegistryName("jumper_block_extension"));
 		registry.register(jumperBlockExtension[1].setRegistryName("jumper_block_extension2"));
 		registry.register(jumperBlockExtension[2].setRegistryName("jumper_block_extension3"));
@@ -309,7 +309,7 @@ public class MinestuckBlocks
 		registry.register(alchemiterUpgrades[1].setRegistryName("alchemiter_upgrade2"));
 		registry.register(alchemiterUpgrades[2].setRegistryName("alchemiter_upgrade3"));
 		registry.register(alchemiterUpgrades[3].setRegistryName("alchemiter_upgrade4"));
-		*/
+		
 		registry.register(blender.setRegistryName("blender"));
 		registry.register(chessboard.setRegistryName("chessboard"));
 		registry.register(frogStatueReplica.setRegistryName("frog_statue_replica"));
