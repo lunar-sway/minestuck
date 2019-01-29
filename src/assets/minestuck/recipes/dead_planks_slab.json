@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minestuck:dead_planks"
+    }
+  },
+  "result": {
+    "item": "minestuck:dead_planks_slab",
+    "count": 6
+  }
+}

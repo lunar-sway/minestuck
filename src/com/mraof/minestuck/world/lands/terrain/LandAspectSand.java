@@ -28,7 +28,7 @@ import java.util.Random;
 
 public class LandAspectSand extends TerrainLandAspect
 {
-	private final Vec3d skyColor;
+	private final Vec3d fogColor, skyColor;
 	private final Variant type;
 	private final List<TerrainLandAspect> variations;
 	
@@ -44,14 +44,16 @@ public class LandAspectSand extends TerrainLandAspect
 		
 		if(type == Variant.SAND)
 		{
-			skyColor = new Vec3d(0.99D, 0.8D, 0.05D);
+			fogColor = new Vec3d(0.99D, 0.8D, 0.05D);
+			skyColor = new Vec3d(0.8D, 0.8D, 0.1D);
 			
 			variations.add(this);
 			variations.add(new LandAspectSand(Variant.SAND_RED));
 			variations.add(new LandAspectSand(Variant.LUSH_DESERTS));
 		} else
 		{
-			skyColor = new Vec3d(0.99D, 0.6D, 0.05D);
+			fogColor = new Vec3d(0.99D, 0.6D, 0.05D);
+			skyColor = new Vec3d(0.8D, 0.6D, 0.1D);
 		}
 		
 	}
@@ -106,6 +108,10 @@ public class LandAspectSand extends TerrainLandAspect
 	public List<ILandDecorator> getDecorators()
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
+		list.add(new WorldGenDecorator(new WorldGenCactus(), 15, 0.4F, BiomeMinestuck.mediumNormal));
+		list.add(new WorldGenDecorator(new WorldGenCactus(), 5, 0.4F, BiomeMinestuck.mediumRough));
+		list.add(new WorldGenDecorator(new WorldGenDeadBush(), 1, 0.4F, BiomeMinestuck.mediumNormal, BiomeMinestuck.mediumRough));
+		list.add(new OasisDecorator());
 		if(type == Variant.LUSH_DESERTS) {
 			list.add(new WorldGenDecorator(new WorldGenCactus(), 45, 0.4F, BiomeMinestuck.mediumNormal));
 			list.add(new WorldGenDecorator(new WorldGenCactus(), 30, 0.4F, BiomeMinestuck.mediumRough));
@@ -130,12 +136,6 @@ public class LandAspectSand extends TerrainLandAspect
 	}
 	
 	@Override
-	public int getDayCycleMode()
-	{
-		return 1;
-	}
-	
-	@Override
 	public float getTemperature()
 	{
 		return 2.0F;
@@ -155,6 +155,12 @@ public class LandAspectSand extends TerrainLandAspect
 	
 	@Override
 	public Vec3d getFogColor() 
+	{
+		return fogColor;
+	}
+	
+	@Override
+	public Vec3d getSkyColor()
 	{
 		return skyColor;
 	}

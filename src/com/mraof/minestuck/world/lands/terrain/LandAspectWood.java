@@ -18,7 +18,7 @@ import java.util.List;
 
 public class LandAspectWood extends TerrainLandAspect 
 {
-	static Vec3d skyColor = new Vec3d(0.0D, 0.16D, 0.38D);
+	static Vec3d fogColor = new Vec3d(0.0D, 0.16D, 0.38D);
 	
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
@@ -74,15 +74,21 @@ public class LandAspectWood extends TerrainLandAspect
 	}
 	
 	@Override
-	public int getDayCycleMode()
+	public float getSkylightBase()
 	{
-		return 2;
+		return 1/2F;
 	}
 	
 	@Override
 	public Vec3d getFogColor() 
 	{
-		return skyColor;
+		return fogColor;
+	}
+	
+	@Override
+	public Vec3d getSkyColor()
+	{
+		return new Vec3d(0.0D, 0.3D, 0.4D);
 	}
 	
 	@Override

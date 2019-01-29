@@ -42,6 +42,7 @@ public class ConsortRewardHandler
 		ConsortRewardHandler.registerPrice(new ItemStack(hotCake), 400, 400);
 		ConsortRewardHandler.registerPrice(new ItemStack(redCake), 400, 400);
 		ConsortRewardHandler.registerPrice(new ItemStack(rockCookie), 15, 20);
+		ConsortRewardHandler.registerPrice(new ItemStack(strawberryChunk), 100, 150);
 		ConsortRewardHandler.registerPrice(new ItemStack(beverage, 1, 0), 200, 200);
 		for(int i = 1; i <= 9; i++)
 			ConsortRewardHandler.registerPrice(new ItemStack(beverage, 1, i), 100, 100);
@@ -89,6 +90,10 @@ public class ConsortRewardHandler
 		ConsortRewardHandler.registerPrice(new ItemStack(log, 1, 2), 20, 32);
 		ConsortRewardHandler.registerPrice(new ItemStack(woodenCactus), 50, 60);
 		ConsortRewardHandler.registerPrice(new ItemStack(sugarCube), 200, 240);
+		ConsortRewardHandler.registerPrice(new ItemStack(fungalSpore), 1, 4);
+		ConsortRewardHandler.registerPrice(new ItemStack(sporeo), 15, 25);
+		ConsortRewardHandler.registerPrice(new ItemStack(morelMushroom), 40, 80);
+		ConsortRewardHandler.registerPrice(new ItemStack(paradisesPortabello), 400, 600);
 		ConsortRewardHandler.registerPrice(new ItemStack(bugNet), 500, 600);
 		
 		ConsortRewardHandler.registerPrice(new ItemStack(WATERLILY), 24, 31);
@@ -168,6 +173,14 @@ public class ConsortRewardHandler
 		ConsortRewardHandler.registerPrice(new ItemStack(RED_SANDSTONE, 1, 2), 5, 10);
 		ConsortRewardHandler.registerPrice(new ItemStack(STONEBRICK, 1, 0), 5, 10);
 		ConsortRewardHandler.registerPrice(new ItemStack(STONEBRICK, 1, 3), 10, 15);
+		ConsortRewardHandler.registerPrice(new ItemStack(BREAD), 90, 130);
+		ConsortRewardHandler.registerPrice(new ItemStack(CHORUS_FRUIT), 420, 420);
+		ConsortRewardHandler.registerPrice(new ItemStack(DRAGON_BREATH), 50, 100);
+		ConsortRewardHandler.registerPrice(new ItemStack(EGG), 50, 100);
+		ConsortRewardHandler.registerPrice(new ItemStack(ELYTRA), 500, 1000);
+		ConsortRewardHandler.registerPrice(new ItemStack(OBSIDIAN), 8, 20);
+		ConsortRewardHandler.registerPrice(new ItemStack(PAPER), 5, 20);
+
 	}
 	
 	public static void registerPrice(ItemStack stack, int min, int max)	//Maybe add json support at some point too

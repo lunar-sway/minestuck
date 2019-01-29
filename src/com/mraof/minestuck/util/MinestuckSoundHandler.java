@@ -32,6 +32,6 @@ public class MinestuckSoundHandler
 		event.getRegistry().register(soundEmissaryOfDance);
 		event.getRegistry().register(soundDanceStabDance);
 		event.getRegistry().register(soundRetroBattleTheme);
-		event.getRegistry().register(soundFrogAmbient);
+		//event.getRegistry().register(soundFrogAmbient);
 	}
 }

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "minestuck:pink_stone_bricks"
+    }
+  },
+  "result": {
+    "item": "minestuck:pink_polished_stone",
+    "count": 4
+  }
+}

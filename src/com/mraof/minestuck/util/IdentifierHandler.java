@@ -33,9 +33,10 @@ public class IdentifierHandler {
 	public static String host;	//This basically stores server.getServerOwner(), but for all players to access
 	public static final PlayerIdentifier nullIdentifier = new PlayerIdentifier(".null");
 	
-	private static List<PlayerIdentifier> identifierList = new ArrayList<PlayerIdentifier>();
-	private static List<PlayerIdentifier> identifiersToChange = new ArrayList<PlayerIdentifier>();
+	private static List<PlayerIdentifier> identifierList = new ArrayList<>();
+	private static List<PlayerIdentifier> identifiersToChange = new ArrayList<>();
 	private static int nextIdentifierId;
+	private static int fakePlayerIndex = 0;
 	
 	/**
 	 * Used to convert a player username to a stored version.
@@ -161,7 +162,7 @@ public class IdentifierHandler {
 		if(arg.startsWith("@"))
 		{
 			arg = arg.substring(1);
-			List<String> list = Lists.<String>newArrayList();
+			List<String> list = Lists.newArrayList();
 			for(PlayerIdentifier identifier : identifierList)
 				if(identifier.getString().startsWith(arg))
 					list.add("@"+identifier.getString());
@@ -172,6 +173,27 @@ public class IdentifierHandler {
 		} else
 		{
 			return CommandBase.getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames());
+		}
+	}
+	
+	public static PlayerIdentifier createNewFakeIdentifier()
+	{
+		index: while(true)
+		{
+			for(PlayerIdentifier identifier : identifierList)
+			{
+				if(!identifier.useUUID && identifier.username.equals(".fake" + fakePlayerIndex))
+				{
+					fakePlayerIndex++;
+					continue index;
+				}
+			}
+			PlayerIdentifier identifier = new PlayerIdentifier(".fake" + fakePlayerIndex);
+			identifier.id = nextIdentifierId;
+			nextIdentifierId++;
+			identifierList.add(identifier);
+			fakePlayerIndex++;
+			return identifier;
 		}
 	}
 	

@@ -56,7 +56,7 @@ public class SmallRuinStart extends StructureStart
 			int zWidth = getCoordBaseMode().getAxis().equals(EnumFacing.Axis.Z) ? 10 : 7;
 			this.boundingBox = new StructureBoundingBox(x, 64, z, x + xWidth - 1, 67, z + zWidth - 1);
 			
-			float torchChance = provider.dayCycle == 0 ? 0.4F : provider.dayCycle == 1 ? 0F : 0.9F;
+			float torchChance = 1 -  provider.worldProvider.skylightBase;
 			
 			torches[0] = rand.nextFloat() < 0.5F*torchChance;
 			torches[1] = rand.nextFloat() < 0.5F*torchChance;

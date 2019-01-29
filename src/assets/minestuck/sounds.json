@@ -22,13 +22,5 @@
             "stream": true
         }
       ]
-    },
-    "mobs.frogAmbient": {
-    	"sounds":[
-    		{
-    			"name": "minestuck:mobs/frog_ambient",
-    			"stream": true 
-    		}
-    	]
     }
 }

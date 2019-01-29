@@ -1,0 +1,6 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "all": "minestuck:blocks/diamond_ore_pink_stone"
+    }
+}

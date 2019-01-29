@@ -42,7 +42,7 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 		IBlockState floor = provider.blockRegistry.getBlockState("structure_secondary");
 		IBlockState torch = provider.blockRegistry.getBlockState("torch");
 		
-		boolean torches = random.nextFloat() < (provider.dayCycle == 0 ? 0.4F : provider.dayCycle == 1 ? 0F : 0.9F);
+		boolean torches = random.nextFloat() < 1 - provider.worldProvider.skylightBase;
 		
 		for(int x = -3; x < 4; x++)
 			for(int z = Math.abs(x) == 3 ? -2 : -3; z < (Math.abs(x) == 3 ? 3 : 4); z++)

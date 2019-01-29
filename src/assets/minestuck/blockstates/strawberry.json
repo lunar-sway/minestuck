@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "facing=up": { "model": "minestuck:strawberry" },
+        "facing=down": { "model": "minestuck:strawberry", "x": 180 },
+        "facing=north": { "model": "minestuck:strawberry", "x": 90 },
+        "facing=east": { "model": "minestuck:strawberry", "x": 90, "y": 90 },
+        "facing=south": { "model": "minestuck:strawberry", "x": 90, "y": 180 },
+        "facing=west": { "model": "minestuck:strawberry", "x": 90, "y": 270 }
+    }
+}

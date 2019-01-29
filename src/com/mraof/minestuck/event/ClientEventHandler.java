@@ -1,5 +1,7 @@
 package com.mraof.minestuck.event;
 
+import javax.annotation.Nullable;
+
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MinestuckBlocks;
@@ -16,13 +18,21 @@ import com.mraof.minestuck.util.ColorCollector;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 
+import net.minecraft.block.BlockStem;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.color.BlockColors;
+import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionUtils;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -121,5 +131,22 @@ public class ClientEventHandler
 	public void onModelBake(ModelBakeEvent event)
 	{
 		Debug.info(event.getModelManager().getModel(new ModelResourceLocation("minestuck:alchemiter#facing=east,has_dowel=true,part=totem_pad")));
+	}
+	
+	@SubscribeEvent
+	public void onBlockColorsInit(ColorHandlerEvent.Block e)
+	{
+		BlockColors blockColors = e.getBlockColors();
+		blockColors.registerBlockColorHandler(new IBlockColor()
+		{
+			public int colorMultiplier(IBlockState state, @Nullable IBlockAccess worldIn, @Nullable BlockPos pos, int tintIndex)
+			{
+				int age = ((Integer)state.getValue(BlockStem.AGE)).intValue();
+				int red = age * 32;
+				int green = 255 - age * 8;
+				int blue = age * 4;
+				return red << 16 | green << 8 | blue;
+			}
+		}, MinestuckBlocks.strawberryStem);
 	}
 }

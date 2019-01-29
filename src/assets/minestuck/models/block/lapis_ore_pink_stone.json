@@ -1,0 +1,6 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "all": "minestuck:blocks/lapis_ore_pink_stone"
+    }
+}

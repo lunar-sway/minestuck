@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "normal": { "model": "minestuck:end_planks" },
+        "all":    { "model": "minestuck:end_planks" }
+    }
+}

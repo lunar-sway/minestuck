@@ -8,6 +8,7 @@ import com.mraof.minestuck.world.gen.feature.WorldGenRainbowTree;
 
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.IGrowable;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
@@ -33,6 +34,7 @@ public class BlockEndSapling extends BlockBush implements IGrowable
 		this.setDefaultState(this.blockState.getBaseState().withProperty(ALPHA, false).withProperty(OMEGA, false));
 		this.setCreativeTab(TabMinestuck.instance);
 		this.setUnlocalizedName("endSapling");
+		this.setSoundType(SoundType.PLANT);
 	}
 	
 	@Override

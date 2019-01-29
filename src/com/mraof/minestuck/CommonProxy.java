@@ -33,6 +33,7 @@ import com.mraof.minestuck.world.storage.loot.conditions.ConsortLootCondition;
 import com.mraof.minestuck.world.storage.loot.conditions.LandAspectLootCondition;
 import com.mraof.minestuck.world.storage.loot.functions.SetBoondollarCount;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.storage.loot.conditions.LootConditionManager;
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;

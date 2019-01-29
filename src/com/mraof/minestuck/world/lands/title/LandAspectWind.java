@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.lands.title;
 
+import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.lands.decorator.RockDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.gen.DefaultTerrainGen;
@@ -24,12 +25,16 @@ public class LandAspectWind extends TitleLandAspect
 	}
 	
 	@Override
+	public void prepareWorldProvider(WorldProviderLands worldProvider)
+	{
+		worldProvider.mergeFogColor(new Vec3d(0.1, 0.2, 0.8), 0.3F);
+	}
+	
+	@Override
 	public void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
 		if(chunkProvider.weatherType == -1)
 			chunkProvider.weatherType = 0;
-		
-		chunkProvider.mergeFogColor(new Vec3d(0.1, 0.2, 0.8), 0.3F);
 	}
 	
 	@Override
@@ -42,7 +47,7 @@ public class LandAspectWind extends TitleLandAspect
 		{
 			DefaultTerrainGen terrainGen = (DefaultTerrainGen) chunkProvider.terrainGenerator;
 			terrainGen.normalVariation *= 0.6F;
-			terrainGen.roughtVariation *= 0.6F;
+			terrainGen.roughVariation *= 0.6F;
 			terrainGen.roughHeight = (terrainGen.roughHeight + terrainGen.normalHeight)/2;
 		}
 	}
