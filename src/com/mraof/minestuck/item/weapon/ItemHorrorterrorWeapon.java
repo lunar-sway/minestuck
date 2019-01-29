@@ -24,12 +24,12 @@ public class ItemHorrorterrorWeapon extends ItemWeapon {
         if (attacker instanceof EntityPlayer && attacker.getRNG().nextFloat() < .15)
         {
         	if(!attacker.world.isRemote) {
-        		String[]  options = new String[] {"Your blood shall fuel our machinations.", 
-        				"They stir in your subconscious.", 
-        				"Your suffering grants us strength.", 
-        				"Our will is your will.",
-        				"It is done.",
-        				"You are a tool. A tool through which we we exert our conspiracies."};
+        		String[]  options = new String[] {"item.clawOfNrubyiglith.message.machinations",
+        				"item.clawOfNrubyiglith.message.stir",
+        				"item.clawOfNrubyiglith.message.suffering",
+        				"item.clawOfNrubyiglith.message.will",
+        				"item.clawOfNrubyiglith.message.done",
+        				"item.clawOfNrubyiglith.message.conspiracies"};
         		Random rand = new Random();
         		int num = rand.nextInt(options.length);
     			ITextComponent message = new TextComponentTranslation(options[num]);       
