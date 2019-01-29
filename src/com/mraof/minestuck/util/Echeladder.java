@@ -87,8 +87,6 @@ public class Echeladder
 					break increasment;
 				if(rung > prevRung + 1)
 					exp = (int) (exp/1.5);
-				EntityPlayer player = identifier.getPlayer();
-				player.world.playSound((EntityPlayer)null, player.posX, player.posY, player.posZ, MinestuckSoundHandler.soundUpcheladder, SoundCategory.AMBIENT, 1F, 1.0F);
 				Debug.debugf("Increased rung to %s, remaining exp is %s", rung, exp);
 			}
 			if(exp >= expReq/50)
@@ -107,6 +105,7 @@ public class Echeladder
 			{
 				updateEcheladderBonuses(player);
 				MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.BOONDOLLAR, MinestuckPlayerData.getData(identifier).boondollars), player);
+				player.world.playSound((EntityPlayer)null, player.posX, player.posY, player.posZ, MinestuckSoundHandler.soundUpcheladder, SoundCategory.AMBIENT, 1F, 1SF);
 			}
 		}
 	}
