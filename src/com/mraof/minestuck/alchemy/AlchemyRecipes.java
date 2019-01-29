@@ -515,7 +515,7 @@ public class AlchemyRecipes
 		GristRegistry.addGristConversion(new ItemStack(crockerMachine, 1, 0), true, new GristSet(new GristType[] {GristType.Build, GristType.Garnet, GristType.Ruby}, new int[] {550, 55, 34}));
 		GristRegistry.addGristConversion(new ItemStack(genericObject), true, new GristSet(new GristType[] {GristType.Build}, new int[] {2}));
 		GristRegistry.addGristConversion(new ItemStack(chessboard), true, new GristSet(new GristType[] {GristType.Shale, GristType.Marble}, new int[] {25, 25}));
-		GristRegistry.addGristConversion(new ItemStack(grimoire), true, new GristSet(new GristType[] {GristType.Build, GristType.Amethyst, GristType.Garnet}, new int[] {35, 20, 15}));
+		GristRegistry.addGristConversion(new ItemStack(grimoire), true, new GristSet(new GristType[] {GristType.Build, GristType.Amethyst, GristType.Garnet}, new int[] {120, 60, 33}));
 		GristRegistry.addGristConversion(new ItemStack(longForgottenWarhorn), true, new GristSet(new GristType[] {GristType.Build, GristType.Amethyst, GristType.Tar, GristType.Garnet}, new int[] {550, 120, 50, 80}));
 
 		GristRegistry.addGristConversion(new ItemStack(cruxiteApple, 1), false, new GristSet());
