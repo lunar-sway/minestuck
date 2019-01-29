@@ -43,12 +43,6 @@ public class BlockDecor extends Block
 	{
 		this(unlocalizedName, SoundType.STONE);
 	}
-
-	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) 
-	{
-		return BlockFaceShape.UNDEFINED;
-	}
 	
 	@Override
 	public boolean isFullCube(IBlockState state)
