@@ -31,7 +31,7 @@ public class ItemHorrorterrorWeapon extends ItemWeapon {
         				"It is done.",
         				"You are a tool. A tool through which we we exert our conspiracies."};
         		Random rand = new Random();
-        		int num = rand.nextInt(5);
+        		int num = rand.nextInt(options.length);
     			ITextComponent message = new TextComponentTranslation(options[num]);       
     			message.getStyle().setColor(TextFormatting.DARK_PURPLE);
     			attacker.sendMessage(message);
