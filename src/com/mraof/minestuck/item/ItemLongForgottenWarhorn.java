@@ -25,9 +25,9 @@ public class ItemLongForgottenWarhorn extends Item {
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
         ItemStack item = playerIn.getHeldItem(handIn);
         Random rand = new Random();
-        int duration = rand.nextInt(1200);
+        int duration = rand.nextInt(1199) + 1;
         int amplifier = rand.nextInt(8);
-        int durability = rand.nextInt(15);
+        int durability = rand.nextInt(14) + 1;
         PotionEffect[] effect = new PotionEffect[] {new PotionEffect(MobEffects.BLINDNESS, duration, amplifier),
                 new PotionEffect(MobEffects.WITHER, duration, amplifier),
                 new PotionEffect(MobEffects.POISON, duration, amplifier),
