@@ -20,6 +20,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -135,7 +136,8 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 			//player.addStat(MinestuckAchievementHandler.getHammer);
 		}
 	}
-
+	
+	
 	//Thanks to Mraof for supplying the base for this method.
 	@Override
 	public boolean canHarvestBlock(IBlockState state, ItemStack stack)

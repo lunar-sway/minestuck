@@ -98,6 +98,13 @@ public class MinestuckItems
 	//Dice
 	public static Item dice = new ItemWeapon(51, 6, 3, 6, "dice");
 	public static Item fluoriteOctet = new ItemWeapon(67, 15, 6, 8, "fluoriteOctet");
+	//Gauntlets
+	public static Item fancyGlove = new ItemWeapon(50, 0D, 0, 5, "fancyGlove").setTool("gauntlet", 0, 0);
+	public static Item spikedGlove = new ItemWeapon(75, 3.5D, 0, 8, "spikedGlove").setTool("gauntlet", 0, 0.5F);
+	public static Item cobbleBasher = new ItemWeapon(175, 4D, -1.2D, 4, "cobbleBasher").setTool("gauntlet", 0, 1.2F);
+	public static Item fluoriteGauntlet = new ItemWeapon(980, 8.9D, -0.25D, 8, "fluoriteGauntlet").setTool("gauntlet", 0, 2.4F);
+	public static Item goldenGenesisGloves = new ItemWeapon(1256, 13D, -0.2D, 15, "goldenGenesisGloves").setTool("gauntlet", 0, 3F);
+	public static Item pogoFist = new ItemPogoWeapon(700, 7.0D, -0.3, 8, "pogoFist", 0.55D).setTool("gauntlet", 0, 1.4F);
 	//misc weapons
 	public static Item catClaws = new ItemDualWeapon(500, 4.0D, 1.0D, -1.5D, -1.0D, 6, "catclaws");
 	//sickles
@@ -107,6 +114,7 @@ public class MinestuckItems
 	public static Item regiSickle = new ItemWeapon(812, 6.0D, -2.4D, 5, "regiSickle").setTool("sickle", 0, 4.0F);
 	public static Item clawSickle = new ItemWeapon(2048, 7.0D, -2.4D, 15, "clawSickle").setTool("sickle", 0, 4.0F);
 	public static Item candySickle = new ItemCandyWeapon(96, 6.0D, -2.4D, 15, "candySickle").setTool("sickle", 0, 2.5F);
+	public static Item hereticusAurum = new ItemWeapon(952, 6.5D, -2.3D, 20, "hereticusAurum").setTool("sickle", 0, 5.0F);
 	//clubs
 	public static Item deuceClub = new ItemWeapon(1024, 2.5D, -2.2D, 15, "deuceClub");
 	public static Item nightClub = new ItemWeapon(600, 4.0D, -2.2D, 20, "nightClub");
@@ -431,6 +439,9 @@ public class MinestuckItems
 		//Dice
 		registry.register(dice.setRegistryName("dice"));
 		registry.register(fluoriteOctet.setRegistryName("fluorite_octet"));
+		//Gauntlets
+		registry.register(fluoriteGauntlet.setRegistryName("fluorite_gauntlet"));
+		registry.register(pogoFist.setRegistryName("pogo_fist"));
 		//misc weapons
 		registry.register(catClaws.setRegistryName("catclaws"));
 		//sickles
@@ -440,6 +451,7 @@ public class MinestuckItems
 		registry.register(regiSickle.setRegistryName("regisickle"));
 		registry.register(clawSickle.setRegistryName("claw_sickle"));
 		registry.register(candySickle.setRegistryName("candy_sickle"));
+		registry.register(hereticusAurum.setRegistryName("hereticus_aururm"));
 		
 		//clubs
 		registry.register(deuceClub.setRegistryName("deuce_club"));
@@ -552,6 +564,7 @@ public class MinestuckItems
 		ItemWeapon.addToolMaterial("shovel", Arrays.asList(Material.SNOW, Material.CRAFTED_SNOW, Material.CLAY, Material.GRASS, Material.GROUND, Material.SAND));
 		ItemWeapon.addToolMaterial("sword", Arrays.asList(Material.WEB));
 		ItemWeapon.addToolMaterial("sickle", Arrays.asList(Material.WEB, Material.LEAVES, Material.PLANTS, Material.VINE));
+		ItemWeapon.addToolMaterial("gauntlet", Arrays.asList(Material.GLASS, Material.ICE));
 	}
 
 	private static Item registerItemBlock(IForgeRegistry<Item> registry, ItemBlock item)

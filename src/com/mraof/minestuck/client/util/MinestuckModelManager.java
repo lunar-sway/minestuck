@@ -101,6 +101,9 @@ public class MinestuckModelManager
 		register(dice);
 		register(fluoriteOctet);
 		
+		register(fluoriteGauntlet);
+		register(pogoFist);
+		
 		ModelLoader.registerItemVariants(catClaws, new ResourceLocation("minestuck:catclaws_sheathed"), new ResourceLocation("minestuck:catclaws_drawn"));
 		ModelLoader.setCustomMeshDefinition(catClaws, new DualWeaponDefinition(catClaws));
 		
@@ -110,6 +113,7 @@ public class MinestuckModelManager
 		register(regiSickle);
 		register(clawSickle);
 		register(candySickle);
+		register(hereticusAurum);
 		
 		register(deuceClub);
 		register(nightClub);
