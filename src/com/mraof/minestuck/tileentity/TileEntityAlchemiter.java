@@ -449,7 +449,7 @@ public class TileEntityAlchemiter extends TileEntity
 		//if the item is a captcha card do other stuff
 		useSelectedType = stack.getItem() == MinestuckItems.captchaCard;
 		if (useSelectedType)
-			set = new GristSet(getSelectedGrist(), MinestuckConfig.cardCost);
+			set = new GristSet(getSelectedGrist(), !world.isRemote ? MinestuckConfig.cardCost : MinestuckConfig.clientCardCost);
 		
 		if (set != null)
 		{

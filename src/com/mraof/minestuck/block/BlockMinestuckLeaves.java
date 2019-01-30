@@ -28,8 +28,8 @@ public abstract class BlockMinestuckLeaves extends Block implements net.minecraf
 	public static final PropertyBool DECAYABLE = PropertyBool.create("decayable");
 	public static final PropertyBool CHECK_DECAY = PropertyBool.create("check_decay");
 	
-	@SideOnly(Side.CLIENT)
-	public static boolean leavesFancy = Minecraft.isFancyGraphicsEnabled();
+	//@SideOnly(Side.CLIENT)
+	protected boolean leavesFancy = true;	//TODO Update this setting
 	
 	int[] surroundings;
 	

@@ -75,7 +75,7 @@ public class GuiCrockerMachine extends GuiMachine
 			GuiUtil.drawGristBoard(set, GuiUtil.GristboardMode.GRIST_WIDGET, 9, 45, fontRenderer);
 			
 			int cost = te.getGristWidgetBoondollarValue();
-			int has = MinestuckPlayerData.boondollars;
+			long has = MinestuckPlayerData.boondollars;
 			String costText = GuiUtil.addSuffix(cost)+"£("+GuiUtil.addSuffix(has)+")";
 			fontRenderer.drawString(costText, xSize - 9 - fontRenderer.getStringWidth(costText), ySize - 96 + 3, cost > has ? 0xFF0000 : 0x00FF00);
 			
