@@ -7,9 +7,20 @@ import net.minecraft.util.DamageSource;
 
 /**
  * Created by mraof on 2017 January 18 at 6:33 PM.
+ * Edited by Cibernet some day, idk which one.
  */
+
+
+
 public class ItemRandomWeapon extends ItemWeapon
 {
+	private int maxRand = 7;
+	
+	public ItemRandomWeapon(int maxUses, double damageVsEntity, double weaponSpeed, int enchantability, int maxRand, String name)
+	{
+		this(maxUses, damageVsEntity, weaponSpeed, enchantability, name);
+		this.maxRand = maxRand;
+	}
     public ItemRandomWeapon(int maxUses, double damageVsEntity, double weaponSpeed, int enchantability, String name)
     {
         super(maxUses, damageVsEntity, weaponSpeed, enchantability, name);
@@ -28,7 +39,7 @@ public class ItemRandomWeapon extends ItemWeapon
             source = DamageSource.causeMobDamage(player);
         }
         
-        float rng = (float) (player.getRNG().nextInt(7)+1) * (player.getRNG().nextInt(7)+1);
+        float rng = (float) (player.getRNG().nextInt(maxRand)+1) * (player.getRNG().nextInt(maxRand)+1);
         target.attackEntityFrom(source, rng );
         
         
