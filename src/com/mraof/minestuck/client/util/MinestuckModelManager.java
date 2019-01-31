@@ -101,7 +101,11 @@ public class MinestuckModelManager
 		register(dice);
 		register(fluoriteOctet);
 		
+		register(fancyGlove);
+		register(spikedGlove);
+		register(cobbleBasher);
 		register(fluoriteGauntlet);
+		register(goldenGenesisGauntlet);
 		register(pogoFist);
 		
 		ModelLoader.registerItemVariants(catClaws, new ResourceLocation("minestuck:catclaws_sheathed"), new ResourceLocation("minestuck:catclaws_drawn"));

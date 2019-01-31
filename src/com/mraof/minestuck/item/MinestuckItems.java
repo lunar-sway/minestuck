@@ -103,7 +103,7 @@ public class MinestuckItems
 	public static Item spikedGlove = new ItemWeapon(75, 3.5D, 0, 8, "spikedGlove").setTool("gauntlet", 0, 0.5F);
 	public static Item cobbleBasher = new ItemWeapon(175, 4D, -1.2D, 4, "cobbleBasher").setTool("gauntlet", 0, 1.2F);
 	public static Item fluoriteGauntlet = new ItemWeapon(980, 8.9D, -0.25D, 8, "fluoriteGauntlet").setTool("gauntlet", 0, 2.4F);
-	public static Item goldenGenesisGloves = new ItemWeapon(1256, 13D, -0.2D, 15, "goldenGenesisGloves").setTool("gauntlet", 0, 3F);
+	public static Item goldenGenesisGauntlet = new ItemWeapon(1256, 13D, -0.2D, 15, "goldenGenesisGauntlet").setTool("gauntlet", 0, 3F);
 	public static Item pogoFist = new ItemPogoWeapon(700, 7.0D, -0.3, 8, "pogoFist", 0.55D).setTool("gauntlet", 0, 1.4F);
 	//misc weapons
 	public static Item catClaws = new ItemDualWeapon(500, 4.0D, 1.0D, -1.5D, -1.0D, 6, "catclaws");
@@ -439,11 +439,18 @@ public class MinestuckItems
 		//Dice
 		registry.register(dice.setRegistryName("dice"));
 		registry.register(fluoriteOctet.setRegistryName("fluorite_octet"));
+		
 		//Gauntlets
+		registry.register(fancyGlove.setRegistryName("fancy_glove"));
+		registry.register(spikedGlove.setRegistryName("spiked_glove"));
+		registry.register(cobbleBasher.setRegistryName("cobble_basher"));
 		registry.register(fluoriteGauntlet.setRegistryName("fluorite_gauntlet"));
+		registry.register(goldenGenesisGauntlet.setRegistryName("golden_genesis_gauntlet"));
 		registry.register(pogoFist.setRegistryName("pogo_fist"));
+		
 		//misc weapons
 		registry.register(catClaws.setRegistryName("catclaws"));
+		
 		//sickles
 		registry.register(sickle.setRegistryName("sickle"));
 		registry.register(homesSmellYaLater.setRegistryName("homes_smell_ya_later"));
