@@ -179,6 +179,7 @@ public class MinestuckItems
 	//public static Item chessboard = new Item().setUnlocalizedName("chessboard").setCreativeTab(TabMinestuck.instance);
 	public static ItemDowel cruxiteDowel = new ItemDowel(MinestuckBlocks.blockCruxiteDowel);
 	public static Item captchaCard = new ItemCaptchaCard();
+	public static Item strifeCard = new ItemStrifeCard();
 	public static Item cruxiteApple = new ItemCruxiteApple();
 	public static Item cruxitePotion = new ItemCruxitePotion();
 	public static Item disk = new ItemDisk();
@@ -526,6 +527,7 @@ public class MinestuckItems
 		registry.register(rawUranium.setRegistryName("raw_uranium"));
 		registry.register(energyCore.setRegistryName("energy_core"));
 		registry.register(captchaCard.setRegistryName("captcha_card"));
+		registry.register(strifeCard.setRegistryName("strife_card"));
 		registry.register(cruxiteApple.setRegistryName("cruxite_apple"));
 		registry.register(cruxitePotion.setRegistryName("cruxite_potion"));
 		registry.register(disk.setRegistryName("computer_disk"));

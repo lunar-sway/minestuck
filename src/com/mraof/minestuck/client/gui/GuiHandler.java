@@ -30,6 +30,7 @@ public class GuiHandler implements IGuiHandler
 		COLOR,
 		MERCHANT,
 		ALCHEMITER,
+		STRIFE_CARD,
 	}
 	
 	@Override
@@ -77,7 +78,8 @@ public class GuiHandler implements IGuiHandler
 		
 		if(tileEntity instanceof TileEntityAlchemiter && id == GuiId.ALCHEMITER.ordinal())
 			return new GuiAlchemiter((TileEntityAlchemiter) tileEntity);
-		
+		if(id == GuiId.STRIFE_CARD.ordinal())
+			return new GuiStrifeCard();
 		return null;
 		
 	}
