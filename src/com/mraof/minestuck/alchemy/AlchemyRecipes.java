@@ -518,6 +518,13 @@ public class AlchemyRecipes
 		GristRegistry.addGristConversion(new ItemStack(cruxiteApple, 1), false, new GristSet());
 		GristRegistry.addGristConversion(new ItemStack(cruxitePotion, 1), false, new GristSet());
 		
+		GristRegistry.addGristConversion(new ItemStack(fancyGlove), false, new GristSet(new GristType[] {GristType.Build, GristType.Chalk}, new int[] {5, 2}));
+		GristRegistry.addGristConversion(new ItemStack(spikedGlove), false, new GristSet(new GristType[] {GristType.Build, GristType.Rust, GristType.Chalk}, new int[] {25, 5, 3}));
+		GristRegistry.addGristConversion(new ItemStack(cobbleBasher), false, new GristSet(new GristType[] {GristType.Build, GristType.Marble}, new int[] {30, 5}));
+		GristRegistry.addGristConversion(new ItemStack(pogoFist), false, new GristSet(new GristType[] {GristType.Build, GristType.Shale}, new int[] {16, 21}));
+		GristRegistry.addGristConversion(new ItemStack(fluoriteGauntlet), false, new GristSet(new GristType[] {GristType.Cobalt, GristType.Caulk, GristType.Quartz, GristType.Shale}, new int[] {803, 500, 10, 2}));
+		GristRegistry.addGristConversion(new ItemStack(goldenGenesisGauntlet), false, new GristSet(new GristType[] {GristType.Build, GristType.Gold, GristType.Uranium, GristType.Diamond, GristType.Artifact}, new int[] {8000, 5000, 300, 250, 10}));
+		
 		GristRegistry.addGristConversion(new ItemStack(catClaws),false,new GristSet(new GristType[] {GristType.Build,GristType.Rust},new int[] {15,5}));
 		
 		GristRegistry.addGristConversion(new ItemStack(clawHammer), false, new GristSet(GristType.Build, 8));
@@ -775,6 +782,13 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(new ItemStack(ironCane), new ItemStack(chessboard), MODE_AND, false, true, new ItemStack(regiCane));
 		CombinationRegistry.addCombination(new ItemStack(Items.STICK), new ItemStack(rawUranium), MODE_OR, false, false, new ItemStack(upStick));
 		
+		//gauntlets
+		CombinationRegistry.addCombination(new ItemStack(Blocks.IRON_BARS), new ItemStack(fancyGlove), MODE_AND, false, false, new ItemStack(spikedGlove));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.COBBLESTONE), new ItemStack(fancyGlove), MODE_AND, false, false, new ItemStack(cobbleBasher));
+		CombinationRegistry.addCombination(new ItemStack(Items.SLIME_BALL), new ItemStack(fancyGlove), MODE_OR, false, false, new ItemStack(pogoFist));
+		CombinationRegistry.addCombination(new ItemStack(fluoriteOctet), new ItemStack(cobbleBasher), MODE_OR, false, false, new ItemStack(fluoriteGauntlet));
+		CombinationRegistry.addCombination(new ItemStack(itemFrog, 1, 5), new ItemStack(fluoriteGauntlet), MODE_OR, true, false, new ItemStack(goldenGenesisGauntlet));
+		
 		//spoons/sporks/forks
 		CombinationRegistry.addCombination(new ItemStack(Items.WOODEN_SHOVEL), new ItemStack(Items.BOWL), MODE_AND, false, true, new ItemStack(woodenSpoon));
 		CombinationRegistry.addCombination(new ItemStack(Items.WOODEN_SHOVEL), new ItemStack(Items.MUSHROOM_STEW), MODE_AND, false, true, new ItemStack(woodenSpoon));
@@ -802,6 +816,7 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(new ItemStack(modusCard), new ItemStack(blockComputerOff), MODE_AND, false, true, new ItemStack(modusCard, 1, 4));
 		CombinationRegistry.addCombination(new ItemStack(modusCard), new ItemStack(Items.ITEM_FRAME), MODE_AND, false, true, new ItemStack(modusCard, 1, 5));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.IRON_BARS),new ItemStack(Items.LEATHER), MODE_AND, false, true, new ItemStack(catClaws));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.IRON_BARS),new ItemStack(fancyGlove), MODE_OR, false, false, new ItemStack(catClaws));
 		CombinationRegistry.addCombination(new ItemStack(Items.WHEAT_SEEDS), new ItemStack(Items.GOLD_NUGGET), MODE_AND, new ItemStack(goldSeeds));
 		CombinationRegistry.addCombination(new ItemStack(Items.WHEAT_SEEDS), new ItemStack(Items.GOLD_INGOT), MODE_AND, new ItemStack(goldSeeds));
 		CombinationRegistry.addCombination(new ItemStack(Items.BOAT), new ItemStack(Items.MINECART), MODE_OR, new ItemStack(metalBoat, 1, 0));
