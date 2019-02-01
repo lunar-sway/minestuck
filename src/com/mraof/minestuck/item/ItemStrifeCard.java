@@ -23,7 +23,8 @@ public class ItemStrifeCard extends Item
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) 
 	{
-		System.out.println("eee");
+		//System.out.println("eee");
+		
 		
 		//if(worldIn.isRemote)
 		//	return new ActionResult<ItemStack>(EnumActionResult.PASS, playerIn.getHeldItem(handIn));
