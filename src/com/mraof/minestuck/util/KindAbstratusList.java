@@ -24,7 +24,8 @@ public class KindAbstratusList {
 		typeList.add(new KindAbstratusType("cane"));
 		typeList.add(new KindAbstratusType("club"));
 		typeList.add(new KindAbstratusType("sickle"));
-		typeList.add(new KindAbstratusType("spork"));
+		typeList.add(new KindAbstratusType("spoon"));
+		typeList.add(new KindAbstratusType("fork"));
 	}
 	
 	public static void registerType(KindAbstratusType type) {

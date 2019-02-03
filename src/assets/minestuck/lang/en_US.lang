@@ -880,6 +880,7 @@ item.rawCruxite.name=Raw Cruxite
 item.rawUranium.name=Uranium Lump
 item.energyCore.name=Energy Core
 item.dowelCruxite.name=Cruxite Dowel
+item.strifeCard.name=Strife Specibus
 item.captchaCard.name=Captchalogue Card
 item.captchaCard.empty=empty
 item.captchaCard.invalid=invalid data
@@ -1278,7 +1279,8 @@ strife.hammer.name=Hammerkind
 strife.cane.name=Canekind
 strife.club.name=Clubkind
 strife.sickle.name=Sicklekind
-strife.spork.name=sporkkind
+strife.spoon.name=Spoonkind
+strife.fork.name=Forkkind
 strife.gauntlet.name=Gauntletkind
 
 tile.oil.name=Oil
