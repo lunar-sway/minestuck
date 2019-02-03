@@ -5,6 +5,7 @@ import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalouge.Modus;
+import com.mraof.minestuck.inventory.specibus.StrifeSpecibus;
 import com.mraof.minestuck.network.GristCachePacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
@@ -17,6 +18,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -68,6 +70,16 @@ public class MinestuckPlayerData
 		getData(player).gristCache = set;
 	}
 
+	public static ArrayList<StrifeSpecibus> getStrifePortfolio(PlayerIdentifier player)
+	{
+		return getData(player).strifePortfolio;
+	}
+	
+	public static void setStrifePortfolio(PlayerIdentifier player, ArrayList<StrifeSpecibus> portfolio)
+	{
+		getData(player).strifePortfolio = portfolio;
+	}
+	
 	public static Title getTitle(PlayerIdentifier player)
 	{
 		return getData(player).title;
@@ -157,6 +169,7 @@ public class MinestuckPlayerData
 		public int color = -1;
 		public long boondollars;
 		public Echeladder echeladder;
+		public ArrayList<StrifeSpecibus> strifePortfolio;
 
 		private void readFromNBT(NBTTagCompound nbt)
 		{
@@ -215,7 +228,18 @@ public class MinestuckPlayerData
 			if (nbt.hasKey("color"))
 				this.color = nbt.getInteger("color");
 			boondollars = nbt.getLong("boondollars");
-
+			
+			if(nbt.hasKey("specibus"))
+			{
+				ArrayList<StrifeSpecibus> nbtPortfolio = new ArrayList<StrifeSpecibus>();
+				for(NBTBase base : nbt.getTagList("specibus", 10))
+				{
+					NBTTagCompound specibusTag = (NBTTagCompound) base;
+					nbtPortfolio.add(new StrifeSpecibus(specibusTag));
+				}
+				this.strifePortfolio = nbtPortfolio;
+			}
+			
 			echeladder = new Echeladder(player);
 			echeladder.loadEcheladder(nbt);
 		}
@@ -246,7 +270,19 @@ public class MinestuckPlayerData
 			else nbt.setBoolean("givenModus", givenModus);
 			nbt.setInteger("color", this.color);
 			nbt.setLong("boondollars", boondollars);
-
+			if(this.strifePortfolio != null)
+			{
+				NBTTagList list = new NBTTagList();
+				for(StrifeSpecibus specibus : strifePortfolio)
+				{
+					NBTTagCompound tag = new NBTTagCompound();
+					specibus.writeToNBT(tag);
+					list.appendTag(tag);
+				}
+				nbt.setTag("specibus", list);
+			}
+			
+			
 			echeladder.saveEcheladder(nbt);
 			return nbt;
 		}

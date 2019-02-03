@@ -79,7 +79,7 @@ public class GuiHandler implements IGuiHandler
 		if(tileEntity instanceof TileEntityAlchemiter && id == GuiId.ALCHEMITER.ordinal())
 			return new GuiAlchemiter((TileEntityAlchemiter) tileEntity);
 		if(id == GuiId.STRIFE_CARD.ordinal())
-			return new GuiStrifeCard();
+			return new GuiStrifeCard(player);
 		return null;
 		
 	}
