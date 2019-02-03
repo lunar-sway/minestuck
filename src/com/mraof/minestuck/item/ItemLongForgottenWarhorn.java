@@ -63,6 +63,11 @@ public class ItemLongForgottenWarhorn extends Item {
             item.damageItem(durability, playerIn);
             playerIn.world.playSound((EntityPlayer)null, playerIn.posX, playerIn.posY, playerIn.posZ, MinestuckSoundHandler.soundWarhorn, SoundCategory.AMBIENT, 1.5F, 1.0F);
         }
-        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, item);
+        if(worldIn.isRemote) {
+            return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, item);
+        }
+        else {
+            return new ActionResult<ItemStack>(EnumActionResult.PASS, item);
+        }
     }
 }
