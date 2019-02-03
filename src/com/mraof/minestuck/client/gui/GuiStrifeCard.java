@@ -1,17 +1,25 @@
 package com.mraof.minestuck.client.gui;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import com.mraof.minestuck.inventory.specibus.StrifeSpecibus;
+import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.KindAbstratusList;
 import com.mraof.minestuck.util.KindAbstratusType;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.translation.I18n;
+import scala.swing.TextComponent;
 
 public class GuiStrifeCard extends GuiScreenMinestuck
 {
@@ -20,6 +28,12 @@ public class GuiStrifeCard extends GuiScreenMinestuck
 	private static final ResourceLocation guiStrifeSelector = new ResourceLocation("minestuck", "textures/gui/strife_specibus/strife_selector.png");
 	private static float scale = 1;
 	private static final int columnWidth = 50, columns = 2;
+	private static EntityPlayer player;
+	
+	public GuiStrifeCard(EntityPlayer player) 
+	{
+		this.player = player;
+	}
 	
 	@Override
 	public void initGui() 
@@ -41,22 +55,24 @@ public class GuiStrifeCard extends GuiScreenMinestuck
 	{
 		scale = 1;
 		super.drawScreen(mouseX, mouseY, partialTicks);
-		//this.drawDefaultBackground();
 		
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		this.mc.getTextureManager().bindTexture(guiStrifeSelector);
 		
 		this.drawTexturedModalRect(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
-		
 		int listOffsetX = xOffset + 27;
 		int listOffsetY = yOffset + 60;
 		
-		for(int i = 0; i < KindAbstratusList.getTypeList().size(); i++)
+
+		List<KindAbstratusType> list = KindAbstratusList.getTypeList();
+		for(int i = 0; i < list.size(); i++)
 		{
-			List<KindAbstratusType> list = KindAbstratusList.getTypeList();
 			KindAbstratusType type = list.get(i);
 			String typeName = type.getDisplayName();
+			
+			//txPos += 78 (0.1625*width)
+			//tyPos += 36 (9540 / height)
 			
 			setScale(0.75f);
 			int color = 0xFFFFFF;
@@ -64,37 +80,51 @@ public class GuiStrifeCard extends GuiScreenMinestuck
 			int listY = (mc.fontRenderer.FONT_HEIGHT*(i / columns));
 			int xPos = listOffsetX + listX;
 			int yPos = listOffsetY + listY;
-			int sxPos = (listOffsetX) + (int)(listX/scale);
-			int syPos = listOffsetY + (int)(listY/scale);
-			int txPos = (sxPos + columnWidth - mc.fontRenderer.getStringWidth(typeName))+ 78;
-			int tyPos = syPos + 42;
+			int sxPos = (int)((listOffsetX + listX)/scale);
+			int syPos = (int)((listOffsetY + listY)/scale);
+			int txPos = (sxPos + columnWidth - mc.fontRenderer.getStringWidth(typeName))+ (int)(10/scale);
+			int tyPos = syPos + (int)(3/scale);
 			if(isPointInRegion(xPos, yPos, columnWidth, mc.fontRenderer.FONT_HEIGHT, mouseX, mouseY))
 			{
 				setScale(1);
 				drawRect(xPos, yPos, xPos+columnWidth, yPos+mc.fontRenderer.FONT_HEIGHT, 0xFFAFAFAF);
 				color = 0x000000;
-				if(Mouse.getEventButtonState())
+				if(Mouse.getEventButtonState() && Mouse.isButtonDown(0))
 				{
+					
 					System.out.println(typeName);
+					EnumHand hand = (player.getHeldItemMainhand().isItemEqual(new ItemStack(MinestuckItems.strifeCard)) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+					ItemStack card = player.getHeldItem(hand);
+					
+					if(card.isItemEqual(new ItemStack(MinestuckItems.strifeCard)))
+					{
+						//TODO Add the abstrata to the player's portfolio
+						StrifeSpecibus specibus = new StrifeSpecibus(i);
+						player.sendStatusMessage(new TextComponentTranslation("The " + typeName + " specibus has been added to your strife portfolio."), false);						
+						card.shrink(1);
+
+						this.mc.displayGuiScreen(null);
+					}
+					
 				}
 			}
 			
-
+			
+			
 			setScale(0.75f);
 			mc.fontRenderer.drawString(typeName, txPos, tyPos, color);
 		}
-		//setScale(1);
-			
-			/*
-			 * isPointInRegion()
-			 * drawRect()
-			 * mc.fontRender.drawString();
-			 * Mouse.getEventButtonState()
-			 */
-			
 		
+		//96*265/width
 		
-		mc.fontRenderer.drawString(""+((int)(listOffsetY/scale)), 10, 10, 0xFFFFFF);
+		setScale(1.8F);
+		String label = I18n.translateToLocal("kind abstrata");
+		int xLabel = (int)(-(((height+guiHeight)/2)-8)/scale);
+		int yLabel = (int)((((width+guiWidth)/2)-135)/scale);
+		//178
+		
+		GL11.glRotatef(270, 0, 0, 1);
+		mc.fontRenderer.drawString(label, xLabel, yLabel, 0xFFFFFF);
 		
 	}
 	
