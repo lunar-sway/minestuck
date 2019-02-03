@@ -18,6 +18,7 @@ public class ItemStrifeCard extends Item
 	{
 		setUnlocalizedName("strifeCard");
 		setMaxStackSize(1);
+		setCreativeTab(TabMinestuck.instance);
 	}
 	
 	@Override
