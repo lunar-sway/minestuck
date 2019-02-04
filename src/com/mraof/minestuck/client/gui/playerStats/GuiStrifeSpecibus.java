@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL11;
 import com.mraof.minestuck.inventory.specibus.StrifeSpecibus;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.KindAbstratusType;
+import com.mraof.minestuck.util.MinestuckPlayerData;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
@@ -25,12 +26,16 @@ public class GuiStrifeSpecibus extends GuiPlayerStats
 	
 	private static final int iconsOffX = 23, iconsOffY = 166;
 	private static float scale;
+	private static ArrayList<StrifeSpecibus> portfolio;
 	
 	public GuiStrifeSpecibus()
 	{
 		super();
 		guiWidth = 226;
 		guiHeight = 188;
+		portfolio = MinestuckPlayerData.getClientPortfolio();
+		System.out.println(portfolio);
+		if(portfolio == null) portfolio = new ArrayList<StrifeSpecibus>();
 	}
 	
 	@Override
@@ -48,8 +53,7 @@ public class GuiStrifeSpecibus extends GuiPlayerStats
 		
 		setScale(1);
 		drawActiveTabAndOther(xcor, ycor);
-		
-		ArrayList<StrifeSpecibus> portfolio = new ArrayList<StrifeSpecibus>();
+		/*portfolio = new ArrayList<StrifeSpecibus>();
 		for(int i = 0; i < 10; i++)
 		{
 			portfolio.add(new StrifeSpecibus(i));
@@ -58,6 +62,7 @@ public class GuiStrifeSpecibus extends GuiPlayerStats
 				portfolio.get(i).forceItemStack(new ItemStack(Items.IRON_SWORD));
 			}
 		}
+		*/
 		
 
 		
@@ -106,12 +111,14 @@ public class GuiStrifeSpecibus extends GuiPlayerStats
 		mc.fontRenderer.drawString("strife specibus", (int)((26)+(cardX/scale)), (int)((8)+(cardY/scale)), 0x00E371);
 		setScale(cardScale*0.75f);
 		mc.fontRenderer.drawString("sylladex :: strife deck", (int)((60)+(cardX/scale)), (int)((240)+(cardY/scale)), 0xFFFFFF);
-		setScale(cardScale*2.6F);
-		mc.fontRenderer.drawString(displayName, (int)(((75 - txOffset))+(cardX/scale)), (int)((88)+(cardY/scale)), 0x00E371);
-		mc.getTextureManager().bindTexture(icon);
-		setScale(cardScale/0.5f*(0.1875f));
-		drawTexturedModalRect(140 + cardX/scale, 148 + cardY/scale, 0, 0, 256, 256);
-		
+		if(specibus.getAbstratusIndex() > 0)
+		{
+			setScale(cardScale*2.6F);
+			mc.fontRenderer.drawString(displayName, (int)(((75 - txOffset))+(cardX/scale)), (int)((88)+(cardY/scale)), 0x00E371);
+			mc.getTextureManager().bindTexture(icon);
+			setScale(cardScale/0.5f*(0.1875f));
+			drawTexturedModalRect(140 + cardX/scale, 148 + cardY/scale, 0, 0, 256, 256);
+		}
 		setScale(1);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		

@@ -1,25 +1,39 @@
 package com.mraof.minestuck.tracker;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalouge.Modus;
+import com.mraof.minestuck.inventory.specibus.StrifePortfolioHandler;
+import com.mraof.minestuck.inventory.specibus.StrifeSpecibus;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.PlayerDataPacket;
+import com.mraof.minestuck.network.SpecibusPacket;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.Echeladder;
+import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
+import com.mraof.minestuck.util.MinestuckPlayerData;
+import com.mraof.minestuck.util.Title;
+import com.mraof.minestuck.util.UpdateChecker;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -31,9 +45,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class MinestuckPlayerTracker
 {
@@ -85,11 +96,13 @@ public class MinestuckPlayerTracker
 			MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.CAPTCHA, CaptchaDeckPacket.DATA, CaptchaDeckHandler.writeToNBT(modus)), player);
 		}
 		
+		
+		updatePortfolio(player);
 		updateGristCache(identifier);
 		updateTitle(player);
 		updateEcheladder(player, true);
 		MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.BOONDOLLAR, MinestuckPlayerData.getData(identifier).boondollars), player);
-		ServerEditHandler.onPlayerLoggedIn(player);
+		ServerEditHandler.onPlayerLoggedIn(player);		
 		
 		if(firstTime && !player.isSpectator())
 			MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.COLOR), player);
@@ -181,6 +194,33 @@ public class MinestuckPlayerTracker
 		}
 	}
 	
+	public static void updatePortfolio(EntityPlayer player)
+	{
+		PlayerIdentifier identifier = IdentifierHandler.encode(player);
+		ArrayList<StrifeSpecibus> newPortfolio = MinestuckPlayerData.getStrifePortfolio(identifier);
+		
+		if(newPortfolio == null) 
+			{
+				newPortfolio = new ArrayList<StrifeSpecibus>(); 
+				newPortfolio.add(new StrifeSpecibus(0));
+			}
+		
+		System.out.println(newPortfolio);
+		
+		NBTTagCompound nbt = StrifePortfolioHandler.writeToNBT(newPortfolio);
+		
+		/*
+		int i = 0;
+		for(StrifeSpecibus specibus : newPortfolio)
+		{
+			System.out.println(specibus.getAbstratus().getUnlocalizedName());
+			nbt.setTag("specibus"+i, specibus.writeToNBT(new NBTTagCompound()));
+			i++;
+		}
+		*/
+		MinestuckPacket packet = MinestuckPacket.makePacket(Type.PORTFOLIO, SpecibusPacket.PORTFOLIO, nbt);
+		MinestuckChannelHandler.sendToPlayer(packet, player);
+	}
 	public static void updateTitle(EntityPlayer player)
 	{
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);

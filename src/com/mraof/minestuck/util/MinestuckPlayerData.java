@@ -1,5 +1,11 @@
 package com.mraof.minestuck.util;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.editmode.ClientEditHandler;
@@ -10,17 +16,15 @@ import com.mraof.minestuck.network.GristCachePacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.PlayerDataPacket;
+import com.mraof.minestuck.network.SpecibusPacket;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class MinestuckPlayerData
 {
@@ -39,6 +43,8 @@ public class MinestuckPlayerData
 	static GristSet playerGrist;
 	@SideOnly(Side.CLIENT)
 	static GristSet targetGrist;
+	@SideOnly(Side.CLIENT)
+	static ArrayList<StrifeSpecibus> playerPortfolio;
 	static Map<PlayerIdentifier, PlayerData> dataMap = new HashMap<>();
 
 	public static void onPacketRecived(GristCachePacket packet)
@@ -53,8 +59,23 @@ public class MinestuckPlayerData
 		}
 	}
 
+	public static void onPacketRecived(SpecibusPacket packet)
+	{
+		playerPortfolio = packet.portfolio;
+	}
+	
 	//Server sided
 
+	public static ArrayList<StrifeSpecibus> getClientPortfolio()
+	{
+		return playerPortfolio;
+	}
+	
+	public static void setClientPortfolio(ArrayList<StrifeSpecibus> portfolio)
+	{
+		playerPortfolio = portfolio;
+	}
+	
 	public static GristSet getClientGrist()
 	{
 		return ClientEditHandler.isActive() ? targetGrist : playerGrist;
@@ -169,8 +190,8 @@ public class MinestuckPlayerData
 		public int color = -1;
 		public long boondollars;
 		public Echeladder echeladder;
-		public ArrayList<StrifeSpecibus> strifePortfolio;
-
+		public ArrayList<StrifeSpecibus> strifePortfolio = new ArrayList<StrifeSpecibus>(Arrays.asList(new StrifeSpecibus(0)));
+		
 		private void readFromNBT(NBTTagCompound nbt)
 		{
 			if (nbt.hasKey("username"))

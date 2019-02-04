@@ -38,6 +38,11 @@ public class StrifeSpecibus
 		readFromNBT(writeToNBT(new NBTTagCompound()));
 	}
 	
+	public void initSpecibus(Side side)
+	{
+		
+	}
+	
 	public void addToPortfolio(PlayerIdentifier player)
 	{
 		MinestuckPlayerData.getStrifePortfolio(player).add(this);
@@ -76,6 +81,11 @@ public class StrifeSpecibus
 	{
 		this.abstratus = newKind;
 		this.abstIndex = KindAbstratusList.getTypeList().indexOf(newKind);
+	}
+	
+	public int getAbstratusIndex()
+	{
+		return this.abstIndex;
 	}
 	
 	public KindAbstratusType getAbstratus()
