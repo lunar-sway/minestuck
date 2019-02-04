@@ -14,6 +14,7 @@ public class KindAbstratusList {
 		if(typeList != null)
 			return;
 		typeList = new ArrayList<KindAbstratusType>();
+		typeList.add(new KindAbstratusType("blank"));
 		typeList.add(new KindAbstratusType("sword").addItemClass(ItemSword.class));
 		typeList.add(new KindAbstratusType("bow").addItemClass(ItemBow.class));
 		typeList.add(new KindAbstratusType("pickaxe").addItemClass(ItemPickaxe.class));

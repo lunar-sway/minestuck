@@ -5,8 +5,12 @@ import java.util.List;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import com.mraof.minestuck.inventory.specibus.StrifePortfolioHandler;
 import com.mraof.minestuck.inventory.specibus.StrifeSpecibus;
 import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.network.CaptchaDeckPacket;
+import com.mraof.minestuck.network.MinestuckChannelHandler;
+import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.util.KindAbstratusList;
 import com.mraof.minestuck.util.KindAbstratusType;
 
@@ -100,6 +104,9 @@ public class GuiStrifeCard extends GuiScreenMinestuck
 					{
 						//TODO Add the abstrata to the player's portfolio
 						StrifeSpecibus specibus = new StrifeSpecibus(i);
+						
+						StrifePortfolioHandler.addSpecibus(player, specibus);
+						
 						player.sendStatusMessage(new TextComponentTranslation("The " + typeName + " specibus has been added to your strife portfolio."), false);						
 						card.shrink(1);
 
