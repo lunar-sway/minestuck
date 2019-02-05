@@ -70,7 +70,7 @@ public class GuiStrifeCard extends GuiScreenMinestuck
 		
 
 		List<KindAbstratusType> list = KindAbstratusList.getTypeList();
-		for(int i = 0; i < list.size(); i++)
+		for(int i = 1; i < list.size(); i++)
 		{
 			KindAbstratusType type = list.get(i);
 			String typeName = type.getDisplayName();
@@ -80,8 +80,8 @@ public class GuiStrifeCard extends GuiScreenMinestuck
 			
 			setScale(0.75f);
 			int color = 0xFFFFFF;
-			int listX = (columnWidth*(i % columns));
-			int listY = (mc.fontRenderer.FONT_HEIGHT*(i / columns));
+			int listX = (columnWidth*((i-1) % columns));
+			int listY = (mc.fontRenderer.FONT_HEIGHT*((i-1) / columns));
 			int xPos = listOffsetX + listX;
 			int yPos = listOffsetY + listY;
 			int sxPos = (int)((listOffsetX + listX)/scale);
@@ -95,21 +95,14 @@ public class GuiStrifeCard extends GuiScreenMinestuck
 				color = 0x000000;
 				if(Mouse.getEventButtonState() && Mouse.isButtonDown(0))
 				{
-					
-					System.out.println(typeName);
 					EnumHand hand = (player.getHeldItemMainhand().isItemEqual(new ItemStack(MinestuckItems.strifeCard)) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
 					ItemStack card = player.getHeldItem(hand);
 					
 					if(card.isItemEqual(new ItemStack(MinestuckItems.strifeCard)))
 					{
-						//TODO Add the abstrata to the player's portfolio
 						StrifeSpecibus specibus = new StrifeSpecibus(i);
 						
 						StrifePortfolioHandler.addSpecibus(player, specibus);
-						
-						player.sendStatusMessage(new TextComponentTranslation("The " + typeName + " specibus has been added to your strife portfolio."), false);						
-						card.shrink(1);
-
 						this.mc.displayGuiScreen(null);
 					}
 					

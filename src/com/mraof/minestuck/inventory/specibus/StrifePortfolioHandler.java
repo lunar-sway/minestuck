@@ -13,6 +13,7 @@ import com.mraof.minestuck.util.KindAbstratusType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class StrifePortfolioHandler 
@@ -34,7 +35,15 @@ public class StrifePortfolioHandler
 
 	public static void addSpecibus(EntityPlayer player, StrifeSpecibus specibus) 
 	{
+		String typeName = specibus.getAbstratus().getDisplayName();
+		player.sendStatusMessage(new TextComponentTranslation("The " + typeName + " specibus has been added to your strife portfolio."), false);						
 		MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.PORTFOLIO, SpecibusPacket.SPECIBUS_ADD, writeToNBT(specibus));
+		MinestuckChannelHandler.sendToServer(packet);
+	}
+	
+	public static void setPortfolio(EntityPlayer player, ArrayList<StrifeSpecibus> portfolio) 
+	{
+		MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.PORTFOLIO, SpecibusPacket.PORTFOLIO, writeToNBT(portfolio));
 		MinestuckChannelHandler.sendToServer(packet);
 	}
 	
@@ -50,7 +59,6 @@ public class StrifePortfolioHandler
 		int i = 0;
 		for(StrifeSpecibus specibus : portfolio)
 		{
-			System.out.println(specibus.getAbstratus().getUnlocalizedName());
 			nbt.setTag("specibus"+i, specibus.writeToNBT(new NBTTagCompound()));
 			i++;
 		}

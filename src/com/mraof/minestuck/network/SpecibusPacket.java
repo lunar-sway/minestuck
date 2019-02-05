@@ -8,21 +8,23 @@ import java.util.EnumSet;
 
 import com.mraof.minestuck.inventory.specibus.StrifePortfolioHandler;
 import com.mraof.minestuck.inventory.specibus.StrifeSpecibus;
+import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class SpecibusPacket extends MinestuckPacket
 {
-	public static final byte DATA = 0;
-	public static final byte SPECIBUS = 1;
-	public static final byte SPECIBUS_ADD = 2;
+	public static final byte SPECIBUS_ADD = 1;
+	public static final byte SPECIBUS_REMOVE = 2;
 	public static final byte PORTFOLIO = 3;
 	
 	public byte type;
@@ -98,14 +100,21 @@ public class SpecibusPacket extends MinestuckPacket
 				portfolio = StrifePortfolioHandler.createPortfolio(nbt);
 				MinestuckPlayerData.onPacketRecived(this);
 				MinestuckPlayerData.setStrifePortfolio(IdentifierHandler.encode(player), portfolio);
+				MinestuckPlayerData.setClientPortfolio(portfolio);
 			}
 			break;
 			case SPECIBUS_ADD:
 			{
 				ArrayList<StrifeSpecibus> portfolio = MinestuckPlayerData.getStrifePortfolio(IdentifierHandler.encode(player));
 				StrifeSpecibus specibus = new StrifeSpecibus(nbt);
-				System.out.println(portfolio);
+				MinestuckPlayerData.setClientPortfolio(portfolio);
 				MinestuckPlayerData.getStrifePortfolio(IdentifierHandler.encode(player)).add(specibus);
+
+				EnumHand hand = (player.getHeldItemMainhand().isItemEqual(new ItemStack(MinestuckItems.strifeCard)) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+				ItemStack card = player.getHeldItem(hand);
+				
+				if(card.isItemEqual(new ItemStack(MinestuckItems.strifeCard)))
+					card.shrink(1);
 			}
 			break;
 			}

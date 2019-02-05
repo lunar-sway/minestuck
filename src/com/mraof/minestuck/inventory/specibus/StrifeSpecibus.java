@@ -38,6 +38,11 @@ public class StrifeSpecibus
 		readFromNBT(writeToNBT(new NBTTagCompound()));
 	}
 	
+	public StrifeSpecibus(KindAbstratusType type) 
+	{
+		this(KindAbstratusList.getTypeList().indexOf(type));
+	}
+
 	public void initSpecibus(Side side)
 	{
 		
@@ -53,10 +58,14 @@ public class StrifeSpecibus
 		abstIndex = nbt.getInteger("abstrata");
 		list = new LinkedList<ItemStack>();
 		
-		for(int i = 0; i < list.size(); i++)
-			if(nbt.hasKey("item"+i))
-				list.add(new ItemStack(nbt.getCompoundTag("item"+i)));
-			else break;
+		if(nbt.hasKey("items"))
+		{
+			NBTTagCompound items = (NBTTagCompound) nbt.getTag("items");
+			for(int i = 0; i < list.size(); i++)
+				if(items.hasKey("slot"+i))
+					list.add(new ItemStack(items.getCompoundTag("slot"+i)));
+				else break;
+		}
 		if(side.isClient())
 		{
 			abstratus = KindAbstratusList.getTypeList().get(abstIndex);
@@ -67,13 +76,16 @@ public class StrifeSpecibus
 	
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt)
 	{
+		NBTTagCompound items = new NBTTagCompound();
+		
 		nbt.setInteger("abstrata", abstIndex);
 		Iterator<ItemStack> iter = list.iterator();
 		for(int i = 0; i < list.size(); i++)
 		{
 			ItemStack stack = iter.next();
-			nbt.setTag("item"+i, stack.writeToNBT(new NBTTagCompound()));
+			items.setTag("slot"+i, stack.writeToNBT(new NBTTagCompound()));
 		}
+		nbt.setTag("items", items);
 		return nbt;
 	}
 	

@@ -27,6 +27,8 @@ public class GuiStrifeSpecibus extends GuiPlayerStats
 	private static final int iconsOffX = 23, iconsOffY = 166;
 	private static float scale;
 	private static ArrayList<StrifeSpecibus> portfolio;
+	private static int blankCardCount = 0;
+	private static int selectedCard = -1;
 	
 	public GuiStrifeSpecibus()
 	{
@@ -39,10 +41,21 @@ public class GuiStrifeSpecibus extends GuiPlayerStats
 	}
 	
 	@Override
+	public void initGui() 
+	{
+		super.initGui();
+		portfolio = MinestuckPlayerData.getClientPortfolio();
+		if(portfolio == null) portfolio = new ArrayList<StrifeSpecibus>();
+	}
+	
+	@Override
 	public void drawScreen(int xcor, int ycor, float par3) {
 		super.drawScreen(xcor, ycor, par3);
 		this.drawDefaultBackground();
 		scale = 1;
+		blankCardCount = 0;
+		portfolio = MinestuckPlayerData.getClientPortfolio();
+		if(portfolio == null) portfolio = new ArrayList<StrifeSpecibus>();
 		
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		
@@ -67,6 +80,7 @@ public class GuiStrifeSpecibus extends GuiPlayerStats
 
 		
 		int i = 0;
+		int pSize = portfolio.size();
 		for(StrifeSpecibus specibus : portfolio)
 		{
 
@@ -78,14 +92,23 @@ public class GuiStrifeSpecibus extends GuiPlayerStats
 			String displayName = abstratus.getDisplayName();
 			//unlocalizedName = "a";
 			ResourceLocation icon = new ResourceLocation("minestuck", iconsLoc+unlocalizedName+".png");
+			int cardX = 128 + (int)(48*(i%5));
+			int cardY = 64 - (i*5) + (int)(48*(i/5));
+			float cardScale = 0.25F;
 			
+			float c = 0.5f;
+			if(selectedCard != i && selectedCard != -1)
+				GlStateManager.color(c, c, c, 1F);
+			drawCard(cardX,cardY,cardScale, specibus);			
 			
+			if(specibus.getAbstratusIndex() > 0)
+			{
+				setScale(16/256F);
+				drawTexturedModalRect((xOffset+iconsOffX+((i-blankCardCount)*20))/scale, (yOffset+iconsOffY)/scale, 0, 0, 256, 256);
+			}
 			
-			drawCard(70 + (int)(20*i),180 - (int)(20*i),0.25F, specibus);			
-			
-			setScale(16/256F);
-			drawTexturedModalRect((xOffset+iconsOffX+(i*20))/scale, (yOffset+iconsOffY)/scale, 0, 0, 256, 256);
-			
+			if(isPointInRegion(cardX, cardY, (int)(64*cardScale), (int)(64*cardScale), xcor, ycor))
+				selectedCard = i;
 			i++;
 		}
 
@@ -119,6 +142,7 @@ public class GuiStrifeSpecibus extends GuiPlayerStats
 			setScale(cardScale/0.5f*(0.1875f));
 			drawTexturedModalRect(140 + cardX/scale, 148 + cardY/scale, 0, 0, 256, 256);
 		}
+		else blankCardCount++;
 		setScale(1);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		
