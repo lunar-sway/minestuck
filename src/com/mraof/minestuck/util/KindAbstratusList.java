@@ -8,6 +8,7 @@ import java.util.List;
 public class KindAbstratusList {
 	
 	static ArrayList<KindAbstratusType> typeList;
+	static ArrayList<String> namesList = new ArrayList<String>();
 	
 	public static void registerTypes()
 	{
@@ -27,11 +28,22 @@ public class KindAbstratusList {
 		typeList.add(new KindAbstratusType("sickle"));
 		typeList.add(new KindAbstratusType("spoon"));
 		typeList.add(new KindAbstratusType("fork"));
+		
+		registerNames();
 	}
 	
 	public static void registerType(KindAbstratusType type) {
 		if(getTypeFromName(type.getUnlocalizedName()) == null)
+		{
 			typeList.add(type);
+			//namesList.add(type.getUnlocalizedName());
+		}
+	}
+	
+	public static void registerNames()
+	{
+		for(KindAbstratusType type : typeList)
+			namesList.add(type.getUnlocalizedName());
 	}
 	
 	public static KindAbstratusType getTypeFromName(String unlocName) {
@@ -45,4 +57,8 @@ public class KindAbstratusList {
 		return new ArrayList<KindAbstratusType>(typeList);
 	}
 	
+	public static List<String> getNamesList()
+	{
+		return new ArrayList<String>(namesList);
+	}
 }
