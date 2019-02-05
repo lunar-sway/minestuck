@@ -163,7 +163,8 @@ public class MinestuckModelManager
 		register(rawCruxite);
 		register(rawUranium);
 		register(energyCore);
-		register(strifeCard);
+		ModelLoader.registerItemVariants(strifeCard, new ResourceLocation("minestuck:strife_card"), new ResourceLocation("minestuck:strife_card_assigned"),  new ResourceLocation("minestuck:strife_card_invalid"));
+		ModelLoader.setCustomMeshDefinition(strifeCard, new StrifeCardDefinition());
 		ModelLoader.registerItemVariants(boondollars, new ResourceLocation("minestuck:boondollars0"), new ResourceLocation("minestuck:boondollars1"), new ResourceLocation("minestuck:boondollars2"),
 				new ResourceLocation("minestuck:boondollars3"), new ResourceLocation("minestuck:boondollars4"), new ResourceLocation("minestuck:boondollars5"), new ResourceLocation("minestuck:boondollars6"));
 		ModelLoader.setCustomMeshDefinition(boondollars, new BoondollarsDefinition());
@@ -502,6 +503,22 @@ public class MinestuckModelManager
 			if(stack.getMetadata() == 0)
 				return new ModelResourceLocation(name, "inventory");
 			else return new ModelResourceLocation(name + "_blank", "inventory");
+		}
+	}
+	
+	private static class StrifeCardDefinition implements ItemMeshDefinition
+	{
+		@Override
+		public ModelResourceLocation getModelLocation(ItemStack stack)
+		{
+			NBTTagCompound nbt = stack.getTagCompound();
+			String str = "strife_card";
+			if(nbt != null)
+			{
+				if(nbt.hasKey("abstrata")) str = "strife_card_assigned";
+				else 						str = "strife_card_invalid";
+			}
+			return new ModelResourceLocation("minestuck:" + str, "inventory");
 		}
 	}
 	
