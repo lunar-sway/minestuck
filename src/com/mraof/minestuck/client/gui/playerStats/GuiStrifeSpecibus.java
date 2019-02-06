@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.lwjgl.opengl.GL11;
 
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.inventory.specibus.StrifeSpecibus;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.KindAbstratusType;
@@ -96,11 +97,12 @@ public class GuiStrifeSpecibus extends GuiPlayerStats
 			int cardY = 64 - (i*5) + (int)(48*(i/5));
 			float cardScale = 0.25F;
 			
-			float c = 0.5f;
-			if(selectedCard != i && selectedCard != -1)
+			float c = 1f;
+			//if(selectedCard != i && selectedCard != -1)
 				GlStateManager.color(c, c, c, 1F);
 			drawCard(cardX,cardY,cardScale, specibus);			
 			
+			mc.getTextureManager().bindTexture(icon);
 			if(specibus.getAbstratusIndex() > 0)
 			{
 				setScale(16/256F);
@@ -146,10 +148,17 @@ public class GuiStrifeSpecibus extends GuiPlayerStats
 		setScale(1);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		
-		for(ItemStack stack : specibus.getItems())
+		ItemStack[] testStack = {new ItemStack(MinestuckItems.beverage), new ItemStack(MinestuckItems.itemFrog), new ItemStack(MinestuckBlocks.genericObject)};
+		
+		int i = 0;
+		for(ItemStack stack : testStack)//specibus.getItems())
 		{
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			mc.getTextureManager().bindTexture(icons);
+			drawTexturedModalRect(cardX+(i*28), cardY, 0, 122, 21, 26);
 			//System.out.println(stack);
-			//drawItemStack(stack, cardX, cardY, "");
+			drawItemStack(stack, cardX+(i*28), cardY, "");
+			i++;
 		}
 		
 		setScale(1);
