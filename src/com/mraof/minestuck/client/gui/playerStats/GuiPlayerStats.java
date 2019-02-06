@@ -172,7 +172,7 @@ public abstract class GuiPlayerStats extends GuiScreenMinestuck
 				if(type != normalTab && (!type.reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || mc.playerController.isInCreativeMode()))
 				{
 					int i = type.ordinal();
-					drawTexturedModalRect(xOffset + i*(tabWidth + 2), yOffset - tabHeight + tabOverlap, i==0? 0:tabWidth, 0, tabWidth, tabHeight);
+					drawTexturedModalRect(xOffset + i*(tabWidth + 2), yOffset - tabHeight + tabOverlap, i==0? 0:i==1? tabWidth*3:tabWidth, 0, tabWidth, tabHeight);
 				}
 		} else
 		{
@@ -184,7 +184,7 @@ public abstract class GuiPlayerStats extends GuiScreenMinestuck
 				}
 		}
 		
-		if(MinestuckConfig.dataCheckerAccess)
+		if(MinestuckConfig.dataCheckerAccess && !(this instanceof GuiStrifeSpecibus))
 			drawTexturedModalRect(xOffset + guiWidth - tabWidth, yOffset -tabHeight + tabOverlap, 2*tabWidth, 0, tabWidth, tabHeight);
 	}
 	
@@ -196,13 +196,13 @@ public abstract class GuiPlayerStats extends GuiScreenMinestuck
 		
 		int index = (mode? normalTab:editmodeTab).ordinal();
 		drawTexturedModalRect(xOffset + index*(tabWidth+2), yOffset - tabHeight + tabOverlap,
-				index == 0? 0:tabWidth, tabHeight, tabWidth, tabHeight);
+				index == 0? 0:index == 1? tabWidth*3:tabWidth, tabHeight, tabWidth, tabHeight);
 		
 		for(int i = 0; i < (mode? NormalGuiType.values():EditmodeGuiType.values()).length; i++)
 			if(!mode || !NormalGuiType.values()[i].reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || mc.playerController.isInCreativeMode())
 				drawTexturedModalRect(xOffset + (tabWidth - 16)/2 + (tabWidth+2)*i, yOffset - tabHeight + tabOverlap + 8, i*16, tabHeight*2 + (mode? 0:16), 16, 16);
 		
-		if(MinestuckConfig.dataCheckerAccess)
+		if(MinestuckConfig.dataCheckerAccess && !(this instanceof GuiStrifeSpecibus))
 			drawTexturedModalRect(xOffset + guiWidth + (tabWidth - 16)/2 - tabWidth, yOffset - tabHeight + tabOverlap + 8, 5*16, tabHeight*2, 16, 16);
 		
 		GlStateManager.disableRescaleNormal();
@@ -242,7 +242,7 @@ public abstract class GuiPlayerStats extends GuiScreenMinestuck
 					}
 					return;
 				}
-			if(MinestuckConfig.dataCheckerAccess && xcor < xOffset + guiWidth && xcor >= xOffset + guiWidth - tabWidth)
+			if(MinestuckConfig.dataCheckerAccess && !(this instanceof GuiStrifeSpecibus) && xcor < xOffset + guiWidth && xcor >= xOffset + guiWidth - tabWidth)
 				mc.displayGuiScreen(new GuiDataChecker());
 		}
 		super.mouseClicked(xcor, ycor, mouseButton);

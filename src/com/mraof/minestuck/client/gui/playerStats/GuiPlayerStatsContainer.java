@@ -58,7 +58,7 @@ public abstract class GuiPlayerStatsContainer extends GuiContainer
 				if(type != normalTab && (!type.reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || mc.playerController.isInCreativeMode()))
 				{
 					int i = type.ordinal();
-					drawTexturedModalRect(xOffset + i*(tabWidth + 2), yOffset - tabHeight + tabOverlap, i==0? 0:tabWidth, 0, tabWidth, tabHeight);
+					drawTexturedModalRect(xOffset + i*(tabWidth + 2), yOffset - tabHeight + tabOverlap, i==0? 0:i==1? tabWidth*3:tabWidth, 0, tabWidth, tabHeight);
 				}
 		} else
 		{
