@@ -30,6 +30,15 @@ public class KindAbstratusType
 		return this;
 	}
 	
+	public KindAbstratusType addToolClass(String in) {
+		items.add(new ItemToolType(in));
+		return this;
+	}
+	
+	public KindAbstratusType includesFist() {
+		items.add(new FistType());
+		return this;
+	}
 	@SideOnly(Side.CLIENT)
 	public String getDisplayName() {
 		return I18n.translateToLocal("strife."+unlocalizedName+".name");
@@ -83,6 +92,34 @@ public class KindAbstratusType
 		{
 			return this.itemId.equals(Item.REGISTRY.getNameForObject(item.getItem()));
 		}
+	}
+	
+	private static class ItemToolType extends ItemType
+	{
+		final String toolClass;
+		
+		ItemToolType(String toolClass)
+		{
+			this.toolClass = toolClass;
+		}
+		
+		@Override
+		boolean partOf(ItemStack item) 
+		{
+			
+			return item.getItem().getToolClasses(item).contains(toolClass);
+		}
+		
+	}
+	
+	private static class FistType extends ItemType
+	{
+		@Override
+		boolean partOf(ItemStack item) 
+		{
+			return item.isEmpty();
+		}
+		
 	}
 	
 }
