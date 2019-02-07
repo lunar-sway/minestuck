@@ -16,7 +16,7 @@ public class KindAbstratusList {
 			return;
 		typeList = new ArrayList<KindAbstratusType>();
 		typeList.add(new KindAbstratusType("blank"));
-		typeList.add(new KindAbstratusType("sword").addItemClass(ItemSword.class));
+		typeList.add(new KindAbstratusType("sword").addItemClass(ItemSword.class).addToolClass("sword"));
 		typeList.add(new KindAbstratusType("bow").addItemClass(ItemBow.class));
 		typeList.add(new KindAbstratusType("pickaxe").addItemClass(ItemPickaxe.class));
 		typeList.add(new KindAbstratusType("axe").addItemClass(ItemAxe.class));
@@ -28,6 +28,8 @@ public class KindAbstratusList {
 		typeList.add(new KindAbstratusType("sickle"));
 		typeList.add(new KindAbstratusType("spoon"));
 		typeList.add(new KindAbstratusType("fork"));
+		typeList.add(new KindAbstratusType("fist").includesFist());
+		typeList.add(new KindAbstratusType("gauntlet").addToolClass("gauntlet"));
 		
 		registerNames();
 	}
