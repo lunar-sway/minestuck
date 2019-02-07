@@ -10,6 +10,7 @@ import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.KindAbstratusType;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 
+import io.netty.util.concurrent.GlobalEventExecutor;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.init.Items;
@@ -151,7 +152,7 @@ public class GuiStrifeSpecibus extends GuiPlayerStats
 		ItemStack[] testStack = {new ItemStack(MinestuckItems.beverage), new ItemStack(MinestuckItems.itemFrog), new ItemStack(MinestuckBlocks.genericObject)};
 		
 		int i = 0;
-		for(ItemStack stack : testStack)//specibus.getItems())
+		for(ItemStack stack : specibus.getItems())
 		{
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			mc.getTextureManager().bindTexture(icons);
@@ -174,14 +175,15 @@ public class GuiStrifeSpecibus extends GuiPlayerStats
     private void drawItemStack(ItemStack stack, int x, int y, String altText)
     {
         GlStateManager.translate(0.0F, 0.0F, 32.0F);
-        this.zLevel = 200.0F;
-        this.itemRender.zLevel = 200.0F;
+        //this.zLevel = 200.0F;
+        //this.itemRender.zLevel = 200.0F;
         net.minecraft.client.gui.FontRenderer font = stack.getItem().getFontRenderer(stack);
         if (font == null) font = fontRenderer;
+        GlStateManager.enableLighting();
         this.itemRender.renderItemAndEffectIntoGUI(stack, x, y);
-        this.itemRender.renderItemOverlayIntoGUI(font, stack, x, y - (8), altText);
-        this.zLevel = 0.0F;
-        this.itemRender.zLevel = 0.0F;
+        //this.itemRender.renderItemOverlayIntoGUI(font, stack, x, y - (8), altText);
+        //this.zLevel = 0.0F;
+        //this.itemRender.zLevel = 0.0F;
         }
 	
 	public void setScale(float percentage)
