@@ -11,6 +11,7 @@ import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
+import com.mraof.minestuck.network.SpecibusPacket;
 
 public class MinestuckKeyHandler
 {
@@ -50,7 +51,9 @@ public class MinestuckKeyHandler
 		else if(captchaKey.isPressed())
 		{
 			if(Minecraft.getMinecraft().currentScreen == null && Minecraft.getMinecraft().player.getHeldItemMainhand() != null)
-				MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.CAPTCHALOUGE));
+			{
+				MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(MinestuckPacket.Type.PORTFOLIO, SpecibusPacket.DECK_ADD));
+			}
 		}
 		
 		statKeyPressed = statKey.isKeyDown();

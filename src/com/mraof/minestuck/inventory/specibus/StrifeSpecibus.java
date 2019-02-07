@@ -113,6 +113,7 @@ public class StrifeSpecibus
 		if(this.abstratus.partOf(stack))
 		{
 			this.list.add(stack);
+			this.items.add(stack);
 			return true;
 		}
 		else return false;
