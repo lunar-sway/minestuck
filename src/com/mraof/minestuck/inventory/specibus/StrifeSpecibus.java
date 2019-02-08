@@ -83,6 +83,7 @@ public class StrifeSpecibus
 		for(int i = 0; i < list.size(); i++)
 		{
 			ItemStack stack = iter.next();
+			System.out.println(stack);
 			items.setTag("slot"+i, stack.writeToNBT(new NBTTagCompound()));
 		}
 		nbt.setTag("items", items);
@@ -112,8 +113,13 @@ public class StrifeSpecibus
 		
 		if(this.abstratus.partOf(stack))
 		{
+			System.out.println(stack);
 			this.list.add(stack);
 			this.items.add(stack);
+			
+			for(ItemStack i : items)
+				System.out.println(i);
+			
 			return true;
 		}
 		else return false;

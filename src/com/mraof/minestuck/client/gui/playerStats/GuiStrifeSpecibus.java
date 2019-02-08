@@ -2,9 +2,11 @@ package com.mraof.minestuck.client.gui.playerStats;
 
 import java.util.ArrayList;
 
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.inventory.specibus.StrifePortfolioHandler;
 import com.mraof.minestuck.inventory.specibus.StrifeSpecibus;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.KindAbstratusType;
@@ -13,9 +15,11 @@ import com.mraof.minestuck.util.MinestuckPlayerData;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import scala.swing.event.MouseButtonEvent;
 
 public class GuiStrifeSpecibus extends GuiPlayerStats
 {
@@ -101,17 +105,23 @@ public class GuiStrifeSpecibus extends GuiPlayerStats
 			float c = 1f;
 			//if(selectedCard != i && selectedCard != -1)
 				GlStateManager.color(c, c, c, 1F);
+
+			if(isPointInRegion(cardX, cardY, (int)(64*cardScale), (int)(64*cardScale), xcor, ycor))
+			{
+				GlStateManager.color(0.5F,0.5F,0.5F,1F);
+				selectedCard = i;
+				if(Mouse.getEventButtonState() && Mouse.isButtonDown(0))
+					StrifePortfolioHandler.retrieveSpecibus(i);
+			}
 			drawCard(cardX,cardY,cardScale, specibus);			
 			
-			mc.getTextureManager().bindTexture(icon);
 			if(specibus.getAbstratusIndex() > 0)
 			{
+				mc.getTextureManager().bindTexture(icon);
 				setScale(16/256F);
 				drawTexturedModalRect((xOffset+iconsOffX+((i-blankCardCount)*20))/scale, (yOffset+iconsOffY)/scale, 0, 0, 256, 256);
 			}
 			
-			if(isPointInRegion(cardX, cardY, (int)(64*cardScale), (int)(64*cardScale), xcor, ycor))
-				selectedCard = i;
 			i++;
 		}
 
@@ -175,15 +185,15 @@ public class GuiStrifeSpecibus extends GuiPlayerStats
     private void drawItemStack(ItemStack stack, int x, int y, String altText)
     {
         GlStateManager.translate(0.0F, 0.0F, 32.0F);
-        //this.zLevel = 200.0F;
-        //this.itemRender.zLevel = 200.0F;
+        this.zLevel = 200.0F;
+        this.itemRender.zLevel = 200.0F;
         net.minecraft.client.gui.FontRenderer font = stack.getItem().getFontRenderer(stack);
         if (font == null) font = fontRenderer;
         GlStateManager.enableLighting();
         this.itemRender.renderItemAndEffectIntoGUI(stack, x, y);
         //this.itemRender.renderItemOverlayIntoGUI(font, stack, x, y - (8), altText);
-        //this.zLevel = 0.0F;
-        //this.itemRender.zLevel = 0.0F;
+        this.zLevel = 0.0F;
+        this.itemRender.zLevel = 0.0F;
         }
 	
 	public void setScale(float percentage)

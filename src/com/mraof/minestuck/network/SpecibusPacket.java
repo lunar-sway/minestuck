@@ -52,12 +52,12 @@ public class SpecibusPacket extends MinestuckPacket
 
 			case DECK_REMOVE:
 			{
-				if(data[2] != null) this.data.writeInt((Integer)data[2]);
+				if(data.length > 2) this.data.writeInt((Integer)data[2]);
 				else 				this.data.writeInt(0);
 			}
 			case SPECIBUS_REMOVE:
 			{
-				if(data[3] != null) this.data.writeDouble((Integer)data[3]);
+				if(data.length > 1) this.data.writeDouble((Integer)data[1]);
 				else 				this.data.writeDouble(0);
 			}
 			break;
@@ -150,34 +150,13 @@ public class SpecibusPacket extends MinestuckPacket
 			}
 			break;
 			case SPECIBUS_REMOVE:
-				StrifePortfolioHandler.retrieveSpecibus((EntityPlayerMP) player, specibusId);
+				StrifeSpecibus specibus = StrifePortfolioHandler.getSpecibus((EntityPlayerMP) player, specibusId);
+				if(specibus != null)				
+					StrifePortfolioHandler.spawnItem((EntityPlayerMP) player, StrifePortfolioHandler.createSpecibusItem(specibus));
 			break;
 			case DECK_ADD:
 			{
-				ItemStack hand = player.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND);
-				if(hand.isEmpty())
-						return;
-				if(!player.isSneaking())
-				{
-				ArrayList<StrifeSpecibus> portfolio = MinestuckPlayerData.getStrifePortfolio(IdentifierHandler.encode(player));
-				ItemStack stack = player.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND);
-				int i = 0;
-				for(StrifeSpecibus specibus : portfolio)
-				{
-					//specibus.forceItemStack(stack);
-					if(specibus.putItemStack(stack))
-					{
-						//specibus.setAbstratus(KindAbstratusList.getTypeFromName("sword"));
-						portfolio.set(i, specibus);
-						hand.shrink(1);
-						MinestuckPlayerData.setClientPortfolio(portfolio);
-						MinestuckPlayerData.setStrifePortfolio(IdentifierHandler.encode(player), portfolio);
-						return;
-					}
-					i++;
-				}
-				}
-				CaptchaDeckHandler.captchalougeItem((EntityPlayerMP) player);
+				StrifePortfolioHandler.addItemToDeck((EntityPlayerMP)player);
 			}
 			break;
 			case DECK_REMOVE:
