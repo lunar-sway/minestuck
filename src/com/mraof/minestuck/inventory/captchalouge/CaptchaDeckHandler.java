@@ -12,9 +12,16 @@ import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MinestuckPlayerData;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
@@ -252,6 +259,66 @@ public class CaptchaDeckHandler
 			MinestuckChannelHandler.sendToPlayer(packet, player);
 		}
 		
+	}
+	
+	public static void captchalougeInventoryItem (EntityPlayerMP player) {
+		GuiScreen guiScreen = Minecraft.getMinecraft().currentScreen;
+		if(!(guiScreen instanceof GuiContainer))
+			return;
+		else {
+			GuiContainer gui = (GuiContainer) guiScreen;
+			Slot mouseSlot = gui.getSlotUnderMouse();
+			ItemStack stack = mouseSlot.getStack();
+			Modus modus = getModus(player);
+			
+			if(stack.getItem() == MinestuckItems.boondollars)
+			{
+				MinestuckPlayerData.addBoondollars(player, ItemBoondollars.getCount(stack));
+				stack.setCount(0);
+				return;
+			}
+			
+			if(modus != null && !stack.isEmpty())
+			{
+				boolean card1 = false, card2 = true;
+				if(stack.getItem() == MinestuckItems.captchaCard && AlchemyRecipes.hasDecodedItem(stack)
+						&& !AlchemyRecipes.isPunchedCard(stack))
+				{
+					ItemStack newStack = AlchemyRecipes.getDecodedItem(stack, true);
+					if(!newStack.isEmpty())
+					{
+						card1 = true;
+						stack = newStack;
+						card2 = modus.increaseSize();
+					}
+				}
+				if(modus.putItemStack(stack))
+				{
+					MinestuckCriteriaTriggers.CAPTCHALOGUE.trigger(player, modus, stack);
+					if(!card2)
+						launchAnyItem(player, new ItemStack(MinestuckItems.captchaCard, 1));
+					
+					stack = mouseSlot.getStack();
+					if(card1 && stack.getCount() > 1)
+						stack.shrink(1);
+					else {
+						mouseSlot.putStack(ItemStack.EMPTY);
+						player.openContainer.getSlot(mouseSlot.getSlotIndex()).putStack(ItemStack.EMPTY);
+					}
+				}
+				else if(card1 && card2)
+				{
+					launchAnyItem(player, stack);
+					stack = mouseSlot.getStack();
+					if(stack.getCount() == 1) {
+						mouseSlot.putStack(ItemStack.EMPTY);
+						player.openContainer.getSlot(mouseSlot.getSlotIndex()).putStack(ItemStack.EMPTY);
+					} else stack.shrink(1);
+				}
+				MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, writeToNBT(modus));
+				MinestuckChannelHandler.sendToPlayer(packet, player);
+			}
+		}
 	}
 	
 	public static void getItem(EntityPlayerMP player, int index, boolean asCard)

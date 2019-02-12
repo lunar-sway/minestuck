@@ -5,6 +5,9 @@ import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalouge.ContainerCaptchaDeck;
 import com.mraof.minestuck.util.Debug;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -25,6 +28,7 @@ public class CaptchaDeckPacket extends MinestuckPacket
 	public static final byte CAPTCHALOUGE = 2;
 	public static final byte GET = 3;
 	public static final byte VALUE = 4;
+	public static final byte CAPTCHALOUGE_INV = 5;
 	
 	public byte type;
 	
@@ -120,6 +124,8 @@ public class CaptchaDeckPacket extends MinestuckPacket
 				CaptchaDeckHandler.useItem((EntityPlayerMP) player);
 			else if(this.type == CAPTCHALOUGE && !player.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).isEmpty())
 				CaptchaDeckHandler.captchalougeItem((EntityPlayerMP) player);
+			else if(this.type == CAPTCHALOUGE_INV)
+				CaptchaDeckHandler.captchalougeInventoryItem((EntityPlayerMP) player);
 			else if(this.type == GET)
 				CaptchaDeckHandler.getItem((EntityPlayerMP) player, itemIndex, getCard);
 //			else if(this.type == DATA)

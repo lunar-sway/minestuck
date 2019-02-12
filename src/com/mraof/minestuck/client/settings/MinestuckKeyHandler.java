@@ -1,10 +1,15 @@
 package com.mraof.minestuck.client.settings;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 
 import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
 import com.mraof.minestuck.editmode.ClientEditHandler;
@@ -20,6 +25,7 @@ public class MinestuckKeyHandler
 	KeyBinding captchaKey;
 	boolean statKeyPressed = false;
 	boolean editKeyPressed = false;
+	boolean captchaKeyPressed = false;
 	
 	public MinestuckKeyHandler()
 	{
@@ -52,9 +58,15 @@ public class MinestuckKeyHandler
 			if(Minecraft.getMinecraft().currentScreen == null && Minecraft.getMinecraft().player.getHeldItemMainhand() != null)
 				MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.CAPTCHALOUGE));
 		}
+		else if(Keyboard.isKeyDown(captchaKey.getKeyCode()) && !captchaKeyPressed) {
+			if(Minecraft.getMinecraft().currentScreen instanceof GuiContainer && ((GuiContainer)Minecraft.getMinecraft().currentScreen).getSlotUnderMouse().getHasStack())
+			MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.CAPTCHALOUGE_INV));
+		}
+		
 		
 		statKeyPressed = statKey.isKeyDown();
 		editKeyPressed = editKey.isKeyDown();
+		captchaKeyPressed = Keyboard.isKeyDown(captchaKey.getKeyCode());
 		
 	}
 	
