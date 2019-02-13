@@ -63,6 +63,7 @@ public class MinestuckModelManager
 		register(telescopicSassacrusher);
 		register(regiHammer);
 		register(fearNoAnvil);
+		register(meltMasher);
 		register(popamaticVrillyhoo);
 		register(scarletZillyhoo);
 		register(mwrthwl);
