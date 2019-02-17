@@ -37,6 +37,9 @@ public class MapGenLandStructure extends MapGenStructure
 		MapGenStructureIO.registerStructure(ImpDungeonStart.class, "MinestuckImpDungeon");
 		MapGenStructureIO.registerStructureComponent(ImpDungeonStart.EntryComponent.class, "MinestuckIDEntry");
 		ImpDungeonComponents.registerComponents();
+		
+		MapGenStructureIO.registerStructure(CloudDungeonStart.class, "MinestuckCloudDungeon");
+		CloudDungeonComponents.registerComponents();
 	}
 	
 	public boolean isInsideStructure(String structureName, BlockPos pos)
@@ -215,5 +218,10 @@ public class MapGenLandStructure extends MapGenStructure
 	{
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	protected ChunkProviderLands getChunkProvider()
+	{
+		return this.chunkProvider;
 	}
 }
