@@ -26,6 +26,7 @@ public class PlayerDataPacket extends MinestuckPacket
 	public int type;
 	public int i1;
 	public int i2;
+	public long l;
 	public float f;
 	public boolean b;
 	
@@ -49,7 +50,7 @@ public class PlayerDataPacket extends MinestuckPacket
 			data.writeBoolean((Boolean) dat[3]);
 		} else if(type == BOONDOLLAR)
 		{
-			data.writeInt((Integer) dat[1]);
+			data.writeLong((Long) dat[1]);
 		} else if(type == TITLE_SELECT)
 		{
 			if(dat.length > 1)
@@ -83,7 +84,7 @@ public class PlayerDataPacket extends MinestuckPacket
 			b = data.readBoolean();
 		} else if(type == BOONDOLLAR)
 		{
-			i1 = data.readInt();
+			l = data.readLong();
 		} else if(type == TITLE_SELECT)
 		{
 			if(data.readableBytes() > 0)
@@ -124,7 +125,7 @@ public class PlayerDataPacket extends MinestuckPacket
 			else GuiEcheladder.animatedRung = GuiEcheladder.lastRung = i1;
 		} else if(type == BOONDOLLAR)
 		{
-			MinestuckPlayerData.boondollars = i1;
+			MinestuckPlayerData.boondollars = l;
 		} else if(type == TITLE_SELECT)
 		{
 			Title title;

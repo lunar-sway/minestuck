@@ -5,8 +5,10 @@ import com.mraof.minestuck.item.TabMinestuck;
 import com.mraof.minestuck.tileentity.TileEntityItemStack;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -16,10 +18,7 @@ import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -92,6 +91,17 @@ public class BlockCruxtiteDowel extends Block
 			{
 				spawnAsEntity(worldIn, pos, item);
 			}
+		}
+	}
+	
+	@Override
+	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
+	{
+		TileEntity te = world.getTileEntity(pos);
+		if(te instanceof TileEntityItemStack)
+		{
+			ItemStack stack = ((TileEntityItemStack) te).getStack();
+			drops.add(stack);
 		}
 	}
 	
@@ -184,6 +194,18 @@ public class BlockCruxtiteDowel extends Block
 	public int getMetaFromState(IBlockState state)
 	{
 		return state.getValue(TYPE) == Type.CRUXTRUDER ? 0 : 1;
+	}
+	
+	@Override
+	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face)
+	{
+		return BlockFaceShape.UNDEFINED;
+	}
+	
+	@Override
+	public EnumPushReaction getMobilityFlag(IBlockState state)
+	{
+		return EnumPushReaction.DESTROY;
 	}
 	
 	public enum Type implements IStringSerializable

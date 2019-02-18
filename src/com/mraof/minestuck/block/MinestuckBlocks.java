@@ -74,6 +74,7 @@ public class MinestuckBlocks
 	public static Block log = new BlockMinestuckLog1();
 	public static Block leaves1 = new BlockMinestuckLeaves1();
 	public static Block planks = new BlockMinestuckPlanks();
+	public static Block frostPlanks = new BlockFrostPlanks();
 	public static Block aspectSapling = new BlockAspectSapling().setCreativeTab(null);
 	public static Block rainbowSapling = new BlockRainbowSapling();
 	public static Block aspectLog1 = new BlockAspectLog().setCreativeTab(null);
@@ -220,6 +221,7 @@ public class MinestuckBlocks
 		registry.register(log.setRegistryName("log"));
 		registry.register(leaves1.setRegistryName("leaves"));
 		registry.register(planks.setRegistryName("planks"));
+		registry.register(frostPlanks.setRegistryName("frost_planks"));
 		registry.register(aspectSapling.setRegistryName("aspect_sapling"));
 		registry.register(rainbowSapling.setRegistryName("rainbow_sapling"));
 		registry.register(aspectLog1.setRegistryName("aspect_log_1"));
