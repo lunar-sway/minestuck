@@ -1,0 +1,19 @@
+{
+  "type": "minestuck:add_encode",
+  "pattern": [
+    "XO"
+  ],
+  "key": {
+    "O": {
+      "item": "minestuck:captcha_card"
+    },
+    "X": {
+      "item": "minestuck:shunt"
+    }
+  },
+  "result": {
+    "item": "minestuck:shunt",
+    "data": 0,
+    "count": 1
+  }
+}

@@ -24,7 +24,7 @@ import java.util.Random;
 import static com.mraof.minestuck.Minestuck.MOD_ID;
 import static com.mraof.minestuck.Minestuck.MOD_NAME;
 
-@Mod(modid = MOD_ID, name = MOD_NAME, version = "1.12.2-1.3.270", guiFactory = "com.mraof.minestuck.client.gui.MinestuckGuiFactory", acceptedMinecraftVersions = "[1.12,1.12.2]")
+@Mod(modid = MOD_ID, name = MOD_NAME, version = "@VERSION@", guiFactory = "com.mraof.minestuck.client.gui.MinestuckGuiFactory", acceptedMinecraftVersions = "[1.12,1.12.2]")
 public class Minestuck
 {
 	public static final String MOD_NAME = "Minestuck";
@@ -121,6 +121,7 @@ public class Minestuck
 		event.registerServerCommand(new CommandConsortReply());
 		event.registerServerCommand(new CommandToStructure());
 		event.registerServerCommand(new CommandPorkhollow());
+		event.registerServerCommand(new CommandLandDebug());
 		
 		worldSeed = event.getServer().worlds[0].getSeed();
 		ServerEventHandler.lastDay = event.getServer().worlds[0].getWorldTime() / 24000L;

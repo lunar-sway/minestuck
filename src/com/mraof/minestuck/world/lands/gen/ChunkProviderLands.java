@@ -44,7 +44,6 @@ public class ChunkProviderLands implements IChunkGenerator
 	public List<SpawnListEntry> ambientMobsList;
 	public World landWorld;
 	Random random;
-	Vec3d skyColor;
 	long seed;
 	public TerrainLandAspect aspect1;
 	public TitleLandAspect aspect2;
@@ -58,7 +57,6 @@ public class ChunkProviderLands implements IChunkGenerator
 	public MapGenLandStructure structureHandler;
 	public MapGenConsortVillage villageHandler;
 	public MapGenStructure customHandler;
-	public int dayCycle; //0 = Normal day cycle; 1 = Always day; 2 = Always night.
 	public int weatherType;	//-1:No weather &1: Force rain &2: If thunder &4: Force thunder
 	public float rainfall, temperature;
 	public float oceanChance;
@@ -66,10 +64,12 @@ public class ChunkProviderLands implements IChunkGenerator
 	protected Biome biomeLands;
 	
 	public boolean generatingStructure;
+	public final WorldProviderLands worldProvider;
 
 	@SuppressWarnings("unchecked")
 	public ChunkProviderLands(World worldObj, WorldProviderLands worldProvider, boolean clientSide)
 	{
+		this.worldProvider = worldProvider;
 		
 		aspect1 = worldProvider.landAspects.aspectTerrain;
 		aspect2 = worldProvider.landAspects.aspectTitle;
@@ -83,8 +83,6 @@ public class ChunkProviderLands implements IChunkGenerator
 		this.waterMobsList = new ArrayList<SpawnListEntry>();
 		this.consortList.add(new SpawnListEntry(aspect1.getConsortType().getConsortClass(), 2, 1, 10));
 		
-		this.dayCycle = aspect1.getDayCycleMode();
-		this.skyColor = aspect1.getFogColor();
 		this.weatherType = aspect1.getWeatherType();
 		this.rainfall = aspect1.getRainfall();
 		this.temperature = aspect1.getTemperature();
@@ -131,14 +129,6 @@ public class ChunkProviderLands implements IChunkGenerator
 			{
 				return Float.compare(o1.getPriority(), o2.getPriority());
 			}});
-	}
-	
-	public void mergeFogColor(Vec3d fogColor, float strength)
-	{
-		double d1 = (this.skyColor.x + fogColor.x*strength)/(1 + strength);
-		double d2 = (this.skyColor.y + fogColor.y*strength)/(1 + strength);
-		double d3 = (this.skyColor.z + fogColor.z*strength)/(1 + strength);
-		this.skyColor = new Vec3d(d1, d2, d3);
 	}
 	
 	@Override
@@ -237,11 +227,6 @@ public class ChunkProviderLands implements IChunkGenerator
 		long i1 = random.nextLong() / 2L * 2L + 1L;
 		long j1 = random.nextLong() / 2L * 2L + 1L;
 		return ((long)chunkX * i1 + (long)chunkZ * j1) ^ seed;
-	}
-	
-	public Vec3d getFogColor()
-	{
-		return this.skyColor;
 	}
 	
 	@Override
@@ -344,4 +329,8 @@ public class ChunkProviderLands implements IChunkGenerator
 		return blockRegistry.getBlockState("surface");
 	}
 	
+	public IBlockState getOceanBlock()
+	{
+		return blockRegistry.getBlockState("ocean");
+	}
 }

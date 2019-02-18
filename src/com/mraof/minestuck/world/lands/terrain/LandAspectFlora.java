@@ -31,6 +31,9 @@ import net.minecraft.world.World;
 
 public class LandAspectFlora extends TerrainLandAspect
 {
+	static Vec3d fogColor = new Vec3d(0.5D, 0.6D, 0.9D);
+	static Vec3d skyColor = new Vec3d(0.6D, 0.8D, 0.6D);
+	
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
@@ -105,15 +108,15 @@ public class LandAspectFlora extends TerrainLandAspect
 	}
 	
 	@Override
-	public int getDayCycleMode()
+	public Vec3d getFogColor()
 	{
-		return 0;
+		return fogColor;
 	}
 	
 	@Override
-	public Vec3d getFogColor()
+	public Vec3d getSkyColor()
 	{
-		return new Vec3d(0.0D, 1.0D, 0.6D);
+		return skyColor;
 	}
 	
 	@Override

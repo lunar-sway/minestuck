@@ -1,0 +1,17 @@
+{
+  "type": "minestuck:remove_card",
+  "pattern": [
+    "O"
+  ],
+  "key": {
+    "O": {
+      "item": "minestuck:shunt",
+      "data": 0
+    }
+  },  
+  "result": {
+    "item": "minestuck:captcha_card",
+    "data": 0,
+    "count": 1
+  }
+}

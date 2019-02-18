@@ -26,10 +26,10 @@ import net.minecraft.block.BlockWoodSlab;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.math.Vec3d;
- 
+
 public class LandAspectFrost extends TerrainLandAspect
 {
-	static Vec3d skyColor = new Vec3d(0.45D, 0.5D, 0.98D);
+	static Vec3d fogColor = new Vec3d(0.5D, 0.6D, 0.98D);
 	
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
@@ -85,14 +85,21 @@ public class LandAspectFrost extends TerrainLandAspect
 	}
 	
 	@Override
-	public int getDayCycleMode() {
-		return 0;
-	}
-
-	@Override
-	public Vec3d getFogColor() 
+	public float getSkylightBase()
 	{
-		return skyColor;
+		return 7/8F;
+	}
+	
+	@Override
+	public Vec3d getFogColor()
+	{
+		return fogColor;
+	}
+	
+	@Override
+	public Vec3d getSkyColor()
+	{
+		return new Vec3d(0.6D, 0.7D, 0.9D);
 	}
 	
 	@Override

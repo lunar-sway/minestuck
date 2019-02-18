@@ -1,0 +1,44 @@
+{
+	"variants": {
+		"facing=south,part=top_shunt": { "model":"minestuck:jbe_top_shunt" },
+        "facing=south,part=bottom_shunt":    { "model":"minestuck:jbe_bottom_shunt" },
+        "facing=south,part=top_corner_shunt":        { "model":"minestuck:jbe_top_corner_shunt" },
+        "facing=south,part=bottom_corner_shunt": { "model":"minestuck:jbe_bottom_corner_shunt" },
+        
+        "facing=west,part=top_shunt":   { "model":"minestuck:jbe_top_shunt", "y":90  },
+        "facing=west,part=bottom_shunt":    { "model":"minestuck:jbe_bottom_shunt", "y":90 },
+        "facing=west,part=top_corner_shunt":        { "model":"minestuck:jbe_top_corner_shunt", "y":90 },
+        "facing=west,part=bottom_corner_shunt": { "model":"minestuck:jbe_bottom_corner_shunt", "y":90 },
+        
+        "facing=north,part=top_shunt":   { "model":"minestuck:jbe_top_shunt", "y":180  },
+        "facing=north,part=bottom_shunt":    { "model":"minestuck:jbe_bottom_shunt", "y":180 },
+        "facing=north,part=top_corner_shunt":        { "model":"minestuck:jbe_top_corner_shunt", "y":180 },
+        "facing=north,part=bottom_corner_shunt": { "model":"minestuck:jbe_bottom_corner_shunt", "y":180 },
+        
+        "facing=east,part=top_shunt":   { "model":"minestuck:jbe_top_shunt", "y":270  },
+        "facing=east,part=bottom_shunt":    { "model":"minestuck:jbe_bottom_shunt", "y":270 },
+        "facing=east,part=top_corner_shunt":        { "model":"minestuck:jbe_top_corner_shunt", "y":270 },
+        "facing=east,part=bottom_corner_shunt": { "model":"minestuck:jbe_bottom_corner_shunt", "y":270 },
+        
+        
+        "facing=south,part=cable": { "model":"minestuck:jbe_cable_block" },
+        "facing=south,part=center":    { "model":"minestuck:jbe_border_left_side" },
+        "facing=south,part=base_corner":        { "model":"minestuck:jbe_base_corner" },
+        "facing=south,part=base_side": { "model":"minestuck:jbe_base_side" },
+        
+        "facing=west,part=cable":   { "model":"minestuck:jbe_cable_block", "y":90  },
+        "facing=west,part=center":    { "model":"minestuck:jbe_border_left_side", "y":90 },
+        "facing=west,part=base_corner":        { "model":"minestuck:jbe_base_corner", "y":90 },
+        "facing=west,part=base_side": { "model":"minestuck:jbe_base_side", "y":90 },
+        
+        "facing=north,part=cable":   { "model":"minestuck:jbe_cable_block", "y":180  },
+        "facing=north,part=center":    { "model":"minestuck:jbe_border_left_side", "y":180 },
+        "facing=north,part=base_corner":        { "model":"minestuck:jbe_base_corner", "y":180 },
+        "facing=north,part=base_side": { "model":"minestuck:jbe_base_side", "y":180 },
+        
+        "facing=east,part=cable":   { "model":"minestuck:jbe_cable_block", "y":270  },
+        "facing=east,part=center":    { "model":"minestuck:jbe_border_left_side", "y":270 },
+        "facing=east,part=base_corner":        { "model":"minestuck:jbe_base_corner", "y":270 },
+        "facing=east,part=base_side": { "model":"minestuck:jbe_base_side", "y":270 }
+	}
+}

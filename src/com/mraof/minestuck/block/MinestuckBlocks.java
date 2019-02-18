@@ -40,6 +40,11 @@ public class MinestuckBlocks
 	public static Block cruxiteBlock = new Block(Material.ROCK, MapColor.LIGHT_BLUE).setUnlocalizedName("cruxiteBlock").setHardness(3.0F).setCreativeTab(TabMinestuck.instance);
 	public static Block uraniumBlock = new Block(Material.ROCK, MapColor.LIME).setLightLevel(0.5F).setUnlocalizedName("uraniumBlock").setHardness(3.0F).setCreativeTab(TabMinestuck.instance);
 	public static Block genericObject = new BlockCustom(Material.GOURD, MapColor.LIME, SoundType.WOOD).setUnlocalizedName("genericObject").setHardness(1.0F).setCreativeTab(TabMinestuck.instance);
+	
+	public static Block blender = new BlockDecor("blender",SoundType.METAL).setCreativeTab(TabMinestuck.instance);
+	public static Block chessboard = new BlockDecor("chessboard").setCreativeTab(TabMinestuck.instance);
+	public static Block frogStatueReplica = new BlockDecor("frogStatueReplica").setCreativeTab(TabMinestuck.instance);
+	
 	public static Block sburbMachine = new BlockSburbMachine();
 	public static Block crockerMachine = new BlockCrockerMachine();
 	public static Block blockComputerOff = new BlockComputerOff();
@@ -49,10 +54,13 @@ public class MinestuckBlocks
 	public static Block transportalizer = new BlockTransportalizer();
 	
 	public static Block punchDesignix = new BlockPunchDesignix();
-	public static BlockTotemLathe totemlathe[] = BlockTotemLathe.createBlocks();
+	public static BlockTotemLathe[] totemlathe = BlockTotemLathe.createBlocks();
 	public static BlockAlchemiter[] alchemiter = BlockAlchemiter.createBlocks();
 	public static Block cruxtruder = new BlockCruxtruder();
 	public static Block cruxtruderLid = new BlockCruxtruderLid();
+	public static Block holopad = new BlockHolopad();
+	public static BlockJumperBlock[] jumperBlockExtension = BlockJumperBlock.createBlocks();
+	public static BlockAlchemiterUpgrades[] alchemiterUpgrades = BlockAlchemiterUpgrades.createBlocks();
 	
 	public static Block blockCruxiteDowel = new BlockCruxtiteDowel();
 	public static Block blockGoldSeeds = new BlockGoldSeeds();
@@ -67,10 +75,13 @@ public class MinestuckBlocks
 	public static Block glowingLog = new BlockGlowingLog();
 	public static Block glowingPlanks = new BlockCustom(Material.WOOD, MapColor.LIGHT_BLUE, SoundType.WOOD).setFireInfo(5, 20).setUnlocalizedName("glowingPlanks").setLightLevel(0.5F).setHardness(2.0F).setResistance(5.0F).setCreativeTab(TabMinestuck.instance);
 	public static Block stone = new BlockMinestuckStone();
+	public static Block glowyGoop = new BlockGlowyGoop("glowyGoop");
+	public static Block coagulatedBlood = new BlockGoop("coagulatedBlood");
 	public static Block coarseStoneStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.COARSE)).setUnlocalizedName("stairsMinestuck.coarse");
 	public static Block shadeBrickStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.SHADE_BRICK)).setUnlocalizedName("stairsMinestuck.shadeBrick");
 	public static Block frostBrickStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.FROST_BRICK)).setUnlocalizedName("stairsMinestuck.frostBrick");
 	public static Block castIronStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.CAST_IRON)).setUnlocalizedName("stairsMinestuck.castIron");
+	public static Block myceliumBrickStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.MYCELIUM_BRICK)).setUnlocalizedName("stairsMinestuck.myceliumBrick");
 	public static Block log = new BlockMinestuckLog1();
 	public static Block leaves1 = new BlockMinestuckLeaves1();
 	public static Block planks = new BlockMinestuckPlanks();
@@ -89,6 +100,10 @@ public class MinestuckBlocks
 	public static Block redCake = new BlockSimpleCake(2, 0.1F, (EntityPlayer player) -> player.heal(1)).setUnlocalizedName("redCake");
 	public static Block hotCake = new BlockSimpleCake(2, 0.1F, (EntityPlayer player) -> player.setFire(4)).setUnlocalizedName("hotCake");
 	public static Block reverseCake = new BlockSimpleCake(2, 0.1F, null).setUnlocalizedName("cake");
+	public static Block vein = new BlockVein("vein");
+	public static Block veinCorner = new BlockVeinCorner("veinCorner");
+	public static Block veinCornerInverted = new BlockVeinCorner("veinCornerInverted");
+	
 	public static Block treatedPlanks = new BlockCustom(Material.WOOD, MapColor.WOOD, SoundType.WOOD).setFireInfo(1, 0).setUnlocalizedName("treatedPlanks").setHardness(1.0F).setCreativeTab(TabMinestuck.instance);
 	
 	public static Block endLog = new BlockEndLog();
@@ -115,6 +130,7 @@ public class MinestuckBlocks
 	public static Block pinkStoneCracked= new BlockCustomStone(MapColor.PINK).setUnlocalizedName("pinkStoneCracked").setCreativeTab(TabMinestuck.instance);
 	public static Block pinkStoneMossy = new BlockCustomStone(MapColor.PINK).setUnlocalizedName("pinkStoneMossy")	.setCreativeTab(TabMinestuck.instance);
 	public static Block pinkStonePolish = new BlockCustomStone(MapColor.PINK).setUnlocalizedName("pinkStonePolish")	.setCreativeTab(TabMinestuck.instance);
+	public static Block denseCloud = new BlockDenseCloud();
 	
 	//Ores
 	public static Block oreCruxite = new BlockCruxiteOre();
@@ -230,6 +246,8 @@ public class MinestuckBlocks
 		registry.register(glowingLog.setRegistryName("glowing_log"));
 		registry.register(glowingPlanks.setRegistryName("glowing_planks"));
 		registry.register(glowingMushroom.setRegistryName("glowing_mushroom"));
+		registry.register(glowyGoop.setRegistryName("glowy_goop"));
+		registry.register(coagulatedBlood.setRegistryName("coagulated_blood"));
 		registry.register(petrifiedLog.setRegistryName("petrified_log"));
 		registry.register(petrifiedPoppy.setRegistryName("petrified_poppy"));
 		registry.register(petrifiedGrass.setRegistryName("petrified_grass"));
@@ -261,6 +279,7 @@ public class MinestuckBlocks
 		registry.register(shadeBrickStairs.setRegistryName("shade_brick_stairs"));
 		registry.register(frostBrickStairs.setRegistryName("frost_brick_stairs"));
 		registry.register(castIronStairs.setRegistryName("cast_iron_stairs"));
+		registry.register(myceliumBrickStairs.setRegistryName("mycelium_brick_stairs"));
 		
 		registry.register(skaiaPortal.setRegistryName("skaia_portal"));
 		registry.register(returnNode.setRegistryName("return_node"));
@@ -279,6 +298,21 @@ public class MinestuckBlocks
 		registry.register(alchemiter[1].setRegistryName("alchemiter2"));
 		registry.register(cruxtruder.setRegistryName("cruxtruder"));
 		registry.register(cruxtruderLid.setRegistryName("cruxtruder_lid"));
+		/*
+		registry.register(holopad.setRegistryName("holopad"));
+		registry.register(jumperBlockExtension[0].setRegistryName("jumper_block_extension"));
+		registry.register(jumperBlockExtension[1].setRegistryName("jumper_block_extension2"));
+		registry.register(jumperBlockExtension[2].setRegistryName("jumper_block_extension3"));
+		registry.register(jumperBlockExtension[3].setRegistryName("jumper_block_extension4"));
+		
+		registry.register(alchemiterUpgrades[0].setRegistryName("alchemiter_upgrade"));
+		registry.register(alchemiterUpgrades[1].setRegistryName("alchemiter_upgrade2"));
+		registry.register(alchemiterUpgrades[2].setRegistryName("alchemiter_upgrade3"));
+		registry.register(alchemiterUpgrades[3].setRegistryName("alchemiter_upgrade4"));
+		*/
+		registry.register(blender.setRegistryName("blender"));
+		registry.register(chessboard.setRegistryName("chessboard"));
+		registry.register(frogStatueReplica.setRegistryName("frog_statue_replica"));
 		
 		registry.register(blockComputerOff.setRegistryName("computer_standard"));
 		registry.register(blockComputerOn.setRegistryName("computer_standard_on"));
@@ -320,6 +354,11 @@ public class MinestuckBlocks
 		registry.register(pinkStoneCracked.setRegistryName("pink_cracked_stone"));
 		registry.register(pinkStoneMossy.setRegistryName("pink_moss_stone_bricks"));
 		registry.register(pinkStonePolish.setRegistryName("pink_polished_stone"));
+		registry.register(denseCloud.setRegistryName("dense_cloud"));
+		
+		registry.register(vein.setRegistryName("vein"));
+		registry.register(veinCorner.setRegistryName("vein_corner"));
+		registry.register(veinCornerInverted.setRegistryName("vein_corner_inverted"));
 		
 		registry.register(primedTnt.setRegistryName("primed_tnt"));
 		registry.register(unstableTnt.setRegistryName("unstable_tnt"));

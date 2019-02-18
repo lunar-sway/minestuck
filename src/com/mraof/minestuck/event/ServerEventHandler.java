@@ -113,9 +113,14 @@ public class ServerEventHandler
 					event.setAmount((float) (event.getAmount() * modifier));
 				}
 				boolean critical = cachedCooledAttackStrength > 0.9 && player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder() && !player.isInWater() && !player.isPotionActive(MobEffects.BLINDNESS) && !player.isRiding();
-				if(critical && !player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof ItemPotionWeapon)
+				if(!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof ItemPotionWeapon)
 				{
-					event.getEntityLiving().addPotionEffect(((ItemPotionWeapon) player.getHeldItemMainhand().getItem()).getEffect());
+					if(((ItemPotionWeapon) player.getHeldItemMainhand().getItem()).potionOnCrit())
+					{
+						if(critical)
+						event.getEntityLiving().addPotionEffect(((ItemPotionWeapon) player.getHeldItemMainhand().getItem()).getEffect(player));
+					}
+					else event.getEntityLiving().addPotionEffect(((ItemPotionWeapon) player.getHeldItemMainhand().getItem()).getEffect(player));
 				}
 			}
 			else if (event.getEntityLiving() instanceof EntityPlayerMP && event.getSource().getTrueSource() instanceof EntityUnderling)

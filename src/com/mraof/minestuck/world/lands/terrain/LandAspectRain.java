@@ -35,7 +35,8 @@ import net.minecraft.world.gen.structure.MapGenStructure;
 
 public class LandAspectRain extends TerrainLandAspect 
 {
-	static Vec3d skyColor = new Vec3d(0.2D, 0.5D, 0.98D);
+	static Vec3d skyColor = new Vec3d(0.3D, 0.5D, 0.98D);
+	static Vec3d fogColor = new Vec3d(0.9D, 0.8D, 0.6D);
 	
 	//TODO:
 	//Magic Beans
@@ -123,12 +124,13 @@ public class LandAspectRain extends TerrainLandAspect
 	}
 	
 	@Override
-	public int getDayCycleMode() {
-		return 0;
-	}
-
-	@Override
 	public Vec3d getFogColor() 
+	{
+		return fogColor;
+	}
+	
+	@Override
+	public Vec3d getSkyColor()
 	{
 		return skyColor;
 	}

@@ -120,9 +120,9 @@ public class LandAspectRock extends TerrainLandAspect
 	}
 	
 	@Override
-	public int getDayCycleMode()
+	public float getSkylightBase()
 	{
-		return 0;
+		return 7/8F;
 	}
 	
 	@Override
@@ -147,6 +147,12 @@ public class LandAspectRock extends TerrainLandAspect
 	public Vec3d getFogColor()
 	{
 		return new Vec3d(0.5, 0.5, 0.55);
+	}
+	
+	@Override
+	public Vec3d getSkyColor()
+	{
+		return new Vec3d(0.6D, 0.6D, 0.7D);
 	}
 	
 	@Override
