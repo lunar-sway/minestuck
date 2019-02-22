@@ -62,20 +62,16 @@ import com.mraof.minestuck.tileentity.TileEntitySkaiaPortal;
 import com.mraof.minestuck.util.ColorCollector;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ClientProxy extends CommonProxy
 {
 	
@@ -86,10 +82,10 @@ public class ClientProxy extends CommonProxy
 	
 	public static void addScheduledTask(Runnable runnable)
 	{
-		Minecraft.getMinecraft().addScheduledTask(runnable);
+		Minecraft.getInstance().addScheduledTask(runnable);
 	}
 	
-	public static void registerRenderers() 
+	private static void registerRenderers()
 	{
 		Minecraft mc = Minecraft.getMinecraft();
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySkaiaPortal.class, new RenderSkaiaPortal());
@@ -121,12 +117,10 @@ public class ClientProxy extends CommonProxy
         }, MinestuckItems.itemFrog);
 	}
 	
-	@Override
-	public void preInit()
+	public static void init()
 	{
+		registerRenderers();
 		
-		
-		super.preInit();
 		RenderingRegistry.registerEntityRenderingHandler(EntityFrog.class, manager -> new RenderFrog(manager, new ModelBiped(), 0.5F));
 		RenderingRegistry.registerEntityRenderingHandler(EntityHologram.class, manager -> new RenderHologram(manager));
 		RenderingRegistry.registerEntityRenderingHandler(EntityNakagator.class, RenderEntityMinestuck.getFactory(new ModelNakagator(), 0.5F));
@@ -155,12 +149,7 @@ public class ClientProxy extends CommonProxy
 		MinecraftForge.EVENT_BUS.register(new MinestuckKeyHandler());
 		MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
 		MinecraftForge.EVENT_BUS.register(MinestuckModelManager.class);
-	}
-	
-	@Override
-	public void init()
-	{
-		super.init();
+		
 		MinecraftForge.EVENT_BUS.register(ClientEditHandler.instance);
 		MinecraftForge.EVENT_BUS.register(new MinestuckConfig());
 		MinecraftForge.EVENT_BUS.register(RenderMachineOutline.class);

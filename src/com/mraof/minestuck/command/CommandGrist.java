@@ -1,5 +1,6 @@
 package com.mraof.minestuck.command;
 
+import com.mojang.brigadier.CommandDispatcher;
 import com.mraof.minestuck.alchemy.GristAmount;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
@@ -18,6 +19,11 @@ import java.util.List;
 
 public class CommandGrist extends CommandBase
 {
+	public static void register(CommandDispatcher<CommandSource> dispatcher)
+	{
+	
+	}
+	
 	public static GristAmount[] parseGrist(String[] args, int startOffset) throws CommandException
 	{
 		GristAmount[] grist = new GristAmount[(args.length - startOffset) / 2];

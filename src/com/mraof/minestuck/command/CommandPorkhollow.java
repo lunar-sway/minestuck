@@ -1,5 +1,6 @@
 package com.mraof.minestuck.command;
 
+import com.mojang.brigadier.CommandDispatcher;
 import com.mraof.minestuck.item.ItemBoondollars;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.MinestuckPlayerData;
@@ -12,6 +13,11 @@ import net.minecraft.util.text.TextComponentTranslation;
 
 public class CommandPorkhollow extends CommandBase    //Much like /gristSend and /land, is a temporary command until a proper feature is in place
 {
+	public static void register(CommandDispatcher<CommandSource> dispatcher)
+	{
+	
+	}
+	
 	@Override
 	public String getName()
 	{

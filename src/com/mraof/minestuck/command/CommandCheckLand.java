@@ -3,12 +3,14 @@ package com.mraof.minestuck.command;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mojang.brigadier.CommandDispatcher;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
+import net.minecraft.command.CommandSource;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -18,6 +20,10 @@ import net.minecraft.util.text.TextComponentTranslation;
 
 public class CommandCheckLand extends CommandBase
 {
+	public static void register(CommandDispatcher<CommandSource> dispatcher)
+	{
+	
+	}
 	
 	@Override
 	public String getName()

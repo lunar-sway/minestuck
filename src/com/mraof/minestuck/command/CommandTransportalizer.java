@@ -1,5 +1,6 @@
 package com.mraof.minestuck.command;
 
+import com.mojang.brigadier.CommandDispatcher;
 import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
@@ -19,6 +20,10 @@ import java.util.List;
 
 public class CommandTransportalizer extends CommandBase
 {
+	public static void register(CommandDispatcher<CommandSource> dispatcher)
+	{
+	
+	}
 	
 	@Override
 	public String getName()

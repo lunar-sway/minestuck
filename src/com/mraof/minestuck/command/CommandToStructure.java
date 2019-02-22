@@ -1,8 +1,10 @@
 package com.mraof.minestuck.command;
 
+import com.mojang.brigadier.CommandDispatcher;
 import com.mraof.minestuck.world.WorldProviderLands;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
+import net.minecraft.command.CommandSource;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,6 +19,11 @@ import net.minecraft.util.math.BlockPos;
  */
 public class CommandToStructure extends CommandBase
 {
+	public static void register(CommandDispatcher<CommandSource> dispatcher)
+	{
+	
+	}
+	
 	@Override
 	public String getName()
 	{

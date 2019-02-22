@@ -1,9 +1,11 @@
 package com.mraof.minestuck.command;
 
+import com.mojang.brigadier.CommandDispatcher;
 import com.mraof.minestuck.entity.consort.EntityConsort;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
+import net.minecraft.command.CommandSource;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -12,6 +14,10 @@ import net.minecraft.util.math.Vec3d;
 
 public class CommandConsortReply extends CommandBase
 {
+	public static void register(CommandDispatcher<CommandSource> dispatcher)
+	{
+	
+	}
 	
 	@Override
 	public String getName()

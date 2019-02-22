@@ -29,21 +29,13 @@ import com.mraof.minestuck.world.lands.structure.MapGenLandStructure;
 import com.mraof.minestuck.world.lands.structure.village.ConsortVillageComponents;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 import com.mraof.minestuck.world.storage.loot.MinestuckLoot;
-import com.mraof.minestuck.world.storage.loot.conditions.ConsortLootCondition;
-import com.mraof.minestuck.world.storage.loot.conditions.LandAspectLootCondition;
-import com.mraof.minestuck.world.storage.loot.functions.SetBoondollarCount;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.gen.structure.MapGenStructureIO;
-import net.minecraft.world.storage.loot.conditions.LootConditionManager;
-import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class CommonProxy
 {
-	public void preInit()
+	public static void init()
 	{
 		MinecraftForge.EVENT_BUS.register(MinestuckSoundHandler.instance);
 		MinecraftForge.EVENT_BUS.register(MinestuckBlocks.class);
@@ -53,10 +45,7 @@ public class CommonProxy
 		MinestuckSoundHandler.initSound();
 		
 		MinestuckCriteriaTriggers.register();
-	}
-	
-	public void init()
-	{
+		
 		MinestuckDimensionHandler.register();
 		
 		//register ore generation

@@ -3,6 +3,7 @@ package com.mraof.minestuck.command;
 import java.util.Collections;
 import java.util.List;
 
+import com.mojang.brigadier.CommandDispatcher;
 import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
@@ -10,6 +11,7 @@ import com.mraof.minestuck.util.MinestuckPlayerData;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
+import net.minecraft.command.CommandSource;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.server.MinecraftServer;
@@ -17,6 +19,10 @@ import net.minecraft.util.math.BlockPos;
 
 public class CommandSetRung extends CommandBase
 {
+	public static void register(CommandDispatcher<CommandSource> dispatcher)
+	{
+	
+	}
 	
 	@Override
 	public String getName()
