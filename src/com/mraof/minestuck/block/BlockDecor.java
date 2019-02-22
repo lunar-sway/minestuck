@@ -126,12 +126,12 @@ public class BlockDecor extends Block
      */
     public IBlockState getStateFromMeta(int meta)
     {
-    	return getDefaultState().withProperty(FACING, EnumFacing.values()[meta + 2]);
+    	return getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(meta % 4));
     }
 
     public int getMetaFromState(IBlockState state)
     {
-    	return (state.getValue(FACING)).ordinal() - 2;
+    	return (state.getValue(FACING)).getHorizontalIndex();
     }
 
     protected BlockStateContainer createBlockState()
