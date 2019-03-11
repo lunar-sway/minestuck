@@ -11,6 +11,7 @@ import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.Slot;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
@@ -124,8 +125,10 @@ public class CaptchaDeckPacket extends MinestuckPacket
 				CaptchaDeckHandler.useItem((EntityPlayerMP) player);
 			else if(this.type == CAPTCHALOUGE && !player.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).isEmpty())
 				CaptchaDeckHandler.captchalougeItem((EntityPlayerMP) player);
-			else if(this.type == CAPTCHALOUGE_INV)
-				CaptchaDeckHandler.captchalougeInventoryItem((EntityPlayerMP) player);
+			else if(this.type == CAPTCHALOUGE_INV) {
+				Slot slotIn = ((GuiContainer)Minecraft.getMinecraft().currentScreen).getSlotUnderMouse();
+				CaptchaDeckHandler.captchalougeInventoryItem((EntityPlayerMP) player, slotIn);
+			}
 			else if(this.type == GET)
 				CaptchaDeckHandler.getItem((EntityPlayerMP) player, itemIndex, getCard);
 //			else if(this.type == DATA)

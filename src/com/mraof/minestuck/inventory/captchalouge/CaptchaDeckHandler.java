@@ -13,10 +13,6 @@ import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -261,14 +257,9 @@ public class CaptchaDeckHandler
 		
 	}
 	
-	public static void captchalougeInventoryItem (EntityPlayerMP player) {
-		GuiScreen guiScreen = Minecraft.getMinecraft().currentScreen;
-		if(!(guiScreen instanceof GuiContainer))
-			return;
-		else {
-			GuiContainer gui = (GuiContainer) guiScreen;
-			Slot mouseSlot = gui.getSlotUnderMouse();
-			ItemStack stack = mouseSlot.getStack();
+	public static void captchalougeInventoryItem (EntityPlayerMP player, Slot clientSlot) {
+
+			ItemStack stack = player.openContainer.getSlot(clientSlot.getSlotIndex()).getStack();
 			Modus modus = getModus(player);
 			
 			if(stack.getItem() == MinestuckItems.boondollars)
@@ -298,28 +289,25 @@ public class CaptchaDeckHandler
 					if(!card2)
 						launchAnyItem(player, new ItemStack(MinestuckItems.captchaCard, 1));
 					
-					stack = mouseSlot.getStack();
+					stack = player.openContainer.getSlot(clientSlot.getSlotIndex()).getStack();
 					if(card1 && stack.getCount() > 1)
 						stack.shrink(1);
 					else {
-						mouseSlot.putStack(ItemStack.EMPTY);
-						player.openContainer.getSlot(mouseSlot.getSlotIndex()).putStack(ItemStack.EMPTY);
+						player.openContainer.getSlot(clientSlot.getSlotIndex()).putStack(ItemStack.EMPTY);
 					}
 				}
 				else if(card1 && card2)
 				{
 					launchAnyItem(player, stack);
-					stack = mouseSlot.getStack();
+					stack = player.openContainer.getSlot(clientSlot.getSlotIndex()).getStack();
 					if(stack.getCount() == 1) {
-						mouseSlot.putStack(ItemStack.EMPTY);
-						player.openContainer.getSlot(mouseSlot.getSlotIndex()).putStack(ItemStack.EMPTY);
+						player.openContainer.getSlot(clientSlot.getSlotIndex()).putStack(ItemStack.EMPTY);
 					} else stack.shrink(1);
 				}
 				MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, writeToNBT(modus));
 				MinestuckChannelHandler.sendToPlayer(packet, player);
 			}
 		}
-	}
 	
 	public static void getItem(EntityPlayerMP player, int index, boolean asCard)
 	{

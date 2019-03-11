@@ -8,8 +8,8 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
+//Needed for getting key-input inside containers.
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 
 import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
 import com.mraof.minestuck.editmode.ClientEditHandler;
@@ -66,6 +66,7 @@ public class MinestuckKeyHandler
 		
 		statKeyPressed = statKey.isKeyDown();
 		editKeyPressed = editKey.isKeyDown();
+		//Raw keyboard input is gotten because the Minecraft key-input handler doesn't work inside containers.
 		captchaKeyPressed = Keyboard.isKeyDown(captchaKey.getKeyCode());
 		
 	}
