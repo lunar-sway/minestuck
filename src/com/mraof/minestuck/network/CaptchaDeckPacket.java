@@ -41,6 +41,8 @@ public class CaptchaDeckPacket extends MinestuckPacket
 	public byte valueType;
 	public int value;
 	
+	public int slotIndex;
+	
 	@Override
 	public MinestuckPacket generatePacket(Object... data)
 	{
@@ -71,6 +73,9 @@ public class CaptchaDeckPacket extends MinestuckPacket
 			{
 				this.data.writeByte((Byte)data[1]);
 				this.data.writeInt((Integer)data[2]);
+			}
+			else if(type == CAPTCHALOUGE_INV && data[1] != null) {
+				this.data.writeInt((Integer)data[1]);
 			}
 		}
 		
@@ -108,6 +113,9 @@ public class CaptchaDeckPacket extends MinestuckPacket
 				this.valueType = data.readByte();
 				this.value = data.readInt();
 			}
+			else if(this.type == CAPTCHALOUGE_INV) {
+				this.slotIndex = data.readInt();
+			}
 		}
 		
 		return this;
@@ -126,8 +134,7 @@ public class CaptchaDeckPacket extends MinestuckPacket
 			else if(this.type == CAPTCHALOUGE && !player.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).isEmpty())
 				CaptchaDeckHandler.captchalougeItem((EntityPlayerMP) player);
 			else if(this.type == CAPTCHALOUGE_INV) {
-				Slot slotIn = ((GuiContainer)Minecraft.getMinecraft().currentScreen).getSlotUnderMouse();
-				CaptchaDeckHandler.captchalougeInventoryItem((EntityPlayerMP) player, slotIn);
+				CaptchaDeckHandler.captchalougeInventoryItem((EntityPlayerMP) player, slotIndex);
 			}
 			else if(this.type == GET)
 				CaptchaDeckHandler.getItem((EntityPlayerMP) player, itemIndex, getCard);

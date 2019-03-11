@@ -257,9 +257,9 @@ public class CaptchaDeckHandler
 		
 	}
 	
-	public static void captchalougeInventoryItem (EntityPlayerMP player, Slot clientSlot) {
+	public static void captchalougeInventoryItem (EntityPlayerMP player, int slotIndex) {
 
-			ItemStack stack = player.openContainer.getSlot(clientSlot.getSlotIndex()).getStack();
+			ItemStack stack = player.openContainer.getSlot(slotIndex).getStack();
 			Modus modus = getModus(player);
 			
 			if(stack.getItem() == MinestuckItems.boondollars)
@@ -289,19 +289,19 @@ public class CaptchaDeckHandler
 					if(!card2)
 						launchAnyItem(player, new ItemStack(MinestuckItems.captchaCard, 1));
 					
-					stack = player.openContainer.getSlot(clientSlot.getSlotIndex()).getStack();
+					stack = player.openContainer.getSlot(slotIndex).getStack();
 					if(card1 && stack.getCount() > 1)
 						stack.shrink(1);
 					else {
-						player.openContainer.getSlot(clientSlot.getSlotIndex()).putStack(ItemStack.EMPTY);
+						player.openContainer.getSlot(slotIndex).putStack(ItemStack.EMPTY);
 					}
 				}
 				else if(card1 && card2)
 				{
 					launchAnyItem(player, stack);
-					stack = player.openContainer.getSlot(clientSlot.getSlotIndex()).getStack();
+					stack = player.openContainer.getSlot(slotIndex).getStack();
 					if(stack.getCount() == 1) {
-						player.openContainer.getSlot(clientSlot.getSlotIndex()).putStack(ItemStack.EMPTY);
+						player.openContainer.getSlot(slotIndex).putStack(ItemStack.EMPTY);
 					} else stack.shrink(1);
 				}
 				MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, writeToNBT(modus));
