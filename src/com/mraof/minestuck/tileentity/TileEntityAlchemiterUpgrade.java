@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.mraof.minestuck.block.BlockAlchemiterUpgrades;
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.util.AlchemiterUpgrades;
+import com.mraof.minestuck.util.AlchemiterUpgrades_OLD;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
@@ -18,9 +18,9 @@ import scala.actors.threadpool.Arrays;
 
 public class TileEntityAlchemiterUpgrade extends TileEntity implements ITickable
 {
-	protected AlchemiterUpgrades upgrade;
+	protected AlchemiterUpgrades_OLD upgrade;
 	
-	public TileEntityAlchemiterUpgrade(AlchemiterUpgrades upg) 
+	public TileEntityAlchemiterUpgrade(AlchemiterUpgrades_OLD upg) 
 	{
 		setUpgrade(upg);
 	}
@@ -32,7 +32,7 @@ public class TileEntityAlchemiterUpgrade extends TileEntity implements ITickable
 		{
 			EnumFacing facing = world.getBlockState(pos).getValue(BlockAlchemiterUpgrades.DIRECTION);
 			
-			if(upgrade.equals(AlchemiterUpgrades.hopper))
+			if(upgrade.equals(AlchemiterUpgrades_OLD.hopper))
 				updateHopper(facing);
 		}
 	}
@@ -73,12 +73,12 @@ public class TileEntityAlchemiterUpgrade extends TileEntity implements ITickable
         return worldIn.<EntityItem>getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(x, y, z, x + 1D, y + 1.5D, z + 1D), EntitySelectors.IS_ALIVE);
     }
 	
-	public AlchemiterUpgrades getUpgrade()
+	public AlchemiterUpgrades_OLD getUpgrade()
 	{
 		return upgrade;
 	}
 	
-	public void setUpgrade(AlchemiterUpgrades upg)
+	public void setUpgrade(AlchemiterUpgrades_OLD upg)
 	{
 		upgrade = upg;
 	}

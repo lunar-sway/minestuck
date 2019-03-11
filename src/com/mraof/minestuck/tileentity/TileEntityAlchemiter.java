@@ -36,10 +36,8 @@ public class TileEntityAlchemiter extends TileEntity
 	protected GristType selectedGrist = GristType.Build;
 	protected boolean broken = false;
 	protected ItemStack dowel = ItemStack.EMPTY;
-	protected ItemStack upgradeItem[] = {ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY,ItemStack.EMPTY,ItemStack.EMPTY};
-	protected AlchemiterUpgrades upgrade[] = new AlchemiterUpgrades[7];
-	public boolean upgraded = false;
-	protected TileEntity jbe = null;
+	protected boolean upgraded = false;
+	protected TileEntityJumperBlock jbe;
 	
 	public void setDowel(ItemStack newDowel)
 	{
@@ -61,7 +59,7 @@ public class TileEntityAlchemiter extends TileEntity
 	
 	public ItemStack getOutput()
 	{
-		if(hasUpgrade(AlchemiterUpgrades.captchaCard))
+		if(false)//if(hasUpgrade(AlchemiterUpgrades_OLD.captchaCard))
 		{
 		if (!AlchemyRecipes.hasDecodedItem(dowel))
 			return AlchemyRecipes.createCard(new ItemStack(MinestuckBlocks.genericObject), false);
@@ -118,80 +116,23 @@ public class TileEntityAlchemiter extends TileEntity
 	}
 	
 	//JBE upgrades
-	public void setUpgrade(ItemStack stack, int id)
-	{
-		if(!stack.isEmpty())
-		{
-			this.upgradeItem[id] = stack;
-			if(world != null)
-			{
-				IBlockState state = world.getBlockState(pos);
-				world.notifyBlockUpdate(pos, state, state, 2);
-			}
-		}
-	}
 	
-	public void setUpgraded(boolean bool, BlockPos pos)
+	public void setUpgraded(boolean upgraded, TileEntityJumperBlock te)
 	{
-		TileEntity te = world.getTileEntity(pos);
-		
-		if(te instanceof TileEntityJumperBlock)
+		if(upgraded)
 			jbe = te;
-		else
-		{
-			Debug.warnf("%s is not a jbe tile entity", te);
-			return;
-		}
-		
-		TileEntityJumperBlock jbeTe = (TileEntityJumperBlock) te;
-		this.upgraded = bool;
-		
-		if(bool == true)
-		{
-			for(int i = 0; i < upgradeItem.length; i++)
-			{
-				
-				getUpgradeItemsList()[i] = jbeTe.getUpgrade(i);
-				getUpgradeItemsList()[i].setCount(1);
-				
-				System.out.println(getUpgradeItemsList()[i]);
-				
-
-				System.out.println("aaaaa");
-			}
-			
-		}
-		else
-		{
-			for(int i = 0; i < upgradeItem.length; i++)
-			{
-				getUpgradeItemsList()[i] = ItemStack.EMPTY;
-				System.out.println("ee");
-			}
-		}
-		
-		this.upgrade = AlchemiterUpgrades.getUpgradesFromList(getUpgradeItemsList());
+		this.upgraded = upgraded;
 	}
 	
-		
-	public boolean hasUpgrade(AlchemiterUpgrades upgrade)
+	public AlchemiterUpgrade[] getUpgrades()
 	{
-		return AlchemiterUpgrades.hasUpgrade(getUpgradeItemsList(), upgrade);
+		if(upgraded)  return jbe.getUpgrades();
+		else return new AlchemiterUpgrade[] {};
 	}
 	
-	public boolean isUpgraded()
+	public boolean hasUpgrade(AlchemiterUpgrade upgrade)
 	{
-		return this.upgraded;
-	}
-	
-	//TODO
-	public void doTheBlenderThing()
-	{
-		if(!dowel.isEmpty())
-		{
-			InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(MinestuckItems.rawCruxite, 1));
-			setDowel(ItemStack.EMPTY);
-		}
+		return Arrays.asList(getUpgrades()).contains(upgrade);
 	}
 	
 	private boolean isUseable(IBlockState state)
@@ -205,21 +146,7 @@ public class TileEntityAlchemiter extends TileEntity
 		return !broken;
 	}
 	
-	public AlchemiterUpgrades[] getUpgradeList()
-	{
-		return upgrade;
-	}
 	
-	public ItemStack[] getUpgradeItemsList()
-	{
-		System.out.println(upgradeItem);
-		return upgradeItem;
-	}
-	
-	public ItemStack getUpgrade(int id)
-	{
-		return upgradeItem[id];
-	}
 	
 	public void checkStates()
 	{
@@ -273,15 +200,6 @@ public class TileEntityAlchemiter extends TileEntity
 			this.selectedGrist = GristType.Build;
 		}
 		
-		this.upgraded = tagCompound.getBoolean("upgraded");
-		
-		if(upgraded)
-		{
-			for(int i = 0; i < upgradeItem.length; i++)
-			{
-				setUpgrade(new ItemStack(tagCompound.getCompoundTag("upgrade" + i)), i);
-			}
-		}
 		
 		broken = tagCompound.getBoolean("broken");
 		
@@ -295,13 +213,7 @@ public class TileEntityAlchemiter extends TileEntity
 		super.writeToNBT(tagCompound);
 
 		tagCompound.setString("gristType", selectedGrist.getRegistryName().toString());
-		tagCompound.setBoolean("upgraded", upgraded);
 		tagCompound.setBoolean("broken", isBroken());
-		
-		for(int i = 0; i < upgradeItem.length; i++)
-		{
-			tagCompound.setTag("upgrade" + i, upgradeItem[i].writeToNBT(new NBTTagCompound()));
-		}
 		
 		if(dowel!= null)
 			tagCompound.setTag("dowel", dowel.writeToNBT(new NBTTagCompound()));
@@ -353,8 +265,8 @@ public class TileEntityAlchemiter extends TileEntity
 		}
 		else
 		{
-			if(hasUpgrade(AlchemiterUpgrades.blender) && !dowel.isEmpty())
-				doTheBlenderThing();
+			//if(hasUpgrade(AlchemiterUpgrades_OLD.blender) && !dowel.isEmpty())
+			//	doTheBlenderThing();
 		}
 		BlockPos mainPos = pos;
 		TileEntity te = worldIn.getTileEntity(mainPos);
@@ -413,13 +325,9 @@ public class TileEntityAlchemiter extends TileEntity
 		
 		boolean canAfford = GristHelper.canAfford(MinestuckPlayerData.getGristSet(player), cost);
 		
-		System.out.println(getUpgradeItemsList());
-
-		System.out.println(isUpgraded());
-		
 		if(canAfford)
 		{
-			if(hasUpgrade(AlchemiterUpgrades.gristWidget))
+			if(false)//if(hasUpgrade(AlchemiterUpgrades_OLD.gristWidget))
 			{
 				
 				System.out.println("woop");
@@ -461,7 +369,7 @@ public class TileEntityAlchemiter extends TileEntity
 			{
 				ItemStack stack = newItem.copy();
 				//TODO
-				if(hasUpgrade(AlchemiterUpgrades.captchaCard)) {
+				if(false) {//if(hasUpgrade(AlchemiterUpgrades_OLD.captchaCard)) {
 					int stackCount =  Math.min(AlchemyRecipes.getDecodedItem(stack).getMaxStackSize(), quantity);
 					
 					stack = AlchemyRecipes.changeEncodeSize(stack, stackCount);
@@ -488,7 +396,7 @@ public class TileEntityAlchemiter extends TileEntity
 		ItemStack dowel = getDowel();
 		GristSet set;
 		ItemStack stack = getOutput();
-		if(hasUpgrade(AlchemiterUpgrades.captchaCard))
+		if(false)//if(hasUpgrade(AlchemiterUpgrades_OLD.captchaCard))
 			stack = AlchemyRecipes.getDecodedItem(getOutput());
 		boolean useSelectedType;
 		if(dowel.isEmpty())

@@ -111,11 +111,8 @@ public class ItemJumperBlock extends ItemBlock
 					lookupOffset = 5;
 					flipOffset = 5;
 				}
-			
-			
-			
-			BlockPos lookupPos = (pos.offset(lookupFacing, lookupOffset));
-			BlockPos alchemPos = TileEntityJumperBlock.staticAlchemiterMainPos(lookupPos, world);
+
+			BlockPos alchemPos = ((TileEntityJumperBlock)world.getTileEntity(pos)).getAlchemiter().getPos();
 			
 				for(int z2 = 0; z2 < 4; z2++)
 				{
@@ -161,10 +158,7 @@ public class ItemJumperBlock extends ItemBlock
 					flipOffset = 5;
 				}
 			
-			
-			
-			BlockPos lookupPos = (pos.offset(lookupFacing, lookupOffset));
-			BlockPos alchemPos = TileEntityJumperBlock.staticAlchemiterMainPos(lookupPos, world);
+			BlockPos alchemPos = ((TileEntityJumperBlock)world.getTileEntity(pos)).getAlchemiter().getPos();
 			
 				for(int z2 = 0; z2 < 4; z2++)
 				{
@@ -247,7 +241,7 @@ public class ItemJumperBlock extends ItemBlock
 				
 				EnumFacing flipFacing = facing.rotateY();
 				if(!flip) flipFacing = flipFacing.getOpposite();
-				TileEntity alchemTe = world.getTileEntity(((TileEntityJumperBlock) te).staticAlchemiterMainPos(cablePos.offset(flipFacing), world));
+				TileEntity alchemTe = world.getTileEntity(((TileEntityJumperBlock) te).getAlchemiter().getPos());
 				if(alchemTe instanceof TileEntityAlchemiter)
 				{
 					TileEntityAlchemiter alchemiter = (TileEntityAlchemiter) alchemTe;
@@ -255,7 +249,7 @@ public class ItemJumperBlock extends ItemBlock
 					//TODO
 					alchemiter.setUpgraded(true, cablePos);
 				}
-				else Debug.warnf("Couldn't find Alchemiter at %s. Instead found %s.", ((TileEntityJumperBlock) te).alchemiterMainPos(), alchemTe);
+				else Debug.warnf("Couldn't find Alchemiter at %s. Instead found %s.", ((TileEntityJumperBlock) te).getAlchemiter().getPos());
 				
 			} else Debug.warnf("Placed JBE, but can't find tile entity. Instead found %s.", te);
 			

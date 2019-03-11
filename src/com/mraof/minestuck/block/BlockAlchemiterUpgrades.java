@@ -18,7 +18,7 @@ import com.mraof.minestuck.tileentity.TileEntityAlchemiterUpgrade;
 import com.mraof.minestuck.tileentity.TileEntityItemStack;
 import com.mraof.minestuck.tileentity.TileEntityJumperBlock;
 import com.mraof.minestuck.tileentity.TileEntityUpgradedAlchemiter;
-import com.mraof.minestuck.util.AlchemiterUpgrades;
+import com.mraof.minestuck.util.AlchemiterUpgrades_OLD;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
@@ -198,7 +198,7 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 		IBlockState state = getStateFromMeta(meta);
 		EnumParts part = state.getValue(PART);
 		
-		AlchemiterUpgrades upg = AlchemiterUpgrades.getUpgradeFromBlock(part);
+		AlchemiterUpgrades_OLD upg = AlchemiterUpgrades_OLD.getUpgradeFromBlock(part);
 		
 			if(hasTileEntity(state))
 			{
@@ -218,9 +218,9 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 		if(state.getBlock() instanceof BlockAlchemiter)
 			pos = ((BlockAlchemiter) state.getBlock()).getMainPos(state, pos, worldIn);
 		else if(state.getBlock() instanceof BlockAlchemiterUpgrades)
-			if(AlchemiterUpgrades.getUpgradeFromBlock(getPart(state)).getUpgradeType() == AlchemiterUpgrades.EnumType.TOTEM_PAD)
+			if(AlchemiterUpgrades_OLD.getUpgradeFromBlock(getPart(state)).getUpgradeType() == AlchemiterUpgrades_OLD.EnumType.TOTEM_PAD)
 			{
-				IBlockState[] blocks = AlchemiterUpgrades.getUpgradeFromBlock(getPart(state)).getUpgradeBlocks();
+				IBlockState[] blocks = AlchemiterUpgrades_OLD.getUpgradeFromBlock(getPart(state)).getUpgradeBlocks();
 				
 				pos = pos.down(Arrays.asList(blocks).indexOf(state.withProperty(DIRECTION, EnumFacing.NORTH)) - 1);
 			}
@@ -273,7 +273,7 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 		{
 			int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, stack);
 			List<ItemStack> items = new ArrayList<>();
-			items.add(((TileEntityJumperBlock) te).getUpgrade(0));
+			items.add(((TileEntityJumperBlock) te).getUpgrade(0).getShunt());
 			net.minecraftforge.event.ForgeEventFactory.fireBlockHarvesting(items, worldIn, pos, state, fortune, 1.0f, false, harvesters.get());
 			
 			for (ItemStack item : items)
@@ -299,7 +299,7 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 		EnumParts part = BlockAlchemiterUpgrades.getPart(state);
 		EnumFacing facing = BlockAlchemiterUpgrades.getFacing(state);
 		
-		BlockPos offset = (AlchemiterUpgrades.getUpgradeFromBlock(part) == null) ? pos.offset(facing) : (AlchemiterUpgrades.getUpgradeFromBlock(part).getUpgradeType() == AlchemiterUpgrades.EnumType.TOTEM_PAD) ? pos : pos.offset(facing);
+		BlockPos offset = (AlchemiterUpgrades_OLD.getUpgradeFromBlock(part) == null) ? pos.offset(facing) : (AlchemiterUpgrades_OLD.getUpgradeFromBlock(part).getUpgradeType() == AlchemiterUpgrades_OLD.EnumType.TOTEM_PAD) ? pos : pos.offset(facing);
 		BlockPos mainPos =  getAlchemiterPos(worldIn, offset);
 		
 		TileEntity te = worldIn.getTileEntity(mainPos);
@@ -309,7 +309,7 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 			TileEntityAlchemiter alchem = (TileEntityAlchemiter) te;
 			alchem.unbreakMachine();
 			alchem.checkStates();
-			if(!alchem.isBroken() && AlchemiterUpgrades.hasUpgrade(alchem.getUpgradeList(), AlchemiterUpgrades.getUpgradeFromBlock(part)))
+			if(!alchem.isBroken() && AlchemiterUpgrades_OLD.hasUpgrade(alchem.getUpgradeList(), AlchemiterUpgrades_OLD.getUpgradeFromBlock(part)))
 			{
 				return state;
 			}
@@ -322,8 +322,8 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 	public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) 
 	{
 		boolean isUpgraded = false;
-		boolean isPadUpg = AlchemiterUpgrades.getUpgradeFromBlock(getPart(world.getBlockState(pos))) != null;
-		if(isPadUpg) isPadUpg = world.getBlockState(pos).getBlock() instanceof BlockAlchemiterUpgrades ? (AlchemiterUpgrades.getUpgradeFromBlock(getPart(world.getBlockState(pos))).getUpgradeType() == AlchemiterUpgrades.EnumType.TOTEM_PAD) : false;
+		boolean isPadUpg = AlchemiterUpgrades_OLD.getUpgradeFromBlock(getPart(world.getBlockState(pos))) != null;
+		if(isPadUpg) isPadUpg = world.getBlockState(pos).getBlock() instanceof BlockAlchemiterUpgrades ? (AlchemiterUpgrades_OLD.getUpgradeFromBlock(getPart(world.getBlockState(pos))).getUpgradeType() == AlchemiterUpgrades_OLD.EnumType.TOTEM_PAD) : false;
 		
 		BlockPos offset = isPadUpg ? pos : pos.offset(world.getBlockState(pos).getValue(DIRECTION));
 		TileEntity te = world.getTileEntity(getAlchemiterPos((World)world, offset));

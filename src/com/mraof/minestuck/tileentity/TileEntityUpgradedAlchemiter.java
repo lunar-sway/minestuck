@@ -1,17 +1,16 @@
 package com.mraof.minestuck.tileentity;
 
-import com.mraof.minestuck.Minestuck;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.mraof.minestuck.block.BlockAlchemiter;
 import com.mraof.minestuck.block.BlockAlchemiter.EnumParts;
 import com.mraof.minestuck.block.BlockAlchemiterUpgrades;
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.client.gui.GuiHandler;
-import com.mraof.minestuck.util.AlchemiterUpgrades;
+import com.mraof.minestuck.util.AlchemiterUpgrade;
 import com.mraof.minestuck.util.Debug;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -32,9 +31,9 @@ public class TileEntityUpgradedAlchemiter extends TileEntityAlchemiter
 				return;
 			}
 			
-			AlchemiterUpgrades latheUpg = ((TileEntityJumperBlock)jbe).getLatheUpgrade();
+			AlchemiterUpgrade latheUpg = ((TileEntityJumperBlock)jbe).getUpgrade(((TileEntityJumperBlock)jbe).getLatheUpgradeSlot());
 			
-			if(!AlchemiterUpgrades.nullifiesAlchemiterFunc(latheUpg))
+			if(!AlchemiterUpgrade.nullifiesAlchemiterFunc(latheUpg))
 				onRightClick(worldIn, playerIn, state, ((BlockAlchemiter)state.getBlock()).getPart(state));
 		}
 	}
@@ -62,31 +61,31 @@ public class TileEntityUpgradedAlchemiter extends TileEntityAlchemiter
 		
 		BlockPos pos = getPos().down();
 		TileEntityJumperBlock jbeTe = ((TileEntityJumperBlock) jbe);
-		IBlockState[] baseParts = 
-			{
-				BlockAlchemiter.getBlockState(EnumParts.TOTEM_CORNER, facing),
-				BlockAlchemiter.getBlockState(EnumParts.TOTEM_PAD, facing),
-				BlockAlchemiter.getBlockState(EnumParts.LOWER_ROD, facing),
-				BlockAlchemiter.getBlockState(EnumParts.UPPER_ROD, facing)
-			};
+		List<IBlockState> baseParts = new ArrayList<IBlockState> ();
+			
+				baseParts.add(BlockAlchemiter.getBlockState(EnumParts.TOTEM_CORNER, facing));
+				baseParts.add(BlockAlchemiter.getBlockState(EnumParts.TOTEM_PAD, facing));
+				baseParts.add(BlockAlchemiter.getBlockState(EnumParts.LOWER_ROD, facing));
+				baseParts.add(BlockAlchemiter.getBlockState(EnumParts.UPPER_ROD, facing));
+			
 		
-		IBlockState[] upgBlocks;
+		List<IBlockState> upgBlocks;
 		
 		
 		System.out.println(jbeTe);
 		
-		if(jbeTe.getLatheUpgradeId() == -1)
+		if(jbeTe.getLatheUpgradeSlot() == -1)
 			upgBlocks = baseParts;
 		else
 		{
-			AlchemiterUpgrades upg = AlchemiterUpgrades.upgradeList[jbeTe.getLatheUpgradeId()];
-			upgBlocks = upg.getUpgradeBlocks();
+			AlchemiterUpgrade upg = jbeTe.getUpgrade(jbeTe.getLatheUpgradeSlot());
+			upgBlocks = upg.getBlocks();
 		}
-		for(int i = 0; i < upgBlocks.length; i++)
+		for(int i = 0; i < upgBlocks.size(); i++)
 		{
-			IBlockState state = upgBlocks[i];
+			IBlockState state = upgBlocks.get(i);
 			IBlockState checkPart;
-			if(BlockAlchemiterUpgrades.getPart(state) == BlockAlchemiterUpgrades.EnumParts.NONE) checkPart = baseParts[i];
+			if(BlockAlchemiterUpgrades.getPart(state) == BlockAlchemiterUpgrades.EnumParts.NONE) checkPart = baseParts.get(i);
 			else if(state.getBlock() instanceof BlockAlchemiterUpgrades) checkPart = state.withProperty(BlockAlchemiterUpgrades.DIRECTION, facing);
 			else checkPart = state;
 			if(BlockAlchemiterUpgrades.getPart(state) == BlockAlchemiterUpgrades.EnumParts.BLANK) continue;

@@ -5,23 +5,13 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.alchemy.AlchemyRecipes;
-//import com.mraof.minestuck.block.BlockJumperBlock.BlockJumperBlock2;
-import com.mraof.minestuck.block.BlockJumperBlock.EnumParts;
-//import com.mraof.minestuck.block.BlockJumperBlock.BlockJumperBlock2;
-//import com.mraof.minestuck.block.BlockJumperBlock.BlockJumperBlock3;
-import com.mraof.minestuck.client.gui.GuiHandler;
-import com.mraof.minestuck.item.TabMinestuck;
 import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
-import com.mraof.minestuck.tileentity.TileEntityHolopad;
 import com.mraof.minestuck.tileentity.TileEntityItemStack;
 import com.mraof.minestuck.tileentity.TileEntityJumperBlock;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -39,7 +29,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import com.mraof.minestuck.item.TabMinestuck;
+
+
 
 public abstract class BlockJumperBlock extends BlockLargeMachine {
 	public static final PropertyEnum<EnumParts> PART1 = PropertyEnum.create("part", EnumParts.class, EnumParts.TOP_PLUG, EnumParts.BOTTOM_PLUG, EnumParts.TOP_SHUNT, EnumParts.BOTTOM_SHUNT);
@@ -91,8 +82,6 @@ public abstract class BlockJumperBlock extends BlockLargeMachine {
 		BlockPos mainPos = getMainPos(state, pos, worldIn);
 		TileEntity te = worldIn.getTileEntity(mainPos);
 		
-		System.out.println("beejbee");
-		
 		int id = getUpgradeId(state, pos, worldIn);
 		if(te instanceof TileEntityJumperBlock)
 			((TileEntityJumperBlock) te).onRightClick(playerIn, state, id);
@@ -115,6 +104,7 @@ public abstract class BlockJumperBlock extends BlockLargeMachine {
 			return null;
 	}
 	
+	
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
 	{
@@ -129,9 +119,9 @@ public abstract class BlockJumperBlock extends BlockLargeMachine {
 				jbe.setBroken();
 				if(mainPos == pos)
 					for(int i = 0; i < 8; i++)
-						if(!worldIn.isRemote)jbe.dropItem(true, pos, jbe.getShunt(i));
+						if(!worldIn.isRemote)jbe.dropItem(true, pos, jbe.getUpgrade(i).getShunt());
 				
-				else if(!worldIn.isRemote)jbe.dropItem(false, jbe.idToPos(i), jbe.getShunt(id));
+				else if(!worldIn.isRemote)jbe.dropItem(false, jbe.slotToPos(i), jbe.getUpgrade(id).getShunt());
 			}
 		
 		super.breakBlock(worldIn, pos, state);
@@ -145,7 +135,7 @@ public abstract class BlockJumperBlock extends BlockLargeMachine {
 		if(te != null && !worldIn.isRemote)
 		{
 			int id = getUpgradeId(state, pos, worldIn);
-			te.dropItem(true, pos, te.getUpgrade(id));
+			te.dropItem(true, pos, te.getUpgrade(id).getShunt());
 		}
 		
 		super.onBlockHarvested(worldIn, pos, state, player);
@@ -180,7 +170,7 @@ public abstract class BlockJumperBlock extends BlockLargeMachine {
 		{
 			int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, stack);
 			List<ItemStack> items = new ArrayList<>();
-			items.add(((TileEntityJumperBlock) te).getUpgrade(0));
+			items.add(((TileEntityJumperBlock) te).getUpgrade(0).getShunt());
 			net.minecraftforge.event.ForgeEventFactory.fireBlockHarvesting(items, worldIn, pos, state, fortune, 1.0f, false, harvesters.get());
 			
 			for (ItemStack item : items)
@@ -251,7 +241,7 @@ public abstract class BlockJumperBlock extends BlockLargeMachine {
 				
 				TileEntityJumperBlock cable = (TileEntityJumperBlock) te;
 				
-				if(!cable.getUpgrade(id).isEmpty())
+				if(cable.getUpgrade(id).isEmpty())
 				{
 					if(part == EnumParts.TOP_PLUG) part = EnumParts.TOP_SHUNT; 
 					if(part == EnumParts.BOTTOM_PLUG) part = EnumParts.BOTTOM_SHUNT; 
