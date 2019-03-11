@@ -48,8 +48,8 @@ public class RenderMachineOutline
 		if(stack.getItem() == Item.getItemFromBlock(MinestuckBlocks.punchDesignix)
 				||stack.getItem()==Item.getItemFromBlock(MinestuckBlocks.totemlathe[0])
 				||stack.getItem()==Item.getItemFromBlock(MinestuckBlocks.cruxtruder)
-				||stack.getItem()==Item.getItemFromBlock(MinestuckBlocks.alchemiter[0]))
-				//||stack.getItem()==Item.getItemFromBlock(MinestuckBlocks.jumperBlockExtension[0]))
+				||stack.getItem()==Item.getItemFromBlock(MinestuckBlocks.alchemiter[0])
+				||stack.getItem()==Item.getItemFromBlock(MinestuckBlocks.jumperBlockExtension[0]))
 		{
 			BlockPos pos = rayTraceResult.getBlockPos();
 			

@@ -1,5 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -10,8 +12,9 @@ import com.mraof.minestuck.block.BlockAlchemiter;
 import com.mraof.minestuck.block.BlockJumperBlock;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.util.AlchemiterUpgrade;
-import com.mraof.minestuck.util.AlchemiterUpgrade.EnumType;
+import com.mraof.minestuck.upgrades.AlchemiterUpgrade;
+import com.mraof.minestuck.upgrades.placement.HorizontalPlacement;
+import com.mraof.minestuck.upgrades.placement.UpgradePlacementType;
 import com.mraof.minestuck.util.Debug;
 
 import net.minecraft.block.state.IBlockState;
@@ -81,136 +84,19 @@ public class TileEntityJumperBlock extends TileEntity
 		BlockAlchemiter.EnumParts[] totemParts = {EnumParts.TOTEM_CORNER, EnumParts.TOTEM_PAD, EnumParts.LOWER_ROD, EnumParts.UPPER_ROD};
 		AlchemiterUpgrade[] upgradeList = upgrade;
 		int blockCount = 12;
-		BlockPos mainPos = pos;
-		boolean hasLathe = (latheUpgradeSlot >= 0);
-		
-		for(AlchemiterUpgrade upg : upgradeList)
+		//class based upgrade block placement
+		for(AlchemiterUpgrade i : upgradeList)
 		{
-			List<IBlockState> blocks = upg.getBlocks();
-			EnumType placementType = upg.getPlacementType();
-			
-			//horizontal space check
-			if(placementType.equals(EnumType.HORIZONTAL))
-			{
-				if(blockCount - blocks.size() < 0)
-				{
-					playerIn.sendStatusMessage(new TextComponentTranslation("There's not enough space for that upgrade"), true);
-					break;
-				}
-				
-				int blockCounter = blocks.size();
-				int startingPos = 0;
-				for(int i = 0; i < 12; i++)
-				{
-					if(blockCounter <= 0) 
-					{
-						startingPos = 11 - (blockCounter + blocks.size() - 1);
-						break;
-					}
-					BlockPos pos = posWrap(mainPos, i);
-					if(world.getBlockState(pos).getBlockHardness(world, pos) > 1)
-					{
-						blockCounter = blocks.size();
-						continue;
-					}
-					else blockCounter--;
-				}
-				if(blockCounter > 0)
-				{
-					playerIn.sendStatusMessage(new TextComponentTranslation("There's not enough space for that upgrade"), true);
-					break;
-				}
-				
-				int i = startingPos;
-				for(IBlockState state : blocks)
-				{
-					BlockPos pos = posWrap(mainPos, i);
-					world.destroyBlock(pos, true);
-					world.setBlockState(pos, state);
-					i++;
-				}
-				blockCount -= blocks.size();
-			}
-			//Vertical Space Check
-			else if(placementType.equals(EnumType.VERITCAL))
-			{
-				if(blockCount - 1 < 0)
-				{
-					playerIn.sendStatusMessage(new TextComponentTranslation("There's not enough space for that upgrade"), true);
-					break;
-				}
-				
-				int blockCounter = 1;
-				BlockPos startingPos = null;
-				for(int i = 0; i < 12; i++)
-				{
-					startingPos = posWrap(mainPos, i);
-					if(world.getBlockState(pos).getBlockHardness(world, pos) <= 1)
-						break;
-				}
-				if(startingPos == null)
-				{
-					playerIn.sendStatusMessage(new TextComponentTranslation("There's not enough space for that upgrade"), true);
-					break;
-				}
-				
-				boolean space = true;
-				for(int i = 0; i < blocks.size(); i++)
-				{
-					BlockPos pos = startingPos.up(i);
-					if(world.getBlockState(pos).getBlockHardness(world, pos) > 1)
-					{
-						space = false;
-						playerIn.sendStatusMessage(new TextComponentTranslation("There's not enough space for that upgrade"), true);
-						break;
-					}
-				}
-				if(!space) break;
-				
-				int i = 0;
-				for(IBlockState state : blocks)
-				{
-					BlockPos pos = startingPos.up(i);
-					world.destroyBlock(pos, true);
-					world.setBlockState(pos, state);
-					i++;
-				}
-				
-				blockCount--;
-			}
-			//lathe upgrade check
-			else if(placementType.equals(EnumType.TOTEM_PAD))
-			{
-				if(latheUpgradeSlot >= 0 && !hasLathe)
-				{
-					latheUpgradeSlot = Arrays.asList(upgradeList).indexOf(upg);
-					hasLathe = true;
-					BlockPos startingPos = alchemiter.getPos().down();
-					boolean space = true;
+			Class<? extends UpgradePlacementType> placeClass = i.getPlacementType();
+			if(placeClass != null)
+				try {
+					Constructor<?> placeCtor = placeClass.getConstructor(BlockPos.class, int.class);
+					UpgradePlacementType placeObj = (UpgradePlacementType) placeCtor.newInstance(new Object[] {this, i});
+					blockCount = placeObj.placeBlocks(blockCount, playerIn, world);
 					
-					for(int i = 0; i < blocks.size(); i++)
-					{
-						BlockPos pos = startingPos.up(i);
-						if(world.getBlockState(pos).getBlockHardness(world, pos) > 1 && !(world.getBlockState(pos).getBlock() instanceof BlockAlchemiter))
-						{
-							space = false;
-							playerIn.sendStatusMessage(new TextComponentTranslation("There's not enough space for that upgrade"), true);
-							break;
-						}
-					}
-					if(!space) break;
-					
-					int i = 0;
-					for(IBlockState state : blocks)
-					{
-						BlockPos pos = startingPos.up(i);
-						world.destroyBlock(pos, true);
-						world.setBlockState(pos, state);
-						i++;
-					}
-				}
-			}
-			//TODO class based upgrade placement
+				} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException
+						| InvocationTargetException e) {e.printStackTrace();}
+				
 		}
 		
 	}

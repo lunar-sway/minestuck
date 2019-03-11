@@ -1,25 +1,23 @@
 package com.mraof.minestuck.tileentity;
 
 
+import javax.annotation.Nonnull;
+
+import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.block.BlockAlchemiter;
+import com.mraof.minestuck.block.BlockAlchemiter.EnumParts;
 import com.mraof.minestuck.block.BlockAlchemiterUpgrades;
 import com.mraof.minestuck.block.BlockJumperBlock;
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.block.BlockAlchemiter.EnumParts;
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.alchemy.AlchemyRecipes;
-import com.mraof.minestuck.alchemy.CombinationRegistry;
+import com.mraof.minestuck.upgrades.AlchemiterUpgrade;
 import com.mraof.minestuck.util.AlchemiterUpgrades_OLD;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.AlchemiterUpgrades_OLD.EnumType;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockAir;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -31,9 +29,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import scala.actors.threadpool.Arrays;
-import scala.reflect.internal.Trees.Super;
-
-import javax.annotation.Nonnull;
 
 
 
@@ -96,7 +91,7 @@ public class TileEntityJumperBlock_OLD extends TileEntity
 			IBlockState alchemState = world.getBlockState(alchemPos);
 			updateUpgradeBlocks(BlockAlchemiter.getFacing(alchemState), alchemPos, true);
 			TileEntityAlchemiter alchemTe = (TileEntityAlchemiter) te;
-			alchemTe.setUpgraded(false, getPos());
+			//alchemTe.setUpgraded(false, getPos());
 			
 		}
 		else Debug.warnf("Couldn't find TileEntityAlchemiter at %s, found %s instead.", alchemiterMainPos(), te);
@@ -113,7 +108,7 @@ public class TileEntityJumperBlock_OLD extends TileEntity
 			IBlockState alchemState = world.getBlockState(alchemPos);
 			updateUpgradeBlocks(BlockAlchemiter.getFacing(alchemState), alchemPos, false);
 			TileEntityAlchemiter alchemTe = (TileEntityAlchemiter) te;
-			alchemTe.setUpgraded(true, getPos());
+			//alchemTe.setUpgraded(true, getPos());
 			
 		}
 		else Debug.warnf("Couldn't find TileEntityAlchemiter at %s, found %s instead.", alchemiterMainPos(), te);
@@ -183,280 +178,15 @@ public class TileEntityJumperBlock_OLD extends TileEntity
 				} 
 				
 			}
-		if(te instanceof TileEntityAlchemiter)
-			updateUpgrades((TileEntityAlchemiter) te, alchemMainPos, player);
+		//if(te instanceof TileEntityAlchemiter)
+			//updateUpgrades((TileEntityAlchemiter) te, alchemMainPos, player);
 		
-		else Debug.warnf("Couldn't find TileEntityAlchemiter at %s, found %s instead.", alchemMainPos, te);
+		//else Debug.warnf("Couldn't find TileEntityAlchemiter at %s, found %s instead.", alchemMainPos, te);
 		
 		
 	}
 	
-	private void updateUpgrades(TileEntityAlchemiter alchemTe, BlockPos AlchemPos, EntityPlayer notifiedPlayer)
-	{
-		
-		int blockCount = 0;
-		int blockCountCheck = 0;
-		boolean[] sideUpgraded = {false, false, false, false};
-		BlockPos alchemPos = alchemTe.getPos();
-		EnumFacing alchemFacing = alchemTe.getFacing();
-		
-		if(alchemTe instanceof TileEntityUpgradedAlchemiter)
-			alchemFacing = alchemFacing.getOpposite();
-		
-		alchemTe.setUpgraded(true, pos);
-		AlchemiterUpgrades_OLD[] alchemUpgrades = alchemTe.getUpgradeList();
-		IBlockState[] excludedBlocks = new IBlockState[16];
-		IBlockState[] excludedLatheBlocks = new IBlockState[20];
-		BlockAlchemiter.EnumParts[] totemParts = {EnumParts.TOTEM_CORNER, EnumParts.TOTEM_PAD, EnumParts.LOWER_ROD, EnumParts.UPPER_ROD};
-		int EBCount = 0;
-		
-		if(!world.isRemote)
-		{
-			
-			boolean hasLatheUpg = false;
-			for(AlchemiterUpgrades_OLD i : alchemUpgrades)
-			{
-				if(i == null) continue;
-				
-				if(i.getUpgradeType().equals(AlchemiterUpgrades_OLD.EnumType.TOTEM_PAD))
-				{
-					hasLatheUpg = true;
-					break;
-				}
-			}
-			
-			if(!hasLatheUpg) setLatheUpgrade(-1);
-			
-			for(int i = 0; i < 16; i++)
-			{
-				EnumFacing offsetFacing = alchemFacing;
-				EnumFacing offsetFacing2 = offsetFacing.rotateY();
-				int offsetFromAlchemiter = 4;
-				int offset = blockCountCheck % 4;
-				
-				offsetFacing = getOffsetFacing(offsetFacing, blockCountCheck);
-				offsetFromAlchemiter = getOffsetFromAlchemiter(offsetFacing, alchemFacing);
-				offsetFacing2 = getOffsetFacing2(offsetFacing, alchemFacing);
-				
-				BlockPos upgPos = alchemPos.offset(offsetFacing, offsetFromAlchemiter).offset(offsetFacing2, offset).down();
-				
-				IBlockState state = world.getBlockState(upgPos);
-				if(state.getBlock().getClass().getSuperclass().equals(BlockAlchemiterUpgrades.class)) 
-				state = BlockAlchemiterUpgrades.checkForUpgrade(world, upgPos, state);
-				boolean isPlaceholder = false;
-				if(state.getBlock() instanceof BlockAlchemiterUpgrades)
-				{
-					isPlaceholder = (BlockAlchemiterUpgrades.getPartIndex(state) == 0);
-					state = state.withProperty(BlockAlchemiterUpgrades.DIRECTION, EnumFacing.NORTH);
-				}
-				
-				if(state.getBlock().getClass().getSuperclass().equals(BlockAlchemiterUpgrades.class) && !isPlaceholder) 
-				{
-					excludedBlocks[EBCount] = state;
-					EBCount++;
-					sideUpgraded[(blockCountCheck / 4) % 4] = true;
-				}
-				
-				blockCountCheck++;
-			}
-			
-			EBCount = 0;
-			
-			for(int i = 0; i < 8; i++)
-			{
-				BlockPos upgPos = alchemPos.down().up(i);
-				IBlockState state = world.getBlockState(upgPos);
-				
-				if(state.getBlock().getClass().getSuperclass().equals(BlockAlchemiterUpgrades.class)) 
-				state = BlockAlchemiterUpgrades.checkForUpgrade(world, upgPos, state);
-				boolean isPlaceholder = false;
-				if(state.getBlock() instanceof BlockAlchemiterUpgrades)
-				{
-					isPlaceholder = (BlockAlchemiterUpgrades.getPartIndex(state) == 0);
-					state = state.withProperty(BlockAlchemiterUpgrades.DIRECTION, EnumFacing.NORTH);
-				}
-				
-				if(state.getBlock().getClass().getSuperclass().equals(BlockAlchemiterUpgrades.class) && !isPlaceholder) 
-				{
-					excludedLatheBlocks[EBCount] = state;
-					EBCount++;
-				}
-			}
-			
-			boolean br8k = false;
-			
-			for(int i = 0; i < alchemUpgrades.length; i++)
-			{
-				if(alchemUpgrades[i] == null) continue;
-				
-				IBlockState[] upgradeBlocks = alchemUpgrades[i].getUpgradeBlocks();
-				
-				int blockLength = upgradeBlocks.length;
-				
-				switch(alchemUpgrades[i].getUpgradeType())
-				{
-				case TOTEM_PAD:
-				
-					BlockPos pos = alchemPos.down();
-					
-					for(int j = 0; j < blockLength; j++)
-					{
-						if((world.getBlockState(pos).getBlockHardness(world, pos) > 1 && !(world.getBlockState(pos).getBlock().equals(MinestuckBlocks.alchemiter[0]))) 
-								|| (world.getBlockState(pos).getBlock() instanceof BlockAlchemiterUpgrades))
-						{
-							//"true" sends the message to the action bar (like bed messages), while "false" sends it to the chat.
-							notifiedPlayer.sendStatusMessage(new TextComponentTranslation("There's not enough space for that upgrade"), true);
-								br8k = true;
-								break;
-							
-						}
-						
-					}
-					
-					if(br8k) break;
-					
-					for(int j = 0; j < blockLength; j++)
-					{
-						if(BlockAlchemiterUpgrades.getPart(upgradeBlocks[j]) == BlockAlchemiterUpgrades.EnumParts.NONE) 
-							continue;
-						
-						if(getLatheUpgradeId() == -1) setLatheUpgrade(alchemUpgrades[i]);
-						
-						IBlockState state = upgradeBlocks[j];
-						if(state.getBlock() instanceof BlockAlchemiterUpgrades) state = state.withProperty(BlockAlchemiterUpgrades.DIRECTION, alchemFacing);
-						if(!Arrays.asList(excludedLatheBlocks).contains(upgradeBlocks[j]) && getLatheUpgradeId() == Arrays.asList(AlchemiterUpgrades_OLD.upgradeList).indexOf(alchemUpgrades[i]))
-						{
-							if(BlockAlchemiterUpgrades.getPart(upgradeBlocks[j]) == BlockAlchemiterUpgrades.EnumParts.BLANK)
-							{
-									if(world.getBlockState(pos.up(j)).getBlock() instanceof BlockAlchemiter)
-										state = Blocks.AIR.getDefaultState();
-									else continue;
-							}
-							
-							if(state == null) continue;
-							
-							world.destroyBlock(pos.up(j), true);
-							world.setBlockState(pos.up(j), state);
-							if(world.getTileEntity(pos.up(j)) instanceof TileEntityAlchemiter)
-							{
-								((TileEntityAlchemiter)world.getTileEntity(pos.up(j))).setUpgraded(true, getPos());
-							}
-						}
-					}
-					
-					TileEntity te = world.getTileEntity(alchemPos);
-					
-					if(te instanceof TileEntityUpgradedAlchemiter) ((TileEntityAlchemiter) te).setUpgraded(true, getPos());
-					
-				break;
-				default:
-					
-					
-					for(int j = 0; j < blockLength; j++)
-					{
-						if(blockCount > 16)
-						{
-							//"true" sends the message to the action bar (like bed messages), while "false" sends it to the chat.
-							notifiedPlayer.sendStatusMessage(new TextComponentTranslation("There's not enough space for that upgrade"), true);
-							break;
-						}
-						
-						IBlockState part = alchemUpgrades[i].getUpgradeBlocks()[j];
-						
-						EnumFacing offsetFacing = alchemFacing;
-						EnumFacing offsetFacing2 = offsetFacing.rotateY();
-						int offsetFromAlchemiter = 4;
-						int offset = blockCount % 4;
-						
-						offsetFacing = getOffsetFacing(offsetFacing, blockCount);
-						offsetFromAlchemiter = getOffsetFromAlchemiter(offsetFacing, alchemFacing);
-						offsetFacing2 = getOffsetFacing2(offsetFacing, alchemFacing);
-						
-						IBlockState checkPart = part;
-						if(part.getBlock() instanceof BlockAlchemiterUpgrades)
-							{
-								part = part.withProperty(BlockAlchemiterUpgrades.DIRECTION, offsetFacing.getOpposite());
-								checkPart = part.withProperty(BlockAlchemiterUpgrades.DIRECTION, EnumFacing.NORTH);
-							}
-						BlockPos upgPos = alchemPos.offset(offsetFacing, offsetFromAlchemiter).offset(offsetFacing2, offset).down();
 	
-						if(!Arrays.asList(excludedBlocks).contains(checkPart))
-						{
-								
-							if((world.getBlockState(upgPos).getBlockHardness(world, upgPos) > 1 && 
-									!world.getBlockState(upgPos).getBlock().equals(MinestuckBlocks.alchemiterUpgrades[0])) || ((offset - j + blockLength-1) % 4) != (offset - j + blockLength-1))
-								j--;
-							else
-							{
-								world.destroyBlock(upgPos, true);
-								world.setBlockState(upgPos, part);
-								sideUpgraded[(blockCount / 4) % 4] = true;
-							}
-							blockCount++;
-						}
-						
-					}
-					break;
-				}
-			}
-			
-			blockCount = 0;
-			
-			for(int i = 0; i <= 16; i++)
-			{
-				EnumFacing offsetFacing = alchemFacing;
-				EnumFacing offsetFacing2 = offsetFacing.rotateY();
-				int offsetFromAlchemiter = 4;
-				int offset = blockCount % 4;
-				
-				offsetFacing = getOffsetFacing(offsetFacing, blockCount);
-				offsetFromAlchemiter = getOffsetFromAlchemiter(offsetFacing, alchemFacing);
-				offsetFacing2 = getOffsetFacing2(offsetFacing, alchemFacing);
-				
-				BlockPos upgPos = alchemPos.offset(offsetFacing, offsetFromAlchemiter).offset(offsetFacing2, offset).down();
-				
-				BlockAlchemiterUpgrades.EnumParts part;
-				EnumFacing partFacing = offsetFacing;
-				
-				switch(offset)
-				{
-				case 0: 
-						part = BlockAlchemiterUpgrades.EnumParts.BASE_CORNER_RIGHT;
-					break;
-				case 3: 
-						part = BlockAlchemiterUpgrades.EnumParts.BASE_CORNER_LEFT;
-					break;
-				default: 		part = BlockAlchemiterUpgrades.EnumParts.BASE_SIDE; break;
-				}
-				
-				IBlockState state = BlockAlchemiterUpgrades.getBlockState(part, partFacing.getOpposite());
-				
-				if(sideUpgraded[(blockCount / 4) % 4])
-				{
-					if(world.getBlockState(upgPos).getBlockHardness(world, upgPos) <= 1)
-					{
-						world.destroyBlock(upgPos, true);
-						world.setBlockState(upgPos, state);
-					}
-				}
-				else if(world.getBlockState(upgPos).getBlock() instanceof BlockAlchemiterUpgrades) world.destroyBlock(upgPos, true);
-				blockCount++;
-			}
-			unbreakMachine();
-			
-			if(getLatheUpgradeId() == -1)
-			{
-				if(!(world.getBlockState(alchemPos).getBlock() instanceof BlockAlchemiter))
-					for(int i = 0; i < totemParts.length; i++)
-					{
-						if(world.getBlockState(alchemPos.down().up(i)).getBlockHardness(world, alchemPos.down().up(i)) <= 1)
-						world.destroyBlock(alchemPos.down().up(i), true);
-						world.setBlockState(alchemPos.down().up(i), BlockAlchemiter.getBlockState(totemParts[i], alchemFacing));
-					}
-			}
-		}
-		
-	}
 	
 	public void setLatheUpgrade(AlchemiterUpgrades_OLD upg)
 	{
@@ -657,8 +387,8 @@ public class TileEntityJumperBlock_OLD extends TileEntity
 			setBroken();
 		}
 		
-		if(isBroken())((TileEntityAlchemiter) alchemTe).setUpgraded(false, pos);
-		else ((TileEntityAlchemiter) alchemTe).setUpgraded(true, pos);
+		//if(isBroken())((TileEntityAlchemiter) alchemTe).setUpgraded(false, pos);
+		//else ((TileEntityAlchemiter) alchemTe).setUpgraded(true, pos);
 		
 	}
 	

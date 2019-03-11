@@ -5,8 +5,8 @@ import java.util.List;
 
 import com.mraof.minestuck.block.BlockAlchemiter;
 import com.mraof.minestuck.block.BlockAlchemiter.EnumParts;
+import com.mraof.minestuck.upgrades.AlchemiterUpgrade;
 import com.mraof.minestuck.block.BlockAlchemiterUpgrades;
-import com.mraof.minestuck.util.AlchemiterUpgrade;
 import com.mraof.minestuck.util.Debug;
 
 import net.minecraft.block.state.IBlockState;

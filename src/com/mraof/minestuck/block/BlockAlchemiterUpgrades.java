@@ -309,10 +309,10 @@ public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
 			TileEntityAlchemiter alchem = (TileEntityAlchemiter) te;
 			alchem.unbreakMachine();
 			alchem.checkStates();
-			if(!alchem.isBroken() && AlchemiterUpgrades_OLD.hasUpgrade(alchem.getUpgradeList(), AlchemiterUpgrades_OLD.getUpgradeFromBlock(part)))
-			{
-				return state;
-			}
+			//if(!alchem.isBroken() && AlchemiterUpgrade.hasUpgrade(alchem.getUpgrades(), AlchemiterUpgrades_OLD.getUpgradeFromBlock(part)))
+			//{
+			//	return state;
+			//}
 		}
 		worldIn.destroyBlock(pos, true);
 		return Blocks.AIR.getDefaultState();

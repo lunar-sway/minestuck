@@ -247,7 +247,7 @@ public class ItemJumperBlock extends ItemBlock
 					TileEntityAlchemiter alchemiter = (TileEntityAlchemiter) alchemTe;
 					
 					//TODO
-					alchemiter.setUpgraded(true, cablePos);
+					alchemiter.setUpgraded(true, (TileEntityJumperBlock) te);
 				}
 				else Debug.warnf("Couldn't find Alchemiter at %s. Instead found %s.", ((TileEntityJumperBlock) te).getAlchemiter().getPos());
 				

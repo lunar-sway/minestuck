@@ -14,6 +14,7 @@ import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
+import com.mraof.minestuck.upgrades.AlchemiterUpgrade;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import net.minecraft.block.state.IBlockState;
@@ -116,6 +117,9 @@ public class TileEntityAlchemiter extends TileEntity
 	}
 	
 	//JBE upgrades
+	
+	public TileEntityJumperBlock getJBE(){return jbe;}
+	public boolean isUpgraded()		{return upgraded;}
 	
 	public void setUpgraded(boolean upgraded, TileEntityJumperBlock te)
 	{
