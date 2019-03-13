@@ -108,6 +108,9 @@ public class MinestuckModelManager
 		register(goldenGenesisGauntlet);
 		register(pogoFist);
 		
+		register(natureBow);
+		register(infernoShot);
+		
 		ModelLoader.registerItemVariants(catClaws, new ResourceLocation("minestuck:catclaws_sheathed"), new ResourceLocation("minestuck:catclaws_drawn"));
 		ModelLoader.setCustomMeshDefinition(catClaws, new DualWeaponDefinition(catClaws));
 		

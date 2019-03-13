@@ -1,25 +1,68 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.block.*;
+import static com.mraof.minestuck.block.MinestuckBlocks.*;
+
+import java.util.Arrays;
+
+import com.mraof.minestuck.block.BlockAspectLog;
+import com.mraof.minestuck.block.BlockAspectLog2;
+import com.mraof.minestuck.block.BlockAspectLog3;
+import com.mraof.minestuck.block.BlockAspectSapling;
+import com.mraof.minestuck.block.BlockColoredDirt;
+import com.mraof.minestuck.block.BlockCrockerMachine;
+import com.mraof.minestuck.block.BlockMinestuckLeaves1;
+import com.mraof.minestuck.block.BlockMinestuckLog1;
+import com.mraof.minestuck.block.BlockMinestuckPlanks;
+import com.mraof.minestuck.block.BlockMinestuckStone;
+import com.mraof.minestuck.block.BlockVanityLaptopOff;
+import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.block.MinestuckBlocks.EnumSlabStairMaterial;
 import com.mraof.minestuck.entity.item.EntityCrewPoster;
 import com.mraof.minestuck.entity.item.EntitySbahjPoster;
 import com.mraof.minestuck.entity.item.EntityShopPoster;
-import com.mraof.minestuck.item.block.*;
-import com.mraof.minestuck.item.weapon.*;
+import com.mraof.minestuck.item.block.ItemAlchemiter;
+import com.mraof.minestuck.item.block.ItemBlockCraftingTab;
+import com.mraof.minestuck.item.block.ItemBlockLayered;
+import com.mraof.minestuck.item.block.ItemCruxtruder;
+import com.mraof.minestuck.item.block.ItemDowel;
+import com.mraof.minestuck.item.block.ItemPunchDesignix;
+import com.mraof.minestuck.item.block.ItemSburbMachine;
+import com.mraof.minestuck.item.block.ItemTotemLathe;
+import com.mraof.minestuck.item.block.ItemTransportalizer;
+import com.mraof.minestuck.item.weapon.ItemCandyWeapon;
+import com.mraof.minestuck.item.weapon.ItemConsumableWeapon;
+import com.mraof.minestuck.item.weapon.ItemDualWeapon;
+import com.mraof.minestuck.item.weapon.ItemFarmine;
+import com.mraof.minestuck.item.weapon.ItemFireWeapon;
+import com.mraof.minestuck.item.weapon.ItemPogoFarmine;
+import com.mraof.minestuck.item.weapon.ItemPogoWeapon;
+import com.mraof.minestuck.item.weapon.ItemPotionWeapon;
+import com.mraof.minestuck.item.weapon.ItemRandomWeapon;
+import com.mraof.minestuck.item.weapon.ItemRanged;
+import com.mraof.minestuck.item.weapon.ItemSord;
+import com.mraof.minestuck.item.weapon.ItemSpork;
+import com.mraof.minestuck.item.weapon.ItemWeapon;
 import com.mraof.minestuck.util.MinestuckSoundHandler;
 
-import io.netty.handler.codec.http.HttpHeaders.Values;
-import net.minecraft.block.BlockSlab;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityHanging;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.entity.projectile.EntityTippedArrow;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.*;
-import net.minecraft.item.Item.ToolMaterial;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemFood;
+import net.minecraft.item.ItemHoe;
+import net.minecraft.item.ItemMultiTexture;
+import net.minecraft.item.ItemSoup;
+import net.minecraft.item.ItemSpade;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -28,19 +71,6 @@ import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
-
-import static com.mraof.minestuck.block.MinestuckBlocks.*;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import com.mraof.minestuck.block.BlockAspectLog;
-import com.mraof.minestuck.block.BlockAspectLog2;
-import com.mraof.minestuck.block.BlockAspectLog3;
-import com.mraof.minestuck.block.BlockAspectSapling;
 
 public class MinestuckItems
 {
@@ -105,6 +135,9 @@ public class MinestuckItems
 	public static Item fluoriteGauntlet = new ItemRandomWeapon(980, 8D, -0.3D, 8, 3, "fluoriteGauntlet").setTool("gauntlet", 0, 2.4F);
 	public static Item goldenGenesisGauntlet = new ItemWeapon(1256, 11D, -0.25D, 15, "goldenGenesisGauntlet").setTool("gauntlet", 0, 3F);
 	public static Item pogoFist = new ItemPogoWeapon(700, 7.0D, -0.3, 8, "pogoFist", 0.55D).setTool("gauntlet", 0, 1.4F);
+	//Bows
+	public static Item natureBow = new ItemRanged("natureBow", 2.0D, 530, 7000, Items.ARROW, EntityArrow.class);
+	public static Item infernoShot = new ItemRanged("infernoShot", 3.5D, 480, 7500, Items.ARROW, EntityArrow.class).setBulletSpeed(1.2F);
 	//misc weapons
 	public static Item catClaws = new ItemDualWeapon(500, 4.0D, 1.0D, -1.5D, -1.0D, 6, "catclaws");
 	//sickles
@@ -447,6 +480,10 @@ public class MinestuckItems
 		registry.register(fluoriteGauntlet.setRegistryName("fluorite_gauntlet"));
 		registry.register(goldenGenesisGauntlet.setRegistryName("golden_genesis_gauntlet"));
 		registry.register(pogoFist.setRegistryName("pogo_fist"));
+		
+		//Bows
+		registry.register(natureBow.setRegistryName("nature_bow"));
+		registry.register(infernoShot.setRegistryName("flame_bow"));
 		
 		//misc weapons
 		registry.register(catClaws.setRegistryName("catclaws"));
