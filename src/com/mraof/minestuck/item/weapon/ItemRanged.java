@@ -1,5 +1,8 @@
 package com.mraof.minestuck.item.weapon;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.Random;
+
 import javax.annotation.Nullable;
 
 import com.mraof.minestuck.item.MinestuckItems;
@@ -17,7 +20,6 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArrow;
-import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
@@ -26,6 +28,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -92,9 +95,18 @@ public class ItemRanged extends Item
             		if(!worldIn.isRemote)
             		{
 
-            			if(ammo.getItem() instanceof ItemArrow)
+            			if(projectile.isAssignableFrom(EntityArrow.class))
             			{
-            				EntityArrow entityarrow = ((ItemArrow)ammo.getItem()).createArrow(worldIn, ammo, player);
+            				EntityArrow entityarrow = null;
+            				if(ammo.getItem() instanceof ItemArrow)
+            					entityarrow = ((ItemArrow)ammo.getItem()).createArrow(worldIn, ammo, player);
+            				else
+            					try{entityarrow = (EntityArrow) this.projectile.getConstructor(World.class, EntityLivingBase.class).newInstance(worldIn, player);}
+            				catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) 
+            				{
+								e.printStackTrace();
+            				}
+							
                             entityarrow.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, velocity * 3.0F, 1.0F);
                             int fire = 0;
                             
@@ -107,17 +119,10 @@ public class ItemRanged extends Item
                             }
 
                             int j = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, stack);
-
-                            if (j > 0)
-                                entityarrow.setDamage(entityarrow.getDamage() + (double)j * 0.5D + 0.5D);
-
+                            if (j > 0) entityarrow.setDamage(entityarrow.getDamage() + (double)j * 0.5D + 0.5D);
                             int k = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, stack);
-
-                            if (k > 0)
-                                entityarrow.setKnockbackStrength(k);
-
-                            if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0)
-                                fire += 100;
+                            if (k > 0) entityarrow.setKnockbackStrength(k);
+                            if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0) fire += 100;
 
                             stack.damageItem(1, player);
 
@@ -128,9 +133,17 @@ public class ItemRanged extends Item
                             
                             worldIn.spawnEntity(entityarrow);
             			}
-            			else if(true)
+            			else
             			{
-            				//TODO custom ammo
+            				Entity entity = null;
+            				try{entity = (Entity) this.projectile.getConstructor(World.class).newInstance(worldIn);}
+            				catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) 
+            				{
+								e.printStackTrace();
+            				}
+            				
+            				shoot(entity, player.rotationPitch, player.rotationYaw, 0.0F, velocity * 3.0F, 1.0F);
+            				
             			}
             		}
 
@@ -151,6 +164,44 @@ public class ItemRanged extends Item
             }
 		}
 	}
+	
+	public void shoot(Entity projectile, Entity shooter, float pitch, float yaw, float p_184547_4_, float velocity, float inaccuracy)
+    {
+        float f = -MathHelper.sin(yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F);
+        float f1 = -MathHelper.sin(pitch * 0.017453292F);
+        float f2 = MathHelper.cos(yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F);
+        this.shoot(projectile, (double)f, (double)f1, (double)f2, velocity, inaccuracy);
+        projectile.motionX += shooter.motionX;
+        projectile.motionZ += shooter.motionZ;
+
+        if (!shooter.onGround)
+        {
+        	projectile.motionY += shooter.motionY;
+        }
+    }
+	
+	public void shoot(Entity projectile, double x, double y, double z, float velocity, float inaccuracy)
+    {
+		Random rand = new Random();
+        float f = MathHelper.sqrt(x * x + y * y + z * z);
+        x = x / (double)f;
+        y = y / (double)f;
+        z = z / (double)f;
+        x = x + rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
+        y = y + rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
+        z = z + rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
+        x = x * (double)velocity;
+        y = y * (double)velocity;
+        z = z * (double)velocity;
+        projectile.motionX = x;
+        projectile.motionY = y;
+        projectile.motionZ = z;
+        float f1 = MathHelper.sqrt(x * x + z * z);
+        projectile.rotationYaw = (float)(MathHelper.atan2(x, z) * (180D / Math.PI));
+        projectile.rotationPitch = (float)(MathHelper.atan2(y, (double)f1) * (180D / Math.PI));
+        projectile.prevRotationYaw = projectile.rotationYaw;
+        projectile.prevRotationPitch = projectile.rotationPitch;
+    }
 	
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) 
