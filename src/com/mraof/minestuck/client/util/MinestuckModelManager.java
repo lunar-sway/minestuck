@@ -110,6 +110,7 @@ public class MinestuckModelManager
 		
 		register(natureBow);
 		register(infernoShot);
+		register(energyBow);
 		
 		ModelLoader.registerItemVariants(catClaws, new ResourceLocation("minestuck:catclaws_sheathed"), new ResourceLocation("minestuck:catclaws_drawn"));
 		ModelLoader.setCustomMeshDefinition(catClaws, new DualWeaponDefinition(catClaws));

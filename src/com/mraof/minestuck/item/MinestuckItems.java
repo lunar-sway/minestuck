@@ -136,8 +136,9 @@ public class MinestuckItems
 	public static Item goldenGenesisGauntlet = new ItemWeapon(1256, 11D, -0.25D, 15, "goldenGenesisGauntlet").setTool("gauntlet", 0, 3F);
 	public static Item pogoFist = new ItemPogoWeapon(700, 7.0D, -0.3, 8, "pogoFist", 0.55D).setTool("gauntlet", 0, 1.4F);
 	//Bows
-	public static Item natureBow = new ItemRanged("natureBow", 2.0D, 530, 7000, Items.ARROW, EntityArrow.class);
-	public static Item infernoShot = new ItemRanged("infernoShot", 3.5D, 480, 7500, Items.ARROW, EntityArrow.class).setBulletSpeed(1.2F);
+	public static Item natureBow = new ItemRanged("natureBow", 2.0D, 530, 5000, Items.ARROW, EntityArrow.class);
+	public static Item infernoShot = new ItemRanged("infernoShot", 3.5D, 480, 7500, Items.ARROW, EntityArrow.class).setBulletSpeed(1.1F);
+	public static Item energyBow = new ItemRanged("energyBow", 1.5, 235, 7000, ItemStack.EMPTY, EntityArrow.class).setBulletSpeed(1.2F); //TODO make the energy bow shoot custom arrows
 	//misc weapons
 	public static Item catClaws = new ItemDualWeapon(500, 4.0D, 1.0D, -1.5D, -1.0D, 6, "catclaws");
 	//sickles
@@ -484,6 +485,7 @@ public class MinestuckItems
 		//Bows
 		registry.register(natureBow.setRegistryName("nature_bow"));
 		registry.register(infernoShot.setRegistryName("flame_bow"));
+		registry.register(energyBow.setRegistryName("energy_bow"));
 		
 		//misc weapons
 		registry.register(catClaws.setRegistryName("catclaws"));
