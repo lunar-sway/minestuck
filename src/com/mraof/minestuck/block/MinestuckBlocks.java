@@ -6,15 +6,14 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.material.MaterialColor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemSlab;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
@@ -22,21 +21,39 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fluids.BlockFluidClassic;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 
 public class MinestuckBlocks
 {
-	//Blocks
-	public static Block chessTile = new BlockChessTile();
-	public static Block skaiaPortal = new BlockSkaiaPortal(Material.PORTAL);
+	//Skaia
+	public static Block chessDirtBlack, chessDirtWhite, chessDirtLightGray, chessDirtDarkGray;
+	public static Block skaiaPortal;
 	
-	public static Block coloredDirt = new BlockColoredDirt().setUnlocalizedName("coloredDirt").setHardness(0.5F);
+	//Ores
+	public static Block cruxiteOreStone, cruxiteOreNetherrack, cruxiteOreCobblestone, cruxiteOreSandstone;
+	public static Block cruxiteOreRedSandstone, cruxiteOreEndStone, cruxiteOrePinkStone;
+	public static Block uraniumOreStone, uraniumOreNetherrack, uraniumOreCobblestone, uraniumOreSandstone;
+	public static Block uraniumOreRedSandstone, uraniumOreEndStone, uraniumOrePinkStone;
+	public static Block coalOreNetherrack, coalOrePinkStone;
+	public static Block ironOreEndStone, ironOreSandstone, ironOreSandstoneRed;
+	public static Block goldOreSandstone, goldOreSandstoneRed, goldOrePinkStone;
+	public static Block redstoneOreEndStone;
+	public static Block quartzOreStone;
+	public static Block lapisOrePinkStone;
+	public static Block diamondOrePinkStone;
+	
+	//Land Environment blocks
+	public static Block blueDirt, thoughtDirt;
+	public static Block coarseStone, coarseChiseled;
+	public static Block shadeBricks, shadeSmooth;
+	public static Block frostBricks, frostTile, frostBricksChiseled;
+	public static Block castIron, castIronChiseled;
+	public static Block myceliumBricks;
+	public static Block blackStone;
+	
 	public static Block cruxiteBlock = new Block(Material.ROCK, MapColor.LIGHT_BLUE).setUnlocalizedName("cruxiteBlock").setHardness(3.0F).setCreativeTab(TabMinestuck.instance);
 	public static Block uraniumBlock = new Block(Material.ROCK, MapColor.LIME).setLightLevel(0.5F).setUnlocalizedName("uraniumBlock").setHardness(3.0F).setCreativeTab(TabMinestuck.instance);
 	public static Block genericObject = new BlockCustom(Material.GOURD, MapColor.LIME, SoundType.WOOD).setUnlocalizedName("genericObject").setHardness(1.0F).setCreativeTab(TabMinestuck.instance);
@@ -74,7 +91,6 @@ public class MinestuckBlocks
 	public static Block glowingMushroom = new BlockGlowingMushroom();
 	public static Block glowingLog = new BlockGlowingLog();
 	public static Block glowingPlanks = new BlockCustom(Material.WOOD, MapColor.LIGHT_BLUE, SoundType.WOOD).setFireInfo(5, 20).setUnlocalizedName("glowingPlanks").setLightLevel(0.5F).setHardness(2.0F).setResistance(5.0F).setCreativeTab(TabMinestuck.instance);
-	public static Block stone = new BlockMinestuckStone();
 	public static Block glowyGoop = new BlockGlowyGoop("glowyGoop");
 	public static Block coagulatedBlood = new BlockGoop("coagulatedBlood");
 	public static Block coarseStoneStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.COARSE)).setUnlocalizedName("stairsMinestuck.coarse");
@@ -131,22 +147,6 @@ public class MinestuckBlocks
 	public static Block pinkStoneMossy = new BlockCustomStone(MapColor.PINK).setUnlocalizedName("pinkStoneMossy")	.setCreativeTab(TabMinestuck.instance);
 	public static Block pinkStonePolish = new BlockCustomStone(MapColor.PINK).setUnlocalizedName("pinkStonePolish")	.setCreativeTab(TabMinestuck.instance);
 	public static Block denseCloud = new BlockDenseCloud();
-	
-	//Ores
-	public static Block oreCruxite = new BlockCruxiteOre();
-	public static BlockUraniumOre oreUranium = (BlockUraniumOre) new BlockUraniumOre().setUnlocalizedName("oreUranium");
-	public static Block coalOreNetherrack = new BlockVanillaOre(BlockVanillaOre.OreType.COAL).setUnlocalizedName("oreCoal");
-	public static Block coalOrePinkStone = new BlockVanillaOre(BlockVanillaOre.OreType.COAL).setUnlocalizedName("oreCoal");
-	public static Block ironOreEndStone = new BlockVanillaOre(BlockVanillaOre.OreType.IRON).setUnlocalizedName("oreIron");
-	public static Block ironOreSandstone = new BlockVanillaOre(BlockVanillaOre.OreType.IRON).setUnlocalizedName("oreIron");
-	public static Block ironOreSandstoneRed = new BlockVanillaOre(BlockVanillaOre.OreType.IRON).setUnlocalizedName("oreIron");
-	public static Block goldOreSandstone = new BlockVanillaOre(BlockVanillaOre.OreType.GOLD).setUnlocalizedName("oreGold");
-	public static Block goldOreSandstoneRed = new BlockVanillaOre(BlockVanillaOre.OreType.GOLD).setUnlocalizedName("oreGold");
-	public static Block goldOrePinkStone = new BlockVanillaOre(BlockVanillaOre.OreType.GOLD).setUnlocalizedName("oreGold");
-	public static Block redstoneOreEndStone = new BlockVanillaOre(BlockVanillaOre.OreType.REDSTONE).setUnlocalizedName("oreRedstone");
-	public static Block quartzOreStone = new BlockVanillaOre(BlockVanillaOre.OreType.QUARTZ).setUnlocalizedName("oreQuartz");
-	public static Block lapisOrePinkStone = new BlockVanillaOre(BlockVanillaOre.OreType.LAPIS).setUnlocalizedName("oreLapis");
-	public static Block diamondOrePinkStone = new BlockVanillaOre(BlockVanillaOre.OreType.DIAMOND).setUnlocalizedName("oreDiamond");
 	
 	public static Block uraniumCooker = new BlockUraniumCooker().setUnlocalizedName("uraniumCooker");
 	
@@ -223,16 +223,66 @@ public class MinestuckBlocks
 	public static Block[] liquidGrists;
 	public static Fluid[] gristFluids;
 
+	public static Block[] chesstiles;
+	
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event)
 	{
 		IForgeRegistry<Block> registry = event.getRegistry();
 		
-		registry.register(chessTile.setRegistryName("chess_tile"));
-		registry.register(coloredDirt.setRegistryName("colored_dirt"));
-		registry.register(layeredSand.setRegistryName("layered_sand"));
-		registry.register(stone.setRegistryName("stone"));
+		registry.register(chessDirtBlack = new BlockDirt(Block.Properties.create(Material.GROUND, MaterialColor.BLACK).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("chess_dirt_black"));
+		registry.register(chessDirtWhite = new BlockDirt(Block.Properties.create(Material.GROUND, MaterialColor.SNOW).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("chess_dirt_white"));
+		registry.register(chessDirtLightGray = new BlockDirt(Block.Properties.create(Material.GROUND, MaterialColor.LIGHT_GRAY).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("chess_dirt_light_gray"));
+		registry.register(chessDirtDarkGray = new BlockDirt(Block.Properties.create(Material.GROUND, MaterialColor.GRAY).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("chess_dirt__dark_gray"));
+		registry.register(skaiaPortal = new BlockSkaiaPortal(Block.Properties.create(Material.PORTAL, MaterialColor.CYAN).doesNotBlockMovement().lightValue(11).hardnessAndResistance(-1.0F, 3600000.0F)).setRegistryName("skaia_portal"));
+		
+		registry.register(cruxiteOreStone = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F)).setRegistryName("cruxite_ore_stone"));
+		registry.register(cruxiteOreNetherrack = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F)).setRegistryName("cruxite_ore_netherrack"));
+		registry.register(cruxiteOreCobblestone = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F)).setRegistryName("cruxite_ore_cobblestone"));
+		registry.register(cruxiteOreSandstone = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F)).setRegistryName("cruxite_ore_sandstone"));
+		registry.register(cruxiteOreRedSandstone = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F)).setRegistryName("cruxite_ore_red_sandstone"));
+		registry.register(cruxiteOreEndStone = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F)).setRegistryName("cruxite_ore_end_stone"));
+		registry.register(cruxiteOrePinkStone = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F)).setRegistryName("cruxite_ore_pink_stone"));
+		registry.register(uraniumOreStone = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).lightValue(4)).setRegistryName("uranium_ore_stone"));
+		registry.register(uraniumOreNetherrack = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).lightValue(4)).setRegistryName("uranium_ore_netherrack"));
+		registry.register(uraniumOreCobblestone = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).lightValue(4)).setRegistryName("uranium_ore_cobblestone"));
+		registry.register(uraniumOreSandstone = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).lightValue(4)).setRegistryName("uranium_ore_sandstone"));
+		registry.register(uraniumOreRedSandstone = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).lightValue(4)).setRegistryName("uranium_ore_red_sandstone"));
+		registry.register(uraniumOreEndStone = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).lightValue(4)).setRegistryName("uranium_ore_end_stone"));
+		registry.register(uraniumOrePinkStone = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).lightValue(4)).setRegistryName("uranium_ore_pink_stone"));
+		registry.register(coalOreNetherrack = new BlockVanillaOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F), BlockVanillaOre.OreType.COAL).setRegistryName("coal_ore_netherrack"));
+		registry.register(coalOrePinkStone = new BlockVanillaOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F), BlockVanillaOre.OreType.COAL).setRegistryName("coal_ore_pink_stone"));
+		registry.register(ironOreEndStone = new BlockVanillaOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F), BlockVanillaOre.OreType.IRON).setRegistryName("iron_ore_end_stone"));
+		registry.register(ironOreSandstone = new BlockVanillaOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F), BlockVanillaOre.OreType.IRON).setRegistryName("iron_ore_sandstone"));
+		registry.register(ironOreSandstoneRed = new BlockVanillaOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F), BlockVanillaOre.OreType.IRON).setRegistryName("iron_ore_sandstone_red"));
+		registry.register(goldOreSandstone = new BlockVanillaOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F), BlockVanillaOre.OreType.GOLD).setRegistryName("gold_ore_sandstone"));
+		registry.register(goldOreSandstoneRed = new BlockVanillaOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F), BlockVanillaOre.OreType.GOLD).setRegistryName("gold_ore_sandstone_red"));
+		registry.register(goldOrePinkStone = new BlockVanillaOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F), BlockVanillaOre.OreType.GOLD).setRegistryName("gold_ore_pink_stone"));
+		registry.register(redstoneOreEndStone = new BlockVanillaOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F), BlockVanillaOre.OreType.REDSTONE).setRegistryName("redstone_ore_end_stone"));
+		registry.register(quartzOreStone = new BlockVanillaOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F), BlockVanillaOre.OreType.QUARTZ).setRegistryName("quartz_ore_stone"));
+		registry.register(lapisOrePinkStone = new BlockVanillaOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F), BlockVanillaOre.OreType.LAPIS).setRegistryName("lapis_ore_pink_stone"));
+		registry.register(diamondOrePinkStone = new BlockVanillaOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F), BlockVanillaOre.OreType.DIAMOND).setRegistryName("diamond_ore_pink_stone"));
+		
+		registry.register(blueDirt = new BlockDirt(Block.Properties.create(Material.GROUND, MaterialColor.BLUE).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("blue_dirt"));
+		registry.register(thoughtDirt = new BlockDirt(Block.Properties.create(Material.GROUND, MaterialColor.LIME).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("thought_dirt"));
+		registry.register(coarseStone = new Block(Block.Properties.create(Material.ROCK, MaterialColor.STONE).hardnessAndResistance(2.0F, 6.0F)).setRegistryName("coarse_stone"));
+		registry.register(coarseChiseled = new Block(Block.Properties.create(Material.ROCK, MaterialColor.STONE).hardnessAndResistance(2.0F, 6.0F)).setRegistryName("coarse_chiseled"));
+		registry.register(shadeBricks = new Block(Block.Properties.create(Material.ROCK, MaterialColor.BLUE).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("shade_bricks"));
+		registry.register(shadeSmooth = new Block(Block.Properties.create(Material.ROCK, MaterialColor.BLUE).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("shade_smooth"));
+		registry.register(frostBricks = new Block(Block.Properties.create(Material.ROCK, MaterialColor.ICE).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("frost_bricks"));
+		registry.register(frostTile = new Block(Block.Properties.create(Material.ROCK, MaterialColor.ICE).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("frost_tile"));
+		registry.register(frostBricksChiseled = new Block(Block.Properties.create(Material.ROCK, MaterialColor.ICE).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("frost_bricks_chiseled"));
+		registry.register(castIron = new Block(Block.Properties.create(Material.ROCK, MaterialColor.IRON).hardnessAndResistance(3.0F, 9.0F)).setRegistryName("cast_iron"));
+		registry.register(castIronChiseled = new Block(Block.Properties.create(Material.ROCK, MaterialColor.IRON).hardnessAndResistance(3.0F, 9.0F)).setRegistryName("cast_iron_chiseled"));
+		registry.register(myceliumBricks = new Block(Block.Properties.create(Material.ROCK, MaterialColor.MAGENTA).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("mycelium_bricks"));
+		registry.register(blackStone = new Block(Block.Properties.create(Material.ROCK, MaterialColor.BLACK).hardnessAndResistance(2.5F, 6.0F)).setRegistryName("black_stone"));
+		registry.register(coarseEndStone.setRegistryName("coarse_end_stone"));
+		registry.register(endGrass.setRegistryName("end_grass"));
+		registry.register(floweryMossStone.setRegistryName("flowery_moss_stone"));
+		registry.register(floweryMossBrick.setRegistryName("flowery_moss_brick"));
+		
 		registry.register(sugarCube.setRegistryName("sugar_cube"));
+		registry.register(layeredSand.setRegistryName("layered_sand"));
 		
 		registry.register(log.setRegistryName("log"));
 		registry.register(leaves1.setRegistryName("leaves"));
@@ -255,21 +305,6 @@ public class MinestuckBlocks
 		registry.register(desertBush.setRegistryName("desert_bush"));
 		registry.register(woodenCactus.setRegistryName("wooden_cactus"));
 		
-		registry.register(oreCruxite.setRegistryName("ore_cruxite"));
-		registry.register(oreUranium.setRegistryName("ore_uranium"));
-		registry.register(coalOreNetherrack.setRegistryName("coal_ore_netherrack"));
-		registry.register(coalOrePinkStone.setRegistryName("coal_ore_pink_stone"));
-		registry.register(ironOreEndStone.setRegistryName("iron_ore_end_stone"));
-		registry.register(ironOreSandstone.setRegistryName("iron_ore_sandstone"));
-		registry.register(ironOreSandstoneRed.setRegistryName("iron_ore_sandstone_red"));
-		registry.register(goldOreSandstone.setRegistryName("gold_ore_sandstone"));
-		registry.register(goldOreSandstoneRed.setRegistryName("gold_ore_sandstone_red"));
-		registry.register(goldOrePinkStone.setRegistryName("gold_ore_pink_stone"));
-		registry.register(redstoneOreEndStone.setRegistryName("redstone_ore_end_stone"));
-		registry.register(quartzOreStone.setRegistryName("quartz_ore_stone"));
-		registry.register(lapisOrePinkStone.setRegistryName("lapis_ore_pink_stone"));
-		registry.register(diamondOrePinkStone.setRegistryName("diamond_ore_pink_stone"));
-		
 		registry.register(cruxiteBlock.setRegistryName("cruxite_block"));
 		registry.register(uraniumBlock.setRegistryName("uranium_block"));
 		registry.register(genericObject.setRegistryName("generic_object"));
@@ -281,7 +316,6 @@ public class MinestuckBlocks
 		registry.register(castIronStairs.setRegistryName("cast_iron_stairs"));
 		registry.register(myceliumBrickStairs.setRegistryName("mycelium_brick_stairs"));
 		
-		registry.register(skaiaPortal.setRegistryName("skaia_portal"));
 		registry.register(returnNode.setRegistryName("return_node"));
 		registry.register(gate.setRegistryName("gate"));
 		
@@ -329,16 +363,12 @@ public class MinestuckBlocks
 		registry.register(hotCake.setRegistryName("hot_cake"));
 		registry.register(reverseCake.setRegistryName("reverse_cake"));
 		
-		registry.register(coarseEndStone.setRegistryName("coarse_end_stone"));
-		registry.register(endGrass.setRegistryName("end_grass"));
 		registry.register(endLog.setRegistryName("end_log"));
 		registry.register(endLeaves.setRegistryName("end_leaves"));
 		registry.register(endPlanks.setRegistryName("end_planks"));
 		registry.register(endSapling.setRegistryName("end_sapling"));
 		
 		registry.register(treatedPlanks.setRegistryName("treated_planks"));
-		registry.register(floweryMossStone.setRegistryName("flowery_moss_stone"));
-		registry.register(floweryMossBrick.setRegistryName("flowery_moss_brick"));
 		registry.register(strawberry.setRegistryName("strawberry"));
 		registry.register(strawberryStem.setRegistryName("strawberry_stem"));
 		
@@ -390,6 +420,8 @@ public class MinestuckBlocks
 			FluidRegistry.registerFluid(gristFluids[grist.getId()]);
 			liquidGrists[grist.getId()] = GameRegistry.register(new BlockFluidGrist(gristFluids[grist.getId()], Material.WATER).setRegistryName("liquid_" + grist.getName())).setUnlocalizedName("liquid_" + grist.getName());
 		}*/
+		
+		chesstiles = new Block[] {chessDirtBlack, chessDirtWhite, chessDirtLightGray, chessDirtDarkGray};
 		
 		cruxiteBlock.setHarvestLevel("pickaxe", 0);
 		uraniumBlock.setHarvestLevel("pickaxe", 1);

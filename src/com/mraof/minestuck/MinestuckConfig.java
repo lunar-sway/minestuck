@@ -11,20 +11,14 @@ import net.minecraft.server.management.UserListOpsEntry;
 import net.minecraft.world.GameType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GLContext;
 
 import java.io.File;
 
 public class MinestuckConfig
 {
-	public static Configuration config;
-	public static Side gameSide;
+	//public static Configuration config;
 	
 	@OnlyIn(Dist.CLIENT)
 	public static int clientOverworldEditRange;
@@ -127,7 +121,7 @@ public class MinestuckConfig
 	public static int cruxiteStratumMax = 60;
 	public static int uraniumStratumMax = 30;
 	
-	static void loadConfigFile(File file, Side side)
+	/*static void loadConfigFile(File file, Side side)
 	{
 		gameSide = side;
 		config = new Configuration(file, true);
@@ -284,7 +278,7 @@ public class MinestuckConfig
 			config.save();
 			
 		}
-	}
+	}*/
 	
 	public static boolean getDataCheckerPermissionFor(EntityPlayerMP player)
 	{

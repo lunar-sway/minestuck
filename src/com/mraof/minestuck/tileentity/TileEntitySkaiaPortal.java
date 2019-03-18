@@ -9,12 +9,18 @@ import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 
 public class TileEntitySkaiaPortal extends TileEntity implements Teleport.ITeleporter
 {
 	public Location destination = new Location();
+	
+	public TileEntitySkaiaPortal()
+	{
+		super(MinestuckTiles.skaiaPortal);
+	}
 	
 	@Override
 	public void setPos(BlockPos posIn)
@@ -23,22 +29,22 @@ public class TileEntitySkaiaPortal extends TileEntity implements Teleport.ITelep
 	}
 	
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) 
+	public void read(NBTTagCompound compound)
 	{
-		super.readFromNBT(nbt);
-		destination.pos = new BlockPos(nbt.getInteger("destX"), nbt.getInteger("destY"), nbt.getInteger("destZ"));
-		destination.dim = nbt.getInteger("destDim");
+		super.read(compound);
+		destination.pos = new BlockPos(compound.getInt("destX"), compound.getInt("destY"), compound.getInt("destZ"));
+		destination.dim = compound.getInt("destDim");
 	}
 	
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound tagCompound) 
+	public NBTTagCompound write(NBTTagCompound compound)
 	{
-		super.writeToNBT(tagCompound);
-		tagCompound.setInteger("destDim", this.destination.dim);
-		tagCompound.setInteger("destX", destination.pos.getX());
-		tagCompound.setInteger("destY", destination.pos.getY());
-		tagCompound.setInteger("destZ", destination.pos.getZ());
-		return tagCompound;
+		super.write(compound);
+		compound.setInt("destDim", this.destination.dim);
+		compound.setInt("destX", destination.pos.getX());
+		compound.setInt("destY", destination.pos.getY());
+		compound.setInt("destZ", destination.pos.getZ());
+		return compound;
 	}
 	
 	public void teleportEntity(Entity entity)

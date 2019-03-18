@@ -14,10 +14,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -26,64 +27,68 @@ import java.util.Map.Entry;
 
 public class TileEntityComputer extends TileEntity
 {
-
+	public TileEntityComputer()
+	{
+		super(MinestuckTiles.computer);
+	}
+	
 	/**
 	 * 0 = client, 1 = server
 	 */
 	public Hashtable<Integer, Boolean> installedPrograms = new Hashtable<Integer, Boolean>();
 	public GuiComputer gui;
 	public PlayerIdentifier owner;
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public int ownerId;
 	public Hashtable<Integer, String> latestmessage = new Hashtable<Integer, String>();
 	public NBTTagCompound programData = new NBTTagCompound();
 	public int programSelected = -1;
-
-	@SideOnly(Side.CLIENT)
+	
+	@OnlyIn(Dist.CLIENT)
 	public ComputerProgram program;
-
+	
 	@Override
-	public void readFromNBT(NBTTagCompound par1NBTTagCompound) 
+	public void read(NBTTagCompound compound)
 	{
-		super.readFromNBT(par1NBTTagCompound);	
-		if (par1NBTTagCompound.getCompoundTag("programs") != null) 
+		super.read(compound);
+		if (compound.getCompound("programs") != null)
 		{
-			NBTTagCompound programs = par1NBTTagCompound.getCompoundTag("programs");
-			for (Object name : programs.getKeySet()) 
+			NBTTagCompound programs = compound.getCompound("programs");
+			for (Object name : programs.keySet())
 			{
-				installedPrograms.put(programs.getInteger((String)name), true);
+				installedPrograms.put(programs.getInt((String)name), true);
 			}
 		}
 
 		latestmessage.clear();
 		for(Entry<Integer,Boolean> e : installedPrograms.entrySet())
 			if(e.getValue())
-				latestmessage.put(e.getKey(), par1NBTTagCompound.getString("text" + e.getKey()));
+				latestmessage.put(e.getKey(), compound.getString("text" + e.getKey()));
 
-		programData = par1NBTTagCompound.getCompoundTag("programData");
+		programData = compound.getCompound("programData");
 
-		if(!par1NBTTagCompound.hasKey("programData")) 
+		if(!compound.hasKey("programData"))
 		{
 			NBTTagCompound nbt = new NBTTagCompound();
-			nbt.setBoolean("connectedToServer", par1NBTTagCompound.getBoolean("connectServer"));
-			nbt.setBoolean("isResuming", par1NBTTagCompound.getBoolean("resumeClient"));
+			nbt.setBoolean("connectedToServer", compound.getBoolean("connectServer"));
+			nbt.setBoolean("isResuming", compound.getBoolean("resumeClient"));
 			programData.setTag("program_0", nbt);
 			nbt = new NBTTagCompound();
-			nbt.setString("connectedClient", par1NBTTagCompound.getString("connectClient"));
-			nbt.setBoolean("isOpen", par1NBTTagCompound.getBoolean("serverOpen"));
+			nbt.setString("connectedClient", compound.getString("connectClient"));
+			nbt.setBoolean("isOpen", compound.getBoolean("serverOpen"));
 			programData.setTag("program_1", nbt);
 		}
-		if(par1NBTTagCompound.hasKey("ownerId"))
-			ownerId = par1NBTTagCompound.getInteger("ownerId");
-		else this.owner = IdentifierHandler.load(par1NBTTagCompound, "owner");
+		if(compound.hasKey("ownerId"))
+			ownerId = compound.getInt("ownerId");
+		else this.owner = IdentifierHandler.load(compound, "owner");
 		if(gui != null)
 			gui.updateGui();
 	}
 	
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound tagCompound) 
+	public NBTTagCompound write(NBTTagCompound compound)
 	{
-		super.writeToNBT(tagCompound);
+		super.write(compound);
 		NBTTagCompound programs = new NBTTagCompound();
 		Iterator<Entry<Integer, Boolean>> it = this.installedPrograms.entrySet().iterator();
 		//int place = 0;
@@ -91,33 +96,33 @@ public class TileEntityComputer extends TileEntity
 		{
 			Map.Entry<Integer, Boolean> pairs = it.next();
 			int program = pairs.getKey();
-			programs.setInteger("program" + program,program);
+			programs.setInt("program" + program,program);
 			//place++;
 		}
 		for(Entry<Integer, String> e : latestmessage.entrySet())
-			tagCompound.setString("text" + e.getKey(), e.getValue());
-		tagCompound.setTag("programs",programs);
-		tagCompound.setTag("programData", (NBTTagCompound) programData.copy());
+			compound.setString("text" + e.getKey(), e.getValue());
+		compound.setTag("programs",programs);
+		compound.setTag("programData", (NBTTagCompound) programData.copy());
 		if (owner != null) 
-			owner.saveToNBT(tagCompound, "owner");
-		return tagCompound;
+			owner.saveToNBT(compound, "owner");
+		return compound;
 	}
 	
 	@Override
 	public NBTTagCompound getUpdateTag()
 	{
 		NBTTagCompound tagCompound = new NBTTagCompound();
-		this.writeToNBT(tagCompound);
+		this.write(tagCompound);
 		tagCompound.removeTag("owner");
 		tagCompound.removeTag("ownerMost");
 		tagCompound.removeTag("ownerLeast");
 		if(owner != null)
-			tagCompound.setInteger("ownerId", owner.getId());
+			tagCompound.setInt("ownerId", owner.getId());
 		if(hasProgram(1))
 		{
 			SburbConnection c = SkaianetHandler.getServerConnection(ComputerData.createData(this));
 			if(c != null)
-				tagCompound.getCompoundTag("programData").getCompoundTag("program_1").setInteger("connectedClient", c.getClientIdentifier().getId());
+				tagCompound.getCompound("programData").getCompound("program_1").setInt("connectedClient", c.getClientIdentifier().getId());
 		}
 		return tagCompound;
 	}
@@ -131,7 +136,7 @@ public class TileEntityComputer extends TileEntity
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) 
 	{
-		this.readFromNBT(pkt.getNbtCompound());
+		this.read(pkt.getNbtCompound());
 	}
 
 	public boolean hasProgram(int id) 
@@ -143,7 +148,7 @@ public class TileEntityComputer extends TileEntity
 	{
 		if(!programData.hasKey("program_"+id))
 			programData.setTag("program_" + id, new NBTTagCompound());
-		return programData.getCompoundTag("program_" + id);
+		return programData.getCompound("program_" + id);
 	}
 
 	public void closeAll() 
@@ -164,12 +169,6 @@ public class TileEntityComputer extends TileEntity
 		{
 			this.getData(1).setBoolean("isOpen", false);
 		}
-	}
-	
-	@Override
-	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState)
-	{
-		return oldState.getBlock() != newState.getBlock();
 	}
 	
 	public void markBlockForUpdate()

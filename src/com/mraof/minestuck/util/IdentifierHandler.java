@@ -8,20 +8,13 @@ import java.util.UUID;
 import com.google.common.collect.Lists;
 import com.mraof.minestuck.MinestuckConfig;
 
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagLong;
-import net.minecraft.nbt.NBTTagString;
+import net.minecraft.nbt.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerList;
 import net.minecraftforge.common.UsernameCache;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 /**
  * Used to encode/decode player usernames, to handle uses with LAN.
@@ -79,7 +72,7 @@ public class IdentifierHandler {
 		return nbt.hasKey("owner") || nbt.hasKey("ownerMost") && nbt.hasKey("ownerLeast");
 	}
 	
-	public static PlayerIdentifier load(NBTBase nbt, String key)
+	public static PlayerIdentifier load(INBTBase nbt, String key)
 	{
 		PlayerIdentifier identifier = new PlayerIdentifier(nbt, key);
 		if(".null".equals(identifier.username))
@@ -225,7 +218,7 @@ public class IdentifierHandler {
 			useUUID = false;
 		}
 		
-		private PlayerIdentifier(NBTBase nbt, String key)
+		private PlayerIdentifier(INBTBase nbt, String key)
 		{
 			if(nbt instanceof NBTTagString)
 			{
@@ -241,7 +234,7 @@ public class IdentifierHandler {
 			else
 			{
 				NBTTagCompound compound = (NBTTagCompound) nbt;
-				if(compound.hasKey(key, 8))
+				if(compound.contains(key, 8))
 				{
 					username = compound.getString(key);
 					useUUID = false;
@@ -255,25 +248,26 @@ public class IdentifierHandler {
 			}
 		}
 		
-		public NBTBase saveToNBT(NBTBase nbt, String key)
+		public NBTTagList saveToNBT(NBTTagList nbt, String key)
 		{
-			if(nbt instanceof NBTTagList)
-				if(this.useUUID)
-				{
-					NBTTagList list = new NBTTagList();
-					list.appendTag(new NBTTagLong(uuid.getMostSignificantBits()));
-					list.appendTag(new NBTTagLong(uuid.getLeastSignificantBits()));
-					((NBTTagList) nbt).appendTag(list);
-				} else ((NBTTagList) nbt).appendTag(new NBTTagString(username));
-			else
+			if(this.useUUID)
 			{
-				NBTTagCompound compound = (NBTTagCompound) nbt;
-				if(this.useUUID)
-				{
-					compound.setLong(key+"Most", uuid.getMostSignificantBits());
-					compound.setLong(key+"Least", uuid.getLeastSignificantBits());
-				} else compound.setString(key, username);
-			}
+				NBTTagList list = new NBTTagList();
+				list.add(new NBTTagLong(uuid.getMostSignificantBits()));
+				list.add(new NBTTagLong(uuid.getLeastSignificantBits()));
+				((NBTTagList) nbt).add(list);
+			} else ((NBTTagList) nbt).add(new NBTTagString(username));
+			return nbt;
+		}
+		
+		public NBTTagCompound saveToNBT(NBTTagCompound nbt, String key)
+		{
+			NBTTagCompound compound = (NBTTagCompound) nbt;
+			if(this.useUUID)
+			{
+				compound.setLong(key+"Most", uuid.getMostSignificantBits());
+				compound.setLong(key+"Least", uuid.getLeastSignificantBits());
+			} else compound.setString(key, username);
 			return nbt;
 		}
 		

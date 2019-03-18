@@ -84,7 +84,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.13.2-25.0.48'
+    minecraft 'net.minecraftforge:forge:1.13.2-25.0.88'
 
     def mc_version = "1.12.2"
     def jei_version = "4.9.1.168"
