@@ -258,17 +258,21 @@ public class CaptchaDeckHandler
 	}
 	
 	public static void captchalougeInventoryItem (EntityPlayerMP player, int slotIndex) {
+		ItemStack stack;
+		Modus modus = getModus(player);
+		System.out.println(slotIndex);
+		//This statement is so that the server knows whether the item is in the hotbar or not because apparently THE "openContainer" CANT EDIT THE HOTBAR SLOTS.
+		if(slotIndex >= player.openContainer.inventorySlots.size() - 9) {
+			int hotbarIndex = slotIndex - (player.openContainer.inventorySlots.size() - 9);
+			stack = player.inventory.mainInventory.get(hotbarIndex);
 
-			ItemStack stack = player.openContainer.getSlot(slotIndex).getStack();
-			Modus modus = getModus(player);
-			
 			if(stack.getItem() == MinestuckItems.boondollars)
 			{
 				MinestuckPlayerData.addBoondollars(player, ItemBoondollars.getCount(stack));
 				stack.setCount(0);
 				return;
 			}
-			
+
 			if(modus != null && !stack.isEmpty())
 			{
 				boolean card1 = false, card2 = true;
@@ -288,27 +292,76 @@ public class CaptchaDeckHandler
 					MinestuckCriteriaTriggers.CAPTCHALOGUE.trigger(player, modus, stack);
 					if(!card2)
 						launchAnyItem(player, new ItemStack(MinestuckItems.captchaCard, 1));
-					
-					stack = player.openContainer.getSlot(slotIndex).getStack();
+					stack = player.inventory.mainInventory.get(hotbarIndex);
 					if(card1 && stack.getCount() > 1)
 						stack.shrink(1);
 					else {
-						player.openContainer.getSlot(slotIndex).putStack(ItemStack.EMPTY);
+						player.inventory.setInventorySlotContents(hotbarIndex, ItemStack.EMPTY);
 					}
 				}
 				else if(card1 && card2)
 				{
 					launchAnyItem(player, stack);
-					stack = player.openContainer.getSlot(slotIndex).getStack();
+					stack = player.inventory.mainInventory.get(hotbarIndex);
 					if(stack.getCount() == 1) {
-						player.openContainer.getSlot(slotIndex).putStack(ItemStack.EMPTY);
+						player.inventory.setInventorySlotContents(hotbarIndex, ItemStack.EMPTY);
 					} else stack.shrink(1);
 				}
 				MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, writeToNBT(modus));
 				MinestuckChannelHandler.sendToPlayer(packet, player);
 			}
 		}
-	
+		else {
+			Slot slot = player.openContainer.getSlot(slotIndex);
+			stack = slot.getStack();
+
+			if(stack.getItem() == MinestuckItems.boondollars)
+			{
+				MinestuckPlayerData.addBoondollars(player, ItemBoondollars.getCount(stack));
+				stack.setCount(0);
+				return;
+			}
+
+			if(modus != null && !stack.isEmpty())
+			{
+				boolean card1 = false, card2 = true;
+				if(stack.getItem() == MinestuckItems.captchaCard && AlchemyRecipes.hasDecodedItem(stack)
+						&& !AlchemyRecipes.isPunchedCard(stack))
+				{
+					ItemStack newStack = AlchemyRecipes.getDecodedItem(stack, true);
+					if(!newStack.isEmpty())
+					{
+						card1 = true;
+						stack = newStack;
+						card2 = modus.increaseSize();
+					}
+				}
+				if(modus.putItemStack(stack))
+				{
+					MinestuckCriteriaTriggers.CAPTCHALOGUE.trigger(player, modus, stack);
+					if(!card2)
+						launchAnyItem(player, new ItemStack(MinestuckItems.captchaCard, 1));
+					stack = slot.getStack();
+					if(card1 && stack.getCount() > 1)
+						stack.shrink(1);
+					else {
+						slot.putStack(ItemStack.EMPTY);
+					}
+				}
+				else if(card1 && card2)
+				{
+					launchAnyItem(player, stack);
+					stack = slot.getStack();
+					if(stack.getCount() == 1) {
+						slot.putStack(ItemStack.EMPTY);
+					} else stack.shrink(1);
+				}
+				MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, writeToNBT(modus));
+				MinestuckChannelHandler.sendToPlayer(packet, player);
+			}
+		}
+	}
+
 	public static void getItem(EntityPlayerMP player, int index, boolean asCard)
 	{
 		Modus modus = getModus(player);
