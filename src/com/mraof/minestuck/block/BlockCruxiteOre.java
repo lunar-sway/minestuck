@@ -17,7 +17,7 @@ import java.util.Random;
 public class BlockCruxiteOre extends Block 
 {
 	
-	public BlockCruxiteOre(Block.Properties properties)
+	public BlockCruxiteOre(Properties properties)
 	{
 		super(properties);
 	}
@@ -86,7 +86,7 @@ public class BlockCruxiteOre extends Block
 			return MinestuckBlocks.cruxiteOreRedSandstone.getDefaultState();
 		else if(ground.getBlock() == Blocks.END_STONE)
 			return MinestuckBlocks.cruxiteOreEndStone.getDefaultState();
-		else if(ground.getBlock() == MinestuckBlocks.pinkStoneSmooth)
+		else if(ground.getBlock() == MinestuckBlocks.pinkStone)
 			return MinestuckBlocks.cruxiteOrePinkStone.getDefaultState();
 		return MinestuckBlocks.cruxiteOreStone.getDefaultState();
 	}

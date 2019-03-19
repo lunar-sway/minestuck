@@ -24,9 +24,9 @@ public class BlockSkaiaPortal extends BlockContainer
 {
 	protected static final VoxelShape SHAPE = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D);
 	
-	public BlockSkaiaPortal(Block.Properties builder)
+	public BlockSkaiaPortal(Properties properties)
 	{
-		super(builder);
+		super(properties);
 	}
 	
 	@Nullable

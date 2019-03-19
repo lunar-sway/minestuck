@@ -20,7 +20,7 @@ import java.util.Random;
 
 public class BlockUraniumOre extends Block
 {
-	public BlockUraniumOre(Block.Properties properties)
+	public BlockUraniumOre(Properties properties)
 	{
 		super(properties);
 	}
@@ -85,7 +85,7 @@ public class BlockUraniumOre extends Block
 			return MinestuckBlocks.uraniumOreRedSandstone.getDefaultState();
 		else if(ground.getBlock() == Blocks.END_STONE)
 			return MinestuckBlocks.uraniumOreEndStone.getDefaultState();
-		else if(ground.getBlock() == MinestuckBlocks.pinkStoneSmooth)
+		else if(ground.getBlock() == MinestuckBlocks.pinkStone)
 			return MinestuckBlocks.uraniumOrePinkStone.getDefaultState();
 		return MinestuckBlocks.uraniumOreStone.getDefaultState();
 	}

@@ -29,30 +29,74 @@ import net.minecraftforge.registries.IForgeRegistry;
 public class MinestuckBlocks
 {
 	//Skaia
-	public static Block chessDirtBlack, chessDirtWhite, chessDirtLightGray, chessDirtDarkGray;
-	public static Block skaiaPortal;
+	public static Block CHESS_DIRT_BLACK, CHESS_DIRT_WHITE, CHESS_DIRT_DARK_GRAY, CHESS_DIRT_LIGHT_GRAY;
+	public static Block SKAIA_PORTAL;
 	
 	//Ores
-	public static Block cruxiteOreStone, cruxiteOreNetherrack, cruxiteOreCobblestone, cruxiteOreSandstone;
-	public static Block cruxiteOreRedSandstone, cruxiteOreEndStone, cruxiteOrePinkStone;
-	public static Block uraniumOreStone, uraniumOreNetherrack, uraniumOreCobblestone, uraniumOreSandstone;
-	public static Block uraniumOreRedSandstone, uraniumOreEndStone, uraniumOrePinkStone;
-	public static Block coalOreNetherrack, coalOrePinkStone;
-	public static Block ironOreEndStone, ironOreSandstone, ironOreSandstoneRed;
-	public static Block goldOreSandstone, goldOreSandstoneRed, goldOrePinkStone;
-	public static Block redstoneOreEndStone;
-	public static Block quartzOreStone;
-	public static Block lapisOrePinkStone;
-	public static Block diamondOrePinkStone;
+	public static Block CRUXITE_ORE_STONE, CRUXITE_ORE_NETHERRACK, CRUXITE_ORE_COBBLESTONE, CRUXITE_ORE_SANDSTONE;
+	public static Block CRUXITE_ORE_RED_SANDSTONE, CRUXITE_ORE_END_STONE, CRUXITE_ORE_PINK_STONE;
+	public static Block URANIUM_ORE_STONE, URANIUM_ORE_NETHERRACK, URANIUM_ORE_COBBLESTONE, URANIUM_ORE_SANDSTONE;
+	public static Block URANIUM_ORE_RED_SANDSTONE, URANIUM_ORE_END_STONE, URANIUM_ORE_PINK_STONE;
+	public static Block COAL_ORE_NETHERRACK, COAL_ORE_PINK_STONE;
+	public static Block IRON_ORE_END_STONE, IRON_ORE_SANDSTONE, IRON_ORE_SANDSTONE_RED;
+	public static Block GOLD_ORE_SANDSTONE, GOLD_ORE_SANDSTONE_RED, GOLD_ORE_PINK_STONE;
+	public static Block REDSTONE_ORE_END_STONE;
+	public static Block QUARTZ_ORE_STONE;
+	public static Block LAPIS_ORE_PINK_STONE;
+	public static Block DIAMOND_ORE_PINK_STONE;
 	
-	//Land Environment blocks
-	public static Block blueDirt, thoughtDirt;
-	public static Block coarseStone, coarseChiseled;
-	public static Block shadeBricks, shadeSmooth;
-	public static Block frostBricks, frostTile, frostBricksChiseled;
-	public static Block castIron, castIronChiseled;
-	public static Block myceliumBricks;
-	public static Block blackStone;
+	//Land Environment Blocks
+	public static Block BLUE_DIRT, THOUGHT_DIRT;
+	public static Block COARSE_STONE, COARSE_CHISELED;
+	public static Block SHADE_BRICKS, SHADE_SMOOTH;
+	public static Block FROST_BRICKS, FROST_TILE, FROST_BRICKS_CHISELED;
+	public static Block CAST_IRON, CAST_IRON_CHISELED;
+	public static Block MYCELIUM_BRICKS;
+	public static Block BLACK_STONE;
+	public static Block FLOWERY_MOSS_STONE,FLOWERY_MOSS_BRICK;
+	public static Block COARSE_END_STONE, END_GRASS;
+	public static Block CHALK, CHALK_BRICKS, CHALK_CHISELED, CHALK_POLISHED;
+	public static Block PINK_STONE, PINK_STONE_BRICKS, PINK_STONE_CHISELED, PINK_STONE_CRACKED, PINK_STONE_MOSSY, PINK_STONE_POLISHED;
+	public static Block DENSE_CLOUD, DENSE_CLOUD_BRIGHT;
+	public static Block GLOWY_GOOP;
+	public static Block COAGULATED_BLOOD;
+	public static Block SUGAR_CUBE;
+	public static Block LAYERED_SAND;
+	
+	//Land Wood/Plant Blocks
+	public static Block VINE_LOG, FLOWERY_VINE_LOG, PETRIFIED_LOG;
+	public static Block FROST_LOG, FROST_PLANKS, FROST_LEAVES;
+	public static Block rainbowLog, rainbowPlanks, rainbowLeaves;
+	public static Block log = new BlockMinestuckLog1();
+	public static Block planks = new BlockMinestuckPlanks();
+	public static Block leaves1 = new BlockMinestuckLeaves1();
+	public static Block frostPlanks = new BlockFrostPlanks();
+	public static Block deadLog = new BlockMinestuckLog().setUnlocalizedName("logDead").setCreativeTab(TabMinestuck.instance);
+	public static Block deadPlanks = new BlockCustom(Material.WOOD, MapColor.WOOD, SoundType.WOOD).setFireInfo(5, 5).setUnlocalizedName("deadPlanks").setHardness(1.0F).setCreativeTab(TabMinestuck.instance);
+	public static Block glowingLog = new BlockGlowingLog();
+	public static Block glowingPlanks = new BlockCustom(Material.WOOD, MapColor.LIGHT_BLUE, SoundType.WOOD).setFireInfo(5, 20).setUnlocalizedName("glowingPlanks").setLightLevel(0.5F).setHardness(2.0F).setResistance(5.0F).setCreativeTab(TabMinestuck.instance);
+	public static Block aspectSapling = new BlockAspectSapling().setCreativeTab(null);
+	public static Block rainbowSapling = new BlockRainbowSapling();
+	public static Block aspectLog1 = new BlockAspectLog().setCreativeTab(null);
+	public static Block aspectLog2 = new BlockAspectLog2().setCreativeTab(null);
+	public static Block aspectLog3 = new BlockAspectLog3().setCreativeTab(null);
+	public static Block endLog = new BlockEndLog();
+	public static Block endLeaves = new BlockEndLeaves();
+	public static Block endPlanks = new BlockCustom(Material.WOOD, MapColor.SAND, SoundType.WOOD).setFireInfo(1, 250).setUnlocalizedName("endPlanks").setHardness(1.0F).setCreativeTab(TabMinestuck.instance);
+	public static Block endSapling = new BlockEndSapling();
+	public static Block treatedPlanks = new BlockCustom(Material.WOOD, MapColor.WOOD, SoundType.WOOD).setFireInfo(1, 0).setUnlocalizedName("treatedPlanks").setHardness(1.0F).setCreativeTab(TabMinestuck.instance);
+	
+	
+	public static Block woodenCactus = new BlockCactusSpecial(SoundType.WOOD, "axe").setHardness(1.0F).setResistance(2.5F).setUnlocalizedName("woodenCactus");
+	public static Block petrifiedPoppy = new BlockPetrifiedFlora("petrifiedPoppy");
+	public static Block petrifiedGrass = new BlockPetrifiedFlora("petrifiedGrass");
+	public static Block bloomingCactus = new BlockDesertFlora("bloomingCactus");
+	public static Block desertBush = new BlockDesertBush("desertBush");
+	public static Block glowingMushroom = new BlockGlowingMushroom();
+	
+	public static Block vein = new BlockVein("vein");
+	public static Block veinCorner = new BlockVeinCorner("veinCorner");
+	public static Block veinCornerInverted = new BlockVeinCorner("veinCornerInverted");
 	
 	public static Block cruxiteBlock = new Block(Material.ROCK, MapColor.LIGHT_BLUE).setUnlocalizedName("cruxiteBlock").setHardness(3.0F).setCreativeTab(TabMinestuck.instance);
 	public static Block uraniumBlock = new Block(Material.ROCK, MapColor.LIME).setLightLevel(0.5F).setUnlocalizedName("uraniumBlock").setHardness(3.0F).setCreativeTab(TabMinestuck.instance);
@@ -83,32 +127,11 @@ public class MinestuckBlocks
 	public static Block blockGoldSeeds = new BlockGoldSeeds();
 	public static Block returnNode = new BlockReturnNode();
 	public static Block gate = new BlockGate();
-	public static Block petrifiedLog = new BlockPetrifiedLog();
-	public static Block petrifiedPoppy = new BlockPetrifiedFlora("petrifiedPoppy");
-	public static Block petrifiedGrass = new BlockPetrifiedFlora("petrifiedGrass");
-	public static Block bloomingCactus = new BlockDesertFlora("bloomingCactus"); 
-	public static Block desertBush = new BlockDesertBush("desertBush");
-	public static Block glowingMushroom = new BlockGlowingMushroom();
-	public static Block glowingLog = new BlockGlowingLog();
-	public static Block glowingPlanks = new BlockCustom(Material.WOOD, MapColor.LIGHT_BLUE, SoundType.WOOD).setFireInfo(5, 20).setUnlocalizedName("glowingPlanks").setLightLevel(0.5F).setHardness(2.0F).setResistance(5.0F).setCreativeTab(TabMinestuck.instance);
-	public static Block glowyGoop = new BlockGlowyGoop("glowyGoop");
-	public static Block coagulatedBlood = new BlockGoop("coagulatedBlood");
 	public static Block coarseStoneStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.COARSE)).setUnlocalizedName("stairsMinestuck.coarse");
 	public static Block shadeBrickStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.SHADE_BRICK)).setUnlocalizedName("stairsMinestuck.shadeBrick");
 	public static Block frostBrickStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.FROST_BRICK)).setUnlocalizedName("stairsMinestuck.frostBrick");
 	public static Block castIronStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.CAST_IRON)).setUnlocalizedName("stairsMinestuck.castIron");
 	public static Block myceliumBrickStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.MYCELIUM_BRICK)).setUnlocalizedName("stairsMinestuck.myceliumBrick");
-	public static Block log = new BlockMinestuckLog1();
-	public static Block leaves1 = new BlockMinestuckLeaves1();
-	public static Block planks = new BlockMinestuckPlanks();
-	public static Block frostPlanks = new BlockFrostPlanks();
-	public static Block aspectSapling = new BlockAspectSapling().setCreativeTab(null);
-	public static Block rainbowSapling = new BlockRainbowSapling();
-	public static Block aspectLog1 = new BlockAspectLog().setCreativeTab(null);
-	public static Block aspectLog2 = new BlockAspectLog2().setCreativeTab(null);
-	public static Block aspectLog3 = new BlockAspectLog3().setCreativeTab(null);
-	public static Block woodenCactus = new BlockCactusSpecial(SoundType.WOOD, "axe").setHardness(1.0F).setResistance(2.5F).setUnlocalizedName("woodenCactus");
-	public static Block sugarCube = new BlockCustom(Material.SAND, MapColor.SNOW, SoundType.SAND).setUnlocalizedName("sugarCube").setHardness(0.4F).setCreativeTab(TabMinestuck.instance);
 	public static Block rabbitSpawner = new BlockMobSpawner().setUnlocalizedName("rabbitSpawner");
 	public static Block appleCake = new BlockSimpleCake(2, 0.5F, null).setUnlocalizedName("appleCake");
 	public static Block blueCake = new BlockSimpleCake(2, 0.3F, (EntityPlayer player) -> player.addPotionEffect(new PotionEffect(MobEffects.SPEED, 150, 0))).setUnlocalizedName("blueCake");
@@ -116,37 +139,11 @@ public class MinestuckBlocks
 	public static Block redCake = new BlockSimpleCake(2, 0.1F, (EntityPlayer player) -> player.heal(1)).setUnlocalizedName("redCake");
 	public static Block hotCake = new BlockSimpleCake(2, 0.1F, (EntityPlayer player) -> player.setFire(4)).setUnlocalizedName("hotCake");
 	public static Block reverseCake = new BlockSimpleCake(2, 0.1F, null).setUnlocalizedName("cake");
-	public static Block vein = new BlockVein("vein");
-	public static Block veinCorner = new BlockVeinCorner("veinCorner");
-	public static Block veinCornerInverted = new BlockVeinCorner("veinCornerInverted");
 	
-	public static Block treatedPlanks = new BlockCustom(Material.WOOD, MapColor.WOOD, SoundType.WOOD).setFireInfo(1, 0).setUnlocalizedName("treatedPlanks").setHardness(1.0F).setCreativeTab(TabMinestuck.instance);
 	
-	public static Block endLog = new BlockEndLog();
-	public static Block endLeaves = new BlockEndLeaves();
-	public static Block endPlanks = new BlockCustom(Material.WOOD, MapColor.SAND, SoundType.WOOD).setFireInfo(1, 250).setUnlocalizedName("endPlanks").setHardness(1.0F).setCreativeTab(TabMinestuck.instance);
-	public static Block endSapling = new BlockEndSapling();
-	public static Block endGrass = new BlockEndGrass();
-	public static Block coarseEndStone = new BlockCustomStone(MapColor.SAND).setHardness(3.0F).setUnlocalizedName("coarseEndStone").setCreativeTab(TabMinestuck.instance);
-	
-	public static Block floweryMossStone = new BlockCustomStone(MapColor.GRAY).setUnlocalizedName("floweryMossStone").setCreativeTab(TabMinestuck.instance);
-	public static Block floweryMossBrick = new BlockCustomStone(MapColor.GRAY).setUnlocalizedName("floweryMossBrick").setCreativeTab(TabMinestuck.instance);
 	public static Block strawberry = new BlockStrawberry();
 	public static Block strawberryStem = new BlockMinestuckStem((BlockDirectional) strawberry).setUnlocalizedName("strawberryStem").setCreativeTab(null);
 	
-	public static Block deadLog = new BlockMinestuckLog().setUnlocalizedName("logDead").setCreativeTab(TabMinestuck.instance);
-	public static Block deadPlanks = new BlockCustom(Material.WOOD, MapColor.WOOD, SoundType.WOOD).setFireInfo(5, 5).setUnlocalizedName("deadPlanks").setHardness(1.0F).setCreativeTab(TabMinestuck.instance);
-	public static Block chalk = new BlockCustomStone(MapColor.SNOW).setUnlocalizedName("chalk")	.setCreativeTab(TabMinestuck.instance);
-	public static Block chalkBricks = new BlockCustomStone(MapColor.SNOW).setUnlocalizedName("chalkBricks")	.setCreativeTab(TabMinestuck.instance);
-	public static Block chalkChisel = new BlockCustomStone(MapColor.SNOW).setUnlocalizedName("chalkChisel")	.setCreativeTab(TabMinestuck.instance);
-	public static Block chalkPolish = new BlockCustomStone(MapColor.SNOW).setUnlocalizedName("chalkPolish")	.setCreativeTab(TabMinestuck.instance);
-	public static Block pinkStoneSmooth = new BlockCustomStone(MapColor.PINK).setUnlocalizedName("pinkStoneSmooth")	.setCreativeTab(TabMinestuck.instance);
-	public static Block pinkStoneBricks = new BlockCustomStone(MapColor.PINK).setUnlocalizedName("pinkStoneBricks")	.setCreativeTab(TabMinestuck.instance);
-	public static Block pinkStoneChisel = new BlockCustomStone(MapColor.PINK).setUnlocalizedName("pinkStoneChisel")	.setCreativeTab(TabMinestuck.instance);
-	public static Block pinkStoneCracked= new BlockCustomStone(MapColor.PINK).setUnlocalizedName("pinkStoneCracked").setCreativeTab(TabMinestuck.instance);
-	public static Block pinkStoneMossy = new BlockCustomStone(MapColor.PINK).setUnlocalizedName("pinkStoneMossy")	.setCreativeTab(TabMinestuck.instance);
-	public static Block pinkStonePolish = new BlockCustomStone(MapColor.PINK).setUnlocalizedName("pinkStonePolish")	.setCreativeTab(TabMinestuck.instance);
-	public static Block denseCloud = new BlockDenseCloud();
 	
 	public static Block uraniumCooker = new BlockUraniumCooker().setUnlocalizedName("uraniumCooker");
 	
@@ -156,7 +153,6 @@ public class MinestuckBlocks
 	public static Block woodenExplosiveButton = new BlockButtonSpecial(true, true).setUnlocalizedName("buttonTnt");
 	public static Block stoneExplosiveButton = new BlockButtonSpecial(false, true).setUnlocalizedName("buttonTnt");
 	
-	public static BlockLayered layeredSand = (BlockLayered) new BlockLayered(Blocks.SAND.getDefaultState()).setUnlocalizedName("layeredSand");
 	public static Block glowystoneWire = new BlockGlowystoneWire().setUnlocalizedName("glowystoneWire");
 	
 	public static Fluid fluidOil = createFluid("oil", new ResourceLocation("minestuck", "blocks/oil_still"), new ResourceLocation("minestuck", "blocks/oil_flowing"), "tile.oil");
@@ -230,61 +226,78 @@ public class MinestuckBlocks
 	{
 		IForgeRegistry<Block> registry = event.getRegistry();
 		
-		registry.register(chessDirtBlack = new BlockDirt(Block.Properties.create(Material.GROUND, MaterialColor.BLACK).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("chess_dirt_black"));
-		registry.register(chessDirtWhite = new BlockDirt(Block.Properties.create(Material.GROUND, MaterialColor.SNOW).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("chess_dirt_white"));
-		registry.register(chessDirtLightGray = new BlockDirt(Block.Properties.create(Material.GROUND, MaterialColor.LIGHT_GRAY).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("chess_dirt_light_gray"));
-		registry.register(chessDirtDarkGray = new BlockDirt(Block.Properties.create(Material.GROUND, MaterialColor.GRAY).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("chess_dirt__dark_gray"));
-		registry.register(skaiaPortal = new BlockSkaiaPortal(Block.Properties.create(Material.PORTAL, MaterialColor.CYAN).doesNotBlockMovement().lightValue(11).hardnessAndResistance(-1.0F, 3600000.0F)).setRegistryName("skaia_portal"));
+		registry.register(CHESS_DIRT_BLACK = new BlockDirt(Block.Properties.create(Material.GROUND, MaterialColor.BLACK).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("chess_dirt_black"));
+		registry.register(CHESS_DIRT_WHITE = new BlockDirt(Block.Properties.create(Material.GROUND, MaterialColor.SNOW).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("chess_dirt_white"));
+		registry.register(CHESS_DIRT_DARK_GRAY = new BlockDirt(Block.Properties.create(Material.GROUND, MaterialColor.GRAY).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("chess_dirt__dark_gray"));
+		registry.register(CHESS_DIRT_LIGHT_GRAY = new BlockDirt(Block.Properties.create(Material.GROUND, MaterialColor.LIGHT_GRAY).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("chess_dirt_light_gray"));
+		registry.register(SKAIA_PORTAL = new BlockSkaiaPortal(Block.Properties.create(Material.PORTAL, MaterialColor.CYAN).doesNotBlockMovement().lightValue(11).hardnessAndResistance(-1.0F, 3600000.0F)).setRegistryName("skaia_portal"));
 		
-		registry.register(cruxiteOreStone = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F)).setRegistryName("cruxite_ore_stone"));
-		registry.register(cruxiteOreNetherrack = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F)).setRegistryName("cruxite_ore_netherrack"));
-		registry.register(cruxiteOreCobblestone = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F)).setRegistryName("cruxite_ore_cobblestone"));
-		registry.register(cruxiteOreSandstone = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F)).setRegistryName("cruxite_ore_sandstone"));
-		registry.register(cruxiteOreRedSandstone = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F)).setRegistryName("cruxite_ore_red_sandstone"));
-		registry.register(cruxiteOreEndStone = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F)).setRegistryName("cruxite_ore_end_stone"));
-		registry.register(cruxiteOrePinkStone = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F)).setRegistryName("cruxite_ore_pink_stone"));
-		registry.register(uraniumOreStone = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).lightValue(4)).setRegistryName("uranium_ore_stone"));
-		registry.register(uraniumOreNetherrack = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).lightValue(4)).setRegistryName("uranium_ore_netherrack"));
-		registry.register(uraniumOreCobblestone = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).lightValue(4)).setRegistryName("uranium_ore_cobblestone"));
-		registry.register(uraniumOreSandstone = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).lightValue(4)).setRegistryName("uranium_ore_sandstone"));
-		registry.register(uraniumOreRedSandstone = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).lightValue(4)).setRegistryName("uranium_ore_red_sandstone"));
-		registry.register(uraniumOreEndStone = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).lightValue(4)).setRegistryName("uranium_ore_end_stone"));
-		registry.register(uraniumOrePinkStone = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).lightValue(4)).setRegistryName("uranium_ore_pink_stone"));
-		registry.register(coalOreNetherrack = new BlockVanillaOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F), BlockVanillaOre.OreType.COAL).setRegistryName("coal_ore_netherrack"));
-		registry.register(coalOrePinkStone = new BlockVanillaOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F), BlockVanillaOre.OreType.COAL).setRegistryName("coal_ore_pink_stone"));
-		registry.register(ironOreEndStone = new BlockVanillaOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F), BlockVanillaOre.OreType.IRON).setRegistryName("iron_ore_end_stone"));
-		registry.register(ironOreSandstone = new BlockVanillaOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F), BlockVanillaOre.OreType.IRON).setRegistryName("iron_ore_sandstone"));
-		registry.register(ironOreSandstoneRed = new BlockVanillaOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F), BlockVanillaOre.OreType.IRON).setRegistryName("iron_ore_sandstone_red"));
-		registry.register(goldOreSandstone = new BlockVanillaOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F), BlockVanillaOre.OreType.GOLD).setRegistryName("gold_ore_sandstone"));
-		registry.register(goldOreSandstoneRed = new BlockVanillaOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F), BlockVanillaOre.OreType.GOLD).setRegistryName("gold_ore_sandstone_red"));
-		registry.register(goldOrePinkStone = new BlockVanillaOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F), BlockVanillaOre.OreType.GOLD).setRegistryName("gold_ore_pink_stone"));
-		registry.register(redstoneOreEndStone = new BlockVanillaOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F), BlockVanillaOre.OreType.REDSTONE).setRegistryName("redstone_ore_end_stone"));
-		registry.register(quartzOreStone = new BlockVanillaOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F), BlockVanillaOre.OreType.QUARTZ).setRegistryName("quartz_ore_stone"));
-		registry.register(lapisOrePinkStone = new BlockVanillaOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F), BlockVanillaOre.OreType.LAPIS).setRegistryName("lapis_ore_pink_stone"));
-		registry.register(diamondOrePinkStone = new BlockVanillaOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F), BlockVanillaOre.OreType.DIAMOND).setRegistryName("diamond_ore_pink_stone"));
+		registry.register(CRUXITE_ORE_STONE = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F)).setRegistryName("cruxite_ore_stone"));
+		registry.register(CRUXITE_ORE_NETHERRACK = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F)).setRegistryName("cruxite_ore_netherrack"));
+		registry.register(CRUXITE_ORE_COBBLESTONE = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F)).setRegistryName("cruxite_ore_cobblestone"));
+		registry.register(CRUXITE_ORE_SANDSTONE = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F)).setRegistryName("cruxite_ore_sandstone"));
+		registry.register(CRUXITE_ORE_RED_SANDSTONE = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F)).setRegistryName("cruxite_ore_red_sandstone"));
+		registry.register(CRUXITE_ORE_END_STONE = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F)).setRegistryName("cruxite_ore_end_stone"));
+		registry.register(CRUXITE_ORE_PINK_STONE = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F)).setRegistryName("cruxite_ore_pink_stone"));
+		registry.register(URANIUM_ORE_STONE = new BlockUraniumOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).lightValue(4)).setRegistryName("uranium_ore_stone"));
+		registry.register(URANIUM_ORE_NETHERRACK = new BlockUraniumOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).lightValue(4)).setRegistryName("uranium_ore_netherrack"));
+		registry.register(URANIUM_ORE_COBBLESTONE = new BlockUraniumOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).lightValue(4)).setRegistryName("uranium_ore_cobblestone"));
+		registry.register(URANIUM_ORE_SANDSTONE = new BlockUraniumOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).lightValue(4)).setRegistryName("uranium_ore_sandstone"));
+		registry.register(URANIUM_ORE_RED_SANDSTONE = new BlockUraniumOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).lightValue(4)).setRegistryName("uranium_ore_red_sandstone"));
+		registry.register(URANIUM_ORE_END_STONE = new BlockUraniumOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).lightValue(4)).setRegistryName("uranium_ore_end_stone"));
+		registry.register(URANIUM_ORE_PINK_STONE = new BlockUraniumOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).lightValue(4)).setRegistryName("uranium_ore_pink_stone"));
+		registry.register(COAL_ORE_NETHERRACK = new BlockVanillaOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F), BlockVanillaOre.OreType.COAL).setRegistryName("coal_ore_netherrack"));
+		registry.register(COAL_ORE_PINK_STONE = new BlockVanillaOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F), BlockVanillaOre.OreType.COAL).setRegistryName("coal_ore_pink_stone"));
+		registry.register(IRON_ORE_END_STONE = new BlockVanillaOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F), BlockVanillaOre.OreType.IRON).setRegistryName("iron_ore_end_stone"));
+		registry.register(IRON_ORE_SANDSTONE = new BlockVanillaOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F), BlockVanillaOre.OreType.IRON).setRegistryName("iron_ore_sandstone"));
+		registry.register(IRON_ORE_SANDSTONE_RED = new BlockVanillaOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F), BlockVanillaOre.OreType.IRON).setRegistryName("iron_ore_sandstone_red"));
+		registry.register(GOLD_ORE_SANDSTONE = new BlockVanillaOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F), BlockVanillaOre.OreType.GOLD).setRegistryName("gold_ore_sandstone"));
+		registry.register(GOLD_ORE_SANDSTONE_RED = new BlockVanillaOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F), BlockVanillaOre.OreType.GOLD).setRegistryName("gold_ore_sandstone_red"));
+		registry.register(GOLD_ORE_PINK_STONE = new BlockVanillaOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F), BlockVanillaOre.OreType.GOLD).setRegistryName("gold_ore_pink_stone"));
+		registry.register(REDSTONE_ORE_END_STONE = new BlockVanillaOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F), BlockVanillaOre.OreType.REDSTONE).setRegistryName("redstone_ore_end_stone"));
+		registry.register(QUARTZ_ORE_STONE = new BlockVanillaOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F), BlockVanillaOre.OreType.QUARTZ).setRegistryName("quartz_ore_stone"));
+		registry.register(LAPIS_ORE_PINK_STONE = new BlockVanillaOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F), BlockVanillaOre.OreType.LAPIS).setRegistryName("lapis_ore_pink_stone"));
+		registry.register(DIAMOND_ORE_PINK_STONE = new BlockVanillaOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F), BlockVanillaOre.OreType.DIAMOND).setRegistryName("diamond_ore_pink_stone"));
 		
-		registry.register(blueDirt = new BlockDirt(Block.Properties.create(Material.GROUND, MaterialColor.BLUE).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("blue_dirt"));
-		registry.register(thoughtDirt = new BlockDirt(Block.Properties.create(Material.GROUND, MaterialColor.LIME).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("thought_dirt"));
-		registry.register(coarseStone = new Block(Block.Properties.create(Material.ROCK, MaterialColor.STONE).hardnessAndResistance(2.0F, 6.0F)).setRegistryName("coarse_stone"));
-		registry.register(coarseChiseled = new Block(Block.Properties.create(Material.ROCK, MaterialColor.STONE).hardnessAndResistance(2.0F, 6.0F)).setRegistryName("coarse_chiseled"));
-		registry.register(shadeBricks = new Block(Block.Properties.create(Material.ROCK, MaterialColor.BLUE).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("shade_bricks"));
-		registry.register(shadeSmooth = new Block(Block.Properties.create(Material.ROCK, MaterialColor.BLUE).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("shade_smooth"));
-		registry.register(frostBricks = new Block(Block.Properties.create(Material.ROCK, MaterialColor.ICE).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("frost_bricks"));
-		registry.register(frostTile = new Block(Block.Properties.create(Material.ROCK, MaterialColor.ICE).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("frost_tile"));
-		registry.register(frostBricksChiseled = new Block(Block.Properties.create(Material.ROCK, MaterialColor.ICE).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("frost_bricks_chiseled"));
-		registry.register(castIron = new Block(Block.Properties.create(Material.ROCK, MaterialColor.IRON).hardnessAndResistance(3.0F, 9.0F)).setRegistryName("cast_iron"));
-		registry.register(castIronChiseled = new Block(Block.Properties.create(Material.ROCK, MaterialColor.IRON).hardnessAndResistance(3.0F, 9.0F)).setRegistryName("cast_iron_chiseled"));
-		registry.register(myceliumBricks = new Block(Block.Properties.create(Material.ROCK, MaterialColor.MAGENTA).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("mycelium_bricks"));
-		registry.register(blackStone = new Block(Block.Properties.create(Material.ROCK, MaterialColor.BLACK).hardnessAndResistance(2.5F, 6.0F)).setRegistryName("black_stone"));
-		registry.register(coarseEndStone.setRegistryName("coarse_end_stone"));
-		registry.register(endGrass.setRegistryName("end_grass"));
-		registry.register(floweryMossStone.setRegistryName("flowery_moss_stone"));
-		registry.register(floweryMossBrick.setRegistryName("flowery_moss_brick"));
+		registry.register(BLUE_DIRT = new BlockDirt(Block.Properties.create(Material.GROUND, MaterialColor.BLUE).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("blue_dirt"));
+		registry.register(THOUGHT_DIRT = new BlockDirt(Block.Properties.create(Material.GROUND, MaterialColor.LIME).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("thought_dirt"));
+		registry.register(COARSE_STONE = new Block(Block.Properties.create(Material.ROCK, MaterialColor.STONE).hardnessAndResistance(2.0F, 6.0F)).setRegistryName("coarse_stone"));
+		registry.register(COARSE_CHISELED = new Block(Block.Properties.create(Material.ROCK, MaterialColor.STONE).hardnessAndResistance(2.0F, 6.0F)).setRegistryName("coarse_chiseled"));
+		registry.register(SHADE_BRICKS = new Block(Block.Properties.create(Material.ROCK, MaterialColor.BLUE).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("shade_bricks"));
+		registry.register(SHADE_SMOOTH = new Block(Block.Properties.create(Material.ROCK, MaterialColor.BLUE).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("shade_smooth"));
+		registry.register(FROST_BRICKS = new Block(Block.Properties.create(Material.ROCK, MaterialColor.ICE).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("frost_bricks"));
+		registry.register(FROST_TILE = new Block(Block.Properties.create(Material.ROCK, MaterialColor.ICE).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("frost_tile"));
+		registry.register(FROST_BRICKS_CHISELED = new Block(Block.Properties.create(Material.ROCK, MaterialColor.ICE).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("frost_bricks_chiseled"));
+		registry.register(CAST_IRON = new Block(Block.Properties.create(Material.ROCK, MaterialColor.IRON).hardnessAndResistance(3.0F, 9.0F)).setRegistryName("cast_iron"));
+		registry.register(CAST_IRON_CHISELED = new Block(Block.Properties.create(Material.ROCK, MaterialColor.IRON).hardnessAndResistance(3.0F, 9.0F)).setRegistryName("cast_iron_chiseled"));
+		registry.register(MYCELIUM_BRICKS = new Block(Block.Properties.create(Material.ROCK, MaterialColor.MAGENTA).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("mycelium_bricks"));
+		registry.register(BLACK_STONE = new Block(Block.Properties.create(Material.ROCK, MaterialColor.BLACK).hardnessAndResistance(2.5F, 6.0F)).setRegistryName("black_stone"));
+		registry.register(FLOWERY_MOSS_STONE = new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("flowery_moss_stone"));
+		registry.register(FLOWERY_MOSS_BRICK = new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("flowery_moss_brick"));
+		registry.register(COARSE_END_STONE = new Block(Block.Properties.create(Material.ROCK, MaterialColor.SAND).hardnessAndResistance(3.0F, 9.0F)).setRegistryName("coarse_end_stone"));
+		registry.register(END_GRASS = new BlockEndGrass(Block.Properties.create(Material.ROCK, MaterialColor.PURPLE).hardnessAndResistance(3.0F, 9.0F).needsRandomTick()).setRegistryName("end_grass"));
+		registry.register(CHALK = new Block(Block.Properties.create(Material.ROCK, MaterialColor.SNOW).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("chalk"));
+		registry.register(CHALK_BRICKS = new Block(Block.Properties.create(Material.ROCK, MaterialColor.SNOW).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("chalk_bricks"));
+		registry.register(CHALK_CHISELED = new Block(Block.Properties.create(Material.ROCK, MaterialColor.SNOW).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("chiseled_chalk_bricks"));
+		registry.register(CHALK_POLISHED = new Block(Block.Properties.create(Material.ROCK, MaterialColor.SNOW).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("polished_chalk"));
+		registry.register(PINK_STONE = new Block(Block.Properties.create(Material.ROCK, MaterialColor.PINK).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("pink_stone"));
+		registry.register(PINK_STONE_BRICKS = new Block(Block.Properties.create(Material.ROCK, MaterialColor.PINK).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("pink_stone_bricks"));
+		registry.register(PINK_STONE_CHISELED = new Block(Block.Properties.create(Material.ROCK, MaterialColor.PINK).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("pink_chiseled_stone"));
+		registry.register(PINK_STONE_CRACKED = new Block(Block.Properties.create(Material.ROCK, MaterialColor.PINK).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("pink_cracked_stone"));
+		registry.register(PINK_STONE_MOSSY = new Block(Block.Properties.create(Material.ROCK, MaterialColor.PINK).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("pink_moss_stone_bricks"));
+		registry.register(PINK_STONE_POLISHED = new Block(Block.Properties.create(Material.ROCK, MaterialColor.PINK).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("pink_polished_stone"));
+		registry.register(DENSE_CLOUD = new Block(Block.Properties.create(Material.GLASS, MaterialColor.YELLOW).hardnessAndResistance(0.5F).sound(SoundType.SNOW)).setRegistryName("dense_cloud"));
+		registry.register(DENSE_CLOUD_BRIGHT = new Block(Block.Properties.create(Material.GLASS, MaterialColor.LIGHT_GRAY).hardnessAndResistance(0.5F).sound(SoundType.SNOW)).setRegistryName("dense_cloud_bright"));
+		registry.register(GLOWY_GOOP = new BlockGoop(Block.Properties.create(Material.CLAY).hardnessAndResistance(0.1F).sound(SoundType.SLIME).lightValue(15)).setRegistryName("glowy_goop"));
+		registry.register(COAGULATED_BLOOD = new BlockGoop(Block.Properties.create(Material.CLAY).hardnessAndResistance(0.1F).sound(SoundType.SLIME)).setRegistryName("coagulated_blood"));
+		registry.register(SUGAR_CUBE = new Block(Block.Properties.create(Material.SAND, MaterialColor.SNOW).hardnessAndResistance(0.4F).sound(SoundType.SAND)).setRegistryName("sugar_cube"));
+		registry.register(LAYERED_SAND = new BlockLayered(Blocks.SAND).setRegistryName("layered_sand"));
 		
-		registry.register(sugarCube.setRegistryName("sugar_cube"));
-		registry.register(layeredSand.setRegistryName("layered_sand"));
-		
-		registry.register(log.setRegistryName("log"));
+		registry.register(VINE_LOG = new BlockMinestuckLog(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("vine_log"));
+		registry.register(FLOWERY_VINE_LOG = new BlockMinestuckLog(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("flowery_vine_log"));
+		registry.register(PETRIFIED_LOG = new BlockMinestuckLog(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.STONE), 0, 0).setRegistryName("petrified_log"));
+		registry.register(FROST_LOG = new BlockMinestuckLog(MaterialColor.ICE, Block.Properties.create(Material.WOOD, MaterialColor.ICE).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("frost_log"));
+		registry.register(FROST_PLANKS = new Block(Block.Properties.create(Material.WOOD, MaterialColor.ICE).hardnessAndResistance(2.0F, 3.0F).sound(SoundType.WOOD)).setRegistryName("frost_planks"));
 		registry.register(leaves1.setRegistryName("leaves"));
 		registry.register(planks.setRegistryName("planks"));
 		registry.register(frostPlanks.setRegistryName("frost_planks"));
@@ -296,9 +309,6 @@ public class MinestuckBlocks
 		registry.register(glowingLog.setRegistryName("glowing_log"));
 		registry.register(glowingPlanks.setRegistryName("glowing_planks"));
 		registry.register(glowingMushroom.setRegistryName("glowing_mushroom"));
-		registry.register(glowyGoop.setRegistryName("glowy_goop"));
-		registry.register(coagulatedBlood.setRegistryName("coagulated_blood"));
-		registry.register(petrifiedLog.setRegistryName("petrified_log"));
 		registry.register(petrifiedPoppy.setRegistryName("petrified_poppy"));
 		registry.register(petrifiedGrass.setRegistryName("petrified_grass"));
 		registry.register(bloomingCactus.setRegistryName("blooming_cactus"));
@@ -374,17 +384,6 @@ public class MinestuckBlocks
 		
 		registry.register(deadLog.setRegistryName("dead_log"));
 		registry.register(deadPlanks.setRegistryName("dead_planks"));
-		registry.register(chalk.setRegistryName("chalk"));
-		registry.register(chalkBricks.setRegistryName("chalk_bricks"));
-		registry.register(chalkChisel.setRegistryName("chiseled_chalk_bricks"));
-		registry.register(chalkPolish.setRegistryName("polished_chalk"));
-		registry.register(pinkStoneSmooth.setRegistryName("pink_stone"));
-		registry.register(pinkStoneBricks.setRegistryName("pink_stone_bricks"));
-		registry.register(pinkStoneChisel.setRegistryName("pink_chiseled_stone"));
-		registry.register(pinkStoneCracked.setRegistryName("pink_cracked_stone"));
-		registry.register(pinkStoneMossy.setRegistryName("pink_moss_stone_bricks"));
-		registry.register(pinkStonePolish.setRegistryName("pink_polished_stone"));
-		registry.register(denseCloud.setRegistryName("dense_cloud"));
 		
 		registry.register(vein.setRegistryName("vein"));
 		registry.register(veinCorner.setRegistryName("vein_corner"));

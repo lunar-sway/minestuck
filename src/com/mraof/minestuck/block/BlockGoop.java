@@ -1,70 +1,43 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.item.TabMinestuck;
-
-import net.minecraft.block.BlockBreakable;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.MapColor;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockSlime;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.IBlockReader;
+import net.minecraftforge.common.ToolType;
 
-public class BlockGoop extends BlockBreakable 
+import javax.annotation.Nullable;
+
+public class BlockGoop extends BlockSlime
 {
 
-	public BlockGoop(String name) 
+	public BlockGoop(Properties properties)
 	{
-		super(Material.CLAY, false);
-		setCreativeTab(TabMinestuck.instance);
-		setSoundType(SoundType.SLIME);
-		setUnlocalizedName(name);
-		setHardness(0.1F);
-		setHarvestLevel("Shovel", 0);
+		super(properties);
+	}
+	
+	@Nullable
+	@Override
+	public ToolType getHarvestTool(IBlockState state)
+	{
+		return ToolType.SHOVEL;
 	}
 	
 	@Override
-	public void onEntityWalk(World worldIn, BlockPos pos, Entity entityIn)
-    {
-        if (Math.abs(entityIn.motionY) < 0.1D && !entityIn.isSneaking())
-        {
-            double d0 = 0.4D + Math.abs(entityIn.motionY) * 0.2D;
-            entityIn.motionX *= d0;
-            entityIn.motionZ *= d0;
-        }
-
-        super.onEntityWalk(worldIn, pos, entityIn);
-    }
+	public BlockRenderLayer getRenderLayer()
+	{
+		return BlockRenderLayer.SOLID;
+	}
 	
 	@Override
-	public void onFallenUpon(World worldIn, BlockPos pos, Entity entityIn, float fallDistance)
-    {
-        if (entityIn.isSneaking())
-        {
-            super.onFallenUpon(worldIn, pos, entityIn, fallDistance);
-        }
-        else
-        {
-            entityIn.fall(fallDistance, 0.0F);
-        }
-    }
-	
-	@Override
-    public void onLanded(World worldIn, Entity entityIn)
-    {
-        if (entityIn.isSneaking())
-        {
-            super.onLanded(worldIn, entityIn);
-        }
-        else if (entityIn.motionY < 0.0D)
-        {
-            entityIn.motionY = -entityIn.motionY;
-
-            if (!(entityIn instanceof EntityLivingBase))
-            {
-                entityIn.motionY *= 0.8D;
-            }
-        }
-    }
+	public int getOpacity(IBlockState state, IBlockReader worldIn, BlockPos pos)
+	{
+		if (state.isOpaqueCube(worldIn, pos)) {
+			return worldIn.getMaxLightLevel();
+		} else {
+			return state.propagatesSkylightDown(worldIn, pos) ? 0 : 1;
+		}
+	}
 }

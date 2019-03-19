@@ -2,118 +2,75 @@ package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.item.TabMinestuck;
 import net.minecraft.block.Block;
-import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.BlockSnowLayer;
 import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Enchantments;
+import net.minecraft.item.ItemStack;
+import net.minecraft.stats.StatList;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 
-public class BlockLayered extends Block
+public class BlockLayered extends BlockSnowLayer
 {
-	protected static final AxisAlignedBB[] LAYERED_AABB = {new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1/8D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 2/8D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 3/8D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 4/8D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 5/8D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 6/8D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 7/8D, 1.0D)};
+	public Block sourceBlock;
 	
-	public IBlockState sourceBlock;
-	public static final PropertyInteger SIZE = PropertyInteger.create("size", 1, 7);
-	
-	public BlockLayered(IBlockState iconBlock)
+	public BlockLayered(Block block)
 	{
-		super(iconBlock.getMaterial());
+		super(Properties.from(block));
+		this.sourceBlock = block;
+	}
+	
+	@Override
+	public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, ItemStack stack)
+	{
+		Integer integer = state.get(LAYERS);
+		net.minecraft.util.NonNullList<ItemStack> items = net.minecraft.util.NonNullList.create();
+		int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, stack);
+		float chance;
 		
-		this.setCreativeTab(TabMinestuck.instance);
-		this.sourceBlock = iconBlock;
-		setSoundType(sourceBlock.getBlock().getSoundType());
-	}
-	
-	@Override
-	protected BlockStateContainer createBlockState()
-	{
-		return new BlockStateContainer(this, SIZE);
-	}
-	
-	@Override
-	public int getMetaFromState(IBlockState state)
-	{
-		return state.getValue(SIZE) - 1;
-	}
-	
-	@Override
-	public IBlockState getStateFromMeta(int meta)
-	{
-		return getDefaultState().withProperty(SIZE, meta + 1);
-	}
-	
-	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
-	{
-		int size = state.getValue(SIZE);
+		if (this.canSilkHarvest(state, worldIn, pos, player) && EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, stack) > 0) {
+			if (integer == 8) {
+				items.add(new ItemStack(sourceBlock));
+			} else {
+				for(int i = 0; i < integer; ++i) {
+					items.add(this.getSilkTouchDrop(state));
+				}
+			}
+			chance = net.minecraftforge.event.ForgeEventFactory.fireBlockHarvesting(items, worldIn, pos, state, 0, 1.0f, true, player);
+		} else {
+			getDrops(state, items, worldIn, pos, fortune);
+			chance = net.minecraftforge.event.ForgeEventFactory.fireBlockHarvesting(items, worldIn, pos, state, fortune, 1.0f, false, player);
+		}
 		
-		return LAYERED_AABB[size - 1];
+		for (ItemStack item : items) {
+			if (worldIn.rand.nextFloat() <= chance)
+				spawnAsEntity(worldIn, pos, item);
+		}
+		
+		worldIn.removeBlock(pos);
+		player.addStat(StatList.BLOCK_MINED.get(this));
+		player.addExhaustion(0.005F);
 	}
 	
 	@Override
-	public boolean isOpaqueCube(IBlockState state)
+	public IItemProvider getItemDropped(IBlockState state, World worldIn, BlockPos pos, int fortune)
 	{
-		return false;
+		return this;
 	}
 	
 	@Override
-	public boolean isFullCube(IBlockState state)
-	{
-		return false;
-	}
+	public void tick(IBlockState state, World worldIn, BlockPos pos, Random random)
+	{}
 	
-	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face)
-	{
-		return face == EnumFacing.DOWN ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
-	}
-	
-	/**
-	 * Checks to see if its valid to put this block at the specified coordinates. Args: world, pos
-	 */
-	@Override
-	public boolean canPlaceBlockAt(World world, BlockPos pos)
-	{
-		IBlockState underneathBlock = world.getBlockState(pos.down());
-		if (underneathBlock.getBlock().isAir(underneathBlock, world, pos.down()))
-			return false;
-		if (underneathBlock.getBlock().isLeaves(underneathBlock, world, pos.add(0, -1, 0)) && underneathBlock.isOpaqueCube())
-			return false;
-		return underneathBlock.getBlock().getMaterial(underneathBlock).blocksMovement();
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
-	{
-		return side == EnumFacing.UP ? true : super.shouldSideBeRendered(blockState, blockAccess, pos, side);
-	}
-	
-	@Override
-	public int quantityDropped(IBlockState state, int fortune, Random random)
-	{
-		return state.getValue(SIZE) & 7;
-	}
-	
-	@Override
-	public boolean isReplaceable(IBlockAccess worldIn, BlockPos pos)
-	{
-		int meta = worldIn.getBlockState(pos).getValue(SIZE);
-		return meta >= 7 && blockMaterial.isReplaceable();
-	}
-
-	public boolean changeHeight(World world, BlockPos pos, int metadata)
-	{
-		IBlockState block = (metadata <= 7 ? getDefaultState().withProperty(SIZE, metadata) : this.sourceBlock);
-		return  world.setBlockState(pos, block, 3);
-	}
-
 }
