@@ -525,6 +525,10 @@ public class AlchemyRecipes
 		GristRegistry.addGristConversion(new ItemStack(fluoriteGauntlet), false, new GristSet(new GristType[] {GristType.Cobalt, GristType.Caulk, GristType.Quartz, GristType.Shale}, new int[] {803, 500, 10, 2}));
 		GristRegistry.addGristConversion(new ItemStack(goldenGenesisGauntlet), false, new GristSet(new GristType[] {GristType.Build, GristType.Gold, GristType.Uranium, GristType.Diamond, GristType.Artifact}, new int[] {8000, 5000, 300, 250, 10}));
 		
+		GristRegistry.addGristConversion(new ItemStack(natureBow), false, new GristSet(new GristType[] {GristType.Build, GristType.Amber, GristType.Chalk}, new int[] {10,4,8}));
+		GristRegistry.addGristConversion(new ItemStack(infernoShot), false, new GristSet(new GristType[] {GristType.Build, GristType.Garnet, GristType.Tar,GristType.Amber,GristType.Uranium}, new int[] {25,19,11,1}));
+		GristRegistry.addGristConversion(new ItemStack(energyBow), false, new GristSet(new GristType[] {GristType.Build, GristType.Uranium}, new int[] {40,10}));
+		
 		GristRegistry.addGristConversion(new ItemStack(catClaws),false,new GristSet(new GristType[] {GristType.Build,GristType.Rust},new int[] {15,5}));
 		
 		GristRegistry.addGristConversion(new ItemStack(clawHammer), false, new GristSet(GristType.Build, 8));
@@ -788,6 +792,12 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(new ItemStack(Items.SLIME_BALL), new ItemStack(fancyGlove), MODE_OR, false, false, new ItemStack(pogoFist));
 		CombinationRegistry.addCombination(new ItemStack(fluoriteOctet), new ItemStack(cobbleBasher), MODE_OR, false, false, new ItemStack(fluoriteGauntlet));
 		CombinationRegistry.addCombination(new ItemStack(itemFrog, 1, 5), new ItemStack(fluoriteGauntlet), MODE_OR, true, false, new ItemStack(goldenGenesisGauntlet));
+		
+		//bows
+		CombinationRegistry.addCombination(new ItemStack(Items.BOW), new ItemStack(Blocks.VINE), MODE_AND, new ItemStack(natureBow));
+		CombinationRegistry.addCombination(new ItemStack(Items.BOW), new ItemStack(Items.BLAZE_POWDER), MODE_AND, new ItemStack(infernoShot));
+		CombinationRegistry.addCombination(new ItemStack(Items.BOW), new ItemStack(energyCore), MODE_AND, new ItemStack(energyBow));
+		
 		
 		//spoons/sporks/forks
 		CombinationRegistry.addCombination(new ItemStack(Items.WOODEN_SHOVEL), new ItemStack(Items.BOWL), MODE_AND, false, true, new ItemStack(woodenSpoon));

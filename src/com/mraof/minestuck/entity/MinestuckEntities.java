@@ -62,6 +62,7 @@ public final class MinestuckEntities
 		registerEntity(EntitySbahjPoster.class, "sbahjPoster", "sbahj_poster");
 		registerEntity(EntityShopPoster.class, "shopPoster", "shop_poster");
 		registerEntity(EntityHologram.class, "holoItem", "holo_item");
+		registerEntity(EntityBullet.class, "bullet", "bullet");
 		
 	}
 	

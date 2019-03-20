@@ -17,6 +17,7 @@ import com.mraof.minestuck.block.BlockMinestuckStone;
 import com.mraof.minestuck.block.BlockVanityLaptopOff;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.block.MinestuckBlocks.EnumSlabStairMaterial;
+import com.mraof.minestuck.entity.EntityBullet;
 import com.mraof.minestuck.entity.item.EntityCrewPoster;
 import com.mraof.minestuck.entity.item.EntitySbahjPoster;
 import com.mraof.minestuck.entity.item.EntityShopPoster;
@@ -48,7 +49,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityHanging;
 import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.entity.projectile.EntityTippedArrow;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
@@ -138,7 +138,7 @@ public class MinestuckItems
 	//Bows
 	public static Item natureBow = new ItemRanged("natureBow", 2.0D, 530, 5000, Items.ARROW, EntityArrow.class);
 	public static Item infernoShot = new ItemRanged("infernoShot", 3.5D, 480, 7500, Items.ARROW, EntityArrow.class).setBulletSpeed(1.1F);
-	public static Item energyBow = new ItemRanged("energyBow", 1.5, 235, 7000, ItemStack.EMPTY, EntityArrow.class).setBulletSpeed(1.2F); //TODO make the energy bow shoot custom arrows
+	public static Item energyBow = new ItemRanged("energyBow", 1.5, 235, 7000, ItemStack.EMPTY, EntityBullet.class).setBulletSpeed(1.2F); //TODO make the energy bow shoot custom arrows
 	//misc weapons
 	public static Item catClaws = new ItemDualWeapon(500, 4.0D, 1.0D, -1.5D, -1.0D, 6, "catclaws");
 	//sickles

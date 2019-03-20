@@ -5,6 +5,7 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import com.mraof.minestuck.entity.EntityBullet;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.item.TabMinestuck;
 
@@ -94,8 +95,7 @@ public class ItemRanged extends Item
             		boolean arrowPickup = player.capabilities.isCreativeMode || (ammo.getItem() instanceof ItemArrow && ((ItemArrow) ammo.getItem()).isInfinite(ammo, stack, player));
             		if(!worldIn.isRemote)
             		{
-
-            			if(projectile.isAssignableFrom(EntityArrow.class))
+            			if(EntityArrow.class.isAssignableFrom(projectile))
             			{
             				EntityArrow entityarrow = null;
             				if(ammo.getItem() instanceof ItemArrow)
@@ -107,6 +107,12 @@ public class ItemRanged extends Item
 								e.printStackTrace();
             				}
 							
+            				if(entityarrow instanceof EntityBullet)
+            				{
+            					//TODO
+            					((EntityBullet)entityarrow).setTexture(new ResourceLocation("minestuck", "textures/entity/projectiles/energy_arrow_green.png"));
+            					((EntityBullet)entityarrow).setDespawnOnGround(true);
+            				}
                             entityarrow.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, velocity * 3.0F, 1.0F);
                             int fire = 0;
                             
@@ -209,6 +215,8 @@ public class ItemRanged extends Item
 		ItemStack stack = playerIn.getHeldItem(handIn);
 		boolean hasAmmo = !this.findAmmo(playerIn).isEmpty() || !this.requiresAmmo();
 		
+		System.out.println(this.requiresAmmo());
+		
 		ActionResult<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onArrowNock(stack, worldIn, playerIn, handIn, hasAmmo);
 	        if (ret != null) return ret;
         
@@ -258,8 +266,9 @@ public class ItemRanged extends Item
 	
 	protected boolean requiresAmmo() 
 	{
+		
 		if(ammo == null) return false;
-		if(ammo instanceof ItemStack) return ((ItemStack)ammo).isEmpty();
+		if(ammo instanceof ItemStack) return !((ItemStack)ammo).isEmpty();
 		return true;
 	}
 	

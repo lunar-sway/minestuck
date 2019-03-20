@@ -74,6 +74,7 @@ public class EntityBullet extends EntityArrow
 	protected EnumParticleTypes critParticles = EnumParticleTypes.CRIT;
 	protected boolean despawnOnLand = false;
 	protected int fire = 0;
+	protected ResourceLocation texture = new ResourceLocation("minestuck", "textures/entity/projectiles/energy_arrow_blue.png");;
 	
     public EntityBullet(World worldIn)
     {
@@ -451,7 +452,13 @@ public class EntityBullet extends EntityArrow
     public void setArrowStack(ItemStack in) {stack = in;}
     
     public int getFire() 	 	{return fire;}
-    public void setFire(int in) {fire = in; ((Entity)this).setFire(in);}
+    //public void setFire(int in) {fire = in; ((Entity)this).setFire(in);}
+    
+    public void setTexture(ResourceLocation in) {texture = in; System.out.println(texture);}
+    public ResourceLocation getTexture() 		{return texture;}
+    
+    public void setDespawnOnGround(boolean in)  {despawnOnLand = in;}
+	
     /**
      * returns if this entity triggers Block.onEntityWalking on the blocks they walk on. used for spiders and wolves to
      * prevent them from trampling crops
