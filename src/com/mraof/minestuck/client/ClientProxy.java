@@ -1,8 +1,10 @@
 package com.mraof.minestuck.client;
 
 import com.mraof.minestuck.CommonProxy;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.client.gui.MinestuckFontRenderer;
 import com.mraof.minestuck.client.model.ModelBasilisk;
 import com.mraof.minestuck.client.model.ModelBishop;
 import com.mraof.minestuck.client.model.ModelGiclops;
@@ -68,6 +70,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -161,6 +164,10 @@ public class ClientProxy extends CommonProxy
 	public void init()
 	{
 		super.init();
+		
+		Minecraft mc = Minecraft.getMinecraft();
+		Minestuck.setSpecibusFont(new MinestuckFontRenderer(mc.gameSettings, new ResourceLocation(Minestuck.MOD_ID, ":textures/font/ascii_ms.png"), mc.renderEngine, true, 4, 8));
+		
 		MinecraftForge.EVENT_BUS.register(ClientEditHandler.instance);
 		MinecraftForge.EVENT_BUS.register(new MinestuckConfig());
 		MinecraftForge.EVENT_BUS.register(RenderMachineOutline.class);

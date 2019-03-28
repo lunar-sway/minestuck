@@ -5,6 +5,7 @@ import java.util.List;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.inventory.specibus.StrifePortfolioHandler;
 import com.mraof.minestuck.inventory.specibus.StrifeSpecibus;
 import com.mraof.minestuck.item.MinestuckItems;
@@ -15,6 +16,7 @@ import com.mraof.minestuck.util.KindAbstratusList;
 import com.mraof.minestuck.util.KindAbstratusType;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -33,6 +35,7 @@ public class GuiStrifeCard extends GuiScreenMinestuck
 	private static float scale = 1;
 	private static final int columnWidth = 50, columns = 2;
 	private static EntityPlayer player;
+	private static final FontRenderer font = Minestuck.fontSpecibus;
 	
 	public GuiStrifeCard(EntityPlayer player) 
 	{
@@ -78,20 +81,18 @@ public class GuiStrifeCard extends GuiScreenMinestuck
 			//txPos += 78 (0.1625*width)
 			//tyPos += 36 (9540 / height)
 			
-			setScale(0.75f);
 			int color = 0xFFFFFF;
 			int listX = (columnWidth*((i-1) % columns));
-			int listY = (mc.fontRenderer.FONT_HEIGHT*((i-1) / columns));
+			int listY = (font.FONT_HEIGHT*((i-1) / columns));
 			int xPos = listOffsetX + listX;
 			int yPos = listOffsetY + listY;
 			int sxPos = (int)((listOffsetX + listX)/scale);
 			int syPos = (int)((listOffsetY + listY)/scale);
-			int txPos = (sxPos + columnWidth - mc.fontRenderer.getStringWidth(typeName))+ (int)(10/scale);
+			int txPos = (sxPos + columnWidth - font.getStringWidth(typeName))+ (int)(10/scale);
 			int tyPos = syPos + (int)(3/scale);
-			if(isPointInRegion(xPos, yPos, columnWidth, mc.fontRenderer.FONT_HEIGHT, mouseX, mouseY))
+			if(isPointInRegion(xPos, yPos, columnWidth, font.FONT_HEIGHT, mouseX, mouseY))
 			{
-				setScale(1);
-				drawRect(xPos, yPos, xPos+columnWidth, yPos+mc.fontRenderer.FONT_HEIGHT, 0xFFAFAFAF);
+				drawRect(xPos, yPos, xPos+columnWidth, yPos+font.FONT_HEIGHT, 0xFFAFAFAF);
 				color = 0x000000;
 				if(Mouse.getEventButtonState() && Mouse.isButtonDown(0))
 				{
@@ -111,8 +112,7 @@ public class GuiStrifeCard extends GuiScreenMinestuck
 			
 			
 			
-			setScale(0.75f);
-			mc.fontRenderer.drawString(typeName, txPos, tyPos, color);
+			font.drawString(typeName, txPos, tyPos, color);
 		}
 		
 		//96*265/width
@@ -124,7 +124,7 @@ public class GuiStrifeCard extends GuiScreenMinestuck
 		//178
 		
 		GL11.glRotatef(270, 0, 0, 1);
-		mc.fontRenderer.drawString(label, xLabel, yLabel, 0xFFFFFF);
+		font.drawString(label, xLabel, yLabel, 0xFFFFFF);
 		
 	}
 	

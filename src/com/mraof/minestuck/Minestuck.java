@@ -2,6 +2,7 @@ package com.mraof.minestuck;
 
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.client.ClientProxy;
+import com.mraof.minestuck.client.gui.MinestuckFontRenderer;
 import com.mraof.minestuck.command.*;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
@@ -13,11 +14,14 @@ import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.LoaderState;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Random;
 
@@ -60,6 +64,17 @@ public class Minestuck
 		//(new UpdateChecker()).start();
 		
 		proxy.preInit();
+	}
+	
+	//Fonts
+	public static MinestuckFontRenderer fontSpecibus;
+	
+	@SideOnly(Side.CLIENT)
+	public static void setSpecibusFont(MinestuckFontRenderer font)
+	{
+		if(fontSpecibus == null && Loader.instance().getLoaderState() == LoaderState.INITIALIZATION
+				&& Loader.instance().activeModContainer().getModId().equals(MOD_ID))
+					fontSpecibus = font;
 	}
 	
 	@EventHandler
