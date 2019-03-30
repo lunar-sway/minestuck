@@ -1,40 +1,36 @@
 package com.mraof.minestuck.world.gen.feature;
 
-import java.util.HashMap;
 import java.util.Random;
 
 import com.mraof.minestuck.block.BlockEndLog;
 import com.mraof.minestuck.block.BlockMinestuckLeaves1;
-import com.mraof.minestuck.block.BlockMinestuckLog;
-import com.mraof.minestuck.block.BlockRainbowSapling;
 import com.mraof.minestuck.block.MinestuckBlocks;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.BlockOldLog;
 import net.minecraft.block.BlockPlanks;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.trees.AbstractTree;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 
-public class WorldGenEndTree extends WorldGenAbstractTree
+public class EndTree extends AbstractTree
 {
-	private static final IBlockState LOG = MinestuckBlocks.endLog.getDefaultState();
-	private static final IBlockState LEAF = MinestuckBlocks.endLeaves.getDefaultState();
+	private static final IBlockState LOG = MinestuckBlocks.END_LOG.getDefaultState();
+	private static final IBlockState LEAF = MinestuckBlocks.END_LEAVES.getDefaultState();
 	
 	private int minMax;
 	private int maxMax;
 	
-	public WorldGenEndTree(boolean notify)
+	public EndTree(boolean notify)
 	{
 		this(notify, 5, 5);
 	}
 	
-	public WorldGenEndTree(boolean notify, int minimumMaxAge, int maximumMaxAge)
+	public EndTree(boolean notify, int minimumMaxAge, int maximumMaxAge)
 	{
 		super(notify);
 	}
@@ -110,7 +106,7 @@ public class WorldGenEndTree extends WorldGenAbstractTree
 					flag = true;
 					worldIn.setBlockState(blockpos1, LOG.withProperty(BlockEndLog.SECOND_AXIS, BlockLog.EnumAxis.fromFacingAxis(enumfacing.getAxis())), 2);
 					subGenerate(worldIn, rand, blockpos1, origin, range, age + 1, maxAge);
-					((BlockEndLog) MinestuckBlocks.endLog).generateLeaves(worldIn, blockpos1, worldIn.getBlockState(blockpos1));
+					generateLeaves(worldIn, blockpos1, worldIn.getBlockState(blockpos1));
 					blockpos1 = curr.up(i);
 					worldIn.setBlockState(blockpos1, worldIn.getBlockState(blockpos1).withProperty(BlockEndLog.SECOND_AXIS, BlockLog.EnumAxis.fromFacingAxis(enumfacing.getAxis())), 2);
 				}
@@ -120,7 +116,7 @@ public class WorldGenEndTree extends WorldGenAbstractTree
 		if (!flag)
 		{
 			worldIn.setBlockState(curr.up(i), LOG, 2);
-			((BlockEndLog) MinestuckBlocks.endLog).generateLeaves(worldIn, curr.up(i), worldIn.getBlockState(curr.up(i)));
+			generateLeaves(worldIn, curr.up(i), worldIn.getBlockState(curr.up(i)));
 		}
 		return true;
 	}
@@ -136,5 +132,57 @@ public class WorldGenEndTree extends WorldGenAbstractTree
 		}
 		
 		return true;
+	}
+	
+	public void generateLeaves(World world, BlockPos pos, IBlockState state)
+	{
+		EnumAxis primary = state.getValue(LOG_AXIS);
+		EnumAxis secondary = state.getValue(SECOND_AXIS);
+		
+		if(primary == EnumAxis.X || secondary == EnumAxis.X)
+		{
+			leaves(world, pos.east(), 0);
+			leaves(world, pos.west(), 0);
+		}
+		if(primary == EnumAxis.Y || secondary == EnumAxis.Y)
+		{
+			leaves(world, pos.up(), 0);
+			leaves(world, pos.down(), 0);
+		}
+		if(primary == EnumAxis.Z || secondary == EnumAxis.Z)
+		{
+			leaves(world, pos.south(), 0);
+			leaves(world, pos.north(), 0);
+		}
+	}
+	
+	private void leaves(World world, BlockPos curr, int distance)
+	{
+		IBlockState blockState = world.getBlockState(curr);
+		if(blockState.getBlock().canBeReplacedByLeaves(blockState, world, curr))
+		{
+			if(distance <= LEAF_SUSTAIN_DISTANCE)
+			{
+				world.setBlockState(curr, MinestuckBlocks.endLeaves.getDefaultState().withProperty(BlockEndLeaves.DISTANCE, distance), 2);
+				leaves(world, curr.south(),	distance + 1);
+				leaves(world, curr.north(),	distance + 1);
+				leaves(world, curr.up(),	distance + 1);
+				leaves(world, curr.down(),	distance + 1);
+				leaves(world, curr.east(),	distance + 2);
+				leaves(world, curr.west(),	distance + 2);
+			}
+		} else if (blockState.getBlock() == MinestuckBlocks.endLeaves)
+		{
+			if(world.getBlockState(curr).getValue(BlockEndLeaves.DISTANCE) > distance)
+			{
+				world.setBlockState(curr, MinestuckBlocks.endLeaves.getDefaultState().withProperty(BlockEndLeaves.DISTANCE, distance), 2);
+				leaves(world, curr.south(),	distance + 1);
+				leaves(world, curr.north(),	distance + 1);
+				leaves(world, curr.up(),	distance + 1);
+				leaves(world, curr.down(),	distance + 1);
+				leaves(world, curr.east(),	distance + 2);
+				leaves(world, curr.west(),	distance + 2);
+			}
+		}
 	}
 }

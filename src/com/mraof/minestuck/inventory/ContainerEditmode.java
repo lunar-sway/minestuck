@@ -92,7 +92,7 @@ public class ContainerEditmode extends Container
 		ArrayList<ItemStack> itemList = new ArrayList<ItemStack>();
 		SburbConnection c = SkaianetHandler.getClientConnection(ServerEditHandler.getData(player).getTarget());
 		ArrayList<ItemStack> tools = new ArrayList<ItemStack>();
-		//Fill list with tool items when implemented
+		//Fill list with harvestTool items when implemented
 		
 		List<DeployList.DeployEntry> deployItems = DeployList.getItemList(c);
 		deployItems.removeIf(deployEntry -> c.givenItems()[DeployList.getOrdinal(deployEntry.getName())] &&

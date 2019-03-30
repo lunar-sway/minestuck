@@ -146,8 +146,8 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
             int blockHarvestLevel = state.getBlock().getHarvestLevel(state);
             int toolHarvestLevel = getHarvestLevel(stack, tool, null, state);
             return toolHarvestLevel >= blockHarvestLevel;
-        } else		//We know that no specific tool is specified, meaning any tool efficiency is defined in the tool itself.
-        {			//This also means that there's no tool *level* specified, so any tool of that class is sufficient.
+        } else		//We know that no specific harvestTool is specified, meaning any harvestTool efficiency is defined in the harvestTool itself.
+        {			//This also means that there's no harvestTool *level* specified, so any harvestTool of that class is sufficient.
         	Material mat = state.getMaterial();
         	if(mat.isToolNotRequired())
         		return true;

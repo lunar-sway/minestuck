@@ -25,9 +25,9 @@ public class BlockLayered extends BlockSnowLayer
 {
 	public Block sourceBlock;
 	
-	public BlockLayered(Block block)
+	public BlockLayered(Block block, Properties properties)
 	{
-		super(Properties.from(block));
+		super(properties);
 		this.sourceBlock = block;
 	}
 	

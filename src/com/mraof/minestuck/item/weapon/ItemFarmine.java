@@ -23,9 +23,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
- * A "Farmine" tool is a tool that mines more blocks that just the one originally broken.
+ * A "Farmine" harvestTool is a harvestTool that mines more blocks that just the one originally broken.
  * Other mods may refer to this as vein-mining or similar, but here it is called far-mining.
- * A farmining tool works mostly like a normal ItemWeapon: it has durability, attack damage, attack speed, and enchantability.
+ * A farmining harvestTool works mostly like a normal ItemWeapon: it has durability, attack damage, attack speed, and enchantability.
  * In addition, however, it has a Radius and Terminus.
  * The radius is the farthest distance between the initially-broken block and a block broken in the same mining operation. A value of -1 means no radius will come into play.
  * The terminus is the largest number of blocks that can be destroyed in a single farmining operation. Terminus is clamped to a minimum of 1.
@@ -102,8 +102,8 @@ public class ItemFarmine extends ItemWeapon
 		HashSet<Block> equals = farMineEquivalencies.get(block);
 		if(equals==null) equals = new HashSet<Block>();	
 		
-		//If the tool can't harvest the block, or the player isn't actually a player, or the player is sneaking,
-		//or the tool doesn't farmine, or it's one of those blocks that breaks instantly, don't farmine.
+		//If the harvestTool can't harvest the block, or the player isn't actually a player, or the player is sneaking,
+		//or the harvestTool doesn't farmine, or it's one of those blocks that breaks instantly, don't farmine.
 		if (!canHarvestBlock(blockState, stack) || !(playerIn instanceof EntityPlayer) || playerIn.isSneaking()
 				|| terminus == 1 || radius==0 || Math.abs(blockState.getBlockHardness(worldIn, pos)) < 0.000000001)
 		{
@@ -114,7 +114,7 @@ public class ItemFarmine extends ItemWeapon
 		}
 		else
 		{
-			//If the block is unacceptable or there's a tool mismatch, cap out at a basic 3x3 area
+			//If the block is unacceptable or there's a harvestTool mismatch, cap out at a basic 3x3 area
 			if (farMineForbiddenBlocks.contains(block)
 					|| getDestroySpeed(stack, blockState) < getEfficiency())
 			{
@@ -207,7 +207,7 @@ public class ItemFarmine extends ItemWeapon
 			harvestBlock(worldIn, state.getBlock(), blockToBreak, state, (EntityPlayer) playerIn, stack);
 		}
 		
-		//We add 1 because that means the tool will always take at least 2 damage.
+		//We add 1 because that means the harvestTool will always take at least 2 damage.
 		//This is important because all ItemWeapons take at least 2 damage whenever it breaks a block.
 		//This is because ItemWeapon extends ItemSword.
 		if (isDamageable())
@@ -234,7 +234,7 @@ public class ItemFarmine extends ItemWeapon
 	}
 	
 	/**
-	 * Determines if the farmining tool will consider one block equivalent to another.
+	 * Determines if the farmining harvestTool will consider one block equivalent to another.
 	 * Only tests if the equivalencies list considers the blocks to be the same.
 	 * @param a The block whose nature is the test of equivalence
 	 * @param b The block whose equivalency is being tested
@@ -265,8 +265,8 @@ public class ItemFarmine extends ItemWeapon
 	 */
 	
 	/**
-	 * Gets the tool's radius. This limits how far out blocks can be mined.
-	 * @return Returns the tool's maximum mining range. Will never be less than 0.
+	 * Gets the harvestTool's radius. This limits how far out blocks can be mined.
+	 * @return Returns the harvestTool's maximum mining range. Will never be less than 0.
 	 */
 	public int getRadius()
 	{
@@ -274,7 +274,7 @@ public class ItemFarmine extends ItemWeapon
 	}
 	
 	/**
-	 * For some blocks, like obsidian, it might not be appropriate to farmine, even with a farmining tool equipped.
+	 * For some blocks, like obsidian, it might not be appropriate to farmine, even with a farmining harvestTool equipped.
 	 * Farmining can be disabled for these blocks by adding them to a special list.
 	 * This method tests a block to see if it is on this list.
 	 * @param block The block being tested
@@ -286,8 +286,8 @@ public class ItemFarmine extends ItemWeapon
 	}
 	
 	/**
-	 * Gets the tool's terminus. This limits how many blocks can be mined in one operation.
-	 * @return Returns the tool's maximum number of blocks broken in a single operation. Will never be less than 1.
+	 * Gets the harvestTool's terminus. This limits how many blocks can be mined in one operation.
+	 * @return Returns the harvestTool's maximum number of blocks broken in a single operation. Will never be less than 1.
 	 */
 	public int getTerminus()
 	{
@@ -295,26 +295,26 @@ public class ItemFarmine extends ItemWeapon
 	}
 	
 	/**
-	 * Redefines the limiting values of a farmining tool: radius and terminus.
-	 * @param r R is the new value for the tool's radius. Clamped between 0 and t. Setting this to 0 means the item can't farmine at all.
-	 * @param t T is the new value for the tool's terminus. This will limit how many blocks can be mined. Values are clamped to a minimum of 1.
-	 * @return Returns the same farmining tool, after the change has been applied. Useful for chaining same-line modifications.
+	 * Redefines the limiting values of a farmining harvestTool: radius and terminus.
+	 * @param r R is the new value for the harvestTool's radius. Clamped between 0 and t. Setting this to 0 means the item can't farmine at all.
+	 * @param t T is the new value for the harvestTool's terminus. This will limit how many blocks can be mined. Values are clamped to a minimum of 1.
+	 * @return Returns the same farmining harvestTool, after the change has been applied. Useful for chaining same-line modifications.
 	 */
 	public ItemFarmine redefineLimiters(int r, int t)	
 	{
-		//A terminus of less than 1 means that the tool cannot mine. A terminus of 1 means it cannot farmine.
+		//A terminus of less than 1 means that the harvestTool cannot mine. A terminus of 1 means it cannot farmine.
 		terminus = Math.max(1, t);
-		//A tool that can only mine X blocks can't mine more than X blocks away.
+		//A harvestTool that can only mine X blocks can't mine more than X blocks away.
 		radius = Math.max(0, Math.min(r, terminus));
 		return this;
 	}
 	
 	/**
-	 * Each tool maps blocks to sets of blocks, in a system of association.
+	 * Each harvestTool maps blocks to sets of blocks, in a system of association.
 	 * This implementation was chosen because it provides cheap lookup.
 	 * This is good, because associations are checked in large batches within a single server tick.
 	 * A block is mapped to a set of all the blocks associated with it.
-	 * @return Returns a deep clone of this tool's private association map. 
+	 * @return Returns a deep clone of this harvestTool's private association map.
 	 */
 	public HashMap<Block, HashSet<Block>> getAssociations()
 	{
@@ -330,8 +330,8 @@ public class ItemFarmine extends ItemWeapon
 	/**
 	 * Normally, a block is considered equal to the originally-mined one by having the same Block ID and dropping the same item, with the same damage value.
 	 * In cases where this violates intuition and diminishes the gameplay experience (lit redstone ore is not redstone ore), we use associations.
-	 * Two blocks that have an association are considered equal to the farmining tool; when one is mined, the other will be, too. 
-	 * This method lets you add an association between two blocks so that this tool will treat them as the same. 
+	 * Two blocks that have an association are considered equal to the farmining harvestTool; when one is mined, the other will be, too.
+	 * This method lets you add an association between two blocks so that this harvestTool will treat them as the same.
 	 * @param a A is a block that will be made equivalent to B.
 	 * @param b B is a block that will be made equivalent to A.
 	 */
@@ -361,7 +361,7 @@ public class ItemFarmine extends ItemWeapon
 	}
 
 	/**
-	 * Removes an association between two blocks. These two blocks will no longer be considered equivalent for this farmining tool.
+	 * Removes an association between two blocks. These two blocks will no longer be considered equivalent for this farmining harvestTool.
 	 * Blocks will still be equivalent if they have the same block ID and drop items with the same ID and damage values.
 	 * This removal is a two-way removal. If you want to remove only one, use this method alongside <code>addOneWayAssociation</code>. 
 	 * @param a A is a block that may or may not be associated with B. This method ensures it will not be, when complete.

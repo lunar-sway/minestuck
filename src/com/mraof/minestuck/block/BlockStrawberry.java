@@ -1,109 +1,79 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.client.gui.GuiHandler;
-import com.mraof.minestuck.item.TabMinestuck;
-import com.mraof.minestuck.tileentity.TileEntityCrockerMachine;
-import com.mraof.minestuck.tileentity.TileEntityMachine;
-import com.mraof.minestuck.util.IdentifierHandler;
-import net.minecraft.block.BlockContainer;
-import net.minecraft.block.BlockDirectional;
-import net.minecraft.block.BlockHorizontal;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.BlockLog.EnumAxis;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
+import com.mraof.minestuck.item.MinestuckItems;
+import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.*;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
+import javax.annotation.Nullable;
 
-public class BlockStrawberry extends BlockDirectional
+public class BlockStrawberry extends BlockStemGrown
 {
-	protected BlockStrawberry()
+	public static final DirectionProperty FACING = BlockStateProperties.FACING;
+	
+	protected BlockStrawberry(Properties properties)
 	{
-		super(Material.GOURD);
+		super(properties);
 		
-		setUnlocalizedName("strawberry");
-		setHardness(1.0F);
-		setDefaultState(getDefaultState().withProperty(FACING, EnumFacing.UP));
-		this.setCreativeTab(TabMinestuck.instance);
-		this.setSoundType(SoundType.WOOD);
+		setDefaultState(getDefaultState().with(FACING, EnumFacing.UP));
 	}
 	
 	@Override
-	protected BlockStateContainer createBlockState()
+	protected void fillStateContainer(StateContainer.Builder<Block, IBlockState> builder)
 	{
-		return new BlockStateContainer(this, FACING);
+		builder.add(FACING);
+	}
+	
+	@Nullable
+	@Override
+	public IBlockState getStateForPlacement(BlockItemUseContext context)
+	{
+		EnumFacing facing = context.getNearestLookingDirection();
+		return this.getDefaultState().with(FACING, facing);
 	}
 	
 	@Override
-	public int getMetaFromState(IBlockState state)
+	public BlockStem getStem()
 	{
-		return state.getValue(FACING).ordinal();
+		return (BlockStem) MinestuckBlocks.STRAWBERRY_STEM;
 	}
 	
 	@Override
-	public IBlockState getStateFromMeta(int meta)
+	public BlockAttachedStem getAttachedStem()
 	{
-		return getDefaultState().withProperty(FACING, EnumFacing.VALUES[meta]);
+		return (BlockAttachedStem) MinestuckBlocks.ATTACHED_STRAWBERRY_STEM;
 	}
 	
-	@Override
-	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items)
+	public static class AttachedStem extends BlockAttachedStem
 	{
-		items.add(new ItemStack(this));
+		public AttachedStem(BlockStemGrown crop, Properties properties)
+		{
+			super(crop, properties);
+		}
+		
+		@Override
+		protected Item getSeeds()
+		{
+			return MinestuckItems.strawberryChunk;
+		}
 	}
 	
-	@Override
-	public boolean isFullCube(IBlockState state)
+	public static class Stem extends BlockStem
 	{
-		return true;
-	}
-	
-	@Override
-	public EnumBlockRenderType getRenderType(IBlockState state)
-	{
-		return EnumBlockRenderType.MODEL;
-	}
-	
-	@Override
-	public boolean isOpaqueCube(IBlockState state)
-	{
-		return true;
-	}
-	
-	
-	@Override
-	public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
-	{
-		EnumFacing playerFacing = EnumFacing.getDirectionFromEntityLiving(pos, placer);
-		return this.getDefaultState().withProperty(FACING, playerFacing);
-	}
-	
-	@Override
-	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player)
-	{
-		return new ItemStack(Item.getItemFromBlock(this));
-	}
-	
-	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face)
-	{
-		return BlockFaceShape.SOLID;
+		public Stem(BlockStemGrown crop, Properties properties)
+		{
+			super(crop, properties);
+		}
+		
+		@Nullable
+		@Override
+		protected Item getSeedItem()
+		{
+			return MinestuckItems.strawberryChunk;
+		}
 	}
 }

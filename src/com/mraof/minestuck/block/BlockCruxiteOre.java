@@ -75,19 +75,19 @@ public class BlockCruxiteOre extends Block
 	public static IBlockState getBlockState(IBlockState ground)
 	{
 		if(ground.getBlock() == Blocks.STONE)
-			return MinestuckBlocks.cruxiteOreStone.getDefaultState();
+			return MinestuckBlocks.CRUXITE_ORE_STONE.getDefaultState();
 		else if(ground.getBlock() == Blocks.NETHERRACK)
-			return MinestuckBlocks.cruxiteOreNetherrack.getDefaultState();
+			return MinestuckBlocks.CRUXITE_ORE_NETHERRACK.getDefaultState();
 		else if(ground.getBlock() == Blocks.COBBLESTONE)
-			return MinestuckBlocks.cruxiteOreCobblestone.getDefaultState();
+			return MinestuckBlocks.CRUXITE_ORE_COBBLESTONE.getDefaultState();
 		else if(ground.getBlock() == Blocks.SANDSTONE)
-			return MinestuckBlocks.cruxiteOreSandstone.getDefaultState();
+			return MinestuckBlocks.CRUXITE_ORE_SANDSTONE.getDefaultState();
 		else if(ground.getBlock() == Blocks.RED_SANDSTONE)
-			return MinestuckBlocks.cruxiteOreRedSandstone.getDefaultState();
+			return MinestuckBlocks.CRUXITE_ORE_RED_SANDSTONE.getDefaultState();
 		else if(ground.getBlock() == Blocks.END_STONE)
-			return MinestuckBlocks.cruxiteOreEndStone.getDefaultState();
-		else if(ground.getBlock() == MinestuckBlocks.pinkStone)
-			return MinestuckBlocks.cruxiteOrePinkStone.getDefaultState();
-		return MinestuckBlocks.cruxiteOreStone.getDefaultState();
+			return MinestuckBlocks.CRUXITE_ORE_END_STONE.getDefaultState();
+		else if(ground.getBlock() == MinestuckBlocks.PINK_STONE)
+			return MinestuckBlocks.CRUXITE_ORE_PINK_STONE.getDefaultState();
+		return MinestuckBlocks.CRUXITE_ORE_STONE.getDefaultState();
 	}
 }

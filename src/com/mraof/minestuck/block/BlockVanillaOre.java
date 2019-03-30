@@ -37,7 +37,7 @@ public class BlockVanillaOre extends Block
 	
 	public final OreType oreType;
 	
-	public BlockVanillaOre(Properties properties, OreType type)
+	public BlockVanillaOre(OreType type, Properties properties)
 	{
 		super(properties);
 		oreType = type;

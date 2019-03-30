@@ -10,7 +10,7 @@ import com.mraof.minestuck.block.BlockMinestuckPlanks;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
-import com.mraof.minestuck.world.gen.feature.WorldGenRainbowTree;
+import com.mraof.minestuck.world.gen.feature.RainbowTree;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.MesaDecorator;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
@@ -92,8 +92,8 @@ public class LandAspectRainbow extends TerrainLandAspect
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
 		
 		list.add(new MesaDecorator().setAltFrequency(.01F));
-		list.add(new WorldgenTreeDecorator(4, new WorldGenRainbowTree(false), BiomeMinestuck.mediumNormal));
-		list.add(new WorldgenTreeDecorator(2, new WorldGenRainbowTree(false), BiomeMinestuck.mediumRough));
+		list.add(new WorldgenTreeDecorator(4, new RainbowTree(false), BiomeMinestuck.mediumNormal));
+		list.add(new WorldgenTreeDecorator(2, new RainbowTree(false), BiomeMinestuck.mediumRough));
 		
 		//Each of these is associated with one of the primary colors in Minecraft: black, red, blue, yellow, green, brown, and white
 		list.add(new UndergroundDecoratorVein(Blocks.COAL_ORE.getDefaultState(), 20, 17, 128));

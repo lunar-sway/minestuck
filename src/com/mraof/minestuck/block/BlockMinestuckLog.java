@@ -1,7 +1,5 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.item.TabMinestuck;
-
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.block.state.IBlockState;
@@ -15,10 +13,10 @@ public class BlockMinestuckLog extends BlockLog
 	
 	public BlockMinestuckLog(MaterialColor axisColor, Properties properties)
 	{
-		this(axisColor, properties, 5, 5);
+		this(axisColor, 5, 5, properties);
 	}
 	
-	public BlockMinestuckLog(MaterialColor axisColor, Properties properties, int flammability, int encouragement)
+	public BlockMinestuckLog(MaterialColor axisColor, int flammability, int encouragement, Properties properties)
 	{
 		super(axisColor, properties);
 		this.flammability = flammability;
