@@ -166,7 +166,7 @@ public class ClientProxy extends CommonProxy
 		super.init();
 		
 		Minecraft mc = Minecraft.getMinecraft();
-		Minestuck.setSpecibusFont(new MinestuckFontRenderer(mc.gameSettings, new ResourceLocation(Minestuck.MOD_ID, ":textures/font/ascii_ms.png"), mc.renderEngine, true, 4, 8));
+		Minestuck.setSpecibusFont(new MinestuckFontRenderer(mc.gameSettings, new ResourceLocation(Minestuck.MOD_ID, "textures/font/lucida_console_small.png"), mc.renderEngine, true, 4, 8));
 		
 		MinecraftForge.EVENT_BUS.register(ClientEditHandler.instance);
 		MinecraftForge.EVENT_BUS.register(new MinestuckConfig());

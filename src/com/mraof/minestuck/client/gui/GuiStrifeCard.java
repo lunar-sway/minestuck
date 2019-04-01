@@ -68,8 +68,8 @@ public class GuiStrifeCard extends GuiScreenMinestuck
 		
 		this.drawTexturedModalRect(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
-		int listOffsetX = xOffset + 27;
-		int listOffsetY = yOffset + 60;
+		int listOffsetX = xOffset + 16;
+		int listOffsetY = yOffset + 59;
 		
 
 		List<KindAbstratusType> list = KindAbstratusList.getTypeList();
@@ -84,8 +84,8 @@ public class GuiStrifeCard extends GuiScreenMinestuck
 			int color = 0xFFFFFF;
 			int listX = (columnWidth*((i-1) % columns));
 			int listY = (font.FONT_HEIGHT*((i-1) / columns));
-			int xPos = listOffsetX + listX;
-			int yPos = listOffsetY + listY;
+			int xPos = listOffsetX + listX + 11;
+			int yPos = listOffsetY + listY + 1;
 			int sxPos = (int)((listOffsetX + listX)/scale);
 			int syPos = (int)((listOffsetY + listY)/scale);
 			int txPos = (sxPos + columnWidth - font.getStringWidth(typeName))+ (int)(10/scale);

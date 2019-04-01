@@ -36,12 +36,14 @@ public class MinestuckFontRenderer extends FontRenderer
 			return 0.0F;
 		else
 		{
+			height = 16;
+			width = 8;
 			bindTexture(locationFontTexture);
 			int k = i >>> 4;
 			int l = i & 15;
 			float f = k;
 			float f1 = l + 1;
-			float f2 = ch % width * width + f;
+			float f2 = ch % 16 * width + f;
 			float f3 = (ch & 255) / height * height;
 			float f4 = f1 - f - 0.02F;
 			float f5 = italic ? 1.0F : 0.0F;
