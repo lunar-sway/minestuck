@@ -50,10 +50,10 @@ public class ItemLongForgottenWarhorn extends Item {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
         ItemStack item = playerIn.getHeldItem(handIn);
-        Random rand = new Random();
-        int durability = rand.nextInt(14) + 1;
-        int raneffect = rand.nextInt(effect.length);
         if(worldIn.isRemote != true) {
+            Random rand = new Random();
+            int durability = rand.nextInt(14) + 1;
+            int raneffect = rand.nextInt(effect.length);
             playerIn.addPotionEffect(new PotionEffect(effect[raneffect]));
             if(raneffect != 0) {
                 playerIn.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 15, 1));
