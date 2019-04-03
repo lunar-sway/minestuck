@@ -65,6 +65,7 @@ public class ConsortRewardHandler
 		ConsortRewardHandler.registerPrice(new ItemStack(recordDanceStab), 1000, 1000);
 		ConsortRewardHandler.registerPrice(new ItemStack(recordRetroBattle), 1000, 1000);
 		ConsortRewardHandler.registerPrice(new ItemStack(crumplyHat), 80, 100);
+		ConsortRewardHandler.registerPrice(new ItemStack(grimoire), 666, 666);
 		ConsortRewardHandler.registerPrice(new ItemStack(pogoClub), 900, 1200);
 		ConsortRewardHandler.registerPrice(new ItemStack(metalBat), 400, 500);
 		ConsortRewardHandler.registerPrice(new ItemStack(firePoker), 1500, 2000);

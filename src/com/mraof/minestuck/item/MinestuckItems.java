@@ -106,6 +106,7 @@ public class MinestuckItems
 	public static Item fudgeSickle = new ItemConsumableWeapon(450, 5.5D, -2.4D, 10, "fudgeSickle", 7, 0.6F).setTool("sickle", 0, 1.0F);
 	public static Item regiSickle = new ItemWeapon(812, 6.0D, -2.4D, 5, "regiSickle").setTool("sickle", 0, 4.0F);
 	public static Item clawSickle = new ItemWeapon(2048, 7.0D, -2.4D, 15, "clawSickle").setTool("sickle", 0, 4.0F);
+	public static Item clawOfNrubyiglith = new ItemHorrorterrorWeapon(1600, 9.5D, -2.4D, 15, "clawOfNrubyiglith").setTool("sickle", 0, 4.0F);
 	public static Item candySickle = new ItemCandyWeapon(96, 6.0D, -2.4D, 15, "candySickle").setTool("sickle", 0, 2.5F);
 	//clubs
 	public static Item deuceClub = new ItemWeapon(1024, 2.5D, -2.2D, 15, "deuceClub");
@@ -160,6 +161,7 @@ public class MinestuckItems
 	public static Item frenchFry = new ItemFood(1, 0.1F, false).setUnlocalizedName("frenchFry").setCreativeTab(TabMinestuck.instance);
 	public static Item strawberryChunk = new ItemMinestuckSeedFood(4, 0.5F).setUnlocalizedName("strawberryChunk").setCreativeTab(TabMinestuck.instance);
 	public static Item surpriseEmbryo = new ItemSurpriseEmbryo(3, 0.2F, false);
+	public static Item unknowableEgg = new ItemUnknowableEgg(3, 0.3F, false).setUnlocalizedName("unknowableEgg");
 	//Other
 	public static Item goldenGrasshopper = new Item().setUnlocalizedName("goldenGrasshopper").setCreativeTab(TabMinestuck.instance);
 	public static Item bugNet = new ItemNet().setUnlocalizedName("net");
@@ -174,10 +176,14 @@ public class MinestuckItems
 	public static Item cruxiteApple = new ItemCruxiteApple();
 	public static Item cruxitePotion = new ItemCruxitePotion();
 	public static Item disk = new ItemDisk();
+	public static Item grimoire = new ItemGrimoire().setUnlocalizedName("grimoire");
+	public static Item longForgottenWarhorn = new ItemLongForgottenWarhorn().setUnlocalizedName("longForgottenWarhorn");
+	//public static Item chessboard = new Item().setUnlocalizedName("chessboard").setMaxStackSize(1).setCreativeTab(TabMinestuck.instance);
 	public static Item minestuckBucket = new ItemMinestuckBucket();
 	public static Item obsidianBucket = new ItemObsidianBucket();
 	public static Item modusCard = new ItemModus();
 	public static Item goldSeeds = new ItemGoldSeeds();
+	public static Item razorBlade = new ItemRazorBlade();
 	public static Item metalBoat = new ItemMetalBoat();
 	public static Item shunt = new ItemShunt();
 	public static Item captcharoidCamera = new ItemCaptcharoidCamera();
@@ -207,7 +213,7 @@ public class MinestuckItems
 			return new EntityShopPoster(worldIn, pos, facing, stack, meta);
 		}
 	}.setUnlocalizedName("shopPoster").setMaxStackSize(1).setCreativeTab(TabMinestuck.instance);
-	
+
 	public static Item carvingTool = new Item().setUnlocalizedName("carvingTool").setMaxStackSize(1).setCreativeTab(TabMinestuck.instance);
 	public static Item crumplyHat = new Item().setUnlocalizedName("crumplyHat").setMaxStackSize(1).setCreativeTab(TabMinestuck.instance);
     public static Item stoneEyeballs = new Item().setUnlocalizedName("stoneEyeballs").setCreativeTab(TabMinestuck.instance);
@@ -224,7 +230,7 @@ public class MinestuckItems
 	{
 		armorPrismarine.repairMaterial = new ItemStack(Items.PRISMARINE_SHARD);
 		((ItemMinestuckSeedFood) strawberryChunk).setPlant(strawberryStem.getDefaultState());
-		
+
 		IForgeRegistry<Item> registry = event.getRegistry();
 		registerItemBlock(registry, new ItemMultiTexture(chessTile, chessTile, new String[]{"black", "white", "darkgrey", "lightgrey"}));
 		registerItemBlock(registry, new ItemBlock(skaiaPortal));
@@ -257,7 +263,7 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemBlock(goldOrePinkStone));
 		registerItemBlock(registry, new ItemBlock(diamondOrePinkStone));
 		registerItemBlock(registry, new ItemBlock(lapisOrePinkStone));
-		
+
 		registerItemBlock(registry, new ItemBlockCraftingTab(cruxiteBlock, CreativeTabs.BUILDING_BLOCKS));
 		registerItemBlock(registry, new ItemBlockCraftingTab(uraniumBlock, CreativeTabs.BUILDING_BLOCKS));
 		registerItemBlock(registry, new ItemBlock(genericObject));
@@ -278,7 +284,7 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemBlock(blender));
 		registerItemBlock(registry, new ItemBlock(chessboard));
 		registerItemBlock(registry, new ItemBlock(frogStatueReplica));
-		
+
 		registerItemBlock(registry, new ItemBlockLayered(layeredSand));
 		registerItemBlock(registry, new ItemMultiTexture(coloredDirt, coloredDirt,
 				(ItemStack input) -> BlockColoredDirt.BlockType.values()[input.getItemDamage() % BlockColoredDirt.BlockType.values().length].getName()));
@@ -367,13 +373,13 @@ public class MinestuckItems
 				return damage;
 			}
 		});
-		
+
 		for(EnumSlabStairMaterial mat : EnumSlabStairMaterial.values())
 		{
 			registerItemBlock(registry, new ItemBlock(mat.getStair()));
 			registerItemBlock(registry, mat.getSlabItem());
 		}
-		
+
 		registerItemBlock(registry, new ItemBlock(primedTnt));
 		registerItemBlock(registry, new ItemBlock(unstableTnt));
 		registerItemBlock(registry, new ItemBlock(instantTnt));
@@ -416,7 +422,7 @@ public class MinestuckItems
 		registry.register(cobaltSabre.setRegistryName("cobalt_sabre"));
 		registry.register(quantumSabre.setRegistryName("quantum_sabre"));
 		registry.register(shatterBeacon.setRegistryName("shatterbeacon"));
-		
+
 		//axes
 		registry.register(batleacks.setRegistryName("batleacks"));
 		registry.register(copseCrusher.setRegistryName("copse_crusher"));
@@ -439,6 +445,7 @@ public class MinestuckItems
 		registry.register(fudgeSickle.setRegistryName("fudgesickle"));
 		registry.register(regiSickle.setRegistryName("regisickle"));
 		registry.register(clawSickle.setRegistryName("claw_sickle"));
+		registry.register(clawOfNrubyiglith.setRegistryName("claw_of_nrubyiglith"));
 		registry.register(candySickle.setRegistryName("candy_sickle"));
 		
 		//clubs
@@ -465,7 +472,7 @@ public class MinestuckItems
 		registry.register(fork.setRegistryName("fork"));
 		registry.register(spork.setRegistryName("spork"));
 		registry.register(goldenSpork.setRegistryName("golden_spork"));
-		
+
 		registry.register(emeraldSword.setRegistryName("emerald_sword"));
 		registry.register(emeraldAxe.setRegistryName("emerald_axe"));
 		registry.register(emeraldPickaxe.setRegistryName("emerald_pickaxe"));
@@ -497,7 +504,8 @@ public class MinestuckItems
 		registry.register(frenchFry.setRegistryName("french_fry"));
 		registry.register(strawberryChunk.setRegistryName("strawberry_chunk"));
 		registry.register(surpriseEmbryo.setRegistryName("surprise_embryo"));
-		
+		registry.register(unknowableEgg.setRegistryName("unknowable_egg"));
+
 		//misc
 		registry.register(goldenGrasshopper.setRegistryName("golden_grasshopper"));
 		registry.register(bugNet.setRegistryName("net"));
@@ -510,11 +518,14 @@ public class MinestuckItems
 		registry.register(cruxiteApple.setRegistryName("cruxite_apple"));
 		registry.register(cruxitePotion.setRegistryName("cruxite_potion"));
 		registry.register(disk.setRegistryName("computer_disk"));
-		//registry.register(chessboard.setRegistryName("chessboard"));
+        //registry.register(chessboard.setRegistryName("chessboard"));
+		registry.register(grimoire.setRegistryName("grimoire"));
+		registry.register(longForgottenWarhorn.setRegistryName("long_forgotten_warhorn"));
 		registry.register(minestuckBucket.setRegistryName("minestuck_bucket"));
 		registry.register(obsidianBucket.setRegistryName("bucket_obsidian"));
 		registry.register(modusCard.setRegistryName("modus_card"));
 		registry.register(goldSeeds.setRegistryName("gold_seeds"));
+		registry.register(razorBlade.setRegistryName("razor_blade"));
 		registry.register(metalBoat.setRegistryName("metal_boat"));
 		registry.register(threshDvd.setRegistryName("thresh_dvd"));
 		registry.register(crewPoster.setRegistryName("crew_poster"));
@@ -528,19 +539,19 @@ public class MinestuckItems
 		registry.register(fakeArms.setRegistryName("fake_arms"));
 		//registry.register(shunt.setRegistryName("shunt"));
 		registry.register(captcharoidCamera.setRegistryName("captcharoid_camera"));
-		
+
 		//Music disks
 		registry.register(recordEmissaryOfDance.setRegistryName("record_emissary"));
 		registry.register(recordDanceStab.setRegistryName("record_dance_stab"));
 		registry.register(recordRetroBattle.setRegistryName("record_retro_battle"));
-		
+
 		((ItemMinestuckBucket) minestuckBucket).addBlock(blockOil.getDefaultState());
 		((ItemMinestuckBucket) minestuckBucket).addBlock(blockBlood.getDefaultState());
 		((ItemMinestuckBucket) minestuckBucket).addBlock(blockBrainJuice.getDefaultState());
 		((ItemMinestuckBucket) minestuckBucket).addBlock(blockWatercolors.getDefaultState());
 		((ItemMinestuckBucket) minestuckBucket).addBlock(blockEnder.getDefaultState());
 		((ItemMinestuckBucket) minestuckBucket).addBlock(blockLightWater.getDefaultState());
-		
+
 		/*for(Block block : liquidGrists)
 		{
 			minestuckBucket.addBlock(block.getDefaultState());

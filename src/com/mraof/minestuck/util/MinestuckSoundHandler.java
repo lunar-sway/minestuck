@@ -13,6 +13,9 @@ public class MinestuckSoundHandler
 	public static SoundEvent soundDanceStabDance;
 	public static SoundEvent soundRetroBattleTheme;
 	public static SoundEvent soundFrogAmbient;
+	public static SoundEvent soundWarhorn;
+	public static SoundEvent soundWhispers;
+	public static SoundEvent soundUpcheladder;
 	
 	public static void initSound()
 	{
@@ -24,6 +27,12 @@ public class MinestuckSoundHandler
 		soundRetroBattleTheme = new SoundEvent(soundLocation).setRegistryName(soundLocation);
 		soundLocation = new ResourceLocation("minestuck","mobs.frogAmbient");
 		soundFrogAmbient = new SoundEvent(soundLocation).setRegistryName(soundLocation);
+		soundLocation = new ResourceLocation("minestuck", "warhorn");
+		soundWarhorn = new SoundEvent(soundLocation).setRegistryName(soundLocation);
+		soundLocation = new ResourceLocation("minestuck", "whispers");
+		soundWhispers = new SoundEvent(soundLocation).setRegistryName(soundLocation);
+		soundLocation = new ResourceLocation("minestuck", "upcheladder");
+		soundUpcheladder = new SoundEvent(soundLocation).setRegistryName(soundLocation);
 	}
 	
 	@SubscribeEvent
@@ -32,6 +41,9 @@ public class MinestuckSoundHandler
 		event.getRegistry().register(soundEmissaryOfDance);
 		event.getRegistry().register(soundDanceStabDance);
 		event.getRegistry().register(soundRetroBattleTheme);
+		event.getRegistry().register(soundWarhorn);
+		event.getRegistry().register(soundWhispers);
+		event.getRegistry().register(soundUpcheladder);
 		//event.getRegistry().register(soundFrogAmbient);
 	}
 }
