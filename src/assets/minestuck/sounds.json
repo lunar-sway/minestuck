@@ -57,7 +57,8 @@
     "category": "ambient",
     "subtitle": "subtitle.ogreAmbient",
     "sounds": [
-      "minestuck:soundeffects/mobs/ogre_ambient"
+      "minestuck:soundeffects/mobs/ogre_ambient_1",
+      "minestuck:soundeffects/mobs/ogre_ambient_2"
     ]
   },
   "ogreHurt": {

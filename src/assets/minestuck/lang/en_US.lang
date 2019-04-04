@@ -68,8 +68,8 @@ subtitle.warhorn=Warhorn sounds
 subtitle.whispers=Spooky whispers
 subtitle.upcheladder=Echeladder levels up
 subtitle.impScreech=Imp screeches
-subtitle.ogreAmbient=Ogre roars
-subtitle.ogreHurt=Ogre is hurt
+subtitle.ogreAmbient=Ogre grunts
+subtitle.ogreHurt=Ogre takes damage
 subtitle.ogreDeath=Ogre dies
 
 computer.buttonClear=Clear message
