@@ -71,6 +71,9 @@ subtitle.impScreech=Imp screeches
 subtitle.ogreAmbient=Ogre grunts
 subtitle.ogreHurt=Ogre takes damage
 subtitle.ogreDeath=Ogre dies
+subtitle.lichAmbient=Lich whispers
+subtitle.lichHurt=Lich takes damage
+subtitle.lichDeath=Lich dies
 
 computer.buttonClear=Clear message
 computer.buttonClose=Disconnect

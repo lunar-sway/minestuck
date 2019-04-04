@@ -75,6 +75,28 @@
       "minestuck:soundeffects/mobs/ogre_death"
     ]
   },
+  "lichAmbient": {
+    "category": "ambient",
+    "subtitle": "subtitle.lichAmbient",
+    "sounds": [
+      "minestuck:soundeffects/mobs/lich_ambient_1",
+      "minestuck:soundeffects/mobs/lich_ambient_2"
+    ]
+  },
+  "lichHurt": {
+    "category": "ambient",
+    "subtitle": "subtitle.lichHurt",
+    "sounds": [
+      "minestuck:soundeffects/mobs/lich_hurt"
+    ]
+  },
+  "lichDeath": {
+    "category": "ambient",
+    "subtitle": "subtitle.lichDeath",
+    "sounds": [
+      "minestuck:soundeffects/mobs/lich_death"
+    ]
+  },
     "record.retroBattle": {
       "sounds": [
         {
