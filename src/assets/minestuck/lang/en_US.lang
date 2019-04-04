@@ -67,6 +67,10 @@ commands.porkhollow.notEnough=You don't have enough boondollars.
 subtitle.warhorn=Warhorn sounds
 subtitle.whispers=Spooky whispers
 subtitle.upcheladder=Echeladder levels up
+subtitle.impScreech=Imp screeches
+subtitle.ogreAmbient=Ogre roars
+subtitle.ogreHurt=Ogre is hurt
+subtitle.ogreDeath=Ogre dies
 
 computer.buttonClear=Clear message
 computer.buttonClose=Disconnect

@@ -16,6 +16,10 @@ public class MinestuckSoundHandler
 	public static SoundEvent soundWarhorn;
 	public static SoundEvent soundWhispers;
 	public static SoundEvent soundUpcheladder;
+	public static SoundEvent soundImpAmbient;
+	public static SoundEvent soundOgreAmbient;
+	public static SoundEvent soundOgreHurt;
+	public static SoundEvent soundOgreDeath;
 	
 	public static void initSound()
 	{
@@ -25,14 +29,26 @@ public class MinestuckSoundHandler
 		soundDanceStabDance = new SoundEvent(soundLocation).setRegistryName(soundLocation);
 		soundLocation = new ResourceLocation("minestuck","record.retroBattle");
 		soundRetroBattleTheme = new SoundEvent(soundLocation).setRegistryName(soundLocation);
-		soundLocation = new ResourceLocation("minestuck","mobs.frogAmbient");
-		soundFrogAmbient = new SoundEvent(soundLocation).setRegistryName(soundLocation);
 		soundLocation = new ResourceLocation("minestuck", "warhorn");
 		soundWarhorn = new SoundEvent(soundLocation).setRegistryName(soundLocation);
 		soundLocation = new ResourceLocation("minestuck", "whispers");
 		soundWhispers = new SoundEvent(soundLocation).setRegistryName(soundLocation);
 		soundLocation = new ResourceLocation("minestuck", "upcheladder");
 		soundUpcheladder = new SoundEvent(soundLocation).setRegistryName(soundLocation);
+		
+		//Frogs
+		soundLocation = new ResourceLocation("minestuck","mobs.frogAmbient");
+		soundFrogAmbient = new SoundEvent(soundLocation).setRegistryName(soundLocation);
+		//Imps
+		soundLocation = new ResourceLocation("minestuck", "impAmbient");
+		soundImpAmbient = new SoundEvent(soundLocation).setRegistryName(soundLocation);
+		//Ogres
+		soundLocation = new ResourceLocation("minestuck", "ogreAmbient");
+		soundOgreAmbient = new SoundEvent(soundLocation).setRegistryName(soundLocation);
+		soundLocation = new ResourceLocation("minestuck", "ogreHurt");
+		soundOgreHurt = new SoundEvent(soundLocation).setRegistryName(soundLocation);
+		soundLocation = new ResourceLocation("minestuck", "ogreDeath");
+		soundOgreDeath = new SoundEvent(soundLocation).setRegistryName(soundLocation);
 	}
 	
 	@SubscribeEvent
@@ -44,6 +60,10 @@ public class MinestuckSoundHandler
 		event.getRegistry().register(soundWarhorn);
 		event.getRegistry().register(soundWhispers);
 		event.getRegistry().register(soundUpcheladder);
+		event.getRegistry().register(soundImpAmbient);
+		event.getRegistry().register(soundOgreAmbient);
+		event.getRegistry().register(soundOgreHurt);
+		event.getRegistry().register(soundOgreDeath);
 		//event.getRegistry().register(soundFrogAmbient);
 	}
 }

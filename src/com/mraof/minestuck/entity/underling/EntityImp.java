@@ -8,6 +8,7 @@ import com.mraof.minestuck.util.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
 public class EntityImp extends EntityUnderling
@@ -36,6 +37,11 @@ public class EntityImp extends EntityUnderling
 		super.initEntityAI();
 		EntityAIAttackOnCollideWithRate aiAttack = new EntityAIAttackOnCollideWithRate(this, .4F, 20, false);
 		this.tasks.addTask(3, aiAttack);
+	}
+	
+	protected SoundEvent getAmbientSound()
+	{
+		return MinestuckSoundHandler.soundImpAmbient;
 	}
 	
 	@Override

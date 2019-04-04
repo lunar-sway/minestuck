@@ -45,7 +45,35 @@
       }
     ]
   },
-
+  "impAmbient": {
+    "category": "ambient",
+    "subtitle": "subtitle.impScreech",
+    "sounds": [
+      "minestuck:soundeffects/mobs/imp_ambient_1",
+      "minestuck:soundeffects/mobs/imp_ambient_2"
+    ]
+  },
+  "ogreAmbient": {
+    "category": "ambient",
+    "subtitle": "subtitle.ogreAmbient",
+    "sounds": [
+      "minestuck:soundeffects/mobs/ogre_ambient"
+    ]
+  },
+  "ogreHurt": {
+    "category": "ambient",
+    "subtitle": "subtitle.ogreHurt",
+    "sounds": [
+      "minestuck:soundeffects/mobs/ogre_hurt"
+    ]
+  },
+  "ogreDeath": {
+    "category": "ambient",
+    "subtitle": "subtitle.ogreDeath",
+    "sounds": [
+      "minestuck:soundeffects/mobs/ogre_death"
+    ]
+  },
     "record.retroBattle": {
       "sounds": [
         {
