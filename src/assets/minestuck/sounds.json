@@ -46,7 +46,7 @@
     ]
   },
   "impAmbient": {
-    "category": "ambient",
+    "category": "hostile",
     "subtitle": "subtitle.impScreech",
     "sounds": [
       "minestuck:soundeffects/mobs/imp_ambient_1",
@@ -54,7 +54,7 @@
     ]
   },
   "ogreAmbient": {
-    "category": "ambient",
+    "category": "hostile",
     "subtitle": "subtitle.ogreAmbient",
     "sounds": [
       "minestuck:soundeffects/mobs/ogre_ambient_1",
@@ -62,21 +62,21 @@
     ]
   },
   "ogreHurt": {
-    "category": "ambient",
+    "category": "hostile",
     "subtitle": "subtitle.ogreHurt",
     "sounds": [
       "minestuck:soundeffects/mobs/ogre_hurt"
     ]
   },
   "ogreDeath": {
-    "category": "ambient",
+    "category": "hostile",
     "subtitle": "subtitle.ogreDeath",
     "sounds": [
       "minestuck:soundeffects/mobs/ogre_death"
     ]
   },
   "lichAmbient": {
-    "category": "ambient",
+    "category": "hostile",
     "subtitle": "subtitle.lichAmbient",
     "sounds": [
       "minestuck:soundeffects/mobs/lich_ambient_1",
@@ -84,14 +84,14 @@
     ]
   },
   "lichHurt": {
-    "category": "ambient",
+    "category": "hostile",
     "subtitle": "subtitle.lichHurt",
     "sounds": [
       "minestuck:soundeffects/mobs/lich_hurt"
     ]
   },
   "lichDeath": {
-    "category": "ambient",
+    "category": "hostile",
     "subtitle": "subtitle.lichDeath",
     "sounds": [
       "minestuck:soundeffects/mobs/lich_death"
