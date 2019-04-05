@@ -22,6 +22,9 @@ public class MinestuckSoundHandler
 	public static SoundEvent soundOgreAmbient;
 	public static SoundEvent soundOgreHurt;
 	public static SoundEvent soundOgreDeath;
+	public static SoundEvent soundBasiliskAmbient;
+	public static SoundEvent soundBasiliskHurt;
+	public static SoundEvent soundBasiliskDeath;
 	public static SoundEvent soundLichAmbient;
 	public static SoundEvent soundLichHurt;
 	public static SoundEvent soundLichDeath;
@@ -58,6 +61,13 @@ public class MinestuckSoundHandler
 		soundOgreHurt = new SoundEvent(soundLocation).setRegistryName(soundLocation);
 		soundLocation = new ResourceLocation("minestuck", "ogreDeath");
 		soundOgreDeath = new SoundEvent(soundLocation).setRegistryName(soundLocation);
+		//Basilisks
+		soundLocation = new ResourceLocation("minestuck", "basiliskAmbient");
+		soundBasiliskAmbient = new SoundEvent(soundLocation).setRegistryName(soundLocation);
+		soundLocation = new ResourceLocation("minestuck", "basiliskHurt");
+		soundBasiliskHurt = new SoundEvent(soundLocation).setRegistryName(soundLocation);
+		soundLocation = new ResourceLocation("minestuck", "basiliskDeath");
+		soundBasiliskDeath = new SoundEvent(soundLocation).setRegistryName(soundLocation);
 		//Liches
 		soundLocation = new ResourceLocation("minestuck", "lichAmbient");
 		soundLichAmbient = new SoundEvent(soundLocation).setRegistryName(soundLocation);
@@ -76,12 +86,16 @@ public class MinestuckSoundHandler
 		event.getRegistry().register(soundWarhorn);
 		event.getRegistry().register(soundWhispers);
 		event.getRegistry().register(soundUpcheladder);
+		
 		event.getRegistry().register(soundImpAmbient);
 		event.getRegistry().register(soundImpHurt);
 		event.getRegistry().register(soundImpDeath);
 		event.getRegistry().register(soundOgreAmbient);
 		event.getRegistry().register(soundOgreHurt);
 		event.getRegistry().register(soundOgreDeath);
+		event.getRegistry().register(soundBasiliskAmbient);
+		event.getRegistry().register(soundBasiliskHurt);
+		event.getRegistry().register(soundBasiliskDeath);
 		event.getRegistry().register(soundLichAmbient);
 		event.getRegistry().register(soundLichHurt);
 		event.getRegistry().register(soundLichDeath);

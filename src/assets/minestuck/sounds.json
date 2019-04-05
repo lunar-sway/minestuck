@@ -89,6 +89,28 @@
       "minestuck:soundeffects/mobs/ogre_death"
     ]
   },
+  "basiliskAmbient": {
+    "category": "hostile",
+    "subtitle": "subtitle.basiliskAmbient",
+    "sounds": [
+      "minestuck:soundeffects/mobs/basilisk_ambient_1",
+      "minestuck:soundeffects/mobs/basilisk_ambient_2"
+    ]
+  },
+  "basiliskHurt": {
+    "category": "hostile",
+    "subtitle": "subtitle.basiliskHurt",
+    "sounds": [
+      "minestuck:soundeffects/mobs/basilisk_hurt"
+    ]
+  },
+  "basiliskDeath": {
+    "category": "hostile",
+    "subtitle": "subtitle.basiliskDeath",
+    "sounds": [
+      "minestuck:soundeffects/mobs/basilisk_death"
+    ]
+  },
   "lichAmbient": {
     "category": "hostile",
     "subtitle": "subtitle.lichAmbient",
