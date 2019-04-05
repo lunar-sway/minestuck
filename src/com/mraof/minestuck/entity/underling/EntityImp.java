@@ -11,6 +11,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
+
 public class EntityImp extends EntityUnderling
 {
 	public EntityImp(World world) 
@@ -42,6 +44,14 @@ public class EntityImp extends EntityUnderling
 	protected SoundEvent getAmbientSound()
 	{
 		return MinestuckSoundHandler.soundImpAmbient;
+	}
+	
+	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+		return MinestuckSoundHandler.soundImpHurt;
+	}
+	
+	protected SoundEvent getDeathSound() {
+		return MinestuckSoundHandler.soundImpDeath;
 	}
 	
 	@Override

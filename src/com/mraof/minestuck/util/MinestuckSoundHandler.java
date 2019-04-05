@@ -17,6 +17,8 @@ public class MinestuckSoundHandler
 	public static SoundEvent soundWhispers;
 	public static SoundEvent soundUpcheladder;
 	public static SoundEvent soundImpAmbient;
+	public static SoundEvent soundImpHurt;
+	public static SoundEvent soundImpDeath;
 	public static SoundEvent soundOgreAmbient;
 	public static SoundEvent soundOgreHurt;
 	public static SoundEvent soundOgreDeath;
@@ -45,6 +47,10 @@ public class MinestuckSoundHandler
 		//Imps
 		soundLocation = new ResourceLocation("minestuck", "impAmbient");
 		soundImpAmbient = new SoundEvent(soundLocation).setRegistryName(soundLocation);
+		soundLocation = new ResourceLocation("minestuck", "impHurt");
+		soundImpHurt = new SoundEvent(soundLocation).setRegistryName(soundLocation);
+		soundLocation = new ResourceLocation("minestuck", "impDeath");
+		soundImpDeath = new SoundEvent(soundLocation).setRegistryName(soundLocation);
 		//Ogres
 		soundLocation = new ResourceLocation("minestuck", "ogreAmbient");
 		soundOgreAmbient = new SoundEvent(soundLocation).setRegistryName(soundLocation);
@@ -71,6 +77,8 @@ public class MinestuckSoundHandler
 		event.getRegistry().register(soundWhispers);
 		event.getRegistry().register(soundUpcheladder);
 		event.getRegistry().register(soundImpAmbient);
+		event.getRegistry().register(soundImpHurt);
+		event.getRegistry().register(soundImpDeath);
 		event.getRegistry().register(soundOgreAmbient);
 		event.getRegistry().register(soundOgreHurt);
 		event.getRegistry().register(soundOgreDeath);

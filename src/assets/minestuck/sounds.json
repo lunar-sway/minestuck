@@ -53,6 +53,20 @@
       "minestuck:soundeffects/mobs/imp_ambient_2"
     ]
   },
+  "impHurt": {
+    "category": "hostile",
+    "subtitle": "subtitle.impHurt",
+    "sounds": [
+      "minestuck:soundeffects/mobs/imp_hurt"
+    ]
+  },
+  "impDeath": {
+    "category": "hostile",
+    "subtitle": "subtitle.impDeath",
+    "sounds": [
+      "minestuck:soundeffects/mobs/imp_death"
+    ]
+  },
   "ogreAmbient": {
     "category": "hostile",
     "subtitle": "subtitle.ogreAmbient",
