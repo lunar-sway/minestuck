@@ -59,6 +59,7 @@ public class MinestuckItems
 	public static Item telescopicSassacrusher = new ItemWeapon(1024, 9.0D, -2.9D, 15, "telescopicSassacrusher").setTool("pickaxe", 2, 5.0F);
 	public static Item regiHammer = new ItemWeapon(812, 6.0D, -2.4D, 5, "regiHammer");
 	public static Item fearNoAnvil = new ItemPotionWeapon(2048, 10.0D, -2.8D, 12, "fearNoAnvil", new PotionEffect(MobEffects.SLOWNESS, 100, 3)).setTool("pickaxe", 3, 7.0F);
+	public static Item estrogenEmpoweredEverythingEradicator = new ItemPogoFarmine(6114, 11.0D, -2.8D, 40, "estrogenEmpoweredEverythingEradicator", Integer.MAX_VALUE, 200, 0.7).setTool("pickaxe", 3, 5.0F).setTool("shovel", 3, 5.0F).setTool("hoe", 3, 5.0F).setTool("axe", 3, 5.0F);
 	public static Item zillyhooHammer = new ItemWeapon(3000, 11.0D, -2.8D, 30, "zillyhooHammer").setTool("pickaxe", 4, 15.0F);
 
 	public static Item popamaticVrillyhoo = new ItemRandomWeapon(3000, 8.0D, -2.8D, 30, "popamaticVrillyhoo").setTool("pickaxe", 4, 15.0F);
@@ -396,6 +397,7 @@ public class MinestuckItems
 		registry.register(telescopicSassacrusher.setRegistryName("telescopic_sassacrusher"));
 		registry.register(regiHammer.setRegistryName("regi_hammer"));
 		registry.register(fearNoAnvil.setRegistryName("fear_no_anvil"));
+		registry.register(estrogenEmpoweredEverythingEradicator.setRegistryName("estrogen_empowered_everything_eradicator"));
 		registry.register(zillyhooHammer.setRegistryName("zillyhoo_hammer"));
 		registry.register(popamaticVrillyhoo.setRegistryName("popamatic_vrillyhoo"));
 		registry.register(scarletZillyhoo.setRegistryName("scarlet_zillyhoo"));
