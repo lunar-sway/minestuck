@@ -35,6 +35,16 @@
       }
     ]
   },
+  "screech": {
+    "category": "ambient",
+    "subtitle": "subtitle.screech",
+    "sounds": [
+      {
+        "name": "minestuck:soundeffects/screech",
+        "stream": false
+      }
+    ]
+  },
   "upcheladder": {
     "category": "ambient",
     "subtitle": "subtitle.upcheladder",
