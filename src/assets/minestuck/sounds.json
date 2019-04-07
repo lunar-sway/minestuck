@@ -143,6 +143,28 @@
       "minestuck:soundeffects/mobs/lich_death"
     ]
   },
+  "giclopsAmbient": {
+    "category": "hostile",
+    "subtitle": "subtitle.giclopsAmbient",
+    "sounds": [
+      "minestuck:soundeffects/mobs/giclops_ambient_1",
+      "minestuck:soundeffects/mobs/giclops_ambient_2"
+    ]
+  },
+  "giclopsHurt": {
+    "category": "hostile",
+    "subtitle": "subtitle.giclopsHurt",
+    "sounds": [
+      "minestuck:soundeffects/mobs/giclops_hurt"
+    ]
+  },
+  "giclopsDeath": {
+    "category": "hostile",
+    "subtitle": "subtitle.giclopsDeath",
+    "sounds": [
+      "minestuck:soundeffects/mobs/giclops_death"
+    ]
+  },
     "record.retroBattle": {
       "sounds": [
         {

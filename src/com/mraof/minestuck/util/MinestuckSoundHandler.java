@@ -29,6 +29,9 @@ public class MinestuckSoundHandler
 	public static SoundEvent soundLichAmbient;
 	public static SoundEvent soundLichHurt;
 	public static SoundEvent soundLichDeath;
+	public static SoundEvent soundGiclopsAmbient;
+	public static SoundEvent soundGiclopsHurt;
+	public static SoundEvent soundGiclopsDeath;
 	
 	public static void initSound()
 	{
@@ -78,6 +81,13 @@ public class MinestuckSoundHandler
 		soundLichHurt = new SoundEvent(soundLocation).setRegistryName(soundLocation);
 		soundLocation = new ResourceLocation("minestuck", "lichDeath");
 		soundLichDeath = new SoundEvent(soundLocation).setRegistryName(soundLocation);
+		//Giclops
+		soundLocation = new ResourceLocation("minestuck", "giclopsAmbient");
+		soundGiclopsAmbient = new SoundEvent(soundLocation).setRegistryName(soundLocation);
+		soundLocation = new ResourceLocation("minestuck", "giclopsHurt");
+		soundGiclopsHurt = new SoundEvent(soundLocation).setRegistryName(soundLocation);
+		soundLocation = new ResourceLocation("minestuck", "giclopsDeath");
+		soundGiclopsDeath = new SoundEvent(soundLocation).setRegistryName(soundLocation);
 	}
 	
 	@SubscribeEvent
@@ -103,6 +113,9 @@ public class MinestuckSoundHandler
 		event.getRegistry().register(soundLichAmbient);
 		event.getRegistry().register(soundLichHurt);
 		event.getRegistry().register(soundLichDeath);
+		event.getRegistry().register(soundGiclopsAmbient);
+		event.getRegistry().register(soundGiclopsHurt);
+		event.getRegistry().register(soundGiclopsDeath);
 		//event.getRegistry().register(soundFrogAmbient);
 	}
 }
