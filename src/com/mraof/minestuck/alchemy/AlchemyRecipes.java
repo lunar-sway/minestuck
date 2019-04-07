@@ -530,7 +530,7 @@ public class AlchemyRecipes
 		GristRegistry.addGristConversion(new ItemStack(telescopicSassacrusher), false, new GristSet(new GristType[] {GristType.Shale, GristType.Tar, GristType.Mercury}, new int[] {39, 18, 23}));
 		GristRegistry.addGristConversion(new ItemStack(regiHammer), false, new GristSet(new GristType[] {GristType.Amethyst, GristType.Tar,GristType.Gold}, new int[] {25, 70, 34}));
 		GristRegistry.addGristConversion(new ItemStack(fearNoAnvil), false, new GristSet(new GristType[] {GristType.Build, GristType.Garnet, GristType.Diamond, GristType.Gold, GristType.Quartz}, new int[] {999, 150, 54, 61, 1}));
-		GristRegistry.addGristConversion(new ItemStack(estrogenEmpoweredEverythingEradicator), false, new GristSet(new GristType[] {GristType.Build, GristType.Shale, GristType.Uranium, GristType.Rust}, new int[] {8000, 1280, 640, 300}));
+		GristRegistry.addGristConversion(new ItemStack(qEHammerAxe), false, new GristSet(new GristType[] {GristType.Build, GristType.Shale, GristType.Uranium, GristType.Rust}, new int[] {8000, 1280, 640, 300}));
 		
 		GristRegistry.addGristConversion(new ItemStack(cactusCutlass), false, new GristSet(new GristType[] {GristType.Amber, GristType.Marble}, new int[] {7, 2}));
 		GristRegistry.addGristConversion(new ItemStack(steakSword), false, new GristSet(new GristType[] {GristType.Iodine, GristType.Tar}, new int[] {55, 18}));
