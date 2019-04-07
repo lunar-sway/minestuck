@@ -60,11 +60,9 @@ public class EntityGiclops extends EntityUnderling implements IBigEntity
 	protected SoundEvent getAmbientSound() {
 		return MinestuckSoundHandler.soundGiclopsAmbient;
 	}
-	
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
 		return MinestuckSoundHandler.soundGiclopsHurt;
 	}
-	
 	protected SoundEvent getDeathSound() {
 		return MinestuckSoundHandler.soundGiclopsDeath;
 	}

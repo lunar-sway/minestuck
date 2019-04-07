@@ -45,11 +45,7 @@ public class EntityImp extends EntityUnderling
 	{
 		return MinestuckSoundHandler.soundImpAmbient;
 	}
-	
-	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-		return MinestuckSoundHandler.soundImpHurt;
-	}
-	
+	protected SoundEvent getHurtSound(DamageSource damageSourceIn) { return MinestuckSoundHandler.soundImpHurt; }
 	protected SoundEvent getDeathSound() {
 		return MinestuckSoundHandler.soundImpDeath;
 	}

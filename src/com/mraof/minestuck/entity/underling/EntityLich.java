@@ -39,11 +39,9 @@ public class EntityLich extends EntityUnderling
 	protected SoundEvent getAmbientSound() {
 		return MinestuckSoundHandler.soundLichAmbient;
 	}
-	
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
 		return MinestuckSoundHandler.soundLichHurt;
 	}
-	
 	protected SoundEvent getDeathSound() {
 		return MinestuckSoundHandler.soundLichDeath;
 	}
