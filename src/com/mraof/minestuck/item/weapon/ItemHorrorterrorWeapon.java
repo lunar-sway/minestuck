@@ -24,7 +24,7 @@ public class ItemHorrorterrorWeapon extends ItemWeapon {
         if (attacker instanceof EntityPlayer && attacker.getRNG().nextFloat() < .15)
         {
         	if(!attacker.world.isRemote) {
-        		String[]  options = new String[] {"item.clawOfNrubyiglith.message.machinations",
+        		String[] options = new String[] {"item.clawOfNrubyiglith.message.machinations",
         				"item.clawOfNrubyiglith.message.stir",
         				"item.clawOfNrubyiglith.message.suffering",
         				"item.clawOfNrubyiglith.message.will",
