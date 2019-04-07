@@ -12,11 +12,13 @@ public class MinestuckSoundHandler
 	public static SoundEvent soundEmissaryOfDance;
 	public static SoundEvent soundDanceStabDance;
 	public static SoundEvent soundRetroBattleTheme;
-	public static SoundEvent soundFrogAmbient;
 	public static SoundEvent soundWarhorn;
 	public static SoundEvent soundWhispers;
 	public static SoundEvent soundScreech;
 	public static SoundEvent soundUpcheladder;
+	public static SoundEvent soundFrogAmbient;
+	public static SoundEvent soundFrogHurt;
+	public static SoundEvent soundFrogDeath;
 	public static SoundEvent soundImpAmbient;
 	public static SoundEvent soundImpHurt;
 	public static SoundEvent soundImpDeath;
@@ -35,12 +37,15 @@ public class MinestuckSoundHandler
 	
 	public static void initSound()
 	{
+		//Records
 		ResourceLocation soundLocation = new ResourceLocation("minestuck", "record.emissary");
 		soundEmissaryOfDance = new SoundEvent(soundLocation).setRegistryName(soundLocation);
 		soundLocation = new ResourceLocation("minestuck", "record.danceStab");
 		soundDanceStabDance = new SoundEvent(soundLocation).setRegistryName(soundLocation);
 		soundLocation = new ResourceLocation("minestuck","record.retroBattle");
 		soundRetroBattleTheme = new SoundEvent(soundLocation).setRegistryName(soundLocation);
+		
+		//Misc.
 		soundLocation = new ResourceLocation("minestuck", "warhorn");
 		soundWarhorn = new SoundEvent(soundLocation).setRegistryName(soundLocation);
 		soundLocation = new ResourceLocation("minestuck", "whispers");
@@ -51,8 +56,12 @@ public class MinestuckSoundHandler
 		soundUpcheladder = new SoundEvent(soundLocation).setRegistryName(soundLocation);
 		
 		//Frogs
-		soundLocation = new ResourceLocation("minestuck","mobs.frogAmbient");
+		soundLocation = new ResourceLocation("minestuck","frogAmbient");
 		soundFrogAmbient = new SoundEvent(soundLocation).setRegistryName(soundLocation);
+		soundLocation = new ResourceLocation("minestuck","frogHurt");
+		soundFrogHurt = new SoundEvent(soundLocation).setRegistryName(soundLocation);
+		soundLocation = new ResourceLocation("minestuck","frogDeath");
+		soundFrogDeath = new SoundEvent(soundLocation).setRegistryName(soundLocation);
 		//Imps
 		soundLocation = new ResourceLocation("minestuck", "impAmbient");
 		soundImpAmbient = new SoundEvent(soundLocation).setRegistryName(soundLocation);
@@ -101,6 +110,9 @@ public class MinestuckSoundHandler
 		event.getRegistry().register(soundScreech);
 		event.getRegistry().register(soundUpcheladder);
 		
+		event.getRegistry().register(soundFrogAmbient);
+		event.getRegistry().register(soundFrogHurt);
+		event.getRegistry().register(soundFrogDeath);
 		event.getRegistry().register(soundImpAmbient);
 		event.getRegistry().register(soundImpHurt);
 		event.getRegistry().register(soundImpDeath);
@@ -116,6 +128,5 @@ public class MinestuckSoundHandler
 		event.getRegistry().register(soundGiclopsAmbient);
 		event.getRegistry().register(soundGiclopsHurt);
 		event.getRegistry().register(soundGiclopsDeath);
-		//event.getRegistry().register(soundFrogAmbient);
 	}
 }

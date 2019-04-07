@@ -55,6 +55,29 @@
       }
     ]
   },
+  "frogAmbient": {
+    "category": "hostile",
+    "subtitle": "subtitle.frogAmbient",
+    "sounds": [
+      "minestuck:soundeffects/mobs/frog_ambient_1",
+      "minestuck:soundeffects/mobs/frog_ambient_3",
+      "minestuck:soundeffects/mobs/frog_ambient_3"
+    ]
+  },
+  "frogHurt": {
+    "category": "hostile",
+    "subtitle": "subtitle.frogHurt",
+    "sounds": [
+      "minestuck:soundeffects/mobs/frog_hurt"
+    ]
+  },
+  "frogDeath": {
+    "category": "hostile",
+    "subtitle": "subtitle.frogDeath",
+    "sounds": [
+      "minestuck:soundeffects/mobs/frog_death"
+    ]
+  },
   "impAmbient": {
     "category": "hostile",
     "subtitle": "subtitle.impScreech",
