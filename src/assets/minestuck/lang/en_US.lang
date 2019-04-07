@@ -64,30 +64,6 @@ commands.porkhollow.sendSuccess=Successfully sent %s boondollars to %s.
 commands.porkhollow.takeSuccess=Successfully took out %s boondollars from your porkhollow.
 commands.porkhollow.notEnough=You don't have enough boondollars.
 
-subtitle.warhorn=Warhorn sounds
-subtitle.whispers=Spooky whispers
-subtitle.screech=Estrogen-empowered screech
-subtitle.upcheladder=Echeladder levels up
-
-subtitle.frogCroak=Frog croaks
-subtitle.frogHurt=Frog hurts
-subtitle.frogDeath=Frog dies
-subtitle.impScreech=Imp screeches
-subtitle.impHurt=Imp hurts
-subtitle.impDeath=Imp dies
-subtitle.ogreAmbient=Ogre grunts
-subtitle.ogreHurt=Ogre hurts
-subtitle.ogreDeath=Ogre dies
-subtitle.basiliskAmbient=Basilisk hisses
-subtitle.basiliskHurt=Basilisk hurts
-subtitle.basiliskDeath=Basilisk dies
-subtitle.lichAmbient=Lich whispers
-subtitle.lichHurt=Lich hurts
-subtitle.lichDeath=Lich dies
-subtitle.giclopsAmbient=Giclops wants to eat'cha
-subtitle.giclopsHurt=Giclops hurts
-subtitle.giclopsDeath=Giclops dies
-
 computer.buttonClear=Clear message
 computer.buttonClose=Disconnect
 computer.buttonConnect=%s
@@ -1307,6 +1283,30 @@ strife.cane.name=Canekind
 strife.club.name=Clubkind
 strife.sickle.name=Sicklekind
 strife.spork.name=Sporkkind
+
+subtitle.warhorn=Warhorn sounds
+subtitle.whispers=Spooky whispers
+subtitle.screech=Estrogen-empowered screech
+subtitle.upcheladder=Echeladder levels up
+
+subtitle.frogCroak=Frog croaks
+subtitle.frogHurt=Frog hurts
+subtitle.frogDeath=Frog dies
+subtitle.impScreech=Imp screeches
+subtitle.impHurt=Imp hurts
+subtitle.impDeath=Imp dies
+subtitle.ogreAmbient=Ogre grunts
+subtitle.ogreHurt=Ogre hurts
+subtitle.ogreDeath=Ogre dies
+subtitle.basiliskAmbient=Basilisk hisses
+subtitle.basiliskHurt=Basilisk hurts
+subtitle.basiliskDeath=Basilisk dies
+subtitle.lichAmbient=Lich whispers
+subtitle.lichHurt=Lich hurts
+subtitle.lichDeath=Lich dies
+subtitle.giclopsAmbient=Giclops wants to eat'cha
+subtitle.giclopsHurt=Giclops hurts
+subtitle.giclopsDeath=Giclops dies
 
 tile.oil.name=Oil
 tile.blood.name=Blood
