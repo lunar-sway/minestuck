@@ -105,6 +105,7 @@ public class GuiStrifeCard extends GuiScreenMinestuck
 						
 						StrifePortfolioHandler.addSpecibus(player, specibus);
 						this.mc.displayGuiScreen(null);
+						card.shrink(1);	
 					}
 					
 				}

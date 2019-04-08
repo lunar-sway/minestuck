@@ -40,7 +40,10 @@ public class CommandSpecibus extends CommandBase
 		
 		if(args[1].equals("add"))
 		{
-			StrifePortfolioHandler.addSpecibus(player, new StrifeSpecibus(KindAbstratusList.getTypeFromName(args[2])));
+			if(args[2].equals("blank"))
+				StrifePortfolioHandler.addSpecibus(player, new StrifeSpecibus(0));
+			else
+				StrifePortfolioHandler.addSpecibus(player, new StrifeSpecibus(KindAbstratusList.getTypeFromName(args[2])));
 		}
 		else if(args[1].equals("remove"))
 		{
@@ -61,7 +64,9 @@ public class CommandSpecibus extends CommandBase
 		case 1: return getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames());
 		case 2: return getListOfStringsMatchingLastWord(args, "add", "remove", "clear");
 		case 3:
-			if(args[2] != "clear") return getListOfStringsMatchingLastWord(args, KindAbstratusList.getNamesList());
+			List<String> list = KindAbstratusList.getNamesList();
+			list.add("blank");
+			if(args[2] != "clear") return getListOfStringsMatchingLastWord(args, list);
 		default: return super.getTabCompletions(server, sender, args, targetPos);
 		}
 	}

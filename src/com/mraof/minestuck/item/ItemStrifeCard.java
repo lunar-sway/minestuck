@@ -87,10 +87,11 @@ public class ItemStrifeCard extends Item
 				}
 				
 				StrifePortfolioHandler.addSpecibus(playerIn, specibus);
+				stack.shrink(1);
 			}
 			else
 			{
-				playerIn.sendStatusMessage(new TextComponentTranslation("The specibus' data is corrupted and can't be alocated."), false);
+				playerIn.sendStatusMessage(new TextComponentTranslation("The specibus' data is corrupted and can't be allocated."), false);
 				return new ActionResult<ItemStack>(EnumActionResult.FAIL, stack);
 			}
 		}

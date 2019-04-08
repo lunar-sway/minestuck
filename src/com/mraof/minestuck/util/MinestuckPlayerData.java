@@ -103,6 +103,13 @@ public class MinestuckPlayerData
 		getData(player).strifePortfolio = portfolio;
 	}
 	
+	public static void removeStrifeSpecibus(PlayerIdentifier player, int specibusSlot)
+	{
+		if(specibusSlot < getData(player).strifePortfolio.size())
+			getData(player).strifePortfolio.remove(specibusSlot);
+		else System.out.println("INDEX ERROR!");
+	}
+	
 	public static Title getTitle(PlayerIdentifier player)
 	{
 		return getData(player).title;

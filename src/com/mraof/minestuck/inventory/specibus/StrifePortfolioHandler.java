@@ -41,11 +41,14 @@ public class StrifePortfolioHandler
 	{
 		return abstrataList.get(id);
 	}
-
+	
 	public static void addSpecibus(EntityPlayer player, StrifeSpecibus specibus) 
 	{
 		String typeName = specibus.getAbstratus().getDisplayName();
-		player.sendStatusMessage(new TextComponentTranslation("The " + typeName + " specibus has been added to your strife portfolio."), false);						
+		if(specibus.getAbstratus().equals(abstrataList.get(0)))
+			player.sendStatusMessage(new TextComponentTranslation("A blank strife card has been added to your strife portfolio."), false);						
+		else
+			player.sendStatusMessage(new TextComponentTranslation("The " + typeName + " specibus has been added to your strife portfolio."), false);						
 		MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.PORTFOLIO, SpecibusPacket.SPECIBUS_ADD, writeToNBT(specibus));
 		MinestuckChannelHandler.sendToServer(packet);
 	}
@@ -69,7 +72,7 @@ public class StrifePortfolioHandler
 	public static ItemStack createSpecibusItem(StrifeSpecibus specibus)
 	{
 		ItemStack stack = new ItemStack(MinestuckItems.strifeCard);
-		stack.setTagCompound(specibus.writeToNBT(new NBTTagCompound()));
+		if(!specibus.isBlank()) stack.setTagCompound(specibus.writeToNBT(new NBTTagCompound()));
 		
 		return stack;
 	}
@@ -127,7 +130,12 @@ public class StrifePortfolioHandler
 	
 	public static StrifeSpecibus getSpecibus(EntityPlayerMP player, int specibusIndex)
 	{
-		return MinestuckPlayerData.getStrifePortfolio(IdentifierHandler.encode(player)).get(specibusIndex);
+		System.out.println(MinestuckPlayerData.getStrifePortfolio(IdentifierHandler.encode(player)).size());
+		StrifeSpecibus specibus = new StrifeSpecibus(0);
+		if(specibusIndex < MinestuckPlayerData.getStrifePortfolio(IdentifierHandler.encode(player)).size())
+			specibus = MinestuckPlayerData.getStrifePortfolio(IdentifierHandler.encode(player)).get(specibusIndex);
+			else System.out.println("index error!!!!!!!!!");
+		return specibus;
 	}
 	
 	public static void setPortfolio(EntityPlayer player, ArrayList<StrifeSpecibus> portfolio) 

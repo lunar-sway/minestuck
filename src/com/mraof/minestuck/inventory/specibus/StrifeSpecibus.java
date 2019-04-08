@@ -1,12 +1,13 @@
 package com.mraof.minestuck.inventory.specibus;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.util.KindAbstratusList;
 import com.mraof.minestuck.util.KindAbstratusType;
 import com.mraof.minestuck.util.MinestuckPlayerData;
-import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,7 +17,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class StrifeSpecibus 
 {
-	protected LinkedList<ItemStack> list = new LinkedList<ItemStack>();
+	protected LinkedList<ItemStack> list;
 	protected int abstIndex;
 	public Side side = Side.CLIENT;
 	
@@ -27,15 +28,26 @@ public class StrifeSpecibus
 	@SideOnly(Side.CLIENT)
 	protected KindAbstratusType abstratus;
 	
+	public StrifeSpecibus()
+	{
+		System.out.println("start!");
+		list = new LinkedList<ItemStack>();
+	}
+	
 	public StrifeSpecibus(NBTTagCompound nbt)
 	{
+		this();
+		System.out.println("stert!");
 		readFromNBT(nbt);
 	}
 	
 	public StrifeSpecibus(int abstrataIndex)
 	{
+		this();
+		System.out.println("stirt!");
 		abstIndex = abstrataIndex;
 		readFromNBT(writeToNBT(new NBTTagCompound()));
+		System.out.println("creating a new specibus obj");
 	}
 	
 	public StrifeSpecibus(KindAbstratusType type) 
@@ -55,6 +67,8 @@ public class StrifeSpecibus
 	
 	public void readFromNBT(NBTTagCompound nbt)
 	{
+		
+		System.out.println("read");
 		abstIndex = nbt.getInteger("abstrata");
 		list = new LinkedList<ItemStack>();
 		
@@ -72,21 +86,27 @@ public class StrifeSpecibus
 			items = NonNullList.<ItemStack>create();
 			//changed = true;
 		}
+		
 	}
 	
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt)
 	{
+		
+		System.out.println("write");
 		NBTTagCompound items = new NBTTagCompound();
 		
 		nbt.setInteger("abstrata", abstIndex);
-		Iterator<ItemStack> iter = list.iterator();
-		for(int i = 0; i < list.size(); i++)
+			for(int i = 0; i < list.size(); i++)
 		{
-			ItemStack stack = iter.next();
-			System.out.println(stack);
-			items.setTag("slot"+i, stack.writeToNBT(new NBTTagCompound()));
+			if(list.get(i) != null)
+			{
+				ItemStack stack = list.get(i).copy();
+				System.out.println(stack);
+				items.setTag("slot"+i, stack.writeToNBT(new NBTTagCompound()));
+			}
 		}
 		nbt.setTag("items", items);
+		
 		return nbt;
 	}
 	
@@ -106,6 +126,11 @@ public class StrifeSpecibus
 		return this.abstratus;
 	}
 	
+	public boolean isBlank()
+	{
+		return this.abstratus.equals(KindAbstratusList.getTypeList().get(0)) || this.abstIndex == 0;
+	}
+	
 	public boolean putItemStack(ItemStack stack)
 	{
 		if(stack.isEmpty())
@@ -113,22 +138,22 @@ public class StrifeSpecibus
 		
 		if(this.abstratus.partOf(stack))
 		{
-			System.out.println(stack);
-			this.list.add(stack);
-			this.items.add(stack);
+			//System.out.println(stack);
+			this.list.add(stack.copy());
+			this.items.add(stack.copy());
 			
-			for(ItemStack i : items)
+			for(ItemStack i : list)
 				System.out.println(i);
 			
 			return true;
 		}
-		else return false;
+		else return false; 	
 	}
 	
 	public void forceItemStack(ItemStack stack)
 	{
-		this.list.add(stack);
-		this.items.add(stack);
+		this.list.add(stack.copy());
+		this.items.add(stack.copy());
 	}
 	public NonNullList<ItemStack> getItems()
 	{
@@ -145,4 +170,5 @@ public class StrifeSpecibus
 		}
 		return stack;
 	}
+	
 }
