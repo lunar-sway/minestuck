@@ -18,6 +18,7 @@ import com.mraof.minestuck.client.model.ModelSalamander;
 import com.mraof.minestuck.client.model.ModelTurtle;
 import com.mraof.minestuck.client.renderer.BlockColorCruxite;
 import com.mraof.minestuck.client.renderer.RenderMachineOutline;
+import com.mraof.minestuck.client.renderer.entity.RenderBullet;
 import com.mraof.minestuck.client.renderer.entity.RenderDecoy;
 import com.mraof.minestuck.client.renderer.entity.RenderEntityMinestuck;
 import com.mraof.minestuck.client.renderer.entity.RenderGrist;
@@ -34,6 +35,7 @@ import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
 import com.mraof.minestuck.client.util.MinestuckModelManager;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.entity.EntityBigPart;
+import com.mraof.minestuck.entity.EntityBullet;
 import com.mraof.minestuck.entity.EntityDecoy;
 import com.mraof.minestuck.entity.EntityFrog;
 import com.mraof.minestuck.entity.carapacian.EntityBishop;
@@ -67,8 +69,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
@@ -153,7 +153,9 @@ public class ClientProxy extends CommonProxy
 		RenderingRegistry.registerEntityRenderingHandler(EntityCrewPoster.class, manager -> new RenderHangingArt<>(manager, "midnight_poster"));
 		RenderingRegistry.registerEntityRenderingHandler(EntitySbahjPoster.class, manager -> new RenderHangingArt<>(manager, "sbahj_poster"));
 		RenderingRegistry.registerEntityRenderingHandler(EntityShopPoster.class, manager -> new RenderHangingArt<>(manager, "shop_poster"));
-
+		RenderingRegistry.registerEntityRenderingHandler(EntityBullet.class, manager -> new RenderBullet(manager));
+		
+		
 		
 		MinecraftForge.EVENT_BUS.register(new MinestuckKeyHandler());
 		MinecraftForge.EVENT_BUS.register(new ClientEventHandler());

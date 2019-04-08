@@ -1,0 +1,6 @@
+{
+    "parent": "minestuck:item/energy_bow",
+    "textures": {
+        "layer0": "minestuck:items/energy_bow_pulling_2"
+    }
+}

@@ -92,13 +92,13 @@ public class BlockComputerOff extends Block
 	@Override
 	public int getMetaFromState(IBlockState state)
 	{
-		return (state.getValue(DIRECTION)).ordinal() - 2;
+		return state.getValue(DIRECTION).getHorizontalIndex();
 	}
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta)
 	{
-		return getDefaultState().withProperty(DIRECTION, EnumFacing.values()[meta + 2]);
+		return getDefaultState().withProperty(DIRECTION, EnumFacing.getHorizontal(meta % 4));
 	}
 	
 	public static void setDefaultDirection(World world, int x, int y, int z)
