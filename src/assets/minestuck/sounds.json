@@ -78,6 +78,41 @@
       "minestuck:soundeffects/mobs/frog_death"
     ]
   },
+  "nakagatorAmbient": {
+    "category": "hostile",
+    "subtitle": "subtitle.nakagatorAmbient",
+    "sounds": [
+      "minestuck:soundeffects/mobs/nakagator_ambient"
+    ]
+  },
+  "nakagatorHurt": {
+    "category": "hostile",
+    "subtitle": "subtitle.nakagatorHurt",
+    "sounds": [
+      "minestuck:soundeffects/mobs/nakagator_hurt"
+    ]
+  },
+  "nakagatorDeath": {
+    "category": "hostile",
+    "subtitle": "subtitle.nakagatorDeath",
+    "sounds": [
+      "minestuck:soundeffects/mobs/nakagator_death"
+    ]
+  },
+  "turtleHurt": {
+    "category": "hostile",
+    "subtitle": "subtitle.turtleHurt",
+    "sounds": [
+      "minestuck:soundeffects/mobs/turtle_hurt"
+    ]
+  },
+  "turtleDeath": {
+    "category": "hostile",
+    "subtitle": "subtitle.turtleDeath",
+    "sounds": [
+      "minestuck:soundeffects/mobs/turtle_death"
+    ]
+  },
   "impAmbient": {
     "category": "hostile",
     "subtitle": "subtitle.impScreech",

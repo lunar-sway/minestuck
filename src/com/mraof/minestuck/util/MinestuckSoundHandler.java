@@ -16,6 +16,11 @@ public class MinestuckSoundHandler
 	public static SoundEvent soundWhispers;
 	public static SoundEvent soundScreech;
 	public static SoundEvent soundUpcheladder;
+	public static SoundEvent soundNakagatorAmbient;
+	public static SoundEvent soundNakagatorHurt;
+	public static SoundEvent soundNakagatorDeath;
+	public static SoundEvent soundTurtleHurt;
+	public static SoundEvent soundTurtleDeath;
 	public static SoundEvent soundFrogAmbient;
 	public static SoundEvent soundFrogHurt;
 	public static SoundEvent soundFrogDeath;
@@ -55,6 +60,19 @@ public class MinestuckSoundHandler
 		soundLocation = new ResourceLocation("minestuck", "upcheladder");
 		soundUpcheladder = new SoundEvent(soundLocation).setRegistryName(soundLocation);
 		
+		//Nakagators
+		soundLocation = new ResourceLocation("minestuck","nakagatorAmbient");
+		soundNakagatorAmbient = new SoundEvent(soundLocation).setRegistryName(soundLocation);
+		soundLocation = new ResourceLocation("minestuck","nakagatorHurt");
+		soundNakagatorHurt = new SoundEvent(soundLocation).setRegistryName(soundLocation);
+		soundLocation = new ResourceLocation("minestuck","nakagatorDeath");
+		soundNakagatorDeath = new SoundEvent(soundLocation).setRegistryName(soundLocation);
+		//Turtles
+		soundLocation = new ResourceLocation("minestuck","turtleHurt");
+		soundTurtleHurt = new SoundEvent(soundLocation).setRegistryName(soundLocation);
+		soundLocation = new ResourceLocation("minestuck","turtleDeath");
+		soundTurtleDeath = new SoundEvent(soundLocation).setRegistryName(soundLocation);
+		
 		//Frogs
 		soundLocation = new ResourceLocation("minestuck","frogAmbient");
 		soundFrogAmbient = new SoundEvent(soundLocation).setRegistryName(soundLocation);
@@ -62,6 +80,7 @@ public class MinestuckSoundHandler
 		soundFrogHurt = new SoundEvent(soundLocation).setRegistryName(soundLocation);
 		soundLocation = new ResourceLocation("minestuck","frogDeath");
 		soundFrogDeath = new SoundEvent(soundLocation).setRegistryName(soundLocation);
+		
 		//Imps
 		soundLocation = new ResourceLocation("minestuck", "impAmbient");
 		soundImpAmbient = new SoundEvent(soundLocation).setRegistryName(soundLocation);
@@ -110,9 +129,16 @@ public class MinestuckSoundHandler
 		event.getRegistry().register(soundScreech);
 		event.getRegistry().register(soundUpcheladder);
 		
+		event.getRegistry().register(soundNakagatorAmbient);
+		event.getRegistry().register(soundNakagatorHurt);
+		event.getRegistry().register(soundNakagatorDeath);
+		event.getRegistry().register(soundTurtleHurt);
+		event.getRegistry().register(soundTurtleDeath);
+		
 		event.getRegistry().register(soundFrogAmbient);
 		event.getRegistry().register(soundFrogHurt);
 		event.getRegistry().register(soundFrogDeath);
+		
 		event.getRegistry().register(soundImpAmbient);
 		event.getRegistry().register(soundImpHurt);
 		event.getRegistry().register(soundImpDeath);
