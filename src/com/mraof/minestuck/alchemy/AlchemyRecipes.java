@@ -529,7 +529,7 @@ public class AlchemyRecipes
 		GristRegistry.addGristConversion(new ItemStack(goldenGenesisGauntlet), false, new GristSet(new GristType[] {GristType.Build, GristType.Gold, GristType.Uranium, GristType.Diamond, GristType.Artifact}, new int[] {8000, 5000, 300, 250, 10}));
 
 		GristRegistry.addGristConversion(new ItemStack(natureBow), false, new GristSet(new GristType[] {GristType.Build, GristType.Amber, GristType.Chalk}, new int[] {10,4,8}));
-		GristRegistry.addGristConversion(new ItemStack(infernoShot), false, new GristSet(new GristType[] {GristType.Build, GristType.Garnet, GristType.Tar,GristType.Amber,GristType.Uranium}, new int[] {25,19,11,1}));
+		GristRegistry.addGristConversion(new ItemStack(infernoShot), false, new GristSet(new GristType[] {GristType.Build, GristType.Garnet, GristType.Tar, GristType.Amber, GristType.Uranium}, new int[] {25,19,11,3,1}));
 		GristRegistry.addGristConversion(new ItemStack(energyBow), false, new GristSet(new GristType[] {GristType.Build, GristType.Uranium}, new int[] {40,10}));
 
 		GristRegistry.addGristConversion(new ItemStack(catClaws),false,new GristSet(new GristType[] {GristType.Build,GristType.Rust},new int[] {15,5}));
