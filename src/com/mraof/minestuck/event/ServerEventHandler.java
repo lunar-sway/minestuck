@@ -7,17 +7,18 @@ import com.mraof.minestuck.inventory.captchalouge.HashmapModus;
 import com.mraof.minestuck.inventory.captchalouge.Modus;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.item.weapon.ItemPotionWeapon;
+import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.Echeladder;
-import com.mraof.minestuck.util.MinestuckPlayerData;
-import com.mraof.minestuck.util.PostEntryTask;
+import com.mraof.minestuck.util.*;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.SoundCategory;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -35,6 +36,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import static com.mraof.minestuck.util.EnumAspect.HOPE;
+import static com.mraof.minestuck.util.MinestuckPlayerData.getTitle;
+
 public class ServerEventHandler
 {
 	
@@ -43,6 +47,9 @@ public class ServerEventHandler
 	public static long lastDay;
 	
 	public static List<PostEntryTask> tickTasks = new ArrayList<PostEntryTask>();
+	
+	static Potion[] aspectEffects = { MobEffects.ABSORPTION, MobEffects.SPEED, MobEffects.RESISTANCE, MobEffects.SATURATION, MobEffects.FIRE_RESISTANCE, MobEffects.REGENERATION, MobEffects.LUCK, MobEffects.NIGHT_VISION, MobEffects.STRENGTH, MobEffects.JUMP_BOOST, MobEffects.HASTE, MobEffects.INVISIBILITY }; //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
+	static float[] aspectStrength = new float[] {1.0F/10, 1.0F/10, 1.0F/10, 1.0F/10, 1.0F/10, 1.0F/10, 1.0F/10, 1.0F/22, 1.0F/10, 1.0F/10, 1.0F/10, 1.0F/10}; //Absorption, Speed, Resistance, Saturation, Fire Resistance, Regeneration, Luck, Night Vision, Strength, Jump Boost, Haste, Invisibility
 	
 	@SubscribeEvent
 	public void onWorldTick(TickEvent.WorldTickEvent event)
@@ -174,5 +181,25 @@ public class ServerEventHandler
 	{
 		if(event.getItemStack().getItem() == Item.getItemFromBlock(MinestuckBlocks.treatedPlanks))
 			event.setBurnTime(50);	//Do not set this number to 0.
+	}
+	
+	@SubscribeEvent
+	public void aspectPotionEffect(TickEvent.PlayerTickEvent event) {
+		SburbConnection c = SkaianetHandler.getMainConnection(IdentifierHandler.encode(event.player), true);
+		if(c==null || !c.enteredGame() || MinestuckConfig.aspectEffects == false)
+			return;
+		int rung = MinestuckPlayerData.getData(IdentifierHandler.encode(event.player)).echeladder.getRung();
+		EnumAspect aspect = MinestuckPlayerData.getTitle(IdentifierHandler.encode(event.player)).getHeroAspect();
+		int potionLevel = (int) (aspectStrength[aspect.ordinal()] * rung); //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
+		
+		if(MinestuckConfig.aspectEffects != false) {
+			if(rung > 12 && aspect == HOPE) {
+				event.player.addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, 400, 1));
+			}
+			
+			if(potionLevel > 0) {
+				event.player.addPotionEffect(new PotionEffect(aspectEffects[aspect.ordinal()], 400, potionLevel-1));
+			}
+		}
 	}
 }
