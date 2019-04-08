@@ -100,6 +100,17 @@
                 },
                 {
                     "type": "item",
+                    "name": "minestuck:grimoire",
+                    "weight": 1,
+                    "conditions": [
+                        {
+                            "condition": "minestuck:consort",
+                            "consort": "turtle"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
                     "name": "minestuck:crumply_hat",
                     "weight": 8,
                     "functions": [

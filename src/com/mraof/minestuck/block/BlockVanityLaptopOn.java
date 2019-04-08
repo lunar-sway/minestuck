@@ -54,13 +54,13 @@ public class BlockVanityLaptopOn extends BlockComputerOff implements ITileEntity
 	@Override
 	public int getMetaFromState(IBlockState state)
 	{
-		return ((((state.getValue(DIRECTION)).ordinal() - 2) % 4) << 2) + ((state.getValue(VARIANT)).ordinal() % 4);
+		return ((state.getValue(DIRECTION).getHorizontalIndex()) << 2) + ((state.getValue(VARIANT)).ordinal() % 4);
 	}
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta)
 	{
-		return getDefaultState().withProperty(DIRECTION, EnumFacing.values()[(meta >> 2) + 2]).withProperty(VARIANT, BlockType.values()[meta & 3]);
+		return getDefaultState().withProperty(DIRECTION, EnumFacing.getHorizontal((meta >> 2) % 4)).withProperty(VARIANT, BlockType.values()[meta & 3]);
 	}
 	
 	@Override
