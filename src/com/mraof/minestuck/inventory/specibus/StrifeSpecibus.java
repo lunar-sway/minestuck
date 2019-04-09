@@ -67,32 +67,35 @@ public class StrifeSpecibus
 	
 	public void readFromNBT(NBTTagCompound nbt)
 	{
-		
-		System.out.println("read");
 		abstIndex = nbt.getInteger("abstrata");
 		list = new LinkedList<ItemStack>();
 		
-		if(nbt.hasKey("items"))
-		{
-			NBTTagCompound items = (NBTTagCompound) nbt.getTag("items");
-			for(int i = 0; i < list.size(); i++)
-				if(items.hasKey("slot"+i))
-					list.add(new ItemStack(items.getCompoundTag("slot"+i)));
-				else break;
-		}
 		if(side.isClient())
 		{
 			abstratus = KindAbstratusList.getTypeList().get(abstIndex);
 			items = NonNullList.<ItemStack>create();
-			//changed = true;
 		}
 		
+		if(nbt.hasKey("items"))
+		{
+			NBTTagCompound itemsNBT = (NBTTagCompound) nbt.getTag("items");
+			int i = 0;
+			while(true)
+			{
+				if(itemsNBT.hasKey("slot"+i))
+				{
+					ItemStack stack = new ItemStack(itemsNBT.getCompoundTag("slot"+i));
+					list.add(stack);
+					if(side.isClient()) items.add(stack);
+				}
+				else break;
+				i++;
+			}
+		}
 	}
 	
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt)
 	{
-		
-		System.out.println("write");
 		NBTTagCompound items = new NBTTagCompound();
 		
 		nbt.setInteger("abstrata", abstIndex);
@@ -101,7 +104,6 @@ public class StrifeSpecibus
 			if(list.get(i) != null)
 			{
 				ItemStack stack = list.get(i).copy();
-				System.out.println(stack);
 				items.setTag("slot"+i, stack.writeToNBT(new NBTTagCompound()));
 			}
 		}
@@ -138,7 +140,6 @@ public class StrifeSpecibus
 		
 		if(this.abstratus.partOf(stack))
 		{
-			//System.out.println(stack);
 			this.list.add(stack.copy());
 			this.items.add(stack.copy());
 			
