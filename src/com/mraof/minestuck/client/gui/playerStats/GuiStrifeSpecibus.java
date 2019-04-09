@@ -98,8 +98,8 @@ public class GuiStrifeSpecibus extends GuiPlayerStats
 			String displayName = abstratus.getDisplayName();
 			//unlocalizedName = "a";
 			ResourceLocation icon = new ResourceLocation("minestuck", iconsLoc+unlocalizedName+".png");
-			int cardX = 128 + (int)(48*(i%5));
-			int cardY = 64 - (i*5) + (int)(48*(i/5));
+			int cardX = 264 - (int)(32*(i%5)) - (int)(8*(i/5));
+			int cardY = 75 + (int)(48*(i/5)) + (int)(8*(i%5));
 			float cardScale = 0.25F;
 			
 			float c = 1f;
@@ -150,7 +150,7 @@ public class GuiStrifeSpecibus extends GuiPlayerStats
 		if(specibus.getAbstratusIndex() > 0)
 		{
 			setScale(cardScale*2.6F);
-			mc.fontRenderer.drawString(displayName, (int)(((75 - txOffset))+(cardX/scale)), (int)((88)+(cardY/scale)), 0x00E371);
+			mc.fontRenderer.drawString(displayName, (int)(((80 - txOffset))+(cardX/scale)), (int)((88)+(cardY/scale)), 0x00E371);
 			mc.getTextureManager().bindTexture(icon);
 			setScale(cardScale/0.5f*(0.1875f));
 			drawTexturedModalRect(140 + cardX/scale, 148 + cardY/scale, 0, 0, 256, 256);
@@ -158,17 +158,16 @@ public class GuiStrifeSpecibus extends GuiPlayerStats
 		else blankCardCount++;
 		setScale(1);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		
-		ItemStack[] testStack = {new ItemStack(MinestuckItems.beverage), new ItemStack(MinestuckItems.itemFrog), new ItemStack(MinestuckBlocks.genericObject)};
-		
 		int i = 0;
+		
+		setScale(cardScale);
 		for(ItemStack stack : specibus.getItems())
 		{
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			mc.getTextureManager().bindTexture(icons);
-			drawTexturedModalRect(cardX+(i*28), cardY, 0, 122, 21, 26);
+			drawTexturedModalRect((cardX+(i*8)+20)/cardScale, (cardY+48)/cardScale, 0, 122, 21, 26);
 			//System.out.println(stack);
-			drawItemStack(stack, cardX+(i*28), cardY, "");
+			drawItemStack(stack, (int)((cardX+(i*8)+20)/cardScale), (int)((cardY+50)/cardScale), "");
 			i++;
 		}
 		
