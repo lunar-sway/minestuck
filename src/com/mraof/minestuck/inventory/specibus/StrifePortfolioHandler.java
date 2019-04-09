@@ -46,11 +46,16 @@ public class StrifePortfolioHandler
 	{
 		String typeName = specibus.getAbstratus().getDisplayName();
 		if(specibus.getAbstratus().equals(abstrataList.get(0)))
-			player.sendStatusMessage(new TextComponentTranslation("A blank strife card has been added to your strife portfolio."), false);						
+			player.sendStatusMessage(new TextComponentTranslation("specibus.success.blank"), false);						
 		else
-			player.sendStatusMessage(new TextComponentTranslation("The " + typeName + " specibus has been added to your strife portfolio."), false);						
+			player.sendStatusMessage(new TextComponentTranslation("specibus.success"), false);						
 		MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.PORTFOLIO, SpecibusPacket.SPECIBUS_ADD, writeToNBT(specibus));
 		MinestuckChannelHandler.sendToServer(packet);
+	}
+	
+	public static boolean checkSpecibusLimit(EntityPlayer player)
+	{
+		return MinestuckPlayerData.getStrifePortfolio(IdentifierHandler.encode(player)).size() <= 10;
 	}
 	
 	public static void retrieveItem(EntityPlayerMP player, int specibusIndex, int itemIndex)

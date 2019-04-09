@@ -65,6 +65,13 @@ public class ItemStrifeCard extends Item
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) 
 	{
 		ItemStack stack = playerIn.getHeldItem(handIn);
+		
+		if(!StrifePortfolioHandler.checkSpecibusLimit(playerIn))
+			{
+				playerIn.sendStatusMessage(new TextComponentTranslation("specibus.full"), false);
+				return new ActionResult<ItemStack>(EnumActionResult.FAIL, stack);
+			}
+		
 		if(!stack.hasTagCompound())
 		{
 			BlockPos pos = playerIn.getPosition();
@@ -91,7 +98,7 @@ public class ItemStrifeCard extends Item
 			}
 			else
 			{
-				playerIn.sendStatusMessage(new TextComponentTranslation("The specibus' data is corrupted and can't be allocated."), false);
+				playerIn.sendStatusMessage(new TextComponentTranslation("specibus.corrupted"), false);
 				return new ActionResult<ItemStack>(EnumActionResult.FAIL, stack);
 			}
 		}

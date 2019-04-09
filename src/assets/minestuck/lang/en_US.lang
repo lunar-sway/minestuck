@@ -1290,6 +1290,11 @@ normal=Normal
 fast=Fast
 nothing=Nothing
 
+specibus.corrupted=The specibus' data is corrupted and can't be allocated.
+specibus.full=Your strife portfolio is full!
+specibus.success=The %s specibus has been added to your strife portfolio.
+specibus.success.blank=A blank strife card has been added to your strife portfolio.
+
 strife.sword.name=bladekind
 strife.bow.name=bowkind
 strife.pickaxe.name=pickaxekind

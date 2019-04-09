@@ -14,6 +14,7 @@ import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 
 public class CommandSpecibus extends CommandBase
 {
@@ -40,10 +41,14 @@ public class CommandSpecibus extends CommandBase
 		
 		if(args[1].equals("add"))
 		{
-			if(args[2].equals("blank"))
-				StrifePortfolioHandler.addSpecibus(player, new StrifeSpecibus(0));
-			else
-				StrifePortfolioHandler.addSpecibus(player, new StrifeSpecibus(KindAbstratusList.getTypeFromName(args[2])));
+			if(StrifePortfolioHandler.checkSpecibusLimit(player)) 
+			{
+				if(args[2].equals("blank"))
+					StrifePortfolioHandler.addSpecibus(player, new StrifeSpecibus(0));
+				else
+					StrifePortfolioHandler.addSpecibus(player, new StrifeSpecibus(KindAbstratusList.getTypeFromName(args[2])));
+			}
+			else player.sendStatusMessage(new TextComponentTranslation("specibus.full"), false);
 		}
 		else if(args[1].equals("remove"))
 		{
@@ -65,7 +70,7 @@ public class CommandSpecibus extends CommandBase
 		case 2: return getListOfStringsMatchingLastWord(args, "add", "remove", "clear");
 		case 3:
 			List<String> list = KindAbstratusList.getNamesList();
-			list.add("blank");
+			//list.add("blank");
 			if(args[2] != "clear") return getListOfStringsMatchingLastWord(args, list);
 		default: return super.getTabCompletions(server, sender, args, targetPos);
 		}
