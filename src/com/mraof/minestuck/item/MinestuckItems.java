@@ -391,7 +391,7 @@ public class MinestuckItems
 		registry.register(regiHammer.setRegistryName("regi_hammer"));
 		registry.register(fearNoAnvil.setRegistryName("fear_no_anvil"));
 		registry.register(qEHammerAxe.setRegistryName("estrogen_empowered_everything_eradicator"));
-		registry.register(dDEHammerAxe.setRegistryName("EEEEEEEEEEEE"));
+		registry.register(dDEHammerAxe.setRegistryName("eeeeeeeeeeee"));
 		registry.register(zillyhooHammer.setRegistryName("zillyhoo_hammer"));
 		registry.register(popamaticVrillyhoo.setRegistryName("popamatic_vrillyhoo"));
 		registry.register(scarletZillyhoo.setRegistryName("scarlet_zillyhoo"));
