@@ -12,13 +12,18 @@ public class EntitySalamander extends EntityConsort
 		super(world);
 	}
 	
-	protected SoundEvent getAmbientSound() {
+	protected SoundEvent getAmbientSound()
+	{
 		return MinestuckSoundHandler.soundSalamanderAmbient;
 	}
-	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+	
+	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
+	{
 		return MinestuckSoundHandler.soundSalamanderHurt;
 	}
-	protected SoundEvent getDeathSound() {
+	
+	protected SoundEvent getDeathSound()
+	{
 		return MinestuckSoundHandler.soundSalamanderDeath;
 	}
 	

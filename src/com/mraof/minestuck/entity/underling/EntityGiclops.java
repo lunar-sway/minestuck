@@ -57,13 +57,18 @@ public class EntityGiclops extends EntityUnderling implements IBigEntity
 		this.tasks.addTask(3, aiAttack);
 	}
 	
-	protected SoundEvent getAmbientSound() {
+	protected SoundEvent getAmbientSound()
+	{
 		return MinestuckSoundHandler.soundGiclopsAmbient;
 	}
-	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+	
+	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
+	{
 		return MinestuckSoundHandler.soundGiclopsHurt;
 	}
-	protected SoundEvent getDeathSound() {
+	
+	protected SoundEvent getDeathSound()
+	{
 		return MinestuckSoundHandler.soundGiclopsDeath;
 	}
 	

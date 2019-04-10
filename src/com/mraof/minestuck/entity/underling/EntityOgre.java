@@ -39,9 +39,20 @@ public class EntityOgre extends EntityUnderling
 		this.tasks.addTask(3, aiAttack);
 	}
 	
-	protected SoundEvent getAmbientSound() { return MinestuckSoundHandler.soundOgreAmbient; }
-	protected SoundEvent getDeathSound() { return MinestuckSoundHandler.soundOgreDeath; }
-	protected SoundEvent getHurtSound(DamageSource damageSourceIn) { return MinestuckSoundHandler.soundOgreHurt; }
+	protected SoundEvent getAmbientSound()
+	{
+		return MinestuckSoundHandler.soundOgreAmbient;
+	}
+	
+	protected SoundEvent getDeathSound()
+	{
+		return MinestuckSoundHandler.soundOgreDeath;
+	}	
+	
+	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
+	{
+		return MinestuckSoundHandler.soundOgreHurt;
+	}
 	
 	@Override
 	public GristSet getGristSpoils()

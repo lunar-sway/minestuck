@@ -36,13 +36,18 @@ public class EntityLich extends EntityUnderling
 		this.tasks.addTask(3, aiAttack);
 	}
 	
-	protected SoundEvent getAmbientSound() {
+	protected SoundEvent getAmbientSound()
+	{
 		return MinestuckSoundHandler.soundLichAmbient;
 	}
-	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+	
+	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
+	{
 		return MinestuckSoundHandler.soundLichHurt;
 	}
-	protected SoundEvent getDeathSound() {
+	
+	protected SoundEvent getDeathSound()
+	{
 		return MinestuckSoundHandler.soundLichDeath;
 	}
 	

@@ -14,13 +14,18 @@ public class EntityNakagator extends EntityConsort
 		super(world);
 	}
 	
-	protected SoundEvent getAmbientSound() {
+	protected SoundEvent getAmbientSound()
+	{
 		return MinestuckSoundHandler.soundNakagatorAmbient;
 	}
-	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+	
+	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
+	{
 		return MinestuckSoundHandler.soundNakagatorHurt;
 	}
-	protected SoundEvent getDeathSound() {
+	
+	protected SoundEvent getDeathSound()
+	{
 		return MinestuckSoundHandler.soundNakagatorDeath;
 	}
 	

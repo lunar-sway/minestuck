@@ -424,7 +424,10 @@ public class EntityFrog extends EntityMinestuck
     {
         return MinestuckSoundHandler.soundFrogAmbient;
     }
-    protected SoundEvent getHurtSound(DamageSource damageSourceIn) { return MinestuckSoundHandler.soundFrogHurt; }
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn)
+    {
+        return MinestuckSoundHandler.soundFrogHurt;
+    }
     protected SoundEvent getDeathSound()
     {
         return MinestuckSoundHandler.soundFrogDeath;

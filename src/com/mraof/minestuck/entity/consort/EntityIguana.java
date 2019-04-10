@@ -13,13 +13,17 @@ public class EntityIguana extends EntityConsort
 		super(world);
 	}
 	
-	protected SoundEvent getAmbientSound() {
+	protected SoundEvent getAmbientSound()
+	{
 		return MinestuckSoundHandler.soundIguanaAmbient;
 	}
+	
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
 		return MinestuckSoundHandler.soundIguanaHurt;
 	}
-	protected SoundEvent getDeathSound() {
+	
+	protected SoundEvent getDeathSound()
+	{
 		return MinestuckSoundHandler.soundIguanaDeath;
 	}
 	

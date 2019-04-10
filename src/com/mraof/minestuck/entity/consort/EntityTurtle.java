@@ -12,10 +12,12 @@ public class EntityTurtle extends EntityConsort
 		super(world);
 	}
 	
-	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
+	{
 		return MinestuckSoundHandler.soundTurtleHurt;
 	}
-	protected SoundEvent getDeathSound() {
+	protected SoundEvent getDeathSound()
+	{
 		return MinestuckSoundHandler.soundTurtleDeath;
 	}
 	

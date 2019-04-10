@@ -43,10 +43,16 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	{
 		return MinestuckSoundHandler.soundBasiliskAmbient;
 	}
-	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+	
+	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
+	{
 		return MinestuckSoundHandler.soundBasiliskHurt;
 	}
-	protected SoundEvent getDeathSound() { return MinestuckSoundHandler.soundBasiliskDeath; }
+	
+	protected SoundEvent getDeathSound()
+	{
+		return MinestuckSoundHandler.soundBasiliskDeath;
+	}
 	
 	@Override
 	public GristSet getGristSpoils()
