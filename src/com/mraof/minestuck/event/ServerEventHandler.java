@@ -11,6 +11,7 @@ import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.*;
+import net.java.games.input.Component;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -186,15 +187,17 @@ public class ServerEventHandler
 	}
 	
 	@SubscribeEvent
-	public void aspectPotionEffect(TickEvent.PlayerTickEvent event) {
-		SburbConnection c = SkaianetHandler.getMainConnection(IdentifierHandler.encode(event.player), true);
-		if(c==null || !c.enteredGame() || MinestuckConfig.aspectEffects == false)
+	public void aspectPotionEffect(TickEvent.PlayerTickEvent event)
+	{
+		IdentifierHandler.PlayerIdentifier identifier = IdentifierHandler.encode(event.player);
+		SburbConnection c = SkaianetHandler.getMainConnection(identifier, true);
+		if(c == null || !c.enteredGame() || !MinestuckConfig.aspectEffects)
 			return;
-		int rung = MinestuckPlayerData.getData(IdentifierHandler.encode(event.player)).echeladder.getRung();
-		EnumAspect aspect = MinestuckPlayerData.getTitle(IdentifierHandler.encode(event.player)).getHeroAspect();
+		int rung = MinestuckPlayerData.getData(identifier).echeladder.getRung();
+		EnumAspect aspect = MinestuckPlayerData.getTitle(identifier).getHeroAspect();
 		int potionLevel = (int) (aspectStrength[aspect.ordinal()] * rung); //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
 		
-		if(event.player.getEntityWorld().getTotalWorldTime() % 380 == IdentifierHandler.encode(event.player).hashCode() % 380) {
+		if(event.player.getEntityWorld().getTotalWorldTime() % 380 == identifier.hashCode() % 380) {
 			if(rung > 18 && aspect == HOPE) {
 				event.player.addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, 600, 0));
 			}
