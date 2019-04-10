@@ -50,7 +50,8 @@ public class ServerEventHandler
 	public static List<PostEntryTask> tickTasks = new ArrayList<PostEntryTask>();
 	
 	static Potion[] aspectEffects = { MobEffects.ABSORPTION, MobEffects.SPEED, MobEffects.RESISTANCE, MobEffects.SATURATION, MobEffects.FIRE_RESISTANCE, MobEffects.REGENERATION, MobEffects.LUCK, MobEffects.NIGHT_VISION, MobEffects.STRENGTH, MobEffects.JUMP_BOOST, MobEffects.HASTE, MobEffects.INVISIBILITY }; //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
-	static float[] aspectStrength = new float[] {1.0F/9, 1.0F/12, 1.0F/15, 1.0F/23, 1.0F/22, 1.0F/17, 1.0F/13, 1.0F/22, 1.0F/14, 1.0F/12, 1.0F/12, 1.0F/12}; //Absorption, Speed, Resistance, Saturation, Fire Resistance, Regeneration, Luck, Night Vision, Strength, Jump Boost, Haste, Invisibility
+	// Increase the starting rungs
+	static float[] aspectStrength = new float[] {1.0F/14, 1.0F/15, 1.0F/28, 1.0F/25, 1.0F/18, 1.0F/20, 1.0F/10, 1.0F/12, 1.0F/25, 1.0F/10, 1.0F/13, 1.0F/12}; //Absorption, Speed, Resistance, Saturation, Fire Resistance, Regeneration, Luck, Night Vision, Strength, Jump Boost, Haste, Invisibility
 	
 	@SubscribeEvent
 	public void onWorldTick(TickEvent.WorldTickEvent event)
@@ -194,7 +195,7 @@ public class ServerEventHandler
 		int potionLevel = (int) (aspectStrength[aspect.ordinal()] * rung); //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
 		
 		if(event.player.getEntityWorld().getTotalWorldTime() % 380 == IdentifierHandler.encode(event.player).hashCode() % 380) {
-			if(rung > 22 && aspect == HOPE) {
+			if(rung > 18 && aspect == HOPE) {
 				event.player.addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, 600, 0));
 			}
 			
