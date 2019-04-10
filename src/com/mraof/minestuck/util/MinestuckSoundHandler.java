@@ -19,6 +19,12 @@ public class MinestuckSoundHandler
 	public static SoundEvent soundNakagatorAmbient;
 	public static SoundEvent soundNakagatorHurt;
 	public static SoundEvent soundNakagatorDeath;
+	public static SoundEvent soundSalamanderAmbient;
+	public static SoundEvent soundSalamanderHurt;
+	public static SoundEvent soundSalamanderDeath;
+	public static SoundEvent soundIguanaAmbient;
+	public static SoundEvent soundIguanaHurt;
+	public static SoundEvent soundIguanaDeath;
 	public static SoundEvent soundTurtleHurt;
 	public static SoundEvent soundTurtleDeath;
 	public static SoundEvent soundFrogAmbient;
@@ -67,6 +73,20 @@ public class MinestuckSoundHandler
 		soundNakagatorHurt = new SoundEvent(soundLocation).setRegistryName(soundLocation);
 		soundLocation = new ResourceLocation("minestuck","nakagatorDeath");
 		soundNakagatorDeath = new SoundEvent(soundLocation).setRegistryName(soundLocation);
+		//Iguanas
+		soundLocation = new ResourceLocation("minestuck","iguanaAmbient");
+		soundIguanaAmbient = new SoundEvent(soundLocation).setRegistryName(soundLocation);
+		soundLocation = new ResourceLocation("minestuck","iguanaHurt");
+		soundIguanaHurt = new SoundEvent(soundLocation).setRegistryName(soundLocation);
+		soundLocation = new ResourceLocation("minestuck","iguanaDeath");
+		soundIguanaDeath = new SoundEvent(soundLocation).setRegistryName(soundLocation);
+		//Salamanders
+		soundLocation = new ResourceLocation("minestuck","salamanderAmbient");
+		soundSalamanderAmbient = new SoundEvent(soundLocation).setRegistryName(soundLocation);
+		soundLocation = new ResourceLocation("minestuck","salamanderHurt");
+		soundSalamanderHurt = new SoundEvent(soundLocation).setRegistryName(soundLocation);
+		soundLocation = new ResourceLocation("minestuck","salamanderDeath");
+		soundSalamanderDeath = new SoundEvent(soundLocation).setRegistryName(soundLocation);
 		//Turtles
 		soundLocation = new ResourceLocation("minestuck","turtleHurt");
 		soundTurtleHurt = new SoundEvent(soundLocation).setRegistryName(soundLocation);
@@ -132,6 +152,12 @@ public class MinestuckSoundHandler
 		event.getRegistry().register(soundNakagatorAmbient);
 		event.getRegistry().register(soundNakagatorHurt);
 		event.getRegistry().register(soundNakagatorDeath);
+		event.getRegistry().register(soundIguanaAmbient);
+		event.getRegistry().register(soundIguanaHurt);
+		event.getRegistry().register(soundIguanaDeath);
+		event.getRegistry().register(soundSalamanderAmbient);
+		event.getRegistry().register(soundSalamanderHurt);
+		event.getRegistry().register(soundSalamanderDeath);
 		event.getRegistry().register(soundTurtleHurt);
 		event.getRegistry().register(soundTurtleDeath);
 		

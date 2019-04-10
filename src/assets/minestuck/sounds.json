@@ -56,7 +56,7 @@
     ]
   },
   "frogAmbient": {
-    "category": "hostile",
+    "category": "friendly",
     "subtitle": "subtitle.frogAmbient",
     "sounds": [
       "minestuck:soundeffects/mobs/frog_ambient_1",
@@ -65,49 +65,91 @@
     ]
   },
   "frogHurt": {
-    "category": "hostile",
+    "category": "friendly",
     "subtitle": "subtitle.frogHurt",
     "sounds": [
       "minestuck:soundeffects/mobs/frog_hurt"
     ]
   },
   "frogDeath": {
-    "category": "hostile",
+    "category": "friendly",
     "subtitle": "subtitle.frogDeath",
     "sounds": [
       "minestuck:soundeffects/mobs/frog_death"
     ]
   },
   "nakagatorAmbient": {
-    "category": "hostile",
+    "category": "friendly",
     "subtitle": "subtitle.nakagatorAmbient",
     "sounds": [
       "minestuck:soundeffects/mobs/nakagator_ambient"
     ]
   },
   "nakagatorHurt": {
-    "category": "hostile",
+    "category": "friendly",
     "subtitle": "subtitle.nakagatorHurt",
     "sounds": [
       "minestuck:soundeffects/mobs/nakagator_hurt"
     ]
   },
   "nakagatorDeath": {
-    "category": "hostile",
+    "category": "friendly",
     "subtitle": "subtitle.nakagatorDeath",
     "sounds": [
       "minestuck:soundeffects/mobs/nakagator_death"
     ]
   },
+  "iguanaAmbient": {
+    "category": "friendly",
+    "subtitle": "subtitle.iguanaAmbient",
+    "sounds": [
+      "minestuck:soundeffects/mobs/iguana_ambient"
+    ]
+  },
+  "iguanaHurt": {
+    "category": "friendly",
+    "subtitle": "subtitle.iguanaHurt",
+    "sounds": [
+      "minestuck:soundeffects/mobs/iguana_hurt"
+    ]
+  },
+  "iguanaDeath": {
+    "category": "friendly",
+    "subtitle": "subtitle.iguanaDeath",
+    "sounds": [
+      "minestuck:soundeffects/mobs/iguana_death"
+    ]
+  },
+  "salamanderAmbient": {
+    "category": "friendly",
+    "subtitle": "subtitle.salamanderAmbient",
+    "sounds": [
+      "minestuck:soundeffects/mobs/salamander_ambient"
+    ]
+  },
+  "salamanderHurt": {
+    "category": "friendly",
+    "subtitle": "subtitle.salamanderHurt",
+    "sounds": [
+      "minestuck:soundeffects/mobs/salamander_hurt"
+    ]
+  },
+  "salamanderDeath": {
+    "category": "friendly",
+    "subtitle": "subtitle.salamanderDeath",
+    "sounds": [
+      "minestuck:soundeffects/mobs/salamander_death"
+    ]
+  },
   "turtleHurt": {
-    "category": "hostile",
+    "category": "friendly",
     "subtitle": "subtitle.turtleHurt",
     "sounds": [
       "minestuck:soundeffects/mobs/turtle_hurt"
     ]
   },
   "turtleDeath": {
-    "category": "hostile",
+    "category": "friendly",
     "subtitle": "subtitle.turtleDeath",
     "sounds": [
       "minestuck:soundeffects/mobs/turtle_death"
