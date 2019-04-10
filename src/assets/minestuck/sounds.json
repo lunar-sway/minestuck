@@ -60,7 +60,7 @@
     "subtitle": "subtitle.frogAmbient",
     "sounds": [
       "minestuck:soundeffects/mobs/frog_ambient_1",
-      "minestuck:soundeffects/mobs/frog_ambient_3",
+      "minestuck:soundeffects/mobs/frog_ambient_2",
       "minestuck:soundeffects/mobs/frog_ambient_3"
     ]
   },
