@@ -16,26 +16,46 @@ public class KindAbstratusType
 	
 	private ArrayList<ItemType> items = new ArrayList<ItemType>();
 	
-	public KindAbstratusType(String unlocName) {
+	public KindAbstratusType(String unlocName) 
+	{
 		this.unlocalizedName = unlocName;
 	}
 	
-	public KindAbstratusType addItemClass(Class<? extends Item> item) {
-		items.add(new ItemClassType(item));
+	public KindAbstratusType(String unlocName, Object... items)
+	{
+		this(unlocName);
+		
+		for(Object i : items)
+		{
+			if(i instanceof Item) addItemId((Item)i);
+			else if(i instanceof String) addToolClass((String)i);
+			else addItemClass((Class<? extends Item>)i);
+		}
+	}
+	
+	public KindAbstratusType addItemClass(Class<? extends Item>... items) 
+	{
+		for(Class<? extends Item> item : items)
+			this.items.add(new ItemClassType(item));
 		return this;
 	}
 	
-	public KindAbstratusType addItemId(Item item) {
-		items.add(new ItemIdType(item));
+	public KindAbstratusType addItemId(Item... items) 
+	{
+		for(Item item : items)
+			this.items.add(new ItemIdType(item));
 		return this;
 	}
 	
-	public KindAbstratusType addToolClass(String in) {
-		items.add(new ItemToolType(in));
+	public KindAbstratusType addToolClass(String... in) 
+	{
+		for(String i : in)
+			items.add(new ItemToolType(i));
 		return this;
 	}
 	
-	public KindAbstratusType includesFist() {
+	public KindAbstratusType includesFist() 
+	{
 		items.add(new FistType());
 		return this;
 	}

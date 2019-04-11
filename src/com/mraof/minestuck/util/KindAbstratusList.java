@@ -12,45 +12,63 @@ public class KindAbstratusList {
 	static ArrayList<KindAbstratusType> typeList;
 	static ArrayList<String> namesList = new ArrayList<String>();
 	
+	public static final KindAbstratusType blank = new KindAbstratusType("blank");
+	public static final KindAbstratusType bladekind = new KindAbstratusType("sword", ItemSword.class, "sword");
+	public static final KindAbstratusType bowkind = new KindAbstratusType("bow", ItemBow.class);
+	public static final KindAbstratusType pickaxekind = new KindAbstratusType("pickaxe", ItemPickaxe.class, "pickaxe");
+	public static final KindAbstratusType axekind = new KindAbstratusType("axe", ItemAxe.class, "axe");
+	public static final KindAbstratusType hoekind = new KindAbstratusType("hoe", ItemHoe.class, "hoe");
+	public static final KindAbstratusType spadekind = new KindAbstratusType("shovel", ItemSpade.class, "shovel");
+	public static final KindAbstratusType hammerkind = new KindAbstratusType("hammer", "hammer");
+	public static final KindAbstratusType canekind = new KindAbstratusType("cane");
+	public static final KindAbstratusType clubkind = new KindAbstratusType("club");
+	public static final KindAbstratusType sicklekind = new KindAbstratusType("sickle", "sickle");
+	public static final KindAbstratusType spoonkind = new KindAbstratusType("spoon");
+	public static final KindAbstratusType forkkind = new KindAbstratusType("fork");
+	public static final KindAbstratusType fistkind = new KindAbstratusType("fist").includesFist();
+	public static final KindAbstratusType gauntletkind = new KindAbstratusType("gauntlet", "gauntlet");
+	public static final KindAbstratusType clawkind = new KindAbstratusType("claw");
+	public static final KindAbstratusType dicekind = new KindAbstratusType("dice");
+	public static final KindAbstratusType fshngrodkind = new KindAbstratusType("fishing_rod", ItemFishingRod.class);
+	public static final KindAbstratusType jokerkind = new KindAbstratusType("joker", MinestuckItems.zillyhooHammer, MinestuckItems.zillywairCutlass, MinestuckItems.clawSickle);
+	
 	public static void registerTypes()
 	{
 		if(typeList != null)
 			return;
-		typeList = new ArrayList<KindAbstratusType>();
-		typeList.add(new KindAbstratusType("blank"));
-		typeList.add(new KindAbstratusType("sword").addItemClass(ItemSword.class).addToolClass("sword"));
-		typeList.add(new KindAbstratusType("bow").addItemClass(ItemBow.class));
-		typeList.add(new KindAbstratusType("pickaxe").addItemClass(ItemPickaxe.class));
-		typeList.add(new KindAbstratusType("axe").addItemClass(ItemAxe.class).addToolClass("axe"));
-		typeList.add(new KindAbstratusType("hoe").addItemClass(ItemHoe.class));
-		typeList.add(new KindAbstratusType("shovel").addItemClass(ItemSpade.class).addToolClass("shovel"));
-		typeList.add(new KindAbstratusType("hammer"));
-		typeList.add(new KindAbstratusType("cane"));
-		typeList.add(new KindAbstratusType("club"));
-		typeList.add(new KindAbstratusType("sickle").addToolClass("sickle"));
-		typeList.add(new KindAbstratusType("spoon"));
-		typeList.add(new KindAbstratusType("fork"));
-		typeList.add(new KindAbstratusType("fist").includesFist());
-		typeList.add(new KindAbstratusType("gauntlet").addToolClass("gauntlet"));
-		typeList.add(new KindAbstratusType("claw").addItemId(MinestuckItems.catClaws));
-		typeList.add(new KindAbstratusType("dice"));
-		typeList.add(new KindAbstratusType("fishing_rod").addItemClass(ItemFishingRod.class));
 		
-		registerNames();
+		typeList = new ArrayList<>();
+		registerType(blank);
+		registerType(bladekind);
+		registerType(bowkind);
+		registerType(pickaxekind);
+		registerType(axekind);
+		registerType(hoekind);
+		registerType(spadekind);
+		registerType(hammerkind);
+		registerType(canekind);
+		registerType(clubkind);
+		registerType(sicklekind);
+		registerType(spoonkind);
+		registerType(forkkind);
+		registerType(fistkind);
+		registerType(gauntletkind);
+		registerType(clawkind);
+		registerType(dicekind);
+		registerType(fshngrodkind);
+		registerType(jokerkind);
+		
+		
+		
 	}
 	
 	public static void registerType(KindAbstratusType type) {
 		if(getTypeFromName(type.getUnlocalizedName()) == null)
 		{
 			typeList.add(type);
-			//namesList.add(type.getUnlocalizedName());
-		}
-	}
-	
-	public static void registerNames()
-	{
-		for(KindAbstratusType type : typeList)
 			namesList.add(type.getUnlocalizedName());
+		}
+		else Debug.warnf("The %s abstrata already exists!", type.getUnlocalizedName());
 	}
 	
 	public static KindAbstratusType getTypeFromName(String unlocName) {
