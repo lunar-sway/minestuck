@@ -174,7 +174,7 @@ public class ServerEventHandler
 		if(event.getWorld().getBlockState(event.getPos()).getBlock()==MinestuckBlocks.coarseEndStone)
 		{
 			event.getWorld().setBlockState(event.getPos(), Blocks.END_STONE.getDefaultState());
-			event.getWorld().playSound(null, event.getPos(), SoundEvents.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
+			event.getWorld().playSound(null, event.getPos(), SoundEvents.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0F, 	1.0F);
 			event.setResult(Result.ALLOW);
 		}
 	}
@@ -191,7 +191,7 @@ public class ServerEventHandler
 	{
 		IdentifierHandler.PlayerIdentifier identifier = IdentifierHandler.encode(event.player);
 		SburbConnection c = SkaianetHandler.getMainConnection(identifier, true);
-		if(c == null || !c.enteredGame() || !MinestuckConfig.aspectEffects)
+		if(c == null || !c.enteredGame() || MinestuckConfig.aspectEffects == false)
 			return;
 		int rung = MinestuckPlayerData.getData(identifier).echeladder.getRung();
 		EnumAspect aspect = MinestuckPlayerData.getTitle(identifier).getHeroAspect();
