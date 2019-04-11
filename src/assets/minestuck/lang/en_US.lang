@@ -1312,6 +1312,7 @@ strife.gauntlet.name=gauntletkind
 strife.dice.name=dicekind
 strife.claw.name=clawkind
 strife.fishing_rod.name=fshngrodkind
+strife.joker.name=jokerkind
 
 tile.oil.name=Oil
 tile.blood.name=Blood
