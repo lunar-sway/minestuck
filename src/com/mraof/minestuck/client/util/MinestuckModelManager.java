@@ -109,6 +109,7 @@ public class MinestuckModelManager
 		register(fudgeSickle);
 		register(regiSickle);
 		register(clawSickle);
+		register(clawOfNrubyiglith);
 		register(candySickle);
 		
 		register(deuceClub);
@@ -171,6 +172,8 @@ public class MinestuckModelManager
 		register(disk, 0, "disk_client");
 		register(disk, 1, "disk_server");
 		register(chessboard);
+		register(grimoire);
+		register(longForgottenWarhorn);
 		register(minestuckBucket, 0, "bucket_oil");
 		register(minestuckBucket, 1, "bucket_blood");
 		register(minestuckBucket, 2, "bucket_brain_juice");
@@ -180,6 +183,7 @@ public class MinestuckModelManager
 		for(int i = 0; i < ItemModus.NAMES.length; i++)
 			register(modusCard, i, "modus_" + ItemModus.NAMES[i]);
 		register(goldSeeds);
+		register(razorBlade);
 		for(int i = 0; i < ItemMetalBoat.NAMES.length; i++)
 			register(metalBoat, i, "boat_" + ItemMetalBoat.NAMES[i]);
 		register(obsidianBucket);
@@ -225,7 +229,8 @@ public class MinestuckModelManager
 		register(frenchFry);
 		register(strawberryChunk);
 		register(surpriseEmbryo);
-		
+		register(unknowableEgg);
+
 		register(threshDvd);
 		register(crewPoster);
 		register(sbahjPoster);

@@ -118,14 +118,14 @@ public class BlockHolopad extends BlockContainer
     public IBlockState getStateFromMeta(int meta)
     {
         IBlockState iblockstate = this.getDefaultState();
-        iblockstate = iblockstate.withProperty(FACING, EnumFacing.getFront(meta));
+        iblockstate = iblockstate.withProperty(FACING, EnumFacing.getHorizontal(meta % 4));
         return iblockstate;
     }
     
     //Meta from state
     public int getMetaFromState(IBlockState state)
     {
-        return ((EnumFacing)state.getValue(FACING)).getIndex();
+        return ((EnumFacing)state.getValue(FACING)).getHorizontalIndex();
     }
 
     //more states
