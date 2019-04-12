@@ -5,6 +5,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiContainerCreative;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.inventory.ContainerPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -63,15 +64,14 @@ public class MinestuckKeyHandler
 		else if(Keyboard.isKeyDown(captchaKey.getKeyCode()) && !captchaKeyPressed) {
 
 				//This statement is here because for some reason 'slotNumber' always returns as 0 if it is referenced inside the creative inventory.
-			if (Minecraft.getMinecraft().currentScreen instanceof GuiContainerCreative && ((GuiContainer)Minecraft.getMinecraft().currentScreen).getSlotUnderMouse() != null && ((GuiContainer)Minecraft.getMinecraft().currentScreen).getSlotUnderMouse().getHasStack())
+			if (Minecraft.getMinecraft().currentScreen instanceof GuiContainerCreative && Minecraft.getMinecraft().player.openContainer instanceof GuiContainerCreative.ContainerCreative && ((GuiContainer)Minecraft.getMinecraft().currentScreen).getSlotUnderMouse() != null && ((GuiContainer)Minecraft.getMinecraft().currentScreen).getSlotUnderMouse().getHasStack())
 				MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.CAPTCHALOUGE_INV, ((GuiContainer)Minecraft.getMinecraft().currentScreen).getSlotUnderMouse().getSlotIndex()));
-			else if(Minecraft.getMinecraft().currentScreen instanceof GuiContainer  && ((GuiContainer)Minecraft.getMinecraft().currentScreen).getSlotUnderMouse() != null && ((GuiContainer)Minecraft.getMinecraft().currentScreen).getSlotUnderMouse().getHasStack())
+			else if(Minecraft.getMinecraft().currentScreen instanceof GuiContainer && ((GuiContainer)Minecraft.getMinecraft().currentScreen).getSlotUnderMouse() != null && ((GuiContainer)Minecraft.getMinecraft().currentScreen).getSlotUnderMouse().getHasStack())
 				MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.CAPTCHALOUGE_INV, ((GuiContainer)Minecraft.getMinecraft().currentScreen).getSlotUnderMouse().slotNumber)); 
 			}		
 		
 		statKeyPressed = statKey.isKeyDown();
 		editKeyPressed = editKey.isKeyDown();
-		//Raw keyboard input is gotten because the Minecraft key-input handler doesn't work inside containers.
 		captchaKeyPressed = Keyboard.isKeyDown(captchaKey.getKeyCode());
 		
 	}

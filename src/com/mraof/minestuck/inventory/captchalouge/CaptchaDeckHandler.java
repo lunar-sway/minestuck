@@ -13,6 +13,7 @@ import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 
+import net.minecraft.client.gui.inventory.GuiContainerCreative;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -260,10 +261,11 @@ public class CaptchaDeckHandler
 	public static void captchalougeInventoryItem (EntityPlayerMP player, int slotIndex) {
 		ItemStack stack;
 		Modus modus = getModus(player);
-		System.out.println(slotIndex);
+		System.out.println("Raw Slot: " + slotIndex);
 		//This statement is so that the server knows whether the item is in the hotbar or not because apparently THE "openContainer" CANT EDIT THE HOTBAR SLOTS.
-		if(slotIndex >= player.openContainer.inventorySlots.size() - 9) {
-			int hotbarIndex = slotIndex - (player.openContainer.inventorySlots.size() - 9);
+		if(player.openContainer.equals(player.inventoryContainer) && player.inventory.isHotbar(slotIndex)) {
+			int hotbarIndex = slotIndex;
+			
 			stack = player.inventory.mainInventory.get(hotbarIndex);
 
 			if(stack.getItem() == MinestuckItems.boondollars)
