@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.lwjgl.input.Mouse;
@@ -32,10 +33,15 @@ public class GuiStrifeCard extends GuiScreenMinestuck
 	private static int guiWidth = 147, guiHeight = 185;
 	private static int xOffset, yOffset;
 	private static final ResourceLocation guiStrifeSelector = new ResourceLocation("minestuck", "textures/gui/strife_specibus/strife_selector.png");
-	private static float scale = 1;
-	private static final int columnWidth = 50, columns = 2;
+	private float scale = 1;
+	private static final int columnWidth = 50,columns = 2;
 	private static EntityPlayer player;
 	private static final FontRenderer font = Minestuck.fontSpecibus;
+	
+	private boolean canScroll;
+	private float scrollPos = 0F;
+	private boolean isClicking = false;
+	private int extraLines = 0;
 	
 	public GuiStrifeCard(EntityPlayer player) 
 	{
@@ -64,19 +70,32 @@ public class GuiStrifeCard extends GuiScreenMinestuck
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		this.mc.getTextureManager().bindTexture(guiStrifeSelector);
 		
-		this.drawTexturedModalRect(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
+		this.drawRect(xOffset+27, yOffset+23, xOffset+127, yOffset+178, 0xFF000000);
 		
 		int listOffsetX = xOffset + 16;
-		int listOffsetY = yOffset + 59;
+		int listOffsetY = yOffset + 59 - extraLines*font.FONT_HEIGHT;
 		
-
 		List<KindAbstratusType> list = KindAbstratusList.getTypeList();
-		for(int i = 1; i < list.size(); i++)
+		
+		
+		list = new ArrayList<>();
+		for(int i = 0; i < 40; i++)
+			list.add(new KindAbstratusType("testkind"+i));
+		
+		canScroll = list.size() > 25;
+		
+		int itemMin = 0;
+		
+		int i = 0, count = 0;
+		for(KindAbstratusType type : list)
 		{
-			KindAbstratusType type = list.get(i);
+			if(!type.getSelectable()) continue;	
+			count++;
+			if(count-1 < itemMin) continue;
+			i++;
 			String typeName = type.getDisplayName();
+			typeName = type.getUnlocalizedName();
 			
 			//txPos += 78 (0.1625*width)
 			//tyPos += 36 (9540 / height)
@@ -114,7 +133,13 @@ public class GuiStrifeCard extends GuiScreenMinestuck
 			
 			
 			font.drawString(typeName, txPos, tyPos, color);
+			if(i > 25)break;
 		}
+		
+
+		this.mc.getTextureManager().bindTexture(guiStrifeSelector);
+		this.drawTexturedModalRect(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
+		this.drawTexturedModalRect(xOffset+128, yOffset+23, canScroll ? 232 : 244, 0, 12, 15);
 		
 		//96*265/width
 		

@@ -13,6 +13,7 @@ public class KindAbstratusType
 {
 	
 	private String unlocalizedName;
+	private boolean selectable = true;
 	
 	private ArrayList<ItemType> items = new ArrayList<ItemType>();
 	
@@ -24,14 +25,21 @@ public class KindAbstratusType
 	public KindAbstratusType(String unlocName, Object... items)
 	{
 		this(unlocName);
-		
+		addItemChecks(items);
+	}
+	public void addItemChecks(Object... items)
+	{
 		for(Object i : items)
 		{
 			if(i instanceof Item) addItemId((Item)i);
 			else if(i instanceof String) addToolClass((String)i);
-			else addItemClass((Class<? extends Item>)i);
+			else if(i.getClass().isAssignableFrom(Item.class)) addItemClass((Class<? extends Item>)i);
+			else Debug.warnf("%s is not a valid item check.", i);
 		}
 	}
+	
+	public KindAbstratusType setSelectable(boolean in){selectable = in; return this;}
+	public boolean 			 getSelectable() 		  {return selectable;}
 	
 	public KindAbstratusType addItemClass(Class<? extends Item>... items) 
 	{
