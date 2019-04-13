@@ -1,0 +1,21 @@
+{
+    "textures": {
+        "particle": "minestuck:blocks/fuchsia_cake_side",
+        "bottom": "minestuck:blocks/fuchsia_cake_bottom",
+        "top": "minestuck:blocks/fuchsia_cake_top",
+        "side": "minestuck:blocks/fuchsia_cake_side"
+    },
+    "elements": [
+        {   "from": [ 1, 0, 1 ],
+            "to": [ 15, 8, 15 ],
+            "faces": {
+                "down":  { "texture": "#bottom", "cullface": "down" },
+                "up":    { "texture": "#top" },
+                "north": { "texture": "#side" },
+                "south": { "texture": "#side" },
+                "west":  { "texture": "#side" },
+                "east":  { "texture": "#side" }
+            }
+        }
+    ]
+}

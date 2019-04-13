@@ -41,6 +41,7 @@ public class ConsortRewardHandler
 		ConsortRewardHandler.registerPrice(new ItemStack(blueCake), 400, 400);
 		ConsortRewardHandler.registerPrice(new ItemStack(hotCake), 400, 400);
 		ConsortRewardHandler.registerPrice(new ItemStack(redCake), 400, 400);
+		ConsortRewardHandler.registerPrice(new ItemStack(fuchsiaCake), 1500, 1500);
 		ConsortRewardHandler.registerPrice(new ItemStack(rockCookie), 15, 20);
 		ConsortRewardHandler.registerPrice(new ItemStack(strawberryChunk), 100, 150);
 		ConsortRewardHandler.registerPrice(new ItemStack(beverage, 1, 0), 200, 200);

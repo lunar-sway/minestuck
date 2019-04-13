@@ -356,6 +356,7 @@ public class MinestuckModelManager
 		register(redCake);
 		register(hotCake);
 		register(reverseCake);
+		register(fuchsiaCake);
 		
 		register(floweryMossBrick);
 		register(floweryMossStone);
