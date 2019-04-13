@@ -18,6 +18,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.world.World;
@@ -33,6 +34,7 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 	private float efficiency;
 	private boolean unbreakable = false;
 	private static final HashMap<String, Set<Material>> toolMaterials = new HashMap<String, Set<Material>>();
+	private CreativeTabs overshadowTab = TabMinestuck.instance;
 	
 	public ItemWeapon(int maxUses, double damageVsEntity, double weaponSpeed, int enchantability, String name)
 	{
@@ -43,7 +45,7 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 	{
 		super(material);
 		this.maxStackSize = 1;
-		this.setCreativeTab(CreativeTabs.COMBAT);	//Needed to place recipes in the combat/tools tab
+		super.setCreativeTab(CreativeTabs.COMBAT);	//Needed to place recipes in the combat/tools tab
 		this.setMaxDamage(maxUses);
 		this.weaponDamage = damageVsEntity;
 		this.enchantability = enchantability;
@@ -51,17 +53,23 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 		this.setUnlocalizedName(name);
 	}
 
+	@Override
+	public Item setCreativeTab(CreativeTabs tab)
+	{
+		overshadowTab = tab;
+		return this;
+	}
 	
 	@Override
 	protected boolean isInCreativeTab(CreativeTabs targetTab)
 	{
-		return targetTab == CreativeTabs.SEARCH || targetTab == TabMinestuck.instance;
+		return targetTab == CreativeTabs.SEARCH || targetTab == overshadowTab;
 	}
 	
 	@Override
 	public CreativeTabs[] getCreativeTabs()
 	{
-		return new CreativeTabs[] {TabMinestuck.instance};
+		return new CreativeTabs[] {overshadowTab};
 	}
 	
 	protected double getAttackDamage(ItemStack stack)
