@@ -8,7 +8,10 @@ import com.mraof.minestuck.util.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 public class EntityLich extends EntityUnderling
 {
@@ -31,6 +34,21 @@ public class EntityLich extends EntityUnderling
 		super.initEntityAI();
 		EntityAIAttackOnCollideWithRate aiAttack = new EntityAIAttackOnCollideWithRate(this, .4F, 20, false);
 		this.tasks.addTask(3, aiAttack);
+	}
+	
+	protected SoundEvent getAmbientSound()
+	{
+		return MinestuckSoundHandler.soundLichAmbient;
+	}
+	
+	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
+	{
+		return MinestuckSoundHandler.soundLichHurt;
+	}
+	
+	protected SoundEvent getDeathSound()
+	{
+		return MinestuckSoundHandler.soundLichDeath;
 	}
 	
 	@Override

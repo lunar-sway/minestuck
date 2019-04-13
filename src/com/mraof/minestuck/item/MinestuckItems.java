@@ -8,18 +8,14 @@ import com.mraof.minestuck.item.block.*;
 import com.mraof.minestuck.item.weapon.*;
 import com.mraof.minestuck.util.MinestuckSoundHandler;
 
-import io.netty.handler.codec.http.HttpHeaders.Values;
-import net.minecraft.block.BlockSlab;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityHanging;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.*;
-import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -32,10 +28,6 @@ import net.minecraftforge.registries.IForgeRegistry;
 import static com.mraof.minestuck.block.MinestuckBlocks.*;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import com.mraof.minestuck.block.BlockAspectLog;
 import com.mraof.minestuck.block.BlockAspectLog2;
@@ -59,6 +51,8 @@ public class MinestuckItems
 	public static Item telescopicSassacrusher = new ItemWeapon(1024, 9.0D, -2.9D, 15, "telescopicSassacrusher").setTool("pickaxe", 2, 5.0F);
 	public static Item regiHammer = new ItemWeapon(812, 6.0D, -2.4D, 5, "regiHammer");
 	public static Item fearNoAnvil = new ItemPotionWeapon(2048, 10.0D, -2.8D, 12, "fearNoAnvil", new PotionEffect(MobEffects.SLOWNESS, 100, 3)).setTool("pickaxe", 3, 7.0F);
+	public static Item qEHammerAxe = new ItemPogoFarmine(6114, 11.0D, -2.8D, 40, "qEHammerAxe", Integer.MAX_VALUE, 200, 0.7).setTool("pickaxe", 3, 9.0F).setTool("shovel", 3, 9.0F).setTool("sickle", 3, 7.0F).setTool("axe", 3, 12.0F);
+	public static Item dDEHammerAxe = new ItemSbahjEEEE(6114, 11.01D, -2.8D, 40, "dDEHammerAxe", 0.2);
 	public static Item zillyhooHammer = new ItemWeapon(3000, 11.0D, -2.8D, 30, "zillyhooHammer").setTool("pickaxe", 4, 15.0F);
 
 	public static Item popamaticVrillyhoo = new ItemRandomWeapon(3000, 8.0D, -2.8D, 30, "popamaticVrillyhoo").setTool("pickaxe", 4, 15.0F);
@@ -396,6 +390,8 @@ public class MinestuckItems
 		registry.register(telescopicSassacrusher.setRegistryName("telescopic_sassacrusher"));
 		registry.register(regiHammer.setRegistryName("regi_hammer"));
 		registry.register(fearNoAnvil.setRegistryName("fear_no_anvil"));
+		registry.register(qEHammerAxe.setRegistryName("estrogen_empowered_everything_eradicator"));
+		registry.register(dDEHammerAxe.setRegistryName("eeeeeeeeeeee"));
 		registry.register(zillyhooHammer.setRegistryName("zillyhoo_hammer"));
 		registry.register(popamaticVrillyhoo.setRegistryName("popamatic_vrillyhoo"));
 		registry.register(scarletZillyhoo.setRegistryName("scarlet_zillyhoo"));

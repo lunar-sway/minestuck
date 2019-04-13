@@ -71,6 +71,7 @@ public class MinestuckConfig
 	public static boolean disableGristWidget;
 	public static boolean vanillaOreDrop;
 	public static boolean echeladderProgress;
+	public static boolean aspectEffects;
 	public static boolean useUUID;
 	public static boolean playerSelectedTitle;
 	public static boolean canBreakGates;
@@ -210,6 +211,7 @@ public class MinestuckConfig
 		allowSecondaryConnections = config.get("General", "secondaryConnections", true, "Set this to true to allow so-called 'secondary connections' to be created.").setLanguageKey("minestuck.config.secondaryConnections").getBoolean();	//Server lists need to be updated if this gets changeable in-game
 		vanillaOreDrop = config.get("General", "vanillaOreDrop", false, "If this is true, the custom vanilla ores will drop the standard vanilla ores when mined, instead of the custom type.").setLanguageKey("minestuck.config.vanillaOreDrop").getBoolean();
 		echeladderProgress = config.get("General", "echeladderProgress", false, "If this is true, players will be able to see their progress towards the next rung. This is server side and will only be active in multiplayer if the server/Lan host has it activated.").setLanguageKey("minestuck.config.echeladderProgress").getBoolean();
+		aspectEffects = config.get("General", "aspectEffects", true, "If this is true, players will gain certain potion effects once they reach a certain rung based on their aspect.").setLanguageKey("minestuck.config.aspectEffects").getBoolean();
 		playerSelectedTitle = config.get("General", "playerSelectedTitle", false, "Enable this to let players select their own title. They will however not be able to select the Lord or Muse as class.").setLanguageKey("minestuck.config.playerSelectedTitle").getBoolean();
 		canBreakGates = config.get("General", "canBreakGates", true, "Lets gates be destroyed by explosions. Turning this off will make gates use the same explosion resistance as bedrock.").setLanguageKey("minestuck.config.canBreakGates").getBoolean();
 		disableGiclops = config.get("General", "disableGiclops", true, "Right now, the giclops pathfinding is currently causing huge amounts of lag due to their size. This option is a short-term solution that will disable giclops spawning and remove all existing giclopes.").setLanguageKey("minestuck.config.disableGiclops").getBoolean();
