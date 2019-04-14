@@ -19,6 +19,7 @@ import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
+import com.mraof.minestuck.network.MinestuckPacket.Type;
 
 public class MinestuckKeyHandler
 {
@@ -26,9 +27,11 @@ public class MinestuckKeyHandler
 	KeyBinding statKey;
 	KeyBinding editKey;
 	KeyBinding captchaKey;
+	KeyBinding effectToggleKey;
 	boolean statKeyPressed = false;
 	boolean editKeyPressed = false;
 	boolean captchaKeyPressed = false;
+	boolean effectToggleKeyPressed = false;
 	
 	public MinestuckKeyHandler()
 	{
@@ -38,6 +41,7 @@ public class MinestuckKeyHandler
 		ClientRegistry.registerKeyBinding(editKey);
 		captchaKey = new KeyBinding("key.captchalouge", 46, "key.categories.minestuck");
 		ClientRegistry.registerKeyBinding(captchaKey);
+		effectToggleKey = new KeyBinding("key.aspectEffectToggle", Keyboard.KEY_BACKSLASH, "key.categories.minestuck");
 	}
 	
 	@SubscribeEvent
@@ -60,6 +64,10 @@ public class MinestuckKeyHandler
 		{
 			if(Minecraft.getMinecraft().currentScreen == null && Minecraft.getMinecraft().player.getHeldItemMainhand() != null)
 				MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.CAPTCHALOUGE));
+		}
+		else if(effectToggleKey.isKeyDown() && !effectToggleKeyPressed)
+		{
+			MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(Type.EFFECT_TOGGLE));
 		}
 		else if(Keyboard.isKeyDown(captchaKey.getKeyCode()) && !captchaKeyPressed) {
 

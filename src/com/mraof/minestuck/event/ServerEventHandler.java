@@ -191,7 +191,7 @@ public class ServerEventHandler
 	{
 		IdentifierHandler.PlayerIdentifier identifier = IdentifierHandler.encode(event.player);
 		SburbConnection c = SkaianetHandler.getMainConnection(identifier, true);
-		if(c == null || !c.enteredGame() || MinestuckConfig.aspectEffects == false)
+		if(c == null || !c.enteredGame() || MinestuckConfig.aspectEffects == false || !MinestuckPlayerData.getEffectToggle(identifier))
 			return;
 		int rung = MinestuckPlayerData.getData(identifier).echeladder.getRung();
 		EnumAspect aspect = MinestuckPlayerData.getTitle(identifier).getHeroAspect();
