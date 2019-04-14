@@ -1,5 +1,6 @@
 package com.mraof.minestuck.entity.underling;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
@@ -16,10 +17,13 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
+
+import javax.annotation.Nullable;
 
 public class EntityGiclops extends EntityUnderling implements IBigEntity
 {
@@ -52,7 +56,22 @@ public class EntityGiclops extends EntityUnderling implements IBigEntity
 		aiAttack.setDistanceMultiplier(1.1F);
 		this.tasks.addTask(3, aiAttack);
 	}
-
+	
+	protected SoundEvent getAmbientSound()
+	{
+		return MinestuckSoundHandler.soundGiclopsAmbient;
+	}
+	
+	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
+	{
+		return MinestuckSoundHandler.soundGiclopsHurt;
+	}
+	
+	protected SoundEvent getDeathSound()
+	{
+		return MinestuckSoundHandler.soundGiclopsDeath;
+	}
+	
 	@Override
 	public GristSet getGristSpoils()
 	{

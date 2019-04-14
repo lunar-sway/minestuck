@@ -89,7 +89,15 @@ public class HashmapModus extends Modus
 		if(list.size() == 0 || item.isEmpty())
 			return false;
 		
-		int index = item.getUnlocalizedName().hashCode() % list.size();
+		//TODO use registry names when 1.13 comes out
+		
+		String unloc = item.getUnlocalizedName();
+		unloc = unloc.substring(unloc.indexOf('.')+1, unloc.length());
+		String adj = unloc.substring(unloc.indexOf('.')+1, unloc.length());
+		unloc = adj + " " + unloc.substring(0, unloc.indexOf('.'));
+		
+		int index = ((item.hasDisplayName()) ? item.getDisplayName() : unloc).hashCode() % list.size();
+				
 		if(index < 0)
 			index += list.size();
 		
