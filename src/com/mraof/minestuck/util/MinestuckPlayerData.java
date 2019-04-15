@@ -167,7 +167,7 @@ public class MinestuckPlayerData
 		public int color = -1;
 		public long boondollars;
 		public Echeladder echeladder;
-		public boolean effectToggle = false;
+		public boolean effectToggle = true;
 		
 		private void readFromNBT(NBTTagCompound nbt)
 		{

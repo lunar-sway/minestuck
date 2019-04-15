@@ -42,6 +42,7 @@ public class MinestuckKeyHandler
 		captchaKey = new KeyBinding("key.captchalouge", 46, "key.categories.minestuck");
 		ClientRegistry.registerKeyBinding(captchaKey);
 		effectToggleKey = new KeyBinding("key.aspectEffectToggle", Keyboard.KEY_BACKSLASH, "key.categories.minestuck");
+		ClientRegistry.registerKeyBinding(effectToggleKey);
 	}
 	
 	@SubscribeEvent
@@ -81,6 +82,7 @@ public class MinestuckKeyHandler
 		statKeyPressed = statKey.isKeyDown();
 		editKeyPressed = editKey.isKeyDown();
 		captchaKeyPressed = Keyboard.isKeyDown(captchaKey.getKeyCode());
+		effectToggleKeyPressed = effectToggleKey.isKeyDown();
 		
 	}
 	
