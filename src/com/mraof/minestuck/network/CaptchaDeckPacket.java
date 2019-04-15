@@ -5,9 +5,13 @@ import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalouge.ContainerCaptchaDeck;
 import com.mraof.minestuck.util.Debug;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.Slot;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
@@ -25,6 +29,7 @@ public class CaptchaDeckPacket extends MinestuckPacket
 	public static final byte CAPTCHALOUGE = 2;
 	public static final byte GET = 3;
 	public static final byte VALUE = 4;
+	public static final byte CAPTCHALOUGE_INV = 5;
 	
 	public byte type;
 	
@@ -35,6 +40,8 @@ public class CaptchaDeckPacket extends MinestuckPacket
 	
 	public byte valueType;
 	public int value;
+	
+	public int slotIndex;
 	
 	@Override
 	public MinestuckPacket generatePacket(Object... data)
@@ -66,6 +73,9 @@ public class CaptchaDeckPacket extends MinestuckPacket
 			{
 				this.data.writeByte((Byte)data[1]);
 				this.data.writeInt((Integer)data[2]);
+			}
+			else if(type == CAPTCHALOUGE_INV && data[1] != null) {
+				this.data.writeInt((Integer)data[1]);
 			}
 		}
 		
@@ -103,6 +113,9 @@ public class CaptchaDeckPacket extends MinestuckPacket
 				this.valueType = data.readByte();
 				this.value = data.readInt();
 			}
+			else if(this.type == CAPTCHALOUGE_INV) {
+				this.slotIndex = data.readInt();
+			}
 		}
 		
 		return this;
@@ -120,6 +133,9 @@ public class CaptchaDeckPacket extends MinestuckPacket
 				CaptchaDeckHandler.useItem((EntityPlayerMP) player);
 			else if(this.type == CAPTCHALOUGE && !player.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).isEmpty())
 				CaptchaDeckHandler.captchalougeItem((EntityPlayerMP) player);
+			else if(this.type == CAPTCHALOUGE_INV) {
+				CaptchaDeckHandler.captchalougeInventoryItem((EntityPlayerMP) player, slotIndex);
+			}
 			else if(this.type == GET)
 				CaptchaDeckHandler.getItem((EntityPlayerMP) player, itemIndex, getCard);
 //			else if(this.type == DATA)

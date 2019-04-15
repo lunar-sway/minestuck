@@ -4,7 +4,6 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.*;
 import com.mraof.minestuck.entity.EntityFrog;
 import com.mraof.minestuck.item.*;
-import com.mraof.minestuck.item.enums.EnumShopPoster;
 import com.mraof.minestuck.item.weapon.ItemDualWeapon;
 import com.mraof.minestuck.alchemy.GristType;
 import net.minecraft.block.Block;
@@ -63,6 +62,9 @@ public class MinestuckModelManager
 		register(telescopicSassacrusher);
 		register(regiHammer);
 		register(fearNoAnvil);
+		register(meltMasher);
+		register(qEHammerAxe);
+		register(dDEHammerAxe);
 		register(popamaticVrillyhoo);
 		register(scarletZillyhoo);
 		register(mwrthwl);
@@ -354,6 +356,7 @@ public class MinestuckModelManager
 		register(redCake);
 		register(hotCake);
 		register(reverseCake);
+		register(fuchsiaCake);
 		
 		register(floweryMossBrick);
 		register(floweryMossStone);

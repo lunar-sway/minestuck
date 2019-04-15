@@ -27,6 +27,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.Path;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
@@ -36,6 +37,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
 
 public class EntityFrog extends EntityMinestuck
 {
@@ -352,7 +355,7 @@ public class EntityFrog extends EntityMinestuck
 
         this.wasOnGround = this.onGround;
     }
-
+    
     private void calculateRotationYaw(double x, double z)
     {
         this.rotationYaw = (float)(MathHelper.atan2(z - this.posZ, x - this.posX) * (180D / Math.PI)) - 90.0F;
@@ -419,7 +422,15 @@ public class EntityFrog extends EntityMinestuck
     
     protected SoundEvent getAmbientSound()
     {
-        return null; //MinestuckSoundHandler.soundFrogAmbient;
+        return MinestuckSoundHandler.soundFrogAmbient;
+    }
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn)
+    {
+        return MinestuckSoundHandler.soundFrogHurt;
+    }
+    protected SoundEvent getDeathSound()
+    {
+        return MinestuckSoundHandler.soundFrogDeath;
     }
     
     protected SoundEvent getJumpSound()
