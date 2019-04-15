@@ -5,7 +5,6 @@ import java.util.List;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.block.BlockLargeMachine;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItemFrame;
@@ -37,13 +36,13 @@ public class ItemCaptcharoidCamera extends Item {
 	@Override
 	protected boolean isInCreativeTab(CreativeTabs targetTab)
 	{
-		return targetTab == CreativeTabs.SEARCH || targetTab == MinestuckItems.tabMinestuck;
+		return targetTab == CreativeTabs.SEARCH || targetTab == TabMinestuck.instance;
 	}
 	
 	@Override
 	public CreativeTabs[] getCreativeTabs()
 	{
-		return new CreativeTabs[] {MinestuckItems.tabMinestuck};
+		return new CreativeTabs[] {TabMinestuck.instance};
 	}
 	
 	@Override

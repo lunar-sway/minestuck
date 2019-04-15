@@ -36,6 +36,9 @@ import com.mraof.minestuck.block.BlockAspectSapling;
 
 public class MinestuckItems
 {
+	/**
+	 * Use TabMinestuck.instance instead
+	 */
 	@Deprecated
 	public static CreativeTabs tabMinestuck = TabMinestuck.instance;
 
