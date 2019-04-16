@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.gui.captchalouge;
 
+import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
@@ -211,6 +212,8 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 	protected void keyTyped(char typedChar, int keyCode) throws IOException
 	{
 		super.keyTyped(typedChar, keyCode);
+		if(MinestuckKeyHandler.instance.sylladexKey.isActiveAndMatches(keyCode))
+			mc.displayGuiScreen(null);
 		/*if(Loader.isModLoaded("NotEnoughItems"))
 		{
 			boolean usage = keyCode == NEIClientConfig.getKeyBinding("gui.usage") || (keyCode == NEIClientConfig.getKeyBinding("gui.recipe") && NEIClientUtils.shiftKey());

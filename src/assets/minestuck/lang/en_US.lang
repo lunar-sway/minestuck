@@ -1065,6 +1065,7 @@ key.exitEdit=Exit Edit Mode
 key.statsGui=View General Minestuck Gui
 key.captchalouge=Captchalouge Held Item
 key.aspectEffectToggle=Toggle Aspect Effects
+key.sylladex=Open Sylladex
 
 #Land Terrains
 land.format=Land of %s and %s
