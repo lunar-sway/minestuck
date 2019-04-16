@@ -30,8 +30,8 @@ advancements.minestuck.new_modus.description=Equip a new modus.
 advancements.minestuck.all_modi.title=A Full Set
 advancements.minestuck.all_modi.description=Try a new modus type.
 
-aspectEffects.on=Aspect Effects have been toggled on.
-aspectEffects.off=Aspect Effects have been toggled off.
+aspectEffects.on=Aspect Effects have been toggled on
+aspectEffects.off=Aspect Effects have been toggled off
 
 commands.checkLand.usage=/checkLand
 commands.grist.usage=/grist [player] <add|set> <gristtype value ...> OR /grist [player] get
