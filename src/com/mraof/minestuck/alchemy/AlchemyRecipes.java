@@ -690,6 +690,8 @@ public class AlchemyRecipes
 		GristRegistry.addGristConversion(new ItemStack(sbahjPoster), new GristSet(new GristType[] {GristType.Build}, new int[] {4}));
 		GristRegistry.addGristConversion(new ItemStack(crewPoster), new GristSet(new GristType[] {GristType.Tar, GristType.Rust}, new int[] {3, 2}));
 		GristRegistry.addGristConversion(new ItemStack(threshDvd), new GristSet(new GristType[] {GristType.Iodine, GristType.Amethyst}, new int[] {3, 2}));
+		GristRegistry.addGristConversion(new ItemStack(gamebroMagazine), new GristSet(new GristType[] {GristType.Chalk, GristType.Garnet}, new int[] {3, 2}));
+		GristRegistry.addGristConversion(new ItemStack(gamegrlMagazine), new GristSet(new GristType[] {GristType.Chalk, GristType.Amethyst}, new int[] {3, 2}));
 		GristRegistry.addGristConversion(new ItemStack(carvingTool), new GristSet(new GristType[] {GristType.Build, GristType.Rust}, new int[] {10, 2}));
 		GristRegistry.addGristConversion(new ItemStack(crumplyHat), new GristSet(new GristType[] {GristType.Build}, new int[] {20}));
 		GristRegistry.addGristConversion(new ItemStack(frogStatueReplica), new GristSet(new GristType[] {GristType.Build}, new int[] {30}));
@@ -770,6 +772,7 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(new ItemStack(blacksmithHammer), new ItemStack(Items.CLOCK), MODE_OR, false, false, new ItemStack(fearNoAnvil));
 		CombinationRegistry.addCombination(new ItemStack(sledgeHammer), new ItemStack(Items.BOOK), MODE_AND, false, false, new ItemStack(telescopicSassacrusher));
 		CombinationRegistry.addCombination(new ItemStack(fearNoAnvil), new ItemStack(Items.LAVA_BUCKET), MODE_OR, false, false, new ItemStack(meltMasher));
+		CombinationRegistry.addCombination(new ItemStack(qFHammerAxe), new ItemStack(gamegrlMagazine), MODE_OR, false, false, new ItemStack(qEHammerAxe));
 		CombinationRegistry.addCombination(new ItemStack(qEHammerAxe), new ItemStack(sbahjPoster), MODE_AND, false, false, new ItemStack(dDEHammerAxe));
 		CombinationRegistry.addCombination(new ItemStack(zillyhooHammer), new ItemStack(fluoriteOctet), MODE_AND, false, false, new ItemStack(popamaticVrillyhoo));
 		CombinationRegistry.addCombination(new ItemStack(zillyhooHammer), new ItemStack(itemFrog, 1, 2), MODE_AND, false, true, new ItemStack(scarletZillyhoo));
