@@ -560,7 +560,7 @@ public class SkaianetHandler {
 		list.addAll(playerList);
 		
 		for(SburbConnection c : connections)
-			if(c.getClientIdentifier().equals(player) && !c.getServerIdentifier().equals(IdentifierHandler.nullIdentifier) || c.getServerIdentifier().equals(player))
+			if(c.getClientIdentifier().equals(player) || c.getServerIdentifier().equals(player))
 				list.add(c);
 		
 		return list.toArray();
