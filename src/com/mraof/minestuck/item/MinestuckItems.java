@@ -186,6 +186,8 @@ public class MinestuckItems
 	public static Item shunt = new ItemShunt();
 	public static Item captcharoidCamera = new ItemCaptcharoidCamera();
 	public static Item threshDvd = new Item().setUnlocalizedName("threshDvd").setMaxStackSize(1).setCreativeTab(TabMinestuck.instance);
+	public static Item gamebroMagazine = new Item().setUnlocalizedName("gamebroMagazine").setMaxStackSize(1).setCreativeTab(TabMinestuck.instance);
+	public static Item gamegrlMagazine = new Item().setUnlocalizedName("gamegrlMagazine").setMaxStackSize(1).setCreativeTab(TabMinestuck.instance);
 	public static Item crewPoster = new ItemHanging()
 	{
 		@Override
@@ -530,6 +532,8 @@ public class MinestuckItems
 		registry.register(razorBlade.setRegistryName("razor_blade"));
 		registry.register(metalBoat.setRegistryName("metal_boat"));
 		registry.register(threshDvd.setRegistryName("thresh_dvd"));
+		registry.register(gamebroMagazine.setRegistryName("gamebro_magazine"));
+		registry.register(gamegrlMagazine.setRegistryName("gamegrl_magazine"));
 		registry.register(crewPoster.setRegistryName("crew_poster"));
 		registry.register(sbahjPoster.setRegistryName("sbahj_poster"));
 		//registry.register(shopPoster.setRegistryName("shop_poster"));

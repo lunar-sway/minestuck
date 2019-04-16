@@ -30,6 +30,9 @@ advancements.minestuck.new_modus.description=Equip a new modus.
 advancements.minestuck.all_modi.title=A Full Set
 advancements.minestuck.all_modi.description=Try a new modus type.
 
+aspectEffects.on=Aspect Effects have been toggled on.
+aspectEffects.off=Aspect Effects have been toggled off.
+
 commands.checkLand.usage=/checkLand
 commands.grist.usage=/grist [player] <add|set> <gristtype value ...> OR /grist [player] get
 commands.grist.get=%s has:%s
@@ -979,6 +982,8 @@ item.morelMushroom.name=Morel Mushroom
 item.morelMushroom.tooltip=A delicacy amongst both humans and consorts.
 item.frenchFry.name=French Fry
 item.threshDvd.name=Thresh Prince DVD
+item.gamebroMagazine.name=Game Bro Magazine
+item.gamegrlMagazine.name=Game Grl Magazine
 item.crewPoster.name=Midnight Crew Poster
 item.sbahjPoster.name=Sweet Bro and Hella Jeff Poster
 item.shopPoster.fraymotifs.name=Fraymotifs Shop Sign
@@ -1059,6 +1064,7 @@ key.categories.minestuck=Minestuck
 key.exitEdit=Exit Edit Mode
 key.statsGui=View General Minestuck Gui
 key.captchalouge=Captchalouge Held Item
+key.aspectEffectToggle=Toggle Aspect Effects
 
 #Land Terrains
 land.format=Land of %s and %s
