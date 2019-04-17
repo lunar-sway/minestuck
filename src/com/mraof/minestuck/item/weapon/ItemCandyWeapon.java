@@ -9,18 +9,30 @@ import net.minecraft.item.ItemStack;
  */
 public class ItemCandyWeapon extends ItemWeapon
 {
-    public ItemCandyWeapon(int maxUses, double damageVsEntity, double weaponSpeed, int enchantability, String name)
-    {
-        super(maxUses, damageVsEntity, weaponSpeed, enchantability, name);
-    }
+	public ItemCandyWeapon(int maxUses, double damageVsEntity, double weaponSpeed, int enchantability, String name)
+	{
+		super(maxUses, damageVsEntity, weaponSpeed, enchantability, name);
+	}
 
-    @Override
-    public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase player)
-    {
-        if(target instanceof EntityUnderling)
-        {
-            ((EntityUnderling) target).dropCandy = true;
-        }
-        return super.hitEntity(itemStack, target, player);
-    }
+	@Override
+	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase player)
+	{
+		if(target instanceof EntityUnderling)
+		{
+			((EntityUnderling) target).dropCandy = true;
+		}
+		return super.hitEntity(itemStack, target, player);
+	}
+	
+	public class ICandyWeaponComponent implements IModularWeaponComponent
+	{
+		@Override
+		public void onEntityHit(ItemStack itemStack, EntityLivingBase target, EntityLivingBase player)
+		{
+			if(target instanceof EntityUnderling)
+			{
+				((EntityUnderling) target).dropCandy = true;
+			}
+		}
+	}
 }
