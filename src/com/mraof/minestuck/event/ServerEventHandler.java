@@ -6,6 +6,7 @@ import com.mraof.minestuck.entity.underling.EntityUnderling;
 import com.mraof.minestuck.inventory.captchalouge.HashmapModus;
 import com.mraof.minestuck.inventory.captchalouge.Modus;
 import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.weapon.ItemModularWeapon;
 import com.mraof.minestuck.item.weapon.ItemPotionWeapon;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
@@ -18,6 +19,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.SoundCategory;
@@ -123,14 +125,19 @@ public class ServerEventHandler
 					event.setAmount((float) (event.getAmount() * modifier));
 				}
 				boolean critical = cachedCooledAttackStrength > 0.9 && player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder() && !player.isInWater() && !player.isPotionActive(MobEffects.BLINDNESS) && !player.isRiding();
-				if(!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof ItemPotionWeapon)
+				if(!player.getHeldItemMainhand().isEmpty())
 				{
-					if(((ItemPotionWeapon) player.getHeldItemMainhand().getItem()).potionOnCrit())
+					ItemStack weapon = player.getHeldItemMainhand();
+					if(weapon.getItem() instanceof ItemPotionWeapon)
 					{
-						if(critical)
-						event.getEntityLiving().addPotionEffect(((ItemPotionWeapon) player.getHeldItemMainhand().getItem()).getEffect(player));
+						//If the attack was a critical, or if the PotionWeapon applies potions on all hits
+						if(critical || !((ItemPotionWeapon) weapon.getItem()).potionOnCrit())
+							event.getEntityLiving().addPotionEffect(((ItemPotionWeapon) weapon.getItem()).getEffect(player));
 					}
-					else event.getEntityLiving().addPotionEffect(((ItemPotionWeapon) player.getHeldItemMainhand().getItem()).getEffect(player));
+					else if (weapon.getItem() instanceof ItemModularWeapon)
+					{
+						((ItemModularWeapon) weapon.getItem()).onCriticalHit(weapon, event.getEntityLiving(), player);
+					}
 				}
 			}
 			else if (event.getEntityLiving() instanceof EntityPlayerMP && event.getSource().getTrueSource() instanceof EntityUnderling)
