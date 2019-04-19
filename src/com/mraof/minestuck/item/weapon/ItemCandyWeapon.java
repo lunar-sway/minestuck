@@ -24,7 +24,7 @@ public class ItemCandyWeapon extends ItemWeapon
 		return super.hitEntity(itemStack, target, player);
 	}
 	
-	public class ICandyWeaponComponent implements IModularWeaponComponent
+	public class CandyWeaponComponent implements IModularWeaponComponent
 	{
 		@Override
 		public void onEntityHit(ItemStack itemStack, EntityLivingBase target, EntityLivingBase player)
