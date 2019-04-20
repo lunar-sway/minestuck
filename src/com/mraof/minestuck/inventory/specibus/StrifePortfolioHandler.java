@@ -48,7 +48,7 @@ public class StrifePortfolioHandler
 		if(specibus.getAbstratus().equals(abstrataList.get(0)))
 			player.sendStatusMessage(new TextComponentTranslation("specibus.success.blank"), false);						
 		else
-			player.sendStatusMessage(new TextComponentTranslation("specibus.success"), false);						
+			player.sendStatusMessage(new TextComponentTranslation("specibus.success", typeName), false);						
 		MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.PORTFOLIO, SpecibusPacket.SPECIBUS_ADD, writeToNBT(specibus));
 		MinestuckChannelHandler.sendToServer(packet);
 	}
