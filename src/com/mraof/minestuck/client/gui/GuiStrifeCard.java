@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +39,10 @@ public class GuiStrifeCard extends GuiScreenMinestuck
 	private static EntityPlayer player;
 	private static final FontRenderer font = Minestuck.fontSpecibus;
 	
-	private boolean canScroll;
+	private final ArrayList<KindAbstratusType> abstrataList;
+	private static int size = 26;
+	
+	private final int maxScroll;
 	private float scrollPos = 0F;
 	private boolean isClicking = false;
 	private int extraLines = 0;
@@ -46,6 +50,11 @@ public class GuiStrifeCard extends GuiScreenMinestuck
 	public GuiStrifeCard(EntityPlayer player) 
 	{
 		this.player = player;
+		ArrayList<KindAbstratusType> list = new ArrayList<>();
+		for(KindAbstratusType i : KindAbstratusList.getTypeList())
+			if(i.getSelectable()) list.add(i);
+		abstrataList = list;
+		maxScroll = Math.max(0, (abstrataList.size() - size)/2);
 	}
 	
 	@Override
@@ -55,6 +64,8 @@ public class GuiStrifeCard extends GuiScreenMinestuck
 		xOffset = (width-guiWidth)/2;
 		yOffset = (height-guiHeight)/2;
 		mc = Minecraft.getMinecraft();
+		
+		System.out.println(maxScroll);
 	}
 	
 	@Override
@@ -76,26 +87,19 @@ public class GuiStrifeCard extends GuiScreenMinestuck
 		int listOffsetX = xOffset + 16;
 		int listOffsetY = yOffset + 59 - extraLines*font.FONT_HEIGHT;
 		
-		List<KindAbstratusType> list = KindAbstratusList.getTypeList();
 		
-		
-		list = new ArrayList<>();
-		for(int i = 0; i < 40; i++)
-			list.add(new KindAbstratusType("testkind"+i));
-		
-		canScroll = list.size() > 25;
-		
-		int itemMin = 0;
+		int itemMin = (int) (scrollPos * maxScroll * 2) - extraLines*2;
+		if(itemMin%2 == 1) itemMin--;
 		
 		int i = 0, count = 0;
-		for(KindAbstratusType type : list)
+		for(KindAbstratusType type : abstrataList)
 		{
-			if(!type.getSelectable()) continue;	
 			count++;
 			if(count-1 < itemMin) continue;
 			i++;
+			if(i > size) break;
+			
 			String typeName = type.getDisplayName();
-			typeName = type.getUnlocalizedName();
 			
 			//txPos += 78 (0.1625*width)
 			//tyPos += 36 (9540 / height)
@@ -109,6 +113,7 @@ public class GuiStrifeCard extends GuiScreenMinestuck
 			int syPos = (int)((listOffsetY + listY)/scale);
 			int txPos = (sxPos + columnWidth - font.getStringWidth(typeName))+ (int)(10/scale);
 			int tyPos = syPos + (int)(3/scale);
+			
 			if(isPointInRegion(xPos, yPos, columnWidth, font.FONT_HEIGHT, mouseX, mouseY))
 			{
 				drawRect(xPos, yPos, xPos+columnWidth, yPos+font.FONT_HEIGHT, 0xFFAFAFAF);
@@ -129,22 +134,19 @@ public class GuiStrifeCard extends GuiScreenMinestuck
 					
 				}
 			}
-			
-			
-			
 			font.drawString(typeName, txPos, tyPos, color);
-			if(i > 25)break;
 		}
 		
-
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		int scroll = (int) (140*scrollPos);
 		this.mc.getTextureManager().bindTexture(guiStrifeSelector);
 		this.drawTexturedModalRect(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
-		this.drawTexturedModalRect(xOffset+128, yOffset+23, canScroll ? 232 : 244, 0, 12, 15);
+		this.drawTexturedModalRect(xOffset+128, yOffset+23+scroll, (maxScroll > 0) ? 232 : 244, 0, 12, 15);
 		
 		//96*265/width
 		
 		setScale(1.8F);
-		String label = I18n.translateToLocal("kind abstrata");
+		String label = I18n.translateToLocal("specibus.card.label");
 		int xLabel = (int)(-(((height+guiHeight)/2)-8)/scale);
 		int yLabel = (int)((((width+guiWidth)/2)-135)/scale);
 		//178
@@ -152,6 +154,29 @@ public class GuiStrifeCard extends GuiScreenMinestuck
 		GL11.glRotatef(270, 0, 0, 1);
 		font.drawString(label, xLabel, yLabel, 0xFFFFFF);
 		
+	}
+	
+	@Override
+	public void handleMouseInput() throws IOException 
+	{
+		super.handleMouseInput();
+		
+		int i = Mouse.getEventX() * this.width / this.mc.displayWidth;
+        int j = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
+        int k = Mouse.getEventButton();
+        int s = Mouse.getEventDWheel();
+        
+        float sp = scrollPos;
+        if(s != 0) sp += 1.0F/maxScroll * -Math.signum(s);
+        if(isPointInRegion(xOffset+128, yOffset+23, 12, 155, i, j) && Mouse.isButtonDown(0))
+        	sp = (j-23-yOffset)/140.0F;
+        
+        if(maxScroll <= 0) return;
+		scrollPos = Math.min(1, Math.max(0, sp));
+        
+        extraLines = (int) Math.min(4, scrollPos*maxScroll);
+        size = 26 + extraLines*2;
+        
 	}
 	
 	public void setScale(float percentage)
