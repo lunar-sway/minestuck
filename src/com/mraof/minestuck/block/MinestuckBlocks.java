@@ -35,6 +35,7 @@ public class MinestuckBlocks
 	//Blocks
 	public static Block chessTile = new BlockChessTile();
 	public static Block skaiaPortal = new BlockSkaiaPortal(Material.PORTAL);
+	public static Block devBlock = new BlockDevBlock();
 	
 	public static Block coloredDirt = new BlockColoredDirt().setUnlocalizedName("coloredDirt").setHardness(0.5F);
 	public static Block cruxiteBlock = new Block(Material.ROCK, MapColor.LIGHT_BLUE).setUnlocalizedName("cruxiteBlock").setHardness(3.0F).setCreativeTab(TabMinestuck.instance);
@@ -285,6 +286,7 @@ public class MinestuckBlocks
 		registry.register(skaiaPortal.setRegistryName("skaia_portal"));
 		registry.register(returnNode.setRegistryName("return_node"));
 		registry.register(gate.setRegistryName("gate"));
+		registry.register(devBlock.setRegistryName("developer_block"));
 		
 		registry.register(sburbMachine.setRegistryName("sburb_machine"));
 		registry.register(crockerMachine.setRegistryName("crocker_machine"));

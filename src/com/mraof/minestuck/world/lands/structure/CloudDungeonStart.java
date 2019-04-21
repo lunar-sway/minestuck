@@ -6,6 +6,7 @@ package com.mraof.minestuck.world.lands.structure;
 import java.util.List;
 import java.util.Random;
 
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.structure.CloudDungeonComponents.CloudDungeonComponent;
 
@@ -70,36 +71,38 @@ public class CloudDungeonStart extends StructureStart
 		{
 			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
 			
-			IBlockState wallBlock = Blocks.DIAMOND_BLOCK.getDefaultState();
-			IBlockState wallDecor = Blocks.DIAMOND_BLOCK.getDefaultState();
-			IBlockState floorBlock = Blocks.DIAMOND_BLOCK.getDefaultState();
-			IBlockState floorDecor = Blocks.DIAMOND_BLOCK.getDefaultState();
-			IBlockState fluid = provider.blockRegistry.getBlockState("fall_fluid");
+//			IBlockState wallBlock = Blocks.DIAMOND_BLOCK.getDefaultState();
+//			IBlockState wallDecor = Blocks.DIAMOND_BLOCK.getDefaultState();
+//			IBlockState floorBlock = Blocks.DIAMOND_BLOCK.getDefaultState();
+//			IBlockState floorDecor = Blocks.DIAMOND_BLOCK.getDefaultState();
+//			IBlockState fluid = provider.blockRegistry.getBlockState("fall_fluid");
+//			
+//			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 4, 4, 0, 6, floorBlock, floorBlock, false);
+//			fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 4, 4, 4, 6);
+//			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 5, 3, 0, 5, fluid, fluid, false);
+//			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, -1, 5, 3, -1, 5, floorDecor, floorDecor, false);
+//			
+//			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 3, 0, 5, 7, wallBlock, wallBlock, false);
+//			fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 0, 3, 5, 5, 7, wallBlock, wallBlock, false);
+//			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 4, 3, 4, 5, 3, wallBlock, wallBlock, false);
+//			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 4, 7, 4, 5, 7, wallBlock, wallBlock, false);
+//			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 3, 1, 3, 3, wallDecor, wallDecor, false);
+//			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 7, 1, 3, 7, wallDecor, wallDecor, false);
+//			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 0, 3, 4, 3, 3, wallDecor, wallDecor, false);
+//			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 0, 7, 4, 3, 7, wallDecor, wallDecor, false);
+//			
+//			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 0, 3, 0, 3, floorBlock, floorBlock, false);
+//			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 7, 3, 0, 9, floorBlock, floorBlock, false);
+//			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 4, 0, 3, 4, 2, wallBlock, wallBlock, false);
+//			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 4, 8, 3, 4, 9, wallBlock, wallBlock, false);
+//			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 1, 0, 1, 4, 2, wallBlock, wallBlock, false);
+//			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 1, 0, 4, 4, 2, wallBlock, wallBlock, false);
+//			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 1, 8, 1, 4, 9, wallBlock, wallBlock, false);
+//			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 1, 8, 4, 4, 9, wallBlock, wallBlock, false);
+//			fillWithAir(worldIn, structureBoundingBoxIn, 2, 1, 0, 3, 3, 3);
+//			fillWithAir(worldIn, structureBoundingBoxIn, 2, 1, 7, 3, 3, 9);
 			
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 4, 4, 0, 6, floorBlock, floorBlock, false);
-			fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 4, 4, 4, 6);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 5, 3, 0, 5, fluid, fluid, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, -1, 5, 3, -1, 5, floorDecor, floorDecor, false);
-			
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 3, 0, 5, 7, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 0, 3, 5, 5, 7, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 4, 3, 4, 5, 3, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 4, 7, 4, 5, 7, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 3, 1, 3, 3, wallDecor, wallDecor, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 7, 1, 3, 7, wallDecor, wallDecor, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 0, 3, 4, 3, 3, wallDecor, wallDecor, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 0, 7, 4, 3, 7, wallDecor, wallDecor, false);
-			
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 0, 3, 0, 3, floorBlock, floorBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 7, 3, 0, 9, floorBlock, floorBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 4, 0, 3, 4, 2, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 4, 8, 3, 4, 9, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 1, 0, 1, 4, 2, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 1, 0, 4, 4, 2, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 1, 8, 1, 4, 9, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 1, 8, 4, 4, 9, wallBlock, wallBlock, false);
-			fillWithAir(worldIn, structureBoundingBoxIn, 2, 1, 0, 3, 3, 3);
-			fillWithAir(worldIn, structureBoundingBoxIn, 2, 1, 7, 3, 3, 9);
+			worldIn.setBlockState(new BlockPos(structureBoundingBoxIn.minX, structureBoundingBoxIn.minY, structureBoundingBoxIn.minZ), MinestuckBlocks.devBlock.getDefaultState(), 4);
 			
 			return true;
 		}
