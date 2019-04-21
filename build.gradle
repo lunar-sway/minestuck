@@ -33,6 +33,11 @@ repositories {
         name = "ModMaven"
         url = "modmaven.k-4u.nl"
     }
+    maven {
+        // Refined Storage
+        name "Raoulvdberge Repo"
+        url "https://repo.raoulvdberge.com/"
+    }
 }
 
 //apply plugin: 'forge'
@@ -60,6 +65,7 @@ minecraft {
 dependencies {
     def mc_version = "1.12.2"
     def jei_version = "4.9.1.168"
+	def rs_version = "1.6.12-360"
     // http://chickenbones.net/maven
     //compile "codechicken:CodeChickenLib:1.10.2-2.4.3.124:universal"
     //compile "codechicken:CodeChickenCore:1.10.2-2.3.5.91:universal"
@@ -69,6 +75,7 @@ dependencies {
     deobfCompile "mezz.jei:jei_${mc_version}:${jei_version}:api"
     runtime "mezz.jei:jei_${mc_version}:${jei_version}"
     deobfCompile "CraftTweaker2:CraftTweaker2-API:4.1.6.457"
+    deobfCompile "refinedstorage:refinedstorage:${rs_version}:api"
 }
 
 sourceSets {
