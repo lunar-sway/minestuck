@@ -12,7 +12,7 @@ public class KindAbstratusList {
 	static ArrayList<KindAbstratusType> typeList;
 	static ArrayList<String> namesList = new ArrayList<String>();
 	
-	public static final KindAbstratusType blank = new KindAbstratusType("blank").setSelectable(false);;
+	public static final KindAbstratusType blank = new KindAbstratusType("blank").setSelectable(false);
 	public static final KindAbstratusType bladekind = new KindAbstratusType("sword", ItemSword.class, "sword");
 	public static final KindAbstratusType bowkind = new KindAbstratusType("bow", ItemBow.class);
 	public static final KindAbstratusType pickaxekind = new KindAbstratusType("pickaxe", ItemPickaxe.class, "pickaxe");
