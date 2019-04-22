@@ -7,8 +7,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -91,29 +89,8 @@ public class BlockPunchDesignix extends BlockLargeMachine
 	public BlockPos getMainPos(IBlockState state, BlockPos pos)
 	{
 		EnumFacing facing = state.get(FACING);
-		Rotation rotation;
-		switch(facing)
-		{
-			case EAST:
-				rotation = Rotation.CLOCKWISE_90;
-				break;
-			case SOUTH:
-				rotation = Rotation.CLOCKWISE_180;
-				break;
-			case WEST:
-				rotation = Rotation.COUNTERCLOCKWISE_90;
-				break;
-			default:
-				rotation = Rotation.NONE;
-				break;
-		}
+		Rotation rotation = rotationFromFacing(facing);
 		
 		return pos.add(this.MAIN_POS.rotate(rotation));
-	}
-	
-	@Override
-	public Item getItemFromMachine() 
-	{
-		return new ItemStack(MinestuckBlocks.punchDesignix).getItem();
 	}
 }

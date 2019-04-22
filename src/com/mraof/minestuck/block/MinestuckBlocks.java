@@ -15,6 +15,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.RegistryEvent;
@@ -109,11 +110,11 @@ public class MinestuckBlocks
 	public static Block RABBIT_SPAWNER;
 	
 	//Sburb Machines
+	public static Block CRUXTRUDER_CORNER, CRUXTRUDER_SIDE, CRUXTRUDER_CENTER, CRUXTRUDER_TUBE;
+	public static Block CRUXTRUDER_LID;
 	public static Block PUNCH_DESIGNIX_LEFT_LEG, PUNCH_DESIGNIX_RIGHT_LEG, PUNCH_DESIGNIX_SLOT, PUNCH_DESIGNIX_KEYBOARD;
 	public static BlockTotemLathe[] totemlathe = BlockTotemLathe.createBlocks();
 	public static BlockAlchemiter[] alchemiter = BlockAlchemiter.createBlocks();
-	public static Block cruxtruder = new BlockCruxtruder();
-	public static Block cruxtruderLid = new BlockCruxtruderLid();
 	public static Block sburbMachine = new BlockSburbMachine();
 	public static Block crockerMachine = new BlockCrockerMachine();
 	public static Block holopad = new BlockHolopad();
@@ -398,10 +399,16 @@ public class MinestuckBlocks
 		
 		registry.register(RABBIT_SPAWNER = new BlockMobSpawner(Block.Properties.create(Material.AIR).needsRandomTick().doesNotBlockMovement()).setRegistryName("rabbit_spawner"));
 		
-		registry.register(PUNCH_DESIGNIX_LEFT_LEG = new BlockPunchDesignix(Block.Properties.create(Material.ROCK).hardnessAndResistance(2.0F), BlockPunchDesignix.LEG_SHAPE, new BlockPos(0, 1, 0)).setRegistryName("punch_designix_left_leg"));
-		registry.register(PUNCH_DESIGNIX_RIGHT_LEG = new BlockPunchDesignix(Block.Properties.create(Material.ROCK).hardnessAndResistance(2.0F), BlockPunchDesignix.LEG_SHAPE, new BlockPos(-1, 1, 0)).setRegistryName("punch_designix_right_leg"));
-		registry.register(PUNCH_DESIGNIX_SLOT = new BlockPunchDesignixSlot(Block.Properties.create(Material.ROCK).hardnessAndResistance(2.0F), BlockPunchDesignix.SLOT_SHAPE).setRegistryName("punch_designix_slot"));
-		registry.register(PUNCH_DESIGNIX_KEYBOARD = new BlockPunchDesignix(Block.Properties.create(Material.ROCK).hardnessAndResistance(2.0F), BlockPunchDesignix.KEYBOARD_SHAPE, new BlockPos(-1, 0, 0)).setRegistryName("punch_designix_keyboard"));
+		registry.register(CRUXTRUDER_CORNER = new BlockCruxtruder(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), VoxelShapes.fullCube(), false, false, new BlockPos(1, 1, 1)).setRegistryName("cruxtruder_corner"));
+		registry.register(CRUXTRUDER_SIDE = new BlockCruxtruder(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), VoxelShapes.fullCube(), false, false, new BlockPos(0, 1, 1)).setRegistryName("cruxtruder_side"));
+		registry.register(CRUXTRUDER_CENTER = new BlockCruxtruder(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), VoxelShapes.fullCube(), false, true, new BlockPos(0, 1, 0)).setRegistryName("cruxtruder_center"));
+		registry.register(CRUXTRUDER_TUBE = new BlockCruxtruder(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), BlockCruxtruder.TUBE_SHAPE, true, false, new BlockPos(0, 0, 0)).setRegistryName("cruxtruder_tube"));
+		registry.register(CRUXTRUDER_LID = new BlockCruxtruderLid(Block.Properties.create(Material.IRON).hardnessAndResistance(1.0F)).setRegistryName("cruxtruder_lid"));
+		
+		registry.register(PUNCH_DESIGNIX_LEFT_LEG = new BlockPunchDesignix(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), BlockPunchDesignix.LEG_SHAPE, new BlockPos(0, 1, 0)).setRegistryName("punch_designix_left_leg"));
+		registry.register(PUNCH_DESIGNIX_RIGHT_LEG = new BlockPunchDesignix(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), BlockPunchDesignix.LEG_SHAPE, new BlockPos(1, 1, 0)).setRegistryName("punch_designix_right_leg"));
+		registry.register(PUNCH_DESIGNIX_SLOT = new BlockPunchDesignixSlot(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), BlockPunchDesignix.SLOT_SHAPE).setRegistryName("punch_designix_slot"));
+		registry.register(PUNCH_DESIGNIX_KEYBOARD = new BlockPunchDesignix(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), BlockPunchDesignix.KEYBOARD_SHAPE, new BlockPos(1, 0, 0)).setRegistryName("punch_designix_keyboard"));
 		
 		registry.register(blockCruxiteDowel.setRegistryName("cruxite_dowel"));
 		
@@ -412,14 +419,11 @@ public class MinestuckBlocks
 		registry.register(transportalizer.setRegistryName("transportalizer"));
 		registry.register(uraniumCooker.setRegistryName("uranium_cooker"));
 		
-		registry.register(punchDesignix.setRegistryName("punch_designix"));
 		registry.register(totemlathe[0].setRegistryName("totem_lathe"));
 		registry.register(totemlathe[1].setRegistryName("totem_lathe2"));
 		registry.register(totemlathe[2].setRegistryName("totem_lathe3"));
 		registry.register(alchemiter[0].setRegistryName("alchemiter"));
 		registry.register(alchemiter[1].setRegistryName("alchemiter2"));
-		registry.register(cruxtruder.setRegistryName("cruxtruder"));
-		registry.register(cruxtruderLid.setRegistryName("cruxtruder_lid"));
 		/*
 		registry.register(holopad.setRegistryName("holopad"));
 		registry.register(jumperBlockExtension[0].setRegistryName("jumper_block_extension"));

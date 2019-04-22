@@ -1,30 +1,19 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.item.TabMinestuck;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.EnumPushReaction;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.IBlockReader;
 
 public class BlockCruxtruderLid extends Block
 {
-	public AxisAlignedBB BLOCK_AABB = new AxisAlignedBB(2/16f, 0, 2/16f, 14/16f, 5/16f, 14/16f);
+	public static final VoxelShape SHAPE = Block.makeCuboidShape(2, 0, 2, 14, 5, 14);
 	
-	public BlockCruxtruderLid()
+	public BlockCruxtruderLid(Properties properties)
 	{
-		super(Material.IRON);
-		setCreativeTab(TabMinestuck.instance);
-		setUnlocalizedName("cruxtruderLid");
-		setHardness(1.0F);
-	}
-	
-	@Override
-	public boolean isOpaqueCube(IBlockState state)
-	{
-		return false;
+		super(properties);
 	}
 	
 	@Override
@@ -34,14 +23,14 @@ public class BlockCruxtruderLid extends Block
 	}
 	
 	@Override
-	public EnumPushReaction getMobilityFlag(IBlockState state)
+	public EnumPushReaction getPushReaction(IBlockState state)
 	{
 		return EnumPushReaction.DESTROY;
 	}
 	
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+	public VoxelShape getShape(IBlockState state, IBlockReader worldIn, BlockPos pos)
 	{
-		return BLOCK_AABB;
+		return SHAPE;
 	}
 }
