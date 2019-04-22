@@ -109,7 +109,7 @@ public class MinestuckBlocks
 	public static Block RABBIT_SPAWNER;
 	
 	//Sburb Machines
-	public static Block punchDesignix = new BlockPunchDesignix();
+	public static Block PUNCH_DESIGNIX_LEFT_LEG, PUNCH_DESIGNIX_RIGHT_LEG, PUNCH_DESIGNIX_SLOT, PUNCH_DESIGNIX_KEYBOARD;
 	public static BlockTotemLathe[] totemlathe = BlockTotemLathe.createBlocks();
 	public static BlockAlchemiter[] alchemiter = BlockAlchemiter.createBlocks();
 	public static Block cruxtruder = new BlockCruxtruder();
@@ -397,6 +397,11 @@ public class MinestuckBlocks
 		registry.register(RETURN_NODE = new BlockReturnNode(Block.Properties.create(Material.PORTAL).doesNotBlockMovement().hardnessAndResistance(-1.0F, 10.0F).sound(SoundType.GLASS).lightValue(11)).setRegistryName("return_node"));
 		
 		registry.register(RABBIT_SPAWNER = new BlockMobSpawner(Block.Properties.create(Material.AIR).needsRandomTick().doesNotBlockMovement()).setRegistryName("rabbit_spawner"));
+		
+		registry.register(PUNCH_DESIGNIX_LEFT_LEG = new BlockPunchDesignix(Block.Properties.create(Material.ROCK).hardnessAndResistance(2.0F), BlockPunchDesignix.LEG_SHAPE, new BlockPos(0, 1, 0)).setRegistryName("punch_designix_left_leg"));
+		registry.register(PUNCH_DESIGNIX_RIGHT_LEG = new BlockPunchDesignix(Block.Properties.create(Material.ROCK).hardnessAndResistance(2.0F), BlockPunchDesignix.LEG_SHAPE, new BlockPos(-1, 1, 0)).setRegistryName("punch_designix_right_leg"));
+		registry.register(PUNCH_DESIGNIX_SLOT = new BlockPunchDesignixSlot(Block.Properties.create(Material.ROCK).hardnessAndResistance(2.0F), BlockPunchDesignix.SLOT_SHAPE).setRegistryName("punch_designix_slot"));
+		registry.register(PUNCH_DESIGNIX_KEYBOARD = new BlockPunchDesignix(Block.Properties.create(Material.ROCK).hardnessAndResistance(2.0F), BlockPunchDesignix.KEYBOARD_SHAPE, new BlockPos(-1, 0, 0)).setRegistryName("punch_designix_keyboard"));
 		
 		registry.register(blockCruxiteDowel.setRegistryName("cruxite_dowel"));
 		
