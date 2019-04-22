@@ -23,8 +23,10 @@ import scala.swing.event.MouseButtonEvent;
 
 public class GuiStrifeSpecibus extends GuiPlayerStats
 {
-	
+
 	private static final ResourceLocation guiStrifePortfolio = new ResourceLocation("minestuck", "textures/gui/strife_specibus/strife_portfolio.png");
+	private static final ResourceLocation guiPortfolioTabs = new ResourceLocation("minestuck", "textures/gui/strife_specibus/portfolio_tabs.png");
+	private static final ResourceLocation guiStrifePortfolioBg = new ResourceLocation("minestuck", "textures/gui/strife_specibus/portfolio_bg.png");
 	private static final ResourceLocation guiStrifeCard = new ResourceLocation("minestuck", "textures/gui/strife_specibus/strife_card.png");
 	private static final String iconsLoc = "textures/gui/strife_specibus/icons/";
 	
@@ -55,82 +57,76 @@ public class GuiStrifeSpecibus extends GuiPlayerStats
 	}
 	
 	@Override
-	public void drawScreen(int xcor, int ycor, float par3) {
+	public void drawScreen(int xcor, int ycor, float par3) 
+	{
 		super.drawScreen(xcor, ycor, par3);
 		this.drawDefaultBackground();
 		scale = 1;
+		float cardScale = 0.25f;
 		blankCardCount = 0;
 		portfolio = MinestuckPlayerData.getClientPortfolio();
 		if(portfolio == null) portfolio = new ArrayList<StrifeSpecibus>();
+		int i;
 		
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		this.mc.getTextureManager().bindTexture(guiStrifePortfolioBg);
+		this.drawTexturedModalRect(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
+		drawCard(11, 9, cardScale, 6);
+		this.mc.getTextureManager().bindTexture(guiPortfolioTabs);
+		//this.drawTexturedModalRect(xOffset+6, yOffset+6, 14, 54, 98, 98);
+		
+		drawCard(59, 7, cardScale, 7);
+		drawCard(12, 50, cardScale, 9);
+		this.mc.getTextureManager().bindTexture(guiPortfolioTabs);
+		//this.drawTexturedModalRect(xOffset+8, yOffset+6, 0, 38, 136, 114);
+		
+		drawCard(107, 7, cardScale, 8);
+		drawCard(56, 40, cardScale, 0);
+		this.mc.getTextureManager().bindTexture(guiPortfolioTabs);
+		this.drawTexturedModalRect(xOffset+28, yOffset+12, 0, 38, 152, 142);
+		
+		drawCard(107, 33, cardScale, 5);
+		drawCard(56, 80, cardScale, 4);
+		this.mc.getTextureManager().bindTexture(guiPortfolioTabs);
+		this.drawTexturedModalRect(xOffset+81, yOffset+28, 0, 8, 137, 120);
+		this.drawTexturedModalRect(xOffset+218, yOffset+46, 142, 22, 2, 10);
+		
+		drawCard(159, 25, cardScale, 3);
+		drawCard(107, 77, cardScale, 1);
+		this.mc.getTextureManager().bindTexture(guiPortfolioTabs);
+		this.drawTexturedModalRect(xOffset+124, yOffset+52, 0, 32, 96, 96);
+		
+		drawCard(159, 69, cardScale, 2);
+		this.mc.getTextureManager().bindTexture(guiPortfolioTabs);
+		this.drawTexturedModalRect(xOffset+168, yOffset+96, 204, 0, 52, 52);
+		
+		setScale(1);
 		drawTabs();
 		
 		this.mc.getTextureManager().bindTexture(guiStrifePortfolio);
 		this.drawTexturedModalRect(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
-		
-		setScale(1);
 		drawActiveTabAndOther(xcor, ycor);
-		/*portfolio = new ArrayList<StrifeSpecibus>();
-		for(int i = 0; i < 10; i++)
-		{
-			portfolio.add(new StrifeSpecibus(i));
-			for(int j = 0; j < 10; j++)
-			{
-				portfolio.get(i).forceItemStack(new ItemStack(Items.IRON_SWORD));
-			}
-		}
-		*/
-		
-
-		
-		int i = 0;
-		int pSize = portfolio.size();
+		i = 0;
 		for(StrifeSpecibus specibus : portfolio)
 		{
-
-			setScale(1);
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-			
-			KindAbstratusType abstratus = specibus.getAbstratus();
-			String unlocalizedName = abstratus.getUnlocalizedName();
-			String displayName = abstratus.getDisplayName();
-			//unlocalizedName = "a";
-			ResourceLocation icon = new ResourceLocation("minestuck", iconsLoc+unlocalizedName+".png");
-			int cardX = 264 - (int)(32*(i%5)) - (int)(8*(i/5));
-			int cardY = 75 + (int)(48*(i/5)) + (int)(8*(i%5));
-			float cardScale = 0.25F;
-			
-			float c = 1f;
-			//if(selectedCard != i && selectedCard != -1)
-				GlStateManager.color(c, c, c, 1F);
-
-			if(isPointInRegion(cardX, cardY, (int)(64*cardScale), (int)(64*cardScale), xcor, ycor))
-			{
-				GlStateManager.color(0.5F,0.5F,0.5F,1F);
-				selectedCard = i;
-				if(Mouse.getEventButtonState() && Mouse.isButtonDown(0))
-					StrifePortfolioHandler.retrieveSpecibus(i);
-			}
-			drawCard(cardX,cardY,cardScale, specibus);			
-			
-			if(specibus.getAbstratusIndex() > 0)
-			{
-				mc.getTextureManager().bindTexture(icon);
-				setScale(16/256F);
-				drawTexturedModalRect((xOffset+iconsOffX+((i-blankCardCount)*20))/scale, (yOffset+iconsOffY)/scale, 0, 0, 256, 256);
-			}
 			
 			i++;
 		}
-
 		
-		
+		System.out.println("ba");
+	}
+	
+	public void drawCard(int cardX, int cardY, float cardScale, int index)
+	{
+		if(index < portfolio.size()) drawCard(cardX, cardY, cardScale, portfolio.get(index));
 	}
 	
 	public void drawCard(int cardX, int cardY, float cardScale, StrifeSpecibus specibus)
 	{
+		
+		
+		if(specibus == null) return;
 		
 		//specibus.putItemStack(new ItemStack(Items.IRON_SWORD));
 		
@@ -138,41 +134,21 @@ public class GuiStrifeSpecibus extends GuiPlayerStats
 		String unlocalizedName = abstratus.getUnlocalizedName();
 		String displayName = abstratus.getDisplayName();
 		int txOffset = mc.fontRenderer.getStringWidth(displayName);
+		
+		int x = (int) ((xOffset+cardX));
+		int y = (int) ((yOffset+cardY));
+		
 		ResourceLocation icon = new ResourceLocation("minestuck", iconsLoc+unlocalizedName+".png");
 		
-		mc.getTextureManager().bindTexture(guiStrifeCard);
 		setScale(cardScale);
-		drawTexturedModalRect(cardX/scale, cardY/scale, 0, 0, 256, 256);
-		setScale(cardScale*1.5f);
-		mc.fontRenderer.drawString("strife specibus", (int)((26)+(cardX/scale)), (int)((8)+(cardY/scale)), 0x00E371);
-		setScale(cardScale*0.75f);
-		mc.fontRenderer.drawString("sylladex :: strife deck", (int)((60)+(cardX/scale)), (int)((240)+(cardY/scale)), 0xFFFFFF);
-		if(specibus.getAbstratusIndex() > 0)
-		{
-			setScale(cardScale*2.6F);
-			mc.fontRenderer.drawString(displayName, (int)(((80 - txOffset))+(cardX/scale)), (int)((88)+(cardY/scale)), 0x00E371);
-			mc.getTextureManager().bindTexture(icon);
-			setScale(cardScale/0.5f*(0.1875f));
-			drawTexturedModalRect(140 + cardX/scale, 148 + cardY/scale, 0, 0, 256, 256);
-		}
-		else blankCardCount++;
-		setScale(1);
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		int i = 0;
-		
-		setScale(cardScale);
-		for(ItemStack stack : specibus.getItems())
-		{
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-			mc.getTextureManager().bindTexture(icons);
-			drawTexturedModalRect((cardX+(i*8)+20)/cardScale, (cardY+48)/cardScale, 0, 122, 21, 26);
-			//System.out.println(stack);
-			drawItemStack(stack, (int)((cardX+(i*8)+20)/cardScale), (int)((cardY+50)/cardScale), "");
-			i++;
-		}
+		this.mc.getTextureManager().bindTexture(guiStrifeCard);
+		this.drawTexturedModalRect(x/scale, y/scale, 28, 0, 200, 256);
+		setScale(cardScale/4);
+		this.mc.getTextureManager().bindTexture(icon);
+		this.drawTexturedModalRect((x+60)/scale, (y+52)/scale, 0, 0, 256, 256);
 		
 		setScale(1);
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		
 	}
 	
 	
