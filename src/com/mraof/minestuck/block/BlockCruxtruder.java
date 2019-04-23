@@ -23,29 +23,29 @@ public class BlockCruxtruder extends BlockLargeMachine
 {
 	public static final VoxelShape TUBE_SHAPE = Block.makeCuboidShape(2, 0, 2, 14, 16, 14);
 	
-	protected final boolean HAS_TILE_ENTITY, FULL_BLOCK;
-	protected final VoxelShape SHAPE;
-	protected final BlockPos MAIN_POS;
+	protected final VoxelShape shape;
+	protected final boolean hasTileEntity, fullCube;
+	protected final BlockPos mainPos;
 	
-	public BlockCruxtruder(Properties properties, VoxelShape shape, boolean tileEntity, boolean fullBlock, BlockPos mainPos)
+	public BlockCruxtruder(Properties properties, VoxelShape shape, boolean tileEntity, boolean fullCube, BlockPos mainPos)
 	{
 		super(properties);
-		this.SHAPE = shape;
-		this.HAS_TILE_ENTITY = tileEntity;
-		this.FULL_BLOCK = fullBlock;
-		this.MAIN_POS = mainPos;
+		this.shape = shape;
+		this.hasTileEntity = tileEntity;
+		this.fullCube = fullCube;
+		this.mainPos = mainPos;
 	}
 	
 	@Override
 	public VoxelShape getShape(IBlockState state, IBlockReader worldIn, BlockPos pos)
 	{
-		return SHAPE;
+		return shape;
 	}
 	
 	@Override
 	public boolean onBlockActivated(IBlockState state, World worldIn, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
-		if(HAS_TILE_ENTITY && (state.get(FACING) == side || side == EnumFacing.UP))
+		if(hasTileEntity && (state.get(FACING) == side || side == EnumFacing.UP))
 		{
 			if(worldIn.isRemote)
 				return true;
@@ -62,7 +62,7 @@ public class BlockCruxtruder extends BlockLargeMachine
 	@Override
 	public TileEntity createTileEntity(IBlockState state, IBlockReader world)
 	{
-		if(HAS_TILE_ENTITY)
+		if(hasTileEntity)
 			return new TileEntityCruxtruder();
 		else return null;
 	}
@@ -83,13 +83,13 @@ public class BlockCruxtruder extends BlockLargeMachine
 	@Override
 	public boolean isFullCube(IBlockState state)
 	{
-		return FULL_BLOCK;
+		return fullCube;
 	}
 	
 	@Override
 	public BlockFaceShape getBlockFaceShape(IBlockReader worldIn, IBlockState state, BlockPos pos, EnumFacing face)
 	{
-		if(FULL_BLOCK)
+		if(fullCube)
 			return BlockFaceShape.SOLID;
 		return BlockFaceShape.UNDEFINED;
 	}
@@ -131,6 +131,6 @@ public class BlockCruxtruder extends BlockLargeMachine
 	{
 		Rotation rotation = rotationFromFacing(state.get(FACING));
 		
-		return pos.add(MAIN_POS.rotate(rotation));
+		return pos.add(mainPos.rotate(rotation));
 	}
 }

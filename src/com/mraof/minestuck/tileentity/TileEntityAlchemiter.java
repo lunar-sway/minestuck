@@ -326,7 +326,7 @@ public class TileEntityAlchemiter extends TileEntity
 	}
 	
 
-	public void onRightClick(World worldIn, EntityPlayer playerIn, IBlockState state, EnumParts part) 
+	public void onRightClick(World worldIn, EntityPlayer playerIn, IBlockState state)
 	{
 		if(worldIn.isRemote)
 		{

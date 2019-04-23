@@ -26,20 +26,20 @@ public class BlockPunchDesignix extends BlockLargeMachine
 	public static final Map<EnumFacing, VoxelShape> SLOT_SHAPE = createRotatedShapes(1, 0, 0, 16, 7, 7);
 	public static final Map<EnumFacing, VoxelShape> KEYBOARD_SHAPE = createRotatedShapes(0, 0, 0, 15, 7, 12);
 	
-	protected final Map<EnumFacing, VoxelShape> SHAPE;
-	protected final BlockPos MAIN_POS;
+	protected final Map<EnumFacing, VoxelShape> shape;
+	protected final BlockPos mainPos;
 	
 	public BlockPunchDesignix(Properties properties, Map<EnumFacing, VoxelShape> shape, BlockPos pos)
 	{
 		super(properties);
-		this.SHAPE = shape;
-		this.MAIN_POS = pos;
+		this.shape = shape;
+		this.mainPos = pos;
 	}
 	
 	@Override
 	public VoxelShape getShape(IBlockState state, IBlockReader worldIn, BlockPos pos)
 	{
-		return SHAPE.get(state.get(FACING));
+		return shape.get(state.get(FACING));
 	}
 	
 	@Override
@@ -89,7 +89,7 @@ public class BlockPunchDesignix extends BlockLargeMachine
 		EnumFacing facing = state.get(FACING);
 		Rotation rotation = rotationFromFacing(facing);
 		
-		return pos.add(this.MAIN_POS.rotate(rotation));
+		return pos.add(this.mainPos.rotate(rotation));
 	}
 	
 	public static class Slot extends BlockPunchDesignix

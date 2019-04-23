@@ -16,7 +16,9 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
+import java.util.EnumMap;
 import java.util.Map;
+import java.util.function.Function;
 
 public abstract class BlockLargeMachine extends Block
 {
@@ -66,6 +68,7 @@ public abstract class BlockLargeMachine extends Block
 	public void dropBlockAsItemWithChance(IBlockState state, World worldIn, BlockPos pos, float chancePerItem, int fortune)
 	{}
 	
+	//Should probably find an utility class for the functions below
 	public static Rotation rotationFromFacing(EnumFacing facing)
 	{
 		Rotation rotation;
@@ -91,5 +94,15 @@ public abstract class BlockLargeMachine extends Block
 	{
 		return Maps.newEnumMap(ImmutableMap.of(EnumFacing.NORTH, Block.makeCuboidShape(x1, y1, z1, x2, y2, z2), EnumFacing.SOUTH, Block.makeCuboidShape(16 - x2, y1, 16 - z2, 16 - x1, y2, 16 - z1),
 				EnumFacing.WEST, Block.makeCuboidShape(z1, y1, 16 - x2, z2, y2, 16 - x1), EnumFacing.EAST, Block.makeCuboidShape(16 - z2, y1, x1, 16 - z1, y2, x2)));
+	}
+	
+	public static <K extends Enum<K>, V> Map<K, V> createEnumMapping(Class<K> c, K[] keys, Function<K, V> function)
+	{
+		EnumMap<K, V> map = Maps.newEnumMap(c);
+		for(K k : keys)
+		{
+			map.put(k, function.apply(k));
+		}
+		return Maps.immutableEnumMap(map);
 	}
 }

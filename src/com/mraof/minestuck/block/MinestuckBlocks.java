@@ -115,8 +115,9 @@ public class MinestuckBlocks
 	public static Block TOTEM_LATHE_CARD_SLOT, TOTEM_LATHE_BOTTOM_LEFT, TOTEM_LATHE_BOTTOM_RIGHT, TOTEM_LATHE_BOTTOM_CORNER;
 	public static Block TOTEM_LATHE_MIDDLE, TOTEM_LATHE_WHEEL, TOTEM_LATHE_ROD, TOTEM_LATHE_DOWEL_ROD;
 	public static Block TOTEM_LATHE_TOP_CORNER, TOTEM_LATHE_TOP, TOTEM_LATHE_CARVER;
+	public static Block ALCHEMITER_CENTER, ALCHEMITER_CORNER, ALCHEMITER_LEFT_SIDE, ALCHEMITER_RIGHT_SIDE;
+	public static Block ALCHEMITER_TOTEM_CORNER, ALCHEMITER_TOTEM_PAD, ALCHEMITER_LOWER_ROD, ALCHEMITER_UPPER_ROD;
 	public static Block PUNCH_DESIGNIX_LEFT_LEG, PUNCH_DESIGNIX_RIGHT_LEG, PUNCH_DESIGNIX_SLOT, PUNCH_DESIGNIX_KEYBOARD;
-	public static BlockAlchemiter[] alchemiter = BlockAlchemiter.createBlocks();
 	public static Block sburbMachine = new BlockSburbMachine();
 	public static Block crockerMachine = new BlockCrockerMachine();
 	public static Block holopad = new BlockHolopad();
@@ -417,7 +418,14 @@ public class MinestuckBlocks
 		registry.register(TOTEM_LATHE_TOP_CORNER = new BlockTotemLathe(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), BlockTotemLathe.TOP_CORNER_SHAPE, new BlockPos(0, -2, 0)).setRegistryName("totem_lathe_top_corner"));
 		registry.register(TOTEM_LATHE_TOP = new BlockTotemLathe(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), BlockTotemLathe.TOP_SHAPE, new BlockPos(1, -2, 0)).setRegistryName("totem_lathe_top"));
 		registry.register(TOTEM_LATHE_CARVER = new BlockTotemLathe(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), BlockTotemLathe.CARVER_SHAPE, new BlockPos(2, -2, 0)).setRegistryName("totem_lathe_carver"));
-		
+		registry.register(ALCHEMITER_CENTER = new BlockAlchemiter(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), BlockAlchemiter.FULL_BLOCK_SHAPE, BlockAlchemiter.SOLID_FACE_SHAPES, true, true, false, new BlockPos(-1, 0, 1)).setRegistryName("alchemiter_center"));
+		registry.register(ALCHEMITER_CORNER = new BlockAlchemiter(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), BlockAlchemiter.FULL_BLOCK_SHAPE, BlockAlchemiter.CORNER_FACE_SHAPES, false, true, true, new BlockPos(0, 0, -3)).setRegistryName("alchemiter_corner"));
+		registry.register(ALCHEMITER_LEFT_SIDE = new BlockAlchemiter(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), BlockAlchemiter.FULL_BLOCK_SHAPE, BlockAlchemiter.SIDE_FACE_SHAPES, false, true, false, new BlockPos(-1, 0, 0)).setRegistryName("alchemiter_left_side"));
+		registry.register(ALCHEMITER_RIGHT_SIDE = new BlockAlchemiter(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), BlockAlchemiter.FULL_BLOCK_SHAPE, BlockAlchemiter.SIDE_FACE_SHAPES, false, true, false, new BlockPos(-2, 0, 0)).setRegistryName("alchemiter_right_side"));
+		registry.register(ALCHEMITER_TOTEM_CORNER = new BlockAlchemiter(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), BlockAlchemiter.FULL_BLOCK_SHAPE, BlockAlchemiter.CORNER_FACE_SHAPES, false, false, true, new BlockPos(0, 1, 0)).setRegistryName("alchemiter_totem_corner"));
+		registry.register(ALCHEMITER_TOTEM_PAD = new BlockAlchemiter.Pad(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), BlockAlchemiter.TOTEM_PAD_SHAPE, BlockAlchemiter.UNDEFINED_FACE_SHAPES, false).setRegistryName("alchemiter_totem_pad"));
+		registry.register(ALCHEMITER_LOWER_ROD = new BlockAlchemiter(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), BlockAlchemiter.LOWER_ROD_SHAPE, BlockAlchemiter.UNDEFINED_FACE_SHAPES, false, false, false, new BlockPos(0, -1, 0)).setRegistryName("alchemiter_lower_rod"));
+		registry.register(ALCHEMITER_UPPER_ROD = new BlockAlchemiter(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), BlockAlchemiter.UPPER_ROD_SHAPE, BlockAlchemiter.UNDEFINED_FACE_SHAPES, false, false, false, new BlockPos(0, -2, 0)).setRegistryName("alchemiter_upper_rod"));
 		registry.register(PUNCH_DESIGNIX_LEFT_LEG = new BlockPunchDesignix(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), BlockPunchDesignix.LEG_SHAPE, new BlockPos(0, 1, 0)).setRegistryName("punch_designix_left_leg"));
 		registry.register(PUNCH_DESIGNIX_RIGHT_LEG = new BlockPunchDesignix(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), BlockPunchDesignix.LEG_SHAPE, new BlockPos(1, 1, 0)).setRegistryName("punch_designix_right_leg"));
 		registry.register(PUNCH_DESIGNIX_SLOT = new BlockPunchDesignix.Slot(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), BlockPunchDesignix.SLOT_SHAPE).setRegistryName("punch_designix_slot"));
@@ -431,9 +439,6 @@ public class MinestuckBlocks
 		registry.register(crockerMachine.setRegistryName("crocker_machine"));
 		registry.register(transportalizer.setRegistryName("transportalizer"));
 		registry.register(uraniumCooker.setRegistryName("uranium_cooker"));
-		
-		registry.register(alchemiter[0].setRegistryName("alchemiter"));
-		registry.register(alchemiter[1].setRegistryName("alchemiter2"));
 		/*
 		registry.register(holopad.setRegistryName("holopad"));
 		registry.register(jumperBlockExtension[0].setRegistryName("jumper_block_extension"));

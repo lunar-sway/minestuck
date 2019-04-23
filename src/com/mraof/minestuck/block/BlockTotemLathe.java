@@ -3,7 +3,6 @@ package com.mraof.minestuck.block;
 import com.mraof.minestuck.tileentity.TileEntityItemStack;
 import com.mraof.minestuck.tileentity.TileEntityTotemLathe;
 
-import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -17,15 +16,12 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class BlockTotemLathe extends BlockLargeMachine
@@ -42,20 +38,20 @@ public class BlockTotemLathe extends BlockLargeMachine
 	public static final Map<EnumFacing, VoxelShape> CARVER_SHAPE = createRotatedShapes(10, 0, 1, 16, 16, 11);
 	
 	
-	protected final Map<EnumFacing, VoxelShape> SHAPE;
-	protected final BlockPos MAIN_POS;
+	protected final Map<EnumFacing, VoxelShape> shape;
+	protected final BlockPos mainPos;
 	
 	public BlockTotemLathe(Properties properties, Map<EnumFacing, VoxelShape> shape, BlockPos mainPos)
 	{
 		super(properties);
-		this.SHAPE = shape;
-		this.MAIN_POS = mainPos;
+		this.shape = shape;
+		this.mainPos = mainPos;
 	}
 	
 	@Override
 	public VoxelShape getShape(IBlockState state, IBlockReader worldIn, BlockPos pos)
 	{
-		return SHAPE.get(state.get(FACING));
+		return shape.get(state.get(FACING));
 	}
 	
 	@Override
@@ -136,7 +132,7 @@ public class BlockTotemLathe extends BlockLargeMachine
 	{
 		Rotation rotation = rotationFromFacing(state.get(FACING));
 		
-		return pos.add(MAIN_POS.rotate(rotation));
+		return pos.add(mainPos.rotate(rotation));
 	}
 	
 	public static class Rod extends BlockTotemLathe
