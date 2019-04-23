@@ -6,10 +6,8 @@ import com.mraof.minestuck.inventory.ContainerSburbMachine;
 import com.mraof.minestuck.inventory.ContainerUraniumCooker;
 import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
-import com.mraof.minestuck.tileentity.TileEntityCrockerMachine;
-import com.mraof.minestuck.tileentity.TileEntityCruxtruder;
+import com.mraof.minestuck.tileentity.TileEntityGristWidget;
 import com.mraof.minestuck.tileentity.TileEntitySburbMachine;
-import com.mraof.minestuck.tileentity.TileEntityTotemLathe;
 import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
 import com.mraof.minestuck.tileentity.TileEntityUraniumCooker;
 
@@ -40,8 +38,8 @@ public class GuiHandler implements IGuiHandler
 		{
 			if (tileEntity instanceof TileEntitySburbMachine)
 				return new ContainerSburbMachine(player.inventory, (TileEntitySburbMachine) tileEntity);
-			else if(tileEntity instanceof TileEntityCrockerMachine)
-				return new ContainerCrockerMachine(player.inventory, (TileEntityCrockerMachine) tileEntity);
+			else if(tileEntity instanceof TileEntityGristWidget)
+				return new ContainerCrockerMachine(player.inventory, (TileEntityGristWidget) tileEntity);
 			else if(tileEntity instanceof TileEntityUraniumCooker)
 				return new ContainerUraniumCooker(player.inventory, (TileEntityUraniumCooker) tileEntity);
 		} else if(id == GuiId.MERCHANT.ordinal())
@@ -58,8 +56,8 @@ public class GuiHandler implements IGuiHandler
 		if(id == GuiId.MACHINE.ordinal())
 			if(tileEntity instanceof TileEntitySburbMachine)
 				return new GuiSburbMachine(player.inventory, (TileEntitySburbMachine) tileEntity);
-			else if(tileEntity instanceof TileEntityCrockerMachine)
-				return new GuiCrockerMachine(player.inventory, (TileEntityCrockerMachine) tileEntity);
+			else if(tileEntity instanceof TileEntityGristWidget)
+				return new GuiCrockerMachine(player.inventory, (TileEntityGristWidget) tileEntity);
 			else if(tileEntity instanceof TileEntityUraniumCooker)
 				return new GuiUraniumCooker(player.inventory, (TileEntityUraniumCooker) tileEntity);
 			

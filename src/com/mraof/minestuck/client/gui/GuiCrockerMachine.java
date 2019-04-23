@@ -1,10 +1,10 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.block.BlockCrockerMachine.MachineType;
+import com.mraof.minestuck.block.BlockGristWidget.MachineType;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.inventory.ContainerCrockerMachine;
-import com.mraof.minestuck.tileentity.TileEntityCrockerMachine;
+import com.mraof.minestuck.tileentity.TileEntityGristWidget;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import net.minecraft.client.renderer.GlStateManager;
@@ -20,7 +20,7 @@ public class GuiCrockerMachine extends GuiMachine
 {
 
 	private static final String[] guis = {"widget"};
-	protected TileEntityCrockerMachine te;
+	protected TileEntityGristWidget te;
 	private ResourceLocation guiBackground;
 	private ResourceLocation guiProgress;
 	private MachineType type;
@@ -31,7 +31,7 @@ public class GuiCrockerMachine extends GuiMachine
 	private int goX;
 	private int goY;
 
-	public GuiCrockerMachine(InventoryPlayer inventoryPlayer, TileEntityCrockerMachine tileEntity)
+	public GuiCrockerMachine(InventoryPlayer inventoryPlayer, TileEntityGristWidget tileEntity)
 	{
 		super(new ContainerCrockerMachine(inventoryPlayer, tileEntity), tileEntity);
 		this.te = tileEntity;

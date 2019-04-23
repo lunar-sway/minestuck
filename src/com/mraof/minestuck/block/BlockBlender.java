@@ -3,7 +3,7 @@ package com.mraof.minestuck.block;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.item.TabMinestuck;
-import com.mraof.minestuck.tileentity.TileEntityMachine;
+import com.mraof.minestuck.tileentity.TileEntityMachineProcess;
 import com.mraof.minestuck.tileentity.TileEntityUraniumCooker;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -174,7 +174,7 @@ public class BlockBlender extends BlockContainer
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
 	{
-		TileEntityMachine te = (TileEntityMachine) worldIn.getTileEntity(pos);
+		TileEntityMachineProcess te = (TileEntityMachineProcess) worldIn.getTileEntity(pos);
 		if(te != null) InventoryHelper.dropInventoryItems(worldIn, pos, te);
 		
 		super.breakBlock(worldIn, pos, state);

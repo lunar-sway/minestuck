@@ -1,8 +1,8 @@
 package com.mraof.minestuck.inventory;
 
-import com.mraof.minestuck.block.BlockCrockerMachine.MachineType;
+import com.mraof.minestuck.block.BlockGristWidget.MachineType;
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.tileentity.TileEntityCrockerMachine;
+import com.mraof.minestuck.tileentity.TileEntityGristWidget;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -18,12 +18,12 @@ public class ContainerCrockerMachine extends Container
 	private static final int gristWidgetInputX = 27;
 	private static final int gristWidgetInputY = 20;
 	
-	public TileEntityCrockerMachine tileEntity;
+	public TileEntityGristWidget tileEntity;
 	private MachineType type;
 	private boolean operator = true;
 	private int progress;
 	
-	public ContainerCrockerMachine(InventoryPlayer inventoryPlayer, TileEntityCrockerMachine te)
+	public ContainerCrockerMachine(InventoryPlayer inventoryPlayer, TileEntityGristWidget te)
 	{
 		tileEntity = te;
 		type = te.getMachineType();

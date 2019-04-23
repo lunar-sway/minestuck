@@ -5,11 +5,13 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -19,7 +21,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-public class BlockPunchDesignix extends BlockLargeMachine
+public class BlockPunchDesignix extends BlockMachine
 {
 	
 	public static final Map<EnumFacing, VoxelShape> LEG_SHAPE = createRotatedShapes(0, 0, 0, 16, 16, 12);
@@ -77,6 +79,10 @@ public class BlockPunchDesignix extends BlockLargeMachine
 		if(te instanceof TileEntityPunchDesignix)
 			((TileEntityPunchDesignix) te).checkStates();
 	}
+	
+	@Override
+	public void getDrops(IBlockState state, NonNullList<ItemStack> drops, World world, BlockPos pos, int fortune)
+	{}
 	
     /**
      *returns the block position of the "Main" block

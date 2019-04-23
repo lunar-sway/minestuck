@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TileEntityUraniumCooker extends TileEntityMachine
+public class TileEntityUraniumCooker extends TileEntityMachineProcess
 {
 	private static HashMap<Item, ItemStack> radiations = new HashMap();
 	private short fuel = 0;

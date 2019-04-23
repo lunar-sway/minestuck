@@ -24,7 +24,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-public class BlockTotemLathe extends BlockLargeMachine
+public class BlockTotemLathe extends BlockMachine
 {
 	public static final Map<EnumFacing, VoxelShape> CARD_SLOT_SHAPE = createRotatedShapes(0, 0, 1, 16, 16, 13);
 	public static final Map<EnumFacing, VoxelShape> BOTTOM_LEFT_SHAPE = createRotatedShapes(0, 0, 0, 16, 16, 12);
@@ -123,6 +123,10 @@ public class BlockTotemLathe extends BlockLargeMachine
 			}
 		}
 	}
+	
+	@Override
+	public void getDrops(IBlockState state, NonNullList<ItemStack> drops, World world, BlockPos pos, int fortune)
+	{}
 	
     /**
      *returns the block position of the "Main" block

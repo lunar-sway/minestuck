@@ -6,7 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -14,13 +14,13 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.function.Function;
 
-public abstract class BlockLargeMachine extends Block
+public abstract class BlockMachine extends Block
 {
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 	
@@ -29,7 +29,7 @@ public abstract class BlockLargeMachine extends Block
 		return false;
 	}
 	
-	public BlockLargeMachine(Properties properties)
+	public BlockMachine(Properties properties)
 	{
 		super(properties);
 	}
@@ -39,11 +39,6 @@ public abstract class BlockLargeMachine extends Block
 	{
 		builder.add(FACING);
 	}
-	
-	//keeps the blocks from dropping something
-	@Override
-	public void getDrops(IBlockState state, NonNullList<ItemStack> drops, World world, BlockPos pos, int fortune)
-	{}
 	
 	@Override
 	public BlockFaceShape getBlockFaceShape(IBlockReader worldIn, IBlockState state, BlockPos pos, EnumFacing face)
@@ -56,17 +51,6 @@ public abstract class BlockLargeMachine extends Block
 	{
 		return EnumPushReaction.BLOCK;
 	}
-	
-	@Override
-	public BlockRenderLayer getRenderLayer()
-	{
-		return BlockRenderLayer.CUTOUT_MIPPED;
-	}
-	//keep the game from crashing when a machine is blown up
-	
-	@Override
-	public void dropBlockAsItemWithChance(IBlockState state, World worldIn, BlockPos pos, float chancePerItem, int fortune)
-	{}
 	
 	//Should probably find an utility class for the functions below
 	public static Rotation rotationFromFacing(EnumFacing facing)
@@ -88,6 +72,13 @@ public abstract class BlockLargeMachine extends Block
 				break;
 		}
 		return rotation;
+	}
+	
+	@Nullable
+	@Override
+	public IBlockState getStateForPlacement(BlockItemUseContext context)
+	{
+		return getDefaultState().with(FACING, context.getPlacementHorizontalFacing());
 	}
 	
 	public static Map<EnumFacing, VoxelShape> createRotatedShapes(double x1, double y1, double z1, double x2, double y2, double z2)

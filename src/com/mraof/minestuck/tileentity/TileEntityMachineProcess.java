@@ -9,24 +9,35 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
 
-public abstract class TileEntityMachine extends TileEntity implements ISidedInventory, ITickable
+import javax.annotation.Nullable;
+
+public abstract class TileEntityMachineProcess extends TileEntity implements ISidedInventory, ITickable
 {
 
 	public int progress = 0;
 	public int maxProgress = 100;
 	public boolean ready = false;
 	public boolean overrideStop = false;
-	protected NonNullList<ItemStack> inv = NonNullList.<ItemStack>withSize(4, ItemStack.EMPTY);
-
-	protected abstract boolean isAutomatic();
-
-	public abstract boolean allowOverrideStop();
-
+	protected final NonNullList<ItemStack> inv;
+	
+	public TileEntityMachineProcess(TileEntityType<?> tileEntityTypeIn)
+	{
+		super(tileEntityTypeIn);
+		inv = NonNullList.withSize(getSizeInventory(), ItemStack.EMPTY);
+	}
+	
+	public abstract RunType getRunType();
+	
+	public boolean getOverrideStop()
+	{
+		return getRunType() == RunType.BUTTON_OVERRIDE && overrideStop;
+	}
 	@Override
 	public ItemStack getStackInSlot(int index)
 	{
@@ -76,68 +87,69 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 		return this.world.getTileEntity(pos) == this &&
 				player.getDistanceSq(this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5) < 64;
 	}
-
+	
 	@Override
-	public void readFromNBT(NBTTagCompound tagCompound)
+	public void read(NBTTagCompound compound)
 	{
-		super.readFromNBT(tagCompound);
+		super.read(compound);
 
-		this.progress = tagCompound.getInteger("progress");
-		this.overrideStop = tagCompound.getBoolean("overrideStop");
-		inv = NonNullList.<ItemStack>withSize(4, ItemStack.EMPTY);
-		ItemStackHelper.loadAllItems(tagCompound, inv);
+		this.progress = compound.getInt("progress");
+		if(getRunType() == RunType.BUTTON_OVERRIDE)
+			this.overrideStop = compound.getBoolean("overrideStop");
+		inv.clear();
+		ItemStackHelper.loadAllItems(compound, inv);
 	}
-
+	
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound tagCompound)
+	public NBTTagCompound write(NBTTagCompound compound)
 	{
-		super.writeToNBT(tagCompound);
+		super.write(compound);
 
-		tagCompound.setInteger("progress", this.progress);
-		tagCompound.setBoolean("overrideStop", this.overrideStop);
-		ItemStackHelper.saveAllItems(tagCompound, inv);
+		compound.setInt("progress", this.progress);
+		if(getRunType() == RunType.BUTTON_OVERRIDE)
+			compound.setBoolean("overrideStop", this.overrideStop);
+		ItemStackHelper.saveAllItems(compound, inv);
 
-		return tagCompound;
+		return compound;
 	}
 
 	@Override
 	public NBTTagCompound getUpdateTag()
 	{
-		return this.writeToNBT(new NBTTagCompound());
+		return this.write(new NBTTagCompound());
 	}
-
+	
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket()
 	{
 		NBTTagCompound tagCompound = this.getUpdateTag();
 		return new SPacketUpdateTileEntity(this.pos, 2, tagCompound);
 	}
-
+	
 	@Override
 	public void handleUpdateTag(NBTTagCompound tag)
 	{
-		this.readFromNBT(tag);
-
+		this.read(tag);
 	}
-
+	
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt)
 	{
 		this.handleUpdateTag(pkt.getNbtCompound());
 	}
-
+	
 	@Override
-	public void update()
+	public void tick()
 	{
 		IBlockState state = world.getBlockState(pos);
 		if (world.isRemote)    //Processing is easier done on the server side only
 			return;
 
-		if ((!ready && !isAutomatic()) || !contentsValid())
+		if ((!ready && getRunType() != RunType.AUTOMATIC) || !contentsValid())
 		{
 			boolean b = progress == 0;
 			this.progress = 0;
-			this.ready = overrideStop;
+			this.ready = getOverrideStop();
 			if (!b)
 				world.notifyBlockUpdate(pos, state, state, 3);
 			return;
@@ -148,7 +160,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 		if (this.progress == this.maxProgress)
 		{
 			this.progress = 0;
-			this.ready = overrideStop;
+			this.ready = getOverrideStop();
 			processContents();
 			world.notifyBlockUpdate(pos, state, state, 3);
 		}
@@ -157,19 +169,20 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	public abstract boolean contentsValid();
 
 	public abstract void processContents();
-
+	
+	@Nullable
+	@Override
+	public ITextComponent getCustomName()
+	{
+		return null;
+	}
+	
 	@Override
 	public boolean hasCustomName()
 	{
 		return false;
 	}
-
-	@Override
-	public ITextComponent getDisplayName()
-	{
-		return new TextComponentTranslation(getName());
-	}
-
+	
 	@Override
 	public void openInventory(EntityPlayer playerIn)
 	{
@@ -201,5 +214,24 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	public void clear()
 	{
 		inv.clear();
+	}
+	
+	@Override
+	public boolean canInsertItem(int index, ItemStack itemStackIn, @Nullable EnumFacing direction)
+	{
+		return isItemValidForSlot(index, itemStackIn);
+	}
+	
+	@Override
+	public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction)
+	{
+		return true;
+	}
+	
+	public enum RunType
+	{
+		AUTOMATIC,
+		BUTTON,
+		BUTTON_OVERRIDE
 	}
 }

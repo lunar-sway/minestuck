@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.gui;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
-import com.mraof.minestuck.tileentity.TileEntityMachine;
+import com.mraof.minestuck.tileentity.TileEntityMachineProcess;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -20,10 +20,10 @@ import java.io.IOException;
  */
 public abstract class GuiMachine extends GuiContainer
 {
-	private TileEntityMachine te;
+	private TileEntityMachineProcess te;
 	protected GuiButton goButton;
 	
-	public GuiMachine(Container inventorySlotsIn, TileEntityMachine tileEntity)
+	public GuiMachine(Container inventorySlotsIn, TileEntityMachineProcess tileEntity)
 	{
 		super(inventorySlotsIn);
 		this.te = tileEntity;

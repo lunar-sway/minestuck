@@ -8,12 +8,9 @@ import com.mraof.minestuck.item.block.*;
 import com.mraof.minestuck.item.weapon.*;
 import com.mraof.minestuck.util.MinestuckSoundHandler;
 
-import io.netty.handler.codec.http.HttpHeaders.Values;
-import net.minecraft.block.BlockSlab;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityHanging;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
@@ -32,10 +29,6 @@ import net.minecraftforge.registries.IForgeRegistry;
 import static com.mraof.minestuck.block.MinestuckBlocks.*;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import com.mraof.minestuck.block.BlockAspectLog;
 import com.mraof.minestuck.block.BlockAspectLog2;
@@ -263,7 +256,7 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemBlock(genericObject));
 		registerItemBlock(registry, new ItemSburbMachine(sburbMachine));
 		registerItemBlock(registry, new ItemMultiTexture(crockerMachine, crockerMachine,
-				(ItemStack input) -> BlockCrockerMachine.MachineType.values()[input.getItemDamage() % BlockCrockerMachine.MachineType.values().length].getUnlocalizedName()));
+				(ItemStack input) -> BlockGristWidget.MachineType.values()[input.getItemDamage() % BlockGristWidget.MachineType.values().length].getUnlocalizedName()));
 		registerItemBlock(registry, new ItemBlock(blockComputerOff));
 		registerItemBlock(registry, new ItemTransportalizer(transportalizer));
 		

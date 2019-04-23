@@ -6,14 +6,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
@@ -22,7 +19,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-public class BlockAlchemiter extends BlockLargeMachine
+public class BlockAlchemiter extends BlockMachine
 {
 	public static final Map<EnumFacing, VoxelShape> FULL_BLOCK_SHAPE = createRotatedShapes(0, 0, 0, 16, 16, 16);
 	public static final Map<EnumFacing, VoxelShape> TOTEM_PAD_SHAPE = createRotatedShapes(8, 0, 2, 14, 16, 16);
@@ -99,6 +96,10 @@ public class BlockAlchemiter extends BlockLargeMachine
 		super.onReplaced(state, worldIn, pos, newState, isMoving);
 	}
 	
+	@Override
+	public void getDrops(IBlockState state, NonNullList<ItemStack> drops, World world, BlockPos pos, int fortune)
+	{}
+	
     /**
      * returns the block position of the "Main" block
      * aka the block with the TileEntity for the machine
@@ -124,55 +125,6 @@ public class BlockAlchemiter extends BlockLargeMachine
 			{
 				return ((BlockAlchemiter) newState.getBlock()).getMainPos(state, pos, world, count - 1);
 			} else return new BlockPos(0, -1 , 0);
-		}
-	}
-	
-	public enum EnumParts implements IStringSerializable
-	{
-		TOTEM_CORNER(new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D)),
-		TOTEM_PAD(   new AxisAlignedBB(8/16D,0.0D,2/16D,14/16D,1.0D,1.0D),new AxisAlignedBB(0.0D,0.0D,8/16D,14/16D,1.0D,14/16D),
-				     new AxisAlignedBB(2/16D,0.0D,0.0D,8/16D,1.0D,14/16D),new AxisAlignedBB(2/16D,0.0D,2/16D,1.0D,1.0D,8/16D)),
-		LOWER_ROD(   new AxisAlignedBB(10/16D,0.0D,2/16D,14/16D,1.0D,1.0D),new AxisAlignedBB(0.0D,0.0D,10/16D,14/16D,1.0D,14/16D),
-				     new AxisAlignedBB(2/16D,0.0D,0.0D,6/16D,1.0D,14/16D),new AxisAlignedBB(2/16D,0.0D,2/16D,1.0D,1.0D,6/16D)),
-		UPPER_ROD(   new AxisAlignedBB(7/16D,0.0D,2/16D,14/16D,10/16D,1.0D),new AxisAlignedBB(0.0D,0.0D,7/16D,14/16D,10/16D,14/16D),
-				     new AxisAlignedBB(2/16D,0.0D,0.0D,9/16D,10/16D,14/16D),new AxisAlignedBB(2/16D,0.0D,2/16D,1.0D,10/16D,9/16D)),
-		
-		SIDE_LEFT(   new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D)),
-		SIDE_RIGHT(  new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D)),
-		CORNER(      new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D)),
-		CENTER_PAD(  new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D)),
-		TOTEM_PAD_DOWEL(new AxisAlignedBB(6.5/16D,0.0D,2/16D,14/16D,1.0D,13/16D),new AxisAlignedBB(3/16D,0.0D,6.5/16D,14/16D,1.0D,14/16D),
-				new AxisAlignedBB(2/16D,0.0D,3/16D,9.5/16D,1.0D,14/16D),new AxisAlignedBB(2/16D,0.0D,2/16D,13/16D,1.0D,9.5/16D)),
-		TOTEM_PAD_TOTEM(new AxisAlignedBB(6.5/16D,0.0D,2/16D,14/16D,1.0D,13/16D),new AxisAlignedBB(3/16D,0.0D,6.5/16D,14/16D,1.0D,14/16D),
-				     new AxisAlignedBB(2/16D,0.0D,3/16D,9.5/16D,1.0D,14/16D),new AxisAlignedBB(2/16D,0.0D,2/16D,13/16D,1.0D,9.5/16D));
-		
-		private final AxisAlignedBB[] BOUNDING_BOX;
-		
-		EnumParts(AxisAlignedBB... bb)
-		{
-			BOUNDING_BOX = bb;
-		}
-		
-		public AxisAlignedBB getBoundingBox(EnumFacing facing)
-		{
-			return BOUNDING_BOX[facing.getHorizontalIndex() % BOUNDING_BOX.length];
-		}
-		
-		@Override
-		public String toString()
-		{
-			return getName();
-		}
-		
-		@Override
-		public String getName()
-		{
-			return name().toLowerCase();
-		}
-		
-		public boolean isTotemPad()
-		{
-			return this == TOTEM_PAD || this == TOTEM_PAD_DOWEL || this == TOTEM_PAD_TOTEM;
 		}
 	}
 

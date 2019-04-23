@@ -3,9 +3,8 @@ package com.mraof.minestuck.item;
 import java.util.List;
 
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
-import com.mraof.minestuck.block.BlockLargeMachine;
+import com.mraof.minestuck.block.BlockMachine;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItemFrame;
@@ -78,8 +77,8 @@ public class ItemCaptcharoidCamera extends Item {
 				int meta = state.getBlock().damageDropped(state);
 				block.setItemDamage(meta);
 				
-				if(worldIn.getBlockState(pos).getBlock() instanceof BlockLargeMachine)
-					block = new ItemStack(((BlockLargeMachine) worldIn.getBlockState(pos).getBlock()).getItemFromMachine());
+				if(worldIn.getBlockState(pos).getBlock() instanceof BlockMachine)
+					block = new ItemStack(((BlockMachine) worldIn.getBlockState(pos).getBlock()).getItemFromMachine());
 				
 				player.inventory.addItemStackToInventory(AlchemyRecipes.createGhostCard(block));
 				player.getHeldItem(hand).damageItem(1, player);

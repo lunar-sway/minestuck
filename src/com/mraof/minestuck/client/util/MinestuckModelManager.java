@@ -4,7 +4,6 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.*;
 import com.mraof.minestuck.entity.EntityFrog;
 import com.mraof.minestuck.item.*;
-import com.mraof.minestuck.item.enums.EnumShopPoster;
 import com.mraof.minestuck.item.weapon.ItemDualWeapon;
 import com.mraof.minestuck.alchemy.GristType;
 import net.minecraft.block.Block;
@@ -288,7 +287,7 @@ public class MinestuckModelManager
 		register(layeredSand);
 		for(BlockSburbMachine.MachineType type : BlockSburbMachine.MachineType.values())
 			register(sburbMachine, type.ordinal(), "machine_"+type.getName());
-		for(BlockCrockerMachine.MachineType type : BlockCrockerMachine.MachineType.values())
+		for(BlockGristWidget.MachineType type : BlockGristWidget.MachineType.values())
 			register(crockerMachine, type.ordinal(), "machine_"+type.getName());
 		register(punchDesignix);
 		register(totemlathe[0]);

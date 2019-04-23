@@ -6,12 +6,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
@@ -19,7 +16,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class BlockCruxtruder extends BlockLargeMachine
+public class BlockCruxtruder extends BlockMachine
 {
 	public static final VoxelShape TUBE_SHAPE = Block.makeCuboidShape(2, 0, 2, 14, 16, 14);
 	
@@ -94,38 +91,9 @@ public class BlockCruxtruder extends BlockLargeMachine
 		return BlockFaceShape.UNDEFINED;
 	}
 	
-	public enum EnumParts implements IStringSerializable
-	{
-		BASE_CORNER(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1D, 1D, 1D)),
-		BASE_SIDE(new AxisAlignedBB (0.0D, 0.0D, 0.0D, 1D, 1D, 1D)),
-		CENTER(new AxisAlignedBB( 0, 0, 0, 1, 1, 1)),
-		TUBE(new AxisAlignedBB(2/16D, 0D, 2/16D, 14/16D, 1D, 14/16D));
-		
-		private final AxisAlignedBB[] BOUNDING_BOX;
-		
-		EnumParts(AxisAlignedBB... bb)
-		{
-			BOUNDING_BOX = bb;
-		}
-		
-		public AxisAlignedBB getBoundingBox(EnumFacing facing)
-		{
-			int i = facing.getHorizontalIndex();
-			return BOUNDING_BOX[i%BOUNDING_BOX.length];
-		}
-		
-		@Override
-		public String toString()
-		{
-			return getName();
-		}
-		
-		@Override
-		public String getName()
-		{
-			return name().toLowerCase();
-		}
-	}
+	@Override
+	public void getDrops(IBlockState state, NonNullList<ItemStack> drops, World world, BlockPos pos, int fortune)
+	{}
 	
 	public BlockPos getMainPos(IBlockState state, BlockPos pos)
 	{

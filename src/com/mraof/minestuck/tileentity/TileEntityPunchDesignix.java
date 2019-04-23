@@ -22,7 +22,7 @@ import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nonnull;
 
-import static com.mraof.minestuck.block.BlockLargeMachine.FACING;
+import static com.mraof.minestuck.block.BlockMachine.FACING;
 
 public class TileEntityPunchDesignix extends TileEntity
 {

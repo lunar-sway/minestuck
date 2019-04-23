@@ -6,13 +6,9 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.alchemy.AlchemyRecipes;
 //import com.mraof.minestuck.block.BlockJumperBlock.BlockJumperBlock2;
-import com.mraof.minestuck.block.BlockAlchemiterUpgrades.EnumParts;
 //import com.mraof.minestuck.block.BlockJumperBlock.BlockJumperBlock2;
 //import com.mraof.minestuck.block.BlockJumperBlock.BlockJumperBlock3;
-import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
 import com.mraof.minestuck.tileentity.TileEntityAlchemiterUpgrade;
 import com.mraof.minestuck.tileentity.TileEntityItemStack;
@@ -21,15 +17,10 @@ import com.mraof.minestuck.tileentity.TileEntityUpgradedAlchemiter;
 import com.mraof.minestuck.util.AlchemiterUpgrades;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockChest;
-import net.minecraft.block.BlockWorkbench;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.gui.GuiHopper;
-import net.minecraft.client.gui.inventory.GuiCrafting;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -42,8 +33,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.tileentity.TileEntityDropper;
-import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
@@ -53,7 +42,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.ILockableContainer;
 import net.minecraft.world.World;
 
-public abstract class BlockAlchemiterUpgrades extends BlockLargeMachine {
+public abstract class BlockAlchemiterUpgrades extends BlockMachine
+{
 	public static final PropertyEnum<EnumParts> PART1 = PropertyEnum.create("part", EnumParts.class, EnumParts.BASE_CORNER_LEFT, EnumParts.BASE_SIDE, EnumParts.BASE_CORNER_RIGHT, EnumParts.BASE);
 	public static final PropertyEnum<EnumParts> PART2 = PropertyEnum.create("part", EnumParts.class, EnumParts.CHEST, EnumParts.HOPPER, EnumParts.CRAFTING, EnumParts.LIBRARY);
 	public static final PropertyEnum<EnumParts> PART3 = PropertyEnum.create("part", EnumParts.class, EnumParts.GRISTWIDGET, EnumParts.CAPTCHA_CARD, EnumParts.DROPPER, EnumParts.BOONDOLLAR);
