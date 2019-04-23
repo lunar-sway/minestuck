@@ -79,12 +79,12 @@ public class GuiStrifeSpecibus extends GuiPlayerStats
 		drawCard(59, 7, cardScale, 7);
 		drawCard(12, 50, cardScale, 9);
 		this.mc.getTextureManager().bindTexture(guiPortfolioTabs);
-		//this.drawTexturedModalRect(xOffset+8, yOffset+6, 0, 38, 136, 114);
+		this.drawTexturedModalRect(xOffset+28, yOffset+6, 0, 18, 152, 134);
 		
 		drawCard(107, 7, cardScale, 8);
 		drawCard(56, 40, cardScale, 0);
 		this.mc.getTextureManager().bindTexture(guiPortfolioTabs);
-		this.drawTexturedModalRect(xOffset+28, yOffset+12, 0, 38, 152, 142);
+		this.drawTexturedModalRect(xOffset+45, yOffset+10, 0, 0, 164, 152);
 		
 		drawCard(107, 33, cardScale, 5);
 		drawCard(56, 80, cardScale, 4);
@@ -114,7 +114,7 @@ public class GuiStrifeSpecibus extends GuiPlayerStats
 			i++;
 		}
 		
-		System.out.println("ba");
+		System.out.println("a");
 	}
 	
 	public void drawCard(int cardX, int cardY, float cardScale, int index)
