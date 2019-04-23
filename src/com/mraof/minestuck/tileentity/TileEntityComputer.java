@@ -1,7 +1,5 @@
 package com.mraof.minestuck.tileentity;
 
-import com.mraof.minestuck.block.BlockComputerOn;
-import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.client.gui.GuiComputer;
 import com.mraof.minestuck.network.skaianet.ComputerData;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
@@ -14,9 +12,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -29,7 +24,7 @@ public class TileEntityComputer extends TileEntity
 {
 	public TileEntityComputer()
 	{
-		super(MinestuckTiles.computer);
+		super(MinestuckTiles.COMPUTER);
 	}
 	
 	/**

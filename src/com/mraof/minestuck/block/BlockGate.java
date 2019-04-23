@@ -28,7 +28,7 @@ public class BlockGate extends Block
 {
 	
 	protected static final VoxelShape SHAPE = Block.makeCuboidShape(0.0D, 7.0D, 0.0D, 16.0D, 9.0D, 16.0D);
-	public static BooleanProperty MAIN = BooleanProperty.create("main_component");
+	public static BooleanProperty MAIN = MinestuckProperties.MAIN;
 	
 	public BlockGate(Properties properties)
 	{

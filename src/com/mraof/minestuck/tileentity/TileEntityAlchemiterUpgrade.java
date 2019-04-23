@@ -9,7 +9,6 @@ import com.mraof.minestuck.util.AlchemiterUpgrades;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -23,7 +22,7 @@ public class TileEntityAlchemiterUpgrade extends TileEntity implements ITickable
 	
 	public TileEntityAlchemiterUpgrade(AlchemiterUpgrades upg) 
 	{
-		super(MinestuckTiles.alchemiterUpgrade);
+		super(MinestuckTiles.ALCHEMITER_UPGRADE);
 		setUpgrade(upg);
 	}
 	

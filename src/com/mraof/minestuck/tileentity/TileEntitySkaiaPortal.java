@@ -4,12 +4,10 @@ import com.mraof.minestuck.block.BlockChessTile;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.util.Location;
 import com.mraof.minestuck.util.Teleport;
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 
@@ -19,7 +17,7 @@ public class TileEntitySkaiaPortal extends TileEntity implements Teleport.ITelep
 	
 	public TileEntitySkaiaPortal()
 	{
-		super(MinestuckTiles.skaiaPortal);
+		super(MinestuckTiles.SKAIA_PORTAL);
 	}
 	
 	@Override

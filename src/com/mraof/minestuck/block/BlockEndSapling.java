@@ -19,8 +19,8 @@ import net.minecraft.world.World;
 
 public class BlockEndSapling extends BlockBush implements IGrowable
 {
-	public static final BooleanProperty ALPHA = BooleanProperty.create("alpha");
-	public static final BooleanProperty OMEGA = BooleanProperty.create("omega");
+	public static final BooleanProperty ALPHA = MinestuckProperties.ALPHA;
+	public static final BooleanProperty OMEGA = MinestuckProperties.OMEGA;
 	protected static final VoxelShape SHAPE = Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 	
 	protected BlockEndSapling(Properties properties)

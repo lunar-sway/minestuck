@@ -40,6 +40,7 @@ public class CommonProxy
 		MinecraftForge.EVENT_BUS.register(MinestuckSoundHandler.instance);
 		MinecraftForge.EVENT_BUS.register(MinestuckBlocks.class);
 		MinecraftForge.EVENT_BUS.register(MinestuckItems.class);
+		MinecraftForge.EVENT_BUS.register(MinestuckTiles.class);
 		MinecraftForge.EVENT_BUS.register(BiomeMinestuck.class);
 		
 		MinestuckSoundHandler.initSound();
@@ -56,23 +57,6 @@ public class CommonProxy
 		NetworkRegistry.INSTANCE.registerGuiHandler(Minestuck.instance, new GuiHandler());
 		
 		MinestuckEntities.registerEntities();
-		//register Tile Entities
-		GameRegistry.registerTileEntity(TileEntitySkaiaPortal.class, "minestuck:gate_portal");
-		GameRegistry.registerTileEntity(TileEntitySburbMachine.class, "minestuck:sburb_machine");
-		GameRegistry.registerTileEntity(TileEntityPunchDesignix.class, "Minestuck:punch_designix");
-		GameRegistry.registerTileEntity(TileEntityTotemLathe.class, "Minestuck:totem_lathe");
-		GameRegistry.registerTileEntity(TileEntityAlchemiter.class,"Minestuck:alchemiter");
-		GameRegistry.registerTileEntity(TileEntityCruxtruder.class, "Minestuck:cruxtruder");
-		GameRegistry.registerTileEntity(TileEntityItemStack.class, "Minestuck:item_stack");
-		GameRegistry.registerTileEntity(TileEntityCrockerMachine.class, "minestuck:crocker_machine");
-		GameRegistry.registerTileEntity(TileEntityComputer.class, "minestuck:computer_sburb");
-		GameRegistry.registerTileEntity(TileEntityTransportalizer.class, "minestuck:transportalizer");
-		GameRegistry.registerTileEntity(TileEntityGate.class, "minestuck:gate");
-		GameRegistry.registerTileEntity(TileEntityUraniumCooker.class, "minestuck:uranium_cooker");
-		GameRegistry.registerTileEntity(TileEntityJumperBlock.class, "minestuck:jumper_block_extension");
-		GameRegistry.registerTileEntity(TileEntityUpgradedAlchemiter.class,  "minestuck:upgraded_alchemiter");
-		GameRegistry.registerTileEntity(TileEntityAlchemiterUpgrade.class,  "minestuck:alchemiter_upgrade");
-		GameRegistry.registerTileEntity(TileEntityHolopad.class, "minestuck:holopad");
 		
 		//Register event handlers
 		MinecraftForge.EVENT_BUS.register(new MinestuckSaveHandler());

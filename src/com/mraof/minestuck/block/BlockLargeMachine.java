@@ -1,5 +1,7 @@
 package com.mraof.minestuck.block;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.state.BlockFaceShape;
@@ -10,8 +12,11 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+
+import java.util.Map;
 
 public abstract class BlockLargeMachine extends Block
 {
@@ -80,5 +85,11 @@ public abstract class BlockLargeMachine extends Block
 				break;
 		}
 		return rotation;
+	}
+	
+	public static Map<EnumFacing, VoxelShape> createRotatedShapes(double x1, double y1, double z1, double x2, double y2, double z2)
+	{
+		return Maps.newEnumMap(ImmutableMap.of(EnumFacing.NORTH, Block.makeCuboidShape(x1, y1, z1, x2, y2, z2), EnumFacing.SOUTH, Block.makeCuboidShape(16 - x2, y1, 16 - z2, 16 - x1, y2, 16 - z1),
+				EnumFacing.WEST, Block.makeCuboidShape(z1, y1, 16 - x2, z2, y2, 16 - x1), EnumFacing.EAST, Block.makeCuboidShape(16 - z2, y1, x1, 16 - z1, y2, x2)));
 	}
 }

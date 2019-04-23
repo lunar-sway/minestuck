@@ -25,15 +25,15 @@ import net.minecraft.world.World;
 
 public class BlockRainbowSapling extends BlockBush implements IGrowable
 {
-	public static final BooleanProperty HAS_RED = BooleanProperty.create("has_red");
-	public static final BooleanProperty HAS_GREEN = BooleanProperty.create("has_green");
-	public static final BooleanProperty HAS_BLUE = BooleanProperty.create("has_blue");
+	public static final BooleanProperty RED = MinestuckProperties.RED;
+	public static final BooleanProperty GREEN = MinestuckProperties.GREEN;
+	public static final BooleanProperty BLUE = MinestuckProperties.BLUE;
 	protected static final VoxelShape SHAPE = Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 	
 	protected BlockRainbowSapling(Properties properties)
 	{
 		super(properties);
-		this.setDefaultState(this.stateContainer.getBaseState().with(HAS_RED, false).with(HAS_GREEN, false).with(HAS_BLUE, false));
+		this.setDefaultState(this.stateContainer.getBaseState().with(RED, false).with(GREEN, false).with(BLUE, false));
 	}
 	
 	@Override
@@ -66,7 +66,7 @@ public class BlockRainbowSapling extends BlockBush implements IGrowable
 	@Override
 	public void grow(World worldIn, Random rand, BlockPos pos, IBlockState state)
 	{
-		if(state.get(HAS_RED) && state.get(HAS_GREEN) && state.get(HAS_BLUE))
+		if(state.get(RED) && state.get(GREEN) && state.get(BLUE))
 		{
 			generateTree(worldIn, pos, state, rand);
 		} else
@@ -74,10 +74,10 @@ public class BlockRainbowSapling extends BlockBush implements IGrowable
 			float f = rand.nextFloat();
 			BooleanProperty property;
 			if(f < 1/3F)
-				property = HAS_RED;
+				property = RED;
 			else if(f < 2/3F)
-				property = HAS_GREEN;
-			else property = HAS_BLUE;
+				property = GREEN;
+			else property = BLUE;
 			if(!state.get(property))
 				worldIn.setBlockState(pos, state.with(property, true), 2);
 		}
@@ -86,7 +86,7 @@ public class BlockRainbowSapling extends BlockBush implements IGrowable
 	@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, IBlockState> builder)
 	{
-		builder.add(HAS_RED, HAS_GREEN, HAS_BLUE);
+		builder.add(RED, GREEN, BLUE);
 	}
 	
 	@Override
@@ -95,52 +95,52 @@ public class BlockRainbowSapling extends BlockBush implements IGrowable
 		IBlockState soil = worldIn.getBlockState(pos.down());
 		if(soil.getBlock() == Blocks.GRASS)
 		{
-			state = state.with(HAS_GREEN, true);
+			state = state.with(GREEN, true);
 		} else if(soil.getBlock() == Blocks.BLUE_WOOL)
 		{
-			state = state.with(HAS_BLUE, true);
+			state = state.with(BLUE, true);
 		} else if(soil.getBlock() == Blocks.CYAN_WOOL)
 		{
 			if(worldIn.rand.nextFloat() < 0.5)
-				state = state.with(HAS_GREEN, true);
-			else state = state.with(HAS_BLUE, true);
+				state = state.with(GREEN, true);
+			else state = state.with(BLUE, true);
 		} else if(soil.getBlock() == Blocks.GREEN_WOOL)
 		{
-			state = state.with(HAS_GREEN, true);
+			state = state.with(GREEN, true);
 		} else if(soil.getBlock() == Blocks.LIGHT_BLUE_WOOL)
 		{
-			state = state.with(HAS_BLUE, true);
+			state = state.with(BLUE, true);
 		} else if(soil.getBlock() == Blocks.LIME_WOOL)
 		{
 			if(worldIn.rand.nextFloat() < 0.25)
-				state = state.with(HAS_RED, true);
-			else state = state.with(HAS_GREEN, true);
+				state = state.with(RED, true);
+			else state = state.with(GREEN, true);
 		} else if(soil.getBlock() == Blocks.MAGENTA_WOOL)
 		{
 			if(worldIn.rand.nextFloat() < 0.5)
-			state = state.with(HAS_RED, true);
-		else state = state.with(HAS_BLUE, true);
+			state = state.with(RED, true);
+		else state = state.with(BLUE, true);
 		} else if(soil.getBlock() == Blocks.PURPLE_WOOL)
 		{
 			if(worldIn.rand.nextFloat() < 0.25)
-				state = state.with(HAS_RED, true);
-			else state = state.with(HAS_BLUE, true);
+				state = state.with(RED, true);
+			else state = state.with(BLUE, true);
 		} else if(soil.getBlock() == Blocks.ORANGE_WOOL)
 		{
 			if(worldIn.rand.nextFloat() < 0.75)
-				state = state.with(HAS_RED, true);
-			else state = state.with(HAS_GREEN, true);
+				state = state.with(RED, true);
+			else state = state.with(GREEN, true);
 		} else if(soil.getBlock() == Blocks.PINK_WOOL)
 		{
-			state = state.with(HAS_RED, true);
+			state = state.with(RED, true);
 		} else if(soil.getBlock() == Blocks.RED_WOOL)
 		{
-			state = state.with(HAS_RED, true);
+			state = state.with(RED, true);
 		} else if(soil.getBlock() == Blocks.YELLOW_WOOL)
 		{
 			if(worldIn.rand.nextFloat() < 0.5)
-				state = state.with(HAS_RED, true);
-			else state = state.with(HAS_GREEN, true);
+				state = state.with(RED, true);
+			else state = state.with(GREEN, true);
 		}
 		worldIn.setBlockState(pos, state);
 	}
@@ -151,49 +151,49 @@ public class BlockRainbowSapling extends BlockBush implements IGrowable
 		ItemStack stack = player.getHeldItem(hand);
 		if(stack.getItem() == Items.LAPIS_LAZULI)
 		{
-			state = state.with(HAS_BLUE, true);
+			state = state.with(BLUE, true);
 		} else if(stack.getItem() == Items.CYAN_DYE)
 		{
 			if(worldIn.rand.nextFloat() < 0.5)
-				state = state.with(HAS_GREEN, true);
-			else state = state.with(HAS_BLUE, true);
+				state = state.with(GREEN, true);
+			else state = state.with(BLUE, true);
 		} else if(stack.getItem() == Items.CACTUS_GREEN)
 		{
-			state = state.with(HAS_GREEN, true);
+			state = state.with(GREEN, true);
 		} else if(stack.getItem() == Items.LIGHT_BLUE_DYE)
 		{
-			state = state.with(HAS_BLUE, true);
+			state = state.with(BLUE, true);
 		} else if(stack.getItem() == Items.LIME_DYE)
 		{
 			if(worldIn.rand.nextFloat() < 0.25)
-				state = state.with(HAS_RED, true);
-			else state = state.with(HAS_GREEN, true);
+				state = state.with(RED, true);
+			else state = state.with(GREEN, true);
 		} else if(stack.getItem() == Items.MAGENTA_DYE)
 		{
 			if(worldIn.rand.nextFloat() < 0.5)
-				state = state.with(HAS_RED, true);
-			else state = state.with(HAS_BLUE, true);
+				state = state.with(RED, true);
+			else state = state.with(BLUE, true);
 		} else if(stack.getItem() == Items.PURPLE_DYE)
 		{
 			if(worldIn.rand.nextFloat() < 0.25)
-				state = state.with(HAS_RED, true);
-			else state = state.with(HAS_BLUE, true);
+				state = state.with(RED, true);
+			else state = state.with(BLUE, true);
 		} else if(stack.getItem() == Items.ORANGE_DYE)
 		{
 			if(worldIn.rand.nextFloat() < 0.75)
-				state = state.with(HAS_RED, true);
-			else state = state.with(HAS_GREEN, true);
+				state = state.with(RED, true);
+			else state = state.with(GREEN, true);
 		} else if(stack.getItem() == Items.PINK_DYE)
 		{
-			state = state.with(HAS_RED, true);
+			state = state.with(RED, true);
 		} else if(stack.getItem() == Items.ROSE_RED)
 		{
-			state = state.with(HAS_RED, true);
+			state = state.with(RED, true);
 		} else if(stack.getItem() == Items.DANDELION_YELLOW)
 		{
 			if(worldIn.rand.nextFloat() < 0.5)
-				state = state.with(HAS_RED, true);
-			else state = state.with(HAS_GREEN, true);
+				state = state.with(RED, true);
+			else state = state.with(GREEN, true);
 		} else return false;
 		
 		if(!worldIn.isRemote)

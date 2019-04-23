@@ -112,8 +112,10 @@ public class MinestuckBlocks
 	//Sburb Machines
 	public static Block CRUXTRUDER_CORNER, CRUXTRUDER_SIDE, CRUXTRUDER_CENTER, CRUXTRUDER_TUBE;
 	public static Block CRUXTRUDER_LID;
+	public static Block TOTEM_LATHE_CARD_SLOT, TOTEM_LATHE_BOTTOM_LEFT, TOTEM_LATHE_BOTTOM_RIGHT, TOTEM_LATHE_BOTTOM_CORNER;
+	public static Block TOTEM_LATHE_MIDDLE, TOTEM_LATHE_WHEEL, TOTEM_LATHE_ROD, TOTEM_LATHE_DOWEL_ROD;
+	public static Block TOTEM_LATHE_TOP_CORNER, TOTEM_LATHE_TOP, TOTEM_LATHE_CARVER;
 	public static Block PUNCH_DESIGNIX_LEFT_LEG, PUNCH_DESIGNIX_RIGHT_LEG, PUNCH_DESIGNIX_SLOT, PUNCH_DESIGNIX_KEYBOARD;
-	public static BlockTotemLathe[] totemlathe = BlockTotemLathe.createBlocks();
 	public static BlockAlchemiter[] alchemiter = BlockAlchemiter.createBlocks();
 	public static Block sburbMachine = new BlockSburbMachine();
 	public static Block crockerMachine = new BlockCrockerMachine();
@@ -404,10 +406,21 @@ public class MinestuckBlocks
 		registry.register(CRUXTRUDER_CENTER = new BlockCruxtruder(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), VoxelShapes.fullCube(), false, true, new BlockPos(0, 1, 0)).setRegistryName("cruxtruder_center"));
 		registry.register(CRUXTRUDER_TUBE = new BlockCruxtruder(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), BlockCruxtruder.TUBE_SHAPE, true, false, new BlockPos(0, 0, 0)).setRegistryName("cruxtruder_tube"));
 		registry.register(CRUXTRUDER_LID = new BlockCruxtruderLid(Block.Properties.create(Material.IRON).hardnessAndResistance(1.0F)).setRegistryName("cruxtruder_lid"));
+		registry.register(TOTEM_LATHE_CARD_SLOT = new BlockTotemLathe.Slot(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), BlockTotemLathe.CARD_SLOT_SHAPE).setRegistryName("totem_lathe_card_slot"));
+		registry.register(TOTEM_LATHE_BOTTOM_LEFT = new BlockTotemLathe(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), BlockTotemLathe.BOTTOM_LEFT_SHAPE, new BlockPos(1, 0, 0)).setRegistryName("totem_lathe_bottom_left"));
+		registry.register(TOTEM_LATHE_BOTTOM_RIGHT = new BlockTotemLathe(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), BlockTotemLathe.BOTTOM_RIGHT_SHAPE, new BlockPos(2, 0, 0)).setRegistryName("totem_lathe_bottom_right"));
+		registry.register(TOTEM_LATHE_BOTTOM_CORNER = new BlockTotemLathe(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), BlockTotemLathe.BOTTOM_CORNER_SHAPE, new BlockPos(3, 0, 0)).setRegistryName("totem_lathe_bottom_corner"));
+		registry.register(TOTEM_LATHE_MIDDLE = new BlockTotemLathe(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), BlockTotemLathe.MIDDLE_SHAPE, new BlockPos(0, -1, 0)).setRegistryName("totem_lathe_middle"));
+		registry.register(TOTEM_LATHE_WHEEL = new BlockTotemLathe(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), BlockTotemLathe.WHEEL_SHAPE, new BlockPos(3, -1, 0)).setRegistryName("totem_lathe_wheel"));
+		registry.register(TOTEM_LATHE_ROD = new BlockTotemLathe.Rod(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), BlockTotemLathe.ROD_SHAPE, new BlockPos(1, -1, 0)).setRegistryName("totem_lathe_rod"));
+		registry.register(TOTEM_LATHE_DOWEL_ROD = new BlockTotemLathe.DowelRod(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), BlockTotemLathe.ROD_SHAPE, new BlockPos(2, -1, 0)).setRegistryName("totem_lathe_dowel_rod"));
+		registry.register(TOTEM_LATHE_TOP_CORNER = new BlockTotemLathe(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), BlockTotemLathe.TOP_CORNER_SHAPE, new BlockPos(0, -2, 0)).setRegistryName("totem_lathe_top_corner"));
+		registry.register(TOTEM_LATHE_TOP = new BlockTotemLathe(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), BlockTotemLathe.TOP_SHAPE, new BlockPos(1, -2, 0)).setRegistryName("totem_lathe_top"));
+		registry.register(TOTEM_LATHE_CARVER = new BlockTotemLathe(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), BlockTotemLathe.CARVER_SHAPE, new BlockPos(2, -2, 0)).setRegistryName("totem_lathe_carver"));
 		
 		registry.register(PUNCH_DESIGNIX_LEFT_LEG = new BlockPunchDesignix(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), BlockPunchDesignix.LEG_SHAPE, new BlockPos(0, 1, 0)).setRegistryName("punch_designix_left_leg"));
 		registry.register(PUNCH_DESIGNIX_RIGHT_LEG = new BlockPunchDesignix(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), BlockPunchDesignix.LEG_SHAPE, new BlockPos(1, 1, 0)).setRegistryName("punch_designix_right_leg"));
-		registry.register(PUNCH_DESIGNIX_SLOT = new BlockPunchDesignixSlot(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), BlockPunchDesignix.SLOT_SHAPE).setRegistryName("punch_designix_slot"));
+		registry.register(PUNCH_DESIGNIX_SLOT = new BlockPunchDesignix.Slot(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), BlockPunchDesignix.SLOT_SHAPE).setRegistryName("punch_designix_slot"));
 		registry.register(PUNCH_DESIGNIX_KEYBOARD = new BlockPunchDesignix(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F), BlockPunchDesignix.KEYBOARD_SHAPE, new BlockPos(1, 0, 0)).setRegistryName("punch_designix_keyboard"));
 		
 		registry.register(blockCruxiteDowel.setRegistryName("cruxite_dowel"));
@@ -419,9 +432,6 @@ public class MinestuckBlocks
 		registry.register(transportalizer.setRegistryName("transportalizer"));
 		registry.register(uraniumCooker.setRegistryName("uranium_cooker"));
 		
-		registry.register(totemlathe[0].setRegistryName("totem_lathe"));
-		registry.register(totemlathe[1].setRegistryName("totem_lathe2"));
-		registry.register(totemlathe[2].setRegistryName("totem_lathe3"));
 		registry.register(alchemiter[0].setRegistryName("alchemiter"));
 		registry.register(alchemiter[1].setRegistryName("alchemiter2"));
 		/*

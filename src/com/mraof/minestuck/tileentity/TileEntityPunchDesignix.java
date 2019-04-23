@@ -1,7 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
-import com.mraof.minestuck.block.BlockPunchDesignixSlot;
+import com.mraof.minestuck.block.BlockPunchDesignix;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
@@ -31,7 +31,7 @@ public class TileEntityPunchDesignix extends TileEntity
 	
 	public TileEntityPunchDesignix()
 	{
-		super(MinestuckTiles.punchDesignix);
+		super(MinestuckTiles.PUNCH_DESIGNIX);
 	}
 	
 	public void setCard(ItemStack card)
@@ -43,8 +43,8 @@ public class TileEntityPunchDesignix extends TileEntity
 			{
 				IBlockState state = world.getBlockState(pos);
 				boolean hasCard = !card.isEmpty();
-				if(hasCard != state.get(BlockPunchDesignixSlot.HAS_CARD))
-					world.setBlockState(pos, state.with(BlockPunchDesignixSlot.HAS_CARD, hasCard), 2);
+				if(hasCard != state.get(BlockPunchDesignix.Slot.HAS_CARD))
+					world.setBlockState(pos, state.with(BlockPunchDesignix.Slot.HAS_CARD, hasCard), 2);
 			}
 		}
 	}
