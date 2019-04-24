@@ -52,6 +52,13 @@ public abstract class BlockMachine extends Block
 		return EnumPushReaction.BLOCK;
 	}
 	
+	@Nullable
+	@Override
+	public IBlockState getStateForPlacement(BlockItemUseContext context)
+	{
+		return getDefaultState().with(FACING, context.getPlacementHorizontalFacing());
+	}
+	
 	//Should probably find an utility class for the functions below
 	public static Rotation rotationFromFacing(EnumFacing facing)
 	{
@@ -72,13 +79,6 @@ public abstract class BlockMachine extends Block
 				break;
 		}
 		return rotation;
-	}
-	
-	@Nullable
-	@Override
-	public IBlockState getStateForPlacement(BlockItemUseContext context)
-	{
-		return getDefaultState().with(FACING, context.getPlacementHorizontalFacing());
 	}
 	
 	public static Map<EnumFacing, VoxelShape> createRotatedShapes(double x1, double y1, double z1, double x2, double y2, double z2)

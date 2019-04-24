@@ -12,6 +12,7 @@ public class MinestuckProperties
 	public static final BooleanProperty MAIN = BooleanProperty.create("main");
 	public static final BooleanProperty HAS_CARD = BooleanProperty.create("has_card");
 	public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
+	public static final BooleanProperty BROKEN = BooleanProperty.create("broken");
 	public static final BooleanProperty ALPHA = BooleanProperty.create("alpha");
 	public static final BooleanProperty OMEGA = BooleanProperty.create("omega");
 	public static final BooleanProperty RED = BooleanProperty.create("red");

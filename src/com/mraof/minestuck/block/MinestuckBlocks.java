@@ -127,10 +127,11 @@ public class MinestuckBlocks
 	public static BlockAlchemiterUpgrades[] alchemiterUpgrades = BlockAlchemiterUpgrades.createBlocks();*/
 	
 	//Misc Machines
-	public static Block blockComputerOff = new BlockComputerOff();
-	public static Block blockComputerOn = new BlockComputerOn();
-	public static Block blockLaptopOff = new BlockVanityLaptopOff().setCreativeTab(null);
-	public static Block blockLaptopOn = new BlockVanityLaptopOn();
+	public static Block COMPUTER_ON, COMPUTER_OFF;
+	public static Block LAPTOP_ON, LAPTOP_OFF;
+	public static Block CROCKERTOP_ON, CROCKERTOP_OFF;
+	public static Block HUBTOP_ON, HUBTOP_OFF;
+	public static Block LUNCHTOP_ON, LUNCHTOP_OFF;
 	public static Block transportalizer = new BlockTransportalizer();
 	public static Block GRIST_WIDGET;
 	public static Block uraniumCooker = new BlockUraniumCooker().setUnlocalizedName("uraniumCooker");
@@ -450,6 +451,17 @@ public class MinestuckBlocks
 		registry.register(alchemiterUpgrades[3].setRegistryName("alchemiter_upgrade4"));
 		*/
 		
+		registry.register(COMPUTER_ON = new BlockComputerOn(Block.Properties.create(Material.IRON).hardnessAndResistance(4.0F), BlockComputerOff.COMPUTER_SHAPE, BlockComputerOff.COMPUTER_COLLISION_SHAPE, () -> COMPUTER_OFF.asItem()).setRegistryName("computer_on"));
+		registry.register(COMPUTER_OFF = new BlockComputerOff(Block.Properties.create(Material.IRON).hardnessAndResistance(4.0F), COMPUTER_ON, BlockComputerOff.COMPUTER_SHAPE, BlockComputerOff.COMPUTER_COLLISION_SHAPE).setRegistryName("computer_off"));
+		registry.register(LAPTOP_ON = new BlockComputerOn(Block.Properties.create(Material.IRON).hardnessAndResistance(4.0F), BlockComputerOff.LAPTOP_SHAPE, BlockComputerOff.LAPTOP_COLLISION_SHAPE, () -> LAPTOP_OFF.asItem()).setRegistryName("laptop_on"));
+		registry.register(LAPTOP_OFF = new BlockComputerOff(Block.Properties.create(Material.IRON).hardnessAndResistance(4.0F), LAPTOP_ON, BlockComputerOff.LAPTOP_SHAPE, BlockComputerOff.LAPTOP_COLLISION_SHAPE).setRegistryName("laptop_off"));
+		registry.register(CROCKERTOP_ON = new BlockComputerOn(Block.Properties.create(Material.IRON, MaterialColor.RED).hardnessAndResistance(4.0F), BlockComputerOff.LAPTOP_SHAPE, BlockComputerOff.LAPTOP_COLLISION_SHAPE, () -> CROCKERTOP_OFF.asItem()).setRegistryName("crockertop_on"));
+		registry.register(CROCKERTOP_OFF = new BlockComputerOff(Block.Properties.create(Material.IRON, MaterialColor.RED).hardnessAndResistance(4.0F), CROCKERTOP_ON, BlockComputerOff.LAPTOP_SHAPE, BlockComputerOff.LAPTOP_COLLISION_SHAPE).setRegistryName("crockertop_off"));
+		registry.register(HUBTOP_ON = new BlockComputerOn(Block.Properties.create(Material.IRON, MaterialColor.GREEN).hardnessAndResistance(4.0F), BlockComputerOff.LAPTOP_SHAPE, BlockComputerOff.LAPTOP_COLLISION_SHAPE, () -> HUBTOP_OFF.asItem()).setRegistryName("hubtop_on"));
+		registry.register(HUBTOP_OFF = new BlockComputerOff(Block.Properties.create(Material.IRON, MaterialColor.GREEN).hardnessAndResistance(4.0F), HUBTOP_ON, BlockComputerOff.LAPTOP_SHAPE, BlockComputerOff.LAPTOP_COLLISION_SHAPE).setRegistryName("hubtop_off"));
+		registry.register(LUNCHTOP_ON = new BlockComputerOn(Block.Properties.create(Material.IRON, MaterialColor.RED).hardnessAndResistance(4.0F), BlockComputerOff.LUNCHTOP_SHAPE, BlockComputerOff.LUNCHTOP_SHAPE, () -> LUNCHTOP_OFF.asItem()).setRegistryName("lunchtop_on"));
+		registry.register(LUNCHTOP_OFF = new BlockComputerOff(Block.Properties.create(Material.IRON, MaterialColor.RED).hardnessAndResistance(4.0F), LUNCHTOP_ON, BlockComputerOff.LUNCHTOP_SHAPE, BlockComputerOff.LUNCHTOP_SHAPE).setRegistryName("lunchtop_off"));
+		
 		registry.register(GRIST_WIDGET = new BlockGristWidget(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("grist_widget"));
 		
 		registry.register(blockCruxiteDowel.setRegistryName("cruxite_dowel"));
@@ -462,11 +474,6 @@ public class MinestuckBlocks
 		registry.register(blender.setRegistryName("blender"));
 		registry.register(chessboard.setRegistryName("chessboard"));
 		registry.register(frogStatueReplica.setRegistryName("frog_statue_replica"));
-		
-		registry.register(blockComputerOff.setRegistryName("computer_standard"));
-		registry.register(blockComputerOn.setRegistryName("computer_standard_on"));
-		registry.register(blockLaptopOff.setRegistryName("vanity_laptop"));
-		registry.register(blockLaptopOn.setRegistryName("vanity_laptop_on"));
 		
 		registry.register(blockGoldSeeds.setRegistryName("gold_seeds"));
 		registry.register(glowystoneWire.setRegistryName("glowystone_wire"));
