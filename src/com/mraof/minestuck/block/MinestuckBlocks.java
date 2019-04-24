@@ -132,9 +132,9 @@ public class MinestuckBlocks
 	public static Block CROCKERTOP_ON, CROCKERTOP_OFF;
 	public static Block HUBTOP_ON, HUBTOP_OFF;
 	public static Block LUNCHTOP_ON, LUNCHTOP_OFF;
-	public static Block transportalizer = new BlockTransportalizer();
+	public static Block TRANSPORTALIZER;
 	public static Block GRIST_WIDGET;
-	public static Block uraniumCooker = new BlockUraniumCooker().setUnlocalizedName("uraniumCooker");
+	public static Block URANIUM_COOKER;
 	
 	public static Block blender = new BlockDecor("blender",SoundType.METAL).setCreativeTab(TabMinestuck.instance);
 	public static Block chessboard = new BlockDecor("chessboard").setCreativeTab(TabMinestuck.instance);
@@ -461,14 +461,14 @@ public class MinestuckBlocks
 		registry.register(HUBTOP_OFF = new BlockComputerOff(Block.Properties.create(Material.IRON, MaterialColor.GREEN).hardnessAndResistance(4.0F), HUBTOP_ON, BlockComputerOff.LAPTOP_SHAPE, BlockComputerOff.LAPTOP_COLLISION_SHAPE).setRegistryName("hubtop_off"));
 		registry.register(LUNCHTOP_ON = new BlockComputerOn(Block.Properties.create(Material.IRON, MaterialColor.RED).hardnessAndResistance(4.0F), BlockComputerOff.LUNCHTOP_SHAPE, BlockComputerOff.LUNCHTOP_SHAPE, () -> LUNCHTOP_OFF.asItem()).setRegistryName("lunchtop_on"));
 		registry.register(LUNCHTOP_OFF = new BlockComputerOff(Block.Properties.create(Material.IRON, MaterialColor.RED).hardnessAndResistance(4.0F), LUNCHTOP_ON, BlockComputerOff.LUNCHTOP_SHAPE, BlockComputerOff.LUNCHTOP_SHAPE).setRegistryName("lunchtop_off"));
-		
+		registry.register(TRANSPORTALIZER = new BlockTransportalizer(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("transportalizer"));
 		registry.register(GRIST_WIDGET = new BlockGristWidget(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("grist_widget"));
+		registry.register(URANIUM_COOKER = new BlockUraniumCooker(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("uranium_cooker"));
 		
 		registry.register(blockCruxiteDowel.setRegistryName("cruxite_dowel"));
 		
 		registry.register(WOODEN_CACTUS = new BlockCactusSpecial(Block.Properties.create(Material.WOOD).needsRandomTick().hardnessAndResistance(1.0F, 2.5F).sound(SoundType.WOOD), ToolType.AXE).setRegistryName("wooden_cactus"));
 		
-		registry.register(transportalizer.setRegistryName("transportalizer"));
 		registry.register(uraniumCooker.setRegistryName("uranium_cooker"));
 		
 		registry.register(blender.setRegistryName("blender"));
