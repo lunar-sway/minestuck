@@ -158,7 +158,7 @@ public class BlockTotemLathe extends BlockMachine
 	
 	public static class DowelRod extends BlockTotemLathe
 	{
-		public static final EnumProperty<DowelType> DOWEL = MinestuckProperties.DOWEL_OR_NONE;
+		public static final EnumProperty<EnumDowelType> DOWEL = MinestuckProperties.DOWEL_OR_NONE;
 		
 		public DowelRod(Properties properties, Map<EnumFacing, VoxelShape> shape, BlockPos mainPos)
 		{

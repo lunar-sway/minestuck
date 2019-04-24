@@ -130,7 +130,7 @@ public class BlockAlchemiter extends BlockMachine
 
 	public static class Pad extends BlockAlchemiter
 	{
-		public static final EnumProperty<DowelType> DOWEL = MinestuckProperties.DOWEL_OR_NONE;
+		public static final EnumProperty<EnumDowelType> DOWEL = MinestuckProperties.DOWEL_OR_NONE;
 		
 		public Pad(Properties properties, Map<EnumFacing, VoxelShape> shape, Map<EnumFacing, BlockFaceShape> faceShapes, boolean fullCube)
 		{

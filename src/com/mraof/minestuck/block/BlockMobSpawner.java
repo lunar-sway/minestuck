@@ -28,7 +28,7 @@ public class BlockMobSpawner extends Block
 	{
 		if (worldIn.isAirBlock(pos.down()))
 		{
-			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
+			worldIn.removeBlock(pos);
 		}
 		else
 		{

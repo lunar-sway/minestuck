@@ -21,6 +21,7 @@ public class MinestuckProperties
 	
 	public static final IntegerProperty COUNT_0_2 = IntegerProperty.create("count", 0, 2);
 	
-	public static final EnumProperty<DowelType> DOWEL = EnumProperty.create("dowel", DowelType.class, DowelType.DOWEL, DowelType.CARVED_DOWEL);
-	public static final EnumProperty<DowelType> DOWEL_OR_NONE = EnumProperty.create("dowel", DowelType.class);
+	public static final EnumProperty<EnumDowelType> DOWEL = EnumProperty.create("dowel", EnumDowelType.class, EnumDowelType.DOWEL, EnumDowelType.CARVED_DOWEL);
+	public static final EnumProperty<EnumDowelType> DOWEL_OR_NONE = EnumProperty.create("dowel", EnumDowelType.class);
+	public static final EnumProperty<BlockCruxiteDowel.Type> DOWEL_BLOCK = EnumProperty.create("dowel", BlockCruxiteDowel.Type.class);
 }

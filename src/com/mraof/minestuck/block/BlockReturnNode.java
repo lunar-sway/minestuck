@@ -49,6 +49,6 @@ public class BlockReturnNode extends BlockGate
 		for(int x = -1; x <= 0; x++)
 			for(int z = -1; z <= 0; z++)
 				if(world.getBlockState(pos.add(x, 0, z)).getBlock() == this)
-					world.setBlockState(pos.add(x, 0, z), Blocks.AIR.getDefaultState());
+					world.removeBlock(pos.add(x, 0, z));
 	}
 }

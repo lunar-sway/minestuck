@@ -1,7 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.block.BlockCruxtiteDowel;
+import com.mraof.minestuck.block.BlockCruxiteDowel;
 import com.mraof.minestuck.block.BlockCruxtruder;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
@@ -13,8 +13,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -66,7 +64,7 @@ public class TileEntityCruxtruder extends TileEntity
 			{
 				if(state.getBlock() == MinestuckBlocks.blockCruxiteDowel)
 				{
-					BlockCruxtiteDowel.dropDowel(getWorld(), pos);
+					BlockCruxiteDowel.dropDowel(getWorld(), pos);
 				} else if(state.getBlock().isReplaceable(getWorld(), pos))
 				{
 					if(MinestuckConfig.cruxtruderIntake && material == 0)
@@ -74,7 +72,7 @@ public class TileEntityCruxtruder extends TileEntity
 						world.playEvent(1001, pos, 0);
 					} else
 					{
-						world.setBlockState(pos, MinestuckBlocks.blockCruxiteDowel.getDefaultState().withProperty(BlockCruxtiteDowel.TYPE, BlockCruxtiteDowel.Type.CRUXTRUDER));
+						world.setBlockState(pos, MinestuckBlocks.blockCruxiteDowel.getDefaultState().withProperty(BlockCruxiteDowel.TYPE, BlockCruxiteDowel.Type.CRUXTRUDER));
 						TileEntity te = world.getTileEntity(pos);
 						if(te instanceof TileEntityItemStack)
 							((TileEntityItemStack) te).getStack().setItemDamage(color + 1);

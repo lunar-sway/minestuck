@@ -1,7 +1,5 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.item.TabMinestuck;
-
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
@@ -136,27 +134,28 @@ public class MinestuckBlocks
 	public static Block GRIST_WIDGET;
 	public static Block URANIUM_COOKER;
 	
-	public static Block blender = new BlockDecor("blender",SoundType.METAL).setCreativeTab(TabMinestuck.instance);
-	public static Block chessboard = new BlockDecor("chessboard").setCreativeTab(TabMinestuck.instance);
-	public static Block frogStatueReplica = new BlockDecor("frogStatueReplica").setCreativeTab(TabMinestuck.instance);
+	public static Block CRUXITE_DOWEL;
 	
-	public static Block blockCruxiteDowel = new BlockCruxtiteDowel();
-	public static Block blockGoldSeeds = new BlockGoldSeeds();
-	public static Block appleCake = new BlockSimpleCake(2, 0.5F, null).setUnlocalizedName("appleCake");
-	public static Block blueCake = new BlockSimpleCake(2, 0.3F, (EntityPlayer player) -> player.addPotionEffect(new PotionEffect(MobEffects.SPEED, 150, 0))).setUnlocalizedName("blueCake");
-	public static Block coldCake = new BlockSimpleCake(2, 0.3F, (EntityPlayer player) -> {player.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 200, 1));player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 200, 1));}).setUnlocalizedName("coldCake");
-	public static Block redCake = new BlockSimpleCake(2, 0.1F, (EntityPlayer player) -> player.heal(1)).setUnlocalizedName("redCake");
-	public static Block hotCake = new BlockSimpleCake(2, 0.1F, (EntityPlayer player) -> player.setFire(4)).setUnlocalizedName("hotCake");
-	public static Block reverseCake = new BlockSimpleCake(2, 0.1F, null).setUnlocalizedName("cake");
+	public static Block BLENDER;
+	public static Block CHESSBOARD;
+	public static Block MINI_FROG_STATUE;
+	public static Block GLOWYSTONE_WIRE;
+	
+	public static Block GOLD_SEEDS;
+	public static Block WOODEN_CACTUS;
+	
+	public static Block APPLE_CAKE;
+	public static Block BLUE_CAKE;
+	public static Block COLD_CAKE;
+	public static Block RED_CAKE;
+	public static Block HOT_CAKE;
+	public static Block REVERSE_CAKE;
 	
 	public static Block primedTnt = new BlockTNTSpecial(true, false, false).setUnlocalizedName("primedTnt");
 	public static Block unstableTnt = new BlockTNTSpecial(false, true, false).setUnlocalizedName("unstableTnt");
 	public static Block instantTnt = new BlockTNTSpecial(false, false, true).setUnlocalizedName("instantTnt");
 	public static Block woodenExplosiveButton = new BlockButtonSpecial(true, true).setUnlocalizedName("buttonTnt");
 	public static Block stoneExplosiveButton = new BlockButtonSpecial(false, true).setUnlocalizedName("buttonTnt");
-	
-	public static Block WOODEN_CACTUS;
-	public static Block glowystoneWire = new BlockGlowystoneWire().setUnlocalizedName("glowystoneWire");
 	
 	public static Fluid fluidOil = createFluid("oil", new ResourceLocation("minestuck", "blocks/oil_still"), new ResourceLocation("minestuck", "blocks/oil_flowing"), "tile.oil");
 	public static Fluid fluidBlood = createFluid("blood", new ResourceLocation("minestuck", "blocks/blood_still"), new ResourceLocation("minestuck", "blocks/blood_flowing"), "tile.blood");
@@ -465,25 +464,22 @@ public class MinestuckBlocks
 		registry.register(GRIST_WIDGET = new BlockGristWidget(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("grist_widget"));
 		registry.register(URANIUM_COOKER = new BlockUraniumCooker(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("uranium_cooker"));
 		
-		registry.register(blockCruxiteDowel.setRegistryName("cruxite_dowel"));
+		registry.register(CRUXITE_DOWEL = new BlockCruxiteDowel(Block.Properties.create(Material.GLASS).hardnessAndResistance(0.0F)).setRegistryName("cruxite_dowel"));
 		
+		registry.register(BLENDER = new BlockDecor(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F).sound(SoundType.METAL), BlockDecor.BLENDER_SHAPE, BlockAlchemiter.UNDEFINED_FACE_SHAPES).setRegistryName("blender"));
+		registry.register(CHESSBOARD = new BlockDecor(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.5F), BlockDecor.CHESSBOARD_SHAPE, BlockAlchemiter.CORNER_FACE_SHAPES).setRegistryName("chessboard"));
+		registry.register(MINI_FROG_STATUE = new BlockDecor(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.5F), BlockDecor.FROG_STATUE_SHAPE, BlockAlchemiter.UNDEFINED_FACE_SHAPES).setRegistryName("mini_frog_statue"));
+		registry.register(GLOWYSTONE_WIRE = new BlockGlowystoneWire(Block.Properties.create(Material.CIRCUITS).hardnessAndResistance(0.0F).lightValue(16).doesNotBlockMovement()).setRegistryName("glowystone_wire"));
+		
+		registry.register(GOLD_SEEDS = new BlockGoldSeeds(Block.Properties.create(Material.PLANTS).hardnessAndResistance(0.1F).sound(SoundType.METAL).doesNotBlockMovement()).setRegistryName("gold_seeds"));
 		registry.register(WOODEN_CACTUS = new BlockCactusSpecial(Block.Properties.create(Material.WOOD).needsRandomTick().hardnessAndResistance(1.0F, 2.5F).sound(SoundType.WOOD), ToolType.AXE).setRegistryName("wooden_cactus"));
 		
-		registry.register(uraniumCooker.setRegistryName("uranium_cooker"));
-		
-		registry.register(blender.setRegistryName("blender"));
-		registry.register(chessboard.setRegistryName("chessboard"));
-		registry.register(frogStatueReplica.setRegistryName("frog_statue_replica"));
-		
-		registry.register(blockGoldSeeds.setRegistryName("gold_seeds"));
-		registry.register(glowystoneWire.setRegistryName("glowystone_wire"));
-		
-		registry.register(appleCake.setRegistryName("apple_cake"));
-		registry.register(blueCake.setRegistryName("blue_cake"));
-		registry.register(coldCake.setRegistryName("cold_cake"));
-		registry.register(redCake.setRegistryName("red_cake"));
-		registry.register(hotCake.setRegistryName("hot_cake"));
-		registry.register(reverseCake.setRegistryName("reverse_cake"));
+		registry.register(APPLE_CAKE = new BlockSimpleCake(Block.Properties.create(Material.CAKE).hardnessAndResistance(0.5F).sound(SoundType.CLOTH), 2, 0.5F, null).setRegistryName("apple_cake"));
+		registry.register(BLUE_CAKE = new BlockSimpleCake(Block.Properties.create(Material.CAKE).hardnessAndResistance(0.5F).sound(SoundType.CLOTH), 2, 0.3F, (EntityPlayer player) -> player.addPotionEffect(new PotionEffect(MobEffects.SPEED, 150, 0))).setRegistryName("blue_cake"));
+		registry.register(COLD_CAKE = new BlockSimpleCake(Block.Properties.create(Material.CAKE).hardnessAndResistance(0.5F).sound(SoundType.CLOTH), 2, 0.3F, (EntityPlayer player) -> {player.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 200, 1));player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 200, 1));}).setRegistryName("cold_cake"));
+		registry.register(RED_CAKE = new BlockSimpleCake(Block.Properties.create(Material.CAKE).hardnessAndResistance(0.5F).sound(SoundType.CLOTH), 2, 0.1F, (EntityPlayer player) -> player.heal(1)).setRegistryName("red_cake"));
+		registry.register(HOT_CAKE = new BlockSimpleCake(Block.Properties.create(Material.CAKE).hardnessAndResistance(0.5F).sound(SoundType.CLOTH), 2, 0.1F, (EntityPlayer player) -> player.setFire(4)).setRegistryName("hot_cake"));
+		registry.register(REVERSE_CAKE = new BlockSimpleCake(Block.Properties.create(Material.CAKE).hardnessAndResistance(0.5F).sound(SoundType.CLOTH), 2, 0.1F, null).setRegistryName("reverse_cake"));
 		
 		registry.register(primedTnt.setRegistryName("primed_tnt"));
 		registry.register(unstableTnt.setRegistryName("unstable_tnt"));

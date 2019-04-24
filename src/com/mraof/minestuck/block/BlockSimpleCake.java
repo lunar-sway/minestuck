@@ -11,8 +11,9 @@ public class BlockSimpleCake extends BlockCustomCake
 	private final float saturation;
 	private final Effect effect;
 	
-	public BlockSimpleCake(int foodLevel, float saturation, Effect effect)
+	public BlockSimpleCake(Properties builder, int foodLevel, float saturation, Effect effect)
 	{
+		super(builder);
 		this.foodLevel = foodLevel;
 		this.saturation = saturation;
 		this.effect = effect;

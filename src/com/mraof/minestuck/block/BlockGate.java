@@ -134,7 +134,7 @@ public class BlockGate extends Block
 		for(int x = -1; x <= 1; x++)
 			for(int z = -1; z <= 1; z++)
 				if(world.getBlockState(pos.add(x, 0, z)).getBlock() == this)
-					world.setBlockState(pos.add(x, 0, z), Blocks.AIR.getDefaultState());
+					world.removeBlock(pos.add(x, 0, z));
 	}
 	
 	protected BlockPos findMainComponent(BlockPos pos, World world)
@@ -175,7 +175,7 @@ public class BlockGate extends Block
 				mainPos = findMainComponent(pos, worldIn);
 			
 			if(mainPos == null)
-				worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
+				worldIn.removeBlock(pos);
 			else removePortal(mainPos, worldIn);
 		}
 	}

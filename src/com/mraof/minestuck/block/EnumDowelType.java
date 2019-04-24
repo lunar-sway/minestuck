@@ -2,7 +2,7 @@ package com.mraof.minestuck.block;
 
 import net.minecraft.util.IStringSerializable;
 
-public enum DowelType implements IStringSerializable
+public enum EnumDowelType implements IStringSerializable
 {
 	NONE,
 	DOWEL,
