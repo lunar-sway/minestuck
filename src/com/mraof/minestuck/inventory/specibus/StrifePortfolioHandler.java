@@ -55,7 +55,7 @@ public class StrifePortfolioHandler
 	
 	public static boolean checkSpecibusLimit(EntityPlayer player)
 	{
-		return MinestuckPlayerData.getStrifePortfolio(IdentifierHandler.encode(player)).size() <= 10;
+		return MinestuckPlayerData.getStrifePortfolio(IdentifierHandler.encode(player)).size() < 10;
 	}
 	
 	public static void retrieveItem(EntityPlayerMP player, int specibusIndex, int itemIndex)
