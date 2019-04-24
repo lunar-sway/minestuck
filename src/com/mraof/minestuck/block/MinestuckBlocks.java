@@ -3,8 +3,6 @@ package com.mraof.minestuck.block;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
@@ -12,14 +10,11 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 
 public class MinestuckBlocks
@@ -61,7 +56,7 @@ public class MinestuckBlocks
 	public static Block DENSE_CLOUD, DENSE_CLOUD_BRIGHT;
 	public static Block SUGAR_CUBE;
 	
-	//Land Wood/Plant Blocks
+	//Land Tree Blocks
 	public static Block GLOWING_LOG, FROST_LOG, RAINBOW_LOG, END_LOG;
 	public static Block VINE_LOG, FLOWERY_VINE_LOG, DEAD_LOG, PETRIFIED_LOG;
 	public static Block GLOWING_PLANKS, FROST_PLANKS, RAINBOW_PLANKS, END_PLANKS;
@@ -69,6 +64,7 @@ public class MinestuckBlocks
 	public static Block FROST_LEAVES, RAINBOW_LEAVES, END_LEAVES;
 	public static Block RAINBOW_SAPLING, END_SAPLING;
 	
+	//Aspect Tree Blocks
 	public static Block BLOOD_ASPECT_LOG, BREATH_ASPECT_LOG, DOOM_ASPECT_LOG, HEART_ASPECT_LOG, HOPE_ASPECT_LOG, LIFE_ASPECT_LOG;
 	public static Block LIGHT_ASPECT_LOG, MIND_ASPECT_LOG, RAGE_ASPECT_LOG, SPACE_ASPECT_LOG, TIME_ASPECT_LOG, VOID_ASPECT_LOG;
 	public static Block BLOOD_ASPECT_PLANKS, BREATH_ASPECT_PLANKS, DOOM_ASPECT_PLANKS, HEART_ASPECT_PLANKS, HOPE_ASPECT_PLANKS, LIFE_ASPECT_PLANKS;
@@ -78,6 +74,7 @@ public class MinestuckBlocks
 	public static Block BLOOD_ASPECT_SAPLING, BREATH_ASPECT_SAPLING, DOOM_ASPECT_SAPLING, HEART_ASPECT_SAPLING, HOPE_ASPECT_SAPLING, LIFE_ASPECT_SAPLING;
 	public static Block LIGHT_ASPECT_SAPLING, MIND_ASPECT_SAPLING, RAGE_ASPECT_SAPLING, SPACE_ASPECT_SAPLING, TIME_ASPECT_SAPLING, VOID_ASPECT_SAPLING;
 	
+	//Land Plant Blocks
 	public static Block GLOWING_MUSHROOM;
 	public static Block DESERT_BUSH;
 	public static Block BLOOMING_CACTUS;
@@ -134,31 +131,37 @@ public class MinestuckBlocks
 	public static Block GRIST_WIDGET;
 	public static Block URANIUM_COOKER;
 	
+	//Misc Core Objects
 	public static Block CRUXITE_DOWEL;
 	
-	public static Block BLENDER;
-	public static Block CHESSBOARD;
-	public static Block MINI_FROG_STATUE;
-	public static Block GLOWYSTONE_WIRE;
-	
+	//Misc Alchemy Semi-Plants
 	public static Block GOLD_SEEDS;
 	public static Block WOODEN_CACTUS;
 	
+	//Cakes
 	public static Block APPLE_CAKE;
 	public static Block BLUE_CAKE;
 	public static Block COLD_CAKE;
 	public static Block RED_CAKE;
 	public static Block HOT_CAKE;
 	public static Block REVERSE_CAKE;
-	public static Block fuchsiaCake = new BlockSimpleCake(3, 0.5F, (EntityPlayer player) -> {player.addPotionEffect(new PotionEffect(MobEffects.ABSORPTION, 350, 1));player.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 200, 0));}).setUnlocalizedName("fuchsiaCake");
+	public static Block FUCHSIA_CAKE;
 	
-	public static Block primedTnt = new BlockTNTSpecial(true, false, false).setUnlocalizedName("primedTnt");
-	public static Block unstableTnt = new BlockTNTSpecial(false, true, false).setUnlocalizedName("unstableTnt");
-	public static Block instantTnt = new BlockTNTSpecial(false, false, true).setUnlocalizedName("instantTnt");
-	public static Block woodenExplosiveButton = new BlockButtonSpecial(true, true).setUnlocalizedName("buttonTnt");
-	public static Block stoneExplosiveButton = new BlockButtonSpecial(false, true).setUnlocalizedName("buttonTnt");
+	//Explosion and Redstone
+	public static Block PRIMED_TNT;
+	public static Block UNSTABLE_TNT;
+	public static Block INSTANT_TNT;
+	public static Block WOODEN_EXPLOSIVE_BUTTON;
+	public static Block STONE_EXPLOSIVE_BUTTON;
 	
-	public static Fluid fluidOil = createFluid("oil", new ResourceLocation("minestuck", "blocks/oil_still"), new ResourceLocation("minestuck", "blocks/oil_flowing"), "tile.oil");
+	//Misc Alchemy Objects
+	public static Block BLENDER;
+	public static Block CHESSBOARD;
+	public static Block MINI_FROG_STATUE;
+	public static Block GLOWYSTONE_WIRE;
+	
+	//TODO Look more into fluids
+	/*public static Fluid fluidOil = createFluid("oil", new ResourceLocation("minestuck", "blocks/oil_still"), new ResourceLocation("minestuck", "blocks/oil_flowing"), "tile.oil");
 	public static Fluid fluidBlood = createFluid("blood", new ResourceLocation("minestuck", "blocks/blood_still"), new ResourceLocation("minestuck", "blocks/blood_flowing"), "tile.blood");
 	public static Fluid fluidBrainJuice = createFluid("brain_juice", new ResourceLocation("minestuck", "blocks/brain_juice_still"), new ResourceLocation("minestuck", "blocks/brain_juice_flowing"), "tile.brainJuice");
 	public static Fluid fluidWatercolors = createFluid("watercolors", new ResourceLocation("minestuck", "blocks/watercolors_still"), new ResourceLocation("minestuck", "blocks/watercolors_flowing"), "tile.watercolors");
@@ -220,7 +223,7 @@ public class MinestuckBlocks
 	}.setUnlocalizedName("lightWater").setLightOpacity(1);
 	
 	public static Block[] liquidGrists;
-	public static Fluid[] gristFluids;
+	public static Fluid[] gristFluids;*/
 	
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event)
@@ -467,11 +470,6 @@ public class MinestuckBlocks
 		
 		registry.register(CRUXITE_DOWEL = new BlockCruxiteDowel(Block.Properties.create(Material.GLASS).hardnessAndResistance(0.0F)).setRegistryName("cruxite_dowel"));
 		
-		registry.register(BLENDER = new BlockDecor(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F).sound(SoundType.METAL), BlockDecor.BLENDER_SHAPE, BlockAlchemiter.UNDEFINED_FACE_SHAPES).setRegistryName("blender"));
-		registry.register(CHESSBOARD = new BlockDecor(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.5F), BlockDecor.CHESSBOARD_SHAPE, BlockAlchemiter.CORNER_FACE_SHAPES).setRegistryName("chessboard"));
-		registry.register(MINI_FROG_STATUE = new BlockDecor(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.5F), BlockDecor.FROG_STATUE_SHAPE, BlockAlchemiter.UNDEFINED_FACE_SHAPES).setRegistryName("mini_frog_statue"));
-		registry.register(GLOWYSTONE_WIRE = new BlockGlowystoneWire(Block.Properties.create(Material.CIRCUITS).hardnessAndResistance(0.0F).lightValue(16).doesNotBlockMovement()).setRegistryName("glowystone_wire"));
-		
 		registry.register(GOLD_SEEDS = new BlockGoldSeeds(Block.Properties.create(Material.PLANTS).hardnessAndResistance(0.1F).sound(SoundType.METAL).doesNotBlockMovement()).setRegistryName("gold_seeds"));
 		registry.register(WOODEN_CACTUS = new BlockCactusSpecial(Block.Properties.create(Material.WOOD).needsRandomTick().hardnessAndResistance(1.0F, 2.5F).sound(SoundType.WOOD), ToolType.AXE).setRegistryName("wooden_cactus"));
 		
@@ -481,20 +479,25 @@ public class MinestuckBlocks
 		registry.register(RED_CAKE = new BlockSimpleCake(Block.Properties.create(Material.CAKE).hardnessAndResistance(0.5F).sound(SoundType.CLOTH), 2, 0.1F, (EntityPlayer player) -> player.heal(1)).setRegistryName("red_cake"));
 		registry.register(HOT_CAKE = new BlockSimpleCake(Block.Properties.create(Material.CAKE).hardnessAndResistance(0.5F).sound(SoundType.CLOTH), 2, 0.1F, (EntityPlayer player) -> player.setFire(4)).setRegistryName("hot_cake"));
 		registry.register(REVERSE_CAKE = new BlockSimpleCake(Block.Properties.create(Material.CAKE).hardnessAndResistance(0.5F).sound(SoundType.CLOTH), 2, 0.1F, null).setRegistryName("reverse_cake"));
-		registry.register(fuchsiaCake.setRegistryName("fuchsia_cake"));
+		registry.register(FUCHSIA_CAKE = new BlockSimpleCake(Block.Properties.create(Material.CAKE).hardnessAndResistance(0.5F).sound(SoundType.CLOTH), 3, 0.5F, (EntityPlayer player) -> {player.addPotionEffect(new PotionEffect(MobEffects.ABSORPTION, 350, 1));player.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 200, 0));}).setRegistryName("fuchsia_cake"));
 		
-		registry.register(primedTnt.setRegistryName("primed_tnt"));
-		registry.register(unstableTnt.setRegistryName("unstable_tnt"));
-		registry.register(instantTnt.setRegistryName("instant_tnt"));
-		registry.register(woodenExplosiveButton.setRegistryName("wooden_button_explosive"));
-		registry.register(stoneExplosiveButton.setRegistryName("stone_button_explosive"));
+		registry.register(PRIMED_TNT = new BlockTNTSpecial(Block.Properties.create(Material.TNT).hardnessAndResistance(0.0F).sound(SoundType.PLANT), true, false, false).setRegistryName("primed_tnt"));
+		registry.register(UNSTABLE_TNT = new BlockTNTSpecial(Block.Properties.create(Material.TNT).hardnessAndResistance(0.0F).sound(SoundType.PLANT).needsRandomTick(), false, true, false).setRegistryName("unstable_tnt"));
+		registry.register(INSTANT_TNT = new BlockTNTSpecial(Block.Properties.create(Material.TNT).hardnessAndResistance(0.0F).sound(SoundType.PLANT), false, false, true).setRegistryName("instant_tnt"));
+		registry.register(WOODEN_EXPLOSIVE_BUTTON = new BlockButtonSpecial(Block.Properties.create(Material.CIRCUITS).doesNotBlockMovement().hardnessAndResistance(0.5F).sound(SoundType.WOOD), true, true).setRegistryName("wooden_explosive_button"));
+		registry.register(STONE_EXPLOSIVE_BUTTON = new BlockButtonSpecial(Block.Properties.create(Material.CIRCUITS).doesNotBlockMovement().hardnessAndResistance(0.5F).sound(SoundType.STONE), true, false).setRegistryName("stone_explosive_button"));
 		
-		registry.register(blockOil.setRegistryName("block_oil"));
+		registry.register(BLENDER = new BlockDecor(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F).sound(SoundType.METAL), BlockDecor.BLENDER_SHAPE, BlockAlchemiter.UNDEFINED_FACE_SHAPES).setRegistryName("blender"));
+		registry.register(CHESSBOARD = new BlockDecor(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.5F), BlockDecor.CHESSBOARD_SHAPE, BlockAlchemiter.CORNER_FACE_SHAPES).setRegistryName("chessboard"));
+		registry.register(MINI_FROG_STATUE = new BlockDecor(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.5F), BlockDecor.FROG_STATUE_SHAPE, BlockAlchemiter.UNDEFINED_FACE_SHAPES).setRegistryName("mini_frog_statue"));
+		registry.register(GLOWYSTONE_WIRE = new BlockGlowystoneWire(Block.Properties.create(Material.CIRCUITS).hardnessAndResistance(0.0F).lightValue(16).doesNotBlockMovement()).setRegistryName("glowystone_wire"));
+		
+		/*registry.register(blockOil.setRegistryName("block_oil"));
 		registry.register(blockBlood.setRegistryName("block_blood"));
 		registry.register(blockBrainJuice.setRegistryName("block_brain_juice"));
 		registry.register(blockWatercolors.setRegistryName("block_watercolors"));
 		registry.register(blockEnder.setRegistryName("block_ender"));
-		registry.register(blockLightWater.setRegistryName("block_light_water"));
+		registry.register(blockLightWater.setRegistryName("block_light_water"));*/
 		
 		//fluids
 		/*liquidGrists = new Block[GristType.allGrists];
@@ -510,11 +513,11 @@ public class MinestuckBlocks
 	{
 		Fluid fluid = new Fluid(name, still, flowing);
 		
-		boolean useFluid = FluidRegistry.registerFluid(fluid);
+		/*boolean useFluid = FluidRegistry.registerFluid(fluid);
 		
 		if(useFluid)
 			fluid.setUnlocalizedName(unlocalizedName);
-		else fluid = FluidRegistry.getFluid(name);
+		else fluid = FluidRegistry.getFluid(name);*/
 		
 		return fluid;
 	}
