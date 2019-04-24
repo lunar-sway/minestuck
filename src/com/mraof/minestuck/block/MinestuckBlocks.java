@@ -122,10 +122,9 @@ public class MinestuckBlocks
 	public static Block MINI_TOTEM_LATHE;
 	public static Block MINI_ALCHEMITER;
 	public static Block MINI_PUNCH_DESIGNIX;
-	public static Block GRIST_WIDGET;
-	public static Block holopad = new BlockHolopad();
-	public static BlockJumperBlock[] jumperBlockExtension = BlockJumperBlock.createBlocks();
-	public static BlockAlchemiterUpgrades[] alchemiterUpgrades = BlockAlchemiterUpgrades.createBlocks();
+	public static Block HOLOPAD;
+	/*public static BlockJumperBlock[] jumperBlockExtension = BlockJumperBlock.createBlocks();
+	public static BlockAlchemiterUpgrades[] alchemiterUpgrades = BlockAlchemiterUpgrades.createBlocks();*/
 	
 	//Misc Machines
 	public static Block blockComputerOff = new BlockComputerOff();
@@ -133,6 +132,7 @@ public class MinestuckBlocks
 	public static Block blockLaptopOff = new BlockVanityLaptopOff().setCreativeTab(null);
 	public static Block blockLaptopOn = new BlockVanityLaptopOn();
 	public static Block transportalizer = new BlockTransportalizer();
+	public static Block GRIST_WIDGET;
 	public static Block uraniumCooker = new BlockUraniumCooker().setUnlocalizedName("uraniumCooker");
 	
 	public static Block blender = new BlockDecor("blender",SoundType.METAL).setCreativeTab(TabMinestuck.instance);
@@ -437,16 +437,8 @@ public class MinestuckBlocks
 		registry.register(MINI_TOTEM_LATHE = new BlockMiniTotemLathe(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("mini_totem_lathe"));
 		registry.register(MINI_ALCHEMITER = new BlockMiniAlchemiter(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("mini_alchemiter"));
 		registry.register(MINI_PUNCH_DESIGNIX = new BlockMiniPunchDesignix(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("mini_punch_designix"));
-		registry.register(GRIST_WIDGET = new BlockGristWidget(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("grist_widget"));
-		
-		registry.register(blockCruxiteDowel.setRegistryName("cruxite_dowel"));
-		
-		registry.register(WOODEN_CACTUS = new BlockCactusSpecial(Block.Properties.create(Material.WOOD).needsRandomTick().hardnessAndResistance(1.0F, 2.5F).sound(SoundType.WOOD), ToolType.AXE).setRegistryName("wooden_cactus"));
-		
-		registry.register(transportalizer.setRegistryName("transportalizer"));
-		registry.register(uraniumCooker.setRegistryName("uranium_cooker"));
 		/*
-		registry.register(holopad.setRegistryName("holopad"));
+		registry.register(HOLOPAD = new BlockHolopad(Block.Properties.create(Material.IRON, MaterialColor.SNOW).hardnessAndResistance(3.0F)).setRegistryName("holopad"));
 		registry.register(jumperBlockExtension[0].setRegistryName("jumper_block_extension"));
 		registry.register(jumperBlockExtension[1].setRegistryName("jumper_block_extension2"));
 		registry.register(jumperBlockExtension[2].setRegistryName("jumper_block_extension3"));
@@ -457,6 +449,16 @@ public class MinestuckBlocks
 		registry.register(alchemiterUpgrades[2].setRegistryName("alchemiter_upgrade3"));
 		registry.register(alchemiterUpgrades[3].setRegistryName("alchemiter_upgrade4"));
 		*/
+		
+		registry.register(GRIST_WIDGET = new BlockGristWidget(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("grist_widget"));
+		
+		registry.register(blockCruxiteDowel.setRegistryName("cruxite_dowel"));
+		
+		registry.register(WOODEN_CACTUS = new BlockCactusSpecial(Block.Properties.create(Material.WOOD).needsRandomTick().hardnessAndResistance(1.0F, 2.5F).sound(SoundType.WOOD), ToolType.AXE).setRegistryName("wooden_cactus"));
+		
+		registry.register(transportalizer.setRegistryName("transportalizer"));
+		registry.register(uraniumCooker.setRegistryName("uranium_cooker"));
+		
 		registry.register(blender.setRegistryName("blender"));
 		registry.register(chessboard.setRegistryName("chessboard"));
 		registry.register(frogStatueReplica.setRegistryName("frog_statue_replica"));

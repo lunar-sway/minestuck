@@ -1,4 +1,4 @@
-package com.mraof.minestuck.block;
+/*package com.mraof.minestuck.block;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -84,7 +84,7 @@ public abstract class BlockAlchemiterUpgrades extends BlockMachine
             return true;
         }
         else
-        	*/
+        	* /
         {
         	TileEntity te = worldIn.getTileEntity(getAlchemiterPos(worldIn, pos));
         	if(!(te instanceof TileEntityAlchemiter)) return false;
@@ -107,7 +107,7 @@ public abstract class BlockAlchemiterUpgrades extends BlockMachine
     		            }
     	        	}
         		break;
-        		case CRAFTING: /*TODO*/ break;
+        		case CRAFTING: /*TODO* / break;
         		default: defaultRightClick(alchemiter, worldIn, playerIn, state); break;
         		}
         	break;
@@ -416,7 +416,7 @@ public abstract class BlockAlchemiterUpgrades extends BlockMachine
 	 /**
      *returns the block position of the "Main" block
      *aka the block with the TileEntity for the machine
-     */
+     * /
 	
 	
 	public enum EnumParts implements IStringSerializable
@@ -571,3 +571,4 @@ public abstract class BlockAlchemiterUpgrades extends BlockMachine
 	
 
 }
+*/

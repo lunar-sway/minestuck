@@ -1,4 +1,4 @@
-package com.mraof.minestuck.block;
+/*package com.mraof.minestuck.block;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -269,7 +269,7 @@ public abstract class BlockJumperBlock extends BlockMachine
     /**
      *returns the block position of the "Main" block
      *aka the block with the TileEntity for the machine
-     */
+     * /
 	public BlockPos getMainPos(IBlockState state, BlockPos pos, World worldIn)
 	{
 		
@@ -517,7 +517,7 @@ public abstract class BlockJumperBlock extends BlockMachine
 	 /**
      *returns the block position of the "Main" block
      *aka the block with the TileEntity for the machine
-     */
+     * /
 	
 	
 	@Override
@@ -696,3 +696,4 @@ public abstract class BlockJumperBlock extends BlockMachine
 	
 
 }
+*/

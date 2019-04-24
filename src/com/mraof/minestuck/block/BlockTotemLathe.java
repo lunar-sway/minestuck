@@ -214,5 +214,11 @@ public class BlockTotemLathe extends BlockMachine
 			super.fillStateContainer(builder);
 			builder.add(COUNT);
 		}
+		
+		@Override
+		public BlockRenderLayer getRenderLayer()
+		{
+			return BlockRenderLayer.CUTOUT_MIPPED;
+		}
 	}
 }
