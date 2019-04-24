@@ -15,6 +15,256 @@
         }
       ]
     },
+  "warhorn": {
+    "category": "ambient",
+    "subtitle": "subtitle.warhorn",
+    "sounds": [
+      {
+        "name": "minestuck:soundeffects/warhorn",
+        "stream": false
+      }
+    ]
+    },
+  "whispers": {
+    "category": "ambient",
+    "subtitle": "subtitle.whispers",
+    "sounds": [
+      {
+        "name": "minestuck:soundeffects/whispers",
+        "stream": false
+      }
+    ]
+  },
+  "screech": {
+    "category": "ambient",
+    "subtitle": "subtitle.screech",
+    "sounds": [
+      {
+        "name": "minestuck:soundeffects/screech",
+        "stream": false
+      }
+    ]
+  },
+  "upcheladder": {
+    "category": "ambient",
+    "subtitle": "subtitle.upcheladder",
+    "sounds": [
+      {
+        "name": "minestuck:soundeffects/upcheladder",
+        "stream": false
+      }
+    ]
+  },
+  "frogAmbient": {
+    "category": "friendly",
+    "subtitle": "subtitle.frogAmbient",
+    "sounds": [
+      "minestuck:soundeffects/mobs/frog_ambient_1",
+      "minestuck:soundeffects/mobs/frog_ambient_2",
+      "minestuck:soundeffects/mobs/frog_ambient_3"
+    ]
+  },
+  "frogHurt": {
+    "category": "friendly",
+    "subtitle": "subtitle.frogHurt",
+    "sounds": [
+      "minestuck:soundeffects/mobs/frog_hurt"
+    ]
+  },
+  "frogDeath": {
+    "category": "friendly",
+    "subtitle": "subtitle.frogDeath",
+    "sounds": [
+      "minestuck:soundeffects/mobs/frog_death"
+    ]
+  },
+  "nakagatorAmbient": {
+    "category": "friendly",
+    "subtitle": "subtitle.nakagatorAmbient",
+    "sounds": [
+      "minestuck:soundeffects/mobs/nakagator_ambient"
+    ]
+  },
+  "nakagatorHurt": {
+    "category": "friendly",
+    "subtitle": "subtitle.nakagatorHurt",
+    "sounds": [
+      "minestuck:soundeffects/mobs/nakagator_hurt"
+    ]
+  },
+  "nakagatorDeath": {
+    "category": "friendly",
+    "subtitle": "subtitle.nakagatorDeath",
+    "sounds": [
+      "minestuck:soundeffects/mobs/nakagator_death"
+    ]
+  },
+  "iguanaAmbient": {
+    "category": "friendly",
+    "subtitle": "subtitle.iguanaAmbient",
+    "sounds": [
+      "minestuck:soundeffects/mobs/iguana_ambient"
+    ]
+  },
+  "iguanaHurt": {
+    "category": "friendly",
+    "subtitle": "subtitle.iguanaHurt",
+    "sounds": [
+      "minestuck:soundeffects/mobs/iguana_hurt"
+    ]
+  },
+  "iguanaDeath": {
+    "category": "friendly",
+    "subtitle": "subtitle.iguanaDeath",
+    "sounds": [
+      "minestuck:soundeffects/mobs/iguana_death"
+    ]
+  },
+  "salamanderAmbient": {
+    "category": "friendly",
+    "subtitle": "subtitle.salamanderAmbient",
+    "sounds": [
+      "minestuck:soundeffects/mobs/salamander_ambient"
+    ]
+  },
+  "salamanderHurt": {
+    "category": "friendly",
+    "subtitle": "subtitle.salamanderHurt",
+    "sounds": [
+      "minestuck:soundeffects/mobs/salamander_hurt"
+    ]
+  },
+  "salamanderDeath": {
+    "category": "friendly",
+    "subtitle": "subtitle.salamanderDeath",
+    "sounds": [
+      "minestuck:soundeffects/mobs/salamander_death"
+    ]
+  },
+  "turtleHurt": {
+    "category": "friendly",
+    "subtitle": "subtitle.turtleHurt",
+    "sounds": [
+      "minestuck:soundeffects/mobs/turtle_hurt"
+    ]
+  },
+  "turtleDeath": {
+    "category": "friendly",
+    "subtitle": "subtitle.turtleDeath",
+    "sounds": [
+      "minestuck:soundeffects/mobs/turtle_death"
+    ]
+  },
+  "impAmbient": {
+    "category": "hostile",
+    "subtitle": "subtitle.impScreech",
+    "sounds": [
+      "minestuck:soundeffects/mobs/imp_ambient_1",
+      "minestuck:soundeffects/mobs/imp_ambient_2"
+    ]
+  },
+  "impHurt": {
+    "category": "hostile",
+    "subtitle": "subtitle.impHurt",
+    "sounds": [
+      "minestuck:soundeffects/mobs/imp_hurt"
+    ]
+  },
+  "impDeath": {
+    "category": "hostile",
+    "subtitle": "subtitle.impDeath",
+    "sounds": [
+      "minestuck:soundeffects/mobs/imp_death"
+    ]
+  },
+  "ogreAmbient": {
+    "category": "hostile",
+    "subtitle": "subtitle.ogreAmbient",
+    "sounds": [
+      "minestuck:soundeffects/mobs/ogre_ambient_1",
+      "minestuck:soundeffects/mobs/ogre_ambient_2"
+    ]
+  },
+  "ogreHurt": {
+    "category": "hostile",
+    "subtitle": "subtitle.ogreHurt",
+    "sounds": [
+      "minestuck:soundeffects/mobs/ogre_hurt"
+    ]
+  },
+  "ogreDeath": {
+    "category": "hostile",
+    "subtitle": "subtitle.ogreDeath",
+    "sounds": [
+      "minestuck:soundeffects/mobs/ogre_death"
+    ]
+  },
+  "basiliskAmbient": {
+    "category": "hostile",
+    "subtitle": "subtitle.basiliskAmbient",
+    "sounds": [
+      "minestuck:soundeffects/mobs/basilisk_ambient_1",
+      "minestuck:soundeffects/mobs/basilisk_ambient_2"
+    ]
+  },
+  "basiliskHurt": {
+    "category": "hostile",
+    "subtitle": "subtitle.basiliskHurt",
+    "sounds": [
+      "minestuck:soundeffects/mobs/basilisk_hurt"
+    ]
+  },
+  "basiliskDeath": {
+    "category": "hostile",
+    "subtitle": "subtitle.basiliskDeath",
+    "sounds": [
+      "minestuck:soundeffects/mobs/basilisk_death"
+    ]
+  },
+  "lichAmbient": {
+    "category": "hostile",
+    "subtitle": "subtitle.lichAmbient",
+    "sounds": [
+      "minestuck:soundeffects/mobs/lich_ambient_1",
+      "minestuck:soundeffects/mobs/lich_ambient_2"
+    ]
+  },
+  "lichHurt": {
+    "category": "hostile",
+    "subtitle": "subtitle.lichHurt",
+    "sounds": [
+      "minestuck:soundeffects/mobs/lich_hurt"
+    ]
+  },
+  "lichDeath": {
+    "category": "hostile",
+    "subtitle": "subtitle.lichDeath",
+    "sounds": [
+      "minestuck:soundeffects/mobs/lich_death"
+    ]
+  },
+  "giclopsAmbient": {
+    "category": "hostile",
+    "subtitle": "subtitle.giclopsAmbient",
+    "sounds": [
+      "minestuck:soundeffects/mobs/giclops_ambient_1",
+      "minestuck:soundeffects/mobs/giclops_ambient_2"
+    ]
+  },
+  "giclopsHurt": {
+    "category": "hostile",
+    "subtitle": "subtitle.giclopsHurt",
+    "sounds": [
+      "minestuck:soundeffects/mobs/giclops_hurt"
+    ]
+  },
+  "giclopsDeath": {
+    "category": "hostile",
+    "subtitle": "subtitle.giclopsDeath",
+    "sounds": [
+      "minestuck:soundeffects/mobs/giclops_death"
+    ]
+  },
     "record.retroBattle": {
       "sounds": [
         {

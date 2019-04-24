@@ -78,13 +78,13 @@ public class BlockBlender extends BlockContainer
 	@Override
 	public int getMetaFromState(IBlockState state)
 	{
-		return ((EnumFacing)state.getValue(DIRECTION)).ordinal() - 2;
+		return state.getValue(DIRECTION).getHorizontalIndex();
 	}
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta)
 	{
-		return getDefaultState().withProperty(DIRECTION, EnumFacing.values()[meta + 2]);
+		return getDefaultState().withProperty(DIRECTION, EnumFacing.getHorizontal(meta % 4));
 	}
 	
 	 @SideOnly(Side.CLIENT)

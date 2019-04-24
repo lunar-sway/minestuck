@@ -511,7 +511,9 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 			{
 				NBTTagCompound nbt = new NBTTagCompound();
 				tileEntity.writeToNBT(nbt);
+				nbt.setInteger("x", dest.getX());
 				nbt.setInteger("y", dest.getY());
+				nbt.setInteger("z", dest.getZ());
 				TileEntity te1 = TileEntity.create(chunkTo.getWorld(), nbt);
 				chunkTo.addTileEntity(dest, te1);
 				if(tileEntity instanceof TileEntityComputer)

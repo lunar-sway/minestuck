@@ -150,6 +150,7 @@ public class MinestuckBlocks
 	public static Block RED_CAKE;
 	public static Block HOT_CAKE;
 	public static Block REVERSE_CAKE;
+	public static Block fuchsiaCake = new BlockSimpleCake(3, 0.5F, (EntityPlayer player) -> {player.addPotionEffect(new PotionEffect(MobEffects.ABSORPTION, 350, 1));player.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 200, 0));}).setUnlocalizedName("fuchsiaCake");
 	
 	public static Block primedTnt = new BlockTNTSpecial(true, false, false).setUnlocalizedName("primedTnt");
 	public static Block unstableTnt = new BlockTNTSpecial(false, true, false).setUnlocalizedName("unstableTnt");
@@ -480,6 +481,7 @@ public class MinestuckBlocks
 		registry.register(RED_CAKE = new BlockSimpleCake(Block.Properties.create(Material.CAKE).hardnessAndResistance(0.5F).sound(SoundType.CLOTH), 2, 0.1F, (EntityPlayer player) -> player.heal(1)).setRegistryName("red_cake"));
 		registry.register(HOT_CAKE = new BlockSimpleCake(Block.Properties.create(Material.CAKE).hardnessAndResistance(0.5F).sound(SoundType.CLOTH), 2, 0.1F, (EntityPlayer player) -> player.setFire(4)).setRegistryName("hot_cake"));
 		registry.register(REVERSE_CAKE = new BlockSimpleCake(Block.Properties.create(Material.CAKE).hardnessAndResistance(0.5F).sound(SoundType.CLOTH), 2, 0.1F, null).setRegistryName("reverse_cake"));
+		registry.register(fuchsiaCake.setRegistryName("fuchsia_cake"));
 		
 		registry.register(primedTnt.setRegistryName("primed_tnt"));
 		registry.register(unstableTnt.setRegistryName("unstable_tnt"));

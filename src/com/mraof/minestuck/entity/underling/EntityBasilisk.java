@@ -9,6 +9,7 @@ import com.mraof.minestuck.util.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
 public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart 
@@ -36,6 +37,21 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 		EntityAIAttackOnCollideWithRate aiAttack = new EntityAIAttackOnCollideWithRate(this, .3F, 40, false);
 		aiAttack.setDistanceMultiplier(1.2F);
 		this.tasks.addTask(3, aiAttack);
+	}
+	
+	protected SoundEvent getAmbientSound()
+	{
+		return MinestuckSoundHandler.soundBasiliskAmbient;
+	}
+	
+	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
+	{
+		return MinestuckSoundHandler.soundBasiliskHurt;
+	}
+	
+	protected SoundEvent getDeathSound()
+	{
+		return MinestuckSoundHandler.soundBasiliskDeath;
 	}
 	
 	@Override
