@@ -1,74 +1,82 @@
 package com.mraof.minestuck.item.block;
 
+import com.mraof.minestuck.block.BlockCruxiteDowel;
 import com.mraof.minestuck.tileentity.TileEntityItemStack;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagString;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.translation.I18n;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemDowel extends ItemBlock
 {
-	
-	public ItemDowel(Block block)
+	public ItemDowel(Block blockIn, Properties builder)
 	{
-		super(block);
-		this.setHasSubtypes(true);
+		super(blockIn, builder);
 	}
 	
 	@Override
 	public int getItemStackLimit(ItemStack stack)
 	{
-		if(stack.hasTagCompound())
+		if(stack.hasTag())
 			return 16;
 		else return 64;
 	}
 	
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
 	{
-		if (stack.hasTagCompound())
+		if (stack.hasTag() && stack.getTag().hasKey("contentID"))
 		{
-			NBTTagCompound nbttagcompound = stack.getTagCompound();
+			NBTTagCompound nbttagcompound = stack.getTag();
 			NBTTagString contentID = (NBTTagString)nbttagcompound.getTag("contentID");
-			NBTTagInt contentMeta = (NBTTagInt)nbttagcompound.getTag("contentMeta");
 			
-			if (contentID != null && contentMeta != null && Item.REGISTRY.containsKey(new ResourceLocation(contentID.getString())))
+			if (ForgeRegistries.ITEMS.containsKey(new ResourceLocation(contentID.getString())))
 			{
-				tooltip.add("(" + (AlchemyRecipes.getDecodedItem(stack)).getDisplayName() + ")");
-				return;
+				tooltip.add(new TextComponentString("(").appendSibling(AlchemyRecipes.getDecodedItem(stack).getDisplayName()).appendText(")"));
 			}
 			else
 			{
-				tooltip.add("("+I18n.translateToLocal("item.captchaCard.invalid")+")");
+				tooltip.add(new TextComponentString("(").appendSibling(new TextComponentTranslation("item.captchaCard.invalid")).appendText(")"));
 			}
 		}
 	}
 	
+	@Nullable
 	@Override
-	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState)
+	protected IBlockState getStateForPlacement(BlockItemUseContext context)
 	{
-		if(super.placeBlockAt(stack, player, world, pos, side, hitX, hitY, hitZ, newState))
-		{
+		IBlockState state = super.getStateForPlacement(context);
+		ItemStack stack = context.getItem();
+		if(stack.hasTag() && stack.getTag().hasKey("contentID"))
+			state = state.with(BlockCruxiteDowel.DOWEL_TYPE, BlockCruxiteDowel.Type.TOTEM);
+		else
+			state = state.with(BlockCruxiteDowel.DOWEL_TYPE, BlockCruxiteDowel.Type.DOWEL);
+		return state;
+	}
+	
+	@Override
+	protected boolean onBlockPlaced(BlockPos pos, World world, @Nullable EntityPlayer player, ItemStack stack, IBlockState state)
+	{
 			TileEntityItemStack te = (TileEntityItemStack) world.getTileEntity(pos);
 			ItemStack newStack = stack.copy();
 			newStack.setCount(1);
 			te.setStack(newStack);
 			return true;
-		} else return false;
 	}
 }

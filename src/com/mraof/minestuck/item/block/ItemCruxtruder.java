@@ -1,7 +1,6 @@
 package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.block.BlockCruxtruder;
-import com.mraof.minestuck.block.BlockCruxtruder.EnumParts;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.editmode.EditData;
 import com.mraof.minestuck.editmode.ServerEditHandler;
@@ -13,45 +12,48 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 public class ItemCruxtruder extends ItemBlock
 {
-	public ItemCruxtruder(Block block)
+	//TODO Must be looked over along with the other large machine items
+	public ItemCruxtruder(Block blockIn, Properties builder)
 	{
-		super(block);
+		super(blockIn, builder);
 	}
 	
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
+	public EnumActionResult tryPlace(BlockItemUseContext context)
 	{
-		
-		if (world.isRemote)
+		World world = context.getWorld();
+		EnumFacing facing = context.getFace();
+		BlockPos pos = context.getPos();
+		EntityPlayer player = context.getPlayer();
+		if(world.isRemote)
 		{
 			return EnumActionResult.SUCCESS;
-		} else if (facing != EnumFacing.UP)
+		} else if(facing != EnumFacing.UP)
 		{
 			return EnumActionResult.FAIL;
 		} else
 		{
-			Block block = world.getBlockState(pos).getBlock();
-			boolean flag = block.isReplaceable(world, pos);
+			IBlockState block = world.getBlockState(pos);
+			boolean flag = block.isReplaceable(context);
 			
 			if (!flag)
 			{
 				pos = pos.up();
 			}
 			
-			EnumFacing placedFacing = player.getHorizontalFacing().getOpposite();
-			ItemStack itemstack = player.getHeldItem(hand);
+			EnumFacing placedFacing = context.getPlacementHorizontalFacing();
+			ItemStack itemstack = context.getItem();
 			
 			pos = pos.offset(placedFacing.rotateY());
 			
@@ -60,8 +62,8 @@ public class ItemCruxtruder extends ItemBlock
 				if(!canPlaceAt(itemstack, player, world, pos, placedFacing))
 					return EnumActionResult.FAIL;
 				
-				IBlockState state = this.block.getDefaultState();
-				this.placeBlockAt(itemstack, player, world, pos, facing, hitX, hitY, hitZ, state);
+				IBlockState state = this.getBlock().getDefaultState();
+				this.placeBlock(context, state);
 				return EnumActionResult.SUCCESS;
 			}
 			return EnumActionResult.FAIL;
@@ -77,7 +79,7 @@ public class ItemCruxtruder extends ItemBlock
 			for (int y = 0; y < 3; y++)
 			{
 				for(int z=0;z<3;z++) {
-					if (!world.mayPlace(MinestuckBlocks.cruxtruder, pos.offset(facing.getOpposite(),z).offset(facing.rotateYCCW(), x).up(y), false, EnumFacing.UP, null))
+					if (!MinestuckBlocks.CRUXTRUDER_CENTER.getDefaultState().isValidPosition(world, pos.offset(facing.getOpposite(),z).offset(facing.rotateYCCW(), x).up(y)))
 						return false;
 				}
 			}
@@ -86,11 +88,14 @@ public class ItemCruxtruder extends ItemBlock
 	}
 	
 	@Override
-	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState)
+	protected boolean placeBlock(BlockItemUseContext context, IBlockState newState)
 	{
+		BlockPos pos = context.getPos();
+		World world = context.getWorld();
+		EntityPlayer player = context.getPlayer();
 		if(!world.isRemote)
 		{
-			EnumFacing facing = player.getHorizontalFacing().getOpposite();
+			EnumFacing facing = context.getPlacementHorizontalFacing();
 			switch (facing)
 			{
 				case EAST:
@@ -107,17 +112,17 @@ public class ItemCruxtruder extends ItemBlock
 					break;
 			}
 			
-			world.setBlockState(pos.south(0).up(0).east(0), newState.withProperty(BlockCruxtruder.PART, EnumParts.BASE_CORNER).withProperty(BlockCruxtruder.DIRECTION, EnumFacing.NORTH));
-			world.setBlockState(pos.south(0).up(0).east(1), newState.withProperty(BlockCruxtruder.PART, EnumParts.BASE_SIDE).withProperty(BlockCruxtruder.DIRECTION, EnumFacing.NORTH));
-			world.setBlockState(pos.south(0).up(0).east(2), newState.withProperty(BlockCruxtruder.PART, EnumParts.BASE_CORNER).withProperty(BlockCruxtruder.DIRECTION, EnumFacing.EAST));
-			world.setBlockState(pos.south(1).up(0).east(2), newState.withProperty(BlockCruxtruder.PART, EnumParts.BASE_SIDE).withProperty(BlockCruxtruder.DIRECTION, EnumFacing.EAST));
-			world.setBlockState(pos.south(2).up(0).east(2), newState.withProperty(BlockCruxtruder.PART, EnumParts.BASE_CORNER).withProperty(BlockCruxtruder.DIRECTION, EnumFacing.SOUTH));
-			world.setBlockState(pos.south(2).up(0).east(1), newState.withProperty(BlockCruxtruder.PART, EnumParts.BASE_SIDE).withProperty(BlockCruxtruder.DIRECTION, EnumFacing.SOUTH));
-			world.setBlockState(pos.south(2).up(0).east(0), newState.withProperty(BlockCruxtruder.PART, EnumParts.BASE_CORNER).withProperty(BlockCruxtruder.DIRECTION, EnumFacing.WEST));
-			world.setBlockState(pos.south(1).up(0).east(0), newState.withProperty(BlockCruxtruder.PART, EnumParts.BASE_SIDE).withProperty(BlockCruxtruder.DIRECTION, EnumFacing.WEST));
-			world.setBlockState(pos.south(1).up(0).east(1), newState.withProperty(BlockCruxtruder.PART, EnumParts.CENTER).withProperty(BlockCruxtruder.DIRECTION, facing));
-			world.setBlockState(pos.south(1).up(1).east(1), newState.withProperty(BlockCruxtruder.PART, EnumParts.TUBE).withProperty(BlockCruxtruder.DIRECTION, facing));
-			world.setBlockState(pos.south().up(2).east(), MinestuckBlocks.cruxtruderLid.getDefaultState());
+			world.setBlockState(pos.south(0).up(0).east(0), MinestuckBlocks.CRUXTRUDER_CORNER.getDefaultState().with(BlockCruxtruder.FACING, EnumFacing.NORTH));
+			world.setBlockState(pos.south(0).up(0).east(1), MinestuckBlocks.CRUXTRUDER_SIDE.getDefaultState().with(BlockCruxtruder.FACING, EnumFacing.NORTH));
+			world.setBlockState(pos.south(0).up(0).east(2), MinestuckBlocks.CRUXTRUDER_CORNER.getDefaultState().with(BlockCruxtruder.FACING, EnumFacing.EAST));
+			world.setBlockState(pos.south(1).up(0).east(2), MinestuckBlocks.CRUXTRUDER_SIDE.getDefaultState().with(BlockCruxtruder.FACING, EnumFacing.EAST));
+			world.setBlockState(pos.south(2).up(0).east(2), MinestuckBlocks.CRUXTRUDER_CORNER.getDefaultState().with(BlockCruxtruder.FACING, EnumFacing.SOUTH));
+			world.setBlockState(pos.south(2).up(0).east(1), MinestuckBlocks.CRUXTRUDER_SIDE.getDefaultState().with(BlockCruxtruder.FACING, EnumFacing.SOUTH));
+			world.setBlockState(pos.south(2).up(0).east(0), MinestuckBlocks.CRUXTRUDER_CORNER.getDefaultState().with(BlockCruxtruder.FACING, EnumFacing.WEST));
+			world.setBlockState(pos.south(1).up(0).east(0), MinestuckBlocks.CRUXTRUDER_SIDE.getDefaultState().with(BlockCruxtruder.FACING, EnumFacing.WEST));
+			world.setBlockState(pos.south(1).up(0).east(1), MinestuckBlocks.CRUXTRUDER_CENTER.getDefaultState().with(BlockCruxtruder.FACING, facing));
+			world.setBlockState(pos.south(1).up(1).east(1), MinestuckBlocks.CRUXTRUDER_TUBE.getDefaultState().with(BlockCruxtruder.FACING, facing));
+			world.setBlockState(pos.south().up(2).east(), MinestuckBlocks.CRUXTRUDER_LID.getDefaultState());
 			
 			TileEntity te = world.getTileEntity(pos.add( 1, 1, 1));
 			if(te instanceof TileEntityCruxtruder)
@@ -132,7 +137,7 @@ public class ItemCruxtruder extends ItemBlock
 			} else Debug.warnf("Placed cruxtruder, but can't find tile entity. Instead found %s.", te);
 			
 			if(player instanceof EntityPlayerMP)
-				CriteriaTriggers.PLACED_BLOCK.trigger((EntityPlayerMP) player, pos, stack);
+				CriteriaTriggers.PLACED_BLOCK.trigger((EntityPlayerMP) player, pos, context.getItem());
 		}
 		
 		return true;

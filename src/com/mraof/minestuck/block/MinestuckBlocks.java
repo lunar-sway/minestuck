@@ -20,7 +20,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 public class MinestuckBlocks
 {
 	//Skaia
-	public static Block CHESS_DIRT_BLACK, CHESS_DIRT_WHITE, CHESS_DIRT_DARK_GRAY, CHESS_DIRT_LIGHT_GRAY;
+	public static Block BLACK_CHESS_DIRT, WHITE_CHESS_DIRT, DARK_GRAY_CHESS_DIRT, LIGHT_GRAY_CHESS_DIRT;
 	public static Block SKAIA_PORTAL;
 	
 	//Ores
@@ -49,7 +49,7 @@ public class MinestuckBlocks
 	public static Block CAST_IRON, CAST_IRON_CHISELED;
 	public static Block MYCELIUM_BRICKS;
 	public static Block BLACK_STONE;
-	public static Block FLOWERY_MOSS_STONE,FLOWERY_MOSS_BRICK;
+	public static Block FLOWERY_MOSS_STONE, FLOWERY_MOSS_BRICK;
 	public static Block COARSE_END_STONE, END_GRASS;
 	public static Block CHALK, CHALK_BRICKS, CHALK_CHISELED, CHALK_POLISHED;
 	public static Block PINK_STONE, PINK_STONE_BRICKS, PINK_STONE_CHISELED, PINK_STONE_CRACKED, PINK_STONE_MOSSY, PINK_STONE_POLISHED;
@@ -230,10 +230,10 @@ public class MinestuckBlocks
 	{
 		IForgeRegistry<Block> registry = event.getRegistry();
 		
-		registry.register(CHESS_DIRT_BLACK = new BlockDirt(Block.Properties.create(Material.GROUND, MaterialColor.BLACK).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("chess_dirt_black"));
-		registry.register(CHESS_DIRT_WHITE = new BlockDirt(Block.Properties.create(Material.GROUND, MaterialColor.SNOW).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("chess_dirt_white"));
-		registry.register(CHESS_DIRT_DARK_GRAY = new BlockDirt(Block.Properties.create(Material.GROUND, MaterialColor.GRAY).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("chess_dirt__dark_gray"));
-		registry.register(CHESS_DIRT_LIGHT_GRAY = new BlockDirt(Block.Properties.create(Material.GROUND, MaterialColor.LIGHT_GRAY).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("chess_dirt_light_gray"));
+		registry.register(BLACK_CHESS_DIRT = new BlockDirt(Block.Properties.create(Material.GROUND, MaterialColor.BLACK).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("black_chess_dirt"));
+		registry.register(WHITE_CHESS_DIRT = new BlockDirt(Block.Properties.create(Material.GROUND, MaterialColor.SNOW).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("white_chess_dirt"));
+		registry.register(DARK_GRAY_CHESS_DIRT = new BlockDirt(Block.Properties.create(Material.GROUND, MaterialColor.GRAY).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("dark_gray_chess_dirt"));
+		registry.register(LIGHT_GRAY_CHESS_DIRT = new BlockDirt(Block.Properties.create(Material.GROUND, MaterialColor.LIGHT_GRAY).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("light_gray_chess_dirt"));
 		registry.register(SKAIA_PORTAL = new BlockSkaiaPortal(Block.Properties.create(Material.PORTAL, MaterialColor.CYAN).doesNotBlockMovement().lightValue(11).hardnessAndResistance(-1.0F, 3600000.0F)).setRegistryName("skaia_portal"));
 		
 		registry.register(CRUXITE_ORE_STONE = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F)).setRegistryName("cruxite_ore_stone"));

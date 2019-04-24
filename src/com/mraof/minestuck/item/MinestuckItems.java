@@ -8,6 +8,7 @@ import com.mraof.minestuck.item.block.*;
 import com.mraof.minestuck.item.weapon.*;
 import com.mraof.minestuck.util.MinestuckSoundHandler;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityHanging;
@@ -36,11 +37,6 @@ import com.mraof.minestuck.block.BlockAspectSapling;
 
 public class MinestuckItems
 {
-	/**
-	 * Use TabMinestuck.instance instead
-	 */
-	@Deprecated
-	public static CreativeTabs tabMinestuck = TabMinestuck.instance;
 
 	public static Item.ToolMaterial toolEmerald = EnumHelper.addToolMaterial("EMERALD", 3, 1220, 12.0F, 4.0F, 12).setRepairItem(new ItemStack(Items.EMERALD));
 	public static ItemArmor.ArmorMaterial armorPrismarine = EnumHelper.addArmorMaterial("PRISMARINE", "minestuck:prismarine", 20, new int[]{3, 7, 6, 2}, 15, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0F);
@@ -169,7 +165,6 @@ public class MinestuckItems
 	public static Item rawUranium = new Item().setUnlocalizedName("rawUranium").setCreativeTab(TabMinestuck.instance);
 	public static Item energyCore = new Item().setUnlocalizedName("energyCore").setCreativeTab(TabMinestuck.instance);
 	//public static Item chessboard = new Item().setUnlocalizedName("chessboard").setCreativeTab(TabMinestuck.instance);
-	public static ItemDowel cruxiteDowel = new ItemDowel(MinestuckBlocks.blockCruxiteDowel);
 	public static Item captchaCard = new ItemCaptchaCard();
 	public static Item cruxiteApple = new ItemCruxiteApple();
 	public static Item cruxitePotion = new ItemCruxitePotion();
@@ -228,166 +223,222 @@ public class MinestuckItems
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event)
 	{
-		armorPrismarine.repairMaterial = new ItemStack(Items.PRISMARINE_SHARD);
-		((ItemMinestuckSeedFood) strawberryChunk).setPlant(strawberryStem.getDefaultState());
-
 		IForgeRegistry<Item> registry = event.getRegistry();
-		registerItemBlock(registry, new ItemMultiTexture(chessTile, chessTile, new String[]{"black", "white", "darkgrey", "lightgrey"}));
-		registerItemBlock(registry, new ItemBlock(skaiaPortal));
+		registerItemBlock(registry, BLACK_CHESS_DIRT, ModItemGroup.MAIN);
+		registerItemBlock(registry, WHITE_CHESS_DIRT, ModItemGroup.MAIN);
+		registerItemBlock(registry, DARK_GRAY_CHESS_DIRT, ModItemGroup.MAIN);
+		registerItemBlock(registry, LIGHT_GRAY_CHESS_DIRT, ModItemGroup.MAIN);
+		registerItemBlock(registry, SKAIA_PORTAL, ModItemGroup.MAIN);
 		
-		registerItemBlock(registry, new ItemMultiTexture(oreCruxite, oreCruxite, new String[0])
-		{
-			@Override
-			public String getUnlocalizedName(ItemStack stack)
-			{
-				return block.getUnlocalizedName();
-			}
-		});
-		registerItemBlock(registry, new ItemMultiTexture(oreUranium, oreUranium, new String[0])
-		{
-			@Override
-			public String getUnlocalizedName(ItemStack stack)
-			{
-				return block.getUnlocalizedName();
-			}
-		});
-		registerItemBlock(registry, new ItemBlock(coalOreNetherrack));
-		registerItemBlock(registry, new ItemBlock(ironOreEndStone));
-		registerItemBlock(registry, new ItemBlock(ironOreSandstone));
-		registerItemBlock(registry, new ItemBlock(ironOreSandstoneRed));
-		registerItemBlock(registry, new ItemBlock(goldOreSandstone));
-		registerItemBlock(registry, new ItemBlock(goldOreSandstoneRed));
-		registerItemBlock(registry, new ItemBlock(redstoneOreEndStone));
-		registerItemBlock(registry, new ItemBlock(quartzOreStone));
-		registerItemBlock(registry, new ItemBlock(coalOrePinkStone));
-		registerItemBlock(registry, new ItemBlock(goldOrePinkStone));
-		registerItemBlock(registry, new ItemBlock(diamondOrePinkStone));
-		registerItemBlock(registry, new ItemBlock(lapisOrePinkStone));
-
-		registerItemBlock(registry, new ItemBlockCraftingTab(cruxiteBlock, CreativeTabs.BUILDING_BLOCKS));
-		registerItemBlock(registry, new ItemBlockCraftingTab(uraniumBlock, CreativeTabs.BUILDING_BLOCKS));
-		registerItemBlock(registry, new ItemBlock(genericObject));
-		registerItemBlock(registry, new ItemSburbMachine(sburbMachine));
-		registerItemBlock(registry, new ItemMultiTexture(crockerMachine, crockerMachine,
-				(ItemStack input) -> BlockGristWidget.MachineType.values()[input.getItemDamage() % BlockGristWidget.MachineType.values().length].getUnlocalizedName()));
-		registerItemBlock(registry, new ItemBlock(blockComputerOff));
-		registerItemBlock(registry, new ItemTransportalizer(transportalizer));
+		registerItemBlock(registry, CRUXITE_ORE_STONE, ModItemGroup.LANDS);
+		registerItemBlock(registry, CRUXITE_ORE_NETHERRACK, ModItemGroup.LANDS);
+		registerItemBlock(registry, CRUXITE_ORE_COBBLESTONE, ModItemGroup.LANDS);
+		registerItemBlock(registry, CRUXITE_ORE_SANDSTONE, ModItemGroup.LANDS);
+		registerItemBlock(registry, CRUXITE_ORE_RED_SANDSTONE, ModItemGroup.LANDS);
+		registerItemBlock(registry, CRUXITE_ORE_END_STONE, ModItemGroup.LANDS);
+		registerItemBlock(registry, CRUXITE_ORE_PINK_STONE, ModItemGroup.LANDS);
+		registerItemBlock(registry, URANIUM_ORE_STONE, ModItemGroup.LANDS);
+		registerItemBlock(registry, URANIUM_ORE_NETHERRACK, ModItemGroup.LANDS);
+		registerItemBlock(registry, URANIUM_ORE_COBBLESTONE, ModItemGroup.LANDS);
+		registerItemBlock(registry, URANIUM_ORE_SANDSTONE, ModItemGroup.LANDS);
+		registerItemBlock(registry, URANIUM_ORE_RED_SANDSTONE, ModItemGroup.LANDS);
+		registerItemBlock(registry, URANIUM_ORE_END_STONE, ModItemGroup.LANDS);
+		registerItemBlock(registry, COAL_ORE_NETHERRACK, ModItemGroup.LANDS);
+		registerItemBlock(registry, COAL_ORE_PINK_STONE, ModItemGroup.LANDS);
+		registerItemBlock(registry, IRON_ORE_END_STONE, ModItemGroup.LANDS);
+		registerItemBlock(registry, IRON_ORE_SANDSTONE, ModItemGroup.LANDS);
+		registerItemBlock(registry, IRON_ORE_SANDSTONE_RED, ModItemGroup.LANDS);
+		registerItemBlock(registry, GOLD_ORE_SANDSTONE, ModItemGroup.LANDS);
+		registerItemBlock(registry, GOLD_ORE_SANDSTONE_RED, ModItemGroup.LANDS);
+		registerItemBlock(registry, GOLD_ORE_PINK_STONE, ModItemGroup.LANDS);
+		registerItemBlock(registry, REDSTONE_ORE_END_STONE, ModItemGroup.LANDS);
+		registerItemBlock(registry, QUARTZ_ORE_STONE, ModItemGroup.LANDS);
+		registerItemBlock(registry, LAPIS_ORE_PINK_STONE, ModItemGroup.LANDS);
+		registerItemBlock(registry, DIAMOND_ORE_PINK_STONE, ModItemGroup.LANDS);
 		
-		registerItemBlock(registry, new ItemPunchDesignix(punchDesignix));
-		registerItemBlock(registry, new ItemTotemLathe(totemlathe[0]));
-		registerItemBlock(registry, new ItemAlchemiter(alchemiter[0]));
-		registerItemBlock(registry, new ItemCruxtruder(cruxtruder));
-		registerItemBlock(registry, new ItemBlock(cruxtruderLid));
-		registerItemBlock(registry, cruxiteDowel);
+		registerItemBlock(registry, CRUXITE_BLOCK, ModItemGroup.MAIN);
+		registerItemBlock(registry, URANIUM_BLOCK, ModItemGroup.MAIN);
+		registerItemBlock(registry, GENERIC_OBJECT, ModItemGroup.MAIN);
+		
+		registerItemBlock(registry, BLUE_DIRT, ModItemGroup.LANDS);
+		registerItemBlock(registry, THOUGHT_DIRT, ModItemGroup.LANDS);
+		registerItemBlock(registry, COARSE_STONE, ModItemGroup.LANDS);
+		registerItemBlock(registry, COARSE_CHISELED, ModItemGroup.LANDS);
+		registerItemBlock(registry, SHADE_BRICKS, ModItemGroup.LANDS);
+		registerItemBlock(registry, SHADE_SMOOTH, ModItemGroup.LANDS);
+		registerItemBlock(registry, FROST_BRICKS, ModItemGroup.LANDS);
+		registerItemBlock(registry, FROST_TILE, ModItemGroup.LANDS);
+		registerItemBlock(registry, FROST_BRICKS_CHISELED, ModItemGroup.LANDS);
+		registerItemBlock(registry, CAST_IRON, ModItemGroup.LANDS);
+		registerItemBlock(registry, CAST_IRON_CHISELED, ModItemGroup.LANDS);
+		registerItemBlock(registry, MYCELIUM_BRICKS, ModItemGroup.LANDS);
+		registerItemBlock(registry, BLACK_STONE, ModItemGroup.LANDS);
+		registerItemBlock(registry, FLOWERY_MOSS_STONE, ModItemGroup.LANDS);
+		registerItemBlock(registry, FLOWERY_MOSS_BRICK, ModItemGroup.LANDS);
+		registerItemBlock(registry, COARSE_END_STONE, ModItemGroup.LANDS);
+		registerItemBlock(registry, END_GRASS, ModItemGroup.LANDS);
+		registerItemBlock(registry, CHALK, ModItemGroup.LANDS);
+		registerItemBlock(registry, CHALK_BRICKS, ModItemGroup.LANDS);
+		registerItemBlock(registry, CHALK_CHISELED, ModItemGroup.LANDS);
+		registerItemBlock(registry, CHALK_POLISHED, ModItemGroup.LANDS);
+		registerItemBlock(registry, PINK_STONE, ModItemGroup.LANDS);
+		registerItemBlock(registry, PINK_STONE_BRICKS, ModItemGroup.LANDS);
+		registerItemBlock(registry, PINK_STONE_CHISELED, ModItemGroup.LANDS);
+		registerItemBlock(registry, PINK_STONE_CRACKED, ModItemGroup.LANDS);
+		registerItemBlock(registry, PINK_STONE_MOSSY, ModItemGroup.LANDS);
+		registerItemBlock(registry, PINK_STONE_POLISHED, ModItemGroup.LANDS);
+		registerItemBlock(registry, DENSE_CLOUD, ModItemGroup.LANDS);
+		registerItemBlock(registry, DENSE_CLOUD_BRIGHT, ModItemGroup.LANDS);
+		registerItemBlock(registry, SUGAR_CUBE, ModItemGroup.LANDS);
+		
+		registerItemBlock(registry, GLOWING_LOG, ModItemGroup.LANDS);
+		registerItemBlock(registry, FROST_LOG, ModItemGroup.LANDS);
+		registerItemBlock(registry, RAINBOW_LOG, ModItemGroup.LANDS);
+		registerItemBlock(registry, END_LOG, ModItemGroup.LANDS);
+		registerItemBlock(registry, VINE_LOG, ModItemGroup.LANDS);
+		registerItemBlock(registry, FLOWERY_VINE_LOG, ModItemGroup.LANDS);
+		registerItemBlock(registry, DEAD_LOG, ModItemGroup.LANDS);
+		registerItemBlock(registry, PETRIFIED_LOG, ModItemGroup.LANDS);
+		registerItemBlock(registry, GLOWING_PLANKS, ModItemGroup.LANDS);
+		registerItemBlock(registry, FROST_PLANKS, ModItemGroup.LANDS);
+		registerItemBlock(registry, RAINBOW_PLANKS, ModItemGroup.LANDS);
+		registerItemBlock(registry, END_PLANKS, ModItemGroup.LANDS);
+		registerItemBlock(registry, DEAD_PLANKS, ModItemGroup.LANDS);
+		registerItemBlock(registry, TREATED_PLANKS, ModItemGroup.LANDS);
+		registerItemBlock(registry, FROST_LEAVES, ModItemGroup.LANDS);
+		registerItemBlock(registry, RAINBOW_LEAVES, ModItemGroup.LANDS);
+		registerItemBlock(registry, END_LEAVES, ModItemGroup.LANDS);
+		registerItemBlock(registry, RAINBOW_SAPLING, ModItemGroup.LANDS);
+		registerItemBlock(registry, END_SAPLING, ModItemGroup.LANDS);
+		
+		registerItemBlock(registry, BLOOD_ASPECT_LOG, ModItemGroup.LANDS);
+		registerItemBlock(registry, BREATH_ASPECT_LOG, ModItemGroup.LANDS);
+		registerItemBlock(registry, DOOM_ASPECT_LOG, ModItemGroup.LANDS);
+		registerItemBlock(registry, HEART_ASPECT_LOG, ModItemGroup.LANDS);
+		registerItemBlock(registry, HOPE_ASPECT_LOG, ModItemGroup.LANDS);
+		registerItemBlock(registry, LIFE_ASPECT_LOG, ModItemGroup.LANDS);
+		registerItemBlock(registry, LIGHT_ASPECT_LOG, ModItemGroup.LANDS);
+		registerItemBlock(registry, MIND_ASPECT_LOG, ModItemGroup.LANDS);
+		registerItemBlock(registry, RAGE_ASPECT_LOG, ModItemGroup.LANDS);
+		registerItemBlock(registry, SPACE_ASPECT_LOG, ModItemGroup.LANDS);
+		registerItemBlock(registry, TIME_ASPECT_LOG, ModItemGroup.LANDS);
+		registerItemBlock(registry, VOID_ASPECT_LOG, ModItemGroup.LANDS);
+		registerItemBlock(registry, BLOOD_ASPECT_PLANKS, ModItemGroup.LANDS);
+		registerItemBlock(registry, BREATH_ASPECT_PLANKS, ModItemGroup.LANDS);
+		registerItemBlock(registry, DOOM_ASPECT_PLANKS, ModItemGroup.LANDS);
+		registerItemBlock(registry, HEART_ASPECT_PLANKS, ModItemGroup.LANDS);
+		registerItemBlock(registry, HOPE_ASPECT_PLANKS, ModItemGroup.LANDS);
+		registerItemBlock(registry, LIFE_ASPECT_PLANKS, ModItemGroup.LANDS);
+		registerItemBlock(registry, LIGHT_ASPECT_PLANKS, ModItemGroup.LANDS);
+		registerItemBlock(registry, MIND_ASPECT_PLANKS, ModItemGroup.LANDS);
+		registerItemBlock(registry, RAGE_ASPECT_PLANKS, ModItemGroup.LANDS);
+		registerItemBlock(registry, SPACE_ASPECT_PLANKS, ModItemGroup.LANDS);
+		registerItemBlock(registry, TIME_ASPECT_PLANKS, ModItemGroup.LANDS);
+		registerItemBlock(registry, VOID_ASPECT_PLANKS, ModItemGroup.LANDS);
+		registerItemBlock(registry, BLOOD_ASPECT_LEAVES, ModItemGroup.LANDS);
+		registerItemBlock(registry, BREATH_ASPECT_LEAVES, ModItemGroup.LANDS);
+		registerItemBlock(registry, DOOM_ASPECT_LEAVES, ModItemGroup.LANDS);
+		registerItemBlock(registry, HEART_ASPECT_LEAVES, ModItemGroup.LANDS);
+		registerItemBlock(registry, HOPE_ASPECT_LEAVES, ModItemGroup.LANDS);
+		registerItemBlock(registry, LIFE_ASPECT_LEAVES, ModItemGroup.LANDS);
+		registerItemBlock(registry, LIGHT_ASPECT_LEAVES, ModItemGroup.LANDS);
+		registerItemBlock(registry, MIND_ASPECT_LEAVES, ModItemGroup.LANDS);
+		registerItemBlock(registry, RAGE_ASPECT_LEAVES, ModItemGroup.LANDS);
+		registerItemBlock(registry, SPACE_ASPECT_LEAVES, ModItemGroup.LANDS);
+		registerItemBlock(registry, TIME_ASPECT_LEAVES, ModItemGroup.LANDS);
+		registerItemBlock(registry, VOID_ASPECT_LEAVES, ModItemGroup.LANDS);
+		registerItemBlock(registry, BLOOD_ASPECT_SAPLING, ModItemGroup.LANDS);
+		registerItemBlock(registry, BREATH_ASPECT_SAPLING, ModItemGroup.LANDS);
+		registerItemBlock(registry, DOOM_ASPECT_SAPLING, ModItemGroup.LANDS);
+		registerItemBlock(registry, HEART_ASPECT_SAPLING, ModItemGroup.LANDS);
+		registerItemBlock(registry, HOPE_ASPECT_SAPLING, ModItemGroup.LANDS);
+		registerItemBlock(registry, LIFE_ASPECT_SAPLING, ModItemGroup.LANDS);
+		registerItemBlock(registry, LIGHT_ASPECT_SAPLING, ModItemGroup.LANDS);
+		registerItemBlock(registry, MIND_ASPECT_SAPLING, ModItemGroup.LANDS);
+		registerItemBlock(registry, RAGE_ASPECT_SAPLING, ModItemGroup.LANDS);
+		registerItemBlock(registry, SPACE_ASPECT_SAPLING, ModItemGroup.LANDS);
+		registerItemBlock(registry, TIME_ASPECT_SAPLING, ModItemGroup.LANDS);
+		registerItemBlock(registry, VOID_ASPECT_SAPLING, ModItemGroup.LANDS);
+		
+		registerItemBlock(registry, GLOWING_MUSHROOM, ModItemGroup.LANDS);
+		registerItemBlock(registry, DESERT_BUSH, ModItemGroup.LANDS);
+		registerItemBlock(registry, BLOOMING_CACTUS, ModItemGroup.LANDS);
+		registerItemBlock(registry, PETRIFIED_GRASS, ModItemGroup.LANDS);
+		registerItemBlock(registry, PETRIFIED_POPPY, ModItemGroup.LANDS);
+		registerItemBlock(registry, STRAWBERRY, ModItemGroup.LANDS);
+		
+		registerItemBlock(registry, LAYERED_SAND, ModItemGroup.LANDS);
+		registerItemBlock(registry, LAYERED_RED_SAND, ModItemGroup.LANDS);
+		registerItemBlock(registry, GLOWY_GOOP, ModItemGroup.LANDS);
+		registerItemBlock(registry, COAGULATED_BLOOD, ModItemGroup.LANDS);
+		registerItemBlock(registry, VEIN, ModItemGroup.LANDS);
+		registerItemBlock(registry, VEIN_CORNER, ModItemGroup.LANDS);
+		registerItemBlock(registry, VEIN_CORNER_INVERTED, ModItemGroup.LANDS);
+		
+		registerItemBlock(registry, COARSE_STONE_STAIRS, ModItemGroup.LANDS);
+		registerItemBlock(registry, SHADE_BRICK_STAIRS, ModItemGroup.LANDS);
+		registerItemBlock(registry, FROST_BRICK_STAIRS, ModItemGroup.LANDS);
+		registerItemBlock(registry, CAST_IRON_STAIRS, ModItemGroup.LANDS);
+		registerItemBlock(registry, MYCELIUM_BRICK_STAIRS, ModItemGroup.LANDS);
+		registerItemBlock(registry, CHALK_STAIRS, ModItemGroup.LANDS);
+		registerItemBlock(registry, CHALK_BRICK_STAIRS, ModItemGroup.LANDS);
+		registerItemBlock(registry, PINK_STONE_BRICK_STAIRS, ModItemGroup.LANDS);
+		registerItemBlock(registry, RAINBOW_PLANKS_STAIRS, ModItemGroup.LANDS);
+		registerItemBlock(registry, END_PLANKS_STAIRS, ModItemGroup.LANDS);
+		registerItemBlock(registry, DEAD_PLANKS_STAIRS, ModItemGroup.LANDS);
+		registerItemBlock(registry, TREATED_PLANKS_STAIRS, ModItemGroup.LANDS);
+		registerItemBlock(registry, CHALK_SLAB, ModItemGroup.LANDS);
+		registerItemBlock(registry, CHALK_BRICK_SLAB, ModItemGroup.LANDS);
+		registerItemBlock(registry, PINK_STONE_BRICK_SLAB, ModItemGroup.LANDS);
+		registerItemBlock(registry, RAINBOW_PLANKS_SLAB, ModItemGroup.LANDS);
+		registerItemBlock(registry, END_PLANKS_SLAB, ModItemGroup.LANDS);
+		registerItemBlock(registry, DEAD_PLANKS_SLAB, ModItemGroup.LANDS);
+		registerItemBlock(registry, TREATED_PLANKS_SLAB, ModItemGroup.LANDS);
+		
+		registerItemBlock(registry, new ItemCruxtruder(CRUXTRUDER_TUBE, new Item.Properties().group(ModItemGroup.MAIN)));
+		registerItemBlock(registry, CRUXTRUDER_LID, ModItemGroup.MAIN);
+		registerItemBlock(registry, new ItemTotemLathe(TOTEM_LATHE_CARD_SLOT, new Item.Properties().group(ModItemGroup.MAIN)));
+		registerItemBlock(registry, new ItemAlchemiter(ALCHEMITER_TOTEM_PAD, new Item.Properties().group(ModItemGroup.MAIN)));
+		registerItemBlock(registry, new ItemPunchDesignix(PUNCH_DESIGNIX_SLOT, new Item.Properties().group(ModItemGroup.MAIN)));
+		registerItemBlock(registry, new ItemMiniCruxtruder(MINI_CRUXTRUDER, new Item.Properties().group(ModItemGroup.MAIN)));
+		registerItemBlock(registry, MINI_TOTEM_LATHE, ModItemGroup.MAIN);
+		registerItemBlock(registry, MINI_ALCHEMITER, ModItemGroup.MAIN);
+		registerItemBlock(registry, MINI_PUNCH_DESIGNIX, ModItemGroup.MAIN);
 		/*registerItemBlock(registry, new ItemBlock(holopad));
 		registerItemBlock(registry, new ItemJumperBlock(jumperBlockExtension[0]));*/
-		registerItemBlock(registry, new ItemBlock(blender));
-		registerItemBlock(registry, new ItemBlock(chessboard));
-		registerItemBlock(registry, new ItemBlock(frogStatueReplica));
-
-		registerItemBlock(registry, new ItemBlockLayered(layeredSand));
-		registerItemBlock(registry, new ItemMultiTexture(coloredDirt, coloredDirt,
-				(ItemStack input) -> BlockColoredDirt.BlockType.values()[input.getItemDamage() % BlockColoredDirt.BlockType.values().length].getName()));
-		registerItemBlock(registry, new ItemBlock(petrifiedLog));
-		registerItemBlock(registry, new ItemBlock(petrifiedPoppy));
-		registerItemBlock(registry, new ItemBlock(petrifiedGrass));
-		registerItemBlock(registry, new ItemBlock(bloomingCactus));
-		registerItemBlock(registry, new ItemBlock(desertBush));
-		registerItemBlock(registry, new ItemBlock(glowingMushroom));
-		registerItemBlock(registry, new ItemBlock(glowingLog));
-		registerItemBlock(registry, new ItemBlockCraftingTab(glowingPlanks, CreativeTabs.BUILDING_BLOCKS));
-		registerItemBlock(registry, new ItemBlock(frostPlanks));
-		registerItemBlock(registry, new ItemMultiTexture(stone, stone,
-				(ItemStack input) -> BlockMinestuckStone.BlockType.getFromMeta(input.getMetadata()).getUnlocalizedName()));
-		registerItemBlock(registry, new ItemBlock(glowyGoop));
-		registerItemBlock(registry, new ItemBlock(coagulatedBlood));
-		registerItemBlock(registry, new ItemBlockCraftingTab(coarseStoneStairs, CreativeTabs.BUILDING_BLOCKS));
-		registerItemBlock(registry, new ItemBlockCraftingTab(shadeBrickStairs, CreativeTabs.BUILDING_BLOCKS));
-		registerItemBlock(registry, new ItemBlockCraftingTab(frostBrickStairs, CreativeTabs.BUILDING_BLOCKS));
-		registerItemBlock(registry, new ItemBlockCraftingTab(castIronStairs, CreativeTabs.BUILDING_BLOCKS));
-		registerItemBlock(registry, new ItemBlockCraftingTab(myceliumBrickStairs, CreativeTabs.BUILDING_BLOCKS));
 		
-
-		registerItemBlock(registry, new ItemBlock(vein));
-		registerItemBlock(registry, new ItemBlock(veinCorner));
-		registerItemBlock(registry, new ItemBlock(veinCornerInverted));
-
-		registerItemBlock(registry, new ItemMultiTexture(log, log,
-				(ItemStack input) -> BlockMinestuckLog1.BlockType.values()[input.getItemDamage() % BlockMinestuckLog1.BlockType.values().length].getUnlocalizedName()));
-		registerItemBlock(registry, new ItemMultiTexture(leaves1, leaves1,
-				(ItemStack input) -> BlockMinestuckLeaves1.BlockType.values()[input.getItemDamage() % BlockMinestuckLeaves1.BlockType.values().length].getUnlocalizedName()));
-		registerItemBlock(registry, new ItemMultiTexture(planks, planks,
-				(ItemStack input) -> BlockMinestuckPlanks.BlockType.values()[Math.min(input.getItemDamage(), BlockMinestuckPlanks.BlockType.values().length - 1)].getUnlocalizedName()));
-				//Temporarily changed to this mechanism for handling larger inputs so that any leftover blocks at value 15 will convert properly.
+		registerItemBlock(registry, COMPUTER_OFF, ModItemGroup.MAIN);
+		registerItemBlock(registry, LAPTOP_OFF, ModItemGroup.MAIN);
+		registerItemBlock(registry, CROCKERTOP_OFF, ModItemGroup.MAIN);
+		registerItemBlock(registry, HUBTOP_OFF, ModItemGroup.MAIN);
+		registerItemBlock(registry, LUNCHTOP_OFF, ModItemGroup.MAIN);
+		registerItemBlock(registry, new ItemTransportalizer(TRANSPORTALIZER, new Item.Properties().group(ModItemGroup.MAIN)));
+		registerItemBlock(registry, GRIST_WIDGET, ModItemGroup.MAIN);
+		registerItemBlock(registry, URANIUM_COOKER, ModItemGroup.MAIN);
 		
-		registerItemBlock(registry, new ItemMultiTexture(aspectSapling, aspectSapling,
-				(ItemStack input) -> BlockAspectSapling.BlockType.values()[input.getItemDamage() % BlockAspectSapling.BlockType.values().length].getUnlocalizedName()));
+		registerItemBlock(registry, new ItemDowel(CRUXITE_DOWEL, new Item.Properties().group(ModItemGroup.MAIN)));
 		
-		registerItemBlock(registry, new ItemBlock(rainbowSapling));
+		registerItemBlock(registry, GOLD_SEEDS, ModItemGroup.MAIN);	//TODO Gold seeds item
+		registerItemBlock(registry, WOODEN_CACTUS, ModItemGroup.MAIN);
 		
-		registerItemBlock(registry, new ItemMultiTexture(aspectLog1, aspectLog1,
-				(ItemStack input) -> BlockAspectLog.BlockType.values()[input.getItemDamage() % BlockAspectLog.BlockType.values().length].getUnlocalizedName()));
-		registerItemBlock(registry, new ItemMultiTexture(aspectLog2, aspectLog2,
-				(ItemStack input) -> BlockAspectLog2.BlockType.values()[input.getItemDamage() % BlockAspectLog2.BlockType.values().length].getUnlocalizedName()));
-		registerItemBlock(registry, new ItemMultiTexture(aspectLog3, aspectLog3,
-				(ItemStack input) -> BlockAspectLog3.BlockType.values()[input.getItemDamage() % BlockAspectLog3.BlockType.values().length].getUnlocalizedName()));
+		registerItemBlock(registry, new ItemBlock(APPLE_CAKE, new Item.Properties().group(ModItemGroup.MAIN).maxStackSize(1)));
+		registerItemBlock(registry, new ItemBlock(BLUE_CAKE, new Item.Properties().group(ModItemGroup.MAIN).maxStackSize(1)));
+		registerItemBlock(registry, new ItemBlock(COLD_CAKE, new Item.Properties().group(ModItemGroup.MAIN).maxStackSize(1)));
+		registerItemBlock(registry, new ItemBlock(RED_CAKE, new Item.Properties().group(ModItemGroup.MAIN).maxStackSize(1)));
+		registerItemBlock(registry, new ItemBlock(HOT_CAKE, new Item.Properties().group(ModItemGroup.MAIN).maxStackSize(1)));
+		registerItemBlock(registry, new ItemBlock(REVERSE_CAKE, new Item.Properties().group(ModItemGroup.MAIN).maxStackSize(1)));
+		registerItemBlock(registry, new ItemBlock(FUCHSIA_CAKE, new Item.Properties().group(ModItemGroup.MAIN).maxStackSize(1)));
 		
-		registerItemBlock(registry, new ItemMultiTexture(blockLaptopOff, blockLaptopOff,
-				(ItemStack input) -> BlockVanityLaptopOff.BlockType.values()[input.getItemDamage() % BlockVanityLaptopOff.BlockType.values().length].getUnlocalizedName()));
+		registerItemBlock(registry, PRIMED_TNT, ModItemGroup.MAIN);
+		registerItemBlock(registry, UNSTABLE_TNT, ModItemGroup.MAIN);
+		registerItemBlock(registry, INSTANT_TNT, ModItemGroup.MAIN);
+		registerItemBlock(registry, WOODEN_EXPLOSIVE_BUTTON, ModItemGroup.MAIN);
+		registerItemBlock(registry, STONE_EXPLOSIVE_BUTTON, ModItemGroup.MAIN);
 		
-		registerItemBlock(registry, new ItemBlock(woodenCactus));
-		registerItemBlock(registry, new ItemBlock(sugarCube));
-		registerItemBlock(registry, new ItemBlock(appleCake)).setMaxStackSize(1);
-		registerItemBlock(registry, new ItemBlock(blueCake)).setMaxStackSize(1);
-		registerItemBlock(registry, new ItemBlock(coldCake)).setMaxStackSize(1);
-		registerItemBlock(registry, new ItemBlock(redCake)).setMaxStackSize(1);
-		registerItemBlock(registry, new ItemBlock(hotCake)).setMaxStackSize(1);
-		registerItemBlock(registry, new ItemBlock(reverseCake)).setMaxStackSize(1);
-		registerItemBlock(registry, new ItemBlock(fuchsiaCake)).setMaxStackSize(1);
-		
-		registerItemBlock(registry, new ItemBlock(floweryMossBrick));
-		registerItemBlock(registry, new ItemBlock(floweryMossStone));
-		registerItemBlock(registry, new ItemBlock(treatedPlanks));
-		registerItemBlock(registry, new ItemBlock(coarseEndStone));
-		registerItemBlock(registry, new ItemBlock(endLog));
-		registerItemBlock(registry, new ItemBlock(endLeaves));
-		registerItemBlock(registry, new ItemBlock(endPlanks));
-		registerItemBlock(registry, new ItemBlock(endSapling));
-		registerItemBlock(registry, new ItemBlock(endGrass));
-		registerItemBlock(registry, new ItemBlock(strawberry));
-		registerItemBlock(registry, new ItemBlock(deadLog));
-		registerItemBlock(registry, new ItemBlock(deadPlanks));
-		registerItemBlock(registry, new ItemBlock(chalk));
-		registerItemBlock(registry, new ItemBlock(chalkBricks));
-		registerItemBlock(registry, new ItemBlock(chalkChisel));
-		registerItemBlock(registry, new ItemBlock(chalkPolish));
-		registerItemBlock(registry, new ItemBlock(pinkStoneSmooth));
-		registerItemBlock(registry, new ItemBlock(pinkStoneBricks));
-		registerItemBlock(registry, new ItemBlock(pinkStoneChisel));
-		registerItemBlock(registry, new ItemBlock(pinkStoneCracked));
-		registerItemBlock(registry, new ItemBlock(pinkStoneMossy));
-		registerItemBlock(registry, new ItemBlock(pinkStonePolish));
-		registerItemBlock(registry, new ItemBlock(denseCloud) {
-			@Override
-			public int getMetadata(int damage)
-			{
-				return damage;
-			}
-		});
-
-		for(EnumSlabStairMaterial mat : EnumSlabStairMaterial.values())
-		{
-			registerItemBlock(registry, new ItemBlock(mat.getStair()));
-			registerItemBlock(registry, mat.getSlabItem());
-		}
-
-		registerItemBlock(registry, new ItemBlock(primedTnt));
-		registerItemBlock(registry, new ItemBlock(unstableTnt));
-		registerItemBlock(registry, new ItemBlock(instantTnt));
-		registerItemBlock(registry, new ItemBlock(woodenExplosiveButton));
-		registerItemBlock(registry, new ItemBlock(stoneExplosiveButton));
-		
-		registerItemBlock(registry, new ItemBlock(uraniumCooker));
+		registerItemBlock(registry, BLENDER, ModItemGroup.MAIN);
+		registerItemBlock(registry, CHESSBOARD, ModItemGroup.MAIN);
+		registerItemBlock(registry, MINI_FROG_STATUE, ModItemGroup.MAIN);
+		registerItemBlock(registry, GLOWYSTONE_WIRE, ModItemGroup.MAIN);	//TODO Glowystone wire item
 		
 		//hammers
 		registry.register(clawHammer.setRegistryName("claw_hammer"));
@@ -563,6 +614,9 @@ public class MinestuckItems
 			minestuckBucket.addBlock(block.getDefaultState());
 		}*/
 		
+		armorPrismarine.repairMaterial = new ItemStack(Items.PRISMARINE_SHARD);
+		((ItemMinestuckSeedFood) strawberryChunk).setPlant(strawberryStem.getDefaultState());
+		
 		toolUranium.setRepairItem(new ItemStack(rawUranium));
 		ItemWeapon.addToolMaterial("pickaxe", Arrays.asList(Material.IRON, Material.ANVIL, Material.ROCK));
 		ItemWeapon.addToolMaterial("axe", Arrays.asList(Material.WOOD, Material.PLANTS, Material.VINE));
@@ -570,9 +624,21 @@ public class MinestuckItems
 		ItemWeapon.addToolMaterial("sword", Arrays.asList(Material.WEB));
 		ItemWeapon.addToolMaterial("sickle", Arrays.asList(Material.WEB, Material.LEAVES, Material.PLANTS, Material.VINE));
 	}
-
+	
+	private static Item registerItemBlock(IForgeRegistry<Item> registry, Block block)
+	{
+		return registerItemBlock(registry, new ItemBlock(block, new Item.Properties()));
+	}
+	
+	private static Item registerItemBlock(IForgeRegistry<Item> registry, Block block, ItemGroup group)
+	{
+		return registerItemBlock(registry, new ItemBlock(block, new Item.Properties().group(group)));
+	}
+	
 	private static Item registerItemBlock(IForgeRegistry<Item> registry, ItemBlock item)
 	{
+		if(item.getBlock().getRegistryName() == null)
+			throw new IllegalArgumentException(String.format("The provided itemblock %s has a block without a registry name!", item.getBlock()));
 		registry.register(item.setRegistryName(item.getBlock().getRegistryName()));
 		return item;
 	}
