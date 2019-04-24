@@ -4,7 +4,9 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -18,9 +20,9 @@ public class ItemPogoWeapon extends ItemWeapon
 {
 	private double pogoMotion;
 	
-	public ItemPogoWeapon(int maxUses, double damageVsEntity, double weaponSpeed, int enchantability, String name, double pogoMotion)
+	public ItemPogoWeapon(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, double pogoMotion, Properties builder)
 	{
-		super(maxUses, damageVsEntity, weaponSpeed, enchantability, name);
+		super(tier, attackDamageIn, attackSpeedIn, efficiency, builder);
 		this.pogoMotion = pogoMotion;
 	}
 	
@@ -39,26 +41,24 @@ public class ItemPogoWeapon extends ItemWeapon
 	}
 	
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand,
-									  EnumFacing facing, float hitX, float hitY, float hitZ)
+	public EnumActionResult onItemUse(ItemUseContext context)
 	{
-		return onItemUse(player, worldIn, pos, hand, facing, getPogoMotion(player.getHeldItem(hand)));
+		return onItemUse(context.getPlayer(), context.getWorld(), context.getPos(), context.getItem(), context.getFace(), getPogoMotion(context.getItem()));
 	}
 	
 	public static void hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase player, double pogoMotion)
 	{
-		if (player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder() && !player.isInWater() && !player.isRiding())
+		if (player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder() && !player.isInWater() && player.getRidingEntity() == null)
 		{
-			double knockbackModifier = 1D - target.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getAttributeValue();
+			double knockbackModifier = 1D - target.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getValue();
 			target.motionY = Math.max(target.motionY, knockbackModifier * Math.min(pogoMotion * 2, Math.abs(player.motionY) + target.motionY + pogoMotion));
 			player.motionY = 0;
 			player.fallDistance = 0;
 		}
 	}
 	
-	public static EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, double pogoMotion)
+	public static EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, ItemStack stack, EnumFacing facing, double pogoMotion)
 	{
-		ItemStack stack = player.getHeldItem(hand);
 		if (worldIn.getBlockState(pos).getBlock() != Blocks.AIR)
 		{
 			double velocity = Math.max(player.motionY, Math.min(pogoMotion * 2, Math.abs(player.motionY) + pogoMotion));
