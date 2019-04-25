@@ -1,5 +1,6 @@
 package com.mraof.minestuck.item;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -14,11 +15,15 @@ import java.util.function.Supplier;
 public class ModItemTypes
 {
 	public static final IItemTier EMERALD_TIER = new ModItemTier(3, 1220, 8.0F, 3.0F, 12, () -> Ingredient.fromItems(Items.EMERALD));
-	public static final IItemTier URANIUM_TIER = new ModItemTier(2, 512, 5.0F, 2.0F, 15, () -> Ingredient.fromItems(MinestuckItems.rawUranium));
+	public static final IItemTier URANIUM_TIER = new ModItemTier(2, 512, 5.0F, 4.0F, 5, () -> Ingredient.fromItems(MinestuckItems.rawUranium));
 	public static final IItemTier POGO_TIER = new ModItemTier(1, 400, 2.0F, 2.0F, 8, () -> Ingredient.fromItems(Items.SLIME_BALL));
-	public static final IItemTier BOOK_TIER = new ModItemTier(0, 250, 2.0F, 2.0F, 15, () -> Ingredient.fromItems(Items.BOOK));
+	public static final IItemTier BOOK_TIER = new ModItemTier(0, 250, 1.0F, 2.0F, 15, () -> Ingredient.fromItems(Items.BOOK));
 	public static final IItemTier REGI_TIER = new ModItemTier(3, 812, 8.0F, 3.0F, 10, () -> Ingredient.EMPTY);
-	public static final IItemTier RUBY_TIER = new ModItemTier(3, 2000, 8.0F, 4.0F, 20, () -> Ingredient.EMPTY);
+	public static final IItemTier RUBY_TIER = new ModItemTier(3, 2000, 10.0F, 4.0F, 16, () -> Ingredient.EMPTY);
+	public static final IItemTier ZILLYHOO_TIER = new ModItemTier(4, 3000, 15.0F, 5.0F, 25, () -> Ingredient.EMPTY);
+	public static final IItemTier SBAHJ_TIER = new ModItemTier(0, 59, 1.0F, -1.0F, 5, () -> Ingredient.EMPTY);
+	public static final IItemTier CACTUS_TIER = new ModItemTier(0, 104, 2.0F, 1.0F, 10, () -> Ingredient.fromItems(Blocks.CACTUS));
+	public static final IItemTier MEAT_TIER = new ModItemTier(0, 175, 1.0F, 0.0F, 5, () -> Ingredient.EMPTY);
 	
 	public static final IArmorMaterial PRISMARINE_ARMOR = new ModArmorMaterial("minestuck:prismarine", 20, new int[]{3, 7, 6, 2}, 15, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0F, () -> Ingredient.fromItems(Items.PRISMARINE_SHARD));
 	

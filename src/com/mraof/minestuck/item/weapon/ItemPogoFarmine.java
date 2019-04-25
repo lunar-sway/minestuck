@@ -1,27 +1,18 @@
 package com.mraof.minestuck.item.weapon;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class ItemPogoFarmine extends ItemFarmine
 {
 	private double pogoMotion;
 	
-	public ItemPogoFarmine(ToolMaterial material, int maxUses, double damageVsEntity, double weaponSpeed, int enchantability, String name, int r, int t, double pogoMotion)
+	public ItemPogoFarmine(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, int radius, int terminus, double pogoMotion, Properties builder)
 	{
-		super(material, maxUses, damageVsEntity, weaponSpeed, enchantability, name, r, t);
-		this.pogoMotion = pogoMotion;
-	}
-	
-	public ItemPogoFarmine(int maxUses, double damageVsEntity, double weaponSpeed, int enchantability, String name, int r, int t, double pogoMotion)
-	{
-		super(maxUses, damageVsEntity, weaponSpeed, enchantability, name, r, t);
+		super(tier, attackDamageIn, attackSpeedIn, efficiency, radius, terminus, builder);
 		this.pogoMotion = pogoMotion;
 	}
 	
@@ -34,9 +25,8 @@ public class ItemPogoFarmine extends ItemFarmine
 	}
 	
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand,
-									  EnumFacing facing, float hitX, float hitY, float hitZ)
+	public EnumActionResult onItemUse(ItemUseContext context)
 	{
-		return ItemPogoWeapon.onItemUse(player, worldIn, pos, hand, facing, pogoMotion);
+		return ItemPogoWeapon.onItemUse(context.getPlayer(), context.getWorld(), context.getPos(), context.getItem(), context.getFace(), pogoMotion);
 	}
 }

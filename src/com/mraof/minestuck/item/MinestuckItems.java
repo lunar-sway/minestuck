@@ -38,33 +38,33 @@ public class MinestuckItems
 	public static Item REGI_HAMMER;
 	public static Item FEAR_NO_ANVIL;
 	public static Item MELT_MASHER;
-	public static Item qEHammerAxe = new ItemPogoFarmine(6114, 11.0D, -2.8D, 40, "qEHammerAxe", Integer.MAX_VALUE, 200, 0.7).setTool("pickaxe", 3, 9.0F).setTool("shovel", 3, 9.0F).setTool("sickle", 3, 7.0F).setTool("axe", 3, 12.0F);
-	public static Item dDEHammerAxe = new ItemSbahjEEEE(6114, 11.01D, -2.8D, 40, "dDEHammerAxe", 0.2);
-	public static Item zillyhooHammer = new ItemWeapon(3000, 11.0D, -2.8D, 30, "zillyhooHammer").setTool("pickaxe", 4, 15.0F);
-	public static Item popamaticVrillyhoo = new ItemRandomWeapon(3000, 8.0D, -2.8D, 30, "popamaticVrillyhoo").setTool("pickaxe", 4, 15.0F);
-	public static Item scarletZillyhoo = new ItemFireWeapon(2000, 11.0D, -2.8D, 16, "scarletZillyhoo", 50).setTool("pickaxe", 3, 4.0F);
-	public static Item mwrthwl = new ItemWeapon(2000, 10.5D, -2.8D, 16, "mwrthwl").setTool("pickaxe", 3, 4.0F);
+	public static Item Q_E_HAMMER_AXE;
+	public static Item D_D_E_HAMMER_AXE;
+	public static Item ZILLYHOO_HAMMER;
+	public static Item POPAMATIC_VRILLYHOO;
+	public static Item SCARLET_ZILLYHOO;
+	public static Item MWRTHWL;
 	//blades
-	public static Item sord = new ItemSord(59, 2, -2.4D, 5, "sord");
-	public static Item cactusCutlass = new ItemWeapon(104, 4, -2.4D, 10, "cactaceaeCutlass").setTool("sword", 0, 15.0F);	//The sword harvestTool is only used against webs, hence the high efficiency.
-	public static Item steakSword = new ItemConsumableWeapon(250, 4, -2.4D, 5, "steakSword", 8, 1F);
-	public static Item beefSword = new ItemConsumableWeapon(175, 2, -2.4D, 5, "beefSword", 3, 0.8F, 75);
-	public static Item irradiatedSteakSword = new ItemConsumableWeapon(150, 2, -2.4D, 5, "irradiatedSteakSword", 4, 0.4F, 25).setPotionEffect(new PotionEffect(MobEffects.WITHER, 100, 1), 0.9F);
-	public static Item katana = new ItemWeapon(250, 5, -2.4D, 15, "ninjaSword").setTool("sword", 0, 15.0F);
-	public static Item unbreakableKatana = new ItemWeapon(2200, 7, -2.4D, 20, "katana").setTool("sword", 0, 15.0F);    //Not actually unbreakable
-	public static Item firePoker = new ItemFireWeapon(250, 6, -2.4D, 15, "firePoker", 30).setTool("sword", 0, 15.0F);
-	public static Item hotHandle = new ItemFireWeapon(350, 5, -2.4D, 15, "hotHandle", 10).setTool("sword", 0, 15.0F);
-	public static Item caledscratch = new ItemWeapon(1561, 6, -2.4D, 30, "caledscratch").setTool("sword", 0, 15.0F);
-	public static Item caledfwlch = new ItemWeapon(1025, 6, -2.4D, 30, "caledfwlch").setTool("sword", 0, 15.0F);
-	public static Item royalDeringer = new ItemWeapon(1561, 7, -2.4D, 30, "royalDeringer").setTool("sword", 0, 15.0F);
-	public static Item claymore = new ItemWeapon(600, 7D, -2.6D, 15, "claymore").setTool("sword", 0, 15.0F);
-	public static Item zillywairCutlass = new ItemWeapon(2500, 8, -2.4D, 30, "zillywairCutlass").setTool("sword", 0, 15.0F);
-	public static Item regisword = new ItemWeapon(812, 6, -2.4D, 10, "regisword").setTool("sword", 0, 15.0F);
-	public static Item scarletRibbitar = new ItemWeapon(2000, 7, -2.4D, 30, "scarletRibbitar").setTool("sword", 0, 15.0F);
-	public static Item doggMachete = new ItemWeapon(1000, 5, -2.4D, 30, "doggMachete").setTool("sword", 0, 15.0F);
-	public static Item cobaltSabre = new ItemFireWeapon(300, 7, -2.4D, 10, "cobaltSabre", 30).setTool("sword", 0, 15.0F);
-	public static Item quantumSabre = new ItemPotionWeapon(toolUranium, 600, 8, -2.4D, 5, "quantumSabre", new PotionEffect(MobEffects.WITHER, 100, 1)).setTool("sword", 0, 15.0F);
-	public static Item shatterBeacon = new ItemPotionWeapon(1850, 10, -2.4D, 35, "shatterBeacon", ItemPotionWeapon.randomPotionEffect(), false).setTool("sword", 0, 15.0f);
+	public static Item SORD;
+	public static Item CACTUS_CUTLASS;
+	public static Item STEAK_SWORD;
+	public static Item BEEF_SWORD;
+	public static Item IRRADIATED_STEAK_SWORD;
+	public static Item KATANA;
+	public static Item UNBREAKABLE_KATANA;
+	public static Item FIRE_POKER;
+	public static Item HOT_HANDLE;
+	public static Item CALEDSCRATCH;
+	public static Item CALEDFWLCH;
+	public static Item ROYAL_DERINGER;
+	public static Item CLAYMORE;
+	public static Item ZILLYWAIR_CUTLASS;
+	public static Item REGISWORD;
+	public static Item SCARLET_RIBBITAR;
+	public static Item DOGG_MACHETE;
+	public static Item COBALT_SABRE;
+	public static Item QUAMTUM_SABRE;
+	public static Item SHATTER_BEACON;
 	//axes
 	public static Item batleacks = new ItemSord(64, 4, -3.5D, 5, "batleacks");
 	public static Item copseCrusher = new ItemFarmine(400, 6.0D, -3.0D, 20, "copseCrusher", Integer.MAX_VALUE, 20).setTool("axe", 2, 6.0F);
@@ -428,42 +428,42 @@ public class MinestuckItems
 		
 		//hammers
 		registry.register(CLAW_HAMMER = new ItemWeapon(ItemTier.IRON, 2, -2.4F, 1.0F, new Item.Properties().defaultMaxDamage(131).addToolType(ToolType.PICKAXE, 0).group(ModItemGroup.WEAPONS)).setRegistryName("claw_hammer"));
-		registry.register(SLEDGE_HAMMER = new ItemWeapon(ItemTier.IRON, 4, -2.8F, 4.0F, new Item.Properties().defaultMaxDamage(250).addToolType(ToolType.PICKAXE, 2).group(ModItemGroup.WEAPONS)).setRegistryName("sledge_hammer"));
+		registry.register(SLEDGE_HAMMER = new ItemWeapon(ItemTier.IRON, 4, -2.8F, 4.0F, new Item.Properties().addToolType(ToolType.PICKAXE, 2).group(ModItemGroup.WEAPONS)).setRegistryName("sledge_hammer"));
 		registry.register(BLACKSMITH_HAMMER = new ItemWeapon(ItemTier.IRON, 5, -2.8F, 3.5F, new Item.Properties().defaultMaxDamage(450).addToolType(ToolType.PICKAXE, 2).group(ModItemGroup.WEAPONS)).setRegistryName("blacksmith_hammer"));
-		registry.register(POGO_HAMMER = new ItemPogoWeapon(ModItemTypes.POGO_TIER, 5, -2.8F, 2.0F, 0.7, new Item.Properties().defaultMaxDamage(400).addToolType(ToolType.PICKAXE, 1).group(ModItemGroup.WEAPONS)).setRegistryName("pogo_hammer"));
-		registry.register(TELESCOPIC_SASSACRUSHER = new ItemWeapon(ModItemTypes.BOOK_TIER, 7, -2.9F, 5.0F, new Item.Properties().defaultMaxDamage(1024).addToolType(ToolType.PICKAXE, 2).group(ModItemGroup.WEAPONS)).setRegistryName("telescopic_sassacrusher"));
-		registry.register(REGI_HAMMER = new ItemWeapon(ModItemTypes.REGI_TIER, 3, -2.4F, 8.0F, new Item.Properties().defaultMaxDamage(812).addToolType(ToolType.PICKAXE, 2).group(ModItemGroup.WEAPONS)).setRegistryName("regi_hammer"));
-		registry.register(FEAR_NO_ANVIL = new ItemPotionWeapon(ModItemTypes.RUBY_TIER, 6, -2.8F, 7.0F, new PotionEffect(MobEffects.SLOWNESS, 100, 3), new Item.Properties().defaultMaxDamage(2048).addToolType(ToolType.PICKAXE, 3).group(ModItemGroup.WEAPONS)).setRegistryName("fear_no_anvil"));
+		registry.register(POGO_HAMMER = new ItemPogoWeapon(ModItemTypes.POGO_TIER, 5, -2.8F, 2.0F, 0.7, new Item.Properties().addToolType(ToolType.PICKAXE, 1).group(ModItemGroup.WEAPONS)).setRegistryName("pogo_hammer"));
+		registry.register(TELESCOPIC_SASSACRUSHER = new ItemWeapon(ModItemTypes.BOOK_TIER, 8, -2.9F, 5.0F, new Item.Properties().defaultMaxDamage(1024).addToolType(ToolType.PICKAXE, 2).group(ModItemGroup.WEAPONS)).setRegistryName("telescopic_sassacrusher"));
+		registry.register(REGI_HAMMER = new ItemWeapon(ModItemTypes.REGI_TIER, 3, -2.4F, 8.0F, new Item.Properties().addToolType(ToolType.PICKAXE, 2).group(ModItemGroup.WEAPONS)).setRegistryName("regi_hammer"));
+		registry.register(FEAR_NO_ANVIL = new ItemPotionWeapon(ModItemTypes.RUBY_TIER, 6, -2.8F, 7.0F, new PotionEffect(MobEffects.SLOWNESS, 100, 3), new Item.Properties().addToolType(ToolType.PICKAXE, 3).group(ModItemGroup.WEAPONS)).setRegistryName("fear_no_anvil"));
 		registry.register(MELT_MASHER = new ItemFireWeapon(ModItemTypes.RUBY_TIER, 6, -2.8F, 12.0F, 25, new Item.Properties().defaultMaxDamage(1413).addToolType(ToolType.PICKAXE, 4).group(ModItemGroup.WEAPONS)).setRegistryName("melt_masher"));
-		registry.register(qEHammerAxe.setRegistryName("estrogen_empowered_everything_eradicator"));
-		registry.register(dDEHammerAxe.setRegistryName("eeeeeeeeeeee"));
-		registry.register(zillyhooHammer.setRegistryName("zillyhoo_hammer"));
-		registry.register(popamaticVrillyhoo.setRegistryName("popamatic_vrillyhoo"));
-		registry.register(scarletZillyhoo.setRegistryName("scarlet_zillyhoo"));
-		registry.register(mwrthwl.setRegistryName("mwrthwl"));
+		registry.register(Q_E_HAMMER_AXE = new ItemPogoFarmine(ModItemTypes.RUBY_TIER, 5, -2.8F, 9.0F, Integer.MAX_VALUE, 200, 0.7, new Item.Properties().defaultMaxDamage(6114).addToolType(ToolType.PICKAXE, 3).addToolType(ToolType.SHOVEL, 1).addToolType(ToolType.AXE, 2).group(ModItemGroup.WEAPONS)).setRegistryName("estrogen_empowered_everything_eradicator"));
+		registry.register(D_D_E_HAMMER_AXE = new ItemSbahjEEEE(ModItemTypes.RUBY_TIER, 5, -2.8F, 9.1F, 0.2, new Item.Properties().defaultMaxDamage(6114).group(ModItemGroup.WEAPONS)).setRegistryName("eeeeeeeeeeee"));
+		registry.register(ZILLYHOO_HAMMER = new ItemWeapon(ModItemTypes.ZILLYHOO_TIER, 6, -2.8F, 15.0F, new Item.Properties().addToolType(ToolType.PICKAXE, 4).group(ModItemGroup.WEAPONS)).setRegistryName("zillyhoo_hammer"));
+		registry.register(POPAMATIC_VRILLYHOO = new ItemRandomWeapon(ModItemTypes.ZILLYHOO_TIER, 3, -2.8F, 15.0F, new Item.Properties().addToolType(ToolType.PICKAXE, 4).group(ModItemGroup.WEAPONS)).setRegistryName("popamatic_vrillyhoo"));
+		registry.register(SCARLET_ZILLYHOO = new ItemFireWeapon(ModItemTypes.RUBY_TIER, 6, -2.8F, 4.0F, 50, new Item.Properties().addToolType(ToolType.PICKAXE, 3)).setRegistryName("scarlet_zillyhoo"));
+		registry.register(MWRTHWL = new ItemWeapon(ModItemTypes.RUBY_TIER, 6, -2.8F, 4.0F, new Item.Properties().addToolType(ToolType.PICKAXE, 3)).setRegistryName("mwrthwl"));
 		
 		//blades
-		registry.register(sord.setRegistryName("sord"));
-		registry.register(cactusCutlass.setRegistryName("cactaceae_cutlass"));
-		registry.register(steakSword.setRegistryName("steak_sword"));
-		registry.register(beefSword.setRegistryName("beef_sword"));
-		registry.register(irradiatedSteakSword.setRegistryName("irradiated_steak_sword"));
-		registry.register(katana.setRegistryName("katana"));
-		registry.register(unbreakableKatana.setRegistryName("unbreakable_katana"));
-		registry.register(firePoker.setRegistryName("fire_poker"));
-		registry.register(hotHandle.setRegistryName("too_hot_to_handle"));
-		registry.register(caledscratch.setRegistryName("caledscratch"));
-		registry.register(caledfwlch.setRegistryName("caledfwlch"));
-		registry.register(royalDeringer.setRegistryName("royal_deringer"));
-		registry.register(claymore.setRegistryName("claymore"));
-		registry.register(zillywairCutlass.setRegistryName("cutlass_of_zillywair"));
-		registry.register(regisword.setRegistryName("regisword"));
-		registry.register(scarletRibbitar.setRegistryName("scarlet_ribbitar"));
-		registry.register(doggMachete.setRegistryName("dogg_machete"));
-		registry.register(cobaltSabre.setRegistryName("cobalt_sabre"));
-		registry.register(quantumSabre.setRegistryName("quantum_sabre"));
-		registry.register(shatterBeacon.setRegistryName("shatterbeacon"));
-
+		registry.register(SORD = new ItemSord(ModItemTypes.SBAHJ_TIER, 3, -2.4F, 1.0F, new Item.Properties().group(ModItemGroup.WEAPONS)).setRegistryName("sord"));
+		registry.register(CACTUS_CUTLASS = new ItemWeapon(ModItemTypes.CACTUS_TIER, 3, -2.4F, 15.0F, new Item.Properties().group(ModItemGroup.WEAPONS)).setRegistryName("cactaceae_cutlass"));	//The sword harvestTool is only used against webs, hence the high efficiency.
+		registry.register(STEAK_SWORD = new ItemConsumableWeapon(ModItemTypes.MEAT_TIER, 4, -2.4F, 5.0F, 8, 1F, new Item.Properties().defaultMaxDamage(250).group(ModItemGroup.WEAPONS)).setRegistryName("steak_sword"));
+		registry.register(BEEF_SWORD = new ItemConsumableWeapon(ModItemTypes.MEAT_TIER, 2, -2.4F, 5.0F, 3, 0.8F, 75, new Item.Properties().group(ModItemGroup.WEAPONS)).setRegistryName("beef_sword"));
+		registry.register(IRRADIATED_STEAK_SWORD = new ItemConsumableWeapon(ModItemTypes.MEAT_TIER, 2, -2.4F, 5.0F, 4, 0.4F, 25, new Item.Properties().defaultMaxDamage(150).group(ModItemGroup.WEAPONS)).setPotionEffect(new PotionEffect(MobEffects.WITHER, 100, 1), 0.9F).setRegistryName("irradiated_steak_sword"));
+		registry.register(KATANA = new ItemWeapon(ItemTier.IRON, 3, -2.4F, 15.0F, new Item.Properties().group(ModItemGroup.WEAPONS)).setRegistryName("katana"));
+		registry.register(UNBREAKABLE_KATANA = new ItemWeapon(ModItemTypes.RUBY_TIER, 3, -2.4F, 15.0F, new Item.Properties().group(ModItemGroup.WEAPONS)).setRegistryName("unbreakable_katana"));	//Not actually unbreakable
+		registry.register(FIRE_POKER = new ItemFireWeapon(ItemTier.IRON, 4, -2.4F, 15.0F,  30, new Item.Properties().group(ModItemGroup.WEAPONS)).setRegistryName("fire_poker"));
+		registry.register(HOT_HANDLE = new ItemFireWeapon(ItemTier.IRON, 3, -2.4F, 15.0F, 10, new Item.Properties().defaultMaxDamage(350).group(ModItemGroup.WEAPONS)).setRegistryName("too_hot_to_handle"));
+		registry.register(CALEDSCRATCH = new ItemWeapon(ModItemTypes.RUBY_TIER, 2, -2.4F, 15.0F, new Item.Properties().defaultMaxDamage(1561).group(ModItemGroup.WEAPONS)).setRegistryName("caledscratch"));
+		registry.register(CALEDFWLCH = new ItemWeapon(ModItemTypes.RUBY_TIER, 2, -2.4F, 15.0F, new Item.Properties().defaultMaxDamage(1025).group(ModItemGroup.WEAPONS)).setRegistryName("caledfwlch"));
+		registry.register(ROYAL_DERINGER = new ItemWeapon(ModItemTypes.RUBY_TIER, 3, -2.4F, 15.0F, new Item.Properties().defaultMaxDamage(1561).group(ModItemGroup.WEAPONS)).setRegistryName("royal_deringer"));
+		registry.register(CLAYMORE = new ItemWeapon(ItemTier.IRON, 5, -2.6F, 15.0F, new Item.Properties().defaultMaxDamage(600).group(ModItemGroup.WEAPONS)).setRegistryName("claymore"));
+		registry.register(ZILLYWAIR_CUTLASS = new ItemWeapon(ModItemTypes.ZILLYHOO_TIER, 3, -2.4F, 15.0F, new Item.Properties().group(ModItemGroup.WEAPONS)).setRegistryName("cutlass_of_zillywair"));
+		registry.register(REGISWORD = new ItemWeapon(ModItemTypes.REGI_TIER, 3, -2.4F, 15.0F, new Item.Properties().group(ModItemGroup.WEAPONS)).setRegistryName("regisword"));
+		registry.register(SCARLET_RIBBITAR = new ItemWeapon(ModItemTypes.RUBY_TIER, 3, -2.4F, 15.0F, new Item.Properties().group(ModItemGroup.WEAPONS)).setRegistryName("scarlet_ribbitar"));
+		registry.register(DOGG_MACHETE = new ItemWeapon(ModItemTypes.RUBY_TIER, 1, -2.4F, 15.0F, new Item.Properties().defaultMaxDamage(1000).group(ModItemGroup.WEAPONS)).setRegistryName("dogg_machete"));
+		registry.register(COBALT_SABRE = new ItemFireWeapon(ItemTier.GOLD, 7, -2.4F, 15.0F, 30, new Item.Properties().defaultMaxDamage(300).group(ModItemGroup.WEAPONS)).setRegistryName("cobalt_sabre"));
+		registry.register(QUAMTUM_SABRE = new ItemPotionWeapon(ModItemTypes.URANIUM_TIER, 4, -2.4F, 15.0F, new PotionEffect(MobEffects.WITHER, 100, 1), new Item.Properties().group(ModItemGroup.WEAPONS)).setRegistryName("quantum_sabre"));
+		registry.register(SHATTER_BEACON = new ItemWeapon(ModItemTypes.RUBY_TIER, 6, -2.4F, 15.0F, new Item.Properties().defaultMaxDamage(1850).group(ModItemGroup.WEAPONS)).setRegistryName("shatter_beacon"));
+		
 		//axes
 		registry.register(batleacks.setRegistryName("batleacks"));
 		registry.register(copseCrusher.setRegistryName("copse_crusher"));

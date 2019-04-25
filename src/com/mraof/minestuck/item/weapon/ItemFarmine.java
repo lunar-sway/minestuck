@@ -4,7 +4,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.PriorityQueue;
-import java.util.Random;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.util.Pair;
@@ -16,7 +15,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
-import net.minecraft.item.Item;
+import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -40,37 +39,31 @@ public class ItemFarmine extends ItemWeapon
 {
 	private int radius;
 	private int terminus;
-	private HashSet<Block> farMineForbiddenBlocks = new HashSet<Block>();
-	private HashMap<Block, HashSet<Block>> farMineEquivalencies = new HashMap<Block, HashSet<Block>>();
+	private HashSet<Block> farMineForbiddenBlocks = new HashSet<>();
+	private HashMap<Block, HashSet<Block>> farMineEquivalencies = new HashMap<>();
 	
-	public ItemFarmine(ToolMaterial material, int maxUses, double damageVsEntity, double weaponSpeed, int enchantability, String name, int r, int t)
+	public ItemFarmine(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, int radius, int terminus, Properties builder)
 	{
-		super(material, maxUses, damageVsEntity, weaponSpeed, enchantability, name);
-		redefineLimiters(r, t);
+		super(tier, attackDamageIn, attackSpeedIn, efficiency, builder);
+		redefineLimiters(radius, terminus);
 		initializeFarMineLists();
-	}
-	
-	public ItemFarmine(int maxUses, double damageVsEntity, double weaponSpeed, int enchantability, String name, int r, int t)
-	{
-		this(ToolMaterial.IRON, maxUses, damageVsEntity, weaponSpeed, enchantability, name, r, t);
 	}
 
 	private void initializeFarMineLists()
 	{
 		farMineForbiddenBlocks.add(Blocks.OBSIDIAN);
 		
-		addAssociation(Blocks.REDSTONE_ORE, Blocks.LIT_REDSTONE_ORE);
-		addAssociation(Blocks.FURNACE, Blocks.LIT_FURNACE);
-		addAssociation(Blocks.REDSTONE_LAMP, Blocks.LIT_REDSTONE_LAMP);
-		addAssociation(Blocks.DAYLIGHT_DETECTOR, Blocks.DAYLIGHT_DETECTOR_INVERTED);
 		addAssociation(Blocks.DIRT, Blocks.GRASS);
 		addAssociation(Blocks.DIRT, Blocks.MYCELIUM);
 		addAssociation(Blocks.DIRT, Blocks.GRASS_PATH);
-		addAssociation(Blocks.END_STONE, MinestuckBlocks.endGrass);
+		addAssociation(Blocks.END_STONE, MinestuckBlocks.END_GRASS);
 		
-		addOneWayAssociation(Blocks.COBBLESTONE, Blocks.MONSTER_EGG);
-		addOneWayAssociation(Blocks.STONE, Blocks.MONSTER_EGG);
-		addOneWayAssociation(Blocks.STONEBRICK, Blocks.MONSTER_EGG);
+		addOneWayAssociation(Blocks.COBBLESTONE, Blocks.INFESTED_COBBLESTONE);
+		addOneWayAssociation(Blocks.STONE, Blocks.INFESTED_STONE);
+		addOneWayAssociation(Blocks.STONE_BRICKS, Blocks.INFESTED_STONE_BRICKS);
+		addOneWayAssociation(Blocks.CHISELED_STONE_BRICKS, Blocks.INFESTED_CHISELED_STONE_BRICKS);
+		addOneWayAssociation(Blocks.CRACKED_STONE_BRICKS, Blocks.INFESTED_CRACKED_STONE_BRICKS);
+		addOneWayAssociation(Blocks.MOSSY_STONE_BRICKS, Blocks.INFESTED_MOSSY_STONE_BRICKS);
 	}
 	
 	/**
@@ -92,19 +85,16 @@ public class ItemFarmine extends ItemWeapon
 			return false;
 		}
 		
-		Comparator<Pair> comparator = new PairedIntComparator();
-		PriorityQueue<Pair> candidates = new PriorityQueue<Pair>(comparator);
+		Comparator<Pair<BlockPos, Integer>> comparator = new PairedIntComparator();
+		PriorityQueue<Pair<BlockPos, Integer>> candidates = new PriorityQueue<>(comparator);
 		Block block = blockState.getBlock();
 		int fortuneLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, stack);
-		//Must define the drop using a predetermined seed to establish equivalency with random methods
-		Item drop = block.getItemDropped(blockState, new Random(0), fortuneLevel); 
-		int damageDrop = block.damageDropped(blockState);
 		HashSet<Block> equals = farMineEquivalencies.get(block);
 		if(equals==null) equals = new HashSet<Block>();	
 		
 		//If the harvestTool can't harvest the block, or the player isn't actually a player, or the player is sneaking,
 		//or the harvestTool doesn't farmine, or it's one of those blocks that breaks instantly, don't farmine.
-		if (!canHarvestBlock(blockState, stack) || !(playerIn instanceof EntityPlayer) || playerIn.isSneaking()
+		if (!canHarvestBlock(stack, blockState) || !(playerIn instanceof EntityPlayer) || playerIn.isSneaking()
 				|| terminus == 1 || radius==0 || Math.abs(blockState.getBlockHardness(worldIn, pos)) < 0.000000001)
 		{
 			if (!isDamageable())
@@ -118,11 +108,11 @@ public class ItemFarmine extends ItemWeapon
 			if (farMineForbiddenBlocks.contains(block)
 					|| getDestroySpeed(stack, blockState) < getEfficiency())
 			{
-				candidates.add(new Pair(pos, 1));
+				candidates.add(new Pair<>(pos, 1));
 			}
 			else	//Otherwise, farmine normally
 			{
-				candidates.add(new Pair(pos, radius));
+				candidates.add(new Pair<>(pos, radius));
 			}
 		}
 		
@@ -134,8 +124,8 @@ public class ItemFarmine extends ItemWeapon
 
 		while (!candidates.isEmpty())
 		{
-			BlockPos curr = (BlockPos) candidates.peek().object1;
-			int rad = (Integer) candidates.poll().object2;
+			BlockPos curr = candidates.peek().object1;
+			int rad = candidates.poll().object2;
 			if (!blocksToBreak.contains(curr))
 			{
 				blocksToBreak.add(curr);
@@ -154,11 +144,9 @@ public class ItemFarmine extends ItemWeapon
 								BlockPos newBlockPos = new BlockPos(curr.getX() + i, curr.getY() + j, curr.getZ() + k);
 								IBlockState newState = worldIn.getBlockState(newBlockPos);
 								Block newBlock = newState.getBlock();
-								if (	equals.contains(newBlock) || newBlock.equals(block)
-										&& newBlock.getItemDropped(newState, new Random(0), fortuneLevel) == drop
-										&& newBlock.damageDropped(newState) == damageDrop)
+								if (	equals.contains(newBlock) || newBlock.equals(block))
 								{
-									candidates.add(new Pair(newBlockPos, rad - 1));
+									candidates.add(new Pair<>(newBlockPos, rad - 1));
 								}
 							}
 						}
@@ -167,7 +155,7 @@ public class ItemFarmine extends ItemWeapon
 			}	
 			
 			//If you passed the maximum blocks you can break, stop trying to add more blocks to the list.
-			if (blocksToBreak.size() + 1 > stack.getMaxDamage() - stack.getItemDamage() || blocksToBreak.size() + 1 > terminus)
+			if (blocksToBreak.size() + 1 > stack.getMaxDamage() - stack.getDamage() || blocksToBreak.size() + 1 > terminus)
 			{
 				passedBreakLimit = true;
 				break;
@@ -188,10 +176,8 @@ public class ItemFarmine extends ItemWeapon
 						BlockPos newBlockPos = new BlockPos(pos.getX() + i, pos.getY() + j, pos.getZ() + k);
 						IBlockState newState = worldIn.getBlockState(newBlockPos);
 						Block newBlock = newState.getBlock();
-						if ( equals.contains(newBlock) || newBlock.equals(block)
-								&& newBlock.getItemDropped(newState, new Random(0), fortuneLevel) == drop
-								&& newBlock.damageDropped(newState) == damageDrop
-								&& blocksToBreak.size()+1 < stack.getMaxDamage() - stack.getItemDamage())
+						if (equals.contains(newBlock) || newBlock.equals(block)
+								&& blocksToBreak.size()+1 < stack.getMaxDamage() - stack.getDamage())
 						{
 							blocksToBreak.add(newBlockPos);
 						}
@@ -204,7 +190,7 @@ public class ItemFarmine extends ItemWeapon
 		for (BlockPos blockToBreak : blocksToBreak)
 		{
 			IBlockState state = worldIn.getBlockState(blockToBreak);
-			harvestBlock(worldIn, state.getBlock(), blockToBreak, state, (EntityPlayer) playerIn, stack);
+			harvestBlock(worldIn, state.getBlock(), blockToBreak, state, playerIn, stack);
 		}
 		
 		//We add 1 because that means the harvestTool will always take at least 2 damage.
@@ -221,15 +207,15 @@ public class ItemFarmine extends ItemWeapon
 	 */
 	
 	//This returns a larger-to-smaller comparison of the paired objects, assuming they are integers.
-	private class PairedIntComparator implements Comparator<Pair>
+	private class PairedIntComparator implements Comparator<Pair<BlockPos, Integer>>
 	{
 		@Override
-		public int compare(Pair x, Pair y)
+		public int compare(Pair<BlockPos, Integer> x, Pair<BlockPos, Integer> y)
 		{
 			if (x == null || y == null || x.object2 == null || y.object2 == null)
 				return 0;
 			
-			return (Integer) y.object2 - (Integer) x.object2;
+			return y.object2 - x.object2;
 		}
 	}
 	
@@ -251,9 +237,9 @@ public class ItemFarmine extends ItemWeapon
 		EntityPlayer player = (EntityPlayer) playerIn;
 		
 		TileEntity te = world.getTileEntity(pos);
-		if(block.removedByPlayer(state, world, pos, player, true))
+		if(block.removedByPlayer(state, world, pos, player, true, world.getFluidState(pos)))
 		{
-			block.onBlockDestroyedByPlayer(world, pos, state);
+			block.onPlayerDestroy(world, pos, state);
 			block.harvestBlock(world, player, pos, state, te, stack);
 			return true;
 		}
