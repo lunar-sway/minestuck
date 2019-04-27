@@ -3,7 +3,7 @@ package com.mraof.minestuck.world.lands.title;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mraof.minestuck.world.WorldProviderLands;
+import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.lands.ILandAspect;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.structure.IGateStructure;
@@ -16,7 +16,7 @@ public abstract class TitleLandAspect implements ILandAspect<TitleLandAspect>
 		return true;
 	}
 	
-	public ChunkProviderLands createChunkProvider(WorldProviderLands land)
+	public ChunkProviderLands createChunkProvider(LandDimension land)
 	{
 		ChunkProviderLands chunkProvider = new ChunkProviderLands(land.getWorld(), land, land.getWorld().isRemote);
 		TerrainLandAspect terrain = land.landAspects.aspectTerrain;
@@ -52,7 +52,7 @@ public abstract class TitleLandAspect implements ILandAspect<TitleLandAspect>
 		return null;
 	}
 	
-	public void prepareWorldProvider(WorldProviderLands worldProvider)
+	public void prepareWorldProvider(LandDimension worldProvider)
 	{}
 	
 	@Override

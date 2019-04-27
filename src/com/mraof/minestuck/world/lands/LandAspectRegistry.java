@@ -300,20 +300,6 @@ public class LandAspectRegistry
 		return list[random.nextInt(list.length)];
 	}
 	
-	public static class AspectCombination
-	{
-		public AspectCombination(TerrainLandAspect terrainAspect, TitleLandAspect titleAspect)
-		{
-			if(terrainAspect == null || titleAspect == null)
-				throw new IllegalArgumentException("Parameters may not be null");
-			this.aspectTerrain = terrainAspect;
-			this.aspectTitle = titleAspect;
-		}
-		public TerrainLandAspect aspectTerrain;
-		/**
-		 * Not to be confused with EnumAspect.
-		 */
-		public TitleLandAspect aspectTitle;
-	}
+	
 	
 }

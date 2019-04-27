@@ -42,12 +42,11 @@ public class CommonProxy
 		MinecraftForge.EVENT_BUS.register(MinestuckItems.class);
 		MinecraftForge.EVENT_BUS.register(MinestuckTiles.class);
 		MinecraftForge.EVENT_BUS.register(BiomeMinestuck.class);
+		MinecraftForge.EVENT_BUS.register(MinestuckDimensionHandler.class);
 		
 		MinestuckSoundHandler.initSound();
 		
 		MinestuckCriteriaTriggers.register();
-		
-		MinestuckDimensionHandler.register();
 		
 		//register ore generation
 		OreHandler oreHandler = new OreHandler();

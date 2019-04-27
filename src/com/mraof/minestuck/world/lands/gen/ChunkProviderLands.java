@@ -6,7 +6,7 @@ import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.tileentity.TileEntityGate;
 import com.mraof.minestuck.world.GateHandler;
-import com.mraof.minestuck.world.WorldProviderLands;
+import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
@@ -21,7 +21,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.BiomeProperties;
@@ -64,10 +63,10 @@ public class ChunkProviderLands implements IChunkGenerator
 	protected Biome biomeLands;
 	
 	public boolean generatingStructure;
-	public final WorldProviderLands worldProvider;
+	public final LandDimension worldProvider;
 
 	@SuppressWarnings("unchecked")
-	public ChunkProviderLands(World worldObj, WorldProviderLands worldProvider, boolean clientSide)
+	public ChunkProviderLands(World worldObj, LandDimension worldProvider, boolean clientSide)
 	{
 		this.worldProvider = worldProvider;
 		
@@ -115,7 +114,7 @@ public class ChunkProviderLands implements IChunkGenerator
 	
 	public void createBiomeGen()
 	{
-		BiomeProperties properties = new BiomeProperties(((WorldProviderLands)this.landWorld.provider).getDimensionName()).setTemperature(temperature).setRainfall(rainfall).setBaseBiome("medium");
+		BiomeProperties properties = new BiomeProperties(((LandDimension)this.landWorld.provider).getDimensionName()).setTemperature(temperature).setRainfall(rainfall).setBaseBiome("medium");
 		if(temperature <= 0.1)
 			properties.setSnowEnabled();
 		biomeLands = new BiomeMinestuck(properties).setRegistryName("minestuck", "medium");

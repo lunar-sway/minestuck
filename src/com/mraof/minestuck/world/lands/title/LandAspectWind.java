@@ -1,6 +1,6 @@
 package com.mraof.minestuck.world.lands.title;
 
-import com.mraof.minestuck.world.WorldProviderLands;
+import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.lands.decorator.RockDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.gen.DefaultTerrainGen;
@@ -25,7 +25,7 @@ public class LandAspectWind extends TitleLandAspect
 	}
 	
 	@Override
-	public void prepareWorldProvider(WorldProviderLands worldProvider)
+	public void prepareWorldProvider(LandDimension worldProvider)
 	{
 		worldProvider.mergeFogColor(new Vec3d(0.1, 0.2, 0.8), 0.3F);
 	}

@@ -1,4 +1,4 @@
-package com.mraof.minestuck.world;
+package com.mraof.minestuck.world.lands;
 
 import com.mraof.minestuck.world.biome.GenLayerLands;
 

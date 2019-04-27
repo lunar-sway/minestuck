@@ -1,9 +1,8 @@
 package com.mraof.minestuck.client.renderer;
 
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
-import com.mraof.minestuck.world.WorldProviderLands;
+import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -27,8 +26,8 @@ public class LandSkyRender extends IRenderHandler
 	private static final ResourceLocation LAND_TEXTURE = new ResourceLocation("minestuck", "textures/environment/land_wood.png");
 	private static final ResourceLocation LAND_TEXTURE_2 = new ResourceLocation("minestuck", "textures/environment/land_wood_2.png");
 	
-	private WorldProviderLands providerLands;
-	public LandSkyRender(WorldProviderLands provider)
+	private LandDimension providerLands;
+	public LandSkyRender(LandDimension provider)
 	{
 		providerLands = provider;
 	}

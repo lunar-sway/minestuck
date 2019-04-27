@@ -60,7 +60,7 @@ public class IdentifierHandler {
 		PlayerIdentifier identifier;
 		if(MinestuckConfig.useUUID)
 			identifier = new PlayerIdentifier(player.getGameProfile().getId());
-		else identifier = new PlayerIdentifier(usernameEncode(player.getName()));
+		else identifier = new PlayerIdentifier(usernameEncode(player.getName().getString()));
 		identifier.id = nextIdentifierId;
 		nextIdentifierId++;
 		identifierList.add(identifier);
@@ -69,7 +69,7 @@ public class IdentifierHandler {
 	
 	public static boolean hasIdentifier(NBTTagCompound nbt, String key)
 	{
-		return nbt.hasKey("owner") || nbt.hasKey("ownerMost") && nbt.hasKey("ownerLeast");
+		return nbt.contains(key, 8) || nbt.contains(key + "Most", 4) && nbt.contains(key + "Least", 4);
 	}
 	
 	public static PlayerIdentifier load(INBTBase nbt, String key)
@@ -107,7 +107,7 @@ public class IdentifierHandler {
 				identifier.useUUID = MinestuckConfig.useUUID;
 				if(identifier.useUUID)
 					identifier.uuid = player.getGameProfile().getId();
-				else identifier.username = usernameEncode(player.getName());
+				else identifier.username = usernameEncode(player.getName().getString());
 				
 				identifierList.add(identifier);
 				iter.remove();
@@ -275,7 +275,7 @@ public class IdentifierHandler {
 		{
 			if(this.useUUID)
 				return player.getGameProfile().getId().equals(uuid);
-			else return usernameEncode(player.getName()).equals(username);
+			else return usernameEncode(player.getName().getString()).equals(username);
 		}
 		
 		@Override

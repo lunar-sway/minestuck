@@ -11,7 +11,7 @@ import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.Title;
-import com.mraof.minestuck.world.WorldProviderLands;
+import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
@@ -71,7 +71,7 @@ public abstract class MessageType
 			} else if(args[i].equals("landName"))
 			{
 				World world = consort.getServer().getWorld(consort.homeDimension);
-				if(world != null && consort.world.provider instanceof WorldProviderLands)
+				if(world != null && consort.world.provider instanceof LandDimension)
 				{
 					ChunkProviderLands chunkProvider = (ChunkProviderLands) world.provider.createChunkGenerator();
 					ITextComponent aspect1 = new TextComponentTranslation(

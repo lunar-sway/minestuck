@@ -1,11 +1,11 @@
-package com.mraof.minestuck.world;
+package com.mraof.minestuck.world.lands;
 
 import com.mraof.minestuck.client.renderer.LandSkyRender;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.world.lands.LandAspectRegistry;
+import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 import net.minecraft.entity.Entity;
@@ -14,15 +14,20 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.DimensionType;
 import net.minecraft.world.GameType;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldProvider;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.dimension.Dimension;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.IChunkGenerator;
+import net.minecraftforge.common.ModDimension;
 
-public class WorldProviderLands extends WorldProvider
+import java.util.function.Function;
+
+public class LandDimension extends Dimension
 {
+	private final DimensionType type;
+	
 	public ChunkProviderLands chunkProvider;
 	public LandAspectRegistry.AspectCombination landAspects;
 	public float skylightBase;
@@ -30,10 +35,15 @@ public class WorldProviderLands extends WorldProvider
 	Vec3d fogColor;
 	Vec3d cloudColor;
 	
-	@Override
-	public DimensionType getDimensionType()
+	public LandDimension(DimensionType type)
 	{
-		return MinestuckDimensionHandler.landDimensionType;
+		this.type = type;
+	}
+	
+	@Override
+	public DimensionType getType()
+	{
+		return type;
 	}
 	
 	@Override
@@ -114,9 +124,9 @@ public class WorldProviderLands extends WorldProvider
 	}
 	
 	@Override
-	public int getRespawnDimension(EntityPlayerMP player)
+	public DimensionType getRespawnDimension(EntityPlayerMP player)
 	{
-		int dimOut = 0;
+		DimensionType dimOut;
 		SburbConnection c = SkaianetHandler.getMainConnection(IdentifierHandler.encode(player), true);
 		if(c == null || !c.enteredGame())
 			dimOut = player.getSpawnDimension();	//Method outputs 0 when no spawn dimension is set, sending players to the overworld.
@@ -129,9 +139,9 @@ public class WorldProviderLands extends WorldProvider
 	}
 	
 	@Override
-	public WorldSleepResult canSleepAt(EntityPlayer player, BlockPos pos)
+	public SleepResult canSleepAt(EntityPlayer player, BlockPos pos)
 	{
-		return WorldSleepResult.ALLOW;
+		return SleepResult.ALLOW;
 	}
 	
 	@Override
@@ -251,5 +261,14 @@ public class WorldProviderLands extends WorldProvider
 	public Vec3d getFogColor()
 	{
 		return this.fogColor;
+	}
+	
+	public static class Type extends ModDimension
+	{
+		@Override
+		public Function<DimensionType, ? extends Dimension> getFactory()
+		{
+			return LandDimension::new;
+		}
 	}
 }

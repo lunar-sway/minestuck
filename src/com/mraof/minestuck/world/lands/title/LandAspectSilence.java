@@ -1,6 +1,6 @@
 package com.mraof.minestuck.world.lands.title;
 
-import com.mraof.minestuck.world.WorldProviderLands;
+import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.lands.decorator.SingleBlockDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
@@ -32,7 +32,7 @@ public class LandAspectSilence extends TitleLandAspect
 	}
 	
 	@Override
-	public void prepareWorldProvider(WorldProviderLands worldProvider)
+	public void prepareWorldProvider(LandDimension worldProvider)
 	{
 		worldProvider.skylightBase = Math.min(1/2F, worldProvider.skylightBase);
 		worldProvider.mergeFogColor(new Vec3d(0, 0, 0.1), 0.5F);

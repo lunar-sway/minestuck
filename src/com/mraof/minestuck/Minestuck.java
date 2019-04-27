@@ -132,6 +132,8 @@ public class Minestuck
 		worldSeed = event.getServer().getWorld(DimensionType.OVERWORLD).getSeed();
 		ServerEventHandler.lastDay = event.getServer().getWorld(DimensionType.OVERWORLD).getGameTime() / 24000L;
 		CaptchaDeckHandler.rand = new Random();
+		
+		MinestuckDimensionHandler.register();
 	}
 	
 	@SubscribeEvent

@@ -9,13 +9,21 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.DimensionType;
-import net.minecraft.world.WorldProvider;
-import net.minecraft.world.biome.BiomeProviderSingle;
+import net.minecraft.world.dimension.Dimension;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.IChunkGenerator;
+import net.minecraftforge.common.ModDimension;
 
-public class WorldProviderSkaia extends WorldProvider 
+import java.util.function.Function;
+
+public class SkaiaDimension extends Dimension
 {
+	private final DimensionType type;
+	
+	public SkaiaDimension(DimensionType type)
+	{
+		this.type = type;
+	}
 	
 	@Override
 	public IChunkGenerator createChunkGenerator()
@@ -49,9 +57,9 @@ public class WorldProviderSkaia extends WorldProvider
 	}
 	
 	@Override
-	public int getRespawnDimension(EntityPlayerMP player)
+	public DimensionType getRespawnDimension(EntityPlayerMP player)
 	{
-		int dimOut = 0;
+		DimensionType dimOut;
 		SburbConnection c = SkaianetHandler.getMainConnection(IdentifierHandler.encode(player), true);
 		if(c == null || !c.enteredGame())
 			dimOut = player.getSpawnDimension();	//Method outputs 0 when no spawn dimension is set, sending players to the overworld.
@@ -64,24 +72,23 @@ public class WorldProviderSkaia extends WorldProvider
 	}
 	
 	@Override
-	public WorldSleepResult canSleepAt(EntityPlayer player, BlockPos pos)
+	public SleepResult canSleepAt(EntityPlayer player, BlockPos pos)
 	{
-		return WorldSleepResult.ALLOW;
+		return SleepResult.ALLOW;
 	}
 	
 	@Override
-	public DimensionType getDimensionType()
+	public DimensionType getType()
 	{
-		return MinestuckDimensionHandler.skaiaDimensionType;
+		return type;
 	}
 	
-	@Override
-	public void onPlayerAdded(EntityPlayerMP player)
+	public static class Type extends ModDimension
 	{
-		int centerX = ((int)player.posX) >> 4;
-		int centerZ = ((int)player.posZ) >> 4;
-		for(int x = centerX - 1; x <= centerX + 1; x++)
-			for(int z = centerZ - 1; z <= centerZ + 1; z++)
-				this.world.getChunkProvider().provideChunk(x, z);
+		@Override
+		public Function<DimensionType, ? extends Dimension> getFactory()
+		{
+			return SkaiaDimension::new;
+		}
 	}
 }

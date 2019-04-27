@@ -1,7 +1,7 @@
 package com.mraof.minestuck.command;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mraof.minestuck.world.WorldProviderLands;
+import com.mraof.minestuck.world.lands.LandDimension;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandSource;
@@ -55,9 +55,9 @@ public class CommandToStructure extends CommandBase
 		if(!playerMP.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).hasKey("commandVisitedStructures"))
 			playerMP.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setTag("commandVisitedStructures", new NBTTagList());
 		
-		if(playerMP.world.provider instanceof WorldProviderLands)
+		if(playerMP.world.provider instanceof LandDimension)
 		{
-			BlockPos location = ((WorldProviderLands) playerMP.world.provider).findAndMarkNextStructure(playerMP, args[0], playerMP.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getTagList("commandVisitedStructures", 4));
+			BlockPos location = ((LandDimension) playerMP.world.provider).findAndMarkNextStructure(playerMP, args[0], playerMP.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getTagList("commandVisitedStructures", 4));
 			if(location != null)
 				playerMP.setPositionAndUpdate(location.getX(), location.getY(), location.getZ());
 			else throw new CommandException("A problem occured");

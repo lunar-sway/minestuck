@@ -1,15 +1,23 @@
 package com.mraof.minestuck.world;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.network.LandRegisterPacket;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
+import com.mraof.minestuck.world.lands.LandAspects;
+import com.mraof.minestuck.world.lands.LandDimension;
+import com.mraof.minestuck.world.lands.LandInfoContainer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.ModDimension;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.FMLLog;
 
 import java.util.Hashtable;
@@ -19,51 +27,40 @@ import java.util.Set;
 
 public class MinestuckDimensionHandler
 {
-	
-	public static int skaiaProviderTypeId;
-	public static int skaiaDimensionId;
-	public static int landProviderTypeId;
-	public static int landDimensionIdStart;
 	public static int biomeIdStart;
 	
 	private static Exception unregisterTrace;
-	private static Hashtable<Integer, LandAspectRegistry.AspectCombination> lands = new Hashtable<Integer, LandAspectRegistry.AspectCombination>();
-	private static Hashtable<Integer, BlockPos> spawnpoints = new Hashtable<Integer, BlockPos>();
+	private static Hashtable<IdentifierHandler.PlayerIdentifier, LandInfoContainer> landInfo = new Hashtable<>();
+	private static Hashtable<IdentifierHandler.PlayerIdentifier, DimensionType> lands = new Hashtable<>();
+	public static DimensionType skaia;
 	
-	public static DimensionType landDimensionType;
-	public static DimensionType skaiaDimensionType;
+	public static ModDimension landDimensionType;
+	public static ModDimension skaiaDimensionType;
 	
-	public static void register()
+	@SubscribeEvent
+	public static void registerModDimensions(RegistryEvent.Register<ModDimension> event)
 	{
-		//register world generators
-		landDimensionType = DimensionType.register("The Medium", "_medium", landProviderTypeId, WorldProviderLands.class, MinestuckConfig.keepDimensionsLoaded);
-		skaiaDimensionType = DimensionType.register("Skaia", "_skaia", skaiaProviderTypeId, WorldProviderSkaia.class, false);
-		
-		DimensionManager.registerDimension(skaiaDimensionId, skaiaDimensionType);
+		landDimensionType = new LandDimension.Type();
+		event.getRegistry().register(landDimensionType.setRegistryName("medium"));
+		skaiaDimensionType = new SkaiaDimension.Type();
+		event.getRegistry().register(skaiaDimensionType.setRegistryName("skaia"));
 	}
 	
-	public static void unregisterDimensions()
+	/**
+	 * On server init, this function is called to register dimensions.
+	 * The dimensions registered will then be sent and registered by forge client-side.
+	 */
+	public static void register()
 	{
-		for(Iterator<Integer> iterator = lands.keySet().iterator(); iterator.hasNext();)
-		{
-			int b = iterator.next();
-			if(DimensionManager.isDimensionRegistered(b))
-			{
-				DimensionManager.unregisterDimension(b);
-			}
-		}
-		
-		if(Minestuck.isServerRunning)
-			try
-			{
-				throw new Exception();
-			} catch(Exception e)
-			{
-				unregisterTrace = e;
-			}
 		lands.clear();
-		spawnpoints.clear();
-		GateHandler.gateData.clear();
+		//register world generators
+		
+		skaia = DimensionManager.registerDimension(new ResourceLocation("skaia"), skaiaDimensionType, null);
+		for(LandInfoContainer container : landInfo.values())
+		{
+			DimensionType type = DimensionManager.registerDimension(container.name, landDimensionType, null);
+			lands.put(container.identifier, type);
+		}
 	}
 	
 	public static void saveData(NBTTagCompound nbt)
@@ -122,7 +119,7 @@ public class MinestuckDimensionHandler
 		GateHandler.loadData(list);
 	}
 	
-	public static void registerLandDimension(int dimensionId, LandAspectRegistry.AspectCombination landAspects)
+	public static void registerLandDimension(int dimensionId, LandAspects landAspects)
 	{
 		if(landAspects == null)
 			throw new IllegalArgumentException("May not register a land aspect combination that is null");
@@ -134,9 +131,9 @@ public class MinestuckDimensionHandler
 		else Debug.warnf("Did not register land dimension with id %d. Appears to already be registered.", dimensionId);
 	}
 	
-	public static LandAspectRegistry.AspectCombination getAspects(int dimensionId)
+	public static LandAspects getAspects(DimensionType dimension)
 	{
-		LandAspectRegistry.AspectCombination aspects = lands.get(dimensionId);
+		LandAspects aspects = lands.get(dimensionId);
 		
 		if(aspects == null)
 		{
@@ -146,17 +143,17 @@ public class MinestuckDimensionHandler
 		return aspects;
 	}
 	
-	public static boolean isLandDimension(int dimensionId)
+	public static boolean isLandDimension(DimensionType dimension)
 	{
-		return lands.containsKey(dimensionId);
+		return lands.contains(dimension);
 	}
 	
-	public static boolean isSkaia(int dimensionId)
+	public static boolean isSkaia(DimensionType dimension)
 	{
-		return dimensionId == skaiaDimensionId;
+		return dimension == skaia;
 	}
 	
-	public static Set<Map.Entry<Integer, LandAspectRegistry.AspectCombination>> getLandSet()
+	public static Set<Map.Entry<Integer, LandAspects>> getLandSet()
 	{
 		return lands.entrySet();
 	}
@@ -177,15 +174,5 @@ public class MinestuckDimensionHandler
 			if(!DimensionManager.isDimensionRegistered(dim))
 				DimensionManager.registerDimension(dim, landDimensionType);
 		}
-	}
-	
-	public static BlockPos getSpawn(int dim)
-	{
-		return spawnpoints.get(dim);
-	}
-	
-	public static void setSpawn(int dim, BlockPos spawnpoint)
-	{
-		spawnpoints.put(dim, spawnpoint);
 	}
 }

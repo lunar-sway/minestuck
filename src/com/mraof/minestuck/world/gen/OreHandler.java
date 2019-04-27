@@ -22,7 +22,7 @@ import java.util.Random;
 import com.google.common.base.Predicate;
 import com.mraof.minestuck.block.BlockCruxiteOre;
 import com.mraof.minestuck.block.BlockUraniumOre;
-import com.mraof.minestuck.world.WorldProviderLands;
+import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 import net.minecraft.block.state.IBlockState;
@@ -57,7 +57,7 @@ public class OreHandler implements IWorldGenerator
 		//int maxPossY = minY + (maxY - 1);
 		int diffBtwnMinMaxY = maxY - minY;
 		IBlockState groundType = Blocks.STONE.getDefaultState();
-		if(world.provider instanceof WorldProviderLands)
+		if(world.provider instanceof LandDimension)
 			groundType = ((ChunkProviderLands) world.provider.createChunkGenerator()).getGroundBlock();
 		if(block.getBlock() == oreCruxite)
 			block = BlockCruxiteOre.getBlockState(groundType);

@@ -7,13 +7,13 @@ import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class SburbConnection
 {
@@ -34,19 +34,19 @@ public class SburbConnection
 	/**
 	 * Display name used by computer guis
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	String clientName, serverName;
 	/**
 	 * Id for identifying players clientside
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	int clientId, serverId;
 	
 	boolean isActive;
 	boolean isMain;
 	boolean enteredGame;
 	boolean canSplit;
-	int clientHomeLand;
+	DimensionType clientHomeLand;
 	int artifactType;
 	/**
 	 * If the client will have frog breeding as quest, the array will be extended and the new positions will hold the gear.
@@ -86,15 +86,15 @@ public class SburbConnection
 	public ComputerData getServerData() {return server;}
 	public boolean enteredGame(){return enteredGame;}
 	public boolean isMain(){return isMain;}
-	public int getClientDimension() {return clientHomeLand;}
+	public DimensionType getClientDimension() {return clientHomeLand;}
 	public boolean[] givenItems(){return givenItemList;}
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public String getClientDisplayName() {return clientName;}
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public String getServerDisplayName() {return serverName;}
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public int getClientId() {return clientId;}
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public int getServerId() {return serverId;}
 	
 	public void writeBytes(ByteBuf data)
@@ -126,13 +126,13 @@ public class SburbConnection
 			for(int i = 0; i < givenItemList.length; i++)
 			{
 				if(givenItemList[i])
-					list.appendTag(new NBTTagString(deployNames[i]));
+					list.add(new NBTTagString(deployNames[i]));
 			}
 			
 			nbt.setTag("givenItems", list);
 			if(enteredGame)
 			{
-				nbt.setInteger("clientLand", clientHomeLand);
+				nbt.setString("clientLand", clientHomeLand.getRegistryName().toString());
 			}
 		}
 		if(isActive)
@@ -145,7 +145,7 @@ public class SburbConnection
 			getClientIdentifier().saveToNBT(nbt, "client");
 			getServerIdentifier().saveToNBT(nbt, "server");
 		}
-		nbt.setInteger("artifact", artifactType);
+		nbt.setInt("artifact", artifactType);
 		return nbt;
 	}
 	
@@ -161,20 +161,20 @@ public class SburbConnection
 			
 			if(nbt.hasKey("canSplit"))
 				canSplit = nbt.getBoolean("canSplit");
-			NBTTagList list = nbt.getTagList("givenItems", 8);
-			for(int i = 0; i < list.tagCount(); i++)
+			NBTTagList list = nbt.getList("givenItems", 8);
+			for(int i = 0; i < list.size(); i++)
 			{
-				String name = list.getStringTagAt(i);
+				String name = list.getString(i);
 				int ordinal = DeployList.getOrdinal(name);
 				if(ordinal == -1)
-					unregisteredItems.appendTag(new NBTTagString(name));
+					unregisteredItems.add(new NBTTagString(name));
 				else givenItemList[ordinal] = true;
 			}
 		}
 		if(isActive)
 		{
-			client = new ComputerData().read(nbt.getCompoundTag("client"));
-			server = new ComputerData().read(nbt.getCompoundTag("server"));
+			client = new ComputerData().read(nbt.getCompound("client"));
+			server = new ComputerData().read(nbt.getCompound("server"));
 		}
 		else
 		{
@@ -183,7 +183,7 @@ public class SburbConnection
 		}
 		if(enteredGame)
 		{
-			clientHomeLand = nbt.getInteger("clientLand");
+			clientHomeLand = nbt.getInt("clientLand");	//TODO
 			if(MinestuckDimensionHandler.isLandDimension(clientHomeLand))
 			{
 				BlockPos spawn = MinestuckDimensionHandler.getSpawn(clientHomeLand);
@@ -202,7 +202,7 @@ public class SburbConnection
 				enteredGame = false;
 			}
 		}
-		artifactType = nbt.getInteger("artifact");
+		artifactType = nbt.getInt("artifact");
 		
 		return this;
 	}
