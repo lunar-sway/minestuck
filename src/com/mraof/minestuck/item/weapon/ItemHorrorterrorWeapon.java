@@ -3,20 +3,22 @@ package com.mraof.minestuck.item.weapon;
 import java.util.Random;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
+import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 
-public class ItemHorrorterrorWeapon extends ItemWeapon {
+public class ItemHorrorterrorWeapon extends ItemWeapon
+{
 	
-	public ItemHorrorterrorWeapon(int maxUses, double damageVsEntity, double weaponSpeed, int enchantability, String name) {
-		super(maxUses, damageVsEntity, weaponSpeed, enchantability, name);
-	}	
+	public ItemHorrorterrorWeapon(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, Properties builder)
+	{
+		super(tier, attackDamageIn, attackSpeedIn, efficiency, builder);
+	}
 	
 	@Override
 	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase attacker)

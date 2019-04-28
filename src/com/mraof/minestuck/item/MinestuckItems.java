@@ -10,7 +10,6 @@ import com.mraof.minestuck.util.MinestuckSoundHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityHanging;
-import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.*;
@@ -26,6 +25,10 @@ import static com.mraof.minestuck.block.MinestuckBlocks.*;
 
 import java.util.Arrays;
 
+/**
+ * This class contains all non-ItemBlock items that minestuck adds,
+ * and is responsible for initializing and registering these.
+ */
 public class MinestuckItems
 {
 	
@@ -66,62 +69,61 @@ public class MinestuckItems
 	public static Item QUAMTUM_SABRE;
 	public static Item SHATTER_BEACON;
 	//axes
-	public static Item batleacks = new ItemSord(64, 4, -3.5D, 5, "batleacks");
-	public static Item copseCrusher = new ItemFarmine(400, 6.0D, -3.0D, 20, "copseCrusher", Integer.MAX_VALUE, 20).setTool("axe", 2, 6.0F);
-	public static Item battleaxe = new ItemWeapon(600, 10D, -3.0D, 15, "battleaxe").setTool("axe", 2, 3.0F);
-	public static Item blacksmithBane = new ItemWeapon(413, 9.0D, -3.0D, 15, "blacksmithBane").setTool("axe", 2, 6.0F);
-	public static Item scraxe = new ItemWeapon(500, 10.0D, -3.0D, 20, "scraxe").setTool("axe", 2, 7.0F);
-	public static Item qPHammerAxe = new ItemPogoFarmine(800, 8.0D, -3.0D, 30, "qPHammerAxe", Integer.MAX_VALUE, 50, 0.6).setTool("pickaxe", 1, 2.0F).setTool("axe", 2, 7.0F);
-	public static Item rubyCroak = new ItemWeapon(2000, 11.0D, -3.0D, 30, "rubyCroak").setTool("axe", 3, 8.0F);
-	public static Item hephaestusLumber = new ItemFireWeapon(3000, 11.0D, -3.0D, 30, "hephaestusLumber", 30).setTool("axe", 3, 9.0F);
-	public static Item qFHammerAxe = new ItemPogoFarmine(toolUranium, 2048, 11.0D, -3.0D, 0, "qFHammerAxe", Integer.MAX_VALUE, 100, 0.7).setTool("pickaxe", 2, 5.0F).setTool("axe", 3, 9.0F);
+	public static Item BATLEACKS;
+	public static Item COPSE_CRUSHER;
+	public static Item BATTLEAXE;
+	public static Item BLACKSMITH_BANE;
+	public static Item SCRAXE;
+	public static Item Q_P_HAMMER_AXE;
+	public static Item RUBY_CROAK;
+	public static Item HEPHAESTUS_LUMBER;
+	public static Item Q_F_HAMMER_AXE;
 	//Dice
-	public static Item dice = new ItemWeapon(51, 6, 3, 6, "dice");
-	public static Item fluoriteOctet = new ItemWeapon(67, 15, 6, 8, "fluoriteOctet");
+	public static Item DICE;
+	public static Item FLUORITE_OCTET;
 	//misc weapons
-	public static Item catClaws = new ItemDualWeapon(500, 4.0D, 1.0D, -1.5D, -1.0D, 6, "catclaws");
+	public static Item CAT_CLAWS_DRAWN, CAT_CLAWS_SHEATHED;
 	//sickles
-	public static Item sickle = new ItemWeapon(220, 4.0D, -2.4D, 8, "sickle").setTool("sickle", 0, 1.5F);
-	public static Item homesSmellYaLater = new ItemWeapon(400, 5.5D, -2.4D, 10, "homesSmellYaLater").setTool("sickle", 0, 3.0F);
-	public static Item fudgeSickle = new ItemConsumableWeapon(450, 5.5D, -2.4D, 10, "fudgeSickle", 7, 0.6F).setTool("sickle", 0, 1.0F);
-	public static Item regiSickle = new ItemWeapon(812, 6.0D, -2.4D, 5, "regiSickle").setTool("sickle", 0, 4.0F);
-	public static Item clawSickle = new ItemWeapon(2048, 7.0D, -2.4D, 15, "clawSickle").setTool("sickle", 0, 4.0F);
-	public static Item clawOfNrubyiglith = new ItemHorrorterrorWeapon(1600, 9.5D, -2.4D, 15, "clawOfNrubyiglith").setTool("sickle", 0, 4.0F);
-	public static Item candySickle = new ItemCandyWeapon(96, 6.0D, -2.4D, 15, "candySickle").setTool("sickle", 0, 2.5F);
+	public static Item SICKLE;
+	public static Item HOMES_SMELL_YA_LATER;
+	public static Item FUDGE_SICKLE;
+	public static Item REGI_SICKLE;
+	public static Item CLAW_SICKLE;
+	public static Item CLAW_OF_NRUBYIGLITH;
+	public static Item CANDY_SICKLE;
 	//clubs
-	public static Item deuceClub = new ItemWeapon(1024, 2.5D, -2.2D, 15, "deuceClub");
-	public static Item nightClub = new ItemWeapon(600, 4.0D, -2.2D, 20, "nightClub");
-	public static Item pogoClub = new ItemPogoWeapon(600, 3.5D, -2.2D, 15, "pogoClub", 0.5);
-	public static Item metalBat = new ItemWeapon(750, 5.0D, -2.2D, 5, "metalBat");
-	public static Item spikedClub = new ItemWeapon(500, 5.5D, -2.2D, 5, "spikedClub");
+	public static Item DEUCE_CLUB;
+	public static Item NIGHT_CLUB;
+	public static Item POGO_CLUB;
+	public static Item METAL_BAT;
+	public static Item SPIKED_CLUB;
 	//canes
-	public static Item cane = new ItemWeapon(100, 2.0D, -2.0D, 15, "cane");
-	public static Item ironCane = new ItemWeapon(450, 3.5D, -2.0D, 10, "ironCane");
-	public static Item spearCane = new ItemWeapon(300, 5.0D, -2.0D, 13, "spearCane");
-	public static Item paradisesPortabello = new ItemWeapon(175, 3.0D, -2.0D, 10, "paradisesPortabello");
-	public static Item regiCane = new ItemWeapon(812, 6.0D, -2.0D, 7, "regiCane");
-	public static Item dragonCane = new ItemWeapon(300, 6.5D, -2.0D, 20, "dragonCane");
-	public static Item pogoCane = new ItemPogoWeapon(500, 3.0D, -2.0D, 15, "pogoCane", 0.6);
-	public static Item upStick = new ItemWeapon(toolUranium, 1, 0.0D, 0.0D, 0, "upStick").setUnbreakable();	//Never runs out of uranium!
+	public static Item CANE;
+	public static Item IRON_CANE;
+	public static Item SPEAR_CANE;
+	public static Item PARADISES_PORTABELLO;
+	public static Item REGI_CANE;
+	public static Item DRAGON_CANE;
+	public static Item POGO_CANE;
 	//Spoons/forks
-	public static Item woodenSpoon = new ItemWeapon(59, 2.0D, -2.2D, 5, "woodenSpoon");
-	public static Item silverSpoon = new ItemWeapon(250, 2.5D, -2.2D, 12, "silverSpoon");
-	public static ItemSpork crockerSpork = (ItemSpork) new ItemSpork(512, 4.0D, -2.2D, 15, "crocker");
-	public static Item skaiaFork = new ItemWeapon(2048, 8.5D, -2.2D, 10, "skaiaFork");
-	public static Item fork = new ItemWeapon(100, 4.0D, -2.2D, 3, "fork");
-	public static Item spork = new ItemWeapon(120, 4.5D, -2.3D, 5, "spork");
-	public static Item goldenSpork = new ItemWeapon(45, 5D, -2.3D, 22, "goldenSpork");
+	public static Item WOODEN_SPOON;
+	public static Item SILVER_SPOON;
+	public static Item CROCKER_SPOON, CROCKER_FORK;
+	public static Item SKAIA_FORK;
+	public static Item FORK;
+	public static Item SPORK;
+	public static Item GOLDEN_SPORK;
 	//Material tools
-	public static Item emeraldSword = new ItemSword(toolEmerald).setUnlocalizedName("swordEmerald").setCreativeTab(TabMinestuck.instance);
-	public static Item emeraldAxe = new ItemMinestuckAxe(toolEmerald, 9.0F, -3.0F).setUnlocalizedName("hatchetEmerald").setCreativeTab(TabMinestuck.instance);
-	public static Item emeraldPickaxe = new ItemMinestuckPickaxe(toolEmerald).setUnlocalizedName("pickaxeEmerald").setCreativeTab(TabMinestuck.instance);
-	public static Item emeraldShovel = new ItemSpade(toolEmerald).setUnlocalizedName("shovelEmerald").setCreativeTab(TabMinestuck.instance);
-	public static Item emeraldHoe = new ItemHoe(toolEmerald).setUnlocalizedName("hoeEmerald").setCreativeTab(TabMinestuck.instance);
+	public static Item EMERALD_SWORD;
+	public static Item EMERALD_AXE;
+	public static Item EMERALD_PICKAXE;
+	public static Item EMERALD_SHOVEL;
+	public static Item EMERALD_HOE;
 	//Armor
-	public static Item prismarineHelmet = new ItemArmor(armorPrismarine, 0, EntityEquipmentSlot.HEAD).setUnlocalizedName("helmetPrismarine").setCreativeTab(TabMinestuck.instance);
-	public static Item prismarineChestplate = new ItemArmor(armorPrismarine, 0, EntityEquipmentSlot.CHEST).setUnlocalizedName("chestplatePrismarine").setCreativeTab(TabMinestuck.instance);
-	public static Item prismarineLeggings = new ItemArmor(armorPrismarine, 0, EntityEquipmentSlot.LEGS).setUnlocalizedName("leggingsPrismarine").setCreativeTab(TabMinestuck.instance);
-	public static Item prismarineBoots = new ItemArmor(armorPrismarine, 0, EntityEquipmentSlot.FEET).setUnlocalizedName("bootsPrismarine").setCreativeTab(TabMinestuck.instance);
+	public static Item PRISMARINE_HELMET;
+	public static Item PRISMARINE_CHESTPLATE;
+	public static Item PRISMARINE_LEGGINGS;
+	public static Item PRISMARINE_BOOTS;
 	//Food
 	public static Item candy = new ItemMinestuckCandy();
 	public static Item beverage = new ItemMinestuckBeverage();
@@ -143,6 +145,7 @@ public class MinestuckItems
 	public static Item surpriseEmbryo = new ItemSurpriseEmbryo(3, 0.2F, false);
 	public static Item unknowableEgg = new ItemUnknowableEgg(3, 0.3F, false).setUnlocalizedName("unknowableEgg");
 	//Other
+	public static Item UP_STICK;
 	public static Item goldenGrasshopper = new Item().setUnlocalizedName("goldenGrasshopper").setCreativeTab(TabMinestuck.instance);
 	public static Item bugNet = new ItemNet().setUnlocalizedName("net");
 	public static Item itemFrog = new ItemFrog().setUnlocalizedName("frog");
@@ -465,66 +468,69 @@ public class MinestuckItems
 		registry.register(SHATTER_BEACON = new ItemWeapon(ModItemTypes.RUBY_TIER, 6, -2.4F, 15.0F, new Item.Properties().defaultMaxDamage(1850).group(ModItemGroup.WEAPONS)).setRegistryName("shatter_beacon"));
 		
 		//axes
-		registry.register(batleacks.setRegistryName("batleacks"));
-		registry.register(copseCrusher.setRegistryName("copse_crusher"));
-		registry.register(battleaxe.setRegistryName("battleaxe"));
-		registry.register(blacksmithBane.setRegistryName("blacksmith_bane"));
-		registry.register(scraxe.setRegistryName("scraxe"));
-		registry.register(qPHammerAxe.setRegistryName("piston_powered_pogo_axehammer"));
-		registry.register(rubyCroak.setRegistryName("ruby_croak"));
-		registry.register(hephaestusLumber.setRegistryName("hephaestus_lumberjack"));
-		registry.register(qFHammerAxe.setRegistryName("fission_focused_fault_feller"));
+		registry.register(BATLEACKS = new ItemSord(ModItemTypes.SBAHJ_TIER, 5, -3.5F, 1.0F, new Item.Properties().group(ModItemGroup.WEAPONS)).setRegistryName("batleacks"));
+		registry.register(COPSE_CRUSHER = new ItemFarmine(ItemTier.STONE, 5, -3.0F, 6.0F, Integer.MAX_VALUE, 20, new Item.Properties().defaultMaxDamage(400).addToolType(ToolType.AXE, 2).group(ModItemGroup.WEAPONS)).setRegistryName("copse_crusher"));
+		registry.register(BATTLEAXE = new ItemWeapon(ItemTier.IRON, 8, -3.0F, 3.0F, new Item.Properties().defaultMaxDamage(600).group(ModItemGroup.WEAPONS).addToolType(ToolType.AXE, 2)).setRegistryName("battleaxe"));
+		registry.register(BLACKSMITH_BANE = new ItemWeapon(ItemTier.STONE, 8, -3.0F, 6.0F, new Item.Properties().defaultMaxDamage(413).group(ModItemGroup.WEAPONS).addToolType(ToolType.AXE, 2)).setRegistryName("blacksmith_bane"));
+		registry.register(SCRAXE = new ItemWeapon(ItemTier.IRON, 8, -3.0F, 7.0F, new Item.Properties().defaultMaxDamage(500).group(ModItemGroup.WEAPONS).addToolType(ToolType.AXE, 2)).setRegistryName("scraxe"));
+		registry.register(Q_P_HAMMER_AXE = new ItemPogoFarmine(ModItemTypes.POGO_TIER, 6, -3.0F, 2.0F, Integer.MAX_VALUE, 50, 0.6, new Item.Properties().defaultMaxDamage(800).group(ModItemGroup.WEAPONS).addToolType(ToolType.AXE, 2).addToolType(ToolType.PICKAXE, 1)).setRegistryName("piston_powered_pogo_axehammer"));
+		registry.register(RUBY_CROAK = new ItemWeapon(ModItemTypes.RUBY_TIER, 7, -3.0F, 8.0F, new Item.Properties().group(ModItemGroup.WEAPONS).addToolType(ToolType.AXE, 3)).setRegistryName("ruby_croak"));
+		registry.register(HEPHAESTUS_LUMBER = new ItemFireWeapon(ModItemTypes.RUBY_TIER, 7, -3.0F, 9.0F, 30, new Item.Properties().defaultMaxDamage(3000).group(ModItemGroup.WEAPONS).addToolType(ToolType.AXE, 3)).setRegistryName("hephaestus_lumberjack"));
+		registry.register(Q_F_HAMMER_AXE = new ItemPogoFarmine(ModItemTypes.URANIUM_TIER, 7, -3.0F, 5.0F, Integer.MAX_VALUE, 100, 0.7, new Item.Properties().defaultMaxDamage(2048).group(ModItemGroup.WEAPONS).addToolType(ToolType.PICKAXE, 2).addToolType(ToolType.AXE, 3)).setRegistryName("fission_focused_fault_feller"));
 		
 		//Dice
-		registry.register(dice.setRegistryName("dice"));
-		registry.register(fluoriteOctet.setRegistryName("fluorite_octet"));
+		registry.register(DICE = new ItemWeapon(ItemTier.STONE, 5, -3.0F, 1.0F, new Item.Properties().defaultMaxDamage(51).group(ModItemGroup.WEAPONS)).setRegistryName("dice"));
+		registry.register(FLUORITE_OCTET = new ItemWeapon(ItemTier.DIAMOND, 12, -3.0F, 1.0F, new Item.Properties().defaultMaxDamage(67).group(ModItemGroup.WEAPONS)).setRegistryName("fluorite_octet"));
 		//misc weapons
-		registry.register(catClaws.setRegistryName("catclaws"));
+		registry.register(CAT_CLAWS_DRAWN  = new ItemDualWeapon(ItemTier.IRON, 2, -1.5F, 10.0F, new Item.Properties().defaultMaxDamage(500).group(ModItemGroup.WEAPONS)).setRegistryName("cat_claws_drawn"));
+		registry.register(CAT_CLAWS_SHEATHED  = new ItemDualWeapon(ItemTier.IRON, -1, -1.0F, 10.0F, (ItemDualWeapon) CAT_CLAWS_DRAWN, new Item.Properties().defaultMaxDamage(500)).setRegistryName("cat_claws_sheathed"));
 		//sickles
-		registry.register(sickle.setRegistryName("sickle"));
-		registry.register(homesSmellYaLater.setRegistryName("homes_smell_ya_later"));
-		registry.register(fudgeSickle.setRegistryName("fudgesickle"));
-		registry.register(regiSickle.setRegistryName("regisickle"));
-		registry.register(clawSickle.setRegistryName("claw_sickle"));
-		registry.register(clawOfNrubyiglith.setRegistryName("claw_of_nrubyiglith"));
-		registry.register(candySickle.setRegistryName("candy_sickle"));
+		registry.register(SICKLE = new ItemWeapon(ItemTier.IRON, 2, -2.4F, 1.5F, new Item.Properties().group(ModItemGroup.WEAPONS).addToolType(ModItemTypes.SICKLE_TOOL, 0)).setRegistryName("sickle"));
+		registry.register(HOMES_SMELL_YA_LATER = new ItemWeapon(ItemTier.IRON, 3, -2.4F, 3.0F, new Item.Properties().defaultMaxDamage(400).group(ModItemGroup.WEAPONS).addToolType(ModItemTypes.SICKLE_TOOL, 0)).setRegistryName("homes_smell_ya_later"));
+		registry.register(FUDGE_SICKLE = new ItemConsumableWeapon(ModItemTypes.CANDY_TIER, 5, -2.4F, 1.0F, 7, 0.6F, new Item.Properties().group(ModItemGroup.WEAPONS).addToolType(ModItemTypes.SICKLE_TOOL, 0)).setRegistryName("fudgesickle"));
+		registry.register(REGI_SICKLE = new ItemWeapon(ModItemTypes.REGI_TIER, 3, -2.4F, 4.0F, new Item.Properties().group(ModItemGroup.WEAPONS).addToolType(ModItemTypes.SICKLE_TOOL, 0)).setRegistryName("regisickle"));
+		registry.register(CLAW_SICKLE = new ItemWeapon(ModItemTypes.RUBY_TIER, 3, -2.4F, 4.0F, new Item.Properties().group(ModItemGroup.WEAPONS).addToolType(ModItemTypes.SICKLE_TOOL, 0)).setRegistryName("claw_sickle"));
+		registry.register(CLAW_OF_NRUBYIGLITH = new ItemHorrorterrorWeapon(ModItemTypes.HORRORTERROR_TIER, 5, -2.4F, 4.0F, new Item.Properties().group(ModItemGroup.WEAPONS).addToolType(ModItemTypes.SICKLE_TOOL, 0)).setRegistryName("claw_of_nrubyiglith"));
+		registry.register(CANDY_SICKLE = new ItemCandyWeapon(ModItemTypes.CANDY_TIER, 6, -2.4F, 2.5F, new Item.Properties().defaultMaxDamage(96).group(ModItemGroup.WEAPONS).addToolType(ModItemTypes.SICKLE_TOOL, 0)).setRegistryName("candy_sickle"));
 		
 		//clubs
-		registry.register(deuceClub.setRegistryName("deuce_club"));
-		registry.register(nightClub.setRegistryName("nightclub"));
-		registry.register(pogoClub.setRegistryName("pogo_club"));
-		registry.register(metalBat.setRegistryName("metal_bat"));
-		registry.register(spikedClub.setRegistryName("spiked_club"));
+		registry.register(DEUCE_CLUB = new ItemWeapon(ItemTier.WOOD, 3, -2.2F, 2.0F, new Item.Properties().defaultMaxDamage(1024).group(ModItemGroup.WEAPONS)).setRegistryName("deuce_club"));
+		registry.register(NIGHT_CLUB = new ItemWeapon(ModItemTypes.REGI_TIER, 1, -2.2F, 2.0F, new Item.Properties().defaultMaxDamage(600).group(ModItemGroup.WEAPONS)).setRegistryName("night_club"));
+		registry.register(POGO_CLUB = new ItemPogoWeapon(ModItemTypes.POGO_TIER, 2, -2.2F, 2.0F, 0.5, new Item.Properties().group(ModItemGroup.WEAPONS)).setRegistryName("pogo_club"));
+		registry.register(METAL_BAT = new ItemWeapon(ItemTier.IRON, 3, -2.2F, 2.0F, new Item.Properties().defaultMaxDamage(750).group(ModItemGroup.WEAPONS)).setRegistryName("metal_bat"));
+		registry.register(SPIKED_CLUB = new ItemWeapon(ItemTier.WOOD, 5, -2.2F, 2.0F, new Item.Properties().defaultMaxDamage(500).group(ModItemGroup.WEAPONS)).setRegistryName("spiked_club"));
 		
 		//canes
-		registry.register(cane.setRegistryName("cane"));
-		registry.register(ironCane.setRegistryName("iron_cane"));
-		registry.register(spearCane.setRegistryName("spear_cane"));
-		registry.register(paradisesPortabello.setRegistryName("paradises_portabello"));
-		registry.register(regiCane.setRegistryName("regi_cane"));
-		registry.register(dragonCane.setRegistryName("dragon_cane"));
-		registry.register(pogoCane.setRegistryName("pogo_cane"));
-		registry.register(upStick.setRegistryName("uranium_powered_stick"));
+		registry.register(CANE = new ItemWeapon(ItemTier.WOOD, 2, -2.0F, 1.0F, new Item.Properties().defaultMaxDamage(100).group(ModItemGroup.WEAPONS)).setRegistryName("cane"));
+		registry.register(IRON_CANE = new ItemWeapon(ItemTier.IRON, 2, -2.0F, 1.0F, new Item.Properties().defaultMaxDamage(450).group(ModItemGroup.WEAPONS)).setRegistryName("iron_cane"));
+		registry.register(SPEAR_CANE = new ItemWeapon(ItemTier.IRON, 3, -2.0F, 1.0F, new Item.Properties().defaultMaxDamage(300).group(ModItemGroup.WEAPONS)).setRegistryName("spear_cane"));
+		registry.register(PARADISES_PORTABELLO = new ItemWeapon(ModItemTypes.CANDY_TIER, 3, -2.0F, 1.0F, new Item.Properties().defaultMaxDamage(175).group(ModItemGroup.WEAPONS)).setRegistryName("paradises_portabello"));
+		registry.register(REGI_CANE = new ItemWeapon(ModItemTypes.REGI_TIER, 3, -2.0F, 1.0F, new Item.Properties().group(ModItemGroup.WEAPONS)).setRegistryName("regi_cane"));
+		registry.register(DRAGON_CANE = new ItemWeapon(ModItemTypes.RUBY_TIER, 3, -2.0F, 1.0F, new Item.Properties().defaultMaxDamage(300).group(ModItemGroup.WEAPONS)).setRegistryName("dragon_cane"));
+		registry.register(POGO_CANE = new ItemPogoWeapon(ModItemTypes.POGO_TIER, 2, -2.0F, 1.0F, 0.6, new Item.Properties().group(ModItemGroup.WEAPONS)).setRegistryName("pogo_cane"));
 		//Spoons/forks
-		registry.register(woodenSpoon.setRegistryName("wooden_spoon"));
-		registry.register(silverSpoon.setRegistryName("silver_spoon"));
-		registry.register(crockerSpork.setRegistryName("crocker_spork"));
-		registry.register(skaiaFork.setRegistryName("skaia_fork"));
-		registry.register(fork.setRegistryName("fork"));
-		registry.register(spork.setRegistryName("spork"));
-		registry.register(goldenSpork.setRegistryName("golden_spork"));
+		registry.register(WOODEN_SPOON = new ItemWeapon(ItemTier.WOOD, 2, -2.2F, 1.0F, new Item.Properties().group(ModItemGroup.WEAPONS)).setRegistryName("wooden_spoon"));
+		registry.register(SILVER_SPOON = new ItemWeapon(ItemTier.IRON, 1, -2.2F, 1.0F, new Item.Properties().group(ModItemGroup.WEAPONS)).setRegistryName("silver_spoon"));
+		registry.register(CROCKER_SPOON = new ItemDualWeapon(ModItemTypes.RUBY_TIER, 0, -2.2F, 1.0F, new Item.Properties().defaultMaxDamage(512).group(ModItemGroup.WEAPONS)).setRegistryName("crocker_spoon"));
+		registry.register(CROCKER_FORK = new ItemDualWeapon(ModItemTypes.RUBY_TIER, 2, -2.6F, 1.0F, (ItemDualWeapon) CROCKER_SPOON, new Item.Properties().defaultMaxDamage(512)).setRegistryName("crocker_fork"));
+		registry.register(SKAIA_FORK = new ItemWeapon(ModItemTypes.REGI_TIER, 5, -2.2F, 1.0F, new Item.Properties().defaultMaxDamage(2048).group(ModItemGroup.WEAPONS)).setRegistryName("skaia_fork"));
+		registry.register(FORK = new ItemWeapon(ItemTier.STONE, 3, -2.2F, 1.0F, new Item.Properties().group(ModItemGroup.WEAPONS)).setRegistryName("fork"));
+		registry.register(SPORK = new ItemWeapon(ItemTier.STONE, 4, -2.3F, 1.0F, new Item.Properties().group(ModItemGroup.WEAPONS)).setRegistryName("spork"));
+		registry.register(GOLDEN_SPORK = new ItemWeapon(ItemTier.GOLD, 5, -2.3F, 1.0F, new Item.Properties().group(ModItemGroup.WEAPONS)).setRegistryName("golden_spork"));
 
-		registry.register(emeraldSword.setRegistryName("emerald_sword"));
-		registry.register(emeraldAxe.setRegistryName("emerald_axe"));
-		registry.register(emeraldPickaxe.setRegistryName("emerald_pickaxe"));
-		registry.register(emeraldShovel.setRegistryName("emerald_shovel"));
-		registry.register(emeraldHoe.setRegistryName("emerald_hoe"));
+		registry.register(EMERALD_SWORD = new ItemSword(ModItemTypes.EMERALD_TIER, 3, -2.4F, new Item.Properties().group(ModItemGroup.WEAPONS)).setRegistryName("emerald_sword"));
+		registry.register(EMERALD_AXE = new ItemModAxe(ModItemTypes.EMERALD_TIER, 5, -3.0F, new Item.Properties().group(ModItemGroup.WEAPONS)).setRegistryName("emerald_axe"));
+		registry.register(EMERALD_PICKAXE = new ItemModPickaxe(ModItemTypes.EMERALD_TIER, 1 , -2.8F, new Item.Properties().group(ModItemGroup.WEAPONS)).setRegistryName("emerald_pickaxe"));
+		registry.register(EMERALD_SHOVEL = new ItemSpade(ModItemTypes.EMERALD_TIER, 1.5F, -3.0F, new Item.Properties().group(ModItemGroup.WEAPONS)).setRegistryName("emerald_shovel"));
+		registry.register(EMERALD_HOE = new ItemHoe(ModItemTypes.EMERALD_TIER, 0.0F, new Item.Properties().group(ModItemGroup.WEAPONS)).setRegistryName("emerald_hoe"));
 		
 		//armor
-		registry.register(prismarineHelmet.setRegistryName("prismarine_helmet"));
-		registry.register(prismarineChestplate.setRegistryName("prismarine_chestplate"));
-		registry.register(prismarineLeggings.setRegistryName("prismarine_leggings"));
-		registry.register(prismarineBoots.setRegistryName("prismarine_boots"));
+		registry.register(PRISMARINE_HELMET = new ItemArmor(ModItemTypes.PRISMARINE_ARMOR, EntityEquipmentSlot.HEAD, new Item.Properties().group(ModItemGroup.WEAPONS)).setRegistryName("prismarine_helmet"));
+		registry.register(PRISMARINE_CHESTPLATE = new ItemArmor(ModItemTypes.PRISMARINE_ARMOR, EntityEquipmentSlot.CHEST, new Item.Properties().group(ModItemGroup.WEAPONS)).setRegistryName("prismarine_chestplate"));
+		registry.register(PRISMARINE_LEGGINGS = new ItemArmor(ModItemTypes.PRISMARINE_ARMOR, EntityEquipmentSlot.LEGS, new Item.Properties().group(ModItemGroup.WEAPONS)).setRegistryName("prismarine_leggings"));
+		registry.register(PRISMARINE_BOOTS = new ItemArmor(ModItemTypes.PRISMARINE_ARMOR, EntityEquipmentSlot.FEET, new Item.Properties().group(ModItemGroup.WEAPONS)).setRegistryName("prismarine_boots"));
+		
+		registry.register(UP_STICK = new Item(new Item.Properties().group(ModItemGroup.WEAPONS).maxStackSize(1)).setRegistryName("uranium_powered_stick"));
 		
 		//food
 		registry.register(candy.setRegistryName("candy"));
@@ -588,25 +594,25 @@ public class MinestuckItems
 		registry.register(recordDanceStab.setRegistryName("record_dance_stab"));
 		registry.register(recordRetroBattle.setRegistryName("record_retro_battle"));
 
-		((ItemMinestuckBucket) minestuckBucket).addBlock(blockOil.getDefaultState());
+		/*((ItemMinestuckBucket) minestuckBucket).addBlock(blockOil.getDefaultState());
 		((ItemMinestuckBucket) minestuckBucket).addBlock(blockBlood.getDefaultState());
 		((ItemMinestuckBucket) minestuckBucket).addBlock(blockBrainJuice.getDefaultState());
 		((ItemMinestuckBucket) minestuckBucket).addBlock(blockWatercolors.getDefaultState());
 		((ItemMinestuckBucket) minestuckBucket).addBlock(blockEnder.getDefaultState());
-		((ItemMinestuckBucket) minestuckBucket).addBlock(blockLightWater.getDefaultState());
+		((ItemMinestuckBucket) minestuckBucket).addBlock(blockLightWater.getDefaultState());*/
 
 		/*for(Block block : liquidGrists)
 		{
 			minestuckBucket.addBlock(block.getDefaultState());
 		}*/
 		
-		((ItemMinestuckSeedFood) strawberryChunk).setPlant(strawberryStem.getDefaultState());
+		((ItemMinestuckSeedFood) strawberryChunk).setPlant(STRAWBERRY_STEM.getDefaultState());
 		
-		ItemWeapon.addToolMaterial("pickaxe", Arrays.asList(Material.IRON, Material.ANVIL, Material.ROCK));
-		ItemWeapon.addToolMaterial("axe", Arrays.asList(Material.WOOD, Material.PLANTS, Material.VINE));
-		ItemWeapon.addToolMaterial("shovel", Arrays.asList(Material.SNOW, Material.CRAFTED_SNOW, Material.CLAY, Material.GRASS, Material.GROUND, Material.SAND));
-		ItemWeapon.addToolMaterial("sword", Arrays.asList(Material.WEB));
-		ItemWeapon.addToolMaterial("sickle", Arrays.asList(Material.WEB, Material.LEAVES, Material.PLANTS, Material.VINE));
+		ItemWeapon.addToolMaterial(ToolType.PICKAXE, Arrays.asList(Material.IRON, Material.ANVIL, Material.ROCK));
+		ItemWeapon.addToolMaterial(ToolType.AXE, Arrays.asList(Material.WOOD, Material.PLANTS, Material.VINE));
+		ItemWeapon.addToolMaterial(ToolType.SHOVEL, Arrays.asList(Material.SNOW, Material.CRAFTED_SNOW, Material.CLAY, Material.GRASS, Material.GROUND, Material.SAND));
+		//ItemWeapon.addToolMaterial("sword", Arrays.asList(Material.WEB));
+		ItemWeapon.addToolMaterial(ModItemTypes.SICKLE_TOOL, Arrays.asList(Material.WEB, Material.LEAVES, Material.PLANTS, Material.VINE));
 	}
 	
 	private static Item registerItemBlock(IForgeRegistry<Item> registry, Block block)
