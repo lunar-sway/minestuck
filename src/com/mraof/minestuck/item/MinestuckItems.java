@@ -17,6 +17,7 @@ import com.mraof.minestuck.block.BlockMinestuckStone;
 import com.mraof.minestuck.block.BlockVanityLaptopOff;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.block.MinestuckBlocks.EnumSlabStairMaterial;
+import com.mraof.minestuck.client.model.armor.ModelDiverHelmet;
 import com.mraof.minestuck.entity.EntityBullet;
 import com.mraof.minestuck.entity.item.EntityCrewPoster;
 import com.mraof.minestuck.entity.item.EntitySbahjPoster;
@@ -35,6 +36,7 @@ import com.mraof.minestuck.item.weapon.ItemConsumableWeapon;
 import com.mraof.minestuck.item.weapon.ItemDualWeapon;
 import com.mraof.minestuck.item.weapon.ItemFarmine;
 import com.mraof.minestuck.item.weapon.ItemFireWeapon;
+import com.mraof.minestuck.item.weapon.ItemHorrorterrorWeapon;
 import com.mraof.minestuck.item.weapon.ItemPogoFarmine;
 import com.mraof.minestuck.item.weapon.ItemPogoWeapon;
 import com.mraof.minestuck.item.weapon.ItemPotionWeapon;
@@ -79,6 +81,9 @@ public class MinestuckItems
 
 	public static Item.ToolMaterial toolEmerald = EnumHelper.addToolMaterial("EMERALD", 3, 1220, 12.0F, 4.0F, 12).setRepairItem(new ItemStack(Items.EMERALD));
 	public static ItemArmor.ArmorMaterial armorPrismarine = EnumHelper.addArmorMaterial("PRISMARINE", "minestuck:prismarine", 20, new int[]{3, 7, 6, 2}, 15, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0F);
+	
+	public static ItemArmor.ArmorMaterial materialDiverHelmet = EnumHelper.addArmorMaterial("DIVER_HELMET", "minestuck:diver_helmet", 50, new int[] {0, 0, 0, 3}, 5, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0F)
+	
 	;
 	public static Item.ToolMaterial toolUranium = EnumHelper.addToolMaterial("URANIUM", 3, 1220, 12.0F, 6.0F, 15);
 	//hammers
@@ -138,7 +143,7 @@ public class MinestuckItems
 	//Bows
 	public static Item natureBow = new ItemRanged("natureBow", 2.0D, 530, 5000, Items.ARROW, EntityArrow.class);
 	public static Item infernoShot = new ItemRanged("infernoShot", 3.5D, 480, 7500, Items.ARROW, EntityArrow.class).setBulletSpeed(1.1F);
-	public static Item energyBow = new ItemRanged("energyBow", 1.5, 235, 7000, ItemStack.EMPTY, EntityBullet.class).setBulletSpeed(1.2F); //TODO make the energy bow shoot custom arrows
+	public static Item energyBow = new ItemRanged("energyBow", 1.5, 235, 7000, ItemStack.EMPTY, EntityBullet.class).setBulletSpeed(1.2F);
 	//misc weapons
 	public static Item catClaws = new ItemDualWeapon(500, 4.0D, 1.0D, -1.5D, -1.0D, 6, "catclaws");
 	//sickles
@@ -184,6 +189,10 @@ public class MinestuckItems
 	public static Item prismarineChestplate = new ItemArmor(armorPrismarine, 0, EntityEquipmentSlot.CHEST).setUnlocalizedName("chestplatePrismarine").setCreativeTab(TabMinestuck.instance);
 	public static Item prismarineLeggings = new ItemArmor(armorPrismarine, 0, EntityEquipmentSlot.LEGS).setUnlocalizedName("leggingsPrismarine").setCreativeTab(TabMinestuck.instance);
 	public static Item prismarineBoots = new ItemArmor(armorPrismarine, 0, EntityEquipmentSlot.FEET).setUnlocalizedName("bootsPrismarine").setCreativeTab(TabMinestuck.instance);
+	
+	//Hats
+	public static Item diverHelmet = new ItemMinestuckArmor(materialDiverHelmet, 0, EntityEquipmentSlot.HEAD, new ModelDiverHelmet()).setUnlocalizedName("diverHelmet").setCreativeTab(TabMinestuck.instance);
+	
 	//Food
 	public static Item candy = new ItemMinestuckCandy();
 	public static Item beverage = new ItemMinestuckBeverage();
@@ -542,6 +551,9 @@ public class MinestuckItems
 		registry.register(prismarineChestplate.setRegistryName("prismarine_chestplate"));
 		registry.register(prismarineLeggings.setRegistryName("prismarine_leggings"));
 		registry.register(prismarineBoots.setRegistryName("prismarine_boots"));
+		
+		//Hats
+		registry.register(diverHelmet.setRegistryName("diver_helmet"));
 		
 		//food
 		registry.register(candy.setRegistryName("candy"));

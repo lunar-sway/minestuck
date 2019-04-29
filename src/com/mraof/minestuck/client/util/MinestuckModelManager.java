@@ -159,6 +159,8 @@ public class MinestuckModelManager
 		register(prismarineLeggings);
 		register(prismarineBoots);
 		
+		register(diverHelmet);
+		
 		register(bugNet);
 		register(goldenGrasshopper);
 
