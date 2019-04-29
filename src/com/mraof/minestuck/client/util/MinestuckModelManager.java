@@ -27,7 +27,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Collections;
 
-import static com.mraof.minestuck.block.MinestuckBlocks.*;
 import static com.mraof.minestuck.item.MinestuckItems.*;
 
 @SideOnly(Side.CLIENT)
@@ -213,8 +212,8 @@ public class MinestuckModelManager
 		register(candy, GristType.REGISTRY.getID(GristType.Uranium) + 1, "uranium_gummy_bear");
 		register(candy, GristType.REGISTRY.getID(GristType.Zillium) + 1, "zillium_skittles");
 		
-		for(int i = 0; i < ItemMinestuckBeverage.NAMES.length; i++)
-			register(beverage, i, ItemMinestuckBeverage.NAMES[i]);
+		for(int i = 0; i < ItemBeverage.NAMES.length; i++)
+			register(beverage, i, ItemBeverage.NAMES[i]);
 		register(bugOnAStick);
 		register(chocolateBeetle);
 		register(coneOfFlies);

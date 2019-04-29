@@ -50,6 +50,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.Chunk.EnumCreateEntityType;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
+import net.minecraft.world.dimension.DimensionType;
 
 public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITeleporter
 {
@@ -61,19 +62,16 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 	private boolean creative;
 	private HashSet<BlockMove> blockMoves;
 	
-	public ItemCruxiteArtifact() 
+	public ItemCruxiteArtifact(Properties properties)
 	{
-		this.setCreativeTab(TabMinestuck.instance);
-		setUnlocalizedName("cruxiteArtifact");
-		this.maxStackSize = 1;
-		setHasSubtypes(true);
+		super(properties);
 	}
 	
 	public void onArtifactActivated(EntityPlayer player)
 	{
 		try
 		{
-			if(!player.world.isRemote && player.world.provider.getDimension() != -1)
+			if(!player.world.isRemote && player.world.getDimension().getType() != DimensionType.NETHER)
 			{
 				if(!SburbHandler.shouldEnterNow(player))
 					return;
@@ -98,7 +96,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 						}
 						
 						//Teleports the player to their home in the Medium, without any bells or whistles.
-						BlockPos pos = newWorld.provider.getRandomizedSpawnPoint();
+						BlockPos pos = newWorld.getDimension().getRandomizedSpawnPoint();
 						Teleport.teleportEntity(player, c.getClientDimension(), null, pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F);
 						
 						return;

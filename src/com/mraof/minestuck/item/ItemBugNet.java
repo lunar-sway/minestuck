@@ -18,18 +18,12 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class ItemNet extends Item
+public class ItemBugNet extends Item
 {
-	
-	public ItemNet()
+	public ItemBugNet(Properties properties)
 	{
-		setUnlocalizedName("net");
-		setCreativeTab(TabMinestuck.instance);
-		setMaxStackSize(1);
-		setMaxDamage(64);
+		super(properties);
 	}
-	
-	
 	
 	@Override
 	public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState state, BlockPos pos,
@@ -38,7 +32,7 @@ public class ItemNet extends Item
 		if(entityLiving instanceof EntityPlayer)
 		{
 			EntityPlayer playerIn = (EntityPlayer) entityLiving;
-			if(!playerIn.isCreative() && worldIn.getBlockState(pos).getBlock() == Blocks.TALLGRASS)
+			if(!playerIn.isCreative() && worldIn.getBlockState(pos).getBlock() == Blocks.TALL_GRASS)
 			{
 				Random rand = playerIn.getRNG();
 				
@@ -46,7 +40,7 @@ public class ItemNet extends Item
 				{
 					if(rand.nextInt(555) == 0)
 					{
-						EntityItem item = new EntityItem(worldIn, pos.getX(), pos.getY() + 0.5, pos.getZ(), new ItemStack(MinestuckItems.goldenGrasshopper, 1));
+						EntityItem item = new EntityItem(worldIn, pos.getX(), pos.getY() + 0.5, pos.getZ(), new ItemStack(MinestuckItems.GOLDEN_GRASSHOPPER, 1));
 						worldIn.spawnEntity(item);
 						playerIn.getHeldItemMainhand().damageItem(1, playerIn);
 						
@@ -54,7 +48,7 @@ public class ItemNet extends Item
 					}
 					else if(rand.nextInt(5) == 0)
 					{
-						EntityItem item = new EntityItem(worldIn, pos.getX(), pos.getY() + 0.5, pos.getZ(), new ItemStack(MinestuckItems.grasshopper, 1));
+						EntityItem item = new EntityItem(worldIn, pos.getX(), pos.getY() + 0.5, pos.getZ(), new ItemStack(MinestuckItems.GRASSHOPPER, 1));
 						worldIn.spawnEntity(item);
 						playerIn.getHeldItemMainhand().damageItem(1, playerIn);
 						
@@ -65,5 +59,4 @@ public class ItemNet extends Item
 		}
 		return false;
 	}
-	
 }

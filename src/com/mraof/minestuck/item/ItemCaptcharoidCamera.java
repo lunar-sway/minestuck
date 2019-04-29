@@ -3,58 +3,37 @@ package com.mraof.minestuck.item;
 import java.util.List;
 
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
-import com.mraof.minestuck.block.BlockMachine;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemCaptcharoidCamera extends Item {
-
-	public ItemCaptcharoidCamera()
+public class ItemCaptcharoidCamera extends Item
+{
+	
+	public ItemCaptcharoidCamera(Properties properties)
 	{
-		super();
-		this.maxStackSize = 1;
-		this.setMaxDamage(64);
-		
-		this.setUnlocalizedName("captcharoidCamera");
-		//this.setRegistryName("captcharoid_camera");
-	}
-
-	@Override
-	protected boolean isInCreativeTab(CreativeTabs targetTab)
-	{
-		return targetTab == CreativeTabs.SEARCH || targetTab == TabMinestuck.instance;
+		super(properties);
 	}
 	
 	@Override
-	public CreativeTabs[] getCreativeTabs()
+	public EnumActionResult onItemUse(ItemUseContext context)
 	{
-		return new CreativeTabs[] {TabMinestuck.instance};
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean isFull3D()
-	{
-		return true;
-	}
-	
-	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand,
-			EnumFacing facing, float hitX, float hitY, float hitZ) {
+		World worldIn = context.getWorld();
+		BlockPos pos = context.getPos();
+		EntityPlayer player = context.getPlayer();
+		EnumFacing facing = context.getFace();
 		//pos.offset(facing).offset(facing.rotateY()).up(), pos.offset(facing.getOpposite()).offset(facing.rotateYCCW()).down()
 		if(!worldIn.isRemote) 
 		{
@@ -68,20 +47,15 @@ public class ItemCaptcharoidCamera extends Item {
 				if(item.isEmpty()) item = new ItemStack(Items.ITEM_FRAME);
 				
 				player.inventory.addItemStackToInventory(AlchemyRecipes.createGhostCard(item));
-				player.getHeldItem(hand).damageItem(1, player);
+				context.getItem().damageItem(1, player);
 			}
 			else
 			{
 				IBlockState state = worldIn.getBlockState(pos);
-				ItemStack block = new ItemStack(Item.getItemFromBlock(state.getBlock()));
-				int meta = state.getBlock().damageDropped(state);
-				block.setItemDamage(meta);
-				
-				if(worldIn.getBlockState(pos).getBlock() instanceof BlockMachine)
-					block = new ItemStack(((BlockMachine) worldIn.getBlockState(pos).getBlock()).getItemFromMachine());
+				ItemStack block = state.getPickBlock(new RayTraceResult(new Vec3d(context.getHitX(), context.getHitY(), context.getHitZ()), facing, pos), worldIn, pos, player);
 				
 				player.inventory.addItemStackToInventory(AlchemyRecipes.createGhostCard(block));
-				player.getHeldItem(hand).damageItem(1, player);
+				context.getItem().damageItem(1, player);
 			}
 			return EnumActionResult.PASS;
 		}

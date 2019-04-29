@@ -11,17 +11,22 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
-public class ItemGrimoire extends Item {
-	public ItemGrimoire() {
-		this.setCreativeTab(TabMinestuck.instance);
+public class ItemGrimoire extends Item
+{
+	
+	public ItemGrimoire(Properties properties)
+	{
+		super(properties);
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-		if(!worldIn.isRemote && playerIn != null) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
+	{
+		if(!worldIn.isRemote && playerIn != null)
+		{
 			ITextComponent message = new TextComponentTranslation("After flipping through some pages, you feel significantly more insignificant.");
 			playerIn.sendMessage(message);
-			playerIn.world.playSound((EntityPlayer)null, playerIn.posX, playerIn.posY, playerIn.posZ, MinestuckSoundHandler.soundWhispers, SoundCategory.AMBIENT, 0.5F, 0.8F);
+			playerIn.world.playSound(null, playerIn.posX, playerIn.posY, playerIn.posZ, MinestuckSoundHandler.soundWhispers, SoundCategory.AMBIENT, 0.5F, 0.8F);
 		}
 		return super.onItemRightClick(worldIn, playerIn, handIn);
 	}

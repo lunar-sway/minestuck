@@ -2,7 +2,6 @@ package com.mraof.minestuck.item;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -18,11 +17,11 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemMinestuckBucket extends ItemBucket	//Unsure if anything more should update for 1.9
+public class ItemMinestuckBucket //extends ItemBucket	//Unsure if anything more should update for 1.9
 {
-	public List<IBlockState> fillFluids = new ArrayList<IBlockState>();
+	/*public List<IBlockState> fillFluids = new ArrayList<IBlockState>();
 	
-	public ItemMinestuckBucket() 
+	public ItemMinestuckBucket()
 	{
 		super(Blocks.AIR);
 		setUnlocalizedName("minestuckBucket");
@@ -76,12 +75,12 @@ public class ItemMinestuckBucket extends ItemBucket	//Unsure if anything more sh
 				}
 			}
 		}
-	}
+	}*/
 
 	/**
 	 * Attempts to place the liquid contained inside the bucket.
 	 */
-	public boolean tryPlaceContainedLiquid(EntityPlayer player, World world, BlockPos pos, IBlockState block)
+	/*public boolean tryPlaceContainedLiquid(EntityPlayer player, World world, BlockPos pos, IBlockState block)
 	{
 		Material material = world.getBlockState(pos).getMaterial();
 		boolean flag = !material.isSolid();
@@ -121,6 +120,6 @@ public class ItemMinestuckBucket extends ItemBucket	//Unsure if anything more sh
 	public void addBlock(IBlockState block)
 	{
 		fillFluids.add(block);
-	}
+	}*/
 	
 }

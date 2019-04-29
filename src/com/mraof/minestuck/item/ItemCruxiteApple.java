@@ -13,15 +13,19 @@ import net.minecraft.world.World;
 
 public class ItemCruxiteApple extends ItemCruxiteArtifact
 {
+	public ItemCruxiteApple(Properties properties)
+	{
+		super(properties);
+	}
 	
 	@Override
-	public int getMaxItemUseDuration(ItemStack stack)
+	public int getUseDuration(ItemStack stack)
 	{
 		return 32;
 	}
 	
 	@Override
-	public EnumAction getItemUseAction(ItemStack stack)
+	public EnumAction getUseAction(ItemStack stack)
 	{
 		return EnumAction.EAT;
 	}
@@ -44,7 +48,6 @@ public class ItemCruxiteApple extends ItemCruxiteArtifact
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
 	{
 		playerIn.setActiveHand(handIn);
-		return new ActionResult(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
+		return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 	}
-	
 }

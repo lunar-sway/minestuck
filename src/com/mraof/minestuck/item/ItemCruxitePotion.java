@@ -11,15 +11,19 @@ import net.minecraft.world.World;
 
 public class ItemCruxitePotion extends ItemCruxiteArtifact
 {
+	public ItemCruxitePotion(Properties properties)
+	{
+		super(properties);
+	}
 	
 	@Override
-	public int getMaxItemUseDuration(ItemStack stack)
+	public int getUseDuration(ItemStack stack)
 	{
 		return 32;
 	}
 	
 	@Override
-	public EnumAction getItemUseAction(ItemStack stack)
+	public EnumAction getUseAction(ItemStack stack)
 	{
 		return EnumAction.DRINK;
 	}
@@ -40,5 +44,4 @@ public class ItemCruxitePotion extends ItemCruxiteArtifact
 		playerIn.setActiveHand(handIn);
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 	}
-	
 }

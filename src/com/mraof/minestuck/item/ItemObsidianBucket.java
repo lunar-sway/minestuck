@@ -14,24 +14,20 @@ import net.minecraft.world.World;
 
 public class ItemObsidianBucket extends Item
 {
-	
-	public ItemObsidianBucket()
+	public ItemObsidianBucket(Properties properties)
 	{
-		setUnlocalizedName("bucketObsidian");
-		setCreativeTab(TabMinestuck.instance);
-		setMaxStackSize(1);
-		setContainerItem(Items.BUCKET);
+		super(properties);
 	}
 	
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
 	{
 		worldIn.playSound(null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((worldIn.rand.nextFloat() - worldIn.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
-		if(!playerIn.inventory.addItemStackToInventory(new ItemStack(Blocks.OBSIDIAN, 1)))
+		if(!playerIn.inventory.addItemStackToInventory(new ItemStack(Blocks.OBSIDIAN)))
 			if(!worldIn.isRemote)
-				playerIn.dropItem(Item.getItemFromBlock(Blocks.OBSIDIAN), 1);
+				playerIn.dropItem(new ItemStack(Blocks.OBSIDIAN), false);
 		
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, new ItemStack(Items.BUCKET, 1));
+		return new ActionResult<>(EnumActionResult.SUCCESS, new ItemStack(Items.BUCKET));
 	}
 	
 }

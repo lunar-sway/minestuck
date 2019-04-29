@@ -3,10 +3,10 @@ package com.mraof.minestuck.item;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.material.Material;
 import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
+import net.minecraft.dispenser.IBehaviorDispenseItem;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -18,14 +18,16 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public abstract class ItemCustomBoat extends Item
+public class ItemCustomBoat extends Item
 {
+	public static final IBehaviorDispenseItem DISPENSER_BEHAIVOR = new BehaivorDispenseCustomBoat();
+	protected final BoatProvider provider;
 	
-	public ItemCustomBoat()
+	public ItemCustomBoat(BoatProvider provider, Properties properties)
 	{
-		this.maxStackSize = 1;
-		setCreativeTab(TabMinestuck.instance);
-		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, new BehaivorDispenseCustomBoat());
+		super(properties);
+		this.provider = provider;
+		BlockDispenser.registerDispenseBehavior(this, DISPENSER_BEHAIVOR);
 	}
 	
 	@Override
@@ -46,28 +48,23 @@ public abstract class ItemCustomBoat extends Item
 		float f7 = f4 * f5;
 		float f8 = f3 * f5;
 		double d3 = 5.0D;
-		Vec3d vec31 = vec3.addVector((double)f7 * d3, (double)f6 * d3, (double)f8 * d3);
-		RayTraceResult rayTrace = worldIn.rayTraceBlocks(vec3, vec31, true);
+		Vec3d vec31 = vec3.add((double)f7 * d3, (double)f6 * d3, (double)f8 * d3);
+		RayTraceResult rayTrace = worldIn.rayTraceBlocks(vec3, vec31, RayTraceFluidMode.ALWAYS);
 		
 		if (rayTrace == null)
-		{
-			return new ActionResult<ItemStack>(EnumActionResult.PASS, itemstack);
-		}
+			return new ActionResult<>(EnumActionResult.PASS, itemstack);
 		else
 		{
 			Vec3d vec32 = playerIn.getLook(f);
 			boolean flag = false;
-			float f9 = 1.0F;
-			List list = worldIn.getEntitiesWithinAABBExcludingEntity(playerIn, playerIn.getEntityBoundingBox().expand(vec32.x * d3, vec32.y * d3, vec32.z * d3).grow((double)f9));
+			List<Entity> list = worldIn.getEntitiesWithinAABBExcludingEntity(playerIn, playerIn.getBoundingBox().expand(vec32.x * d3, vec32.y * d3, vec32.z * d3).grow(1.0D));
 			
-			for (int i = 0; i < list.size(); ++i)
+			for(Entity entity : list)
 			{
-				Entity entity = (Entity)list.get(i);
-				
 				if (entity.canBeCollidedWith())
 				{
 					float f10 = entity.getCollisionBorderSize();
-					AxisAlignedBB axisalignedbb = entity.getEntityBoundingBox().expand((double)f10, (double)f10, (double)f10);
+					AxisAlignedBB axisalignedbb = entity.getBoundingBox().expand((double)f10, (double)f10, (double)f10);
 					
 					if (axisalignedbb.contains(vec3))
 					{
@@ -78,25 +75,20 @@ public abstract class ItemCustomBoat extends Item
 			
 			if (flag)
 			{
-				return new ActionResult(EnumActionResult.PASS, itemstack);
+				return new ActionResult<>(EnumActionResult.PASS, itemstack);
 			}
 			else
 			{
-				if (rayTrace.typeOfHit == RayTraceResult.Type.BLOCK)
+				if (rayTrace.type == RayTraceResult.Type.BLOCK)
 				{
 					BlockPos blockpos = rayTrace.getBlockPos();
 					
-					if (worldIn.getBlockState(blockpos).getBlock() == Blocks.SNOW_LAYER)
-					{
-						blockpos = blockpos.down();
-					}
+					Entity entityboat = provider.createBoat(itemstack, worldIn, (double)((float)blockpos.getX() + 0.5F), (double)((float)blockpos.getY() + 1.0F), (double)((float)blockpos.getZ() + 0.5F));
+					entityboat.rotationYaw = playerIn.rotationYaw;
 					
-					Entity entityboat = createBoat(itemstack, worldIn, (double)((float)blockpos.getX() + 0.5F), (double)((float)blockpos.getY() + 1.0F), (double)((float)blockpos.getZ() + 0.5F));
-					entityboat.rotationYaw = (float)(((MathHelper.floor((double)(playerIn.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3) - 1) * 90);
-					
-					if (!worldIn.getCollisionBoxes(entityboat, entityboat.getEntityBoundingBox().grow(-0.1D)).isEmpty())
+					if (!worldIn.isCollisionBoxesEmpty(entityboat, entityboat.getBoundingBox().grow(-0.1D)))
 					{
-						return new ActionResult(EnumActionResult.FAIL, itemstack);
+						return new ActionResult<>(EnumActionResult.FAIL, itemstack);
 					}
 					
 					if (!worldIn.isRemote)
@@ -104,30 +96,32 @@ public abstract class ItemCustomBoat extends Item
 						worldIn.spawnEntity(entityboat);
 					}
 					
-					if (!playerIn.capabilities.isCreativeMode)
+					if (!playerIn.abilities.isCreativeMode)
 					{
 						itemstack.shrink(1);
 					}
-					return new ActionResult(EnumActionResult.SUCCESS, itemstack);
+					return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
 				}
 				
-				return new ActionResult(EnumActionResult.PASS, itemstack);
+				return new ActionResult<>(EnumActionResult.PASS, itemstack);
 			}
 		}
 	}
 	
-	protected abstract Entity createBoat(ItemStack stack, World world, double x, double y, double z);
-	
-	protected class BehaivorDispenseCustomBoat extends BehaviorDefaultDispenseItem
+	protected static class BehaivorDispenseCustomBoat extends BehaviorDefaultDispenseItem
 	{
 		@Override
 		public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
 		{
-			EnumFacing enumfacing = (EnumFacing)source.getBlockState().getValue(BlockDispenser.FACING);
+			if(!(stack.getItem() instanceof ItemCustomBoat))
+				throw new IllegalStateException("Can't use custom boat dispenser behaivor on non-custom boat item!");
+			
+			ItemCustomBoat boatItem = (ItemCustomBoat) stack.getItem();
+			EnumFacing enumfacing = source.getBlockState().get(BlockDispenser.FACING);
 			World world = source.getWorld();
-			double d0 = source.getX() + (double)((float)enumfacing.getFrontOffsetX() * 1.125F);
-			double d1 = source.getY() + (double)((float)enumfacing.getFrontOffsetY() * 1.125F);
-			double d2 = source.getZ() + (double)((float)enumfacing.getFrontOffsetZ() * 1.125F);
+			double d0 = source.getX() + (double)((float)enumfacing.getXOffset() * 1.125F);
+			double d1 = source.getY() + (double)((float)enumfacing.getYOffset() * 1.125F);
+			double d2 = source.getZ() + (double)((float)enumfacing.getZOffset() * 1.125F);
 			BlockPos blockpos = source.getBlockPos().offset(enumfacing);
 			Material material = world.getBlockState(blockpos).getMaterial();
 			double d3;
@@ -145,10 +139,9 @@ public abstract class ItemCustomBoat extends Item
 				
 				d3 = 0.0D;
 			}
-			
-			Entity entityboat = createBoat(stack, world, d0, d1 + d3, d2);
-			world.spawnEntity(entityboat);
-			stack.splitStack(1);
+			Entity entityBoat = boatItem.provider.createBoat(stack, world, d0, d1 + d3, d2);
+			world.spawnEntity(entityBoat);
+			stack.shrink(1);
 			return stack;
 		}
 		@Override
@@ -156,5 +149,10 @@ public abstract class ItemCustomBoat extends Item
 		{
 			source.getWorld().playEvent(1000, source.getBlockPos(), 0);
 		}
+	}
+	
+	public interface BoatProvider
+	{
+		Entity createBoat(ItemStack stack, World world, double x, double y, double z);
 	}
 }
