@@ -59,7 +59,7 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 			{
 				return false;
 			}
-			GristSet cost = GristRegistry.getGristConversion(newItem);
+			GristSet cost = AlchemyCostRegistry.getGristConversion(newItem);
 			if(newItem.getItem() == MinestuckItems.captchaCard)
 				cost = new GristSet(selectedGrist, MinestuckConfig.cardCost);
 			
@@ -92,7 +92,7 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 		if (player != null)
 			AlchemyRecipes.onAlchemizedItem(newItem, player);
 		
-		GristSet cost = GristRegistry.getGristConversion(newItem);
+		GristSet cost = AlchemyCostRegistry.getGristConversion(newItem);
 		if (newItem.getItem() == MinestuckItems.captchaCard)
 			cost = new GristSet(selectedGrist, MinestuckConfig.cardCost);
 		GristHelper.decrease(owner, cost);
@@ -168,7 +168,7 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 			{
 				return 0;
 			}
-			GristSet cost = GristRegistry.getGristConversion(newItem);
+			GristSet cost = AlchemyCostRegistry.getGristConversion(newItem);
 			if (newItem.getItem() == MinestuckItems.captchaCard)
 				cost = new GristSet(selectedGrist, MinestuckConfig.cardCost);
 			// We need to run the check 16 times. Don't want to hammer the game with too many of these, so the comparators are only told to update every 20 ticks.

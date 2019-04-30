@@ -1,8 +1,6 @@
 package com.mraof.minestuck.tileentity;
 
 
-import java.util.Arrays;
-
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
@@ -18,7 +16,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -444,7 +441,7 @@ public class TileEntityAlchemiter extends TileEntity
 			return null;
 		
 		//get the grist cost of stack
-		set = GristRegistry.getGristConversion(stack);
+		set = AlchemyCostRegistry.getGristConversion(stack);
 
 		//if the item is a captcha card do other stuff
 		useSelectedType = stack.getItem() == MinestuckItems.captchaCard;

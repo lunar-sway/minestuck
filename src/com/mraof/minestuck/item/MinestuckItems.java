@@ -153,12 +153,12 @@ public class MinestuckItems
 	public static Item STRAWBERRY_CHUNK;
 	
 	public static Item CANDY_CORN;
-	public static Item BUILD_GUSHERS, ARTIFACT_WARHEAD;
+	public static Item BUILD_GUSHERS;
 	public static Item AMBER_GUMMY_WORM, CAULK_PRETZEL, CHALK_CANDY_CIGARETTE, IODINE_LICORICE, SHALE_PEEP, TAR_LICORICE;
 	public static Item COBALT_GUM, MARBLE_JAWBREAKER, MERCURY_SIXLETS, QUARTZ_JELLY_BEAN, SULFUR_CANDY_APPLE;
 	public static Item AMETHYST_HARD_CANDY, GARNET_TWIX, RUBY_LOLLIPOP, RUST_GUMMY_EYE;
 	public static Item DIAMOND_MINT, GOLD_CANDY_RIBBON, URANIUM_GUMMY_BEAR;
-	public static Item ZILLIUM_SKITTLES;
+	public static Item ARTIFACT_WARHEAD, ZILLIUM_SKITTLES;
 	public static Item TAB;
 	public static Item FAYGO, FAYGO_CANDY_APPLE, FAYGO_COLA, FAYGO_COTTON_CANDY, FAYGO_CREME, FAYGO_GRAPE;
 	public static Item FAYGO_MOON_MIST, FAYGO_PEACH, FAYGO_REDPOP;
@@ -239,32 +239,32 @@ public class MinestuckItems
 		registerItemBlock(registry, BLUE_DIRT, ModItemGroup.LANDS);
 		registerItemBlock(registry, THOUGHT_DIRT, ModItemGroup.LANDS);
 		registerItemBlock(registry, COARSE_STONE, ModItemGroup.LANDS);
-		registerItemBlock(registry, COARSE_CHISELED, ModItemGroup.LANDS);
+		registerItemBlock(registry, CHISELED_COARSE_STONE, ModItemGroup.LANDS);
 		registerItemBlock(registry, SHADE_BRICKS, ModItemGroup.LANDS);
-		registerItemBlock(registry, SHADE_SMOOTH, ModItemGroup.LANDS);
+		registerItemBlock(registry, SMOOTH_SHADE_STONE, ModItemGroup.LANDS);
 		registerItemBlock(registry, FROST_BRICKS, ModItemGroup.LANDS);
 		registerItemBlock(registry, FROST_TILE, ModItemGroup.LANDS);
-		registerItemBlock(registry, FROST_BRICKS_CHISELED, ModItemGroup.LANDS);
+		registerItemBlock(registry, CHISELED_FROST_BRICKS, ModItemGroup.LANDS);
 		registerItemBlock(registry, CAST_IRON, ModItemGroup.LANDS);
-		registerItemBlock(registry, CAST_IRON_CHISELED, ModItemGroup.LANDS);
+		registerItemBlock(registry, CHISELED_CAST_IRON, ModItemGroup.LANDS);
 		registerItemBlock(registry, MYCELIUM_BRICKS, ModItemGroup.LANDS);
 		registerItemBlock(registry, BLACK_STONE, ModItemGroup.LANDS);
 		registerItemBlock(registry, FLOWERY_MOSS_STONE, ModItemGroup.LANDS);
-		registerItemBlock(registry, FLOWERY_MOSS_BRICK, ModItemGroup.LANDS);
+		registerItemBlock(registry, FLOWERY_MOSS_BRICKS, ModItemGroup.LANDS);
 		registerItemBlock(registry, COARSE_END_STONE, ModItemGroup.LANDS);
 		registerItemBlock(registry, END_GRASS, ModItemGroup.LANDS);
 		registerItemBlock(registry, CHALK, ModItemGroup.LANDS);
 		registerItemBlock(registry, CHALK_BRICKS, ModItemGroup.LANDS);
-		registerItemBlock(registry, CHALK_CHISELED, ModItemGroup.LANDS);
-		registerItemBlock(registry, CHALK_POLISHED, ModItemGroup.LANDS);
+		registerItemBlock(registry, CHISELED_CHALK_BRICKS, ModItemGroup.LANDS);
+		registerItemBlock(registry, POLISHED_CHALK, ModItemGroup.LANDS);
 		registerItemBlock(registry, PINK_STONE, ModItemGroup.LANDS);
 		registerItemBlock(registry, PINK_STONE_BRICKS, ModItemGroup.LANDS);
-		registerItemBlock(registry, PINK_STONE_CHISELED, ModItemGroup.LANDS);
-		registerItemBlock(registry, PINK_STONE_CRACKED, ModItemGroup.LANDS);
-		registerItemBlock(registry, PINK_STONE_MOSSY, ModItemGroup.LANDS);
-		registerItemBlock(registry, PINK_STONE_POLISHED, ModItemGroup.LANDS);
+		registerItemBlock(registry, CHISELED_PINK_STONE_BRICKS, ModItemGroup.LANDS);
+		registerItemBlock(registry, CRACKED_PINK_STONE_BRICKS, ModItemGroup.LANDS);
+		registerItemBlock(registry, MOSSY_PINK_STONE_BRICKS, ModItemGroup.LANDS);
+		registerItemBlock(registry, POLISHED_PINK_STONE, ModItemGroup.LANDS);
 		registerItemBlock(registry, DENSE_CLOUD, ModItemGroup.LANDS);
-		registerItemBlock(registry, DENSE_CLOUD_BRIGHT, ModItemGroup.LANDS);
+		registerItemBlock(registry, BRIGHT_DENSE_CLOUD, ModItemGroup.LANDS);
 		registerItemBlock(registry, SUGAR_CUBE, ModItemGroup.LANDS);
 		
 		registerItemBlock(registry, GLOWING_LOG, ModItemGroup.LANDS);
@@ -553,7 +553,6 @@ public class MinestuckItems
 		
 		registry.register(CANDY_CORN = new ItemFood(2, 0.3F, false, new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("candy_corn"));
 		registry.register(BUILD_GUSHERS = new ItemFood(2, 0.0F, false, new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("build_gushers"));
-		registry.register(ARTIFACT_WARHEAD = new ItemFood(2, 0.5F, false, new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("artifact_warhead"));
 		registry.register(AMBER_GUMMY_WORM = new ItemFood(2, 0.1F, false, new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("amber_gummy_worm"));
 		registry.register(CAULK_PRETZEL = new ItemFood(2, 0.1F, false, new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("caulk_pretzel"));
 		registry.register(CHALK_CANDY_CIGARETTE = new ItemFood(2, 0.1F, false, new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("chalk_candy_cigarette"));
@@ -572,6 +571,7 @@ public class MinestuckItems
 		registry.register(DIAMOND_MINT = new ItemFood(2, 0.4F, false, new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("Diamond_mint"));
 		registry.register(GOLD_CANDY_RIBBON = new ItemFood(2, 0.4F, false, new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("gold_candy_ribbon"));
 		registry.register(URANIUM_GUMMY_BEAR = new ItemFood(2, 0.4F, false, new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("uranium_gummy_bear"));
+		registry.register(ARTIFACT_WARHEAD = new ItemFood(2, 0.5F, false, new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("artifact_warhead"));
 		registry.register(ZILLIUM_SKITTLES = new ItemFood(2, 0.6F, false, new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("zillium_skittles"));
 		registry.register(TAB = new ItemBeverage(1, 0.0F, false, new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN)).setAlwaysEdible().setRegistryName("tab"));
 		registry.register(FAYGO = new ItemBeverage(1, 0.0F, false, new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN)).setAlwaysEdible().setRegistryName("faygo"));

@@ -113,7 +113,7 @@ public class ClientEditHandler {
 					? deployEntry.getSecondaryCost() : deployEntry.getPrimaryCost();
 		else if(stack.getItem().equals(MinestuckItems.captchaCard))
 			cost = new GristSet();
-		else cost = GristRegistry.getGristConversion(stack);
+		else cost = AlchemyCostRegistry.getGristConversion(stack);
 		
 		if(cost == null)
 		{
@@ -197,7 +197,7 @@ public class ClientEditHandler {
 				if(givenItems[entry.getIndex()])
 					cost = entry.getSecondaryCost();
 				else cost = entry.getPrimaryCost();
-			else cost = GristRegistry.getGristConversion(stack);
+			else cost = AlchemyCostRegistry.getGristConversion(stack);
 			if(!GristHelper.canAfford(MinestuckPlayerData.getClientGrist(), cost)) {
 				StringBuilder str = new StringBuilder();
 				if(cost != null)

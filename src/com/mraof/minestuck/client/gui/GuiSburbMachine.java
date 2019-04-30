@@ -9,7 +9,7 @@ import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tileentity.TileEntitySburbMachine;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.alchemy.GristAmount;
-import com.mraof.minestuck.alchemy.GristRegistry;
+import com.mraof.minestuck.alchemy.AlchemyCostRegistry;
 import com.mraof.minestuck.alchemy.GristSet;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -106,7 +106,7 @@ public class GuiSburbMachine extends GuiMachine
 			if (type == MachineType.ALCHEMITER && !(te.getStackInSlot(0).hasTagCompound() && te.getStackInSlot(0).getTagCompound().hasKey("contentID")))
 				stack = new ItemStack(MinestuckBlocks.genericObject);
 
-			GristSet set = GristRegistry.getGristConversion(stack);
+			GristSet set = AlchemyCostRegistry.getGristConversion(stack);
 			boolean useSelectedType = stack.getItem() == MinestuckItems.captchaCard;
 			if (useSelectedType)
 				set = new GristSet(te.selectedGrist, MinestuckConfig.clientCardCost);

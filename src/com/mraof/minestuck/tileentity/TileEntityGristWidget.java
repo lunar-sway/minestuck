@@ -33,7 +33,7 @@ public class TileEntityGristWidget extends TileEntityMachineProcess implements I
 	public GristSet getGristWidgetResult()
 	{
 		ItemStack item = AlchemyRecipes.getDecodedItem(inv.get(0), true);
-		GristSet gristSet = GristRegistry.getGristConversion(item);
+		GristSet gristSet = AlchemyCostRegistry.getGristConversion(item);
 		if(inv.get(0).getItem() != MinestuckItems.captchaCard || AlchemyRecipes.isPunchedCard(inv.get(0))
 				|| item.getItem() == MinestuckItems.captchaCard || gristSet == null)
 			return null;

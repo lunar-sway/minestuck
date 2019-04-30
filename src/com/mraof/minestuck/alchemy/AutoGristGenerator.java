@@ -1,10 +1,9 @@
 package com.mraof.minestuck.alchemy;
 
-import com.mraof.minestuck.modSupport.Minegicka3Support;
+import com.google.common.collect.Lists;
 import com.mraof.minestuck.util.Debug;
-import net.minecraft.client.util.RecipeItemHelper;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 
@@ -16,8 +15,8 @@ import java.util.*;
 public class AutoGristGenerator
 {
 	
-	private HashMap<Integer, List<IRecipe>> recipeList;
-	private HashSet<Integer> lookedOver;
+	private HashMap<Item, List<IRecipe>> recipeList;
+	private HashSet<Item> lookedOver;
 	private int returned = 0;
 	
 	
@@ -26,7 +25,7 @@ public class AutoGristGenerator
 		recipeList = new HashMap<>();
 		
 		Debug.debug("Looking for dynamic grist conversions...");
-		for(IRecipe recipe : CraftingManager.REGISTRY)
+		for(IRecipe recipe : Lists.<IRecipe>newArrayList())	//TODO Figure out how to access recipes moving forward
 		{
 			try
 			{
@@ -35,11 +34,11 @@ public class AutoGristGenerator
 				ItemStack output = recipe.getRecipeOutput();
 				if(output.isEmpty())
 					continue;
-				int param = RecipeItemHelper.pack(output);
+				Item item = output.getItem();
 				
-				if(!recipeList.containsKey(param))
-					recipeList.put(param, new ArrayList<>());
-				recipeList.get(param).add(recipe);
+				if(!recipeList.containsKey(item))
+					recipeList.put(item, new ArrayList<>());
+				recipeList.get(item).add(recipe);
 				
 			} catch(NullPointerException e)
 			{
@@ -52,10 +51,10 @@ public class AutoGristGenerator
 	public void excecute()
 	{
 		Debug.debug("Calculating grist conversion...");
-		Iterator<Map.Entry<Integer, List<IRecipe>>> it = recipeList.entrySet().iterator();
+		Iterator<Map.Entry<Item, List<IRecipe>>> it = recipeList.entrySet().iterator();
 		while(it.hasNext())
 		{
-			Map.Entry<Integer, List<IRecipe>> pairs = it.next();
+			Map.Entry<Item, List<IRecipe>> pairs = it.next();
 			boolean b = false;
 			for(IRecipe recipe : pairs.getValue())
 			{
@@ -65,7 +64,7 @@ public class AutoGristGenerator
 					b = checkRecipe(recipe);
 				} catch(Exception e)
 				{
-					Debug.logger.warn(String.format("Failed to look over recipe \"%s\" for \"%s\". Cause:", recipe, RecipeItemHelper.unpack(pairs.getKey())), e);
+					Debug.logger.warn(String.format("Failed to look over recipe \"%s\" for \"%s\". Cause:", recipe, pairs.getKey()), e);
 				}
 				if(b)
 					break;
@@ -75,16 +74,15 @@ public class AutoGristGenerator
 		Debug.info("Added "+returned+" grist conversions.");
 	}
 	
-	public GristSet lookupCostForItem(ItemStack item)
+	public GristSet lookupCostForItem(Item item)
 	{
-		GristSet cost = GristRegistry.getGristConversion(item);
+		GristSet cost = AlchemyCostRegistry.getGristConversion(item);
 		if(cost != null)
 			return cost;
 		
-		int i = RecipeItemHelper.pack(item);
-		if(recipeList.containsKey(i))
+		if(recipeList.containsKey(item))
 		{
-			List<IRecipe> recipes = recipeList.get(i);
+			List<IRecipe> recipes = recipeList.get(item);
 			if(recipes == null)
 				return null;
 			boolean b = false;
@@ -99,7 +97,7 @@ public class AutoGristGenerator
 					Debug.logger.warn(String.format("Failed to look over recipe \"%s\" for \"%s\". Cause:", recipe, item), e);
 				}
 				if(b)
-					return GristRegistry.getGristConversion(item);
+					return AlchemyCostRegistry.getGristConversion(item);
 			}
 		}
 		return null;
@@ -108,13 +106,13 @@ public class AutoGristGenerator
 	private boolean checkRecipe(IRecipe recipe)
 	{
 		ItemStack output = recipe.getRecipeOutput();
-		if(GristRegistry.getGristConversion(output) != null)
+		if(AlchemyCostRegistry.getGristConversion(output) != null)
 			return true;
-		if(lookedOver.contains(RecipeItemHelper.pack(output)))
+		if(lookedOver.contains(output.getItem()))
 		{
 			return false;
 		} else {
-			lookedOver.add(RecipeItemHelper.pack(output));
+			lookedOver.add(output.getItem());
 		}
 		
 		GristSet set = new GristSet();
@@ -134,9 +132,9 @@ public class AutoGristGenerator
 		}
 		
 		set.scaleGrist(1/ (float) output.getCount());
-		GristRegistry.addGristConversion(output, output.getHasSubtypes(), set);
+		AlchemyCostRegistry.addGristConversion(output.getItem(), set);
 		
-		returned ++;
+		returned++;
 		return true;
 	}
 	
@@ -158,18 +156,18 @@ public class AutoGristGenerator
 	
 	private GristSet findCostForItem(ItemStack item, boolean withoutContainer)
 	{
-		if(GristRegistry.getGristConversion(item) != null)
+		if(AlchemyCostRegistry.getGristConversion(item) != null)
 		{
-			return withoutContainer ? getCostWithoutContainer(item) : GristRegistry.getGristConversion(item);
+			return withoutContainer ? getCostWithoutContainer(item) : AlchemyCostRegistry.getGristConversion(item);
 		} else if(!item.isEmpty())
 		{
-			List<IRecipe> subrecipes = recipeList.get(RecipeItemHelper.pack(item));
+			List<IRecipe> subrecipes = recipeList.get(item.getItem());
 			if(subrecipes != null)
 			{
 				for(IRecipe recipe : subrecipes)
 					if(checkRecipe(recipe))
 					{
-						return withoutContainer ? getCostWithoutContainer(item) : GristRegistry.getGristConversion(item);
+						return withoutContainer ? getCostWithoutContainer(item) : AlchemyCostRegistry.getGristConversion(item);
 					}
 			}
 		}
@@ -179,7 +177,7 @@ public class AutoGristGenerator
 	//Assumes that the grist cost for the stack has been checked to not be null beforehand
 	private GristSet getCostWithoutContainer(ItemStack stack)
 	{
-		GristSet cost = GristRegistry.getGristConversion(stack);
+		GristSet cost = AlchemyCostRegistry.getGristConversion(stack);
 		if(stack.getItem().hasContainerItem(stack))
 		{
 			ItemStack container = stack.getItem().getContainerItem(stack);

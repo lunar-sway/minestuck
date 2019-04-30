@@ -122,7 +122,7 @@ public class GristHelper {
 	
 	public static boolean canAfford(PlayerIdentifier player, @Nonnull ItemStack stack, boolean clientSide)
 	{
-		return canAfford(clientSide ? MinestuckPlayerData.getClientGrist() : MinestuckPlayerData.getGristSet(player), GristRegistry.getGristConversion(stack));
+		return canAfford(clientSide ? MinestuckPlayerData.getClientGrist() : MinestuckPlayerData.getGristSet(player), AlchemyCostRegistry.getGristConversion(stack));
 	}
 	
 	public static boolean canAfford(GristSet base, GristSet cost) {

@@ -43,17 +43,17 @@ public class MinestuckBlocks
 	
 	//Land Environment Blocks
 	public static Block BLUE_DIRT, THOUGHT_DIRT;
-	public static Block COARSE_STONE, COARSE_CHISELED;
-	public static Block SHADE_BRICKS, SHADE_SMOOTH;
-	public static Block FROST_BRICKS, FROST_TILE, FROST_BRICKS_CHISELED;
-	public static Block CAST_IRON, CAST_IRON_CHISELED;
+	public static Block COARSE_STONE, CHISELED_COARSE_STONE;
+	public static Block SHADE_BRICKS, SMOOTH_SHADE_STONE;
+	public static Block FROST_BRICKS, FROST_TILE, CHISELED_FROST_BRICKS;
+	public static Block CAST_IRON, CHISELED_CAST_IRON;
 	public static Block MYCELIUM_BRICKS;
 	public static Block BLACK_STONE;
-	public static Block FLOWERY_MOSS_STONE, FLOWERY_MOSS_BRICK;
+	public static Block FLOWERY_MOSS_STONE, FLOWERY_MOSS_BRICKS;
 	public static Block COARSE_END_STONE, END_GRASS;
-	public static Block CHALK, CHALK_BRICKS, CHALK_CHISELED, CHALK_POLISHED;
-	public static Block PINK_STONE, PINK_STONE_BRICKS, PINK_STONE_CHISELED, PINK_STONE_CRACKED, PINK_STONE_MOSSY, PINK_STONE_POLISHED;
-	public static Block DENSE_CLOUD, DENSE_CLOUD_BRIGHT;
+	public static Block CHALK, CHALK_BRICKS, CHISELED_CHALK_BRICKS, POLISHED_CHALK;
+	public static Block PINK_STONE, PINK_STONE_BRICKS, CHISELED_PINK_STONE_BRICKS, CRACKED_PINK_STONE_BRICKS, MOSSY_PINK_STONE_BRICKS, POLISHED_PINK_STONE;
+	public static Block DENSE_CLOUD, BRIGHT_DENSE_CLOUD;
 	public static Block SUGAR_CUBE;
 	
 	//Land Tree Blocks
@@ -270,32 +270,32 @@ public class MinestuckBlocks
 		registry.register(BLUE_DIRT = new BlockDirt(Block.Properties.create(Material.GROUND, MaterialColor.BLUE).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("blue_dirt"));
 		registry.register(THOUGHT_DIRT = new BlockDirt(Block.Properties.create(Material.GROUND, MaterialColor.LIME).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("thought_dirt"));
 		registry.register(COARSE_STONE = new Block(Block.Properties.create(Material.ROCK, MaterialColor.STONE).hardnessAndResistance(2.0F, 6.0F)).setRegistryName("coarse_stone"));
-		registry.register(COARSE_CHISELED = new Block(Block.Properties.create(Material.ROCK, MaterialColor.STONE).hardnessAndResistance(2.0F, 6.0F)).setRegistryName("coarse_chiseled"));
+		registry.register(CHISELED_COARSE_STONE = new Block(Block.Properties.create(Material.ROCK, MaterialColor.STONE).hardnessAndResistance(2.0F, 6.0F)).setRegistryName("chiseled_coarse_stone"));
 		registry.register(SHADE_BRICKS = new Block(Block.Properties.create(Material.ROCK, MaterialColor.BLUE).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("shade_bricks"));
-		registry.register(SHADE_SMOOTH = new Block(Block.Properties.create(Material.ROCK, MaterialColor.BLUE).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("shade_smooth"));
+		registry.register(SMOOTH_SHADE_STONE = new Block(Block.Properties.create(Material.ROCK, MaterialColor.BLUE).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("smooth_shade_stone"));
 		registry.register(FROST_BRICKS = new Block(Block.Properties.create(Material.ROCK, MaterialColor.ICE).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("frost_bricks"));
 		registry.register(FROST_TILE = new Block(Block.Properties.create(Material.ROCK, MaterialColor.ICE).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("frost_tile"));
-		registry.register(FROST_BRICKS_CHISELED = new Block(Block.Properties.create(Material.ROCK, MaterialColor.ICE).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("frost_bricks_chiseled"));
+		registry.register(CHISELED_FROST_BRICKS = new Block(Block.Properties.create(Material.ROCK, MaterialColor.ICE).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("chiseled_frost_bricks"));
 		registry.register(CAST_IRON = new Block(Block.Properties.create(Material.ROCK, MaterialColor.IRON).hardnessAndResistance(3.0F, 9.0F)).setRegistryName("cast_iron"));
-		registry.register(CAST_IRON_CHISELED = new Block(Block.Properties.create(Material.ROCK, MaterialColor.IRON).hardnessAndResistance(3.0F, 9.0F)).setRegistryName("cast_iron_chiseled"));
+		registry.register(CHISELED_CAST_IRON = new Block(Block.Properties.create(Material.ROCK, MaterialColor.IRON).hardnessAndResistance(3.0F, 9.0F)).setRegistryName("chiseled_cast_iron"));
 		registry.register(MYCELIUM_BRICKS = new Block(Block.Properties.create(Material.ROCK, MaterialColor.MAGENTA).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("mycelium_bricks"));
 		registry.register(BLACK_STONE = new Block(Block.Properties.create(Material.ROCK, MaterialColor.BLACK).hardnessAndResistance(2.5F, 6.0F)).setRegistryName("black_stone"));
 		registry.register(FLOWERY_MOSS_STONE = new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("flowery_moss_stone"));
-		registry.register(FLOWERY_MOSS_BRICK = new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("flowery_moss_brick"));
+		registry.register(FLOWERY_MOSS_BRICKS = new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("flowery_moss_bricks"));
 		registry.register(COARSE_END_STONE = new Block(Block.Properties.create(Material.ROCK, MaterialColor.SAND).hardnessAndResistance(3.0F, 9.0F)).setRegistryName("coarse_end_stone"));
 		registry.register(END_GRASS = new BlockEndGrass(Block.Properties.create(Material.ROCK, MaterialColor.PURPLE).hardnessAndResistance(3.0F, 9.0F).needsRandomTick()).setRegistryName("end_grass"));
 		registry.register(CHALK = new Block(Block.Properties.create(Material.ROCK, MaterialColor.SNOW).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("chalk"));
 		registry.register(CHALK_BRICKS = new Block(Block.Properties.create(Material.ROCK, MaterialColor.SNOW).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("chalk_bricks"));
-		registry.register(CHALK_CHISELED = new Block(Block.Properties.create(Material.ROCK, MaterialColor.SNOW).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("chiseled_chalk_bricks"));
-		registry.register(CHALK_POLISHED = new Block(Block.Properties.create(Material.ROCK, MaterialColor.SNOW).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("polished_chalk"));
+		registry.register(CHISELED_CHALK_BRICKS = new Block(Block.Properties.create(Material.ROCK, MaterialColor.SNOW).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("chiseled_chalk_bricks"));
+		registry.register(POLISHED_CHALK = new Block(Block.Properties.create(Material.ROCK, MaterialColor.SNOW).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("polished_chalk"));
 		registry.register(PINK_STONE = new Block(Block.Properties.create(Material.ROCK, MaterialColor.PINK).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("pink_stone"));
 		registry.register(PINK_STONE_BRICKS = new Block(Block.Properties.create(Material.ROCK, MaterialColor.PINK).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("pink_stone_bricks"));
-		registry.register(PINK_STONE_CHISELED = new Block(Block.Properties.create(Material.ROCK, MaterialColor.PINK).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("pink_chiseled_stone"));
-		registry.register(PINK_STONE_CRACKED = new Block(Block.Properties.create(Material.ROCK, MaterialColor.PINK).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("pink_cracked_stone"));
-		registry.register(PINK_STONE_MOSSY = new Block(Block.Properties.create(Material.ROCK, MaterialColor.PINK).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("pink_moss_stone_bricks"));
-		registry.register(PINK_STONE_POLISHED = new Block(Block.Properties.create(Material.ROCK, MaterialColor.PINK).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("pink_polished_stone"));
+		registry.register(CHISELED_PINK_STONE_BRICKS = new Block(Block.Properties.create(Material.ROCK, MaterialColor.PINK).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("chiseled_pink_stone_bricks"));
+		registry.register(CRACKED_PINK_STONE_BRICKS = new Block(Block.Properties.create(Material.ROCK, MaterialColor.PINK).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("cracked_pink_stone_bricks"));
+		registry.register(MOSSY_PINK_STONE_BRICKS = new Block(Block.Properties.create(Material.ROCK, MaterialColor.PINK).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("mossy_pink_stone_bricks"));
+		registry.register(POLISHED_PINK_STONE = new Block(Block.Properties.create(Material.ROCK, MaterialColor.PINK).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("polished_pink_stone"));
 		registry.register(DENSE_CLOUD = new Block(Block.Properties.create(Material.GLASS, MaterialColor.YELLOW).hardnessAndResistance(0.5F).sound(SoundType.SNOW)).setRegistryName("dense_cloud"));
-		registry.register(DENSE_CLOUD_BRIGHT = new Block(Block.Properties.create(Material.GLASS, MaterialColor.LIGHT_GRAY).hardnessAndResistance(0.5F).sound(SoundType.SNOW)).setRegistryName("dense_cloud_bright"));
+		registry.register(BRIGHT_DENSE_CLOUD = new Block(Block.Properties.create(Material.GLASS, MaterialColor.LIGHT_GRAY).hardnessAndResistance(0.5F).sound(SoundType.SNOW)).setRegistryName("bright_dense_cloud"));
 		registry.register(SUGAR_CUBE = new Block(Block.Properties.create(Material.SAND, MaterialColor.SNOW).hardnessAndResistance(0.4F).sound(SoundType.SAND)).setRegistryName("sugar_cube"));
 		
 		registry.register(GLOWING_LOG = new BlockMinestuckLog(MaterialColor.LIGHT_BLUE, Block.Properties.create(Material.WOOD, MaterialColor.LIGHT_BLUE).hardnessAndResistance(2.0F).lightValue(11).sound(SoundType.WOOD)).setRegistryName("glowing_log"));

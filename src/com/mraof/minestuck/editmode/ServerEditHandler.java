@@ -364,7 +364,7 @@ public class ServerEditHandler
 			{
 				IBlockState block = event.getWorld().getBlockState(event.getPos());
 				ItemStack stack = block.getBlock().getPickBlock(block, null, event.getWorld(), event.getPos(), event.getEntityPlayer());
-				GristSet set = GristRegistry.getGristConversion(stack);
+				GristSet set = AlchemyCostRegistry.getGristConversion(stack);
 				if(set != null && !set.isEmpty())
 					GristHelper.increase(data.connection.getClientIdentifier(), set);
 			}
@@ -404,7 +404,7 @@ public class ServerEditHandler
 				event.getPlayer().inventory.mainInventory.set(event.getPlayer().inventory.currentItem, ItemStack.EMPTY);
 			} else
 			{
-				GristHelper.decrease(data.connection.getClientIdentifier(), GristRegistry.getGristConversion(stack));
+				GristHelper.decrease(data.connection.getClientIdentifier(), AlchemyCostRegistry.getGristConversion(stack));
 				MinestuckPlayerTracker.updateGristCache(data.connection.getClientIdentifier());
 			}
 		}
@@ -468,7 +468,7 @@ public class ServerEditHandler
 			ItemStack stack = player.inventory.mainInventory.get(i);
 			if(stack.isEmpty())
 				continue;
-			if(GristRegistry.getGristConversion(stack) == null || !isBlockItem(stack.getItem()))
+			if(AlchemyCostRegistry.getGristConversion(stack) == null || !isBlockItem(stack.getItem()))
 			{
 				listSearch :
 				{
