@@ -10,26 +10,22 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockCactus;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.BlockTNT;
-import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fluids.BlockFluidBase;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.Collections;
 
 import static com.mraof.minestuck.item.MinestuckItems.*;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class MinestuckModelManager
 {
 	
@@ -43,7 +39,7 @@ public class MinestuckModelManager
 	private static void itemModels()
 	{
 		//3D Models
-		if(MinestuckConfig.oldItemModels)
+		/*if(MinestuckConfig.oldItemModels) TODO Is this needed anymore?
 		{
 			register(clawHammer, 0, "claw_hammer_old");
 			register(zillyhooHammer, 0, "zillyhoo_hammer_old");
@@ -257,7 +253,7 @@ public class MinestuckModelManager
 	
 	private static void blockModels()
 	{
-		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())
+		/*for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())
 			register(chessTile, type.ordinal(), "chesstile_"+type.name);
 		register(skaiaPortal);
 		register(transportalizer);
@@ -303,7 +299,7 @@ public class MinestuckModelManager
 		register(alchemiter[0]);
 		/*register(holopad);
 		register(jumperBlockExtension[0]);*/
-		register(blender);
+		/*register(blender);
 		register(cruxtruder);
 		register(cruxtruderLid);
 		register(petrifiedGrass);
@@ -561,6 +557,6 @@ public class MinestuckModelManager
 			else str = "boondollars6";
 			
 			return new ModelResourceLocation("minestuck:" + str, "inventory");
-		}
+		}*/
 	}
 }

@@ -92,9 +92,9 @@ public class GuiUtil
 				fontRenderer.drawString(needStr, boardX + 1 + index%GRIST_BOARD_WIDTH, boardY + 8*row, color);
 				fontRenderer.drawString(haveStr, boardX + needStrWidth + 10 + index%GRIST_BOARD_WIDTH, boardY + 8*row, color);
 				
-				GlStateManager.color(1, 1, 1);
+				GlStateManager.color3f(1, 1, 1);
 				GlStateManager.disableLighting();
-				Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation(type.getIcon().getResourceDomain(), "textures/grist/" + type.getIcon().getResourcePath()+ ".png"));
+				Minecraft.getInstance().getTextureManager().bindTexture(new ResourceLocation(type.getIcon().getNamespace(), "textures/grist/" + type.getIcon().getPath()+ ".png"));
 				Gui.drawModalRectWithCustomSizedTexture(boardX + needStrWidth + 1 + index%GRIST_BOARD_WIDTH, boardY + 8*row, 0, 0, 8, 8, 8, 8);
 				
 				//ensure the large alchemiter gui has one grist type to a line
@@ -167,8 +167,8 @@ public class GuiUtil
 					if(!needStr.equals(String.valueOf(need)) && mouseX >= index%GRIST_BOARD_WIDTH && mouseX < index%GRIST_BOARD_WIDTH + needStrWidth)
 						return Collections.singletonList(String.valueOf(need));
 					else if(mouseX >= index%158 + needStrWidth + 1 && mouseX < index%158+ needStrWidth + 9)
-						return Collections.singletonList(type.getDisplayName());
-					else if(!haveStr.equals(String.valueOf(have)) && mouseX >= index%158 + needStrWidth + 10 + fontRenderer.getCharWidth('(') && mouseX < index%158 + needStrWidth + 10 + fontRenderer.getStringWidth("("+haveStr))
+						return Collections.singletonList(type.getDisplayName().getFormattedText());
+					else if(!haveStr.equals(String.valueOf(have)) && mouseX >= index%158 + needStrWidth + 10 + fontRenderer.getStringWidth("(") && mouseX < index%158 + needStrWidth + 10 + fontRenderer.getStringWidth("("+haveStr))
 						return Collections.singletonList(String.valueOf(have));
 				}
 				

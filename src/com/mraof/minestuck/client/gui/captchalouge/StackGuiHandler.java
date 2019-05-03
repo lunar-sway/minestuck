@@ -4,7 +4,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
 import com.mraof.minestuck.inventory.captchalouge.Modus;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class StackGuiHandler extends SylladexGuiHandler
 {
 	

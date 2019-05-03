@@ -12,10 +12,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class RenderHangingArt<T extends EntityHangingArt> extends Render<T>
 {
 	private final ResourceLocation ART_TEXTURE;
@@ -30,13 +30,12 @@ public class RenderHangingArt<T extends EntityHangingArt> extends Render<T>
 	public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks)
 	{
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(x, y, z);
-		GlStateManager.rotate(180.0F - entityYaw, 0.0F, 1.0F, 0.0F);
+		GlStateManager.translated(x, y, z);
+		GlStateManager.rotatef(180.0F - entityYaw, 0.0F, 1.0F, 0.0F);
 		GlStateManager.enableRescaleNormal();
 		this.bindEntityTexture(entity);
 		EntityHangingArt.IArt art = entity.art;
-		float f = 0.0625F;
-		GlStateManager.scale(0.0625F, 0.0625F, 0.0625F);
+		GlStateManager.scalef(0.0625F, 0.0625F, 0.0625F);
 		
 		if (this.renderOutlines)
 		{
@@ -135,7 +134,7 @@ public class RenderHangingArt<T extends EntityHangingArt> extends Render<T>
 		int l = this.renderManager.world.getCombinedLight(new BlockPos(x, y, z), 0);
 		int s = l % 65536;
 		int t = l / 65536;
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)s, (float)t);
-		GlStateManager.color(1.0F, 1.0F, 1.0F);
+		OpenGlHelper.glMultiTexCoord2f(OpenGlHelper.GL_TEXTURE1, (float)s, (float)t);
+		GlStateManager.color3f(1.0F, 1.0F, 1.0F);
 	}
 }

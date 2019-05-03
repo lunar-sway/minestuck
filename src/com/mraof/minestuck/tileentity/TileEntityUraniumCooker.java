@@ -1,5 +1,6 @@
 package com.mraof.minestuck.tileentity;
 
+import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.item.MinestuckItems;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -58,7 +59,7 @@ public class TileEntityUraniumCooker extends TileEntityMachineProcess implements
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack)
 	{
-		if(i == 0 && itemstack.getItem() != MinestuckItems.rawUranium)
+		if(i == 0 && itemstack.getItem() != MinestuckItems.RAW_URANIUM)
 		{
 			return false;
 		}
@@ -77,7 +78,7 @@ public class TileEntityUraniumCooker extends TileEntityMachineProcess implements
 		ItemStack inputA = this.inv.get(0);
 		ItemStack inputB = this.inv.get(1);
 		ItemStack output = irradiate(inputB);
-		return (inputA.getItem() == MinestuckItems.rawUranium && !inputB.isEmpty());
+		return (inputA.getItem() == MinestuckItems.RAW_URANIUM && !inputB.isEmpty());
 	}
 	
 	private ItemStack irradiate(ItemStack input)
@@ -114,7 +115,7 @@ public class TileEntityUraniumCooker extends TileEntityMachineProcess implements
 	public void processContents()
 	{
 		ItemStack item = inv.get(1);
-		if(getFuel() <= getMaxFuel() - 32 && inv.get(0).getItem() == MinestuckItems.rawUranium)
+		if(getFuel() <= getMaxFuel() - 32 && inv.get(0).getItem() == MinestuckItems.RAW_URANIUM)
 		{    //Refill fuel
 			fuel += 32;
 			this.decrStackSize(0, 1);
@@ -195,7 +196,7 @@ public class TileEntityUraniumCooker extends TileEntityMachineProcess implements
 	@Override
 	public String getGuiID()
 	{
-		return null;
+		return GuiHandler.URANIUM_COOKER_ID.toString();
 	}
 	
 	public short getFuel()

@@ -1,29 +1,28 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.block.BlockGristWidget.MachineType;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.inventory.ContainerCrockerMachine;
 import com.mraof.minestuck.tileentity.TileEntityGristWidget;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.io.IOException;
 import java.util.List;
 
-public class GuiCrockerMachine extends GuiMachine
+@OnlyIn(Dist.CLIENT)
+public class GuiGristWidget extends GuiMachine
 {
-
-	private static final String[] guis = {"widget"};
-	protected TileEntityGristWidget te;
-	private ResourceLocation guiBackground;
-	private ResourceLocation guiProgress;
-	private MachineType type;
+	private static final ResourceLocation BACKGROUND = new ResourceLocation("minestuck:textures/gui/widget.png");
+	private static final ResourceLocation PROGRESS = new ResourceLocation("minestuck:textures/gui/progress/widget.png");
+	
+	protected final TileEntityGristWidget te;
+	protected final InventoryPlayer playerInventory;
+	
 	private int progressX;
 	private int progressY;
 	private int progressWidth;
@@ -31,43 +30,36 @@ public class GuiCrockerMachine extends GuiMachine
 	private int goX;
 	private int goY;
 
-	public GuiCrockerMachine(InventoryPlayer inventoryPlayer, TileEntityGristWidget tileEntity)
+	public GuiGristWidget(InventoryPlayer inventoryPlayer, TileEntityGristWidget tileEntity)
 	{
 		super(new ContainerCrockerMachine(inventoryPlayer, tileEntity), tileEntity);
 		this.te = tileEntity;
-		this.type = tileEntity.getMachineType();
-		guiBackground = new ResourceLocation("minestuck:textures/gui/" + guis[type.ordinal()] + ".png");
-		guiProgress = new ResourceLocation("minestuck:textures/gui/progress/" + guis[type.ordinal()] + ".png");
-
-		//sets prgress bar information based on machine type
-		switch (type)
-		{
-			case GRIST_WIDGET:
-				progressX = 54;
-				progressY = 23;
-				progressWidth = 71;
-				progressHeight = 10;
-				goX = 72;
-				goY = 31;
-				break;
-		}
+		this.playerInventory = inventoryPlayer;
+		
+		//sets prgress bar information
+		progressX = 54;
+		progressY = 23;
+		progressWidth = 71;
+		progressHeight = 10;
+		goX = 72;
+		goY = 31;
 	}
-
+	
 	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks)
+	public void render(int mouseX, int mouseY, float partialTicks)
 	{
 		this.drawDefaultBackground();
-		super.drawScreen(mouseX, mouseY, partialTicks);
+		super.render(mouseX, mouseY, partialTicks);
 		this.renderHoveredToolTip(mouseX, mouseY);
 	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
 	{
-		fontRenderer.drawString(I18n.format("gui." + guis[type.ordinal()] + ".name"), 8, 6, 0xFFFFFF);
+		fontRenderer.drawString(this.te.getDisplayName().getFormattedText(), 8, 6, 0xFFFFFF);
 		//draws "Inventory" or your regional equivalent
-		fontRenderer.drawString(I18n.format("container.inventory"), 8, ySize - 96 + 2, 0xFFFFFF);
-		if (type == MachineType.GRIST_WIDGET && !te.getStackInSlot(0).isEmpty())
+		fontRenderer.drawString(this.playerInventory.getDisplayName().getFormattedText(), 8, ySize - 96 + 2, 0xFFFFFF);
+		if (!te.getStackInSlot(0).isEmpty())
 		{
 			//Render grist requirements
 			GristSet set = te.getGristWidgetResult();
@@ -97,16 +89,16 @@ public class GuiCrockerMachine extends GuiMachine
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		//draw background
-		this.mc.getTextureManager().bindTexture(guiBackground);
+		this.mc.getTextureManager().bindTexture(BACKGROUND);
 		int x = (width - xSize) / 2;
 		int y = (height - ySize) / 2;
 		this.drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
 
 		//draw progress bar
-		this.mc.getTextureManager().bindTexture(guiProgress);
+		this.mc.getTextureManager().bindTexture(PROGRESS);
 		int width = getScaledValue(te.progress, te.maxProgress, progressWidth);
 		int height = progressHeight;
 		drawModalRectWithCustomSizedTexture(x + progressX, y + progressY, 0, 0, width, height, progressWidth, progressHeight);
@@ -116,41 +108,10 @@ public class GuiCrockerMachine extends GuiMachine
 	public void initGui()
 	{
 		super.initGui();
-
-		if (!te.isAutomatic())
-		{
-			goButton = new GuiButtonExt(1, (width - xSize) / 2 + goX, (height - ySize) / 2 + goY, 30, 12, te.overrideStop ? "STOP" : "GO");
-			buttonList.add(goButton);
-			if (type == MachineType.GRIST_WIDGET && MinestuckConfig.clientDisableGristWidget)
-				goButton.enabled = false;
-		}
+		
+		goButton = new GoButton(1, (width - xSize) / 2 + goX, (height - ySize) / 2 + goY, 30, 12, te.overrideStop ? "STOP" : "GO");
+		buttons.add(goButton);
+		if(MinestuckConfig.clientDisableGristWidget)
+			goButton.enabled = false;
 	}
-
-	@Override
-	protected void mouseClicked(int par1, int par2, int par3) throws IOException
-	{
-		super.mouseClicked(par1, par2, par3);
-		if (par3 == 1)
-		{
-			if (goButton != null && goButton.mousePressed(this.mc, par1, par2))
-			{
-				goButton.playPressSound(this.mc.getSoundHandler());
-				this.actionPerformed(goButton);
-			}
-		}
-	}
-
-	/**
-	 * Returns a number to be used in calculation of progress bar length.
-	 *
-	 * @param progress the progress done.
-	 * @param max      The maximum amount of progress.
-	 * @param imageMax The length of the progress bar image to scale to
-	 * @return The length the progress bar should be shown to
-	 */
-	public int getScaledValue(int progress, int max, int imageMax)
-	{
-		return (int) ((float) imageMax * ((float) progress / (float) max));
-	}
-
 }

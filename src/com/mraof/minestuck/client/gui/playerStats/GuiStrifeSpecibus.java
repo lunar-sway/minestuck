@@ -4,7 +4,10 @@ import com.mraof.minestuck.util.KindAbstratusList;
 import com.mraof.minestuck.util.KindAbstratusType;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class GuiStrifeSpecibus extends GuiPlayerStats
 {
 	
@@ -20,11 +23,12 @@ public class GuiStrifeSpecibus extends GuiPlayerStats
 	}
 	
 	@Override
-	public void drawScreen(int xcor, int ycor, float par3) {
-		super.drawScreen(xcor, ycor, par3);
+	public void render(int xcor, int ycor, float par3)
+	{
+		super.render(xcor, ycor, par3);
 		this.drawDefaultBackground();
 		
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		
 		drawTabs();
 		

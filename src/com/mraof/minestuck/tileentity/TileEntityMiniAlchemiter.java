@@ -3,11 +3,15 @@ package com.mraof.minestuck.tileentity;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.MinestuckPlayerData;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -19,7 +23,7 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 {
 	private int ticks_since_update = 0;
 	public IdentifierHandler.PlayerIdentifier owner;
-	public GristType selectedGrist = GristType.Build;
+	public GristType selectedGrist = GristType.BUILD;
 	
 	public TileEntityMiniAlchemiter()
 	{
@@ -41,7 +45,7 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack)
 	{
-		return index == 0 && stack.getItem() == MinestuckItems.cruxiteDowel;
+		return index == 0 && stack.getItem() == MinestuckBlocks.CRUXITE_DOWEL.asItem();
 	}
 	
 	@Override
@@ -60,7 +64,7 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 				return false;
 			}
 			GristSet cost = AlchemyCostRegistry.getGristConversion(newItem);
-			if(newItem.getItem() == MinestuckItems.captchaCard)
+			if(newItem.getItem() == MinestuckItems.CAPTCHA_CARD)
 				cost = new GristSet(selectedGrist, MinestuckConfig.cardCost);
 			
 			return GristHelper.canAfford(MinestuckPlayerData.getGristSet(this.owner), cost);
@@ -93,7 +97,7 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 			AlchemyRecipes.onAlchemizedItem(newItem, player);
 		
 		GristSet cost = AlchemyCostRegistry.getGristConversion(newItem);
-		if (newItem.getItem() == MinestuckItems.captchaCard)
+		if (newItem.getItem() == MinestuckItems.CAPTCHA_CARD)
 			cost = new GristSet(selectedGrist, MinestuckConfig.cardCost);
 		GristHelper.decrease(owner, cost);
 		MinestuckPlayerTracker.updateGristCache(owner);
@@ -123,7 +127,7 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 		this.selectedGrist = GristType.getTypeFromString(compound.getString("gristType"));
 		if(this.selectedGrist == null)
 		{
-			this.selectedGrist = GristType.Build;
+			this.selectedGrist = GristType.BUILD;
 		}
 		
 		if(IdentifierHandler.hasIdentifier(compound, "owner"))
@@ -169,7 +173,7 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 				return 0;
 			}
 			GristSet cost = AlchemyCostRegistry.getGristConversion(newItem);
-			if (newItem.getItem() == MinestuckItems.captchaCard)
+			if (newItem.getItem() == MinestuckItems.CAPTCHA_CARD)
 				cost = new GristSet(selectedGrist, MinestuckConfig.cardCost);
 			// We need to run the check 16 times. Don't want to hammer the game with too many of these, so the comparators are only told to update every 20 ticks.
 			// Additionally, we need to check if the item in the slot is empty. Otherwise, it will attempt to check the cost for air, which cannot be alchemized anyway.
@@ -193,5 +197,17 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 			}
 		}
 		return 0;
+	}
+	
+	@Override
+	public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn)
+	{
+		return null;
+	}
+	
+	@Override
+	public String getGuiID()
+	{
+		return GuiHandler.MINI_ALCHEMITER_ID.toString();
 	}
 }

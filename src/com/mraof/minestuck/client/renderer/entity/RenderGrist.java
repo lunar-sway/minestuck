@@ -9,7 +9,10 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class RenderGrist extends Render<EntityGrist>
 {
 	
@@ -24,18 +27,18 @@ public class RenderGrist extends Render<EntityGrist>
 	public void doRender(EntityGrist grist, double d0, double d1, double d2, float f, float f1)
 	{
 		GlStateManager.pushMatrix();
-		GlStateManager.translate((float)d0, (float)d1 + grist.getSizeByValue()/2, (float)d2);
+		GlStateManager.translatef((float)d0, (float)d1 + grist.getSizeByValue()/2, (float)d2);
 		this.bindEntityTexture(grist);
 		BufferBuilder vertexbuffer = Tessellator.getInstance().getBuffer();
 		int j = grist.getBrightnessForRender();
 		int k = j % 65536;
 		int l = j / 65536;
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)k / 1.0F, (float)l / 1.0F);
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		GlStateManager.rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-		GlStateManager.rotate(-this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+		OpenGlHelper.glMultiTexCoord2f(OpenGlHelper.GL_TEXTURE1, (float)k, (float)l);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.rotatef(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+		GlStateManager.rotatef(-this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
 		float f11 = grist.getSizeByValue();
-		GlStateManager.scale(f11, f11, f11);
+		GlStateManager.scalef(f11, f11, f11);
 		vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_NORMAL);
 		vertexbuffer.pos(-0.5D, -0.25D, 0.0D).tex(0.0D, 1.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
 		vertexbuffer.pos(0.5D, -0.25D, 0.0D).tex(1.0D, 1.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
@@ -51,7 +54,7 @@ public class RenderGrist extends Render<EntityGrist>
 	@Override
 	protected ResourceLocation getEntityTexture(EntityGrist entity) 
 	{
-		return new ResourceLocation(entity.getType().getIcon().getResourceDomain(), "textures/grist/" + entity.getType().getIcon().getResourcePath() + ".png");
+		return new ResourceLocation(entity.getType().getIcon().getNamespace(), "textures/grist/" + entity.getType().getIcon().getPath() + ".png");
 	}
 
 }

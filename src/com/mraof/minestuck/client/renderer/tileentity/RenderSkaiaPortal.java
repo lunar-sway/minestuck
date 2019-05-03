@@ -1,9 +1,8 @@
 package com.mraof.minestuck.client.renderer.tileentity;
 
 import com.mraof.minestuck.tileentity.TileEntitySkaiaPortal;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.EntityTippedArrow;
@@ -14,7 +13,7 @@ import org.lwjgl.opengl.GL11;
 import java.nio.FloatBuffer;
 import java.util.Random;
 
-public class RenderSkaiaPortal extends TileEntitySpecialRenderer<TileEntitySkaiaPortal>
+public class RenderSkaiaPortal extends TileEntityRenderer<TileEntitySkaiaPortal>
 {
 	private static final ResourceLocation tunnel = new ResourceLocation("minestuck","textures/tunnel.png");
     private static final ResourceLocation particlefield = new ResourceLocation("minestuck","textures/particlefield.png");
@@ -22,9 +21,9 @@ public class RenderSkaiaPortal extends TileEntitySpecialRenderer<TileEntitySkaia
     FloatBuffer floatBuffer = GLAllocation.createDirectFloatBuffer(16);
 	
 	@Override
-	public void render(TileEntitySkaiaPortal te, double x, double y, double z, float partialTicks, int destroyStage, float alpha)
+	public void render(TileEntitySkaiaPortal tileEntityIn, double x, double y, double z, float partialTicks, int destroyStage)
 	{
-		Entity temp = new EntityTippedArrow(te.getWorld());
+		Entity temp = new EntityTippedArrow(tileEntityIn.getWorld());
 		Vec3d position = ActiveRenderInfo.projectViewFromEntity(temp, 0);	//TODO temp solution for removed getter
 		
 		float var9 = (float)this.rendererDispatcher.entityX;
@@ -64,31 +63,31 @@ public class RenderSkaiaPortal extends TileEntitySpecialRenderer<TileEntitySkaia
 			float var20 = var18 + var15 + (float) position.y;
 			float var21 = var19 / var20;
 			var21 += (float) (y + var13);
-			GlStateManager.translate(var9, var21, var11);
-			GlStateManager.texGen(GlStateManager.TexGen.S, GL11.GL_OBJECT_LINEAR);
-			GlStateManager.texGen(GlStateManager.TexGen.T, GL11.GL_OBJECT_LINEAR);
-			GlStateManager.texGen(GlStateManager.TexGen.R, GL11.GL_OBJECT_LINEAR);
-			GlStateManager.texGen(GlStateManager.TexGen.Q, GL11.GL_EYE_LINEAR);
-			GlStateManager.texGen(GlStateManager.TexGen.S, GL11.GL_OBJECT_PLANE, this.func_76907_a(1.0F, 0.0F, 0.0F, 0.0F));
-			GlStateManager.texGen(GlStateManager.TexGen.T, GL11.GL_OBJECT_PLANE, this.func_76907_a(0.0F, 0.0F, 1.0F, 0.0F));
-			GlStateManager.texGen(GlStateManager.TexGen.R, GL11.GL_OBJECT_PLANE, this.func_76907_a(0.0F, 0.0F, 0.0F, 1.0F));
-			GlStateManager.texGen(GlStateManager.TexGen.Q, GL11.GL_EYE_PLANE, this.func_76907_a(0.0F, 1.0F, 0.0F, 0.0F));
-			GlStateManager.enableTexGenCoord(GlStateManager.TexGen.S);
-			GlStateManager.enableTexGenCoord(GlStateManager.TexGen.T);
-			GlStateManager.enableTexGenCoord(GlStateManager.TexGen.R);
-			GlStateManager.enableTexGenCoord(GlStateManager.TexGen.Q);
+			GlStateManager.translatef(var9, var21, var11);
+			GlStateManager.texGenMode(GlStateManager.TexGen.S, GL11.GL_OBJECT_LINEAR);
+			GlStateManager.texGenMode(GlStateManager.TexGen.T, GL11.GL_OBJECT_LINEAR);
+			GlStateManager.texGenMode(GlStateManager.TexGen.R, GL11.GL_OBJECT_LINEAR);
+			GlStateManager.texGenMode(GlStateManager.TexGen.Q, GL11.GL_EYE_LINEAR);
+			GlStateManager.texGenParam(GlStateManager.TexGen.S, GL11.GL_OBJECT_PLANE, this.func_76907_a(1.0F, 0.0F, 0.0F, 0.0F));
+			GlStateManager.texGenParam(GlStateManager.TexGen.T, GL11.GL_OBJECT_PLANE, this.func_76907_a(0.0F, 0.0F, 1.0F, 0.0F));
+			GlStateManager.texGenParam(GlStateManager.TexGen.R, GL11.GL_OBJECT_PLANE, this.func_76907_a(0.0F, 0.0F, 0.0F, 1.0F));
+			GlStateManager.texGenParam(GlStateManager.TexGen.Q, GL11.GL_EYE_PLANE, this.func_76907_a(0.0F, 1.0F, 0.0F, 0.0F));
+			GlStateManager.enableTexGen(GlStateManager.TexGen.S);
+			GlStateManager.enableTexGen(GlStateManager.TexGen.T);
+			GlStateManager.enableTexGen(GlStateManager.TexGen.R);
+			GlStateManager.enableTexGen(GlStateManager.TexGen.Q);
 			GlStateManager.popMatrix();
 			GlStateManager.matrixMode(GL11.GL_TEXTURE);
 			GlStateManager.pushMatrix();
 			GlStateManager.loadIdentity();
-			GlStateManager.translate(0.0F, Minecraft.getSystemTime() % 700000L / 700000.0F, 0.0F);
-			GlStateManager.scale(var16, var16, var16);
-			GlStateManager.translate(0.5F, 0.5F, 0.0F);
-			GlStateManager.rotate((var14 * var14 * 4321 + var14 * 9) * 2.0F, 0.0F, 0.0F, 1.0F);
-			GlStateManager.translate(-0.5F, -0.5F, 0.0F);
-			GlStateManager.translate(-var9, -var11, -var10);
+			GlStateManager.translatef(0.0F, System.currentTimeMillis() % 700000L / 700000.0F, 0.0F);	//TODO Test if this is the right system time
+			GlStateManager.scalef(var16, var16, var16);
+			GlStateManager.translatef(0.5F, 0.5F, 0.0F);
+			GlStateManager.rotatef((var14 * var14 * 4321 + var14 * 9) * 2.0F, 0.0F, 0.0F, 1.0F);
+			GlStateManager.translatef(-0.5F, -0.5F, 0.0F);
+			GlStateManager.translatef(-var9, -var11, -var10);
 			var19 = var18 + (float) position.x;
-			GlStateManager.translate(((float) position.x) * var15 / var19, ((float) position.z) * var15 / var19, -var10);
+			GlStateManager.translatef(((float) position.x) * var15 / var19, ((float) position.z) * var15 / var19, -var10);
 			BufferBuilder var24 = Tessellator.getInstance().getBuffer();
 			var24.begin(7, DefaultVertexFormats.POSITION_TEX);
 			var21 = var12.nextFloat() * 0.5F + 0.1F;
@@ -102,7 +101,7 @@ public class RenderSkaiaPortal extends TileEntitySpecialRenderer<TileEntitySkaia
 				var21 = 1.0F;
             }
 			
-			GlStateManager.color(var21 * var17, var22 * var17, var23 * var17, 1.0F);
+			GlStateManager.color4f(var21 * var17, var22 * var17, var23 * var17, 1.0F);
 			var24.pos(x, y + var13, z).tex(0, 0).endVertex();
 			var24.pos(x, y + var13, z + 1.0D).tex(0, 1).endVertex();
 			var24.pos(x + 1.0D, y + var13, z + 1.0D).tex(1, 1).endVertex();
@@ -113,10 +112,10 @@ public class RenderSkaiaPortal extends TileEntitySpecialRenderer<TileEntitySkaia
         }
 		
 		GlStateManager.disableBlend();
-		GlStateManager.disableTexGenCoord(GlStateManager.TexGen.S);
-		GlStateManager.disableTexGenCoord(GlStateManager.TexGen.T);
-		GlStateManager.disableTexGenCoord(GlStateManager.TexGen.R);
-		GlStateManager.disableTexGenCoord(GlStateManager.TexGen.Q);
+		GlStateManager.disableTexGen(GlStateManager.TexGen.S);
+		GlStateManager.disableTexGen(GlStateManager.TexGen.T);
+		GlStateManager.disableTexGen(GlStateManager.TexGen.R);
+		GlStateManager.disableTexGen(GlStateManager.TexGen.Q);
 		GlStateManager.enableLighting();
     }
     private FloatBuffer func_76907_a(float par1, float par2, float par3, float par4)

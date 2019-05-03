@@ -2,7 +2,11 @@ package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.alchemy.CombinationRegistry;
+import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.item.MinestuckItems;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.ITextComponent;
@@ -31,7 +35,7 @@ public class TileEntityMiniPunchDesignix extends TileEntityMachineProcess implem
 	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack)
 	{
-		return index == 0 || index == 1 && stack.getItem() == MinestuckItems.captchaCard;
+		return index == 0 || index == 1 && stack.getItem() == MinestuckItems.CAPTCHA_CARD;
 	}
 	
 	@Override
@@ -113,5 +117,17 @@ public class TileEntityMiniPunchDesignix extends TileEntityMachineProcess implem
 		if(index == 0)
 			return !inv.get(2).isEmpty();
 		else return true;
+	}
+	
+	@Override
+	public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn)
+	{
+		return null;
+	}
+	
+	@Override
+	public String getGuiID()
+	{
+		return GuiHandler.MINI_PUNCH_DESIGNIX_ID.toString();
 	}
 }

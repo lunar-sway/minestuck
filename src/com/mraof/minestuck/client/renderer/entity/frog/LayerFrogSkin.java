@@ -3,24 +3,25 @@ package com.mraof.minestuck.client.renderer.entity.frog;
 import com.mraof.minestuck.client.model.ModelFrog;
 import com.mraof.minestuck.entity.EntityFrog;
 
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
 
-public class LayerFrogSkin implements LayerRenderer<EntityFrog> {
+public class LayerFrogSkin implements LayerRenderer<EntityFrog>
+{
 	private final ModelFrog frogModel = new ModelFrog();
 	private final RenderFrog frogRender;
 	private float colorMin = 0.25f;
 	private String name;
 
-	public LayerFrogSkin(RenderFrog renderIn) {
+	public LayerFrogSkin(RenderFrog renderIn)
+	{
 		this.frogRender = renderIn;
 	}
-
+	
 	@Override
-	public void doRenderLayer(EntityFrog frog, float limbSwing, float limbSwingAmount, float partialTicks,
-			float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+	public void render(EntityFrog frog, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
+	{
 		if (!frog.isInvisible()) {
 			int type = frog.getType();
 			this.frogRender.bindTexture(this.getTexture(type));
@@ -38,7 +39,7 @@ public class LayerFrogSkin implements LayerRenderer<EntityFrog> {
 				if (b < this.colorMin)
 					b = this.colorMin;
 
-				GlStateManager.color(r, g, b, 1f);
+				GlStateManager.color4f(r, g, b, 1f);
 			}
 			this.frogModel.setModelAttributes(this.frogRender.getMainModel());
             this.frogModel.setLivingAnimations(frog, limbSwing, limbSwingAmount, partialTicks);

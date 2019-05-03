@@ -5,37 +5,37 @@ import com.mraof.minestuck.util.ColorCollector;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
-public class RenderGate extends TileEntitySpecialRenderer<TileEntityGate>
+public class RenderGate extends TileEntityRenderer<TileEntityGate>
 {
 	
 	private static final ResourceLocation nodeInner = new ResourceLocation("minestuck","textures/blocks/node_spiro_inner.png");
 	private static final ResourceLocation nodeOuter = new ResourceLocation("minestuck","textures/blocks/node_spiro_outer.png");
 	
 	@Override
-	public void render(TileEntityGate te, double x, double y, double z, float partialTicks, int destroyStage, float alpha)
+	public void render(TileEntityGate tileEntityIn, double x, double y, double z, float partialTicks, int destroyStage)
 	{
 		int color;
-		if(te.colorIndex == -1)
+		if(tileEntityIn.colorIndex == -1)
 			color = 0x0057FF;
-		else color = ColorCollector.getColor(te.colorIndex);
+		else color = ColorCollector.getColor(tileEntityIn.colorIndex);
 		float r = ((color >> 16) & 255)/255F;
 		float g = ((color >> 8) & 255)/255F;
 		float b = (color & 255)/255F;
 		
-		GlStateManager.pushAttrib();
-		GlStateManager.color(r, g, b);
+		GlStateManager.pushLightingAttrib();
+		GlStateManager.color3f(r, g, b);
 		GlStateManager.pushMatrix();
 		GlStateManager.disableCull();
 		GlStateManager.disableLighting();
 		
-		if(te.isGate())
-			renderGateAt(te, x, y, z, partialTicks, destroyStage);
-		else renderReturnNodeAt(te, x, y, z, partialTicks, destroyStage);
+		if(tileEntityIn.isGate())
+			renderGateAt(tileEntityIn, x, y, z, partialTicks, destroyStage);
+		else renderReturnNodeAt(tileEntityIn, x, y, z, partialTicks, destroyStage);
 		
 		GlStateManager.enableCull();
 		GlStateManager.enableLighting();
@@ -46,11 +46,11 @@ public class RenderGate extends TileEntitySpecialRenderer<TileEntityGate>
 	public void renderGateAt(TileEntityGate tileEntity, double posX, double posY, double posZ, float f, int p_180535_9_)
 	{
 		BufferBuilder buffer = Tessellator.getInstance().getBuffer();
-		float tick = tileEntity.getWorld().getTotalWorldTime() + f;
-		GlStateManager.translate(posX + 0.5, posY, posZ + 0.5);
+		float tick = tileEntity.getWorld().getGameTime() + f;
+		GlStateManager.translated(posX + 0.5, posY, posZ + 0.5);
 		
 		GlStateManager.pushMatrix();
-		GlStateManager.rotate(tick, 0, 1, 0);
+		GlStateManager.rotatef(tick, 0, 1, 0);
 		double y = 0.5;
 		this.bindTexture(nodeInner);
 		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
@@ -65,11 +65,11 @@ public class RenderGate extends TileEntitySpecialRenderer<TileEntityGate>
 	public void renderReturnNodeAt(TileEntityGate tileEntity, double posX, double posY, double posZ, float f, int p_180535_9_)
 	{
 		BufferBuilder buffer = Tessellator.getInstance().getBuffer();
-		float tick = tileEntity.getWorld().getTotalWorldTime() + f;
-		GlStateManager.translate(posX, posY, posZ);
+		float tick = tileEntity.getWorld().getGameTime() + f;
+		GlStateManager.translated(posX, posY, posZ);
 		
 		GlStateManager.pushMatrix();
-		GlStateManager.rotate(tick, 0, 1, 0);
+		GlStateManager.rotatef(tick, 0, 1, 0);
 		double y = 0.5;
 		this.bindTexture(nodeInner);
 		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
@@ -81,7 +81,7 @@ public class RenderGate extends TileEntitySpecialRenderer<TileEntityGate>
 		GlStateManager.popMatrix();
 		
 		GlStateManager.pushMatrix();
-		GlStateManager.rotate(-tick/1.5F, 0, 1, 0);
+		GlStateManager.rotatef(-tick/1.5F, 0, 1, 0);
 		y = 0.5 + MathHelper.sin(tick/50)*0.1;
 		this.bindTexture(nodeOuter);
 		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);

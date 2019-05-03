@@ -3,6 +3,7 @@ package com.mraof.minestuck.tileentity;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.block.BlockGristWidget;
+import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.*;
@@ -34,8 +35,8 @@ public class TileEntityGristWidget extends TileEntityMachineProcess implements I
 	{
 		ItemStack item = AlchemyRecipes.getDecodedItem(inv.get(0), true);
 		GristSet gristSet = AlchemyCostRegistry.getGristConversion(item);
-		if(inv.get(0).getItem() != MinestuckItems.captchaCard || AlchemyRecipes.isPunchedCard(inv.get(0))
-				|| item.getItem() == MinestuckItems.captchaCard || gristSet == null)
+		if(inv.get(0).getItem() != MinestuckItems.CAPTCHA_CARD || AlchemyRecipes.isPunchedCard(inv.get(0))
+				|| item.getItem() == MinestuckItems.CAPTCHA_CARD || gristSet == null)
 			return null;
 		
 		if (item.getCount() != 1)
@@ -73,13 +74,13 @@ public class TileEntityGristWidget extends TileEntityMachineProcess implements I
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack)
 	{
-		if(i != 0 || itemstack.getItem() != MinestuckItems.captchaCard)
+		if(i != 0 || itemstack.getItem() != MinestuckItems.CAPTCHA_CARD)
 		{
 			return false;
 		} else
 		{
 			return (!itemstack.getTag().getBoolean("punched") && itemstack.getTag().getInt("contentSize") > 0
-					&& AlchemyRecipes.getDecodedItem(itemstack).getItem() != MinestuckItems.captchaCard);
+					&& AlchemyRecipes.getDecodedItem(itemstack).getItem() != MinestuckItems.CAPTCHA_CARD);
 		}
 	}
 	
@@ -197,7 +198,7 @@ public class TileEntityGristWidget extends TileEntityMachineProcess implements I
 	@Override
 	public String getGuiID()
 	{
-		return null;
+		return GuiHandler.GRIST_WIDGET_ID.toString();
 	}
 	
 	public void resendState()

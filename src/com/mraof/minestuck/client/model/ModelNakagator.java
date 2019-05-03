@@ -1,12 +1,12 @@
 package com.mraof.minestuck.client.model;
 
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.entity.model.ModelBase;
+import net.minecraft.client.renderer.entity.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
-public class ModelNakagator extends ModelBase 
+public class ModelNakagator extends ModelBase
 {
 	public boolean hasArms;
 	ModelRenderer body;
@@ -23,6 +23,7 @@ public class ModelNakagator extends ModelBase
     {
     	this(false);
     }
+    
     public ModelNakagator(boolean hasArms)
     {
     	textureWidth = 64;
@@ -103,6 +104,7 @@ public class ModelNakagator extends ModelBase
 			this.lowerTail.render(par7);
 		}
     }
+    
     /**
      * Sets the model's various rotation angles. For bipeds, par1 and par2 are used for animating the movement of arms
      * and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how
@@ -114,6 +116,7 @@ public class ModelNakagator extends ModelBase
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;
 	}
+	
 	@Override
 	public void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6, Entity par7Entity) {
 		this.head.rotateAngleY = par4 / (180F / (float)Math.PI);

@@ -63,6 +63,7 @@ import com.mraof.minestuck.util.ColorCollector;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.client.renderer.entity.model.ModelBiped;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -77,7 +78,7 @@ public class ClientProxy extends CommonProxy
 	
 	public static EntityPlayer getClientPlayer()	//Note: can't get the client player directly from FMLClientHandler either, as the server side will still crash because of the return type
 	{
-		return FMLClientHandler.instance().getClientPlayerEntity();
+		return Minecraft.getInstance().player;	//TODO verify server functionality
 	}
 	
 	public static void addScheduledTask(Runnable runnable)
@@ -87,34 +88,16 @@ public class ClientProxy extends CommonProxy
 	
 	private static void registerRenderers()
 	{
-		Minecraft mc = Minecraft.getMinecraft();
+		Minecraft mc = Minecraft.getInstance();
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySkaiaPortal.class, new RenderSkaiaPortal());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGate.class, new RenderGate());
 //		MinecraftForgeClient.registerItemRenderer(Minestuck.captchaCard, new RenderCard());
 		
-		mc.getItemColors().registerItemColorHandler((stack, tintIndex) -> BlockColorCruxite.handleColorTint(stack.getMetadata() == 0 ? -1 : ColorCollector.getColor(stack.getMetadata() - 1), tintIndex),
-				MinestuckItems.cruxiteDowel, MinestuckItems.cruxiteApple, MinestuckItems.cruxitePotion);
-		mc.getBlockColors().registerBlockColorHandler(new BlockColorCruxite(), MinestuckBlocks.alchemiter[0], MinestuckBlocks.totemlathe[1], MinestuckBlocks.blockCruxiteDowel);
+		mc.getItemColors().register((stack, tintIndex) -> BlockColorCruxite.handleColorTint(stack.hasTag() && stack.getTag().hasKey("color") ? ColorCollector.getColor(stack.getTag().getInt("color") - 1) : -1, tintIndex),
+				MinestuckBlocks.CRUXITE_DOWEL, MinestuckItems.CRUXITE_APPLE, MinestuckItems.CRUXITE_POTION);
+		mc.getBlockColors().register(new BlockColorCruxite(), MinestuckBlocks.ALCHEMITER_TOTEM_PAD, MinestuckBlocks.TOTEM_LATHE_DOWEL_ROD, MinestuckBlocks.CRUXITE_DOWEL);
 
-		mc.getItemColors().registerItemColorHandler(new IItemColor()
-        {
-            public int colorMultiplier(ItemStack stack, int tintIndex)
-            {
-            	ItemFrog item = ((ItemFrog)stack.getItem());
-            	int color = -1;
-            	
-            	if((stack.getMetadata() > EntityFrog.maxTypes() || stack.getMetadata() < 1))
-            	{
-	            	switch(tintIndex)
-	            	{
-	            	case 0: color = item.getSkinColor(stack); break;
-	            	case 1: color = item.getEyeColor(stack); break;
-	            	case 2: color = item.getBellyColor(stack); break; 
-	            	}
-            	}
-                return color;
-            }
-        }, MinestuckItems.itemFrog);
+		mc.getItemColors().register(new RenderFrog.FrogItemColor(), MinestuckItems.FROG);
 	}
 	
 	public static void init()
@@ -122,18 +105,18 @@ public class ClientProxy extends CommonProxy
 		registerRenderers();
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityFrog.class, manager -> new RenderFrog(manager, new ModelBiped(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(EntityHologram.class, manager -> new RenderHologram(manager));
-		RenderingRegistry.registerEntityRenderingHandler(EntityNakagator.class, RenderEntityMinestuck.getFactory(new ModelNakagator(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(EntitySalamander.class, RenderEntityMinestuck.getFactory(new ModelSalamander(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(EntityIguana.class, RenderEntityMinestuck.getFactory(new ModelIguana(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(EntityTurtle.class, RenderEntityMinestuck.getFactory(new ModelTurtle(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(EntityImp.class, RenderEntityMinestuck.getFactory(new ModelImp(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(EntityOgre.class, RenderEntityMinestuck.getFactory(new ModelOgre(), 2.8F));
-		RenderingRegistry.registerEntityRenderingHandler(EntityBasilisk.class, RenderEntityMinestuck.getFactory(new ModelBasilisk(), 2.8F));
-		RenderingRegistry.registerEntityRenderingHandler(EntityLich.class, RenderEntityMinestuck.getFactory(new ModelLich(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(EntityGiclops.class, RenderEntityMinestuck.getFactory(new ModelGiclops(), 7.6F));
-		RenderingRegistry.registerEntityRenderingHandler(EntityBishop.class, RenderEntityMinestuck.getFactory(new ModelBishop(), 1.8F));
-		RenderingRegistry.registerEntityRenderingHandler(EntityRook.class, RenderEntityMinestuck.getFactory(new ModelRook(), 2.5F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityHologram.class, RenderHologram::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityNakagator.class, manager -> new RenderEntityMinestuck<>(manager, new ModelNakagator(), 0.5F));
+		RenderingRegistry.registerEntityRenderingHandler(EntitySalamander.class, manager -> new RenderEntityMinestuck<>(manager, new ModelSalamander(), 0.5F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityIguana.class, manager -> new RenderEntityMinestuck<>(manager, new ModelIguana(), 0.5F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityTurtle.class, manager -> new RenderEntityMinestuck<>(manager, new ModelTurtle(), 0.5F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityImp.class, manager -> new RenderEntityMinestuck<>(manager, new ModelImp(), 0.5F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityOgre.class, manager -> new RenderEntityMinestuck<>(manager, new ModelOgre(), 2.8F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityBasilisk.class, manager -> new RenderEntityMinestuck<>(manager, new ModelBasilisk(), 2.8F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityLich.class, manager -> new RenderEntityMinestuck<>(manager, new ModelLich(), 0.5F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityGiclops.class, manager -> new RenderEntityMinestuck<>(manager, new ModelGiclops(), 7.6F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityBishop.class, manager -> new RenderEntityMinestuck<>(manager, new ModelBishop(), 1.8F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityRook.class, manager -> new RenderEntityMinestuck<>(manager, new ModelRook(), 2.5F));
 		RenderingRegistry.registerEntityRenderingHandler(EntityUnderlingPart.class, manager -> new RenderShadow<>(manager, 2.8F));
 		RenderingRegistry.registerEntityRenderingHandler(EntityBigPart.class, manager -> new RenderShadow<>(manager, 0F));
 		RenderingRegistry.registerEntityRenderingHandler(EntityPawn.class, manager -> new RenderPawn(manager, new ModelBiped(), 0.5F));

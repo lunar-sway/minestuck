@@ -3,6 +3,7 @@ package com.mraof.minestuck.tileentity;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.alchemy.CombinationRegistry;
 import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.item.MinestuckItems;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -36,7 +37,7 @@ public class TileEntityMiniTotemLathe extends TileEntityMachineProcess implement
 	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack)
 	{
-		return (index == 0 || index == 1) && stack.getItem() == MinestuckItems.captchaCard || index == 2 && stack.getItem() == MinestuckItems.cruxiteDowel;
+		return (index == 0 || index == 1) && stack.getItem() == MinestuckItems.CAPTCHA_CARD || index == 2 && stack.getItem() == MinestuckBlocks.CRUXITE_DOWEL;
 	}
 	
 	@Override
@@ -90,7 +91,7 @@ public class TileEntityMiniTotemLathe extends TileEntityMachineProcess implement
 		}
 		
 		ItemStack outputDowel = output.getItem().equals(Item.getItemFromBlock(MinestuckBlocks.GENERIC_OBJECT))
-				? new ItemStack(MinestuckItems.cruxiteDowel) : AlchemyRecipes.createEncodedItem(output, false);
+				? new ItemStack(MinestuckBlocks.CRUXITE_DOWEL) : AlchemyRecipes.createEncodedItem(output, false);
 		outputDowel.setItemDamage(inv.get(2).getItemDamage());	//Setting color
 		
 		setInventorySlotContents(3, outputDowel);
@@ -138,6 +139,6 @@ public class TileEntityMiniTotemLathe extends TileEntityMachineProcess implement
 	@Override
 	public String getGuiID()
 	{
-		return null;
+		return GuiHandler.MINI_TOTEM_LATHE_ID.toString();
 	}
 }

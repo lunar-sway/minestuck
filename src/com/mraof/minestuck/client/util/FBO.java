@@ -2,7 +2,6 @@ package com.mraof.minestuck.client.util;
 
 import static org.lwjgl.opengl.EXTFramebufferObject.*;
 import static org.lwjgl.opengl.GL11.*;
-import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL14;
 
 public class FBO {
@@ -60,7 +59,7 @@ public class FBO {
 		
 		glBindTexture(GL_TEXTURE_2D, texId);
 		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
-		glViewport(0, 0, Display.getWidth(), Display.getHeight());
+		//glViewport(0, 0, Display.getWidth(), Display.getHeight());
 	}
 
 	public void dispose() {

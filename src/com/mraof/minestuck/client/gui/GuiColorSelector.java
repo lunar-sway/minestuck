@@ -12,10 +12,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.io.IOException;
-
-public class GuiColorSelector extends GuiScreen
+@OnlyIn(Dist.CLIENT)
+public class GuiColorSelector extends GuiScreen implements GuiButtonImpl.ButtonClickhandler
 {
 	
 	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/color_selector.png");
@@ -32,19 +33,19 @@ public class GuiColorSelector extends GuiScreen
 	@Override
 	public void initGui()
 	{
-		GuiButton button = new GuiButton(0, (width - guiWidth)/2 + 50, (height - guiHeight)/2 + 132, 76, 20, "Choose");
-		buttonList.add(button);
+		GuiButton button = new GuiButtonImpl(this, 0, (width - guiWidth)/2 + 50, (height - guiHeight)/2 + 132, 76, 20, "Choose");
+		buttons.add(button);
 	}
 	
 	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks)
+	public void render(int mouseX, int mouseY, float partialTicks)
 	{
 		int xOffset = (width - guiWidth)/2;
 		int yOffset = (height - guiHeight)/2;
 		
 		this.drawDefaultBackground();
 		
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		
 		this.mc.getTextureManager().bindTexture(guiBackground);
 		this.drawTexturedModalRect(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
@@ -73,7 +74,7 @@ public class GuiColorSelector extends GuiScreen
 				drawRect(xOffset + x, yOffset + y, xOffset + x + 32, yOffset + y + 16, color);
 			}
 		
-		super.drawScreen(mouseX, mouseY, partialTicks);
+		super.render(mouseX, mouseY, partialTicks);
 		
 		if(selectedColor != -1)
 		{
@@ -83,16 +84,15 @@ public class GuiColorSelector extends GuiScreen
 				y += 3;
 			if(selectedColor >= 8)
 				y += 3;
-			GlStateManager.color(1F, 1F, 1F);
+			GlStateManager.color3f(1F, 1F, 1F);
 			this.mc.getTextureManager().bindTexture(guiBackground);
 			this.drawTexturedModalRect(xOffset + x, yOffset + y, guiWidth, 0, 36, 20);
 		}
 	}
 	
 	@Override
-	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
+	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton)
 	{
-		super.mouseClicked(mouseX, mouseY, mouseButton);
 		if(mouseButton == 0)
 		{
 			int xOffset = (width - guiWidth)/2;
@@ -111,14 +111,15 @@ public class GuiColorSelector extends GuiScreen
 					{
 						int index = y*4 + x;
 						selectedColor = index != selectedColor ? index : -1;
-						return;
+						return true;
 					}
 				}
 		}
+		return super.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 	
 	@Override
-	protected void actionPerformed(GuiButton button) throws IOException
+	public void actionPerformed(GuiButtonImpl button)
 	{
 		MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(MinestuckPacket.Type.SELECTION, SelectionPacket.COLOR, this.selectedColor));
 		ColorCollector.playerColor = selectedColor;

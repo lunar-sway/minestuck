@@ -1,36 +1,24 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mraof.minestuck.inventory.ContainerConsortMerchant;
-import com.mraof.minestuck.inventory.ContainerCrockerMachine;
-import com.mraof.minestuck.inventory.ContainerSburbMachine;
-import com.mraof.minestuck.inventory.ContainerUraniumCooker;
-import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
-import com.mraof.minestuck.tileentity.TileEntityComputer;
-import com.mraof.minestuck.tileentity.TileEntityGristWidget;
-import com.mraof.minestuck.tileentity.TileEntitySburbMachine;
-import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
-import com.mraof.minestuck.tileentity.TileEntityUraniumCooker;
+import com.mraof.minestuck.tileentity.*;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.IGuiHandler;
+import net.minecraftforge.fml.network.FMLPlayMessages;
 
-public class GuiHandler implements IGuiHandler 
+public class GuiHandler
 {
-	public enum GuiId
-	{
-		MACHINE,
-		COMPUTER,
-		TRANSPORTALIZER,
-		COLOR,
-		MERCHANT,
-		ALCHEMITER,
-	}
+	public static ResourceLocation MINI_CRUXTRUDER_ID = new ResourceLocation("minestuck", "mini_cruxtruder");
+	public static ResourceLocation MINI_TOTEM_LATHE_ID = new ResourceLocation("minestuck", "mini_totem_lathe");
+	public static ResourceLocation MINI_ALCHEMITER_ID = new ResourceLocation("minestuck", "mini_alchemiter");
+	public static ResourceLocation MINI_PUNCH_DESIGNIX_ID = new ResourceLocation("minestuck", "mini_punch_designix");
+	public static ResourceLocation GRIST_WIDGET_ID = new ResourceLocation("minestuck", "grist_widget");
+	public static ResourceLocation URANIUM_COOKER_ID = new ResourceLocation("minestuck", "uranium_cooker");
 	
-	@Override
+	/*@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z)
 	{
 		TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
@@ -45,39 +33,36 @@ public class GuiHandler implements IGuiHandler
 		} else if(id == GuiId.MERCHANT.ordinal())
 			return new ContainerConsortMerchant(player);
 		return null;
-	}
-
-	//returns an instance of the Gui you made earlier
-	@Override
-	public Object getClientGuiElement(int id, EntityPlayer player, World world,
-			int x, int y, int z)
+	}*/
+	
+	public static GuiScreen provideGuiContainer(FMLPlayMessages.OpenContainer message)
 	{
-		TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
-		if(id == GuiId.MACHINE.ordinal())
-			if(tileEntity instanceof TileEntitySburbMachine)
-				return new GuiSburbMachine(player.inventory, (TileEntitySburbMachine) tileEntity);
-			else if(tileEntity instanceof TileEntityGristWidget)
-				return new GuiCrockerMachine(player.inventory, (TileEntityGristWidget) tileEntity);
-			else if(tileEntity instanceof TileEntityUraniumCooker)
-				return new GuiUraniumCooker(player.inventory, (TileEntityUraniumCooker) tileEntity);
-			
-		if(tileEntity instanceof TileEntityComputer && id == GuiId.COMPUTER.ordinal())
-			return new GuiComputer(Minecraft.getMinecraft(),(TileEntityComputer) tileEntity);
-		
-		if(id == GuiId.TRANSPORTALIZER.ordinal() && tileEntity instanceof TileEntityTransportalizer)
-			return new GuiTransportalizer(Minecraft.getMinecraft(), (TileEntityTransportalizer) tileEntity);
-		
-		if(id == GuiId.COLOR.ordinal())
-			return new GuiColorSelector(false);
-		
-		if(id == GuiId.MERCHANT.ordinal())
-			return new GuiConsortShop(player);
-		
-		if(tileEntity instanceof TileEntityAlchemiter && id == GuiId.ALCHEMITER.ordinal())
-			return new GuiAlchemiter((TileEntityAlchemiter) tileEntity);
+		ResourceLocation id = message.getId();
+		BlockPos pos = message.getAdditionalData().readBlockPos();
+		Minecraft mc = Minecraft.getInstance();
+		TileEntity tileEntity = mc.world.getTileEntity(pos);
+		if(id == MINI_CRUXTRUDER_ID)
+		{
+			if(tileEntity instanceof TileEntityMiniCruxtruder)
+				return new GuiMiniCruxtruder(mc.player.inventory, (TileEntityMiniCruxtruder) tileEntity);
+		} else if(id == MINI_TOTEM_LATHE_ID)
+		{
+			if(tileEntity instanceof TileEntityMiniTotemLathe)
+				return new GuiMiniTotemLathe(mc.player.inventory, (TileEntityMiniTotemLathe) tileEntity);
+		} else if(id == MINI_ALCHEMITER_ID)
+		{
+			if(tileEntity instanceof TileEntityMiniAlchemiter)
+				return new GuiMiniAlchemiter(mc.player.inventory, (TileEntityMiniAlchemiter) tileEntity);
+		} else if(id == MINI_PUNCH_DESIGNIX_ID)
+		{
+			if(tileEntity instanceof TileEntityMiniPunchDesignix)
+				return new GuiMiniPunchDesignix(mc.player.inventory, (TileEntityMiniPunchDesignix) tileEntity);
+		} else if(id == GRIST_WIDGET_ID)
+		{
+			if(tileEntity instanceof TileEntityGristWidget)
+				return new GuiGristWidget(mc.player.inventory, (TileEntityGristWidget) tileEntity);
+		}
 		
 		return null;
-		
 	}
-	
 }

@@ -25,6 +25,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -63,7 +64,7 @@ public class CaptchaDeckHandler
 		modusItemMap.put(registryName, item);
 	}
 	
-	public static Modus createInstance(ResourceLocation location, Side side)
+	public static Modus createInstance(ResourceLocation location, Dist side)
 	{
 		Class<? extends Modus> c = modusClassMap.get(location);
 		if(c == null)

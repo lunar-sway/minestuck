@@ -10,21 +10,24 @@ import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.InputMappings;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CPacketCloseWindow;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 
+@OnlyIn(Dist.CLIENT)
 public abstract class GuiPlayerStats extends GuiScreenMinestuck
 {
 	
@@ -152,7 +155,7 @@ public abstract class GuiPlayerStats extends GuiScreenMinestuck
 		super.initGui();
 		xOffset = (width-guiWidth)/2;
 		yOffset = (height-guiHeight+tabHeight-tabOverlap)/2;
-		mc = Minecraft.getMinecraft();
+		mc = Minecraft.getInstance();
 	}
 	
 	@Override
@@ -163,7 +166,7 @@ public abstract class GuiPlayerStats extends GuiScreenMinestuck
 	
 	protected void drawTabs()
 	{
-		GlStateManager.color(1,1,1);
+		GlStateManager.color3f(1,1,1);
 		
 		mc.getTextureManager().bindTexture(icons);
 		
@@ -191,7 +194,7 @@ public abstract class GuiPlayerStats extends GuiScreenMinestuck
 	
 	protected void drawActiveTabAndOther(int xcor, int ycor)
 	{
-		GlStateManager.color(1,1,1);
+		GlStateManager.color3f(1,1,1);
 		
 		mc.getTextureManager().bindTexture(icons);
 		
@@ -209,7 +212,7 @@ public abstract class GuiPlayerStats extends GuiScreenMinestuck
 		GlStateManager.disableRescaleNormal();
 		RenderHelper.disableStandardItemLighting();
 		GlStateManager.disableLighting();
-		GlStateManager.disableDepth();
+		GlStateManager.disableDepthTest();
 		
 		if(ycor < yOffset && ycor > yOffset - tabHeight + 4)
 			for(int i = 0; i < (mode? NormalGuiType.values():EditmodeGuiType.values()).length; i++)
@@ -221,8 +224,9 @@ public abstract class GuiPlayerStats extends GuiScreenMinestuck
 							xcor, ycor, fontRenderer);
 	}
 	
+	
 	@Override
-	protected void mouseClicked(int xcor, int ycor, int mouseButton) throws IOException
+	public boolean mouseClicked(double xcor, double ycor, int mouseButton)
 	{
 		if(mouseButton == 0 && ycor < (height - guiHeight + tabHeight - tabOverlap)/2 && ycor > (height - guiHeight - tabHeight + tabOverlap)/2)
 		{
@@ -232,8 +236,8 @@ public abstract class GuiPlayerStats extends GuiScreenMinestuck
 				else if(xcor < xOffset + i*(tabWidth + 2) + tabWidth)
 				{
 					if(mode && NormalGuiType.values()[i].reqMedium() && !SkaiaClient.enteredMedium(SkaiaClient.playerId) && mc.playerController.isNotCreative())
-						return;
-					mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+						return true;
+					mc.getSoundHandler().play(SimpleSound.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 					if(i != (mode? normalTab:editmodeTab).ordinal())
 					{
 						if(mode)
@@ -241,17 +245,20 @@ public abstract class GuiPlayerStats extends GuiScreenMinestuck
 						else editmodeTab = EditmodeGuiType.values()[i];
 						openGui(true);
 					}
-					return;
+					return true;
 				}
 			if(MinestuckConfig.dataCheckerAccess && xcor < xOffset + guiWidth && xcor >= xOffset + guiWidth - tabWidth)
+			{
 				mc.displayGuiScreen(new GuiDataChecker());
+				return true;
+			}
 		}
-		super.mouseClicked(xcor, ycor, mouseButton);
+		return super.mouseClicked(xcor, ycor, mouseButton);
 	}
 	
 	public static void openGui(boolean reload)
 	{
-		Minecraft mc = Minecraft.getMinecraft();
+		Minecraft mc = Minecraft.getInstance();
 		
 		if(mc.player.isSpectator())
 		{
@@ -288,10 +295,13 @@ public abstract class GuiPlayerStats extends GuiScreenMinestuck
 	}
 	
 	@Override
-	protected void keyTyped(char typedChar, int keyCode) throws IOException
+	public boolean keyPressed(int keyCode, int scanCode, int i)
 	{
-		super.keyTyped(typedChar, keyCode);
-		if(MinestuckKeyHandler.instance.statKey.isActiveAndMatches(keyCode))
+		if(MinestuckKeyHandler.instance.statKey.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode)))
+		{
 			mc.displayGuiScreen(null);
+			return true;
+		}
+		else return super.keyPressed(keyCode, scanCode, i);
 	}
 }

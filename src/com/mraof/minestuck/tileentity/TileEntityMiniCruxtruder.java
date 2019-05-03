@@ -1,5 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
+import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.inventory.ContainerSburbMachine;
 import com.mraof.minestuck.item.MinestuckItems;
 import net.minecraft.entity.player.EntityPlayer;
@@ -36,7 +38,7 @@ public class TileEntityMiniCruxtruder extends TileEntityMachineProcess implement
 	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack)
 	{
-		return index == 0 && stack.getItem() == MinestuckItems.rawCruxite;
+		return index == 0 && stack.getItem() == MinestuckItems.RAW_CRUXITE;
 	}
 	
 	@Override
@@ -52,7 +54,7 @@ public class TileEntityMiniCruxtruder extends TileEntityMachineProcess implement
 		// Process the Raw Cruxite
 		
 		if (this.inv.get(1).isEmpty())
-			setInventorySlotContents(1, new ItemStack(MinestuckItems.cruxiteDowel, 1, color + 1));	//TODO Sort out color storage
+			setInventorySlotContents(1, new ItemStack(MinestuckBlocks.CRUXITE_DOWEL, 1, color + 1));	//TODO Sort out color storage
 		else this.inv.get(1).grow(1);
 		decrStackSize(0, 1);
 	}
@@ -94,6 +96,6 @@ public class TileEntityMiniCruxtruder extends TileEntityMachineProcess implement
 	@Override
 	public String getGuiID()
 	{
-		return null;	//TODO Sort out container and gui id
+		return GuiHandler.MINI_CRUXTRUDER_ID.toString();
 	}
 }

@@ -1,13 +1,14 @@
 package com.mraof.minestuck.client.model;
 
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.entity.model.ModelBase;
+import net.minecraft.client.renderer.entity.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 
 import org.lwjgl.opengl.GL11;
 
-public class ModelGiclops extends ModelBase {
+public class ModelGiclops extends ModelBase
+{
 
 	private ModelRenderer head;
 	private ModelRenderer leftLeg;

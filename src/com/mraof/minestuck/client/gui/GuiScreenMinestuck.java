@@ -10,6 +10,8 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 /**
  * Created by mraof on 2017 December 06 at 11:31 PM.
  */
+@OnlyIn(Dist.CLIENT)
 public abstract class GuiScreenMinestuck extends GuiScreen
 {
 	protected static final int gristIconX = 21, gristIconY = 32;
@@ -79,7 +82,7 @@ public abstract class GuiScreenMinestuck extends GuiScreen
 
 	private void drawIcon(int x, int y, ResourceLocation icon)
 	{
-		this.mc.getTextureManager().bindTexture(new ResourceLocation(icon.getResourceDomain(), "textures/grist/" + icon.getResourcePath() + ".png"));
+		this.mc.getTextureManager().bindTexture(new ResourceLocation(icon.getNamespace(), "textures/grist/" + icon.getPath() + ".png"));
 
 		float scale = (float) 1 / 16;
 

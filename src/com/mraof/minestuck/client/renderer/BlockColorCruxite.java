@@ -1,45 +1,32 @@
 package com.mraof.minestuck.client.renderer;
 
-import com.mraof.minestuck.block.BlockAlchemiter;
-import com.mraof.minestuck.block.BlockTotemLathe;
-import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
 import com.mraof.minestuck.tileentity.TileEntityItemStack;
-import com.mraof.minestuck.tileentity.TileEntityTotemLathe;
 import com.mraof.minestuck.util.ColorCollector;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReaderBase;
+
+import javax.annotation.Nullable;
 
 public class BlockColorCruxite implements IBlockColor
 {
 	@Override
-	public int colorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex)
+	public int getColor(IBlockState state, @Nullable IWorldReaderBase worldIn, @Nullable BlockPos pos, int tintIndex)
 	{
 		ItemStack dowel = ItemStack.EMPTY;
-		if(state.getBlock() == MinestuckBlocks.alchemiter[0])
-		{
-			TileEntity tileEntity = worldIn.getTileEntity(pos);
-			if(state.getValue(BlockAlchemiter.PART1).isTotemPad() && tileEntity instanceof TileEntityAlchemiter)
-				dowel = ((TileEntityAlchemiter) tileEntity).getDowel();
-		} else if(state.getBlock() == MinestuckBlocks.totemlathe[1] && state.getValue(BlockTotemLathe.PART2).isRodRight())
-		{
-			TileEntity tileEntity = worldIn.getTileEntity(pos);
-			if(tileEntity instanceof TileEntityItemStack)
-				dowel = ((TileEntityItemStack) tileEntity).getStack();
-		} else if(state.getBlock() == MinestuckBlocks.blockCruxiteDowel)
-		{
-			TileEntity tileEntity = worldIn.getTileEntity(pos);
-			if(tileEntity instanceof TileEntityItemStack)
-				dowel = ((TileEntityItemStack) tileEntity).getStack();
-		}
+		TileEntity tileEntity = worldIn != null && pos != null ? worldIn.getTileEntity(pos) : null;
+		if(tileEntity instanceof TileEntityAlchemiter)
+			dowel = ((TileEntityAlchemiter) tileEntity).getDowel();
+		if(tileEntity instanceof TileEntityItemStack)
+			dowel = ((TileEntityItemStack) tileEntity).getStack();
 		
 		if(!dowel.isEmpty())
 		{
-			int color = dowel.getMetadata() == 0 ? 0x99D9EA : ColorCollector.getColor(dowel.getMetadata() - 1);
+			int color = dowel.hasTag() && dowel.getTag().hasKey("color") ? ColorCollector.getColor(dowel.getTag().getInt("color") - 1) : 0x99D9EA;
 			return handleColorTint(color, tintIndex);
 		}
 		return -1;
