@@ -15,6 +15,7 @@ import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextComponentString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ public class ContainerEditmode extends Container
 {
 	
 	private EntityPlayer player;
-	public InventoryBasic inventory = new InventoryBasic("InventoryEditmode", false, 14);
+	public InventoryBasic inventory = new InventoryBasic(new TextComponentString("InventoryEditmode"), 14);
 	public ArrayList<ItemStack> items  = new ArrayList<ItemStack>();
 	private int scroll;
 	public static int clientScroll;
@@ -81,10 +82,10 @@ public class ContainerEditmode extends Container
 	{
 		
 		for(int i = 0; i < 14; i++)
-			addSlotToContainer(new InventorySlot(inventory, i, 26+(i/2)*18, 16+(i%2)*18));
+			addSlot(new InventorySlot(inventory, i, 26+(i/2)*18, 16+(i%2)*18));
 		
 		for(int i = 0; i < 9; i++)
-			addSlotToContainer(new ToolbarSlot(player.inventory, i, 8+i*18, 74));
+			addSlot(new ToolbarSlot(player.inventory, i, 8+i*18, 74));
 	}
 	
 	private void updateInventory()

@@ -5,6 +5,7 @@ import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.block.BlockGristWidget;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.entity.item.EntityGrist;
+import com.mraof.minestuck.inventory.ContainerGristWidget;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.*;
 import net.minecraft.entity.player.EntityPlayer;
@@ -192,7 +193,7 @@ public class TileEntityGristWidget extends TileEntityMachineProcess implements I
 	@Override
 	public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn)
 	{
-		return null;
+		return new ContainerGristWidget(playerInventory, this);
 	}
 	
 	@Override

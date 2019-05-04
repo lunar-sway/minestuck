@@ -1,7 +1,7 @@
 package com.mraof.minestuck.inventory;
 
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.tileentity.TileEntityUraniumCooker;
+import com.mraof.minestuck.tileentity.TileEntityGristWidget;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -11,31 +11,33 @@ import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
 
-public class ContainerUraniumCooker extends Container
+public class ContainerGristWidget extends Container
 {
 	
-	private static final int uraniumInputX = 38;
-	private static final int uraniumInputY = 51;
-	private static final int itemInputX = 38;
-	private static final int itemInputY = 22;
-	private static final int itemOutputX = 117;
-	private static final int itemOutputY = 35;
+	private static final int gristWidgetInputX = 27;
+	private static final int gristWidgetInputY = 20;
 	
-	public TileEntityUraniumCooker tileEntity;
+	public TileEntityGristWidget tileEntity;
 	private boolean operator = true;
 	private int progress;
 	
-	public ContainerUraniumCooker(InventoryPlayer inventoryPlayer, TileEntityUraniumCooker te)
+	public ContainerGristWidget(InventoryPlayer inventoryPlayer, TileEntityGristWidget te)
 	{
 		tileEntity = te;
 		
-		addSlot(new SlotInput(tileEntity, 0, uraniumInputX, uraniumInputY, MinestuckItems.RAW_URANIUM));
-		addSlot(new Slot(tileEntity, 1, itemInputX, itemInputY));
-		addSlot(new SlotOutput(tileEntity, 2, itemOutputX, itemOutputY));
+		//the Slot constructor takes the IInventory and the slot number in that it binds to
+		//and the x-y coordinates it resides on-screen
+		addSlot(new SlotInput(tileEntity, 0, gristWidgetInputX, gristWidgetInputY, MinestuckItems.CAPTCHA_CARD)
+		{
+			@Override
+			public boolean isItemValid(ItemStack stack)
+			{
+				return super.isItemValid(stack) && (stack.hasTag() && stack.getTag().hasKey("contentID") && !stack.getTag().getBoolean("punched"));
+			}
+		});
 		
 		bindPlayerInventory(inventoryPlayer);
 	}
-	
 	@Override
 	public boolean canInteractWith(EntityPlayer player)
 	{
@@ -67,29 +69,15 @@ public class ContainerUraniumCooker extends Container
 			itemstack = itemstackOrig.copy();
 			boolean result = false;
 			
-			if(slotNumber == 0)    //Shift-clicking from the Uranium input
+			
+			if(slotNumber <= 0)
 			{
-				result = mergeItemStack(itemstackOrig, 3, allSlots, false);    //Send into the inventory
-			} else if(slotNumber == 1)    //Shift-clicking from the item input
+				//if it's a machine slot
+				result = mergeItemStack(itemstackOrig, 2, allSlots, false);
+			} else if(slotNumber > 0 && getSlot(0).isItemValid(itemstackOrig))
 			{
-				result = mergeItemStack(itemstackOrig, 3, allSlots, false);    //Send into the inventory
-				
-			} else if(slotNumber == 2)    //Shift-clicking from the output slot
-			{
-				if(itemstackOrig.getItem() == MinestuckItems.RAW_URANIUM)
-					result = mergeItemStack(itemstackOrig, 0, 1, false);    //Send the uranium back to the uranium input
-				else
-					result = mergeItemStack(itemstackOrig, 3, allSlots, false);    //Send the non-uranium to the inventory
-				
-			} else    //Shift-clicking from the inventory
-			{
-				if(itemstackOrig.getItem() == MinestuckItems.RAW_URANIUM)
-				{
-					result = mergeItemStack(itemstackOrig, 0, 1, false);    //Send the uranium to the uranium input
-				} else
-				{
-					result = mergeItemStack(itemstackOrig, 1, 2, false);    //Send the non-uranium to the other input
-				}
+				//if it's an inventory slot with valid contents
+				result = mergeItemStack(itemstackOrig, 0, 1, false);
 			}
 			
 			if(!result)
@@ -116,7 +104,6 @@ public class ContainerUraniumCooker extends Container
 		if(par1 == 0)
 		{
 			tileEntity.progress = par2;
-			return;
 		}
 	}
 }

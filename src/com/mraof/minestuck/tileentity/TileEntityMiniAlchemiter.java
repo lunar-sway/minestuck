@@ -4,6 +4,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.client.gui.GuiHandler;
+import com.mraof.minestuck.inventory.ContainerMiniAlchemiter;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.IdentifierHandler;
@@ -21,6 +22,7 @@ import net.minecraft.world.IInteractionObject;
 
 public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implements IInteractionObject
 {
+	public static final int INPUT = 0, OUTPUT = 1;
 	private int ticks_since_update = 0;
 	public IdentifierHandler.PlayerIdentifier owner;
 	public GristType selectedGrist = GristType.BUILD;
@@ -51,15 +53,15 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 	@Override
 	public boolean contentsValid()
 	{
-		if(!world.isBlockPowered(this.getPos()) && !this.inv.get(0).isEmpty() && this.owner != null)
+		if(!world.isBlockPowered(this.getPos()) && !this.inv.get(INPUT).isEmpty() && this.owner != null)
 		{
 			//Check owner's cache: Do they have everything they need?
-			ItemStack newItem = AlchemyRecipes.getDecodedItem(this.inv.get(0));
+			ItemStack newItem = AlchemyRecipes.getDecodedItem(this.inv.get(INPUT));
 			if(newItem.isEmpty())
-				if(!inv.get(0).hasTag() || !inv.get(0).getTag().hasKey("contentID"))
+				if(!inv.get(INPUT).hasTag() || !inv.get(INPUT).getTag().hasKey("contentID"))
 					newItem = new ItemStack(MinestuckBlocks.GENERIC_OBJECT);
 				else return false;
-			if(!inv.get(1).isEmpty() && (inv.get(1).getItem() != newItem.getItem() || inv.get(1).getMaxStackSize() <= inv.get(1).getCount()))
+			if(!inv.get(OUTPUT).isEmpty() && (inv.get(OUTPUT).getItem() != newItem.getItem() || inv.get(OUTPUT).getMaxStackSize() <= inv.get(OUTPUT).getCount()))
 			{
 				return false;
 			}
@@ -78,18 +80,18 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 	@Override
 	public void processContents()
 	{
-		ItemStack newItem = AlchemyRecipes.getDecodedItem(this.inv.get(0));
+		ItemStack newItem = AlchemyRecipes.getDecodedItem(this.inv.get(INPUT));
 		
 		if (newItem.isEmpty())
 			newItem = new ItemStack(MinestuckBlocks.GENERIC_OBJECT);
 		
-		if (inv.get(1).isEmpty())
+		if (inv.get(OUTPUT).isEmpty())
 		{
 			setInventorySlotContents(1, newItem);
 		}
 		else
 		{
-			this.inv.get(1).grow(1);
+			this.inv.get(OUTPUT).grow(1);
 		}
 		
 		EntityPlayerMP player = owner.getPlayer();
@@ -161,14 +163,14 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 	
 	public int comparatorValue()
 	{
-		if (getStackInSlot(0) != null && owner != null)
+		if (getStackInSlot(INPUT) != null && owner != null)
 		{
-			ItemStack newItem = AlchemyRecipes.getDecodedItem(getStackInSlot(0));
+			ItemStack newItem = AlchemyRecipes.getDecodedItem(getStackInSlot(INPUT));
 			if (newItem.isEmpty())
-				if (!getStackInSlot(0).hasTag() || !getStackInSlot(0).getTag().hasKey("contentID"))
+				if (!getStackInSlot(INPUT).hasTag() || !getStackInSlot(INPUT).getTag().hasKey("contentID"))
 					newItem = new ItemStack(MinestuckBlocks.GENERIC_OBJECT);
 				else return 0;
-			if (!getStackInSlot(1).isEmpty() && (getStackInSlot(1).getItem() != newItem.getItem() || getStackInSlot(1).getItemDamage() != newItem.getItemDamage() || getStackInSlot(1).getMaxStackSize() <= getStackInSlot(1).getCount()))
+			if (!getStackInSlot(OUTPUT).isEmpty() && (getStackInSlot(OUTPUT).getItem() != newItem.getItem() || getStackInSlot(OUTPUT).getMaxStackSize() <= getStackInSlot(OUTPUT).getCount()))
 			{
 				return 0;
 			}
@@ -202,7 +204,7 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 	@Override
 	public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn)
 	{
-		return null;
+		return new ContainerMiniAlchemiter(playerInventory, this);
 	}
 	
 	@Override

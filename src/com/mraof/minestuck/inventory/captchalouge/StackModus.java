@@ -8,8 +8,9 @@ import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.LogicalSide;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -20,11 +21,11 @@ public class StackModus extends Modus
 	protected int size;
 	protected LinkedList<ItemStack> list;
 	
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	protected boolean changed;
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	protected NonNullList<ItemStack> items;
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	protected SylladexGuiHandler gui;
 	
 	@Override
@@ -49,14 +50,14 @@ public class StackModus extends Modus
 	@Override
 	public void readFromNBT(NBTTagCompound nbt)
 	{
-		size = nbt.getInteger("size");
-		list = new LinkedList<ItemStack>();
+		size = nbt.getInt("size");
+		list = new LinkedList<>();
 		
 		for(int i = 0; i < size; i++)
 			if(nbt.hasKey("item"+i))
-				list.add(new ItemStack(nbt.getCompoundTag("item"+i)));
+				list.add(ItemStack.read(nbt.getCompound("item"+i)));
 			else break;
-		if(side.isClient())
+		if(side == LogicalSide.CLIENT)
 		{
 			items = NonNullList.<ItemStack>create();
 			changed = true;
@@ -66,12 +67,12 @@ public class StackModus extends Modus
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt)
 	{
-		nbt.setInteger("size", size);
+		nbt.setInt("size", size);
 		Iterator<ItemStack> iter = list.iterator();
 		for(int i = 0; i < list.size(); i++)
 		{
 			ItemStack stack = iter.next();
-			nbt.setTag("item"+i, stack.writeToNBT(new NBTTagCompound()));
+			nbt.setTag("item"+i, stack.write(new NBTTagCompound()));
 		}
 		return nbt;
 	}
@@ -83,7 +84,7 @@ public class StackModus extends Modus
 			return false;
 		
 		ItemStack firstItem = list.size() > 0 ? list.getFirst() : ItemStack.EMPTY;
-		if(firstItem.getItem() == item.getItem() && firstItem.getItemDamage() == item.getItemDamage() && ItemStack.areItemStackTagsEqual(firstItem, item)
+		if(firstItem.getItem() == item.getItem() && ItemStack.areItemStackTagsEqual(firstItem, item)
 				&& firstItem.getCount() + item.getCount() <= firstItem.getMaxStackSize())
 			firstItem.grow(item.getCount());
 		else if(list.size() < size)
@@ -100,7 +101,7 @@ public class StackModus extends Modus
 	@Override
 	public NonNullList<ItemStack> getItems()
 	{
-		if(side.isServer())	//Used only when replacing the modus
+		if(side == LogicalSide.SERVER)	//Used only when replacing the modus
 		{
 			NonNullList<ItemStack> items = NonNullList.<ItemStack>create();
 			fillList(items);
@@ -143,7 +144,7 @@ public class StackModus extends Modus
 			if(list.size() < size)
 			{
 				size--;
-				return new ItemStack(MinestuckItems.captchaCard);
+				return new ItemStack(MinestuckItems.CAPTCHA_CARD);
 			} else return ItemStack.EMPTY;
 		}
 		
@@ -179,7 +180,7 @@ public class StackModus extends Modus
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public SylladexGuiHandler getGuiHandler()
 	{
 		if(gui == null)

@@ -98,7 +98,7 @@ public class BlockCruxiteDowel extends Block
 	public TileEntity createTileEntity(IBlockState state, IBlockReader world)
 	{
 		TileEntityItemStack te = new TileEntityItemStack();
-		te.setStack(new ItemStack(MinestuckItems.cruxiteDowel));
+		te.setStack(new ItemStack(this));
 		return te;
 	}
 	

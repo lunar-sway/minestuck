@@ -6,15 +6,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.LogicalSide;
 
 public abstract class Modus
 {
 	
 	public EntityPlayer player;	//TODO remove this and replace this by adding the player as argument in methods next version shift
 	//This change will break addons that add their own modus
-	public Side side;
+	public LogicalSide side;
 	
 	/**
 	 * This is called when the modus is created without calling readFromNBT(nbt).
@@ -49,15 +51,15 @@ public abstract class Modus
 	
 	public void setValue(byte type, int value) {}
 	
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public abstract SylladexGuiHandler getGuiHandler();
 	
-	@SideOnly(Side.CLIENT)
-	public String getName()
+	@OnlyIn(Dist.CLIENT)
+	public ITextComponent getName()
 	{
 		ResourceLocation type = CaptchaDeckHandler.getType(this.getClass());
 		if(type == null)
-			return "";
+			return null;
 		else return CaptchaDeckHandler.getItem(type).getDisplayName();
 	}
 	

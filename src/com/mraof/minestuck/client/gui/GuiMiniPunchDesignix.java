@@ -1,6 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mraof.minestuck.inventory.ContainerSburbMachine;
+import com.mraof.minestuck.inventory.ContainerMiniPunchDesignix;
 import com.mraof.minestuck.tileentity.TileEntityMiniPunchDesignix;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -25,7 +25,7 @@ public class GuiMiniPunchDesignix extends GuiMachine
 
 	public GuiMiniPunchDesignix(InventoryPlayer inventoryPlayer, TileEntityMiniPunchDesignix tileEntity)
 	{
-		super(new ContainerSburbMachine(inventoryPlayer, tileEntity), tileEntity);
+		super(new ContainerMiniPunchDesignix(inventoryPlayer, tileEntity), tileEntity);
 		this.te = tileEntity;
 		this.playerInventory = inventoryPlayer;
 		

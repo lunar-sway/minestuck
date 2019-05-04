@@ -18,6 +18,7 @@ import net.minecraft.network.play.client.CPacketCloseWindow;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.LogicalSide;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiCaptchaDeck extends GuiPlayerStatsContainer implements GuiButtonImpl.ButtonClickhandler
@@ -81,7 +82,7 @@ public class GuiCaptchaDeck extends GuiPlayerStatsContainer implements GuiButton
 			ItemStack stack = container.inventory.getStackInSlot(0);
 			if(!(stack.getItem() instanceof ItemCaptchaCard))
 			{
-				Modus newModus = CaptchaDeckHandler.createInstance(CaptchaDeckHandler.getType(stack), Dist.CLIENT);
+				Modus newModus = CaptchaDeckHandler.createInstance(CaptchaDeckHandler.getType(stack), LogicalSide.CLIENT);
 				if(newModus != null && CaptchaDeckHandler.clientSideModus != null && newModus.getClass() != CaptchaDeckHandler.clientSideModus.getClass() && !newModus.canSwitchFrom(CaptchaDeckHandler.clientSideModus))
 				{
 					mc.currentScreen = new GuiYesNo(this, I18n.format("gui.emptySylladex1"), I18n.format("gui.emptySylladex2"), 0)

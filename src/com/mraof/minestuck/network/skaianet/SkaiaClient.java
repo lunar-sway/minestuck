@@ -11,6 +11,7 @@ import com.mraof.minestuck.tileentity.TileEntityComputer;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -85,7 +86,7 @@ public class SkaiaClient
 		return false;
 	}
 	
-	public static List<Integer> getLandChain(int id)
+	public static List<DimensionType> getLandChain(DimensionType id)
 	{
 		return landChainMap.get(id);
 	}

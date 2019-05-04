@@ -6,8 +6,8 @@ import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Iterator;
 
@@ -22,7 +22,7 @@ public class QueueModus extends StackModus
 			if(list.size() < size)
 			{
 				size--;
-				return new ItemStack(MinestuckItems.captchaCard);
+				return new ItemStack(MinestuckItems.CAPTCHA_CARD);
 			} else return ItemStack.EMPTY;
 		}
 		
@@ -38,7 +38,7 @@ public class QueueModus extends StackModus
 		}
 		
 		ItemStack item = list.removeLast();
-		if(asCard && !(item.getItem() == MinestuckItems.captchaCard && item.hasTagCompound() && !item.getTagCompound().getBoolean("punched") && item.getTagCompound().hasKey("id")))
+		if(asCard && !(item.getItem() == MinestuckItems.CAPTCHA_CARD && item.hasTag() && !item.getTag().getBoolean("punched") && item.getTag().hasKey("id")))
 		{
 			size--;
 			return AlchemyRecipes.createCard(item, false);
@@ -58,7 +58,7 @@ public class QueueModus extends StackModus
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public SylladexGuiHandler getGuiHandler()
 	{
 		if(gui == null)

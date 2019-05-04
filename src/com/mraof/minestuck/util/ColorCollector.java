@@ -1,7 +1,8 @@
 package com.mraof.minestuck.util;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,14 +16,14 @@ public class ColorCollector
 	private static List<Integer> colors;
 //	protected static boolean customColor;
 	
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static int playerColor;
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static boolean displaySelectionGui;
 	
 	static
 	{
-		colors = new ArrayList<Integer>();
+		colors = new ArrayList<>();
 		
 		colors.add(0x0715cd);
 		colors.add(0xb536da);
@@ -60,4 +61,16 @@ public class ColorCollector
 		return colors.size();
 	}
 	
+	public static ItemStack setColor(ItemStack stack, int color)
+	{
+		stack.getOrCreateTag().setInt("color", color);
+		return stack;
+	}
+	
+	public static int getColorFromStack(ItemStack stack, int defaultColor)
+	{
+		if(stack.hasTag() && stack.getTag().contains("color", 99))
+			return stack.getTag().getInt("color");
+		else return defaultColor;
+	}
 }

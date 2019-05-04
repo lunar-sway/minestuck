@@ -2,10 +2,10 @@ package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.BlockCruxiteDowel;
-import com.mraof.minestuck.block.BlockCruxtruder;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
 
+import com.mraof.minestuck.util.ColorCollector;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -14,13 +14,17 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class TileEntityCruxtruder extends TileEntity
 {
 	private int color = -1;
 	private boolean broken = false;
 	private int material = 0;
+	
+	public TileEntityCruxtruder()
+	{
+		super(MinestuckTiles.CRUXTRUDER);
+	}
 	
 	public int getColor()
 	{
@@ -47,12 +51,12 @@ public class TileEntityCruxtruder extends TileEntity
 		{
 			BlockPos pos = getPos().up();
 			IBlockState state = getWorld().getBlockState(pos);
-			if(top && MinestuckConfig.cruxtruderIntake && state.getBlock().isReplaceable(getWorld(), pos) && material < 64 && material > -1)
+			if(top && MinestuckConfig.cruxtruderIntake && state.isAir(getWorld(), pos) && material < 64 && material > -1)
 			{
 				ItemStack stack = player.getHeldItemMainhand();
-				if(stack.getItem() != MinestuckItems.rawCruxite)
+				if(stack.getItem() != MinestuckItems.RAW_CRUXITE)
 					stack = player.getHeldItemOffhand();
-				if(stack.getItem() == MinestuckItems.rawCruxite)
+				if(stack.getItem() == MinestuckItems.RAW_CRUXITE)
 				{
 					int count = 1;
 					if(player.isSneaking())	//Doesn't actually work just yet
@@ -62,20 +66,20 @@ public class TileEntityCruxtruder extends TileEntity
 				}
 			} else if(!top)
 			{
-				if(state.getBlock() == MinestuckBlocks.blockCruxiteDowel)
+				if(state.getBlock() == MinestuckBlocks.CRUXITE_DOWEL)
 				{
 					BlockCruxiteDowel.dropDowel(getWorld(), pos);
-				} else if(state.getBlock().isReplaceable(getWorld(), pos))
+				} else if(state.isAir(getWorld(), pos))
 				{
 					if(MinestuckConfig.cruxtruderIntake && material == 0)
 					{
 						world.playEvent(1001, pos, 0);
 					} else
 					{
-						world.setBlockState(pos, MinestuckBlocks.blockCruxiteDowel.getDefaultState().withProperty(BlockCruxiteDowel.TYPE, BlockCruxiteDowel.Type.CRUXTRUDER));
+						world.setBlockState(pos, MinestuckBlocks.CRUXITE_DOWEL.getDefaultState().with(BlockCruxiteDowel.DOWEL_TYPE, BlockCruxiteDowel.Type.CRUXTRUDER));
 						TileEntity te = world.getTileEntity(pos);
 						if(te instanceof TileEntityItemStack)
-							((TileEntityItemStack) te).getStack().setItemDamage(color + 1);
+							ColorCollector.setColor(((TileEntityItemStack) te).getStack(), color + 1);
 						if(material > 0)
 							material--;
 					}
@@ -85,31 +89,31 @@ public class TileEntityCruxtruder extends TileEntity
 	}
 	
 	@Override
-	public void readFromNBT(NBTTagCompound tagCompound)
+	public void read(NBTTagCompound compound)
 	{
-		super.readFromNBT(tagCompound);
+		super.read(compound);
 		
-		if(tagCompound.hasKey("color"))
-			color = tagCompound.getInteger("color");
-		if(tagCompound.hasKey("broken"))
-			broken = tagCompound.getBoolean("broken");
-		material = tagCompound.getInteger("material");
+		if(compound.hasKey("color"))
+			color = compound.getInt("color");
+		if(compound.hasKey("broken"))
+			broken = compound.getBoolean("broken");
+		material = compound.getInt("material");
 	}
 	
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound tagCompound)
+	public NBTTagCompound write(NBTTagCompound compound)
 	{
-		super.writeToNBT(tagCompound);
-		tagCompound.setInteger("color", color);
-		tagCompound.setBoolean("broken", broken);
-		tagCompound.setInteger("material", material);
-		return tagCompound;
+		super.write(compound);
+		compound.setInt("color", color);
+		compound.setBoolean("broken", broken);
+		compound.setInt("material", material);
+		return compound;
 	}
 	
 	@Override
 	public NBTTagCompound getUpdateTag()
 	{
-		return writeToNBT(new NBTTagCompound());
+		return write(new NBTTagCompound());
 	}
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket()
@@ -121,11 +125,5 @@ public class TileEntityCruxtruder extends TileEntity
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt)
 	{
 		handleUpdateTag(pkt.getNbtCompound());
-	}
-	
-	@Override
-	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate)
-	{
-		return oldState.getBlock() != newSate.getBlock() || oldState.getValue(BlockCruxtruder.PART) != newSate.getValue(BlockCruxtruder.PART);
 	}
 }

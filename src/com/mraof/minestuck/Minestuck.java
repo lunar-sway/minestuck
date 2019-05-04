@@ -83,6 +83,7 @@ public class Minestuck
 	private void clientSetup(final FMLClientSetupEvent event)
 	{
 		ClientProxy.init();
+		MinecraftForge.EVENT_BUS.register(ClientProxy.class);
 	}
 	
 	public void postSetup(FMLLoadCompleteEvent event)
@@ -104,7 +105,6 @@ public class Minestuck
 	@SubscribeEvent
 	public void serverClosed(FMLServerStoppedEvent event)
 	{
-		MinestuckDimensionHandler.unregisterDimensions();
 		//isServerRunning = !isClientRunning;
 		MinestuckPlayerTracker.dataCheckerPermission.clear();
 		IdentifierHandler.clear();

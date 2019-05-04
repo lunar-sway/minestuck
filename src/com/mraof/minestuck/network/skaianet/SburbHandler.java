@@ -66,6 +66,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
+import net.minecraft.world.dimension.DimensionType;
 
 /**
  * A class for managing sbrub-related stuff from outside this package that is dependent on connections and sessions.
@@ -540,10 +541,10 @@ public class SburbHandler
 	public static GristType getPrimaryGristType(PlayerIdentifier player)
 	{
 		
-		return GristType.Shale;
+		return GristType.SHALE;
 	}
 	
-	public static int getColorForDimension(int dim)
+	public static int getColorForDimension(DimensionType dim)
 	{
 		SburbConnection c = getConnectionForDimension(dim);
 		return c == null ? -1 : MinestuckPlayerData.getData(c.getClientIdentifier()).color;

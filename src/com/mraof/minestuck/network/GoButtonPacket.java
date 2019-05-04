@@ -7,7 +7,7 @@ import java.util.EnumSet;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 
-import com.mraof.minestuck.inventory.ContainerCrockerMachine;
+import com.mraof.minestuck.inventory.ContainerGristWidget;
 import com.mraof.minestuck.inventory.ContainerSburbMachine;
 import com.mraof.minestuck.tileentity.TileEntityMachineProcess;
 import com.mraof.minestuck.util.Debug;
@@ -42,8 +42,8 @@ public class GoButtonPacket extends MinestuckPacket
 		TileEntityMachineProcess te;
 		if(player.openContainer instanceof ContainerSburbMachine)
 				te = ((ContainerSburbMachine) player.openContainer).tileEntity;
-		else if(player.openContainer instanceof ContainerCrockerMachine)
-			te = ((ContainerCrockerMachine) player.openContainer).tileEntity;
+		else if(player.openContainer instanceof ContainerGristWidget)
+			te = ((ContainerGristWidget) player.openContainer).tileEntity;
 		else return;
 		
 		if (te == null)

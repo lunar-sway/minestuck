@@ -41,7 +41,7 @@ public abstract class TileEntityMachineProcess extends TileEntity implements ISi
 	@Override
 	public ItemStack getStackInSlot(int index)
 	{
-		return index >= this.getSizeInventory() ? ItemStack.EMPTY : this.inv.get(index);
+		return index >= this.getSizeInventory() || index < 0 ? ItemStack.EMPTY : this.inv.get(index);
 	}
 
 	@Override

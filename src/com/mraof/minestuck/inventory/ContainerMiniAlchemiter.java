@@ -1,8 +1,8 @@
 package com.mraof.minestuck.inventory;
 
-import com.mraof.minestuck.block.BlockGristWidget.MachineType;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.tileentity.TileEntityGristWidget;
+import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.tileentity.TileEntityMiniAlchemiter;
+import com.mraof.minestuck.util.IdentifierHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -12,37 +12,24 @@ import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
 
-public class ContainerCrockerMachine extends Container
+public class ContainerMiniAlchemiter extends Container
 {
 	
-	private static final int gristWidgetInputX = 27;
-	private static final int gristWidgetInputY = 20;
+	private static final int INPUT_X = 27;
+	private static final int INPUT_Y = 20;
+	private static final int OUTPUT_X = 135;
+	private static final int OUTPUT_Y = 20;
 	
-	public TileEntityGristWidget tileEntity;
-	private MachineType type;
-	private boolean operator = true;
+	public TileEntityMiniAlchemiter tileEntity;
 	private int progress;
 	
-	public ContainerCrockerMachine(InventoryPlayer inventoryPlayer, TileEntityGristWidget te)
+	public ContainerMiniAlchemiter(InventoryPlayer inventoryPlayer, TileEntityMiniAlchemiter te)
 	{
 		tileEntity = te;
-		type = te.getMachineType();
+		te.owner = IdentifierHandler.encode(inventoryPlayer.player);
 		
-		//the Slot constructor takes the IInventory and the slot number in that it binds to
-		//and the x-y coordinates it resides on-screen
-		switch (type)
-		{
-		case GRIST_WIDGET:
-			addSlotToContainer(new SlotInput(tileEntity, 0, gristWidgetInputX, gristWidgetInputY, MinestuckItems.captchaCard)
-			{
-				@Override
-				public boolean isItemValid(ItemStack stack)
-				{
-					return super.isItemValid(stack) && (stack.hasTagCompound() && stack.getTagCompound().hasKey("contentID") && !stack.getTagCompound().getBoolean("punched"));
-				}
-			});
-			break;
-		}
+		addSlot(new SlotInput(tileEntity, 0, INPUT_X, INPUT_Y, MinestuckBlocks.CRUXITE_DOWEL.asItem()));
+		addSlot(new SlotOutput(tileEntity, 1, OUTPUT_X, OUTPUT_Y));
 		
 		bindPlayerInventory(inventoryPlayer);
 	}
@@ -56,11 +43,11 @@ public class ContainerCrockerMachine extends Container
 	{
 		for (int i = 0; i < 3; i++)
 			for (int j = 0; j < 9; j++)
-				addSlotToContainer(new Slot(inventoryPlayer, j + i * 9 + 9,
+				addSlot(new Slot(inventoryPlayer, j + i * 9 + 9,
 						8 + j * 18, 84 + i * 18));
 		
 		for (int i = 0; i < 9; i++)
-			addSlotToContainer(new Slot(inventoryPlayer, i, 8 + i * 18, 142));
+			addSlot(new Slot(inventoryPlayer, i, 8 + i * 18, 142));
 	}
 	
 	@Nonnull
@@ -68,33 +55,27 @@ public class ContainerCrockerMachine extends Container
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotNumber)
 	{
 		ItemStack itemstack = ItemStack.EMPTY;
-		Slot slot = (Slot)this.inventorySlots.get(slotNumber);
+		Slot slot = this.inventorySlots.get(slotNumber);
 		int allSlots = this.inventorySlots.size();
 		
-		if (slot != null && slot.getHasStack())
+		if(slot != null && slot.getHasStack())
 		{
 			ItemStack itemstackOrig = slot.getStack();
 			itemstack = itemstackOrig.copy();
 			boolean result = false;
 			
-			
-			switch (type)
+			if(slotNumber <= 1)
 			{
-			case GRIST_WIDGET:
-				if (slotNumber <= 0)
-				{
-					//if it's a machine slot
-					result = mergeItemStack(itemstackOrig,2,allSlots,false);
-				}
-				else if (slotNumber > 0 && getSlot(0).isItemValid(itemstackOrig))
-				{
-					//if it's an inventory slot with valid contents
+				//if it's a machine slot
+				result = mergeItemStack(itemstackOrig, 2, allSlots, false);
+			} else if(slotNumber > 1)
+			{
+				//if it's an inventory slot with valid contents
+				if(itemstackOrig.getItem() == MinestuckBlocks.CRUXITE_DOWEL.asItem())
 					result = mergeItemStack(itemstackOrig, 0, 1, false);
-				}
-				break;
 			}
 			
-			if (!result)
+			if(!result)
 				return ItemStack.EMPTY;
 			
 			if(!itemstackOrig.isEmpty())
@@ -118,7 +99,6 @@ public class ContainerCrockerMachine extends Container
 		if(par1 == 0)
 		{
 			tileEntity.progress = par2;
-			return;
 		}
 	}
 }

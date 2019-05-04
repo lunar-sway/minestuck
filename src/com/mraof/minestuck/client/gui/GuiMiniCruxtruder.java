@@ -1,6 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mraof.minestuck.inventory.ContainerSburbMachine;
+import com.mraof.minestuck.inventory.ContainerMiniCruxtruder;
 import com.mraof.minestuck.tileentity.TileEntityMiniCruxtruder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -26,7 +26,7 @@ public class GuiMiniCruxtruder extends GuiMachine
 
 	public GuiMiniCruxtruder(InventoryPlayer inventoryPlayer, TileEntityMiniCruxtruder tileEntity)
 	{
-		super(new ContainerSburbMachine(inventoryPlayer, tileEntity), tileEntity);
+		super(new ContainerMiniCruxtruder(inventoryPlayer, tileEntity), tileEntity);
 		this.te = tileEntity;
 		this.playerInventory = inventoryPlayer;
 		
@@ -60,13 +60,13 @@ public class GuiMiniCruxtruder extends GuiMachine
 		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		//draw background
-		this.mc.getTextureManager().bindTexture(guiBackground);
+		this.mc.getTextureManager().bindTexture(BACKGROUND);
 		int x = (width - xSize) / 2;
 		int y = (height - ySize) / 2;
 		this.drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
 
 		//draw progress bar
-		this.mc.getTextureManager().bindTexture(guiProgress);
+		this.mc.getTextureManager().bindTexture(PROGRESS);
 		int width = progressWidth;
 		int height = getScaledValue(te.progress, te.maxProgress, progressHeight);
 		drawModalRectWithCustomSizedTexture(x + progressX, y + progressY + progressHeight - height, 0, progressHeight - height, width, height, progressWidth, progressHeight);

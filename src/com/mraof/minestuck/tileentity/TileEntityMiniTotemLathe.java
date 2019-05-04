@@ -4,7 +4,9 @@ import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.alchemy.CombinationRegistry;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.client.gui.GuiHandler;
+import com.mraof.minestuck.inventory.ContainerMiniTotemLathe;
 import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.util.ColorCollector;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -37,14 +39,14 @@ public class TileEntityMiniTotemLathe extends TileEntityMachineProcess implement
 	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack)
 	{
-		return (index == 0 || index == 1) && stack.getItem() == MinestuckItems.CAPTCHA_CARD || index == 2 && stack.getItem() == MinestuckBlocks.CRUXITE_DOWEL;
+		return (index == 0 || index == 1) && stack.getItem() == MinestuckItems.CAPTCHA_CARD || index == 2 && stack.getItem() == MinestuckBlocks.CRUXITE_DOWEL.asItem();
 	}
 	
 	@Override
 	public boolean contentsValid()
 	{
 		if ((!inv.get(0).isEmpty() || !inv.get(1).isEmpty()) && !inv.get(2).isEmpty() && !(inv.get(2).hasTag() && inv.get(2).getTag().hasKey("contentID"))
-				&& (inv.get(3).isEmpty() || inv.get(3).getCount() < inv.get(3).getMaxStackSize() && inv.get(3).getItemDamage() == inv.get(2).getItemDamage()))
+				&& (inv.get(3).isEmpty() || inv.get(3).getCount() < inv.get(3).getMaxStackSize() && ColorCollector.getColorFromStack(inv.get(3), -1) == ColorCollector.getColorFromStack(inv.get(2), -1)))
 		{
 			if (!inv.get(0).isEmpty() && !inv.get(1).isEmpty())
 			{
@@ -90,9 +92,9 @@ public class TileEntityMiniTotemLathe extends TileEntityMachineProcess implement
 			else output = AlchemyRecipes.getDecodedItem(input);
 		}
 		
-		ItemStack outputDowel = output.getItem().equals(Item.getItemFromBlock(MinestuckBlocks.GENERIC_OBJECT))
+		ItemStack outputDowel = output.getItem().equals(MinestuckBlocks.GENERIC_OBJECT.asItem())
 				? new ItemStack(MinestuckBlocks.CRUXITE_DOWEL) : AlchemyRecipes.createEncodedItem(output, false);
-		outputDowel.setItemDamage(inv.get(2).getItemDamage());	//Setting color
+		ColorCollector.setColor(outputDowel, ColorCollector.getColorFromStack(inv.get(2), -1));	//Setting color
 		
 		setInventorySlotContents(3, outputDowel);
 		decrStackSize(2, 1);
@@ -133,7 +135,7 @@ public class TileEntityMiniTotemLathe extends TileEntityMachineProcess implement
 	@Override
 	public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn)
 	{
-		return null;
+		return new ContainerMiniTotemLathe(playerInventory, this);
 	}
 	
 	@Override

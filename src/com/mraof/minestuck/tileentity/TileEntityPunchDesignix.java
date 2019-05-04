@@ -36,7 +36,7 @@ public class TileEntityPunchDesignix extends TileEntity
 	
 	public void setCard(ItemStack card)
 	{
-		if (card.getItem() == MinestuckItems.captchaCard || card.isEmpty())
+		if (card.getItem() == MinestuckItems.CAPTCHA_CARD || card.isEmpty())
 		{
 			this.card = card;
 			if(world != null && !world.isRemote)
@@ -75,15 +75,15 @@ public class TileEntityPunchDesignix extends TileEntity
 			ItemStack heldStack = player.getHeldItemMainhand();
 			if (part == MinestuckBlocks.PUNCH_DESIGNIX_SLOT && getCard().isEmpty())
 			{
-				if (!heldStack.isEmpty() && heldStack.getItem() == MinestuckItems.captchaCard)
+				if (!heldStack.isEmpty() && heldStack.getItem() == MinestuckItems.CAPTCHA_CARD)
 					setCard(heldStack.split(1));    //Insert card into the punch slot
 				
 			} else if (part == MinestuckBlocks.PUNCH_DESIGNIX_KEYBOARD || part == MinestuckBlocks.PUNCH_DESIGNIX_RIGHT_LEG)
 			{
-				if (heldStack.isEmpty() || heldStack.getItem() != MinestuckItems.captchaCard)
+				if (heldStack.isEmpty() || heldStack.getItem() != MinestuckItems.CAPTCHA_CARD)
 					return;    //Not a valid item in hand
 				
-				if (!getCard().isEmpty() && getCard().getItem() == MinestuckItems.captchaCard &&
+				if (!getCard().isEmpty() && getCard().getItem() == MinestuckItems.CAPTCHA_CARD &&
 						heldStack.hasTag() && heldStack.getTag().hasKey("contentID"))
 				{
 					ItemStack output = AlchemyRecipes.getDecodedItem(heldStack);

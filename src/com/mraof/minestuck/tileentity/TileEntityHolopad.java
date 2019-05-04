@@ -19,6 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -28,6 +29,11 @@ public class TileEntityHolopad extends TileEntity
 {
 
 	protected ItemStack card = ItemStack.EMPTY;
+	
+	public TileEntityHolopad()
+	{
+		super(MinestuckTiles.HOLOPAD);
+	}
 	
 	public void onRightClick(EntityPlayer player)
 	{
@@ -53,13 +59,13 @@ public class TileEntityHolopad extends TileEntity
 			ItemStack heldStack = player.getHeldItemMainhand();
 			if (card.isEmpty())
 			{
-				if (!heldStack.isEmpty() && heldStack.getItem() == MinestuckItems.captchaCard)
+				if (!heldStack.isEmpty() && heldStack.getItem() == MinestuckItems.CAPTCHA_CARD)
 				{
-					setCard(heldStack.splitStack(1));    //Insert card into the card slot
+					setCard(heldStack.split(1));    //Insert card into the card slot
 					ItemStack in = getCard();
-					ItemStack item = new ItemStack(MinestuckBlocks.genericObject);
+					ItemStack item = new ItemStack(MinestuckBlocks.GENERIC_OBJECT);
 					
-					if (in.hasTagCompound() && in.getTagCompound().hasKey("contentID"))
+					if (in.hasTag() && in.getTag().hasKey("contentID"))
 						item = AlchemyRecipes.getDecodedItem(in);
 					
 					spawnHologram(pos, item);
@@ -123,7 +129,7 @@ public class TileEntityHolopad extends TileEntity
 	
 	public void setCard(ItemStack card)
 	{
-		if (card.getItem() == MinestuckItems.captchaCard || card.isEmpty())
+		if (card.getItem() == MinestuckItems.CAPTCHA_CARD || card.isEmpty())
 		{
 			this.card = card;
 			if(world != null)
@@ -140,20 +146,20 @@ public class TileEntityHolopad extends TileEntity
 	}
 	
 	@Override
-	public void readFromNBT(NBTTagCompound tagCompound)
+	public void read(NBTTagCompound compound)
 	{
-		super.readFromNBT(tagCompound);
+		super.read(compound);
 		//broken = tagCompound.getBoolean("broken");
-		setCard(new ItemStack(tagCompound.getCompoundTag("card")));
+		setCard(ItemStack.read(compound.getCompound("card")));
 	}
 	
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound tagCompound)
+	public NBTTagCompound write(NBTTagCompound compound)
 	{
-		super.writeToNBT(tagCompound);
+		super.write(compound);
 		//tagCompound.setBoolean("broken", this.broken);
-		tagCompound.setTag("card", card.writeToNBT(new NBTTagCompound()));
-		return tagCompound;
+		compound.setTag("card", card.write(new NBTTagCompound()));
+		return compound;
 	}
 	
 	@Override
@@ -161,7 +167,7 @@ public class TileEntityHolopad extends TileEntity
 	{
 		NBTTagCompound nbt;
 		nbt = super.getUpdateTag();
-		nbt.setTag("card", card.writeToNBT(new NBTTagCompound()));
+		nbt.setTag("card", card.write(new NBTTagCompound()));
 		return nbt;
 	}
 	
@@ -177,11 +183,5 @@ public class TileEntityHolopad extends TileEntity
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt)
 	{
 		handleUpdateTag(pkt.getNbtCompound());
-	}
-	
-	@Override
-	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate)
-	{
-		return oldState.getBlock() != newSate.getBlock() || oldState.getValue(BlockHolopad.CARD) != newSate.getValue(BlockHolopad.CARD);
 	}
 }

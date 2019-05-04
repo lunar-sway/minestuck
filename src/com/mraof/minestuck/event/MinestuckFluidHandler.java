@@ -11,8 +11,8 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.fml.common.eventhandler.Event.Result;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class MinestuckFluidHandler
 {
@@ -21,21 +21,21 @@ public class MinestuckFluidHandler
 	public void onBucketFill(FillBucketEvent event)
 	{
 		
-		if(event.getEmptyBucket() == null || event.getEmptyBucket().getItem() != Items.BUCKET || event.getFilledBucket() != null || event.getTarget() == null || event.getResult() == Result.DENY)
+		if(event.getEmptyBucket().isEmpty() || event.getEmptyBucket().getItem() != Items.BUCKET || !event.getFilledBucket().isEmpty() || event.getTarget() == null || event.getResult() == Event.Result.DENY)
 			return;
 		
 		ItemStack result = fillCustomBucket(event.getWorld(), event.getTarget());
 		
-		if (result == null)
+		if (result.isEmpty())
 			return;
 		
 		event.setFilledBucket(result);
-		event.setResult(Result.ALLOW);
+		event.setResult(Event.Result.ALLOW);
 	}
 	
 	private ItemStack fillCustomBucket(World world, RayTraceResult pos)
 	{
-		ItemMinestuckBucket bucket = (ItemMinestuckBucket)(MinestuckItems.minestuckBucket);
+		/*ItemMinestuckBucket bucket = (ItemMinestuckBucket)(MinestuckItems.minestuckBucket);
 		IBlockState block = world.getBlockState(pos.getBlockPos());
 		
 		//TODO add same checks as used in buckets class
@@ -43,17 +43,17 @@ public class MinestuckFluidHandler
 		{
 			world.setBlockToAir(pos.getBlockPos());
 			return new ItemStack(MinestuckItems.minestuckBucket, 1, bucket.fillFluids.indexOf(block));
-		} else
-			return null;
+		} else*/
+			return ItemStack.EMPTY;
 		
 	}
 
 	@SubscribeEvent
 	public void onCreateFluidSource(BlockEvent.CreateFluidSourceEvent event)
 	{
-		if(event.getState().getBlock() instanceof BlockFluidGrist)
+		/*if(event.getState().getBlock() instanceof BlockFluidGrist)
 		{
 		    event.setResult(Result.DENY);
-		}
+		}*/
 	}
 }

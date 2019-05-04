@@ -2,8 +2,6 @@ package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.BlockAlchemiter;
-import com.mraof.minestuck.block.BlockAlchemiter.EnumParts;
-import com.mraof.minestuck.block.BlockAlchemiterUpgrades;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.util.AlchemiterUpgrades;
@@ -20,7 +18,8 @@ import net.minecraft.world.World;
 public class TileEntityUpgradedAlchemiter extends TileEntityAlchemiter
 {
 	
-	public void onRightClick(World worldIn, EntityPlayer playerIn, IBlockState state) 
+	/*
+	public void onRightClick(World worldIn, EntityPlayer playerIn, IBlockState state)
 	{	
 		if(state.getBlock() instanceof BlockAlchemiterUpgrades)
 			onRightClick(worldIn, playerIn, state, BlockAlchemiterUpgrades.getPart(state));
@@ -117,5 +116,5 @@ public class TileEntityUpgradedAlchemiter extends TileEntityAlchemiter
 		}
 		
 		return;
-	}
+	}*/
 }

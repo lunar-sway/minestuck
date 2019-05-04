@@ -133,7 +133,7 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiButtonI
 		
 		mc.fontRenderer.drawString(I18n.format("gui.sylladex"), xOffset + 15, yOffset + 5, 0x404040);
 		
-		String str = CaptchaDeckHandler.clientSideModus.getName();
+		String str = CaptchaDeckHandler.clientSideModus.getName().getFormattedText();
 		mc.fontRenderer.drawString(str, xOffset + GUI_WIDTH - mc.fontRenderer.getStringWidth(str) - 16, yOffset + 5, 0x404040);
 		
 		super.render(xcor, ycor, f);

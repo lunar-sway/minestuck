@@ -12,8 +12,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.LogicalSide;
 
 import java.util.Iterator;
 
@@ -23,11 +24,11 @@ public class HashmapModus extends Modus
 	protected NonNullList<ItemStack> list;
 	public boolean ejectByChat = true;
 	
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	protected boolean changed;
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	protected NonNullList<ItemStack> items;
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	protected SylladexGuiHandler gui;
 	
 	@Override
@@ -52,15 +53,15 @@ public class HashmapModus extends Modus
 	@Override
 	public void readFromNBT(NBTTagCompound nbt)
 	{
-		int size = nbt.getInteger("size");
+		int size = nbt.getInt("size");
 		ejectByChat = nbt.getBoolean("ejectByChat");
 		list = NonNullList.<ItemStack>create();
 		
 		for(int i = 0; i < size; i++)
 			if(nbt.hasKey("item"+i))
-				list.add(new ItemStack(nbt.getCompoundTag("item"+i)));
+				list.add(ItemStack.read(nbt.getCompound("item"+i)));
 			else list.add(ItemStack.EMPTY);
-		if(side.isClient())
+		if(side == LogicalSide.CLIENT)
 		{
 			if(items == null)
 				items = NonNullList.<ItemStack>create();
@@ -71,14 +72,14 @@ public class HashmapModus extends Modus
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt)
 	{
-		nbt.setInteger("size", list.size());
+		nbt.setInt("size", list.size());
 		nbt.setBoolean("ejectByChat", ejectByChat);
 		Iterator<ItemStack> iter = list.iterator();
 		for(int i = 0; i < list.size(); i++)
 		{
 			ItemStack stack = iter.next();
 			if(!stack.isEmpty())
-				nbt.setTag("item"+i, stack.writeToNBT(new NBTTagCompound()));
+				nbt.setTag("item"+i, stack.write(new NBTTagCompound()));
 		}
 		return nbt;
 	}
@@ -91,7 +92,7 @@ public class HashmapModus extends Modus
 		
 		//TODO use registry names when 1.13 comes out
 		
-		String unloc = item.getUnlocalizedName();
+		String unloc = item.getTranslationKey();
 		unloc = unloc.substring(unloc.indexOf('.')+1, unloc.length());
 
 		if(unloc.indexOf('.') != -1)
@@ -108,7 +109,7 @@ public class HashmapModus extends Modus
 		if(!list.get(index).isEmpty())
 		{
 			ItemStack otherItem = list.get(index);
-			if(otherItem.getItem() == item.getItem() && otherItem.getItemDamage() == item.getItemDamage() && ItemStack.areItemStackTagsEqual(otherItem, item)
+			if(otherItem.getItem() == item.getItem() && ItemStack.areItemStackTagsEqual(otherItem, item)
 					&& otherItem.getCount() + item.getCount() <= otherItem.getMaxStackSize())
 			{
 				otherItem.grow(item.getCount());
@@ -127,7 +128,7 @@ public class HashmapModus extends Modus
 	@Override
 	public NonNullList<ItemStack> getItems()
 	{
-		if(side.isServer())	//Used only when replacing the modus
+		if(side == LogicalSide.SERVER)	//Used only when replacing the modus
 		{
 			NonNullList<ItemStack> items = NonNullList.<ItemStack>create();
 			fillList(items);
@@ -188,7 +189,7 @@ public class HashmapModus extends Modus
 		{
 			list.remove(id);
 			if(item.isEmpty())
-				return new ItemStack(MinestuckItems.captchaCard);
+				return new ItemStack(MinestuckItems.CAPTCHA_CARD);
 			else return AlchemyRecipes.createCard(item, false);
 		} else
 		{
@@ -216,7 +217,7 @@ public class HashmapModus extends Modus
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public SylladexGuiHandler getGuiHandler()
 	{
 		if(gui == null)
@@ -277,7 +278,7 @@ public class HashmapModus extends Modus
 		if(stack == null)
 			return;
 		
-		if(player.inventory.getCurrentItem() == null)
+		if(player.inventory.getCurrentItem().isEmpty())
 			player.inventory.setInventorySlotContents(player.inventory.currentItem, stack);
 		else CaptchaDeckHandler.launchAnyItem(player, stack);
 		

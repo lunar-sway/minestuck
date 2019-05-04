@@ -7,11 +7,12 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextComponentString;
 
 public class ContainerCaptchaDeck extends Container
 {
 	
-	public InventoryBasic inventory = new InventoryBasic("ModusInventory", false, 1);
+	public InventoryBasic inventory = new InventoryBasic(new TextComponentString("ModusInventory"), 1);
 	
 	public ContainerCaptchaDeck(EntityPlayer player)
 	{
@@ -21,15 +22,15 @@ public class ContainerCaptchaDeck extends Container
 	private void addSlots(EntityPlayer player)
 	{
 		for(int i = 9; i < 36; i++)
-			addSlotToContainer(new Slot(player.inventory, i, 9 + (i%9)*18, 63 + ((i - 9)/9)*18));
+			addSlot(new Slot(player.inventory, i, 9 + (i%9)*18, 63 + ((i - 9)/9)*18));
 		for(int i = 0; i < 9; i++)
-			addSlotToContainer(new Slot(player.inventory, i, 9 + i*18, 121));
-		addSlotToContainer(new Slot(this.inventory, 0, 81, 32)
+			addSlot(new Slot(player.inventory, i, 9 + i*18, 121));
+		addSlot(new Slot(this.inventory, 0, 81, 32)
 		{
 			@Override
 			public boolean isItemValid(ItemStack stack)
 			{
-				return CaptchaDeckHandler.getType(stack) != null || stack.getItem().equals(MinestuckItems.captchaCard) && (!stack.hasTagCompound() || !stack.getTagCompound().getBoolean("punched"));
+				return CaptchaDeckHandler.getType(stack) != null || stack.getItem().equals(MinestuckItems.CAPTCHA_CARD) && (!stack.hasTag() || !stack.getTag().getBoolean("punched"));
 			}
 		});
 	}

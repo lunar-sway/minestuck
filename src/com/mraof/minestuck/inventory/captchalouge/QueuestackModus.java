@@ -5,8 +5,8 @@ import com.mraof.minestuck.client.gui.captchalouge.SylladexGuiHandler;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class QueuestackModus extends StackModus {
 	
@@ -18,7 +18,7 @@ public class QueuestackModus extends StackModus {
 			if(list.size() < size)
 			{
 				size--;
-				return new ItemStack(MinestuckItems.captchaCard);
+				return new ItemStack(MinestuckItems.CAPTCHA_CARD);
 			} else return ItemStack.EMPTY;
 		}
 		
@@ -42,7 +42,7 @@ public class QueuestackModus extends StackModus {
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public SylladexGuiHandler getGuiHandler()
 	{
 		if(gui == null)

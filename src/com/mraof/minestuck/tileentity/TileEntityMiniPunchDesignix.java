@@ -3,6 +3,7 @@ package com.mraof.minestuck.tileentity;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.alchemy.CombinationRegistry;
 import com.mraof.minestuck.client.gui.GuiHandler;
+import com.mraof.minestuck.inventory.ContainerMiniPunchDesignix;
 import com.mraof.minestuck.item.MinestuckItems;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -122,7 +123,7 @@ public class TileEntityMiniPunchDesignix extends TileEntityMachineProcess implem
 	@Override
 	public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn)
 	{
-		return null;
+		return new ContainerMiniPunchDesignix(playerInventory, this);
 	}
 	
 	@Override

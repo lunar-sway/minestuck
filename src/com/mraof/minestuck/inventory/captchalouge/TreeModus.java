@@ -10,13 +10,12 @@ import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +27,7 @@ public class TreeModus extends Modus
 	public int size;
 	public boolean autobalance = true;
 	
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	protected TreeGuiHandler guiHandler;
 	
 	@Override
@@ -41,7 +40,7 @@ public class TreeModus extends Modus
 	@Override
 	public void readFromNBT(NBTTagCompound nbt)
 	{
-		size = nbt.getInteger("size");
+		size = nbt.getInt("size");
 		autobalance = nbt.getBoolean("autobalance");
 		node = readNode(nbt, 0, 0);
 		if(player == null || !player.world.isRemote)
@@ -52,7 +51,7 @@ public class TreeModus extends Modus
 	{
 		if(nbt.hasKey("node"+currentIndex))
 		{
-			ItemStack stack = new ItemStack(nbt.getCompoundTag("node"+currentIndex));
+			ItemStack stack = ItemStack.read(nbt.getCompound("node"+currentIndex));
 			if(stack.isEmpty()) return null;	//Should not happen
 			TreeNode node = new TreeNode(stack);
 			node.node1 = readNode(nbt, currentIndex + (int) Math.pow(2, level), level + 1);
@@ -64,7 +63,7 @@ public class TreeModus extends Modus
 	
 	private void saveNode(NBTTagCompound nbt, TreeNode node, int currentIndex, int level)
 	{
-		nbt.setTag("node"+currentIndex, node.stack.writeToNBT(new NBTTagCompound()));
+		nbt.setTag("node"+currentIndex, node.stack.write(new NBTTagCompound()));
 		if(node.node1 != null)
 			saveNode(nbt, node.node1, currentIndex + (int) Math.pow(2, level), level + 1);
 		if(node.node2 != null)
@@ -74,7 +73,7 @@ public class TreeModus extends Modus
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt)
 	{
-		nbt.setInteger("size", size);
+		nbt.setInt("size", size);
 		nbt.setBoolean("autobalance", autobalance);
 		if(node != null)
 			saveNode(nbt, node, 0, 0);
@@ -130,7 +129,7 @@ public class TreeModus extends Modus
 			if(size <= 0 && (node == null || size > node.getSize()))
 				return ItemStack.EMPTY;
 			size--;
-			return new ItemStack(MinestuckItems.captchaCard);
+			return new ItemStack(MinestuckItems.CAPTCHA_CARD);
 		}
 		if(node == null)
 			return ItemStack.EMPTY;
@@ -188,7 +187,7 @@ public class TreeModus extends Modus
 		}
 	}
 	
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public SylladexGuiHandler getGuiHandler()
 	{
@@ -256,7 +255,7 @@ public class TreeModus extends Modus
 		
 		public void addNode(TreeNode node)
 		{
-			if(this.stack.getItem() == node.stack.getItem() && this.stack.getItemDamage() == node.stack.getItemDamage() && ItemStack.areItemStackTagsEqual(this.stack, node.stack)
+			if(this.stack.getItem() == node.stack.getItem() && ItemStack.areItemStackTagsEqual(this.stack, node.stack)
 				&& this.stack.getCount() + node.stack.getCount() <= this.stack.getMaxStackSize())
 			{
 				this.stack.grow(node.stack.getCount());
@@ -264,8 +263,6 @@ public class TreeModus extends Modus
 			else
 			{
 				int compare = this.itemToString().compareTo(node.itemToString());
-				if(compare == 0)
-					compare = this.stack.getItemDamage() - node.stack.getItemDamage();
 				if(compare >= 0)
 				{
 					if(node1 != null)
@@ -283,8 +280,8 @@ public class TreeModus extends Modus
 		
 		private String itemToString()
 		{
-			ResourceLocation name = (ResourceLocation) Item.REGISTRY.getNameForObject(stack.getItem());
-			return name.getResourcePath()+":"+name.getResourceDomain();	//Don't want the items to be sorted mod-wise.
+			ResourceLocation name = stack.getItem().getRegistryName();
+			return name.getPath()+":"+name.getNamespace();	//Don't want the items to be sorted mod-wise.
 		}
 		
 		public ArrayList<ItemStack> removeItems(int index)
@@ -308,7 +305,7 @@ public class TreeModus extends Modus
 					if(index/2 == 0)
 						node1 = null;
 					return list;
-				} else return new ArrayList<ItemStack>();
+				} else return new ArrayList<>();
 			}
 			else
 			{
@@ -318,13 +315,13 @@ public class TreeModus extends Modus
 					if(index/2 == 0)
 						node2 = null;
 					return list;
-				} else return new ArrayList<ItemStack>();
+				} else return new ArrayList<>();
 			}
 		}
 		
 		public NonNullList<ItemStack> getItems()
 		{	//TODO Maybe something more efficient that repeatedly creating and discarding lists?
-			NonNullList<ItemStack> list = NonNullList.<ItemStack>create();
+			NonNullList<ItemStack> list = NonNullList.create();
 			if(node1 != null)
 				list.addAll(node1.getItems());
 			list.add(stack);

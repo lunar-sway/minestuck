@@ -11,9 +11,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.dimension.DimensionType;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -29,6 +32,11 @@ public class TileEntityTransportalizer extends TileEntity implements ITickable
 	String id = "";
 	private String destId = "";
 	
+	public TileEntityTransportalizer()
+	{
+		super(MinestuckTiles.TRANSPORTALIZER);
+	}
+	
 	@Override
 	public void validate()
 	{
@@ -37,24 +45,24 @@ public class TileEntityTransportalizer extends TileEntity implements ITickable
 		{
 			if(id.isEmpty())
 				id = getUnusedId();
-			put(id, new Location(this.pos, world.provider.getDimension()));
+			put(id, new Location(this.pos, world.getDimension().getType()));
 		}
 	}
 	
 	@Override
-	public void invalidate()
+	public void remove()
 	{
-		super.invalidate();
+		super.remove();
 		if(!world.isRemote && active)
 		{
 			Location location = transportalizers.get(id);
-			if(location.equals(new Location(this.pos, this.world.provider.getDimension())))
+			if(location.equals(new Location(this.pos, this.world.getDimension().getType())))
 				transportalizers.remove(id);
 		}
 	}
 	
 	@Override
-	public void update()
+	public void tick()
 	{
 		if(world.isRemote)
 			return;
@@ -114,12 +122,12 @@ public class TileEntityTransportalizer extends TileEntity implements ITickable
 			
 			if(!destTransportalizer.getEnabled()) { return; } // Fail silently to make it look as though the player entered an ID that doesn't map to a transportalizer.
 			
-			for(int id : MinestuckConfig.forbiddenDimensionsTpz)
-				if(this.world.provider.getDimension() == id || location.dim == id)
+			for(DimensionType id : MinestuckConfig.forbiddenDimensionsTpz)
+				if(this.world.getDimension().getType() == id || location.dim == id)
 				{
 					entity.timeUntilPortal = entity.getPortalCooldown();
 					if(entity instanceof EntityPlayerMP)
-						entity.sendMessage(new TextComponentTranslation(this.world.provider.getDimension() == id ?"message.transportalizer.forbidden":"message.transportalizer.forbiddenDest"));
+						entity.sendMessage(new TextComponentTranslation(this.world.getDimension().getType() == id ?"message.transportalizer.forbidden":"message.transportalizer.forbiddenDest"));
 					return;
 				}
 			
@@ -147,7 +155,7 @@ public class TileEntityTransportalizer extends TileEntity implements ITickable
 		}
 	}
 	
-	public static void saveTransportalizers(NBTTagCompound tagCompound)
+	public static void saveTransportalizers(NBTTagCompound compound)
 	{
 		NBTTagCompound transportalizerTagCompound = new NBTTagCompound();
 		Iterator<Map.Entry<String, Location>> it = transportalizers.entrySet().iterator();
@@ -156,21 +164,31 @@ public class TileEntityTransportalizer extends TileEntity implements ITickable
 			Map.Entry<String, Location> entry = it.next();
 			Location location = entry.getValue();
 			NBTTagCompound locationTag = new NBTTagCompound();
-			locationTag.setInteger("x", location.pos.getX());
-			locationTag.setInteger("y", location.pos.getY());
-			locationTag.setInteger("z", location.pos.getZ());
-			locationTag.setInteger("dim", location.dim);
+			locationTag.setInt("x", location.pos.getX());
+			locationTag.setInt("y", location.pos.getY());
+			locationTag.setInt("z", location.pos.getZ());
+			ResourceLocation dimName = DimensionType.func_212678_a(location.dim);
+			if(dimName != null)
+				locationTag.setString("dim", dimName.toString());
+			else
+			{
+				Debug.warnf("Could not save transportalizer %s with dimension %s. Could not get dimension name!", entry.getKey(), location.dim);
+				continue;
+			}
 			transportalizerTagCompound.setTag(entry.getKey(), locationTag);
 		}
-		tagCompound.setTag("transportalizers", transportalizerTagCompound);
+		compound.setTag("transportalizers", transportalizerTagCompound);
 	}
 	
-	public static void loadTransportalizers(NBTTagCompound tagCompound)
+	public static void loadTransportalizers(NBTTagCompound compound)
 	{
-		for(Object id : tagCompound.getKeySet())
+		for(String id : compound.keySet())
 		{
-			NBTTagCompound locationTag = tagCompound.getCompoundTag((String)id);
-			put((String)id, new Location(locationTag.getInteger("x"), locationTag.getInteger("y"), locationTag.getInteger("z"), locationTag.getInteger("dim")));
+			NBTTagCompound locationTag = compound.getCompound((String)id);
+			DimensionType type = DimensionType.byName(ResourceLocation.makeResourceLocation(compound.getString("dim")));
+			if(type != null)
+				put(id, new Location(locationTag.getInt("x"), locationTag.getInt("y"), locationTag.getInt("z"), type));
+			else Debug.warnf("Found transportalizer %s with invalid dimension type %s. This transportalizer will be ignored.", id, compound.getString("dim"));
 		}
 	}
 	
@@ -185,9 +203,9 @@ public class TileEntityTransportalizer extends TileEntity implements ITickable
 			transportalizers.remove(this.id);
 		Location location = transportalizers.get(id);
 		this.id = id;
-		if(location == null || this.hasWorld() && location.dim == getWorld().provider.getDimension() && location.pos.equals(this.getPos()))
+		if(location == null || this.hasWorld() && location.dim == getWorld().getDimension().getType() && location.pos.equals(this.getPos()))
 		{
-			transportalizers.put(id, new Location(getPos(), getWorld().provider.getDimension()));
+			transportalizers.put(id, new Location(getPos(), getWorld().getDimension().getType()));
 		} else
 		{
 			active = false;
@@ -223,43 +241,43 @@ public class TileEntityTransportalizer extends TileEntity implements ITickable
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound tagCompound)
+	public void read(NBTTagCompound compound)
 	{
-		super.readFromNBT(tagCompound);
-		this.destId = tagCompound.getString("destId");
-		this.id = tagCompound.getString("idString");
-		if(tagCompound.hasKey("active"))
-			this.active = tagCompound.getBoolean("active");
+		super.read(compound);
+		this.destId = compound.getString("destId");
+		this.id = compound.getString("idString");
+		if(compound.hasKey("active"))
+			this.active = compound.getBoolean("active");
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound tagCompound)
+	public NBTTagCompound write(NBTTagCompound compound)
 	{
-		super.writeToNBT(tagCompound);
+		super.write(compound);
 		
-		tagCompound.setString("idString", id);
-		tagCompound.setString("destId", destId);
-		tagCompound.setBoolean("active", active);
+		compound.setString("idString", id);
+		compound.setString("destId", destId);
+		compound.setBoolean("active", active);
 		
-		return tagCompound;
+		return compound;
 	}
 	
 	@Override
 	public NBTTagCompound getUpdateTag()
 	{
-		return this.writeToNBT(new NBTTagCompound());
+		return this.write(new NBTTagCompound());
 	}
 	
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket()
 	{
-		return new SPacketUpdateTileEntity(this.pos, 2, this.writeToNBT(new NBTTagCompound()));
+		return new SPacketUpdateTileEntity(this.pos, 2, this.write(new NBTTagCompound()));
 	}
 	
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) 
 	{
-		this.readFromNBT(pkt.getNbtCompound());
+		this.read(pkt.getNbtCompound());
 	}
 	
 }

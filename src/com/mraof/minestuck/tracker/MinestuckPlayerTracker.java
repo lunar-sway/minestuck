@@ -16,7 +16,7 @@ import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
-import com.mraof.minestuck.world.lands.LandAspectRegistry;
+import com.mraof.minestuck.world.lands.LandAspects;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -26,11 +26,11 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -43,11 +43,11 @@ public class MinestuckPlayerTracker
 	@SubscribeEvent
 	public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) 
 	{
-		EntityPlayerMP player = (EntityPlayerMP) event.player;
+		EntityPlayerMP player = (EntityPlayerMP) event.getPlayer();
 		Debug.debug(player.getName()+" joined the game. Sending packets.");
 		MinecraftServer server = player.getServer();
 		if(!server.isDedicatedServer() && IdentifierHandler.host == null)
-			IdentifierHandler.host = event.player.getName();
+			IdentifierHandler.host = event.getPlayer().getName().getUnformattedComponentText();
 		
 		IdentifierHandler.playerLoggedIn(player);
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
@@ -60,7 +60,7 @@ public class MinestuckPlayerTracker
 		if(MinestuckPlayerData.getGristSet(identifier) == null)
 		{
 			Debug.debugf("Grist set is null for player %s. Handling it as first time in this world.", player.getName());
-			MinestuckPlayerData.setGrist(identifier, new GristSet(GristType.Build, 20));
+			MinestuckPlayerData.setGrist(identifier, new GristSet(GristType.BUILD, 20));
 			firstTime = true;
 		}
 		
@@ -69,7 +69,7 @@ public class MinestuckPlayerTracker
 		if(CaptchaDeckHandler.getModus(player) == null && MinestuckConfig.defaultModusTypes.length > 0 && !MinestuckPlayerData.getData(player).givenModus)
 		{
 			int index = player.world.rand.nextInt(MinestuckConfig.defaultModusTypes.length);
-			Modus modus = CaptchaDeckHandler.createInstance(new ResourceLocation(MinestuckConfig.defaultModusTypes[index]), Side.SERVER);
+			Modus modus = CaptchaDeckHandler.createInstance(new ResourceLocation(MinestuckConfig.defaultModusTypes[index]), LogicalSide.SERVER);
 			if(modus != null)
 			{
 				modus.player = player;
@@ -106,11 +106,11 @@ public class MinestuckPlayerTracker
 	@SubscribeEvent(priority = EventPriority.HIGH)	//Editmode players need to be reset before nei handles the event
 	public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event)
 	{
-		ServerEditHandler.onPlayerExit(event.player);
-		Modus modus = CaptchaDeckHandler.getModus(event.player);
+		ServerEditHandler.onPlayerExit(event.getPlayer());
+		Modus modus = CaptchaDeckHandler.getModus(event.getPlayer());
 		if(modus != null)
 			modus.player = null;
-		dataCheckerPermission.remove(event.player.getName());
+		dataCheckerPermission.remove(event.getPlayer().getName().getUnformattedComponentText());
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
@@ -127,7 +127,7 @@ public class MinestuckPlayerTracker
 	@SubscribeEvent
 	public void onPlayerTick(TickEvent.PlayerTickEvent event)
 	{
-		if(event.side.isServer() && event.phase == TickEvent.Phase.END && event.player instanceof EntityPlayerMP)
+		if(event.side == LogicalSide.SERVER && event.phase == TickEvent.Phase.END && event.player instanceof EntityPlayerMP)
 		{
 			EntityPlayerMP player = (EntityPlayerMP) event.player;
 			if(shouldUpdateConfigurations(player))
@@ -138,13 +138,13 @@ public class MinestuckPlayerTracker
 	@SubscribeEvent
 	public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) 
 	{
-		MinestuckPlayerData.getData(event.player).echeladder.updateEcheladderBonuses(event.player);
-		Modus modus = MinestuckPlayerData.getData(event.player).modus;
+		MinestuckPlayerData.getData(event.getPlayer()).echeladder.updateEcheladderBonuses(event.getPlayer());
+		Modus modus = MinestuckPlayerData.getData(event.getPlayer()).modus;
 		if(modus != null)
-			modus.player = event.player;
+			modus.player = event.getPlayer();
 	}
 	
-	public static Set<String> dataCheckerPermission = new HashSet<String>();
+	public static Set<String> dataCheckerPermission = new HashSet<>();
 	
 	private static boolean shouldUpdateConfigurations(EntityPlayerMP player)
 	{
@@ -222,7 +222,7 @@ public class MinestuckPlayerTracker
 			boolean permission = MinestuckConfig.getDataCheckerPermissionFor(player);
 			packet = MinestuckPacket.makePacket(Type.CONFIG, false, permission);
 			if(permission)
-				dataCheckerPermission.add(player.getName());
+				dataCheckerPermission.add(player.getName().getUnformattedComponentText());
 			else dataCheckerPermission.remove(player.getName());
 		}
 		MinestuckChannelHandler.sendToPlayer(packet, player);
@@ -232,8 +232,8 @@ public class MinestuckPlayerTracker
 	{
 		if(MinestuckDimensionHandler.isLandDimension(player.dimension))
 		{
-			LandAspectRegistry.AspectCombination aspects = MinestuckDimensionHandler.getAspects(player.dimension);
-			ChunkProviderLands chunkProvider = (ChunkProviderLands) player.world.provider.createChunkGenerator();
+			LandAspects aspects = MinestuckDimensionHandler.getAspects(player.dimension);
+			ChunkProviderLands chunkProvider = (ChunkProviderLands) player.world.getDimension().createChunkGenerator(); //TODO Check out deprecation
 			ITextComponent aspect1 = new TextComponentTranslation("land."+aspects.aspectTerrain.getNames()[chunkProvider.nameIndex1]);
 			ITextComponent aspect2 = new TextComponentTranslation("land."+aspects.aspectTitle.getNames()[chunkProvider.nameIndex2]);
 			ITextComponent toSend;

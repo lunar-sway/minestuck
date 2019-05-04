@@ -2,8 +2,9 @@ package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.client.gui.GuiHandler;
-import com.mraof.minestuck.inventory.ContainerSburbMachine;
+import com.mraof.minestuck.inventory.ContainerMiniCruxtruder;
 import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.util.ColorCollector;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -45,7 +46,7 @@ public class TileEntityMiniCruxtruder extends TileEntityMachineProcess implement
 	public boolean contentsValid()
 	{
 		ItemStack stack1 = this.inv.get(1);
-		return (!world.isBlockPowered(this.getPos()) && !this.inv.get(0).isEmpty() && (stack1.isEmpty() || stack1.getCount() < stack1.getMaxStackSize() && stack1.getItemDamage() == this.color + 1));
+		return (!world.isBlockPowered(this.getPos()) && !this.inv.get(0).isEmpty() && (stack1.isEmpty() || stack1.getCount() < stack1.getMaxStackSize() && ColorCollector.getColorFromStack(stack1, -1) == this.color + 1));
 	}
 	
 	@Override
@@ -54,7 +55,7 @@ public class TileEntityMiniCruxtruder extends TileEntityMachineProcess implement
 		// Process the Raw Cruxite
 		
 		if (this.inv.get(1).isEmpty())
-			setInventorySlotContents(1, new ItemStack(MinestuckBlocks.CRUXITE_DOWEL, 1, color + 1));	//TODO Sort out color storage
+			setInventorySlotContents(1, ColorCollector.setColor(new ItemStack(MinestuckBlocks.CRUXITE_DOWEL), color + 1));	//TODO Sort out color storage
 		else this.inv.get(1).grow(1);
 		decrStackSize(0, 1);
 	}
@@ -90,7 +91,7 @@ public class TileEntityMiniCruxtruder extends TileEntityMachineProcess implement
 	@Override
 	public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn)
 	{
-		return null;
+		return new ContainerMiniCruxtruder(playerInventory, this);
 	}
 	
 	@Override

@@ -1,7 +1,7 @@
 package com.mraof.minestuck.inventory;
 
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.tileentity.TileEntityUraniumCooker;
+import com.mraof.minestuck.tileentity.TileEntityMiniCruxtruder;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -11,27 +11,23 @@ import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
 
-public class ContainerUraniumCooker extends Container
+public class ContainerMiniCruxtruder extends Container
 {
 	
-	private static final int uraniumInputX = 38;
-	private static final int uraniumInputY = 51;
-	private static final int itemInputX = 38;
-	private static final int itemInputY = 22;
-	private static final int itemOutputX = 117;
-	private static final int itemOutputY = 35;
+	private static final int INPUT_X = 79;
+	private static final int INPUT_Y = 57;
+	private static final int OUTPUT_X = 79;
+	private static final int OUTPUT_Y = 19;
 	
-	public TileEntityUraniumCooker tileEntity;
-	private boolean operator = true;
+	public TileEntityMiniCruxtruder tileEntity;
 	private int progress;
 	
-	public ContainerUraniumCooker(InventoryPlayer inventoryPlayer, TileEntityUraniumCooker te)
+	public ContainerMiniCruxtruder(InventoryPlayer inventoryPlayer, TileEntityMiniCruxtruder te)
 	{
 		tileEntity = te;
 		
-		addSlot(new SlotInput(tileEntity, 0, uraniumInputX, uraniumInputY, MinestuckItems.RAW_URANIUM));
-		addSlot(new Slot(tileEntity, 1, itemInputX, itemInputY));
-		addSlot(new SlotOutput(tileEntity, 2, itemOutputX, itemOutputY));
+		addSlot(new SlotInput(tileEntity, 0, INPUT_X, INPUT_Y, MinestuckItems.RAW_CRUXITE));
+		addSlot(new SlotOutput(tileEntity, 1, OUTPUT_X, OUTPUT_Y));
 		
 		bindPlayerInventory(inventoryPlayer);
 	}
@@ -67,28 +63,19 @@ public class ContainerUraniumCooker extends Container
 			itemstack = itemstackOrig.copy();
 			boolean result = false;
 			
-			if(slotNumber == 0)    //Shift-clicking from the Uranium input
+			
+			if(slotNumber <= 1)
 			{
-				result = mergeItemStack(itemstackOrig, 3, allSlots, false);    //Send into the inventory
-			} else if(slotNumber == 1)    //Shift-clicking from the item input
+				//if it's a machine slot
+				result = mergeItemStack(itemstackOrig, 2, allSlots, false);
+			} else if(slotNumber > 1)
 			{
-				result = mergeItemStack(itemstackOrig, 3, allSlots, false);    //Send into the inventory
-				
-			} else if(slotNumber == 2)    //Shift-clicking from the output slot
-			{
-				if(itemstackOrig.getItem() == MinestuckItems.RAW_URANIUM)
-					result = mergeItemStack(itemstackOrig, 0, 1, false);    //Send the uranium back to the uranium input
-				else
-					result = mergeItemStack(itemstackOrig, 3, allSlots, false);    //Send the non-uranium to the inventory
-				
-			} else    //Shift-clicking from the inventory
-			{
-				if(itemstackOrig.getItem() == MinestuckItems.RAW_URANIUM)
+				//if it's an inventory slot with valid contents
+				//Debug.print("item ID of " + itemstackOrig.itemID + ". Expected " + Minestuck.rawCruxite.itemID);
+				if(itemstackOrig.getItem() == MinestuckItems.RAW_CRUXITE)
 				{
-					result = mergeItemStack(itemstackOrig, 0, 1, false);    //Send the uranium to the uranium input
-				} else
-				{
-					result = mergeItemStack(itemstackOrig, 1, 2, false);    //Send the non-uranium to the other input
+					//Debug.print("Transferring...");
+					result = mergeItemStack(itemstackOrig, 0, 1, false);
 				}
 			}
 			
@@ -116,7 +103,6 @@ public class ContainerUraniumCooker extends Container
 		if(par1 == 0)
 		{
 			tileEntity.progress = par2;
-			return;
 		}
 	}
 }

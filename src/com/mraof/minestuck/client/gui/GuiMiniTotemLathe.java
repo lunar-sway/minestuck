@@ -1,6 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mraof.minestuck.inventory.ContainerSburbMachine;
+import com.mraof.minestuck.inventory.ContainerMiniTotemLathe;
 import com.mraof.minestuck.tileentity.TileEntityMiniTotemLathe;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -27,7 +27,7 @@ public class GuiMiniTotemLathe extends GuiMachine
 
 	public GuiMiniTotemLathe(InventoryPlayer inventoryPlayer, TileEntityMiniTotemLathe tileEntity)
 	{
-		super(new ContainerSburbMachine(inventoryPlayer, tileEntity), tileEntity);
+		super(new ContainerMiniTotemLathe(inventoryPlayer, tileEntity), tileEntity);
 		this.te = tileEntity;
 		this.playerInventory = inventoryPlayer;
 		

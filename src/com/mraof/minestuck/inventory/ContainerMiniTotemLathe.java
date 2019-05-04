@@ -1,7 +1,8 @@
 package com.mraof.minestuck.inventory;
 
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.tileentity.TileEntityUraniumCooker;
+import com.mraof.minestuck.tileentity.TileEntityMiniTotemLathe;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -11,31 +12,31 @@ import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
 
-public class ContainerUraniumCooker extends Container
+public class ContainerMiniTotemLathe extends Container
 {
+	private static final int CARD_1_X = 26;
+	private static final int CARD_1_Y = 25;
+	private static final int CARD_2_X = 26;
+	private static final int CARD_2_Y = 43;
+	private static final int DOWEL_X = 62;
+	private static final int DOWEL_Y = 34;
+	private static final int OUTPUT_X = 134;
+	private static final int OUTPUT_Y = 34;
 	
-	private static final int uraniumInputX = 38;
-	private static final int uraniumInputY = 51;
-	private static final int itemInputX = 38;
-	private static final int itemInputY = 22;
-	private static final int itemOutputX = 117;
-	private static final int itemOutputY = 35;
-	
-	public TileEntityUraniumCooker tileEntity;
-	private boolean operator = true;
+	public TileEntityMiniTotemLathe tileEntity;
 	private int progress;
 	
-	public ContainerUraniumCooker(InventoryPlayer inventoryPlayer, TileEntityUraniumCooker te)
+	public ContainerMiniTotemLathe(InventoryPlayer inventoryPlayer, TileEntityMiniTotemLathe te)
 	{
 		tileEntity = te;
 		
-		addSlot(new SlotInput(tileEntity, 0, uraniumInputX, uraniumInputY, MinestuckItems.RAW_URANIUM));
-		addSlot(new Slot(tileEntity, 1, itemInputX, itemInputY));
-		addSlot(new SlotOutput(tileEntity, 2, itemOutputX, itemOutputY));
+		addSlot(new SlotInput(tileEntity, 0, CARD_1_X, CARD_1_Y, MinestuckItems.CAPTCHA_CARD));
+		addSlot(new SlotInput(tileEntity, 1, CARD_2_X, CARD_2_Y, MinestuckItems.CAPTCHA_CARD));
+		addSlot(new SlotInput(tileEntity, 2, DOWEL_X, DOWEL_Y, MinestuckBlocks.CRUXITE_DOWEL.asItem()));
+		addSlot(new SlotOutput(tileEntity, 3, OUTPUT_X, OUTPUT_Y));
 		
 		bindPlayerInventory(inventoryPlayer);
 	}
-	
 	@Override
 	public boolean canInteractWith(EntityPlayer player)
 	{
@@ -67,29 +68,18 @@ public class ContainerUraniumCooker extends Container
 			itemstack = itemstackOrig.copy();
 			boolean result = false;
 			
-			if(slotNumber == 0)    //Shift-clicking from the Uranium input
+			
+			if(slotNumber <= 3)
 			{
-				result = mergeItemStack(itemstackOrig, 3, allSlots, false);    //Send into the inventory
-			} else if(slotNumber == 1)    //Shift-clicking from the item input
+				//if it's a machine slot
+				result = mergeItemStack(itemstackOrig, 4, allSlots, false);
+			} else if(slotNumber > 3)
 			{
-				result = mergeItemStack(itemstackOrig, 3, allSlots, false);    //Send into the inventory
-				
-			} else if(slotNumber == 2)    //Shift-clicking from the output slot
-			{
-				if(itemstackOrig.getItem() == MinestuckItems.RAW_URANIUM)
-					result = mergeItemStack(itemstackOrig, 0, 1, false);    //Send the uranium back to the uranium input
-				else
-					result = mergeItemStack(itemstackOrig, 3, allSlots, false);    //Send the non-uranium to the inventory
-				
-			} else    //Shift-clicking from the inventory
-			{
-				if(itemstackOrig.getItem() == MinestuckItems.RAW_URANIUM)
-				{
-					result = mergeItemStack(itemstackOrig, 0, 1, false);    //Send the uranium to the uranium input
-				} else
-				{
-					result = mergeItemStack(itemstackOrig, 1, 2, false);    //Send the non-uranium to the other input
-				}
+				//if it's an inventory slot with valid contents
+				if(itemstackOrig.getItem() == MinestuckItems.CAPTCHA_CARD)
+					result = mergeItemStack(itemstackOrig, 0, 2, false);
+				else if(itemstackOrig.getItem() == MinestuckBlocks.CRUXITE_DOWEL.asItem())
+					result = mergeItemStack(itemstackOrig, 2, 3, false);
 			}
 			
 			if(!result)
@@ -116,7 +106,6 @@ public class ContainerUraniumCooker extends Container
 		if(par1 == 0)
 		{
 			tileEntity.progress = par2;
-			return;
 		}
 	}
 }

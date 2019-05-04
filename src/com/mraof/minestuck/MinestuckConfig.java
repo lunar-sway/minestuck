@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.UserListOpsEntry;
 import net.minecraft.world.GameType;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
@@ -95,7 +96,7 @@ public class MinestuckConfig
 	 */
 	public static int escapeFailureMode;
 	public static int preEntryRungLimit;
-	public static int[] forbiddenDimensionsTpz;
+	public static DimensionType[] forbiddenDimensionsTpz;
 	public static byte treeModusSetting;
 	public static byte hashmapChatModusSetting;
 	/**

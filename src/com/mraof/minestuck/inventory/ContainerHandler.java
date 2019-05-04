@@ -4,14 +4,14 @@ import com.mraof.minestuck.inventory.captchalouge.ContainerCaptchaDeck;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ContainerHandler
 {
 	
 	public static int windowIdStart;
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static int clientWindowIdStart;
 	
 	public static Container getPlayerStatsContainer(EntityPlayer player, int id, boolean editmode)

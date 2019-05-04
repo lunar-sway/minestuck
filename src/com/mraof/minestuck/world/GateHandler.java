@@ -17,6 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.DimensionManager;
 
 import java.util.HashMap;
@@ -30,7 +31,7 @@ public class GateHandler
 	
 	static Map<Integer, BlockPos> gateData = new HashMap<Integer, BlockPos>();
 	
-	public static void teleport(int gateId, int dim, EntityPlayerMP player)
+	public static void teleport(int gateId, DimensionType dim, EntityPlayerMP player)
 	{
 		Location location = null;
 		player.timeUntilPortal = player.getPortalCooldown();	//Basically to avoid message spam when something goes wrong

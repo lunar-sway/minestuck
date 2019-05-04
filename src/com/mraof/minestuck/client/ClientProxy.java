@@ -55,20 +55,22 @@ import com.mraof.minestuck.entity.underling.EntityLich;
 import com.mraof.minestuck.entity.underling.EntityOgre;
 import com.mraof.minestuck.entity.underling.EntityUnderlingPart;
 import com.mraof.minestuck.event.ClientEventHandler;
-import com.mraof.minestuck.item.ItemFrog;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tileentity.TileEntityGate;
 import com.mraof.minestuck.tileentity.TileEntitySkaiaPortal;
 import com.mraof.minestuck.util.ColorCollector;
 
+import net.minecraft.block.BlockStem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.client.renderer.color.BlockColors;
+import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.client.renderer.entity.model.ModelBiped;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
@@ -88,16 +90,33 @@ public class ClientProxy extends CommonProxy
 	
 	private static void registerRenderers()
 	{
-		Minecraft mc = Minecraft.getInstance();
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySkaiaPortal.class, new RenderSkaiaPortal());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGate.class, new RenderGate());
 //		MinecraftForgeClient.registerItemRenderer(Minestuck.captchaCard, new RenderCard());
-		
-		mc.getItemColors().register((stack, tintIndex) -> BlockColorCruxite.handleColorTint(stack.hasTag() && stack.getTag().hasKey("color") ? ColorCollector.getColor(stack.getTag().getInt("color") - 1) : -1, tintIndex),
+	}
+	
+	@SubscribeEvent
+	public static void initBlockColors(ColorHandlerEvent.Block event)
+	{
+		BlockColors colors = event.getBlockColors();
+		colors.register(new BlockColorCruxite(), MinestuckBlocks.ALCHEMITER_TOTEM_PAD, MinestuckBlocks.TOTEM_LATHE_DOWEL_ROD, MinestuckBlocks.CRUXITE_DOWEL);
+		colors.register((state, worldIn, pos, tintIndex) ->
+		{
+			int age = state.get(BlockStem.AGE);
+			int red = age * 32;
+			int green = 255 - age * 8;
+			int blue = age * 4;
+			return red << 16 | green << 8 | blue;
+		}, MinestuckBlocks.STRAWBERRY_STEM);
+	}
+	
+	@SubscribeEvent
+	public static void initItemColors(ColorHandlerEvent.Item event)
+	{
+		ItemColors colors = event.getItemColors();
+		colors.register((stack, tintIndex) -> BlockColorCruxite.handleColorTint(ColorCollector.getColorFromStack(stack, 0) - 1, tintIndex),
 				MinestuckBlocks.CRUXITE_DOWEL, MinestuckItems.CRUXITE_APPLE, MinestuckItems.CRUXITE_POTION);
-		mc.getBlockColors().register(new BlockColorCruxite(), MinestuckBlocks.ALCHEMITER_TOTEM_PAD, MinestuckBlocks.TOTEM_LATHE_DOWEL_ROD, MinestuckBlocks.CRUXITE_DOWEL);
-
-		mc.getItemColors().register(new RenderFrog.FrogItemColor(), MinestuckItems.FROG);
+		colors.register(new RenderFrog.FrogItemColor(), MinestuckItems.FROG);
 	}
 	
 	public static void init()

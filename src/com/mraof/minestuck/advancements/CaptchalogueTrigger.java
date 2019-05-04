@@ -10,9 +10,9 @@ import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalouge.Modus;
 import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.advancements.PlayerAdvancements;
-import net.minecraft.advancements.critereon.AbstractCriterionInstance;
-import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.advancements.criterion.AbstractCriterionInstance;
+import net.minecraft.advancements.criterion.ItemPredicate;
+import net.minecraft.advancements.criterion.MinMaxBounds;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -75,7 +75,7 @@ public class CaptchalogueTrigger implements ICriterionTrigger<CaptchalogueTrigge
 		ItemPredicate item = null;
 		if(json.has("item"))
 			item = ItemPredicate.deserialize(json.get("item"));
-		MinMaxBounds count = MinMaxBounds.deserialize(json.get("count"));
+		MinMaxBounds.IntBound count = MinMaxBounds.IntBound.fromJson(json.get("count"));
 		return new Instance(modus, item, count);
 	}
 	
@@ -90,8 +90,8 @@ public class CaptchalogueTrigger implements ICriterionTrigger<CaptchalogueTrigge
 	{
 		private final String modus;
 		private final ItemPredicate item;
-		private final MinMaxBounds count;
-		public Instance(String modus, ItemPredicate item, MinMaxBounds count)
+		private final MinMaxBounds.IntBound count;
+		public Instance(String modus, ItemPredicate item, MinMaxBounds.IntBound count)
 		{
 			super(ID);
 			this.modus = modus;

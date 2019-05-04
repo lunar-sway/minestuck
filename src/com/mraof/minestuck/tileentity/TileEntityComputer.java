@@ -46,7 +46,7 @@ public class TileEntityComputer extends TileEntity
 	public void read(NBTTagCompound compound)
 	{
 		super.read(compound);
-		if (compound.getCompound("programs") != null)
+		if (compound.hasKey("programs"))
 		{
 			NBTTagCompound programs = compound.getCompound("programs");
 			for (Object name : programs.keySet())

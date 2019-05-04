@@ -1,6 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.client.gui.GuiHandler;
+import com.mraof.minestuck.inventory.ContainerUraniumCooker;
 import com.mraof.minestuck.item.MinestuckItems;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -190,7 +191,7 @@ public class TileEntityUraniumCooker extends TileEntityMachineProcess implements
 	@Override
 	public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn)
 	{
-		return null;
+		return new ContainerUraniumCooker(playerInventory, this);
 	}
 	
 	@Override
