@@ -100,6 +100,7 @@ public class MinestuckBlocks
 	public static Block redCake = new BlockSimpleCake(2, 0.1F, (EntityPlayer player) -> player.heal(1)).setUnlocalizedName("redCake");
 	public static Block hotCake = new BlockSimpleCake(2, 0.1F, (EntityPlayer player) -> player.setFire(4)).setUnlocalizedName("hotCake");
 	public static Block reverseCake = new BlockSimpleCake(2, 0.1F, null).setUnlocalizedName("cake");
+	public static Block fuchsiaCake = new BlockSimpleCake(3, 0.5F, (EntityPlayer player) -> {player.addPotionEffect(new PotionEffect(MobEffects.ABSORPTION, 350, 1));player.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 200, 0));}).setUnlocalizedName("fuchsiaCake");
 	public static Block vein = new BlockVein("vein");
 	public static Block veinCorner = new BlockVeinCorner("veinCorner");
 	public static Block veinCornerInverted = new BlockVeinCorner("veinCornerInverted");
@@ -328,6 +329,7 @@ public class MinestuckBlocks
 		registry.register(redCake.setRegistryName("red_cake"));
 		registry.register(hotCake.setRegistryName("hot_cake"));
 		registry.register(reverseCake.setRegistryName("reverse_cake"));
+		registry.register(fuchsiaCake.setRegistryName("fuchsia_cake"));
 		
 		registry.register(coarseEndStone.setRegistryName("coarse_end_stone"));
 		registry.register(endGrass.setRegistryName("end_grass"));
