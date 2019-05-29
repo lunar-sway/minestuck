@@ -127,9 +127,6 @@ public class GuiStrifeSpecibus extends GuiPlayerStats
 		}
 		setScale(1);
 		
-		//drawCard(110, -10, 1, 0);
-		
-		//System.out.println("a");
 		if(!isSelectingCard) selectedCard = -1;
 	}
 	

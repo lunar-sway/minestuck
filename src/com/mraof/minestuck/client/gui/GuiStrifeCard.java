@@ -65,7 +65,6 @@ public class GuiStrifeCard extends GuiScreenMinestuck
 		yOffset = (height-guiHeight)/2;
 		mc = Minecraft.getMinecraft();
 		
-		System.out.println(maxScroll);
 	}
 	
 	@Override

@@ -30,24 +30,21 @@ public class StrifeSpecibus
 	
 	public StrifeSpecibus()
 	{
-		System.out.println("start!");
 		list = new LinkedList<ItemStack>();
 	}
 	
 	public StrifeSpecibus(NBTTagCompound nbt)
 	{
 		this();
-		System.out.println("stert!");
 		readFromNBT(nbt);
 	}
 	
 	public StrifeSpecibus(int abstrataIndex)
 	{
 		this();
-		System.out.println("stirt!");
 		abstIndex = abstrataIndex;
 		readFromNBT(writeToNBT(new NBTTagCompound()));
-		System.out.println("creating a new specibus obj");
+		//System.out.println("creating a new specibus obj");
 	}
 	
 	public StrifeSpecibus(KindAbstratusType type) 
@@ -143,8 +140,6 @@ public class StrifeSpecibus
 			this.list.add(stack.copy());
 			this.items.add(stack.copy());
 			
-			for(ItemStack i : list)
-				System.out.println(i);
 			
 			return true;
 		}

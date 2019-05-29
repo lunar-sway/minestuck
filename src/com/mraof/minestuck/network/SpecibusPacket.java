@@ -129,7 +129,7 @@ public class SpecibusPacket extends MinestuckPacket
 			{
 			case PORTFOLIO:
 			{
-				System.out.println("portfolio");
+				//System.out.println("portfolio");
 				portfolio = StrifePortfolioHandler.createPortfolio(nbt);
 				MinestuckPlayerData.onPacketRecived(this);
 				MinestuckPlayerData.setStrifePortfolio(IdentifierHandler.encode(player), portfolio);
@@ -138,7 +138,7 @@ public class SpecibusPacket extends MinestuckPacket
 			break;
 			case SPECIBUS_ADD:
 			{
-				System.out.println("add");
+				//System.out.println("add");
 				ArrayList<StrifeSpecibus> portfolio = MinestuckPlayerData.getStrifePortfolio(IdentifierHandler.encode(player));
 				StrifeSpecibus specibus = new StrifeSpecibus(nbt);
 				MinestuckPlayerData.setClientPortfolio(portfolio);
@@ -146,7 +146,7 @@ public class SpecibusPacket extends MinestuckPacket
 			}
 			break;
 			case SPECIBUS_REMOVE:
-				System.out.println("remove");
+				//System.out.println("remove");
 				StrifeSpecibus specibus = StrifePortfolioHandler.getSpecibus((EntityPlayerMP) player, specibusId);
 				MinestuckPlayerData.removeStrifeSpecibus(IdentifierHandler.encode(player), specibusId);
 				
@@ -155,12 +155,12 @@ public class SpecibusPacket extends MinestuckPacket
 			break;
 			case DECK_ADD:
 			{
-				System.out.println("deck add");
+				//System.out.println("deck add");
 				StrifePortfolioHandler.addItemToDeck((EntityPlayerMP)player);
 			}
 			break;
 			case DECK_REMOVE:
-				System.out.println("deck remove");
+				//System.out.println("deck remove");
 				StrifePortfolioHandler.retrieveItem((EntityPlayerMP) player, specibusId, itemIndex);
 			break;
 			}
@@ -171,7 +171,7 @@ public class SpecibusPacket extends MinestuckPacket
 			{
 			case PORTFOLIO:
 			{
-				System.out.println("null portfolio");
+				//System.out.println("null portfolio");
 				portfolio = StrifePortfolioHandler.createPortfolio(nbt);
 				MinestuckPlayerData.setClientPortfolio(portfolio);
 				MinestuckPlayerData.setStrifePortfolio(IdentifierHandler.encode(player), portfolio);

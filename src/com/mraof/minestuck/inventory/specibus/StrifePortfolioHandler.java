@@ -135,7 +135,6 @@ public class StrifePortfolioHandler
 	
 	public static StrifeSpecibus getSpecibus(EntityPlayerMP player, int specibusIndex)
 	{
-		System.out.println(MinestuckPlayerData.getStrifePortfolio(IdentifierHandler.encode(player)).size());
 		StrifeSpecibus specibus = new StrifeSpecibus(0);
 		if(specibusIndex < MinestuckPlayerData.getStrifePortfolio(IdentifierHandler.encode(player)).size())
 			specibus = MinestuckPlayerData.getStrifePortfolio(IdentifierHandler.encode(player)).get(specibusIndex);
