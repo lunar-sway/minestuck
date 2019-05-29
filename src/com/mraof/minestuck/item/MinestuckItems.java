@@ -42,6 +42,7 @@ import com.mraof.minestuck.item.weapon.ItemPogoWeapon;
 import com.mraof.minestuck.item.weapon.ItemPotionWeapon;
 import com.mraof.minestuck.item.weapon.ItemRandomWeapon;
 import com.mraof.minestuck.item.weapon.ItemRanged;
+import com.mraof.minestuck.item.weapon.ItemSbahjEEEE;
 import com.mraof.minestuck.item.weapon.ItemSord;
 import com.mraof.minestuck.item.weapon.ItemSpork;
 import com.mraof.minestuck.item.weapon.ItemWeapon;
