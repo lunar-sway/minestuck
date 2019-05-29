@@ -3,15 +3,18 @@ package com.mraof.minestuck.client.gui.playerStats;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.inventory.specibus.StrifePortfolioHandler;
 import com.mraof.minestuck.inventory.specibus.StrifeSpecibus;
 import com.mraof.minestuck.util.KindAbstratusType;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -30,7 +33,10 @@ public class GuiStrifeSpecibus extends GuiPlayerStats
 	private static float scale;
 	private static ArrayList<StrifeSpecibus> portfolio;
 	private static int blankCardCount = 0;
-	private static int selectedCard = -1;
+	private static int selectedCard;
+	private static boolean isSelectingCard = false;
+	private static int mouseX;
+	private static int mouseY;
 	private static final FontRenderer font = Minestuck.fontSpecibus;
 	
 	public GuiStrifeSpecibus()
@@ -54,6 +60,11 @@ public class GuiStrifeSpecibus extends GuiPlayerStats
 	public void drawScreen(int xcor, int ycor, float par3) 
 	{
 		super.drawScreen(xcor, ycor, par3);
+		
+		isSelectingCard = false;
+		mouseX = xcor;
+		mouseY = ycor;
+		
 		this.drawDefaultBackground();
 		scale = 1;
 		float cardScale = 0.25f;
@@ -116,20 +127,19 @@ public class GuiStrifeSpecibus extends GuiPlayerStats
 		}
 		setScale(1);
 		
-		drawCard(110, -10, 1, 0);
+		//drawCard(110, -10, 1, 0);
 		
 		//System.out.println("a");
+		if(!isSelectingCard) selectedCard = -1;
 	}
 	
 	public void drawCard(int cardX, int cardY, float cardScale, int index)
 	{
-		if(index < portfolio.size()) drawCard(cardX, cardY, cardScale, portfolio.get(index));
+		if(index < portfolio.size()) drawCard(cardX, cardY, cardScale, index, portfolio.get(index));
 	}
 	
-	public void drawCard(int cardX, int cardY, float cardScale, StrifeSpecibus specibus)
+	public void drawCard(int cardX, int cardY, float cardScale, int index, StrifeSpecibus specibus)
 	{
-		
-		
 		if(specibus == null) return;
 		
 		//specibus.putItemStack(new ItemStack(Items.IRON_SWORD));
@@ -141,11 +151,10 @@ public class GuiStrifeSpecibus extends GuiPlayerStats
 		List<ItemStack> items = specibus.getItems();
 		int totalItems = items.size();
 		
-		int x = (int) ((xOffset+cardX));
-		int y = (int) ((yOffset+cardY));
+		int x = (int) ((xOffset+cardX)) - (index == selectedCard ? 5 : 0);
+		int y = (int) ((yOffset+cardY)) - (index == selectedCard ? 5 : 0);
 		
-		ResourceLocation icon = new ResourceLocation("minestuck", iconsLoc+unlocalizedName+".png");
-		
+		ResourceLocation icon = new ResourceLocation(Minestuck.MOD_ID, iconsLoc+unlocalizedName+".png");		
 		setScale(cardScale);
 		this.mc.getTextureManager().bindTexture(guiStrifeCard);
 		this.drawTexturedModalRect(x/scale, y/scale, 28, 0, 200, 256);
@@ -162,42 +171,56 @@ public class GuiStrifeSpecibus extends GuiPlayerStats
 		
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		
+		int deckxpos = 68 - 23*(Math.min(items.size(),5)/2);
+		int n = 0;
 		for(ItemStack i : items)
 		{
-			int ixoff = 20;
-			int iyoff = 10;
+			int ixoff = (int)(deckxpos + (n%5)*(23)) - (int)(n/5);
+			int iyoff = 194 - (int)(n/5)*2;
 			setScale(cardScale);
 			mc.getTextureManager().bindTexture(icons);
 			drawTexturedModalRect(x/scale + ixoff, y/scale + iyoff, 0, 122, 21, 26);
 			drawItemStack(i, (int)(x/scale) + ixoff+2, (int)(y/scale) + iyoff+4, i.getDisplayName());
+			n++;
 		}
 		
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		setScale(cardScale);
+		int x1 = (int)(x);
+		int y1 = (int)(y);
+		int xs = (int)((200+(selectedCard == index ? 20 : 0))*scale);
+		int ys = (int)((256+(selectedCard == index ? 20 : 0))*scale);
+		int x2 = x1+xs;
+		int y2 = y1+ys;
+		if(isPointInRegion(x1, y1, xs, ys, mouseX, mouseY))
+		{
+			selectedCard = index;
+			isSelectingCard = true;
+			if(Mouse.getEventButtonState() && Mouse.isButtonDown(0))
+			{
+				//TODO retrieve card
+				StrifePortfolioHandler.retrieveSpecibus(index);
+			}
+		}
 		setScale(1);
-		
-		
-		
 	}
 	
 	
     /**
      * Draws an ItemStack.
-     *  
-     * The z index is increased by 32 (and not decreased afterwards), and the item is then rendered at z=200.
+     * 
      */
     private void drawItemStack(ItemStack stack, int x, int y, String altText)
     {
-        GlStateManager.translate(0.0F, 0.0F, 32.0F);
-        this.zLevel = 200.0F;
-        this.itemRender.zLevel = 200.0F;
-        net.minecraft.client.gui.FontRenderer font = stack.getItem().getFontRenderer(stack);
-        if (font == null) font = fontRenderer;
-        GlStateManager.enableLighting();
-        this.itemRender.renderItemAndEffectIntoGUI(stack, x, y);
-        //this.itemRender.renderItemOverlayIntoGUI(font, stack, x, y - (8), altText);
-        this.zLevel = 0.0F;
-        this.itemRender.zLevel = 0.0F;
-        }
+		
+    	RenderHelper.enableGUIStandardItemLighting();
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(x, y, 0);
+        mc.getRenderItem().renderItemAndEffectIntoGUI(stack, 0, 0);
+        GlStateManager.popMatrix();
+        RenderHelper.disableStandardItemLighting();
+        
+     }
 	
 	public void setScale(float percentage)
 	{
