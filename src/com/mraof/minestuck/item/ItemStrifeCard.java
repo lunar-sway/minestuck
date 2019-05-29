@@ -18,6 +18,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 
@@ -44,13 +45,17 @@ public class ItemStrifeCard extends Item
 				if(nbt.hasKey("items"))
 				{
 					NBTTagCompound items = (NBTTagCompound) nbt.getTag("items");
-					for(int i = 0; i < items.getSize(); i++)
+					int size = items.getSize();
+					int remaining = size;
+					for(int i = 0; i < Math.min(size,5); i++)
 						if(items.hasKey("slot"+i))
 						{
 							ItemStack s = new ItemStack(items.getCompoundTag("slot"+i));
 							tooltip.add(s.getDisplayName());
+							remaining--;
 						}
 						else break;
+					if(remaining > 0)tooltip.add(String.format(TextFormatting.ITALIC + I18n.translateToLocal("container.shulkerBox.more"), remaining));
 				}
 				
 			}
