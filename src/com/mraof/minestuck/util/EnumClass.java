@@ -77,6 +77,8 @@ public enum EnumClass
 	 */
 	public static EnumClass getClassFromInt(int i)
 	{
+		if(i < 0 || i >= EnumClass.values().length)
+			return null;
 		return EnumClass.values()[i];
 	}
 	

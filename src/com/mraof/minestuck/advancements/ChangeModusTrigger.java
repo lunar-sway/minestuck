@@ -6,15 +6,12 @@ import com.google.common.collect.Sets;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
-import com.mraof.minestuck.inventory.captchalouge.Modus;
+import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
+import com.mraof.minestuck.inventory.captchalogue.Modus;
 import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.advancements.PlayerAdvancements;
 import net.minecraft.advancements.criterion.AbstractCriterionInstance;
-import net.minecraft.advancements.criterion.ItemPredicate;
-import net.minecraft.advancements.criterion.MinMaxBounds;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.List;

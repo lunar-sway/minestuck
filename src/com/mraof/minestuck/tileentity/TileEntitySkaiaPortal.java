@@ -3,7 +3,6 @@ package com.mraof.minestuck.tileentity;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Location;
-import com.mraof.minestuck.util.Teleport;
 
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import net.minecraft.block.Block;
@@ -12,12 +11,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.util.ITeleporter;
 
-public class TileEntitySkaiaPortal extends TileEntity implements Teleport.ITeleporter
+public class TileEntitySkaiaPortal extends TileEntity implements ITeleporter
 {
 	public Location destination = new Location();
 	
@@ -68,34 +69,28 @@ public class TileEntitySkaiaPortal extends TileEntity implements Teleport.ITelep
 					return;
 				destination.pos = world.getHeight(Heightmap.Type.WORLD_SURFACE, new BlockPos(entity)).up(5);
 			}
-			if(!Teleport.teleportEntity(entity, this.destination.dim, this, destination.pos))
-				return;
+			entity = entity.changeDimension(destination.dim, this);
 		}
-		entity.timeUntilPortal = entity.getPortalCooldown();
+		if(entity != null)
+			entity.timeUntilPortal = entity.getPortalCooldown();
 	}
 	
 	@Override
-	public boolean prepareDestination(BlockPos pos, Entity entity, WorldServer worldserver)
+	public void placeEntity(World world, Entity entity, float yaw)
 	{
-		entity.setPosition(pos.getX(), pos.getY(), pos.getZ());
-		return true;
-	}
-
-	@Override
-	public void finalizeDestination(Entity entity, WorldServer worldserver, WorldServer worldserver1)
-	{
-		double x = entity.posX;
-		double y = entity.posY;
-		double z = entity.posZ;
+		double x = pos.getX();
+		double y = pos.getY();
+		double z = pos.getZ();
+		entity.setPosition(x, y, z);
 		Block[] blocks = {MinestuckBlocks.BLACK_CHESS_DIRT, MinestuckBlocks.LIGHT_GRAY_CHESS_DIRT, MinestuckBlocks.WHITE_CHESS_DIRT, MinestuckBlocks.DARK_GRAY_CHESS_DIRT};
 		for(int blockX = (int) x - 2; blockX < x + 2; blockX++)
 		{
 			for(int blockZ = (int) z - 2; blockZ < z + 2; blockZ++)
 			{
-				worldserver1.setBlockState(new BlockPos(blockX, (int) y - 1, blockZ), blocks[(blockX + blockZ) & 3].getDefaultState(), 3);
+				world.setBlockState(new BlockPos(blockX, (int) y - 1, blockZ), blocks[(blockX + blockZ) & 3].getDefaultState(), 3);
 				for(int blockY = (int) y; blockY < y + 6; blockY++)
-					if(worldserver1.isBlockFullCube(new BlockPos(blockX, blockY, blockZ)))
-						worldserver1.removeBlock(new BlockPos(blockX, blockY, blockZ));
+					if(world.isBlockFullCube(new BlockPos(blockX, blockY, blockZ)))
+						world.removeBlock(new BlockPos(blockX, blockY, blockZ));
 			}
 		}
 	}

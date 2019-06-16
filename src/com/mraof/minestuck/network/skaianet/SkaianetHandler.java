@@ -6,20 +6,21 @@ import com.mraof.minestuck.editmode.EditData;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.event.ConnectionClosedEvent;
 import com.mraof.minestuck.event.ConnectionCreatedEvent;
-import com.mraof.minestuck.network.MinestuckChannelHandler;
+import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
-import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
+import com.mraof.minestuck.util.Location;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.UserListOpsEntry;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -28,6 +29,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
@@ -110,7 +112,7 @@ public class SkaianetHandler {
 		infoToSend.put(identifier, s);
 		updatePlayer(identifier);
 		MinestuckPacket packet = createLandChainPacket();
-		MinestuckChannelHandler.sendToPlayer(packet, player);
+		MinestuckPacketHandler.sendToPlayer(packet, player);
 	}
 	
 	public static void requestConnection(ComputerData player, PlayerIdentifier otherPlayer, boolean isClient)
@@ -515,7 +517,7 @@ public class SkaianetHandler {
 	{
 		updateLandChain();
 		MinestuckPacket packet = createLandChainPacket();
-		MinestuckChannelHandler.sendToAllPlayers(packet);
+		MinestuckPacketHandler.sendToAllPlayers(packet);
 	}
 	
 	static void updateAll()
@@ -542,7 +544,7 @@ public class SkaianetHandler {
 			if(i != null)
 			{
 				MinestuckPacket packet = MinestuckPacket.makePacket(Type.SBURB_INFO, generateClientInfo(i));
-				MinestuckChannelHandler.sendToPlayer(packet, playerMP);
+				MinestuckPacketHandler.sendToPlayer(packet, playerMP);
 			}
 		}
 	}
@@ -683,20 +685,20 @@ public class SkaianetHandler {
 	
 	/**
 	 * Gets the <code>TileEntityComputer</code> at the given position.
-	 * @param data A <code>ComputerData</code> representing the computer,
-	 * this method does not compare the variable <code>data.owner</code>.
+	 * @param server The server which this takes place.
+	 * @param location A <code>Location</code> pointing to the computer.
 	 * @return The <code>TileEntityComputer</code> at the given position,
 	 * or <code>null</code> if there isn't one there.
 	 */
-	public static TileEntityComputer getComputer(ComputerData data)
+	public static TileEntityComputer getComputer(MinecraftServer server, Location location)
 	{
-		if(data == null)
+		if(location == null)
 			return null;
-		World world = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(data.dimension);
+		World world = DimensionManager.getWorld(server, location.dim, false, true);	//TODO look over code to limit force loading of dimensions
 		if(world == null)
 			return null;
-		TileEntity te = world.getTileEntity(new BlockPos(data.x, data.y, data.z));
-		if(te == null || !(te instanceof TileEntityComputer))
+		TileEntity te = world.getTileEntity(location.pos);
+		if(!(te instanceof TileEntityComputer))
 			return null;
 		else return (TileEntityComputer)te;
 	}
@@ -790,7 +792,7 @@ public class SkaianetHandler {
 			if(data != null)
 			{
 				MinestuckPacket packet = MinestuckPacket.makePacket(Type.SERVER_EDIT, c.givenItemList);
-				MinestuckChannelHandler.sendToPlayer(packet, data.getEditor());
+				MinestuckPacketHandler.sendToPlayer(packet, data.getEditor());
 			}
 		}
 	}

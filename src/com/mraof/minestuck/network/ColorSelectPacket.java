@@ -1,24 +1,33 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class EffectTogglePacket
+public class ColorSelectPacket
 {
-	public void encode(PacketBuffer buffer)
+	public int color;
+	
+	public ColorSelectPacket(int color)
 	{
+		this.color = color;
 	}
 	
-	public static EffectTogglePacket decode(PacketBuffer buffer)
+	public void encode(PacketBuffer buffer)
 	{
-		return new EffectTogglePacket();
+		buffer.writeInt(color);
+	}
+	
+	public static ColorSelectPacket decode(PacketBuffer buffer)
+	{
+		int color = buffer.readInt();
+		
+		return new ColorSelectPacket(color);
 	}
 	
 	public void consume(Supplier<NetworkEvent.Context> ctx)
@@ -31,14 +40,7 @@ public class EffectTogglePacket
 	
 	public void execute(EntityPlayerMP player)
 	{
-		IdentifierHandler.PlayerIdentifier handler = IdentifierHandler.encode(player);
-		MinestuckPlayerData.setEffectToggle(handler, !MinestuckPlayerData.getEffectToggle(handler));
-		if(MinestuckPlayerData.getData(handler).effectToggle)
-		{
-			player.sendStatusMessage(new TextComponentTranslation("aspectEffects.on"), true);
-		} else
-		{
-			player.sendStatusMessage(new TextComponentTranslation("aspectEffects.off"), true);
-		}
+		if(SburbHandler.canSelectColor(player))
+			MinestuckPlayerData.getData(player).color = this.color;
 	}
 }

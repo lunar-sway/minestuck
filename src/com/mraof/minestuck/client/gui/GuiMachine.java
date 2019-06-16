@@ -1,12 +1,11 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mraof.minestuck.network.MinestuckChannelHandler;
+import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityMachineProcess;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.InputMappings;
@@ -40,7 +39,7 @@ public abstract class GuiMachine extends GuiContainer
 
 			boolean mode = te.getRunType() == TileEntityMachineProcess.RunType.BUTTON_OVERRIDE && (InputMappings.isKeyDown(42) || InputMappings.isKeyDown(54));
 			MinestuckPacket packet = MinestuckPacket.makePacket(Type.GOBUTTON, true, mode && !te.overrideStop);
-			MinestuckChannelHandler.sendToServer(packet);
+			MinestuckPacketHandler.sendToServer(packet);
 
 			if (!mode)
 				te.ready = true;
@@ -70,7 +69,7 @@ public abstract class GuiMachine extends GuiContainer
 				{
 					//Tell the machine to go once
 					MinestuckPacket packet = MinestuckPacket.makePacket(Type.GOBUTTON, true, false);
-					MinestuckChannelHandler.sendToServer(packet);
+					MinestuckPacketHandler.sendToServer(packet);
 					
 					te.ready = true;
 					te.overrideStop = false;
@@ -82,7 +81,7 @@ public abstract class GuiMachine extends GuiContainer
 				this.playPressSound(Minecraft.getInstance().getSoundHandler());
 				//Tell the machine to go until stopped
 				MinestuckPacket packet = MinestuckPacket.makePacket(Type.GOBUTTON, true, !te.overrideStop);
-				MinestuckChannelHandler.sendToServer(packet);
+				MinestuckPacketHandler.sendToServer(packet);
 				
 				te.overrideStop = !te.overrideStop;
 				goButton.displayString = I18n.format(te.overrideStop ? "gui.buttonStop" : "gui.buttonGo");

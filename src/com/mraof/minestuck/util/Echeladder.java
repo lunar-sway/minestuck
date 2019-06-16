@@ -1,7 +1,7 @@
 package com.mraof.minestuck.util;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.network.MinestuckChannelHandler;
+import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.PlayerDataPacket;
@@ -17,9 +17,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.init.SoundEvents;
-import net.minecraftforge.client.event.sound.PlaySoundEvent;
-import net.minecraftforge.event.entity.PlaySoundAtEntityEvent;
 import net.minecraft.util.math.MathHelper;
 
 import java.util.Set;
@@ -104,7 +101,7 @@ public class Echeladder
 			if(rung != prevRung)
 			{
 				updateEcheladderBonuses(player);
-				MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.BOONDOLLAR, MinestuckPlayerData.getData(identifier).boondollars), player);
+				MinestuckPacketHandler.sendToPlayer(MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.BOONDOLLAR, MinestuckPlayerData.getData(identifier).boondollars), player);
 				player.world.playSound((EntityPlayer)null, player.posX, player.posY, player.posZ, MinestuckSoundHandler.soundUpcheladder, SoundCategory.AMBIENT, 1F, 1F);
 			}
 		}

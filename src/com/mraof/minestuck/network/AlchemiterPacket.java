@@ -1,59 +1,58 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
-import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-import java.util.EnumSet;
+import java.util.function.Supplier;
 
-public class AlchemiterPacket extends MinestuckPacket
+public class AlchemiterPacket
 {
-	
-	public BlockPos tePos;
+	public BlockPos pos;
 	public int quantity;
 	
-	@Override
-	public MinestuckPacket generatePacket(Object... dat)
+	public AlchemiterPacket(BlockPos pos, int quantity)
 	{
-		TileEntity te = ((TileEntity) dat[0]);
-		data.writeInt(te.getPos().getX());
-		data.writeInt(te.getPos().getY());
-		data.writeInt(te.getPos().getZ());
-		data.writeInt((int) dat[1]);
-		
-		return this;
+		this.pos = pos;
+		this.quantity = quantity;
 	}
 	
-	@Override
-	public MinestuckPacket consumePacket(ByteBuf data)
+	public void encode(PacketBuffer buffer)
 	{
-		tePos = new BlockPos(data.readInt(), data.readInt(), data.readInt());
-		
-		quantity = data.readInt();
-		
-		return this;
+		buffer.writeBlockPos(pos);
+		buffer.writeInt(quantity);
 	}
 	
-	@Override
-	public void execute(EntityPlayer player)
+	public static AlchemiterPacket decode(PacketBuffer buffer)
 	{
-		if(player.getEntityWorld().isBlockLoaded(tePos))
+		BlockPos pos = buffer.readBlockPos();
+		int quantity = buffer.readInt();
+		
+		return new AlchemiterPacket(pos, quantity);
+	}
+	
+	public void consume(Supplier<NetworkEvent.Context> ctx)
+	{
+		if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER)
+			ctx.get().enqueueWork(() -> this.execute(ctx.get().getSender()));
+		
+		ctx.get().setPacketHandled(true);
+	}
+	
+	public void execute(EntityPlayerMP player)
+	{
+		if(player.getEntityWorld().isBlockLoaded(pos))
 		{
 			TileEntity te;
-			te = player.getEntityWorld().getTileEntity(tePos);
+			te = player.getEntityWorld().getTileEntity(pos);
 			if(te instanceof TileEntityAlchemiter)
 			{
 				((TileEntityAlchemiter) te).processContents(quantity, player);
 			}
 		}
-	}
-	
-	@Override
-	public EnumSet<Side> getSenderSide()
-	{
-		return EnumSet.of(Side.CLIENT);
 	}
 }

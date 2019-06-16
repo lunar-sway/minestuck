@@ -13,7 +13,7 @@ import com.mraof.minestuck.event.MinestuckFluidHandler;
 import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.item.ItemMinestuckCandy;
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.network.MinestuckChannelHandler;
+import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.tileentity.*;
 import com.mraof.minestuck.tracker.ConnectionListener;
@@ -63,12 +63,12 @@ public class CommonProxy
 		MinecraftForge.EVENT_BUS.register(ServerEditHandler.instance);
 		MinecraftForge.EVENT_BUS.register(MinestuckPlayerTracker.instance);
 		MinecraftForge.EVENT_BUS.register(ServerEventHandler.instance);
-		MinecraftForge.EVENT_BUS.register(MinestuckChannelHandler.instance);
+		MinecraftForge.EVENT_BUS.register(MinestuckPacketHandler.instance);
 		MinecraftForge.EVENT_BUS.register(new ConnectionListener());
 		
 		
 		//register channel handler
-		MinestuckChannelHandler.setupChannel();
+		MinestuckPacketHandler.setupChannel();
 		
 		//Register structures
 		MapGenStructureIO.registerStructure(StructureCastleStart.class, "SkaiaCastle");

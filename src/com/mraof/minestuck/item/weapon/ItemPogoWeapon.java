@@ -9,7 +9,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -48,7 +47,7 @@ public class ItemPogoWeapon extends ItemWeapon
 	
 	public static void hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase player, double pogoMotion)
 	{
-		if (player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder() && !player.isInWater() && player.getRidingEntity() == null)
+		if (player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder() && !player.isInWater() && !player.isPassenger())
 		{
 			double knockbackModifier = 1D - target.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getValue();
 			target.motionY = Math.max(target.motionY, knockbackModifier * Math.min(pogoMotion * 2, Math.abs(player.motionY) + target.motionY + pogoMotion));

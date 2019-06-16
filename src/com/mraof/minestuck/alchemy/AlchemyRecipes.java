@@ -1072,7 +1072,7 @@ public class AlchemyRecipes
 		}
 		
 		GristSet set = AlchemyCostRegistry.getGristConversion(stack);
-		if(set != null) //The only time the grist set should be null here is if it was a captchalouge card that was alchemized
+		if(set != null) //The only time the grist set should be null here is if it was a captchalogue card that was alchemized
 		{
 			double value = 0;
 			for(GristType type : GristType.values())

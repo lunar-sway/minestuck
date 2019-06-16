@@ -3,14 +3,14 @@ package com.mraof.minestuck.network.skaianet;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiComputer;
 import com.mraof.minestuck.client.gui.GuiHandler;
-import com.mraof.minestuck.network.MinestuckChannelHandler;
+import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.SkaianetInfoPacket;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -55,7 +55,7 @@ public class SkaiaClient
 		if(!b)
 		{
 			MinestuckPacket packet = MinestuckPacket.makePacket(Type.SBURB_INFO, computer.ownerId);
-			MinestuckChannelHandler.sendToServer(packet);
+			MinestuckPacketHandler.sendToServer(packet);
 			te = computer;
 		}
 		return b;
@@ -124,30 +124,30 @@ public class SkaiaClient
 	public static void sendConnectRequest(TileEntityComputer te, int otherPlayer, boolean isClient)	//Used for both connect, open server and resume
 	{
 		MinestuckPacket packet = MinestuckPacket.makePacket(Type.SBURB_CONNECT, ComputerData.createData(te), otherPlayer, isClient);
-		MinestuckChannelHandler.sendToServer(packet);
+		MinestuckPacketHandler.sendToServer(packet);
 	}
 	
 	public static void sendCloseRequest(TileEntityComputer te, int otherPlayer, boolean isClient)
 	{
 		MinestuckPacket packet = MinestuckPacket.makePacket(Type.SBURB_CLOSE, te.ownerId, otherPlayer, isClient);
-		MinestuckChannelHandler.sendToServer(packet);
+		MinestuckPacketHandler.sendToServer(packet);
 	}
 	
 	//Methods used by the SkaianetInfoPacket.
-	public static SburbConnection getConnection(ByteBuf data)
+	public static SburbConnection getConnectionFromBuffer(PacketBuffer buffer)
 	{
 		SburbConnection c = new SburbConnection();
 		
-		c.isMain = data.readBoolean();
+		c.isMain = buffer.readBoolean();
 		if(c.isMain)
 		{
-			c.isActive = data.readBoolean();
-			c.enteredGame = data.readBoolean();
+			c.isActive = buffer.readBoolean();
+			c.enteredGame = buffer.readBoolean();
 		}
-		c.clientId = data.readInt();
-		c.clientName = MinestuckPacket.readLine(data);
-		c.serverId = data.readInt();
-		c.serverName = MinestuckPacket.readLine(data);
+		c.clientId = buffer.readInt();
+		c.clientName = buffer.readString(16);
+		c.serverId = buffer.readInt();
+		c.serverName = buffer.readString(16);
 		
 		return c;
 	}

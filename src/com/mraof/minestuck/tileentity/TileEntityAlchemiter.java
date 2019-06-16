@@ -18,7 +18,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -27,7 +26,7 @@ import net.minecraft.world.World;
 public class TileEntityAlchemiter extends TileEntity
 {
 	
-	protected GristType selectedGrist = GristType.BUILD;
+	protected GristType wildcardGrist = GristType.BUILD;
 	protected boolean broken = false;
 	protected ItemStack dowel = ItemStack.EMPTY;
 	protected ItemStack upgradeItem[] = {ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY,ItemStack.EMPTY,ItemStack.EMPTY};
@@ -259,10 +258,10 @@ public class TileEntityAlchemiter extends TileEntity
 		super.read(tagCompound);
 
 		if(tagCompound.hasKey("gristType"))
-			this.selectedGrist = GristType.getTypeFromString(tagCompound.getString("gristType"));
-		if(this.selectedGrist == null)
+			this.wildcardGrist = GristType.getTypeFromString(tagCompound.getString("gristType"));
+		if(this.wildcardGrist == null)
 		{
-			this.selectedGrist = GristType.BUILD;
+			this.wildcardGrist = GristType.BUILD;
 		}
 		
 		this.upgraded = tagCompound.getBoolean("upgraded");
@@ -286,7 +285,7 @@ public class TileEntityAlchemiter extends TileEntity
 	{
 		super.write(tagCompound);
 
-		tagCompound.setString("gristType", selectedGrist.getRegistryName().toString());
+		tagCompound.setString("gristType", wildcardGrist.getRegistryName().toString());
 		tagCompound.setBoolean("upgraded", upgraded);
 		tagCompound.setBoolean("broken", isBroken());
 		
@@ -441,7 +440,7 @@ public class TileEntityAlchemiter extends TileEntity
 		//if the item is a captcha card do other stuff
 		useSelectedType = stack.getItem() == MinestuckItems.CAPTCHA_CARD;
 		if (useSelectedType)
-			set = new GristSet(getSelectedGrist(), !world.isRemote ? MinestuckConfig.cardCost : MinestuckConfig.clientCardCost);
+			set = new GristSet(getWildcardGrist(), !world.isRemote ? MinestuckConfig.cardCost : MinestuckConfig.clientCardCost);
 		
 		if (set != null)
 		{
@@ -452,14 +451,17 @@ public class TileEntityAlchemiter extends TileEntity
 		return set;
 	}
 
-	public GristType getSelectedGrist()
+	public GristType getWildcardGrist()
 	{
-		return selectedGrist;
+		return wildcardGrist;
 	}
 	
-	public void setSelectedGrist(GristType selectedGrist)
+	public void setWildcardGrist(GristType wildcardGrist)
 	{
-		this.selectedGrist = selectedGrist;
+		if(this.wildcardGrist != wildcardGrist)
+		{
+			this.wildcardGrist = wildcardGrist;
+			this.markDirty();
+		}
 	}
-
 }

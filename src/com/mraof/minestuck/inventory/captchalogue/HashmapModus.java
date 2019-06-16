@@ -1,11 +1,11 @@
-package com.mraof.minestuck.inventory.captchalouge;
+package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.captchalouge.HashmapGuiHandler;
 import com.mraof.minestuck.client.gui.captchalouge.SylladexGuiHandler;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
-import com.mraof.minestuck.network.MinestuckChannelHandler;
+import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import net.minecraft.item.ItemStack;
@@ -257,7 +257,7 @@ public class HashmapModus extends Modus
 			handleNumber(number);
 		
 		MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, CaptchaDeckHandler.writeToNBT(this));
-		MinestuckChannelHandler.sendToPlayer(packet, player);
+		MinestuckPacketHandler.sendToPlayer(packet, player);
 		
 	}
 	

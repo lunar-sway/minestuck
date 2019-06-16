@@ -1,4 +1,4 @@
-package com.mraof.minestuck.inventory.captchalouge;
+package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.client.gui.captchalouge.SylladexGuiHandler;
 import net.minecraft.entity.player.EntityPlayer;

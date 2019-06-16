@@ -82,7 +82,7 @@ public class BlockGate extends Block
 	@Override
 	public void onEntityCollision(IBlockState state, World worldIn, BlockPos pos, Entity entityIn)
 	{
-		if(entityIn instanceof EntityPlayerMP && entityIn.getRidingEntity() == null && entityIn.getPassengers().isEmpty())
+		if(entityIn instanceof EntityPlayerMP && !entityIn.isPassenger() && !entityIn.isBeingRidden())
 		{
 			if(entityIn.timeUntilPortal != 0)
 			{

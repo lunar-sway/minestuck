@@ -1,95 +1,108 @@
 package com.mraof.minestuck.network;
 
-import io.netty.buffer.ByteBuf;
-
-import java.util.EnumSet;
-
-import net.minecraft.entity.player.EntityPlayer;
+import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.editmode.DeployList;
+import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.network.skaianet.SburbConnection;
+import com.mraof.minestuck.network.skaianet.SkaianetHandler;
+import com.mraof.minestuck.util.IdentifierHandler;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.management.UserListOpsEntry;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.network.skaianet.SburbConnection;
-import com.mraof.minestuck.network.skaianet.SburbHandler;
-import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.alchemy.AlchemyRecipes;
-import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.editmode.ServerEditHandler;
+import java.util.function.Supplier;
 
-public class ClientEditPacket extends MinestuckPacket
+public class ClientEditPacket
 {
 	
-	int username = -1;
+	int user = -1;
 	int target;
 	
-	@Override
-	public MinestuckPacket generatePacket(Object... dat)
+	public ClientEditPacket exit()
 	{
-		if(dat.length > 0)
+		return new ClientEditPacket();
+	}
+	
+	public ClientEditPacket activate(int user, int target)
+	{
+		ClientEditPacket packet = new ClientEditPacket();
+		packet.user = user;
+		packet.target = target;
+		return packet;
+	}
+	
+	public void encode(PacketBuffer buffer)
+	{
+		if(user != -1)
 		{
-			data.writeInt((Integer) dat[0]);
-			data.writeInt((Integer) dat[1]);
+			buffer.writeInt(user);
+			buffer.writeInt(target);
 		}
-		return this;
 	}
-
-	@Override
-	public MinestuckPacket consumePacket(ByteBuf data)
+	
+	public static ClientEditPacket decode(PacketBuffer buffer)
 	{
-		if(data.readableBytes() == 0)
-			return this;
-		username = data.readInt();
-		target = data.readInt();
-		return this;
+		ClientEditPacket packet = new ClientEditPacket();
+		if(buffer.readableBytes() > 0)
+		{
+			packet.user = buffer.readInt();
+			packet.target = buffer.readInt();
+		}
+		
+		return packet;
 	}
-
-	@Override
-	public void execute(EntityPlayer player)
+	
+	public void consume(Supplier<NetworkEvent.Context> ctx)
+	{
+		if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER)
+			ctx.get().enqueueWork(() -> this.execute(ctx.get().getSender()));
+		
+		ctx.get().setPacketHandled(true);
+	}
+	
+	public void execute(EntityPlayerMP player)
 	{
 		UserListOpsEntry opsEntry = player == null ? null : player.getServer().getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
 		if(!MinestuckConfig.giveItems)
 		{
-			if(username == -1)
+			if(user == -1)
 				ServerEditHandler.onPlayerExit(player);
-			else if(!MinestuckConfig.privateComputers || IdentifierHandler.encode(player).getId() == this.username || opsEntry != null && opsEntry.getPermissionLevel() >= 2)
-				ServerEditHandler.newServerEditor((EntityPlayerMP) player, IdentifierHandler.getById(username), IdentifierHandler.getById(target));
+			else if(!MinestuckConfig.privateComputers || IdentifierHandler.encode(player).getId() == this.user || opsEntry != null && opsEntry.getPermissionLevel() >= 2)
+			{
+				IdentifierHandler.PlayerIdentifier user = IdentifierHandler.getById(this.user);
+				IdentifierHandler.PlayerIdentifier target = IdentifierHandler.getById(this.target);
+				if(user != null && target != null)
+					ServerEditHandler.newServerEditor(player, user, target);
+			}
 			return;
 		}
 		
-		EntityPlayerMP playerMP = IdentifierHandler.getById(target).getPlayer();
-		
-		if(playerMP != null && (!MinestuckConfig.privateComputers || IdentifierHandler.getById(username).appliesTo(player)) || opsEntry != null && opsEntry.getPermissionLevel() >= 2)
+		IdentifierHandler.PlayerIdentifier user = IdentifierHandler.getById(this.user);
+		IdentifierHandler.PlayerIdentifier target = IdentifierHandler.getById(this.target);
+		if(user != null && target != null)
 		{
-			SburbConnection c = SkaianetHandler.getClientConnection(IdentifierHandler.getById(target));
-			if(c == null || c.getServerIdentifier().getId() != username || !(c.isMain() || SkaianetHandler.giveItems(IdentifierHandler.getById(target))))
-				return;
-			for(int i = 0; i < 5; i++)
-				if(i == 4)
+			EntityPlayerMP targetPlayer = target.getPlayer();
+			
+			if(targetPlayer != null && (!MinestuckConfig.privateComputers || user.appliesTo(player) || opsEntry != null && opsEntry.getPermissionLevel() >= 2))
+			{
+				SburbConnection c = SkaianetHandler.getClientConnection(target);
+				if(c == null || c.getServerIdentifier() != user || !(c.isMain() || SkaianetHandler.giveItems(target)))
+					return;
+				
+				for(DeployList.DeployEntry entry : DeployList.getItemList(c))
 				{
-					if(c.enteredGame())
-						continue;
-					ItemStack card = AlchemyRecipes.createCard(SburbHandler.getEntryItem(c.getClientIdentifier()), true);
-					if(!playerMP.inventory.hasItemStack(card))
-						c.givenItems()[i] = playerMP.inventory.addItemStackToInventory(card) || c.givenItems()[i];
-				} else
-				{
-					ItemStack machine = new ItemStack(MinestuckBlocks.sburbMachine, 1, i);
-					if(i == 1 && !c.enteredGame())
-						continue;
-					if(!playerMP.inventory.hasItemStack(machine))
-						c.givenItems()[i] = playerMP.inventory.addItemStackToInventory(machine) || c.givenItems()[i];
+					if(!c.givenItems()[entry.getOrdinal()])
+					{
+						ItemStack item = entry.getItemStack(c);
+						if(!targetPlayer.inventory.hasItemStack(item))
+							c.givenItems()[entry.getOrdinal()] = targetPlayer.inventory.addItemStackToInventory(item);
+					}
 				}
-			player.getServer().getPlayerList().syncPlayerInventory(playerMP);
+				player.getServer().getPlayerList().sendInventory(targetPlayer);
+			}
 		}
 	}
-
-	@Override
-	public EnumSet<Side> getSenderSide()
-	{
-		return EnumSet.of(Side.CLIENT);
-	}
-
 }

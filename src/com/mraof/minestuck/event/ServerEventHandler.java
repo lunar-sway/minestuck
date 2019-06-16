@@ -3,8 +3,8 @@ package com.mraof.minestuck.event;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.underling.EntityUnderling;
-import com.mraof.minestuck.inventory.captchalouge.HashmapModus;
-import com.mraof.minestuck.inventory.captchalouge.Modus;
+import com.mraof.minestuck.inventory.captchalogue.HashmapModus;
+import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.weapon.ItemPotionWeapon;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
@@ -119,7 +119,7 @@ public class ServerEventHandler
 					double modifier = MinestuckPlayerData.getData(player).echeladder.getUnderlingDamageModifier();
 					event.setAmount((float) (event.getAmount() * modifier));
 				}
-				boolean critical = cachedCooledAttackStrength > 0.9 && player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder() && !player.isInWater() && !player.isPotionActive(MobEffects.BLINDNESS) && player.getRidingEntity() == null;
+				boolean critical = cachedCooledAttackStrength > 0.9 && player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder() && !player.isInWater() && !player.isPotionActive(MobEffects.BLINDNESS) && !player.isPassenger() && !player.isBeingRidden();
 				if(!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof ItemPotionWeapon)
 				{
 					if(((ItemPotionWeapon) player.getHeldItemMainhand().getItem()).potionOnCrit())

@@ -1,27 +1,19 @@
 package com.mraof.minestuck.network;
 
-import io.netty.buffer.ByteBuf;
-
-import java.util.EnumSet;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.translation.I18n;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.relauncher.Side;
-
-import com.mraof.minestuck.client.gui.GuiTitleSelector;
 import com.mraof.minestuck.client.gui.playerStats.GuiEcheladder;
-import com.mraof.minestuck.network.skaianet.SburbHandler;
-import com.mraof.minestuck.util.ColorCollector;
-import com.mraof.minestuck.util.EnumAspect;
-import com.mraof.minestuck.util.EnumClass;
-import com.mraof.minestuck.util.MinestuckPlayerData;
-import com.mraof.minestuck.util.Title;
+import com.mraof.minestuck.util.*;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class PlayerDataPacket extends MinestuckPacket 
+import java.util.function.Supplier;
+
+public class PlayerDataPacket	//TODO Probably healthier if this is several different packets
 {
-	public static final byte COLOR = 0, TITLE = 1, ECHELADDER = 2, BOONDOLLAR = 3, TITLE_SELECT = 4;
+	private static final byte COLOR = 0, TITLE = 1, ECHELADDER = 2, BOONDOLLAR = 3;
+	private static final int NO_COLOR = -2;	//Can be removed if we remove -1 as a default color when colors are made to hexes
 	
 	public int type;
 	public int i1;
@@ -30,75 +22,108 @@ public class PlayerDataPacket extends MinestuckPacket
 	public float f;
 	public boolean b;
 	
-	@Override
-	public MinestuckPacket generatePacket(Object... dat) 
+	public static PlayerDataPacket color()
 	{
-		byte type = (Byte) dat[0];
-		data.writeByte(type);
-		if(type == COLOR)
-		{
-			if(dat.length > 1)
-				data.writeInt((Integer) dat[1]);
-		} else if(type == TITLE)
-		{
-			data.writeInt(EnumClass.getIntFromClass((EnumClass) dat[1]));
-			data.writeInt(EnumAspect.getIntFromAspect((EnumAspect) dat[2]));
-		} else if(type == ECHELADDER)
-		{
-			data.writeInt((Integer) dat[1]);
-			data.writeFloat((Float) dat[2]);
-			data.writeBoolean((Boolean) dat[3]);
-		} else if(type == BOONDOLLAR)
-		{
-			data.writeLong((Long) dat[1]);
-		} else if(type == TITLE_SELECT)
-		{
-			if(dat.length > 1)
-			{
-				data.writeInt(EnumClass.getIntFromClass((EnumClass) dat[1]));
-				data.writeInt(EnumAspect.getIntFromAspect((EnumAspect) dat[2]));
-			}
-		}
-		
-		return this;
-	}
-
-	@Override
-	public MinestuckPacket consumePacket(ByteBuf data) 
-	{
-		type = data.readByte();
-		if(type == COLOR)
-		{
-			if(data.readableBytes() > 0)
-				i1 = data.readInt();
-			else i1 = -2;
-		}
-		else if(type == TITLE)
-		{
-			i1 = data.readInt();
-			i2 = data.readInt();
-		} else if(type == ECHELADDER)
-		{
-			i1 = data.readInt();
-			f = data.readFloat();
-			b = data.readBoolean();
-		} else if(type == BOONDOLLAR)
-		{
-			l = data.readLong();
-		} else if(type == TITLE_SELECT)
-		{
-			if(data.readableBytes() > 0)
-			{
-				i1 = data.readInt();
-				i2 = data.readInt();
-			} else i1 = -1;
-		}
-		
-		return this;
+		return color(NO_COLOR);
 	}
 	
-	@Override
-	public void execute(EntityPlayer player)
+	public static PlayerDataPacket color(int color)
+	{
+		PlayerDataPacket packet = new PlayerDataPacket();
+		packet.type = COLOR;
+		packet.i1 = color;
+		
+		return packet;
+	}
+	
+	public static PlayerDataPacket title(EnumClass enumClass, EnumAspect enumAspect)
+	{
+		PlayerDataPacket packet = new PlayerDataPacket();
+		packet.type = TITLE;
+		packet.i1 = EnumClass.getIntFromClass(enumClass);
+		packet.i2 = EnumAspect.getIntFromAspect(enumAspect);
+		
+		return packet;
+	}
+	
+	public static PlayerDataPacket echeladder(int rung, float progress, boolean skipMessage)
+	{
+		PlayerDataPacket packet = new PlayerDataPacket();
+		packet.type = ECHELADDER;
+		packet.i1 = rung;
+		packet.f = progress;
+		packet.b = skipMessage;
+		
+		return packet;
+	}
+	
+	public static PlayerDataPacket boondollars(long count)
+	{
+		PlayerDataPacket packet = new PlayerDataPacket();
+		packet.type = BOONDOLLAR;
+		packet.l = count;
+		
+		return packet;
+	}
+	
+	public void encode(PacketBuffer buffer)
+	{
+		buffer.writeByte(type);
+		if(type == COLOR)
+		{
+			if(i1 != NO_COLOR)
+				buffer.writeInt(i1);
+		} else if(type == TITLE)
+		{
+			buffer.writeInt(i1);
+			buffer.writeInt(i2);
+		} else if(type == ECHELADDER)
+		{
+			buffer.writeInt(i1);
+			buffer.writeFloat(f);
+			buffer.writeBoolean(b);
+		} else if(type == BOONDOLLAR)
+		{
+			buffer.writeLong(l);
+		}
+	}
+	
+	public static PlayerDataPacket decode(PacketBuffer buffer)
+	{
+		PlayerDataPacket packet = new PlayerDataPacket();
+		packet.type = buffer.readByte();
+		if(packet.type == COLOR)
+		{
+			if(buffer.readableBytes() > 0)
+				packet.i1 = buffer.readInt();
+			else packet.i1 = NO_COLOR;
+		}
+		else if(packet.type == TITLE)
+		{
+			packet.i1 = buffer.readInt();
+			packet.i2 = buffer.readInt();
+		} else if(packet.type == ECHELADDER)
+		{
+			packet.i1 = buffer.readInt();
+			packet.f = buffer.readFloat();
+			packet.b = buffer.readBoolean();
+		} else if(packet.type == BOONDOLLAR)
+		{
+			packet.l = buffer.readLong();
+		}
+		
+		return packet;
+	}
+	
+	public void consume(Supplier<NetworkEvent.Context> ctx)
+	{
+		if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT)
+			ctx.get().enqueueWork(this::execute);
+		
+		ctx.get().setPacketHandled(true);
+	}
+	
+	public void execute()
 	{
 		if(type == COLOR)
 		{
@@ -119,32 +144,13 @@ public class PlayerDataPacket extends MinestuckPacket
 			if(!b)
 				for(prev++; prev <= i1; prev++)
 				{
-					String s = I18n.canTranslate("echeladder.rung"+prev) ? I18n.translateToLocal("echeladder.rung"+prev) : String.valueOf(prev+1);
-					player.sendMessage(new TextComponentString("You reached rung "+s+'!'));
+					TextComponentTranslation rung = new TextComponentTranslation("echeladder.rung"+prev);
+					Minecraft.getInstance().player.sendMessage(new TextComponentTranslation("You reached rung %s!", rung));	//TODO Translation key
 				}
 			else GuiEcheladder.animatedRung = GuiEcheladder.lastRung = i1;
 		} else if(type == BOONDOLLAR)
 		{
 			MinestuckPlayerData.boondollars = l;
-		} else if(type == TITLE_SELECT)
-		{
-			Title title;
-			if(i1 >= 0 && i1 < 12 && i2 >= 0 && i2 < 12)
-				title = new Title(EnumClass.getClassFromInt(i1), EnumAspect.getAspectFromInt(i2));
-			else title = null;
-			if(player.world.isRemote)
-			{
-				FMLClientHandler.instance().showGuiScreen(new GuiTitleSelector(title));
-			} else
-			{
-				SburbHandler.titleSelected(player, title);
-			}
 		}
-	}
-	
-	@Override
-	public EnumSet<Side> getSenderSide()
-	{
-		return EnumSet.of(Side.SERVER);
 	}
 }

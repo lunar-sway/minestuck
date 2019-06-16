@@ -3,16 +3,9 @@ package com.mraof.minestuck.event;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.GuiColorSelector;
-import com.mraof.minestuck.client.gui.playerStats.GuiDataChecker;
-import com.mraof.minestuck.client.gui.playerStats.GuiEcheladder;
-import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.inventory.ContainerConsortMerchant;
-import com.mraof.minestuck.inventory.ContainerEditmode;
-import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
-import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.util.ColorCollector;
-import com.mraof.minestuck.util.MinestuckPlayerData;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;

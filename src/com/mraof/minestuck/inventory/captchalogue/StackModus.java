@@ -1,4 +1,4 @@
-package com.mraof.minestuck.inventory.captchalouge;
+package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.captchalouge.StackGuiHandler;

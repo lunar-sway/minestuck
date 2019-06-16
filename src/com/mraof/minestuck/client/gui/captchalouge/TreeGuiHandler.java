@@ -2,10 +2,10 @@ package com.mraof.minestuck.client.gui.captchalouge;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.GuiButtonImpl;
-import com.mraof.minestuck.inventory.captchalouge.TreeModus;
-import com.mraof.minestuck.inventory.captchalouge.TreeModus.TreeNode;
+import com.mraof.minestuck.inventory.captchalogue.TreeModus;
+import com.mraof.minestuck.inventory.captchalogue.TreeModus.TreeNode;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
-import com.mraof.minestuck.network.MinestuckChannelHandler;
+import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.api.distmarker.Dist;
@@ -98,7 +98,7 @@ public class TreeGuiHandler extends SylladexGuiHandler
 		if(button == this.guiButton && MinestuckConfig.clientTreeAutobalance == 0)
 		{
 			modus.autobalance = !modus.autobalance;
-			MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.VALUE, (byte) 0, modus.autobalance ? 1 : 0)); 
+			MinestuckPacketHandler.sendToServer(MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.VALUE, (byte) 0, modus.autobalance ? 1 : 0));
 		}
 	}
 	

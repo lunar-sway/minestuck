@@ -1,12 +1,12 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mraof.minestuck.client.gui.GuiButtonImpl;
-import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
-import com.mraof.minestuck.inventory.captchalouge.ContainerCaptchaDeck;
-import com.mraof.minestuck.inventory.captchalouge.Modus;
+import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
+import com.mraof.minestuck.inventory.captchalogue.ContainerCaptchaDeck;
+import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.ItemCaptchaCard;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
-import com.mraof.minestuck.network.MinestuckChannelHandler;
+import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import net.minecraft.client.Minecraft;
@@ -98,7 +98,7 @@ public class GuiCaptchaDeck extends GuiPlayerStatsContainer implements GuiButton
 					return;
 				}
 			}
-			MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(Type.CAPTCHA, CaptchaDeckPacket.MODUS));
+			MinestuckPacketHandler.sendToServer(MinestuckPacket.makePacket(Type.CAPTCHA, CaptchaDeckPacket.MODUS));
 		}
 		else if(button == this.sylladexMap && CaptchaDeckHandler.clientSideModus != null)
 		{
@@ -113,7 +113,7 @@ public class GuiCaptchaDeck extends GuiPlayerStatsContainer implements GuiButton
 	public void confirmResult(boolean result, int id)
 	{
 		if(result && !container.inventory.getStackInSlot(0).isEmpty())
-			MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(Type.CAPTCHA, CaptchaDeckPacket.MODUS));
+			MinestuckPacketHandler.sendToServer(MinestuckPacket.makePacket(Type.CAPTCHA, CaptchaDeckPacket.MODUS));
 		mc.currentScreen = this;
 	}
 	

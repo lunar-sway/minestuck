@@ -1,22 +1,21 @@
 package com.mraof.minestuck.network;
 
-import io.netty.buffer.ByteBuf;
-
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.List;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
-
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.IdentifierHandler;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class SkaianetInfoPacket extends MinestuckPacket
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
+
+public class SkaianetInfoPacket
 {
 	public int playerId;
 	public boolean isClientResuming, isServerResuming;
@@ -24,96 +23,121 @@ public class SkaianetInfoPacket extends MinestuckPacket
 	public ArrayList<SburbConnection> connections;
 	public List<List<Integer>> landChains;
 	
-	@Override
-	public MinestuckPacket generatePacket(Object... dat)
+	public static SkaianetInfoPacket landChains(List<List<Integer>> landChains)
 	{
-		if(dat[0] instanceof List) //Land chain data
+		SkaianetInfoPacket packet = new SkaianetInfoPacket();
+		packet.landChains = landChains;
+		
+		return packet;
+	}
+	
+	public static SkaianetInfoPacket update(int playerId, boolean isClientResuming, boolean isServerResuming, HashMap<Integer, String> openServers, ArrayList<SburbConnection> connections)
+	{
+		SkaianetInfoPacket packet = new SkaianetInfoPacket();
+		packet.playerId = playerId;
+		packet.isClientResuming = isClientResuming;
+		packet.isServerResuming = isServerResuming;
+		packet.openServers = openServers;
+		packet.connections = connections;
+		
+		return packet;
+	}
+	
+	public static SkaianetInfoPacket request(int playerId)
+	{
+		SkaianetInfoPacket packet = new SkaianetInfoPacket();
+		packet.playerId = playerId;
+		
+		return packet;
+	}
+	
+	public void encode(PacketBuffer buffer)
+	{
+		if(landChains != null) //Land chain data
 		{
-			data.writeBoolean(true);
-			List<List<Integer>> chains = (List) dat[0];
-			for(List<Integer> list : chains)
+			buffer.writeBoolean(true);
+			for(List<Integer> list : landChains)
 			{
-				data.writeInt(list.size());
+				buffer.writeInt(list.size());
 				for(int i : list)
-					data.writeInt(i);
+					buffer.writeInt(i);
 			}
-			return this;
-		}
-		
-		data.writeBoolean(false);
-		data.writeInt((Integer)dat[0]);
-		
-		if(dat.length == 1)	//If request from client
-			return this;
-		
-		data.writeBoolean((Boolean)dat[1]);
-		data.writeBoolean((Boolean)dat[2]);
-		
-		int size = (Integer)dat[3];
-		data.writeInt(size);
-		for(int i = 0; i < size; i++)
+		} else
 		{
-			data.writeInt((Integer)dat[i*2+4]);
-			writeString(data,((String)dat[i*2+5]+'\n'));
-		}
-		
-		for(int i = size*2+4; i < dat.length; i++)
-			((SburbConnection)dat[i]).writeBytes(data);
-		
-		return this;
-	}
-
-	@Override
-	public MinestuckPacket consumePacket(ByteBuf data)
-	{
-		if(data.readBoolean())
-		{
-			landChains = new ArrayList<>();
-			while(data.readableBytes() > 0)
-			{
-				int l = data.readInt();
-				List<Integer> list = new ArrayList<>();
-				for(int k = 0; k < l; k++)
-					list.add(data.readInt());
-				landChains.add(list);
-			}
+			buffer.writeBoolean(false);
+			buffer.writeInt(playerId);
 			
-			return this;
+			if(connections != null)
+			{
+				
+				buffer.writeBoolean(isClientResuming);
+				buffer.writeBoolean(isServerResuming);
+				
+				buffer.writeInt(openServers.size());
+				for(Map.Entry<Integer, String> entry : openServers.entrySet())
+				{
+					buffer.writeInt(entry.getKey());
+					buffer.writeString(entry.getValue(), 16);
+				}
+				
+				for(SburbConnection connection : connections)
+					connection.toBuffer(buffer);
+			}
 		}
-		
-		this.playerId = data.readInt();
-		if(data.readableBytes() == 0)
-			return this;
-		isClientResuming = data.readBoolean();
-		isServerResuming = data.readBoolean();
-		int size = data.readInt();
-		openServers = new HashMap<>();
-		for(int i = 0; i < size; i++)
-			openServers.put(data.readInt(), readLine(data));
-		connections = new ArrayList<>();
-		try
-		{
-			while(data.readableBytes() > 0)
-				connections.add(SkaiaClient.getConnection(data));
-		} catch(IllegalStateException e)
-		{
-			e.printStackTrace();
-		}
-		
-		return this;
 	}
-
-	@Override
-	public void execute(EntityPlayer player)
+	
+	public static SkaianetInfoPacket decode(PacketBuffer buffer)
 	{
-		if(FMLCommonHandler.instance().getEffectiveSide().isClient())
-			SkaiaClient.consumePacket(this);
-		else SkaianetHandler.requestInfo(player, IdentifierHandler.getById(this.playerId));
+		SkaianetInfoPacket packet = new SkaianetInfoPacket();
+		if(buffer.readBoolean())
+		{
+			packet.landChains = new ArrayList<>();
+			while(buffer.readableBytes() > 0)
+			{
+				int size = buffer.readInt();
+				List<Integer> list = new ArrayList<>();
+				for(int k = 0; k < size; k++)
+					list.add(buffer.readInt());
+				packet.landChains.add(list);
+			}
+		} else
+		{
+			packet.playerId = buffer.readInt();
+			
+			if(buffer.readableBytes() > 0)
+			{
+				packet.isClientResuming = buffer.readBoolean();
+				packet.isServerResuming = buffer.readBoolean();
+				int size = buffer.readInt();
+				packet.openServers = new HashMap<>();
+				for(int i = 0; i < size; i++)
+					packet.openServers.put(buffer.readInt(), buffer.readString(16));
+				packet.connections = new ArrayList<>();
+				while(buffer.readableBytes() > 0)
+					packet.connections.add(SkaiaClient.getConnectionFromBuffer(buffer));
+			}
+		}
+		
+		return packet;
 	}
-
-	@Override
-	public EnumSet<Side> getSenderSide() {
-		return EnumSet.allOf(Side.class);
+	
+	public void consume(Supplier<NetworkEvent.Context> ctx)
+	{
+		if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER)
+			ctx.get().enqueueWork(() -> this.execute(ctx.get().getSender()));
+		else if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT)
+			ctx.get().enqueueWork(this::execute);
+		
+		ctx.get().setPacketHandled(true);
 	}
-
+	
+	public void execute()
+	{
+		SkaiaClient.consumePacket(this);
+	}
+	
+	public void execute(EntityPlayerMP player)
+	{
+		SkaianetHandler.requestInfo(player, IdentifierHandler.getById(this.playerId));
+	}
 }

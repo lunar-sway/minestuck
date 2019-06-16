@@ -53,6 +53,8 @@ public enum EnumAspect
 	 */
 	public static EnumAspect getAspectFromInt(int i)
 	{
+		if(i < 0 || i >= EnumAspect.values().length)
+			return null;
 		return EnumAspect.values()[i];
 	}
 	

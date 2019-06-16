@@ -55,7 +55,7 @@ public class BlockTransportalizer extends BlockMachine
 	@Override
 	public void onEntityCollision(IBlockState state, World worldIn, BlockPos pos, Entity entityIn)
 	{
-		if (!worldIn.isRemote && entityIn.getRidingEntity() == null && entityIn.getPassengers().isEmpty() && !worldIn.isRemote)
+		if (!worldIn.isRemote && !entityIn.isPassenger() && !entityIn.isBeingRidden())
 		{
 			if(entityIn.timeUntilPortal == 0)
 				((TileEntityTransportalizer) worldIn.getTileEntity(pos)).teleport(entityIn);

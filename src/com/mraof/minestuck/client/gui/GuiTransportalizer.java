@@ -1,6 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mraof.minestuck.network.MinestuckChannelHandler;
+import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.TransportalizerPacket;
 import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
@@ -71,7 +71,7 @@ public class GuiTransportalizer extends GuiScreen implements GuiButtonImpl.Butto
 			//Debug.print("Sending transportalizer packet with destination of " + this.destinationTextField.getText());
 			MinestuckPacket packet = new TransportalizerPacket();
 			packet.generatePacket(te.getPos().getX(), te.getPos().getY(), te.getPos().getZ(), this.destinationTextField.getText().toUpperCase());
-			MinestuckChannelHandler.sendToServer(packet);
+			MinestuckPacketHandler.sendToServer(packet);
 			this.mc.displayGuiScreen((GuiScreen)null);
 		}
 	}

@@ -1,63 +1,57 @@
 package com.mraof.minestuck.network;
 
-import io.netty.buffer.ByteBuf;
-
-import java.util.EnumSet;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.relauncher.Side;
-
 import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
-import com.mraof.minestuck.util.Debug;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class TransportalizerPacket extends MinestuckPacket
+import java.util.function.Supplier;
+
+public class TransportalizerPacket
 {
-	int x;
-	int y;
-	int z;
-	int dim;
+	BlockPos pos;
 	String destId;
 	
-	@Override
-	public MinestuckPacket generatePacket(Object... dat)
+	public TransportalizerPacket(BlockPos pos, String destId)
 	{
-		data.writeInt((Integer) dat[0]);
-		data.writeInt((Integer) dat[1]);
-		data.writeInt((Integer) dat[2]);
-		if(dat.length > 0)
-			data.writeBytes(((String) dat[3]).getBytes());
-		return this;
+		this.pos = pos;
+		this.destId = destId;
 	}
-
-	@Override
-	public MinestuckPacket consumePacket(ByteBuf data)
+	
+	public void encode(PacketBuffer buffer)
 	{
-		x = data.readInt();
-		y = data.readInt();
-		z = data.readInt();
-		byte[] destBytes = new byte[4];
-		//data.getBytes(0, destBytes, 0, 4);
-		for(int i = 0; i < 4; i++)
-			destBytes[i] = data.readByte();
-		Debug.debugf("%d, %d, %d, %d", destBytes[0], destBytes[1], destBytes[2], destBytes[3]);
-		destId = new String(destBytes);
-		return this;
+		buffer.writeBlockPos(pos);
+		buffer.writeString(destId, 4);
 	}
-
-	@Override
-	public void execute(EntityPlayer player)
+	
+	public static TransportalizerPacket decode(PacketBuffer buffer)
 	{
-		TileEntityTransportalizer te = (TileEntityTransportalizer) player.world.getTileEntity(new BlockPos(x, y, z));
-		if(te != null)
+		BlockPos pos = buffer.readBlockPos();
+		String destId = buffer.readString(4);
+		
+		return new TransportalizerPacket(pos, destId);
+	}
+	
+	public void consume(Supplier<NetworkEvent.Context> ctx)
+	{
+		if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER)
+			ctx.get().enqueueWork(() -> this.execute(ctx.get().getSender()));
+		
+		ctx.get().setPacketHandled(true);
+	}
+	
+	public void execute(EntityPlayerMP player)
+	{
+		if(player.getEntityWorld().isBlockLoaded(pos))
 		{
-			te.setDestId(destId);
+			TileEntity te = player.world.getTileEntity(pos);
+			if(te instanceof TileEntityTransportalizer)
+			{
+				((TileEntityTransportalizer) te).setDestId(destId);
+			}
 		}
-	}
-
-	@Override
-	public EnumSet<Side> getSenderSide()
-	{
-		return EnumSet.of(Side.CLIENT);
 	}
 }

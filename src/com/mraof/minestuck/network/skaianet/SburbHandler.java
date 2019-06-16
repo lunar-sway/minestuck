@@ -29,7 +29,7 @@ import com.mraof.minestuck.entity.underling.EntityOgre;
 import com.mraof.minestuck.entity.underling.EntityUnderling;
 import com.mraof.minestuck.item.ItemCruxiteArtifact;
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.network.MinestuckChannelHandler;
+import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.PlayerDataPacket;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
@@ -550,7 +550,7 @@ public class SburbHandler
 		return c == null ? -1 : MinestuckPlayerData.getData(c.getClientIdentifier()).color;
 	}
 	
-	public static SburbConnection getConnectionForDimension(int dim)
+	public static SburbConnection getConnectionForDimension(DimensionType dim)
 	{
 		for(SburbConnection c : SkaianetHandler.connections)
 			if(c.enteredGame && c.clientHomeLand == dim)
@@ -755,7 +755,7 @@ public class SburbHandler
 			return true;
 		
 		titleSelectionMap.put(player, new Vec3d(player.posX, player.posY, player.posZ));
-		MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(MinestuckPacket.Type.PLAYER_DATA, PlayerDataPacket.TITLE_SELECT), player);
+		MinestuckPacketHandler.sendToPlayer(MinestuckPacket.makePacket(MinestuckPacket.Type.PLAYER_DATA, PlayerDataPacket.TITLE_SELECT), player);
 		return false;
 	}
 	
@@ -782,13 +782,13 @@ public class SburbHandler
 				for(SburbConnection c : s.connections)
 					if(c.enteredGame() && title.equals(MinestuckPlayerData.getTitle(c.getClientIdentifier())))
 					{	//Title is already used
-						MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(MinestuckPacket.Type.PLAYER_DATA, PlayerDataPacket.TITLE_SELECT, title.getHeroClass(), title.getHeroAspect()), player);
+						MinestuckPacketHandler.sendToPlayer(MinestuckPacket.makePacket(MinestuckPacket.Type.PLAYER_DATA, PlayerDataPacket.TITLE_SELECT, title.getHeroClass(), title.getHeroAspect()), player);
 						return;
 					}
 				for(PredefineData data : s.predefinedPlayers.values())
 					if(title.equals(data.title))
 					{
-						MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(MinestuckPacket.Type.PLAYER_DATA, PlayerDataPacket.TITLE_SELECT, title.getHeroClass(), title.getHeroAspect()), player);
+						MinestuckPacketHandler.sendToPlayer(MinestuckPacket.makePacket(MinestuckPacket.Type.PLAYER_DATA, PlayerDataPacket.TITLE_SELECT, title.getHeroClass(), title.getHeroAspect()), player);
 						return;
 					}
 				

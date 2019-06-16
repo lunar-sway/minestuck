@@ -163,7 +163,7 @@ public class MinestuckConfig
 			
 			deployConfigurations = new boolean[1];
 			deployConfigurations[0] = config.get("General", "deployCard", false, "Determines if a card with a captcha card punched on it should be added to the deploy list or not.").setLanguageKey("minestuck.config.deployCard").setRequiresWorldRestart(true).getBoolean();
-			cardCost = config.get("General", "cardCost", 1, "An integer that determines how much a captchalouge card costs to alchemize").setMinValue(1).setLanguageKey("minestuck.config.cardCost").setRequiresWorldRestart(true).getInt();
+			cardCost = config.get("General", "cardCost", 1, "An integer that determines how much a captchalogue card costs to alchemize").setMinValue(1).setLanguageKey("minestuck.config.cardCost").setRequiresWorldRestart(true).getInt();
 			
 			globalSession = config.get("General", "globalSession", false, "Whenether all connetions should be put into a single session or not.").setRequiresWorldRestart(true).setLanguageKey("minestuck.config.globalSession").getBoolean();
 			generateCruxiteOre = config.get("General", "generateCruxiteOre", true, "If cruxite ore should be generated in the overworld.").setRequiresWorldRestart(true).setLanguageKey("minestuck.config.generateCruxiteOre").getBoolean();
@@ -194,7 +194,7 @@ public class MinestuckConfig
 		deployConfigurations = new boolean[2];
 		deployConfigurations[0] = config.get("General", "deployCard", false, "Determines if a card with a captcha card punched on it should be added to the deploy list or not.").setLanguageKey("minestuck.config.deployCard").setRequiresWorldRestart(true).getBoolean();
 		deployConfigurations[1] = config.get("General", "portableMachines", false, "Determines if the small portable machines should be included in the deploy list.").setLanguageKey("minestuck.config.portableMachines").setRequiresWorldRestart(true).getBoolean();
-		cardCost = config.get("General", "cardCost", 1, "An integer that determines how much a captchalouge card costs to alchemize").setMinValue(1).setLanguageKey("minestuck.config.cardCost").setRequiresWorldRestart(true).getInt();
+		cardCost = config.get("General", "cardCost", 1, "An integer that determines how much a captchalogue card costs to alchemize").setMinValue(1).setLanguageKey("minestuck.config.cardCost").setRequiresWorldRestart(true).getInt();
 
 		generateCruxiteOre = config.get("General", "generateCruxiteOre", true, "If cruxite ore should be generated in the overworld.").setRequiresWorldRestart(true).setLanguageKey("minestuck.config.generateCruxiteOre").getBoolean();
 		generateUraniumOre = config.get("General", "generateUraniumOre", false, "If uranium ore should be generated in the overworld.").setRequiresWorldRestart(true).setLanguageKey("minestuck.config.generateUraniumOre").getBoolean();
@@ -257,7 +257,7 @@ public class MinestuckConfig
 			if(specialCardRenderer && !GLContext.getCapabilities().GL_EXT_framebuffer_object)
 			{
 				specialCardRenderer = false;
-				Debug.warn("The FBO extension is not available and is required for the advanced rendering of captchalouge cards.");
+				Debug.warn("The FBO extension is not available and is required for the advanced rendering of captchalogue cards.");
 			}
 			//cardResolution = config.getInt("General", "cardResolution", 1, 0, 5, "The resolution of the item inside of a card. The width/height is computed by '8*2^x', where 'x' is this config value.");
 			loginColorSelector = config.get("General", "loginColorSelector", true, "Determines if the color selector should be displayed when entering a save file for the first time.").setLanguageKey("minestuck.config.loginColorSelector").getBoolean();

@@ -20,7 +20,7 @@ public class BlockDesertBush extends BlockDesertFlora
 	@Override
 	public IItemProvider getItemDropped(IBlockState state, World worldIn, BlockPos pos, int fortune)
 	{
-        return MinestuckItems.desertFruit;
+        return MinestuckItems.DESERT_FRUIT;
     }
 	
 	@Override

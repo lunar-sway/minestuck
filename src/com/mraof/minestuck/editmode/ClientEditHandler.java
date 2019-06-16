@@ -4,7 +4,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.network.MinestuckChannelHandler;
+import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.util.*;
@@ -64,7 +64,7 @@ public class ClientEditHandler {
 	public static void onKeyPressed()
 	{
 		MinestuckPacket packet = MinestuckPacket.makePacket(Type.CLIENT_EDIT);
-		MinestuckChannelHandler.sendToServer(packet);
+		MinestuckPacketHandler.sendToServer(packet);
 	}
 	
 	public static void onClientPackage(String target, int posX, int posZ, boolean[] items, NBTTagCompound deployList)

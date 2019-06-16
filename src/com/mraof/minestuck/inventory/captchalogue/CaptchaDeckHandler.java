@@ -1,4 +1,4 @@
-package com.mraof.minestuck.inventory.captchalouge;
+package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
@@ -7,7 +7,7 @@ import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.item.ItemBoondollars;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
-import com.mraof.minestuck.network.MinestuckChannelHandler;
+import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.util.Debug;
@@ -202,11 +202,11 @@ public class CaptchaDeckHandler
 		if(modus != null)
 		{
 			MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, writeToNBT(modus));
-			MinestuckChannelHandler.sendToPlayer(packet, player);
+			MinestuckPacketHandler.sendToPlayer(packet, player);
 		}
 	}
 	
-	public static void captchalougeItem(EntityPlayerMP player)
+	public static void captchalogueItem(EntityPlayerMP player)
 	{
 		ItemStack stack = player.getHeldItemMainhand();
 		Modus modus = getModus(player);
@@ -252,12 +252,12 @@ public class CaptchaDeckHandler
 				else stack.shrink(1);
 			}
 			MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, writeToNBT(modus));
-			MinestuckChannelHandler.sendToPlayer(packet, player);
+			MinestuckPacketHandler.sendToPlayer(packet, player);
 		}
 		
 	}
 	
-	public static void captchalougeInventoryItem (EntityPlayerMP player, int slotIndex) {
+	public static void captchalogueInventoryItem (EntityPlayerMP player, int slotIndex) {
 		ItemStack stack;
 		Modus modus = getModus(player);
 		System.out.println("Raw Slot: " + slotIndex);
@@ -309,7 +309,7 @@ public class CaptchaDeckHandler
 					} else stack.shrink(1);
 				}
 				MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, writeToNBT(modus));
-				MinestuckChannelHandler.sendToPlayer(packet, player);
+				MinestuckPacketHandler.sendToPlayer(packet, player);
 			}
 		}
 		else {
@@ -358,7 +358,7 @@ public class CaptchaDeckHandler
 					} else stack.shrink(1);
 				}
 				MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, writeToNBT(modus));
-				MinestuckChannelHandler.sendToPlayer(packet, player);
+				MinestuckPacketHandler.sendToPlayer(packet, player);
 			}
 		}
 	}
@@ -402,7 +402,7 @@ public class CaptchaDeckHandler
 			}
 		}
 		MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, writeToNBT(modus));
-		MinestuckChannelHandler.sendToPlayer(packet, player);
+		MinestuckPacketHandler.sendToPlayer(packet, player);
 	}
 	
 	public static void dropSylladex(EntityPlayer player)
@@ -443,7 +443,7 @@ public class CaptchaDeckHandler
 		} else modus.initModus(null, size);
 		
 		MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, writeToNBT(getModus(player)));
-		MinestuckChannelHandler.sendToPlayer(packet, player);
+		MinestuckPacketHandler.sendToPlayer(packet, player);
 	}
 	
 	public static NBTTagCompound writeToNBT(Modus modus)

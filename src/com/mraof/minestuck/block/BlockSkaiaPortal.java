@@ -16,6 +16,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -54,7 +55,7 @@ public class BlockSkaiaPortal extends BlockContainer
 	@Override
 	public void onEntityCollision(IBlockState state, World worldIn, BlockPos pos, Entity entityIn)
 	{
-		if (entityIn.getRidingEntity() == null && entityIn.getPassengers().isEmpty() && !worldIn.isRemote && entityIn.timeUntilPortal == 0)
+		if (!entityIn.isPassenger() && !entityIn.isBeingRidden() && !worldIn.isRemote && entityIn.timeUntilPortal == 0)
 		{
 			TileEntitySkaiaPortal portal = (TileEntitySkaiaPortal) worldIn.getTileEntity(pos);
 			portal.teleportEntity(entityIn);
@@ -105,7 +106,7 @@ public class BlockSkaiaPortal extends BlockContainer
 //		return true;
 //	}
 	
-	public void setDestinationDimension(World world, int x, int y, int z, int destinationDimension) 
+	public void setDestinationDimension(World world, int x, int y, int z, DimensionType destinationDimension)
 	{
 		((TileEntitySkaiaPortal) world.getTileEntity(new BlockPos(x, y, z))).destination.dim = destinationDimension;
 	}

@@ -1,16 +1,12 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
-import java.time.temporal.ChronoField;
-import java.util.Calendar;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.inventory.ContainerEditmode;
-import com.mraof.minestuck.network.MinestuckChannelHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.MinestuckPacket.Type;
+import com.mraof.minestuck.network.EditmodeInventoryPacket;
+import com.mraof.minestuck.network.MinestuckPacketHandler;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
@@ -29,12 +25,14 @@ public class GuiInventoryEditmode extends GuiPlayerStatsContainer
 	private static final int leftArrowX = 7, rightArrowX = 151, arrowY = 23;
 	
 	public boolean more, less;
+	public ContainerEditmode inventoryEditmode;
 	
 	public GuiInventoryEditmode()
 	{
 		super(new ContainerEditmode(Minecraft.getInstance().player));
 		guiWidth = 176;
 		guiHeight = 98;
+		inventoryEditmode = (ContainerEditmode) this.inventorySlots;
 	}
 	
 	@Override
@@ -64,19 +62,19 @@ public class GuiInventoryEditmode extends GuiPlayerStatsContainer
 	{
 		if(ycor >= yOffset + arrowY && ycor < yOffset + arrowY + 18)
 		{
-			MinestuckPacket packet = null;
+			EditmodeInventoryPacket packet = null;
 			if(less && xcor >= xOffset + leftArrowX && xcor < xOffset + leftArrowX + 18)
 			{
 				mc.getSoundHandler().play(SimpleSound.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-				packet = MinestuckPacket.makePacket(Type.INVENTORY, 0, false);
+				packet = EditmodeInventoryPacket.scroll(false);
 			} else if(more && xcor >= xOffset + rightArrowX && xcor < xOffset + rightArrowX + 18)
 			{
 				mc.getSoundHandler().play(SimpleSound.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-				packet = MinestuckPacket.makePacket(Type.INVENTORY, 0, true);
+				packet = EditmodeInventoryPacket.scroll(true);
 			}
 			if(packet != null)
 			{
-				MinestuckChannelHandler.sendToServer(packet);
+				MinestuckPacketHandler.INSTANCE.sendToServer(packet);
 				return true;
 			}
 		}

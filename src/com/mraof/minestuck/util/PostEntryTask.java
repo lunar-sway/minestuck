@@ -2,8 +2,10 @@ package com.mraof.minestuck.util;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.dimension.DimensionType;
 
 import static com.mraof.minestuck.MinestuckConfig.artifactRange;
 
@@ -20,13 +22,13 @@ public class PostEntryTask
 	 */
 	private static final long MIN_TIME = 20;
 	
-	private final int dimension;
+	private final DimensionType dimension;
 	private final int x, y, z;
 	private final int entrySize;
 	private final byte entryType;	//Used if we add more ways for entry to happen
 	private int index;
 	
-	public PostEntryTask(int dimension, int xCoord, int yCoord, int zCoord, int entrySize, byte entryType)
+	public PostEntryTask(DimensionType dimension, int xCoord, int yCoord, int zCoord, int entrySize, byte entryType)
 	{
 		this.dimension = dimension;
 		this.x = xCoord;
@@ -39,20 +41,22 @@ public class PostEntryTask
 	
 	public PostEntryTask(NBTTagCompound nbt)
 	{
-		this(nbt.getInteger("dimension"), nbt.getInteger("x"), nbt.getInteger("y"), nbt.getInteger("z"), nbt.getInteger("entrySize"), nbt.getByte("entryType"));
-		this.index = nbt.getInteger("index");
+		this(DimensionType.byName(ResourceLocation.makeResourceLocation(nbt.getString("dimension"))), nbt.getInt("x"), nbt.getInt("y"), nbt.getInt("z"), nbt.getInt("entrySize"), nbt.getByte("entryType"));
+		this.index = nbt.getInt("index");
+		if(dimension == null)
+			Debug.warnf("Unable to load dimension type by name %s!", nbt.getString("dimension"));
 	}
 	
 	public NBTTagCompound toNBTTagCompound()
 	{
 		NBTTagCompound nbt = new NBTTagCompound();
-		nbt.setInteger("dimension", dimension);
-		nbt.setInteger("x", x);
-		nbt.setInteger("y", y);
-		nbt.setInteger("z", z);
-		nbt.setInteger("entrySize", entrySize);
+		nbt.setString("dimension", dimension.getRegistryName().toString());
+		nbt.setInt("x", x);
+		nbt.setInt("y", y);
+		nbt.setInt("z", z);
+		nbt.setInt("entrySize", entrySize);
 		nbt.setByte("entryType", entryType);
-		nbt.setInteger("index", index);
+		nbt.setInt("index", index);
 		
 		return nbt;
 	}
@@ -109,7 +113,7 @@ public class PostEntryTask
 		if(i >= index)
 		{
 			if(blockUpdate)
-				world.notifyNeighborsOfStateChange(pos, world.getBlockState(pos).getBlock(), true);
+				world.notifyNeighborsOfStateChange(pos, world.getBlockState(pos).getBlock());
 			world.checkLight(pos);
 			index++;
 		}

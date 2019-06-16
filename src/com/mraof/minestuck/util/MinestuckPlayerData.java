@@ -3,19 +3,18 @@ package com.mraof.minestuck.util;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.editmode.ClientEditHandler;
-import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
-import com.mraof.minestuck.inventory.captchalouge.Modus;
+import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
+import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.network.GristCachePacket;
-import com.mraof.minestuck.network.MinestuckChannelHandler;
+import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.PlayerDataPacket;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,29 +24,29 @@ public class MinestuckPlayerData
 
 	//Client sided
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static Title title;
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static int rung;
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static float rungProgress;
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static long boondollars;
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	static GristSet playerGrist;
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	static GristSet targetGrist;
 	static Map<PlayerIdentifier, PlayerData> dataMap = new HashMap<>();
 
 	public static void onPacketRecived(GristCachePacket packet)
 	{
-		if (packet.targetGrist)
+		if (packet.isEditmode)
 		{
-			targetGrist = packet.values;
+			targetGrist = packet.gristCache;
 		}
 		else
 		{
-			playerGrist = packet.values;
+			playerGrist = packet.gristCache;
 		}
 	}
 
@@ -152,7 +151,7 @@ public class MinestuckPlayerData
 		
 		EntityPlayer player = id.getPlayer();
 		if(player != null)
-			MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(MinestuckPacket.Type.PLAYER_DATA, PlayerDataPacket.BOONDOLLAR, data.boondollars), player);
+			MinestuckPacketHandler.sendToPlayer(MinestuckPacket.makePacket(MinestuckPacket.Type.PLAYER_DATA, PlayerDataPacket.BOONDOLLAR, data.boondollars), player);
 		return true;
 	}
 	

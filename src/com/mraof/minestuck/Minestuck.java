@@ -7,8 +7,7 @@ import com.mraof.minestuck.command.*;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.event.ServerEventHandler;
-import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
-import com.mraof.minestuck.modSupport.crafttweaker.CraftTweakerSupport;
+import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.tileentity.*;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.*;
@@ -31,7 +30,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import java.util.Random;
 
 import static com.mraof.minestuck.Minestuck.MOD_ID;
-import static com.mraof.minestuck.Minestuck.MOD_NAME;
 
 @Mod(MOD_ID)
 public class Minestuck
@@ -39,22 +37,16 @@ public class Minestuck
 	public static final String MOD_NAME = "Minestuck";
 	public static final String MOD_ID = "minestuck";
 	
-	/**
+	/*
 	 * True only if the minecraft application is client-sided 
 	 */
 	//public static boolean isClientRunning;
 	/**
 	 * True if the minecraft application is server-sided, or if there is an integrated server running
 	 */
-	//public static volatile boolean isServerRunning;
+	@Deprecated
+	public static volatile boolean isServerRunning;
 	
-	// The instance of your mod that Forge uses.
-	/*@Instance("minestuck")
-	public static Minestuck instance;
-	
-	@SidedProxy(clientSide = "com.mraof.minestuck.client.ClientProxy", serverSide = "com.mraof.minestuck.CommonProxy")
-	public static CommonProxy proxy;*/
-
 	public static long worldSeed = 0;	//TODO proper usage of seed when generating titles, land aspects, and land dimension data
 	
 	public Minestuck()
@@ -97,7 +89,7 @@ public class Minestuck
 	@SubscribeEvent
 	public void serverAboutToStart(FMLServerAboutToStartEvent event)
 	{
-		//isServerRunning = true;
+		isServerRunning = true;
 		TileEntityTransportalizer.transportalizers.clear();
 		DeployList.applyConfigValues(MinestuckConfig.deployConfigurations);
 	}
@@ -105,7 +97,7 @@ public class Minestuck
 	@SubscribeEvent
 	public void serverClosed(FMLServerStoppedEvent event)
 	{
-		//isServerRunning = !isClientRunning;
+		isServerRunning = false;
 		MinestuckPlayerTracker.dataCheckerPermission.clear();
 		IdentifierHandler.clear();
 	}

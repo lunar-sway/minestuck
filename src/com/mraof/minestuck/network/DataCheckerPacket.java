@@ -1,99 +1,111 @@
 package com.mraof.minestuck.network;
 
-import io.netty.buffer.ByteBuf;
+import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.client.gui.playerStats.GuiDataChecker;
+import com.mraof.minestuck.network.skaianet.SessionHandler;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.EnumSet;
+import java.util.function.Supplier;
 
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.client.gui.playerStats.GuiDataChecker;
-import com.mraof.minestuck.network.skaianet.SessionHandler;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fml.relauncher.Side;
-
-public class DataCheckerPacket extends MinestuckPacket
+public class DataCheckerPacket
 {
 	
 	public static int index = 0;
-	public static NBTTagCompound nbtData;
 	
 	/**
 	 * Used to avoid confusion when the client sends several requests during a short period
 	 */
 	public int packetIndex;
+	public NBTTagCompound nbtData;
 	
-	@Override
-	public MinestuckPacket generatePacket(Object... dat)
+	public static DataCheckerPacket request()
 	{
-		if(dat.length == 0)	//Cient request to server
-			data.writeByte(index = (index + 1) % 100);
-		else
+		DataCheckerPacket packet = new DataCheckerPacket();
+		index = (index + 1) % 100;
+		packet.packetIndex = index;
+		
+		return packet;
+	}
+	
+	public static DataCheckerPacket data(int index, NBTTagCompound nbtData)
+	{
+		DataCheckerPacket packet = new DataCheckerPacket();
+		packet.packetIndex = index;
+		packet.nbtData = nbtData;
+		
+		return packet;
+	}
+	
+	public void encode(PacketBuffer buffer)
+	{
+		buffer.writeInt(packetIndex);
+		if(nbtData != null)
 		{
-			data.writeByte((Integer) dat[0]);
-			
 			try
 			{
 				ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-				CompressedStreamTools.writeCompressed((NBTTagCompound)dat[1], bytes);
-				this.data.writeBytes(bytes.toByteArray());
+				CompressedStreamTools.writeCompressed(nbtData, bytes);
+				buffer.writeBytes(bytes.toByteArray());
 			}
 			catch (IOException e)
 			{
 				e.printStackTrace();
-				return null;
 			}
 		}
-		
-		return this;
 	}
 	
-	@Override
-	public MinestuckPacket consumePacket(ByteBuf data)
+	public static DataCheckerPacket decode(PacketBuffer buffer)
 	{
-		packetIndex = data.readByte();
+		DataCheckerPacket packet = new DataCheckerPacket();
+		packet.packetIndex = buffer.readInt();
 		
-		if(data.readableBytes() > 0)
+		if(buffer.readableBytes() > 0)
 		{
-			byte[] bytes = new byte[data.readableBytes()];
-			data.readBytes(bytes);
+			byte[] bytes = new byte[buffer.readableBytes()];
+			buffer.readBytes(bytes);
 			try
 			{
-				this.nbtData = CompressedStreamTools.readCompressed(new ByteArrayInputStream(bytes));
+				packet.nbtData = CompressedStreamTools.readCompressed(new ByteArrayInputStream(bytes));
 			}
 			catch(IOException e)
 			{
 				e.printStackTrace();
-				return null;
 			}
 		}
 		
-		return this;
+		return packet;
 	}
 	
-	@Override
-	public void execute(EntityPlayer player)
+	public void consume(Supplier<NetworkEvent.Context> ctx)
 	{
-		if(player.world.isRemote)
-		{
-			if(packetIndex == index)
-				GuiDataChecker.activeComponent = new GuiDataChecker.MainComponent(nbtData);
-		} else if(player instanceof EntityPlayerMP && MinestuckConfig.getDataCheckerPermissionFor((EntityPlayerMP) player))
+		if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER)
+			ctx.get().enqueueWork(() -> this.execute(ctx.get().getSender()));
+		else if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT)
+			ctx.get().enqueueWork(this::execute);
+		
+		ctx.get().setPacketHandled(true);
+	}
+	
+	public void execute()
+	{
+		if(packetIndex == index)
+			GuiDataChecker.activeComponent = new GuiDataChecker.MainComponent(nbtData);
+	}
+	
+	public void execute(EntityPlayerMP player)
+	{
+		if(MinestuckConfig.getDataCheckerPermissionFor(player))
 		{
 			NBTTagCompound data = SessionHandler.createDataTag(player.getServer());
-			MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.DATA_CHECKER, packetIndex, data), player);
+			MinestuckPacketHandler.INSTANCE.sendTo(DataCheckerPacket.data(packetIndex, data), player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
 		}
 	}
-	
-	@Override
-	public EnumSet<Side> getSenderSide()
-	{
-		return EnumSet.allOf(Side.class);
-	}
-	
 }

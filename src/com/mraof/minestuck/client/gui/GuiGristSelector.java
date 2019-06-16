@@ -1,6 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mraof.minestuck.network.MinestuckChannelHandler;
+import com.mraof.minestuck.network.GristWildcardPacket;
+import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.alchemy.GristType;
@@ -9,6 +10,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
@@ -112,16 +114,15 @@ public class GuiGristSelector extends GuiScreenMinestuck implements GuiButtonImp
 				int gristYOffset = yOffset + gristIconY + (gristDisplayYOffset * row - row);
 				if (isPointInRegion(gristXOffset, gristYOffset, 16, 16, xcor, ycor))
 				{
-					if(otherGui instanceof GuiMiniAlchemiter) {
-						((GuiMiniAlchemiter)otherGui).te.selectedGrist = type;
-					}else if(otherGui instanceof GuiAlchemiter) {
-						((GuiAlchemiter)otherGui).getAlchemiter().setSelectedGrist(type);
-					}
+					BlockPos pos;
+					if(otherGui instanceof GuiAlchemiter)
+						pos = ((GuiAlchemiter) otherGui).getAlchemiter().getPos();
+					else pos = ((GuiMiniAlchemiter) otherGui).te.getPos();
 					otherGui.width = this.width;
 					otherGui.height = this.height;
 					mc.currentScreen = otherGui;
-					MinestuckPacket packet = MinestuckPacket.makePacket(Type.MACHINE_STATE, type);
-					MinestuckChannelHandler.sendToServer(packet);
+					GristWildcardPacket packet = new GristWildcardPacket(pos, type);
+					MinestuckPacketHandler.INSTANCE.sendToServer(packet);
 					break;
 				}
 				offset++;

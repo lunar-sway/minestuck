@@ -13,11 +13,14 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.common.DimensionManager;
 
 import java.util.HashMap;
@@ -29,7 +32,7 @@ public class GateHandler
 	
 	public static final int gateHeight1 = 144, gateHeight2 = 192;
 	
-	static Map<Integer, BlockPos> gateData = new HashMap<Integer, BlockPos>();
+	static Map<DimensionType, BlockPos> gateData = new HashMap<>();
 	
 	public static void teleport(int gateId, DimensionType dim, EntityPlayerMP player)
 	{
@@ -38,9 +41,9 @@ public class GateHandler
 		
 		if(gateId == 1)
 		{
-			BlockPos pos = getGatePos(-1, dim);
+			BlockPos pos = getGatePos(player.server, -1, dim);
 			Random rand = player.world.rand;
-			BlockPos spawn = player.world.provider.getSpawnPoint();
+			BlockPos spawn = player.world.getDimension().getSpawnPoint();
 			if(pos != null)
 				do
 				{
@@ -54,8 +57,8 @@ public class GateHandler
 					
 					BlockPos placement = pos.add(x, 0, z);
 					
-					if(player.world.getBiomeForCoordsBody(placement) == BiomeMinestuck.mediumNormal)
-						location = new Location(player.world.getTopSolidOrLiquidBlock(placement), dim);
+					if(player.world.getBiomeBody(placement) == BiomeMinestuck.mediumNormal)
+						location = new Location(player.world.getHeight(Heightmap.Type.MOTION_BLOCKING, placement), dim);
 					
 				} while(location == null);	//TODO replace with a more friendly version without a chance of freezing the game
 			else Debug.errorf("Unexpected error: Couldn't find position for land gate for dimension %d.", dim);
@@ -69,24 +72,24 @@ public class GateHandler
 				
 				if(clientConnection != null && clientConnection.enteredGame() && MinestuckDimensionHandler.isLandDimension(clientConnection.getClientDimension()))
 				{
-					int clientDim = clientConnection.getClientDimension();
-					BlockPos gatePos = getGatePos(-1, clientDim);
-					WorldServer world = player.mcServer.getWorld(clientDim);
+					DimensionType clientDim = clientConnection.getClientDimension();
+					BlockPos gatePos = getGatePos(player.server, -1, clientDim);
+					WorldServer world = DimensionManager.getWorld(player.server, clientDim, false, true);
 					
 					if(gatePos == null)
 					{
 						findGatePlacement(world);
-						gatePos = getGatePos(-1, clientDim);
+						gatePos = getGatePos(player.server, -1, clientDim);
 						if(gatePos == null) {Debug.errorf("Unexpected error: Can't initiaize land gate placement for dimension %d!", clientDim); return;}
 					}
 					
 					if(gatePos.getY() == -1)
 					{
-						world.getChunkProvider().provideChunk(gatePos.getX() - 8 >> 4, gatePos.getZ() - 8 >> 4);
-						world.getChunkProvider().provideChunk(gatePos.getX() + 8 >> 4, gatePos.getZ() - 8 >> 4);
-						world.getChunkProvider().provideChunk(gatePos.getX() - 8 >> 4, gatePos.getZ() + 8 >> 4);
-						world.getChunkProvider().provideChunk(gatePos.getX() + 8 >> 4, gatePos.getZ() + 8 >> 4);
-						gatePos = getGatePos(-1, clientDim);
+						world.getChunkProvider().provideChunk(gatePos.getX() - 8 >> 4, gatePos.getZ() - 8 >> 4, true, true);
+						world.getChunkProvider().provideChunk(gatePos.getX() + 8 >> 4, gatePos.getZ() - 8 >> 4, true, true);
+						world.getChunkProvider().provideChunk(gatePos.getX() - 8 >> 4, gatePos.getZ() + 8 >> 4, true, true);
+						world.getChunkProvider().provideChunk(gatePos.getX() + 8 >> 4, gatePos.getZ() + 8 >> 4, true, true);
+						gatePos = getGatePos(player.server, -1, clientDim);
 						if(gatePos.getY() == -1) {Debug.errorf("Unexpected error: Gate didn't generate after loading chunks! Dim: %d, pos: %s", clientDim, gatePos); return;}
 					}
 					
@@ -103,8 +106,8 @@ public class GateHandler
 				
 				if(serverConnection != null && serverConnection.enteredGame() && MinestuckDimensionHandler.isLandDimension(serverConnection.getClientDimension()))	//Last shouldn't be necessary, but just in case something goes wrong elsewhere...
 				{
-					int serverDim = serverConnection.getClientDimension();
-					location = new Location(getGatePos(2, serverDim), serverDim);
+					DimensionType serverDim = serverConnection.getClientDimension();
+					location = new Location(getGatePos(player.server, 2, serverDim), serverDim);
 					
 				} else player.sendMessage(new TextComponentTranslation("message.gateMissingLand"));
 				
@@ -115,11 +118,11 @@ public class GateHandler
 		{
 			if(gateId != 1)
 			{
-				WorldServer world = player.mcServer.getWorld(location.dim);
+				WorldServer world = DimensionManager.getWorld(player.server, location.dim, false, true);
 				
 				IBlockState block = world.getBlockState(location.pos);
 				
-				if(block.getBlock() != MinestuckBlocks.gate)
+				if(block.getBlock() != MinestuckBlocks.GATE)
 				{
 					Debug.debugf("Can't find destination gate at %s. Probably broken.", location);
 					player.sendMessage(new TextComponentTranslation("message.gateDestroyed"));
@@ -133,11 +136,11 @@ public class GateHandler
 	
 	public static void findGatePlacement(World world)
 	{
-		int dim = world.provider.getDimension();
+		DimensionType dim = world.getDimension().getType();
 		if(MinestuckDimensionHandler.isLandDimension(dim) && !gateData.containsKey(dim))
 		{
-			BlockPos spawn = MinestuckDimensionHandler.getSpawn(dim);
-			Random rand = world.setRandomSeed(0, 0, 43839551^world.provider.getDimension());
+			BlockPos spawn = new BlockPos(0, -1, 0);
+			Random rand = new Random(world.getSeed()^43839551L^world.getDimension().getType().getId());
 			
 			BlockPos gatePos = null;
 			int tries = 0;
@@ -151,7 +154,7 @@ public class GateHandler
 				
 				BlockPos pos = new BlockPos(spawn.getX() + x, -1, spawn.getZ() + z);
 				
-				if(/*!world.getChunkProvider().chunkExists(pos.getX() >> 4, pos.getZ() >> 4) &&*/ world.provider.getBiomeProvider().areBiomesViable(pos.getX(), pos.getZ(), Math.max(20, 50 - tries), Lists.newArrayList(BiomeMinestuck.mediumNormal)))
+				if(/*!world.getChunkProvider().chunkExists(pos.getX() >> 4, pos.getZ() >> 4) &&*/ Lists.newArrayList(BiomeMinestuck.mediumNormal).containsAll(world.getChunkProvider().getChunkGenerator().getBiomeProvider().getBiomesInSquare(pos.getX(), pos.getZ(), Math.max(20, 50 - tries))))
 					gatePos = pos;
 				
 				tries++;
@@ -162,7 +165,7 @@ public class GateHandler
 		}
 	}
 	
-	public static BlockPos getGatePos(int gateId, int dim)
+	public static BlockPos getGatePos(MinecraftServer server, int gateId, DimensionType dim)
 	{
 		if(!MinestuckDimensionHandler.isLandDimension(dim))
 			return null;
@@ -171,13 +174,9 @@ public class GateHandler
 			return gateData.get(dim);
 		else if(gateId == 1 || gateId == 2)
 		{
-			World world = DimensionManager.getWorld(dim);
-			if(world == null) {
-				DimensionManager.initDimension(dim);
-				world = DimensionManager.getWorld(dim);
-			}
+			World world = DimensionManager.getWorld(server, dim, false, true);
 			
-			BlockPos spawn = world.provider.getSpawnPoint();
+			BlockPos spawn = world.getDimension().getSpawnPoint();
 			int y;
 			if(gateId == 1)
 				y = gateHeight1;
@@ -188,7 +187,7 @@ public class GateHandler
 		return null;
 	}
 	
-	public static void setDefiniteGatePos(int gateId, int dim, BlockPos newPos)
+	public static void setDefiniteGatePos(int gateId, DimensionType dim, BlockPos newPos)
 	{
 		if(gateId == -1)
 		{
@@ -206,18 +205,18 @@ public class GateHandler
 	
 	static void saveData(NBTTagList nbtList)
 	{
-		for(int i = 0; i < nbtList.tagCount(); i++)
+		for(int i = 0; i < nbtList.size(); i++)
 		{
-			NBTTagCompound nbt = nbtList.getCompoundTagAt(i);
+			NBTTagCompound nbt = nbtList.getCompound(i);
 			if(nbt.getString("type").equals("land"))
 			{
-				int dim = nbt.getInteger("dimID");
+				int dim = nbt.getInt("dimID");
 				if(gateData.containsKey(dim))
 				{
 					BlockPos gatePos = gateData.get(dim);
-					nbt.setInteger("gateX", gatePos.getX());
-					nbt.setInteger("gateY", gatePos.getY());
-					nbt.setInteger("gateZ", gatePos.getZ());
+					nbt.setInt("gateX", gatePos.getX());
+					nbt.setInt("gateY", gatePos.getY());
+					nbt.setInt("gateZ", gatePos.getZ());
 				}
 			}
 		}
@@ -225,14 +224,17 @@ public class GateHandler
 	
 	static void loadData(NBTTagList nbtList)
 	{
-		for(int i = 0; i < nbtList.tagCount(); i++)
+		for(int i = 0; i < nbtList.size(); i++)
 		{
-			NBTTagCompound nbt = nbtList.getCompoundTagAt(i);
+			NBTTagCompound nbt = nbtList.getCompound(i);
 			if(nbt.getString("type").equals("land") && nbt.hasKey("gateX"))
 			{
-				int dim = nbt.getInteger("dimID");
-				BlockPos pos = new BlockPos(nbt.getInteger("gateX"), nbt.getInteger("gateY"), nbt.getInteger("gateZ"));
-				gateData.put(dim, pos);
+				DimensionType dim = DimensionType.byName(ResourceLocation.makeResourceLocation(nbt.getString("dim")));
+				if(dim != null)
+				{
+					BlockPos pos = new BlockPos(nbt.getInt("gateX"), nbt.getInt("gateY"), nbt.getInt("gateZ"));
+					gateData.put(dim, pos);
+				} else Debug.warnf("Unable to load gate position for dimension %s. Could not find dimension by that name!", nbt.getString("dim"));
 			}
 		}
 	}

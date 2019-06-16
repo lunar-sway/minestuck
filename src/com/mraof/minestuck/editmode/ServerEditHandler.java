@@ -3,7 +3,7 @@ package com.mraof.minestuck.editmode;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.entity.EntityDecoy;
-import com.mraof.minestuck.network.MinestuckChannelHandler;
+import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
@@ -128,7 +128,7 @@ public class ServerEditHandler
 		decoy.markedForDespawn = true;
 		
 		MinestuckPacket packet = MinestuckPacket.makePacket(Type.SERVER_EDIT);
-		MinestuckChannelHandler.sendToPlayer(packet, player);
+		MinestuckPacketHandler.sendToPlayer(packet, player);
 		
 		if(damageSource != null && damageSource.getImmediateSource() != player)
 			player.attackEntityFrom(damageSource, damage);
@@ -159,7 +159,7 @@ public class ServerEditHandler
 			decoy.world.spawnEntity(decoy);
 			list.add(data);
 			MinestuckPacket packet = MinestuckPacket.makePacket(Type.SERVER_EDIT, computerTarget, c.centerX, c.centerZ, c.givenItems(), DeployList.getDeployListTag(c));
-			MinestuckChannelHandler.sendToPlayer(packet, player);
+			MinestuckPacketHandler.sendToPlayer(packet, player);
 			MinestuckPlayerTracker.updateGristCache(c.getClientIdentifier());
 		}
 	}
@@ -381,7 +381,7 @@ public class ServerEditHandler
 			if(event.isCanceled())	//If the event was cancelled server side and not client side, notify the client.
 			{
 				MinestuckPacket packet = MinestuckPacket.makePacket(Type.SERVER_EDIT, data.connection.givenItems());
-				MinestuckChannelHandler.sendToPlayer(packet, event.getPlayer());
+				MinestuckPacketHandler.sendToPlayer(packet, event.getPlayer());
 				return;
 			}
 			

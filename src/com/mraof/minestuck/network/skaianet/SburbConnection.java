@@ -1,16 +1,15 @@
 package com.mraof.minestuck.network.skaianet;
 
 import com.mraof.minestuck.editmode.DeployList;
-import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -97,17 +96,17 @@ public class SburbConnection
 	@OnlyIn(Dist.CLIENT)
 	public int getServerId() {return serverId;}
 	
-	public void writeBytes(ByteBuf data)
+	public void toBuffer(PacketBuffer buffer)
 	{
-		data.writeBoolean(isMain);
+		buffer.writeBoolean(isMain);
 		if(isMain){
-			data.writeBoolean(isActive);
-			data.writeBoolean(enteredGame);
+			buffer.writeBoolean(isActive);
+			buffer.writeBoolean(enteredGame);
 		}
-		data.writeInt(getClientIdentifier().getId());
-		MinestuckPacket.writeString(data, getClientIdentifier().getUsername()+"\n");
-		data.writeInt(getServerIdentifier().getId());
-		MinestuckPacket.writeString(data, getServerIdentifier().getUsername()+"\n");
+		buffer.writeInt(getClientIdentifier().getId());
+		buffer.writeString(getClientIdentifier().getUsername(), 16);
+		buffer.writeInt(getServerIdentifier().getId());
+		buffer.writeString(getServerIdentifier().getUsername(), 16);
 	}
 
 	NBTTagCompound write()
@@ -183,20 +182,8 @@ public class SburbConnection
 		}
 		if(enteredGame)
 		{
-			clientHomeLand = nbt.getInt("clientLand");	//TODO
-			if(MinestuckDimensionHandler.isLandDimension(clientHomeLand))
-			{
-				BlockPos spawn = MinestuckDimensionHandler.getSpawn(clientHomeLand);
-				if(spawn != null)
-				{
-					centerX = spawn.getX();
-					centerZ = spawn.getZ();
-				} else
-				{
-					Debug.errorf("While loading skaianet, the dimension %d was registered as a land dimension, but without having a spawn point. This should not happen!", clientHomeLand);
-					centerX = centerZ = 0;
-				}
-			} else
+			clientHomeLand = DimensionType.byName(new ResourceLocation(nbt.getString("clientLand")));	//TODO add robustness in the case that the dimension type no longer exists?
+			if(!MinestuckDimensionHandler.isLandDimension(clientHomeLand))
 			{
 				Debug.errorf("The connection between %s and %s had a home dimension %d that isn't a land dimension. For safety measures, the connection will be loaded as if the player had not yet entered.", getClientIdentifier().getUsername(), getServerIdentifier().getUsername(), clientHomeLand);
 				enteredGame = false;

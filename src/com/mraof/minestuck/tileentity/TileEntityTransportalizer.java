@@ -3,7 +3,6 @@ package com.mraof.minestuck.tileentity;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Location;
-import com.mraof.minestuck.util.Teleport;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -11,19 +10,20 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.common.util.ITeleporter;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 
-public class TileEntityTransportalizer extends TileEntity implements ITickable
+public class TileEntityTransportalizer extends TileEntity implements ITickable, ITeleporter
 {
 	public static HashMap<String, Location> transportalizers = new HashMap<String, Location>();
 	private static Random rand = new Random();
@@ -150,9 +150,16 @@ public class TileEntityTransportalizer extends TileEntity implements ITickable
 				return;
 			}
 			
-			Teleport.teleportEntity(entity, location.dim, null, destTransportalizer.pos.getX() + 0.5, destTransportalizer.pos.getY() + 0.6, destTransportalizer.pos.getZ() + 0.5);
-			entity.timeUntilPortal = entity.getPortalCooldown();
+			entity = entity.changeDimension(location.dim, destTransportalizer);
+			if(entity != null)
+				entity.timeUntilPortal = entity.getPortalCooldown();
 		}
+	}
+	
+	@Override
+	public void placeEntity(World world, Entity entity, float yaw)
+	{
+		entity.setPosition(this.getPos().getX() + 0.5, this.getPos().getY() + 0.6, this.getPos().getZ() + 0.5);
 	}
 	
 	public static void saveTransportalizers(NBTTagCompound compound)

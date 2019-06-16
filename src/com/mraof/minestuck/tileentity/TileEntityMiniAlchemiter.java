@@ -25,7 +25,7 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 	public static final int INPUT = 0, OUTPUT = 1;
 	private int ticks_since_update = 0;
 	public IdentifierHandler.PlayerIdentifier owner;
-	public GristType selectedGrist = GristType.BUILD;
+	private GristType wildcardGrist = GristType.BUILD;
 	
 	public TileEntityMiniAlchemiter()
 	{
@@ -67,7 +67,7 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 			}
 			GristSet cost = AlchemyCostRegistry.getGristConversion(newItem);
 			if(newItem.getItem() == MinestuckItems.CAPTCHA_CARD)
-				cost = new GristSet(selectedGrist, MinestuckConfig.cardCost);
+				cost = new GristSet(wildcardGrist, MinestuckConfig.cardCost);
 			
 			return GristHelper.canAfford(MinestuckPlayerData.getGristSet(this.owner), cost);
 		}
@@ -100,7 +100,7 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 		
 		GristSet cost = AlchemyCostRegistry.getGristConversion(newItem);
 		if (newItem.getItem() == MinestuckItems.CAPTCHA_CARD)
-			cost = new GristSet(selectedGrist, MinestuckConfig.cardCost);
+			cost = new GristSet(wildcardGrist, MinestuckConfig.cardCost);
 		GristHelper.decrease(owner, cost);
 		MinestuckPlayerTracker.updateGristCache(owner);
 	}
@@ -126,10 +126,10 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 	{
 		super.read(compound);
 		
-		this.selectedGrist = GristType.getTypeFromString(compound.getString("gristType"));
-		if(this.selectedGrist == null)
+		this.wildcardGrist = GristType.getTypeFromString(compound.getString("gristType"));
+		if(this.wildcardGrist == null)
 		{
-			this.selectedGrist = GristType.BUILD;
+			this.wildcardGrist = GristType.BUILD;
 		}
 		
 		if(IdentifierHandler.hasIdentifier(compound, "owner"))
@@ -139,7 +139,7 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 	@Override
 	public NBTTagCompound write(NBTTagCompound compound)
 	{
-		compound.setString("gristType", selectedGrist.getRegistryName().toString());
+		compound.setString("gristType", wildcardGrist.getRegistryName().toString());
 		
 		if(owner != null)
 			owner.saveToNBT(compound, "owner");
@@ -176,7 +176,7 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 			}
 			GristSet cost = AlchemyCostRegistry.getGristConversion(newItem);
 			if (newItem.getItem() == MinestuckItems.CAPTCHA_CARD)
-				cost = new GristSet(selectedGrist, MinestuckConfig.cardCost);
+				cost = new GristSet(wildcardGrist, MinestuckConfig.cardCost);
 			// We need to run the check 16 times. Don't want to hammer the game with too many of these, so the comparators are only told to update every 20 ticks.
 			// Additionally, we need to check if the item in the slot is empty. Otherwise, it will attempt to check the cost for air, which cannot be alchemized anyway.
 			if (cost != null && !getStackInSlot(0).isEmpty())
@@ -211,5 +211,19 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 	public String getGuiID()
 	{
 		return GuiHandler.MINI_ALCHEMITER_ID.toString();
+	}
+	
+	public GristType getWildcardGrist()
+	{
+		return wildcardGrist;
+	}
+	
+	public void setWildcardGrist(GristType wildcardGrist)
+	{
+		if(this.wildcardGrist != wildcardGrist)
+		{
+			this.wildcardGrist = wildcardGrist;
+			markDirty();
+		}
 	}
 }
