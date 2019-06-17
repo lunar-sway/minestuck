@@ -4,8 +4,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.entity.EntityDecoy;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.MinestuckPacket.Type;
+import com.mraof.minestuck.network.ServerEditPacket;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
@@ -18,9 +17,7 @@ import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.BlockTrapDoor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
-import net.minecraft.command.EntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -31,12 +28,15 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.GameType;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.event.CommandEvent;
 import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
@@ -44,10 +44,10 @@ import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.eventhandler.Event.Result;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 
@@ -61,10 +61,10 @@ import java.util.*;
 public class ServerEditHandler
 {
 	
-	public static final ArrayList<String> commands = new ArrayList<String>(Arrays.asList(new String[]{"effect", "gamemode", "defaultgamemode", "enchant", "xp", "tp", "spreadplayers", "kill", "clear", "spawnpoint", "setworldspawn", "give"}));
+	public static final ArrayList<String> commands = new ArrayList<>(Arrays.asList(new String[]{"effect", "gamemode", "defaultgamemode", "enchant", "xp", "tp", "spreadplayers", "kill", "clear", "spawnpoint", "setworldspawn", "give"}));
 	public static final ServerEditHandler instance = new ServerEditHandler();
 	
-	static List<EditData> list = new ArrayList<EditData>();
+	static List<EditData> list = new ArrayList<>();
 	
 	/**
 	 * Called both when any player logged out and when a player pressed the exit button.
@@ -117,17 +117,17 @@ public class ServerEditHandler
 		player.setGameType(decoy.gameType);
 		
 		player.connection.setPlayerLocation(decoy.posX, decoy.posY, decoy.posZ, decoy.rotationYaw, decoy.rotationPitch);
-		player.capabilities.readCapabilitiesFromNBT(decoy.capabilities);
+		player.abilities.read(decoy.capabilities);
 		player.sendPlayerAbilities();
 		player.fallDistance = 0;
 		player.setHealth(decoy.getHealth());
-		player.getFoodStats().readNBT(decoy.getFoodStatsNBT());
-		data.connection.inventory = player.inventory.writeToNBT(new NBTTagList());
+		player.getFoodStats().read(decoy.getFoodStatsNBT());
+		data.connection.inventory = player.inventory.write(new NBTTagList());
 		player.inventory.copyInventory(decoy.inventory);
 		
 		decoy.markedForDespawn = true;
 		
-		MinestuckPacket packet = MinestuckPacket.makePacket(Type.SERVER_EDIT);
+		ServerEditPacket packet = ServerEditPacket.exit();
 		MinestuckPacketHandler.sendToPlayer(packet, player);
 		
 		if(damageSource != null && damageSource.getImmediateSource() != player)
@@ -136,7 +136,7 @@ public class ServerEditHandler
 	
 	public static void newServerEditor(EntityPlayerMP player, PlayerIdentifier computerOwner, PlayerIdentifier computerTarget)
 	{
-		if(player.isRiding())
+		if(player.getRidingEntity() == null)
 			return;	//Don't want to bother making the decoy able to ride anything right now.
 		SburbConnection c = SkaianetHandler.getClientConnection(computerTarget);
 		if(c != null && c.getServerIdentifier().equals(computerOwner) && getData(c) == null && getData(player) == null)
@@ -146,8 +146,8 @@ public class ServerEditHandler
 			EditData data = new EditData(decoy, player, c);
 			if(!c.enteredGame())
 			{
-				c.centerX = c.getClientData().getX();
-				c.centerZ = c.getClientData().getZ();
+				c.centerX = c.getClientData().getPos().getX();
+				c.centerZ = c.getClientData().getPos().getZ();
 			}
 			if(!setPlayerStats(player, c))
 			{
@@ -155,10 +155,10 @@ public class ServerEditHandler
 				return;
 			}
 			if(c.inventory != null)
-				player.inventory.readFromNBT(c.inventory);
+				player.inventory.read(c.inventory);
 			decoy.world.spawnEntity(decoy);
 			list.add(data);
-			MinestuckPacket packet = MinestuckPacket.makePacket(Type.SERVER_EDIT, computerTarget, c.centerX, c.centerZ, c.givenItems(), DeployList.getDeployListTag(c));
+			ServerEditPacket packet = ServerEditPacket.activate(computerTarget.getUsername(), c.centerX, c.centerZ, c.givenItems(), DeployList.getDeployListTag(c));
 			MinestuckPacketHandler.sendToPlayer(packet, player);
 			MinestuckPlayerTracker.updateGristCache(c.getClientIdentifier());
 		}
@@ -174,15 +174,15 @@ public class ServerEditHandler
 		{
 			posX = c.posX;
 			posZ = c.posZ;
-			posY = world.getTopSolidOrLiquidBlock(new BlockPos(posX, 0, posZ)).getY();
+			posY = world.getHeight(Heightmap.Type.MOTION_BLOCKING, new BlockPos(posX, 0, posZ)).getY();
 		} else
 		{
 			posX = c.centerX + 0.5;
-			posY = world.getTopSolidOrLiquidBlock(new BlockPos(c.centerX, 0, c.centerZ)).getY();
+			posY = world.getHeight(Heightmap.Type.MOTION_BLOCKING, new BlockPos(c.centerX, 0, c.centerZ)).getY();
 			posZ = c.centerZ + 0.5;
 		}
 		
-		if(!Teleport.teleportEntity(player, world.provider.getDimension(), null, posX, posY, posZ))
+		if(player.changeDimension(world.getDimension().getType(), new PositionTeleporter(posX, posY, posZ)) == null)
 			return false;
 		
 		player.closeScreen();
@@ -219,7 +219,7 @@ public class ServerEditHandler
 	
 	@SubscribeEvent
 	public void tickEnd(PlayerTickEvent event) {
-		if(event.phase != Phase.END || event.side.isClient())
+		if(event.phase != Phase.END || event.side == LogicalSide.CLIENT)
 			return;
 		EntityPlayerMP player = (EntityPlayerMP)event.player;
 		
@@ -266,7 +266,7 @@ public class ServerEditHandler
 			}
 			if(event.isCanceled())
 			{
-				event.getEntityItem().setDead();
+				event.getEntityItem().remove();
 				if(!inventory.getItemStack().isEmpty())
 					inventory.setItemStack(ItemStack.EMPTY);
 				else inventory.setInventorySlotContents(inventory.currentItem, ItemStack.EMPTY);
@@ -289,8 +289,8 @@ public class ServerEditHandler
 			EditData data = getData(event.getEntityPlayer());
 			Block block = event.getWorld().getBlockState(event.getPos()).getBlock();
 			ItemStack stack = event.getEntityPlayer().getHeldItemMainhand();
-			event.setUseBlock(stack.isEmpty() && (block instanceof BlockDoor || block instanceof BlockTrapDoor || block instanceof BlockFenceGate) ? Result.ALLOW : Result.DENY);
-			if(event.getUseBlock() == Result.ALLOW)
+			event.setUseBlock(stack.isEmpty() && (block instanceof BlockDoor || block instanceof BlockTrapDoor || block instanceof BlockFenceGate) ? Event.Result.ALLOW : Event.Result.DENY);
+			if(event.getUseBlock() == Event.Result.ALLOW)
 				return;
 			if(stack.isEmpty() || !isBlockItem(stack.getItem()) || event.getHand().equals(EnumHand.OFF_HAND))
 			{
@@ -325,8 +325,8 @@ public class ServerEditHandler
 			{
 				event.setCanceled(true);
 			}
-			if(event.getUseItem() == Result.DEFAULT)
-				event.setUseItem(Result.ALLOW);
+			if(event.getUseItem() == Event.Result.DEFAULT)
+				event.setUseItem(Event.Result.ALLOW);
 		}
 	}
 	
@@ -338,7 +338,7 @@ public class ServerEditHandler
 			EditData data = getData(event.getEntityPlayer());
 			IBlockState block = event.getWorld().getBlockState(event.getPos());
 			if(block.getBlockHardness(event.getWorld(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
-					|| (GristHelper.getGrist(data.connection.getClientIdentifier(), GristType.Build) <= 0 && !MinestuckConfig.gristRefund))
+					|| (GristHelper.getGrist(data.connection.getClientIdentifier(), GristType.BUILD) <= 0 && !MinestuckConfig.gristRefund))
 				event.setCanceled(true);
 		}
 	}
@@ -359,7 +359,7 @@ public class ServerEditHandler
 		{
 			EditData data = getData(event.getEntityPlayer());
 			if(!MinestuckConfig.gristRefund)
-				GristHelper.decrease(data.connection.getClientIdentifier(), new GristSet(GristType.Build,1));
+				GristHelper.decrease(data.connection.getClientIdentifier(), new GristSet(GristType.BUILD, 1));
 			else
 			{
 				IBlockState block = event.getWorld().getBlockState(event.getPos());
@@ -373,39 +373,43 @@ public class ServerEditHandler
 	}
 	
 	@SubscribeEvent(priority=EventPriority.LOW)
-	public void onBlockPlaced(BlockEvent.PlaceEvent event)
+	public void onBlockPlaced(BlockEvent.EntityPlaceEvent event)
 	{
-		if(getData(event.getPlayer()) != null)
+		if(event.getEntity() instanceof EntityPlayerMP)
 		{
-			EditData data = getData(event.getPlayer());
-			if(event.isCanceled())	//If the event was cancelled server side and not client side, notify the client.
+			EntityPlayerMP player = (EntityPlayerMP) event.getEntity();
+			if(getData(player) != null)
 			{
-				MinestuckPacket packet = MinestuckPacket.makePacket(Type.SERVER_EDIT, data.connection.givenItems());
-				MinestuckPacketHandler.sendToPlayer(packet, event.getPlayer());
-				return;
-			}
-			
-			ItemStack stack = event.getItemInHand();
-			SburbConnection c = data.connection;
-			DeployList.DeployEntry entry = DeployList.getEntryForItem(stack, c);
-			if(entry != null)
-			{
-				int index = DeployList.getOrdinal(entry.getName());
-				GristSet cost = c.givenItems()[index]
-						? entry.getSecondaryGristCost(c) : entry.getPrimaryGristCost(c);
-				c.givenItems()[index] = true;
-				if(!c.isMain())
-					SkaianetHandler.giveItems(c.getClientIdentifier());
-				if(!cost.isEmpty())
+				EditData data = getData(player);
+				if(event.isCanceled())    //If the event was cancelled server side and not client side, notify the client.
 				{
-					GristHelper.decrease(c.getClientIdentifier(), cost);
+					ServerEditPacket packet = ServerEditPacket.givenItems(data.connection.givenItems());
+					MinestuckPacketHandler.sendToPlayer(packet, player);
+					return;
+				}
+				
+				ItemStack stack = player.getHeldItemMainhand();	//TODO Make sure offhand isn't used in editmode?
+				SburbConnection c = data.connection;
+				DeployList.DeployEntry entry = DeployList.getEntryForItem(stack, c);
+				if(entry != null)
+				{
+					int index = DeployList.getOrdinal(entry.getName());
+					GristSet cost = c.givenItems()[index]
+							? entry.getSecondaryGristCost(c) : entry.getPrimaryGristCost(c);
+					c.givenItems()[index] = true;
+					if(!c.isMain())
+						SkaianetHandler.giveItems(c.getClientIdentifier());
+					if(!cost.isEmpty())
+					{
+						GristHelper.decrease(c.getClientIdentifier(), cost);
+						MinestuckPlayerTracker.updateGristCache(data.connection.getClientIdentifier());
+					}
+					player.inventory.mainInventory.set(player.inventory.currentItem, ItemStack.EMPTY);
+				} else
+				{
+					GristHelper.decrease(data.connection.getClientIdentifier(), AlchemyCostRegistry.getGristConversion(stack));
 					MinestuckPlayerTracker.updateGristCache(data.connection.getClientIdentifier());
 				}
-				event.getPlayer().inventory.mainInventory.set(event.getPlayer().inventory.currentItem, ItemStack.EMPTY);
-			} else
-			{
-				GristHelper.decrease(data.connection.getClientIdentifier(), AlchemyCostRegistry.getGristConversion(stack));
-				MinestuckPlayerTracker.updateGristCache(data.connection.getClientIdentifier());
 			}
 		}
 	}
@@ -425,12 +429,12 @@ public class ServerEditHandler
 		if(y < 0) {
 			y = 0;
 			player.motionY = 0;
-			player.capabilities.isFlying = true;
+			player.abilities.isFlying = true;
 		}
 		
 		double newX = player.posX;
 		double newZ = player.posZ;
-		double offset = player.getEntityBoundingBox().maxX-player.posX;
+		double offset = player.getBoundingBox().maxX-player.posX;
 		
 		if(range >= 1) {
 			if(player.posX > centerX+range-offset)
@@ -478,14 +482,14 @@ public class ServerEditHandler
 					player.inventory.mainInventory.set(i, ItemStack.EMPTY);
 					inventoryChanged = true;
 				}
-			} else if(stack.hasTagCompound())
+			} else if(stack.hasTag())
 			{
 				listSearch :
 				{
 					for(ItemStack deployStack : itemList)
 						if(ItemStack.areItemStacksEqual(deployStack, stack))
 							break listSearch;
-					stack.setTagCompound(null);
+					stack.setTag(null);
 					inventoryChanged = true;
 				}
 			}
@@ -497,7 +501,7 @@ public class ServerEditHandler
 		}
 		
 		if(inventoryChanged)
-			player.getServer().getPlayerList().syncPlayerInventory(player);
+			player.getServer().getPlayerList().sendInventory(player);
 	}
 	
 	public static void onServerStopping()
@@ -506,7 +510,7 @@ public class ServerEditHandler
 			reset(data);
 	}
 	
-	@SubscribeEvent(priority=EventPriority.LOWEST, receiveCanceled=false)
+	/*@SubscribeEvent(priority=EventPriority.LOWEST, receiveCanceled=false) TODO Do something about command security
 	public void onCommandEvent(CommandEvent event)
 	{
 		if(list.isEmpty())
@@ -569,7 +573,7 @@ public class ServerEditHandler
 		}
 		catch(CommandException e)
 		{}
-	}
+	}*/
 	
 	@SubscribeEvent
 	public void onEntityTeleport(EntityTravelToDimensionEvent event)
@@ -582,13 +586,13 @@ public class ServerEditHandler
 	
 	public static boolean isBlockItem(Item item)
 	{
-		return item instanceof ItemBlock || item instanceof ItemDoor || item instanceof ItemBlockSpecial;
+		return item instanceof ItemBlock;
 	}
 	
 	public static void cleanStackNBT(ItemStack stack, SburbConnection c)
 	{
 		if(!DeployList.containsItemStack(stack, c))
-			stack.setTagCompound(null);
+			stack.setTag(null);
 	}
 	
 	private static List<NBTTagCompound> recoverData = new ArrayList<NBTTagCompound>();
@@ -597,7 +601,7 @@ public class ServerEditHandler
 	{
 		NBTTagList nbtList = new NBTTagList();
 		for(NBTTagCompound recoverEntry : recoverData)
-			nbtList.appendTag(recoverEntry);
+			nbtList.add(recoverEntry);
 		
 		for(EditData data : list)
 		{
@@ -606,22 +610,22 @@ public class ServerEditHandler
 			nbtTag.setLong("UUID1", id.getLeastSignificantBits());
 			nbtTag.setLong("UUID2", id.getMostSignificantBits());
 			
-			nbtTag.setInteger("dim", data.decoy.dimension);
+			nbtTag.setString("dim", data.decoy.dimension.getRegistryName().toString());
 			nbtTag.setDouble("x", data.decoy.posX);
 			nbtTag.setDouble("y", data.decoy.posY);
 			nbtTag.setDouble("z", data.decoy.posZ);
 			nbtTag.setFloat("rotYaw", data.decoy.rotationYaw);
 			nbtTag.setFloat("rotPitch", data.decoy.rotationPitch);
 			
-			nbtTag.setInteger("gamemode", data.decoy.gameType.getID());
+			nbtTag.setInt("gamemode", data.decoy.gameType.getID());
 			nbtTag.setTag("capabilities", data.decoy.capabilities);
 			nbtTag.setFloat("health", data.decoy.getHealth());
 			nbtTag.setTag("food", data.decoy.getFoodStatsNBT());
-			nbtTag.setTag("inv", data.decoy.inventory.writeToNBT(new NBTTagList()));
+			nbtTag.setTag("inv", data.decoy.inventory.write(new NBTTagList()));
 			
-			data.connection.inventory = data.player.inventory.writeToNBT(new NBTTagList());
+			data.connection.inventory = data.player.inventory.write(new NBTTagList());
 			
-			nbtList.appendTag(nbtTag);
+			nbtList.add(nbtTag);
 		}
 		
 		nbt.setTag("editmodeRecover", nbtList);
@@ -630,11 +634,11 @@ public class ServerEditHandler
 	public static void loadData(NBTTagCompound nbt)
 	{
 		recoverData.clear();
-		if(nbt != null && nbt.hasKey("editmodeRecover", 9))
+		if(nbt != null && nbt.contains("editmodeRecover", 9))
 		{
-			NBTTagList nbtList = nbt.getTagList("editmodeRecover", 10);
-			for(int i = 0; i < nbtList.tagCount(); i++)
-				recoverData.add(nbtList.getCompoundTagAt(i));
+			NBTTagList nbtList = nbt.getList("editmodeRecover", 10);
+			for(int i = 0; i < nbtList.size(); i++)
+				recoverData.add(nbtList.getCompound(i));
 		}
 	}
 	
@@ -647,19 +651,21 @@ public class ServerEditHandler
 			NBTTagCompound nbt = iter.next();
 			if(id.getLeastSignificantBits() == nbt.getLong("UUID1") && id.getMostSignificantBits() == nbt.getLong("UUID2"))
 			{	//Recover player
-				if(player.dimension != nbt.getInteger("dim"))
-					if(!Teleport.teleportEntity(player, nbt.getInteger("dim"), null))
-						throw new IllegalStateException("Was not able to restore editmode player for "+player.getName()+"! Likely caused by mod collision.");
+				DimensionType type = DimensionType.byName(new ResourceLocation(nbt.getString("dim")));
+				if(type == null)
+					throw new IllegalStateException("Unable to restore editmode player for "+player.getName()+"! Could not read dimension "+nbt.getString("dim")+".");
+				else if(player.dimension != type && player.changeDimension(type, (world, entity, yaw) -> {}) == null)
+					throw new IllegalStateException("Was not able to restore editmode player for "+player.getName()+"! Likely caused by mod collision.");
 				
 				player.connection.setPlayerLocation(nbt.getDouble("x"), nbt.getDouble("y"), nbt.getDouble("z"), nbt.getFloat("rotYaw"), nbt.getFloat("rotPitch"));
-				player.setGameType(GameType.getByID(nbt.getInteger("gamemode")));
-				player.capabilities.readCapabilitiesFromNBT(nbt.getCompoundTag("capabilities"));
+				player.setGameType(GameType.getByID(nbt.getInt("gamemode")));
+				player.abilities.read(nbt.getCompound("capabilities"));
 				player.sendPlayerAbilities();
 				player.fallDistance = 0;
 				
 				player.setHealth(nbt.getFloat("health"));
-				player.getFoodStats().readNBT(nbt.getCompoundTag("food"));
-				player.inventory.readFromNBT(nbt.getTagList("inv", 10));
+				player.getFoodStats().read(nbt.getCompound("food"));
+				player.inventory.read(nbt.getList("inv", 10));
 				
 				iter.remove();
 				

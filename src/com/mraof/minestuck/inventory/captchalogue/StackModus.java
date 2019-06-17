@@ -5,9 +5,11 @@ import com.mraof.minestuck.client.gui.captchalouge.StackGuiHandler;
 import com.mraof.minestuck.client.gui.captchalouge.SylladexGuiHandler;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
@@ -28,11 +30,22 @@ public class StackModus extends Modus
 	@OnlyIn(Dist.CLIENT)
 	protected SylladexGuiHandler gui;
 	
+	public StackModus(LogicalSide side)
+	{
+		super(side);
+	}
+	
 	@Override
-	public void initModus(NonNullList<ItemStack> prev, int size)
+	public ResourceLocation getRegistryName()
+	{
+		return CaptchaDeckHandler.STACK;
+	}
+	
+	@Override
+	public void initModus(EntityPlayerMP player, NonNullList<ItemStack> prev, int size)
 	{
 		this.size = size;
-		list = new LinkedList<ItemStack>();
+		list = new LinkedList<>();
 		if(prev != null)
 		{
 			for(ItemStack stack : prev)
@@ -42,7 +55,7 @@ public class StackModus extends Modus
 		
 		if(player.world.isRemote)
 		{
-			items = NonNullList.<ItemStack>create();
+			items = NonNullList.create();
 			changed = prev != null;
 		}
 	}
@@ -59,7 +72,7 @@ public class StackModus extends Modus
 			else break;
 		if(side == LogicalSide.CLIENT)
 		{
-			items = NonNullList.<ItemStack>create();
+			items = NonNullList.create();
 			changed = true;
 		}
 	}
@@ -78,7 +91,7 @@ public class StackModus extends Modus
 	}
 	
 	@Override
-	public boolean putItemStack(ItemStack item)
+	public boolean putItemStack(EntityPlayerMP player, ItemStack item)
 	{
 		if(size == 0 || item.isEmpty())
 			return false;
@@ -103,7 +116,7 @@ public class StackModus extends Modus
 	{
 		if(side == LogicalSide.SERVER)	//Used only when replacing the modus
 		{
-			NonNullList<ItemStack> items = NonNullList.<ItemStack>create();
+			NonNullList<ItemStack> items = NonNullList.create();
 			fillList(items);
 			return items;
 		}
@@ -126,7 +139,7 @@ public class StackModus extends Modus
 	}
 	
 	@Override
-	public boolean increaseSize()
+	public boolean increaseSize(EntityPlayerMP player)
 	{
 		if(MinestuckConfig.modusMaxSize > 0 && size >= MinestuckConfig.modusMaxSize)
 			return false;
@@ -137,7 +150,7 @@ public class StackModus extends Modus
 	}
 
 	@Override
-	public ItemStack getItem(int id, boolean asCard)
+	public ItemStack getItem(EntityPlayerMP player, int id, boolean asCard)
 	{
 		if(id == CaptchaDeckHandler.EMPTY_CARD)
 		{

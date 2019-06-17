@@ -19,7 +19,7 @@ public class EditmodeInventoryPacket
 	public boolean b1, b2;
 	public List<ItemStack> inventory;
 	
-	public static EditmodeInventoryPacket update(boolean scrollLeft, boolean scrollRight, List<ItemStack> inventory)
+	public static EditmodeInventoryPacket update(List<ItemStack> inventory, boolean scrollLeft, boolean scrollRight)
 	{
 		EditmodeInventoryPacket packet = new EditmodeInventoryPacket();
 		packet.b1 = scrollLeft;

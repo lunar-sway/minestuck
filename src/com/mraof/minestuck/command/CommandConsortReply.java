@@ -1,56 +1,35 @@
 package com.mraof.minestuck.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mraof.minestuck.entity.consort.EntityConsort;
 
-import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandSource;
-import net.minecraft.command.ICommandSender;
+import net.minecraft.command.Commands;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.Vec3d;
 
-public class CommandConsortReply extends CommandBase
+public class CommandConsortReply
 {
 	public static void register(CommandDispatcher<CommandSource> dispatcher)
 	{
-	
+		dispatcher.register(Commands.literal("consortreply").then(Commands.argument("id", IntegerArgumentType.integer())).then(Commands.argument("path", StringArgumentType.word()))
+				.executes(context -> execute(context.getSource(), IntegerArgumentType.getInteger(context, "id"), StringArgumentType.getString(context, "path"))));
 	}
 	
-	@Override
-	public String getName()
+	public static int execute(CommandSource source, int id, String path) throws CommandSyntaxException
 	{
-		return "consortReply";
-	}
-	
-	@Override
-	public String getUsage(ICommandSender sender)
-	{
-		return "";
-	}
-	
-	@Override
-	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException
-	{
-		EntityPlayerMP player = getCommandSenderAsPlayer(sender);
-		if(args.length == 2)
+		EntityPlayerMP player = source.asPlayer();
+		Entity entity = player.world.getEntityByID(id);
+		if(entity instanceof EntityConsort && new Vec3d(player.posX, player.posY, player.posZ)
+				.squareDistanceTo(entity.posX, entity.posY, entity.posZ) < 100)
 		{
-			int id = parseInt(args[0]);
-			Entity entity = player.world.getEntityByID(id);
-			if(entity != null && entity instanceof EntityConsort && new Vec3d(player.posX, player.posY, player.posZ)
-					.squareDistanceTo(entity.posX, entity.posY, entity.posZ) < 100)
-			{
-				EntityConsort consort = (EntityConsort) entity;
-				consort.commandReply(player, args[1]);
-			}
+			EntityConsort consort = (EntityConsort) entity;
+			consort.commandReply(player, path);
 		}
-	}
-	
-	@Override
-	public boolean checkPermission(MinecraftServer server, ICommandSender sender)
-	{
-		return true;
+		return 1;
 	}
 }

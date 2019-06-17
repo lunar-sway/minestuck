@@ -19,13 +19,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class CommandGristSend extends CommandBase
+public class CommandGristSend
 {
+
 	public static void register(CommandDispatcher<CommandSource> dispatcher)
 	{
 	
 	}
-	
+	//TODO Grist set argument
+	/*
 	@Override
 	public String getName()
 	{
@@ -143,5 +145,5 @@ public class CommandGristSend extends CommandBase
 		{
 			return Collections.emptyList();
 		}
-	}
+	}*/
 }

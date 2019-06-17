@@ -5,9 +5,8 @@ import java.util.List;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.network.AlchemiterPacket;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.alchemy.GristSet;
@@ -121,7 +120,7 @@ public class GuiAlchemiter extends GuiScreen implements GuiButtonImpl.ButtonClic
 		if (button.id == 0)
 		{
 			
-			MinestuckPacket packet = MinestuckPacket.makePacket(Type.ALCHEMITER_PACKET, alchemiter, itemQuantity);
+			AlchemiterPacket packet = new AlchemiterPacket(alchemiter.getPos(), itemQuantity);
 			MinestuckPacketHandler.sendToServer(packet);
 			this.mc.displayGuiScreen(null);
 			

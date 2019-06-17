@@ -3,7 +3,7 @@ package com.mraof.minestuck.event;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.underling.EntityUnderling;
-import com.mraof.minestuck.inventory.captchalogue.HashmapModus;
+import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.weapon.ItemPotionWeapon;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
@@ -160,8 +160,8 @@ public class ServerEventHandler
 	public void onServerChat(ServerChatEvent event)
 	{
 		Modus modus = MinestuckPlayerData.getData(event.getPlayer()).modus;
-		if(modus instanceof HashmapModus)
-			((HashmapModus) modus).onChatMessage(event.getMessage());
+		if(modus instanceof HashMapModus)
+			((HashMapModus) modus).onChatMessage(event.getMessage());
 	}
 	
 	//This functionality uses an event to maintain compatibility with mod items having hoe functionality but not extending ItemHoe, like TiCon mattocks.

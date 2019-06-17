@@ -1,8 +1,11 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.Minestuck;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkRegistry;
+import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 
 /**
@@ -36,5 +39,20 @@ public class MinestuckPacketHandler
 		INSTANCE.registerMessage(17, GristWildcardPacket.class, GristWildcardPacket::encode, GristWildcardPacket::decode, GristWildcardPacket::consume);
 		INSTANCE.registerMessage(18, TransportalizerPacket.class, TransportalizerPacket::encode, TransportalizerPacket::decode, TransportalizerPacket::consume);
 		INSTANCE.registerMessage(19, EffectTogglePacket.class, EffectTogglePacket::encode, EffectTogglePacket::decode, EffectTogglePacket::consume);
+	}
+	
+	public static <MSG> void sendToPlayer(MSG message, EntityPlayerMP player)
+	{
+		INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), message);
+	}
+	
+	public static <MSG> void sendToAll(MSG message)
+	{
+		INSTANCE.send(PacketDistributor.ALL.noArg(), message);
+	}
+	
+	public static <MSG> void sendToServer(MSG message)
+	{
+		INSTANCE.sendToServer(message);
 	}
 }

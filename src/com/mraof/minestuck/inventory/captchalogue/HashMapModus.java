@@ -6,11 +6,12 @@ import com.mraof.minestuck.client.gui.captchalouge.SylladexGuiHandler;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -18,7 +19,7 @@ import net.minecraftforge.fml.LogicalSide;
 
 import java.util.Iterator;
 
-public class HashmapModus extends Modus
+public class HashMapModus extends Modus
 {
 	
 	protected NonNullList<ItemStack> list;
@@ -31,21 +32,31 @@ public class HashmapModus extends Modus
 	@OnlyIn(Dist.CLIENT)
 	protected SylladexGuiHandler gui;
 	
-	@Override
-	public void initModus(NonNullList<ItemStack> prev, int size)
+	public HashMapModus(LogicalSide side)
 	{
-		list = NonNullList.<ItemStack>create();
+		super(side);
+	}
+	
+	@Override
+	public ResourceLocation getRegistryName()
+	{
+		return CaptchaDeckHandler.HASH_MAP;
+	}
+	
+	@Override
+	public void initModus(EntityPlayerMP player, NonNullList<ItemStack> prev, int size)
+	{
+		list = NonNullList.create();
 		if(prev != null)
 		{
-			for(ItemStack stack : prev)
-				list.add(stack);
+			list.addAll(prev);
 		}
 		while(list.size() < size)
 			list.add(ItemStack.EMPTY);
 		
-		if(player.world.isRemote)
+		if(side == LogicalSide.CLIENT)
 		{
-			items = NonNullList.<ItemStack>create();
+			items = NonNullList.create();
 			changed = true;
 		}
 	}
@@ -55,7 +66,7 @@ public class HashmapModus extends Modus
 	{
 		int size = nbt.getInt("size");
 		ejectByChat = nbt.getBoolean("ejectByChat");
-		list = NonNullList.<ItemStack>create();
+		list = NonNullList.create();
 		
 		for(int i = 0; i < size; i++)
 			if(nbt.hasKey("item"+i))
@@ -64,7 +75,7 @@ public class HashmapModus extends Modus
 		if(side == LogicalSide.CLIENT)
 		{
 			if(items == null)
-				items = NonNullList.<ItemStack>create();
+				items = NonNullList.create();
 			changed = true;
 		}
 	}
@@ -74,10 +85,10 @@ public class HashmapModus extends Modus
 	{
 		nbt.setInt("size", list.size());
 		nbt.setBoolean("ejectByChat", ejectByChat);
-		Iterator<ItemStack> iter = list.iterator();
+		Iterator<ItemStack> iterator = list.iterator();
 		for(int i = 0; i < list.size(); i++)
 		{
-			ItemStack stack = iter.next();
+			ItemStack stack = iterator.next();
 			if(!stack.isEmpty())
 				nbt.setTag("item"+i, stack.write(new NBTTagCompound()));
 		}
@@ -85,7 +96,7 @@ public class HashmapModus extends Modus
 	}
 	
 	@Override
-	public boolean putItemStack(ItemStack item)
+	public boolean putItemStack(EntityPlayerMP player, ItemStack item)
 	{
 		if(list.size() == 0 || item.isEmpty())
 			return false;
@@ -120,7 +131,7 @@ public class HashmapModus extends Modus
 		list.set(index, item);
 		
 		if(ejectByChat && MinestuckConfig.hashmapChatModusSetting != 2 || MinestuckConfig.hashmapChatModusSetting == 1)
-			this.player.sendMessage(new TextComponentTranslation("message.hashmap", item.getTextComponent(), getSize(), index));
+			player.sendMessage(new TextComponentTranslation("message.hash_map", item.getTextComponent(), getSize(), index));
 		
 		return true;
 	}
@@ -130,7 +141,7 @@ public class HashmapModus extends Modus
 	{
 		if(side == LogicalSide.SERVER)	//Used only when replacing the modus
 		{
-			NonNullList<ItemStack> items = NonNullList.<ItemStack>create();
+			NonNullList<ItemStack> items = NonNullList.create();
 			fillList(items);
 			return items;
 		}
@@ -145,12 +156,11 @@ public class HashmapModus extends Modus
 	protected void fillList(NonNullList<ItemStack> items)
 	{
 		items.clear();
-		for(int i = 0; i < list.size(); i++)
-			items.add(list.get(i));
+		list.addAll(items);
 	}
 	
 	@Override
-	public boolean increaseSize()
+	public boolean increaseSize(EntityPlayerMP player)
 	{
 		if(MinestuckConfig.modusMaxSize > 0 && list.size() >= MinestuckConfig.modusMaxSize)
 			return false;
@@ -160,7 +170,7 @@ public class HashmapModus extends Modus
 	}
 	
 	@Override
-	public ItemStack getItem(int id, boolean asCard)
+	public ItemStack getItem(EntityPlayerMP player, int id, boolean asCard)
 	{
 		if(id == CaptchaDeckHandler.EMPTY_CARD)
 		{
@@ -211,7 +221,7 @@ public class HashmapModus extends Modus
 	}
 	
 	@Override
-	public void setValue(byte type, int value)
+	public void setValue(EntityPlayerMP player, byte type, int value)
 	{
 		ejectByChat = value > 0;
 	}
@@ -225,43 +235,43 @@ public class HashmapModus extends Modus
 		return gui;
 	}
 	
-	public void onChatMessage(String str)
+	public void onChatMessage(EntityPlayerMP player, String str)
 	{
 		if(!ejectByChat && MinestuckConfig.hashmapChatModusSetting != 1 || MinestuckConfig.hashmapChatModusSetting == 2)
 			return;
 		
 		boolean isPrevLetter = false;
-		String number = "";
+		StringBuilder number = new StringBuilder();
 		for(int i = 0; i < str.length(); i++)
 		{
 			char c = str.charAt(i);
 			if(Character.isLetter(c))
 				isPrevLetter = true;
-			else if(Character.isDigit(c) || (number.isEmpty() && c == '-'))
+			else if(Character.isDigit(c) || (number.length() == 0 && c == '-'))
 			{
 				if(!isPrevLetter)
-					number = number + c;
+					number.append(c);
 				continue;
 			} else
 			{
 				isPrevLetter = false;
 				
-				if(!number.isEmpty())
-					handleNumber(number);
+				if(number.length() > 0)
+					handleNumber(player, number.toString());
 			}
 			
-			number = "";
+			number = new StringBuilder();
 		}
 		
-		if(!number.isEmpty())
-			handleNumber(number);
+		if(number.length() > 0)
+			handleNumber(player, number.toString());
 		
-		MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, CaptchaDeckHandler.writeToNBT(this));
+		CaptchaDeckPacket packet = CaptchaDeckPacket.data(CaptchaDeckHandler.writeToNBT(this));
 		MinestuckPacketHandler.sendToPlayer(packet, player);
 		
 	}
 	
-	private void handleNumber(String str)
+	private void handleNumber(EntityPlayerMP player, String str)
 	{
 		int i;
 		
@@ -274,7 +284,7 @@ public class HashmapModus extends Modus
 		if(index < 0)
 			index += getSize();
 		
-		ItemStack stack = getItem(index, false);
+		ItemStack stack = getItem(player, index, false);
 		if(stack == null)
 			return;
 		
@@ -282,7 +292,7 @@ public class HashmapModus extends Modus
 			player.inventory.setInventorySlotContents(player.inventory.currentItem, stack);
 		else CaptchaDeckHandler.launchAnyItem(player, stack);
 		
-		this.player.sendMessage(new TextComponentTranslation("message.hashmap", i, getSize(), index, stack.getTextComponent()));
+		player.sendMessage(new TextComponentTranslation("message.hash_map", i, getSize(), index, stack.getTextComponent()));
 	}
 	
 }

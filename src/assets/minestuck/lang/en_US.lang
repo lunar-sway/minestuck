@@ -915,7 +915,7 @@ item.modusCard.stack.name=Stack Modus
 item.modusCard.queue.name=Queue Modus
 item.modusCard.queuestack.name=Queue-Stack Modus
 item.modusCard.tree.name=Tree Modus
-item.modusCard.hashmap.name=Hashmap Modus
+item.modusCard.hash_map.name=Hashmap Modus
 item.modusCard.set.name=Set Modus
 item.modusCard.set.tooltip=This modus is quite similar to the array modus. Surely this is what you were looking for?
 item.metalBoat.iron.name=Iron Boat
@@ -1266,7 +1266,7 @@ message.transportalizer.forbidden=Transportalizers have been disabled for this d
 message.transportalizer.forbiddenDest=Transportalizers have been disabled for the destination dimension.
 message.gateDestroyed=The destination gate seems to have been destroyed.
 message.gateMissingLand=The land this gate leads to does not exist yet!
-message.hashmap=[HASHMAP] %s %% %s -> %s
+message.hash_map=[HASHMAP] %s %% %s -> %s
 
 both=Both
 off=Off

@@ -20,7 +20,7 @@ import com.mraof.minestuck.util.PostEntryTask;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
 
-public class MinestuckSaveHandler 
+public class MinestuckSaveHandler	//TODO https://mcforge.readthedocs.io/en/1.13.x/datastorage/worldsaveddata/
 {
 	
 	@SubscribeEvent

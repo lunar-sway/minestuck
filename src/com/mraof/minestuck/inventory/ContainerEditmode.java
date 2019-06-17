@@ -2,9 +2,8 @@ package com.mraof.minestuck.inventory;
 
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.network.EditmodeInventoryPacket;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import net.minecraft.entity.player.EntityPlayer;
@@ -124,6 +123,9 @@ public class ContainerEditmode extends Container
 	
 	private void sendPacket()
 	{
+		if(!(player instanceof EntityPlayerMP))
+			throw new IllegalStateException("Can't send update packet to player! Found player object "+player+".");
+		
 		ArrayList<ItemStack> itemList = new ArrayList<ItemStack>();
 		for(int i = 0; i < 14; i++)
 		{
@@ -132,7 +134,8 @@ public class ContainerEditmode extends Container
 			this.inventoryItemStacks.set(i, itemList.get(i));
 		}
 		
-		MinestuckPacketHandler.sendToPlayer(MinestuckPacket.makePacket(Type.INVENTORY, 0, itemList, scroll > 0, scroll*2 + 14 < items.size()), player);
+		EditmodeInventoryPacket packet = EditmodeInventoryPacket.update(itemList, scroll > 0, scroll*2 + 14 < items.size());
+		MinestuckPacketHandler.sendToPlayer(packet, (EntityPlayerMP) player);
 	}
 	
 	private static class ToolbarSlot extends Slot

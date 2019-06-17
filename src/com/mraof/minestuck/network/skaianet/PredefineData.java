@@ -16,11 +16,11 @@ class PredefineData
 	
 	PredefineData read(NBTTagCompound nbt)
 	{
-		if(nbt.hasKey("titleAspect", 99))
+		if(nbt.contains("titleAspect", 99))
 			title = new Title(EnumClass.values()[nbt.getByte("titleClass")], EnumAspect.values()[nbt.getByte("titleAspect")]);
-		if(nbt.hasKey("landTerrain", 8))
+		if(nbt.contains("landTerrain", 8))
 			landTerrain = LandAspectRegistry.fromNameTerrain(nbt.getString("landTerrain"));
-		if(nbt.hasKey("landTitle", 8))
+		if(nbt.contains("landTitle", 8))
 			landTitle = LandAspectRegistry.fromNameTitle(nbt.getString("landTitle"));
 		
 		return this;

@@ -71,11 +71,11 @@ public class EntityAINearestAttackableTargetWithHeight extends EntityAITarget
 			}
 			else
 			{
-				List<Entity> list = this.taskOwner.world.getEntitiesWithinAABB(this.targetClass, this.taskOwner.getEntityBoundingBox().grow((double)this.targetDistance, this.targetHeightDistance, (double)this.targetDistance), targetPredicate);
+				List<Entity> list = this.taskOwner.world.getEntitiesWithinAABB(this.targetClass, this.taskOwner.getBoundingBox().grow((double)this.targetDistance, this.targetHeightDistance, (double)this.targetDistance), targetPredicate);
 				Collections.sort(list, this.theNearestAttackableTargetWithHeightSorter);
 				Iterator<Entity> iterator = list.iterator();
 				
-				while (iterator.hasNext())
+				while(iterator.hasNext())
 				{
 					Entity entity = iterator.next();
 					EntityLivingBase entityliving = (EntityLivingBase)entity;

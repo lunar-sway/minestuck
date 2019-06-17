@@ -3,6 +3,7 @@ package com.mraof.minestuck.entity.item;
 import java.util.EnumSet;
 import java.util.Set;
 
+import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.item.MinestuckItems;
 
 import net.minecraft.item.ItemStack;
@@ -15,12 +16,12 @@ public class EntityCrewPoster extends EntityHangingArt<EntityCrewPoster.Midnight
 	
 	public EntityCrewPoster(World worldIn)
 	{
-		super(worldIn);
+		super(ModEntityTypes.CREW_POSTER, worldIn);
 	}
 	
 	public EntityCrewPoster(World worldIn, BlockPos pos, EnumFacing facing)
 	{
-		super(worldIn, pos, facing);
+		super(ModEntityTypes.CREW_POSTER, worldIn, pos, facing);
 	}
 	
 	@Override
@@ -38,10 +39,10 @@ public class EntityCrewPoster extends EntityHangingArt<EntityCrewPoster.Midnight
 	@Override
 	public ItemStack getStackDropped()
 	{
-		return new ItemStack(MinestuckItems.crewPoster);
+		return new ItemStack(MinestuckItems.CREW_POSTER);
 	}
 	
-	public static enum MidnightCrewArt implements EntityHangingArt.IArt
+	public enum MidnightCrewArt implements EntityHangingArt.IArt
 	{
 		SPADE("Spade", 16, 16, 0, 0),
 		DIAMOND("Diamond", 16, 16, 16, 0),
@@ -54,7 +55,7 @@ public class EntityCrewPoster extends EntityHangingArt<EntityCrewPoster.Midnight
 		private final int sizeX, sizeY;
 		private final int offsetX, offsetY;
 		
-		private MidnightCrewArt(String title, int sizeX, int sizeY, int offsetX, int offsetY)
+		MidnightCrewArt(String title, int sizeX, int sizeY, int offsetX, int offsetY)
 		{
 			this.title = title;
 			this.sizeX = sizeX;

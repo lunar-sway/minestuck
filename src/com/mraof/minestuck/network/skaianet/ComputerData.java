@@ -5,7 +5,6 @@ import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.util.Location;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;

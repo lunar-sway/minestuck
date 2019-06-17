@@ -6,8 +6,8 @@ import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
 import com.mraof.minestuck.entity.EntityMinestuck;
 import com.mraof.minestuck.entity.consort.MessageType.SingleMessage;
 import com.mraof.minestuck.inventory.InventoryConsortMerchant;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.ai.*;
@@ -15,13 +15,15 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
+
+import javax.annotation.Nullable;
 
 public abstract class EntityConsort extends EntityMinestuck
 {
@@ -30,7 +32,7 @@ public abstract class EntityConsort extends EntityMinestuck
 	int messageTicksLeft;
 	NBTTagCompound messageData;
 	public EnumConsort.MerchantType merchantType = EnumConsort.MerchantType.NONE;
-	int homeDimension;
+	DimensionType homeDimension;
 	boolean visitedSkaia;
 	MessageType.DelayMessage updatingMessage; //Change to an interface/array if more message components need tick updates
 	public InventoryConsortMerchant stocks;
@@ -38,9 +40,9 @@ public abstract class EntityConsort extends EntityMinestuck
 	private float explosionRadius = 2.0f;
 	static private SingleMessage explosionMessage = new SingleMessage("immortalityHerb.3");
 	
-	public EntityConsort(World world)
+	public EntityConsort(EntityType<?> type, World world)
 	{
-		super(world);
+		super(type, world);
 		setSize(0.6F, 1.5F);
 		this.experienceValue = 1;
 	}
@@ -70,7 +72,7 @@ public abstract class EntityConsort extends EntityMinestuck
 	@Override
 	protected boolean processInteract(EntityPlayer player, EnumHand hand)
 	{
-		if(this.isEntityAlive() && !player.isSneaking() && eventTimer < 0)
+		if(this.isAlive() && !player.isSneaking() && eventTimer < 0)
 		{
 			if(!world.isRemote)
 			{
@@ -109,9 +111,9 @@ public abstract class EntityConsort extends EntityMinestuck
 	}
 	
 	@Override
-	public void onLivingUpdate()
+	public void livingTick()
 	{
-		super.onLivingUpdate();
+		super.livingTick();
 		if(world.isRemote)
 			return;
 		
@@ -150,113 +152,82 @@ public abstract class EntityConsort extends EntityMinestuck
 			boolean flag = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this);
 			this.dead = true;
 			this.world.createExplosion(this, this.posX, this.posY, this.posZ, (float)this.explosionRadius, flag);
-			this.setDead();
+			this.remove();
 		}
 	}
 	
 	@Override
-	public boolean getCanSpawnHere()
+	public void writeAdditional(NBTTagCompound compound)
 	{
-		return this.isValidLightLevel() && super.getCanSpawnHere();
-	}
-	
-	protected boolean isValidLightLevel()
-	{
-		int i = MathHelper.floor(this.posX);
-		int j = MathHelper.floor(this.getEntityBoundingBox().minY);
-		int k = MathHelper.floor(this.posZ);
-		BlockPos pos = new BlockPos(i, j, k);
-		
-		if(this.world.getLightFor(EnumSkyBlock.SKY, pos) < this.rand.nextInt(8))
-		{
-			return false;
-		} else
-		{
-			int l = this.world.getLightFromNeighbors(pos);
-			
-			if(this.world.isThundering())
-			{
-				int i1 = this.world.getSkylightSubtracted();
-				this.world.setSkylightSubtracted(10);
-				l = this.world.getLightFromNeighbors(pos);
-				this.world.setSkylightSubtracted(i1);
-			}
-			
-			return l >= this.rand.nextInt(8);
-		}
-	}
-	
-	@Override
-	public void writeEntityToNBT(NBTTagCompound compound)
-	{
-		super.writeEntityToNBT(compound);
+		super.writeAdditional(compound);
 		
 		if(message != null)
 		{
-			compound.setString("dialogue", message.getString());
-			compound.setInteger("messageTicks", messageTicksLeft);
-			compound.setTag("messageData", messageData);
+			compound.setString("Dialogue", message.getString());
+			compound.setInt("MessageTicks", messageTicksLeft);
+			compound.setTag("MessageData", messageData);
 		}
 		
-		compound.setInteger("type", merchantType.ordinal());
-		compound.setInteger("homeDim", homeDimension);
+		compound.setInt("Type", merchantType.ordinal());
+		compound.setString("HomeDim", DimensionType.func_212678_a(homeDimension).toString());
 		
 		if(merchantType != EnumConsort.MerchantType.NONE && stocks != null)
-			compound.setTag("stock", stocks.writeToNBT());
+			compound.setTag("Stock", stocks.writeToNBT());
 		
 		if(hasHome())
 		{
 			NBTTagCompound nbt = new NBTTagCompound();
 			BlockPos home = getHomePosition();
-			nbt.setInteger("homeX", home.getX());
-			nbt.setInteger("homeY", home.getY());
-			nbt.setInteger("homeZ", home.getZ());
-			nbt.setInteger("maxHomeDistance", (int) getMaximumHomeDistance());
-			compound.setTag("homePos", nbt);
+			nbt.setInt("HomeX", home.getX());
+			nbt.setInt("HomeY", home.getY());
+			nbt.setInt("HomeZ", home.getZ());
+			nbt.setInt("MaxHomeDistance", (int) getMaximumHomeDistance());
+			compound.setTag("HomePos", nbt);
 		}
 		
-		compound.setBoolean("skaia", visitedSkaia);
+		compound.setBoolean("Skaia", visitedSkaia);
 	}
 	
 	@Override
-	public void readEntityFromNBT(NBTTagCompound compound)
+	public void readAdditional(NBTTagCompound compound)
 	{
-		super.readEntityFromNBT(compound);
+		super.readAdditional(compound);
 		
-		if(compound.hasKey("dialogue", 8))
+		if(compound.contains("Dialogue", 8))
 		{
-			message = ConsortDialogue.getMessageFromString(compound.getString("dialogue"));
-			if(compound.hasKey("messageTicks", 99))
-				messageTicksLeft = compound.getInteger("messageTicks");
+			message = ConsortDialogue.getMessageFromString(compound.getString("Dialogue"));
+			if(compound.contains("MessageTicks", 99))
+				messageTicksLeft = compound.getInt("MessageTicks");
 			else messageTicksLeft = 24000;	//Used to make summoning with a specific message slightly easier
-			messageData = compound.getCompoundTag("messageData");
+			messageData = compound.getCompound("MessageData");
 		}
 		
-		merchantType = EnumConsort.MerchantType.values()[MathHelper.clamp(compound.getInteger("type"), 0, EnumConsort.MerchantType.values().length - 1)];
+		merchantType = EnumConsort.MerchantType.values()[MathHelper.clamp(compound.getInt("Type"), 0, EnumConsort.MerchantType.values().length - 1)];
 		
-		if(compound.hasKey("homeDim", 99))
-			homeDimension = compound.getInteger("homeDim");
-		else homeDimension = this.world.provider.getDimension();
+		if(compound.contains("HomeDim", 99))
+			homeDimension = DimensionType.byName(new ResourceLocation(compound.getString("HomeDim")));
+		else homeDimension = this.world.getDimension().getType();
 		
-		if(merchantType != EnumConsort.MerchantType.NONE && compound.hasKey("stock", 9))
+		if(merchantType != EnumConsort.MerchantType.NONE && compound.contains("Stock", 9))
 		{
-			stocks = new InventoryConsortMerchant(this, compound.getTagList("stock", 10));
+			stocks = new InventoryConsortMerchant(this, compound.getList("Stock", 10));
 		}
 		
-		if(compound.hasKey("homePos", 10))
+		if(compound.contains("HomePos", 10))
 		{
-			NBTTagCompound nbt = compound.getCompoundTag("homePos");
-			BlockPos pos = new BlockPos(nbt.getInteger("homeX"), nbt.getInteger("homeY"), nbt.getInteger("homeZ"));
-			setHomePosAndDistance(pos, nbt.getInteger("maxHomeDistance"));
+			NBTTagCompound nbt = compound.getCompound("HomePos");
+			BlockPos pos = new BlockPos(nbt.getInt("HomeX"), nbt.getInt("HomeY"), nbt.getInt("HomeZ"));
+			setHomePosAndDistance(pos, nbt.getInt("MaxHomeDistance"));
 		}
 		
-		visitedSkaia = compound.getBoolean("skaia");
+		visitedSkaia = compound.getBoolean("Skaia");
 		
 		applyAdditionalAITasks();
 	}
 	
+	@Nullable
 	@Override
-	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata)
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData entityLivingData, @Nullable NBTTagCompound itemNbt)
 	{
 		if(merchantType == EnumConsort.MerchantType.NONE && this.rand.nextInt(30) == 0)
 		{
@@ -265,16 +236,16 @@ public abstract class EntityConsort extends EntityMinestuck
 				setHomePosAndDistance(getHomePosition(), (int) (getMaximumHomeDistance()*0.4F));
 		}
 		
-		homeDimension = world.provider.getDimension();
+		homeDimension = world.getDimension().getType();
 		visitedSkaia = rand.nextFloat() < 0.1F;
 		
 		applyAdditionalAITasks();
 		
-		return super.onInitialSpawn(difficulty, livingdata);
+		return super.onInitialSpawn(difficulty, entityLivingData, itemNbt);
 	}
 	
 	@Override
-	protected boolean canDespawn()
+	public boolean canDespawn()
 	{
 		return false;
 	}
@@ -291,7 +262,7 @@ public abstract class EntityConsort extends EntityMinestuck
 	
 	public void commandReply(EntityPlayer player, String chain)
 	{
-		if(this.isEntityAlive() && !world.isRemote && message != null)
+		if(this.isAlive() && !world.isRemote && message != null)
 		{
 			ITextComponent text = message.getFromChain(this, player, chain);
 			if(text != null)
@@ -306,8 +277,8 @@ public abstract class EntityConsort extends EntityMinestuck
 	
 	public NBTTagCompound getMessageTagForPlayer(EntityPlayer player)
 	{
-		if(!messageData.hasKey(player.getCachedUniqueIdString(), 10))
+		if(!messageData.contains(player.getCachedUniqueIdString(), 10))
 			messageData.setTag(player.getCachedUniqueIdString(), new NBTTagCompound());
-		return messageData.getCompoundTag(player.getCachedUniqueIdString());
+		return messageData.getCompound(player.getCachedUniqueIdString());
 	}
 }

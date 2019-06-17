@@ -1,5 +1,6 @@
 package com.mraof.minestuck.entity.consort;
 
+import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.util.MinestuckSoundHandler;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
@@ -11,7 +12,7 @@ public class EntityNakagator extends EntityConsort
 {
 	public EntityNakagator(World world)
 	{
-		super(world);
+		super(ModEntityTypes.NAKAGATOR, world);
 	}
 	
 	protected SoundEvent getAmbientSound()

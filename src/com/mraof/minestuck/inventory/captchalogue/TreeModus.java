@@ -7,7 +7,6 @@ import com.mraof.minestuck.client.gui.captchalouge.TreeGuiHandler;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -16,6 +15,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.LogicalSide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,13 +25,24 @@ public class TreeModus extends Modus
 	
 	public TreeNode node;
 	public int size;
-	public boolean autobalance = true;
+	public boolean autoBalance = true;
 	
 	@OnlyIn(Dist.CLIENT)
 	protected TreeGuiHandler guiHandler;
 	
+	public TreeModus(LogicalSide side)
+	{
+		super(side);
+	}
+	
 	@Override
-	public void initModus(NonNullList<ItemStack> prev, int size)
+	public ResourceLocation getRegistryName()
+	{
+		return CaptchaDeckHandler.TREE;
+	}
+	
+	@Override
+	public void initModus(EntityPlayerMP player, NonNullList<ItemStack> prev, int size)
 	{
 		this.size = size;
 		node = null; //TODO Handle potential prev list instead
@@ -41,10 +52,10 @@ public class TreeModus extends Modus
 	public void readFromNBT(NBTTagCompound nbt)
 	{
 		size = nbt.getInt("size");
-		autobalance = nbt.getBoolean("autobalance");
+		autoBalance = nbt.getBoolean("auto_balance");
 		node = readNode(nbt, 0, 0);
-		if(player == null || !player.world.isRemote)
-			autobalance();
+		if(side == LogicalSide.SERVER)
+			autoBalance();
 	}
 	
 	private TreeNode readNode(NBTTagCompound nbt, int currentIndex, int level)
@@ -74,7 +85,7 @@ public class TreeModus extends Modus
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt)
 	{
 		nbt.setInt("size", size);
-		nbt.setBoolean("autobalance", autobalance);
+		nbt.setBoolean("auto_balance", autoBalance);
 		if(node != null)
 			saveNode(nbt, node, 0, 0);
 		
@@ -82,7 +93,7 @@ public class TreeModus extends Modus
 	}
 	
 	@Override
-	public boolean putItemStack(ItemStack item)
+	public boolean putItemStack(EntityPlayerMP player, ItemStack item)
 	{
 		int currentSize = node == null ? 0 : node.getSize();
 		if(item.isEmpty() || currentSize >= size)
@@ -90,7 +101,7 @@ public class TreeModus extends Modus
 		if(node == null)
 			node = new TreeNode(item);
 		else node.addNode(new TreeNode(item));
-		autobalance();
+		autoBalance();
 		return true;
 	}
 	
@@ -98,7 +109,7 @@ public class TreeModus extends Modus
 	public NonNullList<ItemStack> getItems()
 	{
 		if(node == null)
-			return NonNullList.<ItemStack>withSize(size, ItemStack.EMPTY);
+			return NonNullList.withSize(size, ItemStack.EMPTY);
 		NonNullList<ItemStack> list = node.getItems();
 		while(list.size() < size)
 			list.add(ItemStack.EMPTY);
@@ -112,7 +123,7 @@ public class TreeModus extends Modus
 	}
 	
 	@Override
-	public boolean increaseSize()
+	public boolean increaseSize(EntityPlayerMP player)
 	{
 		if(MinestuckConfig.modusMaxSize > 0 && size >= MinestuckConfig.modusMaxSize)
 			return false;
@@ -122,7 +133,7 @@ public class TreeModus extends Modus
 	}
 	
 	@Override
-	public ItemStack getItem(int id, boolean asCard)
+	public ItemStack getItem(EntityPlayerMP player, int id, boolean asCard)
 	{
 		if(id == CaptchaDeckHandler.EMPTY_CARD)
 		{
@@ -143,7 +154,7 @@ public class TreeModus extends Modus
 		}
 		
 		if(id == 0)
-			MinestuckCriteriaTriggers.TREE_MODUS_ROOT.trigger((EntityPlayerMP) player, node.getSize());
+			MinestuckCriteriaTriggers.TREE_MODUS_ROOT.trigger(player, node.getSize());
 		
 		ArrayList<ItemStack> list = node.removeItems(id);
 		if(list.isEmpty())
@@ -158,7 +169,7 @@ public class TreeModus extends Modus
 		}
 		if(id == 0)
 			node = null;
-		autobalance();
+		autoBalance();
 		return stack;
 	}
 	
@@ -175,15 +186,15 @@ public class TreeModus extends Modus
 	}
 	
 	@Override
-	public void setValue(byte type, int value)
+	public void setValue(EntityPlayerMP player, byte type, int value)
 	{
-		autobalance = value > 0;
-		if(autobalance)
+		autoBalance = value > 0;
+		if(autoBalance)
 		{
 			TreeNode node = this.node;
-			autobalance();
+			autoBalance();
 			if(node != this.node)
-				MinestuckPacketHandler.sendToPlayer(MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, CaptchaDeckHandler.writeToNBT(this)), player);
+				MinestuckPacketHandler.sendToPlayer(CaptchaDeckPacket.data(CaptchaDeckHandler.writeToNBT(this)), player);
 		}
 	}
 	
@@ -196,9 +207,9 @@ public class TreeModus extends Modus
 		return guiHandler;
 	}
 	
-	protected void autobalance()
+	protected void autoBalance()
 	{
-		if(!autobalance && MinestuckConfig.treeModusSetting != 1 || MinestuckConfig.treeModusSetting == 2)
+		if(!autoBalance && MinestuckConfig.treeModusSetting != 1 || MinestuckConfig.treeModusSetting == 2)
 			return;
 		
 		int minDepth = getDepth(node, true);
@@ -212,7 +223,7 @@ public class TreeModus extends Modus
 		}
 	}
 	
-	protected TreeNode createNode(List<ItemStack> list)	//Used only by autobalance
+	protected TreeNode createNode(List<ItemStack> list)	//Used only by auto balance
 	{
 		if(list.isEmpty())
 			return null;
@@ -281,6 +292,8 @@ public class TreeModus extends Modus
 		private String itemToString()
 		{
 			ResourceLocation name = stack.getItem().getRegistryName();
+			if(name == null)
+				throw new IllegalStateException("Item "+stack.getItem()+" does not have a registry name, but ended up in a tree modus!");
 			return name.getPath()+":"+name.getNamespace();	//Don't want the items to be sorted mod-wise.
 		}
 		
@@ -288,7 +301,7 @@ public class TreeModus extends Modus
 		{
 			if(index == 0)
 			{
-				ArrayList<ItemStack> list = new ArrayList<ItemStack>();
+				ArrayList<ItemStack> list = new ArrayList<>();
 				list.add(this.stack);
 				if(node1 != null)
 					list.addAll(node1.getItems());
@@ -320,7 +333,7 @@ public class TreeModus extends Modus
 		}
 		
 		public NonNullList<ItemStack> getItems()
-		{	//TODO Maybe something more efficient that repeatedly creating and discarding lists?
+		{	//TODO Maybe something more efficient than repeatedly creating and discarding lists?
 			NonNullList<ItemStack> list = NonNullList.create();
 			if(node1 != null)
 				list.addAll(node1.getItems());

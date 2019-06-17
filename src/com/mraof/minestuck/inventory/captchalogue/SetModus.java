@@ -5,9 +5,11 @@ import com.mraof.minestuck.client.gui.captchalouge.SetGuiHandler;
 import com.mraof.minestuck.client.gui.captchalouge.SylladexGuiHandler;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
@@ -27,11 +29,22 @@ public class SetModus extends Modus
 	@OnlyIn(Dist.CLIENT)
 	protected SylladexGuiHandler gui;
 	
+	public SetModus(LogicalSide side)
+	{
+		super(side);
+	}
+	
 	@Override
-	public void initModus(NonNullList<ItemStack> prev, int size)
+	public ResourceLocation getRegistryName()
+	{
+		return CaptchaDeckHandler.SET;
+	}
+	
+	@Override
+	public void initModus(EntityPlayerMP player, NonNullList<ItemStack> prev, int size)
 	{
 		this.size = size;
-		list = NonNullList.<ItemStack>create();
+		list = NonNullList.create();
 		/*if(prev != null)
 		{
 			for(ItemStack stack : prev)
@@ -39,9 +52,9 @@ public class SetModus extends Modus
 					list.add(stack);
 		}*/
 		
-		if(player.world.isRemote)
+		if(side == LogicalSide.CLIENT)
 		{
-			items = NonNullList.<ItemStack>create();
+			items = NonNullList.create();
 			changed = true;
 		}
 	}
@@ -50,7 +63,7 @@ public class SetModus extends Modus
 	public void readFromNBT(NBTTagCompound nbt)
 	{
 		size = nbt.getInt("size");
-		list = NonNullList.<ItemStack>create();
+		list = NonNullList.create();
 		
 		for(int i = 0; i < size; i++)
 			if(nbt.hasKey("item"+i))
@@ -78,7 +91,7 @@ public class SetModus extends Modus
 	}
 	
 	@Override
-	public boolean putItemStack(ItemStack item)
+	public boolean putItemStack(EntityPlayerMP player, ItemStack item)
 	{
 		if(size <= list.size() || item.isEmpty())
 			return false;
@@ -108,7 +121,7 @@ public class SetModus extends Modus
 	{
 		if(side == LogicalSide.SERVER)	//Used only when replacing the modus
 		{
-			NonNullList<ItemStack> items = NonNullList.<ItemStack>create();
+			NonNullList<ItemStack> items = NonNullList.create();
 			fillList(items);
 			return items;
 		}
@@ -131,7 +144,7 @@ public class SetModus extends Modus
 	}
 	
 	@Override
-	public boolean increaseSize()
+	public boolean increaseSize(EntityPlayerMP player)
 	{
 		if(MinestuckConfig.modusMaxSize > 0 && size >= MinestuckConfig.modusMaxSize)
 			return false;
@@ -142,7 +155,7 @@ public class SetModus extends Modus
 	}
 	
 	@Override
-	public ItemStack getItem(int id, boolean asCard)
+	public ItemStack getItem(EntityPlayerMP player, int id, boolean asCard)
 	{
 		if(id == CaptchaDeckHandler.EMPTY_CARD)
 		{

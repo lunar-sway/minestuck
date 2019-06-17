@@ -5,10 +5,8 @@ import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandSource;
-import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
@@ -16,14 +14,14 @@ import net.minecraft.util.text.TextComponentString;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommandLandDebug extends CommandBase
+public class CommandLandDebug
 {
 	public static void register(CommandDispatcher<CommandSource> dispatcher)
 	{
 	
 	}
 	
-	@Override
+	/*@Override
 	public String getName()
 	{
 		return "landDebug";
@@ -63,5 +61,5 @@ public class CommandLandDebug extends CommandBase
 		
 		SessionHandler.createDebugLandsChain(landspects, player);
 		sender.sendMessage(new TextComponentString("The chain has now been created."));
-	}
+	}*/
 }

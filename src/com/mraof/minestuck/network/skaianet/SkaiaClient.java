@@ -1,23 +1,21 @@
 package com.mraof.minestuck.network.skaianet;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiComputer;
-import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.MinestuckPacket.Type;
+import com.mraof.minestuck.network.SburbConnectClosedPacket;
+import com.mraof.minestuck.network.SburbConnectPacket;
 import com.mraof.minestuck.network.SkaianetInfoPacket;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.dimension.DimensionType;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.*;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class SkaiaClient
 {
 	
@@ -29,7 +27,7 @@ public class SkaiaClient
 	/**
 	 * A map used to track chains of lands, to be used by the skybox render
 	 */
-	private static Map<Integer, List<Integer>> landChainMap = new HashMap<>();
+	private static Map<DimensionType, List<DimensionType>> landChainMap = new HashMap<>();
 	private static TileEntityComputer te = null;
 	public static int playerId;	//The id that this player is expected to have.
 	
@@ -54,7 +52,7 @@ public class SkaiaClient
 		boolean b = openServers.get(computer.ownerId) != null;
 		if(!b)
 		{
-			MinestuckPacket packet = MinestuckPacket.makePacket(Type.SBURB_INFO, computer.ownerId);
+			SkaianetInfoPacket packet = SkaianetInfoPacket.request(computer.ownerId);
 			MinestuckPacketHandler.sendToServer(packet);
 			te = computer;
 		}
@@ -123,13 +121,13 @@ public class SkaiaClient
 	
 	public static void sendConnectRequest(TileEntityComputer te, int otherPlayer, boolean isClient)	//Used for both connect, open server and resume
 	{
-		MinestuckPacket packet = MinestuckPacket.makePacket(Type.SBURB_CONNECT, ComputerData.createData(te), otherPlayer, isClient);
+		SburbConnectPacket packet = new SburbConnectPacket(ComputerData.createData(te), otherPlayer, isClient);
 		MinestuckPacketHandler.sendToServer(packet);
 	}
 	
 	public static void sendCloseRequest(TileEntityComputer te, int otherPlayer, boolean isClient)
 	{
-		MinestuckPacket packet = MinestuckPacket.makePacket(Type.SBURB_CLOSE, te.ownerId, otherPlayer, isClient);
+		SburbConnectClosedPacket packet = new SburbConnectClosedPacket(te.ownerId, otherPlayer, isClient);
 		MinestuckPacketHandler.sendToServer(packet);
 	}
 	
@@ -158,8 +156,15 @@ public class SkaiaClient
 		{
 			landChainMap.clear();
 			for(List<Integer> list : data.landChains)
+			{
+				List<DimensionType> dimList = new ArrayList<>();
 				for(int i : list)
-					landChainMap.put(i, list);
+				{
+					DimensionType type = DimensionType.getById(i);
+					dimList.add(type);
+					landChainMap.put(type, dimList);
+				}
+			}
 			return;
 		}
 		
@@ -170,22 +175,16 @@ public class SkaiaClient
 		resumingClient.put(data.playerId, data.isClientResuming);
 		serverWaiting.put(data.playerId, data.isServerResuming);
 		
-		Iterator<SburbConnection> i = connections.iterator();
-		while(i.hasNext())
-		{
-			SburbConnection c = i.next();
-			if(c.clientId == data.playerId || c.serverId == data.playerId)
-				i.remove();
-		}
+		connections.removeIf(c -> c.clientId == data.playerId || c.serverId == data.playerId);
 		connections.addAll(data.connections);
 		
-		GuiScreen gui = Minecraft.getMinecraft().currentScreen;
+		GuiScreen gui = Minecraft.getInstance().currentScreen;
 		if(gui instanceof GuiComputer)
 			((GuiComputer)gui).updateGui();
 		else if(te != null && te.ownerId == data.playerId)
 		{
-			if(!Minecraft.getMinecraft().player.isSneaking())
-				Minecraft.getMinecraft().player.openGui(Minestuck.instance, GuiHandler.GuiId.COMPUTER.ordinal(), te.getWorld(), te.getPos().getX(), te.getPos().getY(), te.getPos().getZ());
+			if(!Minecraft.getInstance().player.isSneaking())
+				Minecraft.getInstance().displayGuiScreen(new GuiComputer(Minecraft.getInstance(), te));
 			te = null;
 		}
 	}

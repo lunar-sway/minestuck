@@ -30,29 +30,20 @@ import com.mraof.minestuck.entity.underling.EntityUnderling;
 import com.mraof.minestuck.item.ItemCruxiteArtifact;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.PlayerDataPacket;
+import com.mraof.minestuck.network.TitleSelectPacket;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.EnumAspect;
-import com.mraof.minestuck.util.EnumClass;
+import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristType;
-import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import com.mraof.minestuck.util.MinestuckPlayerData;
-import com.mraof.minestuck.util.MinestuckRandom;
-import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
-import com.mraof.minestuck.world.lands.LandAspectRegistry.AspectCombination;
+import com.mraof.minestuck.world.lands.LandAspects;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommand;
-import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
@@ -69,13 +60,13 @@ import net.minecraft.world.biome.Biome.SpawnListEntry;
 import net.minecraft.world.dimension.DimensionType;
 
 /**
- * A class for managing sbrub-related stuff from outside this package that is dependent on connections and sessions.
+ * A class for managing sburb-related stuff from outside this package that is dependent on connections and sessions.
  * For example: Titles, land aspects, underling grist types, entry items etc.
  * @author kirderf1
  */
 public class SburbHandler
 {
-	static Map<EntityPlayer, Vec3d> titleSelectionMap = new HashMap<EntityPlayer, Vec3d>();
+	static Map<EntityPlayer, Vec3d> titleSelectionMap = new HashMap<>();
 	
 	private static Title produceTitle(PlayerIdentifier player)
 	{
@@ -200,7 +191,7 @@ public class SburbHandler
 		MinestuckPlayerTracker.updateTitle(player.getPlayer());
 	}
 	
-	public static void managePredefinedSession(MinecraftServer server, ICommandSender sender, ICommand command, String sessionName, String[] playerNames, boolean finish) throws CommandException
+	/*public static void managePredefinedSession(MinecraftServer server, ICommandSender sender, ICommand command, String sessionName, String[] playerNames, boolean finish) throws CommandException
 	{
 		Session session = sessionsByName.get(sessionName);
 		if(session == null)
@@ -319,7 +310,7 @@ public class SburbHandler
 				SburbHandler.finishSession(sender, command, session);
 				
 			} else throw new CommandException("Skipping to finalize the session due to one or more issues while adding players.");*/
-	}
+	/*}
 	
 	public static void sessionName(MinecraftServer server, ICommandSender sender, ICommand command, String playerName, String sessionName) throws CommandException
 	{
@@ -433,7 +424,7 @@ public class SburbHandler
 		}
 		/*if(session == null)
 			throw new CommandException("Couldn't find session with the name %s", sessionName);*/
-		if(playerSession != null && session != playerSession)
+		/*if(playerSession != null && session != playerSession)
 			throw new CommandException("The player is already in another session!");
 		if(playerSession == null || !session.predefinedPlayers.containsKey(identifier))
 		{
@@ -515,7 +506,7 @@ public class SburbHandler
 		//order of generation: title -> land aspect title -> land aspect terrain
 		
 		session.locked = true;
-	}
+	}*/
 	
 	/**
 	 * @param player The username of the player, encoded.
@@ -527,15 +518,15 @@ public class SburbHandler
 		int colorIndex = MinestuckPlayerData.getData(player).color;
 		Item artifact;
 		if(c == null)
-			artifact = MinestuckItems.cruxiteApple;
+			artifact = MinestuckItems.CRUXITE_APPLE;
 		
 		else switch(c.artifactType)
 		{
-		case 1: artifact = MinestuckItems.cruxitePotion; break;
-		default: artifact = MinestuckItems.cruxiteApple;
+		case 1: artifact = MinestuckItems.CRUXITE_POTION; break;
+		default: artifact = MinestuckItems.CRUXITE_APPLE;
 		}
 		
-		return new ItemStack(artifact, 1, colorIndex + 1);
+		return ColorCollector.setColor(new ItemStack(artifact), colorIndex + 1);
 	}
 	
 	public static GristType getPrimaryGristType(PlayerIdentifier player)
@@ -583,7 +574,7 @@ public class SburbHandler
 	
 	private static void genLandAspects(SburbConnection connection)
 	{
-		LandAspectRegistry aspectGen = new LandAspectRegistry((Minestuck.worldSeed^connection.clientHomeLand)^(connection.clientHomeLand << 8));
+		LandAspectRegistry aspectGen = new LandAspectRegistry((Minestuck.worldSeed^connection.clientHomeLand.getId())^(connection.clientHomeLand.getId() << 8));
 		Session session = getPlayerSession(connection.getClientIdentifier());
 		Title title = MinestuckPlayerData.getTitle(connection.getClientIdentifier());
 		TitleLandAspect titleAspect = null;
@@ -604,7 +595,7 @@ public class SburbHandler
 		for(SburbConnection c : session.connections)
 			if(c.enteredGame && c != connection)
 			{
-				LandAspectRegistry.AspectCombination aspects = MinestuckDimensionHandler.getAspects(c.clientHomeLand);
+				LandAspects aspects = MinestuckDimensionHandler.getAspects(c.clientHomeLand);
 				if(aspects.aspectTitle == LandAspectRegistry.frogAspect)
 					frogs = true;
 				usedTitleAspects.add(aspects.aspectTitle);
@@ -626,7 +617,7 @@ public class SburbHandler
 			titleAspect = aspectGen.getTitleAspect(terrainAspect, title.getHeroAspect(), usedTitleAspects);
 		if(terrainAspect == null)
 			terrainAspect = aspectGen.getTerrainAspect(titleAspect, usedTerrainAspects);
-		MinestuckDimensionHandler.registerLandDimension(connection.clientHomeLand, new AspectCombination(terrainAspect, titleAspect));
+		MinestuckDimensionHandler.registerLandDimension(connection.clientHomeLand, new LandAspects(terrainAspect, titleAspect));
 	}
 	
 	public static GristType getUnderlingType(EntityUnderling entity)
@@ -742,7 +733,7 @@ public class SburbHandler
 		Debug.infof("Randomized artifact type to be: %d for player %s.", c.artifactType, c.getClientIdentifier().getUsername());
 	}
 	
-	public static boolean shouldEnterNow(EntityPlayer player)
+	public static boolean shouldEnterNow(EntityPlayerMP player)
 	{
 		if(!MinestuckConfig.playerSelectedTitle)
 			return true;
@@ -755,16 +746,17 @@ public class SburbHandler
 			return true;
 		
 		titleSelectionMap.put(player, new Vec3d(player.posX, player.posY, player.posZ));
-		MinestuckPacketHandler.sendToPlayer(MinestuckPacket.makePacket(MinestuckPacket.Type.PLAYER_DATA, PlayerDataPacket.TITLE_SELECT), player);
+		TitleSelectPacket packet = new TitleSelectPacket();
+		MinestuckPacketHandler.sendToPlayer(packet, player);
 		return false;
 	}
 	
-	public static void stopEntry(EntityPlayer player)
+	public static void stopEntry(EntityPlayerMP player)
 	{
 		titleSelectionMap.remove(player);
 	}
 	
-	public static void titleSelected(EntityPlayer player, Title title)
+	public static void titleSelected(EntityPlayerMP player, Title title)
 	{
 		if(MinestuckConfig.playerSelectedTitle && titleSelectionMap.containsKey(player))
 		{
@@ -782,13 +774,15 @@ public class SburbHandler
 				for(SburbConnection c : s.connections)
 					if(c.enteredGame() && title.equals(MinestuckPlayerData.getTitle(c.getClientIdentifier())))
 					{	//Title is already used
-						MinestuckPacketHandler.sendToPlayer(MinestuckPacket.makePacket(MinestuckPacket.Type.PLAYER_DATA, PlayerDataPacket.TITLE_SELECT, title.getHeroClass(), title.getHeroAspect()), player);
+						TitleSelectPacket packet = new TitleSelectPacket(title.getHeroClass(), title.getHeroAspect());
+						MinestuckPacketHandler.sendToPlayer(packet, player);
 						return;
 					}
 				for(PredefineData data : s.predefinedPlayers.values())
 					if(title.equals(data.title))
 					{
-						MinestuckPacketHandler.sendToPlayer(MinestuckPacket.makePacket(MinestuckPacket.Type.PLAYER_DATA, PlayerDataPacket.TITLE_SELECT, title.getHeroClass(), title.getHeroAspect()), player);
+						TitleSelectPacket packet = new TitleSelectPacket(title.getHeroClass(), title.getHeroAspect());
+						MinestuckPacketHandler.sendToPlayer(packet, player);
 						return;
 					}
 				
@@ -799,7 +793,7 @@ public class SburbHandler
 			Vec3d pos = titleSelectionMap.remove(player);
 			
 			player.setPosition(pos.x, pos.y, pos.z);
-			((ItemCruxiteArtifact) MinestuckItems.cruxiteApple).onArtifactActivated(player);
+			((ItemCruxiteArtifact) MinestuckItems.CRUXITE_APPLE).onArtifactActivated(player);
 			
 		} else Debug.warnf("%s tried to select a title without entering.", player.getName());
 	}

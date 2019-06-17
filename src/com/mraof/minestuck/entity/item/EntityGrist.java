@@ -6,6 +6,7 @@ import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.*;
 import io.netty.buffer.ByteBuf;
@@ -15,13 +16,14 @@ import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 {
@@ -31,7 +33,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 
 	private int gristHealth = 5;
 	//Type of grist
-	private GristType gristType = GristType.Build;
+	private GristType gristType = GristType.BUILD;
 	private int gristValue = 1;
 
 	private EntityPlayer closestPlayer;
@@ -40,7 +42,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 
 	public EntityGrist(World world, double x, double y, double z, GristAmount gristData)
 	{
-		super(world);
+		super(ModEntityTypes.GRIST, world);
 		this.gristValue = gristData.getAmount();
 		this.setSize(this.getSizeByValue(), this.getSizeByValue());
 //		this.yOffset = this.height / 2.0F;
@@ -56,9 +58,13 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 
 	public EntityGrist(World par1World)
 	{
-		super(par1World);
+		super(ModEntityTypes.GRIST, par1World);
 	}
-
+	
+	@Override
+	protected void registerData()
+	{}
+	
 	/**
 	 * returns if this entity triggers Block.onEntityWalking on the blocks they walk on. used for spiders and wolves to
 	 * prevent them from trampling crops
@@ -70,12 +76,9 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-	protected void entityInit() {}
-	
-	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount)
 	{
-		if (this.isEntityInvulnerable(source))
+		if (this.isInvulnerableTo(source))
 		{
 			return false;
 		} else
@@ -85,14 +88,14 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 			
 			if (this.gristHealth <= 0)
 			{
-				this.setDead();
+				this.remove();
 			}
 			
 			return false;
 		}
 	}
 	
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public int getBrightnessForRender()
 	{
@@ -166,7 +169,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		
 		if(this.onGround)
 		{
-			f = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getEntityBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.98F;
+			f = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.98F;
 		}
 		
 		this.motionX *= (double)f;
@@ -183,7 +186,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 
 		if (this.gristAge >= 6000)
 		{
-			this.setDead();
+			this.remove();
 		}
 		
 	}
@@ -194,27 +197,27 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	public boolean handleWaterMovement()
 	{
-		return this.world.handleMaterialAcceleration(this.getEntityBoundingBox(), Material.WATER, this);
+		return this.world.handleMaterialAcceleration(this.getBoundingBox(), Material.WATER, this);
 	}
 	
 	@Override
-	public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
+	protected void writeAdditional(NBTTagCompound compound)
 	{
-		par1NBTTagCompound.setShort("Health", (short)((byte)this.gristHealth));
-		par1NBTTagCompound.setShort("Age", (short)this.gristAge);
-		par1NBTTagCompound.setShort("Value", (short)this.gristValue);
-		par1NBTTagCompound.setString("Type", this.gristType.getName());
+		compound.setShort("Health", (short)this.gristHealth);
+		compound.setShort("Age", (short)this.gristAge);
+		compound.setShort("Value", (short)this.gristValue);
+		compound.setString("Type", this.gristType.getName());
 	}
 	
 	@Override
-	public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
+	protected void readAdditional(NBTTagCompound compound)
 	{
-		this.gristHealth = par1NBTTagCompound.getShort("Health") & 255;
-		this.gristAge = par1NBTTagCompound.getShort("Age");
-		if(par1NBTTagCompound.hasKey("Value", 99))
-			this.gristValue = par1NBTTagCompound.getShort("Value");
-		if(par1NBTTagCompound.hasKey("Type", 8))
-			this.gristType = GristType.getTypeFromString(par1NBTTagCompound.getString("Type"));
+		this.gristHealth = compound.getShort("Health") & 255;
+		this.gristAge = compound.getShort("Age");
+		if(compound.contains("Value", 99))
+			this.gristValue = compound.getShort("Value");
+		if(compound.contains("Type", 8))
+			this.gristType = GristType.getTypeFromString(compound.getString("Type"));
 	}
 	
 	/**
@@ -231,7 +234,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 			consumeGrist(IdentifierHandler.encode(entityIn), true);
 		}
 		else  
-			this.setDead();
+			this.remove();
 	}
 	
 	public void consumeGrist(IdentifierHandler.PlayerIdentifier identifier, boolean sound)
@@ -242,7 +245,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 			this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.1F, 0.5F * ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.8F));
 		GristHelper.increase(identifier, new GristSet(gristType, gristValue));
 		MinestuckPlayerTracker.updateGristCache(identifier);
-		this.setDead();
+		this.remove();
 	}
 	
 	@Override
@@ -251,7 +254,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		return false;
 	}
 	
-	public GristType getType() 
+	public GristType getGristType()
 	{
 		return gristType;
 	}
@@ -273,23 +276,23 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-	public void writeSpawnData(ByteBuf data) 
+	public void writeSpawnData(PacketBuffer buffer)
 	{
 		if(typeInt(this.gristType) < 0)
 		{
-			this.setDead();
+			this.remove();
 		}
-		data.writeInt(typeInt(this.gristType));
-		data.writeInt(this.gristValue);
+		buffer.writeInt(typeInt(this.gristType));
+		buffer.writeInt(this.gristValue);
 	}
-
+	
 	@Override
-	public void readSpawnData(ByteBuf data) 
+	public void readSpawnData(PacketBuffer data)
 	{
 		int typeOffset = data.readInt();
 		if(typeOffset < 0)
 		{
-			this.setDead();
+			this.remove();
 			return;
 		}
 		this.gristType = GristType.REGISTRY.getValue(typeOffset);

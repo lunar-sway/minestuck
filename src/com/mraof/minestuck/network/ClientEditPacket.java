@@ -21,12 +21,12 @@ public class ClientEditPacket
 	int user = -1;
 	int target;
 	
-	public ClientEditPacket exit()
+	public static ClientEditPacket exit()
 	{
 		return new ClientEditPacket();
 	}
 	
-	public ClientEditPacket activate(int user, int target)
+	public static ClientEditPacket activate(int user, int target)
 	{
 		ClientEditPacket packet = new ClientEditPacket();
 		packet.user = user;

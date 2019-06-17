@@ -20,19 +20,19 @@ public class ServerEditPacket
 	boolean[] givenItems;
 	NBTTagCompound deployTags;
 	
-	public ServerEditPacket exit()
+	public static ServerEditPacket exit()
 	{
 		return new ServerEditPacket();
 	}
 	
-	public ServerEditPacket givenItems(boolean[] givenItems)
+	public static ServerEditPacket givenItems(boolean[] givenItems)
 	{
 		ServerEditPacket packet = new ServerEditPacket();
 		packet.givenItems = givenItems;
 		return packet;
 	}
 	
-	public ServerEditPacket activate(String target, int centerX, int centerZ, boolean[] givenItems, NBTTagCompound deployTags)
+	public static ServerEditPacket activate(String target, int centerX, int centerZ, boolean[] givenItems, NBTTagCompound deployTags)
 	{
 		ServerEditPacket packet = new ServerEditPacket();
 		packet.target = target;

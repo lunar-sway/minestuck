@@ -11,11 +11,8 @@ import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandSource;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.command.WrongUsageException;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 
@@ -23,14 +20,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class CommandSburbSession extends CommandBase	//TODO properly localize all messages related to this command
+public class CommandSburbSession	//TODO properly localize all messages related to this command
 {
 	public static void register(CommandDispatcher<CommandSource> dispatcher)
 	{
 	
 	}
 	
-	@Override
+	/*@Override
 	public String getName()
 	{
 		return "sburbSession";
@@ -64,7 +61,7 @@ public class CommandSburbSession extends CommandBase	//TODO properly localize al
 			String playerName = args.length < 3 ? getCommandSenderAsPlayer(sender).getName() : args[2];
 			SburbHandler.sessionName(server, sender, this, playerName, sessionName);
 			
-		} else if(command.equalsIgnoreCase("add")/* || command.equalsIgnoreCase("finish")*/)
+		} else if(command.equalsIgnoreCase("add")/* || command.equalsIgnoreCase("finish")*//* )
 		{
 			String[] params = Arrays.copyOfRange(args, 2, args.length);
 			SburbHandler.managePredefinedSession(server, sender, this, sessionName, params, false);//command.equalsIgnoreCase("finish"));
@@ -272,5 +269,5 @@ public class CommandSburbSession extends CommandBase	//TODO properly localize al
 		}
 		
 		return Collections.<String>emptyList();
-	}
+	}*/
 }

@@ -11,14 +11,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentTranslation;
 
-public class CommandPorkhollow extends CommandBase    //Much like /gristSend and /land, is a temporary command until a proper feature is in place
+public class CommandPorkhollow    //Much like /gristSend and /land, is a temporary command until a proper feature is in place
 {
 	public static void register(CommandDispatcher<CommandSource> dispatcher)
 	{
 	
 	}
 	
-	@Override
+	/*@Override
 	public String getName()
 	{
 		return "porkhollow";
@@ -80,5 +80,5 @@ public class CommandPorkhollow extends CommandBase    //Much like /gristSend and
 	public boolean checkPermission(MinecraftServer server, ICommandSender sender)
 	{
 		return true;
-	}
+	}*/
 }

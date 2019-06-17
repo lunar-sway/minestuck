@@ -40,19 +40,19 @@ public class ItemFrog extends Item
 	@Override
 	public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items)
 	{
-        if(this.isInGroup(group))
-        {
-            for (int i = 0; i <= EntityFrog.maxTypes(); ++i)
-            {
-                if(i != 3 && i != 4)
+		if(this.isInGroup(group))
+		{
+			for (int i = 0; i <= EntityFrog.maxTypes(); ++i)
+			{
+				if(i != 3 && i != 4)
 				{
 					ItemStack item = new ItemStack(this);
 					item.getOrCreateTag().setInt("Type", i);
 					items.add(item);
 				}
-            }
-        }
-    }
+			}
+		}
+	}
 	
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
@@ -65,15 +65,15 @@ public class ItemFrog extends Item
 			{
 				NBTTagCompound nbt = stack.getTag();
 				NBTTagInt type = (NBTTagInt)nbt.getTag("Type");
-				NBTTagInt eyeType = (NBTTagInt)nbt.getTag("eyeType");
-				NBTTagInt bellyType = (NBTTagInt)nbt.getTag("bellyType");
+				NBTTagInt eyeType = (NBTTagInt)nbt.getTag("EyeType");
+				NBTTagInt bellyType = (NBTTagInt)nbt.getTag("BellyType");
 				
-					if(nbt.hasKey("eyeType"))for(int i = 0; i <= EntityFrog.maxEyes(); i++)
+					if(nbt.hasKey("EyeType"))for(int i = 0; i <= EntityFrog.maxEyes(); i++)
 					{
 						if(eyeType.getInt() == i)tooltip.add(new TextComponentTranslation("item.frog.eyes"+i));
 					}
 					
-					if(nbt.hasKey("eyeType"))for(int i = 1; i <= EntityFrog.maxBelly(); i++)
+					if(nbt.hasKey("EyeType"))for(int i = 1; i <= EntityFrog.maxBelly(); i++)
 					{
 						if(bellyType.getInt() == i)tooltip.add(new TextComponentTranslation("item.frog.belly"+i));
 					}
@@ -109,21 +109,21 @@ public class ItemFrog extends Item
 	@Override
 	public EnumActionResult onItemUse(ItemUseContext context)
 	{
-        ItemStack itemstack = context.getItem();
-        EnumFacing face = context.getFace();
-        EntityPlayer player = context.getPlayer();
-        World world = context.getWorld();
-        BlockPos pos = context.getPos();
-        
-        if (world.isRemote)
-            return EnumActionResult.SUCCESS;
-        else if (player != null && !player.canPlayerEdit(pos.offset(face), face, itemstack))
-        {
-            return EnumActionResult.FAIL;
-        }
-        else
-        {
-            IBlockState blockState = world.getBlockState(pos);
+		ItemStack itemstack = context.getItem();
+		EnumFacing face = context.getFace();
+		EntityPlayer player = context.getPlayer();
+		World world = context.getWorld();
+		BlockPos pos = context.getPos();
+		
+		if (world.isRemote)
+			return EnumActionResult.SUCCESS;
+		else if (player != null && !player.canPlayerEdit(pos.offset(face), face, itemstack))
+		{
+			return EnumActionResult.FAIL;
+		}
+		else
+		{
+			IBlockState blockState = world.getBlockState(pos);
 	
 			BlockPos spawnPos;
 			if (blockState.getCollisionShape(world, pos).isEmpty())
@@ -133,31 +133,31 @@ public class ItemFrog extends Item
 			
 			Entity entity =  spawnCreature(world, (double)spawnPos.getX() + 0.5D, (double)spawnPos.getY(), (double)spawnPos.getZ() + 0.5D, 0);
 
-            if (entity != null)
-            {
-                if (entity instanceof EntityLivingBase && itemstack.hasDisplayName())
-                {
-                    entity.setCustomName(itemstack.getDisplayName());
-                }
+			if (entity != null)
+			{
+				if (entity instanceof EntityLivingBase && itemstack.hasDisplayName())
+				{
+					entity.setCustomName(itemstack.getDisplayName());
+				}
 
-                applyItemEntityDataToEntity(world, player, itemstack,(EntityFrog) entity);
+				applyItemEntityDataToEntity(world, player, itemstack,(EntityFrog) entity);
 
-                if (player == null || !player.isCreative())
-                {
-                    itemstack.shrink(1);
-                }
-            }
+				if (player == null || !player.isCreative())
+				{
+					itemstack.shrink(1);
+				}
+			}
 
-            return EnumActionResult.SUCCESS;
-        }
-    }
-    
-    @Nullable
-    public static Entity spawnCreature(World worldIn, double x, double y, double z, int type)
-    {
-            Entity entity = null;
+			return EnumActionResult.SUCCESS;
+		}
+	}
+	
+	@Nullable
+	public static Entity spawnCreature(World worldIn, double x, double y, double z, int type)
+	{
+			Entity entity = null;
 
-            for (int i = 0; i < 1; ++i)
+			for (int i = 0; i < 1; ++i)
 			{
 				entity = new EntityFrog(worldIn, type);
 	
@@ -170,94 +170,94 @@ public class ItemFrog extends Item
 				entityliving.playAmbientSound();
 			}
 
-            return entity;
-    }
-    
-    public static void applyItemEntityDataToEntity(World entityWorld, @Nullable EntityPlayer player, ItemStack stack, @Nullable EntityFrog targetEntity)
-    {
-        MinecraftServer minecraftserver = entityWorld.getServer();
+			return entity;
+	}
+	
+	public static void applyItemEntityDataToEntity(World entityWorld, @Nullable EntityPlayer player, ItemStack stack, @Nullable EntityFrog targetEntity)
+	{
+		MinecraftServer minecraftserver = entityWorld.getServer();
 
-        if (minecraftserver != null && targetEntity != null)
-        {
-            NBTTagCompound nbttagcompound = stack.getTag();
+		if (minecraftserver != null && targetEntity != null)
+		{
+			NBTTagCompound nbttagcompound = stack.getTag();
 
-            if (nbttagcompound != null)
-            {
-                if (!entityWorld.isRemote && targetEntity.ignoreItemEntityData() && (player == null || !minecraftserver.getPlayerList().canSendCommands(player.getGameProfile())))
-                {
-                    return;
-                }
-                
-                nbttagcompound.setBoolean("canDespawn", false);
-                if(nbttagcompound.getInt("Type") == 6)
-                	nbttagcompound.setFloat("Size", 0.5f);
-                NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-                targetEntity.writeEntityToNBT(nbttagcompound1);
-                UUID uuid = targetEntity.getUniqueID();
-                nbttagcompound1.merge(nbttagcompound);
-                targetEntity.setUniqueId(uuid);
-                targetEntity.readEntityFromNBT(nbttagcompound1);
+			if (nbttagcompound != null)
+			{
+				if (!entityWorld.isRemote && targetEntity.ignoreItemEntityData() && (player == null || !minecraftserver.getPlayerList().canSendCommands(player.getGameProfile())))
+				{
+					return;
+				}
+				
+				nbttagcompound.setBoolean("PersistenceRequired", true);
+				if(nbttagcompound.getInt("Type") == 6)
+					nbttagcompound.setFloat("Size", 0.5f);
+				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+				targetEntity.writeEntityToNBT(nbttagcompound1);
+				UUID uuid = targetEntity.getUniqueID();
+				nbttagcompound1.merge(nbttagcompound);
+				targetEntity.setUniqueId(uuid);
+				targetEntity.readEntityFromNBT(nbttagcompound1);
 
-                System.out.println("Type: " + nbttagcompound.getInt("Type"));
-            }
-        }
-    }
-    
-    public int getSkinColor(ItemStack stack)
-    {
-        
-        NBTTagCompound nbttagcompound = stack.getTag();
+				//System.out.println("Type: " + nbttagcompound.getInt("Type"));
+			}
+		}
+	}
+	
+	public int getSkinColor(ItemStack stack)
+	{
+		
+		NBTTagCompound nbttagcompound = stack.getTag();
 
-        if (nbttagcompound != null)
-        {
-            if (nbttagcompound.hasKey("skinColor"))
-            {
-                return nbttagcompound.getInt("skinColor");
-            }
-        }
+		if (nbttagcompound != null)
+		{
+			if (nbttagcompound.hasKey("SkinColor"))
+			{
+				return nbttagcompound.getInt("SkinColor");
+			}
+		}
 
-        return 0x4BEC13;
-    }
-    
-    public int getEyeColor(ItemStack stack)
-    {
-        
-        NBTTagCompound nbttagcompound = stack.getTag();
+		return 0x4BEC13;
+	}
+	
+	public int getEyeColor(ItemStack stack)
+	{
+		
+		NBTTagCompound nbttagcompound = stack.getTag();
 
-        if (nbttagcompound != null)
-        {
-            if (nbttagcompound.hasKey("eyeColor"))
-            {
-                return nbttagcompound.getInt("eyeColor");
-            }
-        }
+		if (nbttagcompound != null)
+		{
+			if (nbttagcompound.hasKey("EyeColor"))
+			{
+				return nbttagcompound.getInt("eyeColor");
+			}
+		}
 
-        return 0xC7DB95;
-    }
-    
-    public int getBellyColor(ItemStack stack)
-    {
-        
-        NBTTagCompound nbttagcompound = stack.getTag();
+		return 0xC7DB95;
+	}
+	
+	public int getBellyColor(ItemStack stack)
+	{
+		
+		NBTTagCompound nbttagcompound = stack.getTag();
 
-        if (nbttagcompound != null)
-        {
-    		if(nbttagcompound.hasKey("bellyType") && nbttagcompound.getInt("bellyType") == 0)
-    		{
-    			if(nbttagcompound.hasKey("skinColor"))
-    			{
-    				return nbttagcompound.getInt("skinColor");
-    			}
-    			else return 0x4BEC13;
-    		}
-        	else if (nbttagcompound.hasKey("bellyColor"))
-            {
-                return nbttagcompound.getInt("bellyColor");
-            }
-        }
+		if (nbttagcompound != null)
+		{
+			if(nbttagcompound.hasKey("bellyType") && nbttagcompound.getInt("bellyType") == 0)
+			{
+				if(nbttagcompound.hasKey("skinColor"))
+				{
+					return nbttagcompound.getInt("skinColor");
+				}
+				else return 0x4BEC13;
+			}
+			else if (nbttagcompound.hasKey("bellyColor"))
+			{
+				return nbttagcompound.getInt("bellyColor");
+			}
+		}
 
-        return 0xD6DE83;
-    }
-    
-    
+		return 0xD6DE83;
+	}
+	
+	
 }

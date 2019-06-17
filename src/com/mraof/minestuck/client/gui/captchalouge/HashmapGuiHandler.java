@@ -2,7 +2,7 @@ package com.mraof.minestuck.client.gui.captchalouge;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.GuiButtonImpl;
-import com.mraof.minestuck.inventory.captchalogue.HashmapModus;
+import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
@@ -17,10 +17,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class HashmapGuiHandler extends SylladexGuiHandler
 {
 	
-	private HashmapModus modus;
+	private HashMapModus modus;
 	protected GuiButtonImpl guiButton;
 	
-	public HashmapGuiHandler(HashmapModus modus)
+	public HashmapGuiHandler(HashMapModus modus)
 	{
 		super();
 		this.modus = modus;

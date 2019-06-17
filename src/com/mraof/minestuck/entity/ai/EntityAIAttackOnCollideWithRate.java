@@ -79,7 +79,7 @@ public class EntityAIAttackOnCollideWithRate extends EntityAIBase
 	public boolean shouldContinueExecuting()
 	{
 		EntityLivingBase entityliving = this.attacker.getAttackTarget();
-		return entityliving == null ? false : (!this.entityTarget.isEntityAlive() ? false : (!this.willSearch ? !this.attacker.getNavigator().noPath() : this.attacker.isWithinHomeDistanceFromPosition(new BlockPos(MathHelper.floor(this.entityTarget.posX), MathHelper.floor(this.entityTarget.posY), MathHelper.floor(this.entityTarget.posZ)))));
+		return entityliving != null && this.entityTarget.isAlive() && (!this.willSearch ? !this.attacker.getNavigator().noPath() : this.attacker.isWithinHomeDistanceFromPosition(new BlockPos(MathHelper.floor(this.entityTarget.posX), MathHelper.floor(this.entityTarget.posY), MathHelper.floor(this.entityTarget.posZ))));
 	}
 
 	/**
@@ -101,12 +101,9 @@ public class EntityAIAttackOnCollideWithRate extends EntityAIBase
 		this.entityTarget = null;
 		this.attacker.getNavigator().clearPath();
 	}
-
-	/**
-	 * Updates the task
-	 */
+	
 	@Override
-	public void updateTask()
+	public void tick()
 	{
 		this.attacker.getLookHelper().setLookPositionWithEntity(this.entityTarget, 30.0F, 30.0F);
 
@@ -119,13 +116,13 @@ public class EntityAIAttackOnCollideWithRate extends EntityAIBase
 		this.attackTick = Math.max(this.attackTick - 1, 0);
 		double d0 = (double)(this.attacker.width * distanceMultiplier * this.attacker.width * distanceMultiplier);
 
-		if (this.attacker.getDistanceSq(this.entityTarget.posX, this.entityTarget.getEntityBoundingBox().minY, this.entityTarget.posZ) - (entityTarget.width / 2 ) <= d0)
+		if (this.attacker.getDistanceSq(this.entityTarget.posX, this.entityTarget.getBoundingBox().minY, this.entityTarget.posZ) - (entityTarget.width / 2 ) <= d0)
 		{
 			if (this.attackTick <= 0)
 			{
 				this.attackTick = this.attackRate;
 
-				if (this.attacker.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND) != null)
+				if (!this.attacker.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).isEmpty())
 				{
 					this.attacker.swingArm(EnumHand.MAIN_HAND);
 				}

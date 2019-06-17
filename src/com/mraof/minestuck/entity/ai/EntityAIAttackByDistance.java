@@ -45,7 +45,7 @@ public class EntityAIAttackByDistance extends EntityAIBase
 		this.rangedAttackTime = -1;
 		this.ticksSeeingTarget = 0;
 
-		if (!(par1IRangedAttackMob instanceof EntityLiving))
+		if(!(par1IRangedAttackMob instanceof EntityLiving))
 		{
 			throw new IllegalArgumentException("ArrowAttackGoal requires Mob implements RangedAttackMob");
 		}
@@ -74,7 +74,7 @@ public class EntityAIAttackByDistance extends EntityAIBase
 			return false;
 		else
 		{
-			if(entityliving.isEntityAlive())
+			if(entityliving.isAlive())
 			{
 				this.attackTarget = entityliving;
 				return true;
@@ -103,14 +103,12 @@ public class EntityAIAttackByDistance extends EntityAIBase
 		this.ticksSeeingTarget = 0;
 		this.rangedAttackTime = -1;
 	}
-
-	/**
-	 * Updates the task
-	 */
+	
+	
 	@Override
-	public void updateTask()
+	public void tick()
 	{
-		double d0 = this.entityHost.getDistanceSq(this.attackTarget.posX, this.attackTarget.getEntityBoundingBox().minY, this.attackTarget.posZ);
+		double d0 = this.entityHost.getDistanceSq(this.attackTarget.posX, this.attackTarget.getBoundingBox().minY, this.attackTarget.posZ);
 		boolean flag = this.entityHost.getEntitySenses().canSee(this.attackTarget);
 
 		if (flag)
@@ -168,13 +166,13 @@ public class EntityAIAttackByDistance extends EntityAIBase
 		else
 		{
 			this.rangedAttackTime = Math.max(this.rangedAttackTime - 1, 0);
-			if (this.attacker.getDistanceSq(this.attackTarget.posX, this.attackTarget.getEntityBoundingBox().minY, this.attackTarget.posZ) <= d0)
+			if(this.attacker.getDistanceSq(this.attackTarget.posX, this.attackTarget.getBoundingBox().minY, this.attackTarget.posZ) <= d0)
 			{
-				if (this.rangedAttackTime <= 0)
+				if(this.rangedAttackTime <= 0)
 				{
 					this.rangedAttackTime = 20;
 	
-					if (this.attacker.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND) != null)
+					if(!this.attacker.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).isEmpty())
 					{
 						this.attacker.swingArm(EnumHand.MAIN_HAND);
 					}

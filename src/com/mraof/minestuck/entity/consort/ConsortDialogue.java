@@ -8,6 +8,7 @@ import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
+import com.mraof.minestuck.world.lands.LandAspects;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 import com.mraof.minestuck.world.storage.loot.MinestuckLoot;
@@ -343,9 +344,9 @@ public class ConsortDialogue
 				new SingleMessage[] { new SingleMessage("denizen.what"), new SingleMessage("denizen.askAlignment") },
 				new MessageType[] { new SingleMessage("denizen.explain", "playerClassLand"), new SingleMessage("denizen.alignment") })).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA, EnumConsort.TURTLE).reqLand();
 		
-		List<ItemStack> hungryList = ImmutableList.of(new ItemStack(Items.COOKIE), new ItemStack(MinestuckItems.bugOnAStick),
-				new ItemStack(MinestuckItems.grasshopper), new ItemStack(MinestuckItems.chocolateBeetle),
-				new ItemStack(MinestuckItems.coneOfFlies));
+		List<ItemStack> hungryList = ImmutableList.of(new ItemStack(Items.COOKIE), new ItemStack(MinestuckItems.BUG_ON_A_STICK),
+				new ItemStack(MinestuckItems.GRASSHOPPER), new ItemStack(MinestuckItems.CHOCOLATE_BEETLE),	//TODO Use item tags for these kind of things
+				new ItemStack(MinestuckItems.CONE_OF_FLIES));
 		addMessage(new ItemRequirement(hungryList, false, true, new SingleMessage("hungry"),
 						new ChoiceMessage(new SingleMessage("hungry.askFood", "nbtItem:hungry.item"),
 								new SingleMessage[] { new SingleMessage("hungry.accept"), new SingleMessage("hungry.deny") },
@@ -438,7 +439,7 @@ public class ConsortDialogue
 	
 	public static DialogueWrapper getRandomMessage(EntityConsort consort, EntityPlayer player)
 	{
-		LandAspectRegistry.AspectCombination aspects = MinestuckDimensionHandler.getAspects(consort.homeDimension);
+		LandAspects aspects = MinestuckDimensionHandler.getAspects(consort.homeDimension);
 		
 		List<DialogueWrapper> list = new ArrayList<>();
 		

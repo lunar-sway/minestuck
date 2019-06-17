@@ -4,18 +4,32 @@ import com.mraof.minestuck.client.gui.captchalouge.QueueGuiHandler;
 import com.mraof.minestuck.client.gui.captchalouge.SylladexGuiHandler;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.LogicalSide;
 
 import java.util.Iterator;
 
 public class QueueModus extends StackModus
 {
 	
+	public QueueModus(LogicalSide side)
+	{
+		super(side);
+	}
+	
 	@Override
-	public ItemStack getItem(int id, boolean asCard)
+	public ResourceLocation getRegistryName()
+	{
+		return CaptchaDeckHandler.QUEUE;
+	}
+	
+	@Override
+	public ItemStack getItem(EntityPlayerMP player, int id, boolean asCard)
 	{
 		if(id == CaptchaDeckHandler.EMPTY_CARD)
 		{

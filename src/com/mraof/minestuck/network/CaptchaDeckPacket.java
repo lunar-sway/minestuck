@@ -39,7 +39,7 @@ public class CaptchaDeckPacket
 	
 	public int slotIndex;
 	
-	public CaptchaDeckPacket data(NBTTagCompound nbt)
+	public static CaptchaDeckPacket data(NBTTagCompound nbt)
 	{
 		CaptchaDeckPacket packet = new CaptchaDeckPacket();
 		packet.type = DATA;
@@ -48,7 +48,7 @@ public class CaptchaDeckPacket
 		return packet;
 	}
 	
-	public CaptchaDeckPacket modus()
+	public static CaptchaDeckPacket modus()
 	{
 		CaptchaDeckPacket packet = new CaptchaDeckPacket();
 		packet.type = MODUS;
@@ -56,7 +56,7 @@ public class CaptchaDeckPacket
 		return packet;
 	}
 	
-	public CaptchaDeckPacket captchalogue()
+	public static CaptchaDeckPacket captchalogue()
 	{
 		CaptchaDeckPacket packet = new CaptchaDeckPacket();
 		packet.type = CAPTCHALOGUE;
@@ -64,7 +64,7 @@ public class CaptchaDeckPacket
 		return packet;
 	}
 	
-	public CaptchaDeckPacket get(int index, boolean asCard)
+	public static CaptchaDeckPacket get(int index, boolean asCard)
 	{
 		CaptchaDeckPacket packet = new CaptchaDeckPacket();
 		packet.type = GET;
@@ -74,7 +74,7 @@ public class CaptchaDeckPacket
 		return packet;
 	}
 	
-	public CaptchaDeckPacket modusParam(byte valueType, int value)
+	public static CaptchaDeckPacket modusParam(byte valueType, int value)
 	{
 		CaptchaDeckPacket packet = new CaptchaDeckPacket();
 		packet.type = MODUS_PARAM;
@@ -84,7 +84,7 @@ public class CaptchaDeckPacket
 		return packet;
 	}
 	
-	public CaptchaDeckPacket captchalogueInv(int slotIndex)
+	public static CaptchaDeckPacket captchalogueInv(int slotIndex)
 	{
 		CaptchaDeckPacket packet = new CaptchaDeckPacket();
 		packet.type = CAPTCHALOGUE_INV;

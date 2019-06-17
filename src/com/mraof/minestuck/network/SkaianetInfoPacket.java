@@ -19,8 +19,8 @@ public class SkaianetInfoPacket
 {
 	public int playerId;
 	public boolean isClientResuming, isServerResuming;
-	public HashMap<Integer, String> openServers;
-	public ArrayList<SburbConnection> connections;
+	public Map<Integer, String> openServers;
+	public List<SburbConnection> connections;
 	public List<List<Integer>> landChains;
 	
 	public static SkaianetInfoPacket landChains(List<List<Integer>> landChains)
@@ -31,7 +31,7 @@ public class SkaianetInfoPacket
 		return packet;
 	}
 	
-	public static SkaianetInfoPacket update(int playerId, boolean isClientResuming, boolean isServerResuming, HashMap<Integer, String> openServers, ArrayList<SburbConnection> connections)
+	public static SkaianetInfoPacket update(int playerId, boolean isClientResuming, boolean isServerResuming, Map<Integer, String> openServers, List<SburbConnection> connections)
 	{
 		SkaianetInfoPacket packet = new SkaianetInfoPacket();
 		packet.playerId = playerId;

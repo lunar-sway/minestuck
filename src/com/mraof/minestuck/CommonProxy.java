@@ -6,7 +6,7 @@ import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
-import com.mraof.minestuck.entity.MinestuckEntities;
+import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortDialogue;
 import com.mraof.minestuck.entity.consort.ConsortRewardHandler;
 import com.mraof.minestuck.event.MinestuckFluidHandler;
@@ -55,7 +55,7 @@ public class CommonProxy
 		//register GUI handler
 		NetworkRegistry.INSTANCE.registerGuiHandler(Minestuck.instance, new GuiHandler());
 		
-		MinestuckEntities.registerEntities();
+		ModEntityTypes.registerEntities();
 		
 		//Register event handlers
 		MinecraftForge.EVENT_BUS.register(new MinestuckSaveHandler());
@@ -63,8 +63,6 @@ public class CommonProxy
 		MinecraftForge.EVENT_BUS.register(ServerEditHandler.instance);
 		MinecraftForge.EVENT_BUS.register(MinestuckPlayerTracker.instance);
 		MinecraftForge.EVENT_BUS.register(ServerEventHandler.instance);
-		MinecraftForge.EVENT_BUS.register(MinestuckPacketHandler.instance);
-		MinecraftForge.EVENT_BUS.register(new ConnectionListener());
 		
 		
 		//register channel handler

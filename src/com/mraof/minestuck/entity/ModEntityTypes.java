@@ -27,21 +27,37 @@ import com.mraof.minestuck.entity.underling.EntityOgre;
 import com.mraof.minestuck.entity.underling.EntityWyrm;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-public final class MinestuckEntities
+public final class ModEntityTypes
 {
+	public static final EntityType<EntityFrog> FROG = new EntityType<>(EntityFrog.class, EntityFrog::new, true, true, null);
+	public static final EntityType<EntitySalamander> SALAMANDER = new EntityType<>(EntitySalamander.class, EntitySalamander::new, true, true, null);
+	public static final EntityType<EntityTurtle> TURTLE = new EntityType<>(EntityTurtle.class, EntityTurtle::new, true, true, null);
+	public static final EntityType<EntityNakagator> NAKAGATOR = new EntityType<>(EntityNakagator.class, EntityNakagator::new, true, true, null);
+	public static final EntityType<EntityIguana> IGUANA = new EntityType<>(EntityIguana.class, EntityIguana::new, true, true, null);
+	
+	public static final EntityType<EntityGrist> GRIST = new EntityType<>(EntityGrist.class, EntityGrist::new, true, true, null, true, null, false, 512, 1, true);
+	public static final EntityType<EntityCrewPoster> CREW_POSTER = new EntityType<>(EntityCrewPoster.class, EntityCrewPoster::new, true, true, null);
+	public static final EntityType<EntitySbahjPoster> SBAHJ_POSTER = new EntityType<>(EntitySbahjPoster.class, EntitySbahjPoster::new, true, true, null);
 	public static int currentEntityIdOffset = 0;
 
-	public static void registerEntities()
+	@SubscribeEvent
+	public static void registerEntities(RegistryEvent.Register<EntityType<?>> event)
 	{
-		//register entities
-		registerEntity(EntityFrog.class, "frog", 1100060, 11656884);
-		registerEntity(EntitySalamander.class, EnumConsort.SALAMANDER.getName());
-		registerEntity(EntityNakagator.class, EnumConsort.NAKAGATOR.getName());
-		registerEntity(EntityIguana.class, EnumConsort.IGUANA.getName());
-		registerEntity(EntityTurtle.class, EnumConsort.TURTLE.getName());
+		event.getRegistry().register(FROG.setRegistryName("frog"));
+		event.getRegistry().register(SALAMANDER.setRegistryName("salamander"));
+		event.getRegistry().register(TURTLE.setRegistryName("turtle"));
+		event.getRegistry().register(NAKAGATOR.setRegistryName("nakagator"));
+		event.getRegistry().register(IGUANA.setRegistryName("iguana"));
+		
+		event.getRegistry().register(GRIST.setRegistryName("grist"));
+		event.getRegistry().register(CREW_POSTER.setRegistryName("midnight_crew_poster"));
+		event.getRegistry().register(SBAHJ_POSTER.setRegistryName("sbahj_poster"));
+		
 		registerEntity(EntityImp.class, "imp");
 		registerEntity(EntityOgre.class, "ogre");
 		registerEntity(EntityBasilisk.class, "basilisk");
@@ -56,10 +72,7 @@ public final class MinestuckEntities
 		registerEntity(EntityWhiteRook.class, "prospitianRook", "prospitian_rook");
 		registerEntity(EntityDecoy.class, "playerDecoy",  "player_decoy");
 		registerEntity(EntityMetalBoat.class, "metalBoat", "metal_boat");
-		registerEntity(EntityGrist.class, "grist", "grist", 512, 1, true);
 		registerEntity(EntityVitalityGel.class, "vitalityGel", "vitality_gel", 512, 1, true);
-		registerEntity(EntityCrewPoster.class, "midnightCrewPoster", "midnight_crew_poster");
-		registerEntity(EntitySbahjPoster.class, "sbahjPoster", "sbahj_poster");
 		registerEntity(EntityShopPoster.class, "shopPoster", "shop_poster");
 		registerEntity(EntityHologram.class, "holoItem", "holo_item");
 		

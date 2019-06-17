@@ -1,7 +1,7 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.client.gui.captchalouge.SylladexGuiHandler;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
@@ -13,22 +13,26 @@ import net.minecraftforge.fml.LogicalSide;
 
 public abstract class Modus
 {
+	public final LogicalSide side;
 	
-	public EntityPlayer player;	//TODO remove this and replace this by adding the player as argument in methods next version shift
-	//This change will break addons that add their own modus
-	public LogicalSide side;
+	public Modus(LogicalSide side)
+	{
+		this.side = side;
+	}
+	
+	public abstract ResourceLocation getRegistryName();
 	
 	/**
 	 * This is called when the modus is created without calling readFromNBT(nbt).
 	 * Note that this method is used to clear the inventory/size after dropping stuff on death without creating a new instance.
 	 */
-	public abstract void initModus(NonNullList<ItemStack> prev, int size);
+	public abstract void initModus(EntityPlayerMP player, NonNullList<ItemStack> prev, int size);
 	
 	public abstract void readFromNBT(NBTTagCompound nbt);
 	
 	public abstract NBTTagCompound writeToNBT(NBTTagCompound nbt);
 	
-	public abstract boolean putItemStack(ItemStack item);
+	public abstract boolean putItemStack(EntityPlayerMP player, ItemStack item);
 	
 	public abstract NonNullList<ItemStack> getItems();
 	
@@ -41,15 +45,15 @@ public abstract class Modus
 		return count;
 	}
 	
-	public abstract boolean increaseSize();
+	public abstract boolean increaseSize(EntityPlayerMP player);
 	
-	public abstract ItemStack getItem(int id, boolean asCard);
+	public abstract ItemStack getItem(EntityPlayerMP player, int id, boolean asCard);
 	
 	public abstract boolean canSwitchFrom(Modus modus);
 	
 	public abstract int getSize();
 	
-	public void setValue(byte type, int value) {}
+	public void setValue(EntityPlayerMP player, byte type, int value) {}
 	
 	@OnlyIn(Dist.CLIENT)
 	public abstract SylladexGuiHandler getGuiHandler();
@@ -57,10 +61,7 @@ public abstract class Modus
 	@OnlyIn(Dist.CLIENT)
 	public ITextComponent getName()
 	{
-		ResourceLocation type = CaptchaDeckHandler.getType(this.getClass());
-		if(type == null)
-			return null;
-		else return CaptchaDeckHandler.getItem(type).getDisplayName();
+		return CaptchaDeckHandler.getItem(this.getRegistryName()).getDisplayName();
 	}
 	
 }

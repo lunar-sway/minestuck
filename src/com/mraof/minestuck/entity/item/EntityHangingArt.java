@@ -5,38 +5,36 @@ import java.util.Set;
 
 import com.google.common.collect.Lists;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraft.block.Block;
+import com.mraof.minestuck.util.Debug;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityHanging;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class EntityHangingArt<T extends EntityHangingArt.IArt> extends EntityHanging implements IEntityAdditionalSpawnData
 {
 	public T art;
 	private static boolean random = true;
 	
-	private int meta = 1;
-	
-	public EntityHangingArt(World worldIn)
+	public EntityHangingArt(EntityType<?> type, World worldIn)
 	{
-		super(worldIn);
+		super(type, worldIn);
 	}
 	
-	public EntityHangingArt(World worldIn, BlockPos pos, EnumFacing facing)
+	public EntityHangingArt(EntityType<?> type, World worldIn, BlockPos pos, EnumFacing facing)
 	{
-		super(worldIn, pos);
-		List<T> artList = Lists.<T>newArrayList();
+		super(type, worldIn, pos);
+		List<T> artList = Lists.newArrayList();
 		
 		for(T art : getArtSet())
 		{
@@ -54,9 +52,9 @@ public abstract class EntityHangingArt<T extends EntityHangingArt.IArt> extends 
 		this.updateFacingWithBoundingBox(facing);
 	}
 
-	public EntityHangingArt(World worldIn, BlockPos pos, EnumFacing facing, ItemStack stack, int meta, boolean random)
+	public EntityHangingArt(EntityType<?> type, World worldIn, BlockPos pos, EnumFacing facing, ItemStack stack, int meta, boolean random)
 	{
-		super(worldIn, pos);
+		super(type, worldIn, pos);
 		List<T> artList = Lists.<T>newArrayList();
 		
 		setRandom(random);
@@ -81,10 +79,10 @@ public abstract class EntityHangingArt<T extends EntityHangingArt.IArt> extends 
 		this.updateFacingWithBoundingBox(facing);
 	}
 	
-	@SideOnly(Side.CLIENT)
-	public EntityHangingArt(World worldIn, BlockPos pos, EnumFacing facing, String title)
+	@OnlyIn(Dist.CLIENT)
+	public EntityHangingArt(EntityType<?> type, World worldIn, BlockPos pos, EnumFacing facing, String title)
 	{
-		this(worldIn, pos, facing);
+		this(type, worldIn, pos, facing);
 		
 		for(T art : this.getArtSet())
 		{
@@ -99,15 +97,16 @@ public abstract class EntityHangingArt<T extends EntityHangingArt.IArt> extends 
 	}
 	
 	@Override
-	public void writeEntityToNBT(NBTTagCompound compound)
+	public void writeAdditional(NBTTagCompound compound)
 	{
+		super.writeAdditional(compound);
 		compound.setString("Motive", this.art.getTitle());
-		super.writeEntityToNBT(compound);
 	}
 	
 	@Override
-	public void readEntityFromNBT(NBTTagCompound compound)
+	public void readAdditional(NBTTagCompound compound)
 	{
+		super.readAdditional(compound);
 		String s = compound.getString("Motive");
 		
 		for(T art : this.getArtSet())
@@ -118,9 +117,10 @@ public abstract class EntityHangingArt<T extends EntityHangingArt.IArt> extends 
 			}
 		
 		if(this.art == null)
+		{
 			this.art = this.getDefault();
-		
-		super.readEntityFromNBT(compound);
+			Debug.warnf("Could not load art %s for type %s, resorting to the default type.", s, this.getType().getTranslationKey());
+		}
 	}
 	
 	@Override
@@ -146,7 +146,7 @@ public abstract class EntityHangingArt<T extends EntityHangingArt.IArt> extends 
 			{
 				EntityPlayer entityplayer = (EntityPlayer) brokenEntity;
 				
-				if(entityplayer.capabilities.isCreativeMode)
+				if(entityplayer.abilities.isCreativeMode)
 					return;
 			}
 			//TODO
@@ -169,7 +169,7 @@ public abstract class EntityHangingArt<T extends EntityHangingArt.IArt> extends 
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int posRotationIncrements,
 			boolean teleport)
 	{
@@ -178,22 +178,22 @@ public abstract class EntityHangingArt<T extends EntityHangingArt.IArt> extends 
 	}
 	
 	@Override
-	public void writeSpawnData(ByteBuf data)
+	public void writeSpawnData(PacketBuffer buffer)
 	{
-		data.writeByte(this.facingDirection.ordinal());
+		buffer.writeByte(this.facingDirection.ordinal());
 		
-		data.writeInt(this.hangingPosition.getX());
-		data.writeInt(this.hangingPosition.getY());
-		data.writeInt(this.hangingPosition.getZ());
+		buffer.writeInt(this.hangingPosition.getX());
+		buffer.writeInt(this.hangingPosition.getY());
+		buffer.writeInt(this.hangingPosition.getZ());
 		
 		String name = art.getTitle();
-		data.writeInt(name.length());
+		buffer.writeInt(name.length());
 		for(char c : name.toCharArray())
-			data.writeChar(c);
+			buffer.writeChar(c);
 	}
 	
 	@Override
-	public void readSpawnData(ByteBuf data)
+	public void readSpawnData(PacketBuffer data)
 	{
 		EnumFacing facing = EnumFacing.values()[data.readByte()%EnumFacing.values().length];
 		
@@ -215,29 +215,21 @@ public abstract class EntityHangingArt<T extends EntityHangingArt.IArt> extends 
 		this.updateFacingWithBoundingBox(facing);
 	}
 	
-	public ItemStack getStackDroppedMeta(int meta)
-	{
-		Item stack = getStackDropped().getItem();
-		return new ItemStack(stack, 1, meta);
-	}
-	
 	public abstract Set<T> getArtSet();
 	
 	public abstract T getDefault();
 	
 	public abstract ItemStack getStackDropped();
 	
-	public static interface IArt
+	public interface IArt
 	{
-		public String getTitle();
+		String getTitle();
 		
-		public int getSizeX();
+		int getSizeX();
+		int getSizeY();
 		
-		public int getSizeY();
-		
-		public int getOffsetX();
-		
-		public int getOffsetY();
+		int getOffsetX();
+		int getOffsetY();
 	}
 	
 	public static void setRandom(boolean rand)
