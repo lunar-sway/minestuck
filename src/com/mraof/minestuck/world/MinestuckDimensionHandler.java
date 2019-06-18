@@ -1,7 +1,6 @@
 package com.mraof.minestuck.world;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.network.LandRegisterPacket;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
@@ -12,13 +11,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.DimensionType;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.ModDimension;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.FMLLog;
 
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -41,7 +38,7 @@ public class MinestuckDimensionHandler
 	public static void registerModDimensions(RegistryEvent.Register<ModDimension> event)
 	{
 		landDimensionType = new LandDimension.Type();
-		event.getRegistry().register(landDimensionType.setRegistryName("medium"));
+		event.getRegistry().register(landDimensionType.setRegistryName("lands"));
 		skaiaDimensionType = new SkaiaDimension.Type();
 		event.getRegistry().register(skaiaDimensionType.setRegistryName("skaia"));
 	}
@@ -63,7 +60,7 @@ public class MinestuckDimensionHandler
 		}
 	}
 	
-	public static void saveData(NBTTagCompound nbt)
+	/*public static void saveData(NBTTagCompound nbt)
 	{
 		if(unregisterTrace != null)
 		{
@@ -129,18 +126,19 @@ public class MinestuckDimensionHandler
 			DimensionManager.registerDimension(dimensionId, landDimensionType);
 		}
 		else Debug.warnf("Did not register land dimension with id %d. Appears to already be registered.", dimensionId);
-	}
+	}*/
 	
 	public static LandAspects getAspects(DimensionType dimension)
 	{
-		LandAspects aspects = lands.get(dimensionId);
+		return null;
+		/*LandAspects aspects = lands.get(dimensionId);
 		
 		if(aspects == null)
 		{
 			Debug.warnf("Tried to access land aspect for dimension %d, but didn't find any!", dimensionId);
 		}
 		
-		return aspects;
+		return aspects;*/
 	}
 	
 	public static boolean isLandDimension(DimensionType dimension)
@@ -153,7 +151,7 @@ public class MinestuckDimensionHandler
 		return dimension == skaia;
 	}
 	
-	public static Set<Map.Entry<Integer, LandAspects>> getLandSet()
+	/*public static Set<Map.Entry<Integer, LandAspects>> getLandSet()
 	{
 		return lands.entrySet();
 	}
@@ -174,5 +172,5 @@ public class MinestuckDimensionHandler
 			if(!DimensionManager.isDimensionRegistered(dim))
 				DimensionManager.registerDimension(dim, landDimensionType);
 		}
-	}
+	}*/
 }

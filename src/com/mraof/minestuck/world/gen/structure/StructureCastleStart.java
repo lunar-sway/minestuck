@@ -9,17 +9,15 @@ import java.util.Random;
 import com.mraof.minestuck.util.Debug;
 
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.StructureComponent;
-import net.minecraft.world.gen.structure.StructureStart;
 
 /**
  * @author mraof
  *
  */
-public class StructureCastleStart extends StructureStart
+public class StructureCastleStart //extends StructureStart
 {
 	
-	@SuppressWarnings("unchecked")
+	/*@SuppressWarnings("unchecked")
 	public StructureCastleStart(World world, Random random, int chunkX, int chunkZ, boolean isBlack)
 	{
 		super(chunkX, chunkZ);
@@ -37,7 +35,7 @@ public class StructureCastleStart extends StructureStart
 			structurecomponent.buildComponent(startPiece, this.components, random);
 		}
 		this.updateBoundingBox();
-	}
+	}*/
 	
 	
 }

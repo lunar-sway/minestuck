@@ -19,8 +19,6 @@ import net.minecraft.block.*;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.gen.feature.WorldGenCactus;
-import net.minecraft.world.gen.feature.WorldGenDeadBush;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,27 +63,27 @@ public class LandAspectSand extends TerrainLandAspect
 		{
 			registry.setBlockState("upper", Blocks.SAND.getDefaultState());
 			registry.setBlockState("ground", Blocks.SANDSTONE.getDefaultState());
-			registry.setBlockState("structure_primary", Blocks.SANDSTONE.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.SMOOTH));
-			registry.setBlockState("structure_primary_decorative", Blocks.SANDSTONE.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.CHISELED));
+			registry.setBlockState("structure_primary", Blocks.SMOOTH_SANDSTONE.getDefaultState());
+			registry.setBlockState("structure_primary_decorative", Blocks.CHISELED_SANDSTONE.getDefaultState());
 			registry.setBlockState("structure_primary_stairs", Blocks.SANDSTONE_STAIRS.getDefaultState());
-			registry.setBlockState("village_path", Blocks.SAND.getDefaultState().withProperty(BlockSand.VARIANT, BlockSand.EnumType.RED_SAND));
+			registry.setBlockState("village_path", Blocks.RED_SAND.getDefaultState());
 		} else
 		{
-			registry.setBlockState("upper", Blocks.SAND.getDefaultState().withProperty(BlockSand.VARIANT, BlockSand.EnumType.RED_SAND));
+			registry.setBlockState("upper", Blocks.RED_SAND.getDefaultState());
 			registry.setBlockState("ground", Blocks.RED_SANDSTONE.getDefaultState());
-			registry.setBlockState("structure_primary", Blocks.RED_SANDSTONE.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.SMOOTH));
-			registry.setBlockState("structure_primary_decorative", Blocks.RED_SANDSTONE.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.CHISELED));
+			registry.setBlockState("structure_primary", Blocks.SMOOTH_RED_SANDSTONE.getDefaultState());
+			registry.setBlockState("structure_primary_decorative", Blocks.CHISELED_RED_SANDSTONE.getDefaultState());
 			registry.setBlockState("structure_primary_stairs", Blocks.RED_SANDSTONE_STAIRS.getDefaultState());
 			registry.setBlockState("village_path", Blocks.SAND.getDefaultState());
 		}
-		registry.setBlockState("structure_secondary", Blocks.STONEBRICK.getDefaultState());
-		registry.setBlockState("structure_secondary_decorative", Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED));
+		registry.setBlockState("structure_secondary", Blocks.STONE_BRICKS.getDefaultState());
+		registry.setBlockState("structure_secondary_decorative", Blocks.CHISELED_STONE_BRICKS.getDefaultState());
 		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState());
-		registry.setBlockState("structure_planks", Blocks.PLANKS.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.ACACIA));
-		registry.setBlockState("structure_planks_slab", Blocks.WOODEN_SLAB.getDefaultState().withProperty(BlockWoodSlab.VARIANT, BlockPlanks.EnumType.ACACIA));
+		registry.setBlockState("structure_planks", Blocks.ACACIA_PLANKS.getDefaultState());
+		registry.setBlockState("structure_planks_slab", Blocks.ACACIA_SLAB.getDefaultState());
 		registry.setBlockState("river", registry.getBlockState("upper"));
-		registry.setBlockState("structure_wool_1", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.YELLOW));
-		registry.setBlockState("structure_wool_3", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.MAGENTA));
+		registry.setBlockState("structure_wool_1", Blocks.YELLOW_WOOL.getDefaultState());
+		registry.setBlockState("structure_wool_3", Blocks.MAGENTA_WOOL.getDefaultState());
 	}
 	
 	@Override
@@ -108,7 +106,7 @@ public class LandAspectSand extends TerrainLandAspect
 	public List<ILandDecorator> getDecorators()
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
-		list.add(new WorldGenDecorator(new WorldGenCactus(), 15, 0.4F, BiomeMinestuck.mediumNormal));
+		/*list.add(new WorldGenDecorator(new WorldGenCactus(), 15, 0.4F, BiomeMinestuck.mediumNormal));
 		list.add(new WorldGenDecorator(new WorldGenCactus(), 5, 0.4F, BiomeMinestuck.mediumRough));
 		list.add(new WorldGenDecorator(new WorldGenDeadBush(), 1, 0.4F, BiomeMinestuck.mediumNormal, BiomeMinestuck.mediumRough));
 		list.add(new OasisDecorator());
@@ -131,7 +129,7 @@ public class LandAspectSand extends TerrainLandAspect
 		list.add(new UndergroundDecoratorVein(Blocks.SAND.getDefaultState().withProperty(BlockSand.VARIANT, type == Variant.SAND_RED?BlockSand.EnumType.RED_SAND:BlockSand.EnumType.SAND), 8, 28, 256));
 		list.add(new UndergroundDecoratorVein((type == Variant.SAND_RED?MinestuckBlocks.ironOreSandstoneRed:MinestuckBlocks.ironOreSandstone).getDefaultState(), 24, 9, 64));
 		list.add(new UndergroundDecoratorVein((type == Variant.SAND_RED?MinestuckBlocks.goldOreSandstoneRed:MinestuckBlocks.goldOreSandstone).getDefaultState(), 6, 9, 32));
-		
+		*/
 		return list;
 	}
 	

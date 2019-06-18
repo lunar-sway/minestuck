@@ -1,21 +1,21 @@
 /**
  * 
  */
-package com.mraof.minestuck.world.gen.structure;
+package com.mraof.minestuck.world.lands.structure;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 import com.mraof.minestuck.util.Debug;
 
+import com.mraof.minestuck.world.gen.structure.ComponentCloudDungeonCenterPiece;
+import com.mraof.minestuck.world.gen.structure.ComponentCloudDungeonPiece;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.StructureComponent;
-import net.minecraft.world.gen.structure.StructureStart;
 
-public class StructureCloudDungeonStart extends StructureStart
+public class StructureCloudDungeonStart //extends StructureStart
 {
 	
-	@SuppressWarnings("unchecked")
+	/*@SuppressWarnings("unchecked")
 	public StructureCloudDungeonStart(World world, Random random, int chunkX, int chunkZ)
 	{
 		super(chunkX, chunkZ);
@@ -34,6 +34,6 @@ public class StructureCloudDungeonStart extends StructureStart
 		}
 		this.updateBoundingBox();
 	}
-	
+	*/
 	
 }

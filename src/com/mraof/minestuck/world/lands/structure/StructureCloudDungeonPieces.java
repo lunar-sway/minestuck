@@ -1,15 +1,17 @@
-package com.mraof.minestuck.world.gen.structure;
+package com.mraof.minestuck.world.lands.structure;
+
+import com.mraof.minestuck.world.gen.structure.ComponentCloudDungeonCenterPiece;
+import com.mraof.minestuck.world.gen.structure.ComponentCloudDungeonCornerPiece;
+import com.mraof.minestuck.world.gen.structure.ComponentCloudDungeonEdgePiece;
+import com.mraof.minestuck.world.gen.structure.ComponentCloudDungeonPiece;
 
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.world.gen.structure.MapGenStructureIO;
-import net.minecraft.world.gen.structure.StructureComponent;
-
 public class StructureCloudDungeonPieces 
 {
 
-	public static StructureComponent getNextValidComponent(
+	/*public static StructureComponent getNextValidComponent(
 			ComponentCloudDungeonPiece cloudStartPiece,
 			List<ComponentCloudDungeonPiece> par2List, Random par2Random, int x, int y, int z, int par6, int componentType)
 	{
@@ -52,6 +54,6 @@ public class StructureCloudDungeonPieces
 		MapGenStructureIO.registerStructureComponent(ComponentCloudDungeonCenterPiece.class, "CloudDungeonCenter");
 		MapGenStructureIO.registerStructureComponent(ComponentCloudDungeonEdgePiece.class, "CloudDungeonEdge");
 		MapGenStructureIO.registerStructureComponent(ComponentCloudDungeonCornerPiece.class, "CloudDungeonCorner");
-	}
+	}*/
 	
 }

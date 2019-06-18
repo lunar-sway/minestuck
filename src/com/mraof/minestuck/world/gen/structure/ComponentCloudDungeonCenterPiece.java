@@ -9,9 +9,6 @@ import com.mraof.minestuck.block.MinestuckBlocks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.StructureBoundingBox;
-import net.minecraft.world.gen.structure.StructureComponent;
-import net.minecraft.world.gen.structure.template.TemplateManager;
 
 public class ComponentCloudDungeonCenterPiece extends ComponentCloudDungeonPiece 
 {
@@ -23,7 +20,7 @@ public class ComponentCloudDungeonCenterPiece extends ComponentCloudDungeonPiece
     public int castleWidth, castleLength, x, z, totalPieces;
     
     public ComponentCloudDungeonCenterPiece() {}
-	protected ComponentCloudDungeonCenterPiece(int par1, int x, int z) 
+	/*protected ComponentCloudDungeonCenterPiece(int par1, int x, int z)
 	{
 		super(par1, (ComponentCloudDungeonCenterPiece)null);
         this.boundingBox = new StructureBoundingBox(x, 0, z, x, 74, z);
@@ -90,5 +87,5 @@ public class ComponentCloudDungeonCenterPiece extends ComponentCloudDungeonPiece
 	{
 		// TODO Auto-generated method stub
 		
-	}
+	}*/
 }

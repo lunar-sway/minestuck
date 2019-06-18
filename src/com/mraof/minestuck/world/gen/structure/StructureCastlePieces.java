@@ -3,13 +3,10 @@ package com.mraof.minestuck.world.gen.structure;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.world.gen.structure.MapGenStructureIO;
-import net.minecraft.world.gen.structure.StructureComponent;
-
 public class StructureCastlePieces 
 {
 
-	public static StructureComponent getNextValidComponent(
+	/*public static StructureComponent getNextValidComponent(
 			ComponentCastleStartPiece startPiece,
 			List<ComponentCastlePiece> par2List, Random par2Random, int x, int y, int z, int par6, int componentType)
 	{
@@ -54,6 +51,6 @@ public class StructureCastlePieces
 		MapGenStructureIO.registerStructureComponent(ComponentCastleStaircasePiece.class, "SkaiaCastleStaircase");
 		MapGenStructureIO.registerStructureComponent(ComponentCastleWallPiece.class, "SkaiaCastleWall");
 		MapGenStructureIO.registerStructureComponent(ComponentCastlePiece.class, "SkaiaCastleMain");
-	}
+	}*/
 	
 }

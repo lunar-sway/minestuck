@@ -1,12 +1,7 @@
-/**
- * 
- */
 package com.mraof.minestuck.world.gen.structure;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.MapGenStructure;
-import net.minecraft.world.gen.structure.StructureStart;
 
 import javax.annotation.Nullable;
 
@@ -14,10 +9,10 @@ import javax.annotation.Nullable;
  * @author mraof
  *
  */
-public class MapGenCastle extends MapGenStructure
+public class MapGenCastle //extends MapGenStructure
 {
 	
-	@Override
+	/*@Override
     protected boolean canSpawnStructureAtCoords(int chunkX, int chunkY)
     {
         int var3 = chunkX >> 4;
@@ -44,5 +39,5 @@ public class MapGenCastle extends MapGenStructure
 	public BlockPos getNearestStructurePos(World worldIn, BlockPos pos, boolean findUnexplored)
 	{
 		return null;
-	}
+	}*/
 }

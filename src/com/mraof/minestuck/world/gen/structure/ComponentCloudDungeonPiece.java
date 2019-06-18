@@ -6,6 +6,7 @@ import java.util.Random;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
 
+import com.mraof.minestuck.world.lands.structure.StructureCloudDungeonPieces;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

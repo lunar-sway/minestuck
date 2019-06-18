@@ -2,20 +2,19 @@ package com.mraof.minestuck.world.gen.feature;
 
 import java.util.Random;
 
-import com.mraof.minestuck.block.BlockEndLog;
-import com.mraof.minestuck.block.BlockMinestuckLeaves1;
 import com.mraof.minestuck.block.MinestuckBlocks;
 
 import net.minecraft.block.BlockLog;
-import net.minecraft.block.BlockOldLog;
-import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.trees.AbstractTree;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenAbstractTree;
+import net.minecraft.world.gen.feature.AbstractTreeFeature;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
+
+import javax.annotation.Nullable;
 
 public class EndTree extends AbstractTree
 {
@@ -25,17 +24,23 @@ public class EndTree extends AbstractTree
 	private int minMax;
 	private int maxMax;
 	
-	public EndTree(boolean notify)
+	public EndTree()
 	{
-		this(notify, 5, 5);
+		this(5, 5);
 	}
 	
-	public EndTree(boolean notify, int minimumMaxAge, int maximumMaxAge)
+	public EndTree(int minimumMaxAge, int maximumMaxAge)
 	{
-		super(notify);
 	}
 	
+	@Nullable
 	@Override
+	protected AbstractTreeFeature<NoFeatureConfig> getTreeFeature(Random random)
+	{
+		return null;
+	}
+	
+	/*@Override
 	public boolean generate(World worldIn, Random rand, BlockPos position)
 	{
 		boolean flag = true;
@@ -184,5 +189,5 @@ public class EndTree extends AbstractTree
 				leaves(world, curr.west(),	distance + 2);
 			}
 		}
-	}
+	}*/
 }

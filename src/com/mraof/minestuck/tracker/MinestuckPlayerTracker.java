@@ -79,7 +79,7 @@ public class MinestuckPlayerTracker
 			MinestuckPacketHandler.sendToPlayer(CaptchaDeckPacket.data(CaptchaDeckHandler.writeToNBT(modus)), player);
 		}
 		
-		updateGristCache(identifier);
+		updateGristCache(player.getServer(), identifier);
 		updateTitle(player);
 		updateEcheladder(player, true);
 		MinestuckPacketHandler.sendToPlayer(PlayerDataPacket.boondollars(MinestuckPlayerData.getData(identifier).boondollars), player);
@@ -147,12 +147,12 @@ public class MinestuckPlayerTracker
 	/**
 	 * Uses an "encoded" username as parameter.
 	 */
-	public static void updateGristCache(PlayerIdentifier player)
+	public static void updateGristCache(MinecraftServer server, PlayerIdentifier player)
 	{
 		GristSet gristSet = MinestuckPlayerData.getGristSet(player);
 		
 		//The player
-		EntityPlayerMP playerMP = player.getPlayer();
+		EntityPlayerMP playerMP = player.getPlayer(server);
 		if(playerMP != null)
 		{
 			GristCachePacket packet = new GristCachePacket(gristSet, false);

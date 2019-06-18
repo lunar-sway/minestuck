@@ -4,9 +4,7 @@ import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.decorator.PillarDecorator;
 import com.mraof.minestuck.world.lands.decorator.structure.BasicTowerDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import net.minecraft.block.BlockColored;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumDyeColor;
 
 public class LandAspectTowers extends TitleLandAspect
 {
@@ -26,8 +24,8 @@ public class LandAspectTowers extends TitleLandAspect
 	@Override
 	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
-		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.LIGHT_BLUE));
-		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.CARPET.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.YELLOW));
+		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.LIGHT_BLUE_WOOL.getDefaultState());
+		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.YELLOW_CARPET.getDefaultState());
 		chunkProvider.decorators.add(new BasicTowerDecorator());
 		chunkProvider.decorators.add(new PillarDecorator("structure_primary", 1, true, BiomeMinestuck.mediumRough));
 		chunkProvider.sortDecorators();

@@ -1,6 +1,5 @@
 package com.mraof.minestuck.world.lands.terrain;
 
-import com.mraof.minestuck.block.BlockMinestuckStone;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
@@ -15,12 +14,8 @@ import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.gen.DefaultTerrainGen;
 import com.mraof.minestuck.world.lands.gen.ILandTerrainGen;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
-import net.minecraft.block.BlockColored;
 import net.minecraft.block.BlockSilverfish;
-import net.minecraft.block.BlockStoneBrick;
-import net.minecraft.block.BlockStoneSlab;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.ArrayList;
@@ -58,16 +53,16 @@ public class LandAspectRock extends TerrainLandAspect
 			registry.setBlockState("surface", Blocks.GRAVEL.getDefaultState());
 		}
 		registry.setBlockState("upper", Blocks.COBBLESTONE.getDefaultState());
-		registry.setBlockState("structure_primary_decorative", Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED));
+		registry.setBlockState("structure_primary_decorative", Blocks.CHISELED_STONE_BRICKS.getDefaultState());
 		registry.setBlockState("structure_primary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState());
-		registry.setBlockState("structure_secondary", MinestuckBlocks.stone.getDefaultState());
-		registry.setBlockState("structure_secondary_decorative", MinestuckBlocks.stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.COARSE_CHISELED));
-		registry.setBlockState("structure_secondary_stairs", MinestuckBlocks.coarseStoneStairs.getDefaultState());
-		registry.setBlockState("structure_planks_slab", Blocks.STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.BRICK));		registry.setBlockState("structure_planks_slab", Blocks.STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.BRICK));
+		registry.setBlockState("structure_secondary", MinestuckBlocks.COARSE_STONE.getDefaultState());
+		registry.setBlockState("structure_secondary_decorative", MinestuckBlocks.CHISELED_COARSE_STONE.getDefaultState());
+		registry.setBlockState("structure_secondary_stairs", MinestuckBlocks.COARSE_STONE_STAIRS.getDefaultState());
+		registry.setBlockState("structure_planks_slab", Blocks.BRICK_SLAB.getDefaultState());
 		registry.setBlockState("village_path", Blocks.MOSSY_COBBLESTONE.getDefaultState());
 		registry.setBlockState("village_fence", Blocks.COBBLESTONE_WALL.getDefaultState());
-		registry.setBlockState("structure_wool_1", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.BROWN));
-		registry.setBlockState("structure_wool_3", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.GRAY));
+		registry.setBlockState("structure_wool_1", Blocks.BROWN_WOOL.getDefaultState());
+		registry.setBlockState("structure_wool_3", Blocks.GRAY_WOOL.getDefaultState());
 	}
 	
 	@Override
@@ -97,24 +92,24 @@ public class LandAspectRock extends TerrainLandAspect
 		list.add(new UndergroundDecoratorVein(Blocks.GOLD_ORE.getDefaultState(), 4, 9, 32));
 		list.add(new UndergroundDecoratorVein(Blocks.DIAMOND_ORE.getDefaultState(), 2, 6, 24));
 		list.add(new UndergroundDecoratorVein(Blocks.GRAVEL.getDefaultState(), 10, 33, 256));
-		list.add(new UndergroundDecoratorVein(Blocks.MONSTER_EGG.getDefaultState().withProperty(BlockSilverfish.VARIANT, BlockSilverfish.EnumType.STONE), 7, 9, 64));
+		list.add(new UndergroundDecoratorVein(Blocks.INFESTED_STONE.getDefaultState(), 7, 9, 64));
 		list.add(new SurfaceDecoratorVein(Blocks.CLAY.getDefaultState(), 25, 20, BiomeMinestuck.mediumOcean));
 		
 		list.add(new BlockBlobDecorator(Blocks.COBBLESTONE.getDefaultState(), 0, 3, BiomeMinestuck.mediumNormal));
 		list.add(new BlockBlobDecorator(Blocks.COBBLESTONE.getDefaultState(), 1, 4, BiomeMinestuck.mediumRough));
 		if(type == Variant.ROCK) {
-			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.petrifiedGrass, true, 25, 32, BiomeMinestuck.mediumRough));
-			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.petrifiedGrass, true, 10, 48, BiomeMinestuck.mediumNormal));
-			list.add(new LeaflessTreeDecorator(MinestuckBlocks.petrifiedLog.getDefaultState(), 0.05F, BiomeMinestuck.mediumRough));
+			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.PETRIFIED_GRASS, true, 25, 32, BiomeMinestuck.mediumRough));
+			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.PETRIFIED_GRASS, true, 10, 48, BiomeMinestuck.mediumNormal));
+			list.add(new LeaflessTreeDecorator(MinestuckBlocks.PETRIFIED_LOG.getDefaultState(), 0.05F, BiomeMinestuck.mediumRough));
 			list.add(new BlockBlobDecorator(Blocks.COBBLESTONE.getDefaultState(), 0, 3, BiomeMinestuck.mediumNormal));
 			list.add(new BlockBlobDecorator(Blocks.COBBLESTONE.getDefaultState(), 1, 4, BiomeMinestuck.mediumRough));
 		} else {
-			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.petrifiedPoppy, true, 10, 25, BiomeMinestuck.mediumNormal));
-			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.petrifiedPoppy, true, 5, 25, BiomeMinestuck.mediumRough));
-			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.petrifiedGrass, true, 35, 35, BiomeMinestuck.mediumNormal));
-			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.petrifiedGrass, true, 55, 55, BiomeMinestuck.mediumRough));
-			list.add(new LeaflessTreeDecorator(MinestuckBlocks.petrifiedLog.getDefaultState(), 0.1F, BiomeMinestuck.mediumNormal));
-			list.add(new LeaflessTreeDecorator(MinestuckBlocks.petrifiedLog.getDefaultState(), 2.5F, BiomeMinestuck.mediumRough));
+			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.PETRIFIED_POPPY, true, 10, 25, BiomeMinestuck.mediumNormal));
+			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.PETRIFIED_POPPY, true, 5, 25, BiomeMinestuck.mediumRough));
+			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.PETRIFIED_GRASS, true, 35, 35, BiomeMinestuck.mediumNormal));
+			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.PETRIFIED_GRASS, true, 55, 55, BiomeMinestuck.mediumRough));
+			list.add(new LeaflessTreeDecorator(MinestuckBlocks.PETRIFIED_LOG.getDefaultState(), 0.1F, BiomeMinestuck.mediumNormal));
+			list.add(new LeaflessTreeDecorator(MinestuckBlocks.PETRIFIED_LOG.getDefaultState(), 2.5F, BiomeMinestuck.mediumRough));
 		}
 		return list;
 	}

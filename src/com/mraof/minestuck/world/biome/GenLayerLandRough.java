@@ -3,13 +3,13 @@ package com.mraof.minestuck.world.biome;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.layer.GenLayer;
 
-public class GenLayerLandRough extends GenLayer
+public class GenLayerLandRough //extends GenLayer
 {
 	
 	int roughChance;
 	GenLayer parent;
 	
-	public GenLayerLandRough(long seed, GenLayer parent)
+	/*public GenLayerLandRough(long seed, GenLayer parent)
 	{
 		super(seed);
 		this.parent = parent;
@@ -51,9 +51,9 @@ public class GenLayerLandRough extends GenLayer
 						&& parentGen[parentIndex + width] != oceanId && parentGen[parentIndex - width] != oceanId)
 					biomeGen[biomeIndex] = Biome.getIdForBiome(BiomeMinestuck.mediumRough);
 				else biomeGen[biomeIndex] = parentGen[parentIndex];
-			}*/
+			}*//*
 		
 		return biomeGen;
-	}
+	}*/
 	
 }

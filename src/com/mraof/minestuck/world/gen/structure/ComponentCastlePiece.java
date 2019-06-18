@@ -8,16 +8,14 @@ import com.mraof.minestuck.block.MinestuckBlocks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.StructureBoundingBox;
-import net.minecraft.world.gen.structure.StructureComponent;
 
-public abstract class ComponentCastlePiece extends StructureComponent 
+public abstract class ComponentCastlePiece //extends StructureComponent
 {
 	protected ComponentCastleStartPiece startPiece;
 	protected int direction;
 	//private List roomsLinkedToTheRoom = new LinkedList();
 	public ComponentCastlePiece() {}
-	protected ComponentCastlePiece(int par1, ComponentCastleStartPiece startPiece) 
+	/*protected ComponentCastlePiece(int par1, ComponentCastleStartPiece startPiece)
 	{
 		super(par1);
 //		this.boundingBox = new StructureBoundingBox(0, 0, 0, 256, 7, 256);
@@ -47,7 +45,7 @@ public abstract class ComponentCastlePiece extends StructureComponent
 	 * Discover the y coordinate that will serve as the ground level of the supplied BoundingBox. (A median of all the
 	 * levels in the BB's horizontal rectangle).
 	 */
-	protected int getAverageGroundLevel(World par1World, StructureBoundingBox par2StructureBoundingBox)
+	/*protected int getAverageGroundLevel(World par1World, StructureBoundingBox par2StructureBoundingBox)
 	{
 		int var3 = 0;
 		int var4 = 0;
@@ -107,6 +105,6 @@ public abstract class ComponentCastlePiece extends StructureComponent
 	protected IBlockState getChessBlockState(int meta)
 	{
 		return MinestuckBlocks.chessTile.getStateFromMeta(meta);
-	}
+	}*/
 	
 }

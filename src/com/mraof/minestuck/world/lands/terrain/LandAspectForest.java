@@ -3,7 +3,6 @@ package com.mraof.minestuck.world.lands.terrain;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mraof.minestuck.block.BlockMinestuckLog1;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
@@ -11,23 +10,12 @@ import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.*;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
-import net.minecraft.block.BlockColored;
-import net.minecraft.block.BlockDirt;
 import net.minecraft.block.BlockLeaves;
-import net.minecraft.block.BlockOldLeaf;
-import net.minecraft.block.BlockOldLog;
-import net.minecraft.block.BlockPlanks;
-import net.minecraft.block.BlockLog.EnumAxis;
-import net.minecraft.block.BlockStoneBrick;
+import net.minecraft.block.BlockLog;
 import net.minecraft.block.BlockTallGrass;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.gen.feature.WorldGenBigTree;
-import net.minecraft.world.gen.feature.WorldGenTaiga1;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class LandAspectForest extends TerrainLandAspect
 {
@@ -56,8 +44,8 @@ public class LandAspectForest extends TerrainLandAspect
 	{
 		registry.setBlockState("surface", Blocks.GRASS.getDefaultState());
 		registry.setBlockState("upper", Blocks.DIRT.getDefaultState());
-		if(type == Variant.TAIGA) {
-			registry.setBlockState("structure_primary", Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.SPRUCE).withProperty(BlockMinestuckLog1.LOG_AXIS, EnumAxis.NONE));
+		/*if(type == Variant.TAIGA) {
+			registry.setBlockState("structure_primary", Blocks.SPRUCE_WOOD.getDefaultState());
 			registry.setBlockState("structure_primary_decorative", MinestuckBlocks.log.getDefaultState().withProperty(BlockMinestuckLog1.VARIANT, BlockMinestuckLog1.BlockType.FROST).withProperty(BlockMinestuckLog1.LOG_AXIS, EnumAxis.NONE));
 		} else {
 			registry.setBlockState("structure_primary", MinestuckBlocks.log.getDefaultState().withProperty(BlockMinestuckLog1.VARIANT, BlockMinestuckLog1.BlockType.VINE_OAK).withProperty(BlockMinestuckLog1.LOG_AXIS, EnumAxis.NONE));
@@ -73,7 +61,7 @@ public class LandAspectForest extends TerrainLandAspect
 			registry.setBlockState("structure_wool_3", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.LIGHT_BLUE));
 		} else {
 			registry.setBlockState("structure_wool_3", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.BROWN));
-		}
+		}*/
 	}
 	
 	@Override
@@ -96,7 +84,7 @@ public class LandAspectForest extends TerrainLandAspect
 	public List<ILandDecorator> getDecorators()
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<>();
-		if(type == Variant.FOREST) {
+		/*if(type == Variant.FOREST) {
 			list.add(new BasicTreeDecorator(5, BiomeMinestuck.mediumNormal));
 			list.add(new BasicTreeDecorator(8, BiomeMinestuck.mediumRough));
 			list.add(new WorldGenDecorator(new WorldGenBigTree(false), 15, 0.6F, BiomeMinestuck.mediumNormal));
@@ -105,7 +93,7 @@ public class LandAspectForest extends TerrainLandAspect
 			list.add(new SpruceTreeDecorator(Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.SPRUCE), Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.SPRUCE).withProperty(BlockLeaves.CHECK_DECAY, false), BiomeMinestuck.mediumNormal));
 			list.add(new SpruceTreeDecorator(Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.SPRUCE), Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.SPRUCE).withProperty(BlockLeaves.CHECK_DECAY, false), BiomeMinestuck.mediumRough));
 			list.add(new SurfaceDecoratorVein(Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.PODZOL), 25, 40, BiomeMinestuck.mediumNormal, BiomeMinestuck.mediumRough));
-		}
+		}*/
 		list.add(new TallGrassDecorator(0.3F, BiomeMinestuck.mediumNormal));
 		list.add(new TallGrassDecorator(0.5F, 0.2F, BiomeMinestuck.mediumRough));
 		

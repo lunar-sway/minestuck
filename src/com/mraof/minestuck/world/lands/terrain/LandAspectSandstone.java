@@ -13,7 +13,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.gen.feature.WorldGenDeadBush;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,26 +55,26 @@ public class LandAspectSandstone extends TerrainLandAspect
 		if(type == Variant.SANDSTONE)
 		{
 			registry.setBlockState("upper", Blocks.SANDSTONE.getDefaultState());
-			registry.setBlockState("structure_primary", Blocks.SANDSTONE.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.SMOOTH));
-			registry.setBlockState("structure_primary_decorative", Blocks.SANDSTONE.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.CHISELED));
+			registry.setBlockState("structure_primary", Blocks.SMOOTH_SANDSTONE.getDefaultState());
+			registry.setBlockState("structure_primary_decorative", Blocks.CHISELED_SANDSTONE.getDefaultState());
 			registry.setBlockState("structure_primary_stairs", Blocks.SANDSTONE_STAIRS.getDefaultState());
-			registry.setBlockState("village_path", Blocks.SAND.getDefaultState().withProperty(BlockSand.VARIANT, BlockSand.EnumType.RED_SAND));
+			registry.setBlockState("village_path", Blocks.RED_SAND.getDefaultState());
 		} else
 		{
 			registry.setBlockState("upper", Blocks.RED_SANDSTONE.getDefaultState());
-			registry.setBlockState("structure_primary", Blocks.RED_SANDSTONE.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.SMOOTH));
-			registry.setBlockState("structure_primary_decorative", Blocks.RED_SANDSTONE.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.CHISELED));
+			registry.setBlockState("structure_primary", Blocks.SMOOTH_RED_SANDSTONE.getDefaultState());
+			registry.setBlockState("structure_primary_decorative", Blocks.CHISELED_RED_SANDSTONE.getDefaultState());
 			registry.setBlockState("structure_primary_stairs", Blocks.RED_SANDSTONE_STAIRS.getDefaultState());
 			registry.setBlockState("village_path", Blocks.SAND.getDefaultState());
 		}
-		registry.setBlockState("structure_secondary", Blocks.STONEBRICK.getDefaultState());
-		registry.setBlockState("structure_secondary_decorative", Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED));
+		registry.setBlockState("structure_secondary", Blocks.STONE_BRICKS.getDefaultState());
+		registry.setBlockState("structure_secondary_decorative", Blocks.CHISELED_STONE_BRICKS.getDefaultState());
 		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState());
-		registry.setBlockState("structure_planks", Blocks.PLANKS.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.ACACIA));
-		registry.setBlockState("structure_planks_slab", Blocks.WOODEN_SLAB.getDefaultState().withProperty(BlockWoodSlab.VARIANT, BlockPlanks.EnumType.ACACIA));
+		registry.setBlockState("structure_planks", Blocks.ACACIA_PLANKS.getDefaultState());
+		registry.setBlockState("structure_planks_slab", Blocks.ACACIA_SLAB.getDefaultState());
 		registry.setBlockState("torch", Blocks.REDSTONE_TORCH.getDefaultState());
-		registry.setBlockState("structure_wool_1", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.WHITE));
-		registry.setBlockState("structure_wool_3", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.MAGENTA));
+		registry.setBlockState("structure_wool_1", Blocks.WHITE_WOOL.getDefaultState());
+		registry.setBlockState("structure_wool_3", Blocks.MAGENTA_WOOL.getDefaultState());
 	}
 	
 	@Override
@@ -98,13 +97,13 @@ public class LandAspectSandstone extends TerrainLandAspect
 		IBlockState sandstone = Blocks.SANDSTONE.getDefaultState();
 		if(type == Variant.SANDSTONE_RED)
 		{
-			sand = sand.withProperty(BlockSand.VARIANT, BlockSand.EnumType.RED_SAND);
+			sand = Blocks.RED_SAND.getDefaultState();
 			sandstone = Blocks.RED_SANDSTONE.getDefaultState();
 		}
 		list.add(new SurfaceDecoratorVein(sand, 10, 32));
 		list.add(new BlockBlobDecorator(sandstone, 0, 3, BiomeMinestuck.mediumNormal));
 		list.add(new BlockBlobDecorator(sandstone, 0, 5, BiomeMinestuck.mediumRough));
-		list.add(new WorldGenDecorator(new WorldGenDeadBush(), 15, 0.4F));
+		//list.add(new WorldGenDecorator(new WorldGenDeadBush(), 15, 0.4F));
 		
 		list.add(new UndergroundDecoratorVein(sandstone, 8, 28, 256));
 		list.add(new UndergroundDecoratorVein(Blocks.IRON_ORE.getDefaultState(), 24, 9, 64));

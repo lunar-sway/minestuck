@@ -13,6 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameType;
 import net.minecraft.world.World;
@@ -22,6 +23,7 @@ import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.common.ModDimension;
 
+import javax.annotation.Nullable;
 import java.util.function.Function;
 
 public class LandDimension extends Dimension
@@ -29,7 +31,7 @@ public class LandDimension extends Dimension
 	private final DimensionType type;
 	
 	public ChunkProviderLands chunkProvider;
-	public LandAspectRegistry.AspectCombination landAspects;
+	public LandAspects landAspects;
 	public float skylightBase;
 	Vec3d skyColor;
 	Vec3d fogColor;
@@ -73,12 +75,38 @@ public class LandDimension extends Dimension
 	{
 		if (chunkProvider == null)
 		{
-			landAspects = MinestuckDimensionHandler.getAspects(getDimension());
+			landAspects = MinestuckDimensionHandler.getAspects(getType());
 			
 			chunkProvider = landAspects.aspectTitle.createChunkProvider(this);
 			
 		}
 		return chunkProvider;
+	}
+	
+	@Nullable
+	@Override
+	public BlockPos findSpawn(ChunkPos p_206920_1_, boolean checkValid)
+	{
+		return null;
+	}
+	
+	@Nullable
+	@Override
+	public BlockPos findSpawn(int p_206921_1_, int p_206921_2_, boolean checkValid)
+	{
+		return null;
+	}
+	
+	@Override
+	public float calculateCelestialAngle(long worldTime, float partialTicks)
+	{
+		return 0;
+	}
+	
+	@Override
+	public boolean doesXZShowFog(int x, int z)
+	{
+		return false;
 	}
 	
 	public String getDimensionName()
@@ -93,7 +121,7 @@ public class LandDimension extends Dimension
 	@Override
 	public BlockPos getSpawnPoint() 
 	{
-		BlockPos spawn = MinestuckDimensionHandler.getSpawn(getDimension());
+		BlockPos spawn = new BlockPos(0, 0,0 );
 		if(spawn != null)
 			return spawn;
 		else
@@ -102,7 +130,7 @@ public class LandDimension extends Dimension
 			return super.getSpawnPoint();
 		}
 	}
-	
+	/*
 	@Override
 	public BlockPos getRandomizedSpawnPoint()
 	{
@@ -121,7 +149,7 @@ public class LandDimension extends Dimension
 		}
 		
 		return coordinates;
-	}
+	}*/
 	
 	@Override
 	public DimensionType getRespawnDimension(EntityPlayerMP player)
@@ -163,7 +191,7 @@ public class LandDimension extends Dimension
 		doesWaterVaporize = false;
 		if(chunkProvider == null)
 			createChunkGenerator();
-		this.biomeProvider = new BiomeProviderLands(world, chunkProvider.rainfall, chunkProvider.oceanChance, chunkProvider.roughChance);
+		//this.biomeProvider = new BiomeProviderLands(world, chunkProvider.rainfall, chunkProvider.oceanChance, chunkProvider.roughChance);
 		this.nether = false;
 		
 		if(world.isRemote)
@@ -225,12 +253,12 @@ public class LandDimension extends Dimension
 	{
 		return world;
 	}
-	
+	/*
 	@Override
 	public Biome getBiomeForCoords(BlockPos pos)
 	{
 		return chunkProvider.getBiomeGen();
-	}
+	}^*/
 	
 	@Override
 	public void onPlayerAdded(EntityPlayerMP player)
@@ -239,7 +267,7 @@ public class LandDimension extends Dimension
 		int centerZ = ((int)player.posZ) >> 4;
 		for(int x = centerX - 1; x <= centerX + 1; x++)
 			for(int z = centerZ - 1; z <= centerZ + 1; z++)
-				this.world.getChunkProvider().provideChunk(x, z);
+				this.world.getChunkProvider().provideChunk(x, z, true, true);
 	}
 	
 	public BlockPos findAndMarkNextStructure(EntityPlayerMP player, String type, NBTTagList tags)

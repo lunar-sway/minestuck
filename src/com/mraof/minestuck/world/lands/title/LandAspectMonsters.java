@@ -3,13 +3,8 @@ package com.mraof.minestuck.world.lands.title;
 import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import net.minecraft.block.BlockColored;
-import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.entity.monster.EntitySpider;
-import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.EntityType;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
 
@@ -35,16 +30,16 @@ public class LandAspectMonsters extends TitleLandAspect
 		this.monsterList = new ArrayList<>();
 		if(this.type == Variant.MONSTERS)
 		{
-			monsterList.add(new SpawnListEntry(EntityCreeper.class, 1, 1, 1));
-			monsterList.add(new SpawnListEntry(EntitySpider.class, 1, 1, 2));
-			monsterList.add(new SpawnListEntry(EntityZombie.class, 1, 1, 2));
+			monsterList.add(new SpawnListEntry(EntityType.CREEPER, 1, 1, 1));
+			monsterList.add(new SpawnListEntry(EntityType.SPIDER, 1, 1, 2));
+			monsterList.add(new SpawnListEntry(EntityType.ZOMBIE, 1, 1, 2));
 			variations.add(this);
 			variations.add(new LandAspectMonsters(Variant.MONSTERS_DEAD));
 		}
 		else if(this.type == Variant.MONSTERS_DEAD)
 		{
-			monsterList.add(new SpawnListEntry(EntityZombie.class, 2, 1, 3));
-			monsterList.add(new SpawnListEntry(EntitySkeleton.class, 1, 1, 2));
+			monsterList.add(new SpawnListEntry(EntityType.ZOMBIE, 2, 1, 3));
+			monsterList.add(new SpawnListEntry(EntityType.SKELETON, 1, 1, 2));
 		}
 	}
 	
@@ -76,8 +71,8 @@ public class LandAspectMonsters extends TitleLandAspect
 	@Override
 	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
-		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.SILVER));
-		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.CARPET.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.PURPLE));
+		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.LIGHT_GRAY_WOOL.getDefaultState());
+		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.PURPLE_CARPET.getDefaultState());
 		if(chunkProvider.blockRegistry.getCustomBlock("torch") == null)
 			chunkProvider.blockRegistry.setBlockState("torch", Blocks.REDSTONE_TORCH.getDefaultState());
 	}
@@ -94,7 +89,7 @@ public class LandAspectMonsters extends TitleLandAspect
 		return LandAspectRegistry.fromNameTitle("monsters");
 	}
 	
-	public static enum Variant
+	public enum Variant
 	{
 		MONSTERS,
 		MONSTERS_DEAD;

@@ -1,15 +1,11 @@
 package com.mraof.minestuck.world.lands.terrain;
 
-import com.mraof.minestuck.block.BlockMinestuckStone;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.decorator.*;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
-import net.minecraft.block.BlockColored;
-import net.minecraft.block.BlockStoneSlab;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.ArrayList;
@@ -25,18 +21,18 @@ public class LandAspectHeat extends TerrainLandAspect
 		registry.setBlockState("upper", Blocks.COBBLESTONE.getDefaultState());
 		registry.setBlockState("ground", Blocks.NETHERRACK.getDefaultState());
 		registry.setBlockState("ocean", Blocks.LAVA.getDefaultState());
-		registry.setBlockState("structure_primary", Blocks.NETHER_BRICK.getDefaultState());
+		registry.setBlockState("structure_primary", Blocks.NETHER_BRICKS.getDefaultState());
 		registry.setBlockState("structure_primary_stairs", Blocks.NETHER_BRICK_STAIRS.getDefaultState());
-		registry.setBlockState("structure_secondary", MinestuckBlocks.stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.CAST_IRON));
-		registry.setBlockState("structure_secondary_decorative", MinestuckBlocks.stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.CAST_IRON_CHISELED));
-		registry.setBlockState("structure_secondary_stairs", MinestuckBlocks.castIronStairs.getDefaultState());
+		registry.setBlockState("structure_secondary", MinestuckBlocks.CAST_IRON.getDefaultState());
+		registry.setBlockState("structure_secondary_decorative", MinestuckBlocks.CHISELED_CAST_IRON.getDefaultState());
+		registry.setBlockState("structure_secondary_stairs", MinestuckBlocks.CAST_IRON_STAIRS.getDefaultState());
 		registry.setBlockState("fall_fluid", Blocks.WATER.getDefaultState());
-		registry.setBlockState("structure_planks", Blocks.BRICK_BLOCK.getDefaultState());
-		registry.setBlockState("structure_planks_slab", Blocks.STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.BRICK));
+		registry.setBlockState("structure_planks", Blocks.BRICKS.getDefaultState());
+		registry.setBlockState("structure_planks_slab", Blocks.BRICK_SLAB.getDefaultState());
 		registry.setBlockState("village_path", Blocks.QUARTZ_BLOCK.getDefaultState());
 		registry.setBlockState("village_fence", Blocks.NETHER_BRICK_FENCE.getDefaultState());
-		registry.setBlockState("structure_wool_1", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.YELLOW));
-		registry.setBlockState("structure_wool_3", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.PURPLE));
+		registry.setBlockState("structure_wool_1", Blocks.YELLOW_WOOL.getDefaultState());
+		registry.setBlockState("structure_wool_3", Blocks.PURPLE_WOOL.getDefaultState());
 	}
 	
 	@Override
@@ -62,8 +58,8 @@ public class LandAspectHeat extends TerrainLandAspect
 		list.add(new SurfaceDecoratorVein(Blocks.GLOWSTONE.getDefaultState(), 5, 8, BiomeMinestuck.mediumNormal));
 		
 		list.add(new UndergroundDecoratorVein(Blocks.GRAVEL.getDefaultState(), 8, 33, 256));
-		list.add(new UndergroundDecoratorVein(MinestuckBlocks.coalOreNetherrack.getDefaultState(), 26, 17, 128));
-		list.add(new UndergroundDecoratorVein(Blocks.QUARTZ_ORE.getDefaultState(), 13, 8, 64));
+		list.add(new UndergroundDecoratorVein(MinestuckBlocks.COAL_ORE_NETHERRACK.getDefaultState(), 26, 17, 128));
+		list.add(new UndergroundDecoratorVein(Blocks.NETHER_QUARTZ_ORE.getDefaultState(), 13, 8, 64));
 		return list;
 	}
 	

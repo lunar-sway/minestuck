@@ -35,7 +35,7 @@ public abstract class TitleLandAspect implements ILandAspect<TitleLandAspect>
 	@Override
 	public List<TitleLandAspect> getVariations()
 	{
-		ArrayList<TitleLandAspect> list = new ArrayList<TitleLandAspect>();
+		ArrayList<TitleLandAspect> list = new ArrayList<>();
 		list.add(this);
 		return list;
 	}

@@ -4,14 +4,13 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.GenLayerVoronoiZoom;
 import net.minecraft.world.gen.layer.GenLayerZoom;
-import net.minecraft.world.gen.layer.IntCache;
 
-public class GenLayerLands extends GenLayer
+public class GenLayerLands //extends GenLayer
 {
 	private int oceanChance;
 	private GenLayerLandRough roughGen;
 	
-	public GenLayerLands(long seed)
+	/*public GenLayerLands(long seed)
 	{
 		super(seed);
 	}
@@ -52,6 +51,6 @@ public class GenLayerLands extends GenLayer
 		voronoiZoom.initWorldGenSeed(seed);
 		
 		return new GenLayer[] {layerLands, layer, voronoiZoom};
-	}
+	}*/
 	
 }

@@ -3,11 +3,10 @@ package com.mraof.minestuck.client.gui.playerStats;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.GuiButtonImpl;
 import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
+import com.mraof.minestuck.network.DataCheckerPacket;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.util.EnumClass;
-import com.mraof.minestuck.util.LocalizedObject;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiChat;
@@ -19,6 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -65,7 +65,7 @@ public class GuiDataChecker extends GuiScreen implements GuiButtonImpl.ButtonCli
 		this.buttons.add(refreshButton);
 		
 		if(activeComponent == null)
-			MinestuckPacketHandler.sendToServer(MinestuckPacket.makePacket(MinestuckPacket.Type.DATA_CHECKER));
+			MinestuckPacketHandler.sendToServer(DataCheckerPacket.request());
 		
 		componentChanged();
 	}
@@ -208,7 +208,7 @@ public class GuiDataChecker extends GuiScreen implements GuiButtonImpl.ButtonCli
 			componentChanged();
 		} else if(button.id == 6)
 		{
-			MinestuckPacketHandler.sendToServer(MinestuckPacket.makePacket(MinestuckPacket.Type.DATA_CHECKER));
+			MinestuckPacketHandler.sendToServer(DataCheckerPacket.request());
 			activeComponent = null;
 			componentChanged();
 		}
@@ -460,13 +460,13 @@ public class GuiDataChecker extends GuiScreen implements GuiButtonImpl.ButtonCli
 			{
 				list.add(new TextField("Land dimension: %s", (landDim != 0 ? String.valueOf(landDim) : "Pre-entry")));
 				if(landDim != 0 && connectionTag.hasKey("aspect1"))
-					list.add(new LocalizedTextField("land.message.format", new LocalizedObject("land."+connectionTag.getString("aspect1")), new LocalizedObject("land."+connectionTag.getString("aspect2"))));
+					list.add(new LocalizedTextField("land.message.format", new TextComponentTranslation("land."+connectionTag.getString("aspect1")), new TextComponentTranslation("land."+connectionTag.getString("aspect2"))));
 				if(connectionTag.hasKey("class"))
 				{
 					byte cl = connectionTag.getByte("class"), as = connectionTag.getByte("aspect");
 					String titleClass = cl == -1 ? "Unknown" : "title."+EnumClass.values()[cl].toString();
 					String titleAspect = as == -1 ? "Unknown" : "title."+EnumAspect.values()[as].toString();
-					list.add(new LocalizedTextField("title.format", new LocalizedObject(titleClass), new LocalizedObject(titleAspect)));
+					list.add(new LocalizedTextField("title.format", new TextComponentTranslation(titleClass), new TextComponentTranslation(titleAspect)));
 				}
 				
 				if(connectionTag.hasKey("aspectTitle"))

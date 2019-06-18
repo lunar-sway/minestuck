@@ -1,28 +1,28 @@
 package com.mraof.minestuck.world.gen.feature;
 
-import java.util.Random;
-
-import com.mraof.minestuck.block.BlockMinestuckLeaves1;
-import com.mraof.minestuck.block.BlockMinestuckLog1;
 import com.mraof.minestuck.block.MinestuckBlocks;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.trees.AbstractTree;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenAbstractTree;
+import net.minecraft.world.gen.feature.AbstractTreeFeature;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.gen.feature.TreeFeature;
+
+import javax.annotation.Nullable;
+import java.util.Random;
 
 public class RainbowTree extends AbstractTree
 {
-	private static final IBlockState LOG = MinestuckBlocks.log.getDefaultState().withProperty(BlockMinestuckLog1.VARIANT, BlockMinestuckLog1.BlockType.RAINBOW);
-	private static final IBlockState LEAF = MinestuckBlocks.leaves1.getDefaultState().withProperty(BlockMinestuckLeaves1.VARIANT, BlockMinestuckLeaves1.BlockType.RAINBOW);
+	private static final IBlockState LOG = MinestuckBlocks.RAINBOW_LOG.getDefaultState();
+	private static final IBlockState LEAF = MinestuckBlocks.RAINBOW_LEAVES.getDefaultState();
 	
-	public RainbowTree(boolean notify)
-	{
-		super(notify);
-	}
-
+	@Nullable
 	@Override
+	protected AbstractTreeFeature<NoFeatureConfig> getTreeFeature(Random random)
+	{
+		return new TreeFeature(true, 3 + random.nextInt(5), LOG, LEAF, false).setSapling((net.minecraft.block.BlockSapling)MinestuckBlocks.RAINBOW_SAPLING);
+	}
+	
+	/*@Override
 	public boolean generate(World worldIn, Random rand, BlockPos position)
 	{
 		int height = rand.nextInt(3) + 5;
@@ -129,5 +129,5 @@ public class RainbowTree extends AbstractTree
 		{
 			return false;
 		}
-	}
+	}*/
 }

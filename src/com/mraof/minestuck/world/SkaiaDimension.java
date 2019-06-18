@@ -9,11 +9,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.dimension.Dimension;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.common.ModDimension;
 
+import javax.annotation.Nullable;
 import java.util.function.Function;
 
 public class SkaiaDimension extends Dimension
@@ -23,6 +26,13 @@ public class SkaiaDimension extends Dimension
 	public SkaiaDimension(DimensionType type)
 	{
 		this.type = type;
+	}
+	
+	@Override
+	protected void init()
+	{
+		this.hasSkyLight = true;
+		//this.biomeProvider = new BiomeProviderSingle(Biomes.PLAINS);
 	}
 	
 	@Override
@@ -38,13 +48,6 @@ public class SkaiaDimension extends Dimension
 	}
 	
 	@Override
-	protected void init()
-	{
-		this.hasSkyLight = true;
-		this.biomeProvider = new BiomeProviderSingle(Biomes.PLAINS);
-	}
-	
-	@Override
 	public float calculateCelestialAngle(long par1, float par3)
 	{
 		return 1.0F;
@@ -54,6 +57,38 @@ public class SkaiaDimension extends Dimension
 	public boolean canRespawnHere()
 	{
 		return false;
+	}
+	
+	@Nullable
+	@Override
+	public BlockPos findSpawn(ChunkPos p_206920_1_, boolean checkValid)
+	{
+		return null;
+	}
+	
+	@Nullable
+	@Override
+	public BlockPos findSpawn(int p_206921_1_, int p_206921_2_, boolean checkValid)
+	{
+		return null;
+	}
+	
+	@Override
+	public boolean isSurfaceWorld()
+	{
+		return false;
+	}
+	
+	@Override
+	public Vec3d getFogColor(float p_76562_1_, float p_76562_2_)
+	{
+		return new Vec3d(0.8, 0.8, 1.0);
+	}
+	
+	@Override
+	public boolean doesXZShowFog(int x, int z)
+	{
+		return true;
 	}
 	
 	@Override

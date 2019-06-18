@@ -21,6 +21,7 @@ import java.util.Set;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.underling.EntityBasilisk;
 import com.mraof.minestuck.entity.underling.EntityGiclops;
 import com.mraof.minestuck.entity.underling.EntityImp;
@@ -182,13 +183,13 @@ public class SburbHandler
 		return title;
 	}
 	
-	private static void generateTitle(PlayerIdentifier player)
+	private static void generateTitle(MinecraftServer server, PlayerIdentifier player)
 	{
 		Title title = produceTitle(player);
-		if(title==null)
+		if(title == null)
 			return;
 		MinestuckPlayerData.setTitle(player, title);
-		MinestuckPlayerTracker.updateTitle(player.getPlayer());
+		MinestuckPlayerTracker.updateTitle(player.getPlayer(server));
 	}
 	
 	/*public static void managePredefinedSession(MinecraftServer server, ICommandSender sender, ICommand command, String sessionName, String[] playerNames, boolean finish) throws CommandException
@@ -617,7 +618,7 @@ public class SburbHandler
 			titleAspect = aspectGen.getTitleAspect(terrainAspect, title.getHeroAspect(), usedTitleAspects);
 		if(terrainAspect == null)
 			terrainAspect = aspectGen.getTerrainAspect(titleAspect, usedTerrainAspects);
-		MinestuckDimensionHandler.registerLandDimension(connection.clientHomeLand, new LandAspects(terrainAspect, titleAspect));
+		//MinestuckDimensionHandler.registerLandDimension(connection.clientHomeLand, new LandAspects(terrainAspect, titleAspect)); TODO
 	}
 	
 	public static GristType getUnderlingType(EntityUnderling entity)
@@ -668,15 +669,15 @@ public class SburbHandler
 		}
 		
 		if(impWeight > 0)
-			list.add(new SpawnListEntry(EntityImp.class, impWeight, Math.max(1, (int)(impWeight/2.5)), Math.max(3, impWeight)));
+			list.add(new SpawnListEntry(ModEntityTypes.IMP, impWeight, Math.max(1, (int)(impWeight/2.5)), Math.max(3, impWeight)));
 		if(ogreWeight > 0)
-			list.add(new SpawnListEntry(EntityOgre.class, ogreWeight, ogreWeight >= 5 ? 2 : 1, Math.max(1, ogreWeight/2)));
+			list.add(new SpawnListEntry(ModEntityTypes.OGRE, ogreWeight, ogreWeight >= 5 ? 2 : 1, Math.max(1, ogreWeight/2)));
 		if(basiliskWeight > 0)
-			list.add(new SpawnListEntry(EntityBasilisk.class, basiliskWeight, 1, Math.max(1, basiliskWeight/2)));
+			list.add(new SpawnListEntry(ModEntityTypes.BASILISK, basiliskWeight, 1, Math.max(1, basiliskWeight/2)));
 		if(lichWeight > 0)
-			list.add(new SpawnListEntry(EntityLich.class, lichWeight, 1, Math.max(1, lichWeight/2)));
+			list.add(new SpawnListEntry(ModEntityTypes.LICH, lichWeight, 1, Math.max(1, lichWeight/2)));
 		if(giclopsWeight > 0 && !MinestuckConfig.disableGiclops)
-			list.add(new SpawnListEntry(EntityGiclops.class, giclopsWeight, 1, Math.max(1, giclopsWeight/2)));
+			list.add(new SpawnListEntry(ModEntityTypes.GICLOPS, giclopsWeight, 1, Math.max(1, giclopsWeight/2)));
 		
 		difficultyList[difficulty] = list;
 		
@@ -688,7 +689,7 @@ public class SburbHandler
 		
 	}
 	
-	static void onLandCreated(SburbConnection c)
+	static void onLandCreated(MinecraftServer server, SburbConnection c)
 	{
 //		Session session = getPlayerSession(c.clientIdentifier);
 //		PlayerIdentifier identifier = c.clientIdentifier;
@@ -701,7 +702,7 @@ public class SburbHandler
 //			data.title = title;
 //		}
 		
-		generateTitle(c.getClientIdentifier());
+		generateTitle(server, c.getClientIdentifier());
 		genLandAspects(c);		//This is where the Land dimension is actually registered, but it also needs the player's Title to be determined.
 	}
 	
@@ -768,7 +769,7 @@ public class SburbHandler
 				else s = new Session();
 			
 			if(title == null)
-				generateTitle(identifier);
+				generateTitle(player.getServer(), identifier);
 			else
 			{
 				for(SburbConnection c : s.connections)
