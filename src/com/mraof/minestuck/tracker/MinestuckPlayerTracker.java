@@ -6,11 +6,7 @@ import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
-import com.mraof.minestuck.network.CaptchaDeckPacket;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.MinestuckPacket.Type;
-import com.mraof.minestuck.network.PlayerDataPacket;
+import com.mraof.minestuck.network.*;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.*;
@@ -72,8 +68,7 @@ public class MinestuckPlayerTracker
 			Modus modus = CaptchaDeckHandler.createInstance(new ResourceLocation(MinestuckConfig.defaultModusTypes[index]), LogicalSide.SERVER);
 			if(modus != null)
 			{
-				modus.player = player;
-				modus.initModus(null, MinestuckConfig.initialModusSize);
+				modus.initModus(player, null, MinestuckConfig.initialModusSize);
 				CaptchaDeckHandler.setModus(player, modus);
 			} else Debug.warnf("Couldn't create a modus by the name %s.", MinestuckConfig.defaultModusTypes[index]);
 		}
@@ -81,21 +76,20 @@ public class MinestuckPlayerTracker
 		if(CaptchaDeckHandler.getModus(player) != null)
 		{
 			Modus modus = CaptchaDeckHandler.getModus(player);
-			modus.player = player;
-			MinestuckPacketHandler.sendToPlayer(MinestuckPacket.makePacket(Type.CAPTCHA, CaptchaDeckPacket.DATA, CaptchaDeckHandler.writeToNBT(modus)), player);
+			MinestuckPacketHandler.sendToPlayer(CaptchaDeckPacket.data(CaptchaDeckHandler.writeToNBT(modus)), player);
 		}
 		
 		updateGristCache(identifier);
 		updateTitle(player);
 		updateEcheladder(player, true);
-		MinestuckPacketHandler.sendToPlayer(MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.BOONDOLLAR, MinestuckPlayerData.getData(identifier).boondollars), player);
+		MinestuckPacketHandler.sendToPlayer(PlayerDataPacket.boondollars(MinestuckPlayerData.getData(identifier).boondollars), player);
 		ServerEditHandler.onPlayerLoggedIn(player);
 		
 		if(firstTime && !player.isSpectator())
-			MinestuckPacketHandler.sendToPlayer(MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.COLOR), player);
+			MinestuckPacketHandler.sendToPlayer(PlayerDataPacket.color(), player);
 		else
 		{
-			MinestuckPacket packet = MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.COLOR, MinestuckPlayerData.getData(player).color);
+			PlayerDataPacket packet = PlayerDataPacket.color(MinestuckPlayerData.getData(player).color);
 			MinestuckPacketHandler.sendToPlayer(packet, player);
 		}
 		
@@ -107,18 +101,15 @@ public class MinestuckPlayerTracker
 	public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event)
 	{
 		ServerEditHandler.onPlayerExit(event.getPlayer());
-		Modus modus = CaptchaDeckHandler.getModus(event.getPlayer());
-		if(modus != null)
-			modus.player = null;
 		dataCheckerPermission.remove(event.getPlayer().getName().getUnformattedComponentText());
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public void onPlayerDrops(PlayerDropsEvent event)
 	{
-		if(!event.getEntityPlayer().world.isRemote)
+		if(!event.getEntityPlayer().world.isRemote && event.getEntityPlayer() instanceof EntityPlayerMP)
 		{
-			CaptchaDeckHandler.dropSylladex(event.getEntityPlayer());
+			CaptchaDeckHandler.dropSylladex((EntityPlayerMP) event.getEntityPlayer());
 			
 		}
 		
@@ -139,9 +130,6 @@ public class MinestuckPlayerTracker
 	public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) 
 	{
 		MinestuckPlayerData.getData(event.getPlayer()).echeladder.updateEcheladderBonuses(event.getPlayer());
-		Modus modus = MinestuckPlayerData.getData(event.getPlayer()).modus;
-		if(modus != null)
-			modus.player = event.getPlayer();
 	}
 	
 	public static Set<String> dataCheckerPermission = new HashSet<>();
@@ -150,7 +138,7 @@ public class MinestuckPlayerTracker
 	{
 		//TODO check for changed configs and change setRequiresWorldRestart status for those config options
 		boolean permission = MinestuckConfig.getDataCheckerPermissionFor(player);
-		if(permission != dataCheckerPermission.contains(player.getName()))
+		if(permission != dataCheckerPermission.contains(player.getName().getUnformattedComponentText()))
 			return true;
 		
 		return false;
@@ -167,7 +155,7 @@ public class MinestuckPlayerTracker
 		EntityPlayerMP playerMP = player.getPlayer();
 		if(playerMP != null)
 		{
-			MinestuckPacket packet = MinestuckPacket.makePacket(Type.GRISTCACHE, gristSet, false);
+			GristCachePacket packet = new GristCachePacket(gristSet, false);
 			MinestuckPacketHandler.sendToPlayer(packet, playerMP);
 		}
 		
@@ -176,29 +164,29 @@ public class MinestuckPlayerTracker
 		if(c != null && ServerEditHandler.getData(c) != null)
 		{
 			EntityPlayerMP editor = ServerEditHandler.getData(c).getEditor();
-			MinestuckPacket packet = MinestuckPacket.makePacket(Type.GRISTCACHE, gristSet, true);
+			GristCachePacket packet = new GristCachePacket(gristSet, true);
 			MinestuckPacketHandler.sendToPlayer(packet, editor);
 		}
 	}
 	
-	public static void updateTitle(EntityPlayer player)
+	public static void updateTitle(EntityPlayerMP player)
 	{
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		Title newTitle = MinestuckPlayerData.getTitle(identifier);
 		if(newTitle == null)
 			return;
-		MinestuckPacket packet = MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.TITLE, newTitle.getHeroClass(), newTitle.getHeroAspect());
+		PlayerDataPacket packet = PlayerDataPacket.title(newTitle.getHeroClass(), newTitle.getHeroAspect());
 		MinestuckPacketHandler.sendToPlayer(packet, player);
 	}
 	
-	public static void updateEcheladder(EntityPlayer player, boolean jump)
+	public static void updateEcheladder(EntityPlayerMP player, boolean jump)
 	{
 		Echeladder echeladder = MinestuckPlayerData.getData(player).echeladder;
-		MinestuckPacket packet = MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.ECHELADDER, echeladder.getRung(), MinestuckConfig.echeladderProgress ? echeladder.getProgress() : 0F, jump);
+		PlayerDataPacket packet = PlayerDataPacket.echeladder(echeladder.getRung(), MinestuckConfig.echeladderProgress ? echeladder.getProgress() : 0F, jump);
 		MinestuckPacketHandler.sendToPlayer(packet, player);
 	}
 	
-	public static void updateLands(EntityPlayer player)
+	/*public static void updateLands(EntityPlayer player)
 	{
 		MinestuckPacket packet = MinestuckPacket.makePacket(Type.LANDREGISTER);
 		Debug.debugf("Sending land packets to %s.", player == null ? "all players" : player.getName());
@@ -207,23 +195,24 @@ public class MinestuckPlayerTracker
 		else
 			MinestuckPacketHandler.sendToPlayer(packet, player);
 	}
+	
 	public static void updateLands()
 	{
 		updateLands(null);
-	}
+	}*/
 
 	public static void sendConfigPacket(EntityPlayerMP player, boolean mode)
 	{
-		MinestuckPacket packet;
+		ModConfigPacket packet;
 		if(mode)
-			packet = MinestuckPacket.makePacket(Type.CONFIG, true);
+			packet = new ModConfigPacket();
 		else
 		{
 			boolean permission = MinestuckConfig.getDataCheckerPermissionFor(player);
-			packet = MinestuckPacket.makePacket(Type.CONFIG, false, permission);
+			packet = new ModConfigPacket(permission);
 			if(permission)
 				dataCheckerPermission.add(player.getName().getUnformattedComponentText());
-			else dataCheckerPermission.remove(player.getName());
+			else dataCheckerPermission.remove(player.getName().getUnformattedComponentText());
 		}
 		MinestuckPacketHandler.sendToPlayer(packet, player);
 	}

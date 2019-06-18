@@ -1,12 +1,12 @@
 package com.mraof.minestuck.entity.underling;
 
 import com.mraof.minestuck.entity.IEntityMultiPart;
-import io.netty.buffer.ByteBuf;
+import com.mraof.minestuck.entity.ModEntityTypes;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class EntityUnderlingPart extends EntityLiving implements IEntityAdditionalSpawnData
@@ -15,38 +15,21 @@ public class EntityUnderlingPart extends EntityLiving implements IEntityAddition
 
 	public int id = -1;
 	private int headId = -1;
-
-	@SuppressWarnings("unused") //Minecraft creates entities with reflection
-	public EntityUnderlingPart(World world)
+	
+	public EntityUnderlingPart(IEntityMultiPart entityMultiPart, int id, float par3, float par4)
 	{
-		super(world);
-	}
-	public EntityUnderlingPart(IEntityMultiPart par1IEntityMultiPart, int id, float par3, float par4)
-	{
-		super(par1IEntityMultiPart.getWorld());
+		super(ModEntityTypes.UNDERLING_PART, entityMultiPart.getWorld());
 		this.setSize(par3, par4);
-		this.baseEntity = par1IEntityMultiPart;
+		this.baseEntity = entityMultiPart;
 		this.id = id;
 	}
 	
 	@Override
-	public String getName()
+	public ITextComponent getName()
 	{
 		return ((Entity) baseEntity).getName();
 	}
 	
-	/**
-	 * (abstract) Protected helper method to write subclass entity data to NBT.
-	 */
-	@Override
-	public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound) 
-	{
-		if(this.baseEntity != null)
-			super.writeEntityToNBT(par1NBTTagCompound);
-		else
-			this.setDead();
-	}
-
 	/**
 	 * Returns true if other Entities should be prevented from moving through this Entity.
 	 */
@@ -66,22 +49,23 @@ public class EntityUnderlingPart extends EntityLiving implements IEntityAddition
 			return false;
 		return this.baseEntity.attackEntityFromPart(this, par1DamageSource, par2);
 	}
+	
 	@Override
-	public void onUpdate() 
+	public void tick()
 	{
-		super.onUpdate();
-		if(this.baseEntity == null || ((Entity)this.baseEntity).isDead)
+		super.tick();
+		if(this.baseEntity == null || ((Entity)this.baseEntity).removed)
 		{
-			this.setDead();
+			this.remove();
 		}
 		else
 			this.setBaseById(headId);
 	}
 
 	@Override
-	public void setDead() 
+	public void remove()
 	{
-		super.setDead();
+		super.remove();
 		if(this.baseEntity != null)
 			baseEntity.onPartDeath(this, this.id);
 	}
@@ -100,13 +84,13 @@ public class EntityUnderlingPart extends EntityLiving implements IEntityAddition
 	}
 	
 	@Override
-	 protected boolean canDespawn()
-	 {
-	     return false;
+	public boolean canDespawn()
+	{
+		return false;
 	}
-
+	
 	@Override
-	public void writeSpawnData(ByteBuf buffer) 
+	public void writeSpawnData(PacketBuffer buffer)
 	{
 		buffer.writeInt(this.id);
 		if(this.baseEntity != null)
@@ -114,9 +98,9 @@ public class EntityUnderlingPart extends EntityLiving implements IEntityAddition
 		else
 			buffer.writeInt(-1);
 	}
-
+	
 	@Override
-	public void readSpawnData(ByteBuf additionalData) 
+	public void readSpawnData(PacketBuffer additionalData)
 	{
 		setBaseById(additionalData.readInt());
 	}

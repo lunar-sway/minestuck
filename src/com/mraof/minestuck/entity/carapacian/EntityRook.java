@@ -1,6 +1,7 @@
 package com.mraof.minestuck.entity.carapacian;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.util.DamageSource;
@@ -10,9 +11,9 @@ public abstract class EntityRook extends EntityCarapacian implements IMob
 {
 	private EntityAIAttackMelee entityAIAttackOnCollide = new EntityAIAttackMelee(this, .5F, false);
 
-	public EntityRook(World world)
+	public EntityRook(EntityType<?> type, World world)
 	{
-		super(world);
+		super(type, world);
 		setSize(3.5F, 3.5F);
 		this.experienceValue = 10;
 	}

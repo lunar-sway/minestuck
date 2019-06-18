@@ -16,13 +16,8 @@ public class ContainerConsortMerchant extends Container
 	
 	public ContainerConsortMerchant(EntityPlayer player, InventoryConsortMerchant inv)
 	{
-		this(player);
-		setInventory(inv);
-	}
-	
-	public ContainerConsortMerchant(EntityPlayer player)
-	{
 		this.player = player;
+		setInventory(inv);
 	}
 	
 	public void setInventory(InventoryConsortMerchant inv)

@@ -5,9 +5,10 @@ import java.util.ArrayList;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class KindAbstratusType
 {
@@ -30,9 +31,9 @@ public class KindAbstratusType
 		return this;
 	}
 	
-	@SideOnly(Side.CLIENT)
-	public String getDisplayName() {
-		return I18n.translateToLocal("strife."+unlocalizedName+".name");
+	@OnlyIn(Dist.CLIENT)
+	public ITextComponent getDisplayName() {
+		return new TextComponentTranslation("strife."+unlocalizedName+".name");
 	}
 	
 	public String getUnlocalizedName() {
@@ -75,14 +76,13 @@ public class KindAbstratusType
 		
 		ItemIdType(Item item)
 		{
-			itemId = Item.REGISTRY.getNameForObject(item);
+			itemId = item.getRegistryName();
 		}
 		
 		@Override
 		boolean partOf(ItemStack item)
 		{
-			return this.itemId.equals(Item.REGISTRY.getNameForObject(item.getItem()));
+			return this.itemId.equals(item.getItem().getRegistryName());
 		}
 	}
-	
 }

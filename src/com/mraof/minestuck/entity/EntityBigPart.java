@@ -7,6 +7,7 @@ import net.minecraft.entity.MoverType;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.math.Vec3d;
@@ -26,7 +27,7 @@ public class EntityBigPart extends EntityLivingBase implements IEntityAdditional
 
 	public EntityBigPart(World world)
 	{
-		super(world);
+		super(ModEntityTypes.BIG_PART, world);
 	}
 
 	EntityBigPart(World worldIn, PartGroup group, Vec3d size)
@@ -50,16 +51,16 @@ public class EntityBigPart extends EntityLivingBase implements IEntityAdditional
 	public void writeEntityToNBT(NBTTagCompound compound)
 	{
 	}*/
-
+	
 	@Override
-	public void onEntityUpdate()
+	public void baseTick()
 	{
-		if(this.group == null || this.group.parent == null || this.group.parent.isDead)
+		if(this.group == null || this.group.parent == null || this.group.parent.removed)
 		{
-			this.setDead();
+			this.remove();
 		}
-		super.onEntityUpdate();
-		world.getHeight(this.getPosition());
+		super.baseTick();
+		//world.getHeight(this.getPosition());
 	}
 
 	@Override
@@ -91,9 +92,9 @@ public class EntityBigPart extends EntityLivingBase implements IEntityAdditional
 	{
 		return EnumHandSide.RIGHT;
 	}
-
+	
 	@Override
-	public void writeSpawnData(ByteBuf buffer)
+	public void writeSpawnData(PacketBuffer buffer)
 	{
 		buffer.writeInt(this.group.parent.getEntityId());
 		buffer.writeFloat(this.width);
@@ -101,7 +102,7 @@ public class EntityBigPart extends EntityLivingBase implements IEntityAdditional
 	}
 
 	@Override
-	public void readSpawnData(ByteBuf additionalData)
+	public void readSpawnData(PacketBuffer additionalData)
 	{
 		Entity entity = world.getEntityByID(additionalData.readInt());
 		if(entity instanceof IBigEntity)
@@ -143,7 +144,7 @@ public class EntityBigPart extends EntityLivingBase implements IEntityAdditional
 	@Override
 	public void move(MoverType type, double x, double y, double z)
 	{
-		this.setEntityBoundingBox(this.getEntityBoundingBox().offset(x, y, z));
+		this.setBoundingBox(this.getBoundingBox().offset(x, y, z));
 		this.resetPositionToBB();
 	}
 }

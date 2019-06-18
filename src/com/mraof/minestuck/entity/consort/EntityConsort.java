@@ -3,8 +3,10 @@ package com.mraof.minestuck.entity.consort;
 import java.util.Iterator;
 
 import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
+import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.entity.EntityMinestuck;
 import com.mraof.minestuck.entity.consort.MessageType.SingleMessage;
+import com.mraof.minestuck.inventory.ContainerConsortMerchant;
 import com.mraof.minestuck.inventory.InventoryConsortMerchant;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import net.minecraft.entity.EntityType;
@@ -13,6 +15,8 @@ import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
@@ -20,12 +24,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.IInteractionObject;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 
 import javax.annotation.Nullable;
 
-public abstract class EntityConsort extends EntityMinestuck
+public abstract class EntityConsort extends EntityMinestuck implements IInteractionObject
 {
 	
 	ConsortDialogue.DialogueWrapper message;
@@ -74,19 +79,20 @@ public abstract class EntityConsort extends EntityMinestuck
 	{
 		if(this.isAlive() && !player.isSneaking() && eventTimer < 0)
 		{
-			if(!world.isRemote)
+			if(!world.isRemote && player instanceof EntityPlayerMP)
 			{
+				EntityPlayerMP playerMP = (EntityPlayerMP) player;
 				if(message == null)
 				{
-					message = ConsortDialogue.getRandomMessage(this, player);
+					message = ConsortDialogue.getRandomMessage(this, playerMP);
 					messageTicksLeft = 24000 + world.rand.nextInt(24000);
 					messageData = new NBTTagCompound();
 				}
-				ITextComponent text = message.getMessage(this, player);	//TODO Make sure to catch any issues here
+				ITextComponent text = message.getMessage(this, playerMP);	//TODO Make sure to catch any issues here
 				if (text != null)
 				{
 					player.sendMessage(text);
-					onSendMessage(player, text, this);
+					onSendMessage(playerMP, text, this);
 				}
 				MinestuckCriteriaTriggers.CONSORT_TALK.trigger((EntityPlayerMP) player, message.getString(), this);
 			}
@@ -96,10 +102,10 @@ public abstract class EntityConsort extends EntityMinestuck
 			return super.processInteract(player, hand);
 	}
 	
-	public void onSendMessage(EntityPlayer player, ITextComponent text, EntityConsort entityConsort)
+	public void onSendMessage(EntityPlayerMP player, ITextComponent text, EntityConsort entityConsort)
 	{
 		Iterator<ITextComponent> i = text.iterator();
-		String explosionMessage = this.explosionMessage.getMessageForTesting(this, player).getUnformattedComponentText();
+		String explosionMessage = EntityConsort.explosionMessage.getMessageForTesting(this, player).getUnformattedComponentText();
 		
 		//This block triggers when the consort from Flora Lands eats the "immortality" herb.
 		if(text.getUnformattedComponentText().equals(explosionMessage))
@@ -151,7 +157,7 @@ public abstract class EntityConsort extends EntityMinestuck
 		{
 			boolean flag = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this);
 			this.dead = true;
-			this.world.createExplosion(this, this.posX, this.posY, this.posZ, (float)this.explosionRadius, flag);
+			this.world.createExplosion(this, this.posX, this.posY, this.posZ, this.explosionRadius, flag);
 			this.remove();
 		}
 	}
@@ -260,7 +266,7 @@ public abstract class EntityConsort extends EntityMinestuck
 	
 	public abstract EnumConsort getConsortType();
 	
-	public void commandReply(EntityPlayer player, String chain)
+	public void commandReply(EntityPlayerMP player, String chain)
 	{
 		if(this.isAlive() && !world.isRemote && message != null)
 		{
@@ -280,5 +286,19 @@ public abstract class EntityConsort extends EntityMinestuck
 		if(!messageData.contains(player.getCachedUniqueIdString(), 10))
 			messageData.setTag(player.getCachedUniqueIdString(), new NBTTagCompound());
 		return messageData.getCompound(player.getCachedUniqueIdString());
+	}
+	
+	@Override
+	public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn)
+	{
+		if(this.stocks != null)
+			return new ContainerConsortMerchant(playerIn, stocks);
+		else return null;
+	}
+	
+	@Override
+	public String getGuiID()
+	{
+		return GuiHandler.CONSORT_MERCHANT_ID.toString();
 	}
 }

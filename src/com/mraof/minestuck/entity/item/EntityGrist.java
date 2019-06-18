@@ -113,14 +113,11 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 
 		return j | k << 16;
 	}
-
-	/**
-	 * Called to update the entity's position/logic.
-	 */
+	
 	@Override
-	public void onUpdate()
+	public void tick()
 	{
-		super.onUpdate();
+		super.tick();
 
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
@@ -169,7 +166,8 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		
 		if(this.onGround)
 		{
-			f = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.98F;
+			BlockPos pos = new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getBoundingBox().minY) - 1, MathHelper.floor(this.posZ));
+			f = this.world.getBlockState(pos).getSlipperiness(world, pos, this) * 0.98F;
 		}
 		
 		this.motionX *= (double)f;
@@ -191,14 +189,14 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		
 	}
 
-	/**
+	/*
 	 * Returns if this entity is in water and will end up adding the waters velocity to the entity
 	 */
-	@Override
+	/*@Override
 	public boolean handleWaterMovement()
 	{
 		return this.world.handleMaterialAcceleration(this.getBoundingBox(), Material.WATER, this);
-	}
+	}*/
 	
 	@Override
 	protected void writeAdditional(NBTTagCompound compound)

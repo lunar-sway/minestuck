@@ -18,6 +18,8 @@ public class GuiHandler
 	public static ResourceLocation GRIST_WIDGET_ID = new ResourceLocation("minestuck", "grist_widget");
 	public static ResourceLocation URANIUM_COOKER_ID = new ResourceLocation("minestuck", "uranium_cooker");
 	
+	public static ResourceLocation CONSORT_MERCHANT_ID = new ResourceLocation("minestuck", "consort_merchant");
+	
 	/*@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z)
 	{
@@ -61,6 +63,9 @@ public class GuiHandler
 		{
 			if(tileEntity instanceof TileEntityGristWidget)
 				return new GuiGristWidget(mc.player.inventory, (TileEntityGristWidget) tileEntity);
+		} else if(id == CONSORT_MERCHANT_ID)
+		{
+			return new GuiConsortShop(mc.player);
 		}
 		
 		return null;

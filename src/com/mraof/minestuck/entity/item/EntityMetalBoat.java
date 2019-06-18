@@ -1,24 +1,28 @@
 package com.mraof.minestuck.entity.item;
 
 import com.mraof.minestuck.item.MinestuckItems;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityBoat;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 public class EntityMetalBoat extends EntityBoat implements IEntityAdditionalSpawnData
-{
+{	//TODO vanilla boat functions differently now. This class will probably need to be updated
 	
 	public int type;
 	private boolean isDropping = false;
@@ -44,25 +48,25 @@ public class EntityMetalBoat extends EntityBoat implements IEntityAdditionalSpaw
 	}
 	
 	@Override
-	public void onUpdate()
+	public void tick()
 	{
 		double pos = posY;
 		double motion = motionY;
-		captureDrops = true;
+		captureDrops(new ArrayList<>());
 		
-		super.onUpdate();
+		super.tick();
 		
-		captureDrops = false;
+		Collection<EntityItem> capturedDrops = captureDrops(null);
 		if(isDropping || !capturedDrops.isEmpty())
 		{
 			double prevMotionX = posX - prevPosX, prevMotionZ = posZ - prevPosZ;
 			double maxMotion = type == 0 ? 0.3 : 0.2;
 			if(isDropping || Math.sqrt(prevMotionX * prevMotionX + prevMotionZ * prevMotionZ) > maxMotion)
 				for(int i = 0; i < 3; i++)
-					dropItem(getTypeItem(), 1);
+					entityDropItem(getTypeItem(), 1);
 			else
 			{
-				isDead = false;
+				revive();
 				this.motionX *= 0.9900000095367432D;
 				this.motionY *= 0.949999988079071D;
 				this.motionZ *= 0.9900000095367432D;
@@ -71,7 +75,7 @@ public class EntityMetalBoat extends EntityBoat implements IEntityAdditionalSpaw
 		
 		capturedDrops.clear();
 		
-		if(!this.world.isMaterialInBB(this.getEntityBoundingBox(), Material.WATER))
+		if(!this.world.isMaterialInBB(this.getBoundingBox(), Material.WATER))
 			return;
 		
 		this.motionY = motion;
@@ -95,9 +99,9 @@ public class EntityMetalBoat extends EntityBoat implements IEntityAdditionalSpaw
 			{
 				this.fall(this.fallDistance, 1.0F);
 				
-				if (!this.world.isRemote && !this.isDead)
+				if (!this.world.isRemote && !this.removed)
 				{
-					this.setDead();
+					this.remove();
 					
 					isDropping = true;
 				}
@@ -114,9 +118,9 @@ public class EntityMetalBoat extends EntityBoat implements IEntityAdditionalSpaw
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount)
 	{
-		if (this.isEntityInvulnerable(source))
+		if (this.isInvulnerableTo(source))
 			return false;
-		else if (!this.world.isRemote && !this.isDead)
+		else if (!this.world.isRemote && !this.removed)
 		{
 			if (this.getPassengers().contains(source.getTrueSource()) && source instanceof EntityDamageSourceIndirect)
 				return false;
@@ -126,16 +130,16 @@ public class EntityMetalBoat extends EntityBoat implements IEntityAdditionalSpaw
 				this.setTimeSinceHit(10);
 				this.setDamageTaken(this.getDamageTaken() + amount * 10.0F);
 				this.markVelocityChanged();
-				boolean flag = source.getTrueSource() instanceof EntityPlayer && ((EntityPlayer)source.getTrueSource()).capabilities.isCreativeMode;
+				boolean flag = source.getTrueSource() instanceof EntityPlayer && ((EntityPlayer)source.getTrueSource()).abilities.isCreativeMode;
 				
 				if (flag || this.getDamageTaken() > 40.0F)
 				{
 					this.removePassengers();
 					
 					if (!flag)
-						this.entityDropItem(new ItemStack(MinestuckItems.metalBoat, 1, this.type), 0.0F);
+						this.entityDropItem(new ItemStack(getBoatItem()), 0.0F);
 					
-					this.setDead();
+					this.remove();
 				}
 				
 				return true;
@@ -153,26 +157,35 @@ public class EntityMetalBoat extends EntityBoat implements IEntityAdditionalSpaw
 		return null;
 	}
 	
-	@Override
-	protected void writeEntityToNBT(NBTTagCompound tagCompound)
+	private Item getBoatItem()
 	{
-		tagCompound.setByte("boatType", (byte) type);
+		if(this.type == 0)
+			return MinestuckItems.IRON_BOAT;
+		else if(this.type == 1)
+			return MinestuckItems.GOLD_BOAT;
+		return null;
 	}
 	
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound tagCompund)
+	protected void writeAdditional(NBTTagCompound compound)
 	{
-		this.type = tagCompund.getByte("boatType");
+		compound.setByte("Type", (byte) type);
 	}
 	
 	@Override
-	public void writeSpawnData(ByteBuf buffer)
+	protected void readAdditional(NBTTagCompound compound)
+	{
+		this.type = compound.getByte("Type");
+	}
+	
+	@Override
+	public void writeSpawnData(PacketBuffer buffer)
 	{
 		buffer.writeByte(type);
 	}
 	
 	@Override
-	public void readSpawnData(ByteBuf additionalData)
+	public void readSpawnData(PacketBuffer additionalData)
 	{
 		this.type = additionalData.readByte();
 	}

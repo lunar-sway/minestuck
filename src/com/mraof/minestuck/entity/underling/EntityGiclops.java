@@ -1,12 +1,12 @@
 package com.mraof.minestuck.entity.underling;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.entity.EntityBigPart;
 import com.mraof.minestuck.entity.IBigEntity;
+import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.PartGroup;
 import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
 import com.mraof.minestuck.util.*;
@@ -23,15 +23,13 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
-import javax.annotation.Nullable;
-
 public class EntityGiclops extends EntityUnderling implements IBigEntity
 {
 	private PartGroup partGroup;
 
 	public EntityGiclops(World world)
 	{
-		super(world);
+		super(ModEntityTypes.GICLOPS, world);
 
 		setSize(8.0F, 12.0F);
 		this.stepHeight = 2;
@@ -110,10 +108,10 @@ public class EntityGiclops extends EntityUnderling implements IBigEntity
 	}
 	
 	@Override
-	protected void applyEntityAttributes()
+	protected void registerAttributes()
 	{
-		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32.0D);
+		super.registerAttributes();
+		this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32.0D);
 	}
 	
 	@Override
@@ -145,12 +143,12 @@ public class EntityGiclops extends EntityUnderling implements IBigEntity
 	}
 	
 	@Override
-	public void onEntityUpdate() 
+	public void baseTick()
 	{
-		super.onEntityUpdate();
+		super.baseTick();
 		partGroup.updatePositions();
 		if(!world.isRemote && MinestuckConfig.disableGiclops)
-			this.setDead();
+			this.remove();
 	}
 	
 	@Override
@@ -211,17 +209,17 @@ public class EntityGiclops extends EntityUnderling implements IBigEntity
 	@Override
 	public boolean handleWaterMovement()
 	{
-		AxisAlignedBB realBox = this.getEntityBoundingBox();
-		this.setEntityBoundingBox(new AxisAlignedBB(realBox.minX, realBox.maxY - 1, realBox.minZ, realBox.maxX, realBox.maxY, realBox.maxZ));
+		AxisAlignedBB realBox = this.getBoundingBox();
+		this.setBoundingBox(new AxisAlignedBB(realBox.minX, realBox.maxY - 1, realBox.minZ, realBox.maxX, realBox.maxY, realBox.maxZ));
 		boolean result = super.handleWaterMovement();
-		this.setEntityBoundingBox(realBox);
+		this.setBoundingBox(realBox);
 		return result;
 	}
 	
 	@Override
 	public void move(MoverType type, double x, double y, double z)
 	{
-		AxisAlignedBB realBox = this.getEntityBoundingBox();
+		AxisAlignedBB realBox = this.getBoundingBox();
 		double minX = x > 0 ? realBox.maxX - x : realBox.minX;
 /*				y > 0 ? realBox.maxY - y : realBox.minY,*/
 		double minY = realBox.minY;
@@ -229,10 +227,10 @@ public class EntityGiclops extends EntityUnderling implements IBigEntity
 		double maxX = x < 0 ? realBox.minX - x : realBox.maxX;
 		double maxY = y < 0 ? realBox.minY - y : realBox.maxY;
 		double maxZ = z < 0 ? realBox.minZ - z : realBox.maxZ;
-		this.setEntityBoundingBox(new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ));
+		this.setBoundingBox(new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ));
 		super.move(type, x, y, z);
-		AxisAlignedBB changedBox = this.getEntityBoundingBox();
-		this.setEntityBoundingBox(realBox.offset(changedBox.minX - minX, changedBox.minY - minY, changedBox.minZ - minZ));
+		AxisAlignedBB changedBox = this.getBoundingBox();
+		this.setBoundingBox(realBox.offset(changedBox.minX - minX, changedBox.minY - minY, changedBox.minZ - minZ));
 		this.resetPositionToBB();
 	}
 
@@ -246,9 +244,9 @@ public class EntityGiclops extends EntityUnderling implements IBigEntity
 	 * Will get destroyed next tick.
 	 */
 	@Override
-	public void setDead()
+	public void remove()
 	{
-		super.setDead();
+		super.remove();
 		partGroup.updatePositions();
 	}
 

@@ -2,20 +2,21 @@ package com.mraof.minestuck.entity.item;
 
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.editmode.ServerEditHandler;
-import io.netty.buffer.ByteBuf;
+import com.mraof.minestuck.entity.ModEntityTypes;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnData
 {
@@ -33,7 +34,7 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 
 	public EntityVitalityGel(World world, double x, double y, double z, int healAmount)
 	{
-		super(world);
+		super(ModEntityTypes.VITALITY_GEL, world);
 		this.setSize(this.getSizeByValue(), 0.5F);
 		this.setPosition(x, y, z);
 		this.rotationYaw = (float)(Math.random() * 360.0D);
@@ -47,7 +48,7 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 
 	public EntityVitalityGel(World par1World)
 	{
-		super(par1World);
+		super(ModEntityTypes.VITALITY_GEL, par1World);
 		animationOffset = (float) (Math.random() * Math.PI * 2.0D);
 	}
 	
@@ -64,7 +65,7 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount)
 	{
-		if (this.isEntityInvulnerable(source))
+		if (this.isInvulnerableTo(source))
 		{
 			return false;
 		} else
@@ -74,7 +75,7 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 			
 			if (this.health <= 0)
 			{
-				this.setDead();
+				this.remove();
 			}
 			
 			return false;
@@ -82,10 +83,12 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 	}
 	
 	@Override
-	protected void entityInit() {}
+	protected void registerData()
+	{
+	}
 	
 	
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public int getBrightnessForRender()
 	{
@@ -108,9 +111,9 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 	 * Called to update the entity's position/logic.
 	 */
 	@Override
-	public void onUpdate()
+	public void tick()
 	{
-		super.onUpdate();
+		super.tick();
 		
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
@@ -158,7 +161,8 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 		
 		if(this.onGround)
 		{
-			f = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getEntityBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.98F;
+			BlockPos pos = new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getBoundingBox().minY) - 1, MathHelper.floor(this.posZ));
+			f = this.world.getBlockState(pos).getSlipperiness(world, pos, this) * 0.98F;
 		}
 		
 		this.motionX *= (double)f;
@@ -175,35 +179,35 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 
 		if (this.age >= 6000)
 		{
-			this.setDead();
+			this.remove();
 		}
 		
 	}
 
-	/**
+	/*
 	 * Returns if this entity is in water and will end up adding the waters velocity to the entity
 	 */
-	@Override
+	/*@Override
 	public boolean handleWaterMovement()
 	{
 		return this.world.handleMaterialAcceleration(this.getEntityBoundingBox(), Material.WATER, this);
+	}*/
+	
+	@Override
+	protected void writeAdditional(NBTTagCompound compound)
+	{
+		compound.setShort("health", (short)((byte)this.health));
+		compound.setShort("age", (short)this.age);
+		compound.setShort("amount", (short)this.healAmount);
 	}
 	
 	@Override
-	public void writeEntityToNBT(NBTTagCompound nbt)
+	protected void readAdditional(NBTTagCompound compound)
 	{
-		nbt.setShort("health", (short)((byte)this.health));
-		nbt.setShort("age", (short)this.age);
-		nbt.setShort("amount", (short)this.healAmount);
-	}
-	
-	@Override
-	public void readEntityFromNBT(NBTTagCompound nbt)
-	{
-		this.health = nbt.getShort("health") & 255;
-		this.age = nbt.getShort("age");
-		if(nbt.hasKey("amount", 99))
-			this.healAmount = nbt.getShort("amount");
+		this.health = compound.getShort("health") & 255;
+		this.age = compound.getShort("age");
+		if(compound.contains("amount", 99))
+			this.healAmount = compound.getShort("amount");
 	}
 
 	/**
@@ -219,10 +223,10 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 		{
 			this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.1F, 0.5F * ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.8F));
 			player.heal(healAmount);
-			this.setDead();
+			this.remove();
 		}
 		else  
-			this.setDead();
+			this.remove();
 	}
 	
 	@Override
@@ -237,13 +241,13 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 	}
 	
 	@Override
-	public void writeSpawnData(ByteBuf data) 
+	public void writeSpawnData(PacketBuffer buffer)
 	{
-		data.writeInt(this.healAmount);
+		buffer.writeInt(this.healAmount);
 	}
 	
 	@Override
-	public void readSpawnData(ByteBuf data) 
+	public void readSpawnData(PacketBuffer data)
 	{
 		this.healAmount = data.readInt();
 		this.setSize(this.getSizeByValue(), 0.5F);

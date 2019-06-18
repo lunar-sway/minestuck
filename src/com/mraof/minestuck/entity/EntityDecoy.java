@@ -3,7 +3,7 @@ package com.mraof.minestuck.entity;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.util.Debug;
 import net.minecraft.client.entity.AbstractClientPlayer;
-import net.minecraft.client.renderer.ThreadDownloadImageData;
+import net.minecraft.client.renderer.texture.ThreadDownloadImageData;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,6 +18,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.FoodStats;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.GameType;
 import net.minecraft.world.World;
@@ -25,7 +26,6 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 
 import java.lang.reflect.Constructor;
-import java.util.Set;
 
 public class EntityDecoy extends EntityLiving {
 	
@@ -53,7 +53,7 @@ public class EntityDecoy extends EntityLiving {
 	
 	public EntityDecoy(World world)
 	{
-		super(world);
+		super(ModEntityTypes.DECOY, world);
 		inventory = new InventoryPlayer(null);
 		if(!world.isRemote)	//If not spawned the way it should
 			markedForDespawn = true;
@@ -61,11 +61,11 @@ public class EntityDecoy extends EntityLiving {
 	
 	public EntityDecoy(WorldServer world, EntityPlayerMP player)
 	{
-		super(world);
-		this.setEntityBoundingBox(player.getEntityBoundingBox());
+		super(ModEntityTypes.DECOY, world);
+		this.setBoundingBox(player.getBoundingBox());
 		height = player.height;
 		this.player = new DecoyPlayer(world, this, player);
-		for(String key : (Set<String>) player.getEntityData().getKeySet())
+		for(String key : player.getEntityData().keySet())
 			this.player.getEntityData().setTag(key, player.getEntityData().getTag(key).copy());
 		this.posX = player.posX;
 		originX = posX;
@@ -82,18 +82,18 @@ public class EntityDecoy extends EntityLiving {
 		this.renderYawOffset = player.renderYawOffset;
 		this.gameType = player.interactionManager.getGameType();
 		initInventory(player);
-		player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getModifiers().forEach(attributeModifier ->
-				this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).applyModifier(attributeModifier));
-		player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getModifiers().forEach(attributeModifier ->
-				this.player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).applyModifier(attributeModifier));
+		player.getAttribute(SharedMonsterAttributes.MAX_HEALTH).getModifiers().forEach(attributeModifier ->
+				this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).applyModifier(attributeModifier));
+		player.getAttribute(SharedMonsterAttributes.MAX_HEALTH).getModifiers().forEach(attributeModifier ->
+				this.player.getAttribute(SharedMonsterAttributes.MAX_HEALTH).applyModifier(attributeModifier));
 		this.setHealth(player.getHealth());
-		username = player.getName();
-		isFlying = player.capabilities.isFlying;
-		player.capabilities.writeCapabilitiesToNBT(this.capabilities);
+		username = player.getName().getFormattedText();
+		isFlying = player.abilities.isFlying;
+		player.abilities.write(this.capabilities);
 		foodStatsNBT = new NBTTagCompound();
-		player.getFoodStats().writeNBT(foodStatsNBT);
+		player.getFoodStats().write(foodStatsNBT);
 		initFoodStats(player);
-		dataManager.set(USERNAME, username);
+		dataManager.set(USERNAME, username.toString());
 		dataManager.set(ROTATION_YAW_HEAD, this.rotationYawHead);	//Due to rotationYawHead didn't update correctly
 		dataManager.set(FLYING, isFlying);
 	}
@@ -138,7 +138,7 @@ public class EntityDecoy extends EntityLiving {
 					throw new NoSuchMethodException("Found no known constructor for net.minecraft.util.FoodStats.");
 				}
 			}
-			foodStats.readNBT(foodStatsNBT);	//Exact copy of food stack
+			foodStats.read(foodStatsNBT);	//Exact copy of food stack
 		} catch(Exception e)
 		{
 			foodStats = null;
@@ -152,21 +152,22 @@ public class EntityDecoy extends EntityLiving {
 		if(foodStats != null)
 		{
 			NBTTagCompound nbt = new NBTTagCompound();
-			foodStats.writeNBT(nbt);
+			foodStats.write(nbt);
 			return nbt;
 		} else return foodStatsNBT;
 	}
 	
 	@Override
-	protected void entityInit()
+	protected void registerData()
 	{
-		super.entityInit();
+		super.registerData();
 		dataManager.register(USERNAME, "");
 		dataManager.register(ROTATION_YAW_HEAD, 0F);
 		dataManager.register(FLYING, false);
 	}
 	
-	protected void setupCustomSkin() {
+	protected void setupCustomSkin()
+	{
 		if (this.world.isRemote && username != null && !username.isEmpty()){
 			locationSkin = AbstractClientPlayer.getLocationSkin(username);
 			//locationCape = AbstractClientPlayer.getLocationCape(username);
@@ -175,31 +176,37 @@ public class EntityDecoy extends EntityLiving {
 		}
 	}
 	
-	public ThreadDownloadImageData getTextureSkin() {
+	public ThreadDownloadImageData getTextureSkin()
+	{
 		return downloadImageSkin;
 	}
 	
-	public ThreadDownloadImageData getTextureCape() {
+	public ThreadDownloadImageData getTextureCape()
+	{
 		return downloadImageCape;
 	}
 	
-	public ResourceLocation getLocationSkin() {
+	public ResourceLocation getLocationSkin()
+	{
 //		if(locationSkin == null)
 //			return AbstractClientPlayer.locationStevePng;
 		return locationSkin;
 	}
 	
-	public ResourceLocation getLocationCape() {
+	public ResourceLocation getLocationCape()
+	{
 		return locationCape;
 	}
 	
 	@Override
-	public void onUpdate() {
-		if(markedForDespawn){
-			this.setDead();
+	public void tick()
+	{
+		if(markedForDespawn)
+		{
+			this.remove();
 			return;
 		}
-		super.onUpdate();
+		super.tick();
 		if(world.isRemote && !init ){
 			username = dataManager.get(USERNAME);
 			this.rotationYawHead = dataManager.get(ROTATION_YAW_HEAD);
@@ -221,7 +228,7 @@ public class EntityDecoy extends EntityLiving {
 		if(!world.isRemote)
 		{
 			if(foodStats != null)
-				foodStats.onUpdate(player);
+				foodStats.tick(player);
 			if(this.locationChanged())
 				ServerEditHandler.reset(ServerEditHandler.getData(this));
 		}
@@ -246,9 +253,9 @@ public class EntityDecoy extends EntityLiving {
 	}
 	
 	@Override
-	public String getName() 
+	public ITextComponent getName()
 	{
-		return username != null ? username : "DECOY";
+		return new TextComponentString(username != null ? username : "DECOY");
 	}
 	
 	@Override
@@ -286,7 +293,7 @@ public class EntityDecoy extends EntityLiving {
 	}
 	
 	@Override
-	protected boolean canDespawn() {
+	public boolean canDespawn() {
 		return false;
 	}
 	

@@ -1,9 +1,9 @@
 package com.mraof.minestuck.entity.underling;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
 import com.mraof.minestuck.util.*;
 import net.minecraft.entity.Entity;
@@ -12,14 +12,12 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
-
 //Makes non-stop ogre puns
 public class EntityOgre extends EntityUnderling 
 {
 	public EntityOgre(World world)
 	{
-		super(world);
+		super(ModEntityTypes.OGRE, world);
 		setSize(3.0F, 4.5F);
 		this.stepHeight = 1.0F;
 	}
@@ -105,7 +103,7 @@ public class EntityOgre extends EntityUnderling
 		if(this.dead && !this.world.isRemote && type != null)
 		{
 			computePlayerProgress((int) (40*type.getPower() + 50));
-			if(entity != null && entity instanceof EntityPlayerMP)
+			if(entity instanceof EntityPlayerMP)
 			{
 				//((EntityPlayerMP) entity).addStat(MinestuckAchievementHandler.killOgre);
 				Echeladder ladder = MinestuckPlayerData.getData((EntityPlayerMP) entity).echeladder;

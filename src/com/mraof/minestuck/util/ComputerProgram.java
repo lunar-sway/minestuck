@@ -67,7 +67,7 @@ public abstract class ComputerProgram
 		if(item.isEmpty())
 			return -2;
 		item = item.copy();
-		if(item.getItem().equals(Items.RECORD_11))
+		if(item.getItem().equals(Items.MUSIC_DISC_11))
 			return -1;
 		item.setCount(1);
 		for(int id : disks.keySet())
@@ -80,7 +80,7 @@ public abstract class ComputerProgram
 	public static ItemStack getItem(int id)
 	{
 		if(id == -1)
-			return new ItemStack(Items.RECORD_11);
+			return new ItemStack(Items.MUSIC_DISC_11);
 		return disks.get(id).copy();
 	}
 	

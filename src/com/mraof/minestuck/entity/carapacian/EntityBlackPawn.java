@@ -1,16 +1,17 @@
 package com.mraof.minestuck.entity.carapacian;
 
+import com.mraof.minestuck.entity.ModEntityTypes;
 import net.minecraft.world.World;
 
 public class EntityBlackPawn extends EntityPawn
 {
 	public EntityBlackPawn(World world) 
 	{
-		super(world);
+		super(ModEntityTypes.DERSITE_PAWN, world);
 	}
 	public EntityBlackPawn(World world, int type) 
 	{
-		super(world, type);
+		super(ModEntityTypes.DERSITE_PAWN, world, type);
 	}
 
 	@Override

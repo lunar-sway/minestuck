@@ -2,8 +2,6 @@ package com.mraof.minestuck.util;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.PlayerDataPacket;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
@@ -94,15 +92,15 @@ public class Echeladder
 		}
 		
 		Debug.debugf("Finished echeladder climbing for %s at %s with progress %s", identifier.getUsername(), rung, progress);
-		EntityPlayer player = identifier.getPlayer();
+		EntityPlayerMP player = identifier.getPlayer();
 		if(player != null)
 		{
 			MinestuckPlayerTracker.updateEcheladder(player, false);
 			if(rung != prevRung)
 			{
 				updateEcheladderBonuses(player);
-				MinestuckPacketHandler.sendToPlayer(MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.BOONDOLLAR, MinestuckPlayerData.getData(identifier).boondollars), player);
-				player.world.playSound((EntityPlayer)null, player.posX, player.posY, player.posZ, MinestuckSoundHandler.soundUpcheladder, SoundCategory.AMBIENT, 1F, 1F);
+				MinestuckPacketHandler.sendToPlayer(PlayerDataPacket.boondollars(MinestuckPlayerData.getData(identifier).boondollars), player);
+				player.world.playSound(null, player.posX, player.posY, player.posZ, MinestuckSoundHandler.soundUpcheladder, SoundCategory.AMBIENT, 1F, 1F);
 			}
 		}
 	}
@@ -145,8 +143,8 @@ public class Echeladder
 		int healthBonus = healthBoost(rung);
 		double damageBonus = attackBonus(rung);
 		
-		updateAttribute(player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH), new AttributeModifier(echeladderHealthBoostModifierUUID, "Echeladder Health Boost", healthBonus, 0));	//If this isn't saved, your health goes to 10 hearts (if it was higher before) when loading the save file.
-		updateAttribute(player.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE), new AttributeModifier(echeladderDamageBoostModifierUUID, "Echeladder Damage Boost", damageBonus, 1).setSaved(false));
+		updateAttribute(player.getAttribute(SharedMonsterAttributes.MAX_HEALTH), new AttributeModifier(echeladderHealthBoostModifierUUID, "Echeladder Health Boost", healthBonus, 0));	//If this isn't saved, your health goes to 10 hearts (if it was higher before) when loading the save file.
+		updateAttribute(player.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE), new AttributeModifier(echeladderDamageBoostModifierUUID, "Echeladder Damage Boost", damageBonus, 1).setSaved(false));
 	}
 	
 	public void updateAttribute(IAttributeInstance attribute, AttributeModifier modifier)
@@ -160,13 +158,13 @@ public class Echeladder
 	{
 		Set<IAttributeInstance> attributesToSend = ((AttributeMap) player.getAttributeMap()).getDirtyInstances();
 		
-		attributesToSend.add(player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH));
+		attributesToSend.add(player.getAttribute(SharedMonsterAttributes.MAX_HEALTH));
 	}
 	
 	protected void saveEcheladder(NBTTagCompound nbt)
 	{
-		nbt.setInteger("rung", rung);
-		nbt.setInteger("rungProgress", progress);
+		nbt.setInt("rung", rung);
+		nbt.setInt("rungProgress", progress);
 		
 		byte[] bonuses = new byte[ALCHEMY_BONUS_OFFSET + alchemyBonuses.length];	//Booleans would be stored as bytes anyways
 		for(int i = 0; i < underlingBonuses.length; i++)
@@ -178,8 +176,8 @@ public class Echeladder
 	
 	protected void loadEcheladder(NBTTagCompound nbt)
 	{
-		rung = nbt.getInteger("rung");
-		progress = nbt.getInteger("rungProgress");
+		rung = nbt.getInt("rung");
+		progress = nbt.getInt("rungProgress");
 		
 		byte[] bonuses = nbt.getByteArray("rungBonuses");
 		for(int i = 0; i < underlingBonuses.length && i + UNDERLING_BONUS_OFFSET < bonuses.length; i++)

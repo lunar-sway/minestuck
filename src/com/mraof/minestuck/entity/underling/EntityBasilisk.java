@@ -4,6 +4,7 @@ import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.entity.IEntityMultiPart;
+import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
 import com.mraof.minestuck.util.*;
 import net.minecraft.entity.Entity;
@@ -18,7 +19,7 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	
 	public EntityBasilisk(World world) 
 	{
-		super(world);
+		super(ModEntityTypes.BASILISK, world);
 		this.setSize(3F, 2F);
 		tail = new EntityUnderlingPart(this, 0, 3F, 2F);
 		world.spawnEntity(tail);
@@ -104,9 +105,9 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	}
 	
 	@Override
-	public void onEntityUpdate() 
+	public void baseTick()
 	{
-		super.onEntityUpdate();
+		super.baseTick();
 		this.updatePartPositions();
 	}
 

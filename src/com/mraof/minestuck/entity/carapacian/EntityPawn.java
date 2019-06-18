@@ -13,11 +13,13 @@ import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 
 public abstract class EntityPawn extends EntityCarapacian implements IRangedAttackMob, IMob
@@ -28,13 +30,13 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 	private int pawnType;
 	protected float moveSpeed = 0.3F;
 
-	public EntityPawn(World world)
+	public EntityPawn(EntityType<?> type, World world)
 	{
-		this(world, randStatic.nextDouble() < .25 ? 1 : 0);
+		this(type, world, randStatic.nextDouble() < .25 ? 1 : 0);
 	}
-	public EntityPawn(World world, int pawnType) 
+	public EntityPawn(EntityType<?> type, World world, int pawnType)
 	{
-		super(world);
+		super(type, world);
 		setSize(0.6F, 1.5F);
 		this.experienceValue = 1;
 
@@ -53,10 +55,11 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 		return .3F;
 	}
 	
+	@Nullable
 	@Override
-	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData entityLivingData)	//was called "onSpawnWithEgg"
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData entityLivingData, @Nullable NBTTagCompound itemNbt)
 	{
-		entityLivingData = super.onInitialSpawn(difficulty, entityLivingData);
+		entityLivingData = super.onInitialSpawn(difficulty, entityLivingData, itemNbt);
 		setEquipmentBasedOnDifficulty(difficulty);
 		
 		if(this.pawnType == 1)
@@ -65,7 +68,7 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 		}
 		else
 			this.tasks.addTask(4, this.entityAIAttackOnCollide);
-		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(this.pawnType == 1 ? Items.BOW : rand.nextDouble() < .2 ? MinestuckItems.regisword : rand.nextDouble() < .02 ? MinestuckItems.sord : Items.STONE_SWORD));
+		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(this.pawnType == 1 ? Items.BOW : rand.nextDouble() < .2 ? MinestuckItems.REGISWORD : rand.nextDouble() < .02 ? MinestuckItems.SORD : Items.STONE_SWORD));
 		this.setEnchantmentBasedOnDifficulty(difficulty);	//was called "enchantEquipment"
 		return entityLivingData;
 	}
@@ -75,7 +78,7 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 	{
 		EntityArrow arrow = new EntityTippedArrow(this.world, this);
 		double d0 = target.posX - this.posX;
-		double d1 = target.getEntityBoundingBox().minY + (double)(target.height / 3.0F) - arrow.posY;
+		double d1 = target.getBoundingBox().minY + (double)(target.height / 3.0F) - arrow.posY;
 		double d2 = target.posZ - this.posZ;
 		double d3 = (double)MathHelper.sqrt(d0 * d0 + d2 * d2);
 		arrow.shoot(d0, d1 + d3 * 0.2D, d2, 1.6F, 12.0F);
@@ -114,9 +117,8 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 		ItemStack weapon = this.getHeldItemMainhand();
 		float damage = 2;
 
-		if (weapon != null)
-			damage += 
-				(float)this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
+		if (!weapon.isEmpty())
+			damage += (float)this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue();
 		
 		damage += EnchantmentHelper.getModifierForCreature(this.getHeldItemMainhand(), ((EntityLivingBase) par1Entity).getCreatureAttribute());
 		
@@ -182,11 +184,11 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 			this.setCombatTask();
 		}
 	}
-
+	
 	@Override
-	protected void applyEntityAttributes()
+	protected void registerAttributes()
 	{
-		super.applyEntityAttributes();
+		super.registerAttributes();
 		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
 	}
 	
