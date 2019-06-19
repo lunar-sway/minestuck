@@ -15,17 +15,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.StructureBoundingBox;
-import net.minecraft.world.gen.structure.StructureComponent;
-import net.minecraft.world.gen.structure.StructureStart;
-import net.minecraft.world.gen.structure.template.TemplateManager;
 
-public class SmallRuinStart extends StructureStart
+public class SmallRuinStart //extends StructureStart
 {
 	
 	public SmallRuinStart()
 	{}
-	
+	/*
 	public SmallRuinStart(ChunkProviderLands provider, World world, Random rand, int chunkX, int chunkZ)
 	{
 		super(chunkX, chunkZ);
@@ -148,14 +144,14 @@ public class SmallRuinStart extends StructureStart
 					/*if(y < minY)
 						minY = y;
 					if(y > maxY)
-						maxY = y;*/
+						maxY = y;*//*
 					height += y;
 					i++;
 					if(!worldIn.getBlockState(new BlockPos(x, y, z)).getBlock().equals(Blocks.ICE))
 						onLand = true;	//used to prevent the structure from spawning in an ice-covered sea without any land nearby
 				}
 				
-			if(!onLand || i == 0/* || maxY - minY > 5*/)
+			if(!onLand || i == 0/* || maxY - minY > 5*//*)
 				return false;
 			
 			height /= i;
@@ -256,5 +252,5 @@ public class SmallRuinStart extends StructureStart
 				torches[i] = nbt.getBoolean("torch"+i);
 		}
 		
-	}
+	}*/
 }

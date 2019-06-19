@@ -14,6 +14,7 @@ import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 
@@ -37,7 +38,7 @@ public class Echeladder
 	
 	public static void increaseProgress(EntityPlayerMP player, int progress)
 	{
-		MinestuckPlayerData.getData(player).echeladder.increaseProgress(progress);
+		MinestuckPlayerData.getData(player).echeladder.increaseProgress(player.server, progress);
 	}
 	
 	private PlayerIdentifier identifier;
@@ -57,7 +58,7 @@ public class Echeladder
 		return (int) (Math.pow(1.4, rung)*9);
 	}
 	
-	public void increaseProgress(int exp)
+	public void increaseProgress(MinecraftServer server, int exp)
 	{
 		SburbConnection c = SkaianetHandler.getMainConnection(identifier, true);
 		int topRung = c != null && c.enteredGame() ? RUNG_COUNT - 1 : MinestuckConfig.preEntryRungLimit;
@@ -92,7 +93,7 @@ public class Echeladder
 		}
 		
 		Debug.debugf("Finished echeladder climbing for %s at %s with progress %s", identifier.getUsername(), rung, progress);
-		EntityPlayerMP player = identifier.getPlayer();
+		EntityPlayerMP player = identifier.getPlayer(server);
 		if(player != null)
 		{
 			MinestuckPlayerTracker.updateEcheladder(player, false);
@@ -105,16 +106,16 @@ public class Echeladder
 		}
 	}
 	
-	public void checkBonus(byte type)
+	public void checkBonus(MinecraftServer server, byte type)
 	{
 		if(type >= UNDERLING_BONUS_OFFSET && type < UNDERLING_BONUS_OFFSET + underlingBonuses.length && !underlingBonuses[type - UNDERLING_BONUS_OFFSET])
 		{
 			underlingBonuses[type - UNDERLING_BONUS_OFFSET] = true;
-			increaseProgress(UNDERLING_BONUSES[type - UNDERLING_BONUS_OFFSET]);
+			increaseProgress(server, UNDERLING_BONUSES[type - UNDERLING_BONUS_OFFSET]);
 		} else if(type >= ALCHEMY_BONUS_OFFSET && type < ALCHEMY_BONUS_OFFSET + alchemyBonuses.length && !alchemyBonuses[type - ALCHEMY_BONUS_OFFSET])
 		{
 			alchemyBonuses[type - ALCHEMY_BONUS_OFFSET] = true;
-			increaseProgress(ALCHEMY_BONUSES[type - ALCHEMY_BONUS_OFFSET]);
+			increaseProgress(server, ALCHEMY_BONUSES[type - ALCHEMY_BONUS_OFFSET]);
 		}
 	}
 	
@@ -206,7 +207,7 @@ public class Echeladder
 		return 1/(rung*0.06D + 1);
 	}
 	
-	public void setByCommand(int rung, double progress)
+	public void setByCommand(MinecraftServer server, int rung, double progress)
 	{
 		this.rung = MathHelper.clamp(rung, 0, RUNG_COUNT - 1);	//Can never be too careful
 		if(rung != RUNG_COUNT - 1)
@@ -216,7 +217,7 @@ public class Echeladder
 				this.progress--;
 		} else this.progress = 0;
 		
-		EntityPlayer player = identifier.getPlayer();
+		EntityPlayerMP player = identifier.getPlayer(server);
 		if(player != null)
 		{
 			MinestuckPlayerTracker.updateEcheladder(player, true);

@@ -114,7 +114,7 @@ public class TileEntityGristWidget extends TileEntityMachineProcess implements I
 	{
 		GristSet gristSet = getGristWidgetResult();
 		
-		if(!MinestuckPlayerData.addBoondollars(owner, -getGristWidgetBoondollarValue()))
+		if(!MinestuckPlayerData.addBoondollars(world.getServer(), owner, -getGristWidgetBoondollarValue()))
 		{
 			Debug.warnf("Failed to remove boondollars for a grist widget from %s's porkhollow", owner.getUsername());
 			return;

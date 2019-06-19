@@ -38,7 +38,7 @@ public class BlockCruxiteOre extends Block
 	@Override
 	public IItemProvider getItemDropped(IBlockState state, World worldIn, BlockPos pos, int fortune)
 	{
-		return MinestuckItems.rawCruxite;
+		return MinestuckItems.RAW_CRUXITE;
 	}
 	
 	@Override

@@ -7,6 +7,7 @@ import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.Pair;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -63,7 +64,7 @@ public class InventoryConsortMerchant implements IInventory
 		}
 	}
 	
-	protected void handlePurchase(EntityPlayer player, boolean all, int index)
+	protected void handlePurchase(EntityPlayerMP player, boolean all, int index)
 	{
 		if (!player.world.isRemote && index >= 0 && index < inv.size())
 		{

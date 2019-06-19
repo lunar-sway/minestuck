@@ -160,7 +160,7 @@ public class ServerEditHandler
 			list.add(data);
 			ServerEditPacket packet = ServerEditPacket.activate(computerTarget.getUsername(), c.centerX, c.centerZ, c.givenItems(), DeployList.getDeployListTag(c));
 			MinestuckPacketHandler.sendToPlayer(packet, player);
-			MinestuckPlayerTracker.updateGristCache(c.getClientIdentifier());
+			MinestuckPlayerTracker.updateGristCache(player.getServer(), c.getClientIdentifier());
 		}
 	}
 	
@@ -252,11 +252,11 @@ public class ServerEditHandler
 						? entry.getSecondaryGristCost(data.connection) : entry.getPrimaryGristCost(data.connection);
 				if(GristHelper.canAfford(MinestuckPlayerData.getGristSet(data.connection.getClientIdentifier()), cost))
 				{
-					GristHelper.decrease(data.connection.getClientIdentifier(), cost);
-					MinestuckPlayerTracker.updateGristCache(data.connection.getClientIdentifier());
+					GristHelper.decrease(event.getPlayer().getServer(), data.connection.getClientIdentifier(), cost);
+					MinestuckPlayerTracker.updateGristCache(event.getPlayer().getServer(), data.connection.getClientIdentifier());
 					data.connection.givenItems()[i] = true;
 					if(!data.connection.isMain())
-						SkaianetHandler.giveItems(data.connection.getClientIdentifier());
+						SkaianetHandler.giveItems(event.getPlayer().getServer(), data.connection.getClientIdentifier());
 				}
 				else event.setCanceled(true);
 			}
@@ -359,16 +359,16 @@ public class ServerEditHandler
 		{
 			EditData data = getData(event.getEntityPlayer());
 			if(!MinestuckConfig.gristRefund)
-				GristHelper.decrease(data.connection.getClientIdentifier(), new GristSet(GristType.BUILD, 1));
+				GristHelper.decrease(event.getWorld().getServer(), data.connection.getClientIdentifier(), new GristSet(GristType.BUILD, 1));
 			else
 			{
 				IBlockState block = event.getWorld().getBlockState(event.getPos());
 				ItemStack stack = block.getBlock().getPickBlock(block, null, event.getWorld(), event.getPos(), event.getEntityPlayer());
 				GristSet set = AlchemyCostRegistry.getGristConversion(stack);
 				if(set != null && !set.isEmpty())
-					GristHelper.increase(data.connection.getClientIdentifier(), set);
+					GristHelper.increase(event.getWorld().getServer(), data.connection.getClientIdentifier(), set);
 			}
-			MinestuckPlayerTracker.updateGristCache(data.connection.getClientIdentifier());
+			MinestuckPlayerTracker.updateGristCache(event.getEntity().getServer(), data.connection.getClientIdentifier());
 		}
 	}
 	
@@ -398,17 +398,17 @@ public class ServerEditHandler
 							? entry.getSecondaryGristCost(c) : entry.getPrimaryGristCost(c);
 					c.givenItems()[index] = true;
 					if(!c.isMain())
-						SkaianetHandler.giveItems(c.getClientIdentifier());
+						SkaianetHandler.giveItems(player.getServer(), c.getClientIdentifier());
 					if(!cost.isEmpty())
 					{
-						GristHelper.decrease(c.getClientIdentifier(), cost);
-						MinestuckPlayerTracker.updateGristCache(data.connection.getClientIdentifier());
+						GristHelper.decrease(player.getServer(), c.getClientIdentifier(), cost);
+						MinestuckPlayerTracker.updateGristCache(player.getServer(), data.connection.getClientIdentifier());
 					}
 					player.inventory.mainInventory.set(player.inventory.currentItem, ItemStack.EMPTY);
 				} else
 				{
-					GristHelper.decrease(data.connection.getClientIdentifier(), AlchemyCostRegistry.getGristConversion(stack));
-					MinestuckPlayerTracker.updateGristCache(data.connection.getClientIdentifier());
+					GristHelper.decrease(player.getServer(), data.connection.getClientIdentifier(), AlchemyCostRegistry.getGristConversion(stack));
+					MinestuckPlayerTracker.updateGristCache(player.getServer(), data.connection.getClientIdentifier());
 				}
 			}
 		}

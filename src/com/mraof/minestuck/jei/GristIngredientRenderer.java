@@ -1,5 +1,5 @@
 package com.mraof.minestuck.jei;
-
+/*
 import com.mraof.minestuck.alchemy.GristAmount;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.client.Minecraft;
@@ -54,4 +54,4 @@ public class GristIngredientRenderer implements IIngredientRenderer<GristAmount>
 		list.add(TextFormatting.DARK_GRAY+ingredient.getType().getRegistryName().toString());
 		return list;
 	}
-}
+}*/

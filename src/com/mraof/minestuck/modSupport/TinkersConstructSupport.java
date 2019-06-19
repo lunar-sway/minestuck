@@ -14,7 +14,7 @@ public class TinkersConstructSupport extends ModSupport
 	
 	@Override
 	public void registerRecipes() throws Exception
-	{
+	{/*
 		Block oreBush1 = ((Block) Class.forName("tconstruct.world.TinkerWorld").getField("oreBerry").get(null));
 		Block oreBush2 = ((Block) Class.forName("tconstruct.world.TinkerWorld").getField("oreBerrySecond").get(null));
 		
@@ -31,7 +31,7 @@ public class TinkersConstructSupport extends ModSupport
 			CombinationRegistry.addCombination("treeLeaves", items1[i], CombinationRegistry.Mode.MODE_AND, new ItemStack(oreBush1, 1, i));
 		
 		CombinationRegistry.addCombination("treeLeaves", "ingotAluminium", CombinationRegistry.Mode.MODE_AND, new ItemStack(oreBush2, 1, 0));
-		CombinationRegistry.addCombination("treeLeaves", Items.EXPERIENCE_BOTTLE, 0, CombinationRegistry.Mode.MODE_AND, new ItemStack(oreBush2, 1, 1));
+		CombinationRegistry.addCombination("treeLeaves", Items.EXPERIENCE_BOTTLE, 0, CombinationRegistry.Mode.MODE_AND, new ItemStack(oreBush2, 1, 1));*/
 	}
 	
 }

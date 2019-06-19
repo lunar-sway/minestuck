@@ -17,7 +17,7 @@ public class BlockEndLeaves extends BlockMinestuckLeaves
 	
 	public BlockEndLeaves(Properties properties)
 	{
-		super(properties, () -> MinestuckBlocks.END_SAPLING.asItem(), false, () -> Items.CHORUS_FRUIT);
+		super(() -> MinestuckBlocks.END_SAPLING.asItem(), false, () -> Items.CHORUS_FRUIT, properties);
 	}
 	
 	@Override

@@ -606,8 +606,9 @@ public class SessionHandler
 				connectionTag.setBoolean("isActive", c.isActive);
 				if(c.isMain)
 				{
-					connectionTag.setInt("clientDim", c.enteredGame ? c.clientHomeLand : 0);
-					if(c.enteredGame && DimensionManager.isDimensionRegistered(c.clientHomeLand))
+					if(c.enteredGame)
+						connectionTag.setString("clientDim", c.clientHomeLand.getRegistryName().toString());
+					if(c.enteredGame )//&& DimensionManager.isDimensionRegistered(c.clientHomeLand)) TODO
 					{
 						LandAspects aspects = MinestuckDimensionHandler.getAspects(c.clientHomeLand);
 						IChunkGenerator chunkGen = server.getWorld(c.clientHomeLand).getDimension().createChunkGenerator();

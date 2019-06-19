@@ -28,7 +28,7 @@ public class LandAspectTowers extends TitleLandAspect
 		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.YELLOW_CARPET.getDefaultState());
 		chunkProvider.decorators.add(new BasicTowerDecorator());
 		chunkProvider.decorators.add(new PillarDecorator("structure_primary", 1, true, BiomeMinestuck.mediumRough));
-		chunkProvider.sortDecorators();
+		//chunkProvider.sortDecorators();
 	}
 	
 }

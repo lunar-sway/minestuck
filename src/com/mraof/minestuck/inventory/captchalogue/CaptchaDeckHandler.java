@@ -141,7 +141,7 @@ public class CaptchaDeckHandler
 			else
 			{
 				Modus oldModus = modus;
-				ResourceLocation oldType = oldModus.name;
+				ResourceLocation oldType = oldModus.getRegistryName();
 				if(type.equals(oldType))
 					return;
 				modus = createInstance(type, LogicalSide.SERVER);
@@ -425,7 +425,7 @@ public class CaptchaDeckHandler
 		
 		if(MinestuckConfig.sylladexDropMode == 2)
 		{
-			player.dropItem(getItem(modus.name), true, false);	//TODO Add a method to the modus to get the itemstack instead
+			player.dropItem(getItem(modus.getRegistryName()), true, false);	//TODO Add a method to the modus to get the itemstack instead
 			setModus(player, null);
 		} else modus.initModus(player, null, size);
 		
@@ -437,7 +437,7 @@ public class CaptchaDeckHandler
 	{
 		if(modus == null)
 			return null;
-		ResourceLocation name = modus.name;
+		ResourceLocation name = modus.getRegistryName();
 		NBTTagCompound nbt = modus.writeToNBT(new NBTTagCompound());
 		nbt.setString("type", name.toString());
 		return nbt;
@@ -458,7 +458,7 @@ public class CaptchaDeckHandler
 			name = new ResourceLocation(nbt.getString("type"));
 		}
 		
-		if(clientSide && clientSideModus != null && name.equals(clientSideModus.name))
+		if(clientSide && clientSideModus != null && name.equals(clientSideModus.getRegistryName()))
 			modus = clientSideModus;
 		else
 		{

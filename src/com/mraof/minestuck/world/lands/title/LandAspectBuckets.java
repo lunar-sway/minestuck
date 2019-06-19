@@ -26,6 +26,6 @@ public class LandAspectBuckets extends TitleLandAspect	//Yes, buckets
 		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.BLUE_WOOL.getDefaultState());
 		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.BLACK_CARPET.getDefaultState());
 		chunkProvider.decorators.add(new BucketDecorator(BiomeMinestuck.mediumNormal, BiomeMinestuck.mediumRough));
-		chunkProvider.sortDecorators();
+		//chunkProvider.sortDecorators();
 	}
 }

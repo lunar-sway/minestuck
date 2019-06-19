@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.renderer.entity.frog;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.model.ModelFrog;
 import com.mraof.minestuck.entity.EntityFrog;
 import com.mraof.minestuck.entity.EntityMinestuck;
@@ -35,7 +36,7 @@ public class RenderFrog extends RenderLivingBase<EntityFrog>
 	@Override
 	protected ResourceLocation getEntityTexture(EntityFrog entity)
 	{
-		return entity.getTextureResource();
+		return new ResourceLocation(Minestuck.MOD_ID, "textures/mobs/frog/base.png");
 	}
 	
 	protected boolean canRenderName(EntityFrog entity)

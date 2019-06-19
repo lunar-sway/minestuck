@@ -47,7 +47,7 @@ public class DefaultTerrainGen extends LandTerrainGenBase
 	{
 		int[] topBlock = new int[256];
 		
-		heightMap = this.noiseGens[0].generateNoiseOctaves(heightMap, chunkX * 16, 10, chunkZ * 16, 16, 1, 16, 10, 1, 10);
+		//heightMap = this.noiseGens[0].generateNoiseOctaves(heightMap, chunkX * 16, 10, chunkZ * 16, 16, 1, 16, 10, 1, 10);
 //		double[] heightMapTriangles = noiseGeneratorTriangle.generateNoiseTriangle(heightMap, chunkX * 16, chunkZ * 16, 16, 16);
 		generateBiomeData(chunkX, chunkZ);
 		
@@ -107,7 +107,7 @@ public class DefaultTerrainGen extends LandTerrainGenBase
 	
 	protected void generateBiomeData(int chunkX, int chunkZ)
 	{
-		biomesForGeneration = provider.landWorld.getBiomeProvider().getBiomesForGeneration(this.biomesForGeneration, chunkX*4 - 2, chunkZ*4 - 2, 9, 9);
+		//biomesForGeneration = provider.landWorld.getBiomeProvider().getBiomesForGeneration(this.biomesForGeneration, chunkX*4 - 2, chunkZ*4 - 2, 9, 9);
 		
 		for(int x0 = 0; x0 < 5; x0++)
 			for(int z0 = 0; z0 < 5; z0++)

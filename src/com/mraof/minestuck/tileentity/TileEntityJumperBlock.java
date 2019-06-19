@@ -8,8 +8,6 @@ import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.alchemy.CombinationRegistry;
 import com.mraof.minestuck.util.AlchemiterUpgrades;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.AlchemiterUpgrades.EnumType;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
 import net.minecraft.block.state.IBlockState;

@@ -11,6 +11,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.Heightmap;
 
 import java.util.Random;
 
@@ -63,7 +64,7 @@ public class OasisDecorator extends BiomeSpecificDecorator
 			{
 				if (!blocks[((x * 16) + z) * 4 + 3] && hasBlock1(blocks, x, 3, z, true))
 				{
-					BlockPos topPos = world.getTopSolidOrLiquidBlock(pos.add(x - 8, 0, z - 8)).down();
+					BlockPos topPos = world.getHeight(Heightmap.Type.WORLD_SURFACE, pos.add(x - 8, 0, z - 8)).down();
 					yMin = Math.min(yMin, topPos.getY());
 					yMax = Math.max(yMax, topPos.getY());
 				}
@@ -92,10 +93,10 @@ public class OasisDecorator extends BiomeSpecificDecorator
 				
 				if (!blocks[((x * 16) + z) * 4 + 3] && hasBlock2(blocks, x, 3, z))
 				{
-					BlockPos surfacePos = world.getTopSolidOrLiquidBlock(pos.add(x - 8, 0, z - 8));
+					BlockPos surfacePos = world.getHeight(Heightmap.Type.WORLD_SURFACE, pos.add(x - 8, 0, z - 8));
 					world.setBlockState(surfacePos.down(), Blocks.GRASS.getDefaultState(), 2);
 					if (random.nextInt(5) == 0)
-						world.setBlockState(surfacePos, Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.GRASS), 2);
+						world.setBlockState(surfacePos, Blocks.GRASS.getDefaultState(), 2);
 					if (hasBlock1(blocks, x, 3, z, true))
 					{
 						blockCount++;
@@ -115,8 +116,8 @@ public class OasisDecorator extends BiomeSpecificDecorator
 			int topX = Math.max(4, Math.min(11, posX - 2 + random.nextInt(3)));
 			int topZ = Math.max(4, Math.min(11, posZ - 2 + random.nextInt(3)));
 			BlockPos topPos = pos.add(topX - 8, treePos.getY() - pos.getY() + 5 + random.nextInt(2), topZ - 8);
-			IBlockState log = Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.JUNGLE);
-			IBlockState leaves = Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.JUNGLE).withProperty(BlockLeaves.CHECK_DECAY, false);
+			IBlockState log = Blocks.JUNGLE_LOG.getDefaultState();
+			IBlockState leaves = Blocks.JUNGLE_LEAVES.getDefaultState();
 			
 			BlockPos diff = topPos.subtract(treePos);
 			int logChecks = 12;
@@ -163,7 +164,7 @@ public class OasisDecorator extends BiomeSpecificDecorator
 			
 			if(chestPos != null)
 			{
-				StructureBlockUtil.placeLootChest(chestPos, world, null, EnumFacing.getHorizontal(random.nextInt(4)), MinestuckLoot.BASIC_MEDIUM_CHEST, random);
+				//StructureBlockUtil.placeLootChest(chestPos, world, null, EnumFacing.getHorizontal(random.nextInt(4)), MinestuckLoot.BASIC_MEDIUM_CHEST, random);
 			}
 		}
 		

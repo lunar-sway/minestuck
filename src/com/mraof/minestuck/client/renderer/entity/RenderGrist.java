@@ -54,7 +54,7 @@ public class RenderGrist extends Render<EntityGrist>
 	@Override
 	protected ResourceLocation getEntityTexture(EntityGrist entity) 
 	{
-		return new ResourceLocation(entity.getType().getIcon().getNamespace(), "textures/grist/" + entity.getType().getIcon().getPath() + ".png");
+		return new ResourceLocation(entity.getGristType().getIcon().getNamespace(), "textures/grist/" + entity.getGristType().getIcon().getPath() + ".png");
 	}
 
 }

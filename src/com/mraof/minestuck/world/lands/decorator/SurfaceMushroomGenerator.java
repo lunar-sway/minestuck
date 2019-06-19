@@ -3,15 +3,12 @@ package com.mraof.minestuck.world.lands.decorator;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockDirt;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
-import com.mraof.minestuck.block.BlockColoredDirt;
 import com.mraof.minestuck.block.BlockGlowingMushroom;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
@@ -20,7 +17,7 @@ public class SurfaceMushroomGenerator extends BiomeSpecificDecorator
 {
 	private int tries;
 	private int count;
-	private Block block = MinestuckBlocks.glowingMushroom;
+	private Block block = MinestuckBlocks.GLOWING_MUSHROOM;
 	private boolean lightOverride = true;
 	
 	public SurfaceMushroomGenerator(int tries, int count, Biome... biomes)
@@ -58,14 +55,13 @@ public class SurfaceMushroomGenerator extends BiomeSpecificDecorator
 			IBlockState soil = worldIn.getBlockState(pos.down());
 			if(state.getBlock() instanceof BlockGlowingMushroom)
 			{
-				out = soil.getBlock().equals(MinestuckBlocks.coloredDirt);
-				out = out && soil.getValue(BlockColoredDirt.BLOCK_TYPE).equals(BlockColoredDirt.BlockType.BLUE);
+				out = soil.getBlock().equals(MinestuckBlocks.BLUE_DIRT);
 			} else if(soil.getBlock() == Blocks.MYCELIUM)
 			{
 				out = true;
 			} else
 			{
-				if(soil.getBlock() == Blocks.DIRT && soil.getValue(BlockDirt.VARIANT) == BlockDirt.DirtType.PODZOL)
+				/*if(soil.getBlock() == Blocks.DIRT && soil.getValue(BlockDirt.VARIANT) == BlockDirt.DirtType.PODZOL)
 				{
 					out = true;
 				} else
@@ -78,7 +74,7 @@ public class SurfaceMushroomGenerator extends BiomeSpecificDecorator
 					{
 						out = out && worldIn.getLight(pos) < 13;
 					}
-				}
+				}*/
 			}
 		}
 		return out;

@@ -6,6 +6,7 @@ import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.modSupport.*;
 import com.mraof.minestuck.util.*;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
@@ -1063,12 +1064,12 @@ public class AlchemyRecipes
 		//registerRecipes(new Minegicka3Support(), "minegicka3", true);
 	}
 	
-	public static void onAlchemizedItem(ItemStack stack, EntityPlayer player)
+	public static void onAlchemizedItem(ItemStack stack, EntityPlayerMP player)
 	{
 		if(!(stack.getItem() instanceof ItemCruxiteArtifact))
 		{
 			Echeladder e = MinestuckPlayerData.getData(player).echeladder;
-			e.checkBonus(Echeladder.ALCHEMY_BONUS_OFFSET);
+			e.checkBonus(player.getServer(), Echeladder.ALCHEMY_BONUS_OFFSET);
 		}
 		
 		GristSet set = AlchemyCostRegistry.getGristConversion(stack);
@@ -1085,9 +1086,9 @@ public class AlchemyRecipes
 			
 			Echeladder e = MinestuckPlayerData.getData(player).echeladder;
 			if(value >= 50)
-				e.checkBonus((byte) (Echeladder.ALCHEMY_BONUS_OFFSET + 1));
+				e.checkBonus(player.getServer(), (byte) (Echeladder.ALCHEMY_BONUS_OFFSET + 1));
 			if(value >= 500)
-				e.checkBonus((byte) (Echeladder.ALCHEMY_BONUS_OFFSET + 2));
+				e.checkBonus(player.getServer(), (byte) (Echeladder.ALCHEMY_BONUS_OFFSET + 2));
 		}
 	}
 	

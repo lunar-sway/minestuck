@@ -26,7 +26,7 @@ public class LayerFrogEyes implements LayerRenderer<EntityFrog>
 		{
 
 			this.frogRender.bindTexture(this.getTexture(frog));
-			if (frog.getType() == 6)
+			if (frog.getFrogType() == 6)
 	        {
 	            /*
 	            int i1 = 25;
@@ -82,7 +82,7 @@ public class LayerFrogEyes implements LayerRenderer<EntityFrog>
 		        
 				GlStateManager.disableBlend();
 	        }
-			else if (frog.getType() > frog.maxTypes() || frog.getType() < 1)
+			else if (frog.getFrogType() > frog.maxTypes() || frog.getFrogType() < 1)
 	        {
 				int eyeColor = frog.getEyeColor();
 				
@@ -111,7 +111,7 @@ public class LayerFrogEyes implements LayerRenderer<EntityFrog>
 	{
 		int id = frog.getEyeType();
 		
-		if(frog.getType() == 6) return new ResourceLocation("minestuck:textures/mobs/frog/susan_eyes.png");
+		if(frog.getFrogType() == 6) return new ResourceLocation("minestuck:textures/mobs/frog/susan_eyes.png");
 		else if(id < 0) id = 0;
 		else if(id > 3) id = 3;
 		

@@ -1,5 +1,5 @@
 package com.mraof.minestuck.modSupport.crafttweaker;
-
+/*
 import com.mraof.minestuck.alchemy.AlchemyCostRegistry;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
@@ -124,4 +124,4 @@ public class Alchemy
 		
 		return grist;
 	}
-}
+}*/

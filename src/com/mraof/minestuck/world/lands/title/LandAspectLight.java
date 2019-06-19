@@ -53,7 +53,7 @@ public class LandAspectLight extends TitleLandAspect
 		chunkProvider.decorators.add(new PillarDecorator("light_block", 0.5F, false, BiomeMinestuck.mediumNormal, BiomeMinestuck.mediumOcean));
 		chunkProvider.decorators.add(new PillarDecorator("light_block", 3, true, BiomeMinestuck.mediumRough));
 		
-		chunkProvider.sortDecorators();
+		//chunkProvider.sortDecorators();
 	}
 	
 	@Override

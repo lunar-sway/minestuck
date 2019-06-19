@@ -84,8 +84,8 @@ public class BlockEndSapling extends BlockBush implements IGrowable
 	{
 		if(!net.minecraftforge.event.ForgeEventFactory.saplingGrowTree(worldIn, rand, pos))
 			return;
-		AbstractTree tree = new EndTree(true);
-		tree.spawn(worldIn, pos, state, rand);
+		//AbstractTree tree = new EndTree(true);
+		//tree.spawn(worldIn, pos, state, rand);
 	}
 	
 	@Override

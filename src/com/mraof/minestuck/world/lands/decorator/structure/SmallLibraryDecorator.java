@@ -10,7 +10,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.structure.StructureBoundingBox;
+import net.minecraft.world.gen.Heightmap;
 
 public class SmallLibraryDecorator extends SimpleStructureDecorator
 {
@@ -30,8 +30,8 @@ public class SmallLibraryDecorator extends SimpleStructureDecorator
 		yCoord = getAverageHeight(world);
 		if(yCoord == -1)
 			return null;
-		if(provider.isBBInSpawn(new StructureBoundingBox(xCoord - 4, zCoord - 4, xCoord + 4, zCoord + 4)))
-			return null;
+		/*if(provider.isBBInSpawn(new StructureBoundingBox(xCoord - 4, zCoord - 4, xCoord + 4, zCoord + 4)))
+			return null;*/
 		
 		IBlockState wall = provider.blockRegistry.getBlockState("structure_primary");
 		IBlockState wallDec = provider.blockRegistry.getBlockState("structure_primary_decorative");
@@ -108,11 +108,11 @@ public class SmallLibraryDecorator extends SimpleStructureDecorator
 		for(int x = (rotation ? -2 : -3); x < 4; x++)
 			for(int z = (rotation ? -3 : -2); z < 4; z++)
 			{
-				int height = world.getPrecipitationHeight(new BlockPos(xCoord + x, 0, zCoord + z)).getY();
+				int height = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, new BlockPos(xCoord + x, 0, zCoord + z)).getY();
 				value += height;
 				minVal = Math.min(minVal, height);
 				maxVal = Math.max(maxVal, height);
-				minDepth = Math.min(minDepth, world.getTopSolidOrLiquidBlock(new BlockPos(xCoord + x, 0, zCoord + z)).getY());
+				minDepth = Math.min(minDepth, world.getHeight(Heightmap.Type.WORLD_SURFACE, new BlockPos(xCoord + x, 0, zCoord + z)).getY());
 			}
 		
 		if(maxVal - minVal > 4 || minVal - minDepth > 3)

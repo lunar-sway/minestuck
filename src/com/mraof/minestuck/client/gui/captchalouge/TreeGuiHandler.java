@@ -6,7 +6,6 @@ import com.mraof.minestuck.inventory.captchalogue.TreeModus;
 import com.mraof.minestuck.inventory.captchalogue.TreeModus.TreeNode;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -40,7 +39,7 @@ public class TreeGuiHandler extends SylladexGuiHandler
 	{
 		guiButton.x = (width - GUI_WIDTH)/2 + 15;
 		guiButton.y = (height - GUI_HEIGHT)/2 + 175;
-		boolean autobalance = MinestuckConfig.clientTreeAutobalance == 0 ? modus.autobalance : MinestuckConfig.clientTreeAutobalance == 1;
+		boolean autobalance = MinestuckConfig.clientTreeAutobalance == 0 ? modus.autoBalance : MinestuckConfig.clientTreeAutobalance == 1;
 		guiButton.displayString = I18n.format(autobalance ? "gui.autobalance.on" : "gui.autobalance.off");
 		guiButton.enabled = MinestuckConfig.clientTreeAutobalance == 0;
 		super.render(xcor, ycor, f);
@@ -97,8 +96,8 @@ public class TreeGuiHandler extends SylladexGuiHandler
 		super.actionPerformed(button);
 		if(button == this.guiButton && MinestuckConfig.clientTreeAutobalance == 0)
 		{
-			modus.autobalance = !modus.autobalance;
-			MinestuckPacketHandler.sendToServer(MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.VALUE, (byte) 0, modus.autobalance ? 1 : 0));
+			modus.autoBalance = !modus.autoBalance;
+			MinestuckPacketHandler.sendToServer(CaptchaDeckPacket.modusParam((byte) 0, modus.autoBalance ? 1 : 0));
 		}
 	}
 	

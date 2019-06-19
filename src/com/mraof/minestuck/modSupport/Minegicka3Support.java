@@ -29,11 +29,11 @@ public class Minegicka3Support extends ModSupport
 		Item stick2 = ((Item) (Class.forName("com.williameze.minegicka3.ModBase").getField("stickGood").get(null)));
 		Item stick3 = ((Item) (Class.forName("com.williameze.minegicka3.ModBase").getField("stickSuper").get(null)));
 		
-		AlchemyCostRegistry.addGristConversion(new ItemStack(thingy), false, new GristSet(new GristType[]{GristType.Rust, GristType.Gold}, new int[]{16, 16}));
+		AlchemyCostRegistry.addGristConversion(thingy, new GristSet(new GristType[]{GristType.RUST, GristType.GOLD}, new int[]{16, 16}));
 		
-		CombinationRegistry.addCombination(new ItemStack(thingy), new ItemStack(Items.STICK), CombinationRegistry.Mode.MODE_AND, new ItemStack(stick));
-		CombinationRegistry.addCombination(new ItemStack(thingy2), new ItemStack(Items.STICK), CombinationRegistry.Mode.MODE_AND, new ItemStack(stick2));
-		CombinationRegistry.addCombination(new ItemStack(thingy3), new ItemStack(Items.STICK), CombinationRegistry.Mode.MODE_AND, new ItemStack(stick3));
+		CombinationRegistry.addCombination(thingy, Items.STICK, CombinationRegistry.Mode.MODE_AND, new ItemStack(stick));
+		CombinationRegistry.addCombination(thingy2, Items.STICK, CombinationRegistry.Mode.MODE_AND, new ItemStack(stick2));
+		CombinationRegistry.addCombination(thingy3, Items.STICK, CombinationRegistry.Mode.MODE_AND, new ItemStack(stick3));
 		
 	}
 	
@@ -62,7 +62,7 @@ public class Minegicka3Support extends ModSupport
 					else continue recipes;
 				}
 				if(!cost.isEmpty())
-					AlchemyCostRegistry.addGristConversion(output, cost);
+					AlchemyCostRegistry.addGristConversion(output.getItem(), cost);
 			}
 		}
 	}

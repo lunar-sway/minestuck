@@ -10,7 +10,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.event.ServerEventHandler;
@@ -22,7 +21,7 @@ import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
 
 public class MinestuckSaveHandler	//TODO https://mcforge.readthedocs.io/en/1.13.x/datastorage/worldsaveddata/
 {
-	
+	/*
 	@SubscribeEvent
 	public void onWorldSave(WorldEvent.Save event)
 	{
@@ -99,5 +98,5 @@ public class MinestuckSaveHandler	//TODO https://mcforge.readthedocs.io/en/1.13.
 		SkaianetHandler.loadData(null);
 		MinestuckPlayerData.readFromNBT(null);
 		ServerEditHandler.loadData(null);
-	}
+	}*/
 }

@@ -1,5 +1,5 @@
 package com.mraof.minestuck.jei;
-
+/*
 import com.mraof.minestuck.alchemy.GristAmount;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * Created by mraof on 2017 January 23 at 2:41 AM.
- */
+ * /
 public class AlchemiterRecipeWrapper implements IRecipeWrapper
 {
     private final ItemStack stack;
@@ -56,3 +56,4 @@ public class AlchemiterRecipeWrapper implements IRecipeWrapper
                 '}';
     }
 }
+*/

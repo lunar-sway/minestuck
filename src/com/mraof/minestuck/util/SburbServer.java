@@ -3,8 +3,8 @@ package com.mraof.minestuck.util;
 import java.util.ArrayList;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.network.ClientEditPacket;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.skaianet.ComputerData;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
@@ -17,7 +17,7 @@ public class SburbServer extends ButtonListProgram
 	@Override
 	public ArrayList<UnlocalizedString> getStringList(TileEntityComputer te)
 	{
-		int clientId = te.getData(1).hasKey("connectedClient")?te.getData(1).getInteger("connectedClient"):-1;
+		int clientId = te.getData(1).hasKey("connectedClient")?te.getData(1).getInt("connectedClient"):-1;
 		SburbConnection connection = clientId != -1 ? SkaiaClient.getClientConnection(clientId) : null;
 		if(connection != null && connection.getServerId() != te.ownerId)
 			connection = null;
@@ -49,14 +49,14 @@ public class SburbServer extends ButtonListProgram
 	public void onButtonPressed(TileEntityComputer te, String buttonName, Object[] data) {
 		if(buttonName.equals("computer.buttonEdit") || buttonName.equals("computer.buttonGive"))
 		{
-			MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CLIENT_EDIT, te.ownerId, te.getData(getId()).getInteger("connectedClient"));
+			ClientEditPacket packet = ClientEditPacket.activate(te.ownerId, te.getData(getId()).getInt("connectedClient"));
 			MinestuckPacketHandler.sendToServer(packet);
 		} else if(buttonName.equals("computer.buttonResume"))
 			SkaiaClient.sendConnectRequest(te, SkaiaClient.getAssociatedPartner(te.ownerId, false), false);
 		else if(buttonName.equals("computer.buttonOpen"))
 			SkaiaClient.sendConnectRequest(te, -1, false);
 		else if(buttonName.equals("computer.buttonClose"))
-			SkaiaClient.sendCloseRequest(te, te.getData(getId()).getBoolean("isOpen")?-1:te.getData(getId()).getInteger("connectedClient"), false);
+			SkaiaClient.sendCloseRequest(te, te.getData(getId()).getBoolean("isOpen")?-1:te.getData(getId()).getInt("connectedClient"), false);
 	}
 	
 	@Override
@@ -70,9 +70,9 @@ public class SburbServer extends ButtonListProgram
 	{
 		SburbConnection c = SkaianetHandler.getServerConnection(ComputerData.createData(te));
 		if(c != null)
-			SkaianetHandler.closeConnection(te.owner, c.getClientIdentifier(), false);
+			SkaianetHandler.closeConnection(te.getWorld().getServer(), te.owner, c.getClientIdentifier(), false);
 		else if(te.getData(1).getBoolean("isOpen"))
-			SkaianetHandler.closeConnection(te.owner, null, false);
+			SkaianetHandler.closeConnection(te.getWorld().getServer(), te.owner, null, false);
 	}
 	
 }

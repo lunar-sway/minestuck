@@ -38,7 +38,7 @@ public class LandAspectClockwork extends TitleLandAspect
 		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.LIGHT_GRAY_WOOL.getDefaultState());
 		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.RED_CARPET.getDefaultState());
 		chunkProvider.decorators.add(new CogDecorator());
-		chunkProvider.sortDecorators();
+		//chunkProvider.sortDecorators();
 	}
 	
 }

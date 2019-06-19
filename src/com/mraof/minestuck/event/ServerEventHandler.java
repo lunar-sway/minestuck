@@ -45,7 +45,7 @@ public class ServerEventHandler
 	
 	public static long lastDay;
 	
-	public static List<PostEntryTask> tickTasks = new ArrayList<PostEntryTask>();
+	public static List<PostEntryTask> tickTasks = new ArrayList<>();
 	
 	static Potion[] aspectEffects = { MobEffects.ABSORPTION, MobEffects.SPEED, MobEffects.RESISTANCE, MobEffects.ABSORPTION, MobEffects.FIRE_RESISTANCE, MobEffects.REGENERATION, MobEffects.LUCK, MobEffects.NIGHT_VISION, MobEffects.STRENGTH, MobEffects.JUMP_BOOST, MobEffects.HASTE, MobEffects.INVISIBILITY }; //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
 	// Increase the starting rungs
@@ -151,7 +151,7 @@ public class ServerEventHandler
 	@SubscribeEvent
 	public void playerChangedDimension(PlayerChangedDimensionEvent event)
 	{
-		SburbHandler.stopEntry(event.getPlayer());
+		SburbHandler.stopEntry((EntityPlayerMP) event.getPlayer());
 		
 		MinestuckPlayerData.getData(event.getPlayer()).echeladder.resendAttributes(event.getPlayer());
 	}
@@ -161,7 +161,7 @@ public class ServerEventHandler
 	{
 		Modus modus = MinestuckPlayerData.getData(event.getPlayer()).modus;
 		if(modus instanceof HashMapModus)
-			((HashMapModus) modus).onChatMessage(event.getMessage());
+			((HashMapModus) modus).onChatMessage(event.getPlayer(), event.getMessage());
 	}
 	
 	//This functionality uses an event to maintain compatibility with mod items having hoe functionality but not extending ItemHoe, like TiCon mattocks.

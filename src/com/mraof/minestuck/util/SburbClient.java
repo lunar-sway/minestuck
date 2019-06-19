@@ -3,6 +3,8 @@ package com.mraof.minestuck.util;
 import java.util.ArrayList;
 import java.util.Map;
 
+import com.mraof.minestuck.client.gui.GuiColorSelector;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 
 import com.mraof.minestuck.Minestuck;
@@ -54,7 +56,7 @@ public class SburbClient extends ButtonListProgram {
 		else if(buttonName.equals("computer.buttonClose"))
 			SkaiaClient.sendCloseRequest(te, te.getData(getId()).getBoolean("isResuming")?-1:SkaiaClient.getClientConnection(te.ownerId).getServerId(), true);
 		else if(buttonName.equals("computer.selectColor"))
-			ClientProxy.getClientPlayer().openGui(Minestuck.instance, GuiHandler.GuiId.COLOR.ordinal(), te.getWorld(), te.getPos().getX(), te.getPos().getY(), te.getPos().getZ());
+			Minecraft.getInstance().displayGuiScreen(new GuiColorSelector(false));
 	}
 	
 	@Override
@@ -67,9 +69,9 @@ public class SburbClient extends ButtonListProgram {
 	public void onClosed(TileEntityComputer te)
 	{
 		if(te.getData(0).getBoolean("connectedToServer") && SkaianetHandler.getClientConnection(te.owner) != null)
-			SkaianetHandler.closeConnection(te.owner, SkaianetHandler.getClientConnection(te.owner).getServerIdentifier(), true);
+			SkaianetHandler.closeConnection(te.getWorld().getServer(), te.owner, SkaianetHandler.getClientConnection(te.owner).getServerIdentifier(), true);
 		else if(te.getData(0).getBoolean("isResuming"))
-			SkaianetHandler.closeConnection(te.owner, null, true);
+			SkaianetHandler.closeConnection(te.getWorld().getServer(), te.owner, null, true);
 	}
 	
 }

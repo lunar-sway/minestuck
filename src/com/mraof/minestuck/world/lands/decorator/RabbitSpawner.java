@@ -8,6 +8,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import net.minecraft.world.gen.Heightmap;
 
 public class RabbitSpawner extends BiomeSpecificDecorator
 {
@@ -22,13 +23,13 @@ public class RabbitSpawner extends BiomeSpecificDecorator
 	@Override
 	public BlockPos generate(World world, Random random, BlockPos pos, ChunkProviderLands provider)
 	{
-		pos = world.getTopSolidOrLiquidBlock(pos);
+		pos = world.getHeight(Heightmap.Type.MOTION_BLOCKING, pos);
 
-		if (!world.getBlockState(pos).getMaterial().isLiquid() && !provider.isPositionInSpawn(pos.getX(), pos.getZ()))
+		if (!world.getBlockState(pos).getMaterial().isLiquid() )//&& !provider.isPositionInSpawn(pos.getX(), pos.getZ()))
 		{
 			EntityRabbit entity = new EntityRabbit(world);
 			entity.setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
-			entity.onInitialSpawn(null, null);
+			entity.onInitialSpawn(null, null, null);
 			world.spawnEntity(entity);
 		}
 

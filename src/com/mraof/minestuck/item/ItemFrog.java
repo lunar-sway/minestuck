@@ -192,11 +192,11 @@ public class ItemFrog extends Item
 				if(nbttagcompound.getInt("Type") == 6)
 					nbttagcompound.setFloat("Size", 0.5f);
 				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-				targetEntity.writeEntityToNBT(nbttagcompound1);
+				targetEntity.writeUnlessRemoved(nbttagcompound1);
 				UUID uuid = targetEntity.getUniqueID();
 				nbttagcompound1.merge(nbttagcompound);
 				targetEntity.setUniqueId(uuid);
-				targetEntity.readEntityFromNBT(nbttagcompound1);
+				targetEntity.read(nbttagcompound1);
 
 				//System.out.println("Type: " + nbttagcompound.getInt("Type"));
 			}

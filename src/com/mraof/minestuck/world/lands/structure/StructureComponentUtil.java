@@ -8,13 +8,11 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.StructureBoundingBox;
-import net.minecraft.world.gen.structure.StructureComponent;
 
 import java.util.Random;
 
-public abstract class StructureComponentUtil extends StructureComponent
-{
+public abstract class StructureComponentUtil //extends StructureComponent
+{/*
 	protected void generateDoor(World worldIn, StructureBoundingBox sbb, Random rand, int x, int y, int z, EnumFacing facing, BlockDoor door, BlockDoor.EnumHingePosition hinge)
 	{
 		IBlockState state = door.getDefaultState().withProperty(BlockHorizontal.FACING, facing).withProperty(BlockDoor.HINGE, hinge);
@@ -127,5 +125,5 @@ public abstract class StructureComponentUtil extends StructureComponent
 			
 			worldIn.setBlockState(blockpos, blockstateIn, 2);
 		}
-	}
+	}*/
 }

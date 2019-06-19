@@ -11,17 +11,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.structure.MapGenStructure;
-import net.minecraft.world.gen.structure.MapGenStructureIO;
-import net.minecraft.world.gen.structure.StructureBoundingBox;
-import net.minecraft.world.gen.structure.StructureStart;
 
 import javax.annotation.Nullable;
 import java.util.*;
 
-public class MapGenLandStructure extends MapGenStructure
+public class MapGenLandStructure //extends MapGenStructure
 {
-	
+	/*
 	public final static List<StructureEntry> genericStructures = new ArrayList<StructureEntry>();
 	public final List<StructureEntry> structures = new ArrayList<StructureEntry>();
 	private int totalWeight;
@@ -215,5 +211,5 @@ public class MapGenLandStructure extends MapGenStructure
 	{
 		// TODO Auto-generated method stub
 		return null;
-	}
+	}*/
 }

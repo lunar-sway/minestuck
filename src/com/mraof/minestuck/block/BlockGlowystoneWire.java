@@ -254,12 +254,6 @@ public class BlockGlowystoneWire extends Block
 		}
 	}
 	
-	@Override
-	public Item asItem()
-	{
-		return MinestuckItems.glowystoneDust;
-	}
-
 	protected static boolean canConnectTo(IBlockState blockState)
 	{
 		return blockState.getBlock() == MinestuckBlocks.GLOWYSTONE_WIRE;
@@ -289,11 +283,6 @@ public class BlockGlowystoneWire extends Block
 		double d2 = (double)pos.getZ() + 0.5D + ((double)rand.nextFloat() - 0.5D) * 0.2D;
 			
 		worldIn.spawnParticle(new RedstoneParticleData(1F, 0.8F, 0F, 1F), d0, d1, d2, 0, 0, 0);
-	}
-
-	public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state)
-	{
-		return new ItemStack(MinestuckItems.glowystoneDust);
 	}
 	
 	public IBlockState rotate(IBlockState state, Rotation rot)

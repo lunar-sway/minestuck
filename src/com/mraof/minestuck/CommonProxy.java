@@ -11,12 +11,10 @@ import com.mraof.minestuck.entity.consort.ConsortDialogue;
 import com.mraof.minestuck.entity.consort.ConsortRewardHandler;
 import com.mraof.minestuck.event.MinestuckFluidHandler;
 import com.mraof.minestuck.event.ServerEventHandler;
-import com.mraof.minestuck.item.ItemMinestuckCandy;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.tileentity.*;
-import com.mraof.minestuck.tracker.ConnectionListener;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
@@ -41,6 +39,7 @@ public class CommonProxy
 		MinecraftForge.EVENT_BUS.register(MinestuckBlocks.class);
 		MinecraftForge.EVENT_BUS.register(MinestuckItems.class);
 		MinecraftForge.EVENT_BUS.register(MinestuckTiles.class);
+		MinecraftForge.EVENT_BUS.register(ModEntityTypes.class);
 		MinecraftForge.EVENT_BUS.register(BiomeMinestuck.class);
 		MinecraftForge.EVENT_BUS.register(MinestuckDimensionHandler.class);
 		
@@ -50,12 +49,10 @@ public class CommonProxy
 		
 		//register ore generation
 		OreHandler oreHandler = new OreHandler();
-		GameRegistry.registerWorldGenerator(oreHandler, 0);
+		//GameRegistry.registerWorldGenerator(oreHandler, 0);
 		
 		//register GUI handler
-		NetworkRegistry.INSTANCE.registerGuiHandler(Minestuck.instance, new GuiHandler());
-		
-		ModEntityTypes.registerEntities();
+		//NetworkRegistry.INSTANCE.registerGuiHandler(Minestuck.instance, new GuiHandler());
 		
 		//Register event handlers
 		MinecraftForge.EVENT_BUS.register(new MinestuckSaveHandler());
@@ -69,13 +66,10 @@ public class CommonProxy
 		MinestuckPacketHandler.setupChannel();
 		
 		//Register structures
-		MapGenStructureIO.registerStructure(StructureCastleStart.class, "SkaiaCastle");
-		StructureCastlePieces.registerComponents();
-		MapGenLandStructure.registerStructures();
-		ConsortVillageComponents.registerComponents();
-		
-		//update candy
-		((ItemMinestuckCandy) MinestuckItems.candy).updateCandy();
+		//MapGenStructureIO.registerStructure(StructureCastleStart.class, "SkaiaCastle");
+		//StructureCastlePieces.registerComponents();
+		//MapGenLandStructure.registerStructures();
+		//ConsortVillageComponents.registerComponents();
 		
 		//register grist costs and combination recipes
 		AlchemyRecipes.registerVanillaRecipes();
@@ -98,8 +92,8 @@ public class CommonProxy
 		KindAbstratusList.registerTypes();
 		DeployList.registerItems();
 		
-		ComputerProgram.registerProgram(0, SburbClient.class, new ItemStack(MinestuckItems.disk, 1, 0));	//This idea was kind of bad and should be replaced
-		ComputerProgram.registerProgram(1, SburbServer.class, new ItemStack(MinestuckItems.disk, 1, 1));
+		ComputerProgram.registerProgram(0, SburbClient.class, new ItemStack(MinestuckItems.CLIENT_DISK));	//This idea was kind of bad and should be replaced
+		ComputerProgram.registerProgram(1, SburbServer.class, new ItemStack(MinestuckItems.SERVER_DISK));
 		
 		SessionHandler.maxSize = 144;//acceptTitleCollision?(generateSpecialClasses?168:144):12;
 	}

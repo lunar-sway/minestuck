@@ -1,4 +1,4 @@
-package com.mraof.minestuck.world.gen.structure;
+package com.mraof.minestuck.world.lands.structure;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,21 +6,18 @@ import java.util.Random;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
 
-import com.mraof.minestuck.world.lands.structure.StructureCloudDungeonPieces;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.StructureBoundingBox;
-import net.minecraft.world.gen.structure.StructureComponent;
 
-public abstract class ComponentCloudDungeonPiece extends StructureComponent 
+public abstract class ComponentCloudDungeonPiece //extends StructureComponent
 {
 	protected ComponentCloudDungeonPiece startPiece;
 	protected int direction;
 	//private List roomsLinkedToTheRoom = new LinkedList();
 	public ComponentCloudDungeonPiece() {}
 	public ArrayList<ComponentCloudDungeonPiece> pendingPieces = new ArrayList<>();
-	
+	/*
 	protected ComponentCloudDungeonPiece(int par1, ComponentCloudDungeonPiece componentCloudDungeonPiece) 
 	{
 		super(par1);
@@ -67,7 +64,7 @@ public abstract class ComponentCloudDungeonPiece extends StructureComponent
 	 * Discover the y coordinate that will serve as the ground level of the supplied BoundingBox. (A median of all the
 	 * levels in the BB's horizontal rectangle).
 	 */
-	protected int getAverageGroundLevel(World par1World, StructureBoundingBox par2StructureBoundingBox)
+	/*protected int getAverageGroundLevel(World par1World, StructureBoundingBox par2StructureBoundingBox)
 	{
 		int var3 = 0;
 		int var4 = 0;
@@ -132,5 +129,5 @@ public abstract class ComponentCloudDungeonPiece extends StructureComponent
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+	*/
 }

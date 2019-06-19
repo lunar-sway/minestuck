@@ -34,7 +34,8 @@ public class ContainerConsortMerchant extends Container
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
 	{
-		inventory.handlePurchase(playerIn, true, index);
+		if(playerIn instanceof EntityPlayerMP)
+			inventory.handlePurchase((EntityPlayerMP) playerIn, true, index);
 		return ItemStack.EMPTY;
 	}
 	

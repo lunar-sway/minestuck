@@ -17,10 +17,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.MapGenStructureIO;
-import net.minecraft.world.gen.structure.StructureBoundingBox;
-import net.minecraft.world.gen.structure.StructureComponent;
-import net.minecraft.world.gen.structure.template.TemplateManager;
 
 import java.util.List;
 import java.util.Random;
@@ -32,7 +28,7 @@ import static com.mraof.minestuck.world.lands.structure.village.ConsortVillageTu
 
 public class ConsortVillageComponents
 {
-	public static void registerComponents()
+	/*public static void registerComponents()
 	{
 		MapGenStructureIO.registerStructure(MapGenConsortVillage.Start.class, "MinestuckConsortVillage");
 		ConsortVillageCenter.register();
@@ -584,5 +580,5 @@ public class ConsortVillageComponents
 		{
 			return null;
 		}
-	}
+	}*/
 }

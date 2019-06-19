@@ -7,6 +7,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.Heightmap;
 
 import java.util.Random;
 
@@ -30,7 +31,7 @@ public class CakePedestalDecorator extends SimpleStructureDecorator
 		
 		xCoord = pos.getX();
 		zCoord = pos.getZ();
-		yCoord = world.getPrecipitationHeight(pos).getY();
+		yCoord = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, pos).getY();
 		
 		if(world.getBlockState(new BlockPos(xCoord, yCoord - 1, zCoord)).getMaterial().isLiquid())
 			return null;
@@ -52,7 +53,7 @@ public class CakePedestalDecorator extends SimpleStructureDecorator
 		placeBlock(world, stairsS, 1, 0, -1);
 		placeBlock(world, stairsW, 1, 0, -2);
 		
-		IBlockState cake = MinestuckBlocks.fuchsiaCake.getDefaultState();
+		IBlockState cake = MinestuckBlocks.FUCHSIA_CAKE.getDefaultState();
 		
 		placeBlock(world, cake, 0, 2, 0);
 		

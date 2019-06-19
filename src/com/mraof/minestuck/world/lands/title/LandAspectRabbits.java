@@ -33,7 +33,7 @@ public class LandAspectRabbits extends TitleLandAspect
 		chunkProvider.decorators.add(new RabbitSpawner(6, BiomeMinestuck.mediumNormal));
 		chunkProvider.decorators.add(new RabbitSpawner(3, BiomeMinestuck.mediumRough));
 		chunkProvider.decorators.add(new RabbitHoleDecorator(BiomeMinestuck.mediumNormal, BiomeMinestuck.mediumRough));
-		chunkProvider.sortDecorators();
+		//chunkProvider.sortDecorators();
 	}
 	
 	@Override

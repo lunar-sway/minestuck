@@ -38,7 +38,7 @@ public class SkaiaDimension extends Dimension
 	@Override
 	public IChunkGenerator createChunkGenerator()
 	{
-		return new ChunkProviderSkaia(this.world, this.world.getSeed(), true);
+		return null;//new ChunkProviderSkaia(this.world, this.world.getSeed(), true);
 	}
 	
 	@Override

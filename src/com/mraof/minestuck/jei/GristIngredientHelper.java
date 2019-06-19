@@ -1,5 +1,5 @@
 package com.mraof.minestuck.jei;
-
+/*
 import com.mraof.minestuck.alchemy.GristAmount;
 import com.mraof.minestuck.alchemy.GristType;
 import mezz.jei.api.ingredients.IIngredientHelper;
@@ -87,4 +87,4 @@ public class GristIngredientHelper implements IIngredientHelper<GristAmount>
 			return "grist:null:"+ingredient.getAmount();
 		else return "grist:"+ingredient.getType().getName()+":"+ingredient.getAmount();
 	}
-}
+}*/

@@ -215,7 +215,7 @@ public class BlockRainbowSapling extends BlockBush implements IGrowable
 	{
 		if(!net.minecraftforge.event.ForgeEventFactory.saplingGrowTree(worldIn, rand, pos))
 			return;
-		AbstractTree tree = new RainbowTree(true);
-		tree.spawn(worldIn, pos, state, rand);
+		//AbstractTree tree = new RainbowTree(true);
+		//tree.spawn(worldIn, pos, state, rand);
 	}
 }

@@ -12,6 +12,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.Heightmap;
 
 public class LilypadDecorator extends BiomeSpecificDecorator
 {
@@ -33,12 +34,12 @@ public class LilypadDecorator extends BiomeSpecificDecorator
 	@Override
 	public BlockPos generate(World world, Random random, BlockPos pos, ChunkProviderLands provider) 
 	{
-		pos = world.getHeight(pos).down();
+		pos = world.getHeight(Heightmap.Type.WORLD_SURFACE, pos).down();
 		
-        if(world.getBlockState(pos) == provider.getOceanBlock() && world.isAirBlock(pos.up()))
-        	world.setBlockState(pos.up(), Blocks.WATERLILY.getDefaultState());
-        
-        return null;
+		//if(world.getBlockState(pos) == provider.getOceanBlock() && world.isAirBlock(pos.up()))
+			world.setBlockState(pos.up(), Blocks.LILY_PAD.getDefaultState());
+		
+		return null;
 	}
 
 	@Override

@@ -1,17 +1,13 @@
 package com.mraof.minestuck.block;
-
+/*
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiHandler;
-import com.mraof.minestuck.item.TabMinestuck;
 import com.mraof.minestuck.tileentity.TileEntityMachineProcess;
 import com.mraof.minestuck.tileentity.TileEntityUraniumCooker;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
@@ -23,10 +19,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockBlender extends BlockContainer
 {
@@ -221,3 +214,4 @@ public class BlockBlender extends BlockContainer
 		return BlockFaceShape.UNDEFINED;
 	}
 }
+*/

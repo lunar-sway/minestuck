@@ -94,15 +94,15 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 			this.inv.get(OUTPUT).grow(1);
 		}
 		
-		EntityPlayerMP player = owner.getPlayer();
+		EntityPlayerMP player = owner.getPlayer(world.getServer());
 		if (player != null)
 			AlchemyRecipes.onAlchemizedItem(newItem, player);
 		
 		GristSet cost = AlchemyCostRegistry.getGristConversion(newItem);
 		if (newItem.getItem() == MinestuckItems.CAPTCHA_CARD)
 			cost = new GristSet(wildcardGrist, MinestuckConfig.cardCost);
-		GristHelper.decrease(owner, cost);
-		MinestuckPlayerTracker.updateGristCache(owner);
+		GristHelper.decrease(world.getServer(), owner, cost);
+		MinestuckPlayerTracker.updateGristCache(world.getServer(), owner);
 	}
 	
 	// We're going to want to trigger a block update every 20 ticks to have comparators pull data from the Alchemiter.

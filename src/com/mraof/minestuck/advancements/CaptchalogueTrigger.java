@@ -83,7 +83,7 @@ public class CaptchalogueTrigger implements ICriterionTrigger<CaptchalogueTrigge
 	{
 		Listeners listeners = listenersMap.get(player.getAdvancements());
 		if(listeners != null)
-			listeners.trigger(CaptchaDeckHandler.getType(modus.getClass()).toString(), item, modus.getNonEmptyCards());
+			listeners.trigger(modus.getRegistryName().toString(), item, modus.getNonEmptyCards());
 	}
 	
 	public static class Instance extends AbstractCriterionInstance

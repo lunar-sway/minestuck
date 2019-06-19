@@ -56,7 +56,7 @@ public class OreHandler implements IWorldGenerator
 		int diffBtwnMinMaxY = maxY - minY;
 		IBlockState groundType = Blocks.STONE.getDefaultState();
 		if(world.getDimension() instanceof LandDimension)
-			groundType = ((ChunkProviderLands) world.getDimension().createChunkGenerator()).getGroundBlock();
+			groundType = ((ChunkProviderLands) world.getDimension().createChunkGenerator()).blockRegistry.getBlockState("ground");
 		if(block.getBlock() == CRUXITE_ORE_STONE)
 			block = BlockCruxiteOre.getBlockState(groundType);
 		if(block.getBlock() == URANIUM_ORE_STONE)

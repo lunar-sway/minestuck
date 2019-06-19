@@ -5,8 +5,6 @@ import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.MinestuckPacket.Type;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -265,7 +263,7 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiButtonI
 	public void confirmResult(boolean result, int id)
 	{
 		if(result)
-			MinestuckPacketHandler.sendToServer(MinestuckPacket.makePacket(Type.CAPTCHA, CaptchaDeckPacket.GET, CaptchaDeckHandler.EMPTY_SYLLADEX, false));
+			MinestuckPacketHandler.sendToServer(CaptchaDeckPacket.get(CaptchaDeckHandler.EMPTY_SYLLADEX, false));
 		mc.currentScreen = this;
 	}
 	
@@ -358,7 +356,7 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiButtonI
 			
 			if(toSend != -1)
 			{
-				MinestuckPacket packet = MinestuckPacket.makePacket(Type.CAPTCHA, CaptchaDeckPacket.GET, toSend, mouseButton != 0);
+				CaptchaDeckPacket packet = CaptchaDeckPacket.get(toSend, mouseButton != 0);
 				MinestuckPacketHandler.sendToServer(packet);
 			}
 		}

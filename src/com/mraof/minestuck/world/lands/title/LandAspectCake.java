@@ -38,7 +38,7 @@ public class LandAspectCake extends TitleLandAspect
 		
 		chunkProvider.decorators.add(new CakeDecorator(chunkProvider.temperature));
 		chunkProvider.decorators.add(new CakePedestalDecorator(BiomeMinestuck.mediumNormal, BiomeMinestuck.mediumRough));
-		chunkProvider.sortDecorators();
+		//chunkProvider.sortDecorators();
 	}
 	
 	private static class CakeDecorator extends SingleBlockDecorator

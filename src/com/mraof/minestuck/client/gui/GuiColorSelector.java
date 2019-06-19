@@ -1,7 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.network.MinestuckPacketHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.ColorSelectPacket;
 import com.mraof.minestuck.util.ColorCollector;
 import net.minecraft.client.gui.GuiButton;
@@ -121,7 +120,7 @@ public class GuiColorSelector extends GuiScreen implements GuiButtonImpl.ButtonC
 	@Override
 	public void actionPerformed(GuiButtonImpl button)
 	{
-		MinestuckPacketHandler.sendToServer(MinestuckPacket.makePacket(MinestuckPacket.Type.SELECTION, ColorSelectPacket.COLOR, this.selectedColor));
+		MinestuckPacketHandler.sendToServer(new ColorSelectPacket(this.selectedColor));
 		ColorCollector.playerColor = selectedColor;
 		this.mc.displayGuiScreen(null);
 	}

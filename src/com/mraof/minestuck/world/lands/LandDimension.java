@@ -273,7 +273,7 @@ public class LandDimension extends Dimension
 	public BlockPos findAndMarkNextStructure(EntityPlayerMP player, String type, NBTTagList tags)
 	{
 		if(type.equalsIgnoreCase("village"))
-			return chunkProvider.villageHandler.findAndMarkNextVillage(player, type, tags);
+			//return chunkProvider.villageHandler.findAndMarkNextVillage(player, type, tags);
 		Debug.warnf("Couldn't identify %s", type);
 		return null;
 	}

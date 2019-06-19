@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 import com.mraof.minestuck.util.CoordPair;
 import com.mraof.minestuck.world.lands.decorator.MesaDecorator.BlockRestorer;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import net.minecraft.world.gen.Heightmap;
 
 public class RockDecorator extends BiomeSpecificDecorator
 {
@@ -29,7 +30,7 @@ public class RockDecorator extends BiomeSpecificDecorator
 	@Override
 	public BlockPos generate(World world, Random random, BlockPos pos, ChunkProviderLands provider)
 	{
-		pos = world.getTopSolidOrLiquidBlock(pos);
+		pos = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, pos);
 		int height = random.nextInt(7) + 10;
 		
 		if(world.getBlockState(pos.up(height*2/3)).getMaterial().isLiquid())	//At least 1/3rd of the height should be above the liquid surface
@@ -56,7 +57,7 @@ public class RockDecorator extends BiomeSpecificDecorator
 	{
 		int height = 5 + rand.nextInt((int) ((heightOld - 6)*0.75));
 		BlockPos newPos = pos.add(rand.nextInt(10) - 5, 0, rand.nextInt(10) - 5);
-		newPos = world.getTopSolidOrLiquidBlock(newPos).up(height);
+		//newPos = world.getTopSolidOrLiquidBlock(newPos).up(height);
 		float plateauSize = rand.nextFloat()*plateauOld*0.75F;
 		
 		generateRock(newPos, height, plateauSize, world, rand, provider);
@@ -66,7 +67,7 @@ public class RockDecorator extends BiomeSpecificDecorator
 	private BlockPos generateRock(BlockPos rockPos, int height, float plateauSize, World world, Random random, ChunkProviderLands provider)
 	{
 		float xSlope = random.nextFloat(), zSlope = random.nextFloat();
-		IBlockState block = provider.getGroundBlock();
+		IBlockState block = provider.blockRegistry.getBlockState("ground");
 		
 		Map<CoordPair, Integer> heightMap = new HashMap<CoordPair, Integer>();
 		Queue<BlockPos> toProcess = new LinkedList<BlockPos>();
@@ -89,10 +90,10 @@ public class RockDecorator extends BiomeSpecificDecorator
 					continue;
 				}
 			
-			if(provider.villageHandler.isPositionInStructure(world, pos) || provider.structureHandler.isPositionInStructure(world, pos))
+			//if(provider.villageHandler.isPositionInStructure(world, pos) || provider.structureHandler.isPositionInStructure(world, pos))
 			{
 				stomps = true;
-				break;
+				//break;
 			}
 			
 			if(random.nextFloat()*xSlope < plateauSize)
@@ -141,10 +142,10 @@ public class RockDecorator extends BiomeSpecificDecorator
 				if(!heightMap.containsKey(coord))
 				{
 					BlockPos pos = new BlockPos(coord.x, rockPos.getY() - h, coord.z);
-					if(provider.villageHandler.isPositionInStructure(world, pos) || provider.structureHandler.isPositionInStructure(world, pos))
+					//if(provider.villageHandler.isPositionInStructure(world, pos) || provider.structureHandler.isPositionInStructure(world, pos))
 					{
 						stomps=true;
-						break;
+						//break;
 					}
 					heightMap.put(coord, rockPos.getY() - h);
 					if(checkCoord(coord, heightMap))
@@ -161,10 +162,10 @@ public class RockDecorator extends BiomeSpecificDecorator
 			BlockPos pos = new BlockPos(entry.getKey().x, entry.getValue(), entry.getKey().z);
 			do
 			{
-				if(provider.villageHandler.isPositionInStructure(world, pos) || provider.structureHandler.isPositionInStructure(world, pos) || stomps==true)
+				//if(provider.villageHandler.isPositionInStructure(world, pos) || provider.structureHandler.isPositionInStructure(world, pos) || stomps==true)
 				{
 					stomps=true;
-					break;
+					//break;
 				}
 				was.put(pos, world.getBlockState(pos));
 				world.setBlockState(pos, block, 2);

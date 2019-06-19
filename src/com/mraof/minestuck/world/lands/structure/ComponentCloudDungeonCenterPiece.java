@@ -1,16 +1,6 @@
-package com.mraof.minestuck.world.gen.structure;
+package com.mraof.minestuck.world.lands.structure;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import com.mraof.minestuck.block.MinestuckBlocks;
-
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-
-public class ComponentCloudDungeonCenterPiece extends ComponentCloudDungeonPiece 
+public class ComponentCloudDungeonCenterPiece extends ComponentCloudDungeonPiece
 {
 
     /** List of other Castle components linked to this room. */

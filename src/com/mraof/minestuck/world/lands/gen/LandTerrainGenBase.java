@@ -23,7 +23,7 @@ public abstract class LandTerrainGenBase implements ILandTerrainGen
 	
 	@Override
 	public ChunkPrimer createChunk(int chunkX, int chunkZ)
-	{
+	{/*
 		IBlockState ground = provider.getGroundBlock();
 		IBlockState upper = provider.getUpperBlock();
 		IBlockState surface = provider.getSurfaceBlock();
@@ -63,7 +63,8 @@ public abstract class LandTerrainGenBase implements ILandTerrainGen
 				}
 			}
 		
-		return primer;
+		return primer;*/
+		return null;
 	}
 	
 	protected abstract int[] getHeightMap(int chunkX, int chunkZ);

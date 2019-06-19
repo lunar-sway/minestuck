@@ -102,7 +102,7 @@ public class EntityImp extends EntityUnderling
 			if(entity instanceof EntityPlayerMP)
 			{
 				Echeladder ladder = MinestuckPlayerData.getData((EntityPlayerMP) entity).echeladder;
-				ladder.checkBonus(Echeladder.UNDERLING_BONUS_OFFSET);
+				ladder.checkBonus(getServer(), Echeladder.UNDERLING_BONUS_OFFSET);
 			}
 		}
 	}

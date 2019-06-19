@@ -197,6 +197,6 @@ public class CaptchaDeckPacket
 		} else if(this.type == GET)
 			CaptchaDeckHandler.getItem(player, itemIndex, asCard);
 		else if(this.type == MODUS_PARAM && CaptchaDeckHandler.getModus(player) != null)
-			CaptchaDeckHandler.getModus(player).setValue(valueType, value);
+			CaptchaDeckHandler.getModus(player).setValue(player, valueType, value);
 	}
 }

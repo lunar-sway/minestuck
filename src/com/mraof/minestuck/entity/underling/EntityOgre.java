@@ -107,7 +107,7 @@ public class EntityOgre extends EntityUnderling
 			{
 				//((EntityPlayerMP) entity).addStat(MinestuckAchievementHandler.killOgre);
 				Echeladder ladder = MinestuckPlayerData.getData((EntityPlayerMP) entity).echeladder;
-				ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 1));
+				ladder.checkBonus(getServer(), (byte) (Echeladder.UNDERLING_BONUS_OFFSET + 1));
 			}
 		}
 	}

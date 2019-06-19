@@ -5,8 +5,6 @@ import com.mraof.minestuck.client.gui.GuiButtonImpl;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.MinestuckPacket.Type;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -64,7 +62,7 @@ public class HashmapGuiHandler extends SylladexGuiHandler
 				{
 					if(this.item != null && mouseButton == 1)
 					{
-						MinestuckPacket packet = MinestuckPacket.makePacket(Type.CAPTCHA, CaptchaDeckPacket.GET, this.index, true);
+						CaptchaDeckPacket packet = CaptchaDeckPacket.get(this.index, true);
 						MinestuckPacketHandler.sendToServer(packet);
 					} else super.onClick(mouseButton);
 				}
@@ -109,7 +107,7 @@ public class HashmapGuiHandler extends SylladexGuiHandler
 		if(button == this.guiButton && MinestuckConfig.clientHashmapChat == 0)
 		{
 			modus.ejectByChat = !modus.ejectByChat;
-			MinestuckPacketHandler.sendToServer(MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.VALUE, (byte) 0, modus.ejectByChat ? 1 : 0));
+			MinestuckPacketHandler.sendToServer(CaptchaDeckPacket.modusParam((byte) 0, modus.ejectByChat ? 1 : 0));
 		}
 	}
 }

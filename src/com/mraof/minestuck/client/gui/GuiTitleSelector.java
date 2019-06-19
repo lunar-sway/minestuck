@@ -1,8 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.network.MinestuckPacketHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.PlayerDataPacket;
+import com.mraof.minestuck.network.TitleSelectPacket;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.util.EnumClass;
 import com.mraof.minestuck.util.Title;
@@ -94,7 +93,7 @@ public class GuiTitleSelector extends GuiScreen implements GuiButtonImpl.ButtonC
 			
 		} else if(button.id == -1)	//select
 		{
-			MinestuckPacketHandler.sendToServer(MinestuckPacket.makePacket(MinestuckPacket.Type.PLAYER_DATA, PlayerDataPacket.TITLE_SELECT, currentClass, currentAspect));
+			MinestuckPacketHandler.sendToServer(new TitleSelectPacket(currentClass, currentAspect));
 			sendPacket = false;
 			mc.displayGuiScreen(null);
 		}
@@ -104,7 +103,7 @@ public class GuiTitleSelector extends GuiScreen implements GuiButtonImpl.ButtonC
 	public void onGuiClosed()
 	{
 		if(sendPacket)
-			MinestuckPacketHandler.sendToServer(MinestuckPacket.makePacket(MinestuckPacket.Type.PLAYER_DATA, PlayerDataPacket.TITLE_SELECT));
+			MinestuckPacketHandler.sendToServer(new TitleSelectPacket());
 	}
 	
 }

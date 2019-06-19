@@ -76,7 +76,7 @@ public class ChangeModusTrigger implements ICriterionTrigger<ChangeModusTrigger.
 	{
 		Listeners listeners = listenersMap.get(player.getAdvancements());
 		if(listeners != null)
-			listeners.trigger(CaptchaDeckHandler.getType(modus.getClass()).toString());
+			listeners.trigger(modus.getRegistryName().toString());
 	}
 	
 	public static class Instance extends AbstractCriterionInstance

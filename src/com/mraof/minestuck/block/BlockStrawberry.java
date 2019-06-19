@@ -58,7 +58,7 @@ public class BlockStrawberry extends BlockStemGrown
 		@Override
 		protected Item getSeeds()
 		{
-			return MinestuckItems.strawberryChunk;
+			return MinestuckItems.STRAWBERRY_CHUNK;
 		}
 	}
 	
@@ -73,7 +73,7 @@ public class BlockStrawberry extends BlockStemGrown
 		@Override
 		protected Item getSeedItem()
 		{
-			return MinestuckItems.strawberryChunk;
+			return MinestuckItems.STRAWBERRY_CHUNK;
 		}
 	}
 }

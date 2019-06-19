@@ -41,7 +41,7 @@ public class BlockUraniumOre extends Block
 	@Override
 	public IItemProvider getItemDropped(IBlockState state, World worldIn, BlockPos pos, int fortune)
 	{
-		return MinestuckItems.rawUranium;
+		return MinestuckItems.RAW_URANIUM;
 	}
 	
 	@Override
@@ -74,19 +74,19 @@ public class BlockUraniumOre extends Block
 	public static IBlockState getBlockState(IBlockState ground)
 	{
 		if(ground.getBlock() == Blocks.STONE)
-			return MinestuckBlocks.uraniumOreStone.getDefaultState();
+			return MinestuckBlocks.URANIUM_ORE_STONE.getDefaultState();
 		else if(ground.getBlock() == Blocks.NETHERRACK)
-			return MinestuckBlocks.uraniumOreNetherrack.getDefaultState();
+			return MinestuckBlocks.URANIUM_ORE_NETHERRACK.getDefaultState();
 		else if(ground.getBlock() == Blocks.COBBLESTONE)
-			return MinestuckBlocks.uraniumOreCobblestone.getDefaultState();
+			return MinestuckBlocks.URANIUM_ORE_COBBLESTONE.getDefaultState();
 		else if(ground.getBlock() == Blocks.SANDSTONE)
-			return MinestuckBlocks.uraniumOreSandstone.getDefaultState();
+			return MinestuckBlocks.URANIUM_ORE_SANDSTONE.getDefaultState();
 		else if(ground.getBlock() == Blocks.RED_SANDSTONE)
-			return MinestuckBlocks.uraniumOreRedSandstone.getDefaultState();
+			return MinestuckBlocks.URANIUM_ORE_RED_SANDSTONE.getDefaultState();
 		else if(ground.getBlock() == Blocks.END_STONE)
-			return MinestuckBlocks.uraniumOreEndStone.getDefaultState();
-		else if(ground.getBlock() == MinestuckBlocks.pinkStone)
-			return MinestuckBlocks.uraniumOrePinkStone.getDefaultState();
-		return MinestuckBlocks.uraniumOreStone.getDefaultState();
+			return MinestuckBlocks.URANIUM_ORE_END_STONE.getDefaultState();
+		else if(ground.getBlock() == MinestuckBlocks.PINK_STONE)
+			return MinestuckBlocks.URANIUM_ORE_PINK_STONE.getDefaultState();
+		return MinestuckBlocks.URANIUM_ORE_STONE.getDefaultState();
 	}
 }

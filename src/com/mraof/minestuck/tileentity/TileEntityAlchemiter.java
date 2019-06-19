@@ -12,6 +12,7 @@ import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -59,13 +60,13 @@ public class TileEntityAlchemiter extends TileEntity
 	
 	public ItemStack getOutput()
 	{
-		if(hasUpgrade(AlchemiterUpgrades.captchaCard))
+		/*if(hasUpgrade(AlchemiterUpgrades.captchaCard))
 		{
 		if (!AlchemyRecipes.hasDecodedItem(dowel))
 			return AlchemyRecipes.createCard(new ItemStack(MinestuckBlocks.GENERIC_OBJECT), false);
 		else return AlchemyRecipes.createCard(new ItemStack(AlchemyRecipes.getDecodedItem(dowel).getItem(), 1), false);
 		}
-		else if (!AlchemyRecipes.hasDecodedItem(dowel)) 
+		else */if (!AlchemyRecipes.hasDecodedItem(dowel))
 			return new ItemStack(MinestuckBlocks.GENERIC_OBJECT);
 		else return AlchemyRecipes.getDecodedItem(dowel);
 	}
@@ -162,14 +163,14 @@ public class TileEntityAlchemiter extends TileEntity
 			}
 		}
 		
-		this.upgrade = AlchemiterUpgrades.getUpgradesFromList(getUpgradeItemsList());
+		//this.upgrade = AlchemiterUpgrades.getUpgradesFromList(getUpgradeItemsList());
 	}
 	
 		
-	public boolean hasUpgrade(AlchemiterUpgrades upgrade)
+	/*public boolean hasUpgrade(AlchemiterUpgrades upgrade)
 	{
 		return AlchemiterUpgrades.hasUpgrade(getUpgradeItemsList(), upgrade);
-	}
+	}*/
 	
 	public boolean isUpgraded()
 	{
@@ -339,8 +340,8 @@ public class TileEntityAlchemiter extends TileEntity
 		}
 		else
 		{
-			if(hasUpgrade(AlchemiterUpgrades.blender) && !dowel.isEmpty())
-				doTheBlenderThing();
+			//if(hasUpgrade(AlchemiterUpgrades.blender) && !dowel.isEmpty())
+			//	doTheBlenderThing();
 		}
 		BlockPos mainPos = pos;
 		TileEntity te = worldIn.getTileEntity(mainPos);
@@ -377,7 +378,7 @@ public class TileEntityAlchemiter extends TileEntity
 		}
 	}
 	
-	public void processContents(int quantity, EntityPlayer player)
+	public void processContents(int quantity, EntityPlayerMP player)
 	{
 		ItemStack newItem = getOutput();
 		//Clamp quantity
@@ -401,13 +402,13 @@ public class TileEntityAlchemiter extends TileEntity
 			{
 				ItemStack stack = newItem.copy();
 				//TODO
-				if(hasUpgrade(AlchemiterUpgrades.captchaCard)) {
+				/*if(hasUpgrade(AlchemiterUpgrades.captchaCard)) {
 					int stackCount =  Math.min(AlchemyRecipes.getDecodedItem(stack).getMaxStackSize(), quantity);
 					
 					stack = AlchemyRecipes.changeEncodeSize(stack, stackCount);
 					quantity -=  Math.min(AlchemyRecipes.getDecodedItem(stack).getMaxStackSize(), quantity);
 				}
-				else{
+				else*/{
 					stack.setCount(Math.min(stack.getMaxStackSize(), quantity));
 					quantity -= stack.getCount();
 				}
@@ -418,8 +419,8 @@ public class TileEntityAlchemiter extends TileEntity
 			AlchemyRecipes.onAlchemizedItem(newItem, player);
 			
 			PlayerIdentifier pid = IdentifierHandler.encode(player);
-			GristHelper.decrease(pid, cost);
-			MinestuckPlayerTracker.updateGristCache(pid);
+			GristHelper.decrease(world.getServer(), pid, cost);
+			MinestuckPlayerTracker.updateGristCache(world.getServer(), pid);
 		}
 	}
 	
@@ -428,8 +429,8 @@ public class TileEntityAlchemiter extends TileEntity
 		ItemStack dowel = getDowel();
 		GristSet set;
 		ItemStack stack = getOutput();
-		if(hasUpgrade(AlchemiterUpgrades.captchaCard))
-			stack = AlchemyRecipes.getDecodedItem(getOutput());
+		//if(hasUpgrade(AlchemiterUpgrades.captchaCard))
+		//	stack = AlchemyRecipes.getDecodedItem(getOutput());
 		boolean useSelectedType;
 		if(dowel.isEmpty())
 			return null;

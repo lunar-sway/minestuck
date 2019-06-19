@@ -6,6 +6,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.Heightmap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ public class OceanRundown implements ILandDecorator
 	public BlockPos generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
 	{
 		int x = (chunkX << 4), z = (chunkZ << 4);
-		Biome[] biomes = world.getBiomeProvider().getBiomes(null, x, z, 32, 32);
+		Biome[] biomes = null;//world.getBiomeProvider().getBiomes(null, x, z, 32, 32);
 		
 		if(random.nextFloat() < probability)
 		{
@@ -112,7 +113,7 @@ public class OceanRundown implements ILandDecorator
 					}
 					for(int posZ = z1; posZ <= z2; posZ++)
 					{
-						BlockPos pos = world.getHeight(new BlockPos(posX + x, 0, posZ + z));
+						BlockPos pos = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, new BlockPos(posX + x, 0, posZ + z));
 						if(!world.getBlockState(pos).getMaterial().isLiquid())
 							world.setBlockState(pos.down(), fluid);
 					}

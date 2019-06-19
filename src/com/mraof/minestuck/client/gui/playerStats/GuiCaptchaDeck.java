@@ -7,8 +7,6 @@ import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.ItemCaptchaCard;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.MinestuckPacket.Type;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiYesNo;
@@ -98,7 +96,7 @@ public class GuiCaptchaDeck extends GuiPlayerStatsContainer implements GuiButton
 					return;
 				}
 			}
-			MinestuckPacketHandler.sendToServer(MinestuckPacket.makePacket(Type.CAPTCHA, CaptchaDeckPacket.MODUS));
+			MinestuckPacketHandler.sendToServer(CaptchaDeckPacket.modus());
 		}
 		else if(button == this.sylladexMap && CaptchaDeckHandler.clientSideModus != null)
 		{
@@ -113,7 +111,7 @@ public class GuiCaptchaDeck extends GuiPlayerStatsContainer implements GuiButton
 	public void confirmResult(boolean result, int id)
 	{
 		if(result && !container.inventory.getStackInSlot(0).isEmpty())
-			MinestuckPacketHandler.sendToServer(MinestuckPacket.makePacket(Type.CAPTCHA, CaptchaDeckPacket.MODUS));
+			MinestuckPacketHandler.sendToServer(CaptchaDeckPacket.modus());
 		mc.currentScreen = this;
 	}
 	

@@ -32,7 +32,7 @@ import net.minecraft.init.Blocks;
 		chunkProvider.decorators.add(new FrogSpawner(6, BiomeMinestuck.mediumNormal));
 		chunkProvider.decorators.add(new FrogSpawner(4, BiomeMinestuck.mediumRough));
 		chunkProvider.decorators.add(new LilypadDecorator(10,BiomeMinestuck.mediumOcean));
-		chunkProvider.sortDecorators();
+		//chunkProvider.sortDecorators();
 	}
 	
 	@Override

@@ -193,7 +193,7 @@ public class EntityGiclops extends EntityUnderling implements IBigEntity
 			{
 				//((EntityPlayerMP) entity).addStat(MinestuckAchievementHandler.killGiclops);
 				Echeladder ladder = MinestuckPlayerData.getData((EntityPlayerMP) entity).echeladder;
-				ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 4));
+				ladder.checkBonus(getServer(), (byte) (Echeladder.UNDERLING_BONUS_OFFSET + 4));
 			}
 		}
 	}

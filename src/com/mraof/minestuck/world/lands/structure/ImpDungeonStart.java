@@ -12,17 +12,13 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.StructureBoundingBox;
-import net.minecraft.world.gen.structure.StructureComponent;
-import net.minecraft.world.gen.structure.StructureStart;
-import net.minecraft.world.gen.structure.template.TemplateManager;
 
-public class ImpDungeonStart extends StructureStart
+public class ImpDungeonStart //extends StructureStart
 {
 	
 	public ImpDungeonStart()
 	{}
-	
+	/*
 	public ImpDungeonStart(ChunkProviderLands provider, World world, Random rand, int chunkX, int chunkZ)
 	{
 		super(chunkX, chunkZ);
@@ -190,5 +186,5 @@ public class ImpDungeonStart extends StructureStart
 				y--;
 			} while(this.boundingBox.minY + y >= 0 && !this.getBlockStateFromPos(world, x, y, z, boundingBox).getMaterial().isSolid());
 		}
-	}
+	}*/
 }

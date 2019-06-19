@@ -8,12 +8,11 @@ import net.minecraft.block.trees.AbstractTree;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 
 public class WorldgenTreeDecorator extends TreeDecoratorBase
 {
 	private int tC; 
-	private AbstractTree tree = new RainbowTree(false);
+	//private AbstractTree tree = new RainbowTree(false);
 	private float priority = 0.6F;
 	public WorldgenTreeDecorator(int treeCount, AbstractTree tree, float priority, Biome... biomes)
 	{
@@ -21,18 +20,18 @@ public class WorldgenTreeDecorator extends TreeDecoratorBase
 		this.priority = priority;
 	}
 	
-	public WorldgenTreeDecorator(int treeCount, WorldGenAbstractTree tree, Biome... biomes)
+	public WorldgenTreeDecorator(int treeCount, AbstractTree tree, Biome... biomes)
 	{
 		super(biomes);
-		this.tree=tree;
+		//this.tree=tree;
 		tC = treeCount;
 	}
 	
-	@Override
+	/*@Override
 	protected WorldGenAbstractTree getTreeToGenerate(World world, BlockPos pos, Random rand)
 	{
 		return tree;
-	}
+	}*/
 
 	@Override
 	public int getCount(Random random)

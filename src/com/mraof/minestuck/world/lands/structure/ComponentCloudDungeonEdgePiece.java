@@ -1,12 +1,8 @@
-package com.mraof.minestuck.world.gen.structure;
+package com.mraof.minestuck.world.lands.structure;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
+import com.mraof.minestuck.world.gen.structure.ComponentCastlePiece;
 
 public class ComponentCloudDungeonEdgePiece extends ComponentCloudDungeonPiece 
 {

@@ -11,6 +11,8 @@ import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 
 import javax.annotation.Nonnull;
@@ -31,40 +33,40 @@ public class GristHelper {
 		secondaryGristMap = new HashMap<>();
 		for(GristType type : GristType.values())
 			secondaryGristMap.put(type, new ArrayList<>());
-		secondaryGristMap.get(GristType.Amber).add(GristType.Rust);
-		secondaryGristMap.get(GristType.Amber).add(GristType.Sulfur);
-		secondaryGristMap.get(GristType.Amethyst).add(GristType.Quartz);
-		secondaryGristMap.get(GristType.Amethyst).add(GristType.Garnet);
-		secondaryGristMap.get(GristType.Caulk).add(GristType.Iodine);
-		secondaryGristMap.get(GristType.Caulk).add(GristType.Chalk);
-		secondaryGristMap.get(GristType.Chalk).add(GristType.Shale);
-		secondaryGristMap.get(GristType.Chalk).add(GristType.Marble);
-		secondaryGristMap.get(GristType.Cobalt).add(GristType.Ruby);
-		secondaryGristMap.get(GristType.Cobalt).add(GristType.Amethyst);
-		secondaryGristMap.get(GristType.Garnet).add(GristType.Ruby);
-		secondaryGristMap.get(GristType.Garnet).add(GristType.Gold);
-		secondaryGristMap.get(GristType.Iodine).add(GristType.Amber);
-		secondaryGristMap.get(GristType.Iodine).add(GristType.Chalk);
-		secondaryGristMap.get(GristType.Marble).add(GristType.Caulk);
-		secondaryGristMap.get(GristType.Marble).add(GristType.Amethyst);
-		secondaryGristMap.get(GristType.Mercury).add(GristType.Cobalt);
-		secondaryGristMap.get(GristType.Mercury).add(GristType.Rust);
-		secondaryGristMap.get(GristType.Quartz).add(GristType.Marble);
-		secondaryGristMap.get(GristType.Quartz).add(GristType.Uranium);
-		secondaryGristMap.get(GristType.Ruby).add(GristType.Quartz);
-		secondaryGristMap.get(GristType.Ruby).add(GristType.Diamond);
-		secondaryGristMap.get(GristType.Rust).add(GristType.Shale);
-		secondaryGristMap.get(GristType.Rust).add(GristType.Garnet);
-		secondaryGristMap.get(GristType.Shale).add(GristType.Mercury);
-		secondaryGristMap.get(GristType.Shale).add(GristType.Tar);
-		secondaryGristMap.get(GristType.Sulfur).add(GristType.Iodine);
-		secondaryGristMap.get(GristType.Sulfur).add(GristType.Tar);
-		secondaryGristMap.get(GristType.Tar).add(GristType.Amber);
-		secondaryGristMap.get(GristType.Tar).add(GristType.Cobalt);
+		secondaryGristMap.get(GristType.AMBER).add(GristType.RUST);
+		secondaryGristMap.get(GristType.AMBER).add(GristType.SULFUR);
+		secondaryGristMap.get(GristType.AMETHYST).add(GristType.QUARTZ);
+		secondaryGristMap.get(GristType.AMETHYST).add(GristType.GARNET);
+		secondaryGristMap.get(GristType.CAULK).add(GristType.IODINE);
+		secondaryGristMap.get(GristType.CAULK).add(GristType.CHALK);
+		secondaryGristMap.get(GristType.CHALK).add(GristType.SHALE);
+		secondaryGristMap.get(GristType.CHALK).add(GristType.MARBLE);
+		secondaryGristMap.get(GristType.COBALT).add(GristType.RUBY);
+		secondaryGristMap.get(GristType.COBALT).add(GristType.AMETHYST);
+		secondaryGristMap.get(GristType.GARNET).add(GristType.RUBY);
+		secondaryGristMap.get(GristType.GARNET).add(GristType.GOLD);
+		secondaryGristMap.get(GristType.IODINE).add(GristType.AMBER);
+		secondaryGristMap.get(GristType.IODINE).add(GristType.CHALK);
+		secondaryGristMap.get(GristType.MARBLE).add(GristType.CAULK);
+		secondaryGristMap.get(GristType.MARBLE).add(GristType.AMETHYST);
+		secondaryGristMap.get(GristType.MERCURY).add(GristType.COBALT);
+		secondaryGristMap.get(GristType.MERCURY).add(GristType.RUST);
+		secondaryGristMap.get(GristType.QUARTZ).add(GristType.MARBLE);
+		secondaryGristMap.get(GristType.QUARTZ).add(GristType.URANIUM);
+		secondaryGristMap.get(GristType.RUBY).add(GristType.QUARTZ);
+		secondaryGristMap.get(GristType.RUBY).add(GristType.DIAMOND);
+		secondaryGristMap.get(GristType.RUST).add(GristType.SHALE);
+		secondaryGristMap.get(GristType.RUST).add(GristType.GARNET);
+		secondaryGristMap.get(GristType.SHALE).add(GristType.MERCURY);
+		secondaryGristMap.get(GristType.SHALE).add(GristType.TAR);
+		secondaryGristMap.get(GristType.SULFUR).add(GristType.IODINE);
+		secondaryGristMap.get(GristType.SULFUR).add(GristType.TAR);
+		secondaryGristMap.get(GristType.TAR).add(GristType.AMBER);
+		secondaryGristMap.get(GristType.TAR).add(GristType.COBALT);
 		
-		secondaryGristMap.get(GristType.Uranium).add(GristType.Diamond);
-		secondaryGristMap.get(GristType.Diamond).add(GristType.Gold);
-		secondaryGristMap.get(GristType.Gold).add(GristType.Uranium);
+		secondaryGristMap.get(GristType.URANIUM).add(GristType.DIAMOND);
+		secondaryGristMap.get(GristType.DIAMOND).add(GristType.GOLD);
+		secondaryGristMap.get(GristType.GOLD).add(GristType.URANIUM);
 	}
 
 	
@@ -75,8 +77,8 @@ public class GristHelper {
 	{
 		while (true)
 		{
-			GristType randGrist = GristType.values().get(random.nextInt(GristType.values().size()));
-			if (randGrist.getRarity() > random.nextFloat() && randGrist != GristType.Artifact)
+			GristType randGrist = GristType.MARBLE;//GristType.values().get(random.nextInt(GristType.values().size()));
+			if (randGrist.getRarity() > random.nextFloat() && randGrist != GristType.ARTIFACT)
 				return randGrist;
 		}
 	}
@@ -104,7 +106,7 @@ public class GristHelper {
 		}
 		
 		GristSet set = new GristSet();
-		set.addGrist(GristType.Build, (int)(2*multiplier + random.nextDouble()*18*multiplier));
+		set.addGrist(GristType.BUILD, (int)(2*multiplier + random.nextDouble()*18*multiplier));
 		set.addGrist(primary, (int)(1*multiplier + random.nextDouble()*9*multiplier));
 		set.addGrist(getSecondaryGrist(primary), (int)(0.5*multiplier + random.nextDouble()*4*multiplier));
 		return set;
@@ -146,14 +148,14 @@ public class GristHelper {
 	/**
 	 * Uses the encoded version of the username!
 	 */
-	public static void decrease(PlayerIdentifier player, GristSet set)
+	public static void decrease(MinecraftServer server, PlayerIdentifier player, GristSet set)
 	{
 		Map<GristType, Integer> reqs = set.getMap();
 		if (reqs != null) {
 			for (Entry<GristType, Integer> pairs : reqs.entrySet())
 			{
 				setGrist(player, pairs.getKey(), getGrist(player, pairs.getKey()) - pairs.getValue());
-				notifyServer(player, pairs.getKey().getDisplayName(), pairs.getValue(), "spent");
+				notifyServer(server, player, pairs.getKey().getDisplayName(), pairs.getValue(), "spent");
 			}
 		}
 	}
@@ -169,7 +171,7 @@ public class GristHelper {
 	public static int getGristValue(GristSet set) {
 		int i = 0;
 		for(GristType type : GristType.values()) {
-			if(type.equals(GristType.Build))
+			if(type.equals(GristType.BUILD))
 				i += set.getGrist(type);
 			else if(type.getRarity() == 0.0F)
 				i += set.getGrist(type)*15;
@@ -178,7 +180,7 @@ public class GristHelper {
 		return i;
 	}
 	
-	public static void increase(PlayerIdentifier player, GristSet set)
+	public static void increase(MinecraftServer server, PlayerIdentifier player, GristSet set)
 	{
 		Map<GristType, Integer> reqs = set.getMap();
 		if (reqs != null)
@@ -186,34 +188,34 @@ public class GristHelper {
 			for (Entry<GristType, Integer> pairs : reqs.entrySet())
 			{
 				setGrist(player, pairs.getKey(), getGrist(player, pairs.getKey()) + pairs.getValue());
-				notify(player, pairs.getKey().getDisplayName(), pairs.getValue(), "gained");
+				notify(server, player, pairs.getKey().getDisplayName(), pairs.getValue(), "gained");
 			}
 		}
 	}
 	
-	private static void notify(PlayerIdentifier player, String type, Integer difference, String action)
+	private static void notify(MinecraftServer server, PlayerIdentifier player, ITextComponent type, Integer difference, String action)
 	{
 		if(SHOULD_OUTPUT_GRIST_CHANGES)
 		{
 			if (player != null)
 			{
-				EntityPlayerMP client = player.getPlayer();
+				EntityPlayerMP client = player.getPlayer(server);
 				if(client != null)
 				{
 					//"true" sends the message to the action bar (like bed messages), while "false" sends it to the chat.
-					player.getPlayer().sendStatusMessage(new TextComponentTranslation("You " + action + " " + difference + " " + type + " grist."), true);
+					client.sendStatusMessage(new TextComponentTranslation("You " + action + " " + difference + " " + type + " grist."), true);//TODO Translation
 				}
 			}
 		}
 	}
 	
-	private static void notifyServer(PlayerIdentifier player, String type, Integer difference, String action)
+	private static void notifyServer(MinecraftServer server, PlayerIdentifier player, ITextComponent type, Integer difference, String action)
 	{
 		SburbConnection sc = SkaianetHandler.getClientConnection(player);
 		if (sc==null) return;
 		EditData ed = ServerEditHandler.getData(sc);
 		if(ed==null) return;
-		notify(IdentifierHandler.encode(ed.getEditor()), type, difference, action);
+		notify(server, IdentifierHandler.encode(ed.getEditor()), type, difference, action);
 	}
 	
 }

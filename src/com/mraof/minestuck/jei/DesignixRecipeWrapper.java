@@ -1,5 +1,5 @@
 package com.mraof.minestuck.jei;
-
+/*
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import net.minecraft.item.ItemStack;
 
@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * Created by mraof on 2017 January 23 at 6:53 AM.
- */
+ * /
 class DesignixRecipeWrapper extends PunchCardRecipeWrapper
 {
     DesignixRecipeWrapper(List<ItemStack> first, List<ItemStack> second, ItemStack result)
@@ -25,3 +25,4 @@ class DesignixRecipeWrapper extends PunchCardRecipeWrapper
         return inputs;
     }
 }
+*/

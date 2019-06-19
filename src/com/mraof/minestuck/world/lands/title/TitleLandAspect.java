@@ -18,7 +18,7 @@ public abstract class TitleLandAspect implements ILandAspect<TitleLandAspect>
 	
 	public ChunkProviderLands createChunkProvider(LandDimension land)
 	{
-		ChunkProviderLands chunkProvider = new ChunkProviderLands(land.getWorld(), land, land.getWorld().isRemote);
+		ChunkProviderLands chunkProvider = null;//new ChunkProviderLands(land.getWorld(), land, land.getWorld().isRemote);
 		TerrainLandAspect terrain = land.landAspects.aspectTerrain;
 		
 		prepareChunkProvider(chunkProvider);
@@ -28,7 +28,7 @@ public abstract class TitleLandAspect implements ILandAspect<TitleLandAspect>
 			prepareChunkProviderServer(chunkProvider);
 			terrain.prepareChunkProviderServer(chunkProvider);
 		}
-		chunkProvider.createBiomeGen();
+		//chunkProvider.createBiomeGen();
 		return chunkProvider;
 	}
 	

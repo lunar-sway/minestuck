@@ -3,6 +3,7 @@ package com.mraof.minestuck.item;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -32,7 +33,7 @@ public class ItemBoondollars extends Item	//TODO Add custom crafting recipe that
 	{
 		if(!worldIn.isRemote)
 		{
-			MinestuckPlayerData.addBoondollars(playerIn, getCount(playerIn.getHeldItem(handIn)));
+			MinestuckPlayerData.addBoondollars((EntityPlayerMP) playerIn, getCount(playerIn.getHeldItem(handIn)));
 		}
 		return new ActionResult<>(EnumActionResult.SUCCESS, ItemStack.EMPTY);
 	}

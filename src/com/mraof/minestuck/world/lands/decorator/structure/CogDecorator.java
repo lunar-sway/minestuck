@@ -5,7 +5,7 @@ import java.util.Random;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.StructureBoundingBox;
+import net.minecraft.world.gen.Heightmap;
 
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
@@ -21,18 +21,18 @@ public class CogDecorator extends SimpleStructureDecorator
 		
 		xCoord = pos.getX();
 		zCoord = pos.getZ();
-		yCoord = world.getPrecipitationHeight(pos).getY() - blocksDown;
+		yCoord = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, pos).getY() - blocksDown;
 		if(world.getBlockState(new BlockPos(xCoord, yCoord - 1, zCoord)).getMaterial().isLiquid())
 			return null;
 		IBlockState block = provider.blockRegistry.getBlockState(random.nextBoolean() ? "structure_primary" : "structure_secondary");
-		
+		/*
 		StructureBoundingBox boundingBox;
 		if(!big)
 			boundingBox = new StructureBoundingBox(rotation?zCoord:xCoord - 2, yCoord, rotation?xCoord:zCoord, rotation?zCoord:xCoord + 2, yCoord + 4, rotation?xCoord:zCoord);
 		else boundingBox = new StructureBoundingBox(rotation?zCoord:xCoord - 3, yCoord, rotation?xCoord:zCoord, rotation?zCoord:xCoord + 4, yCoord + 7, rotation?xCoord:zCoord + 1);
 		if(provider.isBBInSpawn(boundingBox))
 			return null;
-		
+		*/
 		if(!big)
 		{
 			placeBlock(world, block, -2, 0, 0);

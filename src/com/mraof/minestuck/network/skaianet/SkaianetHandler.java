@@ -84,15 +84,15 @@ public class SkaianetHandler {
 		return null;
 	}
 	
-	public static boolean giveItems(PlayerIdentifier player)
+	public static boolean giveItems(MinecraftServer server, PlayerIdentifier player)
 	{
 		SburbConnection c = getClientConnection(player);
 		if(c != null && !c.isMain && getAssociatedPartner(c.getClientIdentifier(), true) == null
 				&& getAssociatedPartner(c.getServerIdentifier(), false) == null) {
 			c.isMain = true;
 			SburbHandler.onFirstItemGiven(c);
-			updatePlayer(c.getClientIdentifier());
-			updatePlayer(c.getServerIdentifier());
+			updatePlayer(server, c.getClientIdentifier());
+			updatePlayer(server, c.getServerIdentifier());
 			return true;
 		}
 		return false;
@@ -108,7 +108,7 @@ public class SkaianetHandler {
 		PlayerIdentifier[] s = new PlayerIdentifier[5];
 		s[0] = identifier;
 		infoToSend.put(identifier, s);
-		updatePlayer(identifier);
+		updatePlayer(player.getServer(), identifier);
 		SkaianetInfoPacket packet = createLandChainPacket();
 		MinestuckPacketHandler.sendToPlayer(packet, player);
 	}
@@ -228,7 +228,7 @@ public class SkaianetHandler {
 						sc.latestmessage.put(1, "computer.messageClosed");
 						sc.markBlockForUpdate();
 					}
-					SessionHandler.onConnectionClosed(c, true);
+					SessionHandler.onConnectionClosed(server, c, true);
 					ServerEditHandler.onDisconnect(c);
 					if(c.isMain)
 						c.isActive = false;	//That's everything that is neccesary.
@@ -372,7 +372,7 @@ public class SkaianetHandler {
 			if(s[i].equals(p1))
 			{
 				Debug.warnf("[Skaianet] Player %s already got the requested data.", player.getName());
-				updatePlayer(p0);	//Update anyway, to fix whatever went wrong
+				updatePlayer(player.getServer(), p0);	//Update anyway, to fix whatever went wrong
 				return;
 			}
 		}
@@ -386,7 +386,7 @@ public class SkaianetHandler {
 		
 		s[i] = p1;
 		
-		updatePlayer(p0);
+		updatePlayer(player.getServer(), p0);
 	}
 	
 	public static void saveData(NBTTagCompound data)
@@ -522,13 +522,13 @@ public class SkaianetHandler {
 	{
 		checkData(server);
 		for(PlayerIdentifier i : infoToSend.keySet())
-			updatePlayer(i);
+			updatePlayer(server, i);
 	}
 	
-	private static void updatePlayer(PlayerIdentifier player)
+	private static void updatePlayer(MinecraftServer server, PlayerIdentifier player)
 	{
 		PlayerIdentifier[] iden = infoToSend.get(player);
-		EntityPlayerMP playerMP = player.getPlayer();
+		EntityPlayerMP playerMP = player.getPlayer(server);
 		if(iden == null || playerMP == null)//If the player disconnected
 			return;
 		for(SburbConnection c : connections)
@@ -569,7 +569,7 @@ public class SkaianetHandler {
 		
 		Iterator<PlayerIdentifier> iter0 = infoToSend.keySet().iterator();
 		while(iter0.hasNext())
-			if(iter0.next().getPlayer() == null)
+			if(iter0.next().getPlayer(server) == null)
 			{
 				//Debug.print("[SKAIANET] Player disconnected, removing data.");
 				iter0.remove();
@@ -612,7 +612,7 @@ public class SkaianetHandler {
 					if(!c.isMain)
 						iter2.remove();
 					else c.isActive = false;
-					SessionHandler.onConnectionClosed(c, true);
+					SessionHandler.onConnectionClosed(server, c, true);
 					ServerEditHandler.onDisconnect(c);
 					
 					if(cc != null)
@@ -631,14 +631,14 @@ public class SkaianetHandler {
 			}
 			if(c.enteredGame && !MinestuckDimensionHandler.isLandDimension(c.clientHomeLand))
 			{
-				EntityPlayerMP player = c.getClientIdentifier().getPlayer();
+				EntityPlayerMP player = c.getClientIdentifier().getPlayer(server);
 				if(player != null)
 				{
 					c.clientHomeLand = player.dimension;
 					if(!MinestuckDimensionHandler.isLandDimension(c.clientHomeLand))
 					{
 						iter2.remove();
-						SessionHandler.onConnectionClosed(c, false);
+						SessionHandler.onConnectionClosed(server, c, false);
 						if(c.isActive)
 						{
 							TileEntityComputer cc = getComputer(server, c.client.location), sc = getComputer(server, c.server.location);
@@ -658,7 +658,7 @@ public class SkaianetHandler {
 		{
 			for(Entry<PlayerIdentifier,PlayerIdentifier[]> entry : infoToSend.entrySet())
 			{
-				EntityPlayerMP player = entry.getKey().getPlayer();
+				EntityPlayerMP player = entry.getKey().getPlayer(server);
 				UserListOpsEntry opsEntry = player == null ? null : player.getServer().getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
 				if(opsEntry != null && opsEntry.getPermissionLevel() >= 2)
 					continue;
@@ -748,13 +748,13 @@ public class SkaianetHandler {
 					return null;
 				}
 			}
-			else giveItems(username);
+			else giveItems(player.getServer(), username);
 		}
 		else if(c.enteredGame)
 			return c.clientHomeLand;
 		
 		c.clientHomeLand = dimensionId;
-		SburbHandler.onLandCreated(c);
+		SburbHandler.onLandCreated(player.getServer(), c);
 		
 		if(teleport != null && Teleport.teleportEntity(player, dimensionId, teleport))
 		{

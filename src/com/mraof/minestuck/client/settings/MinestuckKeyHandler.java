@@ -1,6 +1,7 @@
 package com.mraof.minestuck.client.settings;
 
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
+import com.mraof.minestuck.network.EffectTogglePacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiContainerCreative;
@@ -15,8 +16,6 @@ import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.MinestuckPacket.Type;
 
 public class MinestuckKeyHandler
 {
@@ -61,12 +60,12 @@ public class MinestuckKeyHandler
 		while(captchaKey.isPressed())
 		{
 			if(!Minecraft.getInstance().player.getHeldItemMainhand().isEmpty())
-				MinestuckPacketHandler.sendToServer(MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.CAPTCHALOUGE));
+				MinestuckPacketHandler.sendToServer(CaptchaDeckPacket.captchalogue());
 		}
 		
 		while(effectToggleKey.isPressed())
 		{
-			MinestuckPacketHandler.sendToServer(MinestuckPacket.makePacket(Type.EFFECT_TOGGLE));
+			MinestuckPacketHandler.sendToServer(new EffectTogglePacket());
 		}
 		
 		while(sylladexKey.isPressed())
@@ -83,9 +82,9 @@ public class MinestuckKeyHandler
 
 				//This statement is here because for some reason 'slotNumber' always returns as 0 if it is referenced inside the creative inventory.
 			if (Minecraft.getInstance().currentScreen instanceof GuiContainerCreative && Minecraft.getInstance().player.openContainer instanceof GuiContainerCreative.ContainerCreative && ((GuiContainer)Minecraft.getInstance().currentScreen).getSlotUnderMouse() != null && ((GuiContainer)Minecraft.getInstance().currentScreen).getSlotUnderMouse().getHasStack())
-				MinestuckPacketHandler.sendToServer(MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.CAPTCHALOUGE_INV, ((GuiContainer)Minecraft.getInstance().currentScreen).getSlotUnderMouse().getSlotIndex()));
+				MinestuckPacketHandler.sendToServer(CaptchaDeckPacket.captchalogueInv(((GuiContainer)Minecraft.getInstance().currentScreen).getSlotUnderMouse().getSlotIndex()));
 			else if(Minecraft.getInstance().currentScreen instanceof GuiContainer && ((GuiContainer)Minecraft.getInstance().currentScreen).getSlotUnderMouse() != null && ((GuiContainer)Minecraft.getInstance().currentScreen).getSlotUnderMouse().getHasStack())
-				MinestuckPacketHandler.sendToServer(MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.CAPTCHALOUGE_INV, ((GuiContainer)Minecraft.getInstance().currentScreen).getSlotUnderMouse().slotNumber));
+				MinestuckPacketHandler.sendToServer(CaptchaDeckPacket.captchalogueInv(((GuiContainer)Minecraft.getInstance().currentScreen).getSlotUnderMouse().slotNumber));
 		}
 		
 		captchaKeyPressed = InputMappings.isKeyDown(captchaKey.getKey().getKeyCode());

@@ -23,18 +23,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.Biome.BiomeProperties;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.IChunkGenerator;
-import net.minecraft.world.gen.structure.MapGenStructure;
-import net.minecraft.world.gen.structure.StructureBoundingBox;
 
 import javax.annotation.Nullable;
 import java.util.*;
 
-public class ChunkProviderLands implements IChunkGenerator
+public abstract class ChunkProviderLands implements IChunkGenerator
 {
 	List<SpawnListEntry> consortList;
 	public List<SpawnListEntry> monsterList;
@@ -50,12 +47,12 @@ public class ChunkProviderLands implements IChunkGenerator
 	public int nameIndex1, nameIndex2;
 	public boolean nameOrder;
 	
-	public final StructureBlockRegistry blockRegistry;
+	public final StructureBlockRegistry blockRegistry = null;
 	public List<ILandDecorator> decorators;
 	public ILandTerrainGen terrainGenerator;
 	public MapGenLandStructure structureHandler;
 	public MapGenConsortVillage villageHandler;
-	public MapGenStructure customHandler;
+	//public MapGenStructure customHandler;
 	public int weatherType;	//-1:No weather &1: Force rain &2: If thunder &4: Force thunder
 	public float rainfall, temperature;
 	public float oceanChance;
@@ -63,8 +60,8 @@ public class ChunkProviderLands implements IChunkGenerator
 	protected Biome biomeLands;
 	
 	public boolean generatingStructure;
-	public final LandDimension worldProvider;
-
+	public final LandDimension worldProvider = null;
+/*
 	@SuppressWarnings("unchecked")
 	public ChunkProviderLands(World worldObj, LandDimension worldProvider, boolean clientSide)
 	{
@@ -331,5 +328,5 @@ public class ChunkProviderLands implements IChunkGenerator
 	public IBlockState getOceanBlock()
 	{
 		return blockRegistry.getBlockState("ocean");
-	}
+	}*/
 }

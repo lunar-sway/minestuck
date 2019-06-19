@@ -84,12 +84,12 @@ public class ClientEditPacket
 		IdentifierHandler.PlayerIdentifier target = IdentifierHandler.getById(this.target);
 		if(user != null && target != null)
 		{
-			EntityPlayerMP targetPlayer = target.getPlayer();
+			EntityPlayerMP targetPlayer = target.getPlayer(player.getServer());
 			
 			if(targetPlayer != null && (!MinestuckConfig.privateComputers || user.appliesTo(player) || opsEntry != null && opsEntry.getPermissionLevel() >= 2))
 			{
 				SburbConnection c = SkaianetHandler.getClientConnection(target);
-				if(c == null || c.getServerIdentifier() != user || !(c.isMain() || SkaianetHandler.giveItems(target)))
+				if(c == null || c.getServerIdentifier() != user || !(c.isMain() || SkaianetHandler.giveItems(player.getServer(), target)))
 					return;
 				
 				for(DeployList.DeployEntry entry : DeployList.getItemList(c))

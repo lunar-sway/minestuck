@@ -11,7 +11,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.StructureBoundingBox;
 
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
@@ -30,8 +29,8 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 		IBlockState ground = world.getBlockState(new BlockPos(xCoord, yCoord - 1, zCoord));
 		if((ground.getMaterial().isLiquid() || ground.getMaterial() == Material.ICE) && random.nextFloat() < 0.6)	//Make it uncommon, but not impossible for it to be placed in the sea.
 			return null;
-		if(provider.isBBInSpawn(new StructureBoundingBox(xCoord - 4, zCoord - 4, xCoord + 4, zCoord + 4)))
-			return null;
+		/*if(provider.isBBInSpawn(new StructureBoundingBox(xCoord - 4, zCoord - 4, xCoord + 4, zCoord + 4)))
+			return null;*/
 		
 		int height = random.nextInt(7) + 12;
 		if(height + yCoord + 3 >= 256)
@@ -60,44 +59,44 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 		this.placeBlocks(world, wall, 3, 1, -2, 3, height, -1);
 		this.placeBlocks(world, wall, 3, 1, 1, 3, height, 2);
 		
-		for(EnumFacing facing : EnumFacing.HORIZONTALS)
+		for(EnumFacing facing : EnumFacing.Plane.HORIZONTAL)
 		{
 			BlockPos doorPos = new BlockPos(xCoord, yCoord + 1, zCoord).offset(facing, 4);
 			if(world.getBlockState(doorPos).getMaterial().isSolid())
 			{
-				this.placeBlock(world, wall, 3*facing.getFrontOffsetX(), 1, 3*facing.getFrontOffsetZ());
+				this.placeBlock(world, wall, 3*facing.getXOffset(), 1, 3*facing.getZOffset());
 				if(world.getBlockState(doorPos.up()).getMaterial().isSolid())
 				{
-					this.placeBlocks(world, wall, 3*facing.getFrontOffsetX(), 2, 3*facing.getFrontOffsetZ(), 3*facing.getFrontOffsetX(), height, 3*facing.getFrontOffsetZ());
+					this.placeBlocks(world, wall, 3*facing.getXOffset(), 2, 3*facing.getZOffset(), 3*facing.getXOffset(), height, 3*facing.getZOffset());
 					continue;
 				}
 			} else
 			{
-				this.placeBlock(world, Blocks.AIR.getDefaultState(), 3*facing.getFrontOffsetX(), 1, 3*facing.getFrontOffsetZ());
+				this.placeBlock(world, Blocks.AIR.getDefaultState(), 3*facing.getXOffset(), 1, 3*facing.getZOffset());
 				
 				if(!world.getBlockState(doorPos.down(2)).getMaterial().isSolid())
 				{
-					this.placeBlocks(world, floor, Math.min(3*facing.getFrontOffsetX(), 4*facing.getFrontOffsetX()), 0, Math.min(3*facing.getFrontOffsetZ(), 4*facing.getFrontOffsetZ()),
-							Math.max(3*facing.getFrontOffsetX(), 4*facing.getFrontOffsetX()), 0, Math.max(3*facing.getFrontOffsetZ(), 4*facing.getFrontOffsetZ()));
+					this.placeBlocks(world, floor, Math.min(3*facing.getXOffset(), 4*facing.getXOffset()), 0, Math.min(3*facing.getZOffset(), 4*facing.getZOffset()),
+							Math.max(3*facing.getXOffset(), 4*facing.getXOffset()), 0, Math.max(3*facing.getZOffset(), 4*facing.getZOffset()));
 					if(facing.getAxis() == EnumFacing.Axis.X)
 					{
-						this.placeBlocks(world, wall, 4*facing.getFrontOffsetX(), -1, -1, 4*facing.getFrontOffsetX(), -1, 1);
-						this.placeBlocks(world, wall, 5*facing.getFrontOffsetX(), 0, -1, 5*facing.getFrontOffsetX(), 0, 1);
-						this.placeBlock(world, wall, 4*facing.getFrontOffsetX(), 0, -1);
-						this.placeBlock(world, wall, 4*facing.getFrontOffsetX(), 0, 1);
+						this.placeBlocks(world, wall, 4*facing.getXOffset(), -1, -1, 4*facing.getXOffset(), -1, 1);
+						this.placeBlocks(world, wall, 5*facing.getXOffset(), 0, -1, 5*facing.getXOffset(), 0, 1);
+						this.placeBlock(world, wall, 4*facing.getXOffset(), 0, -1);
+						this.placeBlock(world, wall, 4*facing.getXOffset(), 0, 1);
 					} else
 					{
-						this.placeBlocks(world, wall, -1, -1, 4*facing.getFrontOffsetZ(), 1, -1, 4*facing.getFrontOffsetZ());
-						this.placeBlocks(world, wall, -1, 0, 5*facing.getFrontOffsetZ(), 1, 0, 5*facing.getFrontOffsetZ());
-						this.placeBlock(world, wall, -1, 0, 4*facing.getFrontOffsetZ());
-						this.placeBlock(world, wall, 1, 0, 4*facing.getFrontOffsetZ());
+						this.placeBlocks(world, wall, -1, -1, 4*facing.getZOffset(), 1, -1, 4*facing.getZOffset());
+						this.placeBlocks(world, wall, -1, 0, 5*facing.getZOffset(), 1, 0, 5*facing.getZOffset());
+						this.placeBlock(world, wall, -1, 0, 4*facing.getZOffset());
+						this.placeBlock(world, wall, 1, 0, 4*facing.getZOffset());
 					}
 				}
 			}
 			
-			this.placeBlocks(world, Blocks.AIR.getDefaultState(), 3*facing.getFrontOffsetX(), 2, 3*facing.getFrontOffsetZ(), 3*facing.getFrontOffsetX(), 3, 3*facing.getFrontOffsetZ());
-			this.placeBlock(world, wallDec, 3*facing.getFrontOffsetX(), 4, 3*facing.getFrontOffsetZ());
-			this.placeBlocks(world, wall, 3*facing.getFrontOffsetX(), 5, 3*facing.getFrontOffsetZ(), 3*facing.getFrontOffsetX(), height, 3*facing.getFrontOffsetZ());
+			this.placeBlocks(world, Blocks.AIR.getDefaultState(), 3*facing.getXOffset(), 2, 3*facing.getZOffset(), 3*facing.getXOffset(), 3, 3*facing.getZOffset());
+			this.placeBlock(world, wallDec, 3*facing.getXOffset(), 4, 3*facing.getZOffset());
+			this.placeBlocks(world, wall, 3*facing.getXOffset(), 5, 3*facing.getZOffset(), 3*facing.getXOffset(), height, 3*facing.getZOffset());
 		}
 		
 		this.placeBlocks(world, floor, -3, height + 1, -1, -2, height + 1, 1);
@@ -170,10 +169,10 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 		{
 			for(int y = 5; y < height; y += 5)
 			{
-				this.placeBlock(world, torch.withProperty(BlockTorch.FACING, EnumFacing.EAST), -2, y, 0);
-				this.placeBlock(world, torch.withProperty(BlockTorch.FACING, EnumFacing.WEST), 2, y, 0);
+				/*this.placeBlock(world, torch.with(BlockTorch.FACING, EnumFacing.EAST), -2, y, 0);
+				this.placeBlock(world, torch.withProperty(BlockTorch.FACING, EnumFacing.WEST), 2, y, 0);TODO
 				this.placeBlock(world, torch.withProperty(BlockTorch.FACING, EnumFacing.SOUTH), 0, y, -2);
-				this.placeBlock(world, torch.withProperty(BlockTorch.FACING, EnumFacing.NORTH), 0, y, 2);
+				this.placeBlock(world, torch.withProperty(BlockTorch.FACING, EnumFacing.NORTH), 0, y, 2);*/
 			}
 		}
 		
@@ -203,7 +202,7 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 		
 		if(random.nextInt(50) == 0)
 		{
-			StructureBlockUtil.placeLootChest(chestPos, world, null, facing, MinestuckLoot.BASIC_MEDIUM_CHEST, random);
+			//StructureBlockUtil.placeLootChest(chestPos, world, null, facing, MinestuckLoot.BASIC_MEDIUM_CHEST, random);
 		}
 		
 		return new BlockPos(xCoord + offset.getX(), yCoord + height + 2, zCoord + offset.getZ());
@@ -230,11 +229,11 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 		for(int x = -3; x < 4; x++)
 			for(int z = Math.abs(x) == 3 ? -2 : -3; z < (Math.abs(x) == 3 ? 3 : 4); z++)
 			{
-				int height = world.getPrecipitationHeight(new BlockPos(xCoord + x, 0, zCoord + z)).getY();
+				/*int height = world.getPrecipitationHeight(new BlockPos(xCoord + x, 0, zCoord + z)).getY();
 				value += height;
 				minVal = Math.min(minVal, height);
 				maxVal = Math.max(maxVal, height);
-				minDepth = Math.min(minDepth, world.getTopSolidOrLiquidBlock(new BlockPos(xCoord + x, 0, zCoord + z)).getY());
+				minDepth = Math.min(minDepth, world.getTopSolidOrLiquidBlock(new BlockPos(xCoord + x, 0, zCoord + z)).getY());*/
 			}
 		
 		if(maxVal - minVal > 6 || minVal - minDepth > 12)

@@ -39,7 +39,7 @@ public class BlockVeinCorner extends Block
 			
 			if((material.blocksMovement() || material.isLiquid()) && worldIn.rand.nextFloat() <= chancePerItem)
 			{
-				worldIn.setBlockState(pos, MinestuckBlocks.blockBlood.getDefaultState());
+				//worldIn.setBlockState(pos, MinestuckBlocks.blockBlood.getDefaultState());
 			}
 		}
 	}

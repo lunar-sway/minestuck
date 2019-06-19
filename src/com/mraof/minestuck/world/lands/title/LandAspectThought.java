@@ -48,7 +48,7 @@ public class LandAspectThought extends TitleLandAspect
 		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.LIME_CARPET.getDefaultState());
 		
 		chunkProvider.decorators.add(new SmallLibraryDecorator(BiomeMinestuck.mediumNormal));
-		chunkProvider.sortDecorators();
+		//chunkProvider.sortDecorators();
 	}
 	
 	@Override

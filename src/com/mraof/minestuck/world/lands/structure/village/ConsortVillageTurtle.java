@@ -7,15 +7,13 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Rotation;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.StructureBoundingBox;
-import net.minecraft.world.gen.structure.StructureComponent;
 
 import java.util.List;
 import java.util.Random;
 
 public class ConsortVillageTurtle
 {
-	public static class TurtleWellCenter extends ConsortVillageCenter.VillageCenter
+	/*public static class TurtleWellCenter extends ConsortVillageCenter.VillageCenter
 	{
 		public TurtleWellCenter()
 		{
@@ -424,5 +422,5 @@ public class ConsortVillageTurtle
 			
 			return true;
 		}
-	}
+	}*/
 }

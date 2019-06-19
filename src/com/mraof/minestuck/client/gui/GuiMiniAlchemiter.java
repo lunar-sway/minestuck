@@ -71,11 +71,11 @@ public class GuiMiniAlchemiter extends GuiMachine
 				stack = new ItemStack(MinestuckBlocks.GENERIC_OBJECT);
 
 			GristSet set = AlchemyCostRegistry.getGristConversion(stack);
-			boolean useSelectedType = stack.getItem() == MinestuckItems.CAPTCHA_CARD;
-			if (useSelectedType)
-				set = new GristSet(te.selectedGrist, MinestuckConfig.clientCardCost);
+			boolean useWildcard = stack.getItem() == MinestuckItems.CAPTCHA_CARD;
+			if (useWildcard)
+				set = new GristSet(te.getWildcardGrist(), MinestuckConfig.clientCardCost);
 			
-			GuiUtil.drawGristBoard(set, useSelectedType ? GuiUtil.GristboardMode.ALCHEMITER_SELECT : GuiUtil.GristboardMode.ALCHEMITER, 9, 45, fontRenderer);
+			GuiUtil.drawGristBoard(set, useWildcard ? GuiUtil.GristboardMode.ALCHEMITER_SELECT : GuiUtil.GristboardMode.ALCHEMITER, 9, 45, fontRenderer);
 
 			List<String> tooltip = GuiUtil.getGristboardTooltip(set, mouseX - this.guiLeft, mouseY - this.guiTop, 9, 45, fontRenderer);
 			if (tooltip != null)

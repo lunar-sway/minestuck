@@ -14,9 +14,9 @@ public class GateStructurePillar implements IGateStructure
 	@Override
 	public BlockPos generateGateStructure(World world, BlockPos pos, ChunkProviderLands provider)
 	{
-		IBlockState ground = provider.getGroundBlock();
-		Random rand = world.setRandomSeed(pos.getX(), pos.getZ(), 1849234152^world.provider.getDimension());
-		pos = world.getTopSolidOrLiquidBlock(pos);
+		IBlockState ground = provider.blockRegistry.getBlockState("ground");
+		//Random rand = world.setRandomSeed(pos.getX(), pos.getZ(), 1849234152^world.provider.getDimension());
+		//pos = world.getTopSolidOrLiquidBlock(pos);
 		pos = pos.up(20);
 		BlockPos gatePos = pos.up(4);
 		
@@ -28,14 +28,14 @@ public class GateStructurePillar implements IGateStructure
 			world.setBlockState(pos.south(), ground);
 			world.setBlockState(pos.west(), ground);
 			
-			if(rand.nextBoolean())
+			/*if(rand.nextBoolean())
 				world.setBlockState(pos.add(-1, 0, -1), ground);
 			if(rand.nextBoolean())
 				world.setBlockState(pos.add(-1, 0, 1), ground);
 			if(rand.nextBoolean())
 				world.setBlockState(pos.add(1, 0, 1), ground);
 			if(rand.nextBoolean())
-				world.setBlockState(pos.add(1, 0, -1), ground);
+				world.setBlockState(pos.add(1, 0, -1), ground);*/
 			
 			pos = pos.down();
 		} while(pos.getY() > 0 && !world.getBlockState(pos).equals(ground));
