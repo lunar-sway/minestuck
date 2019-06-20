@@ -19,6 +19,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -226,12 +227,10 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		if(this.world.isRemote?ClientEditHandler.isActive():ServerEditHandler.getData(entityIn) != null)
 			return;
 		
-		if (!this.world.isRemote)
+		if (!this.world.isRemote && !(entityIn instanceof FakePlayer))
 		{
 			consumeGrist(IdentifierHandler.encode(entityIn), true);
 		}
-		else  
-			this.setDead();
 	}
 	
 	public void consumeGrist(IdentifierHandler.PlayerIdentifier identifier, boolean sound)
@@ -240,9 +239,11 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 			throw new IllegalStateException("Grist entities shouldn't be consumed client-side.");
 		if(sound)
 			this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.1F, 0.5F * ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.8F));
-		GristHelper.increase(identifier, new GristSet(gristType, gristValue));
-		MinestuckPlayerTracker.updateGristCache(identifier);
-		this.setDead();
+		if(GristHelper.increase(identifier, new GristSet(gristType, gristValue)))
+		{
+			MinestuckPlayerTracker.updateGristCache(identifier);
+			this.setDead();
+		}
 	}
 	
 	@Override
