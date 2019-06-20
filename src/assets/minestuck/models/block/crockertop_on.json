@@ -1,11 +1,11 @@
 {
 	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
 	"textures": {
-		"0": "minestuck:blocks/red",
-		"1": "minestuck:blocks/crockertopback",
-		"3": "minestuck:blocks/screen",
-		"6": "minestuck:blocks/keysred",
-		"particle": "minestuck:blocks/red"
+		"0": "minestuck:block/red",
+		"1": "minestuck:block/crockertopback",
+		"3": "minestuck:block/screen",
+		"6": "minestuck:block/keysred",
+		"particle": "minestuck:block/red"
 	},
 	"elements": [
 		{

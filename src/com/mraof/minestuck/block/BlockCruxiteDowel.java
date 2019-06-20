@@ -35,7 +35,7 @@ public class BlockCruxiteDowel extends Block
 	public BlockCruxiteDowel(Properties properties)
 	{
 		super(properties);
-		setDefaultState(getDefaultState().with(DOWEL_TYPE, Type.DOWEL));
+		setDefaultState(this.stateContainer.getBaseState().with(DOWEL_TYPE, Type.DOWEL));
 	}
 	
 	@Override
@@ -143,7 +143,7 @@ public class BlockCruxiteDowel extends Block
 	@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, IBlockState> builder)
 	{
-		super.fillStateContainer(builder);
+		builder.add(DOWEL_TYPE);
 	}
 	
 	@Override

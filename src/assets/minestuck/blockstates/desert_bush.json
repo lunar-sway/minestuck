@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "minestuck:desert_bush" }
+        "": { "model": "minestuck:block/desert_bush" }
     }
 }

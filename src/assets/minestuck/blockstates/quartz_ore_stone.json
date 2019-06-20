@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "minestuck:quartz_ore_stone" }
+        "": { "model": "minestuck:block/quartz_ore_stone" }
     }
 }

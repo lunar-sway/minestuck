@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "minestuck:block/cruxtruder_center" },
+        "facing=east":  { "model": "minestuck:block/cruxtruder_center", "y": 90 },
+        "facing=south": { "model": "minestuck:block/cruxtruder_center", "y": 180 },
+        "facing=west":  { "model": "minestuck:block/cruxtruder_center", "y": 270 }
+    }
+}

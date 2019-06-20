@@ -7,43 +7,43 @@
                 {"south": "side|up", "west": "side|up"},
                 {"west": "side|up", "north": "side|up"}
             ]},
-            "apply": { "model": "minestuck:glowystone_dot" }
+            "apply": { "model": "minestuck:block/glowystone_dot" }
         },
         {   "when": { "OR": [
                 { "north": "side|up" },
                 { "north": "none", "east": "none", "south": "side|up", "west": "none" }
             ]},
-            "apply": { "model": "minestuck:glowystone_side" }
+            "apply": { "model": "minestuck:block/glowystone_side" }
         },
         {   "when": { "OR": [
                 { "south": "side|up" },
                 { "north": "side|up", "east": "none", "south": "none", "west": "none" }
             ]},
-            "apply": { "model": "minestuck:glowystone_side_alt" }
+            "apply": { "model": "minestuck:block/glowystone_side_alt" }
         },
         {   "when": { "OR": [
                 { "east": "side|up" },
                 { "north": "none", "east": "none", "south": "none", "west": "side|up" }
             ]},
-            "apply": { "model": "minestuck:glowystone_side_alt", "y": 270 }
+            "apply": { "model": "minestuck:block/glowystone_side_alt", "y": 270 }
         },
         {   "when": { "OR": [
                 { "west": "side|up" },
                 { "north": "none", "east": "side|up", "south": "none", "west": "none" }
             ]},
-            "apply": { "model": "minestuck:glowystone_side", "y": 270 }
+            "apply": { "model": "minestuck:block/glowystone_side", "y": 270 }
         },
         {   "when": { "north": "up" },
-            "apply": { "model": "minestuck:glowystone_up" }
+            "apply": { "model": "minestuck:block/glowystone_up" }
         },
         {   "when": { "east": "up" },
-            "apply": { "model": "minestuck:glowystone_up", "y": 90 }
+            "apply": { "model": "minestuck:block/glowystone_up", "y": 90 }
         },
         {   "when": { "south": "up" },
-            "apply": { "model": "minestuck:glowystone_up", "y": 180 }
+            "apply": { "model": "minestuck:block/glowystone_up", "y": 180 }
         },
         {   "when": { "west": "up" },
-            "apply": { "model": "minestuck:glowystone_up", "y": 270 }
+            "apply": { "model": "minestuck:block/glowystone_up", "y": 270 }
         }
     ]
 }

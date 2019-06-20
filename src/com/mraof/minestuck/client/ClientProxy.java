@@ -29,7 +29,6 @@ import com.mraof.minestuck.client.renderer.entity.frog.RenderFrog;
 import com.mraof.minestuck.client.renderer.tileentity.RenderGate;
 import com.mraof.minestuck.client.renderer.tileentity.RenderSkaiaPortal;
 import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
-import com.mraof.minestuck.client.util.MinestuckModelManager;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.entity.EntityBigPart;
 import com.mraof.minestuck.entity.EntityDecoy;
@@ -150,7 +149,6 @@ public class ClientProxy extends CommonProxy
 		MinestuckKeyHandler.instance.registerKeys();
 		MinecraftForge.EVENT_BUS.register(MinestuckKeyHandler.instance);
 		MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
-		MinecraftForge.EVENT_BUS.register(MinestuckModelManager.class);
 		
 		MinecraftForge.EVENT_BUS.register(ClientEditHandler.instance);
 		MinecraftForge.EVENT_BUS.register(new MinestuckConfig());

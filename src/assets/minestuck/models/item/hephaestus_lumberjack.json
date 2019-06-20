@@ -1,6 +1,6 @@
 {
     "parent": "item/handheld",
     "textures": {
-        "layer0": "minestuck:items/hephaestus_lumberjack"
+        "layer0": "minestuck:item/hephaestus_lumberjack"
     }
 }

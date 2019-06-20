@@ -1,13 +1,13 @@
 {
     "textures": {
-        "particle":     "minestuck:machines/totem_lathe/bottom_middle_right_base",
-        "base":         "minestuck:machines/totem_lathe/bottom_middle_right_base",
-        "base_2":       "minestuck:machines/totem_lathe/bottom_middle_right_base_2",
-        "table":        "minestuck:machines/totem_lathe/bottom_middle_table_3",
-        "down":         "minestuck:machines/totem_lathe/down_middle",
-        "inside_left":  "minestuck:machines/totem_lathe/bottom_middle_inside",
-        "inside_right": "minestuck:machines/totem_lathe/bottom_right_inside",
-        "misc":         "minestuck:machines/totem_lathe/misc_bottom_right"
+        "particle":     "minestuck:block/machine/totem_lathe/bottom_middle_right_base",
+        "base":         "minestuck:block/machine/totem_lathe/bottom_middle_right_base",
+        "base_2":       "minestuck:block/machine/totem_lathe/bottom_middle_right_base_2",
+        "table":        "minestuck:block/machine/totem_lathe/bottom_middle_table_3",
+        "down":         "minestuck:block/machine/totem_lathe/down_middle",
+        "inside_left":  "minestuck:block/machine/totem_lathe/bottom_middle_inside",
+        "inside_right": "minestuck:block/machine/totem_lathe/bottom_right_inside",
+        "misc":         "minestuck:block/machine/totem_lathe/misc_bottom_right"
     },
     "elements": [
         {

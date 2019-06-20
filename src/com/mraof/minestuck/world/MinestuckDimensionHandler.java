@@ -16,15 +16,18 @@ import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.ModDimension;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class MinestuckDimensionHandler
 {
 	public static int biomeIdStart;
+	public static final ResourceLocation SKAIA_ID = new ResourceLocation(Minestuck.MOD_ID, "skaia");
 	
 	private static Exception unregisterTrace;
 	private static Hashtable<IdentifierHandler.PlayerIdentifier, LandInfoContainer> landInfo = new Hashtable<>();
@@ -35,7 +38,7 @@ public class MinestuckDimensionHandler
 	public static ModDimension skaiaDimensionType;
 	
 	@SubscribeEvent
-	public static void registerModDimensions(RegistryEvent.Register<ModDimension> event)
+	public static void registerModDimensions(final RegistryEvent.Register<ModDimension> event)
 	{
 		landDimensionType = new LandDimension.Type();
 		event.getRegistry().register(landDimensionType.setRegistryName("lands"));
@@ -50,9 +53,12 @@ public class MinestuckDimensionHandler
 	public static void register()
 	{
 		lands.clear();
-		//register world generators
 		
-		skaia = DimensionManager.registerDimension(new ResourceLocation("skaia"), skaiaDimensionType, null);
+		//register dimensions
+		skaia = DimensionType.byName(SKAIA_ID);
+		/*if(skaia != null) We don't want skaia until it has a chunk generator
+			skaia = DimensionManager.registerDimension(SKAIA_ID, skaiaDimensionType, null);*/
+		
 		for(LandInfoContainer container : landInfo.values())
 		{
 			DimensionType type = DimensionManager.registerDimension(container.name, landDimensionType, null);

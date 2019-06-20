@@ -1,5 +1,6 @@
 package com.mraof.minestuck.item;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.item.EntityCrewPoster;
 import com.mraof.minestuck.entity.item.EntityMetalBoat;
 import com.mraof.minestuck.entity.item.EntitySbahjPoster;
@@ -18,6 +19,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import static com.mraof.minestuck.block.MinestuckBlocks.*;
@@ -28,6 +30,7 @@ import java.util.Arrays;
  * This class contains all non-ItemBlock items that minestuck adds,
  * and is responsible for initializing and registering these.
  */
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class MinestuckItems
 {
 	
@@ -197,7 +200,7 @@ public class MinestuckItems
 	public static Item RECORD_RETRO_BATTLE;
 	
 	@SubscribeEvent
-	public static void registerItems(RegistryEvent.Register<Item> event)
+	public static void registerItems(final RegistryEvent.Register<Item> event)
 	{
 		IForgeRegistry<Item> registry = event.getRegistry();
 		registerItemBlock(registry, BLACK_CHESS_DIRT, ModItemGroup.MAIN);
@@ -275,6 +278,14 @@ public class MinestuckItems
 		registerItemBlock(registry, FLOWERY_VINE_LOG, ModItemGroup.LANDS);
 		registerItemBlock(registry, DEAD_LOG, ModItemGroup.LANDS);
 		registerItemBlock(registry, PETRIFIED_LOG, ModItemGroup.LANDS);
+		registerItemBlock(registry, GLOWING_WOOD, ModItemGroup.LANDS);
+		registerItemBlock(registry, FROST_WOOD, ModItemGroup.LANDS);
+		registerItemBlock(registry, RAINBOW_WOOD, ModItemGroup.LANDS);
+		registerItemBlock(registry, END_WOOD, ModItemGroup.LANDS);
+		registerItemBlock(registry, VINE_WOOD, ModItemGroup.LANDS);
+		registerItemBlock(registry, FLOWERY_VINE_WOOD, ModItemGroup.LANDS);
+		registerItemBlock(registry, DEAD_WOOD, ModItemGroup.LANDS);
+		registerItemBlock(registry, PETRIFIED_WOOD, ModItemGroup.LANDS);
 		registerItemBlock(registry, GLOWING_PLANKS, ModItemGroup.LANDS);
 		registerItemBlock(registry, FROST_PLANKS, ModItemGroup.LANDS);
 		registerItemBlock(registry, RAINBOW_PLANKS, ModItemGroup.LANDS);
@@ -568,7 +579,7 @@ public class MinestuckItems
 		registry.register(GARNET_TWIX = new ItemFood(2, 0.3F, false, new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("garnet_twix"));
 		registry.register(RUBY_LOLLIPOP = new ItemFood(2, 0.3F, false, new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("ruby_lollipop"));
 		registry.register(RUST_GUMMY_EYE = new ItemFood(2, 0.3F, false, new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("rust_gummy_eye"));
-		registry.register(DIAMOND_MINT = new ItemFood(2, 0.4F, false, new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("Diamond_mint"));
+		registry.register(DIAMOND_MINT = new ItemFood(2, 0.4F, false, new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("diamond_mint"));
 		registry.register(GOLD_CANDY_RIBBON = new ItemFood(2, 0.4F, false, new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("gold_candy_ribbon"));
 		registry.register(URANIUM_GUMMY_BEAR = new ItemFood(2, 0.4F, false, new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("uranium_gummy_bear"));
 		registry.register(ARTIFACT_WARHEAD = new ItemFood(2, 0.5F, false, new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("artifact_warhead"));
@@ -594,7 +605,7 @@ public class MinestuckItems
 		registry.register(CRUMPLY_HAT = new Item(new Item.Properties().maxStackSize(1).group(ModItemGroup.LANDS)).setRegistryName("crumply_hat"));
 		registry.register(STONE_EYEBALLS = new Item(new Item.Properties().group(ModItemGroup.LANDS)).setRegistryName("stone_eyeballs"));
 		registry.register(STONE_SLAB = new Item(new Item.Properties().group(ModItemGroup.LANDS)).setRegistryName("stone_slab"));
-		registry.register(SHOP_POSTER = new ItemHanging((world, pos, facing, stack) -> new EntityShopPoster(world, pos, facing, stack, 0), new Item.Properties().maxStackSize(1).group(ModItemGroup.LANDS)).setRegistryName("shop_poster"));
+		//registry.register(SHOP_POSTER = new ItemHanging((world, pos, facing, stack) -> new EntityShopPoster(world, pos, facing, stack, 0), new Item.Properties().maxStackSize(1).group(ModItemGroup.LANDS)).setRegistryName("shop_poster"));
 		
 		//registry.register(minestuckBucket.setRegistryName("minestuck_bucket"));
 		registry.register(OBSIDIAN_BUCKET = new ItemObsidianBucket(new Item.Properties().maxStackSize(1).containerItem(Items.BUCKET).group(ModItemGroup.MAIN)).setRegistryName("obsidian_bucket"));
@@ -610,7 +621,7 @@ public class MinestuckItems
 		registry.register(GAMEGRL_MAGAZINE = new Item(new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("gamegrl_magazine"));
 		registry.register(CREW_POSTER = new ItemHanging((world, pos, facing, stack) -> new EntityCrewPoster(world, pos, facing), new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("crew_poster"));
 		registry.register(SBAHJ_POSTER = new ItemHanging((world, pos, facing, stack) -> new EntitySbahjPoster(world, pos, facing), new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("sbahj_poster"));
-		registry.register(FAKE_ARMS = new Item(new Item.Properties().maxStackSize(1)).setRegistryName("fake_arms"));
+		//registry.register(FAKE_ARMS = new Item(new Item.Properties().maxStackSize(1)).setRegistryName("fake_arms"));
 		
 		//Music disks
 		registry.register(RECORD_EMISSARY_OF_DANCE = new ItemModRecord(13, MinestuckSoundHandler.soundEmissaryOfDance, new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("record_emissary"));

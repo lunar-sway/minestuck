@@ -84,7 +84,7 @@ public class MinestuckConfig
 	public static int landEditRange;
 	public static int cardResolution;
 	public static int initialModusSize;
-	public static String[] defaultModusTypes;
+	public static String[] defaultModusTypes = new String[0];
 	public static int modusMaxSize;
 	public static int cardCost;
 	public static int oreMultiplier;
@@ -106,7 +106,7 @@ public class MinestuckConfig
 	public static byte sylladexDropMode;
 	public static byte dataCheckerPermission;
 	
-	public static boolean[] deployConfigurations;
+	public static boolean[] deployConfigurations = new boolean[2];
 	
 	//Secret configuration options
 	public static boolean secretConfig = false;
@@ -161,8 +161,6 @@ public class MinestuckConfig
 			
 			giveItems = config.get("General", "giveItems", false, "Setting this to true replaces editmode with the old Give Items button.").setLanguageKey("minestuck.config.giveItems").setRequiresWorldRestart(true).getBoolean();
 			
-			deployConfigurations = new boolean[1];
-			deployConfigurations[0] = config.get("General", "deployCard", false, "Determines if a card with a captcha card punched on it should be added to the deploy list or not.").setLanguageKey("minestuck.config.deployCard").setRequiresWorldRestart(true).getBoolean();
 			cardCost = config.get("General", "cardCost", 1, "An integer that determines how much a captchalogue card costs to alchemize").setMinValue(1).setLanguageKey("minestuck.config.cardCost").setRequiresWorldRestart(true).getInt();
 			
 			globalSession = config.get("General", "globalSession", false, "Whenether all connetions should be put into a single session or not.").setRequiresWorldRestart(true).setLanguageKey("minestuck.config.globalSession").getBoolean();
@@ -192,7 +190,7 @@ public class MinestuckConfig
 		privateComputers = config.get("General", "privateComputers", true, "True if computers should only be able to be used by the owner.").setLanguageKey("minestuck.config.privateComputers").getBoolean();
 
 		deployConfigurations = new boolean[2];
-		deployConfigurations[0] = config.get("General", "deployCard", false, "Determines if a card with a captcha card punched on it should be added to the deploy list or not.").setLanguageKey("minestuck.config.deployCard").setRequiresWorldRestart(true).getBoolean();
+		deployConfigurations[0] = config.get("General", "deployCard", false, "Determines if a card with a captcha card punched on it should be added to the deploy list.").setLanguageKey("minestuck.config.deployCard").setRequiresWorldRestart(true).getBoolean();
 		deployConfigurations[1] = config.get("General", "portableMachines", false, "Determines if the small portable machines should be included in the deploy list.").setLanguageKey("minestuck.config.portableMachines").setRequiresWorldRestart(true).getBoolean();
 		cardCost = config.get("General", "cardCost", 1, "An integer that determines how much a captchalogue card costs to alchemize").setMinValue(1).setLanguageKey("minestuck.config.cardCost").setRequiresWorldRestart(true).getInt();
 

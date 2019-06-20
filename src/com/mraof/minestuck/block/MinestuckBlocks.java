@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.Minestuck;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
@@ -15,8 +16,10 @@ import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.IForgeRegistry;
 
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class MinestuckBlocks
 {
 	//Skaia
@@ -59,6 +62,8 @@ public class MinestuckBlocks
 	//Land Tree Blocks
 	public static Block GLOWING_LOG, FROST_LOG, RAINBOW_LOG, END_LOG;
 	public static Block VINE_LOG, FLOWERY_VINE_LOG, DEAD_LOG, PETRIFIED_LOG;
+	public static Block GLOWING_WOOD, FROST_WOOD, RAINBOW_WOOD, END_WOOD;
+	public static Block VINE_WOOD, FLOWERY_VINE_WOOD, DEAD_WOOD, PETRIFIED_WOOD;
 	public static Block GLOWING_PLANKS, FROST_PLANKS, RAINBOW_PLANKS, END_PLANKS;
 	public static Block DEAD_PLANKS, TREATED_PLANKS;
 	public static Block FROST_LEAVES, RAINBOW_LEAVES, END_LEAVES;
@@ -226,7 +231,7 @@ public class MinestuckBlocks
 	public static Fluid[] gristFluids;*/
 	
 	@SubscribeEvent
-	public static void registerBlocks(RegistryEvent.Register<Block> event)
+	public static void registerBlocks(final RegistryEvent.Register<Block> event)
 	{
 		IForgeRegistry<Block> registry = event.getRegistry();
 		
@@ -301,17 +306,25 @@ public class MinestuckBlocks
 		registry.register(GLOWING_LOG = new BlockMinestuckLog(MaterialColor.LIGHT_BLUE, Block.Properties.create(Material.WOOD, MaterialColor.LIGHT_BLUE).hardnessAndResistance(2.0F).lightValue(11).sound(SoundType.WOOD)).setRegistryName("glowing_log"));
 		registry.register(FROST_LOG = new BlockMinestuckLog(MaterialColor.ICE, Block.Properties.create(Material.WOOD, MaterialColor.ICE).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("frost_log"));
 		registry.register(RAINBOW_LOG = new BlockMinestuckLog(MaterialColor.WOOD, Block.Properties.create(Material.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("rainbow_log"));
-		registry.register(END_LOG = new BlockMinestuckLog(MaterialColor.SAND, 1, 250, Block.Properties.create(Material.WOOD, MaterialColor.SAND).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("end_log"));
+		registry.register(END_LOG = new BlockDoubleLog(MaterialColor.SAND, 1, 250, Block.Properties.create(Material.WOOD, MaterialColor.SAND).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("end_log"));
 		registry.register(VINE_LOG = new BlockMinestuckLog(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("vine_log"));
 		registry.register(FLOWERY_VINE_LOG = new BlockMinestuckLog(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("flowery_vine_log"));
 		registry.register(DEAD_LOG = new BlockMinestuckLog(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("dead_log"));
 		registry.register(PETRIFIED_LOG = new BlockMinestuckLog(MaterialColor.WOOD, 0, 0, Block.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.STONE)).setRegistryName("petrified_log"));
+		registry.register(GLOWING_WOOD = new BlockMinestuckLog(MaterialColor.LIGHT_BLUE, Block.Properties.create(Material.WOOD, MaterialColor.LIGHT_BLUE).hardnessAndResistance(2.0F).lightValue(11).sound(SoundType.WOOD)).setRegistryName("glowing_wood"));
+		registry.register(FROST_WOOD = new BlockMinestuckLog(MaterialColor.ICE, Block.Properties.create(Material.WOOD, MaterialColor.ICE).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("frost_wood"));
+		registry.register(RAINBOW_WOOD = new BlockMinestuckLog(MaterialColor.WOOD, Block.Properties.create(Material.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("rainbow_wood"));
+		registry.register(END_WOOD = new BlockMinestuckLog(MaterialColor.SAND, 1, 250, Block.Properties.create(Material.WOOD, MaterialColor.SAND).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("end_wood"));
+		registry.register(VINE_WOOD = new BlockMinestuckLog(MaterialColor.OBSIDIAN, Block.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("vine_wood"));
+		registry.register(FLOWERY_VINE_WOOD = new BlockMinestuckLog(MaterialColor.OBSIDIAN, Block.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("flowery_vine_wood"));
+		registry.register(DEAD_WOOD = new BlockMinestuckLog(MaterialColor.OBSIDIAN, Block.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("dead_wood"));
+		registry.register(PETRIFIED_WOOD = new BlockMinestuckLog(MaterialColor.OBSIDIAN, 0, 0, Block.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.STONE)).setRegistryName("petrified_wood"));
 		registry.register(GLOWING_PLANKS = new BlockCustom(5, 20, Block.Properties.create(Material.WOOD, MaterialColor.LIGHT_BLUE).hardnessAndResistance(2.0F, 3.0F).lightValue(7).sound(SoundType.WOOD)).setRegistryName("glowing_planks"));
 		registry.register(FROST_PLANKS = new BlockCustom(5, 5, Block.Properties.create(Material.WOOD, MaterialColor.ICE).hardnessAndResistance(2.0F, 3.0F).sound(SoundType.WOOD)).setRegistryName("frost_planks"));
 		registry.register(RAINBOW_PLANKS = new BlockCustom(5, 20, Block.Properties.create(Material.WOOD).hardnessAndResistance(2.0F, 3.0F).sound(SoundType.WOOD)).setRegistryName("rainbow_planks"));
 		registry.register(END_PLANKS = new BlockCustom(1, 250, Block.Properties.create(Material.WOOD, MaterialColor.SAND).hardnessAndResistance(2.0F, 3.0F).sound(SoundType.WOOD)).setRegistryName("end_planks"));
 		registry.register(DEAD_PLANKS = new BlockCustom(5, 5, Block.Properties.create(Material.WOOD).hardnessAndResistance(2.0F, 3.0F).sound(SoundType.WOOD)).setRegistryName("dead_planks"));
-		registry.register(TREATED_PLANKS = new BlockCustom(1, 0, Block.Properties.create(Material.WOOD).hardnessAndResistance(2.0F, 3.0F).sound(SoundType.WOOD)).setRegistryName("teated_planks"));
+		registry.register(TREATED_PLANKS = new BlockCustom(1, 0, Block.Properties.create(Material.WOOD).hardnessAndResistance(2.0F, 3.0F).sound(SoundType.WOOD)).setRegistryName("treated_planks"));
 		registry.register(FROST_LEAVES = new BlockMinestuckLeaves(null, Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).needsRandomTick().sound(SoundType.PLANT)).setRegistryName("frost_leaves"));
 		registry.register(RAINBOW_LEAVES = new BlockMinestuckLeaves(() -> RAINBOW_SAPLING.asItem(), Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).needsRandomTick().sound(SoundType.PLANT)).setRegistryName("rainbow_leaves"));
 		registry.register(END_LEAVES = new BlockEndLeaves(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).needsRandomTick().sound(SoundType.PLANT)).setRegistryName("end_leaves"));
@@ -373,7 +386,7 @@ public class MinestuckBlocks
 		registry.register(PETRIFIED_GRASS = new BlockPetrifiedFlora(Block.Properties.create(Material.ROCK, EnumDyeColor.GRAY).doesNotBlockMovement().hardnessAndResistance(0).sound(SoundType.STONE)).setRegistryName("petrified_grass"));
 		registry.register(PETRIFIED_POPPY = new BlockPetrifiedFlora(Block.Properties.create(Material.ROCK, EnumDyeColor.GRAY).doesNotBlockMovement().hardnessAndResistance(0).sound(SoundType.STONE)).setRegistryName("petrified_poppy"));
 		registry.register(STRAWBERRY = new BlockStrawberry(Block.Properties.create(Material.GOURD, MaterialColor.RED).hardnessAndResistance(1.0F).sound(SoundType.WOOD)).setRegistryName("strawberry"));
-		registry.register(ATTACHED_STRAWBERRY_STEM = new BlockStrawberry.AttachedStem((BlockStemGrown) STRAWBERRY, Block.Properties.create(Material.PLANTS).doesNotBlockMovement().needsRandomTick().hardnessAndResistance(0).sound(SoundType.WOOD)).setRegistryName("strawberry_stem"));
+		registry.register(ATTACHED_STRAWBERRY_STEM = new BlockStrawberry.AttachedStem((BlockStemGrown) STRAWBERRY, Block.Properties.create(Material.PLANTS).doesNotBlockMovement().needsRandomTick().hardnessAndResistance(0).sound(SoundType.WOOD)).setRegistryName("attached_strawberry_stem"));
 		registry.register(STRAWBERRY_STEM = new BlockStrawberry.Stem((BlockStemGrown) STRAWBERRY, Block.Properties.create(Material.PLANTS).doesNotBlockMovement().needsRandomTick().hardnessAndResistance(0).sound(SoundType.WOOD)).setRegistryName("strawberry_stem"));
 		
 		registry.register(LAYERED_SAND = new BlockLayered(Blocks.SAND, Block.Properties.from(Blocks.SAND)).setRegistryName("layered_sand"));
@@ -419,7 +432,7 @@ public class MinestuckBlocks
 		registry.register(TOTEM_LATHE_BOTTOM_RIGHT = new BlockTotemLathe(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F), BlockTotemLathe.BOTTOM_RIGHT_SHAPE, new BlockPos(2, 0, 0)).setRegistryName("totem_lathe_bottom_right"));
 		registry.register(TOTEM_LATHE_BOTTOM_CORNER = new BlockTotemLathe(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F), BlockTotemLathe.BOTTOM_CORNER_SHAPE, new BlockPos(3, 0, 0)).setRegistryName("totem_lathe_bottom_corner"));
 		registry.register(TOTEM_LATHE_MIDDLE = new BlockTotemLathe(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F), BlockTotemLathe.MIDDLE_SHAPE, new BlockPos(0, -1, 0)).setRegistryName("totem_lathe_middle"));
-		registry.register(TOTEM_LATHE_WHEEL = new BlockTotemLathe(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F), BlockTotemLathe.WHEEL_SHAPE, new BlockPos(3, -1, 0)).setRegistryName("totem_lathe_wheel"));
+		registry.register(TOTEM_LATHE_WHEEL = new BlockTotemLathe.Rod(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F), BlockTotemLathe.WHEEL_SHAPE, new BlockPos(3, -1, 0)).setRegistryName("totem_lathe_wheel"));
 		registry.register(TOTEM_LATHE_ROD = new BlockTotemLathe.Rod(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F), BlockTotemLathe.ROD_SHAPE, new BlockPos(1, -1, 0)).setRegistryName("totem_lathe_rod"));
 		registry.register(TOTEM_LATHE_DOWEL_ROD = new BlockTotemLathe.DowelRod(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F), BlockTotemLathe.ROD_SHAPE, new BlockPos(2, -1, 0)).setRegistryName("totem_lathe_dowel_rod"));
 		registry.register(TOTEM_LATHE_TOP_CORNER = new BlockTotemLathe(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F), BlockTotemLathe.TOP_CORNER_SHAPE, new BlockPos(0, -2, 0)).setRegistryName("totem_lathe_top_corner"));

@@ -1,10 +1,10 @@
 {
     "textures": {
-        "particle": "minestuck:blocks/fuchsia_cake_side",
-        "bottom": "minestuck:blocks/fuchsia_cake_bottom",
-        "top": "minestuck:blocks/fuchsia_cake_top",
-        "side": "minestuck:blocks/fuchsia_cake_side",
-        "inside": "minestuck:blocks/fuchsia_cake_inner"
+        "particle": "minestuck:block/fuchsia_cake_side",
+        "bottom": "minestuck:block/fuchsia_cake_bottom",
+        "top": "minestuck:block/fuchsia_cake_top",
+        "side": "minestuck:block/fuchsia_cake_side",
+        "inside": "minestuck:block/fuchsia_cake_inner"
     },
     "elements": [
         {   "from": [ 3, 0, 1 ],

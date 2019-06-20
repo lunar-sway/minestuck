@@ -1,6 +1,0 @@
-{
-    "variants": {
-        "block_type=cruxite": { "model": "minestuck:storage_block_cruxite" },
-        "block_type=generic_object": { "model": "minestuck:storage_block_generic_object" }
-    }
-}

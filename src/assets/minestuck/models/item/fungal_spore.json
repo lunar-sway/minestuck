@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "minestuck:items/fungal_spore"
+        "layer0": "minestuck:item/fungal_spore"
     }
 }

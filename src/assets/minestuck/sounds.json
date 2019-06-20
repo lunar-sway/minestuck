@@ -7,7 +7,7 @@
         }
       ]
     },
-    "record.danceStab": {
+    "record.dance_stab": {
       "sounds": [
         {
             "name": "minestuck:records/dance_stab_dance",
@@ -55,107 +55,107 @@
       }
     ]
   },
-  "frogAmbient": {
+  "frog_ambient": {
     "category": "friendly",
-    "subtitle": "subtitle.frogAmbient",
+    "subtitle": "subtitle.frog_ambient",
     "sounds": [
       "minestuck:soundeffects/mobs/frog_ambient_1",
       "minestuck:soundeffects/mobs/frog_ambient_2",
       "minestuck:soundeffects/mobs/frog_ambient_3"
     ]
   },
-  "frogHurt": {
+  "frog_hurt": {
     "category": "friendly",
-    "subtitle": "subtitle.frogHurt",
+    "subtitle": "subtitle.frog_hurt",
     "sounds": [
       "minestuck:soundeffects/mobs/frog_hurt"
     ]
   },
-  "frogDeath": {
+  "frog_death": {
     "category": "friendly",
-    "subtitle": "subtitle.frogDeath",
+    "subtitle": "subtitle.frog_death",
     "sounds": [
       "minestuck:soundeffects/mobs/frog_death"
     ]
   },
-  "nakagatorAmbient": {
+  "nakagator_ambient": {
     "category": "friendly",
-    "subtitle": "subtitle.nakagatorAmbient",
+    "subtitle": "subtitle.nakagator_ambient",
     "sounds": [
       "minestuck:soundeffects/mobs/nakagator_ambient"
     ]
   },
-  "nakagatorHurt": {
+  "nakagator_hurt": {
     "category": "friendly",
-    "subtitle": "subtitle.nakagatorHurt",
+    "subtitle": "subtitle.nakagator_hurt",
     "sounds": [
       "minestuck:soundeffects/mobs/nakagator_hurt"
     ]
   },
-  "nakagatorDeath": {
+  "nakagator_death": {
     "category": "friendly",
-    "subtitle": "subtitle.nakagatorDeath",
+    "subtitle": "subtitle.nakagator_death",
     "sounds": [
       "minestuck:soundeffects/mobs/nakagator_death"
     ]
   },
-  "iguanaAmbient": {
+  "iguana_ambient": {
     "category": "friendly",
-    "subtitle": "subtitle.iguanaAmbient",
+    "subtitle": "subtitle.iguana_ambient",
     "sounds": [
       "minestuck:soundeffects/mobs/iguana_ambient"
     ]
   },
-  "iguanaHurt": {
+  "iguana_hurt": {
     "category": "friendly",
-    "subtitle": "subtitle.iguanaHurt",
+    "subtitle": "subtitle.iguana_hurt",
     "sounds": [
       "minestuck:soundeffects/mobs/iguana_hurt"
     ]
   },
-  "iguanaDeath": {
+  "iguana_death": {
     "category": "friendly",
-    "subtitle": "subtitle.iguanaDeath",
+    "subtitle": "subtitle.iguana_death",
     "sounds": [
       "minestuck:soundeffects/mobs/iguana_death"
     ]
   },
-  "salamanderAmbient": {
+  "salamander_ambient": {
     "category": "friendly",
-    "subtitle": "subtitle.salamanderAmbient",
+    "subtitle": "subtitle.salamander_ambient",
     "sounds": [
       "minestuck:soundeffects/mobs/salamander_ambient"
     ]
   },
-  "salamanderHurt": {
+  "salamander_hurt": {
     "category": "friendly",
-    "subtitle": "subtitle.salamanderHurt",
+    "subtitle": "subtitle.salamander_hurt",
     "sounds": [
       "minestuck:soundeffects/mobs/salamander_hurt"
     ]
   },
-  "salamanderDeath": {
+  "salamander_death": {
     "category": "friendly",
-    "subtitle": "subtitle.salamanderDeath",
+    "subtitle": "subtitle.salamander_death",
     "sounds": [
       "minestuck:soundeffects/mobs/salamander_death"
     ]
   },
-  "turtleHurt": {
+  "turtle_hurt": {
     "category": "friendly",
-    "subtitle": "subtitle.turtleHurt",
+    "subtitle": "subtitle.turtle_hurt",
     "sounds": [
       "minestuck:soundeffects/mobs/turtle_hurt"
     ]
   },
-  "turtleDeath": {
+  "turtle_death": {
     "category": "friendly",
-    "subtitle": "subtitle.turtleDeath",
+    "subtitle": "subtitle.turtle_death",
     "sounds": [
       "minestuck:soundeffects/mobs/turtle_death"
     ]
   },
-  "impAmbient": {
+  "imp_ambient": {
     "category": "hostile",
     "subtitle": "subtitle.impScreech",
     "sounds": [
@@ -163,109 +163,109 @@
       "minestuck:soundeffects/mobs/imp_ambient_2"
     ]
   },
-  "impHurt": {
+  "imp_hurt": {
     "category": "hostile",
-    "subtitle": "subtitle.impHurt",
+    "subtitle": "subtitle.imp_hurt",
     "sounds": [
       "minestuck:soundeffects/mobs/imp_hurt"
     ]
   },
-  "impDeath": {
+  "imp_death": {
     "category": "hostile",
-    "subtitle": "subtitle.impDeath",
+    "subtitle": "subtitle.imp_death",
     "sounds": [
       "minestuck:soundeffects/mobs/imp_death"
     ]
   },
-  "ogreAmbient": {
+  "ogre_ambient": {
     "category": "hostile",
-    "subtitle": "subtitle.ogreAmbient",
+    "subtitle": "subtitle.ogre_ambient",
     "sounds": [
       "minestuck:soundeffects/mobs/ogre_ambient_1",
       "minestuck:soundeffects/mobs/ogre_ambient_2"
     ]
   },
-  "ogreHurt": {
+  "ogre_hurt": {
     "category": "hostile",
-    "subtitle": "subtitle.ogreHurt",
+    "subtitle": "subtitle.ogre_hurt",
     "sounds": [
       "minestuck:soundeffects/mobs/ogre_hurt"
     ]
   },
-  "ogreDeath": {
+  "ogre_death": {
     "category": "hostile",
-    "subtitle": "subtitle.ogreDeath",
+    "subtitle": "subtitle.ogre_death",
     "sounds": [
       "minestuck:soundeffects/mobs/ogre_death"
     ]
   },
-  "basiliskAmbient": {
+  "basilisk_ambient": {
     "category": "hostile",
-    "subtitle": "subtitle.basiliskAmbient",
+    "subtitle": "subtitle.basilisk_ambient",
     "sounds": [
       "minestuck:soundeffects/mobs/basilisk_ambient_1",
       "minestuck:soundeffects/mobs/basilisk_ambient_2"
     ]
   },
-  "basiliskHurt": {
+  "basilisk_hurt": {
     "category": "hostile",
-    "subtitle": "subtitle.basiliskHurt",
+    "subtitle": "subtitle.basilisk_hurt",
     "sounds": [
       "minestuck:soundeffects/mobs/basilisk_hurt"
     ]
   },
-  "basiliskDeath": {
+  "basilisk_death": {
     "category": "hostile",
-    "subtitle": "subtitle.basiliskDeath",
+    "subtitle": "subtitle.basilisk_death",
     "sounds": [
       "minestuck:soundeffects/mobs/basilisk_death"
     ]
   },
-  "lichAmbient": {
+  "lich_ambient": {
     "category": "hostile",
-    "subtitle": "subtitle.lichAmbient",
+    "subtitle": "subtitle.lich_ambient",
     "sounds": [
       "minestuck:soundeffects/mobs/lich_ambient_1",
       "minestuck:soundeffects/mobs/lich_ambient_2"
     ]
   },
-  "lichHurt": {
+  "lich_hurt": {
     "category": "hostile",
-    "subtitle": "subtitle.lichHurt",
+    "subtitle": "subtitle.lich_hurt",
     "sounds": [
       "minestuck:soundeffects/mobs/lich_hurt"
     ]
   },
-  "lichDeath": {
+  "lich_death": {
     "category": "hostile",
-    "subtitle": "subtitle.lichDeath",
+    "subtitle": "subtitle.lich_death",
     "sounds": [
       "minestuck:soundeffects/mobs/lich_death"
     ]
   },
-  "giclopsAmbient": {
+  "giclops_ambient": {
     "category": "hostile",
-    "subtitle": "subtitle.giclopsAmbient",
+    "subtitle": "subtitle.giclops_ambient",
     "sounds": [
       "minestuck:soundeffects/mobs/giclops_ambient_1",
       "minestuck:soundeffects/mobs/giclops_ambient_2"
     ]
   },
-  "giclopsHurt": {
+  "giclops_hurt": {
     "category": "hostile",
-    "subtitle": "subtitle.giclopsHurt",
+    "subtitle": "subtitle.giclops_hurt",
     "sounds": [
       "minestuck:soundeffects/mobs/giclops_hurt"
     ]
   },
-  "giclopsDeath": {
+  "giclops_death": {
     "category": "hostile",
-    "subtitle": "subtitle.giclopsDeath",
+    "subtitle": "subtitle.giclops_death",
     "sounds": [
       "minestuck:soundeffects/mobs/giclops_death"
     ]
   },
-    "record.retroBattle": {
+    "record.retro_battle": {
       "sounds": [
         {
             "name": "minestuck:records/retro_battle_theme",

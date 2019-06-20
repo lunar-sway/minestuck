@@ -1,6 +1,6 @@
 {
     "parent": "item/handheld",
     "textures": {
-        "layer0": "minestuck:items/uranium_powered_stick"
+        "layer0": "minestuck:item/uranium_powered_stick"
     }
 }

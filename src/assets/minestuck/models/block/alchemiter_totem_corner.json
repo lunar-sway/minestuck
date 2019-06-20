@@ -1,12 +1,12 @@
 {
 	"textures": {
-		"particle": "minestuck:machines/alchemiter/corner_top",
-		"top": "minestuck:machines/alchemiter/corner_top",
-		"side1": "minestuck:machines/alchemiter/corner_base_side",
-		"side2": "minestuck:machines/alchemiter/corner_pad_side",
-		"rod": "minestuck:machines/alchemiter/rods",
-		"down": "minestuck:machines/alchemiter/down_corner",
-		"inside": "minestuck:machines/alchemiter/corner_inside"
+		"particle": "minestuck:block/machine/alchemiter/corner_top",
+		"top": "minestuck:block/machine/alchemiter/corner_top",
+		"side1": "minestuck:block/machine/alchemiter/corner_base_side",
+		"side2": "minestuck:block/machine/alchemiter/corner_pad_side",
+		"rod": "minestuck:block/machine/alchemiter/rods",
+		"down": "minestuck:block/machine/alchemiter/down_corner",
+		"inside": "minestuck:block/machine/alchemiter/corner_inside"
 	},
 	"elements": [
 		{

@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "minestuck:cruxtruder_lid" }
+        "": { "model": "minestuck:block/cruxtruder_lid" }
     }
 }

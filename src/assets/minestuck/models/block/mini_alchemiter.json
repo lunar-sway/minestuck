@@ -1,0 +1,207 @@
+{
+    "parent": "block/block",
+    "display": {
+        "gui": {
+            "rotation":    [ 30, 45, 0 ],
+            "translation": [ 0, 0, 0 ],
+            "scale":       [ 0.625, 0.625, 0.625 ]
+        },
+        "fixed": {
+            "rotation": [ 0, 180, 0 ],
+            "translation": [ 0, 0, 0],
+            "scale":[ 0.5, 0.5, 0.5 ]
+        },
+        "thirdperson_lefthand": {
+            "rotation":    [ 75, 45, 0 ],
+            "translation": [ 0, 2.5, 0 ],
+            "scale":       [ 0.375, 0.375, 0.375 ]
+        },
+        "firstperson_righthand": {
+            "rotation": [ 0, -45, 0 ],
+            "translation": [ 0, 0, 0 ],
+            "scale": [ 0.40, 0.40, 0.40 ]
+        },
+        "firstperson_lefthand": {
+            "rotation": [ 0, 315, 0 ],
+            "translation": [ 0, 0, 0 ],
+            "scale": [ 0.40, 0.40, 0.40 ]
+        }
+    },
+    "textures": {
+        "particle": "minestuck:item/alchemiter",
+        "base": "minestuck:block/alchemiter_base",
+        "other": "minestuck:block/alchemiter_misc"
+    },
+    "elements": [
+        {
+            "__comment": "Base",
+            "from": [ 0, 0, 0 ],
+            "to": [ 16, 4, 16 ],
+            "faces": {
+                "down":  { "uv": [ 8,  0, 16, 8 ], "texture": "#base", "cullface": "down" },
+                "up":    { "uv": [ 0,  0,  8, 8 ], "texture": "#base" },
+                "south": { "uv": [ 0,  8,  8, 10 ], "texture": "#base", "cullface": "south" },
+                "east":  { "uv": [ 8,  8, 16, 10 ], "texture": "#base", "cullface": "east" },
+                "north": { "uv": [ 0,  10, 8, 12 ], "texture": "#base", "cullface": "north" },
+                "west":  { "uv": [ 8, 10, 16, 12 ], "texture": "#base", "cullface": "west" }
+            }
+        },
+        {
+            "__comment": "Middle",
+            "from": [ 1, 4, 1 ],
+            "to": [ 15, 6, 15 ],
+            "faces": {
+                "up":    { "uv": [ 7, 2, 14, 9 ], "texture": "#other" },
+                "south": { "uv": [ 0, 0,  7, 1 ], "texture": "#other" },
+                "east":  { "uv": [ 7, 0, 14, 1 ], "texture": "#other" },
+                "north": { "uv": [ 0, 1,  7, 2 ], "texture": "#other" },
+                "west":  { "uv": [ 7, 1, 14, 2 ], "texture": "#other" }
+            }
+        },
+        {
+            "__comment": "Alchemy Platform",
+            "from": [ 2, 6, 2 ],
+            "to": [ 14, 8, 14 ],
+            "faces": {
+                "up":    { "uv": [ 0,  8,  6, 14 ], "texture": "#other" },
+                "south": { "uv": [ 0, 14,  6, 15 ], "texture": "#other" },
+                "east":  { "uv": [ 6, 14, 12, 15 ], "texture": "#other" },
+                "north": { "uv": [ 0, 15,  6, 16 ], "texture": "#other" },
+                "west":  { "uv": [ 6, 15, 12, 16 ], "texture": "#other" }
+            }
+        },
+        {
+            "__comment": "Side Thing W",
+            "from": [ 0.5, 4, 6.75 ],
+            "to": [ 1, 5, 9.25 ],
+            "faces": {
+                "up":    { "uv": [ 0.25,  5.5,  1.5, 5.75 ], "texture": "#other", "rotation": 90 },
+                "west":  { "uv": [ 0.25, 5.75,  1.5, 6.25 ], "texture": "#other" },
+                "north": { "uv": [  1.5, 5.75, 1.75, 6.25 ], "texture": "#other" },
+                "south": { "uv": [    0, 5.75, 0.25, 6.25 ], "texture": "#other" }
+            }
+        },
+        {
+            "__comment": "Side Thing N",
+            "from": [ 6.75, 4, 0.5 ],
+            "to": [ 9.25, 5, 1 ],
+            "faces": {
+                "up":    { "uv": [    2,  5.5, 3.25, 5.75 ], "texture": "#other", "rotation": 180 },
+                "west":  { "uv": [ 1.75, 5.75,    2, 6.25 ], "texture": "#other" },
+                "north": { "uv": [    2, 5.75, 3.25, 6.25 ], "texture": "#other" },
+                "east":  { "uv": [ 3.25, 5.75,  3.5, 6.25 ], "texture": "#other" }
+            }
+        },
+        {
+            "__comment": "Side Thing E",
+            "from": [ 15, 4, 6.75 ],
+            "to": [ 15.5, 5, 9.25 ],
+            "faces": {
+                "up":    { "uv": [ 0.25, 6.25,  1.5, 6.5 ], "texture": "#other", "rotation": 270 },
+                "north": { "uv": [    0,  6.5, 0.25,   7 ], "texture": "#other" },
+                "east":  { "uv": [ 0.25,  6.5,  1.5,   7 ], "texture": "#other" },
+                "south": { "uv": [  1.5,  6.5, 1.75,   7 ], "texture": "#other" }
+            }
+        },
+        {
+            "__comment": "Side Thing S",
+            "from": [ 6.75, 4, 15 ],
+            "to": [ 9.25, 5, 15.5 ],
+            "faces": {
+                "up":    { "uv": [    2, 6.25, 3.25, 6.5 ], "texture": "#other" },
+                "west":  { "uv": [ 3.25,  6.5,  3.5,   7 ], "texture": "#other" },
+                "east":  { "uv": [ 1.75,  6.5,    2,   7 ], "texture": "#other" },
+                "south": { "uv": [    2,  6.5, 3.25,   7 ], "texture": "#other" }
+            }
+        },
+        {
+            "__comment": "Dowel Platform",
+            "from": [ 0.5, 4, 0.5 ],
+            "to": [ 2.5, 9, 2.5 ],
+            "faces": {
+                "up":    { "uv": [ 1, 2, 2,   3 ], "texture": "#other" },
+                "south": { "uv": [ 1, 3, 2, 5.5 ], "texture": "#other" },
+                "east":  { "uv": [ 2, 3, 3, 5.5 ], "texture": "#other" },
+                "north": { "uv": [ 3, 3, 4, 5.5 ], "texture": "#other" },
+                "west":  { "uv": [ 0, 3, 1, 5.5 ], "texture": "#other" }
+            }
+        },
+        {
+            "__comment": "Long Rod",
+            "from": [ 3.5, 4, 0.5 ],
+            "to": [ 4.5, 15, 1.5 ],
+            "faces": {
+                "up":    { "uv": [ 14.5,   0,   15, 0.5 ], "texture": "#other" },
+                "south": { "uv": [ 14.5, 0.5,   15,   6 ], "texture": "#other" },
+                "east":  { "uv": [   15, 0.5, 15.5,   6 ], "texture": "#other" },
+                "north": { "uv": [ 15.5, 0.5,   16,   6 ], "texture": "#other" },
+                "west":  { "uv": [   14, 0.5, 14.5,   6 ], "texture": "#other" }
+            }
+        },
+        {
+            "__comment": "Short Rod 1",
+            "from": [ 2, 11, 0.5 ],
+            "to": [ 3, 15, 1.5 ],
+            "faces": {
+                "up":    { "uv": [ 14.5,   6,   15, 6.5 ], "texture": "#other" },
+                "down":  { "uv": [   15,   6, 15.5, 6.5 ], "texture": "#other" },
+                "south": { "uv": [ 14.5, 6.5,   15, 8.5 ], "texture": "#other" },
+                "east":  { "uv": [   15, 6.5, 15.5, 8.5 ], "texture": "#other" },
+                "north": { "uv": [ 15.5, 6.5,   16, 8.5 ], "texture": "#other" },
+                "west":  { "uv": [   14, 6.5, 14.5, 8.5 ], "texture": "#other" }
+            }
+        },
+        {
+            "__comment": "Short Rod 2",
+            "from": [ 0.5, 11, 0.5 ],
+            "to": [ 1.5, 15, 1.5 ],
+            "faces": {
+                "up":    { "uv": [ 14.5, 8.5,   15,  9 ], "texture": "#other" },
+                "down":  { "uv": [   15, 8.5, 15.5,  9 ], "texture": "#other" },
+                "south": { "uv": [ 14.5,   9,   15, 11 ], "texture": "#other" },
+                "east":  { "uv": [   15,   9, 15.5, 11 ], "texture": "#other" },
+                "north": { "uv": [ 15.5,   9,   16, 11 ], "texture": "#other" },
+                "west":  { "uv": [   14,   9, 14.5, 11 ], "texture": "#other" }
+            }
+        },
+        {
+            "__comment": "Hinge 1",
+            "from": [ 2.5, 15, 0.5 ],
+            "to": [ 4, 15.5, 1.5 ],
+            "faces": {
+                "up":    { "uv": [  11.5,   11, 12.25,  11.5 ], "texture": "#other" },
+                "down":  { "uv": [ 12.25,   11,    13,  11.5 ], "texture": "#other" },
+                "south": { "uv": [  11.5, 11.5, 12.25, 11.75 ], "texture": "#other" },
+                "east":  { "uv": [ 12.25, 11.5, 12.75, 11.75 ], "texture": "#other" },
+                "north": { "uv": [ 12.75, 11.5,  13.5, 11.75 ], "texture": "#other" },
+                "west":  { "uv": [    11, 11.5,  11.5, 11.75 ], "texture": "#other" }
+            }
+        },
+        {
+            "__comment": "Hinge 2",
+            "from": [ 1, 10.5, 0.5 ],
+            "to": [ 2.5, 11, 1.5 ],
+            "faces": {
+                "up":    { "uv": [    14,   11, 14.75,  11.5 ], "texture": "#other" },
+                "down":  { "uv": [ 14.75,   11,  15.5,  11.5 ], "texture": "#other" },
+                "south": { "uv": [    14, 11.5, 14.75, 11.75 ], "texture": "#other" },
+                "east":  { "uv": [ 14.75, 11.5, 15.25, 11.75 ], "texture": "#other" },
+                "north": { "uv": [ 15.25, 11.5,  13.5, 11.75 ], "texture": "#other" },
+                "west":  { "uv": [  13.5, 11.5,    14, 11.75 ], "texture": "#other" }
+            }
+        },
+        {
+            "__comment": "Reader",
+            "from": [ 0, 15, 0 ],
+            "to": [ 2, 17, 2 ],
+            "faces": {
+                "up":    { "uv": [ 11,  9, 12, 10 ], "texture": "#other", "cullface": "up" },
+                "down":  { "uv": [ 12,  9, 13, 10 ], "texture": "#other" },
+                "south": { "uv": [ 11, 10, 12, 11 ], "texture": "#other" },
+                "east":  { "uv": [ 12, 10, 13, 11 ], "texture": "#other" },
+                "north": { "uv": [ 13, 10, 14, 11 ], "texture": "#other" },
+                "west":  { "uv": [ 10, 10, 11, 11 ], "texture": "#other" }
+            }
+        }
+    ]
+}

@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "axis=y": { "model": "minestuck:block/rainbow_wood" },
+        "axis=z": { "model": "minestuck:block/rainbow_wood", "x": 90 },
+        "axis=x": { "model": "minestuck:block/rainbow_wood", "x": 90, "y": 90 }
+    }
+}

@@ -1,11 +1,12 @@
 {
     "variants": {
-        "size=1":  { "model": "minestuck:sand_height2" },
-        "size=2":  { "model": "minestuck:sand_height4" },
-        "size=3":  { "model": "minestuck:sand_height6" },
-        "size=4":  { "model": "minestuck:sand_height8" },
-        "size=5":  { "model": "minestuck:sand_height10" },
-        "size=6":  { "model": "minestuck:sand_height12" },
-        "size=7":  { "model": "minestuck:sand_height14" }
+        "layers=1":  { "model": "minestuck:block/sand_height2" },
+        "layers=2":  { "model": "minestuck:block/sand_height4" },
+        "layers=3":  { "model": "minestuck:block/sand_height6" },
+        "layers=4":  { "model": "minestuck:block/sand_height8" },
+        "layers=5":  { "model": "minestuck:block/sand_height10" },
+        "layers=6":  { "model": "minestuck:block/sand_height12" },
+        "layers=7":  { "model": "minestuck:block/sand_height14" },
+        "layers=8":  { "model": "block/sand" }
     }
 }

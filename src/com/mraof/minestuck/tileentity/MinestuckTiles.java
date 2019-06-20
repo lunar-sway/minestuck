@@ -1,9 +1,12 @@
 package com.mraof.minestuck.tileentity;
 
+import com.mraof.minestuck.Minestuck;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class MinestuckTiles
 {
 	public static final TileEntityType<TileEntityComputer> COMPUTER = new TileEntityType<>(TileEntityComputer::new,null);
@@ -27,7 +30,7 @@ public class MinestuckTiles
 	public static final TileEntityType<TileEntityGate> GATE = new TileEntityType<>(TileEntityGate::new,null);
 	
 	@SubscribeEvent
-	public static void registerTileEntityType(RegistryEvent.Register<TileEntityType<?>> event)
+	public static void registerTileEntityType(final RegistryEvent.Register<TileEntityType<?>> event)
 	{
 		event.getRegistry().register(COMPUTER.setRegistryName("computer"));
 		event.getRegistry().register(MINI_CRUXTRUDER.setRegistryName("mini_cruxtruder"));

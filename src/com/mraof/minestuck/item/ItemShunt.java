@@ -20,6 +20,7 @@ public class ItemShunt extends Item
 	public ItemShunt(Properties properties)
 	{
 		super(properties);
+		this.addPropertyOverride(ItemCaptchaCard.CONTENT_NAME, ItemCaptchaCard.CONTENT);
 	}
 	
 	@Override

@@ -1,17 +1,22 @@
 package com.mraof.minestuck;
 
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.command.*;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
+import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tileentity.*;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -57,13 +62,12 @@ public class Minestuck
 		ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.GUIFACTORY, () -> GuiHandler::provideGuiContainer);
 		
 		MinecraftForge.EVENT_BUS.register(this);
+		//MinecraftForge.EVENT_BUS.register(GristType.class);
 	}
 	
 	private void setup(final FMLCommonSetupEvent event)
 	{
 		//isClientRunning = event.getSide().isClient();
-		
-		//Debug.logger = event.getModLog();
 		
 		//MinestuckConfig.loadConfigFile(event.getSuggestedConfigurationFile(), event.getSide());
 		
@@ -105,6 +109,7 @@ public class Minestuck
 	@SubscribeEvent
 	public void serverStarting(FMLServerStartingEvent event)
 	{
+		
 		//if(!event.getServer().isDedicatedServer() && Minestuck.class.getAnnotation(Mod.class).version().startsWith("@")) TODO Find an alternative to detect dev environment
 			event.getServer().setOnlineMode(false);	//Makes it possible to use LAN in a development environment
 		

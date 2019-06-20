@@ -1,9 +1,12 @@
 package com.mraof.minestuck.world.biome;
 
+import com.mraof.minestuck.Minestuck;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class BiomeMinestuck extends Biome
 {
 	
@@ -15,7 +18,7 @@ public class BiomeMinestuck extends Biome
 	}
 	
 	@SubscribeEvent
-	public static void registerBiomes(RegistryEvent.Register<Biome> event)
+	public static void registerBiomes(final RegistryEvent.Register<Biome> event)
 	{
 		/*mediumNormal = new BiomeMinestuck(new BiomeProperties("The Medium")).setRegistryName("medium");
 		mediumOcean = new BiomeMinestuck(new BiomeProperties("The Medium (Ocean)").setBaseBiome("medium")).setRegistryName("medium_ocean");

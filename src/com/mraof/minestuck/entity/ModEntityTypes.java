@@ -11,7 +11,6 @@ import com.mraof.minestuck.entity.consort.EntityIguana;
 import com.mraof.minestuck.entity.consort.EntityNakagator;
 import com.mraof.minestuck.entity.consort.EntitySalamander;
 import com.mraof.minestuck.entity.consort.EntityTurtle;
-import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.entity.item.EntityCrewPoster;
 import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.entity.item.EntityHologram;
@@ -25,8 +24,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.IForgeRegistry;
 
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public final class ModEntityTypes
 {
 	public static EntityType<EntityFrog> FROG;
@@ -62,7 +63,7 @@ public final class ModEntityTypes
 	public static EntityType<EntityHologram> HOLOGRAM;
 
 	@SubscribeEvent
-	public static void registerEntities(RegistryEvent.Register<EntityType<?>> event)
+	public static void registerEntities(final RegistryEvent.Register<EntityType<?>> event)
 	{
 		IForgeRegistry<EntityType<?>> registry = event.getRegistry();
 		FROG = register(registry, "frog", EntityType.Builder.create(EntityFrog.class, EntityFrog::new));

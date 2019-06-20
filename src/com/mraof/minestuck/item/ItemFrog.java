@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.EntityFrog;
 
 import net.minecraft.block.state.IBlockState;
@@ -24,6 +25,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
@@ -35,6 +37,7 @@ public class ItemFrog extends Item
 	public ItemFrog(Properties properties)
 	{
 		super(properties);
+		this.addPropertyOverride(new ResourceLocation(Minestuck.MOD_ID, "type"), (stack, world, holder) -> stack.hasTag() ? 0 : stack.getTag().getInt("Type"));
 	}
 	
 	@Override
@@ -155,19 +158,18 @@ public class ItemFrog extends Item
 	@Nullable
 	public static Entity spawnCreature(World worldIn, double x, double y, double z, int type)
 	{
-			Entity entity = null;
+		EntityLiving entity = null;
 
 			for (int i = 0; i < 1; ++i)
 			{
 				entity = new EntityFrog(worldIn, type);
 	
-				EntityLiving entityliving = (EntityLiving) entity;
 				entity.setLocationAndAngles(x, y, z, MathHelper.wrapDegrees(worldIn.rand.nextFloat() * 360.0F), 0.0F);
-				entityliving.rotationYawHead = entityliving.rotationYaw;
-				entityliving.renderYawOffset = entityliving.rotationYaw;
-				entityliving.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos(entityliving)), null, null);
+				entity.rotationYawHead = entity.rotationYaw;
+				entity.renderYawOffset = entity.rotationYaw;
+				entity.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos(entity)), null, null);
 				worldIn.spawnEntity(entity);
-				entityliving.playAmbientSound();
+				entity.playAmbientSound();
 			}
 
 			return entity;
@@ -203,7 +205,7 @@ public class ItemFrog extends Item
 		}
 	}
 	
-	public int getSkinColor(ItemStack stack)
+	public static int getSkinColor(ItemStack stack)
 	{
 		
 		NBTTagCompound nbttagcompound = stack.getTag();
@@ -219,7 +221,7 @@ public class ItemFrog extends Item
 		return 0x4BEC13;
 	}
 	
-	public int getEyeColor(ItemStack stack)
+	public static int getEyeColor(ItemStack stack)
 	{
 		
 		NBTTagCompound nbttagcompound = stack.getTag();
@@ -235,7 +237,7 @@ public class ItemFrog extends Item
 		return 0xC7DB95;
 	}
 	
-	public int getBellyColor(ItemStack stack)
+	public static int getBellyColor(ItemStack stack)
 	{
 		
 		NBTTagCompound nbttagcompound = stack.getTag();

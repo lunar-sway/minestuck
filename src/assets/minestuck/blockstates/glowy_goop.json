@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "minestuck:glowy_goop" }
+        "": { "model": "minestuck:block/glowy_goop" }
     }
 }

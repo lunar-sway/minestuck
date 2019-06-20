@@ -1,11 +1,11 @@
 {
 	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
 	"textures": {
-		"0": "minestuck:blocks/green",
-		"1": "minestuck:blocks/hubback",
-		"3": "minestuck:blocks/bsod",
-		"6": "minestuck:blocks/keysgreen",
-		"particle": "minestuck:blocks/green"
+		"0": "minestuck:block/green",
+		"1": "minestuck:block/hubback",
+		"3": "minestuck:block/bsod",
+		"6": "minestuck:block/keysgreen",
+		"particle": "minestuck:block/green"
 	},
 	"elements": [
 		{

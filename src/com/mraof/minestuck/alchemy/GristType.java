@@ -14,7 +14,7 @@ import net.minecraftforge.registries.*;
 
 import java.util.Collection;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID)
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class GristType extends ForgeRegistryEntry<GristType> implements Comparable<GristType>
 {
 	public static final GristType BUILD = new GristType("build", 0.0F, 1, new ResourceLocation("minestuck", "build"));
@@ -136,17 +136,17 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 	}
 	
 	@SubscribeEvent
-	public static void onRegistryNewRegistry(RegistryEvent.NewRegistry event)
+	public static void onRegistryNewRegistry(final RegistryEvent.NewRegistry event)
 	{
 		REGISTRY = (ForgeRegistry<GristType>) new RegistryBuilder<GristType>()
 				.setName(new ResourceLocation("minestuck", "grist"))
 				.setType(GristType.class)
-				.addCallback((IForgeRegistry.CreateCallback<GristType>) (owner, stage) -> owner.setSlaveMap(new ResourceLocation("scapecraft:registry"), new RegistryNamespaced<GristType>()))
+				.addCallback((IForgeRegistry.CreateCallback<GristType>) (owner, stage) -> owner.setSlaveMap(new ResourceLocation("minestuck:registry"), new RegistryNamespaced<GristType>()))
 				.create();
 	}
 
 	@SubscribeEvent
-	public static void registerGrist(RegistryEvent.Register<GristType> event)
+	public static void registerGrist(final RegistryEvent.Register<GristType> event)
 	{
 		event.getRegistry().registerAll(
 				BUILD.setRegistryName("minestuck", "build").setCandyItem(new ItemStack(MinestuckItems.BUILD_GUSHERS)),

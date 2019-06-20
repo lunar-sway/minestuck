@@ -44,20 +44,20 @@ public class CombinationRegistry {
 	 * Creates an entry for a result of combining the cards of two items. Used in the Punch Designix.
 	 */
 	public static void addCombination(@Nonnull IItemProvider input1, @Nonnull IItemProvider input2, Mode mode, @Nonnull ItemStack output) {
-		addCombination(input1.asItem(), input2.asItem(), mode, output);
+		addCombinationInternal(input1.asItem(), input2.asItem(), mode, output);
 	}
 	
 	public static void addCombination(Tag<Item> tagInput, IItemProvider input, Mode mode, @Nonnull ItemStack output)
 	{
-		addCombination(tagInput, input.asItem(), mode, output);
+		addCombinationInternal(tagInput, input.asItem(), mode, output);
 	}
 	
 	public static void addCombination(Tag<Item> input1, Tag<Item> input2, Mode mode, @Nonnull ItemStack output)
 	{
-		addCombination(input1, input2, mode, output);
+		addCombinationInternal(input1, input2, mode, output);
 	}
 	
-	private static void addCombination(Object input1, Object input2, Mode mode, @Nonnull ItemStack output)
+	private static void addCombinationInternal(Object input1, Object input2, Mode mode, @Nonnull ItemStack output)
 	{
 		try
 		{

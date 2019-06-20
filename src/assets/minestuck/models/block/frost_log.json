@@ -1,7 +1,7 @@
 {
     "parent": "block/cube_column",
     "textures": {
-        "end": "minestuck:blocks/log_frost_top",
-        "side": "minestuck:blocks/log_frost"
+        "end": "minestuck:block/frost_log_top",
+        "side": "minestuck:block/frost_log"
     }
 }

@@ -22,8 +22,11 @@ public class ItemDualWeapon extends ItemWeapon
 	public ItemDualWeapon(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, ItemDualWeapon otherItem, Properties builder)
 	{
 		super(tier, attackDamageIn, attackSpeedIn, efficiency, builder);
-		this.otherItem = otherItem;
-		otherItem.otherItem = this;
+		if(otherItem != null)
+		{
+			this.otherItem = otherItem;
+			otherItem.otherItem = this;
+		}
 	}
 	
 	

@@ -1,20 +1,13 @@
 {
     "variants": {
-        "axis=y,axis2=none":  { "model": "minestuck:end_log" },
-        "axis=z,axis2=none":   { "model": "minestuck:end_log", "x": 90 },
-        "axis=x,axis2=none":   { "model": "minestuck:end_log", "x": 90, "y": 90 },
-        "axis=none,axis2=none": { "model": "minestuck:end_log_bark" },
-        "axis=y,axis2=x":  { "model": "minestuck:end_log_double", "x": 90 },
-        "axis=z,axis2=x":   { "model": "minestuck:end_log_double"},
-        "axis=x,axis2=x":   { "model": "minestuck:end_log", "x": 90, "y": 90 },
-        "axis=none,axis2=x": { "model": "minestuck:end_log", "x": 90, "y": 90 },
-        "axis=y,axis2=y":  { "model": "minestuck:end_log" },
-        "axis=z,axis2=y":   { "model": "minestuck:end_log_double", "x": 90, "y": 90 },
-        "axis=x,axis2=y":   { "model": "minestuck:end_log_double", "x": 90 },
-        "axis=none,axis2=y": { "model": "minestuck:end_log" },
-        "axis=y,axis2=z":  { "model": "minestuck:end_log_double", "x": 90, "y": 90 },
-        "axis=z,axis2=z":   { "model": "minestuck:end_log", "x": 90 },
-        "axis=x,axis2=z":   { "model": "minestuck:end_log_double" },
-        "axis=none,axis2=z": { "model": "minestuck:end_log", "x": 90 }
+        "axis=y,axis_2=x":  { "model": "minestuck:block/end_log_double", "x": 90 },
+        "axis=z,axis_2=x":  { "model": "minestuck:block/end_log_double"},
+        "axis=x,axis_2=x":  { "model": "minestuck:block/end_log", "x": 90, "y": 90 },
+        "axis=y,axis_2=y":  { "model": "minestuck:block/end_log" },
+        "axis=z,axis_2=y":  { "model": "minestuck:block/end_log_double", "x": 90, "y": 90 },
+        "axis=x,axis_2=y":  { "model": "minestuck:block/end_log_double", "x": 90 },
+        "axis=y,axis_2=z":  { "model": "minestuck:block/end_log_double", "x": 90, "y": 90 },
+        "axis=z,axis_2=z":  { "model": "minestuck:block/end_log", "x": 90 },
+        "axis=x,axis_2=z":  { "model": "minestuck:block/end_log_double" }
     }
 }

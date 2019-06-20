@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "minestuck:items/unknowable_egg"
+    "layer0": "minestuck:item/unknowable_egg"
   }
 }

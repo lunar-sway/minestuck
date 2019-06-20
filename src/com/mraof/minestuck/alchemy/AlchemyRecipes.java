@@ -1141,6 +1141,11 @@ public class AlchemyRecipes
 		return item.getItem() == MinestuckItems.CAPTCHA_CARD && item.hasTag() && item.getTag().getBoolean("punched");
 	}
 	
+	public static boolean isGhostCard(ItemStack item)
+	{
+		return item.getItem() == MinestuckItems.CAPTCHA_CARD && hasDecodedItem(item) && item.getTag().getInt("contentSize") <= 0;
+	}
+	
 	public static boolean hasDecodedItem(ItemStack item)
 	{
 		return item.hasTag() && item.getTag().contains("contentID", 8);

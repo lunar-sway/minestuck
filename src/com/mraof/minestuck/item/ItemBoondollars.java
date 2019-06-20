@@ -1,5 +1,6 @@
 package com.mraof.minestuck.item;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -8,10 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
+import net.minecraft.util.*;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
@@ -26,6 +24,7 @@ public class ItemBoondollars extends Item	//TODO Add custom crafting recipe that
 	public ItemBoondollars(Properties properties)
 	{
 		super(properties);
+		this.addPropertyOverride(new ResourceLocation(Minestuck.MOD_ID, "count"), (stack, world, holder) -> getCount(stack));
 	}
 	
 	@Override

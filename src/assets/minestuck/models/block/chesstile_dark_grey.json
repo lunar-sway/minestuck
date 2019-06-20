@@ -1,6 +1,0 @@
-{
-    "parent": "block/cube_all",
-    "textures": {
-        "all": "minestuck:blocks/dark_grey_chess_tile"
-    }
-}

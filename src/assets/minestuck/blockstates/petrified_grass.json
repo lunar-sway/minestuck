@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "minestuck:petrified_grass" }
+        "": { "model": "minestuck:block/petrified_grass" }
     }
 }

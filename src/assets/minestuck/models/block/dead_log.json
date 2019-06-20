@@ -1,7 +1,7 @@
 {
     "parent": "block/cube_column",
     "textures": {
-        "end": "minestuck:blocks/dead_log",
-        "side": "minestuck:blocks/dead_log_side"
+        "end": "minestuck:block/dead_log_top",
+        "side": "minestuck:block/dead_log"
     }
 }

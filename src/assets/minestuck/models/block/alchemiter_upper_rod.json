@@ -1,7 +1,7 @@
 {
     "textures": {
-        "particle": "minestuck:machines/alchemiter/rods",
-        "rod": "minestuck:machines/alchemiter/rods"
+        "particle": "minestuck:block/machine/alchemiter/rods",
+        "rod": "minestuck:block/machine/alchemiter/rods"
     },
     "elements": [
         {

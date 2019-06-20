@@ -1,6 +1,6 @@
 {
     "parent": "item/handheld",
     "textures": {
-        "layer0": "minestuck:items/claw_of_nrubyiglith"
+        "layer0": "minestuck:item/claw_of_nrubyiglith"
     }
 }

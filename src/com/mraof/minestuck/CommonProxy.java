@@ -35,16 +35,6 @@ public class CommonProxy
 {
 	public static void init()
 	{
-		MinecraftForge.EVENT_BUS.register(MinestuckSoundHandler.instance);
-		MinecraftForge.EVENT_BUS.register(MinestuckBlocks.class);
-		MinecraftForge.EVENT_BUS.register(MinestuckItems.class);
-		MinecraftForge.EVENT_BUS.register(MinestuckTiles.class);
-		MinecraftForge.EVENT_BUS.register(ModEntityTypes.class);
-		MinecraftForge.EVENT_BUS.register(BiomeMinestuck.class);
-		MinecraftForge.EVENT_BUS.register(MinestuckDimensionHandler.class);
-		
-		MinestuckSoundHandler.initSound();
-		
 		MinestuckCriteriaTriggers.register();
 		
 		//register ore generation

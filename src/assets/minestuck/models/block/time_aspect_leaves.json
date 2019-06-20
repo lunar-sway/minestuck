@@ -1,0 +1,6 @@
+{
+    "parent": "block/leaves",
+    "textures": {
+        "all": "minestuck:block/time_aspect_leaves"
+    }
+}

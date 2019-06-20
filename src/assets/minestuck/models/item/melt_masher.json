@@ -1,6 +1,6 @@
 {
     "parent": "item/handheld",
     "textures": {
-        "layer0": "minestuck:items/melt_masher"
+        "layer0": "minestuck:item/melt_masher"
     }
 }

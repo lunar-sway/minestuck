@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "minestuck:gold_ore_sandstone_red" }
+        "": { "model": "minestuck:block/gold_ore_sandstone_red" }
     }
 }

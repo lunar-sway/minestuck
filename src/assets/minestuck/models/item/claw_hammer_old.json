@@ -1,6 +1,6 @@
 {
     "parent": "item/handheld",
     "textures": {
-        "layer0": "minestuck:items/claw_hammer"
+        "layer0": "minestuck:item/claw_hammer"
     }
 }

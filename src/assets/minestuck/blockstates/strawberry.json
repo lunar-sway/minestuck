@@ -1,10 +1,10 @@
 {
     "variants": {
-        "facing=up": { "model": "minestuck:strawberry" },
-        "facing=down": { "model": "minestuck:strawberry", "x": 180 },
-        "facing=north": { "model": "minestuck:strawberry", "x": 90 },
-        "facing=east": { "model": "minestuck:strawberry", "x": 90, "y": 90 },
-        "facing=south": { "model": "minestuck:strawberry", "x": 90, "y": 180 },
-        "facing=west": { "model": "minestuck:strawberry", "x": 90, "y": 270 }
+        "facing=up":    { "model": "minestuck:block/strawberry" },
+        "facing=down":  { "model": "minestuck:block/strawberry", "x": 180 },
+        "facing=north": { "model": "minestuck:block/strawberry", "x": 90 },
+        "facing=east":  { "model": "minestuck:block/strawberry", "x": 90, "y": 90 },
+        "facing=south": { "model": "minestuck:block/strawberry", "x": 90, "y": 180 },
+        "facing=west":  { "model": "minestuck:block/strawberry", "x": 90, "y": 270 }
     }
 }

@@ -1,6 +1,6 @@
 {
     "parent": "block/cube_all",
     "textures": {
-        "all": "minestuck:blocks/coarse_end_stone"
+        "all": "minestuck:block/coarse_end_stone"
     }
 }

@@ -1,8 +1,7 @@
 {
     "variants": {
-        "axis=y":  { "model": "minestuck:frost_log" },
-        "axis=z":   { "model": "minestuck:frost_log", "x": 90 },
-        "axis=x":   { "model": "minestuck:frost_log", "x": 90, "y": 90 },
-        "axis=none": { "model": "minestuck:frost_log_bark" }
+        "axis=y":  { "model": "minestuck:block/frost_log" },
+        "axis=z":   { "model": "minestuck:block/frost_log", "x": 90 },
+        "axis=x":   { "model": "minestuck:block/frost_log", "x": 90, "y": 90 }
     }
 }

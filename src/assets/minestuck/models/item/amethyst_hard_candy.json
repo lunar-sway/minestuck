@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "minestuck:items/amethyst_hard_candy"
+        "layer0": "minestuck:item/amethyst_hard_candy"
     }
 }

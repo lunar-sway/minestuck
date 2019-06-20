@@ -1,0 +1,16 @@
+{
+    "variants": {
+        "facing=north,count=0": { "model": "minestuck:block/totem_lathe_card_slot" },
+        "facing=east,count=0":  { "model": "minestuck:block/totem_lathe_card_slot", "y": 90 },
+        "facing=south,count=0": { "model": "minestuck:block/totem_lathe_card_slot", "y": 180 },
+        "facing=west,count=0":  { "model": "minestuck:block/totem_lathe_card_slot", "y": 270 },
+        "facing=north,count=1": { "model": "minestuck:block/totem_lathe_card_slot_c" },
+        "facing=east,count=1":  { "model": "minestuck:block/totem_lathe_card_slot_c", "y": 90 },
+        "facing=south,count=1": { "model": "minestuck:block/totem_lathe_card_slot_c", "y": 180 },
+        "facing=west,count=1":  { "model": "minestuck:block/totem_lathe_card_slot_c", "y": 270 },
+        "facing=north,count=2": { "model": "minestuck:block/totem_lathe_card_slot_cc" },
+        "facing=east,count=2":  { "model": "minestuck:block/totem_lathe_card_slot_cc", "y": 90 },
+        "facing=south,count=2": { "model": "minestuck:block/totem_lathe_card_slot_cc", "y": 180 },
+        "facing=west,count=2":  { "model": "minestuck:block/totem_lathe_card_slot_cc", "y": 270 }
+    }
+}

@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.block.BlockCruxiteDowel;
+import com.mraof.minestuck.item.ItemCaptchaCard;
 import com.mraof.minestuck.tileentity.TileEntityItemStack;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import net.minecraft.block.Block;
@@ -25,9 +26,11 @@ import java.util.List;
 
 public class ItemDowel extends ItemBlock
 {
+	
 	public ItemDowel(Block blockIn, Properties builder)
 	{
 		super(blockIn, builder);
+		this.addPropertyOverride(ItemCaptchaCard.CONTENT_NAME, ItemCaptchaCard.CONTENT);
 	}
 	
 	@Override

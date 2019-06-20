@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "minestuck:coarse_end_stone" }
+        "": { "model": "minestuck:block/coarse_end_stone" }
     }
 }

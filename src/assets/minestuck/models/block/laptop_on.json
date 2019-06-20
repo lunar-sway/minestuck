@@ -1,10 +1,10 @@
 {
 	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
 	"textures": {
-		"0": "minestuck:blocks/white",
-		"3": "minestuck:blocks/screen",
-		"6": "minestuck:blocks/keys",
-		"particle": "minestuck:blocks/white"
+		"0": "minestuck:block/white",
+		"3": "minestuck:block/screen",
+		"6": "minestuck:block/keys",
+		"particle": "minestuck:block/white"
 	},
 	"elements": [
 		{

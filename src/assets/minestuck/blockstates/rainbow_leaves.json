@@ -1,8 +1,5 @@
 {
     "variants": {
-        "check_decay=false,decayable=false": { "model": "minestuck:rainbow_leaves" },
-        "check_decay=true,decayable=false": { "model": "minestuck:rainbow_leaves" },
-        "check_decay=false,decayable=true": { "model": "minestuck:rainbow_leaves" },
-        "check_decay=true,decayable=true": { "model": "minestuck:rainbow_leaves" }
+        "": { "model": "minestuck:block/rainbow_leaves" }
     }
 }

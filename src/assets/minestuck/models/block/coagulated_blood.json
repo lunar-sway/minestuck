@@ -1,6 +1,6 @@
 {
     "parent": "block/cube_all",
     "textures": {
-        "all": "minestuck:blocks/coagulated_blood"
+        "all": "minestuck:block/coagulated_blood"
     }
 }
