@@ -15,6 +15,7 @@ import net.minecraft.nbt.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerList;
 import net.minecraftforge.common.UsernameCache;
+import net.minecraftforge.common.util.FakePlayer;
 
 /**
  * Used to encode/decode player usernames, to handle uses with LAN.
@@ -54,6 +55,9 @@ public class IdentifierHandler {
 	
 	public static PlayerIdentifier encode(EntityPlayer player)
 	{
+		if(player instanceof FakePlayer || player.getName() == null)
+			return null;
+		
 		for(PlayerIdentifier identifier : identifierList)
 			if(identifier.appliesTo(player))
 				return identifier;

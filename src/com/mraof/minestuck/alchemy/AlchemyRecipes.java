@@ -534,6 +534,8 @@ public class AlchemyRecipes
 		
 		AlchemyCostRegistry.addGristConversion(CACTUS_CUTLASS, new GristSet(new GristType[] {GristType.AMBER, GristType.MARBLE}, new int[] {7, 2}));
 		AlchemyCostRegistry.addGristConversion(STEAK_SWORD, new GristSet(new GristType[] {GristType.IODINE, GristType.TAR}, new int[] {55, 18}));
+		GristRegistry.addGristConversion(new ItemStack(beefSword), false, new GristSet(new GristType[] {GristType.Iodine}, new int[] {55}));
+		GristRegistry.addGristConversion(new ItemStack(irradiatedSteakSword), false, new GristSet(new GristType[] {GristType.Iodine, GristType.Tar, GristType.Uranium}, new int[] {55, 10, 8}));
 		AlchemyCostRegistry.addGristConversion(SORD, new GristSet(GristType.BUILD, 0));
 		AlchemyCostRegistry.addGristConversion(KATANA, new GristSet(new GristType[] {GristType.CHALK, GristType.QUARTZ, GristType.RUST}, new int[] {12, 10, 6}));
 		AlchemyCostRegistry.addGristConversion(FIRE_POKER, new GristSet(new GristType[] {GristType.AMBER, GristType.RUBY, GristType.SULFUR, GristType.GOLD}, new int[] {41, 14, 38, 3}));

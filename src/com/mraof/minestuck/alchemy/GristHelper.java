@@ -180,8 +180,10 @@ public class GristHelper {
 		return i;
 	}
 	
-	public static void increase(MinecraftServer server, PlayerIdentifier player, GristSet set)
+	public static boolean increase(MinecraftServer server, PlayerIdentifier player, GristSet set)
 	{
+		if(player == null || set == null)
+			return false;
 		Map<GristType, Integer> reqs = set.getMap();
 		if (reqs != null)
 		{
@@ -191,6 +193,7 @@ public class GristHelper {
 				notify(server, player, pairs.getKey().getDisplayName(), pairs.getValue(), "gained");
 			}
 		}
+		return true;
 	}
 	
 	private static void notify(MinecraftServer server, PlayerIdentifier player, ITextComponent type, Integer difference, String action)
