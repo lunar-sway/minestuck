@@ -104,7 +104,7 @@ public class BlockGate extends Block
 				TileEntity te = worldIn.getTileEntity(mainPos);
 				if(te instanceof TileEntityGate)
 					((TileEntityGate) te).teleportEntity(worldIn, (EntityPlayerMP) entityIn, this);
-			} else worldIn.setBlockToAir(pos);
+			} else worldIn.removeBlock(pos);
 		}
 	}
 	
