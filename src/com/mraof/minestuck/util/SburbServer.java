@@ -68,11 +68,11 @@ public class SburbServer extends ButtonListProgram
 	@Override
 	public void onClosed(TileEntityComputer te)
 	{
-		SburbConnection c = SkaianetHandler.getServerConnection(ComputerData.createData(te));
+		SburbConnection c = SkaianetHandler.get(te.getWorld()).getServerConnection(ComputerData.createData(te));
 		if(c != null)
-			SkaianetHandler.closeConnection(te.getWorld().getServer(), te.owner, c.getClientIdentifier(), false);
+			SkaianetHandler.get(te.getWorld()).closeConnection(te.owner, c.getClientIdentifier(), false);
 		else if(te.getData(1).getBoolean("isOpen"))
-			SkaianetHandler.closeConnection(te.getWorld().getServer(), te.owner, null, false);
+			SkaianetHandler.get(te.getWorld()).closeConnection(te.owner, null, false);
 	}
 	
 }

@@ -115,7 +115,7 @@ public class TileEntityComputer extends TileEntity
 			tagCompound.setInt("ownerId", owner.getId());
 		if(hasProgram(1))
 		{
-			SburbConnection c = SkaianetHandler.getServerConnection(ComputerData.createData(this));
+			SburbConnection c = SkaianetHandler.get(getWorld()).getServerConnection(ComputerData.createData(this));
 			if(c != null)
 				tagCompound.getCompound("programData").getCompound("program_1").setInt("connectedClient", c.getClientIdentifier().getId());
 		}

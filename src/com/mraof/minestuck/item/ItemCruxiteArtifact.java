@@ -71,7 +71,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 				if(!SburbHandler.shouldEnterNow(player))
 					return;
 				
-				SburbConnection c = SkaianetHandler.getMainConnection(IdentifierHandler.encode(player), true);
+				SburbConnection c = SkaianetHandler.get(player.world).getMainConnection(IdentifierHandler.encode(player), true);
 				
 				//Only preforms Entry if you have no connection, haven't Entered, or you're not in a Land and additional Entries are permitted.
 				if(c == null || !c.enteredGame() || !MinestuckConfig.stopSecondEntry && !MinestuckDimensionHandler.isLandDimension(player.world.getDimension().getType()))
@@ -106,7 +106,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 					}
 					else
 					{
-						c = SburbHandler.getConnectionForDimension(player.dimension);
+						c = SburbHandler.getConnectionForDimension(player.getServer(), player.dimension);
 						if(c != null && c.getClientIdentifier().equals(IdentifierHandler.encode(player)))
 						{
 							MinestuckCriteriaTriggers.CRUXITE_ARTIFACT.trigger((EntityPlayerMP) player);
@@ -144,7 +144,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 		this.origin = origin;
 		
 		creative = ((EntityPlayerMP) player).interactionManager.isCreative();
-		SburbConnection conn = SkaianetHandler.getMainConnection(IdentifierHandler.encode((EntityPlayer) player), true);
+		SburbConnection conn = SkaianetHandler.get(worldserver0).getMainConnection(IdentifierHandler.encode((EntityPlayer) player), true);
 		
 		topY = MinestuckConfig.adaptEntryBlockHeight ? getTopHeight(worldserver0, x, y, z) : y + artifactRange;
 		yDiff = 127 - topY;
@@ -303,7 +303,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 			
 			player.setPositionAndUpdate(player.posX + xDiff, player.posY + yDiff, player.posZ + zDiff);
 			
-			SkaianetHandler.clearMovingList();
+			SkaianetHandler.get(worldserver0).clearMovingList();
 			
 			//Remove entities that were generated in the process of teleporting entities and removing blocks.
 			// This is usually caused by "anchored" blocks being updated between the removal of their anchor and their own removal.
@@ -509,7 +509,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 					chunkTo.addTileEntity(dest, te1);
 				else Debug.warnf("Unable to create a new tile entity %s when teleporting blocks to the medium!", tileEntity.getType().getRegistryName());
 				if(tileEntity instanceof TileEntityComputer)
-					SkaianetHandler.movingComputer((TileEntityComputer) tileEntity, (TileEntityComputer) te1);
+					SkaianetHandler.get(chunkTo.getWorld()).movingComputer((TileEntityComputer) tileEntity, (TileEntityComputer) te1);
 			}
 		}
 	}

@@ -22,6 +22,7 @@ import com.mraof.minestuck.item.MinestuckItems;
 import net.minecraft.nbt.INBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -41,7 +42,7 @@ public class DeployList
 		registerItem("cruxtruder", new ItemStack(MinestuckBlocks.CRUXTRUDER_CENTER), new GristSet(), new GristSet(GristType.BUILD, 100), 0);
 		registerItem("totem_lathe", new ItemStack(MinestuckBlocks.TOTEM_LATHE_MIDDLE), new GristSet(), new GristSet(GristType.BUILD, 100), 0);
 		registerItem("artifact_card", new GristSet(), null, 0, connection -> !connection.enteredGame(),
-				connection -> AlchemyRecipes.createCard(SburbHandler.getEntryItem(connection.getClientIdentifier()), true));
+				connection -> AlchemyRecipes.createCard(SburbHandler.getEntryItem(connection), true));
 		registerItem("alchemiter", new ItemStack(MinestuckBlocks.ALCHEMITER_CENTER), new GristSet(), new GristSet(GristType.BUILD, 100), 0);
 		registerItem("punch_designix", 0,null, connection -> new ItemStack(MinestuckBlocks.PUNCH_DESIGNIX_SLOT),
 				(isPrimary, connection) -> new GristSet(SburbHandler.getPrimaryGristType(connection.getClientIdentifier()), 4));
@@ -98,9 +99,9 @@ public class DeployList
 			}
 	}
 	
-	public static List<DeployEntry> getItemList(SburbConnection c)
+	public static List<DeployEntry> getItemList(MinecraftServer server, SburbConnection c)
 	{
-		int tier = SburbHandler.availableTier(c.getClientIdentifier());
+		int tier = SburbHandler.availableTier(server, c.getClientIdentifier());
 		ArrayList<DeployEntry> itemList = new ArrayList<>();
 		for(DeployEntry entry : list)
 			if(entry.tier <= tier && (entry.condition == null || entry.condition.test(c)))
@@ -263,12 +264,12 @@ public class DeployList
 	{
 		boolean test(SburbConnection connection);
 	}
-	static NBTTagCompound getDeployListTag(SburbConnection c)
+	static NBTTagCompound getDeployListTag(MinecraftServer server, SburbConnection c)
 	{
 		NBTTagCompound nbt = new NBTTagCompound();
 		NBTTagList tagList = new NBTTagList();
 		nbt.setTag("l", tagList);
-		int tier = SburbHandler.availableTier(c.getClientIdentifier());
+		int tier = SburbHandler.availableTier(server, c.getClientIdentifier());
 		for(int i = 0; i < list.size(); i++)
 		{
 			DeployEntry entry = list.get(i);

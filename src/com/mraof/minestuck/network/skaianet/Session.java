@@ -164,7 +164,6 @@ public class Session
 			}
 		}
 		
-		SkaianetHandler.connections.addAll(this.connections);
 		locked = nbt.getBoolean("locked");
 		
 		checkIfCompleted();

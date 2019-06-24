@@ -3,7 +3,6 @@ package com.mraof.minestuck.tileentity;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.util.PositionTeleporter;
-import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.GateHandler;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -75,7 +74,7 @@ public class TileEntityGate extends TileEntity
 	public NBTTagCompound getUpdateTag()
 	{
 		NBTTagCompound nbt = super.getUpdateTag();
-		nbt.setInt("color", SburbHandler.getColorForDimension(this.world.getDimension().getType()));
+		nbt.setInt("color", SburbHandler.getColorForDimension(world));
 		return nbt;
 	}
 	
@@ -83,7 +82,7 @@ public class TileEntityGate extends TileEntity
 	public SPacketUpdateTileEntity getUpdatePacket()
 	{
 		NBTTagCompound nbt = new NBTTagCompound();
-		nbt.setInt("color", SburbHandler.getColorForDimension(this.world.getDimension().getType()));
+		nbt.setInt("color", SburbHandler.getColorForDimension(world));
 		return new SPacketUpdateTileEntity(this.pos, 0, nbt);
 	}
 	

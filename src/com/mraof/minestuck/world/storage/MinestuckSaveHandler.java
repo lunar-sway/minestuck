@@ -48,7 +48,6 @@ public class MinestuckSaveHandler extends WorldSavedData    //TODO https://mcfor
 			
 			ServerEditHandler.saveData(nbt);    //Keep this before skaianet
 			MinestuckDimensionHandler.saveData(nbt);
-			SkaianetHandler.saveData(nbt);
 			MinestuckPlayerData.writeToNBT(nbt);
 			
 			
@@ -64,7 +63,6 @@ public class MinestuckSaveHandler extends WorldSavedData    //TODO https://mcfor
 	{
 				ServerEditHandler.loadData(nbt);
 				MinestuckDimensionHandler.loadData(nbt);
-				SkaianetHandler.loadData(nbt.getCompoundTag("skaianet"));
 				MinestuckPlayerData.readFromNBT(nbt);
 				
 				ServerEventHandler.tickTasks.clear();

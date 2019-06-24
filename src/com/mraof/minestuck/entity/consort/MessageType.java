@@ -52,7 +52,7 @@ public abstract class MessageType
 		}
 		
 		Object[] obj = new Object[args.length];
-		SburbConnection c = SburbHandler.getConnectionForDimension(consort.homeDimension);
+		SburbConnection c = SburbHandler.getConnectionForDimension(player.getServer(), consort.homeDimension);
 		Title title = c == null ? null : MinestuckPlayerData.getData(c.getClientIdentifier()).title;
 		for(int i = 0; i < args.length; i++)
 		{

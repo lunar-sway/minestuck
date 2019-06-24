@@ -50,7 +50,7 @@ public class SessionHandler
 	/**
 	 * An array list of the current worlds sessions.
 	 */
-	static List<Session> sessions = new ArrayList<Session>();
+	static List<Session> sessions = new ArrayList<>();	//TODO Objectify in the same manner as skaianet, perhaps?
 	static Map<String, Session> sessionsByName = new HashMap<String, Session>();
 	
 	/**
@@ -254,11 +254,11 @@ public class SessionHandler
 	 * @return True if client connection is not null and client and server session is the same or 
 	 * client connection is null and server connection is null.
 	 */
-	private static boolean canConnect(PlayerIdentifier client, PlayerIdentifier server)
+	private static boolean canConnect(MinecraftServer mcServer, PlayerIdentifier client, PlayerIdentifier server)
 	{
 		Session sClient = getPlayerSession(client), sServer = getPlayerSession(server);
-		SburbConnection cClient = SkaianetHandler.getMainConnection(client, true);
-		SburbConnection cServer = SkaianetHandler.getMainConnection(server, false);
+		SburbConnection cClient = SkaianetHandler.get(mcServer).getMainConnection(client, true);
+		SburbConnection cServer = SkaianetHandler.get(mcServer).getMainConnection(server, false);
 		boolean serverActive = cServer != null;
 		if(!serverActive && sServer != null)
 			for(SburbConnection c : sServer.connections)
@@ -275,9 +275,9 @@ public class SessionHandler
 	/**
 	 * @return Null if successful or an unlocalized error message describing reason.
 	 */
-	static String onConnectionCreated(SburbConnection connection)
+	static String onConnectionCreated(MinecraftServer mcServer, SburbConnection connection)
 	{
-		if(!canConnect(connection.getClientIdentifier(), connection.getServerIdentifier()))
+		if(!canConnect(mcServer, connection.getClientIdentifier(), connection.getServerIdentifier()))
 			return "computer.messageConnectFailed";
 		if(singleSession)
 		{
@@ -329,7 +329,7 @@ public class SessionHandler
 	 * @param normal If the connection was closed by normal means.
 	 * (includes everything but getting crushed by a meteor and other reasons for removal of a main connection)
 	 */
-	static void onConnectionClosed(MinecraftServer server, SburbConnection connection, boolean normal)
+	static void onConnectionClosed(MinecraftServer mcServer, SburbConnection connection, boolean normal)
 	{
 		Session s = getPlayerSession(connection.getClientIdentifier());
 		
@@ -342,11 +342,11 @@ public class SessionHandler
 				else split(s);
 		} else if(!normal) {
 			s.connections.remove(connection);
-			if(SkaianetHandler.getAssociatedPartner(connection.getClientIdentifier(), false) != null)
+			if(SkaianetHandler.get(mcServer).getAssociatedPartner(connection.getClientIdentifier(), false) != null)
 			{
-				SburbConnection c = SkaianetHandler.getMainConnection(connection.getClientIdentifier(), false);
+				SburbConnection c = SkaianetHandler.get(mcServer).getMainConnection(connection.getClientIdentifier(), false);
 				if(c.isActive)
-					SkaianetHandler.closeConnection(server, c.getClientIdentifier(), c.getServerIdentifier(), true);
+					SkaianetHandler.get(mcServer).closeConnection(c.getClientIdentifier(), c.getServerIdentifier(), true);
 				switch(MinestuckConfig.escapeFailureMode) {
 				case 0:
 					c.serverIdentifier = connection.getServerIdentifier();
@@ -361,12 +361,12 @@ public class SessionHandler
 		}
 	}
 	
-	static Map<Integer, String> getServerList(PlayerIdentifier client)
+	static Map<Integer, String> getServerList(MinecraftServer mcServer, PlayerIdentifier client)
 	{
 		Map<Integer, String> map = new HashMap<>();
-		for(PlayerIdentifier server : SkaianetHandler.serversOpen.keySet())
+		for(PlayerIdentifier server : SkaianetHandler.get(mcServer).serversOpen.keySet())
 		{
-			if(canConnect(client, server))
+			if(canConnect(mcServer, client, server))
 			{
 				map.put(server.getId(), server.getUsername());
 			}

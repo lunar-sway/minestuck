@@ -59,6 +59,6 @@ public class SburbConnectPacket
 	{
 		UserListOpsEntry opsEntry = player.getServer().getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
 		if((!MinestuckConfig.privateComputers || IdentifierHandler.encode(player) == this.player.getOwner() || opsEntry != null && opsEntry.getPermissionLevel() >= 2) && ServerEditHandler.getData(player) == null)
-			SkaianetHandler.requestConnection(player.getServer(), this.player, otherPlayer != -1 ? IdentifierHandler.getById(otherPlayer) : null, isClient);
+			SkaianetHandler.get(player.world).requestConnection(this.player, otherPlayer != -1 ? IdentifierHandler.getById(otherPlayer) : null, isClient);
 	}
 }

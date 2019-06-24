@@ -88,11 +88,11 @@ public class ClientEditPacket
 			
 			if(targetPlayer != null && (!MinestuckConfig.privateComputers || user.appliesTo(player) || opsEntry != null && opsEntry.getPermissionLevel() >= 2))
 			{
-				SburbConnection c = SkaianetHandler.getClientConnection(target);
-				if(c == null || c.getServerIdentifier() != user || !(c.isMain() || SkaianetHandler.giveItems(player.getServer(), target)))
+				SburbConnection c = SkaianetHandler.get(player.world).getClientConnection(target);
+				if(c == null || c.getServerIdentifier() != user || !(c.isMain() || SkaianetHandler.get(player.world).giveItems(target)))
 					return;
 				
-				for(DeployList.DeployEntry entry : DeployList.getItemList(c))
+				for(DeployList.DeployEntry entry : DeployList.getItemList(player.getServer(), c))
 				{
 					if(!c.givenItems()[entry.getOrdinal()])
 					{

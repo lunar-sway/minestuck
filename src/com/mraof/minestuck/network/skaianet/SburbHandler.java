@@ -510,13 +510,12 @@ public class SburbHandler
 	}*/
 	
 	/**
-	 * @param player The username of the player, encoded.
+	 * @param c The connection.
 	 * @return Damage value for the entry item
 	 */
-	public static ItemStack getEntryItem(PlayerIdentifier player)
+	public static ItemStack getEntryItem(SburbConnection c)
 	{
-		SburbConnection c = SkaianetHandler.getClientConnection(player); 
-		int colorIndex = MinestuckPlayerData.getData(player).color;
+		int colorIndex = MinestuckPlayerData.getData(c.getClientIdentifier()).color;
 		Item artifact;
 		if(c == null)
 			artifact = MinestuckItems.CRUXITE_APPLE;
@@ -536,15 +535,19 @@ public class SburbHandler
 		return GristType.SHALE;
 	}
 	
-	public static int getColorForDimension(DimensionType dim)
+	public static int getColorForDimension(World world)
 	{
-		SburbConnection c = getConnectionForDimension(dim);
+		SburbConnection c = getConnectionForDimension(world);
 		return c == null ? -1 : MinestuckPlayerData.getData(c.getClientIdentifier()).color;
 	}
 	
-	public static SburbConnection getConnectionForDimension(DimensionType dim)
+	public static SburbConnection getConnectionForDimension(World world)
 	{
-		for(SburbConnection c : SkaianetHandler.connections)
+		return getConnectionForDimension(world.getServer(), world.getDimension().getType());
+	}
+	public static SburbConnection getConnectionForDimension(MinecraftServer mcServer, DimensionType dim)
+	{
+		for(SburbConnection c : SkaianetHandler.get(mcServer).connections)
 			if(c.enteredGame && c.clientHomeLand == dim)
 				return c;
 		return null;
@@ -554,14 +557,14 @@ public class SburbHandler
 	 * 
 	 * @param client The username of the player, encoded.
 	 */
-	public static int availableTier(PlayerIdentifier client)
+	public static int availableTier(MinecraftServer mcServer, PlayerIdentifier client)
 	{
 		Session s = getPlayerSession(client);
 		if(s == null)
 			return -1;
 		if(s.completed)
 			return Integer.MAX_VALUE;
-		SburbConnection c = SkaianetHandler.getClientConnection(client);
+		SburbConnection c = SkaianetHandler.get(mcServer).getClientConnection(client);
 		if(c == null)
 			return -1;
 		int count = -1;
@@ -714,7 +717,7 @@ public class SburbHandler
 	public static boolean canSelectColor(EntityPlayerMP player)
 	{
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		for(SburbConnection c : SkaianetHandler.connections)
+		for(SburbConnection c : SkaianetHandler.get(player.world).connections)
 			if(c.getClientIdentifier().equals(identifier))
 				return false;
 		return true;
@@ -723,7 +726,7 @@ public class SburbHandler
 	public static boolean hasEntered(EntityPlayerMP player)
 	{
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		SburbConnection c = SkaianetHandler.getMainConnection(identifier, true);
+		SburbConnection c = SkaianetHandler.get(player.world).getMainConnection(identifier, true);
 		return c != null && c.enteredGame();
 	}
 

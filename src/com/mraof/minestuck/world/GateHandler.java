@@ -65,10 +65,10 @@ public class GateHandler
 			
 		} else if(gateId == 2)
 		{
-			SburbConnection landConnection = SburbHandler.getConnectionForDimension(dim);
+			SburbConnection landConnection = SburbHandler.getConnectionForDimension(player.server, dim);
 			if(landConnection != null)
 			{
-				SburbConnection clientConnection = SkaianetHandler.getMainConnection(landConnection.getClientIdentifier(), false);
+				SburbConnection clientConnection = SkaianetHandler.get(player.world).getMainConnection(landConnection.getClientIdentifier(), false);
 				
 				if(clientConnection != null && clientConnection.enteredGame() && MinestuckDimensionHandler.isLandDimension(clientConnection.getClientDimension()))
 				{
@@ -99,10 +99,10 @@ public class GateHandler
 			} else Debug.errorf("Unexpected error: Can't find connection for dimension %d!", dim);
 		} else if(gateId == -1)
 		{
-			SburbConnection landConnection = SburbHandler.getConnectionForDimension(dim);
+			SburbConnection landConnection = SburbHandler.getConnectionForDimension(player.server, dim);
 			if(landConnection != null)
 			{
-				SburbConnection serverConnection = SkaianetHandler.getMainConnection(landConnection.getServerIdentifier(), true);
+				SburbConnection serverConnection = SkaianetHandler.get(player.world).getMainConnection(landConnection.getServerIdentifier(), true);
 				
 				if(serverConnection != null && serverConnection.enteredGame() && MinestuckDimensionHandler.isLandDimension(serverConnection.getClientDimension()))	//Last shouldn't be necessary, but just in case something goes wrong elsewhere...
 				{

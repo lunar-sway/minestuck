@@ -138,7 +138,7 @@ public class ServerEditHandler
 	{
 		if(player.getRidingEntity() == null)
 			return;	//Don't want to bother making the decoy able to ride anything right now.
-		SburbConnection c = SkaianetHandler.getClientConnection(computerTarget);
+		SburbConnection c = SkaianetHandler.get(player.world).getClientConnection(computerTarget);
 		if(c != null && c.getServerIdentifier().equals(computerOwner) && getData(c) == null && getData(player) == null)
 		{
 			Debug.info("Activating edit mode on player \""+player.getName()+"\", target player: \""+computerTarget+"\".");
@@ -158,7 +158,7 @@ public class ServerEditHandler
 				player.inventory.read(c.inventory);
 			decoy.world.spawnEntity(decoy);
 			list.add(data);
-			ServerEditPacket packet = ServerEditPacket.activate(computerTarget.getUsername(), c.centerX, c.centerZ, c.givenItems(), DeployList.getDeployListTag(c));
+			ServerEditPacket packet = ServerEditPacket.activate(computerTarget.getUsername(), c.centerX, c.centerZ, c.givenItems(), DeployList.getDeployListTag(player.getServer(), c));
 			MinestuckPacketHandler.sendToPlayer(packet, player);
 			MinestuckPlayerTracker.updateGristCache(player.getServer(), c.getClientIdentifier());
 		}
@@ -256,7 +256,7 @@ public class ServerEditHandler
 					MinestuckPlayerTracker.updateGristCache(event.getPlayer().getServer(), data.connection.getClientIdentifier());
 					data.connection.givenItems()[i] = true;
 					if(!data.connection.isMain())
-						SkaianetHandler.giveItems(event.getPlayer().getServer(), data.connection.getClientIdentifier());
+						SkaianetHandler.get(event.getPlayer().world).giveItems(data.connection.getClientIdentifier());
 				}
 				else event.setCanceled(true);
 			}
@@ -398,7 +398,7 @@ public class ServerEditHandler
 							? entry.getSecondaryGristCost(c) : entry.getPrimaryGristCost(c);
 					c.givenItems()[index] = true;
 					if(!c.isMain())
-						SkaianetHandler.giveItems(player.getServer(), c.getClientIdentifier());
+						SkaianetHandler.get(player.world).giveItems(c.getClientIdentifier());
 					if(!cost.isEmpty())
 					{
 						GristHelper.decrease(player.getServer(), c.getClientIdentifier(), cost);
@@ -461,7 +461,7 @@ public class ServerEditHandler
 	
 	public static void updateInventory(EntityPlayerMP player, boolean[] givenItems, SburbConnection connection)
 	{
-		List<DeployList.DeployEntry> deployList = DeployList.getItemList(connection);
+		List<DeployList.DeployEntry> deployList = DeployList.getItemList(player.getServer(), connection);
 		deployList.removeIf(entry -> givenItems[DeployList.getOrdinal(entry.getName())] && entry.getSecondaryGristCost(connection) == null);
 		List<ItemStack> itemList = new ArrayList<>();
 		deployList.forEach(deployEntry -> itemList.add(deployEntry.getItemStack(connection)));

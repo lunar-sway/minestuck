@@ -214,7 +214,7 @@ public class GristHelper {
 	
 	private static void notifyServer(MinecraftServer server, PlayerIdentifier player, ITextComponent type, Integer difference, String action)
 	{
-		SburbConnection sc = SkaianetHandler.getClientConnection(player);
+		SburbConnection sc = SkaianetHandler.get(server).getClientConnection(player);
 		if (sc==null) return;
 		EditData ed = ServerEditHandler.getData(sc);
 		if(ed==null) return;

@@ -63,7 +63,7 @@ public class ServerEventHandler
 				if(time != lastDay)
 				{
 					lastDay = time;
-					SkaianetHandler.resetGivenItems();
+					SkaianetHandler.get(event.world).resetGivenItems();
 				}
 			}
 			
@@ -186,21 +186,27 @@ public class ServerEventHandler
 	@SubscribeEvent
 	public void aspectPotionEffect(TickEvent.PlayerTickEvent event)
 	{
-		IdentifierHandler.PlayerIdentifier identifier = IdentifierHandler.encode(event.player);
-		SburbConnection c = SkaianetHandler.getMainConnection(identifier, true);
-		if(c == null || !c.enteredGame() || MinestuckConfig.aspectEffects == false || !MinestuckPlayerData.getEffectToggle(identifier))
-			return;
-		int rung = MinestuckPlayerData.getData(identifier).echeladder.getRung();
-		EnumAspect aspect = MinestuckPlayerData.getTitle(identifier).getHeroAspect();
-		int potionLevel = (int) (aspectStrength[aspect.ordinal()] * rung); //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
-		
-		if(event.player.getEntityWorld().getGameTime() % 380 == identifier.hashCode() % 380) {
-			if(rung > 18 && aspect == HOPE) {
-				event.player.addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, 600, 0));
-			}
+		if(!event.player.world.isRemote)
+		{
+			IdentifierHandler.PlayerIdentifier identifier = IdentifierHandler.encode(event.player);
+			SburbConnection c = SkaianetHandler.get(event.player.world).getMainConnection(identifier, true);
+			if(c == null || !c.enteredGame() || !MinestuckConfig.aspectEffects || !MinestuckPlayerData.getEffectToggle(identifier))
+				return;
+			int rung = MinestuckPlayerData.getData(identifier).echeladder.getRung();
+			EnumAspect aspect = MinestuckPlayerData.getTitle(identifier).getHeroAspect();
+			int potionLevel = (int) (aspectStrength[aspect.ordinal()] * rung); //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
 			
-			if(potionLevel > 0) {
-				event.player.addPotionEffect(new PotionEffect(aspectEffects[aspect.ordinal()], 600, potionLevel-1));
+			if(event.player.getEntityWorld().getGameTime() % 380 == identifier.hashCode() % 380)
+			{
+				if(rung > 18 && aspect == HOPE)
+				{
+					event.player.addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, 600, 0));
+				}
+				
+				if(potionLevel > 0)
+				{
+					event.player.addPotionEffect(new PotionEffect(aspectEffects[aspect.ordinal()], 600, potionLevel - 1));
+				}
 			}
 		}
 	}

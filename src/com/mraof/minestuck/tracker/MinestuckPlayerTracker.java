@@ -21,6 +21,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -51,7 +52,7 @@ public class MinestuckPlayerTracker
 		sendConfigPacket(player, true);
 		sendConfigPacket(player, false);
 		
-		SkaianetHandler.playerConnected(player);
+		SkaianetHandler.get(player.world).playerConnected(player);
 		boolean firstTime = false;
 		if(MinestuckPlayerData.getGristSet(identifier) == null)
 		{
@@ -160,7 +161,7 @@ public class MinestuckPlayerTracker
 		}
 		
 		//The editing player, if there is any.
-		SburbConnection c = SkaianetHandler.getClientConnection(player);
+		SburbConnection c = SkaianetHandler.get(server).getClientConnection(player);
 		if(c != null && ServerEditHandler.getData(c) != null)
 		{
 			EntityPlayerMP editor = ServerEditHandler.getData(c).getEditor();

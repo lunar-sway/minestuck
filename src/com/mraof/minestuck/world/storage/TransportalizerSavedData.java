@@ -15,17 +15,17 @@ import java.util.Random;
 
 public class TransportalizerSavedData extends WorldSavedData
 {
-	public static final String DATA_NAME = Minestuck.MOD_ID+"_transportalizers";
+	private static final String DATA_NAME = Minestuck.MOD_ID+"_transportalizers";
 	
 	private HashMap<String, Location> locations;
 	
-	public TransportalizerSavedData()
+	private TransportalizerSavedData()
 	{
 		super(DATA_NAME);
 		locations = new HashMap<>();
 	}
 	
-	public TransportalizerSavedData(String name)
+	private TransportalizerSavedData(String name)
 	{
 		super(name);
 	}

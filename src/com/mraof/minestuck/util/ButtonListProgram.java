@@ -1,5 +1,6 @@
 package com.mraof.minestuck.util;
 
+import com.mraof.minestuck.client.gui.GuiButtonImpl;
 import com.mraof.minestuck.client.gui.GuiComputer;
 import com.mraof.minestuck.network.ClearMessagePacket;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
@@ -11,12 +12,11 @@ import net.minecraft.client.resources.I18n;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map.Entry;
 
 public abstract class ButtonListProgram extends ComputerProgram {
 	
-	private LinkedHashMap<GuiButton, UnlocalizedString> buttonMap = new LinkedHashMap<GuiButton, UnlocalizedString>();
+	private LinkedHashMap<GuiButton, UnlocalizedString> buttonMap = new LinkedHashMap<>();
 	private GuiButton upButton, downButton;
 	private String message;
 	
@@ -71,14 +71,14 @@ public abstract class ButtonListProgram extends ComputerProgram {
 			}
 			buttonMap.clear();
 			for (int i = 0; i < 4; i++) {
-				//GuiButton button = new GuiButton(i+2, (gui.width - GuiComputer.xSize) / 2 +14, (gui.height - GuiComputer.ySize) / 2 +60 + i*24, 120, 20,"");
-				//buttonMap.put(button, new UnlocalizedString(""));
-				//buttonList.add(button);
+				GuiButton button = new GuiButtonImpl(gui, i+2, (gui.width - GuiComputer.xSize) / 2 +14, (gui.height - GuiComputer.ySize) / 2 +60 + i*24, 120, 20,"");
+				buttonMap.put(button, new UnlocalizedString(""));
+				gui.addButton(button);
 			}
 			
-			//upButton = new GuiButton(-1, (gui.width - GuiComputer.xSize) / 2 +140, (gui.height - GuiComputer.ySize) / 2 +60, 20, 20,"^");
+			upButton = new GuiButtonImpl(gui, -1, (gui.width - GuiComputer.xSize) / 2 +140, (gui.height - GuiComputer.ySize) / 2 +60, 20, 20,"^");
 			gui.addButton(upButton);
-			//downButton = new GuiButton(-1, (gui.width - GuiComputer.xSize) / 2 +140, (gui.height - GuiComputer.ySize) / 2 +132, 20, 20,"v");
+			downButton = new GuiButtonImpl(gui, -1, (gui.width - GuiComputer.xSize) / 2 +140, (gui.height - GuiComputer.ySize) / 2 +132, 20, 20,"v");
 			gui.addButton(downButton);
 		}
 	}
