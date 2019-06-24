@@ -57,12 +57,12 @@ public class GuiDataChecker extends GuiScreen implements GuiButtonImpl.ButtonCli
 		{
 			GuiButtonImpl button = new GuiButtonImpl(this, i, xOffset + 5, yOffset + LIST_Y + i*22, 180, 20, "");
 			contentButtons[i] = button;
-			this.buttons.add(button);
+			addButton(button);
 		}
 		returnButton = new GuiButtonImpl(this, 5, xOffset + GUI_WIDTH - 25, yOffset + 5, 18, 18, "");
-		this.buttons.add(returnButton);
+		addButton(returnButton);
 		refreshButton = new GuiButtonImpl(this, 6, xOffset + GUI_WIDTH - 45, yOffset + 5, 18, 18, "");
-		this.buttons.add(refreshButton);
+		addButton(refreshButton);
 		
 		if(activeComponent == null)
 			MinestuckPacketHandler.sendToServer(DataCheckerPacket.request());

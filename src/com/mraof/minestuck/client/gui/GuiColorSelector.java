@@ -33,7 +33,7 @@ public class GuiColorSelector extends GuiScreen implements GuiButtonImpl.ButtonC
 	public void initGui()
 	{
 		GuiButton button = new GuiButtonImpl(this, 0, (width - guiWidth)/2 + 50, (height - guiHeight)/2 + 132, 76, 20, "Choose");
-		buttons.add(button);
+		addButton(button);
 	}
 	
 	@Override

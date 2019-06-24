@@ -36,17 +36,17 @@ public class GuiTitleSelector extends GuiScreen implements GuiButtonImpl.ButtonC
 		for(int i = 0; i < 12; i++)
 		{
 			GuiButton button = new GuiButtonImpl(this, i, (width - guiWidth)/2 + 4 + (i%2)*40, (height - guiHeight)/2 + 24 + (i/2)*16, 40, 16, EnumClass.getClassFromInt(i).getDisplayName());
-			buttons.add(button);
+			addButton(button);
 			classButtons[i] = button;
 		}
 		for(int i = 0; i < 12; i++)
 		{
 			GuiButton button = new GuiButtonImpl(this, 12 + i, (width - guiWidth)/2 + 102 + (i%2)*40, (height - guiHeight)/2 + 24 + (i/2)*16, 40, 16, EnumAspect.getAspectFromInt(i).getDisplayName());
-			buttons.add(button);
+			addButton(button);
 			aspectButtons[i] = button;
 		}
 		selectButton = new GuiButtonImpl(this, -1, (width - guiWidth)/2 + 63, (height - guiHeight)/2 + 128, 60, 20, "Select");
-		buttons.add(selectButton);
+		addButton(selectButton);
 	}
 	
 	@Override

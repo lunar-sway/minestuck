@@ -31,7 +31,7 @@ public class TreeGuiHandler extends SylladexGuiHandler
 	{
 		super.initGui();
 		guiButton = new GuiButtonImpl(this, 0, (width - GUI_WIDTH)/2 + 15, (height - GUI_HEIGHT)/2 + 175, 120, 20, "");
-		buttons.add(guiButton);
+		addButton(guiButton);
 	}
 	
 	@Override

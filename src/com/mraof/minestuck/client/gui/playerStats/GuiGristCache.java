@@ -35,7 +35,7 @@ public class GuiGristCache extends GuiPlayerStats implements GuiButtonImpl.Butto
 		this.nextButton = new GuiButtonImpl(this, 2, this.xOffset + guiWidth - 24, this.yOffset + 8, 16, 16, ">");
 		if(GristType.REGISTRY.getValues().size() > rows * columns)
 		{
-			this.buttons.add(this.nextButton);
+			addButton(this.nextButton);
 		}
 	}
 	
@@ -78,6 +78,7 @@ public class GuiGristCache extends GuiPlayerStats implements GuiButtonImpl.Butto
 			page--;
 			if(page == 0) {
 				this.buttons.remove(previousButton);
+				this.children.remove(previousButton);
 			}
 			if(!this.buttons.contains(nextButton)) {
 				this.addButton(nextButton);
@@ -88,6 +89,7 @@ public class GuiGristCache extends GuiPlayerStats implements GuiButtonImpl.Butto
 			page++;
 			if(page == maxPage) {
 				this.buttons.remove(nextButton);
+				this.children.remove(nextButton);
 			}
 			if(!this.buttons.contains(previousButton)) {
 				this.addButton(previousButton);

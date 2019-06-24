@@ -66,7 +66,7 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiButtonI
 	public void initGui()
 	{
 		emptySylladex = new GuiButtonImpl(this, 0, (width - GUI_WIDTH)/2 + 140, (height - GUI_HEIGHT)/2 + 175, 100, 20, I18n.format("gui.emptySylladexButton"));
-		buttons.add(emptySylladex);
+		addButton(emptySylladex);
 	}
 	
 	@Override

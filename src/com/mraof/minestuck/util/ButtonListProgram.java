@@ -53,7 +53,7 @@ public abstract class ButtonListProgram extends ComputerProgram {
 	}
 	
 	@Override
-	public final void onInitGui(GuiComputer gui, List<GuiButton> buttonList, ComputerProgram prevProgram)
+	public final void onInitGui(GuiComputer gui, ComputerProgram prevProgram)
 	{
 		if(prevProgram instanceof ButtonListProgram) 
 		{
@@ -66,8 +66,8 @@ public abstract class ButtonListProgram extends ComputerProgram {
 		{
 			if(prevProgram != null)
 		       	{
-				buttonList.clear();
-				buttonList.add(gui.programButton);
+				gui.clearButtons();
+				gui.addButton(gui.programButton);
 			}
 			buttonMap.clear();
 			for (int i = 0; i < 4; i++) {
@@ -77,14 +77,14 @@ public abstract class ButtonListProgram extends ComputerProgram {
 			}
 			
 			//upButton = new GuiButton(-1, (gui.width - GuiComputer.xSize) / 2 +140, (gui.height - GuiComputer.ySize) / 2 +60, 20, 20,"^");
-			buttonList.add(upButton);
+			gui.addButton(upButton);
 			//downButton = new GuiButton(-1, (gui.width - GuiComputer.xSize) / 2 +140, (gui.height - GuiComputer.ySize) / 2 +132, 20, 20,"v");
-			buttonList.add(downButton);
+			gui.addButton(downButton);
 		}
 	}
 	
 	@Override
-	public final void onUpdateGui(GuiComputer gui, List<GuiButton> buttonList) 
+	public final void onUpdateGui(GuiComputer gui)
 	{
 		downButton.enabled = false;
 		upButton.enabled = index > 0;

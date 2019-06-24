@@ -81,6 +81,6 @@ public class GuiUraniumCooker extends GuiMachine
 		super.initGui();
 		
 		goButton = new GoButton(1, (width - xSize) / 2 + goX, (height - ySize) / 2 + goY, 30, 12, te.overrideStop ? "STOP" : "GO");
-		buttons.add(goButton);
+		addButton(goButton);
 	}
 }

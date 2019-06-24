@@ -87,9 +87,9 @@ public class GuiComputer extends GuiScreen implements GuiButtonImpl.ButtonClickh
 			te.program = ComputerProgram.getProgram(te.programSelected);
 		
 		programButton = new GuiButtonImpl(this, 0, (width - xSize)/2 +95,(height - ySize)/2 +10,70,20, "");
-		buttons.add(programButton);
+		addButton(programButton);
 		if(te.programSelected != -1)
-			te.program.onInitGui(this, buttons, null);
+			te.program.onInitGui(this, null);
 		
 		updateGui();
 	}
@@ -100,12 +100,12 @@ public class GuiComputer extends GuiScreen implements GuiButtonImpl.ButtonClickh
 		programButton.enabled = te.installedPrograms.size() > 1;
 		
 		if(te.hasProgram(-1)) {
-			buttons.clear();
+			clearButtons();
 			return;
 		}
 		
 		if(te.program != null) {
-			te.program.onUpdateGui(this, buttons);
+			te.program.onUpdateGui(this);
 			programButton.displayString = I18n.format(te.program.getName());
 		}
 		
@@ -122,7 +122,7 @@ public class GuiComputer extends GuiScreen implements GuiButtonImpl.ButtonClickh
 			te.programSelected = getNextProgram();
 			ComputerProgram program = te.program;
 			te.program = ComputerProgram.getProgram(te.programSelected);
-			te.program.onInitGui(this, buttons, program);
+			te.program.onInitGui(this, program);
 		}
 		else
 			te.program.onButtonPressed(te, guibutton);
@@ -150,5 +150,17 @@ public class GuiComputer extends GuiScreen implements GuiButtonImpl.ButtonClickh
             //place++;
         }
 		return lastProgram;
+	}
+	
+	@Override
+	public <T extends GuiButton> T addButton(T buttonIn)
+	{
+		return super.addButton(buttonIn);
+	}
+	
+	public void clearButtons()
+	{
+		children.removeAll(buttons);
+		buttons.clear();
 	}
 }

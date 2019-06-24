@@ -41,8 +41,8 @@ public class GuiCaptchaDeck extends GuiPlayerStatsContainer implements GuiButton
 		super.initGui();
 		modusButton = new GuiButtonImpl(this, 1, xOffset + 102, yOffset + 31, 50, 18, I18n.format("gui.useItem"));
 		sylladexMap = new GuiButtonImpl(this, 1, xOffset + 6, yOffset + 31, 60, 18, I18n.format("gui.sylladex"));
-		buttons.add(modusButton);
-		buttons.add(sylladexMap);
+		addButton(modusButton);
+		addButton(sylladexMap);
 		sylladexMap.enabled = CaptchaDeckHandler.clientSideModus != null;
 		modusButton.enabled = !container.inventory.getStackInSlot(0).isEmpty();
 	}

@@ -54,7 +54,7 @@ public class GuiGristSelector extends GuiScreenMinestuck implements GuiButtonImp
 		this.nextButton = new GuiButtonExt(2, xOffset + guiWidth - 24, yOffset + 8, 16, 16, ">");
 		if(GristType.REGISTRY.getValues().size() > rows * columns)
 		{
-			this.buttons.add(this.nextButton);
+			this.addButton(this.nextButton);
 		}
 	}
 	
@@ -150,6 +150,7 @@ public class GuiGristSelector extends GuiScreenMinestuck implements GuiButtonImp
 			page--;
 			if(page == 0) {
 				this.buttons.remove(previousButton);
+				this.children.remove(previousButton);
 			}
 			if(!this.buttons.contains(nextButton)) {
 				this.addButton(nextButton);
@@ -160,6 +161,7 @@ public class GuiGristSelector extends GuiScreenMinestuck implements GuiButtonImp
 			page++;
 			if(page == maxPage) {
 				this.buttons.remove(nextButton);
+				this.children.remove(nextButton);
 			}
 			if(!this.buttons.contains(previousButton)) {
 				this.addButton(previousButton);

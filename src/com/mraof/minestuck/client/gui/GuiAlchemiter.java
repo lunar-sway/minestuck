@@ -59,17 +59,17 @@ public class GuiAlchemiter extends GuiScreen implements GuiButtonImpl.ButtonClic
 		tensDown =new GuiButtonImpl(this, 5,(width-guiWidth)/2+31,(height-guiHeight)/2+74,18,18,"v");
 		onesDown = new GuiButtonImpl(this, 6,(width-guiWidth)/2+10,(height-guiHeight)/2+74,18,18,"v");
 
-		buttons.add(alchemize);
+		addButton(alchemize);
 		GristSet cost = alchemiter.getGristCost(1);
 		//don't add the buttons if the item is free or unalchemizeable
 		if(cost != null && !cost.isEmpty())
 		{
-			buttons.add(onesUp);
-			buttons.add(tensUp);
-			buttons.add(hundredsUp);
-			buttons.add(onesDown);
-			buttons.add(tensDown);
-			buttons.add(hundredsDown);
+			addButton(onesUp);
+			addButton(tensUp);
+			addButton(hundredsUp);
+			addButton(onesDown);
+			addButton(tensDown);
+			addButton(hundredsDown);
 		}
 	}
 	

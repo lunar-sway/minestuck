@@ -3,6 +3,7 @@ package com.mraof.minestuck.tileentity;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Location;
+import com.mraof.minestuck.world.storage.TransportalizerSavedData;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -18,15 +19,12 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.util.ITeleporter;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 
 public class TileEntityTransportalizer extends TileEntity implements ITickable, ITeleporter
 {
-	public static HashMap<String, Location> transportalizers = new HashMap<String, Location>();
-	private static Random rand = new Random();
 	private boolean enabled = true;
 	private boolean active = true;
 	String id = "";
@@ -44,8 +42,8 @@ public class TileEntityTransportalizer extends TileEntity implements ITickable, 
 		if(!world.isRemote && active)
 		{
 			if(id.isEmpty())
-				id = getUnusedId();
-			put(id, new Location(this.pos, world.getDimension().getType()));
+				id = TransportalizerSavedData.get(world).findNewId(world.rand, new Location(this));
+			else active = TransportalizerSavedData.get(world).set(id, new Location(this));
 		}
 	}
 	
@@ -55,9 +53,7 @@ public class TileEntityTransportalizer extends TileEntity implements ITickable, 
 		super.remove();
 		if(!world.isRemote && active)
 		{
-			Location location = transportalizers.get(id);
-			if(location.equals(new Location(this.pos, this.world.getDimension().getType())))
-				transportalizers.remove(id);
+			TransportalizerSavedData.get(world).remove(id, new Location(this));
 		}
 	}
 	
@@ -77,30 +73,10 @@ public class TileEntityTransportalizer extends TileEntity implements ITickable, 
 			if(!enabled) { setEnabled(true); }
 		}
 	}
-
-	public String getUnusedId()
-	{
-		String unusedId = "";
-		do
-		{
-			for(int i = 0; i < 4; i++)
-			{
-				unusedId += (char) (rand.nextInt(26) + 'A');
-			}
-		} 
-		while(transportalizers.containsKey(unusedId));
-
-		return unusedId;
-	}
-
-	public static void put(String key, Location location)
-	{
-		transportalizers.put(key, location);
-	}
 	
 	public void teleport(Entity entity)
 	{
-		Location location = transportalizers.get(this.destId);
+		Location location = TransportalizerSavedData.get(world).get(this.destId);
 		if(!enabled)
 		{
 			entity.timeUntilPortal = entity.getPortalCooldown();
@@ -115,7 +91,7 @@ public class TileEntityTransportalizer extends TileEntity implements ITickable, 
 			if(destTransportalizer == null)
 			{
 				Debug.warn("Invalid transportalizer in map: " + this.destId + " at " + location);
-				transportalizers.remove(this.destId);
+				TransportalizerSavedData.get(world).remove(this.destId, location);
 				this.destId = "";
 				return;
 			}
@@ -164,39 +140,12 @@ public class TileEntityTransportalizer extends TileEntity implements ITickable, 
 	
 	public static void saveTransportalizers(NBTTagCompound compound)
 	{
-		NBTTagCompound transportalizerTagCompound = new NBTTagCompound();
-		Iterator<Map.Entry<String, Location>> it = transportalizers.entrySet().iterator();
-		while(it.hasNext())
-		{
-			Map.Entry<String, Location> entry = it.next();
-			Location location = entry.getValue();
-			NBTTagCompound locationTag = new NBTTagCompound();
-			locationTag.setInt("x", location.pos.getX());
-			locationTag.setInt("y", location.pos.getY());
-			locationTag.setInt("z", location.pos.getZ());
-			ResourceLocation dimName = DimensionType.func_212678_a(location.dim);
-			if(dimName != null)
-				locationTag.setString("dim", dimName.toString());
-			else
-			{
-				Debug.warnf("Could not save transportalizer %s with dimension %s. Could not get dimension name!", entry.getKey(), location.dim);
-				continue;
-			}
-			transportalizerTagCompound.setTag(entry.getKey(), locationTag);
-		}
-		compound.setTag("transportalizers", transportalizerTagCompound);
+	
 	}
 	
 	public static void loadTransportalizers(NBTTagCompound compound)
 	{
-		for(String id : compound.keySet())
-		{
-			NBTTagCompound locationTag = compound.getCompound((String)id);
-			DimensionType type = DimensionType.byName(ResourceLocation.makeResourceLocation(compound.getString("dim")));
-			if(type != null)
-				put(id, new Location(locationTag.getInt("x"), locationTag.getInt("y"), locationTag.getInt("z"), type));
-			else Debug.warnf("Found transportalizer %s with invalid dimension type %s. This transportalizer will be ignored.", id, compound.getString("dim"));
-		}
+	
 	}
 	
 	public String getId()
@@ -206,17 +155,12 @@ public class TileEntityTransportalizer extends TileEntity implements ITickable, 
 	
 	public void setId(String id)
 	{
+		Location location = new Location(this);
 		if(active && !this.id.isEmpty())
-			transportalizers.remove(this.id);
-		Location location = transportalizers.get(id);
+			TransportalizerSavedData.get(world).remove(this.id, location);
+		
 		this.id = id;
-		if(location == null || this.hasWorld() && location.dim == getWorld().getDimension().getType() && location.pos.equals(this.getPos()))
-		{
-			transportalizers.put(id, new Location(getPos(), getWorld().getDimension().getType()));
-		} else
-		{
-			active = false;
-		}
+		active = TransportalizerSavedData.get(world).set(id, location);
 	}
 	
 	public String getDestId()

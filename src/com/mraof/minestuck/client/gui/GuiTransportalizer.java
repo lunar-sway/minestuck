@@ -45,8 +45,7 @@ public class GuiTransportalizer extends GuiScreen implements GuiButtonImpl.Butto
 		this.destinationTextField.setText(this.te.getDestId());
 		children.add(destinationTextField);
 		
-		this.doneButton = new GuiButtonImpl(this, 0, this.width / 2 - 20, yOffset + 50, 40, 20, I18n.format("gui.done"));
-		this.buttons.add(doneButton);
+		this.doneButton = addButton(new GuiButtonImpl(this, 0, this.width / 2 - 20, yOffset + 50, 40, 20, I18n.format("gui.done")));
 	}
 	
 	@Override

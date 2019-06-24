@@ -96,7 +96,7 @@ public class MinestuckConfig
 	 */
 	public static int escapeFailureMode;
 	public static int preEntryRungLimit;
-	public static DimensionType[] forbiddenDimensionsTpz;
+	public static DimensionType[] forbiddenDimensionsTpz = new DimensionType[0];
 	public static byte treeModusSetting;
 	public static byte hashmapChatModusSetting;
 	/**

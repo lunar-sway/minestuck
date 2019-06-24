@@ -99,7 +99,7 @@ public abstract class ComputerProgram
 	/**
 	 * Called when the gui is created or if the player pressed the switch
 	 * program button.
-	 * 
+	 *
 	 * @param buttonList
 	 *            The button list. Note that the list isn't cleared if
 	 *            prevProgram isn't null, so you have to clear it and re-add the
@@ -109,14 +109,14 @@ public abstract class ComputerProgram
 	 * @param prevProgram
 	 *            The previous program, or null if the gui was just created.
 	 */
-	public void onInitGui(GuiComputer gui, List<GuiButton> buttonList, ComputerProgram prevProgram)
+	public void onInitGui(GuiComputer gui, ComputerProgram prevProgram)
 	{
 	}
 	
 	/**
 	 * Called when some related data have changed that may affect the program.
 	 */
-	public void onUpdateGui(GuiComputer gui, List<GuiButton> buttonList)
+	public void onUpdateGui(GuiComputer gui)
 	{
 	}
 	
