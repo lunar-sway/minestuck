@@ -59,7 +59,7 @@ public class ItemCruxtruder extends ItemBlock
 			
 			if(!itemstack.isEmpty())
 			{
-				if(!canPlaceAt(itemstack, player, world, pos, placedFacing))
+				if(!canPlaceAt(context, pos, placedFacing))
 					return EnumActionResult.FAIL;
 				
 				IBlockState state = this.getBlock().getDefaultState();
@@ -70,17 +70,17 @@ public class ItemCruxtruder extends ItemBlock
 		}
 	}
 	
-	public static boolean canPlaceAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing facing)
+	public static boolean canPlaceAt(BlockItemUseContext context, BlockPos pos, EnumFacing facing)
 	{
-		for (int x = 0; x < 3; x++)
+		for(int x = 0; x < 3; x++)
 		{
-			for (int z = 0; z < 3; z++)
+			for(int z = 0; z < 3; z++)
 			{
-				if(!player.canPlayerEdit(pos.offset(facing.rotateYCCW(), x).offset(facing.getOpposite()), EnumFacing.UP, stack))
+				if(!context.getPlayer().canPlayerEdit(pos.offset(facing.rotateYCCW(), x).offset(facing.getOpposite(), z), EnumFacing.UP, context.getItem()))
 					return false;
 				for(int y = 0; y < 3; y++)
 				{
-					if (!MinestuckBlocks.CRUXTRUDER.getMainBlock().getDefaultState().isValidPosition(world, pos.offset(facing.getOpposite(), z).offset(facing.rotateYCCW(), x).up(y)))
+					if(!context.getWorld().getBlockState(pos.offset(facing.getOpposite(), z).offset(facing.rotateYCCW(), x).up(y)).isReplaceable(context))
 						return false;
 				}
 			}

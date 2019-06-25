@@ -58,6 +58,7 @@ public class RenderMachineOutline
 			
 			if (!flag)
 				pos = pos.up();
+			BlockItemUseContext context = new BlockItemUseContext(player.world, player, stack, pos, rayTraceResult.sideHit, (float) rayTraceResult.hitVec.x - pos.getX(), (float) rayTraceResult.hitVec.y - pos.getY(), (float) rayTraceResult.hitVec.z - pos.getZ());
 			
 			EnumFacing placedFacing = player.getHorizontalFacing().getOpposite();
 			double hitX = rayTraceResult.hitVec.x - pos.getX(), hitZ = rayTraceResult.hitVec.z - pos.getZ();
@@ -86,7 +87,7 @@ public class RenderMachineOutline
 					pos = pos.offset(placedFacing.rotateYCCW());    //The bounding box is symmetrical, so doing this gets rid of some rendering cases
 				
 				boundingBox = new AxisAlignedBB(0, 0, 0, (r ? 2 : 1), 2, (r ? 1 : 2)).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
-				placeable = ItemPunchDesignix.canPlaceAt(stack, player, player.world, placementPos, placedFacing);
+				placeable = ItemPunchDesignix.canPlaceAt(context, placementPos, placedFacing);
 			} else if(stack.getItem() == MinestuckBlocks.TOTEM_LATHE.asItem())
 			{
 				pos = pos.offset(placedFacing.rotateY());
@@ -100,14 +101,14 @@ public class RenderMachineOutline
 					pos = pos.offset(placedFacing.rotateYCCW(), 3);    //The bounding box is symmetrical, so doing this gets rid of some rendering cases
 				
 				boundingBox = new AxisAlignedBB(0, 0, 0, (r ? 4 : 1), 3, (r ? 1 : 4)).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
-				placeable = ItemTotemLathe.canPlaceAt(stack, player, player.world, placementPos, placedFacing);
+				placeable = ItemTotemLathe.canPlaceAt(context, placementPos, placedFacing);
 			} else if(stack.getItem() == MinestuckBlocks.CRUXTRUDER.asItem())
 			{
 				BlockPos placementPos = pos.offset(placedFacing.rotateY());
 				pos = pos.offset(placedFacing.getOpposite()).add(-1, 0, -1);
 				
 				boundingBox = new AxisAlignedBB(0,0,0, 3, 3, 3).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
-				placeable = ItemCruxtruder.canPlaceAt(stack, player, player.world, placementPos, placedFacing);
+				placeable = ItemCruxtruder.canPlaceAt(context, placementPos, placedFacing);
 			} /*else if(MinestuckBlocks.jumperBlockExtension[0].asItem())
 			{
 				pos = pos.offset(placedFacing.rotateY());
@@ -143,7 +144,7 @@ public class RenderMachineOutline
 					pos = pos.offset(placedFacing.getOpposite(), 3);
 				
 				boundingBox = new AxisAlignedBB(0, 0, 0, 4, 4, 4).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
-				placeable = ItemAlchemiter.canPlaceAt(stack, player, player.world, placementPos, placedFacing);
+				placeable = ItemAlchemiter.canPlaceAt(context, placementPos, placedFacing);
 				
 				int xOffset = - placedFacing.getXOffset() - placedFacing.rotateY().getXOffset();
 				int zOffset = - placedFacing.getZOffset() - placedFacing.rotateY().getZOffset();

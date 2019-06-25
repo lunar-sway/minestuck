@@ -57,7 +57,7 @@ public class ItemTotemLathe extends ItemBlock
 			
 			if (!itemstack.isEmpty())
 			{
-				if(!canPlaceAt(itemstack, player, world, pos, placedFacing))
+				if(!canPlaceAt(context, pos, placedFacing))
 					return EnumActionResult.FAIL;
 				
 				IBlockState state = getBlock().getDefaultState().with(BlockTotemLathe.FACING, placedFacing);
@@ -68,15 +68,15 @@ public class ItemTotemLathe extends ItemBlock
 		}
 	}
 	
-	public static boolean canPlaceAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing facing)
+	public static boolean canPlaceAt(BlockItemUseContext context, BlockPos pos, EnumFacing facing)
 	{
 		for(int x = 0; x < 4; x++)
 		{
-			if(!player.canPlayerEdit(pos.offset(facing.rotateYCCW(), x), EnumFacing.UP, stack))
+			if(!context.getPlayer().canPlayerEdit(pos.offset(facing.rotateYCCW(), x), EnumFacing.UP, context.getItem()))
 				return false;
 			for(int y = 0; y < 3; y++)
 			{
-				if(!MinestuckBlocks.TOTEM_LATHE.getMainBlock().getDefaultState().isValidPosition(world, pos.offset(facing.rotateYCCW(), x).up(y)))
+				if(!context.getWorld().getBlockState(pos.offset(facing.rotateYCCW(), x).up(y)).isReplaceable(context))
 					return false;
 			}
 		}

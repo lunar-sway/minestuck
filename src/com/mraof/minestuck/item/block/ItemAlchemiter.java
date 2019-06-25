@@ -57,7 +57,7 @@ public class ItemAlchemiter extends ItemBlock
 			
 			if (!itemstack.isEmpty())
 			{
-				if(!canPlaceAt(itemstack, player, world, pos, facing))
+				if(!canPlaceAt(context, pos, facing))
 					return EnumActionResult.FAIL;
 				
 				IBlockState state = getBlock().getDefaultState().with(BlockAlchemiter.FACING, facing);
@@ -69,16 +69,17 @@ public class ItemAlchemiter extends ItemBlock
 	}
 	
 
-	public static boolean canPlaceAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing facing)
+	public static boolean canPlaceAt(BlockItemUseContext context, BlockPos pos, EnumFacing facing)
 	{
 		for(int x = 0; x < 4; x++)
 		{
 			for(int z = 0; z < 4; z++)
 			{
-				if(!player.canPlayerEdit(pos.offset(facing.rotateY(), x).offset(facing, z), EnumFacing.UP, stack))
+				if(!context.getPlayer().canPlayerEdit(pos.offset(facing.rotateY(), x).offset(facing, z), EnumFacing.UP, context.getItem()))
 					return false;
-				for(int y = 0; y < 4; y++) {
-					if(!MinestuckBlocks.ALCHEMITER.getMainBlock().getDefaultState().isValidPosition(world, pos.offset(facing, z).offset(facing.rotateY(), x).up(y)))
+				for(int y = 0; y < 4; y++)
+				{
+					if(!context.getWorld().getBlockState(pos.offset(facing, z).offset(facing.rotateY(), x).up(y)).isReplaceable(context))
 						return false;
 				}
 			}
