@@ -10,7 +10,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class ContainerHandler
 {
 	
-	public static int windowIdStart;
+	public static int windowIdStart = 200;
 	@OnlyIn(Dist.CLIENT)
 	public static int clientWindowIdStart;
 	

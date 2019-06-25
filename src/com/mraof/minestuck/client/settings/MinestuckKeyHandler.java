@@ -32,11 +32,11 @@ public class MinestuckKeyHandler
 		if(statKey != null)
 			throw new IllegalStateException("Minestucck keys have already been registered!");
 		
-		statKey = new KeyBinding("key.statsGui", 34, "key.categories.minestuck");
+		statKey = new KeyBinding("key.statsGui", 71, "key.categories.minestuck");
 		ClientRegistry.registerKeyBinding(statKey);
-		editKey = new KeyBinding("key.exitEdit", 45, "key.categories.minestuck");
+		editKey = new KeyBinding("key.exitEdit", 75, "key.categories.minestuck");
 		ClientRegistry.registerKeyBinding(editKey);
-		captchaKey = new KeyBinding("key.captchalogue", 46, "key.categories.minestuck");
+		captchaKey = new KeyBinding("key.captchalogue", 86, "key.categories.minestuck");
 		ClientRegistry.registerKeyBinding(captchaKey);
 		effectToggleKey = new KeyBinding("key.aspectEffectToggle", 92, "key.categories.minestuck");
 		ClientRegistry.registerKeyBinding(effectToggleKey);
