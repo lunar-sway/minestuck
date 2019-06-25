@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "minestuck:chalk" }
+        "": { "model": "minestuck:block/chalk" }
     }
 }

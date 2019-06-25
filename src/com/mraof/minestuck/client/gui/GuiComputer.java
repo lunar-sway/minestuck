@@ -9,15 +9,15 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-@SideOnly(Side.CLIENT)
-public class GuiComputer extends GuiScreen
+@OnlyIn(Dist.CLIENT)
+public class GuiComputer extends GuiScreen implements GuiButtonImpl.ButtonClickhandler
 {
 
 	public static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/sburb.png");
@@ -43,11 +43,11 @@ public class GuiComputer extends GuiScreen
 	}
 	
 	@Override
-	public void drawScreen(int xcor, int ycor, float par3) {
-		
+	public void render(int mouseX, int mouseY, float partialTicks)
+	{
 		this.drawDefaultBackground();
 		
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		if(te.hasProgram(-1)) {
 			this.mc.getTextureManager().bindTexture(guiBsod);
 			int yOffset = (this.height / 2) - (ySize / 2);
@@ -63,9 +63,9 @@ public class GuiComputer extends GuiScreen
 		GlStateManager.disableRescaleNormal();
 		RenderHelper.disableStandardItemLighting();
 		GlStateManager.disableLighting();
-		GlStateManager.disableDepth();
+		GlStateManager.disableDepthTest();
 
-		super.drawScreen(xcor, ycor, par3);
+		super.render(mouseX, mouseY, partialTicks);
 	}
 
 	@Override
@@ -86,10 +86,10 @@ public class GuiComputer extends GuiScreen
 		if(te.programSelected != -1 && (te.program == null || te.program.getId() != te.programSelected))
 			te.program = ComputerProgram.getProgram(te.programSelected);
 		
-		programButton = new GuiButton(0, (width - xSize)/2 +95,(height - ySize)/2 +10,70,20, "");
-		buttonList.add(programButton);
+		programButton = new GuiButtonImpl(this, 0, (width - xSize)/2 +95,(height - ySize)/2 +10,70,20, "");
+		addButton(programButton);
 		if(te.programSelected != -1)
-			te.program.onInitGui(this, buttonList, null);
+			te.program.onInitGui(this, null);
 		
 		updateGui();
 	}
@@ -100,19 +100,19 @@ public class GuiComputer extends GuiScreen
 		programButton.enabled = te.installedPrograms.size() > 1;
 		
 		if(te.hasProgram(-1)) {
-			buttonList.clear();
+			clearButtons();
 			return;
 		}
 		
 		if(te.program != null) {
-			te.program.onUpdateGui(this, buttonList);
+			te.program.onUpdateGui(this);
 			programButton.displayString = I18n.format(te.program.getName());
 		}
 		
 	}
 	
 	@Override
-	protected void actionPerformed(GuiButton guibutton)
+	public void actionPerformed(GuiButtonImpl guibutton)
 	{
 		if(te.hasProgram(-1))
 			return;
@@ -122,7 +122,7 @@ public class GuiComputer extends GuiScreen
 			te.programSelected = getNextProgram();
 			ComputerProgram program = te.program;
 			te.program = ComputerProgram.getProgram(te.programSelected);
-			te.program.onInitGui(this, buttonList, program);
+			te.program.onInitGui(this, program);
 		}
 		else
 			te.program.onButtonPressed(te, guibutton);
@@ -138,9 +138,8 @@ public class GuiComputer extends GuiScreen
 	   	boolean found = false;
 	   	int lastProgram = te.programSelected;
         while (it.hasNext()) {
-			Map.Entry<Integer, Boolean> pairs = (Entry<Integer, Boolean>) it
-					.next();
-            int program = (Integer) pairs.getKey();
+			Map.Entry<Integer, Boolean> pairs = it.next();
+            int program = pairs.getKey();
             if (found) {
             	return program;
             } else if (program==te.programSelected) {
@@ -151,5 +150,17 @@ public class GuiComputer extends GuiScreen
             //place++;
         }
 		return lastProgram;
+	}
+	
+	@Override
+	public <T extends GuiButton> T addButton(T buttonIn)
+	{
+		return super.addButton(buttonIn);
+	}
+	
+	public void clearButtons()
+	{
+		children.removeAll(buttons);
+		buttons.clear();
 	}
 }

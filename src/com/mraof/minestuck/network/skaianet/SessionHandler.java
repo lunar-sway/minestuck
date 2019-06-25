@@ -10,11 +10,9 @@ import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
+import com.mraof.minestuck.world.lands.LandAspects;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommand;
-import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -52,7 +50,7 @@ public class SessionHandler
 	/**
 	 * An array list of the current worlds sessions.
 	 */
-	static List<Session> sessions = new ArrayList<Session>();
+	static List<Session> sessions = new ArrayList<>();	//TODO Objectify in the same manner as skaianet, perhaps?
 	static Map<String, Session> sessionsByName = new HashMap<String, Session>();
 	
 	/**
@@ -256,11 +254,11 @@ public class SessionHandler
 	 * @return True if client connection is not null and client and server session is the same or 
 	 * client connection is null and server connection is null.
 	 */
-	private static boolean canConnect(PlayerIdentifier client, PlayerIdentifier server)
+	private static boolean canConnect(MinecraftServer mcServer, PlayerIdentifier client, PlayerIdentifier server)
 	{
 		Session sClient = getPlayerSession(client), sServer = getPlayerSession(server);
-		SburbConnection cClient = SkaianetHandler.getMainConnection(client, true);
-		SburbConnection cServer = SkaianetHandler.getMainConnection(server, false);
+		SburbConnection cClient = SkaianetHandler.get(mcServer).getMainConnection(client, true);
+		SburbConnection cServer = SkaianetHandler.get(mcServer).getMainConnection(server, false);
 		boolean serverActive = cServer != null;
 		if(!serverActive && sServer != null)
 			for(SburbConnection c : sServer.connections)
@@ -277,9 +275,9 @@ public class SessionHandler
 	/**
 	 * @return Null if successful or an unlocalized error message describing reason.
 	 */
-	static String onConnectionCreated(SburbConnection connection)
+	static String onConnectionCreated(MinecraftServer mcServer, SburbConnection connection)
 	{
-		if(!canConnect(connection.getClientIdentifier(), connection.getServerIdentifier()))
+		if(!canConnect(mcServer, connection.getClientIdentifier(), connection.getServerIdentifier()))
 			return "computer.messageConnectFailed";
 		if(singleSession)
 		{
@@ -331,7 +329,7 @@ public class SessionHandler
 	 * @param normal If the connection was closed by normal means.
 	 * (includes everything but getting crushed by a meteor and other reasons for removal of a main connection)
 	 */
-	static void onConnectionClosed(SburbConnection connection, boolean normal)
+	static void onConnectionClosed(MinecraftServer mcServer, SburbConnection connection, boolean normal)
 	{
 		Session s = getPlayerSession(connection.getClientIdentifier());
 		
@@ -344,11 +342,11 @@ public class SessionHandler
 				else split(s);
 		} else if(!normal) {
 			s.connections.remove(connection);
-			if(SkaianetHandler.getAssociatedPartner(connection.getClientIdentifier(), false) != null)
+			if(SkaianetHandler.get(mcServer).getAssociatedPartner(connection.getClientIdentifier(), false) != null)
 			{
-				SburbConnection c = SkaianetHandler.getMainConnection(connection.getClientIdentifier(), false);
+				SburbConnection c = SkaianetHandler.get(mcServer).getMainConnection(connection.getClientIdentifier(), false);
 				if(c.isActive)
-					SkaianetHandler.closeConnection(c.getClientIdentifier(), c.getServerIdentifier(), true);
+					SkaianetHandler.get(mcServer).closeConnection(c.getClientIdentifier(), c.getServerIdentifier(), true);
 				switch(MinestuckConfig.escapeFailureMode) {
 				case 0:
 					c.serverIdentifier = connection.getServerIdentifier();
@@ -363,21 +361,20 @@ public class SessionHandler
 		}
 	}
 	
-	static List<Object> getServerList(PlayerIdentifier client)
+	static Map<Integer, String> getServerList(MinecraftServer mcServer, PlayerIdentifier client)
 	{
-		ArrayList<Object> list = new ArrayList<Object>();
-		for(PlayerIdentifier server : SkaianetHandler.serversOpen.keySet())
+		Map<Integer, String> map = new HashMap<>();
+		for(PlayerIdentifier server : SkaianetHandler.get(mcServer).serversOpen.keySet())
 		{
-			if(canConnect(client, server))
+			if(canConnect(mcServer, client, server))
 			{
-				list.add(server.getId());
-				list.add(server.getUsername());
+				map.put(server.getId(), server.getUsername());
 			}
 		}
-		return list;
+		return map;
 	}
 	
-	public static void connectByCommand(ICommandSender sender, ICommand command, PlayerIdentifier client, PlayerIdentifier server) throws CommandException
+	/*public static void connectByCommand(ICommandSender sender, ICommand command, PlayerIdentifier client, PlayerIdentifier server) throws CommandException
 	{
 		Session sc = getPlayerSession(client), ss = getPlayerSession(server);
 		
@@ -475,7 +472,7 @@ public class SessionHandler
 		CommandBase.notifyCommandListener(sender, command, "commands.sburbServer.success", client.getUsername(), server.getUsername());
 	}
 	
-	public static void createDebugLandsChain(List<LandAspectRegistry.AspectCombination> landspects, EntityPlayer player) throws CommandException
+	public static void createDebugLandsChain(List<LandAspects> landspects, EntityPlayer player) throws CommandException
 	{
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		Session s = getPlayerSession(identifier);
@@ -554,7 +551,7 @@ public class SessionHandler
 		SkaianetHandler.sendLandChainUpdate();
 	}
 	
-	private static int createDebugLand(LandAspectRegistry.AspectCombination landspect) throws CommandException
+	private static int createDebugLand(LandAspects landspect) throws CommandException
 	{
 		int landId = MinestuckDimensionHandler.landDimensionIdStart;
 		while (true)
@@ -581,7 +578,7 @@ public class SessionHandler
 			if(session.name != null)
 				list.add(session.name);
 		return list;
-	}
+	}*/
 	
 	/**
 	 * Creates data to be used for the data checker
@@ -609,11 +606,12 @@ public class SessionHandler
 				connectionTag.setBoolean("isActive", c.isActive);
 				if(c.isMain)
 				{
-					connectionTag.setInteger("clientDim", c.enteredGame ? c.clientHomeLand : 0);
-					if(c.enteredGame && DimensionManager.isDimensionRegistered(c.clientHomeLand))
+					if(c.enteredGame)
+						connectionTag.setString("clientDim", c.clientHomeLand.getRegistryName().toString());
+					if(c.enteredGame )//&& DimensionManager.isDimensionRegistered(c.clientHomeLand)) TODO
 					{
-						LandAspectRegistry.AspectCombination aspects = MinestuckDimensionHandler.getAspects(c.clientHomeLand);
-						IChunkGenerator chunkGen = server.getWorld(c.clientHomeLand).provider.createChunkGenerator();
+						LandAspects aspects = MinestuckDimensionHandler.getAspects(c.clientHomeLand);
+						IChunkGenerator chunkGen = server.getWorld(c.clientHomeLand).getDimension().createChunkGenerator();
 						if(chunkGen instanceof ChunkProviderLands)
 						{
 							ChunkProviderLands landChunkGen = (ChunkProviderLands) chunkGen;
@@ -646,7 +644,7 @@ public class SessionHandler
 							connectionTag.setString("aspectTitle", data.landTitle.getPrimaryName());
 					}
 				}
-				connectionList.appendTag(connectionTag);
+				connectionList.add(connectionTag);
 			}
 			
 			for(Map.Entry<PlayerIdentifier, PredefineData> entry : session.predefinedPlayers.entrySet())
@@ -660,7 +658,7 @@ public class SessionHandler
 				connectionTag.setString("clientId", entry.getKey().getString());
 				connectionTag.setBoolean("isMain", true);
 				connectionTag.setBoolean("isActive", false);
-				connectionTag.setInteger("clientDim", 0);
+				connectionTag.setInt("clientDim", 0);
 				
 				PredefineData data = entry.getValue();
 				
@@ -675,14 +673,14 @@ public class SessionHandler
 				if(data.landTitle != null)
 					connectionTag.setString("aspectTitle", data.landTitle.getPrimaryName());
 				
-				connectionList.appendTag(connectionTag);
+				connectionList.add(connectionTag);
 			}
 			
 			NBTTagCompound sessionTag = new NBTTagCompound();
 			if(session.name != null)
 				sessionTag.setString("name", session.name);
 			sessionTag.setTag("connections", connectionList);
-			sessionList.appendTag(sessionTag);
+			sessionList.add(sessionTag);
 		}
 		return nbt;
 	}

@@ -1,21 +1,22 @@
 package com.mraof.minestuck.util;
 
+import com.mraof.minestuck.client.gui.GuiButtonImpl;
 import com.mraof.minestuck.client.gui.GuiComputer;
 import com.mraof.minestuck.network.ClearMessagePacket;
+import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.skaianet.ComputerData;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.util.text.translation.I18n;
+import net.minecraft.client.resources.I18n;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map.Entry;
 
 public abstract class ButtonListProgram extends ComputerProgram {
 	
-	private LinkedHashMap<GuiButton, UnlocalizedString> buttonMap = new LinkedHashMap<GuiButton, UnlocalizedString>();
+	private LinkedHashMap<GuiButton, UnlocalizedString> buttonMap = new LinkedHashMap<>();
 	private GuiButton upButton, downButton;
 	private String message;
 	
@@ -46,13 +47,13 @@ public abstract class ButtonListProgram extends ComputerProgram {
 			index++;
 		else if(data != null) {
 			if(!te.latestmessage.get(this.getId()).isEmpty())
-				ClearMessagePacket.send(ComputerData.createData(te), this.getId());
+				MinestuckPacketHandler.sendToServer(new ClearMessagePacket(ComputerData.createData(te).getLocation(), this.getId()));
 			onButtonPressed(te, data.string, data.formatData);
 		}
 	}
 	
 	@Override
-	public final void onInitGui(GuiComputer gui, List<GuiButton> buttonList, ComputerProgram prevProgram)
+	public final void onInitGui(GuiComputer gui, ComputerProgram prevProgram)
 	{
 		if(prevProgram instanceof ButtonListProgram) 
 		{
@@ -65,25 +66,25 @@ public abstract class ButtonListProgram extends ComputerProgram {
 		{
 			if(prevProgram != null)
 		       	{
-				buttonList.clear();
-				buttonList.add(gui.programButton);
+				gui.clearButtons();
+				gui.addButton(gui.programButton);
 			}
 			buttonMap.clear();
 			for (int i = 0; i < 4; i++) {
-				GuiButton button = new GuiButton(i+2, (gui.width - GuiComputer.xSize) / 2 +14, (gui.height - GuiComputer.ySize) / 2 +60 + i*24, 120, 20,"");
+				GuiButton button = new GuiButtonImpl(gui, i+2, (gui.width - GuiComputer.xSize) / 2 +14, (gui.height - GuiComputer.ySize) / 2 +60 + i*24, 120, 20,"");
 				buttonMap.put(button, new UnlocalizedString(""));
-				buttonList.add(button);
+				gui.addButton(button);
 			}
 			
-			upButton = new GuiButton(-1, (gui.width - GuiComputer.xSize) / 2 +140, (gui.height - GuiComputer.ySize) / 2 +60, 20, 20,"^");
-			buttonList.add(upButton);
-			downButton = new GuiButton(-1, (gui.width - GuiComputer.xSize) / 2 +140, (gui.height - GuiComputer.ySize) / 2 +132, 20, 20,"v");
-			buttonList.add(downButton);
+			upButton = new GuiButtonImpl(gui, -1, (gui.width - GuiComputer.xSize) / 2 +140, (gui.height - GuiComputer.ySize) / 2 +60, 20, 20,"^");
+			gui.addButton(upButton);
+			downButton = new GuiButtonImpl(gui, -1, (gui.width - GuiComputer.xSize) / 2 +140, (gui.height - GuiComputer.ySize) / 2 +132, 20, 20,"v");
+			gui.addButton(downButton);
 		}
 	}
 	
 	@Override
-	public final void onUpdateGui(GuiComputer gui, List<GuiButton> buttonList) 
+	public final void onUpdateGui(GuiComputer gui)
 	{
 		downButton.enabled = false;
 		upButton.enabled = index > 0;
@@ -126,14 +127,14 @@ public abstract class ButtonListProgram extends ComputerProgram {
 	
 	@Override
 	public final void paintGui(GuiComputer gui, TileEntityComputer te) {
-		Minecraft mc = Minecraft.getMinecraft();
+		Minecraft mc = Minecraft.getInstance();
 		mc.getTextureManager().bindTexture(GuiComputer.guiBackground);
 		int yOffset = (gui.height / 2) - (GuiComputer.ySize / 2);
 		gui.drawTexturedModalRect((gui.width / 2) - (GuiComputer.xSize / 2), yOffset, 0, 0, GuiComputer.xSize, GuiComputer.ySize);
 		if(te.latestmessage.get(te.programSelected) == null || te.latestmessage.get(te.programSelected).isEmpty())
 			mc.fontRenderer.drawString(message, (gui.width - GuiComputer.xSize) / 2 + 15, (gui.height - GuiComputer.ySize) / 2 + 45, 4210752);
 		else 
-			mc.fontRenderer.drawString(I18n.translateToLocal(te.latestmessage.get(te.programSelected)), (gui.width - GuiComputer.xSize) / 2  + 15, (gui.height - GuiComputer.ySize) / 2 + 45, 4210752);
+			mc.fontRenderer.drawString(I18n.format(te.latestmessage.get(te.programSelected)), (gui.width - GuiComputer.xSize) / 2  + 15, (gui.height - GuiComputer.ySize) / 2 + 45, 4210752);
 	}
 	
 	/**
@@ -150,7 +151,7 @@ public abstract class ButtonListProgram extends ComputerProgram {
 		}
 		
 		public String translate() {
-			return I18n.translateToLocalFormatted(string, formatData);
+			return I18n.format(string, formatData);
 		}
 		
 	}

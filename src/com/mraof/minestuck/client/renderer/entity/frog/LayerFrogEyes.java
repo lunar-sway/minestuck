@@ -3,11 +3,8 @@ package com.mraof.minestuck.client.renderer.entity.frog;
 import com.mraof.minestuck.client.model.ModelFrog;
 import com.mraof.minestuck.entity.EntityFrog;
 
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.entity.passive.EntitySheep;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.ResourceLocation;
 
 public class LayerFrogEyes implements LayerRenderer<EntityFrog>
@@ -23,14 +20,13 @@ public class LayerFrogEyes implements LayerRenderer<EntityFrog>
 	}
 	
 	@Override
-	public void doRenderLayer(EntityFrog frog, float limbSwing, float limbSwingAmount, float partialTicks,
-			float ageInTicks, float netHeadYaw, float headPitch, float scale) 
+	public void render(EntityFrog frog, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
 	{
 		if(!frog.isInvisible())
 		{
 
 			this.frogRender.bindTexture(this.getTexture(frog));
-			if (frog.getType() == 6)
+			if (frog.getFrogType() == 6)
 	        {
 	            /*
 	            int i1 = 25;
@@ -77,7 +73,7 @@ public class LayerFrogEyes implements LayerRenderer<EntityFrog>
 					} break;
 				}
 				
-				GlStateManager.color(r, g, b);
+				GlStateManager.color3f(r, g, b);
 				
 				this.frogModel.setModelAttributes(this.frogRender.getMainModel());
 	            this.frogModel.setLivingAnimations(frog, limbSwing, limbSwingAmount, partialTicks);
@@ -86,7 +82,7 @@ public class LayerFrogEyes implements LayerRenderer<EntityFrog>
 		        
 				GlStateManager.disableBlend();
 	        }
-			else if (frog.getType() > frog.maxTypes() || frog.getType() < 1)
+			else if (frog.getFrogType() > frog.maxTypes() || frog.getFrogType() < 1)
 	        {
 				int eyeColor = frog.getEyeColor();
 				
@@ -98,7 +94,7 @@ public class LayerFrogEyes implements LayerRenderer<EntityFrog>
 				if(g < this.colorMin) g = this.colorMin;
 				if(b < this.colorMin) b = this.colorMin;
 				
-				GlStateManager.color(r, g, b, 1f);
+				GlStateManager.color4f(r, g, b, 1f);
 
 				this.frogModel.setModelAttributes(this.frogRender.getMainModel());
 	            this.frogModel.setLivingAnimations(frog, limbSwing, limbSwingAmount, partialTicks);
@@ -115,7 +111,7 @@ public class LayerFrogEyes implements LayerRenderer<EntityFrog>
 	{
 		int id = frog.getEyeType();
 		
-		if(frog.getType() == 6) return new ResourceLocation("minestuck:textures/mobs/frog/susan_eyes.png");
+		if(frog.getFrogType() == 6) return new ResourceLocation("minestuck:textures/mobs/frog/susan_eyes.png");
 		else if(id < 0) id = 0;
 		else if(id > 3) id = 3;
 		

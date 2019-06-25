@@ -1,6 +1,6 @@
 {
     "parent": "item/handheld",
     "textures": {
-        "layer0": "minestuck:items/axe_emerald"
+        "layer0": "minestuck:item/emerald_axe"
     }
 }

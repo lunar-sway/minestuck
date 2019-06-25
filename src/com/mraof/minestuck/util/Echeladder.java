@@ -1,9 +1,7 @@
 package com.mraof.minestuck.util;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.network.MinestuckChannelHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.MinestuckPacket.Type;
+import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.PlayerDataPacket;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
@@ -16,6 +14,8 @@ import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 
 import java.util.Set;
@@ -38,7 +38,7 @@ public class Echeladder
 	
 	public static void increaseProgress(EntityPlayerMP player, int progress)
 	{
-		MinestuckPlayerData.getData(player).echeladder.increaseProgress(progress);
+		MinestuckPlayerData.getData(player).echeladder.increaseProgress(player.server, progress);
 	}
 	
 	private PlayerIdentifier identifier;
@@ -58,9 +58,9 @@ public class Echeladder
 		return (int) (Math.pow(1.4, rung)*9);
 	}
 	
-	public void increaseProgress(int exp)
+	public void increaseProgress(MinecraftServer server, int exp)
 	{
-		SburbConnection c = SkaianetHandler.getMainConnection(identifier, true);
+		SburbConnection c = SkaianetHandler.get(server).getMainConnection(identifier, true);
 		int topRung = c != null && c.enteredGame() ? RUNG_COUNT - 1 : MinestuckConfig.preEntryRungLimit;
 		int expReq = getRungProgressReq();
 		if(rung >= topRung || exp < expReq*MIN_PROGRESS_MODIFIER)
@@ -93,28 +93,29 @@ public class Echeladder
 		}
 		
 		Debug.debugf("Finished echeladder climbing for %s at %s with progress %s", identifier.getUsername(), rung, progress);
-		EntityPlayer player = identifier.getPlayer();
+		EntityPlayerMP player = identifier.getPlayer(server);
 		if(player != null)
 		{
 			MinestuckPlayerTracker.updateEcheladder(player, false);
 			if(rung != prevRung)
 			{
 				updateEcheladderBonuses(player);
-				MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.BOONDOLLAR, MinestuckPlayerData.getData(identifier).boondollars), player);
+				MinestuckPacketHandler.sendToPlayer(PlayerDataPacket.boondollars(MinestuckPlayerData.getData(identifier).boondollars), player);
+				player.world.playSound(null, player.posX, player.posY, player.posZ, MinestuckSoundHandler.soundUpcheladder, SoundCategory.AMBIENT, 1F, 1F);
 			}
 		}
 	}
 	
-	public void checkBonus(byte type)
+	public void checkBonus(MinecraftServer server, byte type)
 	{
 		if(type >= UNDERLING_BONUS_OFFSET && type < UNDERLING_BONUS_OFFSET + underlingBonuses.length && !underlingBonuses[type - UNDERLING_BONUS_OFFSET])
 		{
 			underlingBonuses[type - UNDERLING_BONUS_OFFSET] = true;
-			increaseProgress(UNDERLING_BONUSES[type - UNDERLING_BONUS_OFFSET]);
+			increaseProgress(server, UNDERLING_BONUSES[type - UNDERLING_BONUS_OFFSET]);
 		} else if(type >= ALCHEMY_BONUS_OFFSET && type < ALCHEMY_BONUS_OFFSET + alchemyBonuses.length && !alchemyBonuses[type - ALCHEMY_BONUS_OFFSET])
 		{
 			alchemyBonuses[type - ALCHEMY_BONUS_OFFSET] = true;
-			increaseProgress(ALCHEMY_BONUSES[type - ALCHEMY_BONUS_OFFSET]);
+			increaseProgress(server, ALCHEMY_BONUSES[type - ALCHEMY_BONUS_OFFSET]);
 		}
 	}
 	
@@ -143,8 +144,8 @@ public class Echeladder
 		int healthBonus = healthBoost(rung);
 		double damageBonus = attackBonus(rung);
 		
-		updateAttribute(player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH), new AttributeModifier(echeladderHealthBoostModifierUUID, "Echeladder Health Boost", healthBonus, 0));	//If this isn't saved, your health goes to 10 hearts (if it was higher before) when loading the save file.
-		updateAttribute(player.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE), new AttributeModifier(echeladderDamageBoostModifierUUID, "Echeladder Damage Boost", damageBonus, 1).setSaved(false));
+		updateAttribute(player.getAttribute(SharedMonsterAttributes.MAX_HEALTH), new AttributeModifier(echeladderHealthBoostModifierUUID, "Echeladder Health Boost", healthBonus, 0));	//If this isn't saved, your health goes to 10 hearts (if it was higher before) when loading the save file.
+		updateAttribute(player.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE), new AttributeModifier(echeladderDamageBoostModifierUUID, "Echeladder Damage Boost", damageBonus, 1).setSaved(false));
 	}
 	
 	public void updateAttribute(IAttributeInstance attribute, AttributeModifier modifier)
@@ -158,13 +159,13 @@ public class Echeladder
 	{
 		Set<IAttributeInstance> attributesToSend = ((AttributeMap) player.getAttributeMap()).getDirtyInstances();
 		
-		attributesToSend.add(player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH));
+		attributesToSend.add(player.getAttribute(SharedMonsterAttributes.MAX_HEALTH));
 	}
 	
 	protected void saveEcheladder(NBTTagCompound nbt)
 	{
-		nbt.setInteger("rung", rung);
-		nbt.setInteger("rungProgress", progress);
+		nbt.setInt("rung", rung);
+		nbt.setInt("rungProgress", progress);
 		
 		byte[] bonuses = new byte[ALCHEMY_BONUS_OFFSET + alchemyBonuses.length];	//Booleans would be stored as bytes anyways
 		for(int i = 0; i < underlingBonuses.length; i++)
@@ -176,8 +177,8 @@ public class Echeladder
 	
 	protected void loadEcheladder(NBTTagCompound nbt)
 	{
-		rung = nbt.getInteger("rung");
-		progress = nbt.getInteger("rungProgress");
+		rung = nbt.getInt("rung");
+		progress = nbt.getInt("rungProgress");
 		
 		byte[] bonuses = nbt.getByteArray("rungBonuses");
 		for(int i = 0; i < underlingBonuses.length && i + UNDERLING_BONUS_OFFSET < bonuses.length; i++)
@@ -206,7 +207,7 @@ public class Echeladder
 		return 1/(rung*0.06D + 1);
 	}
 	
-	public void setByCommand(int rung, double progress)
+	public void setByCommand(MinecraftServer server, int rung, double progress)
 	{
 		this.rung = MathHelper.clamp(rung, 0, RUNG_COUNT - 1);	//Can never be too careful
 		if(rung != RUNG_COUNT - 1)
@@ -216,7 +217,7 @@ public class Echeladder
 				this.progress--;
 		} else this.progress = 0;
 		
-		EntityPlayer player = identifier.getPlayer();
+		EntityPlayerMP player = identifier.getPlayer(server);
 		if(player != null)
 		{
 			MinestuckPlayerTracker.updateEcheladder(player, true);

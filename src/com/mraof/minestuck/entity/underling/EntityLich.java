@@ -3,11 +3,13 @@ package com.mraof.minestuck.entity.underling;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
 import com.mraof.minestuck.util.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
 public class EntityLich extends EntityUnderling
@@ -15,7 +17,7 @@ public class EntityLich extends EntityUnderling
 	
 	public EntityLich(World world) 
 	{
-		super(world);
+		super(ModEntityTypes.LICH, world);
 		setSize(1.0F, 2.0F);
 	}
 	
@@ -31,6 +33,21 @@ public class EntityLich extends EntityUnderling
 		super.initEntityAI();
 		EntityAIAttackOnCollideWithRate aiAttack = new EntityAIAttackOnCollideWithRate(this, .4F, 20, false);
 		this.tasks.addTask(3, aiAttack);
+	}
+	
+	protected SoundEvent getAmbientSound()
+	{
+		return MinestuckSoundHandler.soundLichAmbient;
+	}
+	
+	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
+	{
+		return MinestuckSoundHandler.soundLichHurt;
+	}
+	
+	protected SoundEvent getDeathSound()
+	{
+		return MinestuckSoundHandler.soundLichDeath;
 	}
 	
 	@Override
@@ -84,10 +101,10 @@ public class EntityLich extends EntityUnderling
 		if(this.dead && !this.world.isRemote && type != null)
 		{
 			computePlayerProgress((int) (300*type.getPower() + 650));
-			if(entity != null && entity instanceof EntityPlayerMP)
+			if(entity instanceof EntityPlayerMP)
 			{
 				Echeladder ladder = MinestuckPlayerData.getData((EntityPlayerMP) entity).echeladder;
-				ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 3));
+				ladder.checkBonus(getServer(), (byte) (Echeladder.UNDERLING_BONUS_OFFSET + 3));
 			}
 		}
 	}

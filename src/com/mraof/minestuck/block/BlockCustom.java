@@ -1,49 +1,60 @@
 package com.mraof.minestuck.block;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.MapColor;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
+import net.minecraftforge.common.ToolType;
 
-/**
- * A class for creating blocks with a sound type in the constructor, because the sound setter is protected.
- */
+import javax.annotation.Nullable;
+
 public class BlockCustom extends Block
 {
+	protected final ToolType harvestTool;
+	protected final int harvestLevel;
+	protected final int flammability, fireSpread;
 	
-	public int flammability, fireSpread;
-	
-	public BlockCustom(Material material, MapColor mapColor, SoundType sound)
+	public BlockCustom(int flammability, int fireSpread, Properties properties)
 	{
-		super(material, mapColor);
-		setSoundType(sound);
+		this(flammability, fireSpread, null, 0, properties);
+	}
+	public BlockCustom(ToolType harvestTool, int harvestLevel, Properties properties)
+	{
+		this(0, 0, harvestTool, harvestLevel, properties);
 	}
 	
-	public BlockCustom(Material material, SoundType sound)
+	public BlockCustom(int flammability, int fireSpread, ToolType harvestTool, int harvestLevel, Properties properties)
 	{
-		super(material);
-		setSoundType(sound);
+		super(properties);
+		this.harvestTool = harvestTool;
+		this.harvestLevel = harvestLevel;
+		this.flammability = flammability;
+		this.fireSpread = fireSpread;
+	}
+	
+	@Nullable
+	@Override
+	public ToolType getHarvestTool(IBlockState state)
+	{
+		return harvestTool;
 	}
 	
 	@Override
-	public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face)
+	public int getHarvestLevel(IBlockState state)
+	{
+		return harvestLevel;
+	}
+	
+	@Override
+	public int getFlammability(IBlockState state, IBlockReader world, BlockPos pos, EnumFacing face)
 	{
 		return flammability;
 	}
 	
 	@Override
-	public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face)
+	public int getFireSpreadSpeed(IBlockState state, IBlockReader world, BlockPos pos, EnumFacing face)
 	{
 		return fireSpread;
-	}
-	
-	public BlockCustom setFireInfo(int flammability, int fireSpread)
-	{
-		this.flammability = flammability;
-		this.fireSpread = fireSpread;
-		return this;
 	}
 }

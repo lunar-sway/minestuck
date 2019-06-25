@@ -1,12 +1,13 @@
 package com.mraof.minestuck.entity.carapacian;
 
+import com.mraof.minestuck.entity.ModEntityTypes;
 import net.minecraft.world.World;
 
 public class EntityWhiteRook extends EntityRook
 {
 	public EntityWhiteRook(World world) 
 	{
-		super(world);
+		super(ModEntityTypes.PROSPITIAN_ROOK, world);
 	}
 
 	@Override

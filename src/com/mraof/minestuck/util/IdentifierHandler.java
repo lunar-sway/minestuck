@@ -8,20 +8,14 @@ import java.util.UUID;
 import com.google.common.collect.Lists;
 import com.mraof.minestuck.MinestuckConfig;
 
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagLong;
-import net.minecraft.nbt.NBTTagString;
+import net.minecraft.nbt.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerList;
 import net.minecraftforge.common.UsernameCache;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.common.util.FakePlayer;
 
 /**
  * Used to encode/decode player usernames, to handle uses with LAN.
@@ -61,13 +55,16 @@ public class IdentifierHandler {
 	
 	public static PlayerIdentifier encode(EntityPlayer player)
 	{
+		if(player instanceof FakePlayer || player.getName() == null)
+			return null;
+		
 		for(PlayerIdentifier identifier : identifierList)
 			if(identifier.appliesTo(player))
 				return identifier;
 		PlayerIdentifier identifier;
 		if(MinestuckConfig.useUUID)
 			identifier = new PlayerIdentifier(player.getGameProfile().getId());
-		else identifier = new PlayerIdentifier(usernameEncode(player.getName()));
+		else identifier = new PlayerIdentifier(usernameEncode(player.getName().getString()));
 		identifier.id = nextIdentifierId;
 		nextIdentifierId++;
 		identifierList.add(identifier);
@@ -76,10 +73,10 @@ public class IdentifierHandler {
 	
 	public static boolean hasIdentifier(NBTTagCompound nbt, String key)
 	{
-		return nbt.hasKey("owner") || nbt.hasKey("ownerMost") && nbt.hasKey("ownerLeast");
+		return nbt.contains(key, 8) || nbt.contains(key + "Most", 4) && nbt.contains(key + "Least", 4);
 	}
 	
-	public static PlayerIdentifier load(NBTBase nbt, String key)
+	public static PlayerIdentifier load(INBTBase nbt, String key)
 	{
 		PlayerIdentifier identifier = new PlayerIdentifier(nbt, key);
 		if(".null".equals(identifier.username))
@@ -92,9 +89,9 @@ public class IdentifierHandler {
 				return id;
 		if(MinestuckConfig.useUUID != identifier.useUUID)
 		{
-			EntityPlayer player = identifier.getPlayer();
-			if(player != null)
-				return encode(player);
+			/*EntityPlayer player = identifier.getPlayer();
+			if(player != null) TODO
+				return encode(player);*/
 		}
 		identifier.id = nextIdentifierId;
 		nextIdentifierId++;
@@ -114,7 +111,7 @@ public class IdentifierHandler {
 				identifier.useUUID = MinestuckConfig.useUUID;
 				if(identifier.useUUID)
 					identifier.uuid = player.getGameProfile().getId();
-				else identifier.username = usernameEncode(player.getName());
+				else identifier.username = usernameEncode(player.getName().getString());
 				
 				identifierList.add(identifier);
 				iter.remove();
@@ -133,7 +130,7 @@ public class IdentifierHandler {
 		return null;
 	}
 	
-	public static PlayerIdentifier getForCommand(MinecraftServer server, ICommandSender sender, String playerName) throws CommandException
+	/*public static PlayerIdentifier getForCommand(MinecraftServer server, ICommandSender sender, String playerName) throws CommandException
 	{
 		if(playerName.startsWith("@"))	//Refer directly to an identifier
 		{
@@ -174,7 +171,7 @@ public class IdentifierHandler {
 		{
 			return CommandBase.getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames());
 		}
-	}
+	}*/
 	
 	public static PlayerIdentifier createNewFakeIdentifier()
 	{
@@ -225,7 +222,7 @@ public class IdentifierHandler {
 			useUUID = false;
 		}
 		
-		private PlayerIdentifier(NBTBase nbt, String key)
+		private PlayerIdentifier(INBTBase nbt, String key)
 		{
 			if(nbt instanceof NBTTagString)
 			{
@@ -241,7 +238,7 @@ public class IdentifierHandler {
 			else
 			{
 				NBTTagCompound compound = (NBTTagCompound) nbt;
-				if(compound.hasKey(key, 8))
+				if(compound.contains(key, 8))
 				{
 					username = compound.getString(key);
 					useUUID = false;
@@ -255,25 +252,25 @@ public class IdentifierHandler {
 			}
 		}
 		
-		public NBTBase saveToNBT(NBTBase nbt, String key)
+		public NBTTagList saveToNBT(NBTTagList nbt, String key)
 		{
-			if(nbt instanceof NBTTagList)
-				if(this.useUUID)
-				{
-					NBTTagList list = new NBTTagList();
-					list.appendTag(new NBTTagLong(uuid.getMostSignificantBits()));
-					list.appendTag(new NBTTagLong(uuid.getLeastSignificantBits()));
-					((NBTTagList) nbt).appendTag(list);
-				} else ((NBTTagList) nbt).appendTag(new NBTTagString(username));
-			else
+			if(this.useUUID)
 			{
-				NBTTagCompound compound = (NBTTagCompound) nbt;
-				if(this.useUUID)
-				{
-					compound.setLong(key+"Most", uuid.getMostSignificantBits());
-					compound.setLong(key+"Least", uuid.getLeastSignificantBits());
-				} else compound.setString(key, username);
-			}
+				NBTTagList list = new NBTTagList();
+				list.add(new NBTTagLong(uuid.getMostSignificantBits()));
+				list.add(new NBTTagLong(uuid.getLeastSignificantBits()));
+				nbt.add(list);
+			} else nbt.add(new NBTTagString(username));
+			return nbt;
+		}
+		
+		public NBTTagCompound saveToNBT(NBTTagCompound nbt, String key)
+		{
+			if(this.useUUID)
+			{
+				nbt.setLong(key+"Most", uuid.getMostSignificantBits());
+				nbt.setLong(key+"Least", uuid.getLeastSignificantBits());
+			} else nbt.setString(key, username);
 			return nbt;
 		}
 		
@@ -281,7 +278,7 @@ public class IdentifierHandler {
 		{
 			if(this.useUUID)
 				return player.getGameProfile().getId().equals(uuid);
-			else return usernameEncode(player.getName()).equals(username);
+			else return usernameEncode(player.getName().getString()).equals(username);
 		}
 		
 		@Override
@@ -305,9 +302,9 @@ public class IdentifierHandler {
 			else return usernameDecode(username);
 		}
 		
-		public EntityPlayerMP getPlayer()
+		public EntityPlayerMP getPlayer(MinecraftServer server)
 		{
-			PlayerList list = FMLCommonHandler.instance().getMinecraftServerInstance() == null ? null : FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList();
+			PlayerList list = server == null ? null : server.getPlayerList();
 			if(list == null)
 				return null;
 			if(this.useUUID)

@@ -1,6 +1,7 @@
 {
     "variants": {
-        "half=bottom": { "model": "minestuck:half_slab_end_planks" },
-        "half=top": { "model": "minestuck:half_slab_end_planks", "x": 180, "uvlock": true }
+        "type=bottom": { "model": "minestuck:block/end_planks_slab" },
+        "type=top":    { "model": "minestuck:block/end_planks_slab_top" },
+        "type=double": { "model": "minestuck:block/end_planks" }
     }
 }

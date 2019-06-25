@@ -3,6 +3,7 @@ package com.mraof.minestuck.entity.underling;
 import com.mraof.minestuck.entity.IEntityMultiPart;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.entity.ModEntityTypes;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -17,7 +18,7 @@ public class EntityWyrm extends EntityUnderling implements IEntityMultiPart
 	public ArrayList<Integer> partIds = new ArrayList<Integer>();
 	public EntityWyrm(World world)
 	{
-		super(world);
+		super(ModEntityTypes.UNDERLING_PART, world);
 	}
 	
 	@Override
@@ -26,18 +27,6 @@ public class EntityWyrm extends EntityUnderling implements IEntityMultiPart
 		return "wyrm";
 	}
 	
-	@Override
-	public void writeSpawnData(ByteBuf buffer)
-	{
-		super.writeSpawnData(buffer);
-	}
-
-	@Override
-	public void readSpawnData(ByteBuf buffer)
-	{
-		super.readSpawnData(buffer);
-	}
-
 	@Override
 	public World getWorld()
 	{

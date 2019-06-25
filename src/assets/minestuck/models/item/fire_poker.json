@@ -1,6 +1,6 @@
 {
     "parent": "item/handheld",
     "textures": {
-        "layer0": "minestuck:items/fire_poker"
+        "layer0": "minestuck:item/fire_poker"
     }
 }

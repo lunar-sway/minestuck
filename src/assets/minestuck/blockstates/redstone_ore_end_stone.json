@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "minestuck:redstone_ore_end_stone" }
+        "": { "model": "minestuck:block/redstone_ore_end_stone" }
     }
 }

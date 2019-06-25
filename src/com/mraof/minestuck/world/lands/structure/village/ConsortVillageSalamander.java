@@ -7,15 +7,13 @@ import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.StructureBoundingBox;
-import net.minecraft.world.gen.structure.StructureComponent;
 
 import java.util.List;
 import java.util.Random;
 
 public class ConsortVillageSalamander
 {
-	public static class RuinedTowerMushroomCenter extends ConsortVillageCenter.VillageCenter
+	/*public static class RuinedTowerMushroomCenter extends ConsortVillageCenter.VillageCenter
 	{
 		public RuinedTowerMushroomCenter()
 		{
@@ -448,5 +446,5 @@ public class ConsortVillageSalamander
 			
 			return true;
 		}
-	}
+	}*/
 }

@@ -4,21 +4,18 @@ import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockHorizontal;
-import net.minecraft.block.BlockStoneSlab;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.StructureBoundingBox;
-import net.minecraft.world.gen.structure.StructureComponent;
 
 import java.util.List;
 import java.util.Random;
 
 public class ConsortVillageNakagator
 {
-	public static class RadioTowerCenter extends ConsortVillageCenter.VillageCenter
+	/*public static class RadioTowerCenter extends ConsortVillageCenter.VillageCenter
 	{
 		public RadioTowerCenter()
 		{
@@ -625,5 +622,5 @@ public class ConsortVillageNakagator
 			
 			return true;
 		}
-	}
+	}*/
 }

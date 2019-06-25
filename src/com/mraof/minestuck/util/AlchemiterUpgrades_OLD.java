@@ -27,25 +27,25 @@ public class AlchemiterUpgrades_OLD
 	public static int upgradeCount = 0;
 	
 	//Upgrade Combos
-	//public static AlchemiterUpgrades itemWidget = new AlchemiterUpgrades(new ItemStack[] {new ItemStack(MinestuckBlocks.crockerMachine), new ItemStack(Blocks.HOPPER)}, EnumType.HORIZONTAL, EnumParts.BASE, EnumParts.BASE);
-	public static AlchemiterUpgrades_OLD holoLathe = new AlchemiterUpgrades_OLD(new ItemStack[] {new ItemStack(MinestuckBlocks.totemlathe[0]), new ItemStack(MinestuckBlocks.holopad)}, EnumType.HORIZONTAL, EnumParts.BASE, EnumParts.BASE);
-	public static AlchemiterUpgrades_OLD cruxiteBlender = new AlchemiterUpgrades_OLD(new ItemStack[] {new ItemStack(MinestuckBlocks.cruxtruder), new ItemStack(MinestuckBlocks.blender)}, EnumType.HORIZONTAL, EnumParts.BASE, EnumParts.BASE);
+	//public static AlchemiterUpgrades itemWidget = new AlchemiterUpgrades(new ItemStack[] {new ItemStack(MinestuckBlocks.GRIST_WIDGET), new ItemStack(Blocks.HOPPER)}, EnumType.HORIZONTAL, EnumParts.BASE, EnumParts.BASE);
+	public static AlchemiterUpgrades_OLD holoLathe = new AlchemiterUpgrades_OLD(new ItemStack[] {new ItemStack(MinestuckBlocks.TOTEM_LATHE_MIDDLE), new ItemStack(MinestuckBlocks.HOLOPAD)}, EnumType.HORIZONTAL, EnumParts.BASE, EnumParts.BASE);
+	public static AlchemiterUpgrades_OLD cruxiteBlender = new AlchemiterUpgrades_OLD(new ItemStack[] {new ItemStack(MinestuckBlocks.CRUXTRUDER_CENTER), new ItemStack(MinestuckBlocks.BLENDER)}, EnumType.HORIZONTAL, EnumParts.BASE, EnumParts.BASE);
 		
 	//Solo Upgrades
-	public static AlchemiterUpgrades_OLD captchaCard = new AlchemiterUpgrades_OLD(new ItemStack(MinestuckItems.captchaCard), EnumType.HORIZONTAL, EnumParts.CAPTCHA_CARD);
-	public static AlchemiterUpgrades_OLD blender = new AlchemiterUpgrades_OLD(new ItemStack(MinestuckBlocks.blender), EnumType.TOTEM_PAD, EnumParts.NONE, EnumParts.BLENDER, EnumParts.BLANK, EnumParts.BLANK);
+	public static AlchemiterUpgrades_OLD captchaCard = new AlchemiterUpgrades_OLD(new ItemStack(MinestuckItems.CAPTCHA_CARD), EnumType.HORIZONTAL, EnumParts.CAPTCHA_CARD);
+	public static AlchemiterUpgrades_OLD blender = new AlchemiterUpgrades_OLD(new ItemStack(MinestuckBlocks.BLENDER), EnumType.TOTEM_PAD, EnumParts.NONE, EnumParts.BLENDER, EnumParts.BLANK, EnumParts.BLANK);
 	public static AlchemiterUpgrades_OLD crafting = new AlchemiterUpgrades_OLD(new ItemStack(Blocks.CRAFTING_TABLE), EnumType.HORIZONTAL, EnumParts.CRAFTING);
 	public static AlchemiterUpgrades_OLD hopper = new AlchemiterUpgrades_OLD(new ItemStack(Blocks.HOPPER), EnumType.HORIZONTAL, EnumParts.HOPPER);
 	public static AlchemiterUpgrades_OLD chest = new AlchemiterUpgrades_OLD(new ItemStack(Blocks.CHEST), EnumType.HORIZONTAL, EnumParts.CHEST);
-	public static AlchemiterUpgrades_OLD library = new AlchemiterUpgrades_OLD(new ItemStack(MinestuckItems.modusCard, 1, 5), EnumType.HORIZONTAL, EnumParts.LIBRARY);
-	public static AlchemiterUpgrades_OLD gristWidget = new AlchemiterUpgrades_OLD(new ItemStack(MinestuckBlocks.crockerMachine), EnumType.HORIZONTAL, EnumParts.GRISTWIDGET);
+	public static AlchemiterUpgrades_OLD library = new AlchemiterUpgrades_OLD(new ItemStack(MinestuckItems.SET_MODUS_CARD), EnumType.HORIZONTAL, EnumParts.LIBRARY);
+	public static AlchemiterUpgrades_OLD gristWidget = new AlchemiterUpgrades_OLD(new ItemStack(MinestuckBlocks.GRIST_WIDGET), EnumType.HORIZONTAL, EnumParts.GRISTWIDGET);
 	public static AlchemiterUpgrades_OLD dropper = new AlchemiterUpgrades_OLD(new ItemStack(Blocks.DROPPER), EnumType.HORIZONTAL, EnumParts.DROPPER);
 	public static AlchemiterUpgrades_OLD redstone = new AlchemiterUpgrades_OLD(new ItemStack(Items.REDSTONE), EnumType.HORIZONTAL, EnumParts.REDSTONE);
-	public static AlchemiterUpgrades_OLD gristToBoon = new AlchemiterUpgrades_OLD(new ItemStack(MinestuckItems.boondollars), EnumType.HORIZONTAL, EnumParts.BOONDOLLAR);
-	public static AlchemiterUpgrades_OLD sbahjified = new AlchemiterUpgrades_OLD(new ItemStack(MinestuckItems.sbahjPoster), EnumType.NONE, EnumParts.BASE);
-	public static AlchemiterUpgrades_OLD holopad = new AlchemiterUpgrades_OLD(new ItemStack(MinestuckBlocks.holopad), EnumType.TOTEM_PAD, EnumParts.BASE);
-	public static AlchemiterUpgrades_OLD cruxtruder = new AlchemiterUpgrades_OLD(new ItemStack(MinestuckBlocks.cruxtruder), EnumType.TOTEM_PAD, EnumParts.BASE);
-	public static AlchemiterUpgrades_OLD punchDesignix = new AlchemiterUpgrades_OLD(new ItemStack(MinestuckBlocks.punchDesignix), EnumType.HORIZONTAL, EnumParts.BASE, EnumParts.BASE);
+	public static AlchemiterUpgrades_OLD gristToBoon = new AlchemiterUpgrades_OLD(new ItemStack(MinestuckItems.BOONDOLLARS), EnumType.HORIZONTAL, EnumParts.BOONDOLLAR);
+	public static AlchemiterUpgrades_OLD sbahjified = new AlchemiterUpgrades_OLD(new ItemStack(MinestuckItems.SBAHJ_POSTER), EnumType.NONE, EnumParts.BASE);
+	public static AlchemiterUpgrades_OLD holopad = new AlchemiterUpgrades_OLD(new ItemStack(MinestuckBlocks.HOLOPAD), EnumType.TOTEM_PAD, EnumParts.BASE);
+	public static AlchemiterUpgrades_OLD cruxtruder = new AlchemiterUpgrades_OLD(new ItemStack(MinestuckBlocks.CRUXTRUDER_CENTER), EnumType.TOTEM_PAD, EnumParts.BASE);
+	public static AlchemiterUpgrades_OLD punchDesignix = new AlchemiterUpgrades_OLD(new ItemStack(MinestuckBlocks.PUNCH_DESIGNIX_KEYBOARD), EnumType.HORIZONTAL, EnumParts.BASE, EnumParts.BASE);
 	public static AlchemiterUpgrades_OLD compactJBE = new AlchemiterUpgrades_OLD(new ItemStack(MinestuckBlocks.jumperBlockExtension[0]), EnumType.HORIZONTAL, EnumParts.BASE, EnumParts.BASE);
 	
 	
@@ -222,7 +222,7 @@ public class AlchemiterUpgrades_OLD
 	        super("The JBE upgrade combination with id of " + id + "has exceeded the maximum amount of items.");
 	    }}
 
-	public static boolean nullifiesAlchemiterFunc(AlchemiterUpgrades_OLD upg) 
+	public static boolean nullifiesAlchemiterFunc(AlchemiterUpgrades_OLD upg)
 	{
 		return 
 			upg == blender

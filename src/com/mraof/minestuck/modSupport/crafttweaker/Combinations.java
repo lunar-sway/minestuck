@@ -1,5 +1,5 @@
 package com.mraof.minestuck.modSupport.crafttweaker;
-
+/*
 import com.mraof.minestuck.alchemy.CombinationRegistry;
 import crafttweaker.IAction;
 import crafttweaker.annotations.ZenRegister;
@@ -104,4 +104,4 @@ public class Combinations
 			else return "Adding Combination Recipe for \""+output.getDisplayName()+"\"";
 		}
 	}
-}
+}*/

@@ -1,5 +1,5 @@
 package com.mraof.minestuck.jei;
-
+/*
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.ColorCollector;
 import mezz.jei.api.IGuiHelper;
@@ -14,7 +14,7 @@ import net.minecraft.util.ResourceLocation;
 /**
  * Created by mraof on 2017 January 23 at 2:38 AM.
  */
-public class AlchemiterRecipeCategory implements IRecipeCategory<AlchemiterRecipeWrapper>
+/*public class AlchemiterRecipeCategory implements IRecipeCategory<AlchemiterRecipeWrapper>
 {
     private IDrawable background;
 
@@ -59,3 +59,4 @@ public class AlchemiterRecipeCategory implements IRecipeCategory<AlchemiterRecip
         recipeLayout.getItemStacks().set(1, ingredients.getOutputs(ItemStack.class).get(0));
     }
 }
+*/

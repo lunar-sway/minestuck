@@ -7,69 +7,34 @@ import javax.annotation.Nullable;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagInt;
-import net.minecraft.nbt.NBTTagString;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ReportedException;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
-public class ItemShunt extends Item {
-	public ItemShunt()
+public class ItemShunt extends Item
+{
+	
+	public ItemShunt(Properties properties)
 	{
-		this.setCreativeTab(TabMinestuck.instance);
-		//this.setHasSubtypes(true);
-		this.setUnlocalizedName("shunt");
+		super(properties);
+		this.addPropertyOverride(ItemCaptchaCard.CONTENT_NAME, ItemCaptchaCard.CONTENT);
 	}
 	
 	@Override
-	public int getItemStackLimit(ItemStack stack)
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
 	{
-		return 1;
-	}
-	
-	@Override
-	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
-	{
-		if(this.isInCreativeTab(tab))
+		if(AlchemyRecipes.hasDecodedItem(stack))
 		{
-			items.add(new ItemStack(this));
-		}
-	}
-	
-	@Override
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
-	{
-		if(stack.hasTagCompound())
-		{
-			NBTTagCompound nbttagcompound = stack.getTagCompound();
-			NBTTagString contentID = (NBTTagString)nbttagcompound.getTag("contentID");
-			NBTTagInt contentMeta;
-			try
-			{
-				contentMeta = (NBTTagInt)nbttagcompound.getTag("contentMeta");
-			}
-			catch(Throwable e)
-			{
-				contentMeta = null;
-			}
+			ItemStack content = AlchemyRecipes.getDecodedItem(stack);
 			
-			if (contentID != null && contentMeta != null && Item.REGISTRY.containsKey(new ResourceLocation(contentID.getString())))
-			{
-				tooltip.add("(" + (AlchemyRecipes.getDecodedItem(stack)).getDisplayName() + ")");
-				return;
-			}
-			else {
-				tooltip.add("("+I18n.translateToLocal("item.shunt.invalid")+")");
-			}
-		} else {
-			tooltip.add("("+I18n.translateToLocal("item.shunt.empty")+")");
-		}
-		
+			if (!content.isEmpty())
+				tooltip.add(new TextComponentString("(").appendSibling(content.getDisplayName()).appendText(")"));
+			else
+				tooltip.add(new TextComponentString("(").appendSibling(new TextComponentTranslation("item.shunt.invalid")).appendText(")"));
+		} else
+			tooltip.add(new TextComponentString("(").appendSibling(new TextComponentTranslation("item.shunt.empty")).appendText(")"));
 	}
 }

@@ -30,9 +30,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-
-
-public abstract class BlockJumperBlock extends BlockLargeMachine {
+public abstract class BlockJumperBlock extends BlockMachine
+{
 	public static final PropertyEnum<EnumParts> PART1 = PropertyEnum.create("part", EnumParts.class, EnumParts.TOP_PLUG, EnumParts.BOTTOM_PLUG, EnumParts.TOP_SHUNT, EnumParts.BOTTOM_SHUNT);
 	public static final PropertyEnum<EnumParts> PART2 = PropertyEnum.create("part", EnumParts.class, EnumParts.TOP_CORNER_PLUG, EnumParts.BOTTOM_CORNER_PLUG, EnumParts.BOTTOM_CORNER_SHUNT, EnumParts.TOP_CORNER_SHUNT);
 	public static final PropertyEnum<EnumParts> PART3 = PropertyEnum.create("part", EnumParts.class, EnumParts.BORDER_LEFT, EnumParts.BORDER_SIDE, EnumParts.BORDER_RIGHT, EnumParts.SMALL_CORNER);

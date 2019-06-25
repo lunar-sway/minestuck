@@ -1,6 +1,6 @@
 {
     "parent": "block/cross",
     "textures": {
-        "cross": "minestuck:blocks/end_sapling"
+        "cross": "minestuck:block/end_sapling"
     }
 }

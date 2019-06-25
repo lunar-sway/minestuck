@@ -1,6 +1,6 @@
 {
     "parent": "block/cube_all",
     "textures": {
-        "all": "minestuck:blocks/coal_ore_netherrack"
+        "all": "minestuck:block/coal_ore_netherrack"
     }
 }

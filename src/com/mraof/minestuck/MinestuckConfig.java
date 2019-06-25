@@ -9,50 +9,47 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.UserListOpsEntry;
 import net.minecraft.world.GameType;
-import net.minecraftforge.common.config.Configuration;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GLContext;
 
 import java.io.File;
 
 public class MinestuckConfig
 {
-	public static Configuration config;
-	public static Side gameSide;
+	//public static Configuration config;
 	
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static int clientOverworldEditRange;
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static int clientLandEditRange;
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static int clientCardCost;
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static int clientAlchemiterStacks;
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static byte clientTreeAutobalance;
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static byte clientHashmapChat;
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static byte echeladderAnimation;
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static boolean clientGiveItems;
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static boolean clientDisableGristWidget;
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static boolean clientHardMode;
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static boolean oldItemModels;
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static boolean loginColorSelector;
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static boolean dataCheckerAccess;
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static boolean alchemyIcons;
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static boolean preEntryEcheladder;
 	
 	public static boolean hardMode = false;
@@ -71,6 +68,7 @@ public class MinestuckConfig
 	public static boolean disableGristWidget;
 	public static boolean vanillaOreDrop;
 	public static boolean echeladderProgress;
+	public static boolean aspectEffects;
 	public static boolean useUUID;
 	public static boolean playerSelectedTitle;
 	public static boolean canBreakGates;
@@ -86,11 +84,11 @@ public class MinestuckConfig
 	public static int landEditRange;
 	public static int cardResolution;
 	public static int initialModusSize;
-	public static String[] defaultModusTypes;
+	public static String[] defaultModusTypes = new String[0];
 	public static int modusMaxSize;
 	public static int cardCost;
 	public static int oreMultiplier;
-	public static int alchemiterMaxStacks;
+	public static int alchemiterMaxStacks = 16;
 	/**
 	 * 0: Make the player's new server player his/her old server player's server player
 	 * 1: The player that lost his/her server player will have an idle main connection until someone without a client player connects to him/her.
@@ -98,7 +96,7 @@ public class MinestuckConfig
 	 */
 	public static int escapeFailureMode;
 	public static int preEntryRungLimit;
-	public static int[] forbiddenDimensionsTpz;
+	public static DimensionType[] forbiddenDimensionsTpz = new DimensionType[0];
 	public static byte treeModusSetting;
 	public static byte hashmapChatModusSetting;
 	/**
@@ -108,7 +106,7 @@ public class MinestuckConfig
 	public static byte sylladexDropMode;
 	public static byte dataCheckerPermission;
 	
-	public static boolean[] deployConfigurations;
+	public static boolean[] deployConfigurations = new boolean[2];
 	
 	//Secret configuration options
 	public static boolean secretConfig = false;
@@ -125,7 +123,7 @@ public class MinestuckConfig
 	public static int cruxiteStratumMax = 60;
 	public static int uraniumStratumMax = 30;
 	
-	static void loadConfigFile(File file, Side side)
+	/*static void loadConfigFile(File file, Side side)
 	{
 		gameSide = side;
 		config = new Configuration(file, true);
@@ -163,9 +161,7 @@ public class MinestuckConfig
 			
 			giveItems = config.get("General", "giveItems", false, "Setting this to true replaces editmode with the old Give Items button.").setLanguageKey("minestuck.config.giveItems").setRequiresWorldRestart(true).getBoolean();
 			
-			deployConfigurations = new boolean[1];
-			deployConfigurations[0] = config.get("General", "deployCard", false, "Determines if a card with a captcha card punched on it should be added to the deploy list or not.").setLanguageKey("minestuck.config.deployCard").setRequiresWorldRestart(true).getBoolean();
-			cardCost = config.get("General", "cardCost", 1, "An integer that determines how much a captchalouge card costs to alchemize").setMinValue(1).setLanguageKey("minestuck.config.cardCost").setRequiresWorldRestart(true).getInt();
+			cardCost = config.get("General", "cardCost", 1, "An integer that determines how much a captchalogue card costs to alchemize").setMinValue(1).setLanguageKey("minestuck.config.cardCost").setRequiresWorldRestart(true).getInt();
 			
 			globalSession = config.get("General", "globalSession", false, "Whenether all connetions should be put into a single session or not.").setRequiresWorldRestart(true).setLanguageKey("minestuck.config.globalSession").getBoolean();
 			generateCruxiteOre = config.get("General", "generateCruxiteOre", true, "If cruxite ore should be generated in the overworld.").setRequiresWorldRestart(true).setLanguageKey("minestuck.config.generateCruxiteOre").getBoolean();
@@ -194,9 +190,9 @@ public class MinestuckConfig
 		privateComputers = config.get("General", "privateComputers", true, "True if computers should only be able to be used by the owner.").setLanguageKey("minestuck.config.privateComputers").getBoolean();
 
 		deployConfigurations = new boolean[2];
-		deployConfigurations[0] = config.get("General", "deployCard", false, "Determines if a card with a captcha card punched on it should be added to the deploy list or not.").setLanguageKey("minestuck.config.deployCard").setRequiresWorldRestart(true).getBoolean();
+		deployConfigurations[0] = config.get("General", "deployCard", false, "Determines if a card with a captcha card punched on it should be added to the deploy list.").setLanguageKey("minestuck.config.deployCard").setRequiresWorldRestart(true).getBoolean();
 		deployConfigurations[1] = config.get("General", "portableMachines", false, "Determines if the small portable machines should be included in the deploy list.").setLanguageKey("minestuck.config.portableMachines").setRequiresWorldRestart(true).getBoolean();
-		cardCost = config.get("General", "cardCost", 1, "An integer that determines how much a captchalouge card costs to alchemize").setMinValue(1).setLanguageKey("minestuck.config.cardCost").setRequiresWorldRestart(true).getInt();
+		cardCost = config.get("General", "cardCost", 1, "An integer that determines how much a captchalogue card costs to alchemize").setMinValue(1).setLanguageKey("minestuck.config.cardCost").setRequiresWorldRestart(true).getInt();
 
 		generateCruxiteOre = config.get("General", "generateCruxiteOre", true, "If cruxite ore should be generated in the overworld.").setRequiresWorldRestart(true).setLanguageKey("minestuck.config.generateCruxiteOre").getBoolean();
 		generateUraniumOre = config.get("General", "generateUraniumOre", false, "If uranium ore should be generated in the overworld.").setRequiresWorldRestart(true).setLanguageKey("minestuck.config.generateUraniumOre").getBoolean();
@@ -210,6 +206,7 @@ public class MinestuckConfig
 		allowSecondaryConnections = config.get("General", "secondaryConnections", true, "Set this to true to allow so-called 'secondary connections' to be created.").setLanguageKey("minestuck.config.secondaryConnections").getBoolean();	//Server lists need to be updated if this gets changeable in-game
 		vanillaOreDrop = config.get("General", "vanillaOreDrop", false, "If this is true, the custom vanilla ores will drop the standard vanilla ores when mined, instead of the custom type.").setLanguageKey("minestuck.config.vanillaOreDrop").getBoolean();
 		echeladderProgress = config.get("General", "echeladderProgress", false, "If this is true, players will be able to see their progress towards the next rung. This is server side and will only be active in multiplayer if the server/Lan host has it activated.").setLanguageKey("minestuck.config.echeladderProgress").getBoolean();
+		aspectEffects = config.get("General", "aspectEffects", true, "If this is true, players will gain certain potion effects once they reach a certain rung based on their aspect.").setLanguageKey("minestuck.config.aspectEffects").getBoolean();
 		playerSelectedTitle = config.get("General", "playerSelectedTitle", false, "Enable this to let players select their own title. They will however not be able to select the Lord or Muse as class.").setLanguageKey("minestuck.config.playerSelectedTitle").getBoolean();
 		canBreakGates = config.get("General", "canBreakGates", true, "Lets gates be destroyed by explosions. Turning this off will make gates use the same explosion resistance as bedrock.").setLanguageKey("minestuck.config.canBreakGates").getBoolean();
 		disableGiclops = config.get("General", "disableGiclops", true, "Right now, the giclops pathfinding is currently causing huge amounts of lag due to their size. This option is a short-term solution that will disable giclops spawning and remove all existing giclopes.").setLanguageKey("minestuck.config.disableGiclops").getBoolean();
@@ -258,7 +255,7 @@ public class MinestuckConfig
 			if(specialCardRenderer && !GLContext.getCapabilities().GL_EXT_framebuffer_object)
 			{
 				specialCardRenderer = false;
-				Debug.warn("The FBO extension is not available and is required for the advanced rendering of captchalouge cards.");
+				Debug.warn("The FBO extension is not available and is required for the advanced rendering of captchalogue cards.");
 			}
 			//cardResolution = config.getInt("General", "cardResolution", 1, 0, 5, "The resolution of the item inside of a card. The width/height is computed by '8*2^x', where 'x' is this config value.");
 			loginColorSelector = config.get("General", "loginColorSelector", true, "Determines if the color selector should be displayed when entering a save file for the first time.").setLanguageKey("minestuck.config.loginColorSelector").getBoolean();
@@ -271,18 +268,18 @@ public class MinestuckConfig
 		}
 	}
 	
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
 	{
-		if(event.getModID().equals(Minestuck.class.getAnnotation(Mod.class).modid()))
+		if(event.getModID().equals(Minestuck.MOD_ID))
 		{
 			loadBasicConfigOptions(event.isWorldRunning());
 			
 			config.save();
 			
 		}
-	}
+	}*/
 	
 	public static boolean getDataCheckerPermissionFor(EntityPlayerMP player)
 	{

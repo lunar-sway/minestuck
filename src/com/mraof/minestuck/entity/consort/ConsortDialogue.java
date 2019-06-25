@@ -8,10 +8,10 @@ import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
+import com.mraof.minestuck.world.lands.LandAspects;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 import com.mraof.minestuck.world.storage.loot.MinestuckLoot;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -35,7 +35,7 @@ import static com.mraof.minestuck.world.lands.LandAspectRegistry.fromNameTitle;
 public class ConsortDialogue
 {
 	
-	private static final List<DialogueWrapper> messages = new LinkedList<DialogueWrapper>();
+	private static final List<DialogueWrapper> messages = new LinkedList<>();
 	
 	/**
 	 * Make sure to call after land registry
@@ -127,9 +127,9 @@ public class ConsortDialogue
 		
 		//Towers
 		addMessage("climbHigh").landTitleSpecific(fromNameTitle("towers"), fromNameTitle("wind")).consort(EnumConsort.IGUANA);
-		addMessage(new ConditionedMessage((EntityConsort consort, EntityPlayer player) -> consort.posY < 78, new ChainMessage(new SingleMessage("heightFear.towers.1"), new SingleMessage("heightFear.towers.2")),
+		addMessage(new ConditionedMessage((EntityConsort consort, EntityPlayerMP player) -> consort.posY < 78, new ChainMessage(new SingleMessage("heightFear.towers.1"), new SingleMessage("heightFear.towers.2")),
 				new SingleMessage("heightFear.panic"))).landTitle(fromNameTitle("towers")).consort(EnumConsort.TURTLE);
-		addMessage(new ConditionedMessage((EntityConsort consort, EntityPlayer player) -> consort.posY < 78, new ChainMessage(new SingleMessage("heightFear.rock.1"), new SingleMessage("heightFear.rock.2")),
+		addMessage(new ConditionedMessage((EntityConsort consort, EntityPlayerMP player) -> consort.posY < 78, new ChainMessage(new SingleMessage("heightFear.rock.1"), new SingleMessage("heightFear.rock.2")),
 				new SingleMessage("heightFear.panic"))).landTitle(fromNameTitle("wind")).consort(EnumConsort.TURTLE);
 		
 		//Shade
@@ -223,7 +223,7 @@ public class ConsortDialogue
 		addMessage("lazyKing").landTerrain(fromNameTerrain("shade"));
 		addMessage("musicInvention").consort(EnumConsort.NAKAGATOR, EnumConsort.SALAMANDER);
 		addMessage("wyrm").consort(EnumConsort.TURTLE, EnumConsort.IGUANA);
-		addMessage(new ConditionedMessage((EntityConsort consort, EntityPlayer player) -> SburbHandler.hasEntered((EntityPlayerMP) player),
+		addMessage(new ConditionedMessage((EntityConsort consort, EntityPlayerMP player) -> SburbHandler.hasEntered((EntityPlayerMP) player),
 				new SingleMessage("heroicStench"), new SingleMessage("leechStench"))).reqLand();
 		addMessage(new SingleMessage("fireCakes")).landTerrain(fromNameTerrain("heat")).landTitle(fromNameTitle("cake"));
 		
@@ -273,11 +273,11 @@ public class ConsortDialogue
 		).consort(EnumConsort.NAKAGATOR, EnumConsort.IGUANA);
 		
 		addMessage("awaitHero", "landName", "consortTypes", "playerTitleLand").reqLand();
-		addMessage(new ConditionedMessage("skaia", (EntityConsort consort, EntityPlayer player) -> !consort.visitedSkaia, new SingleMessage("watchSkaia"),
-				new ConditionedMessage((EntityConsort consort, EntityPlayer player) -> MinestuckDimensionHandler.isSkaia(consort.dimension),
+		addMessage(new ConditionedMessage("skaia", (EntityConsort consort, EntityPlayerMP player) -> !consort.visitedSkaia, new SingleMessage("watchSkaia"),
+				new ConditionedMessage((EntityConsort consort, EntityPlayerMP player) -> MinestuckDimensionHandler.isSkaia(consort.dimension),
 						new SingleMessage("atSkaia.1", "consortSound2"), new SingleMessage("visitedSkaia")))).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA, EnumConsort.NAKAGATOR).reqLand();
-		addMessage(new ConditionedMessage("skaiaTurtle", (EntityConsort consort, EntityPlayer player) -> !consort.visitedSkaia, new SingleMessage("watchSkaia"),
-				new ConditionedMessage((EntityConsort consort, EntityPlayer player) -> MinestuckDimensionHandler.isSkaia(consort.dimension),
+		addMessage(new ConditionedMessage("skaiaTurtle", (EntityConsort consort, EntityPlayerMP player) -> !consort.visitedSkaia, new SingleMessage("watchSkaia"),
+				new ConditionedMessage((EntityConsort consort, EntityPlayerMP player) -> MinestuckDimensionHandler.isSkaia(consort.dimension),
 						new SingleMessage("atSkaia.2"), new SingleMessage("visitedSkaia")))).consort(EnumConsort.TURTLE).reqLand();
 		
 		addMessage(new SingleMessage("zazzerpan")).consort(EnumConsort.TURTLE);
@@ -343,9 +343,9 @@ public class ConsortDialogue
 				new SingleMessage[] { new SingleMessage("denizen.what"), new SingleMessage("denizen.askAlignment") },
 				new MessageType[] { new SingleMessage("denizen.explain", "playerClassLand"), new SingleMessage("denizen.alignment") })).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA, EnumConsort.TURTLE).reqLand();
 		
-		List<ItemStack> hungryList = ImmutableList.of(new ItemStack(Items.COOKIE), new ItemStack(MinestuckItems.bugOnAStick),
-				new ItemStack(MinestuckItems.grasshopper), new ItemStack(MinestuckItems.chocolateBeetle),
-				new ItemStack(MinestuckItems.coneOfFlies));
+		List<ItemStack> hungryList = ImmutableList.of(new ItemStack(Items.COOKIE), new ItemStack(MinestuckItems.BUG_ON_A_STICK),
+				new ItemStack(MinestuckItems.GRASSHOPPER), new ItemStack(MinestuckItems.CHOCOLATE_BEETLE),	//TODO Use item tags for these kind of things
+				new ItemStack(MinestuckItems.CONE_OF_FLIES));
 		addMessage(new ItemRequirement(hungryList, false, true, new SingleMessage("hungry"),
 						new ChoiceMessage(new SingleMessage("hungry.askFood", "nbtItem:hungry.item"),
 								new SingleMessage[] { new SingleMessage("hungry.accept"), new SingleMessage("hungry.deny") },
@@ -397,7 +397,7 @@ public class ConsortDialogue
 		addMessage(new MerchantGuiMessage(new SingleMessage("bloodGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("pulse"));
 		addMessage(new MerchantGuiMessage(new SingleMessage("lifeGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("rabbits"));
 		addMessage(new MerchantGuiMessage(new SingleMessage("doomGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("thunder"));
-		addMessage(new MerchantGuiMessage(new SingleMessage("frogGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(LandAspectRegistry.frogAspect);
+		//addMessage(new MerchantGuiMessage(new SingleMessage("frogGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(LandAspectRegistry.frogAspect);
 		addMessage(new MerchantGuiMessage(new SingleMessage("spaceGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("frogs"));
 		addMessage(new MerchantGuiMessage(new SingleMessage("timeGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("clockwork"));
 		addMessage(new MerchantGuiMessage(new SingleMessage("mindGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("thought"));
@@ -436,9 +436,9 @@ public class ConsortDialogue
 		return set.toArray(new TitleLandAspect[set.size()]);
 	}
 	
-	public static DialogueWrapper getRandomMessage(EntityConsort consort, EntityPlayer player)
+	public static DialogueWrapper getRandomMessage(EntityConsort consort, EntityPlayerMP player)
 	{
-		LandAspectRegistry.AspectCombination aspects = MinestuckDimensionHandler.getAspects(consort.homeDimension);
+		LandAspects aspects = MinestuckDimensionHandler.getAspects(consort.homeDimension);
 		
 		List<DialogueWrapper> list = new ArrayList<>();
 		
@@ -576,12 +576,12 @@ public class ConsortDialogue
 			return this;
 		}
 		
-		public ITextComponent getMessage(EntityConsort consort, EntityPlayer player)
+		public ITextComponent getMessage(EntityConsort consort, EntityPlayerMP player)
 		{
 			return messageStart.getMessage(consort, player, "");
 		}
 		
-		public ITextComponent getFromChain(EntityConsort consort, EntityPlayer player, String fromChain)
+		public ITextComponent getFromChain(EntityConsort consort, EntityPlayerMP player, String fromChain)
 		{
 			return messageStart.getFromChain(consort, player, "", fromChain);
 		}

@@ -1,6 +1,7 @@
 package com.mraof.minestuck.inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
@@ -19,7 +20,8 @@ public class SlotConsortMerchant extends Slot
 	@Override
 	public ItemStack decrStackSize(int amount)
 	{
-		merchant.handlePurchase(player, false, this.slotNumber);
+		if(player instanceof EntityPlayerMP)
+			merchant.handlePurchase((EntityPlayerMP) player, false, this.slotNumber);
 		return ItemStack.EMPTY;
 	}
 }

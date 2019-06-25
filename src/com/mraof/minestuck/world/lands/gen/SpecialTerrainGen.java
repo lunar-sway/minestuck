@@ -2,8 +2,6 @@ package com.mraof.minestuck.world.lands.gen;
 
 import java.util.Random;
 
-import net.minecraft.block.BlockColored;
-import net.minecraft.block.material.MapColor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.IStringSerializable;
@@ -16,7 +14,7 @@ import net.minecraft.world.chunk.ChunkPrimer;
 public class SpecialTerrainGen extends DefaultTerrainGen
 {
 	private int width = 2;
-	private EnumDyeColor[] colors = {EnumDyeColor.GRAY, EnumDyeColor.SILVER, EnumDyeColor.WHITE, EnumDyeColor.PINK,
+	private EnumDyeColor[] colors = {EnumDyeColor.GRAY, EnumDyeColor.LIGHT_GRAY, EnumDyeColor.WHITE, EnumDyeColor.PINK,
 			EnumDyeColor.RED, EnumDyeColor.ORANGE, EnumDyeColor.YELLOW, EnumDyeColor.LIME,
 			EnumDyeColor.GREEN, EnumDyeColor.CYAN, EnumDyeColor.LIGHT_BLUE, EnumDyeColor.BLUE,
 			EnumDyeColor.PURPLE, EnumDyeColor.MAGENTA, EnumDyeColor.BROWN, EnumDyeColor.BLACK};
@@ -34,12 +32,12 @@ public class SpecialTerrainGen extends DefaultTerrainGen
 		switch(action)
 		{
 		case COLOR_STRIPE:
-			colorStripe(out, chunkX, chunkZ);
+			//colorStripe(out, chunkX, chunkZ);
 			break;
 		}
 		return out;
 	}
-
+	/*
 	private void colorStripe(ChunkPrimer c, int chunkX, int chunkZ)
 	{
 		int metamod = Math.floorMod((chunkX + chunkZ) * 16, width*colors.length);		//Modifies the color based on the position of the chunk in the world. Thus, meta-modifier, or metamod.
@@ -74,7 +72,7 @@ public class SpecialTerrainGen extends DefaultTerrainGen
 			}
 		}
 	}
-	
+	*/
 
 	public int getWidth() {
 		return width;

@@ -1,16 +1,16 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.item.TabMinestuck;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;
 
+/**
+ * Only exists because the constructor in BlockStairs is protected
+ */
 public class BlockMinestuckStairs extends BlockStairs
 {
-	public BlockMinestuckStairs(IBlockState modelState)
+	public BlockMinestuckStairs(IBlockState modelState, Properties properties)
 	{
-		super(modelState);
-		setCreativeTab(TabMinestuck.instance);
-		this.useNeighborBrightness = true;
+		super(modelState, properties);
 	}
 
 }

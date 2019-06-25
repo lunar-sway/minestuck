@@ -66,8 +66,8 @@ public class Session
 	
 	Session()
 	{
-		connections = new ArrayList<SburbConnection>();
-		predefinedPlayers = new HashMap<PlayerIdentifier, PredefineData>();
+		connections = new ArrayList<>();
+		predefinedPlayers = new HashMap<>();
 	}
 	
 	/**
@@ -93,7 +93,7 @@ public class Session
 	 */
 	public Set<PlayerIdentifier> getPlayerList()
 	{
-		Set<PlayerIdentifier> list = new HashSet<PlayerIdentifier>();
+		Set<PlayerIdentifier> list = new HashSet<>();
 		for(SburbConnection c : this.connections)
 		{
 			list.add(c.getClientIdentifier());
@@ -117,16 +117,16 @@ public class Session
 			nbt.setString("name", name);
 		NBTTagList list = new NBTTagList();
 		for(SburbConnection c : connections)
-			list.appendTag(c.write());
+			list.add(c.write());
 		nbt.setTag("connections", list);
 		NBTTagList predefineList = new NBTTagList();
 		for(Map.Entry<PlayerIdentifier, PredefineData> entry : predefinedPlayers.entrySet())
-			predefineList.appendTag(entry.getKey().saveToNBT(entry.getValue().write(), "player"));
+			predefineList.add(entry.getKey().saveToNBT(entry.getValue().write(), "player"));
 		nbt.setTag("predefinedPlayers", predefineList);
 		nbt.setBoolean("locked", locked);
-		nbt.setInteger("skaiaId", skaiaId);
-		nbt.setInteger("derseId", derseId);
-		nbt.setInteger("prospitId", prospitId);
+		//nbt.setInt("skaiaId", skaiaId);
+		//nbt.setInt("derseId", derseId);
+		//nbt.setInt("prospitId", prospitId);
 		return nbt;
 	}
 	
@@ -137,34 +137,33 @@ public class Session
 	 */
 	Session read(NBTTagCompound nbt)
 	{
-		if(nbt.hasKey("name", 8))
+		if(nbt.contains("name", 8))
 			name = nbt.getString("name");
 		else name = null;
 		
-		NBTTagList list = nbt.getTagList("connections", 10);
-		for(int i = 0; i < list.tagCount(); i++)
-			connections.add(new SburbConnection().read(list.getCompoundTagAt(i)));
+		NBTTagList list = nbt.getList("connections", 10);
+		for(int i = 0; i < list.size(); i++)
+			connections.add(new SburbConnection().read(list.getCompound(i)));
 		
-		if(nbt.hasKey("predefinedPlayers", 9))	//If it is a tag list
+		if(nbt.contains("predefinedPlayers", 9))	//If it is a tag list
 		{
-			list = nbt.getTagList("predefinedPlayers", 10);
-			for(int i = 0; i < list.tagCount(); i++)
+			list = nbt.getList("predefinedPlayers", 10);
+			for(int i = 0; i < list.size(); i++)
 			{
-				NBTTagCompound compound = list.getCompoundTagAt(i);
+				NBTTagCompound compound = list.getCompound(i);
 				predefinedPlayers.put(IdentifierHandler.load(compound, "player"), new PredefineData().read(compound));
 			}
 		} else
 		{	//Support for saves from older minestuck versions
-			NBTTagCompound predefineTag = nbt.getCompoundTag("predefinedPlayers");
-			for(String player : predefineTag.getKeySet())
+			NBTTagCompound predefineTag = nbt.getCompound("predefinedPlayers");
+			for(String player : predefineTag.keySet())
 			{
 				NBTTagCompound compound = new NBTTagCompound();
 				compound.setString("player", player);
-				predefinedPlayers.put(IdentifierHandler.load(compound, "player"), new PredefineData().read(predefineTag.getCompoundTag(player)));
+				predefinedPlayers.put(IdentifierHandler.load(compound, "player"), new PredefineData().read(predefineTag.getCompound(player)));
 			}
 		}
 		
-		SkaianetHandler.connections.addAll(this.connections);
 		locked = nbt.getBoolean("locked");
 		
 		checkIfCompleted();

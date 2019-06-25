@@ -37,7 +37,7 @@ public abstract class BiomeSpecificDecorator implements ILandDecorator
 		{
 			BlockPos genPos = new BlockPos((chunkX << 4) + 8 + random.nextInt(16), random.nextInt(256), (chunkZ << 4) + 8 + random.nextInt(16));
 			
-			if(!biomes.isEmpty() && !biomes.contains(world.getBiomeForCoordsBody(genPos)))
+			if(!biomes.isEmpty() && !biomes.contains(world.getBiomeBody(genPos)))
 				continue;
 			
 			BlockPos tempPos = generate(world, random, genPos, provider);

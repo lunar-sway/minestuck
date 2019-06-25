@@ -1,121 +1,93 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.item.TabMinestuck;
-import com.mraof.minestuck.util.MinestuckRandom;
-
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
+import net.minecraft.world.World;
+import net.minecraftforge.common.ToolType;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 
 public class BlockCruxiteOre extends Block 
 {
-	public static final PropertyInteger BLOCK_TYPE = PropertyInteger.create("block_type", 0, 6);
 	
-	public BlockCruxiteOre()
+	public BlockCruxiteOre(Properties properties)
 	{
-		super(Material.ROCK);
-		
-		this.setUnlocalizedName("oreCruxite");
-		setHardness(3.0F);
-		setResistance(5.0F);	//Values normally used by ores
-		setHarvestLevel("pickaxe", 0);
-		this.setCreativeTab(TabMinestuck.instance);
+		super(properties);
+	}
+	
+	@Nullable
+	@Override
+	public ToolType getHarvestTool(IBlockState state)
+	{
+		return ToolType.PICKAXE;
 	}
 	
 	@Override
-	public IBlockState getStateFromMeta(int meta)
+	public int getHarvestLevel(IBlockState state)
 	{
-		return getDefaultState().withProperty(BLOCK_TYPE, meta % BLOCK_TYPE.getAllowedValues().size());
+		return 0;
 	}
 	
 	@Override
-	public int getMetaFromState(IBlockState state)
+	public IItemProvider getItemDropped(IBlockState state, World worldIn, BlockPos pos, int fortune)
 	{
-		return (Integer) state.getValue(BLOCK_TYPE);
+		return MinestuckItems.RAW_CRUXITE;
 	}
 	
 	@Override
-	public Item getItemDropped(IBlockState state, Random rand, int fortune)
-	{
-		return MinestuckItems.rawCruxite;
-	}
-	
-	@Override
-	public int quantityDropped(Random random)
+	public int quantityDropped(IBlockState state, Random random)
 	{
 		return 2 + random.nextInt(4);
 	}
 	
 	@Override
-	public int quantityDroppedWithBonus(int par1, Random par2Random)
+	public int getItemsToDropCount(IBlockState state, int fortune, World worldIn, BlockPos pos, Random random)
 	{
-		if (par1 > 0)
+		if (fortune > 0)
 		{
-			int j = par2Random.nextInt(par1 + 2) - 1;
+			int j = random.nextInt(fortune + 2) - 1;
 
 			if (j < 0)
-			{
 				j = 0;
-			}
-
-			return this.quantityDropped(par2Random) * (j + 1);
+			
+			return this.quantityDropped(state, random) * (j + 1);
 		}
 		else
 		{
-			return this.quantityDropped(par2Random);
+			return this.quantityDropped(state, random);
 		}
 	}
 	
-	@Override
-	public int getExpDrop(IBlockState state, IBlockAccess world, BlockPos pos, int fortune)
-	{
-		return MathHelper.getInt(MinestuckRandom.getRandom(), 2, 5);
-	}
 	
 	@Override
-	protected BlockStateContainer createBlockState()
+	public int getExpDrop(IBlockState state, IWorldReader world, BlockPos pos, int fortune)
 	{
-		return new BlockStateContainer(this, BLOCK_TYPE);
+		return MathHelper.nextInt(RANDOM, 2, 5);
 	}
 	
 	public static IBlockState getBlockState(IBlockState ground)
 	{
-		int meta = 0;
 		if(ground.getBlock() == Blocks.STONE)
-			meta = 0;
+			return MinestuckBlocks.CRUXITE_ORE_STONE.getDefaultState();
 		else if(ground.getBlock() == Blocks.NETHERRACK)
-			meta = 1;
+			return MinestuckBlocks.CRUXITE_ORE_NETHERRACK.getDefaultState();
 		else if(ground.getBlock() == Blocks.COBBLESTONE)
-			meta = 2;
+			return MinestuckBlocks.CRUXITE_ORE_COBBLESTONE.getDefaultState();
 		else if(ground.getBlock() == Blocks.SANDSTONE)
-			meta = 3;
+			return MinestuckBlocks.CRUXITE_ORE_SANDSTONE.getDefaultState();
 		else if(ground.getBlock() == Blocks.RED_SANDSTONE)
-			meta = 4;
+			return MinestuckBlocks.CRUXITE_ORE_RED_SANDSTONE.getDefaultState();
 		else if(ground.getBlock() == Blocks.END_STONE)
-			meta = 5;
-		else if(ground.getBlock() == MinestuckBlocks.pinkStoneSmooth)
-			meta = 6;
-		
-		return MinestuckBlocks.oreCruxite.getBlockState().getBaseState().withProperty(BLOCK_TYPE, meta);
-	}
-	
-	@Override
-	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items)
-	{
-		for(int i = 0; i < 7; i++)
-			items.add(new ItemStack(this, 1, i));
+			return MinestuckBlocks.CRUXITE_ORE_END_STONE.getDefaultState();
+		else if(ground.getBlock() == MinestuckBlocks.PINK_STONE)
+			return MinestuckBlocks.CRUXITE_ORE_PINK_STONE.getDefaultState();
+		return MinestuckBlocks.CRUXITE_ORE_STONE.getDefaultState();
 	}
 }

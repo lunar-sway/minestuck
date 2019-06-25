@@ -1,19 +1,21 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
-import java.io.IOException;
-import java.util.Calendar;
+import java.time.LocalDate;
+import java.time.Month;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.inventory.ContainerEditmode;
-import com.mraof.minestuck.network.MinestuckChannelHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.MinestuckPacket.Type;
+import com.mraof.minestuck.network.EditmodeInventoryPacket;
+import com.mraof.minestuck.network.MinestuckPacketHandler;
 
-import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class GuiInventoryEditmode extends GuiPlayerStatsContainer
 {
 
@@ -23,12 +25,14 @@ public class GuiInventoryEditmode extends GuiPlayerStatsContainer
 	private static final int leftArrowX = 7, rightArrowX = 151, arrowY = 23;
 	
 	public boolean more, less;
+	public ContainerEditmode inventoryEditmode;
 	
 	public GuiInventoryEditmode()
 	{
-		super(new ContainerEditmode(FMLClientHandler.instance().getClientPlayerEntity()));
+		super(new ContainerEditmode(Minecraft.getInstance().player));
 		guiWidth = 176;
 		guiHeight = 98;
+		inventoryEditmode = (ContainerEditmode) this.inventorySlots;
 	}
 	
 	@Override
@@ -39,11 +43,13 @@ public class GuiInventoryEditmode extends GuiPlayerStatsContainer
 		mc.getTextureManager().bindTexture(guiBackground);
 		this.drawTexturedModalRect(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
-		Calendar calendar = mc.world.getCurrentDate();
+		LocalDate localdate = LocalDate.now();
+		int d = localdate.getDayOfMonth();
+		Month m = localdate.getMonth();
 		boolean b1 = MinestuckConfig.clientHardMode;
-		boolean b2 = !b1 && (calendar.get(2) + 1 == 4 && calendar.get(5) == 13 || calendar.get(2) + 1 == 6 && calendar.get(5) == 12
-				|| calendar.get(2) + 1 == 10 && calendar.get(5) == 25 || calendar.get(2) + 1 == 11 && calendar.get(5) == 11
-				|| calendar.get(2) + 1 == 11 && calendar.get(5) == 27);
+		boolean b2 = !b1 && (m == Month.APRIL && d == 13 || m == Month.JUNE && d == 12
+				|| m == Month.OCTOBER && d == 25 || m == Month.NOVEMBER && d == 11
+				|| m == Month.NOVEMBER && d == 27);
 		this.drawTexturedModalRect(xOffset+leftArrowX, yOffset+arrowY, guiWidth + (b2?36:0), (less?0:18) + (b1?36:0), 18, 18);
 		this.drawTexturedModalRect(xOffset+rightArrowX, yOffset+arrowY, guiWidth+18 + (b2?36:0), (more?0:18) + (b1?36:0), 18, 18);
 		
@@ -52,24 +58,27 @@ public class GuiInventoryEditmode extends GuiPlayerStatsContainer
 	}
 	
 	@Override
-	protected void mouseClicked(int xcor, int ycor, int mouseButton) throws IOException
+	public boolean mouseClicked(double xcor, double ycor, int mouseButton)
 	{
 		if(ycor >= yOffset + arrowY && ycor < yOffset + arrowY + 18)
 		{
-			MinestuckPacket packet = null;
+			EditmodeInventoryPacket packet = null;
 			if(less && xcor >= xOffset + leftArrowX && xcor < xOffset + leftArrowX + 18)
 			{
-				mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-				packet = MinestuckPacket.makePacket(Type.INVENTORY, 0, false);
+				mc.getSoundHandler().play(SimpleSound.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+				packet = EditmodeInventoryPacket.scroll(false);
 			} else if(more && xcor >= xOffset + rightArrowX && xcor < xOffset + rightArrowX + 18)
 			{
-				mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-				packet = MinestuckPacket.makePacket(Type.INVENTORY, 0, true);
+				mc.getSoundHandler().play(SimpleSound.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+				packet = EditmodeInventoryPacket.scroll(true);
 			}
 			if(packet != null)
-				MinestuckChannelHandler.sendToServer(packet);
+			{
+				MinestuckPacketHandler.INSTANCE.sendToServer(packet);
+				return true;
+			}
 		}
-		super.mouseClicked(xcor, ycor, mouseButton);
+		return super.mouseClicked(xcor, ycor, mouseButton);
 	}
 	
 	@Override

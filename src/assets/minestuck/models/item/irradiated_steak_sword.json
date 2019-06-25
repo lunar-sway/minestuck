@@ -1,6 +1,6 @@
 {
     "parent": "item/handheld",
     "textures": {
-        "layer0": "minestuck:items/irradiated_steak_sword"
+        "layer0": "minestuck:item/irradiated_steak_sword"
     }
 }

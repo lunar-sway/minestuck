@@ -1,6 +1,0 @@
-{
-    "variants": {
-        "normal": { "model": "minestuck:dead_planks" },
-        "all":    { "model": "minestuck:dead_planks" }
-    }
-}

@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "minestuck:flowery_moss_stone" }
+        "": { "model": "minestuck:block/flowery_moss_stone" }
     }
 }

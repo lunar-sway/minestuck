@@ -1,6 +1,6 @@
 {
     "parent": "item/handheld",
     "textures": {
-        "layer0": "minestuck:items/skaian_fork"
+        "layer0": "minestuck:item/skaia_fork"
     }
 }

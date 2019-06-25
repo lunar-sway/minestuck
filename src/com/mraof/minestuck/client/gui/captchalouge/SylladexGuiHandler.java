@@ -1,32 +1,30 @@
 package com.mraof.minestuck.client.gui.captchalouge;
 
-import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
+import com.mraof.minestuck.client.gui.GuiButtonImpl;
+import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
+import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
-import com.mraof.minestuck.network.MinestuckChannelHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.MinestuckPacket.Type;
+import com.mraof.minestuck.network.MinestuckPacketHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiYesNo;
-import net.minecraft.client.gui.GuiYesNoCallback;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.InputMappings;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.input.Mouse;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
-@SideOnly(Side.CLIENT)
-public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCallback
+@OnlyIn(Dist.CLIENT)
+public abstract class SylladexGuiHandler extends GuiScreen implements GuiButtonImpl.ButtonClickhandler
 {
 	
 	
@@ -37,7 +35,7 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 	protected static final int X_OFFSET = 16, Y_OFFSET = 17;
 	protected static final int CARD_WIDTH = 21, CARD_HEIGHT = 26;
 	
-	protected RenderItem itemRender;
+	protected ItemRenderer itemRender;
 	protected ArrayList<GuiCard> cards = new ArrayList<GuiCard>();
 	protected int textureIndex;
 	protected int maxWidth, maxHeight;
@@ -57,29 +55,104 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 	
 	protected GuiButton emptySylladex;
 	
-	protected Minecraft mc = Minecraft.getMinecraft();
+	protected Minecraft mc = Minecraft.getInstance();
 	
 	public SylladexGuiHandler()
 	{
-		itemRender = mc.getRenderItem();
+		itemRender = mc.getItemRenderer();
 	}
 	
 	@Override
 	public void initGui()
 	{
-		emptySylladex = new GuiButton(0, (width - GUI_WIDTH)/2 + 140, (height - GUI_HEIGHT)/2 + 175, 100, 20, I18n.format("gui.emptySylladexButton"));
-		buttonList.add(emptySylladex);
+		emptySylladex = new GuiButtonImpl(this, 0, (width - GUI_WIDTH)/2 + 140, (height - GUI_HEIGHT)/2 + 175, 100, 20, I18n.format("gui.emptySylladexButton"));
+		addButton(emptySylladex);
 	}
 	
 	@Override
-	public void drawScreen(int xcor, int ycor, float f)
+	public void render(int xcor, int ycor, float f)
 	{
 		this.drawDefaultBackground();
 		
 		emptySylladex.x = (width - GUI_WIDTH)/2 + 140;
 		emptySylladex.y = (height - GUI_HEIGHT)/2 + 175;
 		
-		int mouseWheel = Mouse.getDWheel();
+		int xOffset = (width - GUI_WIDTH)/2;
+		int yOffset = (height - GUI_HEIGHT)/2;
+		
+		if(mousePressed)
+		{
+			if(isMouseInContainer(xcor, ycor))
+			{
+				if(isMouseInContainer(mousePosX, mousePosY))
+				{
+					mapX = Math.max(0, Math.min(maxWidth - mapWidth, mapX + mousePosX - xcor));
+					mapY = Math.max(0, Math.min(maxHeight - mapHeight, mapY + mousePosY - ycor));
+				}
+				mousePosX = xcor;
+				mousePosY = ycor;
+			}
+			
+		}
+		else
+		{
+			mousePosX = -1;
+			mousePosY = -1;
+		}
+		
+		prepareMap(xOffset + X_OFFSET, yOffset + Y_OFFSET);
+		
+		drawGuiMap(xcor, ycor);
+		
+		GlStateManager.color4f(1F, 1F, 1F, 1F);
+		
+		ArrayList<GuiCard> visibleCards = new ArrayList<GuiCard>();
+		for(GuiCard card : cards)
+			if(card.xPos + CARD_WIDTH > mapX && card.xPos < mapX + mapWidth 
+					&& card.yPos + CARD_HEIGHT > mapY && card.yPos < mapY + mapHeight)
+				visibleCards.add(card);
+		
+		for(GuiCard card : visibleCards)
+			card.drawItemBackground();
+		
+		RenderHelper.enableGUIStandardItemLighting();
+		GlStateManager.enableRescaleNormal();
+		OpenGlHelper.glMultiTexCoord2f(OpenGlHelper.GL_TEXTURE1, 240F, 240F);
+		for(GuiCard card : visibleCards)
+			card.drawItem();
+		GlStateManager.disableDepthTest();
+		RenderHelper.disableStandardItemLighting();
+		GlStateManager.color4f(1F, 1F, 1F, 1F);
+		
+		finishMap();
+		
+		mc.getTextureManager().bindTexture(sylladexFrame);
+		drawTexturedModalRect(xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
+		
+		mc.fontRenderer.drawString(I18n.format("gui.sylladex"), xOffset + 15, yOffset + 5, 0x404040);
+		
+		String str = CaptchaDeckHandler.clientSideModus.getName().getFormattedText();
+		mc.fontRenderer.drawString(str, xOffset + GUI_WIDTH - mc.fontRenderer.getStringWidth(str) - 16, yOffset + 5, 0x404040);
+		
+		super.render(xcor, ycor, f);
+		
+		if(isMouseInContainer(xcor, ycor))
+		{
+			int translX = (int) ((xcor - xOffset - X_OFFSET) * scroll);
+			int translY = (int) ((ycor - yOffset - Y_OFFSET) * scroll);
+			for(GuiCard card : visibleCards)
+				if(translX >= card.xPos + 2 - mapX && translX < card.xPos + 18 - mapX &&
+						translY >= card.yPos + 7 - mapY && translY < card.yPos + 23 - mapY)
+				{
+					card.drawTooltip(xcor, ycor);
+					break;
+				}
+		}
+	}
+	
+	@Override
+	public boolean mouseScrolled(double mouseWheel)
+	{
 		float prevScroll = scroll;
 		
 		if (mouseWheel < 0)
@@ -99,106 +172,46 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 			updatePosition();
 			mapX = Math.max(0, Math.min(maxWidth - mapWidth, mapX));
 			mapY = Math.max(0, Math.min(maxHeight - mapHeight, mapY));
+			return true;
 		}
-		
-		int xOffset = (width - GUI_WIDTH)/2;
-		int yOffset = (height - GUI_HEIGHT)/2;
-		
-		if(Mouse.isButtonDown(0))
-		{
-			
-			if(isMouseInContainer(xcor, ycor))
-			{
-				if(isMouseInContainer(mousePosX, mousePosY))
-				{
-					mapX = Math.max(0, Math.min(maxWidth - mapWidth, mapX + mousePosX - xcor));
-					mapY = Math.max(0, Math.min(maxHeight - mapHeight, mapY + mousePosY - ycor));
-				}
-				mousePosX = xcor;
-				mousePosY = ycor;
-			}
-			
-		}
-		else
-		{
-			mousePressed = false;
-			mousePosX = -1;
-			mousePosY = -1;
-		}
-		
-		prepareMap(xOffset + X_OFFSET, yOffset + Y_OFFSET);
-		
-		drawGuiMap(xcor, ycor);
-		
-		GlStateManager.color(1F, 1F, 1F, 1F);
-		
-		ArrayList<GuiCard> visibleCards = new ArrayList<GuiCard>();
-		for(GuiCard card : cards)
-			if(card.xPos + CARD_WIDTH > mapX && card.xPos < mapX + mapWidth 
-					&& card.yPos + CARD_HEIGHT > mapY && card.yPos < mapY + mapHeight)
-				visibleCards.add(card);
-		
-		for(GuiCard card : visibleCards)
-			card.drawItemBackground();
-		
-		RenderHelper.enableGUIStandardItemLighting();
-		GlStateManager.enableRescaleNormal();
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
-		for(GuiCard card : visibleCards)
-			card.drawItem();
-		GlStateManager.disableDepth();
-		RenderHelper.disableStandardItemLighting();
-		GlStateManager.color(1F, 1F, 1F, 1F);
-		
-		finishMap();
-		
-		mc.getTextureManager().bindTexture(sylladexFrame);
-		drawTexturedModalRect(xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
-		
-		mc.fontRenderer.drawString(I18n.format("gui.sylladex"), xOffset + 15, yOffset + 5, 0x404040);
-		
-		String str = CaptchaDeckHandler.clientSideModus.getName();
-		mc.fontRenderer.drawString(str, xOffset + GUI_WIDTH - mc.fontRenderer.getStringWidth(str) - 16, yOffset + 5, 0x404040);
-		
-		super.drawScreen(xcor, ycor, f);
-		
-		if(isMouseInContainer(xcor, ycor))
-		{
-			int translX = (int) ((xcor - xOffset - X_OFFSET) * scroll);
-			int translY = (int) ((ycor - yOffset - Y_OFFSET) * scroll);
-			for(GuiCard card : visibleCards)
-				if(translX >= card.xPos + 2 - mapX && translX < card.xPos + 18 - mapX &&
-						translY >= card.yPos + 7 - mapY && translY < card.yPos + 23 - mapY)
-				{
-					card.drawTooltip(xcor, ycor);
-					break;
-				}
-		}
+		return super.mouseScrolled(mouseWheel);
 	}
 	
 	@Override
-	protected void mouseClicked(int xcor, int ycor, int mouseButton) throws IOException
+	public boolean mouseReleased(double mouseX, double mouseY, int mouseButton)
 	{
-		if(isMouseInContainer(xcor, ycor))
+		if(mousePressed)
+		{
+			mousePressed = false;
+			return true;
+		}
+		return super.mouseReleased(mouseX, mouseY, mouseButton);
+	}
+	
+	@Override
+	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton)
+	{
+		if(isMouseInContainer(mouseX, mouseY))
 		{
 			int xOffset = (width - GUI_WIDTH)/2;
 			int yOffset = (height - GUI_HEIGHT)/2;
-			int translX = (int) ((xcor - xOffset - X_OFFSET) * scroll);
-			int translY = (int) ((ycor - yOffset - Y_OFFSET) * scroll);
+			int translX = (int) ((mouseX - xOffset - X_OFFSET) * scroll);
+			int translY = (int) ((mouseY - yOffset - Y_OFFSET) * scroll);
 			for(GuiCard card : this.cards)
 				if(translX >= card.xPos + 2 - mapX && translX < card.xPos + 18 - mapX &&
 						translY >= card.yPos + 7 - mapY && translY < card.yPos + 23 - mapY)
 				{
 					card.onClick(mouseButton);
-					return;
+					return true;
 				}
-			return;
+			mousePressed = true;
+			return true;
 		}
-		super.mouseClicked(xcor, ycor, mouseButton);
+		return super.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 	
 	@Override
-	protected void actionPerformed(GuiButton button) throws IOException
+	public void actionPerformed(GuiButtonImpl button)
 	{
 		if(button == emptySylladex)
 		{
@@ -208,9 +221,14 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 	}
 	
 	@Override
-	protected void keyTyped(char typedChar, int keyCode) throws IOException
+	public boolean keyPressed(int keyCode, int scanCode, int i)
 	{
-		super.keyTyped(typedChar, keyCode);
+		if(MinestuckKeyHandler.instance.sylladexKey.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode)))
+		{
+			mc.displayGuiScreen(null);
+			return true;
+		}
+		return super.keyPressed(keyCode, scanCode, i);
 		/*if(Loader.isModLoaded("NotEnoughItems"))
 		{
 			boolean usage = keyCode == NEIClientConfig.getKeyBinding("gui.usage") || (keyCode == NEIClientConfig.getKeyBinding("gui.recipe") && NEIClientUtils.shiftKey());
@@ -242,10 +260,10 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 	}
 	
 	@Override
-	public void confirmClicked(boolean result, int id)
+	public void confirmResult(boolean result, int id)
 	{
 		if(result)
-			MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(Type.CAPTCHA, CaptchaDeckPacket.GET, CaptchaDeckHandler.EMPTY_SYLLADEX, false));
+			MinestuckPacketHandler.sendToServer(CaptchaDeckPacket.get(CaptchaDeckHandler.EMPTY_SYLLADEX, false));
 		mc.currentScreen = this;
 	}
 	
@@ -263,8 +281,8 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 	private void prepareMap(int xOffset, int yOffset)
 	{
 		GlStateManager.pushMatrix();
-		GlStateManager.translate((float)xOffset, (float)yOffset, 0F);
-		GlStateManager.scale(1.0F / this.scroll, 1.0F / this.scroll, 1.0F);
+		GlStateManager.translatef((float)xOffset, (float)yOffset, 0F);
+		GlStateManager.scalef(1.0F / this.scroll, 1.0F / this.scroll, 1.0F);
 	}
 	
 	private void finishMap()
@@ -272,7 +290,7 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 		GlStateManager.popMatrix();
 	}
 	
-	private boolean isMouseInContainer(int xcor, int ycor)
+	private boolean isMouseInContainer(double xcor, double ycor)
 	{
 		int xOffset = (width - GUI_WIDTH)/2;
 		int yOffset = (height - GUI_HEIGHT)/2;
@@ -338,8 +356,8 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 			
 			if(toSend != -1)
 			{
-				MinestuckPacket packet = MinestuckPacket.makePacket(Type.CAPTCHA, CaptchaDeckPacket.GET, toSend, mouseButton != 0);
-				MinestuckChannelHandler.sendToServer(packet);
+				CaptchaDeckPacket packet = CaptchaDeckPacket.get(toSend, mouseButton != 0);
+				MinestuckPacketHandler.sendToServer(packet);
 			}
 		}
 
@@ -362,7 +380,7 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 		
 		protected void drawItem()
 		{
-			GlStateManager.color(1F, 1F, 1F, 1F);
+			GlStateManager.color4f(1F, 1F, 1F, 1F);
 			if(!this.item.isEmpty())
 			{
 				int x = this.xPos +2 - gui.mapX;
@@ -374,11 +392,11 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 				{
 					String stackSize = String.valueOf(item.getCount());
 					GlStateManager.disableLighting();
-					GlStateManager.disableDepth();
+					GlStateManager.disableDepthTest();
 					GlStateManager.disableBlend();
 					gui.mc.fontRenderer.drawStringWithShadow(stackSize, x + 16 - gui.mc.fontRenderer.getStringWidth(stackSize), y + 8, 0xC6C6C6);
 					GlStateManager.enableLighting();
-					GlStateManager.enableDepth();
+					GlStateManager.enableDepthTest();
 					GlStateManager.enableBlend();
 				}
 				gui.itemRender.renderItemOverlayIntoGUI(gui.mc.fontRenderer, item, x, y, "");
@@ -412,7 +430,7 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 		@Override
 		protected void drawItem()
 		{
-			GlStateManager.color(1F, 1F, 1F, 1F);
+			GlStateManager.color4f(1F, 1F, 1F, 1F);
 			if(size > 1)
 			{
 				String stackSize = String.valueOf(size);
@@ -421,11 +439,11 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 				if(x >= gui.mapWidth || y >= gui.mapHeight || x + gui.mc.fontRenderer.getStringWidth(stackSize) < 0 || y + gui.fontRenderer.FONT_HEIGHT < 0)
 					return;
 				GlStateManager.disableLighting();
-				GlStateManager.disableDepth();
+				GlStateManager.disableDepthTest();
 				GlStateManager.disableBlend();
 				gui.mc.fontRenderer.drawStringWithShadow(stackSize, x, y, 0xC6C6C6);
 				GlStateManager.enableLighting();
-				GlStateManager.enableDepth();
+				GlStateManager.enableDepthTest();
 				GlStateManager.enableBlend();
 			}
 		}

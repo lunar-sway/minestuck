@@ -1,12 +1,10 @@
 package com.mraof.minestuck.item.weapon;
 
-import com.mraof.minestuck.item.TabMinestuck;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.ItemFood;
+import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ActionResult;
@@ -22,29 +20,28 @@ public class ItemConsumableWeapon extends ItemWeapon
     private final int damageTaken;
 	private PotionEffect potionId;
 	private float potionEffectProbability;
-    
-	public ItemConsumableWeapon(int maxUses, double damageVsEntity, double weaponSpeed, int enchantability, String name, int amount, float saturation, int damageTaken) 
+	
+	public ItemConsumableWeapon(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, int healAmount, float saturationModifier, int damageTaken, Properties builder)
 	{
-		super(maxUses, damageVsEntity, weaponSpeed, enchantability, name);
-		this.setCreativeTab(TabMinestuck.instance);
-		this.healAmount = amount;
-        this.saturationModifier = saturation;
-        this.damageTaken = damageTaken;
+		super(tier, attackDamageIn, attackSpeedIn, efficiency, builder);
+		this.healAmount = healAmount;
+		this.saturationModifier = saturationModifier;
+		this.damageTaken = damageTaken;
 	}
 	
-	public ItemConsumableWeapon(int maxUses, double damageVsEntity, double weaponSpeed, int enchantability, String name, int amount, float saturation) 
+	public ItemConsumableWeapon(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, int healAmount, float saturationModifier, Properties builder)
 	{
-		this(maxUses, damageVsEntity, weaponSpeed, enchantability, name, amount, saturation, 50);
+		this(tier, attackDamageIn, attackSpeedIn, efficiency, healAmount, saturationModifier, 50, builder);
 	}
 	
 	@Override
-	public int getMaxItemUseDuration(ItemStack stack)
+	public int getUseDuration(ItemStack stack)
 	{
 		return 32;
 	}
 	
 	@Override
-	public EnumAction getItemUseAction(ItemStack stack)
+	public EnumAction getUseAction(ItemStack stack)
 	{
 		return EnumAction.EAT;
 	} 
@@ -68,7 +65,7 @@ public class ItemConsumableWeapon extends ItemWeapon
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
 	{
 		playerIn.setActiveHand(handIn);
-		return new ActionResult(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
+		return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 	}
 	
 	public ItemConsumableWeapon setPotionEffect(PotionEffect effect, float probability)

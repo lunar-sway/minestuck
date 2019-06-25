@@ -1,10 +1,9 @@
 package com.mraof.minestuck.command;
 
-import com.mraof.minestuck.world.WorldProviderLands;
-import net.minecraft.command.CommandBase;
+import com.mojang.brigadier.CommandDispatcher;
+import com.mraof.minestuck.world.lands.LandDimension;
 import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.command.WrongUsageException;
+import net.minecraft.command.CommandSource;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,8 +14,13 @@ import net.minecraft.util.math.BlockPos;
 /**
  * Created by kirderf1 for debugging purposes
  */
-public class CommandToStructure extends CommandBase
+public class CommandToStructure
 {
+	public static void register(CommandDispatcher<CommandSource> dispatcher)
+	{
+	
+	}
+	/*
 	@Override
 	public String getName()
 	{
@@ -48,12 +52,12 @@ public class CommandToStructure extends CommandBase
 		if(!playerMP.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).hasKey("commandVisitedStructures"))
 			playerMP.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setTag("commandVisitedStructures", new NBTTagList());
 		
-		if(playerMP.world.provider instanceof WorldProviderLands)
+		if(playerMP.world.provider instanceof LandDimension)
 		{
-			BlockPos location = ((WorldProviderLands) playerMP.world.provider).findAndMarkNextStructure(playerMP, args[0], playerMP.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getTagList("commandVisitedStructures", 4));
+			BlockPos location = ((LandDimension) playerMP.world.provider).findAndMarkNextStructure(playerMP, args[0], playerMP.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getTagList("commandVisitedStructures", 4));
 			if(location != null)
 				playerMP.setPositionAndUpdate(location.getX(), location.getY(), location.getZ());
 			else throw new CommandException("A problem occured");
 		}
-	}
+	}*/
 }

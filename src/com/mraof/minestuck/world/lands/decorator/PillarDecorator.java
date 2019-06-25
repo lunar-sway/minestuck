@@ -8,6 +8,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.Heightmap;
 
 public class PillarDecorator extends BiomeSpecificDecorator
 {
@@ -27,7 +28,7 @@ public class PillarDecorator extends BiomeSpecificDecorator
 	public BlockPos generate(World world, Random random, BlockPos pos, ChunkProviderLands provider)
 	{
 		IBlockState state = provider.blockRegistry.getBlockState(blockType);
-		pos = world.getPrecipitationHeight(pos);
+		pos = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, pos);
 		while(world.getBlockState(pos.down()).getMaterial().isLiquid())
 			pos = pos.down();
 		
@@ -36,7 +37,7 @@ public class PillarDecorator extends BiomeSpecificDecorator
 		if(world.getBlockState(pos.up(height - 1)).getMaterial().isLiquid())
 			return null;
 		
-		boolean size = large ? random.nextFloat() < 0.4 : false;
+		boolean size = large && random.nextFloat() < 0.4;
 		
 		if(size)
 		{

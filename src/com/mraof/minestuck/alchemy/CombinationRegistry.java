@@ -9,13 +9,13 @@ import javax.annotation.Nonnull;
 import com.mraof.minestuck.block.MinestuckBlocks;
 
 import com.mraof.minestuck.util.Debug;
-import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
+import net.minecraft.tags.Tag;
+import net.minecraft.util.IItemProvider;
 
 public class CombinationRegistry {
-	private static Hashtable<List<Object>, ItemStack> combRecipes = new Hashtable<List<Object>, ItemStack>();
+	private static Hashtable<List<Object>, ItemStack> combRecipes = new Hashtable<>();
 	
 	public enum Mode
 	{
@@ -43,41 +43,21 @@ public class CombinationRegistry {
 	/**
 	 * Creates an entry for a result of combining the cards of two items. Used in the Punch Designix.
 	 */
-	public static void addCombination(@Nonnull ItemStack input1, @Nonnull ItemStack input2, Mode mode, @Nonnull ItemStack output) {
-		addCombination(input1, input2, mode, !input1.getItem().isDamageable(), !input2.getItem().isDamageable(), output);
+	public static void addCombination(@Nonnull IItemProvider input1, @Nonnull IItemProvider input2, Mode mode, @Nonnull ItemStack output) {
+		addCombinationInternal(input1.asItem(), input2.asItem(), mode, output);
 	}
 	
-	
-	public static void addCombination(@Nonnull ItemStack input1, @Nonnull ItemStack input2, Mode mode, boolean useDamage1, boolean useDamage2, @Nonnull ItemStack output)
+	public static void addCombination(Tag<Item> tagInput, IItemProvider input, Mode mode, @Nonnull ItemStack output)
 	{
-		if(useDamage1 && input1.getItem().isDamageable())
-			Debug.warnf("Item %s in a recipe for %s appears to be using damage value. This might not be intended.", input1, output);
-		if(useDamage2 && input2.getItem().isDamageable())
-			Debug.warnf("Item %s in a recipe for %s appears to be using damage value. This might not be intended.", input2, output);
-		addCombination(input1.getItem(), useDamage1 ? input1.getItemDamage() : OreDictionary.WILDCARD_VALUE, input2.getItem(), useDamage2 ? input2.getItemDamage() : OreDictionary.WILDCARD_VALUE, mode, output);
+		addCombinationInternal(tagInput, input.asItem(), mode, output);
 	}
 	
-	public static void addCombination(String oreDictInput, @Nonnull ItemStack itemInput, boolean useDamage, Mode mode, @Nonnull ItemStack output)
+	public static void addCombination(Tag<Item> input1, Tag<Item> input2, Mode mode, @Nonnull ItemStack output)
 	{
-		addCombination(oreDictInput, itemInput.getItem(), useDamage ? itemInput.getItemDamage() : OreDictionary.WILDCARD_VALUE, mode, output);
+		addCombinationInternal(input1, input2, mode, output);
 	}
 	
-	public static void addCombination(String oreDictInput, Item item, int damage, Mode mode, @Nonnull ItemStack output)
-	{
-		addCombination(oreDictInput, OreDictionary.WILDCARD_VALUE, item, damage, mode, output);
-	}
-	
-	public static void addCombination(String oreDictInput, Block block, int damage, Mode mode, @Nonnull ItemStack output)
-	{
-		addCombination(oreDictInput, OreDictionary.WILDCARD_VALUE, Item.getItemFromBlock(block), damage, mode, output);
-	}
-	
-	public static void addCombination(String input1, String input2, Mode mode, @Nonnull ItemStack output)
-	{
-		addCombination(input1, OreDictionary.WILDCARD_VALUE, input2, OreDictionary.WILDCARD_VALUE, mode, output);
-	}
-	
-	private static void addCombination(Object input1, int damage1, Object input2, int damage2, Mode mode, @Nonnull ItemStack output)
+	private static void addCombinationInternal(Object input1, Object input2, Mode mode, @Nonnull ItemStack output)
 	{
 		try
 		{
@@ -88,16 +68,14 @@ public class CombinationRegistry {
 		} catch(IllegalArgumentException e)
 		{
 			Debug.warnf("[Minestuck] An argument for a combination recipe was found invalid. Reason: "+e.getMessage());
-			Debug.warnf("[Minestuck] The recipe in question: %s %s %s -> %s", input1 instanceof Item ? ((Item) input1).getUnlocalizedName() : input1, mode.getStr(), input2 instanceof Item ? ((Item) input2).getUnlocalizedName() : input2, output == null || output.getItem() == null ? null : output);
+			Debug.warnf("[Minestuck] The recipe in question: %s %s %s -> %s", input1 instanceof Item ? ((Item) input1).getName() : input1, mode.getStr(), input2 instanceof Item ? ((Item) input2).getName() : input2, output);
 			return;
 		}
 		
 		int index = input1.hashCode() - input2.hashCode();
-		if(index == 0)
-			index = damage1 - damage2;
 		if(index > 0)
-			combRecipes.put(Arrays.asList(input1, damage1, input2, damage2, mode), output);
-		else combRecipes.put(Arrays.asList(input2, damage2, input1, damage1, mode), output);
+			combRecipes.put(Arrays.asList(input1, input2, mode), output);
+		else combRecipes.put(Arrays.asList(input2, input1, mode), output);
 	}
 	
 	private static void checkIsValid(Object input) throws IllegalArgumentException
@@ -105,7 +83,7 @@ public class CombinationRegistry {
 		if(input == null)
 			throw new IllegalArgumentException("Input is null");
 		if(input instanceof String)
-			if(AlchemyRecipes.getItems(input, 0).isEmpty())
+			if(AlchemyRecipes.getItems(input).isEmpty())
 				throw new IllegalArgumentException("No oredict item found for \""+input+"\"");
 	}
 	
@@ -118,55 +96,46 @@ public class CombinationRegistry {
 		ItemStack item;
 		if (input1.isEmpty() || input2.isEmpty()) {return ItemStack.EMPTY;}
 		
-		if((item = getCombination(input1.getItem(), input1.getItemDamage(), input2.getItem(), input2.getItemDamage(), mode)).isEmpty())
+		if((item = getCombination(input1.getItem(), input2.getItem(), mode)).isEmpty())
 		{
-			String[] itemNames2 = getDictionaryNames(input2);
+			Tag<Item>[] itemTags2 = getTags(input2);
 			
-			for(String str2 : itemNames2)
-				if(!(item = getCombination(input1.getItem(), input1.getItemDamage(), str2, OreDictionary.WILDCARD_VALUE, mode)).isEmpty())
+			for(Tag<Item> str2 : itemTags2)
+				if(!(item = getCombination(input1.getItem(), str2, mode)).isEmpty())
 					return item;
 			
-			String[] itemNames1 = getDictionaryNames(input1);
-			for(String str1 : itemNames1)
-				if(!(item = getCombination(str1, OreDictionary.WILDCARD_VALUE, input2.getItem(), input2.getItemDamage(), mode)).isEmpty())
+			Tag<Item>[] itemTags1 = getTags(input1);
+			for(Tag<Item> str1 : itemTags1)
+				if(!(item = getCombination(str1, input2.getItem(), mode)).isEmpty())
 					return item;
 			
-			for(String str1 : itemNames1)
-				for(String str2 : itemNames2)
-					if(!(item = getCombination(str1, OreDictionary.WILDCARD_VALUE, str2, OreDictionary.WILDCARD_VALUE, mode)).isEmpty())
+			for(Tag<Item> tag1 : itemTags1)
+				for(Tag<Item> tag2 : itemTags2)
+					if(!(item = getCombination(tag1, tag2, mode)).isEmpty())
 						return item;
 		}
 		
 		if(item.isEmpty())
-			if(input1.getItem().equals(Item.getItemFromBlock(MinestuckBlocks.genericObject)))
+			if(input1.getItem().equals(MinestuckBlocks.GENERIC_OBJECT.asItem()))
 				return mode == Mode.MODE_AND ? input1 : input2;
-			else if(input2.getItem().equals(Item.getItemFromBlock(MinestuckBlocks.genericObject)))
+			else if(input2.getItem().equals(MinestuckBlocks.GENERIC_OBJECT.asItem()))
 				return mode == Mode.MODE_AND ? input2 : input1;
 		return item;
 	}
 	
 	@Nonnull
-	private static ItemStack getCombination(Object input1, int damage1, Object input2, int damage2, Mode mode)
+	private static ItemStack getCombination(Object input1, Object input2, Mode mode)
 	{
 		ItemStack item;
-		boolean b1 = damage1 != OreDictionary.WILDCARD_VALUE, b2 = damage2 != OreDictionary.WILDCARD_VALUE;
 		
 		int index = input1.hashCode() - input2.hashCode();
-		if(index == 0)
-			index = damage1 - damage2;
 		if(index > 0)
 		{
-			if((item = combRecipes.get(Arrays.asList(input1, damage1, input2, damage2, mode))) != null);
-			else if(b2 && (item = combRecipes.get(Arrays.asList(input1, damage1, input2, OreDictionary.WILDCARD_VALUE, mode))) != null);
-			else if(b1 && (item = combRecipes.get(Arrays.asList(input1, OreDictionary.WILDCARD_VALUE, input2, damage2, mode))) != null);
-			else if(b1 && b2) item = combRecipes.get(Arrays.asList(input1, OreDictionary.WILDCARD_VALUE, input2, OreDictionary.WILDCARD_VALUE, mode));
+			if((item = combRecipes.get(Arrays.asList(input1, input2, mode))) != null);
 		}
 		else
 		{
-			if((item = combRecipes.get(Arrays.asList(input2, damage2, input1, damage1, mode))) != null);
-			else if(b2 && (item = combRecipes.get(Arrays.asList(input2, OreDictionary.WILDCARD_VALUE, input1, damage1, mode))) != null);
-			else if(b1 && (item = combRecipes.get(Arrays.asList(input2, damage2, input1, OreDictionary.WILDCARD_VALUE, mode))) != null);
-			else if(b1 && b2) item = combRecipes.get(Arrays.asList(input2, OreDictionary.WILDCARD_VALUE, input1, OreDictionary.WILDCARD_VALUE, mode));
+			if((item = combRecipes.get(Arrays.asList(input2, input1, mode))) != null);
 		}
 		
 		if(item == null || item.isEmpty())
@@ -175,16 +144,17 @@ public class CombinationRegistry {
 		return item;
 	}
 	
-	protected static String[] getDictionaryNames(@Nonnull ItemStack stack)
+	protected static Tag<Item>[] getTags(@Nonnull ItemStack stack)
 	{
-		int[] itemIDs = OreDictionary.getOreIDs(stack);
+		/*int[] itemIDs = OreDictionary.getOreIDs(stack);
 		String[] itemNames = new String[itemIDs.length];
 		for(int i = 0; i < itemIDs.length; i++)
-			itemNames[i] = OreDictionary.getOreName(itemIDs[i]);
-		return itemNames;
+			itemNames[i] = OreDictionary.getOreName(itemIDs[i]);*/
+		return null;	//TODO Figure out tags
 	}
 	
-	public static Hashtable<List<Object>, ItemStack> getAllConversions() {
+	public static Hashtable<List<Object>, ItemStack> getAllConversions()
+	{
 		return combRecipes;
 	}
 }

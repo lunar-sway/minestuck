@@ -4,29 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.mraof.minestuck.block.BlockMinestuckStone;
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.block.MinestuckBlocks.EnumSlabStairMaterial;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.LeaflessTreeDecorator;
-import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.gen.DefaultTerrainGen;
 import com.mraof.minestuck.world.lands.gen.ILandTerrainGen;
-import com.mraof.minestuck.world.lands.gen.LandTerrainGenBase;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
-
-import net.minecraft.block.BlockColored;
-import net.minecraft.block.BlockDirt;
-import net.minecraft.block.BlockPlanks;
-import net.minecraft.block.BlockPrismarine;
-import net.minecraft.block.BlockTallGrass;
-import net.minecraft.block.BlockWoodSlab;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.math.Vec3d;
 
 public class LandAspectRain extends TerrainLandAspect 
@@ -44,21 +32,21 @@ public class LandAspectRain extends TerrainLandAspect
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("surface", MinestuckBlocks.chalk.getDefaultState());
-		registry.setBlockState("upper", MinestuckBlocks.chalk.getDefaultState());
-		registry.setBlockState("ground", MinestuckBlocks.pinkStoneSmooth.getDefaultState());
+		registry.setBlockState("surface", MinestuckBlocks.CHALK.getDefaultState());
+		registry.setBlockState("upper", MinestuckBlocks.CHALK.getDefaultState());
+		registry.setBlockState("ground", MinestuckBlocks.PINK_STONE.getDefaultState());
 		registry.setBlockState("ocean", Blocks.WATER.getDefaultState());
-		registry.setBlockState("structure_primary", MinestuckBlocks.pinkStoneBricks.getDefaultState());
-		registry.setBlockState("structure_primary_stairs", EnumSlabStairMaterial.PINK_BRICK.getStair().getDefaultState());
-		registry.setBlockState("structure_primary_decorative", MinestuckBlocks.pinkStoneChisel.getDefaultState());
-		registry.setBlockState("structure_secondary", MinestuckBlocks.pinkStonePolish.getDefaultState());
-		registry.setBlockState("structure_secondary_stairs", EnumSlabStairMaterial.CHALK_BRICK.getStair().getDefaultState());
-		registry.setBlockState("structure_secondary_decorative", MinestuckBlocks.pinkStoneChisel.getDefaultState());
-		registry.setBlockState("structure_planks", MinestuckBlocks.deadPlanks.getDefaultState());
-		registry.setBlockState("structure_planks_slab", EnumSlabStairMaterial.DEAD.getSlab().getDefaultState());
-		registry.setBlockState("bush", Blocks.DEADBUSH.getDefaultState());
-		registry.setBlockState("structure_wool_1", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.YELLOW));
-		registry.setBlockState("structure_wool_3", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.MAGENTA));
+		registry.setBlockState("structure_primary", MinestuckBlocks.PINK_STONE_BRICKS.getDefaultState());
+		registry.setBlockState("structure_primary_stairs", MinestuckBlocks.PINK_STONE_BRICK_STAIRS.getDefaultState());
+		registry.setBlockState("structure_primary_decorative", MinestuckBlocks.CHISELED_PINK_STONE_BRICKS.getDefaultState());
+		registry.setBlockState("structure_secondary", MinestuckBlocks.POLISHED_PINK_STONE.getDefaultState());
+		registry.setBlockState("structure_secondary_stairs", MinestuckBlocks.CHALK_BRICK_STAIRS.getDefaultState());
+		registry.setBlockState("structure_secondary_decorative", MinestuckBlocks.CHISELED_PINK_STONE_BRICKS.getDefaultState());
+		registry.setBlockState("structure_planks", MinestuckBlocks.DEAD_PLANKS.getDefaultState());
+		registry.setBlockState("structure_planks_slab", MinestuckBlocks.DEAD_PLANKS_SLAB.getDefaultState());
+		registry.setBlockState("bush", Blocks.DEAD_BUSH.getDefaultState());
+		registry.setBlockState("structure_wool_1", Blocks.YELLOW_WOOL.getDefaultState());
+		registry.setBlockState("structure_wool_3", Blocks.MAGENTA_WOOL.getDefaultState());
 	}
 	
 	@Override
@@ -87,14 +75,14 @@ public class LandAspectRain extends TerrainLandAspect
 	public List<ILandDecorator> getDecorators()
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
-		list.add(new LeaflessTreeDecorator(MinestuckBlocks.deadLog.getDefaultState(), 0.5F, BiomeMinestuck.mediumNormal));
-		list.add(new LeaflessTreeDecorator(MinestuckBlocks.deadLog.getDefaultState(), 0.25F, BiomeMinestuck.mediumRough));
+		list.add(new LeaflessTreeDecorator(MinestuckBlocks.DEAD_LOG.getDefaultState(), 0.5F, BiomeMinestuck.mediumNormal));
+		list.add(new LeaflessTreeDecorator(MinestuckBlocks.DEAD_LOG.getDefaultState(), 0.25F, BiomeMinestuck.mediumRough));
 		
-		list.add(new UndergroundDecoratorVein(MinestuckBlocks.pinkStonePolish.getDefaultState(), 2, 8, 64));
-		list.add(new UndergroundDecoratorVein(MinestuckBlocks.coalOrePinkStone.getDefaultState(), 13, 17, 64));
-		list.add(new UndergroundDecoratorVein(MinestuckBlocks.lapisOrePinkStone.getDefaultState(), 4, 7, 24));
-		list.add(new UndergroundDecoratorVein(MinestuckBlocks.goldOrePinkStone.getDefaultState(), 4, 9, 32));
-		list.add(new UndergroundDecoratorVein(MinestuckBlocks.diamondOrePinkStone.getDefaultState(), 3, 6, 24));
+		list.add(new UndergroundDecoratorVein(MinestuckBlocks.POLISHED_PINK_STONE.getDefaultState(), 2, 8, 64));
+		list.add(new UndergroundDecoratorVein(MinestuckBlocks.COAL_ORE_PINK_STONE.getDefaultState(), 13, 17, 64));
+		list.add(new UndergroundDecoratorVein(MinestuckBlocks.LAPIS_ORE_PINK_STONE.getDefaultState(), 4, 7, 24));
+		list.add(new UndergroundDecoratorVein(MinestuckBlocks.GOLD_ORE_PINK_STONE.getDefaultState(), 4, 9, 32));
+		list.add(new UndergroundDecoratorVein(MinestuckBlocks.DIAMOND_ORE_PINK_STONE.getDefaultState(), 3, 6, 24));
 		return list;
 	}
 	

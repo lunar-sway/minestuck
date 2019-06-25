@@ -1,9 +1,9 @@
 {
     "textures": {
-        "particle": "minestuck:blocks/cold_cake_side",
-        "bottom": "minestuck:blocks/cold_cake_bottom",
-        "top": "minestuck:blocks/cold_cake_top",
-        "side": "minestuck:blocks/cold_cake_side"
+        "particle": "minestuck:block/cold_cake_side",
+        "bottom": "minestuck:block/cold_cake_bottom",
+        "top": "minestuck:block/cold_cake_top",
+        "side": "minestuck:block/cold_cake_side"
     },
     "elements": [
         {   "from": [ 1, 0, 1 ],

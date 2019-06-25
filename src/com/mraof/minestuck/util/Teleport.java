@@ -1,7 +1,6 @@
 package com.mraof.minestuck.util;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketEntityEffect;
@@ -12,28 +11,29 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 import java.lang.reflect.Field;
 import java.util.Iterator;
 
+@Deprecated
 public class Teleport
 {
-	public static boolean teleportEntity(Entity entity, int destinationDimension, ITeleporter teleporter, BlockPos dest)
+	public static boolean teleportEntity(Entity entity, DimensionType destinationDimension, ITeleporter teleporter, BlockPos dest)
 	{
 		return teleportEntity(entity, destinationDimension, teleporter, dest.getX() + 0.5, dest.getY(), dest.getZ() + 0.5);
 	}
 	
-	public static boolean teleportEntity(Entity entity, int destinationDimension, ITeleporter teleporter)
+	public static boolean teleportEntity(Entity entity, DimensionType destinationDimension, ITeleporter teleporter)
 	{
 		return teleportEntity(entity, destinationDimension, teleporter, entity.posX, entity.posY, entity.posZ);
 	}
 	
-	public static boolean teleportEntity(Entity entity, int destinationDimension, ITeleporter teleporter, double x, double y, double z)
+	public static boolean teleportEntity(Entity entity, DimensionType destinationDimension, ITeleporter teleporter, double x, double y, double z)
 	{
-		if(destinationDimension == entity.dimension)
+		return false;
+		/*if(destinationDimension == entity.dimension)
 			return localTeleport(entity, teleporter, x, y, z);
 		
 		if(entity.world.isRemote)
@@ -42,7 +42,7 @@ public class Teleport
 			return false;
 		
 		MinecraftServer mcServer = entity.getServer();
-		int prevDimension = entity.dimension;
+		DimensionType prevDimension = entity.dimension;
 		WorldServer worldFrom = mcServer.getWorld(prevDimension);
 		WorldServer worldDest = mcServer.getWorld(destinationDimension);
 		
@@ -229,7 +229,7 @@ public class Teleport
 			}
 		}
 		
-		portalInvincibilityField.setBoolean(player, true);
+		portalInvincibilityField.setBoolean(player, true);*/
 	}
 	
 	public interface ITeleporter

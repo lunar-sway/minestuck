@@ -6,13 +6,11 @@ import java.util.Random;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.StructureBoundingBox;
-import net.minecraft.world.gen.structure.template.TemplateManager;
 
 public class ComponentCastleSolidPiece extends ComponentCastlePiece 
 {
 	public ComponentCastleSolidPiece() {}
-	protected ComponentCastleSolidPiece(int par1, ComponentCastleStartPiece startPiece, StructureBoundingBox structureBoundingBox) 
+	/*protected ComponentCastleSolidPiece(int par1, ComponentCastleStartPiece startPiece, StructureBoundingBox structureBoundingBox)
 	{
 		super(par1, startPiece);
 		this.boundingBox = structureBoundingBox;
@@ -57,5 +55,5 @@ public class ComponentCastleSolidPiece extends ComponentCastlePiece
 	{
 		// TODO Auto-generated method stub
 		
-	}
+	}*/
 }

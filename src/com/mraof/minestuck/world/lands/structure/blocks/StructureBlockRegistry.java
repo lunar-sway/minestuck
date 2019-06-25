@@ -1,12 +1,12 @@
 package com.mraof.minestuck.world.lands.structure.blocks;
 
 import net.minecraft.block.*;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumDyeColor;
+import net.minecraft.state.IProperty;
+import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.state.properties.Half;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.Rotation;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +14,7 @@ import java.util.Map;
 public class StructureBlockRegistry
 {
 	
-	private static Map<String, BlockEntry> staticRegistry = new HashMap<String, BlockEntry>();
+	private static Map<String, BlockEntry> staticRegistry = new HashMap<>();
 	
 	public static void registerBlock(String name, IBlockState defaultBlock)
 	{
@@ -61,18 +61,18 @@ public class StructureBlockRegistry
 		registerBlock("surface", "upper");
 		registerBlock("ocean", Blocks.WATER.getDefaultState());
 		registerBlock("river", "ocean");
-		registerBlock("structure_primary", Blocks.STONEBRICK.getDefaultState());
+		registerBlock("structure_primary", Blocks.STONE_BRICKS.getDefaultState());
 		registerBlock("structure_primary_decorative", "structure_primary");
 		registerBlock("structure_primary_stairs", "structure_primary");
 		registerBlock("structure_secondary", "structure_primary");
 		registerBlock("structure_secondary_decorative", "structure_secondary");
 		registerBlock("structure_secondary_stairs", "structure_secondary");
-		registerBlock("structure_planks", Blocks.PLANKS.getDefaultState());
-		registerBlock("structure_planks_slab", Blocks.WOODEN_SLAB.getDefaultState(), BlockSlab.class);
-		registerBlock("structure_wool_1", Blocks.WOOL.getDefaultState());
-		registerBlock("structure_wool_2", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.SILVER));
-		registerBlock("structure_wool_3", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.GRAY));
-		registerBlock("carpet", Blocks.CARPET.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.WHITE));
+		registerBlock("structure_planks", Blocks.OAK_PLANKS.getDefaultState());
+		registerBlock("structure_planks_slab", Blocks.OAK_SLAB.getDefaultState(), BlockSlab.class);
+		registerBlock("structure_wool_1", Blocks.WHITE_WOOL.getDefaultState());
+		registerBlock("structure_wool_2", Blocks.LIGHT_GRAY_WOOL.getDefaultState());
+		registerBlock("structure_wool_3", Blocks.GRAY_WOOL.getDefaultState());
+		registerBlock("carpet", Blocks.WHITE_CARPET.getDefaultState());
 		registerBlock("village_door", Blocks.OAK_DOOR.getDefaultState(), BlockDoor.class);
 		registerBlock("salamander_floor", "upper");
 		registerBlock("village_path", "structure_secondary");
@@ -81,13 +81,13 @@ public class StructureBlockRegistry
 		registerBlock("light_block", Blocks.GLOWSTONE.getDefaultState());
 		registerBlock("mushroom_1", Blocks.RED_MUSHROOM.getDefaultState());
 		registerBlock("mushroom_2", Blocks.BROWN_MUSHROOM.getDefaultState());
-		registerBlock("bush", Blocks.DEADBUSH.getDefaultState());
+		registerBlock("bush", Blocks.DEAD_BUSH.getDefaultState());
 		registerBlock("torch", Blocks.TORCH.getDefaultState(), BlockTorch.class);	//Class restriction needed because of the facing property
 		registerBlock("bucket1", Blocks.QUARTZ_BLOCK.getDefaultState());
 		registerBlock("bucket2", Blocks.IRON_BLOCK.getDefaultState());
 		registerBlock("glass", Blocks.GLASS.getDefaultState());
-		registerBlock("stained_glass_1", Blocks.STAINED_GLASS.getDefaultState().withProperty(BlockStainedGlass.COLOR, EnumDyeColor.GRAY));
-		registerBlock("stained_glass_2", Blocks.STAINED_GLASS.getDefaultState().withProperty(BlockStainedGlass.COLOR, EnumDyeColor.SILVER));
+		registerBlock("stained_glass_1", Blocks.GRAY_STAINED_GLASS.getDefaultState());
+		registerBlock("stained_glass_2", Blocks.LIGHT_GRAY_STAINED_GLASS.getDefaultState());
 		registerBlock("slime", Blocks.SLIME_BLOCK.getDefaultState());
 	}
 	
@@ -116,7 +116,7 @@ public class StructureBlockRegistry
 	}
 	
 	//Nonstatic stuff
-	private Map<String, IBlockState> blockRegistry = new HashMap<String, IBlockState>();
+	private Map<String, IBlockState> blockRegistry = new HashMap<>();
 	
 	public void setBlockState(String name, IBlockState state)
 	{
@@ -149,32 +149,22 @@ public class StructureBlockRegistry
 	
 	public IBlockState getStairs(String name, EnumFacing facing, boolean upsideDown)
 	{
-		Rotation rotation;
-		switch(facing)
-		{
-		case EAST:
-			rotation = Rotation.CLOCKWISE_90;
-			break;
-		case SOUTH:
-			rotation = Rotation.CLOCKWISE_180;
-			break;
-		case WEST:
-			rotation = Rotation.COUNTERCLOCKWISE_90;
-			break;
-		default: rotation = Rotation.NONE;
-		}
-		
 		IBlockState state = getBlockState(name);
-		state = state.withRotation(rotation);
+		
+		state = withOptionally(state, BlockStateProperties.HORIZONTAL_FACING, facing);
 		
 		if(upsideDown)
-			for(IProperty<?> property : state.getPropertyKeys())
-				if(property.getValueClass().equals(BlockStairs.EnumHalf.class))
-				{
-					state = state.withProperty((IProperty<BlockStairs.EnumHalf>)property, BlockStairs.EnumHalf.TOP);
-					break;
-				}
+			state = withOptionally(state, BlockStateProperties.HALF, Half.TOP);
 		
+		return state;
+	}
+	
+	public static <T extends Comparable<T>> IBlockState withOptionally(IBlockState state, IProperty<T> property, T value)
+	{
+		if(state.has(property))
+		{
+			state = state.with(property, value);
+		}
 		return state;
 	}
 }

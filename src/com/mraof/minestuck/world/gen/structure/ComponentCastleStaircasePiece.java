@@ -5,13 +5,11 @@ import java.util.Random;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.StructureBoundingBox;
-import net.minecraft.world.gen.structure.StructureComponent;
 
 public class ComponentCastleStaircasePiece extends ComponentCastleRoomPiece 
 {
 	public ComponentCastleStaircasePiece() {}
-	protected ComponentCastleStaircasePiece(int par1, ComponentCastleStartPiece startPiece,	StructureBoundingBox structureBoundingBox) 
+	/*protected ComponentCastleStaircasePiece(int par1, ComponentCastleStartPiece startPiece,	StructureBoundingBox structureBoundingBox)
 	{
 		super(par1, startPiece, structureBoundingBox);
 	}
@@ -67,6 +65,6 @@ public class ComponentCastleStaircasePiece extends ComponentCastleRoomPiece
 				break;
 			}
 		return true;
-	}
+	}*/
 
 }

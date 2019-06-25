@@ -1,6 +1,14 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "minestuck:items/shunt_full"
-    }
+        "layer0": "minestuck:item/empty_shunt"
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "minestuck:content": 1
+            },
+            "model": "minestuck:item/shunt_with_card"
+        }
+    ]
 }

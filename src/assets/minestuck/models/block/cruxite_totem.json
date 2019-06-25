@@ -1,8 +1,8 @@
 {
     "textures": {
-        "particle": "minestuck:machines/totem",
-        "totem": "minestuck:machines/totem",
-        "totem2": "minestuck:machines/totem_2"
+        "particle": "minestuck:block/machine/totem",
+        "totem": "minestuck:block/machine/totem",
+        "totem2": "minestuck:block/machine/totem_2"
     },
     "elements": [
         {

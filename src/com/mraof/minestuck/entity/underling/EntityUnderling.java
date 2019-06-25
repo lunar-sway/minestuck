@@ -12,10 +12,7 @@ import com.mraof.minestuck.entity.item.EntityVitalityGel;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.util.*;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.IMob;
@@ -23,15 +20,19 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.translation.I18n;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -49,11 +50,11 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	
 	private static final float maxSharedProgress = 2;	//The multiplier for the maximum amount progress that can be gathered from each enemy with the group fight bonus
 	
-	protected Map<EntityPlayerMP, Double> damageMap = new HashMap<EntityPlayerMP, Double>();	//Map that stores how much damage each player did to this to this underling. Null is used for environmental or other non-player damage
+	protected Map<EntityPlayerMP, Double> damageMap = new HashMap<>();	//Map that stores how much damage each player did to this to this underling. Null is used for environmental or other non-player damage
 	
-	public EntityUnderling(World par1World)
+	public EntityUnderling(EntityType<?> type, World world)
 	{
-		super(par1World);
+		super(type, world);
 	}
 	
 	@Override
@@ -73,13 +74,13 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	}
 	
 	@Override
-	protected void applyEntityAttributes()
+	protected void registerAttributes()
 	{
-		super.applyEntityAttributes();
+		super.registerAttributes();
 		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
 		
-		this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue((double)(this.getKnockbackResistance()));
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(this.getWanderSpeed());
+		this.getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue((double)(this.getKnockbackResistance()));
+		this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(this.getWanderSpeed());
 	}
 	
 	protected void applyGristType(GristType type, boolean fullHeal)
@@ -87,8 +88,8 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 		this.type = type;
 		if(this.type.getRarity() == 0)	//Utility grist type
 			this.type = SburbHandler.getUnderlingType(this);
-		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(this.getMaximumHealth());
-		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(this.getAttackDamage());
+		this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(this.getMaximumHealth());
+		this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(this.getAttackDamage());
 		if(fullHeal)
 			this.setHealth(this.getMaxHealth());
 	}
@@ -109,7 +110,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn)
 	{
-		boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+		boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
 		return flag;
 	}
 	
@@ -163,16 +164,16 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	public String getTexture() 
 	{
 		if(type == null)
-			return "textures/mobs/underlings/" + GristType.Shale.getName() + '_' + getUnderlingName() + ".png";
+			return "textures/mobs/underlings/" + GristType.SHALE.getName() + '_' + getUnderlingName() + ".png";
 		return "textures/mobs/underlings/" + type.getName() + '_' + getUnderlingName() + ".png";
 	}
 	
 	@Override
-	public String getName() 
+	public ITextComponent getName()
 	{
 		if(type != null)
-			return I18n.translateToLocalFormatted("entity.minestuck." + getUnderlingName() + ".type", type.getDisplayName());
-		else return I18n.translateToFallback("entity.minestuck." + getUnderlingName() + ".name");
+			return new TextComponentTranslation("entity.minestuck." + getUnderlingName() + ".type", type.getDisplayName());
+		else return new TextComponentTranslation("entity.minestuck." + getUnderlingName() + ".name");
 	}
 	
 	@Override
@@ -194,78 +195,79 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	}
 	
 	@Override
-	public void writeEntityToNBT(NBTTagCompound tagCompound) 
+	public void writeAdditional(NBTTagCompound compound)
 	{
-		super.writeEntityToNBT(tagCompound);
-		tagCompound.setString("type", type.getRegistryName().toString());
-		tagCompound.setBoolean("spawned", fromSpawner);
+		super.writeAdditional(compound);
+		compound.setString("Type", type.getRegistryName().toString());
+		compound.setBoolean("Spawned", fromSpawner);
 		if(hasHome())
 		{
 			NBTTagCompound nbt = new NBTTagCompound();
 			BlockPos home = getHomePosition();
-			nbt.setInteger("homeX", home.getX());
-			nbt.setInteger("homeY", home.getY());
-			nbt.setInteger("homeZ", home.getZ());
-			nbt.setInteger("maxHomeDistance", (int) getMaximumHomeDistance());
-			tagCompound.setTag("homePos", nbt);
+			nbt.setInt("HomeX", home.getX());
+			nbt.setInt("HomeY", home.getY());
+			nbt.setInt("HomeZ", home.getZ());
+			nbt.setInt("MaxHomeDistance", (int) getMaximumHomeDistance());
+			compound.setTag("HomePos", nbt);
 		}
 	}
+	
 	@Override
-	public void readEntityFromNBT(NBTTagCompound tagCompound) 
+	public void readAdditional(NBTTagCompound compound)
 	{
-		if(tagCompound.hasKey("type", 8))
-			applyGristType(GristType.getTypeFromString(tagCompound.getString("type")), false);
+		if(compound.contains("Type", 8))
+			applyGristType(GristType.getTypeFromString(compound.getString("Type")), false);
 		else applyGristType(SburbHandler.getUnderlingType(this), true);
-		super.readEntityFromNBT(tagCompound);
+		super.readAdditional(compound);
 		
-		fromSpawner = tagCompound.getBoolean("spawned");
+		fromSpawner = compound.getBoolean("Spawned");
 		
-		if(tagCompound.hasKey("homePos", 10))
+		if(compound.contains("HomePos", 10))
 		{
-			NBTTagCompound nbt = tagCompound.getCompoundTag("homePos");
-			BlockPos pos = new BlockPos(nbt.getInteger("homeX"), nbt.getInteger("homeY"), nbt.getInteger("homeZ"));
-			setHomePosAndDistance(pos, nbt.getInteger("maxHomeDistance"));
+			NBTTagCompound nbt = compound.getCompound("HomePos");
+			BlockPos pos = new BlockPos(nbt.getInt("HomeX"), nbt.getInt("HomeY"), nbt.getInt("homeZ"));
+			setHomePosAndDistance(pos, nbt.getInt("MaxHomeDistance"));
 		}
 	}
 	
 	@Override
-	public boolean getCanSpawnHere()
+	public boolean canSpawn(IWorld worldIn, boolean b)
 	{
-		return this.world.getDifficulty() != EnumDifficulty.PEACEFUL && super.getCanSpawnHere();
+		return this.world.getDifficulty() != EnumDifficulty.PEACEFUL && super.canSpawn(worldIn, b);
 	}
 	
 	@Override
-	public void writeSpawnData(ByteBuf buffer)
+	public void writeSpawnData(PacketBuffer buffer)
 	{
 		buffer.writeInt(type.getId());
 	}
 	
 	@Override
-	public void readSpawnData(ByteBuf additionalData)
+	public void readSpawnData(PacketBuffer additionalData)
 	{
 		applyGristType(GristType.REGISTRY.getValue(additionalData.readInt()), false);
 		this.textureResource = new ResourceLocation("minestuck", this.getTexture());
 	}
 	
+	@Nullable
 	@Override
-	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingData)
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData entityLivingData, @Nullable NBTTagCompound itemNbt)
 	{
-		
-		if(!(livingData instanceof UnderlingData))
+		if(!(entityLivingData instanceof UnderlingData))
 		{
 			if(this.type == null)
 				applyGristType(SburbHandler.getUnderlingType(this), true);
-			livingData = new UnderlingData(this.type);
+			entityLivingData = new UnderlingData(this.type);
 		} else
 		{
-			applyGristType(((UnderlingData)livingData).type, true);
+			applyGristType(((UnderlingData)entityLivingData).type, true);
 		}
 		
-		return super.onInitialSpawn(difficulty, livingData);
+		return super.onInitialSpawn(difficulty, entityLivingData, itemNbt);
 	}
 	
 	@Override
-	protected boolean canDespawn()
+	public boolean canDespawn()
 	{
 		return !this.hasHome();
 	}
@@ -281,9 +283,9 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	}
 	
 	@Override
-	public void onEntityUpdate()
+	public void baseTick()
 	{
-		super.onEntityUpdate();
+		super.baseTick();
 		if(this.getHealth() > 0.0F)
 			dropCandy = false;
 	}

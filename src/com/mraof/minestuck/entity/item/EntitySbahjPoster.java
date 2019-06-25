@@ -1,5 +1,6 @@
 package com.mraof.minestuck.entity.item;
 
+import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.item.MinestuckItems;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -14,12 +15,12 @@ public class EntitySbahjPoster extends EntityHangingArt<EntitySbahjPoster.SbahjA
 	
 	public EntitySbahjPoster(World worldIn)
 	{
-		super(worldIn);
+		super(ModEntityTypes.SBAHJ_POSTER, worldIn);
 	}
 	
 	public EntitySbahjPoster(World worldIn, BlockPos pos, EnumFacing facing)
 	{
-		super(worldIn, pos, facing);
+		super(ModEntityTypes.SBAHJ_POSTER, worldIn, pos, facing);
 	}
 	
 	@Override
@@ -37,7 +38,7 @@ public class EntitySbahjPoster extends EntityHangingArt<EntitySbahjPoster.SbahjA
 	@Override
 	public ItemStack getStackDropped()
 	{
-		return new ItemStack(MinestuckItems.sbahjPoster);
+		return new ItemStack(MinestuckItems.SBAHJ_POSTER);
 	}
 	
 	public static enum SbahjArt implements EntityHangingArt.IArt

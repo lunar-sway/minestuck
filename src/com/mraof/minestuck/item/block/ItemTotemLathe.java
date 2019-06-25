@@ -1,33 +1,36 @@
 package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.block.BlockTotemLathe;
-import com.mraof.minestuck.block.BlockTotemLathe.EnumParts;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class ItemTotemLathe extends ItemBlock
 {
-	public ItemTotemLathe(Block block)
+	
+	public ItemTotemLathe(Block blockIn, Properties builder)
 	{
-		super(block);
+		super(blockIn, builder);
 	}
 	
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
+	public EnumActionResult tryPlace(BlockItemUseContext context)
 	{
-		
-		if (worldIn.isRemote)
+		World world = context.getWorld();
+		EnumFacing facing = context.getFace();
+		BlockPos pos = context.getPos();
+		EntityPlayer player = context.getPlayer();
+		if (world.isRemote)
 		{
 			return EnumActionResult.SUCCESS;
 		} else if (facing != EnumFacing.UP)
@@ -35,45 +38,45 @@ public class ItemTotemLathe extends ItemBlock
 			return EnumActionResult.FAIL;
 		} else
 		{
-			Block block = worldIn.getBlockState(pos).getBlock();
-			boolean flag = block.isReplaceable(worldIn, pos);
+			IBlockState block = world.getBlockState(pos);
+			boolean flag = block.isReplaceable(context);
 			
 			if (!flag)
 			{
 				pos = pos.up();
 			}
 			
-			EnumFacing placedFacing = player.getHorizontalFacing().getOpposite();
-			ItemStack itemstack = player.getHeldItem(hand);
+			EnumFacing placedFacing = context.getPlacementHorizontalFacing().getOpposite();
+			ItemStack itemstack = context.getItem();
 			
 			pos = pos.offset(placedFacing.rotateY());
 			
-			if(placedFacing.getFrontOffsetX() > 0 && hitZ >= 0.5F || placedFacing.getFrontOffsetX() < 0 && hitZ < 0.5F
-					|| placedFacing.getFrontOffsetZ() > 0 && hitX < 0.5F || placedFacing.getFrontOffsetZ() < 0 && hitX >= 0.5F)
+			if(placedFacing == EnumFacing.EAST && context.getHitZ() >= 0.5F || placedFacing == EnumFacing.WEST && context.getHitZ() < 0.5F
+					|| placedFacing == EnumFacing.SOUTH && context.getHitX() < 0.5F || placedFacing == EnumFacing.NORTH && context.getHitX() >= 0.5F)
 				pos = pos.offset(placedFacing.rotateY());
 			
 			if (!itemstack.isEmpty())
 			{
-				if(!canPlaceAt(itemstack, player, worldIn, pos, placedFacing))
+				if(!canPlaceAt(context, pos, placedFacing))
 					return EnumActionResult.FAIL;
 				
-				IBlockState state = this.block.getDefaultState().withProperty(BlockTotemLathe.DIRECTION, placedFacing).withProperty(BlockTotemLathe.PART1, BlockTotemLathe.EnumParts.BOTTOM_LEFT);
-				this.placeBlockAt(itemstack, player, worldIn, pos, facing, hitX, hitY, hitZ, state);
+				IBlockState state = getBlock().getDefaultState().with(BlockTotemLathe.FACING, placedFacing);
+				this.placeBlock(context, state);
 				return EnumActionResult.SUCCESS;
 			}
 			return EnumActionResult.FAIL;
 		}
 	}
 	
-	public static boolean canPlaceAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing facing)
+	public static boolean canPlaceAt(BlockItemUseContext context, BlockPos pos, EnumFacing facing)
 	{
-		for (int x = 0; x < 4; x++)
+		for(int x = 0; x < 4; x++)
 		{
-			if (!player.canPlayerEdit(pos.offset(facing.rotateYCCW(), x), EnumFacing.UP, stack))
+			if(!context.getPlayer().canPlayerEdit(pos.offset(facing.rotateYCCW(), x), EnumFacing.UP, context.getItem()))
 				return false;
-			for (int y = 0; y < 3; y++)
+			for(int y = 0; y < 3; y++)
 			{
-				if (!world.mayPlace(MinestuckBlocks.totemlathe[0], pos.offset(facing.rotateYCCW(), x).up(y), false, EnumFacing.UP, null))
+				if(!context.getWorld().getBlockState(pos.offset(facing.rotateYCCW(), x).up(y)).isReplaceable(context))
 					return false;
 			}
 		}
@@ -81,25 +84,34 @@ public class ItemTotemLathe extends ItemBlock
 	}
 	
 	@Override
-	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState)
+	protected boolean placeBlock(BlockItemUseContext context, IBlockState newState)
 	{
-		EnumFacing facing = player.getHorizontalFacing().getOpposite();
-		
-		if(!(world.isRemote))
+		BlockPos pos = context.getPos();
+		World world = context.getWorld();
+		EntityPlayer player = context.getPlayer();
+		if(!world.isRemote)
 		{
-			world.setBlockState(pos, BlockTotemLathe.getState(EnumParts.BOTTOM_LEFT, facing));
-			world.setBlockState(pos.offset(facing.rotateYCCW(),1), BlockTotemLathe.getState(EnumParts.BOTTOM_MIDLEFT, facing));
-			world.setBlockState(pos.offset(facing.rotateYCCW(),2), BlockTotemLathe.getState(EnumParts.BOTTOM_MIDRIGHT, facing));
-			world.setBlockState(pos.offset(facing.rotateYCCW(),3), BlockTotemLathe.getState(EnumParts.BOTTOM_RIGHT, facing));
-			world.setBlockState(pos.up(1), BlockTotemLathe.getState(EnumParts.MID_LEFT, facing));
-			world.setBlockState(pos.offset(facing.rotateYCCW(),1).up(1), BlockTotemLathe.getState(EnumParts.ROD_LEFT, facing));
-			world.setBlockState(pos.offset(facing.rotateYCCW(),3).up(1), BlockTotemLathe.getState(EnumParts.MID_RIGHT, facing));
-			world.setBlockState(pos.up(2), BlockTotemLathe.getState(EnumParts.TOP_LEFT, facing));
-			world.setBlockState(pos.offset(facing.rotateYCCW(),1).up(2), BlockTotemLathe.getState(EnumParts.TOP_MIDLEFT, facing));
-			world.setBlockState(pos.offset(facing.rotateYCCW(),2).up(2), BlockTotemLathe.getState(EnumParts.TOP_MIDRIGHT, facing));
+			EnumFacing facing = context.getPlacementHorizontalFacing().getOpposite();
+			
+			pos = pos.offset(facing.rotateY());
+			
+			if(facing == EnumFacing.EAST && context.getHitZ() >= 0.5F || facing == EnumFacing.WEST && context.getHitZ() < 0.5F
+					|| facing == EnumFacing.SOUTH && context.getHitX() < 0.5F || facing == EnumFacing.NORTH && context.getHitX() >= 0.5F)
+				pos = pos.offset(facing.rotateY());
+			
+			world.setBlockState(pos, MinestuckBlocks.TOTEM_LATHE.CARD_SLOT.getDefaultState().with(BlockTotemLathe.FACING, facing));
+			world.setBlockState(pos.offset(facing.rotateYCCW(),1), MinestuckBlocks.TOTEM_LATHE.BOTTOM_LEFT.getDefaultState().with(BlockTotemLathe.FACING, facing));
+			world.setBlockState(pos.offset(facing.rotateYCCW(),2), MinestuckBlocks.TOTEM_LATHE.BOTTOM_RIGHT.getDefaultState().with(BlockTotemLathe.FACING, facing));
+			world.setBlockState(pos.offset(facing.rotateYCCW(),3), MinestuckBlocks.TOTEM_LATHE.BOTTOM_CORNER.getDefaultState().with(BlockTotemLathe.FACING, facing));
+			world.setBlockState(pos.up(1), MinestuckBlocks.TOTEM_LATHE.MIDDLE.getDefaultState().with(BlockTotemLathe.FACING, facing));
+			world.setBlockState(pos.offset(facing.rotateYCCW(),1).up(1), MinestuckBlocks.TOTEM_LATHE.ROD.getDefaultState().with(BlockTotemLathe.FACING, facing));
+			world.setBlockState(pos.offset(facing.rotateYCCW(),3).up(1), MinestuckBlocks.TOTEM_LATHE.WHEEL.getDefaultState().with(BlockTotemLathe.FACING, facing));
+			world.setBlockState(pos.up(2), MinestuckBlocks.TOTEM_LATHE.TOP_CORNER.getDefaultState().with(BlockTotemLathe.FACING, facing));
+			world.setBlockState(pos.offset(facing.rotateYCCW(),1).up(2), MinestuckBlocks.TOTEM_LATHE.TOP.getDefaultState().with(BlockTotemLathe.FACING, facing));
+			world.setBlockState(pos.offset(facing.rotateYCCW(),2).up(2), MinestuckBlocks.TOTEM_LATHE.CARVER.getDefaultState().with(BlockTotemLathe.FACING, facing));
 			
 			if(player instanceof EntityPlayerMP)
-				CriteriaTriggers.PLACED_BLOCK.trigger((EntityPlayerMP) player, pos, stack);
+				CriteriaTriggers.PLACED_BLOCK.trigger((EntityPlayerMP) player, pos, context.getItem());
 		}
 		return true;
 	}

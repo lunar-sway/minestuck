@@ -1,17 +1,13 @@
 package com.mraof.minestuck.block;
-
+/*
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiHandler;
-import com.mraof.minestuck.item.TabMinestuck;
-import com.mraof.minestuck.tileentity.TileEntityMachine;
+import com.mraof.minestuck.tileentity.TileEntityMachineProcess;
 import com.mraof.minestuck.tileentity.TileEntityUraniumCooker;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
@@ -23,10 +19,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockBlender extends BlockContainer
 {
@@ -78,13 +71,13 @@ public class BlockBlender extends BlockContainer
 	@Override
 	public int getMetaFromState(IBlockState state)
 	{
-		return ((EnumFacing)state.getValue(DIRECTION)).ordinal() - 2;
+		return state.getValue(DIRECTION).getHorizontalIndex();
 	}
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta)
 	{
-		return getDefaultState().withProperty(DIRECTION, EnumFacing.values()[meta + 2]);
+		return getDefaultState().withProperty(DIRECTION, EnumFacing.getHorizontal(meta % 4));
 	}
 	
 	 @SideOnly(Side.CLIENT)
@@ -174,7 +167,7 @@ public class BlockBlender extends BlockContainer
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
 	{
-		TileEntityMachine te = (TileEntityMachine) worldIn.getTileEntity(pos);
+		TileEntityMachineProcess te = (TileEntityMachineProcess) worldIn.getTileEntity(pos);
 		if(te != null) InventoryHelper.dropInventoryItems(worldIn, pos, te);
 		
 		super.breakBlock(worldIn, pos, state);
@@ -221,3 +214,4 @@ public class BlockBlender extends BlockContainer
 		return BlockFaceShape.UNDEFINED;
 	}
 }
+*/

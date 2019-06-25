@@ -9,6 +9,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import net.minecraft.world.gen.Heightmap;
 
 public class BlockBlobDecorator extends BiomeSpecificDecorator	//A version of WorldGenBlockBlob slightly adapted to this usage area
 {
@@ -28,7 +29,7 @@ public class BlockBlobDecorator extends BiomeSpecificDecorator	//A version of Wo
 	@Override
 	public BlockPos generate(World world, Random random, BlockPos pos, ChunkProviderLands provider)
 	{
-		pos = world.getHeight(pos);
+		pos = world.getHeight(Heightmap.Type.WORLD_SURFACE, pos);
 		
 		for (int i1 = 0; i1 < 3; ++i1)
 		{

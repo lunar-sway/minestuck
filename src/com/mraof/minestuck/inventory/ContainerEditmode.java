@@ -2,9 +2,8 @@ package com.mraof.minestuck.inventory;
 
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
-import com.mraof.minestuck.network.MinestuckChannelHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.MinestuckPacket.Type;
+import com.mraof.minestuck.network.EditmodeInventoryPacket;
+import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,6 +14,7 @@ import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextComponentString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ public class ContainerEditmode extends Container
 {
 	
 	private EntityPlayer player;
-	public InventoryBasic inventory = new InventoryBasic("InventoryEditmode", false, 14);
+	public InventoryBasic inventory = new InventoryBasic(new TextComponentString("InventoryEditmode"), 14);
 	public ArrayList<ItemStack> items  = new ArrayList<ItemStack>();
 	private int scroll;
 	public static int clientScroll;
@@ -81,20 +81,20 @@ public class ContainerEditmode extends Container
 	{
 		
 		for(int i = 0; i < 14; i++)
-			addSlotToContainer(new InventorySlot(inventory, i, 26+(i/2)*18, 16+(i%2)*18));
+			addSlot(new InventorySlot(inventory, i, 26+(i/2)*18, 16+(i%2)*18));
 		
 		for(int i = 0; i < 9; i++)
-			addSlotToContainer(new ToolbarSlot(player.inventory, i, 8+i*18, 74));
+			addSlot(new ToolbarSlot(player.inventory, i, 8+i*18, 74));
 	}
 	
 	private void updateInventory()
 	{
 		ArrayList<ItemStack> itemList = new ArrayList<ItemStack>();
-		SburbConnection c = SkaianetHandler.getClientConnection(ServerEditHandler.getData(player).getTarget());
+		SburbConnection c = SkaianetHandler.get(player.world).getClientConnection(ServerEditHandler.getData(player).getTarget());
 		ArrayList<ItemStack> tools = new ArrayList<ItemStack>();
-		//Fill list with tool items when implemented
+		//Fill list with harvestTool items when implemented
 		
-		List<DeployList.DeployEntry> deployItems = DeployList.getItemList(c);
+		List<DeployList.DeployEntry> deployItems = DeployList.getItemList(player.getServer(), c);
 		deployItems.removeIf(deployEntry -> c.givenItems()[DeployList.getOrdinal(deployEntry.getName())] &&
 				deployEntry.getSecondaryGristCost(c) == null);
 		
@@ -123,6 +123,9 @@ public class ContainerEditmode extends Container
 	
 	private void sendPacket()
 	{
+		if(!(player instanceof EntityPlayerMP))
+			throw new IllegalStateException("Can't send update packet to player! Found player object "+player+".");
+		
 		ArrayList<ItemStack> itemList = new ArrayList<ItemStack>();
 		for(int i = 0; i < 14; i++)
 		{
@@ -131,7 +134,8 @@ public class ContainerEditmode extends Container
 			this.inventoryItemStacks.set(i, itemList.get(i));
 		}
 		
-		MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.INVENTORY, 0, itemList, scroll > 0, scroll*2 + 14 < items.size()), player);
+		EditmodeInventoryPacket packet = EditmodeInventoryPacket.update(itemList, scroll > 0, scroll*2 + 14 < items.size());
+		MinestuckPacketHandler.sendToPlayer(packet, (EntityPlayerMP) player);
 	}
 	
 	private static class ToolbarSlot extends Slot

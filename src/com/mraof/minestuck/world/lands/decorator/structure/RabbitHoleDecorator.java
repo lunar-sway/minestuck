@@ -28,7 +28,7 @@ public class RabbitHoleDecorator extends SimpleStructureDecorator
 	protected BlockPos generateStructure(World world, Random random, BlockPos pos, ChunkProviderLands provider)
 	{
 
-		IBlockState ground = provider.getSurfaceBlock();
+		IBlockState ground = provider.blockRegistry.getBlockState("surface");
 		IBlockState bush = provider.blockRegistry.getBlockState("bush");
 		IBlockState air = Blocks.AIR.getDefaultState();
 
@@ -88,7 +88,7 @@ public class RabbitHoleDecorator extends SimpleStructureDecorator
 			placeBlock(world, air, 0, 0, 0);
 			placeBlock(world, air, 0, -1, 0);
 			placeBlock(world, air, 0, -1, -1);
-			placeBlock(world, MinestuckBlocks.rabbitSpawner.getDefaultState(), 0, -1, -2);
+			placeBlock(world, MinestuckBlocks.RABBIT_SPAWNER.getDefaultState(), 0, -1, -2);
 		}
 		else
 		{
@@ -96,7 +96,7 @@ public class RabbitHoleDecorator extends SimpleStructureDecorator
 			placeBlock(world, air, 0, 0, 0);
 			placeBlock(world, air, 0, -1, 0);
 			placeBlock(world, air, 0, -1, 1);
-			placeBlock(world, MinestuckBlocks.rabbitSpawner.getDefaultState(), 0, -1, 2);
+			placeBlock(world, MinestuckBlocks.RABBIT_SPAWNER.getDefaultState(), 0, -1, 2);
 		}
 		
 		return null;

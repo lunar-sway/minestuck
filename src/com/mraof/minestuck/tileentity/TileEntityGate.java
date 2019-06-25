@@ -2,7 +2,7 @@ package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
-import com.mraof.minestuck.util.Teleport;
+import com.mraof.minestuck.util.PositionTeleporter;
 import com.mraof.minestuck.world.GateHandler;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -13,23 +13,28 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class TileEntityGate extends TileEntity
 {
 	
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public int colorIndex;
 	
 	public int gateCount;
 	
+	public TileEntityGate()
+	{
+		super(MinestuckTiles.GATE);
+	}
+	
 	public void teleportEntity(World world, EntityPlayerMP player, Block block)
 	{
-		if(block == MinestuckBlocks.returnNode)
+		if(block == MinestuckBlocks.RETURN_NODE)
 		{
-			BlockPos pos = world.provider.getRandomizedSpawnPoint();
-			Teleport.localTeleport(player, null, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+			BlockPos pos = world.getSpawnPoint();
+			PositionTeleporter.moveEntity(player, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
 			player.timeUntilPortal = player.getPortalCooldown();
 			player.motionX = 0;
 			player.motionY = 0;
@@ -38,7 +43,7 @@ public class TileEntityGate extends TileEntity
 			//player.addStat(MinestuckAchievementHandler.returnNode);
 		} else
 		{
-			GateHandler.teleport(gateCount, world.provider.getDimension(), player);
+			GateHandler.teleport(gateCount, world.getDimension().getType(), player);
 		}
 	}
 	
@@ -49,19 +54,19 @@ public class TileEntityGate extends TileEntity
 	}
 	
 	@Override
-	public void readFromNBT(NBTTagCompound compound)
+	public void read(NBTTagCompound compound)
 	{
-		super.readFromNBT(compound);
+		super.read(compound);
 		if(compound.hasKey("gateCount"))
-			this.gateCount = compound.getInteger("gateCount");
+			this.gateCount = compound.getInt("gateCount");
 	}
 	
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound)
+	public NBTTagCompound write(NBTTagCompound compound)
 	{
-		super.writeToNBT(compound);
+		super.write(compound);
 		if(this.gateCount != 0)
-			compound.setInteger("gateCount", gateCount);
+			compound.setInt("gateCount", gateCount);
 		return compound;
 	}
 	
@@ -69,7 +74,7 @@ public class TileEntityGate extends TileEntity
 	public NBTTagCompound getUpdateTag()
 	{
 		NBTTagCompound nbt = super.getUpdateTag();
-		nbt.setInteger("color", SburbHandler.getColorForDimension(this.world.provider.getDimension()));
+		nbt.setInt("color", SburbHandler.getColorForDimension(world));
 		return nbt;
 	}
 	
@@ -77,14 +82,14 @@ public class TileEntityGate extends TileEntity
 	public SPacketUpdateTileEntity getUpdatePacket()
 	{
 		NBTTagCompound nbt = new NBTTagCompound();
-		nbt.setInteger("color", SburbHandler.getColorForDimension(this.world.provider.getDimension()));
+		nbt.setInt("color", SburbHandler.getColorForDimension(world));
 		return new SPacketUpdateTileEntity(this.pos, 0, nbt);
 	}
 	
 	@Override
 	public void handleUpdateTag(NBTTagCompound tag)
 	{
-		this.colorIndex = tag.getInteger("color");
+		this.colorIndex = tag.getInt("color");
 	}
 	
 	@Override
@@ -95,10 +100,10 @@ public class TileEntityGate extends TileEntity
 	
 	public boolean isGate()
 	{
-		return this.world != null ? this.world.getBlockState(this.getPos()).getBlock() != MinestuckBlocks.returnNode : this.gateCount != 0;
+		return this.world != null ? this.world.getBlockState(this.getPos()).getBlock() != MinestuckBlocks.RETURN_NODE : this.gateCount != 0;
 	}
 	
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public double getMaxRenderDistanceSquared()
 	{

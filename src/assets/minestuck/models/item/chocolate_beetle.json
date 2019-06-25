@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "minestuck:items/chocolate_covered_beetle"
+        "layer0": "minestuck:item/chocolate_covered_beetle"
     }
 }

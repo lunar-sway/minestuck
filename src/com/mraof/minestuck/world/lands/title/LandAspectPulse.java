@@ -1,14 +1,12 @@
 package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.world.WorldProviderLands;
+import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
-import com.mraof.minestuck.world.lands.decorator.PillarDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
-import net.minecraft.block.BlockColored;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
@@ -30,7 +28,7 @@ public class LandAspectPulse extends TitleLandAspect
 	}
 	
 	@Override
-	public void prepareWorldProvider(WorldProviderLands worldProvider)
+	public void prepareWorldProvider(LandDimension worldProvider)
 	{
 		worldProvider.mergeFogColor(new Vec3d(0.8, 0, 0), 0.8F);
 	}
@@ -44,15 +42,15 @@ public class LandAspectPulse extends TitleLandAspect
 	@Override
 	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
-		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.RED));
-		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.CARPET.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.BROWN));
+		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.RED_WOOL.getDefaultState());
+		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.BROWN_CARPET.getDefaultState());
 		chunkProvider.oceanChance = Math.max(chunkProvider.oceanChance, 0.2F);
 		
-		chunkProvider.blockRegistry.setBlockState("ocean", MinestuckBlocks.blockBlood.getDefaultState());
-		chunkProvider.blockRegistry.setBlockState("river", MinestuckBlocks.blockBlood.getDefaultState());
-		chunkProvider.blockRegistry.setBlockState("slime", MinestuckBlocks.coagulatedBlood.getDefaultState());
+		/*chunkProvider.blockRegistry.setBlockState("ocean", MinestuckBlocks.blockBlood.getDefaultState());TODO
+		chunkProvider.blockRegistry.setBlockState("river", MinestuckBlocks.blockBlood.getDefaultState());*/
+		chunkProvider.blockRegistry.setBlockState("slime", MinestuckBlocks.COAGULATED_BLOOD.getDefaultState());
 		
-		chunkProvider.decorators.add(new SurfaceDecoratorVein(MinestuckBlocks.coagulatedBlood.getDefaultState(), 25, 30, BiomeMinestuck.mediumRough));
+		chunkProvider.decorators.add(new SurfaceDecoratorVein(MinestuckBlocks.COAGULATED_BLOOD.getDefaultState(), 25, 30, BiomeMinestuck.mediumRough));
 	}
 	
 	@Override

@@ -1,0 +1,90 @@
+{
+    "textures": {
+        "particle": "minestuck:block/machine/totem_lathe/top_right_bottom",
+        "top":      "minestuck:block/machine/totem_lathe/top_right_top",
+        "side":     "minestuck:block/machine/totem_lathe/top_right_side",
+        "bottom":   "minestuck:block/machine/totem_lathe/top_right_bottom",
+        "left":     "minestuck:block/machine/totem_lathe/top_right_inside",
+        "misc":     "minestuck:block/machine/totem_lathe/misc_top"
+    },
+    "elements": [
+        {
+            "from": [ 6, 12, 5 ],
+            "to": [ 16, 16, 15 ],
+            "faces": {
+                "north": { "uv": [  0,  0, 10, 4 ], "texture": "#side" },
+                "east":  { "uv": [ 16,  0, 6, 4 ], "texture": "#left", "cullface": "east" },
+                "south": { "uv": [  0,  0, 10, 4 ], "texture": "#bottom" },
+                "west":  { "uv": [  0, 10, 10, 14 ], "texture": "#top" },
+                "up":    { "uv": [  0,  0, 10, 10 ], "texture": "#top", "cullface": "up" },
+                "down":  { "uv": [  0,  6, 10, 16 ], "texture": "#bottom" }
+            }
+        },
+        {
+            "from": [ 8, 3, 7 ],
+            "to": [ 16, 12, 13 ],
+            "faces": {
+                "north": { "uv": [  0, 4,  8, 13 ], "texture": "#side" },
+                "east":  { "uv": [ 14, 4,  8, 13 ], "texture": "#left", "cullface": "east" },
+                "south": { "uv": [  8, 4, 16, 13 ], "texture": "#side" },
+                "west":  { "uv": [ 10, 0, 16,  9 ], "texture": "#top" },
+                "down":  { "uv": [  2, 8, 10, 14 ], "texture": "#bottom" }
+            }
+        },
+        {
+            "from": [ 11, 3, 5 ],
+            "to": [ 15, 7, 7 ],
+            "faces": {
+                "north": { "uv": [ 8, 12, 12, 16 ], "texture": "#misc" },
+                "east":  { "uv": [ 4, 10,  6, 14 ], "texture": "#misc" },
+                "west":  { "uv": [ 6, 10,  8, 14 ], "texture": "#misc" },
+                "up":    { "uv": [ 0, 10,  4, 12 ], "texture": "#misc" },
+                "down":  { "uv": [ 0, 12,  4, 14 ], "texture": "#misc" }
+            }
+        },
+        {
+            "from": [ 7, 5, 5 ],
+            "to": [ 11, 6, 6 ],
+            "faces": {
+                "north": { "uv": [ 12, 12, 16, 13 ], "texture": "#misc" },
+                "south": { "uv": [ 12, 14, 16, 15 ], "texture": "#misc" },
+                "west":  { "uv": [ 15, 11, 16, 12 ], "texture": "#misc" },
+                "up":    { "uv": [ 12, 13, 16, 14 ], "texture": "#misc" },
+                "down":  { "uv": [ 12, 15, 16, 16 ], "texture": "#misc" }
+            }
+        },
+        {
+            "from": [ 9, 2, 8 ],
+            "to": [ 15, 3, 12 ],
+            "faces": {
+                "north": { "uv": [ 10, 0, 16,  1 ], "texture": "#bottom" },
+                "east":  { "uv": [ 11, 9, 15, 10 ], "texture": "#bottom" },
+                "south": { "uv": [ 10, 6, 16,  7 ], "texture": "#bottom" },
+                "west":  { "uv": [ 11, 3, 15,  4 ], "texture": "#bottom" },
+                "down":  { "uv": [  3, 9,  9, 13 ], "texture": "#bottom" }
+            }
+        },
+        {
+            "from": [ 13, 1, 9 ],
+            "to": [ 14, 2, 11 ],
+            "faces": {
+                "north": { "uv": [ 11,  1, 12,  2 ], "texture": "#bottom" },
+                "east":  { "uv": [ 12, 10, 14, 11 ], "texture": "#bottom" },
+                "south": { "uv": [ 14,  7, 15,  8 ], "texture": "#bottom" },
+                "west":  { "uv": [ 12,  4, 14,  5 ], "texture": "#bottom" },
+                "down":  { "uv": [  4, 10,  5, 12 ], "texture": "#bottom" }
+            }
+        },
+        {
+            "from": [ 10, 0, 9 ],
+            "to": [ 12, 2, 11 ],
+            "faces": {
+                "north": { "uv": [ 13,  1, 15,  3 ], "texture": "#bottom" },
+                "east":  { "uv": [ 12, 10, 14, 12 ], "texture": "#bottom" },
+                "south": { "uv": [ 11,  7, 13,  9 ], "texture": "#bottom" },
+                "west":  { "uv": [ 12,  4, 14,  6 ], "texture": "#bottom" },
+                "down":  { "uv": [  4, 10,  6, 12 ], "texture": "#bottom" }
+            }
+        }
+    ]
+}

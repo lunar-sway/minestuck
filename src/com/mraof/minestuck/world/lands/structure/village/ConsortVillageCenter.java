@@ -11,9 +11,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.MapGenStructureIO;
-import net.minecraft.world.gen.structure.StructureBoundingBox;
-import net.minecraft.world.gen.structure.StructureComponent;
 
 import java.util.List;
 import java.util.Random;
@@ -23,7 +20,7 @@ import java.util.Random;
  */
 public class ConsortVillageCenter
 {
-	public static void register()
+	/*public static void register()
 	{
 		MapGenStructureIO.registerStructureComponent(ConsortVillageCenter.VillageMarketCenter.class, "MinestuckCVCM");
 		MapGenStructureIO.registerStructureComponent(ConsortVillageCenter.RockCenter.class, "MinestuckCVCRo");
@@ -409,5 +406,5 @@ public class ConsortVillageCenter
 			return true;
 		}
 		
-	}
+	}*/
 }

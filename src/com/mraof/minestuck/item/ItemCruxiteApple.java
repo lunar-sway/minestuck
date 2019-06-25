@@ -2,6 +2,7 @@ package com.mraof.minestuck.item;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
@@ -13,15 +14,19 @@ import net.minecraft.world.World;
 
 public class ItemCruxiteApple extends ItemCruxiteArtifact
 {
+	public ItemCruxiteApple(Properties properties)
+	{
+		super(properties);
+	}
 	
 	@Override
-	public int getMaxItemUseDuration(ItemStack stack)
+	public int getUseDuration(ItemStack stack)
 	{
 		return 32;
 	}
 	
 	@Override
-	public EnumAction getItemUseAction(ItemStack stack)
+	public EnumAction getUseAction(ItemStack stack)
 	{
 		return EnumAction.EAT;
 	}
@@ -31,11 +36,11 @@ public class ItemCruxiteApple extends ItemCruxiteArtifact
 	{
 		stack.shrink(1);
 		
-		if(entityLiving instanceof EntityPlayer)
+		if(entityLiving instanceof EntityPlayerMP)
 		{
-			EntityPlayer entityplayer = (EntityPlayer)entityLiving;
-			worldIn.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
-			onArtifactActivated(entityplayer);
+			EntityPlayerMP player = (EntityPlayerMP)entityLiving;
+			worldIn.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
+			onArtifactActivated(player);
 		}
 		return stack;
 	}
@@ -44,7 +49,6 @@ public class ItemCruxiteApple extends ItemCruxiteArtifact
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
 	{
 		playerIn.setActiveHand(handIn);
-		return new ActionResult(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
+		return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 	}
-	
 }

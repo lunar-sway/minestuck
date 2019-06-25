@@ -1,8 +1,12 @@
 package com.mraof.minestuck.client.gui.captchalouge;
 
-import com.mraof.minestuck.inventory.captchalouge.Modus;
+import com.mraof.minestuck.inventory.captchalogue.Modus;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class QueueGuiHandler extends StackGuiHandler {
+@OnlyIn(Dist.CLIENT)
+public class QueueGuiHandler extends StackGuiHandler
+{
 
 	public QueueGuiHandler(Modus modus)
 	{

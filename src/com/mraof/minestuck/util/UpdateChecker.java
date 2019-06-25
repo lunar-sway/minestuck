@@ -18,7 +18,7 @@ import java.net.URLConnection;
 public class UpdateChecker extends Thread
 {
 	public static boolean outOfDate = false;
-	public static String latestVersion = Minestuck.class.getAnnotation(Mod.class).version();
+	public static String latestVersion = "";//Minestuck.class.getAnnotation(Mod.class).version();
 	public static String updateChanges = "";
 	
 	@Override

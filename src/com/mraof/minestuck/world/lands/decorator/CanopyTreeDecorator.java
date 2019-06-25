@@ -7,22 +7,19 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.feature.WorldGenAbstractTree;
-import net.minecraft.world.gen.feature.WorldGenCanopyTree;
-import net.minecraft.world.gen.feature.WorldGenTrees;
 
 public class CanopyTreeDecorator extends TreeDecoratorBase
 {
-	WorldGenCanopyTree[] treeTypes;
+	//WorldGenCanopyTree[] treeTypes;
 	protected int treeCount;
 	
 	public CanopyTreeDecorator(IBlockState[] trees, IBlockState[] leaves, int treeCount, Biome... biomes)
 	{
 		super(biomes);
 		this.treeCount = treeCount;
-		this.treeTypes = new WorldGenCanopyTree[trees.length];
+		/*this.treeTypes = new WorldGenCanopyTree[trees.length];
 		for(int i = 0; i < trees.length; i++)
-			treeTypes[i] = new WorldGenCanopyTree(false);
+			treeTypes[i] = new WorldGenCanopyTree(false);*/
 	}
 	
 	public CanopyTreeDecorator(IBlockState treeType, IBlockState leafType, int treeCount, Biome... biomes)
@@ -32,7 +29,7 @@ public class CanopyTreeDecorator extends TreeDecoratorBase
 	
 	public CanopyTreeDecorator(int treeCount, Biome... biomes)
 	{
-		this(Blocks.LOG2.getDefaultState(), Blocks.LEAVES2.getDefaultState(), treeCount, biomes);
+		this(Blocks.ACACIA_LOG.getDefaultState(), Blocks.ACACIA_LEAVES.getDefaultState(), treeCount, biomes);
 	}
 	
 	@Override
@@ -40,10 +37,10 @@ public class CanopyTreeDecorator extends TreeDecoratorBase
 	{
 		return random.nextInt(treeCount) + treeCount;
 	}
-	
+	/*
 	@Override
 	protected WorldGenAbstractTree getTreeToGenerate(World world, BlockPos pos, Random rand)
 	{
 		return this.treeTypes[rand.nextInt(treeTypes.length)];
-	}
+	}*/
 }

@@ -7,6 +7,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import net.minecraft.world.gen.Heightmap;
 
 public abstract class SingleBlockDecorator extends BiomeSpecificDecorator
 {
@@ -15,7 +16,7 @@ public abstract class SingleBlockDecorator extends BiomeSpecificDecorator
 	@Override
 	public BlockPos generate(World world, Random random, BlockPos pos, ChunkProviderLands provider)
 	{
-		pos = world.getHeight(pos);
+		pos = world.getHeight(Heightmap.Type.WORLD_SURFACE, pos);
 		
 		if(canPlace(pos, world))
 			world.setBlockState(pos, pickBlock(random), 2);

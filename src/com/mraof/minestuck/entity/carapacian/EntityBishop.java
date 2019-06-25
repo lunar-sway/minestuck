@@ -4,6 +4,7 @@ import com.mraof.minestuck.entity.ai.EntityAIAttackByDistance;
 import com.mraof.minestuck.entity.ai.EntityAINearestAttackableTargetWithHeight;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.projectile.EntityLargeFireball;
@@ -19,9 +20,9 @@ public abstract class EntityBishop extends EntityCarapacian implements IRangedAt
 	private EntityAIAttackByDistance entityAIAttackByDistance = new EntityAIAttackByDistance(this, 0.25F, 30, 64.0F);
 	int burnTime;
 
-	public EntityBishop(World par1World) 
+	public EntityBishop(EntityType<?> type, World par1World)
 	{
-		super(par1World);
+		super(type, par1World);
 		this.setSize(1.9F, 4.1F);
 		this.experienceValue = 3;
 	}
@@ -43,16 +44,16 @@ public abstract class EntityBishop extends EntityCarapacian implements IRangedAt
 	{
 		
 		double distanceX = entityliving.posX - this.posX;
-		double distanceY = entityliving.getEntityBoundingBox().minY + (double)(entityliving.height / 2.0F) - (this.posY + (double)(this.height / 2.0F));
+		double distanceY = entityliving.getBoundingBox().minY + (double)(entityliving.height / 2.0F) - (this.posY + (double)(this.height / 2.0F));
 		double distanceZ = entityliving.posZ - this.posZ;
 		
 		EntityLargeFireball entitylargefireball = new EntityLargeFireball(this.world, this, distanceX, distanceY, distanceZ);
 		entitylargefireball.explosionPower = 1;
 		double d8 = (double)this.width;
 		Vec3d vec3 = this.getLook(1.0F);
-		entitylargefireball.posX = (this.getEntityBoundingBox().minX + this.getEntityBoundingBox().maxX) / 2.0F  + vec3.x * d8;
+		entitylargefireball.posX = (this.getBoundingBox().minX + this.getBoundingBox().maxX) / 2.0F  + vec3.x * d8;
 		entitylargefireball.posY = this.posY + (double)(this.height / 2.0F);
-		entitylargefireball.posZ = (this.getEntityBoundingBox().minZ + this.getEntityBoundingBox().maxZ) / 2.0F + vec3.z * d8;
+		entitylargefireball.posZ = (this.getBoundingBox().minZ + this.getBoundingBox().maxZ) / 2.0F + vec3.z * d8;
 		this.world.spawnEntity(entitylargefireball);
 	}
 	public int getAttackStrength(Entity par1Entity)
@@ -60,8 +61,8 @@ public abstract class EntityBishop extends EntityCarapacian implements IRangedAt
 		ItemStack var2 = this.getHeldItemMainhand();
 		int var3 = 0;
 		
-		if (var2 != null)
-			var3 += var2.getItemDamage();
+		/*if(!var2.isEmpty())
+			var3 += var2.getItemDamage();*/
 		
 		return var3;
 	}

@@ -10,9 +10,6 @@ import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.structure.MapGenStructure;
-import net.minecraft.world.gen.structure.StructureComponent;
-import net.minecraft.world.gen.structure.StructureStart;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -20,10 +17,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
-public class MapGenConsortVillage extends MapGenStructure
+public class MapGenConsortVillage //extends MapGenStructure
 {
 	
-	private static final List<Biome> BIOMES = Arrays.asList(BiomeMinestuck.mediumNormal);
+	/*private static final List<Biome> BIOMES = Arrays.asList(BiomeMinestuck.mediumNormal);
 	
 	private static final int VILLAGE_DISTANCE = 24;
 	private static final int MIN_VILLAGE_DISTANCE = 5;
@@ -141,5 +138,5 @@ public class MapGenConsortVillage extends MapGenStructure
 			}
 			updateBoundingBox();
 		}
-	}
+	}*/
 }

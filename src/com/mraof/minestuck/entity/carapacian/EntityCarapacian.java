@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
@@ -37,9 +38,9 @@ public abstract class EntityCarapacian extends EntityMinestuck
 	}
 	protected EntityListFilter attackEntitySelector;
 
-	public EntityCarapacian(World par1World)
+	public EntityCarapacian(EntityType<?> type, World par1World)
 	{
-		super(par1World);
+		super(type, par1World);
 		enemyClasses = new ArrayList<Class<? extends EntityLivingBase>>();
 		allyClasses = new ArrayList<Class<? extends EntityLivingBase>>();
 		setEnemies();

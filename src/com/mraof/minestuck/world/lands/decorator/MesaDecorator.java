@@ -7,7 +7,6 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.function.BiConsumer;
 
-import net.minecraft.block.BlockColored;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
@@ -17,6 +16,7 @@ import net.minecraft.world.World;
 import com.mraof.minestuck.util.CoordPair;
 import com.mraof.minestuck.world.lands.decorator.MesaDecorator.BlockRestorer;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import net.minecraft.world.gen.Heightmap;
 
 /**
  * A decorator that generates Mesas. By default, generates the rainbow mesas seen in rainbow Lands.
@@ -31,14 +31,14 @@ public class MesaDecorator extends BiomeSpecificDecorator
 	private float priority = 0.6F;
 	private int tallness = 7;
 	private float altFrequency = 0.025F;
-	private IBlockState baseBlock[] = {Blocks.STAINED_HARDENED_CLAY.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.RED), 
-			Blocks.STAINED_HARDENED_CLAY.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.ORANGE), 
-			Blocks.STAINED_HARDENED_CLAY.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.YELLOW), 
-			Blocks.STAINED_HARDENED_CLAY.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.GREEN), 
-			Blocks.STAINED_HARDENED_CLAY.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.CYAN), 
-			Blocks.STAINED_HARDENED_CLAY.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.BLUE), 
-			Blocks.STAINED_HARDENED_CLAY.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.PURPLE), 
-			Blocks.STAINED_HARDENED_CLAY.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.MAGENTA)};
+	private IBlockState baseBlock[] = {Blocks.RED_TERRACOTTA.getDefaultState(),
+			Blocks.ORANGE_TERRACOTTA.getDefaultState(),
+			Blocks.YELLOW_TERRACOTTA.getDefaultState(),
+			Blocks.GREEN_TERRACOTTA.getDefaultState(),
+			Blocks.CYAN_TERRACOTTA.getDefaultState(),
+			Blocks.BLUE_TERRACOTTA.getDefaultState(),
+			Blocks.PURPLE_TERRACOTTA.getDefaultState(),
+			Blocks.MAGENTA_TERRACOTTA.getDefaultState()};
 	private IBlockState altBlock[] = {Blocks.RED_GLAZED_TERRACOTTA.getDefaultState(),
 			Blocks.ORANGE_GLAZED_TERRACOTTA.getDefaultState(), 
 			Blocks.YELLOW_GLAZED_TERRACOTTA.getDefaultState(),
@@ -61,7 +61,7 @@ public class MesaDecorator extends BiomeSpecificDecorator
 	@Override
 	public BlockPos generate(World world, Random random, BlockPos pos, ChunkProviderLands provider)
 	{
-		pos = world.getTopSolidOrLiquidBlock(pos);
+		pos = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, pos);
 		int height = random.nextInt(tallness) + tallness + 3;
 		
 		if(world.getBlockState(pos.up(height*2/3)).getMaterial().isLiquid())	//At least 1/3rd of the height should be above the liquid surface
@@ -91,11 +91,11 @@ public class MesaDecorator extends BiomeSpecificDecorator
 	private BlockPos generateMesa(BlockPos rockPos, int height, float plateauSize, World world, Random random, ChunkProviderLands provider, boolean isAlt)
 	{
 		float xSlope = random.nextFloat(), zSlope = random.nextFloat();
-		IBlockState groundBlock = provider.getGroundBlock();
+		IBlockState groundBlock = provider.blockRegistry.getBlockState("ground");
 		
-		Map<CoordPair, Integer> heightMap = new HashMap<CoordPair, Integer>();
-		Queue<BlockPos> toProcess = new LinkedList<BlockPos>();
-		Map<BlockPos, IBlockState> was = new HashMap<BlockPos, IBlockState>();
+		Map<CoordPair, Integer> heightMap = new HashMap<>();
+		Queue<BlockPos> toProcess = new LinkedList<>();
+		Map<BlockPos, IBlockState> was = new HashMap<>();
 		toProcess.add(rockPos);
 		toProcess.add(null);
 		
@@ -114,10 +114,10 @@ public class MesaDecorator extends BiomeSpecificDecorator
 					continue;
 				}
 			
-			if(provider.villageHandler.isPositionInStructure(world, pos) || provider.structureHandler.isPositionInStructure(world, pos))
+			//if(provider.villageHandler.isPositionInStructure(world, pos) || provider.structureHandler.isPositionInStructure(world, pos))
 			{
 				stomps = true;
-				break;
+				//break;
 			}
 			
 			if(random.nextFloat()*xSlope < plateauSize)
@@ -166,10 +166,10 @@ public class MesaDecorator extends BiomeSpecificDecorator
 				if(!heightMap.containsKey(coord))
 				{
 					BlockPos pos = new BlockPos(coord.x, rockPos.getY() - h, coord.z);
-					if(provider.villageHandler.isPositionInStructure(world, pos) || provider.structureHandler.isPositionInStructure(world, pos))
+					//if(provider.villageHandler.isPositionInStructure(world, pos) || provider.structureHandler.isPositionInStructure(world, pos))
 					{
 						stomps=true;
-						break;
+						//break;
 					}
 					heightMap.put(coord, pos.getY());
 					if(checkCoord(coord, heightMap))

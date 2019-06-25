@@ -1,109 +1,115 @@
 package com.mraof.minestuck;
 
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.client.ClientProxy;
+import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.command.*;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.event.ServerEventHandler;
-import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
-import com.mraof.minestuck.modSupport.crafttweaker.CraftTweakerSupport;
+import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
+import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tileentity.*;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
-import net.minecraftforge.fml.common.Loader;
+import com.mraof.minestuck.world.biome.BiomeMinestuck;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ExtensionPoint;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.Mod.Instance;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
+import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
+import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import java.util.Random;
 
 import static com.mraof.minestuck.Minestuck.MOD_ID;
-import static com.mraof.minestuck.Minestuck.MOD_NAME;
 
-@Mod(modid = MOD_ID, name = MOD_NAME, version = "@VERSION@", guiFactory = "com.mraof.minestuck.client.gui.MinestuckGuiFactory", acceptedMinecraftVersions = "[1.12,1.12.2]")
+@Mod(MOD_ID)
 public class Minestuck
 {
 	public static final String MOD_NAME = "Minestuck";
 	public static final String MOD_ID = "minestuck";
 	
-	/**
+	/*
 	 * True only if the minecraft application is client-sided 
 	 */
-	public static boolean isClientRunning;
+	//public static boolean isClientRunning;
 	/**
 	 * True if the minecraft application is server-sided, or if there is an integrated server running
 	 */
+	@Deprecated
 	public static volatile boolean isServerRunning;
 	
-	// The instance of your mod that Forge uses.
-	@Instance("minestuck")
-	public static Minestuck instance;
-	
-	@SidedProxy(clientSide = "com.mraof.minestuck.client.ClientProxy", serverSide = "com.mraof.minestuck.CommonProxy")
-	public static CommonProxy proxy;
-
 	public static long worldSeed = 0;	//TODO proper usage of seed when generating titles, land aspects, and land dimension data
 	
-	@EventHandler
-	public void preInit(FMLPreInitializationEvent event) 
+	public Minestuck()
 	{
-		isClientRunning = event.getSide().isClient();
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::postSetup);
+		ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.GUIFACTORY, () -> GuiHandler::provideGuiContainer);
 		
-		Debug.logger = event.getModLog();
+		MinecraftForge.EVENT_BUS.register(this);
+		//MinecraftForge.EVENT_BUS.register(GristType.class);
+	}
+	
+	private void setup(final FMLCommonSetupEvent event)
+	{
+		//isClientRunning = event.getSide().isClient();
 		
-		MinestuckConfig.loadConfigFile(event.getSuggestedConfigurationFile(), event.getSide());
+		//MinestuckConfig.loadConfigFile(event.getSuggestedConfigurationFile(), event.getSide());
 		
 		//(new UpdateChecker()).start();
 		
-		proxy.preInit();
+		CommonProxy.init();
 	}
 	
-	@EventHandler
-	public void load(FMLInitializationEvent event) 
+	private void clientSetup(final FMLClientSetupEvent event)
 	{
-		//Register textures and renders
-		if(isClientRunning)
-		{
-			ClientProxy.registerRenderers();
-		}
-		
-		proxy.init();
+		ClientProxy.init();
+		MinecraftForge.EVENT_BUS.register(ClientProxy.class);
 	}
-
-	@EventHandler
-	public void postInit(FMLPostInitializationEvent event) 
+	
+	public void postSetup(FMLLoadCompleteEvent event)
 	{
-		if(Loader.isModLoaded("crafttweaker"))
-			CraftTweakerSupport.applyRecipes();
+		/*if(Loader.isModLoaded("crafttweaker"))
+			CraftTweakerSupport.applyRecipes();*/
 		
 		AlchemyRecipes.registerAutomaticRecipes();
 	}
 
-	@EventHandler 
+	@SubscribeEvent
 	public void serverAboutToStart(FMLServerAboutToStartEvent event)
 	{
 		isServerRunning = true;
-		TileEntityTransportalizer.transportalizers.clear();
 		DeployList.applyConfigValues(MinestuckConfig.deployConfigurations);
 	}
 	
-	@EventHandler
+	@SubscribeEvent
 	public void serverClosed(FMLServerStoppedEvent event)
 	{
-		MinestuckDimensionHandler.unregisterDimensions();
-		isServerRunning = !isClientRunning;
+		isServerRunning = false;
 		MinestuckPlayerTracker.dataCheckerPermission.clear();
 		IdentifierHandler.clear();
 	}
 	
-	@EventHandler
+	@SubscribeEvent
 	public void serverStarting(FMLServerStartingEvent event)
 	{
-		if(!event.getServer().isDedicatedServer() && Minestuck.class.getAnnotation(Mod.class).version().startsWith("@"))
+		
+		//if(!event.getServer().isDedicatedServer() && Minestuck.class.getAnnotation(Mod.class).version().startsWith("@")) TODO Find an alternative to detect dev environment
 			event.getServer().setOnlineMode(false);	//Makes it possible to use LAN in a development environment
 		
 		if(!event.getServer().isServerInOnlineMode() && MinestuckConfig.useUUID)
@@ -111,24 +117,26 @@ public class Minestuck
 		if(event.getServer().isServerInOnlineMode() && !MinestuckConfig.useUUID)
 			Debug.warn("Because users may change their usernames, it is normally recommended to use uuids for minestuck. You should enable uuidIdentification in the minestuck config.");
 		
-		event.registerServerCommand(new CommandCheckLand());
-		event.registerServerCommand(new CommandGrist());
-		event.registerServerCommand(new CommandGristSend());
-		event.registerServerCommand(new CommandTransportalizer());
-		event.registerServerCommand(new CommandSburbSession());
-		event.registerServerCommand(new CommandSburbServer());
-		event.registerServerCommand(new CommandSetRung());
-		event.registerServerCommand(new CommandConsortReply());
-		event.registerServerCommand(new CommandToStructure());
-		event.registerServerCommand(new CommandPorkhollow());
-		event.registerServerCommand(new CommandLandDebug());
+		CommandCheckLand.register(event.getCommandDispatcher());
+		CommandGrist.register(event.getCommandDispatcher());
+		CommandGristSend.register(event.getCommandDispatcher());
+		CommandTransportalizer.register(event.getCommandDispatcher());
+		CommandSburbSession.register(event.getCommandDispatcher());
+		CommandSburbServer.register(event.getCommandDispatcher());
+		CommandSetRung.register(event.getCommandDispatcher());
+		CommandConsortReply.register(event.getCommandDispatcher());
+		CommandToStructure.register(event.getCommandDispatcher());
+		CommandPorkhollow.register(event.getCommandDispatcher());
+		CommandLandDebug.register(event.getCommandDispatcher());
 		
-		worldSeed = event.getServer().worlds[0].getSeed();
-		ServerEventHandler.lastDay = event.getServer().worlds[0].getWorldTime() / 24000L;
+		worldSeed = event.getServer().getWorld(DimensionType.OVERWORLD).getSeed();
+		ServerEventHandler.lastDay = event.getServer().getWorld(DimensionType.OVERWORLD).getGameTime() / 24000L;
 		CaptchaDeckHandler.rand = new Random();
+		
+		MinestuckDimensionHandler.register();
 	}
 	
-	@EventHandler
+	@SubscribeEvent
 	public void serverStopping(FMLServerStoppingEvent event)
 	{
 		ServerEditHandler.onServerStopping();

@@ -1,5 +1,5 @@
 package com.mraof.minestuck.jei;
-
+/*
 import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.block.BlockSburbMachine;
 import com.mraof.minestuck.block.MinestuckBlocks;
@@ -19,7 +19,7 @@ import java.util.Map;
 
 /**
  * Created by mraof on 2017 January 23 at 2:11 AM.
- */
+ * /
 @JEIPlugin
 public class MinestuckJeiPlugin implements IModPlugin
 {
@@ -54,7 +54,7 @@ public class MinestuckJeiPlugin implements IModPlugin
     public void register(IModRegistry registry)
     {
         ArrayList<AlchemiterRecipeWrapper> alchemiterRecipes = new ArrayList<>();
-        for(Map.Entry<List<Object>, GristSet> entry : GristRegistry.getAllConversions().entrySet())
+        for(Map.Entry<List<Object>, GristSet> entry : AlchemyCostRegistry.getAllConversions().entrySet())
         {
             for(ItemStack stack : getItemStacks(entry.getKey().get(0), (Integer) entry.getKey().get(1)))
             {
@@ -118,3 +118,4 @@ public class MinestuckJeiPlugin implements IModPlugin
 
     }
 }
+*/

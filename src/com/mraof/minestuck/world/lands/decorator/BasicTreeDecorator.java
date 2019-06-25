@@ -7,21 +7,19 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.feature.WorldGenAbstractTree;
-import net.minecraft.world.gen.feature.WorldGenTrees;
 
 public class BasicTreeDecorator extends TreeDecoratorBase
 {
-	WorldGenTrees[] treeTypes;
+	//WorldGenTrees[] treeTypes;
 	protected int treeCount;
 	
 	public BasicTreeDecorator(IBlockState[] trees, IBlockState[] leaves, int treeCount, Biome... biomes)
 	{
 		super(biomes);
 		this.treeCount = treeCount;
-		this.treeTypes = new WorldGenTrees[trees.length];
+		/*this.treeTypes = new WorldGenTrees[trees.length];
 		for(int i = 0; i < trees.length; i++)
-			treeTypes[i] = new WorldGenTrees(false, 5, trees[i], leaves[i], false);
+			treeTypes[i] = new WorldGenTrees(false, 5, trees[i], leaves[i], false);*/
 	}
 	
 	public BasicTreeDecorator(IBlockState treeType, IBlockState leafType, int treeCount, Biome... biomes)
@@ -31,7 +29,7 @@ public class BasicTreeDecorator extends TreeDecoratorBase
 	
 	public BasicTreeDecorator(int treeCount, Biome... biomes)
 	{
-		this(Blocks.LOG.getDefaultState(), Blocks.LEAVES.getDefaultState(), treeCount, biomes);
+		this(Blocks.OAK_LOG.getDefaultState(), Blocks.OAK_LEAVES.getDefaultState(), treeCount, biomes);
 	}
 	
 	@Override
@@ -40,9 +38,9 @@ public class BasicTreeDecorator extends TreeDecoratorBase
 		return random.nextInt(treeCount) + treeCount;
 	}
 	
-	@Override
+/*	@Override
 	protected WorldGenAbstractTree getTreeToGenerate(World world, BlockPos pos, Random rand)
 	{
 		return this.treeTypes[rand.nextInt(treeTypes.length)];
-	}
+	}*/
 }

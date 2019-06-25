@@ -5,12 +5,13 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import com.mraof.minestuck.Minestuck;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.storage.ISaveHandler;
+import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.event.ServerEventHandler;
@@ -20,24 +21,33 @@ import com.mraof.minestuck.util.PostEntryTask;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
 
-public class MinestuckSaveHandler 
+public class MinestuckSaveHandler extends WorldSavedData    //TODO https://mcforge.readthedocs.io/en/1.13.x/datastorage/worldsaveddata/
 {
+	public static final String DATA_NAME = Minestuck.MOD_ID + "_data";
 	
-	@SubscribeEvent
-	public void onWorldSave(WorldEvent.Save event)
+	public MinestuckSaveHandler()
 	{
-		if(event.getWorld().provider.getDimension() != 0)	//Only save one time each world-save instead of one per dimension each world-save.
-			return;
-
-		File dataFile = event.getWorld().getSaveHandler().getMapFileFromName("MinestuckData");
-		if (dataFile != null)
-		{
+		super(DATA_NAME);
+	}
+	
+	@Override
+	public void read(NBTTagCompound nbt)
+	{
+	
+	}
+	
+	@Override
+	public NBTTagCompound write(NBTTagCompound compound)
+	{
+		return compound;
+	}
+	
+	/*public void onWorldSave(WorldEvent.Save event)
+	{
 			NBTTagCompound nbt = new NBTTagCompound();
 			
-			ServerEditHandler.saveData(nbt);	//Keep this before skaianet
+			ServerEditHandler.saveData(nbt);    //Keep this before skaianet
 			MinestuckDimensionHandler.saveData(nbt);
-			TileEntityTransportalizer.saveTransportalizers(nbt);
-			SkaianetHandler.saveData(nbt);
 			MinestuckPlayerData.writeToNBT(nbt);
 			
 			
@@ -47,40 +57,13 @@ public class MinestuckSaveHandler
 			if(list.tagCount() > 0)
 				nbt.setTag("tickTasks", list);
 			
-			try {
-				CompressedStreamTools.writeCompressed(nbt, new FileOutputStream(dataFile));
-			} catch(IOException e) {
-				e.printStackTrace();
-			}
-		}
 		
 	}
-	
-	@SubscribeEvent
 	public void onWorldLoad(WorldEvent.Load event)
 	{
-		if(event.getWorld().provider.getDimension() != 0 || event.getWorld().isRemote)
-			return;
-		ISaveHandler saveHandler = event.getWorld().getSaveHandler();
-		File dataFile = saveHandler.getMapFileFromName("MinestuckData");
-		if(dataFile != null && dataFile.exists())
-		{
-			NBTTagCompound nbt = null;
-			try
-			{
-				nbt = CompressedStreamTools.readCompressed(new FileInputStream(dataFile));
-			}
-			catch(IOException e)
-			{
-				e.printStackTrace();
-			}
-			if(nbt != null)
-			{
 				ServerEditHandler.loadData(nbt);
 				MinestuckDimensionHandler.loadData(nbt);
-				SkaianetHandler.loadData(nbt.getCompoundTag("skaianet"));
 				MinestuckPlayerData.readFromNBT(nbt);
-				TileEntityTransportalizer.loadTransportalizers(nbt.getCompoundTag("transportalizers"));
 				
 				ServerEventHandler.tickTasks.clear();
 				if(nbt.hasKey("tickTasks", 9))
@@ -91,13 +74,11 @@ public class MinestuckSaveHandler
 				}
 				
 				return;
-			}
-		}
 		
 		ServerEventHandler.tickTasks.clear();
 		MinestuckDimensionHandler.loadData(null);
 		SkaianetHandler.loadData(null);
 		MinestuckPlayerData.readFromNBT(null);
 		ServerEditHandler.loadData(null);
-	}
+	}*/
 }

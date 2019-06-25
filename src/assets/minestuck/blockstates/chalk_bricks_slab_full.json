@@ -1,6 +1,0 @@
-{
-    "variants": {
-        "normal": { "model": "minestuck:chalk_bricks" },
-        "all":    { "model": "minestuck:chalk_bricks" }
-    }
-}

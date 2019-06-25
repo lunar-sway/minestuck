@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "minestuck:frost_planks" }
+        "": { "model": "minestuck:block/frost_planks" }
     }
 }

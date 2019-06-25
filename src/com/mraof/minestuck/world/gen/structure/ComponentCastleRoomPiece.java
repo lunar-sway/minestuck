@@ -7,14 +7,11 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.StructureBoundingBox;
-import net.minecraft.world.gen.structure.StructureComponent;
-import net.minecraft.world.gen.structure.template.TemplateManager;
 
 public class ComponentCastleRoomPiece extends ComponentCastlePiece 
 {
 	public ComponentCastleRoomPiece() {}
-	protected ComponentCastleRoomPiece(int par1, ComponentCastleStartPiece startPiece, StructureBoundingBox structureBoundingBox) 
+	/*protected ComponentCastleRoomPiece(int par1, ComponentCastleStartPiece startPiece, StructureBoundingBox structureBoundingBox)
 	{
 		super(par1, startPiece);
 		this.boundingBox = structureBoundingBox;
@@ -98,5 +95,5 @@ public class ComponentCastleRoomPiece extends ComponentCastlePiece
 	{
 		// TODO Auto-generated method stub
 		
-	}
+	}*/
 }

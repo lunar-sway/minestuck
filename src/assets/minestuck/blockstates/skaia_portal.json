@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "minestuck:skaia_portal" }
+        "": { "model": "minestuck:block/skaia_portal" }
     }
 }

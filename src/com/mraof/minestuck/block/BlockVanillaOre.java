@@ -1,25 +1,25 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.item.TabMinestuck;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.EnumDyeColor;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ToolType;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 
-
+/**
+ * To create vanilla ores with a different background texture
+ */
 public class BlockVanillaOre extends Block
 {
 	
@@ -37,44 +37,63 @@ public class BlockVanillaOre extends Block
 	
 	public final OreType oreType;
 	
-	public BlockVanillaOre(OreType type)	//For vanilla ores with a different background texture
+	public BlockVanillaOre(OreType type, Properties properties)
 	{
-		super(Material.ROCK);
+		super(properties);
 		oreType = type;
-		setHardness(3.0F);
-		setResistance(5.0F);	//Values normally used by ores
-		this.setCreativeTab(TabMinestuck.instance);
+	}
+	
+	@Nullable
+	@Override
+	public ToolType getHarvestTool(IBlockState state)
+	{
+		return ToolType.PICKAXE;
 	}
 	
 	@Override
-	public Item getItemDropped(IBlockState state, Random rand, int fortune)
+	public int getHarvestLevel(IBlockState state)
 	{
 		switch(oreType)
 		{
-		case COAL: return Items.COAL;
-		case IRON: return Item.getItemFromBlock(MinestuckConfig.vanillaOreDrop ? Blocks.IRON_ORE : this);
-		case GOLD: return Item.getItemFromBlock(MinestuckConfig.vanillaOreDrop ? Blocks.GOLD_ORE : this);
-		case LAPIS: return Items.DYE;
-		case DIAMOND: return Items.DIAMOND;
-		case EMERALD: return Items.EMERALD;
-		case QUARTZ: return Items.QUARTZ;
-		case REDSTONE: return Items.REDSTONE;
-		default: return Item.getItemFromBlock(this);
+			case IRON: return 1;
+			case GOLD: return 2;
+			case LAPIS: return 1;
+			case DIAMOND: return 2;
+			case EMERALD: return 2;
+			case REDSTONE: return 2;
+			default: return 0;
 		}
 	}
 	
 	@Override
-	public int quantityDropped(Random random)
+	public IItemProvider getItemDropped(IBlockState state, World worldIn, BlockPos pos, int fortune)
+	{
+		switch(oreType)
+		{
+			case COAL: return Items.COAL;
+			case IRON: return MinestuckConfig.vanillaOreDrop ? Blocks.IRON_ORE : this;
+			case GOLD: return MinestuckConfig.vanillaOreDrop ? Blocks.GOLD_ORE : this;
+			case LAPIS: return Items.LAPIS_LAZULI;
+			case DIAMOND: return Items.DIAMOND;
+			case EMERALD: return Items.EMERALD;
+			case QUARTZ: return Items.QUARTZ;
+			case REDSTONE: return Items.REDSTONE;
+			default: return this;
+		}
+	}
+	
+	@Override
+	public int quantityDropped(IBlockState state, Random random)
 	{
 		return oreType == OreType.LAPIS ? 4 + random.nextInt(5) : oreType == OreType.REDSTONE ? 4 + random.nextInt(2) : 1;
 	}
 	
 	@Override
-	public int quantityDroppedWithBonus(int fortune, Random random)
+	public int getItemsToDropCount(IBlockState state, int fortune, World worldIn, BlockPos pos, Random random)
 	{
 		if(oreType == OreType.REDSTONE)
 		{
-			return this.quantityDropped(random) + random.nextInt(fortune + 1);
+			return this.quantityDropped(state, random) + random.nextInt(fortune + 1);
 		}
 		else if(fortune > 0 && oreType != OreType.IRON && oreType != OreType.GOLD)
 		{
@@ -83,31 +102,30 @@ public class BlockVanillaOre extends Block
 			if(j < 0)
 				j = 0;
 			
-			return this.quantityDropped(random) * (j + 1);
+			return this.quantityDropped(state, random) * (j + 1);
 		}
-		else return this.quantityDropped(random);
+		else return this.quantityDropped(state, random);
 	}
 	
 	@Override
-	public int getExpDrop(IBlockState state, IBlockAccess world, BlockPos pos, int fortune)
+	public int getExpDrop(IBlockState state, IWorldReader world, BlockPos pos, int fortune)
 	{
-		Random rand = world instanceof World ? ((World)world).rand : new Random();
 		if(oreType != OreType.IRON && oreType != OreType.GOLD)
 		{
 			int j = 0;
 			
 			if(oreType == OreType.COAL)
-				j = MathHelper.getInt(rand, 0, 2);
+				j = MathHelper.nextInt(RANDOM, 0, 2);
 			else if(oreType == OreType.DIAMOND)
-				j = MathHelper.getInt(rand, 3, 7);
+				j = MathHelper.nextInt(RANDOM, 3, 7);
 			else if(oreType == OreType.EMERALD)
-				j = MathHelper.getInt(rand, 3, 7);
+				j = MathHelper.nextInt(RANDOM, 3, 7);
 			else if(oreType == OreType.LAPIS)
-				j = MathHelper.getInt(rand, 2, 5);
+				j = MathHelper.nextInt(RANDOM, 2, 5);
 			else if(oreType == OreType.QUARTZ)
-				j = MathHelper.getInt(rand, 2, 5);
+				j = MathHelper.nextInt(RANDOM, 2, 5);
 			else if(oreType == OreType.REDSTONE)
-				j = MathHelper.getInt(rand, 1, 6);
+				j = MathHelper.nextInt(RANDOM, 1, 6);
 			
 			return j;
 		}
@@ -115,15 +133,9 @@ public class BlockVanillaOre extends Block
 	}
 	
 	@Override
-	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player)
+	public ItemStack getItem(IBlockReader worldIn, BlockPos pos, IBlockState state)
 	{
 		return new ItemStack(this);
-	}
-	
-	@Override
-	public int damageDropped(IBlockState state)
-	{
-		return oreType == OreType.LAPIS ? EnumDyeColor.BLUE.getDyeDamage() : 0;
 	}
 	
 	@Override
@@ -139,10 +151,9 @@ public class BlockVanillaOre extends Block
 		case LAPIS: return new ItemStack(Blocks.LAPIS_ORE);
 		case DIAMOND: return new ItemStack(Blocks.DIAMOND_ORE);
 		case EMERALD: return new ItemStack(Blocks.EMERALD_ORE);
-		case QUARTZ: return new ItemStack(Blocks.QUARTZ_ORE);
+		case QUARTZ: return new ItemStack(Blocks.NETHER_QUARTZ_ORE);
 		case REDSTONE: return new ItemStack(Blocks.REDSTONE_ORE);
 		default: return new ItemStack(this);
 		}
 	}
-	
 }

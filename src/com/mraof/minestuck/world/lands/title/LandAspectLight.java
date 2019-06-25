@@ -1,15 +1,12 @@
 package com.mraof.minestuck.world.lands.title;
 
-import com.mraof.minestuck.block.BlockMinestuckStone;
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.world.WorldProviderLands;
+import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.decorator.PillarDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
-import net.minecraft.block.BlockColored;
-import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.math.Vec3d;
@@ -19,7 +16,7 @@ public class LandAspectLight extends TitleLandAspect
 	
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("slime", MinestuckBlocks.glowyGoop.getDefaultState());
+		registry.setBlockState("slime", MinestuckBlocks.GLOWY_GOOP.getDefaultState());
 	}
 	
 	@Override
@@ -35,7 +32,7 @@ public class LandAspectLight extends TitleLandAspect
 	}
 	
 	@Override
-	public void prepareWorldProvider(WorldProviderLands worldProvider)
+	public void prepareWorldProvider(LandDimension worldProvider)
 	{
 		worldProvider.skylightBase = 1.0F;
 		worldProvider.mergeFogColor(new Vec3d(1, 1, 0.8), 0.5F);
@@ -49,14 +46,14 @@ public class LandAspectLight extends TitleLandAspect
 	@Override
 	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
-		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.ORANGE));
-		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.CARPET.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.ORANGE));
+		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.ORANGE_WOOL.getDefaultState());
+		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.ORANGE_CARPET.getDefaultState());
 		chunkProvider.blockRegistry.setBlockState("torch", Blocks.TORCH.getDefaultState());
 		
 		chunkProvider.decorators.add(new PillarDecorator("light_block", 0.5F, false, BiomeMinestuck.mediumNormal, BiomeMinestuck.mediumOcean));
 		chunkProvider.decorators.add(new PillarDecorator("light_block", 3, true, BiomeMinestuck.mediumRough));
 		
-		chunkProvider.sortDecorators();
+		//chunkProvider.sortDecorators();
 	}
 	
 	@Override

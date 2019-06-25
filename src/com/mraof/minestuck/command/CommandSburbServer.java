@@ -3,21 +3,24 @@ package com.mraof.minestuck.command;
 import java.util.Collections;
 import java.util.List;
 
+import com.mojang.brigadier.CommandDispatcher;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.command.WrongUsageException;
+import net.minecraft.command.CommandSource;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 
-public class CommandSburbServer extends CommandBase
+public class CommandSburbServer
 {
+	public static void register(CommandDispatcher<CommandSource> dispatcher)
+	{
 	
-	@Override
+	}
+	
+	/*@Override
 	public String getName()
 	{
 		return "sburbServer";
@@ -52,5 +55,5 @@ public class CommandSburbServer extends CommandBase
 	{
 		return args.length == 1 || args.length == 2 ? IdentifierHandler.getCommandAutocomplete(server, args)
 				: Collections.<String>emptyList();
-	}
+	}*/
 }

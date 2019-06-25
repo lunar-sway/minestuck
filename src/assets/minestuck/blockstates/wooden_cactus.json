@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "minestuck:wooden_cactus" }
+        "": { "model": "minestuck:block/wooden_cactus" }
     }
 }

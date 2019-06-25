@@ -1,6 +1,6 @@
 {
     "parent": "block/cube_all",
     "textures": {
-        "all": "minestuck:blocks/glowy_goop"
+        "all": "minestuck:block/glowy_goop"
     }
 }

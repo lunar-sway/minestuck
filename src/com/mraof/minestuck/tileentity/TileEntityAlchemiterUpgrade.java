@@ -2,7 +2,6 @@ package com.mraof.minestuck.tileentity;
 
 import java.util.List;
 
-import com.mraof.minestuck.block.BlockAlchemiterUpgrades;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemiterUpgrades_OLD;
 
@@ -14,19 +13,24 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
-import scala.actors.threadpool.Arrays;
 
 public class TileEntityAlchemiterUpgrade extends TileEntity implements ITickable
 {
 	protected AlchemiterUpgrades_OLD upgrade;
 	
-	public TileEntityAlchemiterUpgrade(AlchemiterUpgrades_OLD upg) 
+	public TileEntityAlchemiterUpgrade(AlchemiterUpgrades_OLD upg)
 	{
+		super(MinestuckTiles.ALCHEMITER_UPGRADE);
 		setUpgrade(upg);
 	}
 	
+	public TileEntityAlchemiterUpgrade()
+	{
+		this(null);
+	}
+	
 	@Override
-	public void update() 
+	public void tick()
 	{
 		if(world != null && !world.isRemote)
 		{

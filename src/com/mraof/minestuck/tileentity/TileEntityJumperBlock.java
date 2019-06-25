@@ -16,7 +16,6 @@ import com.mraof.minestuck.upgrades.AlchemiterUpgrade;
 import com.mraof.minestuck.upgrades.placement.HorizontalPlacement;
 import com.mraof.minestuck.upgrades.placement.UpgradePlacementType;
 import com.mraof.minestuck.util.Debug;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
@@ -25,6 +24,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -71,7 +71,7 @@ public class TileEntityJumperBlock extends TileEntity
 			AlchemiterUpgrade upg = AlchemiterUpgrade.getUpgradeFromItem(AlchemyRecipes.getDecodedItem(heldStack));
 			setUpgrade(upg, slot);
 			heldStack.splitStack(1);
-		} 
+		}
 		
 		//upgrade checking
 		if(alchemiter == null)

@@ -1,8 +1,6 @@
 package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.block.BlockAlchemiter;
-import com.mraof.minestuck.block.BlockAlchemiterUpgrades;
-import com.mraof.minestuck.block.BlockJumperBlock.EnumParts;
 import com.mraof.minestuck.editmode.EditData;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.item.MinestuckItems;
@@ -11,7 +9,6 @@ import com.mraof.minestuck.tileentity.TileEntityCruxtruder;
 import com.mraof.minestuck.tileentity.TileEntityJumperBlock;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MinestuckPlayerData;
-import com.mraof.minestuck.block.BlockJumperBlock;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
@@ -27,12 +24,11 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class ItemJumperBlock extends ItemBlock
+public class ItemJumperBlock //extends ItemBlock
 {
-	static boolean flip = false;
+	/*static boolean flip = false;
 	
 	public ItemJumperBlock(Block block)
 	{
@@ -257,7 +253,7 @@ public class ItemJumperBlock extends ItemBlock
 				CriteriaTriggers.PLACED_BLOCK.trigger((EntityPlayerMP) player, pos, stack);
 		}
 		return true;
-	}
+	}*/
 }
 
 

@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "minestuck:machine_transportalizer" }
+        "": { "model": "minestuck:block/transportalizer" }
     }
 }

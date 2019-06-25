@@ -1,8 +1,0 @@
-{
-    "variants": {
-        "block_type=black": { "model": "minestuck:chesstile_black" },
-        "block_type=white": { "model": "minestuck:chesstile_white" },
-        "block_type=dark_grey": { "model": "minestuck:chesstile_dark_grey" },
-        "block_type=light_grey": { "model": "minestuck:chesstile_light_grey" }
-    }
-}

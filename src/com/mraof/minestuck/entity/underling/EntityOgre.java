@@ -3,11 +3,13 @@ package com.mraof.minestuck.entity.underling;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
 import com.mraof.minestuck.util.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
 //Makes non-stop ogre puns
@@ -15,7 +17,7 @@ public class EntityOgre extends EntityUnderling
 {
 	public EntityOgre(World world)
 	{
-		super(world);
+		super(ModEntityTypes.OGRE, world);
 		setSize(3.0F, 4.5F);
 		this.stepHeight = 1.0F;
 	}
@@ -33,6 +35,21 @@ public class EntityOgre extends EntityUnderling
 		EntityAIAttackOnCollideWithRate aiAttack = new EntityAIAttackOnCollideWithRate(this, .3F, 40, false);
 		aiAttack.setDistanceMultiplier(1.2F);
 		this.tasks.addTask(3, aiAttack);
+	}
+	
+	protected SoundEvent getAmbientSound()
+	{
+		return MinestuckSoundHandler.soundOgreAmbient;
+	}
+	
+	protected SoundEvent getDeathSound()
+	{
+		return MinestuckSoundHandler.soundOgreDeath;
+	}	
+	
+	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
+	{
+		return MinestuckSoundHandler.soundOgreHurt;
 	}
 	
 	@Override
@@ -86,11 +103,11 @@ public class EntityOgre extends EntityUnderling
 		if(this.dead && !this.world.isRemote && type != null)
 		{
 			computePlayerProgress((int) (40*type.getPower() + 50));
-			if(entity != null && entity instanceof EntityPlayerMP)
+			if(entity instanceof EntityPlayerMP)
 			{
 				//((EntityPlayerMP) entity).addStat(MinestuckAchievementHandler.killOgre);
 				Echeladder ladder = MinestuckPlayerData.getData((EntityPlayerMP) entity).echeladder;
-				ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 1));
+				ladder.checkBonus(getServer(), (byte) (Echeladder.UNDERLING_BONUS_OFFSET + 1));
 			}
 		}
 	}

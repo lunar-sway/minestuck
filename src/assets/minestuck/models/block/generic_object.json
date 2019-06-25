@@ -1,6 +1,6 @@
 {
     "parent": "block/cube_all",
     "textures": {
-        "all": "minestuck:blocks/generic_object"
+        "all": "minestuck:block/generic_object"
     }
 }

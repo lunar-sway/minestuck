@@ -1,0 +1,44 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "minestuck:item/boondollars_0"
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "minestuck:count": 5
+            },
+            "model": "minestuck:item/boondollars_1"
+        },
+        {
+            "predicate": {
+                "minestuck:count": 15
+            },
+            "model": "minestuck:item/boondollars_2"
+        },
+        {
+            "predicate": {
+                "minestuck:count": 50
+            },
+            "model": "minestuck:item/boondollars_3"
+        },
+        {
+            "predicate": {
+                "minestuck:count": 100
+            },
+            "model": "minestuck:item/boondollars_4"
+        },
+        {
+            "predicate": {
+                "minestuck:count": 250
+            },
+            "model": "minestuck:item/boondollars_5"
+        },
+        {
+            "predicate": {
+                "minestuck:count": 1000
+            },
+            "model": "minestuck:item/boondollars_6"
+        }
+    ]
+}

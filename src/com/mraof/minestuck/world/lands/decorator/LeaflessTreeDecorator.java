@@ -5,11 +5,11 @@ import java.util.Random;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 import net.minecraft.block.BlockLog;
-import net.minecraft.block.BlockLog.EnumAxis;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.Heightmap;
 
 public class LeaflessTreeDecorator extends BiomeSpecificDecorator
 {
@@ -32,7 +32,7 @@ public class LeaflessTreeDecorator extends BiomeSpecificDecorator
 	@Override
 	public BlockPos generate(World world, Random random, BlockPos pos, ChunkProviderLands provider)
 	{
-		pos = world.getHeight(pos);
+		pos = world.getHeight(Heightmap.Type.WORLD_SURFACE, pos);
 		if(!provider.blockRegistry.getBlockState("surface").equals(world.getBlockState(pos.down())))
 			return null;
 		
@@ -69,7 +69,7 @@ public class LeaflessTreeDecorator extends BiomeSpecificDecorator
 		final int zLength = Math.abs(zDiff);
 		
 		int length;
-		EnumAxis axis;
+		/*EnumAxis axis;
 		if(xLength >= yLength && xLength >= zLength)
 		{
 			length = xLength;
@@ -91,7 +91,7 @@ public class LeaflessTreeDecorator extends BiomeSpecificDecorator
 			float f = i/(float) (length);
 			BlockPos pos = pos0.add(xDiff*f, yDiff*f, zDiff*f);
 			world.setBlockState(pos, state, 2);
-		}
+		}*/
 	}
 	
 	@Override

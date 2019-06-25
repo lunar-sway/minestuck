@@ -1,68 +1,78 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.block.multiblock.MultiblockMachine;
 import com.mraof.minestuck.tileentity.TileEntityCruxtruder;
 
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-public class BlockCruxtruder extends BlockLargeMachine
+import javax.annotation.Nullable;
+
+public class BlockCruxtruder extends BlockMultiMachine
 {
-	public static final PropertyEnum<EnumParts> PART = PropertyEnum.create("part", EnumParts.class);
-	public static final PropertyDirection DIRECTION = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+	public static final VoxelShape TUBE_SHAPE = Block.makeCuboidShape(2, 0, 2, 14, 16, 14);
 	
-	public BlockCruxtruder()
+	protected final VoxelShape shape;
+	protected final boolean hasTileEntity, fullCube;
+	protected final BlockPos mainPos;
+	
+	public BlockCruxtruder(MultiblockMachine machine, VoxelShape shape, boolean tileEntity, boolean fullCube, BlockPos mainPos, Properties properties)
 	{
-		setUnlocalizedName("cruxtruder");
-	}
-	//not sure how to do this.
-	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state,IBlockAccess source,BlockPos pos)
-	{
-		EnumParts parts = state.getValue(PART);
-		return parts.getBoundingBox(state.getValue(DIRECTION));
+		super(machine, properties);
+		this.shape = shape;
+		this.hasTileEntity = tileEntity;
+		this.fullCube = fullCube;
+		this.mainPos = mainPos;
 	}
 	
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
+	public VoxelShape getShape(IBlockState state, IBlockReader worldIn, BlockPos pos)
 	{
-		if(state.getValue(PART) == EnumParts.TUBE && (state.getValue(DIRECTION) == facing || facing == EnumFacing.UP))
+		return shape;
+	}
+	
+	@Override
+	public boolean onBlockActivated(IBlockState state, World worldIn, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
+	{
+		if(hasTileEntity && (state.get(FACING) == side || side == EnumFacing.UP))
 		{
 			if(worldIn.isRemote)
 				return true;
 			
 			TileEntity te = worldIn.getTileEntity(pos);
 			if(te instanceof TileEntityCruxtruder)
-				((TileEntityCruxtruder) te).onRightClick(playerIn, facing == EnumFacing.UP);
+				((TileEntityCruxtruder) te).onRightClick(player, side == EnumFacing.UP);
 			return true;
 		}
 		return false;
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta)
+	public boolean hasTileEntity(IBlockState state)
 	{
-		if(meta/4 == EnumParts.TUBE.ordinal())
+		return hasTileEntity;
+	}
+	
+	@Nullable
+	@Override
+	public TileEntity createTileEntity(IBlockState state, IBlockReader world)
+	{
+		if(hasTileEntity)
 			return new TileEntityCruxtruder();
 		else return null;
 	}
 	
 	@Override
-	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
+	public void onReplaced(IBlockState state, World worldIn, BlockPos pos, IBlockState newState, boolean isMoving)
 	{
 		BlockPos MainPos = getMainPos(state, pos);
 		TileEntity te = worldIn.getTileEntity(MainPos);
@@ -71,103 +81,37 @@ public class BlockCruxtruder extends BlockLargeMachine
 			((TileEntityCruxtruder) te).destroy();
 		}
 		
-		super.breakBlock(worldIn, pos, state);
-	}
-	
-	@Override
-	public boolean isOpaqueCube(IBlockState state)
-	{
-		return state.getValue(PART) == EnumParts.CENTER;
+		super.onReplaced(state, worldIn, pos, newState, isMoving);
 	}
 	
 	@Override
 	public boolean isFullCube(IBlockState state)
 	{
-		return state.getValue(PART) == EnumParts.CENTER;
+		return fullCube;
 	}
 	
 	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face)
+	public BlockFaceShape getBlockFaceShape(IBlockReader worldIn, IBlockState state, BlockPos pos, EnumFacing face)
 	{
-		if(state.getValue(PART) == EnumParts.CENTER)
+		if(fullCube)
 			return BlockFaceShape.SOLID;
 		return BlockFaceShape.UNDEFINED;
 	}
 	
-	public enum EnumParts implements IStringSerializable
-	{
-		BASE_CORNER(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1D, 1D, 1D)),
-		BASE_SIDE(new AxisAlignedBB (0.0D, 0.0D, 0.0D, 1D, 1D, 1D)),
-		CENTER(new AxisAlignedBB( 0, 0, 0, 1, 1, 1)),
-		TUBE(new AxisAlignedBB(2/16D, 0D, 2/16D, 14/16D, 1D, 14/16D));
-		
-		private final AxisAlignedBB[] BOUNDING_BOX;
-		
-		EnumParts(AxisAlignedBB... bb)
-		{
-			BOUNDING_BOX = bb;
-		}
-		
-		public AxisAlignedBB getBoundingBox(EnumFacing facing)
-		{
-			int i = facing.getHorizontalIndex();
-			return BOUNDING_BOX[i%BOUNDING_BOX.length];
-		}
-		
-		@Override
-		public String toString()
-		{
-			return getName();
-		}
-		
-		@Override
-		public String getName()
-		{
-			return name().toLowerCase();
-		}
-	}
 	@Override
-	protected BlockStateContainer createBlockState()
+	public boolean isSolid(IBlockState state)
 	{
-		return new BlockStateContainer(this, PART, DIRECTION);
+		return fullCube;
 	}
 	
 	@Override
-	public IBlockState getStateFromMeta(int meta)
-	{
-		IBlockState defaultState = getDefaultState();
-		EnumParts part = EnumParts.values()[meta/4];
-		EnumFacing facing = EnumFacing.getHorizontal(meta%4);
-		
-		return defaultState.withProperty(PART, part).withProperty(DIRECTION, facing);
-	}
-	@Override
-	public int getMetaFromState(IBlockState state)
-	{
-		EnumParts part = state.getValue(PART);
-		EnumFacing facing = state.getValue(DIRECTION);
-		return part.ordinal()*4 + facing.getHorizontalIndex();
-	}
-
+	public void getDrops(IBlockState state, NonNullList<ItemStack> drops, World world, BlockPos pos, int fortune)
+	{}
+	
 	public BlockPos getMainPos(IBlockState state, BlockPos pos)
 	{
-			EnumParts part = state.getValue(PART);
-			EnumFacing facing = state.getValue(DIRECTION);
-			switch(part)
-			{
-				case BASE_CORNER:
-					return pos.offset(facing.rotateY()).offset(facing.getOpposite()).up();
-				case BASE_SIDE:
-					return pos.offset(facing.getOpposite()).up();
-				case CENTER:
-					return pos.up();
-				default:
-					return pos;
-			}
-	}
-	@Override
-	public Item getItemFromMachine() 
-	{
-		return new ItemStack(MinestuckBlocks.cruxtruder).getItem();
+		Rotation rotation = rotationFromFacing(state.get(FACING));
+		
+		return pos.add(mainPos.rotate(rotation));
 	}
 }

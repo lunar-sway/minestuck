@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import net.minecraft.world.gen.Heightmap;
 
 public class FlowerDecorator implements ILandDecorator
 {
@@ -41,8 +42,8 @@ public class FlowerDecorator implements ILandDecorator
 		for(int x = 0; x < 16; x++)
 			for(int z = 0; z < 16; z++)
 			{
-				BlockPos grassPos = world.getHeight(pos.add(x, 0, z));
-				if(!biomes.isEmpty() && !biomes.contains(world.getBiomeForCoordsBody(grassPos)))
+				BlockPos grassPos = world.getHeight(Heightmap.Type.WORLD_SURFACE, pos.add(x, 0, z));
+				if(!biomes.isEmpty() && !biomes.contains(world.getBiomeBody(grassPos)))
 					continue;
 				
 				if(random.nextFloat() < flowerChance)
@@ -53,7 +54,7 @@ public class FlowerDecorator implements ILandDecorator
 					//TODO: Make the flower decorator able to use other enums
 					
 					if(random.nextFloat() < doubleFlowerChance)
-					{
+					{/*
 						BlockDoublePlant.EnumPlantType type;
 						if(random.nextFloat() < 0.5)
 						{
@@ -72,7 +73,7 @@ public class FlowerDecorator implements ILandDecorator
 						{
 							Blocks.DOUBLE_PLANT.placeAt(world, grassPos, type, 2);
 						}
-							
+						
 					} else
 					{
 						IBlockState state;
@@ -93,7 +94,7 @@ public class FlowerDecorator implements ILandDecorator
 						if(Blocks.RED_FLOWER.canPlaceBlockAt(world, grassPos))
 						{
 							world.setBlockState(grassPos, state);
-						}
+						}*/
 					}
 				}
 			}

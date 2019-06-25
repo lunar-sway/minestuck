@@ -1,25 +1,24 @@
 package com.mraof.minestuck.client.gui.captchalouge;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.inventory.captchalouge.HashmapModus;
+import com.mraof.minestuck.client.gui.GuiButtonImpl;
+import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
-import com.mraof.minestuck.network.MinestuckChannelHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.MinestuckPacket.Type;
-import net.minecraft.client.gui.GuiButton;
+import com.mraof.minestuck.network.MinestuckPacketHandler;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.io.IOException;
-
+@OnlyIn(Dist.CLIENT)
 public class HashmapGuiHandler extends SylladexGuiHandler
 {
 	
-	private HashmapModus modus;
-	protected GuiButton guiButton;
+	private HashMapModus modus;
+	protected GuiButtonImpl guiButton;
 	
-	public HashmapGuiHandler(HashmapModus modus)
+	public HashmapGuiHandler(HashMapModus modus)
 	{
 		super();
 		this.modus = modus;
@@ -30,19 +29,19 @@ public class HashmapGuiHandler extends SylladexGuiHandler
 	public void initGui()
 	{
 		super.initGui();
-		guiButton = new GuiButton(0, (width - GUI_WIDTH)/2 + 15, (height - GUI_HEIGHT)/2 + 175, 120, 20, "");
-		buttonList.add(guiButton);
+		guiButton = new GuiButtonImpl(this, 0, (width - GUI_WIDTH)/2 + 15, (height - GUI_HEIGHT)/2 + 175, 120, 20, "");
+		addButton(guiButton);
 	}
 	
 	@Override
-	public void drawScreen(int xcor, int ycor, float f)
+	public void render(int xcor, int ycor, float f)
 	{
 		guiButton.x = (width - GUI_WIDTH)/2 + 15;
 		guiButton.y = (height - GUI_HEIGHT)/2 + 175;
 		boolean active = MinestuckConfig.clientHashmapChat == 0 ? modus.ejectByChat : MinestuckConfig.clientHashmapChat == 1;
 		guiButton.displayString = I18n.format(active ? "gui.ejectByChat.on" : "gui.ejectByChat.off");
 		guiButton.enabled = MinestuckConfig.clientHashmapChat == 0;
-		super.drawScreen(xcor, ycor, f);
+		super.render(xcor, ycor, f);
 	}
 	
 	@Override
@@ -61,10 +60,10 @@ public class HashmapGuiHandler extends SylladexGuiHandler
 				@Override
 				public void onClick(int mouseButton)
 				{
-					if(this.item == null && mouseButton == 1)
+					if(this.item != null && mouseButton == 1)
 					{
-						MinestuckPacket packet = MinestuckPacket.makePacket(Type.CAPTCHA, CaptchaDeckPacket.GET, this.index, true);
-						MinestuckChannelHandler.sendToServer(packet);
+						CaptchaDeckPacket packet = CaptchaDeckPacket.get(this.index, true);
+						MinestuckPacketHandler.sendToServer(packet);
 					} else super.onClick(mouseButton);
 				}
 			});
@@ -102,13 +101,13 @@ public class HashmapGuiHandler extends SylladexGuiHandler
 	}
 	
 	@Override
-	protected void actionPerformed(GuiButton button) throws IOException
+	public void actionPerformed(GuiButtonImpl button)
 	{
 		super.actionPerformed(button);
 		if(button == this.guiButton && MinestuckConfig.clientHashmapChat == 0)
 		{
 			modus.ejectByChat = !modus.ejectByChat;
-			MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.VALUE, (byte) 0, modus.ejectByChat ? 1 : 0)); 
+			MinestuckPacketHandler.sendToServer(CaptchaDeckPacket.modusParam((byte) 0, modus.ejectByChat ? 1 : 0));
 		}
 	}
 }

@@ -3,8 +3,8 @@ package com.mraof.minestuck.util;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -77,6 +77,8 @@ public enum EnumClass
 	 */
 	public static EnumClass getClassFromInt(int i)
 	{
+		if(i < 0 || i >= EnumClass.values().length)
+			return null;
 		return EnumClass.values()[i];
 	}
 	
@@ -109,7 +111,7 @@ public enum EnumClass
 	 * For debugging purposes, use <code>toString()</code> instead.
 	 * @return a translated string of the name.
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public String getDisplayName()
 	{
 		return I18n.format("title." + this.toString());

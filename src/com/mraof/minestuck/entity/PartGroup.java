@@ -31,22 +31,22 @@ public class PartGroup
     public void addBox(double xOffset, double yOffset, double zOffset, double xSize, double ySize, double zSize)
     {
         Vec3d offset = new Vec3d(xOffset, yOffset, zOffset);
-        Vec3d max = offset.addVector(xSize, ySize, zSize);
+        Vec3d max = offset.add(xSize, ySize, zSize);
         //I know AxisAlignedBB has a constructor for two Vec3d but that doesn't work on dedicated servers
         boxes.add(new AxisAlignedBB(offset.x, offset.y, offset.z, max.x, max.y, max.z));
         for(int x = 0; x < xSize; x++)
         {
-            positions.add(offset.addVector(x + 0.5, 0, 0.5));
+            positions.add(offset.add(x + 0.5, 0, 0.5));
             sizes.add(new Vec3d(1, ySize, 1));
-            positions.add(offset.addVector(x + 0.5, 0, zSize - 0.5));
+            positions.add(offset.add(x + 0.5, 0, zSize - 0.5));
             sizes.add(new Vec3d(1, ySize, 1));
         }
 
         for(int z = 1; z < zSize - 1; z++)
         {
-            positions.add(offset.addVector(0.5, 0, z + 0.5));
+            positions.add(offset.add(0.5, 0, z + 0.5));
             sizes.add(new Vec3d(1, ySize + 10, 1));
-            positions.add(offset.addVector(xSize - 0.5, 0, z + 0.5));
+            positions.add(offset.add(xSize - 0.5, 0, z + 0.5));
             sizes.add(new Vec3d(1, ySize + 10, 1));
         }
     }
@@ -76,7 +76,12 @@ public class PartGroup
             EntityBigPart part = parts.get(i);
             Vec3d position = positions.get(i).rotateYaw(yaw);
             part.setPosition(parent.posX + position.x, parent.posY + position.y, parent.posZ + position.z);
-            part.isDead = parent.isDead;
+            if(parent.removed != part.removed)
+            {
+                if(parent.removed)
+                    part.remove(false);
+                else part.revive();
+            }
         }
     }
 

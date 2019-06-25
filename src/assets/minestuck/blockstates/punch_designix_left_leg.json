@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "minestuck:block/punch_designix_left_leg" },
+        "facing=east":  { "model": "minestuck:block/punch_designix_left_leg", "y": 90 },
+        "facing=south": { "model": "minestuck:block/punch_designix_left_leg", "y": 180 },
+        "facing=west":  { "model": "minestuck:block/punch_designix_left_leg", "y": 270 }
+    }
+}

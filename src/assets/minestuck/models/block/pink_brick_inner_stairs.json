@@ -1,8 +1,0 @@
-{
-    "parent": "block/inner_stairs",
-    "textures": {
-        "bottom": "minestuck:blocks/pink_stone_bricks",
-        "top": "minestuck:blocks/pink_stone_bricks",
-        "side": "minestuck:blocks/pink_stone_bricks"
-    }
-}

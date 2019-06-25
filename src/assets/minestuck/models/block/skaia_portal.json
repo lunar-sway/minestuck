@@ -1,6 +1,5 @@
 {
-    "parent": "block/cube_all",
     "textures": {
-        "all": "minestuck:items/skaia_portal"
+        "particle": "minestuck:item/skaia_portal"
     }
 }

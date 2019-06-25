@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
 
 import com.mraof.minestuck.alchemy.CombinationRegistry;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.alchemy.GristRegistry;
+import com.mraof.minestuck.alchemy.AlchemyCostRegistry;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 
@@ -29,11 +29,11 @@ public class Minegicka3Support extends ModSupport
 		Item stick2 = ((Item) (Class.forName("com.williameze.minegicka3.ModBase").getField("stickGood").get(null)));
 		Item stick3 = ((Item) (Class.forName("com.williameze.minegicka3.ModBase").getField("stickSuper").get(null)));
 		
-		GristRegistry.addGristConversion(new ItemStack(thingy), false, new GristSet(new GristType[]{GristType.Rust, GristType.Gold}, new int[]{16, 16}));
+		AlchemyCostRegistry.addGristConversion(thingy, new GristSet(new GristType[]{GristType.RUST, GristType.GOLD}, new int[]{16, 16}));
 		
-		CombinationRegistry.addCombination(new ItemStack(thingy), new ItemStack(Items.STICK), CombinationRegistry.Mode.MODE_AND, new ItemStack(stick));
-		CombinationRegistry.addCombination(new ItemStack(thingy2), new ItemStack(Items.STICK), CombinationRegistry.Mode.MODE_AND, new ItemStack(stick2));
-		CombinationRegistry.addCombination(new ItemStack(thingy3), new ItemStack(Items.STICK), CombinationRegistry.Mode.MODE_AND, new ItemStack(stick3));
+		CombinationRegistry.addCombination(thingy, Items.STICK, CombinationRegistry.Mode.MODE_AND, new ItemStack(stick));
+		CombinationRegistry.addCombination(thingy2, Items.STICK, CombinationRegistry.Mode.MODE_AND, new ItemStack(stick2));
+		CombinationRegistry.addCombination(thingy3, Items.STICK, CombinationRegistry.Mode.MODE_AND, new ItemStack(stick3));
 		
 	}
 	
@@ -48,12 +48,12 @@ public class Minegicka3Support extends ModSupport
 			List<Entry<ItemStack, Integer>> input = (List<Entry<ItemStack, Integer>>) entry.getValue().getClass().getField("input").get(entry.getValue());
 			ItemStack output = (ItemStack) entry.getValue().getClass().getField("output").get(entry.getValue());
 			
-			if(GristRegistry.getGristConversion(output) == null)
+			if(AlchemyCostRegistry.getGristConversion(output) == null)
 			{
 				GristSet cost = new GristSet();
 				for(Entry<ItemStack, Integer> ingredient : input)
 				{
-					GristSet set = GristRegistry.getGristConversion(ingredient.getKey());
+					GristSet set = AlchemyCostRegistry.getGristConversion(ingredient.getKey());
 					if(set != null)
 					{
 						set = set.scaleGrist(ingredient.getValue());
@@ -62,7 +62,7 @@ public class Minegicka3Support extends ModSupport
 					else continue recipes;
 				}
 				if(!cost.isEmpty())
-					GristRegistry.addGristConversion(output, cost);
+					AlchemyCostRegistry.addGristConversion(output.getItem(), cost);
 			}
 		}
 	}

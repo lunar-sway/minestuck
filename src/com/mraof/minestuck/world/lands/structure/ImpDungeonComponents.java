@@ -13,17 +13,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.MapGenStructureIO;
-import net.minecraft.world.gen.structure.StructureBoundingBox;
-import net.minecraft.world.gen.structure.StructureComponent;
-import net.minecraft.world.gen.structure.template.TemplateManager;
 
 import java.util.List;
 import java.util.Random;
 
 public class ImpDungeonComponents
 {
-	
+	/*
 	public static void registerComponents()
 	{
 		MapGenStructureIO.registerStructureComponent(ImpDungeonComponents.EntryCorridor.class, "MinestuckIDEC");
@@ -1330,5 +1326,5 @@ public class ImpDungeonComponents
 			
 			return true;
 		}	
-	}
+	}*/
 }

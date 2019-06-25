@@ -1,12 +1,13 @@
 package com.mraof.minestuck.entity.carapacian;
 
+import com.mraof.minestuck.entity.ModEntityTypes;
 import net.minecraft.world.World;
 
 public class EntityBlackRook extends EntityRook
 {
 	public EntityBlackRook(World world) 
 	{
-		super(world);
+		super(ModEntityTypes.DERSITE_ROOK, world);
 	}
 
 	@Override

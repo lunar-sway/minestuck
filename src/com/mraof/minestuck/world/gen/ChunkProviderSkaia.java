@@ -1,11 +1,7 @@
-/**
- * 
- */
 package com.mraof.minestuck.world.gen;
 
-import com.mraof.minestuck.block.BlockChessTile;
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.entity.carapacian.*;
+import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.world.gen.structure.MapGenCastle;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
@@ -28,7 +24,7 @@ import java.util.Random;
  * @author Mraof
  *
  */
-public class ChunkProviderSkaia implements IChunkGenerator
+public class ChunkProviderSkaia //implements IChunkGenerator
 {
 	World skaiaWorld;
 	Random random;
@@ -53,14 +49,14 @@ public class ChunkProviderSkaia implements IChunkGenerator
 	{
 		this.skaiaWorld = world;
 		this.random = new Random(seed);
-		this.spawnableBlackList = new ArrayList<SpawnListEntry>();
-		this.spawnableWhiteList = new ArrayList<SpawnListEntry>();
-		this.spawnableBlackList.add(new SpawnListEntry(EntityBlackPawn.class, 2, 1, 10));
-		this.spawnableBlackList.add(new SpawnListEntry(EntityBlackBishop.class, 1, 1, 1));
-		this.spawnableBlackList.add(new SpawnListEntry(EntityBlackRook.class, 1, 1, 1));
-		this.spawnableWhiteList.add(new SpawnListEntry(EntityWhitePawn.class, 2, 1, 10));
-		this.spawnableWhiteList.add(new SpawnListEntry(EntityWhiteBishop.class, 1, 1, 1));
-		this.spawnableWhiteList.add(new SpawnListEntry(EntityWhiteRook.class, 1, 1, 1));
+		this.spawnableBlackList = new ArrayList<>();
+		this.spawnableWhiteList = new ArrayList<>();
+		this.spawnableBlackList.add(new SpawnListEntry(ModEntityTypes.DERSITE_PAWN, 2, 1, 10));
+		this.spawnableBlackList.add(new SpawnListEntry(ModEntityTypes.DERSITE_BISHOP, 1, 1, 1));
+		this.spawnableBlackList.add(new SpawnListEntry(ModEntityTypes.DERSITE_ROOK, 1, 1, 1));
+		this.spawnableWhiteList.add(new SpawnListEntry(ModEntityTypes.PROSPITIAN_PAWN, 2, 1, 10));
+		this.spawnableWhiteList.add(new SpawnListEntry(ModEntityTypes.PROSPITIAN_BISHOP, 1, 1, 1));
+		this.spawnableWhiteList.add(new SpawnListEntry(ModEntityTypes.PROSPITIAN_ROOK, 1, 1, 1));
 		this.noiseGen1 = new NoiseGeneratorOctaves(this.random, 7);
 		this.noiseGen2 = new NoiseGeneratorOctaves(this.random, 3);
 		this.noiseGen3 = new NoiseGeneratorOctaves(this.random, 8);
@@ -76,6 +72,7 @@ public class ChunkProviderSkaia implements IChunkGenerator
 		
 	}
 	
+	/*
 	@Override
 	public Chunk generateChunk(int x, int z)
 	{
@@ -93,13 +90,19 @@ public class ChunkProviderSkaia implements IChunkGenerator
 			int y = (int)(128 + generated0[i] + generated1[i] + generated2[i]);
 			topBlock[i] = (y&511)<=255  ? y&255 : 255 - y&255;
 		}
-		byte chessTileMetadata = (byte) ((Math.abs(x) + Math.abs(z)) % 2);
-		IBlockState block = MinestuckBlocks.chessTile.getDefaultState().withProperty(BlockChessTile.BLOCK_TYPE, BlockChessTile.BlockType.values()[chessTileMetadata]);
+		
+		IBlockState block;
+		if((Math.abs(x) + Math.abs(z)) % 2 == 0)
+			block = MinestuckBlocks.WHITE_CHESS_DIRT.getDefaultState();
+		else block = MinestuckBlocks.BLACK_CHESS_DIRT.getDefaultState();
+		
+		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
 		for(int posX = 0; posX < 16; posX++)
 			for(int posZ = 0; posZ < 16; posZ++)
 				for(int posY = 0; posY <= topBlock[posX * 16 + posZ]; posY++)
 				{
-					primer.setBlockState(posX, posY, posZ, block);
+					pos.setPos(posX, posY, posZ);
+					primer.setBlockState(pos, block, false);
 				}
 		//y * 256, z * 16, x
 		Chunk chunk = new Chunk(this.skaiaWorld, primer, x, z);
@@ -142,5 +145,5 @@ public class ChunkProviderSkaia implements IChunkGenerator
 	
 	@Override
 	public void recreateStructures(Chunk chunk, int p_180514_2_, int p_180514_3_) {}
-	
+	*/
 }

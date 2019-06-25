@@ -8,7 +8,10 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class GuiConsortShop extends GuiContainer
 {
 	private ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/consort_shop.png");
@@ -33,7 +36,7 @@ public class GuiConsortShop extends GuiContainer
 			portrait = new ResourceLocation("minestuck",
 					"textures/gui/store/"+inv.getConsortType().name().toLowerCase()+"_"+inv.getMerchantType().name().toLowerCase()+".png");
 		
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		
 		this.mc.getTextureManager().bindTexture(guiBackground);
 		int x = (width - xSize) / 2;
@@ -59,10 +62,10 @@ public class GuiConsortShop extends GuiContainer
 	}
 	
 	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks)
+	public void render(int mouseX, int mouseY, float partialTicks)
 	{
 		this.drawDefaultBackground();
-		super.drawScreen(mouseX, mouseY, partialTicks);
+		super.render(mouseX, mouseY, partialTicks);
 		this.renderHoveredToolTip(mouseX, mouseY);
 	}
 }

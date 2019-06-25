@@ -4,7 +4,10 @@ import com.mraof.minestuck.util.KindAbstratusList;
 import com.mraof.minestuck.util.KindAbstratusType;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class GuiStrifeSpecibus extends GuiPlayerStats
 {
 	
@@ -20,11 +23,12 @@ public class GuiStrifeSpecibus extends GuiPlayerStats
 	}
 	
 	@Override
-	public void drawScreen(int xcor, int ycor, float par3) {
-		super.drawScreen(xcor, ycor, par3);
+	public void render(int xcor, int ycor, float par3)
+	{
+		super.render(xcor, ycor, par3);
 		this.drawDefaultBackground();
 		
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		
 		drawTabs();
 		
@@ -37,7 +41,7 @@ public class GuiStrifeSpecibus extends GuiPlayerStats
 		
 		int i = 0;
 		for(KindAbstratusType type : KindAbstratusList.getTypeList()) {
-			String typeName = type.getDisplayName().toLowerCase();
+			String typeName = type.getDisplayName().toString().toLowerCase();
 			int xPos = xOffset+9+(columnWidth)*((i%columns)+1)-mc.fontRenderer.getStringWidth(typeName);
 			int yPos = yOffset+35+(mc.fontRenderer.FONT_HEIGHT+1)*(int)(i/columns);
 			

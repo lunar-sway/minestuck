@@ -11,26 +11,24 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
+
 public class ItemTransportalizer  extends ItemBlock
 {
-	public ItemTransportalizer(Block block)
+	public ItemTransportalizer(Block blockIn, Properties builder)
 	{
-		super(block);
+		super(blockIn, builder);
 	}
 	
 	@Override
-	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState)
+	protected boolean onBlockPlaced(BlockPos pos, World world, @Nullable EntityPlayer player, ItemStack stack, IBlockState state)
 	{
-		if(super.placeBlockAt(stack, player, world, pos, side, hitX, hitY, hitZ, newState))
+		if(stack.hasDisplayName() && stack.getDisplayName().getString().length() == 4)
 		{
-			if(stack.hasDisplayName() && stack.getDisplayName().length() == 4)
-			{
-				TileEntity te = world.getTileEntity(pos);
-				if(te instanceof TileEntityTransportalizer)
-					((TileEntityTransportalizer)te).setId(stack.getDisplayName().toUpperCase());
-			}
-			return true;
+			TileEntity te = world.getTileEntity(pos);
+			if(te instanceof TileEntityTransportalizer)
+				((TileEntityTransportalizer) te).setId(stack.getDisplayName().getString().toUpperCase());
 		}
-		return false;
+		return true;
 	}
 }

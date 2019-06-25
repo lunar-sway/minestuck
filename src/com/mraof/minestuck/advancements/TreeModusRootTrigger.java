@@ -8,8 +8,8 @@ import com.google.gson.JsonObject;
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.advancements.PlayerAdvancements;
-import net.minecraft.advancements.critereon.AbstractCriterionInstance;
-import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.advancements.criterion.AbstractCriterionInstance;
+import net.minecraft.advancements.criterion.MinMaxBounds;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
 
@@ -61,7 +61,7 @@ public class TreeModusRootTrigger implements ICriterionTrigger<TreeModusRootTrig
 	@Override
 	public Instance deserializeInstance(JsonObject json, JsonDeserializationContext context)
 	{
-		MinMaxBounds count = MinMaxBounds.deserialize(json.get("count"));
+		MinMaxBounds.IntBound count = MinMaxBounds.IntBound.fromJson(json.get("count"));
 		return new Instance(count);
 	}
 	
@@ -74,8 +74,8 @@ public class TreeModusRootTrigger implements ICriterionTrigger<TreeModusRootTrig
 	
 	public static class Instance extends AbstractCriterionInstance
 	{
-		private final MinMaxBounds count;
-		public Instance(MinMaxBounds count)
+		private final MinMaxBounds.IntBound count;
+		public Instance(MinMaxBounds.IntBound count)
 		{
 			super(ID);
 			this.count = count;

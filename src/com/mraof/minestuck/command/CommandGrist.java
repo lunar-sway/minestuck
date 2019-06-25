@@ -1,5 +1,7 @@
 package com.mraof.minestuck.command;
 
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mraof.minestuck.alchemy.GristAmount;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
@@ -8,6 +10,7 @@ import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import net.minecraft.command.*;
+import net.minecraft.command.arguments.EntityArgument;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
@@ -16,8 +19,18 @@ import net.minecraft.util.text.TextComponentTranslation;
 import java.util.Collections;
 import java.util.List;
 
-public class CommandGrist extends CommandBase
+public class CommandGrist
 {
+	public static void register(CommandDispatcher<CommandSource> dispatcher)
+	{
+	}
+	//TODO grist set argument
+	/*	LiteralArgumentBuilder<CommandSource> add = Commands.literal("add");
+		
+		dispatcher.register(Commands.literal("grist").requires(source -> source.hasPermissionLevel(2)).then(Commands.argument("targets", EntityArgument.multiplePlayers())
+		.then(add)));
+	}
+	
 	public static GristAmount[] parseGrist(String[] args, int startOffset) throws CommandException
 	{
 		GristAmount[] grist = new GristAmount[(args.length - startOffset) / 2];
@@ -37,24 +50,6 @@ public class CommandGrist extends CommandBase
 		}
 
 		return grist;
-	}
-
-	@Override
-	public String getName()
-	{
-		return "grist";
-	}
-
-	@Override
-	public String getUsage(ICommandSender sender)
-	{
-		return "commands.grist.usage";
-	}
-
-	@Override
-	public int getRequiredPermissionLevel()
-	{
-		return 2;    //Same as /give
 	}
 
 	@Override
@@ -129,5 +124,5 @@ public class CommandGrist extends CommandBase
 		{
 			return Collections.emptyList();
 		}
-	}
+	}*/
 }

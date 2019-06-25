@@ -5,21 +5,20 @@ import java.util.Random;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.feature.WorldGenerator;
 
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 public class WorldGenDecorator extends BiomeSpecificDecorator
 {
 	
-	protected WorldGenerator worldgen;
+	//protected WorldGenerator worldgen;
 	protected float priority;
 	protected int tries;
 	
-	public WorldGenDecorator(WorldGenerator worldGen, int tries, float priority, Biome... biomes)
+	public WorldGenDecorator(/*WorldGenerator worldGen,*/ int tries, float priority, Biome... biomes)
 	{
 		super(biomes);
-		this.worldgen = worldGen;
+		//this.worldgen = worldGen;
 		this.tries = tries;
 		this.priority = priority;
 	}
@@ -27,7 +26,7 @@ public class WorldGenDecorator extends BiomeSpecificDecorator
 	@Override
 	public BlockPos generate(World world, Random random, BlockPos pos, ChunkProviderLands provider)
 	{
-		worldgen.generate(world, random, pos);
+		//worldgen.generate(world, random, pos);
 		
 		return null;
 	}

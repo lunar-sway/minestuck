@@ -1,8 +1,0 @@
-{
-    "parent": "block/cube_bottom_top",
-    "textures": {
-        "bottom": "minestuck:blocks/cruxite_sandstone_bottom",
-        "top": "minestuck:blocks/cruxite_sandstone_top",
-        "side": "minestuck:blocks/cruxite_sandstone_side"
-    }
-}

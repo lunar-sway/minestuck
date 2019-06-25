@@ -12,13 +12,10 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.StructureBoundingBox;
-
-import static net.minecraft.block.BlockColored.COLOR;
-import static net.minecraft.item.EnumDyeColor.*;
 
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import net.minecraft.world.gen.Heightmap;
 
 public class SwordDecorator extends SimpleStructureDecorator
 {
@@ -65,33 +62,33 @@ public class SwordDecorator extends SimpleStructureDecorator
 		case 0:
 			out = new IBlockState[]
 			{
-				Blocks.CONCRETE.getDefaultState().withProperty(COLOR, GRAY),
-				Blocks.STAINED_HARDENED_CLAY.getDefaultState().withProperty(COLOR, CYAN),
-				Blocks.STAINED_HARDENED_CLAY.getDefaultState().withProperty(COLOR, BROWN),
-				Blocks.CONCRETE.getDefaultState().withProperty(COLOR, BROWN),
-				Blocks.CONCRETE.getDefaultState().withProperty(COLOR, SILVER),
-				Blocks.CONCRETE.getDefaultState().withProperty(COLOR, WHITE)
+				Blocks.GRAY_CONCRETE.getDefaultState(),
+				Blocks.CYAN_TERRACOTTA.getDefaultState(),
+				Blocks.BROWN_TERRACOTTA.getDefaultState(),
+				Blocks.BROWN_CONCRETE.getDefaultState(),
+				Blocks.LIGHT_GRAY_CONCRETE.getDefaultState(),
+				Blocks.WHITE_CONCRETE.getDefaultState()
 			};
 			break;
 		case 1:
 			out = new IBlockState[]
 			{
-				Blocks.STAINED_HARDENED_CLAY.getDefaultState().withProperty(COLOR, PURPLE),
-				Blocks.STAINED_HARDENED_CLAY.getDefaultState().withProperty(COLOR, PINK),
-				Blocks.CONCRETE.getDefaultState().withProperty(COLOR, SILVER),
-				Blocks.STAINED_HARDENED_CLAY.getDefaultState().withProperty(COLOR, CYAN),
-				Blocks.STAINED_HARDENED_CLAY.getDefaultState().withProperty(COLOR, MAGENTA),
-				Blocks.CONCRETE.getDefaultState().withProperty(COLOR, PINK)
+				Blocks.PURPLE_TERRACOTTA.getDefaultState(),
+				Blocks.PINK_TERRACOTTA.getDefaultState(),
+				Blocks.LIGHT_GRAY_CONCRETE.getDefaultState(),
+				Blocks.CYAN_TERRACOTTA.getDefaultState(),
+				Blocks.MAGENTA_TERRACOTTA.getDefaultState(),
+				Blocks.PINK_CONCRETE.getDefaultState()
 			};
 			break;
 		case 2:
 			out = new IBlockState[]
 			{
-				Blocks.CONCRETE.getDefaultState().withProperty(COLOR, WHITE),
+				Blocks.WHITE_CONCRETE.getDefaultState(),
 				Blocks.QUARTZ_BLOCK.getDefaultState(),
-				Blocks.WOOL.getDefaultState(),
+				Blocks.WHITE_WOOL.getDefaultState(),
 				Blocks.BONE_BLOCK.getDefaultState(),
-				Blocks.STAINED_GLASS.getDefaultState().withProperty(COLOR, WHITE),
+				Blocks.WHITE_STAINED_GLASS.getDefaultState(),
 				Blocks.SEA_LANTERN.getDefaultState()
 			};
 			break;
@@ -112,7 +109,7 @@ public class SwordDecorator extends SimpleStructureDecorator
 			return null;
 		
 		BlockPos curr = new BlockPos(xCoord, yCoord, zCoord);
-		if(rotation)
+		/*if(rotation)
 		{
 			if(provider.isBBInSpawn(new StructureBoundingBox(curr.add(-8, 0, 0), curr.add(8, 25, 0))))
 				return null;
@@ -120,7 +117,7 @@ public class SwordDecorator extends SimpleStructureDecorator
 		{
 			if(provider.isBBInSpawn(new StructureBoundingBox(curr.add(0, 0, -8), curr.add(0, 25, 8))))
 				return null;
-		}
+		}*/
 			
 		
 		
@@ -260,11 +257,11 @@ public class SwordDecorator extends SimpleStructureDecorator
 		for(int x = -3; x < 4; x++)
 			for(int z = Math.abs(x) == 3 ? -2 : -3; z < (Math.abs(x) == 3 ? 3 : 4); z++)
 			{
-				int height = world.getPrecipitationHeight(new BlockPos(xCoord + x, 0, zCoord + z)).getY();
+				int height = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, new BlockPos(xCoord + x, 0, zCoord + z)).getY();
 				value += height;
 				minVal = Math.min(minVal, height);
 				maxVal = Math.max(maxVal, height);
-				minDepth = Math.min(minDepth, world.getTopSolidOrLiquidBlock(new BlockPos(xCoord + x, 0, zCoord + z)).getY());
+				minDepth = Math.min(minDepth, world.getHeight(Heightmap.Type.WORLD_SURFACE, new BlockPos(xCoord + x, 0, zCoord + z)).getY());
 			}
 		
 		if(maxVal - minVal > 6 || minVal - minDepth > 12)

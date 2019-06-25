@@ -1,6 +1,6 @@
 package com.mraof.minestuck.modSupport.crafttweaker;
-
-import com.mraof.minestuck.alchemy.GristRegistry;
+/*
+import com.mraof.minestuck.alchemy.AlchemyCostRegistry;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import crafttweaker.CraftTweakerAPI;
@@ -71,9 +71,9 @@ public class Alchemy
 		@Override
 		public void apply()
 		{
-			GristRegistry.getAllConversions().remove(items);
+			AlchemyCostRegistry.getAllConversions().remove(items);
 			if(cost != null)
-				GristRegistry.getAllConversions().put(items, cost);
+				AlchemyCostRegistry.getAllConversions().put(items, cost);
 		}
 		
 		@Override
@@ -124,4 +124,4 @@ public class Alchemy
 		
 		return grist;
 	}
-}
+}*/

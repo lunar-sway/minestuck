@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
 import com.mraof.minestuck.block.BlockGate;
@@ -21,10 +20,7 @@ import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.tileentity.TileEntityGate;
 import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.util.PostEntryTask;
-import com.mraof.minestuck.util.Teleport;
+import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
@@ -32,7 +28,6 @@ import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -49,7 +44,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.Chunk.EnumCreateEntityType;
-import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
+import net.minecraft.world.chunk.ChunkSection;
+import net.minecraft.world.dimension.DimensionType;
 
 public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITeleporter
 {
@@ -61,27 +57,24 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 	private boolean creative;
 	private HashSet<BlockMove> blockMoves;
 	
-	public ItemCruxiteArtifact() 
+	public ItemCruxiteArtifact(Properties properties)
 	{
-		this.setCreativeTab(TabMinestuck.instance);
-		setUnlocalizedName("cruxiteArtifact");
-		this.maxStackSize = 1;
-		setHasSubtypes(true);
+		super(properties);
 	}
 	
-	public void onArtifactActivated(EntityPlayer player)
+	public void onArtifactActivated(EntityPlayerMP player)
 	{
 		try
 		{
-			if(!player.world.isRemote && player.world.provider.getDimension() != -1)
+			if(player.world.getDimension().getType() != DimensionType.NETHER)
 			{
 				if(!SburbHandler.shouldEnterNow(player))
 					return;
 				
-				SburbConnection c = SkaianetHandler.getMainConnection(IdentifierHandler.encode(player), true);
+				SburbConnection c = SkaianetHandler.get(player.world).getMainConnection(IdentifierHandler.encode(player), true);
 				
 				//Only preforms Entry if you have no connection, haven't Entered, or you're not in a Land and additional Entries are permitted.
-				if(c == null || !c.enteredGame() || !MinestuckConfig.stopSecondEntry && !MinestuckDimensionHandler.isLandDimension(player.world.provider.getDimension()))
+				if(c == null || !c.enteredGame() || !MinestuckConfig.stopSecondEntry && !MinestuckDimensionHandler.isLandDimension(player.world.getDimension().getType()))
 				{
 					if(!canModifyEntryBlocks(player.world, player))
 					{
@@ -98,7 +91,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 						}
 						
 						//Teleports the player to their home in the Medium, without any bells or whistles.
-						BlockPos pos = newWorld.provider.getRandomizedSpawnPoint();
+						BlockPos pos = newWorld.getDimension().getSpawnPoint();
 						Teleport.teleportEntity(player, c.getClientDimension(), null, pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F);
 						
 						return;
@@ -107,13 +100,13 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 					//Teleportation code is now called from enterMedium(), which is called from createLand.
 					//createLand will return -1 if Entry fails for any reason, including the teleporter being null or returning false in prepareDestination().
 					//Whatever the problem is, relevant information should be printed to the console.
-					if(LandAspectRegistry.createLand(player, this) == -1)
+					if(LandAspectRegistry.createLand(player, this) == null)
 					{
 						player.sendMessage(new TextComponentString("Something went wrong creating your Land. More details in the server console."));
 					}
 					else
 					{
-						c = SburbHandler.getConnectionForDimension(player.dimension);
+						c = SburbHandler.getConnectionForDimension(player.getServer(), player.dimension);
 						if(c != null && c.getClientIdentifier().equals(IdentifierHandler.encode(player)))
 						{
 							MinestuckCriteriaTriggers.CRUXITE_ARTIFACT.trigger((EntityPlayerMP) player);
@@ -130,7 +123,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 		} catch(Exception e)
 		{
 			Debug.logger.error("Exception when "+player.getName()+" tried to enter their land.", e);
-			player.sendMessage(new TextComponentString("[Minestuck] Something went wrong during entry. "+ (Minestuck.isServerRunning?"Check the console for the error message.":"Notify the server owner about this.")).setStyle(new Style().setColor(TextFormatting.RED)));
+			player.sendMessage(new TextComponentString("[Minestuck] Something went wrong during entry. "+ (player.getName().getString().equals(IdentifierHandler.host)?"Check the console for the error message.":"Notify the server owner about this.")).setStyle(new Style().setColor(TextFormatting.RED)));
 		}
 	}
 	
@@ -151,7 +144,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 		this.origin = origin;
 		
 		creative = ((EntityPlayerMP) player).interactionManager.isCreative();
-		SburbConnection conn = SkaianetHandler.getMainConnection(IdentifierHandler.encode((EntityPlayer) player), true);
+		SburbConnection conn = SkaianetHandler.get(worldserver0).getMainConnection(IdentifierHandler.encode((EntityPlayer) player), true);
 		
 		topY = MinestuckConfig.adaptEntryBlockHeight ? getTopHeight(worldserver0, x, y, z) : y + artifactRange;
 		yDiff = 127 - topY;
@@ -167,7 +160,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 			int zWidth = (int) Math.sqrt((artifactRange+0.5) * (artifactRange+0.5) - (blockX - x) * (blockX - x));
 			for(int blockZ = z - zWidth; blockZ <= z + zWidth; blockZ++)
 			{
-				Chunk c = worldserver0.getChunkFromChunkCoords(blockX >> 4, blockZ >> 4);
+				Chunk c = worldserver0.getChunk(blockX >> 4, blockZ >> 4);
 				
 				int height = (int) Math.sqrt(artifactRange * artifactRange - (((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2));
 				
@@ -181,7 +174,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 					
 					Block gotBlock = block.getBlock();
 					
-					if(gotBlock == Blocks.BEDROCK || gotBlock == Blocks.PORTAL)
+					if(gotBlock == Blocks.BEDROCK || gotBlock == Blocks.NETHER_PORTAL)
 					{
 						blockMoves.add(new BlockMove(c, pos, pos1, Blocks.AIR.getDefaultState(), true));
 						continue;
@@ -235,10 +228,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 			Debug.debug("Loading spawn chunks...");
 			for(int chunkX = ((x + xDiff - artifactRange) >> 4) - 1; chunkX <= ((x + xDiff + artifactRange) >> 4) + 2; chunkX++)		//Prevent anything generating on the piece that we move
 				for(int chunkZ = ((z + zDiff - artifactRange) >> 4) - 1; chunkZ <= ((z + zDiff + artifactRange) >> 4) + 2; chunkZ++)	//from the overworld.
-					worldserver1.getChunkProvider().provideChunk(chunkX, chunkZ);
-			
-			//Set again, but with a more precise value now that the y-coordinate is properly decided.
-			MinestuckDimensionHandler.setSpawn(worldserver1.provider.getDimension(), new BlockPos(x + xDiff, y + yDiff, z + zDiff));
+					worldserver1.getChunkProvider().provideChunk(chunkX, chunkZ, true, true);
 			
 			//This is split into two sections because moves that require block updates should happen after the ones that don't.
 			//This helps to ensure that "anchored" blocks like torches still have the blocks they are anchored to when they update.
@@ -248,20 +238,20 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 			for(BlockMove move : blockMoves)
 			{
 				if(!move.update)
-					move.copy(worldserver1.getChunkFromBlockCoords(move.dest));
+					move.copy(worldserver1.getChunk(move.dest));
 				else
 					blockMoves2.add(move);
 			}
 			for(BlockMove move : blockMoves2)
 			{
-				move.copy(worldserver1.getChunkFromBlockCoords(move.dest));
+				move.copy(worldserver1.getChunk(move.dest));
 			}
 			blockMoves2.clear();
 			
 			Debug.debug("Teleporting entities...");
 			//The fudge here is to ensure that the AABB will always contain every entity meant to be moved.
 			// As entities outside the radius will be excluded from transport anyway, this is fine.
-			AxisAlignedBB entityTeleportBB = player.getEntityBoundingBox().grow(artifactRange + 0.5);
+			AxisAlignedBB entityTeleportBB = player.getBoundingBox().grow(artifactRange + 0.5);
 			List<Entity> list = worldserver0.getEntitiesWithinAABBExcludingEntity(player, entityTeleportBB);
 			Iterator<Entity> iterator = list.iterator();
 			while (iterator.hasNext())
@@ -275,21 +265,21 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 							ServerEditHandler.reset(ServerEditHandler.getData((EntityPlayer) e));
 						else
 						{
-							Teleport.teleportEntity(e, worldserver1.provider.getDimension(), null, e.posX + xDiff, e.posY + yDiff, e.posZ + zDiff);
+							e.changeDimension(worldserver1.getDimension().getType(), new PositionTeleporter(e.posX + xDiff, e.posY + yDiff, e.posZ + zDiff));
 						}
 						//These entities should no longer be in the world, and this list is later used for entities that *should* remain.
 						iterator.remove();
 					}
 					else	//Copy instead of teleport
 					{
-						Entity newEntity = EntityList.newEntity(e.getClass(), worldserver1);
+						Entity newEntity = e.getType().create(worldserver1);
 						if (newEntity != null)
 						{
 							NBTTagCompound nbttagcompound = new NBTTagCompound();
-							e.writeToNBT(nbttagcompound);
+							e.writeWithoutTypeId(nbttagcompound);
 							nbttagcompound.removeTag("Dimension");
-							newEntity.readFromNBT(nbttagcompound);
-							newEntity.dimension = worldserver1.provider.getDimension();
+							newEntity.read(nbttagcompound);
+							newEntity.dimension = worldserver1.getDimension().getType();
 							newEntity.setPosition(newEntity.posX + xDiff, newEntity.posY + yDiff, newEntity.posZ + zDiff);
 							worldserver1.spawnEntity(newEntity);
 						}
@@ -313,7 +303,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 			
 			player.setPositionAndUpdate(player.posX + xDiff, player.posY + yDiff, player.posZ + zDiff);
 			
-			SkaianetHandler.clearMovingList();
+			SkaianetHandler.get(worldserver0).clearMovingList();
 			
 			//Remove entities that were generated in the process of teleporting entities and removing blocks.
 			// This is usually caused by "anchored" blocks being updated between the removal of their anchor and their own removal.
@@ -333,7 +323,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 				{
 					while (iterator.hasNext())
 					{
-						iterator.next().setDead();
+						iterator.next().remove();
 					}
 				} else
 				{
@@ -341,7 +331,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 					{
 						Entity e = iterator.next();
 						if(e instanceof EntityItem)
-							e.setDead();
+							e.remove();
 					}
 				}
 			}
@@ -352,7 +342,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 			placeGate(1, new BlockPos(x + xDiff, GateHandler.gateHeight1, z + zDiff), worldserver1);
 			placeGate(2, new BlockPos(x + xDiff, GateHandler.gateHeight2, z + zDiff), worldserver1);
 			
-			ServerEventHandler.tickTasks.add(new PostEntryTask(worldserver1.provider.getDimension(), x + xDiff, y + yDiff, z + zDiff, artifactRange, (byte) 0));
+			ServerEventHandler.tickTasks.add(new PostEntryTask(worldserver1.getDimension().getType(), x + xDiff, y + yDiff, z + zDiff, artifactRange, (byte) 0));
 			
 			Debug.info("Entry finished");
 		}
@@ -377,7 +367,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 				String name = worldserver0.getBlockState(pos).getBlock().getRegistryName().toString();
 				try {
 					worldserver0.removeTileEntity(pos);
-					worldserver0.setBlockToAir(pos);
+					worldserver0.removeBlock(pos);
 				} catch (NullPointerException e) {
 					Logger.getGlobal().warning("Null Pointer Exception encountered when removing " + name + ". "
 							+ "Notify the mod author that the block should make a null check on its tile entity when broken.");
@@ -415,8 +405,8 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 	
 	private static void copyBlockDirect(Chunk cSrc, Chunk cDst, int xSrc, int ySrc, int zSrc, int xDst, int yDst, int zDst)
 	{
-		ExtendedBlockStorage blockStorageSrc = getBlockStorage(cSrc, ySrc >> 4);
-		ExtendedBlockStorage blockStorageDst = getBlockStorage(cDst, yDst >> 4);
+		ChunkSection blockStorageSrc = getBlockStorage(cSrc, ySrc >> 4);
+		ChunkSection blockStorageDst = getBlockStorage(cDst, yDst >> 4);
 		xSrc &= 15; ySrc &= 15; zSrc &= 15; xDst &= 15; yDst &= 15; zDst &= 15;
 		
 		blockStorageDst.set(xDst, yDst, zDst, blockStorageSrc.get(xSrc, ySrc, zSrc));
@@ -425,12 +415,12 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 			blockStorageDst.setSkyLight(xDst, yDst, zDst, blockStorageSrc.getSkyLight(xSrc, ySrc, zSrc));
 	}
 	
-	private static ExtendedBlockStorage getBlockStorage(Chunk c, int y)
+	private static ChunkSection getBlockStorage(Chunk c, int y)
 	{
-		ExtendedBlockStorage blockStorage = c.getBlockStorageArray()[y];
-		if(blockStorage == null)
-			blockStorage = c.getBlockStorageArray()[y] = new ExtendedBlockStorage(y << 4, c.getWorld().provider.hasSkyLight());
-		return blockStorage;
+		ChunkSection section = c.getSections()[y];
+		if(section == Chunk.EMPTY_SECTION)
+			section = c.getSections()[y] = new ChunkSection(y << 4, c.getWorld().dimension.hasSkyLight());
+		return section;
 	}
 	
 	/**
@@ -464,11 +454,11 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 		for(int i = 0; i < 9; i++)
 			if(i == 4)
 			{
-				world.setBlockState(pos, MinestuckBlocks.gate.getDefaultState().cycleProperty(BlockGate.isMainComponent), 0);
+				world.setBlockState(pos, MinestuckBlocks.GATE.getDefaultState().cycle(BlockGate.MAIN), 0);
 				TileEntityGate tileEntity = (TileEntityGate) world.getTileEntity(pos);
 				tileEntity.gateCount = gateCount;
 			}
-			else world.setBlockState(pos.add((i % 3) - 1, 0, i/3 - 1), MinestuckBlocks.gate.getDefaultState(), 0);
+			else world.setBlockState(pos.add((i % 3) - 1, 0, i/3 - 1), MinestuckBlocks.GATE.getDefaultState(), 0);
 	}
 	
 	private class BlockMove
@@ -497,7 +487,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 			
 			if(update)
 			{
-				chunkTo.setBlockState(dest, block);
+				chunkTo.setBlockState(dest, block, true);
 			} else if(block == Blocks.AIR.getDefaultState())
 			{
 				chunkTo.getWorld().setBlockState(dest, block, 0);
@@ -510,12 +500,16 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 			if(tileEntity != null)
 			{
 				NBTTagCompound nbt = new NBTTagCompound();
-				tileEntity.writeToNBT(nbt);
-				nbt.setInteger("y", dest.getY());
-				TileEntity te1 = TileEntity.create(chunkTo.getWorld(), nbt);
-				chunkTo.addTileEntity(dest, te1);
+				tileEntity.write(nbt);
+				nbt.setInt("x", dest.getX());
+				nbt.setInt("y", dest.getY());
+				nbt.setInt("z", dest.getZ());
+				TileEntity te1 = TileEntity.create(nbt);
+				if(te1 != null)
+					chunkTo.addTileEntity(dest, te1);
+				else Debug.warnf("Unable to create a new tile entity %s when teleporting blocks to the medium!", tileEntity.getType().getRegistryName());
 				if(tileEntity instanceof TileEntityComputer)
-					SkaianetHandler.movingComputer((TileEntityComputer) tileEntity, (TileEntityComputer) te1);
+					SkaianetHandler.get(chunkTo.getWorld()).movingComputer((TileEntityComputer) tileEntity, (TileEntityComputer) te1);
 			}
 		}
 	}

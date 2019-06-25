@@ -1,78 +1,105 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mraof.minestuck.network.MinestuckChannelHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.MinestuckPacket.Type;
-import com.mraof.minestuck.tileentity.TileEntityMachine;
-import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.gui.GuiButton;
+import com.mraof.minestuck.network.GoButtonPacket;
+import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.tileentity.TileEntityMachineProcess;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.InputMappings;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.Container;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-
-import java.io.IOException;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 /**
  * Created by mraof on 2017 December 07 at 12:55 AM.
  */
+@OnlyIn(Dist.CLIENT)
 public abstract class GuiMachine extends GuiContainer
 {
-	private TileEntityMachine te;
-	protected GuiButton goButton;
+	private TileEntityMachineProcess te;
+	protected GoButton goButton;
 	
-	public GuiMachine(Container inventorySlotsIn, TileEntityMachine tileEntity)
+	public GuiMachine(Container inventorySlotsIn, TileEntityMachineProcess tileEntity)
 	{
 		super(inventorySlotsIn);
 		this.te = tileEntity;
 	}
 	
 	@Override
-	protected void keyTyped(char typedChar, int keyCode) throws IOException
+	public boolean keyPressed(int keyCode, int scanCode, int i)
 	{
-		super.keyTyped(typedChar, keyCode);
-
-		if (keyCode == 28)
+		if(keyCode == 28)
 		{
-			this.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+			this.mc.getSoundHandler().play(SimpleSound.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 
-			boolean mode = te.allowOverrideStop() && (Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54));
-			MinestuckPacket packet = MinestuckPacket.makePacket(Type.GOBUTTON, true, mode && !te.overrideStop);
-			MinestuckChannelHandler.sendToServer(packet);
+			boolean mode = te.getRunType() == TileEntityMachineProcess.RunType.BUTTON_OVERRIDE && (InputMappings.isKeyDown(42) || InputMappings.isKeyDown(54));
+			GoButtonPacket packet = new GoButtonPacket(true, mode && !te.overrideStop);
+			MinestuckPacketHandler.sendToServer(packet);
 
 			if (!mode)
 				te.ready = true;
 			te.overrideStop = mode && !te.overrideStop;
 			goButton.displayString = I18n.format(te.overrideStop ? "gui.buttonStop" : "gui.buttonGo");
+			return true;
 		}
+		return super.keyPressed(keyCode, scanCode, i);
 	}
-
-	@Override
-	protected void actionPerformed(GuiButton guibutton)
+	
+	protected class GoButton extends GuiButtonExt
 	{
-		if (guibutton == goButton)
+		public GoButton(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText)
 		{
-			if (Mouse.getEventButton() == 0 && !te.overrideStop)
+			super(buttonId, x, y, widthIn, heightIn, buttonText);
+		}
+		
+		@Override
+		public boolean mouseClicked(double mouseX, double mouseY, int mouseKey)
+		{
+			if(!isPressable(mouseX, mouseY))
+				return false;
+			if(mouseKey == 0)
 			{
-				//Tell the machine to go once
-				MinestuckPacket packet = MinestuckPacket.makePacket(Type.GOBUTTON, true, false);
-				MinestuckChannelHandler.sendToServer(packet);
-
-				te.ready = true;
-				te.overrideStop = false;
-				goButton.displayString = I18n.format("gui.buttonGo");
-			}
-			else if (Mouse.getEventButton() == 1 && te.allowOverrideStop())
+				this.playPressSound(Minecraft.getInstance().getSoundHandler());
+				if(!te.overrideStop)
+				{
+					//Tell the machine to go once
+					GoButtonPacket packet = new GoButtonPacket(true, false);
+					MinestuckPacketHandler.sendToServer(packet);
+					
+					te.ready = true;
+					te.overrideStop = false;
+					goButton.displayString = I18n.format("gui.buttonGo");
+				}
+				return true;
+			} else if(mouseKey == 1 && te.getRunType() == TileEntityMachineProcess.RunType.BUTTON_OVERRIDE)
 			{
+				this.playPressSound(Minecraft.getInstance().getSoundHandler());
 				//Tell the machine to go until stopped
-				MinestuckPacket packet = MinestuckPacket.makePacket(Type.GOBUTTON, true, !te.overrideStop);
-				MinestuckChannelHandler.sendToServer(packet);
-
+				GoButtonPacket packet = new GoButtonPacket(true, !te.overrideStop);
+				MinestuckPacketHandler.sendToServer(packet);
+				
 				te.overrideStop = !te.overrideStop;
 				goButton.displayString = I18n.format(te.overrideStop ? "gui.buttonStop" : "gui.buttonGo");
+				return true;
 			}
+			return false;
 		}
+	}
+	
+	/**
+	 * Returns a number to be used in calculation of progress bar length.
+	 *
+	 * @param progress the progress done.
+	 * @param max      The maximum amount of progress.
+	 * @param imageMax The length of the progress bar image to scale to
+	 * @return The length the progress bar should be shown to
+	 */
+	public static int getScaledValue(int progress, int max, int imageMax)
+	{
+		return (int) ((float) imageMax * ((float) progress / (float) max));
 	}
 }

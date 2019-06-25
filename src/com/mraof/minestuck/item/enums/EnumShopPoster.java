@@ -1,8 +1,8 @@
 package com.mraof.minestuck.item.enums;
 
 import net.minecraft.util.IStringSerializable;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public enum EnumShopPoster implements IStringSerializable
 {
@@ -69,7 +69,7 @@ public enum EnumShopPoster implements IStringSerializable
     }
 
     
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public String getPosterName()
     {
         return this.name;

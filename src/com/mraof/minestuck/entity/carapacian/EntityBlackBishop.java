@@ -1,5 +1,6 @@
 package com.mraof.minestuck.entity.carapacian;
 
+import com.mraof.minestuck.entity.ModEntityTypes;
 import net.minecraft.world.World;
 
 public class EntityBlackBishop extends EntityBishop 
@@ -7,7 +8,7 @@ public class EntityBlackBishop extends EntityBishop
 
 	public EntityBlackBishop(World par1World)
 	{
-		super(par1World);
+		super(ModEntityTypes.DERSITE_BISHOP, par1World);
 	}
 
 	@Override

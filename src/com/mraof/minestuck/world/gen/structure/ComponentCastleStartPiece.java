@@ -7,9 +7,6 @@ import java.util.Random;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.StructureBoundingBox;
-import net.minecraft.world.gen.structure.StructureComponent;
-import net.minecraft.world.gen.structure.template.TemplateManager;
 
 public class ComponentCastleStartPiece extends ComponentCastlePiece 
 {
@@ -22,7 +19,7 @@ public class ComponentCastleStartPiece extends ComponentCastlePiece
     public ArrayList<ComponentCastlePiece> pendingPieces = new ArrayList<ComponentCastlePiece>();
     
     public ComponentCastleStartPiece() {}
-	protected ComponentCastleStartPiece(int par1, int x, int z,  boolean isBlack) 
+	/*protected ComponentCastleStartPiece(int par1, int x, int z,  boolean isBlack)
 	{
 		super(par1, (ComponentCastleStartPiece)null);
         this.boundingBox = new StructureBoundingBox(x, 0, z, x, 74, z);
@@ -92,5 +89,5 @@ public class ComponentCastleStartPiece extends ComponentCastlePiece
 	{
 		// TODO Auto-generated method stub
 		
-	}
+	}*/
 }

@@ -3,41 +3,37 @@ package com.mraof.minestuck.network.skaianet;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
+import com.mraof.minestuck.util.Location;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ComputerData
 {
-	int x, y, z;
-	int dimension;
+	Location location;
 	PlayerIdentifier owner;
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	private int ownerId;
 	
 	public static ComputerData createData(TileEntityComputer te)
 	{
 		if(!te.getWorld().isRemote)
-			return new ComputerData(te.owner, te.getPos().getX(), te.getPos().getY(), te.getPos().getZ(), te.getWorld().provider.getDimension());
-		else return new ComputerData(te.ownerId, te.getPos().getX(), te.getPos().getY(), te.getPos().getZ(), te.getWorld().provider.getDimension());
+			return new ComputerData(te.owner, new Location(te.getPos(), te.getWorld().dimension.getType()));
+		else return new ComputerData(te.ownerId, new Location(te.getPos(), te.getWorld().dimension.getType()));
 	}
 	
-	private ComputerData(int ownerId, int x, int y, int z, int dimension)
+	private ComputerData(int ownerId, Location location)
 	{
 		this.ownerId = ownerId;
-		this.x = x;
-		this.y = y;
-		this.z = z;
-		this.dimension = dimension;
+		this.location = location;
 	}
 	
-	public ComputerData(PlayerIdentifier owner, int x, int y, int z, int dimension)
+	public ComputerData(PlayerIdentifier owner, Location location)
 	{
 		this.owner = owner;
-		this.x = x;
-		this.y = y;
-		this.z = z;
-		this.dimension = dimension;
+		this.location = location;
 	}
 	
 	ComputerData()
@@ -46,10 +42,7 @@ public class ComputerData
 	ComputerData read(NBTTagCompound nbt)
 	{
 		owner = IdentifierHandler.load(nbt, "name");
-		x = nbt.getInteger("x");
-		y = nbt.getInteger("y");
-		z = nbt.getInteger("z");
-		dimension = nbt.getInteger("dim");
+		location = Location.fromNBT(nbt);
 		return this;
 	}
 	
@@ -57,19 +50,14 @@ public class ComputerData
 	{
 		NBTTagCompound c = new NBTTagCompound();
 		owner.saveToNBT(c, "name");
-		c.setInteger("x", x);
-		c.setInteger("y", y);
-		c.setInteger("z", z);
-		c.setInteger("dim", dimension);
 		return c;
 	}
 	
-	public int getX(){return x;}
-	public int getY(){return y;}
-	public int getZ() {return z;}
-	public int getDimension() {return dimension;}
+	public Location getLocation() {return location;}
+	public BlockPos getPos() {return location.pos;}
+	public DimensionType getDimension() {return location.dim;}
 	public PlayerIdentifier getOwner() {return owner;}
-	@SideOnly(Side.CLIENT) public int getOwnerId() {return ownerId;}
+	@OnlyIn(Dist.CLIENT) public int getOwnerId() {return ownerId;}
 	
 	@Override
 	public boolean equals(Object obj)
@@ -77,7 +65,7 @@ public class ComputerData
 		if(obj instanceof ComputerData)
 		{
 			ComputerData otherData = (ComputerData) obj;
-			return this.owner.equals(otherData.owner) && this.x == otherData.x && this.y == otherData.y && this.z == otherData.z && this.dimension == otherData.dimension;
+			return this.owner.equals(otherData.owner) && this.location.equals(otherData.location);
 		}
 		return false;
 	}

@@ -3,8 +3,8 @@ package com.mraof.minestuck.util;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class Title
 {
@@ -28,7 +28,7 @@ public class Title
 		return this.heroAspect;
 	}
 	
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public String getTitleName()
 	{
 		return I18n.format("title.format", heroClass.getDisplayName(), heroAspect.getDisplayName());

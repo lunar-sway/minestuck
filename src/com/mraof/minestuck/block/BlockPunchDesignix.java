@@ -1,77 +1,68 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.block.multiblock.MultiblockMachine;
 import com.mraof.minestuck.tileentity.TileEntityPunchDesignix;
 import net.minecraft.block.Block;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-public class BlockPunchDesignix extends BlockLargeMachine
+import javax.annotation.Nullable;
+import java.util.Map;
+
+public class BlockPunchDesignix extends BlockMultiMachine
 {
 	
-	public static final PropertyEnum<EnumParts> PART = PropertyEnum.create("part", EnumParts.class);
-	public static final PropertyDirection DIRECTION = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-	public BlockPunchDesignix()
-	{
-		setUnlocalizedName("punch_designix");
-		setDefaultState(blockState.getBaseState());
-	} 
+	public static final Map<EnumFacing, VoxelShape> LEG_SHAPE = createRotatedShapes(0, 0, 4, 16, 16, 16);
+	public static final Map<EnumFacing, VoxelShape> SLOT_SHAPE = createRotatedShapes(0, 0, 9, 15, 7, 16);
+	public static final Map<EnumFacing, VoxelShape> KEYBOARD_SHAPE = createRotatedShapes(1, 0, 4, 16, 7, 16);
 	
-	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+	protected final Map<EnumFacing, VoxelShape> shape;
+	protected final BlockPos mainPos;
+	
+	public BlockPunchDesignix(MultiblockMachine machine, Map<EnumFacing, VoxelShape> shape, BlockPos pos, Properties properties)
 	{
-		EnumParts parts = state.getValue(PART);
-		EnumFacing facing = state.getValue(DIRECTION);
-		
-		return parts.BOUNDING_BOX[facing.getHorizontalIndex()];
+		super(machine, properties);
+		this.shape = shape;
+		this.mainPos = pos;
 	}
 	
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
+	public VoxelShape getShape(IBlockState state, IBlockReader worldIn, BlockPos pos)
+	{
+		return shape.get(state.get(FACING));
+	}
+	
+	@Override
+	public boolean onBlockActivated(IBlockState state, World worldIn, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
 		if (worldIn.isRemote)
 			return true;
 		BlockPos mainPos = getMainPos(state, pos);
 		TileEntity te = worldIn.getTileEntity(mainPos);
-		if (te != null && te instanceof TileEntityPunchDesignix)
-			((TileEntityPunchDesignix) te).onRightClick((EntityPlayerMP) playerIn, state);
+		if (te instanceof TileEntityPunchDesignix)
+			((TileEntityPunchDesignix) te).onRightClick((EntityPlayerMP) player, state);
 		return true;
 	}
 	
 	@Override
-	public boolean hasTileEntity(IBlockState state)
+	public void onReplaced(IBlockState state, World worldIn, BlockPos pos, IBlockState newState, boolean isMoving)
 	{
-		return state.getValue(PART) == EnumParts.TOP_LEFT || state.getValue(PART) == EnumParts.TOP_LEFT_CARD;
-	}
-	
-	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta)
-	{
-		if(meta % 4 == EnumParts.TOP_LEFT.ordinal())
-			return new TileEntityPunchDesignix();
-		else return null;
-	}
-	
-	@Override
-	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
-	{
-	
 		BlockPos mainPos = getMainPos(state, pos);
 		TileEntity te = worldIn.getTileEntity(mainPos);
-		if(te != null && te instanceof TileEntityPunchDesignix)
+		if(te instanceof TileEntityPunchDesignix)
 		{
 			TileEntityPunchDesignix designix = (TileEntityPunchDesignix) te;
 			designix.broken = true;
@@ -79,7 +70,7 @@ public class BlockPunchDesignix extends BlockLargeMachine
 				designix.dropItem(true);
 		}
 		
-		super.breakBlock(worldIn, pos, state);
+		super.onReplaced(state, worldIn, pos, newState, isMoving);
 	}
 	
 	@Override
@@ -90,101 +81,52 @@ public class BlockPunchDesignix extends BlockLargeMachine
 			((TileEntityPunchDesignix) te).checkStates();
 	}
 	
-	//Block state handling
 	@Override
-	protected BlockStateContainer createBlockState()
-	{
-		return new BlockStateContainer(this, PART, DIRECTION);
-	}
-	
-	@Override
-	public IBlockState getStateFromMeta(int meta)
-	{
-		IBlockState defaultState = getDefaultState();
-		EnumParts part = EnumParts.values()[meta % 4];
-		EnumFacing facing = EnumFacing.getHorizontal(meta/4);
-		
-		return defaultState.withProperty(PART, part).withProperty(DIRECTION, facing);
-	}
-	@Override
-	public int getMetaFromState(IBlockState state)
-	{
-		EnumParts part = state.getValue(PART);
-		EnumFacing facing = state.getValue(DIRECTION);
-		if(part == EnumParts.TOP_LEFT_CARD)
-			part = EnumParts.TOP_LEFT;
-		
-		return part.ordinal() + facing.getHorizontalIndex()*4;
-	}
-	
+	public void getDrops(IBlockState state, NonNullList<ItemStack> drops, World world, BlockPos pos, int fortune)
+	{}
 	
     /**
      *returns the block position of the "Main" block
      *aka the block with the TileEntity for the machine
-     *@pram the state of the block
-     *@pram the position the block 
+     *@param state the state of the block
+     *@param pos the position the block
      */
 	public BlockPos getMainPos(IBlockState state, BlockPos pos)
 	{
-		EnumFacing facing = state.getValue(DIRECTION);
-		switch(state.getValue(PART))
-		{
-			case TOP_LEFT: case TOP_LEFT_CARD: return pos;
-			case TOP_RIGHT: return pos.offset(facing.rotateY());
-			case BOTTOM_LEFT: return pos.up();
-			case BOTTOM_RIGHT: return pos.up().offset(facing.rotateY());
-		}
-		return pos;
+		EnumFacing facing = state.get(FACING);
+		Rotation rotation = rotationFromFacing(facing);
+		
+		return pos.add(this.mainPos.rotate(rotation));
 	}
 	
-	@Override
-	public IBlockState getActualState(IBlockState state,IBlockAccess worldIn,BlockPos pos)
+	public static class Slot extends BlockPunchDesignix
 	{
-		if (hasTileEntity(state))
-		{
-			BlockPos mainPos = getMainPos(state, pos);
-			TileEntity te = worldIn.getTileEntity(mainPos);
-			if (te instanceof TileEntityPunchDesignix)
-				return state.withProperty(PART, ((TileEntityPunchDesignix) te).getCard().isEmpty() ? EnumParts.TOP_LEFT : EnumParts.TOP_LEFT_CARD);
-		}
-		return state;
-	}
-	
-	public enum EnumParts implements IStringSerializable
-	{
-		BOTTOM_LEFT(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 12/16D)),
-		BOTTOM_RIGHT(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 12/16D)),
-		TOP_LEFT(new AxisAlignedBB(1/16D, 0.0D, 0.0D, 1.0D, 7/16D, 7/16D)),
-		TOP_RIGHT(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 15/16D, 7/16D, 12/16D)),
-		TOP_LEFT_CARD(new AxisAlignedBB(1/16D, 0.0D, 0.0D, 1.0D, 7/16D, 7/16D));
+		public static final BooleanProperty HAS_CARD = MinestuckProperties.HAS_CARD;
 		
-		private final AxisAlignedBB[] BOUNDING_BOX;
-		
-		EnumParts(AxisAlignedBB bb)
+		public Slot(MultiblockMachine machine, Map<EnumFacing, VoxelShape> shape, Properties properties)
 		{
-			BOUNDING_BOX = new AxisAlignedBB[4];
-			BOUNDING_BOX[0] = bb;
-			BOUNDING_BOX[1] = new AxisAlignedBB(1 - bb.maxZ, bb.minY, bb.minX, 1 - bb.minZ, bb.maxY, bb.maxX);
-			BOUNDING_BOX[2] = new AxisAlignedBB(1 - bb.maxX, bb.minY, 1- bb.maxZ, 1 - bb.minX, bb.maxY, 1 - bb.minZ);
-			BOUNDING_BOX[3] = new AxisAlignedBB(bb.minZ, bb.minY, 1 - bb.maxX, bb.maxZ, bb.maxY, 1 - bb.minX);
+			super(machine, shape, new BlockPos(0, 0, 0), properties);
+			setDefaultState(this.stateContainer.getBaseState().with(HAS_CARD, false));
 		}
 		
 		@Override
-		public String toString()
+		protected void fillStateContainer(StateContainer.Builder<Block, IBlockState> builder)
 		{
-			return getName();
+			super.fillStateContainer(builder);
+			builder.add(HAS_CARD);
 		}
 		
 		@Override
-		public String getName()
+		public boolean hasTileEntity(IBlockState state)
 		{
-			return name().toLowerCase();
+			return true;
 		}
-	}
-
-	@Override
-	public Item getItemFromMachine() 
-	{
-		return new ItemStack(MinestuckBlocks.punchDesignix).getItem();
+		
+		@Nullable
+		@Override
+		public TileEntity createTileEntity(IBlockState state, IBlockReader world)
+		{
+			return new TileEntityPunchDesignix();
+		}
 	}
 }

@@ -1,24 +1,24 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
+import com.mraof.minestuck.client.gui.GuiButtonImpl;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.util.MinestuckPlayerData;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.io.IOException;
-
-public class GuiGristCache extends GuiPlayerStats
+@OnlyIn(Dist.CLIENT)
+public class GuiGristCache extends GuiPlayerStats implements GuiButtonImpl.ButtonClickhandler
 {
 	private static final ResourceLocation guiGristcache = new ResourceLocation("minestuck", "textures/gui/grist_cache.png");
 	private int page = 0;
 
-	private GuiButton previousButton;
-	private GuiButton nextButton;
+	private GuiButtonImpl previousButton;
+	private GuiButtonImpl nextButton;
 
 	public GuiGristCache()
 	{
@@ -31,20 +31,20 @@ public class GuiGristCache extends GuiPlayerStats
 	public void initGui()
 	{
 		super.initGui();
-		this.previousButton = new GuiButtonExt(1, this.xOffset + 8, this.yOffset + 8, 16, 16, "<");
-		this.nextButton = new GuiButtonExt(2, this.xOffset + guiWidth - 24, this.yOffset + 8, 16, 16, ">");
+		this.previousButton = new GuiButtonImpl(this, 1, this.xOffset + 8, this.yOffset + 8, 16, 16, "<");
+		this.nextButton = new GuiButtonImpl(this, 2, this.xOffset + guiWidth - 24, this.yOffset + 8, 16, 16, ">");
 		if(GristType.REGISTRY.getValues().size() > rows * columns)
 		{
-			this.buttonList.add(this.nextButton);
+			addButton(this.nextButton);
 		}
 	}
-
+	
 	@Override
-	public void drawScreen(int xcor, int ycor, float par3)
+	public void render(int mouseX, int mouseY, float partialTicks)
 	{
 		this.drawDefaultBackground();
 
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		drawTabs();
 
@@ -56,30 +56,31 @@ public class GuiGristCache extends GuiPlayerStats
 			cacheMessage = I18n.format("gui.gristCache.name");
 		else cacheMessage = MinestuckPlayerData.title.getTitleName();
 		mc.fontRenderer.drawString(cacheMessage, (this.width / 2) - mc.fontRenderer.getStringWidth(cacheMessage) / 2, yOffset + 12, 0x404040);
-		super.drawScreen(xcor, ycor, par3);
+		super.render(mouseX, mouseY, partialTicks);
 
-		drawActiveTabAndOther(xcor, ycor);
+		drawActiveTabAndOther(mouseX, mouseY);
 
-		GlStateManager.color(1, 1, 1);
+		GlStateManager.color3f(1, 1, 1);
 		GlStateManager.disableRescaleNormal();
 		RenderHelper.disableStandardItemLighting();
 		GlStateManager.disableLighting();
-		GlStateManager.disableDepth();
+		GlStateManager.disableDepthTest();
 
-		this.drawGrist(xOffset, yOffset, xcor, ycor, page);
+		this.drawGrist(xOffset, yOffset, mouseX, mouseY, page);
 	}
 
 	@Override
-	protected void actionPerformed(GuiButton button) throws IOException
+	public void actionPerformed(GuiButtonImpl button)
 	{
 		int maxPage = (GristType.REGISTRY.getValues().size() - 1) / (rows * columns);
 		if (button == previousButton && page > 0)
 		{
 			page--;
 			if(page == 0) {
-				this.buttonList.remove(previousButton);
+				this.buttons.remove(previousButton);
+				this.children.remove(previousButton);
 			}
-			if(!this.buttonList.contains(nextButton)) {
+			if(!this.buttons.contains(nextButton)) {
 				this.addButton(nextButton);
 			}
 		}
@@ -87,9 +88,10 @@ public class GuiGristCache extends GuiPlayerStats
 		{
 			page++;
 			if(page == maxPage) {
-				this.buttonList.remove(nextButton);
+				this.buttons.remove(nextButton);
+				this.children.remove(nextButton);
 			}
-			if(!this.buttonList.contains(previousButton)) {
+			if(!this.buttons.contains(previousButton)) {
 				this.addButton(previousButton);
 			}
 		}

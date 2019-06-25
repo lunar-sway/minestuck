@@ -1,6 +1,6 @@
 {
     "parent": "block/cube_all",
     "textures": {
-        "all": "minestuck:blocks/frost_planks"
+        "all": "minestuck:block/frost_planks"
     }
 }

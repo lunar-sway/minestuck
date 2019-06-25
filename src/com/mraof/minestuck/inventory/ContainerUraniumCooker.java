@@ -22,26 +22,20 @@ public class ContainerUraniumCooker extends Container
 	private static final int itemOutputY = 35;
 	
 	public TileEntityUraniumCooker tileEntity;
-	private com.mraof.minestuck.block.BlockUraniumCooker.MachineType type;
 	private boolean operator = true;
 	private int progress;
 	
 	public ContainerUraniumCooker(InventoryPlayer inventoryPlayer, TileEntityUraniumCooker te)
 	{
 		tileEntity = te;
-		type = te.getMachineType();
 		
-		switch (type)
-		{
-		case URANIUM_COOKER:
-			addSlotToContainer(new SlotInput(tileEntity, 0, uraniumInputX, uraniumInputY, MinestuckItems.rawUranium));
-			addSlotToContainer(new Slot(tileEntity, 1, itemInputX, itemInputY));
-			addSlotToContainer(new SlotOutput(tileEntity, 2, itemOutputX, itemOutputY));
-			break;
-		}
+		addSlot(new SlotInput(tileEntity, 0, uraniumInputX, uraniumInputY, MinestuckItems.RAW_URANIUM));
+		addSlot(new Slot(tileEntity, 1, itemInputX, itemInputY));
+		addSlot(new SlotOutput(tileEntity, 2, itemOutputX, itemOutputY));
 		
 		bindPlayerInventory(inventoryPlayer);
 	}
+	
 	@Override
 	public boolean canInteractWith(EntityPlayer player)
 	{
@@ -52,11 +46,11 @@ public class ContainerUraniumCooker extends Container
 	{
 		for (int i = 0; i < 3; i++)
 			for (int j = 0; j < 9; j++)
-				addSlotToContainer(new Slot(inventoryPlayer, j + i * 9 + 9,
+				addSlot(new Slot(inventoryPlayer, j + i * 9 + 9,
 						8 + j * 18, 84 + i * 18));
 		
 		for (int i = 0; i < 9; i++)
-			addSlotToContainer(new Slot(inventoryPlayer, i, 8 + i * 18, 142));
+			addSlot(new Slot(inventoryPlayer, i, 8 + i * 18, 142));
 	}
 	
 	@Nonnull
@@ -64,7 +58,7 @@ public class ContainerUraniumCooker extends Container
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotNumber)
 	{
 		ItemStack itemstack = ItemStack.EMPTY;
-		Slot slot = (Slot)this.inventorySlots.get(slotNumber);
+		Slot slot = this.inventorySlots.get(slotNumber);
 		int allSlots = this.inventorySlots.size();
 		
 		if (slot != null && slot.getHasStack())
@@ -73,39 +67,32 @@ public class ContainerUraniumCooker extends Container
 			itemstack = itemstackOrig.copy();
 			boolean result = false;
 			
-			
-			switch (type)
+			if(slotNumber == 0)    //Shift-clicking from the Uranium input
 			{
-			case URANIUM_COOKER:
-				if (slotNumber == 0)	//Shift-clicking from the Uranium input
+				result = mergeItemStack(itemstackOrig, 3, allSlots, false);    //Send into the inventory
+			} else if(slotNumber == 1)    //Shift-clicking from the item input
+			{
+				result = mergeItemStack(itemstackOrig, 3, allSlots, false);    //Send into the inventory
+				
+			} else if(slotNumber == 2)    //Shift-clicking from the output slot
+			{
+				if(itemstackOrig.getItem() == MinestuckItems.RAW_URANIUM)
+					result = mergeItemStack(itemstackOrig, 0, 1, false);    //Send the uranium back to the uranium input
+				else
+					result = mergeItemStack(itemstackOrig, 3, allSlots, false);    //Send the non-uranium to the inventory
+				
+			} else    //Shift-clicking from the inventory
+			{
+				if(itemstackOrig.getItem() == MinestuckItems.RAW_URANIUM)
 				{
-					result = mergeItemStack(itemstackOrig,3,allSlots,false);	//Send into the inventory
-				} else if (slotNumber == 1)	//Shift-clicking from the item input
+					result = mergeItemStack(itemstackOrig, 0, 1, false);    //Send the uranium to the uranium input
+				} else
 				{
-					result = mergeItemStack(itemstackOrig,3,allSlots,false);	//Send into the inventory
-					
-				} else if (slotNumber == 2)	//Shift-clicking from the output slot
-				{
-					if (itemstackOrig.getItem() == MinestuckItems.rawUranium) 
-						result = mergeItemStack(itemstackOrig,0,1,false);	//Send the uranium back to the uranium input
-					else
-						result = mergeItemStack(itemstackOrig,3,allSlots,false);	//Send the non-uranium to the inventory
-					
-				} else	//Shift-clicking from the inventory
-				{
-					if (itemstackOrig.getItem() == MinestuckItems.rawUranium)
-					{
-						result = mergeItemStack(itemstackOrig,0,1,false);	//Send the uranium to the uranium input
-					} else
-					{
-						result = mergeItemStack(itemstackOrig,1,2,false);	//Send the non-uranium to the other input
-					}
-					
+					result = mergeItemStack(itemstackOrig, 1, 2, false);    //Send the non-uranium to the other input
 				}
-				break;
 			}
 			
-			if (!result)
+			if(!result)
 				return ItemStack.EMPTY;
 			
 			if(!itemstackOrig.isEmpty())

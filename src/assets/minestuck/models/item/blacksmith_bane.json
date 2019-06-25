@@ -1,6 +1,6 @@
 {
     "parent": "item/handheld",
     "textures": {
-        "layer0": "minestuck:items/blacksmiths_bane"
+        "layer0": "minestuck:item/blacksmith_bane"
     }
 }

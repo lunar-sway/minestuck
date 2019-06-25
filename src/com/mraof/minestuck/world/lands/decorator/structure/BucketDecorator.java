@@ -11,13 +11,13 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.structure.StructureBoundingBox;
+import net.minecraft.world.gen.Heightmap;
 
 public class BucketDecorator extends SimpleStructureDecorator
 {
 	
-	private Block[] liquidBlocks = {Blocks.AIR, Blocks.WATER, Blocks.LAVA, MinestuckBlocks.blockBlood, MinestuckBlocks.blockOil, MinestuckBlocks.blockBrainJuice,
-			MinestuckBlocks.blockWatercolors, MinestuckBlocks.blockEnder};
+	private Block[] liquidBlocks = {Blocks.AIR, Blocks.WATER, Blocks.LAVA};//, MinestuckBlocks.blockBlood, MinestuckBlocks.blockOil, MinestuckBlocks.blockBrainJuice,
+			//MinestuckBlocks.blockWatercolors, MinestuckBlocks.blockEnder};
 	
 	public BucketDecorator(Biome... biomes)
 	{
@@ -30,7 +30,7 @@ public class BucketDecorator extends SimpleStructureDecorator
 		rotation = random.nextBoolean();
 		xCoord = pos.getX();
 		zCoord = pos.getZ();
-		yCoord = world.getPrecipitationHeight(pos).getY();
+		yCoord = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, pos).getY();
 		if(world.getBlockState(new BlockPos(xCoord, yCoord -1, zCoord)).getMaterial().isLiquid())
 			return null;
 		yCoord -= random.nextInt(3);
@@ -41,12 +41,12 @@ public class BucketDecorator extends SimpleStructureDecorator
 			liquid = liquidBlocks[random.nextInt(liquidBlocks.length)].getDefaultState();
 		else liquid = provider.blockRegistry.getBlockState(random.nextBoolean() ? "ocean" : "river");
 		
-		StructureBoundingBox boundingBox;
+		/*StructureBoundingBox boundingBox;
 		if(variant)
 			boundingBox = new StructureBoundingBox(rotation?zCoord:xCoord - 2, yCoord, rotation?xCoord:zCoord - 2, rotation?zCoord:xCoord + 3, yCoord + 6, rotation?xCoord:zCoord + 3);
 		else boundingBox = new StructureBoundingBox(rotation?zCoord:xCoord - 2, yCoord, rotation?xCoord:zCoord - 2, rotation?zCoord:xCoord + 2, yCoord + 4, rotation?xCoord:zCoord + 2);
 		if(provider.isBBInSpawn(boundingBox))
-			return null;
+			return null;*/
 		
 		if(variant)
 		{

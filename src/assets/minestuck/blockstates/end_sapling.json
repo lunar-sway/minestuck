@@ -1,8 +1,5 @@
 {
     "variants": {
-        "alpha=false,omega=false":  { "model": "minestuck:end_sapling" },
-        "alpha=true,omega=false":  { "model": "minestuck:end_sapling" },
-        "alpha=false,omega=true":  { "model": "minestuck:end_sapling" },
-        "alpha=true,omega=true":  { "model": "minestuck:end_sapling" }
+        "": { "model": "minestuck:block/end_sapling" }
     }
 }

@@ -1,79 +1,71 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.client.gui.GuiHandler;
+import com.mraof.minestuck.client.gui.GuiComputer;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.util.ComputerProgram;
-import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.state.BlockStateContainer;
+
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.Map.Entry;
 
-public class BlockComputerOn extends BlockComputerOff implements ITileEntityProvider
+public class BlockComputerOn extends BlockComputerOff
 {
-	public static final PropertyBool BSOD = PropertyBool.create("bsod");
+	public static final BooleanProperty BROKEN = MinestuckProperties.BROKEN;
+	public final IItemProvider computerOff;
 	
-	public BlockComputerOn()
+	public BlockComputerOn(Properties properties, Map<EnumFacing, VoxelShape> shape, Map<EnumFacing, VoxelShape> collisionShape, IItemProvider computerOff)
 	{
-		super();
-		setDefaultState(getDefaultState().withProperty(BSOD, false));
+		super(properties, null, shape, collisionShape);
+		this.computerOff = computerOff;
+		setDefaultState(getDefaultState().with(BROKEN, false));
 	}
 	
 	@Override
-	protected BlockStateContainer createBlockState()
+	protected void fillStateContainer(StateContainer.Builder<Block, IBlockState> builder)
 	{
-		return new BlockStateContainer(this, BlockComputerOff.DIRECTION, BSOD);
+		super.fillStateContainer(builder);
+		builder.add(BROKEN);
 	}
 	
 	@Override
-	public int getMetaFromState(IBlockState state)
-	{
-		return (state.getValue(BSOD) ? 1 : 0) + MinestuckBlocks.blockComputerOff.getMetaFromState(state)*2;
-			//TODO: Now that I know about block.getActualState, the bsod doesn't have to be part of the block.
-			//Fix that when there is no need to worry about breaking existing save files
-	}
-	
-	@Override
-	public IBlockState getStateFromMeta(int meta)
-	{
-		return getDefaultState().withProperty(BSOD, meta % 2 == 1).withProperty(BlockComputerOff.DIRECTION, EnumFacing.values()[(meta/2) + 2]);
-	}
-	
-	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
+	public boolean onBlockActivated(IBlockState state, World worldIn, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
 		TileEntityComputer tileEntity = (TileEntityComputer) worldIn.getTileEntity(pos);
 
-		if (tileEntity == null || playerIn.isSneaking())
+		if (tileEntity == null || player.isSneaking())
 		{
 			return false;
 		}
 
-		int id = ComputerProgram.getProgramID(playerIn.getHeldItem(hand));
+		int id = ComputerProgram.getProgramID(player.getHeldItem(hand));
 		if(id != -2 && !tileEntity.hasProgram(id) && tileEntity.installedPrograms.size() < 2 && !tileEntity.hasProgram(-1)) 
 		{
 			if(worldIn.isRemote)
 				return true;
-			playerIn.setHeldItem(hand, ItemStack.EMPTY);
+			player.setHeldItem(hand, ItemStack.EMPTY);
 			if(id == -1) 
 			{
 				tileEntity.closeAll();
-				worldIn.setBlockState(pos, state.withProperty(BSOD, true), 2);
+				worldIn.setBlockState(pos, state.with(BROKEN, true), 2);
 			}
 			else tileEntity.installedPrograms.put(id, true);
 			tileEntity.markDirty();
@@ -82,31 +74,35 @@ public class BlockComputerOn extends BlockComputerOff implements ITileEntityProv
 		}
 
 		if(worldIn.isRemote && SkaiaClient.requestData(tileEntity))
-			playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.COMPUTER.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
-
+			Minecraft.getInstance().displayGuiScreen(new GuiComputer(Minecraft.getInstance(), tileEntity));
+		//TODO Check if this actually is fine
 		return true;
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(World var1, int var2)
+	public boolean hasTileEntity(IBlockState state)
+	{
+		return true;
+	}
+	
+	@Nullable
+	@Override
+	public TileEntity createTileEntity(IBlockState state, IBlockReader world)
 	{
 		return new TileEntityComputer();
 	}
 	
 	@Override
-	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
+	public Item asItem()
 	{
-		ArrayList<ItemStack> list = new ArrayList<ItemStack>();
-		list.add(new ItemStack(MinestuckBlocks.blockComputerOff));
-		
-		return list;
+		return computerOff.asItem();
 	}
 	
 	@Override
-	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
+	public void onReplaced(IBlockState state, World worldIn, BlockPos pos, IBlockState newState, boolean isMoving)
 	{
 		dropItems(worldIn, pos.getX(), pos.getY(), pos.getZ(), state);
-		super.breakBlock(worldIn, pos, state);
+		super.onReplaced(state, worldIn, pos, newState, isMoving);
 	}
 	
 	private void dropItems(World world, int x, int y, int z, IBlockState state)
@@ -121,7 +117,7 @@ public class BlockComputerOn extends BlockComputerOff implements ITileEntityProv
 		float factor = 0.05F;
 
 		Iterator<Entry<Integer, Boolean>> it = te.installedPrograms.entrySet().iterator();
-		while (it.hasNext())
+		while(it.hasNext())
 		{
 			Map.Entry<Integer, Boolean> pairs = it.next();
 			if(!pairs.getValue())
@@ -137,7 +133,7 @@ public class BlockComputerOn extends BlockComputerOff implements ITileEntityProv
 			entityItem.motionZ = rand.nextGaussian() * factor;
 			world.spawnEntity(entityItem);
 		}
-		if(state.getValue(BSOD))
+		if(state.get(BROKEN))
 		{
 			float rx = rand.nextFloat() * 0.8F + 0.1F;
 			float ry = rand.nextFloat() * 0.8F + 0.1F;
@@ -148,10 +144,5 @@ public class BlockComputerOn extends BlockComputerOff implements ITileEntityProv
 			entityItem.motionZ = rand.nextGaussian() * factor;
 			world.spawnEntity(entityItem);
 		}
-	}
-	@Override
-	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player)
-	{
-		return new ItemStack(MinestuckBlocks.blockComputerOff);
 	}
 }

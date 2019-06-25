@@ -1,0 +1,12 @@
+{
+    "variants": {
+        "facing=north,broken=false": { "model": "minestuck:block/laptop_off" },
+        "facing=east,broken=false":  { "model": "minestuck:block/laptop_off", "y": 90 },
+        "facing=south,broken=false": { "model": "minestuck:block/laptop_off", "y": 180 },
+        "facing=west,broken=false":  { "model": "minestuck:block/laptop_off", "y": 270 },
+        "facing=north,broken=true":  { "model": "minestuck:block/laptop_off" },
+        "facing=east,broken=true":   { "model": "minestuck:block/laptop_off", "y": 90 },
+        "facing=south,broken=true":  { "model": "minestuck:block/laptop_off", "y": 180 },
+        "facing=west,broken=true":   { "model": "minestuck:block/laptop_off", "y": 270 }
+    }
+}

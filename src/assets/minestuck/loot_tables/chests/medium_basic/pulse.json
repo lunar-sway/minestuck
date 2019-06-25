@@ -12,6 +12,12 @@
                 },
                 {
                     "type": "item",
+                    "name": "minestuck:razor_blade",
+                    "weight": 4,
+                    "quality": -1
+                },
+                {
+                    "type": "item",
                     "name": "minecraft:beef",
                     "weight": 8,
                     "quality": 0,

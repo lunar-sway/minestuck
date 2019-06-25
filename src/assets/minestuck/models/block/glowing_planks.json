@@ -1,6 +1,6 @@
 {
     "parent": "block/cube_all",
     "textures": {
-        "all": "minestuck:blocks/planks_glowing"
+        "all": "minestuck:block/glowing_planks"
     }
 }

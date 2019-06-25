@@ -7,15 +7,16 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import org.lwjgl.input.Mouse;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
 
 /**
  * @author Kirderf1
  */
+@OnlyIn(Dist.CLIENT)
 public class GuiEcheladder extends GuiPlayerStats
 {
 	
@@ -33,7 +34,7 @@ public class GuiEcheladder extends GuiPlayerStats
 	private static final int timeBeforeAnimation = 10, timeBeforeNext = 16, timeForRung = 4, timeForShowOnly = 65;
 	
 	private int scrollIndex;
-	private boolean wasClicking, isScrolling;
+	private boolean isScrolling;
 	
 	public static int lastRung = -1;	//The current rung last time the gui was opened. Used to determine which rung to display increments from next time the gui is opened
 	public static int animatedRung;	//The rung animated to or the latest to be animated
@@ -59,9 +60,9 @@ public class GuiEcheladder extends GuiPlayerStats
 	}
 	
 	@Override
-	public void drawScreen(int xcor, int ycor, float par3)
+	public void render(int mouseX, int mouseY, float partialTicks)
 	{
-		updateScrollAndAnimation(xcor, ycor);
+		updateScrollAndAnimation(mouseX, mouseY);
 		
 		int currentRung;
 		boolean showLastRung = true;
@@ -96,10 +97,10 @@ public class GuiEcheladder extends GuiPlayerStats
 			}
 		}
 		
-		super.drawScreen(xcor, ycor, par3);
+		super.render(mouseX, mouseY, partialTicks);
 		this.drawDefaultBackground();
 		
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		
 		drawTabs();
 		
@@ -138,7 +139,7 @@ public class GuiEcheladder extends GuiPlayerStats
 			String s = I18n.hasKey("echeladder.rung"+rung) ? I18n.format("echeladder.rung"+rung) : "Rung "+(rung+1);
 			mc.fontRenderer.drawString(s, xOffset+ladderXOffset - mc.fontRenderer.getStringWidth(s) / 2, y + 2, textColor);
 		}
-		GlStateManager.color(1,1,1);
+		GlStateManager.color3f(1,1,1);
 		
 		this.mc.getTextureManager().bindTexture(guiEcheladder);
 		this.drawTexturedModalRect(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
@@ -156,7 +157,7 @@ public class GuiEcheladder extends GuiPlayerStats
 		String msg = I18n.format("gui.echeladder.name");
 		mc.fontRenderer.drawString(msg, xOffset + 168 - mc.fontRenderer.getStringWidth(msg)/2, yOffset + 12, 0x404040);
 		
-		int attack = (int) Math.round(100*Echeladder.attackBonus(currentRung));
+		int attack = (int) Math.round(100*(1 + Echeladder.attackBonus(currentRung)));
 		mc.fontRenderer.drawString(I18n.format("gui.echeladder.attack.name"), xOffset + 24, yOffset + 30, 0x404040);
 		mc.fontRenderer.drawString(attack+"%", xOffset + 26, yOffset + 39, 0x0094FF);
 		
@@ -165,7 +166,7 @@ public class GuiEcheladder extends GuiPlayerStats
 		mc.fontRenderer.drawString(String.valueOf(health), xOffset + 26, yOffset + 93, 0x0094FF);
 		
 		mc.fontRenderer.drawString("=", xOffset + 25, yOffset + 12, 0x404040);	//Should this be black, or the same blue as the numbers?
-		mc.fontRenderer.drawString(String.valueOf(MinestuckPlayerData.boondollars), xOffset + 27 + mc.fontRenderer.getCharWidth('='), yOffset + 12, 0x0094FF);
+		mc.fontRenderer.drawString(String.valueOf(MinestuckPlayerData.boondollars), xOffset + 27 + mc.fontRenderer.getStringWidth("="), yOffset + 12, 0x0094FF);
 		
 		mc.fontRenderer.drawString(I18n.format("gui.echeladder.cache.name"), xOffset + 24, yOffset + 138, 0x404040);
 		mc.fontRenderer.drawString("Unlimited", xOffset + 26, yOffset + 147, 0x0094FF);
@@ -189,7 +190,7 @@ public class GuiEcheladder extends GuiPlayerStats
 				drawRect(xOffset + 5 + 32*(index%2), yOffset + 50 + 15*(index/2), xOffset + 35 + 32*(index%2), yOffset + 62 + 15*(index/2), bg);
 				int strX = xOffset + 20 + 32*(index%2) - mc.fontRenderer.getStringWidth(str)/2, strY = yOffset + 52 + 15*(index/2);
 				mc.fontRenderer.drawString(str, strX, strY, textColor);
-				if(ycor >= strY && ycor < strY + mc.fontRenderer.FONT_HEIGHT && xcor >= strX && xcor < strX + mc.fontRenderer.getStringWidth(str))
+				if(mouseY >= strY && mouseY < strY + mc.fontRenderer.FONT_HEIGHT && mouseX >= strX && mouseX < strX + mc.fontRenderer.getStringWidth(str))
 				{
 					int diff = (int) Math.round(100*Echeladder.attackBonus(rung)*Echeladder.getUnderlingDamageModifier(rung));
 					diff -= Math.round(100*Echeladder.attackBonus(rung - 1)*Echeladder.getUnderlingDamageModifier(rung - 1));
@@ -202,7 +203,7 @@ public class GuiEcheladder extends GuiPlayerStats
 				strX = xOffset + 20 + 32*(index%2) - mc.fontRenderer.getStringWidth(str)/2;
 				strY = yOffset + 106 + 15*(index/2);
 				mc.fontRenderer.drawString(str, strX, strY, textColor);
-				if(ycor >= strY && ycor < strY + mc.fontRenderer.FONT_HEIGHT && xcor >= strX && xcor < strX + mc.fontRenderer.getStringWidth(str))
+				if(mouseY >= strY && mouseY < strY + mc.fontRenderer.FONT_HEIGHT && mouseX >= strX && mouseX < strX + mc.fontRenderer.getStringWidth(str))
 				{
 					int diff = (int) Math.round(1000*Echeladder.getUnderlingProtectionModifier(rung - 1));
 					diff -= Math.round(1000*Echeladder.getUnderlingProtectionModifier(rung));
@@ -211,30 +212,23 @@ public class GuiEcheladder extends GuiPlayerStats
 			}
 		}
 		
-		drawActiveTabAndOther(xcor, ycor);
+		drawActiveTabAndOther(mouseX, mouseY);
 		
 		if(tooltip != null)
-			drawHoveringText(Arrays.asList(tooltip), xcor, ycor);
-		else if(ycor >= yOffset + 39 && ycor < yOffset + 39 + mc.fontRenderer.FONT_HEIGHT && xcor >= xOffset + 26 && xcor < xOffset + 26 + mc.fontRenderer.getStringWidth(attack+"%"))
-			drawHoveringText(Arrays.asList(I18n.format("gui.echeladder.damageUnderling"), Math.round(attack*Echeladder.getUnderlingDamageModifier(currentRung)) + "%"), xcor, ycor);
-		else if(ycor >= yOffset + 93 && ycor < yOffset + 93 + mc.fontRenderer.FONT_HEIGHT && xcor >= xOffset + 26 && xcor < xOffset + 26 + mc.fontRenderer.getStringWidth(String.valueOf(health)))
-			drawHoveringText(Arrays.asList(I18n.format("gui.echeladder.protectionUnderling"), String.format("%.1f", 100*Echeladder.getUnderlingProtectionModifier(currentRung))+"%"), xcor, ycor);
+			drawHoveringText(Arrays.asList(tooltip), mouseX, mouseY);
+		else if(mouseY >= yOffset + 39 && mouseY < yOffset + 39 + mc.fontRenderer.FONT_HEIGHT && mouseX >= xOffset + 26 && mouseX < xOffset + 26 + mc.fontRenderer.getStringWidth(attack+"%"))
+			drawHoveringText(Arrays.asList(I18n.format("gui.echeladder.damageUnderling"), Math.round(attack*Echeladder.getUnderlingDamageModifier(currentRung)) + "%"), mouseX, mouseY);
+		else if(mouseY >= yOffset + 93 && mouseY < yOffset + 93 + mc.fontRenderer.FONT_HEIGHT && mouseX >= xOffset + 26 && mouseX < xOffset + 26 + mc.fontRenderer.getStringWidth(String.valueOf(health)))
+			drawHoveringText(Arrays.asList(I18n.format("gui.echeladder.protectionUnderling"), String.format("%.1f", 100*Echeladder.getUnderlingProtectionModifier(currentRung))+"%"), mouseX, mouseY);
 	}
 	
 	private void updateScrollAndAnimation(int xcor, int ycor)
 	{
-		boolean mouseButtonDown = Mouse.isButtonDown(0);
-		if(!wasClicking && mouseButtonDown && xcor >= xOffset + 80 && xcor < xOffset + 87 && ycor >= yOffset + 42 && ycor < yOffset + 185)
-			isScrolling = true;
-		else if(!mouseButtonDown)
-			isScrolling = false;
-		
 		if(isScrolling)
 		{
 			scrollIndex = (int) (MAX_SCROLL*(ycor - yOffset - 179)/-130F);
 			scrollIndex = MathHelper.clamp(scrollIndex, 0, MAX_SCROLL);
 		}
-		wasClicking = mouseButtonDown;
 		
 		if(animationCycle > 0)
 			if(MinestuckConfig.echeladderAnimation != 0)
@@ -250,37 +244,58 @@ public class GuiEcheladder extends GuiPlayerStats
 	}
 	
 	@Override
-	protected void keyTyped(char typedChar, int keyCode) throws IOException
+	public boolean keyPressed(int keyCode, int scanCode, int i)
 	{
-		super.keyTyped(typedChar, keyCode);
-		
-		if(keyCode == 28 || keyCode == 156)
+		if(keyCode == 28 || keyCode == 156 && animationCycle > 0)
+		{
 			animationCycle = 0;
+			return true;
+		}
+		return super.keyPressed(keyCode, scanCode, i);
 	}
 	
 	@Override
-	public void handleMouseInput() throws IOException
+	public boolean mouseScrolled(double i)
 	{
-		super.handleMouseInput();
-		int i = Mouse.getEventDWheel();
-		
 		if(i != 0)
 		{
 			if(i > 0)
 				scrollIndex += 14;
 			else scrollIndex -= 14;
 			scrollIndex = MathHelper.clamp(scrollIndex, 0, MAX_SCROLL);
+			return true;
 		}
+		else return super.mouseScrolled(i);
 	}
 	
 	@Override
-	protected void mouseClicked(int xcor, int ycor, int mouseButton) throws IOException
+	public boolean mouseClicked(double xcor, double ycor, int mouseButton)
 	{
-		super.mouseClicked(xcor, ycor, mouseButton);
 		if(mouseButton == 0&& xcor >= xOffset + 80 && xcor < xOffset + 87)
+		{
 			if(ycor >= yOffset + 35 && ycor < yOffset + 42)
+			{
 				scrollIndex = MathHelper.clamp(scrollIndex + 14, 0, MAX_SCROLL);
-			else if(ycor >= yOffset + 185 && ycor < yOffset + 192)
+				isScrolling = true;
+				return true;
+			} else if(ycor >= yOffset + 185 && ycor < yOffset + 192)
+			{
 				scrollIndex = MathHelper.clamp(scrollIndex - 14, 0, MAX_SCROLL);
+				isScrolling = true;
+				return true;
+			}
+		}
+		return	super.mouseClicked(xcor, ycor, mouseButton);
+	}
+	
+	@Override
+	public boolean mouseReleased(double mouseX, double mouseY, int mouseButton)
+	{
+		if(isScrolling)
+		{
+			isScrolling = false;
+			return false;
+		}
+		return super.mouseReleased(mouseX, mouseY, mouseButton);
 	}
 }

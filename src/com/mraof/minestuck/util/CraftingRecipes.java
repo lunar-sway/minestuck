@@ -16,7 +16,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
@@ -24,10 +23,7 @@ import net.minecraft.util.registry.RegistryNamespaced;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.common.crafting.IRecipeFactory;
-import net.minecraftforge.common.crafting.JsonContext;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.Map;
 import java.util.Set;
@@ -43,11 +39,11 @@ import static com.mraof.minestuck.item.MinestuckItems.*;
 public class CraftingRecipes
 {
 	private static int nextAvailableId;
-	public static final RegistryNamespaced<ResourceLocation, IRecipe> REGISTRY = net.minecraftforge.registries.GameData.getWrapper(IRecipe.class);
+	//public static final RegistryNamespaced<ResourceLocation, IRecipe> REGISTRY = net.minecraftforge.registries.GameData.getWrapper(IRecipe.class);
 	
 	public static void registerSmelting()
 	{
-		GameRegistry.addSmelting(goldSeeds, new ItemStack(Items.GOLD_NUGGET), 0.1F);
+		/*GameRegistry.addSmelting(goldSeeds, new ItemStack(Items.GOLD_NUGGET), 0.1F);
 		GameRegistry.addSmelting(ironOreEndStone, new ItemStack(Items.IRON_INGOT), 0.7F);
 		GameRegistry.addSmelting(ironOreSandstone, new ItemStack(Items.IRON_INGOT), 0.7F);
 		GameRegistry.addSmelting(ironOreSandstoneRed, new ItemStack(Items.IRON_INGOT), 0.7F);
@@ -71,7 +67,7 @@ public class CraftingRecipes
 		{
 			TileEntityUraniumCooker.setRadiation(ectoSlime, new ItemStack(Items.SLIME_BALL));
 		}
-		
+		*/
 		
 	}
 
@@ -86,14 +82,14 @@ public class CraftingRecipes
     //Forge: Made private use GameData/Registry events!
     private static void register(ResourceLocation name, IRecipe recipe)
     {
-        if (REGISTRY.containsKey(name))
+       /* if (REGISTRY.containsKey(name))
         {
             throw new IllegalStateException("Duplicate recipe ignored with ID " + name);
         }
         else
         {
             REGISTRY.register(nextAvailableId++, name, recipe);
-        }
+        }*/
     }
 
     
@@ -101,7 +97,7 @@ public class CraftingRecipes
 	public static void addOredictionary()
 	{
 		//Register ore dictionary entries
-		OreDictionary.registerOre("oreCoal", coalOreNetherrack);
+		/*OreDictionary.registerOre("oreCoal", coalOreNetherrack);
 		OreDictionary.registerOre("oreCoal", coalOrePinkStone);
 		OreDictionary.registerOre("oreIron", ironOreEndStone);
 		OreDictionary.registerOre("oreIron", ironOreSandstone);
@@ -137,14 +133,14 @@ public class CraftingRecipes
 		OreDictionary.registerOre("treeLeaves",	new ItemStack(leaves1, 1, OreDictionary.WILDCARD_VALUE));
 		
 		OreDictionary.registerOre("cropStrawberry", strawberry);
-		OreDictionary.registerOre("blockCactus", bloomingCactus);
+		OreDictionary.registerOre("blockCactus", bloomingCactus);*/
 	}
 	
 	/**
 	 * Regular recipes can typically be made independent on if the ingredients are put to the left or the right, as long as the shape remains.
 	 * With this class, that possible mirror is not possible, and the recipe will instead only follow the patten exactly.
 	 */
-	public static class NonMirroredRecipe extends ShapedRecipes
+	/*public static class NonMirroredRecipe extends ShapedRecipes
 	{
 		
 		public NonMirroredRecipe(String group, int width, int height, NonNullList<Ingredient> input, ItemStack result)
@@ -202,7 +198,7 @@ public class CraftingRecipes
 	 * Any recipes made out of this instance will not accept captchalogue cards as ingredients, unless said cards are empty and blank.
 	 * Beware that this class extends NoMirroredRecipe.
 	 */
-	public static class EmptyCardRecipe extends NonMirroredRecipe
+	/*public static class EmptyCardRecipe extends NonMirroredRecipe
 	{
 		
 		public EmptyCardRecipe(String group, int width, int height, NonNullList<Ingredient> ingredients, ItemStack result)
@@ -389,5 +385,5 @@ public class CraftingRecipes
 		}
 		
 		public abstract IRecipe initRecipe(String group, int width, int height, NonNullList<Ingredient> ingredients, ItemStack result);
-	}
+	}*/
 }

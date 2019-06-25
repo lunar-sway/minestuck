@@ -1,31 +1,30 @@
 package com.mraof.minestuck.item;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.translation.I18n;
+import net.minecraft.util.*;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemBoondollars extends Item
+public class ItemBoondollars extends Item	//TODO Add custom crafting recipe that merges boondollar stacks
 {
-	public ItemBoondollars()	//TODO Add custom crafting recipe that merges boondollar stacks
+	public ItemBoondollars(Properties properties)
 	{
-		setUnlocalizedName("boondollars");
-		setCreativeTab(TabMinestuck.instance);
-		setMaxStackSize(1);
+		super(properties);
+		this.addPropertyOverride(new ResourceLocation(Minestuck.MOD_ID, "count"), (stack, world, holder) -> getCount(stack));
 	}
 	
 	@Override
@@ -33,15 +32,15 @@ public class ItemBoondollars extends Item
 	{
 		if(!worldIn.isRemote)
 		{
-			MinestuckPlayerData.addBoondollars(playerIn, getCount(playerIn.getHeldItem(handIn)));
+			MinestuckPlayerData.addBoondollars((EntityPlayerMP) playerIn, getCount(playerIn.getHeldItem(handIn)));
 		}
 		return new ActionResult<>(EnumActionResult.SUCCESS, ItemStack.EMPTY);
 	}
 	
 	@Override
-	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
+	public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items)
 	{
-		if(isInCreativeTab(tab))
+		if(isInGroup(group))
 		{
 			items.add(new ItemStack(this));
 			items.add(setCount(new ItemStack(this), 10));
@@ -51,30 +50,30 @@ public class ItemBoondollars extends Item
 		}
 	}
 	
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
 	{
 		int amount = getCount(stack);
-		tooltip.add(I18n.translateToLocalFormatted("item.boondollars.amount", amount));
+		tooltip.add(new TextComponentTranslation("item.boondollars.amount", amount));
 	}
 	
 	public static int getCount(ItemStack stack)
 	{
-		if(!stack.hasTagCompound() || !stack.getTagCompound().hasKey("value", 99))
+		if(!stack.hasTag() || !stack.getTag().contains("value", 99))
 			return 1;
-		else return stack.getTagCompound().getInteger("value");
+		else return stack.getTag().getInt("value");
 	}
 	
 	public static ItemStack setCount(ItemStack stack, int value)
 	{
-		NBTTagCompound nbt = stack.getTagCompound();
+		NBTTagCompound nbt = stack.getTag();
 		if(nbt == null)
 		{
 			nbt = new NBTTagCompound();
-			stack.setTagCompound(nbt);
+			stack.setTag(nbt);
 		}
-		nbt.setInteger("value", value);
+		nbt.setInt("value", value);
 		return stack;
 	}
 }

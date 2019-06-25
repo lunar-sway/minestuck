@@ -7,6 +7,7 @@ import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.Pair;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -14,9 +15,10 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class InventoryConsortMerchant implements IInventory
@@ -33,17 +35,17 @@ public class InventoryConsortMerchant implements IInventory
 		consortType = consort.getConsortType();
 		merchantType = consort.merchantType;
 		
-		for(int i = 0; i < list.tagCount() && i < 9; i++)
+		for(int i = 0; i < list.size() && i < 9; i++)
 		{
-			NBTTagCompound nbt = list.getCompoundTagAt(i);
-			ItemStack stack = new ItemStack(nbt);
+			NBTTagCompound nbt = list.getCompound(i);
+			ItemStack stack = ItemStack.read(nbt);
 			inv.set(i, stack);
 			if(!stack.isEmpty())
-				prices[i] = nbt.getInteger("price");
+				prices[i] = nbt.getInt("price");
 		}
 	}
 	
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public InventoryConsortMerchant()
 	{
 	}
@@ -62,7 +64,7 @@ public class InventoryConsortMerchant implements IInventory
 		}
 	}
 	
-	protected void handlePurchase(EntityPlayer player, boolean all, int index)
+	protected void handlePurchase(EntityPlayerMP player, boolean all, int index)
 	{
 		if (!player.world.isRemote && index >= 0 && index < inv.size())
 		{
@@ -77,7 +79,7 @@ public class InventoryConsortMerchant implements IInventory
 			} else
 			{
 				MinestuckPlayerData.addBoondollars(player, -(amountPurchased * prices[index]));
-				ItemStack items = stack.splitStack(amountPurchased);
+				ItemStack items = stack.split(amountPurchased);
 				
 				if (!player.addItemStackToInventory(items))
 				{
@@ -97,9 +99,9 @@ public class InventoryConsortMerchant implements IInventory
 		NBTTagList list = new NBTTagList();
 		for (int i = 0; i < 9; i++)
 		{
-			NBTTagCompound nbt = inv.get(i).writeToNBT(new NBTTagCompound());
-			nbt.setInteger("price", prices[i]);
-			list.appendTag(nbt);
+			NBTTagCompound nbt = inv.get(i).write(new NBTTagCompound());
+			nbt.setInt("price", prices[i]);
+			list.add(nbt);
 		}
 		return list;
 	}
@@ -224,10 +226,18 @@ public class InventoryConsortMerchant implements IInventory
 			prices[i] = 0;
 	}
 	
+	
 	@Override
-	public String getName()
+	public ITextComponent getName()
 	{
 		return null;	//TODO
+	}
+	
+	@Nullable
+	@Override
+	public ITextComponent getCustomName()
+	{
+		return null;
 	}
 	
 	@Override

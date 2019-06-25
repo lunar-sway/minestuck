@@ -13,8 +13,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.fml.common.FMLLog;
 
 import java.util.*;
 
@@ -103,7 +103,6 @@ public class LandAspectRegistry
 	
 	/**
 	 * Generates a random land aspect, weighted based on a player's title.
-	 * @param playerTitle
 	 * @return
 	 */
 	public TerrainLandAspect getTerrainAspect(TitleLandAspect aspect2, List<TerrainLandAspect> usedAspects)
@@ -262,10 +261,10 @@ public class LandAspectRegistry
 	 * <code>ItemCruxiteArtifact</code> is the recommended teleporter for Entry.
 	 * @return Returns the dimension of the player's Land, or -1 if Entry fails.
 	 */
-	public static int createLand(EntityPlayer player, Teleport.ITeleporter teleport)
+	public static DimensionType createLand(EntityPlayer player, Teleport.ITeleporter teleport)
 	{
 		
-		int newLandId = MinestuckDimensionHandler.landDimensionIdStart;
+		/*int newLandId = MinestuckDimensionHandler.landDimensionIdStart;
 		
 		while (true)
 		{
@@ -289,7 +288,8 @@ public class LandAspectRegistry
 		
 		MinestuckPlayerTracker.updateLands();
 		
-		return newLandId;
+		return newLandId;*/
+		return null;
 	}
 	
 	/**
@@ -300,20 +300,6 @@ public class LandAspectRegistry
 		return list[random.nextInt(list.length)];
 	}
 	
-	public static class AspectCombination
-	{
-		public AspectCombination(TerrainLandAspect terrainAspect, TitleLandAspect titleAspect)
-		{
-			if(terrainAspect == null || titleAspect == null)
-				throw new IllegalArgumentException("Parameters may not be null");
-			this.aspectTerrain = terrainAspect;
-			this.aspectTitle = titleAspect;
-		}
-		public TerrainLandAspect aspectTerrain;
-		/**
-		 * Not to be confused with EnumAspect.
-		 */
-		public TitleLandAspect aspectTitle;
-	}
+	
 	
 }

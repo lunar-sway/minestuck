@@ -2,7 +2,6 @@ package com.mraof.minestuck.world.lands.structure.village;
 
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import net.minecraft.block.BlockDirt;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -10,16 +9,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Rotation;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.StructureBoundingBox;
-import net.minecraft.world.gen.structure.StructureComponent;
-import net.minecraft.world.gen.structure.template.TemplateManager;
 
 import java.util.List;
 import java.util.Random;
 
 public class ConsortVillageIguana
 {
-	public static class SmallTent1 extends ConsortVillageComponents.ConsortVillagePiece
+	/*public static class SmallTent1 extends ConsortVillageComponents.ConsortVillagePiece
 	{
 		private int woolType = 1;
 		
@@ -342,5 +338,5 @@ public class ConsortVillageIguana
 			
 			return true;
 		}
-	}
+	}*/
 }

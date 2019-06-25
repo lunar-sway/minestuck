@@ -4,9 +4,8 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.network.MinestuckChannelHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.MinestuckPacket.Type;
+import com.mraof.minestuck.network.ClientEditPacket;
+import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import net.minecraft.block.Block;
@@ -18,14 +17,12 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.InventoryEffectRenderer;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.*;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
@@ -33,9 +30,9 @@ import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.fml.common.eventhandler.Event.Result;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 
@@ -63,13 +60,13 @@ public class ClientEditHandler {
 	
 	public static void onKeyPressed()
 	{
-		MinestuckPacket packet = MinestuckPacket.makePacket(Type.CLIENT_EDIT);
-		MinestuckChannelHandler.sendToServer(packet);
+		ClientEditPacket packet = ClientEditPacket.exit();
+		MinestuckPacketHandler.sendToServer(packet);
 	}
 	
 	public static void onClientPackage(String target, int posX, int posZ, boolean[] items, NBTTagCompound deployList)
 	{
-		Minecraft mc = Minecraft.getMinecraft();
+		Minecraft mc = Minecraft.getInstance();
 		EntityPlayerSP player = mc.player;
 		if(target != null) {	//Enable edit mode
 			activated = true;
@@ -103,7 +100,7 @@ public class ClientEditHandler {
 		
 	}
 	
-	static void addToolTip(ItemStack stack, List<String> toolTip, GristSet have, boolean[] givenItems)
+	static void addToolTip(ItemStack stack, List<ITextComponent> toolTip, GristSet have, boolean[] givenItems)
 	{
 		
 		GristSet cost;
@@ -111,29 +108,29 @@ public class ClientEditHandler {
 		if(deployEntry != null)
 			cost = givenItems[deployEntry.getIndex()]
 					? deployEntry.getSecondaryCost() : deployEntry.getPrimaryCost();
-		else if(stack.getItem().equals(MinestuckItems.captchaCard))
+		else if(stack.getItem().equals(MinestuckItems.CAPTCHA_CARD))
 			cost = new GristSet();
-		else cost = GristRegistry.getGristConversion(stack);
+		else cost = AlchemyCostRegistry.getGristConversion(stack);
 		
 		if(cost == null)
 		{
-			toolTip.add(TextFormatting.RED + I18n.format("gui.notAvailable"));
+			toolTip.add(new TextComponentTranslation("gui.notAvailable").setStyle(new Style().setColor(TextFormatting.RED)));
 			return;
 		}
 		
 		for(Entry<GristType, Integer> entry : cost.getMap().entrySet())
 		{
 			GristType grist = entry.getKey();
-			String s = "" + (entry.getValue() <= have.getGrist(grist) ? TextFormatting.GREEN : TextFormatting.RED);
-			toolTip.add(s + entry.getValue() + " " + grist.getDisplayName() + " (" + have.getGrist(grist) + ")");
+			TextFormatting color = entry.getValue() <= have.getGrist(grist) ? TextFormatting.GREEN : TextFormatting.RED;
+			toolTip.add(new TextComponentString(entry.getValue()+" ").appendSibling(grist.getDisplayName()).appendText(" ("+have.getGrist(grist) + ")").setStyle(new Style().setColor(color)));
 		}
 		if(cost.isEmpty())
-			toolTip.add(TextFormatting.GREEN + I18n.format("gui.free"));
+			toolTip.add(new TextComponentTranslation("gui.free").setStyle(new Style().setColor(TextFormatting.GREEN)));
 	}
 	
 	@SubscribeEvent
 	public void tickEnd(PlayerTickEvent event) {
-		if(event.phase != TickEvent.Phase.END || event.player != Minecraft.getMinecraft().player || !isActive())
+		if(event.phase != TickEvent.Phase.END || event.player != Minecraft.getInstance().player || !isActive())
 			return;
 		EntityPlayer player = event.player;
 		
@@ -164,26 +161,26 @@ public class ClientEditHandler {
 				if(!inventory.getItemStack().isEmpty())
 					inventory.setItemStack(ItemStack.EMPTY);
 				else inventory.setInventorySlotContents(inventory.currentItem, ItemStack.EMPTY);
-				event.getEntityItem().setDead();
+				event.getEntityItem().remove();
 			}
 		}
 	}
 	
 	@SubscribeEvent
 	public void onItemPickupEvent(EntityItemPickupEvent event) {
-		if(event.getEntity().world.isRemote && isActive() && event.getEntityPlayer().equals(Minecraft.getMinecraft().player))
+		if(event.getEntity().world.isRemote && isActive() && event.getEntityPlayer().equals(Minecraft.getInstance().player))
 			event.setCanceled(true);
 	}
 	
-	@SubscribeEvent(priority=EventPriority.NORMAL)
+	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public void onRightClickEvent(PlayerInteractEvent.RightClickBlock event)
 	{
 		if(event.getWorld().isRemote && event.getEntityPlayer().isUser() && isActive())
 		{
 			Block block = event.getWorld().getBlockState(event.getPos()).getBlock();
 			ItemStack stack = event.getEntityPlayer().getHeldItemMainhand();
-			event.setUseBlock((block instanceof BlockDoor || block instanceof BlockTrapDoor || block instanceof BlockFenceGate) ? Result.ALLOW : Result.DENY);
-			if(event.getUseBlock() == Result.ALLOW)
+			event.setUseBlock((block instanceof BlockDoor || block instanceof BlockTrapDoor || block instanceof BlockFenceGate) ? Event.Result.ALLOW : Event.Result.DENY);
+			if(event.getUseBlock() == Event.Result.ALLOW)
 				return;
 			if(event.getHand().equals(EnumHand.OFF_HAND) || !ServerEditHandler.isBlockItem(stack.getItem()))
 			{
@@ -197,7 +194,7 @@ public class ClientEditHandler {
 				if(givenItems[entry.getIndex()])
 					cost = entry.getSecondaryCost();
 				else cost = entry.getPrimaryCost();
-			else cost = GristRegistry.getGristConversion(stack);
+			else cost = AlchemyCostRegistry.getGristConversion(stack);
 			if(!GristHelper.canAfford(MinestuckPlayerData.getClientGrist(), cost)) {
 				StringBuilder str = new StringBuilder();
 				if(cost != null)
@@ -212,8 +209,8 @@ public class ClientEditHandler {
 				}
 				event.setCanceled(true);
 			}
-			if(event.getUseItem() == Result.DEFAULT)
-				event.setUseItem(Result.ALLOW);
+			if(event.getUseItem() == Event.Result.DEFAULT)
+				event.setUseItem(Event.Result.ALLOW);
 		}
 	}
 	
@@ -224,7 +221,7 @@ public class ClientEditHandler {
 		{
 			IBlockState block = event.getWorld().getBlockState(event.getPos());
 			if(block.getBlockHardness(event.getWorld(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
-					|| MinestuckPlayerData.getClientGrist().getGrist(GristType.Build) <= 0)
+					|| MinestuckPlayerData.getClientGrist().getGrist(GristType.BUILD) <= 0)
 				event.setCanceled(true);
 		}
 	}
@@ -241,8 +238,8 @@ public class ClientEditHandler {
 	@SubscribeEvent(priority=EventPriority.LOWEST,receiveCanceled=false)
 	public void onBlockPlaced(PlayerInteractEvent.RightClickBlock event)
 	{
-		if(event.getWorld().isRemote && isActive() && event.getEntityPlayer().equals(Minecraft.getMinecraft().player)
-				&& event.getUseItem() == Result.ALLOW) {
+		if(event.getWorld().isRemote && isActive() && event.getEntityPlayer().equals(Minecraft.getInstance().player)
+				&& event.getUseItem() == Event.Result.ALLOW) {
 			ItemStack stack = event.getEntityPlayer().getHeldItemMainhand();
 			DeployList.ClientDeployEntry entry = DeployList.getEntryClient(stack);
 			if(entry != null)
@@ -260,7 +257,7 @@ public class ClientEditHandler {
 	@SubscribeEvent
 	public void onWorldUnload(WorldEvent.Unload event)
 	{
-		if(event.getWorld().isRemote)
+		if(event.getWorld().isRemote())
 			activated = false;
 	}
 	

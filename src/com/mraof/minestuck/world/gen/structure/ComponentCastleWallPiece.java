@@ -6,9 +6,6 @@ import java.util.Random;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.StructureBoundingBox;
-import net.minecraft.world.gen.structure.StructureComponent;
-import net.minecraft.world.gen.structure.template.TemplateManager;
 
 import com.mraof.minestuck.util.Debug;
 
@@ -16,7 +13,7 @@ public class ComponentCastleWallPiece extends ComponentCastlePiece
 {
 	boolean cornerPiece;
 	public ComponentCastleWallPiece() {}
-	protected ComponentCastleWallPiece(int par1, ComponentCastleStartPiece startPiece, StructureBoundingBox structureboundingbox, int direction, boolean cornerPiece) 
+	/*protected ComponentCastleWallPiece(int par1, ComponentCastleStartPiece startPiece, StructureBoundingBox structureboundingbox, int direction, boolean cornerPiece)
 	{
 		super(par1, startPiece);
 		this.boundingBox = structureboundingbox;
@@ -197,5 +194,5 @@ public class ComponentCastleWallPiece extends ComponentCastlePiece
 	{
 		// TODO Auto-generated method stub
 		
-	}
+	}*/
 }

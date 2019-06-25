@@ -1,6 +1,6 @@
 {
     "parent": "block/crop",
     "textures": {
-        "crop": "minestuck:blocks/gold_seeds"
+        "crop": "minestuck:block/gold_seeds"
     }
 }

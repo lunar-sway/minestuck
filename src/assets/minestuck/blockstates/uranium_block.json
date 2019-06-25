@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "minestuck:uranium_block" }
+        "": { "model": "minestuck:block/uranium_block" }
     }
 }

@@ -6,6 +6,7 @@ import java.util.Set;
 
 import com.google.common.collect.Lists;
 import com.mraof.minestuck.entity.EntityFrog;
+import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.item.MinestuckItems;
 
 import net.minecraft.item.ItemStack;
@@ -24,20 +25,22 @@ public class EntityShopPoster extends EntityHangingArt<EntityShopPoster.ShopArt>
 	
 	public EntityShopPoster(World worldIn)
 	{
-		super(worldIn);
+		super(ModEntityTypes.SHOP_POSTER, worldIn);
 	}
 	
-	protected void entityInit()
-    {
-        super.entityInit();
-        this.dataManager.register(TYPE, 0);
-        
-    }
 	
 	public EntityShopPoster(World worldIn, BlockPos pos, EnumFacing facing, ItemStack stack, int meta)
 	{
-		super(worldIn, pos, facing, stack, meta, false);
-		setType(meta);
+		super(ModEntityTypes.SHOP_POSTER, worldIn, pos, facing, stack, meta, false);
+		setPosterType(meta);
+	}
+	
+	@Override
+	protected void registerData()
+	{
+		super.registerData();
+		this.dataManager.register(TYPE, 0);
+		
 	}
 	
 	@Override
@@ -55,35 +58,37 @@ public class EntityShopPoster extends EntityHangingArt<EntityShopPoster.ShopArt>
 	@Override
 	public ItemStack getStackDropped()
 	{
-		return new ItemStack(MinestuckItems.shopPoster, 1, getType());
+		return new ItemStack(MinestuckItems.SHOP_POSTER);//, 1, getPosterType()); TODO poster subtypes
 	}
 	
-	private void setType(int i) 
+	private void setPosterType(int i)
     {
     	this.dataManager.set(TYPE, i);
 	}
 
-	public int getType() 
+	public int getPosterType()
 	{
 		return this.dataManager.get(TYPE);
 	}
 	
 	//NBT
-		public void writeEntityToNBT(NBTTagCompound compound)
-	    {
-	        super.writeEntityToNBT(compound);
-	        compound.setInteger("Type", this.getType());
-	    }
-
-	    public void readEntityFromNBT(NBTTagCompound compound)
-	    {
-	        super.readEntityFromNBT(compound);
-	        
-	        if(compound.hasKey("Type")) setType(compound.getInteger("Type"));
-	        else setType(0);
-	    }
 	
-	public static enum ShopArt implements EntityHangingArt.IArt
+	@Override
+	public void writeAdditional(NBTTagCompound compound)
+	{
+		super.writeAdditional(compound);
+		compound.setInt("Type", this.getPosterType());
+	}
+	
+	@Override
+	public void readAdditional(NBTTagCompound compound)
+	{
+		super.readAdditional(compound);
+		if(compound.hasKey("Type")) setPosterType(compound.getInt("Type"));
+		else setPosterType(0);
+	}
+	
+	public enum ShopArt implements EntityHangingArt.IArt
 	{
 		FRAYMOTIFS("Fraymotifs", 48, 48, 0, 0),
 		FOOD("Food", 48, 48, 48, 0),

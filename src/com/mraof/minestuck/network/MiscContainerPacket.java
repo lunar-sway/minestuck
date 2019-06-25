@@ -1,51 +1,48 @@
 package com.mraof.minestuck.network;
 
-import io.netty.buffer.ByteBuf;
-
-import java.util.EnumSet;
-
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.inventory.ContainerHandler;
-
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class MiscContainerPacket extends MinestuckPacket
+import java.util.function.Supplier;
+
+public class MiscContainerPacket
 {
 	
 	int i;
 	
-	@Override
-	public MinestuckPacket generatePacket(Object... data)
+	public MiscContainerPacket(int i)
 	{
-		this.data.writeInt((Integer) data[0]);
-		return this;
+		this.i = i;
 	}
-
-	@Override
-	public MinestuckPacket consumePacket(ByteBuf data)
+	
+	public void encode(PacketBuffer buffer)
 	{
-		i = data.readInt();
-		return this;
+		buffer.writeInt(i);
 	}
-
-	@Override
-	public void execute(EntityPlayer player)
+	
+	public static MiscContainerPacket decode(PacketBuffer buffer)
 	{
-		if(player instanceof EntityPlayerMP)
-		{
-			EntityPlayerMP playerMP = (EntityPlayerMP) player;
-			playerMP.openContainer = ContainerHandler.getPlayerStatsContainer(playerMP, i, ServerEditHandler.getData(playerMP) != null);
-			playerMP.openContainer.windowId = ContainerHandler.windowIdStart + i;
-			playerMP.addSelfToInternalCraftingInventory();	//Must be placed after setting the window id!!
-		}
+		int i = buffer.readInt();
+		
+		return new MiscContainerPacket(i);
 	}
-
-	@Override
-	public EnumSet<Side> getSenderSide()
+	
+	public void consume(Supplier<NetworkEvent.Context> ctx)
 	{
-		return EnumSet.of(Side.CLIENT);
+		if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER)
+			ctx.get().enqueueWork(() -> this.execute(ctx.get().getSender()));
+		
+		ctx.get().setPacketHandled(true);
 	}
-
+	
+	public void execute(EntityPlayerMP player)
+	{
+		player.openContainer = ContainerHandler.getPlayerStatsContainer(player, i, ServerEditHandler.getData(player) != null);
+		player.openContainer.windowId = ContainerHandler.windowIdStart + i;
+		player.addSelfToInternalCraftingInventory();    //Must be placed after setting the window id!!
+	}
 }

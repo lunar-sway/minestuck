@@ -9,6 +9,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.Heightmap;
 
 public class LayeredBlockDecorator implements ILandDecorator
 {
@@ -53,8 +54,8 @@ public class LayeredBlockDecorator implements ILandDecorator
 		for(int x = 0; x < 24; x++)
 			for(int z = 0; z < 24; z++)
 			{
-				BlockPos pos = world.getTopSolidOrLiquidBlock(new BlockPos(x + 4 + (chunkX << 4), 0, z + 4 + (chunkZ << 4)));
-				if(world.getBlockState(pos).getBlock().isAir(world.getBlockState(pos), world, pos) && block.canPlaceBlockAt(world, pos))
+				BlockPos pos = world.getHeight(Heightmap.Type.WORLD_SURFACE, new BlockPos(x + 4 + (chunkX << 4), 0, z + 4 + (chunkZ << 4)));
+				//if(world.getBlockState(pos).getBlock().isAir(world.getBlockState(pos), world, pos) && block.canPlaceBlockAt(world, pos))
 					setBlock(world, pos, 1);
 			}
 		return null;
@@ -69,7 +70,7 @@ public class LayeredBlockDecorator implements ILandDecorator
 	private void setBlock(World world, BlockPos pos, int height)
 	{
 		if(world.getBlockState(pos).getBlock() == block)
-			height += block.getMetaFromState(world.getBlockState(pos)) + 1;
+			//height += block.getMetaFromState(world.getBlockState(pos)) + 1;
 		if(height <= 0)
 			return;
 		int nextHeight = 0;
@@ -81,12 +82,12 @@ public class LayeredBlockDecorator implements ILandDecorator
 		
 		if(height == 8)
 		{
-			IBlockState fullBlock = ((BlockLayered) block).sourceBlock;
+			IBlockState fullBlock = ((BlockLayered) block).sourceBlock.getDefaultState();
 			world.setBlockState(pos, fullBlock, 2);
 		}
 		else
 		{
-			world.setBlockState(pos, block.getStateFromMeta(height - 1), 2);
+			//world.setBlockState(pos, block.getStateFromMeta(height - 1), 2);
 		}
 		
 		if(nextHeight > 0)

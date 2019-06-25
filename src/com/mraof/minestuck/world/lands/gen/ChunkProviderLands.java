@@ -6,7 +6,7 @@ import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.tileentity.TileEntityGate;
 import com.mraof.minestuck.world.GateHandler;
-import com.mraof.minestuck.world.WorldProviderLands;
+import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
@@ -21,21 +21,17 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.Biome.BiomeProperties;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.IChunkGenerator;
-import net.minecraft.world.gen.structure.MapGenStructure;
-import net.minecraft.world.gen.structure.StructureBoundingBox;
 
 import javax.annotation.Nullable;
 import java.util.*;
 
-public class ChunkProviderLands implements IChunkGenerator
+public abstract class ChunkProviderLands implements IChunkGenerator
 {
 	List<SpawnListEntry> consortList;
 	public List<SpawnListEntry> monsterList;
@@ -51,12 +47,12 @@ public class ChunkProviderLands implements IChunkGenerator
 	public int nameIndex1, nameIndex2;
 	public boolean nameOrder;
 	
-	public final StructureBlockRegistry blockRegistry;
+	public final StructureBlockRegistry blockRegistry = null;
 	public List<ILandDecorator> decorators;
 	public ILandTerrainGen terrainGenerator;
 	public MapGenLandStructure structureHandler;
 	public MapGenConsortVillage villageHandler;
-	public MapGenStructure customHandler;
+	//public MapGenStructure customHandler;
 	public int weatherType;	//-1:No weather &1: Force rain &2: If thunder &4: Force thunder
 	public float rainfall, temperature;
 	public float oceanChance;
@@ -64,10 +60,10 @@ public class ChunkProviderLands implements IChunkGenerator
 	protected Biome biomeLands;
 	
 	public boolean generatingStructure;
-	public final WorldProviderLands worldProvider;
-
+	public final LandDimension worldProvider = null;
+/*
 	@SuppressWarnings("unchecked")
-	public ChunkProviderLands(World worldObj, WorldProviderLands worldProvider, boolean clientSide)
+	public ChunkProviderLands(World worldObj, LandDimension worldProvider, boolean clientSide)
 	{
 		this.worldProvider = worldProvider;
 		
@@ -115,7 +111,7 @@ public class ChunkProviderLands implements IChunkGenerator
 	
 	public void createBiomeGen()
 	{
-		BiomeProperties properties = new BiomeProperties(((WorldProviderLands)this.landWorld.provider).getDimensionName()).setTemperature(temperature).setRainfall(rainfall).setBaseBiome("medium");
+		BiomeProperties properties = new BiomeProperties(((LandDimension)this.landWorld.provider).getDimensionName()).setTemperature(temperature).setRainfall(rainfall).setBaseBiome("medium");
 		if(temperature <= 0.1)
 			properties.setSnowEnabled();
 		biomeLands = new BiomeMinestuck(properties).setRegistryName("minestuck", "medium");
@@ -332,5 +328,5 @@ public class ChunkProviderLands implements IChunkGenerator
 	public IBlockState getOceanBlock()
 	{
 		return blockRegistry.getBlockState("ocean");
-	}
+	}*/
 }
