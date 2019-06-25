@@ -27,16 +27,16 @@ import java.util.Map;
 
 public class BlockTotemLathe extends BlockMultiMachine
 {
-	public static final Map<EnumFacing, VoxelShape> CARD_SLOT_SHAPE = createRotatedShapes(0, 0, 1, 16, 16, 13);
-	public static final Map<EnumFacing, VoxelShape> BOTTOM_LEFT_SHAPE = createRotatedShapes(0, 0, 0, 16, 16, 12);
-	public static final Map<EnumFacing, VoxelShape> BOTTOM_RIGHT_SHAPE = createRotatedShapes(0, 0, 0, 16, 12, 12);
-	public static final Map<EnumFacing, VoxelShape> BOTTOM_CORNER_SHAPE = createRotatedShapes(0, 0, 1, 12, 16, 11);
-	public static final Map<EnumFacing, VoxelShape> MIDDLE_SHAPE = createRotatedShapes(0, 0, 1, 16, 16, 12);
-	public static final Map<EnumFacing, VoxelShape> WHEEL_SHAPE = createRotatedShapes(0, 0, 3, 14, 10, 9);
-	public static final Map<EnumFacing, VoxelShape> ROD_SHAPE = createRotatedShapes(0, 4, 3, 16, 10, 9);
-	public static final Map<EnumFacing, VoxelShape> TOP_CORNER_SHAPE = createRotatedShapes(0, 0, 1, 16, 16, 11);
-	public static final Map<EnumFacing, VoxelShape> TOP_SHAPE = createRotatedShapes(0, 3, 1, 16, 16, 11);
-	public static final Map<EnumFacing, VoxelShape> CARVER_SHAPE = createRotatedShapes(10, 0, 1, 16, 16, 11);
+	public static final Map<EnumFacing, VoxelShape> CARD_SLOT_SHAPE = createRotatedShapes(0, 0, 3, 16, 16, 15);
+	public static final Map<EnumFacing, VoxelShape> BOTTOM_LEFT_SHAPE = createRotatedShapes(0, 0, 4, 16, 16, 16);
+	public static final Map<EnumFacing, VoxelShape> BOTTOM_RIGHT_SHAPE = createRotatedShapes(0, 0, 4, 16, 12, 16);
+	public static final Map<EnumFacing, VoxelShape> BOTTOM_CORNER_SHAPE = createRotatedShapes(4, 0, 5, 16, 16, 15);
+	public static final Map<EnumFacing, VoxelShape> MIDDLE_SHAPE = createRotatedShapes(0, 0, 4, 16, 16, 15);
+	public static final Map<EnumFacing, VoxelShape> WHEEL_SHAPE = createRotatedShapes(0, 0, 7, 14, 10, 13);
+	public static final Map<EnumFacing, VoxelShape> ROD_SHAPE = createRotatedShapes(0, 4, 7, 16, 10, 13);
+	public static final Map<EnumFacing, VoxelShape> TOP_CORNER_SHAPE = createRotatedShapes(0, 0, 5, 16, 16, 15);
+	public static final Map<EnumFacing, VoxelShape> TOP_SHAPE = createRotatedShapes(0, 3, 5, 16, 16, 15);
+	public static final Map<EnumFacing, VoxelShape> CARVER_SHAPE = createRotatedShapes(6, 0, 5, 16, 16, 15);
 	
 	
 	protected final Map<EnumFacing, VoxelShape> shape;
@@ -184,6 +184,12 @@ public class BlockTotemLathe extends BlockMultiMachine
 		{
 			super.fillStateContainer(builder);
 			builder.add(DOWEL);
+		}
+		
+		@Override
+		public BlockRenderLayer getRenderLayer()
+		{
+			return BlockRenderLayer.CUTOUT;
 		}
 	}
 	

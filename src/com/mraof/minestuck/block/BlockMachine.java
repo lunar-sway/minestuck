@@ -47,6 +47,12 @@ public abstract class BlockMachine extends Block
 	}
 	
 	@Override
+	public boolean isSolid(IBlockState state)
+	{
+		return false;
+	}
+	
+	@Override
 	public EnumPushReaction getPushReaction(IBlockState state)
 	{
 		return EnumPushReaction.BLOCK;

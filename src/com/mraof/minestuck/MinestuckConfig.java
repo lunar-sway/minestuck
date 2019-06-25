@@ -88,7 +88,7 @@ public class MinestuckConfig
 	public static int modusMaxSize;
 	public static int cardCost;
 	public static int oreMultiplier;
-	public static int alchemiterMaxStacks;
+	public static int alchemiterMaxStacks = 16;
 	/**
 	 * 0: Make the player's new server player his/her old server player's server player
 	 * 1: The player that lost his/her server player will have an idle main connection until someone without a client player connects to him/her.

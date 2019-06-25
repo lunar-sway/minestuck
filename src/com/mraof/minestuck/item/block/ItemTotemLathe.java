@@ -93,6 +93,12 @@ public class ItemTotemLathe extends ItemBlock
 		{
 			EnumFacing facing = context.getPlacementHorizontalFacing().getOpposite();
 			
+			pos = pos.offset(facing.rotateY());
+			
+			if(facing == EnumFacing.EAST && context.getHitZ() >= 0.5F || facing == EnumFacing.WEST && context.getHitZ() < 0.5F
+					|| facing == EnumFacing.SOUTH && context.getHitX() < 0.5F || facing == EnumFacing.NORTH && context.getHitX() >= 0.5F)
+				pos = pos.offset(facing.rotateY());
+			
 			world.setBlockState(pos, MinestuckBlocks.TOTEM_LATHE.CARD_SLOT.getDefaultState().with(BlockTotemLathe.FACING, facing));
 			world.setBlockState(pos.offset(facing.rotateYCCW(),1), MinestuckBlocks.TOTEM_LATHE.BOTTOM_LEFT.getDefaultState().with(BlockTotemLathe.FACING, facing));
 			world.setBlockState(pos.offset(facing.rotateYCCW(),2), MinestuckBlocks.TOTEM_LATHE.BOTTOM_RIGHT.getDefaultState().with(BlockTotemLathe.FACING, facing));

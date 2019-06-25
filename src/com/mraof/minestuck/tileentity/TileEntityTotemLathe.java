@@ -38,13 +38,19 @@ public class TileEntityTotemLathe extends TileEntity
 	//data checking
 	public void setCard1(ItemStack stack)
 	{
+		if(!card2.isEmpty())
+			throw new IllegalStateException("Cannot set first card with the second card!");
+		
 		if(stack.getItem() == MinestuckItems.CAPTCHA_CARD || stack.isEmpty())
 		{
 			card1 = stack;
 			if(world != null)
 			{
 				IBlockState state = world.getBlockState(pos);
-				world.notifyBlockUpdate(pos, state, state, 2);
+				if(!card1.isEmpty())
+					state = state.with(BlockTotemLathe.Slot.COUNT, 1);
+				else state = state.with(BlockTotemLathe.Slot.COUNT, 0);
+				world.setBlockState(pos, state, 2);
 			}
 		}
 	}
@@ -57,13 +63,19 @@ public class TileEntityTotemLathe extends TileEntity
 	
 	public void setCard2(ItemStack stack)
 	{
+		if(card1.isEmpty())
+			throw new IllegalStateException("Cannot set second card without the first card!");
+		
 		if(stack.getItem() == MinestuckItems.CAPTCHA_CARD || stack.isEmpty())
 		{
 			card2 = stack;
 			if(world != null)
 			{
 				IBlockState state = world.getBlockState(pos);
-				world.notifyBlockUpdate(pos, state, state, 2);
+				if(!card2.isEmpty())
+					state = state.with(BlockTotemLathe.Slot.COUNT, 2);
+				else state = state.with(BlockTotemLathe.Slot.COUNT, 1);
+				world.setBlockState(pos, state, 2);
 			}
 		}
 	}
@@ -238,7 +250,7 @@ public class TileEntityTotemLathe extends TileEntity
 			return;
 		EnumFacing facing = getFacing();
 		
-		if(	!world.getBlockState(getPos()).equals(MinestuckBlocks.TOTEM_LATHE.CARD_SLOT.getDefaultState().with(BlockTotemLathe.FACING, facing)) ||
+		if(	//!world.getBlockState(getPos()).equals(MinestuckBlocks.TOTEM_LATHE.CARD_SLOT.getDefaultState().with(BlockTotemLathe.FACING, facing)) ||
 			!world.getBlockState(getPos().offset(facing.rotateYCCW(),1)).equals(MinestuckBlocks.TOTEM_LATHE.BOTTOM_LEFT.getDefaultState().with(BlockTotemLathe.FACING, facing)) ||
 			!world.getBlockState(getPos().offset(facing.rotateYCCW(),2)).equals(MinestuckBlocks.TOTEM_LATHE.BOTTOM_RIGHT.getDefaultState().with(BlockTotemLathe.FACING, facing)) ||
 			!world.getBlockState(getPos().offset(facing.rotateYCCW(),3)).equals(MinestuckBlocks.TOTEM_LATHE.BOTTOM_CORNER.getDefaultState().with(BlockTotemLathe.FACING, facing)) ||
@@ -274,9 +286,13 @@ public class TileEntityTotemLathe extends TileEntity
 	{
 		super.read(compound);
 		broken = compound.getBoolean("broken");
-		setCard1(ItemStack.read(compound.getCompound("card1")));
-		setCard2(ItemStack.read(compound.getCompound("card2")));
-		
+		card1 = ItemStack.read(compound.getCompound("card1"));
+		card2 = ItemStack.read(compound.getCompound("card2"));
+		if(card1.isEmpty() && !card2.isEmpty())
+		{
+			card1 = card2;
+			card2 = ItemStack.EMPTY;
+		}
 	}
 	
 	@Override

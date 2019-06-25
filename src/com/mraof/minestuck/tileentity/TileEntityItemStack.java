@@ -28,6 +28,7 @@ public class TileEntityItemStack extends TileEntity
 		if(stack != null)
 		{
 			this.stack = stack;
+			markDirty();
 		}
 	}
 	

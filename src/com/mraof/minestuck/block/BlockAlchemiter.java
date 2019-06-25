@@ -68,6 +68,12 @@ public class BlockAlchemiter extends BlockMultiMachine
 	}
 	
 	@Override
+	public boolean isSolid(IBlockState state)
+	{
+		return fullCube;
+	}
+	
+	@Override
 	public boolean onBlockActivated(IBlockState state, World worldIn, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
 		BlockPos mainPos = getMainPos(state, pos, worldIn);
@@ -127,7 +133,7 @@ public class BlockAlchemiter extends BlockMultiMachine
 			if(count > 0 && newState.getBlock() instanceof BlockAlchemiter && ((BlockAlchemiter) newState.getBlock()).corner
 					&& newState.get(FACING).equals(this.corner ? state.get(FACING).rotateY() : state.get(FACING)))
 			{
-				return ((BlockAlchemiter) newState.getBlock()).getMainPos(state, pos, world, count - 1);
+				return ((BlockAlchemiter) newState.getBlock()).getMainPos(newState, newPos, world, count - 1);
 			} else return new BlockPos(0, -1 , 0);
 		}
 	}

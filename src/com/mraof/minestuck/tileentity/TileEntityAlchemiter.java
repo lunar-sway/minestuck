@@ -388,11 +388,11 @@ public class TileEntityAlchemiter extends TileEntity
 		
 		EnumFacing facing = world.getBlockState(pos).get(BlockAlchemiter.FACING);
 		//get the position to spawn the item
-		BlockPos spawnPos = this.getPos().offset(facing).offset(facing.rotateY());
-		if(facing.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE)
-			spawnPos = spawnPos.offset(facing);
-		if(facing.rotateY().getAxisDirection() == EnumFacing.AxisDirection.POSITIVE)
-			spawnPos = spawnPos.offset(facing.rotateY());
+		BlockPos spawnPos = this.getPos().offset(facing.getOpposite()).offset(facing.rotateYCCW());
+		if(facing.getAxisDirection() == EnumFacing.AxisDirection.NEGATIVE)
+			spawnPos = spawnPos.offset(facing.getOpposite());
+		if(facing.rotateY().getAxisDirection() == EnumFacing.AxisDirection.NEGATIVE)
+			spawnPos = spawnPos.offset(facing.rotateYCCW());
 		//get the grist cost
 		GristSet cost = getGristCost(quantity);
 		

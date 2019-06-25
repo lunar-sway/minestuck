@@ -99,6 +99,12 @@ public class BlockCruxtruder extends BlockMultiMachine
 	}
 	
 	@Override
+	public boolean isSolid(IBlockState state)
+	{
+		return fullCube;
+	}
+	
+	@Override
 	public void getDrops(IBlockState state, NonNullList<ItemStack> drops, World world, BlockPos pos, int fortune)
 	{}
 	
