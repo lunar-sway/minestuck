@@ -60,17 +60,20 @@ public class BlockPunchDesignix extends BlockMultiMachine
 	@Override
 	public void onReplaced(IBlockState state, World worldIn, BlockPos pos, IBlockState newState, boolean isMoving)
 	{
-		BlockPos mainPos = getMainPos(state, pos);
-		TileEntity te = worldIn.getTileEntity(mainPos);
-		if(te instanceof TileEntityPunchDesignix)
+		if(state.getBlock() != newState.getBlock())
 		{
-			TileEntityPunchDesignix designix = (TileEntityPunchDesignix) te;
-			designix.broken = true;
-			if(hasTileEntity(state))
-				designix.dropItem(true);
+			BlockPos mainPos = getMainPos(state, pos);
+			TileEntity te = worldIn.getTileEntity(mainPos);
+			if(te instanceof TileEntityPunchDesignix)
+			{
+				TileEntityPunchDesignix designix = (TileEntityPunchDesignix) te;
+				designix.broken = true;
+				if(hasTileEntity(state))
+					designix.dropItem(true);
+			}
+			
+			super.onReplaced(state, worldIn, pos, newState, isMoving);
 		}
-		
-		super.onReplaced(state, worldIn, pos, newState, isMoving);
 	}
 	
 	@Override
