@@ -38,7 +38,7 @@ public class MinestuckKeyHandler
 		ClientRegistry.registerKeyBinding(editKey);
 		captchaKey = new KeyBinding("key.captchalogue", 86, "key.categories.minestuck");
 		ClientRegistry.registerKeyBinding(captchaKey);
-		effectToggleKey = new KeyBinding("key.aspectEffectToggle", 43, "key.categories.minestuck");
+		effectToggleKey = new KeyBinding("key.aspectEffectToggle", 92, "key.categories.minestuck");
 		ClientRegistry.registerKeyBinding(effectToggleKey);
 		sylladexKey = new KeyBinding("key.sylladex", -1, "key.categories.minestuck");
 		ClientRegistry.registerKeyBinding(sylladexKey);
