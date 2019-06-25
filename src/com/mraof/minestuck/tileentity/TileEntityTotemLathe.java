@@ -92,12 +92,12 @@ public class TileEntityTotemLathe extends TileEntity
 		IBlockState state = world.getBlockState(pos);
 		if(stack.isEmpty())
 		{
-			if(state.equals(MinestuckBlocks.TOTEM_LATHE_DOWEL_ROD.getDefaultState().with(BlockTotemLathe.FACING, facing)))
+			if(state.equals(MinestuckBlocks.TOTEM_LATHE.DOWEL_ROD.getDefaultState().with(BlockTotemLathe.FACING, facing)))
 				world.removeBlock(pos);
 			return true;
 		} else if (stack.getItem() == MinestuckBlocks.CRUXITE_DOWEL.asItem())
 		{
-			if(state.equals(MinestuckBlocks.TOTEM_LATHE_DOWEL_ROD.getDefaultState().with(BlockTotemLathe.FACING, facing)))
+			if(state.equals(MinestuckBlocks.TOTEM_LATHE.DOWEL_ROD.getDefaultState().with(BlockTotemLathe.FACING, facing)))
 			{
 				TileEntity te = world.getTileEntity(pos);
 				if(!(te instanceof TileEntityItemStack))
@@ -111,7 +111,7 @@ public class TileEntityTotemLathe extends TileEntity
 				return true;
 			} else if(state.isAir(world, pos))
 			{
-				world.setBlockState(pos, MinestuckBlocks.TOTEM_LATHE_DOWEL_ROD.getDefaultState().with(BlockTotemLathe.FACING, facing));
+				world.setBlockState(pos, MinestuckBlocks.TOTEM_LATHE.DOWEL_ROD.getDefaultState().with(BlockTotemLathe.FACING, facing));
 				TileEntity te = world.getTileEntity(pos);
 				if(!(te instanceof TileEntityItemStack))
 				{
@@ -129,7 +129,7 @@ public class TileEntityTotemLathe extends TileEntity
 	public ItemStack getDowel()
 	{
 		BlockPos pos = getPos().up().offset(getFacing().rotateYCCW(), 2);
-		if(world.getBlockState(pos).equals(MinestuckBlocks.TOTEM_LATHE_DOWEL_ROD.getDefaultState().with(BlockTotemLathe.FACING, getFacing())))
+		if(world.getBlockState(pos).equals(MinestuckBlocks.TOTEM_LATHE.DOWEL_ROD.getDefaultState().with(BlockTotemLathe.FACING, getFacing())))
 		{
 			TileEntity te = world.getTileEntity(pos);
 			if(te instanceof TileEntityItemStack)
@@ -183,7 +183,7 @@ public class TileEntityTotemLathe extends TileEntity
 		}
 		
 		//if they have clicked the dowel block
-		if(clickedState.getBlock() == MinestuckBlocks.TOTEM_LATHE_ROD || clickedState.getBlock() == MinestuckBlocks.TOTEM_LATHE_DOWEL_ROD)
+		if(clickedState.getBlock() == MinestuckBlocks.TOTEM_LATHE.ROD || clickedState.getBlock() == MinestuckBlocks.TOTEM_LATHE.DOWEL_ROD)
 		{
 			ItemStack dowel = getDowel();
 			if (dowel.isEmpty())
@@ -210,7 +210,7 @@ public class TileEntityTotemLathe extends TileEntity
 		}
 		
 		//if they have clicked on the lever
-		if(working && clickedState.getBlock() == MinestuckBlocks.TOTEM_LATHE_CARVER)
+		if(working && clickedState.getBlock() == MinestuckBlocks.TOTEM_LATHE.CARVER)
 		{
 			//carve the dowel.
 			processContents();
@@ -238,18 +238,18 @@ public class TileEntityTotemLathe extends TileEntity
 			return;
 		EnumFacing facing = getFacing();
 		
-		if(	!world.getBlockState(getPos()).equals(MinestuckBlocks.TOTEM_LATHE_CARD_SLOT.getDefaultState().with(BlockTotemLathe.FACING, facing)) ||
-			!world.getBlockState(getPos().offset(facing.rotateYCCW(),1)).equals(MinestuckBlocks.TOTEM_LATHE_BOTTOM_LEFT.getDefaultState().with(BlockTotemLathe.FACING, facing)) ||
-			!world.getBlockState(getPos().offset(facing.rotateYCCW(),2)).equals(MinestuckBlocks.TOTEM_LATHE_BOTTOM_RIGHT.getDefaultState().with(BlockTotemLathe.FACING, facing)) ||
-			!world.getBlockState(getPos().offset(facing.rotateYCCW(),3)).equals(MinestuckBlocks.TOTEM_LATHE_BOTTOM_CORNER.getDefaultState().with(BlockTotemLathe.FACING, facing)) ||
+		if(	!world.getBlockState(getPos()).equals(MinestuckBlocks.TOTEM_LATHE.CARD_SLOT.getDefaultState().with(BlockTotemLathe.FACING, facing)) ||
+			!world.getBlockState(getPos().offset(facing.rotateYCCW(),1)).equals(MinestuckBlocks.TOTEM_LATHE.BOTTOM_LEFT.getDefaultState().with(BlockTotemLathe.FACING, facing)) ||
+			!world.getBlockState(getPos().offset(facing.rotateYCCW(),2)).equals(MinestuckBlocks.TOTEM_LATHE.BOTTOM_RIGHT.getDefaultState().with(BlockTotemLathe.FACING, facing)) ||
+			!world.getBlockState(getPos().offset(facing.rotateYCCW(),3)).equals(MinestuckBlocks.TOTEM_LATHE.BOTTOM_CORNER.getDefaultState().with(BlockTotemLathe.FACING, facing)) ||
 			
-			!world.getBlockState(getPos().up()).equals(MinestuckBlocks.TOTEM_LATHE_MIDDLE.getDefaultState().with(BlockTotemLathe.FACING, facing)) ||
-			!world.getBlockState(getPos().up().offset(facing.rotateYCCW(),1)).equals(MinestuckBlocks.TOTEM_LATHE_ROD.getDefaultState().with(BlockTotemLathe.FACING, facing)) ||
-			!world.getBlockState(getPos().up().offset(facing.rotateYCCW(),3)).equals(MinestuckBlocks.TOTEM_LATHE_WHEEL.getDefaultState().with(BlockTotemLathe.FACING, facing)) ||
+			!world.getBlockState(getPos().up()).equals(MinestuckBlocks.TOTEM_LATHE.MIDDLE.getDefaultState().with(BlockTotemLathe.FACING, facing)) ||
+			!world.getBlockState(getPos().up().offset(facing.rotateYCCW(),1)).equals(MinestuckBlocks.TOTEM_LATHE.ROD.getDefaultState().with(BlockTotemLathe.FACING, facing)) ||
+			!world.getBlockState(getPos().up().offset(facing.rotateYCCW(),3)).equals(MinestuckBlocks.TOTEM_LATHE.WHEEL.getDefaultState().with(BlockTotemLathe.FACING, facing)) ||
 			
-			!world.getBlockState(getPos().up(2)).equals(MinestuckBlocks.TOTEM_LATHE_TOP_CORNER.getDefaultState().with(BlockTotemLathe.FACING, facing)) ||
-			!world.getBlockState(getPos().up(2).offset(facing.rotateYCCW(),1)).equals(MinestuckBlocks.TOTEM_LATHE_TOP.getDefaultState().with(BlockTotemLathe.FACING, facing)) ||
-			!world.getBlockState(getPos().up(2).offset(facing.rotateYCCW(),2)).equals(MinestuckBlocks.TOTEM_LATHE_CARVER.getDefaultState().with(BlockTotemLathe.FACING, facing)))
+			!world.getBlockState(getPos().up(2)).equals(MinestuckBlocks.TOTEM_LATHE.TOP_CORNER.getDefaultState().with(BlockTotemLathe.FACING, facing)) ||
+			!world.getBlockState(getPos().up(2).offset(facing.rotateYCCW(),1)).equals(MinestuckBlocks.TOTEM_LATHE.TOP.getDefaultState().with(BlockTotemLathe.FACING, facing)) ||
+			!world.getBlockState(getPos().up(2).offset(facing.rotateYCCW(),2)).equals(MinestuckBlocks.TOTEM_LATHE.CARVER.getDefaultState().with(BlockTotemLathe.FACING, facing)))
 		{
 			setBroken();
 		}

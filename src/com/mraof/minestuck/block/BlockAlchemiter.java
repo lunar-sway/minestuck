@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.block.multiblock.MultiblockMachine;
 import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
 
 import net.minecraft.block.Block;
@@ -19,7 +20,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-public class BlockAlchemiter extends BlockMachine
+public class BlockAlchemiter extends BlockMultiMachine
 {
 	public static final Map<EnumFacing, VoxelShape> FULL_BLOCK_SHAPE = createRotatedShapes(0, 0, 0, 16, 16, 16);
 	public static final Map<EnumFacing, VoxelShape> TOTEM_PAD_SHAPE = createRotatedShapes(8, 0, 2, 14, 16, 16);
@@ -36,9 +37,9 @@ public class BlockAlchemiter extends BlockMachine
 	protected final boolean fullCube, recursive, corner;
 	protected final BlockPos mainPos;
 	
-	public BlockAlchemiter(Properties properties, Map<EnumFacing, VoxelShape> shape, Map<EnumFacing, BlockFaceShape> faceShapes, boolean fullCube, boolean recursive, boolean corner, BlockPos mainPos)
+	public BlockAlchemiter(MultiblockMachine machine, Map<EnumFacing, VoxelShape> shape, Map<EnumFacing, BlockFaceShape> faceShapes, boolean fullCube, boolean recursive, boolean corner, BlockPos mainPos, Properties properties)
 	{
-		super(properties);
+		super(machine, properties);
 		this.shape = shape;
 		this.faceShapes = faceShapes;
 		this.fullCube = fullCube;
@@ -83,17 +84,20 @@ public class BlockAlchemiter extends BlockMachine
 	@Override
 	public void onReplaced(IBlockState state, World worldIn, BlockPos pos, IBlockState newState, boolean isMoving)
 	{
-		BlockPos mainPos = getMainPos(state, pos, worldIn);
-		TileEntity te = worldIn.getTileEntity(mainPos);
-		if(te instanceof TileEntityAlchemiter)
+		if(state.getBlock() != newState.getBlock())
 		{
-			TileEntityAlchemiter alchemiter = (TileEntityAlchemiter) te;
-			alchemiter.breakMachine();
-			if(mainPos.equals(pos))
-				alchemiter.dropItem(true);
+			BlockPos mainPos = getMainPos(state, pos, worldIn);
+			TileEntity te = worldIn.getTileEntity(mainPos);
+			if(te instanceof TileEntityAlchemiter)
+			{
+				TileEntityAlchemiter alchemiter = (TileEntityAlchemiter) te;
+				alchemiter.breakMachine();
+				if(mainPos.equals(pos))
+					alchemiter.dropItem(true);
+			}
+			
+			super.onReplaced(state, worldIn, pos, newState, isMoving);
 		}
-		
-		super.onReplaced(state, worldIn, pos, newState, isMoving);
 	}
 	
 	@Override
@@ -132,9 +136,9 @@ public class BlockAlchemiter extends BlockMachine
 	{
 		public static final EnumProperty<EnumDowelType> DOWEL = MinestuckProperties.DOWEL_OR_NONE;
 		
-		public Pad(Properties properties, Map<EnumFacing, VoxelShape> shape, Map<EnumFacing, BlockFaceShape> faceShapes, boolean fullCube)
+		public Pad(MultiblockMachine machine, Map<EnumFacing, VoxelShape> shape, Map<EnumFacing, BlockFaceShape> faceShapes, boolean fullCube, Properties properties)
 		{
-			super(properties, shape, faceShapes, fullCube, false, false, new BlockPos(0, 0, 0));
+			super(machine, shape, faceShapes, fullCube, false, false, new BlockPos(0, 0, 0), properties);
 		}
 		
 		@Override
@@ -155,6 +159,12 @@ public class BlockAlchemiter extends BlockMachine
 		{
 			super.fillStateContainer(builder);
 			builder.add(DOWEL);
+		}
+		
+		@Override
+		public BlockRenderLayer getRenderLayer()
+		{
+			return BlockRenderLayer.CUTOUT;
 		}
 	}
 }

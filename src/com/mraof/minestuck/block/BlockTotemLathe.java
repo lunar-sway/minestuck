@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.block.multiblock.MultiblockMachine;
 import com.mraof.minestuck.tileentity.TileEntityItemStack;
 import com.mraof.minestuck.tileentity.TileEntityTotemLathe;
 
@@ -24,7 +25,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-public class BlockTotemLathe extends BlockMachine
+public class BlockTotemLathe extends BlockMultiMachine
 {
 	public static final Map<EnumFacing, VoxelShape> CARD_SLOT_SHAPE = createRotatedShapes(0, 0, 1, 16, 16, 13);
 	public static final Map<EnumFacing, VoxelShape> BOTTOM_LEFT_SHAPE = createRotatedShapes(0, 0, 0, 16, 16, 12);
@@ -41,9 +42,9 @@ public class BlockTotemLathe extends BlockMachine
 	protected final Map<EnumFacing, VoxelShape> shape;
 	protected final BlockPos mainPos;
 	
-	public BlockTotemLathe(Properties properties, Map<EnumFacing, VoxelShape> shape, BlockPos mainPos)
+	public BlockTotemLathe(MultiblockMachine machine, Map<EnumFacing, VoxelShape> shape, BlockPos mainPos, Properties properties)
 	{
-		super(properties);
+		super(machine, properties);
 		this.shape = shape;
 		this.mainPos = mainPos;
 	}
@@ -143,9 +144,9 @@ public class BlockTotemLathe extends BlockMachine
 	{
 		public static final BooleanProperty ACTIVE = MinestuckProperties.ACTIVE;
 		
-		public Rod(Properties properties, Map<EnumFacing, VoxelShape> shape, BlockPos mainPos)
+		public Rod(MultiblockMachine machine, Map<EnumFacing, VoxelShape> shape, BlockPos mainPos, Properties properties)
 		{
-			super(properties, shape, mainPos);
+			super(machine, shape, mainPos, properties);
 		}
 		
 		@Override
@@ -160,9 +161,9 @@ public class BlockTotemLathe extends BlockMachine
 	{
 		public static final EnumProperty<EnumDowelType> DOWEL = MinestuckProperties.DOWEL;
 		
-		public DowelRod(Properties properties, Map<EnumFacing, VoxelShape> shape, BlockPos mainPos)
+		public DowelRod(MultiblockMachine machine, Map<EnumFacing, VoxelShape> shape, BlockPos mainPos, Properties properties)
 		{
-			super(properties, shape, mainPos);
+			super(machine, shape, mainPos, properties);
 		}
 		
 		@Override
@@ -190,9 +191,9 @@ public class BlockTotemLathe extends BlockMachine
 	{
 		public static final IntegerProperty COUNT = MinestuckProperties.COUNT_0_2;
 		
-		public Slot(Properties properties, Map<EnumFacing, VoxelShape> shape)
+		public Slot(MultiblockMachine machine, Map<EnumFacing, VoxelShape> shape, Properties properties)
 		{
-			super(properties, shape, new BlockPos(0, 0, 0));
+			super(machine, shape, new BlockPos(0, 0, 0), properties);
 		}
 		
 		@Override

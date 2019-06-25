@@ -45,7 +45,7 @@ public class ItemPunchDesignix extends ItemBlock
 				pos = pos.up();
 			}
 			
-			EnumFacing placedFacing = context.getPlacementHorizontalFacing();
+			EnumFacing placedFacing = context.getPlacementHorizontalFacing().getOpposite();
 			ItemStack itemstack = context.getItem();
 			
 			if(placedFacing == EnumFacing.EAST && context.getHitZ() >= 0.5F || placedFacing == EnumFacing.WEST && context.getHitZ() < 0.5F
@@ -73,7 +73,7 @@ public class ItemPunchDesignix extends ItemBlock
 				return false;
 			for(int y = 0; y < 2; y++)
 			{
-				if(!MinestuckBlocks.TOTEM_LATHE_CARD_SLOT.getDefaultState().isValidPosition(world, pos.offset(facing.rotateYCCW(), x).up(y)))
+				if(!MinestuckBlocks.PUNCH_DESIGNIX.getMainBlock().getDefaultState().isValidPosition(world, pos.offset(facing.rotateYCCW(), x).up(y)))
 					return false;
 			}
 		}
@@ -87,13 +87,17 @@ public class ItemPunchDesignix extends ItemBlock
 		World world = context.getWorld();
 		EntityPlayer player = context.getPlayer();
 		
-		EnumFacing facing = context.getPlacementHorizontalFacing();
+		EnumFacing facing = context.getPlacementHorizontalFacing().getOpposite();
 		
-		world.setBlockState(pos, MinestuckBlocks.PUNCH_DESIGNIX_LEFT_LEG.getDefaultState().with(BlockPunchDesignix.FACING, facing), 11);
-		world.setBlockState(pos.offset(facing.rotateYCCW()), MinestuckBlocks.PUNCH_DESIGNIX_RIGHT_LEG.getDefaultState().with(BlockPunchDesignix.FACING, facing), 11);
-		world.setBlockState(pos.up().offset(facing.rotateYCCW()), MinestuckBlocks.PUNCH_DESIGNIX_KEYBOARD.getDefaultState().with(BlockPunchDesignix.FACING, facing), 11);
+		if(facing == EnumFacing.EAST && context.getHitZ() >= 0.5F || facing == EnumFacing.WEST && context.getHitZ() < 0.5F
+				|| facing == EnumFacing.SOUTH && context.getHitX() < 0.5F || facing == EnumFacing.NORTH && context.getHitX() >= 0.5F)
+			pos = pos.offset(facing.rotateY());
 		
-		world.setBlockState(pos.up(), MinestuckBlocks.PUNCH_DESIGNIX_SLOT.getDefaultState().with(BlockPunchDesignix.FACING, facing), 11);
+		world.setBlockState(pos, MinestuckBlocks.PUNCH_DESIGNIX.LEFT_LEG.getDefaultState().with(BlockPunchDesignix.FACING, facing), 11);
+		world.setBlockState(pos.offset(facing.rotateYCCW()), MinestuckBlocks.PUNCH_DESIGNIX.RIGHT_LEG.getDefaultState().with(BlockPunchDesignix.FACING, facing), 11);
+		world.setBlockState(pos.up().offset(facing.rotateYCCW()), MinestuckBlocks.PUNCH_DESIGNIX.KEYBOARD.getDefaultState().with(BlockPunchDesignix.FACING, facing), 11);
+		
+		world.setBlockState(pos.up(), MinestuckBlocks.PUNCH_DESIGNIX.SLOT.getDefaultState().with(BlockPunchDesignix.FACING, facing), 11);
 		
 		if(player instanceof EntityPlayerMP)
 			CriteriaTriggers.PLACED_BLOCK.trigger((EntityPlayerMP) player, pos, context.getItem());

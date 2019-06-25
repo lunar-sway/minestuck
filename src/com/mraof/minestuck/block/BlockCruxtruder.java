@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.block.multiblock.MultiblockMachine;
 import com.mraof.minestuck.tileentity.TileEntityCruxtruder;
 
 import net.minecraft.block.Block;
@@ -16,7 +17,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class BlockCruxtruder extends BlockMachine
+public class BlockCruxtruder extends BlockMultiMachine
 {
 	public static final VoxelShape TUBE_SHAPE = Block.makeCuboidShape(2, 0, 2, 14, 16, 14);
 	
@@ -24,9 +25,9 @@ public class BlockCruxtruder extends BlockMachine
 	protected final boolean hasTileEntity, fullCube;
 	protected final BlockPos mainPos;
 	
-	public BlockCruxtruder(Properties properties, VoxelShape shape, boolean tileEntity, boolean fullCube, BlockPos mainPos)
+	public BlockCruxtruder(MultiblockMachine machine, VoxelShape shape, boolean tileEntity, boolean fullCube, BlockPos mainPos, Properties properties)
 	{
-		super(properties);
+		super(machine, properties);
 		this.shape = shape;
 		this.hasTileEntity = tileEntity;
 		this.fullCube = fullCube;
@@ -53,6 +54,12 @@ public class BlockCruxtruder extends BlockMachine
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public boolean hasTileEntity(IBlockState state)
+	{
+		return hasTileEntity;
 	}
 	
 	@Nullable

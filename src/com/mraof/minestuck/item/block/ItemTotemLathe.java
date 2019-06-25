@@ -46,7 +46,7 @@ public class ItemTotemLathe extends ItemBlock
 				pos = pos.up();
 			}
 			
-			EnumFacing placedFacing = context.getPlacementHorizontalFacing();
+			EnumFacing placedFacing = context.getPlacementHorizontalFacing().getOpposite();
 			ItemStack itemstack = context.getItem();
 			
 			pos = pos.offset(placedFacing.rotateY());
@@ -76,7 +76,7 @@ public class ItemTotemLathe extends ItemBlock
 				return false;
 			for(int y = 0; y < 3; y++)
 			{
-				if(!MinestuckBlocks.TOTEM_LATHE_CARD_SLOT.getDefaultState().isValidPosition(world, pos.offset(facing.rotateYCCW(), x).up(y)))
+				if(!MinestuckBlocks.TOTEM_LATHE.getMainBlock().getDefaultState().isValidPosition(world, pos.offset(facing.rotateYCCW(), x).up(y)))
 					return false;
 			}
 		}
@@ -91,18 +91,18 @@ public class ItemTotemLathe extends ItemBlock
 		EntityPlayer player = context.getPlayer();
 		if(!world.isRemote)
 		{
-			EnumFacing facing = context.getPlacementHorizontalFacing();
+			EnumFacing facing = context.getPlacementHorizontalFacing().getOpposite();
 			
-			world.setBlockState(pos, MinestuckBlocks.TOTEM_LATHE_CARD_SLOT.getDefaultState().with(BlockTotemLathe.FACING, facing));
-			world.setBlockState(pos.offset(facing.rotateYCCW(),1), MinestuckBlocks.TOTEM_LATHE_BOTTOM_LEFT.getDefaultState().with(BlockTotemLathe.FACING, facing));
-			world.setBlockState(pos.offset(facing.rotateYCCW(),2), MinestuckBlocks.TOTEM_LATHE_BOTTOM_RIGHT.getDefaultState().with(BlockTotemLathe.FACING, facing));
-			world.setBlockState(pos.offset(facing.rotateYCCW(),3), MinestuckBlocks.TOTEM_LATHE_BOTTOM_CORNER.getDefaultState().with(BlockTotemLathe.FACING, facing));
-			world.setBlockState(pos.up(1), MinestuckBlocks.TOTEM_LATHE_MIDDLE.getDefaultState().with(BlockTotemLathe.FACING, facing));
-			world.setBlockState(pos.offset(facing.rotateYCCW(),1).up(1), MinestuckBlocks.TOTEM_LATHE_ROD.getDefaultState().with(BlockTotemLathe.FACING, facing));
-			world.setBlockState(pos.offset(facing.rotateYCCW(),3).up(1), MinestuckBlocks.TOTEM_LATHE_WHEEL.getDefaultState().with(BlockTotemLathe.FACING, facing));
-			world.setBlockState(pos.up(2), MinestuckBlocks.TOTEM_LATHE_TOP_CORNER.getDefaultState().with(BlockTotemLathe.FACING, facing));
-			world.setBlockState(pos.offset(facing.rotateYCCW(),1).up(2), MinestuckBlocks.TOTEM_LATHE_TOP.getDefaultState().with(BlockTotemLathe.FACING, facing));
-			world.setBlockState(pos.offset(facing.rotateYCCW(),2).up(2), MinestuckBlocks.TOTEM_LATHE_CARVER.getDefaultState().with(BlockTotemLathe.FACING, facing));
+			world.setBlockState(pos, MinestuckBlocks.TOTEM_LATHE.CARD_SLOT.getDefaultState().with(BlockTotemLathe.FACING, facing));
+			world.setBlockState(pos.offset(facing.rotateYCCW(),1), MinestuckBlocks.TOTEM_LATHE.BOTTOM_LEFT.getDefaultState().with(BlockTotemLathe.FACING, facing));
+			world.setBlockState(pos.offset(facing.rotateYCCW(),2), MinestuckBlocks.TOTEM_LATHE.BOTTOM_RIGHT.getDefaultState().with(BlockTotemLathe.FACING, facing));
+			world.setBlockState(pos.offset(facing.rotateYCCW(),3), MinestuckBlocks.TOTEM_LATHE.BOTTOM_CORNER.getDefaultState().with(BlockTotemLathe.FACING, facing));
+			world.setBlockState(pos.up(1), MinestuckBlocks.TOTEM_LATHE.MIDDLE.getDefaultState().with(BlockTotemLathe.FACING, facing));
+			world.setBlockState(pos.offset(facing.rotateYCCW(),1).up(1), MinestuckBlocks.TOTEM_LATHE.ROD.getDefaultState().with(BlockTotemLathe.FACING, facing));
+			world.setBlockState(pos.offset(facing.rotateYCCW(),3).up(1), MinestuckBlocks.TOTEM_LATHE.WHEEL.getDefaultState().with(BlockTotemLathe.FACING, facing));
+			world.setBlockState(pos.up(2), MinestuckBlocks.TOTEM_LATHE.TOP_CORNER.getDefaultState().with(BlockTotemLathe.FACING, facing));
+			world.setBlockState(pos.offset(facing.rotateYCCW(),1).up(2), MinestuckBlocks.TOTEM_LATHE.TOP.getDefaultState().with(BlockTotemLathe.FACING, facing));
+			world.setBlockState(pos.offset(facing.rotateYCCW(),2).up(2), MinestuckBlocks.TOTEM_LATHE.CARVER.getDefaultState().with(BlockTotemLathe.FACING, facing));
 			
 			if(player instanceof EntityPlayerMP)
 				CriteriaTriggers.PLACED_BLOCK.trigger((EntityPlayerMP) player, pos, context.getItem());

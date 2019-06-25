@@ -39,12 +39,12 @@ public class DeployList
 	public static void registerItems()
 	{
 		
-		registerItem("cruxtruder", new ItemStack(MinestuckBlocks.CRUXTRUDER_CENTER), new GristSet(), new GristSet(GristType.BUILD, 100), 0);
-		registerItem("totem_lathe", new ItemStack(MinestuckBlocks.TOTEM_LATHE_MIDDLE), new GristSet(), new GristSet(GristType.BUILD, 100), 0);
+		registerItem("cruxtruder", new ItemStack(MinestuckBlocks.CRUXTRUDER), new GristSet(), new GristSet(GristType.BUILD, 100), 0);
+		registerItem("totem_lathe", new ItemStack(MinestuckBlocks.TOTEM_LATHE), new GristSet(), new GristSet(GristType.BUILD, 100), 0);
 		registerItem("artifact_card", new GristSet(), null, 0, connection -> !connection.enteredGame(),
 				connection -> AlchemyRecipes.createCard(SburbHandler.getEntryItem(connection), true));
-		registerItem("alchemiter", new ItemStack(MinestuckBlocks.ALCHEMITER_CENTER), new GristSet(), new GristSet(GristType.BUILD, 100), 0);
-		registerItem("punch_designix", 0,null, connection -> new ItemStack(MinestuckBlocks.PUNCH_DESIGNIX_SLOT),
+		registerItem("alchemiter", new ItemStack(MinestuckBlocks.ALCHEMITER), new GristSet(), new GristSet(GristType.BUILD, 100), 0);
+		registerItem("punch_designix", 0,null, connection -> new ItemStack(MinestuckBlocks.PUNCH_DESIGNIX),
 				(isPrimary, connection) -> new GristSet(SburbHandler.getPrimaryGristType(connection.getClientIdentifier()), 4));
 		/*registerItem("jumper_block_extension", new ItemStack(MinestuckBlocks.jumperBlockExtension[0]), new GristSet(GristType.Build, 1000), 1);
 		registerItem("punch_card_shunt", new ItemStack(MinestuckItems.shunt), new GristSet(GristType.Build, 100), 1);

@@ -382,11 +382,11 @@ public class MinestuckItems
 		registerItemBlock(registry, DEAD_PLANKS_SLAB, ModItemGroup.LANDS);
 		registerItemBlock(registry, TREATED_PLANKS_SLAB, ModItemGroup.LANDS);
 		
-		registerItemBlock(registry, new ItemCruxtruder(CRUXTRUDER_TUBE, new Item.Properties().group(ModItemGroup.MAIN)));
+		registry.register(new ItemCruxtruder(CRUXTRUDER.getMainBlock(), new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("cruxtruder"));
 		registerItemBlock(registry, CRUXTRUDER_LID, ModItemGroup.MAIN);
-		registerItemBlock(registry, new ItemTotemLathe(TOTEM_LATHE_CARD_SLOT, new Item.Properties().group(ModItemGroup.MAIN)));
-		registerItemBlock(registry, new ItemAlchemiter(ALCHEMITER_TOTEM_PAD, new Item.Properties().group(ModItemGroup.MAIN)));
-		registerItemBlock(registry, new ItemPunchDesignix(PUNCH_DESIGNIX_SLOT, new Item.Properties().group(ModItemGroup.MAIN)));
+		registry.register(new ItemTotemLathe(TOTEM_LATHE.getMainBlock(), new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("totem_lathe"));
+		registry.register(new ItemAlchemiter(ALCHEMITER.getMainBlock(), new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("alchemiter"));
+		registry.register(new ItemPunchDesignix(PUNCH_DESIGNIX.getMainBlock(), new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("punch_designix"));
 		registerItemBlock(registry, new ItemMiniCruxtruder(MINI_CRUXTRUDER, new Item.Properties().group(ModItemGroup.MAIN)));
 		registerItemBlock(registry, MINI_TOTEM_LATHE, ModItemGroup.MAIN);
 		registerItemBlock(registry, MINI_ALCHEMITER, ModItemGroup.MAIN);

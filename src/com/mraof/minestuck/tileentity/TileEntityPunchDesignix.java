@@ -43,7 +43,7 @@ public class TileEntityPunchDesignix extends TileEntity
 			{
 				IBlockState state = world.getBlockState(pos);
 				boolean hasCard = !card.isEmpty();
-				if(hasCard != state.get(BlockPunchDesignix.Slot.HAS_CARD))
+				if(state.has(BlockPunchDesignix.Slot.HAS_CARD) && hasCard != state.get(BlockPunchDesignix.Slot.HAS_CARD))
 					world.setBlockState(pos, state.with(BlockPunchDesignix.Slot.HAS_CARD, hasCard), 2);
 			}
 		}
@@ -58,7 +58,7 @@ public class TileEntityPunchDesignix extends TileEntity
 	public void onRightClick(EntityPlayerMP player, IBlockState clickedState)
 	{
 		Block part = clickedState.getBlock();
-		if (part == MinestuckBlocks.PUNCH_DESIGNIX_SLOT && !getCard().isEmpty())
+		if (part == MinestuckBlocks.PUNCH_DESIGNIX.SLOT && !getCard().isEmpty())
 		{    //Remove card from punch slot
 			if (player.getHeldItemMainhand().isEmpty())
 				player.setHeldItem(EnumHand.MAIN_HAND, getCard());
@@ -73,12 +73,12 @@ public class TileEntityPunchDesignix extends TileEntity
 		if (isUseable(clickedState))
 		{
 			ItemStack heldStack = player.getHeldItemMainhand();
-			if (part == MinestuckBlocks.PUNCH_DESIGNIX_SLOT && getCard().isEmpty())
+			if (part == MinestuckBlocks.PUNCH_DESIGNIX.SLOT && getCard().isEmpty())
 			{
 				if (!heldStack.isEmpty() && heldStack.getItem() == MinestuckItems.CAPTCHA_CARD)
 					setCard(heldStack.split(1));    //Insert card into the punch slot
 				
-			} else if (part == MinestuckBlocks.PUNCH_DESIGNIX_KEYBOARD || part == MinestuckBlocks.PUNCH_DESIGNIX_RIGHT_LEG)
+			} else if (part == MinestuckBlocks.PUNCH_DESIGNIX.KEYBOARD || part == MinestuckBlocks.PUNCH_DESIGNIX.RIGHT_LEG)
 			{
 				if (heldStack.isEmpty() || heldStack.getItem() != MinestuckItems.CAPTCHA_CARD)
 					return;    //Not a valid item in hand
@@ -147,9 +147,9 @@ public class TileEntityPunchDesignix extends TileEntity
 		IBlockState currentState = getWorld().getBlockState(getPos());
 		EnumFacing facing = currentState.get(FACING);
 		EnumFacing hOffset = facing.rotateYCCW();
-		if (!world.getBlockState(getPos().offset(hOffset)).equals(MinestuckBlocks.PUNCH_DESIGNIX_KEYBOARD.getDefaultState().with(FACING, facing)) ||
-				!world.getBlockState(getPos().down()).equals(MinestuckBlocks.PUNCH_DESIGNIX_LEFT_LEG.getDefaultState().with(FACING, facing)) ||
-				!world.getBlockState(getPos().down().offset(hOffset)).equals(MinestuckBlocks.PUNCH_DESIGNIX_RIGHT_LEG.getDefaultState().with(FACING, facing)))
+		if (!world.getBlockState(getPos().offset(hOffset)).equals(MinestuckBlocks.PUNCH_DESIGNIX.KEYBOARD.getDefaultState().with(FACING, facing)) ||
+				!world.getBlockState(getPos().down()).equals(MinestuckBlocks.PUNCH_DESIGNIX.LEFT_LEG.getDefaultState().with(FACING, facing)) ||
+				!world.getBlockState(getPos().down().offset(hOffset)).equals(MinestuckBlocks.PUNCH_DESIGNIX.RIGHT_LEG.getDefaultState().with(FACING, facing)))
 		{
 			broken = true;
 		}

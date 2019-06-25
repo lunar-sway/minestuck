@@ -43,10 +43,12 @@ public class RenderMachineOutline
 	
 	private static boolean renderCheckItem(EntityPlayerSP player, ItemStack stack, WorldRenderer render, RayTraceResult rayTraceResult, float partialTicks)
 	{
-		if(stack.getItem() == MinestuckBlocks.PUNCH_DESIGNIX_SLOT.asItem()
-				|| stack.getItem() == MinestuckBlocks.TOTEM_LATHE_CARD_SLOT.asItem()
-				|| stack.getItem() == MinestuckBlocks.CRUXTRUDER_CORNER.asItem()
-				|| stack.getItem() == MinestuckBlocks.ALCHEMITER_CENTER.asItem())
+		if(stack.isEmpty())
+			return false;
+		if(stack.getItem() == MinestuckBlocks.PUNCH_DESIGNIX.asItem()
+				|| stack.getItem() == MinestuckBlocks.TOTEM_LATHE.asItem()
+				|| stack.getItem() == MinestuckBlocks.CRUXTRUDER.asItem()
+				|| stack.getItem() == MinestuckBlocks.ALCHEMITER.asItem())
 				//||stack.getItem()==Item.getItemFromBlock(MinestuckBlocks.jumperBlockExtension[0]))
 		{
 			BlockPos pos = rayTraceResult.getBlockPos();
@@ -73,7 +75,7 @@ public class RenderMachineOutline
 			GlStateManager.disableTexture2D();
 			GlStateManager.depthMask(false);	//GL stuff was copied from the standard mouseover bounding box drawing, which is likely why the alpha isn't working
 			
-			if(stack.getItem() == MinestuckBlocks.PUNCH_DESIGNIX_SLOT.asItem())
+			if(stack.getItem() == MinestuckBlocks.PUNCH_DESIGNIX.asItem())
 			{
 				if (placedFacing.getXOffset() > 0 && hitZ >= 0.5F || placedFacing.getXOffset() < 0 && hitZ < 0.5F
 						|| placedFacing.getZOffset() > 0 && hitX < 0.5F || placedFacing.getZOffset() < 0 && hitX >= 0.5F)
@@ -85,7 +87,7 @@ public class RenderMachineOutline
 				
 				boundingBox = new AxisAlignedBB(0, 0, 0, (r ? 2 : 1), 2, (r ? 1 : 2)).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
 				placeable = ItemPunchDesignix.canPlaceAt(stack, player, player.world, placementPos, placedFacing);
-			} else if(stack.getItem() == MinestuckBlocks.TOTEM_LATHE_CARD_SLOT.asItem())
+			} else if(stack.getItem() == MinestuckBlocks.TOTEM_LATHE.asItem())
 			{
 				pos = pos.offset(placedFacing.rotateY());
 				
@@ -99,14 +101,14 @@ public class RenderMachineOutline
 				
 				boundingBox = new AxisAlignedBB(0, 0, 0, (r ? 4 : 1), 3, (r ? 1 : 4)).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
 				placeable = ItemTotemLathe.canPlaceAt(stack, player, player.world, placementPos, placedFacing);
-			} else if(stack.getItem() == MinestuckBlocks.CRUXTRUDER_CORNER.asItem())
+			} else if(stack.getItem() == MinestuckBlocks.CRUXTRUDER.asItem())
 			{
 				BlockPos placementPos = pos.offset(placedFacing.rotateY());
 				pos = pos.offset(placedFacing.getOpposite()).add(-1, 0, -1);
 				
 				boundingBox = new AxisAlignedBB(0,0,0, 3, 3, 3).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
 				placeable = ItemCruxtruder.canPlaceAt(stack, player, player.world, placementPos, placedFacing);
-			} else if(stack.getItem() == null)//MinestuckBlocks.jumperBlockExtension[0].asItem())
+			} /*else if(MinestuckBlocks.jumperBlockExtension[0].asItem())
 			{
 				pos = pos.offset(placedFacing.rotateY());
 				
@@ -126,7 +128,7 @@ public class RenderMachineOutline
 				
 				boundingBox = new AxisAlignedBB(0, 0, 0, (r ? 5 : 4), 1, (r ? 4 : 5)).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
 				placeable = false;//ItemJumperBlock.checkOutline(stack, player, player.world, placementPos, placedFacing);
-			} else	//Alchemiter
+			} */else	//Alchemiter
 			{
 				pos = pos.offset(placedFacing.rotateY());
 				
@@ -143,8 +145,10 @@ public class RenderMachineOutline
 				boundingBox = new AxisAlignedBB(0, 0, 0, 4, 4, 4).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
 				placeable = ItemAlchemiter.canPlaceAt(stack, player, player.world, placementPos, placedFacing);
 				
+				int xOffset = - placedFacing.getXOffset() - placedFacing.rotateY().getXOffset();
+				int zOffset = - placedFacing.getZOffset() - placedFacing.rotateY().getZOffset();
 				//If you don't want the extra details to the alchemiter outline, comment out the following two lines
-				WorldRenderer.drawSelectionBoundingBox(new AxisAlignedBB(1F/4F,1,1F/4F, 3F/4F, 4, 3F/4F).offset(placementPos).offset(-d1, -d2, -d3).shrink(0.002), placeable ? 0 : 1, placeable ? 1 : 0, 0, 0.5F);
+				WorldRenderer.drawSelectionBoundingBox(new AxisAlignedBB(3*xOffset + 1F/4F,1,3*zOffset + 1F/4F, 3*xOffset + 3F/4F, 4, 3*zOffset + 3F/4F).offset(placementPos).offset(-d1, -d2, -d3).shrink(0.002), placeable ? 0 : 1, placeable ? 1 : 0, 0, 0.5F);
 				WorldRenderer.drawSelectionBoundingBox(new AxisAlignedBB(0,0,0, 4, 1, 4).offset(pos).offset(-d1, -d2, -d3).shrink(0.002), placeable ? 0 : 1, placeable ? 1 : 0, 0, 0.5F);
 			}
 			
@@ -152,7 +156,8 @@ public class RenderMachineOutline
 			GlStateManager.depthMask(true);
 			GlStateManager.enableTexture2D();
 			GlStateManager.disableBlend();
-		}		
-		return true;
+			return true;
+		}
+		return false;
 	}
 }

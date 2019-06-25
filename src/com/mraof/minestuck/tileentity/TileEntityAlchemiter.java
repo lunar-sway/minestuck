@@ -1,15 +1,17 @@
 package com.mraof.minestuck.tileentity;
 
-
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.block.BlockAlchemiter;
+import com.mraof.minestuck.block.EnumDowelType;
 import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.client.gui.GuiAlchemiter;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -42,14 +44,21 @@ public class TileEntityAlchemiter extends TileEntity
 	
 	public void setDowel(ItemStack newDowel)
 	{
-		if (newDowel.getItem() == MinestuckBlocks.CRUXITE_DOWEL.asItem() || newDowel.isEmpty())
+		if(newDowel.getItem() == MinestuckBlocks.CRUXITE_DOWEL.asItem() || newDowel.isEmpty())
 		{
 			dowel = newDowel;
 			if(world != null)
 			{
 				IBlockState state = world.getBlockState(pos);
-				world.notifyBlockUpdate(pos, state, state, 2);
+				if(newDowel.isEmpty())
+					state = state.with(BlockAlchemiter.Pad.DOWEL, EnumDowelType.NONE);
+				else if(AlchemyRecipes.hasDecodedItem(newDowel))
+					state = state.with(BlockAlchemiter.Pad.DOWEL, EnumDowelType.CARVED_DOWEL);
+					else state = state.with(BlockAlchemiter.Pad.DOWEL, EnumDowelType.DOWEL);
+				
+				world.setBlockState(pos, state, 2);
 			}
+			markDirty();
 		}
 	}
 	
@@ -215,30 +224,32 @@ public class TileEntityAlchemiter extends TileEntity
 	
 	public void checkStates()
 	{
-		if(this.broken)
+		if(this.broken || world == null)
 			return;
 		
-		EnumFacing facing = getWorld().getBlockState(this.getPos()).get(BlockAlchemiter.FACING);
+		EnumFacing facing = world.getBlockState(this.getPos()).get(BlockAlchemiter.FACING);
+		EnumFacing x = facing.rotateYCCW();
+		EnumFacing z = facing.getOpposite();
 		BlockPos pos = getPos().down();
-		if(!world.getBlockState(pos.up(3)).equals(MinestuckBlocks.ALCHEMITER_UPPER_ROD.getDefaultState().with(BlockAlchemiter.FACING, facing)) ||
-				!world.getBlockState(pos.up(2)).equals(MinestuckBlocks.ALCHEMITER_LOWER_ROD.getDefaultState().with(BlockAlchemiter.FACING, facing)) ||
-				!world.getBlockState(pos.up()).equals(MinestuckBlocks.ALCHEMITER_TOTEM_PAD.getDefaultState().with(BlockAlchemiter.FACING, facing)) ||
-				!world.getBlockState(pos).equals(MinestuckBlocks.ALCHEMITER_TOTEM_CORNER.getDefaultState().with(BlockAlchemiter.FACING, facing)) ||
-				!world.getBlockState(pos.offset(facing.rotateY())).equals(MinestuckBlocks.ALCHEMITER_LEFT_SIDE.getDefaultState().with(BlockAlchemiter.FACING, facing)) ||
-				!world.getBlockState(pos.offset(facing.rotateY(), 2)).equals(MinestuckBlocks.ALCHEMITER_RIGHT_SIDE.getDefaultState().with(BlockAlchemiter.FACING, facing)) ||
-				!world.getBlockState(pos.offset(facing).offset(facing.rotateY())).equals(MinestuckBlocks.ALCHEMITER_CENTER.getDefaultState().with(BlockAlchemiter.FACING, facing)) ||
-				!world.getBlockState(pos.offset(facing.rotateY(), 3)).equals(MinestuckBlocks.ALCHEMITER_CORNER.getDefaultState().with(BlockAlchemiter.FACING, facing.rotateYCCW())) ||
-				!world.getBlockState(pos.offset(facing).offset(facing.rotateY(), 3)).equals(MinestuckBlocks.ALCHEMITER_LEFT_SIDE.getDefaultState().with(BlockAlchemiter.FACING, facing.rotateYCCW())) ||
-				!world.getBlockState(pos.offset(facing, 2).offset(facing.rotateY(), 3)).equals(MinestuckBlocks.ALCHEMITER_RIGHT_SIDE.getDefaultState().with(BlockAlchemiter.FACING, facing.rotateYCCW())) ||
-				!world.getBlockState(pos.offset(facing).offset(facing.rotateY(), 2)).equals(MinestuckBlocks.ALCHEMITER_CENTER.getDefaultState().with(BlockAlchemiter.FACING, facing.rotateYCCW())) ||
-				!world.getBlockState(pos.offset(facing, 3).offset(facing.rotateY(), 3)).equals(MinestuckBlocks.ALCHEMITER_CORNER.getDefaultState().with(BlockAlchemiter.FACING, facing.getOpposite())) ||
-				!world.getBlockState(pos.offset(facing, 3).offset(facing.rotateY(), 2)).equals(MinestuckBlocks.ALCHEMITER_LEFT_SIDE.getDefaultState().with(BlockAlchemiter.FACING, facing.getOpposite())) ||
-				!world.getBlockState(pos.offset(facing, 3).offset(facing.rotateY(), 1)).equals(MinestuckBlocks.ALCHEMITER_RIGHT_SIDE.getDefaultState().with(BlockAlchemiter.FACING, facing.getOpposite())) ||
-				!world.getBlockState(pos.offset(facing, 2).offset(facing.rotateY(), 2)).equals(MinestuckBlocks.ALCHEMITER_CENTER.getDefaultState().with(BlockAlchemiter.FACING, facing.getOpposite())) ||
-				!world.getBlockState(pos.offset(facing, 3)).equals(MinestuckBlocks.ALCHEMITER_CORNER.getDefaultState().with(BlockAlchemiter.FACING, facing.rotateY())) ||
-				!world.getBlockState(pos.offset(facing, 2)).equals(MinestuckBlocks.ALCHEMITER_LEFT_SIDE.getDefaultState().with(BlockAlchemiter.FACING, facing.rotateY())) ||
-				!world.getBlockState(pos.offset(facing)).equals(MinestuckBlocks.ALCHEMITER_RIGHT_SIDE.getDefaultState().with(BlockAlchemiter.FACING, facing.rotateY())) ||
-				!world.getBlockState(pos.offset(facing, 2).offset(facing.rotateY(), 1)).equals(MinestuckBlocks.ALCHEMITER_CENTER.getDefaultState().with(BlockAlchemiter.FACING, facing.rotateY())))
+		if(!world.getBlockState(pos.up(3)).equals(MinestuckBlocks.ALCHEMITER.UPPER_ROD.getDefaultState().with(BlockAlchemiter.FACING, facing)) ||
+				!world.getBlockState(pos.up(2)).equals(MinestuckBlocks.ALCHEMITER.LOWER_ROD.getDefaultState().with(BlockAlchemiter.FACING, facing)) ||
+				//!world.getBlockState(pos.up()).equals(MinestuckBlocks.ALCHEMITER.TOTEM_PAD.getDefaultState().with(BlockAlchemiter.FACING, facing)) ||
+				!world.getBlockState(pos).equals(MinestuckBlocks.ALCHEMITER.TOTEM_CORNER.getDefaultState().with(BlockAlchemiter.FACING, facing)) ||
+				!world.getBlockState(pos.offset(x)).equals(MinestuckBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(BlockAlchemiter.FACING, facing)) ||
+				!world.getBlockState(pos.offset(x, 2)).equals(MinestuckBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(BlockAlchemiter.FACING, facing)) ||
+				!world.getBlockState(pos.offset(z).offset(x)).equals(MinestuckBlocks.ALCHEMITER.CENTER.getDefaultState().with(BlockAlchemiter.FACING, facing)) ||
+				!world.getBlockState(pos.offset(x, 3)).equals(MinestuckBlocks.ALCHEMITER.CORNER.getDefaultState().with(BlockAlchemiter.FACING, facing.rotateYCCW())) ||
+				!world.getBlockState(pos.offset(z).offset(x, 3)).equals(MinestuckBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(BlockAlchemiter.FACING, facing.rotateYCCW())) ||
+				!world.getBlockState(pos.offset(z, 2).offset(x, 3)).equals(MinestuckBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(BlockAlchemiter.FACING, facing.rotateYCCW())) ||
+				!world.getBlockState(pos.offset(z).offset(x, 2)).equals(MinestuckBlocks.ALCHEMITER.CENTER.getDefaultState().with(BlockAlchemiter.FACING, facing.rotateYCCW())) ||
+				!world.getBlockState(pos.offset(z, 3).offset(x, 3)).equals(MinestuckBlocks.ALCHEMITER.CORNER.getDefaultState().with(BlockAlchemiter.FACING, facing.getOpposite())) ||
+				!world.getBlockState(pos.offset(z, 3).offset(x, 2)).equals(MinestuckBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(BlockAlchemiter.FACING, facing.getOpposite())) ||
+				!world.getBlockState(pos.offset(z, 3).offset(x, 1)).equals(MinestuckBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(BlockAlchemiter.FACING, facing.getOpposite())) ||
+				!world.getBlockState(pos.offset(z, 2).offset(x, 2)).equals(MinestuckBlocks.ALCHEMITER.CENTER.getDefaultState().with(BlockAlchemiter.FACING, facing.getOpposite())) ||
+				!world.getBlockState(pos.offset(z, 3)).equals(MinestuckBlocks.ALCHEMITER.CORNER.getDefaultState().with(BlockAlchemiter.FACING, facing.rotateY())) ||
+				!world.getBlockState(pos.offset(z, 2)).equals(MinestuckBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(BlockAlchemiter.FACING, facing.rotateY())) ||
+				!world.getBlockState(pos.offset(z)).equals(MinestuckBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(BlockAlchemiter.FACING, facing.rotateY())) ||
+				!world.getBlockState(pos.offset(z, 2).offset(x, 1)).equals(MinestuckBlocks.ALCHEMITER.CENTER.getDefaultState().with(BlockAlchemiter.FACING, facing.rotateY())))
 			
 		{
 			breakMachine();
@@ -278,7 +289,7 @@ public class TileEntityAlchemiter extends TileEntity
 		broken = tagCompound.getBoolean("broken");
 		
 		if(tagCompound.hasKey("dowel")) 
-			setDowel(ItemStack.read(tagCompound.getCompound("dowel")));
+			dowel = ItemStack.read(tagCompound.getCompound("dowel"));
 	}
 	
 	@Override
@@ -324,16 +335,13 @@ public class TileEntityAlchemiter extends TileEntity
 	{
 		if(worldIn.isRemote)
 		{
-			if(state.getBlock() == MinestuckBlocks.ALCHEMITER_CENTER || state.getBlock() == MinestuckBlocks.ALCHEMITER_CORNER || state.getBlock() == MinestuckBlocks.ALCHEMITER_LEFT_SIDE
-					|| state.getBlock() == MinestuckBlocks.ALCHEMITER_RIGHT_SIDE || state.getBlock() == MinestuckBlocks.ALCHEMITER_TOTEM_CORNER)
+			if(state.getBlock() == MinestuckBlocks.ALCHEMITER.CENTER || state.getBlock() == MinestuckBlocks.ALCHEMITER.CORNER || state.getBlock() == MinestuckBlocks.ALCHEMITER.LEFT_SIDE
+					|| state.getBlock() == MinestuckBlocks.ALCHEMITER.RIGHT_SIDE || state.getBlock() == MinestuckBlocks.ALCHEMITER.TOTEM_CORNER)
 			{
 				BlockPos mainPos = pos;
 				if(!isBroken())
 				{
-					{
-						//TODO Gui
-						//playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.ALCHEMITER.ordinal(), worldIn, mainPos.getX(), mainPos.getY(), mainPos.getZ());
-					}
+					Minecraft.getInstance().displayGuiScreen(new GuiAlchemiter(this));
 				}
 			}
 			return;
@@ -343,21 +351,15 @@ public class TileEntityAlchemiter extends TileEntity
 			//if(hasUpgrade(AlchemiterUpgrades.blender) && !dowel.isEmpty())
 			//	doTheBlenderThing();
 		}
-		BlockPos mainPos = pos;
-		TileEntity te = worldIn.getTileEntity(mainPos);
 		
-		if (te instanceof TileEntityAlchemiter && playerIn != null)
-		{
-			((TileEntityAlchemiter) te).onPadRightClick(playerIn, state);
-		}
+		onPadRightClick(playerIn, state);
 	}
 	
 	public void onPadRightClick(EntityPlayer player, IBlockState clickedState)
 	{
 		if (isUseable(clickedState))
 		{
-			BlockAlchemiter alchemiter = (BlockAlchemiter) clickedState.getBlock();
-			if(clickedState.getBlock() == MinestuckBlocks.ALCHEMITER_TOTEM_PAD)
+			if(clickedState.getBlock() == MinestuckBlocks.ALCHEMITER.TOTEM_PAD)
 			{
 				if (!dowel.isEmpty())
 				{    //Remove dowel from pad

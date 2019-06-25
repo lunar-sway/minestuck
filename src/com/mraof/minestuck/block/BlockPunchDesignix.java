@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.block.multiblock.MultiblockMachine;
 import com.mraof.minestuck.tileentity.TileEntityPunchDesignix;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -21,19 +22,19 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-public class BlockPunchDesignix extends BlockMachine
+public class BlockPunchDesignix extends BlockMultiMachine
 {
 	
-	public static final Map<EnumFacing, VoxelShape> LEG_SHAPE = createRotatedShapes(0, 0, 0, 16, 16, 12);
-	public static final Map<EnumFacing, VoxelShape> SLOT_SHAPE = createRotatedShapes(1, 0, 0, 16, 7, 7);
-	public static final Map<EnumFacing, VoxelShape> KEYBOARD_SHAPE = createRotatedShapes(0, 0, 0, 15, 7, 12);
+	public static final Map<EnumFacing, VoxelShape> LEG_SHAPE = createRotatedShapes(0, 0, 4, 16, 16, 16);
+	public static final Map<EnumFacing, VoxelShape> SLOT_SHAPE = createRotatedShapes(0, 0, 9, 15, 7, 16);
+	public static final Map<EnumFacing, VoxelShape> KEYBOARD_SHAPE = createRotatedShapes(1, 0, 4, 16, 7, 16);
 	
 	protected final Map<EnumFacing, VoxelShape> shape;
 	protected final BlockPos mainPos;
 	
-	public BlockPunchDesignix(Properties properties, Map<EnumFacing, VoxelShape> shape, BlockPos pos)
+	public BlockPunchDesignix(MultiblockMachine machine, Map<EnumFacing, VoxelShape> shape, BlockPos pos, Properties properties)
 	{
-		super(properties);
+		super(machine, properties);
 		this.shape = shape;
 		this.mainPos = pos;
 	}
@@ -102,9 +103,10 @@ public class BlockPunchDesignix extends BlockMachine
 	{
 		public static final BooleanProperty HAS_CARD = MinestuckProperties.HAS_CARD;
 		
-		public Slot(Properties properties, Map<EnumFacing, VoxelShape> shape)
+		public Slot(MultiblockMachine machine, Map<EnumFacing, VoxelShape> shape, Properties properties)
 		{
-			super(properties, shape, new BlockPos(0, 0, 0));
+			super(machine, shape, new BlockPos(0, 0, 0), properties);
+			setDefaultState(this.stateContainer.getBaseState().with(HAS_CARD, false));
 		}
 		
 		@Override

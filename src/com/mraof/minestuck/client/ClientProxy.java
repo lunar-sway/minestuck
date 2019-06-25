@@ -98,7 +98,7 @@ public class ClientProxy extends CommonProxy
 	public static void initBlockColors(ColorHandlerEvent.Block event)
 	{
 		BlockColors colors = event.getBlockColors();
-		colors.register(new BlockColorCruxite(), MinestuckBlocks.ALCHEMITER_TOTEM_PAD, MinestuckBlocks.TOTEM_LATHE_DOWEL_ROD, MinestuckBlocks.CRUXITE_DOWEL);
+		colors.register(new BlockColorCruxite(), MinestuckBlocks.ALCHEMITER.TOTEM_PAD, MinestuckBlocks.TOTEM_LATHE.DOWEL_ROD, MinestuckBlocks.CRUXITE_DOWEL);
 		colors.register((state, worldIn, pos, tintIndex) ->
 		{
 			int age = state.get(BlockStem.AGE);

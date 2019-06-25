@@ -56,7 +56,7 @@ public abstract class BlockMachine extends Block
 	@Override
 	public IBlockState getStateForPlacement(BlockItemUseContext context)
 	{
-		return getDefaultState().with(FACING, context.getPlacementHorizontalFacing());
+		return getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
 	}
 	
 	//Should probably find an utility class for the functions below
