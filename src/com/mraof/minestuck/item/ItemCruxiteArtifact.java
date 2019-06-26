@@ -100,7 +100,8 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 					//Teleportation code is now called from enterMedium(), which is called from createLand.
 					//createLand will return -1 if Entry fails for any reason, including the teleporter being null or returning false in prepareDestination().
 					//Whatever the problem is, relevant information should be printed to the console.
-					if(LandAspectRegistry.createLand(player, this) == null)
+					DimensionType type = SkaianetHandler.get(player.world).enterMedium(player, this);
+					if(type == null)
 					{
 						player.sendMessage(new TextComponentString("Something went wrong creating your Land. More details in the server console."));
 					}

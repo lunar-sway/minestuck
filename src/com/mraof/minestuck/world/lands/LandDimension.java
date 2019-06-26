@@ -1,16 +1,21 @@
 package com.mraof.minestuck.world.lands;
 
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.client.renderer.LandSkyRender;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import com.mraof.minestuck.world.biome.BiomeMinestuck;
+import com.mraof.minestuck.world.gen.ModChunkGeneratorType;
+import com.mraof.minestuck.world.gen.SkaiaGenSettings;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -18,6 +23,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameType;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.provider.BiomeProviderType;
 import net.minecraft.world.dimension.Dimension;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.IChunkGenerator;
@@ -73,14 +79,10 @@ public class LandDimension extends Dimension
 	@Override
 	public IChunkGenerator createChunkGenerator()
 	{
-		if (chunkProvider == null)
-		{
-			landAspects = MinestuckDimensionHandler.getAspects(getType());
-			
-			chunkProvider = landAspects.aspectTitle.createChunkProvider(this);
-			
-		}
-		return chunkProvider;
+		SkaiaGenSettings settings = ModChunkGeneratorType.SKAIA.createSettings();
+		settings.setDefautBlock(MinestuckBlocks.WHITE_CHESS_DIRT.getDefaultState());
+		settings.setDefaultFluid(Blocks.AIR.getDefaultState());
+		return ModChunkGeneratorType.SKAIA.create(this.world, BiomeProviderType.FIXED.create(BiomeProviderType.FIXED.createSettings().setBiome(BiomeMinestuck.skaia)), settings);
 	}
 	
 	@Nullable
