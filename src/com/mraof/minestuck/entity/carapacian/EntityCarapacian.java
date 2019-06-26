@@ -47,7 +47,7 @@ public abstract class EntityCarapacian extends EntityMinestuck
 		setAllies();
 		
 		this.tasks.addTask(1, new EntityAISwimming(this));
-		this.tasks.addTask(4, new EntityAIMoveToBattle(this));
+		//this.tasks.addTask(4, new EntityAIMoveToBattle(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTargetAllied(this, this.getKingdom() == EnumEntityKingdom.PROSPITIAN ? prospitianSelector : dersiteSelector));
 		this.targetTasks.addTask(2, this.entityAINearestAttackableTargetWithHeight());
 		this.tasks.addTask(5, new EntityAIWander(this, this.getWanderSpeed()));

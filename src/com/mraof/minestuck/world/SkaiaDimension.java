@@ -1,16 +1,21 @@
 package com.mraof.minestuck.world;
 
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.world.gen.ChunkProviderSkaia;
 
+import com.mraof.minestuck.world.biome.BiomeMinestuck;
+import com.mraof.minestuck.world.gen.ModChunkGeneratorType;
+import com.mraof.minestuck.world.gen.SkaiaGenSettings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Biomes;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.biome.provider.BiomeProviderType;
 import net.minecraft.world.dimension.Dimension;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.IChunkGenerator;
@@ -32,13 +37,15 @@ public class SkaiaDimension extends Dimension
 	protected void init()
 	{
 		this.hasSkyLight = true;
-		//this.biomeProvider = new BiomeProviderSingle(Biomes.PLAINS);
 	}
 	
 	@Override
 	public IChunkGenerator createChunkGenerator()
 	{
-		return null;//new ChunkProviderSkaia(this.world, this.world.getSeed(), true);
+		SkaiaGenSettings settings = ModChunkGeneratorType.SKAIA.createSettings();
+		settings.setDefautBlock(MinestuckBlocks.WHITE_CHESS_DIRT.getDefaultState());
+		settings.setDefaultFluid(Blocks.AIR.getDefaultState());
+		return ModChunkGeneratorType.SKAIA.create(this.world, BiomeProviderType.FIXED.create(BiomeProviderType.FIXED.createSettings().setBiome(BiomeMinestuck.skaia)), settings);
 	}
 	
 	@Override
@@ -88,7 +95,7 @@ public class SkaiaDimension extends Dimension
 	@Override
 	public boolean doesXZShowFog(int x, int z)
 	{
-		return true;
+		return false;
 	}
 	
 	@Override

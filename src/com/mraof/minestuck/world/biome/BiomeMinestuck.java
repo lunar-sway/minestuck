@@ -10,6 +10,7 @@ import net.minecraftforge.fml.common.Mod;
 public class BiomeMinestuck extends Biome
 {
 	
+	public static Biome skaia;
 	public static Biome mediumOcean, mediumNormal, mediumRough;
 	
 	public BiomeMinestuck(BiomeBuilder biomeBuilder)
@@ -20,6 +21,8 @@ public class BiomeMinestuck extends Biome
 	@SubscribeEvent
 	public static void registerBiomes(final RegistryEvent.Register<Biome> event)
 	{
+		skaia = new SkaiaBiome();
+		event.getRegistry().register(skaia.setRegistryName("skaia"));
 		/*mediumNormal = new BiomeMinestuck(new BiomeProperties("The Medium")).setRegistryName("medium");
 		mediumOcean = new BiomeMinestuck(new BiomeProperties("The Medium (Ocean)").setBaseBiome("medium")).setRegistryName("medium_ocean");
 		mediumRough = new BiomeMinestuck(new BiomeProperties("The Medium (Rough)").setBaseBiome("medium")).setRegistryName("medium_rough");

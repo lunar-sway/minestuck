@@ -2,11 +2,8 @@ package com.mraof.minestuck;
 
 import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
-import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortDialogue;
 import com.mraof.minestuck.entity.consort.ConsortRewardHandler;
 import com.mraof.minestuck.event.MinestuckFluidHandler;
@@ -14,22 +11,14 @@ import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
-import com.mraof.minestuck.tileentity.*;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.*;
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
-import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.gen.OreHandler;
-import com.mraof.minestuck.world.gen.structure.StructureCastlePieces;
-import com.mraof.minestuck.world.gen.structure.StructureCastleStart;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
-import com.mraof.minestuck.world.lands.structure.MapGenLandStructure;
-import com.mraof.minestuck.world.lands.structure.village.ConsortVillageComponents;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 import com.mraof.minestuck.world.storage.loot.MinestuckLoot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class CommonProxy
 {

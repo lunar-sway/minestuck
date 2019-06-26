@@ -15,15 +15,17 @@ import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.ModDimension;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.world.RegisterDimensionsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class MinestuckDimensionHandler
 {
 	public static int biomeIdStart;
@@ -37,27 +39,27 @@ public class MinestuckDimensionHandler
 	public static ModDimension landDimensionType;
 	public static ModDimension skaiaDimensionType;
 	
-	@SubscribeEvent
-	public static void registerModDimensions(final RegistryEvent.Register<ModDimension> event)
+	public static void registerModDimensions(IForgeRegistry<ModDimension> registry)
 	{
 		landDimensionType = new LandDimension.Type();
-		event.getRegistry().register(landDimensionType.setRegistryName("lands"));
+		registry.register(landDimensionType.setRegistryName("lands"));
 		skaiaDimensionType = new SkaiaDimension.Type();
-		event.getRegistry().register(skaiaDimensionType.setRegistryName("skaia"));
+		registry.register(skaiaDimensionType.setRegistryName("skaia"));
 	}
 	
 	/**
 	 * On server init, this function is called to register dimensions.
 	 * The dimensions registered will then be sent and registered by forge client-side.
 	 */
-	public static void register()
+	@SubscribeEvent
+	public static void registerDimensionTypes(final RegisterDimensionsEvent event)
 	{
 		lands.clear();
 		
 		//register dimensions
 		skaia = DimensionType.byName(SKAIA_ID);
-		/*if(skaia != null) We don't want skaia until it has a chunk generator
-			skaia = DimensionManager.registerDimension(SKAIA_ID, skaiaDimensionType, null);*/
+		if(skaia == null)
+			skaia = DimensionManager.registerDimension(SKAIA_ID, skaiaDimensionType, null);
 		
 		for(LandInfoContainer container : landInfo.values())
 		{
