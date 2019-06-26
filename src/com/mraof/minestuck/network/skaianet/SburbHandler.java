@@ -576,7 +576,7 @@ public class SburbHandler
 		return count;
 	}
 	
-	private static void genLandAspects(SburbConnection connection)
+	private static LandAspects genLandAspects(SburbConnection connection)
 	{
 		LandAspectRegistry aspectGen = new LandAspectRegistry((Minestuck.worldSeed^connection.clientHomeLand.getId())^(connection.clientHomeLand.getId() << 8));
 		Session session = getPlayerSession(connection.getClientIdentifier());
@@ -621,7 +621,8 @@ public class SburbHandler
 			titleAspect = aspectGen.getTitleAspect(terrainAspect, title.getHeroAspect(), usedTitleAspects);
 		if(terrainAspect == null)
 			terrainAspect = aspectGen.getTerrainAspect(titleAspect, usedTerrainAspects);
-		//MinestuckDimensionHandler.registerLandDimension(connection.clientHomeLand, new LandAspects(terrainAspect, titleAspect)); TODO
+		
+		return new LandAspects(terrainAspect, titleAspect);
 	}
 	
 	public static GristType getUnderlingType(EntityUnderling entity)
@@ -692,21 +693,22 @@ public class SburbHandler
 		
 	}
 	
-	static void onLandCreated(MinecraftServer server, SburbConnection c)
+	static DimensionType enterMedium(MinecraftServer server, SburbConnection c)
 	{
-//		Session session = getPlayerSession(c.clientIdentifier);
-//		PlayerIdentifier identifier = c.clientIdentifier;
-//		Title title = produceTitle(identifier);
-//		
-//		Title playerTitle = MinestuckPlayerData.getTitle(identifier);
-//		if(playerTitle == null)
-//		{
-//			PredefineData data = session.predefinedPlayers.get(identifier);
-//			data.title = title;
-//		}
+		PlayerIdentifier identifier = c.getClientIdentifier();
+		Session session = getPlayerSession(c.getClientIdentifier());
+		Title title = produceTitle(identifier);
+		
+		Title playerTitle = MinestuckPlayerData.getTitle(identifier);
+		if(playerTitle == null)
+		{
+			PredefineData data = session.predefinedPlayers.get(identifier);
+			data.title = title;
+		}
 		
 		generateTitle(server, c.getClientIdentifier());
-		genLandAspects(c);		//This is where the Land dimension is actually registered, but it also needs the player's Title to be determined.
+		LandAspects aspects = genLandAspects(c);		//This is where the Land dimension is actually registered, but it also needs the player's Title to be determined.
+		return LandAspectRegistry.createLand(identifier, aspects);
 	}
 	
 	static void onGameEntered(SburbConnection c)

@@ -724,7 +724,7 @@ public class SkaianetHandler extends WorldSavedData
 		return null;
 	}
 	
-	public DimensionType enterMedium(EntityPlayerMP player, DimensionType dimensionId, Teleport.ITeleporter teleport)
+	public DimensionType enterMedium(EntityPlayerMP player, Teleport.ITeleporter teleport)
 	{
 		PlayerIdentifier username = IdentifierHandler.encode(player);
 		SburbConnection c = getMainConnection(username, true);
@@ -771,10 +771,9 @@ public class SkaianetHandler extends WorldSavedData
 		else if(c.enteredGame)
 			return c.clientHomeLand;
 		
-		c.clientHomeLand = dimensionId;
-		SburbHandler.onLandCreated(player.getServer(), c);
+		c.clientHomeLand = SburbHandler.enterMedium(player.getServer(), c);
 		
-		if(teleport != null && Teleport.teleportEntity(player, dimensionId, teleport))
+		if(teleport != null && Teleport.teleportEntity(player, c.clientHomeLand, teleport))
 		{
 			c.enteredGame = true;
 			SburbHandler.onGameEntered(c);
@@ -786,7 +785,7 @@ public class SkaianetHandler extends WorldSavedData
 			sendLandChainUpdate();
 		} else //TODO Look at effects of cancelling entry at this point
 			Debug.errorf("Couldn't move %s to their Land. Stopping entry.", player.getName());
-		return dimensionId;
+		return c.clientHomeLand;
 	}
 	
 	public void resetGivenItems()
