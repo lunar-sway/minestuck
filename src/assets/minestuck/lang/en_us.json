@@ -1188,7 +1188,7 @@
   "minestuck.config.entry_crater": "Create Crater on Entry",
   "minestuck.config.entry_crater.tooltip": "Turning this off will prevent minestuck from creating craters when players enter the medium. Items and tile entities will still be removed from where the crater should be.",
   "minestuck.config.keep_dimensions_loaded": "Keep the Medium Loaded",
-  "minestuck.config.keep_dimensions_loadedtooltip": "Having this on will make medium dimensions and the area around the spawn stay loaded.",
+  "minestuck.config.keep_dimensions_loaded.tooltip": "Having this on will make medium dimensions and the area around the spawn stay loaded.",
   "minestuck.config.old_item_models": "Use Old Item Models",
   "minestuck.config.old_item_models.tooltip": "Set this to true to have back all old 2D item models.",
   "minestuck.config.login_color_selector": "Display Color Selector on Login",
