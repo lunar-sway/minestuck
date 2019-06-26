@@ -33,7 +33,7 @@ public class EntityNakagator extends EntityConsort
 	@Override
 	public String getTexture()
 	{
-		return "textures/mobs/nakagator.png";
+		return "textures/entity/nakagator.png";
 	}
 	
 	@Override

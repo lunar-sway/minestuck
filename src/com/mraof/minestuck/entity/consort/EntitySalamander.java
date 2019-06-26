@@ -31,7 +31,7 @@ public class EntitySalamander extends EntityConsort
 	@Override
 	public String getTexture()
 	{
-		return "textures/mobs/salamander.png";
+		return "textures/entity/salamander.png";
 	}
 	
 	@Override

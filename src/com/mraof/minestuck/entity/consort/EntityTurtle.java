@@ -25,7 +25,7 @@ public class EntityTurtle extends EntityConsort
 	@Override
 	public String getTexture()
 	{
-		return "textures/mobs/turtle.png";
+		return "textures/entity/turtle.png";
 	}
 	
 	@Override
