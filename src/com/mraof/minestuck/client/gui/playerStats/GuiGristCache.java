@@ -53,7 +53,7 @@ public class GuiGristCache extends GuiPlayerStats implements GuiButtonImpl.Butto
 
 		String cacheMessage;
 		if (ClientEditHandler.isActive() || MinestuckPlayerData.title == null)
-			cacheMessage = I18n.format("gui.gristCache.name");
+			cacheMessage = I18n.format("gui.grist_cache.name");
 		else cacheMessage = MinestuckPlayerData.title.getTitleName();
 		mc.fontRenderer.drawString(cacheMessage, (this.width / 2) - mc.fontRenderer.getStringWidth(cacheMessage) / 2, yOffset + 12, 0x404040);
 		super.render(mouseX, mouseY, partialTicks);
