@@ -41,7 +41,7 @@ public class GuiStrifeSpecibus extends GuiPlayerStats
 		
 		int i = 0;
 		for(KindAbstratusType type : KindAbstratusList.getTypeList()) {
-			String typeName = type.getDisplayName().toString().toLowerCase();
+			String typeName = type.getUnlocalizedName().toLowerCase() + "kind";
 			int xPos = xOffset+9+(columnWidth)*((i%columns)+1)-mc.fontRenderer.getStringWidth(typeName);
 			int yPos = yOffset+35+(mc.fontRenderer.FONT_HEIGHT+1)*(int)(i/columns);
 			
