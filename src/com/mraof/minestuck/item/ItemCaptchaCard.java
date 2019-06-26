@@ -76,15 +76,15 @@ public class ItemCaptchaCard extends Item
 				String stackSize = (nbt.getBoolean("punched") || nbt.getInt("contentSize") <= 0) ? "" : nbt.getInt("contentSize") + "x";
 				tooltip.add(new TextComponentString("(").appendText(stackSize).appendSibling(content.getDisplayName()).appendText(")"));
 				if(nbt.getBoolean("punched"))
-					tooltip.add(new TextComponentString("(").appendSibling(new TextComponentTranslation("item.captchaCard.punched")).appendText(")"));
+					tooltip.add(new TextComponentString("(").appendSibling(new TextComponentTranslation("item.minestuck.captcha_card.punched")).appendText(")"));
 				else if(nbt.getInt("contentSize") <= 0)
-					tooltip.add(new TextComponentString("(").appendSibling(new TextComponentTranslation("item.captchaCard.ghost")).appendText(")"));
+					tooltip.add(new TextComponentString("(").appendSibling(new TextComponentTranslation("item.minestuck.captcha_card.ghost")).appendText(")"));
 			} else
 			{
-				tooltip.add(new TextComponentString("(").appendSibling(new TextComponentTranslation("item.captchaCard.invalid")).appendText(")"));
+				tooltip.add(new TextComponentString("(").appendSibling(new TextComponentTranslation("item.minestuck.captcha_card.invalid")).appendText(")"));
 			}
 		} else
-			tooltip.add(new TextComponentString("(").appendSibling(new TextComponentTranslation("item.captchaCard.empty")).appendText(")"));
+			tooltip.add(new TextComponentString("(").appendSibling(new TextComponentTranslation("item.minestuck.captcha_card.empty")).appendText(")"));
 	}
 	
 }
