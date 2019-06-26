@@ -24,7 +24,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.lwjgl.openal.ALC;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class MinestuckBlocks
 {
 	//Skaia
@@ -232,10 +231,8 @@ public class MinestuckBlocks
 	public static Block[] liquidGrists;
 	public static Fluid[] gristFluids;*/
 	
-	@SubscribeEvent
-	public static void registerBlocks(final RegistryEvent.Register<Block> event)
+	public static void registerBlocks(IForgeRegistry<Block> registry)
 	{
-		IForgeRegistry<Block> registry = event.getRegistry();
 		
 		registry.register(BLACK_CHESS_DIRT = new BlockDirt(Block.Properties.create(Material.GROUND, MaterialColor.BLACK).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("black_chess_dirt"));
 		registry.register(WHITE_CHESS_DIRT = new BlockDirt(Block.Properties.create(Material.GROUND, MaterialColor.SNOW).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("white_chess_dirt"));

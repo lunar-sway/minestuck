@@ -17,8 +17,12 @@ import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.ModDimension;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -132,13 +136,33 @@ public class Minestuck
 		worldSeed = event.getServer().getWorld(DimensionType.OVERWORLD).getSeed();
 		ServerEventHandler.lastDay = event.getServer().getWorld(DimensionType.OVERWORLD).getGameTime() / 24000L;
 		CaptchaDeckHandler.rand = new Random();
-		
-		MinestuckDimensionHandler.register();
 	}
 	
 	@SubscribeEvent
 	public void serverStopping(FMLServerStoppingEvent event)
 	{
 		ServerEditHandler.onServerStopping();
+	}
+	
+	@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
+	public static class RegistryEvents
+	{
+		@SubscribeEvent
+		public static void onBlockRegistry(final RegistryEvent.Register<Block> event)
+		{
+			MinestuckBlocks.registerBlocks(event.getRegistry());
+		}
+		
+		@SubscribeEvent
+		public static void onItemRegistry(final RegistryEvent.Register<Item> event)
+		{
+			MinestuckItems.registerItems(event.getRegistry());
+		}
+		
+		@SubscribeEvent
+		public static void onDimensionRegistry(final RegistryEvent.Register<ModDimension> event)
+		{
+			MinestuckDimensionHandler.registerModDimensions(event.getRegistry());
+		}
 	}
 }

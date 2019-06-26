@@ -38,6 +38,7 @@ public class KindAbstratusList {
 				return type;
 		return null;
 	}
+
 	
 	public static List<KindAbstratusType> getTypeList() {
 		return new ArrayList<KindAbstratusType>(typeList);

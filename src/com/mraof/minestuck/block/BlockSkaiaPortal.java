@@ -1,6 +1,7 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.tileentity.TileEntitySkaiaPortal;
+import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.state.BlockFaceShape;
@@ -35,8 +36,6 @@ public class BlockSkaiaPortal extends BlockContainer
 	public TileEntity createNewTileEntity(IBlockReader worldIn)
 	{
 		TileEntitySkaiaPortal tileEntity = new TileEntitySkaiaPortal();
-		//TODO Once dimensions are figured out
-		//tileEntity.destination.dim = MinestuckDimensionHandler.skaiaDimensionId == worldIn.provider.getDimension() ? 0 : MinestuckDimensionHandler.skaiaDimensionId;
 		return tileEntity;
 	}
 	

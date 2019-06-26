@@ -28,9 +28,11 @@ public class TileEntitySkaiaPortal extends TileEntity implements ITeleporter
 	}
 	
 	@Override
-	public void setPos(BlockPos posIn)
+	public void setWorld(World worldIn)
 	{
-		super.setPos(posIn);
+		super.setWorld(worldIn);
+		if(destination.dim == worldIn.getDimension().getType())
+			destination.dim = worldIn.getDimension().getType() == MinestuckDimensionHandler.skaia ? DimensionType.OVERWORLD : MinestuckDimensionHandler.skaia;
 	}
 	
 	@Override
@@ -60,7 +62,7 @@ public class TileEntitySkaiaPortal extends TileEntity implements ITeleporter
 	
 	public void teleportEntity(Entity entity)
 	{
-		if(destination.dim != this.world.getDimension().getType())
+		if(destination.dim != this.world.getDimension().getType() && destination.dim != null)
 		{
 			if(destination.pos.getY() < 0)
 			{

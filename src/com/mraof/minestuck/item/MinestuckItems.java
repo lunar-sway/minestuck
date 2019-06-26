@@ -30,7 +30,6 @@ import java.util.Arrays;
  * This class contains all non-ItemBlock items that minestuck adds,
  * and is responsible for initializing and registering these.
  */
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class MinestuckItems
 {
 	
@@ -199,10 +198,8 @@ public class MinestuckItems
 	public static Item RECORD_DANCE_STAB;
 	public static Item RECORD_RETRO_BATTLE;
 	
-	@SubscribeEvent
-	public static void registerItems(final RegistryEvent.Register<Item> event)
+	public static void registerItems(IForgeRegistry<Item> registry)
 	{
-		IForgeRegistry<Item> registry = event.getRegistry();
 		registerItemBlock(registry, BLACK_CHESS_DIRT, ModItemGroup.MAIN);
 		registerItemBlock(registry, WHITE_CHESS_DIRT, ModItemGroup.MAIN);
 		registerItemBlock(registry, DARK_GRAY_CHESS_DIRT, ModItemGroup.MAIN);
