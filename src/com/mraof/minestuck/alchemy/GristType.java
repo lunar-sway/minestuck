@@ -76,7 +76,6 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 	{
 		return new TextComponentTranslation("grist." + name);
 	}
-
 	/**
 	 * Returns the grist's full unlocalized name.
 	 *
@@ -134,7 +133,7 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 	{
 		return REGISTRY.getID(this);
 	}
-	
+
 	@SubscribeEvent
 	public static void onRegistryNewRegistry(final RegistryEvent.NewRegistry event)
 	{
