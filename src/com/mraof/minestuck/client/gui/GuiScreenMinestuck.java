@@ -4,12 +4,14 @@ import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.util.MinestuckPlayerData;
+import com.sun.java.accessibility.util.Translator;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -70,8 +72,8 @@ public abstract class GuiScreenMinestuck extends GuiScreen
 		{
 			if (showName)
 			{
-				drawHoveringText(Collections.singletonList(I18n.format("grist.format", tooltipType.getDisplayName())),
-						xcor, ycor, fontRenderer);
+				drawHoveringText(Collections.singletonList(new TextComponentTranslation("grist.format", tooltipType.getDisplayName()).getFormattedText()), xcor, ycor, fontRenderer);
+
 			}
 			else
 			{
