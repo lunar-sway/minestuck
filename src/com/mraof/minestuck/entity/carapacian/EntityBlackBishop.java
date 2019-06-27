@@ -14,7 +14,7 @@ public class EntityBlackBishop extends EntityBishop
 	@Override
 	public String getTexture() 
 	{
-		return "textures/mobs/dersite_bishop.png";
+		return "textures/entity/dersite_bishop.png";
 	}
 
 	@Override

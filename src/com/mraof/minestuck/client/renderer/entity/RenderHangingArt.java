@@ -23,7 +23,7 @@ public class RenderHangingArt<T extends EntityHangingArt> extends Render<T>
 	public RenderHangingArt(RenderManager renderManagerIn, String artPath)
 	{
 		super(renderManagerIn);
-		ART_TEXTURE = new ResourceLocation("minestuck:textures/paintings/" + artPath + ".png");
+		ART_TEXTURE = new ResourceLocation("minestuck:textures/painting/" + artPath + ".png");
 	}
 	
 	@Override

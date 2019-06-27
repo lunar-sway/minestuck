@@ -17,7 +17,7 @@ public class EntityBlackPawn extends EntityPawn
 	@Override
 	public String getTexture() 
 	{
-		return "textures/mobs/dersite_pawn.png";
+		return "textures/entity/dersite_pawn.png";
 	}
 
 	@Override

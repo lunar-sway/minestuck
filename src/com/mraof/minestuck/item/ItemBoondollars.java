@@ -55,7 +55,7 @@ public class ItemBoondollars extends Item	//TODO Add custom crafting recipe that
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
 	{
 		int amount = getCount(stack);
-		tooltip.add(new TextComponentTranslation("item.boondollars.amount", amount));
+		tooltip.add(new TextComponentTranslation("item.minestuck.boondollars.amount", amount));
 	}
 	
 	public static int getCount(ItemStack stack)
