@@ -1,16 +1,17 @@
 {
   "type": "crafting_shaped",
   "pattern": [
-    "##",
-    "##"
+    "###",
+    "###",
+    "###"
   ],
   "key": {
     "#": {
-      "item": "minestuck:pink_stone"
+      "item": "minestuck:frost_tile"
     }
   },
   "result": {
-    "item": "minestuck:polished_pink_stone",
+    "item": "minestuck:frost_bricks",
     "count": 4
   }
 }

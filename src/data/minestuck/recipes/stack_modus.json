@@ -15,8 +15,7 @@
     }
   },
   "result": {
-    "item": "minestuck:modus_card",
-    "data": 0,
+    "item": "minestuck:stack_modus_card",
     "count": 1
   }
 }

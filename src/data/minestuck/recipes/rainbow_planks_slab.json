@@ -1,12 +1,11 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "crafting_shaped",
   "pattern": [
     "###"
   ],
   "key": {
     "#": {
-      "item": "minestuck:planks",
-      "data": 12
+      "item": "minestuck:rainbow_planks"
     }
   },
   "result": {

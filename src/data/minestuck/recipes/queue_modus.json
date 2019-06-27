@@ -15,8 +15,7 @@
     }
   },
   "result": {
-    "item": "minestuck:modus_card",
-    "data": 1,
+    "item": "minestuck:queue_modus_card",
     "count": 1
   }
 }

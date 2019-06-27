@@ -1,18 +1,15 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "crafting_shapeless",
   "ingredients": [
     {
-      "item": "minestuck:treated_planks",
-      "data": 0
+      "item": "minestuck:treated_planks"
     },
     {
-      "item": "minecraft:water_bucket",
-      "data": 0
+      "item": "minecraft:water_bucket"
     }
   ],
   "result": {
-    "item": "minecraft:planks",
-    "count": 1,
-    "data": 0
+    "item": "minecraft:oak_planks",
+    "count": 1
   }
 }

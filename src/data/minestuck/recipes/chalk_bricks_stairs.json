@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "crafting_shaped",
   "group": "minestuck:stairs",
   "pattern": [
     "#  ",
@@ -12,7 +12,7 @@
     }
   },
   "result": {
-    "item": "minestuck:chalk_bricks_stairs",
+    "item": "minestuck:chalk_brick_stairs",
     "count": 4
   }
 }

@@ -1,13 +1,11 @@
 {
-  "type": "forge:ore_shapeless",
+  "type": "crafting_shapeless",
   "ingredients": [
     {
-      "item": "minecraft:bowl",
-      "data": 0
+      "item": "minecraft:bowl"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "treeLeaves"
+      "tag": "minecraft:leaves"
     }
   ],
   "result": {

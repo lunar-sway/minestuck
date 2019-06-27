@@ -1,14 +1,12 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "crafting_shapeless",
   "ingredients": [
     {
-      "item": "minestuck:log",
-      "data": 3
+      "item": "minestuck:rainbow_log"
     }
   ],
   "result": {
-    "item": "minestuck:planks",
-    "data": 12,
+    "item": "minestuck:rainbow_planks",
     "count": 4
   }
 }

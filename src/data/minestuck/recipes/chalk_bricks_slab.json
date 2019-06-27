@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "crafting_shaped",
   "pattern": [
     "###"
   ],
@@ -9,7 +9,7 @@
     }
   },
   "result": {
-    "item": "minestuck:chalk_bricks_slab",
+    "item": "minestuck:chalk_brick_slab",
     "count": 6
   }
 }

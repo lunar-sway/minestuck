@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "crafting_shaped",
   "pattern": [
     "X X",
     " X ",
@@ -7,8 +7,7 @@
   ],
   "key": {
     "X": {
-      "item": "minecraft:stone",
-      "data": 0
+      "item": "minecraft:stone"
     }
   },
   "result": {

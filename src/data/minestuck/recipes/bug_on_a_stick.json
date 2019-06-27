@@ -1,25 +1,21 @@
 {
-  "type": "forge:ore_shapeless",
+  "type": "crafting_shapeless",
   "ingredients": [
     {
-      "type": "forge:ore_dict",
-      "ore": "stickWood"
+      "tag": "forge:rods/wooden"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "stickWood"
+      "tag": "forge:rods/wooden"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "stickWood"
+      "tag": "forge:rods/wooden"
     },
     {
-      "item": "minestuck:jar_of_bugs",
-      "data": 0
+      "item": "minestuck:jar_of_bugs"
     }
   ],
   "result": {
-    "item": "minestuck:bug_on_stick",
+    "item": "minestuck:bug_on_a_stick",
     "count": 3
   }
 }
