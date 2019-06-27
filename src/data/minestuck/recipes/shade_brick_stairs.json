@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "crafting_shaped",
   "group": "minestuck:stairs",
   "pattern": [
     "#  ",
@@ -8,8 +8,7 @@
   ],
   "key": {
     "#": {
-      "item": "minestuck:stone",
-      "data": 2
+      "item": "minestuck:shade_bricks"
     }
   },
   "result": {

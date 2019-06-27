@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "crafting_shaped",
   "pattern": [
     "  X",
     " # ",
@@ -7,12 +7,10 @@
   ],
   "key": {
     "#": {
-      "type": "forge:ore_dict",
-      "ore": "stickWood"
+      "tag": "forge:rods/wooden"
     },
     "X": {
-      "type": "forge:ore_dict",
-      "ore": "plankWood"
+      "tag": "minecraft:planks"
     }
   },
   "result": {

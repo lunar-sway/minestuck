@@ -2,8 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "minestuck:log",
-      "data": 2
+      "item": "minestuck:frost_log"
     }
   ],
   "result": {

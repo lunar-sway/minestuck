@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "crafting_shaped",
   "pattern": [
     " X ",
     "X#X",
@@ -14,8 +14,7 @@
     }
   },
   "result": {
-    "item": "minestuck:computer_disk",
-    "data": 1,
+    "item": "minestuck:server_disk",
     "count": 1
   }
 }

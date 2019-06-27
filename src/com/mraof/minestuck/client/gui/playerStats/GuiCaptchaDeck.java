@@ -67,7 +67,7 @@ public class GuiCaptchaDeck extends GuiPlayerStatsContainer implements GuiButton
 	{
 		drawTabTooltip(xcor, ycor);
 		
-		String message = I18n.format("gui.captchaDeck.name");
+		String message = I18n.format("gui.captcha_deck.name");
 		mc.fontRenderer.drawString(message, (this.width / 2) - mc.fontRenderer.getStringWidth(message) / 2 - guiLeft, yOffset + 12 - guiTop, 0x404040);
 		
 	}
