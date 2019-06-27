@@ -7,8 +7,11 @@ import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.LandAspects;
 import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.lands.LandInfoContainer;
+import io.netty.buffer.Unpooled;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.dimension.DimensionType;
@@ -20,20 +23,20 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.IForgeRegistry;
 
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class MinestuckDimensionHandler
 {
+	public static int landDimensionCache = 1;
+	
 	public static int biomeIdStart;
 	public static final ResourceLocation SKAIA_ID = new ResourceLocation(Minestuck.MOD_ID, "skaia");
 	
 	private static Exception unregisterTrace;
 	private static Hashtable<IdentifierHandler.PlayerIdentifier, LandInfoContainer> landInfo = new Hashtable<>();
 	private static Hashtable<IdentifierHandler.PlayerIdentifier, DimensionType> lands = new Hashtable<>();
+	public static List<DimensionType> landCache = new ArrayList<>();
 	public static DimensionType skaia;
 	
 	public static ModDimension landDimensionType;
@@ -54,17 +57,37 @@ public class MinestuckDimensionHandler
 	@SubscribeEvent
 	public static void registerDimensionTypes(final RegisterDimensionsEvent event)
 	{
-		lands.clear();
+		landCache.clear();
 		
 		//register dimensions
 		skaia = DimensionType.byName(SKAIA_ID);
 		if(skaia == null)
 			skaia = DimensionManager.registerDimension(SKAIA_ID, skaiaDimensionType, null);
 		
-		for(LandInfoContainer container : landInfo.values())
+		for(int i = 0; i < landDimensionCache; i++)
 		{
-			DimensionType type = DimensionManager.registerDimension(container.name, landDimensionType, null);
-			lands.put(container.identifier, type);
+			ResourceLocation name = new ResourceLocation(Minestuck.MOD_ID, "land_"+i);
+			DimensionType land = DimensionType.byName(name);
+			if(land != null)
+			{
+				PacketBuffer data = land.getData();
+				if(data == null)
+				{
+					Debug.errorf("Data was null for cached land dimension %s. The entry will be unusable!", name);
+					continue;
+				}
+				data.resetReaderIndex();
+				if(!data.readBoolean())
+				{
+					landCache.add(land);
+				}
+			} else
+			{
+				PacketBuffer data = new PacketBuffer(Unpooled.buffer());
+				data.writeBoolean(false);
+				land = DimensionManager.registerDimension(name, landDimensionType, data);
+				landCache.add(land);
+			}
 		}
 	}
 	
@@ -136,17 +159,9 @@ public class MinestuckDimensionHandler
 		else Debug.warnf("Did not register land dimension with id %d. Appears to already be registered.", dimensionId);
 	}*/
 	
-	public static LandAspects getAspects(DimensionType dimension)
+	public static LandAspects getAspects(MinecraftServer server, DimensionType dimension)
 	{
-		return null;
-		/*LandAspects aspects = lands.get(dimensionId);
-		
-		if(aspects == null)
-		{
-			Debug.warnf("Tried to access land aspect for dimension %d, but didn't find any!", dimensionId);
-		}
-		
-		return aspects;*/
+		return ((LandDimension) DimensionManager.getWorld(server, dimension, false, true).dimension).landAspects;
 	}
 	
 	public static boolean isLandDimension(DimensionType dimension)

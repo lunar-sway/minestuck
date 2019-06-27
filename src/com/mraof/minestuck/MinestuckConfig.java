@@ -79,7 +79,7 @@ public class MinestuckConfig
 	public static boolean needComputer;
 	public static boolean cruxtruderIntake;
 	public static boolean skaianetCheck;
-	public static int artifactRange;
+	public static int artifactRange = 20;
 	public static int overworldEditRange;
 	public static int landEditRange;
 	public static int cardResolution;

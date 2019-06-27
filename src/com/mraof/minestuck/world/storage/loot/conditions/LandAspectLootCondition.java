@@ -12,6 +12,7 @@ import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.ILandAspect;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.LandAspects;
+import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 
@@ -41,7 +42,7 @@ public class LandAspectLootCondition implements LootCondition
 		
 		if(world != null && MinestuckDimensionHandler.isLandDimension(world.getDimension().getType()))
 		{
-			LandAspects aspects = MinestuckDimensionHandler.getAspects(world.getDimension().getType());
+			LandAspects aspects = ((LandDimension) context.getWorld().dimension).landAspects;
 			
 			TerrainLandAspect terrain = includeSubtypes ? aspects.aspectTerrain.getPrimaryVariant() : aspects.aspectTerrain;
 			TitleLandAspect title = includeSubtypes ? aspects.aspectTitle.getPrimaryVariant() : aspects.aspectTitle;
@@ -97,9 +98,9 @@ public class LandAspectLootCondition implements LootCondition
 		
 		private static ILandAspect getAspect(String aspectName)
 		{
-			ILandAspect aspect = LandAspectRegistry.fromNameTerrain(aspectName);
+			ILandAspect aspect = LandAspectRegistry.fromNameTerrain(aspectName, true);
 			if(aspect == null)
-				aspect = LandAspectRegistry.fromNameTitle(aspectName);
+				aspect = LandAspectRegistry.fromNameTitle(aspectName, true);
 			if(aspect == null)
 				throw new JsonSyntaxException("\"" + aspectName + "\" is not a valid land aspect.");
 			return aspect;

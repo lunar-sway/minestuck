@@ -153,14 +153,14 @@ public class GateHandler
 				int z = (int) Math.sqrt(distance*(1-d));
 				
 				BlockPos pos = new BlockPos(spawn.getX() + x, -1, spawn.getZ() + z);
-				
-				if(/*!world.getChunkProvider().chunkExists(pos.getX() >> 4, pos.getZ() >> 4) &&*/ Lists.newArrayList(BiomeMinestuck.mediumNormal).containsAll(world.getChunkProvider().getChunkGenerator().getBiomeProvider().getBiomesInSquare(pos.getX(), pos.getZ(), Math.max(20, 50 - tries))))
+				//TODO When we have biomes again
+				//if(/*!world.getChunkProvider().chunkExists(pos.getX() >> 4, pos.getZ() >> 4) &&*/ Lists.newArrayList(BiomeMinestuck.mediumNormal).containsAll(world.getChunkProvider().getChunkGenerator().getBiomeProvider().getBiomesInSquare(pos.getX(), pos.getZ(), Math.max(20, 50 - tries))))
 					gatePos = pos;
 				
 				tries++;
 			} while(gatePos == null);	//TODO replace with a more friendly version without a chance of freezing the game
 			
-			Debug.infof("Land gate will generate at %d %d in dimension %d.", gatePos.getX(), gatePos.getZ(), dim);
+			Debug.infof("Land gate will generate at %d %d in dimension %s.", gatePos.getX(), gatePos.getZ(), dim.getRegistryName());
 			gateData.put(dim, gatePos);
 		}
 	}

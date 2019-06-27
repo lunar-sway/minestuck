@@ -16,8 +16,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.DimensionManager;
 
@@ -220,6 +222,11 @@ public class LandAspectRegistry
 		return tag;
 	}
 	
+	public static TerrainLandAspect fromNameTerrain(String name)
+	{
+		return fromNameTerrain(name, true);
+	}
+	
 	/**
 	 * Gets a land aspect from it's primary name. Used in loading from NBT.
 	 */
@@ -232,6 +239,11 @@ public class LandAspectRegistry
 			return landAspects.get(0);
 		}
 		return aspect;
+	}
+	
+	public static TitleLandAspect fromNameTitle(String name)
+	{
+		return fromNameTitle(name, true);
 	}
 	
 	/**
@@ -276,31 +288,30 @@ public class LandAspectRegistry
 	 * @param aspects Land aspects that the land should have
 	 * @return Returns the dimension of the newly created land.
 	 */
-	public static DimensionType createLand(IdentifierHandler.PlayerIdentifier player, LandAspects aspects)
+	public static DimensionType createLand(MinecraftServer server, IdentifierHandler.PlayerIdentifier player, LandAspects aspects)
 	{
 		
-		int newLandId = 0;
-		
-		while (true)
+		if(MinestuckDimensionHandler.landCache.isEmpty())
 		{
-			if (DimensionType.byName(new ResourceLocation(Minestuck.MOD_ID, "land_"+newLandId)) == null)
-			{
-				break;
-			}
-			else
-			{
-				newLandId++;
-			}
+			Debug.warnf("Minestuck is out of cached land dimensions. You have to increase the cache size in the config and restart!");
+			return null;
 		}
 		
-		ResourceLocation name = new ResourceLocation(Minestuck.MOD_ID, "land_"+newLandId);
+		DimensionType land = MinestuckDimensionHandler.landCache.remove(0);
+		PacketBuffer data = land.getData();
+		data.clear();
+		data.writeBoolean(true);
+		data.writeString(aspects.aspectTerrain.getPrimaryName());
+		data.writeString(aspects.aspectTitle.getPrimaryName());
+		World world = DimensionManager.getWorld(server, land, true, false);
 		
-		PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
-		buffer.writeString(aspects.aspectTerrain.getPrimaryName());
-		buffer.writeString(aspects.aspectTitle.getPrimaryName());
+		if(world != null)
+		{
+			((LandDimension) world.dimension).landAspects = aspects;
+			((LandDimension) world.dimension).initLandAspects();
+		}
 		
-		DimensionType type = DimensionManager.registerDimension(name, MinestuckDimensionHandler.landDimensionType, buffer);
-		return type;
+		return land;
 	}
 	
 	/**

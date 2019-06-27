@@ -49,9 +49,12 @@ public class LandDimension extends Dimension
 	{
 		this.type = type;
 		type.getData().resetReaderIndex();
-		TerrainLandAspect terrain = LandAspectRegistry.fromNameTerrain(type.getData().readString(32767), false);
-		TitleLandAspect title = LandAspectRegistry.fromNameTitle(type.getData().readString(32767), false);
-		landAspects = new LandAspects(terrain, title);
+		if(type.getData().readBoolean())
+		{
+			TerrainLandAspect terrain = LandAspectRegistry.fromNameTerrain(type.getData().readString(32767), false);
+			TitleLandAspect title = LandAspectRegistry.fromNameTitle(type.getData().readString(32767), false);
+			landAspects = new LandAspects(terrain, title);
+		} else landAspects = null;
 	}
 	
 	@Override
@@ -204,12 +207,19 @@ public class LandDimension extends Dimension
 		if(world.isRemote)
 			setSkyRenderer(new LandSkyRender(this));
 		
+		if(landAspects != null)
+			initLandAspects();
+	}
+	
+	public void initLandAspects()
+	{
 		skylightBase = landAspects.aspectTerrain.getSkylightBase();
 		skyColor = landAspects.aspectTerrain.getSkyColor();
 		fogColor = landAspects.aspectTerrain.getFogColor();
 		cloudColor = landAspects.aspectTerrain.getCloudColor();
 		landAspects.aspectTitle.prepareWorldProvider(this);
 	}
+	
 	/*
 	@Override
 	public void calculateInitialWeather()

@@ -610,7 +610,7 @@ public class SessionHandler
 					if(c.clientHomeLand != null)
 					{
 						connectionTag.setString("clientDim", c.clientHomeLand.getRegistryName().toString());
-						LandAspects aspects = MinestuckDimensionHandler.getAspects(c.clientHomeLand);
+						LandAspects aspects = MinestuckDimensionHandler.getAspects(server, c.clientHomeLand);
 						IChunkGenerator chunkGen = server.getWorld(c.clientHomeLand).getDimension().createChunkGenerator();
 						if(chunkGen instanceof ChunkProviderLands)
 						{

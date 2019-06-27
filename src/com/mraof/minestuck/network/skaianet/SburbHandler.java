@@ -578,7 +578,7 @@ public class SburbHandler
 		return count;
 	}
 	
-	private static LandAspects genLandAspects(SburbConnection connection)
+	private static LandAspects genLandAspects(MinecraftServer server, SburbConnection connection)
 	{
 		LandAspectRegistry aspectGen = new LandAspectRegistry(Minestuck.worldSeed^connection.getClientIdentifier().hashCode());
 		Session session = getPlayerSession(connection.getClientIdentifier());
@@ -601,7 +601,7 @@ public class SburbHandler
 		for(SburbConnection c : session.connections)
 			if(c != connection)
 			{
-				LandAspects aspects = MinestuckDimensionHandler.getAspects(c.clientHomeLand);
+				LandAspects aspects = MinestuckDimensionHandler.getAspects(server, c.clientHomeLand);
 				if(aspects.aspectTitle == LandAspectRegistry.frogAspect)
 					frogs = true;
 				usedTitleAspects.add(aspects.aspectTitle);
@@ -701,8 +701,8 @@ public class SburbHandler
 		Session session = getPlayerSession(c.getClientIdentifier());
 		
 		generateTitle(server, c.getClientIdentifier());
-		LandAspects aspects = genLandAspects(c);		//This is where the Land dimension is actually registered, but it also needs the player's Title to be determined.
-		return LandAspectRegistry.createLand(identifier, aspects);
+		LandAspects aspects = genLandAspects(server, c);		//This is where the Land dimension is actually registered, but it also needs the player's Title to be determined.
+		return LandAspectRegistry.createLand(server, identifier, aspects);
 	}
 	
 	static void onGameEntered(MinecraftServer server, SburbConnection c)

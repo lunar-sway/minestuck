@@ -100,7 +100,7 @@ public class PostEntryTask
 				}
 			}
 			
-			Debug.infof("Completed entry block updates for dimension %d.", dimension);
+			Debug.infof("Completed entry block updates for dimension %s.", dimension.getRegistryName());
 			return true;
 		}
 		

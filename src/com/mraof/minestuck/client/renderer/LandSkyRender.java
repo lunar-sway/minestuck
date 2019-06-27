@@ -199,7 +199,7 @@ public class LandSkyRender implements IRenderHandler
 			if(type != null)
 			{
 				Random random = new Random(mc.world.getSeed() + type.getId());
-				drawLand(mc, getResourceLocations(MinestuckDimensionHandler.getAspects(type), random), (i / (float) list.size()), random);
+				//drawLand(mc, getResourceLocations(MinestuckDimensionHandler.getAspects(type), random), (i / (float) list.size()), random);
 			}
 		}
 		GlStateManager.disableTexture2D();

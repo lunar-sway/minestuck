@@ -24,7 +24,7 @@ public class CommandCheckLand
 		
 		if(MinestuckDimensionHandler.isLandDimension(player.dimension))
 		{
-			LandAspects aspects = MinestuckDimensionHandler.getAspects(player.dimension);
+			LandAspects aspects = MinestuckDimensionHandler.getAspects(player.getServer(), player.dimension);
 			ChunkProviderLands chunkProvider = (ChunkProviderLands) player.world.dimension.createChunkGenerator();	//TODO Change name storage so that we don't have to go through the chunk generator
 			ITextComponent aspect1 = new TextComponentTranslation("land."+aspects.aspectTerrain.getNames()[chunkProvider.nameIndex1]);
 			ITextComponent aspect2 = new TextComponentTranslation("land."+aspects.aspectTitle.getNames()[chunkProvider.nameIndex2]);

@@ -222,14 +222,14 @@ public class MinestuckPlayerTracker
 	{
 		if(MinestuckDimensionHandler.isLandDimension(player.dimension))
 		{
-			LandAspects aspects = MinestuckDimensionHandler.getAspects(player.dimension);
-			ChunkProviderLands chunkProvider = (ChunkProviderLands) player.world.getDimension().createChunkGenerator(); //TODO Check out deprecation
-			ITextComponent aspect1 = new TextComponentTranslation("land."+aspects.aspectTerrain.getNames()[chunkProvider.nameIndex1]);
-			ITextComponent aspect2 = new TextComponentTranslation("land."+aspects.aspectTitle.getNames()[chunkProvider.nameIndex2]);
+			LandAspects aspects = MinestuckDimensionHandler.getAspects(player.getServer(), player.dimension);
+			//ChunkProviderLands chunkProvider = (ChunkProviderLands) player.world.getDimension().createChunkGenerator(); //TODO Check out deprecation
+			ITextComponent aspect1 = new TextComponentTranslation("land."+aspects.aspectTerrain.getNames()[0]);
+			ITextComponent aspect2 = new TextComponentTranslation("land."+aspects.aspectTitle.getNames()[0]);
 			ITextComponent toSend;
-			if(chunkProvider.nameOrder)
+			/*if(chunkProvider.nameOrder)
 				toSend = new TextComponentTranslation("land.message.entry", aspect1, aspect2);
-			else toSend = new TextComponentTranslation("land.message.entry", aspect2, aspect1);
+			else*/ toSend = new TextComponentTranslation("land.message.entry", aspect2, aspect1);
 			player.sendMessage(toSend);
 		}
 	}

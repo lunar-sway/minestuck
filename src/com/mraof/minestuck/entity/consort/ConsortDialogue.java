@@ -438,7 +438,7 @@ public class ConsortDialogue
 	
 	public static DialogueWrapper getRandomMessage(EntityConsort consort, EntityPlayerMP player)
 	{
-		LandAspects aspects = MinestuckDimensionHandler.getAspects(consort.homeDimension);
+		LandAspects aspects = MinestuckDimensionHandler.getAspects(player.getServer(), consort.homeDimension);
 		
 		List<DialogueWrapper> list = new ArrayList<>();
 		
