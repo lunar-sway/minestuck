@@ -43,7 +43,7 @@ public class SburbConnection
 	
 	boolean isActive;
 	boolean isMain;
-	boolean enteredGame;
+	boolean hasEntered;
 	boolean canSplit;
 	DimensionType clientHomeLand;
 	int artifactType;
@@ -83,9 +83,20 @@ public class SburbConnection
 	
 	public ComputerData getClientData() {return client;}
 	public ComputerData getServerData() {return server;}
-	public boolean enteredGame(){return enteredGame;}
+	
+	public boolean hasEntered()
+	{
+		return hasEntered;
+	}
 	public boolean isMain(){return isMain;}
-	public DimensionType getClientDimension() {return clientHomeLand;}
+	
+	/**
+	 * @return The land dimension assigned to the client player.
+	 */
+	public DimensionType getClientDimension()
+	{
+		return clientHomeLand;
+	}
 	public boolean[] givenItems(){return givenItemList;}
 	@OnlyIn(Dist.CLIENT)
 	public String getClientDisplayName() {return clientName;}
@@ -101,7 +112,7 @@ public class SburbConnection
 		buffer.writeBoolean(isMain);
 		if(isMain){
 			buffer.writeBoolean(isActive);
-			buffer.writeBoolean(enteredGame);
+			buffer.writeBoolean(hasEntered);
 		}
 		buffer.writeInt(getClientIdentifier().getId());
 		buffer.writeString(getClientIdentifier().getUsername(), 16);
@@ -112,14 +123,14 @@ public class SburbConnection
 	NBTTagCompound write()
 	{
 		NBTTagCompound nbt = new NBTTagCompound();
-		nbt.setBoolean("isMain", isMain);
+		nbt.setBoolean("IsMain", isMain);
 		if(inventory != null)
-			nbt.setTag("inventory", inventory);
+			nbt.setTag("Inventory", inventory);
 		if(isMain)
 		{
-			nbt.setBoolean("isActive", isActive);
-			nbt.setBoolean("enteredGame", enteredGame);
-			nbt.setBoolean("canSplit", canSplit);
+			nbt.setBoolean("IsActive", isActive);
+			nbt.setBoolean("HasEntered", hasEntered);
+			nbt.setBoolean("CanSplit", canSplit);
 			NBTTagList list = unregisteredItems.copy();
 			String[] deployNames = DeployList.getNameList();
 			for(int i = 0; i < givenItemList.length; i++)
@@ -128,39 +139,39 @@ public class SburbConnection
 					list.add(new NBTTagString(deployNames[i]));
 			}
 			
-			nbt.setTag("givenItems", list);
-			if(enteredGame)
+			nbt.setTag("GivenItems", list);
+			if(clientHomeLand != null)
 			{
-				nbt.setString("clientLand", clientHomeLand.getRegistryName().toString());
+				nbt.setString("ClientLand", clientHomeLand.getRegistryName().toString());
 			}
 		}
 		if(isActive)
 		{
-			nbt.setTag("client", client.write());
-			nbt.setTag("server", server.write());
+			nbt.setTag("Client", client.write());
+			nbt.setTag("Server", server.write());
 		}
 		else
 		{
-			getClientIdentifier().saveToNBT(nbt, "client");
-			getServerIdentifier().saveToNBT(nbt, "server");
+			getClientIdentifier().saveToNBT(nbt, "Client");
+			getServerIdentifier().saveToNBT(nbt, "Server");
 		}
-		nbt.setInt("artifact", artifactType);
+		nbt.setInt("Artifact", artifactType);
 		return nbt;
 	}
 	
 	SburbConnection read(NBTTagCompound nbt)
 	{
-		isMain = nbt.getBoolean("isMain");
-		if(nbt.hasKey("inventory"))
-			inventory = (NBTTagList) nbt.getTag("inventory");
+		isMain = nbt.getBoolean("IsMain");
+		if(nbt.hasKey("Inventory"))
+			inventory = (NBTTagList) nbt.getTag("Inventory");
 		if(isMain)
 		{
-			isActive = nbt.getBoolean("isActive");
-			enteredGame = nbt.getBoolean("enteredGame");
+			isActive = nbt.getBoolean("IsActive");
+			hasEntered = nbt.getBoolean("HasEntered");
 			
-			if(nbt.hasKey("canSplit"))
-				canSplit = nbt.getBoolean("canSplit");
-			NBTTagList list = nbt.getList("givenItems", 8);
+			if(nbt.hasKey("CanSplit"))
+				canSplit = nbt.getBoolean("CanSplit");
+			NBTTagList list = nbt.getList("GivenItems", 8);
 			for(int i = 0; i < list.size(); i++)
 			{
 				String name = list.getString(i);
@@ -172,24 +183,25 @@ public class SburbConnection
 		}
 		if(isActive)
 		{
-			client = new ComputerData().read(nbt.getCompound("client"));
-			server = new ComputerData().read(nbt.getCompound("server"));
+			client = new ComputerData().read(nbt.getCompound("Client"));
+			server = new ComputerData().read(nbt.getCompound("Server"));
 		}
 		else
 		{
-			clientIdentifier = IdentifierHandler.load(nbt, "client");
-			serverIdentifier = IdentifierHandler.load(nbt, "server");
+			clientIdentifier = IdentifierHandler.load(nbt, "Client");
+			serverIdentifier = IdentifierHandler.load(nbt, "Server");
 		}
-		if(enteredGame)
+		if(nbt.hasKey("ClientLand"))
 		{
-			clientHomeLand = DimensionType.byName(new ResourceLocation(nbt.getString("clientLand")));	//TODO add robustness in the case that the dimension type no longer exists?
+			clientHomeLand = DimensionType.byName(new ResourceLocation(nbt.getString("ClientLand")));	//TODO add robustness in the case that the dimension type no longer exists?
 			if(!MinestuckDimensionHandler.isLandDimension(clientHomeLand))
 			{
 				Debug.errorf("The connection between %s and %s had a home dimension %d that isn't a land dimension. For safety measures, the connection will be loaded as if the player had not yet entered.", getClientIdentifier().getUsername(), getServerIdentifier().getUsername(), clientHomeLand);
-				enteredGame = false;
+				clientHomeLand = null;
+				hasEntered = false;
 			}
 		}
-		artifactType = nbt.getInt("artifact");
+		artifactType = nbt.getInt("Artifact");
 		
 		return this;
 	}

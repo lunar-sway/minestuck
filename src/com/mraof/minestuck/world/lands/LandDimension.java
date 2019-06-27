@@ -12,6 +12,8 @@ import com.mraof.minestuck.world.gen.ModChunkGeneratorType;
 import com.mraof.minestuck.world.gen.SkaiaGenSettings;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
+import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
+import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -36,7 +38,7 @@ public class LandDimension extends Dimension
 {
 	private final DimensionType type;
 	
-	public ChunkProviderLands chunkProvider;
+	//public ChunkProviderLands chunkProvider;
 	public LandAspects landAspects;
 	public float skylightBase;
 	Vec3d skyColor;
@@ -46,6 +48,10 @@ public class LandDimension extends Dimension
 	public LandDimension(DimensionType type)
 	{
 		this.type = type;
+		type.getData().resetReaderIndex();
+		TerrainLandAspect terrain = LandAspectRegistry.fromNameTerrain(type.getData().readString(32767), false);
+		TitleLandAspect title = LandAspectRegistry.fromNameTitle(type.getData().readString(32767), false);
+		landAspects = new LandAspects(terrain, title);
 	}
 	
 	@Override
@@ -111,14 +117,14 @@ public class LandDimension extends Dimension
 		return false;
 	}
 	
-	public String getDimensionName()
+	/*public String getDimensionName()
 	{
 		if (chunkProvider == null || chunkProvider.aspect1 == null || chunkProvider.aspect2 == null) {
 			return "Land";
 		} else {
 			return "Land of " + chunkProvider.aspect1.getPrimaryName() + " and " + chunkProvider.aspect2.getPrimaryName();
 		}
-	}
+	}*/
 	
 	@Override
 	public BlockPos getSpawnPoint() 
@@ -158,7 +164,7 @@ public class LandDimension extends Dimension
 	{
 		DimensionType dimOut;
 		SburbConnection c = SkaianetHandler.get(world).getMainConnection(IdentifierHandler.encode(player), true);
-		if(c == null || !c.enteredGame())
+		if(c == null || !c.hasEntered())
 			dimOut = player.getSpawnDimension();	//Method outputs 0 when no spawn dimension is set, sending players to the overworld.
 		else
 		{
@@ -191,8 +197,7 @@ public class LandDimension extends Dimension
 	{
 		hasSkyLight = true;
 		doesWaterVaporize = false;
-		if(chunkProvider == null)
-			createChunkGenerator();
+		
 		//this.biomeProvider = new BiomeProviderLands(world, chunkProvider.rainfall, chunkProvider.oceanChance, chunkProvider.roughChance);
 		this.nether = false;
 		
@@ -205,7 +210,7 @@ public class LandDimension extends Dimension
 		cloudColor = landAspects.aspectTerrain.getCloudColor();
 		landAspects.aspectTitle.prepareWorldProvider(this);
 	}
-	
+	/*
 	@Override
 	public void calculateInitialWeather()
 	{
@@ -218,8 +223,8 @@ public class LandDimension extends Dimension
 	{
 		super.updateWeather();
 		forceWeatherCheck();
-	}
-	
+	}*/
+	/*
 	private void forceWeatherCheck()
 	{
 		if(chunkProvider.weatherType == -1)
@@ -231,7 +236,7 @@ public class LandDimension extends Dimension
 			world.thunderingStrength = 0.0F;
 		else if((chunkProvider.weatherType & 4) != 0)
 			world.thunderingStrength = 1.0F;
-	}
+	}*/
 	
 	@Override
 	public Vec3d getSkyColor(Entity cameraEntity, float partialTicks)

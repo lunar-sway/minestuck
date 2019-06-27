@@ -45,7 +45,7 @@ public class Session
 		main: while(true){
 			for(SburbConnection c : connections)
 			{
-				if(!c.enteredGame)
+				if(!c.hasEntered())
 				{
 					completed = false;
 					return;

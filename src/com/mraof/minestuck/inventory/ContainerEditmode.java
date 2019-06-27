@@ -89,9 +89,9 @@ public class ContainerEditmode extends Container
 	
 	private void updateInventory()
 	{
-		ArrayList<ItemStack> itemList = new ArrayList<ItemStack>();
-		SburbConnection c = SkaianetHandler.get(player.world).getClientConnection(ServerEditHandler.getData(player).getTarget());
-		ArrayList<ItemStack> tools = new ArrayList<ItemStack>();
+		ArrayList<ItemStack> itemList = new ArrayList<>();
+		SburbConnection c = SkaianetHandler.get(player.world).getActiveConnection(ServerEditHandler.getData(player).getTarget());
+		ArrayList<ItemStack> tools = new ArrayList<>();
 		//Fill list with harvestTool items when implemented
 		
 		List<DeployList.DeployEntry> deployItems = DeployList.getItemList(player.getServer(), c);

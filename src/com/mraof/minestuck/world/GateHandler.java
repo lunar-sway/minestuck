@@ -70,7 +70,7 @@ public class GateHandler
 			{
 				SburbConnection clientConnection = SkaianetHandler.get(player.world).getMainConnection(landConnection.getClientIdentifier(), false);
 				
-				if(clientConnection != null && clientConnection.enteredGame() && MinestuckDimensionHandler.isLandDimension(clientConnection.getClientDimension()))
+				if(clientConnection != null && clientConnection.hasEntered() && MinestuckDimensionHandler.isLandDimension(clientConnection.getClientDimension()))
 				{
 					DimensionType clientDim = clientConnection.getClientDimension();
 					BlockPos gatePos = getGatePos(player.server, -1, clientDim);
@@ -104,7 +104,7 @@ public class GateHandler
 			{
 				SburbConnection serverConnection = SkaianetHandler.get(player.world).getMainConnection(landConnection.getServerIdentifier(), true);
 				
-				if(serverConnection != null && serverConnection.enteredGame() && MinestuckDimensionHandler.isLandDimension(serverConnection.getClientDimension()))	//Last shouldn't be necessary, but just in case something goes wrong elsewhere...
+				if(serverConnection != null && serverConnection.hasEntered() && MinestuckDimensionHandler.isLandDimension(serverConnection.getClientDimension()))	//Last shouldn't be necessary, but just in case something goes wrong elsewhere...
 				{
 					DimensionType serverDim = serverConnection.getClientDimension();
 					location = new Location(getGatePos(player.server, 2, serverDim), serverDim);

@@ -80,7 +80,7 @@ public class SkaiaClient
 	{
 		for(SburbConnection c : connections)
 			if(c.isMain && c.clientId == player)
-				return c.enteredGame;
+				return c.hasEntered();
 		return false;
 	}
 	
@@ -140,7 +140,7 @@ public class SkaiaClient
 		if(c.isMain)
 		{
 			c.isActive = buffer.readBoolean();
-			c.enteredGame = buffer.readBoolean();
+			c.hasEntered = buffer.readBoolean();
 		}
 		c.clientId = buffer.readInt();
 		c.clientName = buffer.readString(16);

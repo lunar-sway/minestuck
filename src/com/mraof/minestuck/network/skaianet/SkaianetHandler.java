@@ -15,7 +15,6 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.util.Location;
-import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -33,6 +32,7 @@ import net.minecraft.world.storage.WorldSavedData;
 import net.minecraft.world.storage.WorldSavedDataStorage;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.ITeleporter;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -72,7 +72,11 @@ public class SkaianetHandler extends WorldSavedData
 		this.mcServer = mcServer;
 	}
 	
-	public SburbConnection getClientConnection(PlayerIdentifier client)
+	/**
+	 * @param client The client player to search for
+	 * @return The active connection with the client as its client player, or null if no such connection was found.
+	 */
+	public SburbConnection getActiveConnection(PlayerIdentifier client)
 	{
 		for(SburbConnection c : connections)
 			if(c.isActive && c.client.owner.equals(client))
@@ -103,11 +107,12 @@ public class SkaianetHandler extends WorldSavedData
 		return null;
 	}
 	
-	public  boolean giveItems(PlayerIdentifier player)
+	public boolean giveItems(PlayerIdentifier player)
 	{
-		SburbConnection c = getClientConnection(player);
+		SburbConnection c = getActiveConnection(player);
 		if(c != null && !c.isMain && getAssociatedPartner(c.getClientIdentifier(), true) == null
-				&& getAssociatedPartner(c.getServerIdentifier(), false) == null) {
+				&& getAssociatedPartner(c.getServerIdentifier(), false) == null)
+		{
 			c.isMain = true;
 			SburbHandler.onFirstItemGiven(c);
 			updatePlayer(c.getClientIdentifier());
@@ -166,7 +171,7 @@ public class SkaianetHandler extends WorldSavedData
 			else return;
 		} else	//Is client
 		{
-			if(getClientConnection(player.owner) != null || resumingClients.containsKey(player.owner))
+			if(getActiveConnection(player.owner) != null || resumingClients.containsKey(player.owner))
 				return;
 			PlayerIdentifier p = getAssociatedPartner(player.owner, true);
 			if(p != null && (otherPlayer == null || p.equals(otherPlayer)))	//If trying to connect to the associated partner
@@ -344,7 +349,7 @@ public class SkaianetHandler extends WorldSavedData
 				
 				if(conn != null)
 				{
-					c.enteredGame = conn.enteredGame;
+					c.hasEntered = conn.hasEntered;
 					c.canSplit = conn.canSplit;
 					c.centerX = conn.centerX;
 					c.centerZ = conn.centerZ;
@@ -489,7 +494,7 @@ public class SkaianetHandler extends WorldSavedData
 		Set<Integer> checked = new HashSet<>();
 		for(SburbConnection c : connections)
 		{
-			if(c.isMain() && c.enteredGame() && !checked.contains(c.clientHomeLand.getId()))
+			if(c.isMain() && c.hasEntered() && !checked.contains(c.clientHomeLand.getId()))
 			{
 				LinkedList<Integer> chain = new LinkedList<>();
 				chain.add(c.clientHomeLand.getId());
@@ -498,7 +503,7 @@ public class SkaianetHandler extends WorldSavedData
 				while(true)
 				{
 					cIter = getMainConnection(cIter.getClientIdentifier(), false);
-					if(cIter != null && cIter.enteredGame())
+					if(cIter != null && cIter.hasEntered())
 					{
 						if(!checked.contains(cIter.clientHomeLand.getId()))
 						{
@@ -515,7 +520,7 @@ public class SkaianetHandler extends WorldSavedData
 				while(true)
 				{
 					cIter = getMainConnection(cIter.getServerIdentifier(), true);
-					if(cIter != null && cIter.enteredGame() && !checked.contains(cIter.clientHomeLand.getId()))
+					if(cIter != null && cIter.hasEntered() && !checked.contains(cIter.clientHomeLand.getId()))
 					{
 						chain.addFirst(cIter.clientHomeLand.getId());
 						checked.add(cIter.clientHomeLand.getId());
@@ -644,10 +649,10 @@ public class SkaianetHandler extends WorldSavedData
 						sc.markBlockForUpdate();
 					}
 				}
-				if(cc != null && c.enteredGame && !MinestuckDimensionHandler.isLandDimension(c.clientHomeLand))
+				if(cc != null && c.hasEntered() && !MinestuckDimensionHandler.isLandDimension(c.clientHomeLand))
 					c.clientHomeLand = c.client.getDimension();
 			}
-			if(c.enteredGame && !MinestuckDimensionHandler.isLandDimension(c.clientHomeLand))
+			if(c.hasEntered() && !MinestuckDimensionHandler.isLandDimension(c.clientHomeLand))
 			{
 				EntityPlayerMP player = c.getClientIdentifier().getPlayer(mcServer);
 				if(player != null)
@@ -724,20 +729,25 @@ public class SkaianetHandler extends WorldSavedData
 		return null;
 	}
 	
-	public DimensionType enterMedium(EntityPlayerMP player, Teleport.ITeleporter teleport)
+	/**
+	 * Prepares the sburb connection and data needed for after entry.
+	 * Should only be called by the cruxite artifact on trigger before teleportation
+	 * @param target the identifier of the player that is entering
+	 * @return The dimension type of the new land created, or null if the player can't enter at this time.
+	 */
+	public DimensionType prepareEntry(PlayerIdentifier target)
 	{
-		PlayerIdentifier username = IdentifierHandler.encode(player);
-		SburbConnection c = getMainConnection(username, true);
+		SburbConnection c = getMainConnection(target, true);
 		if(c == null)
 		{
-			c = getClientConnection(username);
+			c = getActiveConnection(target);
 			if(c == null)
 			{
-				Debug.infof("Player %s entered without connection. Creating connection... ", player.getName());
+				Debug.infof("Player %s entered without connection. Creating connection... ", target.getUsername());
 				c = new SburbConnection();
 				c.isActive = false;
 				c.isMain = true;
-				c.clientIdentifier = username;
+				c.clientIdentifier = target;
 				c.serverIdentifier = IdentifierHandler.nullIdentifier;
 				String s = SessionHandler.onConnectionCreated(mcServer, c);
 				if(s == null)
@@ -757,35 +767,48 @@ public class SkaianetHandler extends WorldSavedData
 						connections.add(c);
 					} else
 					{
-						Debug.errorf("Couldn't create a connection for %s: %s. Stopping entry.", player.getName(), s);
+						SessionHandler.singleSession = true;
+						SessionHandler.mergeAll();
+						Debug.errorf("Couldn't create a connection for %s: %s. Stopping entry.", target.getUsername(), s);
 						return null;
 					}
 				} else
 				{
-					Debug.errorf("Couldn't create a connection for %s: %s. Stopping entry.", player.getName(), s);
+					Debug.errorf("Couldn't create a connection for %s: %s. Stopping entry.", target.getUsername(), s);
 					return null;
 				}
 			}
-			else giveItems(username);
+			else giveItems(target);
 		}
-		else if(c.enteredGame)
+		else if(c.clientHomeLand != null)
 			return c.clientHomeLand;
 		
-		c.clientHomeLand = SburbHandler.enterMedium(player.getServer(), c);
-		
-		if(teleport != null && Teleport.teleportEntity(player, c.clientHomeLand, teleport))
+		c.clientHomeLand = SburbHandler.enterMedium(mcServer, c);
+		if(c.clientHomeLand == null)
 		{
-			c.enteredGame = true;
-			SburbHandler.onGameEntered(c);
-			
-			c.centerX = 0;
-			c.centerZ = 0;
-			c.useCoordinates = false;
-			updateAll();
-			sendLandChainUpdate();
-		} else //TODO Look at effects of cancelling entry at this point
-			Debug.errorf("Couldn't move %s to their Land. Stopping entry.", player.getName());
+			Debug.errorf("Could not create a land for player %s.", target.getUsername());
+		}
+		
 		return c.clientHomeLand;
+	}
+	
+	public void onEntry(PlayerIdentifier target)
+	{
+		SburbConnection c = getMainConnection(target, true);
+		if(c == null)
+		{
+			Debug.errorf("Finished entry without a player connection for %s. This should NOT happen!", target.getUsername());
+			return;
+		}
+		
+		c.hasEntered = true;
+		SburbHandler.onGameEntered(mcServer, c);
+		
+		c.centerX = 0;
+		c.centerZ = 0;
+		c.useCoordinates = false;
+		updateAll();
+		sendLandChainUpdate();
 	}
 	
 	public void resetGivenItems()

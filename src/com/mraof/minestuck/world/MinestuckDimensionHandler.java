@@ -151,7 +151,7 @@ public class MinestuckDimensionHandler
 	
 	public static boolean isLandDimension(DimensionType dimension)
 	{
-		return dimension.getModType() == landDimensionType;
+		return dimension != null && dimension.getModType() == landDimensionType;
 	}
 	
 	public static boolean isSkaia(DimensionType dimension)

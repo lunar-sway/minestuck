@@ -138,13 +138,13 @@ public class ServerEditHandler
 	{
 		if(player.getRidingEntity() == null)
 			return;	//Don't want to bother making the decoy able to ride anything right now.
-		SburbConnection c = SkaianetHandler.get(player.world).getClientConnection(computerTarget);
+		SburbConnection c = SkaianetHandler.get(player.world).getActiveConnection(computerTarget);
 		if(c != null && c.getServerIdentifier().equals(computerOwner) && getData(c) == null && getData(player) == null)
 		{
 			Debug.info("Activating edit mode on player \""+player.getName()+"\", target player: \""+computerTarget+"\".");
 			EntityDecoy decoy = new EntityDecoy((WorldServer) player.world, player);
 			EditData data = new EditData(decoy, player, c);
-			if(!c.enteredGame())
+			if(!c.hasEntered())
 			{
 				c.centerX = c.getClientData().getPos().getX();
 				c.centerZ = c.getClientData().getPos().getZ();
@@ -168,7 +168,7 @@ public class ServerEditHandler
 	{
 		
 		double posX, posY = 0, posZ;
-		WorldServer world = player.getServer().getWorld(c.enteredGame()?c.getClientDimension():c.getClientData().getDimension());
+		WorldServer world = player.getServer().getWorld(c.hasEntered() ? c.getClientDimension() : c.getClientData().getDimension());
 		
 		if(c.useCoordinates)
 		{

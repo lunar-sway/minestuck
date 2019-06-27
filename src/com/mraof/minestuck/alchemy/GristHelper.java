@@ -155,7 +155,7 @@ public class GristHelper {
 			for (Entry<GristType, Integer> pairs : reqs.entrySet())
 			{
 				setGrist(player, pairs.getKey(), getGrist(player, pairs.getKey()) - pairs.getValue());
-				notifyServer(server, player, pairs.getKey().getDisplayName(), pairs.getValue(), "spent");
+				notifyEditPlayer(server, player, pairs.getKey().getDisplayName(), pairs.getValue(), "spent");
 			}
 		}
 	}
@@ -212,12 +212,16 @@ public class GristHelper {
 		}
 	}
 	
-	private static void notifyServer(MinecraftServer server, PlayerIdentifier player, ITextComponent type, Integer difference, String action)
+	private static void notifyEditPlayer(MinecraftServer server, PlayerIdentifier player, ITextComponent type, Integer difference, String action)
 	{
-		SburbConnection sc = SkaianetHandler.get(server).getClientConnection(player);
-		if (sc==null) return;
+		SburbConnection sc = SkaianetHandler.get(server).getActiveConnection(player);
+		if(sc == null)
+			return;
+		
 		EditData ed = ServerEditHandler.getData(sc);
-		if(ed==null) return;
+		if(ed == null)
+			return;
+		
 		notify(server, IdentifierHandler.encode(ed.getEditor()), type, difference, action);
 	}
 	

@@ -161,7 +161,7 @@ public class MinestuckPlayerTracker
 		}
 		
 		//The editing player, if there is any.
-		SburbConnection c = SkaianetHandler.get(server).getClientConnection(player);
+		SburbConnection c = SkaianetHandler.get(server).getActiveConnection(player);
 		if(c != null && ServerEditHandler.getData(c) != null)
 		{
 			EntityPlayerMP editor = ServerEditHandler.getData(c).getEditor();

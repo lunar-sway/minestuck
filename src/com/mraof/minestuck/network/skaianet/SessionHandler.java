@@ -65,13 +65,6 @@ public class SessionHandler
 		} else
 		{
 			mergeAll();
-			if(sessions.size() == 0)
-			{
-				Session mainSession = new Session();
-				mainSession.name = GLOBAL_SESSION_NAME;
-				sessions.add(mainSession);
-				sessionsByName.put(mainSession.name, mainSession);
-			}
 		}
 	}
 	
@@ -80,13 +73,21 @@ public class SessionHandler
 	 * Used in the conversion of a non-global session world
 	 * to a global session world.
 	 */
-	private static void mergeAll()
+	static void mergeAll()
 	{
-		if(!canMergeAll() || sessions.size() == 0)
+		if(sessions.size() == 0 ||!canMergeAll())
 		{
 			singleSession = sessions.size() == 0;
 			if(!singleSession)
 				Debug.warn("Not allowed to merge all sessions together! Global session temporarily disabled for this time.");
+			else
+			{
+				Session mainSession = new Session();
+				mainSession.name = GLOBAL_SESSION_NAME;
+				sessions.add(mainSession);
+				sessionsByName.put(mainSession.name, mainSession);
+			}
+			
 			return;
 		}
 		
@@ -606,10 +607,9 @@ public class SessionHandler
 				connectionTag.setBoolean("isActive", c.isActive);
 				if(c.isMain)
 				{
-					if(c.enteredGame)
-						connectionTag.setString("clientDim", c.clientHomeLand.getRegistryName().toString());
-					if(c.enteredGame )//&& DimensionManager.isDimensionRegistered(c.clientHomeLand)) TODO
+					if(c.clientHomeLand != null)
 					{
+						connectionTag.setString("clientDim", c.clientHomeLand.getRegistryName().toString());
 						LandAspects aspects = MinestuckDimensionHandler.getAspects(c.clientHomeLand);
 						IChunkGenerator chunkGen = server.getWorld(c.clientHomeLand).getDimension().createChunkGenerator();
 						if(chunkGen instanceof ChunkProviderLands)

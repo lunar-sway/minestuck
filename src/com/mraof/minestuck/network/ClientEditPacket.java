@@ -88,7 +88,7 @@ public class ClientEditPacket
 			
 			if(targetPlayer != null && (!MinestuckConfig.privateComputers || user.appliesTo(player) || opsEntry != null && opsEntry.getPermissionLevel() >= 2))
 			{
-				SburbConnection c = SkaianetHandler.get(player.world).getClientConnection(target);
+				SburbConnection c = SkaianetHandler.get(player.world).getActiveConnection(target);
 				if(c == null || c.getServerIdentifier() != user || !(c.isMain() || SkaianetHandler.get(player.world).giveItems(target)))
 					return;
 				

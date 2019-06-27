@@ -223,17 +223,29 @@ public class LandAspectRegistry
 	/**
 	 * Gets a land aspect from it's primary name. Used in loading from NBT.
 	 */
-	public static TerrainLandAspect fromNameTerrain(String name) {
-		return (TerrainLandAspect)landNames.get(name);
-		
+	public static TerrainLandAspect fromNameTerrain(String name, boolean acceptNull)
+	{
+		TerrainLandAspect aspect = landNames.get(name);
+		if(aspect == null && !acceptNull)
+		{
+			Debug.errorf("Could not find terrain landspect %s!", name);
+			return landAspects.get(0);
+		}
+		return aspect;
 	}
 	
 	/**
 	 * Gets a land aspect from it's primary name. Used in loading from NBT.
 	 */
-	public static TitleLandAspect fromNameTitle(String name)
+	public static TitleLandAspect fromNameTitle(String name, boolean acceptNull)
 	{
-		return landNames2.get(name);
+		TitleLandAspect aspect = landNames2.get(name);
+		if(aspect == null && !acceptNull)
+		{
+			Debug.errorf("Could not find title landspect %s!", name);
+			return nullAspect;
+		}
+		return aspect;
 	}
 	
 	public static Collection<String> getNamesTerrain()

@@ -41,7 +41,7 @@ public class DeployList
 		
 		registerItem("cruxtruder", new ItemStack(MinestuckBlocks.CRUXTRUDER), new GristSet(), new GristSet(GristType.BUILD, 100), 0);
 		registerItem("totem_lathe", new ItemStack(MinestuckBlocks.TOTEM_LATHE), new GristSet(), new GristSet(GristType.BUILD, 100), 0);
-		registerItem("artifact_card", new GristSet(), null, 0, connection -> !connection.enteredGame(),
+		registerItem("artifact_card", new GristSet(), null, 0, connection -> !connection.hasEntered(),
 				connection -> AlchemyRecipes.createCard(SburbHandler.getEntryItem(connection), true));
 		registerItem("alchemiter", new ItemStack(MinestuckBlocks.ALCHEMITER), new GristSet(), new GristSet(GristType.BUILD, 100), 0);
 		registerItem("punch_designix", 0,null, connection -> new ItemStack(MinestuckBlocks.PUNCH_DESIGNIX),

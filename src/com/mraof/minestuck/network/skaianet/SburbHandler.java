@@ -21,6 +21,7 @@ import java.util.Set;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
 import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.underling.EntityBasilisk;
 import com.mraof.minestuck.entity.underling.EntityGiclops;
@@ -72,13 +73,12 @@ public class SburbHandler
 	private static Title produceTitle(PlayerIdentifier player)
 	{
 		if(MinestuckPlayerData.getTitle(player) != null)
-			if(MinestuckConfig.playerSelectedTitle)
-				return null;	//Should be generated using the title-selection gui
-			else
-			{
+		{
+			if(!MinestuckConfig.playerSelectedTitle)
 				Debug.warnf("Trying to generate a title for %s when a title is already assigned!", player.getUsername());
-				return null;
-			}
+			
+			return MinestuckPlayerData.getTitle(player);
+		}
 		
 		Session session = getPlayerSession(player);
 		if(session == null)
@@ -102,18 +102,18 @@ public class SburbHandler
 			Random rand = MinestuckRandom.getPlayerSpecificRandom(player);
 			rand.nextInt();	//Avoid using same data as the artifact generation
 			
-			ArrayList<Title> usedTitles = new ArrayList<Title>();
-			Set<PlayerIdentifier> playersEntered = new HashSet<PlayerIdentifier>();	//Used to avoid duplicates from both connections and predefined data
+			ArrayList<Title> usedTitles = new ArrayList<>();
+			Set<PlayerIdentifier> playersEntered = new HashSet<>();	//Used to avoid duplicates from both connections and predefined data
 			playersEntered.add(player);
 			for(SburbConnection c : session.connections)
-				if(!c.getClientIdentifier().equals(player) && c.enteredGame)
+				if(!c.getClientIdentifier().equals(player))
 				{
 					Title playerTitle = MinestuckPlayerData.getTitle(c.getClientIdentifier());
 					if(playerTitle != null)
 					{
 						usedTitles.add(playerTitle);
 						playersEntered.add(c.getClientIdentifier());
-					} else Debug.warnf("Player %s has entered, but lacks a title. This is not good!", c.getClientIdentifier().getUsername());
+					}
 				}
 			
 			for(Map.Entry<PlayerIdentifier, PredefineData> entry : session.predefinedPlayers.entrySet())
@@ -547,8 +547,10 @@ public class SburbHandler
 	}
 	public static SburbConnection getConnectionForDimension(MinecraftServer mcServer, DimensionType dim)
 	{
+		if(dim == null)
+			return null;
 		for(SburbConnection c : SkaianetHandler.get(mcServer).connections)
-			if(c.enteredGame && c.clientHomeLand == dim)
+			if(c.clientHomeLand == dim)
 				return c;
 		return null;
 	}
@@ -564,21 +566,21 @@ public class SburbHandler
 			return -1;
 		if(s.completed)
 			return Integer.MAX_VALUE;
-		SburbConnection c = SkaianetHandler.get(mcServer).getClientConnection(client);
+		SburbConnection c = SkaianetHandler.get(mcServer).getActiveConnection(client);
 		if(c == null)
 			return -1;
 		int count = -1;
 		for(SburbConnection conn : s.connections)
-			if(conn.enteredGame)
+			if(conn.hasEntered())
 				count++;
-		if(!c.enteredGame)
+		if(!c.hasEntered())
 			count++;
 		return count;
 	}
 	
 	private static LandAspects genLandAspects(SburbConnection connection)
 	{
-		LandAspectRegistry aspectGen = new LandAspectRegistry((Minestuck.worldSeed^connection.clientHomeLand.getId())^(connection.clientHomeLand.getId() << 8));
+		LandAspectRegistry aspectGen = new LandAspectRegistry(Minestuck.worldSeed^connection.getClientIdentifier().hashCode());
 		Session session = getPlayerSession(connection.getClientIdentifier());
 		Title title = MinestuckPlayerData.getTitle(connection.getClientIdentifier());
 		TitleLandAspect titleAspect = null;
@@ -597,7 +599,7 @@ public class SburbHandler
 		ArrayList<TerrainLandAspect> usedTerrainAspects = new ArrayList<TerrainLandAspect>();
 		ArrayList<TitleLandAspect> usedTitleAspects = new ArrayList<TitleLandAspect>();
 		for(SburbConnection c : session.connections)
-			if(c.enteredGame && c != connection)
+			if(c != connection)
 			{
 				LandAspects aspects = MinestuckDimensionHandler.getAspects(c.clientHomeLand);
 				if(aspects.aspectTitle == LandAspectRegistry.frogAspect)
@@ -697,23 +699,22 @@ public class SburbHandler
 	{
 		PlayerIdentifier identifier = c.getClientIdentifier();
 		Session session = getPlayerSession(c.getClientIdentifier());
-		Title title = produceTitle(identifier);
-		
-		Title playerTitle = MinestuckPlayerData.getTitle(identifier);
-		if(playerTitle == null)
-		{
-			PredefineData data = session.predefinedPlayers.get(identifier);
-			data.title = title;
-		}
 		
 		generateTitle(server, c.getClientIdentifier());
 		LandAspects aspects = genLandAspects(c);		//This is where the Land dimension is actually registered, but it also needs the player's Title to be determined.
 		return LandAspectRegistry.createLand(identifier, aspects);
 	}
 	
-	static void onGameEntered(SburbConnection c)
+	static void onGameEntered(MinecraftServer server, SburbConnection c)
 	{
 		getPlayerSession(c.getClientIdentifier()).checkIfCompleted();
+		
+		EntityPlayerMP player = c.getClientIdentifier().getPlayer(server);
+		if(player != null)
+		{
+			MinestuckCriteriaTriggers.CRUXITE_ARTIFACT.trigger(player);
+			MinestuckPlayerTracker.sendLandEntryMessage(player);
+		}
 	}
 	
 	public static boolean canSelectColor(EntityPlayerMP player)
@@ -729,7 +730,7 @@ public class SburbHandler
 	{
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		SburbConnection c = SkaianetHandler.get(player.world).getMainConnection(identifier, true);
-		return c != null && c.enteredGame();
+		return c != null && c.hasEntered();
 	}
 
 	static void onConnectionCreated(SburbConnection c)
@@ -778,7 +779,7 @@ public class SburbHandler
 			else
 			{
 				for(SburbConnection c : s.connections)
-					if(c.enteredGame() && title.equals(MinestuckPlayerData.getTitle(c.getClientIdentifier())))
+					if(title.equals(MinestuckPlayerData.getTitle(c.getClientIdentifier())))
 					{	//Title is already used
 						TitleSelectPacket packet = new TitleSelectPacket(title.getHeroClass(), title.getHeroAspect());
 						MinestuckPacketHandler.sendToPlayer(packet, player);

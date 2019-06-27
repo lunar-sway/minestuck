@@ -103,7 +103,7 @@ public class SkaiaDimension extends Dimension
 	{
 		DimensionType dimOut;
 		SburbConnection c = SkaianetHandler.get(world).getMainConnection(IdentifierHandler.encode(player), true);
-		if(c == null || !c.enteredGame())
+		if(c == null || !c.hasEntered())
 			dimOut = player.getSpawnDimension();	//Method outputs 0 when no spawn dimension is set, sending players to the overworld.
 		else
 		{
