@@ -1,0 +1,9 @@
+{
+  "type": "smelting",
+  "ingredient": {
+    "tag": "forge:ores/gold"
+  },
+  "result": "minecraft:gold_ingot",
+  "experience": 1.0,
+  "cookingtime": 200
+}

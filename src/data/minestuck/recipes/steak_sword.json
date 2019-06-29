@@ -1,0 +1,9 @@
+{
+  "type": "smelting",
+  "ingredient": {
+    "item": "minestuck_beef_sword"
+  },
+  "result": "minestuck:steak_sword",
+  "experience": 0.5,
+  "cookingtime": 200
+}

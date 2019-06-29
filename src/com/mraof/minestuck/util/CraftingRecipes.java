@@ -43,15 +43,7 @@ public class CraftingRecipes
 	
 	public static void registerSmelting()
 	{
-		/*GameRegistry.addSmelting(goldSeeds, new ItemStack(Items.GOLD_NUGGET), 0.1F);
-		GameRegistry.addSmelting(ironOreEndStone, new ItemStack(Items.IRON_INGOT), 0.7F);
-		GameRegistry.addSmelting(ironOreSandstone, new ItemStack(Items.IRON_INGOT), 0.7F);
-		GameRegistry.addSmelting(ironOreSandstoneRed, new ItemStack(Items.IRON_INGOT), 0.7F);
-		GameRegistry.addSmelting(goldOreSandstone, new ItemStack(Items.GOLD_INGOT), 1.0F);
-		GameRegistry.addSmelting(goldOreSandstoneRed, new ItemStack(Items.GOLD_INGOT), 1.0F);
-		GameRegistry.addSmelting(redstoneOreEndStone, new ItemStack(Items.REDSTONE), 0.7F);
-		GameRegistry.addSmelting(woodenCactus, new ItemStack(Items.COAL, 1, 1), 0.15F);
-		GameRegistry.addSmelting(beefSword, new ItemStack(steakSword), 0.5F);
+		/*GameRegistry.addSmelting(woodenCactus, new ItemStack(Items.COAL, 1, 1), 0.15F);
 		if(MinestuckConfig.cruxtruderIntake)
 			GameRegistry.addSmelting(cruxiteDowel, new ItemStack(MinestuckItems.rawCruxite), 0.0F);
 		
