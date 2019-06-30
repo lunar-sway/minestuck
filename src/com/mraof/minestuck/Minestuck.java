@@ -66,7 +66,6 @@ public class Minestuck
 		ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.GUIFACTORY, () -> GuiHandler::provideGuiContainer);
 		
 		MinecraftForge.EVENT_BUS.register(this);
-		//MinecraftForge.EVENT_BUS.register(GristType.class);
 	}
 	
 	private void setup(final FMLCommonSetupEvent event)
