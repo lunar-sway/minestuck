@@ -43,12 +43,8 @@ public class CraftingRecipes
 	
 	public static void registerSmelting()
 	{
-		/*GameRegistry.addSmelting(woodenCactus, new ItemStack(Items.COAL, 1, 1), 0.15F);
-		if(MinestuckConfig.cruxtruderIntake)
+		/*if(MinestuckConfig.cruxtruderIntake)
 			GameRegistry.addSmelting(cruxiteDowel, new ItemStack(MinestuckItems.rawCruxite), 0.0F);
-		
-		GameRegistry.addSmelting(log, new ItemStack(Items.COAL, 1, 1), 0.15F);
-		GameRegistry.addSmelting(endLog, new ItemStack(Items.COAL, 1, 1), 0.15F);
 		
 		TileEntityUraniumCooker.setRadiation(Items.BEEF, new ItemStack(irradiatedSteak));
 		TileEntityUraniumCooker.setRadiation(beefSword, new ItemStack(irradiatedSteakSword));
