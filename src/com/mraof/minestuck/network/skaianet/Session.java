@@ -114,19 +114,19 @@ public class Session
 		NBTTagCompound nbt = new NBTTagCompound();
 		
 		if(isCustom())
-			nbt.setString("name", name);
+			nbt.putString("name", name);
 		NBTTagList list = new NBTTagList();
 		for(SburbConnection c : connections)
 			list.add(c.write());
-		nbt.setTag("connections", list);
+		nbt.put("connections", list);
 		NBTTagList predefineList = new NBTTagList();
 		for(Map.Entry<PlayerIdentifier, PredefineData> entry : predefinedPlayers.entrySet())
 			predefineList.add(entry.getKey().saveToNBT(entry.getValue().write(), "player"));
-		nbt.setTag("predefinedPlayers", predefineList);
-		nbt.setBoolean("locked", locked);
-		//nbt.setInt("skaiaId", skaiaId);
-		//nbt.setInt("derseId", derseId);
-		//nbt.setInt("prospitId", prospitId);
+		nbt.put("predefinedPlayers", predefineList);
+		nbt.putBoolean("locked", locked);
+		//nbt.putInt("skaiaId", skaiaId);
+		//nbt.putInt("derseId", derseId);
+		//nbt.putInt("prospitId", prospitId);
 		return nbt;
 	}
 	
@@ -159,7 +159,7 @@ public class Session
 			for(String player : predefineTag.keySet())
 			{
 				NBTTagCompound compound = new NBTTagCompound();
-				compound.setString("player", player);
+				compound.putString("player", player);
 				predefinedPlayers.put(IdentifierHandler.load(compound, "player"), new PredefineData().read(predefineTag.getCompound(player)));
 			}
 		}

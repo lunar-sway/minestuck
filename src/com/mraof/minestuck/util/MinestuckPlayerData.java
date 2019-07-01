@@ -89,7 +89,7 @@ public class MinestuckPlayerData
 		for (PlayerData data : dataMap.values())
 			list.add(data.writeToNBT());
 
-		nbt.setTag("playerData", list);
+		nbt.put("playerData", list);
 	}
 
 	public static void readFromNBT(NBTTagCompound nbt)
@@ -177,10 +177,10 @@ public class MinestuckPlayerData
 		
 		private void readFromNBT(NBTTagCompound nbt)
 		{
-			if (nbt.hasKey("username"))
+			if (nbt.contains("username"))
 				this.player = IdentifierHandler.load(nbt, "username");    //For compability with saves from older minestuck versions
 			else this.player = IdentifierHandler.load(nbt, "player");
-			if (nbt.hasKey("grist"))
+			if (nbt.contains("grist"))
 			{
 				this.gristCache = new GristSet();
 				NBTTagList gristTags = nbt.getList("grist", 10);
@@ -192,15 +192,15 @@ public class MinestuckPlayerData
 						this.gristCache.setGrist(type, gristTag.getInt("amount"));
 				}
 			}
-			if (nbt.hasKey("titleClass"))
+			if (nbt.contains("titleClass"))
 				this.title = new Title(EnumClass.getClassFromInt(nbt.getByte("titleClass")), EnumAspect.getAspectFromInt(nbt.getByte("titleAspect")));
-			if (nbt.hasKey("modus"))
+			if (nbt.contains("modus"))
 			{
 				this.modus = CaptchaDeckHandler.readFromNBT(nbt.getCompound("modus"), false);
 				givenModus = true;
 			}
 			else givenModus = nbt.getBoolean("givenModus");
-			if (nbt.hasKey("color"))
+			if (nbt.contains("color"))
 				this.color = nbt.getInt("color");
 			boondollars = nbt.getLong("boondollars");
 			effectToggle = nbt.getBoolean("effectToggle");
@@ -219,23 +219,23 @@ public class MinestuckPlayerData
 				for (GristType type : GristType.values())
 				{
 					NBTTagCompound gristTag = new NBTTagCompound();
-					gristTag.setString("id", String.valueOf(type.getRegistryName()));
-					gristTag.setInt("amount", this.gristCache.getGrist(type));
+					gristTag.putString("id", String.valueOf(type.getRegistryName()));
+					gristTag.putInt("amount", this.gristCache.getGrist(type));
 					list.add(gristTag);
 				}
-				nbt.setTag("grist", list);
+				nbt.put("grist", list);
 			}
 			if (this.title != null)
 			{
-				nbt.setByte("titleClass", (byte) this.title.getHeroClass().ordinal());
-				nbt.setByte("titleAspect", (byte) this.title.getHeroAspect().ordinal());
+				nbt.putByte("titleClass", (byte) this.title.getHeroClass().ordinal());
+				nbt.putByte("titleAspect", (byte) this.title.getHeroAspect().ordinal());
 			}
 			if (this.modus != null)
-				nbt.setTag("modus", CaptchaDeckHandler.writeToNBT(modus));
-			else nbt.setBoolean("givenModus", givenModus);
-			nbt.setInt("color", this.color);
-			nbt.setLong("boondollars", boondollars);
-			nbt.setBoolean("effectToggle", effectToggle);
+				nbt.put("modus", CaptchaDeckHandler.writeToNBT(modus));
+			else nbt.putBoolean("givenModus", givenModus);
+			nbt.putInt("color", this.color);
+			nbt.putLong("boondollars", boondollars);
+			nbt.putBoolean("effectToggle", effectToggle);
 			
 			echeladder.saveEcheladder(nbt);
 			return nbt;

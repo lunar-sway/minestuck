@@ -154,7 +154,7 @@ public class SkaianetHandler extends WorldSavedData
 					connectTo(player, false, getAssociatedPartner(player.owner, false), resumingClients);
 				else
 				{
-					te.getData(1).setBoolean("isOpen", true);
+					te.getData(1).putBoolean("isOpen", true);
 					serversOpen.put(player.owner, player);
 				}
 			}
@@ -164,7 +164,7 @@ public class SkaianetHandler extends WorldSavedData
 					connectTo(player, false, otherPlayer, resumingClients);
 				else	//Client is not currently trying to resume
 				{
-					te.getData(1).setBoolean("isOpen", true);
+					te.getData(1).putBoolean("isOpen", true);
 					resumingServers.put(player.owner, player);
 				}
 			}
@@ -182,7 +182,7 @@ public class SkaianetHandler extends WorldSavedData
 					connectTo(player, true, p, serversOpen);
 				else	//If server isn't open
 				{
-					te.getData(0).setBoolean("isResuming", true);
+					te.getData(0).putBoolean("isResuming", true);
 					resumingClients.put(player.owner, player);
 				}
 			}
@@ -204,7 +204,7 @@ public class SkaianetHandler extends WorldSavedData
 				TileEntityComputer te = getComputer(mcServer, resumingClients.remove(player).location);
 				if(te != null)
 				{
-					te.getData(0).setBoolean("isResuming", false);
+					te.getData(0).putBoolean("isResuming", false);
 					te.latestmessage.put(0, "computer.messageResumeStop");
 					te.markBlockForUpdate();
 				}
@@ -215,7 +215,7 @@ public class SkaianetHandler extends WorldSavedData
 				TileEntityComputer te = getComputer(mcServer, serversOpen.remove(player).getLocation());
 				if(te != null)
 				{
-					te.getData(1).setBoolean("isOpen", false);
+					te.getData(1).putBoolean("isOpen", false);
 					te.latestmessage.put(1, "computer.messageClosedServer");
 					te.markBlockForUpdate();
 				}
@@ -226,7 +226,7 @@ public class SkaianetHandler extends WorldSavedData
 				TileEntityComputer te = getComputer(mcServer, resumingServers.remove(player).getLocation());
 				if(te != null)
 				{
-					te.getData(1).setBoolean("isOpen", false);
+					te.getData(1).putBoolean("isOpen", false);
 					te.latestmessage.put(1, "computer.messageResumeStop");
 					te.markBlockForUpdate();
 				}
@@ -242,13 +242,13 @@ public class SkaianetHandler extends WorldSavedData
 					TileEntityComputer cc = getComputer(mcServer, c.client.getLocation()), sc = getComputer(mcServer, c.server.getLocation());
 					if(cc != null)
 					{
-						cc.getData(0).setBoolean("connectedToServer", false);
+						cc.getData(0).putBoolean("connectedToServer", false);
 						cc.latestmessage.put(0, "computer.messageClosed");
 						cc.markBlockForUpdate();
 					}
 					if(sc != null)
 					{
-						sc.getData(1).setString("connectedClient", "");
+						sc.getData(1).putString("connectedClient", "");
 						sc.latestmessage.put(1, "computer.messageClosed");
 						sc.markBlockForUpdate();
 					}
@@ -466,7 +466,7 @@ public class SkaianetHandler extends WorldSavedData
 		for(Session s : SessionHandler.sessions)
 			list.add(s.write());
 		
-		compound.setTag("sessions", list);
+		compound.put("sessions", list);
 		
 		String[] s = {"serversOpen","resumingClients","resumingServers"};
 		@SuppressWarnings("unchecked")
@@ -476,7 +476,7 @@ public class SkaianetHandler extends WorldSavedData
 			list = new NBTTagList();
 			for(ComputerData c:maps[i].values())
 				list.add(c.write());
-			compound.setTag(s[i], list);
+			compound.put(s[i], list);
 		}
 		
 		return compound;
@@ -640,7 +640,7 @@ public class SkaianetHandler extends WorldSavedData
 					
 					if(cc != null)
 					{
-						cc.getData(0).setBoolean("connectedToServer", false);
+						cc.getData(0).putBoolean("connectedToServer", false);
 						cc.latestmessage.put(0, "computer.messageClosed");
 						cc.markBlockForUpdate();
 					} else if(sc != null)
@@ -665,10 +665,10 @@ public class SkaianetHandler extends WorldSavedData
 						if(c.isActive)
 						{
 							TileEntityComputer cc = getComputer(mcServer, c.client.location), sc = getComputer(mcServer, c.server.location);
-							cc.getData(0).setBoolean("connectedToServer", false);
+							cc.getData(0).putBoolean("connectedToServer", false);
 							cc.latestmessage.put(0, "computer.messageClosed");
 							cc.markBlockForUpdate();
-							sc.getData(1).setString("connectedClient", "");
+							sc.getData(1).putString("connectedClient", "");
 							sc.latestmessage.put(1, "computer.messageClosed");
 							sc.markBlockForUpdate();
 						}
@@ -863,13 +863,13 @@ public class SkaianetHandler extends WorldSavedData
 		if(world.isRemote)
 			throw new IllegalStateException("Should not attempt to get saved data on the client side!");
 		
-		WorldSavedDataStorage storage = world.getMapStorage();
-		SkaianetHandler instance = storage.func_212426_a(DimensionType.OVERWORLD, s -> new SkaianetHandler(s, world.getServer()), DATA_NAME);
+		WorldSavedDataStorage storage = world.getSavedDataStorage();
+		SkaianetHandler instance = storage.get(DimensionType.OVERWORLD, s -> new SkaianetHandler(s, world.getServer()), DATA_NAME);
 		
 		if(instance == null)	//There is no save data
 		{
 			instance = new SkaianetHandler(world.getServer());
-			storage.func_212424_a(DimensionType.OVERWORLD, DATA_NAME, instance);
+			storage.set(DimensionType.OVERWORLD, DATA_NAME, instance);
 		}
 		
 		return instance;

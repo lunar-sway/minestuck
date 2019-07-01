@@ -459,9 +459,9 @@ public class GuiDataChecker extends GuiScreen implements GuiButtonImpl.ButtonCli
 			if(isMain)
 			{
 				list.add(new TextField("Land dimension: %s", (landDim != 0 ? String.valueOf(landDim) : "Pre-entry")));
-				if(landDim != 0 && connectionTag.hasKey("aspect1"))
+				if(landDim != 0 && connectionTag.contains("aspect1"))
 					list.add(new LocalizedTextField("land.message.format", new TextComponentTranslation("land."+connectionTag.getString("aspect1")), new TextComponentTranslation("land."+connectionTag.getString("aspect2"))));
-				if(connectionTag.hasKey("class"))
+				if(connectionTag.contains("class"))
 				{
 					byte cl = connectionTag.getByte("class"), as = connectionTag.getByte("aspect");
 					String titleClass = cl == -1 ? "Unknown" : "title."+EnumClass.values()[cl].toString();
@@ -469,9 +469,9 @@ public class GuiDataChecker extends GuiScreen implements GuiButtonImpl.ButtonCli
 					list.add(new LocalizedTextField("title.format", new TextComponentTranslation(titleClass), new TextComponentTranslation(titleAspect)));
 				}
 				
-				if(connectionTag.hasKey("aspectTitle"))
+				if(connectionTag.contains("aspectTitle"))
 					list.add(new TextField("Title aspect: %s", connectionTag.getString("aspectTitle")));
-				if(connectionTag.hasKey("aspectTerrain"))
+				if(connectionTag.contains("aspectTerrain"))
 					list.add(new TextField("Terrain aspect: %s", connectionTag.getString("aspectTerrain")));
 			}
 			list.add(new GristCacheButton(connectionTag.getString("clientId")));

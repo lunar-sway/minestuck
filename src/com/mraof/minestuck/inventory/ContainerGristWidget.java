@@ -32,7 +32,7 @@ public class ContainerGristWidget extends Container
 			@Override
 			public boolean isItemValid(ItemStack stack)
 			{
-				return super.isItemValid(stack) && (stack.hasTag() && stack.getTag().hasKey("contentID") && !stack.getTag().getBoolean("punched"));
+				return super.isItemValid(stack) && (stack.hasTag() && stack.getTag().contains("contentID") && !stack.getTag().getBoolean("punched"));
 			}
 		});
 		

@@ -123,14 +123,14 @@ public class SburbConnection
 	NBTTagCompound write()
 	{
 		NBTTagCompound nbt = new NBTTagCompound();
-		nbt.setBoolean("IsMain", isMain);
+		nbt.putBoolean("IsMain", isMain);
 		if(inventory != null)
-			nbt.setTag("Inventory", inventory);
+			nbt.put("Inventory", inventory);
 		if(isMain)
 		{
-			nbt.setBoolean("IsActive", isActive);
-			nbt.setBoolean("HasEntered", hasEntered);
-			nbt.setBoolean("CanSplit", canSplit);
+			nbt.putBoolean("IsActive", isActive);
+			nbt.putBoolean("HasEntered", hasEntered);
+			nbt.putBoolean("CanSplit", canSplit);
 			NBTTagList list = unregisteredItems.copy();
 			String[] deployNames = DeployList.getNameList();
 			for(int i = 0; i < givenItemList.length; i++)
@@ -139,37 +139,37 @@ public class SburbConnection
 					list.add(new NBTTagString(deployNames[i]));
 			}
 			
-			nbt.setTag("GivenItems", list);
+			nbt.put("GivenItems", list);
 			if(clientHomeLand != null)
 			{
-				nbt.setString("ClientLand", clientHomeLand.getRegistryName().toString());
+				nbt.putString("ClientLand", clientHomeLand.getRegistryName().toString());
 			}
 		}
 		if(isActive)
 		{
-			nbt.setTag("Client", client.write());
-			nbt.setTag("Server", server.write());
+			nbt.put("Client", client.write());
+			nbt.put("Server", server.write());
 		}
 		else
 		{
 			getClientIdentifier().saveToNBT(nbt, "Client");
 			getServerIdentifier().saveToNBT(nbt, "Server");
 		}
-		nbt.setInt("Artifact", artifactType);
+		nbt.putInt("Artifact", artifactType);
 		return nbt;
 	}
 	
 	SburbConnection read(NBTTagCompound nbt)
 	{
 		isMain = nbt.getBoolean("IsMain");
-		if(nbt.hasKey("Inventory"))
-			inventory = (NBTTagList) nbt.getTag("Inventory");
+		if(nbt.contains("Inventory"))
+			inventory = nbt.getList("Inventory", 10);
 		if(isMain)
 		{
 			isActive = nbt.getBoolean("IsActive");
 			hasEntered = nbt.getBoolean("HasEntered");
 			
-			if(nbt.hasKey("CanSplit"))
+			if(nbt.contains("CanSplit"))
 				canSplit = nbt.getBoolean("CanSplit");
 			NBTTagList list = nbt.getList("GivenItems", 8);
 			for(int i = 0; i < list.size(); i++)
@@ -191,7 +191,7 @@ public class SburbConnection
 			clientIdentifier = IdentifierHandler.load(nbt, "Client");
 			serverIdentifier = IdentifierHandler.load(nbt, "Server");
 		}
-		if(nbt.hasKey("ClientLand"))
+		if(nbt.contains("ClientLand"))
 		{
 			clientHomeLand = DimensionType.byName(new ResourceLocation(nbt.getString("ClientLand")));	//TODO add robustness in the case that the dimension type no longer exists?
 			if(!MinestuckDimensionHandler.isLandDimension(clientHomeLand))

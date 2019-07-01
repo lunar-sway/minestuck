@@ -41,7 +41,7 @@ public class PostEntryTask
 	
 	public PostEntryTask(NBTTagCompound nbt)
 	{
-		this(DimensionType.byName(ResourceLocation.makeResourceLocation(nbt.getString("dimension"))), nbt.getInt("x"), nbt.getInt("y"), nbt.getInt("z"), nbt.getInt("entrySize"), nbt.getByte("entryType"));
+		this(DimensionType.byName(ResourceLocation.tryCreate(nbt.getString("dimension"))), nbt.getInt("x"), nbt.getInt("y"), nbt.getInt("z"), nbt.getInt("entrySize"), nbt.getByte("entryType"));
 		this.index = nbt.getInt("index");
 		if(dimension == null)
 			Debug.warnf("Unable to load dimension type by name %s!", nbt.getString("dimension"));
@@ -50,13 +50,13 @@ public class PostEntryTask
 	public NBTTagCompound toNBTTagCompound()
 	{
 		NBTTagCompound nbt = new NBTTagCompound();
-		nbt.setString("dimension", dimension.getRegistryName().toString());
-		nbt.setInt("x", x);
-		nbt.setInt("y", y);
-		nbt.setInt("z", z);
-		nbt.setInt("entrySize", entrySize);
-		nbt.setByte("entryType", entryType);
-		nbt.setInt("index", index);
+		nbt.putString("dimension", dimension.getRegistryName().toString());
+		nbt.putInt("x", x);
+		nbt.putInt("y", y);
+		nbt.putInt("z", z);
+		nbt.putInt("entrySize", entrySize);
+		nbt.putByte("entryType", entryType);
+		nbt.putInt("index", index);
 		
 		return nbt;
 	}

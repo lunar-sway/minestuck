@@ -269,7 +269,7 @@ public class TileEntityAlchemiter extends TileEntity
 	{
 		super.read(tagCompound);
 
-		if(tagCompound.hasKey("gristType"))
+		if(tagCompound.contains("gristType"))
 			this.wildcardGrist = GristType.getTypeFromString(tagCompound.getString("gristType"));
 		if(this.wildcardGrist == null)
 		{
@@ -288,7 +288,7 @@ public class TileEntityAlchemiter extends TileEntity
 		
 		broken = tagCompound.getBoolean("broken");
 		
-		if(tagCompound.hasKey("dowel")) 
+		if(tagCompound.contains("dowel"))
 			dowel = ItemStack.read(tagCompound.getCompound("dowel"));
 	}
 	
@@ -297,17 +297,17 @@ public class TileEntityAlchemiter extends TileEntity
 	{
 		super.write(tagCompound);
 
-		tagCompound.setString("gristType", wildcardGrist.getRegistryName().toString());
-		tagCompound.setBoolean("upgraded", upgraded);
-		tagCompound.setBoolean("broken", isBroken());
+		tagCompound.putString("gristType", wildcardGrist.getRegistryName().toString());
+		tagCompound.putBoolean("upgraded", upgraded);
+		tagCompound.putBoolean("broken", isBroken());
 		
 		for(int i = 0; i < upgradeItem.length; i++)
 		{
-			tagCompound.setTag("upgrade" + i, upgradeItem[i].write(new NBTTagCompound()));
+			tagCompound.put("upgrade" + i, upgradeItem[i].write(new NBTTagCompound()));
 		}
 		
 		if(dowel!= null)
-			tagCompound.setTag("dowel", dowel.write(new NBTTagCompound()));
+			tagCompound.put("dowel", dowel.write(new NBTTagCompound()));
 		
 		return tagCompound;
 	}

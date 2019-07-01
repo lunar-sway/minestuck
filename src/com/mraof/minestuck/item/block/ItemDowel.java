@@ -44,10 +44,10 @@ public class ItemDowel extends ItemBlock
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
 	{
-		if (stack.hasTag() && stack.getTag().hasKey("contentID"))
+		if (stack.hasTag() && stack.getTag().contains("contentID"))
 		{
 			NBTTagCompound nbttagcompound = stack.getTag();
-			NBTTagString contentID = (NBTTagString)nbttagcompound.getTag("contentID");
+			NBTTagString contentID = (NBTTagString)nbttagcompound.get("contentID");
 			
 			if (ForgeRegistries.ITEMS.containsKey(new ResourceLocation(contentID.getString())))
 			{
@@ -66,7 +66,7 @@ public class ItemDowel extends ItemBlock
 	{
 		IBlockState state = super.getStateForPlacement(context);
 		ItemStack stack = context.getItem();
-		if(stack.hasTag() && stack.getTag().hasKey("contentID"))
+		if(stack.hasTag() && stack.getTag().contains("contentID"))
 			state = state.with(BlockCruxiteDowel.DOWEL_TYPE, BlockCruxiteDowel.Type.TOTEM);
 		else
 			state = state.with(BlockCruxiteDowel.DOWEL_TYPE, BlockCruxiteDowel.Type.DOWEL);

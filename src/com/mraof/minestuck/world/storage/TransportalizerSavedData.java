@@ -56,7 +56,7 @@ public class TransportalizerSavedData extends WorldSavedData
 			NBTTagCompound locationTag = location.toNBT(new NBTTagCompound());
 			
 			if(locationTag != null)
-				compound.setTag(entry.getKey(), locationTag);
+				compound.put(entry.getKey(), locationTag);
 			else Debug.warnf("Couldn't save the location of transportalizer %s!", entry.getKey());
 		}
 		
@@ -108,13 +108,13 @@ public class TransportalizerSavedData extends WorldSavedData
 		if(world.isRemote)
 			throw new IllegalStateException("Should not attempt to get saved data on the client side!");
 		
-		WorldSavedDataStorage storage = world.getMapStorage();
-		TransportalizerSavedData instance = storage.func_212426_a(DimensionType.OVERWORLD, TransportalizerSavedData::new, DATA_NAME);
+		WorldSavedDataStorage storage = world.getSavedDataStorage();
+		TransportalizerSavedData instance = storage.get(DimensionType.OVERWORLD, TransportalizerSavedData::new, DATA_NAME);
 		
 		if(instance == null)	//There is no save data
 		{
 			instance = new TransportalizerSavedData();
-			storage.func_212424_a(DimensionType.OVERWORLD, DATA_NAME, instance);
+			storage.set(DimensionType.OVERWORLD, DATA_NAME, instance);
 		}
 		
 		return instance;

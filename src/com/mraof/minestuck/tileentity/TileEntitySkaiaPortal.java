@@ -40,7 +40,7 @@ public class TileEntitySkaiaPortal extends TileEntity implements ITeleporter
 	{
 		super.read(compound);
 		destination.pos = new BlockPos(compound.getInt("destX"), compound.getInt("destY"), compound.getInt("destZ"));
-		destination.dim = DimensionType.byName(ResourceLocation.makeResourceLocation(compound.getString("destDim")));
+		destination.dim = DimensionType.byName(ResourceLocation.tryCreate(compound.getString("destDim")));
 		if(destination.dim == null)
 			destination.dim = MinestuckDimensionHandler.skaia;
 	}
@@ -49,14 +49,14 @@ public class TileEntitySkaiaPortal extends TileEntity implements ITeleporter
 	public NBTTagCompound write(NBTTagCompound compound)
 	{
 		super.write(compound);
-		ResourceLocation dimName = DimensionType.func_212678_a(this.destination.dim);
+		ResourceLocation dimName = this.destination.dim.getRegistryName();
 		
 		if(dimName != null)
-			compound.setString("destDim", dimName.toString());
+			compound.putString("destDim", dimName.toString());
 		else Debug.warnf("Couldn't get dimension name for dimension %s!", destination.dim);
-		compound.setInt("destX", destination.pos.getX());
-		compound.setInt("destY", destination.pos.getY());
-		compound.setInt("destZ", destination.pos.getZ());
+		compound.putInt("destX", destination.pos.getX());
+		compound.putInt("destY", destination.pos.getY());
+		compound.putInt("destZ", destination.pos.getZ());
 		return compound;
 	}
 	

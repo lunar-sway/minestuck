@@ -67,7 +67,7 @@ public class GuiMiniAlchemiter extends GuiMachine
 		{
 			//Render grist requirements
 			ItemStack stack = AlchemyRecipes.getDecodedItem(te.getStackInSlot(0));
-			if (!(te.getStackInSlot(0).hasTag() && te.getStackInSlot(0).getTag().hasKey("contentID")))
+			if (!(te.getStackInSlot(0).hasTag() && te.getStackInSlot(0).getTag().contains("contentID")))
 				stack = new ItemStack(MinestuckBlocks.GENERIC_OBJECT);
 
 			GristSet set = AlchemyCostRegistry.getGristConversion(stack);

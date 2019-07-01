@@ -607,28 +607,28 @@ public class ServerEditHandler
 		{
 			NBTTagCompound nbtTag = new NBTTagCompound();
 			UUID id = data.player.getGameProfile().getId();
-			nbtTag.setLong("UUID1", id.getLeastSignificantBits());
-			nbtTag.setLong("UUID2", id.getMostSignificantBits());
+			nbtTag.putLong("UUID1", id.getLeastSignificantBits());
+			nbtTag.putLong("UUID2", id.getMostSignificantBits());
 			
-			nbtTag.setString("dim", data.decoy.dimension.getRegistryName().toString());
-			nbtTag.setDouble("x", data.decoy.posX);
-			nbtTag.setDouble("y", data.decoy.posY);
-			nbtTag.setDouble("z", data.decoy.posZ);
-			nbtTag.setFloat("rotYaw", data.decoy.rotationYaw);
-			nbtTag.setFloat("rotPitch", data.decoy.rotationPitch);
+			nbtTag.putString("dim", data.decoy.dimension.getRegistryName().toString());
+			nbtTag.putDouble("x", data.decoy.posX);
+			nbtTag.putDouble("y", data.decoy.posY);
+			nbtTag.putDouble("z", data.decoy.posZ);
+			nbtTag.putFloat("rotYaw", data.decoy.rotationYaw);
+			nbtTag.putFloat("rotPitch", data.decoy.rotationPitch);
 			
-			nbtTag.setInt("gamemode", data.decoy.gameType.getID());
-			nbtTag.setTag("capabilities", data.decoy.capabilities);
-			nbtTag.setFloat("health", data.decoy.getHealth());
-			nbtTag.setTag("food", data.decoy.getFoodStatsNBT());
-			nbtTag.setTag("inv", data.decoy.inventory.write(new NBTTagList()));
+			nbtTag.putInt("gamemode", data.decoy.gameType.getID());
+			nbtTag.put("capabilities", data.decoy.capabilities);
+			nbtTag.putFloat("health", data.decoy.getHealth());
+			nbtTag.put("food", data.decoy.getFoodStatsNBT());
+			nbtTag.put("inv", data.decoy.inventory.write(new NBTTagList()));
 			
 			data.connection.inventory = data.player.inventory.write(new NBTTagList());
 			
 			nbtList.add(nbtTag);
 		}
 		
-		nbt.setTag("editmodeRecover", nbtList);
+		nbt.put("editmodeRecover", nbtList);
 	}
 	
 	public static void loadData(NBTTagCompound nbt)

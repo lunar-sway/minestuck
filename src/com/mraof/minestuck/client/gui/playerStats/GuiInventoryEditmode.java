@@ -65,11 +65,11 @@ public class GuiInventoryEditmode extends GuiPlayerStatsContainer
 			EditmodeInventoryPacket packet = null;
 			if(less && xcor >= xOffset + leftArrowX && xcor < xOffset + leftArrowX + 18)
 			{
-				mc.getSoundHandler().play(SimpleSound.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+				mc.getSoundHandler().play(SimpleSound.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 				packet = EditmodeInventoryPacket.scroll(false);
 			} else if(more && xcor >= xOffset + rightArrowX && xcor < xOffset + rightArrowX + 18)
 			{
-				mc.getSoundHandler().play(SimpleSound.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+				mc.getSoundHandler().play(SimpleSound.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 				packet = EditmodeInventoryPacket.scroll(true);
 			}
 			if(packet != null)

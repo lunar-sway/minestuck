@@ -268,7 +268,7 @@ public class DeployList
 	{
 		NBTTagCompound nbt = new NBTTagCompound();
 		NBTTagList tagList = new NBTTagList();
-		nbt.setTag("l", tagList);
+		nbt.put("l", tagList);
 		int tier = SburbHandler.availableTier(server, c.getClientIdentifier());
 		for(int i = 0; i < list.size(); i++)
 		{
@@ -280,18 +280,18 @@ public class DeployList
 				GristSet secondary = entry.getSecondaryGristCost(c);
 				NBTTagCompound tag = new NBTTagCompound();
 				stack.write(tag);
-				tag.setInt("i", i);
+				tag.putInt("i", i);
 				NBTTagList listPrimary = new NBTTagList();
 				for (GristType type : GristType.values())
 				{
 					if(primary.getGrist(type) == 0)
 						continue;
 					NBTTagCompound gristTag = new NBTTagCompound();
-					gristTag.setString("id", String.valueOf(type.getRegistryName()));
-					gristTag.setInt("amount", primary.getGrist(type));
+					gristTag.putString("id", String.valueOf(type.getRegistryName()));
+					gristTag.putInt("amount", primary.getGrist(type));
 					listPrimary.add(gristTag);
 				}
-				tag.setTag("primary", listPrimary);
+				tag.put("primary", listPrimary);
 				if(secondary != null)
 				{
 					NBTTagList listSecondary = new NBTTagList();
@@ -300,11 +300,11 @@ public class DeployList
 						if(secondary.getGrist(type) == 0)
 							continue;
 						NBTTagCompound gristTag = new NBTTagCompound();
-						gristTag.setString("id", String.valueOf(type.getRegistryName()));
-						gristTag.setInt("amount", secondary.getGrist(type));
+						gristTag.putString("id", String.valueOf(type.getRegistryName()));
+						gristTag.putInt("amount", secondary.getGrist(type));
 						listSecondary.add(gristTag);
 					}
-					tag.setTag("secondary", listSecondary);
+					tag.put("secondary", listSecondary);
 				}
 				tagList.add(tag);
 			}

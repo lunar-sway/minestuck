@@ -284,7 +284,7 @@ public class LandDimension extends Dimension
 		int centerZ = ((int)player.posZ) >> 4;
 		for(int x = centerX - 1; x <= centerX + 1; x++)
 			for(int z = centerZ - 1; z <= centerZ + 1; z++)
-				this.world.getChunkProvider().provideChunk(x, z, true, true);
+				this.world.getChunkProvider().getChunk(x, z, true, true);
 	}
 	
 	public BlockPos findAndMarkNextStructure(EntityPlayerMP player, String type, NBTTagList tags)

@@ -202,10 +202,10 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	protected void writeAdditional(NBTTagCompound compound)
 	{
-		compound.setShort("Health", (short)this.gristHealth);
-		compound.setShort("Age", (short)this.gristAge);
-		compound.setShort("Value", (short)this.gristValue);
-		compound.setString("Type", this.gristType.getName());
+		compound.putShort("Health", (short)this.gristHealth);
+		compound.putShort("Age", (short)this.gristAge);
+		compound.putShort("Value", (short)this.gristValue);
+		compound.putString("Type", this.gristType.getName());
 	}
 	
 	@Override

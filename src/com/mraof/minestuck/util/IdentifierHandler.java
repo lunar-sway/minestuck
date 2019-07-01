@@ -268,9 +268,9 @@ public class IdentifierHandler {
 		{
 			if(this.useUUID)
 			{
-				nbt.setLong(key+"Most", uuid.getMostSignificantBits());
-				nbt.setLong(key+"Least", uuid.getLeastSignificantBits());
-			} else nbt.setString(key, username);
+				nbt.putLong(key+"Most", uuid.getMostSignificantBits());
+				nbt.putLong(key+"Least", uuid.getLeastSignificantBits());
+			} else nbt.putString(key, username);
 			return nbt;
 		}
 		

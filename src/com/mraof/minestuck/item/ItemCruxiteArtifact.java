@@ -229,7 +229,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 			Debug.debug("Loading spawn chunks...");
 			for(int chunkX = ((x + xDiff - artifactRange) >> 4) - 1; chunkX <= ((x + xDiff + artifactRange) >> 4) + 2; chunkX++)		//Prevent anything generating on the piece that we move
 				for(int chunkZ = ((z + zDiff - artifactRange) >> 4) - 1; chunkZ <= ((z + zDiff + artifactRange) >> 4) + 2; chunkZ++)	//from the overworld.
-					worldserver1.getChunkProvider().provideChunk(chunkX, chunkZ, true, true);
+					worldserver1.getChunkProvider().getChunk(chunkX, chunkZ, true, true);
 			
 			//This is split into two sections because moves that require block updates should happen after the ones that don't.
 			//This helps to ensure that "anchored" blocks like torches still have the blocks they are anchored to when they update.
@@ -278,7 +278,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 						{
 							NBTTagCompound nbttagcompound = new NBTTagCompound();
 							e.writeWithoutTypeId(nbttagcompound);
-							nbttagcompound.removeTag("Dimension");
+							nbttagcompound.remove("Dimension");
 							newEntity.read(nbttagcompound);
 							newEntity.dimension = worldserver1.getDimension().getType();
 							newEntity.setPosition(newEntity.posX + xDiff, newEntity.posY + yDiff, newEntity.posZ + zDiff);
@@ -502,9 +502,9 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 			{
 				NBTTagCompound nbt = new NBTTagCompound();
 				tileEntity.write(nbt);
-				nbt.setInt("x", dest.getX());
-				nbt.setInt("y", dest.getY());
-				nbt.setInt("z", dest.getZ());
+				nbt.putInt("x", dest.getX());
+				nbt.putInt("y", dest.getY());
+				nbt.putInt("z", dest.getZ());
 				TileEntity te1 = TileEntity.create(nbt);
 				if(te1 != null)
 					chunkTo.addTileEntity(dest, te1);

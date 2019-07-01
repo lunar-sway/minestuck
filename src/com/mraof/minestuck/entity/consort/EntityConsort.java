@@ -169,29 +169,29 @@ public abstract class EntityConsort extends EntityMinestuck implements IInteract
 		
 		if(message != null)
 		{
-			compound.setString("Dialogue", message.getString());
-			compound.setInt("MessageTicks", messageTicksLeft);
-			compound.setTag("MessageData", messageData);
+			compound.putString("Dialogue", message.getString());
+			compound.putInt("MessageTicks", messageTicksLeft);
+			compound.put("MessageData", messageData);
 		}
 		
-		compound.setInt("Type", merchantType.ordinal());
-		compound.setString("HomeDim", DimensionType.func_212678_a(homeDimension).toString());
+		compound.putInt("Type", merchantType.ordinal());
+		compound.putString("HomeDim", homeDimension.getRegistryName().toString());
 		
 		if(merchantType != EnumConsort.MerchantType.NONE && stocks != null)
-			compound.setTag("Stock", stocks.writeToNBT());
+			compound.put("Stock", stocks.writeToNBT());
 		
 		if(hasHome())
 		{
 			NBTTagCompound nbt = new NBTTagCompound();
 			BlockPos home = getHomePosition();
-			nbt.setInt("HomeX", home.getX());
-			nbt.setInt("HomeY", home.getY());
-			nbt.setInt("HomeZ", home.getZ());
-			nbt.setInt("MaxHomeDistance", (int) getMaximumHomeDistance());
-			compound.setTag("HomePos", nbt);
+			nbt.putInt("HomeX", home.getX());
+			nbt.putInt("HomeY", home.getY());
+			nbt.putInt("HomeZ", home.getZ());
+			nbt.putInt("MaxHomeDistance", (int) getMaximumHomeDistance());
+			compound.put("HomePos", nbt);
 		}
 		
-		compound.setBoolean("Skaia", visitedSkaia);
+		compound.putBoolean("Skaia", visitedSkaia);
 	}
 	
 	@Override
@@ -284,7 +284,7 @@ public abstract class EntityConsort extends EntityMinestuck implements IInteract
 	public NBTTagCompound getMessageTagForPlayer(EntityPlayer player)
 	{
 		if(!messageData.contains(player.getCachedUniqueIdString(), 10))
-			messageData.setTag(player.getCachedUniqueIdString(), new NBTTagCompound());
+			messageData.put(player.getCachedUniqueIdString(), new NBTTagCompound());
 		return messageData.getCompound(player.getCachedUniqueIdString());
 	}
 	

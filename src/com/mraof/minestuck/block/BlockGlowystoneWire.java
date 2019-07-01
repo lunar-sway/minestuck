@@ -281,8 +281,8 @@ public class BlockGlowystoneWire extends Block
 		double d0 = (double)pos.getX() + 0.5D + ((double)rand.nextFloat() - 0.5D) * 0.2D;
 		double d1 = (double)((float)pos.getY() + 0.0625F);
 		double d2 = (double)pos.getZ() + 0.5D + ((double)rand.nextFloat() - 0.5D) * 0.2D;
-			
-		worldIn.spawnParticle(new RedstoneParticleData(1F, 0.8F, 0F, 1F), d0, d1, d2, 0, 0, 0);
+		
+		worldIn.addParticle(new RedstoneParticleData(1F, 0.8F, 0F, 1F), d0, d1, d2, 0, 0, 0);
 	}
 	
 	public IBlockState rotate(IBlockState state, Rotation rot)

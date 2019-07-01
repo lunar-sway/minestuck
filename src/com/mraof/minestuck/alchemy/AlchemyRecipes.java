@@ -1126,12 +1126,12 @@ public class AlchemyRecipes
 		if (item == null) {return ItemStack.EMPTY;}
 		ItemStack newItem = new ItemStack(item);
 		
-		if(tag.hasKey("contentTags"))
+		if(tag.contains("contentTags"))
 			newItem.setTag(tag.getCompound("contentTags"));
 		
-		if(ignoreGhost && tag.hasKey("contentSize") && tag.getInt("contentSize") <= 0)
+		if(ignoreGhost && tag.contains("contentSize") && tag.getInt("contentSize") <= 0)
 			newItem.setCount(0);
-		else if(tag.hasKey("contentSize") && tag.getInt("contentSize") >= 1)
+		else if(tag.contains("contentSize") && tag.getInt("contentSize") >= 1)
 			newItem.setCount(tag.getInt("contentSize"));
 		
 		return newItem;
@@ -1163,7 +1163,7 @@ public class AlchemyRecipes
 		
 		if (card.isEmpty()) {return ItemStack.EMPTY;}
 		
-		if (card.getItem().equals(CAPTCHA_CARD) && card.hasTag() && card.getTag().hasKey("contentID"))
+		if (card.getItem().equals(CAPTCHA_CARD) && card.hasTag() && card.getTag().contains("contentID"))
 		{
 			return getDecodedItem(card);
 		}
@@ -1180,7 +1180,7 @@ public class AlchemyRecipes
 		if(!item.isEmpty())
 		{
 			nbt = new NBTTagCompound();
-			nbt.setString("contentID", item.getItem().getRegistryName().toString());
+			nbt.putString("contentID", item.getItem().getRegistryName().toString());
 		}
 		ItemStack stack = new ItemStack(registerToCard ? CAPTCHA_CARD : CRUXITE_DOWEL);
 		stack.setTag(nbt);
@@ -1194,7 +1194,7 @@ public class AlchemyRecipes
 		if(!itemIn.isEmpty())
 		{
 			nbt = new NBTTagCompound();
-			nbt.setString("contentID", itemIn.getItem().getRegistryName().toString());
+			nbt.putString("contentID", itemIn.getItem().getRegistryName().toString());
 		}
 		ItemStack stack = itemOut;
 		
@@ -1215,12 +1215,12 @@ public class AlchemyRecipes
 		ItemStack stack = createEncodedItem(item, true);
 		if(!stack.hasTag())
 			stack.setTag(new NBTTagCompound());
-		stack.getTag().setBoolean("punched", punched);
+		stack.getTag().putBoolean("punched", punched);
 		if(!punched)
 		{
 			if(item.hasTag())
-				stack.getTag().setTag("contentTags", item.getTag());
-			stack.getTag().setInt("contentSize", item.getCount());
+				stack.getTag().put("contentTags", item.getTag());
+			stack.getTag().putInt("contentSize", item.getCount());
 		}
 		
 		return stack;
@@ -1232,10 +1232,10 @@ public class AlchemyRecipes
 		ItemStack stack = createEncodedItem(item, true);
 		if(!stack.hasTag())
 			stack.setTag(new NBTTagCompound());
-		stack.getTag().setBoolean("punched", false);
+		stack.getTag().putBoolean("punched", false);
 			if(item.hasTag())
-				stack.getTag().setTag("contentTags", item.getTag());
-			stack.getTag().setInt("contentSize", 0);
+				stack.getTag().put("contentTags", item.getTag());
+			stack.getTag().putInt("contentSize", 0);
 		return stack;
 	}
 	
@@ -1245,7 +1245,7 @@ public class AlchemyRecipes
 		if(!stack.hasTag())
 			stack.setTag(new NBTTagCompound());
 		
-			stack.getTag().setInt("contentSize", size);
+			stack.getTag().putInt("contentSize", size);
 		
 		
 		return stack;
@@ -1256,11 +1256,11 @@ public class AlchemyRecipes
 		ItemStack stack = createEncodedItem(item, SHUNT);
 		if(!stack.hasTag())
 			stack.setTag(new NBTTagCompound());
-		stack.getTag().setBoolean("punched", true);
+		stack.getTag().putBoolean("punched", true);
 		
 			if(item.hasTag())
-				stack.getTag().setTag("contentTags", item.getTag());
-			stack.getTag().setInt("contentSize", item.getCount());
+				stack.getTag().put("contentTags", item.getTag());
+			stack.getTag().putInt("contentSize", item.getCount());
 		
 		
 		return stack;

@@ -67,7 +67,7 @@ public class StackModus extends Modus
 		list = new LinkedList<>();
 		
 		for(int i = 0; i < size; i++)
-			if(nbt.hasKey("item"+i))
+			if(nbt.contains("item"+i))
 				list.add(ItemStack.read(nbt.getCompound("item"+i)));
 			else break;
 		if(side == LogicalSide.CLIENT)
@@ -80,12 +80,12 @@ public class StackModus extends Modus
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt)
 	{
-		nbt.setInt("size", size);
+		nbt.putInt("size", size);
 		Iterator<ItemStack> iter = list.iterator();
 		for(int i = 0; i < list.size(); i++)
 		{
 			ItemStack stack = iter.next();
-			nbt.setTag("item"+i, stack.write(new NBTTagCompound()));
+			nbt.put("item"+i, stack.write(new NBTTagCompound()));
 		}
 		return nbt;
 	}

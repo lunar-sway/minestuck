@@ -85,10 +85,10 @@ public class GateHandler
 					
 					if(gatePos.getY() == -1)
 					{
-						world.getChunkProvider().provideChunk(gatePos.getX() - 8 >> 4, gatePos.getZ() - 8 >> 4, true, true);
-						world.getChunkProvider().provideChunk(gatePos.getX() + 8 >> 4, gatePos.getZ() - 8 >> 4, true, true);
-						world.getChunkProvider().provideChunk(gatePos.getX() - 8 >> 4, gatePos.getZ() + 8 >> 4, true, true);
-						world.getChunkProvider().provideChunk(gatePos.getX() + 8 >> 4, gatePos.getZ() + 8 >> 4, true, true);
+						world.getChunkProvider().getChunk(gatePos.getX() - 8 >> 4, gatePos.getZ() - 8 >> 4, true, true);
+						world.getChunkProvider().getChunk(gatePos.getX() + 8 >> 4, gatePos.getZ() - 8 >> 4, true, true);
+						world.getChunkProvider().getChunk(gatePos.getX() - 8 >> 4, gatePos.getZ() + 8 >> 4, true, true);
+						world.getChunkProvider().getChunk(gatePos.getX() + 8 >> 4, gatePos.getZ() + 8 >> 4, true, true);
 						gatePos = getGatePos(player.server, -1, clientDim);
 						if(gatePos.getY() == -1) {Debug.errorf("Unexpected error: Gate didn't generate after loading chunks! Dim: %d, pos: %s", clientDim, gatePos); return;}
 					}
@@ -214,9 +214,9 @@ public class GateHandler
 				if(gateData.containsKey(dim))
 				{
 					BlockPos gatePos = gateData.get(dim);
-					nbt.setInt("gateX", gatePos.getX());
-					nbt.setInt("gateY", gatePos.getY());
-					nbt.setInt("gateZ", gatePos.getZ());
+					nbt.putInt("gateX", gatePos.getX());
+					nbt.putInt("gateY", gatePos.getY());
+					nbt.putInt("gateZ", gatePos.getZ());
 				}
 			}
 		}
@@ -227,9 +227,9 @@ public class GateHandler
 		for(int i = 0; i < nbtList.size(); i++)
 		{
 			NBTTagCompound nbt = nbtList.getCompound(i);
-			if(nbt.getString("type").equals("land") && nbt.hasKey("gateX"))
+			if(nbt.getString("type").equals("land") && nbt.contains("gateX"))
 			{
-				DimensionType dim = DimensionType.byName(ResourceLocation.makeResourceLocation(nbt.getString("dim")));
+				DimensionType dim = DimensionType.byName(ResourceLocation.tryCreate(nbt.getString("dim")));
 				if(dim != null)
 				{
 					BlockPos pos = new BlockPos(nbt.getInt("gateX"), nbt.getInt("gateY"), nbt.getInt("gateZ"));

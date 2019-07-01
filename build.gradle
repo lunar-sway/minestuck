@@ -41,7 +41,7 @@ compileJava {
 }
 
 minecraft {
-    mappings channel: 'snapshot', version: '20180921-1.13'
+    mappings channel: 'stable', version: '47-1.13.2'
 
     //replaceIn "com/mraof/minestuck/Minestuck.java"
     //replace "@VERSION@", project.version

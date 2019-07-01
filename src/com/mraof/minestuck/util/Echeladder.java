@@ -164,15 +164,15 @@ public class Echeladder
 	
 	protected void saveEcheladder(NBTTagCompound nbt)
 	{
-		nbt.setInt("rung", rung);
-		nbt.setInt("rungProgress", progress);
+		nbt.putInt("rung", rung);
+		nbt.putInt("rungProgress", progress);
 		
 		byte[] bonuses = new byte[ALCHEMY_BONUS_OFFSET + alchemyBonuses.length];	//Booleans would be stored as bytes anyways
 		for(int i = 0; i < underlingBonuses.length; i++)
 			bonuses[i + UNDERLING_BONUS_OFFSET] = (byte) (underlingBonuses[i] ? 1 : 0);
 		for(int i = 0; i < alchemyBonuses.length; i++)
 			bonuses[i + ALCHEMY_BONUS_OFFSET] = (byte) (alchemyBonuses[i] ? 1 : 0);
-		nbt.setByteArray("rungBonuses", bonuses);
+		nbt.putByteArray("rungBonuses", bonuses);
 	}
 	
 	protected void loadEcheladder(NBTTagCompound nbt)

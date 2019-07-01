@@ -31,13 +31,13 @@ class PredefineData
 		NBTTagCompound nbt = new NBTTagCompound();
 		if(title != null)
 		{
-			nbt.setByte("titleClass", (byte) title.getHeroClass().ordinal());
-			nbt.setByte("titleAspect", (byte) title.getHeroAspect().ordinal());
+			nbt.putByte("titleClass", (byte) title.getHeroClass().ordinal());
+			nbt.putByte("titleAspect", (byte) title.getHeroAspect().ordinal());
 		}
 		if(landTerrain != null)
-			nbt.setString("landTerrain", landTerrain.getPrimaryName());
+			nbt.putString("landTerrain", landTerrain.getPrimaryName());
 		if(landTitle != null)
-			nbt.setString("landTitle", landTitle.getPrimaryName());
+			nbt.putString("landTitle", landTitle.getPrimaryName());
 		
 		return nbt;
 	}

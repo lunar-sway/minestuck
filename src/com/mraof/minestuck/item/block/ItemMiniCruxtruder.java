@@ -24,7 +24,7 @@ public class ItemMiniCruxtruder extends ItemBlock
 	@Override
 	protected boolean onBlockPlaced(BlockPos pos, World world, @Nullable EntityPlayer player, ItemStack stack, IBlockState state)
 	{
-		if(stack.hasTag() && stack.getTag().hasKey("color"))
+		if(stack.hasTag() && stack.getTag().contains("color"))
 		{
 			TileEntity te = world.getTileEntity(pos);
 			if(te instanceof TileEntityMiniCruxtruder)
@@ -37,7 +37,7 @@ public class ItemMiniCruxtruder extends ItemBlock
 	{
 		ItemStack stack = new ItemStack(MinestuckBlocks.MINI_CRUXTRUDER);
 		stack.setTag(new NBTTagCompound());
-		stack.getTag().setInt("color", color);
+		stack.getTag().putInt("color", color);
 		return stack;
 	}
 }

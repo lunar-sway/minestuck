@@ -93,9 +93,9 @@ public class TileEntityCruxtruder extends TileEntity
 	{
 		super.read(compound);
 		
-		if(compound.hasKey("color"))
+		if(compound.contains("color"))
 			color = compound.getInt("color");
-		if(compound.hasKey("broken"))
+		if(compound.contains("broken"))
 			broken = compound.getBoolean("broken");
 		material = compound.getInt("material");
 	}
@@ -104,9 +104,9 @@ public class TileEntityCruxtruder extends TileEntity
 	public NBTTagCompound write(NBTTagCompound compound)
 	{
 		super.write(compound);
-		compound.setInt("color", color);
-		compound.setBoolean("broken", broken);
-		compound.setInt("material", material);
+		compound.putInt("color", color);
+		compound.putBoolean("broken", broken);
+		compound.putInt("material", material);
 		return compound;
 	}
 	

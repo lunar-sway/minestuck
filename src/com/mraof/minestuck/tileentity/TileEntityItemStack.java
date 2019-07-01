@@ -43,7 +43,7 @@ public class TileEntityItemStack extends TileEntity
 	public NBTTagCompound write(NBTTagCompound compound)
 	{
 		compound = super.write(compound);
-		compound.setTag("stack", stack.write(new NBTTagCompound()));
+		compound.put("stack", stack.write(new NBTTagCompound()));
 		return compound;
 	}
 	

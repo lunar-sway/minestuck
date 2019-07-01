@@ -21,7 +21,7 @@ public class BlockEndLeaves extends BlockMinestuckLeaves
 	}
 	
 	@Override
-	public boolean getTickRandomly(IBlockState state)
+	public boolean ticksRandomly(IBlockState state)
 	{
 		return state.get(DISTANCE) >= LEAF_SUSTAIN_DISTANCE && !state.get(PERSISTENT);
 	}

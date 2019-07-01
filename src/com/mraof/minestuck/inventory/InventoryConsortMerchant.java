@@ -100,7 +100,7 @@ public class InventoryConsortMerchant implements IInventory
 		for (int i = 0; i < 9; i++)
 		{
 			NBTTagCompound nbt = inv.get(i).write(new NBTTagCompound());
-			nbt.setInt("price", prices[i]);
+			nbt.putInt("price", prices[i]);
 			list.add(nbt);
 		}
 		return list;

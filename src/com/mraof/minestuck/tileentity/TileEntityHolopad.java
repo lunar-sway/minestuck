@@ -65,7 +65,7 @@ public class TileEntityHolopad extends TileEntity
 					ItemStack in = getCard();
 					ItemStack item = new ItemStack(MinestuckBlocks.GENERIC_OBJECT);
 					
-					if (in.hasTag() && in.getTag().hasKey("contentID"))
+					if (in.hasTag() && in.getTag().contains("contentID"))
 						item = AlchemyRecipes.getDecodedItem(in);
 					
 					spawnHologram(pos, item);
@@ -158,7 +158,7 @@ public class TileEntityHolopad extends TileEntity
 	{
 		super.write(compound);
 		//tagCompound.setBoolean("broken", this.broken);
-		compound.setTag("card", card.write(new NBTTagCompound()));
+		compound.put("card", card.write(new NBTTagCompound()));
 		return compound;
 	}
 	
@@ -167,7 +167,7 @@ public class TileEntityHolopad extends TileEntity
 	{
 		NBTTagCompound nbt;
 		nbt = super.getUpdateTag();
-		nbt.setTag("card", card.write(new NBTTagCompound()));
+		nbt.put("card", card.write(new NBTTagCompound()));
 		return nbt;
 	}
 	

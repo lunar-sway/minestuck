@@ -52,7 +52,7 @@ public class QueueModus extends StackModus
 		}
 		
 		ItemStack item = list.removeLast();
-		if(asCard && !(item.getItem() == MinestuckItems.CAPTCHA_CARD && item.hasTag() && !item.getTag().getBoolean("punched") && item.getTag().hasKey("id")))
+		if(asCard && !(item.getItem() == MinestuckItems.CAPTCHA_CARD && item.hasTag() && !item.getTag().getBoolean("punched") && item.getTag().contains("id")))
 		{
 			size--;
 			return AlchemyRecipes.createCard(item, false);

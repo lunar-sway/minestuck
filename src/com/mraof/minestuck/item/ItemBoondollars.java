@@ -73,7 +73,7 @@ public class ItemBoondollars extends Item	//TODO Add custom crafting recipe that
 			nbt = new NBTTagCompound();
 			stack.setTag(nbt);
 		}
-		nbt.setInt("value", value);
+		nbt.putInt("value", value);
 		return stack;
 	}
 }

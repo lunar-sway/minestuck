@@ -96,7 +96,7 @@ public class CaptchaDeckHandler
 	
 	public static void launchItem(EntityPlayerMP player, ItemStack item)
 	{
-		if(item.getItem().equals(MinestuckItems.CAPTCHA_CARD) && (!item.hasTag() || !item.getTag().hasKey("contentID")))
+		if(item.getItem().equals(MinestuckItems.CAPTCHA_CARD) && (!item.hasTag() || !item.getTag().contains("contentID")))
 			while(item.getCount() > 0)
 			{
 				if(getModus(player).increaseSize(player))
@@ -439,7 +439,7 @@ public class CaptchaDeckHandler
 			return null;
 		ResourceLocation name = modus.getRegistryName();
 		NBTTagCompound nbt = modus.writeToNBT(new NBTTagCompound());
-		nbt.setString("type", name.toString());
+		nbt.putString("type", name.toString());
 		return nbt;
 	}
 	

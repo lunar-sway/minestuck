@@ -197,7 +197,7 @@ public class TileEntityTransportalizer extends TileEntity implements ITickable, 
 		super.read(compound);
 		this.destId = compound.getString("destId");
 		this.id = compound.getString("idString");
-		if(compound.hasKey("active"))
+		if(compound.contains("active"))
 			this.active = compound.getBoolean("active");
 	}
 
@@ -206,9 +206,9 @@ public class TileEntityTransportalizer extends TileEntity implements ITickable, 
 	{
 		super.write(compound);
 		
-		compound.setString("idString", id);
-		compound.setString("destId", destId);
-		compound.setBoolean("active", active);
+		compound.putString("idString", id);
+		compound.putString("destId", destId);
+		compound.putBoolean("active", active);
 		
 		return compound;
 	}

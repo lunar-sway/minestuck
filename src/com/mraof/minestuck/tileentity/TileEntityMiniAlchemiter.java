@@ -58,7 +58,7 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 			//Check owner's cache: Do they have everything they need?
 			ItemStack newItem = AlchemyRecipes.getDecodedItem(this.inv.get(INPUT));
 			if(newItem.isEmpty())
-				if(!inv.get(INPUT).hasTag() || !inv.get(INPUT).getTag().hasKey("contentID"))
+				if(!inv.get(INPUT).hasTag() || !inv.get(INPUT).getTag().contains("contentID"))
 					newItem = new ItemStack(MinestuckBlocks.GENERIC_OBJECT);
 				else return false;
 			if(!inv.get(OUTPUT).isEmpty() && (inv.get(OUTPUT).getItem() != newItem.getItem() || inv.get(OUTPUT).getMaxStackSize() <= inv.get(OUTPUT).getCount()))
@@ -139,7 +139,7 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 	@Override
 	public NBTTagCompound write(NBTTagCompound compound)
 	{
-		compound.setString("gristType", wildcardGrist.getRegistryName().toString());
+		compound.putString("gristType", wildcardGrist.getRegistryName().toString());
 		
 		if(owner != null)
 			owner.saveToNBT(compound, "owner");
@@ -167,7 +167,7 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 		{
 			ItemStack newItem = AlchemyRecipes.getDecodedItem(getStackInSlot(INPUT));
 			if (newItem.isEmpty())
-				if (!getStackInSlot(INPUT).hasTag() || !getStackInSlot(INPUT).getTag().hasKey("contentID"))
+				if (!getStackInSlot(INPUT).hasTag() || !getStackInSlot(INPUT).getTag().contains("contentID"))
 					newItem = new ItemStack(MinestuckBlocks.GENERIC_OBJECT);
 				else return 0;
 			if (!getStackInSlot(OUTPUT).isEmpty() && (getStackInSlot(OUTPUT).getItem() != newItem.getItem() || getStackInSlot(OUTPUT).getMaxStackSize() <= getStackInSlot(OUTPUT).getCount()))

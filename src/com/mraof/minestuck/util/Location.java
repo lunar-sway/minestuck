@@ -61,7 +61,7 @@ public class Location
 		int z = nbt.getInt("z");
 		BlockPos blockPos = new BlockPos(x, y, z);
 		
-		ResourceLocation dimName = ResourceLocation.makeResourceLocation(nbt.getString("dim"));
+		ResourceLocation dimName = ResourceLocation.tryCreate(nbt.getString("dim"));
 		if(dimName == null)
 		{
 			Debug.warnf("Could not parse dimension name %s. This is not good!", nbt.getString("dim"));
@@ -89,12 +89,12 @@ public class Location
 	@Nullable
 	public NBTTagCompound toNBT(NBTTagCompound nbt)
 	{
-		nbt.setInt("x", pos.getX());
-		nbt.setInt("y", pos.getY());
-		nbt.setInt("z", pos.getZ());
-		ResourceLocation dimName = DimensionType.func_212678_a(dim);
+		nbt.putInt("x", pos.getX());
+		nbt.putInt("y", pos.getY());
+		nbt.putInt("z", pos.getZ());
+		ResourceLocation dimName = dim.getRegistryName();
 		if(dimName != null)
-			nbt.setString("dim", dimName.toString());
+			nbt.putString("dim", dimName.toString());
 		else
 		{
 			Debug.warnf("Could not save dimension %s. Could not get dimension name!", dim);

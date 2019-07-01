@@ -132,7 +132,7 @@ public abstract class GuiPlayerStatsContainer extends GuiContainer
 				{
 					if(mode && NormalGuiType.values()[i].reqMedium() && !SkaiaClient.enteredMedium(SkaiaClient.playerId) && mc.playerController.isNotCreative())
 						return true;
-					mc.getSoundHandler().play(SimpleSound.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+					mc.getSoundHandler().play(SimpleSound.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 					if(i != (mode? normalTab:editmodeTab).ordinal())
 					{
 						if(mode)

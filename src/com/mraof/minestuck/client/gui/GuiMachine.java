@@ -34,7 +34,7 @@ public abstract class GuiMachine extends GuiContainer
 	{
 		if(keyCode == 28)
 		{
-			this.mc.getSoundHandler().play(SimpleSound.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+			this.mc.getSoundHandler().play(SimpleSound.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 
 			boolean mode = te.getRunType() == TileEntityMachineProcess.RunType.BUTTON_OVERRIDE && (InputMappings.isKeyDown(42) || InputMappings.isKeyDown(54));
 			GoButtonPacket packet = new GoButtonPacket(true, mode && !te.overrideStop);

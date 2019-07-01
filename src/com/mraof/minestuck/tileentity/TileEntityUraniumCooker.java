@@ -34,7 +34,7 @@ public class TileEntityUraniumCooker extends TileEntityMachineProcess implements
 	public NBTTagCompound write(NBTTagCompound compound)
 	{
 		super.write(compound);
-		compound.setShort("fuel", fuel);
+		compound.putShort("fuel", fuel);
 		return compound;
 	}
 	
