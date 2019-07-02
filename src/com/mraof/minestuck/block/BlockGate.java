@@ -108,21 +108,27 @@ public class BlockGate extends Block
 	{
 		if(entityIn instanceof EntityPlayerMP && entityIn.getRidingEntity() == null && entityIn.getPassengers().isEmpty())
 		{
-			if(entityIn.timeUntilPortal != 0)
-			{
-				entityIn.timeUntilPortal = entityIn.getPortalCooldown();
-				return;
-			}
+			
 			
 			BlockPos mainPos = pos;
 			if(!(Boolean) state.getValue(isMainComponent))
+			{
 				if(this != MinestuckBlocks.gate)
 					mainPos = this.findMainComponent(pos, worldIn);
 				else return;
+			}
 			
-			TileEntity te = worldIn.getTileEntity(mainPos);
-			if(te instanceof TileEntityGate)
-				((TileEntityGate) te).teleportEntity(worldIn, (EntityPlayerMP) entityIn, this);
+			if(mainPos != null)
+			{
+				if(entityIn.timeUntilPortal != 0)
+				{
+					entityIn.timeUntilPortal = entityIn.getPortalCooldown();
+					return;
+				}
+				TileEntity te = worldIn.getTileEntity(mainPos);
+				if(te instanceof TileEntityGate)
+					((TileEntityGate) te).teleportEntity(worldIn, (EntityPlayerMP) entityIn, this);
+			} else worldIn.setBlockToAir(pos);
 		}
 	}
 	

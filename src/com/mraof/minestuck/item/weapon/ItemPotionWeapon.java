@@ -14,7 +14,7 @@ public class ItemPotionWeapon extends ItemWeapon
 {
     private final PotionEffect effect;
     private final boolean onCritical;
-    private static boolean isRandom = false;;
+    private boolean isRandom = false;
     public ItemPotionWeapon(int maxUses, double damageVsEntity, double weaponSpeed, int enchantability, String name, PotionEffect effect, boolean potionEffectOnCriticalHit)
     {
         super(maxUses, damageVsEntity, weaponSpeed, enchantability, name);
@@ -34,10 +34,10 @@ public class ItemPotionWeapon extends ItemWeapon
         this.effect = effect;
     }
 
-    public static PotionEffect randomPotionEffect()
+    public ItemPotionWeapon setRandomPotionEffect()
     {
     	isRandom = true;
-    	return new PotionEffect(MobEffects.SPEED, 220, 0);
+    	return this;
     }
     
     public PotionEffect getEffect(EntityPlayerMP player)

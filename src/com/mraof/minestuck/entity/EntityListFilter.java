@@ -7,24 +7,29 @@ import com.google.common.base.Predicate;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 
-public class EntityListFilter implements Predicate 
+public class EntityListFilter implements Predicate
 {
 	public List<Class<? extends EntityLivingBase>> entityList;
-	
+
 	public boolean isEntityApplicable(Entity par1Entity)
 	{
-		return entityList.contains(par1Entity.getClass());
+	    for(Class<? extends EntityLivingBase> clazz : entityList) {
+	    	if(clazz.isInstance(par1Entity)) {
+	    		return true;
+		    }
+	    }
+		return false;
 	}
-	
-	public EntityListFilter(List<Class<? extends EntityLivingBase>> entityList) 
+
+	public EntityListFilter(List<Class<? extends EntityLivingBase>> entityList)
 	{
 		this.entityList = entityList;
 	}
-	
+
 	@Override
 	public boolean apply(Object input)
 	{
 		return input instanceof Entity && isEntityApplicable((Entity) input);
 	}
-	
+
 }
