@@ -151,8 +151,8 @@ public class ClientProxy extends CommonProxy
 		RenderingRegistry.registerEntityRenderingHandler(EntitySbahjPoster.class, manager -> new RenderHangingArt<>(manager, "sbahj_poster"));
 		RenderingRegistry.registerEntityRenderingHandler(EntityShopPoster.class, manager -> new RenderHangingArt<>(manager, "shop_poster"));
 
-		
-		MinecraftForge.EVENT_BUS.register(new MinestuckKeyHandler());
+		MinestuckKeyHandler.instance.registerKeys();
+		MinecraftForge.EVENT_BUS.register(MinestuckKeyHandler.instance);
 		MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
 		MinecraftForge.EVENT_BUS.register(MinestuckModelManager.class);
 	}

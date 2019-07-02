@@ -93,8 +93,12 @@ public class HashmapModus extends Modus
 		
 		String unloc = item.getUnlocalizedName();
 		unloc = unloc.substring(unloc.indexOf('.')+1, unloc.length());
-		String adj = unloc.substring(unloc.indexOf('.')+1, unloc.length());
-		unloc = adj + " " + unloc.substring(0, unloc.indexOf('.'));
+
+		if(unloc.indexOf('.') != -1)
+		{
+			String adj = unloc.substring(unloc.indexOf('.')+1, unloc.length());
+			unloc = adj + " " + unloc.substring(0, unloc.indexOf('.'));
+		}
 		
 		int index = ((item.hasDisplayName()) ? item.getDisplayName() : unloc).hashCode() % list.size();
 				

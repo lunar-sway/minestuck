@@ -2,6 +2,7 @@ package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.GuiScreenMinestuck;
+import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.inventory.ContainerHandler;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
@@ -286,4 +287,11 @@ public abstract class GuiPlayerStats extends GuiScreenMinestuck
 			mc.displayGuiScreen(null);
 	}
 	
+	@Override
+	protected void keyTyped(char typedChar, int keyCode) throws IOException
+	{
+		super.keyTyped(typedChar, keyCode);
+		if(MinestuckKeyHandler.instance.statKey.isActiveAndMatches(keyCode))
+			mc.displayGuiScreen(null);
+	}
 }

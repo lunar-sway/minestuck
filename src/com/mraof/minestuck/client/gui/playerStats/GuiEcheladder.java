@@ -156,7 +156,7 @@ public class GuiEcheladder extends GuiPlayerStats
 		String msg = I18n.format("gui.echeladder.name");
 		mc.fontRenderer.drawString(msg, xOffset + 168 - mc.fontRenderer.getStringWidth(msg)/2, yOffset + 12, 0x404040);
 		
-		int attack = (int) Math.round(100*Echeladder.attackBonus(currentRung));
+		int attack = (int) Math.round(100*(1 + Echeladder.attackBonus(currentRung)));
 		mc.fontRenderer.drawString(I18n.format("gui.echeladder.attack.name"), xOffset + 24, yOffset + 30, 0x404040);
 		mc.fontRenderer.drawString(attack+"%", xOffset + 26, yOffset + 39, 0x0094FF);
 		
