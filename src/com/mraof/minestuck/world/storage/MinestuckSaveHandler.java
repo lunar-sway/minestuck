@@ -1,25 +1,8 @@
 package com.mraof.minestuck.world.storage;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
 import com.mraof.minestuck.Minestuck;
-import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.WorldSavedData;
-import net.minecraftforge.event.world.WorldEvent;
-
-import com.mraof.minestuck.editmode.ServerEditHandler;
-import com.mraof.minestuck.event.ServerEventHandler;
-import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.MinestuckPlayerData;
-import com.mraof.minestuck.util.PostEntryTask;
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
-import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
 
 public class MinestuckSaveHandler extends WorldSavedData    //TODO https://mcforge.readthedocs.io/en/1.13.x/datastorage/worldsaveddata/
 {

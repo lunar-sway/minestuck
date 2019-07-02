@@ -10,6 +10,7 @@ import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityItem;
@@ -396,7 +397,7 @@ public class TileEntityAlchemiter extends TileEntity
 		//get the grist cost
 		GristSet cost = getGristCost(quantity);
 		
-		boolean canAfford = GristHelper.canAfford(MinestuckPlayerData.getGristSet(player), cost);
+		boolean canAfford = GristHelper.canAfford(PlayerSavedData.getGristSet(player), cost);
 		
 		if(canAfford)
 		{

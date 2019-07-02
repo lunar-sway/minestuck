@@ -6,6 +6,7 @@ import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
 import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.DamageSource;
@@ -101,8 +102,8 @@ public class EntityImp extends EntityUnderling
 			computePlayerProgress((int) (2 + 3*type.getPower()));
 			if(entity instanceof EntityPlayerMP)
 			{
-				Echeladder ladder = MinestuckPlayerData.getData((EntityPlayerMP) entity).echeladder;
-				ladder.checkBonus(getServer(), Echeladder.UNDERLING_BONUS_OFFSET);
+				Echeladder ladder = PlayerSavedData.getData((EntityPlayerMP) entity).echeladder;
+				ladder.checkBonus(Echeladder.UNDERLING_BONUS_OFFSET);
 			}
 		}
 	}

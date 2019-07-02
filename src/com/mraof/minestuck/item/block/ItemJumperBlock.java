@@ -1,31 +1,5 @@
 package com.mraof.minestuck.item.block;
 
-import com.mraof.minestuck.block.BlockAlchemiter;
-import com.mraof.minestuck.editmode.EditData;
-import com.mraof.minestuck.editmode.ServerEditHandler;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
-import com.mraof.minestuck.tileentity.TileEntityCruxtruder;
-import com.mraof.minestuck.tileentity.TileEntityJumperBlock;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.MinestuckPlayerData;
-import com.mraof.minestuck.block.MinestuckBlocks;
-import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
-
 public class ItemJumperBlock //extends ItemBlock
 {
 	/*static boolean flip = false;

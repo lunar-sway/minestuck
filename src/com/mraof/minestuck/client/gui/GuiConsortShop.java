@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.gui;
 import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
 import com.mraof.minestuck.inventory.ContainerConsortMerchant;
 import com.mraof.minestuck.inventory.InventoryConsortMerchant;
-import com.mraof.minestuck.util.MinestuckPlayerData;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -49,7 +49,7 @@ public class GuiConsortShop extends GuiContainer
 		this.mc.getTextureManager().bindTexture(GuiPlayerStats.icons);
 		this.drawTexturedModalRect(x + 5, y + 7, 238, 16, 18, 18);
 		
-		mc.fontRenderer.drawString(String.valueOf(MinestuckPlayerData.boondollars), x + 25, y + 12, 0x0094FF);
+		mc.fontRenderer.drawString(String.valueOf(PlayerSavedData.boondollars), x + 25, y + 12, 0x0094FF);
 		
 		for (int i = 0; i < 9; i++)
 		{

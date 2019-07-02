@@ -43,7 +43,7 @@ import java.util.Map.Entry;
  * @author kirderf1
  */
 public class SkaianetHandler extends WorldSavedData
-{
+{	//TODO This class need a thorough look through to make sure that markDirty() is called when it should (otherwise there may be hard to notice data-loss bugs)
 	private static final String DATA_NAME = Minestuck.MOD_ID+"_skaianet";
 	
 	Map<PlayerIdentifier, ComputerData> serversOpen = new TreeMap<>();

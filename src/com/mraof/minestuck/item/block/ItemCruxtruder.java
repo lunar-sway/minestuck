@@ -6,7 +6,7 @@ import com.mraof.minestuck.editmode.EditData;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.tileentity.TileEntityCruxtruder;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.MinestuckPlayerData;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -131,8 +131,8 @@ public class ItemCruxtruder extends ItemBlock
 				int color;
 				EditData editData = ServerEditHandler.getData(player);
 				if(editData != null)
-					color = MinestuckPlayerData.getData(editData.getTarget()).color;
-				else color = MinestuckPlayerData.getData(player).color;
+					color = PlayerSavedData.get(world).getData(editData.getTarget()).color;
+				else color = PlayerSavedData.getData((EntityPlayerMP) player).color;
 				
 				((TileEntityCruxtruder) te).setColor(color);
 			} else Debug.warnf("Placed cruxtruder, but can't find tile entity. Instead found %s.", te);

@@ -5,11 +5,10 @@ import com.mraof.minestuck.item.ItemCruxiteArtifact;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.modSupport.*;
 import com.mraof.minestuck.util.*;
-import net.minecraft.entity.player.EntityPlayer;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -1070,8 +1069,8 @@ public class AlchemyRecipes
 	{
 		if(!(stack.getItem() instanceof ItemCruxiteArtifact))
 		{
-			Echeladder e = MinestuckPlayerData.getData(player).echeladder;
-			e.checkBonus(player.getServer(), Echeladder.ALCHEMY_BONUS_OFFSET);
+			Echeladder e = PlayerSavedData.getData(player).echeladder;
+			e.checkBonus(Echeladder.ALCHEMY_BONUS_OFFSET);
 		}
 		
 		GristSet set = AlchemyCostRegistry.getGristConversion(stack);
@@ -1086,11 +1085,11 @@ public class AlchemyRecipes
 					value += f*v/2;
 			}
 			
-			Echeladder e = MinestuckPlayerData.getData(player).echeladder;
+			Echeladder e = PlayerSavedData.getData(player).echeladder;
 			if(value >= 50)
-				e.checkBonus(player.getServer(), (byte) (Echeladder.ALCHEMY_BONUS_OFFSET + 1));
+				e.checkBonus((byte) (Echeladder.ALCHEMY_BONUS_OFFSET + 1));
 			if(value >= 500)
-				e.checkBonus(player.getServer(), (byte) (Echeladder.ALCHEMY_BONUS_OFFSET + 2));
+				e.checkBonus((byte) (Echeladder.ALCHEMY_BONUS_OFFSET + 2));
 		}
 	}
 	

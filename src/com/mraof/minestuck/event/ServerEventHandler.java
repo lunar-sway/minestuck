@@ -11,6 +11,7 @@ import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.*;
 
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -116,7 +117,7 @@ public class ServerEventHandler
 				EntityPlayerMP player = (EntityPlayerMP) event.getSource().getTrueSource();
 				if (event.getEntityLiving() instanceof EntityUnderling)
 				{    //Increase damage to underling
-					double modifier = MinestuckPlayerData.getData(player).echeladder.getUnderlingDamageModifier();
+					double modifier = PlayerSavedData.getData(player).echeladder.getUnderlingDamageModifier();
 					event.setAmount((float) (event.getAmount() * modifier));
 				}
 				boolean critical = cachedCooledAttackStrength > 0.9 && player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder() && !player.isInWater() && !player.isPotionActive(MobEffects.BLINDNESS) && !player.isPassenger() && !player.isBeingRidden();
@@ -133,7 +134,7 @@ public class ServerEventHandler
 			else if (event.getEntityLiving() instanceof EntityPlayerMP && event.getSource().getTrueSource() instanceof EntityUnderling)
 			{    //Decrease damage to player
 					EntityPlayerMP player = (EntityPlayerMP) event.getEntityLiving();
-					double modifier = MinestuckPlayerData.getData(player).echeladder.getUnderlingProtectionModifier();
+					double modifier = PlayerSavedData.getData(player).echeladder.getUnderlingProtectionModifier();
 					event.setAmount((float) (event.getAmount() * modifier));
 			}
 		}
@@ -153,13 +154,13 @@ public class ServerEventHandler
 	{
 		SburbHandler.stopEntry((EntityPlayerMP) event.getPlayer());
 		
-		MinestuckPlayerData.getData(event.getPlayer()).echeladder.resendAttributes(event.getPlayer());
+		PlayerSavedData.getData((EntityPlayerMP) event.getPlayer()).echeladder.resendAttributes(event.getPlayer());
 	}
 	
 	@SubscribeEvent(priority=EventPriority.LOW, receiveCanceled=false)
 	public void onServerChat(ServerChatEvent event)
 	{
-		Modus modus = MinestuckPlayerData.getData(event.getPlayer()).modus;
+		Modus modus = PlayerSavedData.getData(event.getPlayer()).modus;
 		if(modus instanceof HashMapModus)
 			((HashMapModus) modus).onChatMessage(event.getPlayer(), event.getMessage());
 	}
@@ -190,10 +191,10 @@ public class ServerEventHandler
 		{
 			IdentifierHandler.PlayerIdentifier identifier = IdentifierHandler.encode(event.player);
 			SburbConnection c = SkaianetHandler.get(event.player.world).getMainConnection(identifier, true);
-			if(c == null || !c.hasEntered() || !MinestuckConfig.aspectEffects || !MinestuckPlayerData.getEffectToggle(identifier))
+			if(c == null || !c.hasEntered() || !MinestuckConfig.aspectEffects || !PlayerSavedData.get(event.player.world).getEffectToggle(identifier))
 				return;
-			int rung = MinestuckPlayerData.getData(identifier).echeladder.getRung();
-			EnumAspect aspect = MinestuckPlayerData.getTitle(identifier).getHeroAspect();
+			int rung = PlayerSavedData.getData((EntityPlayerMP) event.player).echeladder.getRung();
+			EnumAspect aspect = PlayerSavedData.get(event.player.world).getTitle(identifier).getHeroAspect();
 			int potionLevel = (int) (aspectStrength[aspect.ordinal()] * rung); //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
 			
 			if(event.player.getEntityWorld().getGameTime() % 380 == identifier.hashCode() % 380)

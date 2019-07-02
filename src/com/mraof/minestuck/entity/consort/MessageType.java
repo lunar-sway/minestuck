@@ -7,7 +7,7 @@ import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import com.mraof.minestuck.util.MinestuckPlayerData;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
@@ -53,7 +53,7 @@ public abstract class MessageType
 		
 		Object[] obj = new Object[args.length];
 		SburbConnection c = SburbHandler.getConnectionForDimension(player.getServer(), consort.homeDimension);
-		Title title = c == null ? null : MinestuckPlayerData.getData(c.getClientIdentifier()).title;
+		Title title = c == null ? null : PlayerSavedData.get(player.world).getTitle(c.getClientIdentifier());
 		for(int i = 0; i < args.length; i++)
 		{
 			if(args[i].equals("playerNameLand"))
@@ -114,15 +114,15 @@ public abstract class MessageType
 			} else if(args[i].equals("playerTitle"))
 			{
 				PlayerIdentifier identifier = IdentifierHandler.encode(player);
-				if(MinestuckPlayerData.getTitle(identifier) != null)
-					obj[i] = MinestuckPlayerData.getTitle(identifier).asTextComponent();
+				if(PlayerSavedData.get(player.world).getTitle(identifier) != null)
+					obj[i] = PlayerSavedData.get(player.world).getTitle(identifier).asTextComponent();
 				else
 					obj[i] = player.getName();
 			} else if(args[i].equals("denizen"))
 			{
 				if(title != null)
 					obj[i] = new TextComponentTranslation("denizen."
-							+ MinestuckPlayerData.getData(c.getClientIdentifier()).title.getHeroAspect().toString()
+							+ PlayerSavedData.get(player.world).getData(c.getClientIdentifier()).title.getHeroAspect().toString()
 							+ ".name");
 				else
 					obj[i] = "Denizen";
@@ -868,7 +868,7 @@ public abstract class MessageType
 			if(!repeat && nbt.getBoolean(nbtName))
 				return message.getMessage(consort, player, chainIdentifier);
 			
-			if(!MinestuckPlayerData.addBoondollars(player, -cost))
+			if(!PlayerSavedData.addBoondollars(player, -cost))
 			{
 				player.sendMessage(createMessage(consort, player, "cantAfford", new String[0], false));
 				
@@ -1100,7 +1100,7 @@ public abstract class MessageType
 			{
 				if(boondollars != 0)
 				{
-					MinestuckPlayerData.addBoondollars(player, boondollars);
+					PlayerSavedData.addBoondollars(player, boondollars);
 				}
 				nbt.putBoolean(this.getString(), true);
 				return next.getMessage(consort, player, chainIdentifier);

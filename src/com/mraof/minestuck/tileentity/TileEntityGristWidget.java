@@ -8,6 +8,7 @@ import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.inventory.ContainerGristWidget;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -106,7 +107,7 @@ public class TileEntityGristWidget extends TileEntityMachineProcess implements I
 		if(world.isBlockPowered(this.getPos()))
 			return false;
 		int i = getGristWidgetBoondollarValue();
-		return owner != null && i != 0 && i <= MinestuckPlayerData.getData(owner).boondollars;
+		return owner != null && i != 0 && i <= PlayerSavedData.get(world).getData(owner).boondollars;
 	}
 
 	@Override
@@ -114,7 +115,7 @@ public class TileEntityGristWidget extends TileEntityMachineProcess implements I
 	{
 		GristSet gristSet = getGristWidgetResult();
 		
-		if(!MinestuckPlayerData.addBoondollars(world.getServer(), owner, -getGristWidgetBoondollarValue()))
+		if(!PlayerSavedData.get(world).addBoondollars(owner, -getGristWidgetBoondollarValue()))
 		{
 			Debug.warnf("Failed to remove boondollars for a grist widget from %s's porkhollow", owner.getUsername());
 			return;

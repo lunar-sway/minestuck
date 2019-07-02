@@ -10,6 +10,7 @@ import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.PartGroup;
 import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
 import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -192,8 +193,8 @@ public class EntityGiclops extends EntityUnderling implements IBigEntity
 			if(entity != null && entity instanceof EntityPlayerMP)
 			{
 				//((EntityPlayerMP) entity).addStat(MinestuckAchievementHandler.killGiclops);
-				Echeladder ladder = MinestuckPlayerData.getData((EntityPlayerMP) entity).echeladder;
-				ladder.checkBonus(getServer(), (byte) (Echeladder.UNDERLING_BONUS_OFFSET + 4));
+				Echeladder ladder = PlayerSavedData.getData((EntityPlayerMP) entity).echeladder;
+				ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 4));
 			}
 		}
 	}

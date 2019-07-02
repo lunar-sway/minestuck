@@ -5,7 +5,7 @@ import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.inventory.ContainerGristWidget;
 import com.mraof.minestuck.tileentity.TileEntityGristWidget;
 import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.util.MinestuckPlayerData;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -67,7 +67,7 @@ public class GuiGristWidget extends GuiMachine
 			GuiUtil.drawGristBoard(set, GuiUtil.GristboardMode.GRIST_WIDGET, 9, 45, fontRenderer);
 			
 			int cost = te.getGristWidgetBoondollarValue();
-			long has = MinestuckPlayerData.boondollars;
+			long has = PlayerSavedData.boondollars;
 			String costText = GuiUtil.addSuffix(cost)+"£("+GuiUtil.addSuffix(has)+")";
 			fontRenderer.drawString(costText, xSize - 9 - fontRenderer.getStringWidth(costText), ySize - 96 + 3, cost > has ? 0xFF0000 : 0x00FF00);
 			

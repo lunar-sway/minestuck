@@ -1,28 +1,19 @@
 package com.mraof.minestuck.network.skaianet;
 
-import com.google.common.collect.Lists;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import com.mraof.minestuck.util.MinestuckPlayerData;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
-import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.LandAspects;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import net.minecraft.command.CommandException;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.IChunkGenerator;
-import net.minecraftforge.common.DimensionManager;
 
 import java.util.*;
 
@@ -625,7 +616,7 @@ public class SessionHandler
 								connectionTag.putString("aspect2", aspects.aspectTerrain.getNames()[landChunkGen.nameIndex1]);
 							}
 						}
-						Title title = MinestuckPlayerData.getTitle(c.getClientIdentifier());
+						Title title = PlayerSavedData.get(server.getWorld(DimensionType.OVERWORLD)).getTitle(c.getClientIdentifier());
 						connectionTag.putByte("class", title == null ? -1 : (byte) title.getHeroClass().ordinal());
 						connectionTag.putByte("aspect", title == null ? -1 : (byte) title.getHeroAspect().ordinal());
 					} else if(session.predefinedPlayers.containsKey(c.getClientIdentifier()))

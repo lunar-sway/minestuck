@@ -13,7 +13,7 @@ import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspects;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
@@ -53,17 +53,19 @@ public class MinestuckPlayerTracker
 		sendConfigPacket(player, false);
 		
 		SkaianetHandler.get(player.world).playerConnected(player);
+		PlayerSavedData data = PlayerSavedData.get(player.world);
+		
 		boolean firstTime = false;
-		if(MinestuckPlayerData.getGristSet(identifier) == null)
+		if(data.getGristSet(identifier) == null)
 		{
 			Debug.debugf("Grist set is null for player %s. Handling it as first time in this world.", player.getName());
-			MinestuckPlayerData.setGrist(identifier, new GristSet(GristType.BUILD, 20));
+			data.setGrist(identifier, new GristSet(GristType.BUILD, 20));
 			firstTime = true;
 		}
 		
-		MinestuckPlayerData.getData(identifier).echeladder.updateEcheladderBonuses(player);
+		data.getData(identifier).echeladder.updateEcheladderBonuses(player);
 		
-		if(CaptchaDeckHandler.getModus(player) == null && MinestuckConfig.defaultModusTypes.length > 0 && !MinestuckPlayerData.getData(player).givenModus)
+		if(CaptchaDeckHandler.getModus(player) == null && MinestuckConfig.defaultModusTypes.length > 0 && !PlayerSavedData.getData(player).givenModus)
 		{
 			int index = player.world.rand.nextInt(MinestuckConfig.defaultModusTypes.length);
 			Modus modus = CaptchaDeckHandler.createInstance(new ResourceLocation(MinestuckConfig.defaultModusTypes[index]), LogicalSide.SERVER);
@@ -83,14 +85,14 @@ public class MinestuckPlayerTracker
 		updateGristCache(player.getServer(), identifier);
 		updateTitle(player);
 		updateEcheladder(player, true);
-		MinestuckPacketHandler.sendToPlayer(PlayerDataPacket.boondollars(MinestuckPlayerData.getData(identifier).boondollars), player);
+		MinestuckPacketHandler.sendToPlayer(PlayerDataPacket.boondollars(PlayerSavedData.getData(player).boondollars), player);
 		ServerEditHandler.onPlayerLoggedIn(player);
 		
 		if(firstTime && !player.isSpectator())
 			MinestuckPacketHandler.sendToPlayer(PlayerDataPacket.color(), player);
 		else
 		{
-			PlayerDataPacket packet = PlayerDataPacket.color(MinestuckPlayerData.getData(player).color);
+			PlayerDataPacket packet = PlayerDataPacket.color(PlayerSavedData.getData(player).color);
 			MinestuckPacketHandler.sendToPlayer(packet, player);
 		}
 		
@@ -130,7 +132,7 @@ public class MinestuckPlayerTracker
 	@SubscribeEvent
 	public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) 
 	{
-		MinestuckPlayerData.getData(event.getPlayer()).echeladder.updateEcheladderBonuses(event.getPlayer());
+		PlayerSavedData.getData((EntityPlayerMP) event.getPlayer()).echeladder.updateEcheladderBonuses(event.getPlayer());
 	}
 	
 	public static Set<String> dataCheckerPermission = new HashSet<>();
@@ -150,7 +152,7 @@ public class MinestuckPlayerTracker
 	 */
 	public static void updateGristCache(MinecraftServer server, PlayerIdentifier player)
 	{
-		GristSet gristSet = MinestuckPlayerData.getGristSet(player);
+		GristSet gristSet = PlayerSavedData.get(server.getWorld(DimensionType.OVERWORLD)).getGristSet(player);
 		
 		//The player
 		EntityPlayerMP playerMP = player.getPlayer(server);
@@ -172,8 +174,10 @@ public class MinestuckPlayerTracker
 	
 	public static void updateTitle(EntityPlayerMP player)
 	{
+		if(player == null)
+			return;
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		Title newTitle = MinestuckPlayerData.getTitle(identifier);
+		Title newTitle = PlayerSavedData.get(player.world).getTitle(identifier);
 		if(newTitle == null)
 			return;
 		PlayerDataPacket packet = PlayerDataPacket.title(newTitle.getHeroClass(), newTitle.getHeroAspect());
@@ -182,7 +186,7 @@ public class MinestuckPlayerTracker
 	
 	public static void updateEcheladder(EntityPlayerMP player, boolean jump)
 	{
-		Echeladder echeladder = MinestuckPlayerData.getData(player).echeladder;
+		Echeladder echeladder = PlayerSavedData.getData(player).echeladder;
 		PlayerDataPacket packet = PlayerDataPacket.echeladder(echeladder.getRung(), MinestuckConfig.echeladderProgress ? echeladder.getProgress() : 0F, jump);
 		MinestuckPacketHandler.sendToPlayer(packet, player);
 	}

@@ -3,7 +3,7 @@ package com.mraof.minestuck.inventory;
 import com.mraof.minestuck.entity.consort.EntityConsort;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.MinestuckPlayerData;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import com.mraof.minestuck.util.Pair;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -71,14 +71,14 @@ public class InventoryConsortMerchant implements IInventory
 			ItemStack stack = inv.get(index);
 			if (stack.isEmpty())
 				return;
-			MinestuckPlayerData.PlayerData playerData = MinestuckPlayerData.getData(player);
+			PlayerSavedData.PlayerData playerData = PlayerSavedData.getData(player);
 			int amountPurchased = (int) Math.min(prices[index] != 0 ? playerData.boondollars / prices[index] : Integer.MAX_VALUE, all ? stack.getCount() : 1);
 			if (amountPurchased == 0)
 			{
 				player.sendMessage(new TextComponentTranslation("consort.cantAfford"));
 			} else
 			{
-				MinestuckPlayerData.addBoondollars(player, -(amountPurchased * prices[index]));
+				PlayerSavedData.addBoondollars(player, -(amountPurchased * prices[index]));
 				ItemStack items = stack.split(amountPurchased);
 				
 				if (!player.addItemStackToInventory(items))

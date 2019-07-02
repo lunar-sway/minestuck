@@ -8,7 +8,7 @@ import com.mraof.minestuck.inventory.ContainerMiniAlchemiter;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.util.MinestuckPlayerData;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -69,7 +69,7 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 			if(newItem.getItem() == MinestuckItems.CAPTCHA_CARD)
 				cost = new GristSet(wildcardGrist, MinestuckConfig.cardCost);
 			
-			return GristHelper.canAfford(MinestuckPlayerData.getGristSet(this.owner), cost);
+			return GristHelper.canAfford(PlayerSavedData.get(world).getGristSet(this.owner), cost);
 		}
 		else
 		{
@@ -101,7 +101,7 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 		GristSet cost = AlchemyCostRegistry.getGristConversion(newItem);
 		if (newItem.getItem() == MinestuckItems.CAPTCHA_CARD)
 			cost = new GristSet(wildcardGrist, MinestuckConfig.cardCost);
-		GristHelper.decrease(world.getServer(), owner, cost);
+		GristHelper.decrease(world, owner, cost);
 		MinestuckPlayerTracker.updateGristCache(world.getServer(), owner);
 	}
 	
@@ -191,7 +191,7 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 					}
 					// We need to make a copy to preserve the original grist amounts and avoid scaling values that have already been scaled. Keeps scaling linear as opposed to exponential.
 					scale_cost = cost.copy().scaleGrist(lvl);
-					if (!GristHelper.canAfford(MinestuckPlayerData.getGristSet(owner), scale_cost))
+					if (!GristHelper.canAfford(PlayerSavedData.get(world).getGristSet(owner), scale_cost))
 					{
 						return lvl - 1;
 					}

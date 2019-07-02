@@ -2,6 +2,7 @@ package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.client.gui.playerStats.GuiEcheladder;
 import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -135,12 +136,12 @@ public class PlayerDataPacket	//TODO Probably healthier if this is several diffe
 			else ColorCollector.playerColor = i1;
 		} else if(type == TITLE)
 		{
-			MinestuckPlayerData.title = new Title(EnumClass.getClassFromInt(i1), EnumAspect.getAspectFromInt(i2));
+			PlayerSavedData.title = new Title(EnumClass.getClassFromInt(i1), EnumAspect.getAspectFromInt(i2));
 		} else if(type == ECHELADDER)
 		{
-			int prev = MinestuckPlayerData.rung;
-			MinestuckPlayerData.rung = i1;
-			MinestuckPlayerData.rungProgress = f;
+			int prev = PlayerSavedData.rung;
+			PlayerSavedData.rung = i1;
+			PlayerSavedData.rungProgress = f;
 			if(!b)
 				for(prev++; prev <= i1; prev++)
 				{
@@ -150,7 +151,7 @@ public class PlayerDataPacket	//TODO Probably healthier if this is several diffe
 			else GuiEcheladder.animatedRung = GuiEcheladder.lastRung = i1;
 		} else if(type == BOONDOLLAR)
 		{
-			MinestuckPlayerData.boondollars = l;
+			PlayerSavedData.boondollars = l;
 		}
 	}
 }

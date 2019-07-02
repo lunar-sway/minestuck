@@ -1,11 +1,7 @@
 package com.mraof.minestuck.network.skaianet;
 
-import static com.mraof.minestuck.network.skaianet.SessionHandler.GLOBAL_SESSION_NAME;
 import static com.mraof.minestuck.network.skaianet.SessionHandler.getPlayerSession;
-import static com.mraof.minestuck.network.skaianet.SessionHandler.maxSize;
-import static com.mraof.minestuck.network.skaianet.SessionHandler.merge;
 import static com.mraof.minestuck.network.skaianet.SessionHandler.sessions;
-import static com.mraof.minestuck.network.skaianet.SessionHandler.sessionsByName;
 import static com.mraof.minestuck.network.skaianet.SessionHandler.singleSession;
 import static com.mraof.minestuck.network.skaianet.SessionHandler.split;
 
@@ -13,7 +9,6 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -23,16 +18,10 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
 import com.mraof.minestuck.entity.ModEntityTypes;
-import com.mraof.minestuck.entity.underling.EntityBasilisk;
-import com.mraof.minestuck.entity.underling.EntityGiclops;
-import com.mraof.minestuck.entity.underling.EntityImp;
-import com.mraof.minestuck.entity.underling.EntityLich;
-import com.mraof.minestuck.entity.underling.EntityOgre;
 import com.mraof.minestuck.entity.underling.EntityUnderling;
 import com.mraof.minestuck.item.ItemCruxiteArtifact;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
-import com.mraof.minestuck.network.PlayerDataPacket;
 import com.mraof.minestuck.network.TitleSelectPacket;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.*;
@@ -45,7 +34,7 @@ import com.mraof.minestuck.world.lands.LandAspects;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 
-import net.minecraft.command.CommandException;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
@@ -54,9 +43,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
 import net.minecraft.world.dimension.DimensionType;
@@ -70,14 +56,14 @@ public class SburbHandler
 {
 	static Map<EntityPlayer, Vec3d> titleSelectionMap = new HashMap<>();
 	
-	private static Title produceTitle(PlayerIdentifier player)
+	private static Title produceTitle(World world, PlayerIdentifier player)
 	{
-		if(MinestuckPlayerData.getTitle(player) != null)
+		if(PlayerSavedData.get(world).getTitle(player) != null)
 		{
 			if(!MinestuckConfig.playerSelectedTitle)
 				Debug.warnf("Trying to generate a title for %s when a title is already assigned!", player.getUsername());
 			
-			return MinestuckPlayerData.getTitle(player);
+			return PlayerSavedData.get(world).getTitle(player);
 		}
 		
 		Session session = getPlayerSession(player);
@@ -108,7 +94,7 @@ public class SburbHandler
 			for(SburbConnection c : session.connections)
 				if(!c.getClientIdentifier().equals(player))
 				{
-					Title playerTitle = MinestuckPlayerData.getTitle(c.getClientIdentifier());
+					Title playerTitle = PlayerSavedData.get(world).getTitle(c.getClientIdentifier());
 					if(playerTitle != null)
 					{
 						usedTitles.add(playerTitle);
@@ -183,13 +169,13 @@ public class SburbHandler
 		return title;
 	}
 	
-	private static void generateTitle(MinecraftServer server, PlayerIdentifier player)
+	private static void generateTitle(World world, PlayerIdentifier player)
 	{
-		Title title = produceTitle(player);
+		Title title = produceTitle(world, player);
 		if(title == null)
 			return;
-		MinestuckPlayerData.setTitle(player, title);
-		MinestuckPlayerTracker.updateTitle(player.getPlayer(server));
+		PlayerSavedData.get(world).setTitle(player, title);
+		MinestuckPlayerTracker.updateTitle(player.getPlayer(world.getServer()));
 	}
 	
 	/*public static void managePredefinedSession(MinecraftServer server, ICommandSender sender, ICommand command, String sessionName, String[] playerNames, boolean finish) throws CommandException
@@ -513,9 +499,9 @@ public class SburbHandler
 	 * @param c The connection.
 	 * @return Damage value for the entry item
 	 */
-	public static ItemStack getEntryItem(SburbConnection c)
+	public static ItemStack getEntryItem(World world, SburbConnection c)
 	{
-		int colorIndex = MinestuckPlayerData.getData(c.getClientIdentifier()).color;
+		int colorIndex = PlayerSavedData.get(world).getData(c.getClientIdentifier()).color;
 		Item artifact;
 		if(c == null)
 			artifact = MinestuckItems.CRUXITE_APPLE;
@@ -538,7 +524,7 @@ public class SburbHandler
 	public static int getColorForDimension(World world)
 	{
 		SburbConnection c = getConnectionForDimension(world);
-		return c == null ? -1 : MinestuckPlayerData.getData(c.getClientIdentifier()).color;
+		return c == null ? -1 : PlayerSavedData.get(world).getData(c.getClientIdentifier()).color;
 	}
 	
 	public static SburbConnection getConnectionForDimension(World world)
@@ -582,7 +568,7 @@ public class SburbHandler
 	{
 		LandAspectRegistry aspectGen = new LandAspectRegistry(Minestuck.worldSeed^connection.getClientIdentifier().hashCode());
 		Session session = getPlayerSession(connection.getClientIdentifier());
-		Title title = MinestuckPlayerData.getTitle(connection.getClientIdentifier());
+		Title title = PlayerSavedData.get(server.getWorld(DimensionType.OVERWORLD)).getTitle(connection.getClientIdentifier());
 		TitleLandAspect titleAspect = null;
 		TerrainLandAspect terrainAspect = null;
 		
@@ -700,7 +686,7 @@ public class SburbHandler
 		PlayerIdentifier identifier = c.getClientIdentifier();
 		Session session = getPlayerSession(c.getClientIdentifier());
 		
-		generateTitle(server, c.getClientIdentifier());
+		generateTitle(server.getWorld(DimensionType.OVERWORLD), c.getClientIdentifier());
 		LandAspects aspects = genLandAspects(server, c);		//This is where the Land dimension is actually registered, but it also needs the player's Title to be determined.
 		return LandAspectRegistry.createLand(server, identifier, aspects);
 	}
@@ -749,7 +735,7 @@ public class SburbHandler
 		Session s = getPlayerSession(identifier);
 		
 		if(s != null && s.predefinedPlayers.containsKey(identifier) && s.predefinedPlayers.get(identifier).title != null
-				|| MinestuckPlayerData.getTitle(identifier) != null)
+				|| PlayerSavedData.get(player.world).getTitle(identifier) != null)
 			return true;
 		
 		titleSelectionMap.put(player, new Vec3d(player.posX, player.posY, player.posZ));
@@ -775,11 +761,11 @@ public class SburbHandler
 				else s = new Session();
 			
 			if(title == null)
-				generateTitle(player.getServer(), identifier);
+				generateTitle(player.world, identifier);
 			else
 			{
 				for(SburbConnection c : s.connections)
-					if(title.equals(MinestuckPlayerData.getTitle(c.getClientIdentifier())))
+					if(title.equals(PlayerSavedData.get(player.world).getTitle(c.getClientIdentifier())))
 					{	//Title is already used
 						TitleSelectPacket packet = new TitleSelectPacket(title.getHeroClass(), title.getHeroAspect());
 						MinestuckPacketHandler.sendToPlayer(packet, player);
@@ -793,7 +779,7 @@ public class SburbHandler
 						return;
 					}
 				
-				MinestuckPlayerData.setTitle(identifier, title);
+				PlayerSavedData.get(player.world).setTitle(identifier, title);
 				MinestuckPlayerTracker.updateTitle(player);
 			}
 			
