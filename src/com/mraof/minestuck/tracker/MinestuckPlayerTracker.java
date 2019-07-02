@@ -135,6 +135,7 @@ public class MinestuckPlayerTracker
 		}
 	}
 	
+	//TODO: Use this instead of normal respawn mechanics?
 	@SubscribeEvent
 	public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) 
 	{
