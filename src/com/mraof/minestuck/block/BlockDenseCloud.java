@@ -38,6 +38,7 @@ public class BlockDenseCloud extends Block
 		super(Material.GLASS, MapColor.YELLOW);
 		setHardness(0.5F);
 		setSoundType(SoundType.SNOW);
+		setLightOpacity(1);
 		setUnlocalizedName("dense_cloud");
 		setCreativeTab(TabMinestuck.instance);
 	}
