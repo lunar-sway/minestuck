@@ -96,7 +96,7 @@ public class ClientEditPacket
 				{
 					if(!c.givenItems()[entry.getOrdinal()])
 					{
-						ItemStack item = entry.getItemStack(c);
+						ItemStack item = entry.getItemStack(c, player.world);
 						if(!targetPlayer.inventory.hasItemStack(item))
 							c.givenItems()[entry.getOrdinal()] = targetPlayer.inventory.addItemStackToInventory(item);
 					}

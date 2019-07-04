@@ -101,7 +101,7 @@ public class ContainerEditmode extends Container
 		for(int i = 0; i < Math.max(tools.size(), deployItems.size()); i++)
 		{
 			itemList.add(i >= tools.size() ? ItemStack.EMPTY : tools.get(i));
-			itemList.add(i >= deployItems.size() ? ItemStack.EMPTY : deployItems.get(i).getItemStack(c));
+			itemList.add(i >= deployItems.size() ? ItemStack.EMPTY : deployItems.get(i).getItemStack(c, player.world));
 		}
 		
 		boolean changed = false;

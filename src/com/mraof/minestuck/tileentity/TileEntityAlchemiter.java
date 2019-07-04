@@ -422,7 +422,7 @@ public class TileEntityAlchemiter extends TileEntity
 			AlchemyRecipes.onAlchemizedItem(newItem, player);
 			
 			PlayerIdentifier pid = IdentifierHandler.encode(player);
-			GristHelper.decrease(world.getServer(), pid, cost);
+			GristHelper.decrease(world, pid, cost);
 			MinestuckPlayerTracker.updateGristCache(world.getServer(), pid);
 		}
 	}
