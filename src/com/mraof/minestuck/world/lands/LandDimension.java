@@ -12,6 +12,7 @@ import com.mraof.minestuck.world.gen.ModChunkGeneratorType;
 import com.mraof.minestuck.world.gen.SkaiaGenSettings;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
+import com.mraof.minestuck.world.lands.gen.LandGenSettings;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 import net.minecraft.entity.Entity;
@@ -28,7 +29,9 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.provider.BiomeProviderType;
 import net.minecraft.world.dimension.Dimension;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.gen.ChunkGeneratorType;
 import net.minecraft.world.gen.IChunkGenerator;
+import net.minecraft.world.gen.OverworldGenSettings;
 import net.minecraftforge.common.ModDimension;
 
 import javax.annotation.Nullable;
@@ -88,10 +91,9 @@ public class LandDimension extends Dimension
 	@Override
 	public IChunkGenerator createChunkGenerator()
 	{
-		SkaiaGenSettings settings = ModChunkGeneratorType.SKAIA.createSettings();
-		settings.setDefautBlock(MinestuckBlocks.WHITE_CHESS_DIRT.getDefaultState());
-		settings.setDefaultFluid(Blocks.AIR.getDefaultState());
-		return ModChunkGeneratorType.SKAIA.create(this.world, BiomeProviderType.FIXED.create(BiomeProviderType.FIXED.createSettings().setBiome(BiomeMinestuck.skaia)), settings);
+		LandGenSettings settings = ModChunkGeneratorType.LANDS.createSettings();
+		
+		return ModChunkGeneratorType.LANDS.create(this.world, BiomeProviderType.FIXED.create(BiomeProviderType.FIXED.createSettings().setBiome(BiomeMinestuck.skaia)), settings);
 	}
 	
 	@Nullable
