@@ -59,6 +59,11 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 		mcServer = server;
 	}
 	
+	public static PlayerSavedData get(MinecraftServer mcServer)
+	{
+		return get(mcServer.getWorld(DimensionType.OVERWORLD));
+	}
+	
 	public static PlayerSavedData get(World world)
 	{
 		if(world.isRemote)

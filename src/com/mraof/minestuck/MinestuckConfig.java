@@ -104,7 +104,7 @@ public class MinestuckConfig
 	 * If 0: only captchalouged items are dropped. If 1: Both captchalouged items and cards are dropped. If 2: All items, including the actual modus.
 	 */
 	public static byte sylladexDropMode;
-	public static byte dataCheckerPermission;
+	public static byte dataCheckerPermission = 4;
 	
 	public static boolean[] deployConfigurations = new boolean[2];
 	

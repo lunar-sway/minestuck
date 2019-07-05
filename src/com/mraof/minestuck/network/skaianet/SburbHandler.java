@@ -1,10 +1,5 @@
 package com.mraof.minestuck.network.skaianet;
 
-import static com.mraof.minestuck.network.skaianet.SessionHandler.getPlayerSession;
-import static com.mraof.minestuck.network.skaianet.SessionHandler.sessions;
-import static com.mraof.minestuck.network.skaianet.SessionHandler.singleSession;
-import static com.mraof.minestuck.network.skaianet.SessionHandler.split;
-
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -54,7 +49,7 @@ import net.minecraft.world.dimension.DimensionType;
  */
 public class SburbHandler
 {
-	static Map<EntityPlayer, Vec3d> titleSelectionMap = new HashMap<>();
+	static Map<EntityPlayer, Vec3d> titleSelectionMap = new HashMap<>();	//TODO Consider making this non-static
 	
 	private static Title produceTitle(World world, PlayerIdentifier player)
 	{
@@ -66,7 +61,7 @@ public class SburbHandler
 			return PlayerSavedData.get(world).getTitle(player);
 		}
 		
-		Session session = getPlayerSession(player);
+		Session session = SessionHandler.get(world).getPlayerSession(player);
 		if(session == null)
 			if(MinestuckConfig.playerSelectedTitle)
 				session = new Session();
@@ -547,7 +542,7 @@ public class SburbHandler
 	 */
 	public static int availableTier(MinecraftServer mcServer, PlayerIdentifier client)
 	{
-		Session s = getPlayerSession(client);
+		Session s = SessionHandler.get(mcServer).getPlayerSession(client);
 		if(s == null)
 			return -1;
 		if(s.completed)
@@ -564,11 +559,11 @@ public class SburbHandler
 		return count;
 	}
 	
-	private static LandAspects genLandAspects(MinecraftServer server, SburbConnection connection)
+	private static LandAspects genLandAspects(MinecraftServer mcServer, SburbConnection connection)
 	{
 		LandAspectRegistry aspectGen = new LandAspectRegistry(Minestuck.worldSeed^connection.getClientIdentifier().hashCode());
-		Session session = getPlayerSession(connection.getClientIdentifier());
-		Title title = PlayerSavedData.get(server.getWorld(DimensionType.OVERWORLD)).getTitle(connection.getClientIdentifier());
+		Session session = SessionHandler.get(mcServer).getPlayerSession(connection.getClientIdentifier());
+		Title title = PlayerSavedData.get(mcServer).getTitle(connection.getClientIdentifier());
 		TitleLandAspect titleAspect = null;
 		TerrainLandAspect terrainAspect = null;
 		
@@ -585,9 +580,9 @@ public class SburbHandler
 		ArrayList<TerrainLandAspect> usedTerrainAspects = new ArrayList<TerrainLandAspect>();
 		ArrayList<TitleLandAspect> usedTitleAspects = new ArrayList<TitleLandAspect>();
 		for(SburbConnection c : session.connections)
-			if(c != connection)
+			if(c != connection && c.clientHomeLand != null)
 			{
-				LandAspects aspects = MinestuckDimensionHandler.getAspects(server, c.clientHomeLand);
+				LandAspects aspects = MinestuckDimensionHandler.getAspects(mcServer, c.clientHomeLand);
 				if(aspects.aspectTitle == LandAspectRegistry.frogAspect)
 					frogs = true;
 				usedTitleAspects.add(aspects.aspectTitle);
@@ -681,19 +676,18 @@ public class SburbHandler
 		
 	}
 	
-	static DimensionType enterMedium(MinecraftServer server, SburbConnection c)
+	static DimensionType enterMedium(MinecraftServer mcServer, SburbConnection c)
 	{
 		PlayerIdentifier identifier = c.getClientIdentifier();
-		Session session = getPlayerSession(c.getClientIdentifier());
 		
-		generateTitle(server.getWorld(DimensionType.OVERWORLD), c.getClientIdentifier());
-		LandAspects aspects = genLandAspects(server, c);		//This is where the Land dimension is actually registered, but it also needs the player's Title to be determined.
-		return LandAspectRegistry.createLand(server, identifier, aspects);
+		generateTitle(mcServer.getWorld(DimensionType.OVERWORLD), c.getClientIdentifier());
+		LandAspects aspects = genLandAspects(mcServer, c);		//This is where the Land dimension is actually registered, but it also needs the player's Title to be determined.
+		return LandAspectRegistry.createLand(mcServer, identifier, aspects);
 	}
 	
 	static void onGameEntered(MinecraftServer server, SburbConnection c)
 	{
-		getPlayerSession(c.getClientIdentifier()).checkIfCompleted();
+		SessionHandler.get(server).getPlayerSession(c.getClientIdentifier()).checkIfCompleted(SessionHandler.get(server).singleSession);
 		
 		EntityPlayerMP player = c.getClientIdentifier().getPlayer(server);
 		if(player != null)
@@ -732,7 +726,7 @@ public class SburbHandler
 			return true;
 		
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		Session s = getPlayerSession(identifier);
+		Session s = SessionHandler.get(player.world).getPlayerSession(identifier);
 		
 		if(s != null && s.predefinedPlayers.containsKey(identifier) && s.predefinedPlayers.get(identifier).title != null
 				|| PlayerSavedData.get(player.world).getTitle(identifier) != null)
@@ -754,10 +748,10 @@ public class SburbHandler
 		if(MinestuckConfig.playerSelectedTitle && titleSelectionMap.containsKey(player))
 		{
 			PlayerIdentifier identifier = IdentifierHandler.encode(player);
-			Session s = getPlayerSession(identifier);
+			Session s = SessionHandler.get(player.world).getPlayerSession(identifier);
 			if(s == null)
-				if(singleSession)
-					s = sessions.get(0);
+				if(SessionHandler.get(player.world).singleSession)
+					s = SessionHandler.get(player.world).sessions.get(0);
 				else s = new Session();
 			
 			if(title == null)

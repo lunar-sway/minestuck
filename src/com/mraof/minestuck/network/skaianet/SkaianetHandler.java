@@ -52,13 +52,14 @@ public class SkaianetHandler extends WorldSavedData
 	List<SburbConnection> connections = new ArrayList<>();
 	private Map<PlayerIdentifier, PlayerIdentifier[]> infoToSend = new HashMap<>();	//Key: player, value: data to send to player
 	private List<ComputerData> movingComputers = new ArrayList<>();
+	SessionHandler sessionHandler = new SessionHandler(this);
 	
 	/**
 	 * Chains of lands to be used by the skybox render
 	 */
 	private List<List<Integer>> landChains = new LinkedList<>();
 	
-	private final MinecraftServer mcServer;
+	final MinecraftServer mcServer;
 	
 	private SkaianetHandler(MinecraftServer mcServer)
 	{
@@ -252,7 +253,7 @@ public class SkaianetHandler extends WorldSavedData
 						sc.latestmessage.put(1, "computer.messageClosed");
 						sc.markBlockForUpdate();
 					}
-					SessionHandler.onConnectionClosed(mcServer, c, true);
+					sessionHandler.onConnectionClosed(c, true);
 					ServerEditHandler.onDisconnect(c);
 					if(c.isMain)
 						c.isActive = false;	//That's everything that is neccesary.
@@ -260,7 +261,7 @@ public class SkaianetHandler extends WorldSavedData
 					
 					ConnectionCreatedEvent.ConnectionType type = !c.isMain && getMainConnection(c.getClientIdentifier(), true) != null
 							? ConnectionCreatedEvent.ConnectionType.SECONDARY : ConnectionCreatedEvent.ConnectionType.REGULAR;
-					MinecraftForge.EVENT_BUS.post(new ConnectionClosedEvent(c, SessionHandler.getPlayerSession(c.getClientIdentifier()), type));
+					MinecraftForge.EVENT_BUS.post(new ConnectionClosedEvent(c, sessionHandler.getPlayerSession(c.getClientIdentifier()), type));
 				} else if(getAssociatedPartner(player, isClient).equals(otherPlayer))
 				{
 					if(movingComputers.contains(isClient?resumingClients.get(player):resumingServers.get(player)))
@@ -312,7 +313,7 @@ public class SkaianetHandler extends WorldSavedData
 		}
 		
 		//Get session type for event
-		Session s1 = SessionHandler.getPlayerSession(c.getClientIdentifier()), s2 = SessionHandler.getPlayerSession(c.getServerIdentifier());
+		Session s1 = sessionHandler.getPlayerSession(c.getClientIdentifier()), s2 = sessionHandler.getPlayerSession(c.getServerIdentifier());
 		ConnectionCreatedEvent.SessionJoinType joinType = s1 == null || s2 == null ? ConnectionCreatedEvent.SessionJoinType.JOIN
 				: s1 == s2 ? ConnectionCreatedEvent.SessionJoinType.INTERNAL : ConnectionCreatedEvent.SessionJoinType.MERGE;
 		ConnectionCreatedEvent.ConnectionType type = ConnectionCreatedEvent.ConnectionType.REGULAR;
@@ -333,7 +334,7 @@ public class SkaianetHandler extends WorldSavedData
 				updateLandChain = true;
 			} else
 			{
-				String s = SessionHandler.onConnectionCreated(mcServer, c);
+				String s = sessionHandler.onConnectionCreated(c);
 				if(s != null)
 				{
 					Debug.warnf("SessionHandler denied connection between %s and %s, reason: %s", c.getClientIdentifier().getUsername(), c.getServerIdentifier().getUsername(), s);
@@ -367,7 +368,7 @@ public class SkaianetHandler extends WorldSavedData
 		if(c1 != c2)
 			c2.markBlockForUpdate();
 		
-		MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(c, SessionHandler.getPlayerSession(c.getClientIdentifier()), type, joinType));
+		MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(c, sessionHandler.getPlayerSession(c.getClientIdentifier()), type, joinType));
 		if(updateLandChain)
 			sendLandChainUpdate();
 	}
@@ -416,25 +417,19 @@ public class SkaianetHandler extends WorldSavedData
 	@Override
 	public void read(NBTTagCompound nbt)
 	{
-		connections.clear();
-		serversOpen.clear();
-		resumingClients.clear();
-		resumingServers.clear();
-		SessionHandler.sessions.clear();
-		SessionHandler.sessionsByName.clear();
 		SburbHandler.titleSelectionMap.clear();
 		NBTTagList list = nbt.getList("sessions", 10);
 		for(int i = 0; i < list.size(); i++)
 		{
 			Session session = new Session().read(list.getCompound(i));
-			SessionHandler.sessions.add(session);
+			sessionHandler.sessions.add(session);
 			connections.addAll(session.connections);
 			
 			if(session.isCustom())
 			{
-				if(SessionHandler.sessionsByName.containsKey(session.name))
+				if(sessionHandler.sessionsByName.containsKey(session.name))
 					Debug.warnf("A session with a duplicate name has been loaded! (Session '%s') Either a bug or someone messing with the data file.", session.name);
-				SessionHandler.sessionsByName.put(session.name, session);
+				sessionHandler.sessionsByName.put(session.name, session);
 			}
 		}
 		
@@ -452,7 +447,7 @@ public class SkaianetHandler extends WorldSavedData
 			}
 		}
 		
-		SessionHandler.serverStarted();
+		sessionHandler.onLoad();
 		
 		updateLandChain();
 	}
@@ -463,7 +458,7 @@ public class SkaianetHandler extends WorldSavedData
 		//checkData();
 		NBTTagList list = new NBTTagList();
 		
-		for(Session s : SessionHandler.sessions)
+		for(Session s : sessionHandler.sessions)
 			list.add(s.write());
 		
 		compound.put("sessions", list);
@@ -575,7 +570,7 @@ public class SkaianetHandler extends WorldSavedData
 		boolean clientResuming = resumingClients.containsKey(player);
 		boolean serverResuming = resumingServers.containsKey(player) || serversOpen.containsKey(player);
 		
-		Map<Integer, String> serverMap = SessionHandler.getServerList(mcServer, player);
+		Map<Integer, String> serverMap = sessionHandler.getServerList(player);
 		
 		List<SburbConnection> list = new ArrayList<>();
 		for(SburbConnection c : connections)
@@ -635,7 +630,7 @@ public class SkaianetHandler extends WorldSavedData
 					if(!c.isMain)
 						iter2.remove();
 					else c.isActive = false;
-					SessionHandler.onConnectionClosed(mcServer, c, true);
+					sessionHandler.onConnectionClosed(c, true);
 					ServerEditHandler.onDisconnect(c);
 					
 					if(cc != null)
@@ -661,7 +656,7 @@ public class SkaianetHandler extends WorldSavedData
 					if(!MinestuckDimensionHandler.isLandDimension(c.clientHomeLand))
 					{
 						iter2.remove();
-						SessionHandler.onConnectionClosed(mcServer, c, false);
+						sessionHandler.onConnectionClosed(c, false);
 						if(c.isActive)
 						{
 							TileEntityComputer cc = getComputer(mcServer, c.client.location), sc = getComputer(mcServer, c.server.location);
@@ -749,26 +744,26 @@ public class SkaianetHandler extends WorldSavedData
 				c.isMain = true;
 				c.clientIdentifier = target;
 				c.serverIdentifier = IdentifierHandler.nullIdentifier;
-				String s = SessionHandler.onConnectionCreated(mcServer, c);
+				String s = sessionHandler.onConnectionCreated(c);
 				if(s == null)
 				{
 					SburbHandler.onFirstItemGiven(c);
 					connections.add(c);
 				}
-				else if(SessionHandler.singleSession)
+				else if(sessionHandler.singleSession)
 				{
 					Debug.warnf("Failed to create connection: %s. Trying again with global session disabled for this world...", s);
-					SessionHandler.singleSession = false;
-					SessionHandler.split();
-					s = SessionHandler.onConnectionCreated(mcServer, c);
+					sessionHandler.singleSession = false;
+					sessionHandler.split();
+					s = sessionHandler.onConnectionCreated(c);
 					if(s == null)
 					{
 						SburbHandler.onFirstItemGiven(c);
 						connections.add(c);
 					} else
 					{
-						SessionHandler.singleSession = true;
-						SessionHandler.mergeAll();
+						sessionHandler.singleSession = true;
+						sessionHandler.mergeAll();
 						Debug.errorf("Couldn't create a connection for %s: %s. Stopping entry.", target.getUsername(), s);
 						return null;
 					}

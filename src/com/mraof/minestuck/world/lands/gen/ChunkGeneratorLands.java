@@ -21,8 +21,6 @@ import java.util.List;
 public class ChunkGeneratorLands extends AbstractChunkGenerator<LandGenSettings>
 {
 	private final NoiseGeneratorOctaves noiseGen;
-	private final IBlockState defaultBlock;
-	private final IBlockState defaultFluid;
 	
 	private final LandGenSettings settings;
 	
@@ -41,9 +39,6 @@ public class ChunkGeneratorLands extends AbstractChunkGenerator<LandGenSettings>
 		this.settings = settings;
 		SharedSeedRandom rand = new SharedSeedRandom(this.seed);
 		this.noiseGen = new NoiseGeneratorOctaves(rand, 10);
-		this.defaultBlock = this.settings.getDefaultBlock();
-		this.defaultFluid = this.settings.getDefaultFluid();
-		
 	}
 	
 	@Override
@@ -151,8 +146,8 @@ public class ChunkGeneratorLands extends AbstractChunkGenerator<LandGenSettings>
 				{
 					pos.setPos(posX, posY, posZ);
 					if(posY <= topBlock[posX * 16 + posZ])
-						primer.setBlockState(pos, this.defaultBlock, false);
-					else primer.setBlockState(pos, this.defaultFluid, false);
+						primer.setBlockState(pos, settings.getDefaultBlock(), false);
+					else primer.setBlockState(pos, settings.getDefaultFluid(), false);
 				}
 	}
 	

@@ -1,5 +1,6 @@
 package com.mraof.minestuck.network.skaianet;
 
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import net.minecraft.nbt.NBTTagCompound;
@@ -33,9 +34,9 @@ public class Session
 	/**
 	 * Checks if the variable completed should be true or false.
 	 */
-	void checkIfCompleted()
+	void checkIfCompleted(boolean singleSession)
 	{
-		if(connections.isEmpty() || SessionHandler.singleSession)
+		if(connections.isEmpty() || singleSession)
 		{
 			completed = false;
 			return;
@@ -166,7 +167,7 @@ public class Session
 		
 		locked = nbt.getBoolean("locked");
 		
-		checkIfCompleted();
+		checkIfCompleted(MinestuckConfig.globalSession);
 		return this;
 	}
 	
