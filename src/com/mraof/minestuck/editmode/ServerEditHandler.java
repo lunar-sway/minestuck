@@ -21,6 +21,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -192,7 +193,7 @@ public class ServerEditHandler
 		return true;
 	}
 	
-	public static EditData getData(EntityPlayer editor)
+	public static EditData getData(PlayerEntity editor)
 	{
 		for(EditData data : list)
 			if(data.player == editor)

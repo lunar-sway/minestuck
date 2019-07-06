@@ -16,6 +16,7 @@ import com.mraof.minestuck.world.lands.LandAspects;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -172,7 +173,7 @@ public class MinestuckPlayerTracker
 		}
 	}
 	
-	public static void updateTitle(EntityPlayerMP player)
+	public static void updateTitle(ServerPlayerEntity player)
 	{
 		if(player == null)
 			return;
@@ -184,7 +185,7 @@ public class MinestuckPlayerTracker
 		MinestuckPacketHandler.sendToPlayer(packet, player);
 	}
 	
-	public static void updateEcheladder(EntityPlayerMP player, boolean jump)
+	public static void updateEcheladder(ServerPlayerEntity player, boolean jump)
 	{
 		Echeladder echeladder = PlayerSavedData.getData(player).echeladder;
 		PlayerDataPacket packet = PlayerDataPacket.echeladder(echeladder.getRung(), MinestuckConfig.echeladderProgress ? echeladder.getProgress() : 0F, jump);
@@ -206,7 +207,7 @@ public class MinestuckPlayerTracker
 		updateLands(null);
 	}*/
 
-	public static void sendConfigPacket(EntityPlayerMP player, boolean mode)
+	public static void sendConfigPacket(ServerPlayerEntity player, boolean mode)
 	{
 		ModConfigPacket packet;
 		if(mode)

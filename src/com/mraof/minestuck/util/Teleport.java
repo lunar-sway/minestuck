@@ -1,16 +1,9 @@
 package com.mraof.minestuck.util;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.play.server.SPacketEntityEffect;
-import net.minecraft.network.play.server.SPacketPlayerAbilities;
-import net.minecraft.network.play.server.SPacketRespawn;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldServer;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.ForgeHooks;
 
@@ -19,7 +12,7 @@ import java.util.Iterator;
 
 @Deprecated
 public class Teleport
-{
+{/*
 	public static boolean teleportEntity(Entity entity, DimensionType destinationDimension, ITeleporter teleporter, BlockPos dest)
 	{
 		return teleportEntity(entity, destinationDimension, teleporter, dest.getX() + 0.5, dest.getY(), dest.getZ() + 0.5);
@@ -33,7 +26,7 @@ public class Teleport
 	public static boolean teleportEntity(Entity entity, DimensionType destinationDimension, ITeleporter teleporter, double x, double y, double z)
 	{
 		return false;
-		/*if(destinationDimension == entity.dimension)
+		if(destinationDimension == entity.dimension)
 			return localTeleport(entity, teleporter, x, y, z);
 		
 		if(entity.world.isRemote)
@@ -229,7 +222,7 @@ public class Teleport
 			}
 		}
 		
-		portalInvincibilityField.setBoolean(player, true);*/
+		portalInvincibilityField.setBoolean(player, true);
 	}
 	
 	public interface ITeleporter
@@ -242,15 +235,15 @@ public class Teleport
 		 * @param entity The entity that will be teleported.
 		 * @param worldserver The WorldServer <i>from</i> which the entity is teleporting
 		 * @return True if the entity should be allowed to teleport under these conditions, or false if not.
-		 */
+		 * /
 		boolean prepareDestination(BlockPos pos, Entity entity, WorldServer worldserver);
 		/**
 		 * Finalizes the teleportation process. This method is in charge of actually transporting the entity.
 		 * @param entity The entity being teleported.
 		 * @param worldserver The world from which the entity is being teleported
 		 * @param worldserver1 The world to which the entity is being teleported
-		 */
+		 * /
 		void finalizeDestination(Entity entity, WorldServer worldserver, WorldServer worldserver1);
 	}
-	
+	*/
 }

@@ -14,12 +14,12 @@ public class KindAbstratusList {
 		if(typeList != null)
 			return;
 		typeList = new ArrayList<KindAbstratusType>();
-		typeList.add(new KindAbstratusType("sword").addItemClass(ItemSword.class));
-		typeList.add(new KindAbstratusType("bow").addItemClass(ItemBow.class));
-		typeList.add(new KindAbstratusType("pickaxe").addItemClass(ItemPickaxe.class));
-		typeList.add(new KindAbstratusType("axe").addItemClass(ItemAxe.class));
-		typeList.add(new KindAbstratusType("hoe").addItemClass(ItemHoe.class));
-		typeList.add(new KindAbstratusType("shovel").addItemClass(ItemSpade.class));
+		typeList.add(new KindAbstratusType("sword").addItemClass(SwordItem.class));
+		typeList.add(new KindAbstratusType("bow").addItemClass(BowItem.class));
+		typeList.add(new KindAbstratusType("pickaxe").addItemClass(PickaxeItem.class));
+		typeList.add(new KindAbstratusType("axe").addItemClass(AxeItem.class));
+		typeList.add(new KindAbstratusType("hoe").addItemClass(HoeItem.class));
+		typeList.add(new KindAbstratusType("shovel").addItemClass(ShovelItem.class));
 		typeList.add(new KindAbstratusType("hammer"));
 		typeList.add(new KindAbstratusType("cane"));
 		typeList.add(new KindAbstratusType("club"));

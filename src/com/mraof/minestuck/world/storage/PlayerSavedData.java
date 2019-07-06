@@ -13,6 +13,7 @@ import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
@@ -159,7 +160,7 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 		this.markDirty();
 	}
 
-	public static PlayerData getData(EntityPlayerMP player)
+	public static PlayerData getData(ServerPlayerEntity player)
 	{
 		return get(player.world).getData(IdentifierHandler.encode(player));
 	}

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.mraof.minestuck.client.gui.GuiColorSelector;
 import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTTagCompound;
 
 import com.mraof.minestuck.Minestuck;
@@ -21,7 +22,7 @@ public class SburbClient extends ButtonListProgram {
 	public ArrayList<UnlocalizedString> getStringList(TileEntityComputer te)
 	{
 		ArrayList<UnlocalizedString> list = new ArrayList<UnlocalizedString>();
-		NBTTagCompound nbt = te.getData(getId());
+		CompoundNBT nbt = te.getData(getId());
 		
 		SburbConnection c = SkaiaClient.getClientConnection(te.ownerId);
 		if(nbt.getBoolean("connectedToServer") && c != null) //If it is connected to someone.

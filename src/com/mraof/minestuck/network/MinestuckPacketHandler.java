@@ -1,7 +1,7 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.Minestuck;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkRegistry;
@@ -41,7 +41,7 @@ public class MinestuckPacketHandler
 		INSTANCE.registerMessage(19, EffectTogglePacket.class, EffectTogglePacket::encode, EffectTogglePacket::decode, EffectTogglePacket::consume);
 	}
 	
-	public static <MSG> void sendToPlayer(MSG message, EntityPlayerMP player)
+	public static <MSG> void sendToPlayer(MSG message, ServerPlayerEntity player)
 	{
 		INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), message);
 	}

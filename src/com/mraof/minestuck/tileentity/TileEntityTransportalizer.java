@@ -7,6 +7,7 @@ import com.mraof.minestuck.world.storage.TransportalizerSavedData;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -14,6 +15,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.ServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.dimension.DimensionType;
@@ -80,13 +83,13 @@ public class TileEntityTransportalizer extends TileEntity implements ITickable, 
 		if(!enabled)
 		{
 			entity.timeUntilPortal = entity.getPortalCooldown();
-			if(entity instanceof EntityPlayerMP)
-				entity.sendMessage(new TextComponentTranslation("message.transportalizer.transportalizerDisabled"));
+			if(entity instanceof ServerPlayerEntity)
+				entity.sendMessage(new TranslationTextComponent("message.transportalizer.transportalizerDisabled"));
 			return;
 		}
 		if(location != null && location.pos.getY() != -1)
 		{
-			WorldServer world = entity.getServer().getWorld(location.dim);
+			ServerWorld world = entity.getServer().getWorld(location.dim);
 			TileEntityTransportalizer destTransportalizer = (TileEntityTransportalizer) world.getTileEntity(location.pos);
 			if(destTransportalizer == null)
 			{

@@ -1,6 +1,6 @@
 package com.mraof.minestuck.util;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -54,7 +54,7 @@ public class Location
 		return loc.pos.equals(this.pos) && loc.dim == this.dim;
 	}
 	
-	public static Location fromNBT(NBTTagCompound nbt)
+	public static Location fromNBT(CompoundNBT nbt)
 	{
 		int x = nbt.getInt("x");
 		int y = nbt.getInt("y");
@@ -87,7 +87,7 @@ public class Location
 	}
 	
 	@Nullable
-	public NBTTagCompound toNBT(NBTTagCompound nbt)
+	public CompoundNBT toNBT(CompoundNBT nbt)
 	{
 		nbt.putInt("x", pos.getX());
 		nbt.putInt("y", pos.getY());

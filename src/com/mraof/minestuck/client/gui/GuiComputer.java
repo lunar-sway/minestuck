@@ -5,6 +5,9 @@ import com.mraof.minestuck.util.ComputerProgram;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.Widget;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
@@ -17,7 +20,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 @OnlyIn(Dist.CLIENT)
-public class GuiComputer extends GuiScreen implements GuiButtonImpl.ButtonClickhandler
+public class GuiComputer extends Screen implements GuiButtonImpl.ButtonClickhandler
 {
 
 	public static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/sburb.png");
@@ -26,7 +29,7 @@ public class GuiComputer extends GuiScreen implements GuiButtonImpl.ButtonClickh
 	public static final int xSize = 176;
 	public static final int ySize = 166;
 	
-	public GuiButton programButton;
+	public Button programButton;
 	
 	public Minecraft mc;
 	public TileEntityComputer te;
@@ -153,7 +156,7 @@ public class GuiComputer extends GuiScreen implements GuiButtonImpl.ButtonClickh
 	}
 	
 	@Override
-	public <T extends GuiButton> T addButton(T buttonIn)
+	public <T extends Widget> T addButton(T buttonIn)
 	{
 		return super.addButton(buttonIn);
 	}

@@ -14,6 +14,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.SoundCategory;
@@ -38,7 +39,7 @@ public class Echeladder
 													//	0				4						9							14								19								24									29										34
 	private static final int[] BOONDOLLARS = new int[] {0, 50, 75, 105, 140, 170, 200, 250, 320, 425, 575, 790, 1140, 1630, 2230, 2980, 3850, 4800, 6000, 7500, 9500, 11900, 15200, 19300, 24400, 45000, 68000, 95500, 124000, 180000, 260000, 425000, 632000, 880000, 1000000};
 	
-	public static void increaseProgress(EntityPlayerMP player, int progress)
+	public static void increaseProgress(ServerPlayerEntity player, int progress)
 	{
 		PlayerSavedData.getData(player).echeladder.increaseProgress(progress);
 	}
@@ -97,7 +98,7 @@ public class Echeladder
 		}
 		
 		Debug.debugf("Finished echeladder climbing for %s at %s with progress %s", identifier.getUsername(), rung, progress);
-		EntityPlayerMP player = identifier.getPlayer(mcServer);
+		ServerPlayerEntity player = identifier.getPlayer(mcServer);
 		if(player != null)
 		{
 			MinestuckPlayerTracker.updateEcheladder(player, false);

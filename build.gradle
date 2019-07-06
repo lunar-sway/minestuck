@@ -31,7 +31,7 @@ repositories {
 //apply plugin: 'forge'
 apply plugin: 'net.minecraftforge.gradle'
 
-version = '1.13.2-1.4.' + System.getenv()['BUILD_NUMBER']
+version = '1.14.3-1.4.' + System.getenv()['BUILD_NUMBER']
 group= 'com.mraof.minestuck'
 archivesBaseName = 'Minestuck'
 
@@ -41,7 +41,7 @@ compileJava {
 }
 
 minecraft {
-    mappings channel: 'stable', version: '47-1.13.2'
+    mappings channel: 'snapshot', version: '20190705-1.14.3'
 
     //replaceIn "com/mraof/minestuck/Minestuck.java"
     //replace "@VERSION@", project.version
@@ -84,10 +84,10 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.13.2-25.0.219'
+    minecraft 'net.minecraftforge:forge:1.14.3-27.0.24'
 
-    def mc_version = "1.13.2"
-    def jei_version = "5.0.0.28"
+    def mc_version = "1.14.3"
+    def jei_version = "6.0.0.7"
 	// http://dvs1.progwml6.com/files/maven
     //compile "mezz.jei:jei_1.9.4:3.6.8.225"
     compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")

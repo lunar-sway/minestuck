@@ -9,8 +9,8 @@ import com.google.common.collect.Lists;
 import com.mraof.minestuck.MinestuckConfig;
 
 import net.minecraft.command.CommandException;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerList;
@@ -53,7 +53,7 @@ public class IdentifierHandler {
 		else return username;
 	}
 	
-	public static PlayerIdentifier encode(EntityPlayer player)
+	public static PlayerIdentifier encode(PlayerEntity player)
 	{
 		if(player instanceof FakePlayer || player.getName() == null)
 			return null;
@@ -71,12 +71,12 @@ public class IdentifierHandler {
 		return identifier;
 	}
 	
-	public static boolean hasIdentifier(NBTTagCompound nbt, String key)
+	public static boolean hasIdentifier(CompoundNBT nbt, String key)
 	{
 		return nbt.contains(key, 8) || nbt.contains(key + "Most", 4) && nbt.contains(key + "Least", 4);
 	}
 	
-	public static PlayerIdentifier load(INBTBase nbt, String key)
+	public static PlayerIdentifier load(INBT nbt, String key)
 	{
 		PlayerIdentifier identifier = new PlayerIdentifier(nbt, key);
 		if(".null".equals(identifier.username))
@@ -99,7 +99,7 @@ public class IdentifierHandler {
 		return identifier;
 	}
 	
-	public static void playerLoggedIn(EntityPlayer player)
+	public static void playerLoggedIn(ServerPlayerEntity player)
 	{
 		Iterator<PlayerIdentifier> iter = identifiersToChange.iterator();
 		while(iter.hasNext())
@@ -222,22 +222,22 @@ public class IdentifierHandler {
 			useUUID = false;
 		}
 		
-		private PlayerIdentifier(INBTBase nbt, String key)
+		private PlayerIdentifier(INBT nbt, String key)
 		{
-			if(nbt instanceof NBTTagString)
+			if(nbt instanceof CompoundNBT)
 			{
-				username = ((NBTTagString) nbt).getString();
+				username = ((StringNBT) nbt).getString();
 				useUUID = false;
-			} else if(nbt instanceof NBTTagList)
+			} else if(nbt instanceof ListNBT)
 			{
-				long most = ((NBTTagLong)((NBTTagList) nbt).get(0)).getLong();
-				long least = ((NBTTagLong)((NBTTagList) nbt).get(1)).getLong();
+				long most = ((LongNBT)((ListNBT) nbt).get(0)).getLong();
+				long least = ((LongNBT)((ListNBT) nbt).get(1)).getLong();
 				uuid = new UUID(most, least);
 				useUUID = true;
 			}
 			else
 			{
-				NBTTagCompound compound = (NBTTagCompound) nbt;
+				CompoundNBT compound = (CompoundNBT) nbt;
 				if(compound.contains(key, 8))
 				{
 					username = compound.getString(key);
@@ -252,19 +252,19 @@ public class IdentifierHandler {
 			}
 		}
 		
-		public NBTTagList saveToNBT(NBTTagList nbt, String key)
+		public ListNBT saveToNBT(ListNBT nbt, String key)
 		{
 			if(this.useUUID)
 			{
-				NBTTagList list = new NBTTagList();
-				list.add(new NBTTagLong(uuid.getMostSignificantBits()));
-				list.add(new NBTTagLong(uuid.getLeastSignificantBits()));
+				ListNBT list = new ListNBT();
+				list.add(new LongNBT(uuid.getMostSignificantBits()));
+				list.add(new LongNBT(uuid.getLeastSignificantBits()));
 				nbt.add(list);
-			} else nbt.add(new NBTTagString(username));
+			} else nbt.add(new StringNBT(username));
 			return nbt;
 		}
 		
-		public NBTTagCompound saveToNBT(NBTTagCompound nbt, String key)
+		public CompoundNBT saveToNBT(CompoundNBT nbt, String key)
 		{
 			if(this.useUUID)
 			{
@@ -274,7 +274,7 @@ public class IdentifierHandler {
 			return nbt;
 		}
 		
-		public boolean appliesTo(EntityPlayer player)
+		public boolean appliesTo(PlayerEntity player)
 		{
 			if(this.useUUID)
 				return player.getGameProfile().getId().equals(uuid);
@@ -302,7 +302,7 @@ public class IdentifierHandler {
 			else return usernameDecode(username);
 		}
 		
-		public EntityPlayerMP getPlayer(MinecraftServer server)
+		public ServerPlayerEntity getPlayer(MinecraftServer server)
 		{
 			PlayerList list = server == null ? null : server.getPlayerList();
 			if(list == null)
