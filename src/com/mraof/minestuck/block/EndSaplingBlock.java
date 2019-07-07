@@ -2,47 +2,41 @@ package com.mraof.minestuck.block;
 
 import java.util.Random;
 
-import com.mraof.minestuck.world.gen.feature.EndTree;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockBush;
-import net.minecraft.block.IGrowable;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.block.trees.AbstractTree;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.*;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-public class BlockEndSapling extends BlockBush implements IGrowable
+public class EndSaplingBlock extends BushBlock implements IGrowable
 {
 	public static final BooleanProperty ALPHA = MinestuckProperties.ALPHA;
 	public static final BooleanProperty OMEGA = MinestuckProperties.OMEGA;
 	protected static final VoxelShape SHAPE = Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 	
-	protected BlockEndSapling(Properties properties)
+	protected EndSaplingBlock(Properties properties)
 	{
 		super(properties);
 		this.setDefaultState(this.stateContainer.getBaseState().with(ALPHA, false).with(OMEGA, false));
 	}
 	
 	@Override
-	public VoxelShape getShape(IBlockState state, IBlockReader worldIn, BlockPos pos)
+	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext contezt)
 	{
 		return SHAPE;
 	}
 	
 	@Override
-	public boolean canGrow(IBlockReader worldIn, BlockPos pos, IBlockState state, boolean isClient)
+	public boolean canGrow(IBlockReader worldIn, BlockPos pos, BlockState state, boolean isClient)
 	{
 		return true;
 	}
 	
 	@Override
-	public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, IBlockState state)
+	public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, BlockState state)
 	{
 		return true;
 	}
@@ -52,7 +46,7 @@ public class BlockEndSapling extends BlockBush implements IGrowable
 	 * If Alpha is true and omega is false, then the tree will generate.
 	 */
 	@Override
-	public void grow(World worldIn, Random rand, BlockPos pos, IBlockState state)
+	public void grow(World worldIn, Random rand, BlockPos pos, BlockState state)
 	{
 		if(worldIn.isRemote || worldIn.getMoonPhase() == 4)
 		{
@@ -80,7 +74,7 @@ public class BlockEndSapling extends BlockBush implements IGrowable
 		}
 	}
 	
-	private void generateTree(World worldIn, BlockPos pos, IBlockState state, Random rand)
+	private void generateTree(World worldIn, BlockPos pos, BlockState state, Random rand)
 	{
 		if(!net.minecraftforge.event.ForgeEventFactory.saplingGrowTree(worldIn, rand, pos))
 			return;
@@ -89,19 +83,19 @@ public class BlockEndSapling extends BlockBush implements IGrowable
 	}
 	
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, IBlockState> builder)
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
 	{
 		builder.add(ALPHA, OMEGA);
 	}
 	
 	@Override
-	protected boolean isValidGround(IBlockState state, IBlockReader worldIn, BlockPos pos)
+	protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos)
 	{
 		return state.getBlock() == Blocks.END_STONE || state.getBlock() == MinestuckBlocks.COARSE_END_STONE || state.getBlock() == MinestuckBlocks.END_GRASS;
 	}
 	
 	@Override
-	public void tick(IBlockState state, World worldIn, BlockPos pos, Random random)
+	public void tick(BlockState state, World worldIn, BlockPos pos, Random random)
 	{
 		if (!worldIn.isRemote)
 		{

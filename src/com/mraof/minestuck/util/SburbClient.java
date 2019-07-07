@@ -6,7 +6,6 @@ import java.util.Map;
 import com.mraof.minestuck.client.gui.GuiColorSelector;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTTagCompound;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.ClientProxy;

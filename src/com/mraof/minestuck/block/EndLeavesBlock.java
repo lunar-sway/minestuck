@@ -1,43 +1,43 @@
 package com.mraof.minestuck.block;
 
 import java.util.Random;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Items;
+
+import net.minecraft.block.BlockState;
 import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.IWorldReaderBase;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
-public class BlockEndLeaves extends BlockMinestuckLeaves
+public class EndLeavesBlock extends FlammableLeavesBlock
 {
 	public static final int LEAF_SUSTAIN_DISTANCE = 5;
 	
-	public BlockEndLeaves(Properties properties)
+	public EndLeavesBlock(Properties properties)
 	{
-		super(() -> MinestuckBlocks.END_SAPLING.asItem(), false, () -> Items.CHORUS_FRUIT, properties);
+		super(properties);
 	}
 	
 	@Override
-	public boolean ticksRandomly(IBlockState state)
+	public boolean ticksRandomly(BlockState state)
 	{
 		return state.get(DISTANCE) >= LEAF_SUSTAIN_DISTANCE && !state.get(PERSISTENT);
 	}
 	
 	@Override
-	public void randomTick(IBlockState state, World worldIn, BlockPos pos, Random random)
+	public void randomTick(BlockState state, World worldIn, BlockPos pos, Random random)
 	{
 		if(!state.get(PERSISTENT) && state.get(DISTANCE) >= LEAF_SUSTAIN_DISTANCE)
 		{
-			state.dropBlockAsItem(worldIn, pos, 0);
-			worldIn.removeBlock(pos);
+			spawnDrops(state, worldIn, pos);
+			worldIn.removeBlock(pos, false);
 		}
 	}
 	
 	@Override
-	public IBlockState updatePostPlacement(IBlockState stateIn, EnumFacing facing, IBlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos)
+	public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos)
 	{
 		int i = getDistance(facingState) + 1;
 		if(i != 1 || stateIn.get(DISTANCE) != i)
@@ -46,15 +46,15 @@ public class BlockEndLeaves extends BlockMinestuckLeaves
 		return stateIn;
 	}
 	
-	protected IBlockState updateDistance(IBlockState state, IWorld world, BlockPos pos) {
+	protected BlockState updateDistance(BlockState state, IWorld world, BlockPos pos) {
 		int i = 7;
 		
 		try (BlockPos.PooledMutableBlockPos mutablePos = BlockPos.PooledMutableBlockPos.retain())
 		{
-			for(EnumFacing facing : EnumFacing.values())
+			for(Direction facing : Direction.values())
 			{
 				mutablePos.setPos(pos).move(facing);
-				int axisDecrease = facing.getAxis() == EnumFacing.Axis.X ? 2 : 1;
+				int axisDecrease = facing.getAxis() == Direction.Axis.X ? 2 : 1;
 				i = Math.min(i, getDistance(world.getBlockState(mutablePos)) + axisDecrease);
 				if(i == 1)
 					break;
@@ -64,7 +64,7 @@ public class BlockEndLeaves extends BlockMinestuckLeaves
 		return state.with(DISTANCE, i);
 	}
 	
-	protected int getDistance(IBlockState neighbor)
+	protected int getDistance(BlockState neighbor)
 	{
 		if(neighbor.getBlock() == MinestuckBlocks.END_LOG)
 		{
@@ -76,25 +76,25 @@ public class BlockEndLeaves extends BlockMinestuckLeaves
 	}
 	
 	@Override
-	public IBlockState getStateForPlacement(BlockItemUseContext context)
+	public BlockState getStateForPlacement(BlockItemUseContext context)
 	{
 		return updateDistance(this.getDefaultState().with(PERSISTENT, true), context.getWorld(), context.getPos());
 	}
 	
 	@Override
-	public boolean canBeReplacedByLeaves(IBlockState state, IWorldReaderBase world, BlockPos pos)
+	public boolean canBeReplacedByLeaves(BlockState state, IWorldReader world, BlockPos pos)
 	{
 		return false;
 	}
 	
 	@Override
-	public int getFlammability(IBlockState state, IBlockReader world, BlockPos pos, EnumFacing face)
+	public int getFlammability(BlockState state, IBlockReader world, BlockPos pos, Direction face)
 	{
 		return 1;
 	}
 	
 	@Override
-	public int getFireSpreadSpeed(IBlockState state, IBlockReader world, BlockPos pos, EnumFacing face)
+	public int getFireSpreadSpeed(BlockState state, IBlockReader world, BlockPos pos, Direction face)
 	{
 		return 250;
 	}
