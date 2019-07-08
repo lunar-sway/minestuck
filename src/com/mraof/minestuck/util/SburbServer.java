@@ -17,7 +17,7 @@ public class SburbServer extends ButtonListProgram
 	@Override
 	public ArrayList<UnlocalizedString> getStringList(TileEntityComputer te)
 	{
-		int clientId = te.getData(1).hasKey("connectedClient")?te.getData(1).getInt("connectedClient"):-1;
+		int clientId = te.getData(1).contains("connectedClient")?te.getData(1).getInt("connectedClient"):-1;
 		SburbConnection connection = clientId != -1 ? SkaiaClient.getClientConnection(clientId) : null;
 		if(connection != null && connection.getServerId() != te.ownerId)
 			connection = null;

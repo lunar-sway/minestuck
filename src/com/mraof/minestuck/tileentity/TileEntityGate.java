@@ -57,7 +57,7 @@ public class TileEntityGate extends TileEntity
 	public void read(NBTTagCompound compound)
 	{
 		super.read(compound);
-		if(compound.hasKey("gateCount"))
+		if(compound.contains("gateCount"))
 			this.gateCount = compound.getInt("gateCount");
 	}
 	
@@ -66,7 +66,7 @@ public class TileEntityGate extends TileEntity
 	{
 		super.write(compound);
 		if(this.gateCount != 0)
-			compound.setInt("gateCount", gateCount);
+			compound.putInt("gateCount", gateCount);
 		return compound;
 	}
 	
@@ -74,7 +74,7 @@ public class TileEntityGate extends TileEntity
 	public NBTTagCompound getUpdateTag()
 	{
 		NBTTagCompound nbt = super.getUpdateTag();
-		nbt.setInt("color", SburbHandler.getColorForDimension(world));
+		nbt.putInt("color", SburbHandler.getColorForDimension(world));
 		return nbt;
 	}
 	
@@ -82,7 +82,7 @@ public class TileEntityGate extends TileEntity
 	public SPacketUpdateTileEntity getUpdatePacket()
 	{
 		NBTTagCompound nbt = new NBTTagCompound();
-		nbt.setInt("color", SburbHandler.getColorForDimension(world));
+		nbt.putInt("color", SburbHandler.getColorForDimension(world));
 		return new SPacketUpdateTileEntity(this.pos, 0, nbt);
 	}
 	

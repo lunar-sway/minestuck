@@ -8,7 +8,7 @@ import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.EnumFacing;
 
-public class BlockDoubleLog extends BlockMinestuckLog
+public class BlockDoubleLog extends FlammableLogBlock
 {
 	public static final EnumProperty<EnumFacing.Axis> AXIS_2 = MinestuckProperties.AXIS_2;
 	

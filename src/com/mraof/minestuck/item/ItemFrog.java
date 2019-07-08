@@ -50,7 +50,7 @@ public class ItemFrog extends Item
 				if(i != 3 && i != 4)
 				{
 					ItemStack item = new ItemStack(this);
-					item.getOrCreateTag().setInt("Type", i);
+					item.getOrCreateTag().putInt("Type", i);
 					items.add(item);
 				}
 			}
@@ -67,16 +67,16 @@ public class ItemFrog extends Item
 			if(stack.hasTag())
 			{
 				NBTTagCompound nbt = stack.getTag();
-				NBTTagInt type = (NBTTagInt)nbt.getTag("Type");
-				NBTTagInt eyeType = (NBTTagInt)nbt.getTag("EyeType");
-				NBTTagInt bellyType = (NBTTagInt)nbt.getTag("BellyType");
+				NBTTagInt type = (NBTTagInt)nbt.get("Type");
+				NBTTagInt eyeType = (NBTTagInt)nbt.get("EyeType");
+				NBTTagInt bellyType = (NBTTagInt)nbt.get("BellyType");
 				
-					if(nbt.hasKey("EyeType"))for(int i = 0; i <= EntityFrog.maxEyes(); i++)
+					if(nbt.contains("EyeType"))for(int i = 0; i <= EntityFrog.maxEyes(); i++)
 					{
 						if(eyeType.getInt() == i)tooltip.add(new TextComponentTranslation("item.frog.eyes"+i));
 					}
 					
-					if(nbt.hasKey("EyeType"))for(int i = 1; i <= EntityFrog.maxBelly(); i++)
+					if(nbt.contains("EyeType"))for(int i = 1; i <= EntityFrog.maxBelly(); i++)
 					{
 						if(bellyType.getInt() == i)tooltip.add(new TextComponentTranslation("item.frog.belly"+i));
 					}
@@ -95,9 +95,9 @@ public class ItemFrog extends Item
 		if(stack.hasTag())
 		{
 			NBTTagCompound nbt = stack.getTag();
-			NBTTagFloat size = (NBTTagFloat)nbt.getTag("Size");
+			NBTTagFloat size = (NBTTagFloat)nbt.get("Size");
 			
-			if(nbt.hasKey("Size"))
+			if(nbt.contains("Size"))
 			{
 				if(size.getFloat() <= 0.4f) 	tooltip.add(new TextComponentTranslation("item.frog.size0"));
 				else if(size.getFloat() <= 0.8f) tooltip.add(new TextComponentTranslation("item.frog.size1"));
@@ -190,9 +190,9 @@ public class ItemFrog extends Item
 					return;
 				}
 				
-				nbttagcompound.setBoolean("PersistenceRequired", true);
+				nbttagcompound.putBoolean("PersistenceRequired", true);
 				if(nbttagcompound.getInt("Type") == 6)
-					nbttagcompound.setFloat("Size", 0.5f);
+					nbttagcompound.putFloat("Size", 0.5f);
 				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 				targetEntity.writeUnlessRemoved(nbttagcompound1);
 				UUID uuid = targetEntity.getUniqueID();
@@ -212,7 +212,7 @@ public class ItemFrog extends Item
 
 		if (nbttagcompound != null)
 		{
-			if (nbttagcompound.hasKey("SkinColor"))
+			if (nbttagcompound.contains("SkinColor"))
 			{
 				return nbttagcompound.getInt("SkinColor");
 			}
@@ -228,7 +228,7 @@ public class ItemFrog extends Item
 
 		if (nbttagcompound != null)
 		{
-			if (nbttagcompound.hasKey("EyeColor"))
+			if (nbttagcompound.contains("EyeColor"))
 			{
 				return nbttagcompound.getInt("eyeColor");
 			}
@@ -244,15 +244,15 @@ public class ItemFrog extends Item
 
 		if (nbttagcompound != null)
 		{
-			if(nbttagcompound.hasKey("bellyType") && nbttagcompound.getInt("bellyType") == 0)
+			if(nbttagcompound.contains("bellyType") && nbttagcompound.getInt("bellyType") == 0)
 			{
-				if(nbttagcompound.hasKey("skinColor"))
+				if(nbttagcompound.contains("skinColor"))
 				{
 					return nbttagcompound.getInt("skinColor");
 				}
 				else return 0x4BEC13;
 			}
-			else if (nbttagcompound.hasKey("bellyColor"))
+			else if (nbttagcompound.contains("bellyColor"))
 			{
 				return nbttagcompound.getInt("bellyColor");
 			}

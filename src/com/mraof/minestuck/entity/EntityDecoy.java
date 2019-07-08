@@ -66,7 +66,7 @@ public class EntityDecoy extends EntityLiving {
 		height = player.height;
 		this.player = new DecoyPlayer(world, this, player);
 		for(String key : player.getEntityData().keySet())
-			this.player.getEntityData().setTag(key, player.getEntityData().getTag(key).copy());
+			this.player.getEntityData().put(key, player.getEntityData().get(key).copy());
 		this.posX = player.posX;
 		originX = posX;
 		this.chunkCoordX = player.chunkCoordX;

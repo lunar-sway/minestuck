@@ -2,7 +2,7 @@ package com.mraof.minestuck.util;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -42,7 +42,7 @@ public class Title
 	
 	public ITextComponent asTextComponent()
 	{
-		return new TextComponentTranslation("title.format", heroClass.asTextComponent(), heroAspect.asTextComponent());
+		return new TranslationTextComponent("title.format", heroClass.asTextComponent(), heroAspect.asTextComponent());
 	}
 	
 	@Override

@@ -7,16 +7,19 @@ import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeMap;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.dimension.DimensionType;
 
 import java.util.Set;
 import java.util.UUID;
@@ -36,21 +39,23 @@ public class Echeladder
 													//	0				4						9							14								19								24									29										34
 	private static final int[] BOONDOLLARS = new int[] {0, 50, 75, 105, 140, 170, 200, 250, 320, 425, 575, 790, 1140, 1630, 2230, 2980, 3850, 4800, 6000, 7500, 9500, 11900, 15200, 19300, 24400, 45000, 68000, 95500, 124000, 180000, 260000, 425000, 632000, 880000, 1000000};
 	
-	public static void increaseProgress(EntityPlayerMP player, int progress)
+	public static void increaseProgress(ServerPlayerEntity player, int progress)
 	{
-		MinestuckPlayerData.getData(player).echeladder.increaseProgress(player.server, progress);
+		PlayerSavedData.getData(player).echeladder.increaseProgress(progress);
 	}
 	
-	private PlayerIdentifier identifier;
+	private final MinecraftServer mcServer;
+	private final PlayerIdentifier identifier;
 	private int rung;
 	private int progress;
 	
 	private boolean[] underlingBonuses = new boolean[UNDERLING_BONUSES.length];
 	private boolean[] alchemyBonuses = new boolean[ALCHEMY_BONUSES.length];
 	
-	public Echeladder(PlayerIdentifier identifier)
+	public Echeladder(PlayerIdentifier identifier, MinecraftServer server)
 	{
 		this.identifier = identifier;
+		mcServer = server;
 	}
 	
 	private int getRungProgressReq()
@@ -58,9 +63,9 @@ public class Echeladder
 		return (int) (Math.pow(1.4, rung)*9);
 	}
 	
-	public void increaseProgress(MinecraftServer server, int exp)
+	public void increaseProgress(int exp)
 	{
-		SburbConnection c = SkaianetHandler.get(server).getMainConnection(identifier, true);
+		SburbConnection c = SkaianetHandler.get(mcServer).getMainConnection(identifier, true);
 		int topRung = c != null && c.hasEntered() ? RUNG_COUNT - 1 : MinestuckConfig.preEntryRungLimit;
 		int expReq = getRungProgressReq();
 		if(rung >= topRung || exp < expReq*MIN_PROGRESS_MODIFIER)
@@ -75,7 +80,7 @@ public class Echeladder
 			while(progress + exp >= expReq)
 			{
 				rung++;
-				MinestuckPlayerData.getData(identifier).boondollars += BOONDOLLARS[Math.min(rung, BOONDOLLARS.length - 1)];
+				PlayerSavedData.get(mcServer.getWorld(DimensionType.OVERWORLD)).getData(identifier).boondollars += BOONDOLLARS[Math.min(rung, BOONDOLLARS.length - 1)];
 				exp -= (expReq - progress);
 				progress = 0;
 				expReq = getRungProgressReq();
@@ -93,29 +98,29 @@ public class Echeladder
 		}
 		
 		Debug.debugf("Finished echeladder climbing for %s at %s with progress %s", identifier.getUsername(), rung, progress);
-		EntityPlayerMP player = identifier.getPlayer(server);
+		ServerPlayerEntity player = identifier.getPlayer(mcServer);
 		if(player != null)
 		{
 			MinestuckPlayerTracker.updateEcheladder(player, false);
 			if(rung != prevRung)
 			{
 				updateEcheladderBonuses(player);
-				MinestuckPacketHandler.sendToPlayer(PlayerDataPacket.boondollars(MinestuckPlayerData.getData(identifier).boondollars), player);
+				MinestuckPacketHandler.sendToPlayer(PlayerDataPacket.boondollars(PlayerSavedData.get(player.world).getData(identifier).boondollars), player);
 				player.world.playSound(null, player.posX, player.posY, player.posZ, MinestuckSoundHandler.soundUpcheladder, SoundCategory.AMBIENT, 1F, 1F);
 			}
 		}
 	}
 	
-	public void checkBonus(MinecraftServer server, byte type)
+	public void checkBonus(byte type)
 	{
 		if(type >= UNDERLING_BONUS_OFFSET && type < UNDERLING_BONUS_OFFSET + underlingBonuses.length && !underlingBonuses[type - UNDERLING_BONUS_OFFSET])
 		{
 			underlingBonuses[type - UNDERLING_BONUS_OFFSET] = true;
-			increaseProgress(server, UNDERLING_BONUSES[type - UNDERLING_BONUS_OFFSET]);
+			increaseProgress(UNDERLING_BONUSES[type - UNDERLING_BONUS_OFFSET]);
 		} else if(type >= ALCHEMY_BONUS_OFFSET && type < ALCHEMY_BONUS_OFFSET + alchemyBonuses.length && !alchemyBonuses[type - ALCHEMY_BONUS_OFFSET])
 		{
 			alchemyBonuses[type - ALCHEMY_BONUS_OFFSET] = true;
-			increaseProgress(server, ALCHEMY_BONUSES[type - ALCHEMY_BONUS_OFFSET]);
+			increaseProgress(ALCHEMY_BONUSES[type - ALCHEMY_BONUS_OFFSET]);
 		}
 	}
 	
@@ -162,20 +167,20 @@ public class Echeladder
 		attributesToSend.add(player.getAttribute(SharedMonsterAttributes.MAX_HEALTH));
 	}
 	
-	protected void saveEcheladder(NBTTagCompound nbt)
+	public void saveEcheladder(NBTTagCompound nbt)
 	{
-		nbt.setInt("rung", rung);
-		nbt.setInt("rungProgress", progress);
+		nbt.putInt("rung", rung);
+		nbt.putInt("rungProgress", progress);
 		
 		byte[] bonuses = new byte[ALCHEMY_BONUS_OFFSET + alchemyBonuses.length];	//Booleans would be stored as bytes anyways
 		for(int i = 0; i < underlingBonuses.length; i++)
 			bonuses[i + UNDERLING_BONUS_OFFSET] = (byte) (underlingBonuses[i] ? 1 : 0);
 		for(int i = 0; i < alchemyBonuses.length; i++)
 			bonuses[i + ALCHEMY_BONUS_OFFSET] = (byte) (alchemyBonuses[i] ? 1 : 0);
-		nbt.setByteArray("rungBonuses", bonuses);
+		nbt.putByteArray("rungBonuses", bonuses);
 	}
 	
-	protected void loadEcheladder(NBTTagCompound nbt)
+	public void loadEcheladder(NBTTagCompound nbt)
 	{
 		rung = nbt.getInt("rung");
 		progress = nbt.getInt("rungProgress");
@@ -207,7 +212,7 @@ public class Echeladder
 		return 1/(rung*0.06D + 1);
 	}
 	
-	public void setByCommand(MinecraftServer server, int rung, double progress)
+	public void setByCommand(int rung, double progress)
 	{
 		this.rung = MathHelper.clamp(rung, 0, RUNG_COUNT - 1);	//Can never be too careful
 		if(rung != RUNG_COUNT - 1)
@@ -217,7 +222,7 @@ public class Echeladder
 				this.progress--;
 		} else this.progress = 0;
 		
-		EntityPlayerMP player = identifier.getPlayer(server);
+		EntityPlayerMP player = identifier.getPlayer(mcServer);
 		if(player != null)
 		{
 			MinestuckPlayerTracker.updateEcheladder(player, true);

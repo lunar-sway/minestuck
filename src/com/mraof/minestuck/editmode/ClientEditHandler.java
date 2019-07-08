@@ -6,8 +6,8 @@ import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.ClientEditPacket;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
-import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockFenceGate;
@@ -94,7 +94,7 @@ public class ClientEditHandler {
 		if(!isActive())
 			return;
 		
-		GristSet have = MinestuckPlayerData.getClientGrist();
+		GristSet have = PlayerSavedData.getClientGrist();
 		
 		addToolTip(event.getItemStack(), event.getToolTip(), have, givenItems);
 		
@@ -150,7 +150,7 @@ public class ClientEditHandler {
 			DeployList.ClientDeployEntry entry = DeployList.getEntryClient(stack);
 			if(entry != null)
 			{
-				if(!ServerEditHandler.isBlockItem(stack.getItem()) && GristHelper.canAfford(MinestuckPlayerData.getClientGrist(), givenItems[entry.getIndex()]
+				if(!ServerEditHandler.isBlockItem(stack.getItem()) && GristHelper.canAfford(PlayerSavedData.getClientGrist(), givenItems[entry.getIndex()]
 						? entry.getSecondaryCost() : entry.getPrimaryCost()))
 					givenItems[entry.getIndex()] = true;
 				else event.setCanceled(true);
@@ -195,7 +195,7 @@ public class ClientEditHandler {
 					cost = entry.getSecondaryCost();
 				else cost = entry.getPrimaryCost();
 			else cost = AlchemyCostRegistry.getGristConversion(stack);
-			if(!GristHelper.canAfford(MinestuckPlayerData.getClientGrist(), cost)) {
+			if(!GristHelper.canAfford(PlayerSavedData.getClientGrist(), cost)) {
 				StringBuilder str = new StringBuilder();
 				if(cost != null)
 				{
@@ -221,7 +221,7 @@ public class ClientEditHandler {
 		{
 			IBlockState block = event.getWorld().getBlockState(event.getPos());
 			if(block.getBlockHardness(event.getWorld(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
-					|| MinestuckPlayerData.getClientGrist().getGrist(GristType.BUILD) <= 0)
+					|| PlayerSavedData.getClientGrist().getGrist(GristType.BUILD) <= 0)
 				event.setCanceled(true);
 		}
 	}

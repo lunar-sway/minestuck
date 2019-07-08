@@ -56,8 +56,8 @@ public class ItemCaptchaCard extends Item
 		NBTTagCompound nbt = playerIn.getHeldItem(handIn).getTag();
 		ItemStack stack = playerIn.getHeldItem(handIn);
 		
-		if(playerIn.isSneaking() && stack.hasTag() && ((nbt.getInt("contentSize") <= 0 && !nbt.getBoolean("punched") && AlchemyRecipes.getDecodedItem(stack) != ItemStack.EMPTY) || !nbt.hasKey("contentID")))
-		{
+		if(playerIn.isSneaking() && stack.hasTag() && ((AlchemyRecipes.isGhostCard(stack) && !AlchemyRecipes.isPunchedCard(stack)) || !AlchemyRecipes.hasDecodedItem(stack)))
+		{	//TODO should only remove content tags
 			return new ActionResult<>(EnumActionResult.SUCCESS, new ItemStack(playerIn.getHeldItem(handIn).getItem(), playerIn.getHeldItem(handIn).getCount()));
 		}
 		else

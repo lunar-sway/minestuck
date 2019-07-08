@@ -57,7 +57,7 @@ public class BlockEndGrass extends Block
 		super.animateTick(stateIn, worldIn, pos, rand);
 
 		if (rand.nextInt(10) == 0)
-			worldIn.spawnParticle(Particles.PORTAL, (double)((float)pos.getX() + rand.nextFloat()), (double)((float)pos.getY() + 1.1F), (double)((float)pos.getZ() + rand.nextFloat()), 0.0D, 0.0D, 0.0D);
+			worldIn.addParticle(Particles.PORTAL, (double)((float)pos.getX() + rand.nextFloat()), (double)((float)pos.getY() + 1.1F), (double)((float)pos.getZ() + rand.nextFloat()), 0.0D, 0.0D, 0.0D);
 	}
 	
 	@Override

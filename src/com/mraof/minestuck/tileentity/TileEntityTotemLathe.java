@@ -299,9 +299,9 @@ public class TileEntityTotemLathe extends TileEntity
 	public NBTTagCompound write(NBTTagCompound compound)
 	{
 		super.write(compound);
-		compound.setBoolean("broken",broken);
-		compound.setTag("card1", card1.write(new NBTTagCompound()));
-		compound.setTag("card2", card2.write(new NBTTagCompound()));
+		compound.putBoolean("broken",broken);
+		compound.put("card1", card1.write(new NBTTagCompound()));
+		compound.put("card2", card2.write(new NBTTagCompound()));
 		return compound;
 	}
 	@Override

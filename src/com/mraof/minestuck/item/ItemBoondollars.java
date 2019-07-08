@@ -1,7 +1,7 @@
 package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.util.MinestuckPlayerData;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -32,7 +32,7 @@ public class ItemBoondollars extends Item	//TODO Add custom crafting recipe that
 	{
 		if(!worldIn.isRemote)
 		{
-			MinestuckPlayerData.addBoondollars((EntityPlayerMP) playerIn, getCount(playerIn.getHeldItem(handIn)));
+			PlayerSavedData.addBoondollars((EntityPlayerMP) playerIn, getCount(playerIn.getHeldItem(handIn)));
 		}
 		return new ActionResult<>(EnumActionResult.SUCCESS, ItemStack.EMPTY);
 	}
@@ -73,7 +73,7 @@ public class ItemBoondollars extends Item	//TODO Add custom crafting recipe that
 			nbt = new NBTTagCompound();
 			stack.setTag(nbt);
 		}
-		nbt.setInt("value", value);
+		nbt.putInt("value", value);
 		return stack;
 	}
 }

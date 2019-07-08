@@ -6,6 +6,7 @@ import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
 import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.DamageSource;
@@ -106,8 +107,8 @@ public class EntityOgre extends EntityUnderling
 			if(entity instanceof EntityPlayerMP)
 			{
 				//((EntityPlayerMP) entity).addStat(MinestuckAchievementHandler.killOgre);
-				Echeladder ladder = MinestuckPlayerData.getData((EntityPlayerMP) entity).echeladder;
-				ladder.checkBonus(getServer(), (byte) (Echeladder.UNDERLING_BONUS_OFFSET + 1));
+				Echeladder ladder = PlayerSavedData.getData((EntityPlayerMP) entity).echeladder;
+				ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 1));
 			}
 		}
 	}

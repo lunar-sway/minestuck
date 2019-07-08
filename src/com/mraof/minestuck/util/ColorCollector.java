@@ -63,7 +63,7 @@ public class ColorCollector
 	
 	public static ItemStack setColor(ItemStack stack, int color)
 	{
-		stack.getOrCreateTag().setInt("color", color);
+		stack.getOrCreateTag().putInt("color", color);
 		return stack;
 	}
 	

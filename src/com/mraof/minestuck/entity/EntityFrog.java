@@ -109,7 +109,7 @@ public class EntityFrog extends EntityCreature
 			{
 				if(!player.isCreative())itemstack.shrink(1);
 				
-				this.world.spawnParticle(Particles.EXPLOSION, this.posX, this.posY + (double)(this.height / 2.0F), this.posZ, 0.0D, 0.0D, 0.0D);
+				this.world.addParticle(Particles.EXPLOSION, this.posX, this.posY + (double)(this.height / 2.0F), this.posZ, 0.0D, 0.0D, 0.0D);
 				this.playSound(SoundEvents.BLOCK_ANVIL_HIT, this.getSoundVolume(), ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) * 0.8F);
 				this.setType(5);
 			}
@@ -130,13 +130,13 @@ public class EntityFrog extends EntityCreature
 	{
 		NBTTagCompound compound = new NBTTagCompound();
 		
-		compound.setInt("Type", this.getFrogType());
-		compound.setFloat("Size", this.getFrogSize()+0.4f);
-		compound.setInt("SkinColor", this.getSkinColor());
-		compound.setInt("EyeColor", this.getEyeColor());
-		compound.setInt("BellyColor", this.getBellyColor());
-		compound.setInt("EyeType", this.getEyeType());
-		compound.setInt("BellyType", this.getBellyType());
+		compound.putInt("Type", this.getFrogType());
+		compound.putFloat("Size", this.getFrogSize()+0.4f);
+		compound.putInt("SkinColor", this.getSkinColor());
+		compound.putInt("EyeColor", this.getEyeColor());
+		compound.putInt("BellyColor", this.getBellyColor());
+		compound.putInt("EyeType", this.getEyeType());
+		compound.putInt("BellyType", this.getBellyType());
 		
 		return compound;
 	}
@@ -434,15 +434,15 @@ public class EntityFrog extends EntityCreature
 	public void writeAdditional(NBTTagCompound compound)
 	{
 		super.writeAdditional(compound);
-		compound.setInt("Type", this.getFrogType());
-		if(getFrogType() != 6) compound.setFloat("Size", this.getFrogSize()+0.4f);
-		else compound.setFloat("Size", 0.6f);
-		compound.setInt("SkinColor", this.getSkinColor());
-		compound.setInt("EyeColor", this.getEyeColor());
-		compound.setInt("BellyColor", this.getBellyColor());
-		compound.setInt("EyeType", this.getEyeType());
-		compound.setInt("BellyType", this.getBellyType());
-		compound.setBoolean("WasOnGround", this.wasOnGround);
+		compound.putInt("Type", this.getFrogType());
+		if(getFrogType() != 6) compound.putFloat("Size", this.getFrogSize()+0.4f);
+		else compound.putFloat("Size", 0.6f);
+		compound.putInt("SkinColor", this.getSkinColor());
+		compound.putInt("EyeColor", this.getEyeColor());
+		compound.putInt("BellyColor", this.getBellyColor());
+		compound.putInt("EyeType", this.getEyeType());
+		compound.putInt("BellyType", this.getBellyType());
+		compound.putBoolean("WasOnGround", this.wasOnGround);
 	}
 	
 	@Override
@@ -450,17 +450,17 @@ public class EntityFrog extends EntityCreature
 	{
 		super.readAdditional(compound);
 		
-		if(compound.hasKey("Type")) setType(compound.getInt("Type"));
+		if(compound.contains("Type")) setType(compound.getInt("Type"));
 		else setType(getRandomFrogType());
 		
-		if(compound.hasKey("Size") && getFrogType() != 6)
+		if(compound.contains("Size") && getFrogType() != 6)
 		{
 			float i = compound.getFloat("Size");
 			if (i <= 0.2f) i = 0.2f;
 			this.setFrogSize(i-0.4f, false);
 		}
 		else this.setFrogSize(0.6f, false);
-		if(compound.hasKey("SkinColor"))
+		if(compound.contains("SkinColor"))
 		{
 			if (compound.getInt("SkinColor") == 0)
 				this.setSkinColor(0);
@@ -469,7 +469,7 @@ public class EntityFrog extends EntityCreature
 		}
 		else this.setSkinColor(random(16777215));
 
-		if (compound.hasKey("EyeColor"))
+		if (compound.contains("EyeColor"))
 		{
 			if (compound.getInt("EyeColor") == 0)
 				this.setEyeColor(0);
@@ -478,7 +478,7 @@ public class EntityFrog extends EntityCreature
 		}
 		else this.setEyeColor(random(16777215));
 		
-		if (compound.hasKey("EyeType"))
+		if (compound.contains("EyeType"))
 		{
 			if (compound.getInt("EyeType") == 0)
 				this.setEyeType(0);
@@ -488,7 +488,7 @@ public class EntityFrog extends EntityCreature
 		else this.setEyeType(random(2));
 		
 
-		if (compound.hasKey("BellyColor"))
+		if (compound.contains("BellyColor"))
 		{
 			if (compound.getInt("BellyColor") == 0)
 				this.setBellyColor(0);
@@ -497,7 +497,7 @@ public class EntityFrog extends EntityCreature
 		}
 		else this.setBellyColor(random(16777215));
 		
-		if (compound.hasKey("BellyType"))
+		if (compound.contains("BellyType"))
 		{
 			if (compound.getInt("BellyType") == 0)
 				this.setBellyType(0);

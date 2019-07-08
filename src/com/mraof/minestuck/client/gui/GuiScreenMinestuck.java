@@ -3,13 +3,11 @@ package com.mraof.minestuck.client.gui;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
-import com.mraof.minestuck.util.MinestuckPlayerData;
-import com.sun.java.accessibility.util.Translator;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -35,7 +33,7 @@ public abstract class GuiScreenMinestuck extends GuiScreen
 		//Show the name of the grist instead of the count if displaying a tooltip
 		boolean showName = false;
 		GristType tooltipType = null;
-		GristSet clientGrist = MinestuckPlayerData.getClientGrist();
+		GristSet clientGrist = PlayerSavedData.getClientGrist();
 
 		List<GristType> types = new ArrayList<>(GristType.REGISTRY.getValues());
 		Collections.sort(types);

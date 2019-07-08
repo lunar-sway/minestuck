@@ -57,7 +57,7 @@ public class BlockMiniCruxtruder extends BlockMachineProcess
 			color = ((TileEntityMiniCruxtruder) tileEntity).color;
 		
 		ItemStack stack = new ItemStack(this);
-		stack.getOrCreateTag().setInt("dowel_color", color);
+		stack.getOrCreateTag().putInt("dowel_color", color);
 		drops.add(stack);
 	}
 	

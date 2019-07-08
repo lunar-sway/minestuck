@@ -100,7 +100,7 @@ public abstract class EntityHangingArt<T extends EntityHangingArt.IArt> extends 
 	public void writeAdditional(NBTTagCompound compound)
 	{
 		super.writeAdditional(compound);
-		compound.setString("Motive", this.art.getTitle());
+		compound.putString("Motive", this.art.getTitle());
 	}
 	
 	@Override

@@ -1,6 +1,5 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.multiblock.MultiblockAlchemiter;
 import com.mraof.minestuck.block.multiblock.MultiblockCruxtruder;
 import com.mraof.minestuck.block.multiblock.MultiblockPunchDesignix;
@@ -8,21 +7,11 @@ import com.mraof.minestuck.block.multiblock.MultiblockTotemLathe;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.MobEffects;
-import net.minecraft.item.EnumDyeColor;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.item.DyeColor;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraftforge.common.ToolType;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.IForgeRegistry;
-import org.lwjgl.openal.ALC;
 
 public class MinestuckBlocks
 {
@@ -234,11 +223,11 @@ public class MinestuckBlocks
 	public static void registerBlocks(IForgeRegistry<Block> registry)
 	{
 		
-		registry.register(BLACK_CHESS_DIRT = new BlockDirt(Block.Properties.create(Material.GROUND, MaterialColor.BLACK).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("black_chess_dirt"));
-		registry.register(WHITE_CHESS_DIRT = new BlockDirt(Block.Properties.create(Material.GROUND, MaterialColor.SNOW).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("white_chess_dirt"));
-		registry.register(DARK_GRAY_CHESS_DIRT = new BlockDirt(Block.Properties.create(Material.GROUND, MaterialColor.GRAY).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("dark_gray_chess_dirt"));
-		registry.register(LIGHT_GRAY_CHESS_DIRT = new BlockDirt(Block.Properties.create(Material.GROUND, MaterialColor.LIGHT_GRAY).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("light_gray_chess_dirt"));
-		registry.register(SKAIA_PORTAL = new BlockSkaiaPortal(Block.Properties.create(Material.PORTAL, MaterialColor.CYAN).doesNotBlockMovement().lightValue(11).hardnessAndResistance(-1.0F, 3600000.0F)).setRegistryName("skaia_portal"));
+		registry.register(BLACK_CHESS_DIRT = new BlockDirt(Block.Properties.create(Material.EARTH, MaterialColor.BLACK).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("black_chess_dirt"));
+		registry.register(WHITE_CHESS_DIRT = new BlockDirt(Block.Properties.create(Material.EARTH, MaterialColor.SNOW).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("white_chess_dirt"));
+		registry.register(DARK_GRAY_CHESS_DIRT = new BlockDirt(Block.Properties.create(Material.EARTH, MaterialColor.GRAY).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("dark_gray_chess_dirt"));
+		registry.register(LIGHT_GRAY_CHESS_DIRT = new BlockDirt(Block.Properties.create(Material.EARTH, MaterialColor.LIGHT_GRAY).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("light_gray_chess_dirt"));
+		registry.register(SKAIA_PORTAL = new SkaiaPortalBlock(Block.Properties.create(Material.PORTAL, MaterialColor.CYAN).doesNotBlockMovement().lightValue(11).hardnessAndResistance(-1.0F, 3600000.0F)).setRegistryName("skaia_portal"));
 		
 		registry.register(CRUXITE_ORE_STONE = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F)).setRegistryName("cruxite_ore_stone"));
 		registry.register(CRUXITE_ORE_NETHERRACK = new BlockCruxiteOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F)).setRegistryName("cruxite_ore_netherrack"));
@@ -267,12 +256,12 @@ public class MinestuckBlocks
 		registry.register(LAPIS_ORE_PINK_STONE = new BlockVanillaOre(BlockVanillaOre.OreType.LAPIS, Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F)).setRegistryName("lapis_ore_pink_stone"));
 		registry.register(DIAMOND_ORE_PINK_STONE = new BlockVanillaOre(BlockVanillaOre.OreType.DIAMOND, Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F)).setRegistryName("diamond_ore_pink_stone"));
 		
-		registry.register(CRUXITE_BLOCK = new Block(Block.Properties.create(Material.ROCK, EnumDyeColor.LIGHT_BLUE).hardnessAndResistance(3.0F)).setRegistryName("cruxite_block"));
-		registry.register(URANIUM_BLOCK = new Block(Block.Properties.create(Material.ROCK, EnumDyeColor.LIME).hardnessAndResistance(3.0F).lightValue(7)).setRegistryName("uranium_block"));
-		registry.register(GENERIC_OBJECT = new Block(Block.Properties.create(Material.GOURD, EnumDyeColor.LIME).hardnessAndResistance(1.0F).sound(SoundType.WOOD)).setRegistryName("generic_object"));
+		registry.register(CRUXITE_BLOCK = new Block(Block.Properties.create(Material.ROCK, DyeColor.LIGHT_BLUE).hardnessAndResistance(3.0F)).setRegistryName("cruxite_block"));
+		registry.register(URANIUM_BLOCK = new Block(Block.Properties.create(Material.ROCK, DyeColor.LIME).hardnessAndResistance(3.0F).lightValue(7)).setRegistryName("uranium_block"));
+		registry.register(GENERIC_OBJECT = new Block(Block.Properties.create(Material.GOURD, DyeColor.LIME).hardnessAndResistance(1.0F).sound(SoundType.WOOD)).setRegistryName("generic_object"));
 		
-		registry.register(BLUE_DIRT = new BlockDirt(Block.Properties.create(Material.GROUND, MaterialColor.BLUE).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("blue_dirt"));
-		registry.register(THOUGHT_DIRT = new BlockDirt(Block.Properties.create(Material.GROUND, MaterialColor.LIME).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("thought_dirt"));
+		registry.register(BLUE_DIRT = new BlockDirt(Block.Properties.create(Material.EARTH, MaterialColor.BLUE).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("blue_dirt"));
+		registry.register(THOUGHT_DIRT = new BlockDirt(Block.Properties.create(Material.EARTH, MaterialColor.LIME).hardnessAndResistance(0.5F).sound(SoundType.GROUND)).setRegistryName("thought_dirt"));
 		registry.register(COARSE_STONE = new Block(Block.Properties.create(Material.ROCK, MaterialColor.STONE).hardnessAndResistance(2.0F, 6.0F)).setRegistryName("coarse_stone"));
 		registry.register(CHISELED_COARSE_STONE = new Block(Block.Properties.create(Material.ROCK, MaterialColor.STONE).hardnessAndResistance(2.0F, 6.0F)).setRegistryName("chiseled_coarse_stone"));
 		registry.register(SHADE_BRICKS = new Block(Block.Properties.create(Material.ROCK, MaterialColor.BLUE).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("shade_bricks"));
@@ -287,7 +276,7 @@ public class MinestuckBlocks
 		registry.register(FLOWERY_MOSS_STONE = new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("flowery_moss_stone"));
 		registry.register(FLOWERY_MOSS_BRICKS = new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("flowery_moss_bricks"));
 		registry.register(COARSE_END_STONE = new Block(Block.Properties.create(Material.ROCK, MaterialColor.SAND).hardnessAndResistance(3.0F, 9.0F)).setRegistryName("coarse_end_stone"));
-		registry.register(END_GRASS = new BlockEndGrass(Block.Properties.create(Material.ROCK, MaterialColor.PURPLE).hardnessAndResistance(3.0F, 9.0F).needsRandomTick()).setRegistryName("end_grass"));
+		registry.register(END_GRASS = new BlockEndGrass(Block.Properties.create(Material.ROCK, MaterialColor.PURPLE).hardnessAndResistance(3.0F, 9.0F).tickRandomly()).setRegistryName("end_grass"));
 		registry.register(CHALK = new Block(Block.Properties.create(Material.ROCK, MaterialColor.SNOW).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("chalk"));
 		registry.register(CHALK_BRICKS = new Block(Block.Properties.create(Material.ROCK, MaterialColor.SNOW).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("chalk_bricks"));
 		registry.register(CHISELED_CHALK_BRICKS = new Block(Block.Properties.create(Material.ROCK, MaterialColor.SNOW).hardnessAndResistance(1.5F, 6.0F)).setRegistryName("chiseled_chalk_bricks"));
@@ -302,46 +291,46 @@ public class MinestuckBlocks
 		registry.register(BRIGHT_DENSE_CLOUD = new Block(Block.Properties.create(Material.GLASS, MaterialColor.LIGHT_GRAY).hardnessAndResistance(0.5F).sound(SoundType.SNOW)).setRegistryName("bright_dense_cloud"));
 		registry.register(SUGAR_CUBE = new Block(Block.Properties.create(Material.SAND, MaterialColor.SNOW).hardnessAndResistance(0.4F).sound(SoundType.SAND)).setRegistryName("sugar_cube"));
 		
-		registry.register(GLOWING_LOG = new BlockMinestuckLog(MaterialColor.LIGHT_BLUE, Block.Properties.create(Material.WOOD, MaterialColor.LIGHT_BLUE).hardnessAndResistance(2.0F).lightValue(11).sound(SoundType.WOOD)).setRegistryName("glowing_log"));
-		registry.register(FROST_LOG = new BlockMinestuckLog(MaterialColor.ICE, Block.Properties.create(Material.WOOD, MaterialColor.ICE).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("frost_log"));
-		registry.register(RAINBOW_LOG = new BlockMinestuckLog(MaterialColor.WOOD, Block.Properties.create(Material.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("rainbow_log"));
+		registry.register(GLOWING_LOG = new FlammableLogBlock(MaterialColor.LIGHT_BLUE, Block.Properties.create(Material.WOOD, MaterialColor.LIGHT_BLUE).hardnessAndResistance(2.0F).lightValue(11).sound(SoundType.WOOD)).setRegistryName("glowing_log"));
+		registry.register(FROST_LOG = new FlammableLogBlock(MaterialColor.ICE, Block.Properties.create(Material.WOOD, MaterialColor.ICE).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("frost_log"));
+		registry.register(RAINBOW_LOG = new FlammableLogBlock(MaterialColor.WOOD, Block.Properties.create(Material.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("rainbow_log"));
 		registry.register(END_LOG = new BlockDoubleLog(MaterialColor.SAND, 1, 250, Block.Properties.create(Material.WOOD, MaterialColor.SAND).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("end_log"));
-		registry.register(VINE_LOG = new BlockMinestuckLog(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("vine_log"));
-		registry.register(FLOWERY_VINE_LOG = new BlockMinestuckLog(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("flowery_vine_log"));
-		registry.register(DEAD_LOG = new BlockMinestuckLog(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("dead_log"));
-		registry.register(PETRIFIED_LOG = new BlockMinestuckLog(MaterialColor.WOOD, 0, 0, Block.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.STONE)).setRegistryName("petrified_log"));
-		registry.register(GLOWING_WOOD = new BlockMinestuckLog(MaterialColor.LIGHT_BLUE, Block.Properties.create(Material.WOOD, MaterialColor.LIGHT_BLUE).hardnessAndResistance(2.0F).lightValue(11).sound(SoundType.WOOD)).setRegistryName("glowing_wood"));
-		registry.register(FROST_WOOD = new BlockMinestuckLog(MaterialColor.ICE, Block.Properties.create(Material.WOOD, MaterialColor.ICE).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("frost_wood"));
-		registry.register(RAINBOW_WOOD = new BlockMinestuckLog(MaterialColor.WOOD, Block.Properties.create(Material.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("rainbow_wood"));
-		registry.register(END_WOOD = new BlockMinestuckLog(MaterialColor.SAND, 1, 250, Block.Properties.create(Material.WOOD, MaterialColor.SAND).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("end_wood"));
-		registry.register(VINE_WOOD = new BlockMinestuckLog(MaterialColor.OBSIDIAN, Block.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("vine_wood"));
-		registry.register(FLOWERY_VINE_WOOD = new BlockMinestuckLog(MaterialColor.OBSIDIAN, Block.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("flowery_vine_wood"));
-		registry.register(DEAD_WOOD = new BlockMinestuckLog(MaterialColor.OBSIDIAN, Block.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("dead_wood"));
-		registry.register(PETRIFIED_WOOD = new BlockMinestuckLog(MaterialColor.OBSIDIAN, 0, 0, Block.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.STONE)).setRegistryName("petrified_wood"));
+		registry.register(VINE_LOG = new FlammableLogBlock(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("vine_log"));
+		registry.register(FLOWERY_VINE_LOG = new FlammableLogBlock(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("flowery_vine_log"));
+		registry.register(DEAD_LOG = new FlammableLogBlock(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("dead_log"));
+		registry.register(PETRIFIED_LOG = new FlammableLogBlock(MaterialColor.WOOD, 0, 0, Block.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.STONE)).setRegistryName("petrified_log"));
+		registry.register(GLOWING_WOOD = new FlammableLogBlock(MaterialColor.LIGHT_BLUE, Block.Properties.create(Material.WOOD, MaterialColor.LIGHT_BLUE).hardnessAndResistance(2.0F).lightValue(11).sound(SoundType.WOOD)).setRegistryName("glowing_wood"));
+		registry.register(FROST_WOOD = new FlammableLogBlock(MaterialColor.ICE, Block.Properties.create(Material.WOOD, MaterialColor.ICE).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("frost_wood"));
+		registry.register(RAINBOW_WOOD = new FlammableLogBlock(MaterialColor.WOOD, Block.Properties.create(Material.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("rainbow_wood"));
+		registry.register(END_WOOD = new FlammableLogBlock(MaterialColor.SAND, 1, 250, Block.Properties.create(Material.WOOD, MaterialColor.SAND).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("end_wood"));
+		registry.register(VINE_WOOD = new FlammableLogBlock(MaterialColor.OBSIDIAN, Block.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("vine_wood"));
+		registry.register(FLOWERY_VINE_WOOD = new FlammableLogBlock(MaterialColor.OBSIDIAN, Block.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("flowery_vine_wood"));
+		registry.register(DEAD_WOOD = new FlammableLogBlock(MaterialColor.OBSIDIAN, Block.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("dead_wood"));
+		registry.register(PETRIFIED_WOOD = new FlammableLogBlock(MaterialColor.OBSIDIAN, 0, 0, Block.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.STONE)).setRegistryName("petrified_wood"));
 		registry.register(GLOWING_PLANKS = new BlockCustom(5, 20, Block.Properties.create(Material.WOOD, MaterialColor.LIGHT_BLUE).hardnessAndResistance(2.0F, 3.0F).lightValue(7).sound(SoundType.WOOD)).setRegistryName("glowing_planks"));
 		registry.register(FROST_PLANKS = new BlockCustom(5, 5, Block.Properties.create(Material.WOOD, MaterialColor.ICE).hardnessAndResistance(2.0F, 3.0F).sound(SoundType.WOOD)).setRegistryName("frost_planks"));
 		registry.register(RAINBOW_PLANKS = new BlockCustom(5, 20, Block.Properties.create(Material.WOOD).hardnessAndResistance(2.0F, 3.0F).sound(SoundType.WOOD)).setRegistryName("rainbow_planks"));
 		registry.register(END_PLANKS = new BlockCustom(1, 250, Block.Properties.create(Material.WOOD, MaterialColor.SAND).hardnessAndResistance(2.0F, 3.0F).sound(SoundType.WOOD)).setRegistryName("end_planks"));
 		registry.register(DEAD_PLANKS = new BlockCustom(5, 5, Block.Properties.create(Material.WOOD).hardnessAndResistance(2.0F, 3.0F).sound(SoundType.WOOD)).setRegistryName("dead_planks"));
 		registry.register(TREATED_PLANKS = new BlockCustom(1, 0, Block.Properties.create(Material.WOOD).hardnessAndResistance(2.0F, 3.0F).sound(SoundType.WOOD)).setRegistryName("treated_planks"));
-		registry.register(FROST_LEAVES = new BlockMinestuckLeaves(null, Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).needsRandomTick().sound(SoundType.PLANT)).setRegistryName("frost_leaves"));
-		registry.register(RAINBOW_LEAVES = new BlockMinestuckLeaves(() -> RAINBOW_SAPLING.asItem(), Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).needsRandomTick().sound(SoundType.PLANT)).setRegistryName("rainbow_leaves"));
-		registry.register(END_LEAVES = new BlockEndLeaves(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).needsRandomTick().sound(SoundType.PLANT)).setRegistryName("end_leaves"));
-		registry.register(RAINBOW_SAPLING = new BlockRainbowSapling(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().needsRandomTick().hardnessAndResistance(0).sound(SoundType.PLANT)).setRegistryName("rainbow_sapling"));
-		registry.register(END_SAPLING = new BlockEndSapling(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().needsRandomTick().hardnessAndResistance(0).sound(SoundType.PLANT)).setRegistryName("end_sapling"));
+		registry.register(FROST_LEAVES = new FlammableLeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT)).setRegistryName("frost_leaves"));
+		registry.register(RAINBOW_LEAVES = new FlammableLeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT)).setRegistryName("rainbow_leaves"));
+		registry.register(END_LEAVES = new EndLeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT)).setRegistryName("end_leaves"));
+		registry.register(RAINBOW_SAPLING = new RainbowSaplingBlock(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.PLANT)).setRegistryName("rainbow_sapling"));
+		registry.register(END_SAPLING = new EndSaplingBlock(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.PLANT)).setRegistryName("end_sapling"));
 		
-		registry.register(BLOOD_ASPECT_LOG = new BlockMinestuckLog(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("blood_aspect_log"));
-		registry.register(BREATH_ASPECT_LOG = new BlockMinestuckLog(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("breath_aspect_log"));
-		registry.register(DOOM_ASPECT_LOG = new BlockMinestuckLog(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("doom_aspect_log"));
-		registry.register(HEART_ASPECT_LOG = new BlockMinestuckLog(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("heart_aspect_log"));
-		registry.register(HOPE_ASPECT_LOG = new BlockMinestuckLog(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("hope_aspect_log"));
-		registry.register(LIFE_ASPECT_LOG = new BlockMinestuckLog(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("life_aspect_log"));
-		registry.register(LIGHT_ASPECT_LOG = new BlockMinestuckLog(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("light_aspect_log"));
-		registry.register(MIND_ASPECT_LOG = new BlockMinestuckLog(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("mind_aspect_log"));
-		registry.register(RAGE_ASPECT_LOG = new BlockMinestuckLog(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("rage_aspect_log"));
-		registry.register(SPACE_ASPECT_LOG = new BlockMinestuckLog(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("space_aspect_log"));
-		registry.register(TIME_ASPECT_LOG = new BlockMinestuckLog(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("time_aspect_log"));
-		registry.register(VOID_ASPECT_LOG = new BlockMinestuckLog(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("void_aspect_log"));
+		registry.register(BLOOD_ASPECT_LOG = new FlammableLogBlock(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("blood_aspect_log"));
+		registry.register(BREATH_ASPECT_LOG = new FlammableLogBlock(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("breath_aspect_log"));
+		registry.register(DOOM_ASPECT_LOG = new FlammableLogBlock(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("doom_aspect_log"));
+		registry.register(HEART_ASPECT_LOG = new FlammableLogBlock(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("heart_aspect_log"));
+		registry.register(HOPE_ASPECT_LOG = new FlammableLogBlock(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("hope_aspect_log"));
+		registry.register(LIFE_ASPECT_LOG = new FlammableLogBlock(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("life_aspect_log"));
+		registry.register(LIGHT_ASPECT_LOG = new FlammableLogBlock(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("light_aspect_log"));
+		registry.register(MIND_ASPECT_LOG = new FlammableLogBlock(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("mind_aspect_log"));
+		registry.register(RAGE_ASPECT_LOG = new FlammableLogBlock(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("rage_aspect_log"));
+		registry.register(SPACE_ASPECT_LOG = new FlammableLogBlock(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("space_aspect_log"));
+		registry.register(TIME_ASPECT_LOG = new FlammableLogBlock(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("time_aspect_log"));
+		registry.register(VOID_ASPECT_LOG = new FlammableLogBlock(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD)).setRegistryName("void_aspect_log"));
 		registry.register(BLOOD_ASPECT_PLANKS = new BlockCustom(5, 20, Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F, 3.0F).sound(SoundType.WOOD)).setRegistryName("blood_aspect_planks"));
 		registry.register(BREATH_ASPECT_PLANKS = new BlockCustom(5, 20, Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F, 3.0F).sound(SoundType.WOOD)).setRegistryName("breath_aspect_planks"));
 		registry.register(DOOM_ASPECT_PLANKS = new BlockCustom(5, 20, Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F, 3.0F).sound(SoundType.WOOD)).setRegistryName("doom_aspect_planks"));
@@ -354,39 +343,39 @@ public class MinestuckBlocks
 		registry.register(SPACE_ASPECT_PLANKS = new BlockCustom(5, 20, Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F, 3.0F).sound(SoundType.WOOD)).setRegistryName("space_aspect_planks"));
 		registry.register(TIME_ASPECT_PLANKS = new BlockCustom(5, 20, Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F, 3.0F).sound(SoundType.WOOD)).setRegistryName("time_aspect_planks"));
 		registry.register(VOID_ASPECT_PLANKS = new BlockCustom(5, 20, Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F, 3.0F).sound(SoundType.WOOD)).setRegistryName("void_aspect_planks"));
-		registry.register(BLOOD_ASPECT_LEAVES = new BlockMinestuckLeaves(() -> BLOOD_ASPECT_SAPLING.asItem(), Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).needsRandomTick().sound(SoundType.PLANT)).setRegistryName("blood_aspect_leaves"));
-		registry.register(BREATH_ASPECT_LEAVES = new BlockMinestuckLeaves(() -> BREATH_ASPECT_SAPLING.asItem(), Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).needsRandomTick().sound(SoundType.PLANT)).setRegistryName("breath_aspect_leaves"));
-		registry.register(DOOM_ASPECT_LEAVES = new BlockMinestuckLeaves(() -> DOOM_ASPECT_SAPLING.asItem(), Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).needsRandomTick().sound(SoundType.PLANT)).setRegistryName("doom_aspect_leaves"));
-		registry.register(HEART_ASPECT_LEAVES = new BlockMinestuckLeaves(() -> HEART_ASPECT_SAPLING.asItem(), Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).needsRandomTick().sound(SoundType.PLANT)).setRegistryName("heart_aspect_leaves"));
-		registry.register(HOPE_ASPECT_LEAVES = new BlockMinestuckLeaves(() -> HOPE_ASPECT_SAPLING.asItem(), Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).needsRandomTick().sound(SoundType.PLANT)).setRegistryName("hope_aspect_leaves"));
-		registry.register(LIFE_ASPECT_LEAVES = new BlockMinestuckLeaves(() -> LIFE_ASPECT_SAPLING.asItem(), Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).needsRandomTick().sound(SoundType.PLANT)).setRegistryName("life_aspect_leaves"));
-		registry.register(LIGHT_ASPECT_LEAVES = new BlockMinestuckLeaves(() -> LIGHT_ASPECT_SAPLING.asItem(), Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).needsRandomTick().sound(SoundType.PLANT)).setRegistryName("light_aspect_leaves"));
-		registry.register(MIND_ASPECT_LEAVES = new BlockMinestuckLeaves(() -> MIND_ASPECT_SAPLING.asItem(), Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).needsRandomTick().sound(SoundType.PLANT)).setRegistryName("mind_aspect_leaves"));
-		registry.register(RAGE_ASPECT_LEAVES = new BlockMinestuckLeaves(() -> RAGE_ASPECT_SAPLING.asItem(), Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).needsRandomTick().sound(SoundType.PLANT)).setRegistryName("rage_aspect_leaves"));
-		registry.register(SPACE_ASPECT_LEAVES = new BlockMinestuckLeaves(() -> SPACE_ASPECT_SAPLING.asItem(), Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).needsRandomTick().sound(SoundType.PLANT)).setRegistryName("space_aspect_leaves"));
-		registry.register(TIME_ASPECT_LEAVES = new BlockMinestuckLeaves(() -> TIME_ASPECT_SAPLING.asItem(), Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).needsRandomTick().sound(SoundType.PLANT)).setRegistryName("time_aspect_leaves"));
-		registry.register(VOID_ASPECT_LEAVES = new BlockMinestuckLeaves(() -> VOID_ASPECT_SAPLING.asItem(), Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).needsRandomTick().sound(SoundType.PLANT)).setRegistryName("void_aspect_leaves"));
-		registry.register(BLOOD_ASPECT_SAPLING = new BlockAspectSapling(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().needsRandomTick().hardnessAndResistance(0).sound(SoundType.PLANT)).setRegistryName("blood_aspect_sapling"));
-		registry.register(BREATH_ASPECT_SAPLING = new BlockAspectSapling(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().needsRandomTick().hardnessAndResistance(0).sound(SoundType.PLANT)).setRegistryName("breath_aspect_sapling"));
-		registry.register(DOOM_ASPECT_SAPLING = new BlockAspectSapling(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().needsRandomTick().hardnessAndResistance(0).sound(SoundType.PLANT)).setRegistryName("doom_aspect_sapling"));
-		registry.register(HEART_ASPECT_SAPLING = new BlockAspectSapling(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().needsRandomTick().hardnessAndResistance(0).sound(SoundType.PLANT)).setRegistryName("heart_aspect_sapling"));
-		registry.register(HOPE_ASPECT_SAPLING = new BlockAspectSapling(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().needsRandomTick().hardnessAndResistance(0).sound(SoundType.PLANT)).setRegistryName("hope_aspect_sapling"));
-		registry.register(LIFE_ASPECT_SAPLING = new BlockAspectSapling(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().needsRandomTick().hardnessAndResistance(0).sound(SoundType.PLANT)).setRegistryName("life_aspect_sapling"));
-		registry.register(LIGHT_ASPECT_SAPLING = new BlockAspectSapling(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().needsRandomTick().hardnessAndResistance(0).sound(SoundType.PLANT)).setRegistryName("light_aspect_sapling"));
-		registry.register(MIND_ASPECT_SAPLING = new BlockAspectSapling(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().needsRandomTick().hardnessAndResistance(0).sound(SoundType.PLANT)).setRegistryName("mind_aspect_sapling"));
-		registry.register(RAGE_ASPECT_SAPLING = new BlockAspectSapling(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().needsRandomTick().hardnessAndResistance(0).sound(SoundType.PLANT)).setRegistryName("rage_aspect_sapling"));
-		registry.register(SPACE_ASPECT_SAPLING = new BlockAspectSapling(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().needsRandomTick().hardnessAndResistance(0).sound(SoundType.PLANT)).setRegistryName("space_aspect_sapling"));
-		registry.register(TIME_ASPECT_SAPLING = new BlockAspectSapling(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().needsRandomTick().hardnessAndResistance(0).sound(SoundType.PLANT)).setRegistryName("time_aspect_sapling"));
-		registry.register(VOID_ASPECT_SAPLING = new BlockAspectSapling(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().needsRandomTick().hardnessAndResistance(0).sound(SoundType.PLANT)).setRegistryName("void_aspect_sapling"));
+		registry.register(BLOOD_ASPECT_LEAVES = new FlammableLeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT)).setRegistryName("blood_aspect_leaves"));
+		registry.register(BREATH_ASPECT_LEAVES = new FlammableLeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT)).setRegistryName("breath_aspect_leaves"));
+		registry.register(DOOM_ASPECT_LEAVES = new FlammableLeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT)).setRegistryName("doom_aspect_leaves"));
+		registry.register(HEART_ASPECT_LEAVES = new FlammableLeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT)).setRegistryName("heart_aspect_leaves"));
+		registry.register(HOPE_ASPECT_LEAVES = new FlammableLeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT)).setRegistryName("hope_aspect_leaves"));
+		registry.register(LIFE_ASPECT_LEAVES = new FlammableLeavesBlock( Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT)).setRegistryName("life_aspect_leaves"));
+		registry.register(LIGHT_ASPECT_LEAVES = new FlammableLeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT)).setRegistryName("light_aspect_leaves"));
+		registry.register(MIND_ASPECT_LEAVES = new FlammableLeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT)).setRegistryName("mind_aspect_leaves"));
+		registry.register(RAGE_ASPECT_LEAVES = new FlammableLeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT)).setRegistryName("rage_aspect_leaves"));
+		registry.register(SPACE_ASPECT_LEAVES = new FlammableLeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT)).setRegistryName("space_aspect_leaves"));
+		registry.register(TIME_ASPECT_LEAVES = new FlammableLeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT)).setRegistryName("time_aspect_leaves"));
+		registry.register(VOID_ASPECT_LEAVES = new FlammableLeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT)).setRegistryName("void_aspect_leaves"));
+		registry.register(BLOOD_ASPECT_SAPLING = new AspectSaplingBlock(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.PLANT)).setRegistryName("blood_aspect_sapling"));
+		registry.register(BREATH_ASPECT_SAPLING = new AspectSaplingBlock(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.PLANT)).setRegistryName("breath_aspect_sapling"));
+		registry.register(DOOM_ASPECT_SAPLING = new AspectSaplingBlock(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.PLANT)).setRegistryName("doom_aspect_sapling"));
+		registry.register(HEART_ASPECT_SAPLING = new AspectSaplingBlock(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.PLANT)).setRegistryName("heart_aspect_sapling"));
+		registry.register(HOPE_ASPECT_SAPLING = new AspectSaplingBlock(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.PLANT)).setRegistryName("hope_aspect_sapling"));
+		registry.register(LIFE_ASPECT_SAPLING = new AspectSaplingBlock(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.PLANT)).setRegistryName("life_aspect_sapling"));
+		registry.register(LIGHT_ASPECT_SAPLING = new AspectSaplingBlock(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.PLANT)).setRegistryName("light_aspect_sapling"));
+		registry.register(MIND_ASPECT_SAPLING = new AspectSaplingBlock(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.PLANT)).setRegistryName("mind_aspect_sapling"));
+		registry.register(RAGE_ASPECT_SAPLING = new AspectSaplingBlock(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.PLANT)).setRegistryName("rage_aspect_sapling"));
+		registry.register(SPACE_ASPECT_SAPLING = new AspectSaplingBlock(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.PLANT)).setRegistryName("space_aspect_sapling"));
+		registry.register(TIME_ASPECT_SAPLING = new AspectSaplingBlock(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.PLANT)).setRegistryName("time_aspect_sapling"));
+		registry.register(VOID_ASPECT_SAPLING = new AspectSaplingBlock(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.PLANT)).setRegistryName("void_aspect_sapling"));
 		
-		registry.register(GLOWING_MUSHROOM = new BlockGlowingMushroom(Block.Properties.create(Material.PLANTS, MaterialColor.DIAMOND).doesNotBlockMovement().needsRandomTick().hardnessAndResistance(0).sound(SoundType.PLANT).lightValue(11)).setRegistryName("glowing_mushroom"));
+		registry.register(GLOWING_MUSHROOM = new BlockGlowingMushroom(Block.Properties.create(Material.PLANTS, MaterialColor.DIAMOND).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.PLANT).lightValue(11)).setRegistryName("glowing_mushroom"));
 		registry.register(DESERT_BUSH = new BlockDesertBush(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().hardnessAndResistance(0).sound(SoundType.PLANT)).setRegistryName("desert_bush"));
 		registry.register(BLOOMING_CACTUS = new BlockDesertFlora(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().hardnessAndResistance(0).sound(SoundType.PLANT)).setRegistryName("blooming_cactus"));
 		registry.register(PETRIFIED_GRASS = new BlockPetrifiedFlora(Block.Properties.create(Material.ROCK, EnumDyeColor.GRAY).doesNotBlockMovement().hardnessAndResistance(0).sound(SoundType.STONE)).setRegistryName("petrified_grass"));
 		registry.register(PETRIFIED_POPPY = new BlockPetrifiedFlora(Block.Properties.create(Material.ROCK, EnumDyeColor.GRAY).doesNotBlockMovement().hardnessAndResistance(0).sound(SoundType.STONE)).setRegistryName("petrified_poppy"));
 		registry.register(STRAWBERRY = new BlockStrawberry(Block.Properties.create(Material.GOURD, MaterialColor.RED).hardnessAndResistance(1.0F).sound(SoundType.WOOD)).setRegistryName("strawberry"));
-		registry.register(ATTACHED_STRAWBERRY_STEM = new BlockStrawberry.AttachedStem((BlockStemGrown) STRAWBERRY, Block.Properties.create(Material.PLANTS).doesNotBlockMovement().needsRandomTick().hardnessAndResistance(0).sound(SoundType.WOOD)).setRegistryName("attached_strawberry_stem"));
-		registry.register(STRAWBERRY_STEM = new BlockStrawberry.Stem((BlockStemGrown) STRAWBERRY, Block.Properties.create(Material.PLANTS).doesNotBlockMovement().needsRandomTick().hardnessAndResistance(0).sound(SoundType.WOOD)).setRegistryName("strawberry_stem"));
+		registry.register(ATTACHED_STRAWBERRY_STEM = new BlockStrawberry.AttachedStem((BlockStemGrown) STRAWBERRY, Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.WOOD)).setRegistryName("attached_strawberry_stem"));
+		registry.register(STRAWBERRY_STEM = new BlockStrawberry.Stem((BlockStemGrown) STRAWBERRY, Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.WOOD)).setRegistryName("strawberry_stem"));
 		
 		registry.register(LAYERED_SAND = new BlockLayered(Blocks.SAND, Block.Properties.from(Blocks.SAND)).setRegistryName("layered_sand"));
 		registry.register(LAYERED_RED_SAND = new BlockLayered(Blocks.RED_SAND, Block.Properties.from(Blocks.RED_SAND)).setRegistryName("layered_red_sand"));
@@ -419,7 +408,7 @@ public class MinestuckBlocks
 		registry.register(GATE = new BlockGate(Block.Properties.create(Material.PORTAL).doesNotBlockMovement().hardnessAndResistance(-1.0F, 25.0F).sound(SoundType.GLASS).lightValue(11)).setRegistryName("gate"));
 		registry.register(RETURN_NODE = new BlockReturnNode(Block.Properties.create(Material.PORTAL).doesNotBlockMovement().hardnessAndResistance(-1.0F, 10.0F).sound(SoundType.GLASS).lightValue(11)).setRegistryName("return_node"));
 		
-		registry.register(RABBIT_SPAWNER = new BlockMobSpawner(Block.Properties.create(Material.AIR).needsRandomTick().doesNotBlockMovement()).setRegistryName("rabbit_spawner"));
+		registry.register(RABBIT_SPAWNER = new BlockMobSpawner(Block.Properties.create(Material.AIR).tickRandomly().doesNotBlockMovement()).setRegistryName("rabbit_spawner"));
 		
 		CRUXTRUDER = new MultiblockCruxtruder();
 		CRUXTRUDER.registerBlocks(registry);
@@ -464,7 +453,7 @@ public class MinestuckBlocks
 		registry.register(CRUXITE_DOWEL = new BlockCruxiteDowel(Block.Properties.create(Material.GLASS).hardnessAndResistance(0.0F)).setRegistryName("cruxite_dowel"));
 		
 		registry.register(GOLD_SEEDS = new BlockGoldSeeds(Block.Properties.create(Material.PLANTS).hardnessAndResistance(0.1F).sound(SoundType.METAL).doesNotBlockMovement()).setRegistryName("gold_seeds"));
-		registry.register(WOODEN_CACTUS = new BlockCactusSpecial(Block.Properties.create(Material.WOOD).needsRandomTick().hardnessAndResistance(1.0F, 2.5F).sound(SoundType.WOOD), ToolType.AXE).setRegistryName("wooden_cactus"));
+		registry.register(WOODEN_CACTUS = new BlockCactusSpecial(Block.Properties.create(Material.WOOD).tickRandomly().hardnessAndResistance(1.0F, 2.5F).sound(SoundType.WOOD), ToolType.AXE).setRegistryName("wooden_cactus"));
 		
 		registry.register(APPLE_CAKE = new BlockSimpleCake(Block.Properties.create(Material.CAKE).hardnessAndResistance(0.5F).sound(SoundType.CLOTH), 2, 0.5F, null).setRegistryName("apple_cake"));
 		registry.register(BLUE_CAKE = new BlockSimpleCake(Block.Properties.create(Material.CAKE).hardnessAndResistance(0.5F).sound(SoundType.CLOTH), 2, 0.3F, (EntityPlayer player) -> player.addPotionEffect(new PotionEffect(MobEffects.SPEED, 150, 0))).setRegistryName("blue_cake"));
@@ -475,7 +464,7 @@ public class MinestuckBlocks
 		registry.register(FUCHSIA_CAKE = new BlockSimpleCake(Block.Properties.create(Material.CAKE).hardnessAndResistance(0.5F).sound(SoundType.CLOTH), 3, 0.5F, (EntityPlayer player) -> {player.addPotionEffect(new PotionEffect(MobEffects.ABSORPTION, 350, 1));player.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 200, 0));}).setRegistryName("fuchsia_cake"));
 		
 		registry.register(PRIMED_TNT = new BlockTNTSpecial(Block.Properties.create(Material.TNT).hardnessAndResistance(0.0F).sound(SoundType.PLANT), true, false, false).setRegistryName("primed_tnt"));
-		registry.register(UNSTABLE_TNT = new BlockTNTSpecial(Block.Properties.create(Material.TNT).hardnessAndResistance(0.0F).sound(SoundType.PLANT).needsRandomTick(), false, true, false).setRegistryName("unstable_tnt"));
+		registry.register(UNSTABLE_TNT = new BlockTNTSpecial(Block.Properties.create(Material.TNT).hardnessAndResistance(0.0F).sound(SoundType.PLANT).tickRandomly(), false, true, false).setRegistryName("unstable_tnt"));
 		registry.register(INSTANT_TNT = new BlockTNTSpecial(Block.Properties.create(Material.TNT).hardnessAndResistance(0.0F).sound(SoundType.PLANT), false, false, true).setRegistryName("instant_tnt"));
 		registry.register(WOODEN_EXPLOSIVE_BUTTON = new BlockButtonSpecial(Block.Properties.create(Material.CIRCUITS).doesNotBlockMovement().hardnessAndResistance(0.5F).sound(SoundType.WOOD), true, true).setRegistryName("wooden_explosive_button"));
 		registry.register(STONE_EXPLOSIVE_BUTTON = new BlockButtonSpecial(Block.Properties.create(Material.CIRCUITS).doesNotBlockMovement().hardnessAndResistance(0.5F).sound(SoundType.STONE), true, false).setRegistryName("stone_explosive_button"));

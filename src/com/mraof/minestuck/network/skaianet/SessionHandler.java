@@ -1,28 +1,17 @@
 package com.mraof.minestuck.network.skaianet;
 
-import com.google.common.collect.Lists;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import com.mraof.minestuck.util.MinestuckPlayerData;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
-import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.LandAspects;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import net.minecraft.command.CommandException;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.gen.IChunkGenerator;
-import net.minecraftforge.common.DimensionManager;
+import net.minecraft.world.World;
 
 import java.util.*;
 
@@ -45,19 +34,21 @@ public class SessionHandler
 	 * Will be for example false even if Minestuck.globalSession is true if it can't merge all
 	 * sessions into a single session.
 	 */
-	static boolean singleSession;
+	boolean singleSession;
 	
 	/**
 	 * An array list of the current worlds sessions.
 	 */
-	static List<Session> sessions = new ArrayList<>();	//TODO Objectify in the same manner as skaianet, perhaps?
-	static Map<String, Session> sessionsByName = new HashMap<String, Session>();
+	List<Session> sessions = new ArrayList<>();	//TODO Objectify in the same manner as skaianet, perhaps?
+	Map<String, Session> sessionsByName = new HashMap<>();
+	SkaianetHandler skaianetHandler;
 	
-	/**
-	 * Called when the server loads a new world, after
-	 * Minestuck has loaded the sessions from file.
-	 */
-	static void serverStarted()
+	SessionHandler(SkaianetHandler skaianetHandler)
+	{
+		this.skaianetHandler = skaianetHandler;
+	}
+	
+	void onLoad()
 	{
 		singleSession = MinestuckConfig.globalSession;
 		if(!MinestuckConfig.globalSession) {
@@ -73,7 +64,7 @@ public class SessionHandler
 	 * Used in the conversion of a non-global session world
 	 * to a global session world.
 	 */
-	static void mergeAll()
+	void mergeAll()
 	{
 		if(sessions.size() == 0 ||!canMergeAll())
 		{
@@ -113,7 +104,7 @@ public class SessionHandler
 	 * @return False if all registered players is more than maxSize, or if there exists more
 	 * than one skaia, prospit, or derse dimension.
 	 */
-	private static boolean canMergeAll()
+	private boolean canMergeAll()
 	{
 		if(sessions.size() == 1 && (!sessions.get(0).isCustom() || sessions.get(0).name.equals(GLOBAL_SESSION_NAME)))
 				return true;
@@ -143,7 +134,7 @@ public class SessionHandler
 	 * @param player A string of the player's username.
 	 * @return A session that contains at least one connection, that the player is a part of.
 	 */
-	public static Session getPlayerSession(PlayerIdentifier player)
+	public Session getPlayerSession(PlayerIdentifier player)
 	{
 		if(singleSession)
 			return sessions.get(0);
@@ -153,7 +144,7 @@ public class SessionHandler
 		return null;
 	}
 	
-	static String merge(Session cs, Session ss, SburbConnection sb)
+	String merge(Session cs, Session ss, SburbConnection sb)
 	{
 		String s = canMerge(cs, ss);
 		if(s == null)
@@ -191,7 +182,7 @@ public class SessionHandler
 	 * Used for the conversion of a global session world to
 	 * a non-global session.
 	 */
-	static void split()
+	void split()
 	{
 		if(MinestuckConfig.globalSession || sessions.size() != 1)
 			return;
@@ -200,7 +191,7 @@ public class SessionHandler
 		split(s);
 	}
 	
-	static void split(Session session)
+	void split(Session session)
 	{
 		if(session.locked)
 			return;
@@ -235,14 +226,15 @@ public class SessionHandler
 				Iterator<SburbConnection> iter = session.connections.iterator();
 				while(iter.hasNext()){
 					SburbConnection c = iter.next();
-					if(s.containsPlayer(c.getClientIdentifier()) || s.containsPlayer(c.getServerIdentifier()) || first && !c.canSplit){
+					if(s.containsPlayer(c.getClientIdentifier()) || s.containsPlayer(c.getServerIdentifier()) || first && !c.canSplit)
+					{
 						found = true;
 						iter.remove();
 						s.connections.add(c);
 					}
 				}
 			} while(found);
-			s.checkIfCompleted();
+			s.checkIfCompleted(singleSession);
 			if(s.connections.size() > 0 || s.isCustom())
 				sessions.add(s);
 			first = false;
@@ -255,11 +247,11 @@ public class SessionHandler
 	 * @return True if client connection is not null and client and server session is the same or 
 	 * client connection is null and server connection is null.
 	 */
-	private static boolean canConnect(MinecraftServer mcServer, PlayerIdentifier client, PlayerIdentifier server)
+	private boolean canConnect(PlayerIdentifier client, PlayerIdentifier server)
 	{
 		Session sClient = getPlayerSession(client), sServer = getPlayerSession(server);
-		SburbConnection cClient = SkaianetHandler.get(mcServer).getMainConnection(client, true);
-		SburbConnection cServer = SkaianetHandler.get(mcServer).getMainConnection(server, false);
+		SburbConnection cClient = skaianetHandler.getMainConnection(client, true);
+		SburbConnection cServer = skaianetHandler.getMainConnection(server, false);
 		boolean serverActive = cServer != null;
 		if(!serverActive && sServer != null)
 			for(SburbConnection c : sServer.connections)
@@ -276,9 +268,9 @@ public class SessionHandler
 	/**
 	 * @return Null if successful or an unlocalized error message describing reason.
 	 */
-	static String onConnectionCreated(MinecraftServer mcServer, SburbConnection connection)
+	String onConnectionCreated(SburbConnection connection)
 	{
-		if(!canConnect(mcServer, connection.getClientIdentifier(), connection.getServerIdentifier()))
+		if(!canConnect(connection.getClientIdentifier(), connection.getServerIdentifier()))
 			return "computer.messageConnectFailed";
 		if(singleSession)
 		{
@@ -330,7 +322,7 @@ public class SessionHandler
 	 * @param normal If the connection was closed by normal means.
 	 * (includes everything but getting crushed by a meteor and other reasons for removal of a main connection)
 	 */
-	static void onConnectionClosed(MinecraftServer mcServer, SburbConnection connection, boolean normal)
+	void onConnectionClosed(SburbConnection connection, boolean normal)
 	{
 		Session s = getPlayerSession(connection.getClientIdentifier());
 		
@@ -343,11 +335,11 @@ public class SessionHandler
 				else split(s);
 		} else if(!normal) {
 			s.connections.remove(connection);
-			if(SkaianetHandler.get(mcServer).getAssociatedPartner(connection.getClientIdentifier(), false) != null)
+			if(skaianetHandler.getAssociatedPartner(connection.getClientIdentifier(), false) != null)
 			{
-				SburbConnection c = SkaianetHandler.get(mcServer).getMainConnection(connection.getClientIdentifier(), false);
+				SburbConnection c = skaianetHandler.getMainConnection(connection.getClientIdentifier(), false);
 				if(c.isActive)
-					SkaianetHandler.get(mcServer).closeConnection(c.getClientIdentifier(), c.getServerIdentifier(), true);
+					skaianetHandler.closeConnection(c.getClientIdentifier(), c.getServerIdentifier(), true);
 				switch(MinestuckConfig.escapeFailureMode) {
 				case 0:
 					c.serverIdentifier = connection.getServerIdentifier();
@@ -362,12 +354,12 @@ public class SessionHandler
 		}
 	}
 	
-	static Map<Integer, String> getServerList(MinecraftServer mcServer, PlayerIdentifier client)
+	Map<Integer, String> getServerList(PlayerIdentifier client)
 	{
 		Map<Integer, String> map = new HashMap<>();
-		for(PlayerIdentifier server : SkaianetHandler.get(mcServer).serversOpen.keySet())
+		for(PlayerIdentifier server : skaianetHandler.serversOpen.keySet())
 		{
-			if(canConnect(mcServer, client, server))
+			if(canConnect(client, server))
 			{
 				map.put(server.getId(), server.getUsername());
 			}
@@ -584,11 +576,11 @@ public class SessionHandler
 	/**
 	 * Creates data to be used for the data checker
 	 */
-	public static NBTTagCompound createDataTag(MinecraftServer server)
+	public NBTTagCompound createDataTag()
 	{
 		NBTTagCompound nbt = new NBTTagCompound();
 		NBTTagList sessionList = new NBTTagList();
-		nbt.setTag("sessions", sessionList);
+		nbt.put("sessions", sessionList);
 		for(int i = 0; i < sessions.size(); i++)
 		{
 			Session session = sessions.get(i);
@@ -599,49 +591,49 @@ public class SessionHandler
 				if(c.isMain)
 					playerSet.add(c.getClientIdentifier());
 				NBTTagCompound connectionTag = new NBTTagCompound();
-				connectionTag.setString("client", c.getClientIdentifier().getUsername());
-				connectionTag.setString("clientId", c.getClientIdentifier().getString());
+				connectionTag.putString("client", c.getClientIdentifier().getUsername());
+				connectionTag.putString("clientId", c.getClientIdentifier().getString());
 				if(!c.getServerIdentifier().equals(IdentifierHandler.nullIdentifier))
-					connectionTag.setString("server", c.getServerIdentifier().getUsername());
-				connectionTag.setBoolean("isMain", c.isMain);
-				connectionTag.setBoolean("isActive", c.isActive);
+					connectionTag.putString("server", c.getServerIdentifier().getUsername());
+				connectionTag.putBoolean("isMain", c.isMain);
+				connectionTag.putBoolean("isActive", c.isActive);
 				if(c.isMain)
 				{
 					if(c.clientHomeLand != null)
 					{
-						connectionTag.setString("clientDim", c.clientHomeLand.getRegistryName().toString());
-						LandAspects aspects = MinestuckDimensionHandler.getAspects(server, c.clientHomeLand);
-						IChunkGenerator chunkGen = server.getWorld(c.clientHomeLand).getDimension().createChunkGenerator();
+						connectionTag.putString("clientDim", c.clientHomeLand.getRegistryName().toString());
+						LandAspects aspects = MinestuckDimensionHandler.getAspects(skaianetHandler.mcServer, c.clientHomeLand);
+						/*IChunkGenerator chunkGen = skaianetHandler.mcServer.getWorld(c.clientHomeLand).getDimension().createChunkGenerator();
 						if(chunkGen instanceof ChunkProviderLands)
 						{
 							ChunkProviderLands landChunkGen = (ChunkProviderLands) chunkGen;
 							if(landChunkGen.nameOrder)
+							{*/
+								connectionTag.putString("aspect1", aspects.aspectTerrain.getNames()[0]);	//TODO add name order and name index back
+								connectionTag.putString("aspect2", aspects.aspectTitle.getNames()[0]);
+							/*} else
 							{
-								connectionTag.setString("aspect1", aspects.aspectTerrain.getNames()[landChunkGen.nameIndex1]);
-								connectionTag.setString("aspect2", aspects.aspectTitle.getNames()[landChunkGen.nameIndex2]);
-							} else
-							{
-								connectionTag.setString("aspect1", aspects.aspectTitle.getNames()[landChunkGen.nameIndex2]);
-								connectionTag.setString("aspect2", aspects.aspectTerrain.getNames()[landChunkGen.nameIndex1]);
+								connectionTag.putString("aspect1", aspects.aspectTitle.getNames()[landChunkGen.nameIndex2]);
+								connectionTag.putString("aspect2", aspects.aspectTerrain.getNames()[landChunkGen.nameIndex1]);
 							}
-						}
-						Title title = MinestuckPlayerData.getTitle(c.getClientIdentifier());
-						connectionTag.setByte("class", title == null ? -1 : (byte) title.getHeroClass().ordinal());
-						connectionTag.setByte("aspect", title == null ? -1 : (byte) title.getHeroAspect().ordinal());
+						}*/
+						Title title = PlayerSavedData.get(skaianetHandler.mcServer).getTitle(c.getClientIdentifier());
+						connectionTag.putByte("class", title == null ? -1 : (byte) title.getHeroClass().ordinal());
+						connectionTag.putByte("aspect", title == null ? -1 : (byte) title.getHeroAspect().ordinal());
 					} else if(session.predefinedPlayers.containsKey(c.getClientIdentifier()))
 					{
 						PredefineData data = session.predefinedPlayers.get(c.getClientIdentifier());
 						
 						if(data.title != null)
 						{
-							connectionTag.setByte("class", (byte) data.title.getHeroClass().ordinal());
-							connectionTag.setByte("aspect", (byte) data.title.getHeroAspect().ordinal());
+							connectionTag.putByte("class", (byte) data.title.getHeroClass().ordinal());
+							connectionTag.putByte("aspect", (byte) data.title.getHeroAspect().ordinal());
 						}
 						
 						if(data.landTerrain != null)
-							connectionTag.setString("aspectTerrain", data.landTerrain.getPrimaryName());
+							connectionTag.putString("aspectTerrain", data.landTerrain.getPrimaryName());
 						if(data.landTitle != null)
-							connectionTag.setString("aspectTitle", data.landTitle.getPrimaryName());
+							connectionTag.putString("aspectTitle", data.landTitle.getPrimaryName());
 					}
 				}
 				connectionList.add(connectionTag);
@@ -654,34 +646,44 @@ public class SessionHandler
 				
 				NBTTagCompound connectionTag = new NBTTagCompound();
 				
-				connectionTag.setString("client", entry.getKey().getUsername());
-				connectionTag.setString("clientId", entry.getKey().getString());
-				connectionTag.setBoolean("isMain", true);
-				connectionTag.setBoolean("isActive", false);
-				connectionTag.setInt("clientDim", 0);
+				connectionTag.putString("client", entry.getKey().getUsername());
+				connectionTag.putString("clientId", entry.getKey().getString());
+				connectionTag.putBoolean("isMain", true);
+				connectionTag.putBoolean("isActive", false);
+				connectionTag.putInt("clientDim", 0);
 				
 				PredefineData data = entry.getValue();
 				
 				if(data.title != null)
 				{
-					connectionTag.setByte("class", (byte) data.title.getHeroClass().ordinal());
-					connectionTag.setByte("aspect", (byte) data.title.getHeroAspect().ordinal());
+					connectionTag.putByte("class", (byte) data.title.getHeroClass().ordinal());
+					connectionTag.putByte("aspect", (byte) data.title.getHeroAspect().ordinal());
 				}
 				
 				if(data.landTerrain != null)
-					connectionTag.setString("aspectTerrain", data.landTerrain.getPrimaryName());
+					connectionTag.putString("aspectTerrain", data.landTerrain.getPrimaryName());
 				if(data.landTitle != null)
-					connectionTag.setString("aspectTitle", data.landTitle.getPrimaryName());
+					connectionTag.putString("aspectTitle", data.landTitle.getPrimaryName());
 				
 				connectionList.add(connectionTag);
 			}
 			
 			NBTTagCompound sessionTag = new NBTTagCompound();
 			if(session.name != null)
-				sessionTag.setString("name", session.name);
-			sessionTag.setTag("connections", connectionList);
+				sessionTag.putString("name", session.name);
+			sessionTag.put("connections", connectionList);
 			sessionList.add(sessionTag);
 		}
 		return nbt;
+	}
+	
+	public static SessionHandler get(MinecraftServer server)
+	{
+		return SkaianetHandler.get(server).sessionHandler;
+	}
+	
+	public static SessionHandler get(World world)
+	{
+		return SkaianetHandler.get(world).sessionHandler;
 	}
 }

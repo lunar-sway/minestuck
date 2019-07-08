@@ -7,6 +7,7 @@ import com.mraof.minestuck.entity.IEntityMultiPart;
 import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
 import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.DamageSource;
@@ -168,10 +169,10 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 		if(this.dead && !this.world.isRemote && type != null)
 		{
 			computePlayerProgress((int) (100*type.getPower() + 160));
-			if(entity != null && entity instanceof EntityPlayerMP)
+			if(entity instanceof EntityPlayerMP)
 			{
-				Echeladder ladder = MinestuckPlayerData.getData((EntityPlayerMP) entity).echeladder;
-				ladder.checkBonus(getServer(), (byte) (Echeladder.UNDERLING_BONUS_OFFSET + 2));
+				Echeladder ladder = PlayerSavedData.getData((EntityPlayerMP) entity).echeladder;
+				ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 2));
 			}
 		}
 	}

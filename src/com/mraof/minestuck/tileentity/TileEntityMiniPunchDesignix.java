@@ -68,7 +68,7 @@ public class TileEntityMiniPunchDesignix extends TileEntityMachineProcess implem
 		if(!inv.get(2).isEmpty())
 		{
 			decrStackSize(1, 1);
-			if(!(inv.get(0).hasTag() && inv.get(0).getTag().hasKey("contentID")))
+			if(!(inv.get(0).hasTag() && inv.get(0).getTag().contains("contentID")))
 				decrStackSize(0, 1);
 			this.inv.get(2).grow(1);
 			return;
@@ -83,7 +83,7 @@ public class TileEntityMiniPunchDesignix extends TileEntityMachineProcess implem
 		outputItem = AlchemyRecipes.createCard(outputItem, true);
 		
 		setInventorySlotContents(2, outputItem);
-		if(!(inv.get(0).hasTag() && inv.get(0).getTag().hasKey("contentID")))
+		if(!(inv.get(0).hasTag() && inv.get(0).getTag().contains("contentID")))
 			decrStackSize(0, 1);
 		decrStackSize(1, 1);
 	}

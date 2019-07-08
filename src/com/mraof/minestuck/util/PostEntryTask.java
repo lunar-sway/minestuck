@@ -1,10 +1,10 @@
 package com.mraof.minestuck.util;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import net.minecraft.world.dimension.DimensionType;
 
 import static com.mraof.minestuck.MinestuckConfig.artifactRange;
@@ -39,31 +39,31 @@ public class PostEntryTask
 		this.index = 0;
 	}
 	
-	public PostEntryTask(NBTTagCompound nbt)
+	public PostEntryTask(CompoundNBT nbt)
 	{
-		this(DimensionType.byName(ResourceLocation.makeResourceLocation(nbt.getString("dimension"))), nbt.getInt("x"), nbt.getInt("y"), nbt.getInt("z"), nbt.getInt("entrySize"), nbt.getByte("entryType"));
+		this(DimensionType.byName(ResourceLocation.tryCreate(nbt.getString("dimension"))), nbt.getInt("x"), nbt.getInt("y"), nbt.getInt("z"), nbt.getInt("entrySize"), nbt.getByte("entryType"));
 		this.index = nbt.getInt("index");
 		if(dimension == null)
 			Debug.warnf("Unable to load dimension type by name %s!", nbt.getString("dimension"));
 	}
 	
-	public NBTTagCompound toNBTTagCompound()
+	public CompoundNBT toNBTTagCompound()
 	{
-		NBTTagCompound nbt = new NBTTagCompound();
-		nbt.setString("dimension", dimension.getRegistryName().toString());
-		nbt.setInt("x", x);
-		nbt.setInt("y", y);
-		nbt.setInt("z", z);
-		nbt.setInt("entrySize", entrySize);
-		nbt.setByte("entryType", entryType);
-		nbt.setInt("index", index);
+		CompoundNBT nbt = new CompoundNBT();
+		nbt.putString("dimension", dimension.getRegistryName().toString());
+		nbt.putInt("x", x);
+		nbt.putInt("y", y);
+		nbt.putInt("z", z);
+		nbt.putInt("entrySize", entrySize);
+		nbt.putByte("entryType", entryType);
+		nbt.putInt("index", index);
 		
 		return nbt;
 	}
 	
 	public boolean onTick(MinecraftServer server)
 	{
-		WorldServer world = server.getWorld(dimension);
+		ServerWorld world = server.getWorld(dimension);
 		
 		if(world == null)
 		{
@@ -108,13 +108,13 @@ public class PostEntryTask
 		return false;
 	}
 	
-	private int updateBlock(BlockPos pos, WorldServer world, int i, boolean blockUpdate)
+	private int updateBlock(BlockPos pos, ServerWorld world, int i, boolean blockUpdate)
 	{
 		if(i >= index)
 		{
 			if(blockUpdate)
 				world.notifyNeighborsOfStateChange(pos, world.getBlockState(pos).getBlock());
-			world.checkLight(pos);
+			//world.lightcheckLight(pos);
 			index++;
 		}
 		return i + 1;

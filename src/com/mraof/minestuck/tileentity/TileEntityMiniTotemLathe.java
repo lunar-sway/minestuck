@@ -45,13 +45,13 @@ public class TileEntityMiniTotemLathe extends TileEntityMachineProcess implement
 	@Override
 	public boolean contentsValid()
 	{
-		if ((!inv.get(0).isEmpty() || !inv.get(1).isEmpty()) && !inv.get(2).isEmpty() && !(inv.get(2).hasTag() && inv.get(2).getTag().hasKey("contentID"))
+		if ((!inv.get(0).isEmpty() || !inv.get(1).isEmpty()) && !inv.get(2).isEmpty() && !(inv.get(2).hasTag() && inv.get(2).getTag().contains("contentID"))
 				&& (inv.get(3).isEmpty() || inv.get(3).getCount() < inv.get(3).getMaxStackSize() && ColorCollector.getColorFromStack(inv.get(3), -1) == ColorCollector.getColorFromStack(inv.get(2), -1)))
 		{
 			if (!inv.get(0).isEmpty() && !inv.get(1).isEmpty())
 			{
 				if (!inv.get(0).hasTag() || !inv.get(0).getTag().getBoolean("punched") || !inv.get(1).hasTag() || !inv.get(1).getTag().getBoolean("punched"))
-					return inv.get(3).isEmpty() || !(inv.get(3).hasTag() && inv.get(3).getTag().hasKey("contentID"));
+					return inv.get(3).isEmpty() || !(inv.get(3).hasTag() && inv.get(3).getTag().contains("contentID"));
 				else
 				{
 					ItemStack output = CombinationRegistry.getCombination(AlchemyRecipes.getDecodedItem(inv.get(0)), AlchemyRecipes.getDecodedItem(inv.get(1)), CombinationRegistry.Mode.MODE_AND);
@@ -62,7 +62,7 @@ public class TileEntityMiniTotemLathe extends TileEntityMachineProcess implement
 			{
 				ItemStack input = inv.get(0).isEmpty() ? inv.get(1) : inv.get(0);
 				return (inv.get(3).isEmpty() || (AlchemyRecipes.getDecodedItem(inv.get(3)).isItemEqual(AlchemyRecipes.getDecodedItem(input))
-						|| !(input.hasTag() && input.getTag().getBoolean("punched")) && !(inv.get(3).hasTag() && inv.get(3).getTag().hasKey("contentID"))));
+						|| !(input.hasTag() && input.getTag().getBoolean("punched")) && !(inv.get(3).hasTag() && inv.get(3).getTag().contains("contentID"))));
 			}
 		}
 		else return false;

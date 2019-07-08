@@ -1,5 +1,6 @@
 package com.mraof.minestuck.inventory;
 
+import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tileentity.TileEntityMiniPunchDesignix;
 import net.minecraft.entity.player.EntityPlayer;
@@ -74,8 +75,7 @@ public class ContainerMiniPunchDesignix extends Container
 			} else if(slotNumber > 2)
 			{
 				//if it's an inventory slot with valid contents
-				if(itemstackOrig.getItem() == MinestuckItems.CAPTCHA_CARD && (itemstackOrig.getTag() == null
-						|| !itemstackOrig.getTag().hasKey("contentID") || itemstackOrig.getTag().getBoolean("punched")))
+				if(itemstackOrig.getItem() == MinestuckItems.CAPTCHA_CARD && (!AlchemyRecipes.hasDecodedItem(itemstackOrig) || AlchemyRecipes.isPunchedCard(itemstackOrig)))
 					result = mergeItemStack(itemstackOrig, 1, 2, false);
 				else result = mergeItemStack(itemstackOrig, 0, 1, false);
 			}

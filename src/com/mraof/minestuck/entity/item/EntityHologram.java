@@ -59,14 +59,14 @@ public class EntityHologram extends Entity
 	@Override
 	protected void readAdditional(NBTTagCompound compound)
 	{
-		if(compound.hasKey("Item"))
+		if(compound.contains("Item"))
 			setItem(ItemStack.read(compound.getCompound("Item")));
 	}
 	
 	@Override
 	protected void writeAdditional(NBTTagCompound compound)
 	{
-		compound.setTag("Item", this.getItem().write(new NBTTagCompound()));
+		compound.put("Item", this.getItem().write(new NBTTagCompound()));
 	}
 
 	public ItemStack getItem()

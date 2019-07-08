@@ -104,7 +104,7 @@ public class DataCheckerPacket
 	{
 		if(MinestuckConfig.getDataCheckerPermissionFor(player))
 		{
-			NBTTagCompound data = SessionHandler.createDataTag(player.getServer());
+			NBTTagCompound data = SessionHandler.get(player.world).createDataTag();
 			MinestuckPacketHandler.sendToPlayer(DataCheckerPacket.data(packetIndex, data), player);
 		}
 	}

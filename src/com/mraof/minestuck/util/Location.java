@@ -1,6 +1,6 @@
 package com.mraof.minestuck.util;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -54,14 +54,14 @@ public class Location
 		return loc.pos.equals(this.pos) && loc.dim == this.dim;
 	}
 	
-	public static Location fromNBT(NBTTagCompound nbt)
+	public static Location fromNBT(CompoundNBT nbt)
 	{
 		int x = nbt.getInt("x");
 		int y = nbt.getInt("y");
 		int z = nbt.getInt("z");
 		BlockPos blockPos = new BlockPos(x, y, z);
 		
-		ResourceLocation dimName = ResourceLocation.makeResourceLocation(nbt.getString("dim"));
+		ResourceLocation dimName = ResourceLocation.tryCreate(nbt.getString("dim"));
 		if(dimName == null)
 		{
 			Debug.warnf("Could not parse dimension name %s. This is not good!", nbt.getString("dim"));
@@ -87,14 +87,14 @@ public class Location
 	}
 	
 	@Nullable
-	public NBTTagCompound toNBT(NBTTagCompound nbt)
+	public CompoundNBT toNBT(CompoundNBT nbt)
 	{
-		nbt.setInt("x", pos.getX());
-		nbt.setInt("y", pos.getY());
-		nbt.setInt("z", pos.getZ());
-		ResourceLocation dimName = DimensionType.func_212678_a(dim);
+		nbt.putInt("x", pos.getX());
+		nbt.putInt("y", pos.getY());
+		nbt.putInt("z", pos.getZ());
+		ResourceLocation dimName = dim.getRegistryName();
 		if(dimName != null)
-			nbt.setString("dim", dimName.toString());
+			nbt.putString("dim", dimName.toString());
 		else
 		{
 			Debug.warnf("Could not save dimension %s. Could not get dimension name!", dim);

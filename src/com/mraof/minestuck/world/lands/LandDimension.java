@@ -10,8 +10,11 @@ import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.gen.ModChunkGeneratorType;
 import com.mraof.minestuck.world.gen.SkaiaGenSettings;
+import com.mraof.minestuck.world.lands.gen.ChunkGeneratorLands;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
+import com.mraof.minestuck.world.lands.gen.LandGenSettings;
+import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 import net.minecraft.entity.Entity;
@@ -28,7 +31,9 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.provider.BiomeProviderType;
 import net.minecraft.world.dimension.Dimension;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.gen.ChunkGeneratorType;
 import net.minecraft.world.gen.IChunkGenerator;
+import net.minecraft.world.gen.OverworldGenSettings;
 import net.minecraftforge.common.ModDimension;
 
 import javax.annotation.Nullable;
@@ -37,8 +42,9 @@ import java.util.function.Function;
 public class LandDimension extends Dimension
 {
 	private final DimensionType type;
+	private ChunkGeneratorLands chunkGen;
 	
-	//public ChunkProviderLands chunkProvider;
+	public StructureBlockRegistry blockRegistry;
 	public LandAspects landAspects;
 	public float skylightBase;
 	Vec3d skyColor;
@@ -61,6 +67,42 @@ public class LandDimension extends Dimension
 	public DimensionType getType()
 	{
 		return type;
+	}
+	
+	
+	@Override
+	protected void init()
+	{
+		hasSkyLight = true;
+		doesWaterVaporize = false;
+		
+		//this.biomeProvider = new BiomeProviderLands(world, chunkProvider.rainfall, chunkProvider.oceanChance, chunkProvider.roughChance);
+		this.nether = false;
+		
+		if(world.isRemote)
+			setSkyRenderer(new LandSkyRender(this));
+		
+		if(landAspects != null)
+			initLandAspects();
+	}
+	
+	public void initLandAspects()
+	{
+		blockRegistry = new StructureBlockRegistry();
+		landAspects.aspectTerrain.registerBlocks(blockRegistry);
+		skylightBase = landAspects.aspectTerrain.getSkylightBase();
+		skyColor = landAspects.aspectTerrain.getSkyColor();
+		fogColor = landAspects.aspectTerrain.getFogColor();
+		cloudColor = landAspects.aspectTerrain.getCloudColor();
+		landAspects.aspectTitle.prepareWorldProvider(this);
+		if(chunkGen != null)
+			initGenSettings(chunkGen.getSettings());
+	}
+	
+	private void initGenSettings(LandGenSettings settings)
+	{
+		settings.setDefautBlock(blockRegistry.getBlockState("ground"));
+		settings.setDefaultFluid(blockRegistry.getBlockState("ocean"));
 	}
 	
 	@Override
@@ -88,10 +130,11 @@ public class LandDimension extends Dimension
 	@Override
 	public IChunkGenerator createChunkGenerator()
 	{
-		SkaiaGenSettings settings = ModChunkGeneratorType.SKAIA.createSettings();
-		settings.setDefautBlock(MinestuckBlocks.WHITE_CHESS_DIRT.getDefaultState());
-		settings.setDefaultFluid(Blocks.AIR.getDefaultState());
-		return ModChunkGeneratorType.SKAIA.create(this.world, BiomeProviderType.FIXED.create(BiomeProviderType.FIXED.createSettings().setBiome(BiomeMinestuck.skaia)), settings);
+		LandGenSettings settings = ModChunkGeneratorType.LANDS.createSettings();
+		if(landAspects != null)
+			initGenSettings(settings);
+		chunkGen = ModChunkGeneratorType.LANDS.create(this.world, BiomeProviderType.FIXED.create(BiomeProviderType.FIXED.createSettings().setBiome(BiomeMinestuck.skaia)), settings);
+		return chunkGen;
 	}
 	
 	@Nullable
@@ -195,31 +238,6 @@ public class LandDimension extends Dimension
 		return true;
 	}
 	
-	@Override
-	protected void init()
-	{
-		hasSkyLight = true;
-		doesWaterVaporize = false;
-		
-		//this.biomeProvider = new BiomeProviderLands(world, chunkProvider.rainfall, chunkProvider.oceanChance, chunkProvider.roughChance);
-		this.nether = false;
-		
-		if(world.isRemote)
-			setSkyRenderer(new LandSkyRender(this));
-		
-		if(landAspects != null)
-			initLandAspects();
-	}
-	
-	public void initLandAspects()
-	{
-		skylightBase = landAspects.aspectTerrain.getSkylightBase();
-		skyColor = landAspects.aspectTerrain.getSkyColor();
-		fogColor = landAspects.aspectTerrain.getFogColor();
-		cloudColor = landAspects.aspectTerrain.getCloudColor();
-		landAspects.aspectTitle.prepareWorldProvider(this);
-	}
-	
 	/*
 	@Override
 	public void calculateInitialWeather()
@@ -284,7 +302,7 @@ public class LandDimension extends Dimension
 		int centerZ = ((int)player.posZ) >> 4;
 		for(int x = centerX - 1; x <= centerX + 1; x++)
 			for(int z = centerZ - 1; z <= centerZ + 1; z++)
-				this.world.getChunkProvider().provideChunk(x, z, true, true);
+				this.world.getChunkProvider().getChunk(x, z, true, true);
 	}
 	
 	public BlockPos findAndMarkNextStructure(EntityPlayerMP player, String type, NBTTagList tags)

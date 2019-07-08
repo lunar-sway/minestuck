@@ -169,7 +169,7 @@ public class EntityMetalBoat extends EntityBoat implements IEntityAdditionalSpaw
 	@Override
 	protected void writeAdditional(NBTTagCompound compound)
 	{
-		compound.setByte("Type", (byte) type);
+		compound.putByte("Type", (byte) type);
 	}
 	
 	@Override

@@ -60,7 +60,7 @@ public class TreeModus extends Modus
 	
 	private TreeNode readNode(NBTTagCompound nbt, int currentIndex, int level)
 	{
-		if(nbt.hasKey("node"+currentIndex))
+		if(nbt.contains("node"+currentIndex))
 		{
 			ItemStack stack = ItemStack.read(nbt.getCompound("node"+currentIndex));
 			if(stack.isEmpty()) return null;	//Should not happen
@@ -74,7 +74,7 @@ public class TreeModus extends Modus
 	
 	private void saveNode(NBTTagCompound nbt, TreeNode node, int currentIndex, int level)
 	{
-		nbt.setTag("node"+currentIndex, node.stack.write(new NBTTagCompound()));
+		nbt.put("node"+currentIndex, node.stack.write(new NBTTagCompound()));
 		if(node.node1 != null)
 			saveNode(nbt, node.node1, currentIndex + (int) Math.pow(2, level), level + 1);
 		if(node.node2 != null)
@@ -84,8 +84,8 @@ public class TreeModus extends Modus
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt)
 	{
-		nbt.setInt("size", size);
-		nbt.setBoolean("auto_balance", autoBalance);
+		nbt.putInt("size", size);
+		nbt.putBoolean("auto_balance", autoBalance);
 		if(node != null)
 			saveNode(nbt, node, 0, 0);
 		

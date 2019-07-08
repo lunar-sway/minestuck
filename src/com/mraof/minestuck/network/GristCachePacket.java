@@ -2,7 +2,7 @@ package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
-import com.mraof.minestuck.util.MinestuckPlayerData;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -54,6 +54,6 @@ public class GristCachePacket
 	
 	private void execute()
 	{
-		MinestuckPlayerData.onPacketRecived(this);
+		PlayerSavedData.onPacketRecived(this);
 	}
 }

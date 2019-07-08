@@ -10,6 +10,7 @@ import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityItem;
@@ -269,7 +270,7 @@ public class TileEntityAlchemiter extends TileEntity
 	{
 		super.read(tagCompound);
 
-		if(tagCompound.hasKey("gristType"))
+		if(tagCompound.contains("gristType"))
 			this.wildcardGrist = GristType.getTypeFromString(tagCompound.getString("gristType"));
 		if(this.wildcardGrist == null)
 		{
@@ -288,7 +289,7 @@ public class TileEntityAlchemiter extends TileEntity
 		
 		broken = tagCompound.getBoolean("broken");
 		
-		if(tagCompound.hasKey("dowel")) 
+		if(tagCompound.contains("dowel"))
 			dowel = ItemStack.read(tagCompound.getCompound("dowel"));
 	}
 	
@@ -297,17 +298,17 @@ public class TileEntityAlchemiter extends TileEntity
 	{
 		super.write(tagCompound);
 
-		tagCompound.setString("gristType", wildcardGrist.getRegistryName().toString());
-		tagCompound.setBoolean("upgraded", upgraded);
-		tagCompound.setBoolean("broken", isBroken());
+		tagCompound.putString("gristType", wildcardGrist.getRegistryName().toString());
+		tagCompound.putBoolean("upgraded", upgraded);
+		tagCompound.putBoolean("broken", isBroken());
 		
 		for(int i = 0; i < upgradeItem.length; i++)
 		{
-			tagCompound.setTag("upgrade" + i, upgradeItem[i].write(new NBTTagCompound()));
+			tagCompound.put("upgrade" + i, upgradeItem[i].write(new NBTTagCompound()));
 		}
 		
 		if(dowel!= null)
-			tagCompound.setTag("dowel", dowel.write(new NBTTagCompound()));
+			tagCompound.put("dowel", dowel.write(new NBTTagCompound()));
 		
 		return tagCompound;
 	}
@@ -396,7 +397,7 @@ public class TileEntityAlchemiter extends TileEntity
 		//get the grist cost
 		GristSet cost = getGristCost(quantity);
 		
-		boolean canAfford = GristHelper.canAfford(MinestuckPlayerData.getGristSet(player), cost);
+		boolean canAfford = GristHelper.canAfford(PlayerSavedData.getGristSet(player), cost);
 		
 		if(canAfford)
 		{
@@ -421,7 +422,7 @@ public class TileEntityAlchemiter extends TileEntity
 			AlchemyRecipes.onAlchemizedItem(newItem, player);
 			
 			PlayerIdentifier pid = IdentifierHandler.encode(player);
-			GristHelper.decrease(world.getServer(), pid, cost);
+			GristHelper.decrease(world, pid, cost);
 			MinestuckPlayerTracker.updateGristCache(world.getServer(), pid);
 		}
 	}

@@ -7,7 +7,7 @@ import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.skaianet.ComputerData;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
 
 import java.util.ArrayList;
@@ -16,8 +16,8 @@ import java.util.Map.Entry;
 
 public abstract class ButtonListProgram extends ComputerProgram {
 	
-	private LinkedHashMap<GuiButton, UnlocalizedString> buttonMap = new LinkedHashMap<>();
-	private GuiButton upButton, downButton;
+	private LinkedHashMap<Button, UnlocalizedString> buttonMap = new LinkedHashMap<>();
+	private Button upButton, downButton;
 	private String message;
 	
 	private int index = 0;
@@ -39,7 +39,7 @@ public abstract class ButtonListProgram extends ComputerProgram {
 	protected abstract void onButtonPressed(TileEntityComputer te, String buttonName, Object[] data);
 	
 	@Override
-	public final void onButtonPressed(TileEntityComputer te, GuiButton button) {
+	public final void onButtonPressed(TileEntityComputer te, Button button) {
 		UnlocalizedString data = buttonMap.get(button);
 		if (button == upButton)
 			index--;
@@ -71,7 +71,7 @@ public abstract class ButtonListProgram extends ComputerProgram {
 			}
 			buttonMap.clear();
 			for (int i = 0; i < 4; i++) {
-				GuiButton button = new GuiButtonImpl(gui, i+2, (gui.width - GuiComputer.xSize) / 2 +14, (gui.height - GuiComputer.ySize) / 2 +60 + i*24, 120, 20,"");
+				Button button = new GuiButtonImpl(gui, i+2, (gui.width - GuiComputer.xSize) / 2 +14, (gui.height - GuiComputer.ySize) / 2 +60 + i*24, 120, 20,"");
 				buttonMap.put(button, new UnlocalizedString(""));
 				gui.addButton(button);
 			}
@@ -86,8 +86,8 @@ public abstract class ButtonListProgram extends ComputerProgram {
 	@Override
 	public final void onUpdateGui(GuiComputer gui)
 	{
-		downButton.enabled = false;
-		upButton.enabled = index > 0;
+		downButton.active = false;
+		upButton.active = index > 0;
 		ArrayList<UnlocalizedString> list = getStringList(gui.te);
 		if(!gui.te.latestmessage.get(this.getId()).isEmpty())
 			list.add(1, new UnlocalizedString("computer.buttonClear"));
@@ -107,21 +107,21 @@ public abstract class ButtonListProgram extends ComputerProgram {
 				}
 				if(pos == index + 4) 
 				{
-					downButton.enabled = true;
+					downButton.active = true;
 					break;
 				}
-				buttonMap.put((GuiButton) buttonMap.keySet().toArray()[pos-index], s);
+				buttonMap.put((Button) buttonMap.keySet().toArray()[pos-index], s);
 			}
 			pos++;
 		}
 		if(index == 0 && pos != 4)
 			for(; pos < 4; pos++)
-				buttonMap.put((GuiButton) buttonMap.keySet().toArray()[pos-index], new UnlocalizedString(""));
+				buttonMap.put((Button) buttonMap.keySet().toArray()[pos-index], new UnlocalizedString(""));
 		
-		for(Entry<GuiButton, UnlocalizedString> entry : buttonMap.entrySet()) {
+		for(Entry<Button, UnlocalizedString> entry : buttonMap.entrySet()) {
 			UnlocalizedString data = entry.getValue();
-			entry.getKey().enabled = !data.string.isEmpty();
-			entry.getKey().displayString = data.translate();
+			entry.getKey().active = !data.string.isEmpty();
+			entry.getKey().setMessage(data.translate());
 		}
 	}
 	
@@ -130,7 +130,7 @@ public abstract class ButtonListProgram extends ComputerProgram {
 		Minecraft mc = Minecraft.getInstance();
 		mc.getTextureManager().bindTexture(GuiComputer.guiBackground);
 		int yOffset = (gui.height / 2) - (GuiComputer.ySize / 2);
-		gui.drawTexturedModalRect((gui.width / 2) - (GuiComputer.xSize / 2), yOffset, 0, 0, GuiComputer.xSize, GuiComputer.ySize);
+		gui.blit((gui.width / 2) - (GuiComputer.xSize / 2), yOffset, 0, 0, GuiComputer.xSize, GuiComputer.ySize);
 		if(te.latestmessage.get(te.programSelected) == null || te.latestmessage.get(te.programSelected).isEmpty())
 			mc.fontRenderer.drawString(message, (gui.width - GuiComputer.xSize) / 2 + 15, (gui.height - GuiComputer.ySize) / 2 + 45, 4210752);
 		else 

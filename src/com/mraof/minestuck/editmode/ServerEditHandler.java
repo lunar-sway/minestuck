@@ -11,21 +11,20 @@ import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.BlockTrapDoor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.command.CommandException;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
@@ -34,10 +33,10 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.GameType;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.Heightmap;
-import net.minecraftforge.event.CommandEvent;
 import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
@@ -194,7 +193,7 @@ public class ServerEditHandler
 		return true;
 	}
 	
-	public static EditData getData(EntityPlayer editor)
+	public static EditData getData(PlayerEntity editor)
 	{
 		for(EditData data : list)
 			if(data.player == editor)
@@ -244,15 +243,15 @@ public class ServerEditHandler
 		{
 			EditData data = getData(event.getPlayer());
 			ItemStack stack = event.getEntityItem().getItem();
-			DeployList.DeployEntry entry = DeployList.getEntryForItem(stack, data.connection);
+			DeployList.DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getEntity().world);
 			if(entry != null && !isBlockItem(stack.getItem()))
 			{
 				int i = DeployList.getOrdinal(entry.getName());
 				GristSet cost = data.connection.givenItems()[i]
 						? entry.getSecondaryGristCost(data.connection) : entry.getPrimaryGristCost(data.connection);
-				if(GristHelper.canAfford(MinestuckPlayerData.getGristSet(data.connection.getClientIdentifier()), cost))
+				if(GristHelper.canAfford(PlayerSavedData.get(event.getEntity().world).getGristSet(data.connection.getClientIdentifier()), cost))
 				{
-					GristHelper.decrease(event.getPlayer().getServer(), data.connection.getClientIdentifier(), cost);
+					GristHelper.decrease(event.getPlayer().world, data.connection.getClientIdentifier(), cost);
 					MinestuckPlayerTracker.updateGristCache(event.getPlayer().getServer(), data.connection.getClientIdentifier());
 					data.connection.givenItems()[i] = true;
 					if(!data.connection.isMain())
@@ -298,14 +297,14 @@ public class ServerEditHandler
 				return;
 			}
 			
-			cleanStackNBT(stack, data.connection);
+			cleanStackNBT(stack, data.connection, event.getWorld());
 			
-			DeployList.DeployEntry entry = DeployList.getEntryForItem(stack, data.connection);
+			DeployList.DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getEntity().world);
 			if(entry != null)
 			{
 				GristSet cost = data.connection.givenItems()[DeployList.getOrdinal(entry.getName())]
 						? entry.getSecondaryGristCost(data.connection) : entry.getPrimaryGristCost(data.connection);
-				if(!GristHelper.canAfford(MinestuckPlayerData.getGristSet(data.connection.getClientIdentifier()), cost))
+				if(!GristHelper.canAfford(PlayerSavedData.get(event.getEntity().world).getGristSet(data.connection.getClientIdentifier()), cost))
 				{
 					StringBuilder str = new StringBuilder();
 					if(cost != null)
@@ -321,7 +320,7 @@ public class ServerEditHandler
 					event.setCanceled(true);
 				}
 			}
-			else if(!isBlockItem(stack.getItem()) || !GristHelper.canAfford(data.connection.getClientIdentifier(), stack, false))
+			else if(!isBlockItem(stack.getItem()) || !GristHelper.canAfford(event.getEntity().world, data.connection.getClientIdentifier(), stack))
 			{
 				event.setCanceled(true);
 			}
@@ -338,7 +337,7 @@ public class ServerEditHandler
 			EditData data = getData(event.getEntityPlayer());
 			IBlockState block = event.getWorld().getBlockState(event.getPos());
 			if(block.getBlockHardness(event.getWorld(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
-					|| (GristHelper.getGrist(data.connection.getClientIdentifier(), GristType.BUILD) <= 0 && !MinestuckConfig.gristRefund))
+					|| (GristHelper.getGrist(event.getEntity().world, data.connection.getClientIdentifier(), GristType.BUILD) <= 0 && !MinestuckConfig.gristRefund))
 				event.setCanceled(true);
 		}
 	}
@@ -359,14 +358,14 @@ public class ServerEditHandler
 		{
 			EditData data = getData(event.getEntityPlayer());
 			if(!MinestuckConfig.gristRefund)
-				GristHelper.decrease(event.getWorld().getServer(), data.connection.getClientIdentifier(), new GristSet(GristType.BUILD, 1));
+				GristHelper.decrease(event.getWorld(), data.connection.getClientIdentifier(), new GristSet(GristType.BUILD, 1));
 			else
 			{
 				IBlockState block = event.getWorld().getBlockState(event.getPos());
 				ItemStack stack = block.getBlock().getPickBlock(block, null, event.getWorld(), event.getPos(), event.getEntityPlayer());
 				GristSet set = AlchemyCostRegistry.getGristConversion(stack);
 				if(set != null && !set.isEmpty())
-					GristHelper.increase(event.getWorld().getServer(), data.connection.getClientIdentifier(), set);
+					GristHelper.increase(event.getWorld(), data.connection.getClientIdentifier(), set);
 			}
 			MinestuckPlayerTracker.updateGristCache(event.getEntity().getServer(), data.connection.getClientIdentifier());
 		}
@@ -390,7 +389,7 @@ public class ServerEditHandler
 				
 				ItemStack stack = player.getHeldItemMainhand();	//TODO Make sure offhand isn't used in editmode?
 				SburbConnection c = data.connection;
-				DeployList.DeployEntry entry = DeployList.getEntryForItem(stack, c);
+				DeployList.DeployEntry entry = DeployList.getEntryForItem(stack, c, player.world);
 				if(entry != null)
 				{
 					int index = DeployList.getOrdinal(entry.getName());
@@ -401,13 +400,13 @@ public class ServerEditHandler
 						SkaianetHandler.get(player.world).giveItems(c.getClientIdentifier());
 					if(!cost.isEmpty())
 					{
-						GristHelper.decrease(player.getServer(), c.getClientIdentifier(), cost);
+						GristHelper.decrease(player.world, c.getClientIdentifier(), cost);
 						MinestuckPlayerTracker.updateGristCache(player.getServer(), data.connection.getClientIdentifier());
 					}
 					player.inventory.mainInventory.set(player.inventory.currentItem, ItemStack.EMPTY);
 				} else
 				{
-					GristHelper.decrease(player.getServer(), data.connection.getClientIdentifier(), AlchemyCostRegistry.getGristConversion(stack));
+					GristHelper.decrease(player.world, data.connection.getClientIdentifier(), AlchemyCostRegistry.getGristConversion(stack));
 					MinestuckPlayerTracker.updateGristCache(player.getServer(), data.connection.getClientIdentifier());
 				}
 			}
@@ -464,7 +463,7 @@ public class ServerEditHandler
 		List<DeployList.DeployEntry> deployList = DeployList.getItemList(player.getServer(), connection);
 		deployList.removeIf(entry -> givenItems[DeployList.getOrdinal(entry.getName())] && entry.getSecondaryGristCost(connection) == null);
 		List<ItemStack> itemList = new ArrayList<>();
-		deployList.forEach(deployEntry -> itemList.add(deployEntry.getItemStack(connection)));
+		deployList.forEach(deployEntry -> itemList.add(deployEntry.getItemStack(connection, player.world)));
 		
 		boolean inventoryChanged = false;
 		for(int i = 0; i < player.inventory.mainInventory.size(); i++)
@@ -589,9 +588,9 @@ public class ServerEditHandler
 		return item instanceof ItemBlock;
 	}
 	
-	public static void cleanStackNBT(ItemStack stack, SburbConnection c)
+	public static void cleanStackNBT(ItemStack stack, SburbConnection c, World world)
 	{
-		if(!DeployList.containsItemStack(stack, c))
+		if(!DeployList.containsItemStack(stack, c, world))
 			stack.setTag(null);
 	}
 	
@@ -607,28 +606,28 @@ public class ServerEditHandler
 		{
 			NBTTagCompound nbtTag = new NBTTagCompound();
 			UUID id = data.player.getGameProfile().getId();
-			nbtTag.setLong("UUID1", id.getLeastSignificantBits());
-			nbtTag.setLong("UUID2", id.getMostSignificantBits());
+			nbtTag.putLong("UUID1", id.getLeastSignificantBits());
+			nbtTag.putLong("UUID2", id.getMostSignificantBits());
 			
-			nbtTag.setString("dim", data.decoy.dimension.getRegistryName().toString());
-			nbtTag.setDouble("x", data.decoy.posX);
-			nbtTag.setDouble("y", data.decoy.posY);
-			nbtTag.setDouble("z", data.decoy.posZ);
-			nbtTag.setFloat("rotYaw", data.decoy.rotationYaw);
-			nbtTag.setFloat("rotPitch", data.decoy.rotationPitch);
+			nbtTag.putString("dim", data.decoy.dimension.getRegistryName().toString());
+			nbtTag.putDouble("x", data.decoy.posX);
+			nbtTag.putDouble("y", data.decoy.posY);
+			nbtTag.putDouble("z", data.decoy.posZ);
+			nbtTag.putFloat("rotYaw", data.decoy.rotationYaw);
+			nbtTag.putFloat("rotPitch", data.decoy.rotationPitch);
 			
-			nbtTag.setInt("gamemode", data.decoy.gameType.getID());
-			nbtTag.setTag("capabilities", data.decoy.capabilities);
-			nbtTag.setFloat("health", data.decoy.getHealth());
-			nbtTag.setTag("food", data.decoy.getFoodStatsNBT());
-			nbtTag.setTag("inv", data.decoy.inventory.write(new NBTTagList()));
+			nbtTag.putInt("gamemode", data.decoy.gameType.getID());
+			nbtTag.put("capabilities", data.decoy.capabilities);
+			nbtTag.putFloat("health", data.decoy.getHealth());
+			nbtTag.put("food", data.decoy.getFoodStatsNBT());
+			nbtTag.put("inv", data.decoy.inventory.write(new NBTTagList()));
 			
 			data.connection.inventory = data.player.inventory.write(new NBTTagList());
 			
 			nbtList.add(nbtTag);
 		}
 		
-		nbt.setTag("editmodeRecover", nbtList);
+		nbt.put("editmodeRecover", nbtList);
 	}
 	
 	public static void loadData(NBTTagCompound nbt)

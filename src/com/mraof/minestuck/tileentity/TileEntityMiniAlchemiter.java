@@ -8,7 +8,7 @@ import com.mraof.minestuck.inventory.ContainerMiniAlchemiter;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.util.MinestuckPlayerData;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -58,7 +58,7 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 			//Check owner's cache: Do they have everything they need?
 			ItemStack newItem = AlchemyRecipes.getDecodedItem(this.inv.get(INPUT));
 			if(newItem.isEmpty())
-				if(!inv.get(INPUT).hasTag() || !inv.get(INPUT).getTag().hasKey("contentID"))
+				if(!inv.get(INPUT).hasTag() || !inv.get(INPUT).getTag().contains("contentID"))
 					newItem = new ItemStack(MinestuckBlocks.GENERIC_OBJECT);
 				else return false;
 			if(!inv.get(OUTPUT).isEmpty() && (inv.get(OUTPUT).getItem() != newItem.getItem() || inv.get(OUTPUT).getMaxStackSize() <= inv.get(OUTPUT).getCount()))
@@ -69,7 +69,7 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 			if(newItem.getItem() == MinestuckItems.CAPTCHA_CARD)
 				cost = new GristSet(wildcardGrist, MinestuckConfig.cardCost);
 			
-			return GristHelper.canAfford(MinestuckPlayerData.getGristSet(this.owner), cost);
+			return GristHelper.canAfford(PlayerSavedData.get(world).getGristSet(this.owner), cost);
 		}
 		else
 		{
@@ -101,7 +101,7 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 		GristSet cost = AlchemyCostRegistry.getGristConversion(newItem);
 		if (newItem.getItem() == MinestuckItems.CAPTCHA_CARD)
 			cost = new GristSet(wildcardGrist, MinestuckConfig.cardCost);
-		GristHelper.decrease(world.getServer(), owner, cost);
+		GristHelper.decrease(world, owner, cost);
 		MinestuckPlayerTracker.updateGristCache(world.getServer(), owner);
 	}
 	
@@ -139,7 +139,7 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 	@Override
 	public NBTTagCompound write(NBTTagCompound compound)
 	{
-		compound.setString("gristType", wildcardGrist.getRegistryName().toString());
+		compound.putString("gristType", wildcardGrist.getRegistryName().toString());
 		
 		if(owner != null)
 			owner.saveToNBT(compound, "owner");
@@ -167,7 +167,7 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 		{
 			ItemStack newItem = AlchemyRecipes.getDecodedItem(getStackInSlot(INPUT));
 			if (newItem.isEmpty())
-				if (!getStackInSlot(INPUT).hasTag() || !getStackInSlot(INPUT).getTag().hasKey("contentID"))
+				if (!getStackInSlot(INPUT).hasTag() || !getStackInSlot(INPUT).getTag().contains("contentID"))
 					newItem = new ItemStack(MinestuckBlocks.GENERIC_OBJECT);
 				else return 0;
 			if (!getStackInSlot(OUTPUT).isEmpty() && (getStackInSlot(OUTPUT).getItem() != newItem.getItem() || getStackInSlot(OUTPUT).getMaxStackSize() <= getStackInSlot(OUTPUT).getCount()))
@@ -191,7 +191,7 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 					}
 					// We need to make a copy to preserve the original grist amounts and avoid scaling values that have already been scaled. Keeps scaling linear as opposed to exponential.
 					scale_cost = cost.copy().scaleGrist(lvl);
-					if (!GristHelper.canAfford(MinestuckPlayerData.getGristSet(owner), scale_cost))
+					if (!GristHelper.canAfford(PlayerSavedData.get(world).getGristSet(owner), scale_cost))
 					{
 						return lvl - 1;
 					}

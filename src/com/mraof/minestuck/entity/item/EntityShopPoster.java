@@ -77,14 +77,14 @@ public class EntityShopPoster extends EntityHangingArt<EntityShopPoster.ShopArt>
 	public void writeAdditional(NBTTagCompound compound)
 	{
 		super.writeAdditional(compound);
-		compound.setInt("Type", this.getPosterType());
+		compound.putInt("Type", this.getPosterType());
 	}
 	
 	@Override
 	public void readAdditional(NBTTagCompound compound)
 	{
 		super.readAdditional(compound);
-		if(compound.hasKey("Type")) setPosterType(compound.getInt("Type"));
+		if(compound.contains("Type")) setPosterType(compound.getInt("Type"));
 		else setPosterType(0);
 	}
 	

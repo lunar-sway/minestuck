@@ -6,12 +6,12 @@ import java.util.Map.Entry;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.init.Items;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.item.ItemStack;
 
 import com.mraof.minestuck.client.gui.GuiComputer;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
+import net.minecraft.item.Items;
 
 /**
  * The static interface will probably later be merged with DeployList,
@@ -92,7 +92,7 @@ public abstract class ComputerProgram
 		return -1;
 	}
 	
-	public void onButtonPressed(TileEntityComputer te, GuiButton button)
+	public void onButtonPressed(TileEntityComputer te, Button button)
 	{
 	}
 	

@@ -105,9 +105,9 @@ public abstract class TileEntityMachineProcess extends TileEntity implements ISi
 	{
 		super.write(compound);
 
-		compound.setInt("progress", this.progress);
+		compound.putInt("progress", this.progress);
 		if(getRunType() == RunType.BUTTON_OVERRIDE)
-			compound.setBoolean("overrideStop", this.overrideStop);
+			compound.putBoolean("overrideStop", this.overrideStop);
 		ItemStackHelper.saveAllItems(compound, inv);
 
 		return compound;

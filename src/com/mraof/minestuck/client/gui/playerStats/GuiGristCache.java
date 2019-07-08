@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.gui.playerStats;
 import com.mraof.minestuck.client.gui.GuiButtonImpl;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.alchemy.GristType;
-import com.mraof.minestuck.util.MinestuckPlayerData;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
@@ -52,9 +52,9 @@ public class GuiGristCache extends GuiPlayerStats implements GuiButtonImpl.Butto
 		this.drawTexturedModalRect(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 
 		String cacheMessage;
-		if (ClientEditHandler.isActive() || MinestuckPlayerData.title == null)
+		if (ClientEditHandler.isActive() || PlayerSavedData.title == null)
 			cacheMessage = I18n.format("gui.grist_cache.name");
-		else cacheMessage = MinestuckPlayerData.title.getTitleName();
+		else cacheMessage = PlayerSavedData.title.getTitleName();
 		mc.fontRenderer.drawString(cacheMessage, (this.width / 2) - mc.fontRenderer.getStringWidth(cacheMessage) / 2, yOffset + 12, 0x404040);
 		super.render(mouseX, mouseY, partialTicks);
 

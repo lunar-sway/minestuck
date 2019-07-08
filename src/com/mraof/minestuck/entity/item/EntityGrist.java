@@ -202,10 +202,10 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	protected void writeAdditional(NBTTagCompound compound)
 	{
-		compound.setShort("Health", (short)this.gristHealth);
-		compound.setShort("Age", (short)this.gristAge);
-		compound.setShort("Value", (short)this.gristValue);
-		compound.setString("Type", this.gristType.getName());
+		compound.putShort("Health", (short)this.gristHealth);
+		compound.putShort("Age", (short)this.gristAge);
+		compound.putShort("Value", (short)this.gristValue);
+		compound.putString("Type", this.gristType.getName());
 	}
 	
 	@Override
@@ -240,7 +240,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 			throw new IllegalStateException("Grist entities shouldn't be consumed client-side.");
 		if(sound)
 			this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.1F, 0.5F * ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.8F));
-		if(GristHelper.increase(getServer(), identifier, new GristSet(gristType, gristValue)))
+		if(GristHelper.increase(world, identifier, new GristSet(gristType, gristValue)))
 		{
 			MinestuckPlayerTracker.updateGristCache(this.getServer(), identifier);
 			this.remove();

@@ -84,7 +84,7 @@ public class TileEntityPunchDesignix extends TileEntity
 					return;    //Not a valid item in hand
 				
 				if (!getCard().isEmpty() && getCard().getItem() == MinestuckItems.CAPTCHA_CARD &&
-						heldStack.hasTag() && heldStack.getTag().hasKey("contentID"))
+						heldStack.hasTag() && heldStack.getTag().contains("contentID"))
 				{
 					ItemStack output = AlchemyRecipes.getDecodedItem(heldStack);
 					if (!output.isEmpty())
@@ -183,8 +183,8 @@ public class TileEntityPunchDesignix extends TileEntity
 	public NBTTagCompound write(NBTTagCompound compound)
 	{
 		super.write(compound);
-		compound.setBoolean("broken", this.broken);
-		compound.setTag("card", getCard().write(new NBTTagCompound()));
+		compound.putBoolean("broken", this.broken);
+		compound.put("card", getCard().write(new NBTTagCompound()));
 		return compound;
 	}
 	
@@ -193,7 +193,7 @@ public class TileEntityPunchDesignix extends TileEntity
 	{
 		NBTTagCompound nbt;
 		nbt = super.getUpdateTag();
-		nbt.setTag("card", getCard().write(new NBTTagCompound()));
+		nbt.put("card", getCard().write(new NBTTagCompound()));
 		return nbt;
 	}
 	

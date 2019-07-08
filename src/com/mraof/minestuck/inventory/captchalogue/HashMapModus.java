@@ -69,7 +69,7 @@ public class HashMapModus extends Modus
 		list = NonNullList.create();
 		
 		for(int i = 0; i < size; i++)
-			if(nbt.hasKey("item"+i))
+			if(nbt.contains("item"+i))
 				list.add(ItemStack.read(nbt.getCompound("item"+i)));
 			else list.add(ItemStack.EMPTY);
 		if(side == LogicalSide.CLIENT)
@@ -83,14 +83,14 @@ public class HashMapModus extends Modus
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt)
 	{
-		nbt.setInt("size", list.size());
-		nbt.setBoolean("ejectByChat", ejectByChat);
+		nbt.putInt("size", list.size());
+		nbt.putBoolean("ejectByChat", ejectByChat);
 		Iterator<ItemStack> iterator = list.iterator();
 		for(int i = 0; i < list.size(); i++)
 		{
 			ItemStack stack = iterator.next();
 			if(!stack.isEmpty())
-				nbt.setTag("item"+i, stack.write(new NBTTagCompound()));
+				nbt.put("item"+i, stack.write(new NBTTagCompound()));
 		}
 		return nbt;
 	}

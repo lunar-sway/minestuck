@@ -5,9 +5,9 @@ import com.mraof.minestuck.inventory.ContainerHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.management.UserListOpsEntry;
+import net.minecraft.server.management.OpEntry;
 import net.minecraft.world.GameType;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;
@@ -104,7 +104,7 @@ public class MinestuckConfig
 	 * If 0: only captchalouged items are dropped. If 1: Both captchalouged items and cards are dropped. If 2: All items, including the actual modus.
 	 */
 	public static byte sylladexDropMode;
-	public static byte dataCheckerPermission;
+	public static byte dataCheckerPermission = 4;
 	
 	public static boolean[] deployConfigurations = new boolean[2];
 	
@@ -281,7 +281,7 @@ public class MinestuckConfig
 		}
 	}*/
 	
-	public static boolean getDataCheckerPermissionFor(EntityPlayerMP player)
+	public static boolean getDataCheckerPermissionFor(ServerPlayerEntity player)
 	{
 		if((dataCheckerPermission & 3) != 0)
 		{
@@ -290,7 +290,7 @@ public class MinestuckConfig
 				MinecraftServer server = player.getServer();
 				if (server.getPlayerList().canSendCommands(player.getGameProfile()))
 				{
-					UserListOpsEntry userlistopsentry = server.getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
+					OpEntry userlistopsentry = server.getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
 					if((userlistopsentry != null ? userlistopsentry.getPermissionLevel() : server.getOpPermissionLevel()) >= 2)
 						return true;
 				}

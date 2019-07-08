@@ -70,7 +70,7 @@ public class TileEntityMiniCruxtruder extends TileEntityMachineProcess implement
 	@Override
 	public NBTTagCompound write(NBTTagCompound compound)
 	{
-		compound.setInt("color", color);
+		compound.putInt("color", color);
 		return super.write(compound);
 	}
 	

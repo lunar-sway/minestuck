@@ -2,7 +2,7 @@ package com.mraof.minestuck.util;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -100,6 +100,6 @@ public enum EnumAspect
 	 */
 	public ITextComponent asTextComponent()
 	{
-		return new TextComponentTranslation("title." + this.toString());
+		return new TranslationTextComponent("title." + this.toString());
 	}
 }

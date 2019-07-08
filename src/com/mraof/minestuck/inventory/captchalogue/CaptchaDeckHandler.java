@@ -9,7 +9,7 @@ import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.MinestuckPlayerData;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -96,7 +96,7 @@ public class CaptchaDeckHandler
 	
 	public static void launchItem(EntityPlayerMP player, ItemStack item)
 	{
-		if(item.getItem().equals(MinestuckItems.CAPTCHA_CARD) && (!item.hasTag() || !item.getTag().hasKey("contentID")))
+		if(item.getItem().equals(MinestuckItems.CAPTCHA_CARD) && (!item.hasTag() || !item.getTag().contains("contentID")))
 			while(item.getCount() > 0)
 			{
 				if(getModus(player).increaseSize(player))
@@ -131,7 +131,7 @@ public class CaptchaDeckHandler
 		{
 			if(modus == null)
 			{
-				MinestuckPlayerData.PlayerData data = MinestuckPlayerData.getData(player);
+				PlayerSavedData.PlayerData data = PlayerSavedData.getData(player);
 				modus = createInstance(type, LogicalSide.SERVER);
 				modus.initModus(player, null, data.givenModus ? 0 : MinestuckConfig.initialModusSize);
 				data.givenModus = true;
@@ -200,7 +200,7 @@ public class CaptchaDeckHandler
 		
 		if(stack.getItem() == MinestuckItems.BOONDOLLARS)
 		{
-			MinestuckPlayerData.addBoondollars(player, ItemBoondollars.getCount(stack));
+			PlayerSavedData.addBoondollars(player, ItemBoondollars.getCount(stack));
 			stack.setCount(0);
 			return;
 		}
@@ -256,7 +256,7 @@ public class CaptchaDeckHandler
 
 			if(stack.getItem() == MinestuckItems.BOONDOLLARS)
 			{
-				MinestuckPlayerData.addBoondollars(player, ItemBoondollars.getCount(stack));
+				PlayerSavedData.addBoondollars(player, ItemBoondollars.getCount(stack));
 				stack.setCount(0);
 				return;
 			}
@@ -305,7 +305,7 @@ public class CaptchaDeckHandler
 
 			if(stack.getItem() == MinestuckItems.BOONDOLLARS)
 			{
-				MinestuckPlayerData.addBoondollars(player, ItemBoondollars.getCount(stack));
+				PlayerSavedData.addBoondollars(player, ItemBoondollars.getCount(stack));
 				stack.setCount(0);
 				return;
 			}
@@ -439,7 +439,7 @@ public class CaptchaDeckHandler
 			return null;
 		ResourceLocation name = modus.getRegistryName();
 		NBTTagCompound nbt = modus.writeToNBT(new NBTTagCompound());
-		nbt.setString("type", name.toString());
+		nbt.putString("type", name.toString());
 		return nbt;
 	}
 	
@@ -473,16 +473,17 @@ public class CaptchaDeckHandler
 		return modus;
 	}
 	
-	public static Modus getModus(EntityPlayer player)
+	public static Modus getModus(EntityPlayerMP player)
 	{
-		return MinestuckPlayerData.getData(player).modus;
+		return PlayerSavedData.getData(player).modus;
 	}
 	
-	public static void setModus(EntityPlayer player, Modus modus)
+	public static void setModus(EntityPlayerMP player, Modus modus)
 	{
-		MinestuckPlayerData.getData(player).modus = modus;
+		PlayerSavedData.getData(player).modus = modus;
 		if(modus != null)
-			MinestuckPlayerData.getData(player).givenModus = true;
+			PlayerSavedData.getData(player).givenModus = true;
+		PlayerSavedData.get(player.world).markDirty();
 	}
 	
 	private static boolean canMergeItemStacks(ItemStack stack1, ItemStack stack2)

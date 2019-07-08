@@ -8,12 +8,13 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import com.mraof.minestuck.util.MinestuckPlayerData;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -117,14 +118,19 @@ public class GristHelper {
 	 * A shortened statement to obtain a certain grist count.
 	 * Uses the encoded version of the username!
 	 */
-	public static int getGrist(PlayerIdentifier player, GristType type)
+	public static int getGrist(World world, PlayerIdentifier player, GristType type)
 	{
-		return MinestuckPlayerData.getGristSet(player).getGrist(type);
+		return PlayerSavedData.get(world).getGristSet(player).getGrist(type);
 	}
 	
-	public static boolean canAfford(PlayerIdentifier player, @Nonnull ItemStack stack, boolean clientSide)
+	public static boolean canAfford(@Nonnull ItemStack stack)
 	{
-		return canAfford(clientSide ? MinestuckPlayerData.getClientGrist() : MinestuckPlayerData.getGristSet(player), AlchemyCostRegistry.getGristConversion(stack));
+		return canAfford(PlayerSavedData.getClientGrist(), AlchemyCostRegistry.getGristConversion(stack));
+	}
+	
+	public static boolean canAfford(World world, PlayerIdentifier player, @Nonnull ItemStack stack)
+	{
+		return canAfford(PlayerSavedData.get(world).getGristSet(player), AlchemyCostRegistry.getGristConversion(stack));
 	}
 	
 	public static boolean canAfford(GristSet base, GristSet cost) {
@@ -148,21 +154,23 @@ public class GristHelper {
 	/**
 	 * Uses the encoded version of the username!
 	 */
-	public static void decrease(MinecraftServer server, PlayerIdentifier player, GristSet set)
+	public static void decrease(World world, PlayerIdentifier player, GristSet set)
 	{
 		Map<GristType, Integer> reqs = set.getMap();
 		if (reqs != null) {
 			for (Entry<GristType, Integer> pairs : reqs.entrySet())
 			{
-				setGrist(player, pairs.getKey(), getGrist(player, pairs.getKey()) - pairs.getValue());
-				notifyEditPlayer(server, player, pairs.getKey().getDisplayName(), pairs.getValue(), "spent");
+				setGrist(world, player, pairs.getKey(), getGrist(world, player, pairs.getKey()) - pairs.getValue());
+				notifyEditPlayer(world.getServer(), player, pairs.getKey().getDisplayName(), pairs.getValue(), "spent");
 			}
 		}
 	}
 	
-	public static void setGrist(PlayerIdentifier player, GristType type, int i)
+	public static void setGrist(World world, PlayerIdentifier player, GristType type, int i)
 	{
-		MinestuckPlayerData.getGristSet(player).setGrist(type, i);
+		PlayerSavedData data = PlayerSavedData.get(world);
+		data.getGristSet(player).setGrist(type, i);
+		data.markDirty();
 	}
 	
 	/**
@@ -180,7 +188,7 @@ public class GristHelper {
 		return i;
 	}
 	
-	public static boolean increase(MinecraftServer server, PlayerIdentifier player, GristSet set)
+	public static boolean increase(World world, PlayerIdentifier player, GristSet set)
 	{
 		if(player == null || set == null)
 			return false;
@@ -189,8 +197,8 @@ public class GristHelper {
 		{
 			for (Entry<GristType, Integer> pairs : reqs.entrySet())
 			{
-				setGrist(player, pairs.getKey(), getGrist(player, pairs.getKey()) + pairs.getValue());
-				notify(server, player, pairs.getKey().getDisplayName(), pairs.getValue(), "gained");
+				setGrist(world, player, pairs.getKey(), getGrist(world, player, pairs.getKey()) + pairs.getValue());
+				notify(world.getServer(), player, pairs.getKey().getDisplayName(), pairs.getValue(), "gained");
 			}
 		}
 		return true;

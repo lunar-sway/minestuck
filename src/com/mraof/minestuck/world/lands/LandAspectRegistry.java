@@ -217,8 +217,8 @@ public class LandAspectRegistry
 	 */
 	public static NBTTagCompound toNBT(TerrainLandAspect aspect1, TitleLandAspect aspect2) {
 		NBTTagCompound tag = new NBTTagCompound();
-		tag.setString("aspect1",aspect1.getPrimaryName());
-		tag.setString("aspect2",aspect2.getPrimaryName());
+		tag.putString("aspect1",aspect1.getPrimaryName());
+		tag.putString("aspect2",aspect2.getPrimaryName());
 		return tag;
 	}
 	

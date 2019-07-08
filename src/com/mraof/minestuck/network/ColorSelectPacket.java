@@ -1,7 +1,7 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.network.skaianet.SburbHandler;
-import com.mraof.minestuck.util.MinestuckPlayerData;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkDirection;
@@ -41,6 +41,6 @@ public class ColorSelectPacket
 	public void execute(EntityPlayerMP player)
 	{
 		if(SburbHandler.canSelectColor(player))
-			MinestuckPlayerData.getData(player).color = this.color;
+			PlayerSavedData.getData(player).color = this.color;
 	}
 }

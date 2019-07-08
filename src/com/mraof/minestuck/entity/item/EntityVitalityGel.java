@@ -196,9 +196,9 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 	@Override
 	protected void writeAdditional(NBTTagCompound compound)
 	{
-		compound.setShort("health", (short)((byte)this.health));
-		compound.setShort("age", (short)this.age);
-		compound.setShort("amount", (short)this.healAmount);
+		compound.putShort("health", (short)((byte)this.health));
+		compound.putShort("age", (short)this.age);
+		compound.putShort("amount", (short)this.healAmount);
 	}
 	
 	@Override

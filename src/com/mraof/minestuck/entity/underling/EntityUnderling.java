@@ -198,17 +198,17 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	public void writeAdditional(NBTTagCompound compound)
 	{
 		super.writeAdditional(compound);
-		compound.setString("Type", type.getRegistryName().toString());
-		compound.setBoolean("Spawned", fromSpawner);
+		compound.putString("Type", type.getRegistryName().toString());
+		compound.putBoolean("Spawned", fromSpawner);
 		if(hasHome())
 		{
 			NBTTagCompound nbt = new NBTTagCompound();
 			BlockPos home = getHomePosition();
-			nbt.setInt("HomeX", home.getX());
-			nbt.setInt("HomeY", home.getY());
-			nbt.setInt("HomeZ", home.getZ());
-			nbt.setInt("MaxHomeDistance", (int) getMaximumHomeDistance());
-			compound.setTag("HomePos", nbt);
+			nbt.putInt("HomeX", home.getX());
+			nbt.putInt("HomeY", home.getY());
+			nbt.putInt("HomeZ", home.getZ());
+			nbt.putInt("MaxHomeDistance", (int) getMaximumHomeDistance());
+			compound.put("HomePos", nbt);
 		}
 	}
 	
