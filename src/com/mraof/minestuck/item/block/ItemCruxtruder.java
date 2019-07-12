@@ -9,19 +9,19 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class ItemCruxtruder extends ItemBlock
+public class ItemCruxtruder extends BlockItem
 {
 	//TODO Must be looked over along with the other large machine items
 	public ItemCruxtruder(Block blockIn, Properties builder)
@@ -30,21 +30,21 @@ public class ItemCruxtruder extends ItemBlock
 	}
 	
 	@Override
-	public EnumActionResult tryPlace(BlockItemUseContext context)
+	public ActionResultType tryPlace(BlockItemUseContext context)
 	{
 		World world = context.getWorld();
-		EnumFacing facing = context.getFace();
+		Direction facing = context.getFace();
 		BlockPos pos = context.getPos();
-		EntityPlayer player = context.getPlayer();
+		PlayerEntity player = context.getPlayer();
 		if(world.isRemote)
 		{
-			return EnumActionResult.SUCCESS;
-		} else if(facing != EnumFacing.UP)
+			return ActionResultType.SUCCESS;
+		} else if(facing != Direction.UP)
 		{
-			return EnumActionResult.FAIL;
+			return ActionResultType.FAIL;
 		} else
 		{
-			IBlockState block = world.getBlockState(pos);
+			BlockState block = world.getBlockState(pos);
 			boolean flag = block.isReplaceable(context);
 			
 			if (!flag)
@@ -52,7 +52,7 @@ public class ItemCruxtruder extends ItemBlock
 				pos = pos.up();
 			}
 			
-			EnumFacing placedFacing = context.getPlacementHorizontalFacing().getOpposite();
+			Direction placedFacing = context.getPlacementHorizontalFacing().getOpposite();
 			ItemStack itemstack = context.getItem();
 			
 			pos = pos.offset(placedFacing.rotateY());
@@ -60,17 +60,17 @@ public class ItemCruxtruder extends ItemBlock
 			if(!itemstack.isEmpty())
 			{
 				if(!canPlaceAt(context, pos, placedFacing))
-					return EnumActionResult.FAIL;
+					return ActionResultType.FAIL;
 				
-				IBlockState state = this.getBlock().getDefaultState();
+				BlockState state = this.getBlock().getDefaultState();
 				this.placeBlock(context, state);
-				return EnumActionResult.SUCCESS;
+				return ActionResultType.SUCCESS;
 			}
-			return EnumActionResult.FAIL;
+			return ActionResultType.FAIL;
 		}
 	}
 	
-	public static boolean canPlaceAt(BlockItemUseContext context, BlockPos pos, EnumFacing facing)
+	public static boolean canPlaceAt(BlockItemUseContext context, BlockPos pos, Direction facing)
 	{
 		for(int x = 0; x < 3; x++)
 		{
@@ -89,14 +89,14 @@ public class ItemCruxtruder extends ItemBlock
 	}
 	
 	@Override
-	protected boolean placeBlock(BlockItemUseContext context, IBlockState newState)
+	protected boolean placeBlock(BlockItemUseContext context, BlockState newState)
 	{
 		BlockPos pos = context.getPos();
 		World world = context.getWorld();
-		EntityPlayer player = context.getPlayer();
+		PlayerEntity player = context.getPlayer();
 		if(!world.isRemote)
 		{
-			EnumFacing facing = context.getPlacementHorizontalFacing().getOpposite();
+			Direction facing = context.getPlacementHorizontalFacing().getOpposite();
 			switch (facing)
 			{
 				case EAST:
@@ -132,13 +132,13 @@ public class ItemCruxtruder extends ItemBlock
 				EditData editData = ServerEditHandler.getData(player);
 				if(editData != null)
 					color = PlayerSavedData.get(world).getData(editData.getTarget()).color;
-				else color = PlayerSavedData.getData((EntityPlayerMP) player).color;
+				else color = PlayerSavedData.getData((ServerPlayerEntity) player).color;
 				
 				((TileEntityCruxtruder) te).setColor(color);
 			} else Debug.warnf("Placed cruxtruder, but can't find tile entity. Instead found %s.", te);
 			
-			if(player instanceof EntityPlayerMP)
-				CriteriaTriggers.PLACED_BLOCK.trigger((EntityPlayerMP) player, pos, context.getItem());
+			if(player instanceof ServerPlayerEntity)
+				CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayerEntity) player, pos, context.getItem());
 		}
 		
 		return true;

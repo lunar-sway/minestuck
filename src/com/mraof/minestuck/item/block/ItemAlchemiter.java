@@ -4,18 +4,18 @@ import com.mraof.minestuck.block.BlockAlchemiter;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class ItemAlchemiter extends ItemBlock
+public class ItemAlchemiter extends BlockItem
 {
 	
 	public ItemAlchemiter(Block blockIn, Properties builder)
@@ -24,21 +24,21 @@ public class ItemAlchemiter extends ItemBlock
 	}
 	
 	@Override
-	public EnumActionResult tryPlace(BlockItemUseContext context)
+	public ActionResultType tryPlace(BlockItemUseContext context)
 	{
 		World world = context.getWorld();
-		EnumFacing sideFace = context.getFace();
+		Direction sideFace = context.getFace();
 		BlockPos pos = context.getPos();
-		EntityPlayer player = context.getPlayer();
+		PlayerEntity player = context.getPlayer();
 		if (world.isRemote)
 		{
-			return EnumActionResult.SUCCESS;
-		} else if (sideFace != EnumFacing.UP)
+			return ActionResultType.SUCCESS;
+		} else if (sideFace != Direction.UP)
 		{
-			return EnumActionResult.FAIL;
+			return ActionResultType.FAIL;
 		} else
 		{
-			IBlockState block = world.getBlockState(pos);
+			BlockState block = world.getBlockState(pos);
 			boolean flag = block.isReplaceable(context);
 			
 			if (!flag)
@@ -46,30 +46,30 @@ public class ItemAlchemiter extends ItemBlock
 				pos = pos.up();
 			}
 			
-			EnumFacing facing = context.getPlacementHorizontalFacing();
+			Direction facing = context.getPlacementHorizontalFacing();
 			ItemStack itemstack = context.getItem();
 			
 			pos = pos.offset(facing.rotateYCCW());
 			
-			if(facing == EnumFacing.WEST && context.getHitZ() >= 0.5F || facing == EnumFacing.EAST && context.getHitZ() < 0.5F
-					|| facing == EnumFacing.NORTH && context.getHitX() < 0.5F || facing == EnumFacing.SOUTH && context.getHitX() >= 0.5F)
+			if(facing == Direction.WEST && context.getHitZ() >= 0.5F || facing == Direction.EAST && context.getHitZ() < 0.5F
+					|| facing == Direction.NORTH && context.getHitX() < 0.5F || facing == Direction.SOUTH && context.getHitX() >= 0.5F)
 				pos = pos.offset(facing.rotateYCCW());
 			
 			if (!itemstack.isEmpty())
 			{
 				if(!canPlaceAt(context, pos, facing))
-					return EnumActionResult.FAIL;
+					return ActionResultType.FAIL;
 				
-				IBlockState state = getBlock().getDefaultState().with(BlockAlchemiter.FACING, facing);
+				BlockState state = getBlock().getDefaultState().with(BlockAlchemiter.FACING, facing);
 				this.placeBlock(context, state);
-				return EnumActionResult.SUCCESS;
+				return ActionResultType.SUCCESS;
 			}
-			return EnumActionResult.FAIL;
+			return ActionResultType.FAIL;
 		}
 	}
 	
 
-	public static boolean canPlaceAt(BlockItemUseContext context, BlockPos pos, EnumFacing facing)
+	public static boolean canPlaceAt(BlockItemUseContext context, BlockPos pos, Direction facing)
 	{
 		for(int x = 0; x < 4; x++)
 		{
@@ -92,15 +92,15 @@ public class ItemAlchemiter extends ItemBlock
 	{
 		BlockPos pos = context.getPos();
 		World world = context.getWorld();
-		EntityPlayer player = context.getPlayer();
+		PlayerEntity player = context.getPlayer();
 		if(!world.isRemote)
 		{
-			EnumFacing facing = context.getPlacementHorizontalFacing();
+			Direction facing = context.getPlacementHorizontalFacing();
 			
 			pos = pos.offset(facing.rotateYCCW());
 			
-			if(facing == EnumFacing.WEST && context.getHitZ() >= 0.5F || facing == EnumFacing.EAST && context.getHitZ() < 0.5F
-					|| facing == EnumFacing.NORTH && context.getHitX() < 0.5F || facing == EnumFacing.SOUTH && context.getHitX() >= 0.5F)
+			if(facing == Direction.WEST && context.getHitZ() >= 0.5F || facing == Direction.EAST && context.getHitZ() < 0.5F
+					|| facing == Direction.NORTH && context.getHitX() < 0.5F || facing == Direction.SOUTH && context.getHitX() >= 0.5F)
 				pos = pos.offset(facing.rotateYCCW());
 			
 			world.setBlockState(pos.offset(facing,3).offset(facing.rotateY(),3).up(0), MinestuckBlocks.ALCHEMITER.TOTEM_CORNER.getDefaultState().with(BlockAlchemiter.FACING, facing));
@@ -124,8 +124,8 @@ public class ItemAlchemiter extends ItemBlock
 			world.setBlockState(pos.offset(facing,3).offset(facing.rotateY(),1), MinestuckBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(BlockAlchemiter.FACING, facing));
 			world.setBlockState(pos.offset(facing,3).offset(facing.rotateY(),2), MinestuckBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(BlockAlchemiter.FACING, facing));
 			
-			if(player instanceof EntityPlayerMP)
-				CriteriaTriggers.PLACED_BLOCK.trigger((EntityPlayerMP) player, pos, context.getItem());
+			if(player instanceof ServerPlayerEntity)
+				CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayerEntity) player, pos, context.getItem());
 		}
 		return true;
 	}

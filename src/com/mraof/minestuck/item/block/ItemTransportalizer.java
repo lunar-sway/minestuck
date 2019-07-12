@@ -2,18 +2,18 @@ package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class ItemTransportalizer  extends ItemBlock
+public class ItemTransportalizer  extends BlockItem
 {
 	public ItemTransportalizer(Block blockIn, Properties builder)
 	{
@@ -21,7 +21,7 @@ public class ItemTransportalizer  extends ItemBlock
 	}
 	
 	@Override
-	protected boolean onBlockPlaced(BlockPos pos, World world, @Nullable EntityPlayer player, ItemStack stack, IBlockState state)
+	protected boolean onBlockPlaced(BlockPos pos, World world, @Nullable PlayerEntity player, ItemStack stack, BlockState state)
 	{
 		if(stack.hasDisplayName() && stack.getDisplayName().getString().length() == 4)
 		{

@@ -11,11 +11,11 @@ import com.mraof.minestuck.util.MinestuckSoundHandler;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.init.Items;
-import net.minecraft.init.MobEffects;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Items;
+import net.minecraft.potion.Effect;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -405,13 +405,13 @@ public class MinestuckItems
 		registerItemBlock(registry, GOLD_SEEDS, ModItemGroup.MAIN);
 		registerItemBlock(registry, WOODEN_CACTUS, ModItemGroup.MAIN);
 		
-		registerItemBlock(registry, new ItemBlock(APPLE_CAKE, new Item.Properties().group(ModItemGroup.MAIN).maxStackSize(1)));
-		registerItemBlock(registry, new ItemBlock(BLUE_CAKE, new Item.Properties().group(ModItemGroup.MAIN).maxStackSize(1)));
-		registerItemBlock(registry, new ItemBlock(COLD_CAKE, new Item.Properties().group(ModItemGroup.MAIN).maxStackSize(1)));
-		registerItemBlock(registry, new ItemBlock(RED_CAKE, new Item.Properties().group(ModItemGroup.MAIN).maxStackSize(1)));
-		registerItemBlock(registry, new ItemBlock(HOT_CAKE, new Item.Properties().group(ModItemGroup.MAIN).maxStackSize(1)));
-		registerItemBlock(registry, new ItemBlock(REVERSE_CAKE, new Item.Properties().group(ModItemGroup.MAIN).maxStackSize(1)));
-		registerItemBlock(registry, new ItemBlock(FUCHSIA_CAKE, new Item.Properties().group(ModItemGroup.MAIN).maxStackSize(1)));
+		registerItemBlock(registry, new BlockItem(APPLE_CAKE, new Item.Properties().group(ModItemGroup.MAIN).maxStackSize(1)));
+		registerItemBlock(registry, new BlockItem(BLUE_CAKE, new Item.Properties().group(ModItemGroup.MAIN).maxStackSize(1)));
+		registerItemBlock(registry, new BlockItem(COLD_CAKE, new Item.Properties().group(ModItemGroup.MAIN).maxStackSize(1)));
+		registerItemBlock(registry, new BlockItem(RED_CAKE, new Item.Properties().group(ModItemGroup.MAIN).maxStackSize(1)));
+		registerItemBlock(registry, new BlockItem(HOT_CAKE, new Item.Properties().group(ModItemGroup.MAIN).maxStackSize(1)));
+		registerItemBlock(registry, new BlockItem(REVERSE_CAKE, new Item.Properties().group(ModItemGroup.MAIN).maxStackSize(1)));
+		registerItemBlock(registry, new BlockItem(FUCHSIA_CAKE, new Item.Properties().group(ModItemGroup.MAIN).maxStackSize(1)));
 		
 		registerItemBlock(registry, PRIMED_TNT, ModItemGroup.MAIN);
 		registerItemBlock(registry, UNSTABLE_TNT, ModItemGroup.MAIN);
