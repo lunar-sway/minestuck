@@ -1,19 +1,6 @@
 package com.mraof.minestuck.world.lands.structure;
 
-import com.mraof.minestuck.block.BlockGate;
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.world.biome.BiomeMinestuck;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.WeightedRandom;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-
-import javax.annotation.Nullable;
-import java.util.*;
 
 public class MapGenLandStructure //extends MapGenStructure
 {

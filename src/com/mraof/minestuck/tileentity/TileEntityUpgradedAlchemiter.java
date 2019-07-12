@@ -1,18 +1,8 @@
 package com.mraof.minestuck.tileentity;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.BlockAlchemiter;
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.client.gui.GuiHandler;
-import com.mraof.minestuck.util.AlchemiterUpgrades;
-import com.mraof.minestuck.util.Debug;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 
 public class TileEntityUpgradedAlchemiter extends TileEntityAlchemiter

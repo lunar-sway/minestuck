@@ -13,6 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -20,7 +21,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IInteractionObject;
 
-public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implements IInteractionObject
+public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implements INamedContainerProvider
 {
 	public static final int INPUT = 0, OUTPUT = 1;
 	private int ticks_since_update = 0;

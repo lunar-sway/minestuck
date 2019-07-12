@@ -1,6 +1,6 @@
 package com.mraof.minestuck.item.block;
 
-import com.mraof.minestuck.block.BlockCruxtruder;
+import com.mraof.minestuck.block.CruxtruderBlock;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.editmode.EditData;
 import com.mraof.minestuck.editmode.ServerEditHandler;
@@ -113,16 +113,16 @@ public class ItemCruxtruder extends ItemBlock
 					break;
 			}
 			
-			world.setBlockState(pos.south(0).up(0).east(0), MinestuckBlocks.CRUXTRUDER.CORNER.getDefaultState().with(BlockCruxtruder.FACING, EnumFacing.NORTH));
-			world.setBlockState(pos.south(0).up(0).east(1), MinestuckBlocks.CRUXTRUDER.SIDE.getDefaultState().with(BlockCruxtruder.FACING, EnumFacing.NORTH));
-			world.setBlockState(pos.south(0).up(0).east(2), MinestuckBlocks.CRUXTRUDER.CORNER.getDefaultState().with(BlockCruxtruder.FACING, EnumFacing.EAST));
-			world.setBlockState(pos.south(1).up(0).east(2), MinestuckBlocks.CRUXTRUDER.SIDE.getDefaultState().with(BlockCruxtruder.FACING, EnumFacing.EAST));
-			world.setBlockState(pos.south(2).up(0).east(2), MinestuckBlocks.CRUXTRUDER.CORNER.getDefaultState().with(BlockCruxtruder.FACING, EnumFacing.SOUTH));
-			world.setBlockState(pos.south(2).up(0).east(1), MinestuckBlocks.CRUXTRUDER.SIDE.getDefaultState().with(BlockCruxtruder.FACING, EnumFacing.SOUTH));
-			world.setBlockState(pos.south(2).up(0).east(0), MinestuckBlocks.CRUXTRUDER.CORNER.getDefaultState().with(BlockCruxtruder.FACING, EnumFacing.WEST));
-			world.setBlockState(pos.south(1).up(0).east(0), MinestuckBlocks.CRUXTRUDER.SIDE.getDefaultState().with(BlockCruxtruder.FACING, EnumFacing.WEST));
-			world.setBlockState(pos.south(1).up(0).east(1), MinestuckBlocks.CRUXTRUDER.CENTER.getDefaultState().with(BlockCruxtruder.FACING, facing));
-			world.setBlockState(pos.south(1).up(1).east(1), MinestuckBlocks.CRUXTRUDER.TUBE.getDefaultState().with(BlockCruxtruder.FACING, facing));
+			world.setBlockState(pos.south(0).up(0).east(0), MinestuckBlocks.CRUXTRUDER.CORNER.getDefaultState().with(CruxtruderBlock.FACING, EnumFacing.NORTH));
+			world.setBlockState(pos.south(0).up(0).east(1), MinestuckBlocks.CRUXTRUDER.SIDE.getDefaultState().with(CruxtruderBlock.FACING, EnumFacing.NORTH));
+			world.setBlockState(pos.south(0).up(0).east(2), MinestuckBlocks.CRUXTRUDER.CORNER.getDefaultState().with(CruxtruderBlock.FACING, EnumFacing.EAST));
+			world.setBlockState(pos.south(1).up(0).east(2), MinestuckBlocks.CRUXTRUDER.SIDE.getDefaultState().with(CruxtruderBlock.FACING, EnumFacing.EAST));
+			world.setBlockState(pos.south(2).up(0).east(2), MinestuckBlocks.CRUXTRUDER.CORNER.getDefaultState().with(CruxtruderBlock.FACING, EnumFacing.SOUTH));
+			world.setBlockState(pos.south(2).up(0).east(1), MinestuckBlocks.CRUXTRUDER.SIDE.getDefaultState().with(CruxtruderBlock.FACING, EnumFacing.SOUTH));
+			world.setBlockState(pos.south(2).up(0).east(0), MinestuckBlocks.CRUXTRUDER.CORNER.getDefaultState().with(CruxtruderBlock.FACING, EnumFacing.WEST));
+			world.setBlockState(pos.south(1).up(0).east(0), MinestuckBlocks.CRUXTRUDER.SIDE.getDefaultState().with(CruxtruderBlock.FACING, EnumFacing.WEST));
+			world.setBlockState(pos.south(1).up(0).east(1), MinestuckBlocks.CRUXTRUDER.CENTER.getDefaultState().with(CruxtruderBlock.FACING, facing));
+			world.setBlockState(pos.south(1).up(1).east(1), MinestuckBlocks.CRUXTRUDER.TUBE.getDefaultState().with(CruxtruderBlock.FACING, facing));
 			world.setBlockState(pos.south().up(2).east(), MinestuckBlocks.CRUXTRUDER_LID.getDefaultState());
 			
 			TileEntity te = world.getTileEntity(pos.add( 1, 1, 1));

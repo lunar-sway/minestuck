@@ -1,15 +1,17 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
-import com.mraof.minestuck.block.BlockPunchDesignix;
+import com.mraof.minestuck.block.PunchDesignixBlock;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.alchemy.CombinationRegistry;
 import com.mraof.minestuck.util.Debug;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -22,7 +24,7 @@ import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nonnull;
 
-import static com.mraof.minestuck.block.BlockMachine.FACING;
+import static com.mraof.minestuck.block.MachineBlock.FACING;
 
 public class TileEntityPunchDesignix extends TileEntity
 {
@@ -43,8 +45,8 @@ public class TileEntityPunchDesignix extends TileEntity
 			{
 				IBlockState state = world.getBlockState(pos);
 				boolean hasCard = !card.isEmpty();
-				if(state.has(BlockPunchDesignix.Slot.HAS_CARD) && hasCard != state.get(BlockPunchDesignix.Slot.HAS_CARD))
-					world.setBlockState(pos, state.with(BlockPunchDesignix.Slot.HAS_CARD, hasCard), 2);
+				if(state.has(PunchDesignixBlock.Slot.HAS_CARD) && hasCard != state.get(PunchDesignixBlock.Slot.HAS_CARD))
+					world.setBlockState(pos, state.with(PunchDesignixBlock.Slot.HAS_CARD, hasCard), 2);
 			}
 		}
 	}
@@ -55,7 +57,7 @@ public class TileEntityPunchDesignix extends TileEntity
 		return card;
 	}
 	
-	public void onRightClick(EntityPlayerMP player, IBlockState clickedState)
+	public void onRightClick(ServerPlayerEntity player, BlockState clickedState)
 	{
 		Block part = clickedState.getBlock();
 		if (part == MinestuckBlocks.PUNCH_DESIGNIX.SLOT && !getCard().isEmpty())

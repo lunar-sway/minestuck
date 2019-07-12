@@ -1,17 +1,8 @@
 package com.mraof.minestuck.world.lands.gen;
 
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.block.BlockGate;
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.network.skaianet.SburbHandler;
-import com.mraof.minestuck.tileentity.TileEntityGate;
-import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.lands.LandDimension;
-import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
-import com.mraof.minestuck.world.lands.structure.DefaultGatePlacement;
-import com.mraof.minestuck.world.lands.structure.IGateStructure;
 import com.mraof.minestuck.world.lands.structure.MapGenLandStructure;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.structure.village.MapGenConsortVillage;
@@ -19,16 +10,11 @@ import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.IChunkGenerator;
 
-import javax.annotation.Nullable;
 import java.util.*;
 
 public abstract class ChunkProviderLands implements IChunkGenerator

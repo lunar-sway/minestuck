@@ -19,14 +19,13 @@ import static com.mraof.minestuck.block.MinestuckBlocks.*;
 import java.util.Random;
 
 import com.google.common.base.Predicate;
-import com.mraof.minestuck.block.BlockCruxiteOre;
+import com.mraof.minestuck.block.CustomOreBlock;
 import com.mraof.minestuck.block.BlockUraniumOre;
 import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
@@ -58,7 +57,7 @@ public class OreHandler implements IWorldGenerator
 		if(world.getDimension() instanceof LandDimension)
 			groundType = ((ChunkProviderLands) world.getDimension().createChunkGenerator()).blockRegistry.getBlockState("ground");
 		if(block.getBlock() == CRUXITE_ORE_STONE)
-			block = BlockCruxiteOre.getBlockState(groundType);
+			block = CustomOreBlock.getBlockState(groundType);
 		if(block.getBlock() == URANIUM_ORE_STONE)
 			block = BlockUraniumOre.getBlockState(groundType);
 		for(int x = 0; x < chancesToSpawn; x++)

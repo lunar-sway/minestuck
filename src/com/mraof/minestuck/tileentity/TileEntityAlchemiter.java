@@ -2,7 +2,7 @@ package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
-import com.mraof.minestuck.block.BlockAlchemiter;
+import com.mraof.minestuck.block.AlchemiterBlock;
 import com.mraof.minestuck.block.EnumDowelType;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.client.gui.GuiAlchemiter;
@@ -11,11 +11,13 @@ import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -52,10 +54,10 @@ public class TileEntityAlchemiter extends TileEntity
 			{
 				IBlockState state = world.getBlockState(pos);
 				if(newDowel.isEmpty())
-					state = state.with(BlockAlchemiter.Pad.DOWEL, EnumDowelType.NONE);
+					state = state.with(AlchemiterBlock.Pad.DOWEL, EnumDowelType.NONE);
 				else if(AlchemyRecipes.hasDecodedItem(newDowel))
-					state = state.with(BlockAlchemiter.Pad.DOWEL, EnumDowelType.CARVED_DOWEL);
-					else state = state.with(BlockAlchemiter.Pad.DOWEL, EnumDowelType.DOWEL);
+					state = state.with(AlchemiterBlock.Pad.DOWEL, EnumDowelType.CARVED_DOWEL);
+					else state = state.with(AlchemiterBlock.Pad.DOWEL, EnumDowelType.DOWEL);
 				
 				world.setBlockState(pos, state, 2);
 			}
@@ -228,29 +230,29 @@ public class TileEntityAlchemiter extends TileEntity
 		if(this.broken || world == null)
 			return;
 		
-		EnumFacing facing = world.getBlockState(this.getPos()).get(BlockAlchemiter.FACING);
+		EnumFacing facing = world.getBlockState(this.getPos()).get(AlchemiterBlock.FACING);
 		EnumFacing x = facing.rotateYCCW();
 		EnumFacing z = facing.getOpposite();
 		BlockPos pos = getPos().down();
-		if(!world.getBlockState(pos.up(3)).equals(MinestuckBlocks.ALCHEMITER.UPPER_ROD.getDefaultState().with(BlockAlchemiter.FACING, facing)) ||
-				!world.getBlockState(pos.up(2)).equals(MinestuckBlocks.ALCHEMITER.LOWER_ROD.getDefaultState().with(BlockAlchemiter.FACING, facing)) ||
+		if(!world.getBlockState(pos.up(3)).equals(MinestuckBlocks.ALCHEMITER.UPPER_ROD.getDefaultState().with(AlchemiterBlock.FACING, facing)) ||
+				!world.getBlockState(pos.up(2)).equals(MinestuckBlocks.ALCHEMITER.LOWER_ROD.getDefaultState().with(AlchemiterBlock.FACING, facing)) ||
 				//!world.getBlockState(pos.up()).equals(MinestuckBlocks.ALCHEMITER.TOTEM_PAD.getDefaultState().with(BlockAlchemiter.FACING, facing)) ||
-				!world.getBlockState(pos).equals(MinestuckBlocks.ALCHEMITER.TOTEM_CORNER.getDefaultState().with(BlockAlchemiter.FACING, facing)) ||
-				!world.getBlockState(pos.offset(x)).equals(MinestuckBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(BlockAlchemiter.FACING, facing)) ||
-				!world.getBlockState(pos.offset(x, 2)).equals(MinestuckBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(BlockAlchemiter.FACING, facing)) ||
-				!world.getBlockState(pos.offset(z).offset(x)).equals(MinestuckBlocks.ALCHEMITER.CENTER.getDefaultState().with(BlockAlchemiter.FACING, facing)) ||
-				!world.getBlockState(pos.offset(x, 3)).equals(MinestuckBlocks.ALCHEMITER.CORNER.getDefaultState().with(BlockAlchemiter.FACING, facing.rotateYCCW())) ||
-				!world.getBlockState(pos.offset(z).offset(x, 3)).equals(MinestuckBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(BlockAlchemiter.FACING, facing.rotateYCCW())) ||
-				!world.getBlockState(pos.offset(z, 2).offset(x, 3)).equals(MinestuckBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(BlockAlchemiter.FACING, facing.rotateYCCW())) ||
-				!world.getBlockState(pos.offset(z).offset(x, 2)).equals(MinestuckBlocks.ALCHEMITER.CENTER.getDefaultState().with(BlockAlchemiter.FACING, facing.rotateYCCW())) ||
-				!world.getBlockState(pos.offset(z, 3).offset(x, 3)).equals(MinestuckBlocks.ALCHEMITER.CORNER.getDefaultState().with(BlockAlchemiter.FACING, facing.getOpposite())) ||
-				!world.getBlockState(pos.offset(z, 3).offset(x, 2)).equals(MinestuckBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(BlockAlchemiter.FACING, facing.getOpposite())) ||
-				!world.getBlockState(pos.offset(z, 3).offset(x, 1)).equals(MinestuckBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(BlockAlchemiter.FACING, facing.getOpposite())) ||
-				!world.getBlockState(pos.offset(z, 2).offset(x, 2)).equals(MinestuckBlocks.ALCHEMITER.CENTER.getDefaultState().with(BlockAlchemiter.FACING, facing.getOpposite())) ||
-				!world.getBlockState(pos.offset(z, 3)).equals(MinestuckBlocks.ALCHEMITER.CORNER.getDefaultState().with(BlockAlchemiter.FACING, facing.rotateY())) ||
-				!world.getBlockState(pos.offset(z, 2)).equals(MinestuckBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(BlockAlchemiter.FACING, facing.rotateY())) ||
-				!world.getBlockState(pos.offset(z)).equals(MinestuckBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(BlockAlchemiter.FACING, facing.rotateY())) ||
-				!world.getBlockState(pos.offset(z, 2).offset(x, 1)).equals(MinestuckBlocks.ALCHEMITER.CENTER.getDefaultState().with(BlockAlchemiter.FACING, facing.rotateY())))
+				!world.getBlockState(pos).equals(MinestuckBlocks.ALCHEMITER.TOTEM_CORNER.getDefaultState().with(AlchemiterBlock.FACING, facing)) ||
+				!world.getBlockState(pos.offset(x)).equals(MinestuckBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, facing)) ||
+				!world.getBlockState(pos.offset(x, 2)).equals(MinestuckBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, facing)) ||
+				!world.getBlockState(pos.offset(z).offset(x)).equals(MinestuckBlocks.ALCHEMITER.CENTER.getDefaultState().with(AlchemiterBlock.FACING, facing)) ||
+				!world.getBlockState(pos.offset(x, 3)).equals(MinestuckBlocks.ALCHEMITER.CORNER.getDefaultState().with(AlchemiterBlock.FACING, facing.rotateYCCW())) ||
+				!world.getBlockState(pos.offset(z).offset(x, 3)).equals(MinestuckBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, facing.rotateYCCW())) ||
+				!world.getBlockState(pos.offset(z, 2).offset(x, 3)).equals(MinestuckBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, facing.rotateYCCW())) ||
+				!world.getBlockState(pos.offset(z).offset(x, 2)).equals(MinestuckBlocks.ALCHEMITER.CENTER.getDefaultState().with(AlchemiterBlock.FACING, facing.rotateYCCW())) ||
+				!world.getBlockState(pos.offset(z, 3).offset(x, 3)).equals(MinestuckBlocks.ALCHEMITER.CORNER.getDefaultState().with(AlchemiterBlock.FACING, facing.getOpposite())) ||
+				!world.getBlockState(pos.offset(z, 3).offset(x, 2)).equals(MinestuckBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, facing.getOpposite())) ||
+				!world.getBlockState(pos.offset(z, 3).offset(x, 1)).equals(MinestuckBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, facing.getOpposite())) ||
+				!world.getBlockState(pos.offset(z, 2).offset(x, 2)).equals(MinestuckBlocks.ALCHEMITER.CENTER.getDefaultState().with(AlchemiterBlock.FACING, facing.getOpposite())) ||
+				!world.getBlockState(pos.offset(z, 3)).equals(MinestuckBlocks.ALCHEMITER.CORNER.getDefaultState().with(AlchemiterBlock.FACING, facing.rotateY())) ||
+				!world.getBlockState(pos.offset(z, 2)).equals(MinestuckBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, facing.rotateY())) ||
+				!world.getBlockState(pos.offset(z)).equals(MinestuckBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, facing.rotateY())) ||
+				!world.getBlockState(pos.offset(z, 2).offset(x, 1)).equals(MinestuckBlocks.ALCHEMITER.CENTER.getDefaultState().with(AlchemiterBlock.FACING, facing.rotateY())))
 			
 		{
 			breakMachine();
@@ -262,7 +264,7 @@ public class TileEntityAlchemiter extends TileEntity
 	
 	public EnumFacing getFacing()
 	{
-		return getBlockState().get(BlockAlchemiter.FACING);
+		return getBlockState().get(AlchemiterBlock.FACING);
 	}
 	
 	@Override
@@ -332,7 +334,7 @@ public class TileEntityAlchemiter extends TileEntity
 		handleUpdateTag(pkt.getNbtCompound());
 	}
 	
-	public void onRightClick(World worldIn, EntityPlayer playerIn, IBlockState state)
+	public void onRightClick(World worldIn, PlayerEntity playerIn, BlockState state)
 	{
 		if(worldIn.isRemote)
 		{
@@ -387,7 +389,7 @@ public class TileEntityAlchemiter extends TileEntity
 		//Clamp quantity
 		quantity = Math.min(newItem.getMaxStackSize() * MinestuckConfig.alchemiterMaxStacks, Math.max(1, quantity));
 		
-		EnumFacing facing = world.getBlockState(pos).get(BlockAlchemiter.FACING);
+		EnumFacing facing = world.getBlockState(pos).get(AlchemiterBlock.FACING);
 		//get the position to spawn the item
 		BlockPos spawnPos = this.getPos().offset(facing.getOpposite()).offset(facing.rotateYCCW());
 		if(facing.getAxisDirection() == EnumFacing.AxisDirection.NEGATIVE)

@@ -140,7 +140,7 @@ public class RainbowSaplingBlock extends BushBlock implements IGrowable
 	}
 	
 	@Override
-	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult)
+	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
 		ItemStack stack = player.getHeldItem(hand);
 		if(stack.getItem() == Items.LAPIS_LAZULI)

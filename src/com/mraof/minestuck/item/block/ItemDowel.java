@@ -1,6 +1,6 @@
 package com.mraof.minestuck.item.block;
 
-import com.mraof.minestuck.block.BlockCruxiteDowel;
+import com.mraof.minestuck.block.CruxiteDowelBlock;
 import com.mraof.minestuck.item.ItemCaptchaCard;
 import com.mraof.minestuck.tileentity.TileEntityItemStack;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
@@ -67,9 +67,9 @@ public class ItemDowel extends ItemBlock
 		IBlockState state = super.getStateForPlacement(context);
 		ItemStack stack = context.getItem();
 		if(stack.hasTag() && stack.getTag().contains("contentID"))
-			state = state.with(BlockCruxiteDowel.DOWEL_TYPE, BlockCruxiteDowel.Type.TOTEM);
+			state = state.with(CruxiteDowelBlock.DOWEL_TYPE, CruxiteDowelBlock.Type.TOTEM);
 		else
-			state = state.with(BlockCruxiteDowel.DOWEL_TYPE, BlockCruxiteDowel.Type.DOWEL);
+			state = state.with(CruxiteDowelBlock.DOWEL_TYPE, CruxiteDowelBlock.Type.DOWEL);
 		return state;
 	}
 	

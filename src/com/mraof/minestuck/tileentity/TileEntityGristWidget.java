@@ -2,7 +2,7 @@ package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
-import com.mraof.minestuck.block.BlockGristWidget;
+import com.mraof.minestuck.block.GristWidgetBlock;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.inventory.ContainerGristWidget;
@@ -12,6 +12,7 @@ import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -21,7 +22,7 @@ import net.minecraft.world.IInteractionObject;
 
 import java.util.Map.Entry;
 
-public class TileEntityGristWidget extends TileEntityMachineProcess implements IInteractionObject
+public class TileEntityGristWidget extends TileEntityMachineProcess implements INamedContainerProvider
 {
 	
 	
@@ -207,10 +208,10 @@ public class TileEntityGristWidget extends TileEntityMachineProcess implements I
 	{
 		if(hasItem)
 		{
-			BlockGristWidget.updateItem(false, world, this.getPos());
+			GristWidgetBlock.updateItem(false, world, this.getPos());
 		} else
 		{
-			BlockGristWidget.updateItem(true, world, this.getPos());
+			GristWidgetBlock.updateItem(true, world, this.getPos());
 		}
 	}
 }

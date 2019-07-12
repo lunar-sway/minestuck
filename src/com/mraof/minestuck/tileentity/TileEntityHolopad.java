@@ -3,23 +3,19 @@ package com.mraof.minestuck.tileentity;
 import java.util.List;
 
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
-import com.mraof.minestuck.block.BlockHolopad;
-import com.mraof.minestuck.block.BlockPunchDesignix;
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.entity.EntityFrog;
 import com.mraof.minestuck.entity.item.EntityHologram;
 import com.mraof.minestuck.item.MinestuckItems;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -35,7 +31,7 @@ public class TileEntityHolopad extends TileEntity
 		super(MinestuckTiles.HOLOPAD);
 	}
 	
-	public void onRightClick(EntityPlayer player)
+	public void onRightClick(PlayerEntity player)
 	{
 		if(!world.isRemote)
 		{

@@ -1,6 +1,6 @@
 package com.mraof.minestuck.item.block;
 
-import com.mraof.minestuck.block.BlockTotemLathe;
+import com.mraof.minestuck.block.TotemLatheBlock;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
@@ -60,7 +60,7 @@ public class ItemTotemLathe extends ItemBlock
 				if(!canPlaceAt(context, pos, placedFacing))
 					return EnumActionResult.FAIL;
 				
-				IBlockState state = getBlock().getDefaultState().with(BlockTotemLathe.FACING, placedFacing);
+				IBlockState state = getBlock().getDefaultState().with(TotemLatheBlock.FACING, placedFacing);
 				this.placeBlock(context, state);
 				return EnumActionResult.SUCCESS;
 			}
@@ -99,16 +99,16 @@ public class ItemTotemLathe extends ItemBlock
 					|| facing == EnumFacing.SOUTH && context.getHitX() < 0.5F || facing == EnumFacing.NORTH && context.getHitX() >= 0.5F)
 				pos = pos.offset(facing.rotateY());
 			
-			world.setBlockState(pos, MinestuckBlocks.TOTEM_LATHE.CARD_SLOT.getDefaultState().with(BlockTotemLathe.FACING, facing));
-			world.setBlockState(pos.offset(facing.rotateYCCW(),1), MinestuckBlocks.TOTEM_LATHE.BOTTOM_LEFT.getDefaultState().with(BlockTotemLathe.FACING, facing));
-			world.setBlockState(pos.offset(facing.rotateYCCW(),2), MinestuckBlocks.TOTEM_LATHE.BOTTOM_RIGHT.getDefaultState().with(BlockTotemLathe.FACING, facing));
-			world.setBlockState(pos.offset(facing.rotateYCCW(),3), MinestuckBlocks.TOTEM_LATHE.BOTTOM_CORNER.getDefaultState().with(BlockTotemLathe.FACING, facing));
-			world.setBlockState(pos.up(1), MinestuckBlocks.TOTEM_LATHE.MIDDLE.getDefaultState().with(BlockTotemLathe.FACING, facing));
-			world.setBlockState(pos.offset(facing.rotateYCCW(),1).up(1), MinestuckBlocks.TOTEM_LATHE.ROD.getDefaultState().with(BlockTotemLathe.FACING, facing));
-			world.setBlockState(pos.offset(facing.rotateYCCW(),3).up(1), MinestuckBlocks.TOTEM_LATHE.WHEEL.getDefaultState().with(BlockTotemLathe.FACING, facing));
-			world.setBlockState(pos.up(2), MinestuckBlocks.TOTEM_LATHE.TOP_CORNER.getDefaultState().with(BlockTotemLathe.FACING, facing));
-			world.setBlockState(pos.offset(facing.rotateYCCW(),1).up(2), MinestuckBlocks.TOTEM_LATHE.TOP.getDefaultState().with(BlockTotemLathe.FACING, facing));
-			world.setBlockState(pos.offset(facing.rotateYCCW(),2).up(2), MinestuckBlocks.TOTEM_LATHE.CARVER.getDefaultState().with(BlockTotemLathe.FACING, facing));
+			world.setBlockState(pos, MinestuckBlocks.TOTEM_LATHE.CARD_SLOT.getDefaultState().with(TotemLatheBlock.FACING, facing));
+			world.setBlockState(pos.offset(facing.rotateYCCW(),1), MinestuckBlocks.TOTEM_LATHE.BOTTOM_LEFT.getDefaultState().with(TotemLatheBlock.FACING, facing));
+			world.setBlockState(pos.offset(facing.rotateYCCW(),2), MinestuckBlocks.TOTEM_LATHE.BOTTOM_RIGHT.getDefaultState().with(TotemLatheBlock.FACING, facing));
+			world.setBlockState(pos.offset(facing.rotateYCCW(),3), MinestuckBlocks.TOTEM_LATHE.BOTTOM_CORNER.getDefaultState().with(TotemLatheBlock.FACING, facing));
+			world.setBlockState(pos.up(1), MinestuckBlocks.TOTEM_LATHE.MIDDLE.getDefaultState().with(TotemLatheBlock.FACING, facing));
+			world.setBlockState(pos.offset(facing.rotateYCCW(),1).up(1), MinestuckBlocks.TOTEM_LATHE.ROD.getDefaultState().with(TotemLatheBlock.FACING, facing));
+			world.setBlockState(pos.offset(facing.rotateYCCW(),3).up(1), MinestuckBlocks.TOTEM_LATHE.WHEEL.getDefaultState().with(TotemLatheBlock.FACING, facing));
+			world.setBlockState(pos.up(2), MinestuckBlocks.TOTEM_LATHE.TOP_CORNER.getDefaultState().with(TotemLatheBlock.FACING, facing));
+			world.setBlockState(pos.offset(facing.rotateYCCW(),1).up(2), MinestuckBlocks.TOTEM_LATHE.TOP.getDefaultState().with(TotemLatheBlock.FACING, facing));
+			world.setBlockState(pos.offset(facing.rotateYCCW(),2).up(2), MinestuckBlocks.TOTEM_LATHE.CARVER.getDefaultState().with(TotemLatheBlock.FACING, facing));
 			
 			if(player instanceof EntityPlayerMP)
 				CriteriaTriggers.PLACED_BLOCK.trigger((EntityPlayerMP) player, pos, context.getItem());

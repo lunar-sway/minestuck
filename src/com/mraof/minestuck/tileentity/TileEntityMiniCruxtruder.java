@@ -8,6 +8,7 @@ import com.mraof.minestuck.util.ColorCollector;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -15,7 +16,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IInteractionObject;
 
-public class TileEntityMiniCruxtruder extends TileEntityMachineProcess implements IInteractionObject
+public class TileEntityMiniCruxtruder extends TileEntityMachineProcess implements INamedContainerProvider
 {
 	public int color = -1;
 	

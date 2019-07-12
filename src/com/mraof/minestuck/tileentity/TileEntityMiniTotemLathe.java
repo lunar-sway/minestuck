@@ -10,6 +10,7 @@ import com.mraof.minestuck.util.ColorCollector;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -17,7 +18,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IInteractionObject;
 
-public class TileEntityMiniTotemLathe extends TileEntityMachineProcess implements IInteractionObject
+public class TileEntityMiniTotemLathe extends TileEntityMachineProcess implements INamedContainerProvider
 {
 	public TileEntityMiniTotemLathe()
 	{

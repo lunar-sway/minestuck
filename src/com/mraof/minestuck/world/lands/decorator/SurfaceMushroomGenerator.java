@@ -9,7 +9,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
-import com.mraof.minestuck.block.BlockGlowingMushroom;
+import com.mraof.minestuck.block.GlowingMushroomBlock;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
@@ -53,7 +53,7 @@ public class SurfaceMushroomGenerator extends BiomeSpecificDecorator
 		if (pos.getY() >= 0 && pos.getY() < 256)
 		{
 			IBlockState soil = worldIn.getBlockState(pos.down());
-			if(state.getBlock() instanceof BlockGlowingMushroom)
+			if(state.getBlock() instanceof GlowingMushroomBlock)
 			{
 				out = soil.getBlock().equals(MinestuckBlocks.BLUE_DIRT);
 			} else if(soil.getBlock() == Blocks.MYCELIUM)

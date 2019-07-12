@@ -1,6 +1,6 @@
 package com.mraof.minestuck.item.block;
 
-import com.mraof.minestuck.block.BlockPunchDesignix;
+import com.mraof.minestuck.block.PunchDesignixBlock;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
@@ -57,7 +57,7 @@ public class ItemPunchDesignix extends ItemBlock
 				if(!canPlaceAt(context, pos, placedFacing))
 					return EnumActionResult.FAIL;
 				
-				IBlockState state = getBlock().getDefaultState().with(BlockPunchDesignix.FACING, placedFacing);
+				IBlockState state = getBlock().getDefaultState().with(PunchDesignixBlock.FACING, placedFacing);
 				this.placeBlock(context, state);
 				return EnumActionResult.SUCCESS;
 			}
@@ -93,11 +93,11 @@ public class ItemPunchDesignix extends ItemBlock
 				|| facing == EnumFacing.SOUTH && context.getHitX() < 0.5F || facing == EnumFacing.NORTH && context.getHitX() >= 0.5F)
 			pos = pos.offset(facing.rotateY());
 		
-		world.setBlockState(pos, MinestuckBlocks.PUNCH_DESIGNIX.LEFT_LEG.getDefaultState().with(BlockPunchDesignix.FACING, facing), 11);
-		world.setBlockState(pos.offset(facing.rotateYCCW()), MinestuckBlocks.PUNCH_DESIGNIX.RIGHT_LEG.getDefaultState().with(BlockPunchDesignix.FACING, facing), 11);
-		world.setBlockState(pos.up().offset(facing.rotateYCCW()), MinestuckBlocks.PUNCH_DESIGNIX.KEYBOARD.getDefaultState().with(BlockPunchDesignix.FACING, facing), 11);
+		world.setBlockState(pos, MinestuckBlocks.PUNCH_DESIGNIX.LEFT_LEG.getDefaultState().with(PunchDesignixBlock.FACING, facing), 11);
+		world.setBlockState(pos.offset(facing.rotateYCCW()), MinestuckBlocks.PUNCH_DESIGNIX.RIGHT_LEG.getDefaultState().with(PunchDesignixBlock.FACING, facing), 11);
+		world.setBlockState(pos.up().offset(facing.rotateYCCW()), MinestuckBlocks.PUNCH_DESIGNIX.KEYBOARD.getDefaultState().with(PunchDesignixBlock.FACING, facing), 11);
 		
-		world.setBlockState(pos.up(), MinestuckBlocks.PUNCH_DESIGNIX.SLOT.getDefaultState().with(BlockPunchDesignix.FACING, facing), 11);
+		world.setBlockState(pos.up(), MinestuckBlocks.PUNCH_DESIGNIX.SLOT.getDefaultState().with(PunchDesignixBlock.FACING, facing), 11);
 		
 		if(player instanceof EntityPlayerMP)
 			CriteriaTriggers.PLACED_BLOCK.trigger((EntityPlayerMP) player, pos, context.getItem());
