@@ -9,42 +9,38 @@ buildscript {
     }
 }
 
-repositories {
-    maven {
-        name = "chickenbones"
-        url = "http://chickenbones.net/maven/"
-    }
-    maven {
-        name = "Progwml6 maven"
-        url = "http://dvs1.progwml6.com/files/maven/"
-    }
-    maven {
-        url = "http://maven.blamejared.com"
-    }
-    maven {
-        // location of a maven mirror for JEI files, as a fallback
-        name = "ModMaven"
-        url = "modmaven.k-4u.nl"
-    }
-}
-
 //apply plugin: 'forge'
 apply plugin: 'net.minecraftforge.gradle'
 
-version = '1.14.3-1.4.' + System.getenv()['BUILD_NUMBER']
-group= 'com.mraof.minestuck'
-archivesBaseName = 'Minestuck'
-
-sourceCompatibility = targetCompatibility = "1.8" // Need this here so eclipse task generates correctly.
-compileJava {
-    sourceCompatibility = targetCompatibility = "1.8"
+repositories {
+    maven {
+        // location of the maven that hosts JEI files
+        name = 'Progwml6 maven'
+        url = 'http://dvs1.progwml6.com/files/maven/'
+    }
+    maven {
+        //CraftTweaker
+        name = 'blamejared'
+        url = 'http://maven.blamejared.com'
+    }
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = 'ModMaven'
+        url = 'modmaven.k-4u.nl'
+    }
 }
 
-minecraft {
-    mappings channel: 'snapshot', version: '20190705-1.14.3'
+version = '1.14.3-1.4.' + System.env.BUILD_NUMBER
+group = 'com.mraof.minestuck'
+archivesBaseName = 'Minestuck'
 
-    //replaceIn "com/mraof/minestuck/Minestuck.java"
-    //replace "@VERSION@", project.version
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+
+minecraft {
+    mappings channel: 'snapshot', version: '20190712-1.14.3'
+
+    //replaceIn 'com/mraof/minestuck/Minestuck.java'
+    //replace '@VERSION@', project.version
 
     // Default run configurations.
     // These can be tweaked, removed, or duplicated as needed.
@@ -64,7 +60,6 @@ minecraft {
                 }
             }
         }
-
         server {
             workingDirectory project.file('run')
 
@@ -84,12 +79,11 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.3-27.0.24'
+    minecraft 'net.minecraftforge:forge:1.14.3-27.0.50'
 
     def mc_version = "1.14.3"
     def jei_version = "6.0.0.7"
 	// http://dvs1.progwml6.com/files/maven
-    //compile "mezz.jei:jei_1.9.4:3.6.8.225"
     compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
     //deobf "CraftTweaker2:CraftTweaker2-API:4.1.6.457"
@@ -105,7 +99,8 @@ sourceSets {
         }
     }
 }
-processResources
+
+/*processResources
 {
     // replace stuff in mcmod.info, nothing else
     //from(sourceSets.main.resources.srcDirs) {
@@ -119,4 +114,4 @@ processResources
     //from(sourceSets.main.resources.srcDirs) {
     //    exclude 'mcmod.info'
     //}
-}
+}*/
