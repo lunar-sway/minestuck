@@ -39,20 +39,8 @@ public class CraftingRecipes
 	
 	public static void registerSmelting()
 	{
-		/*GameRegistry.addSmelting(goldSeeds, new ItemStack(Items.GOLD_NUGGET), 0.1F);
-		GameRegistry.addSmelting(ironOreEndStone, new ItemStack(Items.IRON_INGOT), 0.7F);
-		GameRegistry.addSmelting(ironOreSandstone, new ItemStack(Items.IRON_INGOT), 0.7F);
-		GameRegistry.addSmelting(ironOreSandstoneRed, new ItemStack(Items.IRON_INGOT), 0.7F);
-		GameRegistry.addSmelting(goldOreSandstone, new ItemStack(Items.GOLD_INGOT), 1.0F);
-		GameRegistry.addSmelting(goldOreSandstoneRed, new ItemStack(Items.GOLD_INGOT), 1.0F);
-		GameRegistry.addSmelting(redstoneOreEndStone, new ItemStack(Items.REDSTONE), 0.7F);
-		GameRegistry.addSmelting(woodenCactus, new ItemStack(Items.COAL, 1, 1), 0.15F);
-		GameRegistry.addSmelting(beefSword, new ItemStack(steakSword), 0.5F);
-		if(MinestuckConfig.cruxtruderIntake)
+		/*if(MinestuckConfig.cruxtruderIntake)
 			GameRegistry.addSmelting(cruxiteDowel, new ItemStack(MinestuckItems.rawCruxite), 0.0F);
-		
-		GameRegistry.addSmelting(log, new ItemStack(Items.COAL, 1, 1), 0.15F);
-		GameRegistry.addSmelting(endLog, new ItemStack(Items.COAL, 1, 1), 0.15F);
 		
 		TileEntityUraniumCooker.setRadiation(Items.BEEF, new ItemStack(irradiatedSteak));
 		TileEntityUraniumCooker.setRadiation(beefSword, new ItemStack(irradiatedSteakSword));

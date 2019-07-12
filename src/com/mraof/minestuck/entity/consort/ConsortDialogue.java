@@ -55,7 +55,7 @@ public class ConsortDialogue
 		addMessage("blue_moon").landTitle(fromNameTitle("thunder")).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
 		addMessage("lightning_strike").landTitle(fromNameTitle("thunder")).consort(EnumConsort.TURTLE);
 		addMessage(new ChainMessage(new SingleMessage("reckoning1"), new SingleMessage("reckoning2"), new SingleMessage("reckoning3", "consort_type"))).landTitle(fromNameTitle("thunder"));
-		addMessage(new ChainMessage(new SingleMessage("thunder_death.1"), new SingleMessage("thunder_death.2"))).landTitle(fromNameTitle("thunder")).landTerrain(fromNameTerrain("wood"));
+		addMessage(new ChainMessage(new SingleMessage("thunder_death.1"), new SingleMessage("thunder_death.2"))).landTitle(fromNameTitle("thunder")).landTerrain(fromNameTerrain("woods"));
 		addMessage("hardcore").landTitle(fromNameTitle("thunder")).landTerrain(fromNameTerrain("heat"));
 		addMessage(new ChainMessage(new SingleMessage("thunder_throw.1"), new SingleMessage("thunder_throw.2"))).landTitle(fromNameTitle("thunder")).consort(EnumConsort.TURTLE, EnumConsort.SALAMANDER);
 		
@@ -67,7 +67,7 @@ public class ConsortDialogue
 		addMessage(new ChainMessage(0, "rabbit.foodShortage.2", new SingleMessage("rabbit.food_shortage.1"), new SingleMessage("rabbit.food_shortage.2"))).landTitle(fromNameTitle("rabbits")).landTerrain(fromNameTerrain("rock"));
 		addMessage(new ChainMessage(0, "rabbit.food.1", new SingleMessage("rabbit.food.1"), new SingleMessage("rabbit.food.2a"))).landTitle(fromNameTitle("rabbits")).landTerrain(fromNameTerrain("rock"), fromNameTerrain("sandstone"));
 		addMessage(new ChainMessage(0, "rabbit.food.2", new SingleMessage("rabbit.food.1"), new SingleMessage("rabbit.food.2a"), new SingleMessage("rabbit.food.3a"))).landTitle(fromNameTitle("rabbits")).landTerrain(fromNameTerrain("sand"));
-		addMessage(new ChainMessage(0, "rabbit.food.3", new SingleMessage("rabbit.food.1"), new SingleMessage("rabbit.food.2b"))).landTitle(fromNameTitle("rabbits")).landTerrain(fromNameTerrain("wood"), fromNameTerrain("shade"));
+		addMessage(new ChainMessage(0, "rabbit.food.3", new SingleMessage("rabbit.food.1"), new SingleMessage("rabbit.food.2b"))).landTitle(fromNameTitle("rabbits")).landTerrain(fromNameTerrain("woods"), fromNameTerrain("shade"));
 		
 		//Monsters
 		addMessage(new SingleMessage("pet_zombie")).landTitle(fromNameTitle("monsters")).consort(EnumConsort.NAKAGATOR, EnumConsort.SALAMANDER);
@@ -145,8 +145,8 @@ public class ConsortDialogue
 		addMessage("lava_crickets").landTerrain(fromNameTerrain("heat"));
 		
 		//Wood
-		addMessage("wood_treatments").landTerrain(fromNameTerrain("wood"));
-		addMessage(new ChainMessage(new SingleMessage("splinters.1"), new SingleMessage("splinters.2"))).landTerrain(fromNameTerrain("wood"));
+		addMessage("wood_treatments").landTerrain(fromNameTerrain("woods"));
+		addMessage(new ChainMessage(new SingleMessage("splinters.1"), new SingleMessage("splinters.2"))).landTerrain(fromNameTerrain("woods"));
 		
 		//Sand & Sandstone
 		addMessage("sand_surfing").landTerrain(fromNameTerrain("sand"));
