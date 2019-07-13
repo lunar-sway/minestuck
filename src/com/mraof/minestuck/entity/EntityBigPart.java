@@ -1,40 +1,34 @@
 package com.mraof.minestuck.entity;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.MoverType;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.entity.*;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.IPacket;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHandSide;
+import net.minecraft.util.HandSide;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.fml.network.NetworkHooks;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 
 /**
  * Created by mraof on 2017 January 26 at 9:31 PM.
  */
-public class EntityBigPart extends EntityLivingBase implements IEntityAdditionalSpawnData
+public class EntityBigPart extends Entity implements IEntityAdditionalSpawnData
 {
 	PartGroup group;
 	private int partId;
-
-	public EntityBigPart(World world)
+	EntitySize size;
+	
+	EntityBigPart(EntityType<?> type, World worldIn, PartGroup group, float width, float height)
 	{
-		super(ModEntityTypes.BIG_PART, world);
-	}
-
-	EntityBigPart(World worldIn, PartGroup group, Vec3d size)
-	{
-		this(worldIn);
+		super(type, worldIn);
 		this.group = group;
-		this.setSize((float) size.x, (float) size.y);
+		this.size = EntitySize.flexible(width, height);
 	}
 
 	void setPartId(int id)
@@ -42,15 +36,23 @@ public class EntityBigPart extends EntityLivingBase implements IEntityAdditional
 		this.partId = id;
 	}
 	
-	/*@Override TODO Consider which nbt functions that should be overwritten, alternatively look at making the entity type not serializable
-	public void readEntityFromNBT(NBTTagCompound compound)
-	{
-	}
-
 	@Override
-	public void writeEntityToNBT(NBTTagCompound compound)
+	protected void registerData()
 	{
-	}*/
+	
+	}
+	
+	@Override
+	protected void readAdditional(CompoundNBT compound)
+	{
+	
+	}
+	
+	@Override
+	protected void writeAdditional(CompoundNBT compound)
+	{
+	
+	}
 	
 	@Override
 	public void baseTick()
@@ -68,37 +70,19 @@ public class EntityBigPart extends EntityLivingBase implements IEntityAdditional
 	{
 		return this.group != null && this.group.attackFrom(damageSource, amount);
 	}
-
-	@Override
-	public Iterable<ItemStack> getArmorInventoryList()
-	{
-		return new ArrayList<ItemStack>();
-	}
 	
 	@Override
-	public ItemStack getItemStackFromSlot(EntityEquipmentSlot slotIn)
+	public EntitySize getSize(Pose poseIn)
 	{
-		return ItemStack.EMPTY;
-	}
-
-	@Override
-	public void setItemStackToSlot(EntityEquipmentSlot slotIn, @Nullable ItemStack stack)
-	{
-
-	}
-
-	@Override
-	public EnumHandSide getPrimaryHand()
-	{
-		return EnumHandSide.RIGHT;
+		return super.getSize(poseIn);
 	}
 	
 	@Override
 	public void writeSpawnData(PacketBuffer buffer)
 	{
 		buffer.writeInt(this.group.parent.getEntityId());
-		buffer.writeFloat(this.width);
-		buffer.writeFloat(this.height);
+		buffer.writeFloat(this.getWidth());
+		buffer.writeFloat(this.getHeight());
 	}
 
 	@Override
@@ -115,7 +99,6 @@ public class EntityBigPart extends EntityLivingBase implements IEntityAdditional
 			}
 			parts.add(index, this);
 		}
-		this.setSize(this.width, this.height);
 	}
 
 	@Override
@@ -135,16 +118,17 @@ public class EntityBigPart extends EntityLivingBase implements IEntityAdditional
 	{
 		return false;
 	}
-
+	
 	@Override
-	protected void collideWithEntity(Entity entityIn)
+	public void move(MoverType typeIn, Vec3d pos)
 	{
-	}
-
-	@Override
-	public void move(MoverType type, double x, double y, double z)
-	{
-		this.setBoundingBox(this.getBoundingBox().offset(x, y, z));
+		this.setBoundingBox(this.getBoundingBox().offset(pos));
 		this.resetPositionToBB();
+	}
+	
+	@Override
+	public IPacket<?> createSpawnPacket()
+	{
+		throw new UnsupportedOperationException();
 	}
 }

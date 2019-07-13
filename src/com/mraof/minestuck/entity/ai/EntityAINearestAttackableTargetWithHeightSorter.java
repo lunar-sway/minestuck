@@ -8,9 +8,9 @@ public class EntityAINearestAttackableTargetWithHeightSorter implements Comparat
 {
 	private Entity theEntity;
 
-	final EntityAINearestAttackableTargetWithHeight parent;
+	final NearestAttackableTargetWithHeightGoal parent;
 
-	public EntityAINearestAttackableTargetWithHeightSorter(EntityAINearestAttackableTargetWithHeight par1EntityAINearestAttackableTarget, Entity par2Entity)
+	public EntityAINearestAttackableTargetWithHeightSorter(NearestAttackableTargetWithHeightGoal par1EntityAINearestAttackableTarget, Entity par2Entity)
 	{
 		this.parent = par1EntityAINearestAttackableTarget;
 		this.theEntity = par2Entity;

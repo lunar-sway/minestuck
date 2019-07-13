@@ -242,7 +242,7 @@ public class ConsortRewardHandler
 		}
 	}
 	
-	public static List<Pair<ItemStack, Integer>> generateStock(ResourceLocation lootTable, EntityConsort consort, Random rand)
+	public static List<Pair<ItemStack, Integer>> generateStock(ResourceLocation lootTable, ConsortEntity consort, Random rand)
 	{
 		LootContext.Builder contextBuilder = new LootContext.Builder((WorldServer) consort.world).withLootedEntity(consort);
 		List<ItemStack> itemStacks = consort.getServer().getLootTableManager().getLootTableFromLocation(lootTable).generateLootForPools(rand, contextBuilder.build());

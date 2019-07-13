@@ -1,6 +1,6 @@
 package com.mraof.minestuck.item.weapon;
 
-import com.mraof.minestuck.entity.underling.EntityUnderling;
+import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
@@ -18,9 +18,9 @@ public class ItemCandyWeapon extends ItemWeapon
 	@Override
 	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase player)
 	{
-		if(target instanceof EntityUnderling)
+		if(target instanceof UnderlingEntity)
 		{
-			((EntityUnderling) target).dropCandy = true;
+			((UnderlingEntity) target).dropCandy = true;
 		}
 		return super.hitEntity(itemStack, target, player);
 	}

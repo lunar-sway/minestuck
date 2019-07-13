@@ -1,6 +1,6 @@
 package com.mraof.minestuck.client.renderer.entity;
 
-import com.mraof.minestuck.entity.item.EntityHologram;
+import com.mraof.minestuck.entity.item.HologramEntity;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class RenderHologram extends Render<EntityHologram>
+public class RenderHologram extends Render<HologramEntity>
 {
 
 	public RenderHologram(RenderManager manager) 
@@ -19,7 +19,7 @@ public class RenderHologram extends Render<EntityHologram>
 	}
 	
 	@Override
-	public void doRender(EntityHologram entity, double x, double y, double z, float entityYaw, float partialTicks) {
+	public void doRender(HologramEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		
 		ItemStack item = entity.getItem();
 		float f = (float)entity.innerRotation + partialTicks;
@@ -38,13 +38,13 @@ public class RenderHologram extends Render<EntityHologram>
 		GlStateManager.popMatrix();
 	}
 	
-	protected boolean canRenderName(EntityHologram entity)
+	protected boolean canRenderName(HologramEntity entity)
     {
         return super.canRenderName(entity) && (entity.getAlwaysRenderNameTagForRender() || entity.hasCustomName() && entity == this.renderManager.pointedEntity);
     }
 
 	@Override
-	protected ResourceLocation getEntityTexture(EntityHologram entity) 
+	protected ResourceLocation getEntityTexture(HologramEntity entity)
 	{
 		return null;
 	}

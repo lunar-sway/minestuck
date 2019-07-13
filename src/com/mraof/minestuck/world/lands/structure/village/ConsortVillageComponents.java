@@ -1,30 +1,10 @@
 package com.mraof.minestuck.world.lands.structure.village;
 
-import com.google.common.collect.Lists;
-import com.mraof.minestuck.entity.consort.EntityConsort;
-import com.mraof.minestuck.entity.consort.EnumConsort;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
-import com.mraof.minestuck.world.lands.LandAspectRegistry;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import com.mraof.minestuck.world.lands.structure.StructureComponentUtil;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.World;
-
-import java.util.List;
-import java.util.Random;
-
-import static com.mraof.minestuck.world.lands.structure.village.ConsortVillageIguana.*;
-import static com.mraof.minestuck.world.lands.structure.village.ConsortVillageNakagator.*;
-import static com.mraof.minestuck.world.lands.structure.village.ConsortVillageSalamander.*;
-import static com.mraof.minestuck.world.lands.structure.village.ConsortVillageTurtle.*;
 
 public class ConsortVillageComponents
 {

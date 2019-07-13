@@ -4,7 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mraof.minestuck.entity.consort.EntityConsort;
+import com.mraof.minestuck.entity.consort.ConsortEntity;
 
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
@@ -24,10 +24,10 @@ public class CommandConsortReply
 	{
 		EntityPlayerMP player = source.asPlayer();
 		Entity entity = player.world.getEntityByID(id);
-		if(entity instanceof EntityConsort && new Vec3d(player.posX, player.posY, player.posZ)
+		if(entity instanceof ConsortEntity && new Vec3d(player.posX, player.posY, player.posZ)
 				.squareDistanceTo(entity.posX, entity.posY, entity.posZ) < 100)
 		{
-			EntityConsort consort = (EntityConsort) entity;
+			ConsortEntity consort = (ConsortEntity) entity;
 			consort.commandReply(player, path);
 		}
 		return 1;

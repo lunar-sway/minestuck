@@ -7,7 +7,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.client.renderer.GlStateManager;
 
-import com.mraof.minestuck.entity.EntityFrog;
+import com.mraof.minestuck.entity.FrogEntity;
 
 /**
  * ModelFrog - Cibernet
@@ -122,7 +122,7 @@ public class ModelFrog extends ModelBase
 	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
 		
 		float f = ageInTicks - (float)entityIn.ticksExisted;
-		EntityFrog frog = (EntityFrog) entityIn;
+		FrogEntity frog = (FrogEntity) entityIn;
 		
 		this.head.rotateAngleY = netHeadYaw / (180F / (float)Math.PI);
 		this.head.rotateAngleX = headPitch / (180F / (float)Math.PI);
@@ -150,7 +150,7 @@ public class ModelFrog extends ModelBase
 	public void setLivingAnimations(EntityLivingBase entitylivingbaseIn, float p_78086_2_, float p_78086_3_, float partialTickTime)
 	{
 		super.setLivingAnimations(entitylivingbaseIn, p_78086_2_, p_78086_3_, partialTickTime);
-		this.jumpRotation = MathHelper.sin(((EntityFrog)entitylivingbaseIn).setJumpCompletion(partialTickTime) * (float)Math.PI);
+		this.jumpRotation = MathHelper.sin(((FrogEntity)entitylivingbaseIn).setJumpCompletion(partialTickTime) * (float)Math.PI);
 	}
 	
 	//MathHelper.cos(par1 * 0.6662F + (float)Math.PI) * 1.4F * par2;

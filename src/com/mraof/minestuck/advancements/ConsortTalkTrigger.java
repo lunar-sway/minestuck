@@ -6,11 +6,12 @@ import com.google.common.collect.Sets;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.entity.consort.EntityConsort;
+import com.mraof.minestuck.entity.consort.ConsortEntity;
 import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.advancements.PlayerAdvancements;
 import net.minecraft.advancements.criterion.AbstractCriterionInstance;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
@@ -67,7 +68,7 @@ public class ConsortTalkTrigger implements ICriterionTrigger<ConsortTalkTrigger.
 		return new Instance(message);
 	}
 	
-	public void trigger(EntityPlayerMP player, String message, EntityConsort consort)
+	public void trigger(ServerPlayerEntity player, String message, ConsortEntity consort)
 	{
 		Listeners listeners = listenersMap.get(player.getAdvancements());
 		if(listeners != null)

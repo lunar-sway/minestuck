@@ -13,6 +13,7 @@ import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 import com.mraof.minestuck.world.storage.loot.MinestuckLoot;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandom;
@@ -127,9 +128,9 @@ public class ConsortDialogue
 		
 		//Towers
 		addMessage("climb_high").landTitleSpecific(fromNameTitle("towers"), fromNameTitle("wind")).consort(EnumConsort.IGUANA);
-		addMessage(new ConditionedMessage((EntityConsort consort, EntityPlayerMP player) -> consort.posY < 78, new ChainMessage(new SingleMessage("height_fear.towers.1"), new SingleMessage("height_fear.towers.2")),
+		addMessage(new ConditionedMessage((ConsortEntity consort, EntityPlayerMP player) -> consort.posY < 78, new ChainMessage(new SingleMessage("height_fear.towers.1"), new SingleMessage("height_fear.towers.2")),
 				new SingleMessage("height_fear.panic"))).landTitle(fromNameTitle("towers")).consort(EnumConsort.TURTLE);
-		addMessage(new ConditionedMessage((EntityConsort consort, EntityPlayerMP player) -> consort.posY < 78, new ChainMessage(new SingleMessage("height_fear.rock.1"), new SingleMessage("height_fear.rock.2")),
+		addMessage(new ConditionedMessage((ConsortEntity consort, EntityPlayerMP player) -> consort.posY < 78, new ChainMessage(new SingleMessage("height_fear.rock.1"), new SingleMessage("height_fear.rock.2")),
 				new SingleMessage("height_fear.panic"))).landTitle(fromNameTitle("wind")).consort(EnumConsort.TURTLE);
 		
 		//Shade
@@ -162,7 +163,7 @@ public class ConsortDialogue
 		addMessage(new ChoiceMessage(new SingleMessage("fur_coat"), new SingleMessage[]{new SingleMessage("fur_coat.pay"), new SingleMessage("fur_coat.ignore")},
 				new MessageType[]{new PurchaseMessage(MinestuckLoot.CONSORT_JUNK_REWARD, 100, new ChainMessage(1, new SingleMessage("fur_coat.grattitude"), new SingleMessage("thank_you"))),
 						new SingleMessage("fur_coat.death")})).landTerrain(fromNameTerrain("frost"));
-		addMessage("tent_protection").landTerrain(fromNameTerrain("frost")).consortReq((EntityConsort::hasHome));
+		addMessage("tent_protection").landTerrain(fromNameTerrain("frost")).consortReq((ConsortEntity::hasHome));
 		addMessage("all_ores").landTerrain(fromNameTerrain("rock"));
 		addMessage("rockfu", "landName").landTerrain(fromNameTerrain("rock"));
 		addMessage("all_trees").landTerrain(fromNameTerrain("forest"));
@@ -223,7 +224,7 @@ public class ConsortDialogue
 		addMessage("lazy_king").landTerrain(fromNameTerrain("shade"));
 		addMessage("music_invention").consort(EnumConsort.NAKAGATOR, EnumConsort.SALAMANDER);
 		addMessage("wyrm").consort(EnumConsort.TURTLE, EnumConsort.IGUANA);
-		addMessage(new ConditionedMessage((EntityConsort consort, EntityPlayerMP player) -> SburbHandler.hasEntered((EntityPlayerMP) player),
+		addMessage(new ConditionedMessage((ConsortEntity consort, EntityPlayerMP player) -> SburbHandler.hasEntered((EntityPlayerMP) player),
 				new SingleMessage("heroic_stench"), new SingleMessage("leech_stench"))).reqLand();
 		addMessage(new SingleMessage("fire_cakes")).landTerrain(fromNameTerrain("heat")).landTitle(fromNameTitle("cake"));
 		
@@ -273,11 +274,11 @@ public class ConsortDialogue
 		).consort(EnumConsort.NAKAGATOR, EnumConsort.IGUANA);
 		
 		addMessage("await_hero", "land_name", "consort_types", "player_title_land").reqLand();
-		addMessage(new ConditionedMessage("skaia", (EntityConsort consort, EntityPlayerMP player) -> !consort.visitedSkaia, new SingleMessage("watch_skaia"),
-				new ConditionedMessage((EntityConsort consort, EntityPlayerMP player) -> MinestuckDimensionHandler.isSkaia(consort.dimension),
+		addMessage(new ConditionedMessage("skaia", (ConsortEntity consort, EntityPlayerMP player) -> !consort.visitedSkaia, new SingleMessage("watch_skaia"),
+				new ConditionedMessage((ConsortEntity consort, EntityPlayerMP player) -> MinestuckDimensionHandler.isSkaia(consort.dimension),
 						new SingleMessage("at_skaia.1", "consort_sound2"), new SingleMessage("visited_skaia")))).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA, EnumConsort.NAKAGATOR).reqLand();
-		addMessage(new ConditionedMessage("skaia_turtle", (EntityConsort consort, EntityPlayerMP player) -> !consort.visitedSkaia, new SingleMessage("watch_skaia"),
-				new ConditionedMessage((EntityConsort consort, EntityPlayerMP player) -> MinestuckDimensionHandler.isSkaia(consort.dimension),
+		addMessage(new ConditionedMessage("skaia_turtle", (ConsortEntity consort, EntityPlayerMP player) -> !consort.visitedSkaia, new SingleMessage("watch_skaia"),
+				new ConditionedMessage((ConsortEntity consort, EntityPlayerMP player) -> MinestuckDimensionHandler.isSkaia(consort.dimension),
 						new SingleMessage("at_skaia.2"), new SingleMessage("visited_skaia")))).consort(EnumConsort.TURTLE).reqLand();
 		
 		addMessage(new SingleMessage("zazzerpan")).consort(EnumConsort.TURTLE);
@@ -436,7 +437,7 @@ public class ConsortDialogue
 		return set.toArray(new TitleLandAspect[set.size()]);
 	}
 	
-	public static DialogueWrapper getRandomMessage(EntityConsort consort, EntityPlayerMP player)
+	public static DialogueWrapper getRandomMessage(ConsortEntity consort, ServerPlayerEntity player)
 	{
 		LandAspects aspects = MinestuckDimensionHandler.getAspects(player.getServer(), consort.homeDimension);
 		
@@ -576,12 +577,12 @@ public class ConsortDialogue
 			return this;
 		}
 		
-		public ITextComponent getMessage(EntityConsort consort, EntityPlayerMP player)
+		public ITextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player)
 		{
 			return messageStart.getMessage(consort, player, "");
 		}
 		
-		public ITextComponent getFromChain(EntityConsort consort, EntityPlayerMP player, String fromChain)
+		public ITextComponent getFromChain(ConsortEntity consort, ServerPlayerEntity player, String fromChain)
 		{
 			return messageStart.getFromChain(consort, player, "", fromChain);
 		}
@@ -594,6 +595,6 @@ public class ConsortDialogue
 	
 	public interface ConsortRequirement
 	{
-		boolean apply(EntityConsort consort);
+		boolean apply(ConsortEntity consort);
 	}
 }

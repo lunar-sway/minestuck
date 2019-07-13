@@ -1,7 +1,7 @@
 package com.mraof.minestuck.entity;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -15,13 +15,13 @@ import java.util.ArrayList;
  */
 public class PartGroup
 {
-    private ArrayList<Vec3d> positions = new ArrayList<Vec3d>();
-    private ArrayList<Vec3d> sizes = new ArrayList<Vec3d>();
-    public ArrayList<EntityBigPart> parts = new ArrayList<EntityBigPart>();
-    private ArrayList<AxisAlignedBB> boxes = new ArrayList<AxisAlignedBB>();
-    EntityLivingBase parent;
+    private ArrayList<Vec3d> positions = new ArrayList<>();
+    private ArrayList<Vec3d> sizes = new ArrayList<>();
+    public ArrayList<EntityBigPart> parts = new ArrayList<>();
+    private ArrayList<AxisAlignedBB> boxes = new ArrayList<>();
+    LivingEntity parent;
 
-    public PartGroup(EntityLivingBase parent)
+    public PartGroup(LivingEntity parent)
     {
         this.parent = parent;
     }
@@ -55,12 +55,12 @@ public class PartGroup
     {
         for(int i = 0; i < positions.size(); i++)
         {
-            EntityBigPart part = new EntityBigPart(world, this, sizes.get(i));
+            EntityBigPart part = new EntityBigPart(parent.getType(), world, this, (float) sizes.get(i).x, (float) sizes.get(i).y);
             Vec3d position = positions.get(i);
             part.setPosition(parent.posX + position.x, parent.posY + position.y, parent.posZ + position.z);
             part.setPartId(parts.size());
             parts.add(part);
-            world.spawnEntity(part);
+            world.addEntity(part);
         }
     }
 
@@ -87,13 +87,13 @@ public class PartGroup
 
     public void applyCollision(Entity entity)
     {
-        parent.world.profiler.startSection("partGroupCollision");
+        parent.world.getProfiler().startSection("partGroupCollision");
         float yaw = -parent.renderYawOffset * 3.141592f / 180f;
         boolean positionChanged = false;
         Vec3d position = new Vec3d(entity.posX - parent.posX, entity.posY - parent.posY, entity.posZ - parent.posZ).rotateYaw(yaw);
         for (AxisAlignedBB box : boxes)
         {
-            AxisAlignedBB relativeBox = new AxisAlignedBB(position.x, position.y, position.z, entity.width, entity.height, entity.width);
+            AxisAlignedBB relativeBox = new AxisAlignedBB(position.x, position.y, position.z, entity.getWidth(), entity.getHeight(), entity.getWidth());
             if(box.intersects(relativeBox))
             {
                 positionChanged = true;
@@ -113,10 +113,10 @@ public class PartGroup
             if(positionChanged)
             {
                 position = position.rotateYaw(-yaw);
-                entity.move(MoverType.SELF, position.x + parent.posX, position.y + parent.posY, position.z + parent.posZ);	//TODO change to velocity, or lookup MoverType?
+                entity.move(MoverType.SELF, position.add(parent.getPositionVec()));	//TODO change to velocity, or lookup MoverType?
             }
         }
-        parent.world.profiler.endSection();
+        parent.world.getProfiler().endSection();
     }
 
     boolean attackFrom(DamageSource damageSource, float amount)

@@ -1,6 +1,6 @@
 package com.mraof.minestuck.client.renderer.entity;
 
-import com.mraof.minestuck.entity.item.EntityMetalBoat;
+import com.mraof.minestuck.entity.item.MetalBoatEntity;
 
 import net.minecraft.client.renderer.entity.RenderBoat;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -21,7 +21,7 @@ public class RenderMetalBoat extends RenderBoat
 	@Override
 	protected ResourceLocation getEntityTexture(EntityBoat entity)
 	{
-		EntityMetalBoat boat = (EntityMetalBoat) entity;
+		MetalBoatEntity boat = (MetalBoatEntity) entity;
 		
 		if(boat.type == 1)
 			return goldVariant;

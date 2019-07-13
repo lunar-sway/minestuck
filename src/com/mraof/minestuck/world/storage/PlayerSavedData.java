@@ -184,7 +184,7 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 		else return get(player.world).getGristSet(IdentifierHandler.encode(player));
 	}
 	
-	public static boolean addBoondollars(EntityPlayerMP player, long boons)
+	public static boolean addBoondollars(ServerPlayerEntity player, long boons)
 	{
 		PlayerData data = getData(player);
 		if(data.boondollars + boons < 0)

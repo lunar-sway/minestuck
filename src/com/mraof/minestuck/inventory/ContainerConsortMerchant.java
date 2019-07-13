@@ -2,8 +2,10 @@ package com.mraof.minestuck.inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -14,7 +16,7 @@ public class ContainerConsortMerchant extends Container
 	
 	private EntityPlayer player;
 	
-	public ContainerConsortMerchant(EntityPlayer player, InventoryConsortMerchant inv)
+	public ContainerConsortMerchant(PlayerEntity player, InventoryConsortMerchant inv)
 	{
 		this.player = player;
 		setInventory(inv);

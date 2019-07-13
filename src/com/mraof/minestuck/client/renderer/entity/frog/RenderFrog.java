@@ -2,8 +2,7 @@ package com.mraof.minestuck.client.renderer.entity.frog;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.model.ModelFrog;
-import com.mraof.minestuck.entity.EntityFrog;
-import com.mraof.minestuck.entity.EntityMinestuck;
+import com.mraof.minestuck.entity.FrogEntity;
 
 import com.mraof.minestuck.item.ItemFrog;
 import net.minecraft.client.renderer.GlStateManager;
@@ -14,7 +13,7 @@ import net.minecraft.client.renderer.entity.model.ModelBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class RenderFrog extends RenderLivingBase<EntityFrog>
+public class RenderFrog extends RenderLivingBase<FrogEntity>
 {
 
 	public RenderFrog(RenderManager manager, ModelBase par1ModelBase, float par2)
@@ -27,19 +26,19 @@ public class RenderFrog extends RenderLivingBase<EntityFrog>
 	}
 
 	@Override
-	protected void preRenderCallback(EntityFrog frog, float partialTickTime) 
+	protected void preRenderCallback(FrogEntity frog, float partialTickTime)
 	{
 		float scale = frog.getFrogSize();
 		GlStateManager.scalef(scale,scale,scale);
 	}
 	
 	@Override
-	protected ResourceLocation getEntityTexture(EntityFrog entity)
+	protected ResourceLocation getEntityTexture(FrogEntity entity)
 	{
 		return new ResourceLocation(Minestuck.MOD_ID, "textures/mobs/frog/base.png");
 	}
 	
-	protected boolean canRenderName(EntityFrog entity)
+	protected boolean canRenderName(FrogEntity entity)
     {
         return super.canRenderName(entity) && (entity.getAlwaysRenderNameTagForRender() || entity.hasCustomName() && entity == this.renderManager.pointedEntity);
     }

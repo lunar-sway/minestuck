@@ -6,7 +6,7 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.entity.EntityFrog;
+import com.mraof.minestuck.entity.FrogEntity;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
@@ -45,7 +45,7 @@ public class ItemFrog extends Item
 	{
 		if(this.isInGroup(group))
 		{
-			for (int i = 0; i <= EntityFrog.maxTypes(); ++i)
+			for (int i = 0; i <= FrogEntity.maxTypes(); ++i)
 			{
 				if(i != 3 && i != 4)
 				{
@@ -62,7 +62,7 @@ public class ItemFrog extends Item
 	{stack.hasTag()
 		int dmg = stack.hasTag() ? 0 : stack.getTag().getInt("Type");
 		
-		if(dmg < 1 || dmg > EntityFrog.maxTypes())
+		if(dmg < 1 || dmg > FrogEntity.maxTypes())
 		{
 			if(stack.hasTag())
 			{
@@ -71,12 +71,12 @@ public class ItemFrog extends Item
 				NBTTagInt eyeType = (NBTTagInt)nbt.get("EyeType");
 				NBTTagInt bellyType = (NBTTagInt)nbt.get("BellyType");
 				
-					if(nbt.contains("EyeType"))for(int i = 0; i <= EntityFrog.maxEyes(); i++)
+					if(nbt.contains("EyeType"))for(int i = 0; i <= FrogEntity.maxEyes(); i++)
 					{
 						if(eyeType.getInt() == i)tooltip.add(new TextComponentTranslation("item.frog.eyes"+i));
 					}
 					
-					if(nbt.contains("EyeType"))for(int i = 1; i <= EntityFrog.maxBelly(); i++)
+					if(nbt.contains("EyeType"))for(int i = 1; i <= FrogEntity.maxBelly(); i++)
 					{
 						if(bellyType.getInt() == i)tooltip.add(new TextComponentTranslation("item.frog.belly"+i));
 					}
@@ -143,7 +143,7 @@ public class ItemFrog extends Item
 					entity.setCustomName(itemstack.getDisplayName());
 				}
 
-				applyItemEntityDataToEntity(world, player, itemstack,(EntityFrog) entity);
+				applyItemEntityDataToEntity(world, player, itemstack,(FrogEntity) entity);
 
 				if (player == null || !player.isCreative())
 				{
@@ -162,7 +162,7 @@ public class ItemFrog extends Item
 
 			for (int i = 0; i < 1; ++i)
 			{
-				entity = new EntityFrog(worldIn, type);
+				entity = new FrogEntity(worldIn, type);
 	
 				entity.setLocationAndAngles(x, y, z, MathHelper.wrapDegrees(worldIn.rand.nextFloat() * 360.0F), 0.0F);
 				entity.rotationYawHead = entity.rotationYaw;
@@ -175,7 +175,7 @@ public class ItemFrog extends Item
 			return entity;
 	}
 	
-	public static void applyItemEntityDataToEntity(World entityWorld, @Nullable EntityPlayer player, ItemStack stack, @Nullable EntityFrog targetEntity)
+	public static void applyItemEntityDataToEntity(World entityWorld, @Nullable EntityPlayer player, ItemStack stack, @Nullable FrogEntity targetEntity)
 	{
 		MinecraftServer minecraftserver = entityWorld.getServer();
 

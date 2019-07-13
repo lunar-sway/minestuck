@@ -4,7 +4,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.block.GristWidgetBlock;
 import com.mraof.minestuck.client.gui.GuiHandler;
-import com.mraof.minestuck.entity.item.EntityGrist;
+import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.inventory.ContainerGristWidget;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.*;
@@ -131,7 +131,7 @@ public class TileEntityGristWidget extends TileEntityMachineProcess implements I
 					break;
 				GristAmount gristAmount = new GristAmount(entry.getKey(),
 						grist <= 3 ? grist : (world.rand.nextInt(grist) + 1));
-				EntityGrist entity = new EntityGrist(world,
+				GristEntity entity = new GristEntity(world,
 						this.pos.getX()
 								+ 0.5 /* this.width - this.width / 2 */,
 						this.pos.getY() + 1, this.pos.getZ()

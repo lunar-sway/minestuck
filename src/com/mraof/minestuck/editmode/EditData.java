@@ -1,6 +1,6 @@
 package com.mraof.minestuck.editmode;
 
-import com.mraof.minestuck.entity.EntityDecoy;
+import com.mraof.minestuck.entity.DecoyEntity;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -14,14 +14,14 @@ import net.minecraft.entity.player.EntityPlayerMP;
 public class EditData
 {
 	
-	EditData(EntityDecoy decoy, EntityPlayerMP player, SburbConnection c)
+	EditData(DecoyEntity decoy, EntityPlayerMP player, SburbConnection c)
 	{
 		this.decoy = decoy;
 		this.player = player;
 		this.connection = c;
 	}
 	
-	EntityDecoy decoy;
+	DecoyEntity decoy;
 	
 	SburbConnection connection;
 	
@@ -46,7 +46,7 @@ public class EditData
 	/**
 	 * @return the decoy entity that took the editors place
 	 */
-	public EntityDecoy getDecoy()
+	public DecoyEntity getDecoy()
 	{
 		return decoy;
 	}

@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.entity.item.EntityHologram;
+import com.mraof.minestuck.entity.item.HologramEntity;
 import com.mraof.minestuck.item.MinestuckItems;
 
 import net.minecraft.block.state.IBlockState;
@@ -78,11 +78,11 @@ public class TileEntityHolopad extends TileEntity
 		{
 			AxisAlignedBB bb = new AxisAlignedBB(pos);
 			
-			boolean bool = world.getEntitiesWithinAABB(EntityHologram.class, bb).isEmpty();
+			boolean bool = world.getEntitiesWithinAABB(HologramEntity.class, bb).isEmpty();
 			
 			if(bool)
 			{
-				EntityHologram holo = new EntityHologram(world, item);
+				HologramEntity holo = new HologramEntity(world, item);
 				holo.setPosition(pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5);
 				world.spawnEntity(holo);
 			}
@@ -94,9 +94,9 @@ public class TileEntityHolopad extends TileEntity
 		if(!world.isRemote)
 		{
 			AxisAlignedBB bb = new AxisAlignedBB(pos);
-			List<EntityHologram> list = world.getEntitiesWithinAABB(EntityHologram.class, bb);
+			List<HologramEntity> list = world.getEntitiesWithinAABB(HologramEntity.class, bb);
 			
-			for(EntityHologram holo : list)
+			for(HologramEntity holo : list)
 			{
 				world.removeEntity(holo);
 			}
