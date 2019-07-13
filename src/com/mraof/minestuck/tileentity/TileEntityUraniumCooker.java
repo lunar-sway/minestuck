@@ -7,6 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,7 +19,7 @@ import net.minecraft.world.IInteractionObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TileEntityUraniumCooker extends TileEntityMachineProcess implements IInteractionObject
+public class TileEntityUraniumCooker extends TileEntityMachineProcess implements INamedContainerProvider
 {
 	private static HashMap<Item, ItemStack> radiations = new HashMap<>();
 	private short fuel = 0;

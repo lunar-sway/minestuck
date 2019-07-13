@@ -1,21 +1,10 @@
 package com.mraof.minestuck.world.lands.structure;
 
-import com.mraof.minestuck.block.BlockGate;
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.entity.underling.EntityOgre;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockUtil;
-import com.mraof.minestuck.world.storage.loot.MinestuckLoot;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
-import java.util.List;
-import java.util.Random;
 
 public class ImpDungeonComponents
 {

@@ -4,16 +4,16 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.*;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -51,17 +51,17 @@ public class ItemCaptchaCard extends Item
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, EnumHand handIn) {
 		
-		NBTTagCompound nbt = playerIn.getHeldItem(handIn).getTag();
+		CompoundNBT nbt = playerIn.getHeldItem(handIn).getTag();
 		ItemStack stack = playerIn.getHeldItem(handIn);
 		
 		if(playerIn.isSneaking() && stack.hasTag() && ((AlchemyRecipes.isGhostCard(stack) && !AlchemyRecipes.isPunchedCard(stack)) || !AlchemyRecipes.hasDecodedItem(stack)))
 		{	//TODO should only remove content tags
-			return new ActionResult<>(EnumActionResult.SUCCESS, new ItemStack(playerIn.getHeldItem(handIn).getItem(), playerIn.getHeldItem(handIn).getCount()));
+			return new ActionResult<>(ActionResultType.SUCCESS, new ItemStack(playerIn.getHeldItem(handIn).getItem(), playerIn.getHeldItem(handIn).getCount()));
 		}
 		else
-			return new ActionResult<>(EnumActionResult.PASS, playerIn.getHeldItem(handIn));
+			return new ActionResult<>(ActionResultType.PASS, playerIn.getHeldItem(handIn));
 	}
 	
 	@Override
@@ -69,22 +69,22 @@ public class ItemCaptchaCard extends Item
 	{
 		if(AlchemyRecipes.hasDecodedItem(stack))
 		{
-			NBTTagCompound nbt = stack.getTag();
+			CompoundNBT nbt = stack.getTag();
 			ItemStack content = AlchemyRecipes.getDecodedItem(stack);
 			if(!content.isEmpty())
 			{
 				String stackSize = (nbt.getBoolean("punched") || nbt.getInt("contentSize") <= 0) ? "" : nbt.getInt("contentSize") + "x";
-				tooltip.add(new TextComponentString("(").appendText(stackSize).appendSibling(content.getDisplayName()).appendText(")"));
+				tooltip.add(new StringTextComponent("(").appendText(stackSize).appendSibling(content.getDisplayName()).appendText(")"));
 				if(nbt.getBoolean("punched"))
-					tooltip.add(new TextComponentString("(").appendSibling(new TextComponentTranslation("item.minestuck.captcha_card.punched")).appendText(")"));
+					tooltip.add(new StringTextComponent("(").appendSibling(new TranslationTextComponent("item.minestuck.captcha_card.punched")).appendText(")"));
 				else if(nbt.getInt("contentSize") <= 0)
-					tooltip.add(new TextComponentString("(").appendSibling(new TextComponentTranslation("item.minestuck.captcha_card.ghost")).appendText(")"));
+					tooltip.add(new StringTextComponent("(").appendSibling(new StringTextComponent("item.minestuck.captcha_card.ghost")).appendText(")"));
 			} else
 			{
-				tooltip.add(new TextComponentString("(").appendSibling(new TextComponentTranslation("item.minestuck.captcha_card.invalid")).appendText(")"));
+				tooltip.add(new StringTextComponent("(").appendSibling(new TranslationTextComponent("item.minestuck.captcha_card.invalid")).appendText(")"));
 			}
 		} else
-			tooltip.add(new TextComponentString("(").appendSibling(new TextComponentTranslation("item.minestuck.captcha_card.empty")).appendText(")"));
+			tooltip.add(new StringTextComponent("(").appendSibling(new TranslationTextComponent("item.minestuck.captcha_card.empty")).appendText(")"));
 	}
 	
 }

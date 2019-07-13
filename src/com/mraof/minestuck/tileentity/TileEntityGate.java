@@ -6,6 +6,7 @@ import com.mraof.minestuck.util.PositionTeleporter;
 import com.mraof.minestuck.world.GateHandler;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -29,7 +30,7 @@ public class TileEntityGate extends TileEntity
 		super(MinestuckTiles.GATE);
 	}
 	
-	public void teleportEntity(World world, EntityPlayerMP player, Block block)
+	public void teleportEntity(World world, ServerPlayerEntity player, Block block)
 	{
 		if(block == MinestuckBlocks.RETURN_NODE)
 		{

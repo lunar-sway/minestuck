@@ -3,6 +3,7 @@ package com.mraof.minestuck.block;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.IntegerProperty;
+import net.minecraft.util.Direction;
 import net.minecraft.util.EnumFacing;
 
 /**
@@ -24,6 +25,6 @@ public class MinestuckProperties
 	
 	public static final EnumProperty<EnumDowelType> DOWEL = EnumProperty.create("dowel", EnumDowelType.class, EnumDowelType.DOWEL, EnumDowelType.CARVED_DOWEL);
 	public static final EnumProperty<EnumDowelType> DOWEL_OR_NONE = EnumProperty.create("dowel", EnumDowelType.class);
-	public static final EnumProperty<BlockCruxiteDowel.Type> DOWEL_BLOCK = EnumProperty.create("dowel", BlockCruxiteDowel.Type.class);
-	public static final EnumProperty<EnumFacing.Axis> AXIS_2 = EnumProperty.create("axis_2", EnumFacing.Axis.class);
+	public static final EnumProperty<CruxiteDowelBlock.Type> DOWEL_BLOCK = EnumProperty.create("dowel", CruxiteDowelBlock.Type.class);
+	public static final EnumProperty<Direction.Axis> AXIS_2 = EnumProperty.create("axis_2", Direction.Axis.class);
 }

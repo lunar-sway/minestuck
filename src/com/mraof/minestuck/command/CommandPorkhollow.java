@@ -49,7 +49,7 @@ public class CommandPorkhollow    //Much like /gristSend and /land, is a tempora
 			int amount = parseInt(args[1], 1);
 			if(MinestuckPlayerData.addBoondollars(player, -amount))
 			{
-				ItemStack stack = ItemBoondollars.setCount(new ItemStack(MinestuckItems.boondollars), amount);
+				ItemStack stack = BoondollarsItem.setCount(new ItemStack(MinestuckItems.boondollars), amount);
 				if (!player.addItemStackToInventory(stack))
 				{
 					EntityItem entity = player.dropItem(stack, false);

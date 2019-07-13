@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
-import com.mraof.minestuck.block.BlockGate;
+import com.mraof.minestuck.block.GateBlock;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.event.ServerEventHandler;
@@ -19,7 +18,6 @@ import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.tileentity.TileEntityGate;
 import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
-import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
@@ -455,7 +453,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 		for(int i = 0; i < 9; i++)
 			if(i == 4)
 			{
-				world.setBlockState(pos, MinestuckBlocks.GATE.getDefaultState().cycle(BlockGate.MAIN), 0);
+				world.setBlockState(pos, MinestuckBlocks.GATE.getDefaultState().cycle(GateBlock.MAIN), 0);
 				TileEntityGate tileEntity = (TileEntityGate) world.getTileEntity(pos);
 				tileEntity.gateCount = gateCount;
 			}

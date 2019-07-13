@@ -59,7 +59,7 @@ public class ItemFrog extends Item
 	
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
-	{
+	{stack.hasTag()
 		int dmg = stack.hasTag() ? 0 : stack.getTag().getInt("Type");
 		
 		if(dmg < 1 || dmg > EntityFrog.maxTypes())
