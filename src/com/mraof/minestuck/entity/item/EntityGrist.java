@@ -24,6 +24,8 @@ import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Objects;
+
 public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 {
 	public int cycle;
@@ -51,8 +53,8 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		this.motionY = (double)((float)(world.rand.nextGaussian() * 0.2D));
 		this.motionZ = (double)((float)(world.rand.nextGaussian() * 0.20000000298023224D - 0.10000000149011612D));
 		this.isImmuneToFire = true;
-
-		this.gristType = gristData.getType();
+		
+		this.gristType = Objects.requireNonNull(gristData.getType(), "Tried to create a grist entity with null grist type!");
 	}
 
 	public EntityGrist(World par1World)
@@ -215,7 +217,13 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		if(par1NBTTagCompound.hasKey("Value", 99))
 			this.gristValue = par1NBTTagCompound.getShort("Value");
 		if(par1NBTTagCompound.hasKey("Type", 8))
-			this.gristType = GristType.getTypeFromString(par1NBTTagCompound.getString("Type"));
+		{
+			GristType type = GristType.getTypeFromString(par1NBTTagCompound.getString("Type"));
+			if(type == null) {
+				Debug.warnf("Loaded grist entity from nbt but got null grist type! Can't find grist type for %s.", par1NBTTagCompound.getString("Type"));
+				this.setDead();
+			} else this.gristType = type;
+		}
 	}
 	
 	/**
@@ -293,7 +301,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 			this.setDead();
 			return;
 		}
-		this.gristType = GristType.REGISTRY.getValue(typeOffset);
+		this.gristType = Objects.requireNonNull(GristType.REGISTRY.getValue(typeOffset), "Got null grist type when reading spawn data!");
 		this.gristValue = data.readInt();
 		this.setSize(this.getSizeByValue(), 0.5F);
 //		this.yOffset = this.height / 2.0F;
