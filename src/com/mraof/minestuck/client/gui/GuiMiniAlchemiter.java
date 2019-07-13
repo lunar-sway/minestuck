@@ -8,7 +8,7 @@ import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.inventory.ContainerMiniAlchemiter;
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.tileentity.TileEntityMiniAlchemiter;
+import com.mraof.minestuck.tileentity.MiniAlchemiterTileEntity;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
@@ -21,7 +21,7 @@ import java.util.List;
 @OnlyIn(Dist.CLIENT)
 public class GuiMiniAlchemiter extends GuiMachine
 {
-	protected final TileEntityMiniAlchemiter te;
+	protected final MiniAlchemiterTileEntity te;
 	protected final InventoryPlayer playerInventory;
 	
 	private ResourceLocation BACKGROUND = new ResourceLocation("minestuck:textures/gui/alchemiter.png");
@@ -34,7 +34,7 @@ public class GuiMiniAlchemiter extends GuiMachine
 	private int goX;
 	private int goY;
 
-	public GuiMiniAlchemiter(InventoryPlayer inventoryPlayer, TileEntityMiniAlchemiter tileEntity)
+	public GuiMiniAlchemiter(InventoryPlayer inventoryPlayer, MiniAlchemiterTileEntity tileEntity)
 	{
 		super(new ContainerMiniAlchemiter(inventoryPlayer, tileEntity), tileEntity);
 		this.te = tileEntity;

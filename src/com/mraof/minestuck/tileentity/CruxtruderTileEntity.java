@@ -6,23 +6,22 @@ import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
 
 import com.mraof.minestuck.util.ColorCollector;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
-public class TileEntityCruxtruder extends TileEntity
+public class CruxtruderTileEntity extends TileEntity
 {
 	private int color = -1;
 	private boolean broken = false;
 	private int material = 0;
 	
-	public TileEntityCruxtruder()
+	public CruxtruderTileEntity()
 	{
 		super(MinestuckTiles.CRUXTRUDER);
 	}
@@ -51,7 +50,7 @@ public class TileEntityCruxtruder extends TileEntity
 		if(!isBroken())
 		{
 			BlockPos pos = getPos().up();
-			IBlockState state = getWorld().getBlockState(pos);
+			BlockState state = getWorld().getBlockState(pos);
 			if(top && MinestuckConfig.cruxtruderIntake && state.isAir(getWorld(), pos) && material < 64 && material > -1)
 			{
 				ItemStack stack = player.getHeldItemMainhand();
@@ -79,8 +78,8 @@ public class TileEntityCruxtruder extends TileEntity
 					{
 						world.setBlockState(pos, MinestuckBlocks.CRUXITE_DOWEL.getDefaultState().with(CruxiteDowelBlock.DOWEL_TYPE, CruxiteDowelBlock.Type.CRUXTRUDER));
 						TileEntity te = world.getTileEntity(pos);
-						if(te instanceof TileEntityItemStack)
-							ColorCollector.setColor(((TileEntityItemStack) te).getStack(), color + 1);
+						if(te instanceof ItemStackTileEntity)
+							ColorCollector.setColor(((ItemStackTileEntity) te).getStack(), color + 1);
 						if(material > 0)
 							material--;
 					}
@@ -90,7 +89,7 @@ public class TileEntityCruxtruder extends TileEntity
 	}
 	
 	@Override
-	public void read(NBTTagCompound compound)
+	public void read(CompoundNBT compound)
 	{
 		super.read(compound);
 		
@@ -102,7 +101,7 @@ public class TileEntityCruxtruder extends TileEntity
 	}
 	
 	@Override
-	public NBTTagCompound write(NBTTagCompound compound)
+	public CompoundNBT write(CompoundNBT compound)
 	{
 		super.write(compound);
 		compound.putInt("color", color);
@@ -112,18 +111,18 @@ public class TileEntityCruxtruder extends TileEntity
 	}
 	
 	@Override
-	public NBTTagCompound getUpdateTag()
+	public CompoundNBT getUpdateTag()
 	{
-		return write(new NBTTagCompound());
+		return write(new CompoundNBT());
 	}
 	@Override
-	public SPacketUpdateTileEntity getUpdatePacket()
+	public SUpdateTileEntityPacket getUpdatePacket()
 	{
-		return new SPacketUpdateTileEntity(this.pos, 0, getUpdateTag());
+		return new SUpdateTileEntityPacket(this.pos, 0, getUpdateTag());
 	}
 	
 	@Override
-	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt)
+	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
 	{
 		handleUpdateTag(pkt.getNbtCompound());
 	}

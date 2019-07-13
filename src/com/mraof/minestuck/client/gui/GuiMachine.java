@@ -2,7 +2,7 @@ package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.network.GoButtonPacket;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
-import com.mraof.minestuck.tileentity.TileEntityMachineProcess;
+import com.mraof.minestuck.tileentity.MachineProcessTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -20,10 +20,10 @@ import net.minecraftforge.fml.client.config.GuiButtonExt;
 @OnlyIn(Dist.CLIENT)
 public abstract class GuiMachine extends GuiContainer
 {
-	private TileEntityMachineProcess te;
+	private MachineProcessTileEntity te;
 	protected GoButton goButton;
 	
-	public GuiMachine(Container inventorySlotsIn, TileEntityMachineProcess tileEntity)
+	public GuiMachine(Container inventorySlotsIn, MachineProcessTileEntity tileEntity)
 	{
 		super(inventorySlotsIn);
 		this.te = tileEntity;
@@ -36,7 +36,7 @@ public abstract class GuiMachine extends GuiContainer
 		{
 			this.mc.getSoundHandler().play(SimpleSound.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 
-			boolean mode = te.getRunType() == TileEntityMachineProcess.RunType.BUTTON_OVERRIDE && (InputMappings.isKeyDown(42) || InputMappings.isKeyDown(54));
+			boolean mode = te.getRunType() == MachineProcessTileEntity.RunType.BUTTON_OVERRIDE && (InputMappings.isKeyDown(42) || InputMappings.isKeyDown(54));
 			GoButtonPacket packet = new GoButtonPacket(true, mode && !te.overrideStop);
 			MinestuckPacketHandler.sendToServer(packet);
 
@@ -75,7 +75,7 @@ public abstract class GuiMachine extends GuiContainer
 					goButton.displayString = I18n.format("gui.buttonGo");
 				}
 				return true;
-			} else if(mouseKey == 1 && te.getRunType() == TileEntityMachineProcess.RunType.BUTTON_OVERRIDE)
+			} else if(mouseKey == 1 && te.getRunType() == MachineProcessTileEntity.RunType.BUTTON_OVERRIDE)
 			{
 				this.playPressSound(Minecraft.getInstance().getSoundHandler());
 				//Tell the machine to go until stopped

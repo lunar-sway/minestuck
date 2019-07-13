@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.gui;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.inventory.ContainerGristWidget;
-import com.mraof.minestuck.tileentity.TileEntityGristWidget;
+import com.mraof.minestuck.tileentity.GristWidgetTileEntity;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.client.renderer.GlStateManager;
@@ -20,7 +20,7 @@ public class GuiGristWidget extends GuiMachine
 	private static final ResourceLocation BACKGROUND = new ResourceLocation("minestuck:textures/gui/widget.png");
 	private static final ResourceLocation PROGRESS = new ResourceLocation("minestuck:textures/gui/progress/widget.png");
 	
-	protected final TileEntityGristWidget te;
+	protected final GristWidgetTileEntity te;
 	protected final InventoryPlayer playerInventory;
 	
 	private int progressX;
@@ -30,7 +30,7 @@ public class GuiGristWidget extends GuiMachine
 	private int goX;
 	private int goY;
 
-	public GuiGristWidget(InventoryPlayer inventoryPlayer, TileEntityGristWidget tileEntity)
+	public GuiGristWidget(InventoryPlayer inventoryPlayer, GristWidgetTileEntity tileEntity)
 	{
 		super(new ContainerGristWidget(inventoryPlayer, tileEntity), tileEntity);
 		this.te = tileEntity;

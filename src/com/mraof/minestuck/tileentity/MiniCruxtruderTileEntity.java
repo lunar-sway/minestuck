@@ -1,26 +1,26 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.inventory.ContainerMiniCruxtruder;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.ColorCollector;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.world.IInteractionObject;
+import net.minecraft.util.text.TranslationTextComponent;
 
-public class TileEntityMiniCruxtruder extends TileEntityMachineProcess implements INamedContainerProvider
+import javax.annotation.Nullable;
+
+public class MiniCruxtruderTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
 {
 	public int color = -1;
 	
-	public TileEntityMiniCruxtruder()
+	public MiniCruxtruderTileEntity()
 	{
 		super(MinestuckTiles.MINI_CRUXTRUDER);
 	}
@@ -62,42 +62,37 @@ public class TileEntityMiniCruxtruder extends TileEntityMachineProcess implement
 	}
 	
 	@Override
-	public void read(NBTTagCompound compound)
+	public void read(CompoundNBT compound)
 	{
 		super.read(compound);
 		this.color = compound.getInt("color");
 	}
 	
 	@Override
-	public NBTTagCompound write(NBTTagCompound compound)
+	public CompoundNBT write(CompoundNBT compound)
 	{
 		compound.putInt("color", color);
 		return super.write(compound);
 	}
 	
 	@Override
-	public ITextComponent getName()
+	public ITextComponent getDisplayName()
 	{
-		return new TextComponentTranslation("container.mini_cruxtruder");
+		return new TranslationTextComponent("container.mini_cruxtruder");
 	}
 	
 	@Override
-	public int[] getSlotsForFace(EnumFacing side)
+	public int[] getSlotsForFace(Direction side)
 	{
-		if(side == EnumFacing.DOWN)
+		if(side == Direction.DOWN)
 			return new int[] {1};
 		else return new int[] {0};
 	}
 	
+	@Nullable
 	@Override
-	public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn)
+	public Container createMenu(int containerId, PlayerInventory playerInventory, PlayerEntity player)
 	{
 		return new ContainerMiniCruxtruder(playerInventory, this);
-	}
-	
-	@Override
-	public String getGuiID()
-	{
-		return GuiHandler.MINI_CRUXTRUDER_ID.toString();
 	}
 }

@@ -1,7 +1,7 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.block.multiblock.MachineMultiblock;
-import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
+import com.mraof.minestuck.tileentity.AlchemiterTileEntity;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -52,9 +52,9 @@ public class AlchemiterBlock extends MultiMachineBlock
 		BlockPos mainPos = getMainPos(state, pos, worldIn);
 		TileEntity te = worldIn.getTileEntity(mainPos);
 		
-		if (te instanceof TileEntityAlchemiter)
+		if (te instanceof AlchemiterTileEntity)
 		{
-			((TileEntityAlchemiter) te).onRightClick(worldIn, player, state);
+			((AlchemiterTileEntity) te).onRightClick(worldIn, player, state, hit.getFace());
 		}
 		
 		return true;
@@ -67,12 +67,12 @@ public class AlchemiterBlock extends MultiMachineBlock
 		{
 			BlockPos mainPos = getMainPos(state, pos, worldIn);
 			TileEntity te = worldIn.getTileEntity(mainPos);
-			if(te instanceof TileEntityAlchemiter)
+			if(te instanceof AlchemiterTileEntity)
 			{
-				TileEntityAlchemiter alchemiter = (TileEntityAlchemiter) te;
+				AlchemiterTileEntity alchemiter = (AlchemiterTileEntity) te;
 				alchemiter.breakMachine();
 				if(mainPos.equals(pos))
-					alchemiter.dropItem(true);
+					alchemiter.dropItem(null);
 			}
 			
 			super.onReplaced(state, worldIn, pos, newState, isMoving);
@@ -126,7 +126,7 @@ public class AlchemiterBlock extends MultiMachineBlock
 		@Override
 		public TileEntity createTileEntity(BlockState state, IBlockReader world)
 		{
-			return new TileEntityAlchemiter();
+			return new AlchemiterTileEntity();
 		}
 		
 		@Override

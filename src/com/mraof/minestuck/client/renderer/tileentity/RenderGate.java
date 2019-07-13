@@ -1,6 +1,6 @@
 package com.mraof.minestuck.client.renderer.tileentity;
 
-import com.mraof.minestuck.tileentity.TileEntityGate;
+import com.mraof.minestuck.tileentity.GateTileEntity;
 import com.mraof.minestuck.util.ColorCollector;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -10,14 +10,14 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
-public class RenderGate extends TileEntityRenderer<TileEntityGate>
+public class RenderGate extends TileEntityRenderer<GateTileEntity>
 {
 	
 	private static final ResourceLocation nodeInner = new ResourceLocation("minestuck","textures/blocks/node_spiro_inner.png");
 	private static final ResourceLocation nodeOuter = new ResourceLocation("minestuck","textures/blocks/node_spiro_outer.png");
 	
 	@Override
-	public void render(TileEntityGate tileEntityIn, double x, double y, double z, float partialTicks, int destroyStage)
+	public void render(GateTileEntity tileEntityIn, double x, double y, double z, float partialTicks, int destroyStage)
 	{
 		int color;
 		if(tileEntityIn.colorIndex == -1)
@@ -43,7 +43,7 @@ public class RenderGate extends TileEntityRenderer<TileEntityGate>
 		GlStateManager.popAttrib();
 	}
 	
-	public void renderGateAt(TileEntityGate tileEntity, double posX, double posY, double posZ, float f, int p_180535_9_)
+	public void renderGateAt(GateTileEntity tileEntity, double posX, double posY, double posZ, float f, int p_180535_9_)
 	{
 		BufferBuilder buffer = Tessellator.getInstance().getBuffer();
 		float tick = tileEntity.getWorld().getGameTime() + f;
@@ -62,7 +62,7 @@ public class RenderGate extends TileEntityRenderer<TileEntityGate>
 		GlStateManager.popMatrix();
 	}
 	
-	public void renderReturnNodeAt(TileEntityGate tileEntity, double posX, double posY, double posZ, float f, int p_180535_9_)
+	public void renderReturnNodeAt(GateTileEntity tileEntity, double posX, double posY, double posZ, float f, int p_180535_9_)
 	{
 		BufferBuilder buffer = Tessellator.getInstance().getBuffer();
 		float tick = tileEntity.getWorld().getGameTime() + f;

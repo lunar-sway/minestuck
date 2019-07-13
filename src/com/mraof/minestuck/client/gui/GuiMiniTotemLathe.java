@@ -1,7 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.inventory.ContainerMiniTotemLathe;
-import com.mraof.minestuck.tileentity.TileEntityMiniTotemLathe;
+import com.mraof.minestuck.tileentity.MiniTotemLatheTileEntity;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -12,7 +12,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class GuiMiniTotemLathe extends GuiMachine
 {
 
-	protected final TileEntityMiniTotemLathe te;
+	protected final MiniTotemLatheTileEntity te;
 	protected final InventoryPlayer playerInventory;
 	
 	private ResourceLocation BACKGROUND = new ResourceLocation("minestuck:textures/gui/totem_lathe.png");
@@ -25,7 +25,7 @@ public class GuiMiniTotemLathe extends GuiMachine
 	private int goX;
 	private int goY;
 
-	public GuiMiniTotemLathe(InventoryPlayer inventoryPlayer, TileEntityMiniTotemLathe tileEntity)
+	public GuiMiniTotemLathe(InventoryPlayer inventoryPlayer, MiniTotemLatheTileEntity tileEntity)
 	{
 		super(new ContainerMiniTotemLathe(inventoryPlayer, tileEntity), tileEntity);
 		this.te = tileEntity;

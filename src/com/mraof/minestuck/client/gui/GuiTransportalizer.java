@@ -2,7 +2,7 @@ package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.TransportalizerPacket;
-import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
+import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -23,11 +23,11 @@ public class GuiTransportalizer extends Screen implements GuiButtonImpl.ButtonCl
 	private static final int guiHeight = 98;
 
 	private Minecraft mc;
-	TileEntityTransportalizer te;
+	TransportalizerTileEntity te;
 	private GuiTextField destinationTextField;
 	private GuiButton doneButton;
 
-	public GuiTransportalizer(Minecraft mc, TileEntityTransportalizer te)
+	public GuiTransportalizer(Minecraft mc, TransportalizerTileEntity te)
 	{
 		super();
 

@@ -1,17 +1,17 @@
 package com.mraof.minestuck.tileentity;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 
 import javax.annotation.Nullable;
 
-public class TileEntityItemStack extends TileEntity
+public class ItemStackTileEntity extends TileEntity
 {
-	public TileEntityItemStack()
+	public ItemStackTileEntity()
 	{
 		super(MinestuckTiles.ITEM_STACK);
 	}
@@ -33,40 +33,40 @@ public class TileEntityItemStack extends TileEntity
 	}
 	
 	@Override
-	public void read(NBTTagCompound compound)
+	public void read(CompoundNBT compound)
 	{
 		super.read(compound);
 		stack = ItemStack.read(compound.getCompound("stack"));
 	}
 	
 	@Override
-	public NBTTagCompound write(NBTTagCompound compound)
+	public CompoundNBT write(CompoundNBT compound)
 	{
 		compound = super.write(compound);
-		compound.put("stack", stack.write(new NBTTagCompound()));
+		compound.put("stack", stack.write(new CompoundNBT()));
 		return compound;
 	}
 	
 	@Override
-	public NBTTagCompound getUpdateTag()
+	public CompoundNBT getUpdateTag()
 	{
-		return write(new NBTTagCompound());
+		return write(new CompoundNBT());
 	}
 	
 	@Nullable
 	@Override
-	public SPacketUpdateTileEntity getUpdatePacket()
+	public SUpdateTileEntityPacket getUpdatePacket()
 	{
-		return new SPacketUpdateTileEntity(getPos(), 2, getUpdateTag());
+		return new SUpdateTileEntityPacket(getPos(), 2, getUpdateTag());
 	}
 	
 	@Override
-	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt)
+	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
 	{
 		handleUpdateTag(pkt.getNbtCompound());
 		if(world != null)
 		{
-			IBlockState state = world.getBlockState(pos);
+			BlockState state = world.getBlockState(pos);
 			world.notifyBlockUpdate(pos, state, state, 2);
 		}
 	}

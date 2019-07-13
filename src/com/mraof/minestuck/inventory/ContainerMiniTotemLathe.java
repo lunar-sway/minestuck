@@ -2,12 +2,14 @@ package com.mraof.minestuck.inventory;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.tileentity.TileEntityMiniTotemLathe;
+import com.mraof.minestuck.tileentity.MiniTotemLatheTileEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -23,10 +25,10 @@ public class ContainerMiniTotemLathe extends Container
 	private static final int OUTPUT_X = 134;
 	private static final int OUTPUT_Y = 34;
 	
-	public TileEntityMiniTotemLathe tileEntity;
+	public MiniTotemLatheTileEntity tileEntity;
 	private int progress;
 	
-	public ContainerMiniTotemLathe(InventoryPlayer inventoryPlayer, TileEntityMiniTotemLathe te)
+	public ContainerMiniTotemLathe(PlayerInventory inventoryPlayer, MiniTotemLatheTileEntity te)
 	{
 		tileEntity = te;
 		

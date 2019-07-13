@@ -1,6 +1,6 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
+import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
@@ -48,9 +48,9 @@ public class TransportalizerPacket
 		if(player.getEntityWorld().isBlockLoaded(pos))
 		{
 			TileEntity te = player.world.getTileEntity(pos);
-			if(te instanceof TileEntityTransportalizer)
+			if(te instanceof TransportalizerTileEntity)
 			{
-				((TileEntityTransportalizer) te).setDestId(destId);
+				((TransportalizerTileEntity) te).setDestId(destId);
 			}
 		}
 	}

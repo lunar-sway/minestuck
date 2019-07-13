@@ -7,26 +7,27 @@ import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.item.HologramEntity;
 import com.mraof.minestuck.item.MinestuckItems;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class TileEntityHolopad extends TileEntity
+public class HolopadTileEntity extends TileEntity
 {
 
 	protected ItemStack card = ItemStack.EMPTY;
 	
-	public TileEntityHolopad()
+	public HolopadTileEntity()
 	{
 		super(MinestuckTiles.HOLOPAD);
 	}
@@ -40,10 +41,10 @@ public class TileEntityHolopad extends TileEntity
 		if(!card.isEmpty())
 		{
 			if (player.getHeldItemMainhand().isEmpty())
-				player.setHeldItem(EnumHand.MAIN_HAND, card);
+				player.setHeldItem(Hand.MAIN_HAND, card);
 			else if (!player.inventory.addItemStackToInventory(card))
 				dropItem(false, world, pos, card);
-			else player.inventoryContainer.detectAndSendChanges();
+			else player.container.detectAndSendChanges();
 			
 			setCard(ItemStack.EMPTY);
 			
@@ -84,7 +85,7 @@ public class TileEntityHolopad extends TileEntity
 			{
 				HologramEntity holo = new HologramEntity(world, item);
 				holo.setPosition(pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5);
-				world.spawnEntity(holo);
+				world.addEntity(holo);
 			}
 		}
 	}
@@ -98,7 +99,7 @@ public class TileEntityHolopad extends TileEntity
 			
 			for(HologramEntity holo : list)
 			{
-				world.removeEntity(holo);
+				holo.remove();
 			}
 		}
 	}
@@ -108,9 +109,7 @@ public class TileEntityHolopad extends TileEntity
 		BlockPos dropPos;
 		if(inBlock)
 			dropPos = pos;
-		else if(!worldIn.getBlockState(pos).isBlockNormalCube())
-			dropPos = pos;
-		else if(!worldIn.getBlockState(pos.up()).isBlockNormalCube())
+		else if(!Block.hasSolidSide(worldIn.getBlockState(pos.up()), worldIn, pos.up(), Direction.DOWN))
 			dropPos = pos.up();
 		else dropPos = pos;
 		
@@ -130,7 +129,7 @@ public class TileEntityHolopad extends TileEntity
 			this.card = card;
 			if(world != null)
 			{
-				IBlockState state = world.getBlockState(pos);
+				BlockState state = world.getBlockState(pos);
 				world.notifyBlockUpdate(pos, state, state, 2);
 			}
 		}
@@ -142,7 +141,7 @@ public class TileEntityHolopad extends TileEntity
 	}
 	
 	@Override
-	public void read(NBTTagCompound compound)
+	public void read(CompoundNBT compound)
 	{
 		super.read(compound);
 		//broken = tagCompound.getBoolean("broken");
@@ -150,33 +149,33 @@ public class TileEntityHolopad extends TileEntity
 	}
 	
 	@Override
-	public NBTTagCompound write(NBTTagCompound compound)
+	public CompoundNBT write(CompoundNBT compound)
 	{
 		super.write(compound);
 		//tagCompound.setBoolean("broken", this.broken);
-		compound.put("card", card.write(new NBTTagCompound()));
+		compound.put("card", card.write(new CompoundNBT()));
 		return compound;
 	}
 	
 	@Override
-	public NBTTagCompound getUpdateTag()
+	public CompoundNBT getUpdateTag()
 	{
-		NBTTagCompound nbt;
+		CompoundNBT nbt;
 		nbt = super.getUpdateTag();
-		nbt.put("card", card.write(new NBTTagCompound()));
+		nbt.put("card", card.write(new CompoundNBT()));
 		return nbt;
 	}
 	
 	@Override
-	public SPacketUpdateTileEntity getUpdatePacket()
+	public SUpdateTileEntityPacket getUpdatePacket()
 	{
-		SPacketUpdateTileEntity packet;
-		packet = new SPacketUpdateTileEntity(this.pos, 0, getUpdateTag());
+		SUpdateTileEntityPacket packet;
+		packet = new SUpdateTileEntityPacket(this.pos, 0, getUpdateTag());
 		return packet;
 	}
 	
 	@Override
-	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt)
+	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
 	{
 		handleUpdateTag(pkt.getNbtCompound());
 	}

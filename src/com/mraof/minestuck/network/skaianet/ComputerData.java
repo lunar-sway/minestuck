@@ -1,6 +1,6 @@
 package com.mraof.minestuck.network.skaianet;
 
-import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.util.Location;
@@ -17,7 +17,7 @@ public class ComputerData
 	@OnlyIn(Dist.CLIENT)
 	private int ownerId;
 	
-	public static ComputerData createData(TileEntityComputer te)
+	public static ComputerData createData(ComputerTileEntity te)
 	{
 		if(!te.getWorld().isRemote)
 			return new ComputerData(te.owner, new Location(te.getPos(), te.getWorld().dimension.getType()));

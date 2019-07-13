@@ -1,12 +1,14 @@
 package com.mraof.minestuck.inventory;
 
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.tileentity.TileEntityGristWidget;
+import com.mraof.minestuck.tileentity.GristWidgetTileEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -17,11 +19,11 @@ public class ContainerGristWidget extends Container
 	private static final int gristWidgetInputX = 27;
 	private static final int gristWidgetInputY = 20;
 	
-	public TileEntityGristWidget tileEntity;
+	public GristWidgetTileEntity tileEntity;
 	private boolean operator = true;
 	private int progress;
 	
-	public ContainerGristWidget(InventoryPlayer inventoryPlayer, TileEntityGristWidget te)
+	public ContainerGristWidget(PlayerInventory inventoryPlayer, GristWidgetTileEntity te)
 	{
 		tileEntity = te;
 		

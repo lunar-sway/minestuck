@@ -5,7 +5,7 @@ import com.mraof.minestuck.client.gui.GuiComputer;
 import com.mraof.minestuck.network.ClearMessagePacket;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.skaianet.ComputerData;
-import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
@@ -28,7 +28,7 @@ public abstract class ButtonListProgram extends ComputerProgram {
 	 * button and down.
 	 * @param te The TileEntityComputer this program is associated with, for access to related data.
 	 */
-	protected abstract ArrayList<UnlocalizedString> getStringList(TileEntityComputer te);
+	protected abstract ArrayList<UnlocalizedString> getStringList(ComputerTileEntity te);
 	
 	/**
 	 * Performs the action caused by pressing a button.
@@ -36,10 +36,10 @@ public abstract class ButtonListProgram extends ComputerProgram {
 	 * @param buttonName The unlocalized string from getStringList() associated with the pressed button.
 	 * @param data Format data provided by getStringList().
 	 */
-	protected abstract void onButtonPressed(TileEntityComputer te, String buttonName, Object[] data);
+	protected abstract void onButtonPressed(ComputerTileEntity te, String buttonName, Object[] data);
 	
 	@Override
-	public final void onButtonPressed(TileEntityComputer te, Button button) {
+	public final void onButtonPressed(ComputerTileEntity te, Button button) {
 		UnlocalizedString data = buttonMap.get(button);
 		if (button == upButton)
 			index--;
@@ -126,7 +126,7 @@ public abstract class ButtonListProgram extends ComputerProgram {
 	}
 	
 	@Override
-	public final void paintGui(GuiComputer gui, TileEntityComputer te) {
+	public final void paintGui(GuiComputer gui, ComputerTileEntity te) {
 		Minecraft mc = Minecraft.getInstance();
 		mc.getTextureManager().bindTexture(GuiComputer.guiBackground);
 		int yOffset = (gui.height / 2) - (GuiComputer.ySize / 2);

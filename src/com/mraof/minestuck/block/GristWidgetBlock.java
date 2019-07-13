@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.tileentity.TileEntityGristWidget;
+import com.mraof.minestuck.tileentity.GristWidgetTileEntity;
 import com.mraof.minestuck.util.IdentifierHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -51,12 +51,12 @@ public class GristWidgetBlock extends MachineProcessBlock
 	{
 		TileEntity tileEntity = worldIn.getTileEntity(pos);
 		
-		if (!(tileEntity instanceof TileEntityGristWidget) || player.isSneaking())
+		if (!(tileEntity instanceof GristWidgetTileEntity) || player.isSneaking())
 			return false;
 		
 		if(!worldIn.isRemote)
 		{
-			TileEntityGristWidget widget = (TileEntityGristWidget) tileEntity;
+			GristWidgetTileEntity widget = (GristWidgetTileEntity) tileEntity;
 			widget.owner = IdentifierHandler.encode(player);
 			NetworkHooks.openGui((ServerPlayerEntity) player, widget, pos);
 		}
@@ -73,7 +73,7 @@ public class GristWidgetBlock extends MachineProcessBlock
 	@Override
 	public TileEntity createTileEntity(BlockState state, IBlockReader world)
 	{
-		return new TileEntityGristWidget();
+		return new GristWidgetTileEntity();
 	}
 	
 	public static void updateItem(boolean b, World world, BlockPos pos)

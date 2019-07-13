@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.tileentity.TileEntityMiniTotemLathe;
+import com.mraof.minestuck.tileentity.MiniTotemLatheTileEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -37,12 +37,12 @@ public class MiniTotemLatheBlock extends MachineProcessBlock
 	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
 		TileEntity tileEntity = worldIn.getTileEntity(pos);
-		if(!(tileEntity instanceof TileEntityMiniTotemLathe) || player.isSneaking())
+		if(!(tileEntity instanceof MiniTotemLatheTileEntity) || player.isSneaking())
 			return false;
 		
 		if(!worldIn.isRemote)
 		{
-			NetworkHooks.openGui((ServerPlayerEntity) player, (TileEntityMiniTotemLathe) tileEntity, pos);
+			NetworkHooks.openGui((ServerPlayerEntity) player, (MiniTotemLatheTileEntity) tileEntity, pos);
 		}
 		return true;
 	}
@@ -57,6 +57,6 @@ public class MiniTotemLatheBlock extends MachineProcessBlock
 	@Override
 	public TileEntity createTileEntity(BlockState state, IBlockReader world)
 	{
-		return new TileEntityMiniTotemLathe();
+		return new MiniTotemLatheTileEntity();
 	}
 }

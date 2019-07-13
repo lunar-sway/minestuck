@@ -11,6 +11,7 @@ import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
@@ -34,7 +35,7 @@ public class GateHandler
 	
 	static Map<DimensionType, BlockPos> gateData = new HashMap<>();
 	
-	public static void teleport(int gateId, DimensionType dim, EntityPlayerMP player)
+	public static void teleport(int gateId, DimensionType dim, ServerPlayerEntity player)
 	{
 		Location location = null;
 		player.timeUntilPortal = player.getPortalCooldown();	//Basically to avoid message spam when something goes wrong

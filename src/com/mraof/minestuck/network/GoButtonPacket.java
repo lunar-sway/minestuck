@@ -1,7 +1,7 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.inventory.*;
-import com.mraof.minestuck.tileentity.TileEntityMachineProcess;
+import com.mraof.minestuck.tileentity.MachineProcessTileEntity;
 import com.mraof.minestuck.util.Debug;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
@@ -46,7 +46,7 @@ public class GoButtonPacket
 	
 	public void execute(EntityPlayer player)
 	{
-		TileEntityMachineProcess te;
+		MachineProcessTileEntity te;
 		if(player.openContainer instanceof ContainerMiniAlchemiter)
 				te = ((ContainerMiniAlchemiter) player.openContainer).tileEntity;
 		else if(player.openContainer instanceof ContainerMiniCruxtruder)

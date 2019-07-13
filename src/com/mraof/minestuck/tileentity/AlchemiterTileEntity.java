@@ -11,25 +11,24 @@ import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class TileEntityAlchemiter extends TileEntity
+public class AlchemiterTileEntity extends TileEntity
 {
 	
 	protected GristType wildcardGrist = GristType.BUILD;
@@ -40,7 +39,7 @@ public class TileEntityAlchemiter extends TileEntity
 	public boolean upgraded = false;
 	protected TileEntity jbe = null;
 	
-	public TileEntityAlchemiter()
+	public AlchemiterTileEntity()
 	{
 		super(MinestuckTiles.ALCHEMITER);
 	}
@@ -52,7 +51,7 @@ public class TileEntityAlchemiter extends TileEntity
 			dowel = newDowel;
 			if(world != null)
 			{
-				IBlockState state = world.getBlockState(pos);
+				BlockState state = world.getBlockState(pos);
 				if(newDowel.isEmpty())
 					state = state.with(AlchemiterBlock.Pad.DOWEL, EnumDowelType.NONE);
 				else if(AlchemyRecipes.hasDecodedItem(newDowel))
@@ -97,7 +96,7 @@ public class TileEntityAlchemiter extends TileEntity
 		broken = true;
 		if(world != null)
 		{
-			IBlockState state = world.getBlockState(pos);
+			BlockState state = world.getBlockState(pos);
 			world.notifyBlockUpdate(pos, state, state, 2);
 		}
 	}
@@ -108,21 +107,21 @@ public class TileEntityAlchemiter extends TileEntity
 			broken = false;
 			if(world != null)
 			{
-				IBlockState state = world.getBlockState(pos);
+				BlockState state = world.getBlockState(pos);
 				world.notifyBlockUpdate(pos, state, state, 2);
 			}
 		}
 	
-	public void dropItem(boolean inBlock)
+	public void dropItem(Direction direction)
 	{
-		BlockPos dropPos;
-		if(inBlock)
+		if(world == null)
+		{
+			Debug.warn("Tried to drop alchemiter dowel before the tile entity was given a world!");
+			return;
+		}
+		BlockPos dropPos = direction == null ? this.pos : this.pos.offset(direction);
+		if(direction != null && Block.hasSolidSide(world.getBlockState(this.pos.offset(direction)), world, pos.offset(direction), direction.getOpposite()))
 			dropPos = this.pos;
-		else if(!world.getBlockState(this.pos).isBlockNormalCube())
-			dropPos = this.pos;
-		else if(!world.getBlockState(this.pos.up()).isBlockNormalCube())
-			dropPos = this.pos.up();
-		else dropPos = this.pos;
 		
 		InventoryHelper.spawnItemStack(world, dropPos.getX(), dropPos.getY(), dropPos.getZ(), dowel);
 		setDowel(ItemStack.EMPTY);
@@ -136,7 +135,7 @@ public class TileEntityAlchemiter extends TileEntity
 			this.upgradeItem[id] = stack;
 			if(world != null)
 			{
-				IBlockState state = world.getBlockState(pos);
+				BlockState state = world.getBlockState(pos);
 				world.notifyBlockUpdate(pos, state, state, 2);
 			}
 		}
@@ -158,7 +157,7 @@ public class TileEntityAlchemiter extends TileEntity
 		TileEntityJumperBlock jbeTe = (TileEntityJumperBlock) te;
 		this.upgraded = bool;
 		
-		if(bool == true)
+		if(bool)
 		{
 			for(int i = 0; i < upgradeItem.length; i++)
 			{
@@ -199,7 +198,7 @@ public class TileEntityAlchemiter extends TileEntity
 		}
 	}
 	
-	private boolean isUseable(IBlockState state)
+	private boolean isUseable(BlockState state)
 	{
 		if(!broken)
 		{
@@ -230,29 +229,29 @@ public class TileEntityAlchemiter extends TileEntity
 		if(this.broken || world == null)
 			return;
 		
-		EnumFacing facing = world.getBlockState(this.getPos()).get(AlchemiterBlock.FACING);
-		EnumFacing x = facing.rotateYCCW();
-		EnumFacing z = facing.getOpposite();
+		Direction direction = world.getBlockState(this.getPos()).get(AlchemiterBlock.FACING);
+		Direction x = direction.rotateYCCW();
+		Direction z = direction.getOpposite();
 		BlockPos pos = getPos().down();
-		if(!world.getBlockState(pos.up(3)).equals(MinestuckBlocks.ALCHEMITER.UPPER_ROD.getDefaultState().with(AlchemiterBlock.FACING, facing)) ||
-				!world.getBlockState(pos.up(2)).equals(MinestuckBlocks.ALCHEMITER.LOWER_ROD.getDefaultState().with(AlchemiterBlock.FACING, facing)) ||
-				//!world.getBlockState(pos.up()).equals(MinestuckBlocks.ALCHEMITER.TOTEM_PAD.getDefaultState().with(BlockAlchemiter.FACING, facing)) ||
-				!world.getBlockState(pos).equals(MinestuckBlocks.ALCHEMITER.TOTEM_CORNER.getDefaultState().with(AlchemiterBlock.FACING, facing)) ||
-				!world.getBlockState(pos.offset(x)).equals(MinestuckBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, facing)) ||
-				!world.getBlockState(pos.offset(x, 2)).equals(MinestuckBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, facing)) ||
-				!world.getBlockState(pos.offset(z).offset(x)).equals(MinestuckBlocks.ALCHEMITER.CENTER.getDefaultState().with(AlchemiterBlock.FACING, facing)) ||
-				!world.getBlockState(pos.offset(x, 3)).equals(MinestuckBlocks.ALCHEMITER.CORNER.getDefaultState().with(AlchemiterBlock.FACING, facing.rotateYCCW())) ||
-				!world.getBlockState(pos.offset(z).offset(x, 3)).equals(MinestuckBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, facing.rotateYCCW())) ||
-				!world.getBlockState(pos.offset(z, 2).offset(x, 3)).equals(MinestuckBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, facing.rotateYCCW())) ||
-				!world.getBlockState(pos.offset(z).offset(x, 2)).equals(MinestuckBlocks.ALCHEMITER.CENTER.getDefaultState().with(AlchemiterBlock.FACING, facing.rotateYCCW())) ||
-				!world.getBlockState(pos.offset(z, 3).offset(x, 3)).equals(MinestuckBlocks.ALCHEMITER.CORNER.getDefaultState().with(AlchemiterBlock.FACING, facing.getOpposite())) ||
-				!world.getBlockState(pos.offset(z, 3).offset(x, 2)).equals(MinestuckBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, facing.getOpposite())) ||
-				!world.getBlockState(pos.offset(z, 3).offset(x, 1)).equals(MinestuckBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, facing.getOpposite())) ||
-				!world.getBlockState(pos.offset(z, 2).offset(x, 2)).equals(MinestuckBlocks.ALCHEMITER.CENTER.getDefaultState().with(AlchemiterBlock.FACING, facing.getOpposite())) ||
-				!world.getBlockState(pos.offset(z, 3)).equals(MinestuckBlocks.ALCHEMITER.CORNER.getDefaultState().with(AlchemiterBlock.FACING, facing.rotateY())) ||
-				!world.getBlockState(pos.offset(z, 2)).equals(MinestuckBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, facing.rotateY())) ||
-				!world.getBlockState(pos.offset(z)).equals(MinestuckBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, facing.rotateY())) ||
-				!world.getBlockState(pos.offset(z, 2).offset(x, 1)).equals(MinestuckBlocks.ALCHEMITER.CENTER.getDefaultState().with(AlchemiterBlock.FACING, facing.rotateY())))
+		if(!world.getBlockState(pos.up(3)).equals(MinestuckBlocks.ALCHEMITER.UPPER_ROD.getDefaultState().with(AlchemiterBlock.FACING, direction)) ||
+				!world.getBlockState(pos.up(2)).equals(MinestuckBlocks.ALCHEMITER.LOWER_ROD.getDefaultState().with(AlchemiterBlock.FACING, direction)) ||
+				//!world.getBlockState(pos.up()).equals(MinestuckBlocks.ALCHEMITER.TOTEM_PAD.getDefaultState().with(BlockAlchemiter.FACING, direction)) ||
+				!world.getBlockState(pos).equals(MinestuckBlocks.ALCHEMITER.TOTEM_CORNER.getDefaultState().with(AlchemiterBlock.FACING, direction)) ||
+				!world.getBlockState(pos.offset(x)).equals(MinestuckBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, direction)) ||
+				!world.getBlockState(pos.offset(x, 2)).equals(MinestuckBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, direction)) ||
+				!world.getBlockState(pos.offset(z).offset(x)).equals(MinestuckBlocks.ALCHEMITER.CENTER.getDefaultState().with(AlchemiterBlock.FACING, direction)) ||
+				!world.getBlockState(pos.offset(x, 3)).equals(MinestuckBlocks.ALCHEMITER.CORNER.getDefaultState().with(AlchemiterBlock.FACING, direction.rotateYCCW())) ||
+				!world.getBlockState(pos.offset(z).offset(x, 3)).equals(MinestuckBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, direction.rotateYCCW())) ||
+				!world.getBlockState(pos.offset(z, 2).offset(x, 3)).equals(MinestuckBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, direction.rotateYCCW())) ||
+				!world.getBlockState(pos.offset(z).offset(x, 2)).equals(MinestuckBlocks.ALCHEMITER.CENTER.getDefaultState().with(AlchemiterBlock.FACING, direction.rotateYCCW())) ||
+				!world.getBlockState(pos.offset(z, 3).offset(x, 3)).equals(MinestuckBlocks.ALCHEMITER.CORNER.getDefaultState().with(AlchemiterBlock.FACING, direction.getOpposite())) ||
+				!world.getBlockState(pos.offset(z, 3).offset(x, 2)).equals(MinestuckBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, direction.getOpposite())) ||
+				!world.getBlockState(pos.offset(z, 3).offset(x, 1)).equals(MinestuckBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, direction.getOpposite())) ||
+				!world.getBlockState(pos.offset(z, 2).offset(x, 2)).equals(MinestuckBlocks.ALCHEMITER.CENTER.getDefaultState().with(AlchemiterBlock.FACING, direction.getOpposite())) ||
+				!world.getBlockState(pos.offset(z, 3)).equals(MinestuckBlocks.ALCHEMITER.CORNER.getDefaultState().with(AlchemiterBlock.FACING, direction.rotateY())) ||
+				!world.getBlockState(pos.offset(z, 2)).equals(MinestuckBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, direction.rotateY())) ||
+				!world.getBlockState(pos.offset(z)).equals(MinestuckBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, direction.rotateY())) ||
+				!world.getBlockState(pos.offset(z, 2).offset(x, 1)).equals(MinestuckBlocks.ALCHEMITER.CENTER.getDefaultState().with(AlchemiterBlock.FACING, direction.rotateY())))
 			
 		{
 			breakMachine();
@@ -262,79 +261,80 @@ public class TileEntityAlchemiter extends TileEntity
 		return;
 	}
 	
-	public EnumFacing getFacing()
+	public Direction getFacing()
 	{
 		return getBlockState().get(AlchemiterBlock.FACING);
 	}
 	
 	@Override
-	public void read(NBTTagCompound tagCompound)
+	public void read(CompoundNBT compound)
 	{
-		super.read(tagCompound);
+		super.read(compound);
 
-		if(tagCompound.contains("gristType"))
-			this.wildcardGrist = GristType.getTypeFromString(tagCompound.getString("gristType"));
+		if(compound.contains("gristType"))
+			this.wildcardGrist = GristType.getTypeFromString(compound.getString("gristType"));
 		if(this.wildcardGrist == null)
 		{
 			this.wildcardGrist = GristType.BUILD;
 		}
 		
-		this.upgraded = tagCompound.getBoolean("upgraded");
+		this.upgraded = compound.getBoolean("upgraded");
 		
 		if(upgraded)
 		{
 			for(int i = 0; i < upgradeItem.length; i++)
 			{
-				setUpgrade(ItemStack.read(tagCompound.getCompound("upgrade" + i)), i);
+				setUpgrade(ItemStack.read(compound.getCompound("upgrade" + i)), i);
 			}
 		}
 		
-		broken = tagCompound.getBoolean("broken");
+		broken = compound.getBoolean("broken");
 		
-		if(tagCompound.contains("dowel"))
-			dowel = ItemStack.read(tagCompound.getCompound("dowel"));
+		if(compound.contains("dowel"))
+			dowel = ItemStack.read(compound.getCompound("dowel"));
 	}
 	
 	@Override
-	public NBTTagCompound write(NBTTagCompound tagCompound)
+	public CompoundNBT write(CompoundNBT compound)
 	{
-		super.write(tagCompound);
+		super.write(compound);
 
-		tagCompound.putString("gristType", wildcardGrist.getRegistryName().toString());
-		tagCompound.putBoolean("upgraded", upgraded);
-		tagCompound.putBoolean("broken", isBroken());
+		compound.putString("gristType", wildcardGrist.getRegistryName().toString());
+		compound.putBoolean("upgraded", upgraded);
+		compound.putBoolean("broken", isBroken());
 		
 		for(int i = 0; i < upgradeItem.length; i++)
 		{
-			tagCompound.put("upgrade" + i, upgradeItem[i].write(new NBTTagCompound()));
+			compound.put("upgrade" + i, upgradeItem[i].write(new CompoundNBT()));
 		}
 		
 		if(dowel!= null)
-			tagCompound.put("dowel", dowel.write(new NBTTagCompound()));
+			compound.put("dowel", dowel.write(new CompoundNBT()));
 		
-		return tagCompound;
+		return compound;
 	}
 	
 	@Override
-	public NBTTagCompound getUpdateTag()
+	public CompoundNBT getUpdateTag()
 	{
-		return write(new NBTTagCompound());
+		return write(new CompoundNBT());
 	}
 	
+	
 	@Override
-	public SPacketUpdateTileEntity getUpdatePacket()
+	public SUpdateTileEntityPacket getUpdatePacket()
 	{
-		SPacketUpdateTileEntity packet = new SPacketUpdateTileEntity(this.pos, 0, getUpdateTag());
+		SUpdateTileEntityPacket packet = new SUpdateTileEntityPacket(this.pos, 0, getUpdateTag());
 		return packet;
 	}
 	
 	@Override
-	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt)
+	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
 	{
 		handleUpdateTag(pkt.getNbtCompound());
 	}
 	
-	public void onRightClick(World worldIn, PlayerEntity playerIn, BlockState state)
+	public void onRightClick(World worldIn, PlayerEntity playerIn, BlockState state, Direction side)
 	{
 		if(worldIn.isRemote)
 		{
@@ -355,10 +355,10 @@ public class TileEntityAlchemiter extends TileEntity
 			//	doTheBlenderThing();
 		}
 		
-		onPadRightClick(playerIn, state);
+		onPadRightClick(playerIn, state, side);
 	}
 	
-	public void onPadRightClick(EntityPlayer player, IBlockState clickedState)
+	public void onPadRightClick(PlayerEntity player, BlockState clickedState, Direction side)
 	{
 		if (isUseable(clickedState))
 		{
@@ -367,10 +367,10 @@ public class TileEntityAlchemiter extends TileEntity
 				if (!dowel.isEmpty())
 				{    //Remove dowel from pad
 					if (player.getHeldItemMainhand().isEmpty())
-						player.setHeldItem(EnumHand.MAIN_HAND, dowel);
+						player.setHeldItem(Hand.MAIN_HAND, dowel);
 					else if (!player.inventory.addItemStackToInventory(dowel))
-						dropItem(false);
-					else player.inventoryContainer.detectAndSendChanges();
+						dropItem(side);
+					else player.container.detectAndSendChanges();
 					
 					setDowel(ItemStack.EMPTY);
 				} else
@@ -383,18 +383,18 @@ public class TileEntityAlchemiter extends TileEntity
 		}
 	}
 	
-	public void processContents(int quantity, EntityPlayerMP player)
+	public void processContents(int quantity, ServerPlayerEntity player)
 	{
 		ItemStack newItem = getOutput();
 		//Clamp quantity
 		quantity = Math.min(newItem.getMaxStackSize() * MinestuckConfig.alchemiterMaxStacks, Math.max(1, quantity));
 		
-		EnumFacing facing = world.getBlockState(pos).get(AlchemiterBlock.FACING);
+		Direction facing = world.getBlockState(pos).get(AlchemiterBlock.FACING);
 		//get the position to spawn the item
 		BlockPos spawnPos = this.getPos().offset(facing.getOpposite()).offset(facing.rotateYCCW());
-		if(facing.getAxisDirection() == EnumFacing.AxisDirection.NEGATIVE)
+		if(facing.getAxisDirection() == Direction.AxisDirection.NEGATIVE)
 			spawnPos = spawnPos.offset(facing.getOpposite());
-		if(facing.rotateY().getAxisDirection() == EnumFacing.AxisDirection.NEGATIVE)
+		if(facing.rotateY().getAxisDirection() == Direction.AxisDirection.NEGATIVE)
 			spawnPos = spawnPos.offset(facing.rotateYCCW());
 		//get the grist cost
 		GristSet cost = getGristCost(quantity);
@@ -417,8 +417,8 @@ public class TileEntityAlchemiter extends TileEntity
 					stack.setCount(Math.min(stack.getMaxStackSize(), quantity));
 					quantity -= stack.getCount();
 				}
-				EntityItem item = new EntityItem(world, spawnPos.getX(), spawnPos.getY() + 0.5, spawnPos.getZ(), stack);
-				world.spawnEntity(item);
+				ItemEntity item = new ItemEntity(world, spawnPos.getX(), spawnPos.getY() + 0.5, spawnPos.getZ(), stack);
+				world.addEntity(item);
 			}
 			
 			AlchemyRecipes.onAlchemizedItem(newItem, player);

@@ -3,24 +3,23 @@ package com.mraof.minestuck.tileentity;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.alchemy.CombinationRegistry;
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.inventory.ContainerMiniTotemLathe;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.ColorCollector;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.world.IInteractionObject;
+import net.minecraft.util.text.TranslationTextComponent;
 
-public class TileEntityMiniTotemLathe extends TileEntityMachineProcess implements INamedContainerProvider
+import javax.annotation.Nullable;
+
+public class MiniTotemLatheTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
 {
-	public TileEntityMiniTotemLathe()
+	public MiniTotemLatheTileEntity()
 	{
 		super(MinestuckTiles.MINI_TOTEM_LATHE);
 	}
@@ -110,38 +109,33 @@ public class TileEntityMiniTotemLathe extends TileEntityMachineProcess implement
 	}
 	
 	@Override
-	public ITextComponent getName()
+	public ITextComponent getDisplayName()
 	{
-		return new TextComponentTranslation("container.mini_totem_lathe");
+		return new TranslationTextComponent("container.mini_totem_lathe");
 	}
 	
 	@Override
-	public int[] getSlotsForFace(EnumFacing side)
+	public int[] getSlotsForFace(Direction side)
 	{
-		if(side == EnumFacing.UP)
+		if(side == Direction.UP)
 			return new int[] {2};
-		if(side == EnumFacing.DOWN)
+		if(side == Direction.DOWN)
 			return new int[] {0, 1, 3};
 		else return new int[] {0, 1};
 	}
 	
 	@Override
-	public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction)
+	public boolean canExtractItem(int index, ItemStack stack, Direction direction)
 	{
 		if(index == 0 || index == 1)
 			return !inv.get(3).isEmpty();
 		else return true;
 	}
 	
+	@Nullable
 	@Override
-	public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn)
+	public Container createMenu(int containerId, PlayerInventory playerInventory, PlayerEntity playerIn)
 	{
 		return new ContainerMiniTotemLathe(playerInventory, this);
-	}
-	
-	@Override
-	public String getGuiID()
-	{
-		return GuiHandler.MINI_TOTEM_LATHE_ID.toString();
 	}
 }

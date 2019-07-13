@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.tileentity.TileEntitySkaiaPortal;
+import com.mraof.minestuck.tileentity.SkaiaPortalTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
@@ -14,10 +14,8 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 public class SkaiaPortalBlock extends ContainerBlock
 {
@@ -32,7 +30,7 @@ public class SkaiaPortalBlock extends ContainerBlock
 	@Override
 	public TileEntity createNewTileEntity(IBlockReader worldIn)
 	{
-		TileEntitySkaiaPortal tileEntity = new TileEntitySkaiaPortal();
+		SkaiaPortalTileEntity tileEntity = new SkaiaPortalTileEntity();
 		return tileEntity;
 	}
 	
@@ -53,7 +51,7 @@ public class SkaiaPortalBlock extends ContainerBlock
 	{
 		if (!entityIn.isPassenger() && !entityIn.isBeingRidden() && !worldIn.isRemote && entityIn.timeUntilPortal == 0)
 		{
-			TileEntitySkaiaPortal portal = (TileEntitySkaiaPortal) worldIn.getTileEntity(pos);
+			SkaiaPortalTileEntity portal = (SkaiaPortalTileEntity) worldIn.getTileEntity(pos);
 			portal.teleportEntity(entityIn);
 		}
 	}

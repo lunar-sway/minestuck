@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.util.ComputerProgram;
 import com.mraof.minestuck.util.IdentifierHandler;
 import net.minecraft.block.Block;
@@ -60,8 +60,8 @@ public class ComputerOffBlock extends MachineBlock
 			worldIn.setBlockState(pos, newState, 2);
 			
 			TileEntity te = worldIn.getTileEntity(pos);
-			if(te instanceof TileEntityComputer)
-				((TileEntityComputer) te).owner = IdentifierHandler.encode(player);
+			if(te instanceof ComputerTileEntity)
+				((ComputerTileEntity) te).owner = IdentifierHandler.encode(player);
 			newState.onBlockActivated(worldIn, player, handIn, hit);
 		}
 		

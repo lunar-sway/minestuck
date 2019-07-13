@@ -1,13 +1,15 @@
 package com.mraof.minestuck.inventory;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.tileentity.TileEntityMiniAlchemiter;
+import com.mraof.minestuck.tileentity.MiniAlchemiterTileEntity;
 import com.mraof.minestuck.util.IdentifierHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -20,10 +22,10 @@ public class ContainerMiniAlchemiter extends Container
 	private static final int OUTPUT_X = 135;
 	private static final int OUTPUT_Y = 20;
 	
-	public TileEntityMiniAlchemiter tileEntity;
+	public MiniAlchemiterTileEntity tileEntity;
 	private int progress;
 	
-	public ContainerMiniAlchemiter(InventoryPlayer inventoryPlayer, TileEntityMiniAlchemiter te)
+	public ContainerMiniAlchemiter(PlayerInventory inventoryPlayer, MiniAlchemiterTileEntity te)
 	{
 		tileEntity = te;
 		te.owner = IdentifierHandler.encode(inventoryPlayer.player);

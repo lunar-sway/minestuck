@@ -3,32 +3,32 @@ package com.mraof.minestuck.tileentity;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.inventory.ContainerMiniAlchemiter;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.world.IInteractionObject;
+import net.minecraft.util.text.TranslationTextComponent;
 
-public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implements INamedContainerProvider
+import javax.annotation.Nullable;
+
+public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
 {
 	public static final int INPUT = 0, OUTPUT = 1;
 	private int ticks_since_update = 0;
 	public IdentifierHandler.PlayerIdentifier owner;
 	private GristType wildcardGrist = GristType.BUILD;
 	
-	public TileEntityMiniAlchemiter()
+	public MiniAlchemiterTileEntity()
 	{
 		super(MinestuckTiles.MINI_ALCHEMITER);
 	}
@@ -95,7 +95,7 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 			this.inv.get(OUTPUT).grow(1);
 		}
 		
-		EntityPlayerMP player = owner.getPlayer(world.getServer());
+		ServerPlayerEntity player = owner.getPlayer(world.getServer());
 		if (player != null)
 			AlchemyRecipes.onAlchemizedItem(newItem, player);
 		
@@ -123,7 +123,7 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 	}
 	
 	@Override
-	public void read(NBTTagCompound compound)
+	public void read(CompoundNBT compound)
 	{
 		super.read(compound);
 		
@@ -138,7 +138,7 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 	}
 	
 	@Override
-	public NBTTagCompound write(NBTTagCompound compound)
+	public CompoundNBT write(CompoundNBT compound)
 	{
 		compound.putString("gristType", wildcardGrist.getRegistryName().toString());
 		
@@ -149,15 +149,15 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 	}
 	
 	@Override
-	public ITextComponent getName()
+	public ITextComponent getDisplayName()
 	{
-		return new TextComponentTranslation("container.mini_alchemiter");
+		return new TranslationTextComponent("container.mini_alchemiter");
 	}
 	
 	@Override
-	public int[] getSlotsForFace(EnumFacing side)
+	public int[] getSlotsForFace(Direction side)
 	{
-		if(side == EnumFacing.DOWN)
+		if(side == Direction.DOWN)
 			return new int[] {1};
 		else return new int[] {0};
 	}
@@ -202,16 +202,11 @@ public class TileEntityMiniAlchemiter extends TileEntityMachineProcess implement
 		return 0;
 	}
 	
+	@Nullable
 	@Override
-	public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn)
+	public Container createMenu(int containerId, PlayerInventory playerInventory, PlayerEntity player)
 	{
 		return new ContainerMiniAlchemiter(playerInventory, this);
-	}
-	
-	@Override
-	public String getGuiID()
-	{
-		return GuiHandler.MINI_ALCHEMITER_ID.toString();
 	}
 	
 	public GristType getWildcardGrist()

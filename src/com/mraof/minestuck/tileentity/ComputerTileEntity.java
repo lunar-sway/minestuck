@@ -21,9 +21,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class TileEntityComputer extends TileEntity
+public class ComputerTileEntity extends TileEntity
 {
-	public TileEntityComputer()
+	public ComputerTileEntity()
 	{
 		super(MinestuckTiles.COMPUTER);
 	}

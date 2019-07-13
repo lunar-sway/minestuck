@@ -2,7 +2,7 @@ package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.block.CruxiteDowelBlock;
 import com.mraof.minestuck.item.ItemCaptchaCard;
-import com.mraof.minestuck.tileentity.TileEntityItemStack;
+import com.mraof.minestuck.tileentity.ItemStackTileEntity;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -76,7 +76,7 @@ public class ItemDowel extends ItemBlock
 	@Override
 	protected boolean onBlockPlaced(BlockPos pos, World world, @Nullable EntityPlayer player, ItemStack stack, IBlockState state)
 	{
-			TileEntityItemStack te = (TileEntityItemStack) world.getTileEntity(pos);
+			ItemStackTileEntity te = (ItemStackTileEntity) world.getTileEntity(pos);
 			ItemStack newStack = stack.copy();
 			newStack.setCount(1);
 			te.setStack(newStack);

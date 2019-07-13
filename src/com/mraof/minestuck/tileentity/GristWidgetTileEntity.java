@@ -3,33 +3,32 @@ package com.mraof.minestuck.tileentity;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.block.GristWidgetBlock;
-import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.inventory.ContainerGristWidget;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.world.IInteractionObject;
+import net.minecraft.util.text.TranslationTextComponent;
 
+import javax.annotation.Nullable;
 import java.util.Map.Entry;
 
-public class TileEntityGristWidget extends TileEntityMachineProcess implements INamedContainerProvider
+public class GristWidgetTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
 {
 	
 	
 	public IdentifierHandler.PlayerIdentifier owner;
 	boolean hasItem;
 	
-	public TileEntityGristWidget()
+	public GristWidgetTileEntity()
 	{
 		super(MinestuckTiles.GRIST_WIDGET);
 	}
@@ -137,10 +136,8 @@ public class TileEntityGristWidget extends TileEntityMachineProcess implements I
 						this.pos.getY() + 1, this.pos.getZ()
 						+ 0.5 /* this.width - this.width / 2 */,
 						gristAmount);
-				entity.motionX /= 2;
-				entity.motionY /= 2;
-				entity.motionZ /= 2;
-				world.spawnEntity(entity);
+				entity.setMotion(entity.getMotion().mul(0.5, 0.5, 0.5));
+				world.addEntity(entity);
 				//Create grist entity of gristAmount
 				grist -= gristAmount.getAmount();
 			}
@@ -149,7 +146,7 @@ public class TileEntityGristWidget extends TileEntityMachineProcess implements I
 	}
 	
 	@Override
-	public void read(NBTTagCompound compound)
+	public void read(CompoundNBT compound)
 	{
 		super.read(compound);
 		
@@ -158,7 +155,7 @@ public class TileEntityGristWidget extends TileEntityMachineProcess implements I
 	}
 	
 	@Override
-	public NBTTagCompound write(NBTTagCompound compound)
+	public CompoundNBT write(CompoundNBT compound)
 	{
 		super.write(compound);
 		
@@ -169,39 +166,34 @@ public class TileEntityGristWidget extends TileEntityMachineProcess implements I
 	}
 	
 	@Override
-	public int[] getSlotsForFace(EnumFacing side)
+	public int[] getSlotsForFace(Direction side)
 	{
 		return new int[0];
 	}
 	
 	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction)
+	public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction)
 	{
 		return true;
 	}
 	
 	@Override
-	public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction)
+	public boolean canExtractItem(int index, ItemStack stack, Direction direction)
 	{
 		return true;
 	}
 	
 	@Override
-	public ITextComponent getName()
+	public ITextComponent getDisplayName()
 	{
-		return new TextComponentTranslation("container.grist_widget");
+		return new TranslationTextComponent("container.grist_widget");
 	}
 	
+	@Nullable
 	@Override
-	public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn)
+	public Container createMenu(int containerId, PlayerInventory playerInventory, PlayerEntity player)
 	{
 		return new ContainerGristWidget(playerInventory, this);
-	}
-	
-	@Override
-	public String getGuiID()
-	{
-		return GuiHandler.GRIST_WIDGET_ID.toString();
 	}
 	
 	public void resendState()

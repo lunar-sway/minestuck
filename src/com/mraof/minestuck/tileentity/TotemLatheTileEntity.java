@@ -9,30 +9,29 @@ import com.mraof.minestuck.alchemy.CombinationRegistry;
 
 import com.mraof.minestuck.util.ColorCollector;
 import com.mraof.minestuck.util.Debug;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nonnull;
 
-public class TileEntityTotemLathe extends TileEntity
+public class TotemLatheTileEntity extends TileEntity
 {
 	private boolean broken = false;
 	//two cards so that we can preform the && alchemy operation
 	protected ItemStack card1 = ItemStack.EMPTY;
 	protected ItemStack card2 = ItemStack.EMPTY;
 	
-	public TileEntityTotemLathe()
+	public TotemLatheTileEntity()
 	{
 		super(MinestuckTiles.TOTEM_LATHE);
 	}
@@ -48,7 +47,7 @@ public class TileEntityTotemLathe extends TileEntity
 			card1 = stack;
 			if(world != null)
 			{
-				IBlockState state = world.getBlockState(pos);
+				BlockState state = world.getBlockState(pos);
 				if(!card1.isEmpty())
 					state = state.with(TotemLatheBlock.Slot.COUNT, 1);
 				else state = state.with(TotemLatheBlock.Slot.COUNT, 0);
@@ -73,7 +72,7 @@ public class TileEntityTotemLathe extends TileEntity
 			card2 = stack;
 			if(world != null)
 			{
-				IBlockState state = world.getBlockState(pos);
+				BlockState state = world.getBlockState(pos);
 				if(!card2.isEmpty())
 					state = state.with(TotemLatheBlock.Slot.COUNT, 2);
 				else state = state.with(TotemLatheBlock.Slot.COUNT, 1);
@@ -101,25 +100,25 @@ public class TileEntityTotemLathe extends TileEntity
 	{
 		if(world == null)
 			return false;
-		EnumFacing facing = getFacing();
+		Direction facing = getFacing();
 		BlockPos pos = getPos().up().offset(facing.rotateYCCW(), 2);
-		IBlockState state = world.getBlockState(pos);
+		BlockState state = world.getBlockState(pos);
 		if(stack.isEmpty())
 		{
 			if(state.equals(MinestuckBlocks.TOTEM_LATHE.DOWEL_ROD.getDefaultState().with(TotemLatheBlock.FACING, facing)))
-				world.removeBlock(pos);
+				world.removeBlock(pos, false);
 			return true;
 		} else if (stack.getItem() == MinestuckBlocks.CRUXITE_DOWEL.asItem())
 		{
 			if(state.equals(MinestuckBlocks.TOTEM_LATHE.DOWEL_ROD.getDefaultState().with(TotemLatheBlock.FACING, facing)))
 			{
 				TileEntity te = world.getTileEntity(pos);
-				if(!(te instanceof TileEntityItemStack))
+				if(!(te instanceof ItemStackTileEntity))
 				{
-					te = new TileEntityItemStack();
+					te = new ItemStackTileEntity();
 					world.setTileEntity(pos, te);
 				}
-				TileEntityItemStack teItem = (TileEntityItemStack) te;
+				ItemStackTileEntity teItem = (ItemStackTileEntity) te;
 				teItem.setStack(stack);
 				world.notifyBlockUpdate(pos, state, state, 2);
 				return true;
@@ -127,12 +126,12 @@ public class TileEntityTotemLathe extends TileEntity
 			{
 				world.setBlockState(pos, MinestuckBlocks.TOTEM_LATHE.DOWEL_ROD.getDefaultState().with(TotemLatheBlock.FACING, facing));
 				TileEntity te = world.getTileEntity(pos);
-				if(!(te instanceof TileEntityItemStack))
+				if(!(te instanceof ItemStackTileEntity))
 				{
-					te = new TileEntityItemStack();
+					te = new ItemStackTileEntity();
 					world.setTileEntity(pos, te);
 				}
-				TileEntityItemStack teItem = (TileEntityItemStack) te;
+				ItemStackTileEntity teItem = (ItemStackTileEntity) te;
 				teItem.setStack(stack);
 				
 				return true;
@@ -146,16 +145,16 @@ public class TileEntityTotemLathe extends TileEntity
 		if(world.getBlockState(pos).equals(MinestuckBlocks.TOTEM_LATHE.DOWEL_ROD.getDefaultState().with(TotemLatheBlock.FACING, getFacing())))
 		{
 			TileEntity te = world.getTileEntity(pos);
-			if(te instanceof TileEntityItemStack)
+			if(te instanceof ItemStackTileEntity)
 			{
-				return ((TileEntityItemStack) te).getStack();
+				return ((ItemStackTileEntity) te).getStack();
 			}
 		}
 		return ItemStack.EMPTY;
 		
 	}
 	
-	public EnumFacing getFacing()
+	public Direction getFacing()
 	{
 		return getBlockState().get(TotemLatheBlock.FACING);
 	}
@@ -173,10 +172,10 @@ public class TileEntityTotemLathe extends TileEntity
 				if(!card2.isEmpty())
 				{
 					if(player.getHeldItemMainhand().isEmpty())
-						player.setHeldItem(EnumHand.MAIN_HAND, card2);
+						player.setHeldItem(Hand.MAIN_HAND, card2);
 					else if(!player.inventory.addItemStackToInventory(card2))
 						dropItem(false, getPos(), card2);
-					else player.inventoryContainer.detectAndSendChanges();
+					else player.container.detectAndSendChanges();
 					setCard2(ItemStack.EMPTY);
 				} else if(working && heldStack.getItem() == MinestuckItems.CAPTCHA_CARD)
 				{
@@ -184,10 +183,10 @@ public class TileEntityTotemLathe extends TileEntity
 				} else
 				{
 					if(player.getHeldItemMainhand().isEmpty())
-						player.setHeldItem(EnumHand.MAIN_HAND, card1);
+						player.setHeldItem(Hand.MAIN_HAND, card1);
 					else if(!player.inventory.addItemStackToInventory(card1))
 						dropItem(false, getPos(), card1);
-					else player.inventoryContainer.detectAndSendChanges();
+					else player.container.detectAndSendChanges();
 					setCard1(ItemStack.EMPTY);
 				}
 			} else if(working && heldStack.getItem() == MinestuckItems.CAPTCHA_CARD)
@@ -215,10 +214,10 @@ public class TileEntityTotemLathe extends TileEntity
 			} else
 			{
 				if(player.getHeldItemMainhand().isEmpty())
-					player.setHeldItem(EnumHand.MAIN_HAND, dowel);
+					player.setHeldItem(Hand.MAIN_HAND, dowel);
 				else if(!player.inventory.addItemStackToInventory(dowel))
 					dropItem(true, getPos().up().offset(getFacing().rotateYCCW(), 2), dowel);
-				else player.inventoryContainer.detectAndSendChanges();
+				else player.container.detectAndSendChanges();
 				setDowel(ItemStack.EMPTY);
 			}
 		}
@@ -231,9 +230,9 @@ public class TileEntityTotemLathe extends TileEntity
 		}
 	}
 	
-	private boolean isUseable(IBlockState state)
+	private boolean isUseable(BlockState state)
 	{
-		IBlockState currentState = getWorld().getBlockState(getPos());
+		BlockState currentState = getWorld().getBlockState(getPos());
 		if(!isBroken())
 		{
 			checkStates();
@@ -250,7 +249,7 @@ public class TileEntityTotemLathe extends TileEntity
 	{
 		if(isBroken())
 			return;
-		EnumFacing facing = getFacing();
+		Direction facing = getFacing();
 		
 		if(	//!world.getBlockState(getPos()).equals(MinestuckBlocks.TOTEM_LATHE.CARD_SLOT.getDefaultState().with(BlockTotemLathe.FACING, facing)) ||
 			!world.getBlockState(getPos().offset(facing.rotateYCCW(),1)).equals(MinestuckBlocks.TOTEM_LATHE.BOTTOM_LEFT.getDefaultState().with(TotemLatheBlock.FACING, facing)) ||
@@ -272,11 +271,11 @@ public class TileEntityTotemLathe extends TileEntity
 	
 	private void dropItem(boolean inBlock, BlockPos pos, ItemStack stack)
 	{
-		EnumFacing direction = getFacing();
+		Direction direction = getFacing();
 		BlockPos dropPos;
 		if(inBlock)
 			dropPos = pos;
-		else if(!world.getBlockState(pos.offset(direction)).isBlockNormalCube())
+		else if(!Block.hasSolidSide(world.getBlockState(pos.offset(direction)), world, pos.offset(direction), direction.getOpposite()))
 			dropPos = pos.offset(direction);
 		else dropPos = pos;
 		
@@ -284,7 +283,7 @@ public class TileEntityTotemLathe extends TileEntity
 	}
 	
 	@Override
-	public void read(NBTTagCompound compound)
+	public void read(CompoundNBT compound)
 	{
 		super.read(compound);
 		broken = compound.getBoolean("broken");
@@ -298,27 +297,27 @@ public class TileEntityTotemLathe extends TileEntity
 	}
 	
 	@Override
-	public NBTTagCompound write(NBTTagCompound compound)
+	public CompoundNBT write(CompoundNBT compound)
 	{
 		super.write(compound);
 		compound.putBoolean("broken",broken);
-		compound.put("card1", card1.write(new NBTTagCompound()));
-		compound.put("card2", card2.write(new NBTTagCompound()));
+		compound.put("card1", card1.write(new CompoundNBT()));
+		compound.put("card2", card2.write(new CompoundNBT()));
 		return compound;
 	}
 	@Override
-	public NBTTagCompound getUpdateTag()
+	public CompoundNBT getUpdateTag()
 	{
-		return write(new NBTTagCompound());
+		return write(new CompoundNBT());
 	}
 	@Override
-	public SPacketUpdateTileEntity getUpdatePacket()
+	public SUpdateTileEntityPacket getUpdatePacket()
 	{
-		return new SPacketUpdateTileEntity(this.pos, 0, getUpdateTag());
+		return new SUpdateTileEntityPacket(this.pos, 0, getUpdateTag());
 	}
 	
 	@Override
-	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt)
+	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
 	{
 		handleUpdateTag(pkt.getNbtCompound());
 	}
@@ -361,7 +360,7 @@ public class TileEntityTotemLathe extends TileEntity
 		world.playEvent(success ? 1000 : 1001, pos, 0);
 		if (success)
 		{
-			EnumFacing direction = getFacing();
+			Direction direction = getFacing();
 			int i = direction.getXOffset() + 1 + (direction.getZOffset() + 1) * 3;
 			world.playEvent(2000, pos, i);
 		}

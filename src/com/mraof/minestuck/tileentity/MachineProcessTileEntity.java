@@ -1,23 +1,22 @@
 package com.mraof.minestuck.tileentity;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ITickable;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
 
 import javax.annotation.Nullable;
 
-public abstract class TileEntityMachineProcess extends TileEntity implements ISidedInventory, ITickable
+public abstract class MachineProcessTileEntity extends TileEntity implements ISidedInventory, ITickableTileEntity
 {
 
 	public int progress = 0;
@@ -26,7 +25,7 @@ public abstract class TileEntityMachineProcess extends TileEntity implements ISi
 	public boolean overrideStop = false;
 	protected final NonNullList<ItemStack> inv;
 	
-	public TileEntityMachineProcess(TileEntityType<?> tileEntityTypeIn)
+	public MachineProcessTileEntity(TileEntityType<?> tileEntityTypeIn)
 	{
 		super(tileEntityTypeIn);
 		inv = NonNullList.withSize(getSizeInventory(), ItemStack.EMPTY);
@@ -66,6 +65,8 @@ public abstract class TileEntityMachineProcess extends TileEntity implements ISi
 		return ItemStackHelper.getAndRemove(this.inv, index);
 	}
 
+	
+	
 	@Override
 	public boolean isEmpty()
 	{
@@ -80,16 +81,16 @@ public abstract class TileEntityMachineProcess extends TileEntity implements ISi
 	{
 		return 64;
 	}
-
+	
 	@Override
-	public boolean isUsableByPlayer(EntityPlayer player)
+	public boolean isUsableByPlayer(PlayerEntity player)
 	{
 		return this.world.getTileEntity(pos) == this &&
 				player.getDistanceSq(this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5) < 64;
 	}
 	
 	@Override
-	public void read(NBTTagCompound compound)
+	public void read(CompoundNBT compound)
 	{
 		super.read(compound);
 
@@ -101,7 +102,7 @@ public abstract class TileEntityMachineProcess extends TileEntity implements ISi
 	}
 	
 	@Override
-	public NBTTagCompound write(NBTTagCompound compound)
+	public CompoundNBT write(CompoundNBT compound)
 	{
 		super.write(compound);
 
@@ -114,26 +115,26 @@ public abstract class TileEntityMachineProcess extends TileEntity implements ISi
 	}
 
 	@Override
-	public NBTTagCompound getUpdateTag()
+	public CompoundNBT getUpdateTag()
 	{
-		return this.write(new NBTTagCompound());
+		return this.write(new CompoundNBT());
 	}
 	
 	@Override
-	public SPacketUpdateTileEntity getUpdatePacket()
+	public SUpdateTileEntityPacket getUpdatePacket()
 	{
-		NBTTagCompound tagCompound = this.getUpdateTag();
-		return new SPacketUpdateTileEntity(this.pos, 2, tagCompound);
+		CompoundNBT compound = this.getUpdateTag();
+		return new SUpdateTileEntityPacket(this.pos, 2, compound);
 	}
 	
 	@Override
-	public void handleUpdateTag(NBTTagCompound tag)
+	public void handleUpdateTag(CompoundNBT tag)
 	{
 		this.read(tag);
 	}
 	
 	@Override
-	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt)
+	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
 	{
 		this.handleUpdateTag(pkt.getNbtCompound());
 	}
@@ -141,7 +142,7 @@ public abstract class TileEntityMachineProcess extends TileEntity implements ISi
 	@Override
 	public void tick()
 	{
-		IBlockState state = world.getBlockState(pos);
+		BlockState state = world.getBlockState(pos);
 		if (world.isRemote)    //Processing is easier done on the server side only
 			return;
 
@@ -170,46 +171,6 @@ public abstract class TileEntityMachineProcess extends TileEntity implements ISi
 
 	public abstract void processContents();
 	
-	@Nullable
-	@Override
-	public ITextComponent getCustomName()
-	{
-		return null;
-	}
-	
-	@Override
-	public boolean hasCustomName()
-	{
-		return false;
-	}
-	
-	@Override
-	public void openInventory(EntityPlayer playerIn)
-	{
-	}
-
-	@Override
-	public void closeInventory(EntityPlayer playerIn)
-	{
-	}
-
-	@Override
-	public int getField(int id)
-	{
-		return 0;
-	}
-
-	@Override
-	public void setField(int id, int value)
-	{
-	}
-
-	@Override
-	public int getFieldCount()
-	{
-		return 0;
-	}
-
 	@Override
 	public void clear()
 	{
@@ -217,13 +178,13 @@ public abstract class TileEntityMachineProcess extends TileEntity implements ISi
 	}
 	
 	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn, @Nullable EnumFacing direction)
+	public boolean canInsertItem(int index, ItemStack itemStackIn, @Nullable Direction direction)
 	{
 		return isItemValidForSlot(index, itemStackIn);
 	}
 	
 	@Override
-	public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction)
+	public boolean canExtractItem(int index, ItemStack stack, Direction direction)
 	{
 		return true;
 	}

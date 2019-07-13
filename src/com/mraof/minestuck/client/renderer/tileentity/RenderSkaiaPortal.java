@@ -1,6 +1,6 @@
 package com.mraof.minestuck.client.renderer.tileentity;
 
-import com.mraof.minestuck.tileentity.TileEntitySkaiaPortal;
+import com.mraof.minestuck.tileentity.SkaiaPortalTileEntity;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -13,7 +13,7 @@ import org.lwjgl.opengl.GL11;
 import java.nio.FloatBuffer;
 import java.util.Random;
 
-public class RenderSkaiaPortal extends TileEntityRenderer<TileEntitySkaiaPortal>
+public class RenderSkaiaPortal extends TileEntityRenderer<SkaiaPortalTileEntity>
 {
 	private static final ResourceLocation tunnel = new ResourceLocation("minestuck","textures/tunnel.png");
     private static final ResourceLocation particlefield = new ResourceLocation("minestuck","textures/particlefield.png");
@@ -21,7 +21,7 @@ public class RenderSkaiaPortal extends TileEntityRenderer<TileEntitySkaiaPortal>
     FloatBuffer floatBuffer = GLAllocation.createDirectFloatBuffer(16);
 	
 	@Override
-	public void render(TileEntitySkaiaPortal tileEntityIn, double x, double y, double z, float partialTicks, int destroyStage)
+	public void render(SkaiaPortalTileEntity tileEntityIn, double x, double y, double z, float partialTicks, int destroyStage)
 	{
 		Entity temp = new EntityTippedArrow(tileEntityIn.getWorld());
 		Vec3d position = ActiveRenderInfo.projectViewFromEntity(temp, 0);	//TODO temp solution for removed getter

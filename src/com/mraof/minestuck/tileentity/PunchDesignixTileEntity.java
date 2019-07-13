@@ -9,29 +9,27 @@ import com.mraof.minestuck.alchemy.CombinationRegistry;
 import com.mraof.minestuck.util.Debug;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nonnull;
 
 import static com.mraof.minestuck.block.MachineBlock.FACING;
 
-public class TileEntityPunchDesignix extends TileEntity
+public class PunchDesignixTileEntity extends TileEntity
 {
 	public boolean broken = false;
 	protected ItemStack card = ItemStack.EMPTY;
 	
-	public TileEntityPunchDesignix()
+	public PunchDesignixTileEntity()
 	{
 		super(MinestuckTiles.PUNCH_DESIGNIX);
 	}
@@ -43,7 +41,7 @@ public class TileEntityPunchDesignix extends TileEntity
 			this.card = card;
 			if(world != null && !world.isRemote)
 			{
-				IBlockState state = world.getBlockState(pos);
+				BlockState state = world.getBlockState(pos);
 				boolean hasCard = !card.isEmpty();
 				if(state.has(PunchDesignixBlock.Slot.HAS_CARD) && hasCard != state.get(PunchDesignixBlock.Slot.HAS_CARD))
 					world.setBlockState(pos, state.with(PunchDesignixBlock.Slot.HAS_CARD, hasCard), 2);
@@ -63,10 +61,10 @@ public class TileEntityPunchDesignix extends TileEntity
 		if (part == MinestuckBlocks.PUNCH_DESIGNIX.SLOT && !getCard().isEmpty())
 		{    //Remove card from punch slot
 			if (player.getHeldItemMainhand().isEmpty())
-				player.setHeldItem(EnumHand.MAIN_HAND, getCard());
+				player.setHeldItem(Hand.MAIN_HAND, getCard());
 			else if (!player.inventory.addItemStackToInventory(getCard()))
 				dropItem(false);
-			else player.inventoryContainer.detectAndSendChanges();
+			else player.container.detectAndSendChanges();
 			
 			setCard(ItemStack.EMPTY);
 			return;
@@ -121,15 +119,15 @@ public class TileEntityPunchDesignix extends TileEntity
 		world.playEvent(success ? 1000 : 1001, pos, 0);
 		if (success)
 		{
-			EnumFacing direction = getBlockState().get(FACING);
+			Direction direction = getBlockState().get(FACING);
 			int i = direction.getXOffset() + 1 + (direction.getZOffset() + 1) * 3;
 			world.playEvent(2000, pos, i);
 		}
 	}
 	
-	private boolean isUseable(IBlockState state)
+	private boolean isUseable(BlockState state)
 	{
-		IBlockState currentState = getWorld().getBlockState(getPos());
+		BlockState currentState = getWorld().getBlockState(getPos());
 		if(!broken)
 		{
 			checkStates();
@@ -143,12 +141,12 @@ public class TileEntityPunchDesignix extends TileEntity
 	
 	public void checkStates()
 	{
-		if (broken)
+		if (broken || world == null)
 			return;
 		
-		IBlockState currentState = getWorld().getBlockState(getPos());
-		EnumFacing facing = currentState.get(FACING);
-		EnumFacing hOffset = facing.rotateYCCW();
+		BlockState currentState = world.getBlockState(getPos());
+		Direction facing = currentState.get(FACING);
+		Direction hOffset = facing.rotateYCCW();
 		if (!world.getBlockState(getPos().offset(hOffset)).equals(MinestuckBlocks.PUNCH_DESIGNIX.KEYBOARD.getDefaultState().with(FACING, facing)) ||
 				!world.getBlockState(getPos().down()).equals(MinestuckBlocks.PUNCH_DESIGNIX.LEFT_LEG.getDefaultState().with(FACING, facing)) ||
 				!world.getBlockState(getPos().down().offset(hOffset)).equals(MinestuckBlocks.PUNCH_DESIGNIX.RIGHT_LEG.getDefaultState().with(FACING, facing)))
@@ -159,13 +157,18 @@ public class TileEntityPunchDesignix extends TileEntity
 	
 	public void dropItem(boolean inBlock)
 	{
-		EnumFacing direction = inBlock ? null : world.getBlockState(this.pos).get(FACING);
+		if(world == null) {
+			Debug.warn("Tried to drop punch designix card before the world had been set!");
+			return;
+		}
+		
+		Direction direction = inBlock ? null : world.getBlockState(this.pos).get(FACING);
 		BlockPos dropPos;
 		if (inBlock)
 			dropPos = this.pos;
-		else if (!world.getBlockState(this.pos.offset(direction)).isBlockNormalCube())
+		else if (!Block.hasSolidSide(world.getBlockState(this.pos.offset(direction)), world, this.pos.offset(direction), direction.getOpposite()))
 			dropPos = this.pos.offset(direction);
-		else if (!world.getBlockState(this.pos.up()).isBlockNormalCube())
+		else if (!Block.hasSolidSide(world.getBlockState(this.pos.up()), world, this.pos.up(), Direction.DOWN))
 			dropPos = this.pos.up();
 		else dropPos = this.pos;
 		
@@ -174,7 +177,7 @@ public class TileEntityPunchDesignix extends TileEntity
 	}
 	
 	@Override
-	public void read(NBTTagCompound compound)
+	public void read(CompoundNBT compound)
 	{
 		super.read(compound);
 		broken = compound.getBoolean("broken");
@@ -182,33 +185,33 @@ public class TileEntityPunchDesignix extends TileEntity
 	}
 	
 	@Override
-	public NBTTagCompound write(NBTTagCompound compound)
+	public CompoundNBT write(CompoundNBT compound)
 	{
 		super.write(compound);
 		compound.putBoolean("broken", this.broken);
-		compound.put("card", getCard().write(new NBTTagCompound()));
+		compound.put("card", getCard().write(new CompoundNBT()));
 		return compound;
 	}
 	
 	@Override
-	public NBTTagCompound getUpdateTag()
+	public CompoundNBT getUpdateTag()
 	{
-		NBTTagCompound nbt;
+		CompoundNBT nbt;
 		nbt = super.getUpdateTag();
-		nbt.put("card", getCard().write(new NBTTagCompound()));
+		nbt.put("card", getCard().write(new CompoundNBT()));
 		return nbt;
 	}
 	
 	@Override
-	public SPacketUpdateTileEntity getUpdatePacket()
+	public SUpdateTileEntityPacket getUpdatePacket()
 	{
-		SPacketUpdateTileEntity packet;
-		packet = new SPacketUpdateTileEntity(this.pos, 0, getUpdateTag());
+		SUpdateTileEntityPacket packet;
+		packet = new SUpdateTileEntityPacket(this.pos, 0, getUpdateTag());
 		return packet;
 	}
 	
 	@Override
-	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt)
+	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
 	{
 		handleUpdateTag(pkt.getNbtCompound());
 	}

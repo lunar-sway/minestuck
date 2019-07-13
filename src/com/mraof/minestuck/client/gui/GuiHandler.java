@@ -45,24 +45,24 @@ public class GuiHandler
 		TileEntity tileEntity = mc.world.getTileEntity(pos);
 		if(id == MINI_CRUXTRUDER_ID)
 		{
-			if(tileEntity instanceof TileEntityMiniCruxtruder)
-				return new GuiMiniCruxtruder(mc.player.inventory, (TileEntityMiniCruxtruder) tileEntity);
+			if(tileEntity instanceof MiniCruxtruderTileEntity)
+				return new GuiMiniCruxtruder(mc.player.inventory, (MiniCruxtruderTileEntity) tileEntity);
 		} else if(id == MINI_TOTEM_LATHE_ID)
 		{
-			if(tileEntity instanceof TileEntityMiniTotemLathe)
-				return new GuiMiniTotemLathe(mc.player.inventory, (TileEntityMiniTotemLathe) tileEntity);
+			if(tileEntity instanceof MiniTotemLatheTileEntity)
+				return new GuiMiniTotemLathe(mc.player.inventory, (MiniTotemLatheTileEntity) tileEntity);
 		} else if(id == MINI_ALCHEMITER_ID)
 		{
-			if(tileEntity instanceof TileEntityMiniAlchemiter)
-				return new GuiMiniAlchemiter(mc.player.inventory, (TileEntityMiniAlchemiter) tileEntity);
+			if(tileEntity instanceof MiniAlchemiterTileEntity)
+				return new GuiMiniAlchemiter(mc.player.inventory, (MiniAlchemiterTileEntity) tileEntity);
 		} else if(id == MINI_PUNCH_DESIGNIX_ID)
 		{
-			if(tileEntity instanceof TileEntityMiniPunchDesignix)
-				return new GuiMiniPunchDesignix(mc.player.inventory, (TileEntityMiniPunchDesignix) tileEntity);
+			if(tileEntity instanceof MiniPunchDesignixTileEntity)
+				return new GuiMiniPunchDesignix(mc.player.inventory, (MiniPunchDesignixTileEntity) tileEntity);
 		} else if(id == GRIST_WIDGET_ID)
 		{
-			if(tileEntity instanceof TileEntityGristWidget)
-				return new GuiGristWidget(mc.player.inventory, (TileEntityGristWidget) tileEntity);
+			if(tileEntity instanceof GristWidgetTileEntity)
+				return new GuiGristWidget(mc.player.inventory, (GristWidgetTileEntity) tileEntity);
 		} else if(id == CONSORT_MERCHANT_ID)
 		{
 			return new GuiConsortShop(mc.player);

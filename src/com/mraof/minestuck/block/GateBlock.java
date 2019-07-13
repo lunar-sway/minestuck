@@ -1,7 +1,7 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.tileentity.TileEntityGate;
+import com.mraof.minestuck.tileentity.GateTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -64,7 +64,7 @@ public class GateBlock extends Block
 	@Override
 	public TileEntity createTileEntity(BlockState state, IBlockReader world)
 	{
-		return new TileEntityGate();
+		return new GateTileEntity();
 	}
 	
 	@Override
@@ -94,8 +94,8 @@ public class GateBlock extends Block
 					return;
 				}
 				TileEntity te = worldIn.getTileEntity(mainPos);
-				if(te instanceof TileEntityGate)
-					((TileEntityGate) te).teleportEntity(worldIn, (ServerPlayerEntity) entityIn, this);
+				if(te instanceof GateTileEntity)
+					((GateTileEntity) te).teleportEntity(worldIn, (ServerPlayerEntity) entityIn, this);
 			} else worldIn.removeBlock(pos, false);
 		}
 	}

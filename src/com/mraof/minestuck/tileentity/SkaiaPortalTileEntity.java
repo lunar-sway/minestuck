@@ -7,22 +7,21 @@ import com.mraof.minestuck.util.Location;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ServerWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.common.util.ITeleporter;
 
-public class TileEntitySkaiaPortal extends TileEntity implements ITeleporter
+public class SkaiaPortalTileEntity extends TileEntity //implements ITeleporter
 {
 	public Location destination = new Location();
 	
-	public TileEntitySkaiaPortal()
+	public SkaiaPortalTileEntity()
 	{
 		super(MinestuckTiles.SKAIA_PORTAL);
 	}
@@ -36,7 +35,7 @@ public class TileEntitySkaiaPortal extends TileEntity implements ITeleporter
 	}
 	
 	@Override
-	public void read(NBTTagCompound compound)
+	public void read(CompoundNBT compound)
 	{
 		super.read(compound);
 		destination.pos = new BlockPos(compound.getInt("destX"), compound.getInt("destY"), compound.getInt("destZ"));
@@ -46,7 +45,7 @@ public class TileEntitySkaiaPortal extends TileEntity implements ITeleporter
 	}
 	
 	@Override
-	public NBTTagCompound write(NBTTagCompound compound)
+	public CompoundNBT write(CompoundNBT compound)
 	{
 		super.write(compound);
 		ResourceLocation dimName = this.destination.dim.getRegistryName();
@@ -66,18 +65,18 @@ public class TileEntitySkaiaPortal extends TileEntity implements ITeleporter
 		{
 			if(destination.pos.getY() < 0)
 			{
-				WorldServer world = DimensionManager.getWorld(entity.getServer(), destination.dim, true, true);
+				ServerWorld world = DimensionManager.getWorld(entity.getServer(), destination.dim, true, true);
 				if(world == null)
 					return;
 				destination.pos = world.getHeight(Heightmap.Type.WORLD_SURFACE, new BlockPos(entity)).up(5);
 			}
-			entity = entity.changeDimension(destination.dim, this);
+			entity = entity.changeDimension(destination.dim);//, this);
 		}
 		if(entity != null)
 			entity.timeUntilPortal = entity.getPortalCooldown();
 	}
 	
-	@Override
+	//@Override
 	public void placeEntity(World world, Entity entity, float yaw)
 	{
 		double x = pos.getX();
@@ -91,8 +90,7 @@ public class TileEntitySkaiaPortal extends TileEntity implements ITeleporter
 			{
 				world.setBlockState(new BlockPos(blockX, (int) y - 1, blockZ), blocks[(blockX + blockZ) & 3].getDefaultState(), 3);
 				for(int blockY = (int) y; blockY < y + 6; blockY++)
-					if(world.isBlockFullCube(new BlockPos(blockX, blockY, blockZ)))
-						world.removeBlock(new BlockPos(blockX, blockY, blockZ));
+					world.removeBlock(new BlockPos(blockX, blockY, blockZ), false);
 			}
 		}
 	}

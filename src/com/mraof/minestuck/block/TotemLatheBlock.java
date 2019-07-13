@@ -1,8 +1,8 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.block.multiblock.MachineMultiblock;
-import com.mraof.minestuck.tileentity.TileEntityItemStack;
-import com.mraof.minestuck.tileentity.TileEntityTotemLathe;
+import com.mraof.minestuck.tileentity.ItemStackTileEntity;
+import com.mraof.minestuck.tileentity.TotemLatheTileEntity;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -61,8 +61,8 @@ public class TotemLatheBlock extends MultiMachineBlock
 		
 		BlockPos mainPos = getMainPos(state, pos);
 		TileEntity te = worldIn.getTileEntity(mainPos);
-		if(te instanceof TileEntityTotemLathe)
-			((TileEntityTotemLathe) te).onRightClick(player, state);
+		if(te instanceof TotemLatheTileEntity)
+			((TotemLatheTileEntity) te).onRightClick(player, state);
 		return true;
 	}
 	
@@ -74,9 +74,9 @@ public class TotemLatheBlock extends MultiMachineBlock
 			BlockPos mainPos = getMainPos(state, pos);
 			TileEntity te = worldIn.getTileEntity(mainPos);
 			BlockState otherState = worldIn.getBlockState(mainPos);
-			if(te instanceof TileEntityTotemLathe && otherState.get(FACING) == state.get(FACING))
+			if(te instanceof TotemLatheTileEntity && otherState.get(FACING) == state.get(FACING))
 			{
-				((TileEntityTotemLathe) te).setBroken();
+				((TotemLatheTileEntity) te).setBroken();
 			}
 		}
 		
@@ -87,8 +87,8 @@ public class TotemLatheBlock extends MultiMachineBlock
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
 		TileEntity te = worldIn.getTileEntity(pos);
-		if(te instanceof TileEntityTotemLathe)
-			((TileEntityTotemLathe) te).checkStates();
+		if(te instanceof TotemLatheTileEntity)
+			((TotemLatheTileEntity) te).checkStates();
 	}
 	
     /**
@@ -138,7 +138,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 		@Override
 		public TileEntity createTileEntity(BlockState state, IBlockReader world)
 		{
-			return new TileEntityItemStack();
+			return new ItemStackTileEntity();
 		}
 		
 		@Override
@@ -174,7 +174,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 		@Override
 		public TileEntity createTileEntity(BlockState state, IBlockReader world)
 		{
-			return new TileEntityTotemLathe();
+			return new TotemLatheTileEntity();
 		}
 		
 		@Override

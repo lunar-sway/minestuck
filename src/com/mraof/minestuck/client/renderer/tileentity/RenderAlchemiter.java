@@ -1,12 +1,12 @@
 package com.mraof.minestuck.client.renderer.tileentity;
 
-import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
+import com.mraof.minestuck.tileentity.AlchemiterTileEntity;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 
-public class RenderAlchemiter extends TileEntityRenderer<TileEntityAlchemiter>
+public class RenderAlchemiter extends TileEntityRenderer<AlchemiterTileEntity>
 {
 	@Override
-	public void render(TileEntityAlchemiter tileEntityIn, double x, double y, double z, float partialTicks, int destroyStage)
+	public void render(AlchemiterTileEntity tileEntityIn, double x, double y, double z, float partialTicks, int destroyStage)
 	{
 		//ModelLoaderRegistry.getModel()
 	}

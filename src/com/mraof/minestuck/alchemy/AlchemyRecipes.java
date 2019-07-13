@@ -7,6 +7,7 @@ import com.mraof.minestuck.modSupport.*;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -1065,7 +1066,7 @@ public class AlchemyRecipes
 		//registerRecipes(new Minegicka3Support(), "minegicka3", true);
 	}
 	
-	public static void onAlchemizedItem(ItemStack stack, EntityPlayerMP player)
+	public static void onAlchemizedItem(ItemStack stack, ServerPlayerEntity player)
 	{
 		if(!(stack.getItem() instanceof ItemCruxiteArtifact))
 		{

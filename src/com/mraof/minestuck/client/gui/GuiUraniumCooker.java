@@ -1,7 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.inventory.ContainerUraniumCooker;
-import com.mraof.minestuck.tileentity.TileEntityUraniumCooker;
+import com.mraof.minestuck.tileentity.UraniumCookerTileEntity;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -14,7 +14,7 @@ public class GuiUraniumCooker extends GuiMachine
 	private static final ResourceLocation BACKGROUND = new ResourceLocation("minestuck:textures/gui/uranium_cooker.png");
 	private static final ResourceLocation PROGRESS = new ResourceLocation("minestuck:textures/gui/progress/uranium_cooker.png");
 	
-	protected final TileEntityUraniumCooker te;
+	protected final UraniumCookerTileEntity te;
 	protected final InventoryPlayer playerInventory;
 	
 	private int progressX;
@@ -24,7 +24,7 @@ public class GuiUraniumCooker extends GuiMachine
 	private int goX;
 	private int goY;
 
-	public GuiUraniumCooker (InventoryPlayer inventoryPlayer, TileEntityUraniumCooker tileEntity)
+	public GuiUraniumCooker (InventoryPlayer inventoryPlayer, UraniumCookerTileEntity tileEntity)
 	{
 		super(new ContainerUraniumCooker(inventoryPlayer, tileEntity), tileEntity);
 		this.te = tileEntity;

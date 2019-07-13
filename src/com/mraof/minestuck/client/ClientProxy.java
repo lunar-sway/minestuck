@@ -55,8 +55,8 @@ import com.mraof.minestuck.entity.underling.OgreEntity;
 import com.mraof.minestuck.entity.underling.UnderlingPartEntity;
 import com.mraof.minestuck.event.ClientEventHandler;
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.tileentity.TileEntityGate;
-import com.mraof.minestuck.tileentity.TileEntitySkaiaPortal;
+import com.mraof.minestuck.tileentity.GateTileEntity;
+import com.mraof.minestuck.tileentity.SkaiaPortalTileEntity;
 import com.mraof.minestuck.util.ColorCollector;
 
 import net.minecraft.block.BlockStem;
@@ -89,8 +89,8 @@ public class ClientProxy extends CommonProxy
 	
 	private static void registerRenderers()
 	{
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySkaiaPortal.class, new RenderSkaiaPortal());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGate.class, new RenderGate());
+		ClientRegistry.bindTileEntitySpecialRenderer(SkaiaPortalTileEntity.class, new RenderSkaiaPortal());
+		ClientRegistry.bindTileEntitySpecialRenderer(GateTileEntity.class, new RenderGate());
 //		MinecraftForgeClient.registerItemRenderer(Minestuck.captchaCard, new RenderCard());
 	}
 	

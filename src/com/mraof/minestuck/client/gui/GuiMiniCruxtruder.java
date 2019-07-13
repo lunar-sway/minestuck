@@ -1,7 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.inventory.ContainerMiniCruxtruder;
-import com.mraof.minestuck.tileentity.TileEntityMiniCruxtruder;
+import com.mraof.minestuck.tileentity.MiniCruxtruderTileEntity;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -11,7 +11,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class GuiMiniCruxtruder extends GuiMachine
 {
-	protected final TileEntityMiniCruxtruder te;
+	protected final MiniCruxtruderTileEntity te;
 	protected final InventoryPlayer playerInventory;
 	
 	private ResourceLocation BACKGROUND = new ResourceLocation("minestuck:textures/gui/cruxtruder.png");
@@ -24,7 +24,7 @@ public class GuiMiniCruxtruder extends GuiMachine
 	private int goX;
 	private int goY;
 
-	public GuiMiniCruxtruder(InventoryPlayer inventoryPlayer, TileEntityMiniCruxtruder tileEntity)
+	public GuiMiniCruxtruder(InventoryPlayer inventoryPlayer, MiniCruxtruderTileEntity tileEntity)
 	{
 		super(new ContainerMiniCruxtruder(inventoryPlayer, tileEntity), tileEntity);
 		this.te = tileEntity;

@@ -1,38 +1,37 @@
 package com.mraof.minestuck.tileentity;
 
-import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.inventory.ContainerUraniumCooker;
 import com.mraof.minestuck.item.MinestuckItems;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.world.IInteractionObject;
+import net.minecraft.util.text.TranslationTextComponent;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TileEntityUraniumCooker extends TileEntityMachineProcess implements INamedContainerProvider
+public class UraniumCookerTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
 {
 	private static HashMap<Item, ItemStack> radiations = new HashMap<>();
 	private short fuel = 0;
 	private short maxFuel = 128;
 	
-	public TileEntityUraniumCooker()
+	public UraniumCookerTileEntity()
 	{
 		super(MinestuckTiles.URANIUM_COOKER);
 		maxProgress = 0;
 	}
 	
 	@Override
-	public NBTTagCompound write(NBTTagCompound compound)
+	public CompoundNBT write(CompoundNBT compound)
 	{
 		super.write(compound);
 		compound.putShort("fuel", fuel);
@@ -40,7 +39,7 @@ public class TileEntityUraniumCooker extends TileEntityMachineProcess implements
 	}
 	
 	@Override
-	public void read(NBTTagCompound compound)
+	public void read(CompoundNBT compound)
 	{
 		super.read(compound);
 		fuel = compound.getShort("fuel");
@@ -90,7 +89,7 @@ public class TileEntityUraniumCooker extends TileEntityMachineProcess implements
 			input = radiations.get(input.getItem());
 		} else
 		{
-			input = this.world.getRecipeManager().getRecipe(this, this.world, net.minecraftforge.common.crafting.VanillaRecipeTypes.SMELTING).getRecipeOutput();
+			//input = this.world.getRecipeManager().getRecipe(this, this.world, net.minecraftforge.common.crafting.VanillaRecipeTypes.SMELTING).getRecipeOutput();
 			//TODO Check the above
 		}
 		
@@ -162,43 +161,38 @@ public class TileEntityUraniumCooker extends TileEntityMachineProcess implements
 	}
 	
 	@Override
-	public int[] getSlotsForFace(EnumFacing side)
+	public int[] getSlotsForFace(Direction side)
 	{
-		if(side == EnumFacing.UP)
+		if(side == Direction.UP)
 			return new int[] {1};
-		if(side == EnumFacing.DOWN)
+		if(side == Direction.DOWN)
 			return new int[] {2};
 		else return new int[] {0};
 	}
 	
 	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction)
+	public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction)
 	{
 		return true;
 	}
 	
 	@Override
-	public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction)
+	public boolean canExtractItem(int index, ItemStack stack, Direction direction)
 	{
 		return true;
 	}
 	
+	@Nullable
 	@Override
-	public ITextComponent getName()
-	{
-		return new TextComponentTranslation("container.uranium_cooker");
-	}
-	
-	@Override
-	public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn)
+	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
 	{
 		return new ContainerUraniumCooker(playerInventory, this);
 	}
 	
 	@Override
-	public String getGuiID()
+	public ITextComponent getDisplayName()
 	{
-		return GuiHandler.URANIUM_COOKER_ID.toString();
+		return new TranslationTextComponent("container.uranium_cooker");
 	}
 	
 	public short getFuel()

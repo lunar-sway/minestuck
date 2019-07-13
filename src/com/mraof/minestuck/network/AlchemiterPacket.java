@@ -1,6 +1,6 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
+import com.mraof.minestuck.tileentity.AlchemiterTileEntity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
@@ -49,9 +49,9 @@ public class AlchemiterPacket
 		{
 			TileEntity te;
 			te = player.getEntityWorld().getTileEntity(pos);
-			if(te instanceof TileEntityAlchemiter)
+			if(te instanceof AlchemiterTileEntity)
 			{
-				((TileEntityAlchemiter) te).processContents(quantity, player);
+				((AlchemiterTileEntity) te).processContents(quantity, player);
 			}
 		}
 	}

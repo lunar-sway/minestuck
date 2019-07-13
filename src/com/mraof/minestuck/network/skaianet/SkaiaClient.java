@@ -5,7 +5,7 @@ import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.SburbConnectClosedPacket;
 import com.mraof.minestuck.network.SburbConnectPacket;
 import com.mraof.minestuck.network.SkaianetInfoPacket;
-import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.network.PacketBuffer;
@@ -28,7 +28,7 @@ public class SkaiaClient
 	 * A map used to track chains of lands, to be used by the skybox render
 	 */
 	private static Map<DimensionType, List<DimensionType>> landChainMap = new HashMap<>();
-	private static TileEntityComputer te = null;
+	private static ComputerTileEntity te = null;
 	public static int playerId;	//The id that this player is expected to have.
 	
 	public static void clear()
@@ -47,7 +47,7 @@ public class SkaiaClient
 	 * @param computer The computer. Will save this variable for later if it sends a request.
 	 * @return If it currently has the necessary information.
 	 */
-	public static boolean requestData(TileEntityComputer computer)
+	public static boolean requestData(ComputerTileEntity computer)
 	{
 		boolean b = openServers.get(computer.ownerId) != null;
 		if(!b)
@@ -119,13 +119,13 @@ public class SkaiaClient
 		return null;
 	}
 	
-	public static void sendConnectRequest(TileEntityComputer te, int otherPlayer, boolean isClient)	//Used for both connect, open server and resume
+	public static void sendConnectRequest(ComputerTileEntity te, int otherPlayer, boolean isClient)	//Used for both connect, open server and resume
 	{
 		SburbConnectPacket packet = new SburbConnectPacket(ComputerData.createData(te), otherPlayer, isClient);
 		MinestuckPacketHandler.sendToServer(packet);
 	}
 	
-	public static void sendCloseRequest(TileEntityComputer te, int otherPlayer, boolean isClient)
+	public static void sendCloseRequest(ComputerTileEntity te, int otherPlayer, boolean isClient)
 	{
 		SburbConnectClosedPacket packet = new SburbConnectClosedPacket(te.ownerId, otherPlayer, isClient);
 		MinestuckPacketHandler.sendToServer(packet);
