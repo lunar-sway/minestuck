@@ -12,10 +12,10 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
-public class ItemRazorBlade extends Item
+public class RazorBladeItem extends Item
 {
 	
-	public ItemRazorBlade(Properties properties)
+	public RazorBladeItem(Properties properties)
 	{
 		super(properties);
 	}

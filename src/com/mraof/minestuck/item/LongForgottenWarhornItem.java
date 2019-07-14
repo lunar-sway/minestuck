@@ -14,7 +14,7 @@ import net.minecraft.util.SoundCategory;
 
 import java.util.Random;
 
-public class ItemLongForgottenWarhorn extends Item
+public class LongForgottenWarhornItem extends Item
 {
 	static PotionEffect[] effect = new PotionEffect[] {
 			new PotionEffect(MobEffects.BLINDNESS, 400, 0),
@@ -44,7 +44,7 @@ public class ItemLongForgottenWarhorn extends Item
 			new PotionEffect(MobEffects.MINING_FATIGUE, 300, 2),
 			new PotionEffect(MobEffects.SATURATION, 400, 1)};
 	
-	public ItemLongForgottenWarhorn(Properties properties)
+	public LongForgottenWarhornItem(Properties properties)
 	{
 		super(properties);
 	}

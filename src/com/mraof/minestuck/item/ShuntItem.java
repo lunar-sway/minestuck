@@ -14,10 +14,10 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
-public class ItemShunt extends Item
+public class ShuntItem extends Item
 {
 	
-	public ItemShunt(Properties properties)
+	public ShuntItem(Properties properties)
 	{
 		super(properties);
 		this.addPropertyOverride(CaptchaCardItem.CONTENT_NAME, CaptchaCardItem.CONTENT);

@@ -4,7 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.model.ModelFrog;
 import com.mraof.minestuck.entity.FrogEntity;
 
-import com.mraof.minestuck.item.ItemFrog;
+import com.mraof.minestuck.item.FrogItem;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
@@ -48,7 +48,7 @@ public class RenderFrog extends RenderLivingBase<FrogEntity>
 		@Override
 		public int getColor(ItemStack stack, int tintIndex)
 		{
-			ItemFrog item = ((ItemFrog)stack.getItem());
+			FrogItem item = ((FrogItem)stack.getItem());
 			int color = -1;
 			int type = stack.hasTag() ? 0 : stack.getTag().getInt("Type");
 			if(type == 0)

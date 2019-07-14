@@ -18,12 +18,12 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class ItemCustomBoat extends Item
+public class CustomBoatItem extends Item
 {
 	public static final IBehaviorDispenseItem DISPENSER_BEHAIVOR = new BehaivorDispenseCustomBoat();
 	protected final BoatProvider provider;
 	
-	public ItemCustomBoat(BoatProvider provider, Properties properties)
+	public CustomBoatItem(BoatProvider provider, Properties properties)
 	{
 		super(properties);
 		this.provider = provider;
@@ -113,10 +113,10 @@ public class ItemCustomBoat extends Item
 		@Override
 		public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
 		{
-			if(!(stack.getItem() instanceof ItemCustomBoat))
+			if(!(stack.getItem() instanceof CustomBoatItem))
 				throw new IllegalStateException("Can't use custom boat dispenser behaivor on non-custom boat item!");
 			
-			ItemCustomBoat boatItem = (ItemCustomBoat) stack.getItem();
+			CustomBoatItem boatItem = (CustomBoatItem) stack.getItem();
 			EnumFacing enumfacing = source.getBlockState().get(BlockDispenser.FACING);
 			World world = source.getWorld();
 			double d0 = source.getX() + (double)((float)enumfacing.getXOffset() * 1.125F);

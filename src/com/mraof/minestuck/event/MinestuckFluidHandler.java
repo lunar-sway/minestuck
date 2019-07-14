@@ -1,9 +1,5 @@
 package com.mraof.minestuck.event;
 
-import com.mraof.minestuck.block.BlockFluidGrist;
-import com.mraof.minestuck.item.ItemMinestuckBucket;
-import com.mraof.minestuck.item.MinestuckItems;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -35,7 +31,7 @@ public class MinestuckFluidHandler
 	
 	private ItemStack fillCustomBucket(World world, RayTraceResult pos)
 	{
-		/*ItemMinestuckBucket bucket = (ItemMinestuckBucket)(MinestuckItems.minestuckBucket);
+		/*MinestuckBucketItem bucket = (MinestuckBucketItem)(MinestuckItems.minestuckBucket);
 		IBlockState block = world.getBlockState(pos.getBlockPos());
 		
 		//TODO add same checks as used in buckets class

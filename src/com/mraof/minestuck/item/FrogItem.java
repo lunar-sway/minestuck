@@ -32,9 +32,9 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
-public class ItemFrog extends Item
+public class FrogItem extends Item
 {
-	public ItemFrog(Properties properties)
+	public FrogItem(Properties properties)
 	{
 		super(properties);
 		this.addPropertyOverride(new ResourceLocation(Minestuck.MOD_ID, "type"), (stack, world, holder) -> stack.hasTag() ? 0 : stack.getTag().getInt("Type"));

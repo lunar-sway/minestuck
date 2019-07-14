@@ -12,9 +12,9 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
-public class ItemObsidianBucket extends Item
+public class ObsidianBucketItem extends Item
 {
-	public ItemObsidianBucket(Properties properties)
+	public ObsidianBucketItem(Properties properties)
 	{
 		super(properties);
 	}

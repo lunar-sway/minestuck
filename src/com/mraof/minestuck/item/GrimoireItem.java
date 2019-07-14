@@ -11,10 +11,10 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
-public class ItemGrimoire extends Item
+public class GrimoireItem extends Item
 {
 	
-	public ItemGrimoire(Properties properties)
+	public GrimoireItem(Properties properties)
 	{
 		super(properties);
 	}

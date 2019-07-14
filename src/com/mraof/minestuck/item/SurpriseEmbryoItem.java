@@ -12,10 +12,10 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-public class ItemSurpriseEmbryo extends ItemFood
+public class SurpriseEmbryoItem extends ItemFood
 {
 	
-	public ItemSurpriseEmbryo(int healAmount, float saturationModifier, boolean meat, Properties builder)
+	public SurpriseEmbryoItem(int healAmount, float saturationModifier, boolean meat, Properties builder)
 	{
 		super(healAmount, saturationModifier, meat, builder);
 	}

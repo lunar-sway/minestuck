@@ -10,10 +10,10 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
-public class ItemUnknowableEgg extends ItemFood
+public class UnknowableEggItem extends ItemFood
 {
 	
-	public ItemUnknowableEgg(int healAmountIn, float saturation, boolean meat, Properties builder)
+	public UnknowableEggItem(int healAmountIn, float saturation, boolean meat, Properties builder)
 	{
 		super(healAmountIn, saturation, meat, builder);
 	}

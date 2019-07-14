@@ -10,10 +10,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 
-public class ItemHanging extends Item
+public class HangingItem extends Item
 {
 	protected final EntityProvider provider;
-	public ItemHanging(EntityProvider provider, Properties properties)
+	public HangingItem(EntityProvider provider, Properties properties)
 	{
 		super(properties);
 		this.provider = provider;
