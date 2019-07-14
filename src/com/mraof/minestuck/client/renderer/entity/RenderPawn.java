@@ -1,16 +1,16 @@
 package com.mraof.minestuck.client.renderer.entity;
 
-import net.minecraft.client.renderer.entity.RenderBiped;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.entity.model.ModelBiped;
+import net.minecraft.client.renderer.entity.BipedRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.util.ResourceLocation;
 
 import com.mraof.minestuck.entity.carapacian.PawnEntity;
 
-public class RenderPawn extends RenderBiped<PawnEntity>
+public class RenderPawn extends BipedRenderer<PawnEntity, BipedModel<PawnEntity>>
 {
 	
-	public RenderPawn(RenderManager manager, ModelBiped modelBiped, float shadowSize)
+	public RenderPawn(EntityRendererManager manager, BipedModel modelBiped, float shadowSize)
 	{
 		super(manager, modelBiped, shadowSize);
 	}

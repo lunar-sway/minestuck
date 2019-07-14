@@ -1,13 +1,15 @@
 package com.mraof.minestuck.client.renderer.entity;
 
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
-public class RenderShadow<T extends Entity> extends Render<T>
+public class RenderShadow<T extends Entity> extends EntityRenderer<T>
 {
-	public RenderShadow(RenderManager manager, float shadowSize)
+	public RenderShadow(EntityRendererManager manager, float shadowSize)
 	{
 		super(manager);
 		this.shadowSize = shadowSize;

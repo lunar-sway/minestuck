@@ -1,27 +1,26 @@
 package com.mraof.minestuck.client.renderer.entity.frog;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.client.model.ModelFrog;
+import com.mraof.minestuck.client.model.FrogModel;
 import com.mraof.minestuck.entity.FrogEntity;
 
-import com.mraof.minestuck.item.ItemFrog;
-import net.minecraft.client.renderer.GlStateManager;
+import com.mraof.minestuck.item.FrogItem;
 import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.client.renderer.entity.RenderLivingBase;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.entity.model.ModelBase;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class RenderFrog extends RenderLivingBase<FrogEntity>
+public class FrogRenderer extends MobRenderer<FrogEntity, FrogModel<FrogEntity>>
 {
 
-	public RenderFrog(RenderManager manager, ModelBase par1ModelBase, float par2)
+	public FrogRenderer(EntityRendererManager manager)
 	{
-		super(manager, new ModelFrog(), par2);
-		this.addLayer(new LayerFrogSkin(this));
-		this.addLayer(new LayerFrogEyes(this));
-		this.addLayer(new LayerFrogBelly(this));
+		super(manager, new FrogModel(), 0.5f);
+		this.addLayer(new FrogSkinLayer(this));
+		this.addLayer(new FrogEyesLayer(this));
+		this.addLayer(new FrogBellyLayer(this));
 		
 	}
 
@@ -48,7 +47,7 @@ public class RenderFrog extends RenderLivingBase<FrogEntity>
 		@Override
 		public int getColor(ItemStack stack, int tintIndex)
 		{
-			ItemFrog item = ((ItemFrog)stack.getItem());
+			FrogItem item = ((FrogItem)stack.getItem());
 			int color = -1;
 			int type = stack.hasTag() ? 0 : stack.getTag().getInt("Type");
 			if(type == 0)

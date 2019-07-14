@@ -1,13 +1,17 @@
 package com.mraof.minestuck.client.renderer.entity;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.entity.item.HangingArtEntity;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.Direction;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -16,11 +20,11 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderHangingArt<T extends HangingArtEntity> extends Render<T>
+public class RenderHangingArt<T extends HangingArtEntity> extends EntityRenderer<T>
 {
 	private final ResourceLocation ART_TEXTURE;
-	
-	public RenderHangingArt(RenderManager renderManagerIn, String artPath)
+
+	public RenderHangingArt(EntityRendererManager renderManagerIn, String artPath)
 	{
 		super(renderManagerIn);
 		ART_TEXTURE = new ResourceLocation("minestuck:textures/painting/" + artPath + ".png");
@@ -117,18 +121,18 @@ public class RenderHangingArt<T extends HangingArtEntity> extends Render<T>
 		int x = MathHelper.floor(painting.posX);
 		int y = MathHelper.floor(painting.posY + (double)(v / 16.0F));
 		int z = MathHelper.floor(painting.posZ);
-		EnumFacing enumfacing = painting.facingDirection;
+		Direction enumfacing = painting.getFacingDirection();
 		
-		if (enumfacing == EnumFacing.NORTH)
+		if (enumfacing == Direction.NORTH)
 			x = MathHelper.floor(painting.posX + (double)(u / 16.0F));
 		
-		if (enumfacing == EnumFacing.WEST)
+		if (enumfacing == Direction.WEST)
 			z = MathHelper.floor(painting.posZ - (double)(u / 16.0F));
 		
-		if (enumfacing == EnumFacing.SOUTH)
+		if (enumfacing == Direction.SOUTH)
 			x = MathHelper.floor(painting.posX - (double)(u / 16.0F));
 		
-		if (enumfacing == EnumFacing.EAST)
+		if (enumfacing == Direction.EAST)
 			z = MathHelper.floor(painting.posZ + (double)(u / 16.0F));
 		
 		int l = this.renderManager.world.getCombinedLight(new BlockPos(x, y, z), 0);
