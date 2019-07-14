@@ -7,10 +7,10 @@ import net.minecraft.util.ResourceLocation;
 
 import com.mraof.minestuck.entity.carapacian.PawnEntity;
 
-public class RenderPawn extends BipedRenderer<PawnEntity, BipedModel<PawnEntity>>
+public class PawnRenderer extends BipedRenderer<PawnEntity, BipedModel<PawnEntity>>
 {
 	
-	public RenderPawn(EntityRendererManager manager, BipedModel modelBiped, float shadowSize)
+	public PawnRenderer(EntityRendererManager manager, BipedModel modelBiped, float shadowSize)
 	{
 		super(manager, modelBiped, shadowSize);
 	}

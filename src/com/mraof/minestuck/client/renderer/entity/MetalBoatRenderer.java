@@ -7,13 +7,13 @@ import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.util.ResourceLocation;
 
-public class RenderMetalBoat extends BoatRenderer
+public class MetalBoatRenderer extends BoatRenderer
 {
 	
 	private static final ResourceLocation ironVariant = new ResourceLocation("minestuck", "textures/entity/iron_boat.png");
 	private static final ResourceLocation goldVariant = new ResourceLocation("minestuck", "textures/entity/gold_boat.png");
 	
-	public RenderMetalBoat(EntityRendererManager manager)
+	public MetalBoatRenderer(EntityRendererManager manager)
 	{
 		super(manager);
 	}

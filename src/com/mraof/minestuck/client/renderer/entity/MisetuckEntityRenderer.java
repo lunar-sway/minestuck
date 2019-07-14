@@ -10,10 +10,10 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderEntityMinestuck<T extends EntityMinestuck, M extends EntityModel<T>> extends MobRenderer<T, M>
+public class MisetuckEntityRenderer<T extends EntityMinestuck, M extends EntityModel<T>> extends MobRenderer<T, M>
 {
 	
-	public RenderEntityMinestuck(EntityRendererManager manager, M par1ModelBase, float par2)
+	public MisetuckEntityRenderer(EntityRendererManager manager, M par1ModelBase, float par2)
 	{
 		super(manager, par1ModelBase, par2);
 	}
