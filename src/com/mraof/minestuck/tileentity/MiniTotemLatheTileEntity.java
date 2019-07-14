@@ -3,7 +3,7 @@ package com.mraof.minestuck.tileentity;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.alchemy.CombinationRegistry;
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.inventory.ContainerMiniTotemLathe;
+import com.mraof.minestuck.inventory.MiniTotemLatheContainer;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.ColorCollector;
 import net.minecraft.entity.player.PlayerEntity;
@@ -12,6 +12,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
+import net.minecraft.util.IIntArray;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -19,9 +20,11 @@ import javax.annotation.Nullable;
 
 public class MiniTotemLatheTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
 {
+	private final IIntArray parameters = new ProgressIntArray(this);
+	
 	public MiniTotemLatheTileEntity()
 	{
-		super(MinestuckTiles.MINI_TOTEM_LATHE);
+		super(ModTileEntityTypes.MINI_TOTEM_LATHE);
 	}
 	
 	@Override
@@ -134,8 +137,8 @@ public class MiniTotemLatheTileEntity extends MachineProcessTileEntity implement
 	
 	@Nullable
 	@Override
-	public Container createMenu(int containerId, PlayerInventory playerInventory, PlayerEntity playerIn)
+	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerIn)
 	{
-		return new ContainerMiniTotemLathe(playerInventory, this);
+		return new MiniTotemLatheContainer(windowId, playerInventory, this, parameters);
 	}
 }

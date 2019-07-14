@@ -6,33 +6,34 @@ import com.mraof.minestuck.network.EditmodeInventoryPacket;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryBasic;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TextComponentString;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContainerEditmode extends Container
+public class EditmodeContainer extends Container
 {
 	
-	private EntityPlayer player;
-	public InventoryBasic inventory = new InventoryBasic(new TextComponentString("InventoryEditmode"), 14);
-	public ArrayList<ItemStack> items  = new ArrayList<ItemStack>();
+	private PlayerEntity player;
+	public Inventory inventory = new Inventory(14);
+	public ArrayList<ItemStack> items  = new ArrayList<>();
 	private int scroll;
 	public static int clientScroll;
 	
-	public ContainerEditmode(EntityPlayer player)
+	public EditmodeContainer(int windowId, PlayerInventory playerInventory)
 	{
-		this.player = player;
+		super(ModContainerTypes.EDITMODE, windowId);
+		this.player = playerInventory.player;
 		addSlots();
-		if(player instanceof EntityPlayerMP)
+		if(player instanceof ServerPlayerEntity)
 		{
 			updateInventory();
 		}
@@ -47,24 +48,24 @@ public class ContainerEditmode extends Container
 	}
 	
 	@Override
-	public boolean canInteractWith(EntityPlayer player)
+	public boolean canInteractWith(PlayerEntity player)
 	{
 		return player == this.player;
 	}
 	
 	@Override
-	public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex)
+	public ItemStack transferStackInSlot(PlayerEntity player, int slotIndex)
 	{
 		if(slotIndex >= 14 && slotIndex < this.inventorySlots.size())
 		{
-			Slot slot = (Slot) this.inventorySlots.get(slotIndex);
+			Slot slot = this.inventorySlots.get(slotIndex);
 			ItemStack stack = slot.getStack();
 			slot.putStack(ItemStack.EMPTY);
 			return stack;
 		}
 		if(slotIndex >= 0 && slotIndex < 14)
 		{
-			Slot slot = (Slot) this.inventorySlots.get(slotIndex);
+			Slot slot = this.inventorySlots.get(slotIndex);
 			ItemStack stack = slot.getStack();
 			if(!stack.isEmpty())
 				for(int i = 14; i < inventorySlots.size(); i++)
@@ -123,19 +124,19 @@ public class ContainerEditmode extends Container
 	
 	private void sendPacket()
 	{
-		if(!(player instanceof EntityPlayerMP))
+		if(!(player instanceof ServerPlayerEntity))
 			throw new IllegalStateException("Can't send update packet to player! Found player object "+player+".");
 		
-		ArrayList<ItemStack> itemList = new ArrayList<ItemStack>();
+		ArrayList<ItemStack> itemList = new ArrayList<>();
 		for(int i = 0; i < 14; i++)
 		{
 			itemList.add(this.items.size() <= i + scroll*2? ItemStack.EMPTY:this.items.get(i + scroll*2));
 			this.inventory.setInventorySlotContents(i, itemList.get(i));
-			this.inventoryItemStacks.set(i, itemList.get(i));
+			this.items.set(i, itemList.get(i));
 		}
 		
 		EditmodeInventoryPacket packet = EditmodeInventoryPacket.update(itemList, scroll > 0, scroll*2 + 14 < items.size());
-		MinestuckPacketHandler.sendToPlayer(packet, (EntityPlayerMP) player);
+		MinestuckPacketHandler.sendToPlayer(packet, (ServerPlayerEntity) player);
 	}
 	
 	private static class ToolbarSlot extends Slot

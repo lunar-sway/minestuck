@@ -2,7 +2,7 @@ package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mraof.minestuck.client.gui.GuiButtonImpl;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
-import com.mraof.minestuck.inventory.captchalogue.ContainerCaptchaDeck;
+import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckContainer;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
@@ -25,12 +25,12 @@ public class GuiCaptchaDeck extends GuiPlayerStatsContainer implements GuiButton
 	private static final ResourceLocation guiCaptchaDeck = new ResourceLocation("minestuck", "textures/gui/captcha_deck.png");
 	
 	private GuiButtonImpl modusButton, sylladexMap;
-	private ContainerCaptchaDeck container;
+	private CaptchaDeckContainer container;
 	
 	public GuiCaptchaDeck()
 	{
-		super(new ContainerCaptchaDeck(Minecraft.getInstance().player));
-		container = (ContainerCaptchaDeck) inventorySlots;
+		super(new CaptchaDeckContainer(Minecraft.getInstance().player));
+		container = (CaptchaDeckContainer) inventorySlots;
 		guiWidth = 178;
 		guiHeight= 145;
 	}

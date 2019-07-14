@@ -1,7 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.inventory.ContainerMiniCruxtruder;
+import com.mraof.minestuck.inventory.MiniCruxtruderContainer;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.ColorCollector;
 import net.minecraft.entity.player.PlayerEntity;
@@ -11,6 +11,7 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
+import net.minecraft.util.IIntArray;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -18,11 +19,13 @@ import javax.annotation.Nullable;
 
 public class MiniCruxtruderTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
 {
+	
+	private final IIntArray parameters = new ProgressIntArray(this);
 	public int color = -1;
 	
 	public MiniCruxtruderTileEntity()
 	{
-		super(MinestuckTiles.MINI_CRUXTRUDER);
+		super(ModTileEntityTypes.MINI_CRUXTRUDER);
 	}
 	
 	@Override
@@ -91,8 +94,8 @@ public class MiniCruxtruderTileEntity extends MachineProcessTileEntity implement
 	
 	@Nullable
 	@Override
-	public Container createMenu(int containerId, PlayerInventory playerInventory, PlayerEntity player)
+	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
 	{
-		return new ContainerMiniCruxtruder(playerInventory, this);
+		return new MiniCruxtruderContainer(windowId, playerInventory, this, parameters);
 	}
 }

@@ -12,6 +12,7 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.IIntArray;
 import net.minecraft.util.NonNullList;
 
 import javax.annotation.Nullable;
@@ -194,5 +195,36 @@ public abstract class MachineProcessTileEntity extends TileEntity implements ISi
 		AUTOMATIC,
 		BUTTON,
 		BUTTON_OVERRIDE
+	}
+	
+	protected static class ProgressIntArray implements IIntArray
+	{
+		private final MachineProcessTileEntity tileEntity;
+		
+		public ProgressIntArray(MachineProcessTileEntity tileEntity)
+		{
+			this.tileEntity = tileEntity;
+		}
+		
+		@Override
+		public int get(int index)
+		{
+			if(index == 0)
+				return tileEntity.progress;
+			return 0;
+		}
+		
+		@Override
+		public void set(int index, int value)
+		{
+			if(index == 0)
+				tileEntity.progress = value;
+		}
+		
+		@Override
+		public int size()
+		{
+			return 1;
+		}
 	}
 }

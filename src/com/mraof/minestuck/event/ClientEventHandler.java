@@ -4,7 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.GuiColorSelector;
 import com.mraof.minestuck.entity.consort.EnumConsort;
-import com.mraof.minestuck.inventory.ContainerConsortMerchant;
+import com.mraof.minestuck.inventory.ConsortMerchantContainer;
 import com.mraof.minestuck.util.ColorCollector;
 
 import net.minecraft.client.Minecraft;
@@ -65,14 +65,14 @@ public class ClientEventHandler
 		//Add config check
 		{
 			ItemStack stack = event.getItemStack();
-			if(event.getEntityPlayer() != null && event.getEntityPlayer().openContainer instanceof ContainerConsortMerchant
+			if(event.getEntityPlayer() != null && event.getEntityPlayer().openContainer instanceof ConsortMerchantContainer
 					&& event.getEntityPlayer().openContainer.getInventory().contains(stack))
 			{
 				String unlocalized = stack.getTranslationKey();
 				if(stack.getItem() instanceof ItemPotion)
 					unlocalized = PotionUtils.getPotionFromItem(stack).getNamePrefixed("potion.");
 				
-				EnumConsort type = ((ContainerConsortMerchant)event.getEntityPlayer().openContainer).inventory.getConsortType();
+				EnumConsort type = ((ConsortMerchantContainer)event.getEntityPlayer().openContainer).inventory.getConsortType();
 				String arg1 = I18n.format("entity.minestuck." + type.getName() + ".name");
 				
 				String name = "store."+unlocalized+".name";

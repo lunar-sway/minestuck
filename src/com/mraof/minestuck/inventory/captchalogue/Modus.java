@@ -1,9 +1,9 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.client.gui.captchalouge.SylladexGuiHandler;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -26,13 +26,13 @@ public abstract class Modus
 	 * This is called when the modus is created without calling readFromNBT(nbt).
 	 * Note that this method is used to clear the inventory/size after dropping stuff on death without creating a new instance.
 	 */
-	public abstract void initModus(EntityPlayerMP player, NonNullList<ItemStack> prev, int size);
+	public abstract void initModus(ServerPlayerEntity player, NonNullList<ItemStack> prev, int size);
 	
-	public abstract void readFromNBT(NBTTagCompound nbt);
+	public abstract void readFromNBT(CompoundNBT nbt);
 	
-	public abstract NBTTagCompound writeToNBT(NBTTagCompound nbt);
+	public abstract CompoundNBT writeToNBT(CompoundNBT nbt);
 	
-	public abstract boolean putItemStack(EntityPlayerMP player, ItemStack item);
+	public abstract boolean putItemStack(ServerPlayerEntity player, ItemStack item);
 	
 	public abstract NonNullList<ItemStack> getItems();
 	
@@ -45,15 +45,15 @@ public abstract class Modus
 		return count;
 	}
 	
-	public abstract boolean increaseSize(EntityPlayerMP player);
+	public abstract boolean increaseSize(ServerPlayerEntity player);
 	
-	public abstract ItemStack getItem(EntityPlayerMP player, int id, boolean asCard);
+	public abstract ItemStack getItem(ServerPlayerEntity player, int id, boolean asCard);
 	
 	public abstract boolean canSwitchFrom(Modus modus);
 	
 	public abstract int getSize();
 	
-	public void setValue(EntityPlayerMP player, byte type, int value) {}
+	public void setValue(ServerPlayerEntity player, byte type, int value) {}
 	
 	@OnlyIn(Dist.CLIENT)
 	public abstract SylladexGuiHandler getGuiHandler();

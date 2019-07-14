@@ -1,7 +1,7 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.client.gui.playerStats.GuiInventoryEditmode;
-import com.mraof.minestuck.inventory.ContainerEditmode;
+import com.mraof.minestuck.inventory.EditmodeContainer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -92,7 +92,7 @@ public class EditmodeInventoryPacket
 	
 	public void execute(EntityPlayerMP player)
 	{
-		if(player.openContainer instanceof ContainerEditmode)
-			((ContainerEditmode)player.openContainer).updateScroll(b1);
+		if(player.openContainer instanceof EditmodeContainer)
+			((EditmodeContainer)player.openContainer).updateScroll(b1);
 	}
 }

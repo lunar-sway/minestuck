@@ -2,7 +2,7 @@ package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.alchemy.CombinationRegistry;
-import com.mraof.minestuck.inventory.ContainerMiniPunchDesignix;
+import com.mraof.minestuck.inventory.MiniPunchDesignixContainer;
 import com.mraof.minestuck.item.MinestuckItems;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -10,6 +10,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
+import net.minecraft.util.IIntArray;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -17,9 +18,11 @@ import javax.annotation.Nullable;
 
 public class MiniPunchDesignixTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
 {
+	private final IIntArray parameters = new ProgressIntArray(this);
+	
 	public MiniPunchDesignixTileEntity()
 	{
-		super(MinestuckTiles.MINI_PUNCH_DESIGNIX);
+		super(ModTileEntityTypes.MINI_PUNCH_DESIGNIX);
 	}
 	
 	@Override
@@ -123,8 +126,8 @@ public class MiniPunchDesignixTileEntity extends MachineProcessTileEntity implem
 	
 	@Nullable
 	@Override
-	public Container createMenu(int containerId, PlayerInventory playerInventory, PlayerEntity player)
+	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
 	{
-		return new ContainerMiniPunchDesignix(playerInventory, this);
+		return new MiniPunchDesignixContainer(windowId, playerInventory, this, parameters);
 	}
 }

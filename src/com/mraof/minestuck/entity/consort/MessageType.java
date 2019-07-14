@@ -1,7 +1,7 @@
 package com.mraof.minestuck.entity.consort;
 
 import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
-import com.mraof.minestuck.inventory.ContainerConsortMerchant;
+import com.mraof.minestuck.inventory.ConsortMerchantContainer;
 import com.mraof.minestuck.inventory.InventoryConsortMerchant;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
@@ -10,7 +10,6 @@ import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.world.lands.LandDimension;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.SimpleNamedContainerProvider;
 import net.minecraft.item.ItemStack;
@@ -1157,9 +1156,9 @@ public abstract class MessageType
 			
 			NetworkHooks.openGui(player, new SimpleNamedContainerProvider(consort, new StringTextComponent("Consort shop")));
 			
-			if(player.openContainer instanceof ContainerConsortMerchant)
+			if(player.openContainer instanceof ConsortMerchantContainer)
 			{
-				((ContainerConsortMerchant) player.openContainer).setInventory(consort.stocks);
+				((ConsortMerchantContainer) player.openContainer).setInventory(consort.stocks);
 			}
 			
 			return initMessage.getMessage(consort, player, chainIdentifier);

@@ -4,7 +4,7 @@ import com.mraof.minestuck.client.gui.captchalouge.QueueGuiHandler;
 import com.mraof.minestuck.client.gui.captchalouge.SylladexGuiHandler;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
@@ -29,7 +29,7 @@ public class QueueModus extends StackModus
 	}
 	
 	@Override
-	public ItemStack getItem(EntityPlayerMP player, int id, boolean asCard)
+	public ItemStack getItem(ServerPlayerEntity player, int id, boolean asCard)
 	{
 		if(id == CaptchaDeckHandler.EMPTY_CARD)
 		{

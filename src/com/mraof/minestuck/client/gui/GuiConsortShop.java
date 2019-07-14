@@ -1,7 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
-import com.mraof.minestuck.inventory.ContainerConsortMerchant;
+import com.mraof.minestuck.inventory.ConsortMerchantContainer;
 import com.mraof.minestuck.inventory.InventoryConsortMerchant;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -20,8 +20,8 @@ public class GuiConsortShop extends GuiContainer
 	
 	public GuiConsortShop(EntityPlayer player)
 	{
-		super(new ContainerConsortMerchant(player, new InventoryConsortMerchant()));
-		inv = ((ContainerConsortMerchant) this.inventorySlots).inventory;
+		super(new ConsortMerchantContainer(player, new InventoryConsortMerchant()));
+		inv = ((ConsortMerchantContainer) this.inventorySlots).inventory;
 		xSize = 192;
 		ySize = 137;
 	}

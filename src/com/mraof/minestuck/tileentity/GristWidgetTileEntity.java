@@ -4,7 +4,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.block.GristWidgetBlock;
 import com.mraof.minestuck.entity.item.GristEntity;
-import com.mraof.minestuck.inventory.ContainerGristWidget;
+import com.mraof.minestuck.inventory.GristWidgetContainer;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
@@ -15,6 +15,7 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
+import net.minecraft.util.IIntArray;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -23,14 +24,14 @@ import java.util.Map.Entry;
 
 public class GristWidgetTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
 {
-	
+	private final IIntArray parameters = new ProgressIntArray(this);
 	
 	public IdentifierHandler.PlayerIdentifier owner;
 	boolean hasItem;
 	
 	public GristWidgetTileEntity()
 	{
-		super(MinestuckTiles.GRIST_WIDGET);
+		super(ModTileEntityTypes.GRIST_WIDGET);
 	}
 	
 	public GristSet getGristWidgetResult()
@@ -191,9 +192,9 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 	
 	@Nullable
 	@Override
-	public Container createMenu(int containerId, PlayerInventory playerInventory, PlayerEntity player)
+	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
 	{
-		return new ContainerGristWidget(playerInventory, this);
+		return new GristWidgetContainer(windowId, playerInventory, this, parameters);
 	}
 	
 	public void resendState()

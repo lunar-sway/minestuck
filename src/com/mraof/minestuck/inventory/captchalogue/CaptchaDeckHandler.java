@@ -11,14 +11,14 @@ import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumHand;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -94,7 +94,7 @@ public class CaptchaDeckHandler
 		return modusItemMap.get(location).copy();
 	}
 	
-	public static void launchItem(EntityPlayerMP player, ItemStack item)
+	public static void launchItem(ServerPlayerEntity player, ItemStack item)
 	{
 		if(item.getItem().equals(MinestuckItems.CAPTCHA_CARD) && (!item.hasTag() || !item.getTag().contains("contentID")))
 			while(item.getCount() > 0)
@@ -107,20 +107,19 @@ public class CaptchaDeckHandler
 			launchAnyItem(player, item);
 	}
 	
-	public static void launchAnyItem(EntityPlayer player, ItemStack item)
+	public static void launchAnyItem(PlayerEntity player, ItemStack item)
 	{
-		EntityItem entity = new EntityItem(player.world, player.posX, player.posY+1, player.posZ, item);
-		entity.motionX = rand.nextDouble() - 0.5;
-		entity.motionZ = rand.nextDouble() - 0.5;
+		ItemEntity entity = new ItemEntity(player.world, player.posX, player.posY+1, player.posZ, item);
+		entity.setMotion(rand.nextDouble() - 0.5, entity.getMotion().y, rand.nextDouble() - 0.5);
 		entity.setDefaultPickupDelay();
-		player.world.spawnEntity(entity);
+		player.world.addEntity(entity);
 	}
 	
-	public static void useItem(EntityPlayerMP player)
+	public static void useItem(ServerPlayerEntity player)
 	{
-		if(!(player.openContainer instanceof ContainerCaptchaDeck))
+		if(!(player.openContainer instanceof CaptchaDeckContainer))
 			 return;
-		ContainerCaptchaDeck container = (ContainerCaptchaDeck) player.openContainer;
+		CaptchaDeckContainer container = (CaptchaDeckContainer) player.openContainer;
 		if(container.inventory.getStackInSlot(0).isEmpty())
 			return;
 		ItemStack item = container.inventory.getStackInSlot(0);
@@ -193,7 +192,7 @@ public class CaptchaDeckHandler
 		}
 	}
 	
-	public static void captchalogueItem(EntityPlayerMP player)
+	public static void captchalogueItem(ServerPlayerEntity player)
 	{
 		ItemStack stack = player.getHeldItemMainhand();
 		Modus modus = getModus(player);
@@ -228,14 +227,14 @@ public class CaptchaDeckHandler
 				stack = player.getHeldItemMainhand();
 				if(card1 && stack.getCount() > 1)
 					stack.shrink(1);
-				else player.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
+				else player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
 			}
 			else if(card1 && card2)
 			{
 				launchAnyItem(player, stack);
 				stack = player.getHeldItemMainhand();
 				if(stack.getCount() == 1)
-					player.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
+					player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
 				else stack.shrink(1);
 			}
 			CaptchaDeckPacket packet = CaptchaDeckPacket.data(writeToNBT(modus));
@@ -244,12 +243,12 @@ public class CaptchaDeckHandler
 		
 	}
 	
-	public static void captchalogueInventoryItem (EntityPlayerMP player, int slotIndex) {
+	public static void captchalogueInventoryItem (ServerPlayerEntity player, int slotIndex) {
 		ItemStack stack;
 		Modus modus = getModus(player);
 		System.out.println("Raw Slot: " + slotIndex);
 		//This statement is so that the server knows whether the item is in the hotbar or not because apparently THE "openContainer" CANT EDIT THE HOTBAR SLOTS.
-		if(player.openContainer.equals(player.inventoryContainer) && InventoryPlayer.isHotbar(slotIndex)) {
+		if(player.openContainer.equals(player.container) && PlayerInventory.isHotbar(slotIndex)) {
 			int hotbarIndex = slotIndex;
 			
 			stack = player.inventory.mainInventory.get(hotbarIndex);
@@ -350,7 +349,7 @@ public class CaptchaDeckHandler
 		}
 	}
 
-	public static void getItem(EntityPlayerMP player, int index, boolean asCard)
+	public static void getItem(ServerPlayerEntity player, int index, boolean asCard)
 	{
 		Modus modus = getModus(player);
 		if(modus == null)
@@ -360,7 +359,7 @@ public class CaptchaDeckHandler
 		{
 			ItemStack otherStack = player.getHeldItemMainhand();
 			if(otherStack.isEmpty())
-				player.setHeldItem(EnumHand.MAIN_HAND, stack);
+				player.setHeldItem(Hand.MAIN_HAND, stack);
 			else if(canMergeItemStacks(stack, otherStack))
 			{
 				otherStack.grow(stack.getCount());
@@ -381,7 +380,7 @@ public class CaptchaDeckHandler
 					stack.setCount(0);
 					placed = true;
 					player.inventory.markDirty();
-					player.inventoryContainer.detectAndSendChanges();
+					player.container.detectAndSendChanges();
 					break;
 				}
 				if(!placed)
@@ -392,7 +391,7 @@ public class CaptchaDeckHandler
 		MinestuckPacketHandler.sendToPlayer(packet, player);
 	}
 	
-	public static void dropSylladex(EntityPlayerMP player)
+	public static void dropSylladex(ServerPlayerEntity player)
 	{
 		Modus modus = getModus(player);
 		
@@ -433,17 +432,17 @@ public class CaptchaDeckHandler
 		MinestuckPacketHandler.sendToPlayer(packet, player);
 	}
 	
-	public static NBTTagCompound writeToNBT(Modus modus)
+	public static CompoundNBT writeToNBT(Modus modus)
 	{
 		if(modus == null)
 			return null;
 		ResourceLocation name = modus.getRegistryName();
-		NBTTagCompound nbt = modus.writeToNBT(new NBTTagCompound());
+		CompoundNBT nbt = modus.writeToNBT(new CompoundNBT());
 		nbt.putString("type", name.toString());
 		return nbt;
 	}
 	
-	public static Modus readFromNBT(NBTTagCompound nbt, boolean clientSide)
+	public static Modus readFromNBT(CompoundNBT nbt, boolean clientSide)
 	{
 		if(nbt == null)
 			return null;
@@ -473,12 +472,12 @@ public class CaptchaDeckHandler
 		return modus;
 	}
 	
-	public static Modus getModus(EntityPlayerMP player)
+	public static Modus getModus(ServerPlayerEntity player)
 	{
 		return PlayerSavedData.getData(player).modus;
 	}
 	
-	public static void setModus(EntityPlayerMP player, Modus modus)
+	public static void setModus(ServerPlayerEntity player, Modus modus)
 	{
 		PlayerSavedData.getData(player).modus = modus;
 		if(modus != null)

@@ -1,15 +1,9 @@
 package com.mraof.minestuck.tileentity;
 
-import java.util.List;
-
-import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemiterUpgrades;
 
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.World;
 
 public class TileEntityAlchemiterUpgrade extends TileEntity implements ITickableTileEntity
 {
@@ -17,7 +11,7 @@ public class TileEntityAlchemiterUpgrade extends TileEntity implements ITickable
 	
 	public TileEntityAlchemiterUpgrade(AlchemiterUpgrades upg) 
 	{
-		super(MinestuckTiles.ALCHEMITER_UPGRADE);
+		super(ModTileEntityTypes.ALCHEMITER_UPGRADE);
 		//setUpgrade(upg);
 	}
 	

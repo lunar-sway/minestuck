@@ -11,6 +11,7 @@ import net.minecraft.advancements.PlayerAdvancements;
 import net.minecraft.advancements.criterion.AbstractCriterionInstance;
 import net.minecraft.advancements.criterion.MinMaxBounds;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
@@ -65,7 +66,7 @@ public class TreeModusRootTrigger implements ICriterionTrigger<TreeModusRootTrig
 		return new Instance(count);
 	}
 	
-	public void trigger(EntityPlayerMP player, int count)
+	public void trigger(ServerPlayerEntity player, int count)
 	{
 		Listeners listeners = listenersMap.get(player.getAdvancements());
 		if(listeners != null)

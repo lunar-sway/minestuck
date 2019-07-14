@@ -6,7 +6,7 @@ import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.client.util.GuiUtil;
-import com.mraof.minestuck.inventory.ContainerMiniAlchemiter;
+import com.mraof.minestuck.inventory.MiniAlchemiterContainer;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tileentity.MiniAlchemiterTileEntity;
 import net.minecraft.client.renderer.GlStateManager;
@@ -36,7 +36,7 @@ public class GuiMiniAlchemiter extends GuiMachine
 
 	public GuiMiniAlchemiter(InventoryPlayer inventoryPlayer, MiniAlchemiterTileEntity tileEntity)
 	{
-		super(new ContainerMiniAlchemiter(inventoryPlayer, tileEntity), tileEntity);
+		super(new MiniAlchemiterContainer(inventoryPlayer, tileEntity), tileEntity);
 		this.te = tileEntity;
 		this.playerInventory = inventoryPlayer;
 		

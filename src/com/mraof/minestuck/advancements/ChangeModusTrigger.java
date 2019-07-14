@@ -12,6 +12,7 @@ import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.advancements.PlayerAdvancements;
 import net.minecraft.advancements.criterion.AbstractCriterionInstance;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
@@ -72,7 +73,7 @@ public class ChangeModusTrigger implements ICriterionTrigger<ChangeModusTrigger.
 		return new Instance(modus);
 	}
 	
-	public void trigger(EntityPlayerMP player, Modus modus)
+	public void trigger(ServerPlayerEntity player, Modus modus)
 	{
 		Listeners listeners = listenersMap.get(player.getAdvancements());
 		if(listeners != null)

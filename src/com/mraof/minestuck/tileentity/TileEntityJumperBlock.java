@@ -20,7 +20,7 @@ public class TileEntityJumperBlock extends TileEntity
 	
 	public TileEntityJumperBlock()
 	{
-		super(MinestuckTiles.JUMPER_BLOCK);
+		super(ModTileEntityTypes.JUMPER_BLOCK);
 	}
 	
 	public int getColor()

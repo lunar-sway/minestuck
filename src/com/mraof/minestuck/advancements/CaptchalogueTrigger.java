@@ -14,6 +14,7 @@ import net.minecraft.advancements.criterion.AbstractCriterionInstance;
 import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.advancements.criterion.MinMaxBounds;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -79,7 +80,7 @@ public class CaptchalogueTrigger implements ICriterionTrigger<CaptchalogueTrigge
 		return new Instance(modus, item, count);
 	}
 	
-	public void trigger(EntityPlayerMP player, Modus modus, ItemStack item)
+	public void trigger(ServerPlayerEntity player, Modus modus, ItemStack item)
 	{
 		Listeners listeners = listenersMap.get(player.getAdvancements());
 		if(listeners != null)

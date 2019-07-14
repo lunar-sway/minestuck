@@ -5,7 +5,7 @@ import java.util.Iterator;
 import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
 import com.mraof.minestuck.entity.EntityMinestuck;
 import com.mraof.minestuck.entity.consort.MessageType.SingleMessage;
-import com.mraof.minestuck.inventory.ContainerConsortMerchant;
+import com.mraof.minestuck.inventory.ConsortMerchantContainer;
 import com.mraof.minestuck.inventory.InventoryConsortMerchant;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import net.minecraft.entity.EntityType;
@@ -285,7 +285,7 @@ public abstract class ConsortEntity extends EntityMinestuck implements IContaine
 	public Container createMenu(int containerId, PlayerInventory playerInventory, PlayerEntity player)
 	{
 		if(this.stocks != null)
-			return new ContainerConsortMerchant(player, stocks);
+			return new ConsortMerchantContainer(player, stocks);
 		else return null;
 	}
 }

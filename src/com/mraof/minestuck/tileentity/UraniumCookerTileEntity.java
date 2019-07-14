@@ -1,6 +1,6 @@
 package com.mraof.minestuck.tileentity;
 
-import com.mraof.minestuck.inventory.ContainerUraniumCooker;
+import com.mraof.minestuck.inventory.UraniumCookerContainer;
 import com.mraof.minestuck.item.MinestuckItems;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
+import net.minecraft.util.IIntArray;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -21,12 +22,15 @@ import java.util.Map;
 public class UraniumCookerTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
 {
 	private static HashMap<Item, ItemStack> radiations = new HashMap<>();
+	
+	private final IIntArray parameters = new ProgressIntArray(this);
+	
 	private short fuel = 0;
 	private short maxFuel = 128;
 	
 	public UraniumCookerTileEntity()
 	{
-		super(MinestuckTiles.URANIUM_COOKER);
+		super(ModTileEntityTypes.URANIUM_COOKER);
 		maxProgress = 0;
 	}
 	
@@ -186,7 +190,7 @@ public class UraniumCookerTileEntity extends MachineProcessTileEntity implements
 	@Override
 	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
 	{
-		return new ContainerUraniumCooker(playerInventory, this);
+		return new UraniumCookerContainer(windowId, playerInventory, this, parameters);
 	}
 	
 	@Override

@@ -2,10 +2,11 @@ package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
-import com.mraof.minestuck.inventory.captchalogue.ContainerCaptchaDeck;
+import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckContainer;
 import com.mraof.minestuck.util.Debug;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
@@ -39,7 +40,7 @@ public class CaptchaDeckPacket
 	
 	public int slotIndex;
 	
-	public static CaptchaDeckPacket data(NBTTagCompound nbt)
+	public static CaptchaDeckPacket data(CompoundNBT nbt)
 	{
 		CaptchaDeckPacket packet = new CaptchaDeckPacket();
 		packet.type = DATA;
@@ -187,7 +188,7 @@ public class CaptchaDeckPacket
 		if(ServerEditHandler.getData(player) != null)
 			return;
 		
-		if(this.type == MODUS && player.openContainer instanceof ContainerCaptchaDeck)
+		if(this.type == MODUS && player.openContainer instanceof CaptchaDeckContainer)
 			CaptchaDeckHandler.useItem(player);
 		else if(this.type == CAPTCHALOGUE && !player.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).isEmpty())
 			CaptchaDeckHandler.captchalogueItem(player);

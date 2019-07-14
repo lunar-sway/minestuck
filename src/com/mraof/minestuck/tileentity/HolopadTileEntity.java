@@ -29,7 +29,7 @@ public class HolopadTileEntity extends TileEntity
 	
 	public HolopadTileEntity()
 	{
-		super(MinestuckTiles.HOLOPAD);
+		super(ModTileEntityTypes.HOLOPAD);
 	}
 	
 	public void onRightClick(PlayerEntity player)

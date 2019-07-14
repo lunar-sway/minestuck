@@ -1,6 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mraof.minestuck.inventory.ContainerUraniumCooker;
+import com.mraof.minestuck.inventory.UraniumCookerContainer;
 import com.mraof.minestuck.tileentity.UraniumCookerTileEntity;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -26,7 +26,7 @@ public class GuiUraniumCooker extends GuiMachine
 
 	public GuiUraniumCooker (InventoryPlayer inventoryPlayer, UraniumCookerTileEntity tileEntity)
 	{
-		super(new ContainerUraniumCooker(inventoryPlayer, tileEntity), tileEntity);
+		super(new UraniumCookerContainer(inventoryPlayer, tileEntity), tileEntity);
 		this.te = tileEntity;
 		this.playerInventory = inventoryPlayer;
 		

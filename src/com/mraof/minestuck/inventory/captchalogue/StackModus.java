@@ -5,9 +5,9 @@ import com.mraof.minestuck.client.gui.captchalouge.StackGuiHandler;
 import com.mraof.minestuck.client.gui.captchalouge.SylladexGuiHandler;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -42,7 +42,7 @@ public class StackModus extends Modus
 	}
 	
 	@Override
-	public void initModus(EntityPlayerMP player, NonNullList<ItemStack> prev, int size)
+	public void initModus(ServerPlayerEntity player, NonNullList<ItemStack> prev, int size)
 	{
 		this.size = size;
 		list = new LinkedList<>();
@@ -61,7 +61,7 @@ public class StackModus extends Modus
 	}
 	
 	@Override
-	public void readFromNBT(NBTTagCompound nbt)
+	public void readFromNBT(CompoundNBT nbt)
 	{
 		size = nbt.getInt("size");
 		list = new LinkedList<>();
@@ -78,20 +78,20 @@ public class StackModus extends Modus
 	}
 	
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt)
+	public CompoundNBT writeToNBT(CompoundNBT nbt)
 	{
 		nbt.putInt("size", size);
 		Iterator<ItemStack> iter = list.iterator();
 		for(int i = 0; i < list.size(); i++)
 		{
 			ItemStack stack = iter.next();
-			nbt.put("item"+i, stack.write(new NBTTagCompound()));
+			nbt.put("item"+i, stack.write(new CompoundNBT()));
 		}
 		return nbt;
 	}
 	
 	@Override
-	public boolean putItemStack(EntityPlayerMP player, ItemStack item)
+	public boolean putItemStack(ServerPlayerEntity player, ItemStack item)
 	{
 		if(size == 0 || item.isEmpty())
 			return false;
@@ -139,7 +139,7 @@ public class StackModus extends Modus
 	}
 	
 	@Override
-	public boolean increaseSize(EntityPlayerMP player)
+	public boolean increaseSize(ServerPlayerEntity player)
 	{
 		if(MinestuckConfig.modusMaxSize > 0 && size >= MinestuckConfig.modusMaxSize)
 			return false;
@@ -150,7 +150,7 @@ public class StackModus extends Modus
 	}
 
 	@Override
-	public ItemStack getItem(EntityPlayerMP player, int id, boolean asCard)
+	public ItemStack getItem(ServerPlayerEntity player, int id, boolean asCard)
 	{
 		if(id == CaptchaDeckHandler.EMPTY_CARD)
 		{

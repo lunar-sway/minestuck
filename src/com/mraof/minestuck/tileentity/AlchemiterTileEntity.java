@@ -41,7 +41,7 @@ public class AlchemiterTileEntity extends TileEntity
 	
 	public AlchemiterTileEntity()
 	{
-		super(MinestuckTiles.ALCHEMITER);
+		super(ModTileEntityTypes.ALCHEMITER);
 	}
 	
 	public void setDowel(ItemStack newDowel)

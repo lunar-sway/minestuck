@@ -1,6 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mraof.minestuck.inventory.ContainerMiniCruxtruder;
+import com.mraof.minestuck.inventory.MiniCruxtruderContainer;
 import com.mraof.minestuck.tileentity.MiniCruxtruderTileEntity;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -26,7 +26,7 @@ public class GuiMiniCruxtruder extends GuiMachine
 
 	public GuiMiniCruxtruder(InventoryPlayer inventoryPlayer, MiniCruxtruderTileEntity tileEntity)
 	{
-		super(new ContainerMiniCruxtruder(inventoryPlayer, tileEntity), tileEntity);
+		super(new MiniCruxtruderContainer(inventoryPlayer, tileEntity), tileEntity);
 		this.te = tileEntity;
 		this.playerInventory = inventoryPlayer;
 		

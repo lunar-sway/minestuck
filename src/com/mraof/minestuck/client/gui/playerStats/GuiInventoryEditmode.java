@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.Month;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.inventory.ContainerEditmode;
+import com.mraof.minestuck.inventory.EditmodeContainer;
 import com.mraof.minestuck.network.EditmodeInventoryPacket;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
 
@@ -25,14 +25,14 @@ public class GuiInventoryEditmode extends GuiPlayerStatsContainer
 	private static final int leftArrowX = 7, rightArrowX = 151, arrowY = 23;
 	
 	public boolean more, less;
-	public ContainerEditmode inventoryEditmode;
+	public EditmodeContainer inventoryEditmode;
 	
 	public GuiInventoryEditmode()
 	{
-		super(new ContainerEditmode(Minecraft.getInstance().player));
+		super(new EditmodeContainer(Minecraft.getInstance().player));
 		guiWidth = 176;
 		guiHeight = 98;
-		inventoryEditmode = (ContainerEditmode) this.inventorySlots;
+		inventoryEditmode = (EditmodeContainer) this.inventorySlots;
 	}
 	
 	@Override

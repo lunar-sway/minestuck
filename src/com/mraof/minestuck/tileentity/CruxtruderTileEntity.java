@@ -23,7 +23,7 @@ public class CruxtruderTileEntity extends TileEntity
 	
 	public CruxtruderTileEntity()
 	{
-		super(MinestuckTiles.CRUXTRUDER);
+		super(ModTileEntityTypes.CRUXTRUDER);
 	}
 	
 	public int getColor()

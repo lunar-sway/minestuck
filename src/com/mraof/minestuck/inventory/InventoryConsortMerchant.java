@@ -5,21 +5,18 @@ import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import com.mraof.minestuck.util.Pair;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class InventoryConsortMerchant implements IInventory
@@ -38,7 +35,7 @@ public class InventoryConsortMerchant implements IInventory
 		
 		for(int i = 0; i < list.size() && i < 9; i++)
 		{
-			NBTTagCompound nbt = list.getCompound(i);
+			CompoundNBT nbt = list.getCompound(i);
 			ItemStack stack = ItemStack.read(nbt);
 			inv.set(i, stack);
 			if(!stack.isEmpty())
@@ -65,7 +62,7 @@ public class InventoryConsortMerchant implements IInventory
 		}
 	}
 	
-	protected void handlePurchase(EntityPlayerMP player, boolean all, int index)
+	public void handlePurchase(ServerPlayerEntity player, boolean all, int index)
 	{
 		if (!player.world.isRemote && index >= 0 && index < inv.size())
 		{
@@ -76,7 +73,7 @@ public class InventoryConsortMerchant implements IInventory
 			int amountPurchased = (int) Math.min(prices[index] != 0 ? playerData.boondollars / prices[index] : Integer.MAX_VALUE, all ? stack.getCount() : 1);
 			if (amountPurchased == 0)
 			{
-				player.sendMessage(new TextComponentTranslation("consort.cantAfford"));
+				player.sendMessage(new TranslationTextComponent("consort.cantAfford"));
 			} else
 			{
 				PlayerSavedData.addBoondollars(player, -(amountPurchased * prices[index]));
@@ -84,11 +81,11 @@ public class InventoryConsortMerchant implements IInventory
 				
 				if (!player.addItemStackToInventory(items))
 				{
-					EntityItem entity = player.dropItem(items, false);
+					ItemEntity entity = player.dropItem(items, false);
 					if (entity != null)
 						entity.setNoPickupDelay();
 					else Debug.warn("Couldn't spawn in an item purchased from a consort! "+items);
-				} else player.inventoryContainer.detectAndSendChanges();
+				} else player.container.detectAndSendChanges();
 				
 				player.openContainer.detectAndSendChanges();
 			}
@@ -97,10 +94,10 @@ public class InventoryConsortMerchant implements IInventory
 	
 	public ListNBT writeToNBT()
 	{
-		NBTTagList list = new NBTTagList();
+		ListNBT list = new ListNBT();
 		for (int i = 0; i < 9; i++)
 		{
-			NBTTagCompound nbt = inv.get(i).write(new NBTTagCompound());
+			CompoundNBT nbt = inv.get(i).write(new CompoundNBT());
 			nbt.putInt("price", prices[i]);
 			list.add(nbt);
 		}
@@ -170,19 +167,19 @@ public class InventoryConsortMerchant implements IInventory
 	}
 	
 	@Override
-	public boolean isUsableByPlayer(EntityPlayer player)
+	public boolean isUsableByPlayer(PlayerEntity player)
 	{
 		return true;
 	}
 	
 	@Override
-	public void openInventory(EntityPlayer player)
+	public void openInventory(PlayerEntity player)
 	{
 	
 	}
 	
 	@Override
-	public void closeInventory(EntityPlayer player)
+	public void closeInventory(PlayerEntity player)
 	{
 	
 	}
@@ -193,6 +190,7 @@ public class InventoryConsortMerchant implements IInventory
 		return false;
 	}
 	
+	/*
 	@Override
 	public int getField(int id)
 	{
@@ -217,7 +215,7 @@ public class InventoryConsortMerchant implements IInventory
 	public int getFieldCount()
 	{
 		return 11;
-	}
+	}*/
 	
 	@Override
 	public void clear()
@@ -225,31 +223,5 @@ public class InventoryConsortMerchant implements IInventory
 		inv.clear();
 		for(int i = 0; i < 9; i++)
 			prices[i] = 0;
-	}
-	
-	
-	@Override
-	public ITextComponent getName()
-	{
-		return null;	//TODO
-	}
-	
-	@Nullable
-	@Override
-	public ITextComponent getCustomName()
-	{
-		return null;
-	}
-	
-	@Override
-	public boolean hasCustomName()
-	{
-		return false;
-	}
-	
-	@Override
-	public ITextComponent getDisplayName()
-	{
-		return null;	//TODO
 	}
 }

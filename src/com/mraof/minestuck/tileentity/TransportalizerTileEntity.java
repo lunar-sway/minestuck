@@ -26,7 +26,7 @@ public class TransportalizerTileEntity extends TileEntity implements ITickableTi
 	
 	public TransportalizerTileEntity()
 	{
-		super(MinestuckTiles.TRANSPORTALIZER);
+		super(ModTileEntityTypes.TRANSPORTALIZER);
 	}
 	
 	@Override

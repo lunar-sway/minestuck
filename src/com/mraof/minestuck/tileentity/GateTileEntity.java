@@ -27,7 +27,7 @@ public class GateTileEntity extends TileEntity
 	
 	public GateTileEntity()
 	{
-		super(MinestuckTiles.GATE);
+		super(ModTileEntityTypes.GATE);
 	}
 	
 	public void teleportEntity(World world, ServerPlayerEntity player, Block block)

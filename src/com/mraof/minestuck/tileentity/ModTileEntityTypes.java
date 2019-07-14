@@ -8,7 +8,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
-public class MinestuckTiles
+public class ModTileEntityTypes
 {
 	public static final TileEntityType<ComputerTileEntity> COMPUTER = TileEntityType.Builder.create(ComputerTileEntity::new, MinestuckBlocks.COMPUTER_ON, MinestuckBlocks.CROCKERTOP_ON, MinestuckBlocks.HUBTOP_ON, MinestuckBlocks.LAPTOP_ON, MinestuckBlocks.LUNCHTOP_ON).build(null);
 	public static final TileEntityType<MiniCruxtruderTileEntity> MINI_CRUXTRUDER = TileEntityType.Builder.create(MiniCruxtruderTileEntity::new, MinestuckBlocks.MINI_CRUXTRUDER).build(null);

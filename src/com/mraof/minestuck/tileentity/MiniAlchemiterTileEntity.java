@@ -3,7 +3,7 @@ package com.mraof.minestuck.tileentity;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.inventory.ContainerMiniAlchemiter;
+import com.mraof.minestuck.inventory.MiniAlchemiterContainer;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.IdentifierHandler;
@@ -16,6 +16,7 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
+import net.minecraft.util.IIntArray;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -24,13 +25,15 @@ import javax.annotation.Nullable;
 public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
 {
 	public static final int INPUT = 0, OUTPUT = 1;
+	
+	private final IIntArray parameters = new ProgressIntArray(this);
 	private int ticks_since_update = 0;
 	public IdentifierHandler.PlayerIdentifier owner;
 	private GristType wildcardGrist = GristType.BUILD;
 	
 	public MiniAlchemiterTileEntity()
 	{
-		super(MinestuckTiles.MINI_ALCHEMITER);
+		super(ModTileEntityTypes.MINI_ALCHEMITER);
 	}
 	
 	@Override
@@ -204,9 +207,9 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 	
 	@Nullable
 	@Override
-	public Container createMenu(int containerId, PlayerInventory playerInventory, PlayerEntity player)
+	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
 	{
-		return new ContainerMiniAlchemiter(playerInventory, this);
+		return new MiniAlchemiterContainer(windowId, playerInventory, this, parameters);
 	}
 	
 	public GristType getWildcardGrist()

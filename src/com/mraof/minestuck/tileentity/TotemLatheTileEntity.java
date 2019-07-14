@@ -33,7 +33,7 @@ public class TotemLatheTileEntity extends TileEntity
 	
 	public TotemLatheTileEntity()
 	{
-		super(MinestuckTiles.TOTEM_LATHE);
+		super(ModTileEntityTypes.TOTEM_LATHE);
 	}
 	
 	//data checking

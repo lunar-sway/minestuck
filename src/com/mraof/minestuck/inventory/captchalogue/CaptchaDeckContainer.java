@@ -1,30 +1,31 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
+import com.mraof.minestuck.inventory.ModContainerTypes;
 import com.mraof.minestuck.item.MinestuckItems;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.InventoryBasic;
-import net.minecraft.inventory.Slot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextComponentString;
 
-public class ContainerCaptchaDeck extends Container
+public class CaptchaDeckContainer extends Container
 {
 	
-	public InventoryBasic inventory = new InventoryBasic(new TextComponentString("ModusInventory"), 1);
+	public Inventory inventory = new Inventory(1);
 	
-	public ContainerCaptchaDeck(EntityPlayer player)
+	public CaptchaDeckContainer(int windowId, PlayerInventory playerInventory)
 	{
-		addSlots(player);
+		super(ModContainerTypes.CAPTCHA_DECK, windowId);
+		addSlots(playerInventory);
 	}
 	
-	private void addSlots(EntityPlayer player)
+	private void addSlots(PlayerInventory playerInventory)
 	{
 		for(int i = 9; i < 36; i++)
-			addSlot(new Slot(player.inventory, i, 9 + (i%9)*18, 63 + ((i - 9)/9)*18));
+			addSlot(new Slot(playerInventory, i, 9 + (i%9)*18, 63 + ((i - 9)/9)*18));
 		for(int i = 0; i < 9; i++)
-			addSlot(new Slot(player.inventory, i, 9 + i*18, 121));
+			addSlot(new Slot(playerInventory, i, 9 + i*18, 121));
 		addSlot(new Slot(this.inventory, 0, 81, 32)
 		{
 			@Override
@@ -36,29 +37,29 @@ public class ContainerCaptchaDeck extends Container
 	}
 	
 	@Override
-	public void onContainerClosed(EntityPlayer player)
+	public void onContainerClosed(PlayerEntity playerIn)
 	{
 		ItemStack stack = this.inventory.removeStackFromSlot(0);
 		if(!stack.isEmpty())
-			player.dropItem(stack, false);
+			playerIn.dropItem(stack, false);
 	}
 	
 	@Override
-	public boolean canInteractWith(EntityPlayer player)
+	public boolean canInteractWith(PlayerEntity playerIn)
 	{
-		return ((InventoryPlayer)this.getSlot(0).inventory).player == player;
+		return ((PlayerInventory)this.getSlot(0).inventory).player == playerIn;
 	}
 	
 	@Override
-	public ItemStack transferStackInSlot(EntityPlayer player, int slotNumber)
+	public ItemStack transferStackInSlot(PlayerEntity playerIn, int index)
 	{
-		Slot slot = getSlot(slotNumber);
+		Slot slot = getSlot(index);
 		int slotCount = inventorySlots.size();
-		if(slot != null && slot.getHasStack())
+		if(slot.getHasStack())
 		{
 			ItemStack stack1 = slot.getStack();
 			ItemStack stack2 = stack1.copy();
-			if(slotNumber == slotCount - 1)
+			if(index == slotCount - 1)
 			{
 				if(!mergeItemStack(stack1, 0, slotCount - 1, false))
 					return ItemStack.EMPTY;

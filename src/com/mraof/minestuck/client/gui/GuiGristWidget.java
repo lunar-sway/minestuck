@@ -2,7 +2,7 @@ package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.util.GuiUtil;
-import com.mraof.minestuck.inventory.ContainerGristWidget;
+import com.mraof.minestuck.inventory.GristWidgetContainer;
 import com.mraof.minestuck.tileentity.GristWidgetTileEntity;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
@@ -32,7 +32,7 @@ public class GuiGristWidget extends GuiMachine
 
 	public GuiGristWidget(InventoryPlayer inventoryPlayer, GristWidgetTileEntity tileEntity)
 	{
-		super(new ContainerGristWidget(inventoryPlayer, tileEntity), tileEntity);
+		super(new GristWidgetContainer(inventoryPlayer, tileEntity), tileEntity);
 		this.te = tileEntity;
 		this.playerInventory = inventoryPlayer;
 		

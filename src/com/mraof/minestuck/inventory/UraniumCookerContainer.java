@@ -1,19 +1,25 @@
 package com.mraof.minestuck.inventory;
 
+import com.mraof.minestuck.inventory.slot.InputSlot;
+import com.mraof.minestuck.inventory.slot.OutputSlot;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tileentity.UraniumCookerTileEntity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIntArray;
+import net.minecraft.util.IntArray;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 
-public class ContainerUraniumCooker extends Container
+public class UraniumCookerContainer extends Container
 {
 	
 	private static final int uraniumInputX = 38;
@@ -23,41 +29,56 @@ public class ContainerUraniumCooker extends Container
 	private static final int itemOutputX = 117;
 	private static final int itemOutputY = 35;
 	
-	public UraniumCookerTileEntity tileEntity;
-	private boolean operator = true;
-	private int progress;
+	private final IInventory cookerInventory;
+	private final IIntArray parameters;
 	
-	public ContainerUraniumCooker(PlayerInventory inventoryPlayer, UraniumCookerTileEntity te)
+	public UraniumCookerContainer(int windowId, PlayerInventory playerInventory)
 	{
-		tileEntity = te;
+		this(ModContainerTypes.URANIUM_COOKER, windowId, playerInventory, new Inventory(3), new IntArray(1));
+	}
+	
+	public UraniumCookerContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters)
+	{
+		this(ModContainerTypes.URANIUM_COOKER, windowId, playerInventory, inventory, parameters);
+	}
+	
+	public UraniumCookerContainer(ContainerType<? extends UraniumCookerContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters)
+	{
+		super(type, windowId);
 		
-		addSlot(new SlotInput(tileEntity, 0, uraniumInputX, uraniumInputY, MinestuckItems.RAW_URANIUM));
-		addSlot(new Slot(tileEntity, 1, itemInputX, itemInputY));
-		addSlot(new SlotOutput(tileEntity, 2, itemOutputX, itemOutputY));
+		assertInventorySize(inventory, 3);
+		assertIntArraySize(parameters, 1);
+		this.cookerInventory = inventory;
+		this.parameters = parameters;
 		
-		bindPlayerInventory(inventoryPlayer);
+		addSlot(new InputSlot(inventory, 0, uraniumInputX, uraniumInputY, MinestuckItems.RAW_URANIUM));
+		addSlot(new Slot(inventory, 1, itemInputX, itemInputY));
+		addSlot(new OutputSlot(inventory, 2, itemOutputX, itemOutputY));
+		trackIntArray(parameters);
+		
+		bindPlayerInventory(playerInventory);
 	}
 	
 	@Override
-	public boolean canInteractWith(EntityPlayer player)
+	public boolean canInteractWith(PlayerEntity player)
 	{
-		return tileEntity.isUsableByPlayer(player);
+		return cookerInventory.isUsableByPlayer(player);
 	}
 	
-	protected void bindPlayerInventory(InventoryPlayer inventoryPlayer)
+	protected void bindPlayerInventory(PlayerInventory playerInventory)
 	{
 		for (int i = 0; i < 3; i++)
 			for (int j = 0; j < 9; j++)
-				addSlot(new Slot(inventoryPlayer, j + i * 9 + 9,
+				addSlot(new Slot(playerInventory, j + i * 9 + 9,
 						8 + j * 18, 84 + i * 18));
 		
 		for (int i = 0; i < 9; i++)
-			addSlot(new Slot(inventoryPlayer, i, 8 + i * 18, 142));
+			addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
 	}
 	
 	@Nonnull
 	@Override
-	public ItemStack transferStackInSlot(EntityPlayer player, int slotNumber)
+	public ItemStack transferStackInSlot(PlayerEntity player, int slotNumber)
 	{
 		ItemStack itemstack = ItemStack.EMPTY;
 		Slot slot = this.inventorySlots.get(slotNumber);
@@ -104,21 +125,9 @@ public class ContainerUraniumCooker extends Container
 		return itemstack;
 	}
 	
-	@Override
-	public void detectAndSendChanges()
+	@OnlyIn(Dist.CLIENT)
+	public int getProgress()
 	{
-		if(this.progress != tileEntity.progress && tileEntity.progress != 0)
-			for(IContainerListener listener : listeners)
-				listener.sendWindowProperty(this, 0, tileEntity.progress);	//The server should update and send the progress bar to the client because client and server ticks aren't synchronized
-		this.progress = tileEntity.progress;
-	}
-	@Override
-	public void updateProgressBar(int par1, int par2) 
-	{
-		if(par1 == 0)
-		{
-			tileEntity.progress = par2;
-			return;
-		}
+		return parameters.get(0);
 	}
 }

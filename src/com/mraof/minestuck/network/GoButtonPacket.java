@@ -47,16 +47,16 @@ public class GoButtonPacket
 	public void execute(EntityPlayer player)
 	{
 		MachineProcessTileEntity te;
-		if(player.openContainer instanceof ContainerMiniAlchemiter)
-				te = ((ContainerMiniAlchemiter) player.openContainer).tileEntity;
-		else if(player.openContainer instanceof ContainerMiniCruxtruder)
-			te = ((ContainerMiniCruxtruder) player.openContainer).tileEntity;
-		else if(player.openContainer instanceof ContainerMiniPunchDesignix)
-			te = ((ContainerMiniPunchDesignix) player.openContainer).tileEntity;
-		else if(player.openContainer instanceof ContainerMiniTotemLathe)
-			te = ((ContainerMiniTotemLathe) player.openContainer).tileEntity;
-		else if(player.openContainer instanceof ContainerGristWidget)
-			te = ((ContainerGristWidget) player.openContainer).tileEntity;
+		if(player.openContainer instanceof MiniAlchemiterContainer)
+				te = ((MiniAlchemiterContainer) player.openContainer).tileEntity;
+		else if(player.openContainer instanceof MiniCruxtruderContainer)
+			te = ((MiniCruxtruderContainer) player.openContainer).tileEntity;
+		else if(player.openContainer instanceof MiniPunchDesignixContainer)
+			te = ((MiniPunchDesignixContainer) player.openContainer).tileEntity;
+		else if(player.openContainer instanceof MiniTotemLatheContainer)
+			te = ((MiniTotemLatheContainer) player.openContainer).tileEntity;
+		else if(player.openContainer instanceof GristWidgetContainer)
+			te = ((GristWidgetContainer) player.openContainer).tileEntity;
 		else return;
 		
 		if (te == null)
