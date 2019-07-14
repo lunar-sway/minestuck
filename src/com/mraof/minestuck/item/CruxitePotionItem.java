@@ -1,13 +1,13 @@
-package com.mraof.minestuck.item;
+/*package com.mraof.minestuck.item;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.EnumAction;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.UseAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
 public class CruxitePotionItem extends CruxiteArtifactItem
@@ -24,25 +24,25 @@ public class CruxitePotionItem extends CruxiteArtifactItem
 	}
 	
 	@Override
-	public EnumAction getUseAction(ItemStack stack)
+	public UseAction getUseAction(ItemStack stack)
 	{
-		return EnumAction.DRINK;
+		return UseAction.DRINK;
 	}
 	
 	@Override
-	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving)
+	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving)
 	{
 		stack.shrink(1);
-		if(entityLiving instanceof EntityPlayerMP)
-			onArtifactActivated((EntityPlayerMP) entityLiving);
+		if(entityLiving instanceof ServerPlayerEntity)
+			onArtifactActivated((ServerPlayerEntity) entityLiving);
 		
 		return stack;
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn)
 	{
 		playerIn.setActiveHand(handIn);
-		return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
+		return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getHeldItem(handIn));
 	}
-}
+}*/
