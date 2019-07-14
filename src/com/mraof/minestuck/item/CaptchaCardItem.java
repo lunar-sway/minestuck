@@ -19,12 +19,12 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemCaptchaCard extends Item
+public class CaptchaCardItem extends Item
 {
 	public static final IItemPropertyGetter CONTENT = (stack, world, holder) -> AlchemyRecipes.hasDecodedItem(stack) ? 1 : 0;
 	public static final ResourceLocation CONTENT_NAME = new ResourceLocation(Minestuck.MOD_ID, "content");
 	
-	public ItemCaptchaCard(Properties properties)
+	public CaptchaCardItem(Properties properties)
 	{
 		super(properties);
 		this.addPropertyOverride(CONTENT_NAME, CONTENT);
@@ -51,7 +51,7 @@ public class ItemCaptchaCard extends Item
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, EnumHand handIn) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		
 		CompoundNBT nbt = playerIn.getHeldItem(handIn).getTag();
 		ItemStack stack = playerIn.getHeldItem(handIn);

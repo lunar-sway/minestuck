@@ -41,7 +41,7 @@ public class BugNetItem extends Item
 					if(rand.nextInt(555) == 0)
 					{
 						ItemEntity item = new ItemEntity(worldIn, pos.getX(), pos.getY() + 0.5, pos.getZ(), new ItemStack(MinestuckItems.GOLDEN_GRASSHOPPER, 1));
-						worldIn.spawnEntity(item);
+						worldIn.addEntity(item);
 						playerIn.getHeldItemMainhand().damageItem(1, playerIn);
 						
 						return true;
@@ -49,7 +49,7 @@ public class BugNetItem extends Item
 					else if(rand.nextInt(5) == 0)
 					{
 						ItemEntity item = new ItemEntity(worldIn, pos.getX(), pos.getY() + 0.5, pos.getZ(), new ItemStack(MinestuckItems.GRASSHOPPER, 1));
-						worldIn.spawnEntity(item);
+						worldIn.addEntity(item);
 						playerIn.getHeldItemMainhand().damageItem(1, playerIn);
 						
 						return true;

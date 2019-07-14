@@ -17,9 +17,6 @@ import net.minecraft.item.*;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraftforge.common.ToolType;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import static com.mraof.minestuck.block.MinestuckBlocks.*;
@@ -530,11 +527,11 @@ public class MinestuckItems
 		registry.register(RAW_CRUXITE = new Item(new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("raw_cruxite"));
 		registry.register(RAW_URANIUM = new Item(new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("raw_uranium"));
 		registry.register(ENERGY_CORE = new Item(new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("energy_core"));
-		registry.register(CRUXITE_APPLE = new ItemCruxiteApple(new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("cruxite_apple"));
-		registry.register(CRUXITE_POTION = new ItemCruxitePotion(new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("cruxite_potion"));
+		registry.register(CRUXITE_APPLE = new CruxiteAppleItem(new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("cruxite_apple"));
+		registry.register(CRUXITE_POTION = new CruxitePotionItem(new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("cruxite_potion"));
 		registry.register(CLIENT_DISK = new Item(new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("client_disk"));
 		registry.register(SERVER_DISK = new Item(new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("server_disk"));
-		registry.register(CAPTCHA_CARD = new ItemCaptchaCard(new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("captcha_card"));
+		registry.register(CAPTCHA_CARD = new CaptchaCardItem(new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("captcha_card"));
 		registry.register(STACK_MODUS_CARD = new Item(new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("stack_modus_card"));
 		registry.register(QUEUE_MODUS_CARD = new Item(new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("queue_modus_card"));
 		registry.register(QUEUESTACK_MODUS_CARD = new Item(new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("queuestack_modus_card"));
@@ -606,7 +603,7 @@ public class MinestuckItems
 		
 		//registry.register(minestuckBucket.setRegistryName("minestuck_bucket"));
 		registry.register(OBSIDIAN_BUCKET = new ItemObsidianBucket(new Item.Properties().maxStackSize(1).containerItem(Items.BUCKET).group(ModItemGroup.MAIN)).setRegistryName("obsidian_bucket"));
-		registry.register(CAPTCHAROID_CAMERA = new ItemCaptcharoidCamera(new Item.Properties().defaultMaxDamage(64).group(ModItemGroup.MAIN)).setRegistryName("captcharoid_camera"));
+		registry.register(CAPTCHAROID_CAMERA = new CaptcharoidCameraItem(new Item.Properties().defaultMaxDamage(64).group(ModItemGroup.MAIN)).setRegistryName("captcharoid_camera"));
 		registry.register(GRIMOIRE = new ItemGrimoire(new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("grimoire"));
 		registry.register(LONG_FORGOTTEN_WARHORN = new ItemLongForgottenWarhorn(new Item.Properties().defaultMaxDamage(100)).setRegistryName("long_forgotten_warhorn"));
 		registry.register(RAZOR_BLADE = new ItemRazorBlade(new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("razor_blade"));

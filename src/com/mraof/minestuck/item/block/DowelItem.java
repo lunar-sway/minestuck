@@ -1,7 +1,7 @@
 package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.block.CruxiteDowelBlock;
-import com.mraof.minestuck.item.ItemCaptchaCard;
+import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.tileentity.ItemStackTileEntity;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import net.minecraft.block.Block;
@@ -17,7 +17,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -30,7 +29,7 @@ public class DowelItem extends BlockItem
 	public DowelItem(Block blockIn, Properties builder)
 	{
 		super(blockIn, builder);
-		this.addPropertyOverride(ItemCaptchaCard.CONTENT_NAME, ItemCaptchaCard.CONTENT);
+		this.addPropertyOverride(CaptchaCardItem.CONTENT_NAME, CaptchaCardItem.CONTENT);
 	}
 	
 	@Override

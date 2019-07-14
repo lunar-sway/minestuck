@@ -14,7 +14,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
 import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
-import com.mraof.minestuck.item.ItemCruxiteArtifact;
+import com.mraof.minestuck.item.CruxiteArtifactItem;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.TitleSelectPacket;
@@ -780,7 +780,7 @@ public class SburbHandler
 			Vec3d pos = titleSelectionMap.remove(player);
 			
 			player.setPosition(pos.x, pos.y, pos.z);
-			((ItemCruxiteArtifact) MinestuckItems.CRUXITE_APPLE).onArtifactActivated(player);
+			((CruxiteArtifactItem) MinestuckItems.CRUXITE_APPLE).onArtifactActivated(player);
 			
 		} else Debug.warnf("%s tried to select a title without entering.", player.getName());
 	}
