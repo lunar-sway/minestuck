@@ -46,9 +46,9 @@ public class FrogEntity extends CreatureEntity
 	private static final DataParameter<Integer> BELLY_TYPE = EntityDataManager.createKey(FrogEntity.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> TYPE = EntityDataManager.createKey(FrogEntity.class, DataSerializers.VARINT);
 	
-	public FrogEntity(EntityType<? extends FrogEntity> type, World world)
+	public FrogEntity(World world)
 	{
-		super(type, world);
+		super(ModEntityTypes.FROG, world);
 		this.jumpController = new JumpHelperController(this);
 		this.moveController = new MoveHelperController(this);
 		this.setMovementSpeed(0.0D);
