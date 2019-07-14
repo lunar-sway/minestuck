@@ -5,54 +5,55 @@
 // - ZeuX
 package com.mraof.minestuck.client.model;
 
-import net.minecraft.client.renderer.entity.model.ModelBase;
-import net.minecraft.client.renderer.entity.model.ModelRenderer;
+import com.mraof.minestuck.entity.underling.ImpEntity;
+import net.minecraft.client.renderer.entity.model.EntityModel;
+import net.minecraft.client.renderer.entity.model.RendererModel;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 
-public class ModelImp extends ModelBase
+public class ImpModel<T extends ImpEntity> extends EntityModel<T>
 {
 	//fields
-	ModelRenderer Head;
-	ModelRenderer Body;
-	ModelRenderer Armright;
-	ModelRenderer Armleft;
-	ModelRenderer Legleft;
-	ModelRenderer Legright;
+	RendererModel Head;
+	RendererModel Body;
+	RendererModel Armright;
+	RendererModel Armleft;
+	RendererModel Legleft;
+	RendererModel Legright;
 
-	public ModelImp()
+	public ImpModel()
 	{
 		textureWidth = 32;
 		textureHeight = 32;
 
-		Head = new ModelRenderer(this, 0, 0);
+		Head = new RendererModel(this, 0, 0);
 		Head.addBox(-3F, -3F, -5F, 5, 5, 5);
 		Head.setRotationPoint(0F, 15F, 0F);
 		Head.mirror = true;
 		setRotation(Head, 0F, 0F, 0F); 
-		Body = new ModelRenderer(this, 0, 10);
+		Body = new RendererModel(this, 0, 10);
 		Body.addBox(-3F, -4F, -2F, 5, 6, 4);
 		Body.setRotationPoint(0F, 19F, 0F);
 		Body.mirror = true;
 		setRotation(Body, 0F, 0F, 0F);
-		Armright = new ModelRenderer(this, 0, 20);
+		Armright = new RendererModel(this, 0, 20);
 		Armright.addBox(-1F, 0F, -1F, 1, 5, 1);
 		Armright.setRotationPoint(-3F, 16F, 0F);
 		Armright.mirror = true;
 		setRotation(Armright, 0F, 0.0371786F, 0.0371786F); 
-		Armleft = new ModelRenderer(this, 0, 20);
+		Armleft = new RendererModel(this, 0, 20);
 		Armleft.addBox(0F, 0F, -1F, 1, 5, 1);
 		Armleft.setRotationPoint(2F, 16F, 0F);
 		Armleft.mirror = true;
 		setRotation(Armleft, 0F, 0F, 0F);
-		Legleft = new ModelRenderer(this, 4, 20);
+		Legleft = new RendererModel(this, 4, 20);
 		Legleft.addBox(-1F, 0F, 0F, 1, 3, 1);
 		Legleft.setRotationPoint(-1F, 21F, 0F);
 		Legleft.mirror = true;
 		setRotation(Legleft, 0F, 0F, 0F);
-		Legright = new ModelRenderer(this, 4, 20);
+		Legright = new RendererModel(this, 4, 20);
 		Legright.addBox(0F, 0F, 0F, 1, 3, 1);
 		Legright.setRotationPoint(0F, 21F, 0F);
 		Legright.mirror = true;
@@ -60,12 +61,12 @@ public class ModelImp extends ModelBase
 	}
 	
 	@Override
-	public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale)
+	public void render(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale)
 	{
 		scale*=1.5F;
 		GL11.glTranslatef(0F, -0.8F, 0F);
 		
-		setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entity);
+		setRotationAngles(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 		Head.render(scale);
 		Body.render(scale);
 		Armright.render(scale);
@@ -74,7 +75,7 @@ public class ModelImp extends ModelBase
 		Legright.render(scale);
 	}
 	
-	private void setRotation(ModelRenderer model, float x, float y, float z)
+	private void setRotation(RendererModel model, float x, float y, float z)
 	{
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
@@ -82,7 +83,7 @@ public class ModelImp extends ModelBase
 	}
 	
 	@Override
-	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn)
+	public void setRotationAngles(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor)
 	{
 		this.Legleft.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
 		this.Legright.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;

@@ -1,61 +1,62 @@
 package com.mraof.minestuck.client.model;
 
-import net.minecraft.client.renderer.entity.model.ModelBase;
-import net.minecraft.client.renderer.entity.model.ModelRenderer;
+import com.mraof.minestuck.entity.underling.BasiliskEntity;
+import net.minecraft.client.renderer.entity.model.EntityModel;
+import net.minecraft.client.renderer.entity.model.RendererModel;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 
-public class ModelBasilisk extends ModelBase
+public class ModelBasilisk<T extends BasiliskEntity> extends EntityModel<T>
 {
-	private ModelRenderer head;
-	private ModelRenderer body;
-	private ModelRenderer leftFrontLeg;
-	private ModelRenderer rightFrontLeg;
-	private ModelRenderer leftBackLeg;
-	private ModelRenderer rightBackLeg;
-	private ModelRenderer tail0;
-	private ModelRenderer tail1;
-	private ModelRenderer tail2;
+	private RendererModel head;
+	private RendererModel body;
+	private RendererModel leftFrontLeg;
+	private RendererModel rightFrontLeg;
+	private RendererModel leftBackLeg;
+	private RendererModel rightBackLeg;
+	private RendererModel tail0;
+	private RendererModel tail1;
+	private RendererModel tail2;
 	public ModelBasilisk()
 	{
 		this.textureWidth = 128;
 		this.textureHeight = 128;
 		float offsetY = 24;
 		setTextureOffset("null.Tongue", 84, 0);
-		head = new ModelRenderer(this, 0, 0);
+		head = new RendererModel(this, 0, 0);
 		head.addBox(-15F, -16F, -6F, 30, 16, 12);
 		head.addBox("Tongue", -3, -5, -8, 6, 12, 2);
 		head.setRotationPoint(0F, -16 + offsetY, -24F);
-		body = new ModelRenderer(this, 0, 28);
+		body = new RendererModel(this, 0, 28);
 		body.addBox(-7, 0, -20, 14, 14, 40);
 		body.setRotationPoint(0F, -24 + offsetY, 0F);
-		leftFrontLeg = new ModelRenderer(this, 100, 0);
+		leftFrontLeg = new RendererModel(this, 100, 0);
 		leftFrontLeg.addBox(-2, 0, -2, 4, 14, 4);
 		leftFrontLeg.setRotationPoint(-9F, -14 + offsetY, -14);
-		rightFrontLeg = new ModelRenderer(this, 100, 0);
+		rightFrontLeg = new RendererModel(this, 100, 0);
 		rightFrontLeg.addBox(-2, 0, -2, 4, 14, 4);
 		rightFrontLeg.setRotationPoint(9F, -14 + offsetY, -14);
-		leftBackLeg = new ModelRenderer(this, 100, 0);
+		leftBackLeg = new RendererModel(this, 100, 0);
 		leftBackLeg.addBox(-2, 0, -2, 4, 14, 4);
 		leftBackLeg.setRotationPoint(-9F, -14 + offsetY, 14);
-		rightBackLeg = new ModelRenderer(this, 100, 0);
+		rightBackLeg = new RendererModel(this, 100, 0);
 		rightBackLeg.addBox(-2, 0, -2, 4, 14, 4);
 		rightBackLeg.setRotationPoint(9F, -14 + offsetY, 14);
-		tail0 = new ModelRenderer(this, 0, 82);
+		tail0 = new RendererModel(this, 0, 82);
 		tail0.addBox(-5, 0, -2, 10, 10, 20);
 		tail0.setRotationPoint(0F, -22 + offsetY, 18F);
-		tail1 = new ModelRenderer(this, 60, 82);
+		tail1 = new RendererModel(this, 60, 82);
 		tail1.addBox(-3, 0, -2, 6, 6, 20);
 		tail1.setRotationPoint(0F, -18 + offsetY, 36F);
-		tail2 = new ModelRenderer(this, 68, 28);
+		tail2 = new RendererModel(this, 68, 28);
 		tail2.addBox(-3, 0, -2, 4, 4, 20);
 		tail2.setRotationPoint(0F, -15 + offsetY, 54F);
 	}
 	
 	@Override
-	public void render(Entity entity, float par2, float par3, float par4, float par5, float par6, float par7)
+	public void render(T entity, float par2, float par3, float par4, float par5, float par6, float par7)
 	{
-		this.setRotationAngles(par2, par3, par4, par5, par6, par7, entity);
+		this.setRotationAngles(entity, par2, par3, par4, par5, par6, par7);
 		this.head.render(par7);
 		this.body.render(par7);
 		this.leftFrontLeg.render(par7);
@@ -68,7 +69,7 @@ public class ModelBasilisk extends ModelBase
 	}
 	
 	@Override
-	public void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6, Entity par7Entity)
+	public void setRotationAngles(T par7Entity, float par1, float par2, float par3, float par4, float par5, float par6)
 	{
 		this.head.rotateAngleY = par4 / 2 / (180F / (float)Math.PI);
 		this.head.rotateAngleX = (par5) / (180F / (float)Math.PI);

@@ -1,24 +1,25 @@
 package com.mraof.minestuck.client.model;
 
-import net.minecraft.client.renderer.entity.model.ModelBase;
-import net.minecraft.client.renderer.entity.model.ModelRenderer;
+import com.mraof.minestuck.entity.carapacian.BishopEntity;
+import net.minecraft.client.renderer.entity.model.EntityModel;
+import net.minecraft.client.renderer.entity.model.RendererModel;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 
-public class ModelBishop extends ModelBase
+public class BishopModel<T extends BishopEntity> extends EntityModel<T>
 {
-	private ModelRenderer hatKnob;
-	private ModelRenderer head;
-	private ModelRenderer leftLeg;
-	private ModelRenderer rightLeg;
-	private ModelRenderer body;
-	private ModelRenderer leftArm;
-	private ModelRenderer rightArm;
+	private RendererModel hatKnob;
+	private RendererModel head;
+	private RendererModel leftLeg;
+	private RendererModel rightLeg;
+	private RendererModel body;
+	private RendererModel leftArm;
+	private RendererModel rightArm;
 	private int heldItemLeft;
 	private int heldItemRight;
 
 
-	public ModelBishop()
+	public BishopModel()
 	{
 		/*addBox(offsetx,offsety,offsetz,sizex,sizey,sizez)
 		 * setRotationPoint(x,y,z) 
@@ -27,41 +28,41 @@ public class ModelBishop extends ModelBase
 		float offsetY = -46;
 		this.textureWidth = 128;
 		this.textureHeight = 128;
-		hatKnob = new ModelRenderer(this, 0, 0);
+		hatKnob = new RendererModel(this, 0, 0);
 		hatKnob.addBox(-2F, -34F, -2F, 4, 4, 4);
 		hatKnob.setRotationPoint(0F, 33F + offsetY, -4F);
 
-		head = new ModelRenderer(this, 0, 0);
+		head = new RendererModel(this, 0, 0);
 		head.addBox(-8F, -30F, -8F, 16, 30, 16);
 		head.setRotationPoint(0F, 33F + offsetY, -4F);
 
-		body = new ModelRenderer(this, 0, 46);
+		body = new RendererModel(this, 0, 46);
 		body.addBox(-15F, 0F, -10F, 30, 32, 20);
 		body.setRotationPoint(0F, 29F + offsetY, 0F);
 
-		leftArm = new ModelRenderer(this, 64, 0);
+		leftArm = new RendererModel(this, 64, 0);
 		leftArm.addBox(-3F, 0F, -3F, 6, 24, 6);
 		leftArm.setRotationPoint(-15F, 31F + offsetY, 0F);
 
-		rightArm = new ModelRenderer(this, 64, 0);
+		rightArm = new RendererModel(this, 64, 0);
 		rightArm.addBox(-3F, 0F, -3F, 6, 24, 6);
 		rightArm.setRotationPoint(15F, 31F + offsetY, 0F);
 		rightArm.mirror = true;
 
-		leftLeg = new ModelRenderer(this, 88, 0);
+		leftLeg = new RendererModel(this, 88, 0);
 		leftLeg.addBox(-4F, 0F, -5F, 6, 15, 8);
 		leftLeg.setRotationPoint(-10F, 55F + offsetY, 0F);
 
-		rightLeg = new ModelRenderer(this, 88, 0);
+		rightLeg = new RendererModel(this, 88, 0);
 		rightLeg.addBox(-4F, 0F, -5F, 6, 15, 8);
 		rightLeg.setRotationPoint(10F, 55F + offsetY, 0F);
 		rightLeg.mirror = true;
 	}
 	
 	@Override
-	public void render(Entity entity, float par2, float par3, float par4, float par5, float par6, float par7)
+	public void render(T entity, float par2, float par3, float par4, float par5, float par6, float par7)
 	{
-		this.setRotationAngles(par2, par3, par4, par5, par6, par7, entity);
+		this.setRotationAngles(entity, par2, par3, par4, par5, par6, par7);
 		
 		this.body.render(par7);
 		this.rightArm.render(par7);
@@ -78,7 +79,7 @@ public class ModelBishop extends ModelBase
 	 * "far" arms and legs can swing at most.
 	 */
 	@Override
-	public void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6, Entity par7Entity) 
+	public void setRotationAngles(T par7Entity, float par1, float par2, float par3, float par4, float par5, float par6)
 	{
 		this.head.rotateAngleY = par4 / (180F / (float)Math.PI);
 		this.head.rotateAngleX = (par5 + 20) / (180F / (float)Math.PI);
