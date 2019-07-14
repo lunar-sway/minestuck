@@ -6,10 +6,10 @@ import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundCategory;
 
-public class ItemSbahjEEEE extends ItemPogoWeapon
+public class SbahjEEEEItem extends PogoWeaponItem
 {
 	
-	public ItemSbahjEEEE(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, double pogoMotion, Properties builder)
+	public SbahjEEEEItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, double pogoMotion, Properties builder)
 	{
 		super(tier, attackDamageIn, attackSpeedIn, efficiency, pogoMotion, builder);
 	}

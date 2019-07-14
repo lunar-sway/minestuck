@@ -5,27 +5,27 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
+import net.minecraft.item.SwordItem;
 import net.minecraftforge.common.ToolType;
 
 //TODO add system for Minestuck weapons that can replace enchantments
-public class ItemWeapon extends ItemSword //To allow enchantments such as sharpness
+public class WeaponItem extends SwordItem //To allow enchantments such as sharpness
 {
 	private float efficiency;
 	private static final HashMap<ToolType, Set<Material>> toolMaterials = new HashMap<>();
 	
-	public ItemWeapon(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, Properties builder)
+	public WeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, Properties builder)
 	{
 		super(tier, attackDamageIn, attackSpeedIn, builder);
 		this.efficiency = efficiency;
 	}
-	
+
 	@Override
-	public float getDestroySpeed(ItemStack stack, IBlockState state)
+	public float getDestroySpeed(ItemStack stack, BlockState state)
 	{
 		Material material = state.getMaterial();
 		for(ToolType tool : getToolTypes(stack))
@@ -40,7 +40,7 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 	
 	//Thanks to Mraof for supplying the base for this method.
 	@Override
-	public boolean canHarvestBlock(IBlockState blockIn)
+	public boolean canHarvestBlock(BlockState blockIn)
 	{
         ToolType tool = blockIn.getHarvestTool();
         if(getToolTypes(new ItemStack(this)).contains(tool))

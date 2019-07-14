@@ -10,16 +10,16 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
-public class ItemDualWeapon extends ItemWeapon
+public class DualWeaponItem extends WeaponItem
 {
 	protected Item otherItem;
 	
-	public ItemDualWeapon(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, Properties builder)
+	public DualWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, Properties builder)
 	{
 		this(tier, attackDamageIn, attackSpeedIn, efficiency, null, builder);
 	}
 	
-	public ItemDualWeapon(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, ItemDualWeapon otherItem, Properties builder)
+	public DualWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, DualWeaponItem otherItem, Properties builder)
 	{
 		super(tier, attackDamageIn, attackSpeedIn, efficiency, builder);
 		if(otherItem != null)

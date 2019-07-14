@@ -1,10 +1,10 @@
 package com.mraof.minestuck.item.block;
 
-public class ItemJumperBlock //extends ItemBlock
+public class JumperBlockItem //extends ItemBlock
 {
 	/*static boolean flip = false;
 	
-	public ItemJumperBlock(Block block)
+	public JumperBlockItem(Block block)
 	{
 		super(block);
 	}

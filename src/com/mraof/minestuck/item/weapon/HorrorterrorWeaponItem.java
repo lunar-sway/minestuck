@@ -12,10 +12,10 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 
-public class ItemHorrorterrorWeapon extends ItemWeapon
+public class HorrorterrorWeaponItem extends WeaponItem
 {
 	
-	public ItemHorrorterrorWeapon(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, Properties builder)
+	public HorrorterrorWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, Properties builder)
 	{
 		super(tier, attackDamageIn, attackSpeedIn, efficiency, builder);
 	}

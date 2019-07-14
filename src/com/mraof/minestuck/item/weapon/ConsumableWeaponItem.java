@@ -6,6 +6,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -13,7 +14,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
-public class ItemConsumableWeapon extends ItemWeapon 
+public class ConsumableWeaponItem extends WeaponItem
 {
 	private final int healAmount;
     private final float saturationModifier;
@@ -21,7 +22,7 @@ public class ItemConsumableWeapon extends ItemWeapon
 	private PotionEffect potionId;
 	private float potionEffectProbability;
 	
-	public ItemConsumableWeapon(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, int healAmount, float saturationModifier, int damageTaken, Properties builder)
+	public ConsumableWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, int healAmount, float saturationModifier, int damageTaken, Properties builder)
 	{
 		super(tier, attackDamageIn, attackSpeedIn, efficiency, builder);
 		this.healAmount = healAmount;
@@ -29,7 +30,7 @@ public class ItemConsumableWeapon extends ItemWeapon
 		this.damageTaken = damageTaken;
 	}
 	
-	public ItemConsumableWeapon(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, int healAmount, float saturationModifier, Properties builder)
+	public ConsumableWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, int healAmount, float saturationModifier, Properties builder)
 	{
 		this(tier, attackDamageIn, attackSpeedIn, efficiency, healAmount, saturationModifier, 50, builder);
 	}
@@ -68,7 +69,7 @@ public class ItemConsumableWeapon extends ItemWeapon
 		return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 	}
 	
-	public ItemConsumableWeapon setPotionEffect(PotionEffect effect, float probability)
+	public ConsumableWeaponItem setPotionEffect(EffectInstance effect, float probability)
     {
         this.potionId = effect;
         this.potionEffectProbability = probability;

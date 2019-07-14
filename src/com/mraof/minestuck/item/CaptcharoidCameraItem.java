@@ -4,42 +4,42 @@ import java.util.List;
 
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.item.ItemFrameEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class ItemCaptcharoidCamera extends Item
+public class CaptcharoidCameraItem extends Item
 {
 	
-	public ItemCaptcharoidCamera(Properties properties)
+	public CaptcharoidCameraItem(Properties properties)
 	{
 		super(properties);
 	}
 	
 	@Override
-	public EnumActionResult onItemUse(ItemUseContext context)
+	public ActionResultType onItemUse(ItemUseContext context)
 	{
 		World worldIn = context.getWorld();
 		BlockPos pos = context.getPos();
-		EntityPlayer player = context.getPlayer();
-		EnumFacing facing = context.getFace();
+		PlayerEntity player = context.getPlayer();
+		Direction facing = context.getFace();
 		//pos.offset(facing).offset(facing.rotateY()).up(), pos.offset(facing.getOpposite()).offset(facing.rotateYCCW()).down()
 		if(!worldIn.isRemote) 
 		{
 			
 			AxisAlignedBB bb = new AxisAlignedBB(pos.offset(facing));
-			List<EntityItemFrame> list = worldIn.getEntitiesWithinAABB(EntityItemFrame.class, bb);
+			List<ItemFrameEntity> list = worldIn.getEntitiesWithinAABB(ItemFrameEntity.class, bb);
 			
 			if(!list.isEmpty())
 			{
@@ -51,15 +51,15 @@ public class ItemCaptcharoidCamera extends Item
 			}
 			else
 			{
-				IBlockState state = worldIn.getBlockState(pos);
+				BlockState state = worldIn.getBlockState(pos);
 				ItemStack block = state.getPickBlock(new RayTraceResult(new Vec3d(context.getHitX(), context.getHitY(), context.getHitZ()), facing, pos), worldIn, pos, player);
 				
 				player.inventory.addItemStackToInventory(AlchemyRecipes.createGhostCard(block));
 				context.getItem().damageItem(1, player);
 			}
-			return EnumActionResult.PASS;
+			return ActionResultType.PASS;
 		}
 		
-		return EnumActionResult.SUCCESS;
+		return ActionResultType.SUCCESS;
 	}
 }

@@ -24,7 +24,7 @@ import net.minecraft.world.World;
 /**
  * A "Farmine" harvestTool is a harvestTool that mines more blocks that just the one originally broken.
  * Other mods may refer to this as vein-mining or similar, but here it is called far-mining.
- * A farmining harvestTool works mostly like a normal ItemWeapon: it has durability, attack damage, attack speed, and enchantability.
+ * A farmining harvestTool works mostly like a normal WeaponItem: it has durability, attack damage, attack speed, and enchantability.
  * In addition, however, it has a Radius and Terminus.
  * The radius is the farthest distance between the initially-broken block and a block broken in the same mining operation. A value of -1 means no radius will come into play.
  * The terminus is the largest number of blocks that can be destroyed in a single farmining operation. Terminus is clamped to a minimum of 1.
@@ -35,14 +35,14 @@ import net.minecraft.world.World;
  * @author BenjaminK
  *
  */
-public class ItemFarmine extends ItemWeapon
+public class FarmineItem extends WeaponItem
 {
 	private int radius;
 	private int terminus;
 	private HashSet<Block> farMineForbiddenBlocks = new HashSet<>();
 	private HashMap<Block, HashSet<Block>> farMineEquivalencies = new HashMap<>();
 	
-	public ItemFarmine(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, int radius, int terminus, Properties builder)
+	public FarmineItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, int radius, int terminus, Properties builder)
 	{
 		super(tier, attackDamageIn, attackSpeedIn, efficiency, builder);
 		redefineLimiters(radius, terminus);
@@ -69,7 +69,7 @@ public class ItemFarmine extends ItemWeapon
 	/**
 	* Called when a Block is destroyed using this Item. Returns true to trigger the "Use Item" statistic.
 	* This is the method that performs farmining calculations and destruction.
-	* @param stack The ItemStack being used to destroy the block. This should always be an instance of ItemFarmine.
+	* @param stack The ItemStack being used to destroy the block. This should always be an instance of FarmineItem.
 	* This method also respects the presence of Silk Touch or Fortune on this ItemStack.
 	* @param worldIn The world where the blocks being destroyed can be found.
 	* @param blockState The state of the initial block being destroyed.
@@ -195,7 +195,7 @@ public class ItemFarmine extends ItemWeapon
 		
 		//We add 1 because that means the harvestTool will always take at least 2 damage.
 		//This is important because all ItemWeapons take at least 2 damage whenever it breaks a block.
-		//This is because ItemWeapon extends ItemSword.
+		//This is because WeaponItem extends ItemSword.
 		if (isDamageable())
 			stack.damageItem(blocksToBreak.size() + 1, playerIn);
 		
@@ -286,7 +286,7 @@ public class ItemFarmine extends ItemWeapon
 	 * @param t T is the new value for the harvestTool's terminus. This will limit how many blocks can be mined. Values are clamped to a minimum of 1.
 	 * @return Returns the same farmining harvestTool, after the change has been applied. Useful for chaining same-line modifications.
 	 */
-	public ItemFarmine redefineLimiters(int r, int t)	
+	public FarmineItem redefineLimiters(int r, int t)
 	{
 		//A terminus of less than 1 means that the harvestTool cannot mine. A terminus of 1 means it cannot farmine.
 		terminus = Math.max(1, t);

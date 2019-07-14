@@ -4,7 +4,7 @@ import com.mraof.minestuck.client.gui.GuiButtonImpl;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.ContainerCaptchaDeck;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
-import com.mraof.minestuck.item.ItemCaptchaCard;
+import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
 import net.minecraft.client.Minecraft;
@@ -78,7 +78,7 @@ public class GuiCaptchaDeck extends GuiPlayerStatsContainer implements GuiButton
 		if(button == this.modusButton && !container.inventory.getStackInSlot(0).isEmpty())
 		{
 			ItemStack stack = container.inventory.getStackInSlot(0);
-			if(!(stack.getItem() instanceof ItemCaptchaCard))
+			if(!(stack.getItem() instanceof CaptchaCardItem))
 			{
 				Modus newModus = CaptchaDeckHandler.createInstance(CaptchaDeckHandler.getType(stack), LogicalSide.CLIENT);
 				if(newModus != null && CaptchaDeckHandler.clientSideModus != null && newModus.getClass() != CaptchaDeckHandler.clientSideModus.getClass() && !newModus.canSwitchFrom(CaptchaDeckHandler.clientSideModus))

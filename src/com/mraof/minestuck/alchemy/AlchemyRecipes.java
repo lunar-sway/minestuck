@@ -1,7 +1,7 @@
 package com.mraof.minestuck.alchemy;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.item.ItemCruxiteArtifact;
+import com.mraof.minestuck.item.CruxiteArtifactItem;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.modSupport.*;
 import com.mraof.minestuck.util.*;
@@ -1068,7 +1068,7 @@ public class AlchemyRecipes
 	
 	public static void onAlchemizedItem(ItemStack stack, ServerPlayerEntity player)
 	{
-		if(!(stack.getItem() instanceof ItemCruxiteArtifact))
+		if(!(stack.getItem() instanceof CruxiteArtifactItem))
 		{
 			Echeladder e = PlayerSavedData.getData(player).echeladder;
 			e.checkBonus(Echeladder.ALCHEMY_BONUS_OFFSET);

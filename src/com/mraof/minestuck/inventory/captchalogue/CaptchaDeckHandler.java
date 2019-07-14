@@ -3,7 +3,7 @@ package com.mraof.minestuck.inventory.captchalogue;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
-import com.mraof.minestuck.item.ItemBoondollars;
+import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
@@ -200,7 +200,7 @@ public class CaptchaDeckHandler
 		
 		if(stack.getItem() == MinestuckItems.BOONDOLLARS)
 		{
-			PlayerSavedData.addBoondollars(player, ItemBoondollars.getCount(stack));
+			PlayerSavedData.addBoondollars(player, BoondollarsItem.getCount(stack));
 			stack.setCount(0);
 			return;
 		}
@@ -256,7 +256,7 @@ public class CaptchaDeckHandler
 
 			if(stack.getItem() == MinestuckItems.BOONDOLLARS)
 			{
-				PlayerSavedData.addBoondollars(player, ItemBoondollars.getCount(stack));
+				PlayerSavedData.addBoondollars(player, BoondollarsItem.getCount(stack));
 				stack.setCount(0);
 				return;
 			}
@@ -305,7 +305,7 @@ public class CaptchaDeckHandler
 
 			if(stack.getItem() == MinestuckItems.BOONDOLLARS)
 			{
-				PlayerSavedData.addBoondollars(player, ItemBoondollars.getCount(stack));
+				PlayerSavedData.addBoondollars(player, BoondollarsItem.getCount(stack));
 				stack.setCount(0);
 				return;
 			}

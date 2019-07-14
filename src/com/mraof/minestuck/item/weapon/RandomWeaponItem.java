@@ -9,10 +9,10 @@ import net.minecraft.util.DamageSource;
 /**
  * Created by mraof on 2017 January 18 at 6:33 PM.
  */
-public class ItemRandomWeapon extends ItemWeapon
+public class RandomWeaponItem extends WeaponItem
 {
 	
-	public ItemRandomWeapon(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, Properties builder)
+	public RandomWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, Properties builder)
 	{
 		super(tier, attackDamageIn, attackSpeedIn, efficiency, builder);
 	}

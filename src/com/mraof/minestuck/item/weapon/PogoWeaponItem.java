@@ -15,11 +15,11 @@ import net.minecraft.world.World;
 /**
  * Created by mraof on 2017 January 18 at 6:17 PM.
  */
-public class ItemPogoWeapon extends ItemWeapon
+public class PogoWeaponItem extends WeaponItem
 {
 	private double pogoMotion;
 	
-	public ItemPogoWeapon(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, double pogoMotion, Properties builder)
+	public PogoWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, double pogoMotion, Properties builder)
 	{
 		super(tier, attackDamageIn, attackSpeedIn, efficiency, builder);
 		this.pogoMotion = pogoMotion;

@@ -8,10 +8,10 @@ import net.minecraft.item.ItemStack;
 /**
  * Created by mraof on 2017 January 18 at 7:15 PM.
  */
-public class ItemSord extends ItemWeapon
+public class SordItem extends WeaponItem
 {
 	
-	public ItemSord(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, Properties builder)
+	public SordItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, Properties builder)
 	{
 		super(tier, attackDamageIn, attackSpeedIn, efficiency, builder);
 	}

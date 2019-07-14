@@ -8,9 +8,9 @@ import net.minecraft.item.ItemStack;
 /**
  * Created by mraof on 2017 January 18 at 7:42 PM.
  */
-public class ItemCandyWeapon extends ItemWeapon
+public class CandyWeaponItem extends WeaponItem
 {
-	public ItemCandyWeapon(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, Properties builder)
+	public CandyWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, Properties builder)
 	{
 		super(tier, attackDamageIn, attackSpeedIn, efficiency, builder);
 	}

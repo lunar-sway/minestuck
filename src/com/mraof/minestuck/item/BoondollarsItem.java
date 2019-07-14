@@ -3,15 +3,15 @@ package com.mraof.minestuck.item;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.*;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -19,22 +19,22 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemBoondollars extends Item	//TODO Add custom crafting recipe that merges boondollar stacks
+public class BoondollarsItem extends Item	//TODO Add custom crafting recipe that merges boondollar stacks
 {
-	public ItemBoondollars(Properties properties)
+	public BoondollarsItem(Properties properties)
 	{
 		super(properties);
 		this.addPropertyOverride(new ResourceLocation(Minestuck.MOD_ID, "count"), (stack, world, holder) -> getCount(stack));
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn)
 	{
 		if(!worldIn.isRemote)
 		{
-			PlayerSavedData.addBoondollars((EntityPlayerMP) playerIn, getCount(playerIn.getHeldItem(handIn)));
+			PlayerSavedData.addBoondollars((ServerPlayerEntity) playerIn, getCount(playerIn.getHeldItem(handIn)));
 		}
-		return new ActionResult<>(EnumActionResult.SUCCESS, ItemStack.EMPTY);
+		return new ActionResult<>(ActionResultType.SUCCESS, ItemStack.EMPTY);
 	}
 	
 	@Override
@@ -55,7 +55,7 @@ public class ItemBoondollars extends Item	//TODO Add custom crafting recipe that
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
 	{
 		int amount = getCount(stack);
-		tooltip.add(new TextComponentTranslation("item.minestuck.boondollars.amount", amount));
+		tooltip.add(new TranslationTextComponent("item.minestuck.boondollars.amount", amount));
 	}
 	
 	public static int getCount(ItemStack stack)
@@ -67,10 +67,10 @@ public class ItemBoondollars extends Item	//TODO Add custom crafting recipe that
 	
 	public static ItemStack setCount(ItemStack stack, int value)
 	{
-		NBTTagCompound nbt = stack.getTag();
+		CompoundNBT nbt = stack.getTag();
 		if(nbt == null)
 		{
-			nbt = new NBTTagCompound();
+			nbt = new CompoundNBT();
 			stack.setTag(nbt);
 		}
 		nbt.putInt("value", value);

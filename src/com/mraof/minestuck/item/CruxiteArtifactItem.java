@@ -28,6 +28,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
@@ -45,7 +46,7 @@ import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.util.ITeleporter;
 
-public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
+public abstract class CruxiteArtifactItem extends Item implements ITeleporter
 {
 	private int xDiff;
 	private int yDiff;
@@ -55,12 +56,12 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 	private boolean creative;
 	private HashSet<BlockMove> blockMoves;
 	
-	public ItemCruxiteArtifact(Properties properties)
+	public CruxiteArtifactItem(Properties properties)
 	{
 		super(properties);
 	}
 	
-	public void onArtifactActivated(EntityPlayerMP player)
+	public void onArtifactActivated(ServerPlayerEntity player)
 	{
 		try
 		{
@@ -492,7 +493,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 				chunkTo.getWorld().setBlockState(dest, block, 0);
 			} else
 			{
-				ItemCruxiteArtifact.copyBlockDirect(chunkFrom, chunkTo, source.getX(), source.getY(), source.getZ(), dest.getX(), dest.getY(), dest.getZ());
+				CruxiteArtifactItem.copyBlockDirect(chunkFrom, chunkTo, source.getX(), source.getY(), source.getZ(), dest.getX(), dest.getY(), dest.getZ());
 			}
 			
 			TileEntity tileEntity = chunkFrom.getTileEntity(source, EnumCreateEntityType.CHECK);

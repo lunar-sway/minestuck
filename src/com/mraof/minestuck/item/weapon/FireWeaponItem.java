@@ -7,11 +7,11 @@ import net.minecraft.item.ItemStack;
 /**
  * Created by mraof on 2017 January 18 at 6:24 PM.
  */
-public class ItemFireWeapon extends ItemWeapon
+public class FireWeaponItem extends WeaponItem
 {
 	private final int duration;
 	
-	public ItemFireWeapon(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, int duration, Properties builder)
+	public FireWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, int duration, Properties builder)
 	{
 		super(tier, attackDamageIn, attackSpeedIn, efficiency, builder);
 		this.duration = duration;

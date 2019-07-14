@@ -3,26 +3,26 @@ package com.mraof.minestuck.item.block;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.tileentity.MiniCruxtruderTileEntity;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class ItemMiniCruxtruder extends ItemBlock
+public class MiniCruxtruderItem extends BlockItem
 {
-	public ItemMiniCruxtruder(Block blockIn, Properties builder)
+	public MiniCruxtruderItem(Block blockIn, Properties builder)
 	{
 		super(blockIn, builder);
 	}
 	
 	@Override
-	protected boolean onBlockPlaced(BlockPos pos, World world, @Nullable EntityPlayer player, ItemStack stack, IBlockState state)
+	protected boolean onBlockPlaced(BlockPos pos, World world, @Nullable PlayerEntity player, ItemStack stack, BlockState state)
 	{
 		if(stack.hasTag() && stack.getTag().contains("color"))
 		{
@@ -36,7 +36,7 @@ public class ItemMiniCruxtruder extends ItemBlock
 	public static ItemStack getCruxtruderWithColor(int color)
 	{
 		ItemStack stack = new ItemStack(MinestuckBlocks.MINI_CRUXTRUDER);
-		stack.setTag(new NBTTagCompound());
+		stack.setTag(new CompoundNBT());
 		stack.getTag().putInt("color", color);
 		return stack;
 	}
