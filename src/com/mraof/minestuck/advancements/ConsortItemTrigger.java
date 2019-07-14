@@ -6,13 +6,14 @@ import com.google.common.collect.Sets;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.entity.consort.EntityConsort;
+import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.advancements.PlayerAdvancements;
 import net.minecraft.advancements.criterion.AbstractCriterionInstance;
 import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -76,7 +77,7 @@ public class ConsortItemTrigger implements ICriterionTrigger<ConsortItemTrigger.
 		return new Instance(table, item, type);
 	}
 	
-	public void trigger(EntityPlayerMP player, String table, ItemStack item, EntityConsort consort)
+	public void trigger(ServerPlayerEntity player, String table, ItemStack item, ConsortEntity consort)
 	{
 		Listeners listeners = listenersMap.get(player.getAdvancements());
 		if(listeners != null)

@@ -1,7 +1,7 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.tileentity.TileEntityMiniPunchDesignix;
-import com.mraof.minestuck.tileentity.TileEntityPunchDesignix;
+import com.mraof.minestuck.tileentity.MiniPunchDesignixTileEntity;
+import com.mraof.minestuck.tileentity.PunchDesignixTileEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -38,12 +38,12 @@ public class MiniPunchDesignixBlock extends MachineProcessBlock
 	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
 		TileEntity tileEntity = worldIn.getTileEntity(pos);
-		if(!(tileEntity instanceof TileEntityMiniPunchDesignix) || player.isSneaking())
+		if(!(tileEntity instanceof MiniPunchDesignixTileEntity) || player.isSneaking())
 			return false;
 		
 		if(!worldIn.isRemote)
 		{
-			NetworkHooks.openGui((ServerPlayerEntity) player, (TileEntityMiniPunchDesignix) tileEntity, pos);
+			NetworkHooks.openGui((ServerPlayerEntity) player, (MiniPunchDesignixTileEntity) tileEntity, pos);
 		}
 		return true;
 	}
@@ -58,6 +58,6 @@ public class MiniPunchDesignixBlock extends MachineProcessBlock
 	@Override
 	public TileEntity createTileEntity(BlockState state, IBlockReader world)
 	{
-		return new TileEntityPunchDesignix();
+		return new PunchDesignixTileEntity();
 	}
 }

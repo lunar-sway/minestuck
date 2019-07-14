@@ -1,6 +1,6 @@
 package com.mraof.minestuck.item.block;
 
-import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
+import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -26,8 +26,8 @@ public class TransportalizerItem extends BlockItem
 		if(stack.hasDisplayName() && stack.getDisplayName().getString().length() == 4)
 		{
 			TileEntity te = world.getTileEntity(pos);
-			if(te instanceof TileEntityTransportalizer)
-				((TileEntityTransportalizer) te).setId(stack.getDisplayName().getString().toUpperCase());
+			if(te instanceof TransportalizerTileEntity)
+				((TransportalizerTileEntity) te).setId(stack.getDisplayName().getString().toUpperCase());
 		}
 		return true;
 	}

@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.tileentity.TileEntityMachineProcess;
+import com.mraof.minestuck.tileentity.MachineProcessTileEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.tileentity.TileEntity;
@@ -20,9 +20,9 @@ public abstract class MachineProcessBlock extends MachineBlock
 		if (state.getBlock() != newState.getBlock())
 		{
 			TileEntity tileentity = worldIn.getTileEntity(pos);
-			if (tileentity instanceof TileEntityMachineProcess)
+			if (tileentity instanceof MachineProcessTileEntity)
 			{
-				InventoryHelper.dropInventoryItems(worldIn, pos, (TileEntityMachineProcess)tileentity);
+				InventoryHelper.dropInventoryItems(worldIn, pos, (MachineProcessTileEntity)tileentity);
 				worldIn.updateComparatorOutputLevel(pos, this);
 			}
 			

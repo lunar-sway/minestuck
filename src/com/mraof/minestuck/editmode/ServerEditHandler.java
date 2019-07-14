@@ -2,7 +2,7 @@ package com.mraof.minestuck.editmode;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
-import com.mraof.minestuck.entity.EntityDecoy;
+import com.mraof.minestuck.entity.DecoyEntity;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.ServerEditPacket;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
@@ -101,7 +101,7 @@ public class ServerEditHandler
 		
 		EntityPlayerMP player = data.player;
 		player.closeScreen();
-		EntityDecoy decoy = data.decoy;
+		DecoyEntity decoy = data.decoy;
 		if(player.dimension != decoy.dimension)
 			if(!Teleport.teleportEntity(player, decoy.dimension, null))
 			{
@@ -141,7 +141,7 @@ public class ServerEditHandler
 		if(c != null && c.getServerIdentifier().equals(computerOwner) && getData(c) == null && getData(player) == null)
 		{
 			Debug.info("Activating edit mode on player \""+player.getName()+"\", target player: \""+computerTarget+"\".");
-			EntityDecoy decoy = new EntityDecoy((WorldServer) player.world, player);
+			DecoyEntity decoy = new DecoyEntity((WorldServer) player.world, player);
 			EditData data = new EditData(decoy, player, c);
 			if(!c.hasEntered())
 			{
@@ -209,7 +209,7 @@ public class ServerEditHandler
 		return null;
 	}
 	
-	public static EditData getData(EntityDecoy decoy) {
+	public static EditData getData(DecoyEntity decoy) {
 		for(EditData data : list)
 			if(data.decoy == decoy)
 				return data;

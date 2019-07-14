@@ -1,20 +1,10 @@
 package com.mraof.minestuck.world.lands.structure;
 
-import java.util.Random;
-
-import com.mraof.minestuck.entity.underling.EntityOgre;
-import com.mraof.minestuck.world.GateHandler;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockUtil;
-
-import com.mraof.minestuck.world.storage.loot.MinestuckLoot;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class SmallRuinStart //extends StructureStart
 {

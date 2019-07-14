@@ -9,13 +9,13 @@ import com.mraof.minestuck.network.skaianet.ComputerData;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.tileentity.ComputerTileEntity;
 
 public class SburbServer extends ButtonListProgram
 {
 	
 	@Override
-	public ArrayList<UnlocalizedString> getStringList(TileEntityComputer te)
+	public ArrayList<UnlocalizedString> getStringList(ComputerTileEntity te)
 	{
 		int clientId = te.getData(1).contains("connectedClient")?te.getData(1).getInt("connectedClient"):-1;
 		SburbConnection connection = clientId != -1 ? SkaiaClient.getClientConnection(clientId) : null;
@@ -46,7 +46,7 @@ public class SburbServer extends ButtonListProgram
 	}
 	
 	@Override
-	public void onButtonPressed(TileEntityComputer te, String buttonName, Object[] data) {
+	public void onButtonPressed(ComputerTileEntity te, String buttonName, Object[] data) {
 		if(buttonName.equals("computer.buttonEdit") || buttonName.equals("computer.buttonGive"))
 		{
 			ClientEditPacket packet = ClientEditPacket.activate(te.ownerId, te.getData(getId()).getInt("connectedClient"));
@@ -66,7 +66,7 @@ public class SburbServer extends ButtonListProgram
 	}
 	
 	@Override
-	public void onClosed(TileEntityComputer te)
+	public void onClosed(ComputerTileEntity te)
 	{
 		SburbConnection c = SkaianetHandler.get(te.getWorld()).getServerConnection(ComputerData.createData(te));
 		if(c != null)

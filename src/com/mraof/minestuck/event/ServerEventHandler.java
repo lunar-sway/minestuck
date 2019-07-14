@@ -2,7 +2,7 @@ package com.mraof.minestuck.event;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.entity.underling.EntityUnderling;
+import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.weapon.PotionWeaponItem;
@@ -115,7 +115,7 @@ public class ServerEventHandler
 			if (event.getSource().getTrueSource() instanceof EntityPlayerMP)
 			{
 				EntityPlayerMP player = (EntityPlayerMP) event.getSource().getTrueSource();
-				if (event.getEntityLiving() instanceof EntityUnderling)
+				if (event.getEntityLiving() instanceof UnderlingEntity)
 				{    //Increase damage to underling
 					double modifier = PlayerSavedData.getData(player).echeladder.getUnderlingDamageModifier();
 					event.setAmount((float) (event.getAmount() * modifier));
@@ -131,7 +131,7 @@ public class ServerEventHandler
 					else event.getEntityLiving().addPotionEffect(((PotionWeaponItem) player.getHeldItemMainhand().getItem()).getEffect(player));
 				}
 			}
-			else if (event.getEntityLiving() instanceof EntityPlayerMP && event.getSource().getTrueSource() instanceof EntityUnderling)
+			else if (event.getEntityLiving() instanceof EntityPlayerMP && event.getSource().getTrueSource() instanceof UnderlingEntity)
 			{    //Decrease damage to player
 					EntityPlayerMP player = (EntityPlayerMP) event.getEntityLiving();
 					double modifier = PlayerSavedData.getData(player).echeladder.getUnderlingProtectionModifier();
@@ -143,9 +143,9 @@ public class ServerEventHandler
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public void onEntityDamage(LivingHurtEvent event)
 	{
-		if(event.getEntityLiving() instanceof EntityUnderling)
+		if(event.getEntityLiving() instanceof UnderlingEntity)
 		{
-			((EntityUnderling) event.getEntityLiving()).onEntityDamaged(event.getSource(), event.getAmount());
+			((UnderlingEntity) event.getEntityLiving()).onEntityDamaged(event.getSource(), event.getAmount());
 		}
 	}
 	

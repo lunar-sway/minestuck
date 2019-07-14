@@ -1,17 +1,14 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.tileentity.TileEntityItemStack;
+import com.mraof.minestuck.tileentity.ItemStackTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.PushReaction;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
-import net.minecraft.stats.Stats;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -60,7 +57,7 @@ public class CruxiteDowelBlock extends Block
 	@Override
 	public TileEntity createTileEntity(BlockState state, IBlockReader world)
 	{
-		TileEntityItemStack te = new TileEntityItemStack();
+		ItemStackTileEntity te = new ItemStackTileEntity();
 		te.setStack(new ItemStack(this));
 		return te;
 	}
@@ -83,9 +80,9 @@ public class CruxiteDowelBlock extends Block
 	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player)
 	{
 		TileEntity te = world.getTileEntity(pos);
-		if(te instanceof TileEntityItemStack)
+		if(te instanceof ItemStackTileEntity)
 		{
-			ItemStack dowel = ((TileEntityItemStack) te).getStack();
+			ItemStack dowel = ((ItemStackTileEntity) te).getStack();
 			if(!dowel.isEmpty())
 				return dowel.copy();
 		}
@@ -95,9 +92,9 @@ public class CruxiteDowelBlock extends Block
 	public static void dropDowel(World world, BlockPos pos)
 	{
 		TileEntity te = world.getTileEntity(pos);
-		if(te instanceof TileEntityItemStack)
+		if(te instanceof ItemStackTileEntity)
 		{
-			ItemStack stack = ((TileEntityItemStack) te).getStack();
+			ItemStack stack = ((ItemStackTileEntity) te).getStack();
 			spawnAsEntity(world, pos, stack);
 		}
 		world.removeBlock(pos, false);

@@ -1,7 +1,7 @@
 package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.tileentity.TileEntityMiniCruxtruder;
+import com.mraof.minestuck.tileentity.MiniCruxtruderTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -27,8 +27,8 @@ public class MiniCruxtruderItem extends BlockItem
 		if(stack.hasTag() && stack.getTag().contains("color"))
 		{
 			TileEntity te = world.getTileEntity(pos);
-			if(te instanceof TileEntityMiniCruxtruder)
-				((TileEntityMiniCruxtruder) te).color = stack.getTag().getInt("color");
+			if(te instanceof MiniCruxtruderTileEntity)
+				((MiniCruxtruderTileEntity) te).color = stack.getTag().getInt("color");
 		}
 		return true;
 	}

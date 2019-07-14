@@ -15,9 +15,9 @@ import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.tileentity.TileEntityComputer;
-import com.mraof.minestuck.tileentity.TileEntityGate;
-import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
+import com.mraof.minestuck.tileentity.ComputerTileEntity;
+import com.mraof.minestuck.tileentity.GateTileEntity;
+import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
@@ -183,9 +183,9 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 					{
 						player.sendStatusMessage(new TextComponentString("You are not allowed to move command blocks."), false);
 						return false;
-					} else if(te instanceof TileEntityComputer)		//If the block is a computer
+					} else if(te instanceof ComputerTileEntity)		//If the block is a computer
 					{
-						if(!((TileEntityComputer)te).owner.equals(IdentifierHandler.encode((EntityPlayer) player)))	//You can't Enter with someone else's computer
+						if(!((ComputerTileEntity)te).owner.equals(IdentifierHandler.encode((EntityPlayer) player)))	//You can't Enter with someone else's computer
 						{
 							player.sendStatusMessage(new TextComponentString("You are not allowed to move other players' computers."), false);
 							return false;
@@ -376,9 +376,9 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 				}
 			} else
 			{
-				if(tileEntity instanceof TileEntityComputer)	//Avoid duplicating computer data when a computer is kept in the overworld
-					((TileEntityComputer) tileEntity).programData = new NBTTagCompound();
-				else if(tileEntity instanceof TileEntityTransportalizer)
+				if(tileEntity instanceof ComputerTileEntity)	//Avoid duplicating computer data when a computer is kept in the overworld
+					((ComputerTileEntity) tileEntity).programData = new NBTTagCompound();
+				else if(tileEntity instanceof TransportalizerTileEntity)
 					worldserver0.removeTileEntity(pos);
 			}
 		}
@@ -454,7 +454,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 			if(i == 4)
 			{
 				world.setBlockState(pos, MinestuckBlocks.GATE.getDefaultState().cycle(GateBlock.MAIN), 0);
-				TileEntityGate tileEntity = (TileEntityGate) world.getTileEntity(pos);
+				GateTileEntity tileEntity = (GateTileEntity) world.getTileEntity(pos);
 				tileEntity.gateCount = gateCount;
 			}
 			else world.setBlockState(pos.add((i % 3) - 1, 0, i/3 - 1), MinestuckBlocks.GATE.getDefaultState(), 0);
@@ -507,8 +507,8 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 				if(te1 != null)
 					chunkTo.addTileEntity(dest, te1);
 				else Debug.warnf("Unable to create a new tile entity %s when teleporting blocks to the medium!", tileEntity.getType().getRegistryName());
-				if(tileEntity instanceof TileEntityComputer)
-					SkaianetHandler.get(chunkTo.getWorld()).movingComputer((TileEntityComputer) tileEntity, (TileEntityComputer) te1);
+				if(tileEntity instanceof ComputerTileEntity)
+					SkaianetHandler.get(chunkTo.getWorld()).movingComputer((ComputerTileEntity) tileEntity, (ComputerTileEntity) te1);
 			}
 		}
 	}

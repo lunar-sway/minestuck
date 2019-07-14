@@ -8,12 +8,12 @@ import net.minecraft.client.renderer.entity.layers.LayerHeldItem;
 import net.minecraft.client.renderer.entity.model.ModelPlayer;
 import net.minecraft.util.ResourceLocation;
 
-import com.mraof.minestuck.entity.EntityDecoy;
+import com.mraof.minestuck.entity.DecoyEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderDecoy extends RenderLivingBase<EntityDecoy>
+public class RenderDecoy extends RenderLivingBase<DecoyEntity>
 {
 	
 	public RenderDecoy(RenderManager manager)
@@ -25,7 +25,7 @@ public class RenderDecoy extends RenderLivingBase<EntityDecoy>
 	}
 	
 	@Override
-	protected ResourceLocation getEntityTexture(EntityDecoy entity)
+	protected ResourceLocation getEntityTexture(DecoyEntity entity)
 	{
 		return entity.getLocationSkin();
 	}

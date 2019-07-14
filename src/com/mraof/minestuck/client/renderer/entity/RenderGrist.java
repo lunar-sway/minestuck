@@ -1,6 +1,6 @@
 package com.mraof.minestuck.client.renderer.entity;
 
-import com.mraof.minestuck.entity.item.EntityGrist;
+import com.mraof.minestuck.entity.item.GristEntity;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -13,7 +13,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderGrist extends Render<EntityGrist>
+public class RenderGrist extends Render<GristEntity>
 {
 	
 	public RenderGrist(RenderManager manager)
@@ -24,7 +24,7 @@ public class RenderGrist extends Render<EntityGrist>
 	}
 	
 	@Override
-	public void doRender(EntityGrist grist, double d0, double d1, double d2, float f, float f1)
+	public void doRender(GristEntity grist, double d0, double d1, double d2, float f, float f1)
 	{
 		GlStateManager.pushMatrix();
 		GlStateManager.translatef((float)d0, (float)d1 + grist.getSizeByValue()/2, (float)d2);
@@ -52,7 +52,7 @@ public class RenderGrist extends Render<EntityGrist>
 	}
 	
 	@Override
-	protected ResourceLocation getEntityTexture(EntityGrist entity) 
+	protected ResourceLocation getEntityTexture(GristEntity entity)
 	{
 		return new ResourceLocation(entity.getGristType().getIcon().getNamespace(), "textures/grist/" + entity.getGristType().getIcon().getPath() + ".png");
 	}

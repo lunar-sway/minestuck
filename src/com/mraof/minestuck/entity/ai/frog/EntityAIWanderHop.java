@@ -1,17 +1,9 @@
 package com.mraof.minestuck.entity.ai.frog;
 
-import com.mraof.minestuck.entity.EntityFrog;
-
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.pathfinding.PathNavigateFlying;
-import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.math.Vec3d;
 
-public class EntityAIWanderHop extends EntityAIWander
-{
+public class EntityAIWanderHop //extends EntityAIWander
+{/*
     private final EntityLiving entity;
     private boolean shouldHop = false;
     
@@ -33,7 +25,7 @@ public class EntityAIWanderHop extends EntityAIWander
     
     /**
      * Returns whether the EntityAIBase should begin execution.
-     */
+     * /
     public boolean shouldExecute()
     {
         if (!this.mustUpdate)
@@ -72,12 +64,12 @@ public class EntityAIWanderHop extends EntityAIWander
 
     /**
      * Keep ticking a continuous task that has already been started
-     */
+     * /
     public void updateTask()
     {
         if (this.entity.getRNG().nextFloat() < 0.8F && shouldHop)
         {
             //((EntityFrog) this.entity).setJump(true);
         }
-    }
+    }*/
 }

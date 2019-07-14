@@ -1,7 +1,7 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.client.gui.GuiTransportalizer;
-import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
+import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -44,7 +44,7 @@ public class TransportalizerBlock extends MachineBlock
 	@Override
 	public TileEntity createTileEntity(BlockState state, IBlockReader world)
 	{
-		return new TileEntityTransportalizer();
+		return new TransportalizerTileEntity();
 	}
 	
 	@Override
@@ -53,7 +53,7 @@ public class TransportalizerBlock extends MachineBlock
 		if (!worldIn.isRemote && !entityIn.isPassenger() && !entityIn.isBeingRidden() && entityIn.isNonBoss())
 		{
 			if(entityIn.timeUntilPortal == 0)
-				((TileEntityTransportalizer) worldIn.getTileEntity(pos)).teleport(entityIn);
+				((TransportalizerTileEntity) worldIn.getTileEntity(pos)).teleport(entityIn);
 			else entityIn.timeUntilPortal = entityIn.getPortalCooldown();
 		}
 	}
@@ -67,7 +67,7 @@ public class TransportalizerBlock extends MachineBlock
 	@Override
 	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
-		TileEntityTransportalizer tileEntity = (TileEntityTransportalizer) worldIn.getTileEntity(pos);
+		TransportalizerTileEntity tileEntity = (TransportalizerTileEntity) worldIn.getTileEntity(pos);
 
 		if (tileEntity == null || player.isSneaking())
 		{

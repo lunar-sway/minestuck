@@ -1,6 +1,6 @@
 package com.mraof.minestuck.inventory;
 
-import com.mraof.minestuck.entity.consort.EntityConsort;
+import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
@@ -10,6 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.NonNullList;
@@ -27,9 +28,9 @@ public class InventoryConsortMerchant implements IInventory
 	private EnumConsort consortType;
 	private EnumConsort.MerchantType merchantType;
 	private final int[] prices = new int[9];
-	private EntityConsort consort;
+	private ConsortEntity consort;
 	
-	public InventoryConsortMerchant(EntityConsort consort, NBTTagList list)
+	public InventoryConsortMerchant(ConsortEntity consort, ListNBT list)
 	{
 		this.consort = consort;
 		consortType = consort.getConsortType();
@@ -50,7 +51,7 @@ public class InventoryConsortMerchant implements IInventory
 	{
 	}
 	
-	public InventoryConsortMerchant(EntityConsort consort, List<Pair<ItemStack, Integer>> stocks)
+	public InventoryConsortMerchant(ConsortEntity consort, List<Pair<ItemStack, Integer>> stocks)
 	{
 		this.consort = consort;
 		consortType = consort.getConsortType();
@@ -94,7 +95,7 @@ public class InventoryConsortMerchant implements IInventory
 		}
 	}
 	
-	public NBTTagList writeToNBT()
+	public ListNBT writeToNBT()
 	{
 		NBTTagList list = new NBTTagList();
 		for (int i = 0; i < 9; i++)

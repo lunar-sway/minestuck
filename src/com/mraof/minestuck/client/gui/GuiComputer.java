@@ -1,6 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.util.ComputerProgram;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -32,10 +32,10 @@ public class GuiComputer extends Screen implements GuiButtonImpl.ButtonClickhand
 	public Button programButton;
 	
 	public Minecraft mc;
-	public TileEntityComputer te;
+	public ComputerTileEntity te;
 
 
-	public GuiComputer(Minecraft mc,TileEntityComputer te)
+	public GuiComputer(Minecraft mc, ComputerTileEntity te)
 	{
 		super();
 		

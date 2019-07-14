@@ -1,8 +1,8 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.entity.item.EntityCrewPoster;
-import com.mraof.minestuck.entity.item.EntityMetalBoat;
-import com.mraof.minestuck.entity.item.EntitySbahjPoster;
+import com.mraof.minestuck.entity.item.CrewPosterEntity;
+import com.mraof.minestuck.entity.item.MetalBoatEntity;
+import com.mraof.minestuck.entity.item.SbahjPosterEntity;
 import com.mraof.minestuck.item.block.*;
 import com.mraof.minestuck.item.foods.BeverageItem;
 import com.mraof.minestuck.item.foods.FoodItem;
@@ -17,6 +17,9 @@ import net.minecraft.item.*;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraftforge.common.ToolType;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import static com.mraof.minestuck.block.MinestuckBlocks.*;
@@ -386,7 +389,7 @@ public class MinestuckItems
 		registerItemBlock(registry, MINI_ALCHEMITER, ModItemGroup.MAIN);
 		registerItemBlock(registry, MINI_PUNCH_DESIGNIX, ModItemGroup.MAIN);
 		/*registerItemBlock(registry, new ItemBlock(holopad));
-		registerItemBlock(registry, new JumperBlockItem(jumperBlockExtension[0]));*/
+		registerItemBlock(registry, new ItemJumperBlock(jumperBlockExtension[0]));*/
 		
 		registerItemBlock(registry, COMPUTER_OFF, ModItemGroup.MAIN);
 		registerItemBlock(registry, LAPTOP_OFF, ModItemGroup.MAIN);
@@ -608,13 +611,13 @@ public class MinestuckItems
 		registry.register(LONG_FORGOTTEN_WARHORN = new ItemLongForgottenWarhorn(new Item.Properties().defaultMaxDamage(100)).setRegistryName("long_forgotten_warhorn"));
 		registry.register(RAZOR_BLADE = new ItemRazorBlade(new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("razor_blade"));
 		registry.register(UP_STICK = new Item(new Item.Properties().group(ModItemGroup.MAIN).maxStackSize(1)).setRegistryName("uranium_powered_stick"));
-		registry.register(IRON_BOAT = new ItemCustomBoat((stack, world, x, y, z) -> new EntityMetalBoat(world, x, y, z, 0), new Item.Properties().group(ModItemGroup.MAIN).maxStackSize(1)).setRegistryName("iron_boat"));
-		registry.register(GOLD_BOAT = new ItemCustomBoat((stack, world, x, y, z) -> new EntityMetalBoat(world, x, y, z, 1), new Item.Properties().group(ModItemGroup.MAIN).maxStackSize(1)).setRegistryName("gold_boat"));
+		registry.register(IRON_BOAT = new ItemCustomBoat((stack, world, x, y, z) -> new MetalBoatEntity(world, x, y, z, 0), new Item.Properties().group(ModItemGroup.MAIN).maxStackSize(1)).setRegistryName("iron_boat"));
+		registry.register(GOLD_BOAT = new ItemCustomBoat((stack, world, x, y, z) -> new MetalBoatEntity(world, x, y, z, 1), new Item.Properties().group(ModItemGroup.MAIN).maxStackSize(1)).setRegistryName("gold_boat"));
 		registry.register(THRESH_DVD = new Item(new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("thresh_dvd"));
 		registry.register(GAMEBRO_MAGAZINE = new Item(new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("gamebro_magazine"));
 		registry.register(GAMEGRL_MAGAZINE = new Item(new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("gamegrl_magazine"));
-		registry.register(CREW_POSTER = new ItemHanging((world, pos, facing, stack) -> new EntityCrewPoster(world, pos, facing), new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("crew_poster"));
-		registry.register(SBAHJ_POSTER = new ItemHanging((world, pos, facing, stack) -> new EntitySbahjPoster(world, pos, facing), new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("sbahj_poster"));
+		registry.register(CREW_POSTER = new ItemHanging((world, pos, facing, stack) -> new CrewPosterEntity(world, pos, facing), new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("crew_poster"));
+		registry.register(SBAHJ_POSTER = new ItemHanging((world, pos, facing, stack) -> new SbahjPosterEntity(world, pos, facing), new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("sbahj_poster"));
 		//registry.register(FAKE_ARMS = new Item(new Item.Properties().maxStackSize(1)).setRegistryName("fake_arms"));
 		
 		//Music disks

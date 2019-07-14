@@ -1,6 +1,6 @@
 package com.mraof.minestuck.client.renderer.entity;
 
-import com.mraof.minestuck.entity.item.EntityVitalityGel;
+import com.mraof.minestuck.entity.item.VitalityGelEntity;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -11,7 +11,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
-public class RenderVitalityGel extends Render<EntityVitalityGel>
+public class RenderVitalityGel extends Render<VitalityGelEntity>
 {
 	
 	public RenderVitalityGel(RenderManager manager)
@@ -22,7 +22,7 @@ public class RenderVitalityGel extends Render<EntityVitalityGel>
 	}
 	
 	@Override
-	public void doRender(EntityVitalityGel entity, double x, double y, double z, float entityYaw, float partialTicks)
+	public void doRender(VitalityGelEntity entity, double x, double y, double z, float entityYaw, float partialTicks)
 	{
 		GlStateManager.pushMatrix();
 		GlStateManager.translatef((float)x, (float)y + entity.getSizeByValue()/2, (float)z);
@@ -53,7 +53,7 @@ public class RenderVitalityGel extends Render<EntityVitalityGel>
 	}
 	
 	@Override
-	protected ResourceLocation getEntityTexture(EntityVitalityGel entity) 
+	protected ResourceLocation getEntityTexture(VitalityGelEntity entity)
 	{
 		return new ResourceLocation("minestuck", "textures/entity/vitality_gel.png");
 	}

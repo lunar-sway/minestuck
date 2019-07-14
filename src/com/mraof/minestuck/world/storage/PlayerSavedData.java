@@ -13,6 +13,7 @@ import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -177,7 +178,7 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 		return dataMap.get(player);
 	}
 
-	public static GristSet getGristSet(EntityPlayer player)
+	public static GristSet getGristSet(PlayerEntity player)
 	{
 		if (player.world.isRemote)
 			return getClientGrist();

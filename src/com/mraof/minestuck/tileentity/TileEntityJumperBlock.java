@@ -3,16 +3,9 @@ package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
-import net.minecraft.block.BlockAir;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 
 import javax.annotation.Nonnull;
 
@@ -49,7 +42,7 @@ public class TileEntityJumperBlock extends TileEntity
 			upgrade[id] = stack;
 			if(world != null)
 			{
-				IBlockState state = world.getBlockState(pos);
+				BlockState state = world.getBlockState(pos);
 				world.notifyBlockUpdate(pos, state, state, 2);
 			}
 		}

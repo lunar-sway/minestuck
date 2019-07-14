@@ -1,6 +1,6 @@
 package com.mraof.minestuck.client.renderer.entity;
 
-import com.mraof.minestuck.entity.item.EntityHangingArt;
+import com.mraof.minestuck.entity.item.HangingArtEntity;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -16,7 +16,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderHangingArt<T extends EntityHangingArt> extends Render<T>
+public class RenderHangingArt<T extends HangingArtEntity> extends Render<T>
 {
 	private final ResourceLocation ART_TEXTURE;
 	
@@ -34,7 +34,7 @@ public class RenderHangingArt<T extends EntityHangingArt> extends Render<T>
 		GlStateManager.rotatef(180.0F - entityYaw, 0.0F, 1.0F, 0.0F);
 		GlStateManager.enableRescaleNormal();
 		this.bindEntityTexture(entity);
-		EntityHangingArt.IArt art = entity.art;
+		HangingArtEntity.IArt art = entity.art;
 		GlStateManager.scalef(0.0625F, 0.0625F, 0.0625F);
 		
 		if (this.renderOutlines)
@@ -57,7 +57,7 @@ public class RenderHangingArt<T extends EntityHangingArt> extends Render<T>
 	}
 	
 	@Override
-	protected ResourceLocation getEntityTexture(EntityHangingArt entity)
+	protected ResourceLocation getEntityTexture(HangingArtEntity entity)
 	{
 		return ART_TEXTURE;
 	}

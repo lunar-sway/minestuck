@@ -1,7 +1,7 @@
 package com.mraof.minestuck.client.renderer;
 
-import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
-import com.mraof.minestuck.tileentity.TileEntityItemStack;
+import com.mraof.minestuck.tileentity.AlchemiterTileEntity;
+import com.mraof.minestuck.tileentity.ItemStackTileEntity;
 import com.mraof.minestuck.util.ColorCollector;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.color.IBlockColor;
@@ -19,10 +19,10 @@ public class BlockColorCruxite implements IBlockColor
 	{
 		ItemStack dowel = ItemStack.EMPTY;
 		TileEntity tileEntity = worldIn != null && pos != null ? worldIn.getTileEntity(pos) : null;
-		if(tileEntity instanceof TileEntityAlchemiter)
-			dowel = ((TileEntityAlchemiter) tileEntity).getDowel();
-		if(tileEntity instanceof TileEntityItemStack)
-			dowel = ((TileEntityItemStack) tileEntity).getStack();
+		if(tileEntity instanceof AlchemiterTileEntity)
+			dowel = ((AlchemiterTileEntity) tileEntity).getDowel();
+		if(tileEntity instanceof ItemStackTileEntity)
+			dowel = ((ItemStackTileEntity) tileEntity).getStack();
 		
 		if(!dowel.isEmpty())
 		{

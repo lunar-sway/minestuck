@@ -1,7 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.inventory.ContainerMiniPunchDesignix;
-import com.mraof.minestuck.tileentity.TileEntityMiniPunchDesignix;
+import com.mraof.minestuck.tileentity.MiniPunchDesignixTileEntity;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -11,7 +11,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class GuiMiniPunchDesignix extends GuiMachine
 {
-	protected final TileEntityMiniPunchDesignix te;
+	protected final MiniPunchDesignixTileEntity te;
 	protected final InventoryPlayer playerInventory;
 	
 	private ResourceLocation BACKGROUND = new ResourceLocation("minestuck:textures/gui/designix.png");
@@ -23,7 +23,7 @@ public class GuiMiniPunchDesignix extends GuiMachine
 	private int goX;
 	private int goY;
 
-	public GuiMiniPunchDesignix(InventoryPlayer inventoryPlayer, TileEntityMiniPunchDesignix tileEntity)
+	public GuiMiniPunchDesignix(InventoryPlayer inventoryPlayer, MiniPunchDesignixTileEntity tileEntity)
 	{
 		super(new ContainerMiniPunchDesignix(inventoryPlayer, tileEntity), tileEntity);
 		this.te = tileEntity;

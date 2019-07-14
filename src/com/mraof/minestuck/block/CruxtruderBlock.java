@@ -1,7 +1,7 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.block.multiblock.MachineMultiblock;
-import com.mraof.minestuck.tileentity.TileEntityCruxtruder;
+import com.mraof.minestuck.tileentity.CruxtruderTileEntity;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -48,8 +48,8 @@ public class CruxtruderBlock extends MultiMachineBlock
 				return true;
 			
 			TileEntity te = worldIn.getTileEntity(pos);
-			if(te instanceof TileEntityCruxtruder)
-				((TileEntityCruxtruder) te).onRightClick(player, hit.getFace() == Direction.UP);
+			if(te instanceof CruxtruderTileEntity)
+				((CruxtruderTileEntity) te).onRightClick(player, hit.getFace() == Direction.UP);
 			return true;
 		}
 		return false;
@@ -66,7 +66,7 @@ public class CruxtruderBlock extends MultiMachineBlock
 	public TileEntity createTileEntity(BlockState state, IBlockReader world)
 	{
 		if(hasTileEntity)
-			return new TileEntityCruxtruder();
+			return new CruxtruderTileEntity();
 		else return null;
 	}
 	
@@ -75,9 +75,9 @@ public class CruxtruderBlock extends MultiMachineBlock
 	{
 		BlockPos MainPos = getMainPos(state, pos);
 		TileEntity te = worldIn.getTileEntity(MainPos);
-		if(te instanceof TileEntityCruxtruder)
+		if(te instanceof CruxtruderTileEntity)
 		{
-			((TileEntityCruxtruder) te).destroy();
+			((CruxtruderTileEntity) te).destroy();
 		}
 		
 		super.onReplaced(state, worldIn, pos, newState, isMoving);

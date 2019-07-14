@@ -10,7 +10,7 @@ import com.mraof.minestuck.event.ConnectionCreatedEvent;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.ServerEditPacket;
 import com.mraof.minestuck.network.SkaianetInfoPacket;
-import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
@@ -142,7 +142,7 @@ public class SkaianetHandler extends WorldSavedData
 	{
 		if(player.getDimension() == DimensionType.NETHER)
 			return;
-		TileEntityComputer te = getComputer(mcServer, player.getLocation());
+		ComputerTileEntity te = getComputer(mcServer, player.getLocation());
 		if(te == null)
 			return;
 		if(!isClient)	//Is server
@@ -202,7 +202,7 @@ public class SkaianetHandler extends WorldSavedData
 			{
 				if(movingComputers.contains(resumingClients.get(player)))
 					return;
-				TileEntityComputer te = getComputer(mcServer, resumingClients.remove(player).location);
+				ComputerTileEntity te = getComputer(mcServer, resumingClients.remove(player).location);
 				if(te != null)
 				{
 					te.getData(0).putBoolean("isResuming", false);
@@ -213,7 +213,7 @@ public class SkaianetHandler extends WorldSavedData
 			{
 				if(movingComputers.contains(serversOpen.get(player)))
 					return;
-				TileEntityComputer te = getComputer(mcServer, serversOpen.remove(player).getLocation());
+				ComputerTileEntity te = getComputer(mcServer, serversOpen.remove(player).getLocation());
 				if(te != null)
 				{
 					te.getData(1).putBoolean("isOpen", false);
@@ -224,7 +224,7 @@ public class SkaianetHandler extends WorldSavedData
 			{
 				if(movingComputers.contains(resumingServers.get(player)))
 					return;
-				TileEntityComputer te = getComputer(mcServer, resumingServers.remove(player).getLocation());
+				ComputerTileEntity te = getComputer(mcServer, resumingServers.remove(player).getLocation());
 				if(te != null)
 				{
 					te.getData(1).putBoolean("isOpen", false);
@@ -240,7 +240,7 @@ public class SkaianetHandler extends WorldSavedData
 				{
 					if(movingComputers.contains(isClient ? c.client : c.server))
 						return;
-					TileEntityComputer cc = getComputer(mcServer, c.client.getLocation()), sc = getComputer(mcServer, c.server.getLocation());
+					ComputerTileEntity cc = getComputer(mcServer, c.client.getLocation()), sc = getComputer(mcServer, c.server.getLocation());
 					if(cc != null)
 					{
 						cc.getData(0).putBoolean("connectedToServer", false);
@@ -266,7 +266,7 @@ public class SkaianetHandler extends WorldSavedData
 				{
 					if(movingComputers.contains(isClient?resumingClients.get(player):resumingServers.get(player)))
 						return;
-					TileEntityComputer te = getComputer(mcServer, (isClient?resumingClients.remove(player):resumingServers.remove(player)).getLocation());
+					ComputerTileEntity te = getComputer(mcServer, (isClient?resumingClients.remove(player):resumingServers.remove(player)).getLocation());
 					if(te != null)
 					{
 						te.latestmessage.put(isClient?0:1, "computer.messageResumeStop");
@@ -280,7 +280,7 @@ public class SkaianetHandler extends WorldSavedData
 	
 	private void connectTo(ComputerData player, boolean isClient, PlayerIdentifier otherPlayer, Map<PlayerIdentifier, ComputerData> map)
 	{
-		TileEntityComputer c1 = getComputer(mcServer, player.location), c2 = getComputer(mcServer, map.get(otherPlayer).location);
+		ComputerTileEntity c1 = getComputer(mcServer, player.location), c2 = getComputer(mcServer, map.get(otherPlayer).location);
 		if(c2 == null)
 		{
 			map.remove(otherPlayer);	//Invalid, should not be in the list
@@ -339,7 +339,7 @@ public class SkaianetHandler extends WorldSavedData
 				{
 					Debug.warnf("SessionHandler denied connection between %s and %s, reason: %s", c.getClientIdentifier().getUsername(), c.getServerIdentifier().getUsername(), s);
 					connections.remove(c);
-					TileEntityComputer cte = getComputer(mcServer, c.client.location);
+					ComputerTileEntity cte = getComputer(mcServer, c.client.location);
 					if(cte != null)
 						cte.latestmessage.put(0, s);
 					map.put(c.server.owner, c.server);
@@ -600,7 +600,7 @@ public class SkaianetHandler extends WorldSavedData
 			while(i.hasNext())
 			{
 				ComputerData data = i.next();
-				TileEntityComputer computer = getComputer(mcServer, data.location);
+				ComputerTileEntity computer = getComputer(mcServer, data.location);
 				if(computer == null || data.getDimension() == DimensionType.NETHER || !computer.owner.equals(data.owner)
 						|| !(i == iter1[1] && computer.getData(0).getBoolean("isResuming")
 								|| i != iter1[1] && computer.getData(1).getBoolean("isOpen")))
@@ -622,7 +622,7 @@ public class SkaianetHandler extends WorldSavedData
 			}
 			if(c.isActive)
 			{
-				TileEntityComputer cc = getComputer(mcServer, c.client.location), sc = getComputer(mcServer, c.server.location);
+				ComputerTileEntity cc = getComputer(mcServer, c.client.location), sc = getComputer(mcServer, c.server.location);
 				if(cc == null || sc == null || c.client.getDimension() == DimensionType.NETHER || c.server.getDimension() == DimensionType.NETHER || !c.getClientIdentifier().equals(cc.owner)
 						|| !c.getServerIdentifier().equals(sc.owner) || !cc.getData(0).getBoolean("connectedToServer"))
 				{
@@ -659,7 +659,7 @@ public class SkaianetHandler extends WorldSavedData
 						sessionHandler.onConnectionClosed(c, false);
 						if(c.isActive)
 						{
-							TileEntityComputer cc = getComputer(mcServer, c.client.location), sc = getComputer(mcServer, c.server.location);
+							ComputerTileEntity cc = getComputer(mcServer, c.client.location), sc = getComputer(mcServer, c.server.location);
 							cc.getData(0).putBoolean("connectedToServer", false);
 							cc.latestmessage.put(0, "computer.messageClosed");
 							cc.markBlockForUpdate();
@@ -703,7 +703,7 @@ public class SkaianetHandler extends WorldSavedData
 	 * @return The <code>TileEntityComputer</code> at the given position,
 	 * or <code>null</code> if there isn't one there.
 	 */
-	public static TileEntityComputer getComputer(MinecraftServer server, Location location)
+	public static ComputerTileEntity getComputer(MinecraftServer server, Location location)
 	{
 		if(location == null)
 			return null;
@@ -711,9 +711,9 @@ public class SkaianetHandler extends WorldSavedData
 		if(world == null)
 			return null;
 		TileEntity te = world.getTileEntity(location.pos);
-		if(!(te instanceof TileEntityComputer))
+		if(!(te instanceof ComputerTileEntity))
 			return null;
-		else return (TileEntityComputer)te;
+		else return (ComputerTileEntity)te;
 	}
 	
 	public SburbConnection getServerConnection(ComputerData data)
@@ -822,7 +822,7 @@ public class SkaianetHandler extends WorldSavedData
 		}
 	}
 	
-	public void movingComputer(TileEntityComputer oldTE, TileEntityComputer newTE)
+	public void movingComputer(ComputerTileEntity oldTE, ComputerTileEntity newTE)
 	{
 		ComputerData dataOld = ComputerData.createData(oldTE), dataNew = ComputerData.createData(newTE);
 		for(SburbConnection c : connections)

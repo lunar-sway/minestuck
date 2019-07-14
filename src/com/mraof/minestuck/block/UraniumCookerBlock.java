@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.tileentity.TileEntityUraniumCooker;
+import com.mraof.minestuck.tileentity.UraniumCookerTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -31,12 +31,12 @@ public class UraniumCookerBlock extends MachineProcessBlock
 	{
 		TileEntity tileEntity = worldIn.getTileEntity(pos);
 		
-		if (!(tileEntity instanceof TileEntityUraniumCooker) || player.isSneaking())
+		if (!(tileEntity instanceof UraniumCookerTileEntity) || player.isSneaking())
 			return false;
 		
 		if(!worldIn.isRemote)
 		{
-			NetworkHooks.openGui((ServerPlayerEntity) player, (TileEntityUraniumCooker) tileEntity, pos);
+			NetworkHooks.openGui((ServerPlayerEntity) player, (UraniumCookerTileEntity) tileEntity, pos);
 		}
 		return true;
 	}
@@ -51,7 +51,7 @@ public class UraniumCookerBlock extends MachineProcessBlock
 	@Override
 	public TileEntity createTileEntity(BlockState state, IBlockReader world)
 	{
-		return new TileEntityUraniumCooker();
+		return new UraniumCookerTileEntity();
 	}
 	
 	@Override

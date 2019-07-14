@@ -1,12 +1,14 @@
 package com.mraof.minestuck.inventory;
 
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.tileentity.TileEntityMiniCruxtruder;
+import com.mraof.minestuck.tileentity.MiniCruxtruderTileEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -19,10 +21,10 @@ public class ContainerMiniCruxtruder extends Container
 	private static final int OUTPUT_X = 79;
 	private static final int OUTPUT_Y = 19;
 	
-	public TileEntityMiniCruxtruder tileEntity;
+	public MiniCruxtruderTileEntity tileEntity;
 	private int progress;
 	
-	public ContainerMiniCruxtruder(InventoryPlayer inventoryPlayer, TileEntityMiniCruxtruder te)
+	public ContainerMiniCruxtruder(PlayerInventory inventoryPlayer, MiniCruxtruderTileEntity te)
 	{
 		tileEntity = te;
 		

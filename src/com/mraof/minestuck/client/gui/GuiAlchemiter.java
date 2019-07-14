@@ -7,32 +7,33 @@ import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.AlchemiterPacket;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
-import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
+import com.mraof.minestuck.tileentity.AlchemiterTileEntity;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.alchemy.GristSet;
 
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class GuiAlchemiter extends GuiScreen implements GuiButtonImpl.ButtonClickhandler
+public class GuiAlchemiter extends Screen implements GuiButtonImpl.ButtonClickhandler
 {
 	
 	
 	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/large_alchemiter.png");
 	private static final int guiWidth = 159, guiHeight = 102;
-	private TileEntityAlchemiter alchemiter;
+	private AlchemiterTileEntity alchemiter;
 	private int itemQuantity;
-	public GuiAlchemiter(TileEntityAlchemiter te)
+	public GuiAlchemiter(AlchemiterTileEntity te)
 	{
 		alchemiter = te;
 		itemQuantity = 1;
 	}
 	
-	public TileEntityAlchemiter getAlchemiter() {
+	public AlchemiterTileEntity getAlchemiter() {
 		return alchemiter;
 	}
 	

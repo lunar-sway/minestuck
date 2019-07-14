@@ -1,6 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.MinestuckBlocks;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -9,25 +10,25 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class MinestuckTiles
 {
-	public static final TileEntityType<TileEntityComputer> COMPUTER = new TileEntityType<>(TileEntityComputer::new,null);
-	public static final TileEntityType<TileEntityMiniCruxtruder> MINI_CRUXTRUDER = new TileEntityType<>(TileEntityMiniCruxtruder::new,null);
-	public static final TileEntityType<TileEntityMiniTotemLathe> MINI_TOTEM_LATHE = new TileEntityType<>(TileEntityMiniTotemLathe::new,null);
-	public static final TileEntityType<TileEntityMiniAlchemiter> MINI_ALCHEMITER = new TileEntityType<>(TileEntityMiniAlchemiter::new,null);
-	public static final TileEntityType<TileEntityMiniPunchDesignix> MINI_PUNCH_DESIGNIX = new TileEntityType<>(TileEntityMiniPunchDesignix::new,null);
-	public static final TileEntityType<TileEntityCruxtruder> CRUXTRUDER = new TileEntityType<>(TileEntityCruxtruder::new,null);
-	public static final TileEntityType<TileEntityTotemLathe> TOTEM_LATHE = new TileEntityType<>(TileEntityTotemLathe::new,null);
-	public static final TileEntityType<TileEntityAlchemiter> ALCHEMITER = new TileEntityType<>(TileEntityAlchemiter::new,null);
-	public static final TileEntityType<TileEntityPunchDesignix> PUNCH_DESIGNIX = new TileEntityType<>(TileEntityPunchDesignix::new,null);
-	public static final TileEntityType<TileEntityGristWidget> GRIST_WIDGET = new TileEntityType<>(TileEntityGristWidget::new,null);
-	public static final TileEntityType<TileEntityTransportalizer> TRANSPORTALIZER = new TileEntityType<>(TileEntityTransportalizer::new,null);
-	public static final TileEntityType<TileEntityItemStack> ITEM_STACK = new TileEntityType<>(TileEntityItemStack::new,null);
-	public static final TileEntityType<TileEntityUraniumCooker> URANIUM_COOKER = new TileEntityType<>(TileEntityUraniumCooker::new,null);
-	public static final TileEntityType<TileEntityJumperBlock> JUMPER_BLOCK = new TileEntityType<>(TileEntityJumperBlock::new,null);
-	public static final TileEntityType<TileEntityAlchemiterUpgrade> ALCHEMITER_UPGRADE = new TileEntityType<>(TileEntityAlchemiterUpgrade::new,null);
-	public static final TileEntityType<TileEntityUpgradedAlchemiter> UPGRADE_ALCHEMITER = new TileEntityType<>(TileEntityUpgradedAlchemiter::new,null);
-	public static final TileEntityType<TileEntityHolopad> HOLOPAD = new TileEntityType<>(TileEntityHolopad::new,null);
-	public static final TileEntityType<TileEntitySkaiaPortal> SKAIA_PORTAL = new TileEntityType<>(TileEntitySkaiaPortal::new,null);
-	public static final TileEntityType<TileEntityGate> GATE = new TileEntityType<>(TileEntityGate::new,null);
+	public static final TileEntityType<ComputerTileEntity> COMPUTER = TileEntityType.Builder.create(ComputerTileEntity::new, MinestuckBlocks.COMPUTER_ON, MinestuckBlocks.CROCKERTOP_ON, MinestuckBlocks.HUBTOP_ON, MinestuckBlocks.LAPTOP_ON, MinestuckBlocks.LUNCHTOP_ON).build(null);
+	public static final TileEntityType<MiniCruxtruderTileEntity> MINI_CRUXTRUDER = TileEntityType.Builder.create(MiniCruxtruderTileEntity::new, MinestuckBlocks.MINI_CRUXTRUDER).build(null);
+	public static final TileEntityType<MiniTotemLatheTileEntity> MINI_TOTEM_LATHE = TileEntityType.Builder.create(MiniTotemLatheTileEntity::new, MinestuckBlocks.MINI_TOTEM_LATHE).build(null);
+	public static final TileEntityType<MiniAlchemiterTileEntity> MINI_ALCHEMITER = TileEntityType.Builder.create(MiniAlchemiterTileEntity::new, MinestuckBlocks.MINI_ALCHEMITER).build(null);
+	public static final TileEntityType<MiniPunchDesignixTileEntity> MINI_PUNCH_DESIGNIX = TileEntityType.Builder.create(MiniPunchDesignixTileEntity::new, MinestuckBlocks.MINI_PUNCH_DESIGNIX).build(null);
+	public static final TileEntityType<CruxtruderTileEntity> CRUXTRUDER = TileEntityType.Builder.create(CruxtruderTileEntity::new, MinestuckBlocks.CRUXTRUDER.CENTER).build(null);
+	public static final TileEntityType<TotemLatheTileEntity> TOTEM_LATHE = TileEntityType.Builder.create(TotemLatheTileEntity::new, MinestuckBlocks.TOTEM_LATHE.CARD_SLOT).build(null);
+	public static final TileEntityType<AlchemiterTileEntity> ALCHEMITER = TileEntityType.Builder.create(AlchemiterTileEntity::new, MinestuckBlocks.ALCHEMITER.TOTEM_PAD).build(null);
+	public static final TileEntityType<PunchDesignixTileEntity> PUNCH_DESIGNIX = TileEntityType.Builder.create(PunchDesignixTileEntity::new, MinestuckBlocks.PUNCH_DESIGNIX.SLOT).build(null);
+	public static final TileEntityType<GristWidgetTileEntity> GRIST_WIDGET = TileEntityType.Builder.create(GristWidgetTileEntity::new, MinestuckBlocks.GRIST_WIDGET).build(null);
+	public static final TileEntityType<TransportalizerTileEntity> TRANSPORTALIZER = TileEntityType.Builder.create(TransportalizerTileEntity::new, MinestuckBlocks.TRANSPORTALIZER).build(null);
+	public static final TileEntityType<ItemStackTileEntity> ITEM_STACK = TileEntityType.Builder.create(ItemStackTileEntity::new, MinestuckBlocks.CRUXITE_DOWEL, MinestuckBlocks.TOTEM_LATHE.DOWEL_ROD).build(null);
+	public static final TileEntityType<UraniumCookerTileEntity> URANIUM_COOKER = TileEntityType.Builder.create(UraniumCookerTileEntity::new, MinestuckBlocks.URANIUM_COOKER).build(null);
+	public static final TileEntityType<TileEntityJumperBlock> JUMPER_BLOCK = TileEntityType.Builder.create(TileEntityJumperBlock::new).build(null);
+	public static final TileEntityType<TileEntityAlchemiterUpgrade> ALCHEMITER_UPGRADE = TileEntityType.Builder.create(TileEntityAlchemiterUpgrade::new).build(null);
+	public static final TileEntityType<TileEntityUpgradedAlchemiter> UPGRADE_ALCHEMITER = TileEntityType.Builder.create(TileEntityUpgradedAlchemiter::new).build(null);
+	public static final TileEntityType<HolopadTileEntity> HOLOPAD = TileEntityType.Builder.create(HolopadTileEntity::new, MinestuckBlocks.HOLOPAD).build(null);
+	public static final TileEntityType<SkaiaPortalTileEntity> SKAIA_PORTAL = TileEntityType.Builder.create(SkaiaPortalTileEntity::new, MinestuckBlocks.SKAIA_PORTAL).build(null);
+	public static final TileEntityType<GateTileEntity> GATE = TileEntityType.Builder.create(GateTileEntity::new, MinestuckBlocks.GATE, MinestuckBlocks.RETURN_NODE).build(null);
 	
 	@SubscribeEvent
 	public static void registerTileEntityType(final RegistryEvent.Register<TileEntityType<?>> event)

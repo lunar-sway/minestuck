@@ -1,7 +1,7 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.tileentity.TileEntityCruxtruder;
-import com.mraof.minestuck.tileentity.TileEntityMiniCruxtruder;
+import com.mraof.minestuck.tileentity.CruxtruderTileEntity;
+import com.mraof.minestuck.tileentity.MiniCruxtruderTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -37,12 +37,12 @@ public class MiniCruxtruderBlock extends MachineProcessBlock
 	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
 		TileEntity tileEntity = worldIn.getTileEntity(pos);
-		if(!(tileEntity instanceof TileEntityMiniCruxtruder) || player.isSneaking())
+		if(!(tileEntity instanceof MiniCruxtruderTileEntity) || player.isSneaking())
 			return false;
 		
 		if(!worldIn.isRemote)
 		{
-			NetworkHooks.openGui((ServerPlayerEntity) player, (TileEntityMiniCruxtruder) tileEntity, pos);
+			NetworkHooks.openGui((ServerPlayerEntity) player, (MiniCruxtruderTileEntity) tileEntity, pos);
 		}
 		return true;
 	}
@@ -71,6 +71,6 @@ public class MiniCruxtruderBlock extends MachineProcessBlock
 	@Override
 	public TileEntity createTileEntity(BlockState state, IBlockReader world)
 	{
-		return new TileEntityCruxtruder();
+		return new CruxtruderTileEntity();
 	}
 }

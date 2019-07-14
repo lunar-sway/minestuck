@@ -1,12 +1,14 @@
 package com.mraof.minestuck.inventory;
 
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.tileentity.TileEntityUraniumCooker;
+import com.mraof.minestuck.tileentity.UraniumCookerTileEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -21,11 +23,11 @@ public class ContainerUraniumCooker extends Container
 	private static final int itemOutputX = 117;
 	private static final int itemOutputY = 35;
 	
-	public TileEntityUraniumCooker tileEntity;
+	public UraniumCookerTileEntity tileEntity;
 	private boolean operator = true;
 	private int progress;
 	
-	public ContainerUraniumCooker(InventoryPlayer inventoryPlayer, TileEntityUraniumCooker te)
+	public ContainerUraniumCooker(PlayerInventory inventoryPlayer, UraniumCookerTileEntity te)
 	{
 		tileEntity = te;
 		

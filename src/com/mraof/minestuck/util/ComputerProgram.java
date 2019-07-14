@@ -1,7 +1,6 @@
 package com.mraof.minestuck.util;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map.Entry;
 
 import javax.annotation.Nonnull;
@@ -10,7 +9,7 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.item.ItemStack;
 
 import com.mraof.minestuck.client.gui.GuiComputer;
-import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import net.minecraft.item.Items;
 
 /**
@@ -92,7 +91,7 @@ public abstract class ComputerProgram
 		return -1;
 	}
 	
-	public void onButtonPressed(TileEntityComputer te, Button button)
+	public void onButtonPressed(ComputerTileEntity te, Button button)
 	{
 	}
 	
@@ -124,7 +123,7 @@ public abstract class ComputerProgram
 	 * Called when something breaks the computer block. (or if the disk is
 	 * ejected when that feature is added)
 	 */
-	public void onClosed(TileEntityComputer te)
+	public void onClosed(ComputerTileEntity te)
 	{
 	}
 	
@@ -132,7 +131,7 @@ public abstract class ComputerProgram
 	 * Called when the gui is painted. This may not be a good way of doing this,
 	 * but I do not know since I do not know very much about minecraft graphics.
 	 */
-	public abstract void paintGui(GuiComputer gui, TileEntityComputer te);
+	public abstract void paintGui(GuiComputer gui, ComputerTileEntity te);
 	
 	/**
 	 * Returns an unlocalized string of the name of the program. Used for the

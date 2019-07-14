@@ -1,11 +1,6 @@
 package com.mraof.minestuck.tileentity;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumFacing;
-
-
-public class TileEntityUpgradedAlchemiter extends TileEntityAlchemiter
+public class TileEntityUpgradedAlchemiter extends AlchemiterTileEntity
 {
 	
 	/*

@@ -7,18 +7,15 @@ import com.mraof.minestuck.client.gui.GuiColorSelector;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundNBT;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.client.ClientProxy;
-import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.tileentity.ComputerTileEntity;
 
 public class SburbClient extends ButtonListProgram {
 	
 	@Override
-	public ArrayList<UnlocalizedString> getStringList(TileEntityComputer te)
+	public ArrayList<UnlocalizedString> getStringList(ComputerTileEntity te)
 	{
 		ArrayList<UnlocalizedString> list = new ArrayList<UnlocalizedString>();
 		CompoundNBT nbt = te.getData(getId());
@@ -47,7 +44,7 @@ public class SburbClient extends ButtonListProgram {
 	}
 	
 	@Override
-	public void onButtonPressed(TileEntityComputer te, String buttonName, Object[] data)
+	public void onButtonPressed(ComputerTileEntity te, String buttonName, Object[] data)
 	{
 		if(buttonName.equals("computer.buttonResume"))
 			SkaiaClient.sendConnectRequest(te, SkaiaClient.getAssociatedPartner(te.ownerId, true), true);
@@ -66,7 +63,7 @@ public class SburbClient extends ButtonListProgram {
 	}
 	
 	@Override
-	public void onClosed(TileEntityComputer te)
+	public void onClosed(ComputerTileEntity te)
 	{
 		if(te.getData(0).getBoolean("connectedToServer") && SkaianetHandler.get(te.getWorld()).getActiveConnection(te.owner) != null)
 			SkaianetHandler.get(te.getWorld()).closeConnection(te.owner, SkaianetHandler.get(te.getWorld()).getActiveConnection(te.owner).getServerIdentifier(), true);

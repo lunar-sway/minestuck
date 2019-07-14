@@ -1,7 +1,7 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.block.multiblock.MachineMultiblock;
-import com.mraof.minestuck.tileentity.TileEntityPunchDesignix;
+import com.mraof.minestuck.tileentity.PunchDesignixTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -52,8 +52,8 @@ public class PunchDesignixBlock extends MultiMachineBlock
 			return true;
 		BlockPos mainPos = getMainPos(state, pos);
 		TileEntity te = worldIn.getTileEntity(mainPos);
-		if (te instanceof TileEntityPunchDesignix)
-			((TileEntityPunchDesignix) te).onRightClick((ServerPlayerEntity) player, state);
+		if (te instanceof PunchDesignixTileEntity)
+			((PunchDesignixTileEntity) te).onRightClick((ServerPlayerEntity) player, state);
 		return true;
 	}
 	
@@ -64,9 +64,9 @@ public class PunchDesignixBlock extends MultiMachineBlock
 		{
 			BlockPos mainPos = getMainPos(state, pos);
 			TileEntity te = worldIn.getTileEntity(mainPos);
-			if(te instanceof TileEntityPunchDesignix)
+			if(te instanceof PunchDesignixTileEntity)
 			{
-				TileEntityPunchDesignix designix = (TileEntityPunchDesignix) te;
+				PunchDesignixTileEntity designix = (PunchDesignixTileEntity) te;
 				designix.broken = true;
 				if(hasTileEntity(state))
 					designix.dropItem(true);
@@ -80,8 +80,8 @@ public class PunchDesignixBlock extends MultiMachineBlock
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
 		TileEntity te = worldIn.getTileEntity(pos);
-		if(te instanceof TileEntityPunchDesignix)
-			((TileEntityPunchDesignix) te).checkStates();
+		if(te instanceof PunchDesignixTileEntity)
+			((PunchDesignixTileEntity) te).checkStates();
 	}
 	
     /**
@@ -125,7 +125,7 @@ public class PunchDesignixBlock extends MultiMachineBlock
 		@Override
 		public TileEntity createTileEntity(BlockState state, IBlockReader world)
 		{
-			return new TileEntityPunchDesignix();
+			return new PunchDesignixTileEntity();
 		}
 	}
 }

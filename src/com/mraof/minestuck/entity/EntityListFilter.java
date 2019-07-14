@@ -5,31 +5,30 @@ import java.util.List;
 import com.google.common.base.Predicate;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EntityType;
 
-public class EntityListFilter implements Predicate
+public class EntityListFilter implements Predicate<Entity>
 {
-	public List<Class<? extends EntityLivingBase>> entityList;
+	public List<EntityType<?>> entityList;
 
-	public boolean isEntityApplicable(Entity par1Entity)
+	public boolean isEntityApplicable(Entity entity)
 	{
-	    for(Class<? extends EntityLivingBase> clazz : entityList) {
-	    	if(clazz.isInstance(par1Entity)) {
+	    for(EntityType<?> type : entityList) {
+	    	if(entity.getType() == type) {
 	    		return true;
 		    }
 	    }
 		return false;
 	}
 
-	public EntityListFilter(List<Class<? extends EntityLivingBase>> entityList)
+	public EntityListFilter(List<EntityType<?>> entityList)
 	{
 		this.entityList = entityList;
 	}
 
 	@Override
-	public boolean apply(Object input)
+	public boolean apply(Entity entity)
 	{
-		return input instanceof Entity && isEntityApplicable((Entity) input);
+		return isEntityApplicable(entity);
 	}
-
 }

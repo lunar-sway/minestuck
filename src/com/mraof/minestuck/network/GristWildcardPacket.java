@@ -1,7 +1,7 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
-import com.mraof.minestuck.tileentity.TileEntityMiniAlchemiter;
+import com.mraof.minestuck.tileentity.AlchemiterTileEntity;
+import com.mraof.minestuck.tileentity.MiniAlchemiterTileEntity;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.alchemy.GristType;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -52,12 +52,12 @@ public class GristWildcardPacket
 		if(player.getEntityWorld().isBlockLoaded(pos))
 		{
 			TileEntity te = player.getEntityWorld().getTileEntity(pos);
-			if(te instanceof TileEntityMiniAlchemiter)
+			if(te instanceof MiniAlchemiterTileEntity)
 			{
-				((TileEntityMiniAlchemiter) te).setWildcardGrist(gristType);
-			} else if(te instanceof TileEntityAlchemiter)
+				((MiniAlchemiterTileEntity) te).setWildcardGrist(gristType);
+			} else if(te instanceof AlchemiterTileEntity)
 			{
-				((TileEntityAlchemiter) te).setWildcardGrist(gristType);
+				((AlchemiterTileEntity) te).setWildcardGrist(gristType);
 			} else
 			{
 				Debug.warnf("No tile entity found at %s for packet sent by player %s!", pos, player.getName());

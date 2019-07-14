@@ -1,6 +1,6 @@
 package com.mraof.minestuck.entity.ai;
 
-import com.mraof.minestuck.entity.carapacian.EntityCarapacian;
+import com.mraof.minestuck.entity.carapacian.CarapacianEntity;
 import com.mraof.minestuck.entity.carapacian.EnumEntityKingdom;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -12,10 +12,10 @@ import net.minecraft.world.gen.Heightmap;
 public class EntityAIMoveToBattle extends EntityAIBase
 {
 	
-	private EntityCarapacian target;
+	private CarapacianEntity target;
 	protected Vec3d destination;
 	
-	public EntityAIMoveToBattle(EntityCarapacian entity)
+	public EntityAIMoveToBattle(CarapacianEntity entity)
 	{
 		this.target = entity;
 		setMutexBits(1);

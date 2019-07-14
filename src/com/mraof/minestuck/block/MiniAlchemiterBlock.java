@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.tileentity.TileEntityMiniAlchemiter;
+import com.mraof.minestuck.tileentity.MiniAlchemiterTileEntity;
 import com.mraof.minestuck.util.IdentifierHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -52,12 +52,12 @@ public class MiniAlchemiterBlock extends MachineProcessBlock
 	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
 		TileEntity tileEntity = worldIn.getTileEntity(pos);
-		if(!(tileEntity instanceof TileEntityMiniAlchemiter) || player.isSneaking())
+		if(!(tileEntity instanceof MiniAlchemiterTileEntity) || player.isSneaking())
 			return false;
 		
 		if(!worldIn.isRemote)
 		{
-			TileEntityMiniAlchemiter alchemiter = (TileEntityMiniAlchemiter) tileEntity;
+			MiniAlchemiterTileEntity alchemiter = (MiniAlchemiterTileEntity) tileEntity;
 			alchemiter.owner = IdentifierHandler.encode(player);
 			NetworkHooks.openGui((ServerPlayerEntity) player, alchemiter, pos);
 		}
@@ -76,8 +76,8 @@ public class MiniAlchemiterBlock extends MachineProcessBlock
 	public int getComparatorInputOverride(BlockState blockState, World worldIn, BlockPos pos)
 	{
 		TileEntity tileEntity = worldIn.getTileEntity(pos);
-		if(tileEntity instanceof TileEntityMiniAlchemiter)
-			return ((TileEntityMiniAlchemiter) tileEntity).comparatorValue();
+		if(tileEntity instanceof MiniAlchemiterTileEntity)
+			return ((MiniAlchemiterTileEntity) tileEntity).comparatorValue();
 		return 0;
 	}
 	
@@ -97,6 +97,6 @@ public class MiniAlchemiterBlock extends MachineProcessBlock
 	@Override
 	public TileEntity createTileEntity(BlockState state, IBlockReader world)
 	{
-		return new TileEntityMiniAlchemiter();
+		return new MiniAlchemiterTileEntity();
 	}
 }

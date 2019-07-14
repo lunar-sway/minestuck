@@ -4,7 +4,7 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-import com.mraof.minestuck.tileentity.TileEntityHolopad;
+import com.mraof.minestuck.tileentity.HolopadTileEntity;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -55,7 +55,7 @@ public class HolopadBlock extends MachineBlock
 	@Override
 	public TileEntity createTileEntity(BlockState state, IBlockReader world)
 	{
-		return new TileEntityHolopad();
+		return new HolopadTileEntity();
 	}
 	
 	@Override
@@ -66,15 +66,15 @@ public class HolopadBlock extends MachineBlock
 			return true;
 		TileEntity te = worldIn.getTileEntity(pos);
 		
-		if(te instanceof TileEntityHolopad)
-			((TileEntityHolopad) te).onRightClick(player);
+		if(te instanceof HolopadTileEntity)
+			((HolopadTileEntity) te).onRightClick(player);
 		return true;
 	}
 	
 	@Override
 	public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player)
 	{
-		TileEntityHolopad te = (TileEntityHolopad) worldIn.getTileEntity(pos);
+		HolopadTileEntity te = (HolopadTileEntity) worldIn.getTileEntity(pos);
 		
 		if(te != null && !worldIn.isRemote)
 		{

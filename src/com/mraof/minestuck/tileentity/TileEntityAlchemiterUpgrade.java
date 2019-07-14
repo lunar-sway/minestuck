@@ -5,16 +5,13 @@ import java.util.List;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemiterUpgrades;
 
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EntitySelectors;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 
-public class TileEntityAlchemiterUpgrade extends TileEntity implements ITickable
+public class TileEntityAlchemiterUpgrade extends TileEntity implements ITickableTileEntity
 {
 	protected AlchemiterUpgrades upgrade;
 	

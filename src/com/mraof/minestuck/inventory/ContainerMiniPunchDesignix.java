@@ -2,12 +2,14 @@ package com.mraof.minestuck.inventory;
 
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.tileentity.TileEntityMiniPunchDesignix;
+import com.mraof.minestuck.tileentity.MiniPunchDesignixTileEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -22,10 +24,10 @@ public class ContainerMiniPunchDesignix extends Container
 	private static final int designixOutputX = 116;
 	private static final int designixOutputY = 37;
 	
-	public TileEntityMiniPunchDesignix tileEntity;
+	public MiniPunchDesignixTileEntity tileEntity;
 	private int progress;
 	
-	public ContainerMiniPunchDesignix(InventoryPlayer inventoryPlayer, TileEntityMiniPunchDesignix te)
+	public ContainerMiniPunchDesignix(PlayerInventory inventoryPlayer, MiniPunchDesignixTileEntity te)
 	{
 		tileEntity = te;
 		

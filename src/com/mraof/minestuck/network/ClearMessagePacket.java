@@ -1,7 +1,7 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.util.Location;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.PacketBuffer;
@@ -56,7 +56,7 @@ public class ClearMessagePacket
 	
 		if(player.getEntityWorld().dimension.getType() == computer.dim && player.getEntityWorld().isBlockLoaded(computer.pos))
 		{
-			TileEntityComputer te = SkaianetHandler.getComputer(player.getServer(), computer);
+			ComputerTileEntity te = SkaianetHandler.getComputer(player.getServer(), computer);
 			
 			if(te != null)
 			{

@@ -2,7 +2,7 @@ package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.client.gui.GuiComputer;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
-import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.util.ComputerProgram;
 
 import net.minecraft.block.Block;
@@ -50,7 +50,7 @@ public class ComputerOnBlock extends ComputerOffBlock
 	@Override
 	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
-		TileEntityComputer tileEntity = (TileEntityComputer) worldIn.getTileEntity(pos);
+		ComputerTileEntity tileEntity = (ComputerTileEntity) worldIn.getTileEntity(pos);
 
 		if (tileEntity == null || player.isSneaking())
 		{
@@ -90,7 +90,7 @@ public class ComputerOnBlock extends ComputerOffBlock
 	@Override
 	public TileEntity createTileEntity(BlockState state, IBlockReader world)
 	{
-		return new TileEntityComputer();
+		return new ComputerTileEntity();
 	}
 	
 	@Override
@@ -109,7 +109,7 @@ public class ComputerOnBlock extends ComputerOffBlock
 	private void dropItems(World world, int x, int y, int z, BlockState state)
 	{
 		Random rand = new Random();
-		TileEntityComputer te = (TileEntityComputer) world.getTileEntity(new BlockPos(x, y, z));
+		ComputerTileEntity te = (ComputerTileEntity) world.getTileEntity(new BlockPos(x, y, z));
 		if (te == null) 
 		{
 			return;

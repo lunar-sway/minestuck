@@ -1,6 +1,6 @@
 package com.mraof.minestuck.world.lands.decorator;
  import java.util.Random;
- import com.mraof.minestuck.entity.EntityFrog;
+ import com.mraof.minestuck.entity.FrogEntity;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
  import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.util.math.BlockPos;
@@ -22,7 +22,7 @@ public class FrogSpawner extends BiomeSpecificDecorator
 		pos = world.getHeight(Heightmap.Type.MOTION_BLOCKING, pos);
  		if (!world.getBlockState(pos).getMaterial().isLiquid() )//&& !provider.isPositionInSpawn(pos.getX(), pos.getZ()))
 		{
-			EntityFrog entity = new EntityFrog(world);
+			FrogEntity entity = new FrogEntity(world);
 			entity.setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
 			entity.onInitialSpawn(null, null, null);
 			world.spawnEntity(entity);

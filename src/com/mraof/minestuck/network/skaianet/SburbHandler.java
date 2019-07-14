@@ -13,7 +13,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
 import com.mraof.minestuck.entity.ModEntityTypes;
-import com.mraof.minestuck.entity.underling.EntityUnderling;
+import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.item.ItemCruxiteArtifact;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
@@ -608,7 +608,7 @@ public class SburbHandler
 		return new LandAspects(terrainAspect, titleAspect);
 	}
 	
-	public static GristType getUnderlingType(EntityUnderling entity)
+	public static GristType getUnderlingType(UnderlingEntity entity)
 	{
 		return GristHelper.getPrimaryGrist();
 	}

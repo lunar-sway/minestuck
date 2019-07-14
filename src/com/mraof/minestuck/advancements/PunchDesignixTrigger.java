@@ -11,6 +11,7 @@ import net.minecraft.advancements.PlayerAdvancements;
 import net.minecraft.advancements.criterion.AbstractCriterionInstance;
 import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -74,7 +75,7 @@ public class PunchDesignixTrigger implements ICriterionTrigger<PunchDesignixTrig
 		return new Instance(input, target, output);
 	}
 	
-	public void trigger(EntityPlayerMP player, ItemStack input, ItemStack target, ItemStack result)
+	public void trigger(ServerPlayerEntity player, ItemStack input, ItemStack target, ItemStack result)
 	{
 		Listeners listeners = listenersMap.get(player.getAdvancements());
 		if(listeners != null)

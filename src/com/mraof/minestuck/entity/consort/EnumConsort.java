@@ -7,16 +7,16 @@ import java.util.Random;
 
 public enum EnumConsort
 {
-	SALAMANDER(EntitySalamander.class, "salamander", TextFormatting.YELLOW),
-	TURTLE(EntityTurtle.class, "turtle", TextFormatting.LIGHT_PURPLE),
-	NAKAGATOR(EntityNakagator.class, "nakagator", TextFormatting.RED),
-	IGUANA(EntityIguana.class, "iguana", TextFormatting.AQUA);
+	SALAMANDER(SalamanderEntity.class, "salamander", TextFormatting.YELLOW),
+	TURTLE(TurtleEntity.class, "turtle", TextFormatting.LIGHT_PURPLE),
+	NAKAGATOR(NakagatorEntity.class, "nakagator", TextFormatting.RED),
+	IGUANA(IguanaEntity.class, "iguana", TextFormatting.AQUA);
 	
-	private final Class<? extends EntityConsort> consortClass;
+	private final Class<? extends ConsortEntity> consortClass;
 	private final String name;
 	private final TextFormatting color;
 	
-	EnumConsort(Class<? extends EntityConsort> consort, String name, TextFormatting color)
+	EnumConsort(Class<? extends ConsortEntity> consort, String name, TextFormatting color)
 	{
 		consortClass = consort;
 		this.color = color;
@@ -38,7 +38,7 @@ public enum EnumConsort
 		return name;
 	}
 	
-	public Class<? extends EntityConsort> getConsortClass()
+	public Class<? extends ConsortEntity> getConsortClass()
 	{
 		return consortClass;
 	}

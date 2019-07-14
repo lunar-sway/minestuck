@@ -1,13 +1,13 @@
 package com.mraof.minestuck.client.renderer.entity.frog;
 
 import com.mraof.minestuck.client.model.ModelFrog;
-import com.mraof.minestuck.entity.EntityFrog;
+import com.mraof.minestuck.entity.FrogEntity;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
 
-public class LayerFrogBelly implements LayerRenderer<EntityFrog>
+public class LayerFrogBelly implements LayerRenderer<FrogEntity>
 {
 	private final ModelFrog frogModel = new ModelFrog();
 	private final RenderFrog frogRender;
@@ -21,7 +21,7 @@ public class LayerFrogBelly implements LayerRenderer<EntityFrog>
 	}
 	
 	@Override
-	public void render(EntityFrog frog, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
+	public void render(FrogEntity frog, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
 	{
 		if (!frog.isInvisible() && (frog.getFrogType() > frog.maxTypes() || frog.getFrogType() < 1))
         {
@@ -54,7 +54,7 @@ public class LayerFrogBelly implements LayerRenderer<EntityFrog>
         }
 	}
 
-	public ResourceLocation getTexture(EntityFrog frog) 
+	public ResourceLocation getTexture(FrogEntity frog)
 	{
 		int id = frog.getBellyType();
 		

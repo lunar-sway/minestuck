@@ -1,22 +1,10 @@
 package com.mraof.minestuck.command;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.util.Location;
-import com.mraof.minestuck.util.Teleport;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.*;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.DimensionManager;
-
-import java.util.Collections;
-import java.util.List;
 
 public class CommandTransportalizer
 {
