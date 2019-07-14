@@ -1,6 +1,6 @@
 package com.mraof.minestuck.item.weapon;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 
@@ -18,7 +18,7 @@ public class FireWeaponItem extends WeaponItem
 	}
 
 	@Override
-	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase player)
+	public boolean hitEntity(ItemStack itemStack, LivingEntity target, LivingEntity player)
 	{
 		target.setFire(duration);
 		return super.hitEntity(itemStack, target, player);

@@ -1,18 +1,18 @@
 package com.mraof.minestuck.item;
 
-import net.minecraft.block.BlockDispenser;
+import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.material.Material;
-import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
-import net.minecraft.dispenser.IBehaviorDispenseItem;
+import net.minecraft.dispenser.DefaultDispenseItemBehavior;
+import net.minecraft.dispenser.IDispenseItemBehavior;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 
@@ -20,18 +20,18 @@ import java.util.List;
 
 public class CustomBoatItem extends Item
 {
-	public static final IBehaviorDispenseItem DISPENSER_BEHAIVOR = new BehaivorDispenseCustomBoat();
+	public static final IDispenseItemBehavior DISPENSER_BEHAIVOR = new BehaivorDispenseCustomBoat();
 	protected final BoatProvider provider;
 	
 	public CustomBoatItem(BoatProvider provider, Properties properties)
 	{
 		super(properties);
 		this.provider = provider;
-		BlockDispenser.registerDispenseBehavior(this, DISPENSER_BEHAIVOR);
+		DispenserBlock.registerDispenseBehavior(this, DISPENSER_BEHAIVOR);
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn)
 	{
 		ItemStack itemstack = playerIn.getHeldItem(handIn);
 		float f = 1.0F;
@@ -50,9 +50,9 @@ public class CustomBoatItem extends Item
 		double d3 = 5.0D;
 		Vec3d vec31 = vec3.add((double)f7 * d3, (double)f6 * d3, (double)f8 * d3);
 		RayTraceResult rayTrace = worldIn.rayTraceBlocks(vec3, vec31, RayTraceFluidMode.ALWAYS);
-		
+
 		if (rayTrace == null)
-			return new ActionResult<>(EnumActionResult.PASS, itemstack);
+			return new ActionResult<>(ActionResultType.PASS, itemstack);
 		else
 		{
 			Vec3d vec32 = playerIn.getLook(f);
@@ -75,7 +75,7 @@ public class CustomBoatItem extends Item
 			
 			if (flag)
 			{
-				return new ActionResult<>(EnumActionResult.PASS, itemstack);
+				return new ActionResult<>(ActionResultType.PASS, itemstack);
 			}
 			else
 			{
@@ -88,7 +88,7 @@ public class CustomBoatItem extends Item
 					
 					if (!worldIn.isCollisionBoxesEmpty(entityboat, entityboat.getBoundingBox().grow(-0.1D)))
 					{
-						return new ActionResult<>(EnumActionResult.FAIL, itemstack);
+						return new ActionResult<>(ActionResultType.FAIL, itemstack);
 					}
 					
 					if (!worldIn.isRemote)
@@ -100,15 +100,15 @@ public class CustomBoatItem extends Item
 					{
 						itemstack.shrink(1);
 					}
-					return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
+					return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
 				}
 				
-				return new ActionResult<>(EnumActionResult.PASS, itemstack);
+				return new ActionResult<>(ActionResultType.PASS, itemstack);
 			}
 		}
 	}
 	
-	protected static class BehaivorDispenseCustomBoat extends BehaviorDefaultDispenseItem
+	protected static class BehaivorDispenseCustomBoat extends DefaultDispenseItemBehavior
 	{
 		@Override
 		public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
@@ -117,7 +117,7 @@ public class CustomBoatItem extends Item
 				throw new IllegalStateException("Can't use custom boat dispenser behaivor on non-custom boat item!");
 			
 			CustomBoatItem boatItem = (CustomBoatItem) stack.getItem();
-			EnumFacing enumfacing = source.getBlockState().get(BlockDispenser.FACING);
+			Direction enumfacing = source.getBlockState().get(DispenserBlock.FACING);
 			World world = source.getWorld();
 			double d0 = source.getX() + (double)((float)enumfacing.getXOffset() * 1.125F);
 			double d1 = source.getY() + (double)((float)enumfacing.getYOffset() * 1.125F);

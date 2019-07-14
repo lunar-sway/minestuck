@@ -1,15 +1,15 @@
 package com.mraof.minestuck.item;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 public class RazorBladeItem extends Item
@@ -21,20 +21,20 @@ public class RazorBladeItem extends Item
 	}
 	
 	@Override
-	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker)
+	public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker)
 	{
-		if(attacker instanceof EntityPlayer)
+		if(attacker instanceof PlayerEntity)
 		{
-			if(!((EntityPlayer) attacker).isCreative())
+			if(!((PlayerEntity) attacker).isCreative())
 			{
-				EntityItem razor = new EntityItem(attacker.world, attacker.posX, attacker.posY, attacker.posZ, stack.copy());
+				ItemEntity razor = new ItemEntity(attacker.world, attacker.posX, attacker.posY, attacker.posZ, stack.copy());
 				if(!attacker.world.isRemote)
 				{
 					razor.getItem().setCount(1);
 					razor.setPickupDelay(40);
 					attacker.world.spawnEntity(razor);
 					stack.shrink(1);
-					ITextComponent message = new TextComponentTranslation("While you handle the razor blade, you accidentally cut yourself and drop it.");
+					ITextComponent message = new TranslationTextComponent("While you handle the razor blade, you accidentally cut yourself and drop it.");
 					attacker.sendMessage(message);
 				}
 				attacker.setHealth(attacker.getHealth() - 1);
@@ -44,20 +44,20 @@ public class RazorBladeItem extends Item
 	}
 	
 	@Override
-	public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState state, BlockPos pos, EntityLivingBase entityLiving)
+	public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving)
 	{
-		if(entityLiving instanceof EntityPlayer)
+		if(entityLiving instanceof PlayerEntity)
 		{
-			if(!((EntityPlayer) entityLiving).isCreative())
+			if(!((PlayerEntity) entityLiving).isCreative())
 			{
-				EntityItem razor = new EntityItem(entityLiving.world, entityLiving.posX, entityLiving.posY, entityLiving.posZ, stack.copy());
+				ItemEntity razor = new ItemEntity(entityLiving.world, entityLiving.posX, entityLiving.posY, entityLiving.posZ, stack.copy());
 				if(!entityLiving.world.isRemote)
 				{
 					razor.getItem().setCount(1);
 					razor.setPickupDelay(40);
 					entityLiving.world.spawnEntity(razor);
 					stack.shrink(1);
-					ITextComponent message = new TextComponentTranslation("While you handle the razor blade, you accidentally cut yourself and drop it.");
+					ITextComponent message = new TranslationTextComponent("While you handle the razor blade, you accidentally cut yourself and drop it.");
 					entityLiving.sendMessage(message);
 				}
 				entityLiving.setHealth(entityLiving.getHealth() - 1);	//TODO Use damage source instead

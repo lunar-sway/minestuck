@@ -1,7 +1,7 @@
 package com.mraof.minestuck.item.weapon;
 
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 
@@ -16,7 +16,7 @@ public class CandyWeaponItem extends WeaponItem
 	}
 	
 	@Override
-	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase player)
+	public boolean hitEntity(ItemStack itemStack, LivingEntity target, LivingEntity player)
 	{
 		if(target instanceof UnderlingEntity)
 		{

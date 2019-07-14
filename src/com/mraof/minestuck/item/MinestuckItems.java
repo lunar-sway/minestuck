@@ -4,8 +4,7 @@ import com.mraof.minestuck.entity.item.CrewPosterEntity;
 import com.mraof.minestuck.entity.item.MetalBoatEntity;
 import com.mraof.minestuck.entity.item.SbahjPosterEntity;
 import com.mraof.minestuck.item.block.*;
-import com.mraof.minestuck.item.foods.BeverageItem;
-import com.mraof.minestuck.item.foods.FoodItem;
+import com.mraof.minestuck.item.foods.*;
 import com.mraof.minestuck.item.weapon.*;
 import com.mraof.minestuck.util.MinestuckSoundHandler;
 
@@ -554,7 +553,7 @@ public class MinestuckItems
 		registry.register(SPOREO = new FoodItem(new Item.Properties().group(ModItemGroup.LANDS)).setRegistryName("sporeo"));
 		registry.register(MOREL_MUSHROOM = new FoodItem(new Item.Properties().group(ModItemGroup.LANDS)).setRegistryName("morel_mushroom"));
 		registry.register(FRENCH_FRY = new FoodItem(new Item.Properties().group(ModItemGroup.LANDS)).setRegistryName("french_fry"));
-		registry.register(STRAWBERRY_CHUNK = new ItemSeedFood(4, 0.5F, STRAWBERRY_STEM, new Item.Properties().group(ModItemGroup.LANDS)).setRegistryName("strawberry_chunk"));
+		registry.register(STRAWBERRY_CHUNK = new SeedFoodItem(4, 0.5F, STRAWBERRY_STEM, new Item.Properties().group(ModItemGroup.LANDS)).setRegistryName("strawberry_chunk"));
 		
 		registry.register(CANDY_CORN = new FoodItem(new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("candy_corn"));
 		registry.register(BUILD_GUSHERS = new FoodItem(new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("build_gushers"));
@@ -588,7 +587,7 @@ public class MinestuckItems
 		registry.register(FAYGO_MOON_MIST = new BeverageItem(1, 0.0F, false, new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN)).setAlwaysEdible().setRegistryName("faygo_moon_mist"));
 		registry.register(FAYGO_PEACH = new BeverageItem(1, 0.0F, false, new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN)).setAlwaysEdible().setRegistryName("faygo_peach"));
 		registry.register(FAYGO_REDPOP = new BeverageItem(1, 0.0F, false, new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN)).setAlwaysEdible().setRegistryName("faygo_redpop"));
-		registry.register(IRRADIATED_STEAK = new FoodItem(4, 0.4F, true, new Item.Properties().group(ModItemGroup.MAIN)).setPotionEffect(new PotionEffect(MobEffects.WITHER, 100, 1), 0.9F).setRegistryName("irradiated_steak"));
+		registry.register(IRRADIATED_STEAK = new FoodItem(4, 0.4F, true, new Item.Properties().group(ModItemGroup.MAIN)).setPotionEffect(new EffectInstance(Effects.WITHER, 100, 1), 0.9F).setRegistryName("irradiated_steak"));
 		registry.register(SURPRISE_EMBRYO = new SurpriseEmbryoItem(3, 0.2F, false, new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("surprise_embryo"));
 		registry.register(UNKNOWABLE_EGG = new UnknowableEggItem(3, 0.3F, false, new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN)).setRegistryName("unknowable_egg"));
 		
@@ -618,9 +617,9 @@ public class MinestuckItems
 		//registry.register(FAKE_ARMS = new Item(new Item.Properties().maxStackSize(1)).setRegistryName("fake_arms"));
 		
 		//Music disks
-		registry.register(RECORD_EMISSARY_OF_DANCE = new ModRecordItem(13, MinestuckSoundHandler.soundEmissaryOfDance, new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("record_emissary"));
-		registry.register(RECORD_DANCE_STAB = new ModRecordItem(13, MinestuckSoundHandler.soundDanceStabDance, new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("record_dance_stab"));
-		registry.register(RECORD_RETRO_BATTLE = new ModRecordItem(13, MinestuckSoundHandler.soundRetroBattleTheme, new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("record_retro_battle"));
+		registry.register(RECORD_EMISSARY_OF_DANCE = new ModMusicDiscItem(13, MinestuckSoundHandler.soundEmissaryOfDance, new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("record_emissary"));
+		registry.register(RECORD_DANCE_STAB = new ModMusicDiscItem(13, MinestuckSoundHandler.soundDanceStabDance, new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("record_dance_stab"));
+		registry.register(RECORD_RETRO_BATTLE = new ModMusicDiscItem(13, MinestuckSoundHandler.soundRetroBattleTheme, new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("record_retro_battle"));
 
 		/*((MinestuckBucketItem) minestuckBucket).addBlock(blockOil.getDefaultState());
 		((MinestuckBucketItem) minestuckBucket).addBlock(blockBlood.getDefaultState());
@@ -635,7 +634,7 @@ public class MinestuckItems
 		}*/
 		
 		WeaponItem.addToolMaterial(ToolType.PICKAXE, Arrays.asList(Material.IRON, Material.ANVIL, Material.ROCK));
-		WeaponItem.addToolMaterial(ToolType.AXE, Arrays.asList(Material.WOOD, Material.PLANTS, Material.VINE));
+		WeaponItem.addToolMaterial(ToolType.AXE, Arrays.asList(Material.WOOD, Material.PLANTS, Material.Vine));
 		WeaponItem.addToolMaterial(ToolType.SHOVEL, Arrays.asList(Material.SNOW, Material.CRAFTED_SNOW, Material.CLAY, Material.GRASS, Material.GROUND, Material.SAND));
 		//WeaponItem.addToolMaterial("sword", Arrays.asList(Material.WEB));
 		WeaponItem.addToolMaterial(ModItemTypes.SICKLE_TOOL, Arrays.asList(Material.WEB, Material.LEAVES, Material.PLANTS, Material.VINE));
