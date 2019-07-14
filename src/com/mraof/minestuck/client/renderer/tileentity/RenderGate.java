@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.renderer.tileentity;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.tileentity.GateTileEntity;
 import com.mraof.minestuck.util.ColorCollector;
 import net.minecraft.client.renderer.BufferBuilder;

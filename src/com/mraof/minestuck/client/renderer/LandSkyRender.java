@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.renderer;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspects;
@@ -12,6 +13,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -33,7 +35,7 @@ public class LandSkyRender implements IRenderHandler
 	}
 	
 	@Override
-	public void render(float partialTicks, WorldClient world, Minecraft mc)
+	public void render(float partialTicks, ClientWorld world, Minecraft mc)
 	{
 		float heightModifier = (float) MathHelper.clamp((mc.player.posY - 144)/112, 0, 1);
 		float heightModifierDiminish = (1 - heightModifier/1.5F);
