@@ -48,7 +48,12 @@ public class FrogEntity extends CreatureEntity
 	
 	public FrogEntity(World world)
 	{
-		super(ModEntityTypes.FROG, world);
+		this(ModEntityTypes.FROG, world);
+	}
+	
+	public FrogEntity(EntityType<? extends FrogEntity> type, World world)
+	{
+		super(type, world);
 		this.jumpController = new JumpHelperController(this);
 		this.moveController = new MoveHelperController(this);
 		this.setMovementSpeed(0.0D);

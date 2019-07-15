@@ -282,10 +282,10 @@ public abstract class ConsortEntity extends EntityMinestuck implements IContaine
 	
 	@Nullable
 	@Override
-	public Container createMenu(int containerId, PlayerInventory playerInventory, PlayerEntity player)
+	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
 	{
 		if(this.stocks != null)
-			return new ConsortMerchantContainer(player, stocks);
+			return new ConsortMerchantContainer(windowId, playerInventory, stocks);
 		else return null;
 	}
 }
