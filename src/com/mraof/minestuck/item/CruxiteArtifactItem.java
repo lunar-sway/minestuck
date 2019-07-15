@@ -1,5 +1,6 @@
 package com.mraof.minestuck.item;
-
+//missing Iteleport package
+/*
 import static com.mraof.minestuck.MinestuckConfig.artifactRange;
 
 import java.util.HashSet;
@@ -23,25 +24,24 @@ import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.Chunk.EnumCreateEntityType;
+import net.minecraft.world.chunk.Chunk.CreateEntityType;
 import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.util.ITeleporter;
@@ -55,7 +55,7 @@ public abstract class CruxiteArtifactItem extends Item implements ITeleporter
 	private BlockPos origin;
 	private boolean creative;
 	private HashSet<BlockMove> blockMoves;
-	
+
 	public CruxiteArtifactItem(Properties properties)
 	{
 		super(properties);
@@ -65,7 +65,7 @@ public abstract class CruxiteArtifactItem extends Item implements ITeleporter
 	{
 		try
 		{
-			if(player.world.getDimension().getType() != DimensionType.NETHER)
+			if(player.world.getDimension().getType() != DimensionType.THE_NETHER)
 			{
 				if(!SburbHandler.shouldEnterNow(player))
 					return;
@@ -78,7 +78,7 @@ public abstract class CruxiteArtifactItem extends Item implements ITeleporter
 				{
 					if(!canModifyEntryBlocks(player.world, player))
 					{
-						player.sendMessage(new TextComponentString("You are not allowed to enter here."));
+						player.sendMessage(new StringTextComponent("You are not allowed to enter here."));
 						return;
 					}
 					
@@ -103,18 +103,18 @@ public abstract class CruxiteArtifactItem extends Item implements ITeleporter
 					DimensionType landDimension = SkaianetHandler.get(player.world).prepareEntry(identifier);
 					if(landDimension == null)
 					{
-						player.sendMessage(new TextComponentString("Something went wrong while creating your Land. More details in the server console."));
+						player.sendMessage(new StringTextComponent("Something went wrong while creating your Land. More details in the server console."));
 					}
 					else
 					{
-						if(this.prepareDestination(player.getPosition(), player, (WorldServer) player.world))
+						if(this.prepareDestination(player.getPosition(), player, (ServerWorld) player.world))
 						{
 							if(player.changeDimension(landDimension, this) != null)
 							{
 								SkaianetHandler.get(player.world).onEntry(identifier);
 							} else
 							{
-								player.sendMessage(new TextComponentString("Entry failed!"));
+								player.sendMessage(new StringTextComponent("Entry failed!"));
 							}
 						}
 					}
@@ -123,17 +123,17 @@ public abstract class CruxiteArtifactItem extends Item implements ITeleporter
 		} catch(Exception e)
 		{
 			Debug.logger.error("Exception when "+player.getName()+" tried to enter their land.", e);
-			player.sendMessage(new TextComponentString("[Minestuck] Something went wrong during entry. "+ (player.getName().getString().equals(IdentifierHandler.host)?"Check the console for the error message.":"Notify the server owner about this.")).setStyle(new Style().setColor(TextFormatting.RED)));
+			player.sendMessage(new StringTextComponent("[Minestuck] Something went wrong during entry. "+ (player.getName().getString().equals(IdentifierHandler.host)?"Check the console for the error message.":"Notify the server owner about this.")).setStyle(new Style().setColor(TextFormatting.RED)));
 		}
 	}
 	
 	@Override
 	public void placeEntity(World world, Entity entity, float yaw)
 	{
-		finalizeDestination(entity, (WorldServer) entity.world, (WorldServer) world);
+		finalizeDestination(entity, (ServerWorld) entity.world, (ServerWorld) world);
 	}
 	
-	public boolean prepareDestination(BlockPos origin, EntityPlayerMP player, WorldServer worldserver0)
+	public boolean prepareDestination(BlockPos origin, ServerPlayerEntity player, ServerWorld worldserver0)
 	{
 		
 		blockMoves = new HashSet<>();
@@ -170,7 +170,7 @@ public abstract class CruxiteArtifactItem extends Item implements ITeleporter
 				{
 					BlockPos pos = new BlockPos(blockX, blockY, blockZ);
 					BlockPos pos1 = pos.add(xDiff, yDiff, zDiff);
-					IBlockState block = worldserver0.getBlockState(pos);
+					BlockState block = worldserver0.getBlockState(pos);
 					TileEntity te = worldserver0.getTileEntity(pos);
 					
 					Block gotBlock = block.getBlock();
@@ -182,13 +182,13 @@ public abstract class CruxiteArtifactItem extends Item implements ITeleporter
 					}
 					else if(!creative && (gotBlock == Blocks.COMMAND_BLOCK || gotBlock == Blocks.CHAIN_COMMAND_BLOCK || gotBlock == Blocks.REPEATING_COMMAND_BLOCK))
 					{
-						player.sendStatusMessage(new TextComponentString("You are not allowed to move command blocks."), false);
+						player.sendStatusMessage(new StringTextComponent("You are not allowed to move command blocks."), false);
 						return false;
 					} else if(te instanceof ComputerTileEntity)		//If the block is a computer
 					{
-						if(!((ComputerTileEntity)te).owner.equals(IdentifierHandler.encode((EntityPlayer) player)))	//You can't Enter with someone else's computer
+						if(!((ComputerTileEntity)te).owner.equals(IdentifierHandler.encode((PlayerEntity) player)))	//You can't Enter with someone else's computer
 						{
-							player.sendStatusMessage(new TextComponentString("You are not allowed to move other players' computers."), false);
+							player.sendStatusMessage(new StringTextComponent("You are not allowed to move other players' computers."), false);
 							return false;
 						}
 						
@@ -203,23 +203,23 @@ public abstract class CruxiteArtifactItem extends Item implements ITeleporter
 				for(blockY += yDiff; blockY <= 255; blockY++)
 				{
 					//The first BlockPos isn't used for this operation.
-					blockMoves.add(new BlockMove(c, BlockPos.ORIGIN, new BlockPos(blockX + xDiff, blockY, blockZ + zDiff), Blocks.AIR.getDefaultState(), false));
+					blockMoves.add(new BlockMove(c, BlockPos.ZERO, new BlockPos(blockX + xDiff, blockY, blockZ + zDiff), Blocks.AIR.getDefaultState(), false));
 				}
 			}
 		}
 		
 		if(foundComputer == false && MinestuckConfig.needComputer)
 		{
-			player.sendStatusMessage(new TextComponentString("There is no computer in range."), false);
+			player.sendStatusMessage(new StringTextComponent("There is no computer in range."), false);
 			return false;
 		}
 		
 		return true;
 	}
 	
-	public void finalizeDestination(Entity player, WorldServer worldserver0, WorldServer worldserver1)
+	public void finalizeDestination(Entity player, ServerWorld worldserver0, ServerWorld worldserver1)
 	{
-		if(player instanceof EntityPlayerMP)
+		if(player instanceof ServerPlayerEntity)
 		{
 			int x = origin.getX();
 			int y = origin.getY();
@@ -237,7 +237,7 @@ public abstract class CruxiteArtifactItem extends Item implements ITeleporter
 			HashSet<BlockMove> blockMoves2 = new HashSet<BlockMove>();
 			for(BlockMove move : blockMoves)
 			{
-				if(!move.update)
+				if(move.update)
 					move.copy(worldserver1.getChunk(move.dest));
 				else
 					blockMoves2.add(move);
@@ -259,10 +259,10 @@ public abstract class CruxiteArtifactItem extends Item implements ITeleporter
 				Entity e = iterator.next();
 				if(origin.distanceSqToCenter(e.posX, e.posY, e.posZ) <= artifactRange*artifactRange)
 				{
-					if(MinestuckConfig.entryCrater || e instanceof EntityPlayer || !creative && e instanceof EntityItem)
+					if(MinestuckConfig.entryCrater || e instanceof PlayerEntity || !creative && e instanceof ItemEntity)
 					{
-						if(e instanceof EntityPlayer && ServerEditHandler.getData((EntityPlayer) e) != null)
-							ServerEditHandler.reset(ServerEditHandler.getData((EntityPlayer) e));
+						if(e instanceof PlayerEntity && ServerEditHandler.getData((PlayerEntity) e) != null)
+							ServerEditHandler.reset(ServerEditHandler.getData((PlayerEntity) e));
 						else
 						{
 							e.changeDimension(worldserver1.getDimension().getType(), new PositionTeleporter(e.posX + xDiff, e.posY + yDiff, e.posZ + zDiff));
@@ -275,7 +275,7 @@ public abstract class CruxiteArtifactItem extends Item implements ITeleporter
 						Entity newEntity = e.getType().create(worldserver1);
 						if (newEntity != null)
 						{
-							NBTTagCompound nbttagcompound = new NBTTagCompound();
+							CompoundNBT nbttagcompound = new CompoundNBT();
 							e.writeWithoutTypeId(nbttagcompound);
 							nbttagcompound.remove("Dimension");
 							newEntity.read(nbttagcompound);
@@ -330,7 +330,7 @@ public abstract class CruxiteArtifactItem extends Item implements ITeleporter
 					while (iterator.hasNext())
 					{
 						Entity e = iterator.next();
-						if(e instanceof EntityItem)
+						if(e instanceof ItemEntity)
 							e.remove();
 					}
 				}
@@ -346,8 +346,8 @@ public abstract class CruxiteArtifactItem extends Item implements ITeleporter
 			
 			Debug.info("Entry finished");
 		}
-	}
-	
+	}*/
+
 	/**
 	 * Determines if it is appropriate to remove the tile entity in the specified location,
 	 * and removes both the tile entity and its corresponding block if so.
@@ -357,7 +357,7 @@ public abstract class CruxiteArtifactItem extends Item implements ITeleporter
 	 * @param pos The position at which the tile entity is located
 	 * @param creative Whether or not creative-mode rules should be employed
 	 */
-	private static void removeTileEntity(WorldServer worldserver0, BlockPos pos, boolean creative)
+	/*private static void removeTileEntity(ServerWorld worldserver0, BlockPos pos, boolean creative)
 	{
 		TileEntity tileEntity = worldserver0.getTileEntity(pos);
 		if(tileEntity != null)
@@ -378,14 +378,14 @@ public abstract class CruxiteArtifactItem extends Item implements ITeleporter
 			} else
 			{
 				if(tileEntity instanceof ComputerTileEntity)	//Avoid duplicating computer data when a computer is kept in the overworld
-					((ComputerTileEntity) tileEntity).programData = new NBTTagCompound();
+					((ComputerTileEntity) tileEntity).programData = new CompoundNBT();
 				else if(tileEntity instanceof TransportalizerTileEntity)
 					worldserver0.removeTileEntity(pos);
 			}
 		}
 	}
 	
-	private static boolean canModifyEntryBlocks(World world, EntityPlayer player)
+	private static boolean canModifyEntryBlocks(World world, PlayerEntity player)
 	{
 		int x = (int) player.posX;
 		if(player.posX < 0) x--;
@@ -422,11 +422,11 @@ public abstract class CruxiteArtifactItem extends Item implements ITeleporter
 			section = c.getSections()[y] = new ChunkSection(y << 4, c.getWorld().dimension.hasSkyLight());
 		return section;
 	}
-	
+	*/
 	/**
 	 * Gives the Y-value of the highest non-air block within artifact range of the coordinates provided in the given world.
 	 */
-	private static int getTopHeight(WorldServer world, int x, int y, int z)
+	/*private static int getTopHeight(ServerWorld world, int x, int y, int z)
 	{
 		Debug.debug("Getting maxY..");
 		int maxY = y;
@@ -449,7 +449,7 @@ public abstract class CruxiteArtifactItem extends Item implements ITeleporter
 		return maxY;
 	}
 	
-	private static void placeGate(int gateCount, BlockPos pos, WorldServer world)
+	private static void placeGate(int gateCount, BlockPos pos, ServerWorld world)
 	{
 		for(int i = 0; i < 9; i++)
 			if(i == 4)
@@ -466,10 +466,10 @@ public abstract class CruxiteArtifactItem extends Item implements ITeleporter
 		protected Chunk chunkFrom;
 		BlockPos source;
 		BlockPos dest;
-		private IBlockState block = null;
+		private BlockState block = null;
 		private boolean update;
 		
-		BlockMove(Chunk c, BlockPos src, BlockPos dst, IBlockState b, boolean u)
+		BlockMove(Chunk c, BlockPos src, BlockPos dst, BlockState b, boolean u)
 		{
 			chunkFrom = c;
 			source = src;
@@ -496,10 +496,10 @@ public abstract class CruxiteArtifactItem extends Item implements ITeleporter
 				CruxiteArtifactItem.copyBlockDirect(chunkFrom, chunkTo, source.getX(), source.getY(), source.getZ(), dest.getX(), dest.getY(), dest.getZ());
 			}
 			
-			TileEntity tileEntity = chunkFrom.getTileEntity(source, EnumCreateEntityType.CHECK);
+			TileEntity tileEntity = chunkFrom.getTileEntity(source, CreateEntityType.CHECK);
 			if(tileEntity != null)
 			{
-				NBTTagCompound nbt = new NBTTagCompound();
+				CompoundNBT nbt = new CompoundNBT();
 				tileEntity.write(nbt);
 				nbt.putInt("x", dest.getX());
 				nbt.putInt("y", dest.getY());
@@ -513,4 +513,4 @@ public abstract class CruxiteArtifactItem extends Item implements ITeleporter
 			}
 		}
 	}
-}
+}*/

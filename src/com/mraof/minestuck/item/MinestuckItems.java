@@ -4,8 +4,7 @@ import com.mraof.minestuck.entity.item.CrewPosterEntity;
 import com.mraof.minestuck.entity.item.MetalBoatEntity;
 import com.mraof.minestuck.entity.item.SbahjPosterEntity;
 import com.mraof.minestuck.item.block.*;
-import com.mraof.minestuck.item.foods.BeverageItem;
-import com.mraof.minestuck.item.foods.FoodItem;
+import com.mraof.minestuck.item.foods.*;
 import com.mraof.minestuck.item.weapon.*;
 import com.mraof.minestuck.util.MinestuckSoundHandler;
 
@@ -176,7 +175,7 @@ public class MinestuckItems
 	public static Item SHOP_POSTER;
 	
 	//Other
-	//public static Item minestuckBucket = new ItemMinestuckBucket();	//TODO Sort out fluids and the bucket
+	//public static Item minestuckBucket = new MinestuckBucketItem();	//TODO Sort out fluids and the bucket
 	public static Item OBSIDIAN_BUCKET;
 	public static Item CAPTCHAROID_CAMERA;
 	public static Item GRIMOIRE;
@@ -512,7 +511,7 @@ public class MinestuckItems
 
 		registry.register(EMERALD_SWORD = new SwordItem(ModItemTypes.EMERALD_TIER, 3, -2.4F, new Item.Properties().group(ModItemGroup.WEAPONS)).setRegistryName("emerald_sword"));
 		registry.register(EMERALD_AXE = new ModAxeItem(ModItemTypes.EMERALD_TIER, 5, -3.0F, new Item.Properties().group(ModItemGroup.WEAPONS)).setRegistryName("emerald_axe"));
-		registry.register(EMERALD_PICKAXE = new ItemModPickaxe(ModItemTypes.EMERALD_TIER, 1 , -2.8F, new Item.Properties().group(ModItemGroup.WEAPONS)).setRegistryName("emerald_pickaxe"));
+		registry.register(EMERALD_PICKAXE = new ModPickaxeItem(ModItemTypes.EMERALD_TIER, 1 , -2.8F, new Item.Properties().group(ModItemGroup.WEAPONS)).setRegistryName("emerald_pickaxe"));
 		registry.register(EMERALD_SHOVEL = new ShovelItem(ModItemTypes.EMERALD_TIER, 1.5F, -3.0F, new Item.Properties().group(ModItemGroup.WEAPONS)).setRegistryName("emerald_shovel"));
 		registry.register(EMERALD_HOE = new HoeItem(ModItemTypes.EMERALD_TIER, 0.0F, new Item.Properties().group(ModItemGroup.WEAPONS)).setRegistryName("emerald_hoe"));
 		
@@ -538,7 +537,7 @@ public class MinestuckItems
 		registry.register(TREE_MODUS_CARD = new Item(new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("tree_modus_card"));
 		registry.register(HASHMAP_MODUS_CARD = new Item(new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("hashmap_modus_card"));
 		registry.register(SET_MODUS_CARD = new Item(new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("set_modus_card"));
-		registry.register(SHUNT = new ItemShunt(new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("shunt"));
+		registry.register(SHUNT = new ShuntItem(new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("shunt"));
 		
 		//food
 		registry.register(BUG_ON_A_STICK = new FoodItem(new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("Bug On A Stick"));
@@ -554,7 +553,7 @@ public class MinestuckItems
 		registry.register(SPOREO = new FoodItem(new Item.Properties().group(ModItemGroup.LANDS)).setRegistryName("sporeo"));
 		registry.register(MOREL_MUSHROOM = new FoodItem(new Item.Properties().group(ModItemGroup.LANDS)).setRegistryName("morel_mushroom"));
 		registry.register(FRENCH_FRY = new FoodItem(new Item.Properties().group(ModItemGroup.LANDS)).setRegistryName("french_fry"));
-		registry.register(STRAWBERRY_CHUNK = new ItemSeedFood(4, 0.5F, STRAWBERRY_STEM, new Item.Properties().group(ModItemGroup.LANDS)).setRegistryName("strawberry_chunk"));
+		registry.register(STRAWBERRY_CHUNK = new SeedFoodItem(4, 0.5F, STRAWBERRY_STEM, new Item.Properties().group(ModItemGroup.LANDS)).setRegistryName("strawberry_chunk"));
 		
 		registry.register(CANDY_CORN = new FoodItem(new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("candy_corn"));
 		registry.register(BUILD_GUSHERS = new FoodItem(new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("build_gushers"));
@@ -588,9 +587,9 @@ public class MinestuckItems
 		registry.register(FAYGO_MOON_MIST = new BeverageItem(1, 0.0F, false, new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN)).setAlwaysEdible().setRegistryName("faygo_moon_mist"));
 		registry.register(FAYGO_PEACH = new BeverageItem(1, 0.0F, false, new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN)).setAlwaysEdible().setRegistryName("faygo_peach"));
 		registry.register(FAYGO_REDPOP = new BeverageItem(1, 0.0F, false, new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN)).setAlwaysEdible().setRegistryName("faygo_redpop"));
-		registry.register(IRRADIATED_STEAK = new FoodItem(4, 0.4F, true, new Item.Properties().group(ModItemGroup.MAIN)).setPotionEffect(new PotionEffect(MobEffects.WITHER, 100, 1), 0.9F).setRegistryName("irradiated_steak"));
-		registry.register(SURPRISE_EMBRYO = new ItemSurpriseEmbryo(3, 0.2F, false, new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("surprise_embryo"));
-		registry.register(UNKNOWABLE_EGG = new ItemUnknowableEgg(3, 0.3F, false, new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN)).setRegistryName("unknowable_egg"));
+		registry.register(IRRADIATED_STEAK = new FoodItem(4, 0.4F, true, new Item.Properties().group(ModItemGroup.MAIN)).setPotionEffect(new EffectInstance(Effects.WITHER, 100, 1), 0.9F).setRegistryName("irradiated_steak"));
+		registry.register(SURPRISE_EMBRYO = new SurpriseEmbryoItem(3, 0.2F, false, new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("surprise_embryo"));
+		registry.register(UNKNOWABLE_EGG = new UnknowableEggItem(3, 0.3F, false, new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN)).setRegistryName("unknowable_egg"));
 		
 		registry.register(GOLDEN_GRASSHOPPER = new Item(new Item.Properties().group(ModItemGroup.LANDS)).setRegistryName("golden_grasshopper"));
 		registry.register(BUG_NET = new BugNetItem(new Item.Properties().defaultMaxDamage(64).group(ModItemGroup.LANDS)).setRegistryName("bug_net"));
@@ -599,35 +598,35 @@ public class MinestuckItems
 		registry.register(CRUMPLY_HAT = new Item(new Item.Properties().maxStackSize(1).group(ModItemGroup.LANDS)).setRegistryName("crumply_hat"));
 		registry.register(STONE_EYEBALLS = new Item(new Item.Properties().group(ModItemGroup.LANDS)).setRegistryName("stone_eyeballs"));
 		registry.register(STONE_SLAB = new Item(new Item.Properties().group(ModItemGroup.LANDS)).setRegistryName("stone_slab"));
-		//registry.register(SHOP_POSTER = new ItemHanging((world, pos, facing, stack) -> new EntityShopPoster(world, pos, facing, stack, 0), new Item.Properties().maxStackSize(1).group(ModItemGroup.LANDS)).setRegistryName("shop_poster"));
+		//registry.register(SHOP_POSTER = new HangingItem((world, pos, facing, stack) -> new EntityShopPoster(world, pos, facing, stack, 0), new Item.Properties().maxStackSize(1).group(ModItemGroup.LANDS)).setRegistryName("shop_poster"));
 		
 		//registry.register(minestuckBucket.setRegistryName("minestuck_bucket"));
-		registry.register(OBSIDIAN_BUCKET = new ItemObsidianBucket(new Item.Properties().maxStackSize(1).containerItem(Items.BUCKET).group(ModItemGroup.MAIN)).setRegistryName("obsidian_bucket"));
+		registry.register(OBSIDIAN_BUCKET = new ObsidianBucketItem(new Item.Properties().maxStackSize(1).containerItem(Items.BUCKET).group(ModItemGroup.MAIN)).setRegistryName("obsidian_bucket"));
 		registry.register(CAPTCHAROID_CAMERA = new CaptcharoidCameraItem(new Item.Properties().defaultMaxDamage(64).group(ModItemGroup.MAIN)).setRegistryName("captcharoid_camera"));
-		registry.register(GRIMOIRE = new ItemGrimoire(new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("grimoire"));
-		registry.register(LONG_FORGOTTEN_WARHORN = new ItemLongForgottenWarhorn(new Item.Properties().defaultMaxDamage(100)).setRegistryName("long_forgotten_warhorn"));
-		registry.register(RAZOR_BLADE = new ItemRazorBlade(new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("razor_blade"));
+		registry.register(GRIMOIRE = new GrimoireItem(new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("grimoire"));
+		registry.register(LONG_FORGOTTEN_WARHORN = new LongForgottenWarhornItem(new Item.Properties().defaultMaxDamage(100)).setRegistryName("long_forgotten_warhorn"));
+		registry.register(RAZOR_BLADE = new RazorBladeItem(new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("razor_blade"));
 		registry.register(UP_STICK = new Item(new Item.Properties().group(ModItemGroup.MAIN).maxStackSize(1)).setRegistryName("uranium_powered_stick"));
-		registry.register(IRON_BOAT = new ItemCustomBoat((stack, world, x, y, z) -> new MetalBoatEntity(world, x, y, z, 0), new Item.Properties().group(ModItemGroup.MAIN).maxStackSize(1)).setRegistryName("iron_boat"));
-		registry.register(GOLD_BOAT = new ItemCustomBoat((stack, world, x, y, z) -> new MetalBoatEntity(world, x, y, z, 1), new Item.Properties().group(ModItemGroup.MAIN).maxStackSize(1)).setRegistryName("gold_boat"));
+		registry.register(IRON_BOAT = new CustomBoatItem((stack, world, x, y, z) -> new MetalBoatEntity(world, x, y, z, 0), new Item.Properties().group(ModItemGroup.MAIN).maxStackSize(1)).setRegistryName("iron_boat"));
+		registry.register(GOLD_BOAT = new CustomBoatItem((stack, world, x, y, z) -> new MetalBoatEntity(world, x, y, z, 1), new Item.Properties().group(ModItemGroup.MAIN).maxStackSize(1)).setRegistryName("gold_boat"));
 		registry.register(THRESH_DVD = new Item(new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("thresh_dvd"));
 		registry.register(GAMEBRO_MAGAZINE = new Item(new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("gamebro_magazine"));
 		registry.register(GAMEGRL_MAGAZINE = new Item(new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("gamegrl_magazine"));
-		registry.register(CREW_POSTER = new ItemHanging((world, pos, facing, stack) -> new CrewPosterEntity(world, pos, facing), new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("crew_poster"));
-		registry.register(SBAHJ_POSTER = new ItemHanging((world, pos, facing, stack) -> new SbahjPosterEntity(world, pos, facing), new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("sbahj_poster"));
+		registry.register(CREW_POSTER = new HangingItem((world, pos, facing, stack) -> new CrewPosterEntity(world, pos, facing), new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("crew_poster"));
+		registry.register(SBAHJ_POSTER = new HangingItem((world, pos, facing, stack) -> new SbahjPosterEntity(world, pos, facing), new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("sbahj_poster"));
 		//registry.register(FAKE_ARMS = new Item(new Item.Properties().maxStackSize(1)).setRegistryName("fake_arms"));
 		
 		//Music disks
-		registry.register(RECORD_EMISSARY_OF_DANCE = new ItemModRecord(13, MinestuckSoundHandler.soundEmissaryOfDance, new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("record_emissary"));
-		registry.register(RECORD_DANCE_STAB = new ItemModRecord(13, MinestuckSoundHandler.soundDanceStabDance, new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("record_dance_stab"));
-		registry.register(RECORD_RETRO_BATTLE = new ItemModRecord(13, MinestuckSoundHandler.soundRetroBattleTheme, new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("record_retro_battle"));
+		registry.register(RECORD_EMISSARY_OF_DANCE = new ModMusicDiscItem(13, MinestuckSoundHandler.soundEmissaryOfDance, new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("record_emissary"));
+		registry.register(RECORD_DANCE_STAB = new ModMusicDiscItem(13, MinestuckSoundHandler.soundDanceStabDance, new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("record_dance_stab"));
+		registry.register(RECORD_RETRO_BATTLE = new ModMusicDiscItem(13, MinestuckSoundHandler.soundRetroBattleTheme, new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("record_retro_battle"));
 
-		/*((ItemMinestuckBucket) minestuckBucket).addBlock(blockOil.getDefaultState());
-		((ItemMinestuckBucket) minestuckBucket).addBlock(blockBlood.getDefaultState());
-		((ItemMinestuckBucket) minestuckBucket).addBlock(blockBrainJuice.getDefaultState());
-		((ItemMinestuckBucket) minestuckBucket).addBlock(blockWatercolors.getDefaultState());
-		((ItemMinestuckBucket) minestuckBucket).addBlock(blockEnder.getDefaultState());
-		((ItemMinestuckBucket) minestuckBucket).addBlock(blockLightWater.getDefaultState());*/
+		/*((MinestuckBucketItem) minestuckBucket).addBlock(blockOil.getDefaultState());
+		((MinestuckBucketItem) minestuckBucket).addBlock(blockBlood.getDefaultState());
+		((MinestuckBucketItem) minestuckBucket).addBlock(blockBrainJuice.getDefaultState());
+		((MinestuckBucketItem) minestuckBucket).addBlock(blockWatercolors.getDefaultState());
+		((MinestuckBucketItem) minestuckBucket).addBlock(blockEnder.getDefaultState());
+		((MinestuckBucketItem) minestuckBucket).addBlock(blockLightWater.getDefaultState());*/
 
 		/*for(Block block : liquidGrists)
 		{
@@ -635,7 +634,7 @@ public class MinestuckItems
 		}*/
 		
 		WeaponItem.addToolMaterial(ToolType.PICKAXE, Arrays.asList(Material.IRON, Material.ANVIL, Material.ROCK));
-		WeaponItem.addToolMaterial(ToolType.AXE, Arrays.asList(Material.WOOD, Material.PLANTS, Material.VINE));
+		WeaponItem.addToolMaterial(ToolType.AXE, Arrays.asList(Material.WOOD, Material.PLANTS, Material.Vine));
 		WeaponItem.addToolMaterial(ToolType.SHOVEL, Arrays.asList(Material.SNOW, Material.CRAFTED_SNOW, Material.CLAY, Material.GRASS, Material.GROUND, Material.SAND));
 		//WeaponItem.addToolMaterial("sword", Arrays.asList(Material.WEB));
 		WeaponItem.addToolMaterial(ModItemTypes.SICKLE_TOOL, Arrays.asList(Material.WEB, Material.LEAVES, Material.PLANTS, Material.VINE));

@@ -10,14 +10,13 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 
-public class ItemShunt extends Item
+public class ShuntItem extends Item
 {
 	
-	public ItemShunt(Properties properties)
+	public ShuntItem(Properties properties)
 	{
 		super(properties);
 		this.addPropertyOverride(CaptchaCardItem.CONTENT_NAME, CaptchaCardItem.CONTENT);
@@ -31,10 +30,10 @@ public class ItemShunt extends Item
 			ItemStack content = AlchemyRecipes.getDecodedItem(stack);
 			
 			if (!content.isEmpty())
-				tooltip.add(new TextComponentString("(").appendSibling(content.getDisplayName()).appendText(")"));
+				tooltip.add(new StringTextComponent("(").appendSibling(content.getDisplayName()).appendText(")"));
 			else
-				tooltip.add(new TextComponentString("(").appendSibling(new TextComponentTranslation("item.shunt.invalid")).appendText(")"));
+				tooltip.add(new StringTextComponent("(").appendSibling(new StringTextComponent("item.shunt.invalid")).appendText(")"));
 		} else
-			tooltip.add(new TextComponentString("(").appendSibling(new TextComponentTranslation("item.shunt.empty")).appendText(")"));
+			tooltip.add(new StringTextComponent("(").appendSibling(new StringTextComponent("item.shunt.empty")).appendText(")"));
 	}
 }

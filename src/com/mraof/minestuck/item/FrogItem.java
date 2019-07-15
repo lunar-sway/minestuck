@@ -66,16 +66,16 @@ public class FrogItem extends Item
 				int eyeType = nbt.getInt("EyeType");
 				int bellyType = nbt.getInt("BellyType");
 				
-					if(nbt.contains("EyeType"))for(int i = 0; i <= FrogEntity.maxEyes(); i++)
-					{
-						if(eyeType == i)tooltip.add(new StringTextComponent("item.frog.eyes"+i));
-					}
-					
-					if(nbt.contains("EyeType"))for(int i = 1; i <= FrogEntity.maxBelly(); i++)
-					{
-						if(bellyType == i)tooltip.add(new StringTextComponent("item.frog.belly"+i));
-					}
-			} 
+				if(nbt.contains("EyeType"))for(int i = 0; i <= FrogEntity.maxEyes(); i++)
+				{
+					if(eyeType == i)tooltip.add(new StringTextComponent("item.frog.eyes"+i));
+				}
+				
+				if(nbt.contains("EyeType"))for(int i = 1; i <= FrogEntity.maxBelly(); i++)
+				{
+					if(bellyType == i)tooltip.add(new StringTextComponent("item.frog.belly"+i));
+				}
+			}
 			else tooltip.add(new StringTextComponent("item.frog.random"));
 		}
 		else
@@ -103,7 +103,7 @@ public class FrogItem extends Item
 		}
 		
 	}
-
+	
 	@Override
 	public ActionResultType onItemUse(ItemUseContext context)
 	{
@@ -122,7 +122,7 @@ public class FrogItem extends Item
 		else
 		{
 			BlockState blockState = world.getBlockState(pos);
-	
+			
 			BlockPos spawnPos;
 			if (blockState.getCollisionShape(world, pos).isEmpty())
 				spawnPos = pos;
@@ -130,22 +130,22 @@ public class FrogItem extends Item
 				spawnPos = pos.offset(face);
 			
 			Entity entity =  spawnCreature(world, (double)spawnPos.getX() + 0.5D, (double)spawnPos.getY(), (double)spawnPos.getZ() + 0.5D, 0);
-
+			
 			if (entity != null)
 			{
 				if (entity instanceof LivingEntity && itemstack.hasDisplayName())
 				{
 					entity.setCustomName(itemstack.getDisplayName());
 				}
-
+				
 				applyItemEntityDataToEntity(world, player, itemstack,(FrogEntity) entity);
-
+				
 				if (player == null || !player.isCreative())
 				{
 					itemstack.shrink(1);
 				}
 			}
-
+			
 			return ActionResultType.SUCCESS;
 		}
 	}
@@ -154,30 +154,30 @@ public class FrogItem extends Item
 	public static Entity spawnCreature(World worldIn, double x, double y, double z, int type)
 	{
 		LivingEntity entity = null;
-
-			for (int i = 0; i < 1; ++i)
-			{
-				FrogEntity frog = new FrogEntity(worldIn);
-	
-				frog.setLocationAndAngles(x, y, z, MathHelper.wrapDegrees(worldIn.rand.nextFloat() * 360.0F), 0.0F);
-				frog.rotationYawHead = frog.rotationYaw;
-				frog.renderYawOffset = frog.rotationYaw;
-				frog.onInitialSpawn(worldIn, worldIn.getDifficultyForLocation(new BlockPos(x,y,z)), null, null, null);
-				worldIn.addEntity(frog);
-				frog.playAmbientSound();
-			}
-
-			return entity;
+		
+		for (int i = 0; i < 1; ++i)
+		{
+			FrogEntity frog = new FrogEntity(worldIn);
+			
+			frog.setLocationAndAngles(x, y, z, MathHelper.wrapDegrees(worldIn.rand.nextFloat() * 360.0F), 0.0F);
+			frog.rotationYawHead = frog.rotationYaw;
+			frog.renderYawOffset = frog.rotationYaw;
+			frog.onInitialSpawn(worldIn, worldIn.getDifficultyForLocation(new BlockPos(x,y,z)), null, null, null);
+			worldIn.addEntity(frog);
+			frog.playAmbientSound();
+		}
+		
+		return entity;
 	}
 	
 	public static void applyItemEntityDataToEntity(World entityWorld, @Nullable PlayerEntity player, ItemStack stack, @Nullable FrogEntity targetEntity)
 	{
 		MinecraftServer minecraftserver = entityWorld.getServer();
-
+		
 		if (minecraftserver != null && targetEntity != null)
 		{
 			CompoundNBT CompoundNBT = stack.getTag();
-
+			
 			if (CompoundNBT != null)
 			{
 				if (!entityWorld.isRemote && targetEntity.ignoreItemEntityData() && (player == null || !minecraftserver.getPlayerList().canSendCommands(player.getGameProfile())))
@@ -194,7 +194,7 @@ public class FrogItem extends Item
 				CompoundNBT1.merge(CompoundNBT);
 				targetEntity.setUniqueId(uuid);
 				targetEntity.read(CompoundNBT1);
-
+				
 				//System.out.println("Type: " + CompoundNBT.getInt("Type"));
 			}
 		}
@@ -204,7 +204,7 @@ public class FrogItem extends Item
 	{
 		
 		CompoundNBT CompoundNBT = stack.getTag();
-
+		
 		if (CompoundNBT != null)
 		{
 			if (CompoundNBT.contains("SkinColor"))
@@ -212,7 +212,7 @@ public class FrogItem extends Item
 				return CompoundNBT.getInt("SkinColor");
 			}
 		}
-
+		
 		return 0x4BEC13;
 	}
 	
@@ -220,7 +220,7 @@ public class FrogItem extends Item
 	{
 		
 		CompoundNBT CompoundNBT = stack.getTag();
-
+		
 		if (CompoundNBT != null)
 		{
 			if (CompoundNBT.contains("EyeColor"))
@@ -228,7 +228,7 @@ public class FrogItem extends Item
 				return CompoundNBT.getInt("eyeColor");
 			}
 		}
-
+		
 		return 0xC7DB95;
 	}
 	
@@ -236,7 +236,7 @@ public class FrogItem extends Item
 	{
 		
 		CompoundNBT CompoundNBT = stack.getTag();
-
+		
 		if (CompoundNBT != null)
 		{
 			if(CompoundNBT.contains("bellyType") && CompoundNBT.getInt("bellyType") == 0)
@@ -252,7 +252,7 @@ public class FrogItem extends Item
 				return CompoundNBT.getInt("bellyColor");
 			}
 		}
-
+		
 		return 0xD6DE83;
 	}
 	

@@ -1,16 +1,15 @@
 package com.mraof.minestuck.item.weapon;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.item.EnumAction;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.item.UseAction;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
@@ -19,7 +18,7 @@ public class ConsumableWeaponItem extends WeaponItem
 	private final int healAmount;
     private final float saturationModifier;
     private final int damageTaken;
-	private PotionEffect potionId;
+	private EffectInstance potionId;
 	private float potionEffectProbability;
 	
 	public ConsumableWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, int healAmount, float saturationModifier, int damageTaken, Properties builder)
@@ -42,20 +41,20 @@ public class ConsumableWeaponItem extends WeaponItem
 	}
 	
 	@Override
-	public EnumAction getUseAction(ItemStack stack)
+	public UseAction getUseAction(ItemStack stack)
 	{
-		return EnumAction.EAT;
+		return UseAction.EAT;
 	} 
 	
 	@Override
-	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving)
+	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving)
 	{
 		stack.damageItem(this.damageTaken, entityLiving);
 		this.onFoodEaten(stack, worldIn, entityLiving);
 		
-		if(entityLiving instanceof EntityPlayer)
+		if(entityLiving instanceof PlayerEntity)
 		{
-			EntityPlayer entityplayer = (EntityPlayer)entityLiving;
+			PlayerEntity entityplayer = (PlayerEntity) entityLiving;
 			entityplayer.getFoodStats().addStats(this.healAmount, this.saturationModifier);
 			worldIn.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
 		}
@@ -63,10 +62,10 @@ public class ConsumableWeaponItem extends WeaponItem
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn)
 	{
 		playerIn.setActiveHand(handIn);
-		return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
+		return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getHeldItem(handIn));
 	}
 	
 	public ConsumableWeaponItem setPotionEffect(EffectInstance effect, float probability)
@@ -77,11 +76,11 @@ public class ConsumableWeaponItem extends WeaponItem
         return this;
     }
 	
-	protected void onFoodEaten(ItemStack stack, World worldIn, EntityLivingBase player)
+	protected void onFoodEaten(ItemStack stack, World worldIn, LivingEntity player)
     {
         if (!worldIn.isRemote && this.potionId != null && worldIn.rand.nextFloat() < this.potionEffectProbability)
         {
-            player.addPotionEffect(new PotionEffect(this.potionId));
+            player.addPotionEffect(new EffectInstance(this.potionId));
         }
     }
 }

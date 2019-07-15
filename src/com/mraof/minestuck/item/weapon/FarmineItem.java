@@ -9,12 +9,12 @@ import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.util.Pair;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Enchantments;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.Blocks;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -78,7 +78,7 @@ public class FarmineItem extends WeaponItem
 	* @return Returns false if and only if the world is remote.
 	*/
 	@Override
-	public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState blockState, BlockPos pos, EntityLivingBase playerIn)
+	public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState blockState, BlockPos pos, LivingEntity playerIn)
 	{
 		if(worldIn.isRemote)
 		{
@@ -94,7 +94,7 @@ public class FarmineItem extends WeaponItem
 		
 		//If the harvestTool can't harvest the block, or the player isn't actually a player, or the player is sneaking,
 		//or the harvestTool doesn't farmine, or it's one of those blocks that breaks instantly, don't farmine.
-		if (!canHarvestBlock(stack, blockState) || !(playerIn instanceof EntityPlayer) || playerIn.isSneaking()
+		if (!canHarvestBlock(stack, blockState) || !(playerIn instanceof PlayerEntity) || playerIn.isSneaking()
 				|| terminus == 1 || radius==0 || Math.abs(blockState.getBlockHardness(worldIn, pos)) < 0.000000001)
 		{
 			if (!isDamageable())
@@ -142,7 +142,7 @@ public class FarmineItem extends WeaponItem
 								if(i==0 && j==0 && k==0)
 									continue;
 								BlockPos newBlockPos = new BlockPos(curr.getX() + i, curr.getY() + j, curr.getZ() + k);
-								IBlockState newState = worldIn.getBlockState(newBlockPos);
+								BlockState newState = worldIn.getBlockState(newBlockPos);
 								Block newBlock = newState.getBlock();
 								if (	equals.contains(newBlock) || newBlock.equals(block))
 								{
@@ -174,7 +174,7 @@ public class FarmineItem extends WeaponItem
 					for (int k = -1; k < 2; k++)
 					{
 						BlockPos newBlockPos = new BlockPos(pos.getX() + i, pos.getY() + j, pos.getZ() + k);
-						IBlockState newState = worldIn.getBlockState(newBlockPos);
+						BlockState newState = worldIn.getBlockState(newBlockPos);
 						Block newBlock = newState.getBlock();
 						if (equals.contains(newBlock) || newBlock.equals(block)
 								&& blocksToBreak.size()+1 < stack.getMaxDamage() - stack.getDamage())
@@ -189,7 +189,7 @@ public class FarmineItem extends WeaponItem
 		//Now, break ALL of the blocks!
 		for (BlockPos blockToBreak : blocksToBreak)
 		{
-			IBlockState state = worldIn.getBlockState(blockToBreak);
+			BlockState state = worldIn.getBlockState(blockToBreak);
 			harvestBlock(worldIn, state.getBlock(), blockToBreak, state, playerIn, stack);
 		}
 		
@@ -232,9 +232,9 @@ public class FarmineItem extends WeaponItem
 		return e != null && e.contains(b);
 	}
 	
-	private boolean harvestBlock(World world, Block block, BlockPos pos, IBlockState state, EntityLivingBase playerIn, ItemStack stack)
+	private boolean harvestBlock(World world, Block block, BlockPos pos, BlockState state, LivingEntity playerIn, ItemStack stack)
 	{
-		EntityPlayer player = (EntityPlayer) playerIn;
+		PlayerEntity player = (PlayerEntity) playerIn;
 		
 		TileEntity te = world.getTileEntity(pos);
 		if(block.removedByPlayer(state, world, pos, player, true, world.getFluidState(pos)))

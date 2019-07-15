@@ -1,14 +1,14 @@
 package com.mraof.minestuck.item.weapon;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -26,7 +26,7 @@ public class PogoWeaponItem extends WeaponItem
 	}
 	
 	@Override
-	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase player)
+	public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity player)
 	{
 		super.hitEntity(stack, target, player);
 		hitEntity(stack, target, player, getPogoMotion(stack));
@@ -40,12 +40,12 @@ public class PogoWeaponItem extends WeaponItem
 	}
 	
 	@Override
-	public EnumActionResult onItemUse(ItemUseContext context)
+	public ActionResultType onItemUse(ItemUseContext context)
 	{
 		return onItemUse(context.getPlayer(), context.getWorld(), context.getPos(), context.getItem(), context.getFace(), getPogoMotion(context.getItem()));
 	}
 	
-	public static void hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase player, double pogoMotion)
+	public static void hitEntity(ItemStack stack, LivingEntity target, LivingEntity player, double pogoMotion)
 	{
 		if (player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder() && !player.isInWater() && !player.isPassenger())
 		{
@@ -56,7 +56,7 @@ public class PogoWeaponItem extends WeaponItem
 		}
 	}
 	
-	public static EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, ItemStack stack, EnumFacing facing, double pogoMotion)
+	public static ActionResultType onItemUse(PlayerEntity player, World worldIn, BlockPos pos, ItemStack stack, Direction facing, double pogoMotion)
 	{
 		if (worldIn.getBlockState(pos).getBlock() != Blocks.AIR)
 		{
@@ -80,8 +80,8 @@ public class PogoWeaponItem extends WeaponItem
 			}
 			player.fallDistance = 0;
 			stack.damageItem(1, player);
-			return EnumActionResult.SUCCESS;
+			return ActionResultType.SUCCESS;
 		}
-		return EnumActionResult.PASS;
+		return ActionResultType.PASS;
 	}
 }

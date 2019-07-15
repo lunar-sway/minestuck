@@ -1,7 +1,7 @@
 package com.mraof.minestuck.item.weapon;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 
@@ -17,11 +17,11 @@ public class SordItem extends WeaponItem
 	}
 	
 	@Override
-	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase attacker)
+	public boolean hitEntity(ItemStack itemStack, LivingEntity target, LivingEntity attacker)
 	{
 		if (attacker.getRNG().nextFloat() < .25)
 		{
-			EntityItem sord = new EntityItem(attacker.world, attacker.posX, attacker.posY, attacker.posZ, itemStack.copy());
+			ItemEntity sord = new ItemEntity(attacker.world, attacker.posX, attacker.posY, attacker.posZ, itemStack.copy());
 			sord.getItem().setCount(1);
 			sord.setPickupDelay(40);
 			attacker.world.spawnEntity(sord);

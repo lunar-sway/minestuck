@@ -1,7 +1,7 @@
 package com.mraof.minestuck.item.weapon;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
@@ -18,12 +18,12 @@ public class RandomWeaponItem extends WeaponItem
 	}
 	
 	@Override
-	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase player)
+	public boolean hitEntity(ItemStack itemStack, LivingEntity target, LivingEntity player)
 	{
 		DamageSource source;
-		if(player instanceof EntityPlayer)
+		if(player instanceof PlayerEntity)
 		{
-			source = DamageSource.causePlayerDamage((EntityPlayer) player);
+			source = DamageSource.causePlayerDamage((PlayerEntity) player);
 		}
 		else
 		{
