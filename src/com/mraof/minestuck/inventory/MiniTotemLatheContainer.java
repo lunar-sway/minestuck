@@ -8,18 +8,15 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 
-public class MiniTotemLatheContainer extends Container
+public class MiniTotemLatheContainer extends MachineContainer
 {
 	private static final int CARD_1_X = 26;
 	private static final int CARD_1_Y = 25;
@@ -31,11 +28,10 @@ public class MiniTotemLatheContainer extends Container
 	private static final int OUTPUT_Y = 34;
 	
 	private final IInventory totemLatheInventory;
-	private final IIntArray parameters;
 	
 	public MiniTotemLatheContainer(int windowId, PlayerInventory playerInventory)
 	{
-		this(ModContainerTypes.MINI_TOTEM_LATHE, windowId, playerInventory, new Inventory(4), new IntArray(1));
+		this(ModContainerTypes.MINI_TOTEM_LATHE, windowId, playerInventory, new Inventory(4), new IntArray(2));
 	}
 	
 	public MiniTotemLatheContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters)
@@ -45,18 +41,15 @@ public class MiniTotemLatheContainer extends Container
 	
 	public MiniTotemLatheContainer(ContainerType<? extends MiniTotemLatheContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters)
 	{
-		super(type, windowId);
+		super(type, windowId, parameters);
 		
 		assertInventorySize(inventory, 4);
-		assertIntArraySize(parameters, 1);
 		this.totemLatheInventory = inventory;
-		this.parameters = parameters;
 		
 		addSlot(new InputSlot(inventory, 0, CARD_1_X, CARD_1_Y, MinestuckItems.CAPTCHA_CARD));
 		addSlot(new InputSlot(inventory, 1, CARD_2_X, CARD_2_Y, MinestuckItems.CAPTCHA_CARD));
 		addSlot(new InputSlot(inventory, 2, DOWEL_X, DOWEL_Y, MinestuckBlocks.CRUXITE_DOWEL.asItem()));
 		addSlot(new OutputSlot(inventory, 3, OUTPUT_X, OUTPUT_Y));
-		trackIntArray(parameters);
 		
 		bindPlayerInventory(playerInventory);
 	}
@@ -113,11 +106,5 @@ public class MiniTotemLatheContainer extends Container
 		}
 		
 		return itemstack;
-	}
-	
-	@OnlyIn(Dist.CLIENT)
-	public int getProgress()
-	{
-		return parameters.get(0);
 	}
 }

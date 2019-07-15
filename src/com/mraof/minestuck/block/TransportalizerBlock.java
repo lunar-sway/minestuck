@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.client.gui.GuiTransportalizer;
+import com.mraof.minestuck.client.gui.TransportalizerScreen;
 import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
@@ -75,7 +75,7 @@ public class TransportalizerBlock extends MachineBlock
 		}
 
 		if(worldIn.isRemote)
-			Minecraft.getInstance().displayGuiScreen(new GuiTransportalizer(Minecraft.getInstance(), tileEntity));	//TODO Check if this causes complications
+			Minecraft.getInstance().displayGuiScreen(new TransportalizerScreen(Minecraft.getInstance(), tileEntity));	//TODO Check if this causes complications
 
 		return true;
 	}

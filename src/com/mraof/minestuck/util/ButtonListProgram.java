@@ -1,7 +1,6 @@
 package com.mraof.minestuck.util;
 
-import com.mraof.minestuck.client.gui.GuiButtonImpl;
-import com.mraof.minestuck.client.gui.GuiComputer;
+import com.mraof.minestuck.client.gui.ComputerScreen;
 import com.mraof.minestuck.network.ClearMessagePacket;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.skaianet.ComputerData;
@@ -9,6 +8,7 @@ import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
+import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -38,7 +38,6 @@ public abstract class ButtonListProgram extends ComputerProgram {
 	 */
 	protected abstract void onButtonPressed(ComputerTileEntity te, String buttonName, Object[] data);
 	
-	@Override
 	public final void onButtonPressed(ComputerTileEntity te, Button button) {
 		UnlocalizedString data = buttonMap.get(button);
 		if (button == upButton)
@@ -53,7 +52,7 @@ public abstract class ButtonListProgram extends ComputerProgram {
 	}
 	
 	@Override
-	public final void onInitGui(GuiComputer gui, ComputerProgram prevProgram)
+	public final void onInitGui(ComputerScreen gui, ComputerProgram prevProgram)
 	{
 		if(prevProgram instanceof ButtonListProgram) 
 		{
@@ -71,20 +70,20 @@ public abstract class ButtonListProgram extends ComputerProgram {
 			}
 			buttonMap.clear();
 			for (int i = 0; i < 4; i++) {
-				Button button = new GuiButtonImpl(gui, i+2, (gui.width - GuiComputer.xSize) / 2 +14, (gui.height - GuiComputer.ySize) / 2 +60 + i*24, 120, 20,"");
+				Button button = new GuiButtonExt((gui.width - ComputerScreen.xSize) / 2 +14, (gui.height - ComputerScreen.ySize) / 2 +60 + i*24, 120, 20,"", button1 -> onButtonPressed(gui.te, button1));
 				buttonMap.put(button, new UnlocalizedString(""));
 				gui.addButton(button);
 			}
 			
-			upButton = new GuiButtonImpl(gui, -1, (gui.width - GuiComputer.xSize) / 2 +140, (gui.height - GuiComputer.ySize) / 2 +60, 20, 20,"^");
+			upButton = new GuiButtonExt((gui.width - ComputerScreen.xSize) / 2 +140, (gui.height - ComputerScreen.ySize) / 2 +60, 20, 20,"^", button1 -> onButtonPressed(gui.te, button1));
 			gui.addButton(upButton);
-			downButton = new GuiButtonImpl(gui, -1, (gui.width - GuiComputer.xSize) / 2 +140, (gui.height - GuiComputer.ySize) / 2 +132, 20, 20,"v");
+			downButton = new GuiButtonExt((gui.width - ComputerScreen.xSize) / 2 +140, (gui.height - ComputerScreen.ySize) / 2 +132, 20, 20,"v", button1 -> onButtonPressed(gui.te, button1));
 			gui.addButton(downButton);
 		}
 	}
 	
 	@Override
-	public final void onUpdateGui(GuiComputer gui)
+	public final void onUpdateGui(ComputerScreen gui)
 	{
 		downButton.active = false;
 		upButton.active = index > 0;
@@ -126,15 +125,15 @@ public abstract class ButtonListProgram extends ComputerProgram {
 	}
 	
 	@Override
-	public final void paintGui(GuiComputer gui, ComputerTileEntity te) {
+	public final void paintGui(ComputerScreen gui, ComputerTileEntity te) {
 		Minecraft mc = Minecraft.getInstance();
-		mc.getTextureManager().bindTexture(GuiComputer.guiBackground);
-		int yOffset = (gui.height / 2) - (GuiComputer.ySize / 2);
-		gui.blit((gui.width / 2) - (GuiComputer.xSize / 2), yOffset, 0, 0, GuiComputer.xSize, GuiComputer.ySize);
+		mc.getTextureManager().bindTexture(ComputerScreen.guiBackground);
+		int yOffset = (gui.height / 2) - (ComputerScreen.ySize / 2);
+		gui.blit((gui.width / 2) - (ComputerScreen.xSize / 2), yOffset, 0, 0, ComputerScreen.xSize, ComputerScreen.ySize);
 		if(te.latestmessage.get(te.programSelected) == null || te.latestmessage.get(te.programSelected).isEmpty())
-			mc.fontRenderer.drawString(message, (gui.width - GuiComputer.xSize) / 2 + 15, (gui.height - GuiComputer.ySize) / 2 + 45, 4210752);
+			mc.fontRenderer.drawString(message, (gui.width - ComputerScreen.xSize) / 2 + 15, (gui.height - ComputerScreen.ySize) / 2 + 45, 4210752);
 		else 
-			mc.fontRenderer.drawString(I18n.format(te.latestmessage.get(te.programSelected)), (gui.width - GuiComputer.xSize) / 2  + 15, (gui.height - GuiComputer.ySize) / 2 + 45, 4210752);
+			mc.fontRenderer.drawString(I18n.format(te.latestmessage.get(te.programSelected)), (gui.width - ComputerScreen.xSize) / 2  + 15, (gui.height - ComputerScreen.ySize) / 2 + 45, 4210752);
 	}
 	
 	/**

@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
+import net.minecraft.util.IntReferenceHolder;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -23,15 +23,31 @@ public class UraniumCookerTileEntity extends MachineProcessTileEntity implements
 {
 	private static HashMap<Item, ItemStack> radiations = new HashMap<>();
 	
-	private final IIntArray parameters = new ProgressIntArray(this);
+	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
+	public static final int DEFAULT_MAX_PROGRESS = 0;
+	
+	private final IntReferenceHolder fuelHolder = new IntReferenceHolder()
+	{
+		@Override
+		public int get()
+		{
+			return fuel;
+		}
+		
+		@Override
+		public void set(int value)
+		{
+			fuel = (short) value;
+		}
+	};
 	
 	private short fuel = 0;
-	private short maxFuel = 128;
+	private static final short maxFuel = 128;
 	
 	public UraniumCookerTileEntity()
 	{
 		super(ModTileEntityTypes.URANIUM_COOKER);
-		maxProgress = 0;
+		maxProgress = DEFAULT_MAX_PROGRESS;
 	}
 	
 	@Override
@@ -52,7 +68,7 @@ public class UraniumCookerTileEntity extends MachineProcessTileEntity implements
 	@Override
 	public RunType getRunType()
 	{
-		return RunType.BUTTON_OVERRIDE;
+		return TYPE;
 	}
 	
 	@Override
@@ -190,7 +206,7 @@ public class UraniumCookerTileEntity extends MachineProcessTileEntity implements
 	@Override
 	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
 	{
-		return new UraniumCookerContainer(windowId, playerInventory, this, parameters);
+		return new UraniumCookerContainer(windowId, playerInventory, this, parameters, fuelHolder);
 	}
 	
 	@Override
@@ -209,13 +225,8 @@ public class UraniumCookerTileEntity extends MachineProcessTileEntity implements
 		this.fuel = fuel;
 	}
 
-	public short getMaxFuel()
+	public static short getMaxFuel()
 	{
 		return maxFuel;
-	}
-
-	public void setMaxFuel(short maxFuel)
-	{
-		this.maxFuel = maxFuel;
 	}
 }

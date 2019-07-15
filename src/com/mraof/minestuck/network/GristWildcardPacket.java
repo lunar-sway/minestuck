@@ -21,7 +21,7 @@ public class GristWildcardPacket
 	
 	public GristWildcardPacket(BlockPos pos, GristType gristType)
 	{
-		this.pos = pos;
+		this.pos = pos;	//TODO Pos can now be null. If it is, check if the players container is instance of MiniAlchemiterContainer
 		this.gristType = gristType;
 	}
 	

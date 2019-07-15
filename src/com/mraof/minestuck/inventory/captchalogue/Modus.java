@@ -1,6 +1,6 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
-import com.mraof.minestuck.client.gui.captchalouge.SylladexGuiHandler;
+import com.mraof.minestuck.client.gui.captchalouge.SylladexScreen;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -56,7 +56,7 @@ public abstract class Modus
 	public void setValue(ServerPlayerEntity player, byte type, int value) {}
 	
 	@OnlyIn(Dist.CLIENT)
-	public abstract SylladexGuiHandler getGuiHandler();
+	public abstract SylladexScreen getGuiHandler();
 	
 	@OnlyIn(Dist.CLIENT)
 	public ITextComponent getName()

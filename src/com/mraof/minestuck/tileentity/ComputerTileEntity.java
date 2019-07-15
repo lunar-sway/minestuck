@@ -1,6 +1,6 @@
 package com.mraof.minestuck.tileentity;
 
-import com.mraof.minestuck.client.gui.GuiComputer;
+import com.mraof.minestuck.client.gui.ComputerScreen;
 import com.mraof.minestuck.network.skaianet.ComputerData;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
@@ -32,7 +32,7 @@ public class ComputerTileEntity extends TileEntity
 	 * 0 = client, 1 = server
 	 */
 	public Hashtable<Integer, Boolean> installedPrograms = new Hashtable<Integer, Boolean>();
-	public GuiComputer gui;
+	public ComputerScreen gui;
 	public PlayerIdentifier owner;
 	@OnlyIn(Dist.CLIENT)
 	public int ownerId;

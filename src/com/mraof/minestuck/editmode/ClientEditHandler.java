@@ -2,7 +2,7 @@ package com.mraof.minestuck.editmode;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
-import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
+import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.ClientEditPacket;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
@@ -267,8 +267,8 @@ public class ClientEditHandler {
 		if(isActive() && event.getGui() instanceof InventoryEffectRenderer)
 		{
 				event.setCanceled(true);
-				GuiPlayerStats.editmodeTab = GuiPlayerStats.EditmodeGuiType.DEPLOY_LIST;
-				GuiPlayerStats.openGui(true);
+				PlayerStatsScreen.editmodeTab = PlayerStatsScreen.EditmodeGuiType.DEPLOY_LIST;
+				PlayerStatsScreen.openGui(true);
 		}
 	}
 	

@@ -2,7 +2,7 @@ package com.mraof.minestuck.event;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.client.gui.GuiColorSelector;
+import com.mraof.minestuck.client.gui.ColorSelectorScreen;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.inventory.ConsortMerchantContainer;
 import com.mraof.minestuck.util.ColorCollector;
@@ -53,7 +53,7 @@ public class ClientEventHandler
 			{
 				ColorCollector.displaySelectionGui = false;
 				if(MinestuckConfig.loginColorSelector)
-					Minecraft.getInstance().displayGuiScreen(new GuiColorSelector(true));
+					Minecraft.getInstance().displayGuiScreen(new ColorSelectorScreen(true));
 			}
 			
 		}

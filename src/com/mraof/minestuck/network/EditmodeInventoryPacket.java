@@ -1,6 +1,6 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.client.gui.playerStats.GuiInventoryEditmode;
+import com.mraof.minestuck.client.gui.playerStats.InventoryEditmodeScreen;
 import com.mraof.minestuck.inventory.EditmodeContainer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -77,9 +77,9 @@ public class EditmodeInventoryPacket
 	
 	public void execute()
 	{
-		if(Minecraft.getInstance().currentScreen instanceof GuiInventoryEditmode)
+		if(Minecraft.getInstance().currentScreen instanceof InventoryEditmodeScreen)
 		{
-			GuiInventoryEditmode gui = (GuiInventoryEditmode) Minecraft.getInstance().currentScreen;
+			InventoryEditmodeScreen gui = (InventoryEditmodeScreen) Minecraft.getInstance().currentScreen;
 			gui.less = b1;
 			gui.more = b2;
 			for(int i = 0; i < inventory.size(); i++)

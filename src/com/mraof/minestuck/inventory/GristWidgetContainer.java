@@ -19,18 +19,17 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 
-public class GristWidgetContainer extends Container
+public class GristWidgetContainer extends MachineContainer
 {
 	
 	private static final int gristWidgetInputX = 27;
 	private static final int gristWidgetInputY = 20;
 	
 	private final IInventory widgetInventory;
-	private final IIntArray parameters;
 	
 	public GristWidgetContainer(int windowId, PlayerInventory playerInventory)
 	{
-		this(ModContainerTypes.GRIST_WIDGET, windowId, playerInventory, new Inventory(1), new IntArray(1));
+		this(ModContainerTypes.GRIST_WIDGET, windowId, playerInventory, new Inventory(1), new IntArray(2));
 	}
 	
 	public GristWidgetContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters)
@@ -40,12 +39,10 @@ public class GristWidgetContainer extends Container
 	
 	public GristWidgetContainer(ContainerType<? extends GristWidgetContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters)
 	{
-		super(type, windowId);
+		super(type, windowId, parameters);
 		
 		assertInventorySize(inventory, 1);
-		assertIntArraySize(parameters, 1);
 		this.widgetInventory = inventory;
-		this.parameters = parameters;
 		
 		//the Slot constructor takes the IInventory and the slot number in that it binds to
 		//and the x-y coordinates it resides on-screen
@@ -57,7 +54,6 @@ public class GristWidgetContainer extends Container
 				return super.isItemValid(stack) && AlchemyRecipes.hasDecodedItem(stack) && !AlchemyRecipes.isPunchedCard(stack);
 			}
 		});
-		trackIntArray(parameters);
 		
 		bindPlayerInventory(playerInventory);
 	}
@@ -111,11 +107,5 @@ public class GristWidgetContainer extends Container
 		}
 		
 		return itemstack;
-	}
-	
-	@OnlyIn(Dist.CLIENT)
-	public int getProgress()
-	{
-		return parameters.get(0);
 	}
 }

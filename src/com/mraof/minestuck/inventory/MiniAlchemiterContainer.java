@@ -1,5 +1,6 @@
 package com.mraof.minestuck.inventory;
 
+import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.inventory.slot.InputSlot;
 import com.mraof.minestuck.inventory.slot.OutputSlot;
@@ -7,18 +8,18 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
+import net.minecraft.util.IntReferenceHolder;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 
-public class MiniAlchemiterContainer extends Container
+public class MiniAlchemiterContainer extends MachineContainer
 {
 	
 	private static final int INPUT_X = 27;
@@ -27,30 +28,29 @@ public class MiniAlchemiterContainer extends Container
 	private static final int OUTPUT_Y = 20;
 	
 	private final IInventory alchemiterInventory;
-	private final IIntArray parameters;
+	private final IntReferenceHolder wildcardHolder;
 	
 	public MiniAlchemiterContainer(int windowId, PlayerInventory playerInventory)
 	{
-		this(ModContainerTypes.MINI_ALCHEMITER, windowId, playerInventory, new Inventory(2), new IntArray(1));
+		this(ModContainerTypes.MINI_ALCHEMITER, windowId, playerInventory, new Inventory(2), new IntArray(2), IntReferenceHolder.single());
 	}
 	
-	public MiniAlchemiterContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters)
+	public MiniAlchemiterContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, IntReferenceHolder wildcardHolder)
 	{
-		this(ModContainerTypes.MINI_ALCHEMITER, windowId, playerInventory, inventory, parameters);
+		this(ModContainerTypes.MINI_ALCHEMITER, windowId, playerInventory, inventory, parameters, wildcardHolder);
 	}
 	
-	public MiniAlchemiterContainer(ContainerType<? extends MiniAlchemiterContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters)
+	public MiniAlchemiterContainer(ContainerType<? extends MiniAlchemiterContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, IntReferenceHolder wildcardHolder)
 	{
-		super(type, windowId);
+		super(type, windowId, parameters);
 		
 		assertInventorySize(inventory, 2);
-		assertIntArraySize(parameters, 1);
 		this.alchemiterInventory = inventory;
-		this.parameters = parameters;
+		this.wildcardHolder = wildcardHolder;
 		
 		addSlot(new InputSlot(inventory, 0, INPUT_X, INPUT_Y, MinestuckBlocks.CRUXITE_DOWEL.asItem()));
 		addSlot(new OutputSlot(inventory, 1, OUTPUT_X, OUTPUT_Y));
-		trackIntArray(parameters);
+		trackInt(wildcardHolder);
 		
 		bindPlayerInventory(playerInventory);
 	}
@@ -107,8 +107,11 @@ public class MiniAlchemiterContainer extends Container
 	}
 	
 	@OnlyIn(Dist.CLIENT)
-	public int getProgress()
+	public GristType getWildcardType()
 	{
-		return parameters.get(0);
+		GristType type = GristType.REGISTRY.getValue(wildcardHolder.get());
+		if(type == null)
+			type = GristType.BUILD;
+		return type;
 	}
 }

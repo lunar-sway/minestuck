@@ -7,18 +7,15 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 
-public class MiniCruxtruderContainer extends Container
+public class MiniCruxtruderContainer extends MachineContainer
 {
 	
 	private static final int INPUT_X = 79;
@@ -27,11 +24,10 @@ public class MiniCruxtruderContainer extends Container
 	private static final int OUTPUT_Y = 19;
 	
 	private final IInventory cruxtruderInventory;
-	private final IIntArray parameters;
 	
 	public MiniCruxtruderContainer(int windowId, PlayerInventory inventoryPlayer)
 	{
-		this(ModContainerTypes.MINI_CRUXTRUDER, windowId, inventoryPlayer, new Inventory(2), new IntArray(1));
+		this(ModContainerTypes.MINI_CRUXTRUDER, windowId, inventoryPlayer, new Inventory(2), new IntArray(2));
 	}
 	
 	public MiniCruxtruderContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters)
@@ -41,16 +37,13 @@ public class MiniCruxtruderContainer extends Container
 	
 	public MiniCruxtruderContainer(ContainerType<? extends MiniCruxtruderContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters)
 	{
-		super(type, windowId);
+		super(type, windowId, parameters);
 		
 		assertInventorySize(inventory, 2);
-		assertIntArraySize(parameters, 1);
 		this.cruxtruderInventory = inventory;
-		this.parameters = parameters;
 		
 		addSlot(new InputSlot(inventory, 0, INPUT_X, INPUT_Y, MinestuckItems.RAW_CRUXITE));
 		addSlot(new OutputSlot(inventory, 1, OUTPUT_X, OUTPUT_Y));
-		trackIntArray(parameters);
 		
 		bindPlayerInventory(playerInventory);
 	}
@@ -110,11 +103,5 @@ public class MiniCruxtruderContainer extends Container
 		}
 		
 		return itemstack;
-	}
-	
-	@OnlyIn(Dist.CLIENT)
-	public int getProgress()
-	{
-		return parameters.get(0);
 	}
 }

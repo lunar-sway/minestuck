@@ -16,7 +16,7 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
+import net.minecraft.util.IntReferenceHolder;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -24,9 +24,27 @@ import javax.annotation.Nullable;
 
 public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
 {
+	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
 	public static final int INPUT = 0, OUTPUT = 1;
 	
-	private final IIntArray parameters = new ProgressIntArray(this);
+	private final IntReferenceHolder wildcardGristHolder = new IntReferenceHolder()
+	{
+		@Override
+		public int get()
+		{
+			return getWildcardGrist().getId();
+		}
+		
+		@Override
+		public void set(int id)
+		{
+			GristType type = GristType.REGISTRY.getValue(id);
+			if(type == null)
+				type = GristType.BUILD;
+			setWildcardGrist(type);
+		}
+	};
+	
 	private int ticks_since_update = 0;
 	public IdentifierHandler.PlayerIdentifier owner;
 	private GristType wildcardGrist = GristType.BUILD;
@@ -39,7 +57,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 	@Override
 	public RunType getRunType()
 	{
-		return RunType.BUTTON_OVERRIDE;
+		return TYPE;
 	}
 	
 	@Override
@@ -209,7 +227,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 	@Override
 	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
 	{
-		return new MiniAlchemiterContainer(windowId, playerInventory, this, parameters);
+		return new MiniAlchemiterContainer(windowId, playerInventory, this, parameters, wildcardGristHolder);
 	}
 	
 	public GristType getWildcardGrist()

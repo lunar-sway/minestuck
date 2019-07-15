@@ -19,9 +19,11 @@ import javax.annotation.Nullable;
 
 public abstract class MachineProcessTileEntity extends TileEntity implements ISidedInventory, ITickableTileEntity
 {
+	protected final IIntArray parameters = new ProgressIntArray(this);
+	public static final int DEFAULT_MAX_PROGRESS = 100;
 
 	public int progress = 0;
-	public int maxProgress = 100;
+	public int maxProgress = DEFAULT_MAX_PROGRESS;
 	public boolean ready = false;
 	public boolean overrideStop = false;
 	protected final NonNullList<ItemStack> inv;
@@ -197,11 +199,11 @@ public abstract class MachineProcessTileEntity extends TileEntity implements ISi
 		BUTTON_OVERRIDE
 	}
 	
-	protected static class ProgressIntArray implements IIntArray
+	private static class ProgressIntArray implements IIntArray
 	{
 		private final MachineProcessTileEntity tileEntity;
 		
-		public ProgressIntArray(MachineProcessTileEntity tileEntity)
+		private ProgressIntArray(MachineProcessTileEntity tileEntity)
 		{
 			this.tileEntity = tileEntity;
 		}
@@ -211,6 +213,8 @@ public abstract class MachineProcessTileEntity extends TileEntity implements ISi
 		{
 			if(index == 0)
 				return tileEntity.progress;
+			else if(index == 1)
+				return tileEntity.overrideStop ? 1 : 0;
 			return 0;
 		}
 		
@@ -219,12 +223,14 @@ public abstract class MachineProcessTileEntity extends TileEntity implements ISi
 		{
 			if(index == 0)
 				tileEntity.progress = value;
+			else if(index == 1)
+				tileEntity.overrideStop = value != 0;
 		}
 		
 		@Override
 		public int size()
 		{
-			return 1;
+			return 2;
 		}
 	}
 }

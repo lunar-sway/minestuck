@@ -5,10 +5,9 @@ import java.util.Map.Entry;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.item.ItemStack;
 
-import com.mraof.minestuck.client.gui.GuiComputer;
+import com.mraof.minestuck.client.gui.ComputerScreen;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import net.minecraft.item.Items;
 
@@ -91,10 +90,6 @@ public abstract class ComputerProgram
 		return -1;
 	}
 	
-	public void onButtonPressed(ComputerTileEntity te, Button button)
-	{
-	}
-	
 	/**
 	 * Called when the gui is created or if the player pressed the switch
 	 * program button.
@@ -108,14 +103,14 @@ public abstract class ComputerProgram
 	 * @param prevProgram
 	 *            The previous program, or null if the gui was just created.
 	 */
-	public void onInitGui(GuiComputer gui, ComputerProgram prevProgram)
+	public void onInitGui(ComputerScreen gui, ComputerProgram prevProgram)
 	{
 	}
 	
 	/**
 	 * Called when some related data have changed that may affect the program.
 	 */
-	public void onUpdateGui(GuiComputer gui)
+	public void onUpdateGui(ComputerScreen gui)
 	{
 	}
 	
@@ -131,7 +126,7 @@ public abstract class ComputerProgram
 	 * Called when the gui is painted. This may not be a good way of doing this,
 	 * but I do not know since I do not know very much about minecraft graphics.
 	 */
-	public abstract void paintGui(GuiComputer gui, ComputerTileEntity te);
+	public abstract void paintGui(ComputerScreen gui, ComputerTileEntity te);
 	
 	/**
 	 * Returns an unlocalized string of the name of the program. Used for the

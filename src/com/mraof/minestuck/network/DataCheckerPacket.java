@@ -1,7 +1,7 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.client.gui.playerStats.GuiDataChecker;
+import com.mraof.minestuck.client.gui.playerStats.DataCheckerScreen;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.CompressedStreamTools;
@@ -97,7 +97,7 @@ public class DataCheckerPacket
 	public void execute()
 	{
 		if(packetIndex == index)
-			GuiDataChecker.activeComponent = new GuiDataChecker.MainComponent(nbtData);
+			DataCheckerScreen.activeComponent = new DataCheckerScreen.MainComponent(nbtData);
 	}
 	
 	public void execute(EntityPlayerMP player)

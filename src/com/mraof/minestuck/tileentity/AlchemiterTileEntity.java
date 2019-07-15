@@ -5,7 +5,7 @@ import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.block.AlchemiterBlock;
 import com.mraof.minestuck.block.EnumDowelType;
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.client.gui.GuiAlchemiter;
+import com.mraof.minestuck.client.gui.AlchemiterScreen;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.*;
@@ -344,7 +344,7 @@ public class AlchemiterTileEntity extends TileEntity
 				BlockPos mainPos = pos;
 				if(!isBroken())
 				{
-					Minecraft.getInstance().displayGuiScreen(new GuiAlchemiter(this));
+					Minecraft.getInstance().displayGuiScreen(new AlchemiterScreen(this));
 				}
 			}
 			return;

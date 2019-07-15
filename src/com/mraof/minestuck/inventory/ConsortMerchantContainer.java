@@ -11,7 +11,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ConsortMerchantContainer extends Container
 {
-	public InventoryConsortMerchant inventory;
+	public ConsortMerchantInventory inventory;
 	
 	private PlayerEntity player;
 	
@@ -21,14 +21,14 @@ public class ConsortMerchantContainer extends Container
 		//TODO
 	}
 	
-	public ConsortMerchantContainer(int windowId, PlayerInventory playerInventory, InventoryConsortMerchant inv)
+	public ConsortMerchantContainer(int windowId, PlayerInventory playerInventory, ConsortMerchantInventory inv)
 	{
 		super(ModContainerTypes.CONSORT_MERCHANT, windowId);
 		this.player = playerInventory.player;
 		setInventory(inv);
 	}
 	
-	public void setInventory(InventoryConsortMerchant inv)
+	public void setInventory(ConsortMerchantInventory inv)
 	{
 		inventory = inv;
 		
@@ -61,18 +61,19 @@ public class ConsortMerchantContainer extends Container
 		return this.player == playerIn;
 	}
 	
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void updateProgressBar(int id, int data)
-	{
-		//inventory.setField(id, data);
-	}
-	
 	@Override
 	public void onContainerClosed(PlayerEntity playerIn)
 	{
 		super.onContainerClosed(playerIn);
 		if(playerIn instanceof ServerPlayerEntity)
 			((ServerPlayerEntity) playerIn).sendContainerToPlayer(playerIn.container);
+	}
+	
+	@OnlyIn(Dist.CLIENT)
+	public int getPrice(int index)
+	{
+		if(index >= 0 && index < inventory.prices.length)
+			return inventory.prices[index];
+		else return -1;
 	}
 }

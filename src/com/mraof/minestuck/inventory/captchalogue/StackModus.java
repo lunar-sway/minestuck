@@ -1,8 +1,8 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.client.gui.captchalouge.StackGuiHandler;
-import com.mraof.minestuck.client.gui.captchalouge.SylladexGuiHandler;
+import com.mraof.minestuck.client.gui.captchalouge.StackSylladexScreen;
+import com.mraof.minestuck.client.gui.captchalouge.SylladexScreen;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -28,7 +28,7 @@ public class StackModus extends Modus
 	@OnlyIn(Dist.CLIENT)
 	protected NonNullList<ItemStack> items;
 	@OnlyIn(Dist.CLIENT)
-	protected SylladexGuiHandler gui;
+	protected SylladexScreen gui;
 	
 	public StackModus(LogicalSide side)
 	{
@@ -194,10 +194,10 @@ public class StackModus extends Modus
 	
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public SylladexGuiHandler getGuiHandler()
+	public SylladexScreen getGuiHandler()
 	{
 		if(gui == null)
-			gui = new StackGuiHandler(this);
+			gui = new StackSylladexScreen(this);
 		return gui;
 	}
 	

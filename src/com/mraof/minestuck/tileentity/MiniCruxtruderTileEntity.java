@@ -11,7 +11,6 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -19,8 +18,7 @@ import javax.annotation.Nullable;
 
 public class MiniCruxtruderTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
 {
-	
-	private final IIntArray parameters = new ProgressIntArray(this);
+	public static final RunType TYPE = RunType.AUTOMATIC;
 	public int color = -1;
 	
 	public MiniCruxtruderTileEntity()
@@ -31,7 +29,7 @@ public class MiniCruxtruderTileEntity extends MachineProcessTileEntity implement
 	@Override
 	public RunType getRunType()
 	{
-		return RunType.AUTOMATIC;
+		return TYPE;
 	}
 	
 	@Override

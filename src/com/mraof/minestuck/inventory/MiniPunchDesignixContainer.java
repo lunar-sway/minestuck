@@ -19,7 +19,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 
-public class MiniPunchDesignixContainer extends Container
+public class MiniPunchDesignixContainer extends MachineContainer
 {
 	
 	private static final int designixInputX = 44;
@@ -30,11 +30,10 @@ public class MiniPunchDesignixContainer extends Container
 	private static final int designixOutputY = 37;
 	
 	private final IInventory designixInventory;
-	private final IIntArray parameters;
 	
 	public MiniPunchDesignixContainer(int windowId, PlayerInventory playerInventory)
 	{
-		this(ModContainerTypes.MINI_PUNCH_DESIGNIX, windowId, playerInventory, new Inventory(3), new IntArray(1));
+		this(ModContainerTypes.MINI_PUNCH_DESIGNIX, windowId, playerInventory, new Inventory(3), new IntArray(2));
 	}
 	
 	public MiniPunchDesignixContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters)
@@ -44,17 +43,14 @@ public class MiniPunchDesignixContainer extends Container
 	
 	public MiniPunchDesignixContainer(ContainerType<? extends MiniPunchDesignixContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters)
 	{
-		super(type, windowId);
+		super(type, windowId, parameters);
 		
 		assertInventorySize(inventory, 3);
-		assertIntArraySize(parameters, 1);
 		this.designixInventory = inventory;
-		this.parameters = parameters;
 		
 		addSlot(new Slot(inventory, 0, designixInputX, designixInputY));
 		addSlot(new InputSlot(inventory, 1, designixCardsX, designixCardsY, MinestuckItems.CAPTCHA_CARD));
 		addSlot(new OutputSlot(inventory, 2, designixOutputX, designixOutputY));
-		trackIntArray(parameters);
 		
 		bindPlayerInventory(playerInventory);
 	}
@@ -111,11 +107,5 @@ public class MiniPunchDesignixContainer extends Container
 		}
 		
 		return itemstack;
-	}
-	
-	@OnlyIn(Dist.CLIENT)
-	public int getProgress()
-	{
-		return parameters.get(0);
 	}
 }

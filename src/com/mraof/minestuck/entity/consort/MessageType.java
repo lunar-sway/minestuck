@@ -2,7 +2,7 @@ package com.mraof.minestuck.entity.consort;
 
 import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
 import com.mraof.minestuck.inventory.ConsortMerchantContainer;
-import com.mraof.minestuck.inventory.InventoryConsortMerchant;
+import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.util.IdentifierHandler;
@@ -1151,7 +1151,7 @@ public abstract class MessageType
 		{
 			if(consort.stocks == null)
 			{
-				consort.stocks = new InventoryConsortMerchant(consort, ConsortRewardHandler.generateStock(lootTable, consort, consort.world.rand));
+				consort.stocks = new ConsortMerchantInventory(consort, ConsortRewardHandler.generateStock(lootTable, consort, consort.world.rand));
 			}
 			
 			NetworkHooks.openGui(player, new SimpleNamedContainerProvider(consort, new StringTextComponent("Consort shop")));

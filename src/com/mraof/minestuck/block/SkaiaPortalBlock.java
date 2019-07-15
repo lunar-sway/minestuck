@@ -41,12 +41,6 @@ public class SkaiaPortalBlock extends ContainerBlock
 	}
 	
 	@Override
-	public boolean isFullCube(IBlockState state)
-	{
-		return super.isFullCube(state);
-	}
-	
-	@Override
 	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn)
 	{
 		if (!entityIn.isPassenger() && !entityIn.isBeingRidden() && !worldIn.isRemote && entityIn.timeUntilPortal == 0)
@@ -60,18 +54,5 @@ public class SkaiaPortalBlock extends ContainerBlock
 	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player)
 	{
 		return ItemStack.EMPTY;
-	}
-	
-	
-	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockReader worldIn, IBlockState state, BlockPos pos, EnumFacing face)
-	{
-		return BlockFaceShape.UNDEFINED;
-	}
-	
-	@Override
-	public EnumBlockRenderType getRenderType(IBlockState state)
-	{
-		return EnumBlockRenderType.INVISIBLE;
 	}
 }

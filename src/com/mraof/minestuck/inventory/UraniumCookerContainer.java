@@ -14,12 +14,13 @@ import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
+import net.minecraft.util.IntReferenceHolder;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 
-public class UraniumCookerContainer extends Container
+public class UraniumCookerContainer extends MachineContainer
 {
 	
 	private static final int uraniumInputX = 38;
@@ -30,31 +31,30 @@ public class UraniumCookerContainer extends Container
 	private static final int itemOutputY = 35;
 	
 	private final IInventory cookerInventory;
-	private final IIntArray parameters;
+	private final IntReferenceHolder fuelHolder;
 	
 	public UraniumCookerContainer(int windowId, PlayerInventory playerInventory)
 	{
-		this(ModContainerTypes.URANIUM_COOKER, windowId, playerInventory, new Inventory(3), new IntArray(1));
+		this(ModContainerTypes.URANIUM_COOKER, windowId, playerInventory, new Inventory(3), new IntArray(2), IntReferenceHolder.single());
 	}
 	
-	public UraniumCookerContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters)
+	public UraniumCookerContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, IntReferenceHolder fuelHolder)
 	{
-		this(ModContainerTypes.URANIUM_COOKER, windowId, playerInventory, inventory, parameters);
+		this(ModContainerTypes.URANIUM_COOKER, windowId, playerInventory, inventory, parameters, fuelHolder);
 	}
 	
-	public UraniumCookerContainer(ContainerType<? extends UraniumCookerContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters)
+	public UraniumCookerContainer(ContainerType<? extends UraniumCookerContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, IntReferenceHolder fuelHolder)
 	{
-		super(type, windowId);
+		super(type, windowId, parameters);
 		
 		assertInventorySize(inventory, 3);
-		assertIntArraySize(parameters, 1);
 		this.cookerInventory = inventory;
-		this.parameters = parameters;
+		this.fuelHolder = fuelHolder;
 		
 		addSlot(new InputSlot(inventory, 0, uraniumInputX, uraniumInputY, MinestuckItems.RAW_URANIUM));
 		addSlot(new Slot(inventory, 1, itemInputX, itemInputY));
 		addSlot(new OutputSlot(inventory, 2, itemOutputX, itemOutputY));
-		trackIntArray(parameters);
+		trackInt(fuelHolder);
 		
 		bindPlayerInventory(playerInventory);
 	}
@@ -126,8 +126,8 @@ public class UraniumCookerContainer extends Container
 	}
 	
 	@OnlyIn(Dist.CLIENT)
-	public int getProgress()
+	public int getFuel()
 	{
-		return parameters.get(0);
+		return fuelHolder.get();
 	}
 }

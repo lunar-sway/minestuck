@@ -1,6 +1,6 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.client.gui.playerStats.GuiEcheladder;
+import com.mraof.minestuck.client.gui.playerStats.EcheladderScreen;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.client.Minecraft;
@@ -148,7 +148,7 @@ public class PlayerDataPacket	//TODO Probably healthier if this is several diffe
 					TextComponentTranslation rung = new TextComponentTranslation("echeladder.rung"+prev);
 					Minecraft.getInstance().player.sendMessage(new TextComponentTranslation("You reached rung %s!", rung));	//TODO Translation key
 				}
-			else GuiEcheladder.animatedRung = GuiEcheladder.lastRung = i1;
+			else EcheladderScreen.animatedRung = EcheladderScreen.lastRung = i1;
 		} else if(type == BOONDOLLAR)
 		{
 			PlayerSavedData.boondollars = l;

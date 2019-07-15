@@ -15,7 +15,6 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -24,7 +23,7 @@ import java.util.Map.Entry;
 
 public class GristWidgetTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
 {
-	private final IIntArray parameters = new ProgressIntArray(this);
+	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
 	
 	public IdentifierHandler.PlayerIdentifier owner;
 	boolean hasItem;
@@ -36,18 +35,23 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 	
 	public GristSet getGristWidgetResult()
 	{
-		ItemStack item = AlchemyRecipes.getDecodedItem(inv.get(0), true);
-		GristSet gristSet = AlchemyCostRegistry.getGristConversion(item);
-		if(inv.get(0).getItem() != MinestuckItems.CAPTCHA_CARD || AlchemyRecipes.isPunchedCard(inv.get(0))
-				|| item.getItem() == MinestuckItems.CAPTCHA_CARD || gristSet == null)
+		return getGristWidgetResult(inv.get(0));
+	}
+	
+	public static GristSet getGristWidgetResult(ItemStack stack)
+	{
+		ItemStack heldItem = AlchemyRecipes.getDecodedItem(stack, true);
+		GristSet gristSet = AlchemyCostRegistry.getGristConversion(heldItem);
+		if(stack.getItem() != MinestuckItems.CAPTCHA_CARD || AlchemyRecipes.isPunchedCard(stack)
+				|| heldItem.getItem() == MinestuckItems.CAPTCHA_CARD || gristSet == null)
 			return null;
 		
-		if (item.getCount() != 1)
-			gristSet.scaleGrist(item.getCount());
+		if (heldItem.getCount() != 1)
+			gristSet.scaleGrist(heldItem.getCount());
 		
-		if (item.isDamaged())
+		if (heldItem.isDamaged())
 		{
-			float multiplier = 1 - item.getItem().getDamage(item) / ((float) item.getMaxDamage());
+			float multiplier = 1 - heldItem.getItem().getDamage(heldItem) / ((float) heldItem.getMaxDamage());
 			for (GristAmount amount : gristSet.getArray())
 			{
 				gristSet.setGrist(amount.getType(), (int) (amount.getAmount() * multiplier));
@@ -59,13 +63,18 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 	public int getGristWidgetBoondollarValue()
 	{
 		GristSet set = getGristWidgetResult();
+		return getGristWidgetBoondollarValue(set);
+	}
+	
+	public static int getGristWidgetBoondollarValue(GristSet set)
+	{
 		return set == null ? 0 : Math.max(1, (int) Math.pow(set.getValue(), 1/1.5));
 	}
 	
 	@Override
 	public RunType getRunType()
 	{
-		return RunType.BUTTON_OVERRIDE;
+		return TYPE;
 	}
 	
 	@Override

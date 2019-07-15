@@ -3,7 +3,7 @@ package com.mraof.minestuck.util;
 import java.util.ArrayList;
 import java.util.Map;
 
-import com.mraof.minestuck.client.gui.GuiColorSelector;
+import com.mraof.minestuck.client.gui.ColorSelectorScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundNBT;
 
@@ -53,7 +53,7 @@ public class SburbClient extends ButtonListProgram {
 		else if(buttonName.equals("computer.buttonClose"))
 			SkaiaClient.sendCloseRequest(te, te.getData(getId()).getBoolean("isResuming")?-1:SkaiaClient.getClientConnection(te.ownerId).getServerId(), true);
 		else if(buttonName.equals("computer.selectColor"))
-			Minecraft.getInstance().displayGuiScreen(new GuiColorSelector(false));
+			Minecraft.getInstance().displayGuiScreen(new ColorSelectorScreen(false));
 	}
 	
 	@Override

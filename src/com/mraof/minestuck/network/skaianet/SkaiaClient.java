@@ -1,6 +1,6 @@
 package com.mraof.minestuck.network.skaianet;
 
-import com.mraof.minestuck.client.gui.GuiComputer;
+import com.mraof.minestuck.client.gui.ComputerScreen;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.SburbConnectClosedPacket;
 import com.mraof.minestuck.network.SburbConnectPacket;
@@ -179,12 +179,12 @@ public class SkaiaClient
 		connections.addAll(data.connections);
 		
 		GuiScreen gui = Minecraft.getInstance().currentScreen;
-		if(gui instanceof GuiComputer)
-			((GuiComputer)gui).updateGui();
+		if(gui instanceof ComputerScreen)
+			((ComputerScreen)gui).updateGui();
 		else if(te != null && te.ownerId == data.playerId)
 		{
 			if(!Minecraft.getInstance().player.isSneaking())
-				Minecraft.getInstance().displayGuiScreen(new GuiComputer(Minecraft.getInstance(), te));
+				Minecraft.getInstance().displayGuiScreen(new ComputerScreen(Minecraft.getInstance(), te));
 			te = null;
 		}
 	}

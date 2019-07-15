@@ -10,7 +10,6 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -18,7 +17,7 @@ import javax.annotation.Nullable;
 
 public class MiniPunchDesignixTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
 {
-	private final IIntArray parameters = new ProgressIntArray(this);
+	public static final RunType TYPE = RunType.BUTTON;
 	
 	public MiniPunchDesignixTileEntity()
 	{
@@ -28,7 +27,7 @@ public class MiniPunchDesignixTileEntity extends MachineProcessTileEntity implem
 	@Override
 	public RunType getRunType()
 	{
-		return RunType.BUTTON;
+		return TYPE;
 	}
 	
 	@Override

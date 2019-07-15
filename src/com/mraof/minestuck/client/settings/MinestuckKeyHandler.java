@@ -12,7 +12,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
+import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
@@ -49,7 +49,7 @@ public class MinestuckKeyHandler
 	{
 		while(statKey.isPressed())
 		{
-			GuiPlayerStats.openGui(false);
+			PlayerStatsScreen.openGui(false);
 		}
 		
 		while(editKey.isPressed())

@@ -1,8 +1,8 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.client.gui.captchalouge.HashmapGuiHandler;
-import com.mraof.minestuck.client.gui.captchalouge.SylladexGuiHandler;
+import com.mraof.minestuck.client.gui.captchalouge.HashMapSylladexScreen;
+import com.mraof.minestuck.client.gui.captchalouge.SylladexScreen;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
@@ -30,7 +30,7 @@ public class HashMapModus extends Modus
 	@OnlyIn(Dist.CLIENT)
 	protected NonNullList<ItemStack> items;
 	@OnlyIn(Dist.CLIENT)
-	protected SylladexGuiHandler gui;
+	protected SylladexScreen gui;
 	
 	public HashMapModus(LogicalSide side)
 	{
@@ -228,10 +228,10 @@ public class HashMapModus extends Modus
 	
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public SylladexGuiHandler getGuiHandler()
+	public SylladexScreen getGuiHandler()
 	{
 		if(gui == null)
-			gui = new HashmapGuiHandler(this);
+			gui = new HashMapSylladexScreen(this);
 		return gui;
 	}
 	

@@ -6,7 +6,7 @@ import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
 import com.mraof.minestuck.entity.EntityMinestuck;
 import com.mraof.minestuck.entity.consort.MessageType.SingleMessage;
 import com.mraof.minestuck.inventory.ConsortMerchantContainer;
-import com.mraof.minestuck.inventory.InventoryConsortMerchant;
+import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
@@ -41,7 +41,7 @@ public abstract class ConsortEntity extends EntityMinestuck implements IContaine
 	DimensionType homeDimension;
 	boolean visitedSkaia;
 	MessageType.DelayMessage updatingMessage; //Change to an interface/array if more message components need tick updates
-	public InventoryConsortMerchant stocks;
+	public ConsortMerchantInventory stocks;
 	private int eventTimer = -1;
 	private float explosionRadius = 2.0f;
 	static private SingleMessage explosionMessage = new SingleMessage("immortalityHerb.3");
@@ -216,7 +216,7 @@ public abstract class ConsortEntity extends EntityMinestuck implements IContaine
 		
 		if(merchantType != EnumConsort.MerchantType.NONE && compound.contains("Stock", 9))
 		{
-			stocks = new InventoryConsortMerchant(this, compound.getList("Stock", 10));
+			stocks = new ConsortMerchantInventory(this, compound.getList("Stock", 10));
 		}
 		
 		if(compound.contains("HomePos", 10))
