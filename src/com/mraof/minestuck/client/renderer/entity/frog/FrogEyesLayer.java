@@ -1,22 +1,22 @@
 package com.mraof.minestuck.client.renderer.entity.frog;
 
-import com.mraof.minestuck.client.model.ModelFrog;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mraof.minestuck.client.model.FrogModel;
 import com.mraof.minestuck.entity.FrogEntity;
 
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.entity.IEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
 
-public class LayerFrogEyes implements LayerRenderer<FrogEntity>
+public class FrogEyesLayer extends LayerRenderer<FrogEntity, FrogModel<FrogEntity>>
 {
-	private final ModelFrog frogModel = new ModelFrog();
-	private final RenderFrog frogRender;
+	private final FrogModel frogModel = new FrogModel();
 	private float colorMin = 0;
 	private String name;
 	
-	public LayerFrogEyes(RenderFrog renderIn)
+	public FrogEyesLayer(IEntityRenderer<FrogEntity, FrogModel<FrogEntity>> renderIn)
 	{
-		this.frogRender = renderIn;
+		super(renderIn);
 	}
 	
 	@Override
@@ -25,7 +25,7 @@ public class LayerFrogEyes implements LayerRenderer<FrogEntity>
 		if(!frog.isInvisible())
 		{
 
-			this.frogRender.bindTexture(this.getTexture(frog));
+			this.bindTexture(this.getTexture(frog));
 			if (frog.getFrogType() == 6)
 	        {
 	            /*
@@ -74,8 +74,8 @@ public class LayerFrogEyes implements LayerRenderer<FrogEntity>
 				}
 				
 				GlStateManager.color3f(r, g, b);
-				
-				this.frogModel.setModelAttributes(this.frogRender.getMainModel());
+
+				this.getEntityModel().setModelAttributes(this.frogModel);
 	            this.frogModel.setLivingAnimations(frog, limbSwing, limbSwingAmount, partialTicks);
 	            this.frogModel.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, 1f, frog);
 		        this.frogModel.render(frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
@@ -96,7 +96,7 @@ public class LayerFrogEyes implements LayerRenderer<FrogEntity>
 				
 				GlStateManager.color4f(r, g, b, 1f);
 
-				this.frogModel.setModelAttributes(this.frogRender.getMainModel());
+				this.getEntityModel().setModelAttributes(this.frogModel);
 	            this.frogModel.setLivingAnimations(frog, limbSwing, limbSwingAmount, partialTicks);
 	            this.frogModel.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, 1f, frog);
 		        this.frogModel.render(frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);

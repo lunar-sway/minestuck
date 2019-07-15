@@ -1,31 +1,30 @@
 package com.mraof.minestuck.client.renderer.entity.frog;
 
-import com.mraof.minestuck.client.model.ModelFrog;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mraof.minestuck.client.model.FrogModel;
 import com.mraof.minestuck.entity.FrogEntity;
 
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.entity.IEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
 
-public class LayerFrogBelly implements LayerRenderer<FrogEntity>
+public class FrogBellyLayer extends LayerRenderer<FrogEntity, FrogModel<FrogEntity>>
 {
-	private final ModelFrog frogModel = new ModelFrog();
-	private final RenderFrog frogRender;
+	private final FrogModel frogModel = new FrogModel();
 	private float colorMin = 0;
 	private int type = 0;
 	private String name;
 	
-	public LayerFrogBelly(RenderFrog renderIn)
+	public FrogBellyLayer(IEntityRenderer<FrogEntity, FrogModel<FrogEntity>> renderIn)
 	{
-		this.frogRender = renderIn;
+		super(renderIn);
 	}
-	
 	@Override
 	public void render(FrogEntity frog, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
 	{
 		if (!frog.isInvisible() && (frog.getFrogType() > frog.maxTypes() || frog.getFrogType() < 1))
         {
-			this.frogRender.bindTexture(this.getTexture(frog));
+			this.bindTexture(this.getTexture(frog));
 			int bellyColor;
 			type = frog.getBellyType();
 			if(type == 0)
@@ -44,8 +43,8 @@ public class LayerFrogBelly implements LayerRenderer<FrogEntity>
 			if(b < this.colorMin) b = this.colorMin;
 			
 			GlStateManager.color4f(r, g, b, 1f);
-			
-			this.frogModel.setModelAttributes(this.frogRender.getMainModel());
+
+			this.getEntityModel().setModelAttributes(this.frogModel);
             this.frogModel.setLivingAnimations(frog, limbSwing, limbSwingAmount, partialTicks);
             this.frogModel.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, 1f, frog);
 	        this.frogModel.render(frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);

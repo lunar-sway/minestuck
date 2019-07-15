@@ -1,22 +1,23 @@
 package com.mraof.minestuck.client.model;
 
-import net.minecraft.client.renderer.entity.model.ModelBase;
-import net.minecraft.client.renderer.entity.model.ModelRenderer;
+import com.mraof.minestuck.entity.underling.GiclopsEntity;
+import net.minecraft.client.renderer.entity.model.EntityModel;
+import net.minecraft.client.renderer.entity.model.RendererModel;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 
 import org.lwjgl.opengl.GL11;
 
-public class ModelGiclops extends ModelBase
+public class ModelGiclops<T extends GiclopsEntity> extends EntityModel<T>
 {
 
-	private ModelRenderer head;
-	private ModelRenderer leftLeg;
-	private ModelRenderer rightLeg;
-	private ModelRenderer body;
-	private ModelRenderer leftArm;
-	private ModelRenderer rightArm;
-	private ModelRenderer tail;
+	private RendererModel head;
+	private RendererModel leftLeg;
+	private RendererModel rightLeg;
+	private RendererModel body;
+	private RendererModel leftArm;
+	private RendererModel rightArm;
+	private RendererModel tail;
 	float scaling = 2.0F;
 
 	public ModelGiclops()
@@ -25,38 +26,38 @@ public class ModelGiclops extends ModelBase
 		this.textureWidth = 256;
 		this.textureHeight = 256;
 		setTextureOffset("null.Spike", 0, 0);
-		head = new ModelRenderer(this, 0, 0);
+		head = new RendererModel(this, 0, 0);
 		head.addBox(-21F, -26F, -25F, 42, 26, 50);
 		head.addBox("Spike", -2, -34, -6, 4, 8, 4);
 		head.addBox("Spike", -2, -34, -16, 4, 8, 4);
 		head.setRotationPoint(0F, 26F + offsetY, -14F);
-		body = new ModelRenderer(this, 0, 76);
+		body = new RendererModel(this, 0, 76);
 		body.addBox(-32F, 0F, -20F, 64, 64, 40);
 		body.setRotationPoint(0F, 16F + offsetY, -8F);
-		leftArm = new ModelRenderer(this, 184, 0);
+		leftArm = new RendererModel(this, 184, 0);
 		leftArm.addBox(-8F, 0F, -4F, 8, 52, 8);
 		leftArm.setRotationPoint(-32F, 28F + offsetY, -8F);
-		rightArm = new ModelRenderer(this, 184, 0);
+		rightArm = new RendererModel(this, 184, 0);
 		rightArm.addBox(0F, 0F, -4F, 8, 52, 8);
 		rightArm.setRotationPoint(32F, 28F + offsetY, -8F);
 		rightArm.mirror = true;
-		leftLeg = new ModelRenderer(this, 120, 180);
+		leftLeg = new RendererModel(this, 120, 180);
 		leftLeg.addBox(-12F, 0F, -12F, 24, 16, 24);
 		leftLeg.setRotationPoint(-20, 80F + offsetY, -8F);
-		rightLeg = new ModelRenderer(this, 120, 180);
+		rightLeg = new RendererModel(this, 120, 180);
 		rightLeg.addBox(-12F, 0F, -12F, 24, 16, 24);
 		rightLeg.setRotationPoint(20, 80F + offsetY, -8F);
 		rightLeg.mirror = true;
-		tail = new ModelRenderer(this, 0, 180);
+		tail = new RendererModel(this, 0, 180);
 		tail.addBox(-20F, -6F, -10F, 40, 44, 20);
 		tail.setRotationPoint(0F, 56F + offsetY, 0F);
 		tail.rotateAngleX = 30F / (180F / (float)Math.PI);
 	}
 	
 	@Override
-	public void render(Entity entity, float par2, float par3, float par4, float par5, float par6, float par7)
+	public void render(T entity, float par2, float par3, float par4, float par5, float par6, float par7)
 	{
-		this.setRotationAngles(par2, par3, par4, par5, par6, par7, entity);
+		this.setRotationAngles(entity, par2, par3, par4, par5, par6, par7);
 		//this is where I can increase the size
         GL11.glPushMatrix();
 //        GL11.glTranslatef(0.0F, par7 * scaling, 0.0F);
@@ -75,7 +76,7 @@ public class ModelGiclops extends ModelBase
 	 * "far" arms and legs can swing at most.
 	 */
 	@Override
-	public void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6, Entity par7Entity) 
+	public void setRotationAngles(T par7Entity, float par1, float par2, float par3, float par4, float par5, float par6)
 	{
 		this.head.rotateAngleY = par4 / (180F / (float)Math.PI);
 		this.head.rotateAngleX = (par5 + 20) / (180F / (float)Math.PI);

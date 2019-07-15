@@ -1,30 +1,30 @@
 package com.mraof.minestuck.client.renderer.entity.frog;
 
-import com.mraof.minestuck.client.model.ModelFrog;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mraof.minestuck.client.model.FrogModel;
 import com.mraof.minestuck.entity.FrogEntity;
 
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.entity.IEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
 
-public class LayerFrogSkin implements LayerRenderer<FrogEntity>
+public class FrogSkinLayer extends LayerRenderer<FrogEntity, FrogModel<FrogEntity>>
 {
-	private final ModelFrog frogModel = new ModelFrog();
-	private final RenderFrog frogRender;
+	private final FrogModel frogModel = new FrogModel();
 	private float colorMin = 0.25f;
 	private String name;
 
-	public LayerFrogSkin(RenderFrog renderIn)
+	public FrogSkinLayer(IEntityRenderer<FrogEntity, FrogModel<FrogEntity>> renderIn)
 	{
-		this.frogRender = renderIn;
+		super(renderIn);
 	}
-	
+
 	@Override
 	public void render(FrogEntity frog, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
 	{
 		if (!frog.isInvisible()) {
 			int type = frog.getFrogType();
-			this.frogRender.bindTexture(this.getTexture(type));
+			this.bindTexture(this.getTexture(type));
 			if ((type > frog.maxTypes() || type < 1)) {
 				int skinColor = frog.getSkinColor();
 
@@ -41,7 +41,7 @@ public class LayerFrogSkin implements LayerRenderer<FrogEntity>
 
 				GlStateManager.color4f(r, g, b, 1f);
 			}
-			this.frogModel.setModelAttributes(this.frogRender.getMainModel());
+			this.getEntityModel().setModelAttributes(this.frogModel);
             this.frogModel.setLivingAnimations(frog, limbSwing, limbSwingAmount, partialTicks);
             this.frogModel.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, 1f, frog);
 	        this.frogModel.render(frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);

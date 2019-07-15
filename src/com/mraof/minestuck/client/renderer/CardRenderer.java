@@ -4,7 +4,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderCard// implements IItemRenderer
+public class CardRenderer// implements IItemRenderer
 {
 	
 //	public static IIcon cardIcon;

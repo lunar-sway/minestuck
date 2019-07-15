@@ -1,56 +1,56 @@
 package com.mraof.minestuck.client.model;
 
-import net.minecraft.client.renderer.entity.model.ModelBase;
-import net.minecraft.client.renderer.entity.model.ModelRenderer;
-import net.minecraft.entity.Entity;
+import com.mraof.minestuck.entity.consort.NakagatorEntity;
+import net.minecraft.client.renderer.entity.model.EntityModel;
+import net.minecraft.client.renderer.entity.model.RendererModel;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
-public class ModelNakagator extends ModelBase
+public class NakagatorModel<T extends NakagatorEntity> extends EntityModel<T>
 {
 	public boolean hasArms;
-	ModelRenderer body;
-	ModelRenderer rightLeg;
-	ModelRenderer leftLeg;
-	ModelRenderer head;
-	ModelRenderer upperTail;
-	ModelRenderer lowerTail;
-	ModelRenderer upperJaw;
-	ModelRenderer lowerJaw;
+	RendererModel body;
+	RendererModel rightLeg;
+	RendererModel leftLeg;
+	RendererModel head;
+	RendererModel upperTail;
+	RendererModel lowerTail;
+	RendererModel upperJaw;
+	RendererModel lowerJaw;
 
     
-    public ModelNakagator()
+    public NakagatorModel()
     {
     	this(false);
     }
     
-    public ModelNakagator(boolean hasArms)
+    public NakagatorModel(boolean hasArms)
     {
     	textureWidth = 64;
         textureHeight = 32;
 	
-		this.body = new ModelRenderer(this, 10, 17);
+		this.body = new RendererModel(this, 10, 17);
 		this.body.setRotationPoint(0.0F, 10.0F, 0.0F);
 		this.body.addBox(-3.0F, 0.0F, -3.0F, 6, 9, 6, 0.0F);
-		this.rightLeg = new ModelRenderer(this, 0, 16);
+		this.rightLeg = new RendererModel(this, 0, 16);
 		this.rightLeg.setRotationPoint(-1.0F, 19.0F, 0.0F);
 		this.rightLeg.addBox(-2.0F, 0.0F, -2.0F, 2, 5, 3, 0.0F);
-		this.leftLeg = new ModelRenderer(this, 0, 24);
+		this.leftLeg = new RendererModel(this, 0, 24);
 		this.leftLeg.setRotationPoint(3.0F, 19.0F, 0.0F);
 		this.leftLeg.addBox(-2.0F, 0.0F, -2.0F, 2, 5, 3, 0.0F);
-		this.head = new ModelRenderer(this, 0, 0);
+		this.head = new RendererModel(this, 0, 0);
 		this.head.setRotationPoint(0.0F, 8.3F, 0.0F);
 		this.head.addBox(-3.0F, -1.3F, -3.0F, 6, 3, 7, 0.0F);
-		this.upperJaw = new ModelRenderer(this, 34, 0);
+		this.upperJaw = new RendererModel(this, 34, 0);
 		this.upperJaw.setRotationPoint(0.0F, 8.1F, 0.0F);
 		this.upperJaw.addBox(-2.0F, 0.0F, -12.0F, 4, 1, 11, 0.0F);
-		this.lowerJaw = new ModelRenderer(this, 34, 12);
+		this.lowerJaw = new RendererModel(this, 34, 12);
 		this.lowerJaw.setRotationPoint(0.0F, 9.0F, -0.0F);
 		this.lowerJaw.addBox(-2.0F, 0.0F, -10.0F, 4, 1, 11, 0.0F);
-		this.lowerTail = new ModelRenderer(this, 26, 0);
+		this.lowerTail = new RendererModel(this, 26, 0);
 		this.lowerTail.setRotationPoint(0.0F, 22.0F, 4.0F);
 		this.lowerTail.addBox(-1.0F, 0.0F, -1.0F, 2, 2, 7, 0.0F);
-		this.upperTail = new ModelRenderer(this, 26, 9);
+		this.upperTail = new RendererModel(this, 26, 9);
 		this.upperTail.setRotationPoint(0.0F, 18.0F, 3.0F);
 		this.upperTail.addBox(-1.0F, 0.0F, -1.0F, 2, 4, 2, 0.0F);
 		this.setRotation(upperTail, 0.22307169437408447F, 0.0F, 0.0F);
@@ -58,9 +58,9 @@ public class ModelNakagator extends ModelBase
 	}
 	
 	@Override
-	public void render(Entity entity, float par2, float par3, float par4, float par5, float par6, float par7)
+	public void render(T entity, float par2, float par3, float par4, float par5, float par6, float par7)
 	{
-		this.setRotationAngles(par2, par3, par4, par5, par6, par7, entity);
+		this.setRotationAngles(entity, par2, par3, par4, par5, par6, par7);
 
 		if (this.isChild)
 		{
@@ -110,7 +110,7 @@ public class ModelNakagator extends ModelBase
      * and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how
      * "far" arms and legs can swing at most.
      */
-    private void setRotation(ModelRenderer model, float x, float y, float z)
+    private void setRotation(RendererModel model, float x, float y, float z)
 	{
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
@@ -118,7 +118,7 @@ public class ModelNakagator extends ModelBase
 	}
 	
 	@Override
-	public void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6, Entity par7Entity) {
+	public void setRotationAngles(T par7Entity, float par1, float par2, float par3, float par4, float par5, float par6) {
 		this.head.rotateAngleY = par4 / (180F / (float)Math.PI);
 		this.head.rotateAngleX = par5 / (180F / (float)Math.PI);
 		this.upperJaw.rotateAngleY = par4 / (180F / (float)Math.PI);

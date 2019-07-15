@@ -1,10 +1,13 @@
 package com.mraof.minestuck.client.renderer.entity;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.entity.item.GristEntity;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -13,10 +16,10 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderGrist extends Render<GristEntity>
+public class RenderGrist extends EntityRenderer<GristEntity>
 {
 	
-	public RenderGrist(RenderManager manager)
+	public RenderGrist(EntityRendererManager manager)
 	{
 		super(manager);
 		this.shadowSize = 0.15F;

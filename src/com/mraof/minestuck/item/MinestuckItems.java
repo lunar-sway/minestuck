@@ -594,7 +594,7 @@ public class MinestuckItems
 		
 		registry.register(GOLDEN_GRASSHOPPER = new Item(new Item.Properties().group(ModItemGroup.LANDS)).setRegistryName("golden_grasshopper"));
 		registry.register(BUG_NET = new BugNetItem(new Item.Properties().defaultMaxDamage(64).group(ModItemGroup.LANDS)).setRegistryName("bug_net"));
-		registry.register(FROG = new ItemFrog(new Item.Properties().maxStackSize(1).group(ModItemGroup.LANDS)).setRegistryName("frog"));
+		registry.register(FROG = new FrogItem(new Item.Properties().maxStackSize(1).group(ModItemGroup.LANDS)).setRegistryName("frog"));
 		registry.register(CARVING_TOOL = new Item(new Item.Properties().maxStackSize(1).group(ModItemGroup.LANDS)).setRegistryName("carving_tool"));
 		registry.register(CRUMPLY_HAT = new Item(new Item.Properties().maxStackSize(1).group(ModItemGroup.LANDS)).setRegistryName("crumply_hat"));
 		registry.register(STONE_EYEBALLS = new Item(new Item.Properties().group(ModItemGroup.LANDS)).setRegistryName("stone_eyeballs"));

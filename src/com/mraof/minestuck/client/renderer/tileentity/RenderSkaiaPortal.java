@@ -1,10 +1,13 @@
 package com.mraof.minestuck.client.renderer.tileentity;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.tileentity.SkaiaPortalTileEntity;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.EntityTippedArrow;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
@@ -23,7 +26,7 @@ public class RenderSkaiaPortal extends TileEntityRenderer<SkaiaPortalTileEntity>
 	@Override
 	public void render(SkaiaPortalTileEntity tileEntityIn, double x, double y, double z, float partialTicks, int destroyStage)
 	{
-		Entity temp = new EntityTippedArrow(tileEntityIn.getWorld());
+		Entity temp = new ArrowEntity(EntityType.ARROW, tileEntityIn.getWorld());
 		Vec3d position = ActiveRenderInfo.projectViewFromEntity(temp, 0);	//TODO temp solution for removed getter
 		
 		float var9 = (float)this.rendererDispatcher.entityX;

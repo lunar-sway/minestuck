@@ -250,4 +250,6 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 	{
 		return random;
 	}
+
+	public Direction getFacingDirection() {return facingDirection;}
 }

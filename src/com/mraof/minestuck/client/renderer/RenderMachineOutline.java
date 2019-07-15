@@ -1,20 +1,24 @@
 package com.mraof.minestuck.client.renderer;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.block.AlchemiterItem;
 import com.mraof.minestuck.item.block.CruxtruderItem;
 import com.mraof.minestuck.item.block.PunchDesignixItem;
 import com.mraof.minestuck.item.block.TotemLatheItem;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -33,7 +37,7 @@ public class RenderMachineOutline
 		if (mc.player != null && mc.getRenderViewEntity() == mc.player)
 		{
 			RayTraceResult rayTraceResult = mc.objectMouseOver;
-			if (rayTraceResult == null || rayTraceResult.type != RayTraceResult.Type.BLOCK || rayTraceResult.sideHit != EnumFacing.UP)
+			if (rayTraceResult == null || rayTraceResult.type != RayTraceResult.Type.BLOCK || rayTraceResult.sideHit != Direction.UP)
 				return;
 			
 			if (!renderCheckItem(mc.player, mc.player.getHeldItemMainhand(), event.getContext(), rayTraceResult, event.getPartialTicks()))
@@ -41,7 +45,7 @@ public class RenderMachineOutline
 		}
 	}
 	
-	private static boolean renderCheckItem(EntityPlayerSP player, ItemStack stack, WorldRenderer render, RayTraceResult rayTraceResult, float partialTicks)
+	private static boolean renderCheckItem(ClientPlayerEntity player, ItemStack stack, WorldRenderer render, BlockRayTraceResult rayTraceResult, float partialTicks)
 	{
 		if(stack.isEmpty())
 			return false;
@@ -51,19 +55,19 @@ public class RenderMachineOutline
 				|| stack.getItem() == MinestuckBlocks.ALCHEMITER.asItem())
 				//||stack.getItem()==Item.getItemFromBlock(MinestuckBlocks.jumperBlockExtension[0]))
 		{
-			BlockPos pos = rayTraceResult.getBlockPos();
+			BlockPos pos = rayTraceResult.getPos();
 			
-			IBlockState block = player.world.getBlockState(pos);
+			BlockState block = player.world.getBlockState(pos);
 			boolean flag = block.isReplaceable(new BlockItemUseContext(player.world, player, stack, pos, rayTraceResult.sideHit, (float) rayTraceResult.hitVec.x - pos.getX(), (float) rayTraceResult.hitVec.y - pos.getY(), (float) rayTraceResult.hitVec.z - pos.getZ()));
 			
 			if (!flag)
 				pos = pos.up();
 			BlockItemUseContext context = new BlockItemUseContext(player.world, player, stack, pos, rayTraceResult.sideHit, (float) rayTraceResult.hitVec.x - pos.getX(), (float) rayTraceResult.hitVec.y - pos.getY(), (float) rayTraceResult.hitVec.z - pos.getZ());
 			
-			EnumFacing placedFacing = player.getHorizontalFacing().getOpposite();
+			Direction placedFacing = player.getHorizontalFacing().getOpposite();
 			double hitX = rayTraceResult.hitVec.x - pos.getX(), hitZ = rayTraceResult.hitVec.z - pos.getZ();
-			boolean r = placedFacing.getAxis() == EnumFacing.Axis.Z;
-			boolean f = placedFacing== EnumFacing.NORTH || placedFacing==EnumFacing.EAST;
+			boolean r = placedFacing.getAxis() == Direction.Axis.Z;
+			boolean f = placedFacing== Direction.NORTH || placedFacing==Direction.EAST;
 			double d1 = player.lastTickPosX + (player.posX - player.lastTickPosX) * (double)partialTicks;
 			double d2 = player.lastTickPosY + (player.posY - player.lastTickPosY) * (double)partialTicks;
 			double d3 = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * (double)partialTicks;
@@ -83,7 +87,7 @@ public class RenderMachineOutline
 					pos = pos.offset(placedFacing.rotateY());
 				
 				BlockPos placementPos = pos;
-				if (placedFacing == EnumFacing.EAST || placedFacing == EnumFacing.NORTH)
+				if (placedFacing == Direction.EAST || placedFacing == Direction.NORTH)
 					pos = pos.offset(placedFacing.rotateYCCW());    //The bounding box is symmetrical, so doing this gets rid of some rendering cases
 				
 				boundingBox = new AxisAlignedBB(0, 0, 0, (r ? 2 : 1), 2, (r ? 1 : 2)).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
@@ -97,7 +101,7 @@ public class RenderMachineOutline
 					pos = pos.offset(placedFacing.rotateY());
 				
 				BlockPos placementPos = pos;
-				if (placedFacing == EnumFacing.EAST || placedFacing == EnumFacing.NORTH)
+				if (placedFacing == Direction.EAST || placedFacing == Direction.NORTH)
 					pos = pos.offset(placedFacing.rotateYCCW(), 3);    //The bounding box is symmetrical, so doing this gets rid of some rendering cases
 				
 				boundingBox = new AxisAlignedBB(0, 0, 0, (r ? 4 : 1), 3, (r ? 1 : 4)).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
@@ -118,13 +122,13 @@ public class RenderMachineOutline
 					pos = pos.offset(placedFacing.rotateY());
 				
 				BlockPos placementPos = pos;
-				if(placedFacing == EnumFacing.WEST)
+				if(placedFacing == Direction.WEST)
 					pos = pos.offset(placedFacing, 0);
-				if (placedFacing == EnumFacing.SOUTH)
+				if (placedFacing == Direction.SOUTH)
 					pos = pos.offset(placedFacing.getOpposite(), 3);    
-				if (placedFacing == EnumFacing.EAST)
+				if (placedFacing == Direction.EAST)
 					pos = pos.offset(placedFacing.getOpposite(), 3).offset(placedFacing.rotateYCCW(), 4);    
-				if(placedFacing == EnumFacing.NORTH)
+				if(placedFacing == Direction.NORTH)
 					pos = pos.offset(placedFacing.rotateYCCW(), 4);
 				
 				boundingBox = new AxisAlignedBB(0, 0, 0, (r ? 5 : 4), 1, (r ? 4 : 5)).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
@@ -138,9 +142,9 @@ public class RenderMachineOutline
 					pos = pos.offset(placedFacing.rotateY());
 				
 				BlockPos placementPos = pos;
-				if (placedFacing == EnumFacing.EAST || placedFacing == EnumFacing.NORTH)
+				if (placedFacing == Direction.EAST || placedFacing == Direction.NORTH)
 					pos = pos.offset(placedFacing.rotateYCCW(), 3);
-				if(placedFacing == EnumFacing.EAST || placedFacing == EnumFacing.SOUTH)
+				if(placedFacing == Direction.EAST || placedFacing == Direction.SOUTH)
 					pos = pos.offset(placedFacing.getOpposite(), 3);
 				
 				boundingBox = new AxisAlignedBB(0, 0, 0, 4, 4, 4).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
