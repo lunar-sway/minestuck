@@ -1,15 +1,12 @@
 package com.mraof.minestuck.client.renderer;
 
+import ca.weblite.objc.Client;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspects;
 import com.mraof.minestuck.world.lands.LandDimension;
-import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -23,19 +20,19 @@ import net.minecraftforge.client.IRenderHandler;
 import java.util.List;
 import java.util.Random;
 
-public class LandSkyRender implements IRenderHandler
+public class LandSkyRenderer implements IRenderHandler
 {
 	
 	private static final ResourceLocation SKAIA_TEXTURE = new ResourceLocation("minestuck", "textures/environment/skaia.png");
 	
 	private LandDimension providerLands;
-	public LandSkyRender(LandDimension provider)
+	public LandSkyRenderer(LandDimension provider)
 	{
 		providerLands = provider;
 	}
 	
 	@Override
-	public void render(float partialTicks, ClientWorld world, Minecraft mc)
+	public void render(int ticks, float partialTicks, ClientWorld world, Minecraft mc)
 	{
 		float heightModifier = (float) MathHelper.clamp((mc.player.posY - 144)/112, 0, 1);
 		float heightModifierDiminish = (1 - heightModifier/1.5F);
@@ -44,8 +41,8 @@ public class LandSkyRender implements IRenderHandler
 		starBrightness += (0.5 - starBrightness)*heightModifier;
 		float skaiaBrightness = 0.5F +0.5F*skyClearness*heightModifier;
 		
-		GlStateManager.disableTexture2D();
-		Vec3d vec3d = world.getSkyColor(mc.getRenderViewEntity(), partialTicks);
+		GlStateManager.disableTexture();
+		Vec3d vec3d = world.getSkyColor(mc.getRenderViewEntity().getPosition(), partialTicks);
 		float r = (float)vec3d.x*heightModifierDiminish;
 		float g = (float)vec3d.y*heightModifierDiminish;
 		float b = (float)vec3d.z*heightModifierDiminish;
@@ -77,7 +74,7 @@ public class LandSkyRender implements IRenderHandler
 		RenderHelper.disableStandardItemLighting();
 		//
 		
-		GlStateManager.enableTexture2D();
+		GlStateManager.enableTexture();
 		GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 		GlStateManager.color4f(1.0F, 1.0F, 1.0F, skaiaBrightness);
 		float skaiaSize = 20.0F;
@@ -88,7 +85,7 @@ public class LandSkyRender implements IRenderHandler
 		bufferbuilder.pos((double)skaiaSize, 100.0D, (double)skaiaSize).tex(1.0D, 1.0D).endVertex();
 		bufferbuilder.pos((double)(-skaiaSize), 100.0D, (double)skaiaSize).tex(0.0D, 1.0D).endVertex();
 		tessellator.draw();
-		GlStateManager.disableTexture2D();
+		GlStateManager.disableTexture();
 		
 		if(starBrightness > 0)
 		{
@@ -107,7 +104,7 @@ public class LandSkyRender implements IRenderHandler
 		GlStateManager.disableBlend();
 		GlStateManager.enableAlphaTest();
 		GlStateManager.enableFog();
-		GlStateManager.disableTexture2D();
+		GlStateManager.disableTexture();
 		GlStateManager.color3f(0.0F, 0.0F, 0.0F);
 		double d3 = mc.player.getEyePosition(partialTicks).y - world.getHorizon();
 		
@@ -129,11 +126,11 @@ public class LandSkyRender implements IRenderHandler
 		}
 		tessellator.draw();
 		GlStateManager.popMatrix();
-		GlStateManager.enableTexture2D();
+		GlStateManager.enableTexture();
 		GlStateManager.depthMask(true);
 	}
 	
-	private void drawVeil(float partialTicks, WorldClient world)
+	private void drawVeil(float partialTicks, ClientWorld world)
 	{
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
@@ -194,7 +191,7 @@ public class LandSkyRender implements IRenderHandler
 		if(list == null)
 			return;
 		int index = list.indexOf(dim);
-		GlStateManager.enableTexture2D();
+		GlStateManager.enableTexture();
 		for(int i = 1; i < list.size(); i++)
 		{
 			DimensionType type = list.get((index + i)%list.size());
@@ -204,7 +201,7 @@ public class LandSkyRender implements IRenderHandler
 				//drawLand(mc, getResourceLocations(MinestuckDimensionHandler.getAspects(type), random), (i / (float) list.size()), random);
 			}
 		}
-		GlStateManager.disableTexture2D();
+		GlStateManager.disableTexture();
 	}
 	
 	public void drawLand(Minecraft mc, ResourceLocation[] textures, float pos, Random random)

@@ -1,38 +1,29 @@
 package com.mraof.minestuck.world.lands;
 
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.client.renderer.LandSkyRender;
+import com.mraof.minestuck.client.renderer.LandSkyRenderer;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.gen.ModChunkGeneratorType;
-import com.mraof.minestuck.world.gen.SkaiaGenSettings;
 import com.mraof.minestuck.world.lands.gen.ChunkGeneratorLands;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 import com.mraof.minestuck.world.lands.gen.LandGenSettings;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.GameType;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.provider.BiomeProviderType;
 import net.minecraft.world.dimension.Dimension;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.ChunkGeneratorType;
-import net.minecraft.world.gen.OverworldGenSettings;
 import net.minecraftforge.common.ModDimension;
 
 import javax.annotation.Nullable;
@@ -66,7 +57,7 @@ public class LandDimension extends Dimension
 		this.nether = false;
 		
 		if(world.isRemote)
-			setSkyRenderer(new LandSkyRender(this));
+			setSkyRenderer(new LandSkyRenderer(this));
 		
 		if(landAspects != null)
 			initLandAspects();
