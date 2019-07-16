@@ -12,14 +12,14 @@ import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.*;
 
 import com.mraof.minestuck.world.storage.PlayerSavedData;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.monster.*;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.MobEffects;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.potion.Effect;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -48,7 +48,7 @@ public class ServerEventHandler
 	
 	public static List<PostEntryTask> tickTasks = new ArrayList<>();
 	
-	static Potion[] aspectEffects = { MobEffects.ABSORPTION, MobEffects.SPEED, MobEffects.RESISTANCE, MobEffects.ABSORPTION, MobEffects.FIRE_RESISTANCE, MobEffects.REGENERATION, MobEffects.LUCK, MobEffects.NIGHT_VISION, MobEffects.STRENGTH, MobEffects.JUMP_BOOST, MobEffects.HASTE, MobEffects.INVISIBILITY }; //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
+	static Effect[] aspectEffects = {Effects.ABSORPTION, Effects.SPEED, Effects.RESISTANCE, Effects.ABSORPTION, Effects.FIRE_RESISTANCE, Effects.REGENERATION, Effects.LUCK, Effects.NIGHT_VISION, Effects.STRENGTH, Effects.JUMP_BOOST, Effects.HASTE, Effects.INVISIBILITY }; //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
 	// Increase the starting rungs
 	static float[] aspectStrength = new float[] {1.0F/14, 1.0F/15, 1.0F/28, 1.0F/14, 1.0F/18, 1.0F/20, 1.0F/10, 1.0F/12, 1.0F/25, 1.0F/10, 1.0F/13, 1.0F/12}; //Absorption, Speed, Resistance, Saturation, Fire Resistance, Regeneration, Luck, Night Vision, Strength, Jump Boost, Haste, Invisibility
 	
@@ -64,7 +64,7 @@ public class ServerEventHandler
 				if(time != lastDay)
 				{
 					lastDay = time;
-					SkaianetHandler.get(event.world).resetGivenItems();
+					SkaianetHandler.get(event.world.getServer()).resetGivenItems();
 				}
 			}
 			
@@ -78,24 +78,24 @@ public class ServerEventHandler
 	@SubscribeEvent(priority=EventPriority.LOWEST, receiveCanceled=false)
 	public void onEntityDeath(LivingDeathEvent event)
 	{
-		if(event.getEntity() instanceof IMob && event.getSource().getTrueSource() instanceof EntityPlayerMP)
+		if(event.getEntity() instanceof IMob && event.getSource().getTrueSource() instanceof ServerPlayerEntity)
 		{
-			EntityPlayerMP player = (EntityPlayerMP) event.getSource().getTrueSource();
+			ServerPlayerEntity player = (ServerPlayerEntity) event.getSource().getTrueSource();
 			int exp = 0;
-			if(event.getEntity() instanceof EntityZombie || event.getEntity() instanceof EntitySkeleton)
+			if(event.getEntity() instanceof ZombieEntity || event.getEntity() instanceof SkeletonEntity)
 				exp = 6;
-			else if(event.getEntity() instanceof EntityCreeper || event.getEntity() instanceof EntitySpider || event.getEntity() instanceof EntitySilverfish)
+			else if(event.getEntity() instanceof CreeperEntity || event.getEntity() instanceof SpiderEntity || event.getEntity() instanceof SilverfishEntity)
 				exp = 5;
-			else if(event.getEntity() instanceof EntityEnderman || event.getEntity() instanceof EntityBlaze || event.getEntity() instanceof EntityWitch || event.getEntity() instanceof EntityGuardian)
+			else if(event.getEntity() instanceof EndermanEntity || event.getEntity() instanceof BlazeEntity || event.getEntity() instanceof WitchEntity || event.getEntity() instanceof GuardianEntity)
 				exp = 12;
-			else if(event.getEntity() instanceof EntitySlime)
-				exp = ((EntitySlime) event.getEntity()).getSlimeSize() - 1;
+			else if(event.getEntity() instanceof SlimeEntity)
+				exp = ((SlimeEntity) event.getEntity()).getSlimeSize() - 1;
 			
 			if(exp > 0)
 				Echeladder.increaseProgress(player, exp);
 		}
-		if(event.getEntity() instanceof EntityPlayerMP)
-			SburbHandler.stopEntry((EntityPlayerMP) event.getEntity());
+		if(event.getEntity() instanceof ServerPlayerEntity)
+			SburbHandler.stopEntry((ServerPlayerEntity) event.getEntity());
 	}
 
 	//Gets reset after AttackEntityEvent but before LivingHurtEvent, but is used in determining if it's a critical hit
@@ -112,15 +112,15 @@ public class ServerEventHandler
 	{
 		if(event.getSource().getTrueSource() != null)
 		{
-			if (event.getSource().getTrueSource() instanceof EntityPlayerMP)
+			if (event.getSource().getTrueSource() instanceof ServerPlayerEntity)
 			{
-				EntityPlayerMP player = (EntityPlayerMP) event.getSource().getTrueSource();
+				ServerPlayerEntity player = (ServerPlayerEntity) event.getSource().getTrueSource();
 				if (event.getEntityLiving() instanceof UnderlingEntity)
 				{    //Increase damage to underling
 					double modifier = PlayerSavedData.getData(player).echeladder.getUnderlingDamageModifier();
 					event.setAmount((float) (event.getAmount() * modifier));
 				}
-				boolean critical = cachedCooledAttackStrength > 0.9 && player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder() && !player.isInWater() && !player.isPotionActive(MobEffects.BLINDNESS) && !player.isPassenger() && !player.isBeingRidden();
+				boolean critical = cachedCooledAttackStrength > 0.9 && player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder() && !player.isInWater() && !player.isPotionActive(Effects.BLINDNESS) && !player.isPassenger() && !player.isBeingRidden();
 				if(!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof PotionWeaponItem)
 				{
 					if(((PotionWeaponItem) player.getHeldItemMainhand().getItem()).potionOnCrit())
@@ -131,9 +131,9 @@ public class ServerEventHandler
 					else event.getEntityLiving().addPotionEffect(((PotionWeaponItem) player.getHeldItemMainhand().getItem()).getEffect(player));
 				}
 			}
-			else if (event.getEntityLiving() instanceof EntityPlayerMP && event.getSource().getTrueSource() instanceof UnderlingEntity)
+			else if (event.getEntityLiving() instanceof ServerPlayerEntity && event.getSource().getTrueSource() instanceof UnderlingEntity)
 			{    //Decrease damage to player
-					EntityPlayerMP player = (EntityPlayerMP) event.getEntityLiving();
+				ServerPlayerEntity player = (ServerPlayerEntity) event.getEntityLiving();
 					double modifier = PlayerSavedData.getData(player).echeladder.getUnderlingProtectionModifier();
 					event.setAmount((float) (event.getAmount() * modifier));
 			}
@@ -152,9 +152,9 @@ public class ServerEventHandler
 	@SubscribeEvent
 	public void playerChangedDimension(PlayerChangedDimensionEvent event)
 	{
-		SburbHandler.stopEntry((EntityPlayerMP) event.getPlayer());
+		SburbHandler.stopEntry((ServerPlayerEntity) event.getPlayer());
 		
-		PlayerSavedData.getData((EntityPlayerMP) event.getPlayer()).echeladder.resendAttributes(event.getPlayer());
+		PlayerSavedData.getData((ServerPlayerEntity) event.getPlayer()).echeladder.resendAttributes(event.getPlayer());
 	}
 	
 	@SubscribeEvent(priority=EventPriority.LOW, receiveCanceled=false)
@@ -190,23 +190,23 @@ public class ServerEventHandler
 		if(!event.player.world.isRemote)
 		{
 			IdentifierHandler.PlayerIdentifier identifier = IdentifierHandler.encode(event.player);
-			SburbConnection c = SkaianetHandler.get(event.player.world).getMainConnection(identifier, true);
-			if(c == null || !c.hasEntered() || !MinestuckConfig.aspectEffects || !PlayerSavedData.get(event.player.world).getEffectToggle(identifier))
+			SburbConnection c = SkaianetHandler.get(event.player.getServer()).getMainConnection(identifier, true);
+			if(c == null || !c.hasEntered() || !MinestuckConfig.aspectEffects || !PlayerSavedData.get(event.player.getServer()).getEffectToggle(identifier))
 				return;
-			int rung = PlayerSavedData.getData((EntityPlayerMP) event.player).echeladder.getRung();
-			EnumAspect aspect = PlayerSavedData.get(event.player.world).getTitle(identifier).getHeroAspect();
+			int rung = PlayerSavedData.getData((ServerPlayerEntity) event.player).echeladder.getRung();
+			EnumAspect aspect = PlayerSavedData.get(event.player.getServer()).getTitle(identifier).getHeroAspect();
 			int potionLevel = (int) (aspectStrength[aspect.ordinal()] * rung); //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
 			
 			if(event.player.getEntityWorld().getGameTime() % 380 == identifier.hashCode() % 380)
 			{
 				if(rung > 18 && aspect == HOPE)
 				{
-					event.player.addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, 600, 0));
+					event.player.addPotionEffect(new EffectInstance(Effects.WATER_BREATHING, 600, 0));
 				}
 				
 				if(potionLevel > 0)
 				{
-					event.player.addPotionEffect(new PotionEffect(aspectEffects[aspect.ordinal()], 600, potionLevel - 1));
+					event.player.addPotionEffect(new EffectInstance(aspectEffects[aspect.ordinal()], 600, potionLevel - 1));
 				}
 			}
 		}

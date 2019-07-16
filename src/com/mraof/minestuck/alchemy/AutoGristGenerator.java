@@ -48,7 +48,7 @@ public class AutoGristGenerator
 		Debug.info("Found " + recipeList.size() + " nondynamic recipes.");
 	}
 	
-	public void excecute()
+	public void execute()
 	{
 		Debug.debug("Calculating grist conversion...");
 		Iterator<Map.Entry<Item, List<IRecipe>>> it = recipeList.entrySet().iterator();
@@ -103,7 +103,7 @@ public class AutoGristGenerator
 		return null;
 	}
 	
-	private boolean checkRecipe(IRecipe recipe)
+	private boolean checkRecipe(IRecipe<?> recipe)
 	{
 		ItemStack output = recipe.getRecipeOutput();
 		if(AlchemyCostRegistry.getGristConversion(output) != null)

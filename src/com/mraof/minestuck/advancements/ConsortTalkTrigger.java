@@ -9,8 +9,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.advancements.PlayerAdvancements;
-import net.minecraft.advancements.criterion.AbstractCriterionInstance;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.advancements.criterion.CriterionInstance;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
 
@@ -75,7 +74,7 @@ public class ConsortTalkTrigger implements ICriterionTrigger<ConsortTalkTrigger.
 			listeners.trigger(message);
 	}
 	
-	public static class Instance extends AbstractCriterionInstance
+	public static class Instance extends CriterionInstance
 	{
 		private final String message;
 		public Instance(String message)

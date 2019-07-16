@@ -1,10 +1,7 @@
 package com.mraof.minestuck.command;
 
 import com.mojang.brigadier.CommandDispatcher;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.*;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.world.WorldServer;
 
 public class CommandTransportalizer
 {

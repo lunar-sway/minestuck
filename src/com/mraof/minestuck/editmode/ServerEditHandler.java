@@ -12,30 +12,24 @@ import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockDoor;
-import net.minecraft.block.BlockFenceGate;
-import net.minecraft.block.BlockTrapDoor;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.*;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.GameType;
+import net.minecraft.world.ServerWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
@@ -100,11 +94,11 @@ public class ServerEditHandler
 		
 		list.remove(data);
 		
-		EntityPlayerMP player = data.player;
+		ServerPlayerEntity player = data.player;
 		player.closeScreen();
 		DecoyEntity decoy = data.decoy;
 		if(player.dimension != decoy.dimension)
-			if(!Teleport.teleportEntity(player, decoy.dimension, null))
+			//if(!Teleport.teleportEntity(player, decoy.dimension, null))	TODO
 			{
 				list.add(data);
 				throw new IllegalStateException("Was not able to reset editmode player for "+player.getName()+"! Likely caused by mod collision.");
@@ -122,7 +116,7 @@ public class ServerEditHandler
 		player.fallDistance = 0;
 		player.setHealth(decoy.getHealth());
 		player.getFoodStats().read(decoy.getFoodStatsNBT());
-		data.connection.inventory = player.inventory.write(new NBTTagList());
+		data.connection.inventory = player.inventory.write(new ListNBT());
 		player.inventory.copyInventory(decoy.inventory);
 		
 		decoy.markedForDespawn = true;
@@ -138,11 +132,11 @@ public class ServerEditHandler
 	{
 		if(player.getRidingEntity() == null)
 			return;	//Don't want to bother making the decoy able to ride anything right now.
-		SburbConnection c = SkaianetHandler.get(player.world).getActiveConnection(computerTarget);
+		SburbConnection c = SkaianetHandler.get(player.getServer()).getActiveConnection(computerTarget);
 		if(c != null && c.getServerIdentifier().equals(computerOwner) && getData(c) == null && getData(player) == null)
 		{
 			Debug.info("Activating edit mode on player \""+player.getName()+"\", target player: \""+computerTarget+"\".");
-			DecoyEntity decoy = new DecoyEntity((WorldServer) player.world, player);
+			DecoyEntity decoy = new DecoyEntity((ServerWorld) player.world, player);
 			EditData data = new EditData(decoy, player, c);
 			if(!c.hasEntered())
 			{
@@ -151,12 +145,12 @@ public class ServerEditHandler
 			}
 			if(!setPlayerStats(player, c))
 			{
-				player.sendMessage(new TextComponentString(TextFormatting.RED+"Failed to activate edit mode."));
+				player.sendMessage(new StringTextComponent(TextFormatting.RED+"Failed to activate edit mode."));
 				return;
 			}
 			if(c.inventory != null)
 				player.inventory.read(c.inventory);
-			decoy.world.spawnEntity(decoy);
+			decoy.world.addEntity(decoy);
 			list.add(data);
 			ServerEditPacket packet = ServerEditPacket.activate(computerTarget.getUsername(), c.centerX, c.centerZ, c.givenItems(), DeployList.getDeployListTag(player.getServer(), c));
 			MinestuckPacketHandler.sendToPlayer(packet, player);
@@ -164,11 +158,11 @@ public class ServerEditHandler
 		}
 	}
 	
-	static boolean setPlayerStats(EntityPlayerMP player, SburbConnection c)
+	static boolean setPlayerStats(ServerPlayerEntity player, SburbConnection c)
 	{
 		
 		double posX, posY = 0, posZ;
-		WorldServer world = player.getServer().getWorld(c.hasEntered() ? c.getClientDimension() : c.getClientData().getDimension());
+		ServerWorld world = player.getServer().getWorld(c.hasEntered() ? c.getClientDimension() : c.getClientData().getDimension());
 		
 		if(c.useCoordinates)
 		{
@@ -182,8 +176,8 @@ public class ServerEditHandler
 			posZ = c.centerZ + 0.5;
 		}
 		
-		if(player.changeDimension(world.getDimension().getType(), new PositionTeleporter(posX, posY, posZ)) == null)
-			return false;
+		//if(player.changeDimension(world.getDimension().getType(), new PositionTeleporter(posX, posY, posZ)) == null) TODO
+		//	return false;
 		
 		player.closeScreen();
 		player.inventory.clear();
@@ -221,7 +215,7 @@ public class ServerEditHandler
 	public void tickEnd(PlayerTickEvent event) {
 		if(event.phase != Phase.END || event.side == LogicalSide.CLIENT)
 			return;
-		EntityPlayerMP player = (EntityPlayerMP)event.player;
+		ServerPlayerEntity player = (ServerPlayerEntity) event.player;
 		
 		EditData data = getData(player);
 		if(data == null)
@@ -239,7 +233,7 @@ public class ServerEditHandler
 	@SubscribeEvent
 	public void onTossEvent(ItemTossEvent event)
 	{
-		InventoryPlayer inventory = event.getPlayer().inventory;
+		PlayerInventory inventory = event.getPlayer().inventory;
 		if(!event.getEntity().world.isRemote && getData(event.getPlayer()) != null)
 		{
 			EditData data = getData(event.getPlayer());
@@ -250,13 +244,13 @@ public class ServerEditHandler
 				int i = DeployList.getOrdinal(entry.getName());
 				GristSet cost = data.connection.givenItems()[i]
 						? entry.getSecondaryGristCost(data.connection) : entry.getPrimaryGristCost(data.connection);
-				if(GristHelper.canAfford(PlayerSavedData.get(event.getEntity().world).getGristSet(data.connection.getClientIdentifier()), cost))
+				if(GristHelper.canAfford(PlayerSavedData.get(event.getEntity().getServer()).getGristSet(data.connection.getClientIdentifier()), cost))
 				{
 					GristHelper.decrease(event.getPlayer().world, data.connection.getClientIdentifier(), cost);
 					MinestuckPlayerTracker.updateGristCache(event.getPlayer().getServer(), data.connection.getClientIdentifier());
 					data.connection.givenItems()[i] = true;
 					if(!data.connection.isMain())
-						SkaianetHandler.get(event.getPlayer().world).giveItems(data.connection.getClientIdentifier());
+						SkaianetHandler.get(event.getPlayer().getServer()).giveItems(data.connection.getClientIdentifier());
 				}
 				else event.setCanceled(true);
 			}
@@ -289,10 +283,10 @@ public class ServerEditHandler
 			EditData data = getData(event.getEntityPlayer());
 			Block block = event.getWorld().getBlockState(event.getPos()).getBlock();
 			ItemStack stack = event.getEntityPlayer().getHeldItemMainhand();
-			event.setUseBlock(stack.isEmpty() && (block instanceof BlockDoor || block instanceof BlockTrapDoor || block instanceof BlockFenceGate) ? Event.Result.ALLOW : Event.Result.DENY);
+			event.setUseBlock(stack.isEmpty() && (block instanceof DoorBlock || block instanceof TrapDoorBlock || block instanceof FenceGateBlock) ? Event.Result.ALLOW : Event.Result.DENY);
 			if(event.getUseBlock() == Event.Result.ALLOW)
 				return;
-			if(stack.isEmpty() || !isBlockItem(stack.getItem()) || event.getHand().equals(EnumHand.OFF_HAND))
+			if(stack.isEmpty() || !isBlockItem(stack.getItem()) || event.getHand().equals(Hand.OFF_HAND))
 			{
 				event.setCanceled(true);
 				return;
@@ -305,7 +299,7 @@ public class ServerEditHandler
 			{
 				GristSet cost = data.connection.givenItems()[DeployList.getOrdinal(entry.getName())]
 						? entry.getSecondaryGristCost(data.connection) : entry.getPrimaryGristCost(data.connection);
-				if(!GristHelper.canAfford(PlayerSavedData.get(event.getEntity().world).getGristSet(data.connection.getClientIdentifier()), cost))
+				if(!GristHelper.canAfford(PlayerSavedData.get(event.getEntity().getServer()).getGristSet(data.connection.getClientIdentifier()), cost))
 				{
 					StringBuilder str = new StringBuilder();
 					if(cost != null)
@@ -316,7 +310,7 @@ public class ServerEditHandler
 								str.append(", ");
 							str.append(grist.getAmount()+" "+grist.getType().getDisplayName());
 						}
-						event.getEntityPlayer().sendMessage(new TextComponentTranslation("grist.missing",str.toString()));
+						event.getEntityPlayer().sendMessage(new TranslationTextComponent("grist.missing",str.toString()));
 					}
 					event.setCanceled(true);
 				}
@@ -336,7 +330,7 @@ public class ServerEditHandler
 		if(!event.getWorld().isRemote && getData(event.getEntityPlayer()) != null)
 		{
 			EditData data = getData(event.getEntityPlayer());
-			IBlockState block = event.getWorld().getBlockState(event.getPos());
+			BlockState block = event.getWorld().getBlockState(event.getPos());
 			if(block.getBlockHardness(event.getWorld(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
 					|| (GristHelper.getGrist(event.getEntity().world, data.connection.getClientIdentifier(), GristType.BUILD) <= 0 && !MinestuckConfig.gristRefund))
 				event.setCanceled(true);
@@ -362,7 +356,7 @@ public class ServerEditHandler
 				GristHelper.decrease(event.getWorld(), data.connection.getClientIdentifier(), new GristSet(GristType.BUILD, 1));
 			else
 			{
-				IBlockState block = event.getWorld().getBlockState(event.getPos());
+				BlockState block = event.getWorld().getBlockState(event.getPos());
 				ItemStack stack = block.getBlock().getPickBlock(block, null, event.getWorld(), event.getPos(), event.getEntityPlayer());
 				GristSet set = AlchemyCostRegistry.getGristConversion(stack);
 				if(set != null && !set.isEmpty())
@@ -375,9 +369,9 @@ public class ServerEditHandler
 	@SubscribeEvent(priority=EventPriority.LOW)
 	public void onBlockPlaced(BlockEvent.EntityPlaceEvent event)
 	{
-		if(event.getEntity() instanceof EntityPlayerMP)
+		if(event.getEntity() instanceof ServerPlayerEntity)
 		{
-			EntityPlayerMP player = (EntityPlayerMP) event.getEntity();
+			ServerPlayerEntity player = (ServerPlayerEntity) event.getEntity();
 			if(getData(player) != null)
 			{
 				EditData data = getData(player);
@@ -398,17 +392,17 @@ public class ServerEditHandler
 							? entry.getSecondaryGristCost(c) : entry.getPrimaryGristCost(c);
 					c.givenItems()[index] = true;
 					if(!c.isMain())
-						SkaianetHandler.get(player.world).giveItems(c.getClientIdentifier());
+						SkaianetHandler.get(player.server).giveItems(c.getClientIdentifier());
 					if(!cost.isEmpty())
 					{
 						GristHelper.decrease(player.world, c.getClientIdentifier(), cost);
-						MinestuckPlayerTracker.updateGristCache(player.getServer(), data.connection.getClientIdentifier());
+						MinestuckPlayerTracker.updateGristCache(player.server, data.connection.getClientIdentifier());
 					}
 					player.inventory.mainInventory.set(player.inventory.currentItem, ItemStack.EMPTY);
 				} else
 				{
 					GristHelper.decrease(player.world, data.connection.getClientIdentifier(), AlchemyCostRegistry.getGristConversion(stack));
-					MinestuckPlayerTracker.updateGristCache(player.getServer(), data.connection.getClientIdentifier());
+					MinestuckPlayerTracker.updateGristCache(player.server, data.connection.getClientIdentifier());
 				}
 			}
 		}
@@ -424,11 +418,11 @@ public class ServerEditHandler
 	/**
 	 * Used on both server and client side.
 	 */
-	public static void updatePosition(EntityPlayer player, double range, int centerX, int centerZ) {
+	public static void updatePosition(PlayerEntity player, double range, int centerX, int centerZ) {
 		double y = player.posY;
 		if(y < 0) {
 			y = 0;
-			player.motionY = 0;
+			player.setMotion(player.getMotion().mul(1, 0, 1));
 			player.abilities.isFlying = true;
 		}
 		
@@ -448,10 +442,10 @@ public class ServerEditHandler
 		}
 		
 		if(newX != player.posX)
-			player.motionX = 0;
+			player.setMotion(player.getMotion().mul(0, 1, 1));
 		
 		if(newZ != player.posZ)
-			player.motionZ = 0;
+			player.setMotion(player.getMotion().mul(1, 1, 0));
 		
 		if(newX != player.posX || newZ != player.posZ || y != player.posY)
 		{
@@ -459,7 +453,7 @@ public class ServerEditHandler
 		}
 	}
 	
-	public static void updateInventory(EntityPlayerMP player, boolean[] givenItems, SburbConnection connection)
+	public static void updateInventory(ServerPlayerEntity player, boolean[] givenItems, SburbConnection connection)
 	{
 		List<DeployList.DeployEntry> deployList = DeployList.getItemList(player.getServer(), connection);
 		deployList.removeIf(entry -> givenItems[DeployList.getOrdinal(entry.getName())] && entry.getSecondaryGristCost(connection) == null);
@@ -578,7 +572,7 @@ public class ServerEditHandler
 	@SubscribeEvent
 	public void onEntityTeleport(EntityTravelToDimensionEvent event)
 	{
-		if(event.getEntity() instanceof EntityPlayerMP && getData((EntityPlayerMP) event.getEntity()) != null)
+		if(event.getEntity() instanceof ServerPlayerEntity && getData((ServerPlayerEntity) event.getEntity()) != null)
 		{
 			event.setCanceled(true);
 		}
@@ -586,7 +580,7 @@ public class ServerEditHandler
 	
 	public static boolean isBlockItem(Item item)
 	{
-		return item instanceof ItemBlock;
+		return item instanceof BlockItem;
 	}
 	
 	public static void cleanStackNBT(ItemStack stack, SburbConnection c, World world)
@@ -595,17 +589,17 @@ public class ServerEditHandler
 			stack.setTag(null);
 	}
 	
-	private static List<NBTTagCompound> recoverData = new ArrayList<NBTTagCompound>();
+	private static List<CompoundNBT> recoverData = new ArrayList<CompoundNBT>();
 	
-	public static void saveData(NBTTagCompound nbt)
+	public static void saveData(CompoundNBT nbt)
 	{
-		NBTTagList nbtList = new NBTTagList();
-		for(NBTTagCompound recoverEntry : recoverData)
+		ListNBT nbtList = new ListNBT();
+		for(CompoundNBT recoverEntry : recoverData)
 			nbtList.add(recoverEntry);
 		
 		for(EditData data : list)
 		{
-			NBTTagCompound nbtTag = new NBTTagCompound();
+			CompoundNBT nbtTag = new CompoundNBT();
 			UUID id = data.player.getGameProfile().getId();
 			nbtTag.putLong("UUID1", id.getLeastSignificantBits());
 			nbtTag.putLong("UUID2", id.getMostSignificantBits());
@@ -621,9 +615,9 @@ public class ServerEditHandler
 			nbtTag.put("capabilities", data.decoy.capabilities);
 			nbtTag.putFloat("health", data.decoy.getHealth());
 			nbtTag.put("food", data.decoy.getFoodStatsNBT());
-			nbtTag.put("inv", data.decoy.inventory.write(new NBTTagList()));
+			nbtTag.put("inv", data.decoy.inventory.write(new ListNBT()));
 			
-			data.connection.inventory = data.player.inventory.write(new NBTTagList());
+			data.connection.inventory = data.player.inventory.write(new ListNBT());
 			
 			nbtList.add(nbtTag);
 		}
@@ -631,31 +625,31 @@ public class ServerEditHandler
 		nbt.put("editmodeRecover", nbtList);
 	}
 	
-	public static void loadData(NBTTagCompound nbt)
+	public static void loadData(CompoundNBT nbt)
 	{
 		recoverData.clear();
 		if(nbt != null && nbt.contains("editmodeRecover", 9))
 		{
-			NBTTagList nbtList = nbt.getList("editmodeRecover", 10);
+			ListNBT nbtList = nbt.getList("editmodeRecover", 10);
 			for(int i = 0; i < nbtList.size(); i++)
 				recoverData.add(nbtList.getCompound(i));
 		}
 	}
 	
-	public static void onPlayerLoggedIn(EntityPlayerMP player)
+	public static void onPlayerLoggedIn(ServerPlayerEntity player)
 	{
 		UUID id = player.getGameProfile().getId();
-		Iterator<NBTTagCompound> iter = recoverData.iterator();
+		Iterator<CompoundNBT> iter = recoverData.iterator();
 		while(iter.hasNext())
 		{
-			NBTTagCompound nbt = iter.next();
+			CompoundNBT nbt = iter.next();
 			if(id.getLeastSignificantBits() == nbt.getLong("UUID1") && id.getMostSignificantBits() == nbt.getLong("UUID2"))
 			{	//Recover player
 				DimensionType type = DimensionType.byName(new ResourceLocation(nbt.getString("dim")));
 				if(type == null)
 					throw new IllegalStateException("Unable to restore editmode player for "+player.getName()+"! Could not read dimension "+nbt.getString("dim")+".");
-				else if(player.dimension != type && player.changeDimension(type, (world, entity, yaw) -> {}) == null)
-					throw new IllegalStateException("Was not able to restore editmode player for "+player.getName()+"! Likely caused by mod collision.");
+				//else if(player.dimension != type && player.changeDimension(type, (world, entity, yaw) -> {}) == null) //TODO
+				//	throw new IllegalStateException("Was not able to restore editmode player for "+player.getName()+"! Likely caused by mod collision.");
 				
 				player.connection.setPlayerLocation(nbt.getDouble("x"), nbt.getDouble("y"), nbt.getDouble("z"), nbt.getFloat("rotYaw"), nbt.getFloat("rotPitch"));
 				player.setGameType(GameType.getByID(nbt.getInt("gamemode")));

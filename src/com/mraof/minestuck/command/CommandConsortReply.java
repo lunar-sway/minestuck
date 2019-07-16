@@ -9,7 +9,7 @@ import com.mraof.minestuck.entity.consort.ConsortEntity;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.math.Vec3d;
 
 public class CommandConsortReply
@@ -22,7 +22,7 @@ public class CommandConsortReply
 	
 	public static int execute(CommandSource source, int id, String path) throws CommandSyntaxException
 	{
-		EntityPlayerMP player = source.asPlayer();
+		ServerPlayerEntity player = source.asPlayer();
 		Entity entity = player.world.getEntityByID(id);
 		if(entity instanceof ConsortEntity && new Vec3d(player.posX, player.posY, player.posZ)
 				.squareDistanceTo(entity.posX, entity.posY, entity.posZ) < 100)

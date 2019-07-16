@@ -14,17 +14,14 @@ import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspects;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.dimension.DimensionType;
-import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
@@ -42,7 +39,7 @@ public class MinestuckPlayerTracker
 	@SubscribeEvent
 	public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) 
 	{
-		EntityPlayerMP player = (EntityPlayerMP) event.getPlayer();
+		ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
 		Debug.debug(player.getName()+" joined the game. Sending packets.");
 		MinecraftServer server = player.getServer();
 		if(!server.isDedicatedServer() && IdentifierHandler.host == null)
@@ -99,7 +96,7 @@ public class MinestuckPlayerTracker
 		}
 		
 		if(UpdateChecker.outOfDate)
-			player.sendMessage(new TextComponentString("New version of Minestuck: " + UpdateChecker.latestVersion + "\nChanges: " + UpdateChecker.updateChanges));
+			player.sendMessage(new StringTextComponent("New version of Minestuck: " + UpdateChecker.latestVersion + "\nChanges: " + UpdateChecker.updateChanges));
 	}
 	
 	@SubscribeEvent(priority = EventPriority.HIGH)	//Editmode players need to be reset before nei handles the event
@@ -109,8 +106,8 @@ public class MinestuckPlayerTracker
 		dataCheckerPermission.remove(event.getPlayer().getName().getUnformattedComponentText());
 	}
 	
-	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
-	public void onPlayerDrops(PlayerDropsEvent event)
+	/*@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
+	public void onPlayerDrops(PlayerDropsEvent event)TODO
 	{
 		if(!event.getEntityPlayer().world.isRemote && event.getEntityPlayer() instanceof EntityPlayerMP)
 		{
@@ -118,14 +115,14 @@ public class MinestuckPlayerTracker
 			
 		}
 		
-	}
+	}*/
 	
 	@SubscribeEvent
 	public void onPlayerTick(TickEvent.PlayerTickEvent event)
 	{
-		if(event.side == LogicalSide.SERVER && event.phase == TickEvent.Phase.END && event.player instanceof EntityPlayerMP)
+		if(event.side == LogicalSide.SERVER && event.phase == TickEvent.Phase.END && event.player instanceof ServerPlayerEntity)
 		{
-			EntityPlayerMP player = (EntityPlayerMP) event.player;
+			ServerPlayerEntity player = (ServerPlayerEntity) event.player;
 			if(shouldUpdateConfigurations(player))
 				sendConfigPacket(player, false);
 		}
@@ -134,12 +131,12 @@ public class MinestuckPlayerTracker
 	@SubscribeEvent
 	public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) 
 	{
-		PlayerSavedData.getData((EntityPlayerMP) event.getPlayer()).echeladder.updateEcheladderBonuses(event.getPlayer());
+		PlayerSavedData.getData((ServerPlayerEntity) event.getPlayer()).echeladder.updateEcheladderBonuses(event.getPlayer());
 	}
 	
 	public static Set<String> dataCheckerPermission = new HashSet<>();
 	
-	private static boolean shouldUpdateConfigurations(EntityPlayerMP player)
+	private static boolean shouldUpdateConfigurations(ServerPlayerEntity player)
 	{
 		//TODO check for changed configs and change setRequiresWorldRestart status for those config options
 		boolean permission = MinestuckConfig.getDataCheckerPermissionFor(player);
@@ -157,7 +154,7 @@ public class MinestuckPlayerTracker
 		GristSet gristSet = PlayerSavedData.get(server.getWorld(DimensionType.OVERWORLD)).getGristSet(player);
 		
 		//The player
-		EntityPlayerMP playerMP = player.getPlayer(server);
+		ServerPlayerEntity playerMP = player.getPlayer(server);
 		if(playerMP != null)
 		{
 			GristCachePacket packet = new GristCachePacket(gristSet, false);
@@ -168,7 +165,7 @@ public class MinestuckPlayerTracker
 		SburbConnection c = SkaianetHandler.get(server).getActiveConnection(player);
 		if(c != null && ServerEditHandler.getData(c) != null)
 		{
-			EntityPlayerMP editor = ServerEditHandler.getData(c).getEditor();
+			ServerPlayerEntity editor = ServerEditHandler.getData(c).getEditor();
 			GristCachePacket packet = new GristCachePacket(gristSet, true);
 			MinestuckPacketHandler.sendToPlayer(packet, editor);
 		}
@@ -230,12 +227,12 @@ public class MinestuckPlayerTracker
 		{
 			LandAspects aspects = MinestuckDimensionHandler.getAspects(player.getServer(), player.dimension);
 			//ChunkProviderLands chunkProvider = (ChunkProviderLands) player.world.getDimension().createChunkGenerator(); //TODO Check out deprecation
-			ITextComponent aspect1 = new TextComponentTranslation("land."+aspects.aspectTerrain.getNames()[0]);
-			ITextComponent aspect2 = new TextComponentTranslation("land."+aspects.aspectTitle.getNames()[0]);
+			ITextComponent aspect1 = new TranslationTextComponent("land."+aspects.aspectTerrain.getNames()[0]);
+			ITextComponent aspect2 = new TranslationTextComponent("land."+aspects.aspectTitle.getNames()[0]);
 			ITextComponent toSend;
 			/*if(chunkProvider.nameOrder)
 				toSend = new TextComponentTranslation("land.message.entry", aspect1, aspect2);
-			else*/ toSend = new TextComponentTranslation("land.message.entry", aspect2, aspect1);
+			else*/ toSend = new TranslationTextComponent("land.message.entry", aspect2, aspect1);
 			player.sendMessage(toSend);
 		}
 	}

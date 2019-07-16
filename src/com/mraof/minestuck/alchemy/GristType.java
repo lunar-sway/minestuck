@@ -4,9 +4,9 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.MinestuckItems;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.RegistryNamespaced;
+import net.minecraft.util.registry.DefaultedRegistry;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -74,7 +74,7 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 
 	public ITextComponent getDisplayName()	//TODO Phase out serverside usage of this method
 	{
-		return new TextComponentTranslation("grist." + name);
+		return new TranslationTextComponent("grist." + name);
 	}
 	/**
 	 * Returns the grist's full unlocalized name.
@@ -140,7 +140,7 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 		REGISTRY = (ForgeRegistry<GristType>) new RegistryBuilder<GristType>()
 				.setName(new ResourceLocation("minestuck", "grist"))
 				.setType(GristType.class)
-				.addCallback((IForgeRegistry.CreateCallback<GristType>) (owner, stage) -> owner.setSlaveMap(new ResourceLocation("minestuck:registry"), new RegistryNamespaced<GristType>()))
+				.addCallback((IForgeRegistry.CreateCallback<GristType>) (owner, stage) -> owner.setSlaveMap(new ResourceLocation("minestuck:registry"), new DefaultedRegistry<>("minestuck:build")))
 				.create();
 	}
 

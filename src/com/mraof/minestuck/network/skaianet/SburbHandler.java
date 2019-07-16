@@ -699,7 +699,7 @@ public class SburbHandler
 	public static boolean canSelectColor(ServerPlayerEntity player)
 	{
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		for(SburbConnection c : SkaianetHandler.get(player.world).connections)
+		for(SburbConnection c : SkaianetHandler.get(player.server).connections)
 			if(c.getClientIdentifier().equals(identifier))
 				return false;
 		return true;
@@ -708,7 +708,7 @@ public class SburbHandler
 	public static boolean hasEntered(ServerPlayerEntity player)
 	{
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		SburbConnection c = SkaianetHandler.get(player.world).getMainConnection(identifier, true);
+		SburbConnection c = SkaianetHandler.get(player.server).getMainConnection(identifier, true);
 		return c != null && c.hasEntered();
 	}
 

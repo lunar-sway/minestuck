@@ -1,18 +1,16 @@
 package com.mraof.minestuck.alchemy;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.item.CruxiteArtifactItem;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.modSupport.*;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
@@ -113,13 +111,13 @@ public class AlchemyRecipes
 		AlchemyCostRegistry.addGristConversion(Items.CLAY_BALL, new GristSet(new GristType[] {GristType.SHALE}, new int[] {3}));
 		AlchemyCostRegistry.addGristConversion(Items.DIAMOND_HORSE_ARMOR, new GristSet(new GristType[] {GristType.DIAMOND}, new int[] {80}));
 		AlchemyCostRegistry.addGristConversion(Items.INK_SAC, new GristSet(new GristType[] {GristType.TAR}, new int[] {4}));
-		AlchemyCostRegistry.addGristConversion(Items.ROSE_RED, new GristSet(new GristType[] {GristType.GARNET}, new int[] {4}));
+		AlchemyCostRegistry.addGristConversion(Items.RED_DYE, new GristSet(new GristType[] {GristType.GARNET}, new int[] {4}));
 		AlchemyCostRegistry.addGristConversion(Items.LIME_DYE, new GristSet(new GristType[] {GristType.AMBER}, new int[] {3}));
-		AlchemyCostRegistry.addGristConversion(Items.DANDELION_YELLOW, new GristSet(new GristType[] {GristType.AMBER}, new int[] {4}));
+		AlchemyCostRegistry.addGristConversion(Items.YELLOW_DYE, new GristSet(new GristType[] {GristType.AMBER}, new int[] {4}));
 		AlchemyCostRegistry.addGristConversion(Items.LIGHT_BLUE_DYE, new GristSet(new GristType[] {GristType.AMETHYST, GristType.CHALK}, new int[] {2, 2}));
 		AlchemyCostRegistry.addGristConversion(Items.MAGENTA_DYE, new GristSet(new GristType[] {GristType.AMETHYST, GristType.GARNET}, new int[] {1, 3}));
 		AlchemyCostRegistry.addGristConversion(Items.ORANGE_DYE, new GristSet(new GristType[] {GristType.GARNET, GristType.AMBER}, new int[] {2, 2}));
-		AlchemyCostRegistry.addGristConversion(Items.CACTUS_GREEN, new GristSet(new GristType[] {GristType.AMBER, GristType.IODINE}, new int[] {3, 1}));
+		AlchemyCostRegistry.addGristConversion(Items.GREEN_DYE, new GristSet(new GristType[] {GristType.AMBER, GristType.IODINE}, new int[] {3, 1}));
 		AlchemyCostRegistry.addGristConversion(Items.COCOA_BEANS, new GristSet(new GristType[] {GristType.IODINE, GristType.AMBER}, new int[] {3, 1}));
 		AlchemyCostRegistry.addGristConversion(Items.LAPIS_LAZULI, new GristSet(new GristType[] {GristType.AMETHYST}, new int[] {4}));
 		AlchemyCostRegistry.addGristConversion(Items.PURPLE_DYE, new GristSet(new GristType[] {GristType.AMETHYST, GristType.GARNET}, new int[] {2, 2}));
@@ -451,12 +449,12 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(Items.BLAZE_POWDER, Items.GUNPOWDER, MODE_OR, new ItemStack(Items.FIRE_CHARGE));
 		CombinationRegistry.addCombination(Blocks.SAND, Blocks.STONE_BRICK_STAIRS, MODE_OR, new ItemStack(Blocks.SANDSTONE_STAIRS));
 		CombinationRegistry.addCombination(Blocks.RED_SAND, Blocks.STONE_BRICK_STAIRS, MODE_OR, new ItemStack(Blocks.RED_SANDSTONE_STAIRS));
-		CombinationRegistry.addCombination(Blocks.SAND, Items.ROSE_RED, MODE_AND, new ItemStack(Blocks.RED_SAND));
-		CombinationRegistry.addCombination(Blocks.SANDSTONE, Items.ROSE_RED, MODE_AND, new ItemStack(Blocks.RED_SANDSTONE));
-		CombinationRegistry.addCombination(Blocks.CUT_SANDSTONE, Items.ROSE_RED, MODE_AND, new ItemStack(Blocks.CUT_RED_SANDSTONE));
-		CombinationRegistry.addCombination(Blocks.CHISELED_SANDSTONE, Items.ROSE_RED, MODE_AND, new ItemStack(Blocks.CHISELED_RED_SANDSTONE));
-		CombinationRegistry.addCombination(Blocks.SMOOTH_SANDSTONE, Items.ROSE_RED, MODE_AND, new ItemStack(Blocks.SMOOTH_RED_SANDSTONE));
-		CombinationRegistry.addCombination(Blocks.SANDSTONE_STAIRS, Items.ROSE_RED, MODE_AND, new ItemStack(Blocks.RED_SANDSTONE_STAIRS));
+		CombinationRegistry.addCombination(Blocks.SAND, Items.RED_DYE, MODE_AND, new ItemStack(Blocks.RED_SAND));
+		CombinationRegistry.addCombination(Blocks.SANDSTONE, Items.RED_DYE, MODE_AND, new ItemStack(Blocks.RED_SANDSTONE));
+		CombinationRegistry.addCombination(Blocks.CUT_SANDSTONE, Items.RED_DYE, MODE_AND, new ItemStack(Blocks.CUT_RED_SANDSTONE));
+		CombinationRegistry.addCombination(Blocks.CHISELED_SANDSTONE, Items.RED_DYE, MODE_AND, new ItemStack(Blocks.CHISELED_RED_SANDSTONE));
+		CombinationRegistry.addCombination(Blocks.SMOOTH_SANDSTONE, Items.RED_DYE, MODE_AND, new ItemStack(Blocks.SMOOTH_RED_SANDSTONE));
+		CombinationRegistry.addCombination(Blocks.SANDSTONE_STAIRS, Items.RED_DYE, MODE_AND, new ItemStack(Blocks.RED_SANDSTONE_STAIRS));
 		CombinationRegistry.addCombination(ItemTags.PLANKS, Items.BOOK, MODE_OR, new ItemStack(Blocks.BOOKSHELF));
 		//CombinationRegistry.addCombination("record", Blocks.NOTE_BLOCK, MODE_AND, new ItemStack(Blocks.JUKEBOX));
 		CombinationRegistry.addCombination(Items.STICK, Blocks.VINE, MODE_AND, new ItemStack(Blocks.LADDER));
@@ -478,7 +476,7 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(Items.GUNPOWDER, Blocks.LEVER, MODE_OR, new ItemStack(Items.REDSTONE));
 		CombinationRegistry.addCombination(ItemTags.WOODEN_BUTTONS, Items.GUNPOWDER, MODE_OR, new ItemStack(Blocks.REDSTONE_TORCH));
 		CombinationRegistry.addCombination(ItemTags.WOODEN_PRESSURE_PLATES, Items.GUNPOWDER, MODE_OR, new ItemStack(Blocks.REDSTONE_TORCH));
-		CombinationRegistry.addCombination(Blocks.GRAVEL, Items.ROSE_RED, MODE_AND, new ItemStack(Items.REDSTONE));
+		CombinationRegistry.addCombination(Blocks.GRAVEL, Items.RED_DYE, MODE_AND, new ItemStack(Items.REDSTONE));
 		CombinationRegistry.addCombination(Blocks.PUMPKIN, STRAWBERRY, MODE_OR, new ItemStack(Blocks.MELON));
 		CombinationRegistry.addCombination(Blocks.MELON, Items.CARROT, MODE_AND, new ItemStack(Blocks.PUMPKIN));
 		CombinationRegistry.addCombination(Items.WITHER_SKELETON_SKULL, Items.BONE, MODE_AND, new ItemStack(Items.SKELETON_SKULL));
@@ -1061,14 +1059,14 @@ public class AlchemyRecipes
 			AlchemyCostRegistry.addGristConversion(item, cost);
 		}
 		
-		autogrist.excecute();
+		autogrist.execute();
 		
 		//registerRecipes(new Minegicka3Support(), "minegicka3", true);
 	}
 	
 	public static void onAlchemizedItem(ItemStack stack, ServerPlayerEntity player)
 	{
-		if(!(stack.getItem() instanceof CruxiteArtifactItem))
+		//if(!(stack.getItem() instanceof CruxiteArtifactItem)) TODO
 		{
 			Echeladder e = PlayerSavedData.getData(player).echeladder;
 			e.checkBonus(Echeladder.ALCHEMY_BONUS_OFFSET);
@@ -1120,7 +1118,7 @@ public class AlchemyRecipes
 		{
 			return ItemStack.EMPTY;
 		}
-		NBTTagCompound tag = card.getTag();
+		CompoundNBT tag = card.getTag();
 		
 		Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(tag.getString(("contentID"))));
 		if (item == null) {return ItemStack.EMPTY;}
@@ -1176,10 +1174,10 @@ public class AlchemyRecipes
 	@Nonnull
 	public static ItemStack createEncodedItem(ItemStack item, boolean registerToCard)
 	{
-		NBTTagCompound nbt = null;
+		CompoundNBT nbt = null;
 		if(!item.isEmpty())
 		{
-			nbt = new NBTTagCompound();
+			nbt = new CompoundNBT();
 			nbt.putString("contentID", item.getItem().getRegistryName().toString());
 		}
 		ItemStack stack = new ItemStack(registerToCard ? CAPTCHA_CARD : CRUXITE_DOWEL);
@@ -1190,10 +1188,10 @@ public class AlchemyRecipes
 	@Nonnull
 	public static ItemStack createEncodedItem(ItemStack itemIn, ItemStack itemOut)
 	{
-		NBTTagCompound nbt = null;
+		CompoundNBT nbt = null;
 		if(!itemIn.isEmpty())
 		{
-			nbt = new NBTTagCompound();
+			nbt = new CompoundNBT();
 			nbt.putString("contentID", itemIn.getItem().getRegistryName().toString());
 		}
 		ItemStack stack = itemOut;
@@ -1214,7 +1212,7 @@ public class AlchemyRecipes
 	{
 		ItemStack stack = createEncodedItem(item, true);
 		if(!stack.hasTag())
-			stack.setTag(new NBTTagCompound());
+			stack.setTag(new CompoundNBT());
 		stack.getTag().putBoolean("punched", punched);
 		if(!punched)
 		{
@@ -1231,7 +1229,7 @@ public class AlchemyRecipes
 	{
 		ItemStack stack = createEncodedItem(item, true);
 		if(!stack.hasTag())
-			stack.setTag(new NBTTagCompound());
+			stack.setTag(new CompoundNBT());
 		stack.getTag().putBoolean("punched", false);
 			if(item.hasTag())
 				stack.getTag().put("contentTags", item.getTag());
@@ -1243,7 +1241,7 @@ public class AlchemyRecipes
 	{
 		
 		if(!stack.hasTag())
-			stack.setTag(new NBTTagCompound());
+			stack.setTag(new CompoundNBT());
 		
 			stack.getTag().putInt("contentSize", size);
 		
@@ -1255,7 +1253,7 @@ public class AlchemyRecipes
 	{
 		ItemStack stack = createEncodedItem(item, SHUNT);
 		if(!stack.hasTag())
-			stack.setTag(new NBTTagCompound());
+			stack.setTag(new CompoundNBT());
 		stack.getTag().putBoolean("punched", true);
 		
 			if(item.hasTag())

@@ -3,13 +3,15 @@ package com.mraof.minestuck.entity.ai;
 import com.mraof.minestuck.entity.carapacian.CarapacianEntity;
 import com.mraof.minestuck.entity.carapacian.EnumEntityKingdom;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
-import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.gen.Heightmap;
 
-public class EntityAIMoveToBattle extends EntityAIBase
+import java.util.EnumSet;
+
+public class EntityAIMoveToBattle extends Goal
 {
 	
 	private CarapacianEntity target;
@@ -18,7 +20,7 @@ public class EntityAIMoveToBattle extends EntityAIBase
 	public EntityAIMoveToBattle(CarapacianEntity entity)
 	{
 		this.target = entity;
-		setMutexBits(1);
+		setMutexFlags(EnumSet.of(Flag.MOVE));
 	}
 	
 	@Override

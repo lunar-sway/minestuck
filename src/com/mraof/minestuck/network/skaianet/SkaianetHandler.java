@@ -842,6 +842,15 @@ public class SkaianetHandler extends WorldSavedData
 		movingComputers.clear();
 	}
 	
+	
+	public static SkaianetHandler get(World world)
+	{
+		MinecraftServer server = world.getServer();
+		if(server == null)
+			throw new IllegalArgumentException("Can't get skaianet instance on client side! (Got null server from world)");
+		return get(server);
+	}
+	
 	public static SkaianetHandler get(MinecraftServer server)
 	{
 		ServerWorld world = server.getWorld(DimensionType.OVERWORLD);

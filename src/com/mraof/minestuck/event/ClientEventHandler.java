@@ -9,10 +9,10 @@ import com.mraof.minestuck.util.ColorCollector;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.PotionItem;
 import net.minecraft.potion.PotionUtils;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -27,7 +27,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 public class ClientEventHandler
 {
 	
-	/*@SubscribeEvent TODO Find new event hor similar here
+	/*@SubscribeEvent TODO Find new event or similar here
 	public void onConnectedToServer(ClientConnectedToServerEvent event)	//Reset all static client-side data here
 	{
 		GuiPlayerStats.normalTab = GuiPlayerStats.NormalGuiType.CAPTCHA_DECK;
@@ -69,7 +69,7 @@ public class ClientEventHandler
 					&& event.getEntityPlayer().openContainer.getInventory().contains(stack))
 			{
 				String unlocalized = stack.getTranslationKey();
-				if(stack.getItem() instanceof ItemPotion)
+				if(stack.getItem() instanceof PotionItem)
 					unlocalized = PotionUtils.getPotionFromItem(stack).getNamePrefixed("potion.");
 				
 				EnumConsort type = ((ConsortMerchantContainer)event.getEntityPlayer().openContainer).inventory.getConsortType();
@@ -79,15 +79,15 @@ public class ClientEventHandler
 				String tooltip = "store."+unlocalized+".tooltip";
 				event.getToolTip().clear();
 				if(I18n.hasKey(name))
-					event.getToolTip().add(new TextComponentTranslation(name, arg1));
+					event.getToolTip().add(new TranslationTextComponent(name, arg1));
 				else event.getToolTip().add(stack.getDisplayName());
 				if(I18n.hasKey(tooltip))
-					event.getToolTip().add(new TextComponentTranslation(tooltip, arg1));
+					event.getToolTip().add(new TranslationTextComponent(tooltip, arg1));
 			} else if(stack.getItem().getRegistryName().getNamespace().equals(Minestuck.MOD_ID))
 			{
 				String name = stack.getTranslationKey() + ".tooltip";
 				if(I18n.hasKey(name))
-					event.getToolTip().add(1, new TextComponentTranslation(name));
+					event.getToolTip().add(1, new TranslationTextComponent(name));
 			}
 		}
 	}

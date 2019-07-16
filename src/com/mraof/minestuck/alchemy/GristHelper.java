@@ -9,11 +9,11 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -120,7 +120,7 @@ public class GristHelper {
 	 */
 	public static int getGrist(World world, PlayerIdentifier player, GristType type)
 	{
-		return PlayerSavedData.get(world).getGristSet(player).getGrist(type);
+		return PlayerSavedData.get(world.getServer()).getGristSet(player).getGrist(type);
 	}
 	
 	public static boolean canAfford(@Nonnull ItemStack stack)
@@ -130,7 +130,7 @@ public class GristHelper {
 	
 	public static boolean canAfford(World world, PlayerIdentifier player, @Nonnull ItemStack stack)
 	{
-		return canAfford(PlayerSavedData.get(world).getGristSet(player), AlchemyCostRegistry.getGristConversion(stack));
+		return canAfford(PlayerSavedData.get(world.getServer()).getGristSet(player), AlchemyCostRegistry.getGristConversion(stack));
 	}
 	
 	public static boolean canAfford(GristSet base, GristSet cost) {
@@ -168,7 +168,7 @@ public class GristHelper {
 	
 	public static void setGrist(World world, PlayerIdentifier player, GristType type, int i)
 	{
-		PlayerSavedData data = PlayerSavedData.get(world);
+		PlayerSavedData data = PlayerSavedData.get(world.getServer());
 		data.getGristSet(player).setGrist(type, i);
 		data.markDirty();
 	}
@@ -210,11 +210,11 @@ public class GristHelper {
 		{
 			if (player != null)
 			{
-				EntityPlayerMP client = player.getPlayer(server);
+				ServerPlayerEntity client = player.getPlayer(server);
 				if(client != null)
 				{
 					//"true" sends the message to the action bar (like bed messages), while "false" sends it to the chat.
-					client.sendStatusMessage(new TextComponentTranslation("You " + action + " " + difference + " " + type + " grist."), true);//TODO Translation
+					client.sendStatusMessage(new TranslationTextComponent("You " + action + " " + difference + " " + type + " grist."), true);//TODO Translation
 				}
 			}
 		}

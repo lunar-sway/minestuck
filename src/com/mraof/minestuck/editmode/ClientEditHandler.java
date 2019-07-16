@@ -8,21 +8,16 @@ import com.mraof.minestuck.network.ClientEditPacket;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockDoor;
-import net.minecraft.block.BlockFenceGate;
-import net.minecraft.block.BlockTrapDoor;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.renderer.InventoryEffectRenderer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraft.client.gui.DisplayEffectsScreen;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.text.*;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
@@ -68,7 +63,7 @@ public class ClientEditHandler {
 	public static void onClientPackage(String target, int posX, int posZ, boolean[] items, CompoundNBT deployList)
 	{
 		Minecraft mc = Minecraft.getInstance();
-		EntityPlayerSP player = mc.player;
+		ClientPlayerEntity player = mc.player;
 		if(target != null) {	//Enable edit mode
 			activated = true;
 			givenItems = items;
@@ -115,7 +110,7 @@ public class ClientEditHandler {
 		
 		if(cost == null)
 		{
-			toolTip.add(new TextComponentTranslation("gui.notAvailable").setStyle(new Style().setColor(TextFormatting.RED)));
+			toolTip.add(new TranslationTextComponent("gui.notAvailable").setStyle(new Style().setColor(TextFormatting.RED)));
 			return;
 		}
 		
@@ -123,17 +118,17 @@ public class ClientEditHandler {
 		{
 			GristType grist = entry.getKey();
 			TextFormatting color = entry.getValue() <= have.getGrist(grist) ? TextFormatting.GREEN : TextFormatting.RED;
-			toolTip.add(new TextComponentString(entry.getValue()+" ").appendSibling(grist.getDisplayName()).appendText(" ("+have.getGrist(grist) + ")").setStyle(new Style().setColor(color)));
+			toolTip.add(new StringTextComponent(entry.getValue()+" ").appendSibling(grist.getDisplayName()).appendText(" ("+have.getGrist(grist) + ")").setStyle(new Style().setColor(color)));
 		}
 		if(cost.isEmpty())
-			toolTip.add(new TextComponentTranslation("gui.free").setStyle(new Style().setColor(TextFormatting.GREEN)));
+			toolTip.add(new TranslationTextComponent("gui.free").setStyle(new Style().setColor(TextFormatting.GREEN)));
 	}
 	
 	@SubscribeEvent
 	public void tickEnd(PlayerTickEvent event) {
 		if(event.phase != TickEvent.Phase.END || event.player != Minecraft.getInstance().player || !isActive())
 			return;
-		EntityPlayer player = event.player;
+		PlayerEntity player = event.player;
 		
 		double range = MinestuckDimensionHandler.isLandDimension(player.dimension) ? MinestuckConfig.clientLandEditRange : MinestuckConfig.clientOverworldEditRange;
 		
@@ -146,7 +141,7 @@ public class ClientEditHandler {
 	{
 		if(event.getEntity().world.isRemote && event.getPlayer().isUser() && isActive())
 		{
-			InventoryPlayer inventory = event.getPlayer().inventory;
+			PlayerInventory inventory = event.getPlayer().inventory;
 			ItemStack stack = event.getEntityItem().getItem();
 			DeployList.ClientDeployEntry entry = DeployList.getEntryClient(stack);
 			if(entry != null)
@@ -180,10 +175,10 @@ public class ClientEditHandler {
 		{
 			Block block = event.getWorld().getBlockState(event.getPos()).getBlock();
 			ItemStack stack = event.getEntityPlayer().getHeldItemMainhand();
-			event.setUseBlock((block instanceof BlockDoor || block instanceof BlockTrapDoor || block instanceof BlockFenceGate) ? Event.Result.ALLOW : Event.Result.DENY);
+			event.setUseBlock((block instanceof DoorBlock || block instanceof TrapDoorBlock || block instanceof FenceGateBlock) ? Event.Result.ALLOW : Event.Result.DENY);
 			if(event.getUseBlock() == Event.Result.ALLOW)
 				return;
-			if(event.getHand().equals(EnumHand.OFF_HAND) || !ServerEditHandler.isBlockItem(stack.getItem()))
+			if(event.getHand().equals(Hand.OFF_HAND) || !ServerEditHandler.isBlockItem(stack.getItem()))
 			{
 				event.setCanceled(true);
 				return;
@@ -206,7 +201,7 @@ public class ClientEditHandler {
 							str.append(", ");
 						str.append(grist.getAmount()+" "+grist.getType().getDisplayName());
 					}
-					event.getEntityPlayer().sendMessage(new TextComponentTranslation("grist.missing",str.toString()));
+					event.getEntityPlayer().sendMessage(new TranslationTextComponent("grist.missing",str.toString()));
 				}
 				event.setCanceled(true);
 			}
@@ -220,7 +215,7 @@ public class ClientEditHandler {
 	{
 		if(event.getWorld().isRemote && event.getEntityPlayer().isUser() && isActive())
 		{
-			IBlockState block = event.getWorld().getBlockState(event.getPos());
+			BlockState block = event.getWorld().getBlockState(event.getPos());
 			if(block.getBlockHardness(event.getWorld(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
 					|| PlayerSavedData.getClientGrist().getGrist(GristType.BUILD) <= 0)
 				event.setCanceled(true);
@@ -265,7 +260,7 @@ public class ClientEditHandler {
 	@SubscribeEvent(priority=EventPriority.HIGH)
 	public void onGuiOpened(GuiOpenEvent event)
 	{
-		if(isActive() && event.getGui() instanceof InventoryEffectRenderer)
+		if(isActive() && event.getGui() instanceof DisplayEffectsScreen<?>)
 		{
 				event.setCanceled(true);
 				PlayerStatsScreen.editmodeTab = PlayerStatsScreen.EditmodeGuiType.DEPLOY_LIST;

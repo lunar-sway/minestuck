@@ -59,6 +59,14 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 		return get();
 	}
 	
+	public static PlayerSavedData get(World world)
+	{
+		MinecraftServer server = world.getServer();
+		if(server == null)
+			throw new IllegalArgumentException("Can't get player data instance on client side! (Got null server from world)");
+		return get(server);
+	}
+	
 	public static PlayerSavedData get(MinecraftServer mcServer)
 	{
 		ServerWorld world = mcServer.getWorld(DimensionType.OVERWORLD);

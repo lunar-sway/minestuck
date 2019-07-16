@@ -10,9 +10,8 @@ import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.advancements.PlayerAdvancements;
-import net.minecraft.advancements.criterion.AbstractCriterionInstance;
+import net.minecraft.advancements.criterion.CriterionInstance;
 import net.minecraft.advancements.criterion.ItemPredicate;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -84,7 +83,7 @@ public class ConsortItemTrigger implements ICriterionTrigger<ConsortItemTrigger.
 			listeners.trigger(table, item, consort.merchantType);
 	}
 	
-	public static class Instance extends AbstractCriterionInstance
+	public static class Instance extends CriterionInstance
 	{
 		private final String table;
 		private final ItemPredicate item;

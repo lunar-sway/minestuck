@@ -10,8 +10,7 @@ import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.advancements.PlayerAdvancements;
-import net.minecraft.advancements.criterion.AbstractCriterionInstance;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.advancements.criterion.CriterionInstance;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
 
@@ -80,7 +79,7 @@ public class ChangeModusTrigger implements ICriterionTrigger<ChangeModusTrigger.
 			listeners.trigger(modus.getRegistryName().toString());
 	}
 	
-	public static class Instance extends AbstractCriterionInstance
+	public static class Instance extends CriterionInstance
 	{
 		private final String modus;
 		public Instance(String modus)

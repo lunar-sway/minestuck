@@ -8,9 +8,8 @@ import com.google.gson.JsonObject;
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.advancements.PlayerAdvancements;
-import net.minecraft.advancements.criterion.AbstractCriterionInstance;
+import net.minecraft.advancements.criterion.CriterionInstance;
 import net.minecraft.advancements.criterion.ItemPredicate;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -82,7 +81,7 @@ public class PunchDesignixTrigger implements ICriterionTrigger<PunchDesignixTrig
 			listeners.trigger(player, input, target, result);
 	}
 	
-	public static class Instance extends AbstractCriterionInstance
+	public static class Instance extends CriterionInstance
 	{
 		private final ItemPredicate input;
 		private final ItemPredicate target;
@@ -126,7 +125,7 @@ public class PunchDesignixTrigger implements ICriterionTrigger<PunchDesignixTrig
 			this.listeners.remove(listener);
 		}
 		
-		public void trigger(EntityPlayerMP player, ItemStack input, ItemStack target, ItemStack output)
+		public void trigger(ServerPlayerEntity player, ItemStack input, ItemStack target, ItemStack output)
 		{
 			List<Listener<Instance>> list = Lists.newArrayList();
 			for(Listener<Instance> listener : listeners)

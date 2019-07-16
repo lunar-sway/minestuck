@@ -3,7 +3,6 @@ package com.mraof.minestuck.editmode;
 import com.mraof.minestuck.entity.DecoyEntity;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.ServerPlayerEntity;
 
 /**
@@ -15,7 +14,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 public class EditData
 {
 	
-	EditData(DecoyEntity decoy, EntityPlayerMP player, SburbConnection c)
+	EditData(DecoyEntity decoy, ServerPlayerEntity player, SburbConnection c)
 	{
 		this.decoy = decoy;
 		this.player = player;
@@ -26,7 +25,7 @@ public class EditData
 	
 	SburbConnection connection;
 	
-	EntityPlayerMP player;
+	ServerPlayerEntity player;
 	
 	/**
 	 * @return a player identifier for the player at the receiving end of the connection

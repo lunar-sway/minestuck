@@ -6,7 +6,6 @@ import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 
 import net.minecraft.block.Block;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 public class TinkersConstructSupport extends ModSupport

@@ -18,9 +18,9 @@ import net.minecraft.item.ItemStack;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
-import net.minecraft.nbt.INBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
@@ -176,7 +176,7 @@ public class DeployList
 			if(booleans[1])
 			{
 				registerItem("portable_cruxtruder", new GristSet(GristType.BUILD, 200), 1, null,
-						(connection, world) -> MiniCruxtruderItem.getCruxtruderWithColor(PlayerSavedData.get(world).getData(connection.getClientIdentifier()).color));
+						(connection, world) -> MiniCruxtruderItem.getCruxtruderWithColor(PlayerSavedData.get(world.getServer()).getData(connection.getClientIdentifier()).color));
 				registerItem("portable_punch_designix", new ItemStack(MinestuckBlocks.MINI_PUNCH_DESIGNIX), new GristSet(GristType.BUILD, 200), 1);
 				registerItem("portable_totem_lathe", new ItemStack(MinestuckBlocks.MINI_TOTEM_LATHE), new GristSet(GristType.BUILD, 200), 1);
 				registerItem("portable_alchemiter", new ItemStack(MinestuckBlocks.MINI_ALCHEMITER), new GristSet(GristType.BUILD, 300), 1);
@@ -265,10 +265,10 @@ public class DeployList
 	{
 		boolean test(SburbConnection connection);
 	}
-	static NBTTagCompound getDeployListTag(MinecraftServer server, SburbConnection c)
+	static CompoundNBT getDeployListTag(MinecraftServer server, SburbConnection c)
 	{
-		NBTTagCompound nbt = new NBTTagCompound();
-		NBTTagList tagList = new NBTTagList();
+		CompoundNBT nbt = new CompoundNBT();
+		ListNBT tagList = new ListNBT();
 		nbt.put("l", tagList);
 		int tier = SburbHandler.availableTier(server, c.getClientIdentifier());
 		for(int i = 0; i < list.size(); i++)
@@ -279,15 +279,15 @@ public class DeployList
 				ItemStack stack = entry.getItemStack(c, server.getWorld(DimensionType.OVERWORLD));
 				GristSet primary = entry.getPrimaryGristCost(c);
 				GristSet secondary = entry.getSecondaryGristCost(c);
-				NBTTagCompound tag = new NBTTagCompound();
+				CompoundNBT tag = new CompoundNBT();
 				stack.write(tag);
 				tag.putInt("i", i);
-				NBTTagList listPrimary = new NBTTagList();
+				ListNBT listPrimary = new ListNBT();
 				for (GristType type : GristType.values())
 				{
 					if(primary.getGrist(type) == 0)
 						continue;
-					NBTTagCompound gristTag = new NBTTagCompound();
+					CompoundNBT gristTag = new CompoundNBT();
 					gristTag.putString("id", String.valueOf(type.getRegistryName()));
 					gristTag.putInt("amount", primary.getGrist(type));
 					listPrimary.add(gristTag);
@@ -295,12 +295,12 @@ public class DeployList
 				tag.put("primary", listPrimary);
 				if(secondary != null)
 				{
-					NBTTagList listSecondary = new NBTTagList();
+					ListNBT listSecondary = new ListNBT();
 					for(GristType type : GristType.values())
 					{
 						if(secondary.getGrist(type) == 0)
 							continue;
-						NBTTagCompound gristTag = new NBTTagCompound();
+						CompoundNBT gristTag = new CompoundNBT();
 						gristTag.putString("id", String.valueOf(type.getRegistryName()));
 						gristTag.putInt("amount", secondary.getGrist(type));
 						listSecondary.add(gristTag);
@@ -316,22 +316,22 @@ public class DeployList
 	//Clientside
 	
 	@OnlyIn(Dist.CLIENT)
-	static void loadClientDeployList(NBTTagCompound nbt)
+	static void loadClientDeployList(CompoundNBT nbt)
 	{
 		if(clientDeployList == null)
 			clientDeployList = new ArrayList<>();
 		else clientDeployList.clear();
-		NBTTagList list = nbt.getList("l", 10);
+		ListNBT list = nbt.getList("l", 10);
 		for(int i = 0; i < list.size(); i++)
 		{
-			NBTTagCompound tag = list.getCompound(i);
+			CompoundNBT tag = list.getCompound(i);
 			ClientDeployEntry entry = new ClientDeployEntry();
 			entry.item = ItemStack.read(tag);
 			entry.index = tag.getInt("i");
 			entry.cost1 = new GristSet();
-			for (INBTBase nbtBase : tag.getList("primary", 10))
+			for (INBT nbtBase : tag.getList("primary", 10))
 			{
-				NBTTagCompound gristTag = (NBTTagCompound) nbtBase;
+				CompoundNBT gristTag = (CompoundNBT) nbtBase;
 				GristType type = GristType.getTypeFromString(gristTag.getString("id"));
 				if(type != null)
 					entry.cost1.setGrist(type, gristTag.getInt("amount"));
@@ -339,9 +339,9 @@ public class DeployList
 			if(tag.contains("secondary", 9))
 			{
 				entry.cost2 = new GristSet();
-				for(INBTBase nbtBase : tag.getList("secondary", 10))
+				for(INBT nbtBase : tag.getList("secondary", 10))
 				{
-					NBTTagCompound gristTag = (NBTTagCompound) nbtBase;
+					CompoundNBT gristTag = (CompoundNBT) nbtBase;
 					GristType type = GristType.getTypeFromString(gristTag.getString("id"));
 					if(type != null)
 						entry.cost2.setGrist(type, gristTag.getInt("amount"));

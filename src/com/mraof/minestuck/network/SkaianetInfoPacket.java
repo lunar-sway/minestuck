@@ -138,6 +138,6 @@ public class SkaianetInfoPacket
 	
 	public void execute(ServerPlayerEntity player)
 	{
-		SkaianetHandler.get(player.world).requestInfo(player, IdentifierHandler.getById(this.playerId));
+		SkaianetHandler.get(player.server).requestInfo(player, IdentifierHandler.getById(this.playerId));
 	}
 }

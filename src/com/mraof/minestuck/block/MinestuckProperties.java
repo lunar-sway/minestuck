@@ -4,7 +4,6 @@ import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.util.Direction;
-import net.minecraft.util.EnumFacing;
 
 /**
  * Minestuck version of {@link net.minecraft.state.properties.BlockStateProperties}

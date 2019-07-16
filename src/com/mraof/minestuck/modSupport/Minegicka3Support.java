@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -14,13 +13,14 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.alchemy.AlchemyCostRegistry;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
+import net.minecraft.item.Items;
 
 public class Minegicka3Support extends ModSupport
 {
 	
 	@Override
 	public void registerRecipes() throws Exception
-	{
+	{//TODO Get rid of this reflection and use registry names instead! This is something that should've happened already
 		Item thingy = ((Item) (Class.forName("com.williameze.minegicka3.ModBase").getField("thingy").get(null)));
 		Item thingy2 = ((Item) (Class.forName("com.williameze.minegicka3.ModBase").getField("thingyGood").get(null)));
 		Item thingy3 = ((Item) (Class.forName("com.williameze.minegicka3.ModBase").getField("thingySuper").get(null)));

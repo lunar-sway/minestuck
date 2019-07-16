@@ -8,9 +8,8 @@ import com.google.gson.JsonObject;
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.advancements.PlayerAdvancements;
-import net.minecraft.advancements.criterion.AbstractCriterionInstance;
+import net.minecraft.advancements.criterion.CriterionInstance;
 import net.minecraft.advancements.criterion.MinMaxBounds;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
 
@@ -73,7 +72,7 @@ public class TreeModusRootTrigger implements ICriterionTrigger<TreeModusRootTrig
 			listeners.trigger(player, count);
 	}
 	
-	public static class Instance extends AbstractCriterionInstance
+	public static class Instance extends CriterionInstance
 	{
 		private final MinMaxBounds.IntBound count;
 		public Instance(MinMaxBounds.IntBound count)
@@ -113,7 +112,7 @@ public class TreeModusRootTrigger implements ICriterionTrigger<TreeModusRootTrig
 			this.listeners.remove(listener);
 		}
 		
-		public void trigger(EntityPlayerMP player, int count)
+		public void trigger(ServerPlayerEntity player, int count)
 		{
 			List<Listener<Instance>> list = Lists.newArrayList();
 			for(Listener<Instance> listener : listeners)
