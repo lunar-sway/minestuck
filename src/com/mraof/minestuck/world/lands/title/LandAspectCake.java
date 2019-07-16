@@ -5,9 +5,9 @@ import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.decorator.SingleBlockDecorator;
 import com.mraof.minestuck.world.lands.decorator.structure.CakePedestalDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import net.minecraft.block.BlockCake;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.CakeBlock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -50,22 +50,22 @@ public class LandAspectCake extends TitleLandAspect
 		}
 		
 		@Override
-		public IBlockState pickBlock(Random random)
+		public BlockState pickBlock(Random random)
 		{
 			int bites = Math.max(0, (int) (random.nextDouble()*10) - 6);
 			float f = random.nextFloat();
 			if(f < 0.1F)
 			{
 				if(random.nextFloat() < redCakeChance)
-					return (f < 0.05F ? MinestuckBlocks.RED_CAKE : MinestuckBlocks.HOT_CAKE).getDefaultState().with(BlockCake.BITES, bites);
-				else return (f < 0.05F ? MinestuckBlocks.BLUE_CAKE : MinestuckBlocks.COLD_CAKE).getDefaultState().with(BlockCake.BITES, bites);
+					return (f < 0.05F ? MinestuckBlocks.RED_CAKE : MinestuckBlocks.HOT_CAKE).getDefaultState().with(CakeBlock.BITES, bites);
+				else return (f < 0.05F ? MinestuckBlocks.BLUE_CAKE : MinestuckBlocks.COLD_CAKE).getDefaultState().with(CakeBlock.BITES, bites);
 			}
 			else if(f < 0.4F)
-				return MinestuckBlocks.APPLE_CAKE.getDefaultState().with(BlockCake.BITES, bites);
+				return MinestuckBlocks.APPLE_CAKE.getDefaultState().with(CakeBlock.BITES, bites);
 			else if(random.nextFloat() < 0.01)
-				return MinestuckBlocks.REVERSE_CAKE.getDefaultState().with(BlockCake.BITES, bites);
+				return MinestuckBlocks.REVERSE_CAKE.getDefaultState().with(CakeBlock.BITES, bites);
 			else
-				return Blocks.CAKE.getDefaultState().with(BlockCake.BITES, bites);
+				return Blocks.CAKE.getDefaultState().with(CakeBlock.BITES, bites);
 		}
 		
 		@Override

@@ -17,7 +17,7 @@ import com.mraof.minestuck.world.lands.structure.GateStructurePillar;
 import com.mraof.minestuck.world.lands.structure.IGateStructure;
 import com.mraof.minestuck.world.lands.structure.GateStructureMushroom;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.Vec3d;
 
 public class LandAspectFungi extends TerrainLandAspect 

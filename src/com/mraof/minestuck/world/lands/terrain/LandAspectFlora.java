@@ -17,10 +17,10 @@ import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 import com.mraof.minestuck.world.lands.decorator.structure.SwordDecorator;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
-import net.minecraft.block.BlockDirectional;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.DirectionalBlock;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -51,9 +51,9 @@ public class LandAspectFlora extends TerrainLandAspect
 	private static class StrawberryDecorator extends SingleBlockDecorator
 	{
 		@Override
-		public IBlockState pickBlock(Random random)
+		public BlockState pickBlock(Random random)
 		{
-			return MinestuckBlocks.STRAWBERRY.getDefaultState().with(BlockDirectional.FACING, EnumFacing.random(random));
+			return MinestuckBlocks.STRAWBERRY.getDefaultState().with(DirectionalBlock.FACING, Direction.random(random));
 		}
 		@Override
 		public int getCount(Random random)

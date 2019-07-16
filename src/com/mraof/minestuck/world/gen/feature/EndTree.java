@@ -4,11 +4,8 @@ import java.util.Random;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
 
-import net.minecraft.block.BlockLog;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.block.trees.AbstractTree;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.trees.Tree;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.AbstractTreeFeature;
@@ -16,10 +13,10 @@ import net.minecraft.world.gen.feature.NoFeatureConfig;
 
 import javax.annotation.Nullable;
 
-public class EndTree extends AbstractTree
+public class EndTree extends Tree
 {
-	private static final IBlockState LOG = MinestuckBlocks.END_LOG.getDefaultState();
-	private static final IBlockState LEAF = MinestuckBlocks.END_LEAVES.getDefaultState();
+	private static final BlockState LOG = MinestuckBlocks.END_LOG.getDefaultState();
+	private static final BlockState LEAF = MinestuckBlocks.END_LEAVES.getDefaultState();
 	
 	private int minMax;
 	private int maxMax;

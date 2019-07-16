@@ -9,9 +9,6 @@ import com.mraof.minestuck.world.lands.gen.DefaultTerrainGen;
 import com.mraof.minestuck.world.lands.gen.ILandTerrainGen;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.*;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.ArrayList;
@@ -93,8 +90,8 @@ public class LandAspectSandstone extends TerrainLandAspect
 	public List<ILandDecorator> getDecorators()
 	{
 		List<ILandDecorator> list = new ArrayList<ILandDecorator>();
-		IBlockState sand = Blocks.SAND.getDefaultState();
-		IBlockState sandstone = Blocks.SANDSTONE.getDefaultState();
+		BlockState sand = Blocks.SAND.getDefaultState();
+		BlockState sandstone = Blocks.SANDSTONE.getDefaultState();
 		if(type == Variant.SANDSTONE_RED)
 		{
 			sand = Blocks.RED_SAND.getDefaultState();

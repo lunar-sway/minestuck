@@ -1,9 +1,6 @@
 package com.mraof.minestuck.world.biome;
 
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.layer.GenLayer;
-import net.minecraft.world.gen.layer.GenLayerVoronoiZoom;
-import net.minecraft.world.gen.layer.GenLayerZoom;
 
 public class GenLayerLands //extends GenLayer
 {

@@ -4,10 +4,8 @@ import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.lands.decorator.SingleBlockDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
-import net.minecraft.block.BlockPumpkin;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -60,7 +58,7 @@ public class LandAspectSilence extends TitleLandAspect
 	private static class PumpkinDecorator extends SingleBlockDecorator
 	{
 		@Override
-		public IBlockState pickBlock(Random random)
+		public BlockState pickBlock(Random random)
 		{
 			return Blocks.PUMPKIN.getDefaultState();//.with(BlockPumpkin.FACING, EnumFacing.Plane.HORIZONTAL.random(random));
 		}

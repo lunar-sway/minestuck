@@ -6,8 +6,8 @@ import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -35,8 +35,8 @@ public class BucketDecorator extends SimpleStructureDecorator
 			return null;
 		yCoord -= random.nextInt(3);
 		boolean variant = random.nextDouble() < 0.4;
-		IBlockState block = provider.blockRegistry.getBlockState(random.nextDouble() < 0.3 ? "bucket2" : "bucket1");
-		IBlockState liquid;
+		BlockState block = provider.blockRegistry.getBlockState(random.nextDouble() < 0.3 ? "bucket2" : "bucket1");
+		BlockState liquid;
 		if(random.nextBoolean())
 			liquid = liquidBlocks[random.nextInt(liquidBlocks.length)].getDefaultState();
 		else liquid = provider.blockRegistry.getBlockState(random.nextBoolean() ? "ocean" : "river");

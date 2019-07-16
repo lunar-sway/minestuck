@@ -6,7 +6,7 @@ import com.mraof.minestuck.block.LayeredBlock;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.Heightmap;
@@ -80,15 +80,7 @@ public class LayeredBlockDecorator implements ILandDecorator
 			height = 8;
 		}
 		
-		if(height == 8)
-		{
-			IBlockState fullBlock = ((LayeredBlock) block).sourceBlock.getDefaultState();
-			world.setBlockState(pos, fullBlock, 2);
-		}
-		else
-		{
-			//world.setBlockState(pos, block.getStateFromMeta(height - 1), 2);
-		}
+		//world.setBlockState(pos, block.getStateFromMeta(height - 1), 2);
 		
 		if(nextHeight > 0)
 			setBlock(world, pos.up(), nextHeight);

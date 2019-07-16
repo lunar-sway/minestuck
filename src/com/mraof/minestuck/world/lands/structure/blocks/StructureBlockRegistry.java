@@ -1,12 +1,10 @@
 package com.mraof.minestuck.world.lands.structure.blocks;
 
 import net.minecraft.block.*;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.state.IProperty;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.state.properties.Half;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,12 +14,12 @@ public class StructureBlockRegistry
 	
 	private static Map<String, BlockEntry> staticRegistry = new HashMap<>();
 	
-	public static void registerBlock(String name, IBlockState defaultBlock)
+	public static void registerBlock(String name, BlockState defaultBlock)
 	{
 		registerBlock(name, defaultBlock, Block.class);
 	}
 	
-	public static void registerBlock(String name, IBlockState defaultBlock, Class<? extends Block> extention)
+	public static void registerBlock(String name, BlockState defaultBlock, Class<? extends Block> extention)
 	{
 		if(defaultBlock == null || name == null)
 			throw new IllegalArgumentException("Null parameters not allowed.");
@@ -68,12 +66,12 @@ public class StructureBlockRegistry
 		registerBlock("structure_secondary_decorative", "structure_secondary");
 		registerBlock("structure_secondary_stairs", "structure_secondary");
 		registerBlock("structure_planks", Blocks.OAK_PLANKS.getDefaultState());
-		registerBlock("structure_planks_slab", Blocks.OAK_SLAB.getDefaultState(), BlockSlab.class);
+		registerBlock("structure_planks_slab", Blocks.OAK_SLAB.getDefaultState(), SlabBlock.class);
 		registerBlock("structure_wool_1", Blocks.WHITE_WOOL.getDefaultState());
 		registerBlock("structure_wool_2", Blocks.LIGHT_GRAY_WOOL.getDefaultState());
 		registerBlock("structure_wool_3", Blocks.GRAY_WOOL.getDefaultState());
 		registerBlock("carpet", Blocks.WHITE_CARPET.getDefaultState());
-		registerBlock("village_door", Blocks.OAK_DOOR.getDefaultState(), BlockDoor.class);
+		registerBlock("village_door", Blocks.OAK_DOOR.getDefaultState(), DoorBlock.class);
 		registerBlock("salamander_floor", "upper");
 		registerBlock("village_path", "structure_secondary");
 		registerBlock("village_fence", Blocks.OAK_FENCE.getDefaultState());
@@ -82,7 +80,7 @@ public class StructureBlockRegistry
 		registerBlock("mushroom_1", Blocks.RED_MUSHROOM.getDefaultState());
 		registerBlock("mushroom_2", Blocks.BROWN_MUSHROOM.getDefaultState());
 		registerBlock("bush", Blocks.DEAD_BUSH.getDefaultState());
-		registerBlock("torch", Blocks.TORCH.getDefaultState(), BlockTorch.class);	//Class restriction needed because of the facing property
+		registerBlock("torch", Blocks.TORCH.getDefaultState(), TorchBlock.class);	//Class restriction needed because of the facing property
 		registerBlock("bucket1", Blocks.QUARTZ_BLOCK.getDefaultState());
 		registerBlock("bucket2", Blocks.IRON_BLOCK.getDefaultState());
 		registerBlock("glass", Blocks.GLASS.getDefaultState());
@@ -94,9 +92,9 @@ public class StructureBlockRegistry
 	private static class BlockEntry
 	{
 		Class<? extends Block> extention;
-		IBlockState defaultBlock;
+		BlockState defaultBlock;
 		String parentEntry;
-		BlockEntry(IBlockState state, Class<? extends Block> clazz)
+		BlockEntry(BlockState state, Class<? extends Block> clazz)
 		{
 			defaultBlock = state;
 			extention = clazz;
@@ -107,7 +105,7 @@ public class StructureBlockRegistry
 			extention = clazz;
 		}
 		
-		IBlockState getBlockState(StructureBlockRegistry registry)
+		BlockState getBlockState(StructureBlockRegistry registry)
 		{
 			if(parentEntry != null)
 				return registry.getBlockState(parentEntry);
@@ -116,9 +114,9 @@ public class StructureBlockRegistry
 	}
 	
 	//Nonstatic stuff
-	private Map<String, IBlockState> blockRegistry = new HashMap<>();
+	private Map<String, BlockState> blockRegistry = new HashMap<>();
 	
-	public void setBlockState(String name, IBlockState state)
+	public void setBlockState(String name, BlockState state)
 	{
 		if(state == null || name == null)
 			throw new IllegalArgumentException("Null parameters not allowed.");
@@ -130,7 +128,7 @@ public class StructureBlockRegistry
 		blockRegistry.put(name, state);
 	}
 	
-	public IBlockState getBlockState(String name)
+	public BlockState getBlockState(String name)
 	{
 		if(name == null)
 			throw new IllegalArgumentException("Null parameters not allowed.");
@@ -142,14 +140,14 @@ public class StructureBlockRegistry
 		else return staticRegistry.get(name).getBlockState(this);
 	}
 	
-	public IBlockState getCustomBlock(String name)
+	public BlockState getCustomBlock(String name)
 	{
 		return blockRegistry.get(name);
 	}
 	
-	public IBlockState getStairs(String name, EnumFacing facing, boolean upsideDown)
+	public BlockState getStairs(String name, Direction facing, boolean upsideDown)
 	{
-		IBlockState state = getBlockState(name);
+		BlockState state = getBlockState(name);
 		
 		state = withOptionally(state, BlockStateProperties.HORIZONTAL_FACING, facing);
 		
@@ -159,7 +157,7 @@ public class StructureBlockRegistry
 		return state;
 	}
 	
-	public static <T extends Comparable<T>> IBlockState withOptionally(IBlockState state, IProperty<T> property, T value)
+	public static <T extends Comparable<T>> BlockState withOptionally(BlockState state, IProperty<T> property, T value)
 	{
 		if(state.has(property))
 		{

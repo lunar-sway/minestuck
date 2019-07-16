@@ -3,11 +3,13 @@ package com.mraof.minestuck.world.storage;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Location;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.ServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.storage.DimensionSavedDataManager;
 import net.minecraft.world.storage.WorldSavedData;
-import net.minecraft.world.storage.WorldSavedDataStorage;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,18 +27,13 @@ public class TransportalizerSavedData extends WorldSavedData
 		locations = new HashMap<>();
 	}
 	
-	private TransportalizerSavedData(String name)
-	{
-		super(name);
-	}
-	
 	@Override
-	public void read(NBTTagCompound nbt)
+	public void read(CompoundNBT nbt)
 	{
 		locations = new HashMap<>();
 		for(String id : nbt.keySet())
 		{
-			NBTTagCompound locationTag = nbt.getCompound(id);
+			CompoundNBT locationTag = nbt.getCompound(id);
 			Location location = Location.fromNBT(locationTag);
 			
 			if(location != null)
@@ -47,13 +44,13 @@ public class TransportalizerSavedData extends WorldSavedData
 	}
 	
 	@Override
-	public NBTTagCompound write(NBTTagCompound compound)
+	public CompoundNBT write(CompoundNBT compound)
 	{
 		for(Map.Entry<String, Location> entry : locations.entrySet())
 		{
 			Location location = entry.getValue();
 			
-			NBTTagCompound locationTag = location.toNBT(new NBTTagCompound());
+			CompoundNBT locationTag = location.toNBT(new CompoundNBT());
 			
 			if(locationTag != null)
 				compound.put(entry.getKey(), locationTag);
@@ -103,18 +100,17 @@ public class TransportalizerSavedData extends WorldSavedData
 		return unusedId;
 	}
 	
-	public static TransportalizerSavedData get(World world)
+	public static TransportalizerSavedData get(MinecraftServer mcServer)
 	{
-		if(world.isRemote)
-			throw new IllegalStateException("Should not attempt to get saved data on the client side!");
+		ServerWorld world = mcServer.getWorld(DimensionType.OVERWORLD);
 		
-		WorldSavedDataStorage storage = world.getSavedDataStorage();
-		TransportalizerSavedData instance = storage.get(DimensionType.OVERWORLD, TransportalizerSavedData::new, DATA_NAME);
+		DimensionSavedDataManager storage = world.getSavedData();
+		TransportalizerSavedData instance = storage.get(TransportalizerSavedData::new, DATA_NAME);
 		
 		if(instance == null)	//There is no save data
 		{
 			instance = new TransportalizerSavedData();
-			storage.set(DimensionType.OVERWORLD, DATA_NAME, instance);
+			storage.set(instance);
 		}
 		
 		return instance;

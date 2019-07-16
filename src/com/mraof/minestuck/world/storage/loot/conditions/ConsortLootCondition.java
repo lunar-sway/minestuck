@@ -3,14 +3,15 @@ package com.mraof.minestuck.world.storage.loot.conditions;
 import com.google.gson.*;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.conditions.LootCondition;
+import net.minecraft.world.storage.loot.LootParameters;
+import net.minecraft.world.storage.loot.conditions.ILootCondition;
 
 import java.util.Random;
 
-public class ConsortLootCondition implements LootCondition
+public class ConsortLootCondition implements ILootCondition
 {
 	private final EnumConsort[] consorts;
 	
@@ -20,9 +21,9 @@ public class ConsortLootCondition implements LootCondition
 	}
 	
 	@Override
-	public boolean testCondition(Random rand, LootContext context)
+	public boolean test(LootContext context)
 	{
-		Entity entity = context.getLootedEntity();
+		Entity entity = context.get(LootParameters.THIS_ENTITY);
 		if(entity != null)
 			for(EnumConsort type : consorts)
 				if(type.isConsort(entity))
@@ -30,7 +31,7 @@ public class ConsortLootCondition implements LootCondition
 		return false;
 	}
 	
-	public static class Serializer extends LootCondition.Serializer<ConsortLootCondition>
+	public static class Serializer extends ILootCondition.AbstractSerializer<ConsortLootCondition>
 	{
 		public Serializer()
 		{
@@ -61,9 +62,9 @@ public class ConsortLootCondition implements LootCondition
 				JsonArray list = json.getAsJsonArray("consort");
 				consorts = new EnumConsort[list.size()];
 				for(int i = 0; i < list.size(); i++)
-					consorts[i] = getType(JsonUtils.getString(list.get(i), "consort"));
+					consorts[i] = getType(JSONUtils.getString(list.get(i), "consort"));
 				
-			} else consorts = new EnumConsort[] {getType(JsonUtils.getString(json, "consort"))};
+			} else consorts = new EnumConsort[] {getType(JSONUtils.getString(json, "consort"))};
 			return new ConsortLootCondition(consorts);
 		}
 		

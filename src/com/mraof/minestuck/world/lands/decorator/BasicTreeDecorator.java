@@ -2,8 +2,8 @@ package com.mraof.minestuck.world.lands.decorator;
 
 import java.util.Random;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -13,7 +13,7 @@ public class BasicTreeDecorator extends TreeDecoratorBase
 	//WorldGenTrees[] treeTypes;
 	protected int treeCount;
 	
-	public BasicTreeDecorator(IBlockState[] trees, IBlockState[] leaves, int treeCount, Biome... biomes)
+	public BasicTreeDecorator(BlockState[] trees, BlockState[] leaves, int treeCount, Biome... biomes)
 	{
 		super(biomes);
 		this.treeCount = treeCount;
@@ -22,9 +22,9 @@ public class BasicTreeDecorator extends TreeDecoratorBase
 			treeTypes[i] = new WorldGenTrees(false, 5, trees[i], leaves[i], false);*/
 	}
 	
-	public BasicTreeDecorator(IBlockState treeType, IBlockState leafType, int treeCount, Biome... biomes)
+	public BasicTreeDecorator(BlockState treeType, BlockState leafType, int treeCount, Biome... biomes)
 	{
-		this(new IBlockState[] {treeType}, new IBlockState[] {leafType}, treeCount, biomes);
+		this(new BlockState[] {treeType}, new BlockState[] {leafType}, treeCount, biomes);
 	}
 	
 	public BasicTreeDecorator(int treeCount, Biome... biomes)

@@ -3,7 +3,7 @@ package com.mraof.minestuck.world.lands.decorator;
 
 import java.util.Random;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -15,16 +15,16 @@ public class SurfaceDecoratorVein extends BiomeSpecificDecorator
 {
 	
 	public int amount;
-	public IBlockState block;
+	public BlockState block;
 	public int size;
 	public float priority;
 	
-	public SurfaceDecoratorVein(IBlockState block, int amount, int size, Biome... biomes)
+	public SurfaceDecoratorVein(BlockState block, int amount, int size, Biome... biomes)
 	{
 		this(block, amount, size, 0.3F, biomes);
 	}
 	
-	public SurfaceDecoratorVein(IBlockState block, int amount, int size, float priority, Biome... biomes)
+	public SurfaceDecoratorVein(BlockState block, int amount, int size, float priority, Biome... biomes)
 	{
 		super(biomes);
 		this.amount = amount;

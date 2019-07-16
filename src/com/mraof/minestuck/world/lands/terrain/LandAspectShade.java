@@ -8,7 +8,7 @@ import com.mraof.minestuck.world.lands.decorator.LeaflessTreeDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceMushroomGenerator;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.ArrayList;

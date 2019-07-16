@@ -7,8 +7,7 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.function.BiConsumer;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -67,11 +66,11 @@ public class RockDecorator extends BiomeSpecificDecorator
 	private BlockPos generateRock(BlockPos rockPos, int height, float plateauSize, World world, Random random, ChunkProviderLands provider)
 	{
 		float xSlope = random.nextFloat(), zSlope = random.nextFloat();
-		IBlockState block = provider.blockRegistry.getBlockState("ground");
+		BlockState block = provider.blockRegistry.getBlockState("ground");
 		
-		Map<CoordPair, Integer> heightMap = new HashMap<CoordPair, Integer>();
-		Queue<BlockPos> toProcess = new LinkedList<BlockPos>();
-		Map<BlockPos, IBlockState> was = new HashMap<BlockPos, IBlockState>();
+		Map<CoordPair, Integer> heightMap = new HashMap<>();
+		Queue<BlockPos> toProcess = new LinkedList<>();
+		Map<BlockPos, BlockState> was = new HashMap<>();
 		toProcess.add(rockPos);
 		toProcess.add(null);
 		
@@ -196,20 +195,20 @@ public class RockDecorator extends BiomeSpecificDecorator
 		
 		if(stomps)
 		{
-			BiConsumer<? super BlockPos, ? super IBlockState> action = new BlockRestorer().setWorld(world);
+			BiConsumer<? super BlockPos, ? super BlockState> action = new BlockRestorer().setWorld(world);
 			was.forEach(action);
 		}
 		
 		return corePosition;
 	}
 	
-	public class BlockRestorer implements BiConsumer<BlockPos, IBlockState>
+	public class BlockRestorer implements BiConsumer<BlockPos, BlockState>
 	{
 		World world = null;
 		public BlockRestorer setWorld(World w) {world = w; return this;}
 		
 		@Override
-		public void accept(BlockPos t, IBlockState u)
+		public void accept(BlockPos t, BlockState u)
 		{
 			world.setBlockState(t, u);
 		}

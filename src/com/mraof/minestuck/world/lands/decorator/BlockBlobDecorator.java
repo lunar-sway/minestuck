@@ -3,7 +3,7 @@ package com.mraof.minestuck.world.lands.decorator;
 import java.util.Iterator;
 import java.util.Random;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -14,11 +14,11 @@ import net.minecraft.world.gen.Heightmap;
 public class BlockBlobDecorator extends BiomeSpecificDecorator	//A version of WorldGenBlockBlob slightly adapted to this usage area
 {
 	
-	private IBlockState block;
+	private BlockState block;
 	private int size;
 	private int count;
 	
-	public BlockBlobDecorator(IBlockState block, int size, int count, Biome... biomes)
+	public BlockBlobDecorator(BlockState block, int size, int count, Biome... biomes)
 	{
 		super(biomes);
 		this.block = block;

@@ -5,9 +5,6 @@ import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockUtil;
 import com.mraof.minestuck.world.storage.loot.MinestuckLoot;
 import net.minecraft.block.*;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -116,8 +113,8 @@ public class OasisDecorator extends BiomeSpecificDecorator
 			int topX = Math.max(4, Math.min(11, posX - 2 + random.nextInt(3)));
 			int topZ = Math.max(4, Math.min(11, posZ - 2 + random.nextInt(3)));
 			BlockPos topPos = pos.add(topX - 8, treePos.getY() - pos.getY() + 5 + random.nextInt(2), topZ - 8);
-			IBlockState log = Blocks.JUNGLE_LOG.getDefaultState();
-			IBlockState leaves = Blocks.JUNGLE_LEAVES.getDefaultState();
+			BlockState log = Blocks.JUNGLE_LOG.getDefaultState();
+			BlockState leaves = Blocks.JUNGLE_LEAVES.getDefaultState();
 			
 			BlockPos diff = topPos.subtract(treePos);
 			int logChecks = 12;
@@ -132,7 +129,7 @@ public class OasisDecorator extends BiomeSpecificDecorator
 				for (int z = -4; z <= 4; z++)
 				{
 					int lowerY = 1;
-					if (random.nextDouble() < BlockPos.ORIGIN.getDistance(x, 0, z) / 4)
+					if (random.nextDouble() < Math.sqrt(BlockPos.ZERO.distanceSq(x, 0, z, false)) / 4)
 						lowerY = 0;
 					int upperY = Math.min(4, 4 - Math.max(Math.abs(x), Math.abs(z)) + random.nextInt(2));
 					if (Math.abs(x) == 4 || Math.abs(z) == 4)

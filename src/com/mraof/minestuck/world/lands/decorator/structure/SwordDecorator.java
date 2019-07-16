@@ -5,11 +5,8 @@ import java.util.Random;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockUtil;
 import com.mraof.minestuck.world.storage.loot.MinestuckLoot;
 
-import net.minecraft.block.BlockTorch;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -22,7 +19,7 @@ public class SwordDecorator extends SimpleStructureDecorator
 	@Override
 	public BlockPos generateStructure(World world, Random random, BlockPos pos, ChunkProviderLands provider)
 	{
-		IBlockState[] materials = pickMaterials(random);
+		BlockState[] materials = pickMaterials(random);
 		if(materials==null)
 		{
 			return null;
@@ -53,14 +50,14 @@ public class SwordDecorator extends SimpleStructureDecorator
 	 * 4: Body for blade
 	 * 5: Core of blade
 	 */
-	private IBlockState[] pickMaterials(Random random)
+	private BlockState[] pickMaterials(Random random)
 	{
-		IBlockState[] out = null;
+		BlockState[] out = null;
 		//One in 600 swords will be made of the valuable materials
 		switch(random.nextInt(random.nextDouble() < 0.005 ? 3 : 2))
 		{
 		case 0:
-			out = new IBlockState[]
+			out = new BlockState[]
 			{
 				Blocks.GRAY_CONCRETE.getDefaultState(),
 				Blocks.CYAN_TERRACOTTA.getDefaultState(),
@@ -71,7 +68,7 @@ public class SwordDecorator extends SimpleStructureDecorator
 			};
 			break;
 		case 1:
-			out = new IBlockState[]
+			out = new BlockState[]
 			{
 				Blocks.PURPLE_TERRACOTTA.getDefaultState(),
 				Blocks.PINK_TERRACOTTA.getDefaultState(),
@@ -82,7 +79,7 @@ public class SwordDecorator extends SimpleStructureDecorator
 			};
 			break;
 		case 2:
-			out = new IBlockState[]
+			out = new BlockState[]
 			{
 				Blocks.WHITE_CONCRETE.getDefaultState(),
 				Blocks.QUARTZ_BLOCK.getDefaultState(),
@@ -96,7 +93,7 @@ public class SwordDecorator extends SimpleStructureDecorator
 		return out;
 	}
 	
-	public BlockPos generateHilt(World world, Random random, BlockPos pos, ChunkProviderLands provider, IBlockState[] materials)
+	public BlockPos generateHilt(World world, Random random, BlockPos pos, ChunkProviderLands provider, BlockState[] materials)
 	{
 		xCoord = pos.getX();
 		zCoord = pos.getZ();
@@ -104,7 +101,7 @@ public class SwordDecorator extends SimpleStructureDecorator
 		if(yCoord == -1)
 			return null;
 		
-		IBlockState ground = world.getBlockState(new BlockPos(xCoord, yCoord - 1, zCoord));
+		BlockState ground = world.getBlockState(new BlockPos(xCoord, yCoord - 1, zCoord));
 		if(ground.getMaterial().isLiquid())
 			return null;
 		
@@ -164,7 +161,7 @@ public class SwordDecorator extends SimpleStructureDecorator
 		return new BlockPos(xCoord, yCoord, zCoord);
 	}
 	
-	private void placeHalfGuard(World world, BlockPos origin, IBlockState[] materials, boolean isFlipped)
+	private void placeHalfGuard(World world, BlockPos origin, BlockState[] materials, boolean isFlipped)
 	{
 		int x = origin.getX(), y = origin.getY(), z = origin.getZ();
 		int s = isFlipped ? 1 : -1;
@@ -178,7 +175,7 @@ public class SwordDecorator extends SimpleStructureDecorator
 		this.placeBlock(world, materials[0], x + s*8, y, z);
 	}
 	
-	public BlockPos generateBlade(World world, Random random, BlockPos pos, ChunkProviderLands provider, IBlockState[] materials)
+	public BlockPos generateBlade(World world, Random random, BlockPos pos, ChunkProviderLands provider, BlockState[] materials)
 	{
 		xCoord = pos.getX();
 		zCoord = pos.getZ();
@@ -186,7 +183,7 @@ public class SwordDecorator extends SimpleStructureDecorator
 		
 		pos = new BlockPos(xCoord, yCoord, zCoord);
 		
-		IBlockState ground = world.getBlockState(pos);
+		BlockState ground = world.getBlockState(pos);
 		if(ground.getBlock().canBeReplacedByLeaves(ground, world, pos))
 		{
 			yCoord++;
@@ -228,7 +225,7 @@ public class SwordDecorator extends SimpleStructureDecorator
 		return pos;
 	}
 	
-	private void placeBlocks(World world, IBlockState block, BlockPos start, BlockPos end)
+	private void placeBlocks(World world, BlockState block, BlockPos start, BlockPos end)
 	{
 		int fromX = start.getX(), fromY = start.getY(), fromZ = start.getZ();
 		int toX = end.getX(), toY = end.getY(), toZ = end.getZ();

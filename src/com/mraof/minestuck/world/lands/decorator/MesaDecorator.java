@@ -7,9 +7,8 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.function.BiConsumer;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumDyeColor;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -31,7 +30,7 @@ public class MesaDecorator extends BiomeSpecificDecorator
 	private float priority = 0.6F;
 	private int tallness = 7;
 	private float altFrequency = 0.025F;
-	private IBlockState baseBlock[] = {Blocks.RED_TERRACOTTA.getDefaultState(),
+	private BlockState baseBlock[] = {Blocks.RED_TERRACOTTA.getDefaultState(),
 			Blocks.ORANGE_TERRACOTTA.getDefaultState(),
 			Blocks.YELLOW_TERRACOTTA.getDefaultState(),
 			Blocks.GREEN_TERRACOTTA.getDefaultState(),
@@ -39,7 +38,7 @@ public class MesaDecorator extends BiomeSpecificDecorator
 			Blocks.BLUE_TERRACOTTA.getDefaultState(),
 			Blocks.PURPLE_TERRACOTTA.getDefaultState(),
 			Blocks.MAGENTA_TERRACOTTA.getDefaultState()};
-	private IBlockState altBlock[] = {Blocks.RED_GLAZED_TERRACOTTA.getDefaultState(),
+	private BlockState altBlock[] = {Blocks.RED_GLAZED_TERRACOTTA.getDefaultState(),
 			Blocks.ORANGE_GLAZED_TERRACOTTA.getDefaultState(), 
 			Blocks.YELLOW_GLAZED_TERRACOTTA.getDefaultState(),
 			Blocks.GREEN_GLAZED_TERRACOTTA.getDefaultState(), 
@@ -47,8 +46,8 @@ public class MesaDecorator extends BiomeSpecificDecorator
 			Blocks.BLUE_GLAZED_TERRACOTTA.getDefaultState(), 
 			Blocks.PURPLE_GLAZED_TERRACOTTA.getDefaultState(), 
 			Blocks.MAGENTA_GLAZED_TERRACOTTA.getDefaultState() };
-	private IBlockState baseCore = Blocks.AIR.getDefaultState();
-	private IBlockState altCore = Blocks.BEACON.getDefaultState();
+	private BlockState baseCore = Blocks.AIR.getDefaultState();
+	private BlockState altCore = Blocks.BEACON.getDefaultState();
 	
 	private boolean stomps=false;
 	
@@ -91,11 +90,11 @@ public class MesaDecorator extends BiomeSpecificDecorator
 	private BlockPos generateMesa(BlockPos rockPos, int height, float plateauSize, World world, Random random, ChunkProviderLands provider, boolean isAlt)
 	{
 		float xSlope = random.nextFloat(), zSlope = random.nextFloat();
-		IBlockState groundBlock = provider.blockRegistry.getBlockState("ground");
+		BlockState groundBlock = provider.blockRegistry.getBlockState("ground");
 		
 		Map<CoordPair, Integer> heightMap = new HashMap<>();
 		Queue<BlockPos> toProcess = new LinkedList<>();
-		Map<BlockPos, IBlockState> was = new HashMap<>();
+		Map<BlockPos, BlockState> was = new HashMap<>();
 		toProcess.add(rockPos);
 		toProcess.add(null);
 		
@@ -215,20 +214,20 @@ public class MesaDecorator extends BiomeSpecificDecorator
 		
 		if(stomps)
 		{
-			BiConsumer<? super BlockPos, ? super IBlockState> action = new BlockRestorer().setWorld(world);
+			BiConsumer<? super BlockPos, ? super BlockState> action = new BlockRestorer().setWorld(world);
 			was.forEach(action);
 		}
 		
 		return corePosition;
 	}
 	
-	public class BlockRestorer implements BiConsumer<BlockPos, IBlockState>
+	public class BlockRestorer implements BiConsumer<BlockPos, BlockState>
 	{
 		World world = null;
 		public BlockRestorer setWorld(World w) {world = w; return this;}
 		
 		@Override
-		public void accept(BlockPos t, IBlockState u)
+		public void accept(BlockPos t, BlockState u)
 		{
 			world.setBlockState(t, u);
 		}
@@ -269,9 +268,9 @@ public class MesaDecorator extends BiomeSpecificDecorator
 	
 	public float getAltFrequency() { return altFrequency; }
 	
-	public IBlockState[] getBaseBlock() { return baseBlock; }
+	public BlockState[] getBaseBlock() { return baseBlock; }
 	
-	public IBlockState[] getAltBlock() { return altBlock; }
+	public BlockState[] getAltBlock() { return altBlock; }
 	
 	/*
 	 * Setters
@@ -298,12 +297,12 @@ public class MesaDecorator extends BiomeSpecificDecorator
 		return this;
 	}
 
-	public MesaDecorator setAltBlock(IBlockState[] altBlock) {
+	public MesaDecorator setAltBlock(BlockState[] altBlock) {
 		this.altBlock= altBlock;
 		return this;
 	}
 
-	public MesaDecorator setBaseBlock(IBlockState[] baseBlock) {
+	public MesaDecorator setBaseBlock(BlockState[] baseBlock) {
 		this.baseBlock = baseBlock;
 		return this;
 	}

@@ -7,7 +7,7 @@ import com.mraof.minestuck.world.gen.NoiseGeneratorTriangle;
 
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.NoiseGeneratorOctaves;
+import net.minecraft.world.gen.OctavesNoiseGenerator;
 
 public class DefaultTerrainGen extends LandTerrainGenBase
 {
@@ -15,7 +15,7 @@ public class DefaultTerrainGen extends LandTerrainGenBase
 	public float normalHeight    = 0.3F, oceanHeight    = -0.2F, roughHeight     = 0.4F;
 	public float normalVariation = 0.5F, oceanVariation =  0.2F, roughVariation = 0.8F;
 	
-	protected NoiseGeneratorOctaves noiseGens[] = new NoiseGeneratorOctaves[2];
+	protected OctavesNoiseGenerator noiseGens[] = new OctavesNoiseGenerator[2];
 	protected NoiseGeneratorTriangle noiseGeneratorTriangle;
 	protected int[] topBlock;	//It's easier to just re-use all arrays
 	protected double[] heightMap;
@@ -34,8 +34,8 @@ public class DefaultTerrainGen extends LandTerrainGenBase
 	public DefaultTerrainGen(ChunkProviderLands chunkProvider, Random rand)
 	{
 		super(chunkProvider);
-		this.noiseGens[0] = new NoiseGeneratorOctaves(rand, 10);
-		this.noiseGens[1] = new NoiseGeneratorOctaves(rand, 1);
+		this.noiseGens[0] = new OctavesNoiseGenerator(rand, 10);
+		this.noiseGens[1] = new OctavesNoiseGenerator(rand, 1);
 		noiseGeneratorTriangle = new NoiseGeneratorTriangle(rand);
 		topBlock = new int[256];
 		biomeHeightMap = new double[25];

@@ -9,10 +9,9 @@ import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 import com.mraof.minestuck.world.lands.decorator.WorldgenTreeDecorator;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
-import net.minecraft.block.BlockRotatedPillar;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumDyeColor;
-import net.minecraft.util.EnumFacing.Axis;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.RotatedPillarBlock;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.ArrayList;
@@ -31,7 +30,7 @@ public class LandAspectEnd extends TerrainLandAspect
 		registry.setBlockState("ground", Blocks.END_STONE.getDefaultState());
 		//registry.setBlockState("ocean", MinestuckBlocks.blockEnder.getDefaultState());
 		registry.setBlockState("structure_primary", Blocks.END_STONE_BRICKS.getDefaultState());
-		registry.setBlockState("structure_primary_decorative", Blocks.PURPUR_PILLAR.getDefaultState().with(BlockRotatedPillar.AXIS, Axis.Y));
+		registry.setBlockState("structure_primary_decorative", Blocks.PURPUR_PILLAR.getDefaultState().with(RotatedPillarBlock.AXIS, Direction.Axis.Y));
 		registry.setBlockState("structure_primary_stairs", Blocks.PURPUR_STAIRS.getDefaultState());
 		registry.setBlockState("structure_secondary", Blocks.PURPUR_BLOCK.getDefaultState());
 		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState());

@@ -3,7 +3,7 @@ package com.mraof.minestuck.world.lands.title;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.decorator.structure.BucketDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 
 public class LandAspectBuckets extends TitleLandAspect	//Yes, buckets
 {

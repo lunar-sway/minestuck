@@ -4,9 +4,9 @@ import java.util.Random;
 
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -33,12 +33,12 @@ public class SmallLibraryDecorator extends SimpleStructureDecorator
 		/*if(provider.isBBInSpawn(new StructureBoundingBox(xCoord - 4, zCoord - 4, xCoord + 4, zCoord + 4)))
 			return null;*/
 		
-		IBlockState wall = provider.blockRegistry.getBlockState("structure_primary");
-		IBlockState wallDec = provider.blockRegistry.getBlockState("structure_primary_decorative");
-		IBlockState floor = provider.blockRegistry.getBlockState("structure_secondary");
-		IBlockState floorDec = provider.blockRegistry.getBlockState("structure_secondary_decorative");
-		IBlockState stairs0 = provider.blockRegistry.getStairs("structure_secondary_stairs", rotation ? EnumFacing.EAST : EnumFacing.SOUTH, false);
-		IBlockState stairs1 = provider.blockRegistry.getStairs("structure_secondary_stairs", rotation ? EnumFacing.WEST : EnumFacing.NORTH, false);
+		BlockState wall = provider.blockRegistry.getBlockState("structure_primary");
+		BlockState wallDec = provider.blockRegistry.getBlockState("structure_primary_decorative");
+		BlockState floor = provider.blockRegistry.getBlockState("structure_secondary");
+		BlockState floorDec = provider.blockRegistry.getBlockState("structure_secondary_decorative");
+		BlockState stairs0 = provider.blockRegistry.getStairs("structure_secondary_stairs", rotation ? Direction.EAST : Direction.SOUTH, false);
+		BlockState stairs1 = provider.blockRegistry.getStairs("structure_secondary_stairs", rotation ? Direction.WEST : Direction.NORTH, false);
 		
 		for(int x = -3; x <= 3; x++)
 			for(int z = -2; z <= 3; z++)
@@ -81,10 +81,10 @@ public class SmallLibraryDecorator extends SimpleStructureDecorator
 					placeBlock(world, Blocks.BOOKSHELF.getDefaultState(), 2, y, z);
 			}
 		
-		IBlockState stairs2 = provider.blockRegistry.getStairs("structure_primary_stairs", rotation ? EnumFacing.SOUTH : EnumFacing.EAST, false);
-		IBlockState stairs3 = provider.blockRegistry.getStairs("structure_primary_stairs", rotation ? EnumFacing.NORTH : EnumFacing.WEST, false);
-		IBlockState stairs4 = provider.blockRegistry.getStairs("structure_primary_stairs", rotation ? EnumFacing.SOUTH : EnumFacing.EAST, true);
-		IBlockState stairs5 = provider.blockRegistry.getStairs("structure_primary_stairs", rotation ? EnumFacing.NORTH : EnumFacing.WEST, true);
+		BlockState stairs2 = provider.blockRegistry.getStairs("structure_primary_stairs", rotation ? Direction.SOUTH : Direction.EAST, false);
+		BlockState stairs3 = provider.blockRegistry.getStairs("structure_primary_stairs", rotation ? Direction.NORTH : Direction.WEST, false);
+		BlockState stairs4 = provider.blockRegistry.getStairs("structure_primary_stairs", rotation ? Direction.SOUTH : Direction.EAST, true);
+		BlockState stairs5 = provider.blockRegistry.getStairs("structure_primary_stairs", rotation ? Direction.NORTH : Direction.WEST, true);
 		
 		placeBlocks(world, stairs2, -3, 4, -2, -3, 4, 3);
 		placeBlocks(world, stairs2, -2, 5, -2, -2, 5, 3);

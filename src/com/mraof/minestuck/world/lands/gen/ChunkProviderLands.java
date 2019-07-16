@@ -8,16 +8,14 @@ import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.structure.village.MapGenConsortVillage;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
-import net.minecraft.world.gen.IChunkGenerator;
 
 import java.util.*;
 
-public abstract class ChunkProviderLands implements IChunkGenerator
+@Deprecated //The content of this class is migrating to ChunkGeneratorLands and LandDimension
+public abstract class ChunkProviderLands //implements IChunkGenerator
 {
 	List<SpawnListEntry> consortList;
 	public List<SpawnListEntry> monsterList;

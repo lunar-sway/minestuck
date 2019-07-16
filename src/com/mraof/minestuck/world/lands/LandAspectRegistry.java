@@ -12,9 +12,7 @@ import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.terrain.*;
 import com.mraof.minestuck.world.lands.title.*;
 import io.netty.buffer.Unpooled;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
@@ -215,8 +213,8 @@ public class LandAspectRegistry
 	/**
 	 * Converts aspect data to NBT tags for saving/loading.
 	 */
-	public static NBTTagCompound toNBT(TerrainLandAspect aspect1, TitleLandAspect aspect2) {
-		NBTTagCompound tag = new NBTTagCompound();
+	public static CompoundNBT toNBT(TerrainLandAspect aspect1, TitleLandAspect aspect2) {
+		CompoundNBT tag = new CompoundNBT();
 		tag.putString("aspect1",aspect1.getPrimaryName());
 		tag.putString("aspect2",aspect2.getPrimaryName());
 		return tag;

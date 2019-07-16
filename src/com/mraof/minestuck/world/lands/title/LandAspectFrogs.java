@@ -6,8 +6,8 @@ import com.mraof.minestuck.world.lands.decorator.LilypadDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
 
  public class LandAspectFrogs extends TitleLandAspect
 {

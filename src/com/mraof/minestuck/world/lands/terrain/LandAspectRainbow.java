@@ -16,13 +16,9 @@ import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.gen.ILandTerrainGen;
 import com.mraof.minestuck.world.lands.gen.SpecialTerrainGen;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
-import net.minecraft.block.BlockLog;
-import net.minecraft.block.BlockStone;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.passive.EntitySquid;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
 
@@ -48,7 +44,7 @@ public class LandAspectRainbow extends TerrainLandAspect
 		registry.setBlockState("salamander_floor", Blocks.STONE_BRICKS.getDefaultState());
 		//registry.setBlockState("fall_fluid", MinestuckBlocks.blockWatercolors.getDefaultState());
 		//registry.setBlockState("light_block", MinestuckBlocks.glowingLog.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE));
-		IBlockState rainbow_leaves = MinestuckBlocks.RAINBOW_LEAVES.getDefaultState();
+		BlockState rainbow_leaves = MinestuckBlocks.RAINBOW_LEAVES.getDefaultState();
 		//	rainbow_leaves = rainbow_leaves.with(BlockMinestuckLeaves1.CHECK_DECAY, false).withProperty(BlockMinestuckLeaves1.DECAYABLE, false);
 		registry.setBlockState("bush", rainbow_leaves);
 		registry.setBlockState("mushroom_1", rainbow_leaves);

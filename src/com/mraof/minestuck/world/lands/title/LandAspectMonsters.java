@@ -3,8 +3,8 @@ package com.mraof.minestuck.world.lands.title;
 import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
 

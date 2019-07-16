@@ -1,7 +1,7 @@
 package com.mraof.minestuck.world.storage;
 
 import com.mraof.minestuck.Minestuck;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.storage.WorldSavedData;
 
 public class MinestuckSaveHandler extends WorldSavedData    //TODO https://mcforge.readthedocs.io/en/1.13.x/datastorage/worldsaveddata/
@@ -14,13 +14,13 @@ public class MinestuckSaveHandler extends WorldSavedData    //TODO https://mcfor
 	}
 	
 	@Override
-	public void read(NBTTagCompound nbt)
+	public void read(CompoundNBT nbt)
 	{
 	
 	}
 	
 	@Override
-	public NBTTagCompound write(NBTTagCompound compound)
+	public CompoundNBT write(CompoundNBT compound)
 	{
 		return compound;
 	}

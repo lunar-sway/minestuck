@@ -4,11 +4,10 @@ import java.util.Random;
 
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockUtil;
 import com.mraof.minestuck.world.storage.loot.MinestuckLoot;
-import net.minecraft.block.BlockTorch;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -26,7 +25,7 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 		if(yCoord == -1)
 			return null;
 		
-		IBlockState ground = world.getBlockState(new BlockPos(xCoord, yCoord - 1, zCoord));
+		BlockState ground = world.getBlockState(new BlockPos(xCoord, yCoord - 1, zCoord));
 		if((ground.getMaterial().isLiquid() || ground.getMaterial() == Material.ICE) && random.nextFloat() < 0.6)	//Make it uncommon, but not impossible for it to be placed in the sea.
 			return null;
 		/*if(provider.isBBInSpawn(new StructureBoundingBox(xCoord - 4, zCoord - 4, xCoord + 4, zCoord + 4)))
@@ -36,10 +35,10 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 		if(height + yCoord + 3 >= 256)
 			return null;
 		
-		IBlockState wall = provider.blockRegistry.getBlockState("structure_primary");
-		IBlockState wallDec = provider.blockRegistry.getBlockState("structure_primary_decorative");
-		IBlockState floor = provider.blockRegistry.getBlockState("structure_secondary");
-		IBlockState torch = provider.blockRegistry.getBlockState("torch");
+		BlockState wall = provider.blockRegistry.getBlockState("structure_primary");
+		BlockState wallDec = provider.blockRegistry.getBlockState("structure_primary_decorative");
+		BlockState floor = provider.blockRegistry.getBlockState("structure_secondary");
+		BlockState torch = provider.blockRegistry.getBlockState("torch");
 		
 		boolean torches = random.nextFloat() < 1 - provider.worldProvider.skylightBase;
 		
@@ -59,7 +58,7 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 		this.placeBlocks(world, wall, 3, 1, -2, 3, height, -1);
 		this.placeBlocks(world, wall, 3, 1, 1, 3, height, 2);
 		
-		for(EnumFacing facing : EnumFacing.Plane.HORIZONTAL)
+		for(Direction facing : Direction.Plane.HORIZONTAL)
 		{
 			BlockPos doorPos = new BlockPos(xCoord, yCoord + 1, zCoord).offset(facing, 4);
 			if(world.getBlockState(doorPos).getMaterial().isSolid())
@@ -78,7 +77,7 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 				{
 					this.placeBlocks(world, floor, Math.min(3*facing.getXOffset(), 4*facing.getXOffset()), 0, Math.min(3*facing.getZOffset(), 4*facing.getZOffset()),
 							Math.max(3*facing.getXOffset(), 4*facing.getXOffset()), 0, Math.max(3*facing.getZOffset(), 4*facing.getZOffset()));
-					if(facing.getAxis() == EnumFacing.Axis.X)
+					if(facing.getAxis() == Direction.Axis.X)
 					{
 						this.placeBlocks(world, wall, 4*facing.getXOffset(), -1, -1, 4*facing.getXOffset(), -1, 1);
 						this.placeBlocks(world, wall, 5*facing.getXOffset(), 0, -1, 5*facing.getXOffset(), 0, 1);
@@ -151,8 +150,8 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 		for(int y = 0; y <= height + 3; y++)
 		{
 			offset = getStairOffset(y + stairOffset);
-			EnumFacing facing = getStairFacing(y + stairOffset);
-			IBlockState rotatedStairs = provider.blockRegistry.getStairs("structure_secondary_stairs", facing, false);
+			Direction facing = getStairFacing(y + stairOffset);
+			BlockState rotatedStairs = provider.blockRegistry.getStairs("structure_secondary_stairs", facing, false);
 			this.placeBlock(world, (y < height + 1)?rotatedStairs:floor, offset.getX(), Math.min(height, y) + 1, offset.getZ());
 			if(y != 0 && y < height + 1)
 			{
@@ -176,28 +175,28 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 			}
 		}
 		
-		EnumFacing facing;
+		Direction facing;
 		BlockPos chestPos;
 		if(offset.getZ() == -1 && offset.getX() != 1)
 		{
 			offset = offset.north(2);
 			chestPos = new BlockPos(xCoord, yCoord + height + 2, zCoord + 3);
-			facing = EnumFacing.NORTH;
+			facing = Direction.NORTH;
 		} else if(offset.getX() == -1)
 		{
 			offset = offset.west(2).north();
 			chestPos = new BlockPos(xCoord + 3, yCoord + height + 2, zCoord);
-			facing = EnumFacing.WEST;
+			facing = Direction.WEST;
 		} else if(offset.getZ() == 1)
 		{
 			offset = offset.south().west();
 			chestPos = new BlockPos(xCoord, yCoord + height + 2, zCoord - 3);
-			facing = EnumFacing.SOUTH;
+			facing = Direction.SOUTH;
 		} else
 		{
 			offset = offset.east();
 			chestPos = new BlockPos(xCoord - 3, yCoord + height + 2, zCoord);
-			facing = EnumFacing.EAST;
+			facing = Direction.EAST;
 		}
 		
 		if(random.nextInt(50) == 0)
@@ -262,7 +261,7 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 		return new BlockPos(x, 0, z);
 	}
 	
-	protected EnumFacing getStairFacing(int offset)
+	protected Direction getStairFacing(int offset)
 	{
 		offset /= 2;
 		if(rotation)
@@ -271,10 +270,10 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 		
 		switch(offset)
 		{
-		case 0: return EnumFacing.EAST;
-		case 1: return EnumFacing.NORTH;
-		case 2: return EnumFacing.WEST;
-		default: return EnumFacing.SOUTH;
+		case 0: return Direction.EAST;
+		case 1: return Direction.NORTH;
+		case 2: return Direction.WEST;
+		default: return Direction.SOUTH;
 		}
 	}
 	

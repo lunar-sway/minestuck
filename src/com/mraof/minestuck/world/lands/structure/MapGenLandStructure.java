@@ -1,7 +1,5 @@
 package com.mraof.minestuck.world.lands.structure;
 
-import net.minecraft.block.state.IBlockState;
-
 public class MapGenLandStructure //extends MapGenStructure
 {
 	/*

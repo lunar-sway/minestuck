@@ -3,8 +3,7 @@ package com.mraof.minestuck.world.gen;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.world.gen.structure.MapGenCastle;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -18,8 +17,6 @@ import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.gen.*;
-import net.minecraftforge.event.terraingen.InitNoiseGensEvent;
-import net.minecraftforge.event.terraingen.TerrainGen;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -30,16 +27,14 @@ import java.util.Random;
  * @author Mraof
  *
  */
-public class ChunkGeneratorSkaia extends AbstractChunkGenerator<SkaiaGenSettings>
+public class ChunkGeneratorSkaia extends ChunkGenerator<SkaiaGenSettings>
 {
 	Random random;
-	private NoiseGeneratorOctaves noiseGen1;
-	private NoiseGeneratorOctaves noiseGen2;
-	private NoiseGeneratorOctaves noiseGen3;
-	public NoiseGeneratorOctaves noiseGen4;
-	public NoiseGeneratorOctaves noiseGen5;
-	
-	private final SkaiaGenSettings settings;
+	private OctavesNoiseGenerator noiseGen1;
+	private OctavesNoiseGenerator noiseGen2;
+	private OctavesNoiseGenerator noiseGen3;
+	public OctavesNoiseGenerator noiseGen4;
+	public OctavesNoiseGenerator noiseGen5;
 
 	private MapGenCastle castleGenerator = new MapGenCastle();
 
@@ -54,30 +49,29 @@ public class ChunkGeneratorSkaia extends AbstractChunkGenerator<SkaiaGenSettings
 	
 	public ChunkGeneratorSkaia(World worldIn, BiomeProvider biomeProviderIn, SkaiaGenSettings settings)
 	{
-		super(worldIn, biomeProviderIn);
-		this.settings = settings;
+		super(worldIn, biomeProviderIn, settings);
 		this.random = new Random(seed);
 		this.spawnableBlackList = new ArrayList<>();
 		this.spawnableWhiteList = new ArrayList<>();
-		this.noiseGen1 = new NoiseGeneratorOctaves(this.random, 7);
-		this.noiseGen2 = new NoiseGeneratorOctaves(this.random, 3);
-		this.noiseGen3 = new NoiseGeneratorOctaves(this.random, 8);
-		this.noiseGen4 = new NoiseGeneratorOctaves(this.random, 10);
-		this.noiseGen5 = new NoiseGeneratorOctaves(this.random, 16);
-
+		this.noiseGen1 = new OctavesNoiseGenerator(this.random, 7);
+		this.noiseGen2 = new OctavesNoiseGenerator(this.random, 3);
+		this.noiseGen3 = new OctavesNoiseGenerator(this.random, 8);
+		this.noiseGen4 = new OctavesNoiseGenerator(this.random, 10);
+		this.noiseGen5 = new OctavesNoiseGenerator(this.random, 16);
+		/*
 		InitNoiseGensEvent.Context noiseGens = TerrainGen.getModdedNoiseGenerators(world, this.random, new InitNoiseGensEvent.Context(noiseGen1, noiseGen2, noiseGen3, noiseGen4, noiseGen5));
 		this.noiseGen1 = noiseGens.getLPerlin1();
 		this.noiseGen2 = noiseGens.getLPerlin2();
 		this.noiseGen3 = noiseGens.getPerlin();
 		this.noiseGen4 = noiseGens.getScale();
-		this.noiseGen5 = noiseGens.getDepth();
+		this.noiseGen5 = noiseGens.getDepth();*/
 		
 	}
 	
 	public void prepareHeights(int x, int z, IChunk primer)
 	{
 		int[] topBlock = new int[256];
-		
+		/*
 		double[] generated0 = this.noiseGen1.func_202647_a(x*16, 10, z*16, 16, 1, 16, .1, 0, .1);
 		double[] generated1 = this.noiseGen5.func_202647_a(x*16, 10, z*16, 16, 1, 16, .04, 0, .04);
 		double[] generated2 = this.noiseGen2.func_202647_a(x*16, 10, z*16, 16, 1, 16, .01, 0, .01);
@@ -87,7 +81,7 @@ public class ChunkGeneratorSkaia extends AbstractChunkGenerator<SkaiaGenSettings
 			topBlock[i] = (y&511)<=255  ? y&255 : 255 - y&255;
 		}
 		
-		IBlockState block;
+		BlockState block;
 		if((Math.abs(x) + Math.abs(z)) % 2 == 0)
 			block = MinestuckBlocks.WHITE_CHESS_DIRT.getDefaultState();
 		else block = MinestuckBlocks.BLACK_CHESS_DIRT.getDefaultState();
@@ -100,16 +94,11 @@ public class ChunkGeneratorSkaia extends AbstractChunkGenerator<SkaiaGenSettings
 					pos.setPos(posX, posY, posZ);
 					primer.setBlockState(pos, block, false);
 				}
+		 */
 	}
 	
 	@Override
-	public double[] generateNoiseRegion(int x, int z)
-	{
-		return new double[256];
-	}
-	
-	@Override
-	public void makeBase(IChunk chunkIn)
+	public void makeBase(IWorld world, IChunk chunkIn)
 	{
 		ChunkPos chunkpos = chunkIn.getPos();
 		int i = chunkpos.x;
@@ -118,11 +107,11 @@ public class ChunkGeneratorSkaia extends AbstractChunkGenerator<SkaiaGenSettings
 		sharedseedrandom.setBaseChunkSeed(i, j);
 		Biome[] abiome = this.biomeProvider.getBiomeBlock(i * 16, j * 16, 16, 16);
 		chunkIn.setBiomes(abiome);
-		this.prepareHeights(i, j, chunkIn);
+		this.prepareHeights(i, j, chunkIn);/*
 		this.buildSurface(chunkIn, abiome, sharedseedrandom, this.world.getSeaLevel());
 		this.makeBedrock(chunkIn, sharedseedrandom);
 		chunkIn.createHeightMap(Heightmap.Type.WORLD_SURFACE_WG, Heightmap.Type.OCEAN_FLOOR_WG);
-		chunkIn.setStatus(ChunkStatus.BASE);
+		chunkIn.setStatus(ChunkStatus.BASE);*/
 	}
 	
 	@Override
@@ -131,13 +120,13 @@ public class ChunkGeneratorSkaia extends AbstractChunkGenerator<SkaiaGenSettings
 	}
 	
 	@Override
-	public List<SpawnListEntry> getPossibleCreatures(EnumCreatureType creatureType, BlockPos pos)
+	public void generateSurface(IChunk p_222535_1_)
 	{
-		return this.world.getBiome(pos).getSpawns(creatureType);
+	
 	}
 	
 	@Override
-	public int spawnMobs(World worldIn, boolean spawnHostileMobs, boolean spawnPeacefulMobs)
+	public int func_222529_a(int p_222529_1_, int p_222529_2_, Heightmap.Type p_222529_3_)
 	{
 		return 0;
 	}

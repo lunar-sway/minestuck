@@ -2,8 +2,7 @@ package com.mraof.minestuck.world.lands.gen;
 
 import java.util.Random;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.DyeColor;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.chunk.ChunkPrimer;
@@ -14,10 +13,10 @@ import net.minecraft.world.chunk.ChunkPrimer;
 public class SpecialTerrainGen extends DefaultTerrainGen
 {
 	private int width = 2;
-	private EnumDyeColor[] colors = {EnumDyeColor.GRAY, EnumDyeColor.LIGHT_GRAY, EnumDyeColor.WHITE, EnumDyeColor.PINK,
-			EnumDyeColor.RED, EnumDyeColor.ORANGE, EnumDyeColor.YELLOW, EnumDyeColor.LIME,
-			EnumDyeColor.GREEN, EnumDyeColor.CYAN, EnumDyeColor.LIGHT_BLUE, EnumDyeColor.BLUE,
-			EnumDyeColor.PURPLE, EnumDyeColor.MAGENTA, EnumDyeColor.BROWN, EnumDyeColor.BLACK};
+	private DyeColor[] colors = {DyeColor.GRAY, DyeColor.LIGHT_GRAY, DyeColor.WHITE, DyeColor.PINK,
+			DyeColor.RED, DyeColor.ORANGE, DyeColor.YELLOW, DyeColor.LIME,
+			DyeColor.GREEN, DyeColor.CYAN, DyeColor.LIGHT_BLUE, DyeColor.BLUE,
+			DyeColor.PURPLE, DyeColor.MAGENTA, DyeColor.BROWN, DyeColor.BLACK};
 	private SpecialAction action = SpecialAction.COLOR_STRIPE;
 	
 	public SpecialTerrainGen(ChunkProviderLands chunkProvider, Random rand)
@@ -82,11 +81,11 @@ public class SpecialTerrainGen extends DefaultTerrainGen
 		this.width = width;
 	}
 
-	public EnumDyeColor[] getColors() {
+	public DyeColor[] getColors() {
 		return colors;
 	}
 
-	public void setColors(EnumDyeColor[] colors) {
+	public void setColors(DyeColor[] colors) {
 		this.colors = colors;
 	}
 

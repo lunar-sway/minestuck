@@ -13,7 +13,7 @@ public class BiomeMinestuck extends Biome
 	public static Biome skaia;
 	public static Biome mediumOcean, mediumNormal, mediumRough;
 	
-	public BiomeMinestuck(BiomeBuilder biomeBuilder)
+	protected BiomeMinestuck(Builder biomeBuilder)
 	{
 		super(biomeBuilder);
 	}

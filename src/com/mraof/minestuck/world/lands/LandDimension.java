@@ -18,10 +18,9 @@ import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
@@ -31,17 +30,16 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.provider.BiomeProviderType;
 import net.minecraft.world.dimension.Dimension;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.ChunkGeneratorType;
-import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.OverworldGenSettings;
 import net.minecraftforge.common.ModDimension;
 
 import javax.annotation.Nullable;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
 public class LandDimension extends Dimension
 {
-	private final DimensionType type;
 	private ChunkGeneratorLands chunkGen;
 	
 	public StructureBlockRegistry blockRegistry;
@@ -51,29 +49,17 @@ public class LandDimension extends Dimension
 	Vec3d fogColor;
 	Vec3d cloudColor;
 	
-	public LandDimension(DimensionType type)
+	public LandDimension(World worldIn, DimensionType typeIn)
 	{
-		this.type = type;
-		type.getData().resetReaderIndex();
-		if(type.getData().readBoolean())
+		super(worldIn, typeIn);
+		typeIn.getData().resetReaderIndex();
+		if(typeIn.getData().readBoolean())
 		{
-			TerrainLandAspect terrain = LandAspectRegistry.fromNameTerrain(type.getData().readString(32767), false);
-			TitleLandAspect title = LandAspectRegistry.fromNameTitle(type.getData().readString(32767), false);
+			TerrainLandAspect terrain = LandAspectRegistry.fromNameTerrain(typeIn.getData().readString(32767), false);
+			TitleLandAspect title = LandAspectRegistry.fromNameTitle(typeIn.getData().readString(32767), false);
 			landAspects = new LandAspects(terrain, title);
 		} else landAspects = null;
-	}
-	
-	@Override
-	public DimensionType getType()
-	{
-		return type;
-	}
-	
-	
-	@Override
-	protected void init()
-	{
-		hasSkyLight = true;
+		
 		doesWaterVaporize = false;
 		
 		//this.biomeProvider = new BiomeProviderLands(world, chunkProvider.rainfall, chunkProvider.oceanChance, chunkProvider.roughChance);
@@ -101,11 +87,12 @@ public class LandDimension extends Dimension
 	
 	private void initGenSettings(LandGenSettings settings)
 	{
-		settings.setDefautBlock(blockRegistry.getBlockState("ground"));
+		settings.setDefaultBlock(blockRegistry.getBlockState("ground"));
 		settings.setDefaultFluid(blockRegistry.getBlockState("ocean"));
 	}
 	
-	@Override
+	
+	//@Override TODO
 	public float getSunBrightnessFactor(float partialTicks)
 	{
 		float skylight = skylightBase;
@@ -128,7 +115,7 @@ public class LandDimension extends Dimension
 	}
 	
 	@Override
-	public IChunkGenerator createChunkGenerator()
+	public ChunkGenerator<?> createChunkGenerator()
 	{
 		LandGenSettings settings = ModChunkGeneratorType.LANDS.createSettings();
 		if(landAspects != null)
@@ -206,10 +193,10 @@ public class LandDimension extends Dimension
 	}*/
 	
 	@Override
-	public DimensionType getRespawnDimension(EntityPlayerMP player)
+	public DimensionType getRespawnDimension(ServerPlayerEntity player)
 	{
 		DimensionType dimOut;
-		SburbConnection c = SkaianetHandler.get(world).getMainConnection(IdentifierHandler.encode(player), true);
+		SburbConnection c = SkaianetHandler.get(player.server).getMainConnection(IdentifierHandler.encode(player), true);
 		if(c == null || !c.hasEntered())
 			dimOut = player.getSpawnDimension();	//Method outputs 0 when no spawn dimension is set, sending players to the overworld.
 		else
@@ -221,7 +208,7 @@ public class LandDimension extends Dimension
 	}
 	
 	@Override
-	public SleepResult canSleepAt(EntityPlayer player, BlockPos pos)
+	public SleepResult canSleepAt(PlayerEntity player, BlockPos pos)
 	{
 		return SleepResult.ALLOW;
 	}
@@ -267,7 +254,7 @@ public class LandDimension extends Dimension
 	}*/
 	
 	@Override
-	public Vec3d getSkyColor(Entity cameraEntity, float partialTicks)
+	public Vec3d getSkyColor(BlockPos cameraPos, float partialTicks)
 	{
 		return skyColor;
 	}
@@ -295,17 +282,18 @@ public class LandDimension extends Dimension
 		return chunkProvider.getBiomeGen();
 	}^*/
 	
-	@Override
-	public void onPlayerAdded(EntityPlayerMP player)
+	
+	//@Override TODO Is this actually needed?
+	public void onPlayerAdded(ServerPlayerEntity player)
 	{
 		int centerX = ((int)player.posX) >> 4;
 		int centerZ = ((int)player.posZ) >> 4;
 		for(int x = centerX - 1; x <= centerX + 1; x++)
 			for(int z = centerZ - 1; z <= centerZ + 1; z++)
-				this.world.getChunkProvider().getChunk(x, z, true, true);
+				this.world.getChunkProvider().getChunk(x, z, true);
 	}
 	
-	public BlockPos findAndMarkNextStructure(EntityPlayerMP player, String type, NBTTagList tags)
+	public BlockPos findAndMarkNextStructure(ServerPlayerEntity player, String type, ListNBT tags)
 	{
 		if(type.equalsIgnoreCase("village"))
 			//return chunkProvider.villageHandler.findAndMarkNextVillage(player, type, tags);
@@ -328,8 +316,9 @@ public class LandDimension extends Dimension
 	
 	public static class Type extends ModDimension
 	{
+		
 		@Override
-		public Function<DimensionType, ? extends Dimension> getFactory()
+		public BiFunction<World, DimensionType, ? extends Dimension> getFactory()
 		{
 			return LandDimension::new;
 		}

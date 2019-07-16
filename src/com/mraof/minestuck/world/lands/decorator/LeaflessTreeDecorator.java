@@ -4,8 +4,7 @@ import java.util.Random;
 
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
-import net.minecraft.block.BlockLog;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -13,10 +12,10 @@ import net.minecraft.world.gen.Heightmap;
 
 public class LeaflessTreeDecorator extends BiomeSpecificDecorator
 {
-	public IBlockState logState;
+	public BlockState logState;
 	public float count;
 	
-	public LeaflessTreeDecorator(IBlockState logState, float count, Biome... biomes)
+	public LeaflessTreeDecorator(BlockState logState, float count, Biome... biomes)
 	{
 		super(biomes);
 		this.logState = logState;

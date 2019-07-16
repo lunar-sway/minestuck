@@ -2,8 +2,8 @@ package com.mraof.minestuck.world.lands.decorator;
 
 import java.util.Random;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -25,12 +25,12 @@ public class FireFieldDecorator extends BiomeSpecificDecorator
 	@Override
 	public BlockPos generate(World world, Random random, BlockPos pos, ChunkProviderLands provider)
 	{
-		IBlockState surface = provider.blockRegistry.getBlockState("surface");
-		IBlockState upper = provider.blockRegistry.getBlockState("upper");
+		BlockState surface = provider.blockRegistry.getBlockState("surface");
+		BlockState upper = provider.blockRegistry.getBlockState("upper");
 		for(int i2 = 0; i2 < blocks; i2++)
 		{
 			BlockPos pos1 = pos.add(random.nextInt(8) - random.nextInt(8), random.nextInt(4) - random.nextInt(4), random.nextInt(8) - random.nextInt(8));
-			IBlockState block = world.getBlockState(pos1);
+			BlockState block = world.getBlockState(pos1);
 			if(block == surface || block == upper)
 			{
 				world.setBlockState(pos1, Blocks.NETHERRACK.getDefaultState(), 2);

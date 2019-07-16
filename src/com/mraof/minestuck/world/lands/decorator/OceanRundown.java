@@ -2,7 +2,7 @@ package com.mraof.minestuck.world.lands.decorator;
 
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -70,7 +70,7 @@ public class OceanRundown implements ILandDecorator
 			
 			if(pos2 != null)
 			{
-				IBlockState fluid = provider.blockRegistry.getBlockState("ocean");
+				BlockState fluid = provider.blockRegistry.getBlockState("ocean");
 				int minX = Math.min(pos1.getX(), Math.min(pos2.getX(), pos3.getX()));
 				int maxX = Math.max(pos1.getX(), Math.max(pos2.getX(), pos3.getX()));
 				for(int posX = minX; posX <= maxX; posX++)

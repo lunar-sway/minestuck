@@ -20,46 +20,46 @@ import java.util.Random;
 
 import com.google.common.base.Predicate;
 import com.mraof.minestuck.block.CustomOreBlock;
-import com.mraof.minestuck.block.BlockUraniumOre;
 import com.mraof.minestuck.world.lands.LandDimension;
+import com.mraof.minestuck.world.lands.gen.ChunkGeneratorLands;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraft.world.gen.IChunkGenerator;
+import net.minecraft.world.chunk.AbstractChunkProvider;
+import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraftforge.fml.common.IWorldGenerator;
 
 public class OreHandler implements IWorldGenerator
 {
 	@Override
-	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider)
+	public void generate(Random random, int chunkX, int chunkZ, World world, ChunkGenerator chunkGenerator, AbstractChunkProvider chunkProvider)
 	{
-		if(world.getDimension().isSurfaceWorld() && (generateCruxiteOre || chunkGenerator instanceof ChunkProviderLands) && !disableCruxite)
+		if(world.getDimension().isSurfaceWorld() && (generateCruxiteOre || chunkGenerator instanceof ChunkGeneratorLands) && !disableCruxite)
 		{
 			this.addOreSpawn(CRUXITE_ORE_STONE.getDefaultState(), world, random, chunkX * 16, chunkZ * 16, 16, 16,
 					baseCruxiteVeinSize + random.nextInt(bonusCruxiteVeinSize), cruxiteVeinsPerChunk, cruxiteStratumMin, cruxiteStratumMax);
 		}
 		
-		if(world.getDimension().isSurfaceWorld() && (generateUraniumOre || chunkGenerator instanceof ChunkProviderLands) && !disableUranium)
+		if(world.getDimension().isSurfaceWorld() && (generateUraniumOre || chunkGenerator instanceof ChunkGeneratorLands) && !disableUranium)
 		{
 			this.addOreSpawn(URANIUM_ORE_STONE.getDefaultState(), world, random, chunkX * 16, chunkZ * 16, 16, 16,
 					baseUraniumVeinSize + random.nextInt(bonusUraniumVeinSize), uraniumVeinsPerChunk, uraniumStratumMin, uraniumStratumMax);
 		}
 	}
 	
-	public void addOreSpawn(IBlockState block, World world, Random random, int blockXPos, int blockZPos, int maxX, int maxZ, int maxVeinSize, int chancesToSpawn, int minY, int maxY)
+	public void addOreSpawn(BlockState block, World world, Random random, int blockXPos, int blockZPos, int maxX, int maxZ, int maxVeinSize, int chancesToSpawn, int minY, int maxY)
 	{
 		//int maxPossY = minY + (maxY - 1);
 		int diffBtwnMinMaxY = maxY - minY;
-		IBlockState groundType = Blocks.STONE.getDefaultState();
+		BlockState groundType = Blocks.STONE.getDefaultState();
 		if(world.getDimension() instanceof LandDimension)
-			groundType = ((ChunkProviderLands) world.getDimension().createChunkGenerator()).blockRegistry.getBlockState("ground");
+			groundType = world.getChunkProvider().getChunkGenerator().getSettings().getDefaultBlock();
 		if(block.getBlock() == CRUXITE_ORE_STONE)
-			block = CustomOreBlock.getBlockState(groundType);
+			block = CustomOreBlock.getCruxiteState(groundType);
 		if(block.getBlock() == URANIUM_ORE_STONE)
-			block = BlockUraniumOre.getBlockState(groundType);
+			block = CustomOreBlock.getUraniumState(groundType);
 		for(int x = 0; x < chancesToSpawn; x++)
 		{
 			int posX = blockXPos + random.nextInt(maxX);
@@ -71,15 +71,15 @@ public class OreHandler implements IWorldGenerator
 	
 	public static class BlockStatePredicate implements Predicate
 	{
-		IBlockState[] states;
-		public BlockStatePredicate(IBlockState... blockStates)
+		BlockState[] states;
+		public BlockStatePredicate(BlockState... blockStates)
 		{
 			states = blockStates;
 		}
 		@Override
 		public boolean apply(Object input)
 		{
-			for(IBlockState state : states)
+			for(BlockState state : states)
 				if(state.equals(input))
 					return true;
 			return false;

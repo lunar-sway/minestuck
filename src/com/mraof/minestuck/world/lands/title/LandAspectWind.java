@@ -4,7 +4,7 @@ import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.lands.decorator.RockDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.gen.DefaultTerrainGen;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.Vec3d;
 
 public class LandAspectWind extends TitleLandAspect

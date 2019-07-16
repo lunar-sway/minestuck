@@ -2,7 +2,6 @@ package com.mraof.minestuck.world.gen.structure;
 
 import java.util.Random;
 
-import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 
 public class ComponentCastleLibraryPiece extends ComponentCastleRoomPiece 

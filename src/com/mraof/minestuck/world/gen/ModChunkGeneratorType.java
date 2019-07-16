@@ -7,7 +7,7 @@ import net.minecraft.world.gen.ChunkGeneratorType;
 
 public class ModChunkGeneratorType
 {
-	public static final ChunkGeneratorType<SkaiaGenSettings, ChunkGeneratorSkaia> SKAIA = ChunkGeneratorType.register(Minestuck.MOD_ID+":skaia", ChunkGeneratorSkaia::new, SkaiaGenSettings::new, false);
-	public static final ChunkGeneratorType<LandGenSettings, ChunkGeneratorLands> LANDS = ChunkGeneratorType.register(Minestuck.MOD_ID+":lands", ChunkGeneratorLands::new, LandGenSettings::new, false);
-	
+	public static final ChunkGeneratorType<SkaiaGenSettings, ChunkGeneratorSkaia> SKAIA = new ChunkGeneratorType<>(ChunkGeneratorSkaia::new, false, SkaiaGenSettings::new);
+	public static final ChunkGeneratorType<LandGenSettings, ChunkGeneratorLands> LANDS = new ChunkGeneratorType<>(ChunkGeneratorLands::new, false, LandGenSettings::new);
+	//TODO these should probably be registered
 }

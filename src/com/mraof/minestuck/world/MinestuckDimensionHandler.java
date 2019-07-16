@@ -3,21 +3,16 @@ package com.mraof.minestuck.world;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.LandAspects;
 import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.lands.LandInfoContainer;
 import io.netty.buffer.Unpooled;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.ModDimension;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.RegisterDimensionsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -62,9 +57,9 @@ public class MinestuckDimensionHandler
 		//register dimensions
 		skaia = DimensionType.byName(SKAIA_ID);
 		if(skaia == null)
-			skaia = DimensionManager.registerDimension(SKAIA_ID, skaiaDimensionType, null);
+			skaia = DimensionManager.registerDimension(SKAIA_ID, skaiaDimensionType, null, true);
 		
-		for(int i = 0; i < landDimensionCache; i++)
+		for(int i = 0; i < landDimensionCache; i++)	//TODO I doubt we need a cache as a workaround here in 1.14, and if we still do, make forge fix the problem
 		{
 			ResourceLocation name = new ResourceLocation(Minestuck.MOD_ID, "land_"+i);
 			DimensionType land = DimensionType.byName(name);
@@ -85,7 +80,7 @@ public class MinestuckDimensionHandler
 			{
 				PacketBuffer data = new PacketBuffer(Unpooled.buffer());
 				data.writeBoolean(false);
-				land = DimensionManager.registerDimension(name, landDimensionType, data);
+				land = DimensionManager.registerDimension(name, landDimensionType, data, true);
 				landCache.add(land);
 			}
 		}

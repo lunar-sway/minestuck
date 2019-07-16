@@ -15,6 +15,7 @@ import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.SoundCategory;
@@ -167,7 +168,7 @@ public class Echeladder
 		attributesToSend.add(player.getAttribute(SharedMonsterAttributes.MAX_HEALTH));
 	}
 	
-	public void saveEcheladder(NBTTagCompound nbt)
+	public void saveEcheladder(CompoundNBT nbt)
 	{
 		nbt.putInt("rung", rung);
 		nbt.putInt("rungProgress", progress);
@@ -180,7 +181,7 @@ public class Echeladder
 		nbt.putByteArray("rungBonuses", bonuses);
 	}
 	
-	public void loadEcheladder(NBTTagCompound nbt)
+	public void loadEcheladder(CompoundNBT nbt)
 	{
 		rung = nbt.getInt("rung");
 		progress = nbt.getInt("rungProgress");

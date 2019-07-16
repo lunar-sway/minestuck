@@ -4,7 +4,7 @@ import java.util.Random;
 
 import com.mraof.minestuck.world.gen.feature.RainbowTree;
 
-import net.minecraft.block.trees.AbstractTree;
+import net.minecraft.block.trees.Tree;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -14,13 +14,13 @@ public class WorldgenTreeDecorator extends TreeDecoratorBase
 	private int tC; 
 	//private AbstractTree tree = new RainbowTree(false);
 	private float priority = 0.6F;
-	public WorldgenTreeDecorator(int treeCount, AbstractTree tree, float priority, Biome... biomes)
+	public WorldgenTreeDecorator(int treeCount, Tree tree, float priority, Biome... biomes)
 	{
 		this(treeCount, tree, biomes);
 		this.priority = priority;
 	}
 	
-	public WorldgenTreeDecorator(int treeCount, AbstractTree tree, Biome... biomes)
+	public WorldgenTreeDecorator(int treeCount, Tree tree, Biome... biomes)
 	{
 		super(biomes);
 		//this.tree=tree;

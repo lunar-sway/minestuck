@@ -1,28 +1,25 @@
 package com.mraof.minestuck.world.lands.gen;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.provider.BiomeProvider;
 import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.chunk.IChunk;
-import net.minecraft.world.gen.AbstractChunkGenerator;
+import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.gen.NoiseGeneratorOctaves;
+import net.minecraft.world.gen.OctavesNoiseGenerator;
 import net.minecraft.world.gen.WorldGenRegion;
 
 import java.util.List;
 
-public class ChunkGeneratorLands extends AbstractChunkGenerator<LandGenSettings>
+public class ChunkGeneratorLands extends ChunkGenerator<LandGenSettings>
 {
-	private final NoiseGeneratorOctaves noiseGen;
-	
-	private final LandGenSettings settings;
+	private final OctavesNoiseGenerator noiseGen;
 	
 	public static float[] biomeWeight;
 	
@@ -35,10 +32,9 @@ public class ChunkGeneratorLands extends AbstractChunkGenerator<LandGenSettings>
 	
 	public ChunkGeneratorLands(World worldIn, BiomeProvider biomeProviderIn, LandGenSettings settings)
 	{
-		super(worldIn, biomeProviderIn);
-		this.settings = settings;
+		super(worldIn, biomeProviderIn, settings);
 		SharedSeedRandom rand = new SharedSeedRandom(this.seed);
-		this.noiseGen = new NoiseGeneratorOctaves(rand, 10);
+		this.noiseGen = new OctavesNoiseGenerator(rand, 10);
 	}
 	
 	@Override
@@ -48,13 +44,7 @@ public class ChunkGeneratorLands extends AbstractChunkGenerator<LandGenSettings>
 	}
 	
 	@Override
-	public double[] generateNoiseRegion(int x, int z)
-	{
-		return new double[256];
-	}
-	
-	@Override
-	public void makeBase(IChunk chunkIn)
+	public void makeBase(IWorld world, IChunk chunkIn)
 	{
 		ChunkPos chunkpos = chunkIn.getPos();
 		int x = chunkpos.x;
@@ -64,19 +54,31 @@ public class ChunkGeneratorLands extends AbstractChunkGenerator<LandGenSettings>
 		Biome[] abiome = this.biomeProvider.getBiomeBlock(x * 16, z * 16, 16, 16);
 		chunkIn.setBiomes(abiome);
 		this.genBase(x, z, chunkIn);
-		chunkIn.createHeightMap(Heightmap.Type.WORLD_SURFACE_WG, Heightmap.Type.OCEAN_FLOOR_WG);
+		/*chunkIn.createHeightMap(Heightmap.Type.WORLD_SURFACE_WG, Heightmap.Type.OCEAN_FLOOR_WG);
 		this.buildSurface(chunkIn, abiome, random, this.world.getSeaLevel());
 		this.makeBedrock(chunkIn, random);
 		chunkIn.createHeightMap(Heightmap.Type.WORLD_SURFACE_WG, Heightmap.Type.OCEAN_FLOOR_WG);
-		chunkIn.setStatus(ChunkStatus.BASE);
+		chunkIn.setStatus(ChunkStatus.BASE);*/
+	}
+	
+	@Override
+	public void generateSurface(IChunk p_222535_1_)
+	{
+	
+	}
+	
+	@Override
+	public int func_222529_a(int p_222529_1_, int p_222529_2_, Heightmap.Type p_222529_3_)
+	{
+		return 0;
 	}
 	
 	private void genBase(int x, int z, IChunk primer) {
 		
 		int[] topBlock = new int[256];
 		
-		double[] heightMap = this.noiseGen.func_202647_a(x * 16, 10, z * 16, 16, 1, 16, 10, 1, 10);
-		Biome[] biomes = this.biomeProvider.getBiomes(x*4 - 2, z*4 - 2, 9, 9);
+		double[] heightMap = null;//this.noiseGen.func_202647_a(x * 16, 10, z * 16, 16, 1, 16, 10, 1, 10);
+		Biome[] biomes = this.biomeProvider.getBiomes(x*4 - 2, z*4 - 2, 9, 9, true);
 		double[] biomeHeightMap = new double[25];
 		double[] biomeVariationMap = new double[25];
 		
@@ -165,18 +167,6 @@ public class ChunkGeneratorLands extends AbstractChunkGenerator<LandGenSettings>
 	public void spawnMobs(WorldGenRegion worldGenRegion)
 	{
 	
-	}
-	
-	@Override
-	public List<Biome.SpawnListEntry> getPossibleCreatures(EnumCreatureType creatureType, BlockPos pos)
-	{
-		return this.world.getBiome(pos).getSpawns(creatureType);
-	}
-	
-	@Override
-	public int spawnMobs(World world, boolean spawnHostileMobs, boolean spawnPeacefulMobs)
-	{
-		return 0;
 	}
 	
 	@Override

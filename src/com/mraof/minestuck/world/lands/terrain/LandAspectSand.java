@@ -16,8 +16,6 @@ import com.mraof.minestuck.world.lands.gen.LandTerrainGenBase;
 import com.mraof.minestuck.world.lands.gen.RiverFreeTerrainGen;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.*;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.ArrayList;

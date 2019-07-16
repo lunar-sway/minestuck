@@ -10,11 +10,7 @@ import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.*;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
-import net.minecraft.block.BlockLeaves;
-import net.minecraft.block.BlockLog;
-import net.minecraft.block.BlockTallGrass;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumDyeColor;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.Vec3d;
 
 public class LandAspectForest extends TerrainLandAspect
@@ -44,24 +40,24 @@ public class LandAspectForest extends TerrainLandAspect
 	{
 		registry.setBlockState("surface", Blocks.GRASS.getDefaultState());
 		registry.setBlockState("upper", Blocks.DIRT.getDefaultState());
-		/*if(type == Variant.TAIGA) {
+		if(type == Variant.TAIGA) {
 			registry.setBlockState("structure_primary", Blocks.SPRUCE_WOOD.getDefaultState());
-			registry.setBlockState("structure_primary_decorative", MinestuckBlocks.log.getDefaultState().withProperty(BlockMinestuckLog1.VARIANT, BlockMinestuckLog1.BlockType.FROST).withProperty(BlockMinestuckLog1.LOG_AXIS, EnumAxis.NONE));
+			registry.setBlockState("structure_primary_decorative", MinestuckBlocks.FROST_WOOD.getDefaultState());
 		} else {
-			registry.setBlockState("structure_primary", MinestuckBlocks.log.getDefaultState().withProperty(BlockMinestuckLog1.VARIANT, BlockMinestuckLog1.BlockType.VINE_OAK).withProperty(BlockMinestuckLog1.LOG_AXIS, EnumAxis.NONE));
-			registry.setBlockState("structure_primary_decorative", MinestuckBlocks.log.getDefaultState().withProperty(BlockMinestuckLog1.VARIANT, BlockMinestuckLog1.BlockType.FLOWERY_VINE_OAK).withProperty(BlockMinestuckLog1.LOG_AXIS, EnumAxis.NONE));
+			registry.setBlockState("structure_primary", MinestuckBlocks.VINE_WOOD.getDefaultState());
+			registry.setBlockState("structure_primary_decorative", MinestuckBlocks.FLOWERY_VINE_WOOD.getDefaultState());
 		}
-		registry.setBlockState("structure_secondary", Blocks.STONEBRICK.getDefaultState());
-		registry.setBlockState("structure_secondary_decorative", Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED));
+		registry.setBlockState("structure_secondary", Blocks.STONE_BRICKS.getDefaultState());
+		registry.setBlockState("structure_secondary_decorative", Blocks.CHISELED_STONE_BRICKS.getDefaultState());
 		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState());
 		registry.setBlockState("village_path", Blocks.GRASS_PATH.getDefaultState());
-		registry.setBlockState("bush", Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.FERN));
-		registry.setBlockState("structure_wool_1", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.GREEN));
+		registry.setBlockState("bush", Blocks.FERN.getDefaultState());
+		registry.setBlockState("structure_wool_1", Blocks.GREEN_WOOL.getDefaultState());
 		if(type == Variant.TAIGA) {
-			registry.setBlockState("structure_wool_3", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.LIGHT_BLUE));
+			registry.setBlockState("structure_wool_3", Blocks.LIGHT_BLUE_WOOL.getDefaultState());
 		} else {
-			registry.setBlockState("structure_wool_3", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.BROWN));
-		}*/
+			registry.setBlockState("structure_wool_3", Blocks.BROWN_WOOL.getDefaultState());
+		}
 	}
 	
 	@Override

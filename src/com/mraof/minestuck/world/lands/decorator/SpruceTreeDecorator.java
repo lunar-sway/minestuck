@@ -6,10 +6,7 @@ import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockLeaves;
-import net.minecraft.block.BlockLog;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -17,11 +14,11 @@ import net.minecraft.world.biome.Biome;
 public class SpruceTreeDecorator extends TreeDecoratorBase
 {
    
-	public IBlockState trunk;
-	public IBlockState leaf;
+	public BlockState trunk;
+	public BlockState leaf;
 	private Biome biome;
  
-	public SpruceTreeDecorator(IBlockState trunk, IBlockState leaf, Biome biome) {
+	public SpruceTreeDecorator(BlockState trunk, BlockState leaf, Biome biome) {
 		this.biome = biome;
 	    this.trunk = trunk;
 		this.leaf = leaf;

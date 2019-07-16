@@ -2,8 +2,8 @@ package com.mraof.minestuck.world.lands.decorator.structure;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.block.BlockState;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -21,13 +21,13 @@ public class CakePedestalDecorator extends SimpleStructureDecorator
 	@Override
 	protected BlockPos generateStructure(World world, Random random, BlockPos pos, ChunkProviderLands provider)
 	{
-		IBlockState block = provider.blockRegistry.getBlockState("structure_secondary");
-		IBlockState blockDecor = provider.blockRegistry.getBlockState("structure_secondary_decorative");
+		BlockState block = provider.blockRegistry.getBlockState("structure_secondary");
+		BlockState blockDecor = provider.blockRegistry.getBlockState("structure_secondary_decorative");
 		
-		IBlockState stairsN = provider.blockRegistry.getStairs("structure_secondary_stairs", EnumFacing.NORTH, false);
-		IBlockState stairsE = provider.blockRegistry.getStairs("structure_secondary_stairs", EnumFacing.EAST, false);
-		IBlockState stairsS = provider.blockRegistry.getStairs("structure_secondary_stairs", EnumFacing.SOUTH, false);
-		IBlockState stairsW = provider.blockRegistry.getStairs("structure_secondary_stairs", EnumFacing.WEST, false);
+		BlockState stairsN = provider.blockRegistry.getStairs("structure_secondary_stairs", Direction.NORTH, false);
+		BlockState stairsE = provider.blockRegistry.getStairs("structure_secondary_stairs", Direction.EAST, false);
+		BlockState stairsS = provider.blockRegistry.getStairs("structure_secondary_stairs", Direction.SOUTH, false);
+		BlockState stairsW = provider.blockRegistry.getStairs("structure_secondary_stairs", Direction.WEST, false);
 		
 		xCoord = pos.getX();
 		zCoord = pos.getZ();
@@ -53,7 +53,7 @@ public class CakePedestalDecorator extends SimpleStructureDecorator
 		placeBlock(world, stairsS, 1, 0, -1);
 		placeBlock(world, stairsW, 1, 0, -2);
 		
-		IBlockState cake = MinestuckBlocks.FUCHSIA_CAKE.getDefaultState();
+		BlockState cake = MinestuckBlocks.FUCHSIA_CAKE.getDefaultState();
 		
 		placeBlock(world, cake, 0, 2, 0);
 		

@@ -5,28 +5,27 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.mraof.minestuck.item.BoondollarsItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootFunction;
 import net.minecraft.world.storage.loot.RandomValueRange;
-import net.minecraft.world.storage.loot.conditions.LootCondition;
-import net.minecraft.world.storage.loot.functions.LootFunction;
-
-import java.util.Random;
+import net.minecraft.world.storage.loot.conditions.ILootCondition;
 
 public class SetBoondollarCount extends LootFunction
 {
 	private final RandomValueRange countRange;
 	
-	public SetBoondollarCount(LootCondition[] conditionsIn, RandomValueRange countRangeIn)
+	public SetBoondollarCount(ILootCondition[] conditionsIn, RandomValueRange countRangeIn)
 	{
 		super(conditionsIn);
 		this.countRange = countRangeIn;
 	}
 	
-	public ItemStack apply(ItemStack stack, Random rand, LootContext context)
+	@Override
+	protected ItemStack doApply(ItemStack stack, LootContext context)
 	{
-		return BoondollarsItem.setCount(stack, countRange.generateInt(rand));
+		return BoondollarsItem.setCount(stack, countRange.generateInt(context.getRandom()));
 	}
 	
 	public static class Serializer extends LootFunction.Serializer<SetBoondollarCount>
@@ -41,9 +40,9 @@ public class SetBoondollarCount extends LootFunction
 			object.add("count", serializationContext.serialize(functionClazz.countRange));
 		}
 		
-		public SetBoondollarCount deserialize(JsonObject object, JsonDeserializationContext deserializationContext, LootCondition[] conditionsIn)
+		public SetBoondollarCount deserialize(JsonObject object, JsonDeserializationContext deserializationContext, ILootCondition[] conditionsIn)
 		{
-			return new SetBoondollarCount(conditionsIn, JsonUtils.deserializeClass(object, "count", deserializationContext, RandomValueRange.class));
+			return new SetBoondollarCount(conditionsIn, JSONUtils.deserializeClass(object, "count", deserializationContext, RandomValueRange.class));
 		}
 	}
 }

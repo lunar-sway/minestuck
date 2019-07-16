@@ -1,6 +1,5 @@
 package com.mraof.minestuck.world;
 
-import com.google.common.collect.Lists;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
@@ -9,17 +8,16 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Location;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.ServerWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.common.DimensionManager;
@@ -69,13 +67,13 @@ public class GateHandler
 			SburbConnection landConnection = SburbHandler.getConnectionForDimension(player.server, dim);
 			if(landConnection != null)
 			{
-				SburbConnection clientConnection = SkaianetHandler.get(player.world).getMainConnection(landConnection.getClientIdentifier(), false);
+				SburbConnection clientConnection = SkaianetHandler.get(player.getServer()).getMainConnection(landConnection.getClientIdentifier(), false);
 				
 				if(clientConnection != null && clientConnection.hasEntered() && MinestuckDimensionHandler.isLandDimension(clientConnection.getClientDimension()))
 				{
 					DimensionType clientDim = clientConnection.getClientDimension();
 					BlockPos gatePos = getGatePos(player.server, -1, clientDim);
-					WorldServer world = DimensionManager.getWorld(player.server, clientDim, false, true);
+					ServerWorld world = DimensionManager.getWorld(player.server, clientDim, false, true);
 					
 					if(gatePos == null)
 					{
@@ -86,31 +84,31 @@ public class GateHandler
 					
 					if(gatePos.getY() == -1)
 					{
-						world.getChunkProvider().getChunk(gatePos.getX() - 8 >> 4, gatePos.getZ() - 8 >> 4, true, true);
-						world.getChunkProvider().getChunk(gatePos.getX() + 8 >> 4, gatePos.getZ() - 8 >> 4, true, true);
-						world.getChunkProvider().getChunk(gatePos.getX() - 8 >> 4, gatePos.getZ() + 8 >> 4, true, true);
-						world.getChunkProvider().getChunk(gatePos.getX() + 8 >> 4, gatePos.getZ() + 8 >> 4, true, true);
+						world.getChunkProvider().getChunk(gatePos.getX() - 8 >> 4, gatePos.getZ() - 8 >> 4, true);
+						world.getChunkProvider().getChunk(gatePos.getX() + 8 >> 4, gatePos.getZ() - 8 >> 4, true);
+						world.getChunkProvider().getChunk(gatePos.getX() - 8 >> 4, gatePos.getZ() + 8 >> 4, true);
+						world.getChunkProvider().getChunk(gatePos.getX() + 8 >> 4, gatePos.getZ() + 8 >> 4, true);
 						gatePos = getGatePos(player.server, -1, clientDim);
 						if(gatePos.getY() == -1) {Debug.errorf("Unexpected error: Gate didn't generate after loading chunks! Dim: %d, pos: %s", clientDim, gatePos); return;}
 					}
 					
 					location = new Location(gatePos, clientDim);
 				}
-				else player.sendMessage(new TextComponentTranslation("message.gateMissingLand"));
+				else player.sendMessage(new TranslationTextComponent("message.gateMissingLand"));
 			} else Debug.errorf("Unexpected error: Can't find connection for dimension %d!", dim);
 		} else if(gateId == -1)
 		{
 			SburbConnection landConnection = SburbHandler.getConnectionForDimension(player.server, dim);
 			if(landConnection != null)
 			{
-				SburbConnection serverConnection = SkaianetHandler.get(player.world).getMainConnection(landConnection.getServerIdentifier(), true);
+				SburbConnection serverConnection = SkaianetHandler.get(player.getServer()).getMainConnection(landConnection.getServerIdentifier(), true);
 				
 				if(serverConnection != null && serverConnection.hasEntered() && MinestuckDimensionHandler.isLandDimension(serverConnection.getClientDimension()))	//Last shouldn't be necessary, but just in case something goes wrong elsewhere...
 				{
 					DimensionType serverDim = serverConnection.getClientDimension();
 					location = new Location(getGatePos(player.server, 2, serverDim), serverDim);
 					
-				} else player.sendMessage(new TextComponentTranslation("message.gateMissingLand"));
+				} else player.sendMessage(new TranslationTextComponent("message.gateMissingLand"));
 				
 			} else Debug.errorf("Unexpected error: Can't find connection for dimension %d!", dim);
 		} else Debug.errorf("Unexpected error: Gate id %d is out of bounds!", gateId);
@@ -119,19 +117,19 @@ public class GateHandler
 		{
 			if(gateId != 1)
 			{
-				WorldServer world = DimensionManager.getWorld(player.server, location.dim, false, true);
+				ServerWorld world = DimensionManager.getWorld(player.server, location.dim, false, true);
 				
-				IBlockState block = world.getBlockState(location.pos);
+				BlockState block = world.getBlockState(location.pos);
 				
 				if(block.getBlock() != MinestuckBlocks.GATE)
 				{
 					Debug.debugf("Can't find destination gate at %s. Probably broken.", location);
-					player.sendMessage(new TextComponentTranslation("message.gateDestroyed"));
+					player.sendMessage(new TranslationTextComponent("message.gateDestroyed"));
 					return;
 				}
 			}
 			
-			Teleport.teleportEntity(player, location.dim, null, location.pos);
+			//Teleport.teleportEntity(player, location.dim, null, location.pos);	//TODO
 		}
 	}
 	
@@ -204,11 +202,11 @@ public class GateHandler
 		else Debug.error("Trying to set position for a gate that should already be generated/doesn't exist!");
 	}
 	
-	static void saveData(NBTTagList nbtList)
+	static void saveData(ListNBT nbtList)
 	{
 		for(int i = 0; i < nbtList.size(); i++)
 		{
-			NBTTagCompound nbt = nbtList.getCompound(i);
+			CompoundNBT nbt = nbtList.getCompound(i);
 			if(nbt.getString("type").equals("land"))
 			{
 				int dim = nbt.getInt("dimID");
@@ -223,11 +221,11 @@ public class GateHandler
 		}
 	}
 	
-	static void loadData(NBTTagList nbtList)
+	static void loadData(ListNBT nbtList)
 	{
 		for(int i = 0; i < nbtList.size(); i++)
 		{
-			NBTTagCompound nbt = nbtList.getCompound(i);
+			CompoundNBT nbt = nbtList.getCompound(i);
 			if(nbt.getString("type").equals("land") && nbt.contains("gateX"))
 			{
 				DimensionType dim = DimensionType.byName(ResourceLocation.tryCreate(nbt.getString("dim")));

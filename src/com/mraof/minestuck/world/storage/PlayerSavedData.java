@@ -11,17 +11,16 @@ import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.PlayerDataPacket;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.ServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.storage.DimensionSavedDataManager;
 import net.minecraft.world.storage.WorldSavedData;
-import net.minecraft.world.storage.WorldSavedDataStorage;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -55,29 +54,22 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 		mcServer = server;
 	}
 	
-	private PlayerSavedData(String name, MinecraftServer server)
+	public static PlayerSavedData get()
 	{
-		super(name);
-		mcServer = server;
+		return get();
 	}
 	
 	public static PlayerSavedData get(MinecraftServer mcServer)
 	{
-		return get(mcServer.getWorld(DimensionType.OVERWORLD));
-	}
-	
-	public static PlayerSavedData get(World world)
-	{
-		if(world.isRemote)
-			throw new IllegalStateException("Should not attempt to get saved data on the client side!");
+		ServerWorld world = mcServer.getWorld(DimensionType.OVERWORLD);
 		
-		WorldSavedDataStorage storage = world.getSavedDataStorage();
-		PlayerSavedData instance = storage.get(DimensionType.OVERWORLD, s -> new PlayerSavedData(s, world.getServer()), DATA_NAME);
+		DimensionSavedDataManager storage = world.getSavedData();
+		PlayerSavedData instance = storage.get(() -> new PlayerSavedData(world.getServer()), DATA_NAME);
 		
 		if(instance == null)	//There is no save data
 		{
 			instance = new PlayerSavedData(world.getServer());
-			storage.set(DimensionType.OVERWORLD, DATA_NAME, instance);
+			storage.set(instance);
 		}
 		
 		return instance;
@@ -131,9 +123,9 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 	
 	
 	@Override
-	public NBTTagCompound write(NBTTagCompound compound)
+	public CompoundNBT write(CompoundNBT compound)
 	{
-		NBTTagList list = new NBTTagList();
+		ListNBT list = new ListNBT();
 		for (PlayerData data : dataMap.values())
 			list.add(data.writeToNBT());
 		
@@ -142,12 +134,12 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 	}
 	
 	@Override
-	public void read(NBTTagCompound nbt)
+	public void read(CompoundNBT nbt)
 	{
-		NBTTagList list = nbt.getList("playerData", 10);
+		ListNBT list = nbt.getList("playerData", 10);
 		for (int i = 0; i < list.size(); i++)
 		{
-			NBTTagCompound dataCompound = list.getCompound(i);
+			CompoundNBT dataCompound = list.getCompound(i);
 			PlayerData data = new PlayerData();
 			data.readFromNBT(dataCompound, mcServer);
 			dataMap.put(data.player, data);
@@ -163,7 +155,7 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 
 	public static PlayerData getData(ServerPlayerEntity player)
 	{
-		return get(player.world).getData(IdentifierHandler.encode(player));
+		return get(player.server).getData(IdentifierHandler.encode(player));
 	}
 
 	public PlayerData getData(PlayerIdentifier player)
@@ -182,7 +174,7 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 	{
 		if (player.world.isRemote)
 			return getClientGrist();
-		else return get(player.world).getGristSet(IdentifierHandler.encode(player));
+		else return get(player.getServer()).getGristSet(IdentifierHandler.encode(player));
 	}
 	
 	public static boolean addBoondollars(ServerPlayerEntity player, long boons)
@@ -191,7 +183,7 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 		if(data.boondollars + boons < 0)
 			return false;
 		data.boondollars += boons;
-		get(player.world).markDirty();
+		get(player.server).markDirty();
 		
 		MinestuckPacketHandler.sendToPlayer(PlayerDataPacket.boondollars(data.boondollars), player);
 		return true;
@@ -205,7 +197,7 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 		data.boondollars += boons;
 		markDirty();
 		
-		EntityPlayerMP player = id.getPlayer(mcServer);
+		ServerPlayerEntity player = id.getPlayer(mcServer);
 		if(player != null)
 			MinestuckPacketHandler.sendToPlayer(PlayerDataPacket.boondollars(data.boondollars), player);
 		return true;
@@ -223,7 +215,7 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 		public Echeladder echeladder;
 		public boolean effectToggle = true;
 		
-		private void readFromNBT(NBTTagCompound nbt, MinecraftServer mcServer)
+		private void readFromNBT(CompoundNBT nbt, MinecraftServer mcServer)
 		{
 			if (nbt.contains("username"))
 				this.player = IdentifierHandler.load(nbt, "username");    //For compability with saves from older minestuck versions
@@ -231,10 +223,10 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 			if (nbt.contains("grist"))
 			{
 				this.gristCache = new GristSet();
-				NBTTagList gristTags = nbt.getList("grist", 10);
+				ListNBT gristTags = nbt.getList("grist", 10);
 				for(int i = 0; i <  gristTags.size(); i++)
 				{
-					NBTTagCompound gristTag = gristTags.getCompound(i);
+					CompoundNBT gristTag = gristTags.getCompound(i);
 					GristType type = GristType.getTypeFromString(gristTag.getString("id"));
 					if(type != null)
 						this.gristCache.setGrist(type, gristTag.getInt("amount"));
@@ -257,16 +249,16 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 			echeladder.loadEcheladder(nbt);
 		}
 
-		private NBTTagCompound writeToNBT()
+		private CompoundNBT writeToNBT()
 		{
-			NBTTagCompound nbt = new NBTTagCompound();
+			CompoundNBT nbt = new CompoundNBT();
 			player.saveToNBT(nbt, "player");
 			if (this.gristCache != null)
 			{
-				NBTTagList list = new NBTTagList();
+				ListNBT list = new ListNBT();
 				for (GristType type : GristType.values())
 				{
-					NBTTagCompound gristTag = new NBTTagCompound();
+					CompoundNBT gristTag = new CompoundNBT();
 					gristTag.putString("id", String.valueOf(type.getRegistryName()));
 					gristTag.putInt("amount", this.gristCache.getGrist(type));
 					list.add(gristTag);

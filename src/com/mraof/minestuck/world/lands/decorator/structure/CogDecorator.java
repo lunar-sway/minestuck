@@ -2,7 +2,7 @@ package com.mraof.minestuck.world.lands.decorator.structure;
 
 import java.util.Random;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.Heightmap;
@@ -24,7 +24,7 @@ public class CogDecorator extends SimpleStructureDecorator
 		yCoord = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, pos).getY() - blocksDown;
 		if(world.getBlockState(new BlockPos(xCoord, yCoord - 1, zCoord)).getMaterial().isLiquid())
 			return null;
-		IBlockState block = provider.blockRegistry.getBlockState(random.nextBoolean() ? "structure_primary" : "structure_secondary");
+		BlockState block = provider.blockRegistry.getBlockState(random.nextBoolean() ? "structure_primary" : "structure_secondary");
 		/*
 		StructureBoundingBox boundingBox;
 		if(!big)
@@ -48,7 +48,7 @@ public class CogDecorator extends SimpleStructureDecorator
 		}
 		else
 		{
-			IBlockState block2 = provider.blockRegistry.getBlockState(random.nextBoolean() ? "structure_primary" : "structure_secondary");
+			BlockState block2 = provider.blockRegistry.getBlockState(random.nextBoolean() ? "structure_primary" : "structure_secondary");
 			
 			placeBlocks(world, block, -3, 0, 0, -2, 0, 1);
 			placeBlocks(world, block, -3, 1, 0, -3, 1, 1);

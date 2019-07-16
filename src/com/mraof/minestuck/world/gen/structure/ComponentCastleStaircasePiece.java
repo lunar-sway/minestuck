@@ -3,7 +3,6 @@ package com.mraof.minestuck.world.gen.structure;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.World;
 
 public class ComponentCastleStaircasePiece extends ComponentCastleRoomPiece 

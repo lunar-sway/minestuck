@@ -2,8 +2,8 @@ package com.mraof.minestuck.world.lands.decorator.structure;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -28,9 +28,9 @@ public class RabbitHoleDecorator extends SimpleStructureDecorator
 	protected BlockPos generateStructure(World world, Random random, BlockPos pos, ChunkProviderLands provider)
 	{
 
-		IBlockState ground = provider.blockRegistry.getBlockState("surface");
-		IBlockState bush = provider.blockRegistry.getBlockState("bush");
-		IBlockState air = Blocks.AIR.getDefaultState();
+		BlockState ground = provider.blockRegistry.getBlockState("surface");
+		BlockState bush = provider.blockRegistry.getBlockState("bush");
+		BlockState air = Blocks.AIR.getDefaultState();
 
 		BlockPos newpos = pos;
 		while (world.isAirBlock(newpos))

@@ -8,42 +8,35 @@ import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.gen.ModChunkGeneratorType;
 import com.mraof.minestuck.world.gen.SkaiaGenSettings;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Biomes;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.provider.BiomeProviderType;
 import net.minecraft.world.dimension.Dimension;
 import net.minecraft.world.dimension.DimensionType;
-import net.minecraft.world.gen.IChunkGenerator;
+import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraftforge.common.ModDimension;
 
 import javax.annotation.Nullable;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class SkaiaDimension extends Dimension
 {
-	private final DimensionType type;
-	
-	public SkaiaDimension(DimensionType type)
+	public SkaiaDimension(World worldIn, DimensionType typeIn)
 	{
-		this.type = type;
+		super(worldIn, typeIn);
 	}
 	
 	@Override
-	protected void init()
-	{
-		this.hasSkyLight = true;
-	}
-	
-	@Override
-	public IChunkGenerator createChunkGenerator()
+	public ChunkGenerator<?> createChunkGenerator()
 	{
 		SkaiaGenSettings settings = ModChunkGeneratorType.SKAIA.createSettings();
-		settings.setDefautBlock(MinestuckBlocks.WHITE_CHESS_DIRT.getDefaultState());
+		settings.setDefaultBlock(MinestuckBlocks.WHITE_CHESS_DIRT.getDefaultState());
 		settings.setDefaultFluid(Blocks.AIR.getDefaultState());
 		return ModChunkGeneratorType.SKAIA.create(this.world, BiomeProviderType.FIXED.create(BiomeProviderType.FIXED.createSettings().setBiome(BiomeMinestuck.skaia)), settings);
 	}
@@ -98,11 +91,12 @@ public class SkaiaDimension extends Dimension
 		return false;
 	}
 	
+	
 	@Override
-	public DimensionType getRespawnDimension(EntityPlayerMP player)
+	public DimensionType getRespawnDimension(ServerPlayerEntity player)
 	{
 		DimensionType dimOut;
-		SburbConnection c = SkaianetHandler.get(world).getMainConnection(IdentifierHandler.encode(player), true);
+		SburbConnection c = SkaianetHandler.get(world.getServer()).getMainConnection(IdentifierHandler.encode(player), true);
 		if(c == null || !c.hasEntered())
 			dimOut = player.getSpawnDimension();	//Method outputs 0 when no spawn dimension is set, sending players to the overworld.
 		else
@@ -113,22 +107,17 @@ public class SkaiaDimension extends Dimension
 		return dimOut;
 	}
 	
-	@Override
-	public SleepResult canSleepAt(EntityPlayer player, BlockPos pos)
-	{
-		return SleepResult.ALLOW;
-	}
 	
 	@Override
-	public DimensionType getType()
+	public SleepResult canSleepAt(PlayerEntity player, BlockPos pos)
 	{
-		return type;
+		return SleepResult.ALLOW;
 	}
 	
 	public static class Type extends ModDimension
 	{
 		@Override
-		public Function<DimensionType, ? extends Dimension> getFactory()
+		public BiFunction<World, DimensionType, ? extends Dimension> getFactory()
 		{
 			return SkaiaDimension::new;
 		}

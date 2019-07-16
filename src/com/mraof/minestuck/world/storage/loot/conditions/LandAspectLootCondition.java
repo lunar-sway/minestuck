@@ -16,13 +16,13 @@ import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.conditions.LootCondition;
+import net.minecraft.world.storage.loot.conditions.ILootCondition;
 
-public class LandAspectLootCondition implements LootCondition
+public class LandAspectLootCondition implements ILootCondition
 {
 	
 	private final ILandAspect[] landAspectNames;
@@ -36,13 +36,13 @@ public class LandAspectLootCondition implements LootCondition
 	}
 	
 	@Override
-	public boolean testCondition(Random rand, LootContext context)
+	public boolean test(LootContext context)
 	{
-		WorldServer world = context.getWorld();
+		ServerWorld world = context.getWorld();
 		
 		if(world != null && MinestuckDimensionHandler.isLandDimension(world.getDimension().getType()))
 		{
-			LandAspects aspects = ((LandDimension) context.getWorld().dimension).landAspects;
+			LandAspects aspects = ((LandDimension) world.dimension).landAspects;
 			
 			TerrainLandAspect terrain = includeSubtypes ? aspects.aspectTerrain.getPrimaryVariant() : aspects.aspectTerrain;
 			TitleLandAspect title = includeSubtypes ? aspects.aspectTitle.getPrimaryVariant() : aspects.aspectTitle;
@@ -55,7 +55,7 @@ public class LandAspectLootCondition implements LootCondition
 		return inverted;
 	}
 	
-	public static class Serializer extends LootCondition.Serializer<LandAspectLootCondition>
+	public static class Serializer extends ILootCondition.AbstractSerializer<LandAspectLootCondition>
 	{
 		public Serializer()
 		{
@@ -88,11 +88,11 @@ public class LandAspectLootCondition implements LootCondition
 				JsonArray list = json.getAsJsonArray("land_aspect");
 				landAspects = new ILandAspect[list.size()];
 				for(int i = 0; i < list.size(); i++)
-					landAspects[i] = getAspect(JsonUtils.getString(list.get(i), "land_aspect"));
+					landAspects[i] = getAspect(JSONUtils.getString(list.get(i), "land_aspect"));
 				
-			} else landAspects = new ILandAspect[] {getAspect(JsonUtils.getString(json, "land_aspect"))};
-			boolean inverted = JsonUtils.getBoolean(json, "inverse", false);
-			boolean subtypes = JsonUtils.getBoolean(json, "subtypes", true);
+			} else landAspects = new ILandAspect[] {getAspect(JSONUtils.getString(json, "land_aspect"))};
+			boolean inverted = JSONUtils.getBoolean(json, "inverse", false);
+			boolean subtypes = JSONUtils.getBoolean(json, "subtypes", true);
 			return new LandAspectLootCondition(landAspects, inverted, subtypes);
 		}
 		

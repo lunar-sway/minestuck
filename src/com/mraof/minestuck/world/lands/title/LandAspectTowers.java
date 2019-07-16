@@ -4,7 +4,7 @@ import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.decorator.PillarDecorator;
 import com.mraof.minestuck.world.lands.decorator.structure.BasicTowerDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 
 public class LandAspectTowers extends TitleLandAspect
 {

@@ -1,7 +1,5 @@
 package com.mraof.minestuck.world.lands.gen;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.world.chunk.ChunkPrimer;
 
 public abstract class LandTerrainGenBase implements ILandTerrainGen
@@ -18,7 +16,7 @@ public abstract class LandTerrainGenBase implements ILandTerrainGen
 	public void setSeaHeight(int sea)
 	{
 		this.seaHeight = sea;
-		provider.landWorld.setSeaLevel(this.seaHeight + 1);		//We add 1 to maintain the one-block discrepancy already present, which is required to ensure proper generation of villages.
+		//provider.landWorld.setSeaLevel(this.seaHeight + 1);		//We add 1 to maintain the one-block discrepancy already present, which is required to ensure proper generation of villages.
 	}
 	
 	@Override

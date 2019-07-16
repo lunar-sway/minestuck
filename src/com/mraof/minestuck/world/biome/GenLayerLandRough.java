@@ -1,13 +1,13 @@
 package com.mraof.minestuck.world.biome;
 
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.layer.GenLayer;
+import net.minecraft.world.gen.layer.Layer;
 
 public class GenLayerLandRough //extends GenLayer
 {
 	
 	int roughChance;
-	GenLayer parent;
+	Layer parent;
 	
 	/*public GenLayerLandRough(long seed, GenLayer parent)
 	{

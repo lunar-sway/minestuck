@@ -14,8 +14,7 @@ import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.gen.DefaultTerrainGen;
 import com.mraof.minestuck.world.lands.gen.ILandTerrainGen;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
-import net.minecraft.block.BlockSilverfish;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.ArrayList;
@@ -48,7 +47,7 @@ public class LandAspectRock extends TerrainLandAspect
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
 		if(type == Variant.PETRIFICATION) {
-			registry.setBlockState("surface", Blocks.STONE.getDefaultState());	
+			registry.setBlockState("surface", Blocks.STONE.getDefaultState());
 		} else {
 			registry.setBlockState("surface", Blocks.GRAVEL.getDefaultState());
 		}

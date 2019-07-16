@@ -1,25 +1,26 @@
 package com.mraof.minestuck.world.gen.feature;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.block.trees.AbstractTree;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.trees.Tree;
 import net.minecraft.world.gen.feature.AbstractTreeFeature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.TreeFeature;
+import net.minecraftforge.common.IPlantable;
 
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class RainbowTree extends AbstractTree
+public class RainbowTree extends Tree
 {
-	private static final IBlockState LOG = MinestuckBlocks.RAINBOW_LOG.getDefaultState();
-	private static final IBlockState LEAF = MinestuckBlocks.RAINBOW_LEAVES.getDefaultState();
+	private static final BlockState LOG = MinestuckBlocks.RAINBOW_LOG.getDefaultState();
+	private static final BlockState LEAF = MinestuckBlocks.RAINBOW_LEAVES.getDefaultState();
 	
 	@Nullable
 	@Override
 	protected AbstractTreeFeature<NoFeatureConfig> getTreeFeature(Random random)
 	{
-		return new TreeFeature(true, 3 + random.nextInt(5), LOG, LEAF, false).setSapling((net.minecraft.block.BlockSapling)MinestuckBlocks.RAINBOW_SAPLING);
+		return new TreeFeature(NoFeatureConfig::deserialize, true, 3 + random.nextInt(5), LOG, LEAF, false).setSapling((IPlantable) MinestuckBlocks.RAINBOW_SAPLING);
 	}
 	
 	/*@Override
