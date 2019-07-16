@@ -75,7 +75,7 @@ public class TransportalizerBlock extends MachineBlock
 		}
 
 		if(worldIn.isRemote)
-			Minecraft.getInstance().displayGuiScreen(new TransportalizerScreen(Minecraft.getInstance(), tileEntity));	//TODO Check if this causes complications
+			Minecraft.getInstance().displayGuiScreen(new TransportalizerScreen(tileEntity));	//TODO Check if this causes complications
 
 		return true;
 	}

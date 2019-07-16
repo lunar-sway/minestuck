@@ -471,9 +471,9 @@ public class MinestuckBlocks
 		registry.register(WOODEN_EXPLOSIVE_BUTTON = new SpecialButtonBlock(Block.Properties.create(Material.MISCELLANEOUS).doesNotBlockMovement().hardnessAndResistance(0.5F).sound(SoundType.WOOD), true, true).setRegistryName("wooden_explosive_button"));
 		registry.register(STONE_EXPLOSIVE_BUTTON = new SpecialButtonBlock(Block.Properties.create(Material.MISCELLANEOUS).doesNotBlockMovement().hardnessAndResistance(0.5F).sound(SoundType.STONE), true, false).setRegistryName("stone_explosive_button"));
 		
-		registry.register(BLENDER = new DecorBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F).sound(SoundType.METAL), DecorBlock.BLENDER_SHAPE, AlchemiterBlock.UNDEFINED_FACE_SHAPES).setRegistryName("blender"));
-		registry.register(CHESSBOARD = new DecorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.5F), DecorBlock.CHESSBOARD_SHAPE, AlchemiterBlock.CORNER_FACE_SHAPES).setRegistryName("chessboard"));
-		registry.register(MINI_FROG_STATUE = new DecorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.5F), DecorBlock.FROG_STATUE_SHAPE, AlchemiterBlock.UNDEFINED_FACE_SHAPES).setRegistryName("mini_frog_statue"));
+		registry.register(BLENDER = new DecorBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F).sound(SoundType.METAL), DecorBlock.BLENDER_SHAPE).setRegistryName("blender"));
+		registry.register(CHESSBOARD = new DecorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.5F), DecorBlock.CHESSBOARD_SHAPE).setRegistryName("chessboard"));
+		registry.register(MINI_FROG_STATUE = new DecorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.5F), DecorBlock.FROG_STATUE_SHAPE).setRegistryName("mini_frog_statue"));
 		registry.register(GLOWYSTONE_WIRE = new GlowystoneWireBlock(Block.Properties.create(Material.MISCELLANEOUS).hardnessAndResistance(0.0F).lightValue(16).doesNotBlockMovement()).setRegistryName("glowystone_wire"));
 		
 		/*registry.register(blockOil.setRegistryName("block_oil"));
