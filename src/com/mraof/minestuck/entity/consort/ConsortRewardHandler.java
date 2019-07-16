@@ -4,11 +4,12 @@ import com.google.common.collect.Maps;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Pair;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootParameterSets;
+import net.minecraft.world.storage.loot.LootParameters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +18,7 @@ import java.util.Random;
 
 import static com.mraof.minestuck.block.MinestuckBlocks.*;
 import static com.mraof.minestuck.item.MinestuckItems.*;
-import static net.minecraft.init.Blocks.*;
-import static net.minecraft.init.Items.*;
+import static net.minecraft.item.Items.*;
 
 public class ConsortRewardHandler
 {
@@ -126,7 +126,7 @@ public class ConsortRewardHandler
 		ConsortRewardHandler.registerPrice(new ItemStack(MUSHROOM_STEW), 95, 130);
 		ConsortRewardHandler.registerPrice(new ItemStack(CARROT), 15, 18);
 		ConsortRewardHandler.registerPrice(new ItemStack(APPLE), 25, 30);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.WHEAT), 10, 15);
+		ConsortRewardHandler.registerPrice(new ItemStack(WHEAT), 10, 15);
 		ConsortRewardHandler.registerPrice(new ItemStack(WHEAT_SEEDS), 15, 20);
 		ConsortRewardHandler.registerPrice(new ItemStack(BEETROOT_SOUP), 70, 90);
 		ConsortRewardHandler.registerPrice(new ItemStack(BEETROOT), 10, 15);
@@ -244,8 +244,8 @@ public class ConsortRewardHandler
 	
 	public static List<Pair<ItemStack, Integer>> generateStock(ResourceLocation lootTable, ConsortEntity consort, Random rand)
 	{
-		LootContext.Builder contextBuilder = new LootContext.Builder((WorldServer) consort.world).withLootedEntity(consort);
-		List<ItemStack> itemStacks = consort.getServer().getLootTableManager().getLootTableFromLocation(lootTable).generateLootForPools(rand, contextBuilder.build());
+		LootContext.Builder contextBuilder = new LootContext.Builder((ServerWorld) consort.world).withParameter(LootParameters.THIS_ENTITY, consort);
+		List<ItemStack> itemStacks = consort.getServer().getLootTableManager().getLootTableFromLocation(lootTable).generate(contextBuilder.build(LootParameterSets.GIFT));
 		List<Pair<ItemStack, Integer>> itemPriceList = new ArrayList<>();
 		stackLoop:
 		for (ItemStack stack : itemStacks)

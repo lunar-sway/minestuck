@@ -1,7 +1,6 @@
 package com.mraof.minestuck;
 
 import com.mraof.minestuck.editmode.ServerEditHandler;
-import com.mraof.minestuck.inventory.ContainerHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
