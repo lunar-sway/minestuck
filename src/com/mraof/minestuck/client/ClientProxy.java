@@ -27,8 +27,8 @@ import com.mraof.minestuck.client.renderer.entity.PawnRenderer;
 import com.mraof.minestuck.client.renderer.entity.ShadowRenderer;
 import com.mraof.minestuck.client.renderer.entity.VitalityGelRenderer;
 import com.mraof.minestuck.client.renderer.entity.frog.FrogRenderer;
-import com.mraof.minestuck.client.renderer.tileentity.RenderGate;
-import com.mraof.minestuck.client.renderer.tileentity.RenderSkaiaPortal;
+import com.mraof.minestuck.client.renderer.tileentity.GateRenderer;
+import com.mraof.minestuck.client.renderer.tileentity.SkaiaPortalRenderer;
 import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.entity.EntityBigPart;
@@ -90,8 +90,8 @@ public class ClientProxy extends CommonProxy
 	
 	private static void registerRenderers()
 	{
-		ClientRegistry.bindTileEntitySpecialRenderer(SkaiaPortalTileEntity.class, new RenderSkaiaPortal());
-		ClientRegistry.bindTileEntitySpecialRenderer(GateTileEntity.class, new RenderGate());
+		ClientRegistry.bindTileEntitySpecialRenderer(SkaiaPortalTileEntity.class, new SkaiaPortalRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(GateTileEntity.class, new GateRenderer());
 //		MinecraftForgeClient.registerItemRenderer(Minestuck.captchaCard, new CardRenderer());
 	}
 	
