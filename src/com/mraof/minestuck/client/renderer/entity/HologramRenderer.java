@@ -1,19 +1,19 @@
 package com.mraof.minestuck.client.renderer.entity;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.entity.item.HologramEntity;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class RenderHologram extends Render<HologramEntity>
+public class HologramRenderer extends EntityRenderer<HologramEntity>
 {
 
-	public RenderHologram(RenderManager manager) 
+	public HologramRenderer(EntityRendererManager manager)
 	{
 		super(manager);
 	}

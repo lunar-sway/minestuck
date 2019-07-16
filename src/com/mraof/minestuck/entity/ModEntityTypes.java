@@ -31,7 +31,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public final class ModEntityTypes
 {
-	public static EntityType<FrogEntity> FROG = EntityType.Builder.create(FrogEntity::new, EntityClassification.CREATURE).size(0.51F, 0.51F).build(Minestuck.MOD_ID+":frog");
+	public static EntityType<FrogEntity> FROG = EntityType.Builder.<FrogEntity>create(FrogEntity::new, EntityClassification.CREATURE).size(0.51F, 0.51F).build(Minestuck.MOD_ID+":frog");
 	public static EntityType<SalamanderEntity> SALAMANDER = EntityType.Builder.create(SalamanderEntity::new, EntityClassification.CREATURE).size(0.6F, 1.5F).build(Minestuck.MOD_ID+":salamander");
 	public static EntityType<TurtleEntity> TURTLE = EntityType.Builder.create(TurtleEntity::new, EntityClassification.CREATURE).size(0.6F, 1.5F).build(Minestuck.MOD_ID+":turtle");
 	public static EntityType<NakagatorEntity> NAKAGATOR = EntityType.Builder.create(NakagatorEntity::new, EntityClassification.CREATURE).size(0.6F, 1.5F).build(Minestuck.MOD_ID+":nakagator");

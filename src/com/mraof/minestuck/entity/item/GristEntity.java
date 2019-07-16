@@ -269,7 +269,11 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	{
 		return super.getSize(poseIn).scale((float) Math.pow(gristValue, .25));
 	}
-	
+
+	public float getSizeByValue() {
+		return (float)(Math.pow((double)this.gristValue, 0.25D) / 3.0D);
+	}
+
 	@Override
 	public void writeSpawnData(PacketBuffer buffer)
 	{

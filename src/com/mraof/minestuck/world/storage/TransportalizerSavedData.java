@@ -100,6 +100,15 @@ public class TransportalizerSavedData extends WorldSavedData
 		return unusedId;
 	}
 	
+	
+	public static TransportalizerSavedData get(World world)
+	{
+		MinecraftServer server = world.getServer();
+		if(server == null)
+			throw new IllegalArgumentException("Can't get transportalizer data instance on client side! (Got null server from world)");
+		return get(server);
+	}
+	
 	public static TransportalizerSavedData get(MinecraftServer mcServer)
 	{
 		ServerWorld world = mcServer.getWorld(DimensionType.OVERWORLD);

@@ -236,7 +236,9 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 	{
 		return super.getSize(poseIn).scale(healAmount);
 	}
-	
+
+	public float getSizeByValue() {	return (float)this.healAmount / 4.0F; }
+
 	@Override
 	public void writeSpawnData(PacketBuffer buffer)
 	{

@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.entity.model.RendererModel;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 
-public class ModelBasilisk<T extends BasiliskEntity> extends EntityModel<T>
+public class BasiliskModel<T extends BasiliskEntity> extends EntityModel<T>
 {
 	private RendererModel head;
 	private RendererModel body;
@@ -17,15 +17,15 @@ public class ModelBasilisk<T extends BasiliskEntity> extends EntityModel<T>
 	private RendererModel tail0;
 	private RendererModel tail1;
 	private RendererModel tail2;
-	public ModelBasilisk()
+	public BasiliskModel()
 	{
 		this.textureWidth = 128;
 		this.textureHeight = 128;
 		float offsetY = 24;
-		setTextureOffset("null.Tongue", 84, 0);
+		//setTextureOffset("null.Tongue", 84, 0);
 		head = new RendererModel(this, 0, 0);
 		head.addBox(-15F, -16F, -6F, 30, 16, 12);
-		head.addBox("Tongue", -3, -5, -8, 6, 12, 2);
+		head.func_217178_a("Tongue", -3F, -5F, -8F, 6, 12, 2, 0.0f, 84, 0);
 		head.setRotationPoint(0F, -16 + offsetY, -24F);
 		body = new RendererModel(this, 0, 28);
 		body.addBox(-7, 0, -20, 14, 14, 40);

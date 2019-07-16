@@ -8,7 +8,7 @@ import net.minecraft.util.math.MathHelper;
 
 import org.lwjgl.opengl.GL11;
 
-public class ModelGiclops<T extends GiclopsEntity> extends EntityModel<T>
+public class GiclopsModel<T extends GiclopsEntity> extends EntityModel<T>
 {
 
 	private RendererModel head;
@@ -20,16 +20,16 @@ public class ModelGiclops<T extends GiclopsEntity> extends EntityModel<T>
 	private RendererModel tail;
 	float scaling = 2.0F;
 
-	public ModelGiclops()
+	public GiclopsModel()
 	{
 		float offsetY = -96 + 24 / scaling;
 		this.textureWidth = 256;
 		this.textureHeight = 256;
-		setTextureOffset("null.Spike", 0, 0);
+		//setTextureOffset("null.Spike", 0, 0);
 		head = new RendererModel(this, 0, 0);
 		head.addBox(-21F, -26F, -25F, 42, 26, 50);
-		head.addBox("Spike", -2, -34, -6, 4, 8, 4);
-		head.addBox("Spike", -2, -34, -16, 4, 8, 4);
+		head.func_217178_a("Spike", -2F, -34F, -6F, 4, 8, 4, 0.0f, 0, 0);
+		head.func_217178_a("Spike", -2, -34, -16, 4, 8, 4, 0.0f, 0, 0);
 		head.setRotationPoint(0F, 26F + offsetY, -14F);
 		body = new RendererModel(this, 0, 76);
 		body.addBox(-32F, 0F, -20F, 64, 64, 40);

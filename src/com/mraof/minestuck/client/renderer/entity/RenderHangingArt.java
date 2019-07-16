@@ -1,18 +1,14 @@
 package com.mraof.minestuck.client.renderer.entity;
 
+import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.entity.item.HangingArtEntity;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.Direction;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -44,14 +40,14 @@ public class RenderHangingArt<T extends HangingArtEntity> extends EntityRenderer
 		if (this.renderOutlines)
 		{
 			GlStateManager.enableColorMaterial();
-			GlStateManager.enableOutlineMode(this.getTeamColor(entity));
+			GlStateManager.setupSolidRenderingTextureCombine(this.getTeamColor(entity));
 		}
 		
 		this.renderPainting(entity, art.getSizeX(), art.getSizeY(), art.getOffsetX(), art.getOffsetY());
 		
 		if (this.renderOutlines)
 		{
-			GlStateManager.disableOutlineMode();
+			GlStateManager.tearDownSolidRenderingTextureCombine();
 			GlStateManager.disableColorMaterial();
 		}
 		
@@ -138,7 +134,7 @@ public class RenderHangingArt<T extends HangingArtEntity> extends EntityRenderer
 		int l = this.renderManager.world.getCombinedLight(new BlockPos(x, y, z), 0);
 		int s = l % 65536;
 		int t = l / 65536;
-		OpenGlHelper.glMultiTexCoord2f(OpenGlHelper.GL_TEXTURE1, (float)s, (float)t);
+		GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, (float)s, (float)t);
 		GlStateManager.color3f(1.0F, 1.0F, 1.0F);
 	}
 }
