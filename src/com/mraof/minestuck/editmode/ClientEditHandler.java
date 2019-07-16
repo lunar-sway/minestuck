@@ -20,6 +20,7 @@ import net.minecraft.client.renderer.InventoryEffectRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.*;
@@ -64,7 +65,7 @@ public class ClientEditHandler {
 		MinestuckPacketHandler.sendToServer(packet);
 	}
 	
-	public static void onClientPackage(String target, int posX, int posZ, boolean[] items, NBTTagCompound deployList)
+	public static void onClientPackage(String target, int posX, int posZ, boolean[] items, CompoundNBT deployList)
 	{
 		Minecraft mc = Minecraft.getInstance();
 		EntityPlayerSP player = mc.player;

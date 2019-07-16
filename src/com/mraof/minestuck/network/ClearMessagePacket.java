@@ -3,7 +3,7 @@ package com.mraof.minestuck.network;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.util.Location;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -51,10 +51,10 @@ public class ClearMessagePacket
 		ctx.get().setPacketHandled(true);
 	}
 	
-	public void execute(EntityPlayerMP player)
+	public void execute(ServerPlayerEntity player)
 	{
 	
-		if(player.getEntityWorld().dimension.getType() == computer.dim && player.getEntityWorld().isBlockLoaded(computer.pos))
+		if(player.getEntityWorld().dimension.getType() == computer.dim && player.getEntityWorld().isAreaLoaded(computer.pos, 0))
 		{
 			ComputerTileEntity te = SkaianetHandler.getComputer(player.getServer(), computer);
 			

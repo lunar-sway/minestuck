@@ -3,14 +3,10 @@ package com.mraof.minestuck.network;
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 
-/**
- *
- */
 public class MinestuckPacketHandler
 {
 	private static final String PROTOCOL_VERSION = "1";

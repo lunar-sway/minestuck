@@ -1,8 +1,8 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.editmode.ClientEditHandler;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -18,7 +18,7 @@ public class ServerEditPacket
 	String target;
 	int centerX, centerZ;
 	boolean[] givenItems;
-	NBTTagCompound deployTags;
+	CompoundNBT deployTags;
 	
 	public static ServerEditPacket exit()
 	{
@@ -32,7 +32,7 @@ public class ServerEditPacket
 		return packet;
 	}
 	
-	public static ServerEditPacket activate(String target, int centerX, int centerZ, boolean[] givenItems, NBTTagCompound deployTags)
+	public static ServerEditPacket activate(String target, int centerX, int centerZ, boolean[] givenItems, CompoundNBT deployTags)
 	{
 		ServerEditPacket packet = new ServerEditPacket();
 		packet.target = target;

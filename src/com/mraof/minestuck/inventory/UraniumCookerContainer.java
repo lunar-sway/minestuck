@@ -35,7 +35,7 @@ public class UraniumCookerContainer extends MachineContainer
 	
 	public UraniumCookerContainer(int windowId, PlayerInventory playerInventory)
 	{
-		this(ModContainerTypes.URANIUM_COOKER, windowId, playerInventory, new Inventory(3), new IntArray(2), IntReferenceHolder.single());
+		this(ModContainerTypes.URANIUM_COOKER, windowId, playerInventory, new Inventory(3), new IntArray(3), IntReferenceHolder.single());
 	}
 	
 	public UraniumCookerContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, IntReferenceHolder fuelHolder)

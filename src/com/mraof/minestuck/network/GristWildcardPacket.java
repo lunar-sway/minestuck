@@ -4,7 +4,7 @@ import com.mraof.minestuck.tileentity.AlchemiterTileEntity;
 import com.mraof.minestuck.tileentity.MiniAlchemiterTileEntity;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.alchemy.GristType;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -47,9 +47,9 @@ public class GristWildcardPacket
 		ctx.get().setPacketHandled(true);
 	}
 	
-	public void execute(EntityPlayerMP player)
+	public void execute(ServerPlayerEntity player)
 	{
-		if(player.getEntityWorld().isBlockLoaded(pos))
+		if(player.getEntityWorld().isAreaLoaded(pos, 0))
 		{
 			TileEntity te = player.getEntityWorld().getTileEntity(pos);
 			if(te instanceof MiniAlchemiterTileEntity)

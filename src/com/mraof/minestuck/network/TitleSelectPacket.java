@@ -6,7 +6,7 @@ import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.util.EnumClass;
 import com.mraof.minestuck.util.Title;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -69,7 +69,7 @@ public class TitleSelectPacket
 		Minecraft.getInstance().displayGuiScreen(new TitleSelectorScreen(title));
 	}
 	
-	public void execute(EntityPlayerMP player)
+	public void execute(ServerPlayerEntity player)
 	{
 		Title title;
 		if(enumClass != null && enumAspect != null)

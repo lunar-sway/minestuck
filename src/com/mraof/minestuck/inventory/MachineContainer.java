@@ -15,13 +15,21 @@ public abstract class MachineContainer extends Container
 	{
 		super(type, id);
 		
-		assertIntArraySize(parameters, 2);
+		assertIntArraySize(parameters, 3);
 		this.parameters = parameters;
 		
 		trackIntArray(parameters);
 	}
 	
+	public void setOverrideStop(boolean value)
+	{
+		parameters.set(1, value ? 1 : 0);
+	}
 	
+	public void setReady(boolean value)
+	{
+		parameters.set(2, value ? 1 : 0);
+	}
 	
 	@OnlyIn(Dist.CLIENT)
 	public int getProgress()

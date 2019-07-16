@@ -27,7 +27,7 @@ public class MiniCruxtruderContainer extends MachineContainer
 	
 	public MiniCruxtruderContainer(int windowId, PlayerInventory inventoryPlayer)
 	{
-		this(ModContainerTypes.MINI_CRUXTRUDER, windowId, inventoryPlayer, new Inventory(2), new IntArray(2));
+		this(ModContainerTypes.MINI_CRUXTRUDER, windowId, inventoryPlayer, new Inventory(2), new IntArray(3));
 	}
 	
 	public MiniCruxtruderContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters)

@@ -3,7 +3,6 @@ package com.mraof.minestuck.network;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.editmode.DeployList;
-import com.mraof.minestuck.inventory.ContainerHandler;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -39,7 +38,7 @@ public class ModConfigPacket
 		mode = true;
 		overWorldEditRange = MinestuckConfig.overworldEditRange;
 		landEditRange = MinestuckConfig.landEditRange;
-		windowIdStart = ContainerHandler.windowIdStart;
+		//windowIdStart = ContainerHandler.windowIdStart;
 		giveItems = MinestuckConfig.giveItems;
 		hardMode = MinestuckConfig.hardMode;
 		
@@ -69,7 +68,7 @@ public class ModConfigPacket
 		{
 			buffer.writeInt(overWorldEditRange);
 			buffer.writeInt(landEditRange);
-			buffer.writeInt(windowIdStart);
+			//buffer.writeInt(windowIdStart);
 			buffer.writeBoolean(giveItems);
 			buffer.writeBoolean(hardMode);
 			
@@ -97,7 +96,7 @@ public class ModConfigPacket
 		{
 			packet.overWorldEditRange = buffer.readInt();
 			packet.landEditRange = buffer.readInt();
-			packet.windowIdStart = buffer.readInt();
+			//packet.windowIdStart = buffer.readInt();
 			packet.giveItems = buffer.readBoolean();
 			packet.hardMode = buffer.readBoolean();
 			
@@ -133,7 +132,7 @@ public class ModConfigPacket
 			MinestuckConfig.clientOverworldEditRange = overWorldEditRange;
 			MinestuckConfig.clientLandEditRange = landEditRange;
 			MinestuckConfig.clientGiveItems = giveItems;
-			ContainerHandler.clientWindowIdStart = windowIdStart;
+			//ContainerHandler.clientWindowIdStart = windowIdStart;
 			MinestuckConfig.clientHardMode = hardMode;
 			
 			if(!Minestuck.isServerRunning)

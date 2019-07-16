@@ -33,7 +33,7 @@ public class MiniPunchDesignixContainer extends MachineContainer
 	
 	public MiniPunchDesignixContainer(int windowId, PlayerInventory playerInventory)
 	{
-		this(ModContainerTypes.MINI_PUNCH_DESIGNIX, windowId, playerInventory, new Inventory(3), new IntArray(2));
+		this(ModContainerTypes.MINI_PUNCH_DESIGNIX, windowId, playerInventory, new Inventory(3), new IntArray(3));
 	}
 	
 	public MiniPunchDesignixContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters)

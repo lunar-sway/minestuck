@@ -6,7 +6,7 @@ import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 class PredefineData
 {
@@ -14,7 +14,7 @@ class PredefineData
 	TerrainLandAspect landTerrain;
 	TitleLandAspect landTitle;
 	
-	PredefineData read(NBTTagCompound nbt)
+	PredefineData read(CompoundNBT nbt)
 	{
 		if(nbt.contains("titleAspect", 99))
 			title = new Title(EnumClass.values()[nbt.getByte("titleClass")], EnumAspect.values()[nbt.getByte("titleAspect")]);
@@ -26,9 +26,9 @@ class PredefineData
 		return this;
 	}
 	
-	NBTTagCompound write()
+	CompoundNBT write()
 	{
-		NBTTagCompound nbt = new NBTTagCompound();
+		CompoundNBT nbt = new CompoundNBT();
 		if(title != null)
 		{
 			nbt.putByte("titleClass", (byte) title.getHeroClass().ordinal());

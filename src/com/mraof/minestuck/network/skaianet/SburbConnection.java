@@ -5,9 +5,9 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagString;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.StringNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.dimension.DimensionType;
@@ -51,11 +51,11 @@ public class SburbConnection
 	 * If the client will have frog breeding as quest, the array will be extended and the new positions will hold the gear.
 	 */
 	boolean[] givenItemList = new boolean[DeployList.getEntryCount()];
-	NBTTagList unregisteredItems = new NBTTagList();
+	ListNBT unregisteredItems = new ListNBT();
 	
 	//Only used by the edit handler
 	public int centerX, centerZ;
-	public NBTTagList inventory;
+	public ListNBT inventory;
 	
 	//Non-saved variables used by the edit handler
 	public double posX, posZ;
@@ -120,9 +120,9 @@ public class SburbConnection
 		buffer.writeString(getServerIdentifier().getUsername(), 16);
 	}
 
-	NBTTagCompound write()
+	CompoundNBT write()
 	{
-		NBTTagCompound nbt = new NBTTagCompound();
+		CompoundNBT nbt = new CompoundNBT();
 		nbt.putBoolean("IsMain", isMain);
 		if(inventory != null)
 			nbt.put("Inventory", inventory);
@@ -131,12 +131,12 @@ public class SburbConnection
 			nbt.putBoolean("IsActive", isActive);
 			nbt.putBoolean("HasEntered", hasEntered);
 			nbt.putBoolean("CanSplit", canSplit);
-			NBTTagList list = unregisteredItems.copy();
+			ListNBT list = unregisteredItems.copy();
 			String[] deployNames = DeployList.getNameList();
 			for(int i = 0; i < givenItemList.length; i++)
 			{
 				if(givenItemList[i])
-					list.add(new NBTTagString(deployNames[i]));
+					list.add(new StringNBT(deployNames[i]));
 			}
 			
 			nbt.put("GivenItems", list);
@@ -159,7 +159,7 @@ public class SburbConnection
 		return nbt;
 	}
 	
-	SburbConnection read(NBTTagCompound nbt)
+	SburbConnection read(CompoundNBT nbt)
 	{
 		isMain = nbt.getBoolean("IsMain");
 		if(nbt.contains("Inventory"))
@@ -171,13 +171,13 @@ public class SburbConnection
 			
 			if(nbt.contains("CanSplit"))
 				canSplit = nbt.getBoolean("CanSplit");
-			NBTTagList list = nbt.getList("GivenItems", 8);
+			ListNBT list = nbt.getList("GivenItems", 8);
 			for(int i = 0; i < list.size(); i++)
 			{
 				String name = list.getString(i);
 				int ordinal = DeployList.getOrdinal(name);
 				if(ordinal == -1)
-					unregisteredItems.add(new NBTTagString(name));
+					unregisteredItems.add(new StringNBT(name));
 				else givenItemList[ordinal] = true;
 			}
 		}

@@ -8,8 +8,9 @@ import com.mraof.minestuck.world.storage.PlayerSavedData;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspects;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 
@@ -576,21 +577,21 @@ public class SessionHandler
 	/**
 	 * Creates data to be used for the data checker
 	 */
-	public NBTTagCompound createDataTag()
+	public CompoundNBT createDataTag()
 	{
-		NBTTagCompound nbt = new NBTTagCompound();
-		NBTTagList sessionList = new NBTTagList();
+		CompoundNBT nbt = new CompoundNBT();
+		ListNBT sessionList = new ListNBT();
 		nbt.put("sessions", sessionList);
 		for(int i = 0; i < sessions.size(); i++)
 		{
 			Session session = sessions.get(i);
-			NBTTagList connectionList = new NBTTagList();
+			ListNBT connectionList = new ListNBT();
 			Set<PlayerIdentifier> playerSet = new HashSet<>();
 			for(SburbConnection c :session.connections)
 			{
 				if(c.isMain)
 					playerSet.add(c.getClientIdentifier());
-				NBTTagCompound connectionTag = new NBTTagCompound();
+				CompoundNBT connectionTag = new CompoundNBT();
 				connectionTag.putString("client", c.getClientIdentifier().getUsername());
 				connectionTag.putString("clientId", c.getClientIdentifier().getString());
 				if(!c.getServerIdentifier().equals(IdentifierHandler.nullIdentifier))
@@ -644,7 +645,7 @@ public class SessionHandler
 				if(playerSet.contains(entry.getKey()))
 					continue;
 				
-				NBTTagCompound connectionTag = new NBTTagCompound();
+				CompoundNBT connectionTag = new CompoundNBT();
 				
 				connectionTag.putString("client", entry.getKey().getUsername());
 				connectionTag.putString("clientId", entry.getKey().getString());
@@ -668,7 +669,7 @@ public class SessionHandler
 				connectionList.add(connectionTag);
 			}
 			
-			NBTTagCompound sessionTag = new NBTTagCompound();
+			CompoundNBT sessionTag = new CompoundNBT();
 			if(session.name != null)
 				sessionTag.putString("name", session.name);
 			sessionTag.put("connections", connectionList);

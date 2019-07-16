@@ -16,23 +16,23 @@ import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.util.Location;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.management.UserListOpsEntry;
+import net.minecraft.server.management.OpEntry;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.ServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.storage.DimensionSavedDataManager;
 import net.minecraft.world.storage.WorldSavedData;
-import net.minecraft.world.storage.WorldSavedDataStorage;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.ITeleporter;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -64,12 +64,6 @@ public class SkaianetHandler extends WorldSavedData
 	private SkaianetHandler(MinecraftServer mcServer)
 	{
 		super(DATA_NAME);
-		this.mcServer = mcServer;
-	}
-	
-	private SkaianetHandler(String name, MinecraftServer mcServer)
-	{
-		super(name);
 		this.mcServer = mcServer;
 	}
 	
@@ -127,7 +121,7 @@ public class SkaianetHandler extends WorldSavedData
 	 * Note that this is when a player logs in to the server.
 	 * @param player
 	 */
-	public void playerConnected(EntityPlayerMP player)
+	public void playerConnected(ServerPlayerEntity player)
 	{
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		PlayerIdentifier[] s = new PlayerIdentifier[5];
@@ -140,7 +134,7 @@ public class SkaianetHandler extends WorldSavedData
 	
 	public void requestConnection(ComputerData player, PlayerIdentifier otherPlayer, boolean isClient)
 	{
-		if(player.getDimension() == DimensionType.NETHER)
+		if(player.getDimension() == DimensionType.THE_NETHER)
 			return;
 		ComputerTileEntity te = getComputer(mcServer, player.getLocation());
 		if(te == null)
@@ -373,7 +367,7 @@ public class SkaianetHandler extends WorldSavedData
 			sendLandChainUpdate();
 	}
 	
-	public void requestInfo(EntityPlayerMP player, PlayerIdentifier p1)
+	public void requestInfo(ServerPlayerEntity player, PlayerIdentifier p1)
 	{
 		checkData();
 		PlayerIdentifier p0 = IdentifierHandler.encode(player);
@@ -383,10 +377,10 @@ public class SkaianetHandler extends WorldSavedData
 			Debug.error("[SKAIANET] Something went wrong with player \"" + player.getName() + "\"'s skaianet data!");
 			return;
 		}
-		UserListOpsEntry opsEntry = player.getServer().getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
+		OpEntry opsEntry = player.getServer().getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
 		if(MinestuckConfig.privateComputers && !p0.equals(p1) && !(opsEntry != null && opsEntry.getPermissionLevel() >= 2))
 		{
-			player.sendMessage(new TextComponentString("[Minestuck] ").setStyle(new Style().setColor(TextFormatting.RED)).appendSibling(new TextComponentTranslation("message.privateComputerMessage")));
+			player.sendMessage(new StringTextComponent("[Minestuck] ").setStyle(new Style().setColor(TextFormatting.RED)).appendSibling(new TranslationTextComponent("message.privateComputerMessage")));
 			return;
 		}
 		int i = 0;
@@ -415,10 +409,10 @@ public class SkaianetHandler extends WorldSavedData
 	}
 	
 	@Override
-	public void read(NBTTagCompound nbt)
+	public void read(CompoundNBT nbt)
 	{
 		SburbHandler.titleSelectionMap.clear();
-		NBTTagList list = nbt.getList("sessions", 10);
+		ListNBT list = nbt.getList("sessions", 10);
 		for(int i = 0; i < list.size(); i++)
 		{
 			Session session = new Session().read(list.getCompound(i));
@@ -440,7 +434,7 @@ public class SkaianetHandler extends WorldSavedData
 			list = nbt.getList(s[e], 10);
 			for(int i = 0; i < list.size(); i++)
 			{
-				NBTTagCompound cmp = list.getCompound(i);
+				CompoundNBT cmp = list.getCompound(i);
 				ComputerData c = new ComputerData();
 				c.read(cmp);
 				maps[e].put(c.owner, c);
@@ -453,10 +447,10 @@ public class SkaianetHandler extends WorldSavedData
 	}
 	
 	@Override
-	public NBTTagCompound write(NBTTagCompound compound)
+	public CompoundNBT write(CompoundNBT compound)
 	{
 		//checkData();
-		NBTTagList list = new NBTTagList();
+		ListNBT list = new ListNBT();
 		
 		for(Session s : sessionHandler.sessions)
 			list.add(s.write());
@@ -468,7 +462,7 @@ public class SkaianetHandler extends WorldSavedData
 		Map<PlayerIdentifier, ComputerData>[] maps = new Map[]{serversOpen, resumingClients, resumingServers};
 		for(int i = 0; i < 3; i++)
 		{
-			list = new NBTTagList();
+			list = new ListNBT();
 			for(ComputerData c:maps[i].values())
 				list.add(c.write());
 			compound.put(s[i], list);
@@ -546,7 +540,7 @@ public class SkaianetHandler extends WorldSavedData
 	private void updatePlayer(PlayerIdentifier player)
 	{
 		PlayerIdentifier[] iden = infoToSend.get(player);
-		EntityPlayerMP playerMP = player.getPlayer(mcServer);
+		ServerPlayerEntity playerMP = player.getPlayer(mcServer);
 		if(iden == null || playerMP == null)//If the player disconnected
 			return;
 		for(SburbConnection c : connections)
@@ -601,7 +595,7 @@ public class SkaianetHandler extends WorldSavedData
 			{
 				ComputerData data = i.next();
 				ComputerTileEntity computer = getComputer(mcServer, data.location);
-				if(computer == null || data.getDimension() == DimensionType.NETHER || !computer.owner.equals(data.owner)
+				if(computer == null || data.getDimension() == DimensionType.THE_NETHER || !computer.owner.equals(data.owner)
 						|| !(i == iter1[1] && computer.getData(0).getBoolean("isResuming")
 								|| i != iter1[1] && computer.getData(1).getBoolean("isOpen")))
 				{
@@ -623,7 +617,7 @@ public class SkaianetHandler extends WorldSavedData
 			if(c.isActive)
 			{
 				ComputerTileEntity cc = getComputer(mcServer, c.client.location), sc = getComputer(mcServer, c.server.location);
-				if(cc == null || sc == null || c.client.getDimension() == DimensionType.NETHER || c.server.getDimension() == DimensionType.NETHER || !c.getClientIdentifier().equals(cc.owner)
+				if(cc == null || sc == null || c.client.getDimension() == DimensionType.THE_NETHER || c.server.getDimension() == DimensionType.THE_NETHER || !c.getClientIdentifier().equals(cc.owner)
 						|| !c.getServerIdentifier().equals(sc.owner) || !cc.getData(0).getBoolean("connectedToServer"))
 				{
 					Debug.warnf("[SKAIANET] Invalid computer in connection between %s and %s.", c.getClientIdentifier(), c.getServerIdentifier());
@@ -649,7 +643,7 @@ public class SkaianetHandler extends WorldSavedData
 			}
 			if(c.hasEntered() && !MinestuckDimensionHandler.isLandDimension(c.clientHomeLand))
 			{
-				EntityPlayerMP player = c.getClientIdentifier().getPlayer(mcServer);
+				ServerPlayerEntity player = c.getClientIdentifier().getPlayer(mcServer);
 				if(player != null)
 				{
 					c.clientHomeLand = player.dimension;
@@ -676,8 +670,8 @@ public class SkaianetHandler extends WorldSavedData
 		{
 			for(Entry<PlayerIdentifier,PlayerIdentifier[]> entry : infoToSend.entrySet())
 			{
-				EntityPlayerMP player = entry.getKey().getPlayer(mcServer);
-				UserListOpsEntry opsEntry = player == null ? null : player.getServer().getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
+				ServerPlayerEntity player = entry.getKey().getPlayer(mcServer);
+				OpEntry opsEntry = player == null ? null : player.getServer().getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
 				if(opsEntry != null && opsEntry.getPermissionLevel() >= 2)
 					continue;
 				
@@ -812,7 +806,7 @@ public class SkaianetHandler extends WorldSavedData
 		{
 			for(int i = 0; i < c.givenItemList.length; i++)
 				c.givenItemList[i] = false;
-			c.unregisteredItems = new NBTTagList();
+			c.unregisteredItems = new ListNBT();
 			EditData data = ServerEditHandler.getData(c);
 			if(data != null)
 			{
@@ -850,21 +844,17 @@ public class SkaianetHandler extends WorldSavedData
 	
 	public static SkaianetHandler get(MinecraftServer server)
 	{
-		return get(server.getWorld(DimensionType.OVERWORLD));
-	}
-	
-	public static SkaianetHandler get(World world)
-	{
+		ServerWorld world = server.getWorld(DimensionType.OVERWORLD);
 		if(world.isRemote)
 			throw new IllegalStateException("Should not attempt to get saved data on the client side!");
 		
-		WorldSavedDataStorage storage = world.getSavedDataStorage();
-		SkaianetHandler instance = storage.get(DimensionType.OVERWORLD, s -> new SkaianetHandler(s, world.getServer()), DATA_NAME);
+		DimensionSavedDataManager storage = world.getSavedData();
+		SkaianetHandler instance = storage.get(() -> new SkaianetHandler(world.getServer()), DATA_NAME);
 		
 		if(instance == null)	//There is no save data
 		{
 			instance = new SkaianetHandler(world.getServer());
-			storage.set(DimensionType.OVERWORLD, DATA_NAME, instance);
+			storage.set(instance);
 		}
 		
 		return instance;

@@ -32,7 +32,7 @@ public class MiniAlchemiterContainer extends MachineContainer
 	
 	public MiniAlchemiterContainer(int windowId, PlayerInventory playerInventory)
 	{
-		this(ModContainerTypes.MINI_ALCHEMITER, windowId, playerInventory, new Inventory(2), new IntArray(2), IntReferenceHolder.single());
+		this(ModContainerTypes.MINI_ALCHEMITER, windowId, playerInventory, new Inventory(2), new IntArray(3), IntReferenceHolder.single());
 	}
 	
 	public MiniAlchemiterContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, IntReferenceHolder wildcardHolder)

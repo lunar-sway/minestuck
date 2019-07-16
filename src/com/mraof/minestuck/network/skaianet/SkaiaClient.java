@@ -7,7 +7,7 @@ import com.mraof.minestuck.network.SburbConnectPacket;
 import com.mraof.minestuck.network.SkaianetInfoPacket;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;
@@ -178,7 +178,7 @@ public class SkaiaClient
 		connections.removeIf(c -> c.clientId == data.playerId || c.serverId == data.playerId);
 		connections.addAll(data.connections);
 		
-		GuiScreen gui = Minecraft.getInstance().currentScreen;
+		Screen gui = Minecraft.getInstance().currentScreen;
 		if(gui instanceof ComputerScreen)
 			((ComputerScreen)gui).updateGui();
 		else if(te != null && te.ownerId == data.playerId)

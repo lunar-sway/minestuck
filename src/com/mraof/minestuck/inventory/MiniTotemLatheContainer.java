@@ -31,7 +31,7 @@ public class MiniTotemLatheContainer extends MachineContainer
 	
 	public MiniTotemLatheContainer(int windowId, PlayerInventory playerInventory)
 	{
-		this(ModContainerTypes.MINI_TOTEM_LATHE, windowId, playerInventory, new Inventory(4), new IntArray(2));
+		this(ModContainerTypes.MINI_TOTEM_LATHE, windowId, playerInventory, new Inventory(4), new IntArray(3));
 	}
 	
 	public MiniTotemLatheContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters)

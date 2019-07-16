@@ -2,9 +2,9 @@ package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -29,16 +29,16 @@ public class EffectTogglePacket
 		ctx.get().setPacketHandled(true);
 	}
 	
-	public void execute(EntityPlayerMP player)
+	public void execute(ServerPlayerEntity player)
 	{
 		IdentifierHandler.PlayerIdentifier handler = IdentifierHandler.encode(player);
 		PlayerSavedData.get(player.world).setEffectToggle(handler, !PlayerSavedData.get(player.world).getEffectToggle(handler));
 		if(PlayerSavedData.get(player.world).getData(handler).effectToggle)
 		{
-			player.sendStatusMessage(new TextComponentTranslation("aspectEffects.on"), true);
+			player.sendStatusMessage(new TranslationTextComponent("aspectEffects.on"), true);
 		} else
 		{
-			player.sendStatusMessage(new TextComponentTranslation("aspectEffects.off"), true);
+			player.sendStatusMessage(new TranslationTextComponent("aspectEffects.off"), true);
 		}
 	}
 }

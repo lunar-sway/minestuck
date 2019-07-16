@@ -29,7 +29,7 @@ public class GristWidgetContainer extends MachineContainer
 	
 	public GristWidgetContainer(int windowId, PlayerInventory playerInventory)
 	{
-		this(ModContainerTypes.GRIST_WIDGET, windowId, playerInventory, new Inventory(1), new IntArray(2));
+		this(ModContainerTypes.GRIST_WIDGET, windowId, playerInventory, new Inventory(1), new IntArray(3));
 	}
 	
 	public GristWidgetContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters)

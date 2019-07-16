@@ -4,6 +4,7 @@ import com.mraof.minestuck.entity.DecoyEntity;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 
 /**
  * Data structure used by the server sided EditHandler
@@ -38,7 +39,7 @@ public class EditData
 	/**
 	 * @return the player that activated and is in editmode (not necessarily the server player of the connection)
 	 */
-	public EntityPlayerMP getEditor()
+	public ServerPlayerEntity getEditor()
 	{
 		return player;
 	}

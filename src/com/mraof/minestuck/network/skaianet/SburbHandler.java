@@ -14,7 +14,6 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
 import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
-import com.mraof.minestuck.item.CruxiteArtifactItem;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.TitleSelectPacket;
@@ -30,8 +29,8 @@ import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
@@ -49,7 +48,7 @@ import net.minecraft.world.dimension.DimensionType;
  */
 public class SburbHandler
 {
-	static Map<EntityPlayer, Vec3d> titleSelectionMap = new HashMap<>();	//TODO Consider making this non-static
+	static Map<PlayerEntity, Vec3d> titleSelectionMap = new HashMap<>();	//TODO Consider making this non-static
 	
 	private static Title produceTitle(World world, PlayerIdentifier player)
 	{
@@ -689,7 +688,7 @@ public class SburbHandler
 	{
 		SessionHandler.get(server).getPlayerSession(c.getClientIdentifier()).checkIfCompleted(SessionHandler.get(server).singleSession);
 		
-		EntityPlayerMP player = c.getClientIdentifier().getPlayer(server);
+		ServerPlayerEntity player = c.getClientIdentifier().getPlayer(server);
 		if(player != null)
 		{
 			MinestuckCriteriaTriggers.CRUXITE_ARTIFACT.trigger(player);
@@ -697,7 +696,7 @@ public class SburbHandler
 		}
 	}
 	
-	public static boolean canSelectColor(EntityPlayerMP player)
+	public static boolean canSelectColor(ServerPlayerEntity player)
 	{
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		for(SburbConnection c : SkaianetHandler.get(player.world).connections)
@@ -706,7 +705,7 @@ public class SburbHandler
 		return true;
 	}
 	
-	public static boolean hasEntered(EntityPlayerMP player)
+	public static boolean hasEntered(ServerPlayerEntity player)
 	{
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		SburbConnection c = SkaianetHandler.get(player.world).getMainConnection(identifier, true);
@@ -720,7 +719,7 @@ public class SburbHandler
 		Debug.infof("Randomized artifact type to be: %d for player %s.", c.artifactType, c.getClientIdentifier().getUsername());
 	}
 	
-	public static boolean shouldEnterNow(EntityPlayerMP player)
+	public static boolean shouldEnterNow(ServerPlayerEntity player)
 	{
 		if(!MinestuckConfig.playerSelectedTitle)
 			return true;
@@ -738,12 +737,12 @@ public class SburbHandler
 		return false;
 	}
 	
-	public static void stopEntry(EntityPlayerMP player)
+	public static void stopEntry(ServerPlayerEntity player)
 	{
 		titleSelectionMap.remove(player);
 	}
 	
-	public static void titleSelected(EntityPlayerMP player, Title title)
+	public static void titleSelected(ServerPlayerEntity player, Title title)
 	{
 		if(MinestuckConfig.playerSelectedTitle && titleSelectionMap.containsKey(player))
 		{
@@ -780,7 +779,7 @@ public class SburbHandler
 			Vec3d pos = titleSelectionMap.remove(player);
 			
 			player.setPosition(pos.x, pos.y, pos.z);
-			((CruxiteArtifactItem) MinestuckItems.CRUXITE_APPLE).onArtifactActivated(player);
+			//((CruxiteArtifactItem) MinestuckItems.CRUXITE_APPLE).onArtifactActivated(player); TODO
 			
 		} else Debug.warnf("%s tried to select a title without entering.", player.getName());
 	}

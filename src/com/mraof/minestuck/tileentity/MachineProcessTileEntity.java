@@ -215,6 +215,8 @@ public abstract class MachineProcessTileEntity extends TileEntity implements ISi
 				return tileEntity.progress;
 			else if(index == 1)
 				return tileEntity.overrideStop ? 1 : 0;
+			else if(index == 2)
+				return tileEntity.ready ? 1 : 0;
 			return 0;
 		}
 		
@@ -225,12 +227,14 @@ public abstract class MachineProcessTileEntity extends TileEntity implements ISi
 				tileEntity.progress = value;
 			else if(index == 1)
 				tileEntity.overrideStop = value != 0;
+			else if(index == 2)
+				tileEntity.ready = value != 0;
 		}
 		
 		@Override
 		public int size()
 		{
-			return 2;
+			return 3;
 		}
 	}
 }

@@ -6,10 +6,10 @@ import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.IdentifierHandler;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.server.management.UserListOpsEntry;
+import net.minecraft.server.management.OpEntry;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -63,9 +63,9 @@ public class ClientEditPacket
 		ctx.get().setPacketHandled(true);
 	}
 	
-	public void execute(EntityPlayerMP player)
+	public void execute(ServerPlayerEntity player)
 	{
-		UserListOpsEntry opsEntry = player == null ? null : player.getServer().getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
+		OpEntry opsEntry = player == null ? null : player.getServer().getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
 		if(!MinestuckConfig.giveItems)
 		{
 			if(user == -1)
@@ -84,7 +84,7 @@ public class ClientEditPacket
 		IdentifierHandler.PlayerIdentifier target = IdentifierHandler.getById(this.target);
 		if(user != null && target != null)
 		{
-			EntityPlayerMP targetPlayer = target.getPlayer(player.getServer());
+			ServerPlayerEntity targetPlayer = target.getPlayer(player.getServer());
 			
 			if(targetPlayer != null && (!MinestuckConfig.privateComputers || user.appliesTo(player) || opsEntry != null && opsEntry.getPermissionLevel() >= 2))
 			{

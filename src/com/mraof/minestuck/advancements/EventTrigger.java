@@ -9,6 +9,7 @@ import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.advancements.PlayerAdvancements;
 import net.minecraft.advancements.criterion.AbstractCriterionInstance;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
@@ -67,7 +68,7 @@ public class EventTrigger implements ICriterionTrigger<EventTrigger.Instance>
 		return new Instance(id);
 	}
 	
-	public void trigger(EntityPlayerMP player)
+	public void trigger(ServerPlayerEntity player)
 	{
 		Listeners listeners = listenersMap.get(player.getAdvancements());
 		if(listeners != null)

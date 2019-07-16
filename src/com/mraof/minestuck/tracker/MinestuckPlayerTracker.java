@@ -16,6 +16,7 @@ import com.mraof.minestuck.world.lands.LandAspects;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
@@ -223,7 +224,7 @@ public class MinestuckPlayerTracker
 		MinestuckPacketHandler.sendToPlayer(packet, player);
 	}
 	
-	public static void sendLandEntryMessage(EntityPlayer player)
+	public static void sendLandEntryMessage(PlayerEntity player)
 	{
 		if(MinestuckDimensionHandler.isLandDimension(player.dimension))
 		{

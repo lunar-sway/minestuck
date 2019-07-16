@@ -4,7 +4,7 @@ import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.util.Location;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;
@@ -39,16 +39,16 @@ public class ComputerData
 	ComputerData()
 	{}
 	
-	ComputerData read(NBTTagCompound nbt)
+	ComputerData read(CompoundNBT nbt)
 	{
 		owner = IdentifierHandler.load(nbt, "name");
 		location = Location.fromNBT(nbt);
 		return this;
 	}
 	
-	NBTTagCompound write()
+	CompoundNBT write()
 	{
-		NBTTagCompound c = new NBTTagCompound();
+		CompoundNBT c = new CompoundNBT();
 		owner.saveToNBT(c, "name");
 		return c;
 	}

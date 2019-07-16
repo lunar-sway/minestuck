@@ -1,8 +1,9 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.editmode.ServerEditHandler;
-import com.mraof.minestuck.inventory.ContainerHandler;
-import net.minecraft.entity.player.EntityPlayerMP;
+import com.mraof.minestuck.inventory.EditmodeContainer;
+import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckContainer;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -39,10 +40,16 @@ public class MiscContainerPacket
 		ctx.get().setPacketHandled(true);
 	}
 	
-	public void execute(EntityPlayerMP player)
+	public void execute(ServerPlayerEntity player)
 	{
-		player.openContainer = ContainerHandler.getPlayerStatsContainer(player, i, ServerEditHandler.getData(player) != null);
-		player.openContainer.windowId = ContainerHandler.windowIdStart + i;
-		player.addSelfToInternalCraftingInventory();    //Must be placed after setting the window id!!
+		if(ServerEditHandler.getData(player) == null)
+		{
+			player.openContainer = new CaptchaDeckContainer(200 + i, player.inventory);//ContainerHandler.windowIdStart + i;
+		} else
+		{
+			player.openContainer = new EditmodeContainer(200 + i, player.inventory);
+		}
+		
+		player.addSelfToInternalCraftingInventory();
 	}
 }

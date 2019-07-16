@@ -5,7 +5,7 @@ import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -145,8 +145,8 @@ public class PlayerDataPacket	//TODO Probably healthier if this is several diffe
 			if(!b)
 				for(prev++; prev <= i1; prev++)
 				{
-					TextComponentTranslation rung = new TextComponentTranslation("echeladder.rung"+prev);
-					Minecraft.getInstance().player.sendMessage(new TextComponentTranslation("You reached rung %s!", rung));	//TODO Translation key
+					TranslationTextComponent rung = new TranslationTextComponent("echeladder.rung"+prev);
+					Minecraft.getInstance().player.sendMessage(new TranslationTextComponent("You reached rung %s!", rung));	//TODO Translation key
 				}
 			else EcheladderScreen.animatedRung = EcheladderScreen.lastRung = i1;
 		} else if(type == BOONDOLLAR)

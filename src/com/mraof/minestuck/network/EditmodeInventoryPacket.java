@@ -3,7 +3,7 @@ package com.mraof.minestuck.network;
 import com.mraof.minestuck.client.gui.playerStats.InventoryEditmodeScreen;
 import com.mraof.minestuck.inventory.EditmodeContainer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkDirection;
@@ -84,13 +84,12 @@ public class EditmodeInventoryPacket
 			gui.more = b2;
 			for(int i = 0; i < inventory.size(); i++)
 			{
-				gui.inventoryEditmode.inventoryItemStacks.set(i, inventory.get(i).isEmpty() ? ItemStack.EMPTY : inventory.get(i).copy());
-				gui.inventoryEditmode.inventory.setInventorySlotContents(i, inventory.get(i));
+				((EditmodeContainer) gui.getContainer()).inventory.setInventorySlotContents(i, inventory.get(i));
 			}
 		}
 	}
 	
-	public void execute(EntityPlayerMP player)
+	public void execute(ServerPlayerEntity player)
 	{
 		if(player.openContainer instanceof EditmodeContainer)
 			((EditmodeContainer)player.openContainer).updateScroll(b1);

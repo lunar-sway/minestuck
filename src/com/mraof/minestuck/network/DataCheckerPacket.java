@@ -3,9 +3,9 @@ package com.mraof.minestuck.network;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.playerStats.DataCheckerScreen;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -24,7 +24,7 @@ public class DataCheckerPacket
 	 * Used to avoid confusion when the client sends several requests during a short period
 	 */
 	public int packetIndex;
-	public NBTTagCompound nbtData;
+	public CompoundNBT nbtData;
 	
 	public static DataCheckerPacket request()
 	{
@@ -35,7 +35,7 @@ public class DataCheckerPacket
 		return packet;
 	}
 	
-	public static DataCheckerPacket data(int index, NBTTagCompound nbtData)
+	public static DataCheckerPacket data(int index, CompoundNBT nbtData)
 	{
 		DataCheckerPacket packet = new DataCheckerPacket();
 		packet.packetIndex = index;
@@ -100,11 +100,11 @@ public class DataCheckerPacket
 			DataCheckerScreen.activeComponent = new DataCheckerScreen.MainComponent(nbtData);
 	}
 	
-	public void execute(EntityPlayerMP player)
+	public void execute(ServerPlayerEntity player)
 	{
 		if(MinestuckConfig.getDataCheckerPermissionFor(player))
 		{
-			NBTTagCompound data = SessionHandler.get(player.world).createDataTag();
+			CompoundNBT data = SessionHandler.get(player.world).createDataTag();
 			MinestuckPacketHandler.sendToPlayer(DataCheckerPacket.data(packetIndex, data), player);
 		}
 	}

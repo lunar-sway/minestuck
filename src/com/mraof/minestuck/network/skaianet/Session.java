@@ -3,8 +3,8 @@ package com.mraof.minestuck.network.skaianet;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 
 import java.util.*;
 
@@ -108,19 +108,19 @@ public class Session
 	/**
 	 * Writes this session to an nbt tag.
 	 * Note that this will only work as long as <code>SkaianetHandler.connections</code> remains unmodified.
-	 * @return An NBTTagCompound representing this session.
+	 * @return An CompoundNBT representing this session.
 	 */
-	NBTTagCompound write()
+	CompoundNBT write()
 	{
-		NBTTagCompound nbt = new NBTTagCompound();
+		CompoundNBT nbt = new CompoundNBT();
 		
 		if(isCustom())
 			nbt.putString("name", name);
-		NBTTagList list = new NBTTagList();
+		ListNBT list = new ListNBT();
 		for(SburbConnection c : connections)
 			list.add(c.write());
 		nbt.put("connections", list);
-		NBTTagList predefineList = new NBTTagList();
+		ListNBT predefineList = new ListNBT();
 		for(Map.Entry<PlayerIdentifier, PredefineData> entry : predefinedPlayers.entrySet())
 			predefineList.add(entry.getKey().saveToNBT(entry.getValue().write(), "player"));
 		nbt.put("predefinedPlayers", predefineList);
@@ -133,16 +133,16 @@ public class Session
 	
 	/**
 	 * Reads data from the given nbt tag.
-	 * @param nbt An NBTTagCompound to read from.
+	 * @param nbt An CompoundNBT to read from.
 	 * @return This.
 	 */
-	Session read(NBTTagCompound nbt)
+	Session read(CompoundNBT nbt)
 	{
 		if(nbt.contains("name", 8))
 			name = nbt.getString("name");
 		else name = null;
 		
-		NBTTagList list = nbt.getList("connections", 10);
+		ListNBT list = nbt.getList("connections", 10);
 		for(int i = 0; i < list.size(); i++)
 			connections.add(new SburbConnection().read(list.getCompound(i)));
 		
@@ -151,15 +151,15 @@ public class Session
 			list = nbt.getList("predefinedPlayers", 10);
 			for(int i = 0; i < list.size(); i++)
 			{
-				NBTTagCompound compound = list.getCompound(i);
+				CompoundNBT compound = list.getCompound(i);
 				predefinedPlayers.put(IdentifierHandler.load(compound, "player"), new PredefineData().read(compound));
 			}
 		} else
 		{	//Support for saves from older minestuck versions
-			NBTTagCompound predefineTag = nbt.getCompound("predefinedPlayers");
+			CompoundNBT predefineTag = nbt.getCompound("predefinedPlayers");
 			for(String player : predefineTag.keySet())
 			{
-				NBTTagCompound compound = new NBTTagCompound();
+				CompoundNBT compound = new CompoundNBT();
 				compound.putString("player", player);
 				predefinedPlayers.put(IdentifierHandler.load(compound, "player"), new PredefineData().read(predefineTag.getCompound(player)));
 			}

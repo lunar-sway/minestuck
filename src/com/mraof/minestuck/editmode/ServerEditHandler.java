@@ -22,6 +22,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -69,7 +70,7 @@ public class ServerEditHandler
 	 * Called both when any player logged out and when a player pressed the exit button.
 	 * @param player
 	 */
-	public static void onPlayerExit(EntityPlayer player)
+	public static void onPlayerExit(PlayerEntity player)
 	{
 		if(!player.world.isRemote)
 			reset(getData(player));
@@ -133,7 +134,7 @@ public class ServerEditHandler
 			player.attackEntityFrom(damageSource, damage);
 	}
 	
-	public static void newServerEditor(EntityPlayerMP player, PlayerIdentifier computerOwner, PlayerIdentifier computerTarget)
+	public static void newServerEditor(ServerPlayerEntity player, PlayerIdentifier computerOwner, PlayerIdentifier computerTarget)
 	{
 		if(player.getRidingEntity() == null)
 			return;	//Don't want to bother making the decoy able to ride anything right now.
