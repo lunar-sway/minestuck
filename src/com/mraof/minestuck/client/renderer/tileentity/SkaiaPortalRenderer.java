@@ -8,7 +8,6 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.projectile.ArrowEntity;
-import net.minecraft.entity.projectile.EntityTippedArrow;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
@@ -16,7 +15,7 @@ import org.lwjgl.opengl.GL11;
 import java.nio.FloatBuffer;
 import java.util.Random;
 
-public class RenderSkaiaPortal extends TileEntityRenderer<SkaiaPortalTileEntity>
+public class SkaiaPortalRenderer extends TileEntityRenderer<SkaiaPortalTileEntity>
 {
 	private static final ResourceLocation tunnel = new ResourceLocation("minestuck","textures/tunnel.png");
     private static final ResourceLocation particlefield = new ResourceLocation("minestuck","textures/particlefield.png");
@@ -27,11 +26,11 @@ public class RenderSkaiaPortal extends TileEntityRenderer<SkaiaPortalTileEntity>
 	public void render(SkaiaPortalTileEntity tileEntityIn, double x, double y, double z, float partialTicks, int destroyStage)
 	{
 		Entity temp = new ArrowEntity(EntityType.ARROW, tileEntityIn.getWorld());
-		Vec3d position = ActiveRenderInfo.projectViewFromEntity(temp, 0);	//TODO temp solution for removed getter
-		
-		float var9 = (float)this.rendererDispatcher.entityX;
-		float var10 = (float)this.rendererDispatcher.entityY;
-		float var11 = (float)this.rendererDispatcher.entityZ;
+		Vec3d position =  null;//ActiveRenderInfo.projectViewFromEntity(temp, 0);	//TODO temp solution for removed getter
+
+		float var9 = (float)this.rendererDispatcher.renderInfo.getProjectedView().x;
+		float var10 = (float)this.rendererDispatcher.renderInfo.getProjectedView().y;
+		float var11 = (float)this.rendererDispatcher.renderInfo.getProjectedView().z;
 		GlStateManager.disableLighting();
         Random var12 = new Random(31100L);
         float var13 = 0.75F;
