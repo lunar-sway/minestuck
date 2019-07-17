@@ -193,7 +193,7 @@ public class GuiUtil
 		}
 	}
 	
-	public static String addSuffix(int n)
+	public static String addSuffix(long n)
 	{
 		if(n < 10000)
 			return String.valueOf(n);

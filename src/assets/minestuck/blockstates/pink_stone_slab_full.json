@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "normal": { "model": "minestuck:double_pink_stone" },
+        "all":    { "model": "minestuck:dobule_pink_stone_top" }
+    }
+}

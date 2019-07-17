@@ -43,11 +43,11 @@ public class RockDecorator extends BiomeSpecificDecorator
 		
 		if(rockRarity > 1F)
 		{
-			generateSubRock(pos, height, plateauSize, world, random, provider);
+			generateSubRock(pos, height, plateauSize, world, random, worldProvider);
 			rockRarity -= 1F;
 		}
 		if(random.nextFloat() < rockRarity)
-			generateSubRock(pos, height, plateauSize, world, random, provider);*/
+			generateSubRock(pos, height, plateauSize, world, random, worldProvider);*/
 		
 		return nodePos;
 	}

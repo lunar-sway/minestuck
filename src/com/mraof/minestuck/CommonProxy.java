@@ -33,6 +33,7 @@ import com.mraof.minestuck.world.storage.loot.conditions.ConsortLootCondition;
 import com.mraof.minestuck.world.storage.loot.conditions.LandAspectLootCondition;
 import com.mraof.minestuck.world.storage.loot.functions.SetBoondollarCount;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.storage.loot.conditions.LootConditionManager;
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;
@@ -79,6 +80,10 @@ public class CommonProxy
 		GameRegistry.registerTileEntity(TileEntityTransportalizer.class, "minestuck:transportalizer");
 		GameRegistry.registerTileEntity(TileEntityGate.class, "minestuck:gate");
 		GameRegistry.registerTileEntity(TileEntityUraniumCooker.class, "minestuck:uranium_cooker");
+		GameRegistry.registerTileEntity(TileEntityJumperBlock.class, "minestuck:jumper_block_extension");
+		GameRegistry.registerTileEntity(TileEntityUpgradedAlchemiter.class,  "minestuck:upgraded_alchemiter");
+		GameRegistry.registerTileEntity(TileEntityAlchemiterUpgrade.class,  "minestuck:alchemiter_upgrade");
+		GameRegistry.registerTileEntity(TileEntityHolopad.class, "minestuck:holopad");
 		
 		//Register event handlers
 		MinecraftForge.EVENT_BUS.register(new MinestuckSaveHandler());
@@ -110,7 +115,7 @@ public class CommonProxy
 		//register smelting recipes and oredictionary
 		CraftingRecipes.registerSmelting();
 		CraftingRecipes.addOredictionary();
-		
+
 		//register consort shop prices
 		ConsortRewardHandler.registerMinestuckPrices();
 		

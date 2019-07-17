@@ -2,11 +2,13 @@ package com.mraof.minestuck.client.util;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.*;
+import com.mraof.minestuck.entity.EntityFrog;
 import com.mraof.minestuck.item.*;
 import com.mraof.minestuck.item.weapon.ItemDualWeapon;
 import com.mraof.minestuck.alchemy.GristType;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCactus;
+import net.minecraft.block.BlockSlab;
 import net.minecraft.block.BlockTNT;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -60,6 +62,9 @@ public class MinestuckModelManager
 		register(telescopicSassacrusher);
 		register(regiHammer);
 		register(fearNoAnvil);
+		register(meltMasher);
+		register(qEHammerAxe);
+		register(dDEHammerAxe);
 		register(popamaticVrillyhoo);
 		register(scarletZillyhoo);
 		register(mwrthwl);
@@ -67,6 +72,8 @@ public class MinestuckModelManager
 		register(sord);
 		register(cactusCutlass);
 		register(steakSword);
+		register(beefSword);
+		register(irradiatedSteakSword);
 		register(katana);
 		register(unbreakableKatana);
 		register(firePoker);
@@ -74,13 +81,17 @@ public class MinestuckModelManager
 		register(caledscratch);
 		register(caledfwlch);
 		register(royalDeringer);
+		register(claymore);
 		register(zillywairCutlass);
 		register(regisword);
 		register(scarletRibbitar);
 		register(doggMachete);
 		register(cobaltSabre);
 		register(quantumSabre);
+		register(shatterBeacon);
 		
+		register(batleacks);
+		register(battleaxe);
 		register(blacksmithBane);
 		register(scraxe);
 		register(rubyCroak);
@@ -88,7 +99,6 @@ public class MinestuckModelManager
 		register(copseCrusher);
 		register(qPHammerAxe);
 		register(qFHammerAxe);
-		
 		
 		register(dice);
 		register(fluoriteOctet);
@@ -101,6 +111,7 @@ public class MinestuckModelManager
 		register(fudgeSickle);
 		register(regiSickle);
 		register(clawSickle);
+		register(clawOfNrubyiglith);
 		register(candySickle);
 		
 		register(deuceClub);
@@ -112,6 +123,7 @@ public class MinestuckModelManager
 		register(cane);
 		register(ironCane);
 		register(spearCane);
+		register(paradisesPortabello);
 		register(regiCane);
 		register(dragonCane);
 		register(pogoCane);
@@ -137,6 +149,12 @@ public class MinestuckModelManager
 		register(prismarineLeggings);
 		register(prismarineBoots);
 		
+		register(bugNet);
+		register(goldenGrasshopper);
+
+		for(int type = 0; type <= EntityFrog.maxTypes(); type++)
+			register(itemFrog, type, "frog_"+type);
+		
 		register(rawCruxite);
 		register(rawUranium);
 		register(energyCore);
@@ -145,8 +163,10 @@ public class MinestuckModelManager
 		ModelLoader.setCustomMeshDefinition(boondollars, new BoondollarsDefinition());
 		ModelLoader.registerItemVariants(cruxiteDowel, new ResourceLocation("minestuck:dowel_uncarved"), new ResourceLocation("minestuck:dowel_carved"), new ResourceLocation("minestuck:dowel_uncarved_blank"), new ResourceLocation("minestuck:dowel_carved_blank"));
 		ModelLoader.setCustomMeshDefinition(cruxiteDowel, new CruxiteDowelDefinition());
-		ModelLoader.registerItemVariants(captchaCard, new ResourceLocation("minestuck:card_empty"), new ResourceLocation("minestuck:card_full"), new ResourceLocation("minestuck:card_punched"));
+		ModelLoader.registerItemVariants(captchaCard, new ResourceLocation("minestuck:card_empty"), new ResourceLocation("minestuck:card_full"), new ResourceLocation("minestuck:card_punched"), new ResourceLocation("minestuck:card_ghost"));
 		ModelLoader.setCustomMeshDefinition(captchaCard, new CaptchaCardDefinition());
+		ModelLoader.registerItemVariants(shunt, new ResourceLocation("minestuck:shunt_empty"), new ResourceLocation("minestuck:shunt_full"));
+		ModelLoader.setCustomMeshDefinition(shunt, new ShuntDefinition());
 		ModelLoader.registerItemVariants(cruxiteApple, new ResourceLocation("minestuck:cruxite_apple"), new ResourceLocation("minestuck:cruxite_apple_blank"));
 		ModelLoader.setCustomMeshDefinition(cruxiteApple, new ColoredItemDefinition("minestuck:cruxite_apple"));
 		ModelLoader.registerItemVariants(cruxitePotion, new ResourceLocation("minestuck:cruxite_potion"), new ResourceLocation("minestuck:cruxite_potion_blank"));
@@ -154,14 +174,18 @@ public class MinestuckModelManager
 		register(disk, 0, "disk_client");
 		register(disk, 1, "disk_server");
 		register(chessboard);
+		register(grimoire);
+		register(longForgottenWarhorn);
 		register(minestuckBucket, 0, "bucket_oil");
 		register(minestuckBucket, 1, "bucket_blood");
 		register(minestuckBucket, 2, "bucket_brain_juice");
 		register(minestuckBucket, 3, "bucket_watercolors");
 		register(minestuckBucket, 4, "bucket_ender");
+		register(minestuckBucket, 5, "bucket_light_water");
 		for(int i = 0; i < ItemModus.NAMES.length; i++)
 			register(modusCard, i, "modus_" + ItemModus.NAMES[i]);
 		register(goldSeeds);
+		register(razorBlade);
 		for(int i = 0; i < ItemMetalBoat.NAMES.length; i++)
 			register(metalBoat, i, "boat_" + ItemMetalBoat.NAMES[i]);
 		register(obsidianBucket);
@@ -201,11 +225,20 @@ public class MinestuckModelManager
 		register(desertFruit);
 		register(irradiatedSteak);
 		register(rockCookie);
+		register(fungalSpore);
+		register(sporeo);
+		register(morelMushroom);
+		register(frenchFry);
+		register(strawberryChunk);
 		register(surpriseEmbryo);
-		
+		register(unknowableEgg);
+
 		register(threshDvd);
+		register(gamebroMagazine);
+		register(gamegrlMagazine);
 		register(crewPoster);
 		register(sbahjPoster);
+		
 		register(carvingTool);
 		register(crumplyHat);
 		register(frogStatueReplica);
@@ -213,8 +246,14 @@ public class MinestuckModelManager
 		register(stoneSlab);
 		register(recordEmissaryOfDance);
 		register(recordDanceStab);
+		register(recordRetroBattle);
 		register(glowystoneDust);
 		register(fakeArms);
+		register(captcharoidCamera);
+		/*
+		for(EnumShopPoster type : EnumShopPoster.values())
+			register(shopPoster, type.ordinal(), "shop_poster"+type.ordinal());
+		*/
 	}
 	
 	private static void blockModels()
@@ -230,12 +269,14 @@ public class MinestuckModelManager
 		register(oreCruxite, 3, "cruxite_sandstone");
 		register(oreCruxite, 4, "cruxite_sandstone_red");
 		register(oreCruxite, 5, "cruxite_end_stone");
+		register(oreCruxite, 6, "cruxite_pink_stone");
 		register(oreUranium, 0, "uranium_stone");
 		register(oreUranium, 1, "uranium_netherrack");
 		register(oreUranium, 2, "uranium_cobblestone");
 		register(oreUranium, 3, "uranium_sandstone");
 		register(oreUranium, 4, "uranium_sandstone_red");
 		register(oreUranium, 5, "uranium_end_stone");
+		register(oreUranium, 6, "uranium_pink_stone");
 		register(cruxiteBlock);
 		register(uraniumBlock);
 		register(genericObject);
@@ -246,6 +287,11 @@ public class MinestuckModelManager
 		register(goldOreSandstone);
 		register(goldOreSandstoneRed);
 		register(redstoneOreEndStone);
+		register(quartzOreStone);
+		register(coalOrePinkStone);
+		register(lapisOrePinkStone);
+		register(goldOrePinkStone);
+		register(diamondOrePinkStone);
 		for(BlockColoredDirt.BlockType type : BlockColoredDirt.BlockType.values())
 			register(coloredDirt, type.ordinal(), "colored_dirt_"+type.name);
 		register(layeredSand);
@@ -256,6 +302,9 @@ public class MinestuckModelManager
 		register(punchDesignix);
 		register(totemlathe[0]);
 		register(alchemiter[0]);
+		/*register(holopad);
+		register(jumperBlockExtension[0]);*/
+		register(blender);
 		register(cruxtruder);
 		register(cruxtruderLid);
 		register(petrifiedGrass);
@@ -269,12 +318,15 @@ public class MinestuckModelManager
 		register(frostPlanks);
 		for(BlockMinestuckStone.BlockType type : BlockMinestuckStone.BlockType.values())
 			register(stone, type.getMetadata(), type.getName());
+		register(glowyGoop);
+		register(coagulatedBlood);
 		register(coarseStoneStairs);
 		register(shadeBrickStairs);
 		register(frostBrickStairs);
 		register(castIronStairs);
+		register(myceliumBrickStairs);
 		
-		for(BlockMinestuckLog.BlockType type : BlockMinestuckLog.BlockType.values())
+		for(BlockMinestuckLog1.BlockType type : BlockMinestuckLog1.BlockType.values())
 			register(log, type.ordinal(), type.getName()+"_log");
 		
 		for(BlockMinestuckPlanks.BlockType type : BlockMinestuckPlanks.BlockType.values())
@@ -306,6 +358,7 @@ public class MinestuckModelManager
 		register(redCake);
 		register(hotCake);
 		register(reverseCake);
+		register(fuchsiaCake);
 		
 		register(floweryMossBrick);
 		register(floweryMossStone);
@@ -316,24 +369,54 @@ public class MinestuckModelManager
 		register(endPlanks);
 		register(endSapling);
 		register(endGrass);
+		register(strawberry);
 		
+		register(deadLog);
+		register(deadPlanks);
+		register(chalk);
+		register(chalkBricks);
+		register(chalkChisel);
+		register(chalkPolish);
+		register(pinkStoneSmooth);
+		register(pinkStoneBricks);
+		register(pinkStoneChisel);
+		register(pinkStoneMossy);
+		register(pinkStoneCracked);
+		register(pinkStonePolish);
+		register(denseCloud, 0, "dense_cloud");
+		register(denseCloud, 1, "dense_cloud_bright");
+		
+		register(vein);
+		register(veinCorner);
+		register(veinCornerInverted);
+
 		register(primedTnt);
 		register(unstableTnt);
 		register(instantTnt);
 		register(woodenExplosiveButton);
 		register(stoneExplosiveButton);
-
+		
 		register(uraniumCooker);
+		
+		for(EnumSlabStairMaterial mat : EnumSlabStairMaterial.values())
+		{
+			register(mat.getStair());
+			register(mat.getSlab());
+			ModelLoader.setCustomStateMapper(mat.getSlab(), (new StateMap.Builder()).ignore(BlockMinestuckSlab.dummy).build());
+			ModelLoader.setCustomStateMapper(mat.getSlabFull(), (new StateMap.Builder()).ignore(BlockSlab.HALF, BlockMinestuckSlab.dummy).build());
+		}
 		
 		ModelLoader.setCustomStateMapper(blockOil, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
 		ModelLoader.setCustomStateMapper(blockBlood, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
 		ModelLoader.setCustomStateMapper(blockBrainJuice, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
 		ModelLoader.setCustomStateMapper(blockWatercolors, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
 		ModelLoader.setCustomStateMapper(blockEnder, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
+		ModelLoader.setCustomStateMapper(blockLightWater, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
+		
 		ModelLoader.setCustomStateMapper(primedTnt, (new StateMap.Builder()).ignore(BlockTNT.EXPLODE).build());
 		ModelLoader.setCustomStateMapper(unstableTnt, (new StateMap.Builder()).ignore(BlockTNT.EXPLODE).build());
 		ModelLoader.setCustomStateMapper(instantTnt, (new StateMap.Builder()).ignore(BlockTNT.EXPLODE).build());
-		ModelLoader.setCustomStateMapper(log, (new StateMap.Builder()).withName(BlockMinestuckLog.VARIANT).withSuffix("_log").build());
+		ModelLoader.setCustomStateMapper(log, (new StateMap.Builder()).withName(BlockMinestuckLog1.VARIANT).withSuffix("_log").build());
 		ModelLoader.setCustomStateMapper(leaves1, (new StateMap.Builder()).withName(BlockMinestuckLeaves1.VARIANT).withSuffix("_leaves").build());
 		ModelLoader.setCustomStateMapper(aspectSapling, (new StateMap.Builder()).withName(BlockAspectSapling.VARIANT).withSuffix("_sapling").build());
 		ModelLoader.setCustomStateMapper(aspectLog1, (new StateMap.Builder()).withName(BlockAspectLog.VARIANT).withSuffix("_log").build());
@@ -343,6 +426,7 @@ public class MinestuckModelManager
 		ModelLoader.setCustomStateMapper(returnNode, (Block block) -> Collections.emptyMap());
 		ModelLoader.setCustomStateMapper(gate, (Block block) -> Collections.emptyMap());
 		ModelLoader.setCustomStateMapper(rabbitSpawner, (Block block) -> Collections.emptyMap());
+		ModelLoader.setCustomStateMapper(strawberryStem, (new StateMap.Builder()).build());
 	}
 	
 	private static void register(Item item)
@@ -380,7 +464,6 @@ public class MinestuckModelManager
 		}
 	}
 	
-	
 	private static class DualWeaponDefinition implements ItemMeshDefinition
 	{
 		private Item item;
@@ -391,11 +474,9 @@ public class MinestuckModelManager
 		public ModelResourceLocation getModelLocation(ItemStack stack)
 		{
 			if(((ItemDualWeapon)this.item).IsDrawn(stack)){
-				
 				return new ModelResourceLocation("minestuck:" + ((ItemDualWeapon)this.item).Prefex + "_drawn","inventory");
 			}else
 				return new ModelResourceLocation("minestuck:" + ((ItemDualWeapon)this.item).Prefex + "_sheathed","inventory");
-			
 		}
 	}
 	
@@ -436,13 +517,29 @@ public class MinestuckModelManager
 			{
 				if(nbt.getBoolean("punched") && !(Item.REGISTRY.getObject(new ResourceLocation(nbt.getString("contentID"))) == Item.getItemFromBlock(genericObject)))
 					str = "card_punched";
+				else if(nbt.getInteger("contentSize") <= 0) str = "card_ghost";
 				else str = "card_full";
 			}
 			else str = "card_empty";
 			return new ModelResourceLocation("minestuck:" + str, "inventory");
 		}
 	}
-	
+
+	private static class ShuntDefinition implements ItemMeshDefinition
+	{
+		@Override
+		public ModelResourceLocation getModelLocation(ItemStack stack)
+		{
+			NBTTagCompound nbt = stack.getTagCompound();
+			String str;
+			if(nbt != null && nbt.hasKey("contentID"))
+				str = "shunt_full";
+
+			else str = "shunt_empty";
+			return new ModelResourceLocation("minestuck:" + str, "inventory");
+		}
+	}
+
 	private static class BoondollarsDefinition implements ItemMeshDefinition
 	{
 		@Override

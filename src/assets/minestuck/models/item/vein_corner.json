@@ -1,0 +1,13 @@
+{
+    "parent": "block/cube",
+    "textures": {
+        "particle": "minestuck:blocks/vein_corner",
+        "down": "minestuck:blocks/vein_top",
+        "up": "minestuck:blocks/vein_side",
+        "north": "minestuck:blocks/vein_top",
+        "east": "minestuck:blocks/vein_corner",
+        "south": "minestuck:blocks/vein_side",
+        "west": "minestuck:blocks/vein_corner"
+    }
+}
+

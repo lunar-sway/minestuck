@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "minestuck:frog_statue_block" },
+        "facing=east": { "model": "minestuck:frog_statue_block", "y": 90 },
+        "facing=south": { "model": "minestuck:frog_statue_block", "y": 180 },
+        "facing=west": { "model": "minestuck:frog_statue_block", "y": 270 }
+    }
+}

@@ -1,6 +1,7 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.util.EnumAspect;
@@ -231,8 +232,15 @@ public class GuiDataChecker extends GuiScreen
 			button.visible = false;
 	}
 	
+	@Override
+	protected void keyTyped(char typedChar, int keyCode) throws IOException
+	{
+		super.keyTyped(typedChar, keyCode);
+		if(MinestuckKeyHandler.instance.statKey.isActiveAndMatches(keyCode))
+			mc.displayGuiScreen(null);
+	}
 	
-	public static interface IDataComponent
+	public interface IDataComponent
 	{
 		public IDataComponent getParentComponent();
 		

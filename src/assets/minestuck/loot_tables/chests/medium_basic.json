@@ -18,6 +18,28 @@
                     "conditions": [
                         {
                             "condition": "minestuck:land_aspect",
+                            "land_aspect": "end"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/end",
+                    "weight": 10
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "flora"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/flora",
+                    "weight": 10
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
                             "land_aspect": "forest"
                         }
                     ],
@@ -40,11 +62,44 @@
                     "conditions": [
                         {
                             "condition": "minestuck:land_aspect",
+                            "land_aspect": "fungi"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/fungi",
+                    "weight": 10
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
                             "land_aspect": "heat"
                         }
                     ],
                     "type": "loot_table",
                     "name": "minestuck:chests/medium_basic/heat",
+                    "weight": 10
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "rain"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/rain",
+                    "weight": 10
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "rainbow"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/rainbow",
                     "weight": 10
                 },
                 {
@@ -102,19 +157,6 @@
                     "name": "minestuck:chests/medium_basic/wood",
                     "weight": 10
                 },
-                
-                
-                {
-                    "conditions": [
-                        {
-                            "condition": "minestuck:land_aspect",
-                            "land_aspect": "buckets"
-                        }
-                    ],
-                    "type": "loot_table",
-                    "name": "minestuck:chests/medium_basic/buckets",
-                    "weight": 5
-                },
                 {
                     "conditions": [
                         {
@@ -125,6 +167,17 @@
                     "type": "loot_table",
                     "name": "minestuck:chests/medium_basic/cake",
                     "weight": 7
+                },
+				{
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "frogs"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/frogs",
+                    "weight": 10
                 },
                 {
                     "conditions": [

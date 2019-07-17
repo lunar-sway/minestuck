@@ -52,6 +52,9 @@ public abstract class TitleLandAspect implements ILandAspect<TitleLandAspect>
 		return null;
 	}
 	
+	public void prepareWorldProvider(WorldProviderLands worldProvider)
+	{}
+	
 	@Override
 	public void prepareChunkProvider(ChunkProviderLands chunkProvider){}
 	@Override

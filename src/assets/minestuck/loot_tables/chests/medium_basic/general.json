@@ -333,6 +333,12 @@
                 },
                 {
                     "type": "item",
+                    "name": "minestuck:grimoire",
+                    "weight": 1,
+                    "quality": 1
+                },
+                {
+                    "type": "item",
                     "name": "minestuck:generic_object",
                     "weight": 10,
                     "quality": -1
@@ -360,11 +366,26 @@
                 },
                 {
                     "type": "item",
+                    "name": "minestuck:raw_uranium",
+                    "weight": 12,
+                    "quality": 1,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
                     "conditions": [
                         {
                             "condition": "minestuck:land_aspect",
                             "land_aspect": [
-                                "buckets", "towers", "cake", "pulse"
+                                "towers", "cake", "pulse"
                             ]
                         }
                     ],
@@ -378,7 +399,7 @@
                         {
                             "condition": "minestuck:land_aspect",
                             "land_aspect": [
-                                "wind", "silence", "thunder", "monsters"
+                                "wind", "silence", "thunder", "monsters", "frogs"
                             ]
                         }
                     ],

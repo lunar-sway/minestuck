@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "minestuck:items/estrogen_empowered_everything_eradicator"
+  }
+}

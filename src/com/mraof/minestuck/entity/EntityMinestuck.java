@@ -36,4 +36,20 @@ public abstract class EntityMinestuck extends EntityCreature
 		return textureResource;
 	}
 	
+	/**
+     * Gets called every tick from main Entity class
+     */
+    public void onEntityUpdate()
+    {
+        super.onEntityUpdate();
+        this.world.profiler.startSection("mobBaseTick");
+
+        if (this.isEntityAlive() && this.rand.nextInt(1000) < this.livingSoundTime++)
+        {
+            this.playLivingSound();
+        }
+
+        this.world.profiler.endSection();
+    }
+	
 }

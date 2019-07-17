@@ -61,7 +61,7 @@ public class HashmapGuiHandler extends SylladexGuiHandler
 				@Override
 				public void onClick(int mouseButton)
 				{
-					if(this.item == null && mouseButton == 1)
+					if(this.item != null && mouseButton == 1)
 					{
 						MinestuckPacket packet = MinestuckPacket.makePacket(Type.CAPTCHA, CaptchaDeckPacket.GET, this.index, true);
 						MinestuckChannelHandler.sendToServer(packet);

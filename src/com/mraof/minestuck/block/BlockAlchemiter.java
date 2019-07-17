@@ -2,14 +2,18 @@ package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiHandler;
+import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.block.BlockAlchemiter.EnumParts;
+
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -24,6 +28,7 @@ public class BlockAlchemiter extends BlockLargeMachine
 {
 	public static final PropertyEnum<EnumParts> PART1 = PropertyEnum.create("part", EnumParts.class, EnumParts.TOTEM_CORNER, EnumParts.TOTEM_PAD, EnumParts.LOWER_ROD, EnumParts.UPPER_ROD, EnumParts.TOTEM_PAD_DOWEL, EnumParts.TOTEM_PAD_TOTEM);
 	public static final PropertyEnum<EnumParts> PART2 = PropertyEnum.create("part", EnumParts.class, EnumParts.SIDE_LEFT, EnumParts.SIDE_RIGHT, EnumParts.CORNER, EnumParts.CENTER_PAD);
+	
 	public final PropertyEnum<EnumParts> PART;
 	public static final PropertyDirection DIRECTION = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 	
@@ -34,6 +39,9 @@ public class BlockAlchemiter extends BlockLargeMachine
 		this(0, PART1);
 		
 	}
+	
+	
+	
 	public BlockAlchemiter(int index, PropertyEnum<EnumParts> property)
 	{
 		super();
@@ -42,6 +50,8 @@ public class BlockAlchemiter extends BlockLargeMachine
 		
 		setUnlocalizedName("alchemiter");
 	}
+	
+	
 	
 	//not sure how to do this.
 	@Override
@@ -84,26 +94,16 @@ public class BlockAlchemiter extends BlockLargeMachine
 	@Override
 	public  boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
-		if(worldIn.isRemote)
-		{
-			EnumParts part = state.getValue(PART);
-			if(part == EnumParts.CENTER_PAD || part == EnumParts.CORNER || part == EnumParts.SIDE_LEFT || part == EnumParts.SIDE_RIGHT || part == EnumParts.TOTEM_CORNER)
-			{
-				BlockPos mainPos = getMainPos(state, pos, worldIn);
-				TileEntity te = worldIn.getTileEntity(mainPos);
-				if(te instanceof TileEntityAlchemiter && !((TileEntityAlchemiter) te).isBroken())
-					playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.ALCHEMITER.ordinal(), worldIn, mainPos.getX(), mainPos.getY(), mainPos.getZ());
-			}
-			return true;
-		}
 		
 		BlockPos mainPos = getMainPos(state, pos, worldIn);
 		TileEntity te = worldIn.getTileEntity(mainPos);
+		EnumParts part = state.getValue(PART);
 		
-		if (te instanceof TileEntityAlchemiter && playerIn != null)
+		if (te instanceof TileEntityAlchemiter)
 		{
-			((TileEntityAlchemiter) te).onRightClick(playerIn, state);
+			((TileEntityAlchemiter) te).onRightClick(worldIn, playerIn, state, part);
 		}
+		
 		return true;
 	}
 	
@@ -227,6 +227,16 @@ public class BlockAlchemiter extends BlockLargeMachine
 		}
 	}
 	
+	public static EnumFacing getFacing(IBlockState state)
+	{
+		return state.getValue(DIRECTION);
+	}
+	
+	public EnumParts getPart(IBlockState state)
+	{
+		return state.getValue(PART);
+	}
+	
 	public static IBlockState getBlockState(EnumParts parts, EnumFacing direction)
 	{
 		BlockAlchemiter block = MinestuckBlocks.alchemiter[PART1.getAllowedValues().contains(parts) ? 0 : 1];
@@ -247,6 +257,7 @@ public class BlockAlchemiter extends BlockLargeMachine
 			return new BlockStateContainer(this, PART2, DIRECTION);
 		}
 	}
+	
 	
 	public static BlockAlchemiter[] createBlocks()
 	{
@@ -300,5 +311,12 @@ public class BlockAlchemiter extends BlockLargeMachine
 		{
 			return this == TOTEM_PAD || this == TOTEM_PAD_DOWEL || this == TOTEM_PAD_TOTEM;
 		}
+	}
+
+	@Override
+	public Item getItemFromMachine() 
+	{
+		
+		return new ItemStack(MinestuckBlocks.alchemiter[0]).getItem();
 	}
 }

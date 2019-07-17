@@ -22,13 +22,19 @@ public class ItemMinestuckBucket extends ItemBucket	//Unsure if anything more sh
 {
 	public List<IBlockState> fillFluids = new ArrayList<IBlockState>();
 	
-	public ItemMinestuckBucket() 
+	protected ItemMinestuckBucket() 
+	{
+		this("minestuckBucket", TabMinestuck.instance);
+	}
+	
+	public ItemMinestuckBucket(String unlocalizedName, CreativeTabs tab)
 	{
 		super(Blocks.AIR);
-		setUnlocalizedName("minestuckBucket");
-		setCreativeTab(TabMinestuck.instance);
+		setUnlocalizedName(unlocalizedName);
+		setCreativeTab(tab);
 		setContainerItem(Items.BUCKET);
 		setHasSubtypes(true);
+		
 	}
 	
 	@Override

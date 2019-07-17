@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minestuck:planks",
+      "data": 12
+    }
+  },
+  "result": {
+    "item": "minestuck:rainbow_planks_slab",
+    "count": 6
+  }
+}

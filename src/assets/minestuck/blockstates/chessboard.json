@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "minestuck:chessboard" },
+        "facing=east": { "model": "minestuck:chessboard", "y": 90 },
+        "facing=south": { "model": "minestuck:chessboard", "y": 180 },
+        "facing=west": { "model": "minestuck:chessboard", "y": 270 }
+    }
+}

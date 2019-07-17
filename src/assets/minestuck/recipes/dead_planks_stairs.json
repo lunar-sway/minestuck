@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "minestuck:stairs",
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minestuck:dead_planks"
+    }
+  },
+  "result": {
+    "item": "minestuck:dead_planks_stairs",
+    "count": 4
+  }
+}

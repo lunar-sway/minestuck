@@ -50,7 +50,7 @@ public class BlockComputerOn extends BlockComputerOff implements ITileEntityProv
 	@Override
 	public IBlockState getStateFromMeta(int meta)
 	{
-		return getDefaultState().withProperty(BSOD, meta % 2 == 1).withProperty(BlockComputerOff.DIRECTION, EnumFacing.values()[(meta/2) + 2]);
+		return getDefaultState().withProperty(BSOD, meta % 2 == 1).withProperty(BlockComputerOff.DIRECTION, EnumFacing.getHorizontal(meta/2 % 4));
 	}
 	
 	@Override

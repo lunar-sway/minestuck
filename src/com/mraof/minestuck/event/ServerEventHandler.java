@@ -6,19 +6,24 @@ import com.mraof.minestuck.entity.underling.EntityUnderling;
 import com.mraof.minestuck.inventory.captchalouge.HashmapModus;
 import com.mraof.minestuck.inventory.captchalouge.Modus;
 import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.weapon.ItemModularWeapon;
 import com.mraof.minestuck.item.weapon.ItemPotionWeapon;
+import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.Echeladder;
-import com.mraof.minestuck.util.MinestuckPlayerData;
-import com.mraof.minestuck.util.PostEntryTask;
+import com.mraof.minestuck.util.*;
+import net.java.games.input.Component;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -35,6 +40,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import static com.mraof.minestuck.util.EnumAspect.HOPE;
+import static com.mraof.minestuck.util.MinestuckPlayerData.getTitle;
+
 public class ServerEventHandler
 {
 	
@@ -43,6 +51,10 @@ public class ServerEventHandler
 	public static long lastDay;
 	
 	public static List<PostEntryTask> tickTasks = new ArrayList<PostEntryTask>();
+	
+	static Potion[] aspectEffects = { MobEffects.ABSORPTION, MobEffects.SPEED, MobEffects.RESISTANCE, MobEffects.ABSORPTION, MobEffects.FIRE_RESISTANCE, MobEffects.REGENERATION, MobEffects.LUCK, MobEffects.NIGHT_VISION, MobEffects.STRENGTH, MobEffects.JUMP_BOOST, MobEffects.HASTE, MobEffects.INVISIBILITY }; //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
+	// Increase the starting rungs
+	static float[] aspectStrength = new float[] {1.0F/14, 1.0F/15, 1.0F/28, 1.0F/14, 1.0F/18, 1.0F/20, 1.0F/10, 1.0F/12, 1.0F/25, 1.0F/10, 1.0F/13, 1.0F/12}; //Absorption, Speed, Resistance, Saturation, Fire Resistance, Regeneration, Luck, Night Vision, Strength, Jump Boost, Haste, Invisibility
 	
 	@SubscribeEvent
 	public void onWorldTick(TickEvent.WorldTickEvent event)
@@ -113,9 +125,19 @@ public class ServerEventHandler
 					event.setAmount((float) (event.getAmount() * modifier));
 				}
 				boolean critical = cachedCooledAttackStrength > 0.9 && player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder() && !player.isInWater() && !player.isPotionActive(MobEffects.BLINDNESS) && !player.isRiding();
-				if(critical && !player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof ItemPotionWeapon)
+				if(!player.getHeldItemMainhand().isEmpty())
 				{
-					event.getEntityLiving().addPotionEffect(((ItemPotionWeapon) player.getHeldItemMainhand().getItem()).getEffect());
+					ItemStack weapon = player.getHeldItemMainhand();
+					if(weapon.getItem() instanceof ItemPotionWeapon)
+					{
+						//If the attack was a critical, or if the PotionWeapon applies potions on all hits
+						if(critical || !((ItemPotionWeapon) weapon.getItem()).potionOnCrit())
+							event.getEntityLiving().addPotionEffect(((ItemPotionWeapon) weapon.getItem()).getEffect(player));
+					}
+					else if (weapon.getItem() instanceof ItemModularWeapon)
+					{
+						((ItemModularWeapon) weapon.getItem()).onCriticalHit(weapon, event.getEntityLiving(), player);
+					}
 				}
 			}
 			else if (event.getEntityLiving() instanceof EntityPlayerMP && event.getSource().getTrueSource() instanceof EntityUnderling)
@@ -159,7 +181,7 @@ public class ServerEventHandler
 		if(event.getWorld().getBlockState(event.getPos()).getBlock()==MinestuckBlocks.coarseEndStone)
 		{
 			event.getWorld().setBlockState(event.getPos(), Blocks.END_STONE.getDefaultState());
-			event.getWorld().playSound(null, event.getPos(), SoundEvents.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
+			event.getWorld().playSound(null, event.getPos(), SoundEvents.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0F, 	1.0F);
 			event.setResult(Result.ALLOW);
 		}
 	}
@@ -169,5 +191,27 @@ public class ServerEventHandler
 	{
 		if(event.getItemStack().getItem() == Item.getItemFromBlock(MinestuckBlocks.treatedPlanks))
 			event.setBurnTime(50);	//Do not set this number to 0.
+	}
+	
+	@SubscribeEvent
+	public void aspectPotionEffect(TickEvent.PlayerTickEvent event)
+	{
+		IdentifierHandler.PlayerIdentifier identifier = IdentifierHandler.encode(event.player);
+		SburbConnection c = SkaianetHandler.getMainConnection(identifier, true);
+		if(c == null || !c.enteredGame() || MinestuckConfig.aspectEffects == false || !MinestuckPlayerData.getEffectToggle(identifier))
+			return;
+		int rung = MinestuckPlayerData.getData(identifier).echeladder.getRung();
+		EnumAspect aspect = MinestuckPlayerData.getTitle(identifier).getHeroAspect();
+		int potionLevel = (int) (aspectStrength[aspect.ordinal()] * rung); //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
+		
+		if(event.player.getEntityWorld().getTotalWorldTime() % 380 == identifier.hashCode() % 380) {
+			if(rung > 18 && aspect == HOPE) {
+				event.player.addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, 600, 0));
+			}
+			
+			if(potionLevel > 0) {
+				event.player.addPotionEffect(new PotionEffect(aspectEffects[aspect.ordinal()], 600, potionLevel-1));
+			}
+		}
 	}
 }

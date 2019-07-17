@@ -2,23 +2,17 @@ package com.mraof.minestuck.block;
 
 import java.util.Random;
 
-import com.mraof.minestuck.item.MinestuckItems;
-
+import com.mraof.minestuck.item.TabMinestuck;
 import net.minecraft.block.BlockBush;
-import net.minecraft.block.BlockLog;
-import net.minecraft.block.BlockPlanks;
-import net.minecraft.block.BlockLog.EnumAxis;
-import net.minecraft.block.BlockSapling;
 import net.minecraft.block.IGrowable;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -35,8 +29,9 @@ public class BlockAspectSapling extends BlockBush implements IGrowable
 	protected BlockAspectSapling()
 	{
 		this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, BlockType.ASPECT_BLOOD));
-		this.setCreativeTab(MinestuckItems.tabMinestuck);
+		this.setCreativeTab(TabMinestuck.instance);
 		this.setUnlocalizedName("aspectSapling");
+		this.setSoundType(SoundType.PLANT);
 	}
 
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)

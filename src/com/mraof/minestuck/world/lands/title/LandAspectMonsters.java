@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.lands.title;
 
+import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
@@ -61,12 +62,16 @@ public class LandAspectMonsters extends TitleLandAspect
 	}
 	
 	@Override
+	public void prepareWorldProvider(WorldProviderLands worldProvider)
+	{
+		worldProvider.skylightBase = Math.min(1/4F, worldProvider.skylightBase);
+		worldProvider.mergeFogColor(new Vec3d(0.1, 0, 0), 0.5F);
+	}
+	
+	@Override
 	public void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
-		chunkProvider.dayCycle = 2;
 		chunkProvider.monsterList.addAll(this.monsterList);
-		
-		chunkProvider.mergeFogColor(new Vec3d(0.1, 0, 0), 0.5F);
 	}
 	
 	@Override
@@ -76,12 +81,6 @@ public class LandAspectMonsters extends TitleLandAspect
 		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.CARPET.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.PURPLE));
 		if(chunkProvider.blockRegistry.getCustomBlock("torch") == null)
 			chunkProvider.blockRegistry.setBlockState("torch", Blocks.REDSTONE_TORCH.getDefaultState());
-	}
-	
-	@Override
-	public boolean isAspectCompatible(TerrainLandAspect aspect)
-	{
-		return aspect.getDayCycleMode() != 1;
 	}
 	
 	@Override

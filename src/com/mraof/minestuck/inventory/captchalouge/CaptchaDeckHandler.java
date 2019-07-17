@@ -12,9 +12,13 @@ import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MinestuckPlayerData;
+
+import net.minecraft.client.gui.inventory.GuiContainerCreative;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
@@ -127,7 +131,7 @@ public class CaptchaDeckHandler
 	public static void useItem(EntityPlayerMP player)
 	{
 		if(!(player.openContainer instanceof ContainerCaptchaDeck))
-			return;
+			 return;
 		ContainerCaptchaDeck container = (ContainerCaptchaDeck) player.openContainer;
 		if(container.inventory.getStackInSlot(0).isEmpty())
 			return;
@@ -174,7 +178,9 @@ public class CaptchaDeckHandler
 		else if(item.getItem().equals(MinestuckItems.captchaCard) && !AlchemyRecipes.isPunchedCard(item)
 				&& modus != null)
 		{
-			ItemStack content = AlchemyRecipes.getDecodedItem(item);
+			ItemStack content = AlchemyRecipes.getDecodedItem(item, true);
+			
+			System.out.println(content);
 			int failed = 0;
 			for(int i = 0; i < item.getCount(); i++)
 				if(!modus.increaseSize())
@@ -219,7 +225,7 @@ public class CaptchaDeckHandler
 			if(stack.getItem() == MinestuckItems.captchaCard && AlchemyRecipes.hasDecodedItem(stack)
 					&& !AlchemyRecipes.isPunchedCard(stack))
 			{
-				ItemStack newStack = AlchemyRecipes.getDecodedItem(stack);
+				ItemStack newStack = AlchemyRecipes.getDecodedItem(stack, true);
 				if(!newStack.isEmpty())
 				{
 					card1 = true;
@@ -252,6 +258,112 @@ public class CaptchaDeckHandler
 		
 	}
 	
+	public static void captchalougeInventoryItem (EntityPlayerMP player, int slotIndex) {
+		ItemStack stack;
+		Modus modus = getModus(player);
+		System.out.println("Raw Slot: " + slotIndex);
+		//This statement is so that the server knows whether the item is in the hotbar or not because apparently THE "openContainer" CANT EDIT THE HOTBAR SLOTS.
+		if(player.openContainer.equals(player.inventoryContainer) && player.inventory.isHotbar(slotIndex)) {
+			int hotbarIndex = slotIndex;
+			
+			stack = player.inventory.mainInventory.get(hotbarIndex);
+
+			if(stack.getItem() == MinestuckItems.boondollars)
+			{
+				MinestuckPlayerData.addBoondollars(player, ItemBoondollars.getCount(stack));
+				stack.setCount(0);
+				return;
+			}
+
+			if(modus != null && !stack.isEmpty())
+			{
+				boolean card1 = false, card2 = true;
+				if(stack.getItem() == MinestuckItems.captchaCard && AlchemyRecipes.hasDecodedItem(stack)
+						&& !AlchemyRecipes.isPunchedCard(stack))
+				{
+					ItemStack newStack = AlchemyRecipes.getDecodedItem(stack, true);
+					if(!newStack.isEmpty())
+					{
+						card1 = true;
+						stack = newStack;
+						card2 = modus.increaseSize();
+					}
+				}
+				if(modus.putItemStack(stack))
+				{
+					MinestuckCriteriaTriggers.CAPTCHALOGUE.trigger(player, modus, stack);
+					if(!card2)
+						launchAnyItem(player, new ItemStack(MinestuckItems.captchaCard, 1));
+					stack = player.inventory.mainInventory.get(hotbarIndex);
+					if(card1 && stack.getCount() > 1)
+						stack.shrink(1);
+					else {
+						player.inventory.setInventorySlotContents(hotbarIndex, ItemStack.EMPTY);
+					}
+				}
+				else if(card1 && card2)
+				{
+					launchAnyItem(player, stack);
+					stack = player.inventory.mainInventory.get(hotbarIndex);
+					if(stack.getCount() == 1) {
+						player.inventory.setInventorySlotContents(hotbarIndex, ItemStack.EMPTY);
+					} else stack.shrink(1);
+				}
+				MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, writeToNBT(modus));
+				MinestuckChannelHandler.sendToPlayer(packet, player);
+			}
+		}
+		else {
+			Slot slot = player.openContainer.getSlot(slotIndex);
+			stack = slot.getStack();
+
+			if(stack.getItem() == MinestuckItems.boondollars)
+			{
+				MinestuckPlayerData.addBoondollars(player, ItemBoondollars.getCount(stack));
+				stack.setCount(0);
+				return;
+			}
+
+			if(modus != null && !stack.isEmpty())
+			{
+				boolean card1 = false, card2 = true;
+				if(stack.getItem() == MinestuckItems.captchaCard && AlchemyRecipes.hasDecodedItem(stack)
+						&& !AlchemyRecipes.isPunchedCard(stack))
+				{
+					ItemStack newStack = AlchemyRecipes.getDecodedItem(stack, true);
+					if(!newStack.isEmpty())
+					{
+						card1 = true;
+						stack = newStack;
+						card2 = modus.increaseSize();
+					}
+				}
+				if(modus.putItemStack(stack))
+				{
+					MinestuckCriteriaTriggers.CAPTCHALOGUE.trigger(player, modus, stack);
+					if(!card2)
+						launchAnyItem(player, new ItemStack(MinestuckItems.captchaCard, 1));
+					stack = slot.getStack();
+					if(card1 && stack.getCount() > 1)
+						stack.shrink(1);
+					else {
+						slot.putStack(ItemStack.EMPTY);
+					}
+				}
+				else if(card1 && card2)
+				{
+					launchAnyItem(player, stack);
+					stack = slot.getStack();
+					if(stack.getCount() == 1) {
+						slot.putStack(ItemStack.EMPTY);
+					} else stack.shrink(1);
+				}
+				MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, writeToNBT(modus));
+				MinestuckChannelHandler.sendToPlayer(packet, player);
+			}
+		}
+	}
+
 	public static void getItem(EntityPlayerMP player, int index, boolean asCard)
 	{
 		Modus modus = getModus(player);

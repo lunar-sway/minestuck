@@ -13,7 +13,7 @@ public class DefaultTerrainGen extends LandTerrainGenBase
 {
 	
 	public float normalHeight    = 0.3F, oceanHeight    = -0.2F, roughHeight     = 0.4F;
-	public float normalVariation = 0.5F, oceanVariation =  0.2F, roughtVariation = 0.8F;
+	public float normalVariation = 0.5F, oceanVariation =  0.2F, roughVariation = 0.8F;
 	
 	protected NoiseGeneratorOctaves noiseGens[] = new NoiseGeneratorOctaves[2];
 	protected NoiseGeneratorTriangle noiseGeneratorTriangle;
@@ -149,7 +149,7 @@ public class DefaultTerrainGen extends LandTerrainGenBase
 		if(biome == BiomeMinestuck.mediumOcean)
 			return this.oceanVariation;
 		else if(biome == BiomeMinestuck.mediumRough)
-			return this.roughtVariation;
+			return this.roughVariation;
 		else return this.normalVariation;
 	}
 	

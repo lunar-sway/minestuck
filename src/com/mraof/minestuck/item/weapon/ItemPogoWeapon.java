@@ -1,5 +1,7 @@
 package com.mraof.minestuck.item.weapon;
 
+import com.mraof.minestuck.entity.underling.EntityUnderling;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
@@ -84,5 +86,34 @@ public class ItemPogoWeapon extends ItemWeapon
 			return EnumActionResult.SUCCESS;
 		}
 		return EnumActionResult.PASS;
+	}
+	
+	public class PogoWeaponComponent implements IModularWeaponComponent
+	{
+		private double pogoMotion;
+		
+		public PogoWeaponComponent(double pogoMotion)
+		{
+			this.pogoMotion = pogoMotion;
+		}
+		
+		private double getPogoMotion(ItemStack stack)
+		{
+//			return 0.5 + EnchantmentHelper.getEnchantmentLevel(Enchantment.efficiency.effectId, stack)*0.1;
+			return pogoMotion;
+		}
+		
+		@Override
+		public void onEntityHit(ItemStack itemStack, EntityLivingBase target, EntityLivingBase player)
+		{
+			ItemPogoWeapon.hitEntity(itemStack, target, player, pogoMotion);
+		}
+		
+		@Override
+		public EnumActionResult onItemUse(ItemStack item, EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand,
+										  EnumFacing facing, float hitX, float hitY, float hitZ)
+		{
+			return ItemPogoWeapon.onItemUse(player, worldIn, pos, hand, facing, pogoMotion);
+		}
 	}
 }
