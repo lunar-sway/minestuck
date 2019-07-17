@@ -4,31 +4,31 @@ import com.mraof.minestuck.CommonProxy;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.client.gui.ModScreenManager;
-import com.mraof.minestuck.client.model.ModelBasilisk;
+import com.mraof.minestuck.client.model.BasiliskModel;
 import com.mraof.minestuck.client.model.BishopModel;
-import com.mraof.minestuck.client.model.ModelGiclops;
+import com.mraof.minestuck.client.model.GiclopsModel;
 import com.mraof.minestuck.client.model.IguanaModel;
 import com.mraof.minestuck.client.model.ImpModel;
 import com.mraof.minestuck.client.model.LichModel;
 import com.mraof.minestuck.client.model.NakagatorModel;
-import com.mraof.minestuck.client.model.ModelOgre;
-import com.mraof.minestuck.client.model.ModelRook;
+import com.mraof.minestuck.client.model.OgreModel;
+import com.mraof.minestuck.client.model.RookModel;
 import com.mraof.minestuck.client.model.SalamanderModel;
 import com.mraof.minestuck.client.model.TurtleModel;
 import com.mraof.minestuck.client.renderer.BlockColorCruxite;
-import com.mraof.minestuck.client.renderer.RenderMachineOutline;
+import com.mraof.minestuck.client.renderer.MachineOutlineRenderer;
 import com.mraof.minestuck.client.renderer.entity.DecoyRenderer;
 import com.mraof.minestuck.client.renderer.entity.MisetuckEntityRenderer;
-import com.mraof.minestuck.client.renderer.entity.RenderGrist;
+import com.mraof.minestuck.client.renderer.entity.GristRenderer;
 import com.mraof.minestuck.client.renderer.entity.RenderHangingArt;
-import com.mraof.minestuck.client.renderer.entity.RenderHologram;
+import com.mraof.minestuck.client.renderer.entity.HologramRenderer;
 import com.mraof.minestuck.client.renderer.entity.MetalBoatRenderer;
 import com.mraof.minestuck.client.renderer.entity.PawnRenderer;
-import com.mraof.minestuck.client.renderer.entity.RenderShadow;
-import com.mraof.minestuck.client.renderer.entity.RenderVitalityGel;
+import com.mraof.minestuck.client.renderer.entity.ShadowRenderer;
+import com.mraof.minestuck.client.renderer.entity.VitalityGelRenderer;
 import com.mraof.minestuck.client.renderer.entity.frog.FrogRenderer;
-import com.mraof.minestuck.client.renderer.tileentity.RenderGate;
-import com.mraof.minestuck.client.renderer.tileentity.RenderSkaiaPortal;
+import com.mraof.minestuck.client.renderer.tileentity.GateRenderer;
+import com.mraof.minestuck.client.renderer.tileentity.SkaiaPortalRenderer;
 import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.entity.EntityBigPart;
@@ -64,6 +64,7 @@ import net.minecraft.block.StemBlock;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.client.renderer.color.ItemColors;
+import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -84,13 +85,13 @@ public class ClientProxy extends CommonProxy
 	
 	public static void addScheduledTask(Runnable runnable)
 	{
-		Minecraft.getInstance().addScheduledTask(runnable);
+		//Minecraft.getInstance().addScheduledTask(runnable);
 	}
 	
 	private static void registerRenderers()
 	{
-		ClientRegistry.bindTileEntitySpecialRenderer(SkaiaPortalTileEntity.class, new RenderSkaiaPortal());
-		ClientRegistry.bindTileEntitySpecialRenderer(GateTileEntity.class, new RenderGate());
+		ClientRegistry.bindTileEntitySpecialRenderer(SkaiaPortalTileEntity.class, new SkaiaPortalRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(GateTileEntity.class, new GateRenderer());
 //		MinecraftForgeClient.registerItemRenderer(Minestuck.captchaCard, new CardRenderer());
 	}
 	
@@ -124,24 +125,24 @@ public class ClientProxy extends CommonProxy
 		
 		ModScreenManager.registerScreenFactories();
 		
-		RenderingRegistry.registerEntityRenderingHandler(FrogEntity.class, manager -> new FrogRenderer(manager, new ModelBiped(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(HologramEntity.class, RenderHologram::new);
+		RenderingRegistry.registerEntityRenderingHandler(FrogEntity.class, manager -> new FrogRenderer(manager));
+		RenderingRegistry.registerEntityRenderingHandler(HologramEntity.class, HologramRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(NakagatorEntity.class, manager -> new MisetuckEntityRenderer<>(manager, new NakagatorModel(), 0.5F));
 		RenderingRegistry.registerEntityRenderingHandler(SalamanderEntity.class, manager -> new MisetuckEntityRenderer<>(manager, new SalamanderModel(), 0.5F));
 		RenderingRegistry.registerEntityRenderingHandler(IguanaEntity.class, manager -> new MisetuckEntityRenderer<>(manager, new IguanaModel(), 0.5F));
 		RenderingRegistry.registerEntityRenderingHandler(TurtleEntity.class, manager -> new MisetuckEntityRenderer<>(manager, new TurtleModel(), 0.5F));
 		RenderingRegistry.registerEntityRenderingHandler(ImpEntity.class, manager -> new MisetuckEntityRenderer<>(manager, new ImpModel(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(OgreEntity.class, manager -> new MisetuckEntityRenderer<>(manager, new ModelOgre(), 2.8F));
-		RenderingRegistry.registerEntityRenderingHandler(BasiliskEntity.class, manager -> new MisetuckEntityRenderer<>(manager, new ModelBasilisk(), 2.8F));
+		RenderingRegistry.registerEntityRenderingHandler(OgreEntity.class, manager -> new MisetuckEntityRenderer<>(manager, new OgreModel(), 2.8F));
+		RenderingRegistry.registerEntityRenderingHandler(BasiliskEntity.class, manager -> new MisetuckEntityRenderer<>(manager, new BasiliskModel(), 2.8F));
 		RenderingRegistry.registerEntityRenderingHandler(LichEntity.class, manager -> new MisetuckEntityRenderer<>(manager, new LichModel(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(GiclopsEntity.class, manager -> new MisetuckEntityRenderer<>(manager, new ModelGiclops(), 7.6F));
+		RenderingRegistry.registerEntityRenderingHandler(GiclopsEntity.class, manager -> new MisetuckEntityRenderer<>(manager, new GiclopsModel(), 7.6F));
 		RenderingRegistry.registerEntityRenderingHandler(BishopEntity.class, manager -> new MisetuckEntityRenderer<>(manager, new BishopModel(), 1.8F));
-		RenderingRegistry.registerEntityRenderingHandler(RookEntity.class, manager -> new MisetuckEntityRenderer<>(manager, new ModelRook(), 2.5F));
-		RenderingRegistry.registerEntityRenderingHandler(UnderlingPartEntity.class, manager -> new RenderShadow<>(manager, 2.8F));
-		RenderingRegistry.registerEntityRenderingHandler(EntityBigPart.class, manager -> new RenderShadow<>(manager, 0F));
-		RenderingRegistry.registerEntityRenderingHandler(PawnEntity.class, manager -> new PawnRenderer(manager, new ModelBiped(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(GristEntity.class, RenderGrist::new);
-		RenderingRegistry.registerEntityRenderingHandler(VitalityGelEntity.class, RenderVitalityGel::new);
+		RenderingRegistry.registerEntityRenderingHandler(RookEntity.class, manager -> new MisetuckEntityRenderer<>(manager, new RookModel(), 2.5F));
+		RenderingRegistry.registerEntityRenderingHandler(UnderlingPartEntity.class, manager -> new ShadowRenderer<>(manager, 2.8F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityBigPart.class, manager -> new ShadowRenderer<>(manager, 0F));
+		RenderingRegistry.registerEntityRenderingHandler(PawnEntity.class, manager -> new PawnRenderer(manager, new BipedModel(), 0.5F));
+		RenderingRegistry.registerEntityRenderingHandler(GristEntity.class, GristRenderer::new);
+		RenderingRegistry.registerEntityRenderingHandler(VitalityGelEntity.class, VitalityGelRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(DecoyEntity.class, DecoyRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(MetalBoatEntity.class, MetalBoatRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(CrewPosterEntity.class, manager -> new RenderHangingArt<>(manager, "midnight_poster"));
@@ -154,7 +155,7 @@ public class ClientProxy extends CommonProxy
 		
 		MinecraftForge.EVENT_BUS.register(ClientEditHandler.instance);
 		MinecraftForge.EVENT_BUS.register(new MinestuckConfig());
-		MinecraftForge.EVENT_BUS.register(RenderMachineOutline.class);
+		MinecraftForge.EVENT_BUS.register(MachineOutlineRenderer.class);
 	}
 	
 }

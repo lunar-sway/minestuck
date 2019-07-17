@@ -4,14 +4,13 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.tileentity.GateTileEntity;
 import com.mraof.minestuck.util.ColorCollector;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
-public class RenderGate extends TileEntityRenderer<GateTileEntity>
+public class GateRenderer extends TileEntityRenderer<GateTileEntity>
 {
 	
 	private static final ResourceLocation nodeInner = new ResourceLocation("minestuck","textures/blocks/node_spiro_inner.png");
@@ -28,7 +27,7 @@ public class RenderGate extends TileEntityRenderer<GateTileEntity>
 		float g = ((color >> 8) & 255)/255F;
 		float b = (color & 255)/255F;
 		
-		GlStateManager.pushLightingAttrib();
+		GlStateManager.pushLightingAttributes();
 		GlStateManager.color3f(r, g, b);
 		GlStateManager.pushMatrix();
 		GlStateManager.disableCull();
@@ -41,7 +40,7 @@ public class RenderGate extends TileEntityRenderer<GateTileEntity>
 		GlStateManager.enableCull();
 		GlStateManager.enableLighting();
 		GlStateManager.popMatrix();
-		GlStateManager.popAttrib();
+		GlStateManager.popAttributes();
 	}
 	
 	public void renderGateAt(GateTileEntity tileEntity, double posX, double posY, double posZ, float f, int p_180535_9_)

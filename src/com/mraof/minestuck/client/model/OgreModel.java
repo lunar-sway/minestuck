@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.entity.model.RendererModel;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 
-public class ModelOgre<T extends OgreEntity> extends EntityModel<T>
+public class OgreModel<T extends OgreEntity> extends EntityModel<T>
 {
 	private RendererModel head;
 	private RendererModel leftLeg;
@@ -15,20 +15,20 @@ public class ModelOgre<T extends OgreEntity> extends EntityModel<T>
 	private RendererModel leftArm;
 	private RendererModel rightArm;
 
-	public ModelOgre() 
+	public OgreModel()
 	{
 		float offsetY = -72 + 24;
 		this.textureWidth = 192;
 		this.textureHeight = 128;
-		setTextureOffset("null.Tusk", 84, 0);
+		//setTextureOffset("null.Tusk", 84, 0);
 		head = new RendererModel(this, 0, 0);
 		head.addBox(-9F, -12F, -9F, 18, 12, 18);
-		head.addBox("Tusk", -10F, -3F, -12F, 6, 3, 3);
-		head.addBox("Tusk", 4F, -3F, -12F, 6, 3, 3);
-		head.addBox("Tusk", -14F, 0F, -12F, 6, 3, 3);
-		head.addBox("Tusk", 8F, 0F, -12F, 6, 3, 3);
-		head.addBox("Tusk", -15F, -3F, -12F, 2, 3, 3);
-		head.addBox("Tusk", 13F, -3F, -12F, 2, 3, 3);
+		head.func_217178_a("Tusk", -10F, -3F, -12F, 6, 3, 3, 0.0f, 84, 0);
+		head.func_217178_a("Tusk", 4F, -3F, -12F, 6, 3, 3, 0.0f, 84, 0);
+		head.func_217178_a("Tusk", -14F, 0F, -12F, 6, 3, 3, 0.0f, 84, 0);
+		head.func_217178_a("Tusk", 8F, 0F, -12F, 6, 3, 3, 0.0f, 84, 0);
+		head.func_217178_a("Tusk", -15F, -3F, -12F, 2, 3, 3, 0.0f, 84, 0);
+		head.func_217178_a("Tusk", 13F, -3F, -12F, 2, 3, 3, 0.0f, 84, 0);
 		head.setRotationPoint(0F, 12F + offsetY, -6F);
 		body = new RendererModel(this, 0, 30);
 		body.addBox(-21, 0, -13, 42, 40, 26);

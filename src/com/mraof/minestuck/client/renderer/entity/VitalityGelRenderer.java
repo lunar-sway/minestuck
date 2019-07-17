@@ -1,23 +1,20 @@
 package com.mraof.minestuck.client.renderer.entity;
 
+import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.entity.item.VitalityGelEntity;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
-public class RenderVitalityGel extends EntityRenderer<VitalityGelEntity>
+public class VitalityGelRenderer extends EntityRenderer<VitalityGelEntity>
 {
 	
-	public RenderVitalityGel(EntityRendererManager manager)
+	public VitalityGelRenderer(EntityRendererManager manager)
 	{
 		super(manager);
 		this.shadowSize = 0.15F;
@@ -34,7 +31,7 @@ public class RenderVitalityGel extends EntityRenderer<VitalityGelEntity>
 		int j = entity.getBrightnessForRender();
 		int k = j % 65536;
 		int l = j / 65536;
-		OpenGlHelper.glMultiTexCoord2f(OpenGlHelper.GL_TEXTURE1, (float)k, (float)l);
+		GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, (float)k, (float)l);
 		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GlStateManager.rotatef(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
 		GlStateManager.rotatef(-this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);

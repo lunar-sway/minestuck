@@ -2,12 +2,11 @@ package com.mraof.minestuck.client.model;
 
 import com.mraof.minestuck.entity.carapacian.RookEntity;
 import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.client.renderer.entity.model.ModelBase;
 import net.minecraft.client.renderer.entity.model.RendererModel;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 
-public class ModelRook<T extends RookEntity> extends EntityModel<T>
+public class RookModel<T extends RookEntity> extends EntityModel<T>
 {
 	private RendererModel head;
 	private RendererModel leftLeg;
@@ -16,20 +15,20 @@ public class ModelRook<T extends RookEntity> extends EntityModel<T>
 	private RendererModel leftArm;
 	private RendererModel rightArm;
 
-	public ModelRook()
+	public RookModel()
 	{
 		float offsetY = 24;
 		textureHeight = 128;
 		textureWidth = 256;
-		setTextureOffset("null.Tower", 60, 0);
-		setTextureOffset("null.Lump", 124, 0);
+		//setTextureOffset("null.Tower", 60, 0);
+		//setTextureOffset("null.Lump", 124, 0);
 		head = new RendererModel(this, 0, 0);
 		head.addBox(-9F, -6F, -2F, 18, 16, 12);
 		head.setRotationPoint(0F, -45F + offsetY, -22F);
 		body = new RendererModel(this, 0, 30);
 		body.addBox(-20F, 0F, -16F, 40, 40, 26);
-		body.addBox("Tower", 2F, -12F, -6F, 16, 12, 16);
-		body.addBox("Lump", -18F, 4F, -21F, 8, 16, 8);
+		body.func_217178_a("Tower", 2F, -12F, -6F, 16, 12, 16, 0.0f, 60, 0);
+		body.func_217178_a("Lump", -18F, 4F, -21F, 8, 16, 8, 0.0f, 124, 0);
 		body.setRotationPoint(0F, -52F + offsetY, 0F);
 		leftLeg = new RendererModel(this, 60, 0);
 		leftLeg.addBox(-2F, 0F, -2F, 4, 12, 4);

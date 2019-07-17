@@ -1,31 +1,28 @@
 package com.mraof.minestuck.client.renderer.entity;
 
+import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.entity.item.GristEntity;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderGrist extends EntityRenderer<GristEntity>
+public class GristRenderer extends EntityRenderer<GristEntity>
 {
 	
-	public RenderGrist(EntityRendererManager manager)
+	public GristRenderer(EntityRendererManager manager)
 	{
 		super(manager);
 		this.shadowSize = 0.15F;
 		this.shadowOpaque = .75F;
 	}
-	
+
 	@Override
 	public void doRender(GristEntity grist, double d0, double d1, double d2, float f, float f1)
 	{
@@ -36,7 +33,7 @@ public class RenderGrist extends EntityRenderer<GristEntity>
 		int j = grist.getBrightnessForRender();
 		int k = j % 65536;
 		int l = j / 65536;
-		OpenGlHelper.glMultiTexCoord2f(OpenGlHelper.GL_TEXTURE1, (float)k, (float)l);
+		GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, (float)k, (float)l);
 		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GlStateManager.rotatef(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
 		GlStateManager.rotatef(-this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);

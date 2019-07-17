@@ -8,8 +8,6 @@ package com.mraof.minestuck.client.model;
 import com.mraof.minestuck.entity.consort.TurtleEntity;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.entity.model.RendererModel;
-import net.minecraft.client.renderer.entity.model.TurtleModel;
-import net.minecraft.entity.Entity;
 
 public class TurtleModel<T extends TurtleEntity> extends EntityModel<T>
 {

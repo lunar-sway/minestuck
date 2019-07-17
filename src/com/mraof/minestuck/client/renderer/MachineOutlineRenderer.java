@@ -7,15 +7,14 @@ import com.mraof.minestuck.item.block.CruxtruderItem;
 import com.mraof.minestuck.item.block.PunchDesignixItem;
 import com.mraof.minestuck.item.block.TotemLatheItem;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -26,7 +25,7 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderMachineOutline
+public class MachineOutlineRenderer
 {
 	
 	@SubscribeEvent
@@ -36,17 +35,18 @@ public class RenderMachineOutline
 		
 		if (mc.player != null && mc.getRenderViewEntity() == mc.player)
 		{
-			RayTraceResult rayTraceResult = mc.objectMouseOver;
-			if (rayTraceResult == null || rayTraceResult.type != RayTraceResult.Type.BLOCK || rayTraceResult.sideHit != Direction.UP)
+			BlockRayTraceResult rayTraceResult = (BlockRayTraceResult) mc.objectMouseOver;
+			if (rayTraceResult == null || rayTraceResult.getFace() != Direction.UP)
 				return;
 			
-			if (!renderCheckItem(mc.player, mc.player.getHeldItemMainhand(), event.getContext(), rayTraceResult, event.getPartialTicks()))
-				renderCheckItem(mc.player, mc.player.getHeldItemOffhand(), event.getContext(), rayTraceResult, event.getPartialTicks());
+			if (!renderCheckItem(mc.player, Hand.MAIN_HAND, mc.player.getHeldItemMainhand(), event.getContext(), rayTraceResult, event.getPartialTicks()))
+				 renderCheckItem(mc.player, Hand.OFF_HAND, mc.player.getHeldItemOffhand(), event.getContext(), rayTraceResult, event.getPartialTicks());
 		}
 	}
 	
-	private static boolean renderCheckItem(ClientPlayerEntity player, ItemStack stack, WorldRenderer render, BlockRayTraceResult rayTraceResult, float partialTicks)
+	private static boolean renderCheckItem(ClientPlayerEntity player, Hand hand, ItemStack stack, WorldRenderer render, BlockRayTraceResult rayTraceResult, float partialTicks)
 	{
+
 		if(stack.isEmpty())
 			return false;
 		if(stack.getItem() == MinestuckBlocks.PUNCH_DESIGNIX.asItem()
@@ -56,16 +56,17 @@ public class RenderMachineOutline
 				//||stack.getItem()==Item.getItemFromBlock(MinestuckBlocks.jumperBlockExtension[0]))
 		{
 			BlockPos pos = rayTraceResult.getPos();
-			
+			BlockItemUseContext context = new BlockItemUseContext(new ItemUseContext(player, hand, rayTraceResult));
+
 			BlockState block = player.world.getBlockState(pos);
-			boolean flag = block.isReplaceable(new BlockItemUseContext(player.world, player, stack, pos, rayTraceResult.sideHit, (float) rayTraceResult.hitVec.x - pos.getX(), (float) rayTraceResult.hitVec.y - pos.getY(), (float) rayTraceResult.hitVec.z - pos.getZ()));
+			boolean flag = block.isReplaceable(context);
+					//(player.world, player, stack, pos, rayTraceResult.getFace(), (float) rayTraceResult.getPos().getZ() - pos.getX(), (float) rayTraceResult.getPos().getY() - pos.getY(), (float) rayTraceResult.getPos().getZ() - pos.getZ()));
 			
 			if (!flag)
 				pos = pos.up();
-			BlockItemUseContext context = new BlockItemUseContext(player.world, player, stack, pos, rayTraceResult.sideHit, (float) rayTraceResult.hitVec.x - pos.getX(), (float) rayTraceResult.hitVec.y - pos.getY(), (float) rayTraceResult.hitVec.z - pos.getZ());
-			
+
 			Direction placedFacing = player.getHorizontalFacing().getOpposite();
-			double hitX = rayTraceResult.hitVec.x - pos.getX(), hitZ = rayTraceResult.hitVec.z - pos.getZ();
+			double hitX = rayTraceResult.getPos().getX() - pos.getX(), hitZ = rayTraceResult.getPos().getZ() - pos.getZ();
 			boolean r = placedFacing.getAxis() == Direction.Axis.Z;
 			boolean f = placedFacing== Direction.NORTH || placedFacing==Direction.EAST;
 			double d1 = player.lastTickPosX + (player.posX - player.lastTickPosX) * (double)partialTicks;
@@ -77,7 +78,7 @@ public class RenderMachineOutline
 			
 			GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 			GlStateManager.lineWidth(2.0F);
-			GlStateManager.disableTexture2D();
+			GlStateManager.disableTexture();
 			GlStateManager.depthMask(false);	//GL stuff was copied from the standard mouseover bounding box drawing, which is likely why the alpha isn't working
 			
 			if(stack.getItem() == MinestuckBlocks.PUNCH_DESIGNIX.asItem())
@@ -159,7 +160,7 @@ public class RenderMachineOutline
 			
 			WorldRenderer.drawSelectionBoundingBox(boundingBox, placeable ? 0 : 1, placeable ? 1 : 0, 0, 0.5F);
 			GlStateManager.depthMask(true);
-			GlStateManager.enableTexture2D();
+			GlStateManager.enableTexture();
 			GlStateManager.disableBlend();
 			return true;
 		}
