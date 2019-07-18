@@ -7,8 +7,8 @@ import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.gui.AbstractGui;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 
@@ -95,7 +95,7 @@ public class GuiUtil
 				GlStateManager.color3f(1, 1, 1);
 				GlStateManager.disableLighting();
 				Minecraft.getInstance().getTextureManager().bindTexture(new ResourceLocation(type.getIcon().getNamespace(), "textures/grist/" + type.getIcon().getPath()+ ".png"));
-				Gui.drawModalRectWithCustomSizedTexture(boardX + needStrWidth + 1 + index%GRIST_BOARD_WIDTH, boardY + 8*row, 0, 0, 8, 8, 8, 8);
+				AbstractGui.blit(boardX + needStrWidth + 1 + index%GRIST_BOARD_WIDTH, boardY + 8*row, 0, 0, 8, 8, 8, 8);
 				
 				//ensure the large alchemiter gui has one grist type to a line
 				if(mode==GristboardMode.LARGE_ALCHEMITER||mode==GristboardMode.LARGE_ALCHEMITER_SELECT) {
