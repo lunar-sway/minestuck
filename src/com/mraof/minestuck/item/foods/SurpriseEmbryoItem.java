@@ -2,28 +2,26 @@ package com.mraof.minestuck.item.foods;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.block.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import java.util.Random;
 
-public class SurpriseEmbryoItem extends FoodItem
-{
+public class SurpriseEmbryoItem extends Item {
 	
-	public SurpriseEmbryoItem(int healAmount, float saturationModifier, boolean meat, Properties builder)
+	public SurpriseEmbryoItem(Properties properties)
 	{
-		super(healAmount, saturationModifier, meat, builder);
+		super(properties);
 	}
-	
-	@Override
-	protected void onFoodEaten(ItemStack stack, World world, PlayerEntity player)
+
+	protected void onItemUseFinish(ItemStack stack, World world, PlayerEntity player)
 	{
-		super.onFoodEaten(stack, world, player);
+		super.onItemUseFinish(stack, world, player);
 		if(!player.world.isRemote)
 		{
 			Random ran = new Random();

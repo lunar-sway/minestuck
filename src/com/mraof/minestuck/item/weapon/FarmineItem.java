@@ -15,9 +15,11 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -197,7 +199,7 @@ public class FarmineItem extends WeaponItem
 		//This is important because all ItemWeapons take at least 2 damage whenever it breaks a block.
 		//This is because WeaponItem extends ItemSword.
 		if (isDamageable())
-			stack.damageItem(blocksToBreak.size() + 1, playerIn);
+			stack.damageItem(blocksToBreak.size() + 1, playerIn, player -> player.sendBreakAnimation(Hand.MAIN_HAND));
 		
 		return true;
 	}

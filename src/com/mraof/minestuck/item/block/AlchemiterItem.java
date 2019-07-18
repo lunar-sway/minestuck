@@ -51,8 +51,8 @@ public class AlchemiterItem extends BlockItem
 			
 			pos = pos.offset(facing.rotateYCCW());
 			
-			if(facing == Direction.WEST && context.getHitZ() >= 0.5F || facing == Direction.EAST && context.getHitZ() < 0.5F
-					|| facing == Direction.NORTH && context.getHitX() < 0.5F || facing == Direction.SOUTH && context.getHitX() >= 0.5F)
+			if(facing == Direction.WEST && context.getHitVec().z >= 0.5F || facing == Direction.EAST && context.getHitVec().z < 0.5F
+					|| facing == Direction.NORTH && context.getHitVec().x < 0.5F || facing == Direction.SOUTH && context.getHitVec().x >= 0.5F)
 				pos = pos.offset(facing.rotateYCCW());
 			
 			if (!itemstack.isEmpty())
@@ -99,8 +99,8 @@ public class AlchemiterItem extends BlockItem
 			
 			pos = pos.offset(facing.rotateYCCW());
 			
-			if(facing == Direction.WEST && context.getHitZ() >= 0.5F || facing == Direction.EAST && context.getHitZ() < 0.5F
-					|| facing == Direction.NORTH && context.getHitX() < 0.5F || facing == Direction.SOUTH && context.getHitX() >= 0.5F)
+			if(facing == Direction.WEST && context.getHitVec().z >= 0.5F || facing == Direction.EAST && context.getHitVec().z < 0.5F
+					|| facing == Direction.NORTH && context.getHitVec().x < 0.5F || facing == Direction.SOUTH && context.getHitVec().x >= 0.5F)
 				pos = pos.offset(facing.rotateYCCW());
 			
 			world.setBlockState(pos.offset(facing,3).offset(facing.rotateY(),3).up(0), MinestuckBlocks.ALCHEMITER.TOTEM_CORNER.getDefaultState().with(AlchemiterBlock.FACING, facing));

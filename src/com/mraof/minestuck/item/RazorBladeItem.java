@@ -32,7 +32,7 @@ public class RazorBladeItem extends Item
 				{
 					razor.getItem().setCount(1);
 					razor.setPickupDelay(40);
-					attacker.world.spawnEntity(razor);
+					attacker.world.addEntity(razor);
 					stack.shrink(1);
 					ITextComponent message = new TranslationTextComponent("While you handle the razor blade, you accidentally cut yourself and drop it.");
 					attacker.sendMessage(message);
@@ -55,7 +55,7 @@ public class RazorBladeItem extends Item
 				{
 					razor.getItem().setCount(1);
 					razor.setPickupDelay(40);
-					entityLiving.world.spawnEntity(razor);
+					entityLiving.world.addEntity(razor);
 					stack.shrink(1);
 					ITextComponent message = new TranslationTextComponent("While you handle the razor blade, you accidentally cut yourself and drop it.");
 					entityLiving.sendMessage(message);

@@ -49,7 +49,8 @@ public class CustomBoatItem extends Item
 		float f8 = f3 * f5;
 		double d3 = 5.0D;
 		Vec3d vec31 = vec3.add((double)f7 * d3, (double)f6 * d3, (double)f8 * d3);
-		RayTraceResult rayTrace = worldIn.rayTraceBlocks(vec3, vec31, RayTraceFluidMode.ALWAYS);
+		//TODO check if updated correctly
+		RayTraceResult rayTrace = worldIn.rayTraceBlocks(new RayTraceContext(vec3, vec31, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.ANY, playerIn));
 
 		if (rayTrace == null)
 			return new ActionResult<>(ActionResultType.PASS, itemstack);
@@ -79,7 +80,8 @@ public class CustomBoatItem extends Item
 			}
 			else
 			{
-				if (rayTrace.type == RayTraceResult.Type.BLOCK)
+			    //TODO Updade
+				/*if (rayTrace.type == RayTraceResult.Type.BLOCK)
 				{
 					BlockPos blockpos = rayTrace.getBlockPos();
 					
@@ -93,7 +95,7 @@ public class CustomBoatItem extends Item
 					
 					if (!worldIn.isRemote)
 					{
-						worldIn.spawnEntity(entityboat);
+						worldIn.addEntity(entityboat);
 					}
 					
 					if (!playerIn.abilities.isCreativeMode)
@@ -102,7 +104,7 @@ public class CustomBoatItem extends Item
 					}
 					return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
 				}
-				
+				*/
 				return new ActionResult<>(ActionResultType.PASS, itemstack);
 			}
 		}
@@ -140,7 +142,7 @@ public class CustomBoatItem extends Item
 				d3 = 0.0D;
 			}
 			Entity entityBoat = boatItem.provider.createBoat(stack, world, d0, d1 + d3, d2);
-			world.spawnEntity(entityBoat);
+			world.addEntity(entityBoat);
 			stack.shrink(1);
 			return stack;
 		}

@@ -42,7 +42,7 @@ public class BugNetItem extends Item
 					{
 						ItemEntity item = new ItemEntity(worldIn, pos.getX(), pos.getY() + 0.5, pos.getZ(), new ItemStack(MinestuckItems.GOLDEN_GRASSHOPPER, 1));
 						worldIn.addEntity(item);
-						playerIn.getHeldItemMainhand().damageItem(1, playerIn);
+						playerIn.getHeldItemMainhand().damageItem(1, playerIn, PlayerIn -> playerIn.sendBreakAnimation(Hand.MAIN_HAND));
 						
 						return true;
 					}
@@ -50,7 +50,7 @@ public class BugNetItem extends Item
 					{
 						ItemEntity item = new ItemEntity(worldIn, pos.getX(), pos.getY() + 0.5, pos.getZ(), new ItemStack(MinestuckItems.GRASSHOPPER, 1));
 						worldIn.addEntity(item);
-						playerIn.getHeldItemMainhand().damageItem(1, playerIn);
+						playerIn.getHeldItemMainhand().damageItem(1, playerIn, PlayerIn -> playerIn.sendBreakAnimation(Hand.MAIN_HAND));
 						
 						return true;
 					}

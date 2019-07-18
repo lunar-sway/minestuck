@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -49,9 +50,10 @@ public class PogoWeaponItem extends WeaponItem
 	{
 		if (player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder() && !player.isInWater() && !player.isPassenger())
 		{
-			double knockbackModifier = 1D - target.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getValue();
-			target.motionY = Math.max(target.motionY, knockbackModifier * Math.min(pogoMotion * 2, Math.abs(player.motionY) + target.motionY + pogoMotion));
-			player.motionY = 0;
+			double knockbackModifier = 1D - target.getAttributes().getAttributeInstance(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getValue();
+			double targetMotionY = Math.max(target.getMotion().y, knockbackModifier * Math.min(pogoMotion* 2, Math.abs(player.getMotion().y) + target.getMotion().y + pogoMotion));
+			target.setMotion(target.getMotion().x, targetMotionY, target.getMotion().z);
+			player.setMotion(player.getMotion().x, 0, player.getMotion().z);
 			player.fallDistance = 0;
 		}
 	}
@@ -60,26 +62,32 @@ public class PogoWeaponItem extends WeaponItem
 	{
 		if (worldIn.getBlockState(pos).getBlock() != Blocks.AIR)
 		{
-			double velocity = Math.max(player.motionY, Math.min(pogoMotion * 2, Math.abs(player.motionY) + pogoMotion));
+			double playerMotionX;
+			double playerMotionY;
+			double playerMotionZ;
+			double velocity = Math.max(player.getMotion().y, Math.min(pogoMotion * 2, Math.abs(player.getMotion().y) + pogoMotion));
 			final float HORIZONTAL_Y = 6f;
 			switch (facing.getAxis())
 			{
 				case X:
-					velocity += Math.abs(player.motionX) / 2;
-					player.motionX = velocity * facing.getDirectionVec().getX();
-					player.motionY = velocity / HORIZONTAL_Y;
+					velocity += Math.abs(player.getMotion().x) / 2;
+					playerMotionX = velocity * facing.getDirectionVec().getX();
+					playerMotionY = velocity / HORIZONTAL_Y;
+					player.setMotion(playerMotionX, playerMotionY, player.getMotion().z);
 					break;
 				case Y:
-					player.motionY = velocity * facing.getDirectionVec().getY();
+					playerMotionY = velocity * facing.getDirectionVec().getY();
+					player.setMotion(player.getMotion().x, playerMotionY, player.getMotion().y);
 					break;
 				case Z:
-					velocity += Math.abs(player.motionZ) / 2;
-					player.motionZ = velocity * facing.getDirectionVec().getZ();
-					player.motionY = velocity / HORIZONTAL_Y;
+					velocity += Math.abs(player.getMotion().z) / 2;
+					playerMotionY = velocity / HORIZONTAL_Y;
+					playerMotionZ = velocity * facing.getDirectionVec().getZ();
+					player.setMotion(player.getMotion().x, playerMotionY, playerMotionZ);
 					break;
 			}
 			player.fallDistance = 0;
-			stack.damageItem(1, player);
+			stack.damageItem(1, player, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
 			return ActionResultType.SUCCESS;
 		}
 		return ActionResultType.PASS;

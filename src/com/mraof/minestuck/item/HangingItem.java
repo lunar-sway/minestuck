@@ -37,7 +37,7 @@ public class HangingItem extends Item
 				if (!worldIn.isRemote)
 				{
 					entityhanging.playPlaceSound();
-					worldIn.spawnEntity(entityhanging);
+					worldIn.addEntity(entityhanging);
 				}
 				
 				stack.shrink(1);

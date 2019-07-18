@@ -2,6 +2,7 @@ package com.mraof.minestuck.item.weapon;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.item.UseAction;
 import net.minecraft.item.IItemTier;
@@ -49,7 +50,7 @@ public class ConsumableWeaponItem extends WeaponItem
 	@Override
 	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving)
 	{
-		stack.damageItem(this.damageTaken, entityLiving);
+		stack.damageItem(this.damageTaken, entityLiving, entity -> entity.sendBreakAnimation(Hand.MAIN_HAND));
 		this.onFoodEaten(stack, worldIn, entityLiving);
 		
 		if(entityLiving instanceof PlayerEntity)
