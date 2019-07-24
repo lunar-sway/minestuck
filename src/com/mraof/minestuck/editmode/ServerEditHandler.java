@@ -417,6 +417,13 @@ public class ServerEditHandler
 			event.setCanceled(true);
 	}
 	
+	@SubscribeEvent(priority=EventPriority.NORMAL)
+	public void onEntityInteractEvent(PlayerInteractEvent.EntityInteract event)
+	{
+		if(!event.getEntity().world.isRemote && getData(event.getEntityPlayer()) != null)
+			event.setCanceled(true);
+	}
+	
 	/**
 	 * Used on both server and client side.
 	 */
