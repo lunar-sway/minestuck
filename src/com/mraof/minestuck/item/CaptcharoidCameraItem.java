@@ -13,10 +13,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.Hand;
+import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 
 public class CaptcharoidCameraItem extends Item
@@ -34,6 +32,8 @@ public class CaptcharoidCameraItem extends Item
 		BlockPos pos = context.getPos();
 		PlayerEntity player = context.getPlayer();
 		Direction facing = context.getFace();
+		Boolean inside = context.func_221533_k();
+
 		//pos.offset(facing).offset(facing.rotateY()).up(), pos.offset(facing.getOpposite()).offset(facing.rotateYCCW()).down()
 		if(!worldIn.isRemote) 
 		{
@@ -47,15 +47,15 @@ public class CaptcharoidCameraItem extends Item
 				if(item.isEmpty()) item = new ItemStack(Items.ITEM_FRAME);
 				
 				player.inventory.addItemStackToInventory(AlchemyRecipes.createGhostCard(item));
-				context.getItem().damageItem(1, player);
+				context.getItem().damageItem(1, player, (playerEntity) -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
 			}
 			else
 			{
 				BlockState state = worldIn.getBlockState(pos);
-				ItemStack block = state.getPickBlock(new RayTraceResult(new Vec3d(context.getHitX(), context.getHitY(), context.getHitZ()), facing, pos), worldIn, pos, player);
+				ItemStack block = state.getPickBlock(new BlockRayTraceResult(context.getHitVec(), facing, pos, inside), worldIn, pos, player);
 				
 				player.inventory.addItemStackToInventory(AlchemyRecipes.createGhostCard(block));
-				context.getItem().damageItem(1, player);
+				context.getItem().damageItem(1, player,  (playerEntity) -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
 			}
 			return ActionResultType.PASS;
 		}

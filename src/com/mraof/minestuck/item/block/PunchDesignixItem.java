@@ -48,8 +48,8 @@ public class PunchDesignixItem extends BlockItem
 			Direction placedFacing = context.getPlacementHorizontalFacing().getOpposite();
 			ItemStack itemstack = context.getItem();
 			
-			if(placedFacing == Direction.EAST && context.getHitZ() >= 0.5F || placedFacing == Direction.WEST && context.getHitZ() < 0.5F
-					|| placedFacing == Direction.SOUTH && context.getHitX() < 0.5F || placedFacing == Direction.NORTH && context.getHitX() >= 0.5F)
+			if(placedFacing == Direction.EAST && context.getHitVec().z >= 0.5F || placedFacing == Direction.WEST && context.getHitVec().z < 0.5F
+					|| placedFacing == Direction.SOUTH && context.getHitVec().x < 0.5F || placedFacing == Direction.NORTH && context.getHitVec().x >= 0.5F)
 				pos = pos.offset(placedFacing.rotateY());
 			
 			if (!itemstack.isEmpty())
@@ -89,8 +89,8 @@ public class PunchDesignixItem extends BlockItem
 		
 		Direction facing = context.getPlacementHorizontalFacing().getOpposite();
 		
-		if(facing == Direction.EAST && context.getHitZ() >= 0.5F || facing == Direction.WEST && context.getHitZ() < 0.5F
-				|| facing == Direction.SOUTH && context.getHitX() < 0.5F || facing == Direction.NORTH && context.getHitX() >= 0.5F)
+		if(facing == Direction.EAST && context.getHitVec().z >= 0.5F || facing == Direction.WEST && context.getHitVec().z < 0.5F
+				|| facing == Direction.SOUTH && context.getHitVec().x < 0.5F || facing == Direction.NORTH && context.getHitVec().x >= 0.5F)
 			pos = pos.offset(facing.rotateY());
 		
 		world.setBlockState(pos, MinestuckBlocks.PUNCH_DESIGNIX.LEFT_LEG.getDefaultState().with(PunchDesignixBlock.FACING, facing), 11);

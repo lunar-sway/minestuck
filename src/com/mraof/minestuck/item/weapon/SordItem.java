@@ -24,7 +24,7 @@ public class SordItem extends WeaponItem
 			ItemEntity sord = new ItemEntity(attacker.world, attacker.posX, attacker.posY, attacker.posZ, itemStack.copy());
 			sord.getItem().setCount(1);
 			sord.setPickupDelay(40);
-			attacker.world.spawnEntity(sord);
+			attacker.world.addEntity(sord);
 			itemStack.shrink(1);
 		}
 		return super.hitEntity(itemStack, target, attacker);

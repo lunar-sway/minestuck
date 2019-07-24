@@ -63,7 +63,7 @@ public class LongForgottenWarhornItem extends Item
 			{
 				playerIn.addPotionEffect(new EffectInstance(Effects.BLINDNESS, 15, 1));
 			}
-			item.damageItem(durability, playerIn);
+			item.damageItem(durability, playerIn, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
 			playerIn.world.playSound(null, playerIn.posX, playerIn.posY, playerIn.posZ, MinestuckSoundHandler.soundWarhorn, SoundCategory.AMBIENT, 1.5F, 1.0F);
 		}
 		if(worldIn.isRemote)

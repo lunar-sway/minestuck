@@ -3,10 +3,11 @@ package com.mraof.minestuck.client.settings;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.network.EffectTogglePacket;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.gui.inventory.GuiContainerCreative;
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.client.gui.screen.inventory.CreativeScreen;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.util.InputMappings;
+import net.minecraft.inventory.container.Container;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -78,16 +79,18 @@ public class MinestuckKeyHandler
 	@SubscribeEvent
 	public void onTick(TickEvent.ClientTickEvent event)
 	{
-		if(InputMappings.isKeyDown(captchaKey.getKey().getKeyCode()) && !captchaKeyPressed) {
+		//TODO replace with a long that works
+		long test = 1;
+		if(InputMappings.isKeyDown(test,captchaKey.getKey().getKeyCode()) && !captchaKeyPressed) {
 
 				//This statement is here because for some reason 'slotNumber' always returns as 0 if it is referenced inside the creative inventory.
-			if (Minecraft.getInstance().currentScreen instanceof GuiContainerCreative && Minecraft.getInstance().player.openContainer instanceof GuiContainerCreative.ContainerCreative && ((GuiContainer)Minecraft.getInstance().currentScreen).getSlotUnderMouse() != null && ((GuiContainer)Minecraft.getInstance().currentScreen).getSlotUnderMouse().getHasStack())
-				MinestuckPacketHandler.sendToServer(CaptchaDeckPacket.captchalogueInv(((GuiContainer)Minecraft.getInstance().currentScreen).getSlotUnderMouse().getSlotIndex()));
-			else if(Minecraft.getInstance().currentScreen instanceof GuiContainer && ((GuiContainer)Minecraft.getInstance().currentScreen).getSlotUnderMouse() != null && ((GuiContainer)Minecraft.getInstance().currentScreen).getSlotUnderMouse().getHasStack())
-				MinestuckPacketHandler.sendToServer(CaptchaDeckPacket.captchalogueInv(((GuiContainer)Minecraft.getInstance().currentScreen).getSlotUnderMouse().slotNumber));
+			if (Minecraft.getInstance().currentScreen instanceof CreativeScreen && Minecraft.getInstance().player.openContainer instanceof CreativeScreen.CreativeContainer && ((ContainerScreen)Minecraft.getInstance().currentScreen).getSlotUnderMouse() != null && ((ContainerScreen)Minecraft.getInstance().currentScreen).getSlotUnderMouse().getHasStack())
+				MinestuckPacketHandler.sendToServer(CaptchaDeckPacket.captchalogueInv(((ContainerScreen)Minecraft.getInstance().currentScreen).getSlotUnderMouse().getSlotIndex()));
+			else if(Minecraft.getInstance().currentScreen instanceof ContainerScreen && ((ContainerScreen)Minecraft.getInstance().currentScreen).getSlotUnderMouse() != null && ((ContainerScreen)Minecraft.getInstance().currentScreen).getSlotUnderMouse().getHasStack())
+				MinestuckPacketHandler.sendToServer(CaptchaDeckPacket.captchalogueInv(((ContainerScreen)Minecraft.getInstance().currentScreen).getSlotUnderMouse().slotNumber));
 		}
 		
-		captchaKeyPressed = InputMappings.isKeyDown(captchaKey.getKey().getKeyCode());
+		captchaKeyPressed = InputMappings.isKeyDown(test,captchaKey.getKey().getKeyCode());
 	}
 	
 }

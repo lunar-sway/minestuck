@@ -51,8 +51,8 @@ public class TotemLatheItem extends BlockItem
 			
 			pos = pos.offset(placedFacing.rotateY());
 			
-			if(placedFacing == Direction.EAST && context.getHitZ() >= 0.5F || placedFacing == Direction.WEST && context.getHitZ() < 0.5F
-					|| placedFacing == Direction.SOUTH && context.getHitX() < 0.5F || placedFacing == Direction.NORTH && context.getHitX() >= 0.5F)
+			if(placedFacing == Direction.EAST && context.getHitVec().z >= 0.5F || placedFacing == Direction.WEST && context.getHitVec().z < 0.5F
+					|| placedFacing == Direction.SOUTH && context.getHitVec().x < 0.5F || placedFacing == Direction.NORTH && context.getHitVec().x >= 0.5F)
 				pos = pos.offset(placedFacing.rotateY());
 			
 			if (!itemstack.isEmpty())
@@ -95,8 +95,8 @@ public class TotemLatheItem extends BlockItem
 			
 			pos = pos.offset(facing.rotateY());
 			
-			if(facing == Direction.EAST && context.getHitZ() >= 0.5F || facing == Direction.WEST && context.getHitZ() < 0.5F
-					|| facing == Direction.SOUTH && context.getHitX() < 0.5F || facing == Direction.NORTH && context.getHitX() >= 0.5F)
+			if(facing == Direction.EAST && context.getHitVec().z >= 0.5F || facing == Direction.WEST && context.getHitVec().z < 0.5F
+					|| facing == Direction.SOUTH && context.getHitVec().x < 0.5F || facing == Direction.NORTH && context.getHitVec().x >= 0.5F)
 				pos = pos.offset(facing.rotateY());
 			
 			world.setBlockState(pos, MinestuckBlocks.TOTEM_LATHE.CARD_SLOT.getDefaultState().with(TotemLatheBlock.FACING, facing));
