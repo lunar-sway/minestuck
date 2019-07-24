@@ -6,17 +6,33 @@
             "entries": [
                 {
                     "type": "item",
-                    "name": "minecraft:planks",
-                    "weight": 8,
-                    "functions": [
-                        {
-                            "function": "set_data",
-                            "data": {
-                                "min": 0,
-                                "max": 5
-                            }
-                        }
-                    ]
+                    "name": "minecraft:oak_planks",
+                    "weight": 2
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:spruce_planks",
+                    "weight": 2
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:birch_planks",
+                    "weight": 2
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:jungle_planks",
+                    "weight": 2
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:dark_oak_planks",
+                    "weight": 2
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:acacia_planks",
+                    "weight": 2
                 },
                 {
                     "type": "item",
@@ -60,7 +76,7 @@
                 },
                 {
                     "type": "item",
-                    "name": "minecraft:deadbush",
+                    "name": "minecraft:dead_bush",
                     "weight": 10
                 },
                 {
@@ -75,7 +91,7 @@
                 },
                 {
                     "type": "item",
-                    "name": "minecraft:wooden_button",
+                    "name": "minecraft:birch_button",
                     "weight": 5
                 },
                 {
@@ -155,18 +171,12 @@
                 },
                 {
                     "type": "item",
-                    "name": "minestuck:beverage",
+                    "name": "minestuck:tab",
                     "weight": 5,
                     "conditions": [
                         {
                             "condition": "minestuck:consort",
                             "consort": "salamander"
-                        }
-                    ],
-                    "functions": [
-                        {
-                            "function": "set_data",
-                            "data": 0
                         }
                     ]
                 },

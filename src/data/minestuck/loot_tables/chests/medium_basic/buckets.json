@@ -29,63 +29,34 @@
                     "quality": 0
                 },
                 {
-                    "entryName": "oil_bucket",
                     "type": "item",
-                    "name": "minestuck:minestuck_bucket",
+                    "name": "minestuck:oil_bucket",
                     "weight": 5,
                     "quality": 0
                 },
                 {
-                    "entryName": "blood_bucket",
                     "type": "item",
-                    "name": "minestuck:minestuck_bucket",
+                    "name": "minestuck:blood_bucket",
                     "weight": 5,
-                    "quality": 0,
-                    "functions": [
-                        {
-                            "function": "set_data",
-                            "data": 1
-                        }
-                    ]
+                    "quality": 0
                 },
                 {
-                    "entryName": "brain_juice_bucket",
                     "type": "item",
-                    "name": "minestuck:minestuck_bucket",
+                    "name": "minestuck:brain_juice_bucket",
                     "weight": 5,
-                    "quality": 0,
-                    "functions": [
-                        {
-                            "function": "set_data",
-                            "data": 2
-                        }
-                    ]
+                    "quality": 0
                 },
                 {
-                    "entryName": "watercolors_bucket",
                     "type": "item",
-                    "name": "minestuck:minestuck_bucket",
+                    "name": "minestuck:water_colors_bucket",
                     "weight": 5,
-                    "quality": 0,
-                    "functions": [
-                        {
-                            "function": "set_data",
-                            "data": 3
-                        }
-                    ]
+                    "quality": 0
                 },
                 {
-                    "entryName": "ender_bucket",
                     "type": "item",
-                    "name": "minestuck:minestuck_bucket",
+                    "name": "minestuck:ender_bucket",
                     "weight": 5,
-                    "quality": 0,
-                    "functions": [
-                        {
-                            "function": "set_data",
-                            "data": 4
-                        }
-                    ]
+                    "quality": 0
                 }
             ]
         }

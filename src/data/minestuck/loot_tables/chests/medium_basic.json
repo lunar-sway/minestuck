@@ -243,7 +243,8 @@
                     ],
                     "type": "loot_table",
                     "name": "minestuck:chests/medium_basic/silence",
-                    "weight": 1 //Increase when more loot is added
+                    "weight": 1,
+                    "_comment": "Increase the weight when more loot is added"
                 },
                 {
                     "conditions": [
@@ -254,7 +255,8 @@
                     ],
                     "type": "loot_table",
                     "name": "minestuck:chests/medium_basic/thought",
-                    "weight": 3 //Increase when more loot is added
+                    "weight": 3,
+                    "_comment": "Increase the weight when more loot is added"
                 },
                 {
                     "conditions": [
@@ -265,7 +267,8 @@
                     ],
                     "type": "loot_table",
                     "name": "minestuck:chests/medium_basic/thunder",
-                    "weight": 0 //Increase when more loot is added
+                    "weight": 0,
+                    "_comment": "Increase the weight when more loot is added"
                 },
                 {
                     "conditions": [
@@ -276,7 +279,8 @@
                     ],
                     "type": "loot_table",
                     "name": "minestuck:chests/medium_basic/towers",
-                    "weight": 3 //Increase when more loot is added
+                    "weight": 3,
+                    "_comment": "Increase the weight when more loot is added"
                 },
                 {
                     "conditions": [
@@ -287,7 +291,8 @@
                     ],
                     "type": "loot_table",
                     "name": "minestuck:chests/medium_basic/wind",
-                    "weight": 1 //Increase when more loot is added
+                    "weight": 1,
+                    "_comment": "Increase the weight when more loot is added"
                 }
             ]
         }

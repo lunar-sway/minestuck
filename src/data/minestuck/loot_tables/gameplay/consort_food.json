@@ -46,7 +46,7 @@
                 },
                 {
                     "type": "item",
-                    "name": "minestuck:bug_on_stick",
+                    "name": "minestuck:bug_on_a_stick",
                     "weight": 8,
                     "functions": [
                         {
@@ -405,9 +405,8 @@
                     ]
                 },
                 {
-                    "entryName": "cocoa_beans",
                     "type": "item",
-                    "name": "minecraft:dye",
+                    "name": "minecraft:cocoa_beans",
                     "weight": 2,
                     "functions": [
                         {
@@ -416,10 +415,6 @@
                                 "min": 3,
                                 "max": 6
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 3
                         }
                     ],
                     "conditions": [
@@ -697,9 +692,8 @@
                     ]
                 },
                 {
-                    "entryName": "orange_faygo",
                     "type": "item",
-                    "name": "minestuck:beverage",
+                    "name": "minestuck:orange_faygo",
                     "weight": 2,
                     "functions": [
                         {
@@ -708,10 +702,6 @@
                                 "min": 1,
                                 "max": 3
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 1
                         }
                     ],
                     "conditions": [
@@ -722,9 +712,8 @@
                     ]
                 },
                 {
-                    "entryName": "candy_apple_faygo",
                     "type": "item",
-                    "name": "minestuck:beverage",
+                    "name": "minestuck:candy_apple_faygo",
                     "weight": 2,
                     "functions": [
                         {
@@ -733,10 +722,6 @@
                                 "min": 1,
                                 "max": 3
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 2
                         }
                     ],
                     "conditions": [
@@ -747,9 +732,8 @@
                     ]
                 },
                 {
-                    "entryName": "cola_faygo",
                     "type": "item",
-                    "name": "minestuck:beverage",
+                    "name": "minestuck:faygo_cola",
                     "weight": 2,
                     "functions": [
                         {
@@ -758,10 +742,6 @@
                                 "min": 1,
                                 "max": 3
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 3
                         }
                     ],
                     "conditions": [
@@ -772,9 +752,8 @@
                     ]
                 },
                 {
-                    "entryName": "cotton_candy_faygo",
                     "type": "item",
-                    "name": "minestuck:beverage",
+                    "name": "minestuck:cotton_candy_faygo",
                     "weight": 2,
                     "functions": [
                         {
@@ -783,10 +762,6 @@
                                 "min": 1,
                                 "max": 3
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 4
                         }
                     ],
                     "conditions": [
@@ -797,9 +772,8 @@
                     ]
                 },
                 {
-                    "entryName": "creme_soda_faygo",
                     "type": "item",
-                    "name": "minestuck:beverage",
+                    "name": "minestuck:creme_soda_faygo",
                     "weight": 2,
                     "functions": [
                         {
@@ -808,10 +782,6 @@
                                 "min": 1,
                                 "max": 3
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 5
                         }
                     ],
                     "conditions": [
@@ -822,9 +792,8 @@
                     ]
                 },
                 {
-                    "entryName": "grape_faygo",
                     "type": "item",
-                    "name": "minestuck:beverage",
+                    "name": "minestuck:grape_faygo",
                     "weight": 2,
                     "functions": [
                         {
@@ -833,10 +802,6 @@
                                 "min": 1,
                                 "max": 3
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 6
                         }
                     ],
                     "conditions": [
@@ -847,9 +812,8 @@
                     ]
                 },
                 {
-                    "entryName": "moonmist_faygo",
                     "type": "item",
-                    "name": "minestuck:beverage",
+                    "name": "minestuck:moon_mist_faygo",
                     "weight": 2,
                     "functions": [
                         {
@@ -858,10 +822,6 @@
                                 "min": 1,
                                 "max": 3
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 7
                         }
                     ],
                     "conditions": [
@@ -872,9 +832,8 @@
                     ]
                 },
                 {
-                    "entryName": "peach_faygo",
                     "type": "item",
-                    "name": "minestuck:beverage",
+                    "name": "minestuck:peach_faygo",
                     "weight": 2,
                     "functions": [
                         {
@@ -883,10 +842,6 @@
                                 "min": 1,
                                 "max": 3
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 8
                         }
                     ],
                     "conditions": [
@@ -897,9 +852,8 @@
                     ]
                 },
                 {
-                    "entryName": "redpop_faygo",
                     "type": "item",
-                    "name": "minestuck:beverage",
+                    "name": "minestuck:redpop_faygo",
                     "weight": 2,
                     "functions": [
                         {
@@ -908,10 +862,6 @@
                                 "min": 1,
                                 "max": 3
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 9
                         }
                     ],
                     "conditions": [
@@ -991,9 +941,8 @@
                     ]
                 },
                 {
-                    "entryName": "fish",
                     "type": "item",
-                    "name": "minecraft:fish",
+                    "name": "minecraft:cod",
                     "weight": 8,
                     "functions": [
                         {
@@ -1052,9 +1001,8 @@
                     ]
                 },
                 {
-                    "entryName": "tab",
                     "type": "item",
-                    "name": "minestuck:beverage",
+                    "name": "minestuck:tab",
                     "weight": 8,
                     "functions": [
                         {
@@ -1063,10 +1011,6 @@
                                 "min": 3,
                                 "max": 6
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 0
                         }
                     ],
                     "conditions": [
@@ -1117,8 +1061,8 @@
                 },
                 {
                     "type": "item",
-                    "name": "minestuck:candy",
-                    "weight": 15,
+                    "name": "minestuck:candy_corn",
+                    "weight": 1,
                     "functions": [
                         {
                             "function": "set_count",
@@ -1126,12 +1070,299 @@
                                 "min": 1,
                                 "max": 4
                             }
-                        },
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:build_gushers",
+                    "weight": 1,
+                    "functions": [
                         {
-                            "function": "set_data",
-                            "data": {
-                                "min": 0,
-                                "max": 21
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:amber_gummy_worm",
+                    "weight": 1,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:caulk_pretzel",
+                    "weight": 1,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:chalk_candy_cigarette",
+                    "weight": 1,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:iodine_licorice",
+                    "weight": 1,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:shale_peep",
+                    "weight": 1,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:tar_licorice",
+                    "weight": 1,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:cobalt_gum",
+                    "weight": 1,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:marble_jawbreaker",
+                    "weight": 1,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:mercury_sixlets",
+                    "weight": 1,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:quartz_jelly_bean",
+                    "weight": 1,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:sulfur_candy_apple",
+                    "weight": 1,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:amethyst_hard_candy",
+                    "weight": 1,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:garnet_twix",
+                    "weight": 1,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:ruby_lollipop",
+                    "weight": 1,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:rust_gummy_eye",
+                    "weight": 1,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:diamond_mint",
+                    "weight": 1,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:gold_candy_ribbon",
+                    "weight": 1,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:uranium_gummy_bear",
+                    "weight": 1,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:artifact_warhead",
+                    "weight": 1,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:zillium_skittles",
+                    "weight": 1,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
                             }
                         }
                     ]

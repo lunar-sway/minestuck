@@ -42,7 +42,7 @@
                 },
                 {
                     "type": "item",
-                    "name": "minestuck:colored_dirt",
+                    "name": "minestuck:blue_dirt",
                     "weight": 15,
                     "quality": -2,
                     "functions": [
@@ -87,7 +87,7 @@
                 },
                 {
                     "type": "item",
-                    "name": "minestuck:minestuck_bucket",
+                    "name": "minestuck:oil_bucket",
                     "weight": 5,
                     "quality": 0
                 },

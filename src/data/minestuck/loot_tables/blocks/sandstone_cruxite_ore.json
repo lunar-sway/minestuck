@@ -24,11 +24,19 @@
                                     }
                                 }
                             ],
-                            "name": "minestuck:uranium_ore_netherrack"
+                            "name": "minestuck:sandstone_cruxite_ore"
                         },
                         {
                             "type": "minecraft:item",
                             "functions": [
+                                {
+                                    "function": "minecraft:set_count",
+                                    "count": {
+                                        "min": 2.0,
+                                        "max": 5.0,
+                                        "type": "minecraft:uniform"
+                                    }
+                                },
                                 {
                                     "function": "minecraft:apply_bonus",
                                     "enchantment": "minecraft:fortune",
@@ -38,7 +46,7 @@
                                     "function": "minecraft:explosion_decay"
                                 }
                             ],
-                            "name": "minestuck:raw_uranium"
+                            "name": "minestuck:raw_cruxite"
                         }
                     ]
                 }

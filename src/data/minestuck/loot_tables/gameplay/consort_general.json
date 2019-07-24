@@ -20,7 +20,7 @@
                 },
                 {
                     "type": "item",
-                    "name": "minestuck:frog_statue_replica",
+                    "name": "minestuck:mini_frog_statue",
                     "weight": 8,
                     "functions": [
                         {
@@ -163,9 +163,8 @@
                     ]
                 },
                 {
-                    "entryName": "lapis",
                     "type": "item",
-                    "name": "minecraft:dye",
+                    "name": "minecraft:lapis_lazuli",
                     "weight": 10,
                     "functions": [
                         {
@@ -174,10 +173,6 @@
                                 "min": 5,
                                 "max": 10
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 4
                         }
                     ],
                     "conditions": [
@@ -279,9 +274,8 @@
                     ]
                 },
                 {
-                    "entryName": "charcoal",
                     "type": "item",
-                    "name": "minecraft:coal",
+                    "name": "minecraft:charcoal",
                     "weight": 10,
                     "functions": [
                         {
@@ -290,10 +284,6 @@
                                 "min": 5,
                                 "max": 10
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 1
                         }
                     ],
                     "conditions": [
@@ -315,7 +305,6 @@
                     ]
                 },
                 {
-                    "entryName": "coal",
                     "type": "item",
                     "name": "minecraft:coal",
                     "weight": 10,
@@ -326,10 +315,6 @@
                                 "min": 5,
                                 "max": 10
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 0
                         }
                     ],
                     "conditions": [
@@ -432,7 +417,7 @@
                 },
                 {
                     "type": "item",
-                    "name": "minecraft:netherbrick",
+                    "name": "minecraft:nether_brick",
                     "weight": 10,
                     "functions": [
                         {
@@ -463,8 +448,8 @@
                 },
                 {
                     "type": "item",
-                    "name": "minecraft:sapling",
-                    "weight": 10,
+                    "name": "minecraft:oak_sapling",
+                    "weight": 2,
                     "functions": [
                         {
                             "function": "set_count",
@@ -472,12 +457,105 @@
                                 "min": 5,
                                 "max": 10
                             }
-                        },
+                        }
+                    ],
+                    "conditions": [
                         {
-                            "function": "set_data",
-                            "data": {
-                                "min": 0,
-                                "max": 5
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "forest"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:spruce_sapling",
+                    "weight": 2,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 5,
+                                "max": 10
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "forest"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:birch_sapling",
+                    "weight": 2,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 5,
+                                "max": 10
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "forest"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:jungle_sapling",
+                    "weight": 2,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 5,
+                                "max": 10
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "forest"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:dark_oak_sapling",
+                    "weight": 2,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 5,
+                                "max": 10
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "forest"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:acacia_sapling",
+                    "weight": 2,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 5,
+                                "max": 10
                             }
                         }
                     ],
@@ -723,8 +801,8 @@
                                 "min": 1,
                                 "max": 3
                             }
-                        },
-		    ],
+                        }
+		            ],
                     "conditions": [
                         {
                             "condition": "minestuck:land_aspect",
@@ -930,9 +1008,8 @@
                     ]
                 },
                 {
-                    "entryName": "shade_brick",
                     "type": "item",
-                    "name": "minestuck:stone",
+                    "name": "minestuck:shade_bricks",
                     "weight": 10,
                     "functions": [
                         {
@@ -941,10 +1018,6 @@
                                 "min": 8,
                                 "max": 20
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 2
                         }
                     ],
                     "conditions": [
@@ -955,9 +1028,8 @@
                     ]
                 },
                 {
-                    "entryName": "shade_smooth",
                     "type": "item",
-                    "name": "minestuck:stone",
+                    "name": "minestuck:smooth_shade_stone",
                     "weight": 6,
                     "functions": [
                         {
@@ -966,10 +1038,6 @@
                                 "min": 8,
                                 "max": 20
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 3
                         }
                     ],
                     "conditions": [
@@ -980,9 +1048,8 @@
                     ]
                 },
                 {
-                    "entryName": "oak",
                     "type": "item",
-                    "name": "minecraft:log",
+                    "name": "minecraft:oak_log",
                     "weight": 10,
                     "functions": [
                         {
@@ -991,10 +1058,6 @@
                                 "min": 8,
                                 "max": 20
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 0
                         }
                     ],
                     "conditions": [
@@ -1005,9 +1068,8 @@
                     ]
                 },
                 {
-                    "entryName": "spruce",
                     "type": "item",
-                    "name": "minecraft:log",
+                    "name": "minecraft:spruce_log",
                     "weight": 6,
                     "functions": [
                         {
@@ -1016,10 +1078,6 @@
                                 "min": 8,
                                 "max": 20
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 1
                         }
                     ],
                     "conditions": [
@@ -1030,9 +1088,8 @@
                     ]
                 },
                 {
-                    "entryName": "birch",
                     "type": "item",
-                    "name": "minecraft:log",
+                    "name": "minecraft:birch_log",
                     "weight": 6,
                     "functions": [
                         {
@@ -1041,10 +1098,6 @@
                                 "min": 8,
                                 "max": 20
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 2
                         }
                     ],
                     "conditions": [
@@ -1055,9 +1108,8 @@
                     ]
                 },
                 {
-                    "entryName": "jungle",
                     "type": "item",
-                    "name": "minecraft:log",
+                    "name": "minecraft:jungle_log",
                     "weight": 10,
                     "functions": [
                         {
@@ -1066,10 +1118,6 @@
                                 "min": 8,
                                 "max": 20
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 3
                         }
                     ],
                     "conditions": [
@@ -1080,9 +1128,8 @@
                     ]
                 },
                 {
-                    "entryName": "coarse",
                     "type": "item",
-                    "name": "minestuck:stone",
+                    "name": "minestuck:coarse_stone",
                     "weight": 10,
                     "functions": [
                         {
@@ -1091,10 +1138,6 @@
                                 "min": 8,
                                 "max": 20
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 0
                         }
                     ],
                     "conditions": [
@@ -1105,9 +1148,8 @@
                     ]
                 },
                 {
-                    "entryName": "coarse_chiseled",
                     "type": "item",
-                    "name": "minestuck:stone",
+                    "name": "minestuck:chiseled_coarse_stone",
                     "weight": 6,
                     "functions": [
                         {
@@ -1116,10 +1158,6 @@
                                 "min": 8,
                                 "max": 20
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 1
                         }
                     ],
                     "conditions": [
@@ -1130,9 +1168,8 @@
                     ]
                 },
                 {
-                    "entryName": "smooth_andesite",
                     "type": "item",
-                    "name": "minecraft:stone",
+                    "name": "minecraft:polished_andesite",
                     "weight": 10,
                     "functions": [
                         {
@@ -1141,10 +1178,6 @@
                                 "min": 8,
                                 "max": 20
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 6
                         }
                     ],
                     "conditions": [
@@ -1155,9 +1188,8 @@
                     ]
                 },
                 {
-                    "entryName": "smooth_granite",
                     "type": "item",
-                    "name": "minecraft:stone",
+                    "name": "minecraft:polished_granite",
                     "weight": 6,
                     "functions": [
                         {
@@ -1166,10 +1198,6 @@
                                 "min": 8,
                                 "max": 20
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 2
                         }
                     ],
                     "conditions": [
@@ -1180,58 +1208,8 @@
                     ]
                 },
                 {
-                    "entryName": "cast_iron",
                     "type": "item",
-                    "name": "minestuck:stone",
-                    "weight": 10,
-                    "functions": [
-                        {
-                            "function": "set_count",
-                            "count": {
-                                "min": 8,
-                                "max": 20
-                            }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 7
-                        }
-                    ],
-                    "conditions": [
-                        {
-                            "condition": "minestuck:land_aspect",
-                            "land_aspect": "heat"
-                        }
-                    ]
-                },
-                {
-                    "entryName": "cast_iron_chiseled",
-                    "type": "item",
-                    "name": "minestuck:stone",
-                    "weight": 6,
-                    "functions": [
-                        {
-                            "function": "set_count",
-                            "count": {
-                                "min": 8,
-                                "max": 20
-                            }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 8
-                        }
-                    ],
-                    "conditions": [
-                        {
-                            "condition": "minestuck:land_aspect",
-                            "land_aspect": "heat"
-                        }
-                    ]
-                },
-                {
-                    "type": "item",
-                    "name": "minecraft:nether_brick",
+                    "name": "minestuck:cast_iron",
                     "weight": 10,
                     "functions": [
                         {
@@ -1251,7 +1229,7 @@
                 },
                 {
                     "type": "item",
-                    "name": "minecraft:red_nether_brick",
+                    "name": "minestuck:chiseled_cast_iron",
                     "weight": 6,
                     "functions": [
                         {
@@ -1270,9 +1248,8 @@
                     ]
                 },
                 {
-                    "entryName": "vine_oak",
                     "type": "item",
-                    "name": "minestuck:log",
+                    "name": "minecraft:nether_bricks",
                     "weight": 10,
                     "functions": [
                         {
@@ -1281,23 +1258,18 @@
                                 "min": 8,
                                 "max": 20
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 0
                         }
                     ],
                     "conditions": [
                         {
                             "condition": "minestuck:land_aspect",
-                            "land_aspect": "forest"
+                            "land_aspect": "heat"
                         }
                     ]
                 },
                 {
-                    "entryName": "flowery_vine_oak",
                     "type": "item",
-                    "name": "minestuck:log",
+                    "name": "minecraft:red_nether_bricks",
                     "weight": 6,
                     "functions": [
                         {
@@ -1306,73 +1278,18 @@
                                 "min": 8,
                                 "max": 20
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 1
                         }
                     ],
                     "conditions": [
                         {
                             "condition": "minestuck:land_aspect",
-                            "land_aspect": "forest"
+                            "land_aspect": "heat"
                         }
                     ]
                 },
                 {
-                    "entryName": "oak2",
                     "type": "item",
-                    "name": "minecraft:log",
-                    "weight": 6,
-                    "functions": [
-                        {
-                            "function": "set_count",
-                            "count": {
-                                "min": 8,
-                                "max": 20
-                            }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 0
-                        }
-                    ],
-                    "conditions": [
-                        {
-                            "condition": "minestuck:land_aspect",
-                            "land_aspect": "forest"
-                        }
-                    ]
-                },
-                {
-                    "entryName": "planks_oak",
-                    "type": "item",
-                    "name": "minecraft:planks",
-                    "weight": 6,
-                    "functions": [
-                        {
-                            "function": "set_count",
-                            "count": {
-                                "min": 8,
-                                "max": 20
-                            }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 0
-                        }
-                    ],
-                    "conditions": [
-                        {
-                            "condition": "minestuck:land_aspect",
-                            "land_aspect": "forest"
-                        }
-                    ]
-                },
-                {
-                    "entryName": "frost_brick",
-                    "type": "item",
-                    "name": "minestuck:stone",
+                    "name": "minestuck:vine_log",
                     "weight": 10,
                     "functions": [
                         {
@@ -1381,10 +1298,86 @@
                                 "min": 8,
                                 "max": 20
                             }
-                        },
+                        }
+                    ],
+                    "conditions": [
                         {
-                            "function": "set_data",
-                            "data": 4
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "forest"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:flowery_vine_log",
+                    "weight": 6,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 8,
+                                "max": 20
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "forest"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:dark_oak_log",
+                    "weight": 6,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 8,
+                                "max": 20
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "forest"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:oak_planks",
+                    "weight": 6,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 8,
+                                "max": 20
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "forest"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:frost_bricks",
+                    "weight": 10,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 8,
+                                "max": 20
+                            }
                         }
                     ],
                     "conditions": [
@@ -1395,9 +1388,8 @@
                     ]
                 },
                 {
-                    "entryName": "frost_tile",
                     "type": "item",
-                    "name": "minestuck:stone",
+                    "name": "minestuck:frost_tile",
                     "weight": 6,
                     "functions": [
                         {
@@ -1406,10 +1398,6 @@
                                 "min": 8,
                                 "max": 20
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 5
                         }
                     ],
                     "conditions": [
@@ -1420,7 +1408,6 @@
                     ]
                 },
                 {
-                    "entryName": "prismarine",
                     "type": "item",
                     "name": "minecraft:prismarine",
                     "weight": 10,
@@ -1431,10 +1418,6 @@
                                 "min": 8,
                                 "max": 20
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 0
                         }
                     ],
                     "conditions": [
@@ -1445,9 +1428,8 @@
                     ]
                 },
                 {
-                    "entryName": "prismarine_bricks",
                     "type": "item",
-                    "name": "minecraft:prismarine",
+                    "name": "minecraft:prismarine_bricks",
                     "weight": 6,
                     "functions": [
                         {
@@ -1456,10 +1438,6 @@
                                 "min": 8,
                                 "max": 20
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 1
                         }
                     ],
                     "conditions": [
@@ -1470,9 +1448,8 @@
                     ]
                 },
                 {
-                    "entryName": "frost_log",
                     "type": "item",
-                    "name": "minestuck:log",
+                    "name": "minestuck:frost_log",
                     "weight": 6,
                     "functions": [
                         {
@@ -1481,10 +1458,6 @@
                                 "min": 8,
                                 "max": 20
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 2
                         }
                     ],
                     "conditions": [
@@ -1535,7 +1508,6 @@
                     ]
                 },
                 {
-                    "entryName": "sandstone",
                     "type": "item",
                     "name": "minecraft:sandstone",
                     "weight": 10,
@@ -1546,10 +1518,6 @@
                                 "min": 8,
                                 "max": 20
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 0
                         }
                     ],
                     "conditions": [
@@ -1561,7 +1529,6 @@
                     ]
                 },
                 {
-                    "entryName": "red_sandstone",
                     "type": "item",
                     "name": "minecraft:red_sandstone",
                     "weight": 10,
@@ -1572,10 +1539,6 @@
                                 "min": 8,
                                 "max": 20
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 0
                         }
                     ],
                     "conditions": [
@@ -1587,9 +1550,8 @@
                     ]
                 },
                 {
-                    "entryName": "smooth_sandstone",
                     "type": "item",
-                    "name": "minecraft:sandstone",
+                    "name": "minecraft:smooth_sandstone",
                     "weight": 10,
                     "functions": [
                         {
@@ -1598,10 +1560,6 @@
                                 "min": 8,
                                 "max": 20
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 2
                         }
                     ],
                     "conditions": [
@@ -1613,9 +1571,8 @@
                     ]
                 },
                 {
-                    "entryName": "red_smooth_sandstone",
                     "type": "item",
-                    "name": "minecraft:red_sandstone",
+                    "name": "minecraft:smooth_red_sandstone",
                     "weight": 10,
                     "functions": [
                         {
@@ -1624,10 +1581,6 @@
                                 "min": 8,
                                 "max": 20
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 2
                         }
                     ],
                     "conditions": [
@@ -1639,9 +1592,8 @@
                     ]
                 },
                 {
-                    "entryName": "chiseled_sandstone",
                     "type": "item",
-                    "name": "minecraft:sandstone",
+                    "name": "minecraft:chiseled_sandstone",
                     "weight": 6,
                     "functions": [
                         {
@@ -1650,10 +1602,6 @@
                                 "min": 8,
                                 "max": 20
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 1
                         }
                     ],
                     "conditions": [
@@ -1665,9 +1613,8 @@
                     ]
                 },
                 {
-                    "entryName": "red_chiseled_sandstone",
                     "type": "item",
-                    "name": "minecraft:red_sandstone",
+                    "name": "minecraft:chiseled_red_sandstone",
                     "weight": 6,
                     "functions": [
                         {
@@ -1676,10 +1623,6 @@
                                 "min": 8,
                                 "max": 20
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 1
                         }
                     ],
                     "conditions": [
@@ -1691,9 +1634,8 @@
                     ]
                 },
                 {
-                    "entryName": "stonebricks",
                     "type": "item",
-                    "name": "minecraft:stonebrick",
+                    "name": "minecraft:stone_bricks",
                     "weight": 10,
                     "functions": [
                         {
@@ -1702,10 +1644,6 @@
                                 "min": 8,
                                 "max": 20
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 0
                         }
                     ],
                     "conditions": [
@@ -1716,9 +1654,8 @@
                     ]
                 },
                 {
-                    "entryName": "stonebricks_chiseled",
                     "type": "item",
-                    "name": "minecraft:stonebrick",
+                    "name": "minecraft:chiseled_stone_bricks",
                     "weight": 6,
                     "functions": [
                         {
@@ -1727,10 +1664,6 @@
                                 "min": 8,
                                 "max": 20
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 3
                         }
                     ],
                     "conditions": [
@@ -1782,7 +1715,7 @@
                 },
                 {
                     "type": "item",
-                    "name": "minestuck:net",
+                    "name": "minestuck:bug_net",
                     "weight": 5,
                     "conditions": [
                         {
@@ -1793,7 +1726,7 @@
                 },
                 {
                     "type": "item",
-                    "name": "minecraft:waterlily",
+                    "name": "minecraft:lily_pad",
                     "weight": 8,
                     "functions": [
                         {

@@ -37,7 +37,7 @@
                         }
                     ],
                     "type": "item",
-                    "name": "minecraft:sandstone",
+                    "name": "minecraft:smooth_sandstone",
                     "weight": 10,
                     "quality": -2,
                     "functions": [
@@ -47,10 +47,6 @@
                                 "min": 1,
                                 "max": 8
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 2
                         }
                     ]
                 },
@@ -64,7 +60,7 @@
                         }
                     ],
                     "type": "item",
-                    "name": "minecraft:sandstone",
+                    "name": "minecraft:chiseled_sandstone",
                     "weight": 4,
                     "quality": -2,
                     "functions": [
@@ -74,10 +70,6 @@
                                 "min": 1,
                                 "max": 2
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 1
                         }
                     ]
                 },
@@ -160,7 +152,7 @@
                         }
                     ],
                     "type": "item",
-                    "name": "minecraft:red_sandstone",
+                    "name": "minecraft:smooth_red_sandstone",
                     "weight": 10,
                     "quality": -2,
                     "functions": [
@@ -170,10 +162,6 @@
                                 "min": 1,
                                 "max": 8
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 2
                         }
                     ]
                 },
@@ -187,7 +175,7 @@
                         }
                     ],
                     "type": "item",
-                    "name": "minecraft:red_sandstone",
+                    "name": "minecraft:chiseled_red_sandstone",
                     "weight": 4,
                     "quality": -2,
                     "functions": [
@@ -197,10 +185,6 @@
                                 "min": 1,
                                 "max": 2
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 1
                         }
                     ]
                 },
@@ -237,7 +221,7 @@
                         }
                     ],
                     "type": "item",
-                    "name": "minecraft:sand",
+                    "name": "minecraft:red_sand",
                     "weight": 8,
                     "quality": -2,
                     "functions": [
@@ -247,10 +231,6 @@
                                 "min": 1,
                                 "max": 5
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 1
                         }
                     ]
                 },

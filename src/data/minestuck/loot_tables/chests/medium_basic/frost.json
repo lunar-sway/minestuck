@@ -36,7 +36,7 @@
                 },
                 {
                     "type": "item",
-                    "name": "minecraft:snow_layer",
+                    "name": "minecraft:snow",
                     "weight": 10,
                     "quality": -2,
                     "functions": [
@@ -51,7 +51,7 @@
                 },
                 {
                     "type": "item",
-                    "name": "minecraft:snow",
+                    "name": "minecraft:snow_block",
                     "weight": 10,
                     "quality": -2,
                     "functions": [
@@ -96,15 +96,9 @@
                 },
                 {
                     "type": "item",
-                    "name": "minecraft:sapling",
+                    "name": "minecraft:spruce_sapling",
                     "weight": 15,
-                    "quality": -1,
-                    "functions": [
-                        {
-                            "function": "set_data",
-                            "data": 1
-                        }
-                    ]
+                    "quality": -1
                 }
             ]
         }

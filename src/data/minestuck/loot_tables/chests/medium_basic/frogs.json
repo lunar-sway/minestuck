@@ -21,7 +21,7 @@
                 },
                 {
                     "type": "item",
-                    "name": "minestuck:net",
+                    "name": "minestuck:bug_net",
                     "weight": 6,
                     "quality": 2,
                     "functions": [
@@ -36,7 +36,7 @@
                 },
                 {
                     "type": "item",
-                    "name": "minecraft:waterlily",
+                    "name": "minecraft:lily_pad",
                     "weight": 9,
                     "quality": -2,
                     "functions": [
@@ -51,7 +51,7 @@
                 },
 				{
                     "type": "item",
-                    "name": "minestuck:frog_statue_replica",
+                    "name": "minestuck:mini_frog_statue",
                     "weight": 5,
                     "quality": 3,
                     "functions": [

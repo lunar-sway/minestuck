@@ -99,22 +99,15 @@
                 },
                 {
                     "type": "item",
-                    "name": "minestuck:candy",
+                    "name": "minestuck:candy_corn",
                     "weight": 3,
                     "quality": 0
                 },
                 {
-                    "entryName": "cocoa_beans",
                     "type": "item",
-                    "name": "minecraft:dye",
+                    "name": "minecraft:cocoa_beans",
                     "weight": 3,
-                    "quality": 0,
-                    "functions": [
-                        {
-                            "function": "set_data",
-                            "data": 3
-                        }
-                    ]
+                    "quality": 0
                 },
                 {
                     "type": "item",

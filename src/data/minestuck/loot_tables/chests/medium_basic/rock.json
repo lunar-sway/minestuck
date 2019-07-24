@@ -66,7 +66,7 @@
                 },
                 {
                     "type": "item",
-                    "name": "minecraft:brick_block",
+                    "name": "minecraft:bricks",
                     "weight": 5,
                     "quality": -1,
                     "functions": [

@@ -12,7 +12,7 @@
                 },
                 {
                     "type": "item",
-                    "name": "minestuck:nightclub",
+                    "name": "minestuck:night_club",
                     "weight": 1,
                     "quality": 1,
                     "functions": [

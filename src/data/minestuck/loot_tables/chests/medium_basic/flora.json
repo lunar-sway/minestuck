@@ -6,30 +6,8 @@
             "entries": [
                 {
                     "type": "item",
-                    "name": "minecraft:red_flower",
-                    "weight": 15,
-                    "quality": -1,
-                    "functions": [
-                        {
-                            "function": "set_data",
-                            "data": {
-                                "min": 0,
-                                "max": 8
-                            }
-			},
-			{
-                            "function": "set_count",
-                            "count": {
-                                "min": 1,
-                                "max": 4
-                            }
-                        }
-                    ]
-                },
-                {
-                    "type": "item",
-                    "name": "minecraft:yellow_flower",
-                    "weight": 14,
+                    "name": "minecraft:dandelion",
+                    "weight": 3,
                     "quality": -1,
                     "functions": [
                         {
@@ -42,19 +20,146 @@
                     ]
                 },
                 {
-                    "entryName": "double_plant_one",
                     "type": "item",
-                    "name": "minecraft:double_plant",
-                    "weight": 12,
-                    "quality": -2,
+                    "name": "minecraft:poppy",
+                    "weight": 3,
+                    "quality": -1,
                     "functions": [
                         {
-                            "function": "set_data",
-                            "data": {
-                                "min": 0,
-                                "max": 1
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
                             }
-                        },
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:blue_orchid",
+                    "weight": 3,
+                    "quality": -1,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:allium",
+                    "weight": 3,
+                    "quality": -1,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:azure_bluet",
+                    "weight": 3,
+                    "quality": -1,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:red_tulip",
+                    "weight": 3,
+                    "quality": -1,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:orange_tulip",
+                    "weight": 3,
+                    "quality": -1,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:white_tulip",
+                    "weight": 3,
+                    "quality": -1,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:pink_tulip",
+                    "weight": 3,
+                    "quality": -1,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:oxeye_daisy",
+                    "weight": 3,
+                    "quality": -1,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:sunflower",
+                    "weight": 6,
+                    "quality": -2,
+                    "functions": [
                         {
                             "function": "set_count",
                             "count": {
@@ -65,19 +170,11 @@
                     ]
                 },
                 {
-                    "entryName": "double_plant_two",
                     "type": "item",
-                    "name": "minecraft:double_plant",
-                    "weight": 12,
+                    "name": "minecraft:lilac",
+                    "weight": 6,
                     "quality": -2,
                     "functions": [
-                        {
-                            "function": "set_data",
-                            "data": {
-                                "min": 4,
-                                "max": 5
-                            }
-                        },
                         {
                             "function": "set_count",
                             "count": {
@@ -89,14 +186,40 @@
                 },
                 {
                     "type": "item",
-                    "name": "minecraft:tallgrass",
+                    "name": "minecraft:rose_bush",
+                    "weight": 6,
+                    "quality": -2,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:peony",
+                    "weight": 6,
+                    "quality": -2,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:fern",
                     "weight": 11,
                     "quality": -2,
                     "functions": [
-                        {
-                            "function": "set_data",
-                            "data": 2
-                        },
                         {
                             "function": "set_count",
                             "count": {

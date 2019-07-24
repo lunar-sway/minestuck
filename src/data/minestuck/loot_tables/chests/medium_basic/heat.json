@@ -146,9 +146,8 @@
                     ]
                 },
                 {
-                    "entryName": "cast_iron",
                     "type": "item",
-                    "name": "minestuck:stone",
+                    "name": "minestuck:cast_iron",
                     "weight": 5,
                     "quality": -1,
                     "functions": [
@@ -158,17 +157,12 @@
                                 "min": 1,
                                 "max": 8
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 7
                         }
                     ]
                 },
                 {
-                    "entryName": "cast_iron_chiseled",
                     "type": "item",
-                    "name": "minestuck:stone",
+                    "name": "minestuck:chiseled_cast_iron",
                     "weight": 3,
                     "quality": -1,
                     "functions": [
@@ -178,10 +172,6 @@
                                 "min": 1,
                                 "max": 3
                             }
-                        },
-                        {
-                            "function": "set_data",
-                            "data": 8
                         }
                     ]
                 }
