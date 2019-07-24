@@ -4,9 +4,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.OreBlock;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.common.ToolType;
 
-import javax.annotation.Nullable;
 import java.util.Random;
 
 public class CustomOreBlock extends OreBlock
@@ -34,38 +32,38 @@ public class CustomOreBlock extends OreBlock
 	public static BlockState getCruxiteState(BlockState ground)
 	{
 		if(ground.getBlock() == Blocks.STONE)
-			return MinestuckBlocks.CRUXITE_ORE_STONE.getDefaultState();
+			return MinestuckBlocks.STONE_CRUXITE_ORE.getDefaultState();
 		else if(ground.getBlock() == Blocks.NETHERRACK)
-			return MinestuckBlocks.CRUXITE_ORE_NETHERRACK.getDefaultState();
+			return MinestuckBlocks.NETHERRACK_CRUXITE_ORE.getDefaultState();
 		else if(ground.getBlock() == Blocks.COBBLESTONE)
-			return MinestuckBlocks.CRUXITE_ORE_COBBLESTONE.getDefaultState();
+			return MinestuckBlocks.COBBLESTONE_CRUXITE_ORE.getDefaultState();
 		else if(ground.getBlock() == Blocks.SANDSTONE)
-			return MinestuckBlocks.CRUXITE_ORE_SANDSTONE.getDefaultState();
+			return MinestuckBlocks.SANDSTONE_CRUXITE_ORE.getDefaultState();
 		else if(ground.getBlock() == Blocks.RED_SANDSTONE)
-			return MinestuckBlocks.CRUXITE_ORE_RED_SANDSTONE.getDefaultState();
+			return MinestuckBlocks.RED_SANDSTONE_CRUXITE_ORE.getDefaultState();
 		else if(ground.getBlock() == Blocks.END_STONE)
-			return MinestuckBlocks.CRUXITE_ORE_END_STONE.getDefaultState();
+			return MinestuckBlocks.END_STONE_CRUXITE_ORE.getDefaultState();
 		else if(ground.getBlock() == MinestuckBlocks.PINK_STONE)
-			return MinestuckBlocks.CRUXITE_ORE_PINK_STONE.getDefaultState();
-		return MinestuckBlocks.CRUXITE_ORE_STONE.getDefaultState();
+			return MinestuckBlocks.PINK_STONE_CRUXITE_ORE.getDefaultState();
+		return MinestuckBlocks.STONE_CRUXITE_ORE.getDefaultState();
 	}
 	
 	public static BlockState getUraniumState(BlockState ground)
 	{
 		if(ground.getBlock() == Blocks.STONE)
-			return MinestuckBlocks.URANIUM_ORE_STONE.getDefaultState();
+			return MinestuckBlocks.STONE_URANIUM_ORE.getDefaultState();
 		else if(ground.getBlock() == Blocks.NETHERRACK)
-			return MinestuckBlocks.URANIUM_ORE_NETHERRACK.getDefaultState();
+			return MinestuckBlocks.NETHERRACK_URANIUM_ORE.getDefaultState();
 		else if(ground.getBlock() == Blocks.COBBLESTONE)
-			return MinestuckBlocks.URANIUM_ORE_COBBLESTONE.getDefaultState();
+			return MinestuckBlocks.COBBLESTONE_URANIUM_ORE.getDefaultState();
 		else if(ground.getBlock() == Blocks.SANDSTONE)
-			return MinestuckBlocks.URANIUM_ORE_SANDSTONE.getDefaultState();
+			return MinestuckBlocks.SANDSTONE_URANIUM_ORE.getDefaultState();
 		else if(ground.getBlock() == Blocks.RED_SANDSTONE)
-			return MinestuckBlocks.URANIUM_ORE_RED_SANDSTONE.getDefaultState();
+			return MinestuckBlocks.RED_SANDSTONE_URANIUM_ORE.getDefaultState();
 		else if(ground.getBlock() == Blocks.END_STONE)
-			return MinestuckBlocks.URANIUM_ORE_END_STONE.getDefaultState();
+			return MinestuckBlocks.END_STONE_URANIUM_ORE.getDefaultState();
 		else if(ground.getBlock() == MinestuckBlocks.PINK_STONE)
-			return MinestuckBlocks.URANIUM_ORE_PINK_STONE.getDefaultState();
-		return MinestuckBlocks.URANIUM_ORE_STONE.getDefaultState();
+			return MinestuckBlocks.PINK_STONE_URANIUM_ORE.getDefaultState();
+		return MinestuckBlocks.STONE_URANIUM_ORE.getDefaultState();
 	}
 }

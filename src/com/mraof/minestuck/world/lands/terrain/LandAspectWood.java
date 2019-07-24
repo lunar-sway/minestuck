@@ -42,12 +42,12 @@ public class LandAspectWood extends TerrainLandAspect
 	@Override
 	public String getPrimaryName()
 	{
-		return "woods";
+		return "wood";
 	}
 
 	@Override
 	public String[] getNames() {
-		return new String[] {"woods","oak","lumber"};
+		return new String[] {"wood","oak","lumber"};
 	}
 	
 	@Override

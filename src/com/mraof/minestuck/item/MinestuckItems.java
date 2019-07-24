@@ -175,7 +175,12 @@ public class MinestuckItems
 	public static Item SHOP_POSTER;
 	
 	//Other
-	//public static Item minestuckBucket = new MinestuckBucketItem();	//TODO Sort out fluids and the bucket
+	public static Item OIL_BUCKET;
+	public static Item BLOOD_BUCKET;
+	public static Item BRAIN_JUICE_BUCKET;
+	public static Item WATER_COLORS_BUCKET;
+	public static Item ENDER_BUCKET;
+	public static Item LIGHT_WATER_BUCKET;
 	public static Item OBSIDIAN_BUCKET;
 	public static Item CAPTCHAROID_CAMERA;
 	public static Item GRIMOIRE;
@@ -202,19 +207,20 @@ public class MinestuckItems
 		registerItemBlock(registry, LIGHT_GRAY_CHESS_DIRT, ModItemGroup.MAIN);
 		registerItemBlock(registry, SKAIA_PORTAL, ModItemGroup.MAIN);
 		
-		registerItemBlock(registry, CRUXITE_ORE_STONE, ModItemGroup.LANDS);
-		registerItemBlock(registry, CRUXITE_ORE_NETHERRACK, ModItemGroup.LANDS);
-		registerItemBlock(registry, CRUXITE_ORE_COBBLESTONE, ModItemGroup.LANDS);
-		registerItemBlock(registry, CRUXITE_ORE_SANDSTONE, ModItemGroup.LANDS);
-		registerItemBlock(registry, CRUXITE_ORE_RED_SANDSTONE, ModItemGroup.LANDS);
-		registerItemBlock(registry, CRUXITE_ORE_END_STONE, ModItemGroup.LANDS);
-		registerItemBlock(registry, CRUXITE_ORE_PINK_STONE, ModItemGroup.LANDS);
-		registerItemBlock(registry, URANIUM_ORE_STONE, ModItemGroup.LANDS);
-		registerItemBlock(registry, URANIUM_ORE_NETHERRACK, ModItemGroup.LANDS);
-		registerItemBlock(registry, URANIUM_ORE_COBBLESTONE, ModItemGroup.LANDS);
-		registerItemBlock(registry, URANIUM_ORE_SANDSTONE, ModItemGroup.LANDS);
-		registerItemBlock(registry, URANIUM_ORE_RED_SANDSTONE, ModItemGroup.LANDS);
-		registerItemBlock(registry, URANIUM_ORE_END_STONE, ModItemGroup.LANDS);
+		registerItemBlock(registry, STONE_CRUXITE_ORE, ModItemGroup.LANDS);
+		registerItemBlock(registry, NETHERRACK_CRUXITE_ORE, ModItemGroup.LANDS);
+		registerItemBlock(registry, COBBLESTONE_CRUXITE_ORE, ModItemGroup.LANDS);
+		registerItemBlock(registry, SANDSTONE_CRUXITE_ORE, ModItemGroup.LANDS);
+		registerItemBlock(registry, RED_SANDSTONE_CRUXITE_ORE, ModItemGroup.LANDS);
+		registerItemBlock(registry, END_STONE_CRUXITE_ORE, ModItemGroup.LANDS);
+		registerItemBlock(registry, PINK_STONE_CRUXITE_ORE, ModItemGroup.LANDS);
+		registerItemBlock(registry, STONE_URANIUM_ORE, ModItemGroup.LANDS);
+		registerItemBlock(registry, NETHERRACK_URANIUM_ORE, ModItemGroup.LANDS);
+		registerItemBlock(registry, COBBLESTONE_URANIUM_ORE, ModItemGroup.LANDS);
+		registerItemBlock(registry, SANDSTONE_URANIUM_ORE, ModItemGroup.LANDS);
+		registerItemBlock(registry, RED_SANDSTONE_URANIUM_ORE, ModItemGroup.LANDS);
+		registerItemBlock(registry, END_STONE_URANIUM_ORE, ModItemGroup.LANDS);
+		registerItemBlock(registry, PINK_STONE_URANIUM_ORE, ModItemGroup.LANDS);
 		registerItemBlock(registry, COAL_ORE_NETHERRACK, ModItemGroup.LANDS);
 		registerItemBlock(registry, COAL_ORE_PINK_STONE, ModItemGroup.LANDS);
 		registerItemBlock(registry, IRON_ORE_END_STONE, ModItemGroup.LANDS);
@@ -581,15 +587,15 @@ public class MinestuckItems
 		registry.register(ARTIFACT_WARHEAD = new Item(new Item.Properties().group(ModItemGroup.MAIN).food(MinestuckFoods.ARTIFACT_WARHEAD)).setRegistryName("artifact_warhead"));
 		registry.register(ZILLIUM_SKITTLES = new Item(new Item.Properties().group(ModItemGroup.MAIN).food(MinestuckFoods.ZILLIUM_SKITTLES)).setRegistryName("zillium_skittles"));
 		registry.register(TAB = new DrinkableItem(new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN).food(MinestuckFoods.TAB)).setRegistryName("tab"));
-		registry.register(FAYGO = new DrinkableItem(new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN).food(MinestuckFoods.FAYGO)).setRegistryName("faygo"));
-		registry.register(FAYGO_CANDY_APPLE = new DrinkableItem(new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN).food(MinestuckFoods.FAYGO_CANDY_APPLE)).setRegistryName("faygo_candy_apple"));
+		registry.register(FAYGO = new DrinkableItem(new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN).food(MinestuckFoods.FAYGO)).setRegistryName("orange_faygo"));
+		registry.register(FAYGO_CANDY_APPLE = new DrinkableItem(new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN).food(MinestuckFoods.FAYGO_CANDY_APPLE)).setRegistryName("candy_apple_faygo"));
 		registry.register(FAYGO_COLA = new DrinkableItem(new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN).food(MinestuckFoods.FAYGO_COLA)).setRegistryName("faygo_cola"));
-		registry.register(FAYGO_COTTON_CANDY = new DrinkableItem(new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN).food(MinestuckFoods.FAYGO_COTTON_CANDY)).setRegistryName("faygo_cotton_candy"));
-		registry.register(FAYGO_CREME = new DrinkableItem(new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN).food(MinestuckFoods.FAYGO_CREME)).setRegistryName("faygo_creme"));
-		registry.register(FAYGO_GRAPE = new DrinkableItem(new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN).food(MinestuckFoods.FAYGO_GRAPE)).setRegistryName("faygo_grape"));
-		registry.register(FAYGO_MOON_MIST = new DrinkableItem(new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN).food(MinestuckFoods.FAYGO_MOON_MIST)).setRegistryName("faygo_moon_mist"));
-		registry.register(FAYGO_PEACH = new DrinkableItem(new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN).food(MinestuckFoods.FAYGO_PEACH)).setRegistryName("faygo_peach"));
-		registry.register(FAYGO_REDPOP = new DrinkableItem(new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN).food(MinestuckFoods.FAYGO_REDPOP)).setRegistryName("faygo_redpop"));
+		registry.register(FAYGO_COTTON_CANDY = new DrinkableItem(new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN).food(MinestuckFoods.FAYGO_COTTON_CANDY)).setRegistryName("cotton_candy_faygo"));
+		registry.register(FAYGO_CREME = new DrinkableItem(new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN).food(MinestuckFoods.FAYGO_CREME)).setRegistryName("creme_soda_faygo"));
+		registry.register(FAYGO_GRAPE = new DrinkableItem(new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN).food(MinestuckFoods.FAYGO_GRAPE)).setRegistryName("grape_faygo"));
+		registry.register(FAYGO_MOON_MIST = new DrinkableItem(new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN).food(MinestuckFoods.FAYGO_MOON_MIST)).setRegistryName("moon_mist_faygo"));
+		registry.register(FAYGO_PEACH = new DrinkableItem(new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN).food(MinestuckFoods.FAYGO_PEACH)).setRegistryName("peach_faygo"));
+		registry.register(FAYGO_REDPOP = new DrinkableItem(new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN).food(MinestuckFoods.FAYGO_REDPOP)).setRegistryName("redpop_faygo"));
 		registry.register(IRRADIATED_STEAK = new Item(new Item.Properties().group(ModItemGroup.MAIN).food(MinestuckFoods.IRRADIATED_STEAK)).setRegistryName("irradiated_steak"));
 		registry.register(SURPRISE_EMBRYO = new SurpriseEmbryoItem(new Item.Properties().group(ModItemGroup.MAIN).food(MinestuckFoods.SURPRISE_EMBRYO)).setRegistryName("surprise_embryo"));
 		registry.register(UNKNOWABLE_EGG = new UnknowableEggItem(new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN).food(MinestuckFoods.UNKNOWABLE_EGG)).setRegistryName("unknowable_egg"));
@@ -603,7 +609,13 @@ public class MinestuckItems
 		registry.register(STONE_SLAB = new Item(new Item.Properties().group(ModItemGroup.LANDS)).setRegistryName("stone_slab"));
 		//registry.register(SHOP_POSTER = new HangingItem((world, pos, facing, stack) -> new EntityShopPoster(world, pos, facing, stack, 0), new Item.Properties().maxStackSize(1).group(ModItemGroup.LANDS)).setRegistryName("shop_poster"));
 		
-		//registry.register(minestuckBucket.setRegistryName("minestuck_bucket"));
+		//TODO Buckets
+		registry.register(OIL_BUCKET = new Item(new Item.Properties().containerItem(Items.BUCKET).maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("oil_bucket"));
+		registry.register(BLOOD_BUCKET = new Item(new Item.Properties().containerItem(Items.BUCKET).maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("blood_bucket"));
+		registry.register(BRAIN_JUICE_BUCKET = new Item(new Item.Properties().containerItem(Items.BUCKET).maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("brain_juice_bucket"));
+		registry.register(WATER_COLORS_BUCKET = new Item(new Item.Properties().containerItem(Items.BUCKET).maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("water_colors_bucket"));
+		registry.register(ENDER_BUCKET = new Item(new Item.Properties().containerItem(Items.BUCKET).maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("ender_bucket"));
+		registry.register(LIGHT_WATER_BUCKET = new Item(new Item.Properties().containerItem(Items.BUCKET).maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("light_water_bucket"));
 		registry.register(OBSIDIAN_BUCKET = new ObsidianBucketItem(new Item.Properties().maxStackSize(1).containerItem(Items.BUCKET).group(ModItemGroup.MAIN)).setRegistryName("obsidian_bucket"));
 		registry.register(CAPTCHAROID_CAMERA = new CaptcharoidCameraItem(new Item.Properties().defaultMaxDamage(64).group(ModItemGroup.MAIN)).setRegistryName("captcharoid_camera"));
 		registry.register(GRIMOIRE = new GrimoireItem(new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("grimoire"));

@@ -22,10 +22,10 @@ public class MinestuckBlocks
 	public static Block SKAIA_PORTAL;
 	
 	//Ores
-	public static Block CRUXITE_ORE_STONE, CRUXITE_ORE_NETHERRACK, CRUXITE_ORE_COBBLESTONE, CRUXITE_ORE_SANDSTONE;
-	public static Block CRUXITE_ORE_RED_SANDSTONE, CRUXITE_ORE_END_STONE, CRUXITE_ORE_PINK_STONE;
-	public static Block URANIUM_ORE_STONE, URANIUM_ORE_NETHERRACK, URANIUM_ORE_COBBLESTONE, URANIUM_ORE_SANDSTONE;
-	public static Block URANIUM_ORE_RED_SANDSTONE, URANIUM_ORE_END_STONE, URANIUM_ORE_PINK_STONE;
+	public static Block STONE_CRUXITE_ORE, NETHERRACK_CRUXITE_ORE, COBBLESTONE_CRUXITE_ORE, SANDSTONE_CRUXITE_ORE;
+	public static Block RED_SANDSTONE_CRUXITE_ORE, END_STONE_CRUXITE_ORE, PINK_STONE_CRUXITE_ORE;
+	public static Block STONE_URANIUM_ORE, NETHERRACK_URANIUM_ORE, COBBLESTONE_URANIUM_ORE, SANDSTONE_URANIUM_ORE;
+	public static Block RED_SANDSTONE_URANIUM_ORE, END_STONE_URANIUM_ORE, PINK_STONE_URANIUM_ORE;
 	public static Block COAL_ORE_NETHERRACK, COAL_ORE_PINK_STONE;
 	public static Block IRON_ORE_END_STONE, IRON_ORE_SANDSTONE, IRON_ORE_SANDSTONE_RED;
 	public static Block GOLD_ORE_SANDSTONE, GOLD_ORE_SANDSTONE_RED, GOLD_ORE_PINK_STONE;
@@ -231,20 +231,20 @@ public class MinestuckBlocks
 		registry.register(LIGHT_GRAY_CHESS_DIRT = new Block(Block.Properties.create(Material.EARTH, MaterialColor.LIGHT_GRAY).hardnessAndResistance(0.5F).harvestTool(ToolType.SHOVEL).sound(SoundType.GROUND)).setRegistryName("light_gray_chess_dirt"));
 		registry.register(SKAIA_PORTAL = new SkaiaPortalBlock(Block.Properties.create(Material.PORTAL, MaterialColor.CYAN).doesNotBlockMovement().lightValue(11).hardnessAndResistance(-1.0F, 3600000.0F)).setRegistryName("skaia_portal"));
 		
-		registry.register(CRUXITE_ORE_STONE = new CustomOreBlock(2, 5, Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("cruxite_ore_stone"));
-		registry.register(CRUXITE_ORE_NETHERRACK = new CustomOreBlock(2, 5, Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("cruxite_ore_netherrack"));
-		registry.register(CRUXITE_ORE_COBBLESTONE = new CustomOreBlock(2, 5, Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("cruxite_ore_cobblestone"));
-		registry.register(CRUXITE_ORE_SANDSTONE = new CustomOreBlock(2, 5, Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("cruxite_ore_sandstone"));
-		registry.register(CRUXITE_ORE_RED_SANDSTONE = new CustomOreBlock(2, 5, Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("cruxite_ore_red_sandstone"));
-		registry.register(CRUXITE_ORE_END_STONE = new CustomOreBlock(2, 5, Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("cruxite_ore_end_stone"));
-		registry.register(CRUXITE_ORE_PINK_STONE = new CustomOreBlock(2, 5, Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("cruxite_ore_pink_stone"));
-		registry.register(URANIUM_ORE_STONE = new CustomOreBlock(2, 5, Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1).lightValue(3)).setRegistryName("uranium_ore_stone"));
-		registry.register(URANIUM_ORE_NETHERRACK = new CustomOreBlock(2, 5, Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1).lightValue(3)).setRegistryName("uranium_ore_netherrack"));
-		registry.register(URANIUM_ORE_COBBLESTONE = new CustomOreBlock(2, 5, Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1).lightValue(3)).setRegistryName("uranium_ore_cobblestone"));
-		registry.register(URANIUM_ORE_SANDSTONE = new CustomOreBlock(2, 5, Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1).lightValue(3)).setRegistryName("uranium_ore_sandstone"));
-		registry.register(URANIUM_ORE_RED_SANDSTONE = new CustomOreBlock(2, 5, Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1).lightValue(3)).setRegistryName("uranium_ore_red_sandstone"));
-		registry.register(URANIUM_ORE_END_STONE = new CustomOreBlock(2, 5, Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1).lightValue(3)).setRegistryName("uranium_ore_end_stone"));
-		registry.register(URANIUM_ORE_PINK_STONE = new CustomOreBlock(2, 5, Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1).lightValue(3)).setRegistryName("uranium_ore_pink_stone"));
+		registry.register(STONE_CRUXITE_ORE = new CustomOreBlock(2, 5, Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("stone_cruxite_ore"));
+		registry.register(NETHERRACK_CRUXITE_ORE = new CustomOreBlock(2, 5, Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("netherrack_cruxite_ore"));
+		registry.register(COBBLESTONE_CRUXITE_ORE = new CustomOreBlock(2, 5, Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("cobblestone_cruxite_ore"));
+		registry.register(SANDSTONE_CRUXITE_ORE = new CustomOreBlock(2, 5, Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("sandstone_cruxite_ore"));
+		registry.register(RED_SANDSTONE_CRUXITE_ORE = new CustomOreBlock(2, 5, Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("red_sandstone_cruxite_ore"));
+		registry.register(END_STONE_CRUXITE_ORE = new CustomOreBlock(2, 5, Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("end_stone_cruxite_ore"));
+		registry.register(PINK_STONE_CRUXITE_ORE = new CustomOreBlock(2, 5, Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("pink_stone_cruxite_ore"));
+		registry.register(STONE_URANIUM_ORE = new CustomOreBlock(2, 5, Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1).lightValue(3)).setRegistryName("stone_uranium_ore"));
+		registry.register(NETHERRACK_URANIUM_ORE = new CustomOreBlock(2, 5, Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1).lightValue(3)).setRegistryName("netherrack_uranium_ore"));
+		registry.register(COBBLESTONE_URANIUM_ORE = new CustomOreBlock(2, 5, Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1).lightValue(3)).setRegistryName("cobblestone_uranium_ore"));
+		registry.register(SANDSTONE_URANIUM_ORE = new CustomOreBlock(2, 5, Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1).lightValue(3)).setRegistryName("sandstone_uranium_ore"));
+		registry.register(RED_SANDSTONE_URANIUM_ORE = new CustomOreBlock(2, 5, Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1).lightValue(3)).setRegistryName("red_sandstone_uranium_ore"));
+		registry.register(END_STONE_URANIUM_ORE = new CustomOreBlock(2, 5, Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1).lightValue(3)).setRegistryName("end_stone_uranium_ore"));
+		registry.register(PINK_STONE_URANIUM_ORE = new CustomOreBlock(2, 5, Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1).lightValue(3)).setRegistryName("pink_stone_uranium_ore"));
 		registry.register(COAL_ORE_NETHERRACK = new CustomOreBlock(0, 2, Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("coal_ore_netherrack"));
 		registry.register(COAL_ORE_PINK_STONE = new CustomOreBlock(0, 2, Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("coal_ore_pink_stone"));
 		registry.register(IRON_ORE_END_STONE = new CustomOreBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("iron_ore_end_stone"));
@@ -474,7 +474,7 @@ public class MinestuckBlocks
 		registry.register(BLENDER = new DecorBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F).sound(SoundType.METAL), DecorBlock.BLENDER_SHAPE).setRegistryName("blender"));
 		registry.register(CHESSBOARD = new DecorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.5F), DecorBlock.CHESSBOARD_SHAPE).setRegistryName("chessboard"));
 		registry.register(MINI_FROG_STATUE = new DecorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.5F), DecorBlock.FROG_STATUE_SHAPE).setRegistryName("mini_frog_statue"));
-		registry.register(GLOWYSTONE_WIRE = new GlowystoneWireBlock(Block.Properties.create(Material.MISCELLANEOUS).hardnessAndResistance(0.0F).lightValue(16).doesNotBlockMovement()).setRegistryName("glowystone_wire"));
+		registry.register(GLOWYSTONE_WIRE = new GlowystoneWireBlock(Block.Properties.create(Material.MISCELLANEOUS).hardnessAndResistance(0.0F).lightValue(16).doesNotBlockMovement()).setRegistryName("glowystone_dust"));
 		
 		/*registry.register(blockOil.setRegistryName("block_oil"));
 		registry.register(blockBlood.setRegistryName("block_blood"));

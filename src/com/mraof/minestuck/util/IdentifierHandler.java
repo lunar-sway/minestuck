@@ -224,9 +224,9 @@ public class IdentifierHandler {
 		
 		private PlayerIdentifier(INBT nbt, String key)
 		{
-			if(nbt instanceof CompoundNBT)
+			if(nbt instanceof StringNBT)
 			{
-				username = ((StringNBT) nbt).getString();
+				username = nbt.getString();
 				useUUID = false;
 			} else if(nbt instanceof ListNBT)
 			{

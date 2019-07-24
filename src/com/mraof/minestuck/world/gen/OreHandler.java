@@ -22,7 +22,6 @@ import com.google.common.base.Predicate;
 import com.mraof.minestuck.block.CustomOreBlock;
 import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.lands.gen.ChunkGeneratorLands;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -38,13 +37,13 @@ public class OreHandler implements IWorldGenerator
 	{
 		if(world.getDimension().isSurfaceWorld() && (generateCruxiteOre || chunkGenerator instanceof ChunkGeneratorLands) && !disableCruxite)
 		{
-			this.addOreSpawn(CRUXITE_ORE_STONE.getDefaultState(), world, random, chunkX * 16, chunkZ * 16, 16, 16,
+			this.addOreSpawn(STONE_CRUXITE_ORE.getDefaultState(), world, random, chunkX * 16, chunkZ * 16, 16, 16,
 					baseCruxiteVeinSize + random.nextInt(bonusCruxiteVeinSize), cruxiteVeinsPerChunk, cruxiteStratumMin, cruxiteStratumMax);
 		}
 		
 		if(world.getDimension().isSurfaceWorld() && (generateUraniumOre || chunkGenerator instanceof ChunkGeneratorLands) && !disableUranium)
 		{
-			this.addOreSpawn(URANIUM_ORE_STONE.getDefaultState(), world, random, chunkX * 16, chunkZ * 16, 16, 16,
+			this.addOreSpawn(STONE_URANIUM_ORE.getDefaultState(), world, random, chunkX * 16, chunkZ * 16, 16, 16,
 					baseUraniumVeinSize + random.nextInt(bonusUraniumVeinSize), uraniumVeinsPerChunk, uraniumStratumMin, uraniumStratumMax);
 		}
 	}
@@ -56,9 +55,9 @@ public class OreHandler implements IWorldGenerator
 		BlockState groundType = Blocks.STONE.getDefaultState();
 		if(world.getDimension() instanceof LandDimension)
 			groundType = world.getChunkProvider().getChunkGenerator().getSettings().getDefaultBlock();
-		if(block.getBlock() == CRUXITE_ORE_STONE)
+		if(block.getBlock() == STONE_CRUXITE_ORE)
 			block = CustomOreBlock.getCruxiteState(groundType);
-		if(block.getBlock() == URANIUM_ORE_STONE)
+		if(block.getBlock() == STONE_URANIUM_ORE)
 			block = CustomOreBlock.getUraniumState(groundType);
 		for(int x = 0; x < chancesToSpawn; x++)
 		{
