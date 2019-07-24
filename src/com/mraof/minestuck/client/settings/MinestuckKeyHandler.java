@@ -79,9 +79,7 @@ public class MinestuckKeyHandler
 	@SubscribeEvent
 	public void onTick(TickEvent.ClientTickEvent event)
 	{
-		//TODO replace with a long that works
-		long test = 1;
-		if(InputMappings.isKeyDown(test,captchaKey.getKey().getKeyCode()) && !captchaKeyPressed) {
+		if(InputMappings.isKeyDown(Minecraft.getInstance().mainWindow.getHandle(), captchaKey.getKey().getKeyCode()) && !captchaKeyPressed) {
 
 				//This statement is here because for some reason 'slotNumber' always returns as 0 if it is referenced inside the creative inventory.
 			if (Minecraft.getInstance().currentScreen instanceof CreativeScreen && Minecraft.getInstance().player.openContainer instanceof CreativeScreen.CreativeContainer && ((ContainerScreen)Minecraft.getInstance().currentScreen).getSlotUnderMouse() != null && ((ContainerScreen)Minecraft.getInstance().currentScreen).getSlotUnderMouse().getHasStack())
@@ -90,7 +88,7 @@ public class MinestuckKeyHandler
 				MinestuckPacketHandler.sendToServer(CaptchaDeckPacket.captchalogueInv(((ContainerScreen)Minecraft.getInstance().currentScreen).getSlotUnderMouse().slotNumber));
 		}
 		
-		captchaKeyPressed = InputMappings.isKeyDown(test,captchaKey.getKey().getKeyCode());
+		captchaKeyPressed = InputMappings.isKeyDown(Minecraft.getInstance().mainWindow.getHandle(), captchaKey.getKey().getKeyCode());
 	}
 	
 }
