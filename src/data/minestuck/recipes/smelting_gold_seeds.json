@@ -1,7 +1,7 @@
 {
   "type": "smelting",
   "ingredient": {
-    "item": "minestuck_gold_seeds"
+    "item": "minestuck:gold_seeds"
   },
   "result": "minecraft:gold_nugget",
   "experience": 0.1,
