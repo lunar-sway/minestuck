@@ -1,6 +1,5 @@
 package com.mraof.minestuck.item;
-//missing Iteleport package
-/*
+
 import static com.mraof.minestuck.MinestuckConfig.artifactRange;
 
 import java.util.HashSet;
@@ -44,9 +43,8 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.Chunk.CreateEntityType;
 import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.dimension.DimensionType;
-import net.minecraftforge.common.util.ITeleporter;
 
-public abstract class CruxiteArtifactItem extends Item implements ITeleporter
+public abstract class CruxiteArtifactItem extends Item
 {
 	private int xDiff;
 	private int yDiff;
@@ -92,7 +90,7 @@ public abstract class CruxiteArtifactItem extends Item implements ITeleporter
 						
 						//Teleports the player to their home in the Medium, without any bells or whistles.
 						BlockPos pos = newWorld.getDimension().getSpawnPoint();
-						Teleport.teleportEntity(player, c.getClientDimension(), null, pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F);
+						//Teleport.teleportEntity(player, c.getClientDimension(), null, pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F);TODO
 						
 						return;
 					}
@@ -109,10 +107,10 @@ public abstract class CruxiteArtifactItem extends Item implements ITeleporter
 					{
 						if(this.prepareDestination(player.getPosition(), player, (ServerWorld) player.world))
 						{
-							if(player.changeDimension(landDimension, this) != null)
+							//if(player.changeDimension(landDimension, this) != null)TODO
 							{
 								SkaianetHandler.get(player.world).onEntry(identifier);
-							} else
+							}// else
 							{
 								player.sendMessage(new StringTextComponent("Entry failed!"));
 							}
@@ -127,11 +125,11 @@ public abstract class CruxiteArtifactItem extends Item implements ITeleporter
 		}
 	}
 	
-	@Override
+	/*@Override
 	public void placeEntity(World world, Entity entity, float yaw)
 	{
 		finalizeDestination(entity, (ServerWorld) entity.world, (ServerWorld) world);
-	}
+	}*/
 	
 	public boolean prepareDestination(BlockPos origin, ServerPlayerEntity player, ServerWorld worldserver0)
 	{
@@ -228,14 +226,14 @@ public abstract class CruxiteArtifactItem extends Item implements ITeleporter
 			Debug.debug("Loading spawn chunks...");
 			for(int chunkX = ((x + xDiff - artifactRange) >> 4) - 1; chunkX <= ((x + xDiff + artifactRange) >> 4) + 2; chunkX++)		//Prevent anything generating on the piece that we move
 				for(int chunkZ = ((z + zDiff - artifactRange) >> 4) - 1; chunkZ <= ((z + zDiff + artifactRange) >> 4) + 2; chunkZ++)	//from the overworld.
-					worldserver1.getChunkProvider().getChunk(chunkX, chunkZ, true, true);
+					worldserver1.getChunkProvider().getChunk(chunkX, chunkZ, true);
 			
 			//This is split into two sections because moves that require block updates should happen after the ones that don't.
 			//This helps to ensure that "anchored" blocks like torches still have the blocks they are anchored to when they update.
 			//Some blocks like this (confirmed for torches, rails, and glowystone) will break themselves if they update without their anchor.
 			Debug.debug("Moving blocks...");
-			HashSet<BlockMove> blockMoves2 = new HashSet<BlockMove>();
-			for(BlockMove move : blockMoves)
+			HashSet<BlockMove> blockMoves2 = new HashSet<>();
+			/*for(BlockMove move : blockMoves)	//TODO
 			{
 				if(move.update)
 					move.copy(worldserver1.getChunk(move.dest));
@@ -245,7 +243,7 @@ public abstract class CruxiteArtifactItem extends Item implements ITeleporter
 			for(BlockMove move : blockMoves2)
 			{
 				move.copy(worldserver1.getChunk(move.dest));
-			}
+			}*/
 			blockMoves2.clear();
 			
 			Debug.debug("Teleporting entities...");
@@ -257,7 +255,7 @@ public abstract class CruxiteArtifactItem extends Item implements ITeleporter
 			while (iterator.hasNext())
 			{
 				Entity e = iterator.next();
-				if(origin.distanceSqToCenter(e.posX, e.posY, e.posZ) <= artifactRange*artifactRange)
+				if(origin.distanceSq(e.posX, e.posY, e.posZ, true) <= artifactRange*artifactRange)
 				{
 					if(MinestuckConfig.entryCrater || e instanceof PlayerEntity || !creative && e instanceof ItemEntity)
 					{
@@ -265,7 +263,7 @@ public abstract class CruxiteArtifactItem extends Item implements ITeleporter
 							ServerEditHandler.reset(ServerEditHandler.getData((PlayerEntity) e));
 						else
 						{
-							e.changeDimension(worldserver1.getDimension().getType(), new PositionTeleporter(e.posX + xDiff, e.posY + yDiff, e.posZ + zDiff));
+							//e.changeDimension(worldserver1.getDimension().getType(), new PositionTeleporter(e.posX + xDiff, e.posY + yDiff, e.posZ + zDiff)); TODO
 						}
 						//These entities should no longer be in the world, and this list is later used for entities that *should* remain.
 						iterator.remove();
@@ -281,7 +279,7 @@ public abstract class CruxiteArtifactItem extends Item implements ITeleporter
 							newEntity.read(nbttagcompound);
 							newEntity.dimension = worldserver1.getDimension().getType();
 							newEntity.setPosition(newEntity.posX + xDiff, newEntity.posY + yDiff, newEntity.posZ + zDiff);
-							worldserver1.spawnEntity(newEntity);
+							worldserver1.addEntity(newEntity);
 						}
 					}
 				}
@@ -346,7 +344,7 @@ public abstract class CruxiteArtifactItem extends Item implements ITeleporter
 			
 			Debug.info("Entry finished");
 		}
-	}*/
+	}
 
 	/**
 	 * Determines if it is appropriate to remove the tile entity in the specified location,
@@ -357,7 +355,7 @@ public abstract class CruxiteArtifactItem extends Item implements ITeleporter
 	 * @param pos The position at which the tile entity is located
 	 * @param creative Whether or not creative-mode rules should be employed
 	 */
-	/*private static void removeTileEntity(ServerWorld worldserver0, BlockPos pos, boolean creative)
+	private static void removeTileEntity(ServerWorld worldserver0, BlockPos pos, boolean creative)
 	{
 		TileEntity tileEntity = worldserver0.getTileEntity(pos);
 		if(tileEntity != null)
@@ -367,7 +365,7 @@ public abstract class CruxiteArtifactItem extends Item implements ITeleporter
 				String name = worldserver0.getBlockState(pos).getBlock().getRegistryName().toString();
 				try {
 					worldserver0.removeTileEntity(pos);
-					worldserver0.removeBlock(pos);
+					//worldserver0.removeBlock(pos); TODO
 				} catch (NullPointerException e) {
 					Logger.getGlobal().warning("Null Pointer Exception encountered when removing " + name + ". "
 							+ "Notify the mod author that the block should make a null check on its tile entity when broken.");
@@ -409,24 +407,24 @@ public abstract class CruxiteArtifactItem extends Item implements ITeleporter
 		ChunkSection blockStorageDst = getBlockStorage(cDst, yDst >> 4);
 		xSrc &= 15; ySrc &= 15; zSrc &= 15; xDst &= 15; yDst &= 15; zDst &= 15;
 		
-		blockStorageDst.set(xDst, yDst, zDst, blockStorageSrc.get(xSrc, ySrc, zSrc));
-		blockStorageDst.setBlockLight(xDst, yDst, zDst, blockStorageSrc.getBlockLight(xSrc, ySrc, zSrc));
+		blockStorageDst.setBlockState(xDst, yDst, zDst, blockStorageSrc.getBlockState(xSrc, ySrc, zSrc));
+		/*blockStorageDst.setBlockLight(xDst, yDst, zDst, blockStorageSrc.getBlockLight(xSrc, ySrc, zSrc));TODO Is this needed anymore
 		if(blockStorageSrc.getSkyLight() != null)
-			blockStorageDst.setSkyLight(xDst, yDst, zDst, blockStorageSrc.getSkyLight(xSrc, ySrc, zSrc));
+			blockStorageDst.setSkyLight(xDst, yDst, zDst, blockStorageSrc.getSkyLight(xSrc, ySrc, zSrc));*/
 	}
 	
 	private static ChunkSection getBlockStorage(Chunk c, int y)
 	{
 		ChunkSection section = c.getSections()[y];
 		if(section == Chunk.EMPTY_SECTION)
-			section = c.getSections()[y] = new ChunkSection(y << 4, c.getWorld().dimension.hasSkyLight());
+			section = c.getSections()[y] = new ChunkSection(y << 4);
 		return section;
 	}
-	*/
+	
 	/**
 	 * Gives the Y-value of the highest non-air block within artifact range of the coordinates provided in the given world.
 	 */
-	/*private static int getTopHeight(ServerWorld world, int x, int y, int z)
+	private static int getTopHeight(ServerWorld world, int x, int y, int z)
 	{
 		Debug.debug("Getting maxY..");
 		int maxY = y;
@@ -513,4 +511,4 @@ public abstract class CruxiteArtifactItem extends Item implements ITeleporter
 			}
 		}
 	}
-}*/
+}

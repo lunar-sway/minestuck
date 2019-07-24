@@ -46,10 +46,10 @@ public class ModTileEntityTypes
 		event.getRegistry().register((TRANSPORTALIZER = TileEntityType.Builder.create(TransportalizerTileEntity::new, MinestuckBlocks.TRANSPORTALIZER).build(null)).setRegistryName("transportalizer"));
 		event.getRegistry().register((ITEM_STACK = TileEntityType.Builder.create(ItemStackTileEntity::new, MinestuckBlocks.CRUXITE_DOWEL, MinestuckBlocks.TOTEM_LATHE.DOWEL_ROD).build(null)).setRegistryName("item_stack"));
 		event.getRegistry().register((URANIUM_COOKER = TileEntityType.Builder.create(UraniumCookerTileEntity::new, MinestuckBlocks.URANIUM_COOKER).build(null)).setRegistryName("uranium_cooker"));
-		event.getRegistry().register((JUMPER_BLOCK = TileEntityType.Builder.create(TileEntityJumperBlock::new).build(null)).setRegistryName("jumper_block"));
-		event.getRegistry().register((ALCHEMITER_UPGRADE = TileEntityType.Builder.create(TileEntityAlchemiterUpgrade::new).build(null)).setRegistryName("alchemiter_upgrade"));
-		event.getRegistry().register((UPGRADE_ALCHEMITER = TileEntityType.Builder.create(TileEntityUpgradedAlchemiter::new).build(null)).setRegistryName("upgrade_alchemiter"));
-		event.getRegistry().register((HOLOPAD = TileEntityType.Builder.create(HolopadTileEntity::new, MinestuckBlocks.HOLOPAD).build(null)).setRegistryName("holopad"));
+		//event.getRegistry().register((JUMPER_BLOCK = TileEntityType.Builder.create(TileEntityJumperBlock::new).build(null)).setRegistryName("jumper_block"));
+		//event.getRegistry().register((ALCHEMITER_UPGRADE = TileEntityType.Builder.create(TileEntityAlchemiterUpgrade::new).build(null)).setRegistryName("alchemiter_upgrade"));
+		//event.getRegistry().register((UPGRADE_ALCHEMITER = TileEntityType.Builder.create(TileEntityUpgradedAlchemiter::new).build(null)).setRegistryName("upgrade_alchemiter"));
+		//event.getRegistry().register((HOLOPAD = TileEntityType.Builder.create(HolopadTileEntity::new, MinestuckBlocks.HOLOPAD).build(null)).setRegistryName("holopad"));
 		event.getRegistry().register((SKAIA_PORTAL = TileEntityType.Builder.create(SkaiaPortalTileEntity::new, MinestuckBlocks.SKAIA_PORTAL).build(null)).setRegistryName("skaia_portal"));
 		event.getRegistry().register((GATE = TileEntityType.Builder.create(GateTileEntity::new, MinestuckBlocks.GATE, MinestuckBlocks.RETURN_NODE).build(null)).setRegistryName("gate"));
 	}

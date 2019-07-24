@@ -1,4 +1,4 @@
-/*package com.mraof.minestuck.item;
+package com.mraof.minestuck.item;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -45,4 +45,4 @@ public class CruxitePotionItem extends CruxiteArtifactItem
 		playerIn.setActiveHand(handIn);
 		return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getHeldItem(handIn));
 	}
-}*/
+}

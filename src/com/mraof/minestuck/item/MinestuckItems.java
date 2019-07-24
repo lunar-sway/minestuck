@@ -527,10 +527,10 @@ public class MinestuckItems
 		registry.register(RAW_URANIUM = new Item(new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("raw_uranium"));
 		registry.register(ENERGY_CORE = new Item(new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("energy_core"));
 		//have to fix Cruxite artifact classes
-		/*
+		
 		registry.register(CRUXITE_APPLE = new CruxiteAppleItem(new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("cruxite_apple"));
 		registry.register(CRUXITE_POTION = new CruxitePotionItem(new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("cruxite_potion"));
-		 */
+		
 		registry.register(CLIENT_DISK = new Item(new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("client_disk"));
 		registry.register(SERVER_DISK = new Item(new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("server_disk"));
 		registry.register(CAPTCHA_CARD = new CaptchaCardItem(new Item.Properties().group(ModItemGroup.MAIN)).setRegistryName("captcha_card"));
@@ -543,7 +543,7 @@ public class MinestuckItems
 		registry.register(SHUNT = new ShuntItem(new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("shunt"));
 		
 		//food
-		registry.register(BUG_ON_A_STICK = new Item(new Item.Properties().group(ModItemGroup.MAIN).food(MinestuckFoods.BUG_ON_A_STICK)).setRegistryName("Bug On A Stick"));
+		registry.register(BUG_ON_A_STICK = new Item(new Item.Properties().group(ModItemGroup.MAIN).food(MinestuckFoods.BUG_ON_A_STICK)).setRegistryName("bug_on_a_stick"));
 		registry.register(CHOCOLATE_BEETLE = new Item(new Item.Properties().group(ModItemGroup.LANDS).food(MinestuckFoods.CHOCOLATE_BEETLE)).setRegistryName("chocolate_beetle"));
 		registry.register(CONE_OF_FLIES = new Item(new Item.Properties().group(ModItemGroup.LANDS).food(MinestuckFoods.CONE_OF_FLIES)).setRegistryName("cone_of_flies"));
 		registry.register(GRASSHOPPER = new Item(new Item.Properties().group(ModItemGroup.LANDS).food(MinestuckFoods.GRASSHOPPER)).setRegistryName("grasshopper"));
