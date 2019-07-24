@@ -46,7 +46,7 @@ public class BlockEndSapling extends BlockBush implements IGrowable
 	@Override
 	public boolean canGrow(World worldIn, BlockPos pos, IBlockState state, boolean isClient)
 	{
-		return worldIn.getMoonPhase()!=4;
+		return worldIn.provider.getMoonPhase(worldIn.getWorldTime()) != 4;
 	}
 	
 	@Override
