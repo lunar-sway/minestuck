@@ -40,6 +40,8 @@ public abstract class PlayerStatsContainerScreen<T extends Container> extends Co
 	public void init()
 	{
 		super.init();
+		minecraft.player.openContainer = this.container;
+		
 		xOffset = (width - guiWidth)/2;
 		yOffset = (height - guiHeight + tabHeight - tabOverlap)/2;
 		this.guiTop = yOffset;

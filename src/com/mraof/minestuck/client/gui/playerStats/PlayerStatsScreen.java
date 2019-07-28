@@ -275,10 +275,11 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 			{
 				int ordinal = (ClientEditHandler.isActive() ? editmodeTab : normalTab).ordinal();
 				int windowId = 200 + ordinal;//ContainerHandler.clientWindowIdStart + ordinal;
-				PlayerStatsContainerScreen guiContainer = (PlayerStatsContainerScreen) (ClientEditHandler.isActive() ? editmodeTab.createGuiInstance(windowId) : normalTab.createGuiInstance(windowId));
+				PlayerStatsContainerScreen containerScreen = (PlayerStatsContainerScreen) (ClientEditHandler.isActive() ? editmodeTab.createGuiInstance(windowId) : normalTab.createGuiInstance(windowId));
 				
-				MinestuckPacketHandler.sendToServer(new MiscContainerPacket(ordinal));
-				mc.displayGuiScreen(guiContainer);
+				mc.displayGuiScreen(containerScreen);
+				if(mc.currentScreen == containerScreen)
+					MinestuckPacketHandler.sendToServer(new MiscContainerPacket(ordinal));
 			}
 			else mc.displayGuiScreen(ClientEditHandler.isActive()? editmodeTab.createGuiInstance():normalTab.createGuiInstance());
 		}
