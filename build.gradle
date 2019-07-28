@@ -39,9 +39,6 @@ sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = co
 minecraft {
     mappings channel: 'snapshot', version: '20190712-1.14.3'
 
-    //replaceIn 'com/mraof/minestuck/Minestuck.java'
-    //replace '@VERSION@', project.version
-
     // Default run configurations.
     // These can be tweaked, removed, or duplicated as needed.
     runs {
@@ -79,7 +76,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.3-27.0.60'
+    minecraft 'net.minecraftforge:forge:1.14.4-28.0.21'
 
     def mc_version = "1.14.3"
     def jei_version = "6.0.0.7"

@@ -69,7 +69,7 @@ public class AttackOnCollideWithRateGoal extends Goal
 		else
 		{
 			this.entityTarget = target;
-			this.entityPath = this.attacker.getNavigator().getPathToEntityLiving(this.entityTarget);
+			this.entityPath = this.attacker.getNavigator().getPathToEntityLiving(this.entityTarget, 0);
 			return this.entityPath != null;
 		}
 	}
