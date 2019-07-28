@@ -24,8 +24,7 @@ public class RenderSkaiaPortal extends TileEntitySpecialRenderer<TileEntitySkaia
 	@Override
 	public void render(TileEntitySkaiaPortal te, double x, double y, double z, float partialTicks, int destroyStage, float alpha)
 	{
-		Entity temp = new EntityTippedArrow(te.getWorld());
-		Vec3d position = ActiveRenderInfo.projectViewFromEntity(temp, 0);	//TODO temp solution for removed getter
+		Vec3d position = ActiveRenderInfo.getCameraPosition();
 		
 		float var9 = (float)this.rendererDispatcher.entityX;
 		float var10 = (float)this.rendererDispatcher.entityY;
