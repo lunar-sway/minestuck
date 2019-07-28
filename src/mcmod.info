@@ -17,7 +17,7 @@
         "mcversion": "${mcversion}", 
         "screenshots": [], 
         "dependencies": [
-            "Forge"
+            "Forge@[23.4,)"
         ], 
         "description": "Adds Homestuck to your Minecraft!"
     }
