@@ -33,7 +33,7 @@ public class MachineOutlineRenderer
 	{
 		Minecraft mc = Minecraft.getInstance();
 		
-		if (mc.player != null && mc.getRenderViewEntity() == mc.player)
+		if (mc.player != null && mc.getRenderViewEntity() == mc.player && mc.objectMouseOver.getType() == RayTraceResult.Type.BLOCK)
 		{
 			BlockRayTraceResult rayTraceResult = (BlockRayTraceResult) mc.objectMouseOver;
 			if (rayTraceResult == null || rayTraceResult.getFace() != Direction.UP)
