@@ -58,27 +58,22 @@ public class ChunkGeneratorSkaia extends ChunkGenerator<SkaiaGenSettings>
 		this.noiseGen3 = new OctavesNoiseGenerator(this.random, 8);
 		this.noiseGen4 = new OctavesNoiseGenerator(this.random, 10);
 		this.noiseGen5 = new OctavesNoiseGenerator(this.random, 16);
-		/*
-		InitNoiseGensEvent.Context noiseGens = TerrainGen.getModdedNoiseGenerators(world, this.random, new InitNoiseGensEvent.Context(noiseGen1, noiseGen2, noiseGen3, noiseGen4, noiseGen5));
-		this.noiseGen1 = noiseGens.getLPerlin1();
-		this.noiseGen2 = noiseGens.getLPerlin2();
-		this.noiseGen3 = noiseGens.getPerlin();
-		this.noiseGen4 = noiseGens.getScale();
-		this.noiseGen5 = noiseGens.getDepth();*/
-		
 	}
 	
 	public void prepareHeights(int x, int z, IChunk primer)
 	{
 		int[] topBlock = new int[256];
-		/*
-		double[] generated0 = this.noiseGen1.func_202647_a(x*16, 10, z*16, 16, 1, 16, .1, 0, .1);
-		double[] generated1 = this.noiseGen5.func_202647_a(x*16, 10, z*16, 16, 1, 16, .04, 0, .04);
-		double[] generated2 = this.noiseGen2.func_202647_a(x*16, 10, z*16, 16, 1, 16, .01, 0, .01);
-		for(int i = 0; i < 256; i++)
+		
+		for(int posX = 0; posX < 16; posX++)
 		{
-			int y = (int)(128 + generated0[i] + generated1[i] + generated2[i]);
-			topBlock[i] = (y&511)<=255  ? y&255 : 255 - y&255;
+			for(int posZ = 0; posZ < 16; posZ++)
+			{
+				double generated1 = this.noiseGen1.func_215460_a((posX + x*16)*0.1, (posZ + z*16)*0.1, 0.1, 0.1);
+				double generated5 = this.noiseGen5.func_215460_a((posX + x*16)*0.04, (posZ + z*16)*0.04, 0.04, 0.04);
+				double generated2 = this.noiseGen2.func_215460_a((posX + x*16)*0.01, (posZ + z*16)*0.01, 0.01, 0.01);
+				int y = (int) (128 + generated1 + generated5 + generated2);
+				topBlock[posX * 16 + posZ] = (y&511)<=255  ? y&255 : 255 - y&255;
+			}
 		}
 		
 		BlockState block;
@@ -94,7 +89,7 @@ public class ChunkGeneratorSkaia extends ChunkGenerator<SkaiaGenSettings>
 					pos.setPos(posX, posY, posZ);
 					primer.setBlockState(pos, block, false);
 				}
-		 */
+		 
 	}
 	
 	@Override
