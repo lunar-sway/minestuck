@@ -29,6 +29,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.ObjectHolder;
 
+import javax.annotation.Nonnull;
+
 @ObjectHolder(Minestuck.MOD_ID)
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public final class ModEntityTypes
@@ -63,6 +65,7 @@ public final class ModEntityTypes
 	public static final EntityType<ShopPosterEntity> SHOP_POSTER = getNull();
 	public static final EntityType<HologramEntity> HOLOGRAM = getNull();
 	
+	@Nonnull
 	@SuppressWarnings("ConstantConditions")
 	private static <T> T getNull() {
 		return null;

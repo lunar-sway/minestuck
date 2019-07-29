@@ -10,6 +10,11 @@ public class SkaiaBiome extends Biome
 	protected SkaiaBiome()
 	{
 		super(new Biome.Builder().surfaceBuilder(SurfaceBuilder.NOPE, SurfaceBuilder.AIR_CONFIG).precipitation(Biome.RainType.NONE).category(Biome.Category.NONE).depth(0.1F).scale(0.2F).temperature(0.5F).downfall(0.5F).waterColor(4159204).waterFogColor(329011));
+		
+	}
+	
+	protected void init()
+	{
 		this.addSpawn(EntityClassification.MONSTER, new SpawnListEntry(ModEntityTypes.DERSITE_PAWN, 2, 1, 10));
 		this.addSpawn(EntityClassification.MONSTER, new SpawnListEntry(ModEntityTypes.DERSITE_BISHOP, 1, 1, 1));
 		this.addSpawn(EntityClassification.MONSTER, new SpawnListEntry(ModEntityTypes.DERSITE_ROOK, 1, 1, 1));

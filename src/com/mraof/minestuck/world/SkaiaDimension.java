@@ -38,7 +38,7 @@ public class SkaiaDimension extends Dimension
 		SkaiaGenSettings settings = ModChunkGeneratorType.SKAIA.createSettings();
 		settings.setDefaultBlock(MinestuckBlocks.WHITE_CHESS_DIRT.getDefaultState());
 		settings.setDefaultFluid(Blocks.AIR.getDefaultState());
-		return ModChunkGeneratorType.SKAIA.create(this.world, BiomeProviderType.FIXED.create(BiomeProviderType.FIXED.createSettings().setBiome(BiomeMinestuck.skaia)), settings);
+		return ModChunkGeneratorType.SKAIA.create(this.world, BiomeProviderType.FIXED.create(BiomeProviderType.FIXED.createSettings().setBiome(BiomeMinestuck.SKAIA)), settings);
 	}
 	
 	@Override

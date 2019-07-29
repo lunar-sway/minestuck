@@ -111,7 +111,7 @@ public class LandDimension extends Dimension
 		LandGenSettings settings = ModChunkGeneratorType.LANDS.createSettings();
 		if(landAspects != null)
 			initGenSettings(settings);
-		chunkGen = ModChunkGeneratorType.LANDS.create(this.world, BiomeProviderType.FIXED.create(BiomeProviderType.FIXED.createSettings().setBiome(BiomeMinestuck.skaia)), settings);
+		chunkGen = ModChunkGeneratorType.LANDS.create(this.world, BiomeProviderType.FIXED.create(BiomeProviderType.FIXED.createSettings().setBiome(BiomeMinestuck.SKAIA)), settings);
 		return chunkGen;
 	}
 	

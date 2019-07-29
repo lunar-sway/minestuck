@@ -13,6 +13,7 @@ import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.gen.OreHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
@@ -65,6 +66,7 @@ public class CommonProxy
 		//Register loot functionality objects
 		MinestuckLoot.registerLootClasses();
 		
+		BiomeMinestuck.init();
 		LandAspectRegistry.registerLandAspects();
 		ConsortDialogue.init();
 		
