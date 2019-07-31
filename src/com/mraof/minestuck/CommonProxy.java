@@ -56,9 +56,8 @@ public class CommonProxy
 		AlchemyRecipes.registerMinestuckRecipes();
 		AlchemyRecipes.registerModRecipes();
 		
-		//register smelting recipes and oredictionary
+		//register smelting recipes
 		CraftingRecipes.registerSmelting();
-		CraftingRecipes.addOredictionary();
 
 		//register consort shop prices
 		ConsortRewardHandler.registerMinestuckPrices();

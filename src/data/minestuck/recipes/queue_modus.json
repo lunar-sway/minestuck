@@ -1,5 +1,5 @@
 {
-  "type": "minestuck:empty_card",
+  "type": "minestuck:non_mirrored",
   "pattern": [
     "xOX"
   ],
