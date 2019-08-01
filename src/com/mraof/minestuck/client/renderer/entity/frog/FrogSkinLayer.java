@@ -56,25 +56,25 @@ public class FrogSkinLayer extends LayerRenderer<FrogEntity, FrogModel<FrogEntit
 		switch (type) {
 		default:
 		case 0:
-			path = "minestuck:textures/mobs/frog/skin.png";
+			path = "minestuck:textures/entity/frog/skin.png";
 			break;
 		case 1:
-			path = "minestuck:textures/mobs/frog/totally_normal_frog.png";
+			path = "minestuck:textures/entity/frog/totally_normal_frog.png";
 			break;
 		case 2:
-			path = "minestuck:textures/mobs/frog/ruby_contraband.png";
+			path = "minestuck:textures/entity/frog/ruby_contraband.png";
 			break;
 		case 3:
-			path = "minestuck:textures/mobs/frog/genesis_frog.png";
+			path = "minestuck:textures/entity/frog/genesis_frog.png";
 			break;
 		case 4:
-			path = "minestuck:textures/mobs/frog/null_frog.png";
+			path = "minestuck:textures/entity/frog/null_frog.png";
 			break;
 		case 5:
-			path = "minestuck:textures/mobs/frog/golden_frog.png";
+			path = "minestuck:textures/entity/frog/golden_frog.png";
 			break;
 		case 6:
-			path = "minestuck:textures/mobs/frog/susan.png";
+			path = "minestuck:textures/entity/frog/susan.png";
 			break;
 		}
 		return new ResourceLocation(path);

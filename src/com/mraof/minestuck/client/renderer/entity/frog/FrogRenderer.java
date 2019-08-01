@@ -34,7 +34,7 @@ public class FrogRenderer extends MobRenderer<FrogEntity, FrogModel<FrogEntity>>
 	@Override
 	protected ResourceLocation getEntityTexture(FrogEntity entity)
 	{
-		return new ResourceLocation(Minestuck.MOD_ID, "textures/mobs/frog/base.png");
+		return new ResourceLocation(Minestuck.MOD_ID, "textures/entity/frog/base.png");
 	}
 	
 	protected boolean canRenderName(FrogEntity entity)
