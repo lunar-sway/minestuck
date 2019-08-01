@@ -15,10 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -35,6 +32,7 @@ public class MachineOutlineRenderer
 		
 		if (mc.player != null && mc.getRenderViewEntity() == mc.player)
 		{
+			if(mc.objectMouseOver instanceof EntityRayTraceResult) return;
 			BlockRayTraceResult rayTraceResult = (BlockRayTraceResult) mc.objectMouseOver;
 			if (rayTraceResult == null || rayTraceResult.getFace() != Direction.UP)
 				return;
