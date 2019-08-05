@@ -64,7 +64,7 @@ public class NearestAttackableTargetWithHeightGoal extends TargetGoal
 			{
 				PlayerEntity entityplayer = this.goalOwner.world.getClosestPlayer(this.goalOwner, (double)this.targetDistance);	//Was closest vulnerable player
 
-				if (this.func_220777_a(entityplayer, EntityPredicate.DEFAULT))
+				if (this.isSuitableTarget(entityplayer, EntityPredicate.DEFAULT))
 				{
 					this.targetEntity = entityplayer;
 					return true;
@@ -80,7 +80,7 @@ public class NearestAttackableTargetWithHeightGoal extends TargetGoal
 				{
 					LivingEntity entity = iterator.next();
 
-					if (this.func_220777_a(entity, EntityPredicate.DEFAULT))
+					if (this.isSuitableTarget(entity, EntityPredicate.DEFAULT))
 					{
 						this.targetEntity = entity;
 						return true;

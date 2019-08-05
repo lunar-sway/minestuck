@@ -32,7 +32,7 @@ public class HurtByTargetAlliedGoal extends TargetGoal
 	public boolean shouldExecute()
 	{
 		int i = this.goalOwner.getRevengeTimer();
-		return i != this.revengeTimer && this.func_220777_a(this.goalOwner.getAttackTarget(), EntityPredicate.DEFAULT);
+		return i != this.revengeTimer && this.isSuitableTarget(this.goalOwner.getAttackTarget(), EntityPredicate.DEFAULT);
 	}
 
 	/**
