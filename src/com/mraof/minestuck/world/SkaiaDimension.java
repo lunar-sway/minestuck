@@ -36,7 +36,7 @@ public class SkaiaDimension extends Dimension
 	public ChunkGenerator<?> createChunkGenerator()
 	{
 		SkaiaGenSettings settings = ModChunkGeneratorType.SKAIA.createSettings();
-		settings.setDefaultBlock(MinestuckBlocks.WHITE_CHESS_DIRT.getDefaultState());
+		settings.setDefaultBlock(Blocks.STONE.getDefaultState());
 		settings.setDefaultFluid(Blocks.AIR.getDefaultState());
 		return ModChunkGeneratorType.SKAIA.create(this.world, BiomeProviderType.FIXED.create(BiomeProviderType.FIXED.createSettings().setBiome(BiomeMinestuck.SKAIA)), settings);
 	}
