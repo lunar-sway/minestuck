@@ -30,7 +30,7 @@ repositories {
     }
 }
 
-version = '1.14.3-1.4.' + System.env.BUILD_NUMBER
+version = '1.14.4-1.4.' + System.env.BUILD_NUMBER
 group = 'com.mraof.minestuck'
 archivesBaseName = 'Minestuck'
 
