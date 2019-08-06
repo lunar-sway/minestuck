@@ -1,8 +1,7 @@
 package com.mraof.minestuck.entity;
 
 import java.util.List;
-
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -25,9 +24,9 @@ public class EntityListFilter implements Predicate<Entity>
 	{
 		this.entityList = entityList;
 	}
-
+	
 	@Override
-	public boolean apply(Entity entity)
+	public boolean test(Entity entity)
 	{
 		return isEntityApplicable(entity);
 	}

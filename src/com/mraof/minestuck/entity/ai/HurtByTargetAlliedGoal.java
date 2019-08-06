@@ -1,17 +1,15 @@
 package com.mraof.minestuck.entity.ai;
 
-import com.google.common.base.Predicate;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityPredicate;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.util.math.AxisAlignedBB;
 
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class HurtByTargetAlliedGoal extends TargetGoal
 {
@@ -32,7 +30,7 @@ public class HurtByTargetAlliedGoal extends TargetGoal
 	public boolean shouldExecute()
 	{
 		int i = this.goalOwner.getRevengeTimer();
-		return i != this.revengeTimer && this.isSuitableTarget(this.goalOwner.getAttackTarget(), EntityPredicate.DEFAULT);
+		return i != this.revengeTimer && this.isSuitableTarget(this.goalOwner.getRevengeTarget(), EntityPredicate.DEFAULT);
 	}
 
 	/**
@@ -52,7 +50,7 @@ public class HurtByTargetAlliedGoal extends TargetGoal
 		{
 			CreatureEntity creature = iterator.next();
 			
-			if (this.goalOwner != creature && creature.getAttackTarget() == null && !creature.isOnSameTeam(this.goalOwner.getAttackTarget()))
+			if (this.goalOwner != creature && creature.getAttackTarget() == null && !creature.isOnSameTeam(this.goalOwner.getRevengeTarget()))
 			{
 				creature.setAttackTarget(this.goalOwner.getAttackTarget());
 			}

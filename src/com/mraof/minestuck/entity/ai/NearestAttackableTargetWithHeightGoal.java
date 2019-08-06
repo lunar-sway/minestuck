@@ -1,6 +1,5 @@
 package com.mraof.minestuck.entity.ai;
 
-import com.google.common.base.Predicate;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.LivingEntity;
@@ -11,6 +10,7 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class NearestAttackableTargetWithHeightGoal extends TargetGoal
 {
