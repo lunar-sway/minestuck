@@ -49,7 +49,7 @@ public class SkaiaSurfaceBuilder extends SurfaceBuilder<SurfaceBuilderConfig>
 	@Override
 	public void buildSurface(Random random, IChunk chunkIn, Biome biomeIn, int x, int z, int startHeight, double noise, BlockState defaultBlock, BlockState defaultFluid, int seaLevel, long seed, SurfaceBuilderConfig config)
 	{
-		int chunkX = x / 16, chunkZ = z / 16;
+		int chunkX = Math.floorDiv(x, 16), chunkZ = Math.floorDiv(z, 16);
 		if((chunkX + chunkZ) % 2 == 0)
 		{
 			if(noise > 1.0)
