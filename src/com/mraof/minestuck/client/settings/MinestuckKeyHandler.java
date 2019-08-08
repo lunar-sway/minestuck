@@ -1,6 +1,7 @@
 package com.mraof.minestuck.client.settings;
 
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
+import com.mraof.minestuck.util.Debug;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiContainerCreative;
@@ -81,16 +82,23 @@ public class MinestuckKeyHandler
 	@SubscribeEvent
 	public void onTick(TickEvent.ClientTickEvent event)
 	{
-		if(Keyboard.isKeyDown(captchaKey.getKeyCode()) && !captchaKeyPressed) {
-
+		try
+		{
+			if(Keyboard.isKeyDown(captchaKey.getKeyCode()) && !captchaKeyPressed)
+			{
+				
 				//This statement is here because for some reason 'slotNumber' always returns as 0 if it is referenced inside the creative inventory.
-			if (Minecraft.getMinecraft().currentScreen instanceof GuiContainerCreative && Minecraft.getMinecraft().player.openContainer instanceof GuiContainerCreative.ContainerCreative && ((GuiContainer)Minecraft.getMinecraft().currentScreen).getSlotUnderMouse() != null && ((GuiContainer)Minecraft.getMinecraft().currentScreen).getSlotUnderMouse().getHasStack())
-				MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.CAPTCHALOUGE_INV, ((GuiContainer)Minecraft.getMinecraft().currentScreen).getSlotUnderMouse().getSlotIndex()));
-			else if(Minecraft.getMinecraft().currentScreen instanceof GuiContainer && ((GuiContainer)Minecraft.getMinecraft().currentScreen).getSlotUnderMouse() != null && ((GuiContainer)Minecraft.getMinecraft().currentScreen).getSlotUnderMouse().getHasStack())
-				MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.CAPTCHALOUGE_INV, ((GuiContainer)Minecraft.getMinecraft().currentScreen).getSlotUnderMouse().slotNumber));
+				if(Minecraft.getMinecraft().currentScreen instanceof GuiContainerCreative && Minecraft.getMinecraft().player.openContainer instanceof GuiContainerCreative.ContainerCreative && ((GuiContainer) Minecraft.getMinecraft().currentScreen).getSlotUnderMouse() != null && ((GuiContainer) Minecraft.getMinecraft().currentScreen).getSlotUnderMouse().getHasStack())
+					MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.CAPTCHALOUGE_INV, ((GuiContainer) Minecraft.getMinecraft().currentScreen).getSlotUnderMouse().getSlotIndex()));
+				else if(Minecraft.getMinecraft().currentScreen instanceof GuiContainer && ((GuiContainer) Minecraft.getMinecraft().currentScreen).getSlotUnderMouse() != null && ((GuiContainer) Minecraft.getMinecraft().currentScreen).getSlotUnderMouse().getHasStack())
+					MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.CAPTCHALOUGE_INV, ((GuiContainer) Minecraft.getMinecraft().currentScreen).getSlotUnderMouse().slotNumber));
+			}
+			
+			captchaKeyPressed = Keyboard.isKeyDown(captchaKey.getKeyCode());
+		} catch(IndexOutOfBoundsException e)
+		{
+			Debug.warnf("Got IndexOutOfBoundsException for captcha key keycode %d.");
 		}
-		
-		captchaKeyPressed = Keyboard.isKeyDown(captchaKey.getKeyCode());
 	}
 	
 }
