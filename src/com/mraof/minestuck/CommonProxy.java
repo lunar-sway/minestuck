@@ -4,6 +4,7 @@ import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortDialogue;
 import com.mraof.minestuck.entity.consort.ConsortRewardHandler;
 import com.mraof.minestuck.event.MinestuckFluidHandler;
@@ -26,6 +27,7 @@ public class CommonProxy
 	public static void init()
 	{
 		MinestuckCriteriaTriggers.register();
+		ModEntityTypes.registerPlacements();
 		
 		//register ore generation
 		OreHandler oreHandler = new OreHandler();

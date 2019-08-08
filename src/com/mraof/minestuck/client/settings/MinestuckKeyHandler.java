@@ -17,6 +17,7 @@ import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
+import org.lwjgl.glfw.GLFW;
 
 public class MinestuckKeyHandler
 {
@@ -33,13 +34,13 @@ public class MinestuckKeyHandler
 		if(statKey != null)
 			throw new IllegalStateException("Minestucck keys have already been registered!");
 		
-		statKey = new KeyBinding("key.statsGui", 71, "key.categories.minestuck");
+		statKey = new KeyBinding("key.statsGui", GLFW.GLFW_KEY_G, "key.categories.minestuck");
 		ClientRegistry.registerKeyBinding(statKey);
-		editKey = new KeyBinding("key.exitEdit", 75, "key.categories.minestuck");
+		editKey = new KeyBinding("key.exitEdit", GLFW.GLFW_KEY_K, "key.categories.minestuck");
 		ClientRegistry.registerKeyBinding(editKey);
-		captchaKey = new KeyBinding("key.captchalogue", 86, "key.categories.minestuck");
+		captchaKey = new KeyBinding("key.captchalogue", GLFW.GLFW_KEY_V, "key.categories.minestuck");
 		ClientRegistry.registerKeyBinding(captchaKey);
-		effectToggleKey = new KeyBinding("key.aspectEffectToggle", 92, "key.categories.minestuck");
+		effectToggleKey = new KeyBinding("key.aspectEffectToggle", GLFW.GLFW_KEY_BACKSLASH, "key.categories.minestuck");
 		ClientRegistry.registerKeyBinding(effectToggleKey);
 		sylladexKey = new KeyBinding("key.sylladex", -1, "key.categories.minestuck");
 		ClientRegistry.registerKeyBinding(sylladexKey);

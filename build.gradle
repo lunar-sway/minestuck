@@ -30,14 +30,14 @@ repositories {
     }
 }
 
-version = '1.14.3-1.4.' + System.env.BUILD_NUMBER
+version = '1.14.4-1.4.' + System.env.BUILD_NUMBER
 group = 'com.mraof.minestuck'
 archivesBaseName = 'Minestuck'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 minecraft {
-    mappings channel: 'snapshot', version: '20190712-1.14.3'
+    mappings channel: 'snapshot', version: '20190803-1.14.3'
 
     // Default run configurations.
     // These can be tweaked, removed, or duplicated as needed.
@@ -76,7 +76,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.4-28.0.21'
+    minecraft 'net.minecraftforge:forge:1.14.4-28.0.41'
 
     def mc_version = "1.14.3"
     def jei_version = "6.0.0.7"
