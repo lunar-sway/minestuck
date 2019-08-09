@@ -133,7 +133,7 @@ public class FrogEntity extends CreatureEntity
 	@Override
 	public EntitySize getSize(Pose poseIn)
 	{
-		return super.getSize(poseIn).scale(this.getFrogSize());
+		return super.getSize(poseIn).scale((this.getFrogType() == 6) ? 0.6F :this.getFrogSize());
 	}
 	
 	@Override

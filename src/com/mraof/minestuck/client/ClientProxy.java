@@ -71,6 +71,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 public class ClientProxy extends CommonProxy
 {
@@ -113,7 +114,7 @@ public class ClientProxy extends CommonProxy
 		ItemColors colors = event.getItemColors();
 		colors.register((stack, tintIndex) -> BlockColorCruxite.handleColorTint(ColorCollector.getColorFromStack(stack, 0) - 1, tintIndex),
 				MinestuckBlocks.CRUXITE_DOWEL, MinestuckItems.CRUXITE_APPLE, MinestuckItems.CRUXITE_POTION);
-		colors.register(new FrogRenderer.FrogItemColor(), MinestuckItems.FROG);
+		//colors.register(new FrogRenderer.FrogItemColor(), MinestuckItems.FROG);
 	}
 	
 	public static void init()
@@ -149,10 +150,13 @@ public class ClientProxy extends CommonProxy
 		MinestuckKeyHandler.instance.registerKeys();
 		MinecraftForge.EVENT_BUS.register(MinestuckKeyHandler.instance);
 		MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
-		
+
 		MinecraftForge.EVENT_BUS.register(ClientEditHandler.instance);
 		MinecraftForge.EVENT_BUS.register(new MinestuckConfig());
 		MinecraftForge.EVENT_BUS.register(MachineOutlineRenderer.class);
+		//System.out.println("Adding onItemColors listener");
+		//MinecraftForge.EVENT_BUS.register(ColorHandler.class);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onItemColors);
 	}
 	
 }

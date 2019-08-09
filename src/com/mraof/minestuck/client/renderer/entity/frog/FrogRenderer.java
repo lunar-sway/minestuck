@@ -34,7 +34,7 @@ public class FrogRenderer extends MobRenderer<FrogEntity, FrogModel<FrogEntity>>
 	@Override
 	protected ResourceLocation getEntityTexture(FrogEntity entity)
 	{
-		return new ResourceLocation(Minestuck.MOD_ID, "textures/mobs/frog/base.png");
+		return new ResourceLocation(Minestuck.MOD_ID, "textures/entity/frog/base.png");
 	}
 	
 	protected boolean canRenderName(FrogEntity entity)
@@ -42,24 +42,5 @@ public class FrogRenderer extends MobRenderer<FrogEntity, FrogModel<FrogEntity>>
         return super.canRenderName(entity) && (entity.getAlwaysRenderNameTagForRender() || entity.hasCustomName() && entity == this.renderManager.pointedEntity);
     }
 	
-    public static class FrogItemColor implements IItemColor
-	{
-		@Override
-		public int getColor(ItemStack stack, int tintIndex)
-		{
-			FrogItem item = ((FrogItem)stack.getItem());
-			int color = -1;
-			int type = stack.hasTag() ? 0 : stack.getTag().getInt("Type");
-			if(type == 0)
-			{
-				switch(tintIndex)
-				{
-					case 0: color = item.getSkinColor(stack); break;
-					case 1: color = item.getEyeColor(stack); break;
-					case 2: color = item.getBellyColor(stack); break;
-				}
-			}
-			return color;
-		}
-	}
+
 }
