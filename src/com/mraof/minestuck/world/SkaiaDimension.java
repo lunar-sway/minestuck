@@ -1,11 +1,10 @@
 package com.mraof.minestuck.world;
 
-import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.IdentifierHandler;
 
-import com.mraof.minestuck.world.biome.BiomeMinestuck;
+import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.gen.ModChunkGeneratorType;
 import com.mraof.minestuck.world.gen.SkaiaGenSettings;
 import net.minecraft.block.Blocks;
@@ -23,7 +22,6 @@ import net.minecraftforge.common.ModDimension;
 
 import javax.annotation.Nullable;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 public class SkaiaDimension extends Dimension
 {
@@ -38,7 +36,7 @@ public class SkaiaDimension extends Dimension
 		SkaiaGenSettings settings = ModChunkGeneratorType.SKAIA.createSettings();
 		settings.setDefaultBlock(Blocks.STONE.getDefaultState());
 		settings.setDefaultFluid(Blocks.AIR.getDefaultState());
-		return ModChunkGeneratorType.SKAIA.create(this.world, BiomeProviderType.FIXED.create(BiomeProviderType.FIXED.createSettings().setBiome(BiomeMinestuck.SKAIA)), settings);
+		return ModChunkGeneratorType.SKAIA.create(this.world, BiomeProviderType.FIXED.create(BiomeProviderType.FIXED.createSettings().setBiome(ModBiomes.SKAIA)), settings);
 	}
 	
 	@Override

@@ -1,6 +1,6 @@
 package com.mraof.minestuck.world.lands.title;
 
-import com.mraof.minestuck.world.biome.BiomeMinestuck;
+import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.decorator.FrogSpawner;
 import com.mraof.minestuck.world.lands.decorator.LilypadDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
@@ -29,9 +29,9 @@ import net.minecraft.block.material.Material;
 		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.GREEN_WOOL.getDefaultState());
 		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.LIME_CARPET.getDefaultState());
 		
-		chunkProvider.decorators.add(new FrogSpawner(6, BiomeMinestuck.mediumNormal));
-		chunkProvider.decorators.add(new FrogSpawner(4, BiomeMinestuck.mediumRough));
-		chunkProvider.decorators.add(new LilypadDecorator(10,BiomeMinestuck.mediumOcean));
+		chunkProvider.decorators.add(new FrogSpawner(6, ModBiomes.mediumNormal));
+		chunkProvider.decorators.add(new FrogSpawner(4, ModBiomes.mediumRough));
+		chunkProvider.decorators.add(new LilypadDecorator(10, ModBiomes.mediumOcean));
 		//chunkProvider.sortDecorators();
 	}
 	

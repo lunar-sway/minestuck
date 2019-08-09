@@ -6,12 +6,9 @@ import java.util.Random;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.consort.EnumConsort;
-import com.mraof.minestuck.world.biome.BiomeMinestuck;
-import com.mraof.minestuck.world.gen.feature.RainbowTree;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.MesaDecorator;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
-import com.mraof.minestuck.world.lands.decorator.WorldgenTreeDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.gen.ILandTerrainGen;
 import com.mraof.minestuck.world.lands.gen.SpecialTerrainGen;

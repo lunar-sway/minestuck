@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.consort.EnumConsort;
-import com.mraof.minestuck.world.biome.BiomeMinestuck;
+import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.*;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
@@ -90,14 +90,14 @@ public class LandAspectForest extends TerrainLandAspect
 			list.add(new SpruceTreeDecorator(Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.SPRUCE), Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.SPRUCE).withProperty(BlockLeaves.CHECK_DECAY, false), BiomeMinestuck.mediumRough));
 			list.add(new SurfaceDecoratorVein(Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.PODZOL), 25, 40, BiomeMinestuck.mediumNormal, BiomeMinestuck.mediumRough));
 		}*/
-		list.add(new TallGrassDecorator(0.3F, BiomeMinestuck.mediumNormal));
-		list.add(new TallGrassDecorator(0.5F, 0.2F, BiomeMinestuck.mediumRough));
+		list.add(new TallGrassDecorator(0.3F, ModBiomes.mediumNormal));
+		list.add(new TallGrassDecorator(0.5F, 0.2F, ModBiomes.mediumRough));
 		
 		list.add(new UndergroundDecoratorVein(Blocks.DIRT.getDefaultState(), 3, 33, 64));	//Have 64 be the highest value because stone is used as a building material for structures right now
 		list.add(new UndergroundDecoratorVein(Blocks.GRAVEL.getDefaultState(), 2, 28, 64));
 		list.add(new UndergroundDecoratorVein(Blocks.COAL_ORE.getDefaultState(), 13, 17, 64));
 		list.add(new UndergroundDecoratorVein(Blocks.EMERALD_ORE.getDefaultState(), 8, 3, 32));
-		list.add(new SurfaceDecoratorVein(Blocks.CLAY.getDefaultState(), 15, 10, BiomeMinestuck.mediumOcean));
+		list.add(new SurfaceDecoratorVein(Blocks.CLAY.getDefaultState(), 15, 10, ModBiomes.mediumOcean));
 		return list;
 	}
 	

@@ -2,7 +2,7 @@ package com.mraof.minestuck.world.lands.terrain;
 
 import com.mraof.minestuck.block.*;
 import com.mraof.minestuck.entity.consort.EnumConsort;
-import com.mraof.minestuck.world.biome.BiomeMinestuck;
+import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.decorator.*;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.*;
@@ -55,10 +55,10 @@ public class LandAspectFrost extends TerrainLandAspect
 		//list.add(new SpruceTreeDecorator(MinestuckBlocks.log.getDefaultState().withProperty(BlockMinestuckLog1.VARIANT, BlockMinestuckLog1.BlockType.FROST), MinestuckBlocks.leaves1.getDefaultState().withProperty(BlockMinestuckLeaves1.VARIANT, BlockMinestuckLeaves1.BlockType.FROST).withProperty(BlockMinestuckLeaves1.CHECK_DECAY, Boolean.valueOf(false)), BiomeMinestuck.mediumNormal));
 		//list.add(new SpruceTreeDecorator(MinestuckBlocks.log.getDefaultState().withProperty(BlockMinestuckLog1.VARIANT, BlockMinestuckLog1.BlockType.FROST), MinestuckBlocks.leaves1.getDefaultState().withProperty(BlockMinestuckLeaves1.VARIANT, BlockMinestuckLeaves1.BlockType.FROST).withProperty(BlockMinestuckLeaves1.CHECK_DECAY, Boolean.valueOf(false)), BiomeMinestuck.mediumRough));
 
-		list.add(new SurfaceDecoratorVein(Blocks.COARSE_DIRT.getDefaultState(), 10, 32, BiomeMinestuck.mediumRough, BiomeMinestuck.mediumOcean));
-		list.add(new SurfaceDecoratorVein(Blocks.ICE.getDefaultState(), 5, 8, BiomeMinestuck.mediumRough));
-		list.add(new SurfaceDecoratorVein(Blocks.SNOW_BLOCK.getDefaultState(), 8, 16, BiomeMinestuck.mediumRough));
-		list.add(new SurfaceDecoratorVein(Blocks.SNOW_BLOCK.getDefaultState(), 15, 16, BiomeMinestuck.mediumNormal));
+		list.add(new SurfaceDecoratorVein(Blocks.COARSE_DIRT.getDefaultState(), 10, 32, ModBiomes.mediumRough, ModBiomes.mediumOcean));
+		list.add(new SurfaceDecoratorVein(Blocks.ICE.getDefaultState(), 5, 8, ModBiomes.mediumRough));
+		list.add(new SurfaceDecoratorVein(Blocks.SNOW_BLOCK.getDefaultState(), 8, 16, ModBiomes.mediumRough));
+		list.add(new SurfaceDecoratorVein(Blocks.SNOW_BLOCK.getDefaultState(), 15, 16, ModBiomes.mediumNormal));
 		
 		list.add(new UndergroundDecoratorVein(Blocks.PACKED_ICE.getDefaultState(), 2, 8, 64));
 		list.add(new UndergroundDecoratorVein(Blocks.SNOW_BLOCK.getDefaultState(), 3, 16, 64));

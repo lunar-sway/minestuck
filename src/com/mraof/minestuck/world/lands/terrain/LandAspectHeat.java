@@ -2,7 +2,7 @@ package com.mraof.minestuck.world.lands.terrain;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.consort.EnumConsort;
-import com.mraof.minestuck.world.biome.BiomeMinestuck;
+import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.decorator.*;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.Blocks;
@@ -50,12 +50,12 @@ public class LandAspectHeat extends TerrainLandAspect
 	public List<ILandDecorator> getDecorators()
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<>();
-		list.add(new FireFieldDecorator(7, BiomeMinestuck.mediumNormal));
-		list.add(new FireFieldDecorator(10, BiomeMinestuck.mediumRough));
+		list.add(new FireFieldDecorator(7, ModBiomes.mediumNormal));
+		list.add(new FireFieldDecorator(10, ModBiomes.mediumRough));
 		list.add(new OceanRundown(0.5F, 3));
-		list.add(new SurfaceDecoratorVein(Blocks.SOUL_SAND.getDefaultState(), 15, 32, BiomeMinestuck.mediumRough));
-		list.add(new SurfaceDecoratorVein(Blocks.SOUL_SAND.getDefaultState(), 8, 32, BiomeMinestuck.mediumNormal));
-		list.add(new SurfaceDecoratorVein(Blocks.GLOWSTONE.getDefaultState(), 5, 8, BiomeMinestuck.mediumNormal));
+		list.add(new SurfaceDecoratorVein(Blocks.SOUL_SAND.getDefaultState(), 15, 32, ModBiomes.mediumRough));
+		list.add(new SurfaceDecoratorVein(Blocks.SOUL_SAND.getDefaultState(), 8, 32, ModBiomes.mediumNormal));
+		list.add(new SurfaceDecoratorVein(Blocks.GLOWSTONE.getDefaultState(), 5, 8, ModBiomes.mediumNormal));
 		
 		list.add(new UndergroundDecoratorVein(Blocks.GRAVEL.getDefaultState(), 8, 33, 256));
 		list.add(new UndergroundDecoratorVein(MinestuckBlocks.COAL_ORE_NETHERRACK.getDefaultState(), 26, 17, 128));

@@ -11,10 +11,11 @@ import javax.annotation.Nonnull;
 
 @ObjectHolder(Minestuck.MOD_ID)
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
-public class BiomeMinestuck extends Biome
+public class ModBiomes
 {
 	
 	public static final SkaiaBiome SKAIA = getNull();
+	public static final LandBiome LAND_NORMAL = getNull();
 	public static Biome mediumOcean, mediumNormal, mediumRough;
 	
 	@Nonnull
@@ -24,15 +25,11 @@ public class BiomeMinestuck extends Biome
 	}
 	
 	
-	protected BiomeMinestuck(Builder biomeBuilder)
-	{
-		super(biomeBuilder);
-	}
-	
 	@SubscribeEvent
 	public static void registerBiomes(final RegistryEvent.Register<Biome> event)
 	{
 		event.getRegistry().register(new SkaiaBiome().setRegistryName("skaia"));
+		event.getRegistry().register(new LandBiome().setRegistryName("land_normal"));
 		/*mediumNormal = new BiomeMinestuck(new BiomeProperties("The Medium")).setRegistryName("medium");
 		mediumOcean = new BiomeMinestuck(new BiomeProperties("The Medium (Ocean)").setBaseBiome("medium")).setRegistryName("medium_ocean");
 		mediumRough = new BiomeMinestuck(new BiomeProperties("The Medium (Rough)").setBaseBiome("medium")).setRegistryName("medium_rough");
@@ -44,5 +41,6 @@ public class BiomeMinestuck extends Biome
 	public static void init()
 	{
 		SKAIA.init();
+		LAND_NORMAL.init();
 	}
 }

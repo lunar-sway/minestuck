@@ -306,7 +306,6 @@ public class LandAspectRegistry
 		
 		PacketBuffer data = new PacketBuffer(Unpooled.buffer());
 		data.clear();
-		data.writeBoolean(true);
 		data.writeString(aspects.aspectTerrain.getPrimaryName());
 		data.writeString(aspects.aspectTitle.getPrimaryName());
 		

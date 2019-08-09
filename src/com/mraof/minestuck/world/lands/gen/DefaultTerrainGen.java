@@ -2,7 +2,7 @@ package com.mraof.minestuck.world.lands.gen;
 
 import java.util.Random;
 
-import com.mraof.minestuck.world.biome.BiomeMinestuck;
+import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.gen.NoiseGeneratorTriangle;
 
 import net.minecraft.util.math.MathHelper;
@@ -137,18 +137,18 @@ public class DefaultTerrainGen extends LandTerrainGenBase
 	
 	protected float getBiomeHeight(Biome biome)
 	{
-		if(biome == BiomeMinestuck.mediumOcean)
+		if(biome == ModBiomes.mediumOcean)
 			return this.oceanHeight;
-		else if(biome == BiomeMinestuck.mediumRough)
+		else if(biome == ModBiomes.mediumRough)
 			return this.roughHeight;
 		else return this.normalHeight;
 	}
 	
 	protected float getBiomeVariation(Biome biome)
 	{
-		if(biome == BiomeMinestuck.mediumOcean)
+		if(biome == ModBiomes.mediumOcean)
 			return this.oceanVariation;
-		else if(biome == BiomeMinestuck.mediumRough)
+		else if(biome == ModBiomes.mediumRough)
 			return this.roughVariation;
 		else return this.normalVariation;
 	}

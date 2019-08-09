@@ -6,8 +6,7 @@ import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Location;
-import com.mraof.minestuck.util.Teleport;
-import com.mraof.minestuck.world.biome.BiomeMinestuck;
+import com.mraof.minestuck.world.biome.ModBiomes;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -56,7 +55,7 @@ public class GateHandler
 					
 					BlockPos placement = pos.add(x, 0, z);
 					
-					if(player.world.getBiomeBody(placement) == BiomeMinestuck.mediumNormal)
+					if(player.world.getBiomeBody(placement) == ModBiomes.mediumNormal)
 						location = new Location(player.world.getHeight(Heightmap.Type.MOTION_BLOCKING, placement), dim);
 					
 				} while(location == null);	//TODO replace with a more friendly version without a chance of freezing the game
