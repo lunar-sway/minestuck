@@ -23,6 +23,8 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -75,8 +77,8 @@ public class ComputerOnBlock extends ComputerOffBlock
 		}
 
 		if(worldIn.isRemote && SkaiaClient.requestData(tileEntity))
-			Minecraft.getInstance().displayGuiScreen(new ComputerScreen(Minecraft.getInstance(), tileEntity));
-		//TODO Check if this actually is fine
+			DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> Minecraft.getInstance().displayGuiScreen(new ComputerScreen(Minecraft.getInstance(), tileEntity)));
+		//TODO Check if this is actually fine
 		return true;
 	}
 	
