@@ -589,7 +589,7 @@ public class MinestuckItems
 		registry.register(TAB = new DrinkableItem(new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN).food(MinestuckFoods.TAB)).setRegistryName("tab"));
 		registry.register(FAYGO = new DrinkableItem(new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN).food(MinestuckFoods.FAYGO)).setRegistryName("orange_faygo"));
 		registry.register(FAYGO_CANDY_APPLE = new DrinkableItem(new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN).food(MinestuckFoods.FAYGO_CANDY_APPLE)).setRegistryName("candy_apple_faygo"));
-		registry.register(FAYGO_COLA = new DrinkableItem(new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN).food(MinestuckFoods.FAYGO_COLA)).setRegistryName("faygo_cola"));
+		registry.register(FAYGO_COLA = new DrinkableItem(new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN).food(MinestuckFoods.FAYGO_COLA)).setRegistryName("cola_faygo"));
 		registry.register(FAYGO_COTTON_CANDY = new DrinkableItem(new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN).food(MinestuckFoods.FAYGO_COTTON_CANDY)).setRegistryName("cotton_candy_faygo"));
 		registry.register(FAYGO_CREME = new DrinkableItem(new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN).food(MinestuckFoods.FAYGO_CREME)).setRegistryName("creme_soda_faygo"));
 		registry.register(FAYGO_GRAPE = new DrinkableItem(new Item.Properties().maxStackSize(16).group(ModItemGroup.MAIN).food(MinestuckFoods.FAYGO_GRAPE)).setRegistryName("grape_faygo"));

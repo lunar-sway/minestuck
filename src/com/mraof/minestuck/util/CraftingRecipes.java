@@ -51,41 +51,8 @@ public class CraftingRecipes
         }*/
     }
 
-	/**
-	 * Any recipes made out of this instance will not accept captchalogue cards as ingredients, unless said cards are empty and blank.
-	 * Beware that this class extends NoMirroredRecipe.
-	 */
-	/*public static class EmptyCardRecipe extends NonMirroredRecipe
-	{
-		
-		public EmptyCardRecipe(String group, int width, int height, NonNullList<Ingredient> ingredients, ItemStack result)
-		{
-			super(group, width, height, ingredients, result);
-		}
-		
-		@Override
-		public boolean matches(InventoryCrafting crafting, World world)
-		{
-			for(int i = 0; i < crafting.getSizeInventory(); i++)
-			{
-				ItemStack stack = crafting.getStackInSlot(i);
-				if(stack.getItem() == MinestuckItems.captchaCard && stack.hasTagCompound() && stack.getTagCompound().hasKey("contentID"))
-					return false;
-			}
-			return super.matches(crafting, world);
-		}
-		
-		public static class Factory extends ShapedFactory
-		{
-			@Override
-			public IRecipe initRecipe(String group, int width, int height, NonNullList<Ingredient> ingredients, ItemStack result)
-			{
-				return new EmptyCardRecipe(group, width, height, ingredients, result);
-			}
-		}
-	}
-	
-	public static class AddEncodeRecipe extends NonMirroredRecipe
+
+	/*public static class AddEncodeRecipe extends NonMirroredRecipe
 	{
 		
 		public AddEncodeRecipe(String group, int width, int height, NonNullList<Ingredient> ingredients, ItemStack result)
