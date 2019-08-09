@@ -3,7 +3,7 @@ package com.mraof.minestuck.client;
 import com.mraof.minestuck.CommonProxy;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.client.gui.ModScreenManager;
+import com.mraof.minestuck.client.gui.ModScreenFactories;
 import com.mraof.minestuck.client.model.BasiliskModel;
 import com.mraof.minestuck.client.model.BishopModel;
 import com.mraof.minestuck.client.model.GiclopsModel;
@@ -120,7 +120,7 @@ public class ClientProxy extends CommonProxy
 	{
 		registerRenderers();
 		
-		ModScreenManager.registerScreenFactories();
+		ModScreenFactories.registerScreenFactories();
 		
 		RenderingRegistry.registerEntityRenderingHandler(FrogEntity.class, manager -> new FrogRenderer(manager));
 		RenderingRegistry.registerEntityRenderingHandler(HologramEntity.class, HologramRenderer::new);

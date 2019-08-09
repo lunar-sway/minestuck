@@ -25,7 +25,7 @@ public class TitleSelectorScreen extends Screen
 	private Title previous;
 	private boolean sendPacket = true;
 	
-	public TitleSelectorScreen(Title title)
+	TitleSelectorScreen(Title title)
 	{
 		super(new StringTextComponent("Title Selector"));
 		previous = title;

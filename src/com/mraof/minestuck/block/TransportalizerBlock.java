@@ -1,11 +1,10 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.client.gui.TransportalizerScreen;
+import com.mraof.minestuck.client.gui.ModScreenFactories;
 import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -16,8 +15,6 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
 
 import javax.annotation.Nullable;
 
@@ -77,7 +74,7 @@ public class TransportalizerBlock extends MachineBlock
 		}
 
 		if(worldIn.isRemote)
-			DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> Minecraft.getInstance().displayGuiScreen(new TransportalizerScreen(tileEntity)));	//TODO Check if this causes complications
+			ModScreenFactories.displayTransportalizerScreen(tileEntity);
 
 		return true;
 	}

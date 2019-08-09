@@ -1,6 +1,7 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.client.gui.ComputerScreen;
+import com.mraof.minestuck.client.gui.ModScreenFactories;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.util.ComputerProgram;
@@ -77,8 +78,8 @@ public class ComputerOnBlock extends ComputerOffBlock
 		}
 
 		if(worldIn.isRemote && SkaiaClient.requestData(tileEntity))
-			DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> Minecraft.getInstance().displayGuiScreen(new ComputerScreen(Minecraft.getInstance(), tileEntity)));
-		//TODO Check if this is actually fine
+			ModScreenFactories.displayComputerScreen(tileEntity);
+		
 		return true;
 	}
 	

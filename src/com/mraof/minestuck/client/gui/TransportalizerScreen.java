@@ -23,7 +23,7 @@ public class TransportalizerScreen extends Screen
 	private TextFieldWidget destinationTextField;
 	
 	
-	public TransportalizerScreen(TransportalizerTileEntity te)
+	TransportalizerScreen(TransportalizerTileEntity te)
 	{
 		super(new StringTextComponent("Transportalizer"));
 

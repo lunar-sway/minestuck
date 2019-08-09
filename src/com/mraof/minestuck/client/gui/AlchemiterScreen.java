@@ -25,7 +25,7 @@ public class AlchemiterScreen extends Screen
 	private AlchemiterTileEntity alchemiter;
 	private int itemQuantity;
 	
-	public AlchemiterScreen(AlchemiterTileEntity te)
+	AlchemiterScreen(AlchemiterTileEntity te)
 	{
 		super(new StringTextComponent("Alchemiter"));
 		alchemiter = te;

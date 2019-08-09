@@ -31,7 +31,7 @@ public class ComputerScreen extends Screen
 	public Minecraft mc;
 	public ComputerTileEntity te;
 	
-	public ComputerScreen(Minecraft mc, ComputerTileEntity te)
+	ComputerScreen(Minecraft mc, ComputerTileEntity te)
 	{
 		super(new StringTextComponent("Computer"));
 		

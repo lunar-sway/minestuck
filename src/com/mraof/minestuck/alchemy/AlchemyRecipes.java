@@ -1044,14 +1044,14 @@ public class AlchemyRecipes
 			Item item = entry.getKey();
 			if(AlchemyCostRegistry.getGristConversion(item) != null)
 				continue;
-			Item container = item.getContainerItem();
+			Item container = item.getContainerItem();	//TODO
 			GristSet cost = entry.getValue();
 			if(container != Items.AIR)
 			{
 				GristSet containerCost = autogrist.lookupCostForItem(container);
 				if(containerCost == null)
 				{
-					Debug.warnf("Can't generate a cost for %s: %s does not have a cost.", item.getName(), container.getName());
+					Debug.warnf("Can't generate a cost for %s: %s does not have a cost.", new ItemStack(item).getDisplayName(), new ItemStack(container).getDisplayName());
 					continue;
 				} else cost.addGrist(containerCost);
 			}
