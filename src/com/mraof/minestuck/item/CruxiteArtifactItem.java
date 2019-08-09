@@ -107,10 +107,10 @@ public abstract class CruxiteArtifactItem extends Item
 					{
 						if(this.prepareDestination(player.getPosition(), player, (ServerWorld) player.world))
 						{
-							//if(player.changeDimension(landDimension, this) != null)TODO
+							if(player.changeDimension(landDimension) != null)//TODO
 							{
 								SkaianetHandler.get(player.world).onEntry(identifier);
-							}// else
+							} else
 							{
 								player.sendMessage(new StringTextComponent("Entry failed!"));
 							}

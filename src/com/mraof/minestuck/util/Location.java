@@ -10,6 +10,7 @@ import org.apache.commons.lang3.Validate;
 
 import javax.annotation.Nullable;
 
+@Deprecated //TODO For the most part replaced by GlobalPos. Keep any helper functions that are still useful
 public class Location
 {
 	public BlockPos pos;

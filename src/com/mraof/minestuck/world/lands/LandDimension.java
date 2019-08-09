@@ -7,7 +7,7 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.gen.ModChunkGeneratorType;
-import com.mraof.minestuck.world.lands.gen.ChunkGeneratorLands;
+import com.mraof.minestuck.world.lands.gen.LandChunkGenerator;
 
 import com.mraof.minestuck.world.lands.gen.LandGenSettings;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
@@ -31,7 +31,7 @@ import java.util.function.BiFunction;
 
 public class LandDimension extends Dimension
 {
-	private ChunkGeneratorLands chunkGen;
+	private LandChunkGenerator chunkGen;
 	
 	public StructureBlockRegistry blockRegistry;
 	public LandAspects landAspects;
