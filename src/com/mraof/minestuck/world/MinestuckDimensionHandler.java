@@ -31,7 +31,6 @@ public class MinestuckDimensionHandler
 	private static Exception unregisterTrace;
 	private static Hashtable<IdentifierHandler.PlayerIdentifier, LandInfoContainer> landInfo = new Hashtable<>();
 	private static Hashtable<IdentifierHandler.PlayerIdentifier, DimensionType> lands = new Hashtable<>();
-	public static List<DimensionType> landCache = new ArrayList<>();
 	public static DimensionType skaia;
 	
 	public static ModDimension landDimensionType;
@@ -52,38 +51,10 @@ public class MinestuckDimensionHandler
 	@SubscribeEvent
 	public static void registerDimensionTypes(final RegisterDimensionsEvent event)
 	{
-		landCache.clear();
-		
 		//register dimensions
 		skaia = DimensionType.byName(SKAIA_ID);
 		if(skaia == null)
 			skaia = DimensionManager.registerDimension(SKAIA_ID, skaiaDimensionType, null, true);
-		
-		for(int i = 0; i < landDimensionCache; i++)	//TODO I doubt we need a cache as a workaround here in 1.14, and if we still do, make forge fix the problem
-		{
-			ResourceLocation name = new ResourceLocation(Minestuck.MOD_ID, "land_"+i);
-			DimensionType land = DimensionType.byName(name);
-			if(land != null)
-			{
-				PacketBuffer data = land.getData();
-				if(data == null)
-				{
-					Debug.errorf("Data was null for cached land dimension %s. The entry will be unusable!", name);
-					continue;
-				}
-				data.resetReaderIndex();
-				if(!data.readBoolean())
-				{
-					landCache.add(land);
-				}
-			} else
-			{
-				PacketBuffer data = new PacketBuffer(Unpooled.buffer());
-				data.writeBoolean(false);
-				land = DimensionManager.registerDimension(name, landDimensionType, data, true);
-				landCache.add(land);
-			}
-		}
 	}
 	
 	/*public static void saveData(NBTTagCompound nbt)
