@@ -1,5 +1,5 @@
 {
-  "type": "minestuck:empty_card",
+  "type": "minestuck:non_mirrored",
   "pattern": [
     "xOX"
   ],
@@ -8,14 +8,16 @@
       "item": "minestuck:cruxite_block"
     },
     "O": {
+      "type": "forge:nbt",
       "item": "minestuck:captcha_card"
+      },
+      "x": {
+        "item": "minestuck:raw_cruxite"
+      }
     },
-    "x": {
-      "item": "minestuck:raw_cruxite"
+    "result": {
+      "item": "minestuck:queue_modus_card",
+      "count": 1
     }
-  },
-  "result": {
-    "item": "minestuck:queue_modus_card",
-    "count": 1
   }
 }

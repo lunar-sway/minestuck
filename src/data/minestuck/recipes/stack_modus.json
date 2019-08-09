@@ -1,5 +1,5 @@
 {
-  "type": "minestuck:empty_card",
+  "type": "minestuck:non_mirrored",
   "pattern": [
     "XOx"
   ],
@@ -8,6 +8,7 @@
       "item": "minestuck:cruxite_block"
     },
     "O": {
+      "type": "forge:nbt",
       "item": "minestuck:captcha_card"
     },
     "x": {
