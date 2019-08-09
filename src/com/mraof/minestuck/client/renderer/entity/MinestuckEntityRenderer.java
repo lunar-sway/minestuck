@@ -6,14 +6,11 @@ import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.util.ResourceLocation;
 
 import com.mraof.minestuck.entity.EntityMinestuck;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
-public class MisetuckEntityRenderer<T extends EntityMinestuck, M extends EntityModel<T>> extends MobRenderer<T, M>
+public class MinestuckEntityRenderer<T extends EntityMinestuck, M extends EntityModel<T>> extends MobRenderer<T, M>
 {
 	
-	public MisetuckEntityRenderer(EntityRendererManager manager, M par1ModelBase, float par2)
+	public MinestuckEntityRenderer(EntityRendererManager manager, M par1ModelBase, float par2)
 	{
 		super(manager, par1ModelBase, par2);
 	}

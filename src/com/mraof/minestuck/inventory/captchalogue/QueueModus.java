@@ -8,8 +8,6 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
 
 import java.util.Iterator;
@@ -72,7 +70,6 @@ public class QueueModus extends StackModus
 	}
 	
 	@Override
-	@OnlyIn(Dist.CLIENT)
 	public SylladexScreen getGuiHandler()
 	{
 		if(gui == null)

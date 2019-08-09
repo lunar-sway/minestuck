@@ -15,8 +15,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
 import net.minecraft.util.IntReferenceHolder;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 
@@ -125,7 +123,6 @@ public class UraniumCookerContainer extends MachineContainer
 		return itemstack;
 	}
 	
-	@OnlyIn(Dist.CLIENT)
 	public int getFuel()
 	{
 		return fuelHolder.get();

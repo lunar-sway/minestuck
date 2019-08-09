@@ -1,8 +1,6 @@
 package com.mraof.minestuck.item.enums;
 
 import net.minecraft.util.IStringSerializable;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public enum EnumShopPoster implements IStringSerializable
 {
@@ -67,9 +65,7 @@ public enum EnumShopPoster implements IStringSerializable
     {
         return this.damage;
     }
-
     
-    @OnlyIn(Dist.CLIENT)
     public String getPosterName()
     {
         return this.name;

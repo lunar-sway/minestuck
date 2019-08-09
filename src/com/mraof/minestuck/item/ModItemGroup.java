@@ -3,8 +3,6 @@ package com.mraof.minestuck.item;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.function.Supplier;
 
@@ -22,7 +20,6 @@ public class ModItemGroup extends ItemGroup
 		this.icon = icon;
 	}
 	
-	@OnlyIn(Dist.CLIENT)
 	@Override
 	public ItemStack createIcon()
 	{

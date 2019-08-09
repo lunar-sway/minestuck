@@ -7,14 +7,12 @@ import com.mraof.minestuck.util.Location;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.dimension.DimensionType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ComputerData
 {
 	Location location;
 	PlayerIdentifier owner;
-	@OnlyIn(Dist.CLIENT)
+	//Client only
 	private int ownerId;
 	
 	public static ComputerData createData(ComputerTileEntity te)
@@ -57,7 +55,7 @@ public class ComputerData
 	public BlockPos getPos() {return location.pos;}
 	public DimensionType getDimension() {return location.dim;}
 	public PlayerIdentifier getOwner() {return owner;}
-	@OnlyIn(Dist.CLIENT) public int getOwnerId() {return ownerId;}
+	public int getOwnerId() {return ownerId;}
 	
 	@Override
 	public boolean equals(Object obj)

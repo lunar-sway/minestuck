@@ -22,8 +22,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
 
 import java.util.HashMap;
@@ -49,7 +47,6 @@ public class CaptchaDeckHandler
 	
 	public static Random rand;
 	
-	@OnlyIn(Dist.CLIENT)
 	public static Modus clientSideModus;
 	
 	static

@@ -11,8 +11,6 @@ import net.minecraft.nbt.StringNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.dimension.DimensionType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class SburbConnection
 {
@@ -31,14 +29,12 @@ public class SburbConnection
 	PlayerIdentifier serverIdentifier;
 	
 	/**
-	 * Display name used by computer guis
+	 * Display name used by computer guis clientside
 	 */
-	@OnlyIn(Dist.CLIENT)
 	String clientName, serverName;
 	/**
 	 * Id for identifying players clientside
 	 */
-	@OnlyIn(Dist.CLIENT)
 	int clientId, serverId;
 	
 	boolean isActive;
@@ -98,13 +94,10 @@ public class SburbConnection
 		return clientHomeLand;
 	}
 	public boolean[] givenItems(){return givenItemList;}
-	@OnlyIn(Dist.CLIENT)
+	//client side
 	public String getClientDisplayName() {return clientName;}
-	@OnlyIn(Dist.CLIENT)
 	public String getServerDisplayName() {return serverName;}
-	@OnlyIn(Dist.CLIENT)
 	public int getClientId() {return clientId;}
-	@OnlyIn(Dist.CLIENT)
 	public int getServerId() {return serverId;}
 	
 	public void toBuffer(PacketBuffer buffer)

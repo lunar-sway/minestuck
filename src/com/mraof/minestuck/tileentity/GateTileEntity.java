@@ -14,13 +14,10 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class GateTileEntity extends TileEntity
 {
 	
-	@OnlyIn(Dist.CLIENT)
 	public int colorIndex;
 	
 	public int gateCount;
@@ -102,7 +99,6 @@ public class GateTileEntity extends TileEntity
 		return this.world != null ? this.world.getBlockState(this.getPos()).getBlock() != MinestuckBlocks.RETURN_NODE : this.gateCount != 0;
 	}
 	
-	@OnlyIn(Dist.CLIENT)
 	@Override
 	public double getMaxRenderDistanceSquared()
 	{

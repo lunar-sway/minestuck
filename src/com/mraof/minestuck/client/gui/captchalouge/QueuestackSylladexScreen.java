@@ -1,10 +1,7 @@
 package com.mraof.minestuck.client.gui.captchalouge;
 
 import com.mraof.minestuck.inventory.captchalogue.Modus;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
 public class QueuestackSylladexScreen extends StackSylladexScreen
 {
 	

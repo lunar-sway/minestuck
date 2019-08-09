@@ -13,8 +13,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
 
 import java.util.ArrayList;
@@ -27,7 +25,6 @@ public class TreeModus extends Modus
 	public int size;
 	public boolean autoBalance = true;
 	
-	@OnlyIn(Dist.CLIENT)
 	protected TreeSylladexScreen guiHandler;
 	
 	public TreeModus(LogicalSide side)
@@ -198,7 +195,6 @@ public class TreeModus extends Modus
 		}
 	}
 	
-	@OnlyIn(Dist.CLIENT)
 	@Override
 	public SylladexScreen getGuiHandler()
 	{

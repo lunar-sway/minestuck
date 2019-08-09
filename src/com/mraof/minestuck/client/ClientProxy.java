@@ -18,7 +18,7 @@ import com.mraof.minestuck.client.model.TurtleModel;
 import com.mraof.minestuck.client.renderer.BlockColorCruxite;
 import com.mraof.minestuck.client.renderer.MachineOutlineRenderer;
 import com.mraof.minestuck.client.renderer.entity.DecoyRenderer;
-import com.mraof.minestuck.client.renderer.entity.MisetuckEntityRenderer;
+import com.mraof.minestuck.client.renderer.entity.MinestuckEntityRenderer;
 import com.mraof.minestuck.client.renderer.entity.GristRenderer;
 import com.mraof.minestuck.client.renderer.entity.RenderHangingArt;
 import com.mraof.minestuck.client.renderer.entity.HologramRenderer;
@@ -66,15 +66,12 @@ import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
-@OnlyIn(Dist.CLIENT)
 public class ClientProxy extends CommonProxy
 {
 	
@@ -127,17 +124,17 @@ public class ClientProxy extends CommonProxy
 		
 		RenderingRegistry.registerEntityRenderingHandler(FrogEntity.class, manager -> new FrogRenderer(manager));
 		RenderingRegistry.registerEntityRenderingHandler(HologramEntity.class, HologramRenderer::new);
-		RenderingRegistry.registerEntityRenderingHandler(NakagatorEntity.class, manager -> new MisetuckEntityRenderer<>(manager, new NakagatorModel(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(SalamanderEntity.class, manager -> new MisetuckEntityRenderer<>(manager, new SalamanderModel(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(IguanaEntity.class, manager -> new MisetuckEntityRenderer<>(manager, new IguanaModel(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(TurtleEntity.class, manager -> new MisetuckEntityRenderer<>(manager, new TurtleModel(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(ImpEntity.class, manager -> new MisetuckEntityRenderer<>(manager, new ImpModel(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(OgreEntity.class, manager -> new MisetuckEntityRenderer<>(manager, new OgreModel(), 2.8F));
-		RenderingRegistry.registerEntityRenderingHandler(BasiliskEntity.class, manager -> new MisetuckEntityRenderer<>(manager, new BasiliskModel(), 2.8F));
-		RenderingRegistry.registerEntityRenderingHandler(LichEntity.class, manager -> new MisetuckEntityRenderer<>(manager, new LichModel(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(GiclopsEntity.class, manager -> new MisetuckEntityRenderer<>(manager, new GiclopsModel(), 7.6F));
-		RenderingRegistry.registerEntityRenderingHandler(BishopEntity.class, manager -> new MisetuckEntityRenderer<>(manager, new BishopModel(), 1.8F));
-		RenderingRegistry.registerEntityRenderingHandler(RookEntity.class, manager -> new MisetuckEntityRenderer<>(manager, new RookModel(), 2.5F));
+		RenderingRegistry.registerEntityRenderingHandler(NakagatorEntity.class, manager -> new MinestuckEntityRenderer<>(manager, new NakagatorModel(), 0.5F));
+		RenderingRegistry.registerEntityRenderingHandler(SalamanderEntity.class, manager -> new MinestuckEntityRenderer<>(manager, new SalamanderModel(), 0.5F));
+		RenderingRegistry.registerEntityRenderingHandler(IguanaEntity.class, manager -> new MinestuckEntityRenderer<>(manager, new IguanaModel(), 0.5F));
+		RenderingRegistry.registerEntityRenderingHandler(TurtleEntity.class, manager -> new MinestuckEntityRenderer<>(manager, new TurtleModel(), 0.5F));
+		RenderingRegistry.registerEntityRenderingHandler(ImpEntity.class, manager -> new MinestuckEntityRenderer<>(manager, new ImpModel(), 0.5F));
+		RenderingRegistry.registerEntityRenderingHandler(OgreEntity.class, manager -> new MinestuckEntityRenderer<>(manager, new OgreModel(), 2.8F));
+		RenderingRegistry.registerEntityRenderingHandler(BasiliskEntity.class, manager -> new MinestuckEntityRenderer<>(manager, new BasiliskModel(), 2.8F));
+		RenderingRegistry.registerEntityRenderingHandler(LichEntity.class, manager -> new MinestuckEntityRenderer<>(manager, new LichModel(), 0.5F));
+		RenderingRegistry.registerEntityRenderingHandler(GiclopsEntity.class, manager -> new MinestuckEntityRenderer<>(manager, new GiclopsModel(), 7.6F));
+		RenderingRegistry.registerEntityRenderingHandler(BishopEntity.class, manager -> new MinestuckEntityRenderer<>(manager, new BishopModel(), 1.8F));
+		RenderingRegistry.registerEntityRenderingHandler(RookEntity.class, manager -> new MinestuckEntityRenderer<>(manager, new RookModel(), 2.5F));
 		RenderingRegistry.registerEntityRenderingHandler(UnderlingPartEntity.class, manager -> new ShadowRenderer<>(manager, 2.8F));
 		RenderingRegistry.registerEntityRenderingHandler(EntityBigPart.class, manager -> new ShadowRenderer<>(manager, 0F));
 		RenderingRegistry.registerEntityRenderingHandler(PawnEntity.class, manager -> new PawnRenderer(manager, new BipedModel(), 0.5F));

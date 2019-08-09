@@ -10,8 +10,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
 
 import java.util.Iterator;
@@ -22,11 +20,9 @@ public class SetModus extends Modus
 	protected int size;
 	protected NonNullList<ItemStack> list;
 	
-	@OnlyIn(Dist.CLIENT)
+	//client side
 	protected boolean changed;
-	@OnlyIn(Dist.CLIENT)
 	protected NonNullList<ItemStack> items;
-	@OnlyIn(Dist.CLIENT)
 	protected SylladexScreen gui;
 	
 	public SetModus(LogicalSide side)
@@ -203,7 +199,6 @@ public class SetModus extends Modus
 	}
 	
 	@Override
-	@OnlyIn(Dist.CLIENT)
 	public SylladexScreen getGuiHandler()
 	{
 		if(gui == null)

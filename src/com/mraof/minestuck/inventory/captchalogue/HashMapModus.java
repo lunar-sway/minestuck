@@ -13,8 +13,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
 
 import java.util.Iterator;
@@ -25,11 +23,9 @@ public class HashMapModus extends Modus
 	protected NonNullList<ItemStack> list;
 	public boolean ejectByChat = true;
 	
-	@OnlyIn(Dist.CLIENT)
+	//client only
 	protected boolean changed;
-	@OnlyIn(Dist.CLIENT)
 	protected NonNullList<ItemStack> items;
-	@OnlyIn(Dist.CLIENT)
 	protected SylladexScreen gui;
 	
 	public HashMapModus(LogicalSide side)
@@ -227,7 +223,6 @@ public class HashMapModus extends Modus
 	}
 	
 	@Override
-	@OnlyIn(Dist.CLIENT)
 	public SylladexScreen getGuiHandler()
 	{
 		if(gui == null)

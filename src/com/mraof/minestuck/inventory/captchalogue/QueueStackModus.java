@@ -7,8 +7,6 @@ import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
 
 public class QueueStackModus extends StackModus
@@ -57,7 +55,6 @@ public class QueueStackModus extends StackModus
 	}
 	
 	@Override
-	@OnlyIn(Dist.CLIENT)
 	public SylladexScreen getGuiHandler()
 	{
 		if(gui == null)

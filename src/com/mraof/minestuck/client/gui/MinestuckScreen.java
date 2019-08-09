@@ -11,8 +11,6 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -20,7 +18,6 @@ import java.util.stream.Collectors;
 /**
  * Created by mraof on 2017 December 06 at 11:31 PM.
  */
-@OnlyIn(Dist.CLIENT)
 public abstract class MinestuckScreen extends Screen
 {
 	protected static final int gristIconX = 21, gristIconY = 32;

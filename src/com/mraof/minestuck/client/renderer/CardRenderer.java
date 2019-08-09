@@ -1,9 +1,5 @@
 package com.mraof.minestuck.client.renderer;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-@OnlyIn(Dist.CLIENT)
 public class CardRenderer// implements IItemRenderer
 {
 	

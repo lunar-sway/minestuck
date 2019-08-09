@@ -7,8 +7,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
 
 public abstract class Modus
@@ -55,10 +53,8 @@ public abstract class Modus
 	
 	public void setValue(ServerPlayerEntity player, byte type, int value) {}
 	
-	@OnlyIn(Dist.CLIENT)
 	public abstract SylladexScreen getGuiHandler();
 	
-	@OnlyIn(Dist.CLIENT)
 	public ITextComponent getName()
 	{
 		return CaptchaDeckHandler.getItem(this.getRegistryName()).getDisplayName();

@@ -11,15 +11,12 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-@OnlyIn(Dist.CLIENT)
 public class ComputerScreen extends Screen
 {
 

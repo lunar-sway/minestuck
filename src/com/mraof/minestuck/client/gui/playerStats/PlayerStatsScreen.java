@@ -21,14 +21,11 @@ import net.minecraft.network.play.client.CCloseWindowPacket;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Arrays;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-@OnlyIn(Dist.CLIENT)
 public abstract class PlayerStatsScreen extends MinestuckScreen
 {
 	

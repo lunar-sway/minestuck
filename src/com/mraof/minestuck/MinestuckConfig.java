@@ -9,8 +9,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.OpEntry;
 import net.minecraft.world.GameType;
 import net.minecraft.world.dimension.DimensionType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -20,37 +18,24 @@ public class MinestuckConfig
 {
 	//public static Configuration config;
 	
-	@OnlyIn(Dist.CLIENT)
+	//Client side
 	public static int clientOverworldEditRange;
-	@OnlyIn(Dist.CLIENT)
 	public static int clientLandEditRange;
-	@OnlyIn(Dist.CLIENT)
 	public static int clientCardCost;
-	@OnlyIn(Dist.CLIENT)
 	public static int clientAlchemiterStacks;
-	@OnlyIn(Dist.CLIENT)
 	public static byte clientTreeAutobalance;
-	@OnlyIn(Dist.CLIENT)
 	public static byte clientHashmapChat;
-	@OnlyIn(Dist.CLIENT)
 	public static byte echeladderAnimation;
-	@OnlyIn(Dist.CLIENT)
 	public static boolean clientGiveItems;
-	@OnlyIn(Dist.CLIENT)
 	public static boolean clientDisableGristWidget;
-	@OnlyIn(Dist.CLIENT)
 	public static boolean clientHardMode;
-	@OnlyIn(Dist.CLIENT)
 	public static boolean oldItemModels;
-	@OnlyIn(Dist.CLIENT)
 	public static boolean loginColorSelector;
-	@OnlyIn(Dist.CLIENT)
 	public static boolean dataCheckerAccess;
-	@OnlyIn(Dist.CLIENT)
 	public static boolean alchemyIcons;
-	@OnlyIn(Dist.CLIENT)
 	public static boolean preEntryEcheladder;
 	
+	//Server side
 	public static boolean hardMode = false;
 	public static boolean generateCruxiteOre;
 	public static boolean generateUraniumOre;
