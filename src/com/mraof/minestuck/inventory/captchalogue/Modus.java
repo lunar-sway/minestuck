@@ -9,16 +9,18 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fml.LogicalSide;
 
+import java.util.Objects;
+
 public abstract class Modus
 {
+	private final ModusType<?> type;
 	public final LogicalSide side;
 	
-	public Modus(LogicalSide side)
+	public Modus(ModusType<?> type, LogicalSide side)
 	{
-		this.side = side;
+		this.type = Objects.requireNonNull(type);
+		this.side = Objects.requireNonNull(side);
 	}
-	
-	public abstract ResourceLocation getRegistryName();
 	
 	/**
 	 * This is called when the modus is created without calling readFromNBT(nbt).
@@ -55,9 +57,13 @@ public abstract class Modus
 	
 	public abstract SylladexScreen getGuiHandler();
 	
-	public ITextComponent getName()
+	public ModusType<?> getType()
 	{
-		return CaptchaDeckHandler.getItem(this.getRegistryName()).getDisplayName();
+		return type;
 	}
 	
+	public ITextComponent getName()
+	{
+		return type.getStack().getDisplayName();
+	}
 }

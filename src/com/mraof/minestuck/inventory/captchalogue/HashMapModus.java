@@ -28,15 +28,9 @@ public class HashMapModus extends Modus
 	protected NonNullList<ItemStack> items;
 	protected SylladexScreen gui;
 	
-	public HashMapModus(LogicalSide side)
+	public HashMapModus(ModusType<? extends HashMapModus> type, LogicalSide side)
 	{
-		super(side);
-	}
-	
-	@Override
-	public ResourceLocation getRegistryName()
-	{
-		return CaptchaDeckHandler.HASH_MAP;
+		super(type, side);
 	}
 	
 	@Override

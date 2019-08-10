@@ -1,6 +1,5 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
 import com.mraof.minestuck.item.BoondollarsItem;
@@ -21,27 +20,12 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.LogicalSide;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
-import java.util.function.Function;
 
 public class CaptchaDeckHandler
 {
-	public static final ResourceLocation STACK = new ResourceLocation(Minestuck.MOD_ID, "stack");
-	public static final ResourceLocation QUEUE = new ResourceLocation(Minestuck.MOD_ID, "queue");
-	public static final ResourceLocation QUEUE_STACK = new ResourceLocation(Minestuck.MOD_ID, "queue_stack");
-	public static final ResourceLocation TREE = new ResourceLocation(Minestuck.MOD_ID, "tree");
-	public static final ResourceLocation HASH_MAP = new ResourceLocation(Minestuck.MOD_ID, "hash_map");
-	public static final ResourceLocation SET = new ResourceLocation(Minestuck.MOD_ID, "set");
-	
-	private static Map<ResourceLocation, Function<LogicalSide, Modus>> modusConstructors = new HashMap<>();
-	private static Map<ResourceLocation, ItemStack> modusItemMap = new HashMap<>();
-	private static String[] metaConvert = new String[] {"stack", "queue", "queue_stack", "tree", "hash_map", "set"};
-	
 	public static final int EMPTY_SYLLADEX = -1;
 	public static final int EMPTY_CARD = -2;
 	
@@ -49,51 +33,15 @@ public class CaptchaDeckHandler
 	
 	public static Modus clientSideModus;
 	
-	static
+	public static Modus createModus(ResourceLocation name, LogicalSide side)
 	{
-		registerModusType(STACK, StackModus::new, new ItemStack(MinestuckItems.STACK_MODUS_CARD));
-		registerModusType(QUEUE, QueueModus::new, new ItemStack(MinestuckItems.QUEUE_MODUS_CARD));
-		registerModusType(QUEUE_STACK, QueueStackModus::new, new ItemStack(MinestuckItems.QUEUESTACK_MODUS_CARD));
-		registerModusType(TREE, TreeModus::new, new ItemStack(MinestuckItems.TREE_MODUS_CARD));
-		registerModusType(HASH_MAP, HashMapModus::new, new ItemStack(MinestuckItems.HASHMAP_MODUS_CARD));
-		registerModusType(SET, SetModus::new, new ItemStack(MinestuckItems.SET_MODUS_CARD));
-	}
-	
-	public static void registerModusType(ResourceLocation registryName, Function<LogicalSide, Modus> provider, ItemStack item)
-	{
-		modusConstructors.put(registryName, provider);
-		modusItemMap.put(registryName, item);
-	}
-	
-	public static Modus createInstance(ResourceLocation location, LogicalSide side)
-	{
-		Function<LogicalSide, Modus> provider = modusConstructors.get(location);
-		if(provider == null)
-			return null;
-		return provider.apply(side);
-	}
-	
-	public static boolean isInRegistry(ResourceLocation type)
-	{
-		return modusConstructors.containsKey(type);
-	}
-	
-	public static ResourceLocation getType(ItemStack item)
-	{
-		for(Map.Entry<ResourceLocation, ItemStack> entry : modusItemMap.entrySet())
-			if(ItemStack.areItemsEqual(entry.getValue(), item))
-				return entry.getKey();
-		return null;
-	}
-	
-	public static ItemStack getItem(ResourceLocation location)
-	{
-		return modusItemMap.get(location).copy();
+		ModusType<?> type = ModusTypes.REGISTRY.getValue(name);
+		return type != null ? type.create(side) : null;
 	}
 	
 	public static void launchItem(ServerPlayerEntity player, ItemStack item)
 	{
-		if(item.getItem().equals(MinestuckItems.CAPTCHA_CARD) && (!item.hasTag() || !item.getTag().contains("contentID")))
+		if(item.getItem().equals(MinestuckItems.CAPTCHA_CARD) && !AlchemyRecipes.hasDecodedItem(item))
 			while(item.getCount() > 0)
 			{
 				if(getModus(player).increaseSize(player))
@@ -119,16 +67,16 @@ public class CaptchaDeckHandler
 		CaptchaDeckContainer container = (CaptchaDeckContainer) player.openContainer;
 		if(container.inventory.getStackInSlot(0).isEmpty())
 			return;
-		ItemStack item = container.inventory.getStackInSlot(0);
+		ItemStack stack = container.inventory.getStackInSlot(0);
 		Modus modus = getModus(player);
 		
-		ResourceLocation type = getType(item);
+		ModusType<?> type = ModusTypes.getTypeFromItem(stack.getItem());
 		if(type != null)
 		{
 			if(modus == null)
 			{
 				PlayerSavedData.PlayerData data = PlayerSavedData.getData(player);
-				modus = createInstance(type, LogicalSide.SERVER);
+				modus = type.create(LogicalSide.SERVER);
 				modus.initModus(player, null, data.givenModus ? 0 : MinestuckConfig.initialModusSize);
 				data.givenModus = true;
 				setModus(player, modus);
@@ -137,10 +85,10 @@ public class CaptchaDeckHandler
 			else
 			{
 				Modus oldModus = modus;
-				ResourceLocation oldType = oldModus.getRegistryName();
+				ModusType<?> oldType = oldModus.getType();
 				if(type.equals(oldType))
 					return;
-				modus = createInstance(type, LogicalSide.SERVER);
+				modus = type.create(LogicalSide.SERVER);
 				if(modus.canSwitchFrom(oldModus))
 					modus.initModus(player, oldModus.getItems(), oldModus.getSize());
 				else
@@ -152,24 +100,24 @@ public class CaptchaDeckHandler
 				}
 				
 				setModus(player, modus);
-				container.inventory.setInventorySlotContents(0, getItem(oldType));
+				container.inventory.setInventorySlotContents(0, oldType.getStack().copy());
 			}
 			
 			MinestuckCriteriaTriggers.CHANGE_MODUS.trigger(player, modus);
 		}
-		else if(item.getItem().equals(MinestuckItems.CAPTCHA_CARD) && !AlchemyRecipes.isPunchedCard(item)
+		else if(stack.getItem().equals(MinestuckItems.CAPTCHA_CARD) && !AlchemyRecipes.isPunchedCard(stack)
 				&& modus != null)
 		{
-			ItemStack content = AlchemyRecipes.getDecodedItem(item, true);
+			ItemStack content = AlchemyRecipes.getDecodedItem(stack, true);
 			
 			System.out.println(content);
 			int failed = 0;
-			for(int i = 0; i < item.getCount(); i++)
+			for(int i = 0; i < stack.getCount(); i++)
 				if(!modus.increaseSize(player))
 					failed++;
 			
 			if(!content.isEmpty())
-				for(int i = 0; i < item.getCount() - failed; i++)
+				for(int i = 0; i < stack.getCount() - failed; i++)
 				{
 					ItemStack toPut = content.copy();
 					if(!modus.putItemStack(player, toPut))
@@ -179,7 +127,7 @@ public class CaptchaDeckHandler
 			
 			if(failed == 0)
 				container.inventory.setInventorySlotContents(0, ItemStack.EMPTY);
-			else item.setCount(failed);
+			else stack.setCount(failed);
 		}
 		
 		if(modus != null)
@@ -421,7 +369,7 @@ public class CaptchaDeckHandler
 		
 		if(MinestuckConfig.sylladexDropMode == 2)
 		{
-			player.dropItem(getItem(modus.getRegistryName()), true, false);	//TODO Add a method to the modus to get the itemstack instead
+			player.dropItem(modus.getType().getStack().copy(), true, false);	//TODO Add a method to the modus to get the itemstack instead
 			setModus(player, null);
 		} else modus.initModus(player, null, size);
 		
@@ -433,10 +381,14 @@ public class CaptchaDeckHandler
 	{
 		if(modus == null)
 			return null;
-		ResourceLocation name = modus.getRegistryName();
-		CompoundNBT nbt = modus.writeToNBT(new CompoundNBT());
-		nbt.putString("type", name.toString());
-		return nbt;
+		
+		ResourceLocation name = modus.getType().getRegistryName();
+		if(name != null)
+		{
+			CompoundNBT nbt = modus.writeToNBT(new CompoundNBT());
+			nbt.putString("type", name.toString());
+			return nbt;
+		} else return null;
 	}
 	
 	public static Modus readFromNBT(CompoundNBT nbt, boolean clientSide)
@@ -444,21 +396,13 @@ public class CaptchaDeckHandler
 		if(nbt == null)
 			return null;
 		Modus modus;
-		ResourceLocation name;
-		if(nbt.contains("type", 99))	//Integer from the old format
-		{
-			int i = nbt.getInt("type");
-			name = new ResourceLocation(Minestuck.MOD_ID, metaConvert[MathHelper.clamp(i, 0, 5)]);
-		} else
-		{
-			name = new ResourceLocation(nbt.getString("type"));
-		}
+		ResourceLocation name = new ResourceLocation(nbt.getString("type"));
 		
-		if(clientSide && clientSideModus != null && name.equals(clientSideModus.getRegistryName()))
+		if(clientSide && clientSideModus != null && name.equals(clientSideModus.getType().getRegistryName()))
 			modus = clientSideModus;
 		else
 		{
-			modus = createInstance(name, clientSide ? LogicalSide.CLIENT : LogicalSide.SERVER);
+			modus = createModus(name, clientSide ? LogicalSide.CLIENT : LogicalSide.SERVER);
 			if(modus == null)
 			{
 				Debug.warnf("Failed to load modus from nbt with the name \"%s\"", name.toString());

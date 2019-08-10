@@ -12,15 +12,9 @@ import net.minecraftforge.fml.LogicalSide;
 public class QueueStackModus extends StackModus
 {
 	
-	public QueueStackModus(LogicalSide side)
+	public QueueStackModus(ModusType<? extends QueueStackModus> type, LogicalSide side)
 	{
-		super(side);
-	}
-	
-	@Override
-	public ResourceLocation getRegistryName()
-	{
-		return CaptchaDeckHandler.QUEUE_STACK;
+		super(type, side);
 	}
 	
 	@Override

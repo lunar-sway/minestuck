@@ -27,15 +27,9 @@ public class TreeModus extends Modus
 	
 	protected TreeSylladexScreen guiHandler;
 	
-	public TreeModus(LogicalSide side)
+	public TreeModus(ModusType<? extends TreeModus> type, LogicalSide side)
 	{
-		super(side);
-	}
-	
-	@Override
-	public ResourceLocation getRegistryName()
-	{
-		return CaptchaDeckHandler.TREE;
+		super(type, side);
 	}
 	
 	@Override

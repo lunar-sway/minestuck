@@ -8,6 +8,8 @@ import com.google.gson.JsonObject;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
+import com.mraof.minestuck.inventory.captchalogue.ModusType;
+import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.advancements.PlayerAdvancements;
 import net.minecraft.advancements.criterion.CriterionInstance;
@@ -65,12 +67,13 @@ public class CaptchalogueTrigger implements ICriterionTrigger<CaptchalogueTrigge
 	@Override
 	public Instance deserializeInstance(JsonObject json, JsonDeserializationContext context)
 	{
-		String modus = null;
+		ModusType<?> modus = null;
 		if(json.has("modus"))
 		{
-			modus = json.get("modus").getAsString();
-			if(!CaptchaDeckHandler.isInRegistry(new ResourceLocation(modus)))
-				throw new IllegalArgumentException("Invalid modus "+modus);
+			String modusName = json.get("modus").getAsString();
+			modus = ModusTypes.REGISTRY.getValue(new ResourceLocation(modusName));
+			if(modus == null)
+				throw new IllegalArgumentException("Invalid modus: "+modusName);
 		}
 		ItemPredicate item = null;
 		if(json.has("item"))
@@ -83,15 +86,15 @@ public class CaptchalogueTrigger implements ICriterionTrigger<CaptchalogueTrigge
 	{
 		Listeners listeners = listenersMap.get(player.getAdvancements());
 		if(listeners != null)
-			listeners.trigger(modus.getRegistryName().toString(), item, modus.getNonEmptyCards());
+			listeners.trigger(modus.getType(), item, modus.getNonEmptyCards());
 	}
 	
 	public static class Instance extends CriterionInstance
 	{
-		private final String modus;
+		private final ModusType<?> modus;
 		private final ItemPredicate item;
 		private final MinMaxBounds.IntBound count;
-		public Instance(String modus, ItemPredicate item, MinMaxBounds.IntBound count)
+		public Instance(ModusType<?> modus, ItemPredicate item, MinMaxBounds.IntBound count)
 		{
 			super(ID);
 			this.modus = modus;
@@ -99,7 +102,7 @@ public class CaptchalogueTrigger implements ICriterionTrigger<CaptchalogueTrigge
 			this.count = count;
 		}
 		
-		public boolean test(String modus, ItemStack item, int count)
+		public boolean test(ModusType<?> modus, ItemStack item, int count)
 		{
 			return (this.modus == null || this.modus.equals(modus)) && (this.item == null || this.item.test(item)) && this.count.test(count);
 		}
@@ -130,7 +133,7 @@ public class CaptchalogueTrigger implements ICriterionTrigger<CaptchalogueTrigge
 			this.listeners.remove(listener);
 		}
 		
-		public void trigger(String modus, ItemStack item, int count)
+		public void trigger(ModusType<?> modus, ItemStack item, int count)
 		{
 			List<Listener<Instance>> list = Lists.newArrayList();
 			for(Listener<Instance> listener : listeners)

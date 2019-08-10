@@ -25,15 +25,9 @@ public class SetModus extends Modus
 	protected NonNullList<ItemStack> items;
 	protected SylladexScreen gui;
 	
-	public SetModus(LogicalSide side)
+	public SetModus(ModusType<? extends SetModus> type, LogicalSide side)
 	{
-		super(side);
-	}
-	
-	@Override
-	public ResourceLocation getRegistryName()
-	{
-		return CaptchaDeckHandler.SET;
+		super(type, side);
 	}
 	
 	@Override

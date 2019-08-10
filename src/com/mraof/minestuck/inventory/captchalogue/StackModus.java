@@ -26,15 +26,9 @@ public class StackModus extends Modus
 	protected NonNullList<ItemStack> items;
 	protected SylladexScreen gui;
 	
-	public StackModus(LogicalSide side)
+	public StackModus(ModusType<? extends StackModus> type, LogicalSide side)
 	{
-		super(side);
-	}
-	
-	@Override
-	public ResourceLocation getRegistryName()
-	{
-		return CaptchaDeckHandler.STACK;
+		super(type, side);
 	}
 	
 	@Override

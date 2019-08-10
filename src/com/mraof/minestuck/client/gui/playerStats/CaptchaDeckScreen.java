@@ -1,8 +1,6 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
-import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
-import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckContainer;
-import com.mraof.minestuck.inventory.captchalogue.Modus;
+import com.mraof.minestuck.inventory.captchalogue.*;
 import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
@@ -75,7 +73,8 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckCon
 			ItemStack stack = container.inventory.getStackInSlot(0);
 			if(!(stack.getItem() instanceof CaptchaCardItem))
 			{
-				Modus newModus = CaptchaDeckHandler.createInstance(CaptchaDeckHandler.getType(stack), LogicalSide.CLIENT);
+				ModusType<?> type = ModusTypes.getTypeFromItem(stack.getItem());
+				Modus newModus = type.create(LogicalSide.CLIENT);
 				if(newModus != null && CaptchaDeckHandler.clientSideModus != null && newModus.getClass() != CaptchaDeckHandler.clientSideModus.getClass() && !newModus.canSwitchFrom(CaptchaDeckHandler.clientSideModus))
 				{
 					minecraft.currentScreen = new ConfirmScreen(this::onConfirm, new TranslationTextComponent("gui.emptySylladex1"), new TranslationTextComponent("gui.emptySylladex2"))

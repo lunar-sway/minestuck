@@ -15,15 +15,9 @@ import java.util.Iterator;
 public class QueueModus extends StackModus
 {
 	
-	public QueueModus(LogicalSide side)
+	public QueueModus(ModusType<? extends QueueModus> type, LogicalSide side)
 	{
-		super(side);
-	}
-	
-	@Override
-	public ResourceLocation getRegistryName()
-	{
-		return CaptchaDeckHandler.QUEUE;
+		super(type, side);
 	}
 	
 	@Override

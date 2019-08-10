@@ -66,7 +66,8 @@ public final class ModEntityTypes
 	
 	@Nonnull
 	@SuppressWarnings("ConstantConditions")
-	private static <T> T getNull() {
+	private static <T> T getNull()
+	{
 		return null;
 	}
 	

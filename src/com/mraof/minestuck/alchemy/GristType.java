@@ -72,7 +72,7 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 		return REGISTRY.getValues();
 	}
 
-	public ITextComponent getDisplayName()	//TODO Phase out serverside usage of this method
+	public ITextComponent getDisplayName()
 	{
 		return new TranslationTextComponent("grist." + name);
 	}
@@ -140,7 +140,6 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 		REGISTRY = (ForgeRegistry<GristType>) new RegistryBuilder<GristType>()
 				.setName(new ResourceLocation("minestuck", "grist"))
 				.setType(GristType.class)
-				.addCallback((IForgeRegistry.CreateCallback<GristType>) (owner, stage) -> owner.setSlaveMap(new ResourceLocation("minestuck:registry"), new DefaultedRegistry<>("minestuck:build")))
 				.create();
 	}
 
