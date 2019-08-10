@@ -7,8 +7,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class KindAbstratusType
 {
@@ -31,7 +29,6 @@ public class KindAbstratusType
 		return this;
 	}
 	
-	@OnlyIn(Dist.CLIENT)
 	public ITextComponent getDisplayName() {
 		return new TranslationTextComponent("strife."+unlocalizedName+".name");
 	}

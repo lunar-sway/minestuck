@@ -1,7 +1,7 @@
 package com.mraof.minestuck.world.lands.terrain;
 
 import com.mraof.minestuck.entity.consort.EnumConsort;
-import com.mraof.minestuck.world.biome.BiomeMinestuck;
+import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.*;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
@@ -98,8 +98,8 @@ public class LandAspectSandstone extends TerrainLandAspect
 			sandstone = Blocks.RED_SANDSTONE.getDefaultState();
 		}
 		list.add(new SurfaceDecoratorVein(sand, 10, 32));
-		list.add(new BlockBlobDecorator(sandstone, 0, 3, BiomeMinestuck.mediumNormal));
-		list.add(new BlockBlobDecorator(sandstone, 0, 5, BiomeMinestuck.mediumRough));
+		list.add(new BlockBlobDecorator(sandstone, 0, 3, ModBiomes.mediumNormal));
+		list.add(new BlockBlobDecorator(sandstone, 0, 5, ModBiomes.mediumRough));
 		//list.add(new WorldGenDecorator(new WorldGenDeadBush(), 15, 0.4F));
 		
 		list.add(new UndergroundDecoratorVein(sandstone, 8, 28, 256));

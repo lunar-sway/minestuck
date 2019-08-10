@@ -31,7 +31,7 @@ public class CaptchaDeckContainer extends Container
 			@Override
 			public boolean isItemValid(ItemStack stack)
 			{
-				return CaptchaDeckHandler.getType(stack) != null || stack.getItem().equals(MinestuckItems.CAPTCHA_CARD) && (!stack.hasTag() || !stack.getTag().getBoolean("punched"));
+				return ModusTypes.getTypeFromItem(stack.getItem()) != null || stack.getItem().equals(MinestuckItems.CAPTCHA_CARD) && (!stack.hasTag() || !stack.getTag().getBoolean("punched"));
 			}
 		});
 	}

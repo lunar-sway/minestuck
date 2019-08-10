@@ -2,13 +2,9 @@ package com.mraof.minestuck.world.lands.decorator;
 
 import java.util.Random;
 
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.world.biome.BiomeMinestuck;
+import com.mraof.minestuck.world.biome.ModBiomes;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
 public class SpruceTreeDecorator extends TreeDecoratorBase
@@ -293,7 +289,7 @@ public class SpruceTreeDecorator extends TreeDecoratorBase
 	}
    
 	public int getCount(Random random, Biome biome) {
-		if(biome == BiomeMinestuck.mediumRough) {
+		if(biome == ModBiomes.mediumRough) {
 			return Math.max(0, random.nextInt(20) - 7);
 		}
 	 

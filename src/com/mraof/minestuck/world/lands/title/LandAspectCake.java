@@ -1,7 +1,7 @@
 package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.world.biome.BiomeMinestuck;
+import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.decorator.SingleBlockDecorator;
 import com.mraof.minestuck.world.lands.decorator.structure.CakePedestalDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
@@ -37,7 +37,7 @@ public class LandAspectCake extends TitleLandAspect
 		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.MAGENTA_CARPET.getDefaultState());
 		
 		chunkProvider.decorators.add(new CakeDecorator(chunkProvider.temperature));
-		chunkProvider.decorators.add(new CakePedestalDecorator(BiomeMinestuck.mediumNormal, BiomeMinestuck.mediumRough));
+		chunkProvider.decorators.add(new CakePedestalDecorator(ModBiomes.mediumNormal, ModBiomes.mediumRough));
 		//chunkProvider.sortDecorators();
 	}
 	

@@ -1,6 +1,6 @@
 package com.mraof.minestuck.world.lands.title;
 
-import com.mraof.minestuck.world.biome.BiomeMinestuck;
+import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.decorator.RabbitSpawner;
 import com.mraof.minestuck.world.lands.decorator.structure.RabbitHoleDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
@@ -30,9 +30,9 @@ public class LandAspectRabbits extends TitleLandAspect
 		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.PINK_WOOL.getDefaultState());
 		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.LIGHT_GRAY_CARPET.getDefaultState());
 		
-		chunkProvider.decorators.add(new RabbitSpawner(6, BiomeMinestuck.mediumNormal));
-		chunkProvider.decorators.add(new RabbitSpawner(3, BiomeMinestuck.mediumRough));
-		chunkProvider.decorators.add(new RabbitHoleDecorator(BiomeMinestuck.mediumNormal, BiomeMinestuck.mediumRough));
+		chunkProvider.decorators.add(new RabbitSpawner(6, ModBiomes.mediumNormal));
+		chunkProvider.decorators.add(new RabbitSpawner(3, ModBiomes.mediumRough));
+		chunkProvider.decorators.add(new RabbitHoleDecorator(ModBiomes.mediumNormal, ModBiomes.mediumRough));
 		//chunkProvider.sortDecorators();
 	}
 	

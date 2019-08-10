@@ -18,13 +18,10 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 import java.util.ArrayList;
 
-@OnlyIn(Dist.CLIENT)
 public abstract class SylladexScreen extends Screen
 {
 	protected static final ResourceLocation sylladexFrame = new ResourceLocation("minestuck", "textures/gui/sylladex_frame.png");
@@ -63,6 +60,7 @@ public abstract class SylladexScreen extends Screen
 	{
 		emptySylladex = new GuiButtonExt((width - GUI_WIDTH)/2 + 140, (height - GUI_HEIGHT)/2 + 175, 100, 20, I18n.format("gui.emptySylladexButton"), button -> emptySylladex());
 		addButton(emptySylladex);
+		updateContent();
 	}
 	
 	@Override

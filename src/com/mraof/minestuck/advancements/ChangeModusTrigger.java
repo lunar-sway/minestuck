@@ -6,8 +6,9 @@ import com.google.common.collect.Sets;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
+import com.mraof.minestuck.inventory.captchalogue.ModusType;
+import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.advancements.PlayerAdvancements;
 import net.minecraft.advancements.criterion.CriterionInstance;
@@ -62,35 +63,36 @@ public class ChangeModusTrigger implements ICriterionTrigger<ChangeModusTrigger.
 	@Override
 	public Instance deserializeInstance(JsonObject json, JsonDeserializationContext context)
 	{
-		String modus = null;
+		ModusType<?> modusType = null;
 		if(json.has("modus"))
 		{
-			modus = json.get("modus").getAsString();
-			if(!CaptchaDeckHandler.isInRegistry(new ResourceLocation(modus)))
-				throw new IllegalArgumentException("Invalid modus "+modus);
+			String modusName = json.get("modus").getAsString();
+			modusType = ModusTypes.REGISTRY.getValue(new ResourceLocation(modusName));
+			if(modusType == null)
+				throw new IllegalArgumentException("Invalid modus "+modusName);
 		}
-		return new Instance(modus);
+		return new Instance(modusType);
 	}
 	
 	public void trigger(ServerPlayerEntity player, Modus modus)
 	{
 		Listeners listeners = listenersMap.get(player.getAdvancements());
 		if(listeners != null)
-			listeners.trigger(modus.getRegistryName().toString());
+			listeners.trigger(modus.getType());
 	}
 	
 	public static class Instance extends CriterionInstance
 	{
-		private final String modus;
-		public Instance(String modus)
+		private final ModusType<?> modusType;
+		public Instance(ModusType<?> modusType)
 		{
 			super(ID);
-			this.modus = modus;
+			this.modusType = modusType;
 		}
 		
-		public boolean test(String modus)
+		public boolean test(ModusType<?> modusType)
 		{
-			return this.modus == null || this.modus.equals(modus);
+			return this.modusType == null || this.modusType.equals(modusType);
 		}
 	}
 	
@@ -119,11 +121,11 @@ public class ChangeModusTrigger implements ICriterionTrigger<ChangeModusTrigger.
 			this.listeners.remove(listener);
 		}
 		
-		public void trigger(String modus)
+		public void trigger(ModusType<?> modusType)
 		{
 			List<Listener<Instance>> list = Lists.newArrayList();
 			for(Listener<Instance> listener : listeners)
-				if(listener.getCriterionInstance().test(modus))
+				if(listener.getCriterionInstance().test(modusType))
 					list.add(listener);
 			
 			list.forEach((listener) -> listener.grantCriterion(playerAdvancements));

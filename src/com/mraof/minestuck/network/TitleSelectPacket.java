@@ -1,6 +1,6 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.client.gui.TitleSelectorScreen;
+import com.mraof.minestuck.client.gui.ModScreenFactories;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.util.EnumClass;
@@ -66,7 +66,7 @@ public class TitleSelectPacket
 			title = new Title(enumClass, enumAspect);
 		else title = null;
 		
-		Minecraft.getInstance().displayGuiScreen(new TitleSelectorScreen(title));
+		ModScreenFactories.displayTitleSelectScreen(title);
 	}
 	
 	public void execute(ServerPlayerEntity player)

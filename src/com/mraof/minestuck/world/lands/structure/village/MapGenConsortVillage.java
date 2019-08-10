@@ -1,19 +1,5 @@
 package com.mraof.minestuck.world.lands.structure.village;
 
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.world.biome.BiomeMinestuck;
-import com.mraof.minestuck.world.lands.LandAspectRegistry;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-
-import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-
 public class MapGenConsortVillage //extends MapGenStructure
 {
 	

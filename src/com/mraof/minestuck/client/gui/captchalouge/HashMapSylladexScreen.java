@@ -2,27 +2,25 @@ package com.mraof.minestuck.client.gui.captchalouge;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
+import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 
-@OnlyIn(Dist.CLIENT)
 public class HashMapSylladexScreen extends SylladexScreen
 {
 	
 	private HashMapModus modus;
 	protected Button guiButton;
 	
-	public HashMapSylladexScreen(HashMapModus modus)
+	public HashMapSylladexScreen(Modus modus)
 	{
 		super();
-		this.modus = modus;
+		this.modus = (HashMapModus) modus;
 		this.textureIndex = 4;
 	}
 	

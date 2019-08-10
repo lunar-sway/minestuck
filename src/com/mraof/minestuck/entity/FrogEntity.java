@@ -26,8 +26,6 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class FrogEntity extends CreatureEntity
 {
@@ -221,7 +219,6 @@ public class FrogEntity extends CreatureEntity
 	}
 	
 
-	@OnlyIn(Dist.CLIENT)
 	public float setJumpCompletion(float p_175521_1_)
 	{
 		return this.jumpDuration == 0 ? 0.0F : ((float)this.jumpTicks + p_175521_1_) / (float)this.jumpDuration;

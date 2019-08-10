@@ -1,17 +1,15 @@
 package com.mraof.minestuck.client.gui.captchalouge;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.inventory.captchalogue.TreeModus;
 import com.mraof.minestuck.inventory.captchalogue.TreeModus.TreeNode;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 
-@OnlyIn(Dist.CLIENT)
 public class TreeSylladexScreen extends SylladexScreen
 {
 	
@@ -21,9 +19,9 @@ public class TreeSylladexScreen extends SylladexScreen
 	protected GuiCard[] guiIndexList;
 	protected Button guiButton;
 	
-	public TreeSylladexScreen(TreeModus modus)
+	public TreeSylladexScreen(Modus modus)
 	{
-		this.modus = modus;
+		this.modus = (TreeModus) modus;
 		textureIndex = 3;
 	}
 	

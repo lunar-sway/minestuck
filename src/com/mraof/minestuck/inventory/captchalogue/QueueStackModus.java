@@ -1,28 +1,17 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
-import com.mraof.minestuck.client.gui.captchalouge.QueuestackSylladexScreen;
-import com.mraof.minestuck.client.gui.captchalouge.SylladexScreen;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
 
 public class QueueStackModus extends StackModus
 {
 	
-	public QueueStackModus(LogicalSide side)
+	public QueueStackModus(ModusType<? extends QueueStackModus> type, LogicalSide side)
 	{
-		super(side);
-	}
-	
-	@Override
-	public ResourceLocation getRegistryName()
-	{
-		return CaptchaDeckHandler.QUEUE_STACK;
+		super(type, side);
 	}
 	
 	@Override
@@ -55,14 +44,4 @@ public class QueueStackModus extends StackModus
 		}
 		else return id == 0 ? list.removeFirst() : list.removeLast();
 	}
-	
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public SylladexScreen getGuiHandler()
-	{
-		if(gui == null)
-			gui = new QueuestackSylladexScreen(this);
-		return gui;
-	}
-	
 }

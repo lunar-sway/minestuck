@@ -2,7 +2,7 @@ package com.mraof.minestuck.world.lands.terrain;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.consort.EnumConsort;
-import com.mraof.minestuck.world.biome.BiomeMinestuck;
+import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
 import com.mraof.minestuck.world.lands.decorator.SurfaceMushroomGenerator;
@@ -54,14 +54,14 @@ public class LandAspectWood extends TerrainLandAspect
 	public List<ILandDecorator> getDecorators()
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<>();
-		list.add(new SurfaceDecoratorVein(Blocks.OAK_LEAVES.getDefaultState(), 15, 32, BiomeMinestuck.mediumRough));
+		list.add(new SurfaceDecoratorVein(Blocks.OAK_LEAVES.getDefaultState(), 15, 32, ModBiomes.mediumRough));
 		//list.add(new SurfaceDecoratorVein(MinestuckBlocks.log.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE), 8, 32, BiomeMinestuck.mediumNormal));
-		list.add(new SurfaceDecoratorVein(Blocks.NETHERRACK.getDefaultState(), 6, 8, BiomeMinestuck.mediumNormal));
+		list.add(new SurfaceDecoratorVein(Blocks.NETHERRACK.getDefaultState(), 6, 8, ModBiomes.mediumNormal));
 		
-		list.add(new SurfaceMushroomGenerator(Blocks.BROWN_MUSHROOM, true, 10, 64, BiomeMinestuck.mediumNormal));
-		list.add(new SurfaceMushroomGenerator(Blocks.BROWN_MUSHROOM, true, 5, 32, BiomeMinestuck.mediumRough));
-		list.add(new SurfaceMushroomGenerator(Blocks.RED_MUSHROOM, true, 10, 64, BiomeMinestuck.mediumNormal));
-		list.add(new SurfaceMushroomGenerator(Blocks.RED_MUSHROOM, true, 5, 32, BiomeMinestuck.mediumRough));
+		list.add(new SurfaceMushroomGenerator(Blocks.BROWN_MUSHROOM, true, 10, 64, ModBiomes.mediumNormal));
+		list.add(new SurfaceMushroomGenerator(Blocks.BROWN_MUSHROOM, true, 5, 32, ModBiomes.mediumRough));
+		list.add(new SurfaceMushroomGenerator(Blocks.RED_MUSHROOM, true, 10, 64, ModBiomes.mediumNormal));
+		list.add(new SurfaceMushroomGenerator(Blocks.RED_MUSHROOM, true, 5, 32, ModBiomes.mediumRough));
 		
 		list.add(new UndergroundDecoratorVein(Blocks.GRAVEL.getDefaultState(), 8, 33, 256));
 		list.add(new UndergroundDecoratorVein(Blocks.DIRT.getDefaultState(), 18, 17, 128));

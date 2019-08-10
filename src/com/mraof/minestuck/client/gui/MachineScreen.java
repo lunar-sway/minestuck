@@ -11,14 +11,11 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 /**
  * Created by mraof on 2017 December 07 at 12:55 AM.
  */
-@OnlyIn(Dist.CLIENT)
 public abstract class MachineScreen<T extends MachineContainer> extends ContainerScreen<T>
 {
 	protected final MachineProcessTileEntity.RunType runType;

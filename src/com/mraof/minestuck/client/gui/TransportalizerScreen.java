@@ -10,11 +10,8 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 
-@OnlyIn(Dist.CLIENT)
 public class TransportalizerScreen extends Screen
 {
 	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/transportalizer.png");
@@ -26,7 +23,7 @@ public class TransportalizerScreen extends Screen
 	private TextFieldWidget destinationTextField;
 	
 	
-	public TransportalizerScreen(TransportalizerTileEntity te)
+	TransportalizerScreen(TransportalizerTileEntity te)
 	{
 		super(new StringTextComponent("Transportalizer"));
 

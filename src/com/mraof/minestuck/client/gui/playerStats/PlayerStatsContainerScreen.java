@@ -14,14 +14,11 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Arrays;
 
 import static com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen.*;
 
-@OnlyIn(Dist.CLIENT)
 public abstract class PlayerStatsContainerScreen<T extends Container> extends ContainerScreen<T>
 {
 	
@@ -40,6 +37,8 @@ public abstract class PlayerStatsContainerScreen<T extends Container> extends Co
 	public void init()
 	{
 		super.init();
+		minecraft.player.openContainer = this.container;
+		
 		xOffset = (width - guiWidth)/2;
 		yOffset = (height - guiHeight + tabHeight - tabOverlap)/2;
 		this.guiTop = yOffset;

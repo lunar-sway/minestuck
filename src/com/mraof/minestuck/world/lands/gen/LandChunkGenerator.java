@@ -10,15 +10,52 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.provider.BiomeProvider;
 import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.chunk.IChunk;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.gen.OctavesNoiseGenerator;
-import net.minecraft.world.gen.WorldGenRegion;
+import net.minecraft.world.gen.*;
 
 import java.util.List;
 
-public class ChunkGeneratorLands extends ChunkGenerator<LandGenSettings>
+public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 {
+	public LandChunkGenerator(IWorld worldIn, BiomeProvider biomeProviderIn, LandGenSettings settings)
+	{
+		super(worldIn, biomeProviderIn, 4, 8, 256, settings, false);
+	}
+	
+	@Override
+	protected double[] func_222549_a(int columnX, int columnZ)
+	{
+		return new double[]{0, 0.1};
+	}
+	
+	@Override
+	protected double func_222545_a(double depth, double scale, int height)
+	{
+		double modifier = ((double)height - (8.5D + depth * 8.5D / 8.0D * 4.0D)) * 12.0D * 128.0D / 256.0D / scale;
+		if (modifier < 0.0D)
+			modifier *= 4.0D;
+		
+		return modifier;
+	}
+	
+	@Override
+	protected void func_222548_a(double[] noiseColumn, int columnX, int columnZ)
+	{
+		double horizontal = 684.412D;
+		double vertical = 684.412D;
+		double horizontal2 = 17.1103D;
+		double vertical2 = 4.277575D;
+		int lerpModifier = 3;
+		int skyValueTarget = -10;
+		this.func_222546_a(noiseColumn, columnX, columnZ, horizontal, vertical, horizontal2, vertical2, lerpModifier, skyValueTarget);
+	}
+	
+	@Override
+	public int getGroundHeight()
+	{
+		return 64;
+	}
+	
+	/*
 	private final OctavesNoiseGenerator noiseGen;
 	
 	public static float[] biomeWeight;
@@ -58,7 +95,7 @@ public class ChunkGeneratorLands extends ChunkGenerator<LandGenSettings>
 		this.buildSurface(chunkIn, abiome, random, this.world.getSeaLevel());
 		this.makeBedrock(chunkIn, random);
 		chunkIn.createHeightMap(Heightmap.Type.WORLD_SURFACE_WG, Heightmap.Type.OCEAN_FLOOR_WG);
-		chunkIn.setStatus(ChunkStatus.BASE);*/
+		chunkIn.setStatus(ChunkStatus.BASE);*//*
 	}
 	
 	@Override
@@ -174,4 +211,5 @@ public class ChunkGeneratorLands extends ChunkGenerator<LandGenSettings>
 	{
 		return 63;
 	}
+	*/
 }

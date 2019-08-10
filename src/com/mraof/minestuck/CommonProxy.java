@@ -4,6 +4,7 @@ import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortDialogue;
 import com.mraof.minestuck.entity.consort.ConsortRewardHandler;
 import com.mraof.minestuck.event.MinestuckFluidHandler;
@@ -13,6 +14,7 @@ import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.gen.OreHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
@@ -25,6 +27,7 @@ public class CommonProxy
 	public static void init()
 	{
 		MinestuckCriteriaTriggers.register();
+		ModEntityTypes.registerPlacements();
 		
 		//register ore generation
 		OreHandler oreHandler = new OreHandler();
@@ -55,9 +58,8 @@ public class CommonProxy
 		AlchemyRecipes.registerMinestuckRecipes();
 		AlchemyRecipes.registerModRecipes();
 		
-		//register smelting recipes and oredictionary
+		//register smelting recipes
 		CraftingRecipes.registerSmelting();
-		CraftingRecipes.addOredictionary();
 
 		//register consort shop prices
 		ConsortRewardHandler.registerMinestuckPrices();
@@ -65,6 +67,7 @@ public class CommonProxy
 		//Register loot functionality objects
 		MinestuckLoot.registerLootClasses();
 		
+		ModBiomes.init();
 		LandAspectRegistry.registerLandAspects();
 		ConsortDialogue.init();
 		

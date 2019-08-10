@@ -1,6 +1,6 @@
 package com.mraof.minestuck.world.lands.decorator;
 
-import com.mraof.minestuck.world.biome.BiomeMinestuck;
+import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
@@ -40,8 +40,8 @@ public class OceanRundown implements ILandDecorator
 				{
 					for(int posZ = pos1.getZ() - 3; posZ <= pos1.getZ() + 3; posZ++)
 					{
-						if(!biomes[posX + 32 * posZ].equals(BiomeMinestuck.mediumNormal)
-								&& !biomes[posX + 32 * posZ].equals(BiomeMinestuck.mediumRough))
+						if(!biomes[posX + 32 * posZ].equals(ModBiomes.mediumNormal)
+								&& !biomes[posX + 32 * posZ].equals(ModBiomes.mediumRough))
 						{
 							condition = false;
 							break check;
@@ -56,7 +56,7 @@ public class OceanRundown implements ILandDecorator
 					{
 						for(int posZ = pos1.getZ() - 8; posZ < pos1.getZ() + 8; posZ++)
 						{
-							if(biomes[posX + posZ * 32].equals(BiomeMinestuck.mediumOcean))
+							if(biomes[posX + posZ * 32].equals(ModBiomes.mediumOcean))
 								oceanPos.add(new BlockPos(posX, 0, posZ));
 						}
 					}

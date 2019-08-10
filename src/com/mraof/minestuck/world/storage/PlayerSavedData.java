@@ -16,13 +16,11 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.ServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.DimensionSavedDataManager;
 import net.minecraft.world.storage.WorldSavedData;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,19 +28,13 @@ import java.util.Map;
 public class PlayerSavedData extends WorldSavedData	//TODO This class need a thorough look through to make sure that markDirty() is called when it should (otherwise there may be hard to notice data-loss bugs)
 {
 	private static final String DATA_NAME = Minestuck.MOD_ID+"_player_data";
+	
 	//Client sided
-
-	@OnlyIn(Dist.CLIENT)
 	public static Title title;
-	@OnlyIn(Dist.CLIENT)
 	public static int rung;
-	@OnlyIn(Dist.CLIENT)
 	public static float rungProgress;
-	@OnlyIn(Dist.CLIENT)
 	public static long boondollars;
-	@OnlyIn(Dist.CLIENT)
 	static GristSet playerGrist;
-	@OnlyIn(Dist.CLIENT)
 	static GristSet targetGrist;
 	
 	Map<PlayerIdentifier, PlayerData> dataMap = new HashMap<>();

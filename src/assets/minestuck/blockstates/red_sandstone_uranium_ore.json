@@ -1,5 +1,5 @@
 {
     "variants": {
-        "": { "model": "minestuck:block/uranium_ore_red_sandstone" }
+        "": { "model": "minestuck:block/red_sandstone_uranium_ore" }
     }
 }

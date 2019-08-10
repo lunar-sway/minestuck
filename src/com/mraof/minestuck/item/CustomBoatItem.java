@@ -80,7 +80,7 @@ public class CustomBoatItem extends Item
 			}
 			else
 			{
-			    //TODO Updade
+			    //TODO Update
 				/*if (rayTrace.type == RayTraceResult.Type.BLOCK)
 				{
 					BlockPos blockpos = rayTrace.getBlockPos();

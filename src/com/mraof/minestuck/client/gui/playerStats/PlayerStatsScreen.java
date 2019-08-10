@@ -21,14 +21,11 @@ import net.minecraft.network.play.client.CCloseWindowPacket;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Arrays;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-@OnlyIn(Dist.CLIENT)
 public abstract class PlayerStatsScreen extends MinestuckScreen
 {
 	
@@ -275,10 +272,11 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 			{
 				int ordinal = (ClientEditHandler.isActive() ? editmodeTab : normalTab).ordinal();
 				int windowId = 200 + ordinal;//ContainerHandler.clientWindowIdStart + ordinal;
-				PlayerStatsContainerScreen guiContainer = (PlayerStatsContainerScreen) (ClientEditHandler.isActive() ? editmodeTab.createGuiInstance(windowId) : normalTab.createGuiInstance(windowId));
+				PlayerStatsContainerScreen containerScreen = (PlayerStatsContainerScreen) (ClientEditHandler.isActive() ? editmodeTab.createGuiInstance(windowId) : normalTab.createGuiInstance(windowId));
 				
-				MinestuckPacketHandler.sendToServer(new MiscContainerPacket(ordinal));
-				mc.displayGuiScreen(guiContainer);
+				mc.displayGuiScreen(containerScreen);
+				if(mc.currentScreen == containerScreen)
+					MinestuckPacketHandler.sendToServer(new MiscContainerPacket(ordinal));
 			}
 			else mc.displayGuiScreen(ClientEditHandler.isActive()? editmodeTab.createGuiInstance():normalTab.createGuiInstance());
 		}

@@ -16,6 +16,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.ResourceLocationException;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
@@ -288,26 +289,27 @@ public class LandAspectRegistry
 	 */
 	public static DimensionType createLand(MinecraftServer server, IdentifierHandler.PlayerIdentifier player, LandAspects aspects)
 	{
-		
-		if(MinestuckDimensionHandler.landCache.isEmpty())
+		String base = "minestuck:land_"+player.getUsername().toLowerCase();
+		ResourceLocation dimensionName;
+		try
 		{
-			Debug.warnf("Minestuck is out of cached land dimensions. You have to increase the cache size in the config and restart!");
-			return null;
+			dimensionName = new ResourceLocation(base);
+		} catch(ResourceLocationException e)
+		{
+			base = "minestuck:land";
+			dimensionName = new ResourceLocation(base);
 		}
 		
-		DimensionType land = MinestuckDimensionHandler.landCache.remove(0);
-		PacketBuffer data = land.getData();
+		for(int i = 0; DimensionType.byName(dimensionName) != null; i++) {
+			dimensionName = new ResourceLocation(base+"_"+i);
+		}
+		
+		PacketBuffer data = new PacketBuffer(Unpooled.buffer());
 		data.clear();
-		data.writeBoolean(true);
 		data.writeString(aspects.aspectTerrain.getPrimaryName());
 		data.writeString(aspects.aspectTitle.getPrimaryName());
-		World world = DimensionManager.getWorld(server, land, true, false);
 		
-		if(world != null)
-		{
-			((LandDimension) world.dimension).landAspects = aspects;
-			((LandDimension) world.dimension).initLandAspects();
-		}
+		DimensionType land = DimensionManager.registerDimension(dimensionName, MinestuckDimensionHandler.landDimensionType, data, true);
 		
 		return land;
 	}

@@ -3,8 +3,6 @@ package com.mraof.minestuck.util;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -110,8 +108,9 @@ public enum EnumClass
 	 * For usage in messages sent to a player from a server, use <code>asTextComponent()</code>.
 	 * For debugging purposes, use <code>toString()</code> instead.
 	 * @return a translated string of the name.
+	 * @deprecated use {@link #asTextComponent()} instead
 	 */
-	@OnlyIn(Dist.CLIENT)
+	@Deprecated
 	public String getDisplayName()
 	{
 		return I18n.format("title." + this.toString());

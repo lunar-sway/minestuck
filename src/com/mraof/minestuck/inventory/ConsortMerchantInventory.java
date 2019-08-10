@@ -14,8 +14,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.List;
 
@@ -43,7 +41,6 @@ public class ConsortMerchantInventory implements IInventory
 		}
 	}
 	
-	@OnlyIn(Dist.CLIENT)
 	public ConsortMerchantInventory()
 	{
 	}

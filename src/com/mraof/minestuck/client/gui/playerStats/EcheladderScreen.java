@@ -8,8 +8,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -17,7 +15,6 @@ import java.util.Random;
 /**
  * @author Kirderf1
  */
-@OnlyIn(Dist.CLIENT)
 public class EcheladderScreen extends PlayerStatsScreen
 {
 	

@@ -16,12 +16,9 @@ import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.*;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@OnlyIn(Dist.CLIENT)
 public class MachineOutlineRenderer
 {
 	
@@ -30,7 +27,7 @@ public class MachineOutlineRenderer
 	{
 		Minecraft mc = Minecraft.getInstance();
 		
-		if (mc.player != null && mc.getRenderViewEntity() == mc.player)
+		if (mc.player != null && mc.getRenderViewEntity() == mc.player && mc.objectMouseOver.getType() == RayTraceResult.Type.BLOCK)
 		{
 			if(mc.objectMouseOver instanceof EntityRayTraceResult) return;
 			BlockRayTraceResult rayTraceResult = (BlockRayTraceResult) mc.objectMouseOver;

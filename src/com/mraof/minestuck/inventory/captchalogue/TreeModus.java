@@ -2,8 +2,6 @@ package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
-import com.mraof.minestuck.client.gui.captchalouge.SylladexScreen;
-import com.mraof.minestuck.client.gui.captchalouge.TreeSylladexScreen;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
@@ -13,8 +11,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
 
 import java.util.ArrayList;
@@ -27,18 +23,9 @@ public class TreeModus extends Modus
 	public int size;
 	public boolean autoBalance = true;
 	
-	@OnlyIn(Dist.CLIENT)
-	protected TreeSylladexScreen guiHandler;
-	
-	public TreeModus(LogicalSide side)
+	public TreeModus(ModusType<? extends TreeModus> type, LogicalSide side)
 	{
-		super(side);
-	}
-	
-	@Override
-	public ResourceLocation getRegistryName()
-	{
-		return CaptchaDeckHandler.TREE;
+		super(type, side);
 	}
 	
 	@Override
@@ -196,15 +183,6 @@ public class TreeModus extends Modus
 			if(node != this.node)
 				MinestuckPacketHandler.sendToPlayer(CaptchaDeckPacket.data(CaptchaDeckHandler.writeToNBT(this)), player);
 		}
-	}
-	
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public SylladexScreen getGuiHandler()
-	{
-		if(guiHandler == null)
-			guiHandler = new TreeSylladexScreen(this);
-		return guiHandler;
 	}
 	
 	protected void autoBalance()

@@ -23,8 +23,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.GameType;
-import net.minecraft.world.ServerWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.FakePlayer;
 
 public class DecoyEntity extends MobEntity
@@ -54,7 +54,7 @@ public class DecoyEntity extends MobEntity
 	
 	public DecoyEntity(World world)
 	{
-		super(ModEntityTypes.DECOY, world);
+		super(ModEntityTypes.PLAYER_DECOY, world);
 		inventory = new PlayerInventory(null);
 		if(!world.isRemote)	//If not spawned the way it should
 			markedForDespawn = true;
@@ -62,7 +62,7 @@ public class DecoyEntity extends MobEntity
 	
 	public DecoyEntity(ServerWorld world, ServerPlayerEntity player)
 	{
-		super(ModEntityTypes.DECOY, world);
+		super(ModEntityTypes.PLAYER_DECOY, world);
 		this.setBoundingBox(player.getBoundingBox());
 		this.player = new DecoyPlayer(world, this, player);
 		for(String key : player.getEntityData().keySet())

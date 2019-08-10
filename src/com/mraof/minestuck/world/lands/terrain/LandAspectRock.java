@@ -2,7 +2,7 @@ package com.mraof.minestuck.world.lands.terrain;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.consort.EnumConsort;
-import com.mraof.minestuck.world.biome.BiomeMinestuck;
+import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.BlockBlobDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
@@ -92,23 +92,23 @@ public class LandAspectRock extends TerrainLandAspect
 		list.add(new UndergroundDecoratorVein(Blocks.DIAMOND_ORE.getDefaultState(), 2, 6, 24));
 		list.add(new UndergroundDecoratorVein(Blocks.GRAVEL.getDefaultState(), 10, 33, 256));
 		list.add(new UndergroundDecoratorVein(Blocks.INFESTED_STONE.getDefaultState(), 7, 9, 64));
-		list.add(new SurfaceDecoratorVein(Blocks.CLAY.getDefaultState(), 25, 20, BiomeMinestuck.mediumOcean));
+		list.add(new SurfaceDecoratorVein(Blocks.CLAY.getDefaultState(), 25, 20, ModBiomes.mediumOcean));
 		
-		list.add(new BlockBlobDecorator(Blocks.COBBLESTONE.getDefaultState(), 0, 3, BiomeMinestuck.mediumNormal));
-		list.add(new BlockBlobDecorator(Blocks.COBBLESTONE.getDefaultState(), 1, 4, BiomeMinestuck.mediumRough));
+		list.add(new BlockBlobDecorator(Blocks.COBBLESTONE.getDefaultState(), 0, 3, ModBiomes.mediumNormal));
+		list.add(new BlockBlobDecorator(Blocks.COBBLESTONE.getDefaultState(), 1, 4, ModBiomes.mediumRough));
 		if(type == Variant.ROCK) {
-			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.PETRIFIED_GRASS, true, 25, 32, BiomeMinestuck.mediumRough));
-			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.PETRIFIED_GRASS, true, 10, 48, BiomeMinestuck.mediumNormal));
-			list.add(new LeaflessTreeDecorator(MinestuckBlocks.PETRIFIED_LOG.getDefaultState(), 0.05F, BiomeMinestuck.mediumRough));
-			list.add(new BlockBlobDecorator(Blocks.COBBLESTONE.getDefaultState(), 0, 3, BiomeMinestuck.mediumNormal));
-			list.add(new BlockBlobDecorator(Blocks.COBBLESTONE.getDefaultState(), 1, 4, BiomeMinestuck.mediumRough));
+			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.PETRIFIED_GRASS, true, 25, 32, ModBiomes.mediumRough));
+			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.PETRIFIED_GRASS, true, 10, 48, ModBiomes.mediumNormal));
+			list.add(new LeaflessTreeDecorator(MinestuckBlocks.PETRIFIED_LOG.getDefaultState(), 0.05F, ModBiomes.mediumRough));
+			list.add(new BlockBlobDecorator(Blocks.COBBLESTONE.getDefaultState(), 0, 3, ModBiomes.mediumNormal));
+			list.add(new BlockBlobDecorator(Blocks.COBBLESTONE.getDefaultState(), 1, 4, ModBiomes.mediumRough));
 		} else {
-			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.PETRIFIED_POPPY, true, 10, 25, BiomeMinestuck.mediumNormal));
-			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.PETRIFIED_POPPY, true, 5, 25, BiomeMinestuck.mediumRough));
-			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.PETRIFIED_GRASS, true, 35, 35, BiomeMinestuck.mediumNormal));
-			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.PETRIFIED_GRASS, true, 55, 55, BiomeMinestuck.mediumRough));
-			list.add(new LeaflessTreeDecorator(MinestuckBlocks.PETRIFIED_LOG.getDefaultState(), 0.1F, BiomeMinestuck.mediumNormal));
-			list.add(new LeaflessTreeDecorator(MinestuckBlocks.PETRIFIED_LOG.getDefaultState(), 2.5F, BiomeMinestuck.mediumRough));
+			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.PETRIFIED_POPPY, true, 10, 25, ModBiomes.mediumNormal));
+			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.PETRIFIED_POPPY, true, 5, 25, ModBiomes.mediumRough));
+			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.PETRIFIED_GRASS, true, 35, 35, ModBiomes.mediumNormal));
+			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.PETRIFIED_GRASS, true, 55, 55, ModBiomes.mediumRough));
+			list.add(new LeaflessTreeDecorator(MinestuckBlocks.PETRIFIED_LOG.getDefaultState(), 0.1F, ModBiomes.mediumNormal));
+			list.add(new LeaflessTreeDecorator(MinestuckBlocks.PETRIFIED_LOG.getDefaultState(), 2.5F, ModBiomes.mediumRough));
 		}
 		return list;
 	}

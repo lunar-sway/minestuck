@@ -1,8 +1,7 @@
 package com.mraof.minestuck.world.lands.title;
 
-import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.world.lands.LandDimension;
-import com.mraof.minestuck.world.biome.BiomeMinestuck;
+import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.decorator.structure.SmallLibraryDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
@@ -47,7 +46,7 @@ public class LandAspectThought extends TitleLandAspect
 		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.LIME_WOOL.getDefaultState());
 		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.LIME_CARPET.getDefaultState());
 		
-		chunkProvider.decorators.add(new SmallLibraryDecorator(BiomeMinestuck.mediumNormal));
+		chunkProvider.decorators.add(new SmallLibraryDecorator(ModBiomes.mediumNormal));
 		//chunkProvider.sortDecorators();
 	}
 	

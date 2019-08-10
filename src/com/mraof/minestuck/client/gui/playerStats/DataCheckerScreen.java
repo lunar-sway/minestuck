@@ -17,18 +17,14 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-@OnlyIn(Dist.CLIENT)
 public class DataCheckerScreen extends Screen
 {
 	private static final ResourceLocation icons = new ResourceLocation("minestuck", "textures/gui/icons.png");

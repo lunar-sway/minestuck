@@ -1,6 +1,7 @@
 package com.mraof.minestuck.network.skaianet;
 
 import com.mraof.minestuck.client.gui.ComputerScreen;
+import com.mraof.minestuck.client.gui.ModScreenFactories;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.SburbConnectClosedPacket;
 import com.mraof.minestuck.network.SburbConnectPacket;
@@ -10,12 +11,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.dimension.DimensionType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.*;
 
-@OnlyIn(Dist.CLIENT)
 public class SkaiaClient
 {
 	
@@ -184,7 +182,7 @@ public class SkaiaClient
 		else if(te != null && te.ownerId == data.playerId)
 		{
 			if(!Minecraft.getInstance().player.isSneaking())
-				Minecraft.getInstance().displayGuiScreen(new ComputerScreen(Minecraft.getInstance(), te));
+				ModScreenFactories.displayComputerScreen(te);
 			te = null;
 		}
 	}

@@ -24,8 +24,6 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 /**
  * This class will be used to keep track of all deployable
@@ -315,7 +313,6 @@ public class DeployList
 	
 	//Clientside
 	
-	@OnlyIn(Dist.CLIENT)
 	static void loadClientDeployList(CompoundNBT nbt)
 	{
 		if(clientDeployList == null)
@@ -351,10 +348,8 @@ public class DeployList
 		}
 	}
 	
-	@OnlyIn(Dist.CLIENT)
 	private static List<ClientDeployEntry> clientDeployList;
 	
-	@OnlyIn(Dist.CLIENT)
 	public static ClientDeployEntry getEntryClient(ItemStack stack)
 	{
 		stack = cleanStack(stack);
@@ -364,7 +359,6 @@ public class DeployList
 		return null;
 	}
 	
-	@OnlyIn(Dist.CLIENT)
 	public static class ClientDeployEntry
 	{
 		private ItemStack item;
