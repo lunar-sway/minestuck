@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
+import com.mraof.minestuck.client.gui.ModScreenFactories;
 import com.mraof.minestuck.inventory.captchalogue.*;
 import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
@@ -100,7 +101,7 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckCon
 		{
 			minecraft.player.connection.sendPacket(new CCloseWindowPacket(minecraft.player.openContainer.windowId));
 			minecraft.player.inventory.setItemStack(ItemStack.EMPTY);
-			minecraft.displayGuiScreen(CaptchaDeckHandler.clientSideModus.getGuiHandler());
+			ModScreenFactories.displaySylladexScreen(CaptchaDeckHandler.clientSideModus);
 			minecraft.player.openContainer = minecraft.player.container;
 		}
 	}

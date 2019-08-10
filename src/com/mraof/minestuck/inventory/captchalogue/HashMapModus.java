@@ -1,8 +1,6 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.client.gui.captchalouge.HashMapSylladexScreen;
-import com.mraof.minestuck.client.gui.captchalouge.SylladexScreen;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
@@ -11,7 +9,6 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.LogicalSide;
 
@@ -26,7 +23,6 @@ public class HashMapModus extends Modus
 	//client only
 	protected boolean changed;
 	protected NonNullList<ItemStack> items;
-	protected SylladexScreen gui;
 	
 	public HashMapModus(ModusType<? extends HashMapModus> type, LogicalSide side)
 	{
@@ -214,14 +210,6 @@ public class HashMapModus extends Modus
 	public void setValue(ServerPlayerEntity player, byte type, int value)
 	{
 		ejectByChat = value > 0;
-	}
-	
-	@Override
-	public SylladexScreen getGuiHandler()
-	{
-		if(gui == null)
-			gui = new HashMapSylladexScreen(this);
-		return gui;
 	}
 	
 	public void onChatMessage(ServerPlayerEntity player, String str)

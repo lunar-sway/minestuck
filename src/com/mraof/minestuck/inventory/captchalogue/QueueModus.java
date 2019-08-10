@@ -1,13 +1,10 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
-import com.mraof.minestuck.client.gui.captchalouge.QueueSylladexScreen;
-import com.mraof.minestuck.client.gui.captchalouge.SylladexScreen;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.LogicalSide;
 
 import java.util.Iterator;
@@ -62,13 +59,4 @@ public class QueueModus extends StackModus
 				items.add(ItemStack.EMPTY);
 			else items.add(iter.next());
 	}
-	
-	@Override
-	public SylladexScreen getGuiHandler()
-	{
-		if(gui == null)
-			gui = new QueueSylladexScreen(this);
-		return gui;
-	}
-	
 }

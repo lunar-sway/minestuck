@@ -1,11 +1,9 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
-import com.mraof.minestuck.client.gui.captchalouge.SylladexScreen;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fml.LogicalSide;
 
@@ -54,8 +52,6 @@ public abstract class Modus
 	public abstract int getSize();
 	
 	public void setValue(ServerPlayerEntity player, byte type, int value) {}
-	
-	public abstract SylladexScreen getGuiHandler();
 	
 	public ModusType<?> getType()
 	{

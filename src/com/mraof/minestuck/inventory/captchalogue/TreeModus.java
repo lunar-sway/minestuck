@@ -2,8 +2,6 @@ package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
-import com.mraof.minestuck.client.gui.captchalouge.SylladexScreen;
-import com.mraof.minestuck.client.gui.captchalouge.TreeSylladexScreen;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
@@ -24,8 +22,6 @@ public class TreeModus extends Modus
 	public TreeNode node;
 	public int size;
 	public boolean autoBalance = true;
-	
-	protected TreeSylladexScreen guiHandler;
 	
 	public TreeModus(ModusType<? extends TreeModus> type, LogicalSide side)
 	{
@@ -187,14 +183,6 @@ public class TreeModus extends Modus
 			if(node != this.node)
 				MinestuckPacketHandler.sendToPlayer(CaptchaDeckPacket.data(CaptchaDeckHandler.writeToNBT(this)), player);
 		}
-	}
-	
-	@Override
-	public SylladexScreen getGuiHandler()
-	{
-		if(guiHandler == null)
-			guiHandler = new TreeSylladexScreen(this);
-		return guiHandler;
 	}
 	
 	protected void autoBalance()

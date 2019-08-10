@@ -1,15 +1,12 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.client.gui.captchalouge.SetSylladexScreen;
-import com.mraof.minestuck.client.gui.captchalouge.SylladexScreen;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.LogicalSide;
 
 import java.util.Iterator;
@@ -23,7 +20,6 @@ public class SetModus extends Modus
 	//client side
 	protected boolean changed;
 	protected NonNullList<ItemStack> items;
-	protected SylladexScreen gui;
 	
 	public SetModus(ModusType<? extends SetModus> type, LogicalSide side)
 	{
@@ -190,13 +186,5 @@ public class SetModus extends Modus
 	public int getSize()
 	{
 		return size;
-	}
-	
-	@Override
-	public SylladexScreen getGuiHandler()
-	{
-		if(gui == null)
-			gui = new SetSylladexScreen(this);
-		return gui;
 	}
 }

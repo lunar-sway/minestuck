@@ -60,6 +60,7 @@ public abstract class SylladexScreen extends Screen
 	{
 		emptySylladex = new GuiButtonExt((width - GUI_WIDTH)/2 + 140, (height - GUI_HEIGHT)/2 + 175, 100, 20, I18n.format("gui.emptySylladexButton"), button -> emptySylladex());
 		addButton(emptySylladex);
+		updateContent();
 	}
 	
 	@Override
