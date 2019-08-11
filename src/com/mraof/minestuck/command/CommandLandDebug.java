@@ -25,7 +25,7 @@ public class CommandLandDebug extends CommandBase
 	@Override
 	public String getUsage(ICommandSender sender)
 	{
-		return null;
+		return "commands.landDebug.usage";
 	}
 	
 	@Override
