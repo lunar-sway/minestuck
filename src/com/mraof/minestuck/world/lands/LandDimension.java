@@ -6,7 +6,7 @@ import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.world.biome.ModBiomes;
-import com.mraof.minestuck.world.gen.ModChunkGeneratorType;
+import com.mraof.minestuck.world.gen.ModWorldGenTypes;
 
 import com.mraof.minestuck.world.lands.gen.LandGenSettings;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
@@ -50,7 +50,6 @@ public class LandDimension extends Dimension
 		
 		doesWaterVaporize = false;
 		
-		//this.biomeProvider = new BiomeProviderLands(world, chunkProvider.rainfall, chunkProvider.oceanChance, chunkProvider.roughChance);
 		this.nether = false;
 		
 		if(world.isRemote)
@@ -94,9 +93,9 @@ public class LandDimension extends Dimension
 	@Override
 	public ChunkGenerator<?> createChunkGenerator()
 	{
-		LandGenSettings settings = ModChunkGeneratorType.LANDS.createSettings();
+		LandGenSettings settings = ModWorldGenTypes.LANDS.createSettings();
 		settings.setLandAspects(landAspects);
-		return ModChunkGeneratorType.LANDS.create(this.world, BiomeProviderType.FIXED.create(BiomeProviderType.FIXED.createSettings().setBiome(ModBiomes.LAND_NORMAL)), settings);
+		return ModWorldGenTypes.LANDS.create(this.world, ModWorldGenTypes.LAND_BIOMES.create(ModWorldGenTypes.LAND_BIOMES.createSettings().setGenSettings(settings).setSeed(this.getSeed())), settings);
 	}
 	
 	@Nullable

@@ -32,4 +32,34 @@ public abstract class LandBiome extends AbstractBiome
 			return biome;
 		}
 	}
+	
+	public static class Rough extends LandBiome
+	{
+		public Rough()
+		{
+			super(new Biome.Builder().precipitation(Biome.RainType.NONE).category(Biome.Category.NONE).depth(0.45F).scale(0.3F).temperature(0.5F).downfall(0.5F).waterColor(0x3F76E4).waterFogColor(0x050533));
+		}
+		
+		public LandWrapperBiome createWrapper(LandGenSettings settings)
+		{
+			LandWrapperBiome biome = new LandWrapperBiome(this, settings.roughBiomeDepth, settings.roughBiomeScale);
+			biome.init(settings);
+			return biome;
+		}
+	}
+	
+	public static class Ocean extends LandBiome
+	{
+		public Ocean()
+		{
+			super(new Biome.Builder().precipitation(Biome.RainType.NONE).category(Biome.Category.NONE).depth(-1.0F).scale(0.1F).temperature(0.5F).downfall(0.5F).waterColor(0x3F76E4).waterFogColor(0x050533));
+		}
+		
+		public LandWrapperBiome createWrapper(LandGenSettings settings)
+		{
+			LandWrapperBiome biome = new LandWrapperBiome(this, settings.oceanBiomeDepth, settings.oceanBiomeScale);
+			biome.init(settings);
+			return biome;
+		}
+	}
 }

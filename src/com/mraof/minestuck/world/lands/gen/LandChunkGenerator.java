@@ -46,12 +46,17 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 	private void initBiomes()
 	{
 		normalBiome = ModBiomes.LAND_NORMAL.createWrapper(this.settings);
-		
+		roughBiome = ModBiomes.LAND_ROUGH.createWrapper(this.settings);
+		oceanBiome = ModBiomes.LAND_OCEAN.createWrapper(this.settings);
 	}
 	
 	private LandWrapperBiome localBiomeFrom(Biome biome) {
 		if(biome == ModBiomes.LAND_NORMAL)
 			return normalBiome;
+		if(biome == ModBiomes.LAND_ROUGH)
+			return roughBiome;
+		if(biome == ModBiomes.LAND_OCEAN)
+			return oceanBiome;
 		
 		return normalBiome;
 	}
