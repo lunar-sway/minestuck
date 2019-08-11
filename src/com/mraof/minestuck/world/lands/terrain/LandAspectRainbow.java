@@ -10,8 +10,6 @@ import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.MesaDecorator;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import com.mraof.minestuck.world.lands.gen.ILandTerrainGen;
-import com.mraof.minestuck.world.lands.gen.SpecialTerrainGen;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -48,12 +46,6 @@ public class LandAspectRainbow extends TerrainLandAspect
 		registry.setBlockState("mushroom_2", rainbow_leaves);
 		registry.setBlockState("structure_wool_1", Blocks.YELLOW_WOOL.getDefaultState());
 		registry.setBlockState("structure_wool_3", Blocks.GREEN_WOOL.getDefaultState());
-	}
-	
-	@Override
-	public ILandTerrainGen createTerrainGenerator(ChunkProviderLands chunkProvider, Random rand)
-	{
-		return new SpecialTerrainGen(chunkProvider, rand);
 	}
 	
 	@Override

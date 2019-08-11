@@ -11,8 +11,6 @@ import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.LeaflessTreeDecorator;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import com.mraof.minestuck.world.lands.gen.DefaultTerrainGen;
-import com.mraof.minestuck.world.lands.gen.ILandTerrainGen;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.Vec3d;
@@ -47,17 +45,6 @@ public class LandAspectRain extends TerrainLandAspect
 		registry.setBlockState("bush", Blocks.DEAD_BUSH.getDefaultState());
 		registry.setBlockState("structure_wool_1", Blocks.YELLOW_WOOL.getDefaultState());
 		registry.setBlockState("structure_wool_3", Blocks.MAGENTA_WOOL.getDefaultState());
-	}
-	
-	@Override
-	public ILandTerrainGen createTerrainGenerator(ChunkProviderLands chunkProvider, Random rand)
-	{
-		DefaultTerrainGen out = new DefaultTerrainGen(chunkProvider, rand);
-		out.setSeaHeight(64);		//The ocean is two blocks higher than any other Lands
-		out.oceanVariation += 0.2F;	//The ground under the ocean is a bit more varied
-		out.roughHeight -= 0.1F;	//Rough biomes average a bit lower than normal
-		out.roughVariation += 0.1F;	//But they are more hilly overall
-		return out;
 	}
 	
 	@Override

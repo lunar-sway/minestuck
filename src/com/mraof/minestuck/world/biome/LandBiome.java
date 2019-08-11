@@ -1,20 +1,35 @@
 package com.mraof.minestuck.world.biome;
 
-import com.mraof.minestuck.world.gen.SkaiaSurfaceBuilder;
+import com.mraof.minestuck.world.lands.gen.LandGenSettings;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.surfacebuilders.ConfiguredSurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilders.SurfaceBuilder;
 
-public class LandBiome extends AbstractBiome
+public abstract class LandBiome extends AbstractBiome
 {
-	public LandBiome()
+	public LandBiome(Builder biomeBuilder)
 	{
-		super(new Biome.Builder().precipitation(Biome.RainType.NONE).category(Biome.Category.NONE).depth(0.1F).scale(0.2F).temperature(0.5F).downfall(0.5F).waterColor(0x3F76E4).waterFogColor(0x050533));
+		super(biomeBuilder);
 	}
 	
 	@Override
 	protected void init()
 	{
 		this.surfaceBuilder = new ConfiguredSurfaceBuilder<>(SurfaceBuilder.DEFAULT, SurfaceBuilder.GRASS_DIRT_GRAVEL_CONFIG);
+	}
+	
+	public static class Normal extends LandBiome
+	{
+		public Normal()
+		{
+			super(new Biome.Builder().precipitation(Biome.RainType.NONE).category(Biome.Category.NONE).depth(0.125F).scale(0.05F).temperature(0.5F).downfall(0.5F).waterColor(0x3F76E4).waterFogColor(0x050533));
+		}
+		
+		public LandWrapperBiome createWrapper(LandGenSettings settings)
+		{
+			LandWrapperBiome biome = new LandWrapperBiome(this, settings.normalBiomeDepth, settings.normalBiomeScale);
+			biome.init(settings);
+			return biome;
+		}
 	}
 }

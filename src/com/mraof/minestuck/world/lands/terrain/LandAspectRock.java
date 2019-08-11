@@ -11,8 +11,6 @@ import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
 import com.mraof.minestuck.world.lands.decorator.SurfaceMushroomGenerator;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import com.mraof.minestuck.world.lands.gen.DefaultTerrainGen;
-import com.mraof.minestuck.world.lands.gen.ILandTerrainGen;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.Vec3d;
@@ -147,16 +145,6 @@ public class LandAspectRock extends TerrainLandAspect
 	public Vec3d getSkyColor()
 	{
 		return new Vec3d(0.6D, 0.6D, 0.7D);
-	}
-	
-	@Override
-	public ILandTerrainGen createTerrainGenerator(ChunkProviderLands chunkProvider, Random rand)
-	{
-		DefaultTerrainGen terrainGen = new DefaultTerrainGen(chunkProvider, rand);
-		terrainGen.normalVariation = 0.6F;
-		terrainGen.roughVariation = 0.9F;
-		terrainGen.oceanVariation = 0.4F;
-		return terrainGen;
 	}
 	
 	@Override

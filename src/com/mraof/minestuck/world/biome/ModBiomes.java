@@ -15,7 +15,7 @@ public class ModBiomes
 {
 	
 	public static final SkaiaBiome SKAIA = getNull();
-	public static final LandBiome LAND_NORMAL = getNull();
+	public static final LandBiome.Normal LAND_NORMAL = getNull();
 	public static Biome mediumOcean, mediumNormal, mediumRough;
 	
 	@Nonnull
@@ -29,7 +29,7 @@ public class ModBiomes
 	public static void registerBiomes(final RegistryEvent.Register<Biome> event)
 	{
 		event.getRegistry().register(new SkaiaBiome().setRegistryName("skaia"));
-		event.getRegistry().register(new LandBiome().setRegistryName("land_normal"));
+		event.getRegistry().register(new LandBiome.Normal().setRegistryName("land_normal"));
 		/*mediumNormal = new BiomeMinestuck(new BiomeProperties("The Medium")).setRegistryName("medium");
 		mediumOcean = new BiomeMinestuck(new BiomeProperties("The Medium (Ocean)").setBaseBiome("medium")).setRegistryName("medium_ocean");
 		mediumRough = new BiomeMinestuck(new BiomeProperties("The Medium (Rough)").setBaseBiome("medium")).setRegistryName("medium_rough");

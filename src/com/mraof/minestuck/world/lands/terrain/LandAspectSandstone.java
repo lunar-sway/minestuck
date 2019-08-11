@@ -5,8 +5,6 @@ import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.*;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import com.mraof.minestuck.world.lands.gen.DefaultTerrainGen;
-import com.mraof.minestuck.world.lands.gen.ILandTerrainGen;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.*;
 import net.minecraft.util.math.Vec3d;
@@ -154,15 +152,6 @@ public class LandAspectSandstone extends TerrainLandAspect
 	public List<TerrainLandAspect> getVariations()
 	{
 		return variations;
-	}
-	
-	@Override
-	public ILandTerrainGen createTerrainGenerator(ChunkProviderLands chunkProvider, Random rand)
-	{
-		DefaultTerrainGen terrainGen = new DefaultTerrainGen(chunkProvider, rand);
-		terrainGen.normalVariation = 0.6F;
-		terrainGen.oceanVariation = 0.3F;
-		return terrainGen;
 	}
 	
 	@Override

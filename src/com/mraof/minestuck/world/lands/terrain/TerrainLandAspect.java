@@ -8,12 +8,8 @@ import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.lands.ILandAspect;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import com.mraof.minestuck.world.lands.gen.DefaultTerrainGen;
-import com.mraof.minestuck.world.lands.gen.ILandTerrainGen;
-import com.mraof.minestuck.world.lands.structure.GateStructureMushroom;
 import com.mraof.minestuck.world.lands.structure.GateStructurePillar;
 import com.mraof.minestuck.world.lands.structure.IGateStructure;
-import com.mraof.minestuck.world.lands.structure.MapGenLandStructure;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
 import net.minecraft.util.math.Vec3d;
@@ -81,11 +77,6 @@ public abstract class TerrainLandAspect implements ILandAspect<TerrainLandAspect
 	public TerrainLandAspect getPrimaryVariant()
 	{
 		return this;
-	}
-	
-	public ILandTerrainGen createTerrainGenerator(ChunkProviderLands chunkProvider, Random rand)
-	{
-		return new DefaultTerrainGen(chunkProvider, rand);
 	}
 	
 	//public void modifyStructureList(List<MapGenLandStructure.StructureEntry> list)
