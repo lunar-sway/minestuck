@@ -48,6 +48,12 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 		normalBiome = ModBiomes.LAND_NORMAL.createWrapper(this.settings);
 		roughBiome = ModBiomes.LAND_ROUGH.createWrapper(this.settings);
 		oceanBiome = ModBiomes.LAND_OCEAN.createWrapper(this.settings);
+		landAspects.aspectTerrain.setBiomeParams(normalBiome);
+		landAspects.aspectTerrain.setBiomeParams(roughBiome);
+		landAspects.aspectTerrain.setBiomeParams(oceanBiome);
+		landAspects.aspectTitle.setBiomeParams(normalBiome);
+		landAspects.aspectTitle.setBiomeParams(roughBiome);
+		landAspects.aspectTitle.setBiomeParams(oceanBiome);
 	}
 	
 	private LandWrapperBiome localBiomeFrom(Biome biome) {

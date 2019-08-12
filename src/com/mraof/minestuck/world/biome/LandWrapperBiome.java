@@ -9,12 +9,12 @@ import net.minecraft.world.gen.surfacebuilders.SurfaceBuilderConfig;
 
 public class LandWrapperBiome extends LandBiome
 {
-	public final LandBiome biome;
+	public final LandBiome staticBiome;
 	
 	public LandWrapperBiome(LandBiome biome, float depth, float scale)
 	{
 		super(new Biome.Builder().precipitation(Biome.RainType.NONE).category(Biome.Category.NONE).depth(depth).scale(scale).temperature(0.5F).downfall(0.5F).waterColor(0x3F76E4).waterFogColor(0x050533));
-		this.biome = biome;
+		this.staticBiome = biome;
 	}
 	
 	public void init(LandGenSettings settings)

@@ -8,6 +8,7 @@ import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.lands.ILandAspect;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import com.mraof.minestuck.world.lands.gen.LandGenSettings;
 import com.mraof.minestuck.world.lands.structure.GateStructurePillar;
 import com.mraof.minestuck.world.lands.structure.IGateStructure;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
@@ -18,7 +19,8 @@ public abstract class TerrainLandAspect implements ILandAspect<TerrainLandAspect
 {
 	public abstract void registerBlocks(StructureBlockRegistry registry);
 	
-	public abstract List<ILandDecorator> getDecorators();	//TODO Add a Random as parameter
+	@Deprecated
+	public List<ILandDecorator> getDecorators(){return null;}
 	
 	/**
 	 * @return

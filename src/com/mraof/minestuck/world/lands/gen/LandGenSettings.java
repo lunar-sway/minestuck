@@ -31,9 +31,11 @@ public class LandGenSettings extends GenerationSettings
 		blockRegistry = new StructureBlockRegistry();
 		landAspects.aspectTerrain.registerBlocks(blockRegistry);
 		//TODO Also register from title landspect
-		
 		setDefaultBlock(blockRegistry.getBlockState("ground"));
 		setDefaultFluid(blockRegistry.getBlockState("ocean"));
+		
+		landAspects.aspectTerrain.setSettings(this);
+		landAspects.aspectTitle.setSettings(this);
 	}
 	
 	@Override
