@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.lands.ILandAspect;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
@@ -13,6 +14,7 @@ import com.mraof.minestuck.world.lands.structure.GateStructurePillar;
 import com.mraof.minestuck.world.lands.structure.IGateStructure;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
+import net.minecraft.entity.EntityType;
 import net.minecraft.util.math.Vec3d;
 
 public abstract class TerrainLandAspect implements ILandAspect<TerrainLandAspect>
@@ -95,7 +97,7 @@ public abstract class TerrainLandAspect implements ILandAspect<TerrainLandAspect
 	@Override
 	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider){}
 	
-	public abstract EnumConsort getConsortType();
+	public abstract EntityType<? extends ConsortEntity> getConsortType();
 	
 	/*public MapGenStructure customMapGenStructure(ChunkProviderLands chunkProviderLands)
 	{

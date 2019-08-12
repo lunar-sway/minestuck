@@ -4,6 +4,7 @@ import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.LandAspects;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
+import net.minecraft.entity.EntityClassification;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IWorld;
@@ -15,6 +16,7 @@ import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Objects;
 
 public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
@@ -124,25 +126,31 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 	@Override
 	protected Biome getBiome(IChunk chunkIn)
 	{
-		return normalBiome;
+		return localBiomeFrom(super.getBiome(chunkIn));
 	}
 	
 	@Override
 	protected Biome getBiome(WorldGenRegion worldRegionIn, BlockPos pos)
 	{
-		return normalBiome;
+		return localBiomeFrom(super.getBiome(worldRegionIn, pos));
 	}
 	
 	@Override
 	public boolean hasStructure(Biome biomeIn, Structure<? extends IFeatureConfig> structureIn)
 	{
-		return normalBiome.hasStructure(structureIn);
+		return localBiomeFrom(biomeIn).hasStructure(structureIn);
 	}
 	
 	@Nullable
 	@Override
 	public <C extends IFeatureConfig> C getStructureConfig(Biome biomeIn, Structure<C> structureIn)
 	{
-		return normalBiome.getStructureConfig(structureIn);
+		return localBiomeFrom(biomeIn).getStructureConfig(structureIn);
+	}
+	
+	@Override
+	public List<Biome.SpawnListEntry> getPossibleCreatures(EntityClassification creatureType, BlockPos pos)
+	{
+		return localBiomeFrom(this.world.getBiome(pos)).getSpawns(creatureType);
 	}
 }

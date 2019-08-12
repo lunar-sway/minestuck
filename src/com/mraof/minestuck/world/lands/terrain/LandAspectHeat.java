@@ -1,11 +1,13 @@
 package com.mraof.minestuck.world.lands.terrain;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.entity.consort.EnumConsort;
+import com.mraof.minestuck.entity.ModEntityTypes;
+import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.decorator.*;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.EntityType;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.ArrayList;
@@ -88,8 +90,8 @@ public class LandAspectHeat extends TerrainLandAspect
 	}
 	
 	@Override
-	public EnumConsort getConsortType()
+	public EntityType<? extends ConsortEntity> getConsortType()
 	{
-		return EnumConsort.NAKAGATOR;
+		return ModEntityTypes.NAKAGATOR;
 	}
 }

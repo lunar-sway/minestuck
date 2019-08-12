@@ -4,14 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.entity.consort.EnumConsort;
+import com.mraof.minestuck.entity.ModEntityTypes;
+import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
-import com.mraof.minestuck.world.lands.decorator.*;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.EntityType;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.DefaultBiomeFeatures;
@@ -158,9 +159,9 @@ public class LandAspectForest extends TerrainLandAspect
 	}
 	
 	@Override
-	public EnumConsort getConsortType()
+	public EntityType<? extends ConsortEntity> getConsortType()
 	{
-		return EnumConsort.IGUANA;
+		return ModEntityTypes.IGUANA;
 	}
 	
 	public enum Variant

@@ -2,6 +2,7 @@ package com.mraof.minestuck.world.biome;
 
 import com.mraof.minestuck.world.lands.gen.LandGenSettings;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
+import net.minecraft.entity.EntityClassification;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.surfacebuilders.ConfiguredSurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilders.SurfaceBuilder;
@@ -22,5 +23,6 @@ public class LandWrapperBiome extends LandBiome
 		StructureBlockRegistry registry = settings.getBlockRegistry();
 		SurfaceBuilderConfig surfaceConfig = new SurfaceBuilderConfig(registry.getBlockState("surface"), registry.getBlockState("upper"), registry.getBlockState("ocean_surface"));
 		this.surfaceBuilder = new ConfiguredSurfaceBuilder<>(SurfaceBuilder.DEFAULT, surfaceConfig);
+		this.addSpawn(EntityClassification.CREATURE, new SpawnListEntry(settings.getLandAspects().aspectTerrain.getConsortType(), 2, 1, 10));
 	}
 }

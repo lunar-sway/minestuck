@@ -2,10 +2,10 @@ package com.mraof.minestuck.world.lands.terrain;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.entity.consort.EnumConsort;
+import com.mraof.minestuck.entity.ModEntityTypes;
+import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.MesaDecorator;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
@@ -110,8 +110,8 @@ public class LandAspectRainbow extends TerrainLandAspect
 	}
 	
 	@Override
-	public EnumConsort getConsortType()
+	public EntityType<? extends ConsortEntity> getConsortType()
 	{
-		return EnumConsort.TURTLE;
+		return ModEntityTypes.TURTLE;
 	}
 }
