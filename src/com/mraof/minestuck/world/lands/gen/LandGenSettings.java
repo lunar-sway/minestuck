@@ -3,12 +3,15 @@ package com.mraof.minestuck.world.lands.gen;
 import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.LandAspects;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationSettings;
 
 public class LandGenSettings extends GenerationSettings
 {
 	private LandAspects landAspects;
 	private StructureBlockRegistry blockRegistry;
+	public Biome.RainType rainType = Biome.RainType.NONE;
+	public float temperature = 0.5F, downfall = 0.5F;
 	public float normalBiomeDepth = ModBiomes.LAND_NORMAL.getDepth(), normalBiomeScale = ModBiomes.LAND_NORMAL.getScale();
 	public float roughBiomeDepth = ModBiomes.LAND_ROUGH.getDepth(), roughBiomeScale = ModBiomes.LAND_ROUGH.getScale();
 	public float oceanBiomeDepth = ModBiomes.LAND_OCEAN.getDepth(), oceanBiomeScale = ModBiomes.LAND_OCEAN.getScale();

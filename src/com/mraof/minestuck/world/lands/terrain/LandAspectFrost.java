@@ -4,12 +4,16 @@ import com.mraof.minestuck.block.*;
 import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.EnumConsort;
+import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.decorator.*;
+import com.mraof.minestuck.world.lands.gen.LandGenSettings;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.*;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.DefaultBiomeFeatures;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +51,20 @@ public class LandAspectFrost extends TerrainLandAspect
 	@Override
 	public String[] getNames() {
 		return new String[] {"frost", "ice", "snow"};
+	}
+	
+	@Override
+	public void setSettings(LandGenSettings settings)
+	{
+		settings.rainType = Biome.RainType.SNOW;
+		settings.temperature = 0.0F;
+		settings.oceanChance = 1/4F;
+	}
+	
+	@Override
+	public void setBiomeParams(LandWrapperBiome biome)
+	{
+		DefaultBiomeFeatures.addFreezeTopLayer(biome);
 	}
 	
 	@Override
@@ -93,18 +111,6 @@ public class LandAspectFrost extends TerrainLandAspect
 	public int getWeatherType()
 	{
 		return 1;
-	}
-	
-	@Override
-	public float getTemperature()
-	{
-		return 0.0F;
-	}
-	
-	@Override
-	public float getOceanChance()
-	{
-		return 1/4F;
 	}
 	
 	@Override

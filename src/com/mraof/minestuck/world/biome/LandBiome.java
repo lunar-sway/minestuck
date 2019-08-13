@@ -27,7 +27,7 @@ public abstract class LandBiome extends AbstractBiome
 		
 		public LandWrapperBiome createWrapper(LandGenSettings settings)
 		{
-			LandWrapperBiome biome = new LandWrapperBiome(this, settings.normalBiomeDepth, settings.normalBiomeScale);
+			LandWrapperBiome biome = new LandWrapperBiome(this, settings.rainType, settings.temperature, settings.downfall, settings.normalBiomeDepth, settings.normalBiomeScale);
 			biome.init(settings);
 			return biome;
 		}
@@ -42,7 +42,7 @@ public abstract class LandBiome extends AbstractBiome
 		
 		public LandWrapperBiome createWrapper(LandGenSettings settings)
 		{
-			LandWrapperBiome biome = new LandWrapperBiome(this, settings.roughBiomeDepth, settings.roughBiomeScale);
+			LandWrapperBiome biome = new LandWrapperBiome(this, settings.rainType, settings.temperature, settings.downfall, settings.roughBiomeDepth, settings.roughBiomeScale);
 			biome.init(settings);
 			return biome;
 		}
@@ -57,7 +57,7 @@ public abstract class LandBiome extends AbstractBiome
 		
 		public LandWrapperBiome createWrapper(LandGenSettings settings)
 		{
-			LandWrapperBiome biome = new LandWrapperBiome(this, settings.oceanBiomeDepth, settings.oceanBiomeScale);
+			LandWrapperBiome biome = new LandWrapperBiome(this, settings.rainType, settings.temperature, settings.downfall, settings.oceanBiomeDepth, settings.oceanBiomeScale);
 			biome.init(settings);
 			return biome;
 		}
