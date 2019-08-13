@@ -2,10 +2,12 @@ package com.mraof.minestuck.world.lands;
 
 import java.util.List;
 
+import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.gen.LandGenSettings;
 import com.mraof.minestuck.world.lands.structure.IGateStructure;
+import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
 public interface ILandAspect<A extends ILandAspect>
 {
@@ -28,10 +30,13 @@ public interface ILandAspect<A extends ILandAspect>
 	@Deprecated
 	void prepareChunkProviderServer(ChunkProviderLands chunkProvider);
 	
-	default void setSettings(LandGenSettings settings)
+	default void setGenSettings(LandGenSettings settings)
 	{}
 	
-	default void setBiomeParams(LandWrapperBiome biome)
+	default void setBiomeSettings(LandBiomeHolder settings)
+	{}
+	
+	default void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blockRegistry)
 	{}
 	
 	List<A> getVariations();

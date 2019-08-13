@@ -87,7 +87,7 @@ public class LandAspectForest extends TerrainLandAspect
 	}
 	
 	@Override
-	public void setBiomeParams(LandWrapperBiome biome)
+	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blockRegistry)
 	{
 		if(biome.staticBiome == ModBiomes.LAND_NORMAL)
 		{

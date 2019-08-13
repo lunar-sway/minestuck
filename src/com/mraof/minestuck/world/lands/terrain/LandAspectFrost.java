@@ -3,7 +3,7 @@ package com.mraof.minestuck.world.lands.terrain;
 import com.mraof.minestuck.block.*;
 import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
-import com.mraof.minestuck.entity.consort.EnumConsort;
+import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.decorator.*;
@@ -54,15 +54,20 @@ public class LandAspectFrost extends TerrainLandAspect
 	}
 	
 	@Override
-	public void setSettings(LandGenSettings settings)
+	public void setBiomeSettings(LandBiomeHolder settings)
 	{
 		settings.rainType = Biome.RainType.SNOW;
 		settings.temperature = 0.0F;
+	}
+	
+	@Override
+	public void setGenSettings(LandGenSettings settings)
+	{
 		settings.oceanChance = 1/4F;
 	}
 	
 	@Override
-	public void setBiomeParams(LandWrapperBiome biome)
+	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blockRegistry)
 	{
 		DefaultBiomeFeatures.addFreezeTopLayer(biome);
 	}

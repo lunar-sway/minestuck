@@ -5,9 +5,11 @@ import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.gen.ModWorldGenTypes;
 
+import com.mraof.minestuck.world.lands.gen.LandChunkGenerator;
 import com.mraof.minestuck.world.lands.gen.LandGenSettings;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
@@ -19,6 +21,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.provider.BiomeProviderType;
 import net.minecraft.world.dimension.Dimension;
 import net.minecraft.world.dimension.DimensionType;
@@ -31,7 +34,7 @@ import java.util.function.BiFunction;
 
 public class LandDimension extends Dimension
 {
-	
+	private LandBiomeHolder biomeHolder;
 	public LandAspects landAspects;
 	public float skylightBase;
 	Vec3d skyColor;
@@ -58,7 +61,7 @@ public class LandDimension extends Dimension
 		initLandAspects();
 	}
 	
-	public void initLandAspects()
+	private void initLandAspects()
 	{
 		skylightBase = landAspects.aspectTerrain.getSkylightBase();
 		skyColor = landAspects.aspectTerrain.getSkyColor();
@@ -66,6 +69,8 @@ public class LandDimension extends Dimension
 		cloudColor = landAspects.aspectTerrain.getCloudColor();
 		
 		landAspects.aspectTitle.prepareWorldProvider(this);
+		
+		biomeHolder = new LandBiomeHolder(landAspects);
 	}
 	
 	//@Override TODO
@@ -95,7 +100,14 @@ public class LandDimension extends Dimension
 	{
 		LandGenSettings settings = ModWorldGenTypes.LANDS.createSettings();
 		settings.setLandAspects(landAspects);
+		settings.setBiomeHolder(biomeHolder);
 		return ModWorldGenTypes.LANDS.create(this.world, ModWorldGenTypes.LAND_BIOMES.create(ModWorldGenTypes.LAND_BIOMES.createSettings().setGenSettings(settings).setSeed(this.getSeed())), settings);
+	}
+	
+	@Override
+	public Biome getBiome(BlockPos pos)
+	{
+		return biomeHolder.localBiomeFrom(super.getBiome(pos));
 	}
 	
 	@Nullable
@@ -249,13 +261,6 @@ public class LandDimension extends Dimension
 	{
 		return world;
 	}
-	/*
-	@Override
-	public Biome getBiomeForCoords(BlockPos pos)
-	{
-		return chunkProvider.getBiomeGen();
-	}^*/
-	
 	
 	//@Override TODO Is this actually needed?
 	public void onPlayerAdded(ServerPlayerEntity player)

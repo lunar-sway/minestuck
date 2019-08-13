@@ -1,6 +1,5 @@
 package com.mraof.minestuck.world.biome;
 
-import com.mraof.minestuck.world.lands.gen.LandGenSettings;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.surfacebuilders.ConfiguredSurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilders.SurfaceBuilder;
@@ -25,11 +24,9 @@ public abstract class LandBiome extends AbstractBiome
 			super(new Biome.Builder().precipitation(Biome.RainType.NONE).category(Biome.Category.NONE).depth(0.125F).scale(0.05F).temperature(0.5F).downfall(0.5F).waterColor(0x3F76E4).waterFogColor(0x050533));
 		}
 		
-		public LandWrapperBiome createWrapper(LandGenSettings settings)
+		public LandWrapperBiome createWrapper(LandBiomeHolder settings)
 		{
-			LandWrapperBiome biome = new LandWrapperBiome(this, settings.rainType, settings.temperature, settings.downfall, settings.normalBiomeDepth, settings.normalBiomeScale);
-			biome.init(settings);
-			return biome;
+			return new LandWrapperBiome(this, settings.rainType, settings.temperature, settings.downfall, settings.normalBiomeDepth, settings.normalBiomeScale);
 		}
 	}
 	
@@ -40,11 +37,9 @@ public abstract class LandBiome extends AbstractBiome
 			super(new Biome.Builder().precipitation(Biome.RainType.NONE).category(Biome.Category.NONE).depth(0.45F).scale(0.3F).temperature(0.5F).downfall(0.5F).waterColor(0x3F76E4).waterFogColor(0x050533));
 		}
 		
-		public LandWrapperBiome createWrapper(LandGenSettings settings)
+		public LandWrapperBiome createWrapper(LandBiomeHolder settings)
 		{
-			LandWrapperBiome biome = new LandWrapperBiome(this, settings.rainType, settings.temperature, settings.downfall, settings.roughBiomeDepth, settings.roughBiomeScale);
-			biome.init(settings);
-			return biome;
+			return new LandWrapperBiome(this, settings.rainType, settings.temperature, settings.downfall, settings.roughBiomeDepth, settings.roughBiomeScale);
 		}
 	}
 	
@@ -55,11 +50,9 @@ public abstract class LandBiome extends AbstractBiome
 			super(new Biome.Builder().precipitation(Biome.RainType.NONE).category(Biome.Category.NONE).depth(-1.0F).scale(0.1F).temperature(0.5F).downfall(0.5F).waterColor(0x3F76E4).waterFogColor(0x050533));
 		}
 		
-		public LandWrapperBiome createWrapper(LandGenSettings settings)
+		public LandWrapperBiome createWrapper(LandBiomeHolder settings)
 		{
-			LandWrapperBiome biome = new LandWrapperBiome(this, settings.rainType, settings.temperature, settings.downfall, settings.oceanBiomeDepth, settings.oceanBiomeScale);
-			biome.init(settings);
-			return biome;
+			return new LandWrapperBiome(this, settings.rainType, settings.temperature, settings.downfall, settings.oceanBiomeDepth, settings.oceanBiomeScale);
 		}
 	}
 }

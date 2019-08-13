@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.lands.gen;
 
+import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.LandAspects;
@@ -32,54 +33,31 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 	
 	public final LandAspects landAspects;
 	public final StructureBlockRegistry blockRegistry;
-	
-	public LandWrapperBiome normalBiome, oceanBiome, roughBiome;
+	public final LandBiomeHolder biomeHolder;
 	
 	public LandChunkGenerator(IWorld worldIn, BiomeProvider biomeProviderIn, LandGenSettings settings)
 	{
 		super(worldIn, biomeProviderIn, 4, 8, 256, settings, false);
 		
-		landAspects = Objects.requireNonNull(this.settings.getLandAspects());
-		blockRegistry = Objects.requireNonNull(this.settings.getBlockRegistry());
+		landAspects = Objects.requireNonNull(settings.getLandAspects());
+		blockRegistry = Objects.requireNonNull(settings.getBlockRegistry());
 		
-		initBiomes();
+		biomeHolder = Objects.requireNonNull(settings.getBiomeHolder());
+		biomeHolder.initBiomesWith(settings);
 	}
 	
-	private void initBiomes()
-	{
-		normalBiome = ModBiomes.LAND_NORMAL.createWrapper(this.settings);
-		roughBiome = ModBiomes.LAND_ROUGH.createWrapper(this.settings);
-		oceanBiome = ModBiomes.LAND_OCEAN.createWrapper(this.settings);
-		landAspects.aspectTerrain.setBiomeParams(normalBiome);
-		landAspects.aspectTerrain.setBiomeParams(roughBiome);
-		landAspects.aspectTerrain.setBiomeParams(oceanBiome);
-		landAspects.aspectTitle.setBiomeParams(normalBiome);
-		landAspects.aspectTitle.setBiomeParams(roughBiome);
-		landAspects.aspectTitle.setBiomeParams(oceanBiome);
-	}
-	
-	private LandWrapperBiome localBiomeFrom(Biome biome) {
-		if(biome == ModBiomes.LAND_NORMAL)
-			return normalBiome;
-		if(biome == ModBiomes.LAND_ROUGH)
-			return roughBiome;
-		if(biome == ModBiomes.LAND_OCEAN)
-			return oceanBiome;
-		
-		return normalBiome;
-	}
 	
 	@Override
 	protected double[] func_222549_a(int columnX, int columnZ)
 	{
-		float baseDepth = localBiomeFrom(biomeProvider.func_222366_b(columnX, columnZ)).getDepth();
+		float baseDepth = biomeHolder.localBiomeFrom(biomeProvider.func_222366_b(columnX, columnZ)).getDepth();
 		
 		float depthSum = 0, scaleSum = 0, weightSum = 0;
 		for(int x = -2; x <= 2; x++)
 		{
 			for(int z = -2; z <= 2; z++)
 			{
-				Biome biome = localBiomeFrom(biomeProvider.func_222366_b(columnX + x, columnZ + z));
+				Biome biome = biomeHolder.localBiomeFrom(biomeProvider.func_222366_b(columnX + x, columnZ + z));
 				float weight = biomeWeight[(x + 2)*5 + z + 2] / (biome.getDepth() + 2);
 				if(biome.getDepth() > baseDepth)
 					weight /= 2;
@@ -126,31 +104,25 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 	@Override
 	protected Biome getBiome(IChunk chunkIn)
 	{
-		return localBiomeFrom(super.getBiome(chunkIn));
+		return biomeHolder.localBiomeFrom(super.getBiome(chunkIn));
 	}
 	
 	@Override
 	protected Biome getBiome(WorldGenRegion worldRegionIn, BlockPos pos)
 	{
-		return localBiomeFrom(super.getBiome(worldRegionIn, pos));
+		return biomeHolder.localBiomeFrom(super.getBiome(worldRegionIn, pos));
 	}
 	
 	@Override
 	public boolean hasStructure(Biome biomeIn, Structure<? extends IFeatureConfig> structureIn)
 	{
-		return localBiomeFrom(biomeIn).hasStructure(structureIn);
+		return biomeHolder.localBiomeFrom(biomeIn).hasStructure(structureIn);
 	}
 	
 	@Nullable
 	@Override
 	public <C extends IFeatureConfig> C getStructureConfig(Biome biomeIn, Structure<C> structureIn)
 	{
-		return localBiomeFrom(biomeIn).getStructureConfig(structureIn);
-	}
-	
-	@Override
-	public List<Biome.SpawnListEntry> getPossibleCreatures(EntityClassification creatureType, BlockPos pos)
-	{
-		return localBiomeFrom(this.world.getBiome(pos)).getSpawns(creatureType);
+		return biomeHolder.localBiomeFrom(biomeIn).getStructureConfig(structureIn);
 	}
 }
