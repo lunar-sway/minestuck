@@ -95,10 +95,8 @@ public class MinestuckKeyHandler
 			}
 			
 			captchaKeyPressed = Keyboard.isKeyDown(captchaKey.getKeyCode());
-		} catch(IndexOutOfBoundsException e)
-		{
-			Debug.warnf("Got IndexOutOfBoundsException for captcha key keycode %d.");
-		}
+		} catch(IndexOutOfBoundsException ignored)
+		{}
 	}
 	
 }
