@@ -38,12 +38,12 @@ public class LandBiomeHolder
 	}
 	
 	public LandWrapperBiome localBiomeFrom(Biome biome) {
-		if(biome == ModBiomes.LAND_NORMAL)
-			return normalBiome;
-		if(biome == ModBiomes.LAND_ROUGH)
-			return roughBiome;
-		if(biome == ModBiomes.LAND_OCEAN)
-			return oceanBiome;
+		LandWrapperBiome[] biomes = {normalBiome, roughBiome, oceanBiome};
+		for(LandWrapperBiome wrapperBiome : biomes)
+		{
+			if(wrapperBiome.staticBiome == biome)
+				return wrapperBiome;
+		}
 		
 		return normalBiome;
 	}

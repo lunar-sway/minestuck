@@ -6,6 +6,7 @@ import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
+import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.gen.ModWorldGenTypes;
 
@@ -102,6 +103,11 @@ public class LandDimension extends Dimension
 		settings.setLandAspects(landAspects);
 		settings.setBiomeHolder(biomeHolder);
 		return ModWorldGenTypes.LANDS.create(this.world, ModWorldGenTypes.LAND_BIOMES.create(ModWorldGenTypes.LAND_BIOMES.createSettings().setGenSettings(settings).setSeed(this.getSeed())), settings);
+	}
+	
+	public LandWrapperBiome getWrapperBiome(Biome biome)
+	{
+		return biomeHolder.localBiomeFrom(biome);
 	}
 	
 	@Override
