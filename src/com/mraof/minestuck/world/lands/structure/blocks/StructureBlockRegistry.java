@@ -58,6 +58,7 @@ public class StructureBlockRegistry
 		registerBlock("upper", "ground");
 		registerBlock("surface", "upper");
 		registerBlock("ocean", Blocks.WATER.getDefaultState());
+		registerBlock("ocean_surface", "upper");
 		registerBlock("river", "ocean");
 		registerBlock("structure_primary", Blocks.STONE_BRICKS.getDefaultState());
 		registerBlock("structure_primary_decorative", "structure_primary");

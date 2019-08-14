@@ -5,7 +5,8 @@ import java.util.List;
 import java.util.Random;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.entity.consort.EnumConsort;
+import com.mraof.minestuck.entity.ModEntityTypes;
+import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.decorator.CanopyTreeDecorator;
 import com.mraof.minestuck.world.lands.decorator.FlowerDecorator;
@@ -20,6 +21,7 @@ import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.DirectionalBlock;
+import net.minecraft.entity.EntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -122,8 +124,8 @@ public class LandAspectFlora extends TerrainLandAspect
 	}
 	
 	@Override
-	public EnumConsort getConsortType()
+	public EntityType<? extends ConsortEntity> getConsortType()
 	{
-		return EnumConsort.IGUANA;
+		return ModEntityTypes.IGUANA;
 	}
 }

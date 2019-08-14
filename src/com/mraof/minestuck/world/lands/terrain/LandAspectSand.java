@@ -1,19 +1,17 @@
 
 package com.mraof.minestuck.world.lands.terrain;
 
-import com.mraof.minestuck.entity.consort.EnumConsort;
+import com.mraof.minestuck.entity.ModEntityTypes;
+import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import com.mraof.minestuck.world.lands.gen.LandTerrainGenBase;
-import com.mraof.minestuck.world.lands.gen.RiverFreeTerrainGen;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.*;
+import net.minecraft.entity.EntityType;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class LandAspectSand extends TerrainLandAspect
 {
@@ -167,18 +165,12 @@ public class LandAspectSand extends TerrainLandAspect
 	}
 	
 	@Override
-	public LandTerrainGenBase createTerrainGenerator(ChunkProviderLands chunkProvider, Random rand)
+	public EntityType<? extends ConsortEntity> getConsortType()
 	{
-		return new RiverFreeTerrainGen(chunkProvider, rand);
+		return ModEntityTypes.TURTLE;
 	}
 	
-	@Override
-	public EnumConsort getConsortType()
-	{
-		return EnumConsort.TURTLE;
-	}
-	
-	public static enum Variant
+	public enum Variant
 	{
 		SAND,
 		LUSH_DESERTS,

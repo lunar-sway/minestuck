@@ -1,12 +1,14 @@
 package com.mraof.minestuck.world.lands.terrain;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.entity.consort.EnumConsort;
+import com.mraof.minestuck.entity.ModEntityTypes;
+import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.block.RotatedPillarBlock;
+import net.minecraft.entity.EntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.Vec3d;
 
@@ -90,8 +92,8 @@ public class LandAspectEnd extends TerrainLandAspect
 	}
 	
 	@Override
-	public EnumConsort getConsortType()
+	public EntityType<? extends ConsortEntity> getConsortType()
 	{
-		return EnumConsort.NAKAGATOR;
+		return ModEntityTypes.NAKAGATOR;
 	}
 }

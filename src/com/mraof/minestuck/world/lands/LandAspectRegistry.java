@@ -41,7 +41,7 @@ public class LandAspectRegistry
 	{
 		registerLandAspect(new LandAspectForest());
 		registerLandAspect(new LandAspectFrost());
-		registerLandAspect(new LandAspectFungi());
+		/*registerLandAspect(new LandAspectFungi());
 		registerLandAspect(new LandAspectHeat());
 		registerLandAspect(new LandAspectRock());
 		registerLandAspect(new LandAspectSand());
@@ -51,7 +51,7 @@ public class LandAspectRegistry
 		registerLandAspectHidden(new LandAspectRain());
 		registerLandAspect(new LandAspectRainbow());
 		registerLandAspect(new LandAspectFlora());
-		registerLandAspect(new LandAspectEnd());
+		registerLandAspect(new LandAspectEnd());*/
 		
 		registerLandAspect(new LandAspectWind(), EnumAspect.BREATH);
 		registerLandAspect(new LandAspectLight(), EnumAspect.LIGHT);
