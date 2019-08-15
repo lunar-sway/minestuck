@@ -632,9 +632,9 @@ public class MinestuckItems
 		//registry.register(FAKE_ARMS = new Item(new Item.Properties().maxStackSize(1)).setRegistryName("fake_arms"));
 		
 		//Music disks
-		registry.register(RECORD_EMISSARY_OF_DANCE = new ModMusicDiscItem(13, MinestuckSoundHandler.soundEmissaryOfDance, new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("record_emissary"));
-		registry.register(RECORD_DANCE_STAB = new ModMusicDiscItem(13, MinestuckSoundHandler.soundDanceStabDance, new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("record_dance_stab"));
-		registry.register(RECORD_RETRO_BATTLE = new ModMusicDiscItem(13, MinestuckSoundHandler.soundRetroBattleTheme, new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("record_retro_battle"));
+		registry.register(RECORD_EMISSARY_OF_DANCE = new ModMusicDiscItem(13, MinestuckSoundHandler.soundEmissaryOfDance, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("record_emissary"));
+		registry.register(RECORD_DANCE_STAB = new ModMusicDiscItem(13, MinestuckSoundHandler.soundDanceStabDance, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("record_dance_stab"));
+		registry.register(RECORD_RETRO_BATTLE = new ModMusicDiscItem(13, MinestuckSoundHandler.soundRetroBattleTheme, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("record_retro_battle"));
 
 		/*((MinestuckBucketItem) minestuckBucket).addBlock(blockOil.getDefaultState());
 		((MinestuckBucketItem) minestuckBucket).addBlock(blockBlood.getDefaultState());
