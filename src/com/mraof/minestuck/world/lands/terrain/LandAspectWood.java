@@ -3,6 +3,7 @@ package com.mraof.minestuck.world.lands.terrain;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
@@ -53,6 +54,13 @@ public class LandAspectWood extends TerrainLandAspect
 	}
 	
 	@Override
+	public void setBiomeSettings(LandBiomeHolder settings)
+	{
+		settings.downfall = 0.6F;
+		settings.temperature = 1.0F;
+	}
+	
+	@Override
 	public List<ILandDecorator> getDecorators()
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<>();
@@ -89,18 +97,6 @@ public class LandAspectWood extends TerrainLandAspect
 	public Vec3d getSkyColor()
 	{
 		return new Vec3d(0.0D, 0.3D, 0.4D);
-	}
-	
-	@Override
-	public float getTemperature()
-	{
-		return 1.0F;
-	}
-	
-	@Override
-	public float getRainfall()
-	{
-		return 0.6F;
 	}
 	
 	@Override

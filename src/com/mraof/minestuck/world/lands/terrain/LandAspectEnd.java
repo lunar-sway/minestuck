@@ -3,6 +3,7 @@ package com.mraof.minestuck.world.lands.terrain;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
@@ -11,6 +12,7 @@ import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.biome.Biome;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +56,14 @@ public class LandAspectEnd extends TerrainLandAspect
 	}
 	
 	@Override
+	public void setBiomeSettings(LandBiomeHolder settings)
+	{
+		settings.category = Biome.Category.THEEND;
+		settings.downfall = 0.0F;
+		settings.temperature = 1.2F;
+	}
+	
+	@Override
 	public List<ILandDecorator> getDecorators()
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
@@ -77,18 +87,6 @@ public class LandAspectEnd extends TerrainLandAspect
 	public Vec3d getSkyColor()
 	{
 		return skyColor;
-	}
-	
-	@Override
-	public float getTemperature()
-	{
-		return 1.2F;
-	}
-	
-	@Override
-	public float getRainfall()
-	{
-		return 0.0F;
 	}
 	
 	@Override

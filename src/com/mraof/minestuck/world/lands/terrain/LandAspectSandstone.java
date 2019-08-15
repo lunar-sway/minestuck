@@ -2,13 +2,16 @@ package com.mraof.minestuck.world.lands.terrain;
 
 import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.*;
+import com.mraof.minestuck.world.lands.gen.LandGenSettings;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.*;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.biome.Biome;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,6 +88,20 @@ public class LandAspectSandstone extends TerrainLandAspect
 	}
 	
 	@Override
+	public void setBiomeSettings(LandBiomeHolder settings)
+	{
+		settings.category = Biome.Category.MESA;
+		settings.downfall = 0.0F;
+		settings.temperature = 1.8F;
+	}
+	
+	@Override
+	public void setGenSettings(LandGenSettings settings)
+	{
+		settings.oceanChance = 1/10F;
+	}
+	
+	@Override
 	public List<ILandDecorator> getDecorators()
 	{
 		List<ILandDecorator> list = new ArrayList<ILandDecorator>();
@@ -110,24 +127,6 @@ public class LandAspectSandstone extends TerrainLandAspect
 	public float getSkylightBase()
 	{
 		return 3/4F;
-	}
-	
-	@Override
-	public float getTemperature()
-	{
-		return 1.8F;
-	}
-	
-	@Override
-	public float getRainfall()
-	{
-		return 0.0F;
-	}
-	
-	@Override
-	public float getOceanChance()
-	{
-		return 1/10F;
 	}
 	
 	@Override

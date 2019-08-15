@@ -7,6 +7,7 @@ import java.util.Random;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.decorator.CanopyTreeDecorator;
 import com.mraof.minestuck.world.lands.decorator.FlowerDecorator;
@@ -26,6 +27,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 
 public class LandAspectFlora extends TerrainLandAspect
 {
@@ -82,6 +84,13 @@ public class LandAspectFlora extends TerrainLandAspect
 	}
 	
 	@Override
+	public void setBiomeSettings(LandBiomeHolder settings)
+	{
+		settings.category = Biome.Category.FOREST;
+		settings.downfall = 0.4F;
+	}
+	
+	@Override
 	public List<ILandDecorator> getDecorators()
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
@@ -115,12 +124,6 @@ public class LandAspectFlora extends TerrainLandAspect
 	public Vec3d getSkyColor()
 	{
 		return skyColor;
-	}
-	
-	@Override
-	public float getRainfall()
-	{
-		return 0.4F;
 	}
 	
 	@Override

@@ -30,10 +30,10 @@ public interface ILandAspect<A extends ILandAspect>
 	@Deprecated
 	void prepareChunkProviderServer(ChunkProviderLands chunkProvider);
 	
-	default void setGenSettings(LandGenSettings settings)
+	default void setBiomeSettings(LandBiomeHolder settings)
 	{}
 	
-	default void setBiomeSettings(LandBiomeHolder settings)
+	default void setGenSettings(LandGenSettings settings)
 	{}
 	
 	default void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blockRegistry)

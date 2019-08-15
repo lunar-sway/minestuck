@@ -56,6 +56,7 @@ public class LandAspectFrost extends TerrainLandAspect
 	@Override
 	public void setBiomeSettings(LandBiomeHolder settings)
 	{
+		settings.category = Biome.Category.ICY;
 		settings.rainType = Biome.RainType.SNOW;
 		settings.temperature = 0.0F;
 	}

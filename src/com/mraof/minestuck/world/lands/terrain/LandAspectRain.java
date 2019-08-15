@@ -6,14 +6,17 @@ import java.util.List;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.LeaflessTreeDecorator;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
+import com.mraof.minestuck.world.lands.gen.LandGenSettings;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.biome.Biome;
 
 public class LandAspectRain extends TerrainLandAspect 
 {
@@ -59,6 +62,20 @@ public class LandAspectRain extends TerrainLandAspect
 	}
 	
 	@Override
+	public void setBiomeSettings(LandBiomeHolder settings)
+	{
+		settings.category = Biome.Category.BEACH;	//I guess?
+		settings.downfall = 0.9F;
+		settings.temperature = 0.5F;
+	}
+	
+	@Override
+	public void setGenSettings(LandGenSettings settings)
+	{
+		settings.oceanChance = 3/4F;
+	}
+	
+	@Override
 	public List<ILandDecorator> getDecorators()
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
@@ -83,24 +100,6 @@ public class LandAspectRain extends TerrainLandAspect
 	public Vec3d getSkyColor()
 	{
 		return skyColor;
-	}
-	
-	@Override
-	public float getTemperature()
-	{
-		return 0.5F;
-	}
-	
-	@Override
-	public float getOceanChance()
-	{
-		return 3/4F;
-	}
-	
-	@Override
-	public float getRainfall()
-	{
-		return 0.9F;
 	}
 	
 	@Override

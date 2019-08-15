@@ -12,9 +12,9 @@ public class LandWrapperBiome extends LandBiome
 {
 	public final LandBiome staticBiome;
 	
-	public LandWrapperBiome(LandBiome biome, RainType rainType, float temperature, float downfall, float depth, float scale)
+	public LandWrapperBiome(LandBiome biome, Category category, RainType rainType, float temperature, float downfall, float depth, float scale)
 	{
-		super(new Biome.Builder().category(Biome.Category.NONE).precipitation(rainType).temperature(temperature).downfall(downfall).depth(depth).scale(scale).waterColor(0x3F76E4).waterFogColor(0x050533));
+		super(new Biome.Builder().category(category).precipitation(rainType).temperature(temperature).downfall(downfall).depth(depth).scale(scale).waterColor(0x3F76E4).waterFogColor(0x050533));
 		this.staticBiome = biome;
 	}
 	

@@ -3,12 +3,15 @@ package com.mraof.minestuck.world.lands.terrain;
 
 import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
+import com.mraof.minestuck.world.lands.gen.LandGenSettings;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.*;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.biome.Biome;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,6 +95,20 @@ public class LandAspectSand extends TerrainLandAspect
 	}
 	
 	@Override
+	public void setBiomeSettings(LandBiomeHolder settings)
+	{
+		settings.category = Biome.Category.DESERT;
+		settings.downfall = 0.0F;
+		settings.temperature = 2.0F;
+	}
+	
+	@Override
+	public void setGenSettings(LandGenSettings settings)
+	{
+		settings.oceanChance = 0.0F;
+	}
+	
+	@Override
 	public List<ILandDecorator> getDecorators()
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
@@ -120,24 +137,6 @@ public class LandAspectSand extends TerrainLandAspect
 		list.add(new UndergroundDecoratorVein((type == Variant.SAND_RED?MinestuckBlocks.goldOreSandstoneRed:MinestuckBlocks.goldOreSandstone).getDefaultState(), 6, 9, 32));
 		*/
 		return list;
-	}
-	
-	@Override
-	public float getTemperature()
-	{
-		return 2.0F;
-	}
-	
-	@Override
-	public float getRainfall()
-	{
-		return 0.0F;
-	}
-	
-	@Override
-	public float getOceanChance()
-	{
-		return 0F;
 	}
 	
 	@Override

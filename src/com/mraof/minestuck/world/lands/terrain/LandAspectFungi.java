@@ -6,6 +6,7 @@ import java.util.List;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorRegistryVein;
@@ -17,6 +18,7 @@ import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.biome.Biome;
 
 public class LandAspectFungi extends TerrainLandAspect 
 {
@@ -55,6 +57,13 @@ public class LandAspectFungi extends TerrainLandAspect
 	}
 	
 	@Override
+	public void setBiomeSettings(LandBiomeHolder settings)
+	{
+		settings.category = Biome.Category.MUSHROOM;
+		settings.rainType = Biome.RainType.RAIN;
+	}
+	
+	@Override
 	public List<ILandDecorator> getDecorators()
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
@@ -84,12 +93,6 @@ public class LandAspectFungi extends TerrainLandAspect
 	public Vec3d getSkyColor()
 	{
 		return skyColor;
-	}
-	
-	@Override
-	public int getWeatherType()
-	{
-		return 1;
 	}
 	
 	@Override

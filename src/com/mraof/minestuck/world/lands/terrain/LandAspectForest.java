@@ -6,6 +6,7 @@ import java.util.List;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
@@ -87,6 +88,13 @@ public class LandAspectForest extends TerrainLandAspect
 	}
 	
 	@Override
+	public void setBiomeSettings(LandBiomeHolder settings)
+	{
+		settings.category = this.type == Variant.TAIGA ? Biome.Category.TAIGA : Biome.Category.FOREST;
+		settings.downfall = 0.8F;
+	}
+	
+	@Override
 	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blockRegistry)
 	{
 		if(biome.staticBiome == ModBiomes.LAND_NORMAL)
@@ -138,12 +146,6 @@ public class LandAspectForest extends TerrainLandAspect
 	public Vec3d getSkyColor()
 	{
 		return new Vec3d(0.4D, 0.7D, 1.0D);
-	}
-	
-	@Override
-	public float getRainfall()	//Same as vanilla forest
-	{
-		return 0.8F;
 	}
 	
 	@Override

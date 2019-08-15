@@ -6,6 +6,7 @@ import java.util.List;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.MesaDecorator;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
@@ -15,6 +16,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
 
 public class LandAspectRainbow extends TerrainLandAspect 
@@ -60,6 +62,14 @@ public class LandAspectRainbow extends TerrainLandAspect
 	}
 	
 	@Override
+	public void setBiomeSettings(LandBiomeHolder settings)
+	{
+		settings.category = Biome.Category.PLAINS; //I guess?
+		settings.downfall = 0.6F;
+		settings.temperature = 1.0F;
+	}
+	
+	@Override
 	public void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.waterMobsList.add(new SpawnListEntry(EntityType.SQUID, 2, 3, 5));
@@ -95,18 +105,6 @@ public class LandAspectRainbow extends TerrainLandAspect
 	public Vec3d getSkyColor()
 	{
 		return skyColor;
-	}
-	
-	@Override
-	public float getTemperature()
-	{
-		return 1.0F;
-	}
-	
-	@Override
-	public float getRainfall()
-	{
-		return 0.6F;
 	}
 	
 	@Override
