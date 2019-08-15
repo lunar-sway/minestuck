@@ -27,6 +27,7 @@ import net.minecraft.world.biome.provider.BiomeProviderType;
 import net.minecraft.world.dimension.Dimension;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ModDimension;
 
 import javax.annotation.Nullable;
@@ -56,7 +57,7 @@ public class LandDimension extends Dimension
 		
 		this.nether = false;
 		
-		if(world.isRemote)
+		if(!(world instanceof ServerWorld)) //world.isRemote can't be used just yet because it is set after the dimension is created
 			setSkyRenderer(new LandSkyRenderer(this));
 		
 		initLandAspects();
