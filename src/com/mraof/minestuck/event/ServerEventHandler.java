@@ -22,16 +22,16 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.event.ServerChatEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.UseHoeEvent;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -104,7 +104,7 @@ public class ServerEventHandler
 	@SubscribeEvent
 	public void onPlayerAttack(AttackEntityEvent event)
 	{
-		cachedCooledAttackStrength = event.getEntityPlayer().getCooledAttackStrength(0.5F);
+		cachedCooledAttackStrength = event.getPlayer().getCooledAttackStrength(0.5F);
 	}
 
 	@SubscribeEvent(priority=EventPriority.NORMAL)
@@ -150,7 +150,7 @@ public class ServerEventHandler
 	}
 	
 	@SubscribeEvent
-	public void playerChangedDimension(PlayerChangedDimensionEvent event)
+	public void playerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event)
 	{
 		SburbHandler.stopEntry((ServerPlayerEntity) event.getPlayer());
 		

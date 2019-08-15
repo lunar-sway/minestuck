@@ -37,7 +37,7 @@ archivesBaseName = 'Minestuck'
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 minecraft {
-    mappings channel: 'snapshot', version: '20190803-1.14.3'
+    mappings channel: 'snapshot', version: '20190815-1.14.3'
 
     // Default run configurations.
     // These can be tweaked, removed, or duplicated as needed.
@@ -76,7 +76,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.4-28.0.41'
+    minecraft 'net.minecraftforge:forge:1.14.4-28.0.49'
 
     def mc_version = "1.14.3"
     def jei_version = "6.0.0.7"

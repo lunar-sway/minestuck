@@ -32,6 +32,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
@@ -42,8 +43,6 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 
 import java.util.*;
 
@@ -212,8 +211,8 @@ public class ServerEditHandler
 	}
 	
 	@SubscribeEvent
-	public void tickEnd(PlayerTickEvent event) {
-		if(event.phase != Phase.END || event.side == LogicalSide.CLIENT)
+	public void tickEnd(TickEvent.PlayerTickEvent event) {
+		if(event.phase != TickEvent.Phase.END || event.side == LogicalSide.CLIENT)
 			return;
 		ServerPlayerEntity player = (ServerPlayerEntity) event.player;
 		
@@ -271,18 +270,18 @@ public class ServerEditHandler
 	@SubscribeEvent
 	public void onItemPickupEvent(EntityItemPickupEvent event)
 	{
-		if(!event.getEntity().world.isRemote && getData(event.getEntityPlayer()) != null)
+		if(!event.getEntity().world.isRemote && getData(event.getPlayer()) != null)
 			event.setCanceled(true);
 	}
 	
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public void onRightClickBlockControl(PlayerInteractEvent.RightClickBlock event)
 	{
-		if(!event.getWorld().isRemote && getData(event.getEntityPlayer()) != null)
+		if(!event.getWorld().isRemote && getData(event.getPlayer()) != null)
 		{
-			EditData data = getData(event.getEntityPlayer());
+			EditData data = getData(event.getPlayer());
 			Block block = event.getWorld().getBlockState(event.getPos()).getBlock();
-			ItemStack stack = event.getEntityPlayer().getHeldItemMainhand();
+			ItemStack stack = event.getPlayer().getHeldItemMainhand();
 			event.setUseBlock(stack.isEmpty() && (block instanceof DoorBlock || block instanceof TrapDoorBlock || block instanceof FenceGateBlock) ? Event.Result.ALLOW : Event.Result.DENY);
 			if(event.getUseBlock() == Event.Result.ALLOW)
 				return;
@@ -310,7 +309,7 @@ public class ServerEditHandler
 								str.append(", ");
 							str.append(grist.getAmount()+" "+grist.getType().getDisplayName());
 						}
-						event.getEntityPlayer().sendMessage(new TranslationTextComponent("grist.missing",str.toString()));
+						event.getPlayer().sendMessage(new TranslationTextComponent("grist.missing",str.toString()));
 					}
 					event.setCanceled(true);
 				}
@@ -327,9 +326,9 @@ public class ServerEditHandler
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public void onLeftClickBlockControl(PlayerInteractEvent.LeftClickBlock event)
 	{
-		if(!event.getWorld().isRemote && getData(event.getEntityPlayer()) != null)
+		if(!event.getWorld().isRemote && getData(event.getPlayer()) != null)
 		{
-			EditData data = getData(event.getEntityPlayer());
+			EditData data = getData(event.getPlayer());
 			BlockState block = event.getWorld().getBlockState(event.getPos());
 			if(block.getBlockHardness(event.getWorld(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
 					|| (GristHelper.getGrist(event.getEntity().world, data.connection.getClientIdentifier(), GristType.BUILD) <= 0 && !MinestuckConfig.gristRefund))
@@ -340,7 +339,7 @@ public class ServerEditHandler
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public void onItemUseControl(PlayerInteractEvent.RightClickItem event)
 	{
-		if(!event.getWorld().isRemote && getData(event.getEntityPlayer()) != null)
+		if(!event.getWorld().isRemote && getData(event.getPlayer()) != null)
 		{
 			event.setCanceled(true);
 		}
@@ -349,15 +348,15 @@ public class ServerEditHandler
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public void onBlockBreak(PlayerInteractEvent.LeftClickBlock event)
 	{
-		if(!event.getEntity().world.isRemote && getData(event.getEntityPlayer()) != null)
+		if(!event.getEntity().world.isRemote && getData(event.getPlayer()) != null)
 		{
-			EditData data = getData(event.getEntityPlayer());
+			EditData data = getData(event.getPlayer());
 			if(!MinestuckConfig.gristRefund)
 				GristHelper.decrease(event.getWorld(), data.connection.getClientIdentifier(), new GristSet(GristType.BUILD, 1));
 			else
 			{
 				BlockState block = event.getWorld().getBlockState(event.getPos());
-				ItemStack stack = block.getBlock().getPickBlock(block, null, event.getWorld(), event.getPos(), event.getEntityPlayer());
+				ItemStack stack = block.getBlock().getPickBlock(block, null, event.getWorld(), event.getPos(), event.getPlayer());
 				GristSet set = AlchemyCostRegistry.getGristConversion(stack);
 				if(set != null && !set.isEmpty())
 					GristHelper.increase(event.getWorld(), data.connection.getClientIdentifier(), set);
@@ -411,7 +410,7 @@ public class ServerEditHandler
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public void onAttackEvent(AttackEntityEvent event)
 	{
-		if(!event.getEntity().world.isRemote && getData(event.getEntityPlayer()) != null)
+		if(!event.getEntity().world.isRemote && getData(event.getPlayer()) != null)
 			event.setCanceled(true);
 	}
 	

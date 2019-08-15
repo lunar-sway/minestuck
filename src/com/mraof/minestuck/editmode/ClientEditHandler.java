@@ -20,6 +20,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.*;
 import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
@@ -29,8 +30,6 @@ import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 
 import java.util.List;
 import java.util.Map.Entry;
@@ -125,7 +124,7 @@ public class ClientEditHandler {
 	}
 	
 	@SubscribeEvent
-	public void tickEnd(PlayerTickEvent event) {
+	public void tickEnd(TickEvent.PlayerTickEvent event) {
 		if(event.phase != TickEvent.Phase.END || event.player != Minecraft.getInstance().player || !isActive())
 			return;
 		PlayerEntity player = event.player;
@@ -164,17 +163,17 @@ public class ClientEditHandler {
 	
 	@SubscribeEvent
 	public void onItemPickupEvent(EntityItemPickupEvent event) {
-		if(event.getEntity().world.isRemote && isActive() && event.getEntityPlayer().equals(Minecraft.getInstance().player))
+		if(event.getEntity().world.isRemote && isActive() && event.getPlayer().equals(Minecraft.getInstance().player))
 			event.setCanceled(true);
 	}
 	
 	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public void onRightClickEvent(PlayerInteractEvent.RightClickBlock event)
 	{
-		if(event.getWorld().isRemote && event.getEntityPlayer().isUser() && isActive())
+		if(event.getWorld().isRemote && event.getPlayer().isUser() && isActive())
 		{
 			Block block = event.getWorld().getBlockState(event.getPos()).getBlock();
-			ItemStack stack = event.getEntityPlayer().getHeldItemMainhand();
+			ItemStack stack = event.getPlayer().getHeldItemMainhand();
 			event.setUseBlock((block instanceof DoorBlock || block instanceof TrapDoorBlock || block instanceof FenceGateBlock) ? Event.Result.ALLOW : Event.Result.DENY);
 			if(event.getUseBlock() == Event.Result.ALLOW)
 				return;
@@ -201,7 +200,7 @@ public class ClientEditHandler {
 							str.append(", ");
 						str.append(grist.getAmount()+" "+grist.getType().getDisplayName());
 					}
-					event.getEntityPlayer().sendMessage(new TranslationTextComponent("grist.missing",str.toString()));
+					event.getPlayer().sendMessage(new TranslationTextComponent("grist.missing",str.toString()));
 				}
 				event.setCanceled(true);
 			}
@@ -213,7 +212,7 @@ public class ClientEditHandler {
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public void onLeftClickEvent(PlayerInteractEvent.LeftClickBlock event)
 	{
-		if(event.getWorld().isRemote && event.getEntityPlayer().isUser() && isActive())
+		if(event.getWorld().isRemote && event.getPlayer().isUser() && isActive())
 		{
 			BlockState block = event.getWorld().getBlockState(event.getPos());
 			if(block.getBlockHardness(event.getWorld(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
@@ -225,7 +224,7 @@ public class ClientEditHandler {
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public void onRightClickAir(PlayerInteractEvent.RightClickItem event)
 	{
-		if(event.getWorld().isRemote && event.getEntityPlayer().isUser() && isActive())
+		if(event.getWorld().isRemote && event.getPlayer().isUser() && isActive())
 		{
 			event.setCanceled(true);
 		}
@@ -234,9 +233,9 @@ public class ClientEditHandler {
 	@SubscribeEvent(priority=EventPriority.LOWEST,receiveCanceled=false)
 	public void onBlockPlaced(PlayerInteractEvent.RightClickBlock event)
 	{
-		if(event.getWorld().isRemote && isActive() && event.getEntityPlayer().equals(Minecraft.getInstance().player)
+		if(event.getWorld().isRemote && isActive() && event.getPlayer().equals(Minecraft.getInstance().player)
 				&& event.getUseItem() == Event.Result.ALLOW) {
-			ItemStack stack = event.getEntityPlayer().getHeldItemMainhand();
+			ItemStack stack = event.getPlayer().getHeldItemMainhand();
 			DeployList.ClientDeployEntry entry = DeployList.getEntryClient(stack);
 			if(entry != null)
 				givenItems[entry.getIndex()] = true;
@@ -246,7 +245,7 @@ public class ClientEditHandler {
 	@SubscribeEvent
 	public void onAttackEvent(AttackEntityEvent event)
 	{
-		if(event.getEntity().world.isRemote && event.getEntityPlayer().isUser() && isActive())
+		if(event.getEntity().world.isRemote && event.getPlayer().isUser() && isActive())
 			event.setCanceled(true);
 	}
 	
