@@ -4,6 +4,7 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.world.MinestuckDimensions;
+import com.mraof.minestuck.world.ModDimensionTypes;
 import com.mraof.minestuck.world.lands.terrain.*;
 import com.mraof.minestuck.world.lands.title.*;
 import io.netty.buffer.Unpooled;
@@ -302,7 +303,7 @@ public class LandAspectRegistry
 		data.writeString(aspects.aspectTerrain.getPrimaryName());
 		data.writeString(aspects.aspectTitle.getPrimaryName());
 		
-		DimensionType land = DimensionManager.registerDimension(dimensionName, MinestuckDimensions.LANDS, data, true);
+		DimensionType land = DimensionManager.registerDimension(dimensionName, ModDimensionTypes.LANDS, data, true);
 		
 		return land;
 	}
