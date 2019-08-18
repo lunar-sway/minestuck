@@ -4,7 +4,7 @@ import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import com.mraof.minestuck.world.MinestuckDimensions;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.StringNBT;
@@ -187,7 +187,7 @@ public class SburbConnection
 		if(nbt.contains("ClientLand"))
 		{
 			clientHomeLand = DimensionType.byName(new ResourceLocation(nbt.getString("ClientLand")));	//TODO add robustness in the case that the dimension type no longer exists?
-			if(!MinestuckDimensionHandler.isLandDimension(clientHomeLand))
+			if(!MinestuckDimensions.isLandDimension(clientHomeLand))
 			{
 				Debug.errorf("The connection between %s and %s had a home dimension %d that isn't a land dimension. For safety measures, the connection will be loaded as if the player had not yet entered.", getClientIdentifier().getUsername(), getServerIdentifier().getUsername(), clientHomeLand);
 				clientHomeLand = null;

@@ -15,7 +15,7 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.util.Location;
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import com.mraof.minestuck.world.MinestuckDimensions;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -638,16 +638,16 @@ public class SkaianetHandler extends WorldSavedData
 						sc.markBlockForUpdate();
 					}
 				}
-				if(cc != null && c.hasEntered() && !MinestuckDimensionHandler.isLandDimension(c.clientHomeLand))
+				if(cc != null && c.hasEntered() && !MinestuckDimensions.isLandDimension(c.clientHomeLand))
 					c.clientHomeLand = c.client.getDimension();
 			}
-			if(c.hasEntered() && !MinestuckDimensionHandler.isLandDimension(c.clientHomeLand))
+			if(c.hasEntered() && !MinestuckDimensions.isLandDimension(c.clientHomeLand))
 			{
 				ServerPlayerEntity player = c.getClientIdentifier().getPlayer(mcServer);
 				if(player != null)
 				{
 					c.clientHomeLand = player.dimension;
-					if(!MinestuckDimensionHandler.isLandDimension(c.clientHomeLand))
+					if(!MinestuckDimensions.isLandDimension(c.clientHomeLand))
 					{
 						iter2.remove();
 						sessionHandler.onConnectionClosed(c, false);

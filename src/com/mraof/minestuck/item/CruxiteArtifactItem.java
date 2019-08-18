@@ -20,7 +20,7 @@ import com.mraof.minestuck.tileentity.GateTileEntity;
 import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.world.GateHandler;
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import com.mraof.minestuck.world.MinestuckDimensions;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -72,7 +72,7 @@ public abstract class CruxiteArtifactItem extends Item
 				SburbConnection c = SkaianetHandler.get(player.world).getMainConnection(identifier, true);
 				
 				//Only performs Entry if you have no connection, haven't Entered, or you're not in a Land and additional Entries are permitted.
-				if(c == null || !c.hasEntered() || !MinestuckConfig.stopSecondEntry && !MinestuckDimensionHandler.isLandDimension(player.world.getDimension().getType()))
+				if(c == null || !c.hasEntered() || !MinestuckConfig.stopSecondEntry && !MinestuckDimensions.isLandDimension(player.world.getDimension().getType()))
 				{
 					if(!canModifyEntryBlocks(player.world, player))
 					{

@@ -1,18 +1,11 @@
 package com.mraof.minestuck;
 
 import com.mraof.minestuck.editmode.ServerEditHandler;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.Echeladder;
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.OpEntry;
 import net.minecraft.world.GameType;
 import net.minecraft.world.dimension.DimensionType;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-import net.minecraftforge.fml.common.Mod;
-
-import java.io.File;
 
 public class MinestuckConfig
 {

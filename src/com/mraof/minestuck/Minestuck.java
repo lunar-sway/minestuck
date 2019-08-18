@@ -11,7 +11,7 @@ import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.*;
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import com.mraof.minestuck.world.MinestuckDimensions;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.world.dimension.DimensionType;
@@ -149,12 +149,6 @@ public class Minestuck
 		public static void onItemRegistry(final RegistryEvent.Register<Item> event)
 		{
 			MinestuckItems.registerItems(event.getRegistry());
-		}
-		
-		@SubscribeEvent
-		public static void onDimensionRegistry(final RegistryEvent.Register<ModDimension> event)
-		{
-			MinestuckDimensionHandler.registerModDimensions(event.getRegistry());
 		}
 	}
 }

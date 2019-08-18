@@ -4,7 +4,7 @@ import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Location;
 
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import com.mraof.minestuck.world.MinestuckDimensions;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.CompoundNBT;
@@ -31,7 +31,7 @@ public class SkaiaPortalTileEntity extends TileEntity //implements ITeleporter
 	{
 		super.setWorld(worldIn);
 		if(destination.dim == worldIn.getDimension().getType())
-			destination.dim = worldIn.getDimension().getType() == MinestuckDimensionHandler.skaia ? DimensionType.OVERWORLD : MinestuckDimensionHandler.skaia;
+			destination.dim = worldIn.getDimension().getType() == MinestuckDimensions.skaiaDimension ? DimensionType.OVERWORLD : MinestuckDimensions.skaiaDimension;
 	}
 	
 	@Override
@@ -41,7 +41,7 @@ public class SkaiaPortalTileEntity extends TileEntity //implements ITeleporter
 		destination.pos = new BlockPos(compound.getInt("destX"), compound.getInt("destY"), compound.getInt("destZ"));
 		destination.dim = DimensionType.byName(ResourceLocation.tryCreate(compound.getString("destDim")));
 		if(destination.dim == null)
-			destination.dim = MinestuckDimensionHandler.skaia;
+			destination.dim = MinestuckDimensions.skaiaDimension;
 	}
 	
 	@Override

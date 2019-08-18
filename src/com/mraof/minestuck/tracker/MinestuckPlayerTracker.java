@@ -11,7 +11,7 @@ import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import com.mraof.minestuck.world.MinestuckDimensions;
 import com.mraof.minestuck.world.lands.LandAspects;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.PlayerEntity;
@@ -223,9 +223,9 @@ public class MinestuckPlayerTracker
 	
 	public static void sendLandEntryMessage(PlayerEntity player)
 	{
-		if(MinestuckDimensionHandler.isLandDimension(player.dimension))
+		if(MinestuckDimensions.isLandDimension(player.dimension))
 		{
-			LandAspects aspects = MinestuckDimensionHandler.getAspects(player.getServer(), player.dimension);
+			LandAspects aspects = MinestuckDimensions.getAspects(player.getServer(), player.dimension);
 			//ChunkProviderLands chunkProvider = (ChunkProviderLands) player.world.getDimension().createChunkGenerator(); //TODO Check out deprecation
 			ITextComponent aspect1 = new TranslationTextComponent("land."+aspects.aspectTerrain.getNames()[0]);
 			ITextComponent aspect2 = new TranslationTextComponent("land."+aspects.aspectTitle.getNames()[0]);

@@ -22,7 +22,7 @@ import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import com.mraof.minestuck.world.MinestuckDimensions;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.LandAspects;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
@@ -581,7 +581,7 @@ public class SburbHandler
 		for(SburbConnection c : session.connections)
 			if(c != connection && c.clientHomeLand != null)
 			{
-				LandAspects aspects = MinestuckDimensionHandler.getAspects(mcServer, c.clientHomeLand);
+				LandAspects aspects = MinestuckDimensions.getAspects(mcServer, c.clientHomeLand);
 				if(aspects.aspectTitle == LandAspectRegistry.frogAspect)
 					frogs = true;
 				usedTitleAspects.add(aspects.aspectTitle);

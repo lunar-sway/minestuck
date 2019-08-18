@@ -1,14 +1,9 @@
 package com.mraof.minestuck.world.lands;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.util.Teleport;
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import com.mraof.minestuck.world.MinestuckDimensions;
 import com.mraof.minestuck.world.lands.terrain.*;
 import com.mraof.minestuck.world.lands.title.*;
 import io.netty.buffer.Unpooled;
@@ -17,8 +12,6 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.ResourceLocationException;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.DimensionManager;
 
@@ -309,7 +302,7 @@ public class LandAspectRegistry
 		data.writeString(aspects.aspectTerrain.getPrimaryName());
 		data.writeString(aspects.aspectTitle.getPrimaryName());
 		
-		DimensionType land = DimensionManager.registerDimension(dimensionName, MinestuckDimensionHandler.landDimensionType, data, true);
+		DimensionType land = DimensionManager.registerDimension(dimensionName, MinestuckDimensions.LANDS, data, true);
 		
 		return land;
 	}

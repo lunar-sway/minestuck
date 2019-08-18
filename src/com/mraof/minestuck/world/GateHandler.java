@@ -68,7 +68,7 @@ public class GateHandler
 			{
 				SburbConnection clientConnection = SkaianetHandler.get(player.getServer()).getMainConnection(landConnection.getClientIdentifier(), false);
 				
-				if(clientConnection != null && clientConnection.hasEntered() && MinestuckDimensionHandler.isLandDimension(clientConnection.getClientDimension()))
+				if(clientConnection != null && clientConnection.hasEntered() && MinestuckDimensions.isLandDimension(clientConnection.getClientDimension()))
 				{
 					DimensionType clientDim = clientConnection.getClientDimension();
 					BlockPos gatePos = getGatePos(player.server, -1, clientDim);
@@ -102,7 +102,7 @@ public class GateHandler
 			{
 				SburbConnection serverConnection = SkaianetHandler.get(player.getServer()).getMainConnection(landConnection.getServerIdentifier(), true);
 				
-				if(serverConnection != null && serverConnection.hasEntered() && MinestuckDimensionHandler.isLandDimension(serverConnection.getClientDimension()))	//Last shouldn't be necessary, but just in case something goes wrong elsewhere...
+				if(serverConnection != null && serverConnection.hasEntered() && MinestuckDimensions.isLandDimension(serverConnection.getClientDimension()))	//Last shouldn't be necessary, but just in case something goes wrong elsewhere...
 				{
 					DimensionType serverDim = serverConnection.getClientDimension();
 					location = new Location(getGatePos(player.server, 2, serverDim), serverDim);
@@ -135,7 +135,7 @@ public class GateHandler
 	public static void findGatePlacement(World world)
 	{
 		DimensionType dim = world.getDimension().getType();
-		if(MinestuckDimensionHandler.isLandDimension(dim) && !gateData.containsKey(dim))
+		if(MinestuckDimensions.isLandDimension(dim) && !gateData.containsKey(dim))
 		{
 			BlockPos spawn = new BlockPos(0, -1, 0);
 			Random rand = new Random(world.getSeed()^43839551L^world.getDimension().getType().getId());
@@ -165,7 +165,7 @@ public class GateHandler
 	
 	public static BlockPos getGatePos(MinecraftServer server, int gateId, DimensionType dim)
 	{
-		if(!MinestuckDimensionHandler.isLandDimension(dim))
+		if(!MinestuckDimensions.isLandDimension(dim))
 			return null;
 		
 		if(gateId == -1)

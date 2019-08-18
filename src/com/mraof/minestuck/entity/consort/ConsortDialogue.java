@@ -6,7 +6,7 @@ import com.mraof.minestuck.entity.consort.EnumConsort.MerchantType;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import com.mraof.minestuck.world.MinestuckDimensions;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.LandAspects;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
@@ -275,10 +275,10 @@ public class ConsortDialogue
 		
 		addMessage("await_hero", "land_name", "consort_types", "player_title_land").reqLand();
 		addMessage(new ConditionedMessage("skaia", (ConsortEntity consort, ServerPlayerEntity player) -> !consort.visitedSkaia, new SingleMessage("watch_skaia"),
-				new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> MinestuckDimensionHandler.isSkaia(consort.dimension),
+				new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> MinestuckDimensions.isSkaia(consort.dimension),
 						new SingleMessage("at_skaia.1", "consort_sound2"), new SingleMessage("visited_skaia")))).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA, EnumConsort.NAKAGATOR).reqLand();
 		addMessage(new ConditionedMessage("skaia_turtle", (ConsortEntity consort, ServerPlayerEntity player) -> !consort.visitedSkaia, new SingleMessage("watch_skaia"),
-				new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> MinestuckDimensionHandler.isSkaia(consort.dimension),
+				new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> MinestuckDimensions.isSkaia(consort.dimension),
 						new SingleMessage("at_skaia.2"), new SingleMessage("visited_skaia")))).consort(EnumConsort.TURTLE).reqLand();
 		
 		addMessage(new SingleMessage("zazzerpan")).consort(EnumConsort.TURTLE);
@@ -445,7 +445,7 @@ public class ConsortDialogue
 	
 	public static DialogueWrapper getRandomMessage(ConsortEntity consort, ServerPlayerEntity player)
 	{
-		LandAspects aspects = MinestuckDimensionHandler.getAspects(player.getServer(), consort.homeDimension);
+		LandAspects aspects = MinestuckDimensions.getAspects(player.getServer(), consort.homeDimension);
 		
 		List<DialogueWrapper> list = new ArrayList<>();
 		

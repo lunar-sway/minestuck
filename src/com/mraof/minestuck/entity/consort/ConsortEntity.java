@@ -7,7 +7,7 @@ import com.mraof.minestuck.entity.EntityMinestuck;
 import com.mraof.minestuck.entity.consort.MessageType.SingleMessage;
 import com.mraof.minestuck.inventory.ConsortMerchantContainer;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import com.mraof.minestuck.world.MinestuckDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.SpawnReason;
@@ -138,7 +138,7 @@ public abstract class ConsortEntity extends EntityMinestuck implements IContaine
 			updatingMessage.onTickUpdate(this);
 		}
 		
-		if(MinestuckDimensionHandler.isSkaia(dimension))
+		if(MinestuckDimensions.isSkaia(dimension))
 			visitedSkaia = true;
 		
 		if(eventTimer > 0)

@@ -1,48 +1,32 @@
 package com.mraof.minestuck.world;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.world.lands.LandAspects;
 import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.lands.LandInfoContainer;
-import io.netty.buffer.Unpooled;
-import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.common.ModDimension;
 import net.minecraftforge.event.world.RegisterDimensionsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.*;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
-public class MinestuckDimensionHandler
+public class MinestuckDimensions
 {
 	public static int landDimensionCache = 1;
 	
 	public static int biomeIdStart;
-	public static final ResourceLocation SKAIA_ID = new ResourceLocation(Minestuck.MOD_ID, "skaia");
+	private static final ResourceLocation SKAIA_ID = new ResourceLocation(Minestuck.MOD_ID, "skaia");
 	
 	private static Exception unregisterTrace;
 	private static Hashtable<IdentifierHandler.PlayerIdentifier, LandInfoContainer> landInfo = new Hashtable<>();
 	private static Hashtable<IdentifierHandler.PlayerIdentifier, DimensionType> lands = new Hashtable<>();
-	public static DimensionType skaia;
-	
-	public static ModDimension landDimensionType;
-	public static ModDimension skaiaDimensionType;
-	
-	public static void registerModDimensions(IForgeRegistry<ModDimension> registry)
-	{
-		landDimensionType = new LandDimension.Type();
-		registry.register(landDimensionType.setRegistryName("lands"));
-		skaiaDimensionType = new SkaiaDimension.Type();
-		registry.register(skaiaDimensionType.setRegistryName("skaia"));
-	}
+	public static DimensionType skaiaDimension;
 	
 	/**
 	 * On server init, this function is called to register dimensions.
@@ -52,9 +36,9 @@ public class MinestuckDimensionHandler
 	public static void registerDimensionTypes(final RegisterDimensionsEvent event)
 	{
 		//register dimensions
-		skaia = DimensionType.byName(SKAIA_ID);
-		if(skaia == null)
-			skaia = DimensionManager.registerDimension(SKAIA_ID, skaiaDimensionType, null, true);
+		skaiaDimension = DimensionType.byName(SKAIA_ID);
+		if(skaiaDimension == null)
+			skaiaDimension = DimensionManager.registerDimension(SKAIA_ID, ModDimensionTypes.SKAIA, null, true);
 	}
 	
 	/*public static void saveData(NBTTagCompound nbt)
@@ -132,12 +116,12 @@ public class MinestuckDimensionHandler
 	
 	public static boolean isLandDimension(DimensionType dimension)
 	{
-		return dimension != null && dimension.getModType() == landDimensionType;
+		return dimension != null && dimension.getModType() == ModDimensionTypes.LANDS;
 	}
 	
 	public static boolean isSkaia(DimensionType dimension)
 	{
-		return dimension == skaia;
+		return dimension == skaiaDimension;
 	}
 	
 	/*public static Set<Map.Entry<Integer, LandAspects>> getLandSet()
