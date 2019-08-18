@@ -2,6 +2,8 @@ package com.mraof.minestuck.client.renderer.entity;
 
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.entity.item.GristEntity;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
@@ -51,7 +53,7 @@ public class GristRenderer extends EntityRenderer<GristEntity>
 	@Override
 	protected ResourceLocation getEntityTexture(GristEntity entity)
 	{
-		return new ResourceLocation(entity.getGristType().getIcon().getNamespace(), "textures/grist/" + entity.getGristType().getIcon().getPath() + ".png");
+		return entity.getGristType().getIcon();
 	}
 
 }

@@ -94,8 +94,12 @@ public class GuiUtil
 				
 				GlStateManager.color3f(1, 1, 1);
 				GlStateManager.disableLighting();
-				Minecraft.getInstance().getTextureManager().bindTexture(new ResourceLocation(type.getIcon().getNamespace(), "textures/grist/" + type.getIcon().getPath()+ ".png"));
-				AbstractGui.blit(boardX + needStrWidth + 1 + index%GRIST_BOARD_WIDTH, boardY + 8*row, 0, 0, 8, 8, 8, 8);
+				ResourceLocation icon = type.getIcon();
+				if(icon != null)
+				{
+					Minecraft.getInstance().getTextureManager().bindTexture(icon);
+					AbstractGui.blit(boardX + needStrWidth + 1 + index % GRIST_BOARD_WIDTH, boardY + 8 * row, 0, 0, 8, 8, 8, 8);
+				}
 				
 				//ensure the large alchemiter gui has one grist type to a line
 				if(mode==GristboardMode.LARGE_ALCHEMITER||mode==GristboardMode.LARGE_ALCHEMITER_SELECT) {

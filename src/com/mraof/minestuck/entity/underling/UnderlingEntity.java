@@ -163,8 +163,8 @@ public abstract class UnderlingEntity extends EntityMinestuck implements IEntity
 	public String getTexture() 
 	{
 		if(type == null)
-			return "textures/entity/underlings/" + GristType.SHALE.getName() + '_' + getUnderlingName() + ".png";
-		return "textures/entity/underlings/" + type.getName() + '_' + getUnderlingName() + ".png";
+			return "textures/entity/underlings/shale_" + getUnderlingName() + ".png";
+		return "textures/entity/underlings/" + GristType.REGISTRY.getKey(type).getPath() + '_' + getUnderlingName() + ".png";
 	}
 	
 	@Override
@@ -319,7 +319,7 @@ public abstract class UnderlingEntity extends EntityMinestuck implements IEntity
 				Echeladder.increaseProgress(playerList[i], (int) (progress*modifiers[i]));
 	}
 	
-	protected class UnderlingData implements ILivingEntityData
+	protected static class UnderlingData implements ILivingEntityData
 	{
 		public final GristType type;
 		public UnderlingData(GristType type)

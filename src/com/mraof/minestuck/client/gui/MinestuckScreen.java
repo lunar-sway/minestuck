@@ -33,6 +33,9 @@ public abstract class MinestuckScreen extends Screen
 	
 	public void drawGrist(int xOffset, int yOffset, int xcor, int ycor, int page)
 	{
+		if(minecraft == null)
+			return;
+		
 		//Show the name of the grist instead of the count if displaying a tooltip
 		boolean showName = false;
 		GristType tooltipType = null;
@@ -85,7 +88,10 @@ public abstract class MinestuckScreen extends Screen
 
 	private void drawIcon(int x, int y, ResourceLocation icon)
 	{
-		this.minecraft.getTextureManager().bindTexture(new ResourceLocation(icon.getNamespace(), "textures/grist/" + icon.getPath() + ".png"));
+		if(icon == null || minecraft == null)
+			return;
+		
+		this.minecraft.getTextureManager().bindTexture(icon);
 
 		float scale = (float) 1 / 16;
 

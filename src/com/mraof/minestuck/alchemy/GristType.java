@@ -4,7 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.MinestuckItems;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.DefaultedRegistry;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.event.RegistryEvent;
@@ -12,57 +12,67 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.*;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 
+@ObjectHolder(Minestuck.MOD_ID)
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class GristType extends ForgeRegistryEntry<GristType> implements Comparable<GristType>
 {
-	public static final GristType BUILD = new GristType("build", 0.0F, 1, new ResourceLocation("minestuck", "build"));
-	public static final GristType AMBER = new GristType("amber", 0.5F, 1.5F, new ResourceLocation("minestuck", "amber"));
-	public static final GristType CAULK = new GristType("caulk", 0.5F, 1.5F, new ResourceLocation("minestuck", "caulk"));
-	public static final GristType CHALK = new GristType("chalk", 0.5F, 1.5F, new ResourceLocation("minestuck", "chalk"));
-	public static final GristType IODINE = new GristType("iodine", 0.5F, 1.5F, new ResourceLocation("minestuck", "iodine"));
-	public static final GristType SHALE = new GristType("shale", 0.5F, 1.5F, new ResourceLocation("minestuck", "shale"));
-	public static final GristType TAR = new GristType("tar", 0.5F, 1.5F, new ResourceLocation("minestuck", "tar"));
-	public static final GristType COBALT = new GristType("cobalt", 0.4F, 2, new ResourceLocation("minestuck", "cobalt"));
-	public static final GristType MARBLE = new GristType("marble", 0.4F, 2, new ResourceLocation("minestuck", "marble"));
-	public static final GristType MERCURY = new GristType("mercury", 0.4F, 2, new ResourceLocation("minestuck", "mercury"));
-	public static final GristType QUARTZ = new GristType("quartz", 0.4F, 2, new ResourceLocation("minestuck", "quartz"));
-	public static final GristType SULFUR = new GristType("sulfur", 0.4F, 2, new ResourceLocation("minestuck", "sulfur"));
-	public static final GristType AMETHYST = new GristType("amethyst", 0.3F, 3, new ResourceLocation("minestuck", "amethyst"));
-	public static final GristType GARNET = new GristType("garnet", 0.3F, 3, new ResourceLocation("minestuck", "garnet"));
-	public static final GristType RUBY = new GristType("ruby", 0.3F, 3, new ResourceLocation("minestuck", "ruby"));
-	public static final GristType RUST = new GristType("rust", 0.3F, 3, new ResourceLocation("minestuck", "rust"));
-	public static final GristType DIAMOND = new GristType("diamond", 0.2F, 5, new ResourceLocation("minestuck", "diamond"));
-	public static final GristType GOLD = new GristType("gold", 0.2F, 5, new ResourceLocation("minestuck", "gold"));
-	public static final GristType URANIUM = new GristType("uranium", 0.2F, 5, new ResourceLocation("minestuck", "uranium"));
-	public static final GristType ARTIFACT = new GristType("artifact", 0.1F, 1,  new ResourceLocation("minestuck", "artifact"));
-	public static final GristType ZILLIUM = new GristType("zillium", 0.0F, 10, new ResourceLocation("minestuck", "zillium"));
-	public static ForgeRegistry<GristType> REGISTRY;
-	final String name;
-	final float rarity;
-	final float value;
-	private final ResourceLocation icon;
-	private ItemStack candyItem = ItemStack.EMPTY;
-
-	public GristType(String name, float rarity, ResourceLocation icon)
+	private static final ResourceLocation DUMMY_ICON_LOCATION = new ResourceLocation(Minestuck.MOD_ID, "textures/grist/dummy.png");
+	
+	public static final GristType BUILD = getNull();
+	public static final GristType AMBER = getNull();
+	public static final GristType CAULK = getNull();
+	public static final GristType CHALK = getNull();
+	public static final GristType IODINE = getNull();
+	public static final GristType SHALE = getNull();
+	public static final GristType TAR = getNull();
+	public static final GristType COBALT = getNull();
+	public static final GristType MARBLE = getNull();
+	public static final GristType MERCURY = getNull();
+	public static final GristType QUARTZ = getNull();
+	public static final GristType SULFUR = getNull();
+	public static final GristType AMETHYST = getNull();
+	public static final GristType GARNET = getNull();
+	public static final GristType RUBY = getNull();
+	public static final GristType RUST = getNull();
+	public static final GristType DIAMOND = getNull();
+	public static final GristType GOLD = getNull();
+	public static final GristType URANIUM = getNull();
+	public static final GristType ARTIFACT = getNull();
+	public static final GristType ZILLIUM = getNull();
+	
+	@Nonnull
+	@SuppressWarnings("ConstantConditions")
+	private static <T> T getNull()
 	{
-		this(name, rarity, 2, icon);
+		return null;
 	}
 	
-	public GristType(String name, float rarity, float value, ResourceLocation icon)
+	public static ForgeRegistry<GristType> REGISTRY;
+	final float rarity;
+	final float value;
+	private ItemStack candyItem = ItemStack.EMPTY;
+	private String translationKey;
+	private ResourceLocation icon;
+	
+	public GristType(float rarity)
 	{
-		this.name = name;
+		this(rarity, 2);
+	}
+	
+	public GristType(float rarity, float value)
+	{
 		this.rarity = rarity;
 		this.value = value;
-		this.icon = icon;
 	}
 	
 	public static GristType getTypeFromString(String string)
 	{
 		if (!string.contains(":"))
 		{
-			string = "minestuck:" + string;
+			string = Minestuck.MOD_ID + ":" + string;
 		}
 		return REGISTRY.getValue(new ResourceLocation(string));
 	}
@@ -74,16 +84,17 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 
 	public ITextComponent getDisplayName()
 	{
-		return new TranslationTextComponent("grist." + name);
+		return new TranslationTextComponent(getTranslationKey());
 	}
 	/**
 	 * Returns the grist's full unlocalized name.
-	 *
-	 * @return the grist's full unlocalized name
 	 */
-	public String getName()
+	public String getTranslationKey()
 	{
-		return name;
+		if(translationKey == null)
+			translationKey = Util.makeTranslationKey("grist", REGISTRY.getKey(this));
+		
+		return translationKey;
 	}
 
 	/**
@@ -101,7 +112,7 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 	 */
 	public float getPower()
 	{
-		return 1 / rarity;
+		return rarity != 0 ? 1 / rarity : 100;
 	}
 	
 	
@@ -115,6 +126,9 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 	
 	public ResourceLocation getIcon()
 	{
+		if(icon == null)
+			icon = makeIconPath(REGISTRY.getKey(this));
+		
 		return icon;
 	}
 	
@@ -123,7 +137,7 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 		return candyItem.copy();
 	}
 	
-	public GristType setCandyItem(ItemStack stack)	//TODO Verify that the grist registry is loaded after the item registry
+	public GristType setCandyItem(ItemStack stack)
 	{
 		candyItem = stack;
 		return this;
@@ -133,12 +147,19 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 	{
 		return REGISTRY.getID(this);
 	}
-
+	
+	private static ResourceLocation makeIconPath(ResourceLocation entry)
+	{
+		if(entry == null)
+			return DUMMY_ICON_LOCATION;
+		else return new ResourceLocation(entry.getNamespace(), "textures/grist/"+entry.getPath()+".png");
+	}
+	
 	@SubscribeEvent
 	public static void onRegistryNewRegistry(final RegistryEvent.NewRegistry event)
 	{
 		REGISTRY = (ForgeRegistry<GristType>) new RegistryBuilder<GristType>()
-				.setName(new ResourceLocation("minestuck", "grist"))
+				.setName(new ResourceLocation(Minestuck.MOD_ID, "grist"))
 				.setType(GristType.class)
 				.create();
 	}
@@ -147,27 +168,27 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 	public static void registerGrist(final RegistryEvent.Register<GristType> event)
 	{
 		event.getRegistry().registerAll(
-				BUILD.setRegistryName("minestuck", "build").setCandyItem(new ItemStack(MinestuckItems.BUILD_GUSHERS)),
-				AMBER.setRegistryName("minestuck", "amber").setCandyItem(new ItemStack(MinestuckItems.AMBER_GUMMY_WORM)),
-				CAULK.setRegistryName("minestuck", "caulk").setCandyItem(new ItemStack(MinestuckItems.CAULK_PRETZEL)),
-				CHALK.setRegistryName("minestuck", "chalk").setCandyItem(new ItemStack(MinestuckItems.CHALK_CANDY_CIGARETTE)),
-				IODINE.setRegistryName("minestuck", "iodine").setCandyItem(new ItemStack(MinestuckItems.IODINE_LICORICE)),
-				SHALE.setRegistryName("minestuck", "shale").setCandyItem(new ItemStack(MinestuckItems.SHALE_PEEP)),
-				TAR.setRegistryName("minestuck", "tar").setCandyItem(new ItemStack(MinestuckItems.TAR_LICORICE)),
-				COBALT.setRegistryName("minestuck", "cobalt").setCandyItem(new ItemStack(MinestuckItems.COBALT_GUM)),
-				MARBLE.setRegistryName("minestuck", "marble").setCandyItem(new ItemStack(MinestuckItems.MARBLE_JAWBREAKER)),
-				MERCURY.setRegistryName("minestuck", "mercury").setCandyItem(new ItemStack(MinestuckItems.MERCURY_SIXLETS)),
-				QUARTZ.setRegistryName("minestuck", "quartz").setCandyItem(new ItemStack(MinestuckItems.QUARTZ_JELLY_BEAN)),
-				SULFUR.setRegistryName("minestuck", "sulfur").setCandyItem(new ItemStack(MinestuckItems.SULFUR_CANDY_APPLE)),
-				AMETHYST.setRegistryName("minestuck", "amethyst").setCandyItem(new ItemStack(MinestuckItems.AMETHYST_HARD_CANDY)),
-				GARNET.setRegistryName("minestuck", "garnet").setCandyItem(new ItemStack(MinestuckItems.GARNET_TWIX)),
-				RUBY.setRegistryName("minestuck", "ruby").setCandyItem(new ItemStack(MinestuckItems.RUBY_LOLLIPOP)),
-				RUST.setRegistryName("minestuck", "rust").setCandyItem(new ItemStack(MinestuckItems.RUST_GUMMY_EYE)),
-				DIAMOND.setRegistryName("minestuck", "diamond").setCandyItem(new ItemStack(MinestuckItems.DIAMOND_MINT)),
-				GOLD.setRegistryName("minestuck", "gold").setCandyItem(new ItemStack(MinestuckItems.GOLD_CANDY_RIBBON)),
-				URANIUM.setRegistryName("minestuck", "uranium").setCandyItem(new ItemStack(MinestuckItems.URANIUM_GUMMY_BEAR)),
-				ARTIFACT.setRegistryName("minestuck", "artifact").setCandyItem(new ItemStack(MinestuckItems.ARTIFACT_WARHEAD)),
-				ZILLIUM.setRegistryName("minestuck", "zillium").setCandyItem(new ItemStack(MinestuckItems.ZILLIUM_SKITTLES))
+				new GristType(0.0F, 1).setCandyItem(new ItemStack(MinestuckItems.BUILD_GUSHERS)).setRegistryName("build"),
+				new GristType(0.5F, 1.5F).setCandyItem(new ItemStack(MinestuckItems.AMBER_GUMMY_WORM)).setRegistryName("amber"),
+				new GristType(0.5F, 1.5F).setCandyItem(new ItemStack(MinestuckItems.CAULK_PRETZEL)).setRegistryName("caulk"),
+				new GristType(0.5F, 1.5F).setCandyItem(new ItemStack(MinestuckItems.CHALK_CANDY_CIGARETTE)).setRegistryName("chalk"),
+				new GristType(0.5F, 1.5F).setCandyItem(new ItemStack(MinestuckItems.IODINE_LICORICE)).setRegistryName("iodine"),
+				new GristType(0.5F, 1.5F).setCandyItem(new ItemStack(MinestuckItems.SHALE_PEEP)).setRegistryName("shale"),
+				new GristType(0.5F, 1.5F).setCandyItem(new ItemStack(MinestuckItems.TAR_LICORICE)).setRegistryName("tar"),
+				new GristType(0.4F, 2).setCandyItem(new ItemStack(MinestuckItems.COBALT_GUM)).setRegistryName("cobalt"),
+				new GristType(0.4F, 2).setCandyItem(new ItemStack(MinestuckItems.MARBLE_JAWBREAKER)).setRegistryName("marble"),
+				new GristType(0.4F, 2).setCandyItem(new ItemStack(MinestuckItems.MERCURY_SIXLETS)).setRegistryName("mercury"),
+				new GristType(0.4F, 2).setCandyItem(new ItemStack(MinestuckItems.QUARTZ_JELLY_BEAN)).setRegistryName("quartz"),
+				new GristType(0.4F, 2).setCandyItem(new ItemStack(MinestuckItems.SULFUR_CANDY_APPLE)).setRegistryName("sulfur"),
+				new GristType(0.3F, 3).setCandyItem(new ItemStack(MinestuckItems.AMETHYST_HARD_CANDY)).setRegistryName("amethyst"),
+				new GristType(0.3F, 3).setCandyItem(new ItemStack(MinestuckItems.GARNET_TWIX)).setRegistryName("garnet"),
+				new GristType(0.3F, 3).setCandyItem(new ItemStack(MinestuckItems.RUBY_LOLLIPOP)).setRegistryName("ruby"),
+				new GristType(0.3F, 3).setCandyItem(new ItemStack(MinestuckItems.RUST_GUMMY_EYE)).setRegistryName("rust"),
+				new GristType(0.2F, 5).setCandyItem(new ItemStack(MinestuckItems.DIAMOND_MINT)).setRegistryName("diamond"),
+				new GristType(0.2F, 5).setCandyItem(new ItemStack(MinestuckItems.GOLD_CANDY_RIBBON)).setRegistryName("gold"),
+				new GristType(0.2F, 5).setCandyItem(new ItemStack(MinestuckItems.URANIUM_GUMMY_BEAR)).setRegistryName("uranium"),
+				new GristType(0.1F, 1).setCandyItem(new ItemStack(MinestuckItems.ARTIFACT_WARHEAD)).setRegistryName("artifact"),
+				new GristType(0.0F, 10).setCandyItem(new ItemStack(MinestuckItems.ZILLIUM_SKITTLES)).setRegistryName("zillium")
 		);
 	}
 
@@ -176,5 +197,18 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 	{
 		return this.getId() - gristType.getId();
 	}
+	
+	private static class DummyType extends GristType
+	{
+		public DummyType()
+		{
+			super(0.3F, 3);
+		}
+		
+		@Override
+		public ResourceLocation getIcon()
+		{
+			return DUMMY_ICON_LOCATION;
+		}
+	}
 }
-
