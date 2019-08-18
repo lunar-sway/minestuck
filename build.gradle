@@ -78,8 +78,8 @@ minecraft {
 dependencies {
     minecraft 'net.minecraftforge:forge:1.14.4-28.0.49'
 
-    def mc_version = "1.14.3"
-    def jei_version = "6.0.0.7"
+    def mc_version = "1.14.4"
+    def jei_version = "6.0.0.10"
 	// http://dvs1.progwml6.com/files/maven
     compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
