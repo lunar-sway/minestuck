@@ -115,7 +115,6 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 		return rarity != 0 ? 1 / rarity : 100;
 	}
 	
-	
 	/**
 	 * @return a value estimate for this grist type
 	 */
@@ -130,6 +129,14 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 			icon = makeIconPath(REGISTRY.getKey(this));
 		
 		return icon;
+	}
+	
+	public ResourceLocation getUnderlingTexture(String underlingType)
+	{
+		ResourceLocation name = REGISTRY.getKey(this);
+		if(name == null)
+			name = new ResourceLocation(Minestuck.MOD_ID, "dummy");
+		return new ResourceLocation(name.getNamespace(), "textures/entity/underlings/" + name.getPath() + "_"+ underlingType + ".png");
 	}
 	
 	public ItemStack getCandyItem()
@@ -156,15 +163,18 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 	}
 	
 	@SubscribeEvent
+	@SuppressWarnings("unused")
 	public static void onRegistryNewRegistry(final RegistryEvent.NewRegistry event)
 	{
 		REGISTRY = (ForgeRegistry<GristType>) new RegistryBuilder<GristType>()
 				.setName(new ResourceLocation(Minestuck.MOD_ID, "grist"))
 				.setType(GristType.class)
+				.set(DummyFactory.INSTANCE)
 				.create();
 	}
-
+	
 	@SubscribeEvent
+	@SuppressWarnings("unused")
 	public static void registerGrist(final RegistryEvent.Register<GristType> event)
 	{
 		event.getRegistry().registerAll(
@@ -198,6 +208,17 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 		return this.getId() - gristType.getId();
 	}
 	
+	private static class DummyFactory implements IForgeRegistry.DummyFactory<GristType>
+	{
+		private static final DummyFactory INSTANCE = new DummyFactory();
+		
+		@Override
+		public GristType createDummy(ResourceLocation key)
+		{
+			return new DummyType().setRegistryName(key);
+		}
+	}
+	
 	private static class DummyType extends GristType
 	{
 		public DummyType()
@@ -209,6 +230,12 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 		public ResourceLocation getIcon()
 		{
 			return DUMMY_ICON_LOCATION;
+		}
+		
+		@Override
+		public ResourceLocation getUnderlingTexture(String underlingType)
+		{
+			return new ResourceLocation(Minestuck.MOD_ID, "textures/entity/underlings/dummy_"+ underlingType + ".png");
 		}
 	}
 }

@@ -162,9 +162,15 @@ public abstract class UnderlingEntity extends EntityMinestuck implements IEntity
 	@Override
 	public String getTexture() 
 	{
-		if(type == null)
-			return "textures/entity/underlings/shale_" + getUnderlingName() + ".png";
-		return "textures/entity/underlings/" + GristType.REGISTRY.getKey(type).getPath() + '_' + getUnderlingName() + ".png";
+		return null;
+	}
+	
+	@Override
+	public ResourceLocation getTextureResource()
+	{
+		if(textureResource == null)
+			textureResource = type.getUnderlingTexture(this.getUnderlingName());
+		return textureResource;
 	}
 	
 	@Override
@@ -245,7 +251,7 @@ public abstract class UnderlingEntity extends EntityMinestuck implements IEntity
 	public void readSpawnData(PacketBuffer additionalData)
 	{
 		applyGristType(GristType.REGISTRY.getValue(additionalData.readInt()), false);
-		this.textureResource = new ResourceLocation("minestuck", this.getTexture());
+		this.textureResource = null;
 	}
 	
 	@Nullable
