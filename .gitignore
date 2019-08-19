@@ -15,3 +15,5 @@
 /out
 *.iml
 /.settings
+src/com/mraof/minestuck/block/BlockTotemlathe.java
+src/com/mraof/minestuck/tileentity/TileEntityTotemlathe.java

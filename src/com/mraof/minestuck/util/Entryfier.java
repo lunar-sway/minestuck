@@ -20,8 +20,10 @@ import com.mraof.minestuck.tileentity.TileEntityGate;
 import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
 import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import com.raoulvdberge.refinedstorage.api.network.INetwork;
 import com.raoulvdberge.refinedstorage.api.network.node.INetworkNode;
 import com.raoulvdberge.refinedstorage.api.network.node.INetworkNodeManager;
+import com.raoulvdberge.refinedstorage.api.network.node.INetworkNodeProxy;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -149,28 +151,39 @@ public class Entryfier
 		return EntryPrepResult.success;
 	}
 	
-	private NBTTagCompound getExtraData(WorldServer world, BlockPos pos)
-	{
-		if(isRefinedStorageInstalled)
-		{
-			INetworkNodeManager manager = RefinedStorageSupport.API.getNetworkNodeManager(world);
-			INetworkNode node = manager.getNode(pos);
-			
-			if(node != null)
-			{
-				NBTTagCompound tag = new NBTTagCompound();
-				
-				tag.setTag(RefinedStorageSupport.NBT_NODE, node.write(new NBTTagCompound()));
-				tag.setString(RefinedStorageSupport.NBT_NODE_ID, node.getId());
-				tag.setString("responsibleMod", "refinedstorage");
-				
-				manager.markForSaving();
-				return tag;
-			}
-			
-		}
-		return null;
-	}
+    private NBTTagCompound getExtraData(WorldServer world, BlockPos pos)
+    {
+        NBTTagCompound tag = null;
+        if(isRefinedStorageInstalled)
+        {
+            INetworkNodeManager manager = RefinedStorageSupport.API.getNetworkNodeManager(world);
+            INetworkNode node = manager.getNode(pos);
+            
+            if(node != null)
+            {
+                tag = new NBTTagCompound();
+                tag.setTag(RefinedStorageSupport.NBT_NODE, node.write(new NBTTagCompound()));
+                String nodeID = node.getId();
+                tag.setString(RefinedStorageSupport.NBT_NODE_ID, nodeID);
+                tag.setString("responsibleMod", "refinedstorage");
+                
+                manager.markForSaving();
+            } else
+            {
+                TileEntity te =  world.getTileEntity(pos);
+                tag = new NBTTagCompound();
+                
+                if(te != null && te instanceof INetworkNodeProxy)
+                {
+                    tag.setString("responsibleMod", "refinedstorage");
+                    tag.setBoolean("newTE", true);
+                }
+                
+            }
+            
+        }
+        return tag;
+    }
 
 	public void finalizeDestination(Entity player, WorldServer worldserver0, WorldServer worldserver1)
 	{
@@ -323,30 +336,30 @@ public class Entryfier
 	 * and removes both the tile entity and its corresponding block if so.
 	 * This method is expressly designed to prevent drops from appearing when the block is removed.
 	 * It will also deliberately trigger block updates based on the removal of the tile entity's block.
-	 * @param worldserver0 The world where the tile entity is located
+	 * @param world The world where the tile entity is located
 	 * @param pos The position at which the tile entity is located
 	 * @param creative Whether or not creative-mode rules should be employed
 	 */
-	private static void removeTileEntity(WorldServer worldserver0, BlockPos pos, boolean creative)
+	private static void removeTileEntity(World world, BlockPos pos, boolean creative)
 	{
-		TileEntity tileEntity = worldserver0.getTileEntity(pos);
+		TileEntity tileEntity = world.getTileEntity(pos);
 		if(tileEntity != null)
 		{
 			if(MinestuckConfig.entryCrater || !creative)
 			{
-				String name = worldserver0.getBlockState(pos).getBlock().getRegistryName().toString();
+				String name = world.getBlockState(pos).getBlock().getRegistryName().toString();
 				try {
 					if(isRefinedStorageInstalled)
 					{
-						INetworkNodeManager manager = RefinedStorageSupport.API.getNetworkNodeManager((World)worldserver0);
+						INetworkNodeManager manager = RefinedStorageSupport.API.getNetworkNodeManager((World)world);
 						if(manager.getNode(pos) != null)
 						{
 							manager.removeNode(pos);
 							manager.markForSaving();
 						}
 					}
-					worldserver0.removeTileEntity(pos);
-					worldserver0.setBlockToAir(pos);
+					world.removeTileEntity(pos);
+					world.setBlockToAir(pos);
 				} catch (NullPointerException e) {
 					Logger.getGlobal().warning("Null Pointer Exception encountered when removing " + name + ". "
 							+ "Notify the mod author that the block should make a null check on its tile entity when broken.");
@@ -359,7 +372,7 @@ public class Entryfier
 				if(tileEntity instanceof TileEntityComputer)	//Avoid duplicating computer data when a computer is kept in the overworld
 					((TileEntityComputer) tileEntity).programData = new NBTTagCompound();
 				else if(tileEntity instanceof TileEntityTransportalizer)
-					worldserver0.removeTileEntity(pos);
+					world.removeTileEntity(pos);
 			}
 		}
 	}
@@ -408,74 +421,94 @@ public class Entryfier
 			update = u;
 		}
 		
-		BlockMove(Chunk c, BlockPos src, BlockPos dst, IBlockState b, boolean u, NBTTagCompound eD)
-		{
-			chunkFrom = c;
-			source = src;
-			dest = dst;
-			block = b;
-			update = u;
-			extraData = eD;
-		}
+        BlockMove(Chunk c, BlockPos src, BlockPos dst, IBlockState b, boolean u, NBTTagCompound eD)
+        {
+            chunkFrom = c;
+            source = src;
+            dest = dst;
+            block = b;
+            update = u;
+            extraData = eD;
+            
+            if(extraData!=null && extraData.getBoolean("needsUpdate"))
+            {
+                update = true;
+            }
+        }
 		
-		void copy(Chunk chunkTo)
-		{
-			if(chunkTo.getBlockState(dest).getBlock() == Blocks.BEDROCK)
-			{
-				return;
-			}
-			
-			if(update)
-			{
-				chunkTo.setBlockState(dest, block);
-			} else if(block == Blocks.AIR.getDefaultState())
-			{
-				chunkTo.getWorld().setBlockState(dest, block, 0);
-			} else
-			{
-				copyBlockDirect(chunkFrom, chunkTo, source.getX(), source.getY(), source.getZ(), dest.getX(), dest.getY(), dest.getZ());
-			}
-			
-			TileEntity tileEntity = chunkFrom.getTileEntity(source, EnumCreateEntityType.CHECK);
-			if(tileEntity != null)
-			{
-				NBTTagCompound nbt = new NBTTagCompound();
-				tileEntity.writeToNBT(nbt);
-				nbt.setInteger("x", dest.getX());
-				nbt.setInteger("y", dest.getY());
-				nbt.setInteger("z", dest.getZ());
-				
-				handleExtraData(chunkTo);
-				
-				TileEntity te1 = TileEntity.create(chunkTo.getWorld(), nbt);
-				chunkTo.addTileEntity(dest, te1);
-				
-				if(tileEntity instanceof TileEntityComputer)
-					SkaianetHandler.movingComputer((TileEntityComputer) tileEntity, (TileEntityComputer) te1);
-				
-				te1.markDirty();
-			}
-		}
+        void copy(Chunk chunkTo)
+        {
+            if(chunkTo.getBlockState(dest).getBlock() == Blocks.BEDROCK)
+            {
+                return;
+            }
+            
+            if(update)
+            {
+                chunkTo.setBlockState(dest, block);
+            } else if(block == Blocks.AIR.getDefaultState())
+            {
+                chunkTo.getWorld().setBlockState(dest, block, 0);
+            } else
+            {
+                copyBlockDirect(chunkFrom, chunkTo, source.getX(), source.getY(), source.getZ(), dest.getX(), dest.getY(), dest.getZ());
+            }
+            
+            TileEntity tileEntity = chunkFrom.getTileEntity(source, EnumCreateEntityType.CHECK);
+            if(tileEntity != null)
+            {
+                NBTTagCompound nbt = new NBTTagCompound();
+                tileEntity.writeToNBT(nbt);
+                nbt.setInteger("x", dest.getX());
+                nbt.setInteger("y", dest.getY());
+                nbt.setInteger("z", dest.getZ());
+                
+                TileEntity te1 = TileEntity.create(chunkTo.getWorld(), nbt);
+                chunkTo.addTileEntity(dest, te1);
+                if(tileEntity instanceof TileEntityComputer)
+                    SkaianetHandler.movingComputer((TileEntityComputer) tileEntity, (TileEntityComputer) te1);
+                
+                handleExtraData(chunkTo);
+                
+                te1.markDirty();
+            }
+        }
 		
-		private void handleExtraData(Chunk chunkTo)
-		{
-			if(extraData != null)
-			{
-				switch(extraData.getString("responsibleMod"))
-				{
-				case "refinedstorage":
-					INetworkNode node = RefinedStorageSupport.API.getNetworkNodeRegistry().
-						get(extraData.getString(RefinedStorageSupport.NBT_NODE_ID)).
-						create(extraData.getCompoundTag(RefinedStorageSupport.NBT_NODE), chunkTo.getWorld(), dest);
-					//node.setThrottlingDisabled();		//Might not be necessary due to new instances defaulting to this?
-					
-					INetworkNodeManager manager = RefinedStorageSupport.API.getNetworkNodeManager(chunkTo.getWorld());
-					manager.setNode(dest, node);
-					manager.markForSaving();
-					break;
-				}
-			}
-		}
+        private void handleExtraData(Chunk chunkTo)
+        {
+            if(extraData == null)    return;
+            
+            switch(extraData.getString("responsibleMod"))
+            {
+            case "refinedstorage":
+                if(extraData.getBoolean("newTE"))
+                {
+                    //Destroys the newly-copied tile entity, so that a new one will be generated in its place.
+                    System.out.println("is Controller"); 
+                    chunkTo.removeTileEntity(dest);
+                    TileEntity te = chunkFrom.getTileEntity(source,EnumCreateEntityType.CHECK);
+                    INetworkNode node = ((INetworkNodeProxy)te).getNode();
+                    INetworkNodeManager manager = RefinedStorageSupport.API.getNetworkNodeManager(chunkTo.getWorld());
+                    manager.setNode(dest, node);
+                    manager.markForSaving();
+                }
+                else
+                {
+                    INetworkNode node = RefinedStorageSupport.API.getNetworkNodeRegistry().
+                            get(extraData.getString(RefinedStorageSupport.NBT_NODE_ID)).
+                            create(extraData.getCompoundTag(RefinedStorageSupport.NBT_NODE), chunkTo.getWorld(), dest);
+                    INetworkNodeManager manager = RefinedStorageSupport.API.getNetworkNodeManager(chunkTo.getWorld());
+                    manager.setNode(dest, node);
+                    
+                    manager.markForSaving();
+                    
+                    System.out.println(extraData.getString(RefinedStorageSupport.NBT_NODE_ID));
+                }
+                break;
+            default:
+                break;
+            }
+        }
 		
 		private void copyBlockDirect(Chunk cSrc, Chunk cDst, int xSrc, int ySrc, int zSrc, int xDst, int yDst, int zDst)
 		{
