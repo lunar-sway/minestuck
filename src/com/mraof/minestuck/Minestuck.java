@@ -12,6 +12,7 @@ import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.world.MinestuckDimensions;
+import com.mraof.minestuck.world.gen.OreGeneration;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.world.dimension.DimensionType;
@@ -68,10 +69,11 @@ public class Minestuck
 		//MinestuckConfig.loadConfigFile(event.getSuggestedConfigurationFile(), event.getSide());
 		
 		//(new UpdateChecker()).start();
+		OreGeneration.setupOverworldOreGeneration();
 		
 		CommonProxy.init();
+		
 	}
-	
 	private void clientSetup(final FMLClientSetupEvent event)
 	{
 		ClientProxy.init();
