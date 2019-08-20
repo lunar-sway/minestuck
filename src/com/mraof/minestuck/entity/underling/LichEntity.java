@@ -37,17 +37,17 @@ public class LichEntity extends UnderlingEntity
 	
 	protected SoundEvent getAmbientSound()
 	{
-		return MinestuckSoundHandler.soundLichAmbient;
+		return ModSoundEvents.ENTITY_LICH_AMBIENT;
 	}
 	
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
 	{
-		return MinestuckSoundHandler.soundLichHurt;
+		return ModSoundEvents.ENTITY_LICH_HURT;
 	}
 	
 	protected SoundEvent getDeathSound()
 	{
-		return MinestuckSoundHandler.soundLichDeath;
+		return ModSoundEvents.ENTITY_LICH_DEATH;
 	}
 	
 	@Override

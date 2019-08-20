@@ -18,7 +18,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.dimension.DimensionType;
 
 import java.util.Set;
 import java.util.UUID;
@@ -105,7 +104,7 @@ public class Echeladder
 			{
 				updateEcheladderBonuses(player);
 				MinestuckPacketHandler.sendToPlayer(PlayerDataPacket.boondollars(PlayerSavedData.get(player.server).getData(identifier).boondollars), player);
-				player.world.playSound(null, player.posX, player.posY, player.posZ, MinestuckSoundHandler.soundUpcheladder, SoundCategory.AMBIENT, 1F, 1F);
+				player.world.playSound(null, player.posX, player.posY, player.posZ, ModSoundEvents.EVENT_ECHELADDER_INCREASE, SoundCategory.AMBIENT, 1F, 1F);
 			}
 		}
 	}

@@ -1,6 +1,6 @@
 package com.mraof.minestuck.entity.consort;
 
-import com.mraof.minestuck.util.MinestuckSoundHandler;
+import com.mraof.minestuck.util.ModSoundEvents;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
@@ -16,16 +16,16 @@ public class IguanaEntity extends ConsortEntity
 	
 	protected SoundEvent getAmbientSound()
 	{
-		return MinestuckSoundHandler.soundIguanaAmbient;
+		return ModSoundEvents.ENTITY_IGUANA_AMBIENT;
 	}
 	
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-		return MinestuckSoundHandler.soundIguanaHurt;
+		return ModSoundEvents.ENTITY_IGUANA_HURT;
 	}
 	
 	protected SoundEvent getDeathSound()
 	{
-		return MinestuckSoundHandler.soundIguanaDeath;
+		return ModSoundEvents.ENTITY_IGUANA_DEATH;
 	}
 	
 	@Override

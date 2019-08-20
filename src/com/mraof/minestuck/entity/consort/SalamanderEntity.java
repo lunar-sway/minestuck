@@ -1,6 +1,6 @@
 package com.mraof.minestuck.entity.consort;
 
-import com.mraof.minestuck.util.MinestuckSoundHandler;
+import com.mraof.minestuck.util.ModSoundEvents;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
@@ -15,17 +15,17 @@ public class SalamanderEntity extends ConsortEntity
 	
 	protected SoundEvent getAmbientSound()
 	{
-		return MinestuckSoundHandler.soundSalamanderAmbient;
+		return ModSoundEvents.ENTITY_SALAMANDER_AMBIENT;
 	}
 	
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
 	{
-		return MinestuckSoundHandler.soundSalamanderHurt;
+		return ModSoundEvents.ENTITY_SALAMANDER_HURT;
 	}
 	
 	protected SoundEvent getDeathSound()
 	{
-		return MinestuckSoundHandler.soundSalamanderDeath;
+		return ModSoundEvents.ENTITY_SALAMANDER_DEATH;
 	}
 	
 	@Override
