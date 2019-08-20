@@ -6,7 +6,7 @@ import com.mraof.minestuck.entity.item.SbahjPosterEntity;
 import com.mraof.minestuck.item.block.*;
 import com.mraof.minestuck.item.foods.*;
 import com.mraof.minestuck.item.weapon.*;
-import com.mraof.minestuck.util.MinestuckSoundHandler;
+import com.mraof.minestuck.util.ModSoundEvents;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -632,9 +632,9 @@ public class MinestuckItems
 		//registry.register(FAKE_ARMS = new Item(new Item.Properties().maxStackSize(1)).setRegistryName("fake_arms"));
 		
 		//Music disks
-		registry.register(RECORD_EMISSARY_OF_DANCE = new ModMusicDiscItem(13, MinestuckSoundHandler.soundEmissaryOfDance, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("record_emissary"));
-		registry.register(RECORD_DANCE_STAB = new ModMusicDiscItem(13, MinestuckSoundHandler.soundDanceStabDance, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("record_dance_stab"));
-		registry.register(RECORD_RETRO_BATTLE = new ModMusicDiscItem(13, MinestuckSoundHandler.soundRetroBattleTheme, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("record_retro_battle"));
+		registry.register(RECORD_EMISSARY_OF_DANCE = new ModMusicDiscItem(13, ModSoundEvents.MUSIC_DISC_EMISSARY_OF_DANCE, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("record_emissary"));
+		registry.register(RECORD_DANCE_STAB = new ModMusicDiscItem(13, ModSoundEvents.MUSIC_DISC_DANCE_STAB_DANCE, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("record_dance_stab"));
+		registry.register(RECORD_RETRO_BATTLE = new ModMusicDiscItem(13, ModSoundEvents.MUSIC_DISC_RETRO_BATTLE_THEME, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("record_retro_battle"));
 
 		/*((MinestuckBucketItem) minestuckBucket).addBlock(blockOil.getDefaultState());
 		((MinestuckBucketItem) minestuckBucket).addBlock(blockBlood.getDefaultState());

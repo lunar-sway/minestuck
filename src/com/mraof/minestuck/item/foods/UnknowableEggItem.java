@@ -1,6 +1,6 @@
 package com.mraof.minestuck.item.foods;
 
-import com.mraof.minestuck.util.MinestuckSoundHandler;
+import com.mraof.minestuck.util.ModSoundEvents;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.Effects;
 import net.minecraft.item.Item;
@@ -22,7 +22,7 @@ public class UnknowableEggItem extends Item {
 		{
 			player.addPotionEffect(new EffectInstance(Effects.NAUSEA, 160, 2));
 			player.addPotionEffect(new EffectInstance(Effects.POISON, 160, 2));
-			player.world.playSound(null, player.posX, player.posY, player.posZ, MinestuckSoundHandler.soundWhispers, SoundCategory.AMBIENT, 1.0F, 0.8F);
+			player.world.playSound(null, player.posX, player.posY, player.posZ, ModSoundEvents.ITEM_GRIMOIRE_USE, SoundCategory.AMBIENT, 1.0F, 0.8F);
 		}
 		super.onItemUseFinish(stack, worldIn, player);
 	}

@@ -39,17 +39,17 @@ public class OgreEntity extends UnderlingEntity
 	
 	protected SoundEvent getAmbientSound()
 	{
-		return MinestuckSoundHandler.soundOgreAmbient;
+		return ModSoundEvents.ENTITY_OGRE_AMBIENT;
 	}
 	
 	protected SoundEvent getDeathSound()
 	{
-		return MinestuckSoundHandler.soundOgreDeath;
+		return ModSoundEvents.ENTITY_OGRE_DEATH;
 	}	
 	
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
 	{
-		return MinestuckSoundHandler.soundOgreHurt;
+		return ModSoundEvents.ENTITY_OGRE_HURT;
 	}
 	
 	@Override
