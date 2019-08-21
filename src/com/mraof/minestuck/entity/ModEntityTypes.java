@@ -72,38 +72,39 @@ public final class ModEntityTypes
 	}
 	
 	@SubscribeEvent
+	@SuppressWarnings("unused")
 	public static void registerEntities(final RegistryEvent.Register<EntityType<?>> event)
 	{
 		IForgeRegistry<EntityType<?>> registry = event.getRegistry();
-		registry.register(EntityType.Builder.<FrogEntity>create(FrogEntity::new, EntityClassification.CREATURE).size(0.51F, 0.51F).build(Minestuck.MOD_ID + ":frog").setRegistryName("frog"));
-		registry.register(EntityType.Builder.create(SalamanderEntity::new, EntityClassification.CREATURE).size(0.6F, 1.5F).build(Minestuck.MOD_ID + ":salamander").setRegistryName("salamander"));
-		registry.register(EntityType.Builder.create(TurtleEntity::new, EntityClassification.CREATURE).size(0.6F, 1.5F).build(Minestuck.MOD_ID + ":turtle").setRegistryName("turtle"));
-		registry.register(EntityType.Builder.create(NakagatorEntity::new, EntityClassification.CREATURE).size(0.6F, 1.5F).build(Minestuck.MOD_ID + ":nakagator").setRegistryName("nakagator"));
-		registry.register(EntityType.Builder.create(IguanaEntity::new, EntityClassification.CREATURE).size(0.6F, 1.5F).build(Minestuck.MOD_ID + ":iguana").setRegistryName("iguana"));
+		register(registry, EntityType.Builder.<FrogEntity>create(FrogEntity::new, EntityClassification.CREATURE).size(0.51F, 0.51F), "frog");
+		register(registry, EntityType.Builder.create(SalamanderEntity::new, EntityClassification.CREATURE).size(0.6F, 1.5F), "salamander");
+		register(registry, EntityType.Builder.create(TurtleEntity::new, EntityClassification.CREATURE).size(0.6F, 1.5F), "turtle");
+		register(registry, EntityType.Builder.create(NakagatorEntity::new, EntityClassification.CREATURE).size(0.6F, 1.5F), "nakagator");
+		register(registry, EntityType.Builder.create(IguanaEntity::new, EntityClassification.CREATURE).size(0.6F, 1.5F), "iguana");
 		
-		registry.register(EntityType.Builder.create(ImpEntity::new, EntityClassification.MONSTER).size(0.75F, 1.5F).build(Minestuck.MOD_ID + ":imp").setRegistryName("imp"));
-		registry.register(EntityType.Builder.create(OgreEntity::new, EntityClassification.MONSTER).size(3.0F, 4.5F).build(Minestuck.MOD_ID + ":ogre").setRegistryName("ogre"));
-		registry.register(EntityType.Builder.create(BasiliskEntity::new, EntityClassification.MONSTER).size(3F, 2F).build(Minestuck.MOD_ID + ":basilisk").setRegistryName("basilisk"));
-		registry.register(EntityType.Builder.create(LichEntity::new, EntityClassification.MONSTER).size(1.0F, 2.0F).build(Minestuck.MOD_ID + ":lich").setRegistryName("lich"));
-		registry.register(EntityType.Builder.create(GiclopsEntity::new, EntityClassification.MONSTER).size(8.0F, 12.0F).build(Minestuck.MOD_ID + ":giclops").setRegistryName("giclops"));
-		registry.register(EntityType.Builder.create(WyrmEntity::new, EntityClassification.MONSTER).build(Minestuck.MOD_ID + ":wyrm").setRegistryName("wyrm"));
+		register(registry, EntityType.Builder.create(ImpEntity::new, EntityClassification.MONSTER).size(0.75F, 1.5F), "imp");
+		register(registry, EntityType.Builder.create(OgreEntity::new, EntityClassification.MONSTER).size(3.0F, 4.5F), "ogre");
+		register(registry, EntityType.Builder.create(BasiliskEntity::new, EntityClassification.MONSTER).size(3F, 2F), "basilisk");
+		register(registry, EntityType.Builder.create(LichEntity::new, EntityClassification.MONSTER).size(1.0F, 2.0F), "lich");
+		register(registry, EntityType.Builder.create(GiclopsEntity::new, EntityClassification.MONSTER).size(8.0F, 12.0F), "giclops");
+		register(registry, EntityType.Builder.create(WyrmEntity::new, EntityClassification.MONSTER), "wyrm");
 		
-		registry.register(EntityType.Builder.create(BlackPawnEntity::new, EntityClassification.MONSTER).size(0.6F, 1.5F).build(Minestuck.MOD_ID + ":dersite_pawn").setRegistryName("dersite_pawn"));
-		registry.register(EntityType.Builder.create(WhitePawnEntity::new, EntityClassification.MONSTER).size(0.6F, 1.5F).build(Minestuck.MOD_ID + ":prospitian_pawn").setRegistryName("prospitian_pawn"));
-		registry.register(EntityType.Builder.create(BlackBishopEntity::new, EntityClassification.MONSTER).size(1.9F, 4.1F).build(Minestuck.MOD_ID + ":dersite_bishop").setRegistryName("dersite_bishop"));
-		registry.register(EntityType.Builder.create(WhiteBishopEntity::new, EntityClassification.MONSTER).size(1.9F, 4.1F).build(Minestuck.MOD_ID + ":prospitian_bishop").setRegistryName("prospitian_bishop"));
-		registry.register(EntityType.Builder.create(BlackRookEntity::new, EntityClassification.MONSTER).size(3.5F, 3.5F).build(Minestuck.MOD_ID + ":dersite_rook").setRegistryName("dersite_rook"));
-		registry.register(EntityType.Builder.create(WhiteRookEntity::new, EntityClassification.MONSTER).size(3.5F, 3.5F).build(Minestuck.MOD_ID + ":prospitian_rook").setRegistryName("prospitian_rook"));
+		register(registry, EntityType.Builder.create(BlackPawnEntity::new, EntityClassification.MONSTER).size(0.6F, 1.5F), "dersite_pawn");
+		register(registry, EntityType.Builder.create(WhitePawnEntity::new, EntityClassification.MONSTER).size(0.6F, 1.5F), "prospitian_pawn");
+		register(registry, EntityType.Builder.create(BlackBishopEntity::new, EntityClassification.MONSTER).size(1.9F, 4.1F), "dersite_bishop");
+		register(registry, EntityType.Builder.create(WhiteBishopEntity::new, EntityClassification.MONSTER).size(1.9F, 4.1F), "prospitian_bishop");
+		register(registry, EntityType.Builder.create(BlackRookEntity::new, EntityClassification.MONSTER).size(3.5F, 3.5F), "dersite_rook");
+		register(registry, EntityType.Builder.create(WhiteRookEntity::new, EntityClassification.MONSTER).size(3.5F, 3.5F), "prospitian_rook");
 		
-		registry.register(EntityType.Builder.<GristEntity>create(GristEntity::new, EntityClassification.MISC).size(1 / 3F, 1 / 3F)/*.tracker(512, 1, true)*/.immuneToFire().build(Minestuck.MOD_ID + ":grist").setRegistryName("grist"));
-		registry.register(EntityType.Builder.<VitalityGelEntity>create(VitalityGelEntity::new, EntityClassification.MISC).size(1 / 4F, 1 / 4F)/*.tracker(512, 1, true)*/.immuneToFire().build(Minestuck.MOD_ID + ":vitality_gel").setRegistryName("vitality_gel"));
-		registry.register(EntityType.Builder.<DecoyEntity>create(EntityClassification.MISC).disableSerialization().disableSummoning().build(Minestuck.MOD_ID + ":decoy").setRegistryName("player_decoy"));
+		register(registry, EntityType.Builder.<GristEntity>create(GristEntity::new, EntityClassification.MISC).size(1 / 3F, 1 / 3F)/*.tracker(512, 1, true)*/.immuneToFire(), "grist");
+		register(registry, EntityType.Builder.<VitalityGelEntity>create(VitalityGelEntity::new, EntityClassification.MISC).size(1 / 4F, 1 / 4F)/*.tracker(512, 1, true)*/.immuneToFire(), "vitality_gel");
+		register(registry, EntityType.Builder.<DecoyEntity>create(EntityClassification.MISC).disableSerialization().disableSummoning(), "player_decoy");
 		
-		registry.register(EntityType.Builder.<MetalBoatEntity>create(MetalBoatEntity::new, EntityClassification.MISC).build(Minestuck.MOD_ID + ":metal_boat").setRegistryName("metal_boat"));
-		registry.register(EntityType.Builder.<CrewPosterEntity>create(CrewPosterEntity::new, EntityClassification.MISC).build(Minestuck.MOD_ID + ":midnight_crew_poster").setRegistryName("midnight_crew_poster"));
-		registry.register(EntityType.Builder.<SbahjPosterEntity>create(SbahjPosterEntity::new, EntityClassification.MISC).build(Minestuck.MOD_ID + ":sbahj_poster").setRegistryName("sbahj_poster"));
-		registry.register(EntityType.Builder.<ShopPosterEntity>create(ShopPosterEntity::new, EntityClassification.MISC).build(Minestuck.MOD_ID + ":shop_poster").setRegistryName("shop_poster"));
-		registry.register(EntityType.Builder.<HologramEntity>create(HologramEntity::new, EntityClassification.MISC).build(Minestuck.MOD_ID + ":hologram").setRegistryName("hologram"));
+		register(registry, EntityType.Builder.<MetalBoatEntity>create(MetalBoatEntity::new, EntityClassification.MISC), "metal_boat");
+		register(registry, EntityType.Builder.<CrewPosterEntity>create(CrewPosterEntity::new, EntityClassification.MISC), "midnight_crew_poster");
+		register(registry, EntityType.Builder.<SbahjPosterEntity>create(SbahjPosterEntity::new, EntityClassification.MISC), "sbahj_poster");
+		register(registry, EntityType.Builder.<ShopPosterEntity>create(ShopPosterEntity::new, EntityClassification.MISC), "shop_poster");
+		register(registry, EntityType.Builder.<HologramEntity>create(HologramEntity::new, EntityClassification.MISC), "hologram");
 	}
 	
 	public static void registerPlacements()
@@ -116,10 +117,9 @@ public final class ModEntityTypes
 		EntitySpawnPlacementRegistry.register(PROSPITIAN_ROOK, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, MobEntity::func_223315_a);
 	}
 	
-	private static <T extends Entity> EntityType<T> register(IForgeRegistry<EntityType<?>> registry, String name, EntityType.Builder<T> builder)
+	private static void register(IForgeRegistry<EntityType<?>> registry, EntityType.Builder<?> builder, String name)
 	{
-		EntityType<T> type = builder.build(name);
+		EntityType<?> type = builder.build(Minestuck.MOD_ID + ":" + name);
 		registry.register(type.setRegistryName(name));
-		return type;
 	}
 }
