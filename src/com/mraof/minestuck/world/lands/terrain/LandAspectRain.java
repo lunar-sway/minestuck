@@ -83,10 +83,10 @@ public class LandAspectRain extends TerrainLandAspect
 		list.add(new LeaflessTreeDecorator(MinestuckBlocks.DEAD_LOG.getDefaultState(), 0.25F, ModBiomes.mediumRough));
 		
 		list.add(new UndergroundDecoratorVein(MinestuckBlocks.POLISHED_PINK_STONE.getDefaultState(), 2, 8, 64));
-		list.add(new UndergroundDecoratorVein(MinestuckBlocks.COAL_ORE_PINK_STONE.getDefaultState(), 13, 17, 64));
-		list.add(new UndergroundDecoratorVein(MinestuckBlocks.LAPIS_ORE_PINK_STONE.getDefaultState(), 4, 7, 24));
-		list.add(new UndergroundDecoratorVein(MinestuckBlocks.GOLD_ORE_PINK_STONE.getDefaultState(), 4, 9, 32));
-		list.add(new UndergroundDecoratorVein(MinestuckBlocks.DIAMOND_ORE_PINK_STONE.getDefaultState(), 3, 6, 24));
+		list.add(new UndergroundDecoratorVein(MinestuckBlocks.PINK_STONE_COAL_ORE.getDefaultState(), 13, 17, 64));
+		list.add(new UndergroundDecoratorVein(MinestuckBlocks.PINK_STONE_LAPIS_ORE.getDefaultState(), 4, 7, 24));
+		list.add(new UndergroundDecoratorVein(MinestuckBlocks.PINK_STONE_GOLD_ORE.getDefaultState(), 4, 9, 32));
+		list.add(new UndergroundDecoratorVein(MinestuckBlocks.PINK_STONE_DIAMOND_ORE.getDefaultState(), 3, 6, 24));
 		return list;
 	}
 	

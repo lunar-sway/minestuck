@@ -1,0 +1,6 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "all": "minestuck:block/stone_quartz_ore"
+    }
+}
