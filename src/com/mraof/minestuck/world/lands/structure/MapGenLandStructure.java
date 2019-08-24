@@ -38,8 +38,8 @@ public class MapGenLandStructure extends MapGenStructure
 		MapGenStructureIO.registerStructureComponent(ImpDungeonStart.EntryComponent.class, "MinestuckIDEntry");
 		ImpDungeonComponents.registerComponents();
 		
-		MapGenStructureIO.registerStructure(CloudDungeonStart.class, "MinestuckCloudDungeon");
-		CloudDungeonComponents.registerComponents();
+//		MapGenStructureIO.registerStructure(CloudDungeonStart.class, "MinestuckCloudDungeon");
+//		CloudDungeonComponents.registerComponents();
 	}
 	
 	public boolean isInsideStructure(String structureName, BlockPos pos)
