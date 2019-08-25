@@ -82,6 +82,7 @@ public class Minestuck
 	{
 		ClientProxy.init();
 		MinecraftForge.EVENT_BUS.register(ClientProxy.class);
+		MinestuckConfig.setClientValues();
 	}
 	
 	public void postSetup(FMLLoadCompleteEvent event)
