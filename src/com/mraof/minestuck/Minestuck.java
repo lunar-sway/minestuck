@@ -4,6 +4,7 @@ import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.command.*;
+import com.mraof.minestuck.config.OreGenConfig;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.event.ServerEventHandler;
@@ -11,6 +12,7 @@ import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.*;
+//import com.mraof.minestuck.config.MinestuckConfig;
 import com.mraof.minestuck.world.MinestuckDimensions;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -28,6 +30,7 @@ import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.util.Random;
 
@@ -58,6 +61,9 @@ public class Minestuck
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::postSetup);
 		//ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.GUIFACTORY, () -> GuiHandler::provideGuiContainer);
 		
+		//com.mraof.minestuck.config.MinestuckConfig.loadConfig(com.mraof.minestuck.config.MinestuckConfig.client_config, FMLPaths.CONFIGDIR.get().resolve("tutorialmod-client.toml").toString());
+		com.mraof.minestuck.config.MinestuckConfig.loadConfig(com.mraof.minestuck.config.MinestuckConfig.server_config, FMLPaths.CONFIGDIR.get().resolve("Minestuck.toml").toString());
+		
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 	
@@ -69,6 +75,7 @@ public class Minestuck
 		
 		//(new UpdateChecker()).start();
 		
+		com.mraof.minestuck.config.MinestuckConfig.setConfigVariables();
 		CommonProxy.init();
 	}
 	
@@ -90,7 +97,7 @@ public class Minestuck
 	public void serverAboutToStart(FMLServerAboutToStartEvent event)
 	{
 		isServerRunning = true;
-		DeployList.applyConfigValues(MinestuckConfig.deployConfigurations);
+		DeployList.applyConfigValues(new boolean[] {true, OreGenConfig.uranium_endgen.get()});
 	}
 	
 	@SubscribeEvent
