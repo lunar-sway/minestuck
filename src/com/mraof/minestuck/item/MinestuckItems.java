@@ -221,18 +221,18 @@ public class MinestuckItems
 		registerItemBlock(registry, RED_SANDSTONE_URANIUM_ORE, ModItemGroup.LANDS);
 		registerItemBlock(registry, END_STONE_URANIUM_ORE, ModItemGroup.LANDS);
 		registerItemBlock(registry, PINK_STONE_URANIUM_ORE, ModItemGroup.LANDS);
-		registerItemBlock(registry, COAL_ORE_NETHERRACK, ModItemGroup.LANDS);
-		registerItemBlock(registry, COAL_ORE_PINK_STONE, ModItemGroup.LANDS);
-		registerItemBlock(registry, IRON_ORE_END_STONE, ModItemGroup.LANDS);
-		registerItemBlock(registry, IRON_ORE_SANDSTONE, ModItemGroup.LANDS);
-		registerItemBlock(registry, IRON_ORE_SANDSTONE_RED, ModItemGroup.LANDS);
-		registerItemBlock(registry, GOLD_ORE_SANDSTONE, ModItemGroup.LANDS);
-		registerItemBlock(registry, GOLD_ORE_SANDSTONE_RED, ModItemGroup.LANDS);
-		registerItemBlock(registry, GOLD_ORE_PINK_STONE, ModItemGroup.LANDS);
-		registerItemBlock(registry, REDSTONE_ORE_END_STONE, ModItemGroup.LANDS);
-		registerItemBlock(registry, QUARTZ_ORE_STONE, ModItemGroup.LANDS);
-		registerItemBlock(registry, LAPIS_ORE_PINK_STONE, ModItemGroup.LANDS);
-		registerItemBlock(registry, DIAMOND_ORE_PINK_STONE, ModItemGroup.LANDS);
+		registerItemBlock(registry, NETHERRACK_COAL_ORE, ModItemGroup.LANDS);
+		registerItemBlock(registry, PINK_STONE_COAL_ORE, ModItemGroup.LANDS);
+		registerItemBlock(registry, END_STONE_IRON_ORE, ModItemGroup.LANDS);
+		registerItemBlock(registry, SANDSTONE_IRON_ORE, ModItemGroup.LANDS);
+		registerItemBlock(registry, RED_SANDSTONE_IRON_ORE, ModItemGroup.LANDS);
+		registerItemBlock(registry, SANDSTONE_GOLD_ORE, ModItemGroup.LANDS);
+		registerItemBlock(registry, RED_SANDSTONE_GOLD_ORE, ModItemGroup.LANDS);
+		registerItemBlock(registry, PINK_STONE_GOLD_ORE, ModItemGroup.LANDS);
+		registerItemBlock(registry, END_STONE_REDSTONE_ORE, ModItemGroup.LANDS);
+		registerItemBlock(registry, STONE_QUARTZ_ORE, ModItemGroup.LANDS);
+		registerItemBlock(registry, PINK_STONE_LAPIS_ORE, ModItemGroup.LANDS);
+		registerItemBlock(registry, PINK_STONE_DIAMOND_ORE, ModItemGroup.LANDS);
 		
 		registerItemBlock(registry, CRUXITE_BLOCK, ModItemGroup.MAIN);
 		registerItemBlock(registry, URANIUM_BLOCK, ModItemGroup.MAIN);
@@ -424,7 +424,7 @@ public class MinestuckItems
 		registerItemBlock(registry, BLENDER, ModItemGroup.MAIN);
 		registerItemBlock(registry, CHESSBOARD, ModItemGroup.MAIN);
 		registerItemBlock(registry, MINI_FROG_STATUE, ModItemGroup.MAIN);
-		registerItemBlock(registry, GLOWYSTONE_WIRE, ModItemGroup.MAIN);
+		registerItemBlock(registry, GLOWYSTONE_DUST, ModItemGroup.MAIN);
 		
 		//hammers
 		registry.register(CLAW_HAMMER = new WeaponItem(ItemTier.IRON, 2, -2.4F, 1.0F, new Item.Properties().defaultMaxDamage(131).addToolType(ToolType.PICKAXE, 0).group(ModItemGroup.WEAPONS)).setRegistryName("claw_hammer"));

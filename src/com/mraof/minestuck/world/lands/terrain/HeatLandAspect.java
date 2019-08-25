@@ -69,7 +69,7 @@ public class HeatLandAspect extends TerrainLandAspect
 		list.add(new SurfaceDecoratorVein(Blocks.GLOWSTONE.getDefaultState(), 5, 8, ModBiomes.mediumNormal));
 		
 		list.add(new UndergroundDecoratorVein(Blocks.GRAVEL.getDefaultState(), 8, 33, 256));
-		list.add(new UndergroundDecoratorVein(MinestuckBlocks.COAL_ORE_NETHERRACK.getDefaultState(), 26, 17, 128));
+		list.add(new UndergroundDecoratorVein(MinestuckBlocks.NETHERRACK_COAL_ORE.getDefaultState(), 26, 17, 128));
 		list.add(new UndergroundDecoratorVein(Blocks.NETHER_QUARTZ_ORE.getDefaultState(), 13, 8, 64));
 		return list;
 	}

@@ -617,7 +617,7 @@ public class AlchemyRecipes
 		AlchemyCostRegistry.addGristConversion(PRISMARINE_CHESTPLATE, new GristSet(new GristType[] {GristType.BUILD, GristType.COBALT, GristType.MARBLE}, new int[] {120, 48, 24}));
 		AlchemyCostRegistry.addGristConversion(PRISMARINE_LEGGINGS, new GristSet(new GristType[] {GristType.BUILD, GristType.COBALT, GristType.MARBLE}, new int[] {105, 42, 21}));
 		AlchemyCostRegistry.addGristConversion(PRISMARINE_BOOTS, new GristSet(new GristType[] {GristType.BUILD, GristType.COBALT, GristType.MARBLE}, new int[] {60, 24, 12}));
-		AlchemyCostRegistry.addGristConversion(GLOWYSTONE_WIRE, new GristSet(new GristType[] {GristType.BUILD, GristType.AMBER}, new int[] {1, 1}));
+		AlchemyCostRegistry.addGristConversion(GLOWYSTONE_DUST, new GristSet(new GristType[] {GristType.BUILD, GristType.AMBER}, new int[] {1, 1}));
 		AlchemyCostRegistry.addGristConversion(RAW_CRUXITE, new GristSet(GristType.BUILD, 3));
 		AlchemyCostRegistry.addGristConversion(RAW_URANIUM, new GristSet(GristType.URANIUM, 3));
 		AlchemyCostRegistry.addGristConversion(GOLDEN_GRASSHOPPER, new GristSet(GristType.GOLD, 4000));
@@ -847,13 +847,13 @@ public class AlchemyRecipes
 		
 		if(oreMultiplier != 0)
 		{
-			CombinationRegistry.addCombination(Items.COAL, Blocks.NETHERRACK, MODE_AND, new ItemStack(COAL_ORE_NETHERRACK));
-			CombinationRegistry.addCombination(Items.IRON_INGOT, Blocks.END_STONE, MODE_AND, new ItemStack(IRON_ORE_END_STONE));
-			CombinationRegistry.addCombination(Items.IRON_INGOT, Blocks.SANDSTONE, MODE_AND, new ItemStack(IRON_ORE_SANDSTONE));
-			CombinationRegistry.addCombination(Items.IRON_INGOT, Blocks.RED_SANDSTONE, MODE_AND, new ItemStack(IRON_ORE_SANDSTONE_RED));
-			CombinationRegistry.addCombination(Items.GOLD_INGOT, Blocks.SANDSTONE, MODE_AND, new ItemStack(GOLD_ORE_SANDSTONE));
-			CombinationRegistry.addCombination(Items.GOLD_INGOT, Blocks.RED_SANDSTONE, MODE_AND, new ItemStack(GOLD_ORE_SANDSTONE_RED));
-			CombinationRegistry.addCombination(Items.REDSTONE, Blocks.END_STONE, MODE_AND, new ItemStack(REDSTONE_ORE_END_STONE));
+			CombinationRegistry.addCombination(Items.COAL, Blocks.NETHERRACK, MODE_AND, new ItemStack(NETHERRACK_COAL_ORE));
+			CombinationRegistry.addCombination(Items.IRON_INGOT, Blocks.END_STONE, MODE_AND, new ItemStack(END_STONE_IRON_ORE));
+			CombinationRegistry.addCombination(Items.IRON_INGOT, Blocks.SANDSTONE, MODE_AND, new ItemStack(SANDSTONE_IRON_ORE));
+			CombinationRegistry.addCombination(Items.IRON_INGOT, Blocks.RED_SANDSTONE, MODE_AND, new ItemStack(RED_SANDSTONE_IRON_ORE));
+			CombinationRegistry.addCombination(Items.GOLD_INGOT, Blocks.SANDSTONE, MODE_AND, new ItemStack(SANDSTONE_GOLD_ORE));
+			CombinationRegistry.addCombination(Items.GOLD_INGOT, Blocks.RED_SANDSTONE, MODE_AND, new ItemStack(RED_SANDSTONE_GOLD_ORE));
+			CombinationRegistry.addCombination(Items.REDSTONE, Blocks.END_STONE, MODE_AND, new ItemStack(END_STONE_REDSTONE_ORE));
 		}
 		
 		CombinationRegistry.addCombination(Items.DIAMOND_SWORD, Items.EMERALD, MODE_OR, new ItemStack(EMERALD_SWORD));
@@ -927,7 +927,7 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(RAINBOW_LEAVES, RAINBOW_LOG, MODE_OR, new ItemStack(RAINBOW_SAPLING));
 		CombinationRegistry.addCombination(END_LEAVES, END_LOG, MODE_OR, new ItemStack(END_SAPLING));
 		CombinationRegistry.addCombination(Blocks.STONE, CARVING_TOOL, MODE_AND, new ItemStack(STONE_SLAB));
-		CombinationRegistry.addCombination(Items.REDSTONE, Items.GLOWSTONE_DUST, MODE_OR, new ItemStack(GLOWYSTONE_WIRE));
+		CombinationRegistry.addCombination(Items.REDSTONE, Items.GLOWSTONE_DUST, MODE_OR, new ItemStack(GLOWYSTONE_DUST));
 		CombinationRegistry.addCombination(Blocks.CAKE, Items.APPLE, MODE_OR, new ItemStack(APPLE_CAKE));
 		CombinationRegistry.addCombination(Blocks.CAKE, GLOWING_MUSHROOM, MODE_OR, new ItemStack(BLUE_CAKE));
 		CombinationRegistry.addCombination(Blocks.CAKE, Blocks.ICE, MODE_OR, new ItemStack(COLD_CAKE));
