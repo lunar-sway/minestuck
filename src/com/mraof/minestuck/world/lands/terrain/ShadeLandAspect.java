@@ -18,10 +18,15 @@ import net.minecraft.world.biome.Biome;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LandAspectShade extends TerrainLandAspect 
+public class ShadeLandAspect extends TerrainLandAspect
 {
 	
-	static Vec3d skyColor = new Vec3d(0.16D, 0.38D, 0.54D);
+	private static final Vec3d skyColor = new Vec3d(0.16D, 0.38D, 0.54D);
+	
+	public ShadeLandAspect()
+	{
+		super(null);
+	}
 	
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
@@ -41,12 +46,6 @@ public class LandAspectShade extends TerrainLandAspect
 		registry.setBlockState("bush", MinestuckBlocks.GLOWING_MUSHROOM.getDefaultState());
 		registry.setBlockState("structure_wool_1", Blocks.CYAN_WOOL.getDefaultState());
 		registry.setBlockState("structure_wool_3", Blocks.GRAY_WOOL.getDefaultState());
-	}
-	
-	@Override
-	public String getPrimaryName()
-	{
-		return "shade";
 	}
 	
 	@Override

@@ -1,18 +1,19 @@
 package com.mraof.minestuck.world.lands.title;
 
+import com.mraof.minestuck.util.EnumAspect;
+import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.biome.Biome;
 
 public class LandAspectThunder extends TitleLandAspect
 {
-	
-	@Override
-	public String getPrimaryName()
+	public LandAspectThunder()
 	{
-		return "thunder";
+		super(null, EnumAspect.DOOM);
 	}
 	
 	@Override
@@ -28,15 +29,13 @@ public class LandAspectThunder extends TitleLandAspect
 	}
 	
 	@Override
-	public void prepareChunkProvider(ChunkProviderLands chunkProvider)
+	public void setBiomeSettings(LandBiomeHolder settings)
 	{
-		chunkProvider.weatherType = 4;
-		chunkProvider.rainfall += 0.1F;
-		
-		
+		settings.rainType = Biome.RainType.RAIN; //TODO Add feature to make an eternal thunderstorm
+		settings.downfall += 0.1F;
 	}
 	
-	@Override
+	//@Override
 	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.BLUE_WOOL.getDefaultState());

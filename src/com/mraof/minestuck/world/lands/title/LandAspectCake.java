@@ -1,6 +1,7 @@
 package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.decorator.SingleBlockDecorator;
 import com.mraof.minestuck.world.lands.decorator.structure.CakePedestalDecorator;
@@ -16,11 +17,9 @@ import java.util.Random;
 
 public class LandAspectCake extends TitleLandAspect
 {
-	
-	@Override
-	public String getPrimaryName()
+	public LandAspectCake()
 	{
-		return "cake";
+		super(null, EnumAspect.HEART);
 	}
 	
 	@Override
@@ -29,7 +28,7 @@ public class LandAspectCake extends TitleLandAspect
 		return new String[] {"cake", "dessert"};
 	}
 	
-	@Override
+	//@Override
 	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
 		

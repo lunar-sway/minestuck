@@ -1,15 +1,11 @@
 package com.mraof.minestuck.world.lands.terrain;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.biome.ModBiomes;
-import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
 import net.minecraft.block.Blocks;
@@ -24,26 +20,21 @@ import net.minecraft.world.gen.placement.CountRangeConfig;
 import net.minecraft.world.gen.placement.FrequencyConfig;
 import net.minecraft.world.gen.placement.Placement;
 
-public class LandAspectForest extends TerrainLandAspect
+public class ForestLandAspect extends TerrainLandAspect
 {
 	private final Variant type;
-	private final List<TerrainLandAspect> variations;
 	
-	public LandAspectForest()
+	public static TerrainLandAspect[] createTypes()
 	{
-		this(Variant.FOREST);
+		ForestLandAspect parent = new ForestLandAspect(Variant.FOREST, null);
+		return new TerrainLandAspect[]{parent.setRegistryName("forest"),
+				new ForestLandAspect(Variant.TAIGA, parent).setRegistryName("taiga")};
 	}
 	
-	public LandAspectForest(Variant variation)
+	private ForestLandAspect(Variant variation, ForestLandAspect parent)
 	{
-		variations = new ArrayList<>();
+		super(parent);
 		type = variation;
-		
-		if(type == Variant.FOREST)
-		{
-			variations.add(this);
-			variations.add(new LandAspectForest(Variant.TAIGA));
-		}
 	}
 	
 	@Override
@@ -69,12 +60,6 @@ public class LandAspectForest extends TerrainLandAspect
 		} else {
 			registry.setBlockState("structure_wool_3", Blocks.BROWN_WOOL.getDefaultState());
 		}
-	}
-	
-	@Override
-	public String getPrimaryName()
-	{
-		return type.getName();
 	}
 	
 	@Override
@@ -146,18 +131,6 @@ public class LandAspectForest extends TerrainLandAspect
 	public Vec3d getSkyColor()
 	{
 		return new Vec3d(0.4D, 0.7D, 1.0D);
-	}
-	
-	@Override
-	public List<TerrainLandAspect> getVariations()
-	{
-		return variations;
-	}
-	
-	@Override
-	public TerrainLandAspect getPrimaryVariant()
-	{
-		return LandAspectRegistry.fromNameTerrain("forest");
 	}
 	
 	@Override

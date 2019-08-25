@@ -4,7 +4,6 @@ import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.ModBiomes;
-import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.*;
 import com.mraof.minestuck.world.lands.gen.LandGenSettings;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
@@ -16,29 +15,27 @@ import net.minecraft.world.biome.Biome;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LandAspectSandstone extends TerrainLandAspect
+public class SandstoneLandAspect extends TerrainLandAspect
 {
 	
 	private final Vec3d fogColor, skyColor;
 	private final Variant type;
-	private final List<TerrainLandAspect> variations;
 	
-	public LandAspectSandstone()
+	public static TerrainLandAspect[] createTypes()
 	{
-		this(Variant.SANDSTONE);
+		SandstoneLandAspect parent = new SandstoneLandAspect(Variant.SANDSTONE, null);
+		return new TerrainLandAspect[]{parent.setRegistryName("sandstone"),
+				new SandstoneLandAspect(Variant.RED_SANDSTONE, parent).setRegistryName("red_sandstone")};
 	}
 	
-	public LandAspectSandstone(Variant type)
+	private SandstoneLandAspect(Variant type, SandstoneLandAspect parent)
 	{
-		variations = new ArrayList<>();
+		super(parent);
 		this.type = type;
 		if(type == Variant.SANDSTONE)
 		{
 			fogColor = new Vec3d(0.9D, 0.7D, 0.05D);
 			skyColor = new Vec3d(0.8D, 0.6D, 0.2D);
-			
-			variations.add(this);
-			variations.add(new LandAspectSandstone(Variant.SANDSTONE_RED));
 		} else
 		{
 			fogColor = new Vec3d(0.7D, 0.4D, 0.05D);
@@ -76,12 +73,6 @@ public class LandAspectSandstone extends TerrainLandAspect
 	}
 	
 	@Override
-	public String getPrimaryName()
-	{
-		return type.getName();
-	}
-	
-	@Override
 	public String[] getNames()
 	{
 		return new String[] {"sandstone", "desertStone"};
@@ -107,7 +98,7 @@ public class LandAspectSandstone extends TerrainLandAspect
 		List<ILandDecorator> list = new ArrayList<ILandDecorator>();
 		BlockState sand = Blocks.SAND.getDefaultState();
 		BlockState sandstone = Blocks.SANDSTONE.getDefaultState();
-		if(type == Variant.SANDSTONE_RED)
+		if(type == Variant.RED_SANDSTONE)
 		{
 			sand = Blocks.RED_SAND.getDefaultState();
 			sandstone = Blocks.RED_SANDSTONE.getDefaultState();
@@ -142,27 +133,15 @@ public class LandAspectSandstone extends TerrainLandAspect
 	}
 	
 	@Override
-	public TerrainLandAspect getPrimaryVariant()
-	{
-		return LandAspectRegistry.fromNameTerrain("sandstone");
-	}
-	
-	@Override
-	public List<TerrainLandAspect> getVariations()
-	{
-		return variations;
-	}
-	
-	@Override
 	public EntityType<? extends ConsortEntity> getConsortType()
 	{
 		return ModEntityTypes.TURTLE;
 	}
 	
-	public static enum Variant
+	public enum Variant
 	{
 		SANDSTONE,
-		SANDSTONE_RED;
+		RED_SANDSTONE;
 		public String getName()
 		{
 			return this.toString().toLowerCase();

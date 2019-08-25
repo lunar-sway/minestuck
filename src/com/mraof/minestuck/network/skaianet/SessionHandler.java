@@ -631,9 +631,9 @@ public class SessionHandler
 						}
 						
 						if(data.landTerrain != null)
-							connectionTag.putString("aspectTerrain", data.landTerrain.getPrimaryName());
+							connectionTag.putString("aspectTerrain", data.landTerrain.getRegistryName().toString());
 						if(data.landTitle != null)
-							connectionTag.putString("aspectTitle", data.landTitle.getPrimaryName());
+							connectionTag.putString("aspectTitle", data.landTitle.getRegistryName().toString());
 					}
 				}
 				connectionList.add(connectionTag);
@@ -661,9 +661,9 @@ public class SessionHandler
 				}
 				
 				if(data.landTerrain != null)
-					connectionTag.putString("aspectTerrain", data.landTerrain.getPrimaryName());
+					connectionTag.putString("aspectTerrain", data.landTerrain.getRegistryName().toString());
 				if(data.landTitle != null)
-					connectionTag.putString("aspectTitle", data.landTitle.getPrimaryName());
+					connectionTag.putString("aspectTitle", data.landTitle.getRegistryName().toString());
 				
 				connectionList.add(connectionTag);
 			}

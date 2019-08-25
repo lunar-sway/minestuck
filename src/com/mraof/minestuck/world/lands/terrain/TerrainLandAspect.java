@@ -1,21 +1,38 @@
 package com.mraof.minestuck.world.lands.terrain;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.lands.ILandAspect;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.structure.GateStructurePillar;
 import com.mraof.minestuck.world.lands.structure.IGateStructure;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 
-public abstract class TerrainLandAspect implements ILandAspect<TerrainLandAspect>
+import javax.annotation.Nullable;
+
+public abstract class TerrainLandAspect extends ForgeRegistryEntry<TerrainLandAspect> implements ILandAspect<TerrainLandAspect>
 {
+	private final TerrainLandAspect parent;
+	private final boolean pickedAtRandom;
+	
+	protected TerrainLandAspect(TerrainLandAspect parent)
+	{
+		this(parent, true);
+	}
+	
+	protected TerrainLandAspect(TerrainLandAspect parent, boolean pickedAtRandom)
+	{
+		if(parent != null && parent.getParent() != null)
+			throw new IllegalArgumentException("Provided parent landspect is actually a child!");
+		this.parent = parent;
+		this.pickedAtRandom = pickedAtRandom;
+	}
+
 	public abstract void registerBlocks(StructureBlockRegistry registry);
 	
 	@Deprecated
@@ -54,17 +71,16 @@ public abstract class TerrainLandAspect implements ILandAspect<TerrainLandAspect
 	}
 	
 	@Override
-	public List<TerrainLandAspect> getVariations()
+	public boolean canBePickedAtRandom()
 	{
-		ArrayList<TerrainLandAspect> list = new ArrayList<TerrainLandAspect>();
-		list.add(this);
-		return list;
+		return pickedAtRandom;
 	}
 	
+	@Nullable
 	@Override
-	public TerrainLandAspect getPrimaryVariant()
+	public TerrainLandAspect getParent()
 	{
-		return this;
+		return parent;
 	}
 	
 	//public void modifyStructureList(List<MapGenLandStructure.StructureEntry> list)
@@ -75,11 +91,6 @@ public abstract class TerrainLandAspect implements ILandAspect<TerrainLandAspect
 	{
 		return new GateStructurePillar();
 	}
-	
-	@Override
-	public void prepareChunkProvider(ChunkProviderLands chunkProvider){}
-	@Override
-	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider){}
 	
 	public abstract EntityType<? extends ConsortEntity> getConsortType();
 	

@@ -15,9 +15,14 @@ import net.minecraft.world.biome.Biome;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LandAspectHeat extends TerrainLandAspect 
+public class HeatLandAspect extends TerrainLandAspect
 {
-	static Vec3d skyColor = new Vec3d(0.4D, 0.0D, 0.0D);
+	private static final Vec3d skyColor = new Vec3d(0.4D, 0.0D, 0.0D);
+	
+	public HeatLandAspect()
+	{
+		super(null);
+	}
 	
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
@@ -39,12 +44,6 @@ public class LandAspectHeat extends TerrainLandAspect
 		registry.setBlockState("structure_wool_3", Blocks.PURPLE_WOOL.getDefaultState());
 	}
 	
-	@Override
-	public String getPrimaryName()
-	{
-		return "heat";
-	}
-
 	@Override
 	public String[] getNames() {
 		return new String[] {"heat","flame","fire"};

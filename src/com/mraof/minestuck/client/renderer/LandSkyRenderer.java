@@ -1,6 +1,5 @@
 package com.mraof.minestuck.client.renderer;
 
-import ca.weblite.objc.Client;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.world.lands.LandAspects;
@@ -18,6 +17,7 @@ import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.client.IRenderHandler;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class LandSkyRenderer implements IRenderHandler
@@ -242,8 +242,10 @@ public class LandSkyRenderer implements IRenderHandler
 			return null;
 		
 		int index = random.nextInt(3);
-		ResourceLocation terrain = new ResourceLocation("minestuck", "textures/environment/planets/planet_"+aspects.aspectTerrain.getPrimaryName()+"_"+index+".png");
-		ResourceLocation title = new ResourceLocation("minestuck", "textures/environment/overlays/overlay_"+aspects.aspectTitle.getPrimaryName()+"_"+index+".png");
+		ResourceLocation terrainName = Objects.requireNonNull(aspects.aspectTerrain.getRegistryName());
+		ResourceLocation titleName = Objects.requireNonNull(aspects.aspectTitle.getRegistryName());
+		ResourceLocation terrain = new ResourceLocation(terrainName.getNamespace(), "textures/environment/planets/planet_"+terrainName.getPath()+"_"+index+".png");
+		ResourceLocation title = new ResourceLocation(titleName.getNamespace(), "textures/environment/overlays/overlay_"+titleName.getPath()+"_"+index+".png");
 		return new ResourceLocation[] {terrain, title};
 	}
 }

@@ -7,22 +7,28 @@ import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
+import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.MesaDecorator;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
 
-public class LandAspectRainbow extends TerrainLandAspect 
+public class RainbowLandAspect extends TerrainLandAspect
 {
-	static Vec3d fogColor = new Vec3d(0.0D, 0.6D, 0.8D);
-	static Vec3d skyColor = new Vec3d(0.9D, 0.6D, 0.8D);
+	private static final Vec3d fogColor = new Vec3d(0.0D, 0.6D, 0.8D);
+	private static final Vec3d skyColor = new Vec3d(0.9D, 0.6D, 0.8D);
+	
+	public RainbowLandAspect()
+	{
+		super(null);
+	}
 	
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
@@ -51,12 +57,6 @@ public class LandAspectRainbow extends TerrainLandAspect
 	}
 	
 	@Override
-	public String getPrimaryName()
-	{
-		return "rainbow";
-	}
-
-	@Override
 	public String[] getNames() {
 		return new String[] {"rainbow", "colors"};
 	}
@@ -70,9 +70,9 @@ public class LandAspectRainbow extends TerrainLandAspect
 	}
 	
 	@Override
-	public void prepareChunkProvider(ChunkProviderLands chunkProvider)
+	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blockRegistry)
 	{
-		chunkProvider.waterMobsList.add(new SpawnListEntry(EntityType.SQUID, 2, 3, 5));
+		biome.addSpawn(EntityClassification.WATER_CREATURE, new SpawnListEntry(EntityType.SQUID, 2, 3, 5));
 	}
 	
 	@Override

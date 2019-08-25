@@ -49,8 +49,8 @@ public class LandDimension extends Dimension
 		
 		PacketBuffer buffer = Objects.requireNonNull(typeIn.getData());
 		buffer.resetReaderIndex();
-		TerrainLandAspect terrain = LandAspectRegistry.fromNameTerrain(buffer.readString(32767), false);
-		TitleLandAspect title = LandAspectRegistry.fromNameTitle(buffer.readString(32767), false);
+		TerrainLandAspect terrain = buffer.readRegistryIdSafe(TerrainLandAspect.class);
+		TitleLandAspect title = buffer.readRegistryIdSafe(TitleLandAspect.class);
 		landAspects = new LandAspects(terrain, title);
 		
 		doesWaterVaporize = false;

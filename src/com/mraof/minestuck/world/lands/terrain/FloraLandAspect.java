@@ -29,10 +29,15 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
-public class LandAspectFlora extends TerrainLandAspect
+public class FloraLandAspect extends TerrainLandAspect
 {
-	static Vec3d fogColor = new Vec3d(0.5D, 0.6D, 0.9D);
-	static Vec3d skyColor = new Vec3d(0.6D, 0.8D, 0.6D);
+	private static final Vec3d fogColor = new Vec3d(0.5D, 0.6D, 0.9D);
+	private static final Vec3d skyColor = new Vec3d(0.6D, 0.8D, 0.6D);
+	
+	public FloraLandAspect()
+	{
+		super(null);
+	}
 	
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
@@ -69,12 +74,6 @@ public class LandAspectFlora extends TerrainLandAspect
 		{
 			return !world.getBlockState(pos.down()).getMaterial().isLiquid();
 		}
-	}
-	
-	@Override
-	public String getPrimaryName()
-	{
-		return "flora";
 	}
 	
 	@Override

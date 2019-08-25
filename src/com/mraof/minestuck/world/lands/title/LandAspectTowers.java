@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.lands.title;
 
+import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.decorator.PillarDecorator;
 import com.mraof.minestuck.world.lands.decorator.structure.BasicTowerDecorator;
@@ -8,11 +9,9 @@ import net.minecraft.block.Blocks;
 
 public class LandAspectTowers extends TitleLandAspect
 {
-	
-	@Override
-	public String getPrimaryName()
+	public LandAspectTowers()
 	{
-		return "towers";
+		super(null, EnumAspect.HOPE);
 	}
 	
 	@Override
@@ -21,7 +20,7 @@ public class LandAspectTowers extends TitleLandAspect
 		return new String[] {"tower"};
 	}
 	
-	@Override
+	//@Override
 	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.LIGHT_BLUE_WOOL.getDefaultState());

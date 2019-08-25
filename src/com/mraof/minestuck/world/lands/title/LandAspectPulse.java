@@ -1,6 +1,7 @@
 package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
@@ -13,13 +14,11 @@ import net.minecraft.util.math.Vec3d;
 
 public class LandAspectPulse extends TitleLandAspect
 {
-
-	@Override
-	public String getPrimaryName()
+	public LandAspectPulse()
 	{
-		return "pulse";
+		super(null, EnumAspect.BLOOD);
 	}
-
+	
 	@Override
 	public String[] getNames()
 	{
@@ -32,13 +31,7 @@ public class LandAspectPulse extends TitleLandAspect
 		worldProvider.mergeFogColor(new Vec3d(0.8, 0, 0), 0.8F);
 	}
 	
-	@Override
-	public void prepareChunkProvider(ChunkProviderLands chunkProvider)
-	{
-	
-	}
-	
-	@Override
+	//@Override
 	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.RED_WOOL.getDefaultState());

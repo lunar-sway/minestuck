@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.lands.title;
 
+import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.decorator.FrogSpawner;
 import com.mraof.minestuck.world.lands.decorator.LilypadDecorator;
@@ -11,19 +12,18 @@ import net.minecraft.block.material.Material;
 
  public class LandAspectFrogs extends TitleLandAspect
 {
-	 @Override
-	 	public String getPrimaryName()
-	 	{
-	 		return "frogs";
-	 	}
-	 	
-	 	@Override
-	 	public String[] getNames()
+	public LandAspectFrogs()
+	{
+		super(null, EnumAspect.SPACE, false);
+	}
+	
+	@Override
+	public String[] getNames()
 		{
 			return new String[]{"frog"};
 		}
 	
-	@Override
+	//@Override
 	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.GREEN_WOOL.getDefaultState());

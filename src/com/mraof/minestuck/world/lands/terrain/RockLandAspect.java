@@ -5,7 +5,6 @@ import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.ModBiomes;
-import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.BlockBlobDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.LeaflessTreeDecorator;
@@ -22,26 +21,21 @@ import net.minecraft.world.biome.Biome;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LandAspectRock extends TerrainLandAspect
+public class RockLandAspect extends TerrainLandAspect
 {
 	private final Variant type;
-	private final List<TerrainLandAspect> variations;
-
-	public LandAspectRock()
+	
+	public static TerrainLandAspect[] createTypes()
 	{
-		this(Variant.ROCK);
+		RockLandAspect parent = new RockLandAspect(Variant.ROCK, null);
+		return new TerrainLandAspect[]{parent.setRegistryName("rock"),
+				new RockLandAspect(Variant.PETRIFICATION, parent).setRegistryName("petrification")};
 	}
 	
-	public LandAspectRock(Variant variation)
+	private RockLandAspect(Variant variation, RockLandAspect parent)
 	{
-		variations = new ArrayList<>();
+		super(parent);
 		type = variation;
-		
-		if(type == Variant.ROCK)
-		{
-			variations.add(this);
-			variations.add(new LandAspectRock(Variant.PETRIFICATION));
-		}
 	}
 
 	@Override
@@ -63,12 +57,6 @@ public class LandAspectRock extends TerrainLandAspect
 		registry.setBlockState("village_fence", Blocks.COBBLESTONE_WALL.getDefaultState());
 		registry.setBlockState("structure_wool_1", Blocks.BROWN_WOOL.getDefaultState());
 		registry.setBlockState("structure_wool_3", Blocks.GRAY_WOOL.getDefaultState());
-	}
-	
-	@Override
-	public String getPrimaryName()
-	{
-		return type.getName();
 	}
 	
 	@Override
@@ -147,24 +135,12 @@ public class LandAspectRock extends TerrainLandAspect
 	}
 	
 	@Override
-	public List<TerrainLandAspect> getVariations()
-	{
-		return variations;
-	}
-	
-	@Override
-	public TerrainLandAspect getPrimaryVariant()
-	{
-		return LandAspectRegistry.fromNameTerrain("rock");
-	}
-	
-	@Override
 	public EntityType<? extends ConsortEntity> getConsortType()
 	{
 		return ModEntityTypes.NAKAGATOR;
 	}
 	
-	public static enum Variant
+	public enum Variant
 	{
 		ROCK,
 		PETRIFICATION;

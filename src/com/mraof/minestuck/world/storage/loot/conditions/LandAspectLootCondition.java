@@ -42,8 +42,8 @@ public class LandAspectLootCondition implements ILootCondition
 		{
 			LandAspects aspects = ((LandDimension) world.dimension).landAspects;
 			
-			TerrainLandAspect terrain = includeSubtypes ? aspects.aspectTerrain.getPrimaryVariant() : aspects.aspectTerrain;
-			TitleLandAspect title = includeSubtypes ? aspects.aspectTitle.getPrimaryVariant() : aspects.aspectTitle;
+			TerrainLandAspect terrain = includeSubtypes ? aspects.aspectTerrain.getParentOrThis() : aspects.aspectTerrain;
+			TitleLandAspect title = includeSubtypes ? aspects.aspectTitle.getParentOrThis() : aspects.aspectTitle;
 			
 			for(ILandAspect aspect : landAspectNames)
 				if(terrain == aspect || title == aspect)
@@ -63,7 +63,7 @@ public class LandAspectLootCondition implements ILootCondition
 		@Override
 		public void serialize(JsonObject json, LandAspectLootCondition value, JsonSerializationContext context)
 		{
-			if(value.landAspectNames.length == 1)
+			/*if(value.landAspectNames.length == 1)TODO Rethink how terrain vs title landspects should be handled in the json format
 				json.addProperty("land_aspect", value.landAspectNames[0].getPrimaryName());
 			else
 			{
@@ -73,7 +73,7 @@ public class LandAspectLootCondition implements ILootCondition
 				
 				json.add("land_aspect", list);
 			}
-			
+			*/
 			json.addProperty("inverse", value.inverted);
 			json.addProperty("subtypes", value.includeSubtypes);
 		}
@@ -96,9 +96,9 @@ public class LandAspectLootCondition implements ILootCondition
 		
 		private static ILandAspect getAspect(String aspectName)
 		{
-			ILandAspect aspect = LandAspectRegistry.fromNameTerrain(aspectName, true);
+			ILandAspect aspect = LandAspectRegistry.TERRAIN_REGISTRY.getValue(ResourceLocation.tryCreate(aspectName));
 			if(aspect == null)
-				aspect = LandAspectRegistry.fromNameTitle(aspectName, true);
+				aspect = LandAspectRegistry.TITLE_REGISTRY.getValue(ResourceLocation.tryCreate(aspectName));
 			if(aspect == null)
 				throw new JsonSyntaxException("\"" + aspectName + "\" is not a valid land aspect.");
 			return aspect;

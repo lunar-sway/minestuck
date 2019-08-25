@@ -1,70 +1,144 @@
 package com.mraof.minestuck.world.lands;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.world.MinestuckDimensions;
 import com.mraof.minestuck.world.ModDimensionTypes;
 import com.mraof.minestuck.world.lands.terrain.*;
 import com.mraof.minestuck.world.lands.title.*;
 import io.netty.buffer.Unpooled;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.ResourceLocationException;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.*;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 
+@ObjectHolder(Minestuck.MOD_ID)
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class LandAspectRegistry
 {
+	private static final ResourceLocation TERRAIN_PARENT = new ResourceLocation(Minestuck.MOD_ID, "terrain_parent_map");
+	private static final ResourceLocation TITLE_PARENT = new ResourceLocation(Minestuck.MOD_ID, "title_parent_map");
 	
-	private static ArrayList<TerrainLandAspect> landAspects = new ArrayList<TerrainLandAspect>();
-	private static Hashtable<EnumAspect, ArrayList<TitleLandAspect>> titleAspects = new Hashtable<EnumAspect, ArrayList<TitleLandAspect>>();
-	private static Hashtable<String, TerrainLandAspect> landNames = new Hashtable<String,TerrainLandAspect>();
-	private static Hashtable<String, TitleLandAspect> landNames2 = new Hashtable<String,TitleLandAspect>();
-	private static TitleLandAspect nullAspect = new LandAspectNull();
-	public static TitleLandAspect frogAspect = new LandAspectFrogs();
-	public static TitleLandAspect bucketAspect = new LandAspectBuckets();
+	public static IForgeRegistry<TerrainLandAspect> TERRAIN_REGISTRY;
+	public static IForgeRegistry<TitleLandAspect> TITLE_REGISTRY;
+	
+	private static Map<TerrainLandAspect, List<TerrainLandAspect>> terrainParentMap;
+	private static Map<TitleLandAspect, List<TitleLandAspect>> titleParentMap;
+	
+	public static final TerrainLandAspect FORESTS = getNull();
+	public static final TerrainLandAspect FROST = getNull();
+	public static final TerrainLandAspect FUNGI = getNull();
+	public static final TerrainLandAspect HEAT = getNull();
+	public static final TerrainLandAspect ROCK = getNull();
+	public static final TerrainLandAspect SAND = getNull();
+	public static final TerrainLandAspect RED_SAND = getNull();
+	public static final TerrainLandAspect SANDSTONE = getNull();
+	public static final TerrainLandAspect RED_SANDSTONE = getNull();
+	public static final TerrainLandAspect SHADE = getNull();
+	public static final TerrainLandAspect WOOD = getNull();
+	public static final TerrainLandAspect RAINBOW = getNull();
+	public static final TerrainLandAspect FLORA = getNull();
+	public static final TerrainLandAspect END = getNull();
+	public static final TerrainLandAspect RAIN = getNull();
+	
+	@ObjectHolder(Minestuck.MOD_ID+":null")
+	public static final TitleLandAspect TITLE_NULL = getNull();
+	public static final TitleLandAspect FROGS = getNull();
+	public static final TitleLandAspect WIND = getNull();
+	public static final TitleLandAspect LIGHT = getNull();
+	public static final TitleLandAspect CLOCKWORK = getNull();
+	public static final TitleLandAspect SILENCE = getNull();
+	public static final TitleLandAspect THUNDER = getNull();
+	public static final TitleLandAspect PULSE = getNull();
+	public static final TitleLandAspect THOUGHT = getNull();
+	public static final TitleLandAspect BUCKETS = getNull();
+	public static final TitleLandAspect CAKE = getNull();
+	public static final TitleLandAspect RABBITS = getNull();
+	public static final TitleLandAspect MONSTERS = getNull();
+	public static final TitleLandAspect TOWERS = getNull();
 	
 	private Random random;
 	
-	public static void registerLandAspects()
+	@Nonnull
+	@SuppressWarnings("ConstantConditions")
+	private static <T> T getNull()
 	{
-		registerLandAspect(new LandAspectForest());
-		registerLandAspect(new LandAspectFrost());
-		/*registerLandAspect(new LandAspectFungi());
-		registerLandAspect(new LandAspectHeat());
-		registerLandAspect(new LandAspectRock());
-		registerLandAspect(new LandAspectSand());
-		registerLandAspect(new LandAspectSandstone());
-		registerLandAspect(new LandAspectShade());
-		registerLandAspect(new LandAspectWood());
-		registerLandAspectHidden(new LandAspectRain());
-		registerLandAspect(new LandAspectRainbow());
-		registerLandAspect(new LandAspectFlora());
-		registerLandAspect(new LandAspectEnd());*/
-		
-		registerLandAspect(new LandAspectWind(), EnumAspect.BREATH);
-		registerLandAspect(new LandAspectLight(), EnumAspect.LIGHT);
-		registerLandAspect(new LandAspectClockwork(), EnumAspect.TIME);
-		registerLandAspect(new LandAspectSilence(), EnumAspect.VOID);
-		registerLandAspect(new LandAspectThunder(), EnumAspect.DOOM);
-		registerLandAspect(new LandAspectPulse(), EnumAspect.BLOOD);
-		registerLandAspect(new LandAspectThought(), EnumAspect.MIND);
-		//registerLandAspect(new LandAspectBuckets(), EnumAspect.SPACE);
-		registerLandAspect(new LandAspectFrogs(), EnumAspect.SPACE);
-		registerLandAspect(new LandAspectCake(), EnumAspect.HEART);
-		registerLandAspect(new LandAspectRabbits(), EnumAspect.LIFE);
-		registerLandAspect(new LandAspectMonsters(), EnumAspect.RAGE);
-		registerLandAspect(new LandAspectTowers(), EnumAspect.HOPE);
-		
+		return null;
+	}
+	
+	@SubscribeEvent	@SuppressWarnings({"unused", "unchecked"})
+	public static void onRegistryNewRegistry(final RegistryEvent.NewRegistry event)
+	{
+		TERRAIN_REGISTRY = new RegistryBuilder<TerrainLandAspect>()
+				.setName(new ResourceLocation(Minestuck.MOD_ID, "terrain_land_aspect"))
+				.setType(TerrainLandAspect.class)
+				.addCallback(TerrainCallbacks.INSTANCE)
+				.create();
+		terrainParentMap = TERRAIN_REGISTRY.getSlaveMap(TERRAIN_PARENT, Map.class);
+		TITLE_REGISTRY = new RegistryBuilder<TitleLandAspect>()
+				.setName(new ResourceLocation(Minestuck.MOD_ID, "title_land_aspect"))
+				.setType(TitleLandAspect.class)
+				.addCallback(TitleCallbacks.INSTANCE)
+				.create();
+		titleParentMap = TITLE_REGISTRY.getSlaveMap(TITLE_PARENT, Map.class);
+	}
 
-		landNames2.put(nullAspect.getPrimaryName(), nullAspect);
-		landNames2.put(frogAspect.getPrimaryName(), frogAspect);
-		landNames2.put(bucketAspect.getPrimaryName(), bucketAspect);
+	@SubscribeEvent
+	@SuppressWarnings("unused")
+	public static void registerTerrain(final RegistryEvent.Register<TerrainLandAspect> event)
+	{
+		IForgeRegistry<TerrainLandAspect> registry = event.getRegistry();
+		
+		registry.registerAll(ForestLandAspect.createTypes());
+		registry.register(new FrostLandAspect().setRegistryName("frost"));
+		registry.register(new FungiLandAspect().setRegistryName("fungi"));
+		registry.register(new HeatLandAspect().setRegistryName("heat"));
+		registry.registerAll(RockLandAspect.createTypes());
+		registry.registerAll(SandLandAspect.createTypes());
+		registry.registerAll(SandstoneLandAspect.createTypes());
+		registry.register(new ShadeLandAspect().setRegistryName("shade"));
+		registry.register(new WoodLandAspect().setRegistryName("wood"));
+		registry.register(new RainbowLandAspect().setRegistryName("rainbow"));
+		registry.register(new FloraLandAspect().setRegistryName("flora"));
+		registry.register(new EndLandAspect().setRegistryName("end"));
+		registry.register(new RainLandAspect().setRegistryName("rain"));
+	}
+	
+	@SubscribeEvent
+	@SuppressWarnings("unused")
+	public static void registerTitle(final RegistryEvent.Register<TitleLandAspect> event)
+	{
+		IForgeRegistry<TitleLandAspect> registry = event.getRegistry();
+		
+		registry.register(new LandAspectNull().setRegistryName("null"));
+		registry.register(new LandAspectFrogs().setRegistryName("frogs"));
+		registry.register(new LandAspectWind().setRegistryName("wind"));
+		registry.register(new LandAspectLight().setRegistryName("light"));
+		registry.register(new LandAspectClockwork().setRegistryName("clockwork"));
+		registry.register(new LandAspectSilence().setRegistryName("silence"));
+		registry.register(new LandAspectThunder().setRegistryName("thunder"));
+		registry.register(new LandAspectPulse().setRegistryName("pulse"));
+		registry.register(new LandAspectThought().setRegistryName("thought"));
+		registry.register(new LandAspectBuckets().setRegistryName("buckets"));
+		registry.register(new LandAspectCake().setRegistryName("cake"));
+		registry.register(new LandAspectRabbits().setRegistryName("rabbits"));
+		registry.registerAll(LandAspectMonsters.createTypes());
+		registry.register(new LandAspectTowers().setRegistryName("towers"));
 	}
 	
 	public LandAspectRegistry(long seed)
@@ -73,206 +147,90 @@ public class LandAspectRegistry
 	}
 	
 	/**
-	 * Adds a new Land aspect to the table of random aspects to generate.
-	 * @param newAspect
-	 */
-	public static void registerLandAspect(TerrainLandAspect newAspect)
-	{
-		landAspects.add(newAspect);
-		landNames.put(newAspect.getPrimaryName(),newAspect);
-		for(ILandAspect variant : newAspect.getVariations())
-			landNames.put(variant.getPrimaryName(), (TerrainLandAspect) variant);
-	}
-	
-	public static void registerLandAspectHidden(TerrainLandAspect newAspect)
-	{
-		landNames.put(newAspect.getPrimaryName(),newAspect);
-		for(ILandAspect variant : newAspect.getVariations())
-			landNames.put(variant.getPrimaryName(), (TerrainLandAspect) variant);
-	}
-	
-	public static void registerLandAspect(TitleLandAspect newAspect, EnumAspect titleAspect)
-	{
-		if(!titleAspects.containsKey(titleAspect))
-			titleAspects.put(titleAspect, new ArrayList<TitleLandAspect>());
-		titleAspects.get(titleAspect).add(newAspect);
-		landNames2.put(newAspect.getPrimaryName(), newAspect);
-		for(ILandAspect variant : newAspect.getVariations())
-			landNames2.put(variant.getPrimaryName(), (TitleLandAspect) variant);
-	}
-	
-	/**
 	 * Generates a random land aspect, weighted based on a player's title.
 	 * @return
 	 */
 	public TerrainLandAspect getTerrainAspect(TitleLandAspect aspect2, List<TerrainLandAspect> usedAspects)
 	{
-		ArrayList<TerrainLandAspect> availableAspects = new ArrayList<TerrainLandAspect>();
-		for(TerrainLandAspect aspect : landAspects)
-			if(aspect2.isAspectCompatible(aspect))
-				availableAspects.add(aspect);
-		
-		if(availableAspects.isEmpty())
-			throw new IllegalStateException("No land aspect is compatible with the title aspect "+aspect2.getPrimaryName()+"!");
-		
-		return selectRandomAspect(availableAspects, usedAspects);
+		TerrainLandAspect aspect = selectRandomAspect(usedAspects, terrainParentMap, aspect2::isAspectCompatible);
+		if(aspect != null)
+			return aspect;
+		else throw new IllegalStateException("No land aspect is compatible with the title aspect "+aspect2.getRegistryName()+"!");
 	}
 	
 	public TitleLandAspect getTitleAspect(TerrainLandAspect aspectTerrain, EnumAspect titleAspect, List<TitleLandAspect> usedAspects)
 	{
-		ArrayList<TitleLandAspect> aspectList = titleAspects.get(titleAspect);
-		ArrayList<TitleLandAspect> availableAspects = new ArrayList<TitleLandAspect>();
-		if(aspectList == null || aspectList.isEmpty())
-			return nullAspect;
-		
-		if(aspectTerrain == null)
-			availableAspects.addAll(aspectList);
-		else for(TitleLandAspect aspect : aspectList)
-			if(aspect.isAspectCompatible(aspectTerrain))
-				availableAspects.add(aspect);
-		
-		if(availableAspects.isEmpty())
+		TitleLandAspect landAspect;
+		if(aspectTerrain != null)
 		{
-			Debug.debugf("Failed to find a title land aspect compatible with \"%s\". Forced to use a poorly compatible land aspect instead.");
-			availableAspects.addAll(aspectList);
-		}
-		
-		return selectRandomAspect(availableAspects, usedAspects);
-	}
-	
-	private <A extends ILandAspect> A selectRandomAspect(List<A> aspectList, List<A> usedAspects)
-	{
-		if(aspectList.size() == 1)
-			return getRandomVariant(aspectList.get(0));
-		
-		int[] useCount = new int[aspectList.size()];
-		for(A usedAspect : usedAspects)
-		{
-			usedAspect = (A) usedAspect.getPrimaryVariant();
-			int index = aspectList.indexOf(usedAspect);
-			if(index != -1)
-				useCount[index]++;
-		}
-		
-		ArrayList<A> list = new ArrayList<A>();
-		for(int i = 0; i < useCount.length; i++)	//Check for unused aspects
-			if(useCount[i] == 0)
-				list.add(aspectList.get(i));
-		
-		if(list.size() > 0)
-			return getRandomVariant(list.get(random.nextInt(list.size())));
-		
-		double randCap = 0;
-		for(int i = 0; i < useCount.length; i++)
-			randCap += 1D/useCount[i];
-		
-		double rand = random.nextDouble()*randCap;
-		
-		for(int i = 0; i < useCount.length; i++)
-			if(rand < 1D/useCount[i])
+			landAspect = selectRandomAspect(usedAspects, titleParentMap, aspect -> aspect.getType() == titleAspect && aspect.isAspectCompatible(aspectTerrain));
+			if(landAspect == null)
 			{
-				return getRandomVariant(aspectList.get(i));
+				Debug.warnf("Failed to find a title land aspect compatible with land aspect \"%s\". Forced to use a poorly compatible land aspect instead.", aspectTerrain.getRegistryName());
+				landAspect = selectRandomAspect(usedAspects, titleParentMap, aspect -> aspect.getType() == titleAspect);
 			}
-			else rand -= 1D/useCount[i];
+		} else landAspect = selectRandomAspect(usedAspects, titleParentMap, aspect -> aspect.getType() == titleAspect);
 		
-		return null;	//Should not happen
+		if(landAspect != null)
+			return landAspect;
+		else return TITLE_NULL;
 	}
 	
-	private <A extends ILandAspect> A getRandomVariant(A aspect)
+	private <A extends ILandAspect> A selectRandomAspect(List<A> usedAspects, Map<A, List<A>> parentMap, Predicate<A> condition)
 	{
-		List<ILandAspect> variations = aspect.getVariations();
-		return (A) variations.get(random.nextInt(variations.size()));
+		List<List<A>> list = Lists.newArrayList();
+		for(A aspect : parentMap.getOrDefault(null, Collections.emptyList()))
+		{
+			List<A> variantList = Lists.newArrayList(parentMap.getOrDefault(aspect, Collections.emptyList()));
+			variantList.removeIf(condition.negate());
+			if(!variantList.isEmpty())
+				list.add(variantList);
+		}
+		
+		List<A> variantList = pickOneFromUsage(list, usedAspects, (variants, used) -> variants.get(0).getParentOrThis().equals(used.getParentOrThis()));
+		if(variantList == null)
+			return null;
+		return pickOneFromUsage(variantList, usedAspects, Object::equals);
 	}
 	
-	/**
-	 * Returns a ArrayList that is a random combination of the two input ArrayLists.
-	 */
-	public <T> ArrayList<T> pickSubset(List<T> listIn, int min, int max)
+	private <A extends ILandAspect, B> B pickOneFromUsage(List<B> list, List<A> usedAspects, BiPredicate<B, A> matchPredicate)
 	{
-		int size = min + random.nextInt(max - min + 1);
-		ArrayList<T> result = new ArrayList<T>();
-		if(listIn.size() <= size)
-			result.addAll(listIn);
+		if(list.isEmpty())
+			return null;
+		else if(list.size() == 1)
+			return list.get(0);
 		else
 		{
-			while(result.size() < size)
+			int[] useCount = new int[list.size()];
+			for(A usedAspect : usedAspects)
 			{
-				T object = listIn.get(random.nextInt(listIn.size()));
-				if(!result.contains(object))
-					result.add(object);
+				for(int i = 0; i < list.size(); i++)
+					if(matchPredicate.test(list.get(i), usedAspect))
+						useCount[i]++;
 			}
+			
+			ArrayList<B> unusedEntries = new ArrayList<B>();
+			for(int i = 0; i < list.size(); i++)	//Check for unused aspects
+				if(useCount[i] == 0)
+					unusedEntries.add(list.get(i));
+			
+			if(unusedEntries.size() > 0)
+				return unusedEntries.get(random.nextInt(unusedEntries.size()));
+			
+			double randCap = 0;
+			for(int value : useCount) randCap += 1D / value;
+			
+			double rand = random.nextDouble()*randCap;
+			
+			for(int i = 0; i < useCount.length; i++)
+				if(rand < 1D/useCount[i])
+				{
+					return list.get(i);
+				}
+				else rand -= 1D/useCount[i];
+			
+			throw new IllegalStateException("This should not happen!");
 		}
-		return result;
-	}
-	
-	/**
-	 * Converts aspect data to NBT tags for saving/loading.
-	 */
-	public static CompoundNBT toNBT(TerrainLandAspect aspect1, TitleLandAspect aspect2) {
-		CompoundNBT tag = new CompoundNBT();
-		tag.putString("aspect1",aspect1.getPrimaryName());
-		tag.putString("aspect2",aspect2.getPrimaryName());
-		return tag;
-	}
-	
-	public static TerrainLandAspect fromNameTerrain(String name)
-	{
-		return fromNameTerrain(name, true);
-	}
-	
-	/**
-	 * Gets a land aspect from it's primary name. Used in loading from NBT.
-	 */
-	public static TerrainLandAspect fromNameTerrain(String name, boolean acceptNull)
-	{
-		TerrainLandAspect aspect = landNames.get(name);
-		if(aspect == null && !acceptNull)
-		{
-			Debug.errorf("Could not find terrain landspect %s!", name);
-			return landAspects.get(0);
-		}
-		return aspect;
-	}
-	
-	public static TitleLandAspect fromNameTitle(String name)
-	{
-		return fromNameTitle(name, true);
-	}
-	
-	/**
-	 * Gets a land aspect from it's primary name. Used in loading from NBT.
-	 */
-	public static TitleLandAspect fromNameTitle(String name, boolean acceptNull)
-	{
-		TitleLandAspect aspect = landNames2.get(name);
-		if(aspect == null && !acceptNull)
-		{
-			Debug.errorf("Could not find title landspect %s!", name);
-			return nullAspect;
-		}
-		return aspect;
-	}
-	
-	public static Collection<String> getNamesTerrain()
-	{
-		return landNames.keySet();
-	}
-	
-	public static Collection<String> getNamesTitle()
-	{
-		return landNames2.keySet();
-	}
-	
-	public static boolean containsTitleLandAspect(EnumAspect titleAspect, TitleLandAspect landAspect)
-	{
-		return titleAspects.get(titleAspect).contains(landAspect);
-	}
-	
-	public static TitleLandAspect getSingleLandAspect(EnumAspect aspect)
-	{
-		if(titleAspects.get(aspect).size() == 1)
-			return titleAspects.get(aspect).get(0);
-		else return null;
 	}
 	
 	/**
@@ -300,22 +258,84 @@ public class LandAspectRegistry
 		
 		PacketBuffer data = new PacketBuffer(Unpooled.buffer());
 		data.clear();
-		data.writeString(aspects.aspectTerrain.getPrimaryName());
-		data.writeString(aspects.aspectTitle.getPrimaryName());
+		data.writeRegistryId(aspects.aspectTerrain);
+		data.writeRegistryId(aspects.aspectTitle);
 		
-		DimensionType land = DimensionManager.registerDimension(dimensionName, ModDimensionTypes.LANDS, data, true);
-		
-		return land;
+		return DimensionManager.registerDimension(dimensionName, ModDimensionTypes.LANDS, data, true);
 	}
 	
-	/**
-	 * Returns one random element from a list.
-	 */
-	public <T> T pickElement(T[] list)
+	private static class TerrainCallbacks implements IForgeRegistry.AddCallback<TerrainLandAspect>, IForgeRegistry.ClearCallback<TerrainLandAspect>, IForgeRegistry.CreateCallback<TerrainLandAspect>
 	{
-		return list[random.nextInt(list.length)];
+		private static final TerrainCallbacks INSTANCE = new TerrainCallbacks();
+		@Override
+		public void onAdd(IForgeRegistryInternal<TerrainLandAspect> owner, RegistryManager stage, int id, TerrainLandAspect obj, @Nullable TerrainLandAspect oldObj)
+		{
+			if(oldObj != null)
+			{
+				@SuppressWarnings("unchecked")
+				Map<TerrainLandAspect, List<TerrainLandAspect>> terrainParentMap = owner.getSlaveMap(TERRAIN_PARENT, Map.class);
+				terrainParentMap.getOrDefault(obj.getParent(), Collections.emptyList()).remove(oldObj);
+				terrainParentMap.remove(oldObj);
+			}
+			
+			if(obj.canBePickedAtRandom())
+			{
+				@SuppressWarnings("unchecked")
+				Map<TerrainLandAspect, List<TerrainLandAspect>> terrainParentMap = owner.getSlaveMap(TERRAIN_PARENT, Map.class);
+				terrainParentMap.computeIfAbsent(obj.getParent(), terrainLandAspect -> Lists.newArrayList()).add(obj);
+				if(obj.getParent() == null)
+					terrainParentMap.computeIfAbsent(obj, terrainLandAspect -> Lists.newArrayList()).add(obj);
+			}
+		}
+		
+		@Override
+		public void onClear(IForgeRegistryInternal<TerrainLandAspect> owner, RegistryManager stage)
+		{
+			owner.getSlaveMap(TERRAIN_PARENT, Map.class).clear();
+		}
+		
+		@Override
+		public void onCreate(IForgeRegistryInternal<TerrainLandAspect> owner, RegistryManager stage)
+		{
+			owner.setSlaveMap(TERRAIN_PARENT, Maps.newHashMap());
+		}
 	}
 	
-	
-	
+	private static class TitleCallbacks implements IForgeRegistry.AddCallback<TitleLandAspect>, IForgeRegistry.ClearCallback<TitleLandAspect>, IForgeRegistry.CreateCallback<TitleLandAspect>
+	{
+		private static final TitleCallbacks INSTANCE = new TitleCallbacks();
+		
+		@Override
+		public void onAdd(IForgeRegistryInternal<TitleLandAspect> owner, RegistryManager stage, int id, TitleLandAspect obj, @Nullable TitleLandAspect oldObj)
+		{
+			if(oldObj != null)
+			{
+				@SuppressWarnings("unchecked")
+				Map<TitleLandAspect, List<TitleLandAspect>> titleParentMap = owner.getSlaveMap(TITLE_PARENT, Map.class);
+				titleParentMap.getOrDefault(obj.getParent(), Collections.emptyList()).remove(oldObj);
+				titleParentMap.remove(oldObj);
+			}
+			
+			if(obj.canBePickedAtRandom())
+			{
+				@SuppressWarnings("unchecked")
+				Map<TitleLandAspect, List<TitleLandAspect>> titleParentMap = owner.getSlaveMap(TITLE_PARENT, Map.class);
+				titleParentMap.computeIfAbsent(obj.getParent(), titleLandAspect -> Lists.newArrayList()).add(obj);
+				if(obj.getParent() == null)
+					titleParentMap.computeIfAbsent(obj, titleLandAspect -> Lists.newArrayList()).add(obj);
+			}
+		}
+		
+		@Override
+		public void onClear(IForgeRegistryInternal<TitleLandAspect> owner, RegistryManager stage)
+		{
+			owner.getSlaveMap(TITLE_PARENT, Map.class).clear();
+		}
+		
+		@Override
+		public void onCreate(IForgeRegistryInternal<TitleLandAspect> owner, RegistryManager stage)
+		{
+			owner.setSlaveMap(TITLE_PARENT, Maps.newHashMap());
+		}
+	}
 }

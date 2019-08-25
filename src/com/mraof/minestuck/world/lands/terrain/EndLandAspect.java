@@ -17,10 +17,15 @@ import net.minecraft.world.biome.Biome;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LandAspectEnd extends TerrainLandAspect 
+public class EndLandAspect extends TerrainLandAspect
 {
-	static Vec3d fogColor = new Vec3d(0.0D, 0.4D, 0.2D);
-	static Vec3d skyColor = new Vec3d(0.3D, 0.1D, 0.5D);
+	private static final Vec3d fogColor = new Vec3d(0.0D, 0.4D, 0.2D);
+	private static final Vec3d skyColor = new Vec3d(0.3D, 0.1D, 0.5D);
+	
+	public EndLandAspect()
+	{
+		super(null);
+	}
 	
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
@@ -41,12 +46,6 @@ public class LandAspectEnd extends TerrainLandAspect
 		registry.setBlockState("village_fence", Blocks.NETHER_BRICK_FENCE.getDefaultState());
 		registry.setBlockState("structure_wool_1", Blocks.GREEN_WOOL.getDefaultState());
 		registry.setBlockState("structure_wool_3", Blocks.PURPLE_WOOL.getDefaultState());
-	}
-	
-	@Override
-	public String getPrimaryName()
-	{
-		return "end";
 	}
 	
 	@Override

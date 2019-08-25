@@ -18,10 +18,10 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome;
 
-public class LandAspectRain extends TerrainLandAspect 
+public class RainLandAspect extends TerrainLandAspect
 {
-	static Vec3d skyColor = new Vec3d(0.3D, 0.5D, 0.98D);
-	static Vec3d fogColor = new Vec3d(0.9D, 0.8D, 0.6D);
+	private static final Vec3d skyColor = new Vec3d(0.3D, 0.5D, 0.98D);
+	private static final Vec3d fogColor = new Vec3d(0.9D, 0.8D, 0.6D);
 	
 	//TODO:
 	//Pink stone brick temples		Monsters in these temples tend to guard living trees, Magic Beans, and Fertile Soil.
@@ -29,6 +29,12 @@ public class LandAspectRain extends TerrainLandAspect
 	//Custom dungeon loot
 	//Definitely nothing underwater
 	//Giant beanstalks? Maybe some Paper Mario reference here
+	
+	
+	public RainLandAspect()
+	{
+		super(null, false);
+	}
 	
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
@@ -48,12 +54,6 @@ public class LandAspectRain extends TerrainLandAspect
 		registry.setBlockState("bush", Blocks.DEAD_BUSH.getDefaultState());
 		registry.setBlockState("structure_wool_1", Blocks.YELLOW_WOOL.getDefaultState());
 		registry.setBlockState("structure_wool_3", Blocks.MAGENTA_WOOL.getDefaultState());
-	}
-	
-	@Override
-	public String getPrimaryName()
-	{
-		return "rain";
 	}
 	
 	@Override

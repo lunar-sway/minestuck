@@ -20,10 +20,15 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome;
 
-public class LandAspectFungi extends TerrainLandAspect 
+public class FungiLandAspect extends TerrainLandAspect
 {
-	static Vec3d fogColor = new Vec3d(0.69D, 0.76D, 0.61D);
-	static Vec3d skyColor = new Vec3d(0.69D, 0.76D, 0.61D);
+	private static final Vec3d fogColor = new Vec3d(0.69D, 0.76D, 0.61D);
+	private static final Vec3d skyColor = new Vec3d(0.69D, 0.76D, 0.61D);
+	
+	public FungiLandAspect()
+	{
+		super(null);
+	}
 	
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
@@ -43,12 +48,6 @@ public class LandAspectFungi extends TerrainLandAspect
 		registry.setBlockState("bush", Blocks.BROWN_MUSHROOM.getDefaultState());
 		registry.setBlockState("structure_wool_1", Blocks.LIME_WOOL.getDefaultState());
 		registry.setBlockState("structure_wool_3", Blocks.GRAY_WOOL.getDefaultState());
-	}
-	
-	@Override
-	public String getPrimaryName()
-	{
-		return "fungi";
 	}
 	
 	@Override

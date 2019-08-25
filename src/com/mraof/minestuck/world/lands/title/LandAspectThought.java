@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.lands.title;
 
+import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.decorator.structure.SmallLibraryDecorator;
@@ -12,11 +13,9 @@ import net.minecraft.util.math.Vec3d;
 
 public class LandAspectThought extends TitleLandAspect
 {
-	
-	@Override
-	public String getPrimaryName()
+	public LandAspectThought()
 	{
-		return "thought";
+		super(null, EnumAspect.MIND);
 	}
 	
 	@Override
@@ -31,12 +30,7 @@ public class LandAspectThought extends TitleLandAspect
 		worldProvider.mergeFogColor(new Vec3d(0.8, 0.3, 0.8), 0.8F);
 	}
 	
-	@Override
-	public void prepareChunkProvider(ChunkProviderLands chunkProvider)
-	{
-	}
-	
-	@Override
+	//@Override
 	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.oceanChance = Math.max(chunkProvider.oceanChance, 0.2F);

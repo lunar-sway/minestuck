@@ -1,6 +1,7 @@
 package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.decorator.PillarDecorator;
@@ -12,16 +13,14 @@ import net.minecraft.util.math.Vec3d;
 
 public class LandAspectLight extends TitleLandAspect
 {
+	public LandAspectLight()
+	{
+		super(null, EnumAspect.LIGHT);
+	}
 	
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
 		registry.setBlockState("slime", MinestuckBlocks.GLOWY_GOOP.getDefaultState());
-	}
-	
-	@Override
-	public String getPrimaryName()
-	{
-		return "light";
 	}
 	
 	@Override
@@ -37,12 +36,7 @@ public class LandAspectLight extends TitleLandAspect
 		worldProvider.mergeFogColor(new Vec3d(1, 1, 0.8), 0.5F);
 	}
 	
-	@Override
-	public void prepareChunkProvider(ChunkProviderLands chunkProvider)
-	{
-	}
-	
-	@Override
+	//@Override
 	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.ORANGE_WOOL.getDefaultState());

@@ -4,7 +4,6 @@ package com.mraof.minestuck.world.lands.terrain;
 import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
-import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.gen.LandGenSettings;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
@@ -16,30 +15,28 @@ import net.minecraft.world.biome.Biome;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LandAspectSand extends TerrainLandAspect
+public class SandLandAspect extends TerrainLandAspect
 {
 	private final Vec3d fogColor, skyColor;
 	private final Variant type;
-	private final List<TerrainLandAspect> variations;
 	
-	public LandAspectSand()
+	public static TerrainLandAspect[] createTypes()
 	{
-		this(Variant.SAND);
+		SandLandAspect parent = new SandLandAspect(Variant.SAND, null);
+		return new TerrainLandAspect[]{parent.setRegistryName("sand"),
+				new SandLandAspect(Variant.RED_SAND, parent).setRegistryName("red_sand"),
+				new SandLandAspect(Variant.LUSH_DESERTS, parent).setRegistryName("lush_deserts")};
 	}
 	
-	public LandAspectSand(Variant variation)
+	private SandLandAspect(Variant variation, SandLandAspect parent)
 	{
-		variations = new ArrayList<>();
+		super(parent);
 		type = variation;
 		
 		if(type == Variant.SAND)
 		{
 			fogColor = new Vec3d(0.99D, 0.8D, 0.05D);
 			skyColor = new Vec3d(0.8D, 0.8D, 0.1D);
-			
-			variations.add(this);
-			variations.add(new LandAspectSand(Variant.SAND_RED));
-			variations.add(new LandAspectSand(Variant.LUSH_DESERTS));
 		} else
 		{
 			fogColor = new Vec3d(0.99D, 0.6D, 0.05D);
@@ -78,12 +75,6 @@ public class LandAspectSand extends TerrainLandAspect
 		registry.setBlockState("structure_wool_3", Blocks.MAGENTA_WOOL.getDefaultState());
 	}
 	
-	@Override
-	public String getPrimaryName()
-	{
-		return type.getName();
-	}
-
 	@Override
 	public String[] getNames()
 	{
@@ -152,18 +143,6 @@ public class LandAspectSand extends TerrainLandAspect
 	}
 	
 	@Override
-	public List<TerrainLandAspect> getVariations()
-	{
-		return variations;
-	}
-	
-	@Override
-	public TerrainLandAspect getPrimaryVariant()
-	{
-		return LandAspectRegistry.fromNameTerrain("sand");
-	}
-	
-	@Override
 	public EntityType<? extends ConsortEntity> getConsortType()
 	{
 		return ModEntityTypes.TURTLE;
@@ -173,7 +152,7 @@ public class LandAspectSand extends TerrainLandAspect
 	{
 		SAND,
 		LUSH_DESERTS,
-		SAND_RED;
+		RED_SAND;
 		public String getName()
 		{
 			return this.toString().toLowerCase();

@@ -582,7 +582,7 @@ public class SburbHandler
 			if(c != connection && c.clientHomeLand != null)
 			{
 				LandAspects aspects = MinestuckDimensions.getAspects(mcServer, c.clientHomeLand);
-				if(aspects.aspectTitle == LandAspectRegistry.frogAspect)
+				if(aspects.aspectTitle == LandAspectRegistry.FROGS)
 					frogs = true;
 				usedTitleAspects.add(aspects.aspectTitle);
 				usedTerrainAspects.add(aspects.aspectTerrain);
@@ -594,7 +594,7 @@ public class SburbHandler
 			if(data.landTitle != null)
 			{
 				usedTitleAspects.add(data.landTitle);
-				if(data.landTitle == LandAspectRegistry.frogAspect)
+				if(data.landTitle == LandAspectRegistry.FROGS)
 					frogs = true;
 			}
 		}

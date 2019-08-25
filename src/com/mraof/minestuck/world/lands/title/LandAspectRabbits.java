@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.lands.title;
 
+import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.decorator.RabbitSpawner;
 import com.mraof.minestuck.world.lands.decorator.structure.RabbitHoleDecorator;
@@ -11,11 +12,9 @@ import net.minecraft.block.material.Material;
 
 public class LandAspectRabbits extends TitleLandAspect
 {
-	
-	@Override
-	public String getPrimaryName()
+	public LandAspectRabbits()
 	{
-		return "rabbits";
+		super(null, EnumAspect.LIFE);
 	}
 	
 	@Override
@@ -24,7 +23,7 @@ public class LandAspectRabbits extends TitleLandAspect
 		return new String[] {"rabbit", "bunny"};
 	}
 	
-	@Override
+	//@Override
 	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.PINK_WOOL.getDefaultState());

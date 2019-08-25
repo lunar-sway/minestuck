@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.lands.title;
 
+import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.decorator.structure.BucketDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
@@ -7,20 +8,18 @@ import net.minecraft.block.Blocks;
 
 public class LandAspectBuckets extends TitleLandAspect	//Yes, buckets
 {
-
-	@Override
-	public String getPrimaryName()
+	public LandAspectBuckets()
 	{
-		return "buckets";
+		super(null, EnumAspect.SPACE);
 	}
-
+	
 	@Override
 	public String[] getNames()
 	{
 		return new String[]{"bucket"};
 	}
 	
-	@Override
+	//@Override
 	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.BLUE_WOOL.getDefaultState());

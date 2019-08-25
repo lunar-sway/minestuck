@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.lands.title;
 
+import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.lands.decorator.SingleBlockDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
@@ -14,11 +15,9 @@ import java.util.Random;
 
 public class LandAspectSilence extends TitleLandAspect
 {
-	
-	@Override
-	public String getPrimaryName()
+	public LandAspectSilence()
 	{
-		return "silence";
+		super(null, EnumAspect.VOID);
 	}
 	
 	@Override
@@ -34,12 +33,7 @@ public class LandAspectSilence extends TitleLandAspect
 		worldProvider.mergeFogColor(new Vec3d(0, 0, 0.1), 0.5F);
 	}
 	
-	@Override
-	public void prepareChunkProvider(ChunkProviderLands chunkProvider)
-	{
-	}
-	
-	@Override
+	//@Override
 	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.BLACK_WOOL.getDefaultState());

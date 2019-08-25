@@ -18,9 +18,14 @@ import net.minecraft.world.biome.DefaultBiomeFeatures;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LandAspectFrost extends TerrainLandAspect
+public class FrostLandAspect extends TerrainLandAspect
 {
-	static Vec3d fogColor = new Vec3d(0.5D, 0.6D, 0.98D);
+	private static final Vec3d fogColor = new Vec3d(0.5D, 0.6D, 0.98D);
+	
+	public FrostLandAspect()
+	{
+		super(null);
+	}
 	
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
@@ -40,12 +45,6 @@ public class LandAspectFrost extends TerrainLandAspect
 		registry.setBlockState("bush", Blocks.FERN.getDefaultState());
 		registry.setBlockState("structure_wool_1", Blocks.WHITE_WOOL.getDefaultState());
 		registry.setBlockState("structure_wool_3", Blocks.CYAN_WOOL.getDefaultState());
-	}
-	
-	@Override
-	public String getPrimaryName()
-	{
-		return "frost";
 	}
 	
 	@Override

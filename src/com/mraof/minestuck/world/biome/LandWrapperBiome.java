@@ -25,4 +25,10 @@ public class LandWrapperBiome extends LandBiome
 		this.surfaceBuilder = new ConfiguredSurfaceBuilder<>(SurfaceBuilder.DEFAULT, surfaceConfig);
 		this.addSpawn(EntityClassification.CREATURE, new SpawnListEntry(settings.getLandAspects().aspectTerrain.getConsortType(), 2, 1, 10));
 	}
+	
+	@Override
+	public void addSpawn(EntityClassification classification, SpawnListEntry entry)
+	{
+		super.addSpawn(classification, entry);
+	}
 }

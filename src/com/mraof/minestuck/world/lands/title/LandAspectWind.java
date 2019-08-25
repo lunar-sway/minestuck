@@ -1,18 +1,19 @@
 package com.mraof.minestuck.world.lands.title;
 
+import com.mraof.minestuck.util.EnumAspect;
+import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.lands.decorator.RockDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.biome.Biome;
 
 public class LandAspectWind extends TitleLandAspect
 {
-	
-	@Override
-	public String getPrimaryName()
+	public LandAspectWind()
 	{
-		return "wind";
+		super(null, EnumAspect.BREATH);
 	}
 	
 	@Override
@@ -28,13 +29,13 @@ public class LandAspectWind extends TitleLandAspect
 	}
 	
 	@Override
-	public void prepareChunkProvider(ChunkProviderLands chunkProvider)
+	public void setBiomeSettings(LandBiomeHolder settings)
 	{
-		if(chunkProvider.weatherType == -1)
-			chunkProvider.weatherType = 0;
+		if(settings.rainType == Biome.RainType.NONE)
+			settings.rainType = Biome.RainType.RAIN;
 	}
 	
-	@Override
+	//@Override
 	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.LIGHT_BLUE_WOOL.getDefaultState());

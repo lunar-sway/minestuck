@@ -1,34 +1,35 @@
 package com.mraof.minestuck.world.lands;
 
-import java.util.List;
-
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.gen.LandGenSettings;
 import com.mraof.minestuck.world.lands.structure.IGateStructure;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
+import javax.annotation.Nullable;
+
 public interface ILandAspect<A extends ILandAspect>
 {
-	
-	/**
-	 * Returns a string that represents a unique name for a land, Used in saving and loading land data.
-	 * @return
-	 */
-	public String getPrimaryName();
-	
 	/**
 	 * Returns a list of strings used in giving a land a random name.
 	 */
-	public String[] getNames();
+	String[] getNames();
 	
-	public IGateStructure getGateStructure();
+	IGateStructure getGateStructure();
 	
-	@Deprecated
-	void prepareChunkProvider(ChunkProviderLands chunkProvider);
-	@Deprecated
-	void prepareChunkProviderServer(ChunkProviderLands chunkProvider);
+	boolean canBePickedAtRandom();
+	
+	@Nullable
+	A getParent();	//TODO had an idea of creating groups (perhaps identified by a string/resource location) to replace the parent system
+	
+	@SuppressWarnings("unchecked")
+	default A getParentOrThis()
+	{
+		A parent = this.getParent();
+		if(parent == null)
+			return (A) this;
+		else return parent;
+	}
 	
 	default void setBiomeSettings(LandBiomeHolder settings)
 	{}
@@ -38,8 +39,4 @@ public interface ILandAspect<A extends ILandAspect>
 	
 	default void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blockRegistry)
 	{}
-	
-	List<A> getVariations();
-	
-	A getPrimaryVariant();
 }

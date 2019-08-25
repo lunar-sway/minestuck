@@ -1,9 +1,13 @@
 package com.mraof.minestuck.world.lands.title;
 
+import com.mraof.minestuck.util.EnumAspect;
+import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
@@ -15,17 +19,18 @@ public class LandAspectMonsters extends TitleLandAspect
 {
 	
 	private final Variant type;
-	private final List<TitleLandAspect> variations;
 	private final List<SpawnListEntry> monsterList;
 	
-	public LandAspectMonsters()
+	public static TitleLandAspect[] createTypes()
 	{
-		this(Variant.MONSTERS);
+		LandAspectMonsters parent = new LandAspectMonsters(Variant.MONSTERS, null);
+		return new TitleLandAspect[]{parent.setRegistryName("monsters"),
+				new LandAspectMonsters(Variant.UNDEAD, parent).setRegistryName("undead")};
 	}
 	
-	public LandAspectMonsters(Variant type)
+	private LandAspectMonsters(Variant type, LandAspectMonsters parent)
 	{
-		this.variations = new ArrayList<>();
+		super(parent, EnumAspect.RAGE);
 		this.type = type;
 		this.monsterList = new ArrayList<>();
 		if(this.type == Variant.MONSTERS)
@@ -33,20 +38,12 @@ public class LandAspectMonsters extends TitleLandAspect
 			monsterList.add(new SpawnListEntry(EntityType.CREEPER, 1, 1, 1));
 			monsterList.add(new SpawnListEntry(EntityType.SPIDER, 1, 1, 2));
 			monsterList.add(new SpawnListEntry(EntityType.ZOMBIE, 1, 1, 2));
-			variations.add(this);
-			variations.add(new LandAspectMonsters(Variant.MONSTERS_DEAD));
 		}
-		else if(this.type == Variant.MONSTERS_DEAD)
+		else if(this.type == Variant.UNDEAD)
 		{
 			monsterList.add(new SpawnListEntry(EntityType.ZOMBIE, 2, 1, 3));
 			monsterList.add(new SpawnListEntry(EntityType.SKELETON, 1, 1, 2));
 		}
-	}
-	
-	@Override
-	public String getPrimaryName()
-	{
-		return type.getName();
 	}
 	
 	@Override
@@ -63,12 +60,13 @@ public class LandAspectMonsters extends TitleLandAspect
 	}
 	
 	@Override
-	public void prepareChunkProvider(ChunkProviderLands chunkProvider)
+	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blockRegistry)
 	{
-		chunkProvider.monsterList.addAll(this.monsterList);
+		for(SpawnListEntry entry : this.monsterList)
+			biome.addSpawn(EntityClassification.MONSTER, entry);
 	}
 	
-	@Override
+	//@Override
 	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.LIGHT_GRAY_WOOL.getDefaultState());
@@ -77,25 +75,9 @@ public class LandAspectMonsters extends TitleLandAspect
 			chunkProvider.blockRegistry.setBlockState("torch", Blocks.REDSTONE_TORCH.getDefaultState());
 	}
 	
-	@Override
-	public List<TitleLandAspect> getVariations()
-	{
-		return variations;
-	}
-	
-	@Override
-	public TitleLandAspect getPrimaryVariant()
-	{
-		return LandAspectRegistry.fromNameTitle("monsters");
-	}
-	
 	public enum Variant
 	{
 		MONSTERS,
-		MONSTERS_DEAD;
-		public String getName()
-		{
-			return this.toString().toLowerCase();
-		}
+		UNDEAD;
 	}
 }

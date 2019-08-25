@@ -68,7 +68,6 @@ public class CommonProxy
 		MinestuckLoot.registerLootClasses();
 		
 		ModBiomes.init();
-		LandAspectRegistry.registerLandAspects();
 		ConsortDialogue.init();
 		
 		KindAbstratusList.registerTypes();

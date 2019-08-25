@@ -1,16 +1,12 @@
 package com.mraof.minestuck.world.lands.title;
 
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-
 public class LandAspectNull extends TitleLandAspect
 {
-	
-	@Override
-	public String getPrimaryName()
+	public LandAspectNull()
 	{
-		return "null";
+		super(null, null, false);
 	}
-
+	
 	@Override
 	public String[] getNames()
 	{

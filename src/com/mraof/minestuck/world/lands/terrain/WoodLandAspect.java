@@ -17,9 +17,14 @@ import net.minecraft.util.math.Vec3d;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LandAspectWood extends TerrainLandAspect 
+public class WoodLandAspect extends TerrainLandAspect
 {
-	static Vec3d fogColor = new Vec3d(0.0D, 0.16D, 0.38D);
+	private static final Vec3d fogColor = new Vec3d(0.0D, 0.16D, 0.38D);
+	
+	public WoodLandAspect()
+	{
+		super(null);
+	}
 	
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
@@ -42,12 +47,6 @@ public class LandAspectWood extends TerrainLandAspect
 		registry.setBlockState("structure_wool_3", Blocks.GREEN_WOOL.getDefaultState());
 	}
 	
-	@Override
-	public String getPrimaryName()
-	{
-		return "wood";
-	}
-
 	@Override
 	public String[] getNames() {
 		return new String[] {"wood","oak","lumber"};
