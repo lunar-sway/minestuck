@@ -4,7 +4,6 @@ import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.command.*;
-import com.mraof.minestuck.config.OreGenConfig;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.event.ServerEventHandler;
@@ -61,8 +60,8 @@ public class Minestuck
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::postSetup);
 		//ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.GUIFACTORY, () -> GuiHandler::provideGuiContainer);
 		
-		//com.mraof.minestuck.config.MinestuckConfig.loadConfig(com.mraof.minestuck.config.MinestuckConfig.client_config, FMLPaths.CONFIGDIR.get().resolve("tutorialmod-client.toml").toString());
-		com.mraof.minestuck.config.MinestuckConfig.loadConfig(com.mraof.minestuck.config.MinestuckConfig.server_config, FMLPaths.CONFIGDIR.get().resolve("Minestuck.toml").toString());
+		MinestuckConfig.loadConfig(MinestuckConfig.client_config, FMLPaths.CONFIGDIR.get().resolve("Minestuck-client.toml").toString());
+		MinestuckConfig.loadConfig(MinestuckConfig.server_config, FMLPaths.CONFIGDIR.get().resolve("Minestuck.toml").toString());
 		
 		MinecraftForge.EVENT_BUS.register(this);
 	}
@@ -75,7 +74,7 @@ public class Minestuck
 		
 		//(new UpdateChecker()).start();
 		
-		com.mraof.minestuck.config.MinestuckConfig.setConfigVariables();
+		MinestuckConfig.setConfigVariables();
 		CommonProxy.init();
 	}
 	
@@ -97,7 +96,6 @@ public class Minestuck
 	public void serverAboutToStart(FMLServerAboutToStartEvent event)
 	{
 		isServerRunning = true;
-		DeployList.applyConfigValues(new boolean[] {true, OreGenConfig.uranium_endgen.get()});
 	}
 	
 	@SubscribeEvent
@@ -115,9 +113,9 @@ public class Minestuck
 		//if(!event.getServer().isDedicatedServer() && Minestuck.class.getAnnotation(Mod.class).version().startsWith("@")) TODO Find an alternative to detect dev environment
 			event.getServer().setOnlineMode(false);	//Makes it possible to use LAN in a development environment
 		
-		if(!event.getServer().isServerInOnlineMode() && MinestuckConfig.useUUID)
+		if(!event.getServer().isServerInOnlineMode() && MinestuckConfig.useUUID.get())
 			Debug.warn("Because uuids might not be consistent in an offline environment, it is not recommended to use uuids for minestuck. You should disable uuidIdentification in the minestuck config.");
-		if(event.getServer().isServerInOnlineMode() && !MinestuckConfig.useUUID)
+		if(event.getServer().isServerInOnlineMode() && !MinestuckConfig.useUUID.get())
 			Debug.warn("Because users may change their usernames, it is normally recommended to use uuids for minestuck. You should enable uuidIdentification in the minestuck config.");
 		
 		CommandCheckLand.register(event.getCommandDispatcher());

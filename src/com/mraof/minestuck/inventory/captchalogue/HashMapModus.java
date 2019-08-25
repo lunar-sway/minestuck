@@ -148,7 +148,7 @@ public class HashMapModus extends Modus
 	@Override
 	public boolean increaseSize(ServerPlayerEntity player)
 	{
-		if(MinestuckConfig.modusMaxSize > 0 && list.size() >= MinestuckConfig.modusMaxSize)
+		if(MinestuckConfig.modusMaxSize.get() > 0 && list.size() >= MinestuckConfig.modusMaxSize.get())
 			return false;
 		
 		list.add(ItemStack.EMPTY);

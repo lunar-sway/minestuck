@@ -89,7 +89,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 			}
 			GristSet cost = AlchemyCostRegistry.getGristConversion(newItem);
 			if(newItem.getItem() == MinestuckItems.CAPTCHA_CARD)
-				cost = new GristSet(wildcardGrist, MinestuckConfig.cardCost);
+				cost = new GristSet(wildcardGrist, MinestuckConfig.cardCost.get());
 			
 			return GristHelper.canAfford(PlayerSavedData.get(world).getGristSet(this.owner), cost);
 		}
@@ -122,7 +122,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 		
 		GristSet cost = AlchemyCostRegistry.getGristConversion(newItem);
 		if (newItem.getItem() == MinestuckItems.CAPTCHA_CARD)
-			cost = new GristSet(wildcardGrist, MinestuckConfig.cardCost);
+			cost = new GristSet(wildcardGrist, MinestuckConfig.cardCost.get());
 		GristHelper.decrease(world, owner, cost);
 		MinestuckPlayerTracker.updateGristCache(world.getServer(), owner);
 	}
@@ -198,7 +198,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 			}
 			GristSet cost = AlchemyCostRegistry.getGristConversion(newItem);
 			if (newItem.getItem() == MinestuckItems.CAPTCHA_CARD)
-				cost = new GristSet(wildcardGrist, MinestuckConfig.cardCost);
+				cost = new GristSet(wildcardGrist, MinestuckConfig.cardCost.get());
 			// We need to run the check 16 times. Don't want to hammer the game with too many of these, so the comparators are only told to update every 20 ticks.
 			// Additionally, we need to check if the item in the slot is empty. Otherwise, it will attempt to check the cost for air, which cannot be alchemized anyway.
 			if (cost != null && !getStackInSlot(0).isEmpty())

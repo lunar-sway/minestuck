@@ -25,7 +25,7 @@ import java.util.Random;
 
 public class GristHelper {
 	private static Random random = new Random();
-	private static final boolean SHOULD_OUTPUT_GRIST_CHANGES = MinestuckConfig.showGristChanges;
+	private static final boolean SHOULD_OUTPUT_GRIST_CHANGES = MinestuckConfig.showGristChanges.get();
 	
 	public static HashMap<GristType, ArrayList<GristType>> secondaryGristMap;
 

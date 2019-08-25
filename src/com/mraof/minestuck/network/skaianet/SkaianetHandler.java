@@ -378,7 +378,7 @@ public class SkaianetHandler extends WorldSavedData
 			return;
 		}
 		OpEntry opsEntry = player.getServer().getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
-		if(MinestuckConfig.privateComputers && !p0.equals(p1) && !(opsEntry != null && opsEntry.getPermissionLevel() >= 2))
+		if(MinestuckConfig.privateComputers.get() && !p0.equals(p1) && !(opsEntry != null && opsEntry.getPermissionLevel() >= 2))
 		{
 			player.sendMessage(new StringTextComponent("[Minestuck] ").setStyle(new Style().setColor(TextFormatting.RED)).appendSibling(new TranslationTextComponent("message.privateComputerMessage")));
 			return;
@@ -576,7 +576,7 @@ public class SkaianetHandler extends WorldSavedData
 	
 	private void checkData()
 	{
-		if(!MinestuckConfig.skaianetCheck)
+		if(!MinestuckConfig.skaianetCheck.get())
 			return;
 		
 		Iterator<PlayerIdentifier> iter0 = infoToSend.keySet().iterator();
@@ -666,7 +666,7 @@ public class SkaianetHandler extends WorldSavedData
 			}
 		}
 		
-		if(MinestuckConfig.privateComputers)
+		if(MinestuckConfig.privateComputers.get())
 		{
 			for(Entry<PlayerIdentifier,PlayerIdentifier[]> entry : infoToSend.entrySet())
 			{

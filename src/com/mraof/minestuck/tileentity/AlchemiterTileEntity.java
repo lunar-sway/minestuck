@@ -387,7 +387,7 @@ public class AlchemiterTileEntity extends TileEntity
 	{
 		ItemStack newItem = getOutput();
 		//Clamp quantity
-		quantity = Math.min(newItem.getMaxStackSize() * MinestuckConfig.alchemiterMaxStacks, Math.max(1, quantity));
+		quantity = Math.min(newItem.getMaxStackSize() * MinestuckConfig.alchemiterMaxStacks.get(), Math.max(1, quantity));
 		
 		Direction facing = world.getBlockState(pos).get(AlchemiterBlock.FACING);
 		//get the position to spawn the item
@@ -446,7 +446,7 @@ public class AlchemiterTileEntity extends TileEntity
 		//if the item is a captcha card do other stuff
 		useSelectedType = stack.getItem() == MinestuckItems.CAPTCHA_CARD;
 		if (useSelectedType)
-			set = new GristSet(getWildcardGrist(), !world.isRemote ? MinestuckConfig.cardCost : MinestuckConfig.clientCardCost);
+			set = new GristSet(getWildcardGrist(), !world.isRemote ? MinestuckConfig.cardCost.get() : MinestuckConfig.clientCardCost);
 		
 		if (set != null)
 		{

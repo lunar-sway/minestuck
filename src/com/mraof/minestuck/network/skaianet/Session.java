@@ -167,7 +167,7 @@ public class Session
 		
 		locked = nbt.getBoolean("locked");
 		
-		checkIfCompleted(MinestuckConfig.globalSession);
+		checkIfCompleted(MinestuckConfig.globalSession.get());
 		return this;
 	}
 	

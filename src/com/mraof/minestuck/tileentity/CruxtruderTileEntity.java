@@ -51,7 +51,7 @@ public class CruxtruderTileEntity extends TileEntity
 		{
 			BlockPos pos = getPos().up();
 			BlockState state = getWorld().getBlockState(pos);
-			if(top && MinestuckConfig.cruxtruderIntake && state.isAir(getWorld(), pos) && material < 64 && material > -1)
+			if(top && MinestuckConfig.cruxtruderIntake.get() && state.isAir(getWorld(), pos) && material < 64 && material > -1)
 			{
 				ItemStack stack = player.getHeldItemMainhand();
 				if(stack.getItem() != MinestuckItems.RAW_CRUXITE)
@@ -71,7 +71,7 @@ public class CruxtruderTileEntity extends TileEntity
 					CruxiteDowelBlock.dropDowel(getWorld(), pos);
 				} else if(state.isAir(getWorld(), pos))
 				{
-					if(MinestuckConfig.cruxtruderIntake && material == 0)
+					if(MinestuckConfig.cruxtruderIntake.get() && material == 0)
 					{
 						world.playEvent(1001, pos, 0);
 					} else

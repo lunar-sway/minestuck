@@ -62,7 +62,7 @@ public class IdentifierHandler {
 			if(identifier.appliesTo(player))
 				return identifier;
 		PlayerIdentifier identifier;
-		if(MinestuckConfig.useUUID)
+		if(MinestuckConfig.useUUID.get())
 			identifier = new PlayerIdentifier(player.getGameProfile().getId());
 		else identifier = new PlayerIdentifier(usernameEncode(player.getName().getString()));
 		identifier.id = nextIdentifierId;
@@ -82,12 +82,12 @@ public class IdentifierHandler {
 		if(".null".equals(identifier.username))
 			return nullIdentifier;
 		
-		List<PlayerIdentifier> list = MinestuckConfig.useUUID == identifier.useUUID ? identifierList : identifiersToChange;
+		List<PlayerIdentifier> list = MinestuckConfig.useUUID.get() == identifier.useUUID ? identifierList : identifiersToChange;
 		
 		for(PlayerIdentifier id : list)
 			if(id.equals(identifier))
 				return id;
-		if(MinestuckConfig.useUUID != identifier.useUUID)
+		if(MinestuckConfig.useUUID.get() != identifier.useUUID)
 		{
 			/*EntityPlayer player = identifier.getPlayer();
 			if(player != null) TODO
@@ -108,7 +108,7 @@ public class IdentifierHandler {
 			
 			if(identifier.appliesTo(player))
 			{
-				identifier.useUUID = MinestuckConfig.useUUID;
+				identifier.useUUID = MinestuckConfig.useUUID.get();
 				if(identifier.useUUID)
 					identifier.uuid = player.getGameProfile().getId();
 				else identifier.username = usernameEncode(player.getName().getString());
