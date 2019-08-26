@@ -14,6 +14,7 @@ import com.mraof.minestuck.world.storage.loot.MinestuckLoot;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
@@ -441,7 +442,7 @@ public class ConsortDialogue
 	{
 		Set<TitleLandAspect> set = new HashSet<>(TITLE_REGISTRY.getValues());
 		for(TitleLandAspect exceptedAspect : aspects)
-			set.removeIf(aspect -> aspect.getParentOrThis() == exceptedAspect);
+			set.removeIf(aspect -> aspect.getGroup().equals(exceptedAspect.getGroup()));
 		
 		return set.toArray(new TitleLandAspect[0]);
 	}
@@ -458,9 +459,9 @@ public class ConsortDialogue
 				continue;
 			if(message.consortRequirement != null && !message.consortRequirement.contains(consort.getConsortType()))
 				continue;
-			if(message.aspect1Requirement != null && aspects != null && !message.aspect1Requirement.contains(aspects.aspectTerrain.getParentOrThis()))
+			if(message.aspect1Requirement != null && aspects != null && !message.aspect1Requirement.contains(aspects.aspectTerrain.getGroup()))
 				continue;
-			if(message.aspect2Requirement != null && aspects != null && !message.aspect2Requirement.contains(aspects.aspectTitle.getParentOrThis()))
+			if(message.aspect2Requirement != null && aspects != null && !message.aspect2Requirement.contains(aspects.aspectTitle.getGroup()))
 				continue;
 			if(message.aspect1RequirementS != null && aspects != null && !message.aspect1RequirementS.contains(aspects.aspectTerrain))
 				continue;
@@ -496,8 +497,8 @@ public class ConsortDialogue
 		
 		private MessageType messageStart;
 		
-		private Set<TerrainLandAspect> aspect1Requirement;
-		private Set<TitleLandAspect> aspect2Requirement;
+		private Set<ResourceLocation> aspect1Requirement;
+		private Set<ResourceLocation> aspect2Requirement;
 		private Set<TerrainLandAspect> aspect1RequirementS;
 		private Set<TitleLandAspect> aspect2RequirementS;
 		private EnumSet<EnumConsort> consortRequirement;
@@ -512,25 +513,24 @@ public class ConsortDialogue
 		
 		public DialogueWrapper landTerrain(TerrainLandAspect... aspects)
 		{
-			for(TerrainLandAspect aspect : aspects)
-				if(aspect == null)
-				{
-					Debug.warn("Land aspect is null for consort message " + messageStart.getString() + ", this is probably not intended");
-					break;
-				}
+			if(isAnyNull(aspects))
+				Debug.warnf("Land aspect is null for consort message %s, this is probably not intended", messageStart.getString());
 			reqLand = true;
-			aspect1Requirement = Sets.newHashSet(aspects);
+			aspect1Requirement = Sets.newHashSet();
+			for(TerrainLandAspect aspect : aspects)
+			{
+				if(aspect != null)
+					aspect1Requirement.add(aspect.getGroup());
+			}
+			
 			return this;
 		}
 		
 		public DialogueWrapper landTerrainSpecific(TerrainLandAspect... aspects)
 		{
-			for(TerrainLandAspect aspect : aspects)
-				if(aspect == null)
-				{
-					Debug.warn("Land aspect is null for consort message " + messageStart.getString() + ", this is probably not intended");
-					break;
-				}
+			
+			if(isAnyNull(aspects))
+				Debug.warnf("Land aspect is null for consort message %s, this is probably not intended", messageStart.getString());
 			reqLand = true;
 			aspect1RequirementS = Sets.newHashSet(aspects);
 			return this;
@@ -538,25 +538,20 @@ public class ConsortDialogue
 		
 		public DialogueWrapper landTitle(TitleLandAspect... aspects)
 		{
-			for(TitleLandAspect aspect : aspects)
-				if(aspect == null)
-				{
-					Debug.warn("Land aspect is null for consort message " + messageStart.getString() + ", this is probably not intended");
-					break;
-				}
+			if(isAnyNull(aspects))
+				Debug.warnf("Land aspect is null for consort message %s, this is probably not intended", messageStart.getString());
 			reqLand = true;
-			aspect2Requirement = Sets.newHashSet(aspects);
+			aspect2Requirement = Sets.newHashSet();
+			for(TitleLandAspect aspect : aspects)
+				if(aspect != null)
+					aspect2Requirement.add(aspect.getGroup());
 			return this;
 		}
 		
 		public DialogueWrapper landTitleSpecific(TitleLandAspect... aspects)
 		{
-			for(TitleLandAspect aspect : aspects)
-				if(aspect == null)
-				{
-					Debug.warn("Land aspect is null for consort message " + messageStart.getString() + ", this is probably not intended");
-					break;
-				}
+			if(isAnyNull(aspects))
+				Debug.warnf("Land aspect is null for consort message %s, this is probably not intended", messageStart.getString());
 			reqLand = true;
 			aspect2RequirementS = Sets.newHashSet(aspects);
 			return this;
@@ -594,6 +589,16 @@ public class ConsortDialogue
 		{
 			return messageStart.getString();
 		}
+	}
+	
+	private static boolean isAnyNull(Object[] objects)
+	{
+		for(Object obj : objects)
+		{
+			if(obj == null)
+				return true;
+		}
+		return false;
 	}
 	
 	public interface ConsortRequirement
