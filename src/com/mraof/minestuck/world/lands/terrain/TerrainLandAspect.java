@@ -7,7 +7,6 @@ import com.mraof.minestuck.world.lands.ILandAspect;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.structure.GateStructurePillar;
 import com.mraof.minestuck.world.lands.structure.IGateStructure;
-import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
@@ -43,9 +42,6 @@ public abstract class TerrainLandAspect extends ForgeRegistryEntry<TerrainLandAs
 	@Deprecated
 	public List<ILandDecorator> getDecorators(){return null;}
 	
-	/**
-	 * @return
-	 */
 	public float getSkylightBase()
 	{
 		return 1F;
@@ -61,12 +57,6 @@ public abstract class TerrainLandAspect extends ForgeRegistryEntry<TerrainLandAs
 	public Vec3d getSkyColor()
 	{
 		return new Vec3d(0, 0, 0);
-	}
-	
-	@Deprecated
-	public float getTemperature()
-	{
-		return 0.7F;
 	}
 	
 	@Override

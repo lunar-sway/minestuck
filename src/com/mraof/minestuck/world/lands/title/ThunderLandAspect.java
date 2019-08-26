@@ -2,6 +2,7 @@ package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
+import com.mraof.minestuck.world.lands.LandAspects;
 import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
@@ -53,7 +54,8 @@ public class ThunderLandAspect extends TitleLandAspect
 	@Override
 	public boolean isAspectCompatible(TerrainLandAspect aspect)
 	{
-		return aspect.getTemperature() >= 0.2;
+		LandBiomeHolder biomeSettings = new LandBiomeHolder(new LandAspects(aspect, this), true);
+		return biomeSettings.rainType != Biome.RainType.SNOW;
 	}
 	
 }
