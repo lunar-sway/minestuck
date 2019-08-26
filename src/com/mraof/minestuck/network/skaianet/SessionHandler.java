@@ -50,8 +50,8 @@ public class SessionHandler
 	
 	void onLoad()
 	{
-		singleSession = MinestuckConfig.globalSession;
-		if(!MinestuckConfig.globalSession) {
+		singleSession = MinestuckConfig.globalSession.get();
+		if(!MinestuckConfig.globalSession.get()) {
 			split();
 		} else
 		{
@@ -184,7 +184,7 @@ public class SessionHandler
 	 */
 	void split()
 	{
-		if(MinestuckConfig.globalSession || sessions.size() != 1)
+		if(MinestuckConfig.globalSession.get() || sessions.size() != 1)
 			return;
 		
 		Session s = sessions.get(0);
@@ -261,7 +261,7 @@ public class SessionHandler
 					break;
 				}
 		
-		return cClient != null && sClient == sServer && (MinestuckConfig.allowSecondaryConnections || cClient == cServer)	//Reconnect within session
+		return cClient != null && sClient == sServer && (MinestuckConfig.allowSecondaryConnections.get() || cClient == cServer)	//Reconnect within session
 				|| cClient == null && !serverActive && !(sClient != null && sClient.locked) && !(sServer != null && sServer.locked);	//Connect with a new player and potentially create a main connection
 	}
 	

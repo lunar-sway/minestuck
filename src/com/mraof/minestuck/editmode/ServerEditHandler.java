@@ -221,7 +221,7 @@ public class ServerEditHandler
 			return;
 		
 		SburbConnection c = data.connection;
-		int range = MinestuckDimensions.isLandDimension(player.dimension) ? MinestuckConfig.landEditRange : MinestuckConfig.overworldEditRange;
+		int range = MinestuckDimensions.isLandDimension(player.dimension) ? MinestuckConfig.landEditRange.get() : MinestuckConfig.overworldEditRange.get();
 		
 		updateInventory(player, c.givenItems(), c);
 		updatePosition(player, range, c.centerX, c.centerZ);
@@ -331,7 +331,7 @@ public class ServerEditHandler
 			EditData data = getData(event.getPlayer());
 			BlockState block = event.getWorld().getBlockState(event.getPos());
 			if(block.getBlockHardness(event.getWorld(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
-					|| (GristHelper.getGrist(event.getEntity().world, data.connection.getClientIdentifier(), GristType.BUILD) <= 0 && !MinestuckConfig.gristRefund))
+					|| (GristHelper.getGrist(event.getEntity().world, data.connection.getClientIdentifier(), GristType.BUILD) <= 0 && !MinestuckConfig.gristRefund.get()))
 				event.setCanceled(true);
 		}
 	}
@@ -351,7 +351,7 @@ public class ServerEditHandler
 		if(!event.getEntity().world.isRemote && getData(event.getPlayer()) != null)
 		{
 			EditData data = getData(event.getPlayer());
-			if(!MinestuckConfig.gristRefund)
+			if(!MinestuckConfig.gristRefund.get())
 				GristHelper.decrease(event.getWorld(), data.connection.getClientIdentifier(), new GristSet(GristType.BUILD, 1));
 			else
 			{

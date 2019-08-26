@@ -70,7 +70,7 @@ public class MinestuckPlayerTracker
 			Modus modus = CaptchaDeckHandler.createModus(new ResourceLocation(MinestuckConfig.defaultModusTypes[index]), LogicalSide.SERVER);
 			if(modus != null)
 			{
-				modus.initModus(player, null, MinestuckConfig.initialModusSize);
+				modus.initModus(player, null, MinestuckConfig.initialModusSize.get());
 				CaptchaDeckHandler.setModus(player, modus);
 			} else Debug.warnf("Couldn't create a modus by the name %s.", MinestuckConfig.defaultModusTypes[index]);
 		}
@@ -186,7 +186,7 @@ public class MinestuckPlayerTracker
 	public static void updateEcheladder(ServerPlayerEntity player, boolean jump)
 	{
 		Echeladder echeladder = PlayerSavedData.getData(player).echeladder;
-		PlayerDataPacket packet = PlayerDataPacket.echeladder(echeladder.getRung(), MinestuckConfig.echeladderProgress ? echeladder.getProgress() : 0F, jump);
+		PlayerDataPacket packet = PlayerDataPacket.echeladder(echeladder.getRung(), MinestuckConfig.echeladderProgress.get() ? echeladder.getProgress() : 0F, jump);
 		MinestuckPacketHandler.sendToPlayer(packet, player);
 	}
 	

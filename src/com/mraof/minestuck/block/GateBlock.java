@@ -178,7 +178,7 @@ public class GateBlock extends Block
 	@Override
 	public float getExplosionResistance(BlockState state, IWorldReader world, BlockPos pos, @Nullable Entity exploder, Explosion explosion)
 	{
-		if(this instanceof ReturnNodeBlock || MinestuckConfig.canBreakGates)
+		if(this instanceof ReturnNodeBlock || MinestuckConfig.canBreakGates.get())
 			return super.getExplosionResistance(state, world, pos, exploder, explosion);
 		else return 3600000.0F;
 	}

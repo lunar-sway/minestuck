@@ -36,10 +36,10 @@ public class ModConfigPacket
 	public ModConfigPacket()
 	{
 		mode = true;
-		overWorldEditRange = MinestuckConfig.overworldEditRange;
-		landEditRange = MinestuckConfig.landEditRange;
+		overWorldEditRange = MinestuckConfig.overworldEditRange.get();
+		landEditRange = MinestuckConfig.landEditRange.get();
 		//windowIdStart = ContainerHandler.windowIdStart;
-		giveItems = MinestuckConfig.giveItems;
+		giveItems = MinestuckConfig.giveItems.get();
 		hardMode = MinestuckConfig.hardMode;
 		
 		deployValues = Arrays.copyOf(MinestuckConfig.deployConfigurations, MinestuckConfig.deployConfigurations.length);
@@ -52,13 +52,13 @@ public class ModConfigPacket
 	public ModConfigPacket(boolean dataChecker)
 	{
 		mode = false;
-		cardCost = MinestuckConfig.cardCost;
-		alchemiterStacks = MinestuckConfig.alchemiterMaxStacks;
-		disableGristWidget = MinestuckConfig.disableGristWidget;
+		cardCost = MinestuckConfig.cardCost.get();
+		alchemiterStacks = MinestuckConfig.alchemiterMaxStacks.get();
+		disableGristWidget = MinestuckConfig.disableGristWidget.get();
 		treeModusSetting = MinestuckConfig.treeModusSetting;
 		hashmapModusSetting = MinestuckConfig.hashmapChatModusSetting;
 		this.dataChecker = dataChecker;
-		preEntryEcheladder = MinestuckConfig.preEntryRungLimit <= 0;
+		preEntryEcheladder = MinestuckConfig.preEntryRungLimit.get() <= 0;
 	}
 	
 	public void encode(PacketBuffer buffer)

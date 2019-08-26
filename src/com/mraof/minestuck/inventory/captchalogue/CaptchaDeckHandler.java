@@ -77,7 +77,7 @@ public class CaptchaDeckHandler
 			{
 				PlayerSavedData.PlayerData data = PlayerSavedData.getData(player);
 				modus = type.create(LogicalSide.SERVER);
-				modus.initModus(player, null, data.givenModus ? 0 : MinestuckConfig.initialModusSize);
+				modus.initModus(player, null, data.givenModus ? 0 : MinestuckConfig.initialModusSize.get());
 				data.givenModus = true;
 				setModus(player, modus);
 				container.inventory.setInventorySlotContents(0, ItemStack.EMPTY);
@@ -345,9 +345,9 @@ public class CaptchaDeckHandler
 		
 		NonNullList<ItemStack> stacks = modus.getItems();
 		int size = modus.getSize();
-		int cardsToKeep = MinestuckConfig.sylladexDropMode == 2 ? 0 : MinestuckConfig.initialModusSize;
+		int cardsToKeep = MinestuckConfig.sylladexDropMode == 2 ? 0 : MinestuckConfig.initialModusSize.get();
 		
-		if(!MinestuckConfig.dropItemsInCards || MinestuckConfig.sylladexDropMode == 0)
+		if(!MinestuckConfig.dropItemsInCards.get() || MinestuckConfig.sylladexDropMode == 0)
 		{
 			for(ItemStack stack : stacks)
 				if(!stack.isEmpty())

@@ -35,13 +35,13 @@ public class OreHandler implements IWorldGenerator
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, ChunkGenerator chunkGenerator, AbstractChunkProvider chunkProvider)
 	{
-		if(world.getDimension().isSurfaceWorld() && (generateCruxiteOre || chunkGenerator instanceof LandChunkGenerator) && !disableCruxite)
+		if(world.getDimension().isSurfaceWorld() && (generateCruxiteOre.get() || chunkGenerator instanceof LandChunkGenerator) && !disableCruxite)
 		{
 			this.addOreSpawn(STONE_CRUXITE_ORE.getDefaultState(), world, random, chunkX * 16, chunkZ * 16, 16, 16,
 					baseCruxiteVeinSize + random.nextInt(bonusCruxiteVeinSize), cruxiteVeinsPerChunk, cruxiteStratumMin, cruxiteStratumMax);
 		}
 		
-		if(world.getDimension().isSurfaceWorld() && (generateUraniumOre || chunkGenerator instanceof LandChunkGenerator) && !disableUranium)
+		if(world.getDimension().isSurfaceWorld() && (generateUraniumOre.get() || chunkGenerator instanceof LandChunkGenerator) && !disableUranium)
 		{
 			this.addOreSpawn(STONE_URANIUM_ORE.getDefaultState(), world, random, chunkX * 16, chunkZ * 16, 16, 16,
 					baseUraniumVeinSize + random.nextInt(bonusUraniumVeinSize), uraniumVeinsPerChunk, uraniumStratumMin, uraniumStratumMax);

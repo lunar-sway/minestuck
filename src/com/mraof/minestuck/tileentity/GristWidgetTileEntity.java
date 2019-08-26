@@ -112,7 +112,7 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 	@Override
 	public boolean contentsValid()
 	{
-		if(MinestuckConfig.disableGristWidget)
+		if(MinestuckConfig.disableGristWidget.get())
 			return false;
 		if(world.isBlockPowered(this.getPos()))
 			return false;

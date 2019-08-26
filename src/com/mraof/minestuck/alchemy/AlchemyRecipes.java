@@ -188,7 +188,7 @@ public class AlchemyRecipes
 		AlchemyCostRegistry.addGristConversion(Items.DRAGON_BREATH, new GristSet(new GristType[] {GristType.RUBY, GristType.SULFUR}, new int[] {4, 13}));
 		
 		//Ores
-		if(oreMultiplier != 0)
+		if(oreMultiplier.get() != 0)
 		{
 			/*AlchemyCostRegistry.addGristConversion("oreCoal", new GristSet(new GristType[] {GristType.BUILD, GristType.TAR}, new int[] {4, 8*oreMultiplier}));	TODO Block tags
 			AlchemyCostRegistry.addGristConversion("oreIron", new GristSet(new GristType[] {GristType.BUILD, GristType.RUST}, new int[] {4, 9*oreMultiplier}));
@@ -349,7 +349,7 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(Items.QUARTZ, Blocks.STONE, MODE_OR, new ItemStack(Blocks.QUARTZ_BLOCK));
 		CombinationRegistry.addCombination(Items.REDSTONE, Blocks.STONE, MODE_OR, new ItemStack(Blocks.REDSTONE_BLOCK));
 		
-		if(oreMultiplier != 0)
+		if(oreMultiplier.get() != 0)
 		{
 			CombinationRegistry.addCombination(Items.COAL, Blocks.STONE, MODE_AND, new ItemStack(Blocks.COAL_ORE));
 			CombinationRegistry.addCombination(Items.DIAMOND, Blocks.STONE, MODE_AND, new ItemStack(Blocks.DIAMOND_ORE));
@@ -845,7 +845,7 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(SURPRISE_EMBRYO, GRIMOIRE, MODE_OR, new ItemStack(UNKNOWABLE_EGG));
 		CombinationRegistry.addCombination(Blocks.NOTE_BLOCK, GRIMOIRE, MODE_AND, new ItemStack(LONG_FORGOTTEN_WARHORN));
 		
-		if(oreMultiplier != 0)
+		if(oreMultiplier.get() != 0)
 		{
 			CombinationRegistry.addCombination(Items.COAL, Blocks.NETHERRACK, MODE_AND, new ItemStack(NETHERRACK_COAL_ORE));
 			CombinationRegistry.addCombination(Items.IRON_INGOT, Blocks.END_STONE, MODE_AND, new ItemStack(END_STONE_IRON_ORE));

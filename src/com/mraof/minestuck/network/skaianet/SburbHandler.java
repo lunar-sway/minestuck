@@ -54,7 +54,7 @@ public class SburbHandler
 	{
 		if(PlayerSavedData.get(world).getTitle(player) != null)
 		{
-			if(!MinestuckConfig.playerSelectedTitle)
+			if(!MinestuckConfig.playerSelectedTitle.get())
 				Debug.warnf("Trying to generate a title for %s when a title is already assigned!", player.getUsername());
 			
 			return PlayerSavedData.get(world).getTitle(player);
@@ -62,7 +62,7 @@ public class SburbHandler
 		
 		Session session = SessionHandler.get(world).getPlayerSession(player);
 		if(session == null)
-			if(MinestuckConfig.playerSelectedTitle)
+			if(MinestuckConfig.playerSelectedTitle.get())
 				session = new Session();
 			else
 			{
@@ -662,7 +662,7 @@ public class SburbHandler
 			list.add(new SpawnListEntry(ModEntityTypes.BASILISK, basiliskWeight, 1, Math.max(1, basiliskWeight/2)));
 		if(lichWeight > 0)
 			list.add(new SpawnListEntry(ModEntityTypes.LICH, lichWeight, 1, Math.max(1, lichWeight/2)));
-		if(giclopsWeight > 0 && !MinestuckConfig.disableGiclops)
+		if(giclopsWeight > 0 && !MinestuckConfig.disableGiclops.get())
 			list.add(new SpawnListEntry(ModEntityTypes.GICLOPS, giclopsWeight, 1, Math.max(1, giclopsWeight/2)));
 		
 		difficultyList[difficulty] = list;
@@ -721,7 +721,7 @@ public class SburbHandler
 	
 	public static boolean shouldEnterNow(ServerPlayerEntity player)
 	{
-		if(!MinestuckConfig.playerSelectedTitle)
+		if(!MinestuckConfig.playerSelectedTitle.get())
 			return true;
 		
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
@@ -744,7 +744,7 @@ public class SburbHandler
 	
 	public static void titleSelected(ServerPlayerEntity player, Title title)
 	{
-		if(MinestuckConfig.playerSelectedTitle && titleSelectionMap.containsKey(player))
+		if(MinestuckConfig.playerSelectedTitle.get() && titleSelectionMap.containsKey(player))
 		{
 			PlayerIdentifier identifier = IdentifierHandler.encode(player);
 			Session s = SessionHandler.get(player.world).getPlayerSession(identifier);

@@ -64,7 +64,7 @@ public class Echeladder
 	public void increaseProgress(int exp)
 	{
 		SburbConnection c = SkaianetHandler.get(mcServer).getMainConnection(identifier, true);
-		int topRung = c != null && c.hasEntered() ? RUNG_COUNT - 1 : MinestuckConfig.preEntryRungLimit;
+		int topRung = c != null && c.hasEntered() ? RUNG_COUNT - 1 : MinestuckConfig.preEntryRungLimit.get();
 		int expReq = getRungProgressReq();
 		if(rung >= topRung || exp < expReq*MIN_PROGRESS_MODIFIER)
 			return;

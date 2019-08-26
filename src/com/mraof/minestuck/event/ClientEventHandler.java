@@ -49,7 +49,7 @@ public class ClientEventHandler
 			if(ColorCollector.displaySelectionGui && Minecraft.getInstance().currentScreen == null)
 			{
 				ColorCollector.displaySelectionGui = false;
-				if(MinestuckConfig.loginColorSelector)
+				if(MinestuckConfig.loginColorSelector.get())
 					Minecraft.getInstance().displayGuiScreen(new ColorSelectorScreen(true));
 			}
 			
