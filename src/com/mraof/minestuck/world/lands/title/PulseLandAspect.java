@@ -12,11 +12,11 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.math.Vec3d;
 
-public class LandAspectPulse extends TitleLandAspect
+public class PulseLandAspect extends TitleLandAspect
 {
-	public LandAspectPulse()
+	public PulseLandAspect()
 	{
-		super(null, EnumAspect.BLOOD);
+		super(EnumAspect.BLOOD);
 	}
 	
 	@Override

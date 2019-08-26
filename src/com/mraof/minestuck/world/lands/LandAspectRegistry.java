@@ -31,14 +31,14 @@ import java.util.function.Predicate;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class LandAspectRegistry
 {
-	private static final ResourceLocation TERRAIN_PARENT = new ResourceLocation(Minestuck.MOD_ID, "terrain_parent_map");
-	private static final ResourceLocation TITLE_PARENT = new ResourceLocation(Minestuck.MOD_ID, "title_parent_map");
+	private static final ResourceLocation TERRAIN_GROUP = new ResourceLocation(Minestuck.MOD_ID, "terrain_group_map");
+	private static final ResourceLocation TITLE_GROUP = new ResourceLocation(Minestuck.MOD_ID, "title_group_map");
 	
 	public static IForgeRegistry<TerrainLandAspect> TERRAIN_REGISTRY;
 	public static IForgeRegistry<TitleLandAspect> TITLE_REGISTRY;
 	
-	private static Map<TerrainLandAspect, List<TerrainLandAspect>> terrainParentMap;
-	private static Map<TitleLandAspect, List<TitleLandAspect>> titleParentMap;
+	private static Map<ResourceLocation, List<TerrainLandAspect>> terrainGroupMap;
+	private static Map<ResourceLocation, List<TitleLandAspect>> titleGroupMap;
 	
 	public static final TerrainLandAspect FORESTS = getNull();
 	public static final TerrainLandAspect FROST = getNull();
@@ -89,13 +89,13 @@ public class LandAspectRegistry
 				.setType(TerrainLandAspect.class)
 				.addCallback(TerrainCallbacks.INSTANCE)
 				.create();
-		terrainParentMap = TERRAIN_REGISTRY.getSlaveMap(TERRAIN_PARENT, Map.class);
+		terrainGroupMap = TERRAIN_REGISTRY.getSlaveMap(TERRAIN_GROUP, Map.class);
 		TITLE_REGISTRY = new RegistryBuilder<TitleLandAspect>()
 				.setName(new ResourceLocation(Minestuck.MOD_ID, "title_land_aspect"))
 				.setType(TitleLandAspect.class)
 				.addCallback(TitleCallbacks.INSTANCE)
 				.create();
-		titleParentMap = TITLE_REGISTRY.getSlaveMap(TITLE_PARENT, Map.class);
+		titleGroupMap = TITLE_REGISTRY.getSlaveMap(TITLE_GROUP, Map.class);
 	}
 
 	@SubscribeEvent
@@ -104,13 +104,18 @@ public class LandAspectRegistry
 	{
 		IForgeRegistry<TerrainLandAspect> registry = event.getRegistry();
 		
-		registry.registerAll(ForestLandAspect.createTypes());
+		registry.register(new ForestLandAspect(ForestLandAspect.Variant.FOREST).setRegistryName("forest"));
+		registry.register(new ForestLandAspect(ForestLandAspect.Variant.TAIGA).setRegistryName("taiga"));
 		registry.register(new FrostLandAspect().setRegistryName("frost"));
 		registry.register(new FungiLandAspect().setRegistryName("fungi"));
 		registry.register(new HeatLandAspect().setRegistryName("heat"));
-		registry.registerAll(RockLandAspect.createTypes());
-		registry.registerAll(SandLandAspect.createTypes());
-		registry.registerAll(SandstoneLandAspect.createTypes());
+		registry.register(new RockLandAspect(RockLandAspect.Variant.ROCK).setRegistryName("rock"));
+		registry.register(new RockLandAspect(RockLandAspect.Variant.PETRIFICATION).setRegistryName("petrification"));
+		registry.register(new SandLandAspect(SandLandAspect.Variant.SAND).setRegistryName("sand"));
+		registry.register(new SandLandAspect(SandLandAspect.Variant.RED_SAND).setRegistryName("red_sand"));
+		registry.register(new SandLandAspect(SandLandAspect.Variant.LUSH_DESERTS).setRegistryName("lush_deserts"));
+		registry.register(new SandstoneLandAspect(SandstoneLandAspect.Variant.SANDSTONE).setRegistryName("sandstone"));
+		registry.register(new SandstoneLandAspect(SandstoneLandAspect.Variant.RED_SANDSTONE).setRegistryName("red_sandstone"));
 		registry.register(new ShadeLandAspect().setRegistryName("shade"));
 		registry.register(new WoodLandAspect().setRegistryName("wood"));
 		registry.register(new RainbowLandAspect().setRegistryName("rainbow"));
@@ -125,20 +130,21 @@ public class LandAspectRegistry
 	{
 		IForgeRegistry<TitleLandAspect> registry = event.getRegistry();
 		
-		registry.register(new LandAspectNull().setRegistryName("null"));
-		registry.register(new LandAspectFrogs().setRegistryName("frogs"));
-		registry.register(new LandAspectWind().setRegistryName("wind"));
-		registry.register(new LandAspectLight().setRegistryName("light"));
-		registry.register(new LandAspectClockwork().setRegistryName("clockwork"));
-		registry.register(new LandAspectSilence().setRegistryName("silence"));
-		registry.register(new LandAspectThunder().setRegistryName("thunder"));
-		registry.register(new LandAspectPulse().setRegistryName("pulse"));
-		registry.register(new LandAspectThought().setRegistryName("thought"));
-		registry.register(new LandAspectBuckets().setRegistryName("buckets"));
-		registry.register(new LandAspectCake().setRegistryName("cake"));
-		registry.register(new LandAspectRabbits().setRegistryName("rabbits"));
-		registry.registerAll(LandAspectMonsters.createTypes());
-		registry.register(new LandAspectTowers().setRegistryName("towers"));
+		registry.register(new NullLandAspect().setRegistryName("null"));
+		registry.register(new FrogsLandAspect().setRegistryName("frogs"));
+		registry.register(new WindLandAspect().setRegistryName("wind"));
+		registry.register(new LightLandAspect().setRegistryName("light"));
+		registry.register(new ClockworkLandAspect().setRegistryName("clockwork"));
+		registry.register(new SilenceLandAspect().setRegistryName("silence"));
+		registry.register(new ThunderLandAspect().setRegistryName("thunder"));
+		registry.register(new PulseLandAspect().setRegistryName("pulse"));
+		registry.register(new ThoughtLandAspect().setRegistryName("thought"));
+		registry.register(new BucketsLandAspect().setRegistryName("buckets"));
+		registry.register(new CakeLandAspect().setRegistryName("cake"));
+		registry.register(new RabbitsLandAspect().setRegistryName("rabbits"));
+		registry.register(new MonstersLandAspect(MonstersLandAspect.Variant.MONSTERS).setRegistryName("monsters"));
+		registry.register(new MonstersLandAspect(MonstersLandAspect.Variant.UNDEAD).setRegistryName("undead"));
+		registry.register(new TowersLandAspect().setRegistryName("towers"));
 	}
 	
 	public LandAspectRegistry(long seed)
@@ -152,7 +158,7 @@ public class LandAspectRegistry
 	 */
 	public TerrainLandAspect getTerrainAspect(TitleLandAspect aspect2, List<TerrainLandAspect> usedAspects)
 	{
-		TerrainLandAspect aspect = selectRandomAspect(usedAspects, terrainParentMap, aspect2::isAspectCompatible);
+		TerrainLandAspect aspect = selectRandomAspect(usedAspects, terrainGroupMap, aspect2::isAspectCompatible);
 		if(aspect != null)
 			return aspect;
 		else throw new IllegalStateException("No land aspect is compatible with the title aspect "+aspect2.getRegistryName()+"!");
@@ -163,34 +169,34 @@ public class LandAspectRegistry
 		TitleLandAspect landAspect;
 		if(aspectTerrain != null)
 		{
-			landAspect = selectRandomAspect(usedAspects, titleParentMap, aspect -> aspect.getType() == titleAspect && aspect.isAspectCompatible(aspectTerrain));
+			landAspect = selectRandomAspect(usedAspects, titleGroupMap, aspect -> aspect.getType() == titleAspect && aspect.isAspectCompatible(aspectTerrain));
 			if(landAspect == null)
 			{
 				Debug.warnf("Failed to find a title land aspect compatible with land aspect \"%s\". Forced to use a poorly compatible land aspect instead.", aspectTerrain.getRegistryName());
-				landAspect = selectRandomAspect(usedAspects, titleParentMap, aspect -> aspect.getType() == titleAspect);
+				landAspect = selectRandomAspect(usedAspects, titleGroupMap, aspect -> aspect.getType() == titleAspect);
 			}
-		} else landAspect = selectRandomAspect(usedAspects, titleParentMap, aspect -> aspect.getType() == titleAspect);
+		} else landAspect = selectRandomAspect(usedAspects, titleGroupMap, aspect -> aspect.getType() == titleAspect);
 		
 		if(landAspect != null)
 			return landAspect;
 		else return TITLE_NULL;
 	}
 	
-	private <A extends ILandAspect> A selectRandomAspect(List<A> usedAspects, Map<A, List<A>> parentMap, Predicate<A> condition)
+	private <A extends ILandAspect> A selectRandomAspect(List<A> usedAspects, Map<ResourceLocation, List<A>> groupMap, Predicate<A> condition)
 	{
 		List<List<A>> list = Lists.newArrayList();
-		for(A aspect : parentMap.getOrDefault(null, Collections.emptyList()))
+		for(List<A> aspects : groupMap.values())
 		{
-			List<A> variantList = Lists.newArrayList(parentMap.getOrDefault(aspect, Collections.emptyList()));
+			List<A> variantList = Lists.newArrayList(aspects);
 			variantList.removeIf(condition.negate());
 			if(!variantList.isEmpty())
 				list.add(variantList);
 		}
 		
-		List<A> variantList = pickOneFromUsage(list, usedAspects, (variants, used) -> variants.get(0).getParentOrThis().equals(used.getParentOrThis()));
-		if(variantList == null)
+		List<A> groupList = pickOneFromUsage(list, usedAspects, (variants, used) -> variants.get(0).getGroup().equals(used.getGroup()));
+		if(groupList == null)
 			return null;
-		return pickOneFromUsage(variantList, usedAspects, Object::equals);
+		return pickOneFromUsage(groupList, usedAspects, Object::equals);
 	}
 	
 	private <A extends ILandAspect, B> B pickOneFromUsage(List<B> list, List<A> usedAspects, BiPredicate<B, A> matchPredicate)
@@ -273,31 +279,30 @@ public class LandAspectRegistry
 			if(oldObj != null)
 			{
 				@SuppressWarnings("unchecked")
-				Map<TerrainLandAspect, List<TerrainLandAspect>> terrainParentMap = owner.getSlaveMap(TERRAIN_PARENT, Map.class);
-				terrainParentMap.getOrDefault(obj.getParent(), Collections.emptyList()).remove(oldObj);
-				terrainParentMap.remove(oldObj);
+				Map<ResourceLocation, List<TerrainLandAspect>> terrainGroupMap = owner.getSlaveMap(TERRAIN_GROUP, Map.class);
+				terrainGroupMap.getOrDefault(oldObj.getGroup(), Collections.emptyList()).remove(oldObj);
+				if(terrainGroupMap.containsKey(oldObj.getGroup()) && terrainGroupMap.get(oldObj.getGroup()).isEmpty())
+					terrainGroupMap.remove(oldObj.getGroup());
 			}
 			
 			if(obj.canBePickedAtRandom())
 			{
 				@SuppressWarnings("unchecked")
-				Map<TerrainLandAspect, List<TerrainLandAspect>> terrainParentMap = owner.getSlaveMap(TERRAIN_PARENT, Map.class);
-				terrainParentMap.computeIfAbsent(obj.getParent(), terrainLandAspect -> Lists.newArrayList()).add(obj);
-				if(obj.getParent() == null)
-					terrainParentMap.computeIfAbsent(obj, terrainLandAspect -> Lists.newArrayList()).add(obj);
+				Map<ResourceLocation, List<TerrainLandAspect>> terrainGroupMap = owner.getSlaveMap(TERRAIN_GROUP, Map.class);
+				terrainGroupMap.computeIfAbsent(obj.getGroup(), terrainLandAspect -> Lists.newArrayList()).add(obj);
 			}
 		}
 		
 		@Override
 		public void onClear(IForgeRegistryInternal<TerrainLandAspect> owner, RegistryManager stage)
 		{
-			owner.getSlaveMap(TERRAIN_PARENT, Map.class).clear();
+			owner.getSlaveMap(TERRAIN_GROUP, Map.class).clear();
 		}
 		
 		@Override
 		public void onCreate(IForgeRegistryInternal<TerrainLandAspect> owner, RegistryManager stage)
 		{
-			owner.setSlaveMap(TERRAIN_PARENT, Maps.newHashMap());
+			owner.setSlaveMap(TERRAIN_GROUP, Maps.newHashMap());
 		}
 	}
 	
@@ -311,31 +316,30 @@ public class LandAspectRegistry
 			if(oldObj != null)
 			{
 				@SuppressWarnings("unchecked")
-				Map<TitleLandAspect, List<TitleLandAspect>> titleParentMap = owner.getSlaveMap(TITLE_PARENT, Map.class);
-				titleParentMap.getOrDefault(obj.getParent(), Collections.emptyList()).remove(oldObj);
-				titleParentMap.remove(oldObj);
+				Map<ResourceLocation, List<TitleLandAspect>> titleGroupMap = owner.getSlaveMap(TITLE_GROUP, Map.class);
+				titleGroupMap.getOrDefault(oldObj.getGroup(), Collections.emptyList()).remove(oldObj);
+				if(titleGroupMap.containsKey(oldObj.getGroup()) && titleGroupMap.get(oldObj.getGroup()).isEmpty())
+					titleGroupMap.remove(oldObj.getGroup());
 			}
 			
 			if(obj.canBePickedAtRandom())
 			{
 				@SuppressWarnings("unchecked")
-				Map<TitleLandAspect, List<TitleLandAspect>> titleParentMap = owner.getSlaveMap(TITLE_PARENT, Map.class);
-				titleParentMap.computeIfAbsent(obj.getParent(), titleLandAspect -> Lists.newArrayList()).add(obj);
-				if(obj.getParent() == null)
-					titleParentMap.computeIfAbsent(obj, titleLandAspect -> Lists.newArrayList()).add(obj);
+				Map<ResourceLocation, List<TitleLandAspect>> titleGroupMap = owner.getSlaveMap(TITLE_GROUP, Map.class);
+				titleGroupMap.computeIfAbsent(obj.getGroup(), titleLandAspect -> Lists.newArrayList()).add(obj);
 			}
 		}
 		
 		@Override
 		public void onClear(IForgeRegistryInternal<TitleLandAspect> owner, RegistryManager stage)
 		{
-			owner.getSlaveMap(TITLE_PARENT, Map.class).clear();
+			owner.getSlaveMap(TITLE_GROUP, Map.class).clear();
 		}
 		
 		@Override
 		public void onCreate(IForgeRegistryInternal<TitleLandAspect> owner, RegistryManager stage)
 		{
-			owner.setSlaveMap(TITLE_PARENT, Maps.newHashMap());
+			owner.setSlaveMap(TITLE_GROUP, Maps.newHashMap());
 		}
 	}
 }

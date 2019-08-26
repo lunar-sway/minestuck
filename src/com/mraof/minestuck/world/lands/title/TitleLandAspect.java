@@ -5,29 +5,36 @@ import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.lands.ILandAspect;
 import com.mraof.minestuck.world.lands.structure.IGateStructure;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 
 public abstract class TitleLandAspect extends ForgeRegistryEntry<TitleLandAspect> implements ILandAspect<TitleLandAspect>
 {
-	private final TitleLandAspect parent;
+	private final ResourceLocation groupName;
 	private final EnumAspect aspectType;
 	private final boolean pickedAtRandom;
 	
-	protected TitleLandAspect(TitleLandAspect parent, EnumAspect aspectType)
+	protected TitleLandAspect(EnumAspect aspectType)
 	{
-		this(parent, aspectType, true);
+		this(aspectType, null, true);
 	}
 	
-	protected TitleLandAspect(TitleLandAspect parent, EnumAspect aspectType, boolean pickedAtRandom)
+	protected TitleLandAspect(EnumAspect aspectType, boolean pickedAtRandom)
 	{
-		if(parent != null && parent.getParent() != null)
-			throw new IllegalArgumentException("Provided parent landspect is actually a child!");
-		if(parent != null && parent.getType() != aspectType)
-			throw new IllegalArgumentException("Should not create a child land aspect to a different aspect type than the parent");
-		this.parent = parent;
+		this(aspectType, null, pickedAtRandom);
+	}
+	
+	protected TitleLandAspect(EnumAspect aspectType, ResourceLocation groupName)
+	{
+		this(aspectType, groupName, true);
+	}
+	
+	protected TitleLandAspect(EnumAspect aspectType, ResourceLocation groupName, boolean pickedAtRandom)
+	{
 		this.aspectType = aspectType;
+		this.groupName = groupName;
 		this.pickedAtRandom = pickedAtRandom;
 	}
 	
@@ -42,11 +49,12 @@ public abstract class TitleLandAspect extends ForgeRegistryEntry<TitleLandAspect
 		return pickedAtRandom;
 	}
 	
-	@Nullable
 	@Override
-	public TitleLandAspect getParent()
+	public ResourceLocation getGroup()
 	{
-		return parent;
+		if(groupName == null)
+			return this.getRegistryName();
+		else return groupName;
 	}
 	
 	@Nullable

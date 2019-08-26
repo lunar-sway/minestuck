@@ -5,10 +5,10 @@ import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.lands.gen.LandGenSettings;
 import com.mraof.minestuck.world.lands.structure.IGateStructure;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 
-import javax.annotation.Nullable;
-
-public interface ILandAspect<A extends ILandAspect>
+public interface ILandAspect<A extends ILandAspect> extends IForgeRegistryEntry<A>
 {
 	/**
 	 * Returns a list of strings used in giving a land a random name.
@@ -19,17 +19,7 @@ public interface ILandAspect<A extends ILandAspect>
 	
 	boolean canBePickedAtRandom();
 	
-	@Nullable
-	A getParent();	//TODO had an idea of creating groups (perhaps identified by a string/resource location) to replace the parent system
-	
-	@SuppressWarnings("unchecked")
-	default A getParentOrThis()
-	{
-		A parent = this.getParent();
-		if(parent == null)
-			return (A) this;
-		else return parent;
-	}
+	ResourceLocation getGroup();
 	
 	default void setBiomeSettings(LandBiomeHolder settings)
 	{}

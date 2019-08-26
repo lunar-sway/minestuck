@@ -6,11 +6,11 @@ import com.mraof.minestuck.world.lands.decorator.structure.BucketDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import net.minecraft.block.Blocks;
 
-public class LandAspectBuckets extends TitleLandAspect	//Yes, buckets
+public class BucketsLandAspect extends TitleLandAspect	//Yes, buckets
 {
-	public LandAspectBuckets()
+	public BucketsLandAspect()
 	{
-		super(null, EnumAspect.SPACE);
+		super(EnumAspect.SPACE);
 	}
 	
 	@Override

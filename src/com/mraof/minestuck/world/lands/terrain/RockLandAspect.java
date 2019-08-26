@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.lands.terrain;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
@@ -15,6 +16,7 @@ import com.mraof.minestuck.world.lands.gen.LandGenSettings;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome;
 
@@ -23,18 +25,12 @@ import java.util.List;
 
 public class RockLandAspect extends TerrainLandAspect
 {
+	public static final ResourceLocation GROUP_NAME = new ResourceLocation(Minestuck.MOD_ID, "rock");
 	private final Variant type;
 	
-	public static TerrainLandAspect[] createTypes()
+	public RockLandAspect(Variant variation)
 	{
-		RockLandAspect parent = new RockLandAspect(Variant.ROCK, null);
-		return new TerrainLandAspect[]{parent.setRegistryName("rock"),
-				new RockLandAspect(Variant.PETRIFICATION, parent).setRegistryName("petrification")};
-	}
-	
-	private RockLandAspect(Variant variation, RockLandAspect parent)
-	{
-		super(parent);
+		super(GROUP_NAME);
 		type = variation;
 	}
 

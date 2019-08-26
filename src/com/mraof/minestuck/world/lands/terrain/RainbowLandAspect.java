@@ -27,7 +27,7 @@ public class RainbowLandAspect extends TerrainLandAspect
 	
 	public RainbowLandAspect()
 	{
-		super(null);
+		super();
 	}
 	
 	@Override

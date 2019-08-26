@@ -15,11 +15,11 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-public class LandAspectCake extends TitleLandAspect
+public class CakeLandAspect extends TitleLandAspect
 {
-	public LandAspectCake()
+	public CakeLandAspect()
 	{
-		super(null, EnumAspect.HEART);
+		super(EnumAspect.HEART);
 	}
 	
 	@Override

@@ -1,10 +1,10 @@
 package com.mraof.minestuck.world.lands.title;
 
-public class LandAspectNull extends TitleLandAspect
+public class NullLandAspect extends TitleLandAspect
 {
-	public LandAspectNull()
+	public NullLandAspect()
 	{
-		super(null, null, false);
+		super(null, false);
 	}
 	
 	@Override

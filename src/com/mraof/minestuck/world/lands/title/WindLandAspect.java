@@ -9,11 +9,11 @@ import net.minecraft.block.Blocks;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome;
 
-public class LandAspectWind extends TitleLandAspect
+public class WindLandAspect extends TitleLandAspect
 {
-	public LandAspectWind()
+	public WindLandAspect()
 	{
-		super(null, EnumAspect.BREATH);
+		super(EnumAspect.BREATH);
 	}
 	
 	@Override

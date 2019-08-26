@@ -11,11 +11,11 @@ import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.Vec3d;
 
-public class LandAspectLight extends TitleLandAspect
+public class LightLandAspect extends TitleLandAspect
 {
-	public LandAspectLight()
+	public LightLandAspect()
 	{
-		super(null, EnumAspect.LIGHT);
+		super(EnumAspect.LIGHT);
 	}
 	
 	public void registerBlocks(StructureBlockRegistry registry)

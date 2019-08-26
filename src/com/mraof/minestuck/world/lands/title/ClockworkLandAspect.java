@@ -7,11 +7,11 @@ import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.Vec3d;
 
-public class LandAspectClockwork extends TitleLandAspect
+public class ClockworkLandAspect extends TitleLandAspect
 {
-	public LandAspectClockwork()
+	public ClockworkLandAspect()
 	{
-		super(null, EnumAspect.TIME);
+		super(EnumAspect.TIME);
 	}
 	
 	@Override

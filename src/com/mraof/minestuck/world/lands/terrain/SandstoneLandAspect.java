@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.lands.terrain;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
@@ -9,6 +10,7 @@ import com.mraof.minestuck.world.lands.gen.LandGenSettings;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.*;
 import net.minecraft.entity.EntityType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome;
 
@@ -17,20 +19,13 @@ import java.util.List;
 
 public class SandstoneLandAspect extends TerrainLandAspect
 {
-	
+	public static final ResourceLocation GROUP_NAME = new ResourceLocation(Minestuck.MOD_ID, "sandstone");
 	private final Vec3d fogColor, skyColor;
 	private final Variant type;
 	
-	public static TerrainLandAspect[] createTypes()
+	public SandstoneLandAspect(Variant type)
 	{
-		SandstoneLandAspect parent = new SandstoneLandAspect(Variant.SANDSTONE, null);
-		return new TerrainLandAspect[]{parent.setRegistryName("sandstone"),
-				new SandstoneLandAspect(Variant.RED_SANDSTONE, parent).setRegistryName("red_sandstone")};
-	}
-	
-	private SandstoneLandAspect(Variant type, SandstoneLandAspect parent)
-	{
-		super(parent);
+		super(GROUP_NAME);
 		this.type = type;
 		if(type == Variant.SANDSTONE)
 		{

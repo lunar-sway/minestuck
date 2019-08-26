@@ -1,36 +1,30 @@
 package com.mraof.minestuck.world.lands.title;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.lands.LandDimension;
-import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class LandAspectMonsters extends TitleLandAspect
+public class MonstersLandAspect extends TitleLandAspect
 {
-	
+	public static final ResourceLocation GROUP_NAME = new ResourceLocation(Minestuck.MOD_ID, "monsters");
 	private final Variant type;
 	private final List<SpawnListEntry> monsterList;
 	
-	public static TitleLandAspect[] createTypes()
+	public MonstersLandAspect(Variant type)
 	{
-		LandAspectMonsters parent = new LandAspectMonsters(Variant.MONSTERS, null);
-		return new TitleLandAspect[]{parent.setRegistryName("monsters"),
-				new LandAspectMonsters(Variant.UNDEAD, parent).setRegistryName("undead")};
-	}
-	
-	private LandAspectMonsters(Variant type, LandAspectMonsters parent)
-	{
-		super(parent, EnumAspect.RAGE);
+		super(EnumAspect.RAGE, GROUP_NAME);
 		this.type = type;
 		this.monsterList = new ArrayList<>();
 		if(this.type == Variant.MONSTERS)
@@ -78,6 +72,6 @@ public class LandAspectMonsters extends TitleLandAspect
 	public enum Variant
 	{
 		MONSTERS,
-		UNDEAD;
+		UNDEAD
 	}
 }

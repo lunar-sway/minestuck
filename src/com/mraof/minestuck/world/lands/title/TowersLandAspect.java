@@ -7,11 +7,11 @@ import com.mraof.minestuck.world.lands.decorator.structure.BasicTowerDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import net.minecraft.block.Blocks;
 
-public class LandAspectTowers extends TitleLandAspect
+public class TowersLandAspect extends TitleLandAspect
 {
-	public LandAspectTowers()
+	public TowersLandAspect()
 	{
-		super(null, EnumAspect.HOPE);
+		super(EnumAspect.HOPE);
 	}
 	
 	@Override

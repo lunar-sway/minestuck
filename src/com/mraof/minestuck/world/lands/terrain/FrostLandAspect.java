@@ -24,7 +24,7 @@ public class FrostLandAspect extends TerrainLandAspect
 	
 	public FrostLandAspect()
 	{
-		super(null);
+		super();
 	}
 	
 	@Override

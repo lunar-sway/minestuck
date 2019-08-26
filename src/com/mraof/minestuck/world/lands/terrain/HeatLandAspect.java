@@ -21,7 +21,7 @@ public class HeatLandAspect extends TerrainLandAspect
 	
 	public HeatLandAspect()
 	{
-		super(null);
+		super();
 	}
 	
 	@Override

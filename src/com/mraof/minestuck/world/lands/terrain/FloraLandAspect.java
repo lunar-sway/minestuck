@@ -36,7 +36,7 @@ public class FloraLandAspect extends TerrainLandAspect
 	
 	public FloraLandAspect()
 	{
-		super(null);
+		super();
 	}
 	
 	@Override

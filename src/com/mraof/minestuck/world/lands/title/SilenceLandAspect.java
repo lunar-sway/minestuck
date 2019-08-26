@@ -13,11 +13,11 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-public class LandAspectSilence extends TitleLandAspect
+public class SilenceLandAspect extends TitleLandAspect
 {
-	public LandAspectSilence()
+	public SilenceLandAspect()
 	{
-		super(null, EnumAspect.VOID);
+		super(EnumAspect.VOID);
 	}
 	
 	@Override

@@ -27,7 +27,7 @@ public class FungiLandAspect extends TerrainLandAspect
 	
 	public FungiLandAspect()
 	{
-		super(null);
+		super();
 	}
 	
 	@Override

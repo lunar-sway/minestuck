@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.lands.terrain;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
@@ -10,6 +11,7 @@ import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.DefaultBiomeFeatures;
@@ -22,18 +24,12 @@ import net.minecraft.world.gen.placement.Placement;
 
 public class ForestLandAspect extends TerrainLandAspect
 {
+	public static final ResourceLocation GROUP_NAME = new ResourceLocation(Minestuck.MOD_ID, "forest");
 	private final Variant type;
 	
-	public static TerrainLandAspect[] createTypes()
+	public ForestLandAspect(Variant variation)
 	{
-		ForestLandAspect parent = new ForestLandAspect(Variant.FOREST, null);
-		return new TerrainLandAspect[]{parent.setRegistryName("forest"),
-				new ForestLandAspect(Variant.TAIGA, parent).setRegistryName("taiga")};
-	}
-	
-	private ForestLandAspect(Variant variation, ForestLandAspect parent)
-	{
-		super(parent);
+		super(GROUP_NAME);
 		type = variation;
 	}
 	
@@ -142,10 +138,6 @@ public class ForestLandAspect extends TerrainLandAspect
 	public enum Variant
 	{
 		FOREST,
-		TAIGA;
-		public String getName()
-		{
-			return this.toString().toLowerCase();
-		}
+		TAIGA
 	}
 }

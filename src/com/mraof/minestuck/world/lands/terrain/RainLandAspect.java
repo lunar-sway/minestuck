@@ -33,7 +33,7 @@ public class RainLandAspect extends TerrainLandAspect
 	
 	public RainLandAspect()
 	{
-		super(null, false);
+		super(false);
 	}
 	
 	@Override

@@ -24,7 +24,7 @@ public class EndLandAspect extends TerrainLandAspect
 	
 	public EndLandAspect()
 	{
-		super(null);
+		super();
 	}
 	
 	@Override

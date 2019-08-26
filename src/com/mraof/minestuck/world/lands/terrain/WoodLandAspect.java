@@ -23,7 +23,7 @@ public class WoodLandAspect extends TerrainLandAspect
 	
 	public WoodLandAspect()
 	{
-		super(null);
+		super();
 	}
 	
 	@Override

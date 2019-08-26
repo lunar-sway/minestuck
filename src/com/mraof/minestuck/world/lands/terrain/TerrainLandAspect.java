@@ -10,26 +10,33 @@ import com.mraof.minestuck.world.lands.structure.IGateStructure;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
 import net.minecraft.entity.EntityType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
-import javax.annotation.Nullable;
-
 public abstract class TerrainLandAspect extends ForgeRegistryEntry<TerrainLandAspect> implements ILandAspect<TerrainLandAspect>
 {
-	private final TerrainLandAspect parent;
+	private final ResourceLocation groupName;
 	private final boolean pickedAtRandom;
 	
-	protected TerrainLandAspect(TerrainLandAspect parent)
+	protected TerrainLandAspect()
 	{
-		this(parent, true);
+		this(null, true);
 	}
 	
-	protected TerrainLandAspect(TerrainLandAspect parent, boolean pickedAtRandom)
+	protected TerrainLandAspect(boolean pickedAtRandom)
 	{
-		if(parent != null && parent.getParent() != null)
-			throw new IllegalArgumentException("Provided parent landspect is actually a child!");
-		this.parent = parent;
+		this(null, pickedAtRandom);
+	}
+	
+	protected TerrainLandAspect(ResourceLocation groupName)
+	{
+		this(groupName, true);
+	}
+	
+	protected TerrainLandAspect(ResourceLocation groupName, boolean pickedAtRandom)
+	{
+		this.groupName = groupName;
 		this.pickedAtRandom = pickedAtRandom;
 	}
 
@@ -76,15 +83,13 @@ public abstract class TerrainLandAspect extends ForgeRegistryEntry<TerrainLandAs
 		return pickedAtRandom;
 	}
 	
-	@Nullable
 	@Override
-	public TerrainLandAspect getParent()
+	public ResourceLocation getGroup()
 	{
-		return parent;
+		if(groupName == null)
+			return this.getRegistryName();
+		else return groupName;
 	}
-	
-	//public void modifyStructureList(List<MapGenLandStructure.StructureEntry> list)
-	//{}
 	
 	@Override
 	public IGateStructure getGateStructure()

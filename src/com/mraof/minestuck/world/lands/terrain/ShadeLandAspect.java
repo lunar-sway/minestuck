@@ -25,7 +25,7 @@ public class ShadeLandAspect extends TerrainLandAspect
 	
 	public ShadeLandAspect()
 	{
-		super(null);
+		super();
 	}
 	
 	@Override

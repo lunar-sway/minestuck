@@ -11,11 +11,11 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.math.Vec3d;
 
-public class LandAspectThought extends TitleLandAspect
+public class ThoughtLandAspect extends TitleLandAspect
 {
-	public LandAspectThought()
+	public ThoughtLandAspect()
 	{
-		super(null, EnumAspect.MIND);
+		super(EnumAspect.MIND);
 	}
 	
 	@Override
