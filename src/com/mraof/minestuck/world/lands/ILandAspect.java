@@ -21,6 +21,8 @@ public interface ILandAspect<A extends ILandAspect> extends IForgeRegistryEntry<
 	
 	ResourceLocation getGroup();
 	
+	void registerBlocks(StructureBlockRegistry registry);
+	
 	default void setBiomeSettings(LandBiomeHolder settings)
 	{}
 	

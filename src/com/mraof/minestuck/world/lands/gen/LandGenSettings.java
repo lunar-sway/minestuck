@@ -1,10 +1,8 @@
 package com.mraof.minestuck.world.lands.gen;
 
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
-import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.LandAspects;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationSettings;
 
 public class LandGenSettings extends GenerationSettings
@@ -35,7 +33,7 @@ public class LandGenSettings extends GenerationSettings
 		
 		blockRegistry = new StructureBlockRegistry();
 		landAspects.aspectTerrain.registerBlocks(blockRegistry);
-		//TODO Also register from title landspect
+		landAspects.aspectTitle.registerBlocks(blockRegistry);
 		setDefaultBlock(blockRegistry.getBlockState("ground"));
 		setDefaultFluid(blockRegistry.getBlockState("ocean"));
 		

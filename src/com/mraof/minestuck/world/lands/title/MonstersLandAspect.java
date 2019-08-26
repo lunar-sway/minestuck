@@ -4,7 +4,6 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.lands.LandDimension;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityClassification;
@@ -13,37 +12,30 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class MonstersLandAspect extends TitleLandAspect
 {
 	public static final ResourceLocation GROUP_NAME = new ResourceLocation(Minestuck.MOD_ID, "monsters");
 	private final Variant type;
-	private final List<SpawnListEntry> monsterList;
 	
 	public MonstersLandAspect(Variant type)
 	{
 		super(EnumAspect.RAGE, GROUP_NAME);
 		this.type = type;
-		this.monsterList = new ArrayList<>();
-		if(this.type == Variant.MONSTERS)
-		{
-			monsterList.add(new SpawnListEntry(EntityType.CREEPER, 1, 1, 1));
-			monsterList.add(new SpawnListEntry(EntityType.SPIDER, 1, 1, 2));
-			monsterList.add(new SpawnListEntry(EntityType.ZOMBIE, 1, 1, 2));
-		}
-		else if(this.type == Variant.UNDEAD)
-		{
-			monsterList.add(new SpawnListEntry(EntityType.ZOMBIE, 2, 1, 3));
-			monsterList.add(new SpawnListEntry(EntityType.SKELETON, 1, 1, 2));
-		}
 	}
 	
 	@Override
 	public String[] getNames()
 	{
 		return new String[] {"monster"};
+	}
+	
+	@Override
+	public void registerBlocks(StructureBlockRegistry registry)
+	{
+		registry.setBlockState("structure_wool_2", Blocks.LIGHT_GRAY_WOOL.getDefaultState());
+		registry.setBlockState("carpet", Blocks.PURPLE_CARPET.getDefaultState());
+		if(registry.getCustomBlock("torch") == null)
+			registry.setBlockState("torch", Blocks.REDSTONE_TORCH.getDefaultState());
 	}
 	
 	@Override
@@ -56,17 +48,17 @@ public class MonstersLandAspect extends TitleLandAspect
 	@Override
 	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blockRegistry)
 	{
-		for(SpawnListEntry entry : this.monsterList)
-			biome.addSpawn(EntityClassification.MONSTER, entry);
-	}
-	
-	//@Override
-	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
-	{
-		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.LIGHT_GRAY_WOOL.getDefaultState());
-		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.PURPLE_CARPET.getDefaultState());
-		if(chunkProvider.blockRegistry.getCustomBlock("torch") == null)
-			chunkProvider.blockRegistry.setBlockState("torch", Blocks.REDSTONE_TORCH.getDefaultState());
+		if(this.type == Variant.MONSTERS)
+		{
+			biome.addSpawn(EntityClassification.MONSTER, new SpawnListEntry(EntityType.CREEPER, 1, 1, 1));
+			biome.addSpawn(EntityClassification.MONSTER, new SpawnListEntry(EntityType.SPIDER, 1, 1, 2));
+			biome.addSpawn(EntityClassification.MONSTER, new SpawnListEntry(EntityType.ZOMBIE, 1, 1, 2));
+		}
+		else if(this.type == Variant.UNDEAD)
+		{
+			biome.addSpawn(EntityClassification.MONSTER, new SpawnListEntry(EntityType.ZOMBIE, 2, 1, 3));
+			biome.addSpawn(EntityClassification.MONSTER, new SpawnListEntry(EntityType.SKELETON, 1, 1, 2));
+		}
 	}
 	
 	public enum Variant

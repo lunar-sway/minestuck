@@ -72,7 +72,7 @@ public class LandDimension extends Dimension
 		
 		landAspects.aspectTitle.prepareWorldProvider(this);
 		
-		biomeHolder = new LandBiomeHolder(landAspects);
+		biomeHolder = new LandBiomeHolder(landAspects, false);
 	}
 	
 	//@Override TODO

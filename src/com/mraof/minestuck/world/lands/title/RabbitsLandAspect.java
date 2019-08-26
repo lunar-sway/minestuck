@@ -23,11 +23,16 @@ public class RabbitsLandAspect extends TitleLandAspect
 		return new String[] {"rabbit", "bunny"};
 	}
 	
+	@Override
+	public void registerBlocks(StructureBlockRegistry registry)
+	{
+		registry.setBlockState("structure_wool_2", Blocks.PINK_WOOL.getDefaultState());
+		registry.setBlockState("carpet", Blocks.LIGHT_GRAY_CARPET.getDefaultState());
+	}
+	
 	//@Override
 	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
-		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.PINK_WOOL.getDefaultState());
-		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.LIGHT_GRAY_CARPET.getDefaultState());
 		
 		chunkProvider.decorators.add(new RabbitSpawner(6, ModBiomes.mediumNormal));
 		chunkProvider.decorators.add(new RabbitSpawner(3, ModBiomes.mediumRough));

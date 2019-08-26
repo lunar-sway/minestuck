@@ -6,6 +6,7 @@ import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import com.mraof.minestuck.world.lands.gen.LandGenSettings;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import net.minecraft.block.Blocks;
@@ -26,21 +27,31 @@ public class PulseLandAspect extends TitleLandAspect
 	}
 	
 	@Override
+	public void registerBlocks(StructureBlockRegistry registry)
+	{
+		registry.setBlockState("structure_wool_2", Blocks.RED_WOOL.getDefaultState());
+		registry.setBlockState("carpet", Blocks.BROWN_CARPET.getDefaultState());
+		
+		/*registry.setBlockState("ocean", MinestuckBlocks.blockBlood.getDefaultState());TODO
+		registry.setBlockState("river", MinestuckBlocks.blockBlood.getDefaultState());*/
+		registry.setBlockState("slime", MinestuckBlocks.COAGULATED_BLOOD.getDefaultState());
+	}
+	
+	@Override
 	public void prepareWorldProvider(LandDimension worldProvider)
 	{
 		worldProvider.mergeFogColor(new Vec3d(0.8, 0, 0), 0.8F);
 	}
 	
+	@Override
+	public void setGenSettings(LandGenSettings settings)
+	{
+		settings.oceanChance = Math.max(settings.oceanChance, 0.2F);
+	}
+	
 	//@Override
 	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
-		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.RED_WOOL.getDefaultState());
-		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.BROWN_CARPET.getDefaultState());
-		chunkProvider.oceanChance = Math.max(chunkProvider.oceanChance, 0.2F);
-		
-		/*chunkProvider.blockRegistry.setBlockState("ocean", MinestuckBlocks.blockBlood.getDefaultState());TODO
-		chunkProvider.blockRegistry.setBlockState("river", MinestuckBlocks.blockBlood.getDefaultState());*/
-		chunkProvider.blockRegistry.setBlockState("slime", MinestuckBlocks.COAGULATED_BLOOD.getDefaultState());
 		
 		chunkProvider.decorators.add(new SurfaceDecoratorVein(MinestuckBlocks.COAGULATED_BLOOD.getDefaultState(), 25, 30, ModBiomes.mediumRough));
 	}

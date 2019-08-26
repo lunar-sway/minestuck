@@ -39,8 +39,6 @@ public abstract class TerrainLandAspect extends ForgeRegistryEntry<TerrainLandAs
 		this.groupName = groupName;
 		this.pickedAtRandom = pickedAtRandom;
 	}
-
-	public abstract void registerBlocks(StructureBlockRegistry registry);
 	
 	@Deprecated
 	public List<ILandDecorator> getDecorators(){return null;}
@@ -63,12 +61,6 @@ public abstract class TerrainLandAspect extends ForgeRegistryEntry<TerrainLandAs
 	public Vec3d getSkyColor()
 	{
 		return new Vec3d(0, 0, 0);
-	}
-	
-	@Deprecated
-	public int getWeatherType()
-	{
-		return -1;
 	}
 	
 	@Deprecated

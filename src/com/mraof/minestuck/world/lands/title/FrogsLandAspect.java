@@ -19,15 +19,20 @@ import net.minecraft.block.material.Material;
 	
 	@Override
 	public String[] getNames()
-		{
-			return new String[]{"frog"};
-		}
+	{
+		return new String[] {"frog"};
+	}
+	
+	@Override
+	public void registerBlocks(StructureBlockRegistry registry)
+	{
+		registry.setBlockState("structure_wool_2", Blocks.GREEN_WOOL.getDefaultState());
+		registry.setBlockState("carpet", Blocks.LIME_CARPET.getDefaultState());
+	}
 	
 	//@Override
 	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
-		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.GREEN_WOOL.getDefaultState());
-		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.LIME_CARPET.getDefaultState());
 		
 		chunkProvider.decorators.add(new FrogSpawner(6, ModBiomes.mediumNormal));
 		chunkProvider.decorators.add(new FrogSpawner(4, ModBiomes.mediumRough));

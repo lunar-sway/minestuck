@@ -4,6 +4,7 @@ import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.Vec3d;
@@ -23,6 +24,14 @@ public class ThunderLandAspect extends TitleLandAspect
 	}
 	
 	@Override
+	public void registerBlocks(StructureBlockRegistry registry)
+	{
+		registry.setBlockState("structure_wool_2", Blocks.BLUE_WOOL.getDefaultState());
+		registry.setBlockState("carpet", Blocks.GREEN_CARPET.getDefaultState());
+		
+	}
+	
+	@Override
 	public void prepareWorldProvider(LandDimension worldProvider)
 	{
 		worldProvider.mergeFogColor(new Vec3d(0.1, 0.1, 0.2), 0.5F);
@@ -38,8 +47,6 @@ public class ThunderLandAspect extends TitleLandAspect
 	//@Override
 	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
-		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.BLUE_WOOL.getDefaultState());
-		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.GREEN_CARPET.getDefaultState());
 		chunkProvider.oceanChance = Math.min(Math.max(0.5F, chunkProvider.oceanChance), chunkProvider.oceanChance*1.2F);
 	}
 	

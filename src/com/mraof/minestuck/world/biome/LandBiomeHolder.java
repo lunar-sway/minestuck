@@ -16,15 +16,18 @@ public class LandBiomeHolder
 	private final LandAspects landAspects;
 	private final LandWrapperBiome normalBiome, oceanBiome, roughBiome;
 	
-	public LandBiomeHolder(LandAspects landAspects)
+	public LandBiomeHolder(LandAspects landAspects, boolean isFake)
 	{
 		this.landAspects = landAspects;
 		this.landAspects.aspectTerrain.setBiomeSettings(this);
 		this.landAspects.aspectTitle.setBiomeSettings(this);
 		
-		normalBiome = ModBiomes.LAND_NORMAL.createWrapper(this);
-		roughBiome = ModBiomes.LAND_ROUGH.createWrapper(this);
-		oceanBiome = ModBiomes.LAND_OCEAN.createWrapper(this);
+		if(!isFake)
+		{
+			normalBiome = ModBiomes.LAND_NORMAL.createWrapper(this);
+			roughBiome = ModBiomes.LAND_ROUGH.createWrapper(this);
+			oceanBiome = ModBiomes.LAND_OCEAN.createWrapper(this);
+		} else normalBiome = roughBiome = oceanBiome = null;
 	}
 	
 	public void initBiomesWith(LandGenSettings settings)

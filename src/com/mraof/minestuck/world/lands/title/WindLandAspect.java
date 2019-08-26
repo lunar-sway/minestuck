@@ -5,6 +5,7 @@ import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.lands.decorator.RockDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome;
@@ -23,6 +24,13 @@ public class WindLandAspect extends TitleLandAspect
 	}
 	
 	@Override
+	public void registerBlocks(StructureBlockRegistry registry)
+	{
+		registry.setBlockState("structure_wool_2", Blocks.LIGHT_BLUE_WOOL.getDefaultState());
+		registry.setBlockState("carpet", Blocks.CYAN_CARPET.getDefaultState());
+	}
+	
+	@Override
 	public void prepareWorldProvider(LandDimension worldProvider)
 	{
 		worldProvider.mergeFogColor(new Vec3d(0.1, 0.2, 0.8), 0.3F);
@@ -38,8 +46,6 @@ public class WindLandAspect extends TitleLandAspect
 	//@Override
 	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
-		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.LIGHT_BLUE_WOOL.getDefaultState());
-		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.CYAN_CARPET.getDefaultState());
 		chunkProvider.decorators.add(new RockDecorator());
 	}
 }

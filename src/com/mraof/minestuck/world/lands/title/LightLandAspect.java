@@ -18,15 +18,19 @@ public class LightLandAspect extends TitleLandAspect
 		super(EnumAspect.LIGHT);
 	}
 	
-	public void registerBlocks(StructureBlockRegistry registry)
-	{
-		registry.setBlockState("slime", MinestuckBlocks.GLOWY_GOOP.getDefaultState());
-	}
-	
 	@Override
 	public String[] getNames()
 	{
 		return new String[] {"light", "brightness"};
+	}
+	
+	@Override
+	public void registerBlocks(StructureBlockRegistry registry)
+	{
+		registry.setBlockState("structure_wool_2", Blocks.ORANGE_WOOL.getDefaultState());
+		registry.setBlockState("carpet", Blocks.ORANGE_CARPET.getDefaultState());
+		registry.setBlockState("torch", Blocks.TORCH.getDefaultState());
+		registry.setBlockState("slime", MinestuckBlocks.GLOWY_GOOP.getDefaultState());
 	}
 	
 	@Override
@@ -39,10 +43,6 @@ public class LightLandAspect extends TitleLandAspect
 	//@Override
 	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
-		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.ORANGE_WOOL.getDefaultState());
-		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.ORANGE_CARPET.getDefaultState());
-		chunkProvider.blockRegistry.setBlockState("torch", Blocks.TORCH.getDefaultState());
-		
 		chunkProvider.decorators.add(new PillarDecorator("light_block", 0.5F, false, ModBiomes.mediumNormal, ModBiomes.mediumOcean));
 		chunkProvider.decorators.add(new PillarDecorator("light_block", 3, true, ModBiomes.mediumRough));
 		
@@ -52,7 +52,7 @@ public class LightLandAspect extends TitleLandAspect
 	@Override
 	public boolean isAspectCompatible(TerrainLandAspect aspect)
 	{
-		return aspect.getSkylightBase() > 1/2F && (aspect.getWeatherType() == -1 || (aspect.getWeatherType() & 2) == 0);
+		return aspect.getSkylightBase() > 1/2F;	//TODO Add no thunder as condition
 	}
 	
 }

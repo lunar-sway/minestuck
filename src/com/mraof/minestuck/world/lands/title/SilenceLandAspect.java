@@ -1,15 +1,19 @@
 package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.util.EnumAspect;
+import com.mraof.minestuck.world.biome.LandBiomeHolder;
+import com.mraof.minestuck.world.lands.LandAspects;
 import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.lands.decorator.SingleBlockDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 
 import java.util.Random;
 
@@ -27,6 +31,16 @@ public class SilenceLandAspect extends TitleLandAspect
 	}
 	
 	@Override
+	public void registerBlocks(StructureBlockRegistry registry)
+	{
+		registry.setBlockState("structure_wool_2", Blocks.BLACK_WOOL.getDefaultState());
+		registry.setBlockState("carpet", Blocks.BLUE_CARPET.getDefaultState());
+		
+		if(registry.getCustomBlock("torch") == null)
+			registry.setBlockState("torch", Blocks.REDSTONE_TORCH.getDefaultState());
+	}
+	
+	@Override
 	public void prepareWorldProvider(LandDimension worldProvider)
 	{
 		worldProvider.skylightBase = Math.min(1/2F, worldProvider.skylightBase);
@@ -36,17 +50,14 @@ public class SilenceLandAspect extends TitleLandAspect
 	//@Override
 	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
-		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.BLACK_WOOL.getDefaultState());
-		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.BLUE_CARPET.getDefaultState());
 		chunkProvider.decorators.add(new PumpkinDecorator());
-		if(chunkProvider.blockRegistry.getCustomBlock("torch") == null)
-			chunkProvider.blockRegistry.setBlockState("torch", Blocks.REDSTONE_TORCH.getDefaultState());
 	}
 	
 	@Override
 	public boolean isAspectCompatible(TerrainLandAspect aspect)
 	{
-		return (aspect.getWeatherType() == -1 || (aspect.getWeatherType() & 1) == 1)/*snow is quiet, rain is noisy*/;
+		LandBiomeHolder biomeSettings = new LandBiomeHolder(new LandAspects(aspect, this), true);
+		return biomeSettings.rainType != Biome.RainType.RAIN; //snow is quiet, rain is noisy
 	}
 	
 	private static class PumpkinDecorator extends SingleBlockDecorator

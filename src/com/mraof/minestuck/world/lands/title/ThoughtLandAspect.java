@@ -5,6 +5,7 @@ import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.decorator.structure.SmallLibraryDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import com.mraof.minestuck.world.lands.gen.LandGenSettings;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import net.minecraft.block.Blocks;
@@ -25,20 +26,30 @@ public class ThoughtLandAspect extends TitleLandAspect
 	}
 	
 	@Override
+	public void registerBlocks(StructureBlockRegistry registry)
+	{
+		/*registry.setBlockState("ocean", MinestuckBlocks.blockBrainJuice.getDefaultState());
+		registry.setBlockState("river", MinestuckBlocks.blockBrainJuice.getDefaultState());*/
+		registry.setBlockState("structure_wool_2", Blocks.LIME_WOOL.getDefaultState());
+		registry.setBlockState("carpet", Blocks.LIME_CARPET.getDefaultState());
+	}
+	
+	@Override
 	public void prepareWorldProvider(LandDimension worldProvider)
 	{
 		worldProvider.mergeFogColor(new Vec3d(0.8, 0.3, 0.8), 0.8F);
 	}
 	
+	@Override
+	public void setGenSettings(LandGenSettings settings)
+	{
+		settings.oceanChance = Math.max(settings.oceanChance, 0.2F);
+	}
+	
 	//@Override
 	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
-		chunkProvider.oceanChance = Math.max(chunkProvider.oceanChance, 0.2F);
 		
-		/*chunkProvider.blockRegistry.setBlockState("ocean", MinestuckBlocks.blockBrainJuice.getDefaultState());
-		chunkProvider.blockRegistry.setBlockState("river", MinestuckBlocks.blockBrainJuice.getDefaultState());*/
-		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.LIME_WOOL.getDefaultState());
-		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.LIME_CARPET.getDefaultState());
 		
 		chunkProvider.decorators.add(new SmallLibraryDecorator(ModBiomes.mediumNormal));
 		//chunkProvider.sortDecorators();

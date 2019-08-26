@@ -6,6 +6,7 @@ import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.decorator.SingleBlockDecorator;
 import com.mraof.minestuck.world.lands.decorator.structure.CakePedestalDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CakeBlock;
@@ -28,13 +29,16 @@ public class CakeLandAspect extends TitleLandAspect
 		return new String[] {"cake", "dessert"};
 	}
 	
+	@Override
+	public void registerBlocks(StructureBlockRegistry registry)
+	{
+		registry.setBlockState("structure_wool_2", Blocks.ORANGE_WOOL.getDefaultState());
+		registry.setBlockState("carpet", Blocks.MAGENTA_CARPET.getDefaultState());
+	}
+	
 	//@Override
 	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
-		
-		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.ORANGE_WOOL.getDefaultState());
-		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.MAGENTA_CARPET.getDefaultState());
-		
 		chunkProvider.decorators.add(new CakeDecorator(chunkProvider.temperature));
 		chunkProvider.decorators.add(new CakePedestalDecorator(ModBiomes.mediumNormal, ModBiomes.mediumRough));
 		//chunkProvider.sortDecorators();
