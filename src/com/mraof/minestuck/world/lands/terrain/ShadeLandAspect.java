@@ -88,12 +88,6 @@ public class ShadeLandAspect extends TerrainLandAspect
 	}
 	
 	@Override
-	public int getWeatherType()
-	{
-		return 0;
-	}
-	
-	@Override
 	public EntityType<? extends ConsortEntity> getConsortType()
 	{
 		return ModEntityTypes.SALAMANDER;

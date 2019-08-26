@@ -7,6 +7,7 @@ import net.minecraft.world.World;
 
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
+@Deprecated //We can do what we need to do through biome features. All extensions of this should migrate
 public interface ILandDecorator
 {
 	
