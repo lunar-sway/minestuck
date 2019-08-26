@@ -1,8 +1,8 @@
 {
   "replace": false,
   "values": [
-    "minestuck:iron_ore_end_stone",
-    "minestuck:iron_ore_sandstone",
-    "minestuck:iron_ore_sandstone_red"
+    "minestuck:end_stone_iron_ore",
+    "minestuck:sandstone_iron_ore",
+    "minestuck:red_sandstone_iron_ore"
   ]
 }

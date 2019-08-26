@@ -1,7 +1,8 @@
 {
   "replace": false,
   "values": [
-    "minestuck:gold_ore_sandstone",
-    "minestuck:gold_ore_sandstone_red"
+    "minestuck:sandstone_gold_ore",
+    "minestuck:red_sandstone_gold_ore",
+    "minestuck:pink_stone_gold_ore"
   ]
 }

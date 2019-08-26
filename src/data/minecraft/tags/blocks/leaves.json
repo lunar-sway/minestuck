@@ -1,9 +1,9 @@
 {
   "replace": false,
   "values": [
+    "minestuck:frost_leaves",
     "minestuck:rainbow_leaves",
     "minestuck:end_leaves",
-    "minestuck:frost_leaves",
     "minestuck:blood_aspect_leaves",
     "minestuck:breath_aspect_leaves",
     "minestuck:doom_aspect_leaves",
