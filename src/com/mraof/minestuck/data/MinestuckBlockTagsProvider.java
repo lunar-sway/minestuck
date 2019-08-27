@@ -9,7 +9,7 @@ import static net.minecraftforge.common.Tags.Blocks.*;
 
 public class MinestuckBlockTagsProvider extends BlockTagsProvider
 {
-	public MinestuckBlockTagsProvider(DataGenerator generatorIn)
+	MinestuckBlockTagsProvider(DataGenerator generatorIn)
 	{
 		super(generatorIn);
 	}

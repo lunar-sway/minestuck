@@ -18,6 +18,7 @@ public class MinestuckData
 		if(event.includeServer())
 		{
 			gen.addProvider(new MinestuckBlockTagsProvider(gen));
+			gen.addProvider(new MinestuckItemTagsProvider(gen));
 		}
 	}
 }
