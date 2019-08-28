@@ -23,12 +23,9 @@ import com.mraof.minestuck.tileentity.TileEntityGate;
 import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.Debug;
-//import com.mraof.minestuck.util.Entryfier;
-//import com.mraof.minestuck.util.Entryfier.EntryPrepResult;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.PostEntryTask;
 import com.mraof.minestuck.util.Teleport;
-//import com.mraof.minestuck.util.Entryfier.EntryPrepResult;
 import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
@@ -68,7 +65,6 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 	private BlockPos origin;
 	private boolean creative;
 	private HashSet<BlockMove> blockMoves;
-//	private Entryfier entryfier;
 	
 	private static boolean isRefinedStorageInstalled = Loader.isModLoaded("refinedstorage");
 	
@@ -78,7 +74,6 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 		setUnlocalizedName("cruxiteArtifact");
 		this.maxStackSize = 1;
 		setHasSubtypes(true);
-		//entryfier = new Entryfier();
 	}
 	
 	public void onArtifactActivated(EntityPlayer player)
@@ -149,25 +144,6 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 	@Override
 	public boolean prepareDestination(BlockPos origin, Entity player, WorldServer worldserver0)
 	{
-/*		TextComponentString errorMessage = null;
-		switch(entryfier.prepareDestination(pos, entity, worldserver))
-		{
-		case success:						return true;
-		case notInCreative:					errorMessage = new TextComponentString("You are not allowed to move command blocks.");				break;
-		case stealingIsWrong:				errorMessage = new TextComponentString("You are not allowed to move other players' computers.");	break;
-		case noComputer:					errorMessage = new TextComponentString("There is no computer in range.");							break;
-		case stealingModStuffIsAlsoWrong:	errorMessage = new TextComponentString("You are not allowed to move something in the Entry range.");break;
-		case notAPlayer:					//We can't sendStatusMessage to a non-Player, so we don't set errorMessage. 
-		default:				break;
-		}
-		
-		if(errorMessage != null)
-		{
-			((EntityPlayerMP) entity).sendStatusMessage(errorMessage, false);
-		}
-		
-		return false;*/
-		
 		if(!(player instanceof EntityPlayerMP))
 		{
 			return false;
@@ -291,8 +267,6 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 	@Override
 	public void finalizeDestination(Entity player, WorldServer worldserver0, WorldServer worldserver1)
 	{
-		//entryfier.finalizeDestination(entity, worldserver, worldserver1);
-		
 		if(player instanceof EntityPlayerMP)
 		{
 			int x = origin.getX();
