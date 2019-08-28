@@ -1,10 +1,12 @@
 package com.mraof.minestuck.world.lands.structure.blocks;
 
+import com.mraof.minestuck.world.lands.gen.LandGenSettings;
 import net.minecraft.block.*;
 import net.minecraft.state.IProperty;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.state.properties.Half;
 import net.minecraft.util.Direction;
+import net.minecraft.world.gen.GenerationSettings;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +15,7 @@ public class StructureBlockRegistry
 {
 	
 	private static Map<String, BlockEntry> staticRegistry = new HashMap<>();
+	private static StructureBlockRegistry defaultRegistry = new StructureBlockRegistry();
 	
 	public static void registerBlock(String name, BlockState defaultBlock)
 	{
@@ -88,6 +91,17 @@ public class StructureBlockRegistry
 		registerBlock("stained_glass_1", Blocks.GRAY_STAINED_GLASS.getDefaultState());
 		registerBlock("stained_glass_2", Blocks.LIGHT_GRAY_STAINED_GLASS.getDefaultState());
 		registerBlock("slime", Blocks.SLIME_BLOCK.getDefaultState());
+		
+		defaultRegistry.setBlockState("surface", Blocks.GRASS_BLOCK.getDefaultState());
+		defaultRegistry.setBlockState("upper", Blocks.DIRT.getDefaultState());
+		defaultRegistry.setBlockState("ocean_surface", Blocks.GRAVEL.getDefaultState());
+	}
+	
+	public static StructureBlockRegistry getOrDefault(GenerationSettings settings)
+	{
+		if(settings instanceof LandGenSettings)
+			return ((LandGenSettings) settings).getBlockRegistry();
+		else return defaultRegistry;
 	}
 	
 	private static class BlockEntry

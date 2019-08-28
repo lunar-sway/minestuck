@@ -52,7 +52,7 @@ public class LightLandAspect extends TitleLandAspect
 	@Override
 	public boolean isAspectCompatible(TerrainLandAspect aspect)
 	{
-		return aspect.getSkylightBase() > 1/2F;	//TODO Add no thunder as condition
+		return aspect.getSkylightBase() >= 1/2F;	//TODO Add no thunder as condition
 	}
 	
 }

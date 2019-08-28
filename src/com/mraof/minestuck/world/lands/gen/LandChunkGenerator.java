@@ -6,6 +6,7 @@ import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.LandAspects;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.entity.EntityClassification;
+import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IWorld;
@@ -45,7 +46,6 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 		biomeHolder = Objects.requireNonNull(settings.getBiomeHolder());
 		biomeHolder.initBiomesWith(settings);
 	}
-	
 	
 	@Override
 	protected double[] func_222549_a(int columnX, int columnZ)
@@ -93,6 +93,25 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 		int lerpModifier = 3;
 		int skyValueTarget = -10;
 		this.func_222546_a(noiseColumn, columnX, columnZ, horizontal, vertical, horizontal2, vertical2, lerpModifier, skyValueTarget);
+	}
+	
+	@Override
+	public void generateSurface(IChunk chunkIn)
+	{
+		SharedSeedRandom sharedRandom = new SharedSeedRandom();
+		sharedRandom.setBaseChunkSeed(chunkIn.getPos().x, chunkIn.getPos().z);
+		
+		int xOffset = chunkIn.getPos().getXStart(), zOffset = chunkIn.getPos().getZStart();
+		Biome[] biomes = chunkIn.getBiomes();
+		
+		for(int x = 0; x < 16; x++)
+		{
+			for(int z = 0; z < 16; z++)
+			{
+				int y = chunkIn.getTopBlockY(Heightmap.Type.WORLD_SURFACE_WG, x, z);
+				biomeHolder.localBiomeFrom(biomes[z*16 + x]).buildSurface(sharedRandom, chunkIn, x + xOffset, z + zOffset, y, 0, getSettings().getDefaultBlock(), getSettings().getDefaultFluid(), getSeaLevel(),  world.getSeed());
+			}
+		}
 	}
 	
 	@Override
