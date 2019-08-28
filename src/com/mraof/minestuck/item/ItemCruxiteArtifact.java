@@ -14,6 +14,7 @@ import com.mraof.minestuck.block.BlockGate;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.event.ServerEventHandler;
+import com.mraof.minestuck.modSupport.RefinedStorageSupport;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
@@ -28,6 +29,9 @@ import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
+import com.raoulvdberge.refinedstorage.api.network.node.INetworkNode;
+import com.raoulvdberge.refinedstorage.api.network.node.INetworkNodeManager;
+import com.raoulvdberge.refinedstorage.api.network.node.INetworkNodeProxy;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -50,6 +54,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.Chunk.EnumCreateEntityType;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
+import net.minecraftforge.fml.common.Loader;
 
 public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITeleporter
 {
@@ -60,6 +65,8 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 	private BlockPos origin;
 	private boolean creative;
 	private HashSet<BlockMove> blockMoves;
+	
+	private static boolean isRefinedStorageInstalled = Loader.isModLoaded("refinedstorage");
 	
 	public ItemCruxiteArtifact() 
 	{
@@ -202,7 +209,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 					}
 					
 					//Shouldn't this line check if the block is an edge block?
-					blockMoves.add(new BlockMove(c, pos, pos1, block, false));
+					blockMoves.add(new BlockMove(c, pos, pos1, block, false, getExtraData(worldserver0, pos)));
 				}
 				
 				//What does this code accomplish?
@@ -221,6 +228,40 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 		}
 		
 		return true;
+	}
+	
+	private NBTTagCompound getExtraData(WorldServer world, BlockPos pos)
+	{
+		NBTTagCompound tag = null;
+		if(isRefinedStorageInstalled)
+		{
+			INetworkNodeManager manager = RefinedStorageSupport.API.getNetworkNodeManager(world);
+			INetworkNode node = manager.getNode(pos);
+			
+			if(node != null)
+			{
+				tag = new NBTTagCompound();
+				tag.setTag(RefinedStorageSupport.NBT_NODE, node.write(new NBTTagCompound()));
+				String nodeID = node.getId();
+				tag.setString(RefinedStorageSupport.NBT_NODE_ID, nodeID);
+				tag.setString("responsibleMod", "refinedstorage");
+				
+				manager.markForSaving();
+			} else
+			{
+				TileEntity te =  world.getTileEntity(pos);
+				tag = new NBTTagCompound();
+				
+				if(te != null && te instanceof INetworkNodeProxy)
+				{
+					tag.setString("responsibleMod", "refinedstorage");
+					tag.setBoolean("newTE", true);
+				}
+				
+			}
+			
+		}
+		return tag;
 	}
 	
 	@Override
@@ -477,6 +518,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 		BlockPos source;
 		BlockPos dest;
 		private IBlockState block = null;
+		NBTTagCompound extraData;
 		private boolean update;
 		
 		BlockMove(Chunk c, BlockPos src, BlockPos dst, IBlockState b, boolean u)
@@ -486,6 +528,20 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 			dest = dst;
 			block = b;
 			update = u;
+		}
+		
+		BlockMove(Chunk c, BlockPos src, BlockPos dst, IBlockState b, boolean u, NBTTagCompound eD)
+		{
+			chunkFrom = c;
+			source = src;
+			dest = dst;
+			block = b;
+			update = u;
+			
+			if(extraData!=null && extraData.getBoolean("needsUpdate"))
+			{
+				update = true;
+			}
 		}
 		
 		void copy(Chunk chunkTo)
@@ -518,6 +574,46 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 				chunkTo.addTileEntity(dest, te1);
 				if(tileEntity instanceof TileEntityComputer)
 					SkaianetHandler.movingComputer((TileEntityComputer) tileEntity, (TileEntityComputer) te1);
+				
+				handleExtraData(chunkTo);
+				
+				te1.markDirty();
+			}
+		}
+		
+		private void handleExtraData(Chunk chunkTo)
+		{
+			if(extraData == null)    return;
+			
+			switch(extraData.getString("responsibleMod"))
+			{
+			case "refinedstorage":
+				if(extraData.getBoolean("newTE"))
+				{
+					//Destroys the newly-copied tile entity, so that a new one will be generated in its place.
+					System.out.println("is Controller"); 
+					chunkTo.removeTileEntity(dest);
+					TileEntity te = chunkFrom.getTileEntity(source,EnumCreateEntityType.CHECK);
+					INetworkNode node = ((INetworkNodeProxy)te).getNode();
+					INetworkNodeManager manager = RefinedStorageSupport.API.getNetworkNodeManager(chunkTo.getWorld());
+					manager.setNode(dest, node);
+					manager.markForSaving();
+				}
+				else
+				{
+					INetworkNode node = RefinedStorageSupport.API.getNetworkNodeRegistry().
+							get(extraData.getString(RefinedStorageSupport.NBT_NODE_ID)).
+							create(extraData.getCompoundTag(RefinedStorageSupport.NBT_NODE), chunkTo.getWorld(), dest);
+					INetworkNodeManager manager = RefinedStorageSupport.API.getNetworkNodeManager(chunkTo.getWorld());
+					manager.setNode(dest, node);
+					
+					manager.markForSaving();
+					
+					System.out.println(extraData.getString(RefinedStorageSupport.NBT_NODE_ID));
+				}
+				break;
+			default:
+				break;
 			}
 		}
 	}
