@@ -40,7 +40,7 @@ public class LandAspectRegistry
 	private static Map<ResourceLocation, List<TerrainLandAspect>> terrainGroupMap;
 	private static Map<ResourceLocation, List<TitleLandAspect>> titleGroupMap;
 	
-	public static final TerrainLandAspect FORESTS = getNull();
+	public static final TerrainLandAspect FOREST = getNull();
 	public static final TerrainLandAspect FROST = getNull();
 	public static final TerrainLandAspect FUNGI = getNull();
 	public static final TerrainLandAspect HEAT = getNull();

@@ -1,4 +1,7 @@
 {
   "replace": false,
-  "values": []
+  "values": [
+    "#minestuck:storage_blocks/cruxite",
+    "#minestuck:storage_blocks/uranium"
+  ]
 }

@@ -1,4 +1,7 @@
 {
   "replace": false,
-  "values": []
+  "values": [
+    "#minestuck:ores/cruxite",
+    "#minestuck:ores/uranium"
+  ]
 }

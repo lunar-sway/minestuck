@@ -165,8 +165,8 @@ public class ConsortDialogue
 		addMessage("tent_protection").landTerrain(FROST).consortReq(ConsortEntity::detachHome);
 		addMessage("all_ores").landTerrain(ROCK);
 		addMessage("rockfu", "landName").landTerrain(ROCK);
-		addMessage("all_trees").landTerrain(FORESTS);
-		addMessage("really_likes_trees").landTerrain(FORESTS);
+		addMessage("all_trees").landTerrain(FOREST);
+		addMessage("really_likes_trees").landTerrain(FOREST);
 		
 		//Fungi
 		addMessage(new ChainMessage(new SingleMessage("mycelium1"), new SingleMessage("mycelium2"))).landTerrain(FUNGI);
