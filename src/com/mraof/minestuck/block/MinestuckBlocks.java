@@ -11,9 +11,7 @@ import net.minecraft.block.material.MaterialColor;
 import net.minecraft.item.DyeColor;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ToolType;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.ObjectHolder;
@@ -517,18 +515,5 @@ public class MinestuckBlocks
 	{
 		registry.register(block);
 		return block;
-	}
-	
-	private static Fluid createFluid(String name, ResourceLocation still, ResourceLocation flowing, String unlocalizedName)
-	{
-		Fluid fluid = new Fluid(name, still, flowing);
-		
-		/*boolean useFluid = FluidRegistry.registerFluid(fluid);
-		
-		if(useFluid)
-			fluid.setUnlocalizedName(unlocalizedName);
-		else fluid = FluidRegistry.getFluid(name);*/
-		
-		return fluid;
 	}
 }
