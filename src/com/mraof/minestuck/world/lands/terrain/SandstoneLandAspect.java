@@ -4,8 +4,8 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
+import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.biome.ModBiomes;
-import com.mraof.minestuck.world.lands.decorator.*;
 import com.mraof.minestuck.world.lands.gen.LandGenSettings;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.*;
@@ -13,9 +13,14 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome;
-
-import java.util.ArrayList;
-import java.util.List;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.feature.BlockBlobConfig;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.gen.feature.OreFeatureConfig;
+import net.minecraft.world.gen.placement.CountRangeConfig;
+import net.minecraft.world.gen.placement.FrequencyConfig;
+import net.minecraft.world.gen.placement.Placement;
 
 public class SandstoneLandAspect extends TerrainLandAspect
 {
@@ -44,6 +49,8 @@ public class SandstoneLandAspect extends TerrainLandAspect
 	{
 		if(type == Variant.SANDSTONE)
 		{
+			registry.setBlockState("sand", Blocks.SAND.getDefaultState());
+			registry.setBlockState("ocean_surface", Blocks.SAND.getDefaultState());
 			registry.setBlockState("upper", Blocks.SANDSTONE.getDefaultState());
 			registry.setBlockState("structure_primary", Blocks.SMOOTH_SANDSTONE.getDefaultState());
 			registry.setBlockState("structure_primary_decorative", Blocks.CHISELED_SANDSTONE.getDefaultState());
@@ -51,6 +58,8 @@ public class SandstoneLandAspect extends TerrainLandAspect
 			registry.setBlockState("village_path", Blocks.RED_SAND.getDefaultState());
 		} else
 		{
+			registry.setBlockState("sand", Blocks.RED_SAND.getDefaultState());
+			registry.setBlockState("ocean_surface", Blocks.RED_SAND.getDefaultState());
 			registry.setBlockState("upper", Blocks.RED_SANDSTONE.getDefaultState());
 			registry.setBlockState("structure_primary", Blocks.SMOOTH_RED_SANDSTONE.getDefaultState());
 			registry.setBlockState("structure_primary_decorative", Blocks.CHISELED_RED_SANDSTONE.getDefaultState());
@@ -88,25 +97,31 @@ public class SandstoneLandAspect extends TerrainLandAspect
 	}
 	
 	@Override
-	public List<ILandDecorator> getDecorators()
+	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blockRegistry)
 	{
-		List<ILandDecorator> list = new ArrayList<ILandDecorator>();
-		BlockState sand = Blocks.SAND.getDefaultState();
-		BlockState sandstone = Blocks.SANDSTONE.getDefaultState();
-		if(type == Variant.RED_SANDSTONE)
-		{
-			sand = Blocks.RED_SAND.getDefaultState();
-			sandstone = Blocks.RED_SANDSTONE.getDefaultState();
-		}
-		list.add(new SurfaceDecoratorVein(sand, 10, 32));
-		list.add(new BlockBlobDecorator(sandstone, 0, 3, ModBiomes.mediumNormal));
-		list.add(new BlockBlobDecorator(sandstone, 0, 5, ModBiomes.mediumRough));
-		//list.add(new WorldGenDecorator(new WorldGenDeadBush(), 15, 0.4F));
+		BlockState sand = blockRegistry.getBlockState("sand");
+		BlockState sandstone = blockRegistry.getBlockState("upper");
 		
-		list.add(new UndergroundDecoratorVein(sandstone, 8, 28, 256));
-		list.add(new UndergroundDecoratorVein(Blocks.IRON_ORE.getDefaultState(), 24, 9, 64));
-		list.add(new UndergroundDecoratorVein(Blocks.REDSTONE_ORE.getDefaultState(), 12, 8, 32));
-		return list;
+		if(biome.staticBiome != ModBiomes.LAND_OCEAN)
+		{
+			//TODO We need to be able to replace the surface
+			//biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(null, sand, 32), Placement.COUNT_RANGE, new CountRangeConfig(10, 0, 0, 256)));
+			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Feature.DEAD_BUSH, IFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_HEIGHTMAP_DOUBLE, new FrequencyConfig(15)));
+		}
+		
+		
+		if(biome.staticBiome == ModBiomes.LAND_NORMAL)
+		{
+			//TODO Forest rocks has checks that prevent it from being placed on most blocks, causing it to not appear in this land
+			biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(Feature.FOREST_ROCK, new BlockBlobConfig(sandstone, 0), Placement.FOREST_ROCK, new FrequencyConfig(3)));
+		} else if(biome.staticBiome == ModBiomes.LAND_ROUGH)
+		{
+			biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(Feature.FOREST_ROCK, new BlockBlobConfig(sandstone, 0), Placement.FOREST_ROCK, new FrequencyConfig(5)));
+		}
+		
+		biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, sandstone, 28), Placement.COUNT_RANGE, new CountRangeConfig(8, 0, 0, 256)));
+		biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, Blocks.IRON_ORE.getDefaultState(), 9), Placement.COUNT_RANGE, new CountRangeConfig(24, 0, 0, 64)));
+		biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, Blocks.REDSTONE_ORE.getDefaultState(), 8), Placement.COUNT_RANGE, new CountRangeConfig(12, 0, 0, 32)));
 	}
 	
 	@Override
