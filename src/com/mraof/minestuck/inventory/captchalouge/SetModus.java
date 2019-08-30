@@ -38,7 +38,7 @@ public class SetModus extends Modus
 					list.add(stack);
 		}*/
 		
-		if(player.world.isRemote)
+		if(side.isClient())
 		{
 			items = NonNullList.<ItemStack>create();
 			changed = true;
@@ -79,7 +79,7 @@ public class SetModus extends Modus
 	@Override
 	public boolean putItemStack(ItemStack item)
 	{
-		if(size <= list.size() || item.isEmpty())
+		if(player == null || size <= list.size() || item.isEmpty())
 			return false;
 		
 		for(ItemStack stack : list)
@@ -143,6 +143,9 @@ public class SetModus extends Modus
 	@Override
 	public ItemStack getItem(int id, boolean asCard)
 	{
+		if(player == null)
+			return ItemStack.EMPTY;
+		
 		if(id == CaptchaDeckHandler.EMPTY_CARD)
 		{
 			if(list.size() < size)

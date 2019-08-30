@@ -44,7 +44,7 @@ public class TreeModus extends Modus
 		size = nbt.getInteger("size");
 		autobalance = nbt.getBoolean("autobalance");
 		node = readNode(nbt, 0, 0);
-		if(player == null || !player.world.isRemote)
+		if(side.isServer())
 			autobalance();
 	}
 	
@@ -125,6 +125,9 @@ public class TreeModus extends Modus
 	@Override
 	public ItemStack getItem(int id, boolean asCard)
 	{
+		if(player == null)
+			return ItemStack.EMPTY;
+		
 		if(id == CaptchaDeckHandler.EMPTY_CARD)
 		{
 			if(size <= 0 && (node == null || size > node.getSize()))
@@ -183,7 +186,7 @@ public class TreeModus extends Modus
 		{
 			TreeNode node = this.node;
 			autobalance();
-			if(node != this.node)
+			if(node != this.node && player != null)
 				MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, CaptchaDeckHandler.writeToNBT(this)), player);
 		}
 	}

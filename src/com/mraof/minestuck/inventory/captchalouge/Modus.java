@@ -9,6 +9,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
+
 public abstract class Modus
 {
 	
@@ -41,6 +43,7 @@ public abstract class Modus
 	
 	public abstract boolean increaseSize();
 	
+	@Nonnull
 	public abstract ItemStack getItem(int id, boolean asCard);
 	
 	public abstract boolean canSwitchFrom(Modus modus);

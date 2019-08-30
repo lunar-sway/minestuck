@@ -17,6 +17,9 @@ public class QueueModus extends StackModus
 	@Override
 	public ItemStack getItem(int id, boolean asCard)
 	{
+		if(player == null)
+			return ItemStack.EMPTY;
+		
 		if(id == CaptchaDeckHandler.EMPTY_CARD)
 		{
 			if(list.size() < size)

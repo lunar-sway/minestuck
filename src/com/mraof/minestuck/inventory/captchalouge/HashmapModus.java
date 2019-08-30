@@ -42,7 +42,7 @@ public class HashmapModus extends Modus
 		while(list.size() < size)
 			list.add(ItemStack.EMPTY);
 		
-		if(player.world.isRemote)
+		if(side.isClient())
 		{
 			items = NonNullList.<ItemStack>create();
 			changed = true;
@@ -86,7 +86,7 @@ public class HashmapModus extends Modus
 	@Override
 	public boolean putItemStack(ItemStack item)
 	{
-		if(list.size() == 0 || item.isEmpty())
+		if(list.size() == 0 || item.isEmpty() || player == null)
 			return false;
 		
 		//TODO use registry names when 1.13 comes out
@@ -166,7 +166,7 @@ public class HashmapModus extends Modus
 			return ItemStack.EMPTY;	//Empty card is retrieved the same way as a normal item
 		}
 		
-		if(list.isEmpty())
+		if(list.isEmpty() || player == null)
 			return ItemStack.EMPTY;
 		
 		if(id == CaptchaDeckHandler.EMPTY_SYLLADEX)
@@ -226,7 +226,7 @@ public class HashmapModus extends Modus
 	
 	public void onChatMessage(String str)
 	{
-		if(!ejectByChat && MinestuckConfig.hashmapChatModusSetting != 1 || MinestuckConfig.hashmapChatModusSetting == 2)
+		if(!ejectByChat && MinestuckConfig.hashmapChatModusSetting != 1 || MinestuckConfig.hashmapChatModusSetting == 2 || player == null)
 			return;
 		
 		boolean isPrevLetter = false;
@@ -274,10 +274,10 @@ public class HashmapModus extends Modus
 			index += getSize();
 		
 		ItemStack stack = getItem(index, false);
-		if(stack == null)
+		if(stack.isEmpty())
 			return;
 		
-		if(player.inventory.getCurrentItem() == null)
+		if(player.inventory.getCurrentItem().isEmpty())
 			player.inventory.setInventorySlotContents(player.inventory.currentItem, stack);
 		else CaptchaDeckHandler.launchAnyItem(player, stack);
 		
