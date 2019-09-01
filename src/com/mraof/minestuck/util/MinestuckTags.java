@@ -26,6 +26,13 @@ public class MinestuckTags
 		public static final Tag<Block> ASPECT_SAPLINGS = tag("saplings/aspect");
 		public static final Tag<Block> CRUXITE_ORES = tag("ores/cruxite");
 		public static final Tag<Block> URANIUM_ORES = tag("ores/uranium");
+		public static final Tag<Block> COAL_ORES = tag("ores/coal");
+		public static final Tag<Block> IRON_ORES = tag("ores/iron");
+		public static final Tag<Block> GOLD_ORES = tag("ores/gold");
+		public static final Tag<Block> REDSTONE_ORES = tag("ores/redstone");
+		public static final Tag<Block> QUARTZ_ORES = tag("ores/quartz");
+		public static final Tag<Block> LAPIS_ORES = tag("ores/lapis");
+		public static final Tag<Block> DIAMOND_ORES = tag("ores/diamond");
 		public static final Tag<Block> CRUXITE_STORAGE_BLOCKS = tag("storage_blocks/cruxite");
 		public static final Tag<Block> URANIUM_STORAGE_BLOCKS = tag("storage_blocks/uranium");
 		
@@ -51,6 +58,13 @@ public class MinestuckTags
 		public static final Tag<Item> ASPECT_SAPLINGS = tag("saplings/aspect");
 		public static final Tag<Item> CRUXITE_ORES = tag("ores/cruxite");
 		public static final Tag<Item> URANIUM_ORES = tag("ores/uranium");
+		public static final Tag<Item> COAL_ORES = tag("ores/coal");
+		public static final Tag<Item> IRON_ORES = tag("ores/iron");
+		public static final Tag<Item> GOLD_ORES = tag("ores/gold");
+		public static final Tag<Item> REDSTONE_ORES = tag("ores/redstone");
+		public static final Tag<Item> QUARTZ_ORES = tag("ores/quartz");
+		public static final Tag<Item> LAPIS_ORES = tag("ores/lapis");
+		public static final Tag<Item> DIAMOND_ORES = tag("ores/diamond");
 		public static final Tag<Item> CRUXITE_STORAGE_BLOCKS = tag("storage_blocks/cruxite");
 		public static final Tag<Item> URANIUM_STORAGE_BLOCKS = tag("storage_blocks/uranium");
 		

@@ -1,6 +1,6 @@
 {
   "replace": false,
   "values": [
-    "minestuck:pink_stone_lapis_ore"
+    "#minestuck:ores/lapis"
   ]
 }

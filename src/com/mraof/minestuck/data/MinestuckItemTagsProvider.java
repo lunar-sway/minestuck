@@ -57,6 +57,13 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		copy(MinestuckTags.Blocks.ASPECT_SAPLINGS, ASPECT_SAPLINGS);
 		copy(MinestuckTags.Blocks.CRUXITE_ORES, CRUXITE_ORES);
 		copy(MinestuckTags.Blocks.URANIUM_ORES, URANIUM_ORES);
+		copy(MinestuckTags.Blocks.COAL_ORES, COAL_ORES);
+		copy(MinestuckTags.Blocks.IRON_ORES, IRON_ORES);
+		copy(MinestuckTags.Blocks.GOLD_ORES, GOLD_ORES);
+		copy(MinestuckTags.Blocks.REDSTONE_ORES, REDSTONE_ORES);
+		copy(MinestuckTags.Blocks.QUARTZ_ORES, QUARTZ_ORES);
+		copy(MinestuckTags.Blocks.LAPIS_ORES, LAPIS_ORES);
+		copy(MinestuckTags.Blocks.DIAMOND_ORES, DIAMOND_ORES);
 		copy(MinestuckTags.Blocks.CRUXITE_STORAGE_BLOCKS, CRUXITE_STORAGE_BLOCKS);
 		copy(MinestuckTags.Blocks.URANIUM_STORAGE_BLOCKS, URANIUM_STORAGE_BLOCKS);
 		

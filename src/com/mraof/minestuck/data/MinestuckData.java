@@ -19,6 +19,8 @@ public class MinestuckData
 		{
 			gen.addProvider(new MinestuckBlockTagsProvider(gen));
 			gen.addProvider(new MinestuckItemTagsProvider(gen));
+			
+			gen.addProvider(new MinestuckCraftingRecipeProvider(gen));
 		}
 	}
 }

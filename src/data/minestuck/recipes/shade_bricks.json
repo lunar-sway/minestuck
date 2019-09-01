@@ -1,11 +1,11 @@
 {
-  "type": "crafting_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
-    "XX",
-    "XX"
+    "##",
+    "##"
   ],
   "key": {
-    "X": {
+    "#": {
       "item": "minestuck:smooth_shade_stone"
     }
   },

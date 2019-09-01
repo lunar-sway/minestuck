@@ -22,6 +22,7 @@ public final class ModRecipeSerializers {
     }
 
     @SubscribeEvent
+    @SuppressWarnings("unused")
     public static void registerSerializers(final RegistryEvent.Register<IRecipeSerializer<?>> event){
         IForgeRegistry<IRecipeSerializer<?>> registry = event.getRegistry();
         registry.register(new NonMirroredRecipe.Serializer().setRegistryName("non_mirrored"));

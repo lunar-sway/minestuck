@@ -1,8 +1,9 @@
 {
-  "type": "crafting_shapeless",
+  "type": "minecraft:crafting_shapeless",
+  "group": "planks",
   "ingredients": [
     {
-      "item": "minestuck:rainbow_log"
+      "tag": "minestuck:logs/rainbow"
     }
   ],
   "result": {
