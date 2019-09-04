@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:stick"
+    },
+    {
+      "item": "minecraft:stick"
+    },
+    {
+      "item": "minecraft:stick"
+    },
+    {
+      "item": "minestuck:jar_of_bugs"
+    }
+  ],
+  "result": {
+    "item": "minestuck:bug_on_a_stick",
+    "count": 3
+  }
+}

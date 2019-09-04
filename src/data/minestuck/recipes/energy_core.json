@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "cuc",
+    "ucu",
+    "cuc"
+  ],
+  "key": {
+    "u": {
+      "item": "minestuck:raw_uranium"
+    },
+    "c": {
+      "item": "minestuck:raw_cruxite"
+    }
+  },
+  "result": {
+    "item": "minestuck:energy_core"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:raw_cruxite_from_smelting"
+    ]
+  },
+  "criteria": {
+    "has_cruxite_ore": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "minestuck:ores/cruxite"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:raw_cruxite_from_smelting"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_cruxite_ore",
+      "has_the_recipe"
+    ]
+  ]
+}

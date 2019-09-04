@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:iron_ingot_from_blasting"
+    ]
+  },
+  "criteria": {
+    "has_iron_ore": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "minestuck:ores/iron"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:iron_ingot_from_blasting"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_iron_ore",
+      "has_the_recipe"
+    ]
+  ]
+}

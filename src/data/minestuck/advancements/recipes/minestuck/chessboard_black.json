@@ -2,29 +2,26 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "minestuck:raw_cruxite"
+      "minestuck:chessboard_black"
     ]
   },
   "criteria": {
-    "has_at_least_9_raw_cruxite": {
+    "has_white_terracotta": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "minestuck:raw_cruxite",
-            "count": {
-              "min": 9
-            }
+            "item": "minecraft:white_terracotta"
           }
         ]
       }
     },
-    "has_cruxite_block": {
+    "has_black_terracotta": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "minestuck:cruxite_block"
+            "item": "minecraft:black_terracotta"
           }
         ]
       }
@@ -32,14 +29,14 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "minestuck:raw_cruxite"
+        "recipe": "minestuck:chessboard_black"
       }
     }
   },
   "requirements": [
     [
-      "has_at_least_9_raw_cruxite",
-      "has_cruxite_block",
+      "has_white_terracotta",
+      "has_black_terracotta",
       "has_the_recipe"
     ]
   ]

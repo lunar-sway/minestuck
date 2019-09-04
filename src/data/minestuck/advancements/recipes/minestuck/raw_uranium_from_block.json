@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "minestuck:raw_uranium"
+      "minestuck:raw_uranium_from_block"
     ]
   },
   "criteria": {
@@ -32,7 +32,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "minestuck:raw_uranium"
+        "recipe": "minestuck:raw_uranium_from_block"
       }
     }
   },

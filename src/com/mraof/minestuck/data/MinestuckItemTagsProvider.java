@@ -1,11 +1,19 @@
 package com.mraof.minestuck.data;
 
+import com.google.common.collect.Sets;
 import com.mraof.minestuck.util.MinestuckTags;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ItemTagsProvider;
+import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.Tag;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
+
+import java.nio.file.Path;
+import java.util.Set;
 
 import static com.mraof.minestuck.item.MinestuckItems.*;
 import static com.mraof.minestuck.util.MinestuckTags.Items.*;
@@ -14,6 +22,8 @@ import static net.minecraftforge.common.Tags.Items.*;
 
 public class MinestuckItemTagsProvider extends ItemTagsProvider
 {
+	private Set<ResourceLocation> filter;
+	
 	MinestuckItemTagsProvider(DataGenerator generatorIn)
 	{
 		super(generatorIn);
@@ -67,9 +77,39 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		copy(MinestuckTags.Blocks.CRUXITE_STORAGE_BLOCKS, CRUXITE_STORAGE_BLOCKS);
 		copy(MinestuckTags.Blocks.URANIUM_STORAGE_BLOCKS, URANIUM_STORAGE_BLOCKS);
 		
+		fakePopulate(INGOTS_IRON);
+		fakePopulate(RODS_WOODEN);
+		
 		getBuilder(ItemTags.MUSIC_DISCS).add(RECORD_DANCE_STAB, RECORD_EMISSARY_OF_DANCE, RECORD_RETRO_BATTLE);
 		getBuilder(Tags.Items.MUSIC_DISCS).add(RECORD_DANCE_STAB, RECORD_EMISSARY_OF_DANCE, RECORD_RETRO_BATTLE);
 		getBuilder(RODS).add(UP_STICK);
+	}
+	
+	/**
+	 * Used to work around an issue with using empty tags in recipe data providers
+	 */
+	protected void fakePopulate(Tag<Item> tag)
+	{
+		if(tagToBuilder.containsKey(tag))
+			throw new IllegalStateException("Shouldn't do a fake populate on a tag with a builder!");
+		getBuilder(tag).add(Items.BARRIER);
+		if(filter == null)
+			filter = Sets.newHashSet();
+		filter.add(tag.getId());
+	}
+	
+	@Override
+	protected Tag.Builder<Item> getBuilder(Tag<Item> tag)
+	{
+		if(filter != null && filter.contains(tag.getId()))
+			throw new IllegalStateException("Should't get a builder on a tag that has been passed to fakePopulate()!");
+		return super.getBuilder(tag);
+	}
+	
+	@Override
+	protected Path makePath(ResourceLocation tagName)
+	{
+		return filter != null && filter.contains(tagName) ? null : super.makePath(tagName);
 	}
 	
 	@Override
