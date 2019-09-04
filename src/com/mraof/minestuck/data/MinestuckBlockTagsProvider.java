@@ -1,5 +1,6 @@
 package com.mraof.minestuck.data;
 
+import com.mraof.minestuck.util.ExtraForgeTags;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 
@@ -19,20 +20,20 @@ public class MinestuckBlockTagsProvider extends BlockTagsProvider
 	protected void registerTags()
 	{
 		getBuilder(PLANKS).add(GLOWING_PLANKS, FROST_PLANKS, RAINBOW_PLANKS, END_PLANKS, DEAD_PLANKS, TREATED_PLANKS).add(ASPECT_PLANKS);
-		getBuilder(STONE_BRICKS).add(FLOWERY_MOSS_BRICKS);
+		getBuilder(STONE_BRICKS).add(FLOWERY_MOSSY_STONE_BRICKS);
 		getBuilder(WOODEN_BUTTONS).add(WOODEN_EXPLOSIVE_BUTTON);
 		getBuilder(BUTTONS).add(STONE_EXPLOSIVE_BUTTON);
 		getBuilder(WOODEN_STAIRS).add(RAINBOW_PLANKS_STAIRS, END_PLANKS_STAIRS, DEAD_PLANKS_STAIRS, TREATED_PLANKS_STAIRS);
 		getBuilder(WOODEN_SLABS).add(RAINBOW_PLANKS_SLAB, END_PLANKS_SLAB, DEAD_PLANKS_SLAB, TREATED_PLANKS_SLAB);
 		getBuilder(SAPLINGS).add(RAINBOW_SAPLING, END_SAPLING).add(ASPECT_SAPLINGS);
 		getBuilder(LOGS).add(GLOWING_LOGS, FROST_LOGS, RAINBOW_LOGS, END_LOGS, VINE_LOGS, FLOWERY_VINE_LOGS, DEAD_LOGS, PETRIFIED_LOGS, ASPECT_LOGS);
-		getBuilder(ENDERMAN_HOLDABLE); //There could be a point to adding some of our blocks to this
+		getBuilder(ENDERMAN_HOLDABLE).add(BLUE_DIRT, THOUGHT_DIRT);
 		getBuilder(STAIRS).add(COARSE_STONE_STAIRS, SHADE_BRICK_STAIRS, FROST_BRICK_STAIRS, CAST_IRON_STAIRS, MYCELIUM_BRICK_STAIRS, CHALK_STAIRS, CHALK_BRICK_STAIRS, PINK_STONE_BRICK_STAIRS);
 		getBuilder(SLABS).add(CHALK_SLAB, CHALK_BRICK_SLAB, PINK_STONE_BRICK_SLAB);
 		getBuilder(LEAVES).add(FROST_LEAVES, RAINBOW_LEAVES, END_LEAVES).add(ASPECT_LEAVES);
 		getBuilder(DIRT_LIKE).add(BLACK_CHESS_DIRT, WHITE_CHESS_DIRT, DARK_GRAY_CHESS_DIRT, LIGHT_GRAY_CHESS_DIRT, BLUE_DIRT, THOUGHT_DIRT);
-		getBuilder(Blocks.COBBLESTONE).add(FLOWERY_MOSS_STONE);
-		getBuilder(Blocks.ORES).add(CRUXITE_ORES, URANIUM_ORES);
+		getBuilder(Blocks.COBBLESTONE).add(FLOWERY_MOSSY_COBBLESTONE);
+		getBuilder(Blocks.ORES).add(CRUXITE_ORES, ExtraForgeTags.Blocks.URANIUM_ORES);
 		getBuilder(Blocks.ORES_COAL).add(COAL_ORES);
 		getBuilder(Blocks.ORES_DIAMOND).add(DIAMOND_ORES);
 		getBuilder(Blocks.ORES_GOLD).add(GOLD_ORES);
@@ -41,7 +42,10 @@ public class MinestuckBlockTagsProvider extends BlockTagsProvider
 		getBuilder(Blocks.ORES_QUARTZ).add(QUARTZ_ORES);
 		getBuilder(Blocks.ORES_REDSTONE).add(REDSTONE_ORES);
 		getBuilder(Blocks.STONE).add(COARSE_STONE, BLACK_STONE, COARSE_END_STONE, PINK_STONE);
-		getBuilder(Blocks.STORAGE_BLOCKS).add(CRUXITE_STORAGE_BLOCKS, URANIUM_STORAGE_BLOCKS);
+		getBuilder(Blocks.STORAGE_BLOCKS).add(CRUXITE_STORAGE_BLOCKS, ExtraForgeTags.Blocks.URANIUM_STORAGE_BLOCKS);
+		
+		getBuilder(ExtraForgeTags.Blocks.URANIUM_ORES).add(URANIUM_ORES);
+		getBuilder(ExtraForgeTags.Blocks.URANIUM_STORAGE_BLOCKS).add(URANIUM_BLOCK);
 		
 		getBuilder(GLOWING_LOGS).add(GLOWING_LOG, GLOWING_WOOD);
 		getBuilder(FROST_LOGS).add(FROST_LOG, FROST_WOOD);
@@ -65,7 +69,6 @@ public class MinestuckBlockTagsProvider extends BlockTagsProvider
 		getBuilder(LAPIS_ORES).add(PINK_STONE_LAPIS_ORE);
 		getBuilder(DIAMOND_ORES).add(PINK_STONE_DIAMOND_ORE);
 		getBuilder(CRUXITE_STORAGE_BLOCKS).add(CRUXITE_BLOCK);
-		getBuilder(URANIUM_STORAGE_BLOCKS).add(URANIUM_BLOCK);
 	}
 	
 	@Override

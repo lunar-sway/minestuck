@@ -2,13 +2,13 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "minecraft:stick"
+      "tag": "forge:rods/wooden"
     },
     {
-      "item": "minecraft:stick"
+      "tag": "forge:rods/wooden"
     },
     {
-      "item": "minecraft:stick"
+      "tag": "forge:rods/wooden"
     },
     {
       "item": "minestuck:jar_of_bugs"

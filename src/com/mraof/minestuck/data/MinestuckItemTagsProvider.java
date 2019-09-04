@@ -1,6 +1,8 @@
 package com.mraof.minestuck.data;
 
 import com.google.common.collect.Sets;
+import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.util.ExtraForgeTags;
 import com.mraof.minestuck.util.MinestuckTags;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ItemTagsProvider;
@@ -53,6 +55,8 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		copy(Tags.Blocks.ORES_REDSTONE, ORES_REDSTONE);
 		copy(Tags.Blocks.STONE, STONE);
 		copy(Tags.Blocks.STORAGE_BLOCKS, STORAGE_BLOCKS);
+		copy(ExtraForgeTags.Blocks.URANIUM_ORES, ExtraForgeTags.Items.URANIUM_ORES);
+		copy(ExtraForgeTags.Blocks.URANIUM_STORAGE_BLOCKS, ExtraForgeTags.Items.URANIUM_STORAGE_BLOCKS);
 		copy(MinestuckTags.Blocks.GLOWING_LOGS, GLOWING_LOGS);
 		copy(MinestuckTags.Blocks.FROST_LOGS, FROST_LOGS);
 		copy(MinestuckTags.Blocks.RAINBOW_LOGS, RAINBOW_LOGS);
@@ -75,14 +79,15 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		copy(MinestuckTags.Blocks.LAPIS_ORES, LAPIS_ORES);
 		copy(MinestuckTags.Blocks.DIAMOND_ORES, DIAMOND_ORES);
 		copy(MinestuckTags.Blocks.CRUXITE_STORAGE_BLOCKS, CRUXITE_STORAGE_BLOCKS);
-		copy(MinestuckTags.Blocks.URANIUM_STORAGE_BLOCKS, URANIUM_STORAGE_BLOCKS);
 		
 		fakePopulate(INGOTS_IRON);
 		fakePopulate(RODS_WOODEN);
 		
 		getBuilder(ItemTags.MUSIC_DISCS).add(RECORD_DANCE_STAB, RECORD_EMISSARY_OF_DANCE, RECORD_RETRO_BATTLE);
 		getBuilder(Tags.Items.MUSIC_DISCS).add(RECORD_DANCE_STAB, RECORD_EMISSARY_OF_DANCE, RECORD_RETRO_BATTLE);
+		getBuilder(DUSTS).add(MinestuckBlocks.GLOWYSTONE_DUST.asItem());
 		getBuilder(RODS).add(UP_STICK);
+		getBuilder(ExtraForgeTags.Items.URANIUM_CHUNKS).add(RAW_URANIUM);
 	}
 	
 	/**

@@ -3,6 +3,7 @@ package com.mraof.minestuck.data;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.util.ExtraForgeTags;
 import com.mraof.minestuck.util.MinestuckTags;
 import net.minecraft.advancements.criterion.InventoryChangeTrigger;
 import net.minecraft.advancements.criterion.MinMaxBounds;
@@ -21,9 +22,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-public class MinestuckCraftingRecipeProvider extends RecipeProvider
+public class MinestuckRecipeProvider extends RecipeProvider
 {
-	MinestuckCraftingRecipeProvider(DataGenerator generator)
+	MinestuckRecipeProvider(DataGenerator generator)
 	{
 		super(generator);
 	}
@@ -101,14 +102,14 @@ public class MinestuckCraftingRecipeProvider extends RecipeProvider
 		ShapedRecipeBuilder.shapedRecipe(MinestuckItems.WOODEN_SPOON).key('s', Tags.Items.RODS_WOODEN).key('b', Items.BOWL).patternLine("b").patternLine("s").patternLine("s").addCriterion("has_stick", hasItem(Tags.Items.RODS_WOODEN)).build(recipeBuilder);
 		ShapedRecipeBuilder.shapedRecipe(MinestuckItems.FORK).key('S', Tags.Items.STONE).patternLine("S S").patternLine(" S ").patternLine(" S ").addCriterion("has_stone", hasItem(Tags.Items.STONE)).build(recipeBuilder);
 		
-		ShapedRecipeBuilder.shapedRecipe(MinestuckItems.ENERGY_CORE).key('u', MinestuckItems.RAW_URANIUM).key('c', MinestuckItems.RAW_CRUXITE).patternLine("cuc").patternLine("ucu").patternLine("cuc").addCriterion("has_raw_uranium", hasItem(MinestuckItems.RAW_URANIUM)).build(recipeBuilder);
-		ShapedRecipeBuilder.shapedRecipe(MinestuckItems.CLIENT_DISK).key('i', Items.IRON_INGOT).key('c', MinestuckItems.RAW_CRUXITE).patternLine("c c").patternLine(" i ").patternLine("c c").setGroup("sburb_disk").addCriterion("has_raw_cruxite", hasItem(MinestuckItems.RAW_CRUXITE)).build(recipeBuilder);
-		ShapedRecipeBuilder.shapedRecipe(MinestuckItems.SERVER_DISK).key('i', Items.IRON_INGOT).key('c', MinestuckItems.RAW_CRUXITE).patternLine(" c ").patternLine("cic").patternLine(" c ").setGroup("sburb_disk").addCriterion("has_raw_cruxite", hasItem(MinestuckItems.RAW_CRUXITE)).build(recipeBuilder);
+		ShapedRecipeBuilder.shapedRecipe(MinestuckItems.ENERGY_CORE).key('u', ExtraForgeTags.Items.URANIUM_CHUNKS).key('c', MinestuckItems.RAW_CRUXITE).patternLine("cuc").patternLine("ucu").patternLine("cuc").addCriterion("has_raw_uranium", hasItem(MinestuckItems.RAW_URANIUM)).build(recipeBuilder);
+		ShapedRecipeBuilder.shapedRecipe(MinestuckItems.CLIENT_DISK).key('i', Tags.Items.INGOTS_IRON).key('c', MinestuckItems.RAW_CRUXITE).patternLine("c c").patternLine(" i ").patternLine("c c").setGroup("sburb_disk").addCriterion("has_raw_cruxite", hasItem(MinestuckItems.RAW_CRUXITE)).build(recipeBuilder);
+		ShapedRecipeBuilder.shapedRecipe(MinestuckItems.SERVER_DISK).key('i', Tags.Items.INGOTS_IRON).key('c', MinestuckItems.RAW_CRUXITE).patternLine(" c ").patternLine("cic").patternLine(" c ").setGroup("sburb_disk").addCriterion("has_raw_cruxite", hasItem(MinestuckItems.RAW_CRUXITE)).build(recipeBuilder);
 		ShapedRecipeBuilder.shapedRecipe(MinestuckItems.CAPTCHA_CARD).key('p', Items.PAPER).key('c', MinestuckItems.RAW_CRUXITE).patternLine("ppp").patternLine("pcp").patternLine("ppp").addCriterion("has_raw_cruxite", hasItem(MinestuckItems.RAW_CRUXITE)).build(recipeBuilder);
 		NonMirroredRecipeBuilder.nonMirroredRecipe(MinestuckItems.STACK_MODUS_CARD).key('a', IngredientNBT.fromItems(MinestuckItems.CAPTCHA_CARD)).key('c', MinestuckItems.RAW_CRUXITE).key('C', MinestuckBlocks.CRUXITE_BLOCK).patternLine("Cac").addCriterion("has_card", hasItem(MinestuckItems.CAPTCHA_CARD)).build(recipeBuilder);
 		NonMirroredRecipeBuilder.nonMirroredRecipe(MinestuckItems.QUEUE_MODUS_CARD).key('a', IngredientNBT.fromItems(MinestuckItems.CAPTCHA_CARD)).key('c', MinestuckItems.RAW_CRUXITE).key('C', MinestuckBlocks.CRUXITE_BLOCK).patternLine("caC").addCriterion("has_card", hasItem(MinestuckItems.CAPTCHA_CARD)).build(recipeBuilder);
 		
-		ShapelessRecipeBuilder.shapelessRecipe(MinestuckItems.BUG_ON_A_STICK, 3).addIngredient(Items.STICK, 3).addIngredient(MinestuckItems.JAR_OF_BUGS).addCriterion("has_jag_of_bugs", hasItem(MinestuckItems.JAR_OF_BUGS)).build(recipeBuilder);
+		ShapelessRecipeBuilder.shapelessRecipe(MinestuckItems.BUG_ON_A_STICK, 3).addIngredient(Ingredient.fromTag(Tags.Items.RODS_WOODEN), 3).addIngredient(MinestuckItems.JAR_OF_BUGS).addCriterion("has_jag_of_bugs", hasItem(MinestuckItems.JAR_OF_BUGS)).build(recipeBuilder);
 		ShapelessRecipeBuilder.shapelessRecipe(MinestuckItems.SALAD).addIngredient(Items.BOWL).addIngredient(ItemTags.LEAVES).addCriterion("has_bowl", hasItem(Items.BOWL)).build(recipeBuilder);
 		
 		CookingRecipeBuilder.smeltingRecipe(Ingredient.fromTag(MinestuckTags.Items.CRUXITE_ORES), MinestuckItems.RAW_CRUXITE, 0.2F, 200).addCriterion("has_cruxite_ore", hasItem(MinestuckTags.Items.CRUXITE_ORES)).build(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "raw_cruxite_from_smelting"));

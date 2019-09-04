@@ -46,10 +46,10 @@ public class FloraLandAspect extends TerrainLandAspect
 		registry.setBlockState("upper", Blocks.DIRT.getDefaultState());
 		//registry.setBlockState("ocean", MinestuckBlocks.blockBlood.getDefaultState());
 		registry.setBlockState("structure_primary", Blocks.MOSSY_STONE_BRICKS.getDefaultState());
-		registry.setBlockState("structure_primary_decorative", MinestuckBlocks.FLOWERY_MOSS_BRICKS.getDefaultState());
+		registry.setBlockState("structure_primary_decorative", MinestuckBlocks.FLOWERY_MOSSY_STONE_BRICKS.getDefaultState());
 		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState());
 		registry.setBlockState("structure_secondary", Blocks.MOSSY_COBBLESTONE.getDefaultState());
-		registry.setBlockState("structure_secondary_decorative", MinestuckBlocks.FLOWERY_MOSS_STONE.getDefaultState());
+		registry.setBlockState("structure_secondary_decorative", MinestuckBlocks.FLOWERY_MOSSY_COBBLESTONE.getDefaultState());
 		registry.setBlockState("structure_secondary_stairs", Blocks.DARK_OAK_STAIRS.getDefaultState());
 		registry.setBlockState("village_path", Blocks.GRASS_PATH.getDefaultState());
 		registry.setBlockState("bush", Blocks.FERN.getDefaultState());

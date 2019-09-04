@@ -2,6 +2,7 @@ package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.inventory.UraniumCookerContainer;
 import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.util.ExtraForgeTags;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -80,9 +81,9 @@ public class UraniumCookerTileEntity extends MachineProcessTileEntity implements
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack)
 	{
-		if(i == 0 && itemstack.getItem() != MinestuckItems.RAW_URANIUM)
+		if(i == 0)
 		{
-			return false;
+			return ExtraForgeTags.Items.URANIUM_CHUNKS.contains(itemstack.getItem());
 		}
 		
 		return true;
@@ -99,7 +100,7 @@ public class UraniumCookerTileEntity extends MachineProcessTileEntity implements
 		ItemStack inputA = this.inv.get(0);
 		ItemStack inputB = this.inv.get(1);
 		ItemStack output = irradiate(inputB);
-		return (inputA.getItem() == MinestuckItems.RAW_URANIUM && !inputB.isEmpty());
+		return (ExtraForgeTags.Items.URANIUM_CHUNKS.contains(inputA.getItem()) && !inputB.isEmpty());
 	}
 	
 	private ItemStack irradiate(ItemStack input)
@@ -136,7 +137,7 @@ public class UraniumCookerTileEntity extends MachineProcessTileEntity implements
 	public void processContents()
 	{
 		ItemStack item = inv.get(1);
-		if(getFuel() <= getMaxFuel() - 32 && inv.get(0).getItem() == MinestuckItems.RAW_URANIUM)
+		if(getFuel() <= getMaxFuel() - 32 && ExtraForgeTags.Items.URANIUM_CHUNKS.contains(inv.get(0).getItem()))
 		{    //Refill fuel
 			fuel += 32;
 			this.decrStackSize(0, 1);

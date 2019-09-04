@@ -679,8 +679,8 @@ public class AlchemyRecipes
 		AlchemyCostRegistry.addGristConversion(END_GRASS, new GristSet(new GristType[] {GristType.CAULK, GristType.BUILD}, new int[] {3, 4}));
 		AlchemyCostRegistry.addGristConversion(FLOWERY_VINE_LOG, new GristSet(new GristType[] {GristType.BUILD, GristType.IODINE}, new int[] {7, 1}));
 		AlchemyCostRegistry.addGristConversion(FROST_LOG, new GristSet(new GristType[] {GristType.BUILD, GristType.COBALT}, new int[] {7, 1}));
-		AlchemyCostRegistry.addGristConversion(FLOWERY_MOSS_BRICKS, new GristSet(new GristType[] {GristType.AMBER, GristType.BUILD, GristType.IODINE}, new int[] {1, 7, 1}));
-		AlchemyCostRegistry.addGristConversion(FLOWERY_MOSS_STONE, new GristSet(new GristType[] {GristType.AMBER, GristType.BUILD, GristType.IODINE}, new int[] {1, 7, 1}));
+		AlchemyCostRegistry.addGristConversion(FLOWERY_MOSSY_STONE_BRICKS, new GristSet(new GristType[] {GristType.AMBER, GristType.BUILD, GristType.IODINE}, new int[] {1, 7, 1}));
+		AlchemyCostRegistry.addGristConversion(FLOWERY_MOSSY_COBBLESTONE, new GristSet(new GristType[] {GristType.AMBER, GristType.BUILD, GristType.IODINE}, new int[] {1, 7, 1}));
 		AlchemyCostRegistry.addGristConversion(TREATED_PLANKS, new GristSet(new GristType[] {GristType.BUILD}, new int[] {2}));
 		AlchemyCostRegistry.addGristConversion(SBAHJ_POSTER, new GristSet(new GristType[] {GristType.BUILD}, new int[] {4}));
 		AlchemyCostRegistry.addGristConversion(CREW_POSTER, new GristSet(new GristType[] {GristType.TAR, GristType.RUST}, new int[] {3, 2}));
@@ -910,10 +910,10 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(Blocks.OAK_LOG, Blocks.VINE, MODE_AND, new ItemStack(VINE_LOG));
 		CombinationRegistry.addCombination(VINE_LOG, Blocks.DANDELION, MODE_OR, new ItemStack(FLOWERY_VINE_LOG));
 		CombinationRegistry.addCombination(VINE_LOG, Blocks.POPPY, MODE_OR, new ItemStack(FLOWERY_VINE_LOG));
-		CombinationRegistry.addCombination(Blocks.MOSSY_COBBLESTONE, Blocks.DANDELION, MODE_OR, new ItemStack(FLOWERY_MOSS_STONE));
-		CombinationRegistry.addCombination(Blocks.MOSSY_COBBLESTONE, Blocks.POPPY, MODE_OR, new ItemStack(FLOWERY_MOSS_STONE));
-		CombinationRegistry.addCombination(Blocks.MOSSY_STONE_BRICKS, Blocks.DANDELION, MODE_OR, new ItemStack(FLOWERY_MOSS_BRICKS));
-		CombinationRegistry.addCombination(Blocks.MOSSY_STONE_BRICKS, Blocks.POPPY, MODE_OR, new ItemStack(FLOWERY_MOSS_BRICKS));
+		CombinationRegistry.addCombination(Blocks.MOSSY_COBBLESTONE, Blocks.DANDELION, MODE_OR, new ItemStack(FLOWERY_MOSSY_COBBLESTONE));
+		CombinationRegistry.addCombination(Blocks.MOSSY_COBBLESTONE, Blocks.POPPY, MODE_OR, new ItemStack(FLOWERY_MOSSY_COBBLESTONE));
+		CombinationRegistry.addCombination(Blocks.MOSSY_STONE_BRICKS, Blocks.DANDELION, MODE_OR, new ItemStack(FLOWERY_MOSSY_STONE_BRICKS));
+		CombinationRegistry.addCombination(Blocks.MOSSY_STONE_BRICKS, Blocks.POPPY, MODE_OR, new ItemStack(FLOWERY_MOSSY_STONE_BRICKS));
 		CombinationRegistry.addCombination(ItemTags.PLANKS, Blocks.NETHERRACK,  MODE_OR, new ItemStack(TREATED_PLANKS));
 		CombinationRegistry.addCombination(ItemTags.PLANKS, Blocks.SNOW_BLOCK, MODE_OR, new ItemStack(FROST_PLANKS));
 		CombinationRegistry.addCombination(ItemTags.PLANKS, Blocks.SNOW, MODE_OR, new ItemStack(FROST_PLANKS));

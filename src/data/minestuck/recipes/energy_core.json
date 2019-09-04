@@ -7,7 +7,7 @@
   ],
   "key": {
     "u": {
-      "item": "minestuck:raw_uranium"
+      "tag": "forge:chunks/uranium"
     },
     "c": {
       "item": "minestuck:raw_cruxite"

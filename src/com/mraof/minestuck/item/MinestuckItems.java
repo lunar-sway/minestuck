@@ -251,8 +251,8 @@ public class MinestuckItems
 		registerItemBlock(registry, CHISELED_CAST_IRON, ModItemGroup.LANDS);
 		registerItemBlock(registry, MYCELIUM_BRICKS, ModItemGroup.LANDS);
 		registerItemBlock(registry, BLACK_STONE, ModItemGroup.LANDS);
-		registerItemBlock(registry, FLOWERY_MOSS_STONE, ModItemGroup.LANDS);
-		registerItemBlock(registry, FLOWERY_MOSS_BRICKS, ModItemGroup.LANDS);
+		registerItemBlock(registry, FLOWERY_MOSSY_COBBLESTONE, ModItemGroup.LANDS);
+		registerItemBlock(registry, FLOWERY_MOSSY_STONE_BRICKS, ModItemGroup.LANDS);
 		registerItemBlock(registry, COARSE_END_STONE, ModItemGroup.LANDS);
 		registerItemBlock(registry, END_GRASS, ModItemGroup.LANDS);
 		registerItemBlock(registry, CHALK, ModItemGroup.LANDS);
