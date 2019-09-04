@@ -32,14 +32,14 @@ public class ShadeLandAspect extends TerrainLandAspect
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
 		registry.setBlockState("upper", MinestuckBlocks.BLUE_DIRT.getDefaultState());
-		//registry.setBlockState("ocean", MinestuckBlocks.blockOil.getDefaultState());
+		registry.setBlockState("ocean", MinestuckBlocks.OIL.getDefaultState());
 		registry.setBlockState("structure_primary_decorative", Blocks.CHISELED_STONE_BRICKS.getDefaultState());
 		registry.setBlockState("structure_primary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState());
 		registry.setBlockState("structure_secondary", MinestuckBlocks.SHADE_BRICKS.getDefaultState());
 		registry.setBlockState("structure_secondary_decorative", MinestuckBlocks.SMOOTH_SHADE_STONE.getDefaultState());
 		registry.setBlockState("structure_secondary_stairs", MinestuckBlocks.SHADE_BRICK_STAIRS.getDefaultState());
 		registry.setBlockState("village_path", Blocks.GRAVEL.getDefaultState());
-		//registry.setBlockState("light_block", MinestuckBlocks.glowingLog.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE));
+		registry.setBlockState("light_block", MinestuckBlocks.GLOWING_WOOD.getDefaultState());
 		registry.setBlockState("torch", Blocks.REDSTONE_TORCH.getDefaultState());
 		registry.setBlockState("mushroom_1", MinestuckBlocks.GLOWING_MUSHROOM.getDefaultState());
 		registry.setBlockState("mushroom_2", MinestuckBlocks.GLOWING_MUSHROOM.getDefaultState());

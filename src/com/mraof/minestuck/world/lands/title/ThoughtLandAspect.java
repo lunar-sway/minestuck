@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.lands.title;
 
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.biome.ModBiomes;
@@ -28,8 +29,8 @@ public class ThoughtLandAspect extends TitleLandAspect
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		/*registry.setBlockState("ocean", MinestuckBlocks.blockBrainJuice.getDefaultState());
-		registry.setBlockState("river", MinestuckBlocks.blockBrainJuice.getDefaultState());*/
+		registry.setBlockState("ocean", MinestuckBlocks.BRAIN_JUICE.getDefaultState());
+		registry.setBlockState("river", MinestuckBlocks.BRAIN_JUICE.getDefaultState());
 		registry.setBlockState("structure_wool_2", Blocks.LIME_WOOL.getDefaultState());
 		registry.setBlockState("carpet", Blocks.LIME_CARPET.getDefaultState());
 	}

@@ -3,6 +3,7 @@ package com.mraof.minestuck.item;
 import com.mraof.minestuck.entity.item.CrewPosterEntity;
 import com.mraof.minestuck.entity.item.MetalBoatEntity;
 import com.mraof.minestuck.entity.item.SbahjPosterEntity;
+import com.mraof.minestuck.fluid.ModFluids;
 import com.mraof.minestuck.item.block.*;
 import com.mraof.minestuck.item.foods.*;
 import com.mraof.minestuck.item.weapon.*;
@@ -609,13 +610,12 @@ public class MinestuckItems
 		registry.register(STONE_SLAB = new Item(new Item.Properties().group(ModItemGroup.LANDS)).setRegistryName("stone_slab"));
 		//registry.register(SHOP_POSTER = new HangingItem((world, pos, facing, stack) -> new EntityShopPoster(world, pos, facing, stack, 0), new Item.Properties().maxStackSize(1).group(ModItemGroup.LANDS)).setRegistryName("shop_poster"));
 		
-		//TODO Buckets
-		registry.register(OIL_BUCKET = new Item(new Item.Properties().containerItem(Items.BUCKET).maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("oil_bucket"));
-		registry.register(BLOOD_BUCKET = new Item(new Item.Properties().containerItem(Items.BUCKET).maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("blood_bucket"));
-		registry.register(BRAIN_JUICE_BUCKET = new Item(new Item.Properties().containerItem(Items.BUCKET).maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("brain_juice_bucket"));
-		registry.register(WATER_COLORS_BUCKET = new Item(new Item.Properties().containerItem(Items.BUCKET).maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("water_colors_bucket"));
-		registry.register(ENDER_BUCKET = new Item(new Item.Properties().containerItem(Items.BUCKET).maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("ender_bucket"));
-		registry.register(LIGHT_WATER_BUCKET = new Item(new Item.Properties().containerItem(Items.BUCKET).maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("light_water_bucket"));
+		registry.register(OIL_BUCKET = new BucketItem(ModFluids.OIL, new Item.Properties().containerItem(Items.BUCKET).maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("oil_bucket"));
+		registry.register(BLOOD_BUCKET = new BucketItem(ModFluids.BLOOD, new Item.Properties().containerItem(Items.BUCKET).maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("blood_bucket"));
+		registry.register(BRAIN_JUICE_BUCKET = new BucketItem(ModFluids.BRAIN_JUICE, new Item.Properties().containerItem(Items.BUCKET).maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("brain_juice_bucket"));
+		registry.register(WATER_COLORS_BUCKET = new BucketItem(ModFluids.WATER_COLORS, new Item.Properties().containerItem(Items.BUCKET).maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("water_colors_bucket"));
+		registry.register(ENDER_BUCKET = new BucketItem(ModFluids.ENDER, new Item.Properties().containerItem(Items.BUCKET).maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("ender_bucket"));
+		registry.register(LIGHT_WATER_BUCKET = new BucketItem(ModFluids.LIGHT_WATER, new Item.Properties().containerItem(Items.BUCKET).maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("light_water_bucket"));
 		registry.register(OBSIDIAN_BUCKET = new ObsidianBucketItem(new Item.Properties().maxStackSize(1).containerItem(Items.BUCKET).group(ModItemGroup.MAIN)).setRegistryName("obsidian_bucket"));
 		registry.register(CAPTCHAROID_CAMERA = new CaptcharoidCameraItem(new Item.Properties().defaultMaxDamage(64).group(ModItemGroup.MAIN)).setRegistryName("captcharoid_camera"));
 		registry.register(GRIMOIRE = new GrimoireItem(new Item.Properties().maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("grimoire"));
@@ -635,18 +635,6 @@ public class MinestuckItems
 		registry.register(RECORD_EMISSARY_OF_DANCE = new ModMusicDiscItem(13, ModSoundEvents.MUSIC_DISC_EMISSARY_OF_DANCE, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("record_emissary"));
 		registry.register(RECORD_DANCE_STAB = new ModMusicDiscItem(13, ModSoundEvents.MUSIC_DISC_DANCE_STAB_DANCE, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("record_dance_stab"));
 		registry.register(RECORD_RETRO_BATTLE = new ModMusicDiscItem(13, ModSoundEvents.MUSIC_DISC_RETRO_BATTLE_THEME, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(ModItemGroup.MAIN)).setRegistryName("record_retro_battle"));
-
-		/*((MinestuckBucketItem) minestuckBucket).addBlock(blockOil.getDefaultState());
-		((MinestuckBucketItem) minestuckBucket).addBlock(blockBlood.getDefaultState());
-		((MinestuckBucketItem) minestuckBucket).addBlock(blockBrainJuice.getDefaultState());
-		((MinestuckBucketItem) minestuckBucket).addBlock(blockWatercolors.getDefaultState());
-		((MinestuckBucketItem) minestuckBucket).addBlock(blockEnder.getDefaultState());
-		((MinestuckBucketItem) minestuckBucket).addBlock(blockLightWater.getDefaultState());*/
-
-		/*for(Block block : liquidGrists)
-		{
-			minestuckBucket.addBlock(block.getDefaultState());
-		}*/
 		
 		WeaponItem.addToolMaterial(ToolType.PICKAXE, Arrays.asList(Material.IRON, Material.ANVIL, Material.ROCK));
 		WeaponItem.addToolMaterial(ToolType.AXE, Arrays.asList(Material.WOOD, Material.PLANTS, Material.TALL_PLANTS));

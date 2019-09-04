@@ -5,12 +5,14 @@ import com.mraof.minestuck.block.multiblock.AlchemiterMultiblock;
 import com.mraof.minestuck.block.multiblock.CruxtruderMultiblock;
 import com.mraof.minestuck.block.multiblock.PunchDesignixMultiblock;
 import com.mraof.minestuck.block.multiblock.TotemLatheMultiblock;
+import com.mraof.minestuck.fluid.ModFluids;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.item.DyeColor;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -167,6 +169,8 @@ public class MinestuckBlocks
 	public static final Block MINI_FROG_STATUE = getNull();
 	public static final Block GLOWYSTONE_DUST = getNull();
 	
+	public static final Block OIL = getNull(), BLOOD = getNull(), BRAIN_JUICE = getNull();
+	public static final Block WATER_COLORS = getNull(), ENDER = getNull(), LIGHT_WATER = getNull();
 	//TODO Look more into fluids
 	/*public static Fluid fluidOil = createFluid("oil", new ResourceLocation("minestuck", "blocks/oil_still"), new ResourceLocation("minestuck", "blocks/oil_flowing"), "tile.oil");
 	public static Fluid fluidBlood = createFluid("blood", new ResourceLocation("minestuck", "blocks/blood_still"), new ResourceLocation("minestuck", "blocks/blood_flowing"), "tile.blood");
@@ -494,21 +498,12 @@ public class MinestuckBlocks
 		registry.register(new DecorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.5F), DecorBlockShapes.FROG_STATUE_SHAPE).setRegistryName("mini_frog_statue"));
 		registry.register(new GlowystoneWireBlock(Block.Properties.create(Material.MISCELLANEOUS).hardnessAndResistance(0.0F).lightValue(16).doesNotBlockMovement()).setRegistryName("glowystone_dust"));
 		
-		/*registry.register(blockOil.setRegistryName("block_oil"));
-		registry.register(blockBlood.setRegistryName("block_blood"));
-		registry.register(blockBrainJuice.setRegistryName("block_brain_juice"));
-		registry.register(blockWatercolors.setRegistryName("block_watercolors"));
-		registry.register(blockEnder.setRegistryName("block_ender"));
-		registry.register(blockLightWater.setRegistryName("block_light_water"));*/
-		
-		//fluids
-		/*liquidGrists = new Block[GristType.allGrists];
-		gristFluids = new Fluid[GristType.allGrists];
-		for(GristType grist : GristType.values()) {
-			gristFluids[grist.getId()] = new Fluid(grist.getName(), new ResourceLocation("minestuck", "blocks/Liquid" + grist.getName() + "Still"), new ResourceLocation("minestuck", "blocks/Liquid" + grist.getName() + "Flowing"));
-			FluidRegistry.registerFluid(gristFluids[grist.getId()]);
-			liquidGrists[grist.getId()] = GameRegistry.register(new BlockFluidGrist(gristFluids[grist.getId()], Material.WATER).setRegistryName("liquid_" + grist.getName())).setUnlocalizedName("liquid_" + grist.getName());
-		}*/
+		registry.register(new FlowingModFluidBlock(ModFluids.OIL, new Vec3d(0.0, 0.0, 0.0), Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()).setRegistryName("oil"));
+		registry.register(new FlowingModFluidBlock(ModFluids.BLOOD, new Vec3d(0.8, 0.0, 0.0), Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()).setRegistryName("blood"));
+		registry.register(new FlowingModFluidBlock(ModFluids.BRAIN_JUICE, new Vec3d(0.55, 0.25, 0.7), Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()).setRegistryName("brain_juice"));
+		registry.register(new FlowingWaterColorsBlock(ModFluids.WATER_COLORS, Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()).setRegistryName("water_colors"));
+		registry.register(new FlowingModFluidBlock(ModFluids.ENDER, Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()).setRegistryName("ender"));
+		registry.register(new FlowingModFluidBlock(ModFluids.LIGHT_WATER, new Vec3d(0.2, 0.3, 1.0), Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()).setRegistryName("light_water"));
 	}
 	
 	private static Block register(IForgeRegistry<Block> registry, Block block) //Used because registry.register doesn't return the registered block

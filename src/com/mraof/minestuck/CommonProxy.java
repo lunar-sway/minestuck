@@ -7,7 +7,6 @@ import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortDialogue;
 import com.mraof.minestuck.entity.consort.ConsortRewardHandler;
-import com.mraof.minestuck.event.MinestuckFluidHandler;
 import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
@@ -16,7 +15,6 @@ import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.gen.OreHandler;
-import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 import com.mraof.minestuck.world.storage.loot.MinestuckLoot;
 import net.minecraft.item.ItemStack;
@@ -38,7 +36,6 @@ public class CommonProxy
 		
 		//Register event handlers
 		MinecraftForge.EVENT_BUS.register(new MinestuckSaveHandler());
-		MinecraftForge.EVENT_BUS.register(new MinestuckFluidHandler());
 		MinecraftForge.EVENT_BUS.register(ServerEditHandler.instance);
 		MinecraftForge.EVENT_BUS.register(MinestuckPlayerTracker.instance);
 		MinecraftForge.EVENT_BUS.register(ServerEventHandler.instance);

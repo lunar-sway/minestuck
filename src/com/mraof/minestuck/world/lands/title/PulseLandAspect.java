@@ -32,8 +32,8 @@ public class PulseLandAspect extends TitleLandAspect
 		registry.setBlockState("structure_wool_2", Blocks.RED_WOOL.getDefaultState());
 		registry.setBlockState("carpet", Blocks.BROWN_CARPET.getDefaultState());
 		
-		/*registry.setBlockState("ocean", MinestuckBlocks.blockBlood.getDefaultState());TODO
-		registry.setBlockState("river", MinestuckBlocks.blockBlood.getDefaultState());*/
+		registry.setBlockState("ocean", MinestuckBlocks.BLOOD.getDefaultState());
+		registry.setBlockState("river", MinestuckBlocks.BLOOD.getDefaultState());
 		registry.setBlockState("slime", MinestuckBlocks.COAGULATED_BLOOD.getDefaultState());
 	}
 	
