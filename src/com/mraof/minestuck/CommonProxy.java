@@ -15,6 +15,7 @@ import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.gen.OreHandler;
+import com.mraof.minestuck.world.gen.feature.ModStructureProcessorTypes;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 import com.mraof.minestuck.world.storage.loot.MinestuckLoot;
 import net.minecraft.item.ItemStack;
@@ -25,6 +26,7 @@ public class CommonProxy
 	public static void init()
 	{
 		MinestuckCriteriaTriggers.register();
+		ModStructureProcessorTypes.call();
 		ModEntityTypes.registerPlacements();
 		
 		//register ore generation
