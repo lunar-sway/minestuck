@@ -74,9 +74,9 @@ public class StructureBlockRegistry
 		registerBlock("structure_primary", Blocks.STONE_BRICKS.getDefaultState());
 		registerBlock("structure_primary_decorative", "structure_primary", Blocks.CHISELED_STONE_BRICKS);
 		registerBlock("structure_primary_stairs", "structure_primary", Blocks.STONE_BRICK_STAIRS);
-		registerBlock("structure_secondary", "structure_primary", Blocks.QUARTZ_BLOCK);
-		registerBlock("structure_secondary_decorative", "structure_secondary", Blocks.QUARTZ_PILLAR);
-		registerBlock("structure_secondary_stairs", "structure_secondary", Blocks.QUARTZ_STAIRS);
+		registerBlock("structure_secondary", "structure_primary", Blocks.NETHER_BRICKS);
+		registerBlock("structure_secondary_decorative", "structure_secondary", Blocks.RED_NETHER_BRICKS);
+		registerBlock("structure_secondary_stairs", "structure_secondary", Blocks.NETHER_BRICK_STAIRS);
 		registerBlock("structure_planks", Blocks.OAK_PLANKS.getDefaultState());
 		registerBlock("structure_planks_slab", Blocks.OAK_SLAB.getDefaultState(), SlabBlock.class);
 		registerBlock("structure_wool_1", Blocks.WHITE_WOOL.getDefaultState());
