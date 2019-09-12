@@ -33,6 +33,7 @@ public class MinestuckBlockTagsProvider extends BlockTagsProvider
 		getBuilder(LEAVES).add(FROST_LEAVES, RAINBOW_LEAVES, END_LEAVES).add(ASPECT_LEAVES);
 		getBuilder(DIRT_LIKE).add(BLACK_CHESS_DIRT, WHITE_CHESS_DIRT, DARK_GRAY_CHESS_DIRT, LIGHT_GRAY_CHESS_DIRT, BLUE_DIRT, THOUGHT_DIRT);
 		getBuilder(Blocks.COBBLESTONE).add(FLOWERY_MOSSY_COBBLESTONE);
+		getBuilder(Blocks.END_STONES).add(COARSE_END_STONE);
 		getBuilder(Blocks.ORES).add(CRUXITE_ORES, ExtraForgeTags.Blocks.URANIUM_ORES);
 		getBuilder(Blocks.ORES_COAL).add(COAL_ORES);
 		getBuilder(Blocks.ORES_DIAMOND).add(DIAMOND_ORES);
@@ -69,6 +70,7 @@ public class MinestuckBlockTagsProvider extends BlockTagsProvider
 		getBuilder(LAPIS_ORES).add(PINK_STONE_LAPIS_ORE);
 		getBuilder(DIAMOND_ORES).add(PINK_STONE_DIAMOND_ORE);
 		getBuilder(CRUXITE_STORAGE_BLOCKS).add(CRUXITE_BLOCK);
+		getBuilder(END_SAPLING_DIRT).add(Blocks.END_STONES).add(END_GRASS);
 	}
 	
 	@Override

@@ -34,6 +34,7 @@ public class MinestuckTags
 		public static final Tag<Block> LAPIS_ORES = tag("ores/lapis");
 		public static final Tag<Block> DIAMOND_ORES = tag("ores/diamond");
 		public static final Tag<Block> CRUXITE_STORAGE_BLOCKS = tag("storage_blocks/cruxite");
+		public static final Tag<Block> END_SAPLING_DIRT = tag("end_sapling_dirt");
 		
 		private static Tag<Block> tag(String name)
 		{

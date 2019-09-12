@@ -8,6 +8,8 @@ import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
+import com.mraof.minestuck.world.biome.ModBiomes;
+import com.mraof.minestuck.world.gen.feature.ModFeatures;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.MesaDecorator;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
@@ -19,6 +21,10 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.gen.placement.AtSurfaceWithExtraConfig;
+import net.minecraft.world.gen.placement.Placement;
 
 public class RainbowLandAspect extends TerrainLandAspect
 {
@@ -70,6 +76,14 @@ public class RainbowLandAspect extends TerrainLandAspect
 	@Override
 	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blockRegistry)
 	{
+		if(biome.staticBiome == ModBiomes.LAND_NORMAL)
+		{
+			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(ModFeatures.RAINBOW_TREE, IFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_EXTRA_HEIGHTMAP, new AtSurfaceWithExtraConfig(4, 0.1F, 1)));
+		} else if(biome.staticBiome == ModBiomes.LAND_ROUGH)
+		{
+			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(ModFeatures.RAINBOW_TREE, IFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_EXTRA_HEIGHTMAP, new AtSurfaceWithExtraConfig(2, 0.1F, 1)));
+		}
+		
 		biome.addSpawn(EntityClassification.WATER_CREATURE, new SpawnListEntry(EntityType.SQUID, 2, 3, 5));
 	}
 	
@@ -79,8 +93,6 @@ public class RainbowLandAspect extends TerrainLandAspect
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
 		
 		list.add(new MesaDecorator().setAltFrequency(.01F));
-		//list.add(new WorldgenTreeDecorator(4, new RainbowTree(false), BiomeMinestuck.mediumNormal));
-		//list.add(new WorldgenTreeDecorator(2, new RainbowTree(false), BiomeMinestuck.mediumRough));
 		
 		//Each of these is associated with one of the primary colors in Minecraft: black, red, blue, yellow, green, brown, and white
 		list.add(new UndergroundDecoratorVein(Blocks.COAL_ORE.getDefaultState(), 20, 17, 128));

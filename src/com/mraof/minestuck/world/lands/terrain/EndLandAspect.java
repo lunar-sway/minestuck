@@ -4,6 +4,9 @@ import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
+import com.mraof.minestuck.world.biome.LandWrapperBiome;
+import com.mraof.minestuck.world.biome.ModBiomes;
+import com.mraof.minestuck.world.gen.feature.ModFeatures;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
@@ -13,6 +16,10 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.gen.placement.AtSurfaceWithExtraConfig;
+import net.minecraft.world.gen.placement.Placement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,12 +69,22 @@ public class EndLandAspect extends TerrainLandAspect
 	}
 	
 	@Override
+	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blockRegistry)
+	{
+		if(biome.staticBiome == ModBiomes.LAND_NORMAL)
+		{
+			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(ModFeatures.END_TREE, IFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_EXTRA_HEIGHTMAP, new AtSurfaceWithExtraConfig(2, 0.1F, 1)));
+		} else if(biome.staticBiome == ModBiomes.LAND_ROUGH)
+		{
+			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(ModFeatures.END_TREE, IFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_EXTRA_HEIGHTMAP, new AtSurfaceWithExtraConfig(3, 0.1F, 1)));
+		}
+	}
+	
+	@Override
 	public List<ILandDecorator> getDecorators()
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
-		/*list.add(new WorldgenTreeDecorator(2, new EndTree(), BiomeMinestuck.mediumRough));
-		list.add(new WorldgenTreeDecorator(3, new EndTree(), BiomeMinestuck.mediumNormal));
-		
+		/*
 		list.add(new UndergroundDecoratorVein(Blocks.GRAVEL.getDefaultState(), 8, 33, 256));
 		list.add(new UndergroundDecoratorVein(Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.COARSE_DIRT), 8, 16, 128));
 		list.add(new UndergroundDecoratorVein(MinestuckBlocks.ironOreEndStone.getDefaultState(), 20, 9, 64));

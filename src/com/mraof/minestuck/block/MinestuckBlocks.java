@@ -70,7 +70,7 @@ public class MinestuckBlocks
 	public static final Block GLOWING_PLANKS = getNull(), FROST_PLANKS = getNull(), RAINBOW_PLANKS = getNull(), END_PLANKS = getNull();
 	public static final Block DEAD_PLANKS = getNull(), TREATED_PLANKS = getNull();
 	public static final Block FROST_LEAVES = getNull(), RAINBOW_LEAVES = getNull(), END_LEAVES = getNull();
-	public static final Block RAINBOW_SAPLING = getNull(), END_SAPLING = getNull();
+	public static final BushBlock RAINBOW_SAPLING = getNull(), END_SAPLING = getNull();
 	
 	//Aspect Tree Blocks
 	public static final Block BLOOD_ASPECT_LOG = getNull(), BREATH_ASPECT_LOG = getNull(), DOOM_ASPECT_LOG = getNull(), HEART_ASPECT_LOG = getNull();

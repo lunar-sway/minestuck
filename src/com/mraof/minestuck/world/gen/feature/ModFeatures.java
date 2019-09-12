@@ -15,6 +15,8 @@ import javax.annotation.Nonnull;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class ModFeatures
 {
+	public static final Feature<NoFeatureConfig> RAINBOW_TREE = getNull();
+	public static final Feature<NoFeatureConfig> END_TREE =	 getNull();
 	public static final Feature<NoFeatureConfig> FIRE_FIELD = getNull();
 	
 	@Nonnull
@@ -30,6 +32,8 @@ public class ModFeatures
 	{
 		IForgeRegistry<Feature<?>> registry = event.getRegistry();
 		
+		registry.register(new RainbowTreeFeature(NoFeatureConfig::deserialize, false).setRegistryName("rainbow_tree"));
+		registry.register(new EndTreeFeature(NoFeatureConfig::deserialize, false).setRegistryName("end_tree"));
 		registry.register(new FireFieldFeature(NoFeatureConfig::deserialize).setRegistryName("fire_field"));
 	}
 }
