@@ -78,7 +78,7 @@ public abstract class EnderFluid extends FlowingFluid
 	}
 	
 	@Override
-	protected boolean func_215665_a(IFluidState state, IBlockReader worldIn, BlockPos pos, Fluid fluid, Direction direction)
+	protected boolean canDisplace(IFluidState state, IBlockReader worldIn, BlockPos pos, Fluid fluid, Direction direction)
 	{
 		return direction == Direction.DOWN && !fluid.isIn(FluidTags.WATER);
 	}
@@ -108,9 +108,9 @@ public abstract class EnderFluid extends FlowingFluid
 	}
 	
 	@Override
-	protected FluidAttributes createAttributes(Fluid fluid)
+	protected FluidAttributes createAttributes()
 	{
-		return FluidAttributes.builder("ender", STILL_TEXTURE, FLOWING_TEXTURE).build();
+		return FluidAttributes.builder(STILL_TEXTURE, FLOWING_TEXTURE).build(this);
 	}
 	
 	public static class Flowing extends EnderFluid

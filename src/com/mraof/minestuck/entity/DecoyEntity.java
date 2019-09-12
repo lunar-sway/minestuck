@@ -65,8 +65,8 @@ public class DecoyEntity extends MobEntity
 		super(ModEntityTypes.PLAYER_DECOY, world);
 		this.setBoundingBox(player.getBoundingBox());
 		this.player = new DecoyPlayer(world, this, player);
-		for(String key : player.getEntityData().keySet())
-			this.player.getEntityData().put(key, player.getEntityData().get(key).copy());
+		for(String key : player.getPersistentData().keySet())
+			this.player.getPersistentData().put(key, player.getPersistentData().get(key).copy());
 		this.posX = player.posX;
 		originX = posX;
 		this.chunkCoordX = player.chunkCoordX;
