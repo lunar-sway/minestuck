@@ -1,16 +1,22 @@
 package com.mraof.minestuck.world.lands.title;
 
+import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.util.EnumAspect;
+import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.biome.ModBiomes;
-import com.mraof.minestuck.world.lands.decorator.FrogSpawner;
-import com.mraof.minestuck.world.lands.decorator.LilypadDecorator;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.EntityClassification;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.gen.placement.FrequencyConfig;
+import net.minecraft.world.gen.placement.Placement;
 
- public class FrogsLandAspect extends TitleLandAspect
+public class FrogsLandAspect extends TitleLandAspect
 {
 	public FrogsLandAspect()
 	{
@@ -30,14 +36,15 @@ import net.minecraft.block.material.Material;
 		registry.setBlockState("carpet", Blocks.LIME_CARPET.getDefaultState());
 	}
 	
-	//@Override
-	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
+	@Override
+	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blockRegistry)
 	{
+		if(biome.staticBiome == ModBiomes.LAND_OCEAN)
+		{
+			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Feature.WATERLILY, IFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_HEIGHTMAP_DOUBLE, new FrequencyConfig(2)));
+		}
 		
-		chunkProvider.decorators.add(new FrogSpawner(6, ModBiomes.mediumNormal));
-		chunkProvider.decorators.add(new FrogSpawner(4, ModBiomes.mediumRough));
-		chunkProvider.decorators.add(new LilypadDecorator(10, ModBiomes.mediumOcean));
-		//chunkProvider.sortDecorators();
+		biome.addSpawn(EntityClassification.CREATURE, new Biome.SpawnListEntry(ModEntityTypes.FROG, 10, 4, 4));
 	}
 	
 	@Override

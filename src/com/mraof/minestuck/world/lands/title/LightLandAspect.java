@@ -2,14 +2,22 @@ package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.util.EnumAspect;
+import com.mraof.minestuck.world.biome.LandWrapperBiome;
+import com.mraof.minestuck.world.gen.feature.ModFeatures;
 import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.biome.ModBiomes;
-import com.mraof.minestuck.world.lands.decorator.PillarDecorator;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.feature.BushConfig;
+import net.minecraft.world.gen.placement.ChanceConfig;
+import net.minecraft.world.gen.placement.FrequencyConfig;
+import net.minecraft.world.gen.placement.Placement;
+import net.minecraft.world.gen.placement.TopSolidRangeConfig;
 
 public class LightLandAspect extends TitleLandAspect
 {
@@ -40,13 +48,17 @@ public class LightLandAspect extends TitleLandAspect
 		worldProvider.mergeFogColor(new Vec3d(1, 1, 0.8), 0.5F);
 	}
 	
-	//@Override
-	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
+	@Override
+	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blockRegistry)
 	{
-		chunkProvider.decorators.add(new PillarDecorator("light_block", 0.5F, false, ModBiomes.mediumNormal, ModBiomes.mediumOcean));
-		chunkProvider.decorators.add(new PillarDecorator("light_block", 3, true, ModBiomes.mediumRough));
-		
-		//chunkProvider.sortDecorators();
+		BlockState lightBlock = blockRegistry.getBlockState("light_block");
+		if(biome.staticBiome == ModBiomes.LAND_ROUGH)
+		{
+			biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(ModFeatures.LARGE_PILLAR, new BushConfig(lightBlock), Placement.COUNT_TOP_SOLID, new FrequencyConfig(3)));
+		} else
+		{
+			biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(ModFeatures.PILLAR, new BushConfig(lightBlock), Placement.CHANCE_TOP_SOLID_HEIGHTMAP, new ChanceConfig(2)));
+		}
 	}
 	
 	@Override

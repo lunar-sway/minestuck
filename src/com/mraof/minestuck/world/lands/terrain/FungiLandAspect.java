@@ -33,7 +33,8 @@ public class FungiLandAspect extends TerrainLandAspect
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("upper", Blocks.MYCELIUM.getDefaultState());
+		registry.setBlockState("surface", Blocks.MYCELIUM.getDefaultState());
+		registry.setBlockState("upper", Blocks.DIRT.getDefaultState());
 		registry.setBlockState("ocean", Blocks.WATER.getDefaultState());
 		registry.setBlockState("structure_primary_decorative", Blocks.MOSSY_STONE_BRICKS.getDefaultState());
 		registry.setBlockState("structure_primary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState());

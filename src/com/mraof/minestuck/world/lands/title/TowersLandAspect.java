@@ -1,12 +1,18 @@
 package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.util.EnumAspect;
+import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.biome.ModBiomes;
-import com.mraof.minestuck.world.lands.decorator.PillarDecorator;
+import com.mraof.minestuck.world.gen.feature.ModFeatures;
 import com.mraof.minestuck.world.lands.decorator.structure.BasicTowerDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.Blocks;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.feature.BushConfig;
+import net.minecraft.world.gen.placement.IPlacementConfig;
+import net.minecraft.world.gen.placement.Placement;
 
 public class TowersLandAspect extends TitleLandAspect
 {
@@ -28,11 +34,19 @@ public class TowersLandAspect extends TitleLandAspect
 		registry.setBlockState("carpet", Blocks.YELLOW_CARPET.getDefaultState());
 	}
 	
+	@Override
+	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blockRegistry)
+	{
+		if(biome.staticBiome == ModBiomes.LAND_ROUGH)
+		{
+			biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(ModFeatures.LARGE_PILLAR, new BushConfig(blockRegistry.getBlockState("structure_primary")), Placement.TOP_SOLID_HEIGHTMAP, IPlacementConfig.NO_PLACEMENT_CONFIG));
+		}
+	}
+	
 	//@Override
 	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.decorators.add(new BasicTowerDecorator());
-		chunkProvider.decorators.add(new PillarDecorator("structure_primary", 1, true, ModBiomes.mediumRough));
 		//chunkProvider.sortDecorators();
 	}
 }
