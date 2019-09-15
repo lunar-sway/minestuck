@@ -47,7 +47,7 @@ public class ModusTypes
 	public static void onRegistryNewRegistry(final RegistryEvent.NewRegistry event)
 	{
 		REGISTRY = new RegistryBuilder<ModusType<?>>()
-				.setName(new ResourceLocation(Minestuck.MOD_ID, "modus"))
+				.setName(new ResourceLocation(Minestuck.MOD_ID, "modus_type"))
 				.setType((Class<ModusType<?>>) (Class<?>) ModusType.class)
 				.addCallback(ModusCallbacks.INSTANCE)
 				.create();
