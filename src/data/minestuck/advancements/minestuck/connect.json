@@ -1,19 +1,28 @@
 {
-    "display": {
-        "icon": {
-            "item": "minestuck:computer_disk"
-        },
-        "title": {
-            "translate": "advancements.minestuck.setup_connection.title"
-        },
-        "description": {
-            "translate": "advancements.minestuck.setup_connection.description"
-        }
+  "parent": "minestuck:minestuck/root",
+  "display": {
+    "icon": {
+      "item": "minestuck:client_disk"
     },
-    "parent": "minestuck:minestuck/root",
-    "criteria": {
-        "connection": {
-            "trigger": "minestuck:sburb_connection"
-        }
+    "title": {
+      "translate": "advancements.minestuck.connect.title"
+    },
+    "description": {
+      "translate": "advancements.minestuck.connect.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "connection": {
+      "trigger": "minestuck:sburb_connection"
     }
+  },
+  "requirements": [
+    [
+      "connection"
+    ]
+  ]
 }

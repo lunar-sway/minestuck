@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
@@ -17,10 +18,12 @@ import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.advancements.criterion.MinMaxBounds;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class CaptchalogueTrigger implements ICriterionTrigger<CaptchalogueTrigger.Instance>
@@ -67,17 +70,8 @@ public class CaptchalogueTrigger implements ICriterionTrigger<CaptchalogueTrigge
 	@Override
 	public Instance deserializeInstance(JsonObject json, JsonDeserializationContext context)
 	{
-		ModusType<?> modus = null;
-		if(json.has("modus"))
-		{
-			String modusName = json.get("modus").getAsString();
-			modus = ModusTypes.REGISTRY.getValue(new ResourceLocation(modusName));
-			if(modus == null)
-				throw new IllegalArgumentException("Invalid modus: "+modusName);
-		}
-		ItemPredicate item = null;
-		if(json.has("item"))
-			item = ItemPredicate.deserialize(json.get("item"));
+		ModusType<?> modus = json.has("modus") ? ModusTypes.REGISTRY.getValue(new ResourceLocation(JSONUtils.getString(json, "modus"))) : null;
+		ItemPredicate item = json.has("item") ? ItemPredicate.deserialize(json.get("item")) : null;
 		MinMaxBounds.IntBound count = MinMaxBounds.IntBound.fromJson(json.get("count"));
 		return new Instance(modus, item, count);
 	}
@@ -98,13 +92,25 @@ public class CaptchalogueTrigger implements ICriterionTrigger<CaptchalogueTrigge
 		{
 			super(ID);
 			this.modus = modus;
-			this.item = item;
-			this.count = count;
+			this.item = Objects.requireNonNull(item);
+			this.count = Objects.requireNonNull(count);
 		}
 		
 		public boolean test(ModusType<?> modus, ItemStack item, int count)
 		{
-			return (this.modus == null || this.modus.equals(modus)) && (this.item == null || this.item.test(item)) && this.count.test(count);
+			return (this.modus == null || this.modus.equals(modus)) && this.item.test(item) && this.count.test(count);
+		}
+		
+		@Override
+		public JsonElement serialize()
+		{
+			JsonObject json = new JsonObject();
+			if(modus != null)
+				json.addProperty("modus", modus.getRegistryName().toString());
+			json.add("item", item.serialize());
+			json.add("count", count.serialize());
+			
+			return json;
 		}
 	}
 	

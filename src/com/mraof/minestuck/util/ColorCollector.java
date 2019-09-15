@@ -11,6 +11,7 @@ import java.util.List;
  */
 public class ColorCollector
 {
+	public static final int DEFAULT_COLOR = 0x0057FF;
 	private static List<Integer> colors;
 //	protected static boolean customColor;
 	
@@ -56,6 +57,11 @@ public class ColorCollector
 	public static int getColorSize()
 	{
 		return colors.size();
+	}
+	
+	public static ItemStack setDefaultColor(ItemStack stack)
+	{
+		return setColor(stack, DEFAULT_COLOR);
 	}
 	
 	public static ItemStack setColor(ItemStack stack, int color)

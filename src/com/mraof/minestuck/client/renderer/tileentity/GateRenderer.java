@@ -21,7 +21,7 @@ public class GateRenderer extends TileEntityRenderer<GateTileEntity>
 	{
 		int color;
 		if(tileEntityIn.colorIndex == -1)
-			color = 0x0057FF;
+			color = ColorCollector.DEFAULT_COLOR;
 		else color = ColorCollector.getColor(tileEntityIn.colorIndex);
 		float r = ((color >> 16) & 255)/255F;
 		float g = ((color >> 8) & 255)/255F;

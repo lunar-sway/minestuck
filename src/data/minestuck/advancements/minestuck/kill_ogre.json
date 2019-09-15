@@ -2,13 +2,13 @@
   "parent": "minestuck:minestuck/entry",
   "display": {
     "icon": {
-      "item": "minecraft:red_bed"
+      "item": "minestuck:pogo_hammer"
     },
     "title": {
-      "translate": "advancements.minestuck.return_node.title"
+      "translate": "advancements.minestuck.kill_ogre.title"
     },
     "description": {
-      "translate": "advancements.minestuck.return_node.description"
+      "translate": "advancements.minestuck.kill_ogre.description"
     },
     "frame": "task",
     "show_toast": true,
@@ -16,16 +16,18 @@
     "hidden": false
   },
   "criteria": {
-    "touch_return_node": {
-      "trigger": "minecraft:enter_block",
+    "kill_ogre": {
+      "trigger": "minecraft:player_killed_entity",
       "conditions": {
-        "block": "minestuck:return_node"
+        "entity": {
+          "type": "minestuck:ogre"
+        }
       }
     }
   },
   "requirements": [
     [
-      "touch_return_node"
+      "kill_ogre"
     ]
   ]
 }

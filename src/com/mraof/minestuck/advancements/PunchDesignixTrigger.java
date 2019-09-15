@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.advancements.ICriterionTrigger;
@@ -16,6 +17,7 @@ import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class PunchDesignixTrigger implements ICriterionTrigger<PunchDesignixTrigger.Instance>
@@ -62,15 +64,9 @@ public class PunchDesignixTrigger implements ICriterionTrigger<PunchDesignixTrig
 	@Override
 	public Instance deserializeInstance(JsonObject json, JsonDeserializationContext context)
 	{
-		ItemPredicate input = null;
-		if(json.has("input"))
-			input = ItemPredicate.deserialize(json.get("input"));
-		ItemPredicate target = null;
-		if(json.has("target"))
-			target = ItemPredicate.deserialize(json.get("target"));
-		ItemPredicate output = null;
-		if(json.has("output"))
-			output = ItemPredicate.deserialize(json.get("output"));
+		ItemPredicate input = ItemPredicate.deserialize(json.get("input"));
+		ItemPredicate target = ItemPredicate.deserialize(json.get("target"));
+		ItemPredicate output = ItemPredicate.deserialize(json.get("output"));
 		return new Instance(input, target, output);
 	}
 	
@@ -86,17 +82,39 @@ public class PunchDesignixTrigger implements ICriterionTrigger<PunchDesignixTrig
 		private final ItemPredicate input;
 		private final ItemPredicate target;
 		private final ItemPredicate output;
+		
 		public Instance(ItemPredicate input, ItemPredicate target, ItemPredicate output)
 		{
 			super(ID);
-			this.input = input;
-			this.target = target;
-			this.output = output;
+			this.input = Objects.requireNonNull(input);
+			this.target = Objects.requireNonNull(target);
+			this.output = Objects.requireNonNull(output);
+		}
+		
+		public static Instance any()
+		{
+			return create(ItemPredicate.ANY, ItemPredicate.ANY, ItemPredicate.ANY);
+		}
+		
+		public static Instance create(ItemPredicate input, ItemPredicate target, ItemPredicate output)
+		{
+			return new Instance(input, target, output);
 		}
 		
 		public boolean test(ItemStack input, ItemStack target, ItemStack output)
 		{
-			return (this.input == null || this.input.test(input)) && (this.target == null || this.target.test(target)) && (this.output == null || this.output.test(output));
+			return this.input.test(input) && this.target.test(target) && this.output.test(output);
+		}
+		
+		@Override
+		public JsonElement serialize()
+		{
+			JsonObject json = new JsonObject();
+			json.add("input", input.serialize());
+			json.add("target", target.serialize());
+			json.add("output", output.serialize());
+			
+			return json;
 		}
 	}
 	

@@ -4,6 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import net.minecraft.world.gen.feature.BushConfig;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -16,6 +17,9 @@ import javax.annotation.Nonnull;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class ModFeatures
 {
+	public static final Structure<NoFeatureConfig> IMP_DUNGEON = getNull();	//TODO Rerun advancement provider once these two are reimplemeneted
+	public static final Structure<NoFeatureConfig> CONSORT_VILLAGE = getNull();
+	
 	public static final Feature<NoFeatureConfig> RAINBOW_TREE = getNull();
 	public static final Feature<NoFeatureConfig> END_TREE =	 getNull();
 	public static final Feature<NoFeatureConfig> FIRE_FIELD = getNull();

@@ -10,7 +10,7 @@ import java.util.function.BiFunction;
 public class ModusType<T extends Modus> extends ForgeRegistryEntry<ModusType<?>>
 {
 	private final BiFunction<ModusType<T>, LogicalSide, T> factory;
-	private final ItemStack modusItem;
+	private final ItemStack modusItem;	//TODO This is probably better off as an item
 	
 	public ModusType(BiFunction<ModusType<T>, LogicalSide, T> factory, ItemStack modusItem)
 	{

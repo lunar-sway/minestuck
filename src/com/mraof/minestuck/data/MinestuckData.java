@@ -21,6 +21,8 @@ public class MinestuckData
 			gen.addProvider(new MinestuckItemTagsProvider(gen));
 			
 			gen.addProvider(new MinestuckRecipeProvider(gen));
+			
+			gen.addProvider(new MinestuckAdvancementProvider(gen));
 		}
 	}
 }
