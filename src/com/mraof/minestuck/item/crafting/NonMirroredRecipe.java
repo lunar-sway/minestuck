@@ -1,4 +1,4 @@
-package com.mraof.minestuck.util;
+package com.mraof.minestuck.item.crafting;
 
 import com.google.gson.JsonObject;
 import net.minecraft.inventory.CraftingInventory;
@@ -19,7 +19,7 @@ public class NonMirroredRecipe extends ShapedRecipe
         super(id, group, width, height, ingredients, result);
     }
     public IRecipeSerializer<?> getSerializer() {
-        return ModRecipeSerializers.NON_MIRRORED;
+        return MSRecipeTypes.NON_MIRRORED;
     }
 
     @Override
@@ -53,7 +53,8 @@ public class NonMirroredRecipe extends ShapedRecipe
         return true;
     }
 
-    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>>  implements IRecipeSerializer<NonMirroredRecipe> {
+    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>>  implements IRecipeSerializer<NonMirroredRecipe>
+    {
         private static final ResourceLocation NAME = new ResourceLocation("minestuck", "non_mirrored");
         @Override
         public NonMirroredRecipe read(ResourceLocation recipeId, JsonObject json) {

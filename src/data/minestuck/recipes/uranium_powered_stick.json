@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:irradiating",
+  "ingredient": {
+    "item": "minecraft:stick"
+  },
+  "result": "minestuck:uranium_powered_stick",
+  "experience": 0.1,
+  "cookingtime": 100
+}

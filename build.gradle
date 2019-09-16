@@ -39,6 +39,8 @@ sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = co
 minecraft {
     mappings channel: 'snapshot', version: '20190912-1.14.3'
 
+    accessTransformer = file('src/META-INF/accesstransformer.cfg')
+
     // Default run configurations.
     // These can be tweaked, removed, or duplicated as needed.
     runs {

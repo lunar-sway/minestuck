@@ -1,7 +1,7 @@
 package com.mraof.minestuck.data;
 
 import com.google.gson.JsonObject;
-import com.mraof.minestuck.util.ModRecipeSerializers;
+import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -59,7 +59,7 @@ public class NonMirroredRecipeBuilder extends ShapedRecipeBuilder
 		@Override
 		public IRecipeSerializer<?> getSerializer()
 		{
-			return ModRecipeSerializers.NON_MIRRORED;
+			return MSRecipeTypes.NON_MIRRORED;
 		}
 		
 		@Nullable

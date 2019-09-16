@@ -49,8 +49,8 @@ public class UraniumCookerContainer extends MachineContainer
 		this.cookerInventory = inventory;
 		this.fuelHolder = fuelHolder;
 		
-		addSlot(new InputSlot(inventory, 0, uraniumInputX, uraniumInputY, MinestuckItems.RAW_URANIUM));
-		addSlot(new Slot(inventory, 1, itemInputX, itemInputY));
+		addSlot(new Slot(inventory, 0, itemInputX, itemInputY));
+		addSlot(new InputSlot(inventory, 1, uraniumInputX, uraniumInputY, MinestuckItems.RAW_URANIUM));
 		addSlot(new OutputSlot(inventory, 2, itemOutputX, itemOutputY));
 		trackInt(fuelHolder);
 		
@@ -88,13 +88,13 @@ public class UraniumCookerContainer extends MachineContainer
 			itemstack = itemstackOrig.copy();
 			boolean result = false;
 			
-			if(slotNumber == 0)    //Shift-clicking from the Uranium input
-			{
-				result = mergeItemStack(itemstackOrig, 3, allSlots, false);    //Send into the inventory
-			} else if(slotNumber == 1)    //Shift-clicking from the item input
+			if(slotNumber == 0)    //Shift-clicking from the item input
 			{
 				result = mergeItemStack(itemstackOrig, 3, allSlots, false);    //Send into the inventory
 				
+			} else if(slotNumber == 1)    //Shift-clicking from the Uranium input
+			{
+				result = mergeItemStack(itemstackOrig, 3, allSlots, false);    //Send into the inventory
 			} else if(slotNumber == 2)    //Shift-clicking from the output slot
 			{
 				if(itemstackOrig.getItem() == MinestuckItems.RAW_URANIUM)
@@ -106,10 +106,10 @@ public class UraniumCookerContainer extends MachineContainer
 			{
 				if(itemstackOrig.getItem() == MinestuckItems.RAW_URANIUM)
 				{
-					result = mergeItemStack(itemstackOrig, 0, 1, false);    //Send the uranium to the uranium input
+					result = mergeItemStack(itemstackOrig, 1, 2, false);    //Send the uranium to the uranium input
 				} else
 				{
-					result = mergeItemStack(itemstackOrig, 1, 2, false);    //Send the non-uranium to the other input
+					result = mergeItemStack(itemstackOrig, 0, 1, false);    //Send the non-uranium to the other input
 				}
 			}
 			

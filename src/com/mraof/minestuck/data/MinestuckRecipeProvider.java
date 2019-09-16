@@ -3,6 +3,7 @@ package com.mraof.minestuck.data;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.util.ExtraForgeTags;
 import com.mraof.minestuck.util.MinestuckTags;
 import net.minecraft.advancements.criterion.InventoryChangeTrigger;
@@ -11,6 +12,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.data.*;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.IItemProvider;
@@ -139,6 +141,12 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(MinestuckBlocks.WOODEN_CACTUS), Items.CHARCOAL, 0.15F, 200).addCriterion("has_wooden_cactus", hasItem(MinestuckBlocks.WOODEN_CACTUS)).build(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "charcoal_from_wooden_cactus"));
 		
 		cookingRecipesFor(recipeBuilder, Ingredient.fromItems(MinestuckItems.BEEF_SWORD), MinestuckItems.STEAK_SWORD, 0.5F, "has_beef_sword", hasItem(MinestuckItems.BEEF_SWORD));
+		
+		CookingRecipeBuilder.cookingRecipe(Ingredient.fromItems(Items.BEEF), MinestuckItems.IRRADIATED_STEAK, 0.2F, 20, MSRecipeTypes.IRRADIATING).addCriterion("has_beef", hasItem(Items.BEEF)).build(recipeBuilder);
+		CookingRecipeBuilder.cookingRecipe(Ingredient.fromItems(MinestuckItems.BEEF_SWORD), MinestuckItems.IRRADIATED_STEAK_SWORD, 0.35F, 20, MSRecipeTypes.IRRADIATING).addCriterion("has_beef_sword", hasItem(MinestuckItems.BEEF_SWORD)).build(recipeBuilder);
+		CookingRecipeBuilder.cookingRecipe(Ingredient.fromItems(Items.STICK), MinestuckItems.UP_STICK, 0.1F, 100, MSRecipeTypes.IRRADIATING).addCriterion("has_stick", hasItem(Items.STICK)).build(recipeBuilder);
+		CookingRecipeBuilder.cookingRecipe(Ingredient.fromItems(Items.MUSHROOM_STEW), Items.SLIME_BALL, 0.1F, 20, MSRecipeTypes.IRRADIATING).addCriterion("has_mushroom_stew", hasItem(Items.MUSHROOM_STEW)).build(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "slimeball_from_irradiating"));
+		IrradiatingFallbackRecipeBuilder.fallback(IRecipeType.SMOKING).build(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "irradiate_smoking_fallback"));
 		
 		SingleItemRecipeBuilder.func_218648_a(Ingredient.fromItems(MinestuckBlocks.COARSE_STONE), MinestuckBlocks.COARSE_STONE_STAIRS).func_218643_a("has_coarse_stone", hasItem(MinestuckBlocks.COARSE_STONE)).func_218647_a(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "coarse_stone_stairs_from_coarse_stone_stonecutting"));
 		SingleItemRecipeBuilder.func_218648_a(Ingredient.fromItems(MinestuckBlocks.COARSE_STONE), MinestuckBlocks.CHISELED_COARSE_STONE).func_218643_a("has_coarse_stone", hasItem(MinestuckBlocks.COARSE_STONE)).func_218647_a(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "chiseled_coarse_stone_from_coarse_stone_stonecutting"));
