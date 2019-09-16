@@ -1,12 +1,12 @@
 package com.mraof.minestuck.world.lands.terrain;
 
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.entity.ModEntityTypes;
+import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
-import com.mraof.minestuck.world.biome.ModBiomes;
-import com.mraof.minestuck.world.gen.feature.ModFeatures;
+import com.mraof.minestuck.world.biome.MSBiomes;
+import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.lands.decorator.*;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.Blocks;
@@ -38,9 +38,9 @@ public class HeatLandAspect extends TerrainLandAspect
 		registry.setBlockState("ocean", Blocks.LAVA.getDefaultState());
 		registry.setBlockState("structure_primary", Blocks.NETHER_BRICKS.getDefaultState());
 		registry.setBlockState("structure_primary_stairs", Blocks.NETHER_BRICK_STAIRS.getDefaultState());
-		registry.setBlockState("structure_secondary", MinestuckBlocks.CAST_IRON.getDefaultState());
-		registry.setBlockState("structure_secondary_decorative", MinestuckBlocks.CHISELED_CAST_IRON.getDefaultState());
-		registry.setBlockState("structure_secondary_stairs", MinestuckBlocks.CAST_IRON_STAIRS.getDefaultState());
+		registry.setBlockState("structure_secondary", MSBlocks.CAST_IRON.getDefaultState());
+		registry.setBlockState("structure_secondary_decorative", MSBlocks.CHISELED_CAST_IRON.getDefaultState());
+		registry.setBlockState("structure_secondary_stairs", MSBlocks.CAST_IRON_STAIRS.getDefaultState());
 		registry.setBlockState("fall_fluid", Blocks.WATER.getDefaultState());
 		registry.setBlockState("structure_planks", Blocks.BRICKS.getDefaultState());
 		registry.setBlockState("structure_planks_slab", Blocks.BRICK_SLAB.getDefaultState());
@@ -66,12 +66,12 @@ public class HeatLandAspect extends TerrainLandAspect
 	@Override
 	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blockRegistry)
 	{
-		if(biome.staticBiome == ModBiomes.LAND_NORMAL)
+		if(biome.staticBiome == MSBiomes.LAND_NORMAL)
 		{
-			biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(ModFeatures.FIRE_FIELD, NoFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_RANGE, new CountRangeConfig(7, 0, 0, 256)));
-		} else if(biome.staticBiome == ModBiomes.LAND_ROUGH)
+			biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(MSFeatures.FIRE_FIELD, NoFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_RANGE, new CountRangeConfig(7, 0, 0, 256)));
+		} else if(biome.staticBiome == MSBiomes.LAND_ROUGH)
 		{
-			biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(ModFeatures.FIRE_FIELD, NoFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_RANGE, new CountRangeConfig(10, 0, 0, 256)));
+			biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(MSFeatures.FIRE_FIELD, NoFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_RANGE, new CountRangeConfig(10, 0, 0, 256)));
 		}
 	}
 	
@@ -80,12 +80,12 @@ public class HeatLandAspect extends TerrainLandAspect
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<>();
 		list.add(new OceanRundown(0.5F, 3));
-		list.add(new SurfaceDecoratorVein(Blocks.SOUL_SAND.getDefaultState(), 15, 32, ModBiomes.mediumRough));
-		list.add(new SurfaceDecoratorVein(Blocks.SOUL_SAND.getDefaultState(), 8, 32, ModBiomes.mediumNormal));
-		list.add(new SurfaceDecoratorVein(Blocks.GLOWSTONE.getDefaultState(), 5, 8, ModBiomes.mediumNormal));
+		list.add(new SurfaceDecoratorVein(Blocks.SOUL_SAND.getDefaultState(), 15, 32, MSBiomes.mediumRough));
+		list.add(new SurfaceDecoratorVein(Blocks.SOUL_SAND.getDefaultState(), 8, 32, MSBiomes.mediumNormal));
+		list.add(new SurfaceDecoratorVein(Blocks.GLOWSTONE.getDefaultState(), 5, 8, MSBiomes.mediumNormal));
 		
 		list.add(new UndergroundDecoratorVein(Blocks.GRAVEL.getDefaultState(), 8, 33, 256));
-		list.add(new UndergroundDecoratorVein(MinestuckBlocks.NETHERRACK_COAL_ORE.getDefaultState(), 26, 17, 128));
+		list.add(new UndergroundDecoratorVein(MSBlocks.NETHERRACK_COAL_ORE.getDefaultState(), 26, 17, 128));
 		list.add(new UndergroundDecoratorVein(Blocks.NETHER_QUARTZ_ORE.getDefaultState(), 13, 8, 64));
 		return list;
 	}
@@ -105,6 +105,6 @@ public class HeatLandAspect extends TerrainLandAspect
 	@Override
 	public EntityType<? extends ConsortEntity> getConsortType()
 	{
-		return ModEntityTypes.NAKAGATOR;
+		return MSEntityTypes.NAKAGATOR;
 	}
 }

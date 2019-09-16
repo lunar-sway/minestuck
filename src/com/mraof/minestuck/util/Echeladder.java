@@ -1,11 +1,11 @@
 package com.mraof.minestuck.util;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.PlayerDataPacket;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
+import com.mraof.minestuck.tracker.PlayerTracker;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -99,11 +99,11 @@ public class Echeladder
 		ServerPlayerEntity player = identifier.getPlayer(mcServer);
 		if(player != null)
 		{
-			MinestuckPlayerTracker.updateEcheladder(player, false);
+			PlayerTracker.updateEcheladder(player, false);
 			if(rung != prevRung)
 			{
 				updateEcheladderBonuses(player);
-				MinestuckPacketHandler.sendToPlayer(PlayerDataPacket.boondollars(PlayerSavedData.get(player.server).getData(identifier).boondollars), player);
+				MSPacketHandler.sendToPlayer(PlayerDataPacket.boondollars(PlayerSavedData.get(player.server).getData(identifier).boondollars), player);
 				player.world.playSound(null, player.posX, player.posY, player.posZ, ModSoundEvents.EVENT_ECHELADDER_INCREASE, SoundCategory.AMBIENT, 1F, 1F);
 			}
 		}
@@ -223,7 +223,7 @@ public class Echeladder
 		ServerPlayerEntity player = identifier.getPlayer(mcServer);
 		if(player != null)
 		{
-			MinestuckPlayerTracker.updateEcheladder(player, true);
+			PlayerTracker.updateEcheladder(player, true);
 			updateEcheladderBonuses(player);
 		}
 	}

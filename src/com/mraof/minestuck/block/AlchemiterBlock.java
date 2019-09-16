@@ -109,7 +109,7 @@ public class AlchemiterBlock extends MultiMachineBlock
 
 	public static class Pad extends AlchemiterBlock
 	{
-		public static final EnumProperty<EnumDowelType> DOWEL = MinestuckProperties.DOWEL_OR_NONE;
+		public static final EnumProperty<EnumDowelType> DOWEL = MSProperties.DOWEL_OR_NONE;
 		
 		public Pad(MachineMultiblock machine, Map<Direction, VoxelShape> shape, Properties properties)
 		{

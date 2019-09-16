@@ -2,7 +2,7 @@
 package com.mraof.minestuck.world.lands.terrain;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.entity.ModEntityTypes;
+import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
@@ -140,7 +140,7 @@ public class SandLandAspect extends TerrainLandAspect
 	@Override
 	public EntityType<? extends ConsortEntity> getConsortType()
 	{
-		return ModEntityTypes.TURTLE;
+		return MSEntityTypes.TURTLE;
 	}
 	
 	public enum Variant

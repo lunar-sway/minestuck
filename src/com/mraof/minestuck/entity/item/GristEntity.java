@@ -6,8 +6,8 @@ import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.editmode.ServerEditHandler;
-import com.mraof.minestuck.entity.ModEntityTypes;
-import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
+import com.mraof.minestuck.entity.MSEntityTypes;
+import com.mraof.minestuck.tracker.PlayerTracker;
 import com.mraof.minestuck.util.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.*;
@@ -46,7 +46,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	
 	public GristEntity(World world, double x, double y, double z, GristAmount gristData)
 	{
-		super(ModEntityTypes.GRIST, world);
+		super(MSEntityTypes.GRIST, world);
 		this.gristValue = gristData.getAmount();
 //		this.yOffset = this.height / 2.0F;
 		this.setPosition(x, y, z);
@@ -234,7 +234,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 			this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.1F, 0.5F * ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.8F));
 		if(GristHelper.increase(world, identifier, new GristSet(gristType, gristValue)))
 		{
-			MinestuckPlayerTracker.updateGristCache(this.getServer(), identifier);
+			PlayerTracker.updateGristCache(this.getServer(), identifier);
 			this.remove();
 		}
 	}

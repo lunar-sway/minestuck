@@ -2,7 +2,7 @@ package com.mraof.minestuck.inventory.captchalogue;
 
 import com.google.common.collect.Maps;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.MSItems;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -57,12 +57,12 @@ public class ModusTypes
 	@SubscribeEvent
 	public static void registerTypes(final RegistryEvent.Register<ModusType<?>> event)
 	{
-		event.getRegistry().register(new ModusType<>(StackModus::new, new ItemStack(MinestuckItems.STACK_MODUS_CARD)).setRegistryName("stack"));
-		event.getRegistry().register(new ModusType<>(QueueModus::new, new ItemStack(MinestuckItems.QUEUE_MODUS_CARD)).setRegistryName("queue"));
-		event.getRegistry().register(new ModusType<>(QueueStackModus::new, new ItemStack(MinestuckItems.QUEUESTACK_MODUS_CARD)).setRegistryName("queue_stack"));
-		event.getRegistry().register(new ModusType<>(TreeModus::new, new ItemStack(MinestuckItems.TREE_MODUS_CARD)).setRegistryName("tree"));
-		event.getRegistry().register(new ModusType<>(HashMapModus::new, new ItemStack(MinestuckItems.HASHMAP_MODUS_CARD)).setRegistryName("hash_map"));
-		event.getRegistry().register(new ModusType<>(SetModus::new, new ItemStack(MinestuckItems.SET_MODUS_CARD)).setRegistryName("set"));
+		event.getRegistry().register(new ModusType<>(StackModus::new, new ItemStack(MSItems.STACK_MODUS_CARD)).setRegistryName("stack"));
+		event.getRegistry().register(new ModusType<>(QueueModus::new, new ItemStack(MSItems.QUEUE_MODUS_CARD)).setRegistryName("queue"));
+		event.getRegistry().register(new ModusType<>(QueueStackModus::new, new ItemStack(MSItems.QUEUESTACK_MODUS_CARD)).setRegistryName("queue_stack"));
+		event.getRegistry().register(new ModusType<>(TreeModus::new, new ItemStack(MSItems.TREE_MODUS_CARD)).setRegistryName("tree"));
+		event.getRegistry().register(new ModusType<>(HashMapModus::new, new ItemStack(MSItems.HASHMAP_MODUS_CARD)).setRegistryName("hash_map"));
+		event.getRegistry().register(new ModusType<>(SetModus::new, new ItemStack(MSItems.SET_MODUS_CARD)).setRegistryName("set"));
 	}
 	
 	private static class ModusCallbacks implements IForgeRegistry.AddCallback<ModusType<?>>, IForgeRegistry.ClearCallback<ModusType<?>>, IForgeRegistry.CreateCallback<ModusType<?>>

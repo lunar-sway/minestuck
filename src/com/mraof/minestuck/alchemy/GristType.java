@@ -1,7 +1,7 @@
 package com.mraof.minestuck.alchemy;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.MSItems;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
@@ -178,27 +178,27 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 	public static void registerGrist(final RegistryEvent.Register<GristType> event)
 	{
 		event.getRegistry().registerAll(
-				new GristType(0.0F, 1).setCandyItem(new ItemStack(MinestuckItems.BUILD_GUSHERS)).setRegistryName("build"),
-				new GristType(0.5F, 1.5F).setCandyItem(new ItemStack(MinestuckItems.AMBER_GUMMY_WORM)).setRegistryName("amber"),
-				new GristType(0.5F, 1.5F).setCandyItem(new ItemStack(MinestuckItems.CAULK_PRETZEL)).setRegistryName("caulk"),
-				new GristType(0.5F, 1.5F).setCandyItem(new ItemStack(MinestuckItems.CHALK_CANDY_CIGARETTE)).setRegistryName("chalk"),
-				new GristType(0.5F, 1.5F).setCandyItem(new ItemStack(MinestuckItems.IODINE_LICORICE)).setRegistryName("iodine"),
-				new GristType(0.5F, 1.5F).setCandyItem(new ItemStack(MinestuckItems.SHALE_PEEP)).setRegistryName("shale"),
-				new GristType(0.5F, 1.5F).setCandyItem(new ItemStack(MinestuckItems.TAR_LICORICE)).setRegistryName("tar"),
-				new GristType(0.4F, 2).setCandyItem(new ItemStack(MinestuckItems.COBALT_GUM)).setRegistryName("cobalt"),
-				new GristType(0.4F, 2).setCandyItem(new ItemStack(MinestuckItems.MARBLE_JAWBREAKER)).setRegistryName("marble"),
-				new GristType(0.4F, 2).setCandyItem(new ItemStack(MinestuckItems.MERCURY_SIXLETS)).setRegistryName("mercury"),
-				new GristType(0.4F, 2).setCandyItem(new ItemStack(MinestuckItems.QUARTZ_JELLY_BEAN)).setRegistryName("quartz"),
-				new GristType(0.4F, 2).setCandyItem(new ItemStack(MinestuckItems.SULFUR_CANDY_APPLE)).setRegistryName("sulfur"),
-				new GristType(0.3F, 3).setCandyItem(new ItemStack(MinestuckItems.AMETHYST_HARD_CANDY)).setRegistryName("amethyst"),
-				new GristType(0.3F, 3).setCandyItem(new ItemStack(MinestuckItems.GARNET_TWIX)).setRegistryName("garnet"),
-				new GristType(0.3F, 3).setCandyItem(new ItemStack(MinestuckItems.RUBY_LOLLIPOP)).setRegistryName("ruby"),
-				new GristType(0.3F, 3).setCandyItem(new ItemStack(MinestuckItems.RUST_GUMMY_EYE)).setRegistryName("rust"),
-				new GristType(0.2F, 5).setCandyItem(new ItemStack(MinestuckItems.DIAMOND_MINT)).setRegistryName("diamond"),
-				new GristType(0.2F, 5).setCandyItem(new ItemStack(MinestuckItems.GOLD_CANDY_RIBBON)).setRegistryName("gold"),
-				new GristType(0.2F, 5).setCandyItem(new ItemStack(MinestuckItems.URANIUM_GUMMY_BEAR)).setRegistryName("uranium"),
-				new GristType(0.1F, 1).setCandyItem(new ItemStack(MinestuckItems.ARTIFACT_WARHEAD)).setRegistryName("artifact"),
-				new GristType(0.0F, 10).setCandyItem(new ItemStack(MinestuckItems.ZILLIUM_SKITTLES)).setRegistryName("zillium")
+				new GristType(0.0F, 1).setCandyItem(new ItemStack(MSItems.BUILD_GUSHERS)).setRegistryName("build"),
+				new GristType(0.5F, 1.5F).setCandyItem(new ItemStack(MSItems.AMBER_GUMMY_WORM)).setRegistryName("amber"),
+				new GristType(0.5F, 1.5F).setCandyItem(new ItemStack(MSItems.CAULK_PRETZEL)).setRegistryName("caulk"),
+				new GristType(0.5F, 1.5F).setCandyItem(new ItemStack(MSItems.CHALK_CANDY_CIGARETTE)).setRegistryName("chalk"),
+				new GristType(0.5F, 1.5F).setCandyItem(new ItemStack(MSItems.IODINE_LICORICE)).setRegistryName("iodine"),
+				new GristType(0.5F, 1.5F).setCandyItem(new ItemStack(MSItems.SHALE_PEEP)).setRegistryName("shale"),
+				new GristType(0.5F, 1.5F).setCandyItem(new ItemStack(MSItems.TAR_LICORICE)).setRegistryName("tar"),
+				new GristType(0.4F, 2).setCandyItem(new ItemStack(MSItems.COBALT_GUM)).setRegistryName("cobalt"),
+				new GristType(0.4F, 2).setCandyItem(new ItemStack(MSItems.MARBLE_JAWBREAKER)).setRegistryName("marble"),
+				new GristType(0.4F, 2).setCandyItem(new ItemStack(MSItems.MERCURY_SIXLETS)).setRegistryName("mercury"),
+				new GristType(0.4F, 2).setCandyItem(new ItemStack(MSItems.QUARTZ_JELLY_BEAN)).setRegistryName("quartz"),
+				new GristType(0.4F, 2).setCandyItem(new ItemStack(MSItems.SULFUR_CANDY_APPLE)).setRegistryName("sulfur"),
+				new GristType(0.3F, 3).setCandyItem(new ItemStack(MSItems.AMETHYST_HARD_CANDY)).setRegistryName("amethyst"),
+				new GristType(0.3F, 3).setCandyItem(new ItemStack(MSItems.GARNET_TWIX)).setRegistryName("garnet"),
+				new GristType(0.3F, 3).setCandyItem(new ItemStack(MSItems.RUBY_LOLLIPOP)).setRegistryName("ruby"),
+				new GristType(0.3F, 3).setCandyItem(new ItemStack(MSItems.RUST_GUMMY_EYE)).setRegistryName("rust"),
+				new GristType(0.2F, 5).setCandyItem(new ItemStack(MSItems.DIAMOND_MINT)).setRegistryName("diamond"),
+				new GristType(0.2F, 5).setCandyItem(new ItemStack(MSItems.GOLD_CANDY_RIBBON)).setRegistryName("gold"),
+				new GristType(0.2F, 5).setCandyItem(new ItemStack(MSItems.URANIUM_GUMMY_BEAR)).setRegistryName("uranium"),
+				new GristType(0.1F, 1).setCandyItem(new ItemStack(MSItems.ARTIFACT_WARHEAD)).setRegistryName("artifact"),
+				new GristType(0.0F, 10).setCandyItem(new ItemStack(MSItems.ZILLIUM_SKITTLES)).setRegistryName("zillium")
 		);
 	}
 

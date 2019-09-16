@@ -1,6 +1,6 @@
 package com.mraof.minestuck.entity.consort;
 
-import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
+import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.inventory.ConsortMerchantContainer;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
@@ -885,7 +885,7 @@ public abstract class MessageType
 						.generate(contextBuilder.build(LootParameterSets.GIFT)))
 				{
 					player.entityDropItem(itemstack, 0.0F);
-					MinestuckCriteriaTriggers.CONSORT_ITEM.trigger((ServerPlayerEntity) player, item.toString(), itemstack, consort);
+					MSCriteriaTriggers.CONSORT_ITEM.trigger((ServerPlayerEntity) player, item.toString(), itemstack, consort);
 				}
 				
 				return message.getMessage(consort, player, chainIdentifier);

@@ -11,18 +11,18 @@ import java.util.Set;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
-import com.mraof.minestuck.entity.ModEntityTypes;
+import com.mraof.minestuck.advancements.MSCriteriaTriggers;
+import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.TitleSelectPacket;
-import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
+import com.mraof.minestuck.tracker.PlayerTracker;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import com.mraof.minestuck.world.MinestuckDimensions;
+import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.LandAspects;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
@@ -169,7 +169,7 @@ public class SburbHandler
 		if(title == null)
 			return;
 		PlayerSavedData.get(world).setTitle(player, title);
-		MinestuckPlayerTracker.updateTitle(player.getPlayer(world.getServer()));
+		PlayerTracker.updateTitle(player.getPlayer(world.getServer()));
 	}
 	
 	/*public static void managePredefinedSession(MinecraftServer server, ICommandSender sender, ICommand command, String sessionName, String[] playerNames, boolean finish) throws CommandException
@@ -498,12 +498,12 @@ public class SburbHandler
 		int colorIndex = PlayerSavedData.get(world).getData(c.getClientIdentifier()).color;
 		Item artifact;
 		if(c == null)
-			artifact = MinestuckItems.CRUXITE_APPLE;
+			artifact = MSItems.CRUXITE_APPLE;
 		
 		else switch(c.artifactType)
 		{
-		case 1: artifact = MinestuckItems.CRUXITE_POTION; break;
-		default: artifact = MinestuckItems.CRUXITE_APPLE;
+		case 1: artifact = MSItems.CRUXITE_POTION; break;
+		default: artifact = MSItems.CRUXITE_APPLE;
 		}
 		
 		return ColorCollector.setColor(new ItemStack(artifact), colorIndex + 1);
@@ -581,7 +581,7 @@ public class SburbHandler
 		for(SburbConnection c : session.connections)
 			if(c != connection && c.clientHomeLand != null)
 			{
-				LandAspects aspects = MinestuckDimensions.getAspects(mcServer, c.clientHomeLand);
+				LandAspects aspects = MSDimensions.getAspects(mcServer, c.clientHomeLand);
 				if(aspects.aspectTitle == LandAspectRegistry.FROGS)
 					frogs = true;
 				usedTitleAspects.add(aspects.aspectTitle);
@@ -655,15 +655,15 @@ public class SburbHandler
 		}
 		
 		if(impWeight > 0)
-			list.add(new SpawnListEntry(ModEntityTypes.IMP, impWeight, Math.max(1, (int)(impWeight/2.5)), Math.max(3, impWeight)));
+			list.add(new SpawnListEntry(MSEntityTypes.IMP, impWeight, Math.max(1, (int)(impWeight/2.5)), Math.max(3, impWeight)));
 		if(ogreWeight > 0)
-			list.add(new SpawnListEntry(ModEntityTypes.OGRE, ogreWeight, ogreWeight >= 5 ? 2 : 1, Math.max(1, ogreWeight/2)));
+			list.add(new SpawnListEntry(MSEntityTypes.OGRE, ogreWeight, ogreWeight >= 5 ? 2 : 1, Math.max(1, ogreWeight/2)));
 		if(basiliskWeight > 0)
-			list.add(new SpawnListEntry(ModEntityTypes.BASILISK, basiliskWeight, 1, Math.max(1, basiliskWeight/2)));
+			list.add(new SpawnListEntry(MSEntityTypes.BASILISK, basiliskWeight, 1, Math.max(1, basiliskWeight/2)));
 		if(lichWeight > 0)
-			list.add(new SpawnListEntry(ModEntityTypes.LICH, lichWeight, 1, Math.max(1, lichWeight/2)));
+			list.add(new SpawnListEntry(MSEntityTypes.LICH, lichWeight, 1, Math.max(1, lichWeight/2)));
 		if(giclopsWeight > 0 && !MinestuckConfig.disableGiclops.get())
-			list.add(new SpawnListEntry(ModEntityTypes.GICLOPS, giclopsWeight, 1, Math.max(1, giclopsWeight/2)));
+			list.add(new SpawnListEntry(MSEntityTypes.GICLOPS, giclopsWeight, 1, Math.max(1, giclopsWeight/2)));
 		
 		difficultyList[difficulty] = list;
 		
@@ -691,8 +691,8 @@ public class SburbHandler
 		ServerPlayerEntity player = c.getClientIdentifier().getPlayer(server);
 		if(player != null)
 		{
-			MinestuckCriteriaTriggers.CRUXITE_ARTIFACT.trigger(player);
-			MinestuckPlayerTracker.sendLandEntryMessage(player);
+			MSCriteriaTriggers.CRUXITE_ARTIFACT.trigger(player);
+			PlayerTracker.sendLandEntryMessage(player);
 		}
 	}
 	
@@ -733,7 +733,7 @@ public class SburbHandler
 		
 		titleSelectionMap.put(player, new Vec3d(player.posX, player.posY, player.posZ));
 		TitleSelectPacket packet = new TitleSelectPacket();
-		MinestuckPacketHandler.sendToPlayer(packet, player);
+		MSPacketHandler.sendToPlayer(packet, player);
 		return false;
 	}
 	
@@ -761,19 +761,19 @@ public class SburbHandler
 					if(title.equals(PlayerSavedData.get(player.world).getTitle(c.getClientIdentifier())))
 					{	//Title is already used
 						TitleSelectPacket packet = new TitleSelectPacket(title.getHeroClass(), title.getHeroAspect());
-						MinestuckPacketHandler.sendToPlayer(packet, player);
+						MSPacketHandler.sendToPlayer(packet, player);
 						return;
 					}
 				for(PredefineData data : s.predefinedPlayers.values())
 					if(title.equals(data.title))
 					{
 						TitleSelectPacket packet = new TitleSelectPacket(title.getHeroClass(), title.getHeroAspect());
-						MinestuckPacketHandler.sendToPlayer(packet, player);
+						MSPacketHandler.sendToPlayer(packet, player);
 						return;
 					}
 				
 				PlayerSavedData.get(player.world).setTitle(identifier, title);
-				MinestuckPlayerTracker.updateTitle(player);
+				PlayerTracker.updateTitle(player);
 			}
 			
 			Vec3d pos = titleSelectionMap.remove(player);

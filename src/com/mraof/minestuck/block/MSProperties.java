@@ -8,7 +8,7 @@ import net.minecraft.util.Direction;
 /**
  * Minestuck version of {@link net.minecraft.state.properties.BlockStateProperties}
  */
-public class MinestuckProperties
+public class MSProperties
 {
 	public static final BooleanProperty MAIN = BooleanProperty.create("main");
 	public static final BooleanProperty HAS_CARD = BooleanProperty.create("has_card");

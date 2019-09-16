@@ -16,7 +16,7 @@ import javax.annotation.Nonnull;
 
 @ObjectHolder(Minestuck.MOD_ID)
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
-public class ModWorldGenTypes
+public class MSWorldGenTypes
 {
 	public static final ChunkGeneratorType<SkaiaGenSettings, SkaiaChunkGenerator> SKAIA = getNull();
 	public static final ChunkGeneratorType<LandGenSettings, LandChunkGenerator> LANDS = getNull();

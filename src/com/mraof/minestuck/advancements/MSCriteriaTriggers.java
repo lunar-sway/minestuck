@@ -1,10 +1,8 @@
 package com.mraof.minestuck.advancements;
 
-import com.mraof.minestuck.Minestuck;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.util.ResourceLocation;
 
-public class MinestuckCriteriaTriggers
+public class MSCriteriaTriggers
 {
 	public static final EventTrigger SBURB_CONNECTION = new EventTrigger(EventTrigger.SBURB_CONNECTION_ID);
 	public static final EventTrigger CRUXITE_ARTIFACT = new EventTrigger(EventTrigger.CRUXITE_ARTIFACT_ID);

@@ -11,7 +11,7 @@ import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import com.mraof.minestuck.world.MinestuckDimensions;
+import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandAspects;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.PlayerEntity;
@@ -31,10 +31,10 @@ import net.minecraftforge.fml.LogicalSide;
 import java.util.HashSet;
 import java.util.Set;
 
-public class MinestuckPlayerTracker
+public class PlayerTracker
 {
 	
-	public static MinestuckPlayerTracker instance = new MinestuckPlayerTracker();
+	public static PlayerTracker instance = new PlayerTracker();
 	
 	@SubscribeEvent
 	public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
@@ -78,21 +78,21 @@ public class MinestuckPlayerTracker
 		if(CaptchaDeckHandler.getModus(player) != null)
 		{
 			Modus modus = CaptchaDeckHandler.getModus(player);
-			MinestuckPacketHandler.sendToPlayer(CaptchaDeckPacket.data(CaptchaDeckHandler.writeToNBT(modus)), player);
+			MSPacketHandler.sendToPlayer(CaptchaDeckPacket.data(CaptchaDeckHandler.writeToNBT(modus)), player);
 		}
 		
 		updateGristCache(player.getServer(), identifier);
 		updateTitle(player);
 		updateEcheladder(player, true);
-		MinestuckPacketHandler.sendToPlayer(PlayerDataPacket.boondollars(PlayerSavedData.getData(player).boondollars), player);
+		MSPacketHandler.sendToPlayer(PlayerDataPacket.boondollars(PlayerSavedData.getData(player).boondollars), player);
 		ServerEditHandler.onPlayerLoggedIn(player);
 		
 		if(firstTime && !player.isSpectator())
-			MinestuckPacketHandler.sendToPlayer(PlayerDataPacket.color(), player);
+			MSPacketHandler.sendToPlayer(PlayerDataPacket.color(), player);
 		else
 		{
 			PlayerDataPacket packet = PlayerDataPacket.color(PlayerSavedData.getData(player).color);
-			MinestuckPacketHandler.sendToPlayer(packet, player);
+			MSPacketHandler.sendToPlayer(packet, player);
 		}
 		
 		if(UpdateChecker.outOfDate)
@@ -158,7 +158,7 @@ public class MinestuckPlayerTracker
 		if(playerMP != null)
 		{
 			GristCachePacket packet = new GristCachePacket(gristSet, false);
-			MinestuckPacketHandler.sendToPlayer(packet, playerMP);
+			MSPacketHandler.sendToPlayer(packet, playerMP);
 		}
 		
 		//The editing player, if there is any.
@@ -167,7 +167,7 @@ public class MinestuckPlayerTracker
 		{
 			ServerPlayerEntity editor = ServerEditHandler.getData(c).getEditor();
 			GristCachePacket packet = new GristCachePacket(gristSet, true);
-			MinestuckPacketHandler.sendToPlayer(packet, editor);
+			MSPacketHandler.sendToPlayer(packet, editor);
 		}
 	}
 	
@@ -180,14 +180,14 @@ public class MinestuckPlayerTracker
 		if(newTitle == null)
 			return;
 		PlayerDataPacket packet = PlayerDataPacket.title(newTitle.getHeroClass(), newTitle.getHeroAspect());
-		MinestuckPacketHandler.sendToPlayer(packet, player);
+		MSPacketHandler.sendToPlayer(packet, player);
 	}
 	
 	public static void updateEcheladder(ServerPlayerEntity player, boolean jump)
 	{
 		Echeladder echeladder = PlayerSavedData.getData(player).echeladder;
 		PlayerDataPacket packet = PlayerDataPacket.echeladder(echeladder.getRung(), MinestuckConfig.echeladderProgress.get() ? echeladder.getProgress() : 0F, jump);
-		MinestuckPacketHandler.sendToPlayer(packet, player);
+		MSPacketHandler.sendToPlayer(packet, player);
 	}
 	
 	/*public static void updateLands(EntityPlayer player)
@@ -218,14 +218,14 @@ public class MinestuckPlayerTracker
 				dataCheckerPermission.add(player.getName().getUnformattedComponentText());
 			else dataCheckerPermission.remove(player.getName().getUnformattedComponentText());
 		}
-		MinestuckPacketHandler.sendToPlayer(packet, player);
+		MSPacketHandler.sendToPlayer(packet, player);
 	}
 	
 	public static void sendLandEntryMessage(PlayerEntity player)
 	{
-		if(MinestuckDimensions.isLandDimension(player.dimension))
+		if(MSDimensions.isLandDimension(player.dimension))
 		{
-			LandAspects aspects = MinestuckDimensions.getAspects(player.getServer(), player.dimension);
+			LandAspects aspects = MSDimensions.getAspects(player.getServer(), player.dimension);
 			//ChunkProviderLands chunkProvider = (ChunkProviderLands) player.world.getDimension().createChunkGenerator(); //TODO Check out deprecation
 			ITextComponent aspect1 = new TranslationTextComponent("land."+aspects.aspectTerrain.getNames()[0]);
 			ITextComponent aspect2 = new TranslationTextComponent("land."+aspects.aspectTitle.getNames()[0]);

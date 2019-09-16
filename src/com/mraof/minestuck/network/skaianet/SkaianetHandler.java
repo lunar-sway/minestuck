@@ -2,12 +2,12 @@ package com.mraof.minestuck.network.skaianet;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
+import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.editmode.EditData;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.event.ConnectionClosedEvent;
 import com.mraof.minestuck.event.ConnectionCreatedEvent;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ServerEditPacket;
 import com.mraof.minestuck.network.SkaianetInfoPacket;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
@@ -15,7 +15,7 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.util.Location;
-import com.mraof.minestuck.world.MinestuckDimensions;
+import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -129,7 +129,7 @@ public class SkaianetHandler extends WorldSavedData
 		infoToSend.put(identifier, s);
 		updatePlayer(identifier);
 		SkaianetInfoPacket packet = createLandChainPacket();
-		MinestuckPacketHandler.sendToPlayer(packet, player);
+		MSPacketHandler.sendToPlayer(packet, player);
 	}
 	
 	public void requestConnection(ComputerData player, PlayerIdentifier otherPlayer, boolean isClient)
@@ -527,7 +527,7 @@ public class SkaianetHandler extends WorldSavedData
 	{
 		updateLandChain();
 		SkaianetInfoPacket packet = createLandChainPacket();
-		MinestuckPacketHandler.sendToAll(packet);
+		MSPacketHandler.sendToAll(packet);
 	}
 	
 	void updateAll()
@@ -546,7 +546,7 @@ public class SkaianetHandler extends WorldSavedData
 		for(SburbConnection c : connections)
 			if(c.isActive && (c.getClientIdentifier().equals(player) || c.getServerIdentifier().equals(player)))
 			{
-				MinestuckCriteriaTriggers.SBURB_CONNECTION.trigger(playerMP);
+				MSCriteriaTriggers.SBURB_CONNECTION.trigger(playerMP);
 				break;
 			}
 		for(PlayerIdentifier i : iden)
@@ -554,7 +554,7 @@ public class SkaianetHandler extends WorldSavedData
 			if(i != null)
 			{
 				SkaianetInfoPacket packet = generateClientInfoPacket(i);
-				MinestuckPacketHandler.sendToPlayer(packet, playerMP);
+				MSPacketHandler.sendToPlayer(packet, playerMP);
 			}
 		}
 	}
@@ -638,16 +638,16 @@ public class SkaianetHandler extends WorldSavedData
 						sc.markBlockForUpdate();
 					}
 				}
-				if(cc != null && c.hasEntered() && !MinestuckDimensions.isLandDimension(c.clientHomeLand))
+				if(cc != null && c.hasEntered() && !MSDimensions.isLandDimension(c.clientHomeLand))
 					c.clientHomeLand = c.client.getDimension();
 			}
-			if(c.hasEntered() && !MinestuckDimensions.isLandDimension(c.clientHomeLand))
+			if(c.hasEntered() && !MSDimensions.isLandDimension(c.clientHomeLand))
 			{
 				ServerPlayerEntity player = c.getClientIdentifier().getPlayer(mcServer);
 				if(player != null)
 				{
 					c.clientHomeLand = player.dimension;
-					if(!MinestuckDimensions.isLandDimension(c.clientHomeLand))
+					if(!MSDimensions.isLandDimension(c.clientHomeLand))
 					{
 						iter2.remove();
 						sessionHandler.onConnectionClosed(c, false);
@@ -811,7 +811,7 @@ public class SkaianetHandler extends WorldSavedData
 			if(data != null)
 			{
 				ServerEditPacket packet = ServerEditPacket.givenItems(c.givenItemList);
-				MinestuckPacketHandler.sendToPlayer(packet, data.getEditor());
+				MSPacketHandler.sendToPlayer(packet, data.getEditor());
 			}
 		}
 	}

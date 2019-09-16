@@ -2,10 +2,10 @@ package com.mraof.minestuck.client.gui.captchalouge;
 
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
-import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
+import com.mraof.minestuck.client.settings.MSKeyHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.network.MSPacketHandler;
 import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
@@ -15,7 +15,6 @@ import net.minecraft.client.util.InputMappings;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
@@ -213,7 +212,7 @@ public abstract class SylladexScreen extends Screen
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int i)
 	{
-		if(MinestuckKeyHandler.instance.sylladexKey.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode)))
+		if(MSKeyHandler.instance.sylladexKey.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode)))
 		{
 			minecraft.displayGuiScreen(null);
 			return true;
@@ -252,7 +251,7 @@ public abstract class SylladexScreen extends Screen
 	public void onEmptyConfirm(boolean result)
 	{
 		if(result)
-			MinestuckPacketHandler.sendToServer(CaptchaDeckPacket.get(CaptchaDeckHandler.EMPTY_SYLLADEX, false));
+			MSPacketHandler.sendToServer(CaptchaDeckPacket.get(CaptchaDeckHandler.EMPTY_SYLLADEX, false));
 		minecraft.currentScreen = this;
 	}
 	
@@ -346,7 +345,7 @@ public abstract class SylladexScreen extends Screen
 			if(toSend != -1)
 			{
 				CaptchaDeckPacket packet = CaptchaDeckPacket.get(toSend, mouseButton != 0);
-				MinestuckPacketHandler.sendToServer(packet);
+				MSPacketHandler.sendToServer(packet);
 			}
 		}
 

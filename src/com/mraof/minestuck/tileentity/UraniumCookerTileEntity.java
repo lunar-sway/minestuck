@@ -47,7 +47,7 @@ public class UraniumCookerTileEntity extends MachineProcessTileEntity implements
 	
 	public UraniumCookerTileEntity()
 	{
-		super(ModTileEntityTypes.URANIUM_COOKER);
+		super(MSTileEntityTypes.URANIUM_COOKER);
 		maxProgress = DEFAULT_MAX_PROGRESS;
 	}
 	

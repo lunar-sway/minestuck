@@ -6,7 +6,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.world.ModDimensionTypes;
+import com.mraof.minestuck.world.MSDimensionTypes;
 import com.mraof.minestuck.world.lands.terrain.*;
 import com.mraof.minestuck.world.lands.title.*;
 import io.netty.buffer.Unpooled;
@@ -267,7 +267,7 @@ public class LandAspectRegistry
 		data.writeRegistryId(aspects.aspectTerrain);
 		data.writeRegistryId(aspects.aspectTitle);
 		
-		return DimensionManager.registerDimension(dimensionName, ModDimensionTypes.LANDS, data, true);
+		return DimensionManager.registerDimension(dimensionName, MSDimensionTypes.LANDS, data, true);
 	}
 	
 	private static class TerrainCallbacks implements IForgeRegistry.AddCallback<TerrainLandAspect>, IForgeRegistry.ClearCallback<TerrainLandAspect>, IForgeRegistry.CreateCallback<TerrainLandAspect>

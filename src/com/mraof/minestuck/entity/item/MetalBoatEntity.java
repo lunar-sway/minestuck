@@ -1,7 +1,7 @@
 package com.mraof.minestuck.entity.item;
 
-import com.mraof.minestuck.entity.ModEntityTypes;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.entity.MSEntityTypes;
+import com.mraof.minestuck.item.MSItems;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.item.Item;
@@ -25,7 +25,7 @@ public class MetalBoatEntity extends BoatEntity implements IEntityAdditionalSpaw
 	
 	public MetalBoatEntity(World world, double x, double y, double z, int type)
 	{
-		super(ModEntityTypes.METAL_BOAT, world);
+		super(MSEntityTypes.METAL_BOAT, world);
 		this.preventEntitySpawning = false;
 		this.setPosition(x, y, z);
 		this.setMotion(Vec3d.ZERO);
@@ -158,9 +158,9 @@ public class MetalBoatEntity extends BoatEntity implements IEntityAdditionalSpaw
 	private Item getBoatItem()
 	{
 		if(this.type == 0)
-			return MinestuckItems.IRON_BOAT;
+			return MSItems.IRON_BOAT;
 		else if(this.type == 1)
-			return MinestuckItems.GOLD_BOAT;
+			return MSItems.GOLD_BOAT;
 		return null;
 	}
 	

@@ -4,8 +4,8 @@ import com.mraof.minestuck.util.ExtraForgeTags;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 
-import static com.mraof.minestuck.block.MinestuckBlocks.*;
-import static com.mraof.minestuck.util.MinestuckTags.Blocks.*;
+import static com.mraof.minestuck.block.MSBlocks.*;
+import static com.mraof.minestuck.util.MSTags.Blocks.*;
 import static net.minecraft.tags.BlockTags.*;
 import static net.minecraftforge.common.Tags.*;
 

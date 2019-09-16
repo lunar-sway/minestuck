@@ -60,6 +60,6 @@ public class GlowingMushroomBlock extends BushBlock
 	public boolean canSpread(World world, BlockPos pos, BlockState state)
 	{
 		BlockState soil = world.getBlockState(pos.down());
-		return soil.getBlock().equals(MinestuckBlocks.BLUE_DIRT);
+		return soil.getBlock().equals(MSBlocks.BLUE_DIRT);
 	}
 }

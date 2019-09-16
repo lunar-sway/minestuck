@@ -54,7 +54,7 @@ public class DecoyEntity extends MobEntity
 	
 	public DecoyEntity(World world)
 	{
-		super(ModEntityTypes.PLAYER_DECOY, world);
+		super(MSEntityTypes.PLAYER_DECOY, world);
 		inventory = new PlayerInventory(null);
 		if(!world.isRemote)	//If not spawned the way it should
 			markedForDespawn = true;
@@ -62,7 +62,7 @@ public class DecoyEntity extends MobEntity
 	
 	public DecoyEntity(ServerWorld world, ServerPlayerEntity player)
 	{
-		super(ModEntityTypes.PLAYER_DECOY, world);
+		super(MSEntityTypes.PLAYER_DECOY, world);
 		this.setBoundingBox(player.getBoundingBox());
 		this.player = new DecoyPlayer(world, this, player);
 		for(String key : player.getPersistentData().keySet())

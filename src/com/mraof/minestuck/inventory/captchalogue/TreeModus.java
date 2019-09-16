@@ -1,10 +1,10 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.advancements.MSCriteriaTriggers;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -127,7 +127,7 @@ public class TreeModus extends Modus
 			if(size <= 0 && (node == null || size > node.getSize()))
 				return ItemStack.EMPTY;
 			size--;
-			return new ItemStack(MinestuckItems.CAPTCHA_CARD);
+			return new ItemStack(MSItems.CAPTCHA_CARD);
 		}
 		if(node == null)
 			return ItemStack.EMPTY;
@@ -141,7 +141,7 @@ public class TreeModus extends Modus
 		}
 		
 		if(id == 0)
-			MinestuckCriteriaTriggers.TREE_MODUS_ROOT.trigger(player, node.getSize());
+			MSCriteriaTriggers.TREE_MODUS_ROOT.trigger(player, node.getSize());
 		
 		ArrayList<ItemStack> list = node.removeItems(id);
 		if(list.isEmpty())
@@ -181,7 +181,7 @@ public class TreeModus extends Modus
 			TreeNode node = this.node;
 			autoBalance();
 			if(node != this.node)
-				MinestuckPacketHandler.sendToPlayer(CaptchaDeckPacket.data(CaptchaDeckHandler.writeToNBT(this)), player);
+				MSPacketHandler.sendToPlayer(CaptchaDeckPacket.data(CaptchaDeckHandler.writeToNBT(this)), player);
 		}
 	}
 	

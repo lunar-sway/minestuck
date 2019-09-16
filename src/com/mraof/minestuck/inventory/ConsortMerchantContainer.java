@@ -15,13 +15,13 @@ public class ConsortMerchantContainer extends Container
 	
 	public ConsortMerchantContainer(int windowId, PlayerInventory playerInventory)
 	{
-		super(ModContainerTypes.CONSORT_MERCHANT, windowId);
+		super(MSContainerTypes.CONSORT_MERCHANT, windowId);
 		//TODO
 	}
 	
 	public ConsortMerchantContainer(int windowId, PlayerInventory playerInventory, ConsortMerchantInventory inv)
 	{
-		super(ModContainerTypes.CONSORT_MERCHANT, windowId);
+		super(MSContainerTypes.CONSORT_MERCHANT, windowId);
 		this.player = playerInventory.player;
 		setInventory(inv);
 	}

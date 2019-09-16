@@ -37,7 +37,7 @@ public class StructureBlockRegistryProcessor extends StructureProcessor
 	@Override
 	protected IStructureProcessorType getType()
 	{
-		return ModStructureProcessorTypes.BLOCK_REGISTRY;
+		return MSStructureProcessorTypes.BLOCK_REGISTRY;
 	}
 	
 	@Override

@@ -2,7 +2,7 @@ package com.mraof.minestuck.client.gui;
 
 import com.google.common.collect.Maps;
 import com.mraof.minestuck.client.gui.captchalouge.*;
-import com.mraof.minestuck.inventory.ModContainerTypes;
+import com.mraof.minestuck.inventory.MSContainerTypes;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.inventory.captchalogue.ModusType;
 import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
@@ -21,21 +21,21 @@ import java.util.function.Function;
  * This is the class which registers container type -> screen constructor factories,
  * and this is also the class to hide away all screen display code to prevent standalone server crashes due to references to {@link net.minecraft.client.gui.screen.Screen}
  */
-public class ModScreenFactories
+public class MSScreenFactories
 {
 	private static final Map<ModusType<?>, Function<Modus, ? extends SylladexScreen>> SYLLADEX_FACTORIES = Maps.newHashMap();
 	
 	public static void registerScreenFactories()
 	{
-		ScreenManager.registerFactory(ModContainerTypes.MINI_CRUXTRUDER, MiniCruxtruderScreen::new);
-		ScreenManager.registerFactory(ModContainerTypes.MINI_TOTEM_LATHE, MiniTotemLatheScreen::new);
-		ScreenManager.registerFactory(ModContainerTypes.MINI_ALCHEMITER, MiniAlchemiterScreen::new);
-		ScreenManager.registerFactory(ModContainerTypes.MINI_PUNCH_DESIGNIX, MiniPunchDesignixScreen::new);
-		ScreenManager.registerFactory(ModContainerTypes.GRIST_WIDGET, GristWidgetScreen::new);
-		ScreenManager.registerFactory(ModContainerTypes.URANIUM_COOKER, UraniumCookerScreen::new);
+		ScreenManager.registerFactory(MSContainerTypes.MINI_CRUXTRUDER, MiniCruxtruderScreen::new);
+		ScreenManager.registerFactory(MSContainerTypes.MINI_TOTEM_LATHE, MiniTotemLatheScreen::new);
+		ScreenManager.registerFactory(MSContainerTypes.MINI_ALCHEMITER, MiniAlchemiterScreen::new);
+		ScreenManager.registerFactory(MSContainerTypes.MINI_PUNCH_DESIGNIX, MiniPunchDesignixScreen::new);
+		ScreenManager.registerFactory(MSContainerTypes.GRIST_WIDGET, GristWidgetScreen::new);
+		ScreenManager.registerFactory(MSContainerTypes.URANIUM_COOKER, UraniumCookerScreen::new);
 		//ScreenManager.registerFactory(ModContainerTypes.CAPTCHA_DECK, );
 		//ScreenManager.registerFactory(ModContainerTypes.EDITMODE, );
-		ScreenManager.registerFactory(ModContainerTypes.CONSORT_MERCHANT, ConsortShopScreen::new);
+		ScreenManager.registerFactory(MSContainerTypes.CONSORT_MERCHANT, ConsortShopScreen::new);
 		
 		registerSylladexFactory(ModusTypes.STACK, StackSylladexScreen::new);
 		registerSylladexFactory(ModusTypes.QUEUE, QueueSylladexScreen::new);

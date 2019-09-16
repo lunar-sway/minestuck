@@ -2,12 +2,12 @@ package com.mraof.minestuck.entity.consort;
 
 import java.util.Iterator;
 
-import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
-import com.mraof.minestuck.entity.EntityMinestuck;
+import com.mraof.minestuck.advancements.MSCriteriaTriggers;
+import com.mraof.minestuck.entity.MinestuckEntity;
 import com.mraof.minestuck.entity.consort.MessageType.SingleMessage;
 import com.mraof.minestuck.inventory.ConsortMerchantContainer;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
-import com.mraof.minestuck.world.MinestuckDimensions;
+import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.SpawnReason;
@@ -31,7 +31,7 @@ import net.minecraft.world.dimension.DimensionType;
 
 import javax.annotation.Nullable;
 
-public abstract class ConsortEntity extends EntityMinestuck implements IContainerProvider
+public abstract class ConsortEntity extends MinestuckEntity implements IContainerProvider
 {
 	
 	ConsortDialogue.DialogueWrapper message;
@@ -94,7 +94,7 @@ public abstract class ConsortEntity extends EntityMinestuck implements IContaine
 					player.sendMessage(text);
 					onSendMessage(serverPlayer, text, this);
 				}
-				MinestuckCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, message.getString(), this);
+				MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, message.getString(), this);
 			}
 			
 			return true;
@@ -138,7 +138,7 @@ public abstract class ConsortEntity extends EntityMinestuck implements IContaine
 			updatingMessage.onTickUpdate(this);
 		}
 		
-		if(MinestuckDimensions.isSkaia(dimension))
+		if(MSDimensions.isSkaia(dimension))
 			visitedSkaia = true;
 		
 		if(eventTimer > 0)

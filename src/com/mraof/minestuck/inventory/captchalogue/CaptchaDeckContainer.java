@@ -1,7 +1,7 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
-import com.mraof.minestuck.inventory.ModContainerTypes;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.inventory.MSContainerTypes;
+import com.mraof.minestuck.item.MSItems;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -16,7 +16,7 @@ public class CaptchaDeckContainer extends Container
 	
 	public CaptchaDeckContainer(int windowId, PlayerInventory playerInventory)
 	{
-		super(ModContainerTypes.CAPTCHA_DECK, windowId);
+		super(MSContainerTypes.CAPTCHA_DECK, windowId);
 		addSlots(playerInventory);
 	}
 	
@@ -31,7 +31,7 @@ public class CaptchaDeckContainer extends Container
 			@Override
 			public boolean isItemValid(ItemStack stack)
 			{
-				return ModusTypes.getTypeFromItem(stack.getItem()) != null || stack.getItem().equals(MinestuckItems.CAPTCHA_CARD) && (!stack.hasTag() || !stack.getTag().getBoolean("punched"));
+				return ModusTypes.getTypeFromItem(stack.getItem()) != null || stack.getItem().equals(MSItems.CAPTCHA_CARD) && (!stack.hasTag() || !stack.getTag().getBoolean("punched"));
 			}
 		});
 	}

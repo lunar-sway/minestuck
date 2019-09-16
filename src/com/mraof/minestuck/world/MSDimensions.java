@@ -16,7 +16,7 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.*;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
-public class MinestuckDimensions
+public class MSDimensions
 {
 	public static int landDimensionCache = 1;
 	
@@ -38,7 +38,7 @@ public class MinestuckDimensions
 		//register dimensions
 		skaiaDimension = DimensionType.byName(SKAIA_ID);
 		if(skaiaDimension == null)
-			skaiaDimension = DimensionManager.registerDimension(SKAIA_ID, ModDimensionTypes.SKAIA, null, true);
+			skaiaDimension = DimensionManager.registerDimension(SKAIA_ID, MSDimensionTypes.SKAIA, null, true);
 	}
 	
 	/*public static void saveData(NBTTagCompound nbt)
@@ -116,7 +116,7 @@ public class MinestuckDimensions
 	
 	public static boolean isLandDimension(DimensionType dimension)
 	{
-		return dimension != null && dimension.getModType() == ModDimensionTypes.LANDS;
+		return dimension != null && dimension.getModType() == MSDimensionTypes.LANDS;
 	}
 	
 	public static boolean isSkaia(DimensionType dimension)

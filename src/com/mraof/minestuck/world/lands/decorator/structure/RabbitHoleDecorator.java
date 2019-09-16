@@ -1,6 +1,6 @@
 package com.mraof.minestuck.world.lands.decorator.structure;
 
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -88,7 +88,7 @@ public class RabbitHoleDecorator extends SimpleStructureDecorator
 			placeBlock(world, air, 0, 0, 0);
 			placeBlock(world, air, 0, -1, 0);
 			placeBlock(world, air, 0, -1, -1);
-			placeBlock(world, MinestuckBlocks.RABBIT_SPAWNER.getDefaultState(), 0, -1, -2);
+			placeBlock(world, MSBlocks.RABBIT_SPAWNER.getDefaultState(), 0, -1, -2);
 		}
 		else
 		{
@@ -96,7 +96,7 @@ public class RabbitHoleDecorator extends SimpleStructureDecorator
 			placeBlock(world, air, 0, 0, 0);
 			placeBlock(world, air, 0, -1, 0);
 			placeBlock(world, air, 0, -1, 1);
-			placeBlock(world, MinestuckBlocks.RABBIT_SPAWNER.getDefaultState(), 0, -1, 2);
+			placeBlock(world, MSBlocks.RABBIT_SPAWNER.getDefaultState(), 0, -1, 2);
 		}
 		
 		return null;

@@ -1,7 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ColorSelectPacket;
 import com.mraof.minestuck.util.ColorCollector;
 import net.minecraft.client.gui.screen.Screen;
@@ -116,7 +116,7 @@ public class ColorSelectorScreen extends Screen
 	
 	public void selectColor()
 	{
-		MinestuckPacketHandler.sendToServer(new ColorSelectPacket(this.selectedColor));
+		MSPacketHandler.sendToServer(new ColorSelectPacket(this.selectedColor));
 		ColorCollector.playerColor = selectedColor;
 		this.minecraft.displayGuiScreen(null);
 	}

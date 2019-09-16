@@ -21,9 +21,9 @@ import net.minecraft.world.World;
 
 public class RainbowSaplingBlock extends BushBlock implements IGrowable
 {
-	public static final BooleanProperty RED = MinestuckProperties.RED;
-	public static final BooleanProperty GREEN = MinestuckProperties.GREEN;
-	public static final BooleanProperty BLUE = MinestuckProperties.BLUE;
+	public static final BooleanProperty RED = MSProperties.RED;
+	public static final BooleanProperty GREEN = MSProperties.GREEN;
+	public static final BooleanProperty BLUE = MSProperties.BLUE;
 	protected static final VoxelShape SHAPE = Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 	
 	private final Tree tree = new RainbowTree();

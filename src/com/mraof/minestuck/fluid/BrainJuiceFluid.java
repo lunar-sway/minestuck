@@ -1,8 +1,8 @@
 package com.mraof.minestuck.fluid;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.item.MSItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowingFluidBlock;
@@ -31,13 +31,13 @@ public abstract class BrainJuiceFluid extends FlowingFluid
 	@Override
 	public Fluid getFlowingFluid()
 	{
-		return ModFluids.FLOWING_BRAIN_JUICE;
+		return MSFluids.FLOWING_BRAIN_JUICE;
 	}
 	
 	@Override
 	public Fluid getStillFluid()
 	{
-		return ModFluids.BRAIN_JUICE;
+		return MSFluids.BRAIN_JUICE;
 	}
 	
 	@Override
@@ -74,7 +74,7 @@ public abstract class BrainJuiceFluid extends FlowingFluid
 	@Override
 	public Item getFilledBucket()
 	{
-		return MinestuckItems.BRAIN_JUICE_BUCKET;
+		return MSItems.BRAIN_JUICE_BUCKET;
 	}
 	
 	@Override
@@ -98,13 +98,13 @@ public abstract class BrainJuiceFluid extends FlowingFluid
 	@Override
 	protected BlockState getBlockState(IFluidState state)
 	{
-		return MinestuckBlocks.BRAIN_JUICE.getDefaultState().with(FlowingFluidBlock.LEVEL, getLevelFromState(state));
+		return MSBlocks.BRAIN_JUICE.getDefaultState().with(FlowingFluidBlock.LEVEL, getLevelFromState(state));
 	}
 	
 	@Override
 	public boolean isEquivalentTo(Fluid otherFluid)
 	{
-		return otherFluid == ModFluids.FLOWING_BRAIN_JUICE || otherFluid == ModFluids.BRAIN_JUICE;
+		return otherFluid == MSFluids.FLOWING_BRAIN_JUICE || otherFluid == MSFluids.BRAIN_JUICE;
 	}
 	
 	@Override

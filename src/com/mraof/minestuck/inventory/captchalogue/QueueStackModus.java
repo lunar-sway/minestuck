@@ -1,6 +1,6 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -22,7 +22,7 @@ public class QueueStackModus extends StackModus
 			if(list.size() < size)
 			{
 				size--;
-				return new ItemStack(MinestuckItems.CAPTCHA_CARD);
+				return new ItemStack(MSItems.CAPTCHA_CARD);
 			} else return ItemStack.EMPTY;
 		}
 		

@@ -1,7 +1,7 @@
 package com.mraof.minestuck.event;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
@@ -169,7 +169,7 @@ public class ServerEventHandler
 	@SubscribeEvent
 	public void onPlayerUseHoe(UseHoeEvent event)
 	{
-		if(event.getContext().getWorld().getBlockState(event.getContext().getPos()).getBlock() == MinestuckBlocks.COARSE_END_STONE)
+		if(event.getContext().getWorld().getBlockState(event.getContext().getPos()).getBlock() == MSBlocks.COARSE_END_STONE)
 		{
 			event.getContext().getWorld().setBlockState(event.getContext().getPos(), Blocks.END_STONE.getDefaultState());
 			event.getContext().getWorld().playSound(null, event.getContext().getPos(), SoundEvents.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0F, 	1.0F);
@@ -180,7 +180,7 @@ public class ServerEventHandler
 	@SubscribeEvent
 	public void onGetItemBurnTime(FurnaceFuelBurnTimeEvent event)
 	{
-		if(event.getItemStack().getItem() == MinestuckBlocks.TREATED_PLANKS.asItem())
+		if(event.getItemStack().getItem() == MSBlocks.TREATED_PLANKS.asItem())
 			event.setBurnTime(50);	//Do not set this number to 0.
 	}
 	

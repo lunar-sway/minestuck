@@ -1,12 +1,12 @@
 package com.mraof.minestuck.world.lands.terrain;
 
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.entity.ModEntityTypes;
+import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
-import com.mraof.minestuck.world.biome.ModBiomes;
-import com.mraof.minestuck.world.gen.feature.ModFeatures;
+import com.mraof.minestuck.world.biome.MSBiomes;
+import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
@@ -37,10 +37,10 @@ public class EndLandAspect extends TerrainLandAspect
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("surface", MinestuckBlocks.END_GRASS.getDefaultState());
-		registry.setBlockState("upper", MinestuckBlocks.COARSE_END_STONE.getDefaultState());
+		registry.setBlockState("surface", MSBlocks.END_GRASS.getDefaultState());
+		registry.setBlockState("upper", MSBlocks.COARSE_END_STONE.getDefaultState());
 		registry.setBlockState("ground", Blocks.END_STONE.getDefaultState());
-		registry.setBlockState("ocean", MinestuckBlocks.ENDER.getDefaultState());
+		registry.setBlockState("ocean", MSBlocks.ENDER.getDefaultState());
 		registry.setBlockState("structure_primary", Blocks.END_STONE_BRICKS.getDefaultState());
 		registry.setBlockState("structure_primary_decorative", Blocks.PURPUR_PILLAR.getDefaultState().with(RotatedPillarBlock.AXIS, Direction.Axis.Y));
 		registry.setBlockState("structure_primary_stairs", Blocks.PURPUR_STAIRS.getDefaultState());
@@ -48,7 +48,7 @@ public class EndLandAspect extends TerrainLandAspect
 		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState());
 		registry.setBlockState("structure_planks", Blocks.BRICKS.getDefaultState());
 		registry.setBlockState("structure_planks_slab", Blocks.BRICK_SLAB.getDefaultState());
-		registry.setBlockState("village_path", MinestuckBlocks.COARSE_END_STONE.getDefaultState());
+		registry.setBlockState("village_path", MSBlocks.COARSE_END_STONE.getDefaultState());
 		registry.setBlockState("village_fence", Blocks.NETHER_BRICK_FENCE.getDefaultState());
 		registry.setBlockState("structure_wool_1", Blocks.GREEN_WOOL.getDefaultState());
 		registry.setBlockState("structure_wool_3", Blocks.PURPLE_WOOL.getDefaultState());
@@ -71,12 +71,12 @@ public class EndLandAspect extends TerrainLandAspect
 	@Override
 	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blockRegistry)
 	{
-		if(biome.staticBiome == ModBiomes.LAND_NORMAL)
+		if(biome.staticBiome == MSBiomes.LAND_NORMAL)
 		{
-			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(ModFeatures.END_TREE, IFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_EXTRA_HEIGHTMAP, new AtSurfaceWithExtraConfig(2, 0.1F, 1)));
-		} else if(biome.staticBiome == ModBiomes.LAND_ROUGH)
+			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(MSFeatures.END_TREE, IFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_EXTRA_HEIGHTMAP, new AtSurfaceWithExtraConfig(2, 0.1F, 1)));
+		} else if(biome.staticBiome == MSBiomes.LAND_ROUGH)
 		{
-			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(ModFeatures.END_TREE, IFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_EXTRA_HEIGHTMAP, new AtSurfaceWithExtraConfig(3, 0.1F, 1)));
+			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(MSFeatures.END_TREE, IFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_EXTRA_HEIGHTMAP, new AtSurfaceWithExtraConfig(3, 0.1F, 1)));
 		}
 	}
 	
@@ -107,6 +107,6 @@ public class EndLandAspect extends TerrainLandAspect
 	@Override
 	public EntityType<? extends ConsortEntity> getConsortType()
 	{
-		return ModEntityTypes.NAKAGATOR;
+		return MSEntityTypes.NAKAGATOR;
 	}
 }

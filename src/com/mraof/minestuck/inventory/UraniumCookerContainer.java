@@ -2,13 +2,11 @@ package com.mraof.minestuck.inventory;
 
 import com.mraof.minestuck.inventory.slot.InputSlot;
 import com.mraof.minestuck.inventory.slot.OutputSlot;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.tileentity.UraniumCookerTileEntity;
+import com.mraof.minestuck.item.MSItems;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
@@ -33,12 +31,12 @@ public class UraniumCookerContainer extends MachineContainer
 	
 	public UraniumCookerContainer(int windowId, PlayerInventory playerInventory)
 	{
-		this(ModContainerTypes.URANIUM_COOKER, windowId, playerInventory, new Inventory(3), new IntArray(3), IntReferenceHolder.single());
+		this(MSContainerTypes.URANIUM_COOKER, windowId, playerInventory, new Inventory(3), new IntArray(3), IntReferenceHolder.single());
 	}
 	
 	public UraniumCookerContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, IntReferenceHolder fuelHolder)
 	{
-		this(ModContainerTypes.URANIUM_COOKER, windowId, playerInventory, inventory, parameters, fuelHolder);
+		this(MSContainerTypes.URANIUM_COOKER, windowId, playerInventory, inventory, parameters, fuelHolder);
 	}
 	
 	public UraniumCookerContainer(ContainerType<? extends UraniumCookerContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, IntReferenceHolder fuelHolder)
@@ -50,7 +48,7 @@ public class UraniumCookerContainer extends MachineContainer
 		this.fuelHolder = fuelHolder;
 		
 		addSlot(new Slot(inventory, 0, itemInputX, itemInputY));
-		addSlot(new InputSlot(inventory, 1, uraniumInputX, uraniumInputY, MinestuckItems.RAW_URANIUM));
+		addSlot(new InputSlot(inventory, 1, uraniumInputX, uraniumInputY, MSItems.RAW_URANIUM));
 		addSlot(new OutputSlot(inventory, 2, itemOutputX, itemOutputY));
 		trackInt(fuelHolder);
 		
@@ -97,14 +95,14 @@ public class UraniumCookerContainer extends MachineContainer
 				result = mergeItemStack(itemstackOrig, 3, allSlots, false);    //Send into the inventory
 			} else if(slotNumber == 2)    //Shift-clicking from the output slot
 			{
-				if(itemstackOrig.getItem() == MinestuckItems.RAW_URANIUM)
+				if(itemstackOrig.getItem() == MSItems.RAW_URANIUM)
 					result = mergeItemStack(itemstackOrig, 0, 1, false);    //Send the uranium back to the uranium input
 				else
 					result = mergeItemStack(itemstackOrig, 3, allSlots, false);    //Send the non-uranium to the inventory
 				
 			} else    //Shift-clicking from the inventory
 			{
-				if(itemstackOrig.getItem() == MinestuckItems.RAW_URANIUM)
+				if(itemstackOrig.getItem() == MSItems.RAW_URANIUM)
 				{
 					result = mergeItemStack(itemstackOrig, 1, 2, false);    //Send the uranium to the uranium input
 				} else

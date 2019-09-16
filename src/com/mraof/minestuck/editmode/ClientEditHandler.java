@@ -3,10 +3,10 @@ package com.mraof.minestuck.editmode;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.ClientEditPacket;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
-import com.mraof.minestuck.world.MinestuckDimensions;
+import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -56,7 +56,7 @@ public class ClientEditHandler {
 	public static void onKeyPressed()
 	{
 		ClientEditPacket packet = ClientEditPacket.exit();
-		MinestuckPacketHandler.sendToServer(packet);
+		MSPacketHandler.sendToServer(packet);
 	}
 	
 	public static void onClientPackage(String target, int posX, int posZ, boolean[] items, CompoundNBT deployList)
@@ -103,7 +103,7 @@ public class ClientEditHandler {
 		if(deployEntry != null)
 			cost = givenItems[deployEntry.getIndex()]
 					? deployEntry.getSecondaryCost() : deployEntry.getPrimaryCost();
-		else if(stack.getItem().equals(MinestuckItems.CAPTCHA_CARD))
+		else if(stack.getItem().equals(MSItems.CAPTCHA_CARD))
 			cost = new GristSet();
 		else cost = AlchemyCostRegistry.getGristConversion(stack);
 		
@@ -129,7 +129,7 @@ public class ClientEditHandler {
 			return;
 		PlayerEntity player = event.player;
 		
-		double range = MinestuckDimensions.isLandDimension(player.dimension) ? MinestuckConfig.clientLandEditRange : MinestuckConfig.clientOverworldEditRange;
+		double range = MSDimensions.isLandDimension(player.dimension) ? MinestuckConfig.clientLandEditRange : MinestuckConfig.clientOverworldEditRange;
 		
 		ServerEditHandler.updatePosition(player, range, centerX, centerZ);
 		

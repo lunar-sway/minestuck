@@ -4,7 +4,7 @@ import net.minecraft.item.Food;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 
-public class MinestuckFoods
+public class MSFoods
 {
     //foods
     public static final Food BUG_ON_A_STICK = (new Food.Builder()).hunger(1).saturation(0.1F).build();

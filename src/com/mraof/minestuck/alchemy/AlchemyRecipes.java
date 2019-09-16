@@ -1,7 +1,7 @@
 package com.mraof.minestuck.alchemy;
 
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.modSupport.*;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
@@ -20,8 +20,8 @@ import javax.annotation.Nonnull;
 import java.util.*;
 
 import static com.mraof.minestuck.MinestuckConfig.oreMultiplier;
-import static com.mraof.minestuck.block.MinestuckBlocks.*;
-import static com.mraof.minestuck.item.MinestuckItems.*;
+import static com.mraof.minestuck.block.MSBlocks.*;
+import static com.mraof.minestuck.item.MSItems.*;
 import static com.mraof.minestuck.alchemy.CombinationRegistry.Mode.*;
 
 public class AlchemyRecipes
@@ -802,7 +802,7 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(CROCKER_SPOON, CAPTCHA_CARD, MODE_OR, new ItemStack(GRIST_WIDGET));
 		CombinationRegistry.addCombination(CROCKER_FORK, CAPTCHA_CARD, MODE_OR, new ItemStack(GRIST_WIDGET));
 		CombinationRegistry.addCombination(Items.ENDER_PEARL, Blocks.IRON_BLOCK, MODE_AND, new ItemStack(TRANSPORTALIZER));
-		CombinationRegistry.addCombination(CAPTCHA_CARD, MinestuckBlocks.COMPUTER_OFF, MODE_AND, new ItemStack(CAPTCHAROID_CAMERA));
+		CombinationRegistry.addCombination(CAPTCHA_CARD, MSBlocks.COMPUTER_OFF, MODE_AND, new ItemStack(CAPTCHAROID_CAMERA));
 		CombinationRegistry.addCombination(CAPTCHA_CARD, Items.ENDER_EYE, MODE_OR, new ItemStack(CAPTCHAROID_CAMERA));
 		
 		CombinationRegistry.addCombination(STACK_MODUS_CARD, QUEUE_MODUS_CARD, MODE_AND, new ItemStack(QUEUESTACK_MODUS_CARD));
@@ -1138,12 +1138,12 @@ public class AlchemyRecipes
 	
 	public static boolean isPunchedCard(ItemStack item)
 	{
-		return item.getItem() == MinestuckItems.CAPTCHA_CARD && item.hasTag() && item.getTag().getBoolean("punched");
+		return item.getItem() == MSItems.CAPTCHA_CARD && item.hasTag() && item.getTag().getBoolean("punched");
 	}
 	
 	public static boolean isGhostCard(ItemStack item)
 	{
-		return item.getItem() == MinestuckItems.CAPTCHA_CARD && hasDecodedItem(item) && item.getTag().getInt("contentSize") <= 0;
+		return item.getItem() == MSItems.CAPTCHA_CARD && hasDecodedItem(item) && item.getTag().getInt("contentSize") <= 0;
 	}
 	
 	public static boolean hasDecodedItem(ItemStack item)

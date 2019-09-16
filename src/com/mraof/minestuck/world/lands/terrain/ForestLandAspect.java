@@ -1,12 +1,12 @@
 package com.mraof.minestuck.world.lands.terrain;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.entity.ModEntityTypes;
+import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
-import com.mraof.minestuck.world.biome.ModBiomes;
+import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
 import net.minecraft.block.Blocks;
@@ -40,10 +40,10 @@ public class ForestLandAspect extends TerrainLandAspect
 		registry.setBlockState("upper", Blocks.DIRT.getDefaultState());
 		if(type == Variant.TAIGA) {
 			registry.setBlockState("structure_primary", Blocks.SPRUCE_WOOD.getDefaultState());
-			registry.setBlockState("structure_primary_decorative", MinestuckBlocks.FROST_WOOD.getDefaultState());
+			registry.setBlockState("structure_primary_decorative", MSBlocks.FROST_WOOD.getDefaultState());
 		} else {
-			registry.setBlockState("structure_primary", MinestuckBlocks.VINE_WOOD.getDefaultState());
-			registry.setBlockState("structure_primary_decorative", MinestuckBlocks.FLOWERY_VINE_WOOD.getDefaultState());
+			registry.setBlockState("structure_primary", MSBlocks.VINE_WOOD.getDefaultState());
+			registry.setBlockState("structure_primary_decorative", MSBlocks.FLOWERY_VINE_WOOD.getDefaultState());
 		}
 		registry.setBlockState("structure_secondary", Blocks.STONE_BRICKS.getDefaultState());
 		registry.setBlockState("structure_secondary_decorative", Blocks.CHISELED_STONE_BRICKS.getDefaultState());
@@ -78,7 +78,7 @@ public class ForestLandAspect extends TerrainLandAspect
 	@Override
 	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blockRegistry)
 	{
-		if(biome.staticBiome == ModBiomes.LAND_NORMAL)
+		if(biome.staticBiome == MSBiomes.LAND_NORMAL)
 		{
 			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Feature.GRASS, new GrassFeatureConfig(Blocks.GRASS.getDefaultState()), Placement.COUNT_HEIGHTMAP_DOUBLE, new FrequencyConfig(2)));
 			
@@ -91,7 +91,7 @@ public class ForestLandAspect extends TerrainLandAspect
 					biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Feature.RANDOM_SELECTOR, new MultipleRandomFeatureConfig(new Feature[]{Feature.PINE_TREE}, new IFeatureConfig[]{IFeatureConfig.NO_FEATURE_CONFIG}, new float[]{1/3F}, Feature.SPRUCE_TREE, IFeatureConfig.NO_FEATURE_CONFIG), Placement.COUNT_EXTRA_HEIGHTMAP, new AtSurfaceWithExtraConfig(5, 0.1F, 1)));
 					break;
 			}
-		} else if(biome.staticBiome == ModBiomes.LAND_ROUGH)
+		} else if(biome.staticBiome == MSBiomes.LAND_ROUGH)
 		{
 			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Feature.GRASS, new GrassFeatureConfig(Blocks.GRASS.getDefaultState()), Placement.COUNT_HEIGHTMAP_DOUBLE, new FrequencyConfig(3)));
 			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Feature.GRASS, new GrassFeatureConfig(Blocks.FERN.getDefaultState()), Placement.COUNT_HEIGHTMAP_DOUBLE, new FrequencyConfig(1)));
@@ -105,7 +105,7 @@ public class ForestLandAspect extends TerrainLandAspect
 					biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Feature.RANDOM_SELECTOR, new MultipleRandomFeatureConfig(new Feature[]{Feature.PINE_TREE}, new IFeatureConfig[]{IFeatureConfig.NO_FEATURE_CONFIG}, new float[]{0.33333334F}, Feature.SPRUCE_TREE, IFeatureConfig.NO_FEATURE_CONFIG), Placement.COUNT_EXTRA_HEIGHTMAP, new AtSurfaceWithExtraConfig(10, 0.1F, 1)));
 					break;
 			}
-		} else if(biome.staticBiome == ModBiomes.LAND_OCEAN)
+		} else if(biome.staticBiome == MSBiomes.LAND_OCEAN)
 		{
 			DefaultBiomeFeatures.addSwampClayDisks(biome);
 		}
@@ -132,7 +132,7 @@ public class ForestLandAspect extends TerrainLandAspect
 	@Override
 	public EntityType<? extends ConsortEntity> getConsortType()
 	{
-		return ModEntityTypes.IGUANA;
+		return MSEntityTypes.IGUANA;
 	}
 	
 	public enum Variant

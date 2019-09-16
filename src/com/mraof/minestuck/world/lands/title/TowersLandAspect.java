@@ -2,8 +2,8 @@ package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
-import com.mraof.minestuck.world.biome.ModBiomes;
-import com.mraof.minestuck.world.gen.feature.ModFeatures;
+import com.mraof.minestuck.world.biome.MSBiomes;
+import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.lands.decorator.structure.BasicTowerDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
@@ -37,9 +37,9 @@ public class TowersLandAspect extends TitleLandAspect
 	@Override
 	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blockRegistry)
 	{
-		if(biome.staticBiome == ModBiomes.LAND_ROUGH)
+		if(biome.staticBiome == MSBiomes.LAND_ROUGH)
 		{
-			biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(ModFeatures.LARGE_PILLAR, new BushConfig(blockRegistry.getBlockState("structure_primary")), Placement.TOP_SOLID_HEIGHTMAP, IPlacementConfig.NO_PLACEMENT_CONFIG));
+			biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(MSFeatures.LARGE_PILLAR, new BushConfig(blockRegistry.getBlockState("structure_primary")), Placement.TOP_SOLID_HEIGHTMAP, IPlacementConfig.NO_PLACEMENT_CONFIG));
 		}
 	}
 	

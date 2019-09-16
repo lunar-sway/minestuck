@@ -1,10 +1,10 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
-import com.mraof.minestuck.client.gui.ModScreenFactories;
+import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.inventory.captchalogue.*;
 import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.network.MSPacketHandler;
 import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
@@ -91,7 +91,7 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckCon
 					return;
 				}
 			}
-			MinestuckPacketHandler.sendToServer(CaptchaDeckPacket.modus());
+			MSPacketHandler.sendToServer(CaptchaDeckPacket.modus());
 		}
 	}
 	
@@ -101,7 +101,7 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckCon
 		{
 			minecraft.player.connection.sendPacket(new CCloseWindowPacket(minecraft.player.openContainer.windowId));
 			minecraft.player.inventory.setItemStack(ItemStack.EMPTY);
-			ModScreenFactories.displaySylladexScreen(CaptchaDeckHandler.clientSideModus);
+			MSScreenFactories.displaySylladexScreen(CaptchaDeckHandler.clientSideModus);
 			minecraft.player.openContainer = minecraft.player.container;
 		}
 	}
@@ -109,7 +109,7 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckCon
 	private void onConfirm(boolean result)
 	{
 		if(result && !container.inventory.getStackInSlot(0).isEmpty())
-			MinestuckPacketHandler.sendToServer(CaptchaDeckPacket.modus());
+			MSPacketHandler.sendToServer(CaptchaDeckPacket.modus());
 		minecraft.currentScreen = this;
 	}
 	

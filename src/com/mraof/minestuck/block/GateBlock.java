@@ -25,7 +25,7 @@ public class GateBlock extends Block
 {
 	
 	protected static final VoxelShape SHAPE = Block.makeCuboidShape(0.0D, 7.0D, 0.0D, 16.0D, 9.0D, 16.0D);
-	public static BooleanProperty MAIN = MinestuckProperties.MAIN;
+	public static BooleanProperty MAIN = MSProperties.MAIN;
 	
 	public GateBlock(Properties properties)
 	{
@@ -78,7 +78,7 @@ public class GateBlock extends Block
 			BlockPos mainPos = pos;
 			if(!state.get(MAIN))
 			{
-				if(this != MinestuckBlocks.GATE)
+				if(this != MSBlocks.GATE)
 					mainPos = this.findMainComponent(pos, worldIn);
 				else return;
 			}

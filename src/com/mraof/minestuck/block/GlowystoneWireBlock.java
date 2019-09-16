@@ -247,7 +247,7 @@ public class GlowystoneWireBlock extends Block
 	
 	protected static boolean canConnectTo(BlockState blockState)
 	{
-		return blockState.getBlock() == MinestuckBlocks.GLOWYSTONE_DUST;
+		return blockState.getBlock() == MSBlocks.GLOWYSTONE_DUST;
 	}
 	
 	public static int colorMultiplier()

@@ -3,13 +3,13 @@ package com.mraof.minestuck.world.lands.terrain;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.entity.ModEntityTypes;
+import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
-import com.mraof.minestuck.world.biome.ModBiomes;
-import com.mraof.minestuck.world.gen.feature.ModFeatures;
+import com.mraof.minestuck.world.biome.MSBiomes;
+import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.MesaDecorator;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
@@ -42,16 +42,16 @@ public class RainbowLandAspect extends TerrainLandAspect
 		registry.setBlockState("ground", Blocks.STONE.getDefaultState());
 		registry.setBlockState("upper", Blocks.WHITE_TERRACOTTA.getDefaultState());
 		registry.setBlockState("surface", Blocks.WHITE_WOOL.getDefaultState());
-		registry.setBlockState("ocean", MinestuckBlocks.WATER_COLORS.getDefaultState());
-		registry.setBlockState("structure_primary", MinestuckBlocks.RAINBOW_WOOD.getDefaultState());
+		registry.setBlockState("ocean", MSBlocks.WATER_COLORS.getDefaultState());
+		registry.setBlockState("structure_primary", MSBlocks.RAINBOW_WOOD.getDefaultState());
 		registry.setBlockState("structure_primary_decorative", Blocks.ACACIA_LOG.getDefaultState());
 		registry.setBlockState("structure_primary_stairs", Blocks.DARK_OAK_STAIRS.getDefaultState());
-		registry.setBlockState("structure_secondary", MinestuckBlocks.RAINBOW_PLANKS.getDefaultState());
+		registry.setBlockState("structure_secondary", MSBlocks.RAINBOW_PLANKS.getDefaultState());
 		registry.setBlockState("structure_secondary_decorative", Blocks.SPRUCE_PLANKS.getDefaultState());
 		registry.setBlockState("structure_secondary_stairs", Blocks.JUNGLE_STAIRS.getDefaultState());
 		registry.setBlockState("salamander_floor", Blocks.STONE_BRICKS.getDefaultState());
-		registry.setBlockState("light_block", MinestuckBlocks.GLOWING_WOOD.getDefaultState());
-		BlockState rainbow_leaves = MinestuckBlocks.RAINBOW_LEAVES.getDefaultState();
+		registry.setBlockState("light_block", MSBlocks.GLOWING_WOOD.getDefaultState());
+		BlockState rainbow_leaves = MSBlocks.RAINBOW_LEAVES.getDefaultState();
 		//	rainbow_leaves = rainbow_leaves.with(BlockMinestuckLeaves1.CHECK_DECAY, false).withProperty(BlockMinestuckLeaves1.DECAYABLE, false);
 		registry.setBlockState("bush", rainbow_leaves);
 		registry.setBlockState("mushroom_1", rainbow_leaves);
@@ -76,12 +76,12 @@ public class RainbowLandAspect extends TerrainLandAspect
 	@Override
 	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blockRegistry)
 	{
-		if(biome.staticBiome == ModBiomes.LAND_NORMAL)
+		if(biome.staticBiome == MSBiomes.LAND_NORMAL)
 		{
-			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(ModFeatures.RAINBOW_TREE, IFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_EXTRA_HEIGHTMAP, new AtSurfaceWithExtraConfig(4, 0.1F, 1)));
-		} else if(biome.staticBiome == ModBiomes.LAND_ROUGH)
+			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(MSFeatures.RAINBOW_TREE, IFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_EXTRA_HEIGHTMAP, new AtSurfaceWithExtraConfig(4, 0.1F, 1)));
+		} else if(biome.staticBiome == MSBiomes.LAND_ROUGH)
 		{
-			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(ModFeatures.RAINBOW_TREE, IFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_EXTRA_HEIGHTMAP, new AtSurfaceWithExtraConfig(2, 0.1F, 1)));
+			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(MSFeatures.RAINBOW_TREE, IFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_EXTRA_HEIGHTMAP, new AtSurfaceWithExtraConfig(2, 0.1F, 1)));
 		}
 		
 		biome.addSpawn(EntityClassification.WATER_CREATURE, new SpawnListEntry(EntityType.SQUID, 2, 3, 5));
@@ -120,6 +120,6 @@ public class RainbowLandAspect extends TerrainLandAspect
 	@Override
 	public EntityType<? extends ConsortEntity> getConsortType()
 	{
-		return ModEntityTypes.TURTLE;
+		return MSEntityTypes.TURTLE;
 	}
 }

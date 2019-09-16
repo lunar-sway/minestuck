@@ -14,7 +14,7 @@ import static com.mraof.minestuck.MinestuckConfig.generateUraniumOre;
 import static com.mraof.minestuck.MinestuckConfig.uraniumStratumMax;
 import static com.mraof.minestuck.MinestuckConfig.uraniumStratumMin;
 import static com.mraof.minestuck.MinestuckConfig.uraniumVeinsPerChunk;
-import static com.mraof.minestuck.block.MinestuckBlocks.*;
+import static com.mraof.minestuck.block.MSBlocks.*;
 
 import java.util.Random;
 

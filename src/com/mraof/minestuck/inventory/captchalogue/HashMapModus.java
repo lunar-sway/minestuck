@@ -1,9 +1,9 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -185,7 +185,7 @@ public class HashMapModus extends Modus
 		{
 			list.remove(id);
 			if(item.isEmpty())
-				return new ItemStack(MinestuckItems.CAPTCHA_CARD);
+				return new ItemStack(MSItems.CAPTCHA_CARD);
 			else return AlchemyRecipes.createCard(item, false);
 		} else
 		{
@@ -244,7 +244,7 @@ public class HashMapModus extends Modus
 			handleNumber(player, number.toString());
 		
 		CaptchaDeckPacket packet = CaptchaDeckPacket.data(CaptchaDeckHandler.writeToNBT(this));
-		MinestuckPacketHandler.sendToPlayer(packet, player);
+		MSPacketHandler.sendToPlayer(packet, player);
 		
 	}
 	

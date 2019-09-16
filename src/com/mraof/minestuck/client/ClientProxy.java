@@ -2,8 +2,8 @@ package com.mraof.minestuck.client;
 
 import com.mraof.minestuck.CommonProxy;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.client.gui.ModScreenFactories;
+import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.model.BasiliskModel;
 import com.mraof.minestuck.client.model.BishopModel;
 import com.mraof.minestuck.client.model.GiclopsModel;
@@ -29,7 +29,7 @@ import com.mraof.minestuck.client.renderer.entity.VitalityGelRenderer;
 import com.mraof.minestuck.client.renderer.entity.frog.FrogRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.GateRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.SkaiaPortalRenderer;
-import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
+import com.mraof.minestuck.client.settings.MSKeyHandler;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.entity.EntityBigPart;
 import com.mraof.minestuck.entity.DecoyEntity;
@@ -55,7 +55,7 @@ import com.mraof.minestuck.entity.underling.LichEntity;
 import com.mraof.minestuck.entity.underling.OgreEntity;
 import com.mraof.minestuck.entity.underling.UnderlingPartEntity;
 import com.mraof.minestuck.event.ClientEventHandler;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.tileentity.GateTileEntity;
 import com.mraof.minestuck.tileentity.SkaiaPortalTileEntity;
 import com.mraof.minestuck.util.ColorCollector;
@@ -97,7 +97,7 @@ public class ClientProxy extends CommonProxy
 	public static void initBlockColors(ColorHandlerEvent.Block event)
 	{
 		BlockColors colors = event.getBlockColors();
-		colors.register(new BlockColorCruxite(), MinestuckBlocks.ALCHEMITER.TOTEM_PAD, MinestuckBlocks.TOTEM_LATHE.DOWEL_ROD, MinestuckBlocks.CRUXITE_DOWEL);
+		colors.register(new BlockColorCruxite(), MSBlocks.ALCHEMITER.TOTEM_PAD, MSBlocks.TOTEM_LATHE.DOWEL_ROD, MSBlocks.CRUXITE_DOWEL);
 		colors.register((state, worldIn, pos, tintIndex) ->
 		{
 			int age = state.get(StemBlock.AGE);
@@ -105,7 +105,7 @@ public class ClientProxy extends CommonProxy
 			int green = 255 - age * 8;
 			int blue = age * 4;
 			return red << 16 | green << 8 | blue;
-		}, MinestuckBlocks.STRAWBERRY_STEM);
+		}, MSBlocks.STRAWBERRY_STEM);
 	}
 	
 	@SubscribeEvent
@@ -113,7 +113,7 @@ public class ClientProxy extends CommonProxy
 	{
 		ItemColors colors = event.getItemColors();
 		colors.register((stack, tintIndex) -> BlockColorCruxite.handleColorTint(ColorCollector.getColorFromStack(stack, 0) - 1, tintIndex),
-				MinestuckBlocks.CRUXITE_DOWEL, MinestuckItems.CRUXITE_APPLE, MinestuckItems.CRUXITE_POTION);
+				MSBlocks.CRUXITE_DOWEL, MSItems.CRUXITE_APPLE, MSItems.CRUXITE_POTION);
 		//colors.register(new FrogRenderer.FrogItemColor(), MinestuckItems.FROG);
 	}
 	
@@ -121,7 +121,7 @@ public class ClientProxy extends CommonProxy
 	{
 		registerRenderers();
 		
-		ModScreenFactories.registerScreenFactories();
+		MSScreenFactories.registerScreenFactories();
 		
 		RenderingRegistry.registerEntityRenderingHandler(FrogEntity.class, manager -> new FrogRenderer(manager));
 		RenderingRegistry.registerEntityRenderingHandler(HologramEntity.class, HologramRenderer::new);
@@ -147,8 +147,8 @@ public class ClientProxy extends CommonProxy
 		RenderingRegistry.registerEntityRenderingHandler(SbahjPosterEntity.class, manager -> new RenderHangingArt<>(manager, "sbahj_poster"));
 		RenderingRegistry.registerEntityRenderingHandler(ShopPosterEntity.class, manager -> new RenderHangingArt<>(manager, "shop_poster"));
 
-		MinestuckKeyHandler.instance.registerKeys();
-		MinecraftForge.EVENT_BUS.register(MinestuckKeyHandler.instance);
+		MSKeyHandler.instance.registerKeys();
+		MinecraftForge.EVENT_BUS.register(MSKeyHandler.instance);
 		MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
 
 		MinecraftForge.EVENT_BUS.register(ClientEditHandler.instance);

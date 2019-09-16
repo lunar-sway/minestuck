@@ -2,8 +2,6 @@ package com.mraof.minestuck.world.lands.decorator.structure;
 
 import java.util.Random;
 
-import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockUtil;
-import com.mraof.minestuck.world.storage.loot.MinestuckLoot;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;

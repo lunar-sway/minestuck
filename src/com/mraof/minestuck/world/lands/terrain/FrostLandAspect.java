@@ -1,11 +1,11 @@
 package com.mraof.minestuck.world.lands.terrain;
 
 import com.mraof.minestuck.block.*;
-import com.mraof.minestuck.entity.ModEntityTypes;
+import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
-import com.mraof.minestuck.world.biome.ModBiomes;
+import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.lands.decorator.*;
 import com.mraof.minestuck.world.lands.gen.LandGenSettings;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
@@ -34,9 +34,9 @@ public class FrostLandAspect extends TerrainLandAspect
 		registry.setBlockState("upper", Blocks.DIRT.getDefaultState());
 		registry.setBlockState("structure_primary", Blocks.PRISMARINE.getDefaultState());
 		registry.setBlockState("structure_primary_decorative", Blocks.PRISMARINE_BRICKS.getDefaultState());
-		registry.setBlockState("structure_secondary", MinestuckBlocks.FROST_BRICKS.getDefaultState());
-		registry.setBlockState("structure_secondary_stairs", MinestuckBlocks.FROST_BRICK_STAIRS.getDefaultState());
-		registry.setBlockState("structure_secondary_decorative", MinestuckBlocks.CHISELED_FROST_BRICKS.getDefaultState());
+		registry.setBlockState("structure_secondary", MSBlocks.FROST_BRICKS.getDefaultState());
+		registry.setBlockState("structure_secondary_stairs", MSBlocks.FROST_BRICK_STAIRS.getDefaultState());
+		registry.setBlockState("structure_secondary_decorative", MSBlocks.CHISELED_FROST_BRICKS.getDefaultState());
 		registry.setBlockState("structure_planks", Blocks.SPRUCE_PLANKS.getDefaultState());
 		registry.setBlockState("structure_planks_slab", Blocks.SPRUCE_SLAB.getDefaultState());
 		registry.setBlockState("river", Blocks.ICE.getDefaultState());
@@ -79,10 +79,10 @@ public class FrostLandAspect extends TerrainLandAspect
 		//list.add(new SpruceTreeDecorator(MinestuckBlocks.log.getDefaultState().withProperty(BlockMinestuckLog1.VARIANT, BlockMinestuckLog1.BlockType.FROST), MinestuckBlocks.leaves1.getDefaultState().withProperty(BlockMinestuckLeaves1.VARIANT, BlockMinestuckLeaves1.BlockType.FROST).withProperty(BlockMinestuckLeaves1.CHECK_DECAY, Boolean.valueOf(false)), BiomeMinestuck.mediumNormal));
 		//list.add(new SpruceTreeDecorator(MinestuckBlocks.log.getDefaultState().withProperty(BlockMinestuckLog1.VARIANT, BlockMinestuckLog1.BlockType.FROST), MinestuckBlocks.leaves1.getDefaultState().withProperty(BlockMinestuckLeaves1.VARIANT, BlockMinestuckLeaves1.BlockType.FROST).withProperty(BlockMinestuckLeaves1.CHECK_DECAY, Boolean.valueOf(false)), BiomeMinestuck.mediumRough));
 
-		list.add(new SurfaceDecoratorVein(Blocks.COARSE_DIRT.getDefaultState(), 10, 32, ModBiomes.mediumRough, ModBiomes.mediumOcean));
-		list.add(new SurfaceDecoratorVein(Blocks.ICE.getDefaultState(), 5, 8, ModBiomes.mediumRough));
-		list.add(new SurfaceDecoratorVein(Blocks.SNOW_BLOCK.getDefaultState(), 8, 16, ModBiomes.mediumRough));
-		list.add(new SurfaceDecoratorVein(Blocks.SNOW_BLOCK.getDefaultState(), 15, 16, ModBiomes.mediumNormal));
+		list.add(new SurfaceDecoratorVein(Blocks.COARSE_DIRT.getDefaultState(), 10, 32, MSBiomes.mediumRough, MSBiomes.mediumOcean));
+		list.add(new SurfaceDecoratorVein(Blocks.ICE.getDefaultState(), 5, 8, MSBiomes.mediumRough));
+		list.add(new SurfaceDecoratorVein(Blocks.SNOW_BLOCK.getDefaultState(), 8, 16, MSBiomes.mediumRough));
+		list.add(new SurfaceDecoratorVein(Blocks.SNOW_BLOCK.getDefaultState(), 15, 16, MSBiomes.mediumNormal));
 		
 		list.add(new UndergroundDecoratorVein(Blocks.PACKED_ICE.getDefaultState(), 2, 8, 64));
 		list.add(new UndergroundDecoratorVein(Blocks.SNOW_BLOCK.getDefaultState(), 3, 16, 64));
@@ -113,6 +113,6 @@ public class FrostLandAspect extends TerrainLandAspect
 	@Override
 	public EntityType<? extends ConsortEntity> getConsortType()
 	{
-		return ModEntityTypes.IGUANA;
+		return MSEntityTypes.IGUANA;
 	}
 }

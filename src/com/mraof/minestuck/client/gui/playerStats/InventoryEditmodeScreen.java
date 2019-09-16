@@ -6,7 +6,7 @@ import java.time.Month;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.inventory.EditmodeContainer;
 import com.mraof.minestuck.network.EditmodeInventoryPacket;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.network.MSPacketHandler;
 
 import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.entity.player.PlayerInventory;
@@ -70,7 +70,7 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen
 			}
 			if(packet != null)
 			{
-				MinestuckPacketHandler.INSTANCE.sendToServer(packet);
+				MSPacketHandler.INSTANCE.sendToServer(packet);
 				return true;
 			}
 		}

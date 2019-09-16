@@ -1,7 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
 
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
@@ -20,7 +20,7 @@ public class TileEntityJumperBlock extends TileEntity
 	
 	public TileEntityJumperBlock()
 	{
-		super(ModTileEntityTypes.JUMPER_BLOCK);
+		super(MSTileEntityTypes.JUMPER_BLOCK);
 	}
 	
 	public int getColor()
@@ -37,7 +37,7 @@ public class TileEntityJumperBlock extends TileEntity
 
 	public void setUpgrade(ItemStack stack, int id)
 	{
-		if((stack.getItem() == MinestuckItems.SHUNT && AlchemyRecipes.hasDecodedItem(stack)) || stack.isEmpty())
+		if((stack.getItem() == MSItems.SHUNT && AlchemyRecipes.hasDecodedItem(stack)) || stack.isEmpty())
 		{
 			upgrade[id] = stack;
 			if(world != null)

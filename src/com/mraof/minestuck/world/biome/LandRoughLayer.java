@@ -8,8 +8,8 @@ import net.minecraft.world.gen.layer.traits.IC1Transformer;
 public class LandRoughLayer implements IC1Transformer
 {
 	private final int roughChance;
-	private final int NORMAL_BIOME = Registry.BIOME.getId(ModBiomes.LAND_NORMAL);	//TODO Is there a better way to do this?
-	private final int ROUGH_BIOME = Registry.BIOME.getId(ModBiomes.LAND_ROUGH);
+	private final int NORMAL_BIOME = Registry.BIOME.getId(MSBiomes.LAND_NORMAL);	//TODO Is there a better way to do this?
+	private final int ROUGH_BIOME = Registry.BIOME.getId(MSBiomes.LAND_ROUGH);
 	
 	public LandRoughLayer(float roughChance)
 	{

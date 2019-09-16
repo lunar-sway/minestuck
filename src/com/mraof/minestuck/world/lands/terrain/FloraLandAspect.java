@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.entity.ModEntityTypes;
+import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
-import com.mraof.minestuck.world.biome.ModBiomes;
+import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.lands.decorator.CanopyTreeDecorator;
 import com.mraof.minestuck.world.lands.decorator.FlowerDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
@@ -44,12 +44,12 @@ public class FloraLandAspect extends TerrainLandAspect
 	{
 		registry.setBlockState("surface", Blocks.GRASS.getDefaultState());
 		registry.setBlockState("upper", Blocks.DIRT.getDefaultState());
-		registry.setBlockState("ocean", MinestuckBlocks.BLOOD.getDefaultState());
+		registry.setBlockState("ocean", MSBlocks.BLOOD.getDefaultState());
 		registry.setBlockState("structure_primary", Blocks.MOSSY_STONE_BRICKS.getDefaultState());
-		registry.setBlockState("structure_primary_decorative", MinestuckBlocks.FLOWERY_MOSSY_STONE_BRICKS.getDefaultState());
+		registry.setBlockState("structure_primary_decorative", MSBlocks.FLOWERY_MOSSY_STONE_BRICKS.getDefaultState());
 		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState());
 		registry.setBlockState("structure_secondary", Blocks.MOSSY_COBBLESTONE.getDefaultState());
-		registry.setBlockState("structure_secondary_decorative", MinestuckBlocks.FLOWERY_MOSSY_COBBLESTONE.getDefaultState());
+		registry.setBlockState("structure_secondary_decorative", MSBlocks.FLOWERY_MOSSY_COBBLESTONE.getDefaultState());
 		registry.setBlockState("structure_secondary_stairs", Blocks.DARK_OAK_STAIRS.getDefaultState());
 		registry.setBlockState("village_path", Blocks.GRASS_PATH.getDefaultState());
 		registry.setBlockState("bush", Blocks.FERN.getDefaultState());
@@ -62,7 +62,7 @@ public class FloraLandAspect extends TerrainLandAspect
 		@Override
 		public BlockState pickBlock(Random random)
 		{
-			return MinestuckBlocks.STRAWBERRY.getDefaultState().with(DirectionalBlock.FACING, Direction.random(random));
+			return MSBlocks.STRAWBERRY.getDefaultState().with(DirectionalBlock.FACING, Direction.random(random));
 		}
 		@Override
 		public int getCount(Random random)
@@ -96,11 +96,11 @@ public class FloraLandAspect extends TerrainLandAspect
 		list.add(new SwordDecorator());
 		list.add(new StrawberryDecorator());
 		
-		list.add(new CanopyTreeDecorator(25, ModBiomes.mediumNormal));
-		list.add(new CanopyTreeDecorator(3, ModBiomes.mediumRough));
-		list.add(new TallGrassDecorator(0.3F, ModBiomes.mediumNormal));
-		list.add(new TallGrassDecorator(0.5F, 0.2F, ModBiomes.mediumRough));
-		list.add(new FlowerDecorator(0.5F, 0.2F, ModBiomes.mediumNormal, ModBiomes.mediumRough));
+		list.add(new CanopyTreeDecorator(25, MSBiomes.mediumNormal));
+		list.add(new CanopyTreeDecorator(3, MSBiomes.mediumRough));
+		list.add(new TallGrassDecorator(0.3F, MSBiomes.mediumNormal));
+		list.add(new TallGrassDecorator(0.5F, 0.2F, MSBiomes.mediumRough));
+		list.add(new FlowerDecorator(0.5F, 0.2F, MSBiomes.mediumNormal, MSBiomes.mediumRough));
 		
 		list.add(new UndergroundDecoratorVein(Blocks.DIRT.getDefaultState(), 3, 33, 64));
 		list.add(new UndergroundDecoratorVein(Blocks.GRAVEL.getDefaultState(), 2, 28, 64));
@@ -108,8 +108,8 @@ public class FloraLandAspect extends TerrainLandAspect
 		list.add(new UndergroundDecoratorVein(Blocks.EMERALD_ORE.getDefaultState(), 8, 3, 32));
 		list.add(new UndergroundDecoratorVein(Blocks.DIAMOND_ORE.getDefaultState(), 8, 3, 32));
 		list.add(new UndergroundDecoratorVein(Blocks.LAPIS_ORE.getDefaultState(), 8, 3, 32));
-		list.add(new UndergroundDecoratorVein(MinestuckBlocks.STONE_QUARTZ_ORE.getDefaultState(), 8, 5, 32));
-		list.add(new SurfaceDecoratorVein(Blocks.CLAY.getDefaultState(), 15, 10, ModBiomes.mediumOcean));
+		list.add(new UndergroundDecoratorVein(MSBlocks.STONE_QUARTZ_ORE.getDefaultState(), 8, 5, 32));
+		list.add(new SurfaceDecoratorVein(Blocks.CLAY.getDefaultState(), 15, 10, MSBiomes.mediumOcean));
 		return list;
 	}
 	
@@ -128,6 +128,6 @@ public class FloraLandAspect extends TerrainLandAspect
 	@Override
 	public EntityType<? extends ConsortEntity> getConsortType()
 	{
-		return ModEntityTypes.IGUANA;
+		return MSEntityTypes.IGUANA;
 	}
 }

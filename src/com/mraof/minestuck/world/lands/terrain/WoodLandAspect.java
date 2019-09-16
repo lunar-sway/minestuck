@@ -1,10 +1,10 @@
 package com.mraof.minestuck.world.lands.terrain;
 
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.entity.ModEntityTypes;
+import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
-import com.mraof.minestuck.world.biome.ModBiomes;
+import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
 import com.mraof.minestuck.world.lands.decorator.SurfaceMushroomGenerator;
@@ -31,14 +31,14 @@ public class WoodLandAspect extends TerrainLandAspect
 	{
 		registry.setBlockState("ground", Blocks.STONE.getDefaultState());
 		registry.setBlockState("upper", Blocks.OAK_LOG.getDefaultState());
-		registry.setBlockState("surface", MinestuckBlocks.TREATED_PLANKS.getDefaultState());
+		registry.setBlockState("surface", MSBlocks.TREATED_PLANKS.getDefaultState());
 		registry.setBlockState("structure_primary", Blocks.JUNGLE_WOOD.getDefaultState());
 		registry.setBlockState("structure_primary_decorative", Blocks.DARK_OAK_LOG.getDefaultState());
 		registry.setBlockState("structure_primary_stairs", Blocks.DARK_OAK_STAIRS.getDefaultState());
 		registry.setBlockState("structure_secondary", Blocks.JUNGLE_PLANKS.getDefaultState());
 		registry.setBlockState("structure_secondary_decorative", Blocks.DARK_OAK_PLANKS.getDefaultState());
 		registry.setBlockState("structure_secondary_stairs", Blocks.JUNGLE_STAIRS.getDefaultState());
-		registry.setBlockState("light_block", MinestuckBlocks.GLOWING_WOOD.getDefaultState());
+		registry.setBlockState("light_block", MSBlocks.GLOWING_WOOD.getDefaultState());
 		registry.setBlockState("bush", Blocks.RED_MUSHROOM.getDefaultState());
 		registry.setBlockState("structure_wool_1", Blocks.PURPLE_WOOL.getDefaultState());
 		registry.setBlockState("structure_wool_3", Blocks.GREEN_WOOL.getDefaultState());
@@ -60,14 +60,14 @@ public class WoodLandAspect extends TerrainLandAspect
 	public List<ILandDecorator> getDecorators()
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<>();
-		list.add(new SurfaceDecoratorVein(Blocks.OAK_LEAVES.getDefaultState(), 15, 32, ModBiomes.mediumRough));
+		list.add(new SurfaceDecoratorVein(Blocks.OAK_LEAVES.getDefaultState(), 15, 32, MSBiomes.mediumRough));
 		//list.add(new SurfaceDecoratorVein(MinestuckBlocks.log.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE), 8, 32, BiomeMinestuck.mediumNormal));
-		list.add(new SurfaceDecoratorVein(Blocks.NETHERRACK.getDefaultState(), 6, 8, ModBiomes.mediumNormal));
+		list.add(new SurfaceDecoratorVein(Blocks.NETHERRACK.getDefaultState(), 6, 8, MSBiomes.mediumNormal));
 		
-		list.add(new SurfaceMushroomGenerator(Blocks.BROWN_MUSHROOM, true, 10, 64, ModBiomes.mediumNormal));
-		list.add(new SurfaceMushroomGenerator(Blocks.BROWN_MUSHROOM, true, 5, 32, ModBiomes.mediumRough));
-		list.add(new SurfaceMushroomGenerator(Blocks.RED_MUSHROOM, true, 10, 64, ModBiomes.mediumNormal));
-		list.add(new SurfaceMushroomGenerator(Blocks.RED_MUSHROOM, true, 5, 32, ModBiomes.mediumRough));
+		list.add(new SurfaceMushroomGenerator(Blocks.BROWN_MUSHROOM, true, 10, 64, MSBiomes.mediumNormal));
+		list.add(new SurfaceMushroomGenerator(Blocks.BROWN_MUSHROOM, true, 5, 32, MSBiomes.mediumRough));
+		list.add(new SurfaceMushroomGenerator(Blocks.RED_MUSHROOM, true, 10, 64, MSBiomes.mediumNormal));
+		list.add(new SurfaceMushroomGenerator(Blocks.RED_MUSHROOM, true, 5, 32, MSBiomes.mediumRough));
 		
 		list.add(new UndergroundDecoratorVein(Blocks.GRAVEL.getDefaultState(), 8, 33, 256));
 		list.add(new UndergroundDecoratorVein(Blocks.DIRT.getDefaultState(), 18, 17, 128));
@@ -98,6 +98,6 @@ public class WoodLandAspect extends TerrainLandAspect
 	@Override
 	public EntityType<? extends ConsortEntity> getConsortType()
 	{
-		return ModEntityTypes.SALAMANDER;
+		return MSEntityTypes.SALAMANDER;
 	}
 }

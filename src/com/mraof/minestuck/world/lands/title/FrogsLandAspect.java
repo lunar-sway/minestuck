@@ -1,9 +1,9 @@
 package com.mraof.minestuck.world.lands.title;
 
-import com.mraof.minestuck.entity.ModEntityTypes;
+import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
-import com.mraof.minestuck.world.biome.ModBiomes;
+import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import net.minecraft.block.Blocks;
@@ -39,12 +39,12 @@ public class FrogsLandAspect extends TitleLandAspect
 	@Override
 	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blockRegistry)
 	{
-		if(biome.staticBiome == ModBiomes.LAND_OCEAN)
+		if(biome.staticBiome == MSBiomes.LAND_OCEAN)
 		{
 			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Feature.WATERLILY, IFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_HEIGHTMAP_DOUBLE, new FrequencyConfig(2)));
 		}
 		
-		biome.addSpawn(EntityClassification.CREATURE, new Biome.SpawnListEntry(ModEntityTypes.FROG, 10, 4, 4));
+		biome.addSpawn(EntityClassification.CREATURE, new Biome.SpawnListEntry(MSEntityTypes.FROG, 10, 4, 4));
 	}
 	
 	@Override

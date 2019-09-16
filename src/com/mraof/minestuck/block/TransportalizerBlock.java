@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.client.gui.ModScreenFactories;
+import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
@@ -74,7 +74,7 @@ public class TransportalizerBlock extends MachineBlock
 		}
 
 		if(worldIn.isRemote)
-			ModScreenFactories.displayTransportalizerScreen(tileEntity);
+			MSScreenFactories.displayTransportalizerScreen(tileEntity);
 
 		return true;
 	}

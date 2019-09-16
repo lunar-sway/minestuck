@@ -7,7 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSyntaxException;
-import com.mraof.minestuck.world.MinestuckDimensions;
+import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.ILandAspect;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.LandAspects;
@@ -50,7 +50,7 @@ public class LandAspectLootCondition implements ILootCondition
 	{
 		ServerWorld world = context.getWorld();
 		
-		if(world != null && MinestuckDimensions.isLandDimension(world.getDimension().getType()))
+		if(world != null && MSDimensions.isLandDimension(world.getDimension().getType()))
 		{
 			LandAspects aspects = ((LandDimension) world.dimension).landAspects;
 			

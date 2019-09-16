@@ -1,8 +1,8 @@
 package com.mraof.minestuck.fluid;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.item.MSItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowingFluidBlock;
@@ -31,13 +31,13 @@ public abstract class EnderFluid extends FlowingFluid
 	@Override
 	public Fluid getFlowingFluid()
 	{
-		return ModFluids.FLOWING_ENDER;
+		return MSFluids.FLOWING_ENDER;
 	}
 	
 	@Override
 	public Fluid getStillFluid()
 	{
-		return ModFluids.ENDER;
+		return MSFluids.ENDER;
 	}
 	
 	@Override
@@ -74,7 +74,7 @@ public abstract class EnderFluid extends FlowingFluid
 	@Override
 	public Item getFilledBucket()
 	{
-		return MinestuckItems.ENDER_BUCKET;
+		return MSItems.ENDER_BUCKET;
 	}
 	
 	@Override
@@ -98,13 +98,13 @@ public abstract class EnderFluid extends FlowingFluid
 	@Override
 	protected BlockState getBlockState(IFluidState state)
 	{
-		return MinestuckBlocks.ENDER.getDefaultState().with(FlowingFluidBlock.LEVEL, getLevelFromState(state));
+		return MSBlocks.ENDER.getDefaultState().with(FlowingFluidBlock.LEVEL, getLevelFromState(state));
 	}
 	
 	@Override
 	public boolean isEquivalentTo(Fluid otherFluid)
 	{
-		return otherFluid == ModFluids.FLOWING_ENDER || otherFluid == ModFluids.ENDER;
+		return otherFluid == MSFluids.FLOWING_ENDER || otherFluid == MSFluids.ENDER;
 	}
 	
 	@Override

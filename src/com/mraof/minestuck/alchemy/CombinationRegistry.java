@@ -6,7 +6,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.block.MSBlocks;
 
 import com.mraof.minestuck.util.Debug;
 import net.minecraft.item.Item;
@@ -116,9 +116,9 @@ public class CombinationRegistry {
 		}
 		
 		if(item.isEmpty())
-			if(input1.getItem().equals(MinestuckBlocks.GENERIC_OBJECT.asItem()))
+			if(input1.getItem().equals(MSBlocks.GENERIC_OBJECT.asItem()))
 				return mode == Mode.MODE_AND ? input1 : input2;
-			else if(input2.getItem().equals(MinestuckBlocks.GENERIC_OBJECT.asItem()))
+			else if(input2.getItem().equals(MSBlocks.GENERIC_OBJECT.asItem()))
 				return mode == Mode.MODE_AND ? input2 : input1;
 		return item;
 	}

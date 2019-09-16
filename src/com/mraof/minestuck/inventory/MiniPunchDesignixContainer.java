@@ -3,12 +3,11 @@ package com.mraof.minestuck.inventory;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.inventory.slot.InputSlot;
 import com.mraof.minestuck.inventory.slot.OutputSlot;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.MSItems;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
@@ -31,12 +30,12 @@ public class MiniPunchDesignixContainer extends MachineContainer
 	
 	public MiniPunchDesignixContainer(int windowId, PlayerInventory playerInventory)
 	{
-		this(ModContainerTypes.MINI_PUNCH_DESIGNIX, windowId, playerInventory, new Inventory(3), new IntArray(3));
+		this(MSContainerTypes.MINI_PUNCH_DESIGNIX, windowId, playerInventory, new Inventory(3), new IntArray(3));
 	}
 	
 	public MiniPunchDesignixContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters)
 	{
-		this(ModContainerTypes.MINI_PUNCH_DESIGNIX, windowId, playerInventory, inventory, parameters);
+		this(MSContainerTypes.MINI_PUNCH_DESIGNIX, windowId, playerInventory, inventory, parameters);
 	}
 	
 	public MiniPunchDesignixContainer(ContainerType<? extends MiniPunchDesignixContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters)
@@ -47,7 +46,7 @@ public class MiniPunchDesignixContainer extends MachineContainer
 		this.designixInventory = inventory;
 		
 		addSlot(new Slot(inventory, 0, designixInputX, designixInputY));
-		addSlot(new InputSlot(inventory, 1, designixCardsX, designixCardsY, MinestuckItems.CAPTCHA_CARD));
+		addSlot(new InputSlot(inventory, 1, designixCardsX, designixCardsY, MSItems.CAPTCHA_CARD));
 		addSlot(new OutputSlot(inventory, 2, designixOutputX, designixOutputY));
 		
 		bindPlayerInventory(playerInventory);
@@ -92,7 +91,7 @@ public class MiniPunchDesignixContainer extends MachineContainer
 			} else if(slotNumber > 2)
 			{
 				//if it's an inventory slot with valid contents
-				if(itemstackOrig.getItem() == MinestuckItems.CAPTCHA_CARD && (!AlchemyRecipes.hasDecodedItem(itemstackOrig) || AlchemyRecipes.isPunchedCard(itemstackOrig)))
+				if(itemstackOrig.getItem() == MSItems.CAPTCHA_CARD && (!AlchemyRecipes.hasDecodedItem(itemstackOrig) || AlchemyRecipes.isPunchedCard(itemstackOrig)))
 					result = mergeItemStack(itemstackOrig, 1, 2, false);
 				else result = mergeItemStack(itemstackOrig, 0, 1, false);
 			}

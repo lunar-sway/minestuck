@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.network.ClientEditPacket;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.skaianet.ComputerData;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
@@ -50,7 +50,7 @@ public class SburbServer extends ButtonListProgram
 		if(buttonName.equals("computer.buttonEdit") || buttonName.equals("computer.buttonGive"))
 		{
 			ClientEditPacket packet = ClientEditPacket.activate(te.ownerId, te.getData(getId()).getInt("connectedClient"));
-			MinestuckPacketHandler.sendToServer(packet);
+			MSPacketHandler.sendToServer(packet);
 		} else if(buttonName.equals("computer.buttonResume"))
 			SkaiaClient.sendConnectRequest(te, SkaiaClient.getAssociatedPartner(te.ownerId, false), false);
 		else if(buttonName.equals("computer.buttonOpen"))

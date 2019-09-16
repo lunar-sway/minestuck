@@ -32,7 +32,7 @@ import javax.annotation.Nonnull;
 
 @ObjectHolder(Minestuck.MOD_ID)
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
-public final class ModEntityTypes
+public final class MSEntityTypes
 {
 	public static final EntityType<FrogEntity> FROG = getNull();
 	public static final EntityType<SalamanderEntity> SALAMANDER = getNull();

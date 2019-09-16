@@ -1,6 +1,6 @@
 package com.mraof.minestuck.item.crafting;
 
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.block.MSBlocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.AbstractCookingRecipe;
@@ -21,7 +21,7 @@ public class IrradiatingRecipe extends AbstractCookingRecipe
 	@Override
 	public ItemStack getIcon()
 	{
-		return new ItemStack(MinestuckBlocks.URANIUM_COOKER);
+		return new ItemStack(MSBlocks.URANIUM_COOKER);
 	}
 	
 	@Override

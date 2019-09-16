@@ -3,11 +3,11 @@ package com.mraof.minestuck.world.lands.terrain;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.entity.ModEntityTypes;
+import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
-import com.mraof.minestuck.world.biome.ModBiomes;
+import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.LeaflessTreeDecorator;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
@@ -39,18 +39,18 @@ public class RainLandAspect extends TerrainLandAspect
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("surface", MinestuckBlocks.CHALK.getDefaultState());
-		registry.setBlockState("upper", MinestuckBlocks.CHALK.getDefaultState());
-		registry.setBlockState("ground", MinestuckBlocks.PINK_STONE.getDefaultState());
+		registry.setBlockState("surface", MSBlocks.CHALK.getDefaultState());
+		registry.setBlockState("upper", MSBlocks.CHALK.getDefaultState());
+		registry.setBlockState("ground", MSBlocks.PINK_STONE.getDefaultState());
 		registry.setBlockState("ocean", Blocks.WATER.getDefaultState());
-		registry.setBlockState("structure_primary", MinestuckBlocks.PINK_STONE_BRICKS.getDefaultState());
-		registry.setBlockState("structure_primary_stairs", MinestuckBlocks.PINK_STONE_BRICK_STAIRS.getDefaultState());
-		registry.setBlockState("structure_primary_decorative", MinestuckBlocks.CHISELED_PINK_STONE_BRICKS.getDefaultState());
-		registry.setBlockState("structure_secondary", MinestuckBlocks.POLISHED_PINK_STONE.getDefaultState());
-		registry.setBlockState("structure_secondary_stairs", MinestuckBlocks.CHALK_BRICK_STAIRS.getDefaultState());
-		registry.setBlockState("structure_secondary_decorative", MinestuckBlocks.CHISELED_PINK_STONE_BRICKS.getDefaultState());
-		registry.setBlockState("structure_planks", MinestuckBlocks.DEAD_PLANKS.getDefaultState());
-		registry.setBlockState("structure_planks_slab", MinestuckBlocks.DEAD_PLANKS_SLAB.getDefaultState());
+		registry.setBlockState("structure_primary", MSBlocks.PINK_STONE_BRICKS.getDefaultState());
+		registry.setBlockState("structure_primary_stairs", MSBlocks.PINK_STONE_BRICK_STAIRS.getDefaultState());
+		registry.setBlockState("structure_primary_decorative", MSBlocks.CHISELED_PINK_STONE_BRICKS.getDefaultState());
+		registry.setBlockState("structure_secondary", MSBlocks.POLISHED_PINK_STONE.getDefaultState());
+		registry.setBlockState("structure_secondary_stairs", MSBlocks.CHALK_BRICK_STAIRS.getDefaultState());
+		registry.setBlockState("structure_secondary_decorative", MSBlocks.CHISELED_PINK_STONE_BRICKS.getDefaultState());
+		registry.setBlockState("structure_planks", MSBlocks.DEAD_PLANKS.getDefaultState());
+		registry.setBlockState("structure_planks_slab", MSBlocks.DEAD_PLANKS_SLAB.getDefaultState());
 		registry.setBlockState("bush", Blocks.DEAD_BUSH.getDefaultState());
 		registry.setBlockState("structure_wool_1", Blocks.YELLOW_WOOL.getDefaultState());
 		registry.setBlockState("structure_wool_3", Blocks.MAGENTA_WOOL.getDefaultState());
@@ -79,14 +79,14 @@ public class RainLandAspect extends TerrainLandAspect
 	public List<ILandDecorator> getDecorators()
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
-		list.add(new LeaflessTreeDecorator(MinestuckBlocks.DEAD_LOG.getDefaultState(), 0.5F, ModBiomes.mediumNormal));
-		list.add(new LeaflessTreeDecorator(MinestuckBlocks.DEAD_LOG.getDefaultState(), 0.25F, ModBiomes.mediumRough));
+		list.add(new LeaflessTreeDecorator(MSBlocks.DEAD_LOG.getDefaultState(), 0.5F, MSBiomes.mediumNormal));
+		list.add(new LeaflessTreeDecorator(MSBlocks.DEAD_LOG.getDefaultState(), 0.25F, MSBiomes.mediumRough));
 		
-		list.add(new UndergroundDecoratorVein(MinestuckBlocks.POLISHED_PINK_STONE.getDefaultState(), 2, 8, 64));
-		list.add(new UndergroundDecoratorVein(MinestuckBlocks.PINK_STONE_COAL_ORE.getDefaultState(), 13, 17, 64));
-		list.add(new UndergroundDecoratorVein(MinestuckBlocks.PINK_STONE_LAPIS_ORE.getDefaultState(), 4, 7, 24));
-		list.add(new UndergroundDecoratorVein(MinestuckBlocks.PINK_STONE_GOLD_ORE.getDefaultState(), 4, 9, 32));
-		list.add(new UndergroundDecoratorVein(MinestuckBlocks.PINK_STONE_DIAMOND_ORE.getDefaultState(), 3, 6, 24));
+		list.add(new UndergroundDecoratorVein(MSBlocks.POLISHED_PINK_STONE.getDefaultState(), 2, 8, 64));
+		list.add(new UndergroundDecoratorVein(MSBlocks.PINK_STONE_COAL_ORE.getDefaultState(), 13, 17, 64));
+		list.add(new UndergroundDecoratorVein(MSBlocks.PINK_STONE_LAPIS_ORE.getDefaultState(), 4, 7, 24));
+		list.add(new UndergroundDecoratorVein(MSBlocks.PINK_STONE_GOLD_ORE.getDefaultState(), 4, 9, 32));
+		list.add(new UndergroundDecoratorVein(MSBlocks.PINK_STONE_DIAMOND_ORE.getDefaultState(), 3, 6, 24));
 		return list;
 	}
 	
@@ -105,6 +105,6 @@ public class RainLandAspect extends TerrainLandAspect
 	@Override
 	public EntityType<? extends ConsortEntity> getConsortType()
 	{
-		return ModEntityTypes.TURTLE;
+		return MSEntityTypes.TURTLE;
 	}
 }

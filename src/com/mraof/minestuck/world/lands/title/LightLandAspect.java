@@ -1,11 +1,11 @@
 package com.mraof.minestuck.world.lands.title;
 
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
-import com.mraof.minestuck.world.gen.feature.ModFeatures;
+import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.lands.LandDimension;
-import com.mraof.minestuck.world.biome.ModBiomes;
+import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import net.minecraft.block.BlockState;
@@ -17,7 +17,6 @@ import net.minecraft.world.gen.feature.BushConfig;
 import net.minecraft.world.gen.placement.ChanceConfig;
 import net.minecraft.world.gen.placement.FrequencyConfig;
 import net.minecraft.world.gen.placement.Placement;
-import net.minecraft.world.gen.placement.TopSolidRangeConfig;
 
 public class LightLandAspect extends TitleLandAspect
 {
@@ -38,7 +37,7 @@ public class LightLandAspect extends TitleLandAspect
 		registry.setBlockState("structure_wool_2", Blocks.ORANGE_WOOL.getDefaultState());
 		registry.setBlockState("carpet", Blocks.ORANGE_CARPET.getDefaultState());
 		registry.setBlockState("torch", Blocks.TORCH.getDefaultState());
-		registry.setBlockState("slime", MinestuckBlocks.GLOWY_GOOP.getDefaultState());
+		registry.setBlockState("slime", MSBlocks.GLOWY_GOOP.getDefaultState());
 	}
 	
 	@Override
@@ -52,12 +51,12 @@ public class LightLandAspect extends TitleLandAspect
 	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blockRegistry)
 	{
 		BlockState lightBlock = blockRegistry.getBlockState("light_block");
-		if(biome.staticBiome == ModBiomes.LAND_ROUGH)
+		if(biome.staticBiome == MSBiomes.LAND_ROUGH)
 		{
-			biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(ModFeatures.LARGE_PILLAR, new BushConfig(lightBlock), Placement.COUNT_TOP_SOLID, new FrequencyConfig(3)));
+			biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(MSFeatures.LARGE_PILLAR, new BushConfig(lightBlock), Placement.COUNT_TOP_SOLID, new FrequencyConfig(3)));
 		} else
 		{
-			biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(ModFeatures.PILLAR, new BushConfig(lightBlock), Placement.CHANCE_TOP_SOLID_HEIGHTMAP, new ChanceConfig(2)));
+			biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(MSFeatures.PILLAR, new BushConfig(lightBlock), Placement.CHANCE_TOP_SOLID_HEIGHTMAP, new ChanceConfig(2)));
 		}
 	}
 	

@@ -23,7 +23,7 @@ public class ComputerTileEntity extends TileEntity
 {
 	public ComputerTileEntity()
 	{
-		super(ModTileEntityTypes.COMPUTER);
+		super(MSTileEntityTypes.COMPUTER);
 	}
 	
 	/**

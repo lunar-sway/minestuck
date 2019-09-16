@@ -3,14 +3,14 @@ package com.mraof.minestuck.editmode;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.entity.DecoyEntity;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ServerEditPacket;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
+import com.mraof.minestuck.tracker.PlayerTracker;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import com.mraof.minestuck.world.MinestuckDimensions;
+import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -121,7 +121,7 @@ public class ServerEditHandler
 		decoy.markedForDespawn = true;
 		
 		ServerEditPacket packet = ServerEditPacket.exit();
-		MinestuckPacketHandler.sendToPlayer(packet, player);
+		MSPacketHandler.sendToPlayer(packet, player);
 		
 		if(damageSource != null && damageSource.getImmediateSource() != player)
 			player.attackEntityFrom(damageSource, damage);
@@ -152,8 +152,8 @@ public class ServerEditHandler
 			decoy.world.addEntity(decoy);
 			list.add(data);
 			ServerEditPacket packet = ServerEditPacket.activate(computerTarget.getUsername(), c.centerX, c.centerZ, c.givenItems(), DeployList.getDeployListTag(player.getServer(), c));
-			MinestuckPacketHandler.sendToPlayer(packet, player);
-			MinestuckPlayerTracker.updateGristCache(player.getServer(), c.getClientIdentifier());
+			MSPacketHandler.sendToPlayer(packet, player);
+			PlayerTracker.updateGristCache(player.getServer(), c.getClientIdentifier());
 		}
 	}
 	
@@ -221,7 +221,7 @@ public class ServerEditHandler
 			return;
 		
 		SburbConnection c = data.connection;
-		int range = MinestuckDimensions.isLandDimension(player.dimension) ? MinestuckConfig.landEditRange.get() : MinestuckConfig.overworldEditRange.get();
+		int range = MSDimensions.isLandDimension(player.dimension) ? MinestuckConfig.landEditRange.get() : MinestuckConfig.overworldEditRange.get();
 		
 		updateInventory(player, c.givenItems(), c);
 		updatePosition(player, range, c.centerX, c.centerZ);
@@ -246,7 +246,7 @@ public class ServerEditHandler
 				if(GristHelper.canAfford(PlayerSavedData.get(event.getEntity().getServer()).getGristSet(data.connection.getClientIdentifier()), cost))
 				{
 					GristHelper.decrease(event.getPlayer().world, data.connection.getClientIdentifier(), cost);
-					MinestuckPlayerTracker.updateGristCache(event.getPlayer().getServer(), data.connection.getClientIdentifier());
+					PlayerTracker.updateGristCache(event.getPlayer().getServer(), data.connection.getClientIdentifier());
 					data.connection.givenItems()[i] = true;
 					if(!data.connection.isMain())
 						SkaianetHandler.get(event.getPlayer().getServer()).giveItems(data.connection.getClientIdentifier());
@@ -361,7 +361,7 @@ public class ServerEditHandler
 				if(set != null && !set.isEmpty())
 					GristHelper.increase(event.getWorld(), data.connection.getClientIdentifier(), set);
 			}
-			MinestuckPlayerTracker.updateGristCache(event.getEntity().getServer(), data.connection.getClientIdentifier());
+			PlayerTracker.updateGristCache(event.getEntity().getServer(), data.connection.getClientIdentifier());
 		}
 	}
 	
@@ -377,7 +377,7 @@ public class ServerEditHandler
 				if(event.isCanceled())    //If the event was cancelled server side and not client side, notify the client.
 				{
 					ServerEditPacket packet = ServerEditPacket.givenItems(data.connection.givenItems());
-					MinestuckPacketHandler.sendToPlayer(packet, player);
+					MSPacketHandler.sendToPlayer(packet, player);
 					return;
 				}
 				
@@ -395,13 +395,13 @@ public class ServerEditHandler
 					if(!cost.isEmpty())
 					{
 						GristHelper.decrease(player.world, c.getClientIdentifier(), cost);
-						MinestuckPlayerTracker.updateGristCache(player.server, data.connection.getClientIdentifier());
+						PlayerTracker.updateGristCache(player.server, data.connection.getClientIdentifier());
 					}
 					player.inventory.mainInventory.set(player.inventory.currentItem, ItemStack.EMPTY);
 				} else
 				{
 					GristHelper.decrease(player.world, data.connection.getClientIdentifier(), AlchemyCostRegistry.getGristConversion(stack));
-					MinestuckPlayerTracker.updateGristCache(player.server, data.connection.getClientIdentifier());
+					PlayerTracker.updateGristCache(player.server, data.connection.getClientIdentifier());
 				}
 			}
 		}

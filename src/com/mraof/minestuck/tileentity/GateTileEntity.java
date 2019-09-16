@@ -1,6 +1,6 @@
 package com.mraof.minestuck.tileentity;
 
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.util.PositionTeleporter;
 import com.mraof.minestuck.world.GateHandler;
@@ -24,12 +24,12 @@ public class GateTileEntity extends TileEntity
 	
 	public GateTileEntity()
 	{
-		super(ModTileEntityTypes.GATE);
+		super(MSTileEntityTypes.GATE);
 	}
 	
 	public void teleportEntity(World world, ServerPlayerEntity player, Block block)
 	{
-		if(block == MinestuckBlocks.RETURN_NODE)
+		if(block == MSBlocks.RETURN_NODE)
 		{
 			BlockPos pos = world.getSpawnPoint();
 			PositionTeleporter.moveEntity(player, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
@@ -96,7 +96,7 @@ public class GateTileEntity extends TileEntity
 	
 	public boolean isGate()
 	{
-		return this.world != null ? this.world.getBlockState(this.getPos()).getBlock() != MinestuckBlocks.RETURN_NODE : this.gateCount != 0;
+		return this.world != null ? this.world.getBlockState(this.getPos()).getBlock() != MSBlocks.RETURN_NODE : this.gateCount != 0;
 	}
 	
 	@Override

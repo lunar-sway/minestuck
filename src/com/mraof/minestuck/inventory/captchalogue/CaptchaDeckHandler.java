@@ -1,11 +1,11 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
+import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.item.BoondollarsItem;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
@@ -41,7 +41,7 @@ public class CaptchaDeckHandler
 	
 	public static void launchItem(ServerPlayerEntity player, ItemStack item)
 	{
-		if(item.getItem().equals(MinestuckItems.CAPTCHA_CARD) && !AlchemyRecipes.hasDecodedItem(item))
+		if(item.getItem().equals(MSItems.CAPTCHA_CARD) && !AlchemyRecipes.hasDecodedItem(item))
 			while(item.getCount() > 0)
 			{
 				if(getModus(player).increaseSize(player))
@@ -103,9 +103,9 @@ public class CaptchaDeckHandler
 				container.inventory.setInventorySlotContents(0, oldType.getStack().copy());
 			}
 			
-			MinestuckCriteriaTriggers.CHANGE_MODUS.trigger(player, modus);
+			MSCriteriaTriggers.CHANGE_MODUS.trigger(player, modus);
 		}
-		else if(stack.getItem().equals(MinestuckItems.CAPTCHA_CARD) && !AlchemyRecipes.isPunchedCard(stack)
+		else if(stack.getItem().equals(MSItems.CAPTCHA_CARD) && !AlchemyRecipes.isPunchedCard(stack)
 				&& modus != null)
 		{
 			ItemStack content = AlchemyRecipes.getDecodedItem(stack, true);
@@ -122,7 +122,7 @@ public class CaptchaDeckHandler
 					ItemStack toPut = content.copy();
 					if(!modus.putItemStack(player, toPut))
 						launchItem(player, toPut);
-					else MinestuckCriteriaTriggers.CAPTCHALOGUE.trigger(player, modus, toPut);
+					else MSCriteriaTriggers.CAPTCHALOGUE.trigger(player, modus, toPut);
 				}
 			
 			if(failed == 0)
@@ -133,7 +133,7 @@ public class CaptchaDeckHandler
 		if(modus != null)
 		{
 			CaptchaDeckPacket packet = CaptchaDeckPacket.data(writeToNBT(modus));
-			MinestuckPacketHandler.sendToPlayer(packet, player);
+			MSPacketHandler.sendToPlayer(packet, player);
 		}
 	}
 	
@@ -142,7 +142,7 @@ public class CaptchaDeckHandler
 		ItemStack stack = player.getHeldItemMainhand();
 		Modus modus = getModus(player);
 		
-		if(stack.getItem() == MinestuckItems.BOONDOLLARS)
+		if(stack.getItem() == MSItems.BOONDOLLARS)
 		{
 			PlayerSavedData.addBoondollars(player, BoondollarsItem.getCount(stack));
 			stack.setCount(0);
@@ -152,7 +152,7 @@ public class CaptchaDeckHandler
 		if(modus != null && !stack.isEmpty())
 		{
 			boolean card1 = false, card2 = true;
-			if(stack.getItem() == MinestuckItems.CAPTCHA_CARD && AlchemyRecipes.hasDecodedItem(stack)
+			if(stack.getItem() == MSItems.CAPTCHA_CARD && AlchemyRecipes.hasDecodedItem(stack)
 					&& !AlchemyRecipes.isPunchedCard(stack))
 			{
 				ItemStack newStack = AlchemyRecipes.getDecodedItem(stack, true);
@@ -165,9 +165,9 @@ public class CaptchaDeckHandler
 			}
 			if(modus.putItemStack(player, stack))
 			{
-				MinestuckCriteriaTriggers.CAPTCHALOGUE.trigger(player, modus, stack);
+				MSCriteriaTriggers.CAPTCHALOGUE.trigger(player, modus, stack);
 				if(!card2)
-					launchAnyItem(player, new ItemStack(MinestuckItems.CAPTCHA_CARD, 1));
+					launchAnyItem(player, new ItemStack(MSItems.CAPTCHA_CARD, 1));
 				
 				stack = player.getHeldItemMainhand();
 				if(card1 && stack.getCount() > 1)
@@ -183,7 +183,7 @@ public class CaptchaDeckHandler
 				else stack.shrink(1);
 			}
 			CaptchaDeckPacket packet = CaptchaDeckPacket.data(writeToNBT(modus));
-			MinestuckPacketHandler.sendToPlayer(packet, player);
+			MSPacketHandler.sendToPlayer(packet, player);
 		}
 		
 	}
@@ -198,7 +198,7 @@ public class CaptchaDeckHandler
 			
 			stack = player.inventory.mainInventory.get(hotbarIndex);
 
-			if(stack.getItem() == MinestuckItems.BOONDOLLARS)
+			if(stack.getItem() == MSItems.BOONDOLLARS)
 			{
 				PlayerSavedData.addBoondollars(player, BoondollarsItem.getCount(stack));
 				stack.setCount(0);
@@ -208,7 +208,7 @@ public class CaptchaDeckHandler
 			if(modus != null && !stack.isEmpty())
 			{
 				boolean card1 = false, card2 = true;
-				if(stack.getItem() == MinestuckItems.CAPTCHA_CARD && AlchemyRecipes.hasDecodedItem(stack)
+				if(stack.getItem() == MSItems.CAPTCHA_CARD && AlchemyRecipes.hasDecodedItem(stack)
 						&& !AlchemyRecipes.isPunchedCard(stack))
 				{
 					ItemStack newStack = AlchemyRecipes.getDecodedItem(stack, true);
@@ -221,9 +221,9 @@ public class CaptchaDeckHandler
 				}
 				if(modus.putItemStack(player, stack))
 				{
-					MinestuckCriteriaTriggers.CAPTCHALOGUE.trigger(player, modus, stack);
+					MSCriteriaTriggers.CAPTCHALOGUE.trigger(player, modus, stack);
 					if(!card2)
-						launchAnyItem(player, new ItemStack(MinestuckItems.CAPTCHA_CARD, 1));
+						launchAnyItem(player, new ItemStack(MSItems.CAPTCHA_CARD, 1));
 					stack = player.inventory.mainInventory.get(hotbarIndex);
 					if(card1 && stack.getCount() > 1)
 						stack.shrink(1);
@@ -240,14 +240,14 @@ public class CaptchaDeckHandler
 					} else stack.shrink(1);
 				}
 				CaptchaDeckPacket packet = CaptchaDeckPacket.data(writeToNBT(modus));
-				MinestuckPacketHandler.sendToPlayer(packet, player);
+				MSPacketHandler.sendToPlayer(packet, player);
 			}
 		}
 		else {
 			Slot slot = player.openContainer.getSlot(slotIndex);
 			stack = slot.getStack();
 
-			if(stack.getItem() == MinestuckItems.BOONDOLLARS)
+			if(stack.getItem() == MSItems.BOONDOLLARS)
 			{
 				PlayerSavedData.addBoondollars(player, BoondollarsItem.getCount(stack));
 				stack.setCount(0);
@@ -257,7 +257,7 @@ public class CaptchaDeckHandler
 			if(modus != null && !stack.isEmpty())
 			{
 				boolean card1 = false, card2 = true;
-				if(stack.getItem() == MinestuckItems.CAPTCHA_CARD && AlchemyRecipes.hasDecodedItem(stack)
+				if(stack.getItem() == MSItems.CAPTCHA_CARD && AlchemyRecipes.hasDecodedItem(stack)
 						&& !AlchemyRecipes.isPunchedCard(stack))
 				{
 					ItemStack newStack = AlchemyRecipes.getDecodedItem(stack, true);
@@ -270,9 +270,9 @@ public class CaptchaDeckHandler
 				}
 				if(modus.putItemStack(player, stack))
 				{
-					MinestuckCriteriaTriggers.CAPTCHALOGUE.trigger(player, modus, stack);
+					MSCriteriaTriggers.CAPTCHALOGUE.trigger(player, modus, stack);
 					if(!card2)
-						launchAnyItem(player, new ItemStack(MinestuckItems.CAPTCHA_CARD, 1));
+						launchAnyItem(player, new ItemStack(MSItems.CAPTCHA_CARD, 1));
 					stack = slot.getStack();
 					if(card1 && stack.getCount() > 1)
 						stack.shrink(1);
@@ -289,7 +289,7 @@ public class CaptchaDeckHandler
 					} else stack.shrink(1);
 				}
 				CaptchaDeckPacket packet = CaptchaDeckPacket.data(writeToNBT(modus));
-				MinestuckPacketHandler.sendToPlayer(packet, player);
+				MSPacketHandler.sendToPlayer(packet, player);
 			}
 		}
 	}
@@ -333,7 +333,7 @@ public class CaptchaDeckHandler
 			}
 		}
 		CaptchaDeckPacket packet = CaptchaDeckPacket.data(writeToNBT(modus));
-		MinestuckPacketHandler.sendToPlayer(packet, player);
+		MSPacketHandler.sendToPlayer(packet, player);
 	}
 	
 	public static void dropSylladex(ServerPlayerEntity player)
@@ -362,10 +362,10 @@ public class CaptchaDeckHandler
 						size--;
 					} else player.dropItem(stack, true, false);
 		
-		int stackLimit = MinestuckItems.CAPTCHA_CARD.getItemStackLimit(new ItemStack(MinestuckItems.CAPTCHA_CARD));
+		int stackLimit = MSItems.CAPTCHA_CARD.getItemStackLimit(new ItemStack(MSItems.CAPTCHA_CARD));
 		if(MinestuckConfig.sylladexDropMode >= 1)
 			for(; size > cardsToKeep; size = Math.max(size - stackLimit, cardsToKeep))
-				player.dropItem(new ItemStack(MinestuckItems.CAPTCHA_CARD, Math.min(stackLimit, size - cardsToKeep)), true, false);
+				player.dropItem(new ItemStack(MSItems.CAPTCHA_CARD, Math.min(stackLimit, size - cardsToKeep)), true, false);
 		
 		if(MinestuckConfig.sylladexDropMode == 2)
 		{
@@ -374,7 +374,7 @@ public class CaptchaDeckHandler
 		} else modus.initModus(player, null, size);
 		
 		CaptchaDeckPacket packet = CaptchaDeckPacket.data(writeToNBT(getModus(player)));
-		MinestuckPacketHandler.sendToPlayer(packet, player);
+		MSPacketHandler.sendToPlayer(packet, player);
 	}
 	
 	public static CompoundNBT writeToNBT(Modus modus)

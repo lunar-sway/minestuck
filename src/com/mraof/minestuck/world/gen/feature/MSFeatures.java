@@ -15,7 +15,7 @@ import javax.annotation.Nonnull;
 
 @ObjectHolder(Minestuck.MOD_ID)
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
-public class ModFeatures
+public class MSFeatures
 {
 	public static final Structure<NoFeatureConfig> IMP_DUNGEON = getNull();	//TODO Rerun advancement provider once these two are reimplemeneted
 	public static final Structure<NoFeatureConfig> CONSORT_VILLAGE = getNull();

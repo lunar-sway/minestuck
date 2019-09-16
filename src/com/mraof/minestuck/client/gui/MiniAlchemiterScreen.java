@@ -5,10 +5,10 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.AlchemyCostRegistry;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.inventory.MiniAlchemiterContainer;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.tileentity.MiniAlchemiterTileEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
@@ -62,11 +62,11 @@ public class MiniAlchemiterScreen extends MachineScreen<MiniAlchemiterContainer>
 			//Render grist requirements
 			ItemStack stack;
 			if(!AlchemyRecipes.hasDecodedItem(container.getSlot(0).getStack()))
-				stack = new ItemStack(MinestuckBlocks.GENERIC_OBJECT);
+				stack = new ItemStack(MSBlocks.GENERIC_OBJECT);
 			else stack = AlchemyRecipes.getDecodedItem(container.getSlot(0).getStack());
 
 			GristSet set = AlchemyCostRegistry.getGristConversion(stack);
-			boolean useWildcard = stack.getItem() == MinestuckItems.CAPTCHA_CARD;
+			boolean useWildcard = stack.getItem() == MSItems.CAPTCHA_CARD;
 			if (useWildcard)
 				set = new GristSet(container.getWildcardType(), MinestuckConfig.clientCardCost);
 			
@@ -110,7 +110,7 @@ public class MiniAlchemiterScreen extends MachineScreen<MiniAlchemiterContainer>
 	public boolean mouseClicked(double par1, double par2, int par3)
 	{
 		boolean b = super.mouseClicked(par1, par2, par3);
-		if (par3 == 0 && minecraft.player.inventory.getItemStack().isEmpty() && AlchemyRecipes.getDecodedItem(container.getSlot(0).getStack()).getItem() == MinestuckItems.CAPTCHA_CARD
+		if (par3 == 0 && minecraft.player.inventory.getItemStack().isEmpty() && AlchemyRecipes.getDecodedItem(container.getSlot(0).getStack()).getItem() == MSItems.CAPTCHA_CARD
 				&& par1 >= guiLeft + 9 && par1 < guiLeft + 167 && par2 >= guiTop + 45 && par2 < guiTop + 70)
 		{
 			minecraft.currentScreen = new GristSelectorScreen(this);

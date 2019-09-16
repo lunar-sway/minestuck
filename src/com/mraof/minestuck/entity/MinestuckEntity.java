@@ -6,11 +6,11 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-public abstract class EntityMinestuck extends CreatureEntity
+public abstract class MinestuckEntity extends CreatureEntity
 {
 	protected ResourceLocation textureResource;
 	
-	public EntityMinestuck(EntityType<? extends EntityMinestuck> type, World world)
+	public MinestuckEntity(EntityType<? extends MinestuckEntity> type, World world)
 	{
 		super(type, world);
 	}

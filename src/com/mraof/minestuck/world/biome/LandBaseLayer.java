@@ -8,8 +8,8 @@ import net.minecraft.world.gen.layer.traits.IAreaTransformer0;
 public class LandBaseLayer implements IAreaTransformer0
 {
 	private final int oceanChance;
-	private final int NORMAL_BIOME = Registry.BIOME.getId(ModBiomes.LAND_NORMAL);	//TODO Is there a better way to do this?
-	private final int OCEAN_BIOME = Registry.BIOME.getId(ModBiomes.LAND_OCEAN);
+	private final int NORMAL_BIOME = Registry.BIOME.getId(MSBiomes.LAND_NORMAL);	//TODO Is there a better way to do this?
+	private final int OCEAN_BIOME = Registry.BIOME.getId(MSBiomes.LAND_OCEAN);
 	
 	public LandBaseLayer(float oceanChance)
 	{

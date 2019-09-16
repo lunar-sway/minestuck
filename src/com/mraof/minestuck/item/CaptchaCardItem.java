@@ -46,7 +46,7 @@ public class CaptchaCardItem extends Item
 		if(this.isInGroup(group))
 		{
 			items.add(new ItemStack(this));
-			items.add(AlchemyRecipes.createCard(new ItemStack(MinestuckItems.CRUXITE_APPLE), true));
+			items.add(AlchemyRecipes.createCard(new ItemStack(MSItems.CRUXITE_APPLE), true));
 		}
 	}
 	

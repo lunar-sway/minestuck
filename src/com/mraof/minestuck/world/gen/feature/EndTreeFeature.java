@@ -7,9 +7,9 @@ import java.util.function.Function;
 import com.mojang.datafixers.Dynamic;
 import com.mraof.minestuck.block.DoubleLogBlock;
 import com.mraof.minestuck.block.EndLeavesBlock;
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.block.MSBlocks;
 
-import com.mraof.minestuck.util.MinestuckTags;
+import com.mraof.minestuck.util.MSTags;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -20,8 +20,8 @@ import net.minecraft.world.gen.feature.NoFeatureConfig;
 
 public class EndTreeFeature extends AbstractTreeFeature<NoFeatureConfig>
 {
-	private static final BlockState LOG = MinestuckBlocks.END_LOG.getDefaultState();
-	private static final BlockState LEAF = MinestuckBlocks.END_LEAVES.getDefaultState();
+	private static final BlockState LOG = MSBlocks.END_LOG.getDefaultState();
+	private static final BlockState LEAF = MSBlocks.END_LEAVES.getDefaultState();
 	
 	private final int minMax = 5, maxMax = 5;
 	
@@ -37,7 +37,7 @@ public class EndTreeFeature extends AbstractTreeFeature<NoFeatureConfig>
 		
 		if (position.getY() >= 1 && position.getY() < 256)
 		{
-			if(!worldIn.hasBlockState(position.down(), blockState -> MinestuckTags.Blocks.END_SAPLING_DIRT.contains(blockState.getBlock())))
+			if(!worldIn.hasBlockState(position.down(), blockState -> MSTags.Blocks.END_SAPLING_DIRT.contains(blockState.getBlock())))
 			{
 				return false;
 			}
@@ -157,7 +157,7 @@ public class EndTreeFeature extends AbstractTreeFeature<NoFeatureConfig>
 		{
 			if(distance <= EndLeavesBlock.LEAF_SUSTAIN_DISTANCE)
 			{
-				setLogState(changedBlocks, world, curr, MinestuckBlocks.END_LEAVES.getDefaultState().with(EndLeavesBlock.DISTANCE, distance), boundsIn);
+				setLogState(changedBlocks, world, curr, MSBlocks.END_LEAVES.getDefaultState().with(EndLeavesBlock.DISTANCE, distance), boundsIn);
 				leaves(changedBlocks, world, curr.south(), boundsIn, distance + 1);
 				leaves(changedBlocks, world, curr.north(), boundsIn, distance + 1);
 				leaves(changedBlocks, world, curr.up(), boundsIn, distance + 1);

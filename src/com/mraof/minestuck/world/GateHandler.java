@@ -1,12 +1,12 @@
 package com.mraof.minestuck.world;
 
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Location;
-import com.mraof.minestuck.world.biome.ModBiomes;
+import com.mraof.minestuck.world.biome.MSBiomes;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -55,7 +55,7 @@ public class GateHandler
 					
 					BlockPos placement = pos.add(x, 0, z);
 					
-					if(player.world.getBiomeBody(placement) == ModBiomes.mediumNormal)
+					if(player.world.getBiomeBody(placement) == MSBiomes.mediumNormal)
 						location = new Location(player.world.getHeight(Heightmap.Type.MOTION_BLOCKING, placement), dim);
 					
 				} while(location == null);	//TODO replace with a more friendly version without a chance of freezing the game
@@ -68,7 +68,7 @@ public class GateHandler
 			{
 				SburbConnection clientConnection = SkaianetHandler.get(player.getServer()).getMainConnection(landConnection.getClientIdentifier(), false);
 				
-				if(clientConnection != null && clientConnection.hasEntered() && MinestuckDimensions.isLandDimension(clientConnection.getClientDimension()))
+				if(clientConnection != null && clientConnection.hasEntered() && MSDimensions.isLandDimension(clientConnection.getClientDimension()))
 				{
 					DimensionType clientDim = clientConnection.getClientDimension();
 					BlockPos gatePos = getGatePos(player.server, -1, clientDim);
@@ -102,7 +102,7 @@ public class GateHandler
 			{
 				SburbConnection serverConnection = SkaianetHandler.get(player.getServer()).getMainConnection(landConnection.getServerIdentifier(), true);
 				
-				if(serverConnection != null && serverConnection.hasEntered() && MinestuckDimensions.isLandDimension(serverConnection.getClientDimension()))	//Last shouldn't be necessary, but just in case something goes wrong elsewhere...
+				if(serverConnection != null && serverConnection.hasEntered() && MSDimensions.isLandDimension(serverConnection.getClientDimension()))	//Last shouldn't be necessary, but just in case something goes wrong elsewhere...
 				{
 					DimensionType serverDim = serverConnection.getClientDimension();
 					location = new Location(getGatePos(player.server, 2, serverDim), serverDim);
@@ -120,7 +120,7 @@ public class GateHandler
 				
 				BlockState block = world.getBlockState(location.pos);
 				
-				if(block.getBlock() != MinestuckBlocks.GATE)
+				if(block.getBlock() != MSBlocks.GATE)
 				{
 					Debug.debugf("Can't find destination gate at %s. Probably broken.", location);
 					player.sendMessage(new TranslationTextComponent("message.gateDestroyed"));
@@ -135,7 +135,7 @@ public class GateHandler
 	public static void findGatePlacement(World world)
 	{
 		DimensionType dim = world.getDimension().getType();
-		if(MinestuckDimensions.isLandDimension(dim) && !gateData.containsKey(dim))
+		if(MSDimensions.isLandDimension(dim) && !gateData.containsKey(dim))
 		{
 			BlockPos spawn = new BlockPos(0, -1, 0);
 			Random rand = new Random(world.getSeed()^43839551L^world.getDimension().getType().getId());
@@ -165,7 +165,7 @@ public class GateHandler
 	
 	public static BlockPos getGatePos(MinecraftServer server, int gateId, DimensionType dim)
 	{
-		if(!MinestuckDimensions.isLandDimension(dim))
+		if(!MSDimensions.isLandDimension(dim))
 			return null;
 		
 		if(gateId == -1)

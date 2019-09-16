@@ -12,7 +12,7 @@ import javax.annotation.Nonnull;
 
 @ObjectHolder(Minestuck.MOD_ID)
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
-public class ModDimensionTypes
+public class MSDimensionTypes
 {
 	
 	public static final ModDimension LANDS = getNull();

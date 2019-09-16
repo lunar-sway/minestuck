@@ -1,9 +1,9 @@
 package com.mraof.minestuck.world.lands.title;
 
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.world.lands.LandDimension;
-import com.mraof.minestuck.world.biome.ModBiomes;
+import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.gen.LandGenSettings;
@@ -32,9 +32,9 @@ public class PulseLandAspect extends TitleLandAspect
 		registry.setBlockState("structure_wool_2", Blocks.RED_WOOL.getDefaultState());
 		registry.setBlockState("carpet", Blocks.BROWN_CARPET.getDefaultState());
 		
-		registry.setBlockState("ocean", MinestuckBlocks.BLOOD.getDefaultState());
-		registry.setBlockState("river", MinestuckBlocks.BLOOD.getDefaultState());
-		registry.setBlockState("slime", MinestuckBlocks.COAGULATED_BLOOD.getDefaultState());
+		registry.setBlockState("ocean", MSBlocks.BLOOD.getDefaultState());
+		registry.setBlockState("river", MSBlocks.BLOOD.getDefaultState());
+		registry.setBlockState("slime", MSBlocks.COAGULATED_BLOOD.getDefaultState());
 	}
 	
 	@Override
@@ -53,7 +53,7 @@ public class PulseLandAspect extends TitleLandAspect
 	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
 		
-		chunkProvider.decorators.add(new SurfaceDecoratorVein(MinestuckBlocks.COAGULATED_BLOOD.getDefaultState(), 25, 30, ModBiomes.mediumRough));
+		chunkProvider.decorators.add(new SurfaceDecoratorVein(MSBlocks.COAGULATED_BLOOD.getDefaultState(), 25, 30, MSBiomes.mediumRough));
 	}
 	
 	@Override

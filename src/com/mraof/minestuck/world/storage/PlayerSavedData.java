@@ -7,7 +7,7 @@ import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.network.GristCachePacket;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.PlayerDataPacket;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
@@ -185,7 +185,7 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 		data.boondollars += boons;
 		get(player.server).markDirty();
 		
-		MinestuckPacketHandler.sendToPlayer(PlayerDataPacket.boondollars(data.boondollars), player);
+		MSPacketHandler.sendToPlayer(PlayerDataPacket.boondollars(data.boondollars), player);
 		return true;
 	}
 	
@@ -199,7 +199,7 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 		
 		ServerPlayerEntity player = id.getPlayer(mcServer);
 		if(player != null)
-			MinestuckPacketHandler.sendToPlayer(PlayerDataPacket.boondollars(data.boondollars), player);
+			MSPacketHandler.sendToPlayer(PlayerDataPacket.boondollars(data.boondollars), player);
 		return true;
 	}
 	

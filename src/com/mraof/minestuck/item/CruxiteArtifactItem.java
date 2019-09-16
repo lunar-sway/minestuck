@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.GateBlock;
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
@@ -20,7 +20,7 @@ import com.mraof.minestuck.tileentity.GateTileEntity;
 import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.world.GateHandler;
-import com.mraof.minestuck.world.MinestuckDimensions;
+import com.mraof.minestuck.world.MSDimensions;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -72,7 +72,7 @@ public abstract class CruxiteArtifactItem extends Item
 				SburbConnection c = SkaianetHandler.get(player.world).getMainConnection(identifier, true);
 				
 				//Only performs Entry if you have no connection, haven't Entered, or you're not in a Land and additional Entries are permitted.
-				if(c == null || !c.hasEntered() || !MinestuckConfig.stopSecondEntry.get() && !MinestuckDimensions.isLandDimension(player.world.getDimension().getType()))
+				if(c == null || !c.hasEntered() || !MinestuckConfig.stopSecondEntry.get() && !MSDimensions.isLandDimension(player.world.getDimension().getType()))
 				{
 					if(!canModifyEntryBlocks(player.world, player))
 					{
@@ -452,11 +452,11 @@ public abstract class CruxiteArtifactItem extends Item
 		for(int i = 0; i < 9; i++)
 			if(i == 4)
 			{
-				world.setBlockState(pos, MinestuckBlocks.GATE.getDefaultState().cycle(GateBlock.MAIN), 0);
+				world.setBlockState(pos, MSBlocks.GATE.getDefaultState().cycle(GateBlock.MAIN), 0);
 				GateTileEntity tileEntity = (GateTileEntity) world.getTileEntity(pos);
 				tileEntity.gateCount = gateCount;
 			}
-			else world.setBlockState(pos.add((i % 3) - 1, 0, i/3 - 1), MinestuckBlocks.GATE.getDefaultState(), 0);
+			else world.setBlockState(pos.add((i % 3) - 1, 0, i/3 - 1), MSBlocks.GATE.getDefaultState(), 0);
 	}
 	
 	private class BlockMove

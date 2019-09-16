@@ -1,7 +1,7 @@
 package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.util.EnumAspect;
-import com.mraof.minestuck.world.biome.ModBiomes;
+import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.lands.decorator.RabbitSpawner;
 import com.mraof.minestuck.world.lands.decorator.structure.RabbitHoleDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
@@ -34,9 +34,9 @@ public class RabbitsLandAspect extends TitleLandAspect
 	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
 		
-		chunkProvider.decorators.add(new RabbitSpawner(6, ModBiomes.mediumNormal));
-		chunkProvider.decorators.add(new RabbitSpawner(3, ModBiomes.mediumRough));
-		chunkProvider.decorators.add(new RabbitHoleDecorator(ModBiomes.mediumNormal, ModBiomes.mediumRough));
+		chunkProvider.decorators.add(new RabbitSpawner(6, MSBiomes.mediumNormal));
+		chunkProvider.decorators.add(new RabbitSpawner(3, MSBiomes.mediumRough));
+		chunkProvider.decorators.add(new RabbitHoleDecorator(MSBiomes.mediumNormal, MSBiomes.mediumRough));
 		//chunkProvider.sortDecorators();
 	}
 	

@@ -1,8 +1,8 @@
 package com.mraof.minestuck.world.lands.title;
 
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.util.EnumAspect;
-import com.mraof.minestuck.world.biome.ModBiomes;
+import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.lands.decorator.SingleBlockDecorator;
 import com.mraof.minestuck.world.lands.decorator.structure.CakePedestalDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
@@ -40,7 +40,7 @@ public class CakeLandAspect extends TitleLandAspect
 	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.decorators.add(new CakeDecorator(chunkProvider.temperature));
-		chunkProvider.decorators.add(new CakePedestalDecorator(ModBiomes.mediumNormal, ModBiomes.mediumRough));
+		chunkProvider.decorators.add(new CakePedestalDecorator(MSBiomes.mediumNormal, MSBiomes.mediumRough));
 		//chunkProvider.sortDecorators();
 	}
 	
@@ -60,13 +60,13 @@ public class CakeLandAspect extends TitleLandAspect
 			if(f < 0.1F)
 			{
 				if(random.nextFloat() < redCakeChance)
-					return (f < 0.05F ? MinestuckBlocks.RED_CAKE : MinestuckBlocks.HOT_CAKE).getDefaultState().with(CakeBlock.BITES, bites);
-				else return (f < 0.05F ? MinestuckBlocks.BLUE_CAKE : MinestuckBlocks.COLD_CAKE).getDefaultState().with(CakeBlock.BITES, bites);
+					return (f < 0.05F ? MSBlocks.RED_CAKE : MSBlocks.HOT_CAKE).getDefaultState().with(CakeBlock.BITES, bites);
+				else return (f < 0.05F ? MSBlocks.BLUE_CAKE : MSBlocks.COLD_CAKE).getDefaultState().with(CakeBlock.BITES, bites);
 			}
 			else if(f < 0.4F)
-				return MinestuckBlocks.APPLE_CAKE.getDefaultState().with(CakeBlock.BITES, bites);
+				return MSBlocks.APPLE_CAKE.getDefaultState().with(CakeBlock.BITES, bites);
 			else if(random.nextFloat() < 0.01)
-				return MinestuckBlocks.REVERSE_CAKE.getDefaultState().with(CakeBlock.BITES, bites);
+				return MSBlocks.REVERSE_CAKE.getDefaultState().with(CakeBlock.BITES, bites);
 			else
 				return Blocks.CAKE.getDefaultState().with(CakeBlock.BITES, bites);
 		}

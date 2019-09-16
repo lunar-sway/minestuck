@@ -1,7 +1,7 @@
 package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.block.PunchDesignixBlock;
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.block.MSBlocks;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -93,11 +93,11 @@ public class PunchDesignixItem extends BlockItem
 				|| facing == Direction.SOUTH && context.getHitVec().x < 0.5F || facing == Direction.NORTH && context.getHitVec().x >= 0.5F)
 			pos = pos.offset(facing.rotateY());
 		
-		world.setBlockState(pos, MinestuckBlocks.PUNCH_DESIGNIX.LEFT_LEG.getDefaultState().with(PunchDesignixBlock.FACING, facing), 11);
-		world.setBlockState(pos.offset(facing.rotateYCCW()), MinestuckBlocks.PUNCH_DESIGNIX.RIGHT_LEG.getDefaultState().with(PunchDesignixBlock.FACING, facing), 11);
-		world.setBlockState(pos.up().offset(facing.rotateYCCW()), MinestuckBlocks.PUNCH_DESIGNIX.KEYBOARD.getDefaultState().with(PunchDesignixBlock.FACING, facing), 11);
+		world.setBlockState(pos, MSBlocks.PUNCH_DESIGNIX.LEFT_LEG.getDefaultState().with(PunchDesignixBlock.FACING, facing), 11);
+		world.setBlockState(pos.offset(facing.rotateYCCW()), MSBlocks.PUNCH_DESIGNIX.RIGHT_LEG.getDefaultState().with(PunchDesignixBlock.FACING, facing), 11);
+		world.setBlockState(pos.up().offset(facing.rotateYCCW()), MSBlocks.PUNCH_DESIGNIX.KEYBOARD.getDefaultState().with(PunchDesignixBlock.FACING, facing), 11);
 		
-		world.setBlockState(pos.up(), MinestuckBlocks.PUNCH_DESIGNIX.SLOT.getDefaultState().with(PunchDesignixBlock.FACING, facing), 11);
+		world.setBlockState(pos.up(), MSBlocks.PUNCH_DESIGNIX.SLOT.getDefaultState().with(PunchDesignixBlock.FACING, facing), 11);
 		
 		if(player instanceof ServerPlayerEntity)
 			CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayerEntity) player, pos, context.getItem());

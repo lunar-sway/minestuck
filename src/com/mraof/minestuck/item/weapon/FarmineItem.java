@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.PriorityQueue;
 
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.util.Pair;
 
 import net.minecraft.block.Block;
@@ -15,7 +15,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.Enchantments;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -58,7 +57,7 @@ public class FarmineItem extends WeaponItem
 		addAssociation(Blocks.DIRT, Blocks.GRASS);
 		addAssociation(Blocks.DIRT, Blocks.MYCELIUM);
 		addAssociation(Blocks.DIRT, Blocks.GRASS_PATH);
-		addAssociation(Blocks.END_STONE, MinestuckBlocks.END_GRASS);
+		addAssociation(Blocks.END_STONE, MSBlocks.END_GRASS);
 		
 		addOneWayAssociation(Blocks.COBBLESTONE, Blocks.INFESTED_COBBLESTONE);
 		addOneWayAssociation(Blocks.STONE, Blocks.INFESTED_STONE);

@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.MSItems;
 import net.minecraft.block.*;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.Item;
@@ -40,13 +40,13 @@ public class StrawberryBlock extends StemGrownBlock
 	@Override
 	public StemBlock getStem()
 	{
-		return (StemBlock) MinestuckBlocks.STRAWBERRY_STEM;
+		return (StemBlock) MSBlocks.STRAWBERRY_STEM;
 	}
 	
 	@Override
 	public AttachedStemBlock getAttachedStem()
 	{
-		return (AttachedStemBlock) MinestuckBlocks.ATTACHED_STRAWBERRY_STEM;
+		return (AttachedStemBlock) MSBlocks.ATTACHED_STRAWBERRY_STEM;
 	}
 	
 	public static class AttachedStem extends AttachedStemBlock
@@ -59,7 +59,7 @@ public class StrawberryBlock extends StemGrownBlock
 		@Override
 		protected Item getSeeds()
 		{
-			return MinestuckItems.STRAWBERRY_CHUNK;
+			return MSItems.STRAWBERRY_CHUNK;
 		}
 	}
 	
@@ -74,7 +74,7 @@ public class StrawberryBlock extends StemGrownBlock
 		@Override
 		protected Item getSeedItem()
 		{
-			return MinestuckItems.STRAWBERRY_CHUNK;
+			return MSItems.STRAWBERRY_CHUNK;
 		}
 	}
 }

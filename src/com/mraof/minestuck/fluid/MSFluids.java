@@ -10,7 +10,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class ModFluids
+public class MSFluids
 {
 	public static final FlowingFluid FLOWING_OIL = new OilFluid.Flowing();
 	public static final FlowingFluid OIL = new OilFluid.Source();

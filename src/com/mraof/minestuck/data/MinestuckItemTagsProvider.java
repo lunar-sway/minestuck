@@ -1,9 +1,9 @@
 package com.mraof.minestuck.data;
 
 import com.google.common.collect.Sets;
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.util.ExtraForgeTags;
-import com.mraof.minestuck.util.MinestuckTags;
+import com.mraof.minestuck.util.MSTags;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ItemTagsProvider;
 import net.minecraft.item.Item;
@@ -17,8 +17,8 @@ import net.minecraftforge.common.Tags;
 import java.nio.file.Path;
 import java.util.Set;
 
-import static com.mraof.minestuck.item.MinestuckItems.*;
-import static com.mraof.minestuck.util.MinestuckTags.Items.*;
+import static com.mraof.minestuck.item.MSItems.*;
+import static com.mraof.minestuck.util.MSTags.Items.*;
 import static net.minecraft.tags.ItemTags.*;
 import static net.minecraftforge.common.Tags.Items.*;
 
@@ -57,35 +57,35 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		copy(Tags.Blocks.STORAGE_BLOCKS, STORAGE_BLOCKS);
 		copy(ExtraForgeTags.Blocks.URANIUM_ORES, ExtraForgeTags.Items.URANIUM_ORES);
 		copy(ExtraForgeTags.Blocks.URANIUM_STORAGE_BLOCKS, ExtraForgeTags.Items.URANIUM_STORAGE_BLOCKS);
-		copy(MinestuckTags.Blocks.GLOWING_LOGS, GLOWING_LOGS);
-		copy(MinestuckTags.Blocks.FROST_LOGS, FROST_LOGS);
-		copy(MinestuckTags.Blocks.RAINBOW_LOGS, RAINBOW_LOGS);
-		copy(MinestuckTags.Blocks.END_LOGS, END_LOGS);
-		copy(MinestuckTags.Blocks.VINE_LOGS, VINE_LOGS);
-		copy(MinestuckTags.Blocks.FLOWERY_VINE_LOGS, FLOWERY_VINE_LOGS);
-		copy(MinestuckTags.Blocks.DEAD_LOGS, DEAD_LOGS);
-		copy(MinestuckTags.Blocks.PETRIFIED_LOGS, PETRIFIED_LOGS);
-		copy(MinestuckTags.Blocks.ASPECT_LOGS, ASPECT_LOGS);
-		copy(MinestuckTags.Blocks.ASPECT_PLANKS, ASPECT_PLANKS);
-		copy(MinestuckTags.Blocks.ASPECT_LEAVES, ASPECT_LEAVES);
-		copy(MinestuckTags.Blocks.ASPECT_SAPLINGS, ASPECT_SAPLINGS);
-		copy(MinestuckTags.Blocks.CRUXITE_ORES, CRUXITE_ORES);
-		copy(MinestuckTags.Blocks.URANIUM_ORES, URANIUM_ORES);
-		copy(MinestuckTags.Blocks.COAL_ORES, COAL_ORES);
-		copy(MinestuckTags.Blocks.IRON_ORES, IRON_ORES);
-		copy(MinestuckTags.Blocks.GOLD_ORES, GOLD_ORES);
-		copy(MinestuckTags.Blocks.REDSTONE_ORES, REDSTONE_ORES);
-		copy(MinestuckTags.Blocks.QUARTZ_ORES, QUARTZ_ORES);
-		copy(MinestuckTags.Blocks.LAPIS_ORES, LAPIS_ORES);
-		copy(MinestuckTags.Blocks.DIAMOND_ORES, DIAMOND_ORES);
-		copy(MinestuckTags.Blocks.CRUXITE_STORAGE_BLOCKS, CRUXITE_STORAGE_BLOCKS);
+		copy(MSTags.Blocks.GLOWING_LOGS, GLOWING_LOGS);
+		copy(MSTags.Blocks.FROST_LOGS, FROST_LOGS);
+		copy(MSTags.Blocks.RAINBOW_LOGS, RAINBOW_LOGS);
+		copy(MSTags.Blocks.END_LOGS, END_LOGS);
+		copy(MSTags.Blocks.VINE_LOGS, VINE_LOGS);
+		copy(MSTags.Blocks.FLOWERY_VINE_LOGS, FLOWERY_VINE_LOGS);
+		copy(MSTags.Blocks.DEAD_LOGS, DEAD_LOGS);
+		copy(MSTags.Blocks.PETRIFIED_LOGS, PETRIFIED_LOGS);
+		copy(MSTags.Blocks.ASPECT_LOGS, ASPECT_LOGS);
+		copy(MSTags.Blocks.ASPECT_PLANKS, ASPECT_PLANKS);
+		copy(MSTags.Blocks.ASPECT_LEAVES, ASPECT_LEAVES);
+		copy(MSTags.Blocks.ASPECT_SAPLINGS, ASPECT_SAPLINGS);
+		copy(MSTags.Blocks.CRUXITE_ORES, CRUXITE_ORES);
+		copy(MSTags.Blocks.URANIUM_ORES, URANIUM_ORES);
+		copy(MSTags.Blocks.COAL_ORES, COAL_ORES);
+		copy(MSTags.Blocks.IRON_ORES, IRON_ORES);
+		copy(MSTags.Blocks.GOLD_ORES, GOLD_ORES);
+		copy(MSTags.Blocks.REDSTONE_ORES, REDSTONE_ORES);
+		copy(MSTags.Blocks.QUARTZ_ORES, QUARTZ_ORES);
+		copy(MSTags.Blocks.LAPIS_ORES, LAPIS_ORES);
+		copy(MSTags.Blocks.DIAMOND_ORES, DIAMOND_ORES);
+		copy(MSTags.Blocks.CRUXITE_STORAGE_BLOCKS, CRUXITE_STORAGE_BLOCKS);
 		
 		fakePopulate(INGOTS_IRON);
 		fakePopulate(RODS_WOODEN);
 		
 		getBuilder(ItemTags.MUSIC_DISCS).add(RECORD_DANCE_STAB, RECORD_EMISSARY_OF_DANCE, RECORD_RETRO_BATTLE);
 		getBuilder(Tags.Items.MUSIC_DISCS).add(RECORD_DANCE_STAB, RECORD_EMISSARY_OF_DANCE, RECORD_RETRO_BATTLE);
-		getBuilder(DUSTS).add(MinestuckBlocks.GLOWYSTONE_DUST.asItem());
+		getBuilder(DUSTS).add(MSBlocks.GLOWYSTONE_DUST.asItem());
 		getBuilder(RODS).add(UP_STICK);
 		getBuilder(ExtraForgeTags.Items.URANIUM_CHUNKS).add(RAW_URANIUM);
 	}

@@ -2,10 +2,10 @@ package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.inventory.MiniAlchemiterContainer;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
+import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.tracker.PlayerTracker;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.PlayerEntity;
@@ -51,7 +51,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 	
 	public MiniAlchemiterTileEntity()
 	{
-		super(ModTileEntityTypes.MINI_ALCHEMITER);
+		super(MSTileEntityTypes.MINI_ALCHEMITER);
 	}
 	
 	@Override
@@ -69,7 +69,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack)
 	{
-		return index == 0 && stack.getItem() == MinestuckBlocks.CRUXITE_DOWEL.asItem();
+		return index == 0 && stack.getItem() == MSBlocks.CRUXITE_DOWEL.asItem();
 	}
 	
 	@Override
@@ -81,14 +81,14 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 			ItemStack newItem = AlchemyRecipes.getDecodedItem(this.inv.get(INPUT));
 			if(newItem.isEmpty())
 				if(!inv.get(INPUT).hasTag() || !inv.get(INPUT).getTag().contains("contentID"))
-					newItem = new ItemStack(MinestuckBlocks.GENERIC_OBJECT);
+					newItem = new ItemStack(MSBlocks.GENERIC_OBJECT);
 				else return false;
 			if(!inv.get(OUTPUT).isEmpty() && (inv.get(OUTPUT).getItem() != newItem.getItem() || inv.get(OUTPUT).getMaxStackSize() <= inv.get(OUTPUT).getCount()))
 			{
 				return false;
 			}
 			GristSet cost = AlchemyCostRegistry.getGristConversion(newItem);
-			if(newItem.getItem() == MinestuckItems.CAPTCHA_CARD)
+			if(newItem.getItem() == MSItems.CAPTCHA_CARD)
 				cost = new GristSet(wildcardGrist, MinestuckConfig.cardCost.get());
 			
 			return GristHelper.canAfford(PlayerSavedData.get(world).getGristSet(this.owner), cost);
@@ -105,7 +105,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 		ItemStack newItem = AlchemyRecipes.getDecodedItem(this.inv.get(INPUT));
 		
 		if (newItem.isEmpty())
-			newItem = new ItemStack(MinestuckBlocks.GENERIC_OBJECT);
+			newItem = new ItemStack(MSBlocks.GENERIC_OBJECT);
 		
 		if (inv.get(OUTPUT).isEmpty())
 		{
@@ -121,10 +121,10 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 			AlchemyRecipes.onAlchemizedItem(newItem, player);
 		
 		GristSet cost = AlchemyCostRegistry.getGristConversion(newItem);
-		if (newItem.getItem() == MinestuckItems.CAPTCHA_CARD)
+		if (newItem.getItem() == MSItems.CAPTCHA_CARD)
 			cost = new GristSet(wildcardGrist, MinestuckConfig.cardCost.get());
 		GristHelper.decrease(world, owner, cost);
-		MinestuckPlayerTracker.updateGristCache(world.getServer(), owner);
+		PlayerTracker.updateGristCache(world.getServer(), owner);
 	}
 	
 	// We're going to want to trigger a block update every 20 ticks to have comparators pull data from the Alchemiter.
@@ -190,14 +190,14 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 			ItemStack newItem = AlchemyRecipes.getDecodedItem(getStackInSlot(INPUT));
 			if (newItem.isEmpty())
 				if (!getStackInSlot(INPUT).hasTag() || !getStackInSlot(INPUT).getTag().contains("contentID"))
-					newItem = new ItemStack(MinestuckBlocks.GENERIC_OBJECT);
+					newItem = new ItemStack(MSBlocks.GENERIC_OBJECT);
 				else return 0;
 			if (!getStackInSlot(OUTPUT).isEmpty() && (getStackInSlot(OUTPUT).getItem() != newItem.getItem() || getStackInSlot(OUTPUT).getMaxStackSize() <= getStackInSlot(OUTPUT).getCount()))
 			{
 				return 0;
 			}
 			GristSet cost = AlchemyCostRegistry.getGristConversion(newItem);
-			if (newItem.getItem() == MinestuckItems.CAPTCHA_CARD)
+			if (newItem.getItem() == MSItems.CAPTCHA_CARD)
 				cost = new GristSet(wildcardGrist, MinestuckConfig.cardCost.get());
 			// We need to run the check 16 times. Don't want to hammer the game with too many of these, so the comparators are only told to update every 20 ticks.
 			// Additionally, we need to check if the item in the slot is empty. Otherwise, it will attempt to check the cost for air, which cannot be alchemized anyway.

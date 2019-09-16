@@ -2,7 +2,7 @@ package com.mraof.minestuck.inventory;
 
 import com.mraof.minestuck.inventory.slot.InputSlot;
 import com.mraof.minestuck.inventory.slot.OutputSlot;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.MSItems;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
@@ -27,12 +27,12 @@ public class MiniCruxtruderContainer extends MachineContainer
 	
 	public MiniCruxtruderContainer(int windowId, PlayerInventory inventoryPlayer)
 	{
-		this(ModContainerTypes.MINI_CRUXTRUDER, windowId, inventoryPlayer, new Inventory(2), new IntArray(3));
+		this(MSContainerTypes.MINI_CRUXTRUDER, windowId, inventoryPlayer, new Inventory(2), new IntArray(3));
 	}
 	
 	public MiniCruxtruderContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters)
 	{
-		this(ModContainerTypes.MINI_CRUXTRUDER, windowId, playerInventory, inventory, parameters);
+		this(MSContainerTypes.MINI_CRUXTRUDER, windowId, playerInventory, inventory, parameters);
 	}
 	
 	public MiniCruxtruderContainer(ContainerType<? extends MiniCruxtruderContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters)
@@ -42,7 +42,7 @@ public class MiniCruxtruderContainer extends MachineContainer
 		assertInventorySize(inventory, 2);
 		this.cruxtruderInventory = inventory;
 		
-		addSlot(new InputSlot(inventory, 0, INPUT_X, INPUT_Y, MinestuckItems.RAW_CRUXITE));
+		addSlot(new InputSlot(inventory, 0, INPUT_X, INPUT_Y, MSItems.RAW_CRUXITE));
 		addSlot(new OutputSlot(inventory, 1, OUTPUT_X, OUTPUT_Y));
 		
 		bindPlayerInventory(playerInventory);
@@ -88,7 +88,7 @@ public class MiniCruxtruderContainer extends MachineContainer
 			{
 				//if it's an inventory slot with valid contents
 				//Debug.print("item ID of " + itemstackOrig.itemID + ". Expected " + Minestuck.rawCruxite.itemID);
-				if(itemstackOrig.getItem() == MinestuckItems.RAW_CRUXITE)
+				if(itemstackOrig.getItem() == MSItems.RAW_CRUXITE)
 				{
 					//Debug.print("Transferring...");
 					result = mergeItemStack(itemstackOrig, 0, 1, false);

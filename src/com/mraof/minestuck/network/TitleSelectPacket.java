@@ -1,11 +1,10 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.client.gui.ModScreenFactories;
+import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.util.EnumClass;
 import com.mraof.minestuck.util.Title;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkDirection;
@@ -66,7 +65,7 @@ public class TitleSelectPacket
 			title = new Title(enumClass, enumAspect);
 		else title = null;
 		
-		ModScreenFactories.displayTitleSelectScreen(title);
+		MSScreenFactories.displayTitleSelectScreen(title);
 	}
 	
 	public void execute(ServerPlayerEntity player)

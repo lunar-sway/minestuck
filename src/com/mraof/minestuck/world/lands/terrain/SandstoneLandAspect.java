@@ -1,11 +1,11 @@
 package com.mraof.minestuck.world.lands.terrain;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.entity.ModEntityTypes;
+import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
-import com.mraof.minestuck.world.biome.ModBiomes;
+import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.lands.gen.LandGenSettings;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.*;
@@ -102,7 +102,7 @@ public class SandstoneLandAspect extends TerrainLandAspect
 		BlockState sand = blockRegistry.getBlockState("sand");
 		BlockState sandstone = blockRegistry.getBlockState("upper");
 		
-		if(biome.staticBiome != ModBiomes.LAND_OCEAN)
+		if(biome.staticBiome != MSBiomes.LAND_OCEAN)
 		{
 			//TODO We need to be able to replace the surface
 			//biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(null, sand, 32), Placement.COUNT_RANGE, new CountRangeConfig(10, 0, 0, 256)));
@@ -110,11 +110,11 @@ public class SandstoneLandAspect extends TerrainLandAspect
 		}
 		
 		
-		if(biome.staticBiome == ModBiomes.LAND_NORMAL)
+		if(biome.staticBiome == MSBiomes.LAND_NORMAL)
 		{
 			//TODO Forest rocks has checks that prevent it from being placed on most blocks, causing it to not appear in this land
 			biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(Feature.FOREST_ROCK, new BlockBlobConfig(sandstone, 0), Placement.FOREST_ROCK, new FrequencyConfig(3)));
-		} else if(biome.staticBiome == ModBiomes.LAND_ROUGH)
+		} else if(biome.staticBiome == MSBiomes.LAND_ROUGH)
 		{
 			biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(Feature.FOREST_ROCK, new BlockBlobConfig(sandstone, 0), Placement.FOREST_ROCK, new FrequencyConfig(5)));
 		}
@@ -145,7 +145,7 @@ public class SandstoneLandAspect extends TerrainLandAspect
 	@Override
 	public EntityType<? extends ConsortEntity> getConsortType()
 	{
-		return ModEntityTypes.TURTLE;
+		return MSEntityTypes.TURTLE;
 	}
 	
 	public enum Variant

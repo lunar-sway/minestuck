@@ -1,6 +1,6 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -25,7 +25,7 @@ public class QueueModus extends StackModus
 			if(list.size() < size)
 			{
 				size--;
-				return new ItemStack(MinestuckItems.CAPTCHA_CARD);
+				return new ItemStack(MSItems.CAPTCHA_CARD);
 			} else return ItemStack.EMPTY;
 		}
 		
@@ -41,7 +41,7 @@ public class QueueModus extends StackModus
 		}
 		
 		ItemStack item = list.removeLast();
-		if(asCard && !(item.getItem() == MinestuckItems.CAPTCHA_CARD && item.hasTag() && !item.getTag().getBoolean("punched") && item.getTag().contains("id")))
+		if(asCard && !(item.getItem() == MSItems.CAPTCHA_CARD && item.hasTag() && !item.getTag().getBoolean("punched") && item.getTag().contains("id")))
 		{
 			size--;
 			return AlchemyRecipes.createCard(item, false);

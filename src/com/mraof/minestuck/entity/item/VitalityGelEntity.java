@@ -2,7 +2,7 @@ package com.mraof.minestuck.entity.item;
 
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.editmode.ServerEditHandler;
-import com.mraof.minestuck.entity.ModEntityTypes;
+import com.mraof.minestuck.entity.MSEntityTypes;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
@@ -33,7 +33,7 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 	
 	public VitalityGelEntity(World world, double x, double y, double z, int healAmount)
 	{
-		this(ModEntityTypes.VITALITY_GEL, world, x, y, z, healAmount);
+		this(MSEntityTypes.VITALITY_GEL, world, x, y, z, healAmount);
 	}
 	
 	protected VitalityGelEntity(EntityType<? extends VitalityGelEntity> type, World world, double x, double y, double z, int healAmount)

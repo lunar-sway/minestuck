@@ -3,14 +3,14 @@ package com.mraof.minestuck.entity.consort;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 import com.mraof.minestuck.entity.consort.EnumConsort.MerchantType;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.world.MinestuckDimensions;
+import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandAspects;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
-import com.mraof.minestuck.world.storage.loot.MinestuckLoot;
+import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -22,8 +22,8 @@ import net.minecraft.util.text.ITextComponent;
 import java.util.*;
 
 import static com.mraof.minestuck.entity.consort.MessageType.*;
-import static com.mraof.minestuck.world.storage.loot.MinestuckLoot.CONSORT_FOOD_STOCK;
-import static com.mraof.minestuck.world.storage.loot.MinestuckLoot.CONSORT_GENERAL_STOCK;
+import static com.mraof.minestuck.world.storage.loot.MSLootTables.CONSORT_FOOD_STOCK;
+import static com.mraof.minestuck.world.storage.loot.MSLootTables.CONSORT_GENERAL_STOCK;
 import static com.mraof.minestuck.world.lands.LandAspectRegistry.*;
 
 /**
@@ -160,7 +160,7 @@ public class ConsortDialogue
 		//Frost
 		addMessage(new ChainMessage(new SingleMessage("frozen1"), new DescriptionMessage("frozen2"))).landTerrain(FROST);
 		addMessage(new ChoiceMessage(new SingleMessage("fur_coat"), new SingleMessage[]{new SingleMessage("fur_coat.pay"), new SingleMessage("fur_coat.ignore")},
-				new MessageType[]{new PurchaseMessage(MinestuckLoot.CONSORT_JUNK_REWARD, 100, new ChainMessage(1, new SingleMessage("fur_coat.grattitude"), new SingleMessage("thank_you"))),
+				new MessageType[]{new PurchaseMessage(MSLootTables.CONSORT_JUNK_REWARD, 100, new ChainMessage(1, new SingleMessage("fur_coat.grattitude"), new SingleMessage("thank_you"))),
 						new SingleMessage("fur_coat.death")})).landTerrain(FROST);
 		addMessage("tent_protection").landTerrain(FROST).consortReq(ConsortEntity::detachHome);
 		addMessage("all_ores").landTerrain(ROCK);
@@ -274,10 +274,10 @@ public class ConsortDialogue
 		
 		addMessage("await_hero", "land_name", "consort_types", "player_title_land").reqLand();
 		addMessage(new ConditionedMessage("skaia", (ConsortEntity consort, ServerPlayerEntity player) -> !consort.visitedSkaia, new SingleMessage("watch_skaia"),
-				new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> MinestuckDimensions.isSkaia(consort.dimension),
+				new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> MSDimensions.isSkaia(consort.dimension),
 						new SingleMessage("at_skaia.1", "consort_sound2"), new SingleMessage("visited_skaia")))).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA, EnumConsort.NAKAGATOR).reqLand();
 		addMessage(new ConditionedMessage("skaia_turtle", (ConsortEntity consort, ServerPlayerEntity player) -> !consort.visitedSkaia, new SingleMessage("watch_skaia"),
-				new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> MinestuckDimensions.isSkaia(consort.dimension),
+				new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> MSDimensions.isSkaia(consort.dimension),
 						new SingleMessage("at_skaia.2"), new SingleMessage("visited_skaia")))).consort(EnumConsort.TURTLE).reqLand();
 		
 		addMessage(new SingleMessage("zazzerpan")).consort(EnumConsort.TURTLE);
@@ -296,12 +296,12 @@ public class ConsortDialogue
 		addMessage(new ChoiceMessage(new DescriptionMessage("peppy_offer"),
 				new SingleMessage[] { new SingleMessage("peppy_offer.buy"), new SingleMessage("peppy_offer.deny") },
 				new MessageType[] {
-						new PurchaseMessage(false, MinestuckLoot.CONSORT_JUNK_REWARD, 1000, "purchase",
+						new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 1000, "purchase",
 								new ChainMessage(1, new SingleMessage("peppy_offer.item"), new SingleMessage("peppy_offer.purchase"))),
 						new ChoiceMessage(new SingleMessage("peppy_offer.next"),
 								new SingleMessage[] { new SingleMessage("peppy_offer.deny_again"), new SingleMessage("peppy_offer.buy2") },
 								new MessageType[] { new SingleMessage("dots"),
-										new PurchaseMessage(false, MinestuckLoot.CONSORT_JUNK_REWARD, 500, "purchase",
+										new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 500, "purchase",
 												new SingleMessage("peppy_offer.purchase")) }) })).type(MerchantType.SHADY).consort(EnumConsort.NAKAGATOR, EnumConsort.IGUANA);
 
 
@@ -316,7 +316,7 @@ public class ConsortDialogue
 								new SingleMessage("shady_offer.deny")
 						},
 				new MessageType[] {
-						new PurchaseMessage(false, MinestuckLoot.CONSORT_JUNK_REWARD, 1000, "purchase",
+						new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 1000, "purchase",
 								new ChainMessage(1,
 										new SingleMessage("shady_offer.item"),
 										new SingleMessage("shady_offer.purchase")
@@ -331,7 +331,7 @@ public class ConsortDialogue
 								new MessageType[]
 								{
 										new SingleMessage("dots"),
-										new PurchaseMessage(false, MinestuckLoot.CONSORT_JUNK_REWARD, 500, "purchase",
+										new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 500, "purchase",
 												new SingleMessage("shady_offer.purchase")
 										)
 								}
@@ -343,9 +343,9 @@ public class ConsortDialogue
 				new SingleMessage[] { new SingleMessage("denizen.what"), new SingleMessage("denizen.ask_alignment") },
 				new MessageType[] { new SingleMessage("denizen.explain", "player_class_land"), new SingleMessage("denizen.alignment") })).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA, EnumConsort.TURTLE).reqLand();
 		
-		List<ItemStack> hungryList = ImmutableList.of(new ItemStack(Items.COOKIE), new ItemStack(MinestuckItems.BUG_ON_A_STICK),
-				new ItemStack(MinestuckItems.GRASSHOPPER), new ItemStack(MinestuckItems.CHOCOLATE_BEETLE),	//TODO Use item tags for these kind of things
-				new ItemStack(MinestuckItems.CONE_OF_FLIES));
+		List<ItemStack> hungryList = ImmutableList.of(new ItemStack(Items.COOKIE), new ItemStack(MSItems.BUG_ON_A_STICK),
+				new ItemStack(MSItems.GRASSHOPPER), new ItemStack(MSItems.CHOCOLATE_BEETLE),	//TODO Use item tags for these kind of things
+				new ItemStack(MSItems.CONE_OF_FLIES));
 		addMessage(new ItemRequirement(hungryList, false, true, new SingleMessage("hungry"),
 						new ChoiceMessage(new SingleMessage("hungry.ask_food", "nbt_item:hungry.item"),
 								new SingleMessage[] { new SingleMessage("hungry.accept"), new SingleMessage("hungry.deny") },
@@ -449,7 +449,7 @@ public class ConsortDialogue
 	
 	public static DialogueWrapper getRandomMessage(ConsortEntity consort, ServerPlayerEntity player)
 	{
-		LandAspects aspects = MinestuckDimensions.getAspects(player.getServer(), consort.homeDimension);
+		LandAspects aspects = MSDimensions.getAspects(player.getServer(), consort.homeDimension);
 		
 		List<DialogueWrapper> list = new ArrayList<>();
 		

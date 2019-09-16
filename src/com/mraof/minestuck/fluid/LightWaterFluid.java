@@ -1,8 +1,8 @@
 package com.mraof.minestuck.fluid;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.item.MSItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowingFluidBlock;
@@ -31,13 +31,13 @@ public abstract class LightWaterFluid extends FlowingFluid
 	@Override
 	public Fluid getFlowingFluid()
 	{
-		return ModFluids.FLOWING_LIGHT_WATER;
+		return MSFluids.FLOWING_LIGHT_WATER;
 	}
 	
 	@Override
 	public Fluid getStillFluid()
 	{
-		return ModFluids.LIGHT_WATER;
+		return MSFluids.LIGHT_WATER;
 	}
 	
 	@Override
@@ -74,7 +74,7 @@ public abstract class LightWaterFluid extends FlowingFluid
 	@Override
 	public Item getFilledBucket()
 	{
-		return MinestuckItems.LIGHT_WATER_BUCKET;
+		return MSItems.LIGHT_WATER_BUCKET;
 	}
 	
 	@Override
@@ -98,13 +98,13 @@ public abstract class LightWaterFluid extends FlowingFluid
 	@Override
 	protected BlockState getBlockState(IFluidState state)
 	{
-		return MinestuckBlocks.LIGHT_WATER.getDefaultState().with(FlowingFluidBlock.LEVEL, getLevelFromState(state));
+		return MSBlocks.LIGHT_WATER.getDefaultState().with(FlowingFluidBlock.LEVEL, getLevelFromState(state));
 	}
 	
 	@Override
 	public boolean isEquivalentTo(Fluid otherFluid)
 	{
-		return otherFluid == ModFluids.FLOWING_LIGHT_WATER || otherFluid == ModFluids.LIGHT_WATER;
+		return otherFluid == MSFluids.FLOWING_LIGHT_WATER || otherFluid == MSFluids.LIGHT_WATER;
 	}
 	
 	@Override

@@ -3,7 +3,7 @@ package com.mraof.minestuck.tileentity;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.alchemy.CombinationRegistry;
 import com.mraof.minestuck.inventory.MiniPunchDesignixContainer;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.MSItems;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -21,7 +21,7 @@ public class MiniPunchDesignixTileEntity extends MachineProcessTileEntity implem
 	
 	public MiniPunchDesignixTileEntity()
 	{
-		super(ModTileEntityTypes.MINI_PUNCH_DESIGNIX);
+		super(MSTileEntityTypes.MINI_PUNCH_DESIGNIX);
 	}
 	
 	@Override
@@ -39,7 +39,7 @@ public class MiniPunchDesignixTileEntity extends MachineProcessTileEntity implem
 	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack)
 	{
-		return index == 0 || index == 1 && stack.getItem() == MinestuckItems.CAPTCHA_CARD;
+		return index == 0 || index == 1 && stack.getItem() == MSItems.CAPTCHA_CARD;
 	}
 	
 	@Override

@@ -1,10 +1,8 @@
 package com.mraof.minestuck.world.gen.feature;
 
 import com.mojang.datafixers.Dynamic;
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.block.MSBlocks;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.trees.Tree;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
@@ -12,18 +10,16 @@ import net.minecraft.world.gen.IWorldGenerationBaseReader;
 import net.minecraft.world.gen.IWorldGenerationReader;
 import net.minecraft.world.gen.feature.AbstractTreeFeature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.TreeFeature;
 import net.minecraftforge.common.IPlantable;
 
-import javax.annotation.Nullable;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
 
 public class RainbowTreeFeature extends AbstractTreeFeature<NoFeatureConfig>
 {
-	private static final BlockState LOG = MinestuckBlocks.RAINBOW_LOG.getDefaultState();
-	private static final BlockState LEAF = MinestuckBlocks.RAINBOW_LEAVES.getDefaultState();
+	private static final BlockState LOG = MSBlocks.RAINBOW_LOG.getDefaultState();
+	private static final BlockState LEAF = MSBlocks.RAINBOW_LEAVES.getDefaultState();
 	
 	public RainbowTreeFeature(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactory, boolean doBlockNotify)
 	{

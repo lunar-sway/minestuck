@@ -1,6 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.TitleSelectPacket;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.util.EnumClass;
@@ -99,7 +99,7 @@ public class TitleSelectorScreen extends Screen
 	
 	private void select()
 	{
-		MinestuckPacketHandler.sendToServer(new TitleSelectPacket(currentClass, currentAspect));
+		MSPacketHandler.sendToServer(new TitleSelectPacket(currentClass, currentAspect));
 		sendPacket = false;
 		minecraft.displayGuiScreen(null);
 	}
@@ -108,7 +108,7 @@ public class TitleSelectorScreen extends Screen
 	public void onClose()
 	{
 		if(sendPacket)
-			MinestuckPacketHandler.sendToServer(new TitleSelectPacket());
+			MSPacketHandler.sendToServer(new TitleSelectPacket());
 	}
 	
 }

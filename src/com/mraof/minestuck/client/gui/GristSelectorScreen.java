@@ -2,7 +2,7 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.network.GristWildcardPacket;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.alchemy.GristType;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.RenderHelper;
@@ -121,7 +121,7 @@ public class GristSelectorScreen extends MinestuckScreen
 					otherScreen.height = this.height;
 					minecraft.currentScreen = otherScreen;
 					GristWildcardPacket packet = new GristWildcardPacket(pos, type);
-					MinestuckPacketHandler.INSTANCE.sendToServer(packet);
+					MSPacketHandler.INSTANCE.sendToServer(packet);
 					break;
 				}
 				offset++;

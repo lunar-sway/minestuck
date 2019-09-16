@@ -27,7 +27,7 @@ public class CruxiteDowelBlock extends Block
 	public static final VoxelShape CRUXTRUDER_SHAPE = Block.makeCuboidShape(5, 0, 5, 11, 5, 11);
 	public static final VoxelShape DOWEL_SHAPE = Block.makeCuboidShape(5, 0, 5, 11, 8, 11);
 	
-	public static final EnumProperty<Type> DOWEL_TYPE = MinestuckProperties.DOWEL_BLOCK;
+	public static final EnumProperty<Type> DOWEL_TYPE = MSProperties.DOWEL_BLOCK;
 	
 	public CruxiteDowelBlock(Properties properties)
 	{

@@ -3,7 +3,7 @@ package com.mraof.minestuck.entity.carapacian;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mraof.minestuck.entity.ModEntityTypes;
+import com.mraof.minestuck.entity.MSEntityTypes;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.LookAtGoal;
@@ -14,11 +14,11 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.entity.EntityListFilter;
-import com.mraof.minestuck.entity.EntityMinestuck;
+import com.mraof.minestuck.entity.MinestuckEntity;
 import com.mraof.minestuck.entity.ai.HurtByTargetAlliedGoal;
 import com.mraof.minestuck.entity.ai.NearestAttackableTargetWithHeightGoal;
 
-public abstract class CarapacianEntity extends EntityMinestuck
+public abstract class CarapacianEntity extends MinestuckEntity
 {
 	protected List<EntityType<?>> enemyTypes;
 	protected List<EntityType<?>> allyTypes;
@@ -28,13 +28,13 @@ public abstract class CarapacianEntity extends EntityMinestuck
 	protected static EntityListFilter dersiteSelector = new EntityListFilter(dersiteTypes);
 	static
 	{
-		dersiteTypes.add(ModEntityTypes.DERSITE_PAWN);
-		dersiteTypes.add(ModEntityTypes.DERSITE_BISHOP);
-		dersiteTypes.add(ModEntityTypes.DERSITE_ROOK);
+		dersiteTypes.add(MSEntityTypes.DERSITE_PAWN);
+		dersiteTypes.add(MSEntityTypes.DERSITE_BISHOP);
+		dersiteTypes.add(MSEntityTypes.DERSITE_ROOK);
 
-		prospitianTypes.add(ModEntityTypes.PROSPITIAN_PAWN);
-		prospitianTypes.add(ModEntityTypes.PROSPITIAN_BISHOP);
-		prospitianTypes.add(ModEntityTypes.PROSPITIAN_ROOK);
+		prospitianTypes.add(MSEntityTypes.PROSPITIAN_PAWN);
+		prospitianTypes.add(MSEntityTypes.PROSPITIAN_BISHOP);
+		prospitianTypes.add(MSEntityTypes.PROSPITIAN_ROOK);
 	}
 	protected EntityListFilter attackEntitySelector;
 

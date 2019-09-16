@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class MinestuckGuiFactory //implements IModGuiFactory
+public class MSGuiFactory //implements IModGuiFactory
 {
 	/*TODO Config gui how now?
 	@Override

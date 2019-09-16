@@ -1,16 +1,5 @@
 package com.mraof.minestuck.world.lands.structure.village;
 
-import com.google.common.collect.Lists;
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.entity.consort.EnumConsort;
-import com.mraof.minestuck.world.lands.LandAspectRegistry;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import net.minecraft.util.WeightedRandom;
-import net.minecraft.world.World;
-
-import java.util.List;
-import java.util.Random;
-
 /**
  * Created by kirderf1
  */

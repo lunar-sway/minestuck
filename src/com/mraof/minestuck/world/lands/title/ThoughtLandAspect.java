@@ -1,9 +1,9 @@
 package com.mraof.minestuck.world.lands.title;
 
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.world.lands.LandDimension;
-import com.mraof.minestuck.world.biome.ModBiomes;
+import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.lands.decorator.structure.SmallLibraryDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.gen.LandGenSettings;
@@ -29,8 +29,8 @@ public class ThoughtLandAspect extends TitleLandAspect
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("ocean", MinestuckBlocks.BRAIN_JUICE.getDefaultState());
-		registry.setBlockState("river", MinestuckBlocks.BRAIN_JUICE.getDefaultState());
+		registry.setBlockState("ocean", MSBlocks.BRAIN_JUICE.getDefaultState());
+		registry.setBlockState("river", MSBlocks.BRAIN_JUICE.getDefaultState());
 		registry.setBlockState("structure_wool_2", Blocks.LIME_WOOL.getDefaultState());
 		registry.setBlockState("carpet", Blocks.LIME_CARPET.getDefaultState());
 	}
@@ -52,7 +52,7 @@ public class ThoughtLandAspect extends TitleLandAspect
 	{
 		
 		
-		chunkProvider.decorators.add(new SmallLibraryDecorator(ModBiomes.mediumNormal));
+		chunkProvider.decorators.add(new SmallLibraryDecorator(MSBiomes.mediumNormal));
 		//chunkProvider.sortDecorators();
 	}
 	

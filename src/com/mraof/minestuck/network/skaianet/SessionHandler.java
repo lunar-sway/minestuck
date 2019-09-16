@@ -6,7 +6,7 @@ import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import com.mraof.minestuck.util.Title;
-import com.mraof.minestuck.world.MinestuckDimensions;
+import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandAspects;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -602,7 +602,7 @@ public class SessionHandler
 					if(c.clientHomeLand != null)
 					{
 						connectionTag.putString("clientDim", c.clientHomeLand.getRegistryName().toString());
-						LandAspects aspects = MinestuckDimensions.getAspects(skaianetHandler.mcServer, c.clientHomeLand);
+						LandAspects aspects = MSDimensions.getAspects(skaianetHandler.mcServer, c.clientHomeLand);
 						/*IChunkGenerator chunkGen = skaianetHandler.mcServer.getWorld(c.clientHomeLand).getDimension().createChunkGenerator();
 						if(chunkGen instanceof ChunkProviderLands)
 						{

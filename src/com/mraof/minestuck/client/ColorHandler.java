@@ -1,7 +1,7 @@
 package com.mraof.minestuck.client;
 
 import com.mraof.minestuck.item.FrogItem;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.MSItems;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.item.ItemStack;
@@ -19,7 +19,7 @@ public class ColorHandler
         System.out.println("onItemColors is doing something");
         ItemColors itemColors = event.getItemColors();
 
-        itemColors.register(new FrogItemColor(), MinestuckItems.FROG);
+        itemColors.register(new FrogItemColor(), MSItems.FROG);
         System.out.println("onItemColors is still doing something");
     }
 

@@ -5,9 +5,9 @@ import java.util.List;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.util.GuiUtil;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.AlchemiterPacket;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.tileentity.AlchemiterTileEntity;
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.alchemy.GristSet;
@@ -96,7 +96,7 @@ public class AlchemiterScreen extends Screen
 		GristSet set;
 		set = alchemiter.getGristCost(itemQuantity);
 		//draw the grist board
-		GuiUtil.drawGristBoard(set, AlchemyRecipes.getDecodedItem(alchemiter.getDowel()).getItem() == MinestuckItems.CAPTCHA_CARD ? GuiUtil.GristboardMode.LARGE_ALCHEMITER_SELECT : GuiUtil.GristboardMode.LARGE_ALCHEMITER, (width - guiWidth) / 2 + 88, (height - guiHeight) / 2 + 13, font);
+		GuiUtil.drawGristBoard(set, AlchemyRecipes.getDecodedItem(alchemiter.getDowel()).getItem() == MSItems.CAPTCHA_CARD ? GuiUtil.GristboardMode.LARGE_ALCHEMITER_SELECT : GuiUtil.GristboardMode.LARGE_ALCHEMITER, (width - guiWidth) / 2 + 88, (height - guiHeight) / 2 + 13, font);
 		//draw the grist
 		List<String> tooltip = GuiUtil.getGristboardTooltip(set, mouseX, mouseY, 9, 45, font);
 		if(tooltip != null)
@@ -113,7 +113,7 @@ public class AlchemiterScreen extends Screen
 	private void alchemize()
 	{
 		AlchemiterPacket packet = new AlchemiterPacket(alchemiter.getPos(), itemQuantity);
-		MinestuckPacketHandler.sendToServer(packet);
+		MSPacketHandler.sendToServer(packet);
 		this.minecraft.displayGuiScreen(null);
 	}
 	
@@ -143,7 +143,7 @@ public class AlchemiterScreen extends Screen
 	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton)
 	{
 		if(mouseButton == 0 && minecraft.player.inventory.getItemStack().isEmpty()
-				&& alchemiter.getDowel() != null && AlchemyRecipes.getDecodedItem(alchemiter.getDowel()).getItem() == MinestuckItems.CAPTCHA_CARD
+				&& alchemiter.getDowel() != null && AlchemyRecipes.getDecodedItem(alchemiter.getDowel()).getItem() == MSItems.CAPTCHA_CARD
 				&& mouseX >= (width-guiWidth)/2 +80  && mouseX < (width-guiWidth)/2 + 150 && mouseY >= (height-guiHeight)/2 + 8 && mouseY < (height-guiHeight)/2 + 93)
 		{
 			minecraft.currentScreen = new GristSelectorScreen(this);

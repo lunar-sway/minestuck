@@ -1,8 +1,8 @@
 package com.mraof.minestuck.fluid;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.item.MSItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowingFluidBlock;
@@ -31,13 +31,13 @@ public abstract class OilFluid extends FlowingFluid
 	@Override
 	public Fluid getFlowingFluid()
 	{
-		return ModFluids.FLOWING_OIL;
+		return MSFluids.FLOWING_OIL;
 	}
 	
 	@Override
 	public Fluid getStillFluid()
 	{
-		return ModFluids.OIL;
+		return MSFluids.OIL;
 	}
 	
 	@Override
@@ -74,7 +74,7 @@ public abstract class OilFluid extends FlowingFluid
 	@Override
 	public Item getFilledBucket()
 	{
-		return MinestuckItems.OIL_BUCKET;
+		return MSItems.OIL_BUCKET;
 	}
 	
 	@Override
@@ -98,13 +98,13 @@ public abstract class OilFluid extends FlowingFluid
 	@Override
 	protected BlockState getBlockState(IFluidState state)
 	{
-		return MinestuckBlocks.OIL.getDefaultState().with(FlowingFluidBlock.LEVEL, getLevelFromState(state));
+		return MSBlocks.OIL.getDefaultState().with(FlowingFluidBlock.LEVEL, getLevelFromState(state));
 	}
 	
 	@Override
 	public boolean isEquivalentTo(Fluid otherFluid)
 	{
-		return otherFluid == ModFluids.FLOWING_OIL || otherFluid == ModFluids.OIL;
+		return otherFluid == MSFluids.FLOWING_OIL || otherFluid == MSFluids.OIL;
 	}
 	
 	@Override

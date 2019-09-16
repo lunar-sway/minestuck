@@ -3,7 +3,7 @@ package com.mraof.minestuck.inventory;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckContainer;
 import net.minecraft.inventory.container.ContainerType;
 
-public class ModContainerTypes
+public class MSContainerTypes
 {
 	public static final ContainerType<MiniCruxtruderContainer> MINI_CRUXTRUDER = new ContainerType<>(MiniCruxtruderContainer::new);
 	public static final ContainerType<MiniTotemLatheContainer> MINI_TOTEM_LATHE = new ContainerType<>(MiniTotemLatheContainer::new);

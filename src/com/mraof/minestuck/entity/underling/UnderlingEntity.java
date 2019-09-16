@@ -4,8 +4,8 @@ import com.mraof.minestuck.alchemy.GristAmount;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.entity.EntityListFilter;
-import com.mraof.minestuck.entity.EntityMinestuck;
-import com.mraof.minestuck.entity.ModEntityTypes;
+import com.mraof.minestuck.entity.MinestuckEntity;
+import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.ai.HurtByTargetAlliedGoal;
 import com.mraof.minestuck.entity.ai.NearestAttackableTargetWithHeightGoal;
 import com.mraof.minestuck.entity.item.GristEntity;
@@ -38,9 +38,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class UnderlingEntity extends EntityMinestuck implements IEntityAdditionalSpawnData, IMob
+public abstract class UnderlingEntity extends MinestuckEntity implements IEntityAdditionalSpawnData, IMob
 {
-	protected static EntityListFilter underlingSelector = new EntityListFilter(Arrays.asList(ModEntityTypes.IMP, ModEntityTypes.OGRE, ModEntityTypes.BASILISK, ModEntityTypes.LICH, ModEntityTypes.GICLOPS, ModEntityTypes.WYRM));
+	protected static EntityListFilter underlingSelector = new EntityListFilter(Arrays.asList(MSEntityTypes.IMP, MSEntityTypes.OGRE, MSEntityTypes.BASILISK, MSEntityTypes.LICH, MSEntityTypes.GICLOPS, MSEntityTypes.WYRM));
 	protected EntityListFilter attackEntitySelector;
 	//The type of the underling
 	protected GristType type;

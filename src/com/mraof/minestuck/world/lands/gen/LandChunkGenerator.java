@@ -1,11 +1,8 @@
 package com.mraof.minestuck.world.lands.gen;
 
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
-import com.mraof.minestuck.world.biome.LandWrapperBiome;
-import com.mraof.minestuck.world.biome.ModBiomes;
 import com.mraof.minestuck.world.lands.LandAspects;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
-import net.minecraft.entity.EntityClassification;
 import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -18,7 +15,6 @@ import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
 
 import javax.annotation.Nullable;
-import java.util.List;
 import java.util.Objects;
 
 public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>

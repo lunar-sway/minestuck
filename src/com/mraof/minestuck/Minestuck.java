@@ -1,23 +1,20 @@
 package com.mraof.minestuck;
 
 import com.mraof.minestuck.alchemy.AlchemyRecipes;
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.command.*;
-import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
+import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.tracker.PlayerTracker;
 import com.mraof.minestuck.util.*;
 //import com.mraof.minestuck.config.MinestuckConfig;
-import com.mraof.minestuck.world.MinestuckDimensions;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.ModDimension;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -103,7 +100,7 @@ public class Minestuck
 	public void serverClosed(FMLServerStoppedEvent event)
 	{
 		isServerRunning = false;
-		MinestuckPlayerTracker.dataCheckerPermission.clear();
+		PlayerTracker.dataCheckerPermission.clear();
 		IdentifierHandler.clear();
 	}
 	
@@ -148,13 +145,13 @@ public class Minestuck
 		@SubscribeEvent
 		public static void onBlockRegistry(final RegistryEvent.Register<Block> event)
 		{
-			MinestuckBlocks.registerBlocks(event.getRegistry());
+			MSBlocks.registerBlocks(event.getRegistry());
 		}
 		
 		@SubscribeEvent
 		public static void onItemRegistry(final RegistryEvent.Register<Item> event)
 		{
-			MinestuckItems.registerItems(event.getRegistry());
+			MSItems.registerItems(event.getRegistry());
 		}
 	}
 }

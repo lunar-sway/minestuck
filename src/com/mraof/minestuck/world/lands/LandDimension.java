@@ -7,10 +7,8 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
-import com.mraof.minestuck.world.biome.ModBiomes;
-import com.mraof.minestuck.world.gen.ModWorldGenTypes;
+import com.mraof.minestuck.world.gen.MSWorldGenTypes;
 
-import com.mraof.minestuck.world.lands.gen.LandChunkGenerator;
 import com.mraof.minestuck.world.lands.gen.LandGenSettings;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
@@ -23,7 +21,6 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.provider.BiomeProviderType;
 import net.minecraft.world.dimension.Dimension;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.ChunkGenerator;
@@ -100,10 +97,10 @@ public class LandDimension extends Dimension
 	@Override
 	public ChunkGenerator<?> createChunkGenerator()
 	{
-		LandGenSettings settings = ModWorldGenTypes.LANDS.createSettings();
+		LandGenSettings settings = MSWorldGenTypes.LANDS.createSettings();
 		settings.setLandAspects(landAspects);
 		settings.setBiomeHolder(biomeHolder);
-		return ModWorldGenTypes.LANDS.create(this.world, ModWorldGenTypes.LAND_BIOMES.create(ModWorldGenTypes.LAND_BIOMES.createSettings().setGenSettings(settings).setSeed(this.getSeed())), settings);
+		return MSWorldGenTypes.LANDS.create(this.world, MSWorldGenTypes.LAND_BIOMES.create(MSWorldGenTypes.LAND_BIOMES.createSettings().setGenSettings(settings).setSeed(this.getSeed())), settings);
 	}
 	
 	public LandWrapperBiome getWrapperBiome(Biome biome)
