@@ -2,10 +2,10 @@ package com.mraof.minestuck.util;
 
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityType;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.*;
 import net.minecraft.util.ResourceLocation;
 
 public class MSTags
@@ -66,11 +66,42 @@ public class MSTags
 		public static final Tag<Item> LAPIS_ORES = tag("ores/lapis");
 		public static final Tag<Item> DIAMOND_ORES = tag("ores/diamond");
 		public static final Tag<Item> CRUXITE_STORAGE_BLOCKS = tag("storage_blocks/cruxite");
-		public static final Tag<Item> URANIUM_STORAGE_BLOCKS = tag("storage_blocks/uranium");
 		
 		private static Tag<Item> tag(String name)
 		{
 			return new ItemTags.Wrapper(new ResourceLocation(Minestuck.MOD_ID, name));
+		}
+	}
+	
+	public static class Fluids
+	{
+		public static final Tag<Fluid> OIL = tag("oil");
+		public static final Tag<Fluid> BLOOD = tag("blood");
+		public static final Tag<Fluid> BRAIN_JUICE = tag("brain_juice");
+		public static final Tag<Fluid> WATER_COLORS = tag("water_colors");
+		public static final Tag<Fluid> ENDER = tag("ender");
+		public static final Tag<Fluid> LIGHT_WATER = tag("light_water");
+		
+		private static Tag<Fluid> tag(String name)
+		{
+			return new FluidTags.Wrapper(new ResourceLocation(Minestuck.MOD_ID, name));
+		}
+	}
+	
+	public static class EntityTypes
+	{
+		public static final Tag<EntityType<?>> UNDERLINGS = tag("underlings");
+		public static final Tag<EntityType<?>> CONSORTS = tag("consorts");
+		public static final Tag<EntityType<?>> CARAPACIANS = tag("carapacians");
+		public static final Tag<EntityType<?>> DERSITE_CARAPACIANS = tag("carapacians/dersite");
+		public static final Tag<EntityType<?>> PROSPITIAN_CARAPACIANS = tag("carapacians/prospitian");
+		public static final Tag<EntityType<?>> PAWNS = tag("carapacians/pawn");
+		public static final Tag<EntityType<?>> BISHOPS = tag("carapacians/bishop");
+		public static final Tag<EntityType<?>> ROOKS = tag("carapacians/rook");
+		
+		private static Tag<EntityType<?>> tag(String name)
+		{
+			return new EntityTypeTags.Wrapper(new ResourceLocation(Minestuck.MOD_ID, name));
 		}
 	}
 }
