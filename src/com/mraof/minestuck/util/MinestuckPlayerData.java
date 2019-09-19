@@ -19,6 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class MinestuckPlayerData
 {
@@ -121,6 +122,7 @@ public class MinestuckPlayerData
 
 	public static PlayerData getData(PlayerIdentifier player)
 	{
+		Objects.requireNonNull(player);
 		if (!dataMap.containsKey(player))
 		{
 			PlayerData data = new PlayerData();

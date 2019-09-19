@@ -22,6 +22,7 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -80,7 +81,7 @@ public class ServerEventHandler
 	@SubscribeEvent(priority=EventPriority.LOWEST, receiveCanceled=false)
 	public void onEntityDeath(LivingDeathEvent event)
 	{
-		if(event.getEntity() instanceof IMob && event.getSource().getTrueSource() instanceof EntityPlayerMP)
+		if(event.getEntity() instanceof IMob && event.getSource().getTrueSource() instanceof EntityPlayerMP && !(event.getSource().getTrueSource() instanceof FakePlayer))
 		{
 			EntityPlayerMP player = (EntityPlayerMP) event.getSource().getTrueSource();
 			int exp = 0;
@@ -96,7 +97,7 @@ public class ServerEventHandler
 			if(exp > 0)
 				Echeladder.increaseProgress(player, exp);
 		}
-		if(event.getEntity() instanceof EntityPlayerMP)
+		if(event.getEntity() instanceof EntityPlayerMP && !(event.getSource().getTrueSource() instanceof FakePlayer))
 			SburbHandler.stopEntry((EntityPlayerMP) event.getEntity());
 	}
 

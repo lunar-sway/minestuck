@@ -17,11 +17,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.init.SoundEvents;
-import net.minecraftforge.client.event.sound.PlaySoundEvent;
-import net.minecraftforge.event.entity.PlaySoundAtEntityEvent;
 import net.minecraft.util.math.MathHelper;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -45,7 +43,7 @@ public class Echeladder
 		MinestuckPlayerData.getData(player).echeladder.increaseProgress(progress);
 	}
 	
-	private PlayerIdentifier identifier;
+	private final PlayerIdentifier identifier;
 	private int rung;
 	private int progress;
 	
@@ -54,7 +52,7 @@ public class Echeladder
 	
 	public Echeladder(PlayerIdentifier identifier)
 	{
-		this.identifier = identifier;
+		this.identifier = Objects.requireNonNull(identifier);
 	}
 	
 	private int getRungProgressReq()
