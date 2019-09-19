@@ -30,7 +30,7 @@ public class EditmodeContainer extends Container
 	
 	public EditmodeContainer(int windowId, PlayerInventory playerInventory)
 	{
-		super(MSContainerTypes.EDITMODE, windowId);
+		super(MSContainerTypes.EDIT_MODE, windowId);
 		this.player = playerInventory.player;
 		addSlots();
 		if(player instanceof ServerPlayerEntity)
