@@ -1,4 +1,4 @@
-package com.mraof.minestuck.data;
+package com.mraof.minestuck.data.recipe;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
@@ -26,7 +26,7 @@ import java.util.function.Consumer;
 
 public class MinestuckRecipeProvider extends RecipeProvider
 {
-	MinestuckRecipeProvider(DataGenerator generator)
+	public MinestuckRecipeProvider(DataGenerator generator)
 	{
 		super(generator);
 	}

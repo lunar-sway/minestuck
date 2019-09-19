@@ -4,8 +4,8 @@ package com.mraof.minestuck.tileentity;
 import com.mraof.minestuck.block.TotemLatheBlock;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.alchemy.AlchemyRecipes;
-import com.mraof.minestuck.alchemy.CombinationRegistry;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry;
 
 import com.mraof.minestuck.util.ColorCollector;
 import com.mraof.minestuck.util.Debug;

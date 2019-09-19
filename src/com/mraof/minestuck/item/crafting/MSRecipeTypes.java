@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item.crafting;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
 import net.minecraft.item.crafting.CookingRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
@@ -18,10 +19,12 @@ import javax.annotation.Nonnull;
 public class MSRecipeTypes
 {
 	public static IRecipeType<IrradiatingRecipe> IRRADIATING_TYPE = IRecipeType.register(Minestuck.MOD_ID+":irradiating");
+	public static IRecipeType<GristCostRecipe> GRIST_COST_TYPE = IRecipeType.register(Minestuck.MOD_ID+":grist_cost");
 	
 	public static final IRecipeSerializer<NonMirroredRecipe> NON_MIRRORED = getNull();
 	public static final CookingRecipeSerializer<IrradiatingRecipe> IRRADIATING = getNull();
 	public static final IRecipeSerializer<IrradiatingFallbackRecipe> IRRADIATING_FALLBACK = getNull();
+	public static final IRecipeSerializer<GristCostRecipe> GRIST_COST = getNull();
 	
 	@Nonnull
 	@SuppressWarnings("ConstantConditions")
@@ -37,5 +40,6 @@ public class MSRecipeTypes
 		registry.register(new NonMirroredRecipe.Serializer().setRegistryName("non_mirrored"));
 		registry.register(new CookingRecipeSerializer<>(IrradiatingRecipe::new, 20).setRegistryName("irradiating"));
 		registry.register(new IrradiatingFallbackRecipe.Serializer().setRegistryName("irradiating_fallback"));
+		registry.register(new GristCostRecipe.Serializer().setRegistryName("grist_cost"));
 	}
 }

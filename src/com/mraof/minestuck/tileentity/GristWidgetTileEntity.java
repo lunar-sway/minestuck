@@ -1,7 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.*;
+import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.block.GristWidgetBlock;
 import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.inventory.GristWidgetContainer;
@@ -17,6 +17,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.Map.Entry;
@@ -35,13 +36,15 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 	
 	public GristSet getGristWidgetResult()
 	{
-		return getGristWidgetResult(inv.get(0));
+		return getGristWidgetResult(inv.get(0), world);
 	}
 	
-	public static GristSet getGristWidgetResult(ItemStack stack)
+	public static GristSet getGristWidgetResult(ItemStack stack, World world)
 	{
+		if(world == null)
+			return null;
 		ItemStack heldItem = AlchemyRecipes.getDecodedItem(stack, true);
-		GristSet gristSet = AlchemyCostRegistry.getGristConversion(heldItem);
+		GristSet gristSet = GristCostRecipe.findCostForItem(heldItem, world);
 		if(stack.getItem() != MSItems.CAPTCHA_CARD || AlchemyRecipes.isPunchedCard(stack)
 				|| heldItem.getItem() == MSItems.CAPTCHA_CARD || gristSet == null)
 			return null;

@@ -28,7 +28,7 @@ public abstract class CarapacianEntity extends MinestuckEntity
 	protected static EntityListFilter dersiteSelector = new EntityListFilter(dersiteTypes);
 	static
 	{
-		dersiteTypes.add(MSEntityTypes.DERSITE_PAWN);
+		dersiteTypes.add(MSEntityTypes.DERSITE_PAWN);	//TODO Use tags instead of these lists
 		dersiteTypes.add(MSEntityTypes.DERSITE_BISHOP);
 		dersiteTypes.add(MSEntityTypes.DERSITE_ROOK);
 

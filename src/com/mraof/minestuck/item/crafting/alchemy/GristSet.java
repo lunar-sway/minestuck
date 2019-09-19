@@ -1,6 +1,16 @@
-package com.mraof.minestuck.alchemy;
+package com.mraof.minestuck.item.crafting.alchemy;
+
+import com.google.common.collect.ImmutableMap;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.mraof.minestuck.util.Debug;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.ResourceLocation;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -8,7 +18,7 @@ import java.util.stream.Collectors;
 public class GristSet
 {
 
-	public TreeMap<GristType, Integer> gristTypes;
+	private final Map<GristType, Integer> gristTypes;
 
 	/**
 	 * Creates a blank set of grist values, used in setting up the Grist Registry.
@@ -18,9 +28,21 @@ public class GristSet
 		this.gristTypes = new TreeMap<>();
 	}
 
-	public GristSet(Map<GristType, Integer> map)
+	private GristSet(Map<GristType, Integer> map)
 	{
-		this.gristTypes = new TreeMap<>(map);
+		this.gristTypes = map;
+	}
+	
+	public static GristSet immutable(ImmutableMap<GristType, Integer> map)	//Hopefully this doesn't break sorting
+	{
+		return new GristSet(map);
+	}
+	
+	public GristSet asImmutable()
+	{
+		if(gristTypes instanceof ImmutableMap)
+			return this;
+		else return immutable(ImmutableMap.copyOf(this.gristTypes));
 	}
 
 	/**
@@ -102,7 +124,7 @@ public class GristSet
 	/**
 	 * Returns a Hashtable with grist->amount pairs.
 	 */
-	public TreeMap<GristType, Integer> getMap()
+	public Map<GristType, Integer> getMap()
 	{
 		return this.gristTypes;
 	}
@@ -182,7 +204,55 @@ public class GristSet
 
 	public GristSet copy()
 	{
-		return new GristSet(this.gristTypes);
+		return new GristSet(new TreeMap<>(gristTypes));
 	}
-
+	
+	public JsonElement serialize()
+	{
+		JsonObject json = new JsonObject();
+		for(Map.Entry<GristType, Integer> entry : gristTypes.entrySet())
+		{
+			ResourceLocation id = entry.getKey().getRegistryName();
+			if(id == null)
+			{
+				Debug.warnf("Found grist type without a registry name! (%s)", entry.getKey());
+				continue;
+			}
+			json.addProperty(id.toString(), entry.getValue());
+		}
+		return json;
+	}
+	
+	public static GristSet deserialize(JsonObject json)
+	{
+		GristSet set = new GristSet();
+		for(Map.Entry<String, JsonElement> entry : json.entrySet())
+		{
+			ResourceLocation gristId = new ResourceLocation(entry.getKey());
+			GristType type = GristType.REGISTRY.getValue(gristId);
+			if(type == null)
+				throw new JsonParseException("'"+entry.getKey()+"' did not match an existing grist type!");
+			int amount = entry.getValue().getAsInt();
+			set.addGrist(type, amount);
+		}
+		
+		return set;
+	}
+	
+	public void write(PacketBuffer buffer)
+	{
+		List<GristAmount> amounts = getArray();
+		buffer.writeInt(amounts.size());
+		amounts.forEach(gristAmount -> gristAmount.write(buffer));
+	}
+	
+	public static GristSet read(PacketBuffer buffer)
+	{
+		int size = buffer.readInt();
+		GristAmount[] amounts = new GristAmount[size];
+		for(int i = 0; i < size; i++)
+			amounts[i] = GristAmount.read(buffer);
+		
+		return new GristSet(amounts);
+	}
 }

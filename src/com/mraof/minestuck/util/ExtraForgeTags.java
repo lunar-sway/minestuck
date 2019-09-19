@@ -16,6 +16,7 @@ public class ExtraForgeTags
 	{
 		public static final Tag<Block> URANIUM_ORES = tag("ores/uranium");
 		public static final Tag<Block> URANIUM_STORAGE_BLOCKS = tag("storage_blocks/uranium");
+		public static final Tag<Block> TERRACOTTA = tag("terracotta");
 		
 		private static Tag<Block> tag(String name)
 		{
@@ -28,6 +29,7 @@ public class ExtraForgeTags
 		public static final Tag<Item> URANIUM_ORES = tag("ores/uranium");
 		public static final Tag<Item> URANIUM_STORAGE_BLOCKS = tag("storage_blocks/uranium");
 		public static final Tag<Item> URANIUM_CHUNKS = tag("chunks/uranium");
+		public static final Tag<Item> TERRACOTTA = tag("terracotta");
 		
 		private static Tag<Item> tag(String name)
 		{

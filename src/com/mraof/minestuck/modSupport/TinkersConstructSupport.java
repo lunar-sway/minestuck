@@ -1,13 +1,5 @@
 package com.mraof.minestuck.modSupport;
 
-import com.mraof.minestuck.alchemy.CombinationRegistry;
-import com.mraof.minestuck.alchemy.AlchemyCostRegistry;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.GristType;
-
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-
 public class TinkersConstructSupport extends ModSupport
 {
 	

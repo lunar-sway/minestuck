@@ -1,4 +1,4 @@
-package com.mraof.minestuck.alchemy;
+package com.mraof.minestuck.item.crafting.alchemy;
 
 import com.google.common.collect.Lists;
 import com.mraof.minestuck.util.Debug;

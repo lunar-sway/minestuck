@@ -1,6 +1,6 @@
 package com.mraof.minestuck.jei;
 /*
-import com.mraof.minestuck.alchemy.GristAmount;
+import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;

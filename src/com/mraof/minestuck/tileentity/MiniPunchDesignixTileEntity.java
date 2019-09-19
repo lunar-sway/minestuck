@@ -1,7 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
-import com.mraof.minestuck.alchemy.AlchemyRecipes;
-import com.mraof.minestuck.alchemy.CombinationRegistry;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry;
 import com.mraof.minestuck.inventory.MiniPunchDesignixContainer;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.entity.player.PlayerEntity;

@@ -1,4 +1,6 @@
-package com.mraof.minestuck.alchemy;
+package com.mraof.minestuck.item.crafting.alchemy;
+
+import net.minecraft.network.PacketBuffer;
 
 /**
  * Container for a GristType + integer combination that might be useful when iterating through a GristSet.
@@ -53,4 +55,16 @@ public class GristAmount
 		return type.hashCode() + new Integer(amount).hashCode();
 	}
 	
+	public void write(PacketBuffer buffer)
+	{
+		buffer.writeRegistryId(getType());
+		buffer.writeInt(getAmount());
+	}
+	
+	public static GristAmount read(PacketBuffer buffer)
+	{
+		GristType type = buffer.readRegistryIdSafe(GristType.class);
+		int amount = buffer.readInt();
+		return new GristAmount(type, amount);
+	}
 }

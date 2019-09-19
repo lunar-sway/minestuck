@@ -1,9 +1,9 @@
 package com.mraof.minestuck.entity.underling;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.entity.EntityBigPart;
 import com.mraof.minestuck.entity.IBigEntity;
 import com.mraof.minestuck.entity.PartGroup;

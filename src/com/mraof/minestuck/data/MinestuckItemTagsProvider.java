@@ -24,7 +24,6 @@ import static net.minecraftforge.common.Tags.Items.*;
 
 public class MinestuckItemTagsProvider extends ItemTagsProvider
 {
-	private Set<ResourceLocation> filter;
 	
 	MinestuckItemTagsProvider(DataGenerator generatorIn)
 	{
@@ -57,6 +56,7 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		copy(Tags.Blocks.STORAGE_BLOCKS, STORAGE_BLOCKS);
 		copy(ExtraForgeTags.Blocks.URANIUM_ORES, ExtraForgeTags.Items.URANIUM_ORES);
 		copy(ExtraForgeTags.Blocks.URANIUM_STORAGE_BLOCKS, ExtraForgeTags.Items.URANIUM_STORAGE_BLOCKS);
+		copy(ExtraForgeTags.Blocks.TERRACOTTA, ExtraForgeTags.Items.TERRACOTTA);
 		copy(MSTags.Blocks.GLOWING_LOGS, GLOWING_LOGS);
 		copy(MSTags.Blocks.FROST_LOGS, FROST_LOGS);
 		copy(MSTags.Blocks.RAINBOW_LOGS, RAINBOW_LOGS);
@@ -80,41 +80,11 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		copy(MSTags.Blocks.DIAMOND_ORES, DIAMOND_ORES);
 		copy(MSTags.Blocks.CRUXITE_STORAGE_BLOCKS, CRUXITE_STORAGE_BLOCKS);
 		
-		fakePopulate(INGOTS_IRON);
-		fakePopulate(RODS_WOODEN);
-		
 		getBuilder(ItemTags.MUSIC_DISCS).add(RECORD_DANCE_STAB, RECORD_EMISSARY_OF_DANCE, RECORD_RETRO_BATTLE);
 		getBuilder(Tags.Items.MUSIC_DISCS).add(RECORD_DANCE_STAB, RECORD_EMISSARY_OF_DANCE, RECORD_RETRO_BATTLE);
 		getBuilder(DUSTS).add(MSBlocks.GLOWYSTONE_DUST.asItem());
 		getBuilder(RODS).add(UP_STICK);
 		getBuilder(ExtraForgeTags.Items.URANIUM_CHUNKS).add(RAW_URANIUM);
-	}
-	
-	/**
-	 * Used to work around an issue with using empty tags in recipe data providers
-	 */
-	protected void fakePopulate(Tag<Item> tag)
-	{
-		if(tagToBuilder.containsKey(tag))
-			throw new IllegalStateException("Shouldn't do a fake populate on a tag with a builder!");
-		getBuilder(tag).add(Items.BARRIER);
-		if(filter == null)
-			filter = Sets.newHashSet();
-		filter.add(tag.getId());
-	}
-	
-	@Override
-	protected Tag.Builder<Item> getBuilder(Tag<Item> tag)
-	{
-		if(filter != null && filter.contains(tag.getId()))
-			throw new IllegalStateException("Should't get a builder on a tag that has been passed to fakePopulate()!");
-		return super.getBuilder(tag);
-	}
-	
-	@Override
-	protected Path makePath(ResourceLocation tagName)
-	{
-		return filter != null && filter.contains(tagName) ? null : super.makePath(tagName);
 	}
 	
 	@Override

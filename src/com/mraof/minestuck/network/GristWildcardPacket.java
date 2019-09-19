@@ -3,7 +3,7 @@ package com.mraof.minestuck.network;
 import com.mraof.minestuck.tileentity.AlchemiterTileEntity;
 import com.mraof.minestuck.tileentity.MiniAlchemiterTileEntity;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;

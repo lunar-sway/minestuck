@@ -2,7 +2,7 @@ package com.mraof.minestuck.item;
 
 import java.util.List;
 
-import com.mraof.minestuck.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemFrameEntity;

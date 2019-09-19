@@ -1,13 +1,14 @@
 package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.util.ExtraForgeTags;
+import net.minecraft.block.Blocks;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
+import net.minecraftforge.common.Tags;
 
 import static com.mraof.minestuck.block.MSBlocks.*;
 import static com.mraof.minestuck.util.MSTags.Blocks.*;
 import static net.minecraft.tags.BlockTags.*;
-import static net.minecraftforge.common.Tags.*;
 
 public class MinestuckBlockTagsProvider extends BlockTagsProvider
 {
@@ -32,21 +33,22 @@ public class MinestuckBlockTagsProvider extends BlockTagsProvider
 		getBuilder(SLABS).add(CHALK_SLAB, CHALK_BRICK_SLAB, PINK_STONE_BRICK_SLAB);
 		getBuilder(LEAVES).add(FROST_LEAVES, RAINBOW_LEAVES, END_LEAVES).add(ASPECT_LEAVES);
 		getBuilder(DIRT_LIKE).add(BLACK_CHESS_DIRT, WHITE_CHESS_DIRT, DARK_GRAY_CHESS_DIRT, LIGHT_GRAY_CHESS_DIRT, BLUE_DIRT, THOUGHT_DIRT);
-		getBuilder(Blocks.COBBLESTONE).add(FLOWERY_MOSSY_COBBLESTONE);
-		getBuilder(Blocks.END_STONES).add(COARSE_END_STONE);
-		getBuilder(Blocks.ORES).add(CRUXITE_ORES, ExtraForgeTags.Blocks.URANIUM_ORES);
-		getBuilder(Blocks.ORES_COAL).add(COAL_ORES);
-		getBuilder(Blocks.ORES_DIAMOND).add(DIAMOND_ORES);
-		getBuilder(Blocks.ORES_GOLD).add(GOLD_ORES);
-		getBuilder(Blocks.ORES_IRON).add(IRON_ORES);
-		getBuilder(Blocks.ORES_LAPIS).add(LAPIS_ORES);
-		getBuilder(Blocks.ORES_QUARTZ).add(QUARTZ_ORES);
-		getBuilder(Blocks.ORES_REDSTONE).add(REDSTONE_ORES);
-		getBuilder(Blocks.STONE).add(COARSE_STONE, BLACK_STONE, COARSE_END_STONE, PINK_STONE);
-		getBuilder(Blocks.STORAGE_BLOCKS).add(CRUXITE_STORAGE_BLOCKS, ExtraForgeTags.Blocks.URANIUM_STORAGE_BLOCKS);
+		getBuilder(Tags.Blocks.COBBLESTONE).add(FLOWERY_MOSSY_COBBLESTONE);
+		getBuilder(Tags.Blocks.END_STONES).add(COARSE_END_STONE);
+		getBuilder(Tags.Blocks.ORES).add(CRUXITE_ORES, ExtraForgeTags.Blocks.URANIUM_ORES);
+		getBuilder(Tags.Blocks.ORES_COAL).add(COAL_ORES);
+		getBuilder(Tags.Blocks.ORES_DIAMOND).add(DIAMOND_ORES);
+		getBuilder(Tags.Blocks.ORES_GOLD).add(GOLD_ORES);
+		getBuilder(Tags.Blocks.ORES_IRON).add(IRON_ORES);
+		getBuilder(Tags.Blocks.ORES_LAPIS).add(LAPIS_ORES);
+		getBuilder(Tags.Blocks.ORES_QUARTZ).add(QUARTZ_ORES);
+		getBuilder(Tags.Blocks.ORES_REDSTONE).add(REDSTONE_ORES);
+		getBuilder(Tags.Blocks.STONE).add(COARSE_STONE, BLACK_STONE, COARSE_END_STONE, PINK_STONE);
+		getBuilder(Tags.Blocks.STORAGE_BLOCKS).add(CRUXITE_STORAGE_BLOCKS, ExtraForgeTags.Blocks.URANIUM_STORAGE_BLOCKS);
 		
 		getBuilder(ExtraForgeTags.Blocks.URANIUM_ORES).add(URANIUM_ORES);
 		getBuilder(ExtraForgeTags.Blocks.URANIUM_STORAGE_BLOCKS).add(URANIUM_BLOCK);
+		getBuilder(ExtraForgeTags.Blocks.TERRACOTTA).add(Blocks.TERRACOTTA, Blocks.BLACK_GLAZED_TERRACOTTA, Blocks.BLACK_TERRACOTTA, Blocks.BLUE_GLAZED_TERRACOTTA, Blocks.BLUE_TERRACOTTA, Blocks.BROWN_GLAZED_TERRACOTTA, Blocks.BROWN_TERRACOTTA, Blocks.CYAN_GLAZED_TERRACOTTA, Blocks.CYAN_TERRACOTTA, Blocks.GRAY_GLAZED_TERRACOTTA, Blocks.GRAY_TERRACOTTA, Blocks.GREEN_GLAZED_TERRACOTTA, Blocks.GREEN_TERRACOTTA, Blocks.LIGHT_BLUE_GLAZED_TERRACOTTA, Blocks.LIGHT_BLUE_TERRACOTTA, Blocks.LIGHT_GRAY_GLAZED_TERRACOTTA, Blocks.LIGHT_GRAY_TERRACOTTA, Blocks.LIME_GLAZED_TERRACOTTA, Blocks.LIME_TERRACOTTA, Blocks.MAGENTA_GLAZED_TERRACOTTA, Blocks.MAGENTA_TERRACOTTA, Blocks.ORANGE_GLAZED_TERRACOTTA, Blocks.ORANGE_TERRACOTTA, Blocks.PINK_GLAZED_TERRACOTTA, Blocks.PINK_TERRACOTTA, Blocks.PURPLE_GLAZED_TERRACOTTA, Blocks.PURPLE_TERRACOTTA, Blocks.RED_GLAZED_TERRACOTTA, Blocks.RED_TERRACOTTA, Blocks.WHITE_GLAZED_TERRACOTTA, Blocks.WHITE_TERRACOTTA, Blocks.YELLOW_GLAZED_TERRACOTTA, Blocks.YELLOW_TERRACOTTA);
 		
 		getBuilder(GLOWING_LOGS).add(GLOWING_LOG, GLOWING_WOOD);
 		getBuilder(FROST_LOGS).add(FROST_LOG, FROST_WOOD);
@@ -70,7 +72,7 @@ public class MinestuckBlockTagsProvider extends BlockTagsProvider
 		getBuilder(LAPIS_ORES).add(PINK_STONE_LAPIS_ORE);
 		getBuilder(DIAMOND_ORES).add(PINK_STONE_DIAMOND_ORE);
 		getBuilder(CRUXITE_STORAGE_BLOCKS).add(CRUXITE_BLOCK);
-		getBuilder(END_SAPLING_DIRT).add(Blocks.END_STONES).add(END_GRASS);
+		getBuilder(END_SAPLING_DIRT).add(Tags.Blocks.END_STONES).add(END_GRASS);
 	}
 	
 	@Override

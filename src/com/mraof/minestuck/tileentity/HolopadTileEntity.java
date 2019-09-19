@@ -2,7 +2,7 @@ package com.mraof.minestuck.tileentity;
 
 import java.util.List;
 
-import com.mraof.minestuck.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.item.HologramEntity;
 import com.mraof.minestuck.item.MSItems;

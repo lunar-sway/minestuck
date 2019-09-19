@@ -1,4 +1,4 @@
-package com.mraof.minestuck.data;
+package com.mraof.minestuck.data.recipe;
 
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;

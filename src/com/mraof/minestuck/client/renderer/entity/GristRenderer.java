@@ -2,8 +2,6 @@ package com.mraof.minestuck.client.renderer.entity;
 
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.entity.item.GristEntity;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
