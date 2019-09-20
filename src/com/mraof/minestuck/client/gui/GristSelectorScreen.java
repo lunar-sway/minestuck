@@ -116,7 +116,9 @@ public class GristSelectorScreen extends MinestuckScreen
 					BlockPos pos;
 					if(otherScreen instanceof AlchemiterScreen)
 						pos = ((AlchemiterScreen) otherScreen).getAlchemiter().getPos();
-					else pos = null;
+					else if(otherScreen instanceof MiniAlchemiterScreen)
+						pos = ((MiniAlchemiterScreen) otherScreen).getContainer().machinePos;
+					else break;
 					otherScreen.width = this.width;
 					otherScreen.height = this.height;
 					minecraft.currentScreen = otherScreen;

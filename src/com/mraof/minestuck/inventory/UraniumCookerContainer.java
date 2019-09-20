@@ -10,9 +10,11 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
 import net.minecraft.util.IntReferenceHolder;
+import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nonnull;
 
@@ -29,19 +31,19 @@ public class UraniumCookerContainer extends MachineContainer
 	private final IInventory cookerInventory;
 	private final IntReferenceHolder fuelHolder;
 	
-	public UraniumCookerContainer(int windowId, PlayerInventory playerInventory)
+	public UraniumCookerContainer(int windowId, PlayerInventory playerInventory, PacketBuffer buffer)
 	{
-		this(MSContainerTypes.URANIUM_COOKER, windowId, playerInventory, new Inventory(3), new IntArray(3), IntReferenceHolder.single());
+		this(MSContainerTypes.URANIUM_COOKER, windowId, playerInventory, new Inventory(3), new IntArray(3), IntReferenceHolder.single(), buffer.readBlockPos());
 	}
 	
-	public UraniumCookerContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, IntReferenceHolder fuelHolder)
+	public UraniumCookerContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, IntReferenceHolder fuelHolder, BlockPos machinePos)
 	{
-		this(MSContainerTypes.URANIUM_COOKER, windowId, playerInventory, inventory, parameters, fuelHolder);
+		this(MSContainerTypes.URANIUM_COOKER, windowId, playerInventory, inventory, parameters, fuelHolder, machinePos);
 	}
 	
-	public UraniumCookerContainer(ContainerType<? extends UraniumCookerContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, IntReferenceHolder fuelHolder)
+	public UraniumCookerContainer(ContainerType<? extends UraniumCookerContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, IntReferenceHolder fuelHolder, BlockPos machinePos)
 	{
-		super(type, windowId, parameters);
+		super(type, windowId, parameters, machinePos);
 		
 		assertInventorySize(inventory, 3);
 		this.cookerInventory = inventory;

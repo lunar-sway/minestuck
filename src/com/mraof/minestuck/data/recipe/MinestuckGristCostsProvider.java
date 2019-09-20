@@ -1,6 +1,7 @@
 package com.mraof.minestuck.data.recipe;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.util.ExtraForgeTags;
 import net.minecraft.data.DataGenerator;
@@ -37,6 +38,9 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(ItemTags.SAPLINGS).grist(GristType.BUILD, 16).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(ItemTags.PLANKS).grist(GristType.BUILD, 2).buildFor(recipeSaver, Minestuck.MOD_ID);
 		
+		
+		
+		GristCostRecipeBuilder.of(MSItems.CAPTCHA_CARD).wildcard(1).build(recipeSaver);
 	}
 	
 	@Override

@@ -11,9 +11,11 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
 import net.minecraft.util.IntReferenceHolder;
+import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nonnull;
 
@@ -28,19 +30,19 @@ public class MiniAlchemiterContainer extends MachineContainer
 	private final IInventory alchemiterInventory;
 	private final IntReferenceHolder wildcardHolder;
 	
-	public MiniAlchemiterContainer(int windowId, PlayerInventory playerInventory)
+	public MiniAlchemiterContainer(int windowId, PlayerInventory playerInventory, PacketBuffer buffer)
 	{
-		this(MSContainerTypes.MINI_ALCHEMITER, windowId, playerInventory, new Inventory(2), new IntArray(3), IntReferenceHolder.single());
+		this(MSContainerTypes.MINI_ALCHEMITER, windowId, playerInventory, new Inventory(2), new IntArray(3), IntReferenceHolder.single(), buffer.readBlockPos());
 	}
 	
-	public MiniAlchemiterContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, IntReferenceHolder wildcardHolder)
+	public MiniAlchemiterContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, IntReferenceHolder wildcardHolder, BlockPos machinePos)
 	{
-		this(MSContainerTypes.MINI_ALCHEMITER, windowId, playerInventory, inventory, parameters, wildcardHolder);
+		this(MSContainerTypes.MINI_ALCHEMITER, windowId, playerInventory, inventory, parameters, wildcardHolder, machinePos);
 	}
 	
-	public MiniAlchemiterContainer(ContainerType<? extends MiniAlchemiterContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, IntReferenceHolder wildcardHolder)
+	public MiniAlchemiterContainer(ContainerType<? extends MiniAlchemiterContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, IntReferenceHolder wildcardHolder, BlockPos machinePos)
 	{
-		super(type, windowId, parameters);
+		super(type, windowId, parameters, machinePos);
 		
 		assertInventorySize(inventory, 2);
 		this.alchemiterInventory = inventory;

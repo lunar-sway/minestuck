@@ -54,7 +54,6 @@ public class MinestuckConfig
 	public static String[] defaultModusTypes = new String[0];
 	public static ConfigValue<List<String>> cfg_defaultModusTypes;
 	public static IntValue modusMaxSize;
-	public static IntValue cardCost;
 	public static byte treeModusSetting;
 	public static ConfigValue<String> cfg_treeModusSetting;
 	public static byte hashmapChatModusSetting;
@@ -109,7 +108,6 @@ public class MinestuckConfig
 	//Client side
 	public static int clientOverworldEditRange;
 	public static int clientLandEditRange;
-	public static int clientCardCost;
 	public static int clientAlchemiterStacks;
 	public static byte clientTreeAutobalance;
 	public static byte clientHashmapChat;
@@ -172,8 +170,6 @@ public class MinestuckConfig
 				.define("sylladex.defaultModusTypes", new ArrayList<>(Arrays.asList("minestuck:stack","minestuck:queue")));
 		modusMaxSize = server_builder.comment("The max size on a modus. Ignored if the value is 0.")
 				.defineInRange("sylladex.modusMaxSize", 0, 0, Integer.MAX_VALUE);
-		cardCost = server_builder.comment("An integer that determines how much a captchalouge card costs to alchemize")
-				.defineInRange("sylladex.cardCost", 1, 0, Integer.MAX_VALUE);
 		cfg_treeModusSetting = server_builder.comment("This determines if auto-balance should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.")
 				.define("sylladex.treeModusSetting", "both");
 		cfg_hashmapChatModusSetting = server_builder.comment("This determines if hashmap chat ejection should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.")

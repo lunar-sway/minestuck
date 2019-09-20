@@ -11,8 +11,10 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
+import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nonnull;
 
@@ -29,19 +31,19 @@ public class MiniTotemLatheContainer extends MachineContainer
 	
 	private final IInventory totemLatheInventory;
 	
-	public MiniTotemLatheContainer(int windowId, PlayerInventory playerInventory)
+	public MiniTotemLatheContainer(int windowId, PlayerInventory playerInventory, PacketBuffer buffer)
 	{
-		this(MSContainerTypes.MINI_TOTEM_LATHE, windowId, playerInventory, new Inventory(4), new IntArray(3));
+		this(MSContainerTypes.MINI_TOTEM_LATHE, windowId, playerInventory, new Inventory(4), new IntArray(3), buffer.readBlockPos());
 	}
 	
-	public MiniTotemLatheContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters)
+	public MiniTotemLatheContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, BlockPos machinePos)
 	{
-		this(MSContainerTypes.MINI_TOTEM_LATHE, windowId, playerInventory, inventory, parameters);
+		this(MSContainerTypes.MINI_TOTEM_LATHE, windowId, playerInventory, inventory, parameters, machinePos);
 	}
 	
-	public MiniTotemLatheContainer(ContainerType<? extends MiniTotemLatheContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters)
+	public MiniTotemLatheContainer(ContainerType<? extends MiniTotemLatheContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, BlockPos machinePos)
 	{
-		super(type, windowId, parameters);
+		super(type, windowId, parameters, machinePos);
 		
 		assertInventorySize(inventory, 4);
 		this.totemLatheInventory = inventory;

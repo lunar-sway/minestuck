@@ -10,14 +10,13 @@ import net.minecraftforge.fml.network.NetworkEvent;
 import java.util.Arrays;
 import java.util.function.Supplier;
 
-public class ModConfigPacket
+public class ModConfigPacket	//TODO It might be that configs are synced already. Check if this packet actually is needed for the typical config options
 {
 	
 	boolean mode;
 	
 	int overWorldEditRange;
 	int landEditRange;
-	int cardCost;
 	int alchemiterStacks;
 	int windowIdStart;
 	byte treeModusSetting;
@@ -52,7 +51,6 @@ public class ModConfigPacket
 	public ModConfigPacket(boolean dataChecker)
 	{
 		mode = false;
-		cardCost = MinestuckConfig.cardCost.get();
 		alchemiterStacks = MinestuckConfig.alchemiterMaxStacks.get();
 		disableGristWidget = MinestuckConfig.disableGristWidget.get();
 		treeModusSetting = MinestuckConfig.treeModusSetting;
@@ -76,7 +74,6 @@ public class ModConfigPacket
 				buffer.writeBoolean(deployValues[i]);
 		} else
 		{
-			buffer.writeInt(cardCost);
 			buffer.writeInt(alchemiterStacks);
 			buffer.writeBoolean(disableGristWidget);
 			buffer.writeByte(treeModusSetting);
@@ -105,7 +102,6 @@ public class ModConfigPacket
 				packet.deployValues[i] = buffer.readBoolean();
 		} else
 		{
-			packet.cardCost = buffer.readInt();
 			packet.alchemiterStacks = buffer.readInt();
 			packet.disableGristWidget = buffer.readBoolean();
 			packet.treeModusSetting = buffer.readByte();
@@ -141,7 +137,6 @@ public class ModConfigPacket
 			}
 		} else
 		{
-			MinestuckConfig.clientCardCost = cardCost;
 			MinestuckConfig.clientAlchemiterStacks = alchemiterStacks;
 			MinestuckConfig.clientDisableGristWidget = disableGristWidget;
 			MinestuckConfig.clientTreeAutobalance = treeModusSetting;

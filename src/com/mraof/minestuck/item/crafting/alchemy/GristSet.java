@@ -1,7 +1,6 @@
 package com.mraof.minestuck.item.crafting.alchemy;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
@@ -158,17 +157,22 @@ public class GristSet
 		this.addGrist(grist.getType(), grist.getAmount());
 		return this;
 	}
-
+	
+	public GristSet scale(int scale)
+	{
+		return scale(scale, true);
+	}
+	
 	/**
 	 * Multiplies all the grist amounts by a factor.
 	 */
-	public GristSet scaleGrist(float scale)
+	public GristSet scale(float scale, boolean roundDown)
 	{
 
 		this.gristTypes.forEach((type, amount) -> {
 			if (amount > 0)
 			{
-				this.gristTypes.put(type, (int) Math.max(amount * scale, 1));
+				this.gristTypes.put(type, roundDown ? (int) (amount * scale) : Math.max(Math.round(amount * scale), 1));
 			}
 		});
 

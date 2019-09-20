@@ -6,6 +6,7 @@ import net.minecraft.inventory.container.ContainerType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.network.IContainerFactory;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.ObjectHolder;
 
@@ -36,12 +37,12 @@ public class MSContainerTypes
 	public static void onRegisterContainerType(RegistryEvent.Register<ContainerType<?>> event)
 	{
 		IForgeRegistry<ContainerType<?>> registry = event.getRegistry();
-		registry.register(new ContainerType<>(MiniCruxtruderContainer::new).setRegistryName("mini_cruxtruder"));
-		registry.register(new ContainerType<>(MiniTotemLatheContainer::new).setRegistryName("mini_totem_lathe"));
-		registry.register(new ContainerType<>(MiniAlchemiterContainer::new).setRegistryName("mini_alchemiter"));
-		registry.register(new ContainerType<>(MiniPunchDesignixContainer::new).setRegistryName("mini_punch_designix"));
-		registry.register(new ContainerType<>(GristWidgetContainer::new).setRegistryName("grist_widget"));
-		registry.register(new ContainerType<>(UraniumCookerContainer::new).setRegistryName("uranium_cooker"));
+		registry.register(new ContainerType<>((IContainerFactory<MiniCruxtruderContainer>) MiniCruxtruderContainer::new).setRegistryName("mini_cruxtruder"));
+		registry.register(new ContainerType<>((IContainerFactory<MiniTotemLatheContainer>) MiniTotemLatheContainer::new).setRegistryName("mini_totem_lathe"));
+		registry.register(new ContainerType<>((IContainerFactory<MiniAlchemiterContainer>) MiniAlchemiterContainer::new).setRegistryName("mini_alchemiter"));
+		registry.register(new ContainerType<>((IContainerFactory<MiniPunchDesignixContainer>) MiniPunchDesignixContainer::new).setRegistryName("mini_punch_designix"));
+		registry.register(new ContainerType<>((IContainerFactory<GristWidgetContainer>) GristWidgetContainer::new).setRegistryName("grist_widget"));
+		registry.register(new ContainerType<>((IContainerFactory<UraniumCookerContainer>) UraniumCookerContainer::new).setRegistryName("uranium_cooker"));
 		registry.register(new ContainerType<>(CaptchaDeckContainer::new).setRegistryName("captcha_deck"));
 		registry.register(new ContainerType<>(EditmodeContainer::new).setRegistryName("edit_mode"));
 		registry.register(new ContainerType<>(ConsortMerchantContainer::new).setRegistryName("consort_merchant"));

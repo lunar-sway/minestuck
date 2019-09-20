@@ -87,9 +87,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 			{
 				return false;
 			}
-			GristSet cost = AlchemyCostRegistry.getGristConversion(newItem);
-			if(newItem.getItem() == MSItems.CAPTCHA_CARD)
-				cost = new GristSet(wildcardGrist, MinestuckConfig.cardCost.get());
+			GristSet cost = GristCostRecipe.findCostForItem(newItem, wildcardGrist, false, world);
 			
 			return GristHelper.canAfford(PlayerSavedData.get(world).getGristSet(this.owner), cost);
 		}
@@ -120,9 +118,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 		if (player != null)
 			AlchemyRecipes.onAlchemizedItem(newItem, player);
 		
-		GristSet cost = AlchemyCostRegistry.getGristConversion(newItem);
-		if (newItem.getItem() == MSItems.CAPTCHA_CARD)
-			cost = new GristSet(wildcardGrist, MinestuckConfig.cardCost.get());
+		GristSet cost = GristCostRecipe.findCostForItem(newItem, wildcardGrist, false, world);
 		GristHelper.decrease(world, owner, cost);
 		PlayerTracker.updateGristCache(world.getServer(), owner);
 	}
@@ -196,9 +192,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 			{
 				return 0;
 			}
-			GristSet cost = AlchemyCostRegistry.getGristConversion(newItem);
-			if (newItem.getItem() == MSItems.CAPTCHA_CARD)
-				cost = new GristSet(wildcardGrist, MinestuckConfig.cardCost.get());
+			GristSet cost = GristCostRecipe.findCostForItem(newItem, wildcardGrist, false, world);
 			// We need to run the check 16 times. Don't want to hammer the game with too many of these, so the comparators are only told to update every 20 ticks.
 			// Additionally, we need to check if the item in the slot is empty. Otherwise, it will attempt to check the cost for air, which cannot be alchemized anyway.
 			if (cost != null && !getStackInSlot(0).isEmpty())
@@ -212,7 +206,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 						return 15;
 					}
 					// We need to make a copy to preserve the original grist amounts and avoid scaling values that have already been scaled. Keeps scaling linear as opposed to exponential.
-					scale_cost = cost.copy().scaleGrist(lvl);
+					scale_cost = cost.copy().scale(lvl);
 					if (!GristHelper.canAfford(PlayerSavedData.get(world).getGristSet(owner), scale_cost))
 					{
 						return lvl - 1;
@@ -227,7 +221,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 	@Override
 	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
 	{
-		return new MiniAlchemiterContainer(windowId, playerInventory, this, parameters, wildcardGristHolder);
+		return new MiniAlchemiterContainer(windowId, playerInventory, this, parameters, wildcardGristHolder, pos);
 	}
 	
 	public GristType getWildcardGrist()

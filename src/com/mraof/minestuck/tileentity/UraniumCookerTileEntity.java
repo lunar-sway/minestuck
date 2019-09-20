@@ -191,7 +191,7 @@ public class UraniumCookerTileEntity extends MachineProcessTileEntity implements
 	@Override
 	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
 	{
-		return new UraniumCookerContainer(windowId, playerInventory, this, parameters, fuelHolder);
+		return new UraniumCookerContainer(windowId, playerInventory, this, parameters, fuelHolder, pos);
 	}
 	
 	@Override

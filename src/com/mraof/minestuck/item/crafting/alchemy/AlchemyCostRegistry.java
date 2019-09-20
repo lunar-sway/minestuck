@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.IItemProvider;
 
+@Deprecated
 public class AlchemyCostRegistry
 {
 	private static Hashtable<Item, GristSet> costsByItem = new Hashtable<>();

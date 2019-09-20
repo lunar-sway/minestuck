@@ -127,6 +127,6 @@ public class MiniPunchDesignixTileEntity extends MachineProcessTileEntity implem
 	@Override
 	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
 	{
-		return new MiniPunchDesignixContainer(windowId, playerInventory, this, parameters);
+		return new MiniPunchDesignixContainer(windowId, playerInventory, this, parameters, pos);
 	}
 }

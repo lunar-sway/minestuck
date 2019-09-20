@@ -56,7 +56,7 @@ public class Minegicka3Support extends ModSupport
 					GristSet set = AlchemyCostRegistry.getGristConversion(ingredient.getKey());
 					if(set != null)
 					{
-						set = set.scaleGrist(ingredient.getValue());
+						set = set.scale(ingredient.getValue());
 						cost.addGrist(set);
 					}
 					else continue recipes;

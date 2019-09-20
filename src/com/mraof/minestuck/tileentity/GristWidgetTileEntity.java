@@ -44,22 +44,10 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 		if(world == null)
 			return null;
 		ItemStack heldItem = AlchemyRecipes.getDecodedItem(stack, true);
-		GristSet gristSet = GristCostRecipe.findCostForItem(heldItem, world);
-		if(stack.getItem() != MSItems.CAPTCHA_CARD || AlchemyRecipes.isPunchedCard(stack)
-				|| heldItem.getItem() == MSItems.CAPTCHA_CARD || gristSet == null)
+		GristSet gristSet = GristCostRecipe.findCostForItem(heldItem, null, true, world);
+		if(stack.getItem() != MSItems.CAPTCHA_CARD || AlchemyRecipes.isPunchedCard(stack) || gristSet == null)
 			return null;
 		
-		if (heldItem.getCount() != 1)
-			gristSet.scaleGrist(heldItem.getCount());
-		
-		if (heldItem.isDamaged())
-		{
-			float multiplier = 1 - heldItem.getItem().getDamage(heldItem) / ((float) heldItem.getMaxDamage());
-			for (GristAmount amount : gristSet.getArray())
-			{
-				gristSet.setGrist(amount.getType(), (int) (amount.getAmount() * multiplier));
-			}
-		}
 		return gristSet;
 	}
 	
@@ -206,7 +194,7 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 	@Override
 	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
 	{
-		return new GristWidgetContainer(windowId, playerInventory, this, parameters);
+		return new GristWidgetContainer(windowId, playerInventory, this, parameters, pos);
 	}
 	
 	public void resendState()

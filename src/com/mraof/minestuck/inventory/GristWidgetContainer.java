@@ -10,8 +10,10 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
+import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nonnull;
 
@@ -23,19 +25,19 @@ public class GristWidgetContainer extends MachineContainer
 	
 	private final IInventory widgetInventory;
 	
-	public GristWidgetContainer(int windowId, PlayerInventory playerInventory)
+	public GristWidgetContainer(int windowId, PlayerInventory playerInventory, PacketBuffer buffer)
 	{
-		this(MSContainerTypes.GRIST_WIDGET, windowId, playerInventory, new Inventory(1), new IntArray(3));
+		this(MSContainerTypes.GRIST_WIDGET, windowId, playerInventory, new Inventory(1), new IntArray(3), buffer.readBlockPos());
 	}
 	
-	public GristWidgetContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters)
+	public GristWidgetContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, BlockPos machinePos)
 	{
-		this(MSContainerTypes.GRIST_WIDGET, windowId, playerInventory, inventory, parameters);
+		this(MSContainerTypes.GRIST_WIDGET, windowId, playerInventory, inventory, parameters, machinePos);
 	}
 	
-	public GristWidgetContainer(ContainerType<? extends GristWidgetContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters)
+	public GristWidgetContainer(ContainerType<? extends GristWidgetContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, BlockPos machinePos)
 	{
-		super(type, windowId, parameters);
+		super(type, windowId, parameters, machinePos);
 		
 		assertInventorySize(inventory, 1);
 		this.widgetInventory = inventory;

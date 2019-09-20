@@ -11,8 +11,10 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
+import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nonnull;
 
@@ -28,19 +30,19 @@ public class MiniPunchDesignixContainer extends MachineContainer
 	
 	private final IInventory designixInventory;
 	
-	public MiniPunchDesignixContainer(int windowId, PlayerInventory playerInventory)
+	public MiniPunchDesignixContainer(int windowId, PlayerInventory playerInventory, PacketBuffer buffer)
 	{
-		this(MSContainerTypes.MINI_PUNCH_DESIGNIX, windowId, playerInventory, new Inventory(3), new IntArray(3));
+		this(MSContainerTypes.MINI_PUNCH_DESIGNIX, windowId, playerInventory, new Inventory(3), new IntArray(3), buffer.readBlockPos());
 	}
 	
-	public MiniPunchDesignixContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters)
+	public MiniPunchDesignixContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, BlockPos machinePos)
 	{
-		this(MSContainerTypes.MINI_PUNCH_DESIGNIX, windowId, playerInventory, inventory, parameters);
+		this(MSContainerTypes.MINI_PUNCH_DESIGNIX, windowId, playerInventory, inventory, parameters, machinePos);
 	}
 	
-	public MiniPunchDesignixContainer(ContainerType<? extends MiniPunchDesignixContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters)
+	public MiniPunchDesignixContainer(ContainerType<? extends MiniPunchDesignixContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, BlockPos machinePos)
 	{
-		super(type, windowId, parameters);
+		super(type, windowId, parameters, machinePos);
 		
 		assertInventorySize(inventory, 3);
 		this.designixInventory = inventory;

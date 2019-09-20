@@ -138,6 +138,6 @@ public class MiniTotemLatheTileEntity extends MachineProcessTileEntity implement
 	@Override
 	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerIn)
 	{
-		return new MiniTotemLatheContainer(windowId, playerInventory, this, parameters);
+		return new MiniTotemLatheContainer(windowId, playerInventory, this, parameters, pos);
 	}
 }

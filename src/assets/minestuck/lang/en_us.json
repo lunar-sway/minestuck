@@ -1171,8 +1171,6 @@
   "minestuck.config.deploy_card.tooltip": "Turn this to true to add a punched card (with a card punched to it) to the deploy list.",
   "minestuck.config.portable_machines": "Portable Machines In Deploylist",
   "minestuck.config.portable_machines.tooltip": "Determines if the small portable machines should be included in the deploy list.",
-  "minestuck.config.card_cost": "Card Cost",
-  "minestuck.config.card_cost.tooltip": "An integer to control the cost of captchalogue cards.",
   "minestuck.config.card_recipe": "Include Captcha Card Recipe",
   "minestuck.config.card_recipe.tooltip": "Set this to false to remove the crafting recipe for captchalogue cards.",
   "minestuck.config.card_loot": "Generate Card As Loot",

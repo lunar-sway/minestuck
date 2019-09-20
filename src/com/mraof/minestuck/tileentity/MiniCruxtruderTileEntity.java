@@ -94,6 +94,6 @@ public class MiniCruxtruderTileEntity extends MachineProcessTileEntity implement
 	@Override
 	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
 	{
-		return new MiniCruxtruderContainer(windowId, playerInventory, this, parameters);
+		return new MiniCruxtruderContainer(windowId, playerInventory, this, parameters, pos);
 	}
 }

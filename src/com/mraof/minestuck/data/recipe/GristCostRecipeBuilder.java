@@ -23,6 +23,7 @@ public class GristCostRecipeBuilder
 	private final ResourceLocation defaultName;
 	private final Ingredient ingredient;
 	private ImmutableMap.Builder<GristType, Integer> costBuilder = ImmutableMap.builder();
+	private Integer wildcard = null;
 	private Integer priority = null;
 	
 	public static GristCostRecipeBuilder of(Tag<Item> tag)
@@ -54,13 +55,20 @@ public class GristCostRecipeBuilder
 	public GristCostRecipeBuilder grist(GristType type, int amount)
 	{
 		if(costBuilder == null)
-			throw new IllegalStateException("Can't add grist when the recipe is set to unavailable!");
+			throw new IllegalStateException("Can't add a grist cost to recipe if the recipe is set to a special type!");
 		costBuilder.put(type, amount);
 		return this;
 	}
 	
 	public GristCostRecipeBuilder makeUnavailable()
 	{
+		costBuilder = null;
+		return this;
+	}
+	
+	public GristCostRecipeBuilder wildcard(int wildcardCost)
+	{
+		wildcard = wildcardCost;
 		costBuilder = null;
 		return this;
 	}
@@ -85,7 +93,7 @@ public class GristCostRecipeBuilder
 	
 	public void build(Consumer<IFinishedRecipe> recipeSaver, ResourceLocation id)
 	{
-		recipeSaver.accept(new Result(new ResourceLocation(id.getNamespace(), "grist_costs/"+id.getPath()), ingredient, costBuilder != null ? GristSet.immutable(costBuilder.build()) : null, priority));
+		recipeSaver.accept(new Result(new ResourceLocation(id.getNamespace(), "grist_costs/"+id.getPath()), ingredient, costBuilder != null ? GristSet.immutable(costBuilder.build()) : null, wildcard, priority));
 	}
 	
 	public static class Result implements IFinishedRecipe
@@ -93,13 +101,15 @@ public class GristCostRecipeBuilder
 		public final ResourceLocation id;
 		public final Ingredient ingredient;
 		public final GristSet cost;
+		public final Integer wildcard;
 		public final Integer priority;
 		
-		public Result(ResourceLocation id, Ingredient ingredient, GristSet cost, Integer priority)
+		public Result(ResourceLocation id, Ingredient ingredient, GristSet cost, Integer wildcard, Integer priority)
 		{
 			this.id = id;
 			this.ingredient = ingredient;
 			this.cost = cost;
+			this.wildcard = wildcard;
 			this.priority = priority;
 		}
 		
@@ -109,6 +119,8 @@ public class GristCostRecipeBuilder
 			jsonObject.add("ingredient", ingredient.serialize());
 			if(cost != null)
 				jsonObject.add("grist_cost", cost.serialize());
+			else if(wildcard != null)
+				jsonObject.addProperty("grist_cost", wildcard);
 			if(priority != null)
 				jsonObject.addProperty("priority", priority);
 		}

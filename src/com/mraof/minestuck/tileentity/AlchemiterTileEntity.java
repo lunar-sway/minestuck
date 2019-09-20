@@ -435,23 +435,12 @@ public class AlchemiterTileEntity extends TileEntity
 		ItemStack stack = getOutput();
 		//if(hasUpgrade(AlchemiterUpgrades.captchaCard))
 		//	stack = AlchemyRecipes.getDecodedItem(getOutput());
-		boolean useSelectedType;
-		if(dowel.isEmpty())
+		if(dowel.isEmpty() || world == null)
 			return null;
 		
+		stack.setCount(quantity);
 		//get the grist cost of stack
-		set = AlchemyCostRegistry.getGristConversion(stack);
-
-		//if the item is a captcha card do other stuff
-		useSelectedType = stack.getItem() == MSItems.CAPTCHA_CARD;
-		if (useSelectedType)
-			set = new GristSet(getWildcardGrist(), !world.isRemote ? MinestuckConfig.cardCost.get() : MinestuckConfig.clientCardCost);
-		
-		if (set != null)
-		{
-			//multiply cost by quantity
-			set.scaleGrist(quantity);
-		}
+		set = GristCostRecipe.findCostForItem(stack, getWildcardGrist(), false, world);
 		
 		return set;
 	}

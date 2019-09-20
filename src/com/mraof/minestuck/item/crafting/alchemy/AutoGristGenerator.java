@@ -131,7 +131,7 @@ public class AutoGristGenerator
 			set.addGrist(ingrCost);
 		}
 		
-		set.scaleGrist(1/ (float) output.getCount());
+		set.scale(1/ (float) output.getCount(), false);
 		AlchemyCostRegistry.addGristConversion(output.getItem(), set);
 		
 		returned++;

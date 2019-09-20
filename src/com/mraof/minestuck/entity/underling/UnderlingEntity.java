@@ -123,7 +123,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IEntity
 			if(grist == null)
 				return;
 			if(fromSpawner)
-				grist.scaleGrist(0.5F);
+				grist.scale(0.5F, false);
 			
 			if(!dropCandy)
 			{

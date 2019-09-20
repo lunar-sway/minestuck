@@ -10,8 +10,10 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
+import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nonnull;
 
@@ -25,19 +27,19 @@ public class MiniCruxtruderContainer extends MachineContainer
 	
 	private final IInventory cruxtruderInventory;
 	
-	public MiniCruxtruderContainer(int windowId, PlayerInventory inventoryPlayer)
+	public MiniCruxtruderContainer(int windowId, PlayerInventory inventoryPlayer, PacketBuffer buffer)
 	{
-		this(MSContainerTypes.MINI_CRUXTRUDER, windowId, inventoryPlayer, new Inventory(2), new IntArray(3));
+		this(MSContainerTypes.MINI_CRUXTRUDER, windowId, inventoryPlayer, new Inventory(2), new IntArray(3), buffer.readBlockPos());
 	}
 	
-	public MiniCruxtruderContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters)
+	public MiniCruxtruderContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, BlockPos machinePos)
 	{
-		this(MSContainerTypes.MINI_CRUXTRUDER, windowId, playerInventory, inventory, parameters);
+		this(MSContainerTypes.MINI_CRUXTRUDER, windowId, playerInventory, inventory, parameters, machinePos);
 	}
 	
-	public MiniCruxtruderContainer(ContainerType<? extends MiniCruxtruderContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters)
+	public MiniCruxtruderContainer(ContainerType<? extends MiniCruxtruderContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, BlockPos machinePos)
 	{
-		super(type, windowId, parameters);
+		super(type, windowId, parameters, machinePos);
 		
 		assertInventorySize(inventory, 2);
 		this.cruxtruderInventory = inventory;
