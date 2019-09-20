@@ -96,15 +96,15 @@ public final class MSEntityTypes
 		register(registry, EntityType.Builder.create(BlackRookEntity::new, EntityClassification.MONSTER).size(3.5F, 3.5F), "dersite_rook");
 		register(registry, EntityType.Builder.create(WhiteRookEntity::new, EntityClassification.MONSTER).size(3.5F, 3.5F), "prospitian_rook");
 		
-		register(registry, EntityType.Builder.<GristEntity>create(GristEntity::new, EntityClassification.MISC).size(1 / 3F, 1 / 3F)/*.tracker(512, 1, true)*/.immuneToFire(), "grist");
-		register(registry, EntityType.Builder.<VitalityGelEntity>create(VitalityGelEntity::new, EntityClassification.MISC).size(1 / 4F, 1 / 4F)/*.tracker(512, 1, true)*/.immuneToFire(), "vitality_gel");
-		register(registry, EntityType.Builder.<DecoyEntity>create(EntityClassification.MISC).disableSerialization().disableSummoning(), "player_decoy");
+		register(registry, EntityType.Builder.<GristEntity>create(GristEntity::new, EntityClassification.MISC).setCustomClientFactory((spawnEntity, world) -> new GristEntity(GRIST, world)).size(1 / 3F, 1 / 3F)/*.tracker(512, 1, true)*/.immuneToFire(), "grist");
+		register(registry, EntityType.Builder.<VitalityGelEntity>create(VitalityGelEntity::new, EntityClassification.MISC).setCustomClientFactory((spawnEntity, world) -> new VitalityGelEntity(VITALITY_GEL, world)).size(1 / 4F, 1 / 4F)/*.tracker(512, 1, true)*/.immuneToFire(), "vitality_gel");
+		register(registry, EntityType.Builder.<DecoyEntity>create(EntityClassification.MISC).setCustomClientFactory((spawnEntity, world) -> new DecoyEntity(world)).disableSerialization().disableSummoning(), "player_decoy");
 		
-		register(registry, EntityType.Builder.<MetalBoatEntity>create(MetalBoatEntity::new, EntityClassification.MISC), "metal_boat");
-		register(registry, EntityType.Builder.<CrewPosterEntity>create(CrewPosterEntity::new, EntityClassification.MISC), "midnight_crew_poster");
-		register(registry, EntityType.Builder.<SbahjPosterEntity>create(SbahjPosterEntity::new, EntityClassification.MISC), "sbahj_poster");
-		register(registry, EntityType.Builder.<ShopPosterEntity>create(ShopPosterEntity::new, EntityClassification.MISC), "shop_poster");
-		register(registry, EntityType.Builder.<HologramEntity>create(HologramEntity::new, EntityClassification.MISC), "hologram");
+		register(registry, EntityType.Builder.<MetalBoatEntity>create(MetalBoatEntity::new, EntityClassification.MISC).setCustomClientFactory((spawnEntity, world) -> new MetalBoatEntity(METAL_BOAT, world)), "metal_boat");
+		register(registry, EntityType.Builder.<CrewPosterEntity>create(CrewPosterEntity::new, EntityClassification.MISC).setCustomClientFactory((spawnEntity, world) -> new CrewPosterEntity(MIDNIGHT_CREW_POSTER, world)), "midnight_crew_poster");
+		register(registry, EntityType.Builder.<SbahjPosterEntity>create(SbahjPosterEntity::new, EntityClassification.MISC).setCustomClientFactory((spawnEntity, world) -> new SbahjPosterEntity(SBAHJ_POSTER, world)), "sbahj_poster");
+		register(registry, EntityType.Builder.<ShopPosterEntity>create(ShopPosterEntity::new, EntityClassification.MISC).setCustomClientFactory((spawnEntity, world) -> new ShopPosterEntity(SHOP_POSTER, world)), "shop_poster");
+		register(registry, EntityType.Builder.<HologramEntity>create(HologramEntity::new, EntityClassification.MISC).setCustomClientFactory((spawnEntity, world) -> new HologramEntity(HOLOGRAM, world)), "hologram");
 	}
 	
 	public static void registerPlacements()

@@ -14,6 +14,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -26,6 +27,7 @@ import net.minecraft.world.GameType;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 public class DecoyEntity extends MobEntity
 {
@@ -166,6 +168,12 @@ public class DecoyEntity extends MobEntity
 			downloadImageSkin = AbstractClientPlayerEntity.getDownloadImageSkin(locationSkin, username);
 			//downloadImageCape = AbstractClientPlayer.getDownloadImageCape(locationCape, username);
 		}
+	}
+	
+	@Override
+	public IPacket<?> createSpawnPacket()
+	{
+		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 	
 	public DownloadingTexture getTextureSkin()
