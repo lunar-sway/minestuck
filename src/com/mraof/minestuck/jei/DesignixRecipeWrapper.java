@@ -1,6 +1,6 @@
 package com.mraof.minestuck.jei;
 /*
-import com.mraof.minestuck.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;

@@ -5,17 +5,14 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.inventory.GristWidgetContainer;
 import com.mraof.minestuck.tileentity.GristWidgetTileEntity;
-import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.List;
 
-@OnlyIn(Dist.CLIENT)
 public class GristWidgetScreen extends MachineScreen<GristWidgetContainer>
 {
 	private static final ResourceLocation BACKGROUND = new ResourceLocation("minestuck:textures/gui/widget.png");
@@ -58,7 +55,7 @@ public class GristWidgetScreen extends MachineScreen<GristWidgetContainer>
 		if (container.getSlot(0).getHasStack())
 		{
 			//Render grist requirements
-			GristSet set = GristWidgetTileEntity.getGristWidgetResult(container.getSlot(0).getStack());
+			GristSet set = GristWidgetTileEntity.getGristWidgetResult(container.getSlot(0).getStack(), minecraft.world);
 
 			GuiUtil.drawGristBoard(set, GuiUtil.GristboardMode.GRIST_WIDGET, 9, 45, font);
 			

@@ -3,8 +3,8 @@ package com.mraof.minestuck.entity.item;
 import java.util.EnumSet;
 import java.util.Set;
 
-import com.mraof.minestuck.entity.ModEntityTypes;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.entity.MSEntityTypes;
+import com.mraof.minestuck.item.MSItems;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
@@ -21,7 +21,7 @@ public class CrewPosterEntity extends HangingArtEntity<CrewPosterEntity.Midnight
 	
 	public CrewPosterEntity(World worldIn, BlockPos pos, Direction direction)
 	{
-		super(ModEntityTypes.MIDNIGHT_CREW_POSTER, worldIn, pos, direction);
+		super(MSEntityTypes.MIDNIGHT_CREW_POSTER, worldIn, pos, direction);
 	}
 	
 	@Override
@@ -39,7 +39,7 @@ public class CrewPosterEntity extends HangingArtEntity<CrewPosterEntity.Midnight
 	@Override
 	public ItemStack getStackDropped()
 	{
-		return new ItemStack(MinestuckItems.CREW_POSTER);
+		return new ItemStack(MSItems.CREW_POSTER);
 	}
 	
 	public enum MidnightCrewArt implements HangingArtEntity.IArt

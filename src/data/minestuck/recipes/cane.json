@@ -1,17 +1,16 @@
 {
-  "type": "crafting_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
-    "  I",
-    " I ",
-    "I  "
+    "  s",
+    " s ",
+    "s  "
   ],
   "key": {
-    "I": {
+    "s": {
       "tag": "forge:rods/wooden"
     }
   },
   "result": {
-    "item": "minestuck:cane",
-    "count": 1
+    "item": "minestuck:cane"
   }
 }

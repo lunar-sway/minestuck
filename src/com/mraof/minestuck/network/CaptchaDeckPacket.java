@@ -1,5 +1,6 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckContainer;
@@ -177,7 +178,7 @@ public class CaptchaDeckPacket
 		{
 			CaptchaDeckHandler.clientSideModus = CaptchaDeckHandler.readFromNBT(nbt, true);
 			if(CaptchaDeckHandler.clientSideModus != null)
-				CaptchaDeckHandler.clientSideModus.getGuiHandler().updateContent();
+				MSScreenFactories.updateSylladexScreen();
 			else Debug.debug("Player lost their modus after update packet");
 		}
 	}

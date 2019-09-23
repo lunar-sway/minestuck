@@ -30,8 +30,6 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class GlowystoneWireBlock extends Block
 {
@@ -249,10 +247,9 @@ public class GlowystoneWireBlock extends Block
 	
 	protected static boolean canConnectTo(BlockState blockState)
 	{
-		return blockState.getBlock() == MinestuckBlocks.GLOWYSTONE_WIRE;
+		return blockState.getBlock() == MSBlocks.GLOWYSTONE_DUST;
 	}
-
-	@OnlyIn(Dist.CLIENT)
+	
 	public static int colorMultiplier()
 	{
 		float f = 1.0F;
@@ -267,7 +264,6 @@ public class GlowystoneWireBlock extends Block
 		return -16777216 | i << 16 | j << 8 | k;
 	}
 	
-	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
 	{

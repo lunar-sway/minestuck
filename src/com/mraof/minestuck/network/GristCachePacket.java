@@ -1,7 +1,7 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkDirection;
@@ -23,23 +23,13 @@ public class GristCachePacket
 	
 	public void encode(PacketBuffer buffer)
 	{
-		buffer.writeInt(gristCache.gristTypes.size());
-		for (Map.Entry<GristType, Integer> entry : gristCache.getMap().entrySet())
-		{
-			buffer.writeInt(entry.getKey().getId());
-			buffer.writeInt(entry.getValue());
-		}
+		gristCache.write(buffer);
 		buffer.writeBoolean(isEditmode);
 	}
 	
 	public static GristCachePacket decode(PacketBuffer buffer)
 	{
-		GristSet gristCache = new GristSet();
-		int length = buffer.readInt();
-		for (int i = 0; i < length; i++)
-		{
-			gristCache.setGrist(GristType.REGISTRY.getValue(buffer.readInt()), buffer.readInt());
-		}
+		GristSet gristCache = GristSet.read(buffer);
 		boolean isEditmode = buffer.readBoolean();
 		return new GristCachePacket(gristCache, isEditmode);
 	}

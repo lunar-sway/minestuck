@@ -4,15 +4,13 @@ import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.StringNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.dimension.DimensionType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class SburbConnection
 {
@@ -31,14 +29,12 @@ public class SburbConnection
 	PlayerIdentifier serverIdentifier;
 	
 	/**
-	 * Display name used by computer guis
+	 * Display name used by computer guis clientside
 	 */
-	@OnlyIn(Dist.CLIENT)
 	String clientName, serverName;
 	/**
 	 * Id for identifying players clientside
 	 */
-	@OnlyIn(Dist.CLIENT)
 	int clientId, serverId;
 	
 	boolean isActive;
@@ -98,13 +94,10 @@ public class SburbConnection
 		return clientHomeLand;
 	}
 	public boolean[] givenItems(){return givenItemList;}
-	@OnlyIn(Dist.CLIENT)
+	//client side
 	public String getClientDisplayName() {return clientName;}
-	@OnlyIn(Dist.CLIENT)
 	public String getServerDisplayName() {return serverName;}
-	@OnlyIn(Dist.CLIENT)
 	public int getClientId() {return clientId;}
-	@OnlyIn(Dist.CLIENT)
 	public int getServerId() {return serverId;}
 	
 	public void toBuffer(PacketBuffer buffer)
@@ -194,7 +187,7 @@ public class SburbConnection
 		if(nbt.contains("ClientLand"))
 		{
 			clientHomeLand = DimensionType.byName(new ResourceLocation(nbt.getString("ClientLand")));	//TODO add robustness in the case that the dimension type no longer exists?
-			if(!MinestuckDimensionHandler.isLandDimension(clientHomeLand))
+			if(!MSDimensions.isLandDimension(clientHomeLand))
 			{
 				Debug.errorf("The connection between %s and %s had a home dimension %d that isn't a land dimension. For safety measures, the connection will be loaded as if the player had not yet entered.", getClientIdentifier().getUsername(), getServerIdentifier().getUsername(), clientHomeLand);
 				clientHomeLand = null;

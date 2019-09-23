@@ -1,11 +1,11 @@
 package com.mraof.minestuck.entity.underling;
 
-import com.mraof.minestuck.alchemy.GristAmount;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.entity.EntityListFilter;
-import com.mraof.minestuck.entity.EntityMinestuck;
-import com.mraof.minestuck.entity.ModEntityTypes;
+import com.mraof.minestuck.entity.MinestuckEntity;
+import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.ai.HurtByTargetAlliedGoal;
 import com.mraof.minestuck.entity.ai.NearestAttackableTargetWithHeightGoal;
 import com.mraof.minestuck.entity.item.GristEntity;
@@ -38,9 +38,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class UnderlingEntity extends EntityMinestuck implements IEntityAdditionalSpawnData, IMob
+public abstract class UnderlingEntity extends MinestuckEntity implements IEntityAdditionalSpawnData, IMob
 {
-	protected static EntityListFilter underlingSelector = new EntityListFilter(Arrays.asList(ModEntityTypes.IMP, ModEntityTypes.OGRE, ModEntityTypes.BASILISK, ModEntityTypes.LICH, ModEntityTypes.GICLOPS, ModEntityTypes.WYRM));
+	protected static EntityListFilter underlingSelector = new EntityListFilter(Arrays.asList(MSEntityTypes.IMP, MSEntityTypes.OGRE, MSEntityTypes.BASILISK, MSEntityTypes.LICH, MSEntityTypes.GICLOPS, MSEntityTypes.WYRM));	//TODO Use tag instead
 	protected EntityListFilter attackEntitySelector;
 	//The type of the underling
 	protected GristType type;
@@ -123,7 +123,7 @@ public abstract class UnderlingEntity extends EntityMinestuck implements IEntity
 			if(grist == null)
 				return;
 			if(fromSpawner)
-				grist.scaleGrist(0.5F);
+				grist.scale(0.5F, false);
 			
 			if(!dropCandy)
 			{
@@ -162,9 +162,15 @@ public abstract class UnderlingEntity extends EntityMinestuck implements IEntity
 	@Override
 	public String getTexture() 
 	{
-		if(type == null)
-			return "textures/entity/underlings/" + GristType.SHALE.getName() + '_' + getUnderlingName() + ".png";
-		return "textures/entity/underlings/" + type.getName() + '_' + getUnderlingName() + ".png";
+		return null;
+	}
+	
+	@Override
+	public ResourceLocation getTextureResource()
+	{
+		if(textureResource == null)
+			textureResource = type.getUnderlingTexture(this.getUnderlingName());
+		return textureResource;
 	}
 	
 	@Override
@@ -245,7 +251,7 @@ public abstract class UnderlingEntity extends EntityMinestuck implements IEntity
 	public void readSpawnData(PacketBuffer additionalData)
 	{
 		applyGristType(GristType.REGISTRY.getValue(additionalData.readInt()), false);
-		this.textureResource = new ResourceLocation("minestuck", this.getTexture());
+		this.textureResource = null;
 	}
 	
 	@Nullable
@@ -319,7 +325,7 @@ public abstract class UnderlingEntity extends EntityMinestuck implements IEntity
 				Echeladder.increaseProgress(playerList[i], (int) (progress*modifiers[i]));
 	}
 	
-	protected class UnderlingData implements ILivingEntityData
+	protected static class UnderlingData implements ILivingEntityData
 	{
 		public final GristType type;
 		public UnderlingData(GristType type)

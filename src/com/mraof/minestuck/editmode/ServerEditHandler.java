@@ -1,16 +1,16 @@
 package com.mraof.minestuck.editmode;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.*;
+import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.entity.DecoyEntity;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ServerEditPacket;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
+import com.mraof.minestuck.tracker.PlayerTracker;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -32,6 +32,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
@@ -42,8 +43,6 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 
 import java.util.*;
 
@@ -122,7 +121,7 @@ public class ServerEditHandler
 		decoy.markedForDespawn = true;
 		
 		ServerEditPacket packet = ServerEditPacket.exit();
-		MinestuckPacketHandler.sendToPlayer(packet, player);
+		MSPacketHandler.sendToPlayer(packet, player);
 		
 		if(damageSource != null && damageSource.getImmediateSource() != player)
 			player.attackEntityFrom(damageSource, damage);
@@ -153,8 +152,8 @@ public class ServerEditHandler
 			decoy.world.addEntity(decoy);
 			list.add(data);
 			ServerEditPacket packet = ServerEditPacket.activate(computerTarget.getUsername(), c.centerX, c.centerZ, c.givenItems(), DeployList.getDeployListTag(player.getServer(), c));
-			MinestuckPacketHandler.sendToPlayer(packet, player);
-			MinestuckPlayerTracker.updateGristCache(player.getServer(), c.getClientIdentifier());
+			MSPacketHandler.sendToPlayer(packet, player);
+			PlayerTracker.updateGristCache(player.getServer(), c.getClientIdentifier());
 		}
 	}
 	
@@ -212,8 +211,8 @@ public class ServerEditHandler
 	}
 	
 	@SubscribeEvent
-	public void tickEnd(PlayerTickEvent event) {
-		if(event.phase != Phase.END || event.side == LogicalSide.CLIENT)
+	public void tickEnd(TickEvent.PlayerTickEvent event) {
+		if(event.phase != TickEvent.Phase.END || event.side == LogicalSide.CLIENT)
 			return;
 		ServerPlayerEntity player = (ServerPlayerEntity) event.player;
 		
@@ -222,7 +221,7 @@ public class ServerEditHandler
 			return;
 		
 		SburbConnection c = data.connection;
-		int range = MinestuckDimensionHandler.isLandDimension(player.dimension) ? MinestuckConfig.landEditRange : MinestuckConfig.overworldEditRange;
+		int range = MSDimensions.isLandDimension(player.dimension) ? MinestuckConfig.landEditRange.get() : MinestuckConfig.overworldEditRange.get();
 		
 		updateInventory(player, c.givenItems(), c);
 		updatePosition(player, range, c.centerX, c.centerZ);
@@ -247,7 +246,7 @@ public class ServerEditHandler
 				if(GristHelper.canAfford(PlayerSavedData.get(event.getEntity().getServer()).getGristSet(data.connection.getClientIdentifier()), cost))
 				{
 					GristHelper.decrease(event.getPlayer().world, data.connection.getClientIdentifier(), cost);
-					MinestuckPlayerTracker.updateGristCache(event.getPlayer().getServer(), data.connection.getClientIdentifier());
+					PlayerTracker.updateGristCache(event.getPlayer().getServer(), data.connection.getClientIdentifier());
 					data.connection.givenItems()[i] = true;
 					if(!data.connection.isMain())
 						SkaianetHandler.get(event.getPlayer().getServer()).giveItems(data.connection.getClientIdentifier());
@@ -271,18 +270,18 @@ public class ServerEditHandler
 	@SubscribeEvent
 	public void onItemPickupEvent(EntityItemPickupEvent event)
 	{
-		if(!event.getEntity().world.isRemote && getData(event.getEntityPlayer()) != null)
+		if(!event.getEntity().world.isRemote && getData(event.getPlayer()) != null)
 			event.setCanceled(true);
 	}
 	
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public void onRightClickBlockControl(PlayerInteractEvent.RightClickBlock event)
 	{
-		if(!event.getWorld().isRemote && getData(event.getEntityPlayer()) != null)
+		if(!event.getWorld().isRemote && getData(event.getPlayer()) != null)
 		{
-			EditData data = getData(event.getEntityPlayer());
+			EditData data = getData(event.getPlayer());
 			Block block = event.getWorld().getBlockState(event.getPos()).getBlock();
-			ItemStack stack = event.getEntityPlayer().getHeldItemMainhand();
+			ItemStack stack = event.getPlayer().getHeldItemMainhand();
 			event.setUseBlock(stack.isEmpty() && (block instanceof DoorBlock || block instanceof TrapDoorBlock || block instanceof FenceGateBlock) ? Event.Result.ALLOW : Event.Result.DENY);
 			if(event.getUseBlock() == Event.Result.ALLOW)
 				return;
@@ -310,7 +309,7 @@ public class ServerEditHandler
 								str.append(", ");
 							str.append(grist.getAmount()+" "+grist.getType().getDisplayName());
 						}
-						event.getEntityPlayer().sendMessage(new TranslationTextComponent("grist.missing",str.toString()));
+						event.getPlayer().sendMessage(new TranslationTextComponent("grist.missing",str.toString()));
 					}
 					event.setCanceled(true);
 				}
@@ -327,12 +326,12 @@ public class ServerEditHandler
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public void onLeftClickBlockControl(PlayerInteractEvent.LeftClickBlock event)
 	{
-		if(!event.getWorld().isRemote && getData(event.getEntityPlayer()) != null)
+		if(!event.getWorld().isRemote && getData(event.getPlayer()) != null)
 		{
-			EditData data = getData(event.getEntityPlayer());
+			EditData data = getData(event.getPlayer());
 			BlockState block = event.getWorld().getBlockState(event.getPos());
 			if(block.getBlockHardness(event.getWorld(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
-					|| (GristHelper.getGrist(event.getEntity().world, data.connection.getClientIdentifier(), GristType.BUILD) <= 0 && !MinestuckConfig.gristRefund))
+					|| (GristHelper.getGrist(event.getEntity().world, data.connection.getClientIdentifier(), GristType.BUILD) <= 0 && !MinestuckConfig.gristRefund.get()))
 				event.setCanceled(true);
 		}
 	}
@@ -340,7 +339,7 @@ public class ServerEditHandler
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public void onItemUseControl(PlayerInteractEvent.RightClickItem event)
 	{
-		if(!event.getWorld().isRemote && getData(event.getEntityPlayer()) != null)
+		if(!event.getWorld().isRemote && getData(event.getPlayer()) != null)
 		{
 			event.setCanceled(true);
 		}
@@ -349,20 +348,20 @@ public class ServerEditHandler
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public void onBlockBreak(PlayerInteractEvent.LeftClickBlock event)
 	{
-		if(!event.getEntity().world.isRemote && getData(event.getEntityPlayer()) != null)
+		if(!event.getEntity().world.isRemote && getData(event.getPlayer()) != null)
 		{
-			EditData data = getData(event.getEntityPlayer());
-			if(!MinestuckConfig.gristRefund)
+			EditData data = getData(event.getPlayer());
+			if(!MinestuckConfig.gristRefund.get())
 				GristHelper.decrease(event.getWorld(), data.connection.getClientIdentifier(), new GristSet(GristType.BUILD, 1));
 			else
 			{
 				BlockState block = event.getWorld().getBlockState(event.getPos());
-				ItemStack stack = block.getBlock().getPickBlock(block, null, event.getWorld(), event.getPos(), event.getEntityPlayer());
+				ItemStack stack = block.getBlock().getPickBlock(block, null, event.getWorld(), event.getPos(), event.getPlayer());
 				GristSet set = AlchemyCostRegistry.getGristConversion(stack);
 				if(set != null && !set.isEmpty())
 					GristHelper.increase(event.getWorld(), data.connection.getClientIdentifier(), set);
 			}
-			MinestuckPlayerTracker.updateGristCache(event.getEntity().getServer(), data.connection.getClientIdentifier());
+			PlayerTracker.updateGristCache(event.getEntity().getServer(), data.connection.getClientIdentifier());
 		}
 	}
 	
@@ -378,7 +377,7 @@ public class ServerEditHandler
 				if(event.isCanceled())    //If the event was cancelled server side and not client side, notify the client.
 				{
 					ServerEditPacket packet = ServerEditPacket.givenItems(data.connection.givenItems());
-					MinestuckPacketHandler.sendToPlayer(packet, player);
+					MSPacketHandler.sendToPlayer(packet, player);
 					return;
 				}
 				
@@ -396,13 +395,13 @@ public class ServerEditHandler
 					if(!cost.isEmpty())
 					{
 						GristHelper.decrease(player.world, c.getClientIdentifier(), cost);
-						MinestuckPlayerTracker.updateGristCache(player.server, data.connection.getClientIdentifier());
+						PlayerTracker.updateGristCache(player.server, data.connection.getClientIdentifier());
 					}
 					player.inventory.mainInventory.set(player.inventory.currentItem, ItemStack.EMPTY);
 				} else
 				{
 					GristHelper.decrease(player.world, data.connection.getClientIdentifier(), AlchemyCostRegistry.getGristConversion(stack));
-					MinestuckPlayerTracker.updateGristCache(player.server, data.connection.getClientIdentifier());
+					PlayerTracker.updateGristCache(player.server, data.connection.getClientIdentifier());
 				}
 			}
 		}
@@ -411,7 +410,7 @@ public class ServerEditHandler
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public void onAttackEvent(AttackEntityEvent event)
 	{
-		if(!event.getEntity().world.isRemote && getData(event.getEntityPlayer()) != null)
+		if(!event.getEntity().world.isRemote && getData(event.getPlayer()) != null)
 			event.setCanceled(true);
 	}
 	

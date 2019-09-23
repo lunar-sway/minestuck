@@ -1,8 +1,8 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.client.util.GuiUtil;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -11,8 +11,6 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -20,7 +18,6 @@ import java.util.stream.Collectors;
 /**
  * Created by mraof on 2017 December 06 at 11:31 PM.
  */
-@OnlyIn(Dist.CLIENT)
 public abstract class MinestuckScreen extends Screen
 {
 	protected static final int gristIconX = 21, gristIconY = 32;
@@ -36,6 +33,9 @@ public abstract class MinestuckScreen extends Screen
 	
 	public void drawGrist(int xOffset, int yOffset, int xcor, int ycor, int page)
 	{
+		if(minecraft == null)
+			return;
+		
 		//Show the name of the grist instead of the count if displaying a tooltip
 		boolean showName = false;
 		GristType tooltipType = null;
@@ -88,7 +88,10 @@ public abstract class MinestuckScreen extends Screen
 
 	private void drawIcon(int x, int y, ResourceLocation icon)
 	{
-		this.minecraft.getTextureManager().bindTexture(new ResourceLocation(icon.getNamespace(), "textures/grist/" + icon.getPath() + ".png"));
+		if(icon == null || minecraft == null)
+			return;
+		
+		this.minecraft.getTextureManager().bindTexture(icon);
 
 		float scale = (float) 1 / 16;
 

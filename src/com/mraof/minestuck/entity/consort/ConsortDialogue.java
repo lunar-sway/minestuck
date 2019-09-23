@@ -3,18 +3,18 @@ package com.mraof.minestuck.entity.consort;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 import com.mraof.minestuck.entity.consort.EnumConsort.MerchantType;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
-import com.mraof.minestuck.world.lands.LandAspectRegistry;
+import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandAspects;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
-import com.mraof.minestuck.world.storage.loot.MinestuckLoot;
+import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
@@ -22,10 +22,9 @@ import net.minecraft.util.text.ITextComponent;
 import java.util.*;
 
 import static com.mraof.minestuck.entity.consort.MessageType.*;
-import static com.mraof.minestuck.world.storage.loot.MinestuckLoot.CONSORT_FOOD_STOCK;
-import static com.mraof.minestuck.world.storage.loot.MinestuckLoot.CONSORT_GENERAL_STOCK;
-import static com.mraof.minestuck.world.lands.LandAspectRegistry.fromNameTerrain;
-import static com.mraof.minestuck.world.lands.LandAspectRegistry.fromNameTitle;
+import static com.mraof.minestuck.world.storage.loot.MSLootTables.CONSORT_FOOD_STOCK;
+import static com.mraof.minestuck.world.storage.loot.MSLootTables.CONSORT_GENERAL_STOCK;
+import static com.mraof.minestuck.world.lands.LandAspectRegistry.*;
 
 /**
  * Handles message registry, message selection and contains the main message
@@ -44,175 +43,175 @@ public class ConsortDialogue
 	public static void init()
 	{
 		// Wind
-		addMessage("dad_wind").landTitle(fromNameTitle("wind"));
-		addMessage(new ChainMessage(new SingleMessage("pyre1"), new SingleMessage("pyre2"))).landTitle(fromNameTitle("wind")).consort(EnumConsort.SALAMANDER, EnumConsort.TURTLE);
-		addMessage("koolaid").landTitle(fromNameTitle("pulse")).consort(EnumConsort.SALAMANDER, EnumConsort.TURTLE);
-		addMessage("murder_rain").landTitle(fromNameTitle("pulse"));
-		addMessage("swimming").landTitle(fromNameTitle("pulse")).consort(EnumConsort.IGUANA, EnumConsort.TURTLE);
-		addMessage("blood_surprise").landTitle(fromNameTitle("pulse")).consort(EnumConsort.IGUANA, EnumConsort.NAKAGATOR);
+		addMessage("dad_wind").landTitle(WIND);
+		addMessage(new ChainMessage(new SingleMessage("pyre1"), new SingleMessage("pyre2"))).landTitle(WIND).consort(EnumConsort.SALAMANDER, EnumConsort.TURTLE);
+		addMessage("koolaid").landTitle(PULSE).consort(EnumConsort.SALAMANDER, EnumConsort.TURTLE);
+		addMessage("murder_rain").landTitle(PULSE);
+		addMessage("swimming").landTitle(PULSE).consort(EnumConsort.IGUANA, EnumConsort.TURTLE);
+		addMessage("blood_surprise").landTitle(PULSE).consort(EnumConsort.IGUANA, EnumConsort.NAKAGATOR);
 		
 		// Thunder
-		addMessage("skeleton_horse").landTitle(fromNameTitle("thunder"));
-		addMessage("blue_moon").landTitle(fromNameTitle("thunder")).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
-		addMessage("lightning_strike").landTitle(fromNameTitle("thunder")).consort(EnumConsort.TURTLE);
-		addMessage(new ChainMessage(new SingleMessage("reckoning1"), new SingleMessage("reckoning2"), new SingleMessage("reckoning3", "consort_type"))).landTitle(fromNameTitle("thunder"));
-		addMessage(new ChainMessage(new SingleMessage("thunder_death.1"), new SingleMessage("thunder_death.2"))).landTitle(fromNameTitle("thunder")).landTerrain(fromNameTerrain("woods"));
-		addMessage("hardcore").landTitle(fromNameTitle("thunder")).landTerrain(fromNameTerrain("heat"));
-		addMessage(new ChainMessage(new SingleMessage("thunder_throw.1"), new SingleMessage("thunder_throw.2"))).landTitle(fromNameTitle("thunder")).consort(EnumConsort.TURTLE, EnumConsort.SALAMANDER);
+		addMessage("skeleton_horse").landTitle(THUNDER);
+		addMessage("blue_moon").landTitle(THUNDER).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
+		addMessage("lightning_strike").landTitle(THUNDER).consort(EnumConsort.TURTLE);
+		addMessage(new ChainMessage(new SingleMessage("reckoning1"), new SingleMessage("reckoning2"), new SingleMessage("reckoning3", "consort_type"))).landTitle(THUNDER);
+		addMessage(new ChainMessage(new SingleMessage("thunder_death.1"), new SingleMessage("thunder_death.2"))).landTitle(THUNDER).landTerrain(WOOD);
+		addMessage("hardcore").landTitle(THUNDER).landTerrain(HEAT);
+		addMessage(new ChainMessage(new SingleMessage("thunder_throw.1"), new SingleMessage("thunder_throw.2"))).landTitle(THUNDER).consort(EnumConsort.TURTLE, EnumConsort.SALAMANDER);
 		
 		//Rabbits
-		addMessage("bunny_birthday").landTitle(fromNameTitle("rabbits")).consort(EnumConsort.NAKAGATOR, EnumConsort.SALAMANDER);
-		addMessage("rabbit_eating").landTitle(fromNameTitle("rabbits")).consort(EnumConsort.TURTLE, EnumConsort.SALAMANDER);
-		addMessage("edgyLifeHatred").landTitle(fromNameTitle("rabbits")).consort(EnumConsort.IGUANA, EnumConsort.NAKAGATOR);
-		addMessage("rabbit.food_shortage.1").landTitle(fromNameTitle("rabbits")).landTerrain(fromNameTerrain("sand"), fromNameTerrain("sandstone"));
-		addMessage(new ChainMessage(0, "rabbit.foodShortage.2", new SingleMessage("rabbit.food_shortage.1"), new SingleMessage("rabbit.food_shortage.2"))).landTitle(fromNameTitle("rabbits")).landTerrain(fromNameTerrain("rock"));
-		addMessage(new ChainMessage(0, "rabbit.food.1", new SingleMessage("rabbit.food.1"), new SingleMessage("rabbit.food.2a"))).landTitle(fromNameTitle("rabbits")).landTerrain(fromNameTerrain("rock"), fromNameTerrain("sandstone"));
-		addMessage(new ChainMessage(0, "rabbit.food.2", new SingleMessage("rabbit.food.1"), new SingleMessage("rabbit.food.2a"), new SingleMessage("rabbit.food.3a"))).landTitle(fromNameTitle("rabbits")).landTerrain(fromNameTerrain("sand"));
-		addMessage(new ChainMessage(0, "rabbit.food.3", new SingleMessage("rabbit.food.1"), new SingleMessage("rabbit.food.2b"))).landTitle(fromNameTitle("rabbits")).landTerrain(fromNameTerrain("woods"), fromNameTerrain("shade"));
+		addMessage("bunny_birthday").landTitle(RABBITS).consort(EnumConsort.NAKAGATOR, EnumConsort.SALAMANDER);
+		addMessage("rabbit_eating").landTitle(RABBITS).consort(EnumConsort.TURTLE, EnumConsort.SALAMANDER);
+		addMessage("edgyLifeHatred").landTitle(RABBITS).consort(EnumConsort.IGUANA, EnumConsort.NAKAGATOR);
+		addMessage("rabbit.food_shortage.1").landTitle(RABBITS).landTerrain(SAND, SANDSTONE);
+		addMessage(new ChainMessage(0, "rabbit.foodShortage.2", new SingleMessage("rabbit.food_shortage.1"), new SingleMessage("rabbit.food_shortage.2"))).landTitle(RABBITS).landTerrain(ROCK);
+		addMessage(new ChainMessage(0, "rabbit.food.1", new SingleMessage("rabbit.food.1"), new SingleMessage("rabbit.food.2a"))).landTitle(RABBITS).landTerrain(ROCK, SANDSTONE);
+		addMessage(new ChainMessage(0, "rabbit.food.2", new SingleMessage("rabbit.food.1"), new SingleMessage("rabbit.food.2a"), new SingleMessage("rabbit.food.3a"))).landTitle(RABBITS).landTerrain(SAND);
+		addMessage(new ChainMessage(0, "rabbit.food.3", new SingleMessage("rabbit.food.1"), new SingleMessage("rabbit.food.2b"))).landTitle(RABBITS).landTerrain(WOOD, SHADE);
 		
 		//Monsters
-		addMessage(new SingleMessage("pet_zombie")).landTitle(fromNameTitle("monsters")).consort(EnumConsort.NAKAGATOR, EnumConsort.SALAMANDER);
-		addMessage("spider_raid").landTitleSpecific(fromNameTitle("monsters"));
-		addMessage("monstersona").landTitle(fromNameTitle("monsters")).consort(EnumConsort.IGUANA, EnumConsort.NAKAGATOR);
+		addMessage(new SingleMessage("pet_zombie")).landTitle(MONSTERS).consort(EnumConsort.NAKAGATOR, EnumConsort.SALAMANDER);
+		addMessage("spider_raid").landTitleSpecific(MONSTERS);
+		addMessage("monstersona").landTitle(MONSTERS).consort(EnumConsort.IGUANA, EnumConsort.NAKAGATOR);
 		
 		//Towers
-		addMessage("bug_treasure").landTitleSpecific(fromNameTitle("towers")).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
-		addMessage("tower_gone").landTitleSpecific(fromNameTitle("towers")).consort(EnumConsort.TURTLE, EnumConsort.SALAMANDER);
-		addMessage("no_tower_treasure").landTitle(fromNameTitle("towers")).consort(EnumConsort.IGUANA, EnumConsort.NAKAGATOR);
+		addMessage("bug_treasure").landTitle(TOWERS).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
+		addMessage("tower_gone").landTitle(TOWERS).consort(EnumConsort.TURTLE, EnumConsort.SALAMANDER);
+		addMessage("no_tower_treasure").landTitle(TOWERS).consort(EnumConsort.IGUANA, EnumConsort.NAKAGATOR);
 		
 		//Thought
-		addMessage("glass_books").landTitleSpecific(fromNameTitle("thought")).consort(EnumConsort.TURTLE, EnumConsort.IGUANA);
-		addMessage("book_food").landTitleSpecific(fromNameTitle("thought")).consort(EnumConsort.SALAMANDER, EnumConsort.NAKAGATOR);
-		addMessage("to_eat").landTitle(fromNameTitle("thought")).consort(EnumConsort.IGUANA, EnumConsort.NAKAGATOR);
+		addMessage("glass_books").landTitle(THOUGHT).consort(EnumConsort.TURTLE, EnumConsort.IGUANA);
+		addMessage("book_food").landTitle(THOUGHT).consort(EnumConsort.SALAMANDER, EnumConsort.NAKAGATOR);
+		addMessage("to_eat").landTitle(THOUGHT).consort(EnumConsort.IGUANA, EnumConsort.NAKAGATOR);
 		
 		//Cake
-		addMessage("mystery_recipe").landTitleSpecific(fromNameTitle("cake")).consort(EnumConsort.TURTLE, EnumConsort.NAKAGATOR);
-		addMessage("cake_regen").landTitleSpecific(fromNameTitle("cake")).consort(EnumConsort.TURTLE, EnumConsort.SALAMANDER);
-		addMessage("cake_recipe").landTitleSpecific(fromNameTitle("cake")).consort(EnumConsort.IGUANA, EnumConsort.SALAMANDER);
-		addMessage("frosting").landTitleSpecific(fromNameTitle("cake")).landTerrain(fromNameTerrain("frost"));
+		addMessage("mystery_recipe").landTitle(CAKE).consort(EnumConsort.TURTLE, EnumConsort.NAKAGATOR);
+		addMessage("cake_regen").landTitle(CAKE).consort(EnumConsort.TURTLE, EnumConsort.SALAMANDER);
+		addMessage("cake_recipe").landTitle(CAKE).consort(EnumConsort.IGUANA, EnumConsort.SALAMANDER);
+		addMessage("frosting").landTitle(CAKE).landTerrain(FROST);
 		
 		//Clockwork
-		addMessage("gear_technology").landTitleSpecific(fromNameTitle("clockwork")).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
-		addMessage("evil_gears").landTitleSpecific(fromNameTitle("clockwork")).consort(EnumConsort.NAKAGATOR, EnumConsort.IGUANA);
-		addMessage("ticking").landTitleSpecific(fromNameTitle("clockwork")).consort(EnumConsort.TURTLE, EnumConsort.SALAMANDER);
+		addMessage("gear_technology").landTitle(CLOCKWORK).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
+		addMessage("evil_gears").landTitle(CLOCKWORK).consort(EnumConsort.NAKAGATOR, EnumConsort.IGUANA);
+		addMessage("ticking").landTitle(CLOCKWORK).consort(EnumConsort.TURTLE, EnumConsort.SALAMANDER);
 		
 		//Frogs
-		addMessage("frog_creation").landTitleSpecific(fromNameTitle("frogs"));
-		addMessage("frog_imitation").landTitleSpecific(fromNameTitle("frogs"));
-		addMessage(new ChainMessage(new SingleMessage("frog_variants1"), new SingleMessage("frog_variants2", "land_name"))).landTitle(fromNameTitle("frogs")).landTitleSpecific(LandAspectRegistry.frogAspect);
-		addMessage("frog_hatred").landTitleSpecific(fromNameTitle("frogs"));
-		addMessage(new ChainMessage(new SingleMessage("grasshopper_fishing1"), new SingleMessage("grasshopper_fishing2"))).landTitleSpecific(fromNameTitle("frogs")).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
-		addMessage("gay_frogs").landTitleSpecific(fromNameTitle("frogs")).landTerrainSpecific(fromNameTerrain("rainbow"));
+		addMessage("frog_creation").landTitle(FROGS);
+		addMessage("frog_imitation").landTitle(FROGS);
+		addMessage(new ChainMessage(new SingleMessage("frog_variants1"), new SingleMessage("frog_variants2", "land_name"))).landTitle(FROGS);
+		addMessage("frog_hatred").landTitle(FROGS);
+		addMessage(new ChainMessage(new SingleMessage("grasshopper_fishing1"), new SingleMessage("grasshopper_fishing2"))).landTitle(FROGS).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
+		addMessage("gay_frogs").landTitle(FROGS).landTerrainSpecific(RAINBOW);
 		
 		//Buckets
-		addMessage("lewd_buckets").landTitleSpecific(fromNameTitle("buckets"));
-		addMessage("water_buckets").landTitleSpecific(fromNameTitle("buckets")).landTerrain(fromNameTerrain("sand"));
-		addMessage("warm_buckets").landTitleSpecific(fromNameTitle("buckets")).landTerrain(fromNameTerrain("frost"));
-		addMessage(new ChainMessage(new SingleMessage("oil_buckets.1"), new SingleMessage("oil_buckets.2"))).landTitleSpecific(fromNameTitle("buckets")).landTerrain(fromNameTerrain("shade"));
+		addMessage("lewd_buckets").landTitle(BUCKETS);
+		addMessage("water_buckets").landTitle(BUCKETS).landTerrain(SAND);
+		addMessage("warm_buckets").landTitle(BUCKETS).landTerrain(FROST);
+		addMessage(new ChainMessage(new SingleMessage("oil_buckets.1"), new SingleMessage("oil_buckets.2"))).landTitle(BUCKETS).landTerrain(SHADE);
 		
 		//Light
-		addMessage("blindness").landTitleSpecific(fromNameTitle("light"));
-		addMessage("doctors_inside").landTitleSpecific(fromNameTitle("light")).consort(EnumConsort.TURTLE);
-		addMessage("staring").landTitleSpecific(fromNameTitle("light"));
-		addMessage(new ChainMessage(new SingleMessage("sunglasses.1"), new SingleMessage("sunglasses.2"))).landTitle(fromNameTitle("light")).landTerrain(fromNameTerrain("heat"));
-		addMessage(new ChainMessage(new SingleMessage("bright_snow.1"), new SingleMessage("bright_snow.2"))).landTitle(fromNameTitle("light")).landTerrain(fromNameTerrain("frost"));
-		addMessage("glimmering_snow").landTitleSpecific(fromNameTitle("light")).landTerrain(fromNameTerrain("frost"));
-		addMessage("glimmering_sand").landTitleSpecific(fromNameTitle("light")).landTerrain(fromNameTerrain("sand"));
-		addMessage("light_pillars").landTitleSpecific(fromNameTitle("light")).consort(EnumConsort.IGUANA, EnumConsort.TURTLE);
+		addMessage("blindness").landTitle(LIGHT);
+		addMessage("doctors_inside").landTitle(LIGHT).consort(EnumConsort.TURTLE);
+		addMessage("staring").landTitle(LIGHT);
+		addMessage(new ChainMessage(new SingleMessage("sunglasses.1"), new SingleMessage("sunglasses.2"))).landTitle(LIGHT).landTerrain(HEAT);
+		addMessage(new ChainMessage(new SingleMessage("bright_snow.1"), new SingleMessage("bright_snow.2"))).landTitle(LIGHT).landTerrain(FROST);
+		addMessage("glimmering_snow").landTitle(LIGHT).landTerrain(FROST);
+		addMessage("glimmering_sand").landTitle(LIGHT).landTerrain(SAND);
+		addMessage("light_pillars").landTitle(LIGHT).consort(EnumConsort.IGUANA, EnumConsort.TURTLE);
 		
 		//Silence
-		addMessage("murder_silence").landTitleSpecific(fromNameTitle("silence")).consort(EnumConsort.NAKAGATOR, EnumConsort.SALAMANDER);
-		addMessage("silent_underlings").landTitleSpecific(fromNameTitle("silence"));
-		addMessage(new ChainMessage(new SingleMessage("listening.1"), new SingleMessage("listening.2"))).landTitle(fromNameTitle("silence")).consort(EnumConsort.IGUANA, EnumConsort.SALAMANDER);
-		addMessage("calmness").landTitleSpecific(fromNameTitle("silence")).consort(EnumConsort.TURTLE, EnumConsort.IGUANA);
+		addMessage("murder_silence").landTitle(SILENCE).consort(EnumConsort.NAKAGATOR, EnumConsort.SALAMANDER);
+		addMessage("silent_underlings").landTitle(SILENCE);
+		addMessage(new ChainMessage(new SingleMessage("listening.1"), new SingleMessage("listening.2"))).landTitle(SILENCE).consort(EnumConsort.IGUANA, EnumConsort.SALAMANDER);
+		addMessage("calmness").landTitle(SILENCE).consort(EnumConsort.TURTLE, EnumConsort.IGUANA);
 		
 		//Towers
-		addMessage("climb_high").landTitleSpecific(fromNameTitle("towers"), fromNameTitle("wind")).consort(EnumConsort.IGUANA);
+		addMessage("climb_high").landTitle(TOWERS, WIND).consort(EnumConsort.IGUANA);
 		addMessage(new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> consort.posY < 78, new ChainMessage(new SingleMessage("height_fear.towers.1"), new SingleMessage("height_fear.towers.2")),
-				new SingleMessage("height_fear.panic"))).landTitle(fromNameTitle("towers")).consort(EnumConsort.TURTLE);
+				new SingleMessage("height_fear.panic"))).landTitle(TOWERS).consort(EnumConsort.TURTLE);
 		addMessage(new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> consort.posY < 78, new ChainMessage(new SingleMessage("height_fear.rock.1"), new SingleMessage("height_fear.rock.2")),
-				new SingleMessage("height_fear.panic"))).landTitle(fromNameTitle("wind")).consort(EnumConsort.TURTLE);
+				new SingleMessage("height_fear.panic"))).landTitle(WIND).consort(EnumConsort.TURTLE);
 		
 		//Shade
 		addMessage(new ChainMessage(2, new SingleMessage("mush_farm.1"), new SingleMessage("mush_farm.2"), new SingleMessage("mush_farm.3"),
 				new SingleMessage("mush_farm.4"), new SingleMessage("mush_farm.5"), new SingleMessage("mush_farm.6"),
-				new SingleMessage("mush_farm.7"))).landTerrain(fromNameTerrain("shade"));
+				new SingleMessage("mush_farm.7"))).landTerrain(SHADE);
 		addMessage(new ChoiceMessage(new SingleMessage("mushroom_pizza"),
 				new SingleMessage[]{new SingleMessage("mushroom_pizza.on"), new SingleMessage("mushroom_pizza.off")},
-				new MessageType[]{new SingleMessage("mushroom_pizza.on.consort_reply"), new SingleMessage("mushroom_pizza.off.consort_reply")})).landTerrain(fromNameTerrain("shade"));
-		addMessage("fire_hazard").landTerrain(fromNameTerrain("shade")).landTitle(allExcept(fromNameTitle("thunder")));
-		addMessage("getting_hot").landTerrain(fromNameTerrain("heat"));
-		addMessage("step_into_fire").landTerrain(fromNameTerrain("heat"));
-		addMessage("lava_crickets").landTerrain(fromNameTerrain("heat"));
+				new MessageType[]{new SingleMessage("mushroom_pizza.on.consort_reply"), new SingleMessage("mushroom_pizza.off.consort_reply")})).landTerrain(SHADE);
+		addMessage("fire_hazard").landTerrain(SHADE).landTitle(allExcept(THUNDER));
+		addMessage("getting_hot").landTerrain(HEAT);
+		addMessage("step_into_fire").landTerrain(HEAT);
+		addMessage("lava_crickets").landTerrain(HEAT);
 		
 		//Wood
-		addMessage("wood_treatments").landTerrain(fromNameTerrain("woods"));
-		addMessage(new ChainMessage(new SingleMessage("splinters.1"), new SingleMessage("splinters.2"))).landTerrain(fromNameTerrain("woods"));
+		addMessage("wood_treatments").landTerrain(WOOD);
+		addMessage(new ChainMessage(new SingleMessage("splinters.1"), new SingleMessage("splinters.2"))).landTerrain(WOOD);
 		
 		//Sand & Sandstone
-		addMessage("sand_surfing").landTerrain(fromNameTerrain("sand"));
+		addMessage("sand_surfing").landTerrain(SAND);
 		addMessage(new ChoiceMessage(new SingleMessage("camel"), new SingleMessage[]{new SingleMessage("camel.yes"), new SingleMessage("camel.no")},
-				new MessageType[]{new SingleMessage("camel.no_camel"), new SingleMessage("camel.dancing_camel")})).landTerrain(fromNameTerrain("sand"));
-		addMessage("knockoff").landTerrain(fromNameTerrain("sandstone"));
-		addMessage(new ChainMessage(new SingleMessage("sandless.1", "denizen"), new SingleMessage("sandless.2"))).landTerrain(fromNameTerrain("sandstone"));
-		addMessage("red_better").landTerrainSpecific(fromNameTerrain("sand_red"), fromNameTerrain("sandstone_red"));
-		addMessage("yellow_better").landTerrainSpecific(fromNameTerrain("sand"), fromNameTerrain("sandstone"));
+				new MessageType[]{new SingleMessage("camel.no_camel"), new SingleMessage("camel.dancing_camel")})).landTerrain(SAND);
+		addMessage("knockoff").landTerrain(SANDSTONE);
+		addMessage(new ChainMessage(new SingleMessage("sandless.1", "denizen"), new SingleMessage("sandless.2"))).landTerrain(SANDSTONE);
+		addMessage("red_better").landTerrainSpecific(RED_SAND, RED_SANDSTONE);
+		addMessage("yellow_better").landTerrainSpecific(SAND, SANDSTONE);
 		
 		//Frost
-		addMessage(new ChainMessage(new SingleMessage("frozen1"), new DescriptionMessage("frozen2"))).landTerrain(fromNameTerrain("frost"));
+		addMessage(new ChainMessage(new SingleMessage("frozen1"), new DescriptionMessage("frozen2"))).landTerrain(FROST);
 		addMessage(new ChoiceMessage(new SingleMessage("fur_coat"), new SingleMessage[]{new SingleMessage("fur_coat.pay"), new SingleMessage("fur_coat.ignore")},
-				new MessageType[]{new PurchaseMessage(MinestuckLoot.CONSORT_JUNK_REWARD, 100, new ChainMessage(1, new SingleMessage("fur_coat.grattitude"), new SingleMessage("thank_you"))),
-						new SingleMessage("fur_coat.death")})).landTerrain(fromNameTerrain("frost"));
-		addMessage("tent_protection").landTerrain(fromNameTerrain("frost")).consortReq(ConsortEntity::detachHome);
-		addMessage("all_ores").landTerrain(fromNameTerrain("rock"));
-		addMessage("rockfu", "landName").landTerrain(fromNameTerrain("rock"));
-		addMessage("all_trees").landTerrain(fromNameTerrain("forest"));
-		addMessage("really_likes_trees").landTerrain(fromNameTerrain("forest"));
+				new MessageType[]{new PurchaseMessage(MSLootTables.CONSORT_JUNK_REWARD, 100, new ChainMessage(1, new SingleMessage("fur_coat.grattitude"), new SingleMessage("thank_you"))),
+						new SingleMessage("fur_coat.death")})).landTerrain(FROST);
+		addMessage("tent_protection").landTerrain(FROST).consortReq(ConsortEntity::detachHome);
+		addMessage("all_ores").landTerrain(ROCK);
+		addMessage("rockfu", "landName").landTerrain(ROCK);
+		addMessage("all_trees").landTerrain(FOREST);
+		addMessage("really_likes_trees").landTerrain(FOREST);
 		
 		//Fungi
-		addMessage(new ChainMessage(new SingleMessage("mycelium1"), new SingleMessage("mycelium2"))).landTerrain(fromNameTerrain("fungi"));
-		addMessage(new ChainMessage(new SingleMessage("adaptation1"), new SingleMessage("adaptation2"))).landTerrain(fromNameTerrain("fungi"));
-		addMessage("mushroom_curse", "denizen").landTerrain(fromNameTerrain("fungi"));
-		addMessage("jacket").landTerrain(fromNameTerrain("fungi"));
-		addMessage("mildew").landTerrain(fromNameTerrain("fungi"));
-		addMessage("fungus_destroyer", "playerTitle", "denizen").landTerrain(fromNameTerrain("fungi"));
+		addMessage(new ChainMessage(new SingleMessage("mycelium1"), new SingleMessage("mycelium2"))).landTerrain(FUNGI);
+		addMessage(new ChainMessage(new SingleMessage("adaptation1"), new SingleMessage("adaptation2"))).landTerrain(FUNGI);
+		addMessage("mushroom_curse", "denizen").landTerrain(FUNGI);
+		addMessage("jacket").landTerrain(FUNGI);
+		addMessage("mildew").landTerrain(FUNGI);
+		addMessage("fungus_destroyer", "playerTitle", "denizen").landTerrain(FUNGI);
 		
 		//Rainbow Terrain
-		addMessage("generic_green").landTerrain(fromNameTerrain("rainbow"));
-		addMessage("overwhelming_colors").landTerrain(fromNameTerrain("rainbow"));
-		addMessage("saw_rainbow").landTerrain(fromNameTerrain("rainbow"));
-		addMessage("sunglasses").landTerrain(fromNameTerrain("rainbow"));
-		addMessage("what_is_wool").landTerrain(fromNameTerrain("rainbow"));
-		addMessage("love_colors").landTerrain(fromNameTerrain("rainbow"));
+		addMessage("generic_green").landTerrain(RAINBOW);
+		addMessage("overwhelming_colors").landTerrain(RAINBOW);
+		addMessage("saw_rainbow").landTerrain(RAINBOW);
+		addMessage("sunglasses").landTerrain(RAINBOW);
+		addMessage("what_is_wool").landTerrain(RAINBOW);
+		addMessage("love_colors").landTerrain(RAINBOW);
 		addMessage(new ChainMessage(new SingleMessage("types_of_colors.1"), new SingleMessage("types_of_colors.2"), new SingleMessage("types_of_colors.3"),
 				new SingleMessage("types_of_colors.4"), new SingleMessage("types_of_colors.5"), new SingleMessage("types_of_colors.6"), new SingleMessage("types_of_colors.7"), new SingleMessage("types_of_colors.8"),
 				new SingleMessage("types_of_colors.9"), new SingleMessage("types_of_colors.10"), new SingleMessage("types_of_colors.11"), new SingleMessage("types_of_colors.12"), new SingleMessage("types_of_colors.13"),
 				new SingleMessage("types_of_colors.14"), new SingleMessage("types_of_colors.15"), new SingleMessage("types_of_colors.16"), new SingleMessage("types_of_colors.17"), new SingleMessage("types_of_colors.18")))
-				.landTerrain(fromNameTerrain("rainbow"));
+				.landTerrain(RAINBOW);
 		
 		//End Terrain
-		addMessage("at_the_end").landTerrain(fromNameTerrain("end"));
-		addMessage("chorus_fruit").landTerrain(fromNameTerrain("end"));
-		addMessage("end_grass").landTerrain(fromNameTerrain("end"));
-		addMessage("grass_curse", "denizen").landTerrain(fromNameTerrain("end"));
-		addMessage("useless_pogo").landTerrain(fromNameTerrain("end"));
-		addMessage("useless_elytra").landTerrain(fromNameTerrain("end"));
+		addMessage("at_the_end").landTerrain(END);
+		addMessage("chorus_fruit").landTerrain(END);
+		addMessage("end_grass").landTerrain(END);
+		addMessage("grass_curse", "denizen").landTerrain(END);
+		addMessage("useless_pogo").landTerrain(END);
+		addMessage("useless_elytra").landTerrain(END);
 		
 		//Rain terrain
-		addMessage("empty_ocean", "denizen").landTerrain(fromNameTerrain("rain"));
-		addMessage("forbidden_snack").landTerrain(fromNameTerrain("rain"));
-		addMessage("cotton_candy").landTerrain(fromNameTerrain("rain"));
-		addMessage("monsters_below").landTerrain(fromNameTerrain("rain"));
-		addMessage("keep_swimming").landTerrain(fromNameTerrain("rain"));
+		addMessage("empty_ocean", "denizen").landTerrain(RAIN);
+		addMessage("forbidden_snack").landTerrain(RAIN);
+		addMessage("cotton_candy").landTerrain(RAIN);
+		addMessage("monsters_below").landTerrain(RAIN);
+		addMessage("keep_swimming").landTerrain(RAIN);
 		
 		//Flora Terrain
-		addMessage("battle_site").landTerrain(fromNameTerrain("flora"));
-		addMessage("blood_oceans").landTerrain(fromNameTerrain("flora"));
-		addMessage("giant_swords").landTerrain(fromNameTerrain("flora"));
-		addMessage(new ChainMessage(new SingleMessage("bloodberries.1"), new SingleMessage("bloodberries.2"))).landTerrain(fromNameTerrain("flora"));
-		addMessage("sharp_slide").landTerrain(fromNameTerrain("flora"));
-		addMessage(new ChainMessage(new SingleMessage("immortality_herb.1"), new SingleMessage("immortality_herb.2"), new SingleMessage("immortality_herb.3"))).landTerrain(fromNameTerrain("flora"));
-		addMessage(new ChainMessage(new SingleMessage("spices.1"), new SingleMessage("spices.2", "land_name"))).landTerrain(fromNameTerrain("flora"));
+		addMessage("battle_site").landTerrain(FLORA);
+		addMessage("blood_oceans").landTerrain(FLORA);
+		addMessage("giant_swords").landTerrain(FLORA);
+		addMessage(new ChainMessage(new SingleMessage("bloodberries.1"), new SingleMessage("bloodberries.2"))).landTerrain(FLORA);
+		addMessage("sharp_slide").landTerrain(FLORA);
+		addMessage(new ChainMessage(new SingleMessage("immortality_herb.1"), new SingleMessage("immortality_herb.2"), new SingleMessage("immortality_herb.3"))).landTerrain(FLORA);
+		addMessage(new ChainMessage(new SingleMessage("spices.1"), new SingleMessage("spices.2", "land_name"))).landTerrain(FLORA);
 
 		//Misc
 		addMessage("denizen_mention").reqLand();
@@ -221,12 +220,12 @@ public class ConsortDialogue
 		addMessage("frog_walk").consort(EnumConsort.TURTLE);
 		addMessage("delicious_hair").consort(EnumConsort.IGUANA);
 		//		addMessage("village"); Did not work as intended
-		addMessage("lazy_king").landTerrain(fromNameTerrain("shade"));
+		addMessage("lazy_king").landTerrain(SHADE);
 		addMessage("music_invention").consort(EnumConsort.NAKAGATOR, EnumConsort.SALAMANDER);
 		addMessage("wyrm").consort(EnumConsort.TURTLE, EnumConsort.IGUANA);
-		addMessage(new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> SburbHandler.hasEntered((ServerPlayerEntity) player),
+		addMessage(new ConditionedMessage((consort, player) -> SburbHandler.hasEntered(player),
 				new SingleMessage("heroic_stench"), new SingleMessage("leech_stench"))).reqLand();
-		addMessage(new SingleMessage("fire_cakes")).landTerrain(fromNameTerrain("heat")).landTitle(fromNameTitle("cake"));
+		addMessage(new SingleMessage("fire_cakes")).landTerrain(HEAT).landTitle(CAKE);
 		
 		MessageType raps = new RandomMessage("rap_battles", RandomKeepResult.KEEP_CONSORT,
 				new DelayMessage(new int[] {17, 17, 30},
@@ -275,10 +274,10 @@ public class ConsortDialogue
 		
 		addMessage("await_hero", "land_name", "consort_types", "player_title_land").reqLand();
 		addMessage(new ConditionedMessage("skaia", (ConsortEntity consort, ServerPlayerEntity player) -> !consort.visitedSkaia, new SingleMessage("watch_skaia"),
-				new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> MinestuckDimensionHandler.isSkaia(consort.dimension),
+				new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> MSDimensions.isSkaia(consort.dimension),
 						new SingleMessage("at_skaia.1", "consort_sound2"), new SingleMessage("visited_skaia")))).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA, EnumConsort.NAKAGATOR).reqLand();
 		addMessage(new ConditionedMessage("skaia_turtle", (ConsortEntity consort, ServerPlayerEntity player) -> !consort.visitedSkaia, new SingleMessage("watch_skaia"),
-				new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> MinestuckDimensionHandler.isSkaia(consort.dimension),
+				new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> MSDimensions.isSkaia(consort.dimension),
 						new SingleMessage("at_skaia.2"), new SingleMessage("visited_skaia")))).consort(EnumConsort.TURTLE).reqLand();
 		
 		addMessage(new SingleMessage("zazzerpan")).consort(EnumConsort.TURTLE);
@@ -297,12 +296,12 @@ public class ConsortDialogue
 		addMessage(new ChoiceMessage(new DescriptionMessage("peppy_offer"),
 				new SingleMessage[] { new SingleMessage("peppy_offer.buy"), new SingleMessage("peppy_offer.deny") },
 				new MessageType[] {
-						new PurchaseMessage(false, MinestuckLoot.CONSORT_JUNK_REWARD, 1000, "purchase",
+						new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 1000, "purchase",
 								new ChainMessage(1, new SingleMessage("peppy_offer.item"), new SingleMessage("peppy_offer.purchase"))),
 						new ChoiceMessage(new SingleMessage("peppy_offer.next"),
 								new SingleMessage[] { new SingleMessage("peppy_offer.deny_again"), new SingleMessage("peppy_offer.buy2") },
 								new MessageType[] { new SingleMessage("dots"),
-										new PurchaseMessage(false, MinestuckLoot.CONSORT_JUNK_REWARD, 500, "purchase",
+										new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 500, "purchase",
 												new SingleMessage("peppy_offer.purchase")) }) })).type(MerchantType.SHADY).consort(EnumConsort.NAKAGATOR, EnumConsort.IGUANA);
 
 
@@ -317,7 +316,7 @@ public class ConsortDialogue
 								new SingleMessage("shady_offer.deny")
 						},
 				new MessageType[] {
-						new PurchaseMessage(false, MinestuckLoot.CONSORT_JUNK_REWARD, 1000, "purchase",
+						new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 1000, "purchase",
 								new ChainMessage(1,
 										new SingleMessage("shady_offer.item"),
 										new SingleMessage("shady_offer.purchase")
@@ -332,7 +331,7 @@ public class ConsortDialogue
 								new MessageType[]
 								{
 										new SingleMessage("dots"),
-										new PurchaseMessage(false, MinestuckLoot.CONSORT_JUNK_REWARD, 500, "purchase",
+										new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 500, "purchase",
 												new SingleMessage("shady_offer.purchase")
 										)
 								}
@@ -344,9 +343,9 @@ public class ConsortDialogue
 				new SingleMessage[] { new SingleMessage("denizen.what"), new SingleMessage("denizen.ask_alignment") },
 				new MessageType[] { new SingleMessage("denizen.explain", "player_class_land"), new SingleMessage("denizen.alignment") })).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA, EnumConsort.TURTLE).reqLand();
 		
-		List<ItemStack> hungryList = ImmutableList.of(new ItemStack(Items.COOKIE), new ItemStack(MinestuckItems.BUG_ON_A_STICK),
-				new ItemStack(MinestuckItems.GRASSHOPPER), new ItemStack(MinestuckItems.CHOCOLATE_BEETLE),	//TODO Use item tags for these kind of things
-				new ItemStack(MinestuckItems.CONE_OF_FLIES));
+		List<ItemStack> hungryList = ImmutableList.of(new ItemStack(Items.COOKIE), new ItemStack(MSItems.BUG_ON_A_STICK),
+				new ItemStack(MSItems.GRASSHOPPER), new ItemStack(MSItems.CHOCOLATE_BEETLE),	//TODO Use item tags for these kind of things
+				new ItemStack(MSItems.CONE_OF_FLIES));
 		addMessage(new ItemRequirement(hungryList, false, true, new SingleMessage("hungry"),
 						new ChoiceMessage(new SingleMessage("hungry.ask_food", "nbt_item:hungry.item"),
 								new SingleMessage[] { new SingleMessage("hungry.accept"), new SingleMessage("hungry.deny") },
@@ -375,41 +374,41 @@ public class ConsortDialogue
 		addMessage(new MerchantGuiMessage(new SingleMessage("fast_food"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).consort(EnumConsort.NAKAGATOR);
 		addMessage(new MerchantGuiMessage(new SingleMessage("grocery_store"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).consort(EnumConsort.IGUANA);
 		addMessage(new MerchantGuiMessage(new SingleMessage("tasty_welcome"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).consort(EnumConsort.TURTLE);
-		addMessage(new MerchantGuiMessage(new SingleMessage("breath_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("wind"));
-		addMessage(new MerchantGuiMessage(new SingleMessage("blood_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("pulse"));
-		addMessage(new MerchantGuiMessage(new SingleMessage("life_Food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("rabbits"));
-		addMessage(new MerchantGuiMessage(new SingleMessage("doom_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("thunder"));
-		//addMessage(new MerchantGuiMessage(new SingleMessage("frogFoodShop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(LandAspectRegistry.frogAspect);
-		addMessage(new MerchantGuiMessage(new SingleMessage("space_food_shop", "land_name"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("frogs"));
-		addMessage(new MerchantGuiMessage(new SingleMessage("time_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("clockwork"));
-		addMessage(new MerchantGuiMessage(new SingleMessage("thyme_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("clockwork"), fromNameTitle("thought"));
-		addMessage(new MerchantGuiMessage(new SingleMessage("mind_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("thought"));
-		addMessage(new MerchantGuiMessage(new SingleMessage("heart_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("cake"));
-		addMessage(new MerchantGuiMessage(new SingleMessage("light_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("light"));
-		addMessage(new MerchantGuiMessage(new SingleMessage("void_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("silence"));
-		addMessage(new MerchantGuiMessage(new SingleMessage("rage_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("monsters"));
-		addMessage(new MerchantGuiMessage(new DescriptionMessage("hope_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("towers"));
-		addMessage(new MerchantGuiMessage(new SingleMessage("buckets_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("buckets"));
+		addMessage(new MerchantGuiMessage(new SingleMessage("breath_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(WIND);
+		addMessage(new MerchantGuiMessage(new SingleMessage("blood_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(PULSE);
+		addMessage(new MerchantGuiMessage(new SingleMessage("life_Food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(RABBITS);
+		addMessage(new MerchantGuiMessage(new SingleMessage("doom_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(THUNDER);
+		//addMessage(new MerchantGuiMessage(new SingleMessage("frog_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(FRONS);
+		addMessage(new MerchantGuiMessage(new SingleMessage("space_food_shop", "land_name"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(FROGS);
+		addMessage(new MerchantGuiMessage(new SingleMessage("time_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(CLOCKWORK);
+		addMessage(new MerchantGuiMessage(new SingleMessage("thyme_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(CLOCKWORK, THOUGHT);
+		addMessage(new MerchantGuiMessage(new SingleMessage("mind_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(THOUGHT);
+		addMessage(new MerchantGuiMessage(new SingleMessage("heart_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(CAKE);
+		addMessage(new MerchantGuiMessage(new SingleMessage("light_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(LIGHT);
+		addMessage(new MerchantGuiMessage(new SingleMessage("void_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(SILENCE);
+		addMessage(new MerchantGuiMessage(new SingleMessage("rage_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(MONSTERS);
+		addMessage(new MerchantGuiMessage(new DescriptionMessage("hope_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(TOWERS);
+		addMessage(new MerchantGuiMessage(new SingleMessage("buckets_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(BUCKETS);
 		
 		addMessage(new MerchantGuiMessage(new SingleMessage("general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL);
 		addMessage(new MerchantGuiMessage(new SingleMessage("got_the_goods"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL);
 		addMessage(new MerchantGuiMessage(new SingleMessage("rising_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL);
-		addMessage(new MerchantGuiMessage(new SingleMessage("breath_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("wind"));
-		addMessage(new MerchantGuiMessage(new SingleMessage("blood_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("pulse"));
-		addMessage(new MerchantGuiMessage(new SingleMessage("life_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("rabbits"));
-		addMessage(new MerchantGuiMessage(new SingleMessage("doom_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("thunder"));
+		addMessage(new MerchantGuiMessage(new SingleMessage("breath_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(WIND);
+		addMessage(new MerchantGuiMessage(new SingleMessage("blood_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(PULSE);
+		addMessage(new MerchantGuiMessage(new SingleMessage("life_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(RABBITS);
+		addMessage(new MerchantGuiMessage(new SingleMessage("doom_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(THUNDER);
 		//addMessage(new MerchantGuiMessage(new SingleMessage("frog_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(LandAspectRegistry.frogAspect);
-		addMessage(new MerchantGuiMessage(new SingleMessage("space_general_Shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("frogs"));
-		addMessage(new MerchantGuiMessage(new SingleMessage("time_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("clockwork"));
-		addMessage(new MerchantGuiMessage(new SingleMessage("mind_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("thought"));
-		addMessage(new MerchantGuiMessage(new SingleMessage("heart_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("cake"));
-		addMessage(new MerchantGuiMessage(new SingleMessage("light_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("light"));
-		addMessage(new MerchantGuiMessage(new SingleMessage("void_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("silence"));
-		addMessage(new MerchantGuiMessage(new SingleMessage("rage_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("monsters"));
-		addMessage(new MerchantGuiMessage(new DescriptionMessage("hope_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("towers"));
-		addMessage(new MerchantGuiMessage(new SingleMessage("buckets_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("buckets"));
+		addMessage(new MerchantGuiMessage(new SingleMessage("space_general_Shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(FROGS);
+		addMessage(new MerchantGuiMessage(new SingleMessage("time_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(CLOCKWORK);
+		addMessage(new MerchantGuiMessage(new SingleMessage("mind_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(THOUGHT);
+		addMessage(new MerchantGuiMessage(new SingleMessage("heart_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(CAKE);
+		addMessage(new MerchantGuiMessage(new SingleMessage("light_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(LIGHT);
+		addMessage(new MerchantGuiMessage(new SingleMessage("void_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(SILENCE);
+		addMessage(new MerchantGuiMessage(new SingleMessage("rage_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(MONSTERS);
+		addMessage(new MerchantGuiMessage(new DescriptionMessage("hope_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(TOWERS);
+		addMessage(new MerchantGuiMessage(new SingleMessage("buckets_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(BUCKETS);
 		
-		addMessage(new MerchantGuiMessage(new SingleMessage("boring_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTerrain(fromNameTerrain("rainbow"));
+		addMessage(new MerchantGuiMessage(new SingleMessage("boring_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTerrain(RAINBOW);
 	}
 	
 	public static DialogueWrapper addMessage(String message, String... args)
@@ -430,22 +429,27 @@ public class ConsortDialogue
 		return msg;
 	}
 	
+	public static TitleLandAspect[] allExceptSpecific(TitleLandAspect... aspects)
+	{
+		Set<TitleLandAspect> set = new HashSet<>(TITLE_REGISTRY.getValues());
+		for(TitleLandAspect exceptedAspect : aspects)
+			set.remove(exceptedAspect);
+		
+		return set.toArray(new TitleLandAspect[0]);
+	}
+	
 	public static TitleLandAspect[] allExcept(TitleLandAspect... aspects)
 	{
-		Set<TitleLandAspect> set = new HashSet<>();
-		names: for (String name : LandAspectRegistry.getNamesTitle())
-		{
-			for (TitleLandAspect aspect : aspects)
-				if (aspect.getPrimaryName().equals(name))
-					continue names;
-			set.add(LandAspectRegistry.fromNameTitle(name));
-		}
-		return set.toArray(new TitleLandAspect[set.size()]);
+		Set<TitleLandAspect> set = new HashSet<>(TITLE_REGISTRY.getValues());
+		for(TitleLandAspect exceptedAspect : aspects)
+			set.removeIf(aspect -> aspect.getGroup().equals(exceptedAspect.getGroup()));
+		
+		return set.toArray(new TitleLandAspect[0]);
 	}
 	
 	public static DialogueWrapper getRandomMessage(ConsortEntity consort, ServerPlayerEntity player)
 	{
-		LandAspects aspects = MinestuckDimensionHandler.getAspects(player.getServer(), consort.homeDimension);
+		LandAspects aspects = MSDimensions.getAspects(player.getServer(), consort.homeDimension);
 		
 		List<DialogueWrapper> list = new ArrayList<>();
 		
@@ -455,13 +459,13 @@ public class ConsortDialogue
 				continue;
 			if(message.consortRequirement != null && !message.consortRequirement.contains(consort.getConsortType()))
 				continue;
-			if(message.aspect1Requirement != null && !message.aspect1Requirement.contains(aspects.aspectTerrain.getPrimaryVariant()))
+			if(message.aspect1Requirement != null && aspects != null && !message.aspect1Requirement.contains(aspects.aspectTerrain.getGroup()))
 				continue;
-			if(message.aspect2Requirement != null && !message.aspect2Requirement.contains(aspects.aspectTitle.getPrimaryVariant()))
+			if(message.aspect2Requirement != null && aspects != null && !message.aspect2Requirement.contains(aspects.aspectTitle.getGroup()))
 				continue;
-			if(message.aspect1RequirementS != null && !message.aspect1RequirementS.contains(aspects.aspectTerrain))
+			if(message.aspect1RequirementS != null && aspects != null && !message.aspect1RequirementS.contains(aspects.aspectTerrain))
 				continue;
-			if(message.aspect2RequirementS != null && !message.aspect2RequirementS.contains(aspects.aspectTitle))
+			if(message.aspect2RequirementS != null && aspects != null && !message.aspect2RequirementS.contains(aspects.aspectTitle))
 				continue;
 			if(message.merchantRequirement == null && consort.merchantType != EnumConsort.MerchantType.NONE
 					|| message.merchantRequirement != null && !message.merchantRequirement.contains(consort.merchantType))
@@ -493,8 +497,8 @@ public class ConsortDialogue
 		
 		private MessageType messageStart;
 		
-		private Set<TerrainLandAspect> aspect1Requirement;
-		private Set<TitleLandAspect> aspect2Requirement;
+		private Set<ResourceLocation> aspect1Requirement;
+		private Set<ResourceLocation> aspect2Requirement;
 		private Set<TerrainLandAspect> aspect1RequirementS;
 		private Set<TitleLandAspect> aspect2RequirementS;
 		private EnumSet<EnumConsort> consortRequirement;
@@ -509,25 +513,24 @@ public class ConsortDialogue
 		
 		public DialogueWrapper landTerrain(TerrainLandAspect... aspects)
 		{
-			for(TerrainLandAspect aspect : aspects)
-				if(aspect == null)
-				{
-					Debug.warn("Land aspect is null for consort message " + messageStart.getString() + ", this is probably not intended");
-					break;
-				}
+			if(isAnyNull(aspects))
+				Debug.warnf("Land aspect is null for consort message %s, this is probably not intended", messageStart.getString());
 			reqLand = true;
-			aspect1Requirement = Sets.newHashSet(aspects);
+			aspect1Requirement = Sets.newHashSet();
+			for(TerrainLandAspect aspect : aspects)
+			{
+				if(aspect != null)
+					aspect1Requirement.add(aspect.getGroup());
+			}
+			
 			return this;
 		}
 		
 		public DialogueWrapper landTerrainSpecific(TerrainLandAspect... aspects)
 		{
-			for(TerrainLandAspect aspect : aspects)
-				if(aspect == null)
-				{
-					Debug.warn("Land aspect is null for consort message " + messageStart.getString() + ", this is probably not intended");
-					break;
-				}
+			
+			if(isAnyNull(aspects))
+				Debug.warnf("Land aspect is null for consort message %s, this is probably not intended", messageStart.getString());
 			reqLand = true;
 			aspect1RequirementS = Sets.newHashSet(aspects);
 			return this;
@@ -535,25 +538,20 @@ public class ConsortDialogue
 		
 		public DialogueWrapper landTitle(TitleLandAspect... aspects)
 		{
-			for(TitleLandAspect aspect : aspects)
-				if(aspect == null)
-				{
-					Debug.warn("Land aspect is null for consort message " + messageStart.getString() + ", this is probably not intended");
-					break;
-				}
+			if(isAnyNull(aspects))
+				Debug.warnf("Land aspect is null for consort message %s, this is probably not intended", messageStart.getString());
 			reqLand = true;
-			aspect2Requirement = Sets.newHashSet(aspects);
+			aspect2Requirement = Sets.newHashSet();
+			for(TitleLandAspect aspect : aspects)
+				if(aspect != null)
+					aspect2Requirement.add(aspect.getGroup());
 			return this;
 		}
 		
 		public DialogueWrapper landTitleSpecific(TitleLandAspect... aspects)
 		{
-			for(TitleLandAspect aspect : aspects)
-				if(aspect == null)
-				{
-					Debug.warn("Land aspect is null for consort message " + messageStart.getString() + ", this is probably not intended");
-					break;
-				}
+			if(isAnyNull(aspects))
+				Debug.warnf("Land aspect is null for consort message %s, this is probably not intended", messageStart.getString());
 			reqLand = true;
 			aspect2RequirementS = Sets.newHashSet(aspects);
 			return this;
@@ -591,6 +589,16 @@ public class ConsortDialogue
 		{
 			return messageStart.getString();
 		}
+	}
+	
+	private static boolean isAnyNull(Object[] objects)
+	{
+		for(Object obj : objects)
+		{
+			if(obj == null)
+				return true;
+		}
+		return false;
 	}
 	
 	public interface ConsortRequirement

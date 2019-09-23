@@ -1,11 +1,10 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
-import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
-import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckContainer;
-import com.mraof.minestuck.inventory.captchalogue.Modus;
+import com.mraof.minestuck.client.gui.MSScreenFactories;
+import com.mraof.minestuck.inventory.captchalogue.*;
 import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.network.MSPacketHandler;
 import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
@@ -15,12 +14,9 @@ import net.minecraft.network.play.client.CCloseWindowPacket;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 
-@OnlyIn(Dist.CLIENT)
 public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckContainer>
 {
 	
@@ -78,7 +74,8 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckCon
 			ItemStack stack = container.inventory.getStackInSlot(0);
 			if(!(stack.getItem() instanceof CaptchaCardItem))
 			{
-				Modus newModus = CaptchaDeckHandler.createInstance(CaptchaDeckHandler.getType(stack), LogicalSide.CLIENT);
+				ModusType<?> type = ModusTypes.getTypeFromItem(stack.getItem());
+				Modus newModus = type.create(LogicalSide.CLIENT);
 				if(newModus != null && CaptchaDeckHandler.clientSideModus != null && newModus.getClass() != CaptchaDeckHandler.clientSideModus.getClass() && !newModus.canSwitchFrom(CaptchaDeckHandler.clientSideModus))
 				{
 					minecraft.currentScreen = new ConfirmScreen(this::onConfirm, new TranslationTextComponent("gui.emptySylladex1"), new TranslationTextComponent("gui.emptySylladex2"))
@@ -94,7 +91,7 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckCon
 					return;
 				}
 			}
-			MinestuckPacketHandler.sendToServer(CaptchaDeckPacket.modus());
+			MSPacketHandler.sendToServer(CaptchaDeckPacket.modus());
 		}
 	}
 	
@@ -104,7 +101,7 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckCon
 		{
 			minecraft.player.connection.sendPacket(new CCloseWindowPacket(minecraft.player.openContainer.windowId));
 			minecraft.player.inventory.setItemStack(ItemStack.EMPTY);
-			minecraft.displayGuiScreen(CaptchaDeckHandler.clientSideModus.getGuiHandler());
+			MSScreenFactories.displaySylladexScreen(CaptchaDeckHandler.clientSideModus);
 			minecraft.player.openContainer = minecraft.player.container;
 		}
 	}
@@ -112,7 +109,7 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckCon
 	private void onConfirm(boolean result)
 	{
 		if(result && !container.inventory.getStackInSlot(0).isEmpty())
-			MinestuckPacketHandler.sendToServer(CaptchaDeckPacket.modus());
+			MSPacketHandler.sendToServer(CaptchaDeckPacket.modus());
 		minecraft.currentScreen = this;
 	}
 	

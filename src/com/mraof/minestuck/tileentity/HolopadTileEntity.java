@@ -2,10 +2,10 @@ package com.mraof.minestuck.tileentity;
 
 import java.util.List;
 
-import com.mraof.minestuck.alchemy.AlchemyRecipes;
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.item.HologramEntity;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.MSItems;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -29,7 +29,7 @@ public class HolopadTileEntity extends TileEntity
 	
 	public HolopadTileEntity()
 	{
-		super(ModTileEntityTypes.HOLOPAD);
+		super(MSTileEntityTypes.HOLOPAD);
 	}
 	
 	public void onRightClick(PlayerEntity player)
@@ -56,11 +56,11 @@ public class HolopadTileEntity extends TileEntity
 			ItemStack heldStack = player.getHeldItemMainhand();
 			if (card.isEmpty())
 			{
-				if (!heldStack.isEmpty() && heldStack.getItem() == MinestuckItems.CAPTCHA_CARD)
+				if (!heldStack.isEmpty() && heldStack.getItem() == MSItems.CAPTCHA_CARD)
 				{
 					setCard(heldStack.split(1));    //Insert card into the card slot
 					ItemStack in = getCard();
-					ItemStack item = new ItemStack(MinestuckBlocks.GENERIC_OBJECT);
+					ItemStack item = new ItemStack(MSBlocks.GENERIC_OBJECT);
 					
 					if (in.hasTag() && in.getTag().contains("contentID"))
 						item = AlchemyRecipes.getDecodedItem(in);
@@ -124,7 +124,7 @@ public class HolopadTileEntity extends TileEntity
 	
 	public void setCard(ItemStack card)
 	{
-		if (card.getItem() == MinestuckItems.CAPTCHA_CARD || card.isEmpty())
+		if (card.getItem() == MSItems.CAPTCHA_CARD || card.isEmpty())
 		{
 			this.card = card;
 			if(world != null)

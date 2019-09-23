@@ -1,19 +1,29 @@
 {
-    "display": {
-        "icon": {
-            "item": "minestuck:captcha_card"
-        },
-        "title": {
-            "translate": "advancements.minestuck.alchemy.title"
-        },
-        "description": {
-            "translate": "advancements.minestuck.alchemy.description"
-        }
+  "parent": "minestuck:minestuck/entry",
+  "display": {
+    "icon": {
+      "item": "minestuck:captcha_card"
     },
-    "parent": "minestuck:minestuck/entry",
-    "criteria": {
-        "punch": {
-            "trigger": "minestuck:punch_designix"
-        }
+    "title": {
+      "translate": "advancements.minestuck.alchemy.title"
+    },
+    "description": {
+      "translate": "advancements.minestuck.alchemy.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "use_punch_designix": {
+      "trigger": "minestuck:punch_designix",
+      "conditions": {}
     }
+  },
+  "requirements": [
+    [
+      "use_punch_designix"
+    ]
+  ]
 }

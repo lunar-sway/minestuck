@@ -1,7 +1,8 @@
 package com.mraof.minestuck.network.skaianet;
 
 import com.mraof.minestuck.client.gui.ComputerScreen;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.client.gui.MSScreenFactories;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.SburbConnectClosedPacket;
 import com.mraof.minestuck.network.SburbConnectPacket;
 import com.mraof.minestuck.network.SkaianetInfoPacket;
@@ -10,12 +11,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.dimension.DimensionType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.*;
 
-@OnlyIn(Dist.CLIENT)
 public class SkaiaClient
 {
 	
@@ -53,7 +51,7 @@ public class SkaiaClient
 		if(!b)
 		{
 			SkaianetInfoPacket packet = SkaianetInfoPacket.request(computer.ownerId);
-			MinestuckPacketHandler.sendToServer(packet);
+			MSPacketHandler.sendToServer(packet);
 			te = computer;
 		}
 		return b;
@@ -122,13 +120,13 @@ public class SkaiaClient
 	public static void sendConnectRequest(ComputerTileEntity te, int otherPlayer, boolean isClient)	//Used for both connect, open server and resume
 	{
 		SburbConnectPacket packet = new SburbConnectPacket(ComputerData.createData(te), otherPlayer, isClient);
-		MinestuckPacketHandler.sendToServer(packet);
+		MSPacketHandler.sendToServer(packet);
 	}
 	
 	public static void sendCloseRequest(ComputerTileEntity te, int otherPlayer, boolean isClient)
 	{
 		SburbConnectClosedPacket packet = new SburbConnectClosedPacket(te.ownerId, otherPlayer, isClient);
-		MinestuckPacketHandler.sendToServer(packet);
+		MSPacketHandler.sendToServer(packet);
 	}
 	
 	//Methods used by the SkaianetInfoPacket.
@@ -184,7 +182,7 @@ public class SkaiaClient
 		else if(te != null && te.ownerId == data.playerId)
 		{
 			if(!Minecraft.getInstance().player.isSneaking())
-				Minecraft.getInstance().displayGuiScreen(new ComputerScreen(Minecraft.getInstance(), te));
+				MSScreenFactories.displayComputerScreen(te);
 			te = null;
 		}
 	}

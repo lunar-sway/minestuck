@@ -1,32 +1,47 @@
 package com.mraof.minestuck.world.lands.terrain;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-import com.mraof.minestuck.entity.consort.EnumConsort;
+import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.lands.ILandAspect;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import com.mraof.minestuck.world.lands.gen.DefaultTerrainGen;
-import com.mraof.minestuck.world.lands.gen.ILandTerrainGen;
-import com.mraof.minestuck.world.lands.structure.GateStructureMushroom;
 import com.mraof.minestuck.world.lands.structure.GateStructurePillar;
 import com.mraof.minestuck.world.lands.structure.IGateStructure;
-import com.mraof.minestuck.world.lands.structure.MapGenLandStructure;
-import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
+import net.minecraft.entity.EntityType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 
-public abstract class TerrainLandAspect implements ILandAspect<TerrainLandAspect>
+public abstract class TerrainLandAspect extends ForgeRegistryEntry<TerrainLandAspect> implements ILandAspect<TerrainLandAspect>
 {
-	public abstract void registerBlocks(StructureBlockRegistry registry);
+	private final ResourceLocation groupName;
+	private final boolean pickedAtRandom;
 	
-	public abstract List<ILandDecorator> getDecorators();	//TODO Add a Random as parameter
+	protected TerrainLandAspect()
+	{
+		this(null, true);
+	}
 	
-	/**
-	 * @return
-	 */
+	protected TerrainLandAspect(boolean pickedAtRandom)
+	{
+		this(null, pickedAtRandom);
+	}
+	
+	protected TerrainLandAspect(ResourceLocation groupName)
+	{
+		this(groupName, true);
+	}
+	
+	protected TerrainLandAspect(ResourceLocation groupName, boolean pickedAtRandom)
+	{
+		this.groupName = groupName;
+		this.pickedAtRandom = pickedAtRandom;
+	}
+	
+	@Deprecated
+	public List<ILandDecorator> getDecorators(){return null;}
+	
 	public float getSkylightBase()
 	{
 		return 1F;
@@ -44,52 +59,19 @@ public abstract class TerrainLandAspect implements ILandAspect<TerrainLandAspect
 		return new Vec3d(0, 0, 0);
 	}
 	
-	public int getWeatherType()
+	@Override
+	public boolean canBePickedAtRandom()
 	{
-		return -1;
-	}
-	
-	public float getRainfall()
-	{
-		return 0.5F;
-	}
-	
-	public float getTemperature()
-	{
-		return 0.7F;
-	}
-	
-	public float getOceanChance()
-	{
-		return 1/3F;
-	}
-	
-	public float getRoughChance()
-	{
-		return 1/5F;//getOceanChance()/2 + 1/5F; For if generation by ocean
+		return pickedAtRandom;
 	}
 	
 	@Override
-	public List<TerrainLandAspect> getVariations()
+	public ResourceLocation getGroup()
 	{
-		ArrayList<TerrainLandAspect> list = new ArrayList<TerrainLandAspect>();
-		list.add(this);
-		return list;
+		if(groupName == null)
+			return this.getRegistryName();
+		else return groupName;
 	}
-	
-	@Override
-	public TerrainLandAspect getPrimaryVariant()
-	{
-		return this;
-	}
-	
-	public ILandTerrainGen createTerrainGenerator(ChunkProviderLands chunkProvider, Random rand)
-	{
-		return new DefaultTerrainGen(chunkProvider, rand);
-	}
-	
-	//public void modifyStructureList(List<MapGenLandStructure.StructureEntry> list)
-	//{}
 	
 	@Override
 	public IGateStructure getGateStructure()
@@ -97,15 +79,6 @@ public abstract class TerrainLandAspect implements ILandAspect<TerrainLandAspect
 		return new GateStructurePillar();
 	}
 	
-	@Override
-	public void prepareChunkProvider(ChunkProviderLands chunkProvider){}
-	@Override
-	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider){}
+	public abstract EntityType<? extends ConsortEntity> getConsortType();
 	
-	public abstract EnumConsort getConsortType();
-	
-	/*public MapGenStructure customMapGenStructure(ChunkProviderLands chunkProviderLands)
-	{
-		return null;
-	}*/
 }

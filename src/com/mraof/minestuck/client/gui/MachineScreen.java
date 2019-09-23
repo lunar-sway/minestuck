@@ -2,7 +2,7 @@ package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.inventory.MachineContainer;
 import com.mraof.minestuck.network.GoButtonPacket;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.tileentity.MachineProcessTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
@@ -11,14 +11,11 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 /**
  * Created by mraof on 2017 December 07 at 12:55 AM.
  */
-@OnlyIn(Dist.CLIENT)
 public abstract class MachineScreen<T extends MachineContainer> extends ContainerScreen<T>
 {
 	protected final MachineProcessTileEntity.RunType runType;
@@ -39,7 +36,7 @@ public abstract class MachineScreen<T extends MachineContainer> extends Containe
 
 			boolean mode = runType == MachineProcessTileEntity.RunType.BUTTON_OVERRIDE && hasShiftDown();
 			GoButtonPacket packet = new GoButtonPacket(true, mode && !container.overrideStop());
-			MinestuckPacketHandler.sendToServer(packet);
+			MSPacketHandler.sendToServer(packet);
 			
 			goButton.setMessage(I18n.format(mode && !container.overrideStop() ? "gui.buttonStop" : "gui.buttonGo"));
 			return true;
@@ -92,7 +89,7 @@ public abstract class MachineScreen<T extends MachineContainer> extends Containe
 				{
 					//Tell the machine to go once
 					GoButtonPacket packet = new GoButtonPacket(true, false);
-					MinestuckPacketHandler.sendToServer(packet);
+					MSPacketHandler.sendToServer(packet);
 					
 					goButton.setMessage(I18n.format("gui.buttonGo"));
 				}
@@ -100,7 +97,7 @@ public abstract class MachineScreen<T extends MachineContainer> extends Containe
 			{
 				//Tell the machine to go until stopped
 				GoButtonPacket packet = new GoButtonPacket(true, !container.overrideStop());
-				MinestuckPacketHandler.sendToServer(packet);
+				MSPacketHandler.sendToServer(packet);
 				
 				goButton.setMessage(I18n.format(container.overrideStop() ? "gui.buttonStop" : "gui.buttonGo"));
 			}

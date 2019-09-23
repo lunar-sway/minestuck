@@ -14,14 +14,14 @@ import static com.mraof.minestuck.MinestuckConfig.generateUraniumOre;
 import static com.mraof.minestuck.MinestuckConfig.uraniumStratumMax;
 import static com.mraof.minestuck.MinestuckConfig.uraniumStratumMin;
 import static com.mraof.minestuck.MinestuckConfig.uraniumVeinsPerChunk;
-import static com.mraof.minestuck.block.MinestuckBlocks.*;
+import static com.mraof.minestuck.block.MSBlocks.*;
 
 import java.util.Random;
 
 import com.google.common.base.Predicate;
 import com.mraof.minestuck.block.CustomOreBlock;
 import com.mraof.minestuck.world.lands.LandDimension;
-import com.mraof.minestuck.world.lands.gen.ChunkGeneratorLands;
+import com.mraof.minestuck.world.lands.gen.LandChunkGenerator;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -35,13 +35,13 @@ public class OreHandler implements IWorldGenerator
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, ChunkGenerator chunkGenerator, AbstractChunkProvider chunkProvider)
 	{
-		if(world.getDimension().isSurfaceWorld() && (generateCruxiteOre || chunkGenerator instanceof ChunkGeneratorLands) && !disableCruxite)
+		if(world.getDimension().isSurfaceWorld() && (generateCruxiteOre.get() || chunkGenerator instanceof LandChunkGenerator) && !disableCruxite)
 		{
 			this.addOreSpawn(STONE_CRUXITE_ORE.getDefaultState(), world, random, chunkX * 16, chunkZ * 16, 16, 16,
 					baseCruxiteVeinSize + random.nextInt(bonusCruxiteVeinSize), cruxiteVeinsPerChunk, cruxiteStratumMin, cruxiteStratumMax);
 		}
 		
-		if(world.getDimension().isSurfaceWorld() && (generateUraniumOre || chunkGenerator instanceof ChunkGeneratorLands) && !disableUranium)
+		if(world.getDimension().isSurfaceWorld() && (generateUraniumOre.get() || chunkGenerator instanceof LandChunkGenerator) && !disableUranium)
 		{
 			this.addOreSpawn(STONE_URANIUM_ORE.getDefaultState(), world, random, chunkX * 16, chunkZ * 16, 16, 16,
 					baseUraniumVeinSize + random.nextInt(bonusUraniumVeinSize), uraniumVeinsPerChunk, uraniumStratumMin, uraniumStratumMax);

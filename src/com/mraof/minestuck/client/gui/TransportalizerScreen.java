@@ -1,20 +1,16 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.TransportalizerPacket;
 import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 
-@OnlyIn(Dist.CLIENT)
 public class TransportalizerScreen extends Screen
 {
 	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/transportalizer.png");
@@ -26,7 +22,7 @@ public class TransportalizerScreen extends Screen
 	private TextFieldWidget destinationTextField;
 	
 	
-	public TransportalizerScreen(TransportalizerTileEntity te)
+	TransportalizerScreen(TransportalizerTileEntity te)
 	{
 		super(new StringTextComponent("Transportalizer"));
 
@@ -63,7 +59,7 @@ public class TransportalizerScreen extends Screen
 		{
 			//Debug.print("Sending transportalizer packet with destination of " + this.destinationTextField.getText());
 			TransportalizerPacket packet = new TransportalizerPacket(te.getPos(), destinationTextField.getText().toUpperCase());
-			MinestuckPacketHandler.sendToServer(packet);
+			MSPacketHandler.sendToServer(packet);
 			this.minecraft.displayGuiScreen(null);
 		}
 	}

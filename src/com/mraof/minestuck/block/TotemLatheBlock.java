@@ -104,7 +104,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 	
 	public static class Rod extends TotemLatheBlock
 	{
-		public static final BooleanProperty ACTIVE = MinestuckProperties.ACTIVE;
+		public static final BooleanProperty ACTIVE = MSProperties.ACTIVE;
 		
 		public Rod(MachineMultiblock machine, Map<Direction, VoxelShape> shape, BlockPos mainPos, Properties properties)
 		{
@@ -121,7 +121,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 	
 	public static class DowelRod extends TotemLatheBlock
 	{
-		public static final EnumProperty<EnumDowelType> DOWEL = MinestuckProperties.DOWEL;
+		public static final EnumProperty<EnumDowelType> DOWEL = MSProperties.DOWEL;
 		
 		public DowelRod(MachineMultiblock machine, Map<Direction, VoxelShape> shape, BlockPos mainPos, Properties properties)
 		{
@@ -157,7 +157,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 	
 	public static class Slot extends TotemLatheBlock
 	{
-		public static final IntegerProperty COUNT = MinestuckProperties.COUNT_0_2;
+		public static final IntegerProperty COUNT = MSProperties.COUNT_0_2;
 		
 		public Slot(MachineMultiblock machine, Map<Direction, VoxelShape> shape, Properties properties)
 		{

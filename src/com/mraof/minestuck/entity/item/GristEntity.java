@@ -1,13 +1,13 @@
 package com.mraof.minestuck.entity.item;
 
-import com.mraof.minestuck.alchemy.GristAmount;
-import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
+import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.editmode.ServerEditHandler;
-import com.mraof.minestuck.entity.ModEntityTypes;
-import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
+import com.mraof.minestuck.entity.MSEntityTypes;
+import com.mraof.minestuck.tracker.PlayerTracker;
 import com.mraof.minestuck.util.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.*;
@@ -20,8 +20,6 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -48,7 +46,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	
 	public GristEntity(World world, double x, double y, double z, GristAmount gristData)
 	{
-		super(ModEntityTypes.GRIST, world);
+		super(MSEntityTypes.GRIST, world);
 		this.gristValue = gristData.getAmount();
 //		this.yOffset = this.height / 2.0F;
 		this.setPosition(x, y, z);
@@ -97,7 +95,6 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		}
 	}
 	
-	@OnlyIn(Dist.CLIENT)
 	@Override
 	public int getBrightnessForRender()
 	{
@@ -200,7 +197,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		compound.putShort("Health", (short)this.gristHealth);
 		compound.putShort("Age", (short)this.gristAge);
 		compound.putShort("Value", (short)this.gristValue);
-		compound.putString("Type", this.gristType.getName());
+		compound.putString("Type", GristType.REGISTRY.getKey(gristType).toString());
 	}
 	
 	@Override
@@ -237,7 +234,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 			this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.1F, 0.5F * ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.8F));
 		if(GristHelper.increase(world, identifier, new GristSet(gristType, gristValue)))
 		{
-			MinestuckPlayerTracker.updateGristCache(this.getServer(), identifier);
+			PlayerTracker.updateGristCache(this.getServer(), identifier);
 			this.remove();
 		}
 	}

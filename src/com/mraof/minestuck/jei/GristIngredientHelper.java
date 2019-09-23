@@ -1,7 +1,7 @@
 package com.mraof.minestuck.jei;
 /*
-import com.mraof.minestuck.alchemy.GristAmount;
-import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import mezz.jei.api.ingredients.IIngredientHelper;
 
 import javax.annotation.Nullable;

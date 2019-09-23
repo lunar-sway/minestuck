@@ -7,6 +7,7 @@ import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ResourceLocation;
 
 class PredefineData
 {
@@ -19,9 +20,9 @@ class PredefineData
 		if(nbt.contains("titleAspect", 99))
 			title = new Title(EnumClass.values()[nbt.getByte("titleClass")], EnumAspect.values()[nbt.getByte("titleAspect")]);
 		if(nbt.contains("landTerrain", 8))
-			landTerrain = LandAspectRegistry.fromNameTerrain(nbt.getString("landTerrain"));
+			landTerrain = LandAspectRegistry.TERRAIN_REGISTRY.getValue(ResourceLocation.tryCreate(nbt.getString("landTerrain")));
 		if(nbt.contains("landTitle", 8))
-			landTitle = LandAspectRegistry.fromNameTitle(nbt.getString("landTitle"));
+			landTitle = LandAspectRegistry.TITLE_REGISTRY.getValue(ResourceLocation.tryCreate(nbt.getString("landTitle")));
 		
 		return this;
 	}
@@ -35,9 +36,9 @@ class PredefineData
 			nbt.putByte("titleAspect", (byte) title.getHeroAspect().ordinal());
 		}
 		if(landTerrain != null)
-			nbt.putString("landTerrain", landTerrain.getPrimaryName());
+			nbt.putString("landTerrain", landTerrain.getRegistryName().toString());
 		if(landTitle != null)
-			nbt.putString("landTitle", landTitle.getPrimaryName());
+			nbt.putString("landTitle", landTitle.getRegistryName().toString());
 		
 		return nbt;
 	}

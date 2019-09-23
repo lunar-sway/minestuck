@@ -1,6 +1,6 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.util.MinestuckSoundHandler;
+import com.mraof.minestuck.util.ModSoundEvents;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -26,7 +26,7 @@ public class GrimoireItem extends Item
 		{
 			ITextComponent message = new TranslationTextComponent("After flipping through some pages, you feel significantly more insignificant.");
 			playerIn.sendMessage(message);
-			playerIn.world.playSound(null, playerIn.posX, playerIn.posY, playerIn.posZ, MinestuckSoundHandler.soundWhispers, SoundCategory.AMBIENT, 0.5F, 0.8F);
+			playerIn.world.playSound(null, playerIn.posX, playerIn.posY, playerIn.posZ, ModSoundEvents.ITEM_GRIMOIRE_USE, SoundCategory.AMBIENT, 0.5F, 0.8F);
 		}
 		return super.onItemRightClick(worldIn, playerIn, handIn);
 	}

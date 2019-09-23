@@ -1,14 +1,13 @@
 package com.mraof.minestuck.world.storage.loot.conditions;
 
-import java.util.Random;
-
+import com.google.common.collect.ImmutableSet;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSyntaxException;
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.ILandAspect;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.LandAspects;
@@ -22,17 +21,28 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.conditions.ILootCondition;
 
+import java.util.Collections;
+import java.util.Objects;
+import java.util.Set;
+import java.util.function.Function;
+
 public class LandAspectLootCondition implements ILootCondition
 {
 	
-	private final ILandAspect[] landAspectNames;
-	private final boolean inverted, includeSubtypes;
+	private final Set<ResourceLocation> terrainGroups;
+	private final Set<ResourceLocation> titleGroups;
+	private final Set<TerrainLandAspect> terrainAspects;
+	private final Set<TitleLandAspect> titleAspects;
+	private final boolean inverted;
 	
-	public LandAspectLootCondition(ILandAspect[] landAspect, boolean inverted, boolean subtypes)
+	private LandAspectLootCondition(Set<ResourceLocation> terrainGroups, Set<ResourceLocation> titleGroups,
+									Set<TerrainLandAspect> terrainAspects, Set<TitleLandAspect> titleAspects, boolean inverted)
 	{
-		this.landAspectNames = landAspect;
+		this.terrainGroups = terrainGroups;
+		this.titleGroups = titleGroups;
+		this.terrainAspects = terrainAspects;
+		this.titleAspects = titleAspects;
 		this.inverted = inverted;
-		this.includeSubtypes = subtypes;
 	}
 	
 	@Override
@@ -40,15 +50,12 @@ public class LandAspectLootCondition implements ILootCondition
 	{
 		ServerWorld world = context.getWorld();
 		
-		if(world != null && MinestuckDimensionHandler.isLandDimension(world.getDimension().getType()))
+		if(world != null && MSDimensions.isLandDimension(world.getDimension().getType()))
 		{
 			LandAspects aspects = ((LandDimension) world.dimension).landAspects;
 			
-			TerrainLandAspect terrain = includeSubtypes ? aspects.aspectTerrain.getPrimaryVariant() : aspects.aspectTerrain;
-			TitleLandAspect title = includeSubtypes ? aspects.aspectTitle.getPrimaryVariant() : aspects.aspectTitle;
-			
-			for(ILandAspect aspect : landAspectNames)
-				if(terrain == aspect || title == aspect)
+			if(terrainAspects.contains(aspects.aspectTerrain) || titleAspects.contains(aspects.aspectTitle)
+					|| terrainGroups.contains(aspects.aspectTerrain.getGroup()) || titleGroups.contains(aspects.aspectTitle.getGroup()))
 					return !inverted;
 		}
 		
@@ -65,46 +72,72 @@ public class LandAspectLootCondition implements ILootCondition
 		@Override
 		public void serialize(JsonObject json, LandAspectLootCondition value, JsonSerializationContext context)
 		{
-			if(value.landAspectNames.length == 1)
-				json.addProperty("land_aspect", value.landAspectNames[0].getPrimaryName());
-			else
-			{
-				JsonArray list = new JsonArray();
-				for(ILandAspect aspect : value.landAspectNames)
-					list.add(new JsonPrimitive(aspect.getPrimaryName()));
-				
-				json.add("land_aspect", list);
-			}
+			serializeSet(json, "terrain_group", value.terrainGroups, ResourceLocation::toString);
+			serializeSet(json, "title_group", value.titleGroups, ResourceLocation::toString);
+			serializeSet(json, "terrain_aspect", value.terrainAspects, aspect -> aspect.getRegistryName().toString());
+			serializeSet(json, "title_aspect", value.titleAspects, aspect -> aspect.getRegistryName().toString());
 			
 			json.addProperty("inverse", value.inverted);
-			json.addProperty("subtypes", value.includeSubtypes);
 		}
 		@Override
 		public LandAspectLootCondition deserialize(JsonObject json, JsonDeserializationContext context)
 		{
-			ILandAspect[] landAspects;
-			if(json.has("land_aspect") && json.get("land_aspect").isJsonArray())
-			{
-				JsonArray list = json.getAsJsonArray("land_aspect");
-				landAspects = new ILandAspect[list.size()];
-				for(int i = 0; i < list.size(); i++)
-					landAspects[i] = getAspect(JSONUtils.getString(list.get(i), "land_aspect"));
-				
-			} else landAspects = new ILandAspect[] {getAspect(JSONUtils.getString(json, "land_aspect"))};
+			Set<ResourceLocation> terrainGroups = deserializeSet(json, "terrain_group", ResourceLocation::new);
+			Set<ResourceLocation> titleGroups = deserializeSet(json, "title_group", ResourceLocation::new);
+			Set<TerrainLandAspect> terrainAspects = deserializeSet(json, "terrain_aspect", s -> LandAspectRegistry.TERRAIN_REGISTRY.getValue(new ResourceLocation(s)));
+			Set<TitleLandAspect> titleAspects = deserializeSet(json, "title_aspect", s -> LandAspectRegistry.TITLE_REGISTRY.getValue(new ResourceLocation(s)));
 			boolean inverted = JSONUtils.getBoolean(json, "inverse", false);
-			boolean subtypes = JSONUtils.getBoolean(json, "subtypes", true);
-			return new LandAspectLootCondition(landAspects, inverted, subtypes);
+			return new LandAspectLootCondition(terrainGroups, titleGroups, terrainAspects, titleAspects, inverted);
 		}
 		
 		private static ILandAspect getAspect(String aspectName)
 		{
-			ILandAspect aspect = LandAspectRegistry.fromNameTerrain(aspectName, true);
+			ILandAspect aspect = LandAspectRegistry.TERRAIN_REGISTRY.getValue(ResourceLocation.tryCreate(aspectName));
 			if(aspect == null)
-				aspect = LandAspectRegistry.fromNameTitle(aspectName, true);
+				aspect = LandAspectRegistry.TITLE_REGISTRY.getValue(ResourceLocation.tryCreate(aspectName));
 			if(aspect == null)
 				throw new JsonSyntaxException("\"" + aspectName + "\" is not a valid land aspect.");
 			return aspect;
 		}
 		
+	}
+	
+	private static <T> void serializeSet(JsonObject json, String name, Set<T> set, Function<T, String> toString)
+	{
+		if(!set.isEmpty())
+		{
+			if(set.size() == 1)
+				json.addProperty(name, toString.apply(set.iterator().next()));
+			else
+			{
+				JsonArray list = new JsonArray();
+				for(T entry : set)
+					list.add(new JsonPrimitive(toString.apply(entry)));
+				
+				json.add(name, list);
+			}
+		}
+	}
+	
+	private static <T> Set<T> deserializeSet(JsonObject json, String name, Function<String, T> fromString)
+	{
+		if(json.has(name))
+		{
+			if(json.get(name).isJsonArray())
+			{
+				JsonArray list = json.getAsJsonArray(name);
+				ImmutableSet.Builder<T> builder = ImmutableSet.builder();
+				for(int i = 0; i < list.size(); i++)
+				{
+					String str = JSONUtils.getString(list.get(i), name);
+					builder.add(Objects.requireNonNull(fromString.apply(str), "Unable to parse "+str+" for type "+name));
+				}
+				return builder.build();
+			} else
+			{
+				String str = JSONUtils.getString(json, name);
+				return ImmutableSet.of(Objects.requireNonNull(fromString.apply(str), "Unable to parse "+str+" for type "+name));
+			}
+		} else return Collections.emptySet();
 	}
 }

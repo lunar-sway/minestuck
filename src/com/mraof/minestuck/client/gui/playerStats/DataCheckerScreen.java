@@ -2,9 +2,9 @@ package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
+import com.mraof.minestuck.client.settings.MSKeyHandler;
 import com.mraof.minestuck.network.DataCheckerPacket;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.util.EnumClass;
 import net.minecraft.client.Minecraft;
@@ -17,18 +17,14 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-@OnlyIn(Dist.CLIENT)
 public class DataCheckerScreen extends Screen
 {
 	private static final ResourceLocation icons = new ResourceLocation("minestuck", "textures/gui/icons.png");
@@ -69,7 +65,7 @@ public class DataCheckerScreen extends Screen
 		refreshButton = addButton(new Button(xOffset + GUI_WIDTH - 45, yOffset + 5, 18, 18, "", button -> refresh()));
 		
 		if(activeComponent == null)
-			MinestuckPacketHandler.sendToServer(DataCheckerPacket.request());
+			MSPacketHandler.sendToServer(DataCheckerPacket.request());
 		
 		componentChanged();
 	}
@@ -216,7 +212,7 @@ public class DataCheckerScreen extends Screen
 	
 	private void refresh()
 	{
-		MinestuckPacketHandler.sendToServer(DataCheckerPacket.request());
+		MSPacketHandler.sendToServer(DataCheckerPacket.request());
 		activeComponent = null;
 		componentChanged();
 	}
@@ -255,7 +251,7 @@ public class DataCheckerScreen extends Screen
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int i)
 	{
-		if(MinestuckKeyHandler.instance.statKey.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode)))
+		if(MSKeyHandler.instance.statKey.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode)))
 		{
 			minecraft.displayGuiScreen(null);
 			return true;

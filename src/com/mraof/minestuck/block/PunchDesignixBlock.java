@@ -100,7 +100,7 @@ public class PunchDesignixBlock extends MultiMachineBlock
 	
 	public static class Slot extends PunchDesignixBlock
 	{
-		public static final BooleanProperty HAS_CARD = MinestuckProperties.HAS_CARD;
+		public static final BooleanProperty HAS_CARD = MSProperties.HAS_CARD;
 		
 		public Slot(MachineMultiblock machine, Map<Direction, VoxelShape> shape, Properties properties)
 		{

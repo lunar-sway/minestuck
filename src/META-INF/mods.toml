@@ -8,7 +8,7 @@
 modLoader="javafml" #mandatory
 
 # A version range to match for said mod loader - for regular FML @Mod it will be the forge version
-loaderVersion="[27,)" #mandatory
+loaderVersion="[28,)" #mandatory
 
 # A URL to refer people to when problems occur with this mod
 issueTrackerURL="https://github.com/mraof/Minestuck/issues" #optional
@@ -52,7 +52,7 @@ Adds Homestuck to your Minecraft!
     # Does this dependency have to exist - if not, ordering below must be specified
     mandatory=true #mandatory
     # The version range of the dependency
-    versionRange="[28,)" #mandatory
+    versionRange="[28.0.45,)" #mandatory
     # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
     ordering="NONE"
     # Side this dependency is applied on - BOTH, CLIENT or SERVER

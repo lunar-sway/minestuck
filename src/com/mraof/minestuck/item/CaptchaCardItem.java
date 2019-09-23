@@ -1,7 +1,7 @@
 package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
@@ -46,7 +46,7 @@ public class CaptchaCardItem extends Item
 		if(this.isInGroup(group))
 		{
 			items.add(new ItemStack(this));
-			items.add(AlchemyRecipes.createCard(new ItemStack(MinestuckItems.CRUXITE_APPLE), true));
+			items.add(AlchemyRecipes.createCard(new ItemStack(MSItems.CRUXITE_APPLE), true));
 		}
 	}
 	

@@ -6,8 +6,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ConsortMerchantContainer extends Container
 {
@@ -17,13 +15,13 @@ public class ConsortMerchantContainer extends Container
 	
 	public ConsortMerchantContainer(int windowId, PlayerInventory playerInventory)
 	{
-		super(ModContainerTypes.CONSORT_MERCHANT, windowId);
+		super(MSContainerTypes.CONSORT_MERCHANT, windowId);
 		//TODO
 	}
 	
 	public ConsortMerchantContainer(int windowId, PlayerInventory playerInventory, ConsortMerchantInventory inv)
 	{
-		super(ModContainerTypes.CONSORT_MERCHANT, windowId);
+		super(MSContainerTypes.CONSORT_MERCHANT, windowId);
 		this.player = playerInventory.player;
 		setInventory(inv);
 	}
@@ -69,7 +67,6 @@ public class ConsortMerchantContainer extends Container
 			((ServerPlayerEntity) playerIn).sendContainerToPlayer(playerIn.container);
 	}
 	
-	@OnlyIn(Dist.CLIENT)
 	public int getPrice(int index)
 	{
 		if(index >= 0 && index < inventory.prices.length)

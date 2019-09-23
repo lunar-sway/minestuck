@@ -1,22 +1,31 @@
 {
-    "display": {
-        "icon": {
-            "item": "minestuck:gold_seeds"
-        },
-        "title": {
-            "translate": "advancements.minestuck.gold_seeds.title"
-        },
-        "description": {
-            "translate": "advancements.minestuck.gold_seeds.description"
-        }
+  "parent": "minestuck:minestuck/alchemy",
+  "display": {
+    "icon": {
+      "item": "minestuck:gold_seeds"
     },
-    "parent": "minestuck:minestuck/alchemy",
-    "criteria": {
-        "plant_seeds": {
-            "trigger": "minecraft:placed_block",
-            "conditions": {
-                "block": "minestuck:gold_seeds"
-            }
-        }
+    "title": {
+      "translate": "advancements.minestuck.gold_seeds.title"
+    },
+    "description": {
+      "translate": "advancements.minestuck.gold_seeds.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "plant_gold_seeds": {
+      "trigger": "minecraft:placed_block",
+      "conditions": {
+        "block": "minestuck:gold_seeds"
+      }
     }
+  },
+  "requirements": [
+    [
+      "plant_gold_seeds"
+    ]
+  ]
 }

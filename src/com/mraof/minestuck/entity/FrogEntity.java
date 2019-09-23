@@ -2,14 +2,13 @@ package com.mraof.minestuck.entity;
 
 import java.util.Random;
 
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.util.MinestuckSoundHandler;
+import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.util.ModSoundEvents;
 
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.controller.JumpController;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -26,8 +25,6 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class FrogEntity extends CreatureEntity
 {
@@ -48,7 +45,7 @@ public class FrogEntity extends CreatureEntity
 	
 	public FrogEntity(World world)
 	{
-		this(ModEntityTypes.FROG, world);
+		this(MSEntityTypes.FROG, world);
 	}
 	
 	public FrogEntity(EntityType<? extends FrogEntity> type, World world)
@@ -79,10 +76,10 @@ public class FrogEntity extends CreatureEntity
 		
 		if(player.getDistanceSq(this) < 9.0D && !this.world.isRemote)
 		{
-			if(itemstack.getItem() == MinestuckItems.BUG_NET)
+			if(itemstack.getItem() == MSItems.BUG_NET)
 			{
 				itemstack.damageItem(1, player, (entityPlayer) -> entityPlayer.sendBreakAnimation(hand));
-				ItemStack frogItem = new ItemStack(MinestuckItems.FROG);
+				ItemStack frogItem = new ItemStack(MSItems.FROG);
 				
 				frogItem.setTag(getFrogData());
 				if(this.hasCustomName())frogItem.setDisplayName(this.getCustomName());
@@ -90,7 +87,7 @@ public class FrogEntity extends CreatureEntity
 				entityDropItem(frogItem, 0);
 				this.remove();
 			}
-			else if(itemstack.getItem() == MinestuckItems.GOLDEN_GRASSHOPPER && this.getFrogType() != 5)
+			else if(itemstack.getItem() == MSItems.GOLDEN_GRASSHOPPER && this.getFrogType() != 5)
 			{
 				if(!player.isCreative())itemstack.shrink(1);
 				
@@ -135,7 +132,7 @@ public class FrogEntity extends CreatureEntity
 	@Override
 	public EntitySize getSize(Pose poseIn)
 	{
-		return super.getSize(poseIn).scale(this.getFrogSize());
+		return super.getSize(poseIn).scale((this.getFrogType() == 6) ? 0.6F :this.getFrogSize());
 	}
 	
 	@Override
@@ -154,7 +151,7 @@ public class FrogEntity extends CreatureEntity
 		
 		this.goalSelector.addGoal(1, new SwimGoal(this));
 		this.goalSelector.addGoal(1, new PanicGoal(this, 2.2D));
-		this.goalSelector.addGoal(3, new TemptGoal(this, 1.0D, Ingredient.fromItems(MinestuckItems.CONE_OF_FLIES, MinestuckItems.BUG_ON_A_STICK, MinestuckItems.GRASSHOPPER, MinestuckItems.JAR_OF_BUGS), false));	//TODO use bug item tag
+		this.goalSelector.addGoal(3, new TemptGoal(this, 1.0D, Ingredient.fromItems(MSItems.CONE_OF_FLIES, MSItems.BUG_ON_A_STICK, MSItems.GRASSHOPPER, MSItems.JAR_OF_BUGS), false));	//TODO use bug item tag
 		this.goalSelector.addGoal(6, new WaterAvoidingRandomWalkingGoal(this, 0.6D));
 		this.goalSelector.addGoal(11, new LookAtGoal(this, PlayerEntity.class, 10.0F));
 		
@@ -221,7 +218,6 @@ public class FrogEntity extends CreatureEntity
 	}
 	
 
-	@OnlyIn(Dist.CLIENT)
 	public float setJumpCompletion(float p_175521_1_)
 	{
 		return this.jumpDuration == 0 ? 0.0F : ((float)this.jumpTicks + p_175521_1_) / (float)this.jumpDuration;
@@ -347,19 +343,19 @@ public class FrogEntity extends CreatureEntity
 	@Override
 	protected SoundEvent getAmbientSound()
 	{
-		return MinestuckSoundHandler.soundFrogAmbient;
+		return ModSoundEvents.ENTITY_FROG_AMBIENT;
 	}
 	
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
 	{
-		return MinestuckSoundHandler.soundFrogHurt;
+		return ModSoundEvents.ENTITY_FROG_HURT;
 	}
 	
 	@Override
 	protected SoundEvent getDeathSound()
 	{
-		return MinestuckSoundHandler.soundFrogDeath;
+		return ModSoundEvents.ENTITY_FROG_DEATH;
 	}
 	
 	protected SoundEvent getJumpSound()

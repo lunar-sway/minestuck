@@ -10,14 +10,14 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
 import com.mraof.minestuck.block.GlowingMushroomBlock;
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 public class SurfaceMushroomGenerator extends BiomeSpecificDecorator
 {
 	private int tries;
 	private int count;
-	private Block block = MinestuckBlocks.GLOWING_MUSHROOM;
+	private Block block = MSBlocks.GLOWING_MUSHROOM;
 	private boolean lightOverride = true;
 	
 	public SurfaceMushroomGenerator(int tries, int count, Biome... biomes)
@@ -55,7 +55,7 @@ public class SurfaceMushroomGenerator extends BiomeSpecificDecorator
 			BlockState soil = worldIn.getBlockState(pos.down());
 			if(state.getBlock() instanceof GlowingMushroomBlock)
 			{
-				out = soil.getBlock().equals(MinestuckBlocks.BLUE_DIRT);
+				out = soil.getBlock().equals(MSBlocks.BLUE_DIRT);
 			} else if(soil.getBlock() == Blocks.MYCELIUM)
 			{
 				out = true;

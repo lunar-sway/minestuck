@@ -1,6 +1,6 @@
 {
-  "replace": "false",
+  "replace": false,
   "values": [
-    "minestuck:redstone_ore_end_stone"
+    "#minestuck:ores/redstone"
   ]
 }

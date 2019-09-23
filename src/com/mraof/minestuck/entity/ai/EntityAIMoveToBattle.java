@@ -2,7 +2,7 @@ package com.mraof.minestuck.entity.ai;
 
 import com.mraof.minestuck.entity.carapacian.CarapacianEntity;
 import com.mraof.minestuck.entity.carapacian.EnumEntityKingdom;
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
@@ -27,7 +27,7 @@ public class EntityAIMoveToBattle extends Goal
 	public boolean shouldExecute()
 	{	//TODO When the castles are fixed, make the entity possibly head for one if it's closer
 		
-		if(target.dimension != MinestuckDimensionHandler.skaia || this.target.getAttackTarget() != null && !this.target.getNavigator().noPath())
+		if(target.dimension != MSDimensions.skaiaDimension || this.target.getAttackTarget() != null && !this.target.getNavigator().noPath())
 			return false;
 		
 		EnumEntityKingdom type = target.getKingdom();

@@ -3,9 +3,9 @@ package com.mraof.minestuck.client.gui.playerStats;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.MinestuckScreen;
-import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
+import com.mraof.minestuck.client.settings.MSKeyHandler;
 import com.mraof.minestuck.editmode.ClientEditHandler;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.MiscContainerPacket;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import net.minecraft.client.Minecraft;
@@ -21,14 +21,11 @@ import net.minecraft.network.play.client.CCloseWindowPacket;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Arrays;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-@OnlyIn(Dist.CLIENT)
 public abstract class PlayerStatsScreen extends MinestuckScreen
 {
 	
@@ -279,7 +276,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 				
 				mc.displayGuiScreen(containerScreen);
 				if(mc.currentScreen == containerScreen)
-					MinestuckPacketHandler.sendToServer(new MiscContainerPacket(ordinal));
+					MSPacketHandler.sendToServer(new MiscContainerPacket(ordinal));
 			}
 			else mc.displayGuiScreen(ClientEditHandler.isActive()? editmodeTab.createGuiInstance():normalTab.createGuiInstance());
 		}
@@ -290,7 +287,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int i)
 	{
-		if(MinestuckKeyHandler.instance.statKey.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode)))
+		if(MSKeyHandler.instance.statKey.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode)))
 		{
 			mc.displayGuiScreen(null);
 			return true;

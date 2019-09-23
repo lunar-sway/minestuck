@@ -19,8 +19,6 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.network.NetworkHooks;
 
@@ -82,7 +80,6 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 		this.updateFacingWithBoundingBox(direction);
 	}
 	
-	@OnlyIn(Dist.CLIENT)
 	public HangingArtEntity(EntityType<? extends HangingArtEntity<T>> type, World worldIn, BlockPos pos, Direction direction, String title)
 	{
 		this(type, worldIn, pos, direction);
@@ -172,7 +169,6 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 	}
 	
 	@Override
-	@OnlyIn(Dist.CLIENT)
 	public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int posRotationIncrements,
 			boolean teleport)
 	{

@@ -1,11 +1,11 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.*;
+import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.block.GristWidgetBlock;
 import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.inventory.GristWidgetContainer;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,6 +17,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.Map.Entry;
@@ -30,33 +31,23 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 	
 	public GristWidgetTileEntity()
 	{
-		super(ModTileEntityTypes.GRIST_WIDGET);
+		super(MSTileEntityTypes.GRIST_WIDGET);
 	}
 	
 	public GristSet getGristWidgetResult()
 	{
-		return getGristWidgetResult(inv.get(0));
+		return getGristWidgetResult(inv.get(0), world);
 	}
 	
-	public static GristSet getGristWidgetResult(ItemStack stack)
+	public static GristSet getGristWidgetResult(ItemStack stack, World world)
 	{
+		if(world == null)
+			return null;
 		ItemStack heldItem = AlchemyRecipes.getDecodedItem(stack, true);
-		GristSet gristSet = AlchemyCostRegistry.getGristConversion(heldItem);
-		if(stack.getItem() != MinestuckItems.CAPTCHA_CARD || AlchemyRecipes.isPunchedCard(stack)
-				|| heldItem.getItem() == MinestuckItems.CAPTCHA_CARD || gristSet == null)
+		GristSet gristSet = GristCostRecipe.findCostForItem(heldItem, null, true, world);
+		if(stack.getItem() != MSItems.CAPTCHA_CARD || AlchemyRecipes.isPunchedCard(stack) || gristSet == null)
 			return null;
 		
-		if (heldItem.getCount() != 1)
-			gristSet.scaleGrist(heldItem.getCount());
-		
-		if (heldItem.isDamaged())
-		{
-			float multiplier = 1 - heldItem.getItem().getDamage(heldItem) / ((float) heldItem.getMaxDamage());
-			for (GristAmount amount : gristSet.getArray())
-			{
-				gristSet.setGrist(amount.getType(), (int) (amount.getAmount() * multiplier));
-			}
-		}
 		return gristSet;
 	}
 	
@@ -86,13 +77,13 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack)
 	{
-		if(i != 0 || itemstack.getItem() != MinestuckItems.CAPTCHA_CARD)
+		if(i != 0 || itemstack.getItem() != MSItems.CAPTCHA_CARD)
 		{
 			return false;
 		} else
 		{
 			return (!itemstack.getTag().getBoolean("punched") && itemstack.getTag().getInt("contentSize") > 0
-					&& AlchemyRecipes.getDecodedItem(itemstack).getItem() != MinestuckItems.CAPTCHA_CARD);
+					&& AlchemyRecipes.getDecodedItem(itemstack).getItem() != MSItems.CAPTCHA_CARD);
 		}
 	}
 	
@@ -112,7 +103,7 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 	@Override
 	public boolean contentsValid()
 	{
-		if(MinestuckConfig.disableGristWidget)
+		if(MinestuckConfig.disableGristWidget.get())
 			return false;
 		if(world.isBlockPowered(this.getPos()))
 			return false;
@@ -203,7 +194,7 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 	@Override
 	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
 	{
-		return new GristWidgetContainer(windowId, playerInventory, this, parameters);
+		return new GristWidgetContainer(windowId, playerInventory, this, parameters, pos);
 	}
 	
 	public void resendState()

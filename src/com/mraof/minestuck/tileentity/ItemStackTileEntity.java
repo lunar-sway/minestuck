@@ -13,7 +13,7 @@ public class ItemStackTileEntity extends TileEntity
 {
 	public ItemStackTileEntity()
 	{
-		super(ModTileEntityTypes.ITEM_STACK);
+		super(MSTileEntityTypes.ITEM_STACK);
 	}
 	
 	private ItemStack stack = ItemStack.EMPTY;

@@ -1,9 +1,9 @@
 package com.mraof.minestuck.client.util;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.GristAmount;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -46,7 +46,7 @@ public class GuiUtil
 		
 		GristSet playerGrist = PlayerSavedData.getClientGrist();
 		Iterator<GristAmount> it = grist.getArray().iterator();
-		if(!MinestuckConfig.alchemyIcons)
+		if(!MinestuckConfig.alchemyIcons.get())
 		{
 			int place = 0;
 			while (it.hasNext())
@@ -94,8 +94,12 @@ public class GuiUtil
 				
 				GlStateManager.color3f(1, 1, 1);
 				GlStateManager.disableLighting();
-				Minecraft.getInstance().getTextureManager().bindTexture(new ResourceLocation(type.getIcon().getNamespace(), "textures/grist/" + type.getIcon().getPath()+ ".png"));
-				AbstractGui.blit(boardX + needStrWidth + 1 + index%GRIST_BOARD_WIDTH, boardY + 8*row, 0, 0, 8, 8, 8, 8);
+				ResourceLocation icon = type.getIcon();
+				if(icon != null)
+				{
+					Minecraft.getInstance().getTextureManager().bindTexture(icon);
+					AbstractGui.blit(boardX + needStrWidth + 1 + index % GRIST_BOARD_WIDTH, boardY + 8 * row, 0, 0, 8, 8, 8, 8);
+				}
 				
 				//ensure the large alchemiter gui has one grist type to a line
 				if(mode==GristboardMode.LARGE_ALCHEMITER||mode==GristboardMode.LARGE_ALCHEMITER_SELECT) {
@@ -116,7 +120,7 @@ public class GuiUtil
 		mouseY -= boardY;
 		
 		GristSet playerGrist = PlayerSavedData.getClientGrist();
-		if(!MinestuckConfig.alchemyIcons)
+		if(!MinestuckConfig.alchemyIcons.get())
 		{
 			int place = 0;
 			for(GristAmount entry : grist.getArray())

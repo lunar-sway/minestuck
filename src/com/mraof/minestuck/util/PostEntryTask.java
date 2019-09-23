@@ -83,7 +83,7 @@ public class PostEntryTask
 					int zWidth = (int) Math.sqrt(entrySize * entrySize - (blockX - x) * (blockX - x));
 					for(int blockZ = z - zWidth; blockZ <= z + zWidth; blockZ++)
 					{
-						int height = (int) Math.sqrt(artifactRange * artifactRange - (((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2));
+						int height = (int) Math.sqrt(artifactRange.get() * artifactRange.get() - (((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2));
 						if(blockX == x - entrySize || blockX == x + entrySize || blockZ == z - zWidth || blockZ == z + zWidth)
 							for(int blockY = y - height; blockY <= Math.min(128, y + height); blockY++)
 								i = updateBlock(new BlockPos(blockX, blockY, blockZ), world, i, true);

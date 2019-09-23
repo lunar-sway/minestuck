@@ -1,9 +1,9 @@
 package com.mraof.minestuck.entity.underling;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.entity.EntityBigPart;
 import com.mraof.minestuck.entity.IBigEntity;
 import com.mraof.minestuck.entity.PartGroup;
@@ -54,17 +54,17 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	
 	protected SoundEvent getAmbientSound()
 	{
-		return MinestuckSoundHandler.soundGiclopsAmbient;
+		return ModSoundEvents.ENTITY_GICLOPS_AMBIENT;
 	}
 	
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
 	{
-		return MinestuckSoundHandler.soundGiclopsHurt;
+		return ModSoundEvents.ENTITY_GICLOPS_HURT;
 	}
 	
 	protected SoundEvent getDeathSound()
 	{
-		return MinestuckSoundHandler.soundGiclopsDeath;
+		return ModSoundEvents.ENTITY_GICLOPS_DEATH;
 	}
 	
 	@Override
@@ -122,7 +122,7 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	{
 		super.baseTick();
 		partGroup.updatePositions();
-		if(!world.isRemote && MinestuckConfig.disableGiclops)
+		if(!world.isRemote && MinestuckConfig.disableGiclops.get())
 			this.remove();
 	}
 	

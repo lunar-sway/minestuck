@@ -1,49 +1,66 @@
 package com.mraof.minestuck.world.lands.title;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.lands.ILandAspect;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.structure.IGateStructure;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 
-public abstract class TitleLandAspect implements ILandAspect<TitleLandAspect>
+import javax.annotation.Nullable;
+
+public abstract class TitleLandAspect extends ForgeRegistryEntry<TitleLandAspect> implements ILandAspect<TitleLandAspect>
 {
+	private final ResourceLocation groupName;
+	private final EnumAspect aspectType;
+	private final boolean pickedAtRandom;
+	
+	protected TitleLandAspect(EnumAspect aspectType)
+	{
+		this(aspectType, null, true);
+	}
+	
+	protected TitleLandAspect(EnumAspect aspectType, boolean pickedAtRandom)
+	{
+		this(aspectType, null, pickedAtRandom);
+	}
+	
+	protected TitleLandAspect(EnumAspect aspectType, ResourceLocation groupName)
+	{
+		this(aspectType, groupName, true);
+	}
+	
+	protected TitleLandAspect(EnumAspect aspectType, ResourceLocation groupName, boolean pickedAtRandom)
+	{
+		this.aspectType = aspectType;
+		this.groupName = groupName;
+		this.pickedAtRandom = pickedAtRandom;
+	}
+	
 	public boolean isAspectCompatible(TerrainLandAspect aspect)
 	{
 		return true;
 	}
 	
-	public ChunkProviderLands createChunkProvider(LandDimension land)
+	@Override
+	public boolean canBePickedAtRandom()
 	{
-		ChunkProviderLands chunkProvider = null;//new ChunkProviderLands(land.getWorld(), land, land.getWorld().isRemote);
-		TerrainLandAspect terrain = land.landAspects.aspectTerrain;
-		
-		prepareChunkProvider(chunkProvider);
-		terrain.prepareChunkProvider(chunkProvider);
-		if(!land.getWorld().isRemote)
-		{
-			prepareChunkProviderServer(chunkProvider);
-			terrain.prepareChunkProviderServer(chunkProvider);
-		}
-		//chunkProvider.createBiomeGen();
-		return chunkProvider;
+		return pickedAtRandom;
 	}
 	
 	@Override
-	public List<TitleLandAspect> getVariations()
+	public ResourceLocation getGroup()
 	{
-		ArrayList<TitleLandAspect> list = new ArrayList<>();
-		list.add(this);
-		return list;
+		if(groupName == null)
+			return this.getRegistryName();
+		else return groupName;
 	}
 	
-	@Override
-	public TitleLandAspect getPrimaryVariant()
+	@Nullable
+	public EnumAspect getType()
 	{
-		return this;
+		return aspectType;
 	}
 	
 	@Override
@@ -54,10 +71,4 @@ public abstract class TitleLandAspect implements ILandAspect<TitleLandAspect>
 	
 	public void prepareWorldProvider(LandDimension worldProvider)
 	{}
-	
-	@Override
-	public void prepareChunkProvider(ChunkProviderLands chunkProvider){}
-	@Override
-	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider){}
-	
 }

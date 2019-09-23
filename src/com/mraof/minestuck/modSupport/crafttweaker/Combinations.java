@@ -1,6 +1,6 @@
 package com.mraof.minestuck.modSupport.crafttweaker;
 /*
-import com.mraof.minestuck.alchemy.CombinationRegistry;
+import com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry;
 import crafttweaker.IAction;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IItemStack;

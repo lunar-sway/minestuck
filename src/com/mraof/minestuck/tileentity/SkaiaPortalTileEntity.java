@@ -1,10 +1,10 @@
 package com.mraof.minestuck.tileentity;
 
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Location;
 
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.CompoundNBT;
@@ -23,7 +23,7 @@ public class SkaiaPortalTileEntity extends TileEntity //implements ITeleporter
 	
 	public SkaiaPortalTileEntity()
 	{
-		super(ModTileEntityTypes.SKAIA_PORTAL);
+		super(MSTileEntityTypes.SKAIA_PORTAL);
 	}
 	
 	@Override
@@ -31,7 +31,7 @@ public class SkaiaPortalTileEntity extends TileEntity //implements ITeleporter
 	{
 		super.setWorld(worldIn);
 		if(destination.dim == worldIn.getDimension().getType())
-			destination.dim = worldIn.getDimension().getType() == MinestuckDimensionHandler.skaia ? DimensionType.OVERWORLD : MinestuckDimensionHandler.skaia;
+			destination.dim = worldIn.getDimension().getType() == MSDimensions.skaiaDimension ? DimensionType.OVERWORLD : MSDimensions.skaiaDimension;
 	}
 	
 	@Override
@@ -41,7 +41,7 @@ public class SkaiaPortalTileEntity extends TileEntity //implements ITeleporter
 		destination.pos = new BlockPos(compound.getInt("destX"), compound.getInt("destY"), compound.getInt("destZ"));
 		destination.dim = DimensionType.byName(ResourceLocation.tryCreate(compound.getString("destDim")));
 		if(destination.dim == null)
-			destination.dim = MinestuckDimensionHandler.skaia;
+			destination.dim = MSDimensions.skaiaDimension;
 	}
 	
 	@Override
@@ -83,7 +83,7 @@ public class SkaiaPortalTileEntity extends TileEntity //implements ITeleporter
 		double y = pos.getY();
 		double z = pos.getZ();
 		entity.setPosition(x, y, z);
-		Block[] blocks = {MinestuckBlocks.BLACK_CHESS_DIRT, MinestuckBlocks.LIGHT_GRAY_CHESS_DIRT, MinestuckBlocks.WHITE_CHESS_DIRT, MinestuckBlocks.DARK_GRAY_CHESS_DIRT};
+		Block[] blocks = {MSBlocks.BLACK_CHESS_DIRT, MSBlocks.LIGHT_GRAY_CHESS_DIRT, MSBlocks.WHITE_CHESS_DIRT, MSBlocks.DARK_GRAY_CHESS_DIRT};
 		for(int blockX = (int) x - 2; blockX < x + 2; blockX++)
 		{
 			for(int blockZ = (int) z - 2; blockZ < z + 2; blockZ++)

@@ -12,8 +12,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.Hashtable;
@@ -25,7 +23,7 @@ public class ComputerTileEntity extends TileEntity
 {
 	public ComputerTileEntity()
 	{
-		super(ModTileEntityTypes.COMPUTER);
+		super(MSTileEntityTypes.COMPUTER);
 	}
 	
 	/**
@@ -34,13 +32,12 @@ public class ComputerTileEntity extends TileEntity
 	public Hashtable<Integer, Boolean> installedPrograms = new Hashtable<Integer, Boolean>();
 	public ComputerScreen gui;
 	public PlayerIdentifier owner;
-	@OnlyIn(Dist.CLIENT)
+	//client side only
 	public int ownerId;
 	public Hashtable<Integer, String> latestmessage = new Hashtable<Integer, String>();
 	public CompoundNBT programData = new CompoundNBT();
 	public int programSelected = -1;
 	
-	@OnlyIn(Dist.CLIENT)
 	public ComputerProgram program;
 	
 	@Override

@@ -1,7 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ColorSelectPacket;
 import com.mraof.minestuck.util.ColorCollector;
 import net.minecraft.client.gui.screen.Screen;
@@ -10,11 +10,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 
-@OnlyIn(Dist.CLIENT)
 public class ColorSelectorScreen extends Screen
 {
 	
@@ -119,7 +116,7 @@ public class ColorSelectorScreen extends Screen
 	
 	public void selectColor()
 	{
-		MinestuckPacketHandler.sendToServer(new ColorSelectPacket(this.selectedColor));
+		MSPacketHandler.sendToServer(new ColorSelectPacket(this.selectedColor));
 		ColorCollector.playerColor = selectedColor;
 		this.minecraft.displayGuiScreen(null);
 	}

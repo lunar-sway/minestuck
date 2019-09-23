@@ -1,8 +1,6 @@
 package com.mraof.minestuck.util;
 
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,12 +11,12 @@ import java.util.List;
  */
 public class ColorCollector
 {
+	public static final int DEFAULT_COLOR = 0x0057FF;
 	private static List<Integer> colors;
 //	protected static boolean customColor;
 	
-	@OnlyIn(Dist.CLIENT)
+	//client only
 	public static int playerColor;
-	@OnlyIn(Dist.CLIENT)
 	public static boolean displaySelectionGui;
 	
 	static
@@ -59,6 +57,11 @@ public class ColorCollector
 	public static int getColorSize()
 	{
 		return colors.size();
+	}
+	
+	public static ItemStack setDefaultColor(ItemStack stack)
+	{
+		return setColor(stack, DEFAULT_COLOR);
 	}
 	
 	public static ItemStack setColor(ItemStack stack, int color)

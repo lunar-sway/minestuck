@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.gui.playerStats;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen.*;
-import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
+import com.mraof.minestuck.client.settings.MSKeyHandler;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import net.minecraft.client.audio.SimpleSound;
@@ -14,14 +14,11 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Arrays;
 
 import static com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen.*;
 
-@OnlyIn(Dist.CLIENT)
 public abstract class PlayerStatsContainerScreen<T extends Container> extends ContainerScreen<T>
 {
 	
@@ -158,7 +155,7 @@ public abstract class PlayerStatsContainerScreen<T extends Container> extends Co
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int i)
 	{
-		if(MinestuckKeyHandler.instance.statKey.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode)))
+		if(MSKeyHandler.instance.statKey.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode)))
 		{
 			minecraft.displayGuiScreen(null);
 			return true;

@@ -1,13 +1,13 @@
 package com.mraof.minestuck.world.storage;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.network.GristCachePacket;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.PlayerDataPacket;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
@@ -21,8 +21,6 @@ import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.DimensionSavedDataManager;
 import net.minecraft.world.storage.WorldSavedData;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,19 +28,13 @@ import java.util.Map;
 public class PlayerSavedData extends WorldSavedData	//TODO This class need a thorough look through to make sure that markDirty() is called when it should (otherwise there may be hard to notice data-loss bugs)
 {
 	private static final String DATA_NAME = Minestuck.MOD_ID+"_player_data";
+	
 	//Client sided
-
-	@OnlyIn(Dist.CLIENT)
 	public static Title title;
-	@OnlyIn(Dist.CLIENT)
 	public static int rung;
-	@OnlyIn(Dist.CLIENT)
 	public static float rungProgress;
-	@OnlyIn(Dist.CLIENT)
 	public static long boondollars;
-	@OnlyIn(Dist.CLIENT)
 	static GristSet playerGrist;
-	@OnlyIn(Dist.CLIENT)
 	static GristSet targetGrist;
 	
 	Map<PlayerIdentifier, PlayerData> dataMap = new HashMap<>();
@@ -193,7 +185,7 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 		data.boondollars += boons;
 		get(player.server).markDirty();
 		
-		MinestuckPacketHandler.sendToPlayer(PlayerDataPacket.boondollars(data.boondollars), player);
+		MSPacketHandler.sendToPlayer(PlayerDataPacket.boondollars(data.boondollars), player);
 		return true;
 	}
 	
@@ -207,7 +199,7 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 		
 		ServerPlayerEntity player = id.getPlayer(mcServer);
 		if(player != null)
-			MinestuckPacketHandler.sendToPlayer(PlayerDataPacket.boondollars(data.boondollars), player);
+			MSPacketHandler.sendToPlayer(PlayerDataPacket.boondollars(data.boondollars), player);
 		return true;
 	}
 	

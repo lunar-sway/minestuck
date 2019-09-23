@@ -66,11 +66,11 @@ public class ClientEditPacket
 	public void execute(ServerPlayerEntity player)
 	{
 		OpEntry opsEntry = player == null ? null : player.getServer().getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
-		if(!MinestuckConfig.giveItems)
+		if(!MinestuckConfig.giveItems.get())
 		{
 			if(user == -1)
 				ServerEditHandler.onPlayerExit(player);
-			else if(!MinestuckConfig.privateComputers || IdentifierHandler.encode(player).getId() == this.user || opsEntry != null && opsEntry.getPermissionLevel() >= 2)
+			else if(!MinestuckConfig.privateComputers.get() || IdentifierHandler.encode(player).getId() == this.user || opsEntry != null && opsEntry.getPermissionLevel() >= 2)
 			{
 				IdentifierHandler.PlayerIdentifier user = IdentifierHandler.getById(this.user);
 				IdentifierHandler.PlayerIdentifier target = IdentifierHandler.getById(this.target);
@@ -86,7 +86,7 @@ public class ClientEditPacket
 		{
 			ServerPlayerEntity targetPlayer = target.getPlayer(player.getServer());
 			
-			if(targetPlayer != null && (!MinestuckConfig.privateComputers || user.appliesTo(player) || opsEntry != null && opsEntry.getPermissionLevel() >= 2))
+			if(targetPlayer != null && (!MinestuckConfig.privateComputers.get() || user.appliesTo(player) || opsEntry != null && opsEntry.getPermissionLevel() >= 2))
 			{
 				SburbConnection c = SkaianetHandler.get(player.world).getActiveConnection(target);
 				if(c == null || c.getServerIdentifier() != user || !(c.isMain() || SkaianetHandler.get(player.world).giveItems(target)))

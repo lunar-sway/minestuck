@@ -1,110 +1,126 @@
 package com.mraof.minestuck;
 
 import com.mraof.minestuck.editmode.ServerEditHandler;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.Echeladder;
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.OpEntry;
 import net.minecraft.world.GameType;
 import net.minecraft.world.dimension.DimensionType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-import net.minecraftforge.fml.common.Mod;
+
+import com.electronwill.nightconfig.core.file.CommentedFileConfig;
+import com.electronwill.nightconfig.core.io.WritingMode;
+import com.mraof.minestuck.Minestuck;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.common.ForgeConfigSpec;
+
+import javax.security.auth.login.Configuration;
+
+import static net.minecraftforge.common.ForgeConfigSpec.*;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MinestuckConfig
 {
-	//public static Configuration config;
+	private static final ForgeConfigSpec.Builder client_builder = new ForgeConfigSpec.Builder();
+	public static final ForgeConfigSpec client_config;
+	private static final ForgeConfigSpec.Builder server_builder = new ForgeConfigSpec.Builder();
+	public static final ForgeConfigSpec server_config;
 	
-	@OnlyIn(Dist.CLIENT)
-	public static int clientOverworldEditRange;
-	@OnlyIn(Dist.CLIENT)
-	public static int clientLandEditRange;
-	@OnlyIn(Dist.CLIENT)
-	public static int clientCardCost;
-	@OnlyIn(Dist.CLIENT)
-	public static int clientAlchemiterStacks;
-	@OnlyIn(Dist.CLIENT)
-	public static byte clientTreeAutobalance;
-	@OnlyIn(Dist.CLIENT)
-	public static byte clientHashmapChat;
-	@OnlyIn(Dist.CLIENT)
-	public static byte echeladderAnimation;
-	@OnlyIn(Dist.CLIENT)
-	public static boolean clientGiveItems;
-	@OnlyIn(Dist.CLIENT)
-	public static boolean clientDisableGristWidget;
-	@OnlyIn(Dist.CLIENT)
-	public static boolean clientHardMode;
-	@OnlyIn(Dist.CLIENT)
-	public static boolean oldItemModels;
-	@OnlyIn(Dist.CLIENT)
-	public static boolean loginColorSelector;
-	@OnlyIn(Dist.CLIENT)
-	public static boolean dataCheckerAccess;
-	@OnlyIn(Dist.CLIENT)
-	public static boolean alchemyIcons;
-	@OnlyIn(Dist.CLIENT)
-	public static boolean preEntryEcheladder;
+	//Machines
+	public static BooleanValue disableGristWidget;
+	public static BooleanValue cruxtruderIntake;
+	public static IntValue alchemiterMaxStacks;
+	public static DimensionType[] forbiddenDimensionsTpz = new DimensionType[0];
+	public static ConfigValue<List<Integer>> cfg_forbiddenDimensionsTpz;
 	
-	public static boolean hardMode = false;
-	public static boolean generateCruxiteOre;
-	public static boolean generateUraniumOre;
-	public static boolean privateComputers;
-	public static boolean globalSession;
-	public static boolean forceMaxSize = true;
-	public static boolean giveItems;
-	public static boolean specialCardRenderer;
-	public static boolean dropItemsInCards;
-	public static boolean entryCrater;
-	public static boolean keepDimensionsLoaded;
-	public static boolean adaptEntryBlockHeight;
-	public static boolean allowSecondaryConnections;	//TODO make open server not an option after having a main connection (for when this is set to false)
-	public static boolean disableGristWidget;
-	public static boolean echeladderProgress;
-	public static boolean aspectEffects;
-	public static boolean useUUID;
-	public static boolean playerSelectedTitle;
-	public static boolean canBreakGates;
-	public static boolean disableGiclops;
-	public static boolean showGristChanges;
-	public static boolean stopSecondEntry;
-	public static boolean gristRefund;
-	public static boolean needComputer;
-	public static boolean cruxtruderIntake;
-	public static boolean skaianetCheck;
-	public static int artifactRange = 20;
-	public static int overworldEditRange;
-	public static int landEditRange;
-	public static int cardResolution;
-	public static int initialModusSize;
+	//Medium
+	public static BooleanValue keepDimensionsLoaded;
+	public static BooleanValue canBreakGates;
+	public static BooleanValue disableGiclops;
+	
+	//Ores
+	public static BooleanValue generateCruxiteOre;
+	public static BooleanValue generateUraniumOre;
+	public static IntValue oreMultiplier;
+	
+	//Sylladex
+	public static BooleanValue specialCardRenderer;
+	public static BooleanValue dropItemsInCards;
+	public static IntValue cardResolution;
+	public static IntValue initialModusSize;
 	public static String[] defaultModusTypes = new String[0];
-	public static int modusMaxSize;
-	public static int cardCost;
-	public static int oreMultiplier;
-	public static int alchemiterMaxStacks = 16;
+	public static ConfigValue<List<String>> cfg_defaultModusTypes;
+	public static IntValue modusMaxSize;
+	public static byte treeModusSetting;
+	public static ConfigValue<String> cfg_treeModusSetting;
+	public static byte hashmapChatModusSetting;
+	public static ConfigValue<String> cfg_hashmapChatModusSetting;
+	/**
+	 * An option related to dropping the sylladex on death
+	 * If 0: only captchalouged items are dropped. If 1: Both captchalouged items and cards are dropped. If 2: All items, including the actual modus.
+	 */
+	public static byte sylladexDropMode;
+	public static ConfigValue<String> cfg_sylladexDropMode;
+	
+	//Mechanics
+	public static boolean hardMode = false; //Not fully fleshed out yet
+	public static boolean forceMaxSize = true;
+	public static BooleanValue echeladderProgress;
+	public static BooleanValue aspectEffects;
+	public static BooleanValue playerSelectedTitle;
+	public static IntValue preEntryRungLimit;
+	
+	//Entry
+	public static BooleanValue entryCrater;
+	public static BooleanValue adaptEntryBlockHeight;
+	public static BooleanValue stopSecondEntry;
+	public static BooleanValue needComputer;
+	public static IntValue artifactRange;
+	public static IntValue overworldEditRange;
+	public static IntValue landEditRange;
+	
+	//Computer
+	public static BooleanValue privateComputers;
+	public static BooleanValue globalSession;
+	public static BooleanValue allowSecondaryConnections;	//TODO make open server not an option after having a main connection (for when this is set to false)
+	public static BooleanValue useUUID;
+	public static BooleanValue skaianetCheck;
+	public static byte dataCheckerPermission = 4;
+	public static ConfigValue<String> cfg_dataCheckerPermission;
 	/**
 	 * 0: Make the player's new server player his/her old server player's server player
 	 * 1: The player that lost his/her server player will have an idle main connection until someone without a client player connects to him/her.
 	 * (Will try to put a better explanation somewhere else later)
 	 */
 	public static int escapeFailureMode;
-	public static int preEntryRungLimit;
-	public static DimensionType[] forbiddenDimensionsTpz = new DimensionType[0];
-	public static byte treeModusSetting;
-	public static byte hashmapChatModusSetting;
-	/**
-	 * An option related to dropping the sylladex on death
-	 * If 0: only captchalouged items are dropped. If 1: Both captchalouged items and cards are dropped. If 2: All items, including the actual modus.
-	 */
-	public static byte sylladexDropMode;
-	public static byte dataCheckerPermission = 4;
 	
+	//Edit Mode
+	public static BooleanValue giveItems;
+	public static BooleanValue showGristChanges;
+	public static BooleanValue gristRefund;
 	public static boolean[] deployConfigurations = new boolean[2];
+	public static BooleanValue deployCard;
+	public static BooleanValue portableMachines;
+	
+	//Client side
+	public static int clientOverworldEditRange;
+	public static int clientLandEditRange;
+	public static int clientAlchemiterStacks;
+	public static byte clientTreeAutobalance;
+	public static byte clientHashmapChat;
+	public static byte echeladderAnimation;
+	public static ConfigValue<String> cfg_echeladderAnimation;
+	public static boolean clientGiveItems;
+	public static boolean clientDisableGristWidget;
+	public static boolean clientHardMode;
+	public static BooleanValue oldItemModels;
+	public static BooleanValue loginColorSelector;
+	public static boolean dataCheckerAccess;
+	public static BooleanValue alchemyIcons;
+	public static boolean preEntryEcheladder;
 	
 	//Secret configuration options
 	public static boolean secretConfig = false;
@@ -121,163 +137,195 @@ public class MinestuckConfig
 	public static int cruxiteStratumMax = 60;
 	public static int uraniumStratumMax = 30;
 	
-	/*static void loadConfigFile(File file, Side side)
+	
+	static
 	{
-		gameSide = side;
-		config = new Configuration(file, true);
-		config.load();
+		server_builder.comment("Ores");
+		generateCruxiteOre = server_builder.comment("If cruxite ore should be generated in the overworld.")
+				.define("ores.generateCruxiteOre",true);
+		generateUraniumOre = server_builder.comment("If uranium ore should be generated in the overworld.")
+				.define("ores.generateUraniumOre",true);
+		oreMultiplier = server_builder.comment("Multiplies the cost for the 'contents' of an ore. Set to 0 to disable alchemizing ores.")
+				.defineInRange("ores.oreMultiplier",1,0,Integer.MAX_VALUE);
 		
-		MinestuckDimensionHandler.skaiaProviderTypeId = config.get("IDs", "skaiaProviderTypeId", 2).setRequiresMcRestart(true).setLanguageKey("minestuck.config.skaiaProviderTypeId").getInt();
-		MinestuckDimensionHandler.skaiaDimensionId = config.get("IDs", "skaiaDimensionId", 2).setRequiresMcRestart(true).setLanguageKey("minestuck.config.skaiaDimensionId").getInt();
-		MinestuckDimensionHandler.landProviderTypeId = config.get("IDs", "landProviderTypeId", 3).setRequiresMcRestart(true).setLanguageKey("minestuck.config.landProviderTypeId").getInt();
-		MinestuckDimensionHandler.landDimensionIdStart = config.get("IDs", "landDimensionIdStart", 3).setRequiresMcRestart(true).setLanguageKey("minestuck.config.landDimensionIdStart").getInt();
-		MinestuckDimensionHandler.biomeIdStart = config.get("IDs", "biomeIdStart", 50).setRequiresMcRestart(true).setMinValue(40).setMaxValue(120).setLanguageKey("minestuck.config.biomeIdStart").getInt();
+		server_builder.comment("Mechanics");
+		echeladderProgress = server_builder.comment("If this is true, players will be able to see their progress towards the next rung. This is server side and will only be active in multiplayer if the server/Lan host has it activated.")
+				.define("mechanics.echeladderProgress", false);
+		preEntryRungLimit = server_builder.comment("The highest rung you can get before entering medium. Note that the first rung is indexed as 0, the second as 1 and so on.")
+				.defineInRange("mechanics.preEntryRungLimit", 6, 0, 49);
+		aspectEffects = server_builder.comment("If this is true, players will gain certain potion effects once they reach a certain rung based on their aspect.")
+				.define("mechanics.aspectEffects", true);
+		playerSelectedTitle = server_builder.comment("Enable this to let players select their own title. They will however not be able to select the Lord or Muse as class.")
+				.define("mechanics.playerSelectedTitle", false);
 		
-		keepDimensionsLoaded = config.get("General", "keepDimensionsLoaded", true, "").setLanguageKey("minestuck.config.keepDimensionsLoaded").setRequiresMcRestart(true).getBoolean();
-		oreMultiplier = config.get("General", "oreMultiplier", 1, "Multiplies the cost for the 'contents' of an ore. Set to 0 to disable alchemizing ores.").setMinValue(0).setLanguageKey("minestuck.config.oreMultiplier").setRequiresMcRestart(true).getInt();
 		
-		//Debug.isDebugMode = config.get("General", "Print Debug Messages", true, "Whenether the game should print debug messages or not.").setShowInGui(false).getBoolean();
+		server_builder.comment("Sylladex");
+		//specialCardRenderer = server_builder.comment("Whenether to use the special render for cards or not.").define("sylladex.specialCardRenderer", false);
+		dropItemsInCards = server_builder.comment("When sylladexes are droppable, this option determines if items should be dropped inside of cards or items and cards as different stacks.")
+				.define("sylladex.dropItemsInCards", true);
+		//cardResolution = server_builder.comment("The resolution of the item inside of a card. The width/height is computed by '8*2^x', where 'x' is this config value.").defineInRange("sylladex.cardResolution", 1, 0 ,5);
+		initialModusSize = server_builder.comment("The initial ammount of captchalogue cards in your sylladex.")
+				.defineInRange("sylladex.initialModusSize", 5, 0, Integer.MAX_VALUE);
+		cfg_defaultModusTypes = server_builder.comment("An array with the possible modus types to be assigned. Written with mod-id and modus name, for example \"minestuck:queue_stack\" or \"minestuck:hashmap\"")
+				.define("sylladex.defaultModusTypes", new ArrayList<>(Arrays.asList("minestuck:stack","minestuck:queue")));
+		modusMaxSize = server_builder.comment("The max size on a modus. Ignored if the value is 0.")
+				.defineInRange("sylladex.modusMaxSize", 0, 0, Integer.MAX_VALUE);
+		cfg_treeModusSetting = server_builder.comment("This determines if auto-balance should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.")
+				.define("sylladex.treeModusSetting", "both");
+		cfg_hashmapChatModusSetting = server_builder.comment("This determines if hashmap chat ejection should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.")
+				.define("sylladex.forceEjectByChat", "both");
+		cfg_sylladexDropMode = server_builder.comment("Determines which items from the modus that are dropped on death. \"items\": Only the items are dropped. \"cardsAndItems\": Both items and cards are dropped. (So that you have at most initialModusSize amount of cards) \"all\": Everything is dropped, even the modus.")
+				.define("sylladex.sylladexDropMode", "cardsAndItems");
 		
-		loadBasicConfigOptions(false);
 		
-		config.save();
+		server_builder.comment("Computer");
+		privateComputers = server_builder.comment("True if computers should only be able to be used by the owner.")
+				.define("computer.privateComputers", true);
+		globalSession = server_builder.comment("Whenether all connetions should be put into a single session or not.")
+				.define("computer.globalSession",false);
+		allowSecondaryConnections = server_builder.comment("Set this to true to allow so-called 'secondary connections' to be created.")
+				.define("computer.secondaryConnections", true);
+		useUUID = server_builder.comment("If this is set to true, minestuck will use uuids to refer to players in the saved data. On false it will instead use the old method based on usernames.")
+				.define("computer.useUUID", true);
+		skaianetCheck = server_builder.comment("If enabled, will during certain moments perform a check on all connections and computers that are in use. Recommended to turn off if there is a need to improve performance, however skaianet-related bugs might appear when done so.")
+				.define("computer.skaianetCheck",true);
+		cfg_dataCheckerPermission = server_builder.comment("Determines who's allowed to access the data checker. \"none\": No one is allowed. \"ops\": only those with a command permission of level 2 or more may access the data ckecker. (for single player, that would be if cheats are turned on) \"gamemode\": Only players with the creative or spectator gamemode may view the data checker. \"opsAndGamemode\": Combination of \"ops\" and \"gamemode\". \"anyone\": No access restrictions are used.")
+				.define("computer.dataCheckerPermission", "opsAndGamemode");
+		
+		
+		server_builder.comment("Edit Mode");
+		giveItems = server_builder.comment("Setting this to true replaces editmode with the old Give Items button.")
+				.define("editMode.giveItems", false);
+		showGristChanges = server_builder.comment("If this is true, grist change messages will appear.")
+				.define("editMode.showGristChanges",true);
+		gristRefund = server_builder.comment("Enable this and players will get a (full) grist refund from breaking blocks in editmode.")
+				.define("editMode.gristRefund", false);
+		deployCard = server_builder.comment("Determines if a card with a captcha card punched on it should be added to the deploy list.")
+				.define("editMode.deployCard",false);
+		portableMachines = server_builder.comment("Determines if the small portable machines should be included in the deploy list.")
+				.define("editMode.portableMachines", false);
+		overworldEditRange = server_builder.comment("A number that determines how far away from the computer an editmode player may be before entry.")
+				.defineInRange("editMode.overworldEditRange", 15, 1, Integer.MAX_VALUE);
+		landEditRange = server_builder.comment("A number that determines how far away from the center of the brought land that an editmode player may be after entry.")
+				.defineInRange("editMode.landEditRange", 30, 1, Integer.MAX_VALUE);
+		
+		
+		server_builder.comment("Machines");
+		disableGristWidget = server_builder.comment("Disable Grist Widget")
+				.define("machines.disableGristWidget",false);
+		cruxtruderIntake = server_builder.comment("If enabled, the regular cruxtruder will require raw cruxite to function, which is inserted through the pipe.")
+				.define("machines.cruxtruderIntake",false);
+		alchemiterMaxStacks = server_builder.comment("The number of stacks that can be alchemized at the same time with the alchemiter.")
+				.defineInRange("machines.alchemiterMaxStacks",16,0,999);
+		cfg_forbiddenDimensionsTpz = server_builder.comment("A list of dimension id's that you cannot travel to or from using transportalizers.")
+				.define("machines.forbiddenDimensionsTpz", new ArrayList<>());
+		
+		server_builder.comment("Entry");
+		entryCrater = server_builder.comment("Disable this to prevent craters from people entering the medium.")
+				.define("entry.entryCrater",true);
+		adaptEntryBlockHeight = server_builder.comment("Adapt the transferred height to make the top non-air block to be placed at y:128. Makes entry take slightly longer.")
+				.define("entry.adaptEntryBlockHeight",true);
+		stopSecondEntry = server_builder.comment("If this is true, players may only use an artifact once, even if they end up in the overworld again.")
+				.define("entry.stopSecondEntry",false);
+		needComputer = server_builder.comment("If this is true, players need to have a computer nearby to Enter")
+				.define("entry.needComputer", false);
+		artifactRange = server_builder.comment("Radius of the land brought into the medium.")
+				.defineInRange("entry.artifactRange",30,0,Integer.MAX_VALUE);
+		
+		server_builder.comment("The Medium");
+		keepDimensionsLoaded = server_builder.comment("Keep the Medium Loaded")
+				.define("medium.keepDimensionsLoaded",true);
+		canBreakGates = server_builder.comment("Lets gates be destroyed by explosions. Turning this off will make gates use the same explosion resistance as bedrock.")
+				.define("medium.canBreakGates",true);
+		disableGiclops = server_builder.comment("Right now, the giclops pathfinding is currently causing huge amounts of lag due to their size. This option is a short-term solution that will disable giclops spawning and remove all existing giclopes.")
+				.define("medium.disableGiclops",true);
+		
+		client_builder.comment("Client Side");
+		oldItemModels = client_builder.comment("Set this to true to have back all old 2D item models.")
+				.define("client.oldItemModels", false);
+		alchemyIcons = client_builder.comment("Set this to true to replace grist names in alchemiter/grist widget with the grist icon.")
+				.define("client.alchemyIcons", true);
+		loginColorSelector = client_builder.comment("Determines if the color selector should be displayed when entering a save file for the first time.")
+				.define("client.loginColorSelector", true);
+		cfg_echeladderAnimation = client_builder.comment("Allows control of standard speed for the echeladder rung \"animation\", or if it should have one in the first place.")
+				.comment("Range: [\"nothing\", \"slow\", \"normal\", \"fast\"]")
+				.define("client.echeladderAnimation", "normal");
+		
+		client_config = client_builder.build();
+		server_config = server_builder.build();
 	}
 	
-	static void loadBasicConfigOptions(boolean worldRunning)
+	public static void setClientValues()
 	{
-		config.getCategory("IDs").setLanguageKey("minestuck.config.IDs");
-		config.getCategory("Modus").setLanguageKey("minestuck.config.modus");
-		
-		if(!worldRunning)
+		String ea = cfg_echeladderAnimation.get().toLowerCase();
+		switch(ea)
 		{
-			ContainerHandler.windowIdStart = config.get("IDs", "specialWindowIdStart", -10).setLanguageKey("minestuck.config.windowIdStart").setRequiresWorldRestart(true).getInt();
-			
-			String setting = config.get("Modus", "forceAutobalance", "both", "This determines if auto-balance should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.", new String[] {"both", "off", "on"}).setRequiresWorldRestart(true).setLanguageKey("minestuck.config.forceAutobalance").getString();
-			treeModusSetting = (byte) (setting.equals("both") ? 0 : setting.equals("on") ? 1 : 2);
-			setting = config.get("Modus", "forceEjectByChat", "on", "This determines if hashmap chat ejection should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.", new String[] {"both", "off", "on"}).setRequiresWorldRestart(true).setLanguageKey("minestuck.config.forceEjectByChat").getString();
-			hashmapChatModusSetting = (byte) (setting.equals("both") ? 0 : setting.equals("on") ? 1 : 2);
-			
-			giveItems = config.get("General", "giveItems", false, "Setting this to true replaces editmode with the old Give Items button.").setLanguageKey("minestuck.config.giveItems").setRequiresWorldRestart(true).getBoolean();
-			
-			cardCost = config.get("General", "cardCost", 1, "An integer that determines how much a captchalogue card costs to alchemize").setMinValue(1).setLanguageKey("minestuck.config.cardCost").setRequiresWorldRestart(true).getInt();
-			
-			globalSession = config.get("General", "globalSession", false, "Whenether all connetions should be put into a single session or not.").setRequiresWorldRestart(true).setLanguageKey("minestuck.config.globalSession").getBoolean();
-			generateCruxiteOre = config.get("General", "generateCruxiteOre", true, "If cruxite ore should be generated in the overworld.").setRequiresWorldRestart(true).setLanguageKey("minestuck.config.generateCruxiteOre").getBoolean();
-			generateUraniumOre = config.get("General", "generateUraniumOre", true, "If uranium ore should be generated in the overworld.").setRequiresWorldRestart(true).setLanguageKey("minestuck.config.generateUraniumOre").getBoolean();
-			overworldEditRange = config.get("General", "overworldEditRange", 15, "A number that determines how far away from the computer an editmode player may be before entry.", 3, 50).setRequiresWorldRestart(true).setLanguageKey("minestuck.config.overworldEditRange").getInt();
-			landEditRange = config.get("General", "landEditRange", 30, "A number that determines how far away from the center of the brought land that an editmode player may be after entry.", 3, 50).setRequiresWorldRestart(true).setLanguageKey("minestuck.config.landEditRange").getInt();
-			disableGristWidget = config.get("General", "disableGristWidget", false).setLanguageKey("minestuck.config.disableGristWidget").setRequiresWorldRestart(true).getBoolean();
-			preEntryRungLimit = config.get("General", "preEntryRungLimit", 6, "The highest rung you can get before entering medium. Note that the first rung is indexed as 0, the second as 1 and so on.", 0, Echeladder.RUNG_COUNT - 1).setLanguageKey("minestuck.config.preEntryRungLimit").setRequiresWorldRestart(true).getInt();
-			useUUID = config.get("General", "uuidIdentification", true, "If this is set to true, minestuck will use uuids to refer to players in the saved data. On false it will instead use the old method based on usernames.").setLanguageKey("minestuck.config.uuidIdentification").setRequiresWorldRestart(true).getBoolean();
-		}
-		
-		initialModusSize = config.get("Modus", "initialModusSize", 5).setMinValue(0).setLanguageKey("minestuck.config.initialModusSize").getInt();
-		defaultModusTypes = config.get("Modus", "defaultModusTypes", new String[] {"minestuck:stack", "minestuck:queue"},
-				"An array with the possible modus types to be assigned. Written with mod-id and modus name, for example \"minestuck:queue_stack\" or \"minestuck:hashmap\"").setLanguageKey("minestuck.config.defaultModusType").getStringList();
-		modusMaxSize = config.get("Modus", "modusMaxSize", 0, "The max size on a modus. Ignored if the value is 0.").setMinValue(0).setLanguageKey("minestuck.config.modusMaxSize").getInt();
-		if(initialModusSize > modusMaxSize && modusMaxSize > 0)
-			initialModusSize = modusMaxSize;
-		String setting = config.get("Modus", "itemDropMode", "cardsAndItems", "Determines which items from the modus that are dropped on death. \"items\": Only the items are dropped. \"cardsAndItems\": Both items and cards are dropped. (So that you have at most initialModusSize amount of cards) \"all\": Everything is dropped, even the modus.", new String[] {"items", "cardsAndItems", "all"}).setLanguageKey("minestuck.config.itemDropMode").getString();
-		if(setting.equals("items"))
-			sylladexDropMode = 0;
-		else if(setting.equals("cardsAndItems"))
-			sylladexDropMode = 1;
-		else sylladexDropMode = 2;
-		dropItemsInCards = config.get("Modus", "dropItemsInCards", true, "When sylladexes are droppable, this option determines if items should be dropped inside of cards or items and cards as different stacks.").setLanguageKey("minestuck.config.dropItemsInCards").getBoolean();
-		
-		privateComputers = config.get("General", "privateComputers", true, "True if computers should only be able to be used by the owner.").setLanguageKey("minestuck.config.privateComputers").getBoolean();
-
-		deployConfigurations = new boolean[2];
-		deployConfigurations[0] = config.get("General", "deployCard", false, "Determines if a card with a captcha card punched on it should be added to the deploy list.").setLanguageKey("minestuck.config.deployCard").setRequiresWorldRestart(true).getBoolean();
-		deployConfigurations[1] = config.get("General", "portableMachines", false, "Determines if the small portable machines should be included in the deploy list.").setLanguageKey("minestuck.config.portableMachines").setRequiresWorldRestart(true).getBoolean();
-		cardCost = config.get("General", "cardCost", 1, "An integer that determines how much a captchalogue card costs to alchemize").setMinValue(1).setLanguageKey("minestuck.config.cardCost").setRequiresWorldRestart(true).getInt();
-
-		generateCruxiteOre = config.get("General", "generateCruxiteOre", true, "If cruxite ore should be generated in the overworld.").setRequiresWorldRestart(true).setLanguageKey("minestuck.config.generateCruxiteOre").getBoolean();
-		generateUraniumOre = config.get("General", "generateUraniumOre", false, "If uranium ore should be generated in the overworld.").setRequiresWorldRestart(true).setLanguageKey("minestuck.config.generateUraniumOre").getBoolean();
-		globalSession = config.get("General", "globalSession", false, "Whenether all connetions should be put into a single session or not.").setLanguageKey("minestuck.config.globalSession").getBoolean();
-		overworldEditRange = config.get("General", "overworldEditRange", 15, "A number that determines how far away from the computer an editmode player may be before entry.", 3, 50).setRequiresWorldRestart(true).setLanguageKey("minestuck.config.overworldEditRange").getInt();
-		landEditRange = config.get("General", "landEditRange", 30, "A number that determines how far away from the center of the brought land that an editmode player may be after entry.", 3, 50).setRequiresWorldRestart(true).setLanguageKey("minestuck.config.landEditRange").getInt();
-		artifactRange = config.get("General", "artifactRange", 30, "Radius of the land brought into the medium.", 3, 50).setLanguageKey("minestuck.config.artifactRange").getInt();
-		
-		entryCrater = config.get("General", "entryCrater", true, "Disable this to prevent craters from people entering the medium.").setLanguageKey("minestuck.config.entryCrater").getBoolean();
-		adaptEntryBlockHeight = config.get("General", "adaptEntryBlockHeight", true, "Adapt the transferred height to make the top non-air block to be placed at y:128. Makes entry take slightly longer.").setLanguageKey("minestuck.config.adaptEntryBlockHeight").getBoolean();
-		allowSecondaryConnections = config.get("General", "secondaryConnections", true, "Set this to true to allow so-called 'secondary connections' to be created.").setLanguageKey("minestuck.config.secondaryConnections").getBoolean();	//Server lists need to be updated if this gets changeable in-game
-		vanillaOreDrop = config.get("General", "vanillaOreDrop", false, "If this is true, the custom vanilla ores will drop the standard vanilla ores when mined, instead of the custom type.").setLanguageKey("minestuck.config.vanillaOreDrop").getBoolean();
-		echeladderProgress = config.get("General", "echeladderProgress", false, "If this is true, players will be able to see their progress towards the next rung. This is server side and will only be active in multiplayer if the server/Lan host has it activated.").setLanguageKey("minestuck.config.echeladderProgress").getBoolean();
-		aspectEffects = config.get("General", "aspectEffects", true, "If this is true, players will gain certain potion effects once they reach a certain rung based on their aspect.").setLanguageKey("minestuck.config.aspectEffects").getBoolean();
-		playerSelectedTitle = config.get("General", "playerSelectedTitle", false, "Enable this to let players select their own title. They will however not be able to select the Lord or Muse as class.").setLanguageKey("minestuck.config.playerSelectedTitle").getBoolean();
-		canBreakGates = config.get("General", "canBreakGates", true, "Lets gates be destroyed by explosions. Turning this off will make gates use the same explosion resistance as bedrock.").setLanguageKey("minestuck.config.canBreakGates").getBoolean();
-		disableGiclops = config.get("General", "disableGiclops", true, "Right now, the giclops pathfinding is currently causing huge amounts of lag due to their size. This option is a short-term solution that will disable giclops spawning and remove all existing giclopes.").setLanguageKey("minestuck.config.disableGiclops").getBoolean();
-		showGristChanges = config.get("General", "showGristChanges", true, "If this is true, grist change messages will appear").setLanguageKey("minestuck.config.showGristChanges").getBoolean();
-		forbiddenDimensionsTpz = config.get("General", "forbiddenDimensionsTpz", new int[0], "A list of dimension id's that you cannot travel to or from using transportalizers.").setLanguageKey("minestuck.config.forbiddenDimensionsTpz").getIntList();
-		stopSecondEntry = config.get("General", "stopSecondEntry", false, "If this is true, players may only use an artifact once, even if they end up in the overworld again.").setLanguageKey("minestuck.config.stopSecondEntry").getBoolean();
-		gristRefund = config.get("General", "gristRefund", false, "Enable this and players will get a (full) grist refund from breaking blocks in editmode.").setLanguageKey("minestuck.config.gristRefund").getBoolean();
-		needComputer = config.get("General", "needComputer", false, "If this is true, players need to have a computer nearby to Enter").setLanguageKey("minestuck.config.needComputer").getBoolean();
-		cruxtruderIntake = config.get("General", "cruxtruderIntake", false, "If enabled, the regular cruxtruder will require raw cruxite to function, which is inserted through the pipe.").setLanguageKey("minestuck.config.cruxtruderIntake").getBoolean();
-		alchemiterMaxStacks = config.get("General", "alchemiterMaxStacks", 16,"The number of stacks that can be alchemized at the same time with the alchemiter.", 1, 999).setLanguageKey("minestuck.config.alchemiterMaxStacks").getInt();
-		skaianetCheck = config.get("General", "skaianetCheck", true, "If enabled, will during certain moments perform a check on all connections and computers that are in use. Recommended to turn off if there is a need to improve performance, however skaianet-related bugs might appear when done so.").setLanguageKey("minestuck.config.skaianetCheck").getBoolean();
-		
-		if(config.hasKey("General", "hardMode"))
-			hardMode = config.get("General", "hardMode", false).getBoolean();	//Not fully fleshed out yet
-		
-		if(config.hasKey("General", "secret"))
-			secretConfig = config.get("General", "secret", false).getBoolean();
-		if(secretConfig)
-		{
-			disableCruxite = config.get("Secret", "disableCruxite", false).getBoolean();
-			disableUranium = config.get("Secret", "disableUranium", false).getBoolean();
-			cruxiteVeinsPerChunk = config.get("Secret", "cruxiteVeinsPerChunk", 10).getInt();
-			uraniumVeinsPerChunk = config.get("Secret", "uraniumVeinsPerChunk", 10).getInt();
-			baseCruxiteVeinSize = config.get("Secret", "baseCruxiteVeinSize", 6).getInt();
-			baseUraniumVeinSize = config.get("Secret", "baseUraniumVeinSize", 3).getInt();
-			bonusCruxiteVeinSize = config.get("Secret", "bonusCruxiteVeinSize", 3).getInt();
-			bonusUraniumVeinSize = config.get("Secret", "bonusUraniumVeinSize", 3).getInt();
-			cruxiteStratumMin = config.get("Secret", "cruxiteStratumMin", 0).getInt();
-			uraniumStratumMin = config.get("Secret", "uraniumStratumMin", 0).getInt();
-			cruxiteStratumMax = config.get("Secret", "cruxiteStratumMax", 60).getInt();
-			uraniumStratumMax = config.get("Secret", "uraniumStratumMax", 30).getInt();
-		}
-		
-		setting = config.get("General", "dataCheckerPermission", "opsAndGamemode", "Determines who's allowed to access the data checker. \"none\": No one is allowed. \"ops\": only those with a command permission of level 2 or more may access the data ckecker. (for single player, that would be if cheats are turned on) \"gamemode\": Only players with the creative or spectator gamemode may view the data checker. \"opsAndGamemode\": Combination of \"ops\" and \"gamemode\". \"anyone\": No access restrictions are used.",
-				new String[] {"none", "ops", "gamemode", "opsAndGamemode", "anyone"}).setLanguageKey("minestuck.config.dataCheckerPermission").getString();
-		if(setting.equals("none")) dataCheckerPermission = 0;
-		else if(setting.equals("ops")) dataCheckerPermission = 1;
-		else if(setting.equals("gamemode")) dataCheckerPermission = 2;
-		else if(setting.equals("anyone")) dataCheckerPermission = 4;
-		else dataCheckerPermission = 3;
-		
-		if(gameSide.isClient())	//Client sided config values
-		{
-			oldItemModels = config.get("General", "oldItemModels", false, "Set this to true to have back all old 2D item models.").setRequiresMcRestart(true).setLanguageKey("minestuck.config.oldItemModels").getBoolean();
-			//specialCardRenderer = config.getBoolean("specialCardRenderer", "General", false, "Whenether to use the special render for cards or not.");
-			if(specialCardRenderer && !GLContext.getCapabilities().GL_EXT_framebuffer_object)
-			{
-				specialCardRenderer = false;
-				Debug.warn("The FBO extension is not available and is required for the advanced rendering of captchalogue cards.");
-			}
-			//cardResolution = config.getInt("General", "cardResolution", 1, 0, 5, "The resolution of the item inside of a card. The width/height is computed by '8*2^x', where 'x' is this config value.");
-			loginColorSelector = config.get("General", "loginColorSelector", true, "Determines if the color selector should be displayed when entering a save file for the first time.").setLanguageKey("minestuck.config.loginColorSelector").getBoolean();
-			alchemyIcons = config.get("General", "alchemyIcons", true, "Set this to true to replace grist names in alchemiter/grist widget with the grist icon.").setLanguageKey("minestuck.config.alchemyIcons").getBoolean();
-			setting = config.get("General", "echeladderAnimationNew", "normal", "Allows control of standard speed for the echeladder rung \"animation\", or if it should have one in the first place.", new String[] {"nothing", "slow", "normal", "fast"}).setLanguageKey("minestuck.config.echeladderAnimation").getString();
-			if(setting.equals("nothing")) echeladderAnimation = 0;
-			else if(setting.equals("slow")) echeladderAnimation = 4;
-			else if(setting.equals("fast")) echeladderAnimation = 1;
-			else echeladderAnimation = 2;
+			case "nothing": echeladderAnimation = 0;
+				break;
+			case "slow": echeladderAnimation = 4;
+				break;
+			case "fast": echeladderAnimation = 1;
+				break;
+			default: echeladderAnimation = 2;
 		}
 	}
 	
-	@OnlyIn(Dist.CLIENT)
-	@SubscribeEvent
-	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
+	public static void setConfigVariables()
 	{
-		if(event.getModID().equals(Minestuck.MOD_ID))
+		List<Integer> fdt = cfg_forbiddenDimensionsTpz.get();
+		forbiddenDimensionsTpz = new DimensionType[fdt.size()];
+		for(int i = 0; i < fdt.size(); i++)
+			forbiddenDimensionsTpz[i] = DimensionType.getById(fdt.get(i));
+		
+		List<String> dmt = cfg_defaultModusTypes.get();
+		defaultModusTypes = new String[dmt.size()];
+		for(int i = 0; i < dmt.size(); i++)
+			defaultModusTypes[i] = dmt.get(i);
+		
+		String tms = cfg_treeModusSetting.get().toLowerCase();
+		switch(tms)
 		{
-			loadBasicConfigOptions(event.isWorldRunning());
-			
-			config.save();
-			
+			case "on": treeModusSetting = 1;
+				break;
+			case "off": treeModusSetting = 2;
+				break;
+			default: treeModusSetting = 0;
 		}
-	}*/
+		String hms = cfg_hashmapChatModusSetting.get().toLowerCase();
+		switch(tms)
+		{
+			case "on": hashmapChatModusSetting = 1;
+				break;
+			case "off": hashmapChatModusSetting = 2;
+				break;
+			default: hashmapChatModusSetting = 0;
+		}
+		String sdm = cfg_sylladexDropMode.get().toLowerCase();
+		switch(sdm)
+		{
+			case "all": sylladexDropMode = 2;
+				break;
+			case "items": sylladexDropMode = 0;
+				break;
+			default: sylladexDropMode = 1;
+		}
+		
+		String dcp = cfg_dataCheckerPermission.get().toLowerCase();
+		switch(dcp)
+		{
+			case "none": dataCheckerPermission = 0;
+			case "ops": dataCheckerPermission = 1;
+			case "gamemode": dataCheckerPermission = 2;
+			case "anyone": dataCheckerPermission = 4;
+			default: dataCheckerPermission = 3;
+		}
+	}
+	public static void loadConfig(ForgeConfigSpec config, String path)
+	{
+		final CommentedFileConfig file = CommentedFileConfig.builder(new File(path)).sync().autosave().writingMode(WritingMode.REPLACE).build();
+		file.load();
+		config.setConfig(file);
+	}
 	
 	public static boolean getDataCheckerPermissionFor(ServerPlayerEntity player)
 	{
@@ -304,5 +352,5 @@ public class MinestuckConfig
 			return false;
 		} else return dataCheckerPermission != 0;
 	}
-	
 }
+

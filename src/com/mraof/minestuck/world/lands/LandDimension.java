@@ -5,35 +5,35 @@ import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.world.biome.BiomeMinestuck;
-import com.mraof.minestuck.world.gen.ModChunkGeneratorType;
-import com.mraof.minestuck.world.lands.gen.ChunkGeneratorLands;
+import com.mraof.minestuck.world.biome.LandBiomeHolder;
+import com.mraof.minestuck.world.biome.LandWrapperBiome;
+import com.mraof.minestuck.world.gen.MSWorldGenTypes;
 
 import com.mraof.minestuck.world.lands.gen.LandGenSettings;
-import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.provider.BiomeProviderType;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.dimension.Dimension;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ModDimension;
 
 import javax.annotation.Nullable;
+import java.util.Objects;
 import java.util.function.BiFunction;
 
 public class LandDimension extends Dimension
 {
-	private ChunkGeneratorLands chunkGen;
-	
-	public StructureBlockRegistry blockRegistry;
+	private LandBiomeHolder biomeHolder;
 	public LandAspects landAspects;
 	public float skylightBase;
 	Vec3d skyColor;
@@ -43,45 +43,34 @@ public class LandDimension extends Dimension
 	public LandDimension(World worldIn, DimensionType typeIn)
 	{
 		super(worldIn, typeIn);
-		typeIn.getData().resetReaderIndex();
-		if(typeIn.getData().readBoolean())
-		{
-			TerrainLandAspect terrain = LandAspectRegistry.fromNameTerrain(typeIn.getData().readString(32767), false);
-			TitleLandAspect title = LandAspectRegistry.fromNameTitle(typeIn.getData().readString(32767), false);
-			landAspects = new LandAspects(terrain, title);
-		} else landAspects = null;
+		
+		PacketBuffer buffer = Objects.requireNonNull(typeIn.getData());
+		buffer.resetReaderIndex();
+		TerrainLandAspect terrain = buffer.readRegistryIdSafe(TerrainLandAspect.class);
+		TitleLandAspect title = buffer.readRegistryIdSafe(TitleLandAspect.class);
+		landAspects = new LandAspects(terrain, title);
 		
 		doesWaterVaporize = false;
 		
-		//this.biomeProvider = new BiomeProviderLands(world, chunkProvider.rainfall, chunkProvider.oceanChance, chunkProvider.roughChance);
 		this.nether = false;
 		
-		if(world.isRemote)
+		if(!(world instanceof ServerWorld)) //world.isRemote can't be used just yet because it is set after the dimension is created
 			setSkyRenderer(new LandSkyRenderer(this));
 		
-		if(landAspects != null)
-			initLandAspects();
+		initLandAspects();
 	}
 	
-	public void initLandAspects()
+	private void initLandAspects()
 	{
-		blockRegistry = new StructureBlockRegistry();
-		landAspects.aspectTerrain.registerBlocks(blockRegistry);
 		skylightBase = landAspects.aspectTerrain.getSkylightBase();
 		skyColor = landAspects.aspectTerrain.getSkyColor();
 		fogColor = landAspects.aspectTerrain.getFogColor();
 		cloudColor = landAspects.aspectTerrain.getCloudColor();
+		
 		landAspects.aspectTitle.prepareWorldProvider(this);
-		if(chunkGen != null)
-			initGenSettings(chunkGen.getSettings());
+		
+		biomeHolder = new LandBiomeHolder(landAspects, false);
 	}
-	
-	private void initGenSettings(LandGenSettings settings)
-	{
-		settings.setDefaultBlock(blockRegistry.getBlockState("ground"));
-		settings.setDefaultFluid(blockRegistry.getBlockState("ocean"));
-	}
-	
 	
 	//@Override TODO
 	public float getSunBrightnessFactor(float partialTicks)
@@ -108,11 +97,21 @@ public class LandDimension extends Dimension
 	@Override
 	public ChunkGenerator<?> createChunkGenerator()
 	{
-		LandGenSettings settings = ModChunkGeneratorType.LANDS.createSettings();
-		if(landAspects != null)
-			initGenSettings(settings);
-		chunkGen = ModChunkGeneratorType.LANDS.create(this.world, BiomeProviderType.FIXED.create(BiomeProviderType.FIXED.createSettings().setBiome(BiomeMinestuck.SKAIA)), settings);
-		return chunkGen;
+		LandGenSettings settings = MSWorldGenTypes.LANDS.createSettings();
+		settings.setLandAspects(landAspects);
+		settings.setBiomeHolder(biomeHolder);
+		return MSWorldGenTypes.LANDS.create(this.world, MSWorldGenTypes.LAND_BIOMES.create(MSWorldGenTypes.LAND_BIOMES.createSettings().setGenSettings(settings).setSeed(this.getSeed())), settings);
+	}
+	
+	public LandWrapperBiome getWrapperBiome(Biome biome)
+	{
+		return biomeHolder.localBiomeFrom(biome);
+	}
+	
+	@Override
+	public Biome getBiome(BlockPos pos)
+	{
+		return biomeHolder.localBiomeFrom(super.getBiome(pos));
 	}
 	
 	@Nullable
@@ -266,13 +265,6 @@ public class LandDimension extends Dimension
 	{
 		return world;
 	}
-	/*
-	@Override
-	public Biome getBiomeForCoords(BlockPos pos)
-	{
-		return chunkProvider.getBiomeGen();
-	}^*/
-	
 	
 	//@Override TODO Is this actually needed?
 	public void onPlayerAdded(ServerPlayerEntity player)

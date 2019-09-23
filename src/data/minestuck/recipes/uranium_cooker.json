@@ -1,23 +1,22 @@
 {
-  "type": "crafting_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
-    "III",
-    "IFI",
-    "IEI"
+    "iii",
+    "iFi",
+    "iei"
   ],
   "key": {
-    "I": {
-      "item": "minecraft:iron_ingot"
+    "e": {
+      "item": "minestuck:energy_core"
+    },
+    "i": {
+      "tag": "forge:ingots/iron"
     },
     "F": {
       "item": "minecraft:furnace"
-    },
-    "E": {
-      "item": "minestuck:energy_core"
     }
   },
   "result": {
-    "item": "minestuck:uranium_cooker",
-    "count": 1
+    "item": "minestuck:uranium_cooker"
   }
 }

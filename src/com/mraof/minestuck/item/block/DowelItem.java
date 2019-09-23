@@ -3,7 +3,7 @@ package com.mraof.minestuck.item.block;
 import com.mraof.minestuck.block.CruxiteDowelBlock;
 import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.tileentity.ItemStackTileEntity;
-import com.mraof.minestuck.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;

@@ -2,7 +2,7 @@ package com.mraof.minestuck.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandAspects;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import net.minecraft.command.CommandSource;
@@ -22,9 +22,9 @@ public class CommandCheckLand
 	{
 		ServerPlayerEntity player = source.asPlayer();
 		
-		if(MinestuckDimensionHandler.isLandDimension(player.dimension))
+		if(MSDimensions.isLandDimension(player.dimension))
 		{
-			LandAspects aspects = MinestuckDimensionHandler.getAspects(player.server, player.dimension);
+			LandAspects aspects = MSDimensions.getAspects(player.server, player.dimension);
 			ChunkProviderLands chunkProvider = null;//(ChunkProviderLands) player.world.dimension.createChunkGenerator();	//TODO Change name storage so that we don't have to go through the chunk generator
 			ITextComponent aspect1 = new TranslationTextComponent("land."+aspects.aspectTerrain.getNames()[chunkProvider.nameIndex1]);
 			ITextComponent aspect2 = new TranslationTextComponent("land."+aspects.aspectTitle.getNames()[chunkProvider.nameIndex2]);

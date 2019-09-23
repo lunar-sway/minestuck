@@ -2,8 +2,6 @@ package com.mraof.minestuck.world.lands.decorator.structure;
 
 import com.mraof.minestuck.world.lands.decorator.BiomeSpecificDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockUtil;
-import com.mraof.minestuck.world.storage.loot.MinestuckLoot;
 import net.minecraft.block.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

@@ -10,10 +10,7 @@ import net.minecraft.client.renderer.entity.model.PlayerModel;
 import net.minecraft.util.ResourceLocation;
 
 import com.mraof.minestuck.entity.DecoyEntity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
 public class DecoyRenderer extends MobRenderer<DecoyEntity, PlayerModel<DecoyEntity>>
 {
 	

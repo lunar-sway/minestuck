@@ -1,20 +1,20 @@
 {
-  "type": "crafting_shaped",
+  "type": "minecraft:crafting_shaped",
+  "group": "sburb_disk",
   "pattern": [
-    " X ",
-    "X#X",
-    " X "
+    " c ",
+    "cic",
+    " c "
   ],
   "key": {
-    "#": {
-      "item": "minecraft:iron_ingot"
+    "i": {
+      "tag": "forge:ingots/iron"
     },
-    "X": {
+    "c": {
       "item": "minestuck:raw_cruxite"
     }
   },
   "result": {
-    "item": "minestuck:server_disk",
-    "count": 1
+    "item": "minestuck:server_disk"
   }
 }

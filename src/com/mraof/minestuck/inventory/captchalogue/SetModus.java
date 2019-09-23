@@ -1,17 +1,12 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.client.gui.captchalouge.SetSylladexScreen;
-import com.mraof.minestuck.client.gui.captchalouge.SylladexScreen;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
 
 import java.util.Iterator;
@@ -22,22 +17,13 @@ public class SetModus extends Modus
 	protected int size;
 	protected NonNullList<ItemStack> list;
 	
-	@OnlyIn(Dist.CLIENT)
+	//client side
 	protected boolean changed;
-	@OnlyIn(Dist.CLIENT)
 	protected NonNullList<ItemStack> items;
-	@OnlyIn(Dist.CLIENT)
-	protected SylladexScreen gui;
 	
-	public SetModus(LogicalSide side)
+	public SetModus(ModusType<? extends SetModus> type, LogicalSide side)
 	{
-		super(side);
-	}
-	
-	@Override
-	public ResourceLocation getRegistryName()
-	{
-		return CaptchaDeckHandler.SET;
+		super(type, side);
 	}
 	
 	@Override
@@ -146,7 +132,7 @@ public class SetModus extends Modus
 	@Override
 	public boolean increaseSize(ServerPlayerEntity player)
 	{
-		if(MinestuckConfig.modusMaxSize > 0 && size >= MinestuckConfig.modusMaxSize)
+		if(MinestuckConfig.modusMaxSize.get() > 0 && size >= MinestuckConfig.modusMaxSize.get())
 			return false;
 		
 		size++;
@@ -162,7 +148,7 @@ public class SetModus extends Modus
 			if(list.size() < size)
 			{
 				size--;
-				return new ItemStack(MinestuckItems.CAPTCHA_CARD);
+				return new ItemStack(MSItems.CAPTCHA_CARD);
 			} else return ItemStack.EMPTY;
 		}
 		
@@ -200,14 +186,5 @@ public class SetModus extends Modus
 	public int getSize()
 	{
 		return size;
-	}
-	
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public SylladexScreen getGuiHandler()
-	{
-		if(gui == null)
-			gui = new SetSylladexScreen(this);
-		return gui;
 	}
 }

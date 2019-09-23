@@ -9,10 +9,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
 public class GristRenderer extends EntityRenderer<GristEntity>
 {
 	
@@ -54,7 +51,7 @@ public class GristRenderer extends EntityRenderer<GristEntity>
 	@Override
 	protected ResourceLocation getEntityTexture(GristEntity entity)
 	{
-		return new ResourceLocation(entity.getGristType().getIcon().getNamespace(), "textures/grist/" + entity.getGristType().getIcon().getPath() + ".png");
+		return entity.getGristType().getIcon();
 	}
 
 }

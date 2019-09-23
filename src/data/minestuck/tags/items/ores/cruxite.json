@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "minestuck:stone_cruxite_ore",
+    "minestuck:netherrack_cruxite_ore",
+    "minestuck:cobblestone_cruxite_ore",
+    "minestuck:sandstone_cruxite_ore",
+    "minestuck:red_sandstone_cruxite_ore",
+    "minestuck:end_stone_cruxite_ore",
+    "minestuck:pink_stone_cruxite_ore"
+  ]
+}

@@ -1,30 +1,22 @@
 package com.mraof.minestuck;
 
-import com.mraof.minestuck.alchemy.AlchemyRecipes;
-import com.mraof.minestuck.alchemy.GristType;
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.command.*;
-import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
-import com.mraof.minestuck.entity.ModEntityTypes;
 import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.tileentity.*;
-import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
+import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.tracker.PlayerTracker;
 import com.mraof.minestuck.util.*;
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
-import com.mraof.minestuck.world.biome.BiomeMinestuck;
+//import com.mraof.minestuck.config.MinestuckConfig;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.ModDimension;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ExtensionPoint;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -34,6 +26,7 @@ import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.util.Random;
 
@@ -64,6 +57,9 @@ public class Minestuck
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::postSetup);
 		//ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.GUIFACTORY, () -> GuiHandler::provideGuiContainer);
 		
+		MinestuckConfig.loadConfig(MinestuckConfig.client_config, FMLPaths.CONFIGDIR.get().resolve("Minestuck-client.toml").toString());
+		MinestuckConfig.loadConfig(MinestuckConfig.server_config, FMLPaths.CONFIGDIR.get().resolve("Minestuck.toml").toString());
+		
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 	
@@ -75,6 +71,7 @@ public class Minestuck
 		
 		//(new UpdateChecker()).start();
 		
+		MinestuckConfig.setConfigVariables();
 		CommonProxy.init();
 	}
 	
@@ -82,6 +79,7 @@ public class Minestuck
 	{
 		ClientProxy.init();
 		MinecraftForge.EVENT_BUS.register(ClientProxy.class);
+		MinestuckConfig.setClientValues();
 	}
 	
 	public void postSetup(FMLLoadCompleteEvent event)
@@ -96,14 +94,13 @@ public class Minestuck
 	public void serverAboutToStart(FMLServerAboutToStartEvent event)
 	{
 		isServerRunning = true;
-		DeployList.applyConfigValues(MinestuckConfig.deployConfigurations);
 	}
 	
 	@SubscribeEvent
 	public void serverClosed(FMLServerStoppedEvent event)
 	{
 		isServerRunning = false;
-		MinestuckPlayerTracker.dataCheckerPermission.clear();
+		PlayerTracker.dataCheckerPermission.clear();
 		IdentifierHandler.clear();
 	}
 	
@@ -114,9 +111,9 @@ public class Minestuck
 		//if(!event.getServer().isDedicatedServer() && Minestuck.class.getAnnotation(Mod.class).version().startsWith("@")) TODO Find an alternative to detect dev environment
 			event.getServer().setOnlineMode(false);	//Makes it possible to use LAN in a development environment
 		
-		if(!event.getServer().isServerInOnlineMode() && MinestuckConfig.useUUID)
+		if(!event.getServer().isServerInOnlineMode() && MinestuckConfig.useUUID.get())
 			Debug.warn("Because uuids might not be consistent in an offline environment, it is not recommended to use uuids for minestuck. You should disable uuidIdentification in the minestuck config.");
-		if(event.getServer().isServerInOnlineMode() && !MinestuckConfig.useUUID)
+		if(event.getServer().isServerInOnlineMode() && !MinestuckConfig.useUUID.get())
 			Debug.warn("Because users may change their usernames, it is normally recommended to use uuids for minestuck. You should enable uuidIdentification in the minestuck config.");
 		
 		CommandCheckLand.register(event.getCommandDispatcher());
@@ -148,19 +145,13 @@ public class Minestuck
 		@SubscribeEvent
 		public static void onBlockRegistry(final RegistryEvent.Register<Block> event)
 		{
-			MinestuckBlocks.registerBlocks(event.getRegistry());
+			MSBlocks.registerBlocks(event.getRegistry());
 		}
 		
 		@SubscribeEvent
 		public static void onItemRegistry(final RegistryEvent.Register<Item> event)
 		{
-			MinestuckItems.registerItems(event.getRegistry());
-		}
-		
-		@SubscribeEvent
-		public static void onDimensionRegistry(final RegistryEvent.Register<ModDimension> event)
-		{
-			MinestuckDimensionHandler.registerModDimensions(event.getRegistry());
+			MSItems.registerItems(event.getRegistry());
 		}
 	}
 }

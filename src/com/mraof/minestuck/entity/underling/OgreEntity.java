@@ -1,8 +1,8 @@
 package com.mraof.minestuck.entity.underling;
 
-import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.entity.ai.AttackOnCollideWithRateGoal;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
@@ -39,17 +39,17 @@ public class OgreEntity extends UnderlingEntity
 	
 	protected SoundEvent getAmbientSound()
 	{
-		return MinestuckSoundHandler.soundOgreAmbient;
+		return ModSoundEvents.ENTITY_OGRE_AMBIENT;
 	}
 	
 	protected SoundEvent getDeathSound()
 	{
-		return MinestuckSoundHandler.soundOgreDeath;
+		return ModSoundEvents.ENTITY_OGRE_DEATH;
 	}	
 	
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
 	{
-		return MinestuckSoundHandler.soundOgreHurt;
+		return ModSoundEvents.ENTITY_OGRE_HURT;
 	}
 	
 	@Override

@@ -1,15 +1,10 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
-import com.mraof.minestuck.client.gui.captchalouge.QueueSylladexScreen;
-import com.mraof.minestuck.client.gui.captchalouge.SylladexScreen;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
 
 import java.util.Iterator;
@@ -17,15 +12,9 @@ import java.util.Iterator;
 public class QueueModus extends StackModus
 {
 	
-	public QueueModus(LogicalSide side)
+	public QueueModus(ModusType<? extends QueueModus> type, LogicalSide side)
 	{
-		super(side);
-	}
-	
-	@Override
-	public ResourceLocation getRegistryName()
-	{
-		return CaptchaDeckHandler.QUEUE;
+		super(type, side);
 	}
 	
 	@Override
@@ -36,7 +25,7 @@ public class QueueModus extends StackModus
 			if(list.size() < size)
 			{
 				size--;
-				return new ItemStack(MinestuckItems.CAPTCHA_CARD);
+				return new ItemStack(MSItems.CAPTCHA_CARD);
 			} else return ItemStack.EMPTY;
 		}
 		
@@ -52,7 +41,7 @@ public class QueueModus extends StackModus
 		}
 		
 		ItemStack item = list.removeLast();
-		if(asCard && !(item.getItem() == MinestuckItems.CAPTCHA_CARD && item.hasTag() && !item.getTag().getBoolean("punched") && item.getTag().contains("id")))
+		if(asCard && !(item.getItem() == MSItems.CAPTCHA_CARD && item.hasTag() && !item.getTag().getBoolean("punched") && item.getTag().contains("id")))
 		{
 			size--;
 			return AlchemyRecipes.createCard(item, false);
@@ -70,14 +59,4 @@ public class QueueModus extends StackModus
 				items.add(ItemStack.EMPTY);
 			else items.add(iter.next());
 	}
-	
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public SylladexScreen getGuiHandler()
-	{
-		if(gui == null)
-			gui = new QueueSylladexScreen(this);
-		return gui;
-	}
-	
 }

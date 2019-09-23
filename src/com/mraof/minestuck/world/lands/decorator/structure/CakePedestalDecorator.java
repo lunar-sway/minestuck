@@ -1,6 +1,6 @@
 package com.mraof.minestuck.world.lands.decorator.structure;
 
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Direction;
@@ -53,7 +53,7 @@ public class CakePedestalDecorator extends SimpleStructureDecorator
 		placeBlock(world, stairsS, 1, 0, -1);
 		placeBlock(world, stairsW, 1, 0, -2);
 		
-		BlockState cake = MinestuckBlocks.FUCHSIA_CAKE.getDefaultState();
+		BlockState cake = MSBlocks.FUCHSIA_CAKE.getDefaultState();
 		
 		placeBlock(world, cake, 0, 2, 0);
 		

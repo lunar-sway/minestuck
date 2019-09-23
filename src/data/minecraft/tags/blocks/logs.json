@@ -1,25 +1,14 @@
 {
   "replace": false,
   "values": [
-    "minestuck:wooden_cactus",
-    "minestuck:glowing_log",
-    "minestuck:dead_log",
-    "minestuck:end_log",
-    "minestuck:vine_log",
-    "minestuck:frost_log",
-    "minestuck:rainbow_log",
-    "minestuck:flowery_vine_log",
-    "minestuck:blood_aspect_log",
-    "minestuck:breath_aspect_log",
-    "minestuck:doom_aspect_log",
-    "minestuck:heart_aspect_log",
-    "minestuck:hope_aspect_log",
-    "minestuck:life_aspect_log",
-    "minestuck:light_aspect_log",
-    "minestuck:mind_aspect_log",
-    "minestuck:rage_aspect_log",
-    "minestuck:space_aspect_log",
-    "minestuck:time_aspect_log",
-    "minestuck:void_aspect_log"
+    "#minestuck:logs/glowing",
+    "#minestuck:logs/frost",
+    "#minestuck:logs/rainbow",
+    "#minestuck:logs/end",
+    "#minestuck:logs/vine",
+    "#minestuck:logs/flowery_vine",
+    "#minestuck:logs/dead",
+    "#minestuck:logs/petrified",
+    "#minestuck:logs/aspect"
   ]
 }

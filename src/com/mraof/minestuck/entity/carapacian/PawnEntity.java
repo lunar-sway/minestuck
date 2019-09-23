@@ -1,6 +1,6 @@
 package com.mraof.minestuck.entity.carapacian;
 
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.MSItems;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
@@ -68,7 +68,7 @@ public abstract class PawnEntity extends CarapacianEntity implements IRangedAtta
 		}
 		else
 			this.goalSelector.addGoal(4, this.entityAIAttackOnCollide);
-		this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(this.pawnType == 1 ? Items.BOW : rand.nextDouble() < .2 ? MinestuckItems.REGISWORD : rand.nextDouble() < .02 ? MinestuckItems.SORD : Items.STONE_SWORD));
+		this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(this.pawnType == 1 ? Items.BOW : rand.nextDouble() < .2 ? MSItems.REGISWORD : rand.nextDouble() < .02 ? MSItems.SORD : Items.STONE_SWORD));
 		this.setEnchantmentBasedOnDifficulty(difficultyIn);
 		return spawnDataIn;
 	}

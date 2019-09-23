@@ -1,7 +1,7 @@
 package com.mraof.minestuck.event;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
@@ -22,16 +22,16 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.event.ServerChatEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.UseHoeEvent;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -104,7 +104,7 @@ public class ServerEventHandler
 	@SubscribeEvent
 	public void onPlayerAttack(AttackEntityEvent event)
 	{
-		cachedCooledAttackStrength = event.getEntityPlayer().getCooledAttackStrength(0.5F);
+		cachedCooledAttackStrength = event.getPlayer().getCooledAttackStrength(0.5F);
 	}
 
 	@SubscribeEvent(priority=EventPriority.NORMAL)
@@ -150,7 +150,7 @@ public class ServerEventHandler
 	}
 	
 	@SubscribeEvent
-	public void playerChangedDimension(PlayerChangedDimensionEvent event)
+	public void playerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event)
 	{
 		SburbHandler.stopEntry((ServerPlayerEntity) event.getPlayer());
 		
@@ -169,7 +169,7 @@ public class ServerEventHandler
 	@SubscribeEvent
 	public void onPlayerUseHoe(UseHoeEvent event)
 	{
-		if(event.getContext().getWorld().getBlockState(event.getContext().getPos()).getBlock() == MinestuckBlocks.COARSE_END_STONE)
+		if(event.getContext().getWorld().getBlockState(event.getContext().getPos()).getBlock() == MSBlocks.COARSE_END_STONE)
 		{
 			event.getContext().getWorld().setBlockState(event.getContext().getPos(), Blocks.END_STONE.getDefaultState());
 			event.getContext().getWorld().playSound(null, event.getContext().getPos(), SoundEvents.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0F, 	1.0F);
@@ -180,7 +180,7 @@ public class ServerEventHandler
 	@SubscribeEvent
 	public void onGetItemBurnTime(FurnaceFuelBurnTimeEvent event)
 	{
-		if(event.getItemStack().getItem() == MinestuckBlocks.TREATED_PLANKS.asItem())
+		if(event.getItemStack().getItem() == MSBlocks.TREATED_PLANKS.asItem())
 			event.setBurnTime(50);	//Do not set this number to 0.
 	}
 	
@@ -191,7 +191,7 @@ public class ServerEventHandler
 		{
 			IdentifierHandler.PlayerIdentifier identifier = IdentifierHandler.encode(event.player);
 			SburbConnection c = SkaianetHandler.get(event.player.getServer()).getMainConnection(identifier, true);
-			if(c == null || !c.hasEntered() || !MinestuckConfig.aspectEffects || !PlayerSavedData.get(event.player.getServer()).getEffectToggle(identifier))
+			if(c == null || !c.hasEntered() || !MinestuckConfig.aspectEffects.get() || !PlayerSavedData.get(event.player.getServer()).getEffectToggle(identifier))
 				return;
 			int rung = PlayerSavedData.getData((ServerPlayerEntity) event.player).echeladder.getRung();
 			EnumAspect aspect = PlayerSavedData.get(event.player.getServer()).getTitle(identifier).getHeroAspect();

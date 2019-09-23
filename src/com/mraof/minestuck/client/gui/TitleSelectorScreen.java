@@ -1,6 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.TitleSelectPacket;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.util.EnumClass;
@@ -10,11 +10,8 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 
-@OnlyIn(Dist.CLIENT)
 public class TitleSelectorScreen extends Screen
 {
 	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/title_selector.png");
@@ -28,7 +25,7 @@ public class TitleSelectorScreen extends Screen
 	private Title previous;
 	private boolean sendPacket = true;
 	
-	public TitleSelectorScreen(Title title)
+	TitleSelectorScreen(Title title)
 	{
 		super(new StringTextComponent("Title Selector"));
 		previous = title;
@@ -102,7 +99,7 @@ public class TitleSelectorScreen extends Screen
 	
 	private void select()
 	{
-		MinestuckPacketHandler.sendToServer(new TitleSelectPacket(currentClass, currentAspect));
+		MSPacketHandler.sendToServer(new TitleSelectPacket(currentClass, currentAspect));
 		sendPacket = false;
 		minecraft.displayGuiScreen(null);
 	}
@@ -111,7 +108,7 @@ public class TitleSelectorScreen extends Screen
 	public void onClose()
 	{
 		if(sendPacket)
-			MinestuckPacketHandler.sendToServer(new TitleSelectPacket());
+			MSPacketHandler.sendToServer(new TitleSelectPacket());
 	}
 	
 }

@@ -33,7 +33,6 @@ public abstract class ChunkProviderLands //implements IChunkGenerator
 	
 	public final StructureBlockRegistry blockRegistry = null;
 	public List<ILandDecorator> decorators;
-	public ILandTerrainGen terrainGenerator;
 	public MapGenLandStructure structureHandler;
 	public MapGenConsortVillage villageHandler;
 	//public MapGenStructure customHandler;

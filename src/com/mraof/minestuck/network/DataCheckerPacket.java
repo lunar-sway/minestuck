@@ -105,7 +105,7 @@ public class DataCheckerPacket
 		if(MinestuckConfig.getDataCheckerPermissionFor(player))
 		{
 			CompoundNBT data = SessionHandler.get(player.world).createDataTag();
-			MinestuckPacketHandler.sendToPlayer(DataCheckerPacket.data(packetIndex, data), player);
+			MSPacketHandler.sendToPlayer(DataCheckerPacket.data(packetIndex, data), player);
 		}
 	}
 }

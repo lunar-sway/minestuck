@@ -30,14 +30,16 @@ repositories {
     }
 }
 
-version = '1.14.3-1.4.' + System.env.BUILD_NUMBER
+version = '1.14.4-1.4.' + System.env.BUILD_NUMBER
 group = 'com.mraof.minestuck'
 archivesBaseName = 'Minestuck'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 minecraft {
-    mappings channel: 'snapshot', version: '20190712-1.14.3'
+    mappings channel: 'snapshot', version: '20190912-1.14.3'
+
+    accessTransformer = file('src/META-INF/accesstransformer.cfg')
 
     // Default run configurations.
     // These can be tweaked, removed, or duplicated as needed.
@@ -72,14 +74,31 @@ minecraft {
                 }
             }
         }
+        data {
+            workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+
+            args '--mod', 'minestuck', '--all', '--output', file('src/generated/resources/')
+
+            mods {
+                examplemod {
+                    source sourceSets.main
+                }
+            }
+        }
     }
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.4-28.0.21'
+    minecraft 'net.minecraftforge:forge:1.14.4-28.1.1'
 
-    def mc_version = "1.14.3"
-    def jei_version = "6.0.0.7"
+    def mc_version = "1.14.4"
+    def jei_version = "6.0.0.11"
 	// http://dvs1.progwml6.com/files/maven
     compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")

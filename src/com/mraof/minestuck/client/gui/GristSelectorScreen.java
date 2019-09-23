@@ -2,16 +2,14 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.network.GristWildcardPacket;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
-import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 import java.util.ArrayList;
@@ -19,7 +17,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@OnlyIn(Dist.CLIENT)
 public class GristSelectorScreen extends MinestuckScreen
 {
 
@@ -119,12 +116,14 @@ public class GristSelectorScreen extends MinestuckScreen
 					BlockPos pos;
 					if(otherScreen instanceof AlchemiterScreen)
 						pos = ((AlchemiterScreen) otherScreen).getAlchemiter().getPos();
-					else pos = null;
+					else if(otherScreen instanceof MiniAlchemiterScreen)
+						pos = ((MiniAlchemiterScreen) otherScreen).getContainer().machinePos;
+					else break;
 					otherScreen.width = this.width;
 					otherScreen.height = this.height;
 					minecraft.currentScreen = otherScreen;
 					GristWildcardPacket packet = new GristWildcardPacket(pos, type);
-					MinestuckPacketHandler.INSTANCE.sendToServer(packet);
+					MSPacketHandler.INSTANCE.sendToServer(packet);
 					break;
 				}
 				offset++;

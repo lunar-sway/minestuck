@@ -18,8 +18,6 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
@@ -27,7 +25,7 @@ public class GateBlock extends Block
 {
 	
 	protected static final VoxelShape SHAPE = Block.makeCuboidShape(0.0D, 7.0D, 0.0D, 16.0D, 9.0D, 16.0D);
-	public static BooleanProperty MAIN = MinestuckProperties.MAIN;
+	public static BooleanProperty MAIN = MSProperties.MAIN;
 	
 	public GateBlock(Properties properties)
 	{
@@ -41,7 +39,6 @@ public class GateBlock extends Block
 		return SHAPE;
 	}
 	
-	@OnlyIn(Dist.CLIENT)
 	@Override
 	public boolean addDestroyEffects(BlockState state, World world, BlockPos pos, ParticleManager manager)
 	{
@@ -81,7 +78,7 @@ public class GateBlock extends Block
 			BlockPos mainPos = pos;
 			if(!state.get(MAIN))
 			{
-				if(this != MinestuckBlocks.GATE)
+				if(this != MSBlocks.GATE)
 					mainPos = this.findMainComponent(pos, worldIn);
 				else return;
 			}
@@ -181,7 +178,7 @@ public class GateBlock extends Block
 	@Override
 	public float getExplosionResistance(BlockState state, IWorldReader world, BlockPos pos, @Nullable Entity exploder, Explosion explosion)
 	{
-		if(this instanceof ReturnNodeBlock || MinestuckConfig.canBreakGates)
+		if(this instanceof ReturnNodeBlock || MinestuckConfig.canBreakGates.get())
 			return super.getExplosionResistance(state, world, pos, exploder, explosion);
 		else return 3600000.0F;
 	}

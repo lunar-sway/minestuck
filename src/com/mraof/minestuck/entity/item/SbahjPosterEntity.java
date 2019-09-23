@@ -1,7 +1,7 @@
 package com.mraof.minestuck.entity.item;
 
-import com.mraof.minestuck.entity.ModEntityTypes;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.entity.MSEntityTypes;
+import com.mraof.minestuck.item.MSItems;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
@@ -20,7 +20,7 @@ public class SbahjPosterEntity extends HangingArtEntity<SbahjPosterEntity.SbahjA
 	
 	public SbahjPosterEntity(World worldIn, BlockPos pos, Direction direction)
 	{
-		super(ModEntityTypes.SBAHJ_POSTER, worldIn, pos, direction);
+		super(MSEntityTypes.SBAHJ_POSTER, worldIn, pos, direction);
 	}
 	
 	@Override
@@ -38,7 +38,7 @@ public class SbahjPosterEntity extends HangingArtEntity<SbahjPosterEntity.SbahjA
 	@Override
 	public ItemStack getStackDropped()
 	{
-		return new ItemStack(MinestuckItems.SBAHJ_POSTER);
+		return new ItemStack(MSItems.SBAHJ_POSTER);
 	}
 	
 	public enum SbahjArt implements HangingArtEntity.IArt

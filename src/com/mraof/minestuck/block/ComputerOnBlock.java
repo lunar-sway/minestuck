@@ -1,13 +1,12 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.client.gui.ComputerScreen;
+import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.util.ComputerProgram;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -30,7 +29,7 @@ import java.util.Map.Entry;
 
 public class ComputerOnBlock extends ComputerOffBlock
 {
-	public static final BooleanProperty BROKEN = MinestuckProperties.BROKEN;
+	public static final BooleanProperty BROKEN = MSProperties.BROKEN;
 	public final IItemProvider computerOff;
 	
 	public ComputerOnBlock(Properties properties, Map<Direction, VoxelShape> shape, Map<Direction, VoxelShape> collisionShape, IItemProvider computerOff)
@@ -75,8 +74,8 @@ public class ComputerOnBlock extends ComputerOffBlock
 		}
 
 		if(worldIn.isRemote && SkaiaClient.requestData(tileEntity))
-			Minecraft.getInstance().displayGuiScreen(new ComputerScreen(Minecraft.getInstance(), tileEntity));
-		//TODO Check if this actually is fine
+			MSScreenFactories.displayComputerScreen(tileEntity);
+		
 		return true;
 	}
 	

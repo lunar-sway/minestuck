@@ -6,9 +6,8 @@ import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import com.mraof.minestuck.util.Title;
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandAspects;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
@@ -51,8 +50,8 @@ public class SessionHandler
 	
 	void onLoad()
 	{
-		singleSession = MinestuckConfig.globalSession;
-		if(!MinestuckConfig.globalSession) {
+		singleSession = MinestuckConfig.globalSession.get();
+		if(!MinestuckConfig.globalSession.get()) {
 			split();
 		} else
 		{
@@ -185,7 +184,7 @@ public class SessionHandler
 	 */
 	void split()
 	{
-		if(MinestuckConfig.globalSession || sessions.size() != 1)
+		if(MinestuckConfig.globalSession.get() || sessions.size() != 1)
 			return;
 		
 		Session s = sessions.get(0);
@@ -262,7 +261,7 @@ public class SessionHandler
 					break;
 				}
 		
-		return cClient != null && sClient == sServer && (MinestuckConfig.allowSecondaryConnections || cClient == cServer)	//Reconnect within session
+		return cClient != null && sClient == sServer && (MinestuckConfig.allowSecondaryConnections.get() || cClient == cServer)	//Reconnect within session
 				|| cClient == null && !serverActive && !(sClient != null && sClient.locked) && !(sServer != null && sServer.locked);	//Connect with a new player and potentially create a main connection
 	}
 	
@@ -603,7 +602,7 @@ public class SessionHandler
 					if(c.clientHomeLand != null)
 					{
 						connectionTag.putString("clientDim", c.clientHomeLand.getRegistryName().toString());
-						LandAspects aspects = MinestuckDimensionHandler.getAspects(skaianetHandler.mcServer, c.clientHomeLand);
+						LandAspects aspects = MSDimensions.getAspects(skaianetHandler.mcServer, c.clientHomeLand);
 						/*IChunkGenerator chunkGen = skaianetHandler.mcServer.getWorld(c.clientHomeLand).getDimension().createChunkGenerator();
 						if(chunkGen instanceof ChunkProviderLands)
 						{
@@ -632,9 +631,9 @@ public class SessionHandler
 						}
 						
 						if(data.landTerrain != null)
-							connectionTag.putString("aspectTerrain", data.landTerrain.getPrimaryName());
+							connectionTag.putString("aspectTerrain", data.landTerrain.getRegistryName().toString());
 						if(data.landTitle != null)
-							connectionTag.putString("aspectTitle", data.landTitle.getPrimaryName());
+							connectionTag.putString("aspectTitle", data.landTitle.getRegistryName().toString());
 					}
 				}
 				connectionList.add(connectionTag);
@@ -662,9 +661,9 @@ public class SessionHandler
 				}
 				
 				if(data.landTerrain != null)
-					connectionTag.putString("aspectTerrain", data.landTerrain.getPrimaryName());
+					connectionTag.putString("aspectTerrain", data.landTerrain.getRegistryName().toString());
 				if(data.landTitle != null)
-					connectionTag.putString("aspectTitle", data.landTitle.getPrimaryName());
+					connectionTag.putString("aspectTitle", data.landTitle.getRegistryName().toString());
 				
 				connectionList.add(connectionTag);
 			}

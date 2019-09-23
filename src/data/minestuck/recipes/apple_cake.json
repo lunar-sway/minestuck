@@ -1,22 +1,22 @@
 {
-  "type": "crafting_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
-    "MMM",
-    "AEA",
-    "WWW"
+    "mmm",
+    "aea",
+    "www"
   ],
   "key": {
-    "M": {
+    "m": {
       "item": "minecraft:milk_bucket"
     },
-    "A": {
+    "a": {
       "item": "minecraft:apple"
     },
-    "E": {
-      "item": "minecraft:egg"
-    },
-    "W": {
+    "w": {
       "item": "minecraft:wheat"
+    },
+    "e": {
+      "item": "minecraft:egg"
     }
   },
   "result": {

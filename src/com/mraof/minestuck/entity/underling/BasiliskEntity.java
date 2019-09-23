@@ -1,8 +1,8 @@
 package com.mraof.minestuck.entity.underling;
 
-import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.entity.IEntityMultiPart;
 import com.mraof.minestuck.entity.ai.AttackOnCollideWithRateGoal;
 import com.mraof.minestuck.util.*;
@@ -42,17 +42,17 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	
 	protected SoundEvent getAmbientSound()
 	{
-		return MinestuckSoundHandler.soundBasiliskAmbient;
+		return ModSoundEvents.ENTITY_BASILISK_AMBIENT;
 	}
 	
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
 	{
-		return MinestuckSoundHandler.soundBasiliskHurt;
+		return ModSoundEvents.ENTITY_BASILISK_HURT;
 	}
 	
 	protected SoundEvent getDeathSound()
 	{
-		return MinestuckSoundHandler.soundBasiliskDeath;
+		return ModSoundEvents.ENTITY_BASILISK_DEATH;
 	}
 	
 	@Override

@@ -1,23 +1,22 @@
 {
-  "type": "crafting_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
-    "#X#",
-    " I ",
-    " I "
+    "iSi",
+    " s ",
+    " s "
   ],
   "key": {
-    "#": {
-      "item": "minecraft:iron_ingot"
+    "i": {
+      "tag": "forge:ingots/iron"
     },
-    "X": {
-      "item": "minecraft:stone"
-    },
-    "I": {
+    "s": {
       "tag": "forge:rods/wooden"
+    },
+    "S": {
+      "tag": "forge:stone"
     }
   },
   "result": {
-    "item": "minestuck:sledge_hammer",
-    "count": 1
+    "item": "minestuck:sledge_hammer"
   }
 }

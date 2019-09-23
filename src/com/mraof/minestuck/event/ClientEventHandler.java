@@ -13,17 +13,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.PotionItem;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 /**
  * Used to track mixed client sided events.
  */
-@OnlyIn(Dist.CLIENT)
 public class ClientEventHandler
 {
 	
@@ -52,7 +49,7 @@ public class ClientEventHandler
 			if(ColorCollector.displaySelectionGui && Minecraft.getInstance().currentScreen == null)
 			{
 				ColorCollector.displaySelectionGui = false;
-				if(MinestuckConfig.loginColorSelector)
+				if(MinestuckConfig.loginColorSelector.get())
 					Minecraft.getInstance().displayGuiScreen(new ColorSelectorScreen(true));
 			}
 			
@@ -65,14 +62,14 @@ public class ClientEventHandler
 		//Add config check
 		{
 			ItemStack stack = event.getItemStack();
-			if(event.getEntityPlayer() != null && event.getEntityPlayer().openContainer instanceof ConsortMerchantContainer
-					&& event.getEntityPlayer().openContainer.getInventory().contains(stack))
+			if(event.getPlayer() != null && event.getPlayer().openContainer instanceof ConsortMerchantContainer
+					&& event.getPlayer().openContainer.getInventory().contains(stack))
 			{
 				String unlocalized = stack.getTranslationKey();
 				if(stack.getItem() instanceof PotionItem)
 					unlocalized = PotionUtils.getPotionFromItem(stack).getNamePrefixed("potion.");
 				
-				EnumConsort type = ((ConsortMerchantContainer)event.getEntityPlayer().openContainer).inventory.getConsortType();
+				EnumConsort type = ((ConsortMerchantContainer)event.getPlayer().openContainer).inventory.getConsortType();
 				String arg1 = I18n.format("entity.minestuck." + type.getName() + ".name");
 				
 				String name = "store."+unlocalized+".name";

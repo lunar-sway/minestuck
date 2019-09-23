@@ -1,10 +1,12 @@
 package com.mraof.minestuck.world.lands.structure.blocks;
 
+import com.mraof.minestuck.world.lands.gen.LandGenSettings;
 import net.minecraft.block.*;
 import net.minecraft.state.IProperty;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.state.properties.Half;
 import net.minecraft.util.Direction;
+import net.minecraft.world.gen.GenerationSettings;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +15,8 @@ public class StructureBlockRegistry
 {
 	
 	private static Map<String, BlockEntry> staticRegistry = new HashMap<>();
+	private static Map<Block, String> templateBlockMap = new HashMap<>();
+	private static StructureBlockRegistry defaultRegistry = new StructureBlockRegistry();
 	
 	public static void registerBlock(String name, BlockState defaultBlock)
 	{
@@ -27,16 +31,19 @@ public class StructureBlockRegistry
 			throw new IllegalStateException("\""+name+"\" has already been registered!");
 		if(!extention.isInstance(defaultBlock.getBlock()))
 			throw new IllegalArgumentException("The default block \""+defaultBlock.getBlock()+"\" has to extend the minimum class \""+extention+"\"!");
+		if(templateBlockMap.containsKey(defaultBlock.getBlock()))
+			throw new IllegalStateException("Can't have two identical template blocks!");
 		
 		staticRegistry.put(name, new BlockEntry(defaultBlock, extention));
+		templateBlockMap.put(defaultBlock.getBlock(), name);
 	}
 	
-	public static void registerBlock(String name, String parent)
+	public static void registerBlock(String name, String parent, Block templateState)
 	{
-		registerBlock(name, parent, Block.class);
+		registerBlock(name, parent, templateState, Block.class);
 	}
 	
-	public static void registerBlock(String name, String parent, Class<? extends Block> extention)
+	public static void registerBlock(String name, String parent, Block templateState, Class<? extends Block> extention)
 	{
 		if(parent == null || name == null)
 			throw new IllegalArgumentException("Null parameters not allowed.");
@@ -48,23 +55,28 @@ public class StructureBlockRegistry
 		
 		if(!extention.isAssignableFrom(staticRegistry.get(parent).extention))
 			throw new IllegalArgumentException("The class specified must be the same or a superclass to the class used by the parent \""+parent+"\".");
+		if(templateBlockMap.containsKey(templateState))
+			throw new IllegalStateException("Can't have two identical template blocks!");
 		
 		staticRegistry.put(name, new BlockEntry(parent, extention));
+		templateBlockMap.put(templateState, name);
 	}
 	
 	static
 	{
 		registerBlock("ground", Blocks.STONE.getDefaultState());
-		registerBlock("upper", "ground");
-		registerBlock("surface", "upper");
+		registerBlock("upper", "ground", Blocks.DIRT);
+		registerBlock("surface", "upper", Blocks.GRASS_BLOCK);
 		registerBlock("ocean", Blocks.WATER.getDefaultState());
-		registerBlock("river", "ocean");
+		registerBlock("ocean_surface", "upper", Blocks.GRAVEL);
+		registerBlock("river", "ocean", Blocks.BLUE_WOOL);
+		registerBlock("sand", Blocks.SAND.getDefaultState());
 		registerBlock("structure_primary", Blocks.STONE_BRICKS.getDefaultState());
-		registerBlock("structure_primary_decorative", "structure_primary");
-		registerBlock("structure_primary_stairs", "structure_primary");
-		registerBlock("structure_secondary", "structure_primary");
-		registerBlock("structure_secondary_decorative", "structure_secondary");
-		registerBlock("structure_secondary_stairs", "structure_secondary");
+		registerBlock("structure_primary_decorative", "structure_primary", Blocks.CHISELED_STONE_BRICKS);
+		registerBlock("structure_primary_stairs", "structure_primary", Blocks.STONE_BRICK_STAIRS);
+		registerBlock("structure_secondary", "structure_primary", Blocks.NETHER_BRICKS);
+		registerBlock("structure_secondary_decorative", "structure_secondary", Blocks.RED_NETHER_BRICKS);
+		registerBlock("structure_secondary_stairs", "structure_secondary", Blocks.NETHER_BRICK_STAIRS);
 		registerBlock("structure_planks", Blocks.OAK_PLANKS.getDefaultState());
 		registerBlock("structure_planks_slab", Blocks.OAK_SLAB.getDefaultState(), SlabBlock.class);
 		registerBlock("structure_wool_1", Blocks.WHITE_WOOL.getDefaultState());
@@ -72,10 +84,10 @@ public class StructureBlockRegistry
 		registerBlock("structure_wool_3", Blocks.GRAY_WOOL.getDefaultState());
 		registerBlock("carpet", Blocks.WHITE_CARPET.getDefaultState());
 		registerBlock("village_door", Blocks.OAK_DOOR.getDefaultState(), DoorBlock.class);
-		registerBlock("salamander_floor", "upper");
-		registerBlock("village_path", "structure_secondary");
+		registerBlock("salamander_floor", "upper", Blocks.COARSE_DIRT);
+		registerBlock("village_path", "structure_secondary", Blocks.COBBLESTONE);
 		registerBlock("village_fence", Blocks.OAK_FENCE.getDefaultState());
-		registerBlock("fall_fluid", "ocean");
+		registerBlock("fall_fluid", "ocean", Blocks.LIGHT_BLUE_WOOL);
 		registerBlock("light_block", Blocks.GLOWSTONE.getDefaultState());
 		registerBlock("mushroom_1", Blocks.RED_MUSHROOM.getDefaultState());
 		registerBlock("mushroom_2", Blocks.BROWN_MUSHROOM.getDefaultState());
@@ -87,6 +99,17 @@ public class StructureBlockRegistry
 		registerBlock("stained_glass_1", Blocks.GRAY_STAINED_GLASS.getDefaultState());
 		registerBlock("stained_glass_2", Blocks.LIGHT_GRAY_STAINED_GLASS.getDefaultState());
 		registerBlock("slime", Blocks.SLIME_BLOCK.getDefaultState());
+		
+		defaultRegistry.setBlockState("surface", Blocks.GRASS_BLOCK.getDefaultState());
+		defaultRegistry.setBlockState("upper", Blocks.DIRT.getDefaultState());
+		defaultRegistry.setBlockState("ocean_surface", Blocks.GRAVEL.getDefaultState());
+	}
+	
+	public static StructureBlockRegistry getOrDefault(GenerationSettings settings)
+	{
+		if(settings instanceof LandGenSettings)
+			return ((LandGenSettings) settings).getBlockRegistry();
+		else return defaultRegistry;
 	}
 	
 	private static class BlockEntry
@@ -155,6 +178,24 @@ public class StructureBlockRegistry
 			state = withOptionally(state, BlockStateProperties.HALF, Half.TOP);
 		
 		return state;
+	}
+	
+	public BlockState getTemplateState(BlockState state)
+	{
+		if(templateBlockMap.containsKey(state.getBlock()))
+		{
+			BlockState newState = getBlockState(templateBlockMap.get(state.getBlock()));
+			for(IProperty<?> property : state.getProperties())
+				newState = with(state, newState, property);
+			return newState;
+		} else return state;
+	}
+	
+	private static <T extends Comparable<T>> BlockState with(BlockState fromState, BlockState toState, IProperty<T> property)
+	{
+		if(toState.has(property))
+			return toState.with(property, fromState.get(property));
+		else return toState;
 	}
 	
 	public static <T extends Comparable<T>> BlockState withOptionally(BlockState state, IProperty<T> property, T value)

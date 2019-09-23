@@ -2,7 +2,9 @@ package com.mraof.minestuck.block;
 
 import java.util.Random;
 
+import com.mraof.minestuck.world.gen.feature.EndTree;
 import net.minecraft.block.*;
+import net.minecraft.block.trees.Tree;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.math.BlockPos;
@@ -13,9 +15,11 @@ import net.minecraft.world.World;
 
 public class EndSaplingBlock extends BushBlock implements IGrowable
 {
-	public static final BooleanProperty ALPHA = MinestuckProperties.ALPHA;
-	public static final BooleanProperty OMEGA = MinestuckProperties.OMEGA;
+	public static final BooleanProperty ALPHA = MSProperties.ALPHA;
+	public static final BooleanProperty OMEGA = MSProperties.OMEGA;
 	protected static final VoxelShape SHAPE = Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
+	
+	private final Tree tree = new EndTree();
 	
 	protected EndSaplingBlock(Properties properties)
 	{
@@ -78,8 +82,7 @@ public class EndSaplingBlock extends BushBlock implements IGrowable
 	{
 		if(!net.minecraftforge.event.ForgeEventFactory.saplingGrowTree(worldIn, rand, pos))
 			return;
-		//AbstractTree tree = new EndTree(true);
-		//tree.spawn(worldIn, pos, state, rand);
+		tree.spawn(worldIn, pos, state, rand);
 	}
 	
 	@Override
@@ -91,7 +94,7 @@ public class EndSaplingBlock extends BushBlock implements IGrowable
 	@Override
 	protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos)
 	{
-		return state.getBlock() == Blocks.END_STONE || state.getBlock() == MinestuckBlocks.COARSE_END_STONE || state.getBlock() == MinestuckBlocks.END_GRASS;
+		return state.getBlock() == Blocks.END_STONE || state.getBlock() == MSBlocks.COARSE_END_STONE || state.getBlock() == MSBlocks.END_GRASS;
 	}
 	
 	@Override

@@ -1,6 +1,6 @@
 package com.mraof.minestuck.entity.consort;
 
-import com.mraof.minestuck.util.MinestuckSoundHandler;
+import com.mraof.minestuck.util.ModSoundEvents;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
@@ -15,11 +15,11 @@ public class TurtleEntity extends ConsortEntity
 	
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
 	{
-		return MinestuckSoundHandler.soundTurtleHurt;
+		return ModSoundEvents.ENTITY_TURTLE_HURT;
 	}
 	protected SoundEvent getDeathSound()
 	{
-		return MinestuckSoundHandler.soundTurtleDeath;
+		return ModSoundEvents.ENTITY_TURTLE_DEATH;
 	}
 	
 	@Override

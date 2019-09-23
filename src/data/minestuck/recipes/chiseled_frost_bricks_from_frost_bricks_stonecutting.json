@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "minestuck:frost_bricks"
+  },
+  "result": "minestuck:chiseled_frost_bricks",
+  "count": 1
+}

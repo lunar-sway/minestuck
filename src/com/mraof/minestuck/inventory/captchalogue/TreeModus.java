@@ -1,20 +1,16 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
-import com.mraof.minestuck.client.gui.captchalouge.SylladexScreen;
-import com.mraof.minestuck.client.gui.captchalouge.TreeSylladexScreen;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.advancements.MSCriteriaTriggers;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
-import com.mraof.minestuck.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
 
 import java.util.ArrayList;
@@ -27,18 +23,9 @@ public class TreeModus extends Modus
 	public int size;
 	public boolean autoBalance = true;
 	
-	@OnlyIn(Dist.CLIENT)
-	protected TreeSylladexScreen guiHandler;
-	
-	public TreeModus(LogicalSide side)
+	public TreeModus(ModusType<? extends TreeModus> type, LogicalSide side)
 	{
-		super(side);
-	}
-	
-	@Override
-	public ResourceLocation getRegistryName()
-	{
-		return CaptchaDeckHandler.TREE;
+		super(type, side);
 	}
 	
 	@Override
@@ -125,7 +112,7 @@ public class TreeModus extends Modus
 	@Override
 	public boolean increaseSize(ServerPlayerEntity player)
 	{
-		if(MinestuckConfig.modusMaxSize > 0 && size >= MinestuckConfig.modusMaxSize)
+		if(MinestuckConfig.modusMaxSize.get() > 0 && size >= MinestuckConfig.modusMaxSize.get())
 			return false;
 		
 		size++;
@@ -140,7 +127,7 @@ public class TreeModus extends Modus
 			if(size <= 0 && (node == null || size > node.getSize()))
 				return ItemStack.EMPTY;
 			size--;
-			return new ItemStack(MinestuckItems.CAPTCHA_CARD);
+			return new ItemStack(MSItems.CAPTCHA_CARD);
 		}
 		if(node == null)
 			return ItemStack.EMPTY;
@@ -154,7 +141,7 @@ public class TreeModus extends Modus
 		}
 		
 		if(id == 0)
-			MinestuckCriteriaTriggers.TREE_MODUS_ROOT.trigger(player, node.getSize());
+			MSCriteriaTriggers.TREE_MODUS_ROOT.trigger(player, node.getSize());
 		
 		ArrayList<ItemStack> list = node.removeItems(id);
 		if(list.isEmpty())
@@ -194,17 +181,8 @@ public class TreeModus extends Modus
 			TreeNode node = this.node;
 			autoBalance();
 			if(node != this.node)
-				MinestuckPacketHandler.sendToPlayer(CaptchaDeckPacket.data(CaptchaDeckHandler.writeToNBT(this)), player);
+				MSPacketHandler.sendToPlayer(CaptchaDeckPacket.data(CaptchaDeckHandler.writeToNBT(this)), player);
 		}
-	}
-	
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public SylladexScreen getGuiHandler()
-	{
-		if(guiHandler == null)
-			guiHandler = new TreeSylladexScreen(this);
-		return guiHandler;
 	}
 	
 	protected void autoBalance()

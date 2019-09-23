@@ -1,9 +1,9 @@
 package com.mraof.minestuck.modSupport;
 
-import com.mraof.minestuck.alchemy.CombinationRegistry;
-import com.mraof.minestuck.alchemy.AlchemyCostRegistry;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyCostRegistry;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

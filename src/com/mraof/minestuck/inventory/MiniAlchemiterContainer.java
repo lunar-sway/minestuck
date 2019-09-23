@@ -1,7 +1,7 @@
 package com.mraof.minestuck.inventory;
 
-import com.mraof.minestuck.alchemy.GristType;
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.inventory.slot.InputSlot;
 import com.mraof.minestuck.inventory.slot.OutputSlot;
 import net.minecraft.entity.player.PlayerEntity;
@@ -11,11 +11,11 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
 import net.minecraft.util.IntReferenceHolder;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nonnull;
 
@@ -30,25 +30,25 @@ public class MiniAlchemiterContainer extends MachineContainer
 	private final IInventory alchemiterInventory;
 	private final IntReferenceHolder wildcardHolder;
 	
-	public MiniAlchemiterContainer(int windowId, PlayerInventory playerInventory)
+	public MiniAlchemiterContainer(int windowId, PlayerInventory playerInventory, PacketBuffer buffer)
 	{
-		this(ModContainerTypes.MINI_ALCHEMITER, windowId, playerInventory, new Inventory(2), new IntArray(3), IntReferenceHolder.single());
+		this(MSContainerTypes.MINI_ALCHEMITER, windowId, playerInventory, new Inventory(2), new IntArray(3), IntReferenceHolder.single(), buffer.readBlockPos());
 	}
 	
-	public MiniAlchemiterContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, IntReferenceHolder wildcardHolder)
+	public MiniAlchemiterContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, IntReferenceHolder wildcardHolder, BlockPos machinePos)
 	{
-		this(ModContainerTypes.MINI_ALCHEMITER, windowId, playerInventory, inventory, parameters, wildcardHolder);
+		this(MSContainerTypes.MINI_ALCHEMITER, windowId, playerInventory, inventory, parameters, wildcardHolder, machinePos);
 	}
 	
-	public MiniAlchemiterContainer(ContainerType<? extends MiniAlchemiterContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, IntReferenceHolder wildcardHolder)
+	public MiniAlchemiterContainer(ContainerType<? extends MiniAlchemiterContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, IntReferenceHolder wildcardHolder, BlockPos machinePos)
 	{
-		super(type, windowId, parameters);
+		super(type, windowId, parameters, machinePos);
 		
 		assertInventorySize(inventory, 2);
 		this.alchemiterInventory = inventory;
 		this.wildcardHolder = wildcardHolder;
 		
-		addSlot(new InputSlot(inventory, 0, INPUT_X, INPUT_Y, MinestuckBlocks.CRUXITE_DOWEL.asItem()));
+		addSlot(new InputSlot(inventory, 0, INPUT_X, INPUT_Y, MSBlocks.CRUXITE_DOWEL.asItem()));
 		addSlot(new OutputSlot(inventory, 1, OUTPUT_X, OUTPUT_Y));
 		trackInt(wildcardHolder);
 		
@@ -92,7 +92,7 @@ public class MiniAlchemiterContainer extends MachineContainer
 			} else if(slotNumber > 1)
 			{
 				//if it's an inventory slot with valid contents
-				if(itemstackOrig.getItem() == MinestuckBlocks.CRUXITE_DOWEL.asItem())
+				if(itemstackOrig.getItem() == MSBlocks.CRUXITE_DOWEL.asItem())
 					result = mergeItemStack(itemstackOrig, 0, 1, false);
 			}
 			
@@ -106,7 +106,6 @@ public class MiniAlchemiterContainer extends MachineContainer
 		return itemstack;
 	}
 	
-	@OnlyIn(Dist.CLIENT)
 	public GristType getWildcardType()
 	{
 		GristType type = GristType.REGISTRY.getValue(wildcardHolder.get());

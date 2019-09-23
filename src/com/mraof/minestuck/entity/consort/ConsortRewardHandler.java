@@ -1,7 +1,7 @@
 package com.mraof.minestuck.entity.consort;
 
 import com.google.common.collect.Maps;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Pair;
 import net.minecraft.item.ItemStack;
@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import static com.mraof.minestuck.block.MinestuckBlocks.*;
-import static com.mraof.minestuck.item.MinestuckItems.*;
+import static com.mraof.minestuck.block.MSBlocks.*;
+import static com.mraof.minestuck.item.MSItems.*;
 import static net.minecraft.item.Items.*;
 
 public class ConsortRewardHandler
@@ -81,7 +81,7 @@ public class ConsortRewardHandler
 		
 		ConsortRewardHandler.registerPrice(new ItemStack(CARVING_TOOL), 60, 90);
 		ConsortRewardHandler.registerPrice(new ItemStack(MINI_FROG_STATUE), 200, 250);
-		ConsortRewardHandler.registerPrice(new ItemStack(MinestuckItems.STONE_SLAB), 20, 30);
+		ConsortRewardHandler.registerPrice(new ItemStack(MSItems.STONE_SLAB), 20, 30);
 		ConsortRewardHandler.registerPrice(new ItemStack(THRESH_DVD), 350, 400);
 		ConsortRewardHandler.registerPrice(new ItemStack(CREW_POSTER), 350, 400);
 		ConsortRewardHandler.registerPrice(new ItemStack(SBAHJ_POSTER), 350, 400);
