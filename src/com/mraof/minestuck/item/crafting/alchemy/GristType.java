@@ -155,6 +155,15 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 		return REGISTRY.getID(this);
 	}
 	
+	/**
+	 * Returns the resource location to the dummy grist icon texture
+	 * The actual field is private as to not get caught by the ObjectHolder on the class (because it checks all public static final fields).
+	 */
+	public static ResourceLocation getDummyIcon()
+	{
+		return DUMMY_ICON_LOCATION;
+	}
+	
 	private static ResourceLocation makeIconPath(ResourceLocation entry)
 	{
 		if(entry == null)

@@ -71,8 +71,8 @@ public class MiniAlchemiterScreen extends MachineScreen<MiniAlchemiterContainer>
 			
 			GuiUtil.drawGristBoard(set, useWildcard ? GuiUtil.GristboardMode.ALCHEMITER_SELECT : GuiUtil.GristboardMode.ALCHEMITER, 9, 45, font);
 
-			List<String> tooltip = GuiUtil.getGristboardTooltip(set, mouseX - this.guiLeft, mouseY - this.guiTop, 9, 45, font);
-			if (tooltip != null)
+			List<String> tooltip = GuiUtil.getGristboardTooltip(set, useWildcard ? GuiUtil.GristboardMode.ALCHEMITER_SELECT : GuiUtil.GristboardMode.ALCHEMITER, mouseX - this.guiLeft, mouseY - this.guiTop, 9, 45, font);
+			if(!tooltip.isEmpty())
 				this.renderTooltip(tooltip, mouseX - this.guiLeft, mouseY - this.guiTop, font);
 
 		}

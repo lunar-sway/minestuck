@@ -72,13 +72,13 @@ public class LandDimension extends Dimension
 		biomeHolder = new LandBiomeHolder(landAspects, false);
 	}
 	
-	//@Override TODO
-	public float getSunBrightnessFactor(float partialTicks)
+	@Override
+	public float getSunBrightness(float partialTicks)
 	{
 		float skylight = skylightBase;
 		skylight = (float)((double)skylight * (1.0D - (double)(world.getRainStrength(partialTicks) * 5.0F) / 16.0D));
 		skylight = (float)((double)skylight * (1.0D - (double)(world.getThunderStrength(partialTicks) * 5.0F) / 16.0D));
-		return skylight;
+		return skylight*0.8F + 0.2F;
 	}
 	
 	@Override
@@ -86,12 +86,6 @@ public class LandDimension extends Dimension
 	{
 		float f = 1 - skylightBase;
 		return f * f * 0.5F;
-	}
-	
-	@Override
-	public float getSunBrightness(float par1)
-	{
-		return this.getSunBrightnessFactor(par1) * 0.8F + 0.2F;
 	}
 	
 	@Override

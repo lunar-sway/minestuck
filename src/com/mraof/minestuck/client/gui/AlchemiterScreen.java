@@ -95,11 +95,11 @@ public class AlchemiterScreen extends Screen
 		//Calculate the grist set
 		GristSet set;
 		set = alchemiter.getGristCost(itemQuantity);
-		//draw the grist board
+		//draw the grist board	//TODO Handle select mode correctly
 		GuiUtil.drawGristBoard(set, AlchemyRecipes.getDecodedItem(alchemiter.getDowel()).getItem() == MSItems.CAPTCHA_CARD ? GuiUtil.GristboardMode.LARGE_ALCHEMITER_SELECT : GuiUtil.GristboardMode.LARGE_ALCHEMITER, (width - guiWidth) / 2 + 88, (height - guiHeight) / 2 + 13, font);
 		//draw the grist
-		List<String> tooltip = GuiUtil.getGristboardTooltip(set, mouseX, mouseY, 9, 45, font);
-		if(tooltip != null)
+		List<String> tooltip = GuiUtil.getGristboardTooltip(set, GuiUtil.GristboardMode.LARGE_ALCHEMITER, mouseX, mouseY, 9, 45, font);
+		if(!tooltip.isEmpty())
 			this.renderTooltip(tooltip, mouseX, mouseY, font);
 		super.render(mouseX, mouseY, partialTicks);
 	}

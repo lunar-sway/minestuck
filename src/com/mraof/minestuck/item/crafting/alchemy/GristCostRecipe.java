@@ -2,6 +2,7 @@ package com.mraof.minestuck.item.crafting.alchemy;
 
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
+import com.mraof.minestuck.jei.JeiGristCost;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -98,6 +99,11 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 		return false;
 	}
 	
+	public JeiGristCost getJeiCost()
+	{
+		return null;
+	}
+	
 	private static int priorityFromIngredient(Ingredient ingredient)
 	{
 		return 100 - (ingredient.getMatchingStacks().length - 1)*10;
@@ -111,7 +117,7 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 		if (stack.isDamaged())
 		{
 			float multiplier = 1 - stack.getItem().getDamage(stack) / ((float) stack.getMaxDamage());
-			cost.scale(multiplier, true);
+			cost.scale(multiplier, shouldRoundDown);
 		}
 		
 		return cost;
@@ -131,13 +137,13 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 				if(json.get("grist_cost").isJsonPrimitive())
 				{
 					int wildcardCost = JSONUtils.getInt(json, "grist_cost");
-					return new WildcardGristCostRecipe(recipeId, ingredient, wildcardCost, priority);
+					return new Wildcard(recipeId, ingredient, wildcardCost, priority);
 				} else
 				{
 					GristSet set = GristSet.deserialize(json.getAsJsonObject("grist_cost"));
-					return new SimpleGristCostRecipe(recipeId, ingredient, set, priority);
+					return new Simple(recipeId, ingredient, set, priority);
 				}
-			} else return new UnavailableGristCostRecipe(recipeId, ingredient, priority);
+			} else return new Unavailable(recipeId, ingredient, priority);
 		}
 		
 		@Nullable
@@ -150,11 +156,11 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 			switch(type)
 			{
 				case 0:
-					return new SimpleGristCostRecipe(recipeId, ingredient, GristSet.read(buffer), priority);
+					return new Simple(recipeId, ingredient, GristSet.read(buffer), priority);
 				case 1:
-					return new WildcardGristCostRecipe(recipeId, ingredient, buffer.readInt(), priority);
+					return new Wildcard(recipeId, ingredient, buffer.readInt(), priority);
 				default:
-					return new UnavailableGristCostRecipe(recipeId, ingredient, priority);
+					return new Unavailable(recipeId, ingredient, priority);
 			}
 		}
 		
@@ -163,21 +169,21 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 		{
 			recipe.ingredient.write(buffer);
 			buffer.writeInt(recipe.getPriority());
-			if(recipe instanceof SimpleGristCostRecipe)
+			if(recipe instanceof Simple)
 			{
 				buffer.writeByte(0);
-				((SimpleGristCostRecipe) recipe).cost.write(buffer);
-			} else if(recipe instanceof  WildcardGristCostRecipe)
+				((Simple) recipe).cost.write(buffer);
+			} else if(recipe instanceof Wildcard)
 			{
 				buffer.writeByte(1);
-				buffer.writeInt(((WildcardGristCostRecipe) recipe).wildcardCost);
+				buffer.writeInt(((Wildcard) recipe).wildcardCost);
 			} else buffer.writeByte(-1);
 		}
 	}
 	
-	public static class UnavailableGristCostRecipe extends GristCostRecipe
+	public static class Unavailable extends GristCostRecipe
 	{
-		public UnavailableGristCostRecipe(ResourceLocation id, Ingredient ingredient, Integer priority)
+		public Unavailable(ResourceLocation id, Ingredient ingredient, Integer priority)
 		{
 			super(id, ingredient, priority);
 		}
@@ -197,11 +203,12 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 		
 	}
 	
-	public static class SimpleGristCostRecipe extends GristCostRecipe
+	public static class Simple extends GristCostRecipe
 	{
-		public GristSet cost;
+		public final GristSet cost;
+		private JeiGristCost jeiCost;
 		
-		public SimpleGristCostRecipe(ResourceLocation id, Ingredient ingredient, GristSet cost, Integer priority)
+		public Simple(ResourceLocation id, Ingredient ingredient, GristSet cost, Integer priority)
 		{
 			super(id, ingredient, priority);
 			this.cost = cost.asImmutable();
@@ -210,7 +217,15 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 		@Override
 		public GristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown)
 		{
-			return cost;
+			return GristCostRecipe.scaleToCountAndDurability(cost.copy(), input, shouldRoundDown).asImmutable();
+		}
+		
+		@Override
+		public JeiGristCost getJeiCost()
+		{
+			if(jeiCost == null)
+				jeiCost = new JeiGristCost.Set(cost);
+			return jeiCost;
 		}
 		
 		@Override
@@ -220,11 +235,12 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 		}
 	}
 	
-	public static class WildcardGristCostRecipe extends GristCostRecipe
+	public static class Wildcard extends GristCostRecipe
 	{
 		public final int wildcardCost;
+		private JeiGristCost jeiCost;
 		
-		public WildcardGristCostRecipe(ResourceLocation id, Ingredient ingredient, int wildcardCost, Integer priority)
+		public Wildcard(ResourceLocation id, Ingredient ingredient, int wildcardCost, Integer priority)
 		{
 			super(id, ingredient, priority);
 			this.wildcardCost = wildcardCost;
@@ -233,13 +249,21 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 		@Override
 		public GristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown)
 		{
-			return wildcardType != null ? new GristSet(wildcardType, wildcardCost).asImmutable() : null;
+			return wildcardType != null ? scaleToCountAndDurability(new GristSet(wildcardType, wildcardCost), input, shouldRoundDown).asImmutable() : null;
 		}
 		
 		@Override
 		public boolean canPickWildcard()
 		{
 			return true;
+		}
+		
+		@Override
+		public JeiGristCost getJeiCost()
+		{
+			if(jeiCost == null)
+				jeiCost = new JeiGristCost.Wildcard(wildcardCost);
+			return jeiCost;
 		}
 		
 		@Override

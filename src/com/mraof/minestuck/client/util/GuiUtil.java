@@ -25,7 +25,8 @@ public class GuiUtil
 		ALCHEMITER_SELECT,
 		LARGE_ALCHEMITER,
 		LARGE_ALCHEMITER_SELECT,
-		GRIST_WIDGET;
+		GRIST_WIDGET,
+		JEI_WILDCARD
 	}
 	
 	public static final int GRIST_BOARD_WIDTH = 158, GRIST_BOARD_HEIGHT = 24;
@@ -62,7 +63,9 @@ public class GuiUtil
 				int color = getGristColor(mode, need <= have);
 				
 				String needStr = addSuffix(need), haveStr = addSuffix(have);
-				fontRenderer.drawString(needStr + " " + type.getDisplayName() + " (" + haveStr + ")", boardX + GRIST_BOARD_WIDTH/2*col, boardY + GRIST_BOARD_HEIGHT/3*row, color);
+				if(mode == GristboardMode.JEI_WILDCARD)
+					fontRenderer.drawString(needStr + " Any Type", boardX + GRIST_BOARD_WIDTH/2F*col, boardY + GRIST_BOARD_HEIGHT/3F*row, color);
+				else fontRenderer.drawString(needStr + " " + type.getDisplayName() + " (" + haveStr + ")", boardX + GRIST_BOARD_WIDTH/2F*col, boardY + GRIST_BOARD_HEIGHT/3F*row, color);
 				//ensure that one line is rendered on the large alchemiter
 				if(mode==GristboardMode.LARGE_ALCHEMITER||mode==GristboardMode.LARGE_ALCHEMITER_SELECT)
 					place+=2;
@@ -83,22 +86,29 @@ public class GuiUtil
 				int color = getGristColor(mode, need <= have);
 				
 				String needStr = addSuffix(need), haveStr = '('+addSuffix(have)+')';
+				int needOffset = 1, iconSize = 8, haveOffset = 1;
+				if(mode == GristboardMode.JEI_WILDCARD)
+				{
+					haveStr = "";
+					haveOffset = 0;
+				}
+				
 				int needStrWidth = fontRenderer.getStringWidth(needStr);
-				if(index + needStrWidth + 10 + fontRenderer.getStringWidth(haveStr) > (row + 1)*GRIST_BOARD_WIDTH)
+				if(index + needStrWidth + needOffset + iconSize + haveOffset + fontRenderer.getStringWidth(haveStr) > (row + 1)*GRIST_BOARD_WIDTH)
 				{
 					row++;
 					index = row*GRIST_BOARD_WIDTH;
 				}
-				fontRenderer.drawString(needStr, boardX + 1 + index%GRIST_BOARD_WIDTH, boardY + 8*row, color);
-				fontRenderer.drawString(haveStr, boardX + needStrWidth + 10 + index%GRIST_BOARD_WIDTH, boardY + 8*row, color);
+				fontRenderer.drawString(needStr, boardX + needOffset + index%GRIST_BOARD_WIDTH, boardY + 8*row, color);
+				fontRenderer.drawString(haveStr, boardX + needStrWidth + needOffset + iconSize + haveOffset + index%GRIST_BOARD_WIDTH, boardY + 8*row, color);
 				
 				GlStateManager.color3f(1, 1, 1);
 				GlStateManager.disableLighting();
-				ResourceLocation icon = type.getIcon();
+				ResourceLocation icon = mode == GristboardMode.JEI_WILDCARD ? GristType.getDummyIcon() : type.getIcon();
 				if(icon != null)
 				{
 					Minecraft.getInstance().getTextureManager().bindTexture(icon);
-					AbstractGui.blit(boardX + needStrWidth + 1 + index % GRIST_BOARD_WIDTH, boardY + 8 * row, 0, 0, 8, 8, 8, 8);
+					AbstractGui.blit(boardX + needStrWidth + needOffset + index % GRIST_BOARD_WIDTH, boardY + 8 * row, 0, 0, iconSize, iconSize, iconSize, iconSize);
 				}
 				
 				//ensure the large alchemiter gui has one grist type to a line
@@ -112,10 +122,10 @@ public class GuiUtil
 		}
 	}
 	
-	public static List<String> getGristboardTooltip(GristSet grist, int mouseX, int mouseY, int boardX, int boardY, FontRenderer fontRenderer)
+	public static List<String> getGristboardTooltip(GristSet grist, GristboardMode mode, double mouseX, double mouseY, int boardX, int boardY, FontRenderer fontRenderer)
 	{
 		if (grist == null || grist.isEmpty())
-			return null;
+			return Collections.emptyList();
 		mouseX -= boardX;
 		mouseY -= boardY;
 		
@@ -133,14 +143,17 @@ public class GuiUtil
 					int need = entry.getAmount();
 					String needStr = addSuffix(need);
 					
-					if(!needStr.equals(String.valueOf(need)) && mouseX >= GRIST_BOARD_WIDTH/2*col && mouseX < GRIST_BOARD_WIDTH/2*col + fontRenderer.getStringWidth(needStr))
+					if(!needStr.equals(String.valueOf(need)) && mouseX >= GRIST_BOARD_WIDTH/2F*col && mouseX < GRIST_BOARD_WIDTH/2F*col + fontRenderer.getStringWidth(needStr))
 						return Collections.singletonList(String.valueOf(need));
+					
+					if(mode == GristboardMode.JEI_WILDCARD)
+						continue;
 					
 					int width = fontRenderer.getStringWidth(needStr + " " + entry.getType().getDisplayName() + " (");
 					int have = playerGrist.getGrist(entry.getType());
 					String haveStr = addSuffix(have);
 					
-					if(!haveStr.equals(String.valueOf(have)) && mouseX >= boardX + GRIST_BOARD_WIDTH/2*col + width && mouseX < boardX + GRIST_BOARD_WIDTH/2*col + width + fontRenderer.getStringWidth(haveStr))
+					if(!haveStr.equals(String.valueOf(have)) && mouseX >= boardX + GRIST_BOARD_WIDTH/2F*col + width && mouseX < boardX + GRIST_BOARD_WIDTH/2F*col + width + fontRenderer.getStringWidth(haveStr))
 						return Collections.singletonList(String.valueOf(have));
 				}
 				
@@ -160,7 +173,15 @@ public class GuiUtil
 				int needStrWidth = fontRenderer.getStringWidth(needStr);
 				int haveStrWidth = fontRenderer.getStringWidth('('+haveStr+')');
 				
-				if(index + needStrWidth + 10 + haveStrWidth > (row + 1)*GRIST_BOARD_WIDTH)
+				int needOffset = 1, iconSize = 8, haveOffset = 1;
+				if(mode == GristboardMode.JEI_WILDCARD)
+				{
+					haveStrWidth = 0;
+					haveOffset = 0;
+					haveStr = "";
+				}
+				
+				if(index + needStrWidth + needOffset + iconSize + haveOffset + haveStrWidth > (row + 1)*GRIST_BOARD_WIDTH)
 				{
 					row++;
 					index = row*GRIST_BOARD_WIDTH;
@@ -170,9 +191,9 @@ public class GuiUtil
 				{
 					if(!needStr.equals(String.valueOf(need)) && mouseX >= index%GRIST_BOARD_WIDTH && mouseX < index%GRIST_BOARD_WIDTH + needStrWidth)
 						return Collections.singletonList(String.valueOf(need));
-					else if(mouseX >= index%158 + needStrWidth + 1 && mouseX < index%158+ needStrWidth + 9)
+					else if(mouseX >= index%158 + needStrWidth + needOffset && mouseX < index%158+ needStrWidth + needOffset + iconSize)
 						return Collections.singletonList(type.getDisplayName().getFormattedText());
-					else if(!haveStr.equals(String.valueOf(have)) && mouseX >= index%158 + needStrWidth + 10 + fontRenderer.getStringWidth("(") && mouseX < index%158 + needStrWidth + 10 + fontRenderer.getStringWidth("("+haveStr))
+					else if(!haveStr.isEmpty() && !haveStr.equals(String.valueOf(have)) && mouseX >= index%158 + needStrWidth + needOffset + iconSize + haveOffset + fontRenderer.getStringWidth("(") && mouseX < index%158 + needStrWidth + needOffset + iconSize + haveOffset + fontRenderer.getStringWidth("("+haveStr))
 						return Collections.singletonList(String.valueOf(have));
 				}
 				
@@ -181,7 +202,7 @@ public class GuiUtil
 			}
 		}
 		
-		return null;
+		return Collections.emptyList();
 	}
 	
 	private static int getGristColor(GristboardMode mode, boolean hasEnough)
@@ -191,7 +212,8 @@ public class GuiUtil
 		case LARGE_ALCHEMITER://dont break
 		case ALCHEMITER: return hasEnough ? 0x00FF00 : 0xFF0000;
 		case LARGE_ALCHEMITER_SELECT://dont break;
-		case ALCHEMITER_SELECT: return 0x0000FF;
+		case ALCHEMITER_SELECT:
+		case JEI_WILDCARD: return 0x0000FF;
 		case GRIST_WIDGET:
 		default: return 0x000000;
 		}
@@ -205,5 +227,4 @@ public class GuiUtil
 			return (n/1000) + "K";
 		else return (n/1000000) + "M";
 	}
-
 }

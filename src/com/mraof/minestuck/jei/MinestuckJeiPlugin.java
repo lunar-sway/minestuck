@@ -1,55 +1,75 @@
 package com.mraof.minestuck.jei;
-/*
-import com.mraof.minestuck.item.crafting.alchemy.*;
-import com.mraof.minestuck.block.BlockSburbMachine;
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.util.Debug;
-import mezz.jei.api.*;
-import mezz.jei.api.ingredients.IModIngredientRegistration;
-import mezz.jei.api.recipe.IRecipeCategoryRegistration;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.crafting.MSRecipeTypes;
+import com.mraof.minestuck.item.crafting.alchemy.*;
+import mezz.jei.api.IModPlugin;
+import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.ingredients.IIngredientType;
+import mezz.jei.api.registration.IModIngredientRegistration;
+import mezz.jei.api.registration.IRecipeCategoryRegistration;
+import mezz.jei.api.registration.IRecipeRegistration;
+import mezz.jei.api.registration.ISubtypeRegistration;
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.ResourceLocation;
+
+import java.util.stream.Collectors;
 
 /**
  * Created by mraof on 2017 January 23 at 2:11 AM.
- * /
-@JEIPlugin
+ */
+@JeiPlugin
 public class MinestuckJeiPlugin implements IModPlugin
 {
-	AlchemiterRecipeCategory alchemiterCategory;
-	TotemLatheRecipeCategory totemLatheCategory;
-	DesignixRecipeCategory designixCategory;
-    @Override
-    public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry)
+	public static final ResourceLocation PLUGIN_ID = new ResourceLocation(Minestuck.MOD_ID, "minestuck");
+	public static final ResourceLocation GRIST_COST_ID = new ResourceLocation(Minestuck.MOD_ID, "grist_cost");
+	
+	public static final IIngredientType<GristAmount> GRIST = () -> GristAmount.class;
+	
+	GristCostRecipeCategory alchemiterCategory;
+	//TotemLatheRecipeCategory totemLatheCategory;
+	//DesignixRecipeCategory designixCategory;
+	
+	
+	@Override
+	public ResourceLocation getPluginUid()
+	{
+		return PLUGIN_ID;
+	}
+	
+	@Override
+	public void registerItemSubtypes(ISubtypeRegistration subtypeRegistry)
     {
-        subtypeRegistry.useNbtForSubtypes(MinestuckItems.captchaCard);
-        subtypeRegistry.useNbtForSubtypes(MinestuckItems.cruxiteDowel);
+        subtypeRegistry.useNbtForSubtypes(MSItems.CAPTCHA_CARD);
+        subtypeRegistry.useNbtForSubtypes(MSBlocks.CRUXITE_DOWEL.asItem());
     }
-
-    @Override
+	
+	@Override
     public void registerIngredients(IModIngredientRegistration registry)
     {
-    	registry.register(GristAmount.class, GristIngredientHelper.createList(), new GristIngredientHelper(), new GristIngredientRenderer());
+    	registry.register(GRIST, GristIngredientHelper.createList(), new GristIngredientHelper(), new GristIngredientRenderer());
     }
 	
 	@Override
 	public void registerCategories(IRecipeCategoryRegistration registry)
 	{
-		alchemiterCategory = new AlchemiterRecipeCategory(registry.getJeiHelpers().getGuiHelper());
+		alchemiterCategory = new GristCostRecipeCategory(registry.getJeiHelpers().getGuiHelper());
 		registry.addRecipeCategories(alchemiterCategory);
-		totemLatheCategory = new TotemLatheRecipeCategory(registry.getJeiHelpers().getGuiHelper());
+		/*totemLatheCategory = new TotemLatheRecipeCategory(registry.getJeiHelpers().getGuiHelper());
 		registry.addRecipeCategories(totemLatheCategory);
 		designixCategory = new DesignixRecipeCategory(registry.getJeiHelpers().getGuiHelper());
-		registry.addRecipeCategories(designixCategory);
+		registry.addRecipeCategories(designixCategory);*/
 	}
 	
+	@Override
+	public void registerRecipes(IRecipeRegistration registration)
+	{
+		registration.addRecipes(Minecraft.getInstance().world.getRecipeManager().getRecipes().stream().filter(recipe -> recipe.getType() == MSRecipeTypes.GRIST_COST_TYPE && ((GristCostRecipe) recipe).getJeiCost() != null).collect(Collectors.toList()), GRIST_COST_ID);
+	}
+	
+	/*
 	@Override
     public void register(IModRegistry registry)
     {
@@ -88,34 +108,5 @@ public class MinestuckJeiPlugin implements IModPlugin
         registry.addRecipes(designixRecipes, designixCategory.getUid());
         registry.addRecipeCatalyst(new ItemStack(MinestuckBlocks.sburbMachine, 1, BlockSburbMachine.MachineType.TOTEM_LATHE.ordinal()), totemLatheCategory.getUid());
         registry.addRecipeCatalyst(new ItemStack(MinestuckBlocks.sburbMachine, 1, BlockSburbMachine.MachineType.PUNCH_DESIGNIX.ordinal()), designixCategory.getUid());
-    }
-
-    private List<ItemStack> getItemStacks(Object item, int metadata)
-    {
-        ArrayList<ItemStack> stacks = new ArrayList<ItemStack>();
-        
-        if(item instanceof Item)
-        {
-            stacks.add(new ItemStack((Item) item, 1, metadata));
-        }
-        else if(item instanceof Block)
-        {
-            stacks.add(new ItemStack((Block) item, 1, metadata));
-        }
-        else if(item instanceof String)
-        {
-            for(ItemStack stack : OreDictionary.getOres((String) item))
-            {
-                stacks.add(stack);
-            }
-        }
-        return stacks;
-    }
-
-    @Override
-    public void onRuntimeAvailable(IJeiRuntime jeiRuntime)
-    {
-
-    }
+    }*/
 }
-*/
