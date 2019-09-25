@@ -1,5 +1,6 @@
 package com.mraof.minestuck;
 
+import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.client.ClientProxy;
@@ -16,6 +17,7 @@ import net.minecraft.item.Item;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -61,6 +63,10 @@ public class Minestuck
 		MinestuckConfig.loadConfig(MinestuckConfig.server_config, FMLPaths.CONFIGDIR.get().resolve("Minestuck.toml").toString());
 		
 		MinecraftForge.EVENT_BUS.register(this);
+		
+		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+		
+		MSFluids.FLUIDS.register(eventBus);
 	}
 	
 	private void setup(final FMLCommonSetupEvent event)

@@ -8,16 +8,18 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IWorldReader;
 
+import java.util.function.Supplier;
+
 public class FlowingModFluidBlock extends FlowingFluidBlock
 {
 	protected final Vec3d fogColor;
 	
-	public FlowingModFluidBlock(FlowingFluid fluid, Properties properties)
+	public FlowingModFluidBlock(Supplier<? extends FlowingFluid> fluid, Properties properties)
 	{
 		this(fluid, null, properties);
 	}
 	
-	public FlowingModFluidBlock(FlowingFluid fluid, Vec3d fogColor, Properties properties)
+	public FlowingModFluidBlock(Supplier<? extends FlowingFluid> fluid, Vec3d fogColor, Properties properties)
 	{
 		super(fluid, properties);
 		this.fogColor = fogColor;

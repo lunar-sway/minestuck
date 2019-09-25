@@ -8,9 +8,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IWorldReader;
 
+import java.util.function.Supplier;
+
 public class FlowingWaterColorsBlock extends FlowingFluidBlock
 {
-	public FlowingWaterColorsBlock(FlowingFluid fluid, Properties properties)
+	public FlowingWaterColorsBlock(Supplier<FlowingFluid> fluid, Properties properties)
 	{
 		super(fluid, properties);
 	}

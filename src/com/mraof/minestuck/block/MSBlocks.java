@@ -169,8 +169,8 @@ public class MSBlocks
 	public static final Block MINI_FROG_STATUE = getNull();
 	public static final Block GLOWYSTONE_DUST = getNull();
 	
-	public static final Block OIL = getNull(), BLOOD = getNull(), BRAIN_JUICE = getNull();
-	public static final Block WATER_COLORS = getNull(), ENDER = getNull(), LIGHT_WATER = getNull();
+	public static final FlowingFluidBlock OIL = getNull(), BLOOD = getNull(), BRAIN_JUICE = getNull();
+	public static final FlowingFluidBlock WATER_COLORS = getNull(), ENDER = getNull(), LIGHT_WATER = getNull();
 	//TODO Look more into fluids
 	/*public static Fluid fluidOil = createFluid("oil", new ResourceLocation("minestuck", "blocks/oil_still"), new ResourceLocation("minestuck", "blocks/oil_flowing"), "tile.oil");
 	public static Fluid fluidBlood = createFluid("blood", new ResourceLocation("minestuck", "blocks/blood_still"), new ResourceLocation("minestuck", "blocks/blood_flowing"), "tile.blood");
