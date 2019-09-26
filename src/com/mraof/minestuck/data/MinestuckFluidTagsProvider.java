@@ -16,12 +16,12 @@ public class MinestuckFluidTagsProvider extends FluidTagsProvider
 	@Override
 	protected void registerTags()
 	{
-		getBuilder(Fluids.OIL).add(OIL, FLOWING_OIL);
-		getBuilder(Fluids.BLOOD).add(BLOOD, FLOWING_BLOOD);
-		getBuilder(Fluids.BRAIN_JUICE).add(BRAIN_JUICE, FLOWING_BRAIN_JUICE);
-		getBuilder(Fluids.WATER_COLORS).add(WATER_COLORS, FLOWING_WATER_COLORS);
-		getBuilder(Fluids.ENDER).add(ENDER, FLOWING_ENDER);
-		getBuilder(Fluids.LIGHT_WATER).add(LIGHT_WATER, FLOWING_LIGHT_WATER);
+		getBuilder(Fluids.OIL).add(OIL.get(), FLOWING_OIL.get());
+		getBuilder(Fluids.BLOOD).add(BLOOD.get(), FLOWING_BLOOD.get());
+		getBuilder(Fluids.BRAIN_JUICE).add(BRAIN_JUICE.get(), FLOWING_BRAIN_JUICE.get());
+		getBuilder(Fluids.WATER_COLORS).add(WATER_COLORS.get(), FLOWING_WATER_COLORS.get());
+		getBuilder(Fluids.ENDER).add(ENDER.get(), FLOWING_ENDER.get());
+		getBuilder(Fluids.LIGHT_WATER).add(LIGHT_WATER.get(), FLOWING_LIGHT_WATER.get());
 	}
 	
 	@Override
