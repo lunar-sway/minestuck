@@ -1,17 +1,23 @@
 package com.mraof.minestuck.world.lands.title;
 
+import com.google.common.collect.Lists;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.util.EnumAspect;
+import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.biome.MSBiomes;
-import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.gen.LandGenSettings;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.SphereReplaceConfig;
+import net.minecraft.world.gen.placement.FrequencyConfig;
+import net.minecraft.world.gen.placement.Placement;
 
 public class PulseLandAspect extends TitleLandAspect
 {
@@ -49,11 +55,13 @@ public class PulseLandAspect extends TitleLandAspect
 		settings.oceanChance = Math.max(settings.oceanChance, 0.2F);
 	}
 	
-	//@Override
-	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
+	@Override
+	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{
-		
-		chunkProvider.decorators.add(new SurfaceDecoratorVein(MSBlocks.COAGULATED_BLOOD.getDefaultState(), 25, 30, MSBiomes.mediumRough));
+		if(biome.staticBiome == MSBiomes.LAND_ROUGH)
+		{
+			biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.DISK, new SphereReplaceConfig(MSBlocks.COAGULATED_BLOOD.getDefaultState(), 6, 2, Lists.newArrayList(blocks.getBlockState("surface"), blocks.getBlockState("upper<<<<<"))), Placement.COUNT_TOP_SOLID, new FrequencyConfig(25)));
+		}
 	}
 	
 	@Override
@@ -63,5 +71,4 @@ public class PulseLandAspect extends TitleLandAspect
 		aspect.registerBlocks(registry);
 		return registry.getBlockState("ocean").getMaterial() != Material.LAVA;	//Lava is likely a too important part of the terrain aspect to be replaced
 	}
-	
 }

@@ -7,9 +7,11 @@ import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.state.properties.Half;
 import net.minecraft.util.Direction;
 import net.minecraft.world.gen.GenerationSettings;
+import net.minecraft.world.gen.feature.OreFeatureConfig;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class StructureBlockRegistry
 {
@@ -138,17 +140,29 @@ public class StructureBlockRegistry
 	
 	//Nonstatic stuff
 	private Map<String, BlockState> blockRegistry = new HashMap<>();
+	private OreFeatureConfig.FillerBlockType groundType = OreFeatureConfig.FillerBlockType.NATURAL_STONE;
 	
 	public void setBlockState(String name, BlockState state)
 	{
 		if(state == null || name == null)
-			throw new IllegalArgumentException("Null parameters not allowed.");
+			throw new NullPointerException("Null parameters not allowed.");
 		if(!staticRegistry.containsKey(name))
 			throw new IllegalStateException("Structure block \""+name+"\" isn't registered, and can therefore not be set.");
 		if(!staticRegistry.get(name).extention.isInstance(state.getBlock()))
 			throw new IllegalArgumentException("The provided block must extend \""+staticRegistry.get(name).extention+"\".");
+		if(name.equals("ground"))
+			throw new IllegalArgumentException("Should use setGroundState() for setting the ground block.");
 		
 		blockRegistry.put(name, state);
+	}
+	
+	public void setGroundState(BlockState state, OreFeatureConfig.FillerBlockType groundType)
+	{
+		Objects.requireNonNull(state,  "Null parameters not allowed.");
+		Objects.requireNonNull(groundType,  "Null parameters not allowed.");
+		
+		blockRegistry.put("ground", state);
+		this.groundType = groundType;
 	}
 	
 	public BlockState getBlockState(String name)
@@ -178,6 +192,11 @@ public class StructureBlockRegistry
 			state = withOptionally(state, BlockStateProperties.HALF, Half.TOP);
 		
 		return state;
+	}
+	
+	public OreFeatureConfig.FillerBlockType getGroundType()
+	{
+		return groundType;
 	}
 	
 	public BlockState getTemplateState(BlockState state)

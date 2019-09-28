@@ -35,12 +35,6 @@ public class MSBiomes
 		event.getRegistry().register(new LandBiome.Normal().setRegistryName("land_normal"));
 		event.getRegistry().register(new LandBiome.Rough().setRegistryName("land_rough"));
 		event.getRegistry().register(new LandBiome.Ocean().setRegistryName("land_ocean"));
-		/*mediumNormal = new BiomeMinestuck(new BiomeProperties("The Medium")).setRegistryName("medium");
-		mediumOcean = new BiomeMinestuck(new BiomeProperties("The Medium (Ocean)").setBaseBiome("medium")).setRegistryName("medium_ocean");
-		mediumRough = new BiomeMinestuck(new BiomeProperties("The Medium (Rough)").setBaseBiome("medium")).setRegistryName("medium_rough");
-		event.getRegistry().register(mediumNormal);
-		event.getRegistry().register(mediumOcean);
-		event.getRegistry().register(mediumRough);*/
 	}
 	
 	public static void init()

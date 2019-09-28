@@ -1,18 +1,29 @@
 
 package com.mraof.minestuck.world.lands.terrain;
 
+import com.google.common.collect.Lists;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
+import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.gen.LandGenSettings;
+import com.mraof.minestuck.world.lands.structure.blocks.MSFillerBlockTypes;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.*;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.OreFeatureConfig;
+import net.minecraft.world.gen.feature.SphereReplaceConfig;
+import net.minecraft.world.gen.placement.CountRangeConfig;
+import net.minecraft.world.gen.placement.FrequencyConfig;
+import net.minecraft.world.gen.placement.Placement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,16 +56,16 @@ public class SandLandAspect extends TerrainLandAspect
 	{
 		if(type == Variant.SAND || type == Variant.LUSH_DESERTS)
 		{
+			registry.setGroundState(Blocks.SANDSTONE.getDefaultState(), MSFillerBlockTypes.SANDSTONE);
 			registry.setBlockState("upper", Blocks.SAND.getDefaultState());
-			registry.setBlockState("ground", Blocks.SANDSTONE.getDefaultState());
 			registry.setBlockState("structure_primary", Blocks.SMOOTH_SANDSTONE.getDefaultState());
 			registry.setBlockState("structure_primary_decorative", Blocks.CHISELED_SANDSTONE.getDefaultState());
 			registry.setBlockState("structure_primary_stairs", Blocks.SANDSTONE_STAIRS.getDefaultState());
 			registry.setBlockState("village_path", Blocks.RED_SAND.getDefaultState());
 		} else
 		{
+			registry.setGroundState(Blocks.RED_SANDSTONE.getDefaultState(), MSFillerBlockTypes.RED_SANDSTONE);
 			registry.setBlockState("upper", Blocks.RED_SAND.getDefaultState());
-			registry.setBlockState("ground", Blocks.RED_SANDSTONE.getDefaultState());
 			registry.setBlockState("structure_primary", Blocks.SMOOTH_RED_SANDSTONE.getDefaultState());
 			registry.setBlockState("structure_primary_decorative", Blocks.CHISELED_RED_SANDSTONE.getDefaultState());
 			registry.setBlockState("structure_primary_stairs", Blocks.RED_SANDSTONE_STAIRS.getDefaultState());
@@ -95,6 +106,22 @@ public class SandLandAspect extends TerrainLandAspect
 	}
 	
 	@Override
+	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
+	{
+		
+		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.DISK, new SphereReplaceConfig(blocks.getBlockState("upper"), 7, 2, Lists.newArrayList(blocks.getBlockState("ground"))), Placement.COUNT_TOP_SOLID, new FrequencyConfig(8)));
+		if(type != Variant.RED_SAND)
+		{
+			biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(blocks.getGroundType(), MSBlocks.SANDSTONE_IRON_ORE.getDefaultState(), 9), Placement.COUNT_RANGE, new CountRangeConfig(24, 0, 0, 64)));
+			biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(blocks.getGroundType(), MSBlocks.SANDSTONE_GOLD_ORE.getDefaultState(), 9), Placement.COUNT_RANGE, new CountRangeConfig(6, 0, 0, 32)));
+		} else
+		{
+			biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(blocks.getGroundType(), MSBlocks.RED_SANDSTONE_IRON_ORE.getDefaultState(), 9), Placement.COUNT_RANGE, new CountRangeConfig(24, 0, 0, 64)));
+			biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(blocks.getGroundType(), MSBlocks.RED_SANDSTONE_GOLD_ORE.getDefaultState(), 9), Placement.COUNT_RANGE, new CountRangeConfig(6, 0, 0, 32)));
+		}
+	}
+	
+	@Override
 	public List<ILandDecorator> getDecorators()
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
@@ -117,10 +144,6 @@ public class SandLandAspect extends TerrainLandAspect
 			list.add(new SurfaceMushroomGenerator(MinestuckBlocks.bloomingCactus, true, 5, 32, BiomeMinestuck.mediumRough));
 		}
 		list.add(new OasisDecorator(BiomeMinestuck.mediumNormal));
-		
-		list.add(new UndergroundDecoratorVein(Blocks.SAND.getDefaultState().withProperty(BlockSand.VARIANT, type == Variant.SAND_RED?BlockSand.EnumType.RED_SAND:BlockSand.EnumType.SAND), 8, 28, 256));
-		list.add(new UndergroundDecoratorVein((type == Variant.SAND_RED?MinestuckBlocks.ironOreSandstoneRed:MinestuckBlocks.ironOreSandstone).getDefaultState(), 24, 9, 64));
-		list.add(new UndergroundDecoratorVein((type == Variant.SAND_RED?MinestuckBlocks.goldOreSandstoneRed:MinestuckBlocks.goldOreSandstone).getDefaultState(), 6, 9, 32));
 		*/
 		return list;
 	}
