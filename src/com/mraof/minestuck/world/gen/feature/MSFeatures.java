@@ -25,6 +25,7 @@ public class MSFeatures
 	public static final Feature<NoFeatureConfig> FIRE_FIELD = getNull();
 	public static final Feature<BushConfig> PILLAR = getNull();
 	public static final Feature<BushConfig> LARGE_PILLAR = getNull();
+	public static final Feature<NoFeatureConfig> SMALL_LIBRARY = getNull();
 	
 	@Nonnull
 	@SuppressWarnings("ConstantConditions")
@@ -44,5 +45,6 @@ public class MSFeatures
 		registry.register(new FireFieldFeature(NoFeatureConfig::deserialize).setRegistryName("fire_field"));
 		registry.register(new PillarFeature(BushConfig::deserialize, false).setRegistryName("pillar"));
 		registry.register(new PillarFeature(BushConfig::deserialize, true).setRegistryName("large_pillar"));
+		registry.register(new SmallLibraryFeature(NoFeatureConfig::deserialize).setRegistryName("small_library"));
 	}
 }

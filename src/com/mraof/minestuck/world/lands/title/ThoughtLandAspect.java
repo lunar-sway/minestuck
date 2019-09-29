@@ -2,16 +2,21 @@ package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.util.EnumAspect;
+import com.mraof.minestuck.world.biome.LandWrapperBiome;
+import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.lands.LandDimension;
 import com.mraof.minestuck.world.biome.MSBiomes;
-import com.mraof.minestuck.world.lands.decorator.structure.SmallLibraryDecorator;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.gen.LandGenSettings;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.gen.placement.ChanceConfig;
+import net.minecraft.world.gen.placement.Placement;
 
 public class ThoughtLandAspect extends TitleLandAspect
 {
@@ -47,13 +52,13 @@ public class ThoughtLandAspect extends TitleLandAspect
 		settings.oceanChance = Math.max(settings.oceanChance, 0.2F);
 	}
 	
-	//@Override
-	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
+	@Override
+	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{
-		
-		
-		chunkProvider.decorators.add(new SmallLibraryDecorator(MSBiomes.mediumNormal));
-		//chunkProvider.sortDecorators();
+		if(biome.staticBiome == MSBiomes.LAND_NORMAL)
+		{
+			biome.addFeature(GenerationStage.Decoration.UNDERGROUND_DECORATION, Biome.createDecoratedFeature(MSFeatures.SMALL_LIBRARY, IFeatureConfig.NO_FEATURE_CONFIG, Placement.CHANCE_PASSTHROUGH, new ChanceConfig(64)));
+		}
 	}
 	
 	@Override
@@ -63,5 +68,4 @@ public class ThoughtLandAspect extends TitleLandAspect
 		aspect.registerBlocks(registry);
 		return registry.getBlockState("ocean").getMaterial() != Material.LAVA;
 	}
-	
 }

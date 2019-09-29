@@ -37,7 +37,6 @@ public class WoodLandAspect extends TerrainLandAspect
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("ground", Blocks.STONE.getDefaultState());
 		registry.setBlockState("upper", Blocks.OAK_LOG.getDefaultState());
 		registry.setBlockState("surface", MSBlocks.TREATED_PLANKS.getDefaultState());
 		registry.setBlockState("structure_primary", Blocks.JUNGLE_WOOD.getDefaultState());

@@ -41,7 +41,6 @@ public class RainbowLandAspect extends TerrainLandAspect
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("ground", Blocks.STONE.getDefaultState());
 		registry.setBlockState("upper", Blocks.WHITE_TERRACOTTA.getDefaultState());
 		registry.setBlockState("surface", Blocks.WHITE_WOOL.getDefaultState());
 		registry.setBlockState("ocean", MSBlocks.WATER_COLORS.getDefaultState());
