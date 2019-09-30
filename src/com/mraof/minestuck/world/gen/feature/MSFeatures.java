@@ -4,6 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import net.minecraft.world.gen.feature.BushConfig;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.gen.feature.ProbabilityConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -22,10 +23,14 @@ public class MSFeatures
 	
 	public static final Feature<NoFeatureConfig> RAINBOW_TREE = getNull();
 	public static final Feature<NoFeatureConfig> END_TREE =	 getNull();
+	
 	public static final Feature<NoFeatureConfig> FIRE_FIELD = getNull();
 	public static final Feature<BushConfig> PILLAR = getNull();
 	public static final Feature<BushConfig> LARGE_PILLAR = getNull();
+	public static final Feature<ProbabilityConfig> CAKE = getNull();
+	
 	public static final Feature<NoFeatureConfig> SMALL_LIBRARY = getNull();
+	public static final Feature<NoFeatureConfig> CAKE_PEDESTAL = getNull();
 	
 	@Nonnull
 	@SuppressWarnings("ConstantConditions")
@@ -35,7 +40,6 @@ public class MSFeatures
 	}
 	
 	@SubscribeEvent
-	@SuppressWarnings("unused")
 	public static void registerFeatures(RegistryEvent.Register<Feature<?>> event)
 	{
 		IForgeRegistry<Feature<?>> registry = event.getRegistry();
@@ -45,6 +49,8 @@ public class MSFeatures
 		registry.register(new FireFieldFeature(NoFeatureConfig::deserialize).setRegistryName("fire_field"));
 		registry.register(new PillarFeature(BushConfig::deserialize, false).setRegistryName("pillar"));
 		registry.register(new PillarFeature(BushConfig::deserialize, true).setRegistryName("large_pillar"));
+		registry.register(new CakeFeature(ProbabilityConfig::deserialize).setRegistryName("cake"));
 		registry.register(new SmallLibraryFeature(NoFeatureConfig::deserialize).setRegistryName("small_library"));
+		registry.register(new CakePedestalFeature(NoFeatureConfig::deserialize).setRegistryName("cake_pedestal"));
 	}
 }

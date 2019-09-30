@@ -1,20 +1,18 @@
 package com.mraof.minestuck.world.lands.title;
 
-import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.util.EnumAspect;
+import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.biome.MSBiomes;
-import com.mraof.minestuck.world.lands.decorator.SingleBlockDecorator;
-import com.mraof.minestuck.world.lands.decorator.structure.CakePedestalDecorator;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
-import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.CakeBlock;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
-
-import java.util.Random;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.gen.feature.ProbabilityConfig;
+import net.minecraft.world.gen.placement.ChanceConfig;
+import net.minecraft.world.gen.placement.Placement;
+import net.minecraft.world.gen.placement.TopSolidRangeConfig;
 
 public class CakeLandAspect extends TitleLandAspect
 {
@@ -36,58 +34,14 @@ public class CakeLandAspect extends TitleLandAspect
 		registry.setBlockState("carpet", Blocks.MAGENTA_CARPET.getDefaultState());
 	}
 	
-	//@Override
-	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
+	@Override
+	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{
-		chunkProvider.decorators.add(new CakeDecorator(chunkProvider.temperature));
-		chunkProvider.decorators.add(new CakePedestalDecorator(MSBiomes.mediumNormal, MSBiomes.mediumRough));
-		//chunkProvider.sortDecorators();
-	}
-	
-	private static class CakeDecorator extends SingleBlockDecorator
-	{
-		public float redCakeChance;
-		public CakeDecorator(float temperature)
+		if(biome.staticBiome != MSBiomes.LAND_OCEAN)
 		{
-			redCakeChance = MathHelper.clamp(temperature/2, 0, 1);
+			biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, Biome.createDecoratedFeature(MSFeatures.CAKE_PEDESTAL, IFeatureConfig.NO_FEATURE_CONFIG, Placement.CHANCE_PASSTHROUGH, new ChanceConfig(100)));
 		}
 		
-		@Override
-		public BlockState pickBlock(Random random)
-		{
-			int bites = Math.max(0, (int) (random.nextDouble()*10) - 6);
-			float f = random.nextFloat();
-			if(f < 0.1F)
-			{
-				if(random.nextFloat() < redCakeChance)
-					return (f < 0.05F ? MSBlocks.RED_CAKE : MSBlocks.HOT_CAKE).getDefaultState().with(CakeBlock.BITES, bites);
-				else return (f < 0.05F ? MSBlocks.BLUE_CAKE : MSBlocks.COLD_CAKE).getDefaultState().with(CakeBlock.BITES, bites);
-			}
-			else if(f < 0.4F)
-				return MSBlocks.APPLE_CAKE.getDefaultState().with(CakeBlock.BITES, bites);
-			else if(random.nextFloat() < 0.01)
-				return MSBlocks.REVERSE_CAKE.getDefaultState().with(CakeBlock.BITES, bites);
-			else
-				return Blocks.CAKE.getDefaultState().with(CakeBlock.BITES, bites);
-		}
-		
-		@Override
-		public int getCount(Random random)
-		{
-			if(random.nextDouble() < 0.2)
-			{
-				int blocks = 0;
-				for(int i = 0; i < 10; i++)
-					if(random.nextBoolean())
-						blocks++;
-				return blocks;
-			}
-			return 0;
-		}
-		@Override
-		public boolean canPlace(BlockPos pos, World world)
-		{//TODO
-			return true;//Blocks.CAKE.canPlaceBlockAt(world, pos) && !world.getBlockState(pos).getMaterial().isLiquid() && world.getBlockState(pos).getBlock().isReplaceable(world, pos);
-		}
+		biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(MSFeatures.CAKE, new ProbabilityConfig(biome.getDefaultTemperature()/2), Placement.TOP_SOLID_HEIGHTMAP_RANGE, new TopSolidRangeConfig(0, 5)));
 	}
 }
