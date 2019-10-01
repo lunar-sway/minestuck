@@ -25,12 +25,14 @@ public class MSFeatures
 	public static final Feature<NoFeatureConfig> END_TREE =	 getNull();
 	
 	public static final Feature<NoFeatureConfig> FIRE_FIELD = getNull();
-	public static final Feature<BushConfig> PILLAR = getNull();
-	public static final Feature<BushConfig> LARGE_PILLAR = getNull();
 	public static final Feature<ProbabilityConfig> CAKE = getNull();
 	
+	public static final Feature<BushConfig> PILLAR = getNull();
+	public static final Feature<BushConfig> LARGE_PILLAR = getNull();
 	public static final Feature<NoFeatureConfig> SMALL_LIBRARY = getNull();
 	public static final Feature<NoFeatureConfig> CAKE_PEDESTAL = getNull();
+	public static final Feature<NoFeatureConfig> COG = getNull();
+	public static final Feature<NoFeatureConfig> FLOOR_COG = getNull();
 	
 	@Nonnull
 	@SuppressWarnings("ConstantConditions")
@@ -52,5 +54,7 @@ public class MSFeatures
 		registry.register(new CakeFeature(ProbabilityConfig::deserialize).setRegistryName("cake"));
 		registry.register(new SmallLibraryFeature(NoFeatureConfig::deserialize).setRegistryName("small_library"));
 		registry.register(new CakePedestalFeature(NoFeatureConfig::deserialize).setRegistryName("cake_pedestal"));
+		registry.register(new CogFeature(NoFeatureConfig::deserialize).setRegistryName("cog"));
+		registry.register(new FloorCogFeature(NoFeatureConfig::deserialize).setRegistryName("floor_cog"));
 	}
 }

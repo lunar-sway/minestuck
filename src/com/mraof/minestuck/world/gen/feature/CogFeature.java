@@ -7,7 +7,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationSettings;
@@ -22,13 +21,15 @@ import net.minecraft.world.server.ServerWorld;
 import java.util.Random;
 import java.util.function.Function;
 
-public class SmallLibraryFeature extends Feature<NoFeatureConfig>
+public class CogFeature extends Feature<NoFeatureConfig>
 {
-	private static final ResourceLocation STRUCTURE_SMALL_LIBRARY = new ResourceLocation(Minestuck.MOD_ID, "small_library");
+	private static final ResourceLocation STRUCTURE_SMALL_COG = new ResourceLocation(Minestuck.MOD_ID, "small_cog");
+	private static final ResourceLocation STRUCTURE_LARGE_COG_1 = new ResourceLocation(Minestuck.MOD_ID, "large_cog_1");
+	private static final ResourceLocation STRUCTURE_LARGE_COG_2 = new ResourceLocation(Minestuck.MOD_ID, "large_cog_2");
 	
-	public SmallLibraryFeature(Function<Dynamic<?>, ? extends NoFeatureConfig> deserialize)
+	public CogFeature(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn)
 	{
-		super(deserialize);
+		super(configFactoryIn);
 	}
 	
 	@Override
@@ -36,35 +37,25 @@ public class SmallLibraryFeature extends Feature<NoFeatureConfig>
 	{
 		Rotation rotation = Rotation.randomRotation(rand);
 		TemplateManager templates = ((ServerWorld) worldIn.getWorld()).getSaveHandler().getStructureTemplateManager();
-		Template template = templates.getTemplateDefaulted(STRUCTURE_SMALL_LIBRARY);
+		Template template;
+		boolean big = rand.nextInt(10) == 0;
+		if(big)
+			template = templates.getTemplateDefaulted(rand.nextBoolean() ? STRUCTURE_LARGE_COG_1 : STRUCTURE_LARGE_COG_2);
+		else template = templates.getTemplateDefaulted(STRUCTURE_SMALL_COG);
 		
 		PlacementSettings settings = new PlacementSettings().setRotation(rotation).setChunk(new ChunkPos(pos)).setRandom(rand).addProcessor(StructureBlockRegistryProcessor.INSTANCE);
 		
 		BlockPos size = template.transformedSize(rotation);
 		int xOffset = rand.nextInt(16 - size.getX()), zOffset = rand.nextInt(16 - size.getZ());
-		int minX = template.getSize().getX()/2 - 1, maxX = template.getSize().getX()/2 + 1, z1 = 0, z2 = template.getSize().getZ();
-		MutableBoundingBox door1, door2;
-		if(rotation == Rotation.NONE || rotation == Rotation.CLOCKWISE_180)
+		
+		int yMin = Integer.MAX_VALUE;
+		for(BlockPos floorPos : BlockPos.getAllInBoxMutable(0, 0, 0, size.getX(), 0, size.getZ()))
 		{
-			door1 = new MutableBoundingBox(minX, 0, z1, maxX, 0, z1);
-			door2 = new MutableBoundingBox(minX, 0, z2, maxX, 0, z2);
-		} else
-		{
-			door1 = new MutableBoundingBox(z1, 0, minX, z1, 0, maxX);
-			door2 = new MutableBoundingBox(z2, 0, minX, z2, 0, maxX);
+			int y = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, pos.getX() + floorPos.getX() + xOffset, pos.getZ() + floorPos.getZ() + zOffset);
+			yMin = Math.min(yMin, y);
 		}
 		
-		int y1 = 0;
-		for(BlockPos doorPos : BlockPos.getAllInBoxMutable(door1.minX, 0, door1.minZ, door1.maxX, 0, door1.maxZ))
-		{
-			y1 = Math.max(y1, worldIn.getHeight(Heightmap.Type.OCEAN_FLOOR_WG, pos.getX() + doorPos.getX() + xOffset, pos.getZ() + doorPos.getZ() + zOffset));
-		}
-		int y2 = 0;
-		for(BlockPos doorPos : BlockPos.getAllInBoxMutable(door2.minX, 0, door2.minZ, door2.maxX, 0, door2.maxZ))
-		{
-			y2 = Math.max(y2, worldIn.getHeight(Heightmap.Type.OCEAN_FLOOR_WG, pos.getX() + doorPos.getX() + xOffset, pos.getZ() + doorPos.getZ() + zOffset));
-		}
-		int y = Math.min(y1, y2) - 1;
+		int y = Math.max(0, yMin - rand.nextInt(big ? 4 : 3));
 		
 		BlockPos structurePos = template.getZeroPositionWithTransform(new BlockPos(pos.getX() + xOffset, y, pos.getZ() + zOffset), Mirror.NONE, rotation);
 		template.addBlocksToWorld(worldIn, structurePos, settings);
