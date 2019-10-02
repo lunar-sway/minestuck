@@ -8,10 +8,9 @@ import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.biome.MSBiomes;
-import com.mraof.minestuck.world.lands.decorator.BlockBlobDecorator;
+import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.LeaflessTreeDecorator;
-import com.mraof.minestuck.world.lands.decorator.SurfaceMushroomGenerator;
 import com.mraof.minestuck.world.lands.gen.LandGenSettings;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.Blocks;
@@ -20,12 +19,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.OreFeatureConfig;
-import net.minecraft.world.gen.feature.SphereReplaceConfig;
-import net.minecraft.world.gen.placement.CountRangeConfig;
-import net.minecraft.world.gen.placement.FrequencyConfig;
-import net.minecraft.world.gen.placement.Placement;
+import net.minecraft.world.gen.feature.*;
+import net.minecraft.world.gen.placement.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,6 +89,34 @@ public class RockLandAspect extends TerrainLandAspect
 			biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.DISK, new SphereReplaceConfig(Blocks.CLAY.getDefaultState(), 6, 2, Lists.newArrayList(blocks.getBlockState("ocean_surface"), Blocks.CLAY.getDefaultState())), Placement.COUNT_TOP_SOLID, new FrequencyConfig(25)));
 		}
 		
+		if(biome.staticBiome == MSBiomes.LAND_NORMAL)
+		{
+			if(type == Variant.ROCK)
+			{
+				biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(MSFeatures.BLOCK_BLOB, new BlockBlobConfig(Blocks.COBBLESTONE.getDefaultState(), 0), Placement.COUNT_EXTRA_HEIGHTMAP, new AtSurfaceWithExtraConfig(3, 0.1F, 2)));
+				biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Feature.BUSH, new BushConfig(MSBlocks.PETRIFIED_GRASS.getDefaultState()), Placement.CHANCE_HEIGHTMAP_DOUBLE, new ChanceConfig(3)));
+			} else if(type == Variant.PETRIFICATION)
+			{
+				biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(MSFeatures.BLOCK_BLOB, new BlockBlobConfig(Blocks.COBBLESTONE.getDefaultState(), 0), Placement.COUNT_EXTRA_HEIGHTMAP, new AtSurfaceWithExtraConfig(1, 0.1F, 1)));
+				biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Feature.BUSH, new BushConfig(MSBlocks.PETRIFIED_GRASS.getDefaultState()), Placement.CHANCE_HEIGHTMAP_DOUBLE, new ChanceConfig(2)));
+				biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Feature.BUSH, new BushConfig(MSBlocks.PETRIFIED_POPPY.getDefaultState()), Placement.CHANCE_HEIGHTMAP_DOUBLE, new ChanceConfig(4)));
+			}
+		}
+		
+		if(biome.staticBiome == MSBiomes.LAND_ROUGH)
+		{
+			if(type == Variant.ROCK)
+			{
+				biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(MSFeatures.BLOCK_BLOB, new BlockBlobConfig(Blocks.COBBLESTONE.getDefaultState(), 1), Placement.COUNT_EXTRA_HEIGHTMAP, new AtSurfaceWithExtraConfig(4, 0.1F, 2)));
+				biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Feature.BUSH, new BushConfig(MSBlocks.PETRIFIED_GRASS.getDefaultState()), Placement.CHANCE_HEIGHTMAP_DOUBLE, new ChanceConfig(4)));
+			} else if(type == Variant.PETRIFICATION)
+			{
+				biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(MSFeatures.BLOCK_BLOB, new BlockBlobConfig(Blocks.COBBLESTONE.getDefaultState(), 1), Placement.COUNT_EXTRA_HEIGHTMAP, new AtSurfaceWithExtraConfig(2, 0.1F, 1)));
+				biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Feature.BUSH, new BushConfig(MSBlocks.PETRIFIED_GRASS.getDefaultState()), Placement.COUNT_TOP_SOLID, new FrequencyConfig(1)));
+				biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Feature.BUSH, new BushConfig(MSBlocks.PETRIFIED_POPPY.getDefaultState()), Placement.CHANCE_HEIGHTMAP_DOUBLE, new ChanceConfig(8)));
+			}
+		}
+		
 		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(blocks.getGroundType(), Blocks.GRAVEL.getDefaultState(), 33), Placement.COUNT_RANGE, new CountRangeConfig(10, 0, 0, 256)));
 		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(blocks.getGroundType(), Blocks.INFESTED_STONE.getDefaultState(), 9), Placement.COUNT_RANGE, new CountRangeConfig(7, 0, 0, 64)));
 		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(blocks.getGroundType(), Blocks.COAL_ORE.getDefaultState(), 17), Placement.COUNT_RANGE, new CountRangeConfig(20, 0, 0, 128)));
@@ -110,19 +133,9 @@ public class RockLandAspect extends TerrainLandAspect
 	{
 		List<ILandDecorator> list = new ArrayList<ILandDecorator>();
 		
-		list.add(new BlockBlobDecorator(Blocks.COBBLESTONE.getDefaultState(), 0, 3, MSBiomes.mediumNormal));
-		list.add(new BlockBlobDecorator(Blocks.COBBLESTONE.getDefaultState(), 1, 4, MSBiomes.mediumRough));
 		if(type == Variant.ROCK) {
-			list.add(new SurfaceMushroomGenerator(MSBlocks.PETRIFIED_GRASS, true, 25, 32, MSBiomes.mediumRough));
-			list.add(new SurfaceMushroomGenerator(MSBlocks.PETRIFIED_GRASS, true, 10, 48, MSBiomes.mediumNormal));
 			list.add(new LeaflessTreeDecorator(MSBlocks.PETRIFIED_LOG.getDefaultState(), 0.05F, MSBiomes.mediumRough));
-			list.add(new BlockBlobDecorator(Blocks.COBBLESTONE.getDefaultState(), 0, 3, MSBiomes.mediumNormal));
-			list.add(new BlockBlobDecorator(Blocks.COBBLESTONE.getDefaultState(), 1, 4, MSBiomes.mediumRough));
 		} else {
-			list.add(new SurfaceMushroomGenerator(MSBlocks.PETRIFIED_POPPY, true, 10, 25, MSBiomes.mediumNormal));
-			list.add(new SurfaceMushroomGenerator(MSBlocks.PETRIFIED_POPPY, true, 5, 25, MSBiomes.mediumRough));
-			list.add(new SurfaceMushroomGenerator(MSBlocks.PETRIFIED_GRASS, true, 35, 35, MSBiomes.mediumNormal));
-			list.add(new SurfaceMushroomGenerator(MSBlocks.PETRIFIED_GRASS, true, 55, 55, MSBiomes.mediumRough));
 			list.add(new LeaflessTreeDecorator(MSBlocks.PETRIFIED_LOG.getDefaultState(), 0.1F, MSBiomes.mediumNormal));
 			list.add(new LeaflessTreeDecorator(MSBlocks.PETRIFIED_LOG.getDefaultState(), 2.5F, MSBiomes.mediumRough));
 		}

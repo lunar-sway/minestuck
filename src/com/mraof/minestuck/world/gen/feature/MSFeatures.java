@@ -1,10 +1,7 @@
 package com.mraof.minestuck.world.gen.feature;
 
 import com.mraof.minestuck.Minestuck;
-import net.minecraft.world.gen.feature.BushConfig;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.ProbabilityConfig;
+import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -26,9 +23,10 @@ public class MSFeatures
 	
 	public static final Feature<NoFeatureConfig> FIRE_FIELD = getNull();
 	public static final Feature<ProbabilityConfig> CAKE = getNull();
-	
 	public static final Feature<BushConfig> PILLAR = getNull();
 	public static final Feature<BushConfig> LARGE_PILLAR = getNull();
+	public static final Feature<BlockBlobConfig> BLOCK_BLOB = getNull();
+	
 	public static final Feature<NoFeatureConfig> SMALL_LIBRARY = getNull();
 	public static final Feature<NoFeatureConfig> CAKE_PEDESTAL = getNull();
 	public static final Feature<NoFeatureConfig> COG = getNull();
@@ -48,10 +46,13 @@ public class MSFeatures
 		
 		registry.register(new RainbowTreeFeature(NoFeatureConfig::deserialize, false).setRegistryName("rainbow_tree"));
 		registry.register(new EndTreeFeature(NoFeatureConfig::deserialize, false).setRegistryName("end_tree"));
+		
 		registry.register(new FireFieldFeature(NoFeatureConfig::deserialize).setRegistryName("fire_field"));
+		registry.register(new CakeFeature(ProbabilityConfig::deserialize).setRegistryName("cake"));
 		registry.register(new PillarFeature(BushConfig::deserialize, false).setRegistryName("pillar"));
 		registry.register(new PillarFeature(BushConfig::deserialize, true).setRegistryName("large_pillar"));
-		registry.register(new CakeFeature(ProbabilityConfig::deserialize).setRegistryName("cake"));
+		registry.register(new ConditionFreeBlobFeature(BlockBlobConfig::deserialize).setRegistryName("block_blob"));
+		
 		registry.register(new SmallLibraryFeature(NoFeatureConfig::deserialize).setRegistryName("small_library"));
 		registry.register(new CakePedestalFeature(NoFeatureConfig::deserialize).setRegistryName("cake_pedestal"));
 		registry.register(new CogFeature(NoFeatureConfig::deserialize).setRegistryName("cog"));

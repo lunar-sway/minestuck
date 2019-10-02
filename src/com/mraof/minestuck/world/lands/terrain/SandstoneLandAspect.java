@@ -1,11 +1,13 @@
 package com.mraof.minestuck.world.lands.terrain;
 
+import com.google.common.collect.Lists;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.biome.MSBiomes;
+import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.lands.gen.LandGenSettings;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.*;
@@ -14,10 +16,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.BlockBlobConfig;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.IFeatureConfig;
-import net.minecraft.world.gen.feature.OreFeatureConfig;
+import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.placement.CountRangeConfig;
 import net.minecraft.world.gen.placement.FrequencyConfig;
 import net.minecraft.world.gen.placement.Placement;
@@ -97,26 +96,24 @@ public class SandstoneLandAspect extends TerrainLandAspect
 	}
 	
 	@Override
-	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blockRegistry)
+	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{
-		BlockState sand = blockRegistry.getBlockState("sand");
-		BlockState sandstone = blockRegistry.getBlockState("upper");
+		BlockState sand = blocks.getBlockState("sand");
+		BlockState sandstone = blocks.getBlockState("upper");
 		
 		if(biome.staticBiome != MSBiomes.LAND_OCEAN)
 		{
-			//TODO We need to be able to replace the surface
-			//biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(null, sand, 32), Placement.COUNT_RANGE, new CountRangeConfig(10, 0, 0, 256)));
 			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Feature.DEAD_BUSH, IFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_HEIGHTMAP_DOUBLE, new FrequencyConfig(15)));
+			biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.DISK, new SphereReplaceConfig(sand, 7, 2, Lists.newArrayList(blocks.getBlockState("surface"), blocks.getBlockState("upper"))), Placement.COUNT_TOP_SOLID, new FrequencyConfig(4)));
 		}
 		
 		
 		if(biome.staticBiome == MSBiomes.LAND_NORMAL)
 		{
-			//TODO Forest rocks has checks that prevent it from being placed on most blocks, causing it to not appear in this land
-			biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(Feature.FOREST_ROCK, new BlockBlobConfig(sandstone, 0), Placement.FOREST_ROCK, new FrequencyConfig(3)));
+			biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(MSFeatures.BLOCK_BLOB, new BlockBlobConfig(sandstone, 0), Placement.FOREST_ROCK, new FrequencyConfig(3)));
 		} else if(biome.staticBiome == MSBiomes.LAND_ROUGH)
 		{
-			biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(Feature.FOREST_ROCK, new BlockBlobConfig(sandstone, 0), Placement.FOREST_ROCK, new FrequencyConfig(5)));
+			biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(MSFeatures.BLOCK_BLOB, new BlockBlobConfig(sandstone, 0), Placement.FOREST_ROCK, new FrequencyConfig(5)));
 		}
 		
 		biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, sandstone, 28), Placement.COUNT_RANGE, new CountRangeConfig(8, 0, 0, 256)));
