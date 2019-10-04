@@ -4,7 +4,7 @@ import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.lands.LandAspects;
 import com.mraof.minestuck.world.lands.LandDimension;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import com.mraof.minestuck.world.lands.gen.LandGenSettings;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import net.minecraft.block.Blocks;
@@ -45,10 +45,10 @@ public class ThunderLandAspect extends TitleLandAspect
 		settings.downfall += 0.1F;
 	}
 	
-	//@Override
-	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
+	@Override
+	public void setGenSettings(LandGenSettings settings)
 	{
-		chunkProvider.oceanChance = Math.min(Math.max(0.5F, chunkProvider.oceanChance), chunkProvider.oceanChance*1.2F);
+		settings.oceanChance = Math.min(Math.max(0.5F, settings.oceanChance), settings.oceanChance*1.2F);	//Increase ocean chance by a factor 1.2, but not higher than to 0.5F
 	}
 	
 	@Override
@@ -57,5 +57,4 @@ public class ThunderLandAspect extends TitleLandAspect
 		LandBiomeHolder biomeSettings = new LandBiomeHolder(new LandAspects(aspect, this), true);
 		return biomeSettings.rainType != Biome.RainType.SNOW;
 	}
-	
 }

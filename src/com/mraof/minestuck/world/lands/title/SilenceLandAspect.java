@@ -1,11 +1,11 @@
 package com.mraof.minestuck.world.lands.title;
 
+import com.google.common.collect.Lists;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
+import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.lands.LandAspects;
 import com.mraof.minestuck.world.lands.LandDimension;
-import com.mraof.minestuck.world.lands.decorator.SingleBlockDecorator;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import net.minecraft.block.BlockState;
@@ -14,6 +14,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.feature.BlockWithContextConfig;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.placement.ChanceConfig;
+import net.minecraft.world.gen.placement.Placement;
 
 import java.util.Random;
 
@@ -41,16 +46,16 @@ public class SilenceLandAspect extends TitleLandAspect
 	}
 	
 	@Override
+	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
+	{
+		biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(Feature.SIMPLE_BLOCK, new BlockWithContextConfig(Blocks.PUMPKIN.getDefaultState(), Lists.newArrayList(blocks.getBlockState("surface")), Lists.newArrayList(Blocks.AIR.getDefaultState()), Lists.newArrayList(Blocks.AIR.getDefaultState())), Placement.CHANCE_HEIGHTMAP, new ChanceConfig(128)));
+	}
+	
+	@Override
 	public void prepareWorldProvider(LandDimension worldProvider)
 	{
 		worldProvider.skylightBase = Math.min(1/2F, worldProvider.skylightBase);
 		worldProvider.mergeFogColor(new Vec3d(0, 0, 0.1), 0.5F);
-	}
-	
-	//@Override
-	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
-	{
-		chunkProvider.decorators.add(new PumpkinDecorator());
 	}
 	
 	@Override
@@ -58,24 +63,5 @@ public class SilenceLandAspect extends TitleLandAspect
 	{
 		LandBiomeHolder biomeSettings = new LandBiomeHolder(new LandAspects(aspect, this), true);
 		return biomeSettings.rainType != Biome.RainType.RAIN; //snow is quiet, rain is noisy
-	}
-	
-	private static class PumpkinDecorator extends SingleBlockDecorator
-	{
-		@Override
-		public BlockState pickBlock(Random random)
-		{
-			return Blocks.PUMPKIN.getDefaultState();//.with(BlockPumpkin.FACING, EnumFacing.Plane.HORIZONTAL.random(random));
-		}
-		@Override
-		public int getCount(Random random)
-		{
-			return random.nextFloat() < 0.01 ? 1 : 0;
-		}
-		@Override
-		public boolean canPlace(BlockPos pos, World world)
-		{
-			return !world.getBlockState(pos.down()).getMaterial().isLiquid();
-		}
 	}
 }

@@ -2,9 +2,15 @@ package com.mraof.minestuck.world.lands.structure.blocks;
 
 import java.util.Random;
 
+import net.minecraft.block.Blocks;
+import net.minecraft.block.ChestBlock;
+import net.minecraft.tileentity.ChestTileEntity;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.WeightedSpawnerEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 public class StructureBlockUtil
@@ -35,20 +41,19 @@ public class StructureBlockUtil
 		}
 		return false;
 	}
-	
-	public static boolean placeLootChest(BlockPos pos, World world, StructureBoundingBox bb, EnumFacing facing, ResourceLocation lootTable, Random rand)
+	*/
+	public static void placeLootChest(BlockPos pos, IWorld world, MutableBoundingBox bb, Direction direction, ResourceLocation lootTable, Random rand)
 	{
 		if(bb == null || bb.isVecInside(pos))
 		{
-			world.setBlockState(pos, Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, facing), 2);
+			world.setBlockState(pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, direction), 2);
 			
 			TileEntity te = world.getTileEntity(pos);
-			if(te instanceof TileEntityChest)
+			if(te instanceof ChestTileEntity)
 			{
-				TileEntityChest chest = (TileEntityChest) te;
+				ChestTileEntity chest = (ChestTileEntity) te;
 				chest.setLootTable(lootTable, rand.nextLong());
 			}
 		}
-		return false;
-	}*/
+	}
 }
