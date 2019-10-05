@@ -1120,9 +1120,8 @@
   "land.monster": "Monsters",
   "land.tower": "Towers",
 
-  "land.message.format": "Land of %s and %s",
-  "land.message.entry": "Welcome to Land of %s and %s.",
-  "land.message.check": "You are currently in Land of %s and %s.",
+  "land.message.entry": "Welcome to %s.",
+  "land.message.check": "You are currently in %s.",
   "land.message.checkFail": "You are currently not in a land dimension.",
 
   "minestuck.config.title": "Minestuck Configuration",

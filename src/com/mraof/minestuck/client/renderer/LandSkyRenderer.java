@@ -242,8 +242,8 @@ public class LandSkyRenderer implements IRenderHandler
 			return null;
 		
 		int index = random.nextInt(3);
-		ResourceLocation terrainName = Objects.requireNonNull(aspects.aspectTerrain.getRegistryName());
-		ResourceLocation titleName = Objects.requireNonNull(aspects.aspectTitle.getRegistryName());
+		ResourceLocation terrainName = Objects.requireNonNull(aspects.terrain.getRegistryName());
+		ResourceLocation titleName = Objects.requireNonNull(aspects.title.getRegistryName());
 		ResourceLocation terrain = new ResourceLocation(terrainName.getNamespace(), "textures/environment/planets/planet_"+terrainName.getPath()+"_"+index+".png");
 		ResourceLocation title = new ResourceLocation(titleName.getNamespace(), "textures/environment/overlays/overlay_"+titleName.getPath()+"_"+index+".png");
 		return new ResourceLocation[] {terrain, title};

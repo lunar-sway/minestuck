@@ -19,8 +19,8 @@ public class LandBiomeHolder
 	public LandBiomeHolder(LandAspects landAspects, boolean isFake)
 	{
 		this.landAspects = landAspects;
-		this.landAspects.aspectTerrain.setBiomeSettings(this);
-		this.landAspects.aspectTitle.setBiomeSettings(this);
+		this.landAspects.terrain.setBiomeSettings(this);
+		this.landAspects.title.setBiomeSettings(this);
 		
 		if(!isFake)
 		{
@@ -36,8 +36,8 @@ public class LandBiomeHolder
 		for(LandWrapperBiome biome : biomes)
 		{
 			biome.init(settings);
-			landAspects.aspectTerrain.setBiomeGenSettings(biome, settings.getBlockRegistry());
-			landAspects.aspectTitle.setBiomeGenSettings(biome, settings.getBlockRegistry());
+			landAspects.terrain.setBiomeGenSettings(biome, settings.getBlockRegistry());
+			landAspects.title.setBiomeGenSettings(biome, settings.getBlockRegistry());
 		}
 	}
 	

@@ -1,6 +1,7 @@
 package com.mraof.minestuck.world;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.world.lands.LandAspects;
 import com.mraof.minestuck.world.lands.LandDimension;
@@ -111,7 +112,13 @@ public class MSDimensions
 	
 	public static LandAspects getAspects(MinecraftServer server, DimensionType dimension)
 	{
-		return ((LandDimension) DimensionManager.getWorld(server, dimension, false, true).dimension).landAspects;
+		LandInfoContainer info = getLandInfo(server, dimension);
+		return info == null ? null : info.landAspects;
+	}
+	
+	public static LandInfoContainer getLandInfo(MinecraftServer server, DimensionType dimension)
+	{
+		return SkaianetHandler.get(server).landInfoForDimension(dimension);
 	}
 	
 	public static boolean isLandDimension(DimensionType dimension)

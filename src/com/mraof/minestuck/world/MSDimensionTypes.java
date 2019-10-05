@@ -15,7 +15,7 @@ import javax.annotation.Nonnull;
 public class MSDimensionTypes
 {
 	
-	public static final ModDimension LANDS = getNull();
+	public static final LandDimension.Type LANDS = getNull();
 	public static final ModDimension SKAIA = getNull();
 	
 	@Nonnull

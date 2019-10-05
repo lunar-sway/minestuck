@@ -24,7 +24,7 @@ public class CustomOreBlock extends OreBlock
 	}
 	
 	@Override
-	protected int func_220281_a(Random random)
+	protected int getExperience(Random random)
 	{
 		return MathHelper.nextInt(random, minExp, maxExp);
 	}

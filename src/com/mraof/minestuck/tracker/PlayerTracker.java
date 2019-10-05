@@ -13,6 +13,7 @@ import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandAspects;
+import com.mraof.minestuck.world.lands.LandInfoContainer;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -225,16 +226,10 @@ public class PlayerTracker
 	{
 		if(MSDimensions.isLandDimension(player.dimension))
 		{
-			LandAspects aspects = MSDimensions.getAspects(player.getServer(), player.dimension);
-			//ChunkProviderLands chunkProvider = (ChunkProviderLands) player.world.getDimension().createChunkGenerator(); //TODO Check out deprecation
-			ITextComponent aspect1 = new TranslationTextComponent("land."+aspects.aspectTerrain.getNames()[0]);
-			ITextComponent aspect2 = new TranslationTextComponent("land."+aspects.aspectTitle.getNames()[0]);
+			LandInfoContainer info = MSDimensions.getLandInfo(player.getServer(), player.dimension);
 			ITextComponent toSend;
-			/*if(chunkProvider.nameOrder)
-				toSend = new TextComponentTranslation("land.message.entry", aspect1, aspect2);
-			else*/ toSend = new TranslationTextComponent("land.message.entry", aspect2, aspect1);
+			toSend = new TranslationTextComponent("land.message.entry", info.landAsTextComponent());
 			player.sendMessage(toSend);
 		}
 	}
-	
 }

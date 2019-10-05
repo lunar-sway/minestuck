@@ -22,9 +22,9 @@ import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.LandAspects;
+import com.mraof.minestuck.world.lands.LandInfoContainer;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 
@@ -530,7 +530,7 @@ public class SburbHandler
 		if(dim == null)
 			return null;
 		for(SburbConnection c : SkaianetHandler.get(mcServer).connections)
-			if(c.clientHomeLand == dim)
+			if(c.getClientDimension() == dim)
 				return c;
 		return null;
 	}
@@ -581,11 +581,11 @@ public class SburbHandler
 		for(SburbConnection c : session.connections)
 			if(c != connection && c.clientHomeLand != null)
 			{
-				LandAspects aspects = MSDimensions.getAspects(mcServer, c.clientHomeLand);
-				if(aspects.aspectTitle == LandAspectRegistry.FROGS)
+				LandAspects aspects = c.clientHomeLand.landAspects;
+				if(aspects.title == LandAspectRegistry.FROGS)
 					frogs = true;
-				usedTitleAspects.add(aspects.aspectTitle);
-				usedTerrainAspects.add(aspects.aspectTerrain);
+				usedTitleAspects.add(aspects.title);
+				usedTerrainAspects.add(aspects.terrain);
 			}
 		for(PredefineData data : session.predefinedPlayers.values())
 		{
@@ -675,13 +675,14 @@ public class SburbHandler
 		
 	}
 	
-	static DimensionType enterMedium(MinecraftServer mcServer, SburbConnection c)
+	static LandInfoContainer enterMedium(MinecraftServer mcServer, SburbConnection c)
 	{
 		PlayerIdentifier identifier = c.getClientIdentifier();
 		
 		generateTitle(mcServer.getWorld(DimensionType.OVERWORLD), c.getClientIdentifier());
 		LandAspects aspects = genLandAspects(mcServer, c);		//This is where the Land dimension is actually registered, but it also needs the player's Title to be determined.
-		return LandAspectRegistry.createLand(mcServer, identifier, aspects);
+		DimensionType type = LandAspectRegistry.createLandType(mcServer, identifier, aspects);
+		return new LandInfoContainer(identifier, aspects, type, new Random());	//TODO Handle random better
 	}
 	
 	static void onGameEntered(MinecraftServer server, SburbConnection c)

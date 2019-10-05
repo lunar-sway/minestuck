@@ -54,8 +54,8 @@ public class LandAspectLootCondition implements ILootCondition
 		{
 			LandAspects aspects = ((LandDimension) world.dimension).landAspects;
 			
-			if(terrainAspects.contains(aspects.aspectTerrain) || titleAspects.contains(aspects.aspectTitle)
-					|| terrainGroups.contains(aspects.aspectTerrain.getGroup()) || titleGroups.contains(aspects.aspectTitle.getGroup()))
+			if(terrainAspects.contains(aspects.terrain) || titleAspects.contains(aspects.title)
+					|| terrainGroups.contains(aspects.terrain.getGroup()) || titleGroups.contains(aspects.title.getGroup()))
 					return !inverted;
 		}
 		

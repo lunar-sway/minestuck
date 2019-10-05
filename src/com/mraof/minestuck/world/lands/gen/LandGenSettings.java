@@ -32,13 +32,13 @@ public class LandGenSettings extends GenerationSettings
 		this.landAspects = landAspects;
 		
 		blockRegistry = new StructureBlockRegistry();
-		landAspects.aspectTerrain.registerBlocks(blockRegistry);
-		landAspects.aspectTitle.registerBlocks(blockRegistry);
+		landAspects.terrain.registerBlocks(blockRegistry);
+		landAspects.title.registerBlocks(blockRegistry);
 		setDefaultBlock(blockRegistry.getBlockState("ground"));
 		setDefaultFluid(blockRegistry.getBlockState("ocean"));
 		
-		landAspects.aspectTerrain.setGenSettings(this);
-		landAspects.aspectTitle.setGenSettings(this);
+		landAspects.terrain.setGenSettings(this);
+		landAspects.title.setGenSettings(this);
 	}
 	
 	public void setBiomeHolder(LandBiomeHolder biomeHolder)

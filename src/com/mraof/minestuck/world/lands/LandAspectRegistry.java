@@ -245,7 +245,7 @@ public class LandAspectRegistry
 	 * @param aspects Land aspects that the land should have
 	 * @return Returns the dimension of the newly created land.
 	 */
-	public static DimensionType createLand(MinecraftServer server, IdentifierHandler.PlayerIdentifier player, LandAspects aspects)
+	public static DimensionType createLandType(MinecraftServer server, IdentifierHandler.PlayerIdentifier player, LandAspects aspects)
 	{
 		String base = "minestuck:land_"+player.getUsername().toLowerCase();
 		ResourceLocation dimensionName;
@@ -262,12 +262,7 @@ public class LandAspectRegistry
 			dimensionName = new ResourceLocation(base+"_"+i);
 		}
 		
-		PacketBuffer data = new PacketBuffer(Unpooled.buffer());
-		data.clear();
-		data.writeRegistryId(aspects.aspectTerrain);
-		data.writeRegistryId(aspects.aspectTitle);
-		
-		return DimensionManager.registerDimension(dimensionName, MSDimensionTypes.LANDS, data, true);
+		return DimensionManager.registerDimension(dimensionName, MSDimensionTypes.LANDS, null, true);
 	}
 	
 	private static class TerrainCallbacks implements IForgeRegistry.AddCallback<TerrainLandAspect>, IForgeRegistry.ClearCallback<TerrainLandAspect>, IForgeRegistry.CreateCallback<TerrainLandAspect>

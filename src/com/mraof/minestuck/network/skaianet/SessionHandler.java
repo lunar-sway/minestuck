@@ -601,22 +601,9 @@ public class SessionHandler
 				{
 					if(c.clientHomeLand != null)
 					{
-						connectionTag.putString("clientDim", c.clientHomeLand.getRegistryName().toString());
-						LandAspects aspects = MSDimensions.getAspects(skaianetHandler.mcServer, c.clientHomeLand);
-						/*IChunkGenerator chunkGen = skaianetHandler.mcServer.getWorld(c.clientHomeLand).getDimension().createChunkGenerator();
-						if(chunkGen instanceof ChunkProviderLands)
-						{
-							ChunkProviderLands landChunkGen = (ChunkProviderLands) chunkGen;
-							if(landChunkGen.nameOrder)
-							{*/
-								connectionTag.putString("aspect1", aspects.aspectTerrain.getNames()[0]);	//TODO add name order and name index back
-								connectionTag.putString("aspect2", aspects.aspectTitle.getNames()[0]);
-							/*} else
-							{
-								connectionTag.putString("aspect1", aspects.aspectTitle.getNames()[landChunkGen.nameIndex2]);
-								connectionTag.putString("aspect2", aspects.aspectTerrain.getNames()[landChunkGen.nameIndex1]);
-							}
-						}*/
+						connectionTag.putString("clientDim", c.getClientDimension().getRegistryName().toString());
+						connectionTag.putString("aspect1", c.clientHomeLand.landName1());
+						connectionTag.putString("aspect2", c.clientHomeLand.landName2());
 						Title title = PlayerSavedData.get(skaianetHandler.mcServer).getTitle(c.getClientIdentifier());
 						connectionTag.putByte("class", title == null ? -1 : (byte) title.getHeroClass().ordinal());
 						connectionTag.putByte("aspect", title == null ? -1 : (byte) title.getHeroAspect().ordinal());

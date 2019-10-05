@@ -5,6 +5,7 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.MSDimensions;
+import com.mraof.minestuck.world.lands.LandInfoContainer;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.StringNBT;
@@ -41,7 +42,7 @@ public class SburbConnection
 	boolean isMain;
 	boolean hasEntered;
 	boolean canSplit;
-	DimensionType clientHomeLand;
+	LandInfoContainer clientHomeLand;
 	int artifactType;
 	/**
 	 * If the client will have frog breeding as quest, the array will be extended and the new positions will hold the gear.
@@ -91,7 +92,7 @@ public class SburbConnection
 	 */
 	public DimensionType getClientDimension()
 	{
-		return clientHomeLand;
+		return clientHomeLand == null ? null : clientHomeLand.dimensionType;
 	}
 	public boolean[] givenItems(){return givenItemList;}
 	//client side
@@ -135,7 +136,7 @@ public class SburbConnection
 			nbt.put("GivenItems", list);
 			if(clientHomeLand != null)
 			{
-				nbt.putString("ClientLand", clientHomeLand.getRegistryName().toString());
+				nbt.put("ClientLand", clientHomeLand.write(new CompoundNBT()));
 			}
 		}
 		if(isActive)
@@ -186,8 +187,8 @@ public class SburbConnection
 		}
 		if(nbt.contains("ClientLand"))
 		{
-			clientHomeLand = DimensionType.byName(new ResourceLocation(nbt.getString("ClientLand")));	//TODO add robustness in the case that the dimension type no longer exists?
-			if(!MSDimensions.isLandDimension(clientHomeLand))
+			clientHomeLand = LandInfoContainer.read(nbt.getCompound("ClientLand"), getClientIdentifier());	//TODO add robustness in the case that the dimension type no longer exists?
+			if(!MSDimensions.isLandDimension(getClientDimension()))
 			{
 				Debug.errorf("The connection between %s and %s had a home dimension %d that isn't a land dimension. For safety measures, the connection will be loaded as if the player had not yet entered.", getClientIdentifier().getUsername(), getServerIdentifier().getUsername(), clientHomeLand);
 				clientHomeLand = null;

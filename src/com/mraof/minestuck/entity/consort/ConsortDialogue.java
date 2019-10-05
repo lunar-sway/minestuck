@@ -459,13 +459,13 @@ public class ConsortDialogue
 				continue;
 			if(message.consortRequirement != null && !message.consortRequirement.contains(consort.getConsortType()))
 				continue;
-			if(message.aspect1Requirement != null && aspects != null && !message.aspect1Requirement.contains(aspects.aspectTerrain.getGroup()))
+			if(message.aspect1Requirement != null && aspects != null && !message.aspect1Requirement.contains(aspects.terrain.getGroup()))
 				continue;
-			if(message.aspect2Requirement != null && aspects != null && !message.aspect2Requirement.contains(aspects.aspectTitle.getGroup()))
+			if(message.aspect2Requirement != null && aspects != null && !message.aspect2Requirement.contains(aspects.title.getGroup()))
 				continue;
-			if(message.aspect1RequirementS != null && aspects != null && !message.aspect1RequirementS.contains(aspects.aspectTerrain))
+			if(message.aspect1RequirementS != null && aspects != null && !message.aspect1RequirementS.contains(aspects.terrain))
 				continue;
-			if(message.aspect2RequirementS != null && aspects != null && !message.aspect2RequirementS.contains(aspects.aspectTitle))
+			if(message.aspect2RequirementS != null && aspects != null && !message.aspect2RequirementS.contains(aspects.title))
 				continue;
 			if(message.merchantRequirement == null && consort.merchantType != EnumConsort.MerchantType.NONE
 					|| message.merchantRequirement != null && !message.merchantRequirement.contains(consort.merchantType))

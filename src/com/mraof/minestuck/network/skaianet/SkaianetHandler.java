@@ -15,7 +15,8 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.util.Location;
-import com.mraof.minestuck.world.MSDimensions;
+import com.mraof.minestuck.world.MSDimensionTypes;
+import com.mraof.minestuck.world.lands.LandInfoContainer;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -53,6 +54,10 @@ public class SkaianetHandler extends WorldSavedData
 	private Map<PlayerIdentifier, PlayerIdentifier[]> infoToSend = new HashMap<>();	//Key: player, value: data to send to player
 	private List<ComputerData> movingComputers = new ArrayList<>();
 	SessionHandler sessionHandler = new SessionHandler(this);
+	/**
+	 * Changes to this map must also be done to {@code MSDimensionTypes.LANDS.dimToLandAspects}
+	 */
+	private final Map<DimensionType, LandInfoContainer> typeToInfoContainer = new HashMap<>();
 	
 	/**
 	 * Chains of lands to be used by the skybox render
@@ -411,6 +416,7 @@ public class SkaianetHandler extends WorldSavedData
 	@Override
 	public void read(CompoundNBT nbt)
 	{
+		MSDimensionTypes.LANDS.dimToLandAspects.clear();
 		SburbHandler.titleSelectionMap.clear();
 		ListNBT list = nbt.getList("sessions", 10);
 		for(int i = 0; i < list.size(); i++)
@@ -444,6 +450,15 @@ public class SkaianetHandler extends WorldSavedData
 		sessionHandler.onLoad();
 		
 		updateLandChain();
+		
+		for(SburbConnection c : connections)
+		{
+			if(c.clientHomeLand != null)
+			{
+				typeToInfoContainer.put(c.clientHomeLand.dimensionType, c.clientHomeLand);
+				MSDimensionTypes.LANDS.dimToLandAspects.put(c.clientHomeLand.dimensionType.getId(), c.clientHomeLand.landAspects);
+			}
+		}
 	}
 	
 	@Override
@@ -483,21 +498,21 @@ public class SkaianetHandler extends WorldSavedData
 		Set<Integer> checked = new HashSet<>();
 		for(SburbConnection c : connections)
 		{
-			if(c.isMain() && c.hasEntered() && !checked.contains(c.clientHomeLand.getId()))
+			if(c.isMain() && c.hasEntered() && !checked.contains(c.getClientDimension().getId()))
 			{
 				LinkedList<Integer> chain = new LinkedList<>();
-				chain.add(c.clientHomeLand.getId());
-				checked.add(c.clientHomeLand.getId());
+				chain.add(c.getClientDimension().getId());
+				checked.add(c.getClientDimension().getId());
 				SburbConnection cIter = c;
 				while(true)
 				{
 					cIter = getMainConnection(cIter.getClientIdentifier(), false);
 					if(cIter != null && cIter.hasEntered())
 					{
-						if(!checked.contains(cIter.clientHomeLand.getId()))
+						if(!checked.contains(cIter.getClientDimension().getId()))
 						{
-							chain.addLast(cIter.clientHomeLand.getId());
-							checked.add(cIter.clientHomeLand.getId());
+							chain.addLast(cIter.getClientDimension().getId());
+							checked.add(cIter.getClientDimension().getId());
 						} else break;
 					} else
 					{
@@ -509,10 +524,10 @@ public class SkaianetHandler extends WorldSavedData
 				while(true)
 				{
 					cIter = getMainConnection(cIter.getServerIdentifier(), true);
-					if(cIter != null && cIter.hasEntered() && !checked.contains(cIter.clientHomeLand.getId()))
+					if(cIter != null && cIter.hasEntered() && !checked.contains(cIter.getClientDimension().getId()))
 					{
-						chain.addFirst(cIter.clientHomeLand.getId());
-						checked.add(cIter.clientHomeLand.getId());
+						chain.addFirst(cIter.getClientDimension().getId());
+						checked.add(cIter.getClientDimension().getId());
 					} else
 					{
 						break;
@@ -638,31 +653,6 @@ public class SkaianetHandler extends WorldSavedData
 						sc.markBlockForUpdate();
 					}
 				}
-				if(cc != null && c.hasEntered() && !MSDimensions.isLandDimension(c.clientHomeLand))
-					c.clientHomeLand = c.client.getDimension();
-			}
-			if(c.hasEntered() && !MSDimensions.isLandDimension(c.clientHomeLand))
-			{
-				ServerPlayerEntity player = c.getClientIdentifier().getPlayer(mcServer);
-				if(player != null)
-				{
-					c.clientHomeLand = player.dimension;
-					if(!MSDimensions.isLandDimension(c.clientHomeLand))
-					{
-						iter2.remove();
-						sessionHandler.onConnectionClosed(c, false);
-						if(c.isActive)
-						{
-							ComputerTileEntity cc = getComputer(mcServer, c.client.location), sc = getComputer(mcServer, c.server.location);
-							cc.getData(0).putBoolean("connectedToServer", false);
-							cc.latestmessage.put(0, "computer.messageClosed");
-							cc.markBlockForUpdate();
-							sc.getData(1).putString("connectedClient", "");
-							sc.latestmessage.put(1, "computer.messageClosed");
-							sc.markBlockForUpdate();
-						}
-					}
-				}
 			}
 		}
 		
@@ -769,16 +759,20 @@ public class SkaianetHandler extends WorldSavedData
 			}
 			else giveItems(target);
 		}
-		else if(c.clientHomeLand != null)
-			return c.clientHomeLand;
+		else if(c.getClientDimension() != null)
+			return c.getClientDimension();
 		
 		c.clientHomeLand = SburbHandler.enterMedium(mcServer, c);
 		if(c.clientHomeLand == null)
 		{
 			Debug.errorf("Could not create a land for player %s.", target.getUsername());
+		} else
+		{
+			typeToInfoContainer.put(c.clientHomeLand.dimensionType, c.clientHomeLand);
+			MSDimensionTypes.LANDS.dimToLandAspects.put(c.clientHomeLand.dimensionType.getId(), c.clientHomeLand.landAspects);
 		}
 		
-		return c.clientHomeLand;
+		return c.getClientDimension();
 	}
 	
 	public void onEntry(PlayerIdentifier target)
@@ -842,6 +836,10 @@ public class SkaianetHandler extends WorldSavedData
 		movingComputers.clear();
 	}
 	
+	public LandInfoContainer landInfoForDimension(DimensionType type)
+	{
+		return typeToInfoContainer.get(type);
+	}
 	
 	public static SkaianetHandler get(World world)
 	{

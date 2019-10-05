@@ -26,29 +26,33 @@ import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ModDimension;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import javax.annotation.Nullable;
-import java.util.Objects;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.BiFunction;
 
 public class LandDimension extends Dimension
 {
 	private LandBiomeHolder biomeHolder;
-	public LandAspects landAspects;
+	public final LandAspects landAspects;
 	public float skylightBase;
 	Vec3d skyColor;
 	Vec3d fogColor;
 	Vec3d cloudColor;
 	
-	public LandDimension(World worldIn, DimensionType typeIn)
+	public LandDimension(World worldIn, DimensionType typeIn, LandAspects aspects)
 	{
 		super(worldIn, typeIn);
 		
-		PacketBuffer buffer = Objects.requireNonNull(typeIn.getData());
-		buffer.resetReaderIndex();
-		TerrainLandAspect terrain = buffer.readRegistryIdSafe(TerrainLandAspect.class);
-		TitleLandAspect title = buffer.readRegistryIdSafe(TitleLandAspect.class);
-		landAspects = new LandAspects(terrain, title);
+		if(aspects != null)
+			landAspects = aspects;
+		else
+		{
+			Debug.warnf("Creating land dimension %s without land aspects", typeIn);
+			landAspects = new LandAspects(LandAspectRegistry.FOREST, LandAspectRegistry.TITLE_NULL);
+		}
 		
 		doesWaterVaporize = false;
 		
@@ -62,12 +66,12 @@ public class LandDimension extends Dimension
 	
 	private void initLandAspects()
 	{
-		skylightBase = landAspects.aspectTerrain.getSkylightBase();
-		skyColor = landAspects.aspectTerrain.getSkyColor();
-		fogColor = landAspects.aspectTerrain.getFogColor();
-		cloudColor = landAspects.aspectTerrain.getCloudColor();
+		skylightBase = landAspects.terrain.getSkylightBase();
+		skyColor = landAspects.terrain.getSkyColor();
+		fogColor = landAspects.terrain.getFogColor();
+		cloudColor = landAspects.terrain.getCloudColor();
 		
-		landAspects.aspectTitle.prepareWorldProvider(this);
+		landAspects.title.prepareWorldProvider(this);
 		
 		biomeHolder = new LandBiomeHolder(landAspects, false);
 	}
@@ -293,11 +297,52 @@ public class LandDimension extends Dimension
 	
 	public static class Type extends ModDimension
 	{
+		public Map<Integer, LandAspects> dimToLandAspects = new HashMap<>();
+		
+		@Override
+		public void write(PacketBuffer buffer, boolean network)
+		{
+			if(network)
+			{
+				buffer.writeInt(dimToLandAspects.size());
+				for(Map.Entry<Integer, LandAspects> entry : dimToLandAspects.entrySet())
+				{
+					buffer.writeVarInt(entry.getKey());
+					buffer.writeRegistryId(entry.getValue().terrain);
+					buffer.writeRegistryId(entry.getValue().title);
+				}
+			}
+		}
+		
+		@Override
+		public void read(PacketBuffer buffer, boolean network)
+		{
+			if(network)
+			{
+				dimToLandAspects.clear();
+				int size = buffer.readInt();
+				for(int i = 0; i < size; i++)
+				{
+					int id = buffer.readVarInt();
+					TerrainLandAspect terrain = buffer.readRegistryIdSafe(TerrainLandAspect.class);
+					TitleLandAspect title = buffer.readRegistryIdSafe(TitleLandAspect.class);
+					dimToLandAspects.put(id, new LandAspects(terrain, title));
+				}
+			}
+		}
 		
 		@Override
 		public BiFunction<World, DimensionType, ? extends Dimension> getFactory()
 		{
-			return LandDimension::new;
+			return this::createDimension;
+		}
+		
+		private LandDimension createDimension(World world, DimensionType type)
+		{
+			LandAspects aspects = dimToLandAspects.get(type.getId());
+			if(aspects == null)
+				Debug.warn("Trying to create a land world but haven't gotten its land aspects!");
+			return new LandDimension(world, type, aspects);
 		}
 	}
 }
