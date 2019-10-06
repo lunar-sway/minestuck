@@ -9,8 +9,6 @@ import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.world.MSDimensionTypes;
 import com.mraof.minestuck.world.lands.terrain.*;
 import com.mraof.minestuck.world.lands.title.*;
-import io.netty.buffer.Unpooled;
-import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.ResourceLocationException;
@@ -40,6 +38,8 @@ public class LandAspectRegistry
 	private static Map<ResourceLocation, List<TerrainLandAspect>> terrainGroupMap;
 	private static Map<ResourceLocation, List<TitleLandAspect>> titleGroupMap;
 	
+	@ObjectHolder(Minestuck.MOD_ID+":null")
+	public static final TerrainLandAspect TERRAIN_NULL = getNull();
 	public static final TerrainLandAspect FOREST = getNull();
 	public static final TerrainLandAspect FROST = getNull();
 	public static final TerrainLandAspect FUNGI = getNull();
@@ -81,7 +81,7 @@ public class LandAspectRegistry
 		return null;
 	}
 	
-	@SubscribeEvent	@SuppressWarnings({"unused", "unchecked"})
+	@SubscribeEvent	@SuppressWarnings("unchecked")
 	public static void onRegistryNewRegistry(final RegistryEvent.NewRegistry event)
 	{
 		TERRAIN_REGISTRY = new RegistryBuilder<TerrainLandAspect>()
@@ -99,11 +99,11 @@ public class LandAspectRegistry
 	}
 
 	@SubscribeEvent
-	@SuppressWarnings("unused")
 	public static void registerTerrain(final RegistryEvent.Register<TerrainLandAspect> event)
 	{
 		IForgeRegistry<TerrainLandAspect> registry = event.getRegistry();
 		
+		registry.register(new NullTerrainLandAspect().setRegistryName("null"));
 		registry.register(new ForestLandAspect(ForestLandAspect.Variant.FOREST).setRegistryName("forest"));
 		registry.register(new ForestLandAspect(ForestLandAspect.Variant.TAIGA).setRegistryName("taiga"));
 		registry.register(new FrostLandAspect().setRegistryName("frost"));
@@ -130,7 +130,7 @@ public class LandAspectRegistry
 	{
 		IForgeRegistry<TitleLandAspect> registry = event.getRegistry();
 		
-		registry.register(new NullLandAspect().setRegistryName("null"));
+		registry.register(new NullTitleLandAspect().setRegistryName("null"));
 		registry.register(new FrogsLandAspect().setRegistryName("frogs"));
 		registry.register(new WindLandAspect().setRegistryName("wind"));
 		registry.register(new LightLandAspect().setRegistryName("light"));
@@ -154,14 +154,17 @@ public class LandAspectRegistry
 	
 	/**
 	 * Generates a random land aspect, weighted based on a player's title.
-	 * @return
 	 */
 	public TerrainLandAspect getTerrainAspect(TitleLandAspect aspect2, List<TerrainLandAspect> usedAspects)
 	{
 		TerrainLandAspect aspect = selectRandomAspect(usedAspects, terrainGroupMap, aspect2::isAspectCompatible);
 		if(aspect != null)
 			return aspect;
-		else throw new IllegalStateException("No land aspect is compatible with the title aspect "+aspect2.getRegistryName()+"!");
+		else
+		{
+			Debug.errorf("No land aspect is compatible with the title aspect %s! Defaulting to null land aspect.", aspect2.getRegistryName());
+			return TERRAIN_NULL;
+		}
 	}
 	
 	public TitleLandAspect getTitleAspect(TerrainLandAspect aspectTerrain, EnumAspect titleAspect, List<TitleLandAspect> usedAspects)
@@ -215,7 +218,7 @@ public class LandAspectRegistry
 						useCount[i]++;
 			}
 			
-			ArrayList<B> unusedEntries = new ArrayList<B>();
+			ArrayList<B> unusedEntries = new ArrayList<>();
 			for(int i = 0; i < list.size(); i++)	//Check for unused aspects
 				if(useCount[i] == 0)
 					unusedEntries.add(list.get(i));

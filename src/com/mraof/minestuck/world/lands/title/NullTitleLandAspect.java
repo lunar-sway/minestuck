@@ -2,9 +2,9 @@ package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
-public class NullLandAspect extends TitleLandAspect
+public class NullTitleLandAspect extends TitleLandAspect
 {
-	public NullLandAspect()
+	public NullTitleLandAspect()
 	{
 		super(null, false);
 	}

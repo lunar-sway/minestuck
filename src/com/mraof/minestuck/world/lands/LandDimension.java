@@ -51,7 +51,7 @@ public class LandDimension extends Dimension
 		else
 		{
 			Debug.warnf("Creating land dimension %s without land aspects", typeIn);
-			landAspects = new LandAspects(LandAspectRegistry.FOREST, LandAspectRegistry.TITLE_NULL);
+			landAspects = new LandAspects(LandAspectRegistry.TERRAIN_NULL, LandAspectRegistry.TITLE_NULL);
 		}
 		
 		doesWaterVaporize = false;

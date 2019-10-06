@@ -20,7 +20,7 @@ public class GateTileEntity extends TileEntity
 	
 	public int colorIndex;
 	
-	public int gateCount;
+	public GateHandler.Type gateType;
 	
 	public GateTileEntity()
 	{
@@ -39,7 +39,7 @@ public class GateTileEntity extends TileEntity
 			//player.addStat(MinestuckAchievementHandler.returnNode);
 		} else
 		{
-			GateHandler.teleport(gateCount, world.getDimension().getType(), player);
+			GateHandler.teleport(gateType, world.getDimension().getType(), player);
 		}
 	}
 	
@@ -53,16 +53,16 @@ public class GateTileEntity extends TileEntity
 	public void read(CompoundNBT compound)
 	{
 		super.read(compound);
-		if(compound.contains("gateCount"))
-			this.gateCount = compound.getInt("gateCount");
+		if(compound.contains("gate_type"))
+			this.gateType = GateHandler.Type.fromString(compound.getString("gate_type"));
 	}
 	
 	@Override
 	public CompoundNBT write(CompoundNBT compound)
 	{
 		super.write(compound);
-		if(this.gateCount != 0)
-			compound.putInt("gateCount", gateCount);
+		if(this.gateType != null)
+			compound.putString("gate_type", gateType.toString());
 		return compound;
 	}
 	
@@ -96,7 +96,7 @@ public class GateTileEntity extends TileEntity
 	
 	public boolean isGate()
 	{
-		return this.world != null ? this.world.getBlockState(this.getPos()).getBlock() != MSBlocks.RETURN_NODE : this.gateCount != 0;
+		return this.world != null ? this.world.getBlockState(this.getPos()).getBlock() != MSBlocks.RETURN_NODE : this.gateType != null;
 	}
 	
 	@Override

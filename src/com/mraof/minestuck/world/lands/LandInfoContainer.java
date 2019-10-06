@@ -1,12 +1,15 @@
 package com.mraof.minestuck.world.lands;
 
+import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.IdentifierHandler;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.dimension.DimensionType;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 
 /**
@@ -15,14 +18,20 @@ import java.util.Random;
  */
 public class LandInfoContainer
 {
+	private final SkaianetHandler handler;
+	
 	public final IdentifierHandler.PlayerIdentifier identifier;
 	public final LandAspects landAspects;
 	public final DimensionType dimensionType;
 	private final boolean useReverseOrder;
 	private final int terrainNameIndex, titleNameIndex;
+	@Nullable
+	private BlockPos gatePos = null;
 	
-	public LandInfoContainer(IdentifierHandler.PlayerIdentifier identifier, LandAspects landAspects, DimensionType dimensionType, Random random)
+	public LandInfoContainer(SkaianetHandler handler, IdentifierHandler.PlayerIdentifier identifier, LandAspects landAspects, DimensionType dimensionType, Random random)
 	{
+		this.handler = handler;
+		
 		this.identifier = identifier;
 		this.landAspects = landAspects;
 		this.dimensionType = dimensionType;
@@ -31,8 +40,10 @@ public class LandInfoContainer
 		titleNameIndex = random.nextInt(landAspects.title.getNames().length);
 	}
 	
-	private LandInfoContainer(IdentifierHandler.PlayerIdentifier identifier, LandAspects landAspects, DimensionType dimensionType, boolean reverseOrder, int terrainNameIndex, int titleNameIndex)
+	private LandInfoContainer(SkaianetHandler handler, IdentifierHandler.PlayerIdentifier identifier, LandAspects landAspects, DimensionType dimensionType, boolean reverseOrder, int terrainNameIndex, int titleNameIndex)
 	{
+		this.handler = handler;
+		
 		this.identifier = identifier;
 		this.landAspects = landAspects;
 		this.dimensionType = dimensionType;
@@ -62,6 +73,17 @@ public class LandInfoContainer
 		else return landAspects.title.getNames()[titleNameIndex];
 	}
 	
+	public BlockPos getGatePos()
+	{
+		return gatePos;
+	}
+	
+	public void setGatePos(BlockPos pos)
+	{
+		gatePos = pos;
+		handler.markDirty();
+	}
+	
 	/**
 	 * Saves the info container to nbt, except for the identifier
 	 */
@@ -72,10 +94,16 @@ public class LandInfoContainer
 		nbt.putBoolean("reverse_order", useReverseOrder);
 		nbt.putInt("terrain_name_index", terrainNameIndex);
 		nbt.putInt("title_name_index", titleNameIndex);
+		if(gatePos != null)
+		{
+			nbt.putInt("gate_x", gatePos.getX());
+			nbt.putInt("gate_y", gatePos.getY());
+			nbt.putInt("gate_z", gatePos.getZ());
+		}
 		return nbt;
 	}
 	
-	public static LandInfoContainer read(CompoundNBT nbt, IdentifierHandler.PlayerIdentifier identifier)
+	public static LandInfoContainer read(CompoundNBT nbt, SkaianetHandler handler, IdentifierHandler.PlayerIdentifier identifier)
 	{
 		LandAspects aspects = LandAspects.read(nbt);
 		ResourceLocation dimName = new ResourceLocation(nbt.getString("dim_type"));
@@ -83,6 +111,14 @@ public class LandInfoContainer
 		boolean reverse = nbt.getBoolean("reverse_order");
 		int terrainIndex = nbt.getInt("terrain_name_index");
 		int titleIndex = nbt.getInt("title_name_index");
-		return new LandInfoContainer(identifier, aspects, type, reverse, terrainIndex, titleIndex);
+		
+		LandInfoContainer info = new LandInfoContainer(handler, identifier, aspects, type, reverse, terrainIndex, titleIndex);
+		
+		if(nbt.contains("gate_x", 99))
+		{
+			info.gatePos = new BlockPos(nbt.getInt("gate_x"), nbt.getInt("gate_y"), nbt.getInt("gate_z"));
+		}
+		
+		return info;
 	}
 }

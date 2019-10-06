@@ -1,19 +1,18 @@
 package com.mraof.minestuck.world;
 
+import com.google.common.collect.Lists;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.Location;
 import com.mraof.minestuck.world.biome.MSBiomes;
+import com.mraof.minestuck.world.lands.LandInfoContainer;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.GlobalPos;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
@@ -21,8 +20,6 @@ import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.DimensionManager;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 public class GateHandler
@@ -30,16 +27,14 @@ public class GateHandler
 	
 	public static final int gateHeight1 = 144, gateHeight2 = 192;
 	
-	static Map<DimensionType, BlockPos> gateData = new HashMap<>();
-	
-	public static void teleport(int gateId, DimensionType dim, ServerPlayerEntity player)
+	public static void teleport(Type gateType, DimensionType dim, ServerPlayerEntity player)
 	{
-		Location location = null;
+		GlobalPos location = null;
 		player.timeUntilPortal = player.getPortalCooldown();	//Basically to avoid message spam when something goes wrong
 		
-		if(gateId == 1)
+		if(gateType == Type.GATE_1)
 		{
-			BlockPos pos = getGatePos(player.server, -1, dim);
+			BlockPos pos = getGatePos(player.server, Type.LAND_GATE, dim);
 			Random rand = player.world.rand;
 			BlockPos spawn = player.world.getDimension().getSpawnPoint();
 			if(pos != null)
@@ -56,12 +51,12 @@ public class GateHandler
 					BlockPos placement = pos.add(x, 0, z);
 					
 					if(player.world.getBiomeBody(placement) == MSBiomes.mediumNormal)
-						location = new Location(player.world.getHeight(Heightmap.Type.MOTION_BLOCKING, placement), dim);
+						location = GlobalPos.of(dim, player.world.getHeight(Heightmap.Type.MOTION_BLOCKING, placement));
 					
 				} while(location == null);	//TODO replace with a more friendly version without a chance of freezing the game
 			else Debug.errorf("Unexpected error: Couldn't find position for land gate for dimension %d.", dim);
 			
-		} else if(gateId == 2)
+		} else if(gateType == Type.GATE_2)
 		{
 			SburbConnection landConnection = SburbHandler.getConnectionForDimension(player.server, dim);
 			if(landConnection != null)
@@ -71,13 +66,13 @@ public class GateHandler
 				if(clientConnection != null && clientConnection.hasEntered() && MSDimensions.isLandDimension(clientConnection.getClientDimension()))
 				{
 					DimensionType clientDim = clientConnection.getClientDimension();
-					BlockPos gatePos = getGatePos(player.server, -1, clientDim);
+					BlockPos gatePos = getGatePos(player.server, Type.LAND_GATE, clientDim);
 					ServerWorld world = DimensionManager.getWorld(player.server, clientDim, false, true);
 					
 					if(gatePos == null)
 					{
 						findGatePlacement(world);
-						gatePos = getGatePos(player.server, -1, clientDim);
+						gatePos = getGatePos(player.server, Type.LAND_GATE, clientDim);
 						if(gatePos == null) {Debug.errorf("Unexpected error: Can't initiaize land gate placement for dimension %d!", clientDim); return;}
 					}
 					
@@ -87,15 +82,15 @@ public class GateHandler
 						world.getChunkProvider().getChunk(gatePos.getX() + 8 >> 4, gatePos.getZ() - 8 >> 4, true);
 						world.getChunkProvider().getChunk(gatePos.getX() - 8 >> 4, gatePos.getZ() + 8 >> 4, true);
 						world.getChunkProvider().getChunk(gatePos.getX() + 8 >> 4, gatePos.getZ() + 8 >> 4, true);
-						gatePos = getGatePos(player.server, -1, clientDim);
+						gatePos = getGatePos(player.server, Type.LAND_GATE, clientDim);
 						if(gatePos.getY() == -1) {Debug.errorf("Unexpected error: Gate didn't generate after loading chunks! Dim: %d, pos: %s", clientDim, gatePos); return;}
 					}
 					
-					location = new Location(gatePos, clientDim);
+					location = GlobalPos.of(clientDim, gatePos);
 				}
 				else player.sendMessage(new TranslationTextComponent("message.gateMissingLand"));
 			} else Debug.errorf("Unexpected error: Can't find connection for dimension %d!", dim);
-		} else if(gateId == -1)
+		} else if(gateType == Type.LAND_GATE)
 		{
 			SburbConnection landConnection = SburbHandler.getConnectionForDimension(player.server, dim);
 			if(landConnection != null)
@@ -105,20 +100,20 @@ public class GateHandler
 				if(serverConnection != null && serverConnection.hasEntered() && MSDimensions.isLandDimension(serverConnection.getClientDimension()))	//Last shouldn't be necessary, but just in case something goes wrong elsewhere...
 				{
 					DimensionType serverDim = serverConnection.getClientDimension();
-					location = new Location(getGatePos(player.server, 2, serverDim), serverDim);
+					location = GlobalPos.of(serverDim, getGatePos(player.server, Type.GATE_2, serverDim));
 					
 				} else player.sendMessage(new TranslationTextComponent("message.gateMissingLand"));
 				
 			} else Debug.errorf("Unexpected error: Can't find connection for dimension %d!", dim);
-		} else Debug.errorf("Unexpected error: Gate id %d is out of bounds!", gateId);
+		} else Debug.errorf("Unexpected error: Gate id %d is out of bounds!", gateType);
 		
 		if(location != null)
 		{
-			if(gateId != 1)
+			if(gateType != Type.GATE_1)
 			{
-				ServerWorld world = DimensionManager.getWorld(player.server, location.dim, false, true);
+				ServerWorld world = DimensionManager.getWorld(player.server, location.getDimension(), false, true);
 				
-				BlockState block = world.getBlockState(location.pos);
+				BlockState block = world.getBlockState(location.getPos());
 				
 				if(block.getBlock() != MSBlocks.GATE)
 				{
@@ -135,7 +130,8 @@ public class GateHandler
 	public static void findGatePlacement(World world)
 	{
 		DimensionType dim = world.getDimension().getType();
-		if(MSDimensions.isLandDimension(dim) && !gateData.containsKey(dim))
+		LandInfoContainer info = MSDimensions.getLandInfo(world.getServer(), dim);
+		if(MSDimensions.isLandDimension(dim) && info != null && info.getGatePos() == null)
 		{
 			BlockPos spawn = new BlockPos(0, -1, 0);
 			Random rand = new Random(world.getSeed()^43839551L^world.getDimension().getType().getId());
@@ -151,32 +147,39 @@ public class GateHandler
 				int z = (int) Math.sqrt(distance*(1-d));
 				
 				BlockPos pos = new BlockPos(spawn.getX() + x, -1, spawn.getZ() + z);
-				//TODO When we have biomes again
-				//if(/*!world.getChunkProvider().chunkExists(pos.getX() >> 4, pos.getZ() >> 4) &&*/ Lists.newArrayList(BiomeMinestuck.mediumNormal).containsAll(world.getChunkProvider().getChunkGenerator().getBiomeProvider().getBiomesInSquare(pos.getX(), pos.getZ(), Math.max(20, 50 - tries))))
+				
+				if(!world.getChunkProvider().chunkExists(pos.getX() >> 4, pos.getZ() >> 4) && Lists.newArrayList(MSBiomes.LAND_NORMAL).containsAll(world.getChunkProvider().getChunkGenerator().getBiomeProvider().getBiomesInSquare(pos.getX(), pos.getZ(), Math.max(20, 50 - tries))))
 					gatePos = pos;
 				
 				tries++;
 			} while(gatePos == null);	//TODO replace with a more friendly version without a chance of freezing the game
 			
 			Debug.infof("Land gate will generate at %d %d in dimension %s.", gatePos.getX(), gatePos.getZ(), dim.getRegistryName());
-			gateData.put(dim, gatePos);
+			info.setGatePos(gatePos);
 		}
 	}
 	
-	public static BlockPos getGatePos(MinecraftServer server, int gateId, DimensionType dim)
+	public static BlockPos getGatePos(MinecraftServer server, Type type, DimensionType dim)
 	{
 		if(!MSDimensions.isLandDimension(dim))
 			return null;
 		
-		if(gateId == -1)
-			return gateData.get(dim);
-		else if(gateId == 1 || gateId == 2)
+		if(type == Type.LAND_GATE)
 		{
-			World world = DimensionManager.getWorld(server, dim, false, true);
-			
-			BlockPos spawn = world.getDimension().getSpawnPoint();
+			LandInfoContainer info = MSDimensions.getLandInfo(server, dim);
+			if(info != null)
+				return info.getGatePos();
+			else
+			{
+				Debug.warn("Tried to find gate pos for dimension without land info!");
+				return null;
+			}
+		}
+		else if(type == Type.GATE_1 || type == Type.GATE_2)
+		{
+			BlockPos spawn = new BlockPos(0, 0, 0);
 			int y;
-			if(gateId == 1)
+			if(type == Type.GATE_1)
 				y = gateHeight1;
 			else y = gateHeight2;
 			return new BlockPos(spawn.getX(), y, spawn.getZ());
@@ -185,56 +188,48 @@ public class GateHandler
 		return null;
 	}
 	
-	public static void setDefiniteGatePos(int gateId, DimensionType dim, BlockPos newPos)
+	public static void setDefiniteGatePos(MinecraftServer server, Type type, DimensionType dim, BlockPos newPos)
 	{
-		if(gateId == -1)
+		if(type == Type.LAND_GATE)
 		{
-			BlockPos oldPos = gateData.get(dim);
-			if(oldPos.getY() != -1)
+			LandInfoContainer info = MSDimensions.getLandInfo(server, dim);
+			if(info == null)
+			{
+				Debug.errorf("Tried to set gate position for dimension %s but did not get any land info", dim);
+				return;
+			}
+			BlockPos oldPos = info.getGatePos();
+			if(oldPos != null && oldPos.getY() != -1)
 			{
 				Debug.error("Trying to set position for a gate that should already be generated!");
 				return;
 			}
 			
-			gateData.put(dim, newPos);
+			info.setGatePos(newPos);
 		}
 		else Debug.error("Trying to set position for a gate that should already be generated/doesn't exist!");
 	}
 	
-	static void saveData(ListNBT nbtList)
+	public enum Type
 	{
-		for(int i = 0; i < nbtList.size(); i++)
+		GATE_1,
+		GATE_2,
+		LAND_GATE;
+		
+		@Override
+		public String toString()
 		{
-			CompoundNBT nbt = nbtList.getCompound(i);
-			if(nbt.getString("type").equals("land"))
+			return this.name().toLowerCase();
+		}
+		
+		public static Type fromString(String str)
+		{
+			for(Type type : values())
 			{
-				int dim = nbt.getInt("dimID");
-				if(gateData.containsKey(dim))
-				{
-					BlockPos gatePos = gateData.get(dim);
-					nbt.putInt("gateX", gatePos.getX());
-					nbt.putInt("gateY", gatePos.getY());
-					nbt.putInt("gateZ", gatePos.getZ());
-				}
+				if(type.toString().equals(str))
+					return type;
 			}
+			return null;
 		}
 	}
-	
-	static void loadData(ListNBT nbtList)
-	{
-		for(int i = 0; i < nbtList.size(); i++)
-		{
-			CompoundNBT nbt = nbtList.getCompound(i);
-			if(nbt.getString("type").equals("land") && nbt.contains("gateX"))
-			{
-				DimensionType dim = DimensionType.byName(ResourceLocation.tryCreate(nbt.getString("dim")));
-				if(dim != null)
-				{
-					BlockPos pos = new BlockPos(nbt.getInt("gateX"), nbt.getInt("gateY"), nbt.getInt("gateZ"));
-					gateData.put(dim, pos);
-				} else Debug.warnf("Unable to load gate position for dimension %s. Could not find dimension by that name!", nbt.getString("dim"));
-			}
-		}
-	}
-	
 }
