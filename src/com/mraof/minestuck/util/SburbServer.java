@@ -5,10 +5,7 @@ import java.util.ArrayList;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.network.ClientEditPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.network.skaianet.ComputerData;
-import com.mraof.minestuck.network.skaianet.SburbConnection;
-import com.mraof.minestuck.network.skaianet.SkaiaClient;
-import com.mraof.minestuck.network.skaianet.SkaianetHandler;
+import com.mraof.minestuck.network.skaianet.*;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 
 public class SburbServer extends ButtonListProgram
@@ -18,7 +15,7 @@ public class SburbServer extends ButtonListProgram
 	public ArrayList<UnlocalizedString> getStringList(ComputerTileEntity te)
 	{
 		int clientId = te.getData(1).contains("connectedClient")?te.getData(1).getInt("connectedClient"):-1;
-		SburbConnection connection = clientId != -1 ? SkaiaClient.getClientConnection(clientId) : null;
+		ReducedConnection connection = clientId != -1 ? SkaiaClient.getClientConnection(clientId) : null;
 		if(connection != null && connection.getServerId() != te.ownerId)
 			connection = null;
 		

@@ -1,5 +1,6 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.network.skaianet.ReducedConnection;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
@@ -20,7 +21,8 @@ public class SkaianetInfoPacket
 	public int playerId;
 	public boolean isClientResuming, isServerResuming;
 	public Map<Integer, String> openServers;
-	public List<SburbConnection> connections;
+	public List<SburbConnection> connectionsFrom;
+	public List<ReducedConnection> connectionsTo;
 	public List<List<Integer>> landChains;
 	
 	public static SkaianetInfoPacket landChains(List<List<Integer>> landChains)
@@ -38,7 +40,7 @@ public class SkaianetInfoPacket
 		packet.isClientResuming = isClientResuming;
 		packet.isServerResuming = isServerResuming;
 		packet.openServers = openServers;
-		packet.connections = connections;
+		packet.connectionsFrom = connections;
 		
 		return packet;
 	}
@@ -67,7 +69,7 @@ public class SkaianetInfoPacket
 			buffer.writeBoolean(false);
 			buffer.writeInt(playerId);
 			
-			if(connections != null)
+			if(connectionsFrom != null)
 			{
 				
 				buffer.writeBoolean(isClientResuming);
@@ -80,7 +82,7 @@ public class SkaianetInfoPacket
 					buffer.writeString(entry.getValue(), 16);
 				}
 				
-				for(SburbConnection connection : connections)
+				for(SburbConnection connection : connectionsFrom)
 					connection.toBuffer(buffer);
 			}
 		}
@@ -112,9 +114,9 @@ public class SkaianetInfoPacket
 				packet.openServers = new HashMap<>();
 				for(int i = 0; i < size; i++)
 					packet.openServers.put(buffer.readInt(), buffer.readString(16));
-				packet.connections = new ArrayList<>();
+				packet.connectionsTo = new ArrayList<>();
 				while(buffer.readableBytes() > 0)
-					packet.connections.add(SkaiaClient.getConnectionFromBuffer(buffer));
+					packet.connectionsTo.add(ReducedConnection.read(buffer));
 			}
 		}
 		

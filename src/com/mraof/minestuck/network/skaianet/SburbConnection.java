@@ -10,11 +10,13 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.StringNBT;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.dimension.DimensionType;
+
+import java.util.Arrays;
 
 public class SburbConnection
 {
+	final SkaianetHandler handler;
 	
 	ComputerData client;
 	/**
@@ -29,17 +31,8 @@ public class SburbConnection
 	 */
 	PlayerIdentifier serverIdentifier;
 	
-	/**
-	 * Display name used by computer guis clientside
-	 */
-	String clientName, serverName;
-	/**
-	 * Id for identifying players clientside
-	 */
-	int clientId, serverId;
-	
 	boolean isActive;
-	boolean isMain;
+	private boolean isMain;
 	boolean hasEntered;
 	boolean canSplit;
 	LandInfoContainer clientHomeLand;
@@ -51,15 +44,16 @@ public class SburbConnection
 	ListNBT unregisteredItems = new ListNBT();
 	
 	//Only used by the edit handler
-	public int centerX, centerZ;
-	public ListNBT inventory;
+	public int centerX, centerZ;	//TODO No longer needed as it is either computer pos or the land dim spawn location. Should be functions instead
+	public ListNBT inventory;	//TODO Should not be public
 	
 	//Non-saved variables used by the edit handler
 	public double posX, posZ;
 	public boolean useCoordinates;
 	
-	SburbConnection()
+	SburbConnection(SkaianetHandler handler)
 	{
+		this.handler = handler;
 		this.canSplit = true;
 		this.isActive = true;
 	}
@@ -86,6 +80,14 @@ public class SburbConnection
 		return hasEntered;
 	}
 	public boolean isMain(){return isMain;}
+	void setIsMain()
+	{
+		if(!isMain)
+		{
+			isMain = true;
+			handler.markDirty();
+		}
+	}
 	
 	/**
 	 * @return The land dimension assigned to the client player.
@@ -94,13 +96,11 @@ public class SburbConnection
 	{
 		return clientHomeLand == null ? null : clientHomeLand.dimensionType;
 	}
-	public boolean[] givenItems(){return givenItemList;}
-	//client side
-	public String getClientDisplayName() {return clientName;}
-	public String getServerDisplayName() {return serverName;}
-	public int getClientId() {return clientId;}
-	public int getServerId() {return serverId;}
+	public boolean[] givenItems(){return Arrays.copyOf(givenItemList, givenItemList.length);}	//TODO Add way of setting given items that also calls skaianetHandler.markDirty()
 	
+	/**
+	 * Writes the connection info needed client-side to a network buffer. Must match with {@link ReducedConnection#read}.
+	 */
 	public void toBuffer(PacketBuffer buffer)
 	{
 		buffer.writeBoolean(isMain);
@@ -153,51 +153,51 @@ public class SburbConnection
 		return nbt;
 	}
 	
-	SburbConnection read(CompoundNBT nbt)
+	static SburbConnection read(CompoundNBT nbt, SkaianetHandler handler)
 	{
-		isMain = nbt.getBoolean("IsMain");
+		SburbConnection c = new SburbConnection(handler);
+		c.isMain = nbt.getBoolean("IsMain");
 		if(nbt.contains("Inventory"))
-			inventory = nbt.getList("Inventory", 10);
-		if(isMain)
+			c.inventory = nbt.getList("Inventory", 10);
+		if(c.isMain)
 		{
-			isActive = nbt.getBoolean("IsActive");
-			hasEntered = nbt.getBoolean("HasEntered");
+			c.isActive = nbt.getBoolean("IsActive");
+			c.hasEntered = nbt.getBoolean("HasEntered");
 			
 			if(nbt.contains("CanSplit"))
-				canSplit = nbt.getBoolean("CanSplit");
+				c.canSplit = nbt.getBoolean("CanSplit");
 			ListNBT list = nbt.getList("GivenItems", 8);
 			for(int i = 0; i < list.size(); i++)
 			{
 				String name = list.getString(i);
 				int ordinal = DeployList.getOrdinal(name);
 				if(ordinal == -1)
-					unregisteredItems.add(new StringNBT(name));
-				else givenItemList[ordinal] = true;
+					c.unregisteredItems.add(new StringNBT(name));
+				else c.givenItemList[ordinal] = true;
 			}
 		}
-		if(isActive)
+		if(c.isActive)
 		{
-			client = new ComputerData().read(nbt.getCompound("Client"));
-			server = new ComputerData().read(nbt.getCompound("Server"));
+			c.client = new ComputerData().read(nbt.getCompound("Client"));
+			c.server = new ComputerData().read(nbt.getCompound("Server"));
 		}
 		else
 		{
-			clientIdentifier = IdentifierHandler.load(nbt, "Client");
-			serverIdentifier = IdentifierHandler.load(nbt, "Server");
+			c.clientIdentifier = IdentifierHandler.load(nbt, "Client");
+			c.serverIdentifier = IdentifierHandler.load(nbt, "Server");
 		}
 		if(nbt.contains("ClientLand"))
 		{
-			clientHomeLand = LandInfoContainer.read(nbt.getCompound("ClientLand"), getClientIdentifier());	//TODO add robustness in the case that the dimension type no longer exists?
-			if(!MSDimensions.isLandDimension(getClientDimension()))
+			c.clientHomeLand = LandInfoContainer.read(nbt.getCompound("ClientLand"), handler, c.getClientIdentifier());	//TODO add robustness in the case that the dimension type no longer exists?
+			if(!MSDimensions.isLandDimension(c.getClientDimension()))
 			{
-				Debug.errorf("The connection between %s and %s had a home dimension %d that isn't a land dimension. For safety measures, the connection will be loaded as if the player had not yet entered.", getClientIdentifier().getUsername(), getServerIdentifier().getUsername(), clientHomeLand);
-				clientHomeLand = null;
-				hasEntered = false;
+				Debug.errorf("The connection between %s and %s had a home dimension %d that isn't a land dimension. For safety measures, the connection will be loaded as if the player had not yet entered.", c.getClientIdentifier().getUsername(), c.getServerIdentifier().getUsername(), c.getClientDimension());
+				c.clientHomeLand = null;
+				c.hasEntered = false;
 			}
 		}
-		artifactType = nbt.getInt("Artifact");
+		c.artifactType = nbt.getInt("Artifact");
 		
-		return this;
+		return c;
 	}
-	
 }

@@ -14,6 +14,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
+import com.mraof.minestuck.item.CruxiteArtifactItem;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.TitleSelectPacket;
@@ -682,7 +683,7 @@ public class SburbHandler
 		generateTitle(mcServer.getWorld(DimensionType.OVERWORLD), c.getClientIdentifier());
 		LandAspects aspects = genLandAspects(mcServer, c);		//This is where the Land dimension is actually registered, but it also needs the player's Title to be determined.
 		DimensionType type = LandAspectRegistry.createLandType(mcServer, identifier, aspects);
-		return new LandInfoContainer(identifier, aspects, type, new Random());	//TODO Handle random better
+		return new LandInfoContainer(c.handler, identifier, aspects, type, new Random());	//TODO Handle random better
 	}
 	
 	static void onGameEntered(MinecraftServer server, SburbConnection c)
@@ -780,7 +781,7 @@ public class SburbHandler
 			Vec3d pos = titleSelectionMap.remove(player);
 			
 			player.setPosition(pos.x, pos.y, pos.z);
-			//((CruxiteArtifactItem) MinestuckItems.CRUXITE_APPLE).onArtifactActivated(player); TODO
+			((CruxiteArtifactItem) MSItems.CRUXITE_APPLE).onArtifactActivated(player);
 			
 		} else Debug.warnf("%s tried to select a title without entering.", player.getName());
 	}

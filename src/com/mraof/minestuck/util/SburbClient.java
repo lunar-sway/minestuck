@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import com.mraof.minestuck.client.gui.ColorSelectorScreen;
+import com.mraof.minestuck.network.skaianet.ReducedConnection;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundNBT;
 
-import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
@@ -17,10 +17,10 @@ public class SburbClient extends ButtonListProgram {
 	@Override
 	public ArrayList<UnlocalizedString> getStringList(ComputerTileEntity te)
 	{
-		ArrayList<UnlocalizedString> list = new ArrayList<UnlocalizedString>();
+		ArrayList<UnlocalizedString> list = new ArrayList<>();
 		CompoundNBT nbt = te.getData(getId());
 		
-		SburbConnection c = SkaiaClient.getClientConnection(te.ownerId);
+		ReducedConnection c = SkaiaClient.getClientConnection(te.ownerId);
 		if(nbt.getBoolean("connectedToServer") && c != null) //If it is connected to someone.
 		{
 			String displayPlayer = c.getServerDisplayName();
