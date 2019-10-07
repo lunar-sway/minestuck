@@ -5,6 +5,9 @@ import io.netty.buffer.ByteBuf;
 import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 
 import com.mraof.minestuck.Minestuck;
@@ -22,11 +25,11 @@ public class MinestuckConfigPacket extends MinestuckPacket
 	int cardCost;
 	int alchemiterStacks;
 	int windowIdStart;
+	int oreMultiplier;
 	byte treeModusSetting;
 	byte hashmapModusSetting;
 	
 	boolean giveItems;
-	boolean easyDesignix;
 	boolean disableGristWidget;
 	boolean dataChecker;
 	boolean preEntryEcheladder;
@@ -43,6 +46,7 @@ public class MinestuckConfigPacket extends MinestuckPacket
 			data.writeInt(MinestuckConfig.overworldEditRange);
 			data.writeInt(MinestuckConfig.landEditRange);
 			data.writeInt(ContainerHandler.windowIdStart);
+			data.writeInt(MinestuckConfig.oreMultiplier);
 			data.writeBoolean(MinestuckConfig.giveItems);
 			data.writeBoolean(MinestuckConfig.hardMode);
 			
@@ -72,6 +76,7 @@ public class MinestuckConfigPacket extends MinestuckPacket
 			overWorldEditRange = data.readInt();
 			landEditRange = data.readInt();
 			windowIdStart = data.readInt();
+			oreMultiplier = data.readInt();
 			giveItems = data.readBoolean();
 			hardMode = data.readBoolean();
 			
@@ -107,6 +112,9 @@ public class MinestuckConfigPacket extends MinestuckPacket
 			{
 				DeployList.applyConfigValues(deployValues);
 			}
+			
+			if(MinestuckConfig.oreMultiplier != oreMultiplier)
+				player.sendMessage(new TextComponentString("[Minestuck] Ore multiplier config doesn't match the server value. (server: "+oreMultiplier+", you: "+MinestuckConfig.oreMultiplier+") Grist costs will likely not match their actual cost!").setStyle(new Style().setColor(TextFormatting.YELLOW)));
 		} else
 		{
 			MinestuckConfig.clientCardCost = cardCost;
