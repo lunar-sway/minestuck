@@ -1,4 +1,4 @@
-package com.mraof.minestuck.world.lands;
+package com.mraof.minestuck.world;
 
 import com.mraof.minestuck.client.renderer.LandSkyRenderer;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
@@ -9,7 +9,9 @@ import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.gen.MSWorldGenTypes;
 
-import com.mraof.minestuck.world.lands.gen.LandGenSettings;
+import com.mraof.minestuck.world.lands.LandAspectRegistry;
+import com.mraof.minestuck.world.lands.LandAspects;
+import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 import net.minecraft.entity.player.PlayerEntity;
@@ -26,7 +28,6 @@ import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ModDimension;
-import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;

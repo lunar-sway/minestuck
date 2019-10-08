@@ -1,14 +1,15 @@
 package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.util.EnumAspect;
+import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.biome.MSBiomes;
-import com.mraof.minestuck.world.lands.decorator.RabbitSpawner;
-import com.mraof.minestuck.world.lands.decorator.structure.RabbitHoleDecorator;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.EntityClassification;
+import net.minecraft.entity.EntityType;
+import net.minecraft.world.biome.Biome;
 
 public class RabbitsLandAspect extends TitleLandAspect
 {
@@ -30,14 +31,13 @@ public class RabbitsLandAspect extends TitleLandAspect
 		registry.setBlockState("carpet", Blocks.LIGHT_GRAY_CARPET.getDefaultState());
 	}
 	
-	//@Override
-	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
+	@Override
+	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{
-		
-		chunkProvider.decorators.add(new RabbitSpawner(6, MSBiomes.mediumNormal));
-		chunkProvider.decorators.add(new RabbitSpawner(3, MSBiomes.mediumRough));
-		chunkProvider.decorators.add(new RabbitHoleDecorator(MSBiomes.mediumNormal, MSBiomes.mediumRough));
-		//chunkProvider.sortDecorators();
+		if(biome.staticBiome == MSBiomes.LAND_NORMAL)
+			biome.addSpawn(EntityClassification.CREATURE, new Biome.SpawnListEntry(EntityType.RABBIT, 5, 2, 5));
+		if(biome.staticBiome == MSBiomes.LAND_ROUGH) //TODO verify that rabbits actually spawn properly in all lands with this spawn method
+			biome.addSpawn(EntityClassification.CREATURE, new Biome.SpawnListEntry(EntityType.RABBIT, 3, 1, 3));
 	}
 	
 	@Override
@@ -47,5 +47,4 @@ public class RabbitsLandAspect extends TitleLandAspect
 		aspect.registerBlocks(registry);
 		return registry.getBlockState("ocean").getMaterial() != Material.LAVA;
 	}
-	
 }

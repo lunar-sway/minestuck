@@ -10,7 +10,7 @@ import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
-import com.mraof.minestuck.world.lands.gen.LandGenSettings;
+import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.lands.structure.blocks.MSFillerBlockTypes;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.*;
@@ -24,9 +24,6 @@ import net.minecraft.world.gen.placement.ChanceConfig;
 import net.minecraft.world.gen.placement.CountRangeConfig;
 import net.minecraft.world.gen.placement.FrequencyConfig;
 import net.minecraft.world.gen.placement.Placement;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SandLandAspect extends TerrainLandAspect
 {

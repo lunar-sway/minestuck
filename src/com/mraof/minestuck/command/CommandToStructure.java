@@ -1,11 +1,7 @@
 package com.mraof.minestuck.command;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mraof.minestuck.world.lands.LandDimension;
-import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandSource;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.BlockPos;
 
 /**
  * Created by kirderf1 for debugging purposes

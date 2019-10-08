@@ -1,10 +1,8 @@
 package com.mraof.minestuck.world.gen;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.world.lands.LandBiomeProvider;
-import com.mraof.minestuck.world.lands.LandBiomeProviderSettings;
-import com.mraof.minestuck.world.lands.gen.LandChunkGenerator;
-import com.mraof.minestuck.world.lands.gen.LandGenSettings;
+import com.mraof.minestuck.world.biome.LandBiomeProvider;
+import com.mraof.minestuck.world.biome.LandBiomeProviderSettings;
 import net.minecraft.world.biome.provider.BiomeProviderType;
 import net.minecraft.world.gen.ChunkGeneratorType;
 import net.minecraftforge.event.RegistryEvent;

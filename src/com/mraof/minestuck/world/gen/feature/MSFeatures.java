@@ -29,12 +29,15 @@ public class MSFeatures
 	public static final Feature<BushConfig> LARGE_PILLAR = getNull();
 	public static final Feature<BlockBlobConfig> BLOCK_BLOB = getNull();
 	public static final Feature<NoFeatureConfig> STRAWBERRY = getNull();
+	public static final Feature<NoFeatureConfig> OCEAN_RUNDOWN = getNull();
 	
 	public static final Feature<NoFeatureConfig> SMALL_LIBRARY = getNull();
 	public static final Feature<NoFeatureConfig> CAKE_PEDESTAL = getNull();
 	public static final Feature<NoFeatureConfig> COG = getNull();
 	public static final Feature<NoFeatureConfig> FLOOR_COG = getNull();
 	public static final Feature<NoFeatureConfig> OASIS = getNull();
+	public static final Feature<NoFeatureConfig> MESA = getNull();
+	public static final Feature<NoFeatureConfig> ROCK_SPIKE = getNull();
 	
 	@Nonnull
 	@SuppressWarnings("ConstantConditions")
@@ -58,11 +61,14 @@ public class MSFeatures
 		registry.register(new PillarFeature(BushConfig::deserialize, true).setRegistryName("large_pillar"));
 		registry.register(new ConditionFreeBlobFeature(BlockBlobConfig::deserialize).setRegistryName("block_blob"));
 		registry.register(new ScatteredPlantFeature(NoFeatureConfig::deserialize, MSBlocks.STRAWBERRY.getDefaultState()).setRegistryName("strawberry"));
+		registry.register(new OceanRundownFeature(NoFeatureConfig::deserialize).setRegistryName("ocean_rundown"));
 		
 		registry.register(new SmallLibraryFeature(NoFeatureConfig::deserialize).setRegistryName("small_library"));
 		registry.register(new CakePedestalFeature(NoFeatureConfig::deserialize).setRegistryName("cake_pedestal"));
 		registry.register(new CogFeature(NoFeatureConfig::deserialize).setRegistryName("cog"));
 		registry.register(new FloorCogFeature(NoFeatureConfig::deserialize).setRegistryName("floor_cog"));
 		registry.register(new OasisFeature(NoFeatureConfig::deserialize).setRegistryName("oasis"));
+		registry.register(new MesaFeature(NoFeatureConfig::deserialize).setRegistryName("mesa"));
+		registry.register(new RockSpikeFeature(NoFeatureConfig::deserialize).setRegistryName("rock_spike"));
 	}
 }

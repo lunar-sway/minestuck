@@ -20,8 +20,7 @@ import java.util.Random;
 
 import com.google.common.base.Predicate;
 import com.mraof.minestuck.block.CustomOreBlock;
-import com.mraof.minestuck.world.lands.LandDimension;
-import com.mraof.minestuck.world.lands.gen.LandChunkGenerator;
+import com.mraof.minestuck.world.LandDimension;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;

@@ -1,7 +1,6 @@
-package com.mraof.minestuck.world.lands;
+package com.mraof.minestuck.world.biome;
 
 import com.google.common.collect.Sets;
-import com.mraof.minestuck.world.biome.LandBiomeLayers;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;

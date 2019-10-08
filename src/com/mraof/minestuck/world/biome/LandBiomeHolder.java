@@ -1,7 +1,7 @@
 package com.mraof.minestuck.world.biome;
 
 import com.mraof.minestuck.world.lands.LandAspects;
-import com.mraof.minestuck.world.lands.gen.LandGenSettings;
+import com.mraof.minestuck.world.gen.LandGenSettings;
 import net.minecraft.world.biome.Biome;
 
 public class LandBiomeHolder

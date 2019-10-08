@@ -1,6 +1,6 @@
 package com.mraof.minestuck.world.lands.gen;
 
-import com.mraof.minestuck.world.lands.LandDimension;
+import com.mraof.minestuck.world.LandDimension;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.structure.MapGenLandStructure;

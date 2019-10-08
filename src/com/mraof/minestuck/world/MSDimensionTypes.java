@@ -1,7 +1,6 @@
 package com.mraof.minestuck.world;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.world.lands.LandDimension;
 import net.minecraftforge.common.ModDimension;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

@@ -1,7 +1,7 @@
 package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.util.EnumAspect;
-import com.mraof.minestuck.world.lands.LandDimension;
+import com.mraof.minestuck.world.LandDimension;
 import com.mraof.minestuck.world.lands.ILandAspect;
 import com.mraof.minestuck.world.lands.structure.IGateStructure;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;

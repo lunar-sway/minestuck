@@ -114,7 +114,6 @@ public class MSBlocks
 	public static final Block RETURN_NODE = getNull();
 	
 	//Misc Functional Land Blocks
-	public static final Block RABBIT_SPAWNER = getNull();
 	
 	//Sburb Machines
 	public static CruxtruderMultiblock CRUXTRUDER;	//TODO Figure out how the multiblocks should fit in with objectholders
@@ -431,8 +430,6 @@ public class MSBlocks
 		
 		registry.register(new GateBlock(Block.Properties.create(Material.PORTAL).doesNotBlockMovement().hardnessAndResistance(-1.0F, 25.0F).sound(SoundType.GLASS).lightValue(11)).setRegistryName("gate"));
 		registry.register(new ReturnNodeBlock(Block.Properties.create(Material.PORTAL).doesNotBlockMovement().hardnessAndResistance(-1.0F, 10.0F).sound(SoundType.GLASS).lightValue(11)).setRegistryName("return_node"));
-		
-		registry.register(new MobSpawnerBlock(Block.Properties.create(Material.AIR).tickRandomly().doesNotBlockMovement()).setRegistryName("rabbit_spawner"));
 		
 		CRUXTRUDER = new CruxtruderMultiblock();
 		CRUXTRUDER.registerBlocks(registry);

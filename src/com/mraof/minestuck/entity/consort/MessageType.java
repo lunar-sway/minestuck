@@ -9,7 +9,7 @@ import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import com.mraof.minestuck.util.Title;
-import com.mraof.minestuck.world.lands.LandDimension;
+import com.mraof.minestuck.world.LandDimension;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.SimpleNamedContainerProvider;
 import net.minecraft.item.ItemStack;

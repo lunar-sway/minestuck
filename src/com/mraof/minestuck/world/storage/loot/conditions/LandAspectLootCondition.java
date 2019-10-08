@@ -11,7 +11,7 @@ import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.ILandAspect;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.LandAspects;
-import com.mraof.minestuck.world.lands.LandDimension;
+import com.mraof.minestuck.world.LandDimension;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 

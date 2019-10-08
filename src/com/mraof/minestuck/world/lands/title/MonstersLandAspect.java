@@ -3,7 +3,7 @@ package com.mraof.minestuck.world.lands.title;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
-import com.mraof.minestuck.world.lands.LandDimension;
+import com.mraof.minestuck.world.LandDimension;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityClassification;

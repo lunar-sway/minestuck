@@ -1,6 +1,6 @@
 package com.mraof.minestuck.world.lands.structure.blocks;
 
-import com.mraof.minestuck.world.lands.gen.LandGenSettings;
+import com.mraof.minestuck.world.gen.LandGenSettings;
 import net.minecraft.block.*;
 import net.minecraft.state.IProperty;
 import net.minecraft.state.properties.BlockStateProperties;

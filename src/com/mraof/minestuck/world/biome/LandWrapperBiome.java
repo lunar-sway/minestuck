@@ -1,6 +1,6 @@
 package com.mraof.minestuck.world.biome;
 
-import com.mraof.minestuck.world.lands.gen.LandGenSettings;
+import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.world.biome.Biome;

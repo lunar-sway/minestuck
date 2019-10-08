@@ -8,23 +8,16 @@ import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
-import com.mraof.minestuck.world.lands.decorator.*;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.OreFeatureConfig;
-import net.minecraft.world.gen.feature.SphereReplaceConfig;
+import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.placement.CountRangeConfig;
 import net.minecraft.world.gen.placement.FrequencyConfig;
 import net.minecraft.world.gen.placement.Placement;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class HeatLandAspect extends TerrainLandAspect
 {
@@ -71,6 +64,11 @@ public class HeatLandAspect extends TerrainLandAspect
 	@Override
 	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{
+		if(biome.staticBiome != MSBiomes.LAND_OCEAN)
+		{
+			biome.addFeature(GenerationStage.Decoration.TOP_LAYER_MODIFICATION, Biome.createDecoratedFeature(MSFeatures.OCEAN_RUNDOWN, IFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_HEIGHTMAP, new FrequencyConfig(3)));
+		}
+		
 		if(biome.staticBiome == MSBiomes.LAND_NORMAL)
 		{
 			biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(MSFeatures.FIRE_FIELD, NoFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_RANGE, new CountRangeConfig(7, 0, 0, 256)));
@@ -88,14 +86,6 @@ public class HeatLandAspect extends TerrainLandAspect
 		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(blocks.getGroundType(), MSBlocks.NETHERRACK_COAL_ORE.getDefaultState(), 17), Placement.COUNT_RANGE, new CountRangeConfig(26, 0, 0, 128)));
 		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(blocks.getGroundType(), Blocks.NETHER_QUARTZ_ORE.getDefaultState(), 8), Placement.COUNT_RANGE, new CountRangeConfig(13, 0, 0, 64)));
 		
-	}
-	
-	@Override
-	public List<ILandDecorator> getDecorators()
-	{
-		ArrayList<ILandDecorator> list = new ArrayList<>();
-		list.add(new OceanRundown(0.5F, 3));
-		return list;
 	}
 	
 	@Override

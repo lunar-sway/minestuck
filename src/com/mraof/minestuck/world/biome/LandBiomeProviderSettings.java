@@ -1,6 +1,6 @@
-package com.mraof.minestuck.world.lands;
+package com.mraof.minestuck.world.biome;
 
-import com.mraof.minestuck.world.lands.gen.LandGenSettings;
+import com.mraof.minestuck.world.gen.LandGenSettings;
 import net.minecraft.world.biome.provider.IBiomeProviderSettings;
 
 public class LandBiomeProviderSettings implements IBiomeProviderSettings

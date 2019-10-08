@@ -1,80 +1,73 @@
-package com.mraof.minestuck.world.lands.decorator;
+package com.mraof.minestuck.world.gen.feature;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Random;
-import java.util.function.BiConsumer;
-
+import com.mojang.datafixers.Dynamic;
+import com.mraof.minestuck.util.CoordPair;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.GenerationSettings;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
 
-import com.mraof.minestuck.util.CoordPair;
-import com.mraof.minestuck.world.lands.decorator.MesaDecorator.BlockRestorer;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import net.minecraft.world.gen.Heightmap;
+import java.util.*;
+import java.util.function.Function;
 
-public class RockDecorator extends BiomeSpecificDecorator
+public class RockSpikeFeature extends Feature<NoFeatureConfig>
 {
-	private boolean stomps=false;
+	private final boolean stomps = false;
 	
-	@Override
-	public int getCount(Random random)
+	public RockSpikeFeature(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn)
 	{
-		return random.nextFloat() < 0.02 ? 1 : 0;
+		super(configFactoryIn);
 	}
 	
 	@Override
-	public BlockPos generate(World world, Random random, BlockPos pos, ChunkProviderLands provider)
+	public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, NoFeatureConfig config)
 	{
-		pos = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, pos);
-		int height = random.nextInt(7) + 10;
+		int height = rand.nextInt(7) + 10;
 		
-		if(world.getBlockState(pos.up(height*2/3)).getMaterial().isLiquid())	//At least 1/3rd of the height should be above the liquid surface
-			return null;
-		float plateauSize = 0.2F + random.nextFloat()*(height/25F);
+		if(worldIn.getBlockState(pos.up(height*2/3)).getMaterial().isLiquid())	//At least 1/3rd of the height should be above the liquid surface
+			return false;
+		float plateauSize = 0.2F + rand.nextFloat()*(height/25F);
+		BlockState ground = generator.getSettings().getDefaultBlock();
 		
-		BlockPos nodePos = generateRock(pos.up(height), height, plateauSize, world, random, provider);
-		stomps = false;
+		BlockPos nodePos = generateRock(pos.up(height), height, plateauSize, worldIn, rand, ground);
 		
-/*		float rockRarity = plateauSize + height/15F + random.nextFloat()*0.5F - 0.5F;
+		float rockRarity = plateauSize + height/15F + rand.nextFloat()*0.5F - 0.5F;
 		
 		if(rockRarity > 1F)
 		{
-			generateSubRock(pos, height, plateauSize, world, random, worldProvider);
+			generateSubRock(pos, height, plateauSize, worldIn, rand, ground);
 			rockRarity -= 1F;
 		}
-		if(random.nextFloat() < rockRarity)
-			generateSubRock(pos, height, plateauSize, world, random, worldProvider);*/
+		if(rand.nextFloat() < rockRarity)
+			generateSubRock(pos, height, plateauSize, worldIn, rand, ground);
 		
-		return nodePos;
+		//TODO return node
+		
+		return true;
 	}
 	
-	private void generateSubRock(BlockPos pos, int heightOld, float plateauOld, World world, Random rand, ChunkProviderLands provider)
+	private void generateSubRock(BlockPos pos, int heightOld, float plateauOld, IWorld world, Random rand, BlockState ground)
 	{
 		int height = 5 + rand.nextInt((int) ((heightOld - 6)*0.75));
 		BlockPos newPos = pos.add(rand.nextInt(10) - 5, 0, rand.nextInt(10) - 5);
 		//newPos = world.getTopSolidOrLiquidBlock(newPos).up(height);
 		float plateauSize = rand.nextFloat()*plateauOld*0.75F;
 		
-		generateRock(newPos, height, plateauSize, world, rand, provider);
-		stomps = false;
+		generateRock(newPos, height, plateauSize, world, rand, ground);
 	}
 	
-	private BlockPos generateRock(BlockPos rockPos, int height, float plateauSize, World world, Random random, ChunkProviderLands provider)
+	private BlockPos generateRock(BlockPos rockPos, int height, float plateauSize, IWorld world, Random random, BlockState ground)
 	{
 		float xSlope = random.nextFloat(), zSlope = random.nextFloat();
-		BlockState block = provider.blockRegistry.getBlockState("ground");
 		
 		Map<CoordPair, Integer> heightMap = new HashMap<>();
 		Queue<BlockPos> toProcess = new LinkedList<>();
 		Map<BlockPos, BlockState> was = new HashMap<>();
 		toProcess.add(rockPos);
 		toProcess.add(null);
-		
-		stomps = false;
 		
 		while(!toProcess.isEmpty())	//place the top layer of blocks
 		{
@@ -89,11 +82,11 @@ public class RockDecorator extends BiomeSpecificDecorator
 					continue;
 				}
 			
-			//if(provider.villageHandler.isPositionInStructure(world, pos) || provider.structureHandler.isPositionInStructure(world, pos))
+			/*if(provider.villageHandler.isPositionInStructure(world, pos) || provider.structureHandler.isPositionInStructure(world, pos)) TODO
 			{
 				stomps = true;
-				//break;
-			}
+				break;
+			}*/
 			
 			if(random.nextFloat()*xSlope < plateauSize)
 				toProcess.add(pos.west());
@@ -109,15 +102,15 @@ public class RockDecorator extends BiomeSpecificDecorator
 				heightMap.put(xz, pos.getY());
 		}
 		
-		Queue<BlockEntry> toProcess2 = new LinkedList<BlockEntry>();
+		Queue<BlockEntry> toProcess2 = new LinkedList<>();
 		int h = 1;
 		
 		for(CoordPair coord : heightMap.keySet())
-			if(checkCoord(coord, heightMap) && stomps==false)
+			if(checkCoord(coord, heightMap) && !stomps)
 				toProcess2.add(new BlockEntry(coord, plateauSize + 0.2F));
 		toProcess2.add(null);
 		
-		while(!toProcess2.isEmpty() && stomps==false)
+		while(!toProcess2.isEmpty() && !stomps)
 		{
 			BlockEntry entry = toProcess2.remove();
 			if(entry == null)
@@ -141,18 +134,18 @@ public class RockDecorator extends BiomeSpecificDecorator
 				if(!heightMap.containsKey(coord))
 				{
 					BlockPos pos = new BlockPos(coord.x, rockPos.getY() - h, coord.z);
-					//if(provider.villageHandler.isPositionInStructure(world, pos) || provider.structureHandler.isPositionInStructure(world, pos))
+					/*if(provider.villageHandler.isPositionInStructure(world, pos) || provider.structureHandler.isPositionInStructure(world, pos)) TODO
 					{
 						stomps=true;
-						//break;
-					}
+						break;
+					}*/
 					heightMap.put(coord, rockPos.getY() - h);
 					if(checkCoord(coord, heightMap))
 						toProcess2.add(new BlockEntry(coord, entry.spreadChance));
 				}
 			} else entry.spreadChance += 0.5F;
 			
-			if(!world.getBlockState(new BlockPos(entry.pos.x, rockPos.getY() - h - 1, entry.pos.z)).equals(block))
+			if(!world.getBlockState(new BlockPos(entry.pos.x, rockPos.getY() - h - 1, entry.pos.z)).equals(ground))
 				toProcess2.add(entry);
 		}
 		
@@ -161,20 +154,20 @@ public class RockDecorator extends BiomeSpecificDecorator
 			BlockPos pos = new BlockPos(entry.getKey().x, entry.getValue(), entry.getKey().z);
 			do
 			{
-				//if(provider.villageHandler.isPositionInStructure(world, pos) || provider.structureHandler.isPositionInStructure(world, pos) || stomps==true)
+				/*if(provider.villageHandler.isPositionInStructure(world, pos) || provider.structureHandler.isPositionInStructure(world, pos) || stomps==true) TODO
 				{
 					stomps=true;
-					//break;
-				}
+					break;
+				}*/
 				was.put(pos, world.getBlockState(pos));
-				world.setBlockState(pos, block, 2);
+				world.setBlockState(pos, ground, 2);
 				pos = pos.down();
-			} while(!world.getBlockState(pos).equals(block));
+			} while(!world.getBlockState(pos).equals(ground));
 		}
 		
 		CoordPair nodePos = new CoordPair(rockPos.getX(), rockPos.getZ());
 		int maxBlocks = 0;
-		for(int i = 0; i < 9 && stomps==false; i++)
+		for(int i = 0; i < 9 && !stomps; i++)
 		{
 			CoordPair coords = new CoordPair(rockPos.getX() + (i % 3) - 1, rockPos.getZ() + i/3 - 1);
 			int blockCount = 0;
@@ -195,30 +188,15 @@ public class RockDecorator extends BiomeSpecificDecorator
 		
 		if(stomps)
 		{
-			BiConsumer<? super BlockPos, ? super BlockState> action = new BlockRestorer().setWorld(world);
-			was.forEach(action);
+			was.forEach((t, u) -> world.setBlockState(t, u, 2));
 		}
 		
 		return corePosition;
 	}
 	
-	public class BlockRestorer implements BiConsumer<BlockPos, BlockState>
-	{
-		World world = null;
-		public BlockRestorer setWorld(World w) {world = w; return this;}
-		
-		@Override
-		public void accept(BlockPos t, BlockState u)
-		{
-			world.setBlockState(t, u);
-		}
-	}
-	
 	private static boolean checkCoord(CoordPair pair, Map<CoordPair, Integer> map)
 	{
-		if(map.containsKey(pair.north()) && map.containsKey(pair.east()) && map.containsKey(pair.south()) && map.containsKey(pair.west()))
-			return false;
-		return true;
+		return !map.containsKey(pair.north()) || !map.containsKey(pair.east()) || !map.containsKey(pair.south()) || !map.containsKey(pair.west());
 	}
 	
 	private static class BlockEntry
@@ -231,11 +209,4 @@ public class RockDecorator extends BiomeSpecificDecorator
 			this.spreadChance = spreadChance;
 		}
 	}
-	
-	@Override
-	public float getPriority()
-	{
-		return 0.8F;
-	}
-	
 }
