@@ -50,7 +50,7 @@ public class GateHandler
 					
 					BlockPos placement = pos.add(x, 0, z);
 					
-					if(player.world.getBiomeBody(placement) == MSBiomes.mediumNormal)
+					if(player.world.getBiomeBody(placement) == MSBiomes.LAND_NORMAL)
 						location = GlobalPos.of(dim, player.world.getHeight(Heightmap.Type.MOTION_BLOCKING, placement));
 					
 				} while(location == null);	//TODO replace with a more friendly version without a chance of freezing the game

@@ -1,7 +1,9 @@
 package com.mraof.minestuck.world.gen.feature;
 
+import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.Dynamic;
 import com.mraof.minestuck.Minestuck;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
@@ -14,9 +16,7 @@ import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.template.PlacementSettings;
-import net.minecraft.world.gen.feature.template.Template;
-import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraft.world.gen.feature.template.*;
 import net.minecraft.world.server.ServerWorld;
 
 import java.util.Random;
@@ -39,6 +39,11 @@ public class SmallLibraryFeature extends Feature<NoFeatureConfig>
 		Template template = templates.getTemplateDefaulted(STRUCTURE_SMALL_LIBRARY);
 		
 		PlacementSettings settings = new PlacementSettings().setRotation(rotation).setChunk(new ChunkPos(pos)).setRandom(rand).addProcessor(StructureBlockRegistryProcessor.INSTANCE);
+		
+		if(rand.nextBoolean())
+		{	//Replace 20% of bookcases with air
+			settings.addProcessor(new RuleStructureProcessor(ImmutableList.of(new RuleEntry(new RandomBlockMatchRuleTest(Blocks.BOOKSHELF, 0.2F), AlwaysTrueRuleTest.INSTANCE, Blocks.AIR.getDefaultState()))));
+		}
 		
 		BlockPos size = template.transformedSize(rotation);
 		int xOffset = rand.nextInt(16 - size.getX()), zOffset = rand.nextInt(16 - size.getZ());

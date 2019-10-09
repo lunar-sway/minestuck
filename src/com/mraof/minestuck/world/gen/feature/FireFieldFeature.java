@@ -1,7 +1,7 @@
 package com.mraof.minestuck.world.gen.feature;
 
 import com.mojang.datafixers.Dynamic;
-import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -29,7 +29,7 @@ public class FireFieldFeature extends Feature<NoFeatureConfig>
 	{
 		StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(generator.getSettings());
 		BlockState surface = blocks.getBlockState("surface");
-		BlockState upper = blocks.getBlockState("surface");
+		BlockState upper = blocks.getBlockState("upper");
 		
 		for(int i2 = 0; i2 < BLOCK_COUNT; i2++)
 		{

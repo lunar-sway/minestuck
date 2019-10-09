@@ -337,8 +337,8 @@ public abstract class CruxiteArtifactItem extends Item
 			Debug.debug("Placing gates...");
 			
 			GateHandler.findGatePlacement(worldserver1);
-			placeGate(1, new BlockPos(x + xDiff, GateHandler.gateHeight1, z + zDiff), worldserver1);
-			placeGate(2, new BlockPos(x + xDiff, GateHandler.gateHeight2, z + zDiff), worldserver1);
+			placeGate(GateHandler.Type.GATE_1, new BlockPos(x + xDiff, GateHandler.gateHeight1, z + zDiff), worldserver1);
+			placeGate(GateHandler.Type.GATE_2, new BlockPos(x + xDiff, GateHandler.gateHeight2, z + zDiff), worldserver1);
 			
 			ServerEventHandler.tickTasks.add(new PostEntryTask(worldserver1.getDimension().getType(), x + xDiff, y + yDiff, z + zDiff, artifactRange.get(), (byte) 0));
 			
@@ -447,14 +447,14 @@ public abstract class CruxiteArtifactItem extends Item
 		return maxY;
 	}
 	
-	private static void placeGate(int gateCount, BlockPos pos, ServerWorld world)
+	private static void placeGate(GateHandler.Type gateType, BlockPos pos, ServerWorld world)
 	{
 		for(int i = 0; i < 9; i++)
 			if(i == 4)
 			{
 				world.setBlockState(pos, MSBlocks.GATE.getDefaultState().cycle(GateBlock.MAIN), 0);
 				GateTileEntity tileEntity = (GateTileEntity) world.getTileEntity(pos);
-				tileEntity.gateCount = gateCount;
+				tileEntity.gateType = gateType;
 			}
 			else world.setBlockState(pos.add((i % 3) - 1, 0, i/3 - 1), MSBlocks.GATE.getDefaultState(), 0);
 	}

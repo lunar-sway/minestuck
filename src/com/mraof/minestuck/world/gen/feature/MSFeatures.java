@@ -38,6 +38,7 @@ public class MSFeatures
 	public static final Feature<NoFeatureConfig> OASIS = getNull();
 	public static final Feature<NoFeatureConfig> MESA = getNull();
 	public static final Feature<NoFeatureConfig> ROCK_SPIKE = getNull();
+	public static final Feature<NoFeatureConfig> BUCKET = getNull();
 	
 	@Nonnull
 	@SuppressWarnings("ConstantConditions")
@@ -70,5 +71,6 @@ public class MSFeatures
 		registry.register(new OasisFeature(NoFeatureConfig::deserialize).setRegistryName("oasis"));
 		registry.register(new MesaFeature(NoFeatureConfig::deserialize).setRegistryName("mesa"));
 		registry.register(new RockSpikeFeature(NoFeatureConfig::deserialize).setRegistryName("rock_spike"));
+		registry.register(new BucketFeature(NoFeatureConfig::deserialize).setRegistryName("bucket"));
 	}
 }

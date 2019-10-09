@@ -19,9 +19,6 @@ public class MSBiomes
 	public static final LandBiome.Rough LAND_ROUGH = getNull();
 	public static final LandBiome.Ocean LAND_OCEAN = getNull();
 	
-	@Deprecated //These references are to be removed once references to them properly use the ones above
-	public static Biome mediumOcean, mediumNormal, mediumRough;
-	
 	@Nonnull
 	@SuppressWarnings("ConstantConditions")
 	private static <T> T getNull() {

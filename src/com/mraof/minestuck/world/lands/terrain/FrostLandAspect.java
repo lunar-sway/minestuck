@@ -8,7 +8,7 @@ import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.LandGenSettings;
-import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.*;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.math.Vec3d;
@@ -34,7 +34,7 @@ public class FrostLandAspect extends TerrainLandAspect
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("surface", Blocks.GRASS.getDefaultState());
+		registry.setBlockState("surface", Blocks.GRASS_BLOCK.getDefaultState());
 		registry.setBlockState("upper", Blocks.DIRT.getDefaultState());
 		registry.setBlockState("structure_primary", Blocks.PRISMARINE.getDefaultState());
 		registry.setBlockState("structure_primary_decorative", Blocks.PRISMARINE_BRICKS.getDefaultState());
@@ -45,7 +45,7 @@ public class FrostLandAspect extends TerrainLandAspect
 		registry.setBlockState("structure_planks_slab", Blocks.SPRUCE_SLAB.getDefaultState());
 		registry.setBlockState("river", Blocks.ICE.getDefaultState());
 		registry.setBlockState("light_block", Blocks.SEA_LANTERN.getDefaultState());
-		registry.setBlockState("bucket1", Blocks.SNOW.getDefaultState());
+		registry.setBlockState("bucket_1", Blocks.SNOW_BLOCK.getDefaultState());
 		registry.setBlockState("bush", Blocks.FERN.getDefaultState());
 		registry.setBlockState("structure_wool_1", Blocks.WHITE_WOOL.getDefaultState());
 		registry.setBlockState("structure_wool_3", Blocks.CYAN_WOOL.getDefaultState());

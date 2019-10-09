@@ -1,4 +1,4 @@
-package com.mraof.minestuck.world.lands.structure.blocks;
+package com.mraof.minestuck.world.gen.structure.blocks;
 
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import net.minecraft.block.*;
@@ -95,8 +95,8 @@ public class StructureBlockRegistry
 		registerBlock("mushroom_2", Blocks.BROWN_MUSHROOM.getDefaultState());
 		registerBlock("bush", Blocks.DEAD_BUSH.getDefaultState());
 		registerBlock("torch", Blocks.TORCH.getDefaultState(), TorchBlock.class);	//Class restriction needed because of the facing property
-		registerBlock("bucket1", Blocks.QUARTZ_BLOCK.getDefaultState());
-		registerBlock("bucket2", Blocks.IRON_BLOCK.getDefaultState());
+		registerBlock("bucket_1", Blocks.QUARTZ_BLOCK.getDefaultState());
+		registerBlock("bucket_2", Blocks.IRON_BLOCK.getDefaultState());
 		registerBlock("glass", Blocks.GLASS.getDefaultState());
 		registerBlock("stained_glass_1", Blocks.GRAY_STAINED_GLASS.getDefaultState());
 		registerBlock("stained_glass_2", Blocks.LIGHT_GRAY_STAINED_GLASS.getDefaultState());

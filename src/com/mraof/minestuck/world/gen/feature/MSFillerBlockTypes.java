@@ -1,4 +1,4 @@
-package com.mraof.minestuck.world.lands.structure.blocks;
+package com.mraof.minestuck.world.gen.feature;
 
 import com.mraof.minestuck.block.MSBlocks;
 import net.minecraft.block.Blocks;

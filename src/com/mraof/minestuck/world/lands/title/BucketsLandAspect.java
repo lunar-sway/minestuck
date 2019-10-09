@@ -1,11 +1,16 @@
 package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.util.EnumAspect;
+import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.biome.MSBiomes;
-import com.mraof.minestuck.world.lands.decorator.structure.BucketDecorator;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.feature.MSFeatures;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.Blocks;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.gen.placement.ChanceConfig;
+import net.minecraft.world.gen.placement.Placement;
 
 public class BucketsLandAspect extends TitleLandAspect	//Yes, buckets
 {
@@ -27,10 +32,12 @@ public class BucketsLandAspect extends TitleLandAspect	//Yes, buckets
 		registry.setBlockState("carpet", Blocks.BLACK_CARPET.getDefaultState());
 	}
 	
-	//@Override
-	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
+	@Override
+	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{
-		chunkProvider.decorators.add(new BucketDecorator(MSBiomes.mediumNormal, MSBiomes.mediumRough));
-		//chunkProvider.sortDecorators();
+		if(biome.staticBiome != MSBiomes.LAND_OCEAN)
+		{
+			biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, Biome.createDecoratedFeature(MSFeatures.BUCKET, IFeatureConfig.NO_FEATURE_CONFIG, Placement.CHANCE_PASSTHROUGH, new ChanceConfig(16)));
+		}
 	}
 }
