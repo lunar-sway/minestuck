@@ -77,7 +77,6 @@ public class SessionHandler
 				mainSession.name = GLOBAL_SESSION_NAME;
 				sessions.add(mainSession);
 				sessionsByName.put(mainSession.name, mainSession);
-				skaianetHandler.markDirty();
 			}
 			
 			return;
@@ -98,7 +97,6 @@ public class SessionHandler
 		sessionsByName.put(session.name, session);
 		
 		session.completed = false;
-		skaianetHandler.markDirty();
 	}
 	
 	/**
@@ -165,8 +163,6 @@ public class SessionHandler
 				cs.name = ss.name;
 				sessionsByName.put(cs.name, cs);
 			}
-			
-			skaianetHandler.markDirty();
 		}
 		return s;
 	}
@@ -242,7 +238,6 @@ public class SessionHandler
 				sessions.add(s);
 			first = false;
 		}
-		skaianetHandler.markDirty();
 	}
 	
 	/**
@@ -285,7 +280,6 @@ public class SessionHandler
 				session.name = GLOBAL_SESSION_NAME;
 				sessions.add(session);
 				sessionsByName.put(session.name, session);
-				skaianetHandler.markDirty();
 			}
 			
 			int i = (sessions.get(0).containsPlayer(connection.getClientIdentifier())?0:1)+(connection.getServerIdentifier().equals(IdentifierHandler.nullIdentifier) || sessions.get(0).containsPlayer(connection.getServerIdentifier())?0:1);
@@ -294,7 +288,6 @@ public class SessionHandler
 			else
 			{
 				sessions.get(0).connections.add(connection);
-				skaianetHandler.markDirty();
 				return null;
 			}
 		} else
@@ -305,21 +298,18 @@ public class SessionHandler
 				Session s = new Session();
 				sessions.add(s);
 				s.connections.add(connection);
-				skaianetHandler.markDirty();
 				return null;
 			} else if(sClient == null || sServer == null)
 			{
 				if((sClient == null?sServer:sClient).locked || MinestuckConfig.forceMaxSize && !connection.getServerIdentifier().equals(IdentifierHandler.nullIdentifier) && (sClient == null?sServer:sClient).getPlayerList().size()+1 > maxSize)
 					return "computer."+(sClient == null?"server":"client")+"SessionFull";
 				(sClient == null?sServer:sClient).connections.add(connection);
-				skaianetHandler.markDirty();
 				return null;
 			} else
 			{
 				if(sClient == sServer)
 				{
 					sClient.connections.add(connection);
-					skaianetHandler.markDirty();
 					return null;
 				}
 				else return merge(sClient, sServer, connection);
@@ -338,7 +328,6 @@ public class SessionHandler
 		if(!connection.isMain())
 		{
 			s.connections.remove(connection);
-			skaianetHandler.markDirty();
 			if(!singleSession)
 				if(s.connections.size() == 0 && !s.isCustom())
 					sessions.remove(s);
@@ -361,7 +350,6 @@ public class SessionHandler
 			}
 			if(s.connections.size() == 0 && !s.isCustom())
 				sessions.remove(s);
-			skaianetHandler.markDirty();
 		}
 	}
 	

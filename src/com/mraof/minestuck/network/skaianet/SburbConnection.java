@@ -85,7 +85,6 @@ public class SburbConnection
 		if(!isMain)
 		{
 			isMain = true;
-			handler.markDirty();
 		}
 	}
 	

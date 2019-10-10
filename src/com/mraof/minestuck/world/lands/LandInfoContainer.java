@@ -18,8 +18,6 @@ import java.util.Random;
  */
 public class LandInfoContainer
 {
-	private final SkaianetHandler handler;
-	
 	public final IdentifierHandler.PlayerIdentifier identifier;
 	public final LandAspects landAspects;
 	public final DimensionType dimensionType;
@@ -28,10 +26,8 @@ public class LandInfoContainer
 	@Nullable
 	private BlockPos gatePos = null;
 	
-	public LandInfoContainer(SkaianetHandler handler, IdentifierHandler.PlayerIdentifier identifier, LandAspects landAspects, DimensionType dimensionType, Random random)
+	public LandInfoContainer(IdentifierHandler.PlayerIdentifier identifier, LandAspects landAspects, DimensionType dimensionType, Random random)
 	{
-		this.handler = handler;
-		
 		this.identifier = identifier;
 		this.landAspects = landAspects;
 		this.dimensionType = dimensionType;
@@ -42,8 +38,6 @@ public class LandInfoContainer
 	
 	private LandInfoContainer(SkaianetHandler handler, IdentifierHandler.PlayerIdentifier identifier, LandAspects landAspects, DimensionType dimensionType, boolean reverseOrder, int terrainNameIndex, int titleNameIndex)
 	{
-		this.handler = handler;
-		
 		this.identifier = identifier;
 		this.landAspects = landAspects;
 		this.dimensionType = dimensionType;
@@ -73,6 +67,7 @@ public class LandInfoContainer
 		else return landAspects.title.getNames()[titleNameIndex];
 	}
 	
+	@Nullable
 	public BlockPos getGatePos()
 	{
 		return gatePos;
@@ -81,7 +76,6 @@ public class LandInfoContainer
 	public void setGatePos(BlockPos pos)
 	{
 		gatePos = pos;
-		handler.markDirty();
 	}
 	
 	/**

@@ -298,6 +298,7 @@ public class LandDimension extends Dimension
 	
 	public static class Type extends ModDimension
 	{
+		public boolean useServerData;
 		public Map<Integer, LandAspects> dimToLandAspects = new HashMap<>();	//TODO This might not be populated by skaianet before the dimension the player is in is created
 		//TODO Dimension might actually not be unloaded when switching to/creating a new world
 		@Override

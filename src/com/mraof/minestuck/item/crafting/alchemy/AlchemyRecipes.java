@@ -301,9 +301,9 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(woodItems[7][2], woodItems[6][3], MODE_OR, new ItemStack(woodItems[8][4]));
 		
 		CombinationRegistry.addCombination(ItemTags.WOODEN_DOORS, Items.IRON_INGOT, MODE_AND, new ItemStack(Blocks.IRON_DOOR));
-		//CombinationRegistry.addCombination("fenceWood", Blocks.NETHER_BRICKS, MODE_AND, new ItemStack(Blocks.NETHER_BRICK_FENCE));
+		CombinationRegistry.addCombination(ItemTags.WOODEN_FENCES, Blocks.NETHER_BRICKS, MODE_AND, new ItemStack(Blocks.NETHER_BRICK_FENCE));
 		CombinationRegistry.addCombination(ItemTags.WOODEN_STAIRS, Blocks.NETHER_BRICKS, MODE_AND, new ItemStack(Blocks.NETHER_BRICK_STAIRS));
-		//CombinationRegistry.addCombination("fenceWood", Items.NETHER_BRICK, MODE_AND, new ItemStack(Blocks.NETHER_BRICK_FENCE));
+		CombinationRegistry.addCombination(ItemTags.WOODEN_FENCES, Items.NETHER_BRICK, MODE_AND, new ItemStack(Blocks.NETHER_BRICK_FENCE));
 		CombinationRegistry.addCombination(ItemTags.WOODEN_STAIRS, Items.NETHER_BRICK, MODE_AND, new ItemStack(Blocks.NETHER_BRICK_STAIRS));
 		//CombinationRegistry.addCombination("doorWood", "slabWood", MODE_AND, Blocks.TRAPDOOR)); TODO Add trapdoors to the contraption above
 		CombinationRegistry.addCombination(ItemTags.LOGS, Items.COAL, MODE_AND, new ItemStack(Items.CHARCOAL));
@@ -430,7 +430,7 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(ItemTags.SAND, Blocks.GRASS, MODE_AND, new ItemStack(Blocks.CACTUS));
 		CombinationRegistry.addCombination(ItemTags.SAPLINGS, ItemTags.SAND, MODE_AND, new ItemStack(Blocks.DEAD_BUSH));
 		CombinationRegistry.addCombination(Items.ENDER_PEARL, Blocks.CHEST, MODE_AND, new ItemStack(Blocks.ENDER_CHEST));
-		CombinationRegistry.addCombination(Blocks.GLASS, Blocks.SNOW, MODE_AND, new ItemStack(Blocks.ICE));
+		CombinationRegistry.addCombination(Blocks.GLASS, Blocks.SNOW_BLOCK, MODE_AND, new ItemStack(Blocks.ICE));
 		CombinationRegistry.addCombination(Blocks.SPONGE, Items.WATER_BUCKET, MODE_AND, new ItemStack(Blocks.WET_SPONGE));
 		CombinationRegistry.addCombination(Items.BLAZE_POWDER, Items.GUNPOWDER, MODE_OR, new ItemStack(Items.FIRE_CHARGE));
 		CombinationRegistry.addCombination(Blocks.SAND, Blocks.STONE_BRICK_STAIRS, MODE_OR, new ItemStack(Blocks.SANDSTONE_STAIRS));
@@ -442,7 +442,7 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(Blocks.SMOOTH_SANDSTONE, Items.RED_DYE, MODE_AND, new ItemStack(Blocks.SMOOTH_RED_SANDSTONE));
 		CombinationRegistry.addCombination(Blocks.SANDSTONE_STAIRS, Items.RED_DYE, MODE_AND, new ItemStack(Blocks.RED_SANDSTONE_STAIRS));
 		CombinationRegistry.addCombination(ItemTags.PLANKS, Items.BOOK, MODE_OR, new ItemStack(Blocks.BOOKSHELF));
-		//CombinationRegistry.addCombination("record", Blocks.NOTE_BLOCK, MODE_AND, new ItemStack(Blocks.JUKEBOX));
+		CombinationRegistry.addCombination(ItemTags.MUSIC_DISCS, Blocks.NOTE_BLOCK, MODE_AND, new ItemStack(Blocks.JUKEBOX));
 		CombinationRegistry.addCombination(Items.STICK, Blocks.VINE, MODE_AND, new ItemStack(Blocks.LADDER));
 		CombinationRegistry.addCombination(ItemTags.LEAVES, Blocks.LADDER, MODE_OR, new ItemStack(Blocks.VINE));
 		CombinationRegistry.addCombination(Items.PRISMARINE_SHARD, Blocks.COBBLESTONE, MODE_AND, new ItemStack(Blocks.PRISMARINE));
@@ -892,7 +892,7 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(Blocks.COARSE_DIRT, Blocks.END_STONE, MODE_OR, new ItemStack(COARSE_END_STONE));
 		CombinationRegistry.addCombination(Blocks.GRASS_BLOCK, Blocks.END_STONE, MODE_OR, new ItemStack(END_GRASS));
 		CombinationRegistry.addCombination(Blocks.MYCELIUM, Blocks.END_STONE, MODE_OR, new ItemStack(END_GRASS));
-		CombinationRegistry.addCombination(END_GRASS, Blocks.DIRT, MODE_OR, new ItemStack(Blocks.GRASS));
+		CombinationRegistry.addCombination(END_GRASS, Blocks.DIRT, MODE_OR, new ItemStack(Blocks.GRASS_BLOCK));
 		CombinationRegistry.addCombination(Blocks.OAK_LOG, Blocks.VINE, MODE_AND, new ItemStack(VINE_LOG));
 		CombinationRegistry.addCombination(VINE_LOG, Blocks.DANDELION, MODE_OR, new ItemStack(FLOWERY_VINE_LOG));
 		CombinationRegistry.addCombination(VINE_LOG, Blocks.POPPY, MODE_OR, new ItemStack(FLOWERY_VINE_LOG));

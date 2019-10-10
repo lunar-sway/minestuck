@@ -29,9 +29,9 @@ public class MSDimensions
 	public static void registerDimensionTypes(final RegisterDimensionsEvent event)
 	{
 		//register dimensions
-		skaiaDimension = DimensionType.byName(SKAIA_ID);
-		if(skaiaDimension == null)
-			skaiaDimension = DimensionManager.registerDimension(SKAIA_ID, MSDimensionTypes.SKAIA, null, true);
+		skaiaDimension = DimensionManager.registerOrGetDimension(SKAIA_ID, MSDimensionTypes.SKAIA, null, true);
+		
+		
 	}
 	
 	public static LandAspects getAspects(MinecraftServer server, DimensionType dimension)

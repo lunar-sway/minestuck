@@ -97,7 +97,7 @@ public class OasisFeature extends Feature<NoFeatureConfig>
 				if (!blocks[((x * 16) + z) * 4 + 3] && hasBlock2(blocks, x, 3, z))
 				{
 					BlockPos surfacePos = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE, pos.add(x - 8, 0, z - 8));
-					setBlockState(worldIn, surfacePos.down(), Blocks.GRASS.getDefaultState());
+					setBlockState(worldIn, surfacePos.down(), Blocks.GRASS_BLOCK.getDefaultState());
 					if (rand.nextInt(5) == 0)
 						setBlockState(worldIn, surfacePos, Blocks.GRASS.getDefaultState());
 					if (hasBlock1(blocks, x, 3, z, true))

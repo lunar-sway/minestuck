@@ -39,7 +39,7 @@ public class FloraLandAspect extends TerrainLandAspect
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("surface", Blocks.GRASS.getDefaultState());
+		registry.setBlockState("surface", Blocks.GRASS_BLOCK.getDefaultState());
 		registry.setBlockState("upper", Blocks.DIRT.getDefaultState());
 		registry.setBlockState("ocean", MSBlocks.BLOOD.getDefaultState());
 		registry.setBlockState("structure_primary", Blocks.MOSSY_STONE_BRICKS.getDefaultState());
