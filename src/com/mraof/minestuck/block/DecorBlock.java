@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.util.CustomVoxelShape;
 import net.minecraft.block.AnvilBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -8,6 +9,7 @@ import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -24,10 +26,11 @@ public class DecorBlock extends Block
 	
 	public final VoxelShape[] shape;
 	
-	public DecorBlock(Properties properties, VoxelShape[] shape)
+	
+	public DecorBlock(Properties properties, CustomVoxelShape shape)
 	{
 		super(properties);
-		this.shape = shape;
+		this.shape = new VoxelShape[] {shape.create(Direction.SOUTH), shape.create(Direction.WEST), shape.create(Direction.NORTH), shape.create(Direction.EAST)};
 	}
 	
 	@Override
@@ -47,7 +50,7 @@ public class DecorBlock extends Block
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context)
 	{
-        return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing());
+        return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
     }
 	
 	@Override
@@ -59,8 +62,7 @@ public class DecorBlock extends Block
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 	{
-		if(shape.length < 4)
-			return shape[0];
-		else return shape[state.get(FACING).getHorizontalIndex()];
+		//return shape.create(state.get(FACING)); <- it lags the game when you stand on a decor block
+		return shape[state.get(FACING).getHorizontalIndex()];
 	}
 }
