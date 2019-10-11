@@ -867,7 +867,9 @@ public class SkaianetHandler
 	
 	public static CompoundNBT write()
 	{
-		return INSTANCE.write(new CompoundNBT());
+		if(INSTANCE == null)
+			return null;
+		else return INSTANCE.write(new CompoundNBT());
 	}
 	
 	public static void clear()

@@ -104,7 +104,7 @@ public class LandAspectRegistry
 		IForgeRegistry<TerrainLandAspect> registry = event.getRegistry();
 		
 		registry.register(new NullTerrainLandAspect().setRegistryName("null"));
-		registry.register(new ForestLandAspect(ForestLandAspect.Variant.FOREST).setRegistryName("forest"));
+		/*registry.register(new ForestLandAspect(ForestLandAspect.Variant.FOREST).setRegistryName("forest"));
 		registry.register(new ForestLandAspect(ForestLandAspect.Variant.TAIGA).setRegistryName("taiga"));
 		registry.register(new FrostLandAspect().setRegistryName("frost"));
 		registry.register(new FungiLandAspect().setRegistryName("fungi"));
@@ -118,10 +118,10 @@ public class LandAspectRegistry
 		registry.register(new SandstoneLandAspect(SandstoneLandAspect.Variant.RED_SANDSTONE).setRegistryName("red_sandstone"));
 		registry.register(new ShadeLandAspect().setRegistryName("shade"));
 		registry.register(new WoodLandAspect().setRegistryName("wood"));
-		registry.register(new RainbowLandAspect().setRegistryName("rainbow"));
+		registry.register(new RainbowLandAspect().setRegistryName("rainbow"));*/
 		registry.register(new FloraLandAspect().setRegistryName("flora"));
-		registry.register(new EndLandAspect().setRegistryName("end"));
-		registry.register(new RainLandAspect().setRegistryName("rain"));
+		//registry.register(new EndLandAspect().setRegistryName("end"));
+		//registry.register(new RainLandAspect().setRegistryName("rain"));
 	}
 	
 	@SubscribeEvent

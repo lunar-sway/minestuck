@@ -39,9 +39,6 @@ public abstract class TerrainLandAspect extends ForgeRegistryEntry<TerrainLandAs
 		this.pickedAtRandom = pickedAtRandom;
 	}
 	
-	@Deprecated
-	public List<ILandDecorator> getDecorators(){return null;}
-	
 	public float getSkylightBase()
 	{
 		return 1F;

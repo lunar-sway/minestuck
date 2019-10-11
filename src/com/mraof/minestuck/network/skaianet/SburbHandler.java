@@ -683,7 +683,7 @@ public class SburbHandler
 		generateTitle(mcServer.getWorld(DimensionType.OVERWORLD), c.getClientIdentifier());
 		LandAspects aspects = genLandAspects(mcServer, c);		//This is where the Land dimension is actually registered, but it also needs the player's Title to be determined.
 		DimensionType type = LandAspectRegistry.createLandType(mcServer, identifier, aspects);
-		return new LandInfoContainer(c.handler, identifier, aspects, type, new Random());	//TODO Handle random better
+		return new LandInfoContainer(identifier, aspects, type, new Random());	//TODO Handle random better
 	}
 	
 	static void onGameEntered(MinecraftServer server, SburbConnection c)
