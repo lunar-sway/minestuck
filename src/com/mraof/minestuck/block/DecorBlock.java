@@ -17,20 +17,19 @@ import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 
 import javax.annotation.Nullable;
+import java.util.Map;
 
 public class DecorBlock extends Block
 {
 	
 	
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-	
-	public final VoxelShape[] shape;
-	
+	public final Map<Direction, VoxelShape> shape;
 	
 	public DecorBlock(Properties properties, CustomVoxelShape shape)
 	{
 		super(properties);
-		this.shape = new VoxelShape[] {shape.create(Direction.SOUTH), shape.create(Direction.WEST), shape.create(Direction.NORTH), shape.create(Direction.EAST)};
+		this.shape = shape.createRotatedShapes();
 	}
 	
 	@Override
@@ -62,7 +61,6 @@ public class DecorBlock extends Block
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 	{
-		//return shape.create(state.get(FACING)); <- it lags the game when you stand on a decor block
-		return shape[state.get(FACING).getHorizontalIndex()];
+		return shape.get(state.get(FACING));
 	}
 }
