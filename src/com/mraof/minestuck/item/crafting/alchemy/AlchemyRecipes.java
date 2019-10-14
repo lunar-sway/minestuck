@@ -710,7 +710,7 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(Items.IRON_SWORD, CHESSBOARD, MODE_AND, new ItemStack(REGISWORD));
 		CombinationRegistry.addCombination(KATANA, CHESSBOARD, MODE_AND, new ItemStack(REGISWORD));
 		CombinationRegistry.addCombination(Items.IRON_SWORD, Blocks.IRON_BLOCK, MODE_AND, new ItemStack(CLAYMORE));
-		CombinationRegistry.addCombination(KATANA, Blocks.OBSIDIAN, MODE_AND, new ItemStack(UNBREAKABLE_KATANA));
+		CombinationRegistry.addCombination(KATANA, Blocks.BEDROCK, MODE_AND, new ItemStack(UNBREAKABLE_KATANA));
 		CombinationRegistry.addCombination(HOT_HANDLE, Blocks.LAPIS_BLOCK, MODE_OR, new ItemStack(COBALT_SABRE));
 		CombinationRegistry.addCombination(CALEDSCRATCH, FROG, MODE_AND, new ItemStack(SCARLET_RIBBITAR));
 		CombinationRegistry.addCombination(Blocks.BEACON, Items.DIAMOND_SWORD, MODE_AND, new ItemStack(SHATTER_BEACON));
