@@ -94,7 +94,8 @@ public class StructureBlockRegistry
 		registerBlock("mushroom_1", Blocks.RED_MUSHROOM.getDefaultState());
 		registerBlock("mushroom_2", Blocks.BROWN_MUSHROOM.getDefaultState());
 		registerBlock("bush", Blocks.DEAD_BUSH.getDefaultState());
-		registerBlock("torch", Blocks.TORCH.getDefaultState(), TorchBlock.class);	//Class restriction needed because of the facing property
+		registerBlock("torch", Blocks.TORCH.getDefaultState());
+		registerBlock("wall_torch", Blocks.WALL_TORCH.getDefaultState());
 		registerBlock("bucket_1", Blocks.QUARTZ_BLOCK.getDefaultState());
 		registerBlock("bucket_2", Blocks.IRON_BLOCK.getDefaultState());
 		registerBlock("glass", Blocks.GLASS.getDefaultState());

@@ -40,6 +40,7 @@ public class MSFeatures
 	public static final Feature<NoFeatureConfig> ROCK_SPIKE = getNull();
 	public static final Feature<NoFeatureConfig> BUCKET = getNull();
 	public static final Feature<NoFeatureConfig> BROKEN_SWORD = getNull();
+	public static final Feature<NoFeatureConfig> TOWER = getNull();
 	
 	@Nonnull
 	@SuppressWarnings("ConstantConditions")
@@ -74,5 +75,6 @@ public class MSFeatures
 		registry.register(new RockSpikeFeature(NoFeatureConfig::deserialize).setRegistryName("rock_spike"));
 		registry.register(new BucketFeature(NoFeatureConfig::deserialize).setRegistryName("bucket"));
 		registry.register(new BrokenSwordFeature(NoFeatureConfig::deserialize).setRegistryName("broken_sword"));
+		registry.register(new TowerFeature(NoFeatureConfig::deserialize).setRegistryName("tower"));
 	}
 }

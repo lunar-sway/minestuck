@@ -38,6 +38,8 @@ public class SilenceLandAspect extends TitleLandAspect
 		
 		if(registry.getCustomBlock("torch") == null)
 			registry.setBlockState("torch", Blocks.REDSTONE_TORCH.getDefaultState());
+		if(registry.getCustomBlock("wall_torch") == null)
+			registry.setBlockState("wall_torch", Blocks.REDSTONE_WALL_TORCH.getDefaultState());
 	}
 	
 	@Override

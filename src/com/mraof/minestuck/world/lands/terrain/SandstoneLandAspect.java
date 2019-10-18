@@ -71,6 +71,7 @@ public class SandstoneLandAspect extends TerrainLandAspect
 		registry.setBlockState("structure_planks", Blocks.ACACIA_PLANKS.getDefaultState());
 		registry.setBlockState("structure_planks_slab", Blocks.ACACIA_SLAB.getDefaultState());
 		registry.setBlockState("torch", Blocks.REDSTONE_TORCH.getDefaultState());
+		registry.setBlockState("wall_torch", Blocks.REDSTONE_WALL_TORCH.getDefaultState());
 		registry.setBlockState("structure_wool_1", Blocks.WHITE_WOOL.getDefaultState());
 		registry.setBlockState("structure_wool_3", Blocks.MAGENTA_WOOL.getDefaultState());
 	}

@@ -1,10 +1,7 @@
 package com.mraof.minestuck.world.lands.terrain;
 
-import java.util.List;
-
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.lands.ILandAspect;
-import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.structure.GateStructurePillar;
 import com.mraof.minestuck.world.lands.structure.IGateStructure;
 

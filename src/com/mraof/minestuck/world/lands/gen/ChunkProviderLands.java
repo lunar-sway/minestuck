@@ -2,7 +2,6 @@ package com.mraof.minestuck.world.lands.gen;
 
 import com.mraof.minestuck.world.LandDimension;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
-import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.structure.MapGenLandStructure;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.structure.village.MapGenConsortVillage;
@@ -32,7 +31,6 @@ public abstract class ChunkProviderLands //implements IChunkGenerator
 	public boolean nameOrder;
 	
 	public final StructureBlockRegistry blockRegistry = null;
-	public List<ILandDecorator> decorators;
 	public MapGenLandStructure structureHandler;
 	public MapGenConsortVillage villageHandler;
 	//public MapGenStructure customHandler;

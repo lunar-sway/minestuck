@@ -45,6 +45,7 @@ public class FungiLandAspect extends TerrainLandAspect
 		registry.setBlockState("village_path", Blocks.GRASS_PATH.getDefaultState());
 		registry.setBlockState("light_block", MSBlocks.GLOWY_GOOP.getDefaultState());
 		registry.setBlockState("torch", Blocks.REDSTONE_TORCH.getDefaultState());
+		registry.setBlockState("wall_torch", Blocks.REDSTONE_WALL_TORCH.getDefaultState());
 		registry.setBlockState("mushroom_1", Blocks.RED_MUSHROOM.getDefaultState());
 		registry.setBlockState("mushroom_2", Blocks.BROWN_MUSHROOM.getDefaultState());
 		registry.setBlockState("bush", Blocks.BROWN_MUSHROOM.getDefaultState());

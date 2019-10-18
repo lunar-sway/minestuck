@@ -24,6 +24,7 @@ public class LeaflessTreeFeature extends Feature<BushConfig>
 	@Override
 	public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, BushConfig config)
 	{
+		//TODO Define which blocks that it is allowed to place on
 		int size = rand.nextInt(3);
 		int height = 4 + size;
 		
@@ -78,7 +79,9 @@ public class LeaflessTreeFeature extends Feature<BushConfig>
 		{
 			float f = i/(float) (length);
 			BlockPos pos = pos0.add(xDiff*f, yDiff*f, zDiff*f);
-			setBlockState(world, pos, state);
+			if(world.hasBlockState(pos, (blockState) -> blockState.canBeReplacedByLogs(world, pos)))
+				setBlockState(world, pos, state);
+			else return;
 		}
 	}
 }
