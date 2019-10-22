@@ -6,6 +6,7 @@ import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
@@ -17,6 +18,7 @@ public class TinkersConstructSupport extends ModSupport
 	{
 		Block oreBush1 = ((Block) Class.forName("tconstruct.world.TinkerWorld").getField("oreBerry").get(null));
 		Block oreBush2 = ((Block) Class.forName("tconstruct.world.TinkerWorld").getField("oreBerrySecond").get(null));
+		ItemStack grout = ((ItemStack) Class.forName("tocnstruct.shared.TinkerCommons").getField("grout").get(null));
 		
 		String[] items1 = {"ingotIron", "ingotGold", "ingotCopper", "ingotTin"};
 		
@@ -30,6 +32,7 @@ public class TinkersConstructSupport extends ModSupport
 		for(int i = 0; i < items1.length; i++)
 			CombinationRegistry.addCombination("treeLeaves", items1[i], CombinationRegistry.Mode.MODE_AND, new ItemStack(oreBush1, 1, i));
 		
+		CombinationRegistry.addCombination(new ItemStack(Blocks.GRAVEL), new ItemStack(Blocks.SAND), CombinationRegistry.Mode.MODE_OR, grout);
 		CombinationRegistry.addCombination("treeLeaves", "ingotAluminium", CombinationRegistry.Mode.MODE_AND, new ItemStack(oreBush2, 1, 0));
 		CombinationRegistry.addCombination("treeLeaves", Items.EXPERIENCE_BOTTLE, 0, CombinationRegistry.Mode.MODE_AND, new ItemStack(oreBush2, 1, 1));
 	}
