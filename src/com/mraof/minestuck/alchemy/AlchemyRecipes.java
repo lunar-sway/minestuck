@@ -19,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nonnull;
@@ -176,7 +177,7 @@ public class AlchemyRecipes
 		GristRegistry.addGristConversion(new ItemStack(Items.SNOWBALL), new GristSet(new GristType[] {GristType.Cobalt}, new int[] {1}));
 		GristRegistry.addGristConversion(new ItemStack(Items.SPIDER_EYE), new GristSet(new GristType[] {GristType.Amber, GristType.Iodine}, new int[] {6, 2}));
 		GristRegistry.addGristConversion(new ItemStack(Items.STRING), new GristSet(new GristType[] {GristType.Chalk}, new int[] {2}));
-		GristRegistry.addGristConversion(new ItemStack(Items.SHULKER_SHELL), new GristSet(new GristType[] {GristType.Build, GristType.Diamond, GristType.Uranium, GristType.Mercury}, new int[] {5000, 250, 500, 200}));
+		GristRegistry.addGristConversion(new ItemStack(Items.SHULKER_SHELL), new GristSet(new GristType[] {GristType.Build, GristType.Diamond, GristType.Uranium, GristType.Mercury}, new int[] {800, 24, 58, 20}));
 		GristRegistry.addGristConversion(new ItemStack(Items.TOTEM_OF_UNDYING), new GristSet(new GristType[] {GristType.Diamond, GristType.Uranium, GristType.Ruby, GristType.Gold}, new int[] {200, 350, 90, 90}));
 		GristRegistry.addGristConversion(new ItemStack(Items.SUGAR), new GristSet(new GristType[] {GristType.Iodine, GristType.Amber}, new int[] {2, 3}));
 		registerContainerlessCost(new ItemStack(Items.WATER_BUCKET), new GristSet(new GristType[] {GristType.Cobalt}, new int[] {4}));
@@ -895,8 +896,8 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(new ItemStack(Blocks.CACTUS), new ItemStack(Blocks.YELLOW_FLOWER), MODE_AND, new ItemStack(bloomingCactus));
 		CombinationRegistry.addCombination(new ItemStack(Items.SUGAR), new ItemStack(Items.WHEAT_SEEDS), MODE_AND, new ItemStack(candy, 1, 0));
 		
-		CombinationRegistry.addCombination(new ItemStack(itemFrog, 1, 1), new ItemStack(Blocks.STONE) , MODE_OR, new ItemStack(frogStatueReplica));
-		CombinationRegistry.addCombination(new ItemStack(Items.GLASS_BOTTLE), new ItemStack(Items.IRON_SWORD), MODE_OR, new ItemStack(blender));
+		CombinationRegistry.addCombination(new ItemStack(itemFrog, 1, 1), new ItemStack(Blocks.STONE) , MODE_OR, true, true, new ItemStack(frogStatueReplica));
+		CombinationRegistry.addCombination(new ItemStack(Items.GLASS_BOTTLE), new ItemStack(Items.IRON_SWORD), MODE_OR, false, false, new ItemStack(blender));
 		
 		CombinationRegistry.addCombination(new ItemStack(grasshopper), new ItemStack(Items.GOLD_INGOT), MODE_OR, false, false, new ItemStack(goldenGrasshopper));
 		CombinationRegistry.addCombination(new ItemStack(Items.STICK), new ItemStack(Blocks.WEB), MODE_OR, false, false, new ItemStack(bugNet));
@@ -1087,6 +1088,42 @@ public class AlchemyRecipes
 			Debug.logger.warn("Exception while getting things for mod \"IronChest\".", e);
 		}
 		
+		try
+		{
+			if(Loader.isModLoaded("Actually Additions"))
+			{
+				Item itemMisc = ForgeRegistries.ITEMS.getValue(new ResourceLocation("actuallyadditions", "item_misc")); //Black Quartz = 5, canola = 13, blackDye = 17
+				Item waterBowl = ForgeRegistries.ITEMS.getValue(new ResourceLocation("actuallyadditions", "item_water_bowl"));
+				Item coffeeBeans = ForgeRegistries.ITEMS.getValue(new ResourceLocation("actuallyadditions", "item_coffee_beans"));
+				Item coffeeSeeds = ForgeRegistries.ITEMS.getValue(new ResourceLocation("actuallyadditions", "item_coffee_seed"));
+				Item flaxSeeds = ForgeRegistries.ITEMS.getValue(new ResourceLocation("actuallyadditions", "item_flax_seed"));
+				Item itemFood = ForgeRegistries.ITEMS.getValue(new ResourceLocation("actuallyadditions", "item_food")); //Rice = 16
+				Item worm = ForgeRegistries.ITEMS.getValue(new ResourceLocation("actuallyadditions", "item_worm"));
+				Item solidXp = ForgeRegistries.ITEMS.getValue(new ResourceLocation("actuallyadditions", "item_solidified_experience"));
+				Block blackLotus = ForgeRegistries.BLOCKS.getValue(new ResourceLocation("actuallyadditions", "block_black_lotus"));
+				Block blockMisc = ForgeRegistries.BLOCKS.getValue(new ResourceLocation("actuallyadditions", "block_misc")); // Black Quartz ore = 3
+				
+				GristRegistry.addGristConversion(new ItemStack(blockMisc, 1, 3), true, new GristSet(new GristType[] {GristType.Quartz, GristType.Tar, GristType.Build}, new int[] {4*oreMultiplier, 1*oreMultiplier, 4}));
+				GristRegistry.addGristConversion(new ItemStack(blackLotus), false, new GristSet(new GristType[] {GristType.Tar, GristType.Iodine}, new int[] {4, 1}));
+				GristRegistry.addGristConversion(new ItemStack(itemMisc, 1, 5), true, new GristSet(new GristType[] {GristType.Quartz, GristType.Tar}, new int[] {4, 1}));
+				GristRegistry.addGristConversion(new ItemStack(itemMisc, 1, 13), true, new GristSet(new GristType[] {GristType.Tar, GristType.Amber}, new int[] {1, 4}));
+				GristRegistry.addGristConversion(new ItemStack(itemMisc, 1, 17), true, new GristSet(new GristType[] {GristType.Tar}, new int[] {4}));
+				GristRegistry.addGristConversion(new ItemStack(waterBowl), false, new GristSet(new GristType[] {GristType.Build, GristType.Cobalt}, new int[] {1, 4}));
+				GristRegistry.addGristConversion(new ItemStack(itemFood, 1, 16), true, new GristSet(new GristType[] {GristType.Chalk, GristType.Iodine}, new int[] {2, 2}));
+				GristRegistry.addGristConversion(new ItemStack(flaxSeeds), false, new GristSet(new GristType[] {GristType.Chalk, GristType.Iodine}, new int[] {3, 1}));
+				GristRegistry.addGristConversion(new ItemStack(worm), false, new GristSet(new GristType[] {GristType.Amber, GristType.Iodine}, new int[] {5, 4}));
+				GristRegistry.addGristConversion(new ItemStack(coffeeBeans), false, new GristSet(new GristType[] {GristType.Amber, GristType.Iodine}, new int[] {2, 6}));
+				GristRegistry.addGristConversion(new ItemStack(coffeeSeeds), false, new GristSet(new GristType[] {GristType.Amber, GristType.Iodine}, new int[] {1, 3}));
+				GristRegistry.addGristConversion(new ItemStack(coffeeSeeds), false, new GristSet(new GristType[] {GristType.Uranium, GristType.Ruby}, new int[] {1, 1}));
+
+				CombinationRegistry.addCombination(new ItemStack(itemMisc, 1, 5), new ItemStack(Blocks.STONE, 1, 0), MODE_AND, true, true, new ItemStack(blockMisc, 1, 3));
+				CombinationRegistry.addCombination(new ItemStack(Items.QUARTZ), new ItemStack(Items.DYE, 1, 0), MODE_OR, false, true, new ItemStack(itemMisc, 1, 5));
+			}
+		}
+		catch(Exception e)
+		{
+			Debug.logger.warn("Exception while getting things for mod \"Actually Additions\".", e);
+		}
 		
 		registerRecipes(new Minegicka3Support(), "minegicka3", false);
 		registerRecipes(new NeverSayNetherSupport(), "nsn", false);
