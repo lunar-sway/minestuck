@@ -167,7 +167,7 @@ public class DeployList
 				registerItem("card_punched_card", AlchemyRecipes.createCard(new ItemStack(MinestuckItems.captchaCard), true), new GristSet(GristType.Build, 25), null, 0);
 			else removeEntry("card_punched_card");
 		}
-		if(booleans[1] != containsEntry("portable_cruxtuder"))
+		if(booleans[1] != containsEntry("portable_cruxtruder"))
 		{
 			if(booleans[1])
 			{
