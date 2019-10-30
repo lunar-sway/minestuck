@@ -45,7 +45,7 @@ public abstract class MachineBlock extends Block
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context)
 	{
-		return getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
+		return getDefaultState().with(FACING, context.getPlacementHorizontalFacing());
 	}
 	
 	//Should probably find an utility class for the functions below
