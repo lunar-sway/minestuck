@@ -7,6 +7,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -17,10 +18,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
+import java.util.Map;
 
 public class MiniCruxtruderBlock extends MachineProcessBlock
 {
-	public static final VoxelShape SHAPE = Block.makeCuboidShape(0, 0, 0, 16, 15, 16);
+	public static final Map<Direction, VoxelShape> SHAPE = MSBlockShapes.SMALL_CRUXTRUDER.createRotatedShapes();
 	
 	public MiniCruxtruderBlock(Properties properties)
 	{
@@ -30,7 +32,7 @@ public class MiniCruxtruderBlock extends MachineProcessBlock
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 	{
-		return SHAPE;
+		return SHAPE.get(state.get(FACING));
 	}
 	
 	@Override

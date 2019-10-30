@@ -8,6 +8,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -20,7 +21,7 @@ import javax.annotation.Nullable;
 
 public class TransportalizerBlock extends MachineBlock
 {
-	public static final VoxelShape SHAPE = Block.makeCuboidShape(0, 0, 0, 16, 8, 16);
+	public static final VoxelShape SHAPE = MSBlockShapes.TRANSPORTALIZER.create(Direction.NORTH);
 	
 	public TransportalizerBlock(Properties properties)
 	{

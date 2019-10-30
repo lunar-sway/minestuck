@@ -20,7 +20,7 @@ import java.util.Map;
 
 public class MiniTotemLatheBlock extends MachineProcessBlock
 {
-	public static final Map<Direction, VoxelShape> SHAPE = createRotatedShapes(0, 0, 5, 16, 16, 11);
+	public static final Map<Direction, VoxelShape> SHAPE = MSBlockShapes.SMALL_TOTEM_LATHE.createRotatedShapes();
 	
 	public MiniTotemLatheBlock(Properties properties)
 	{
