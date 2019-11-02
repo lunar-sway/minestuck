@@ -18,6 +18,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
@@ -299,7 +300,7 @@ public class LandDimension extends Dimension
 	public static class Type extends ModDimension
 	{
 		public boolean useServerData;
-		public Map<Integer, LandAspects> dimToLandAspects = new HashMap<>();	//TODO This might not be populated by skaianet before the dimension the player is in is created
+		public Map<ResourceLocation, LandAspects.LazyInstance> dimToLandAspects = new HashMap<>();	//TODO This might not be populated by skaianet before the dimension the player is in is created
 		//TODO Dimension might actually not be unloaded when switching to/creating a new world
 		@Override
 		public void write(PacketBuffer buffer, boolean network)
@@ -307,11 +308,10 @@ public class LandDimension extends Dimension
 			if(network)
 			{
 				buffer.writeInt(dimToLandAspects.size());
-				for(Map.Entry<Integer, LandAspects> entry : dimToLandAspects.entrySet())
+				for(Map.Entry<ResourceLocation, LandAspects.LazyInstance> entry : dimToLandAspects.entrySet())
 				{
-					buffer.writeVarInt(entry.getKey());
-					buffer.writeRegistryId(entry.getValue().terrain);
-					buffer.writeRegistryId(entry.getValue().title);
+					buffer.writeResourceLocation(entry.getKey());
+					entry.getValue().write(buffer);
 				}
 			}
 		}
@@ -325,10 +325,9 @@ public class LandDimension extends Dimension
 				int size = buffer.readInt();
 				for(int i = 0; i < size; i++)
 				{
-					int id = buffer.readVarInt();
-					TerrainLandAspect terrain = buffer.readRegistryIdSafe(TerrainLandAspect.class);
-					TitleLandAspect title = buffer.readRegistryIdSafe(TitleLandAspect.class);
-					dimToLandAspects.put(id, new LandAspects(terrain, title));
+					ResourceLocation dimId = buffer.readResourceLocation();
+					LandAspects.LazyInstance landAspects = LandAspects.LazyInstance.read(buffer);
+					dimToLandAspects.put(dimId, landAspects);
 				}
 			}
 		}
@@ -341,10 +340,10 @@ public class LandDimension extends Dimension
 		
 		private LandDimension createDimension(World world, DimensionType type)
 		{
-			LandAspects aspects = dimToLandAspects.get(type.getId());
+			LandAspects.LazyInstance aspects = dimToLandAspects.get(DimensionType.getKey(type));
 			if(aspects == null)
 				Debug.warn("Trying to create a land world but haven't gotten its land aspects!");
-			return new LandDimension(world, type, aspects);
+			return new LandDimension(world, type, aspects == null ? null : aspects.create());
 		}
 	}
 }

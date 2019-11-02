@@ -577,12 +577,12 @@ public class SburbHandler
 		}
 		
 		boolean frogs = false;
-		ArrayList<TerrainLandAspect> usedTerrainAspects = new ArrayList<TerrainLandAspect>();
-		ArrayList<TitleLandAspect> usedTitleAspects = new ArrayList<TitleLandAspect>();
+		ArrayList<TerrainLandAspect> usedTerrainAspects = new ArrayList<>();
+		ArrayList<TitleLandAspect> usedTitleAspects = new ArrayList<>();
 		for(SburbConnection c : session.connections)
 			if(c != connection && c.clientHomeLand != null)
 			{
-				LandAspects aspects = c.clientHomeLand.landAspects;
+				LandAspects aspects = c.clientHomeLand.getLandAspects();
 				if(aspects.title == LandAspectRegistry.FROGS)
 					frogs = true;
 				usedTitleAspects.add(aspects.title);

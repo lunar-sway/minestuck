@@ -23,6 +23,7 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.OpEntry;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
@@ -57,7 +58,7 @@ public class SkaianetHandler
 	/**
 	 * Changes to this map must also be done to {@link MSDimensionTypes#LANDS#dimToLandAspects}
 	 */
-	private final Map<DimensionType, LandInfoContainer> typeToInfoContainer = new HashMap<>();
+	private final Map<ResourceLocation, LandInfoContainer> typeToInfoContainer = new HashMap<>();
 	
 	/**
 	 * Chains of lands to be used by the skybox render
@@ -451,8 +452,8 @@ public class SkaianetHandler
 		{
 			if(c.clientHomeLand != null)
 			{
-				typeToInfoContainer.put(c.clientHomeLand.dimensionType, c.clientHomeLand);
-				MSDimensionTypes.LANDS.dimToLandAspects.put(c.clientHomeLand.dimensionType.getId(), c.clientHomeLand.landAspects);
+				typeToInfoContainer.put(c.clientHomeLand.getDimensionName(), c.clientHomeLand);
+				MSDimensionTypes.LANDS.dimToLandAspects.put(c.clientHomeLand.getDimensionName(), c.clientHomeLand.getLazyLandAspects());
 			}
 		}
 	}
@@ -763,8 +764,8 @@ public class SkaianetHandler
 			Debug.errorf("Could not create a land for player %s.", target.getUsername());
 		} else
 		{
-			typeToInfoContainer.put(c.clientHomeLand.dimensionType, c.clientHomeLand);
-			MSDimensionTypes.LANDS.dimToLandAspects.put(c.clientHomeLand.dimensionType.getId(), c.clientHomeLand.landAspects);
+			typeToInfoContainer.put(c.clientHomeLand.getDimensionName(), c.clientHomeLand);
+			MSDimensionTypes.LANDS.dimToLandAspects.put(c.clientHomeLand.getDimensionName(), c.clientHomeLand.getLazyLandAspects());
 		}
 		
 		return c.getClientDimension();
@@ -833,7 +834,7 @@ public class SkaianetHandler
 	
 	public LandInfoContainer landInfoForDimension(DimensionType type)
 	{
-		return typeToInfoContainer.get(type);
+		return typeToInfoContainer.get(DimensionType.getKey(type));
 	}
 	
 	public static SkaianetHandler get(World world)

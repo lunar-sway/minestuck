@@ -38,7 +38,7 @@ public class MSDimensions
 	{
 		LandInfoContainer info = getLandInfo(server, dimension);
 		if(info != null)
-			return info.landAspects;
+			return info.getLandAspects();
 		else if(isLandDimension(dimension))
 		{
 			Debug.warnf("Tried to get land aspects for %s, but did not find a container reference! Using defaults instead.");

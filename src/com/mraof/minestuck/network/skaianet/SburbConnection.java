@@ -93,7 +93,7 @@ public class SburbConnection
 	 */
 	public DimensionType getClientDimension()
 	{
-		return clientHomeLand == null ? null : clientHomeLand.dimensionType;
+		return clientHomeLand == null ? null : clientHomeLand.getDimensionType();
 	}
 	public boolean[] givenItems(){return Arrays.copyOf(givenItemList, givenItemList.length);}	//TODO Add way of setting given items that also calls skaianetHandler.markDirty()
 	
@@ -188,12 +188,6 @@ public class SburbConnection
 		if(nbt.contains("ClientLand"))
 		{
 			c.clientHomeLand = LandInfoContainer.read(nbt.getCompound("ClientLand"), handler, c.getClientIdentifier());	//TODO add robustness in the case that the dimension type no longer exists?
-			if(!MSDimensions.isLandDimension(c.getClientDimension()))
-			{
-				Debug.errorf("The connection between %s and %s had a home dimension %d that isn't a land dimension. For safety measures, the connection will be loaded as if the player had not yet entered.", c.getClientIdentifier().getUsername(), c.getServerIdentifier().getUsername(), c.getClientDimension());
-				c.clientHomeLand = null;
-				c.hasEntered = false;
-			}
 		}
 		c.artifactType = nbt.getInt("Artifact");
 		
