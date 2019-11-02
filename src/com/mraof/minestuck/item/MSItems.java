@@ -354,13 +354,11 @@ public class MSItems
 		registerItemBlock(registry, PETRIFIED_POPPY, MSItemGroup.LANDS);
 		registerItemBlock(registry, STRAWBERRY, MSItemGroup.LANDS);
 		
-		registerItemBlock(registry, LAYERED_SAND, MSItemGroup.LANDS);
-		registerItemBlock(registry, LAYERED_RED_SAND, MSItemGroup.LANDS);
 		registerItemBlock(registry, GLOWY_GOOP, MSItemGroup.LANDS);
 		registerItemBlock(registry, COAGULATED_BLOOD, MSItemGroup.LANDS);
 		registerItemBlock(registry, VEIN, MSItemGroup.LANDS);
 		registerItemBlock(registry, VEIN_CORNER, MSItemGroup.LANDS);
-		registerItemBlock(registry, VEIN_CORNER_INVERTED, MSItemGroup.LANDS);
+		registerItemBlock(registry, INVERTED_VEIN_CORNER, MSItemGroup.LANDS);
 		
 		registerItemBlock(registry, COARSE_STONE_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, SHADE_BRICK_STAIRS, MSItemGroup.LANDS);

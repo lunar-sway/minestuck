@@ -20,9 +20,9 @@ public class CruxtruderMultiblock extends MachineMultiblock
 	@Override
 	public void registerBlocks(IForgeRegistry<Block> registry)
 	{
-		registry.register(CORNER = new CruxtruderBlock(this, VoxelShapes.fullCube(), false, new BlockPos(1, 1, 1), Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("cruxtruder_corner"));
-		registry.register(SIDE = new CruxtruderBlock(this, VoxelShapes.fullCube(), false, new BlockPos(0, 1, 1), Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("cruxtruder_side"));
-		registry.register(CENTER = new CruxtruderBlock(this, VoxelShapes.fullCube(), true, new BlockPos(0, 1, 0), Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("cruxtruder_center"));
-		registry.register(TUBE = new CruxtruderBlock(this, CruxtruderBlock.TUBE_SHAPE, false, new BlockPos(0, 0, 0), Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("cruxtruder_tube"));
+		registry.register(CORNER = new CruxtruderBlock(this, VoxelShapes.fullCube(), false, new BlockPos(1, 1, 1), Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F).noDrops()).setRegistryName("cruxtruder_corner"));
+		registry.register(SIDE = new CruxtruderBlock(this, VoxelShapes.fullCube(), false, new BlockPos(0, 1, 1), Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F).noDrops()).setRegistryName("cruxtruder_side"));
+		registry.register(CENTER = new CruxtruderBlock(this, VoxelShapes.fullCube(), true, new BlockPos(0, 1, 0), Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F).noDrops()).setRegistryName("cruxtruder_center"));
+		registry.register(TUBE = new CruxtruderBlock(this, CruxtruderBlock.TUBE_SHAPE, false, new BlockPos(0, 0, 0), Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F).noDrops()).setRegistryName("cruxtruder_tube"));
 	}
 }
