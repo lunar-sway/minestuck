@@ -1,10 +1,13 @@
 package com.mraof.minestuck.world.storage;
 
+import com.mojang.datafixers.Dynamic;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.Location;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.NBTDynamicOps;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.GlobalPos;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
@@ -19,7 +22,7 @@ public class TransportalizerSavedData extends WorldSavedData
 {
 	private static final String DATA_NAME = Minestuck.MOD_ID+"_transportalizers";
 	
-	private HashMap<String, Location> locations;
+	private HashMap<String, GlobalPos> locations;
 	
 	private TransportalizerSavedData()
 	{
@@ -33,8 +36,8 @@ public class TransportalizerSavedData extends WorldSavedData
 		locations = new HashMap<>();
 		for(String id : nbt.keySet())
 		{
-			CompoundNBT locationTag = nbt.getCompound(id);
-			Location location = Location.fromNBT(locationTag);
+			INBT locationTag = nbt.get(id);
+			GlobalPos location = GlobalPos.deserialize(new Dynamic<>(NBTDynamicOps.INSTANCE, locationTag));
 			
 			if(location != null)
 			{
@@ -46,11 +49,11 @@ public class TransportalizerSavedData extends WorldSavedData
 	@Override
 	public CompoundNBT write(CompoundNBT compound)
 	{
-		for(Map.Entry<String, Location> entry : locations.entrySet())
+		for(Map.Entry<String, GlobalPos> entry : locations.entrySet())
 		{
-			Location location = entry.getValue();
+			GlobalPos location = entry.getValue();
 			
-			CompoundNBT locationTag = location.toNBT(new CompoundNBT());
+			INBT locationTag = location.serialize(NBTDynamicOps.INSTANCE);
 			
 			if(locationTag != null)
 				compound.put(entry.getKey(), locationTag);
@@ -60,12 +63,12 @@ public class TransportalizerSavedData extends WorldSavedData
 		return compound;
 	}
 	
-	public Location get(String id)
+	public GlobalPos get(String id)
 	{
 		return locations.get(id);
 	}
 	
-	public boolean set(String id, Location location)
+	public boolean set(String id, GlobalPos location)
 	{
 		if(!locations.containsKey(id))
 		{
@@ -75,7 +78,7 @@ public class TransportalizerSavedData extends WorldSavedData
 		} else return locations.get(id).equals(location);
 	}
 	
-	public boolean remove(String id, Location location)
+	public boolean remove(String id, GlobalPos location)
 	{
 		boolean removed = locations.remove(id, location);
 		if(removed)
@@ -83,7 +86,7 @@ public class TransportalizerSavedData extends WorldSavedData
 		return removed;
 	}
 	
-	public String findNewId(Random random, Location location)
+	public String findNewId(Random random, GlobalPos location)
 	{
 		String unusedId = "";
 		do

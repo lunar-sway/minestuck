@@ -2,7 +2,7 @@ package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.Location;
+import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.storage.TransportalizerSavedData;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -12,6 +12,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.GlobalPos;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
@@ -36,8 +37,8 @@ public class TransportalizerTileEntity extends TileEntity implements ITickableTi
 		if(!world.isRemote && active)
 		{
 			if(id.isEmpty())
-				id = TransportalizerSavedData.get(world).findNewId(world.rand, new Location(this));
-			else active = TransportalizerSavedData.get(world).set(id, new Location(this));
+				id = TransportalizerSavedData.get(world).findNewId(world.rand, GlobalPos.of(world.dimension.getType(), pos));
+			else active = TransportalizerSavedData.get(world).set(id, GlobalPos.of(world.dimension.getType(), pos));
 		}
 	}
 	
@@ -47,7 +48,7 @@ public class TransportalizerTileEntity extends TileEntity implements ITickableTi
 		super.remove();
 		if(!world.isRemote && active)
 		{
-			TransportalizerSavedData.get(world).remove(id, new Location(this));
+			TransportalizerSavedData.get(world).remove(id, GlobalPos.of(world.dimension.getType(), pos));
 		}
 	}
 	
@@ -70,7 +71,7 @@ public class TransportalizerTileEntity extends TileEntity implements ITickableTi
 	
 	public void teleport(Entity entity)
 	{
-		Location location = TransportalizerSavedData.get(world).get(this.destId);
+		GlobalPos location = TransportalizerSavedData.get(world).get(this.destId);
 		if(!enabled)
 		{
 			entity.timeUntilPortal = entity.getPortalCooldown();
@@ -78,10 +79,10 @@ public class TransportalizerTileEntity extends TileEntity implements ITickableTi
 				entity.sendMessage(new TranslationTextComponent("message.transportalizer.transportalizerDisabled"));
 			return;
 		}
-		if(location != null && location.pos.getY() != -1)
+		if(location != null && location.getPos().getY() != -1)
 		{
-			ServerWorld world = entity.getServer().getWorld(location.dim);
-			TransportalizerTileEntity destTransportalizer = (TransportalizerTileEntity) world.getTileEntity(location.pos);
+			ServerWorld world = entity.getServer().getWorld(location.getDimension());
+			TransportalizerTileEntity destTransportalizer = (TransportalizerTileEntity) world.getTileEntity(location.getPos());
 			if(destTransportalizer == null)
 			{
 				Debug.warn("Invalid transportalizer in map: " + this.destId + " at " + location);
@@ -93,7 +94,7 @@ public class TransportalizerTileEntity extends TileEntity implements ITickableTi
 			if(!destTransportalizer.getEnabled()) { return; } // Fail silently to make it look as though the player entered an ID that doesn't map to a transportalizer.
 			
 			for(DimensionType id : MinestuckConfig.forbiddenDimensionsTpz)
-				if(this.world.getDimension().getType() == id || location.dim == id)
+				if(this.world.getDimension().getType() == id || location.getDimension() == id)
 				{
 					entity.timeUntilPortal = entity.getPortalCooldown();
 					if(entity instanceof ServerPlayerEntity)
@@ -110,8 +111,8 @@ public class TransportalizerTileEntity extends TileEntity implements ITickableTi
 					entity.sendMessage(new TranslationTextComponent("message.transportalizer.blocked"));
 				return;
 			}
-			block0 = world.getBlockState(location.pos.up());
-			block1 = world.getBlockState(location.pos.up(2));
+			block0 = world.getBlockState(location.getPos().up());
+			block1 = world.getBlockState(location.getPos().up(2));
 			if(block0.getMaterial().blocksMovement() || block1.getMaterial().blocksMovement())
 			{
 				entity.timeUntilPortal = entity.getPortalCooldown();
@@ -120,16 +121,10 @@ public class TransportalizerTileEntity extends TileEntity implements ITickableTi
 				return;
 			}
 			
-			entity = entity.changeDimension(location.dim);//, destTransportalizer);
+			entity = Teleport.teleportEntity(entity, (ServerWorld) destTransportalizer.world, location.getPos().getX() + 0.5, location.getPos().getY() + 0.6, location.getPos().getZ() + 0.5, entity.rotationYaw, entity.rotationPitch);
 			if(entity != null)
 				entity.timeUntilPortal = entity.getPortalCooldown();
 		}
-	}
-	
-	//@Override
-	public void placeEntity(World world, Entity entity, float yaw)
-	{
-		entity.setPosition(this.getPos().getX() + 0.5, this.getPos().getY() + 0.6, this.getPos().getZ() + 0.5);
 	}
 	
 	public String getId()
@@ -139,7 +134,7 @@ public class TransportalizerTileEntity extends TileEntity implements ITickableTi
 	
 	public void setId(String id)
 	{
-		Location location = new Location(this);
+		GlobalPos location = GlobalPos.of(world.dimension.getType(), pos);
 		if(active && !this.id.isEmpty())
 			TransportalizerSavedData.get(world).remove(this.id, location);
 		
