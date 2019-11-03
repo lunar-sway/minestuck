@@ -29,7 +29,7 @@ public class ImpEntity extends UnderlingEntity
 	@Override
 	public GristSet getGristSpoils()
 	{
-		return GristHelper.getRandomDrop(type, 1);
+		return GristHelper.getRandomDrop(gristType, 1);
 	}
 	
 	@Override
@@ -63,7 +63,7 @@ public class ImpEntity extends UnderlingEntity
 	@Override
 	protected float getMaximumHealth() 
 	{
-		return type != null ? 8*type.getPower() + 6 : 1;
+		return gristType != null ? 8* gristType.getPower() + 6 : 1;
 	}
 	
 	@Override
@@ -75,7 +75,7 @@ public class ImpEntity extends UnderlingEntity
 	@Override
 	protected double getAttackDamage()
 	{
-		return Math.ceil(this.type.getPower() + 1);
+		return Math.ceil(this.gristType.getPower() + 1);
 	}
 	
 	@Override
@@ -96,9 +96,9 @@ public class ImpEntity extends UnderlingEntity
 	{
 		super.onDeath(cause);
 		Entity entity = cause.getTrueSource();
-		if(this.dead && !this.world.isRemote && type != null)
+		if(this.dead && !this.world.isRemote && gristType != null)
 		{
-			computePlayerProgress((int) (2 + 3*type.getPower()));
+			computePlayerProgress((int) (2 + 3* gristType.getPower()));
 			if(entity instanceof ServerPlayerEntity)
 			{
 				Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) entity).echeladder;

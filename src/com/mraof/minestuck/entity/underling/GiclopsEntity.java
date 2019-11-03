@@ -70,7 +70,7 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	@Override
 	public GristSet getGristSpoils()
 	{
-		return GristHelper.getRandomDrop(type, 10);
+		return GristHelper.getRandomDrop(gristType, 10);
 	}
 
 	@Override
@@ -88,7 +88,7 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	@Override
 	protected double getAttackDamage()
 	{
-		return this.type.getPower()*4.5 + 10;
+		return this.gristType.getPower()*4.5 + 10;
 	}
 	
 	@Override
@@ -114,7 +114,7 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	@Override
 	protected float getMaximumHealth() 
 	{
-		return type != null ? 46*type.getPower() + 210 : 1;
+		return gristType != null ? 46* gristType.getPower() + 210 : 1;
 	}
 	
 	@Override
@@ -154,9 +154,9 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	{
 		super.onDeath(cause);
 		Entity entity = cause.getTrueSource();
-		if(this.dead && !this.world.isRemote && type != null)
+		if(this.dead && !this.world.isRemote && gristType != null)
 		{
-			computePlayerProgress((int) (500*type.getPower() + 1000));
+			computePlayerProgress((int) (500* gristType.getPower() + 1000));
 			if(entity != null && entity instanceof ServerPlayerEntity)
 			{
 				//((EntityPlayerMP) entity).addStat(MinestuckAchievementHandler.killGiclops);

@@ -194,11 +194,10 @@ public class MSItems
 	public static Item GAMEGRL_MAGAZINE;
 	public static Item CREW_POSTER;
 	public static Item SBAHJ_POSTER;
-	public static Item FAKE_ARMS;
 	//Music disks
-	public static Item RECORD_EMISSARY_OF_DANCE;
-	public static Item RECORD_DANCE_STAB;
-	public static Item RECORD_RETRO_BATTLE;
+	public static Item MUSIC_DISC_EMISSARY_OF_DANCE;
+	public static Item MUSIC_DISC_DANCE_STAB_DANCE;
+	public static Item MUSIC_DISC_RETRO_BATTLE;
 	
 	public static void registerItems(IForgeRegistry<Item> registry)
 	{
@@ -630,9 +629,9 @@ public class MSItems
 		//registry.register(FAKE_ARMS = new Item(new Item.Properties().maxStackSize(1)).setRegistryName("fake_arms"));
 		
 		//Music disks
-		registry.register(RECORD_EMISSARY_OF_DANCE = new ModMusicDiscItem(13, ModSoundEvents.MUSIC_DISC_EMISSARY_OF_DANCE, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("record_emissary"));
-		registry.register(RECORD_DANCE_STAB = new ModMusicDiscItem(13, ModSoundEvents.MUSIC_DISC_DANCE_STAB_DANCE, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("record_dance_stab"));
-		registry.register(RECORD_RETRO_BATTLE = new ModMusicDiscItem(13, ModSoundEvents.MUSIC_DISC_RETRO_BATTLE_THEME, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("record_retro_battle"));
+		registry.register(MUSIC_DISC_EMISSARY_OF_DANCE = new ModMusicDiscItem(13, ModSoundEvents.MUSIC_DISC_EMISSARY_OF_DANCE, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_emissary_of_dance"));
+		registry.register(MUSIC_DISC_DANCE_STAB_DANCE = new ModMusicDiscItem(13, ModSoundEvents.MUSIC_DISC_DANCE_STAB_DANCE, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_dance_stab_dance"));
+		registry.register(MUSIC_DISC_RETRO_BATTLE = new ModMusicDiscItem(13, ModSoundEvents.MUSIC_DISC_RETRO_BATTLE_THEME, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_retro_battle"));
 		
 		WeaponItem.addToolMaterial(ToolType.PICKAXE, Arrays.asList(Material.IRON, Material.ANVIL, Material.ROCK));
 		WeaponItem.addToolMaterial(ToolType.AXE, Arrays.asList(Material.WOOD, Material.PLANTS, Material.TALL_PLANTS));
