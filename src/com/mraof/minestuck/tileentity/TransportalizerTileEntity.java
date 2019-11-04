@@ -20,6 +20,12 @@ import net.minecraft.world.server.ServerWorld;
 
 public class TransportalizerTileEntity extends TileEntity implements ITickableTileEntity//, ITeleporter
 {
+	public static final String DISABLED = "minestuck.transportalizer.disabled";
+	public static final String BLOCKED = "minestuck.transportalizer.blocked";
+	public static final String BLOCKED_DESTINATION = "minestuck.transportalizer.blocked_destination";
+	public static final String FORBIDDEN = "minestuck.transportalizer.forbidden";
+	public static final String FORBIDDEN_DESTINATION = "minestuck.transportalizer.forbidden_destination";
+	
 	private boolean enabled = true;
 	private boolean active = true;
 	String id = "";
@@ -76,7 +82,7 @@ public class TransportalizerTileEntity extends TileEntity implements ITickableTi
 		{
 			entity.timeUntilPortal = entity.getPortalCooldown();
 			if(entity instanceof ServerPlayerEntity)
-				entity.sendMessage(new TranslationTextComponent("message.transportalizer.transportalizerDisabled"));
+				entity.sendMessage(new TranslationTextComponent(DISABLED));
 			return;
 		}
 		if(location != null && location.getPos().getY() != -1)
@@ -98,7 +104,7 @@ public class TransportalizerTileEntity extends TileEntity implements ITickableTi
 				{
 					entity.timeUntilPortal = entity.getPortalCooldown();
 					if(entity instanceof ServerPlayerEntity)
-						entity.sendMessage(new TranslationTextComponent(this.world.getDimension().getType() == id ?"message.transportalizer.forbidden":"message.transportalizer.forbiddenDest"));
+						entity.sendMessage(new TranslationTextComponent(this.world.getDimension().getType() == id ?FORBIDDEN:FORBIDDEN_DESTINATION));
 					return;
 				}
 			
@@ -108,7 +114,7 @@ public class TransportalizerTileEntity extends TileEntity implements ITickableTi
 			{
 				entity.timeUntilPortal = entity.getPortalCooldown();
 				if(entity instanceof ServerPlayerEntity)
-					entity.sendMessage(new TranslationTextComponent("message.transportalizer.blocked"));
+					entity.sendMessage(new TranslationTextComponent(BLOCKED));
 				return;
 			}
 			block0 = world.getBlockState(location.getPos().up());
@@ -117,7 +123,7 @@ public class TransportalizerTileEntity extends TileEntity implements ITickableTi
 			{
 				entity.timeUntilPortal = entity.getPortalCooldown();
 				if(entity instanceof ServerPlayerEntity)
-					entity.sendMessage(new TranslationTextComponent("message.transportalizer.destinationBlocked"));
+					entity.sendMessage(new TranslationTextComponent(BLOCKED_DESTINATION));
 				return;
 			}
 			

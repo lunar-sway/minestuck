@@ -20,6 +20,7 @@ import net.minecraft.world.gen.placement.*;
 
 public class ShadeLandAspect extends TerrainLandAspect
 {
+	public static final String SHADE = "minestuck.shade";
 	
 	private static final Vec3d skyColor = new Vec3d(0.16D, 0.38D, 0.54D);
 	
@@ -51,7 +52,7 @@ public class ShadeLandAspect extends TerrainLandAspect
 	
 	@Override
 	public String[] getNames() {
-		return new String[] {"shade"};
+		return new String[] {SHADE};
 	}
 	
 	@Override

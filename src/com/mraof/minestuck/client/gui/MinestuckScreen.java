@@ -76,7 +76,7 @@ public abstract class MinestuckScreen extends Screen
 		{
 			if (showName)
 			{
-				renderTooltip(Collections.singletonList(new TranslationTextComponent("grist.format", tooltipType.getDisplayName()).getFormattedText()), xcor, ycor, font);
+				renderTooltip(Collections.singletonList(tooltipType.getNameWithSuffix().getFormattedText()), xcor, ycor, font);
 
 			}
 			else

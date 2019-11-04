@@ -16,6 +16,9 @@ import net.minecraft.world.gen.placement.Placement;
 
 public class ClockworkLandAspect extends TitleLandAspect
 {
+	public static final String CLOCKWORK = "minestuck.clockwork";
+	public static final String GEARS = "minestuck.gears";
+	
 	public ClockworkLandAspect()
 	{
 		super(EnumAspect.TIME);
@@ -24,7 +27,7 @@ public class ClockworkLandAspect extends TitleLandAspect
 	@Override
 	public String[] getNames()
 	{
-		return new String[]{"clockwork", "gear"};
+		return new String[]{CLOCKWORK, GEARS};
 	}
 	
 	@Override

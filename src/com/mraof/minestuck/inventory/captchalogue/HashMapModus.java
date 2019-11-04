@@ -16,6 +16,7 @@ import java.util.Iterator;
 
 public class HashMapModus extends Modus
 {
+	public static final String MESSAGE = "minestuck.hash_map";
 	
 	protected NonNullList<ItemStack> list;
 	public boolean ejectByChat = true;
@@ -117,7 +118,7 @@ public class HashMapModus extends Modus
 		list.set(index, item);
 		
 		if(ejectByChat && MinestuckConfig.hashmapChatModusSetting != 2 || MinestuckConfig.hashmapChatModusSetting == 1)
-			player.sendMessage(new TranslationTextComponent("message.hash_map", item.getTextComponent(), getSize(), index));
+			player.sendMessage(new TranslationTextComponent(MESSAGE, item.getTextComponent(), getSize(), index));
 		
 		return true;
 	}

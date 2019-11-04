@@ -24,6 +24,12 @@ import net.minecraft.world.gen.placement.Placement;
 
 public class ForestLandAspect extends TerrainLandAspect
 {
+	public static final String FORESTS = "minestuck.forests";
+	public static final String TREES = "minestuck.trees";
+	public static final String BOREAL_FORESTS = "minestuck.boreal_forests";
+	public static final String TAIGAS = "minestuck.taigas";
+	public static final String COLD_FORESTS = "minestuck.cold_forests";
+	
 	public static final ResourceLocation GROUP_NAME = new ResourceLocation(Minestuck.MOD_ID, "forest");
 	private final Variant type;
 	
@@ -62,9 +68,9 @@ public class ForestLandAspect extends TerrainLandAspect
 	public String[] getNames()
 	{
 		if(type == Variant.FOREST) {
-			return new String[] {"forest", "tree"};
+			return new String[] {FORESTS, TREES};
 		} else {
-			return new String[] {"taiga", "boreal_forest", "cold_forest"};
+			return new String[] {TAIGAS, BOREAL_FORESTS, COLD_FORESTS};
 		}
 	}
 	

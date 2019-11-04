@@ -14,6 +14,8 @@ import net.minecraft.world.biome.Biome.SpawnListEntry;
 
 public class MonstersLandAspect extends TitleLandAspect
 {
+	public static final String MONSTERS = "minestuck.monsters";
+	
 	public static final ResourceLocation GROUP_NAME = new ResourceLocation(Minestuck.MOD_ID, "monsters");
 	private final Variant type;
 	
@@ -26,7 +28,7 @@ public class MonstersLandAspect extends TitleLandAspect
 	@Override
 	public String[] getNames()
 	{
-		return new String[] {"monster"};
+		return new String[] {MONSTERS};
 	}
 	
 	@Override

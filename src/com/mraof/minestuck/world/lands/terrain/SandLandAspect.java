@@ -27,6 +27,11 @@ import net.minecraft.world.gen.placement.Placement;
 
 public class SandLandAspect extends TerrainLandAspect
 {
+	public static final String SAND = "minestuck.sand";
+	public static final String DUNES = "minestuck.dunes";
+	public static final String DESERTS = "minestuck.deserts";
+	public static final String LUSH_DESERTS = "minestuck.lush_deserts";
+	
 	public static final ResourceLocation GROUP_NAME = new ResourceLocation(Minestuck.MOD_ID, "sand");
 	private final Vec3d fogColor, skyColor;
 	private final Variant type;
@@ -82,9 +87,9 @@ public class SandLandAspect extends TerrainLandAspect
 	public String[] getNames()
 	{
 		if(type == Variant.LUSH_DESERTS) {
-			return new String[] {"lush_deserts"};
+			return new String[] {LUSH_DESERTS};
 		} else {
-			return new String[] {"sand", "dune", "desert"};
+			return new String[] {SAND, DUNES, DESERTS};
 		}
 	}
 	

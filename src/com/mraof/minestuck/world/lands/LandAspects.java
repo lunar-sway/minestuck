@@ -14,6 +14,8 @@ import java.util.Random;
 
 public class LandAspects
 {
+	public static final String FORMAT = "land.format";
+	
 	public LandAspects(TerrainLandAspect terrainAspect, TitleLandAspect titleAspect)
 	{
 		terrain = Objects.requireNonNull(terrainAspect);

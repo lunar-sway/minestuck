@@ -18,6 +18,8 @@ import net.minecraft.world.gen.placement.Placement;
 
 public class FrogsLandAspect extends TitleLandAspect
 {
+	public static final String FROGS = "minestuck.frogs";
+	
 	public FrogsLandAspect()
 	{
 		super(EnumAspect.SPACE, false);
@@ -26,7 +28,7 @@ public class FrogsLandAspect extends TitleLandAspect
 	@Override
 	public String[] getNames()
 	{
-		return new String[] {"frog"};
+		return new String[] {FROGS};
 	}
 	
 	@Override

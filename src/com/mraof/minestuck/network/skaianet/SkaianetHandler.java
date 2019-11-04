@@ -1,6 +1,5 @@
 package com.mraof.minestuck.network.skaianet;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.editmode.EditData;
@@ -46,6 +45,8 @@ import java.util.Map.Entry;
  */
 public class SkaianetHandler
 {
+	public static final String PRIVATE_COMPUTER = "minestuck.private_computer";
+	
 	private static SkaianetHandler INSTANCE;
 	
 	Map<PlayerIdentifier, ComputerData> serversOpen = new TreeMap<>();
@@ -383,7 +384,7 @@ public class SkaianetHandler
 		OpEntry opsEntry = player.getServer().getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
 		if(MinestuckConfig.privateComputers.get() && !p0.equals(p1) && !(opsEntry != null && opsEntry.getPermissionLevel() >= 2))
 		{
-			player.sendMessage(new StringTextComponent("[Minestuck] ").setStyle(new Style().setColor(TextFormatting.RED)).appendSibling(new TranslationTextComponent("message.privateComputerMessage")));
+			player.sendMessage(new StringTextComponent("[Minestuck] ").setStyle(new Style().setColor(TextFormatting.RED)).appendSibling(new TranslationTextComponent(PRIVATE_COMPUTER)));
 			return;
 		}
 		int i = 0;

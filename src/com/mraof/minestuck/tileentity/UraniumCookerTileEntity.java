@@ -24,6 +24,7 @@ import java.util.stream.Stream;
 
 public class UraniumCookerTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
 {
+	public static final String TITLE = "container.minestuck.uranium_cooker";
 	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
 	public static final int DEFAULT_MAX_PROGRESS = 0;
 	
@@ -197,7 +198,7 @@ public class UraniumCookerTileEntity extends MachineProcessTileEntity implements
 	@Override
 	public ITextComponent getDisplayName()
 	{
-		return new TranslationTextComponent("container.uranium_cooker");
+		return new TranslationTextComponent(TITLE);
 	}
 	
 	public short getFuel()

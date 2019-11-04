@@ -13,6 +13,10 @@ import net.minecraft.world.biome.Biome;
 
 public class ThunderLandAspect extends TitleLandAspect
 {
+	public static final String THUNDER = "minestuck.thunder";
+	public static final String LIGHTNING = "minestuck.lightning";
+	public static final String STORMS = "minestuck.storms";
+	
 	public ThunderLandAspect()
 	{
 		super(EnumAspect.DOOM);
@@ -21,7 +25,7 @@ public class ThunderLandAspect extends TitleLandAspect
 	@Override
 	public String[] getNames()
 	{
-		return new String[]{"thunder", "lightning", "storm"};
+		return new String[]{THUNDER, LIGHTNING, STORMS};
 	}
 	
 	@Override

@@ -24,6 +24,10 @@ import net.minecraft.world.gen.placement.Placement;
 
 public class FrostLandAspect extends TerrainLandAspect
 {
+	public static final String FROST = "minestuck.frost";
+	public static final String ICE = "minestuck.ice";
+	public static final String SNOW = "minestuck.snow";
+	
 	private static final Vec3d fogColor = new Vec3d(0.5D, 0.6D, 0.98D);
 	
 	public FrostLandAspect()
@@ -53,7 +57,7 @@ public class FrostLandAspect extends TerrainLandAspect
 	
 	@Override
 	public String[] getNames() {
-		return new String[] {"frost", "ice", "snow"};
+		return new String[] {FROST, ICE, SNOW};
 	}
 	
 	@Override

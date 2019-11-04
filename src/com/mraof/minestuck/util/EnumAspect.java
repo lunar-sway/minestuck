@@ -89,7 +89,7 @@ public enum EnumAspect
 	@Deprecated
 	public String getDisplayName()
 	{
-		return I18n.format("title." + this.toString());
+		return I18n.format(getTranslationKey());
 	}
 	
 	/**
@@ -99,6 +99,11 @@ public enum EnumAspect
 	 */
 	public ITextComponent asTextComponent()
 	{
-		return new TranslationTextComponent("title." + this.toString());
+		return new TranslationTextComponent(getTranslationKey());
+	}
+	
+	public String getTranslationKey()
+	{
+		return "title.aspect." + this.toString();
 	}
 }

@@ -24,6 +24,7 @@ import javax.annotation.Nullable;
 
 public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
 {
+	public static final String TITLE = "container.minestuck.mini_alchemiter";
 	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
 	public static final int INPUT = 0, OUTPUT = 1;
 	
@@ -168,7 +169,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 	@Override
 	public ITextComponent getDisplayName()
 	{
-		return new TranslationTextComponent("container.mini_alchemiter");
+		return new TranslationTextComponent(TITLE);
 	}
 	
 	@Override

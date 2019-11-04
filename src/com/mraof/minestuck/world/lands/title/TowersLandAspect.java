@@ -16,6 +16,8 @@ import net.minecraft.world.gen.placement.Placement;
 
 public class TowersLandAspect extends TitleLandAspect
 {
+	public static final String TOWERS = "minestuck.towers";
+	
 	public TowersLandAspect()
 	{
 		super(EnumAspect.HOPE);
@@ -24,7 +26,7 @@ public class TowersLandAspect extends TitleLandAspect
 	@Override
 	public String[] getNames()
 	{
-		return new String[] {"tower"};
+		return new String[] {TOWERS};
 	}
 	
 	@Override

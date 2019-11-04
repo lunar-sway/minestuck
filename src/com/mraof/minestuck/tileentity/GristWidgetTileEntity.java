@@ -24,6 +24,7 @@ import java.util.Map.Entry;
 
 public class GristWidgetTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
 {
+	public static final String TITLE = "container.minestuck.grist_widget";
 	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
 	
 	public IdentifierHandler.PlayerIdentifier owner;
@@ -187,7 +188,7 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 	@Override
 	public ITextComponent getDisplayName()
 	{
-		return new TranslationTextComponent("container.grist_widget");
+		return new TranslationTextComponent(TITLE);
 	}
 	
 	@Nullable

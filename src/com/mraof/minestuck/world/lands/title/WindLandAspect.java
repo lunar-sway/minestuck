@@ -16,6 +16,8 @@ import net.minecraft.world.gen.placement.Placement;
 
 public class WindLandAspect extends TitleLandAspect
 {
+	public static final String WIND = "minestuck.wind";
+	
 	public WindLandAspect()
 	{
 		super(EnumAspect.BREATH);
@@ -24,7 +26,7 @@ public class WindLandAspect extends TitleLandAspect
 	@Override
 	public String[] getNames()
 	{
-		return new String[] {"wind"};
+		return new String[] {WIND};
 	}
 	
 	@Override

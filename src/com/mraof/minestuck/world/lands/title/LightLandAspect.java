@@ -20,6 +20,9 @@ import net.minecraft.world.gen.placement.Placement;
 
 public class LightLandAspect extends TitleLandAspect
 {
+	public static final String LIGHT = "minestuck.light";
+	public static final String BRIGHTNESS = "minestuck.brightness";
+	
 	public LightLandAspect()
 	{
 		super(EnumAspect.LIGHT);
@@ -28,7 +31,7 @@ public class LightLandAspect extends TitleLandAspect
 	@Override
 	public String[] getNames()
 	{
-		return new String[] {"light", "brightness"};
+		return new String[] {LIGHT, BRIGHTNESS};
 	}
 	
 	@Override

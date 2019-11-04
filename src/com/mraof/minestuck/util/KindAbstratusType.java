@@ -30,7 +30,7 @@ public class KindAbstratusType
 	}
 	
 	public ITextComponent getDisplayName() {
-		return new TranslationTextComponent("strife."+unlocalizedName+".name");
+		return new TranslationTextComponent("strife."+unlocalizedName);
 	}
 	
 	public String getUnlocalizedName() {

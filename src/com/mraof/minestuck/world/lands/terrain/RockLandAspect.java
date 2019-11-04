@@ -22,6 +22,11 @@ import net.minecraft.world.gen.placement.*;
 
 public class RockLandAspect extends TerrainLandAspect
 {
+	public static final String ROCK = "minestuck.rock";
+	public static final String STONE = "minestuck.stone";
+	public static final String ORE = "minestuck.ore";
+	public static final String PETRIFICATION = "minestuck.petrification";
+	
 	public static final ResourceLocation GROUP_NAME = new ResourceLocation(Minestuck.MOD_ID, "rock");
 	private final Variant type;
 	
@@ -56,9 +61,9 @@ public class RockLandAspect extends TerrainLandAspect
 	public String[] getNames()
 	{
 		if(type == Variant.PETRIFICATION) {
-			return new String[] {"petrification"};
+			return new String[] {PETRIFICATION};
 		} else {
-			return new String[] {"rock", "stone", "ore"};
+			return new String[] {ROCK, STONE, ORE};
 		}
 	}
 	

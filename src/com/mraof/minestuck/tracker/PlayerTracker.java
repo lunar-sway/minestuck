@@ -34,6 +34,7 @@ import java.util.Set;
 
 public class PlayerTracker
 {
+	public static final String LAND_ENTRY = "minestuck.land_entry";
 	
 	public static PlayerTracker instance = new PlayerTracker();
 	
@@ -228,7 +229,7 @@ public class PlayerTracker
 		{
 			LandInfoContainer info = MSDimensions.getLandInfo(player.getServer(), player.dimension);
 			ITextComponent toSend;
-			toSend = new TranslationTextComponent("land.message.entry", info.landAsTextComponent());
+			toSend = new TranslationTextComponent(LAND_ENTRY, info.landAsTextComponent());
 			player.sendMessage(toSend);
 		}
 	}

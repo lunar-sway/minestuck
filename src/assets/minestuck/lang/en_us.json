@@ -30,7 +30,7 @@
   "advancements.minestuck.all_modi.title": "A Full Set",
   "advancements.minestuck.all_modi.description": "Try a new modus type.",
 
-  "aspect_effects..on": "Aspect Effects have been toggled on",
+  "aspect_effects.on": "Aspect Effects have been toggled on",
   "aspect_effects.off": "Aspect Effects have been toggled off",
 
   "commands.check_land.usage": "/checkLand",

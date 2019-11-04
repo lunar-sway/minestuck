@@ -57,7 +57,7 @@ public class LandInfoContainer
 	{
 		ITextComponent aspect1 = new TranslationTextComponent("land."+landName1());
 		ITextComponent aspect2 = new TranslationTextComponent("land."+landName2());
-		return new TranslationTextComponent("land.format", aspect1, aspect2);
+		return new TranslationTextComponent(LandAspects.FORMAT, aspect1, aspect2);
 	}
 	
 	public String landName1()

@@ -16,6 +16,9 @@ import net.minecraft.world.gen.placement.TopSolidRangeConfig;
 
 public class CakeLandAspect extends TitleLandAspect
 {
+	public static final String CAKE = "minestuck.cake";
+	public static final String DESSERTS = "minestuck.desserts";
+	
 	public CakeLandAspect()
 	{
 		super(EnumAspect.HEART);
@@ -24,7 +27,7 @@ public class CakeLandAspect extends TitleLandAspect
 	@Override
 	public String[] getNames()
 	{
-		return new String[] {"cake", "dessert"};
+		return new String[] {CAKE, DESSERTS};
 	}
 	
 	@Override

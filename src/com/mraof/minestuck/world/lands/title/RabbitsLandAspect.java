@@ -13,6 +13,9 @@ import net.minecraft.world.biome.Biome;
 
 public class RabbitsLandAspect extends TitleLandAspect
 {
+	public static final String RABBITS = "minestuck.rabbits";
+	public static final String BUNNIES = "minestuck.bunnies";
+	
 	public RabbitsLandAspect()
 	{
 		super(EnumAspect.LIFE);
@@ -21,7 +24,7 @@ public class RabbitsLandAspect extends TitleLandAspect
 	@Override
 	public String[] getNames()
 	{
-		return new String[] {"rabbit", "bunny"};
+		return new String[] {RABBITS, BUNNIES};
 	}
 	
 	@Override

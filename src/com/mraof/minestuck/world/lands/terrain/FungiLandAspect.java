@@ -23,6 +23,13 @@ import net.minecraft.world.gen.placement.Placement;
 
 public class FungiLandAspect extends TerrainLandAspect
 {
+	public static final String FUNGI = "minestuck.fungi";
+	public static final String DANK = "minestuck.dank";
+	public static final String MUST = "minestuck.must";
+	public static final String MYCELIUM = "minestuck.mycelium";
+	public static final String MOLD = "minestuck.mold";
+	public static final String MILDEW = "minestuck.mildew";
+	
 	private static final Vec3d fogColor = new Vec3d(0.69D, 0.76D, 0.61D);
 	private static final Vec3d skyColor = new Vec3d(0.69D, 0.76D, 0.61D);
 	
@@ -55,7 +62,7 @@ public class FungiLandAspect extends TerrainLandAspect
 	
 	@Override
 	public String[] getNames() {
-		return new String[] {"fungi", "dank", "must", "mold", "mildew", "mycelium"};
+		return new String[] {FUNGI, DANK, MUST, MOLD, MILDEW, MYCELIUM};
 	}
 	
 	@Override

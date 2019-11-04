@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 import java.util.ArrayList;
@@ -19,7 +19,8 @@ import java.util.stream.Collectors;
 
 public class GristSelectorScreen extends MinestuckScreen
 {
-
+	public static final String TITLE = "minestuck.grist_selector";
+	public static final String SELECT_GRIST = "minestuck.select_grist";
 	private static final ResourceLocation guiGristcache = new ResourceLocation("minestuck", "textures/gui/grist_cache.png");
 
 	private static final int guiWidth = 226, guiHeight = 190;
@@ -31,13 +32,13 @@ public class GristSelectorScreen extends MinestuckScreen
 
 	protected GristSelectorScreen(MiniAlchemiterScreen screen)
 	{
-		super(new StringTextComponent("Grist selector"));
+		super(new TranslationTextComponent(TITLE));
 		this.otherScreen = screen;
 	}
 
 	public GristSelectorScreen(AlchemiterScreen screen)
 	{
-		super(new StringTextComponent("Grist selector"));
+		super(new TranslationTextComponent(TITLE));
 		this.otherScreen = screen;
 	}
 
@@ -72,8 +73,8 @@ public class GristSelectorScreen extends MinestuckScreen
 		this.minecraft.getTextureManager().bindTexture(guiGristcache);
 		this.blit(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 
-		String cacheMessage = I18n.format("gui.selectGrist");
-		minecraft.fontRenderer.drawString(cacheMessage, (this.width / 2) - minecraft.fontRenderer.getStringWidth(cacheMessage) / 2, yOffset + 12, 0x404040);
+		String cacheMessage = I18n.format(SELECT_GRIST);
+		minecraft.fontRenderer.drawString(cacheMessage, (this.width / 2F) - minecraft.fontRenderer.getStringWidth(cacheMessage) / 2F, yOffset + 12, 0x404040);
 		super.render(mouseX, mouseY, partialTicks);
 
 		GlStateManager.color3f(1, 1, 1);

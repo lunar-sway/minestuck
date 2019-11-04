@@ -1,8 +1,5 @@
 package com.mraof.minestuck.world.lands.terrain;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.common.collect.Lists;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
@@ -26,6 +23,10 @@ import net.minecraft.world.gen.placement.Placement;
 
 public class FloraLandAspect extends TerrainLandAspect
 {
+	public static final String FLORA = "minestuck.flora";
+	public static final String FLOWERS = "minestuck.flowers";
+	public static final String THORNS = "minestuck.thorns";
+	
 	private static final Vec3d fogColor = new Vec3d(0.5D, 0.6D, 0.9D);
 	private static final Vec3d skyColor = new Vec3d(0.6D, 0.8D, 0.6D);
 	
@@ -55,7 +56,7 @@ public class FloraLandAspect extends TerrainLandAspect
 	@Override
 	public String[] getNames()
 	{
-		return new String[] {"flora", "flowers", "thorns"};
+		return new String[] {FLORA, FLOWERS, THORNS};
 	}
 	
 	@Override
