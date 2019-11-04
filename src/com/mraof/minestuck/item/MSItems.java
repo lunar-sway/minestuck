@@ -447,7 +447,7 @@ public class MSItems
 		registry.register(BEEF_SWORD = new ConsumableWeaponItem(MSItemTypes.MEAT_TIER, 2, -2.4F, 5.0F, 3, 0.8F, 75, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("beef_sword"));
 		registry.register(IRRADIATED_STEAK_SWORD = new ConsumableWeaponItem(MSItemTypes.MEAT_TIER, 2, -2.4F, 5.0F, 4, 0.4F, 25, new Item.Properties().defaultMaxDamage(150).group(MSItemGroup.WEAPONS)).setPotionEffect(new EffectInstance(Effects.WITHER, 100, 1), 0.9F).setRegistryName("irradiated_steak_sword"));
 		registry.register(KATANA = new WeaponItem(ItemTier.IRON, 3, -2.4F, 15.0F, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("katana"));
-		registry.register(UNBREAKABLE_KATANA = new WeaponItem(MSItemTypes.RUBY_TIER, 3, -2.4F, 15.0F, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("unbreakable_katana"));	//Not actually unbreakable
+		registry.register(UNBREAKABLE_KATANA = new WeaponItem(MSItemTypes.RUBY_TIER, 3, -2.4F, 15.0F, new Item.Properties().defaultMaxDamage(-1).group(MSItemGroup.WEAPONS)).setRegistryName("unbreakable_katana"));	//Actually unbreakable
 		registry.register(FIRE_POKER = new FireWeaponItem(ItemTier.IRON, 4, -2.4F, 15.0F,  30, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("fire_poker"));
 		registry.register(HOT_HANDLE = new FireWeaponItem(ItemTier.IRON, 3, -2.4F, 15.0F, 10, new Item.Properties().defaultMaxDamage(350).group(MSItemGroup.WEAPONS)).setRegistryName("too_hot_to_handle"));
 		registry.register(CALEDSCRATCH = new WeaponItem(MSItemTypes.RUBY_TIER, 2, -2.4F, 15.0F, new Item.Properties().defaultMaxDamage(1561).group(MSItemGroup.WEAPONS)).setRegistryName("caledscratch"));

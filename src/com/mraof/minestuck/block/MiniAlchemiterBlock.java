@@ -23,13 +23,13 @@ import java.util.Map;
 
 public class MiniAlchemiterBlock extends MachineProcessBlock
 {
-	public static final VoxelShape SHAPE = Block.makeCuboidShape(0, 0, 0, 16, 8, 16);
-	public static final Map<Direction, VoxelShape> COLLISION_SHAPE;
+	public static final Map<Direction, VoxelShape> SHAPE = MSBlockShapes.SMALL_ALCHEMITER.createRotatedShapes();
+	//public static final Map<Direction, VoxelShape> COLLISION_SHAPE;
 	
 	static
 	{
-		COLLISION_SHAPE = createRotatedShapes(0, 2, 0, 4.5, 16, 2);
-		COLLISION_SHAPE.replaceAll((enumFacing, shape) -> VoxelShapes.or(shape, SHAPE));
+		//COLLISION_SHAPE = createRotatedShapes(0, 2, 0, 4.5, 16, 2);
+		//COLLISION_SHAPE.replaceAll((enumFacing, shape) -> VoxelShapes.or(shape, SHAPE.ge));
 	}
 	public MiniAlchemiterBlock(Properties properties)
 	{
@@ -39,13 +39,13 @@ public class MiniAlchemiterBlock extends MachineProcessBlock
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 	{
-		return SHAPE;
+		return SHAPE.get(state.get(FACING));
 	}
 	
 	@Override
 	public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 	{
-		return COLLISION_SHAPE.get(state.get(FACING));
+		return SHAPE.get(state.get(FACING));
 	}
 	
 	@Override

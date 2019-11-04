@@ -3,6 +3,7 @@ package com.mraof.minestuck.block;
 import com.mraof.minestuck.block.multiblock.MachineMultiblock;
 import com.mraof.minestuck.tileentity.CruxtruderTileEntity;
 
+import com.mraof.minestuck.util.CustomVoxelShape;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -16,19 +17,20 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import java.util.Map;
 
 public class CruxtruderBlock extends MultiMachineBlock
 {
 	public static final VoxelShape TUBE_SHAPE = Block.makeCuboidShape(2, 0, 2, 14, 16, 14);
 	
-	protected final VoxelShape shape;
+	protected final Map<Direction, VoxelShape> shape;
 	protected final boolean hasTileEntity;
 	protected final BlockPos mainPos;
 	
-	public CruxtruderBlock(MachineMultiblock machine, VoxelShape shape, boolean tileEntity, BlockPos mainPos, Properties properties)
+	public CruxtruderBlock(MachineMultiblock machine, CustomVoxelShape shape, boolean tileEntity, BlockPos mainPos, Properties properties)
 	{
 		super(machine, properties);
-		this.shape = shape;
+		this.shape = shape.createRotatedShapes();
 		this.hasTileEntity = tileEntity;
 		this.mainPos = mainPos;
 	}
@@ -36,7 +38,7 @@ public class CruxtruderBlock extends MultiMachineBlock
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 	{
-		return shape;
+		return shape.get(state.get(FACING));
 	}
 	
 	@Override
