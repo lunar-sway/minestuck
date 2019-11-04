@@ -22,6 +22,11 @@ import net.minecraft.world.gen.placement.*;
 
 public class RockLandAspect extends TerrainLandAspect
 {
+	public static final String ROCK = "minestuck.rock";
+	public static final String STONE = "minestuck.stone";
+	public static final String ORE = "minestuck.ore";
+	public static final String PETRIFICATION = "minestuck.petrification";
+	
 	public static final ResourceLocation GROUP_NAME = new ResourceLocation(Minestuck.MOD_ID, "rock");
 	private final Variant type;
 	
@@ -56,9 +61,9 @@ public class RockLandAspect extends TerrainLandAspect
 	public String[] getNames()
 	{
 		if(type == Variant.PETRIFICATION) {
-			return new String[] {"petrification"};
+			return new String[] {PETRIFICATION};
 		} else {
-			return new String[] {"rock", "stone", "ore"};
+			return new String[] {ROCK, STONE, ORE};
 		}
 	}
 	
@@ -89,13 +94,13 @@ public class RockLandAspect extends TerrainLandAspect
 			if(type == Variant.ROCK)
 			{
 				biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(MSFeatures.BLOCK_BLOB, new BlockBlobConfig(Blocks.COBBLESTONE.getDefaultState(), 0), Placement.COUNT_EXTRA_HEIGHTMAP, new AtSurfaceWithExtraConfig(3, 0.1F, 2)));
-				biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Feature.BUSH, new BushConfig(MSBlocks.PETRIFIED_GRASS.getDefaultState()), Placement.CHANCE_HEIGHTMAP_DOUBLE, new ChanceConfig(3)));
+				biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Feature.BUSH, new BushConfig(MSBlocks.PETRIFIED_GRASS.getDefaultState()), Placement.CHANCE_HEIGHTMAP, new ChanceConfig(4)));
 			} else if(type == Variant.PETRIFICATION)
 			{
 				biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(MSFeatures.LEAFLESS_TREE, new BushConfig(MSBlocks.PETRIFIED_LOG.getDefaultState()), Placement.CHANCE_HEIGHTMAP, new ChanceConfig(10)));
 				biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(MSFeatures.BLOCK_BLOB, new BlockBlobConfig(Blocks.COBBLESTONE.getDefaultState(), 0), Placement.COUNT_EXTRA_HEIGHTMAP, new AtSurfaceWithExtraConfig(1, 0.1F, 1)));
-				biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Feature.BUSH, new BushConfig(MSBlocks.PETRIFIED_GRASS.getDefaultState()), Placement.CHANCE_HEIGHTMAP_DOUBLE, new ChanceConfig(2)));
-				biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Feature.BUSH, new BushConfig(MSBlocks.PETRIFIED_POPPY.getDefaultState()), Placement.CHANCE_HEIGHTMAP_DOUBLE, new ChanceConfig(4)));
+				biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Feature.BUSH, new BushConfig(MSBlocks.PETRIFIED_GRASS.getDefaultState()), Placement.CHANCE_HEIGHTMAP, new ChanceConfig(2)));
+				biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Feature.BUSH, new BushConfig(MSBlocks.PETRIFIED_POPPY.getDefaultState()), Placement.CHANCE_HEIGHTMAP, new ChanceConfig(8)));
 			}
 		}
 		
@@ -105,13 +110,13 @@ public class RockLandAspect extends TerrainLandAspect
 			{
 				biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(MSFeatures.LEAFLESS_TREE, new BushConfig(MSBlocks.PETRIFIED_LOG.getDefaultState()), Placement.CHANCE_HEIGHTMAP, new ChanceConfig(20)));
 				biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(MSFeatures.BLOCK_BLOB, new BlockBlobConfig(Blocks.COBBLESTONE.getDefaultState(), 1), Placement.COUNT_EXTRA_HEIGHTMAP, new AtSurfaceWithExtraConfig(4, 0.1F, 2)));
-				biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Feature.BUSH, new BushConfig(MSBlocks.PETRIFIED_GRASS.getDefaultState()), Placement.CHANCE_HEIGHTMAP_DOUBLE, new ChanceConfig(4)));
+				biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Feature.BUSH, new BushConfig(MSBlocks.PETRIFIED_GRASS.getDefaultState()), Placement.CHANCE_HEIGHTMAP, new ChanceConfig(10)));
 			} else if(type == Variant.PETRIFICATION)
 			{
 				biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(MSFeatures.LEAFLESS_TREE, new BushConfig(MSBlocks.PETRIFIED_LOG.getDefaultState()), Placement.COUNT_EXTRA_HEIGHTMAP, new AtSurfaceWithExtraConfig(2, 0.5F, 1)));
 				biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(MSFeatures.BLOCK_BLOB, new BlockBlobConfig(Blocks.COBBLESTONE.getDefaultState(), 1), Placement.COUNT_EXTRA_HEIGHTMAP, new AtSurfaceWithExtraConfig(2, 0.1F, 1)));
 				biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Feature.BUSH, new BushConfig(MSBlocks.PETRIFIED_GRASS.getDefaultState()), Placement.COUNT_TOP_SOLID, new FrequencyConfig(1)));
-				biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Feature.BUSH, new BushConfig(MSBlocks.PETRIFIED_POPPY.getDefaultState()), Placement.CHANCE_HEIGHTMAP_DOUBLE, new ChanceConfig(8)));
+				biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Feature.BUSH, new BushConfig(MSBlocks.PETRIFIED_POPPY.getDefaultState()), Placement.CHANCE_HEIGHTMAP, new ChanceConfig(16)));
 			}
 		}
 		

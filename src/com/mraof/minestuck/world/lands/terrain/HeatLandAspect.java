@@ -21,6 +21,10 @@ import net.minecraft.world.gen.placement.Placement;
 
 public class HeatLandAspect extends TerrainLandAspect
 {
+	public static final String HEAT = "minestuck.heat";
+	public static final String FLAME = "minestuck.flame";
+	public static final String FIRE = "minestuck.fire";
+	
 	private static final Vec3d skyColor = new Vec3d(0.4D, 0.0D, 0.0D);
 	
 	public HeatLandAspect()
@@ -50,7 +54,7 @@ public class HeatLandAspect extends TerrainLandAspect
 	
 	@Override
 	public String[] getNames() {
-		return new String[] {"heat","flame","fire"};
+		return new String[] {HEAT, FLAME, FIRE};
 	}
 	
 	@Override

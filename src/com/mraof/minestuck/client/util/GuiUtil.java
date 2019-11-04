@@ -18,6 +18,8 @@ import java.util.List;
 
 public class GuiUtil
 {
+	public static final String NOT_ALCHEMIZABLE = "minsetuck.not_alchemizable";
+	public static final String FREE = "minestuck.free";
 	
 	public enum GristboardMode
 	{
@@ -35,13 +37,13 @@ public class GuiUtil
 	{
 		if (grist == null)
 		{
-			fontRenderer.drawString(I18n.format("gui.notAlchemizable"), boardX, boardY, 0xFF0000);
+			fontRenderer.drawString(I18n.format(NOT_ALCHEMIZABLE), boardX, boardY, 0xFF0000);
 			return;
 		}
 		
 		if (grist.isEmpty())
 		{
-			fontRenderer.drawString(I18n.format("gui.free"), boardX, boardY, 0x00FF00);
+			fontRenderer.drawString(I18n.format(FREE), boardX, boardY, 0x00FF00);
 			return;
 		}
 		

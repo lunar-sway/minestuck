@@ -4,8 +4,11 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
+import java.util.Objects;
+
 public class Title
 {
+	public static final String FORMAT = "title.format";
 	
 	private EnumClass heroClass;
 	private EnumAspect heroAspect;
@@ -26,12 +29,6 @@ public class Title
 		return this.heroAspect;
 	}
 	
-	@Deprecated //Use asTextComponent() instead
-	public String getTitleName()
-	{
-		return I18n.format("title.format", heroClass.getDisplayName(), heroAspect.getDisplayName());
-	}
-	
 	@Override
 	public String toString()
 	{
@@ -40,11 +37,11 @@ public class Title
 	
 	public ITextComponent asTextComponent()
 	{
-		return new TranslationTextComponent("title.format", heroClass.asTextComponent(), heroAspect.asTextComponent());
+		return new TranslationTextComponent(FORMAT, heroClass.asTextComponent(), heroAspect.asTextComponent());
 	}
 	
 	@Override
-	public boolean equals(Object obj)	//TODO override title.hashCode() too.
+	public boolean equals(Object obj)
 	{
 		if(obj instanceof Title)
 		{
@@ -52,5 +49,11 @@ public class Title
 			return title.heroClass.equals(this.heroClass) && title.heroAspect.equals(this.heroAspect);
 		}
 		return false;
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return Objects.hash(heroClass, heroAspect);
 	}
 }

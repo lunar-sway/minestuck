@@ -19,6 +19,7 @@ import javax.annotation.Nullable;
 
 public class MiniTotemLatheTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
 {
+	public static final String TITLE = "container.minestuck.mini_totem_lathe";
 	public static final RunType TYPE = RunType.BUTTON;
 	
 	public MiniTotemLatheTileEntity()
@@ -113,7 +114,7 @@ public class MiniTotemLatheTileEntity extends MachineProcessTileEntity implement
 	@Override
 	public ITextComponent getDisplayName()
 	{
-		return new TranslationTextComponent("container.mini_totem_lathe");
+		return new TranslationTextComponent(TITLE);
 	}
 	
 	@Override

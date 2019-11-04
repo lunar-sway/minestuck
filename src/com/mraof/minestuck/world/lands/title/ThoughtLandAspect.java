@@ -20,6 +20,8 @@ import net.minecraft.world.gen.placement.Placement;
 
 public class ThoughtLandAspect extends TitleLandAspect
 {
+	public static final String THOUGHT = "minestuck.thought";
+	
 	public ThoughtLandAspect()
 	{
 		super(EnumAspect.MIND);
@@ -28,7 +30,7 @@ public class ThoughtLandAspect extends TitleLandAspect
 	@Override
 	public String[] getNames()
 	{
-		return new String[]{"thought"};
+		return new String[]{THOUGHT};
 	}
 	
 	@Override

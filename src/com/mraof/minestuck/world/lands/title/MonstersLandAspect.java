@@ -14,6 +14,8 @@ import net.minecraft.world.biome.Biome.SpawnListEntry;
 
 public class MonstersLandAspect extends TitleLandAspect
 {
+	public static final String MONSTERS = "minestuck.monsters";
+	
 	public static final ResourceLocation GROUP_NAME = new ResourceLocation(Minestuck.MOD_ID, "monsters");
 	private final Variant type;
 	
@@ -26,7 +28,7 @@ public class MonstersLandAspect extends TitleLandAspect
 	@Override
 	public String[] getNames()
 	{
-		return new String[] {"monster"};
+		return new String[] {MONSTERS};
 	}
 	
 	@Override
@@ -36,6 +38,8 @@ public class MonstersLandAspect extends TitleLandAspect
 		registry.setBlockState("carpet", Blocks.PURPLE_CARPET.getDefaultState());
 		if(registry.getCustomBlock("torch") == null)
 			registry.setBlockState("torch", Blocks.REDSTONE_TORCH.getDefaultState());
+		if(registry.getCustomBlock("wall_torch") == null)
+			registry.setBlockState("wall_torch", Blocks.REDSTONE_WALL_TORCH.getDefaultState());
 	}
 	
 	@Override

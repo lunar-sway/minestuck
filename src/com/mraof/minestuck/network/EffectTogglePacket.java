@@ -12,6 +12,9 @@ import java.util.function.Supplier;
 
 public class EffectTogglePacket
 {
+	public static final String ON = "minestuck.aspect_effects.on";
+	public static final String OFF = "minestuck.aspect_effects.off";
+	
 	public void encode(PacketBuffer buffer)
 	{
 	}
@@ -35,10 +38,10 @@ public class EffectTogglePacket
 		PlayerSavedData.get(player.world).setEffectToggle(handler, !PlayerSavedData.get(player.world).getEffectToggle(handler));
 		if(PlayerSavedData.get(player.world).getData(handler).effectToggle)
 		{
-			player.sendStatusMessage(new TranslationTextComponent("aspectEffects.on"), true);
+			player.sendStatusMessage(new TranslationTextComponent(ON), true);
 		} else
 		{
-			player.sendStatusMessage(new TranslationTextComponent("aspectEffects.off"), true);
+			player.sendStatusMessage(new TranslationTextComponent(OFF), true);
 		}
 	}
 }

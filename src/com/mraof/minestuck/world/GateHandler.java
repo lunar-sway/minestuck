@@ -24,6 +24,8 @@ import java.util.Random;
 
 public class GateHandler
 {
+	public static final String DESTROYED = "minestuck.gate_destroyed";
+	public static final String MISSING_LAND = "minestuck.gate_missing_land";
 	
 	public static final int gateHeight1 = 144, gateHeight2 = 192;
 	
@@ -88,7 +90,7 @@ public class GateHandler
 					
 					location = GlobalPos.of(clientDim, gatePos);
 				}
-				else player.sendMessage(new TranslationTextComponent("message.gateMissingLand"));
+				else player.sendMessage(new TranslationTextComponent(MISSING_LAND));
 			} else Debug.errorf("Unexpected error: Can't find connection for dimension %d!", dim);
 		} else if(gateType == Type.LAND_GATE)
 		{
@@ -102,7 +104,7 @@ public class GateHandler
 					DimensionType serverDim = serverConnection.getClientDimension();
 					location = GlobalPos.of(serverDim, getGatePos(player.server, Type.GATE_2, serverDim));
 					
-				} else player.sendMessage(new TranslationTextComponent("message.gateMissingLand"));
+				} else player.sendMessage(new TranslationTextComponent(MISSING_LAND));
 				
 			} else Debug.errorf("Unexpected error: Can't find connection for dimension %d!", dim);
 		} else Debug.errorf("Unexpected error: Gate id %d is out of bounds!", gateType);
@@ -118,7 +120,7 @@ public class GateHandler
 				if(block.getBlock() != MSBlocks.GATE)
 				{
 					Debug.debugf("Can't find destination gate at %s. Probably broken.", location);
-					player.sendMessage(new TranslationTextComponent("message.gateDestroyed"));
+					player.sendMessage(new TranslationTextComponent(DESTROYED));
 					return;
 				}
 			}

@@ -1,6 +1,7 @@
 package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.data.loot_table.MinestuckLootTableProvider;
 import com.mraof.minestuck.data.recipe.MinestuckGristCostsProvider;
 import com.mraof.minestuck.data.recipe.MinestuckRecipeProvider;
 import net.minecraft.data.DataGenerator;
@@ -26,7 +27,8 @@ public class MinestuckData
 			gen.addProvider(new MinestuckRecipeProvider(gen));
 			gen.addProvider(new MinestuckGristCostsProvider(gen));
 			
-			gen.addProvider(new MinestuckAdvancementProvider(gen));
+			gen.addProvider(new MinestuckLootTableProvider(gen));
+			gen.addProvider(new MSAvancementProvider(gen));
 		}
 	}
 }

@@ -24,6 +24,10 @@ import net.minecraft.world.gen.placement.Placement;
 
 public class WoodLandAspect extends TerrainLandAspect
 {
+	public static final String WOOD = "minestuck.wood";
+	public static final String OAK = "minestuck.oak";
+	public static final String LUMBER = "minestuck.lumber";
+	
 	private static final Vec3d fogColor = new Vec3d(0.0D, 0.16D, 0.38D);
 	
 	public WoodLandAspect()
@@ -50,7 +54,7 @@ public class WoodLandAspect extends TerrainLandAspect
 	
 	@Override
 	public String[] getNames() {
-		return new String[] {"wood","oak","lumber"};
+		return new String[] {WOOD, OAK, LUMBER};
 	}
 	
 	@Override

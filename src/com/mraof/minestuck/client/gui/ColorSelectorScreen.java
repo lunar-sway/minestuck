@@ -14,6 +14,10 @@ import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 public class ColorSelectorScreen extends Screen
 {
+	public static final String TITLE = "minestuck.color_selector";
+	public static final String SELECT_COLOR = "minestuck.select_color";
+	public static final String COLOR_SELECTED = "minestuck.color_selected";
+	public static final String DEFAULT_COLOR_SELECTED = "minestuck.default_color_selected";
 	
 	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/color_selector.png");
 	private static final int guiWidth = 176, guiHeight = 157;
@@ -22,7 +26,7 @@ public class ColorSelectorScreen extends Screen
 	
 	public ColorSelectorScreen(boolean firstTime)
 	{
-		super(new StringTextComponent("Color Selector"));
+		super(new TranslationTextComponent(TITLE));
 		this.firstTime = firstTime;
 		selectedColor = ColorCollector.playerColor;
 	}
@@ -46,8 +50,8 @@ public class ColorSelectorScreen extends Screen
 		this.minecraft.getTextureManager().bindTexture(guiBackground);
 		this.blit(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
-		String cacheMessage = I18n.format("gui.selectColor");
-		minecraft.fontRenderer.drawString(cacheMessage, (this.width / 2) - font.getStringWidth(cacheMessage) / 2, yOffset + 12, 0x404040);
+		String cacheMessage = I18n.format(SELECT_COLOR);
+		minecraft.fontRenderer.drawString(cacheMessage, (this.width / 2F) - font.getStringWidth(cacheMessage) / 2F, yOffset + 12, 0x404040);
 		
 		for(int i = 0; i < 4; i++)
 		{
@@ -128,8 +132,8 @@ public class ColorSelectorScreen extends Screen
 		{
 			ITextComponent message;
 			if(ColorCollector.playerColor == -1)
-				message = new TranslationTextComponent("message.selectDefaultColor");
-			else message = new TranslationTextComponent("message.selectColor");
+				message = new TranslationTextComponent(DEFAULT_COLOR_SELECTED);
+			else message = new TranslationTextComponent(COLOR_SELECTED);
 			this.minecraft.player.sendMessage(new StringTextComponent("[Minestuck] ").appendSibling(message));
 		}
 	}

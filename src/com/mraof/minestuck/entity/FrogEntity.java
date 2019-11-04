@@ -190,7 +190,7 @@ public class FrogEntity extends CreatureEntity
 
 		if (d0 > 0.0D)
 		{
-			double d1 = func_213296_b(this.getMotion());
+			double d1 = horizontalMag(this.getMotion());
 
 			if (d1 < 0.01D)
 			{

@@ -21,6 +21,13 @@ import org.lwjgl.glfw.GLFW;
 
 public class MSKeyHandler
 {
+	public static final String CATEGORY = "key.categories.minestuck";
+	public static final String STATS_GUI = "key.minestuck.stats_gui";
+	public static final String EXIT_EDIT_MODE = "key.minestuck.exit_edit_mode";
+	public static final String CAPTCHALOGUE = "key.minestuck.captchalogue";
+	public static final String ASPECT_EFFECT_TOGGLE = "key.minestuck.aspext_effect_toggle";
+	public static final String SYLLADEX = "key.minestuck.sylladex";
+	
 	public static final MSKeyHandler instance = new MSKeyHandler();
 	public KeyBinding statKey;
 	public KeyBinding editKey;
@@ -32,17 +39,17 @@ public class MSKeyHandler
 	public void registerKeys()
 	{
 		if(statKey != null)
-			throw new IllegalStateException("Minestucck keys have already been registered!");
+			throw new IllegalStateException("Minestuck keys have already been registered!");
 		
-		statKey = new KeyBinding("key.statsGui", GLFW.GLFW_KEY_G, "key.categories.minestuck");
+		statKey = new KeyBinding(STATS_GUI, GLFW.GLFW_KEY_G, CATEGORY);
 		ClientRegistry.registerKeyBinding(statKey);
-		editKey = new KeyBinding("key.exitEdit", GLFW.GLFW_KEY_K, "key.categories.minestuck");
+		editKey = new KeyBinding(EXIT_EDIT_MODE, GLFW.GLFW_KEY_K, CATEGORY);
 		ClientRegistry.registerKeyBinding(editKey);
-		captchaKey = new KeyBinding("key.captchalogue", GLFW.GLFW_KEY_V, "key.categories.minestuck");
+		captchaKey = new KeyBinding(CAPTCHALOGUE, GLFW.GLFW_KEY_V, CATEGORY);
 		ClientRegistry.registerKeyBinding(captchaKey);
-		effectToggleKey = new KeyBinding("key.aspectEffectToggle", GLFW.GLFW_KEY_BACKSLASH, "key.categories.minestuck");
+		effectToggleKey = new KeyBinding(ASPECT_EFFECT_TOGGLE, GLFW.GLFW_KEY_BACKSLASH, CATEGORY);
 		ClientRegistry.registerKeyBinding(effectToggleKey);
-		sylladexKey = new KeyBinding("key.sylladex", -1, "key.categories.minestuck");
+		sylladexKey = new KeyBinding(SYLLADEX, -1, CATEGORY);
 		ClientRegistry.registerKeyBinding(sylladexKey);
 	}
 	

@@ -575,8 +575,6 @@ public class AlchemyRecipes
 		AlchemyCostRegistry.addGristConversion(SET_MODUS_CARD, new GristSet(new GristType[] {GristType.BUILD, GristType.MERCURY}, new int[] {350, 29}));
 		AlchemyCostRegistry.addGristConversion(IRON_BOAT, new GristSet(GristType.RUST, 30));
 		AlchemyCostRegistry.addGristConversion(GOLD_BOAT, new GristSet(GristType.GOLD, 30));
-		AlchemyCostRegistry.addGristConversion(LAYERED_SAND, new GristSet(GristType.BUILD, 1));
-		AlchemyCostRegistry.addGristConversion(LAYERED_RED_SAND, new GristSet(GristType.BUILD, 1));
 		/*registerContainerlessCost(new ItemStack(minestuckBucket, 1, 0), new GristSet(new GristType[] {GristType.TAR, GristType.SHALE}, new int[] {8, 8})); TODO Fluids
 		registerContainerlessCost(new ItemStack(minestuckBucket, 1, 1), new GristSet(new GristType[] {GristType.GARNET, GristType.IODINE}, new int[] {8, 8}));
 		registerContainerlessCost(new ItemStack(minestuckBucket, 1, 2), new GristSet(new GristType[] {GristType.AMETHYST, GristType.CHALK}, new int[] {8, 8}));
@@ -807,8 +805,6 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(ItemTags.BOATS, Blocks.GOLD_BLOCK, MODE_AND, new ItemStack(GOLD_BOAT));
 		CombinationRegistry.addCombination(Blocks.DIRT, Items.LAPIS_LAZULI, MODE_OR, new ItemStack(BLUE_DIRT));
 		CombinationRegistry.addCombination(Blocks.DIRT, Items.LIME_DYE, MODE_OR, new ItemStack(THOUGHT_DIRT));
-		CombinationRegistry.addCombination(Blocks.SAND, Blocks.SNOW, MODE_OR, new ItemStack(LAYERED_SAND));
-		CombinationRegistry.addCombination(Blocks.RED_SAND, Blocks.SNOW, MODE_OR, new ItemStack(LAYERED_RED_SAND));
 		CombinationRegistry.addCombination(Items.WATER_BUCKET, Items.LAVA_BUCKET, MODE_OR, new ItemStack(OBSIDIAN_BUCKET));	//water_bucket && lava bucket could make a bucket with liquid obsidian? (from a mod that adds liquid obsidian)
 		CombinationRegistry.addCombination(Items.BUCKET, Blocks.OBSIDIAN, MODE_AND, new ItemStack(OBSIDIAN_BUCKET));	//bucket || obsidian could make a bucket made out of obsidian
 		CombinationRegistry.addCombination(Blocks.BROWN_MUSHROOM, Items.GLOWSTONE_DUST, MODE_OR, new ItemStack(GLOWING_MUSHROOM));

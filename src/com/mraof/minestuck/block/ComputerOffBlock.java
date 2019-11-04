@@ -19,6 +19,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 import java.util.Map;
+import java.util.function.Supplier;
 
 public class ComputerOffBlock extends MachineBlock
 {
@@ -36,10 +37,10 @@ public class ComputerOffBlock extends MachineBlock
 		LAPTOP_COLLISION_SHAPE.replaceAll((enumFacing, shape) -> VoxelShapes.or(shape, LAPTOP_SHAPE.get(enumFacing)));
 	}
 	
-	public final Block computerOn;
+	public final Supplier<Block> computerOn;
 	public final Map<Direction, VoxelShape> shape, collisionShape;
 	
-	public ComputerOffBlock(Properties properties, Block computerOn, Map<Direction, VoxelShape> shape, Map<Direction, VoxelShape> collisionShape)
+	public ComputerOffBlock(Properties properties, Supplier<Block> computerOn, Map<Direction, VoxelShape> shape, Map<Direction, VoxelShape> collisionShape)
 	{
 		super(properties);
 		this.computerOn = computerOn;
@@ -54,9 +55,9 @@ public class ComputerOffBlock extends MachineBlock
 		if(player.isSneaking() || !Direction.UP.equals(hit.getFace()) || !heldItem.isEmpty() && ComputerProgram.getProgramID(heldItem) == -2)
 			return false;
 		
-		if(!worldIn.isRemote && computerOn != null)
+		if(!worldIn.isRemote)
 		{
-			BlockState newState = computerOn.getDefaultState().with(FACING, state.get(FACING));
+			BlockState newState = computerOn.get().getDefaultState().with(FACING, state.get(FACING));
 			worldIn.setBlockState(pos, newState, 2);
 			
 			TileEntity te = worldIn.getTileEntity(pos);

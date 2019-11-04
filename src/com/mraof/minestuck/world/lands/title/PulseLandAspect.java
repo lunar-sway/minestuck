@@ -21,6 +21,9 @@ import net.minecraft.world.gen.placement.Placement;
 
 public class PulseLandAspect extends TitleLandAspect
 {
+	public static final String PULSE = "minestuck.pulse";
+	public static final String BLOOD = "minestuck.blood";
+	
 	public PulseLandAspect()
 	{
 		super(EnumAspect.BLOOD);
@@ -29,7 +32,7 @@ public class PulseLandAspect extends TitleLandAspect
 	@Override
 	public String[] getNames()
 	{
-		return new String[]{"pulse", "blood"};
+		return new String[]{PULSE, BLOOD};
 	}
 	
 	@Override

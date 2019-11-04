@@ -43,7 +43,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IEntity
 	protected static EntityListFilter underlingSelector = new EntityListFilter(Arrays.asList(MSEntityTypes.IMP, MSEntityTypes.OGRE, MSEntityTypes.BASILISK, MSEntityTypes.LICH, MSEntityTypes.GICLOPS, MSEntityTypes.WYRM));	//TODO Use tag instead
 	protected EntityListFilter attackEntitySelector;
 	//The type of the underling
-	protected GristType type;
+	protected GristType gristType;
 	public boolean fromSpawner;
 	public boolean dropCandy;
 	
@@ -84,9 +84,9 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IEntity
 	
 	protected void applyGristType(GristType type, boolean fullHeal)
 	{
-		this.type = type;
-		if(this.type.getRarity() == 0)	//Utility grist type
-			this.type = SburbHandler.getUnderlingType(this);
+		this.gristType = type;
+		if(this.gristType.getRarity() == 0)	//Utility grist type
+			this.gristType = SburbHandler.getUnderlingType(this);
 		this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(this.getMaximumHealth());
 		this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(this.getAttackDamage());
 		if(fullHeal)
@@ -169,16 +169,16 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IEntity
 	public ResourceLocation getTextureResource()
 	{
 		if(textureResource == null)
-			textureResource = type.getUnderlingTexture(this.getUnderlingName());
+			textureResource = gristType.getUnderlingTexture(this.getUnderlingName());
 		return textureResource;
 	}
 	
 	@Override
 	public ITextComponent getName()
 	{
-		if(type != null)
-			return new TranslationTextComponent("entity.minestuck." + getUnderlingName() + ".type", type.getDisplayName());
-		else return new TranslationTextComponent("entity.minestuck." + getUnderlingName() + ".name");
+		if(gristType != null && getCustomName() != null)
+			return new TranslationTextComponent(getType().getTranslationKey() + ".type", gristType.getDisplayName());
+		else return super.getName();
 	}
 	
 	@Override
@@ -203,7 +203,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IEntity
 	public void writeAdditional(CompoundNBT compound)
 	{
 		super.writeAdditional(compound);
-		compound.putString("Type", type.getRegistryName().toString());
+		compound.putString("Type", gristType.getRegistryName().toString());
 		compound.putBoolean("Spawned", fromSpawner);
 		if(detachHome())
 		{
@@ -244,7 +244,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IEntity
 	@Override
 	public void writeSpawnData(PacketBuffer buffer)
 	{
-		buffer.writeInt(type.getId());
+		buffer.writeInt(gristType.getId());
 	}
 	
 	@Override
@@ -260,9 +260,9 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IEntity
 	{
 		if(!(spawnDataIn instanceof UnderlingData))
 		{
-			if(this.type == null)
+			if(this.gristType == null)
 				applyGristType(SburbHandler.getUnderlingType(this), true);
-			spawnDataIn = new UnderlingData(this.type);
+			spawnDataIn = new UnderlingData(this.gristType);
 		} else
 		{
 			applyGristType(((UnderlingData)spawnDataIn).type, true);

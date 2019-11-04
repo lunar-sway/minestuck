@@ -16,10 +16,13 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 public class AlchemiterScreen extends Screen
 {
+	public static final String TITLE = "minestuck.alchemiter";
+	
 	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/large_alchemiter.png");
 	private static final int guiWidth = 159, guiHeight = 102;
 	private AlchemiterTileEntity alchemiter;
@@ -27,7 +30,7 @@ public class AlchemiterScreen extends Screen
 	
 	AlchemiterScreen(AlchemiterTileEntity te)
 	{
-		super(new StringTextComponent("Alchemiter"));
+		super(new TranslationTextComponent(TITLE));
 		alchemiter = te;
 		itemQuantity = 1;
 	}

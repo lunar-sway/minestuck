@@ -58,13 +58,13 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	@Override
 	public GristSet getGristSpoils()
 	{
-		return GristHelper.getRandomDrop(type, 6);
+		return GristHelper.getRandomDrop(gristType, 6);
 	}
 	
 	@Override
 	protected float getMaximumHealth() 
 	{
-		return type != null ? 20 * type.getPower() + 85 : 1;
+		return gristType != null ? 20 * gristType.getPower() + 85 : 1;
 	}
 
 	@Override
@@ -82,7 +82,7 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	@Override
 	protected double getAttackDamage()
 	{
-		return this.type.getPower()*2.7 + 6;
+		return this.gristType.getPower()*2.7 + 6;
 	}
 	
 	@Override
@@ -160,9 +160,9 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	{
 		super.onDeath(cause);
 		Entity entity = cause.getTrueSource();
-		if(this.dead && !this.world.isRemote && type != null)
+		if(this.dead && !this.world.isRemote && gristType != null)
 		{
-			computePlayerProgress((int) (100*type.getPower() + 160));
+			computePlayerProgress((int) (100* gristType.getPower() + 160));
 			if(entity instanceof ServerPlayerEntity)
 			{
 				Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) entity).echeladder;

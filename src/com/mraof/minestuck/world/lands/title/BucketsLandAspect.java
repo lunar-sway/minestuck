@@ -14,6 +14,8 @@ import net.minecraft.world.gen.placement.Placement;
 
 public class BucketsLandAspect extends TitleLandAspect	//Yes, buckets
 {
+	public static final String BUCKETS = "minestuck.buckets";
+	
 	public BucketsLandAspect()
 	{
 		super(EnumAspect.SPACE);
@@ -22,7 +24,7 @@ public class BucketsLandAspect extends TitleLandAspect	//Yes, buckets
 	@Override
 	public String[] getNames()
 	{
-		return new String[]{"bucket"};
+		return new String[]{BUCKETS};
 	}
 	
 	@Override

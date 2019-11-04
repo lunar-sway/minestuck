@@ -5,9 +5,12 @@ import com.mraof.minestuck.util.KindAbstratusList;
 import com.mraof.minestuck.util.KindAbstratusType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 public class StrifeSpecibusScreen extends PlayerStatsScreen
 {
+	public static final String TITLE = "minestuck.strife_specibus";
+	public static final String KIND_ABSTRATUS = "minestuck.kind_abstratus";
 	
 	private static final ResourceLocation guiStrifeSelector = new ResourceLocation("minestuck", "textures/gui/strife_selector.png");
 	
@@ -15,7 +18,7 @@ public class StrifeSpecibusScreen extends PlayerStatsScreen
 	
 	public StrifeSpecibusScreen()
 	{
-		super(new StringTextComponent("Strife Specibus"));
+		super(new TranslationTextComponent(TITLE));
 		guiWidth = 228;
 		guiHeight = 150;
 	}
@@ -34,12 +37,12 @@ public class StrifeSpecibusScreen extends PlayerStatsScreen
 		
 		this.blit(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
-		String message = "This feature isn't implemented yet.";//StatCollector.translateToLocal("gui.kindAbstrata.name");
-		mc.fontRenderer.drawString(message, (this.width / 2) - mc.fontRenderer.getStringWidth(message) / 2, yOffset + 12, 0x404040);
+		String message = "This feature isn't implemented yet.";//new TranslationTextComponent(KIND_ABSTRATUS).getFormattedText();
+		mc.fontRenderer.drawString(message, (this.width / 2F) - mc.fontRenderer.getStringWidth(message) / 2F, yOffset + 12, 0x404040);
 		
 		int i = 0;
 		for(KindAbstratusType type : KindAbstratusList.getTypeList()) {
-			String typeName = type.getUnlocalizedName().toLowerCase() + "kind";
+			String typeName = type.getDisplayName().getFormattedText();
 			int xPos = xOffset+9+(columnWidth)*((i%columns)+1)-mc.fontRenderer.getStringWidth(typeName);
 			int yPos = yOffset+35+(mc.fontRenderer.FONT_HEIGHT+1)*(int)(i/columns);
 			

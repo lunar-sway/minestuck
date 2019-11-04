@@ -53,7 +53,7 @@ public class LichEntity extends UnderlingEntity
 	@Override
 	public GristSet getGristSpoils()
 	{
-		return GristHelper.getRandomDrop(type, 8);
+		return GristHelper.getRandomDrop(gristType, 8);
 	}
 	
 	@Override
@@ -65,7 +65,7 @@ public class LichEntity extends UnderlingEntity
 	@Override
 	protected float getMaximumHealth() 
 	{
-		return type != null ? 30*type.getPower() + 175 : 1;
+		return gristType != null ? 30* gristType.getPower() + 175 : 1;
 	}
 	
 	@Override
@@ -77,7 +77,7 @@ public class LichEntity extends UnderlingEntity
 	@Override
 	protected double getAttackDamage()
 	{
-		return Math.ceil(this.type.getPower()*3.4 + 8);
+		return Math.ceil(this.gristType.getPower()*3.4 + 8);
 	}
 	
 	@Override
@@ -98,9 +98,9 @@ public class LichEntity extends UnderlingEntity
 	{
 		super.onDeath(cause);
 		Entity entity = cause.getTrueSource();
-		if(this.dead && !this.world.isRemote && type != null)
+		if(this.dead && !this.world.isRemote && gristType != null)
 		{
-			computePlayerProgress((int) (300*type.getPower() + 650));
+			computePlayerProgress((int) (300* gristType.getPower() + 650));
 			if(entity instanceof ServerPlayerEntity)
 			{
 				Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) entity).echeladder;

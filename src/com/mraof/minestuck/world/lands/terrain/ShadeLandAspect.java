@@ -20,6 +20,7 @@ import net.minecraft.world.gen.placement.*;
 
 public class ShadeLandAspect extends TerrainLandAspect
 {
+	public static final String SHADE = "minestuck.shade";
 	
 	private static final Vec3d skyColor = new Vec3d(0.16D, 0.38D, 0.54D);
 	
@@ -41,6 +42,7 @@ public class ShadeLandAspect extends TerrainLandAspect
 		registry.setBlockState("village_path", Blocks.GRAVEL.getDefaultState());
 		registry.setBlockState("light_block", MSBlocks.GLOWING_WOOD.getDefaultState());
 		registry.setBlockState("torch", Blocks.REDSTONE_TORCH.getDefaultState());
+		registry.setBlockState("wall_torch", Blocks.REDSTONE_WALL_TORCH.getDefaultState());
 		registry.setBlockState("mushroom_1", MSBlocks.GLOWING_MUSHROOM.getDefaultState());
 		registry.setBlockState("mushroom_2", MSBlocks.GLOWING_MUSHROOM.getDefaultState());
 		registry.setBlockState("bush", MSBlocks.GLOWING_MUSHROOM.getDefaultState());
@@ -50,7 +52,7 @@ public class ShadeLandAspect extends TerrainLandAspect
 	
 	@Override
 	public String[] getNames() {
-		return new String[] {"shade"};
+		return new String[] {SHADE};
 	}
 	
 	@Override
@@ -64,12 +66,12 @@ public class ShadeLandAspect extends TerrainLandAspect
 	{
 		if(biome.staticBiome == MSBiomes.LAND_NORMAL)
 		{
-			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Feature.BUSH, new BushConfig(MSBlocks.GLOWING_MUSHROOM.getDefaultState()), Placement.CHANCE_HEIGHTMAP_DOUBLE, new ChanceConfig(2)));
+			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Feature.BUSH, new BushConfig(MSBlocks.GLOWING_MUSHROOM.getDefaultState()), Placement.COUNT_CHANCE_HEIGHTMAP, new HeightWithChanceConfig(1, 1/2F)));
 			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(MSFeatures.LEAFLESS_TREE, new BushConfig(MSBlocks.GLOWING_LOG.getDefaultState()), Placement.CHANCE_HEIGHTMAP, new ChanceConfig(2)));
 		}
 		if(biome.staticBiome == MSBiomes.LAND_ROUGH)
 		{
-			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Feature.BUSH, new BushConfig(MSBlocks.GLOWING_MUSHROOM.getDefaultState()), Placement.CHANCE_HEIGHTMAP_DOUBLE, new ChanceConfig(4)));
+			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Feature.BUSH, new BushConfig(MSBlocks.GLOWING_MUSHROOM.getDefaultState()), Placement.COUNT_CHANCE_HEIGHTMAP, new HeightWithChanceConfig(1, 1/4F)));
 			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(MSFeatures.LEAFLESS_TREE, new BushConfig(MSBlocks.GLOWING_LOG.getDefaultState()), Placement.COUNT_HEIGHTMAP, new FrequencyConfig(2)));
 		}
 		

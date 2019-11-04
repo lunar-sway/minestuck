@@ -27,6 +27,10 @@ import net.minecraft.world.gen.placement.Placement;
 
 public class RainLandAspect extends TerrainLandAspect
 {
+	public static final String RAIN = "minestuck.rain";
+	public static final String ISLANDS = "minestuck.islands";
+	public static final String SKY = "minestuck.sky";
+	
 	private static final Vec3d skyColor = new Vec3d(0.3D, 0.5D, 0.98D);
 	private static final Vec3d fogColor = new Vec3d(0.9D, 0.8D, 0.6D);
 	
@@ -65,7 +69,7 @@ public class RainLandAspect extends TerrainLandAspect
 	
 	@Override
 	public String[] getNames() {
-		return new String[] {"rain", "islands", "sky"};
+		return new String[] {RAIN, ISLANDS, SKY};
 	}
 	
 	@Override

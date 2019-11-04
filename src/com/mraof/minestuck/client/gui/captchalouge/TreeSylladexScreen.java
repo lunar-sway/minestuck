@@ -12,6 +12,8 @@ import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 public class TreeSylladexScreen extends SylladexScreen
 {
+	public static final String AUTOBALANCE_ON = "minestuck.autobalance.on";
+	public static final String AUTOBALANCE_OFF = "minestuck.autobalance.off";
 	
 	protected TreeModus modus;
 	protected int maxDepth;
@@ -39,7 +41,7 @@ public class TreeSylladexScreen extends SylladexScreen
 		guiButton.x = (width - GUI_WIDTH)/2 + 15;
 		guiButton.y = (height - GUI_HEIGHT)/2 + 175;
 		boolean autobalance = MinestuckConfig.clientTreeAutobalance == 0 ? modus.autoBalance : MinestuckConfig.clientTreeAutobalance == 1;
-		guiButton.setMessage(I18n.format(autobalance ? "gui.autobalance.on" : "gui.autobalance.off"));
+		guiButton.setMessage(I18n.format(autobalance ? AUTOBALANCE_ON : AUTOBALANCE_OFF));
 		guiButton.active = MinestuckConfig.clientTreeAutobalance == 0;
 		super.render(xcor, ycor, f);
 	}

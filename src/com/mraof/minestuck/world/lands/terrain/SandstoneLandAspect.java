@@ -23,6 +23,9 @@ import net.minecraft.world.gen.placement.Placement;
 
 public class SandstoneLandAspect extends TerrainLandAspect
 {
+	public static final String SANDSTONE = "minestuck.sandstone";
+	public static final String STONY_DESERTS = "minestuck.stony_deserts";
+	
 	public static final ResourceLocation GROUP_NAME = new ResourceLocation(Minestuck.MOD_ID, "sandstone");
 	private final Vec3d fogColor, skyColor;
 	private final Variant type;
@@ -71,6 +74,7 @@ public class SandstoneLandAspect extends TerrainLandAspect
 		registry.setBlockState("structure_planks", Blocks.ACACIA_PLANKS.getDefaultState());
 		registry.setBlockState("structure_planks_slab", Blocks.ACACIA_SLAB.getDefaultState());
 		registry.setBlockState("torch", Blocks.REDSTONE_TORCH.getDefaultState());
+		registry.setBlockState("wall_torch", Blocks.REDSTONE_WALL_TORCH.getDefaultState());
 		registry.setBlockState("structure_wool_1", Blocks.WHITE_WOOL.getDefaultState());
 		registry.setBlockState("structure_wool_3", Blocks.MAGENTA_WOOL.getDefaultState());
 	}
@@ -78,7 +82,7 @@ public class SandstoneLandAspect extends TerrainLandAspect
 	@Override
 	public String[] getNames()
 	{
-		return new String[] {"sandstone", "desertStone"};
+		return new String[] {SANDSTONE, STONY_DESERTS};
 	}
 	
 	@Override

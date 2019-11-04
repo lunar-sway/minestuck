@@ -23,6 +23,11 @@ import java.util.ArrayList;
 
 public abstract class SylladexScreen extends Screen
 {
+	public static final String TITLE = "minestuck.sylladex";
+	public static final String EMPTY_SYLLADEX_1 = "minestuck.empty_sylladex.1";
+	public static final String EMPTY_SYLLADEX_2 = "minestuck.empty_sylladex.2";
+	public static final String EMPTY_SYLLADEX_BUTTON = "minestuck.empty_sylladex.button";
+	
 	protected static final ResourceLocation sylladexFrame = new ResourceLocation("minestuck", "textures/gui/sylladex_frame.png");
 	protected static final ResourceLocation cardTexture = new ResourceLocation("minestuck", "textures/gui/icons.png");
 	protected static final int GUI_WIDTH = 256, GUI_HEIGHT= 202;
@@ -51,13 +56,13 @@ public abstract class SylladexScreen extends Screen
 	
 	public SylladexScreen()
 	{
-		super(new StringTextComponent("Sylladex"));
+		super(new TranslationTextComponent(TITLE));
 	}
 	
 	@Override
 	public void init()
 	{
-		emptySylladex = new GuiButtonExt((width - GUI_WIDTH)/2 + 140, (height - GUI_HEIGHT)/2 + 175, 100, 20, I18n.format("gui.emptySylladexButton"), button -> emptySylladex());
+		emptySylladex = new GuiButtonExt((width - GUI_WIDTH)/2 + 140, (height - GUI_HEIGHT)/2 + 175, 100, 20, I18n.format(EMPTY_SYLLADEX_BUTTON), button -> emptySylladex());
 		addButton(emptySylladex);
 		updateContent();
 	}
@@ -122,7 +127,7 @@ public abstract class SylladexScreen extends Screen
 		minecraft.getTextureManager().bindTexture(sylladexFrame);
 		blit(xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		
-		font.drawString(I18n.format("gui.sylladex"), xOffset + 15, yOffset + 5, 0x404040);
+		font.drawString(getTitle().getFormattedText(), xOffset + 15, yOffset + 5, 0x404040);
 		
 		String str = CaptchaDeckHandler.clientSideModus.getName().getFormattedText();
 		font.drawString(str, xOffset + GUI_WIDTH - font.getStringWidth(str) - 16, yOffset + 5, 0x404040);
@@ -205,7 +210,7 @@ public abstract class SylladexScreen extends Screen
 	
 	private void emptySylladex()
 	{
-		minecraft.currentScreen = new ConfirmScreen(this::onEmptyConfirm, new TranslationTextComponent("gui.emptySylladex1"), new TranslationTextComponent("gui.emptySylladex2"));
+		minecraft.currentScreen = new ConfirmScreen(this::onEmptyConfirm, new TranslationTextComponent(EMPTY_SYLLADEX_1), new TranslationTextComponent(EMPTY_SYLLADEX_2));
 		minecraft.currentScreen.init(minecraft, width, height);
 	}
 	

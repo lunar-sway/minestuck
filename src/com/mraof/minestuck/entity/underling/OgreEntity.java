@@ -55,7 +55,7 @@ public class OgreEntity extends UnderlingEntity
 	@Override
 	public GristSet getGristSpoils()
 	{
-		return GristHelper.getRandomDrop(type, 4);
+		return GristHelper.getRandomDrop(gristType, 4);
 	}
 	
 	@Override
@@ -67,7 +67,7 @@ public class OgreEntity extends UnderlingEntity
 	@Override
 	protected float getMaximumHealth() 
 	{
-		return type != null ? 13F * type.getPower() + 50 : 1;
+		return gristType != null ? 13F * gristType.getPower() + 50 : 1;
 	}
 	
 	@Override
@@ -79,7 +79,7 @@ public class OgreEntity extends UnderlingEntity
 	@Override
 	protected double getAttackDamage()
 	{
-		return this.type.getPower() * 2.1 + 6;
+		return this.gristType.getPower() * 2.1 + 6;
 	}
 	
 	@Override
@@ -100,9 +100,9 @@ public class OgreEntity extends UnderlingEntity
 	{
 		super.onDeath(cause);
 		Entity entity = cause.getTrueSource();
-		if(this.dead && !this.world.isRemote && type != null)
+		if(this.dead && !this.world.isRemote && gristType != null)
 		{
-			computePlayerProgress((int) (40*type.getPower() + 50));
+			computePlayerProgress((int) (40* gristType.getPower() + 50));
 			if(entity instanceof ServerPlayerEntity)
 			{
 				//((EntityPlayerMP) entity).addStat(MinestuckAchievementHandler.killOgre);

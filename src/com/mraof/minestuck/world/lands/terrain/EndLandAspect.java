@@ -26,6 +26,9 @@ import net.minecraft.world.gen.placement.Placement;
 
 public class EndLandAspect extends TerrainLandAspect
 {
+	public static final String END = "minestuck.end";
+	public static final String DIMENSION = "minestuck.dimension";
+	
 	private static final Vec3d fogColor = new Vec3d(0.0D, 0.4D, 0.2D);
 	private static final Vec3d skyColor = new Vec3d(0.3D, 0.1D, 0.5D);
 	
@@ -57,7 +60,7 @@ public class EndLandAspect extends TerrainLandAspect
 	@Override
 	public String[] getNames()
 	{
-		return new String[] {"end", "dimension"};
+		return new String[] {END, DIMENSION};
 	}
 	
 	@Override

@@ -19,6 +19,8 @@ import net.minecraft.world.gen.placement.Placement;
 
 public class SilenceLandAspect extends TitleLandAspect
 {
+	public static final String SILENCE = "minestuck.silence";
+	
 	public SilenceLandAspect()
 	{
 		super(EnumAspect.VOID);
@@ -27,7 +29,7 @@ public class SilenceLandAspect extends TitleLandAspect
 	@Override
 	public String[] getNames()
 	{
-		return new String[]{"silence"};
+		return new String[]{SILENCE};
 	}
 	
 	@Override
@@ -38,6 +40,8 @@ public class SilenceLandAspect extends TitleLandAspect
 		
 		if(registry.getCustomBlock("torch") == null)
 			registry.setBlockState("torch", Blocks.REDSTONE_TORCH.getDefaultState());
+		if(registry.getCustomBlock("wall_torch") == null)
+			registry.setBlockState("wall_torch", Blocks.REDSTONE_WALL_TORCH.getDefaultState());
 	}
 	
 	@Override

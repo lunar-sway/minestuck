@@ -18,6 +18,7 @@ import javax.annotation.Nullable;
 
 public class MiniCruxtruderTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
 {
+	public static final String TITLE = "container.minestuck.mini_cruxtruder";
 	public static final RunType TYPE = RunType.AUTOMATIC;
 	public int color = -1;
 	
@@ -79,7 +80,7 @@ public class MiniCruxtruderTileEntity extends MachineProcessTileEntity implement
 	@Override
 	public ITextComponent getDisplayName()
 	{
-		return new TranslationTextComponent("container.mini_cruxtruder");
+		return new TranslationTextComponent(TITLE);
 	}
 	
 	@Override
