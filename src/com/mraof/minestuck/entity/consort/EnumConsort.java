@@ -1,31 +1,33 @@
 package com.mraof.minestuck.entity.consort;
 
+import com.mraof.minestuck.entity.MSEntityTypes;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.util.text.TextFormatting;
 
 import java.util.Random;
 
 public enum EnumConsort
 {
-	SALAMANDER(SalamanderEntity.class, "salamander", TextFormatting.YELLOW),
-	TURTLE(TurtleEntity.class, "turtle", TextFormatting.LIGHT_PURPLE),
-	NAKAGATOR(NakagatorEntity.class, "nakagator", TextFormatting.RED),
-	IGUANA(IguanaEntity.class, "iguana", TextFormatting.AQUA);
+	SALAMANDER(MSEntityTypes.SALAMANDER, "salamander", TextFormatting.YELLOW),
+	TURTLE(MSEntityTypes.TURTLE, "turtle", TextFormatting.LIGHT_PURPLE),
+	NAKAGATOR(MSEntityTypes.NAKAGATOR, "nakagator", TextFormatting.RED),
+	IGUANA(MSEntityTypes.IGUANA, "iguana", TextFormatting.AQUA);
 	
-	private final Class<? extends ConsortEntity> consortClass;
+	private final EntityType<? extends ConsortEntity> consortType;
 	private final String name;
 	private final TextFormatting color;
 	
-	EnumConsort(Class<? extends ConsortEntity> consort, String name, TextFormatting color)
+	EnumConsort(EntityType<? extends ConsortEntity> consort, String name, TextFormatting color)
 	{
-		consortClass = consort;
+		consortType = consort;
 		this.color = color;
 		this.name = name;
 	}
 	
 	public boolean isConsort(Entity consort)
 	{
-		return consortClass.isInstance(consort);
+		return consortType.equals(consort.getType());
 	}
 	
 	public TextFormatting getColor()
@@ -38,9 +40,9 @@ public enum EnumConsort
 		return name;
 	}
 	
-	public Class<? extends ConsortEntity> getConsortClass()
+	public EntityType<? extends ConsortEntity> getConsortType()
 	{
-		return consortClass;
+		return consortType;
 	}
 	
 	public static MerchantType getRandomMerchant(Random rand)

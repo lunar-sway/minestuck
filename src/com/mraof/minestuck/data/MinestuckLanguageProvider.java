@@ -119,6 +119,10 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	{
 		add(key.getTranslationKey(), value);
 	}
+	protected void addDenizen(EnumAspect key, String value)
+	{
+		add("denizen." + key.getTranslationKey(), value);
+	}
 	protected void addRung(int rung, String value)
 	{
 		add("echeladder.rung." + rung, value);

@@ -19,7 +19,7 @@ import java.util.Collection;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class GristType extends ForgeRegistryEntry<GristType> implements Comparable<GristType>
 {
-	public static final String FORMAT = "grist.format";
+	public static String FORMAT = "grist.format";	//TODO Readd final once the ObjectHolder use has been sorted out
 	
 	private static final ResourceLocation DUMMY_ICON_LOCATION = new ResourceLocation(Minestuck.MOD_ID, "textures/grist/dummy.png");
 	

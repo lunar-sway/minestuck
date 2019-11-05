@@ -12,6 +12,8 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.PotionItem;
 import net.minecraft.potion.PotionUtils;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -66,25 +68,23 @@ public class ClientEventHandler
 					&& event.getPlayer().openContainer.getInventory().contains(stack))
 			{
 				String unlocalized = stack.getTranslationKey();
-				if(stack.getItem() instanceof PotionItem)
-					unlocalized = PotionUtils.getPotionFromItem(stack).getNamePrefixed("potion.");
 				
 				EnumConsort type = ((ConsortMerchantContainer)event.getPlayer().openContainer).inventory.getConsortType();
-				String arg1 = I18n.format("entity.minestuck." + type.getName() + ".name");
+				String arg1 = I18n.format(type.getConsortType().getTranslationKey());
 				
-				String name = "store."+unlocalized+".name";
+				String name = "store."+unlocalized;
 				String tooltip = "store."+unlocalized+".tooltip";
 				event.getToolTip().clear();
 				if(I18n.hasKey(name))
 					event.getToolTip().add(new TranslationTextComponent(name, arg1));
 				else event.getToolTip().add(stack.getDisplayName());
 				if(I18n.hasKey(tooltip))
-					event.getToolTip().add(new TranslationTextComponent(tooltip, arg1));
+					event.getToolTip().add(new TranslationTextComponent(tooltip, arg1).setStyle(new Style().setColor(TextFormatting.GRAY)));
 			} else if(stack.getItem().getRegistryName().getNamespace().equals(Minestuck.MOD_ID))
 			{
 				String name = stack.getTranslationKey() + ".tooltip";
 				if(I18n.hasKey(name))
-					event.getToolTip().add(1, new TranslationTextComponent(name));
+					event.getToolTip().add(1, new TranslationTextComponent(name).setStyle(new Style().setColor(TextFormatting.GRAY)));
 			}
 		}
 	}

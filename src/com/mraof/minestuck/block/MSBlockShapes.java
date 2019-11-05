@@ -1,12 +1,7 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.util.CustomVoxelShape;
-import com.mraof.minestuck.util.CustomVoxelShape.Part;
-import net.minecraft.block.Block;
-import net.minecraft.block.LecternBlock;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
 
 public class MSBlockShapes
 {
