@@ -29,6 +29,7 @@ public class MinestuckData
 			
 			gen.addProvider(new MinestuckLootTableProvider(gen));
 			gen.addProvider(new MSAvancementProvider(gen));
+			gen.addProvider(new MinestuckEnUsLanguageProvider(gen));
 		}
 	}
 }

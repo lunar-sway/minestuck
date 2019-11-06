@@ -29,9 +29,6 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.DimensionSavedDataManager;
-import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -46,6 +43,9 @@ import java.util.Map.Entry;
 public class SkaianetHandler
 {
 	public static final String PRIVATE_COMPUTER = "minestuck.private_computer";
+	public static final String CLOSED_SERVER = "minestuck.closed_server_message";
+	public static final String STOP_RESUME = "minestuck.stop_resume_message";
+	public static final String CLOSED = "minestuck.closed_message";
 	
 	private static SkaianetHandler INSTANCE;
 	
@@ -204,7 +204,7 @@ public class SkaianetHandler
 				if(te != null)
 				{
 					te.getData(0).putBoolean("isResuming", false);
-					te.latestmessage.put(0, "computer.messageResumeStop");
+					te.latestmessage.put(0, STOP_RESUME);
 					te.markBlockForUpdate();
 				}
 			} else if(serversOpen.containsKey(player))
@@ -215,7 +215,7 @@ public class SkaianetHandler
 				if(te != null)
 				{
 					te.getData(1).putBoolean("isOpen", false);
-					te.latestmessage.put(1, "computer.messageClosedServer");
+					te.latestmessage.put(1, CLOSED_SERVER);
 					te.markBlockForUpdate();
 				}
 			} else if(resumingServers.containsKey(player))
@@ -226,7 +226,7 @@ public class SkaianetHandler
 				if(te != null)
 				{
 					te.getData(1).putBoolean("isOpen", false);
-					te.latestmessage.put(1, "computer.messageResumeStop");
+					te.latestmessage.put(1, STOP_RESUME);
 					te.markBlockForUpdate();
 				}
 			} else Debug.warn("[SKAIANET] Got disconnect request but server is not open! "+player);
@@ -242,13 +242,13 @@ public class SkaianetHandler
 					if(cc != null)
 					{
 						cc.getData(0).putBoolean("connectedToServer", false);
-						cc.latestmessage.put(0, "computer.messageClosed");
+						cc.latestmessage.put(0, CLOSED);
 						cc.markBlockForUpdate();
 					}
 					if(sc != null)
 					{
 						sc.getData(1).putString("connectedClient", "");
-						sc.latestmessage.put(1, "computer.messageClosed");
+						sc.latestmessage.put(1, CLOSED);
 						sc.markBlockForUpdate();
 					}
 					sessionHandler.onConnectionClosed(c, true);
@@ -267,7 +267,7 @@ public class SkaianetHandler
 					ComputerTileEntity te = getComputer(mcServer, (isClient?resumingClients:resumingServers).remove(player).getLocation());
 					if(te != null)
 					{
-						te.latestmessage.put(isClient?0:1, "computer.messageResumeStop");
+						te.latestmessage.put(isClient?0:1, STOP_RESUME);
 						te.markBlockForUpdate();
 					}
 				}
@@ -642,11 +642,11 @@ public class SkaianetHandler
 					if(cc != null)
 					{
 						cc.getData(0).putBoolean("connectedToServer", false);
-						cc.latestmessage.put(0, "computer.messageClosed");
+						cc.latestmessage.put(0, CLOSED);
 						cc.markBlockForUpdate();
 					} else if(sc != null)
 					{
-						sc.latestmessage.put(1, "computer.messageClosed");
+						sc.latestmessage.put(1, CLOSED);
 						sc.markBlockForUpdate();
 					}
 				}

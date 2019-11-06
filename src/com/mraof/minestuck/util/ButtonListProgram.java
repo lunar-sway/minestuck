@@ -14,7 +14,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
-public abstract class ButtonListProgram extends ComputerProgram {
+public abstract class ButtonListProgram extends ComputerProgram
+{
+	public static final String CLEAR_BUTTON = "minestuck.clear_button";
 	
 	private LinkedHashMap<Button, UnlocalizedString> buttonMap = new LinkedHashMap<>();
 	private Button upButton, downButton;
@@ -89,7 +91,7 @@ public abstract class ButtonListProgram extends ComputerProgram {
 		upButton.active = index > 0;
 		ArrayList<UnlocalizedString> list = getStringList(gui.te);
 		if(!gui.te.latestmessage.get(this.getId()).isEmpty())
-			list.add(1, new UnlocalizedString("computer.buttonClear"));
+			list.add(1, new UnlocalizedString(CLEAR_BUTTON));
 		int pos = -1;
 		for(UnlocalizedString s : list) 
 		{

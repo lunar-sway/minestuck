@@ -6,8 +6,6 @@ import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import com.mraof.minestuck.util.Title;
-import com.mraof.minestuck.world.MSDimensions;
-import com.mraof.minestuck.world.lands.LandAspects;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
@@ -21,6 +19,11 @@ import java.util.*;
  */
 public class SessionHandler
 {
+	public static final String CONNECT_FAILED = "minestuck.connect_failed_message";
+	public static final String SINGLE_SESSION_FULL = "minestuck.single_session_full_message";
+	public static final String CLIENT_SESSION_FULL = "minestuck.client_session_full_message";
+	public static final String SERVER_SESSION_FULL = "minestuck.server_session_full_message";
+	public static final String BOTH_SESSIONS_FULL = "minestuck.both_sessions_full_message";
 	
 	static final String GLOBAL_SESSION_NAME = "global";
 	
@@ -170,9 +173,9 @@ public class SessionHandler
 	private static String canMerge(Session s0, Session s1)
 	{
 		if(s0.isCustom() && s1.isCustom() || s0.locked || s1.locked)
-			return "computer.messageConnectFail";
+			return CONNECT_FAILED;
 		if(MinestuckConfig.forceMaxSize && s0.getPlayerList().size()+s1.getPlayerList().size()>maxSize)
-			return "session.bothSessionsFull";
+			return BOTH_SESSIONS_FULL;
 		return null;
 	}
 	
@@ -270,7 +273,7 @@ public class SessionHandler
 	String onConnectionCreated(SburbConnection connection)
 	{
 		if(!canConnect(connection.getClientIdentifier(), connection.getServerIdentifier()))
-			return "computer.messageConnectFailed";
+			return CONNECT_FAILED;
 		if(singleSession)
 		{
 			if(sessions.size() == 0)
@@ -284,7 +287,7 @@ public class SessionHandler
 			
 			int i = (sessions.get(0).containsPlayer(connection.getClientIdentifier())?0:1)+(connection.getServerIdentifier().equals(IdentifierHandler.nullIdentifier) || sessions.get(0).containsPlayer(connection.getServerIdentifier())?0:1);
 			if(MinestuckConfig.forceMaxSize && sessions.get(0).getPlayerList().size()+i > maxSize)
-				return "computer.singleSessionFull";
+				return SINGLE_SESSION_FULL;
 			else
 			{
 				sessions.get(0).connections.add(connection);
@@ -302,7 +305,7 @@ public class SessionHandler
 			} else if(sClient == null || sServer == null)
 			{
 				if((sClient == null?sServer:sClient).locked || MinestuckConfig.forceMaxSize && !connection.getServerIdentifier().equals(IdentifierHandler.nullIdentifier) && (sClient == null?sServer:sClient).getPlayerList().size()+1 > maxSize)
-					return "computer."+(sClient == null?"server":"client")+"SessionFull";
+					return sClient == null ? SERVER_SESSION_FULL : CLIENT_SESSION_FULL;
 				(sClient == null?sServer:sClient).connections.add(connection);
 				return null;
 			} else

@@ -40,6 +40,8 @@ import java.util.UUID;
  */
 public abstract class MessageType
 {
+	public static final String MISSING_ITEM = "consort.missing_item";
+	
 	public abstract String getString();
 	
 	public abstract ITextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier);
@@ -1099,7 +1101,7 @@ public abstract class MessageType
 			} else
 			{
 				player.sendMessage(
-						createMessage(consort, player, "missingItem", new String[] { "nbtItem:" + itemData }, false).setStyle(new Style().setColor(TextFormatting.RED)));
+						createMessage(consort, player, MISSING_ITEM, new String[] { "nbtItem:" + itemData }, false).setStyle(new Style().setColor(TextFormatting.RED)));
 				return null;
 			}
 		}

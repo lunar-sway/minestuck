@@ -140,6 +140,10 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	{
 		add("strife."+key, value);
 	}
+	protected void addDialogue(String key, String value)
+	{
+		add("consort."+key, value);
+	}
 	protected void addSubtitles(String key, String value)
 	{
 		add("subtitles."+modid+"."+key, value);
