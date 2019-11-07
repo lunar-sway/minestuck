@@ -562,13 +562,15 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.BUG_NET, "Perfect for catching bugs and frogs!");
 		add(MSItems.FROG, "Frog");
 		addExtra(MSItems.FROG, "type.random", "Random Frog");
-		addExtra(MSItems.FROG, "type.0", "Genetically Modified Frog");
+		addExtra(MSItems.FROG, "type.0", "Frog");
 		addExtra(MSItems.FROG, "type.1", "Totally Normal Frog");
 		addExtra(MSItems.FROG, "type.2", "Ruby Contraband");
 		addExtra(MSItems.FROG, "type.3", "Tiny Genesis Frog");
-		addExtra(MSItems.FROG, "type.4", "frog.null.name");
+		addExtra(MSItems.FROG, "type.4", "Frog");
 		addExtra(MSItems.FROG, "type.5", "Golden Frog");
-		addExtra(MSItems.FROG, "type.6", "§k Susan");
+		addExtra(MSItems.FROG, "type.6", "Frog");
+		addExtra(MSItems.FROG, "desc.4", "frog.null.name");
+		addExtra(MSItems.FROG, "desc.6", "§k Susan");
 		addExtra(MSItems.FROG, "eyes.0", "Lighter Eyes");
 		addExtra(MSItems.FROG, "eyes.1", "Darker Eyes");
 		addExtra(MSItems.FROG, "eyes.2", "Blank Eyes");

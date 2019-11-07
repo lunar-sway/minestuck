@@ -210,7 +210,7 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 		public GristSet gristCache;
 		public Modus modus;
 		public boolean givenModus;
-		public int color = -1;
+		public int color = ColorCollector.DEFAULT_COLOR;
 		public long boondollars;
 		public Echeladder echeladder;
 		public boolean effectToggle = true;

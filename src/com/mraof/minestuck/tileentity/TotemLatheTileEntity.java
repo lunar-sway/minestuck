@@ -344,7 +344,7 @@ public class TotemLatheTileEntity extends TileEntity
 			if(!output.isEmpty())
 			{
 				ItemStack outputDowel = output.getItem().equals(MSBlocks.GENERIC_OBJECT.asItem()) ? new ItemStack(MSBlocks.CRUXITE_DOWEL) : AlchemyRecipes.createEncodedItem(output, false);
-				ColorCollector.setColor(outputDowel, ColorCollector.getColorFromStack(dowel, -1));
+				ColorCollector.setColor(outputDowel, ColorCollector.getColorFromStack(dowel));
 				
 				setDowel(outputDowel);
 				success = true;

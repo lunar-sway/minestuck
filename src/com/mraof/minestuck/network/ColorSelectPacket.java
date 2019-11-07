@@ -1,6 +1,7 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.network.skaianet.SburbHandler;
+import com.mraof.minestuck.util.ColorCollector;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
@@ -11,16 +12,16 @@ import java.util.function.Supplier;
 
 public class ColorSelectPacket
 {
-	public int color;
+	public int colorIndex;
 	
-	public ColorSelectPacket(int color)
+	public ColorSelectPacket(int colorIndex)
 	{
-		this.color = color;
+		this.colorIndex = colorIndex;
 	}
 	
 	public void encode(PacketBuffer buffer)
 	{
-		buffer.writeInt(color);
+		buffer.writeInt(colorIndex);
 	}
 	
 	public static ColorSelectPacket decode(PacketBuffer buffer)
@@ -41,6 +42,6 @@ public class ColorSelectPacket
 	public void execute(ServerPlayerEntity player)
 	{
 		if(SburbHandler.canSelectColor(player))
-			PlayerSavedData.getData(player).color = this.color;
+			PlayerSavedData.getData(player).color = ColorCollector.getColor(colorIndex);
 	}
 }

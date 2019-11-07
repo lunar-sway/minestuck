@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 public class GateTileEntity extends TileEntity
 {
 	
-	public int colorIndex;
+	public int color;
 	
 	public GateHandler.Type gateType;
 	
@@ -85,7 +85,7 @@ public class GateTileEntity extends TileEntity
 	@Override
 	public void handleUpdateTag(CompoundNBT tag)
 	{
-		this.colorIndex = tag.getInt("color");
+		this.color = tag.getInt("color");
 	}
 	
 	@Override

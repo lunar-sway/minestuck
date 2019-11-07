@@ -75,46 +75,11 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 public class ClientProxy extends CommonProxy
 {
-	
-	public static PlayerEntity getClientPlayer()	//Note: can't get the client player directly from FMLClientHandler either, as the server side will still crash because of the return type
-	{
-		return Minecraft.getInstance().player;	//TODO verify server functionality
-	}
-	
-	public static void addScheduledTask(Runnable runnable)
-	{
-		//Minecraft.getInstance().addScheduledTask(runnable);
-	}
-	
 	private static void registerRenderers()
 	{
 		ClientRegistry.bindTileEntitySpecialRenderer(SkaiaPortalTileEntity.class, new SkaiaPortalRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(GateTileEntity.class, new GateRenderer());
 //		MinecraftForgeClient.registerItemRenderer(Minestuck.captchaCard, new CardRenderer());
-	}
-	
-	@SubscribeEvent
-	public static void initBlockColors(ColorHandlerEvent.Block event)
-	{
-		BlockColors colors = event.getBlockColors();
-		colors.register(new BlockColorCruxite(), MSBlocks.ALCHEMITER.TOTEM_PAD, MSBlocks.TOTEM_LATHE.DOWEL_ROD, MSBlocks.CRUXITE_DOWEL);
-		colors.register((state, worldIn, pos, tintIndex) ->
-		{
-			int age = state.get(StemBlock.AGE);
-			int red = age * 32;
-			int green = 255 - age * 8;
-			int blue = age * 4;
-			return red << 16 | green << 8 | blue;
-		}, MSBlocks.STRAWBERRY_STEM);
-	}
-	
-	@SubscribeEvent
-	public static void initItemColors(ColorHandlerEvent.Item event)
-	{
-		ItemColors colors = event.getItemColors();
-		colors.register((stack, tintIndex) -> BlockColorCruxite.handleColorTint(ColorCollector.getColorFromStack(stack, 0) - 1, tintIndex),
-				MSBlocks.CRUXITE_DOWEL, MSItems.CRUXITE_APPLE, MSItems.CRUXITE_POTION);
-		//colors.register(new FrogRenderer.FrogItemColor(), MinestuckItems.FROG);
 	}
 	
 	public static void init()
@@ -123,7 +88,7 @@ public class ClientProxy extends CommonProxy
 		
 		MSScreenFactories.registerScreenFactories();
 		
-		RenderingRegistry.registerEntityRenderingHandler(FrogEntity.class, manager -> new FrogRenderer(manager));
+		RenderingRegistry.registerEntityRenderingHandler(FrogEntity.class, FrogRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(HologramEntity.class, HologramRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(NakagatorEntity.class, manager -> new MinestuckEntityRenderer<>(manager, new NakagatorModel(), 0.5F));
 		RenderingRegistry.registerEntityRenderingHandler(SalamanderEntity.class, manager -> new MinestuckEntityRenderer<>(manager, new SalamanderModel(), 0.5F));
@@ -156,7 +121,6 @@ public class ClientProxy extends CommonProxy
 		MinecraftForge.EVENT_BUS.register(MachineOutlineRenderer.class);
 		//System.out.println("Adding onItemColors listener");
 		//MinecraftForge.EVENT_BUS.register(ColorHandler.class);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onItemColors);
 	}
 	
 }

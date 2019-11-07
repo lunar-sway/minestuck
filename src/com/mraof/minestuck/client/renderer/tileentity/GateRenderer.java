@@ -2,7 +2,6 @@ package com.mraof.minestuck.client.renderer.tileentity;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.tileentity.GateTileEntity;
-import com.mraof.minestuck.util.ColorCollector;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
@@ -19,10 +18,7 @@ public class GateRenderer extends TileEntityRenderer<GateTileEntity>
 	@Override
 	public void render(GateTileEntity tileEntityIn, double x, double y, double z, float partialTicks, int destroyStage)
 	{
-		int color;
-		if(tileEntityIn.colorIndex == -1)
-			color = ColorCollector.DEFAULT_COLOR;
-		else color = ColorCollector.getColor(tileEntityIn.colorIndex);
+		int color = tileEntityIn.color;
 		float r = ((color >> 16) & 255)/255F;
 		float g = ((color >> 8) & 255)/255F;
 		float b = (color & 255)/255F;

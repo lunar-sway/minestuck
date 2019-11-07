@@ -21,14 +21,20 @@ public class ColorSelectorScreen extends Screen
 	
 	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/color_selector.png");
 	private static final int guiWidth = 176, guiHeight = 157;
-	private int selectedColor;
+	private int selectedIndex = -1;
 	private boolean firstTime;
 	
 	public ColorSelectorScreen(boolean firstTime)
 	{
 		super(new TranslationTextComponent(TITLE));
 		this.firstTime = firstTime;
-		selectedColor = ColorCollector.playerColor;
+		for(int i = 0; i < ColorCollector.getColorSize(); i++)
+		{
+			if(ColorCollector.getColor(i) == ColorCollector.playerColor)
+			{
+				selectedIndex = i;
+			}
+		}
 	}
 	
 	@Override
@@ -76,13 +82,13 @@ public class ColorSelectorScreen extends Screen
 		
 		super.render(mouseX, mouseY, partialTicks);
 		
-		if(selectedColor != -1)
+		if(selectedIndex != -1)
 		{
-			int x = 19 + (selectedColor % 4)*34;
-			int y = 30 + (selectedColor/4)*18;
-			if(selectedColor >= 4)
+			int x = 19 + (selectedIndex % 4)*34;
+			int y = 30 + (selectedIndex /4)*18;
+			if(selectedIndex >= 4)
 				y += 3;
-			if(selectedColor >= 8)
+			if(selectedIndex >= 8)
 				y += 3;
 			GlStateManager.color3f(1F, 1F, 1F);
 			this.minecraft.getTextureManager().bindTexture(guiBackground);
@@ -110,7 +116,7 @@ public class ColorSelectorScreen extends Screen
 					if(mouseX >= xPos && mouseX < xPos + 32 && mouseY >= yPos && mouseY < yPos + 16)
 					{
 						int index = y*4 + x;
-						selectedColor = index != selectedColor ? index : -1;
+						selectedIndex = index != selectedIndex ? index : -1;
 						return true;
 					}
 				}
@@ -120,8 +126,8 @@ public class ColorSelectorScreen extends Screen
 	
 	public void selectColor()
 	{
-		MSPacketHandler.sendToServer(new ColorSelectPacket(this.selectedColor));
-		ColorCollector.playerColor = selectedColor;
+		MSPacketHandler.sendToServer(new ColorSelectPacket(selectedIndex));
+		ColorCollector.playerColor = ColorCollector.getColor(selectedIndex);
 		this.minecraft.displayGuiScreen(null);
 	}
 	
@@ -131,7 +137,7 @@ public class ColorSelectorScreen extends Screen
 		if(firstTime && minecraft != null && minecraft.player != null)
 		{
 			ITextComponent message;
-			if(ColorCollector.playerColor == -1)
+			if(ColorCollector.playerColor == ColorCollector.DEFAULT_COLOR)
 				message = new TranslationTextComponent(DEFAULT_COLOR_SELECTED);
 			else message = new TranslationTextComponent(COLOR_SELECTED);
 			this.minecraft.player.sendMessage(new StringTextComponent("[Minestuck] ").appendSibling(message));

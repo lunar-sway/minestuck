@@ -11,9 +11,8 @@ import java.util.List;
  */
 public class ColorCollector
 {
-	public static final int DEFAULT_COLOR = 0x0057FF;
+	public static final int DEFAULT_COLOR = 0xA0DCFF;
 	private static List<Integer> colors;
-//	protected static boolean customColor;
 	
 	//client only
 	public static int playerColor;
@@ -50,7 +49,7 @@ public class ColorCollector
 	public static int getColor(int index)
 	{
 		if(index < 0 || index >= colors.size())
-			index = 0;
+			return DEFAULT_COLOR;
 		return colors.get(index);
 	}
 	
@@ -70,10 +69,10 @@ public class ColorCollector
 		return stack;
 	}
 	
-	public static int getColorFromStack(ItemStack stack, int defaultColor)
+	public static int getColorFromStack(ItemStack stack)
 	{
 		if(stack.hasTag() && stack.getTag().contains("color", 99))
 			return stack.getTag().getInt("color");
-		else return defaultColor;
+		else return DEFAULT_COLOR;
 	}
 }

@@ -130,7 +130,7 @@ public class PlayerDataPacket	//TODO Probably healthier if this is several diffe
 		{
 			if(i1 == -2)
 			{
-				ColorCollector.playerColor = -1;
+				ColorCollector.playerColor = ColorCollector.DEFAULT_COLOR;
 				ColorCollector.displaySelectionGui = true;
 			}
 			else ColorCollector.playerColor = i1;

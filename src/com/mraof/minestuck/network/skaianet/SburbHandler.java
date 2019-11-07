@@ -496,7 +496,7 @@ public class SburbHandler
 	 */
 	public static ItemStack getEntryItem(World world, SburbConnection c)
 	{
-		int colorIndex = PlayerSavedData.get(world).getData(c.getClientIdentifier()).color;
+		int color = PlayerSavedData.get(world).getData(c.getClientIdentifier()).color;
 		Item artifact;
 		if(c == null)
 			artifact = MSItems.CRUXITE_APPLE;
@@ -507,7 +507,7 @@ public class SburbHandler
 		default: artifact = MSItems.CRUXITE_APPLE;
 		}
 		
-		return ColorCollector.setColor(new ItemStack(artifact), colorIndex + 1);
+		return ColorCollector.setColor(new ItemStack(artifact), color);
 	}
 	
 	public static GristType getPrimaryGristType(PlayerIdentifier player)
@@ -519,7 +519,7 @@ public class SburbHandler
 	public static int getColorForDimension(World world)
 	{
 		SburbConnection c = getConnectionForDimension(world);
-		return c == null ? -1 : PlayerSavedData.get(world).getData(c.getClientIdentifier()).color;
+		return c == null ? ColorCollector.DEFAULT_COLOR : PlayerSavedData.get(world).getData(c.getClientIdentifier()).color;
 	}
 	
 	public static SburbConnection getConnectionForDimension(World world)

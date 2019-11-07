@@ -1,8 +1,8 @@
 {
   "replace": false,
   "values": [
-    "minestuck:record_dance_stab",
-    "minestuck:record_emissary",
-    "minestuck:record_retro_battle"
+    "minestuck:music_disc_dance_stab_dance",
+    "minestuck:music_disc_emissary_of_dance",
+    "minestuck:music_disc_retro_battle"
   ]
 }
