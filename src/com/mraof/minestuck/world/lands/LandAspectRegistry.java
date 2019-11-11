@@ -41,12 +41,14 @@ public class LandAspectRegistry
 	@ObjectHolder(Minestuck.MOD_ID+":null")
 	public static final TerrainLandAspect TERRAIN_NULL = getNull();
 	public static final TerrainLandAspect FOREST = getNull();
+	public static final TerrainLandAspect TAIGA = getNull();
 	public static final TerrainLandAspect FROST = getNull();
 	public static final TerrainLandAspect FUNGI = getNull();
 	public static final TerrainLandAspect HEAT = getNull();
 	public static final TerrainLandAspect ROCK = getNull();
 	public static final TerrainLandAspect SAND = getNull();
 	public static final TerrainLandAspect RED_SAND = getNull();
+	public static final TerrainLandAspect LUSH_DESERTS = getNull();
 	public static final TerrainLandAspect SANDSTONE = getNull();
 	public static final TerrainLandAspect RED_SANDSTONE = getNull();
 	public static final TerrainLandAspect SHADE = getNull();
@@ -70,6 +72,7 @@ public class LandAspectRegistry
 	public static final TitleLandAspect CAKE = getNull();
 	public static final TitleLandAspect RABBITS = getNull();
 	public static final TitleLandAspect MONSTERS = getNull();
+	public static final TitleLandAspect UNDEAD = getNull();
 	public static final TitleLandAspect TOWERS = getNull();
 	
 	private Random random;

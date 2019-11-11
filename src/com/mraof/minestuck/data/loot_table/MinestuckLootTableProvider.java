@@ -26,7 +26,7 @@ public class MinestuckLootTableProvider extends LootTableProvider
 	@Override
 	protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootParameterSet>> getTables()
 	{
-		return ImmutableList.of(Pair.of(MSBlockLootTables::new, LootParameterSets.BLOCK));
+		return ImmutableList.of(Pair.of(MSChestLootTables::new, LootParameterSets.CHEST), Pair.of(MSBlockLootTables::new, LootParameterSets.BLOCK));
 	}
 	
 	@Override
