@@ -4,6 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.data.loot_table.MinestuckLootTableProvider;
 import com.mraof.minestuck.data.recipe.MinestuckGristCostsProvider;
 import com.mraof.minestuck.data.recipe.MinestuckRecipeProvider;
+import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -27,6 +28,7 @@ public class MinestuckData
 			gen.addProvider(new MinestuckRecipeProvider(gen));
 			gen.addProvider(new MinestuckGristCostsProvider(gen));
 			
+			MSLootTables.registerLootClasses();	//I guess it's not normally called before data generators otherwise?
 			gen.addProvider(new MinestuckLootTableProvider(gen));
 			gen.addProvider(new MSAvancementProvider(gen));
 			gen.addProvider(new MinestuckEnUsLanguageProvider(gen));

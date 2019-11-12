@@ -58,8 +58,8 @@ public class LandTableLootEntry extends LootEntry
 			LootPool pool = lootTable.getPool(poolName);
 			if(pool != null)
 			{
-				for(LootEntry entry : pool.lootEntries)
-					entry.expand(context, lootGenCollector);
+				/*for(LootEntry entry : pool.lootEntries) TODO fix accesstransformer stuff or use different approach
+					entry.expand(context, lootGenCollector); The alternative is to generate from the loot pool directly, however that'd mean that we're not taking into account the weight of table entries related to the weight of other loot tables*/
 			} else
 			{
 				LOGGER.warn("Could not find pool by name {} in loot table {}", poolName, tableName);
