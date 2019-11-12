@@ -1,10 +1,10 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "minestuck:block/vein_corner_inverted",
+		"0": "minestuck:block/inverted_vein_corner",
 		"1": "minestuck:block/vein_side",
 		"2": "minestuck:block/vein_top",
-		"particle": "minestuck:block/vein_corner_inverted"
+		"particle": "minestuck:block/inverted_vein_corner"
 	},
 	"elements": [
 		{
