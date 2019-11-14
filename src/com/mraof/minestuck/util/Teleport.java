@@ -4,21 +4,25 @@ import net.minecraft.command.impl.TeleportCommand;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.management.PlayerList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.server.TicketType;
-import net.minecraftforge.common.ForgeHooks;
-
-import java.lang.reflect.Field;
-import java.util.Iterator;
 
 public class Teleport
 {
+	
+	public static Entity teleportEntity(Entity entity, ServerWorld world)
+	{
+		return teleportEntity(entity, world, entity.posX, entity.posY, entity.posZ);
+	}
+	
+	public static Entity teleportEntity(Entity entity, ServerWorld world, double x, double y, double z)
+	{
+		return teleportEntity(entity, world, x, y, z, entity.rotationYaw, entity.rotationPitch);
+	}
+	
 	/**
 	 * Made with the help of a private function in {@link TeleportCommand}.
 	 */
