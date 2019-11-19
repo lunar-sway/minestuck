@@ -1,9 +1,6 @@
-package com.mraof.minestuck.world.gen.structure;
+package com.mraof.minestuck.world.gen.feature.structure;
 
-import java.util.List;
-import java.util.Random;
-
-public class StructureCastlePieces 
+public class StructureCastlePieces
 {
 
 	/*public static StructureComponent getNextValidComponent(

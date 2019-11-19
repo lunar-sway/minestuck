@@ -32,8 +32,7 @@ public class LandBiomeHolder
 	
 	public void initBiomesWith(LandGenSettings settings)
 	{
-		LandWrapperBiome[] biomes = {normalBiome, roughBiome, oceanBiome};
-		for(LandWrapperBiome biome : biomes)
+		for(LandWrapperBiome biome : getBiomes())
 		{
 			biome.init(settings);
 			landAspects.terrain.setBiomeGenSettings(biome, settings.getBlockRegistry());
@@ -41,14 +40,19 @@ public class LandBiomeHolder
 		}
 	}
 	
-	public LandWrapperBiome localBiomeFrom(Biome biome) {
-		LandWrapperBiome[] biomes = {normalBiome, roughBiome, oceanBiome};
-		for(LandWrapperBiome wrapperBiome : biomes)
+	public LandWrapperBiome localBiomeFrom(Biome biome)
+	{
+		for(LandWrapperBiome wrapperBiome : getBiomes())
 		{
 			if(wrapperBiome.staticBiome == biome)
 				return wrapperBiome;
 		}
 		
 		return normalBiome;
+	}
+	
+	public LandWrapperBiome[] getBiomes()
+	{
+		return new LandWrapperBiome[]{normalBiome, roughBiome, oceanBiome};
 	}
 }

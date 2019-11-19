@@ -1,4 +1,4 @@
-package com.mraof.minestuck.world.gen.structure.blocks;
+package com.mraof.minestuck.world.gen.feature.structure.blocks;
 
 import java.util.Random;
 

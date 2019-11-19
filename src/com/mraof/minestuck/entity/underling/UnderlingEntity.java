@@ -271,12 +271,6 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IEntity
 		return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
 	}
 	
-	@Override
-	public boolean canDespawn(double distanceToClosestPlayer)
-	{
-		return !this.detachHome();
-	}
-	
 	public void onEntityDamaged(DamageSource source, float amount)
 	{
 		ServerPlayerEntity player = null;

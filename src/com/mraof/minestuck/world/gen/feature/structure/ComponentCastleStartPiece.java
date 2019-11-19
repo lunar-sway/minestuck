@@ -1,10 +1,6 @@
-package com.mraof.minestuck.world.gen.structure;
+package com.mraof.minestuck.world.gen.feature.structure;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import net.minecraft.world.World;
 
 public class ComponentCastleStartPiece extends ComponentCastlePiece 
 {

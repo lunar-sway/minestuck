@@ -1,9 +1,4 @@
-package com.mraof.minestuck.world.gen.structure;
-
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
+package com.mraof.minestuck.world.gen.feature.structure;
 
 /**
  * @author mraof

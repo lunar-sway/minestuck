@@ -1,11 +1,6 @@
-package com.mraof.minestuck.world.gen.structure;
+package com.mraof.minestuck.world.gen.feature.structure;
 
-import java.util.List;
-import java.util.Random;
-
-import net.minecraft.world.World;
-
-public class ComponentCastleStaircasePiece extends ComponentCastleRoomPiece 
+public class ComponentCastleStaircasePiece extends ComponentCastleRoomPiece
 {
 	public ComponentCastleStaircasePiece() {}
 	/*protected ComponentCastleStaircasePiece(int par1, ComponentCastleStartPiece startPiece,	StructureBoundingBox structureBoundingBox)

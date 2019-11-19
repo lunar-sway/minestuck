@@ -2,6 +2,7 @@ package com.mraof.minestuck.world.gen.feature;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.world.gen.feature.structure.SmallRuinStructure;
 import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraftforge.event.RegistryEvent;
@@ -14,8 +15,9 @@ import javax.annotation.Nonnull;
 
 @ObjectHolder(Minestuck.MOD_ID)
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
-public class MSFeatures
+public final class MSFeatures
 {
+	public static final Structure<NoFeatureConfig> SMALL_RUIN = getNull();
 	public static final Structure<NoFeatureConfig> IMP_DUNGEON = getNull();	//TODO Rerun advancement provider once these two are reimplemeneted
 	public static final Structure<NoFeatureConfig> CONSORT_VILLAGE = getNull();
 	
@@ -54,6 +56,8 @@ public class MSFeatures
 	{
 		IForgeRegistry<Feature<?>> registry = event.getRegistry();
 		
+		registry.register(new SmallRuinStructure(NoFeatureConfig::deserialize).setRegistryName("small_ruin"));
+		
 		registry.register(new RainbowTreeFeature(NoFeatureConfig::deserialize, false).setRegistryName("rainbow_tree"));
 		registry.register(new EndTreeFeature(NoFeatureConfig::deserialize, false).setRegistryName("end_tree"));
 		registry.register(new LeaflessTreeFeature(BushConfig::deserialize).setRegistryName("leafless_tree"));
@@ -76,5 +80,7 @@ public class MSFeatures
 		registry.register(new BucketFeature(NoFeatureConfig::deserialize).setRegistryName("bucket"));
 		registry.register(new BrokenSwordFeature(NoFeatureConfig::deserialize).setRegistryName("broken_sword"));
 		registry.register(new TowerFeature(NoFeatureConfig::deserialize).setRegistryName("tower"));
+		
+		MSStructurePieces.init();
 	}
 }

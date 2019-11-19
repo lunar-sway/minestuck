@@ -1,4 +1,4 @@
-package com.mraof.minestuck.world.gen.structure;
+package com.mraof.minestuck.world.gen.feature.structure;
 
 public abstract class ComponentCastlePiece //extends StructureComponent
 {

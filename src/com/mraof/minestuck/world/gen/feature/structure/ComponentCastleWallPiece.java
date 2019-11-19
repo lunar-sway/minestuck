@@ -1,13 +1,6 @@
-package com.mraof.minestuck.world.gen.structure;
+package com.mraof.minestuck.world.gen.feature.structure;
 
-import java.util.List;
-import java.util.Random;
-
-import net.minecraft.world.World;
-
-import com.mraof.minestuck.util.Debug;
-
-public class ComponentCastleWallPiece extends ComponentCastlePiece 
+public class ComponentCastleWallPiece extends ComponentCastlePiece
 {
 	boolean cornerPiece;
 	public ComponentCastleWallPiece() {}

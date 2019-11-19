@@ -19,6 +19,7 @@ public class LandBiomeProvider extends BiomeProvider
 {
 	private final Layer genLevelLayer;
 	private final Layer blockLevelLayer;
+	private final LandBiomeHolder biomeHolder;
 	
 	public LandBiomeProvider(LandBiomeProviderSettings settings)
 	{
@@ -28,6 +29,7 @@ public class LandBiomeProvider extends BiomeProvider
 		
 		genLevelLayer = layers[0];
 		blockLevelLayer = layers[1];
+		biomeHolder = settings.getGenSettings().getBiomeHolder();
 	}
 	
 	@Override
@@ -95,6 +97,16 @@ public class LandBiomeProvider extends BiomeProvider
 	@Override
 	public boolean hasStructure(Structure<?> structureIn)
 	{
+		return hasStructureCache.computeIfAbsent(structureIn, this::isStructureInBiomes);
+	}
+	
+	private boolean isStructureInBiomes(Structure<?> structure)
+	{
+		for(Biome biome : biomeHolder.getBiomes())
+		{
+			if(biome.hasStructure(structure))
+				return true;
+		}
 		return false;
 	}
 	

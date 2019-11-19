@@ -1,4 +1,4 @@
-package com.mraof.minestuck.world.gen.structure.blocks;
+package com.mraof.minestuck.world.gen.feature.structure.blocks;
 
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import net.minecraft.block.*;
@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class StructureBlockRegistry
+public final class StructureBlockRegistry
 {
 	
 	private static Map<String, BlockEntry> staticRegistry = new HashMap<>();

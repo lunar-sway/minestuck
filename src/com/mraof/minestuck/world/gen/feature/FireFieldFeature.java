@@ -1,7 +1,7 @@
 package com.mraof.minestuck.world.gen.feature;
 
 import com.mojang.datafixers.Dynamic;
-import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;

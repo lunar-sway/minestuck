@@ -1,9 +1,14 @@
 package com.mraof.minestuck.world.biome;
 
 import com.mraof.minestuck.world.gen.LandGenSettings;
-import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.feature.MSFeatures;
+import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.gen.placement.IPlacementConfig;
+import net.minecraft.world.gen.placement.Placement;
 import net.minecraft.world.gen.surfacebuilders.ConfiguredSurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilders.SurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilders.SurfaceBuilderConfig;
@@ -20,10 +25,17 @@ public class LandWrapperBiome extends LandBiome
 	
 	public void init(LandGenSettings settings)
 	{
-		StructureBlockRegistry registry = settings.getBlockRegistry();
-		SurfaceBuilderConfig surfaceConfig = new SurfaceBuilderConfig(registry.getBlockState("surface"), registry.getBlockState("upper"), registry.getBlockState("ocean_surface"));
+		StructureBlockRegistry blocks = settings.getBlockRegistry();
+		SurfaceBuilderConfig surfaceConfig = new SurfaceBuilderConfig(blocks.getBlockState("surface"), blocks.getBlockState("upper"), blocks.getBlockState("ocean_surface"));
 		this.surfaceBuilder = new ConfiguredSurfaceBuilder<>(SurfaceBuilder.DEFAULT, surfaceConfig);
 		this.addSpawn(EntityClassification.CREATURE, new SpawnListEntry(settings.getLandAspects().terrain.getConsortType(), 2, 1, 10));
+		addDefaultStructures(blocks);
+	}
+	
+	private void addDefaultStructures(StructureBlockRegistry blocks)
+	{
+		addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, createDecoratedFeature(MSFeatures.SMALL_RUIN, IFeatureConfig.NO_FEATURE_CONFIG, Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
+		
 	}
 	
 	@Override

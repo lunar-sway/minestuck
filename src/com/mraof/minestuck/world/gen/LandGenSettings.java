@@ -2,7 +2,7 @@ package com.mraof.minestuck.world.gen;
 
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.lands.LandAspects;
-import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import net.minecraft.world.gen.GenerationSettings;
 
 public class LandGenSettings extends GenerationSettings

@@ -1,14 +1,7 @@
 /**
  * 
  */
-package com.mraof.minestuck.world.gen.structure;
-
-import java.util.ArrayList;
-import java.util.Random;
-
-import com.mraof.minestuck.util.Debug;
-
-import net.minecraft.world.World;
+package com.mraof.minestuck.world.gen.feature.structure;
 
 /**
  * @author mraof
