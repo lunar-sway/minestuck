@@ -23,6 +23,7 @@ import java.util.Random;
 public class SmallRuinPiece extends ScatteredStructurePiece
 {
 	private final boolean[] torches = new boolean[4];
+	private final boolean[] placedOgres = new boolean[4];
 	private boolean placedChest;
 	
 	public SmallRuinPiece(Random random, int minX, int minZ, float skyLight)
@@ -43,6 +44,8 @@ public class SmallRuinPiece extends ScatteredStructurePiece
 		
 		for(int i = 0; i < 4; i++)
 			torches[i] = nbt.getBoolean("torch" + i);
+		for(int i = 0; i < 4; i++)
+			placedOgres[i] = nbt.getBoolean("placed_ogres" + i);
 		placedChest = nbt.getBoolean("placed_chest");
 	}
 	
@@ -53,6 +56,8 @@ public class SmallRuinPiece extends ScatteredStructurePiece
 		
 		for(int i = 0; i < 4; i++)
 			nbt.putBoolean("torch" + i, torches[i]);
+		for(int i = 0; i < 4; i++)
+			nbt.putBoolean("placed_ogres" + i, placedOgres[i]);
 		nbt.putBoolean("placed_chest", placedChest);
 	}
 	
@@ -109,14 +114,14 @@ public class SmallRuinPiece extends ScatteredStructurePiece
 		if(torches[3])
 			this.setBlockState(worldIn, wallTorch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.WEST), 5, 2, 6, boundingBoxIn);
 		
-		if(boundingBoxIn.intersectsWith(this.boundingBox.minX, this.boundingBox.minZ, this.boundingBox.minX, this.boundingBox.minZ))
-			placeUnderling(this.boundingBox.minX - 6, this.boundingBox.minZ - 6, worldIn, randomIn);
-		if(boundingBoxIn.intersectsWith(this.boundingBox.maxX, this.boundingBox.minZ, this.boundingBox.maxX, this.boundingBox.minZ))
-			placeUnderling(this.boundingBox.maxX - 6, this.boundingBox.minZ - 6, worldIn, randomIn);
-		if(boundingBoxIn.intersectsWith(this.boundingBox.minX, this.boundingBox.maxZ, this.boundingBox.minX, this.boundingBox.maxZ))
-			placeUnderling(this.boundingBox.minX - 6, this.boundingBox.maxZ - 6, worldIn, randomIn);
-		if(boundingBoxIn.intersectsWith(this.boundingBox.maxX, this.boundingBox.maxZ, this.boundingBox.maxX, this.boundingBox.maxZ))
-			placeUnderling(this.boundingBox.maxX - 6, this.boundingBox.maxZ - 6, worldIn, randomIn);
+		if(!placedOgres[0])
+			placedOgres[0] = placeUnderling(this.boundingBox.minX - 3, this.boundingBox.minZ - 3, boundingBoxIn, worldIn, randomIn);
+		if(!placedOgres[1])
+			placedOgres[1] = placeUnderling(this.boundingBox.maxX  + 3, this.boundingBox.minZ - 3, boundingBoxIn, worldIn, randomIn);
+		if(!placedOgres[2])
+			placedOgres[2] = placeUnderling(this.boundingBox.minX - 3, this.boundingBox.maxZ + 3, boundingBoxIn, worldIn, randomIn);
+		if(!placedOgres[3])
+			placedOgres[3] = placeUnderling(this.boundingBox.maxX + 3, this.boundingBox.maxZ + 3, boundingBoxIn, worldIn, randomIn);
 		
 		return true;
 	}
@@ -168,41 +173,33 @@ public class SmallRuinPiece extends ScatteredStructurePiece
 		return b;
 	}
 	
-	private void placeUnderling(int minX, int minZ, IWorld world, Random rand)
+	private boolean placeUnderling(int xPos, int zPos, MutableBoundingBox boundingBox, IWorld world, Random rand)
 	{
-		int i = 0;
-		while(i < 10)
-		{
-			int xPos = rand.nextInt(12) + minX;
-			int zPos = rand.nextInt(12) + minZ;
-			if(this.boundingBox.intersectsWith(xPos - 1, zPos - 1, xPos + 1, zPos + 1))
-				continue;
-			
-			int minY = 256, maxY = 0;
-			for(int x = xPos - 1; x <= xPos + 1; x++)
-				for(int z = zPos - 1; z <= zPos + 1; z++)
-				{
-					int y = world.getHeight(Heightmap.Type.MOTION_BLOCKING, new BlockPos(x, 0, z)).getY();
-					if(y < minY)
-						minY = y;
-					if(y > maxY)
-						maxY = y;
-				}
-			
-			if(maxY - minY < 3)
+		if(!boundingBox.isVecInside(new BlockPos(xPos, 64, zPos)))
+			return false;
+		
+		int minY = 256, maxY = 0;
+		for(int x = xPos - 1; x <= xPos + 1; x++)
+			for(int z = zPos - 1; z <= zPos + 1; z++)
 			{
-				OgreEntity ogre = MSEntityTypes.OGRE.create(world.getWorld());
-				if(ogre == null)
-					throw new IllegalStateException("Unable to create a new ogre. Entity factory returned null!");
-				ogre.enablePersistence();
-				ogre.setPositionAndRotation(xPos + 0.5, maxY, zPos + 0.5, rand.nextFloat() * 360F, 0);
-				ogre.onInitialSpawn(world, world.getDifficultyForLocation(new BlockPos(xPos, maxY, zPos)), SpawnReason.STRUCTURE, null, null);
-				ogre.setHomePosAndDistance(new BlockPos(minX + 8, this.boundingBox.minY, minZ + 8), 10);
-				world.addEntity(ogre);
-				return;
+				int y = world.getHeight(Heightmap.Type.MOTION_BLOCKING, new BlockPos(x, 0, z)).getY();
+				if(y < minY)
+					minY = y;
+				if(y > maxY)
+					maxY = y;
 			}
-			
-			i++;
+		
+		if(maxY - minY < 3)
+		{
+			OgreEntity ogre = MSEntityTypes.OGRE.create(world.getWorld());
+			if(ogre == null)
+				throw new IllegalStateException("Unable to create a new ogre. Entity factory returned null!");
+			ogre.enablePersistence();
+			ogre.setLocationAndAngles(xPos + 0.5, maxY, zPos + 0.5, rand.nextFloat() * 360F, 0);
+			ogre.onInitialSpawn(world, world.getDifficultyForLocation(new BlockPos(xPos, maxY, zPos)), SpawnReason.STRUCTURE, null, null);
+			ogre.setHomePosAndDistance(new BlockPos(xPos, this.boundingBox.minY, zPos), 10);
+			world.addEntity(ogre);
 		}
+		return true;
 	}
 }

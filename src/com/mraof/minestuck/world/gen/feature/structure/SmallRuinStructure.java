@@ -34,7 +34,7 @@ public class SmallRuinStructure extends ScatteredStructure<NoFeatureConfig>
 	@Override
 	public String getStructureName()
 	{
-		return null;
+		return "small_ruin";
 	}
 	
 	@Override
