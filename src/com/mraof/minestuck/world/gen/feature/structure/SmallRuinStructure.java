@@ -43,6 +43,18 @@ public class SmallRuinStructure extends ScatteredStructure<NoFeatureConfig>
 		return 2;
 	}
 	
+	@Override
+	protected int getBiomeFeatureDistance(ChunkGenerator<?> generator)
+	{
+		return 16;
+	}
+	
+	@Override
+	protected int getBiomeFeatureSeparation(ChunkGenerator<?> generator)
+	{
+		return 4;
+	}
+	
 	public static class Start extends StructureStart
 	{
 		private Start(Structure<?> structure, int chunkX, int chunkZ, Biome biome, MutableBoundingBox boundingBox, int reference, long seed)

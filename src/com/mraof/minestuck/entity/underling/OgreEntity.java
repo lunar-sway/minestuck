@@ -23,12 +23,6 @@ public class OgreEntity extends UnderlingEntity
 	}
 	
 	@Override
-	protected String getUnderlingName()
-	{
-		return "ogre";
-	}
-	
-	@Override
 	protected void registerGoals()
 	{
 		super.registerGoals();
@@ -55,7 +49,7 @@ public class OgreEntity extends UnderlingEntity
 	@Override
 	public GristSet getGristSpoils()
 	{
-		return GristHelper.getRandomDrop(gristType, 4);
+		return GristHelper.getRandomDrop(getGristType(), 4);
 	}
 	
 	@Override
@@ -67,7 +61,7 @@ public class OgreEntity extends UnderlingEntity
 	@Override
 	protected float getMaximumHealth() 
 	{
-		return gristType != null ? 13F * gristType.getPower() + 50 : 1;
+		return 13F * getGristType().getPower() + 50;
 	}
 	
 	@Override
@@ -79,7 +73,7 @@ public class OgreEntity extends UnderlingEntity
 	@Override
 	protected double getAttackDamage()
 	{
-		return this.gristType.getPower() * 2.1 + 6;
+		return getGristType().getPower() * 2.1 + 6;
 	}
 	
 	@Override
@@ -89,9 +83,9 @@ public class OgreEntity extends UnderlingEntity
 	}
 	
 	@Override
-	protected void applyGristType(GristType type, boolean fullHeal)
+	protected void onGristTypeUpdated(GristType type)
 	{
-		super.applyGristType(type, fullHeal);
+		super.onGristTypeUpdated(type);
 		this.experienceValue = (int) (5 * type.getPower() + 4);
 	}
 	
@@ -100,12 +94,11 @@ public class OgreEntity extends UnderlingEntity
 	{
 		super.onDeath(cause);
 		Entity entity = cause.getTrueSource();
-		if(this.dead && !this.world.isRemote && gristType != null)
+		if(this.dead && !this.world.isRemote)
 		{
-			computePlayerProgress((int) (40* gristType.getPower() + 50));
+			computePlayerProgress((int) (40* getGristType().getPower() + 50));
 			if(entity instanceof ServerPlayerEntity)
 			{
-				//((EntityPlayerMP) entity).addStat(MinestuckAchievementHandler.killOgre);
 				Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) entity).echeladder;
 				ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 1));
 			}

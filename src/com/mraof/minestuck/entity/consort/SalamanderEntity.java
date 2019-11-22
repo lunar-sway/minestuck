@@ -29,12 +29,6 @@ public class SalamanderEntity extends ConsortEntity
 	}
 	
 	@Override
-	public String getTexture()
-	{
-		return "textures/entity/salamander.png";
-	}
-	
-	@Override
 	public EnumConsort getConsortType()
 	{
 		return EnumConsort.SALAMANDER;

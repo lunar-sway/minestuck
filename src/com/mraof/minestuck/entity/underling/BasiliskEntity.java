@@ -16,19 +16,13 @@ import net.minecraft.world.World;
 
 public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 {
-	UnderlingPartEntity tail;
+	private UnderlingPartEntity tail;
 	
 	public BasiliskEntity(EntityType<? extends BasiliskEntity> type, World world)
 	{
 		super(type, world);
 		tail = new UnderlingPartEntity(this, 0, 3F, 2F);
 		world.addEntity(tail);
-	}
-	
-	@Override
-	protected String getUnderlingName()
-	{
-		return "basilisk";
 	}
 	
 	@Override
@@ -58,13 +52,13 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	@Override
 	public GristSet getGristSpoils()
 	{
-		return GristHelper.getRandomDrop(gristType, 6);
+		return GristHelper.getRandomDrop(getGristType(), 6);
 	}
 	
 	@Override
 	protected float getMaximumHealth() 
 	{
-		return gristType != null ? 20 * gristType.getPower() + 85 : 1;
+		return 20 * getGristType().getPower() + 85;
 	}
 
 	@Override
@@ -82,7 +76,7 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	@Override
 	protected double getAttackDamage()
 	{
-		return this.gristType.getPower()*2.7 + 6;
+		return getGristType().getPower()*2.7 + 6;
 	}
 	
 	@Override
@@ -92,9 +86,9 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	}
 	
 	@Override
-	protected void applyGristType(GristType type, boolean fullHeal)
+	protected void onGristTypeUpdated(GristType type)
 	{
-		super.applyGristType(type, fullHeal);
+		super.onGristTypeUpdated(type);
 		this.experienceValue = (int) (6 * type.getPower() + 4);
 	}
 	
@@ -114,9 +108,7 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	@Override
 	public boolean attackEntityFromPart(Entity entityPart, DamageSource source, float damage) 
 	{
-		boolean flag = this.attackEntityFrom(source, damage);
-		
-		return flag;
+		return this.attackEntityFrom(source, damage);
 	}
 	
 	@Override
@@ -160,9 +152,9 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	{
 		super.onDeath(cause);
 		Entity entity = cause.getTrueSource();
-		if(this.dead && !this.world.isRemote && gristType != null)
+		if(this.dead && !this.world.isRemote)
 		{
-			computePlayerProgress((int) (100* gristType.getPower() + 160));
+			computePlayerProgress((int) (100* getGristType().getPower() + 160));
 			if(entity instanceof ServerPlayerEntity)
 			{
 				Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) entity).echeladder;

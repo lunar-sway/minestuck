@@ -6,9 +6,11 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
+import java.util.Objects;
+
 public abstract class MinestuckEntity extends CreatureEntity
 {
-	protected ResourceLocation textureResource;
+	private ResourceLocation textureResource;
 	
 	public MinestuckEntity(EntityType<? extends MinestuckEntity> type, World world)
 	{
@@ -19,38 +21,27 @@ public abstract class MinestuckEntity extends CreatureEntity
 	protected void registerAttributes()
 	{
 		super.registerAttributes();
-		this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue((double)(this.getMaximumHealth()));
+		this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(this.getMaximumHealth());
 	}
 	
 	protected abstract float getMaximumHealth();
 	
-	/**
-	 * Returns null if it handles the texture itself.
-	 * @return
-	 */
-	public abstract String getTexture();
-
-	public ResourceLocation getTextureResource() 
+	protected ResourceLocation createTexture()
 	{
-		if(textureResource == null && this.getTexture() != null)
-			textureResource = new ResourceLocation("minestuck", this.getTexture());
+		ResourceLocation entityName = Objects.requireNonNull(getType().getRegistryName(), () -> "Getting texture for entity without a registry name! "+this);
+		
+		return new ResourceLocation(entityName.getNamespace(), "textures/entity/" + entityName.getPath() + ".png");
+	}
+
+	public final ResourceLocation getTextureResource()
+	{
+		if(textureResource == null)
+			textureResource = createTexture();
 		return textureResource;
 	}
 	
-	/**
-	 * Gets called every tick from main Entity class
-	 */
-	/*public void onEntityUpdate()	//TODO What depends on this?
+	protected void clearTexture()
 	{
-		super.onEntityUpdate();
-		this.world.profiler.startSection("mobBaseTick");
-
-		if (this.isEntityAlive() && this.rand.nextInt(1000) < this.livingSoundTime++)
-		{
-			this.playLivingSound();
-		}
-
-		this.world.profiler.endSection();
-	}*/
-	
+		textureResource = null;
+	}
 }

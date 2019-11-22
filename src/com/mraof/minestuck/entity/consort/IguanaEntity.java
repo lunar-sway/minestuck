@@ -29,12 +29,6 @@ public class IguanaEntity extends ConsortEntity
 	}
 	
 	@Override
-	public String getTexture()
-	{
-		return "textures/entity/iguana.png";
-	}
-	
-	@Override
 	public EnumConsort getConsortType()
 	{
 		return EnumConsort.IGUANA;

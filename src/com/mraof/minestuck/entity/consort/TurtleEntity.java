@@ -23,12 +23,6 @@ public class TurtleEntity extends ConsortEntity
 	}
 	
 	@Override
-	public String getTexture()
-	{
-		return "textures/entity/turtle.png";
-	}
-	
-	@Override
 	public EnumConsort getConsortType()
 	{
 		return EnumConsort.TURTLE;

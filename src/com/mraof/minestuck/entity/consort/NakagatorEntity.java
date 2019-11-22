@@ -29,12 +29,6 @@ public class NakagatorEntity extends ConsortEntity
 	}
 	
 	@Override
-	public String getTexture()
-	{
-		return "textures/entity/nakagator.png";
-	}
-	
-	@Override
 	public EnumConsort getConsortType()
 	{
 		return EnumConsort.NAKAGATOR;

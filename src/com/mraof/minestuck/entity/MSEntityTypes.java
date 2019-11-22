@@ -96,8 +96,8 @@ public final class MSEntityTypes
 		register(registry, EntityType.Builder.create(BlackRookEntity::new, EntityClassification.MONSTER).size(3.5F, 3.5F), "dersite_rook");
 		register(registry, EntityType.Builder.create(WhiteRookEntity::new, EntityClassification.MONSTER).size(3.5F, 3.5F), "prospitian_rook");
 		
-		register(registry, EntityType.Builder.<GristEntity>create(GristEntity::new, EntityClassification.MISC).setCustomClientFactory((spawnEntity, world) -> new GristEntity(GRIST, world)).size(1 / 3F, 1 / 3F)/*.tracker(512, 1, true)*/.immuneToFire(), "grist");
-		register(registry, EntityType.Builder.<VitalityGelEntity>create(VitalityGelEntity::new, EntityClassification.MISC).setCustomClientFactory((spawnEntity, world) -> new VitalityGelEntity(VITALITY_GEL, world)).size(1 / 4F, 1 / 4F)/*.tracker(512, 1, true)*/.immuneToFire(), "vitality_gel");
+		register(registry, EntityType.Builder.<GristEntity>create(GristEntity::new, EntityClassification.MISC).setCustomClientFactory((spawnEntity, world) -> new GristEntity(GRIST, world)).size(1 / 3F, 1 / 3F).immuneToFire(), "grist");
+		register(registry, EntityType.Builder.<VitalityGelEntity>create(VitalityGelEntity::new, EntityClassification.MISC).setCustomClientFactory((spawnEntity, world) -> new VitalityGelEntity(VITALITY_GEL, world)).size(1 / 4F, 1 / 4F).immuneToFire(), "vitality_gel");
 		register(registry, EntityType.Builder.<DecoyEntity>create(EntityClassification.MISC).setCustomClientFactory((spawnEntity, world) -> new DecoyEntity(world)).disableSerialization().disableSummoning(), "player_decoy");
 		
 		register(registry, EntityType.Builder.<MetalBoatEntity>create(MetalBoatEntity::new, EntityClassification.MISC).setCustomClientFactory((spawnEntity, world) -> new MetalBoatEntity(METAL_BOAT, world)), "metal_boat");

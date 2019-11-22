@@ -12,12 +12,6 @@ public class BlackBishopEntity extends BishopEntity
 	}
 	
 	@Override
-	public String getTexture() 
-	{
-		return "textures/entity/dersite_bishop.png";
-	}
-	
-	@Override
 	public EnumEntityKingdom getKingdom()
 	{
 		return EnumEntityKingdom.DERSITE;

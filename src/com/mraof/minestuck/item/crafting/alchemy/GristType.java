@@ -53,8 +53,8 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 	}
 	
 	public static ForgeRegistry<GristType> REGISTRY;
-	final float rarity;
-	final float value;
+	private final float rarity;
+	private final float value;
 	private ItemStack candyItem = ItemStack.EMPTY;
 	private String translationKey;
 	private ResourceLocation icon;
@@ -133,17 +133,17 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 	public ResourceLocation getIcon()
 	{
 		if(icon == null)
-			icon = makeIconPath(REGISTRY.getKey(this));
+			icon = makeIconPath(getEffectiveName());
 		
 		return icon;
 	}
 	
-	public ResourceLocation getUnderlingTexture(String underlingType)
+	public ResourceLocation getEffectiveName()
 	{
 		ResourceLocation name = REGISTRY.getKey(this);
 		if(name == null)
-			name = new ResourceLocation(Minestuck.MOD_ID, "dummy");
-		return new ResourceLocation(name.getNamespace(), "textures/entity/underlings/" + name.getPath() + "_"+ underlingType + ".png");
+			return new ResourceLocation(Minestuck.MOD_ID, "dummy");
+		else return name;
 	}
 	
 	public ItemStack getCandyItem()
@@ -217,7 +217,13 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 				new GristType(0.0F, 10).setCandyItem(new ItemStack(MSItems.ZILLIUM_SKITTLES)).setRegistryName("zillium")
 		);
 	}
-
+	
+	@Override
+	public String toString()
+	{
+		return String.valueOf(getRegistryName());
+	}
+	
 	@Override
 	public int compareTo(GristType gristType)
 	{
@@ -249,9 +255,9 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 		}
 		
 		@Override
-		public ResourceLocation getUnderlingTexture(String underlingType)
+		public ResourceLocation getEffectiveName()
 		{
-			return new ResourceLocation(Minestuck.MOD_ID, "textures/entity/underlings/dummy_"+ underlingType + ".png");
+			return new ResourceLocation(Minestuck.MOD_ID, "dummy");
 		}
 	}
 }

@@ -9,13 +9,7 @@ public class WhiteRookEntity extends RookEntity
 	{
 		super(type, world);
 	}
-
-	@Override
-	public String getTexture() 
-	{
-		return "textures/entity/prospitian_rook.png";
-	}
-
+	
 	@Override
 	public EnumEntityKingdom getKingdom()
 	{
