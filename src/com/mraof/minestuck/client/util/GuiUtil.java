@@ -56,8 +56,8 @@ public class GuiUtil
 			{
 				GristAmount amount = it.next();
 				GristType type = amount.getType();
-				int need = amount.getAmount();
-				int have = playerGrist.getGrist(type);
+				long need = amount.getAmount();
+				long have = playerGrist.getGrist(type);
 				
 				int row = place % 3;
 				int col = place / 3;
@@ -82,8 +82,8 @@ public class GuiUtil
 			{
 				GristAmount amount = it.next();
 				GristType type = amount.getType();
-				int need = amount.getAmount();
-				int have = playerGrist.getGrist(type);
+				long need = amount.getAmount();
+				long have = playerGrist.getGrist(type);
 				int row = index/GRIST_BOARD_WIDTH;
 				int color = getGristColor(mode, need <= have);
 				
@@ -142,7 +142,7 @@ public class GuiUtil
 				
 				if(mouseY >= 8*row && mouseY < 8*row + 8)
 				{
-					int need = entry.getAmount();
+					long need = entry.getAmount();
 					String needStr = addSuffix(need);
 					
 					if(!needStr.equals(String.valueOf(need)) && mouseX >= GRIST_BOARD_WIDTH/2F*col && mouseX < GRIST_BOARD_WIDTH/2F*col + fontRenderer.getStringWidth(needStr))
@@ -152,7 +152,7 @@ public class GuiUtil
 						continue;
 					
 					int width = fontRenderer.getStringWidth(needStr + " " + entry.getType().getDisplayName() + " (");
-					int have = playerGrist.getGrist(entry.getType());
+					long have = playerGrist.getGrist(entry.getType());
 					String haveStr = addSuffix(have);
 					
 					if(!haveStr.equals(String.valueOf(have)) && mouseX >= boardX + GRIST_BOARD_WIDTH/2F*col + width && mouseX < boardX + GRIST_BOARD_WIDTH/2F*col + width + fontRenderer.getStringWidth(haveStr))
@@ -167,8 +167,8 @@ public class GuiUtil
 			for(GristAmount entry : grist.getArray())
 			{
 				GristType type = entry.getType();
-				int need = entry.getAmount();
-				int have = playerGrist.getGrist(type);
+				long need = entry.getAmount();
+				long have = playerGrist.getGrist(type);
 				int row = index/GRIST_BOARD_WIDTH;
 				
 				String needStr = addSuffix(need), haveStr = addSuffix(have);

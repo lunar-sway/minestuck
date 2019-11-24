@@ -256,11 +256,11 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 			if (this.gristCache != null)
 			{
 				ListNBT list = new ListNBT();
-				for (GristType type : GristType.values())
+				for (GristType type : GristType.values())	//TODO Should be written to nbt in GristSet
 				{
 					CompoundNBT gristTag = new CompoundNBT();
 					gristTag.putString("id", String.valueOf(type.getRegistryName()));
-					gristTag.putInt("amount", this.gristCache.getGrist(type));
+					gristTag.putLong("amount", this.gristCache.getGrist(type));
 					list.add(gristTag);
 				}
 				nbt.put("grist", list);

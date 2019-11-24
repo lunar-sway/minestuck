@@ -10,7 +10,7 @@ public abstract class JeiGristCost
 	
 	public abstract GristSet getGristSet();
 	
-	public abstract int getWildcardAmount();
+	public abstract long getWildcardAmount();
 	
 	public static class Set extends JeiGristCost
 	{
@@ -34,7 +34,7 @@ public abstract class JeiGristCost
 		}
 		
 		@Override
-		public int getWildcardAmount()
+		public long getWildcardAmount()
 		{
 			throw new UnsupportedOperationException();
 		}
@@ -42,9 +42,9 @@ public abstract class JeiGristCost
 	
 	public static class Wildcard extends JeiGristCost
 	{
-		private final int wildcard;
+		private final long wildcard;
 		
-		public Wildcard(int wildcard)
+		public Wildcard(long wildcard)
 		{
 			this.wildcard = wildcard;
 		}
@@ -62,7 +62,7 @@ public abstract class JeiGristCost
 		}
 		
 		@Override
-		public int getWildcardAmount()
+		public long getWildcardAmount()
 		{
 			return wildcard;
 		}

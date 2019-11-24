@@ -3,6 +3,7 @@ package com.mraof.minestuck.item.crafting.alchemy;
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.jei.JeiGristCost;
+import com.mraof.minestuck.util.ExtraJSONUtils;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -136,7 +137,7 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 			{
 				if(json.get("grist_cost").isJsonPrimitive())
 				{
-					int wildcardCost = JSONUtils.getInt(json, "grist_cost");
+					long wildcardCost = ExtraJSONUtils.getLong(json, "grist_cost");
 					return new Wildcard(recipeId, ingredient, wildcardCost, priority);
 				} else
 				{
@@ -158,7 +159,7 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 				case 0:
 					return new Simple(recipeId, ingredient, GristSet.read(buffer), priority);
 				case 1:
-					return new Wildcard(recipeId, ingredient, buffer.readInt(), priority);
+					return new Wildcard(recipeId, ingredient, buffer.readLong(), priority);
 				default:
 					return new Unavailable(recipeId, ingredient, priority);
 			}
@@ -176,7 +177,7 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 			} else if(recipe instanceof Wildcard)
 			{
 				buffer.writeByte(1);
-				buffer.writeInt(((Wildcard) recipe).wildcardCost);
+				buffer.writeLong(((Wildcard) recipe).wildcardCost);
 			} else buffer.writeByte(-1);
 		}
 	}
@@ -237,10 +238,10 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 	
 	public static class Wildcard extends GristCostRecipe
 	{
-		public final int wildcardCost;
+		public final long wildcardCost;
 		private JeiGristCost jeiCost;
 		
-		public Wildcard(ResourceLocation id, Ingredient ingredient, int wildcardCost, Integer priority)
+		public Wildcard(ResourceLocation id, Ingredient ingredient, long wildcardCost, Integer priority)
 		{
 			super(id, ingredient, priority);
 			this.wildcardCost = wildcardCost;

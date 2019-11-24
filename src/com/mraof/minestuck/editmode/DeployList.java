@@ -281,13 +281,13 @@ public class DeployList
 				stack.write(tag);
 				tag.putInt("i", i);
 				ListNBT listPrimary = new ListNBT();
-				for (GristType type : GristType.values())
+				for (GristType type : GristType.values())	//TODO This should be written in the grist set instead
 				{
 					if(primary.getGrist(type) == 0)
 						continue;
 					CompoundNBT gristTag = new CompoundNBT();
 					gristTag.putString("id", String.valueOf(type.getRegistryName()));
-					gristTag.putInt("amount", primary.getGrist(type));
+					gristTag.putLong("amount", primary.getGrist(type));
 					listPrimary.add(gristTag);
 				}
 				tag.put("primary", listPrimary);
@@ -300,7 +300,7 @@ public class DeployList
 							continue;
 						CompoundNBT gristTag = new CompoundNBT();
 						gristTag.putString("id", String.valueOf(type.getRegistryName()));
-						gristTag.putInt("amount", secondary.getGrist(type));
+						gristTag.putLong("amount", secondary.getGrist(type));
 						listSecondary.add(gristTag);
 					}
 					tag.put("secondary", listSecondary);

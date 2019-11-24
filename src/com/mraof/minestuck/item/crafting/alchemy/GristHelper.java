@@ -118,9 +118,9 @@ public class GristHelper {
 	 * A shortened statement to obtain a certain grist count.
 	 * Uses the encoded version of the username!
 	 */
-	public static int getGrist(World world, PlayerIdentifier player, GristType type)
+	public static long getGrist(World world, PlayerIdentifier player, GristType type)
 	{
-		return PlayerSavedData.get(world.getServer()).getGristSet(player).getGrist(type);
+		return PlayerSavedData.get(world).getGristSet(player).getGrist(type);
 	}
 	
 	public static boolean canAfford(@Nonnull ItemStack stack)
@@ -135,14 +135,14 @@ public class GristHelper {
 	
 	public static boolean canAfford(GristSet base, GristSet cost) {
 		if (base == null || cost == null) {return false;}
-		Map<GristType, Integer> reqs = cost.getMap();
+		Map<GristType, Long> reqs = cost.getMap();
 		
 		if (reqs != null) {
-			for (Entry<GristType, Integer> pairs : reqs.entrySet())
+			for (Entry<GristType, Long> pairs : reqs.entrySet())
 			{
 				GristType type = pairs.getKey();
-				int need = pairs.getValue();
-				int have = base.getGrist(type);
+				long need = pairs.getValue();
+				long have = base.getGrist(type);
 
 				if (need > have) return false;
 			}
@@ -156,9 +156,9 @@ public class GristHelper {
 	 */
 	public static void decrease(World world, PlayerIdentifier player, GristSet set)
 	{
-		Map<GristType, Integer> reqs = set.getMap();
+		Map<GristType, Long> reqs = set.getMap();
 		if (reqs != null) {
-			for (Entry<GristType, Integer> pairs : reqs.entrySet())
+			for (Entry<GristType, Long> pairs : reqs.entrySet())
 			{
 				setGrist(world, player, pairs.getKey(), getGrist(world, player, pairs.getKey()) - pairs.getValue());
 				notifyEditPlayer(world.getServer(), player, pairs.getKey().getDisplayName(), pairs.getValue(), "spent");
@@ -166,7 +166,7 @@ public class GristHelper {
 		}
 	}
 	
-	public static void setGrist(World world, PlayerIdentifier player, GristType type, int i)
+	public static void setGrist(World world, PlayerIdentifier player, GristType type, long i)
 	{
 		PlayerSavedData data = PlayerSavedData.get(world.getServer());
 		data.getGristSet(player).setGrist(type, i);
@@ -176,8 +176,8 @@ public class GristHelper {
 	/**
 	 * This method will probably be used somewhere in the future.
 	 */
-	public static int getGristValue(GristSet set) {
-		int i = 0;
+	public static long getGristValue(GristSet set) {	//TODO potentially duplicate code here, in GristSet.getValue and in AlchemyRecipes.onAlchemizedItem
+		long i = 0;
 		for(GristType type : GristType.values()) {
 			if(type.equals(GristType.BUILD))
 				i += set.getGrist(type);
@@ -192,10 +192,10 @@ public class GristHelper {
 	{
 		if(player == null || set == null)
 			return false;
-		Map<GristType, Integer> reqs = set.getMap();
+		Map<GristType, Long> reqs = set.getMap();
 		if (reqs != null)
 		{
-			for (Entry<GristType, Integer> pairs : reqs.entrySet())
+			for (Entry<GristType, Long> pairs : reqs.entrySet())
 			{
 				setGrist(world, player, pairs.getKey(), getGrist(world, player, pairs.getKey()) + pairs.getValue());
 				notify(world.getServer(), player, pairs.getKey().getDisplayName(), pairs.getValue(), "gained");
@@ -204,7 +204,7 @@ public class GristHelper {
 		return true;
 	}
 	
-	private static void notify(MinecraftServer server, PlayerIdentifier player, ITextComponent type, Integer difference, String action)
+	private static void notify(MinecraftServer server, PlayerIdentifier player, ITextComponent type, long difference, String action)
 	{
 		if(SHOULD_OUTPUT_GRIST_CHANGES)
 		{
@@ -220,7 +220,7 @@ public class GristHelper {
 		}
 	}
 	
-	private static void notifyEditPlayer(MinecraftServer server, PlayerIdentifier player, ITextComponent type, Integer difference, String action)
+	private static void notifyEditPlayer(MinecraftServer server, PlayerIdentifier player, ITextComponent type, long difference, String action)
 	{
 		SburbConnection sc = SkaianetHandler.get(server).getActiveConnection(player);
 		if(sc == null)

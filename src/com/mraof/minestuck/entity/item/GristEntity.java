@@ -33,7 +33,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	private int gristHealth = 5;
 	//Type of grist
 	private GristType gristType = GristType.BUILD;
-	private int gristValue = 1;
+	private long gristValue = 1;
 
 	private PlayerEntity closestPlayer;
 
@@ -196,7 +196,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	{
 		compound.putShort("Health", (short)this.gristHealth);
 		compound.putShort("Age", (short)this.gristAge);
-		compound.putShort("Value", (short)this.gristValue);
+		compound.putLong("Value", (short)this.gristValue);
 		compound.putString("Type", GristType.REGISTRY.getKey(gristType).toString());
 	}
 	
@@ -206,7 +206,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		this.gristHealth = compound.getShort("Health") & 255;
 		this.gristAge = compound.getShort("Age");
 		if(compound.contains("Value", 99))
-			this.gristValue = compound.getShort("Value");
+			this.gristValue = compound.getLong("Value");
 		if(compound.contains("Type", 8))
 			this.gristType = GristType.getTypeFromString(compound.getString("Type"));
 	}
@@ -279,7 +279,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 			this.remove();
 		}
 		buffer.writeInt(typeInt(this.gristType));
-		buffer.writeInt(this.gristValue);
+		buffer.writeLong(this.gristValue);
 	}
 	
 	@Override
@@ -292,7 +292,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 			return;
 		}
 		this.gristType = GristType.REGISTRY.getValue(typeOffset);
-		this.gristValue = data.readInt();
+		this.gristValue = data.readLong();
 	}
 	
 	@Override

@@ -36,17 +36,17 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	
 	protected SoundEvent getAmbientSound()
 	{
-		return ModSoundEvents.ENTITY_BASILISK_AMBIENT;
+		return MSSoundEvents.ENTITY_BASILISK_AMBIENT;
 	}
 	
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
 	{
-		return ModSoundEvents.ENTITY_BASILISK_HURT;
+		return MSSoundEvents.ENTITY_BASILISK_HURT;
 	}
 	
 	protected SoundEvent getDeathSound()
 	{
-		return ModSoundEvents.ENTITY_BASILISK_DEATH;
+		return MSSoundEvents.ENTITY_BASILISK_DEATH;
 	}
 	
 	@Override

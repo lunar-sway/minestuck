@@ -123,15 +123,15 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 			return;
 		}
 		
-		for(Entry<GristType, Integer> entry : gristSet.getMap().entrySet())
+		for(Entry<GristType, Long> entry : gristSet.getMap().entrySet())
 		{
-			int grist = entry.getValue();
+			long grist = entry.getValue();
 			while(true)
 			{
 				if(grist == 0)
 					break;
 				GristAmount gristAmount = new GristAmount(entry.getKey(),
-						grist <= 3 ? grist : (world.rand.nextInt(grist) + 1));
+						grist <= 3 ? grist : (world.rand.nextInt((int) Math.min(Integer.MAX_VALUE, grist)) + 1));	//TODO is there a better way?
 				GristEntity entity = new GristEntity(world,
 						this.pos.getX()
 								+ 0.5 /* this.width - this.width / 2 */,

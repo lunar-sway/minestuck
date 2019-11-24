@@ -14,7 +14,7 @@ import java.util.List;
 
 @ObjectHolder(Minestuck.MOD_ID)
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
-public class ModSoundEvents
+public class MSSoundEvents
 {
 	public static final SoundEvent MUSIC_DISC_EMISSARY_OF_DANCE = getNull();
 	public static final SoundEvent MUSIC_DISC_DANCE_STAB_DANCE = getNull();

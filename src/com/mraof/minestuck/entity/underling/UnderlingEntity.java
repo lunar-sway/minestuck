@@ -5,7 +5,6 @@ import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.entity.EntityListFilter;
 import com.mraof.minestuck.entity.MinestuckEntity;
-import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.ai.HurtByTargetAlliedGoal;
 import com.mraof.minestuck.entity.ai.NearestAttackableTargetWithHeightGoal;
 import com.mraof.minestuck.entity.item.GristEntity;
@@ -40,8 +39,7 @@ import java.util.*;
 public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 {
 	private static final DataParameter<String> GRIST_TYPE = EntityDataManager.createKey(UnderlingEntity.class, DataSerializers.STRING);
-	protected static EntityListFilter underlingSelector = new EntityListFilter(Arrays.asList(MSEntityTypes.IMP, MSEntityTypes.OGRE, MSEntityTypes.BASILISK, MSEntityTypes.LICH, MSEntityTypes.GICLOPS, MSEntityTypes.WYRM));	//TODO Use tag instead
-	protected EntityListFilter attackEntitySelector;
+	protected EntityListFilter attackEntitySelector;	//TODO this filter isn't being saved. F1X PLZ
 	protected boolean fromSpawner;
 	public boolean dropCandy;
 	
@@ -66,7 +64,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 		goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 8.0F));
 		goalSelector.addGoal(7, new LookRandomlyGoal(this));
 		
-		targetSelector.addGoal(1, new HurtByTargetAlliedGoal(this, underlingSelector));
+		targetSelector.addGoal(1, new HurtByTargetAlliedGoal(this, entity -> MSTags.EntityTypes.UNDERLINGS.contains(entity.getType())));
 		targetSelector.addGoal(2, new NearestAttackableTargetWithHeightGoal(this, LivingEntity.class, 128.0F, 2, true, false, attackEntitySelector));
 	}
 	
@@ -162,8 +160,8 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 			{
 				for(GristAmount gristType : grist.getArray())
 				{
-					int candy = (gristType.getAmount() + 2)/4;
-					int gristAmount = gristType.getAmount() - candy*2;
+					int candy = (int) Math.min(64, (gristType.getAmount() + 2)/4);
+					long gristAmount = gristType.getAmount() - candy*2;
 					ItemStack candyItem = gristType.getType().getCandyItem();
 					candyItem.setCount(candy);
 					if(candy > 0)
@@ -217,7 +215,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 
 	public void addEnemy(EntityType<?> enemyType)
 	{
-		if(!attackEntitySelector.entityList.contains(enemyType) && !underlingSelector.entityList.contains(enemyType))
+		if(!attackEntitySelector.entityList.contains(enemyType) && !MSTags.EntityTypes.UNDERLINGS.contains(enemyType))
 		{
 			attackEntitySelector.entityList.add(enemyType);
 		}

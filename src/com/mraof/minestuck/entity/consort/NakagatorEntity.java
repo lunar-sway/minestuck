@@ -1,6 +1,6 @@
 package com.mraof.minestuck.entity.consort;
 
-import com.mraof.minestuck.util.ModSoundEvents;
+import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
@@ -15,17 +15,17 @@ public class NakagatorEntity extends ConsortEntity
 	
 	protected SoundEvent getAmbientSound()
 	{
-		return ModSoundEvents.ENTITY_NAKAGATOR_AMBIENT;
+		return MSSoundEvents.ENTITY_NAKAGATOR_AMBIENT;
 	}
 	
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
 	{
-		return ModSoundEvents.ENTITY_NAKAGATOR_HURT;
+		return MSSoundEvents.ENTITY_NAKAGATOR_HURT;
 	}
 	
 	protected SoundEvent getDeathSound()
 	{
-		return ModSoundEvents.ENTITY_NAKAGATOR_DEATH;
+		return MSSoundEvents.ENTITY_NAKAGATOR_DEATH;
 	}
 	
 	@Override

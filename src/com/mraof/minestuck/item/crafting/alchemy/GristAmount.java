@@ -2,15 +2,17 @@ package com.mraof.minestuck.item.crafting.alchemy;
 
 import net.minecraft.network.PacketBuffer;
 
+import java.util.Objects;
+
 /**
  * Container for a GristType + integer combination that might be useful when iterating through a GristSet.
  */
 public class GristAmount
-{
+{	//TODO Make immutable
 	private GristType type;
-	private int amount;
-
-	public GristAmount(GristType type, int amount)
+	private long amount;
+	
+	public GristAmount(GristType type, long amount)
 	{
 		this.type = type;
 		this.amount = amount;
@@ -21,7 +23,7 @@ public class GristAmount
 		return type;
 	}
 
-	public int getAmount()
+	public long getAmount()
 	{
 		return amount;
 	}
@@ -41,30 +43,31 @@ public class GristAmount
 	}
 	
 	@Override
-	public boolean equals(Object obj)
+	public boolean equals(Object o)
 	{
-		if(!(obj instanceof GristAmount))
-			return false;
-		GristAmount grist = (GristAmount) obj;
-		return this.type == grist.type && this.amount == grist.amount;
+		if(this == o) return true;
+		if(o == null || getClass() != o.getClass()) return false;
+		GristAmount that = (GristAmount) o;
+		return amount == that.amount &&
+				type.equals(that.type);
 	}
 	
 	@Override
 	public int hashCode()
 	{
-		return type.hashCode() + new Integer(amount).hashCode();
+		return Objects.hash(type, amount);
 	}
 	
 	public void write(PacketBuffer buffer)
 	{
 		buffer.writeRegistryId(getType());
-		buffer.writeInt(getAmount());
+		buffer.writeLong(getAmount());
 	}
 	
 	public static GristAmount read(PacketBuffer buffer)
 	{
 		GristType type = buffer.readRegistryIdSafe(GristType.class);
-		int amount = buffer.readInt();
+		long amount = buffer.readLong();
 		return new GristAmount(type, amount);
 	}
 }

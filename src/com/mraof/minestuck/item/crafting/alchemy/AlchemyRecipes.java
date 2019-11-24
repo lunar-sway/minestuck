@@ -1,8 +1,8 @@
 package com.mraof.minestuck.item.crafting.alchemy;
 
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.item.CruxiteArtifactItem;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.modSupport.*;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.Blocks;
@@ -12,12 +12,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.Tag;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.mraof.minestuck.MinestuckConfig.oreMultiplier;
 import static com.mraof.minestuck.block.MSBlocks.*;
@@ -36,6 +38,7 @@ public class AlchemyRecipes
 	
 	public static void registerVanillaRecipes()
 	{
+		/*
 		//Set up Alchemiter recipes
 		//Blocks
 		AlchemyCostRegistry.addGristConversion(Blocks.DEAD_BUSH, new GristSet(new GristType[] {GristType.AMBER, GristType.SULFUR}, new int[] {2, 1}));
@@ -176,14 +179,14 @@ public class AlchemyRecipes
 		//Ores
 		if(oreMultiplier.get() != 0)
 		{
-			/*AlchemyCostRegistry.addGristConversion("oreCoal", new GristSet(new GristType[] {GristType.BUILD, GristType.TAR}, new int[] {4, 8*oreMultiplier}));	TODO Block tags
+			/*AlchemyCostRegistry.addGristConversion("oreCoal", new GristSet(new GristType[] {GristType.BUILD, GristType.TAR}, new int[] {4, 8*oreMultiplier}));
 			AlchemyCostRegistry.addGristConversion("oreIron", new GristSet(new GristType[] {GristType.BUILD, GristType.RUST}, new int[] {4, 9*oreMultiplier}));
 			AlchemyCostRegistry.addGristConversion("oreGold", new GristSet(new GristType[] {GristType.BUILD, GristType.GOLD}, new int[] {4, 9*oreMultiplier}));
 			AlchemyCostRegistry.addGristConversion("oreRedstone", new GristSet(new GristType[] {GristType.GARNET, GristType.BUILD}, new int[] {16*oreMultiplier, 4}));
 			AlchemyCostRegistry.addGristConversion("oreLapis", new GristSet(new GristType[] {GristType.AMETHYST, GristType.BUILD}, new int[] {16*oreMultiplier, 4}));
 			AlchemyCostRegistry.addGristConversion("oreDiamond", new GristSet(new GristType[] {GristType.DIAMOND, GristType.BUILD}, new int[] {18*oreMultiplier, 4}));
 			AlchemyCostRegistry.addGristConversion("oreEmerald", new GristSet(new GristType[] {GristType.RUBY, GristType.DIAMOND, GristType.BUILD}, new int[] {9*oreMultiplier, 9*oreMultiplier, 4}));
-			AlchemyCostRegistry.addGristConversion("oreQuartz", new GristSet(new GristType[] {GristType.QUARTZ, GristType.MARBLE, GristType.BUILD}, new int[] {8*oreMultiplier, 2*oreMultiplier, 2}));*/
+			AlchemyCostRegistry.addGristConversion("oreQuartz", new GristSet(new GristType[] {GristType.QUARTZ, GristType.MARBLE, GristType.BUILD}, new int[] {8*oreMultiplier, 2*oreMultiplier, 2}));*//*
 		}
 		AlchemyCostRegistry.addGristConversion(Items.COAL, new GristSet(new GristType[] {GristType.TAR}, new int[] {8}));
 		AlchemyCostRegistry.addGristConversion(Items.CHARCOAL, new GristSet(new GristType[] {GristType.TAR, GristType.AMBER}, new int[] {6, 2}));
@@ -239,7 +242,7 @@ public class AlchemyRecipes
 		AlchemyCostRegistry.addGristConversion(Items.COOKED_MUTTON, new GristSet(new GristType[] {GristType.IODINE, GristType.TAR}, new int[] {10, 1}));
 		AlchemyCostRegistry.addGristConversion(Items.COOKED_RABBIT, new GristSet(new GristType[] {GristType.IODINE, GristType.TAR}, new int[] {8, 1}));
 		AlchemyCostRegistry.addGristConversion(Items.ENCHANTED_GOLDEN_APPLE, new GristSet(new GristType[] {GristType.AMBER, GristType.GOLD, GristType.URANIUM}, new int[] {4, 150, 10}));
-		
+		*/
 		//Potions
 		/*GristRegistry.addGristConversion(Items.POTIONITEM, 1, 0), true, new GristSet(new GristType[] {GristType.BUILD, GristType.COBALT}, new int[] {1, 4}));	//water
 		GristRegistry.addGristConversion(Items.POTIONITEM, 1, 8192), true, new GristSet(new GristType[] {GristType.BUILD, GristType.COBALT}, new int[] {1, 4}));	//mundane
@@ -490,6 +493,7 @@ public class AlchemyRecipes
 	
 	public static void registerMinestuckRecipes()
 	{
+		/*
 		//add grist conversions
 		AlchemyCostRegistry.addGristConversion(BLUE_DIRT, new GristSet(new GristType[] {GristType.BUILD, GristType.SHALE}, new int[] {1, 1}));
 		AlchemyCostRegistry.addGristConversion(THOUGHT_DIRT, new GristSet(new GristType[] {GristType.BUILD, GristType.CAULK}, new int[] {1, 1}));
@@ -579,7 +583,7 @@ public class AlchemyRecipes
 		registerContainerlessCost(new ItemStack(minestuckBucket, 1, 1), new GristSet(new GristType[] {GristType.GARNET, GristType.IODINE}, new int[] {8, 8}));
 		registerContainerlessCost(new ItemStack(minestuckBucket, 1, 2), new GristSet(new GristType[] {GristType.AMETHYST, GristType.CHALK}, new int[] {8, 8}));
 		registerContainerlessCost(new ItemStack(minestuckBucket, 1, 3), new GristSet(new GristType[] {GristType.AMETHYST, GristType.CHALK, GristType.GARNET, GristType.AMBER}, new int[] {4, 4, 4, 4}));
-		registerContainerlessCost(new ItemStack(minestuckBucket, 1, 4), new GristSet(new GristType[] {GristType.MERCURY, GristType.URANIUM}, new int[] {8, 8}));*/
+		registerContainerlessCost(new ItemStack(minestuckBucket, 1, 4), new GristSet(new GristType[] {GristType.MERCURY, GristType.URANIUM}, new int[] {8, 8}));*//*
 		registerContainerlessCost(OBSIDIAN_BUCKET, new GristSet(new GristType[] {GristType.COBALT, GristType.TAR, GristType.BUILD}, new int[] {8, 16, 4}));
 		AlchemyCostRegistry.addGristConversion(GLOWING_MUSHROOM, new GristSet(new GristType[] {GristType.BUILD, GristType.SHALE, GristType.MERCURY}, new int[] {5, 3, 2}));
 		AlchemyCostRegistry.addGristConversion(GLOWING_LOG, new GristSet(new GristType[] {GristType.BUILD, GristType.AMBER, GristType.MERCURY}, new int[] {8, 4, 4}));
@@ -687,9 +691,9 @@ public class AlchemyRecipes
 		GristRegistry.addGristConversion(new ItemStack(shopPoster, 1, 1), new GristSet(new GristType[] {GristType.BUILD, GristType.IODINE}, new int[] {9, 3}));
 		GristRegistry.addGristConversion(new ItemStack(shopPoster, 1, 2), new GristSet(new GristType[] {GristType.BUILD, GristType.CHALK, GristType.CAULK}, new int[] {8, 2, 2}));
 		GristRegistry.addGristConversion(new ItemStack(shopPoster, 1, 3), new GristSet(new GristType[] {GristType.BUILD, GristType.RUST, GristType.AMBER}, new int[] {7, 3, 2}));
-		GristRegistry.addGristConversion(new ItemStack(shopPoster, 1, 4), new GristSet(new GristType[] {GristType.BUILD, GristType.IODINE, GristType.CHALK}, new int[] {9, 2, 1}));*/
+		GristRegistry.addGristConversion(new ItemStack(shopPoster, 1, 4), new GristSet(new GristType[] {GristType.BUILD, GristType.IODINE, G/ristType.CHALK}, new int[] {9, 2, 1}));*//*
 		AlchemyCostRegistry.addGristConversion(VEIN, new GristSet(new GristType[] {GristType.GARNET, GristType.IODINE}, new int[] {12, 8}));
-		
+		*/
 		//add Designix and Lathe combinations
 		
 		//swords
@@ -1007,12 +1011,6 @@ public class AlchemyRecipes
 			Debug.logger.warn("Exception while getting things for mod \"IronChest\".", e);
 		}*/
 		
-		
-		//registerRecipes(new Minegicka3Support(), "minegicka3", false);
-		//registerRecipes(new NeverSayNetherSupport(), "nsn", false);
-		//registerRecipes(new ExtraUtilitiesSupport(), "extrautils2", false);
-		//registerRecipes(new TinkersConstructSupport(), "TConstruct", false);
-		
 	}
 	
 	public static void registerAutomaticRecipes()
@@ -1042,13 +1040,11 @@ public class AlchemyRecipes
 		}
 		
 		autogrist.execute();
-		
-		//registerRecipes(new Minegicka3Support(), "minegicka3", true);
 	}
 	
 	public static void onAlchemizedItem(ItemStack stack, ServerPlayerEntity player)
 	{
-		//if(!(stack.getItem() instanceof CruxiteArtifactItem)) TODO
+		if(!(stack.getItem() instanceof CruxiteArtifactItem))
 		{
 			Echeladder e = PlayerSavedData.getData(player).echeladder;
 			e.checkBonus(Echeladder.ALCHEMY_BONUS_OFFSET);
@@ -1058,9 +1054,9 @@ public class AlchemyRecipes
 		if(set != null) //The only time the grist set should be null here is if it was a captchalogue card that was alchemized
 		{
 			double value = 0;
-			for(GristType type : GristType.values())
+			for(GristType type : GristType.values())	//TODO potentially duplicate code here, in GristHelper.getGristValue and in GristSet.getValue
 			{
-				int v = set.getGrist(type);
+				long v = set.getGrist(type);
 				float f = type == GristType.BUILD || type == GristType.ARTIFACT ? 0.5F : type == GristType.ZILLIUM ? 20 : type.getPower();
 				if(v > 0)
 					value += f*v/2;
@@ -1246,24 +1242,8 @@ public class AlchemyRecipes
 		return stack;
 	}
 	
-	private static void registerRecipes(ModSupport modSupport, String modname, boolean dynamic)
-	{
-		try
-		{
-			/*if(ModLoader.isModLoaded(modname))
-			{
-				if(dynamic)
-					modSupport.registerDynamicRecipes();
-				else modSupport.registerRecipes();
-			}*/
-		}
-		catch(Exception e)
-		{
-			Debug.logger.error("Exception while creating"+(dynamic?" dynamic":"")+" recipes for mod \""+modname+"\":", e);
-		}
-	}
-	
-	public static List<ItemStack> getItems(Object item)
+	@Deprecated
+	public static List<ItemStack> getItems(Object item)	//Will be removed once combination recipes are moved to
 	{
 		if(item instanceof ItemStack)
 			return Arrays.asList((ItemStack)item);
@@ -1271,9 +1251,7 @@ public class AlchemyRecipes
 			return Arrays.asList(new ItemStack((Item) item));
 		else
 		{
-			//List<ItemStack> list = OreDictionary.getOres((String) item);
-			//return list; TODO Item tags
-			return null;
+			return ((Tag<Item>) item).getAllElements().stream().map(ItemStack::new).collect(Collectors.toList());
 		}
 	}
 }
