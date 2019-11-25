@@ -1,29 +1,28 @@
 package com.mraof.minestuck.editmode;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.function.BiFunction;
-
-import javax.annotation.Nonnull;
-
+import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.block.MiniCruxtruderItem;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
-import com.mraof.minestuck.item.block.MiniCruxtruderItem;
+import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.item.ItemStack;
-
-import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.item.MSItems;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.function.BiFunction;
 
 /**
  * This class will be used to keep track of all deployable
@@ -169,7 +168,7 @@ public class DeployList
 				registerItem("card_punched_card", AlchemyRecipes.createCard(new ItemStack(MSItems.CAPTCHA_CARD), true), new GristSet(GristType.BUILD, 25), null, 0);
 			else removeEntry("card_punched_card");
 		}
-		if(booleans[1] != containsEntry("portable_cruxtuder"))
+		if(booleans[1] != containsEntry("portable_cruxtruder"))
 		{
 			if(booleans[1])
 			{
@@ -281,7 +280,7 @@ public class DeployList
 				stack.write(tag);
 				tag.putInt("i", i);
 				ListNBT listPrimary = new ListNBT();
-				for (GristType type : GristType.values())	//TODO This should be written in the grist set instead
+				for (GristType type : GristTypes.values())	//TODO This should be written in the grist set instead
 				{
 					if(primary.getGrist(type) == 0)
 						continue;
@@ -294,7 +293,7 @@ public class DeployList
 				if(secondary != null)
 				{
 					ListNBT listSecondary = new ListNBT();
-					for(GristType type : GristType.values())
+					for(GristType type : GristTypes.values())
 					{
 						if(secondary.getGrist(type) == 0)
 							continue;
@@ -329,7 +328,7 @@ public class DeployList
 			for (INBT nbtBase : tag.getList("primary", 10))
 			{
 				CompoundNBT gristTag = (CompoundNBT) nbtBase;
-				GristType type = GristType.getTypeFromString(gristTag.getString("id"));
+				GristType type = GristTypes.getTypeFromString(gristTag.getString("id"));
 				if(type != null)
 					entry.cost1.setGrist(type, gristTag.getInt("amount"));
 			}
@@ -339,7 +338,7 @@ public class DeployList
 				for(INBT nbtBase : tag.getList("secondary", 10))
 				{
 					CompoundNBT gristTag = (CompoundNBT) nbtBase;
-					GristType type = GristType.getTypeFromString(gristTag.getString("id"));
+					GristType type = GristTypes.getTypeFromString(gristTag.getString("id"));
 					if(type != null)
 						entry.cost2.setGrist(type, gristTag.getInt("amount"));
 				}

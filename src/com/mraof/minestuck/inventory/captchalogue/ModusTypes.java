@@ -4,7 +4,6 @@ import com.google.common.collect.Maps;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -57,12 +56,12 @@ public class ModusTypes
 	@SubscribeEvent
 	public static void registerTypes(final RegistryEvent.Register<ModusType<?>> event)
 	{
-		event.getRegistry().register(new ModusType<>(StackModus::new, new ItemStack(MSItems.STACK_MODUS_CARD)).setRegistryName("stack"));
-		event.getRegistry().register(new ModusType<>(QueueModus::new, new ItemStack(MSItems.QUEUE_MODUS_CARD)).setRegistryName("queue"));
-		event.getRegistry().register(new ModusType<>(QueueStackModus::new, new ItemStack(MSItems.QUEUESTACK_MODUS_CARD)).setRegistryName("queue_stack"));
-		event.getRegistry().register(new ModusType<>(TreeModus::new, new ItemStack(MSItems.TREE_MODUS_CARD)).setRegistryName("tree"));
-		event.getRegistry().register(new ModusType<>(HashMapModus::new, new ItemStack(MSItems.HASHMAP_MODUS_CARD)).setRegistryName("hash_map"));
-		event.getRegistry().register(new ModusType<>(SetModus::new, new ItemStack(MSItems.SET_MODUS_CARD)).setRegistryName("set"));
+		event.getRegistry().register(new ModusType<>(StackModus::new, MSItems.STACK_MODUS_CARD).setRegistryName("stack"));
+		event.getRegistry().register(new ModusType<>(QueueModus::new, MSItems.QUEUE_MODUS_CARD).setRegistryName("queue"));
+		event.getRegistry().register(new ModusType<>(QueueStackModus::new, MSItems.QUEUESTACK_MODUS_CARD).setRegistryName("queue_stack"));
+		event.getRegistry().register(new ModusType<>(TreeModus::new, MSItems.TREE_MODUS_CARD).setRegistryName("tree"));
+		event.getRegistry().register(new ModusType<>(HashMapModus::new, MSItems.HASHMAP_MODUS_CARD).setRegistryName("hash_map"));
+		event.getRegistry().register(new ModusType<>(SetModus::new, MSItems.SET_MODUS_CARD).setRegistryName("set"));
 	}
 	
 	private static class ModusCallbacks implements IForgeRegistry.AddCallback<ModusType<?>>, IForgeRegistry.ClearCallback<ModusType<?>>, IForgeRegistry.CreateCallback<ModusType<?>>
@@ -75,14 +74,14 @@ public class ModusTypes
 			@SuppressWarnings("unchecked")
 			Map<Item, ModusType<?>> itemToModus = owner.getSlaveMap(ITEM_TO_MODUS, Map.class);
 			
-			if(oldObj != null && !oldObj.getStack().isEmpty())
+			if(oldObj != null && oldObj.getItem() != null)
 			{
-				itemToModus.remove(oldObj.getStack().getItem());
+				itemToModus.remove(oldObj.getItem());
 			}
 			
-			if(!obj.getStack().isEmpty())
+			if(obj.getItem() != null)
 			{
-				itemToModus.put(obj.getStack().getItem(), obj);
+				itemToModus.put(obj.getItem(), obj);
 			}
 		}
 		

@@ -1,10 +1,10 @@
 package com.mraof.minestuck.item.crafting.alchemy;
 
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.editmode.EditData;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
@@ -27,12 +27,12 @@ public class GristHelper {
 	private static Random random = new Random();
 	private static final boolean SHOULD_OUTPUT_GRIST_CHANGES = MinestuckConfig.showGristChanges.get();
 	
-	public static HashMap<GristType, ArrayList<GristType>> secondaryGristMap;
+	public static HashMap<GristType, ArrayList<GristType>> secondaryGristMap;	//TODO Consider if these instead should be defined when grist types are registered
 
 	static
 	{
 		secondaryGristMap = new HashMap<>();
-		for(GristType type : GristType.values())
+		for(GristType type : GristTypes.values())
 			secondaryGristMap.put(type, new ArrayList<>());
 		secondaryGristMap.get(GristType.AMBER).add(GristType.RUST);
 		secondaryGristMap.get(GristType.AMBER).add(GristType.SULFUR);
@@ -178,7 +178,7 @@ public class GristHelper {
 	 */
 	public static long getGristValue(GristSet set) {	//TODO potentially duplicate code here, in GristSet.getValue and in AlchemyRecipes.onAlchemizedItem
 		long i = 0;
-		for(GristType type : GristType.values()) {
+		for(GristType type : GristTypes.values()) {
 			if(type.equals(GristType.BUILD))
 				i += set.getGrist(type);
 			else if(type.getRarity() == 0.0F)

@@ -1,20 +1,20 @@
 package com.mraof.minestuck.event;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.ColorSelectorScreen;
 import com.mraof.minestuck.entity.consort.EnumConsort;
+import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.inventory.ConsortMerchantContainer;
 import com.mraof.minestuck.util.ColorCollector;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.PotionItem;
-import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -88,15 +88,15 @@ public class ClientEventHandler
 			}
 		}
 	}
-	/*
+	
 	@SubscribeEvent
 	public void onFogRender(EntityViewRenderEvent.FogDensity event)
 	{
-		if (event.getState().getBlock() == MinestuckBlocks.blockEnder)
+		if (event.getInfo().getFluidState().getFluid() == MSFluids.ENDER.get())
 		{
 			event.setCanceled(true);
 			event.setDensity(Float.MAX_VALUE);
-			GlStateManager.setFog(GlStateManager.FogMode.EXP);
+			GlStateManager.fogMode(GlStateManager.FogMode.EXP);
 		}
-	}*/
+	}
 }

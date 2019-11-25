@@ -4,12 +4,11 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -76,7 +75,7 @@ public class CaptchaDeckHandler
 			if(modus == null)
 			{
 				PlayerSavedData.PlayerData data = PlayerSavedData.getData(player);
-				modus = type.create(LogicalSide.SERVER);
+				modus = type.create(LogicalSide.SERVER);	//TODO Let the modus be created with the stack for settings
 				modus.initModus(player, null, data.givenModus ? 0 : MinestuckConfig.initialModusSize.get());
 				data.givenModus = true;
 				setModus(player, modus);
@@ -88,7 +87,7 @@ public class CaptchaDeckHandler
 				ModusType<?> oldType = oldModus.getType();
 				if(type.equals(oldType))
 					return;
-				modus = type.create(LogicalSide.SERVER);
+				modus = type.create(LogicalSide.SERVER);	//TODO See the above
 				if(modus.canSwitchFrom(oldModus))
 					modus.initModus(player, oldModus.getItems(), oldModus.getSize());
 				else
@@ -100,7 +99,7 @@ public class CaptchaDeckHandler
 				}
 				
 				setModus(player, modus);
-				container.inventory.setInventorySlotContents(0, oldType.getStack().copy());
+				container.inventory.setInventorySlotContents(0, new ItemStack(oldType.getItem()));	//TODO Get the stack from the modus to let the modus save stuff to the stack
 			}
 			
 			MSCriteriaTriggers.CHANGE_MODUS.trigger(player, modus);
@@ -369,7 +368,7 @@ public class CaptchaDeckHandler
 		
 		if(MinestuckConfig.sylladexDropMode == 2)
 		{
-			player.dropItem(modus.getType().getStack().copy(), true, false);	//TODO Add a method to the modus to get the itemstack instead
+			player.dropItem(new ItemStack(modus.getType().getItem()), true, false);	//TODO Add a method to the modus to get the itemstack instead
 			setModus(player, null);
 		} else modus.initModus(player, null, size);
 		

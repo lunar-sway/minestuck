@@ -1,18 +1,17 @@
 package com.mraof.minestuck.tracker;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.network.*;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.MSDimensions;
-import com.mraof.minestuck.world.lands.LandAspects;
 import com.mraof.minestuck.world.lands.LandInfoContainer;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.PlayerEntity;
@@ -24,6 +23,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -108,16 +108,14 @@ public class PlayerTracker
 		dataCheckerPermission.remove(event.getPlayer().getName().getUnformattedComponentText());
 	}
 	
-	/*@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
-	public void onPlayerDrops(PlayerDropsEvent event)TODO
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
+	public void onPlayerDrops(LivingDropsEvent event)
 	{
-		if(!event.getEntityPlayer().world.isRemote && event.getEntityPlayer() instanceof EntityPlayerMP)
+		if(!event.getEntity().world.isRemote && event.getEntity() instanceof ServerPlayerEntity)
 		{
-			CaptchaDeckHandler.dropSylladex((EntityPlayerMP) event.getEntityPlayer());
-			
+			CaptchaDeckHandler.dropSylladex((ServerPlayerEntity) event.getEntity());
 		}
-		
-	}*/
+	}
 	
 	@SubscribeEvent
 	public void onPlayerTick(TickEvent.PlayerTickEvent event)
@@ -191,21 +189,6 @@ public class PlayerTracker
 		PlayerDataPacket packet = PlayerDataPacket.echeladder(echeladder.getRung(), MinestuckConfig.echeladderProgress.get() ? echeladder.getProgress() : 0F, jump);
 		MSPacketHandler.sendToPlayer(packet, player);
 	}
-	
-	/*public static void updateLands(EntityPlayer player)
-	{
-		MinestuckPacket packet = MinestuckPacket.makePacket(Type.LANDREGISTER);
-		Debug.debugf("Sending land packets to %s.", player == null ? "all players" : player.getName());
-		if(player == null)
-			MinestuckPacketHandler.sendToAllPlayers(packet);
-		else
-			MinestuckPacketHandler.sendToPlayer(packet, player);
-	}
-	
-	public static void updateLands()
-	{
-		updateLands(null);
-	}*/
 
 	public static void sendConfigPacket(ServerPlayerEntity player, boolean mode)
 	{

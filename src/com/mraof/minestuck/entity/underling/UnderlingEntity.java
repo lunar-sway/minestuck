@@ -1,16 +1,19 @@
 package com.mraof.minestuck.entity.underling;
 
-import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
-import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.entity.EntityListFilter;
 import com.mraof.minestuck.entity.MinestuckEntity;
 import com.mraof.minestuck.entity.ai.HurtByTargetAlliedGoal;
 import com.mraof.minestuck.entity.ai.NearestAttackableTargetWithHeightGoal;
 import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.entity.item.VitalityGelEntity;
+import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
-import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.Echeladder;
+import com.mraof.minestuck.util.MSTags;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.ItemEntity;
@@ -34,7 +37,10 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 {
@@ -113,7 +119,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	@Nonnull
 	public GristType getGristType()
 	{
-		GristType type = GristType.REGISTRY.getValue(ResourceLocation.tryCreate(dataManager.get(GRIST_TYPE)));
+		GristType type = GristTypes.REGISTRY.getValue(ResourceLocation.tryCreate(dataManager.get(GRIST_TYPE)));
 		
 		if(type != null)
 		{
@@ -243,7 +249,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	public void readAdditional(CompoundNBT compound)
 	{
 		if(compound.contains("Type", 8))
-			applyGristType(GristType.getTypeFromString(compound.getString("Type")), false);
+			applyGristType(GristTypes.getTypeFromString(compound.getString("Type")), false);
 		else applyGristType(SburbHandler.getUnderlingType(this), true);
 		super.readAdditional(compound);
 		

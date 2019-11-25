@@ -233,7 +233,7 @@ public class GristSet
 		for(Map.Entry<String, JsonElement> entry : json.entrySet())
 		{
 			ResourceLocation gristId = new ResourceLocation(entry.getKey());
-			GristType type = GristType.REGISTRY.getValue(gristId);
+			GristType type = GristTypes.REGISTRY.getValue(gristId);
 			if(type == null)
 				throw new JsonParseException("'"+entry.getKey()+"' did not match an existing grist type!");
 			long amount = ExtraJSONUtils.getLong(entry.getValue(), entry.getKey());

@@ -2,7 +2,7 @@ package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.editmode.ClientEditHandler;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.RenderHelper;
@@ -33,7 +33,7 @@ public class GristCacheScreen extends PlayerStatsScreen
 		super.init();
 		this.previousButton = new GuiButtonExt(this.xOffset + 8, this.yOffset + 8, 16, 16, "<", button -> prevPage());
 		this.nextButton = new GuiButtonExt(this.xOffset + guiWidth - 24, this.yOffset + 8, 16, 16, ">", button -> nextPage());
-		if(GristType.REGISTRY.getValues().size() > rows * columns)
+		if(GristTypes.REGISTRY.getValues().size() > rows * columns)
 		{
 			addButton(this.nextButton);
 		}
@@ -86,7 +86,7 @@ public class GristCacheScreen extends PlayerStatsScreen
 	
 	private void nextPage()
 	{
-		int maxPage = (GristType.REGISTRY.getValues().size() - 1) / (rows * columns);
+		int maxPage = (GristTypes.REGISTRY.getValues().size() - 1) / (rows * columns);
 		if(page < maxPage)
 		{
 			page++;

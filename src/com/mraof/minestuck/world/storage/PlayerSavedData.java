@@ -1,11 +1,12 @@
 package com.mraof.minestuck.world.storage;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.network.GristCachePacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.PlayerDataPacket;
@@ -227,7 +228,7 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 				for(int i = 0; i <  gristTags.size(); i++)
 				{
 					CompoundNBT gristTag = gristTags.getCompound(i);
-					GristType type = GristType.getTypeFromString(gristTag.getString("id"));
+					GristType type = GristTypes.getTypeFromString(gristTag.getString("id"));
 					if(type != null)
 						this.gristCache.setGrist(type, gristTag.getInt("amount"));
 				}
@@ -256,7 +257,7 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 			if (this.gristCache != null)
 			{
 				ListNBT list = new ListNBT();
-				for (GristType type : GristType.values())	//TODO Should be written to nbt in GristSet
+				for (GristType type : GristTypes.values())	//TODO Should be written to nbt in GristSet
 				{
 					CompoundNBT gristTag = new CompoundNBT();
 					gristTag.putString("id", String.valueOf(type.getRegistryName()));

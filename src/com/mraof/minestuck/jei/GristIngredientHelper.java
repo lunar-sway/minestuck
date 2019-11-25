@@ -2,6 +2,7 @@ package com.mraof.minestuck.jei;
 
 import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import mezz.jei.api.ingredients.IIngredientHelper;
 
 import javax.annotation.Nullable;
@@ -14,7 +15,7 @@ public class GristIngredientHelper implements IIngredientHelper<GristAmount>
 	public static List<GristAmount> createList()
 	{
 		List<GristAmount> list = new ArrayList<>();
-		for(GristType gristType : GristType.values())
+		for(GristType gristType : GristTypes.values())
 			list.add(new GristAmount(gristType, 1));
 		return list;
 	}

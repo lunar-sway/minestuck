@@ -3,7 +3,8 @@ package com.mraof.minestuck.item.crafting.alchemy;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.CruxiteArtifactItem;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -12,19 +13,19 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.mraof.minestuck.MinestuckConfig.oreMultiplier;
 import static com.mraof.minestuck.block.MSBlocks.*;
 import static com.mraof.minestuck.item.MSItems.*;
-import static com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry.Mode.*;
+import static com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry.Mode.MODE_AND;
+import static com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry.Mode.MODE_OR;
 
 public class AlchemyRecipes
 {
@@ -1054,7 +1055,7 @@ public class AlchemyRecipes
 		if(set != null) //The only time the grist set should be null here is if it was a captchalogue card that was alchemized
 		{
 			double value = 0;
-			for(GristType type : GristType.values())	//TODO potentially duplicate code here, in GristHelper.getGristValue and in GristSet.getValue
+			for(GristType type : GristTypes.values())	//TODO potentially duplicate code here, in GristHelper.getGristValue and in GristSet.getValue
 			{
 				long v = set.getGrist(type);
 				float f = type == GristType.BUILD || type == GristType.ARTIFACT ? 0.5F : type == GristType.ZILLIUM ? 20 : type.getPower();
@@ -1070,13 +1071,6 @@ public class AlchemyRecipes
 		}
 	}
 	
-	@Nonnull
-	public static ItemStack getFirstOreItem(String name)
-	{
-		//if(OreDictionary.getOres(name).isEmpty())
-			return ItemStack.EMPTY;
-		//else return OreDictionary.getOres(name).get(0);
-	}
 	/**
 	 * Given a punched card or a carved dowel, returns a new item that represents the encoded data.
 	 * 
@@ -1240,18 +1234,5 @@ public class AlchemyRecipes
 		
 		
 		return stack;
-	}
-	
-	@Deprecated
-	public static List<ItemStack> getItems(Object item)	//Will be removed once combination recipes are moved to
-	{
-		if(item instanceof ItemStack)
-			return Arrays.asList((ItemStack)item);
-		if(item instanceof Item)
-			return Arrays.asList(new ItemStack((Item) item));
-		else
-		{
-			return ((Tag<Item>) item).getAllElements().stream().map(ItemStack::new).collect(Collectors.toList());
-		}
 	}
 }

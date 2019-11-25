@@ -1,10 +1,8 @@
 package com.mraof.minestuck.tileentity;
 
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.inventory.MiniAlchemiterContainer;
-import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.tracker.PlayerTracker;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
@@ -19,6 +17,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.IntReferenceHolder;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.registries.ForgeRegistry;
 
 import javax.annotation.Nullable;
 
@@ -39,7 +38,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 		@Override
 		public void set(int id)
 		{
-			GristType type = GristType.REGISTRY.getValue(id);
+			GristType type = ((ForgeRegistry<GristType>) GristTypes.REGISTRY).getValue(id);	//TODO Not ideal. Find a better solution
 			if(type == null)
 				type = GristType.BUILD;
 			setWildcardGrist(type);
@@ -145,7 +144,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 	{
 		super.read(compound);
 		
-		this.wildcardGrist = GristType.getTypeFromString(compound.getString("gristType"));
+		this.wildcardGrist = GristTypes.getTypeFromString(compound.getString("gristType"));
 		if(this.wildcardGrist == null)
 		{
 			this.wildcardGrist = GristType.BUILD;

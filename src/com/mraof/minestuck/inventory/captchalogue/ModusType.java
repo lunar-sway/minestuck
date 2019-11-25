@@ -1,6 +1,6 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.Item;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
@@ -10,9 +10,9 @@ import java.util.function.BiFunction;
 public class ModusType<T extends Modus> extends ForgeRegistryEntry<ModusType<?>>
 {
 	private final BiFunction<ModusType<T>, LogicalSide, T> factory;
-	private final ItemStack modusItem;	//TODO This is probably better off as an item
+	private final Item modusItem;
 	
-	public ModusType(BiFunction<ModusType<T>, LogicalSide, T> factory, ItemStack modusItem)
+	public ModusType(BiFunction<ModusType<T>, LogicalSide, T> factory, Item modusItem)
 	{
 		this.factory = Objects.requireNonNull(factory);
 		this.modusItem = Objects.requireNonNull(modusItem);
@@ -23,7 +23,7 @@ public class ModusType<T extends Modus> extends ForgeRegistryEntry<ModusType<?>>
 		return factory.apply(this, side);
 	}
 	
-	public ItemStack getStack()
+	public Item getItem()
 	{
 		return modusItem;
 	}

@@ -2,9 +2,9 @@ package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -88,19 +88,10 @@ public class HashMapModus extends Modus
 		if(list.size() == 0 || item.isEmpty())
 			return false;
 		
-		//TODO use registry names when 1.13 comes out
+		String itemName = item.getItem().getRegistryName().getPath().replace('_', ' ');
 		
-		String unloc = item.getTranslationKey();
-		unloc = unloc.substring(unloc.indexOf('.')+1, unloc.length());
-
-		if(unloc.indexOf('.') != -1)
-		{
-			String adj = unloc.substring(unloc.indexOf('.')+1, unloc.length());
-			unloc = adj + " " + unloc.substring(0, unloc.indexOf('.'));
-		}
+		int index = ((item.hasDisplayName()) ? item.getDisplayName() : itemName).hashCode() % list.size();	//TODO Perhaps use a custom hashcode function that behaves more like the one in comic
 		
-		int index = ((item.hasDisplayName()) ? item.getDisplayName() : unloc).hashCode() % list.size();
-				
 		if(index < 0)
 			index += list.size();
 		

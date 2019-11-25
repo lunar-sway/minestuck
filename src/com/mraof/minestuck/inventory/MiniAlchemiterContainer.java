@@ -1,9 +1,10 @@
 package com.mraof.minestuck.inventory;
 
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.inventory.slot.InputSlot;
 import com.mraof.minestuck.inventory.slot.OutputSlot;
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
@@ -16,6 +17,7 @@ import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
 import net.minecraft.util.IntReferenceHolder;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.registries.ForgeRegistry;
 
 import javax.annotation.Nonnull;
 
@@ -108,7 +110,7 @@ public class MiniAlchemiterContainer extends MachineContainer
 	
 	public GristType getWildcardType()
 	{
-		GristType type = GristType.REGISTRY.getValue(wildcardHolder.get());
+		GristType type = ((ForgeRegistry<GristType>) GristTypes.REGISTRY).getValue(wildcardHolder.get());	//TODO this is not ideal. Find a better way
 		if(type == null)
 			type = GristType.BUILD;
 		return type;

@@ -1,12 +1,12 @@
 package com.mraof.minestuck.item;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -60,7 +60,7 @@ public class RazorBladeItem extends Item
 					ITextComponent message = new TranslationTextComponent("While you handle the razor blade, you accidentally cut yourself and drop it.");
 					entityLiving.sendMessage(message);
 				}
-				entityLiving.setHealth(entityLiving.getHealth() - 1);	//TODO Use damage source instead
+				entityLiving.attackEntityFrom(DamageSource.GENERIC, 1);
 			}
 		}
 		return super.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);

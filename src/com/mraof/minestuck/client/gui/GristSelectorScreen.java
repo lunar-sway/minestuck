@@ -1,9 +1,10 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.network.GristWildcardPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
@@ -54,7 +55,7 @@ public class GristSelectorScreen extends MinestuckScreen
 		int yOffset = (height - guiHeight) / 2;
 		this.previousButton = new GuiButtonExt((this.width) + 8, yOffset + 8, 16, 16, "<", button -> prevPage());
 		this.nextButton = new GuiButtonExt(xOffset + guiWidth - 24, yOffset + 8, 16, 16, ">", button -> nextPage());
-		if(GristType.REGISTRY.getValues().size() > rows * columns)
+		if(GristTypes.REGISTRY.getValues().size() > rows * columns)
 		{
 			this.addButton(this.nextButton);
 		}
@@ -101,7 +102,7 @@ public class GristSelectorScreen extends MinestuckScreen
 			int xOffset = (width - guiWidth) / 2;
 			int yOffset = (height - guiHeight) / 2;
 
-			List<GristType> types = new ArrayList<>(GristType.REGISTRY.getValues());
+			List<GristType> types = new ArrayList<>(GristTypes.REGISTRY.getValues());
 			Collections.sort(types);
 			types = types.stream().skip(page * rows * columns).limit(rows * columns).collect(Collectors.toList());
 
@@ -162,7 +163,7 @@ public class GristSelectorScreen extends MinestuckScreen
 	
 	private void nextPage()
 	{
-		int maxPage = (GristType.REGISTRY.getValues().size() - 1) / (rows * columns);
+		int maxPage = (GristTypes.REGISTRY.getValues().size() - 1) / (rows * columns);
 		if(page < maxPage)
 		{
 			page++;

@@ -1,14 +1,16 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.block.AlchemiterBlock;
 import com.mraof.minestuck.block.EnumDowelType;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.tracker.PlayerTracker;
-import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.util.AlchemiterUpgrades;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.Block;
@@ -271,7 +273,7 @@ public class AlchemiterTileEntity extends TileEntity
 		super.read(compound);
 
 		if(compound.contains("gristType"))
-			this.wildcardGrist = GristType.getTypeFromString(compound.getString("gristType"));
+			this.wildcardGrist = GristTypes.getTypeFromString(compound.getString("gristType"));
 		if(this.wildcardGrist == null)
 		{
 			this.wildcardGrist = GristType.BUILD;

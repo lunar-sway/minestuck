@@ -82,7 +82,7 @@ public class MSAvancementProvider implements IDataProvider
 	{
 		for(ModusType<?> type : Arrays.asList(ModusTypes.STACK, ModusTypes.QUEUE, ModusTypes.QUEUE_STACK, ModusTypes.TREE, ModusTypes.HASH_MAP, ModusTypes.SET))
 		{
-			builder = builder.withCriterion(type.getRegistryName().getPath(), InventoryChangeTrigger.Instance.forItems(type.getStack().getItem()));
+			builder = builder.withCriterion(type.getRegistryName().getPath(), InventoryChangeTrigger.Instance.forItems(type.getItem()));
 		}
 		return builder;
 	}

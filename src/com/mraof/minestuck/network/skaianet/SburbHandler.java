@@ -1,34 +1,23 @@
 package com.mraof.minestuck.network.skaianet;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.item.CruxiteArtifactItem;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.TitleSelectPacket;
 import com.mraof.minestuck.tracker.PlayerTracker;
 import com.mraof.minestuck.util.*;
-import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.LandAspects;
 import com.mraof.minestuck.world.lands.LandInfoContainer;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
-
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -41,6 +30,8 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
 import net.minecraft.world.dimension.DimensionType;
+
+import java.util.*;
 
 /**
  * A class for managing sburb-related stuff from outside this package that is dependent on connections and sessions.
@@ -80,7 +71,7 @@ public class SburbHandler
 		
 		if(title == null)
 		{
-			Random rand = MinestuckRandom.getPlayerSpecificRandom(player);
+			Random rand = MinestuckRandom.getPlayerSpecificRandom(player, world.getSeed());
 			rand.nextInt();	//Avoid using same data as the artifact generation
 			
 			ArrayList<Title> usedTitles = new ArrayList<>();
@@ -561,7 +552,7 @@ public class SburbHandler
 	
 	private static LandAspects genLandAspects(MinecraftServer mcServer, SburbConnection connection)
 	{
-		LandAspectRegistry aspectGen = new LandAspectRegistry(Minestuck.worldSeed^connection.getClientIdentifier().hashCode());
+		LandAspectRegistry aspectGen = new LandAspectRegistry(mcServer.getWorld(DimensionType.OVERWORLD).getSeed()^connection.getClientIdentifier().hashCode());
 		Session session = SessionHandler.get(mcServer).getPlayerSession(connection.getClientIdentifier());
 		Title title = PlayerSavedData.get(mcServer).getTitle(connection.getClientIdentifier());
 		TitleLandAspect titleAspect = null;
@@ -716,7 +707,7 @@ public class SburbHandler
 
 	static void onConnectionCreated(SburbConnection c)
 	{
-		Random rand = MinestuckRandom.getPlayerSpecificRandom(c.getClientIdentifier());
+		Random rand = MinestuckRandom.getPlayerSpecificRandom(c.getClientIdentifier(), 0);
 		c.artifactType = rand.nextInt(2);
 		Debug.infof("Randomized artifact type to be: %d for player %s.", c.artifactType, c.getClientIdentifier().getUsername());
 	}

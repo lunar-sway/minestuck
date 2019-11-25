@@ -1,18 +1,18 @@
 package com.mraof.minestuck;
 
-import com.mraof.minestuck.fluid.MSFluids;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.command.*;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.event.ServerEventHandler;
+import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.PlayerTracker;
-import com.mraof.minestuck.util.*;
-//import com.mraof.minestuck.config.MinestuckConfig;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.IdentifierHandler;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.world.dimension.DimensionType;
@@ -36,23 +36,19 @@ import java.util.Random;
 
 import static com.mraof.minestuck.Minestuck.MOD_ID;
 
+//import com.mraof.minestuck.config.MinestuckConfig;
+
 @Mod(MOD_ID)
 public class Minestuck
 {
 	public static final String MOD_NAME = "Minestuck";
 	public static final String MOD_ID = "minestuck";
 	
-	/*
-	 * True only if the minecraft application is client-sided 
-	 */
-	//public static boolean isClientRunning;
 	/**
 	 * True if the minecraft application is server-sided, or if there is an integrated server running
 	 */
 	@Deprecated
 	public static volatile boolean isServerRunning;
-	
-	public static long worldSeed = 0;	//TODO proper usage of seed when generating titles, land aspects, and land dimension data
 	
 	public Minestuck()
 	{
@@ -61,8 +57,8 @@ public class Minestuck
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::postSetup);
 		//ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.GUIFACTORY, () -> GuiHandler::provideGuiContainer);
 		
-		MinestuckConfig.loadConfig(MinestuckConfig.client_config, FMLPaths.CONFIGDIR.get().resolve("Minestuck-client.toml").toString());
-		MinestuckConfig.loadConfig(MinestuckConfig.server_config, FMLPaths.CONFIGDIR.get().resolve("Minestuck.toml").toString());
+		MinestuckConfig.loadConfig(MinestuckConfig.client_config, FMLPaths.CONFIGDIR.get().resolve("minestuck-client.toml").toString());
+		MinestuckConfig.loadConfig(MinestuckConfig.server_config, FMLPaths.CONFIGDIR.get().resolve("minestuck.toml").toString());
 		
 		WorldPersistenceHooks.addHook(new MSWorldPersistenceHook());
 		
@@ -139,7 +135,6 @@ public class Minestuck
 		CommandPorkhollow.register(event.getCommandDispatcher());
 		CommandLandDebug.register(event.getCommandDispatcher());
 		
-		worldSeed = event.getServer().getWorld(DimensionType.OVERWORLD).getSeed();
 		ServerEventHandler.lastDay = event.getServer().getWorld(DimensionType.OVERWORLD).getGameTime() / 24000L;
 		CaptchaDeckHandler.rand = new Random();
 	}
