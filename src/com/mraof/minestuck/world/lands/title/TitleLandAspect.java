@@ -3,7 +3,6 @@ package com.mraof.minestuck.world.lands.title;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.world.LandDimension;
 import com.mraof.minestuck.world.lands.ILandAspect;
-import com.mraof.minestuck.world.lands.structure.IGateStructure;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistryEntry;
@@ -61,12 +60,6 @@ public abstract class TitleLandAspect extends ForgeRegistryEntry<TitleLandAspect
 	public EnumAspect getType()
 	{
 		return aspectType;
-	}
-	
-	@Override
-	public IGateStructure getGateStructure()
-	{
-		return null;
 	}
 	
 	public void prepareWorldProvider(LandDimension worldProvider)

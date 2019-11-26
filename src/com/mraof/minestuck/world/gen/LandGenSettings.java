@@ -1,15 +1,19 @@
 package com.mraof.minestuck.world.gen;
 
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
+import com.mraof.minestuck.world.gen.feature.structure.GateStructure;
 import com.mraof.minestuck.world.lands.LandAspects;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import net.minecraft.world.gen.GenerationSettings;
+
+import java.util.Random;
 
 public class LandGenSettings extends GenerationSettings
 {
 	private LandAspects landAspects;
 	private StructureBlockRegistry blockRegistry;
 	private LandBiomeHolder biomeHolder;
+	private GateStructure.PieceFactory gatePiece;
 	public float oceanChance = 1/3F, roughChance = 1/5F;
 	
 	public LandAspects getLandAspects()
@@ -44,6 +48,16 @@ public class LandGenSettings extends GenerationSettings
 	public void setBiomeHolder(LandBiomeHolder biomeHolder)
 	{
 		this.biomeHolder = biomeHolder;
+	}
+	
+	public void setGatePiece(GateStructure.PieceFactory factory)
+	{
+		gatePiece = factory;
+	}
+	
+	public GateStructure.PieceFactory getGatePiece()
+	{
+		return gatePiece;
 	}
 	
 	@Override

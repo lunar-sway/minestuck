@@ -18,7 +18,7 @@ import java.util.Random;
 import java.util.function.Function;
 
 public class OceanRundownFeature extends Feature<NoFeatureConfig>
-{
+{	//TODO Make sure that this works as intended
 	public OceanRundownFeature(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn)
 	{
 		super(configFactoryIn);
@@ -40,7 +40,7 @@ public class OceanRundownFeature extends Feature<NoFeatureConfig>
 		{
 			for(int posZ = 0; posZ < 16; posZ++)
 			{
-				if(biomes[posX + posZ * 32].equals(MSBiomes.LAND_OCEAN))
+				if(biomes[posX + posZ * 16].equals(MSBiomes.LAND_OCEAN))
 					oceanPos.add(pos.add(posX - 8, 0, posZ - 8));
 			}
 		}

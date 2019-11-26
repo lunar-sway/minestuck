@@ -1,8 +1,6 @@
-package com.mraof.minestuck.world.lands.structure;
+package com.mraof.minestuck.world.gen.feature.structure;
 
 import java.util.ArrayList;
-
-import com.mraof.minestuck.world.gen.feature.structure.ComponentCastlePiece;
 
 public class ComponentCloudDungeonEdgePiece extends ComponentCloudDungeonPiece 
 {

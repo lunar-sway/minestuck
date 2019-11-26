@@ -70,7 +70,7 @@ public class GateHandler
 					DimensionType clientDim = clientConnection.getClientDimension();
 					BlockPos gatePos = getGatePos(player.server, Type.LAND_GATE, clientDim);
 					ServerWorld world = DimensionManager.getWorld(player.server, clientDim, false, true);
-					
+					//TODO Consider only storing the land gate pos through GateStructure and GatePiece
 					if(gatePos == null)
 					{
 						findGatePlacement(world);
@@ -80,6 +80,7 @@ public class GateHandler
 					
 					if(gatePos.getY() == -1)
 					{
+						//TODO Is this good enough to generate the gate structure? Is there a better way of doing it?
 						world.getChunkProvider().getChunk(gatePos.getX() - 8 >> 4, gatePos.getZ() - 8 >> 4, true);
 						world.getChunkProvider().getChunk(gatePos.getX() + 8 >> 4, gatePos.getZ() - 8 >> 4, true);
 						world.getChunkProvider().getChunk(gatePos.getX() - 8 >> 4, gatePos.getZ() + 8 >> 4, true);
@@ -129,7 +130,7 @@ public class GateHandler
 		}
 	}
 	
-	public static void findGatePlacement(World world)
+	public static void findGatePlacement(World world)	//TODO The position is now determined by GateStructure. Use that one instead to determine the gate position.
 	{
 		DimensionType dim = world.getDimension().getType();
 		LandInfoContainer info = MSDimensions.getLandInfo(world.getServer(), dim);
@@ -154,7 +155,7 @@ public class GateHandler
 					gatePos = pos;
 				
 				tries++;
-			} while(gatePos == null);	//TODO replace with a more friendly version without a chance of freezing the game
+			} while(gatePos == null);
 			
 			Debug.infof("Land gate will generate at %d %d in dimension %s.", gatePos.getX(), gatePos.getZ(), dim.getRegistryName());
 			info.setGatePos(gatePos);

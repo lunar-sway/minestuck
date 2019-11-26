@@ -1,4 +1,4 @@
-package com.mraof.minestuck.world.lands.structure;
+package com.mraof.minestuck.world.gen.feature.structure;
 
 public class StructureCloudDungeonPieces
 {

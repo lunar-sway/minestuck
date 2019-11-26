@@ -2,6 +2,7 @@ package com.mraof.minestuck.world.gen.feature;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.world.gen.feature.structure.GateStructure;
 import com.mraof.minestuck.world.gen.feature.structure.SmallRuinStructure;
 import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.feature.structure.Structure;
@@ -17,6 +18,7 @@ import javax.annotation.Nonnull;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public final class MSFeatures
 {
+	public static final Structure<NoFeatureConfig> LAND_GATE = getNull();
 	public static final Structure<NoFeatureConfig> SMALL_RUIN = getNull();
 	public static final Structure<NoFeatureConfig> IMP_DUNGEON = getNull();	//TODO Rerun advancement provider once these two are reimplemeneted
 	public static final Structure<NoFeatureConfig> CONSORT_VILLAGE = getNull();
@@ -56,6 +58,7 @@ public final class MSFeatures
 	{
 		IForgeRegistry<Feature<?>> registry = event.getRegistry();
 		
+		registry.register(new GateStructure(NoFeatureConfig::deserialize).setRegistryName("land_gate"));
 		registry.register(new SmallRuinStructure(NoFeatureConfig::deserialize).setRegistryName("small_ruin"));
 		
 		registry.register(new RainbowTreeFeature(NoFeatureConfig::deserialize, false).setRegistryName("rainbow_tree"));

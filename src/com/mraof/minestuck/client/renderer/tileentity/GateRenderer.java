@@ -12,8 +12,8 @@ import net.minecraft.util.math.MathHelper;
 public class GateRenderer extends TileEntityRenderer<GateTileEntity>
 {
 	
-	private static final ResourceLocation nodeInner = new ResourceLocation("minestuck","textures/blocks/node_spiro_inner.png");
-	private static final ResourceLocation nodeOuter = new ResourceLocation("minestuck","textures/blocks/node_spiro_outer.png");
+	private static final ResourceLocation INNER_NODE = new ResourceLocation("minestuck","textures/block/node_spiro_inner.png");
+	private static final ResourceLocation OUTER_NODE = new ResourceLocation("minestuck","textures/block/node_spiro_outer.png");
 	
 	@Override
 	public void render(GateTileEntity tileEntityIn, double x, double y, double z, float partialTicks, int destroyStage)
@@ -48,7 +48,7 @@ public class GateRenderer extends TileEntityRenderer<GateTileEntity>
 		GlStateManager.pushMatrix();
 		GlStateManager.rotatef(tick, 0, 1, 0);
 		double y = 0.5;
-		this.bindTexture(nodeInner);
+		this.bindTexture(INNER_NODE);
 		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
 		buffer.pos(-1.5, y, -1.5).tex(0, 0).endVertex();
 		buffer.pos(-1.5, y, 1.5).tex(0, 1).endVertex();
@@ -67,7 +67,7 @@ public class GateRenderer extends TileEntityRenderer<GateTileEntity>
 		GlStateManager.pushMatrix();
 		GlStateManager.rotatef(tick, 0, 1, 0);
 		double y = 0.5;
-		this.bindTexture(nodeInner);
+		this.bindTexture(INNER_NODE);
 		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
 		buffer.pos(-1, y, -1).tex(0, 0).endVertex();
 		buffer.pos(-1, y, 1).tex(0, 1).endVertex();
@@ -79,7 +79,7 @@ public class GateRenderer extends TileEntityRenderer<GateTileEntity>
 		GlStateManager.pushMatrix();
 		GlStateManager.rotatef(-tick/1.5F, 0, 1, 0);
 		y = 0.5 + MathHelper.sin(tick/50)*0.1;
-		this.bindTexture(nodeOuter);
+		this.bindTexture(OUTER_NODE);
 		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
 		buffer.pos(-1, y, -1).tex(0, 0).endVertex();
 		buffer.pos(-1, y, 1).tex(0, 1).endVertex();

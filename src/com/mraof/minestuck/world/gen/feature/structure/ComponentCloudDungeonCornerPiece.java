@@ -1,25 +1,29 @@
-package com.mraof.minestuck.world.lands.structure;
+package com.mraof.minestuck.world.gen.feature.structure;
 
-public class ComponentCloudDungeonCenterPiece extends ComponentCloudDungeonPiece
+import java.util.ArrayList;
+
+public class ComponentCloudDungeonCornerPiece extends ComponentCloudDungeonPiece 
 {
 
-    /** List of other Castle components linked to this room. */
+	/** List of other Castle components linked to this room. */
 
-    protected boolean bottom;
-    public int averageGroundLevel = -1;
-    public int castleWidth, castleLength, x, z, totalPieces;
-    
-    public ComponentCloudDungeonCenterPiece() {}
-	/*protected ComponentCloudDungeonCenterPiece(int par1, int x, int z)
+	protected boolean isBlack, bottom;
+	public int averageGroundLevel = -1;
+	public int castleWidth, castleLength, x, z, totalPieces;
+	public ArrayList<ComponentCastlePiece> pendingPieces = new ArrayList<ComponentCastlePiece>();
+	
+	public ComponentCloudDungeonCornerPiece() {}
+	/*protected ComponentCloudDungeonCornerPiece(int par1, int x, int z,  boolean isBlack)
 	{
-		super(par1, (ComponentCloudDungeonCenterPiece)null);
-        this.boundingBox = new StructureBoundingBox(x, 0, z, x, 74, z);
-        this.x = x;
-        this.z = z;
-		if(pendingPieces == null)pendingPieces = new ArrayList<ComponentCloudDungeonPiece>();
+		super(par1, (ComponentCloudDungeonCornerPiece)null);
+		this.boundingBox = new StructureBoundingBox(x, 0, z, x, 74, z);
+		this.x = x;
+		this.z = z;
+		if(pendingPieces == null)pendingPieces = new ArrayList<ComponentCastlePiece>();
+ 		this.isBlack = isBlack;
  		this.bottom = true;
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void buildComponent(StructureComponent structureComponent,
@@ -33,12 +37,14 @@ public class ComponentCloudDungeonCenterPiece extends ComponentCloudDungeonPiece
 		for(int depth = 8; depth < this.castleLength; depth += 8)
 			this.getNextComponentNormal(this, components, random,  0, depth);
 		this.componentType = 0;
-		this.getNextComponentNormal(this, (List<ComponentCloudDungeonPiece>)components, random, 0, -8, 0);
+		this.getNextComponentNormal(this, components, random, 0, -8, 0);
 		
 	}
 	@Override
 	public boolean addComponentParts(World world, Random random, StructureBoundingBox structureBoundingBox)
 	{
+		IBlockState chessTile = getChessBlockState(this.isBlack ? 0 : 1);
+		IBlockState chessTile1 = getChessBlockState(this.isBlack ? 2 : 3);
 //    	Debug.print("addComponentParts in ComponentCastleStartPiece running");
         if (this.averageGroundLevel < 0)
         {
@@ -59,9 +65,9 @@ public class ComponentCloudDungeonCenterPiece extends ComponentCloudDungeonPiece
         {
 //        	Debug.print("CCSP: " + this.averageGroundLevel);
 //            Debug.print(structureBoundingBox.minX + ", " + structureBoundingBox.minY + ", " + structureBoundingBox.minZ + ", " + structureBoundingBox.maxX + ", " + structureBoundingBox.maxY + ", " + structureBoundingBox.maxZ);
-            this.fillWithBlock(world, structureBoundingBox, 0, 0, 0,  7, 6, 7, MinestuckBlocks.chessTile.getDefaultState());
-            this.fillWithBlock(world, structureBoundingBox, 0, 0, 0,  7, 7, 0, MinestuckBlocks.chessTile.getDefaultState());
-            this.fillWithBlock(world, structureBoundingBox, 0, 0, 7,  7, 7, 7, MinestuckBlocks.chessTile.getDefaultState());
+            this.fillWithBlock(world, structureBoundingBox, 0, 0, 0, 7 ,6, 7, chessTile);
+            this.fillWithBlock(world, structureBoundingBox, 0, 0, 0, 7 ,7, 0, chessTile);
+            this.fillWithBlock(world, structureBoundingBox, 0, 0, 7, 7 ,7, 7, chessTile);
             this.fillWithAir(world, structureBoundingBox, 2, 1, 0, 5, 5, 7);
 
             return true;

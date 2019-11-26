@@ -7,8 +7,8 @@ import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.biome.MSBiomes;
-import com.mraof.minestuck.world.lands.structure.IGateStructure;
-import com.mraof.minestuck.world.lands.structure.GateStructureMushroom;
+import com.mraof.minestuck.world.gen.LandGenSettings;
+import com.mraof.minestuck.world.gen.feature.structure.GateMushroomPiece;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
@@ -73,6 +73,12 @@ public class FungiLandAspect extends TerrainLandAspect
 	}
 	
 	@Override
+	public void setGenSettings(LandGenSettings settings)
+	{
+		settings.setGatePiece(GateMushroomPiece::new);
+	}
+	
+	@Override
 	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{
 		if(biome.staticBiome == MSBiomes.LAND_NORMAL)
@@ -106,12 +112,6 @@ public class FungiLandAspect extends TerrainLandAspect
 	public Vec3d getSkyColor()
 	{
 		return skyColor;
-	}
-	
-	@Override
-	public IGateStructure getGateStructure()
-	{
-		return new GateStructureMushroom();
 	}
 	
 	@Override

@@ -2,8 +2,6 @@ package com.mraof.minestuck.world.lands.terrain;
 
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.lands.ILandAspect;
-import com.mraof.minestuck.world.lands.structure.GateStructurePillar;
-import com.mraof.minestuck.world.lands.structure.IGateStructure;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
@@ -65,12 +63,6 @@ public abstract class TerrainLandAspect extends ForgeRegistryEntry<TerrainLandAs
 		if(groupName == null)
 			return this.getRegistryName();
 		else return groupName;
-	}
-	
-	@Override
-	public IGateStructure getGateStructure()
-	{
-		return new GateStructurePillar();
 	}
 	
 	public abstract EntityType<? extends ConsortEntity> getConsortType();
