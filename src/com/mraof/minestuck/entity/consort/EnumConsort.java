@@ -7,7 +7,7 @@ import net.minecraft.util.text.TextFormatting;
 
 import java.util.Random;
 
-public enum EnumConsort
+public enum EnumConsort	//TODO Could ideally be changed into a registry.
 {
 	SALAMANDER(MSEntityTypes.SALAMANDER, "salamander", TextFormatting.YELLOW),
 	TURTLE(MSEntityTypes.TURTLE, "turtle", TextFormatting.LIGHT_PURPLE),

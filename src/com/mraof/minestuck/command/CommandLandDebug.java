@@ -1,16 +1,7 @@
 package com.mraof.minestuck.command;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mraof.minestuck.network.skaianet.SessionHandler;
-import com.mraof.minestuck.world.lands.LandAspectRegistry;
-import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
-import com.mraof.minestuck.world.lands.title.TitleLandAspect;
-import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandSource;
-import net.minecraft.server.MinecraftServer;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class CommandLandDebug
 {

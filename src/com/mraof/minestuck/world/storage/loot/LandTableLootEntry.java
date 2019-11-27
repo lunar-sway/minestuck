@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.MSDimensions;
-import com.mraof.minestuck.world.lands.LandAspects;
+import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.*;
@@ -35,7 +35,7 @@ public class LandTableLootEntry extends LootEntry
 	@Override
 	public boolean expand(LootContext context, Consumer<ILootGenerator> lootGenCollector)
 	{
-		LandAspects aspects = MSDimensions.getAspects(context.getWorld().getServer(), context.getWorld().dimension.getType());
+		LandTypePair aspects = MSDimensions.getAspects(context.getWorld().getServer(), context.getWorld().dimension.getType());
 		if(test(context) && aspects != null)
 		{
 			ResourceLocation terrainTableName = new ResourceLocation(table.getNamespace(), table.getPath() + "/" + Objects.requireNonNull(aspects.terrain.getRegistryName()).toString().replace(':', '/'));

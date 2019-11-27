@@ -1,7 +1,7 @@
 package com.mraof.minestuck.world.gen;
 
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
-import com.mraof.minestuck.world.lands.LandAspects;
+import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.BlockPos;
@@ -28,7 +28,7 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 				biomeWeight[(x + 2)*5 + z + 2] = 10.0F / MathHelper.sqrt((float)(x * x + z * z) + 0.2F);
 	}
 	
-	public final LandAspects landAspects;
+	public final LandTypePair landTypes;
 	public final StructureBlockRegistry blockRegistry;
 	public final LandBiomeHolder biomeHolder;
 	
@@ -36,7 +36,7 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 	{
 		super(worldIn, biomeProviderIn, 4, 8, 256, settings, false);
 		
-		landAspects = Objects.requireNonNull(settings.getLandAspects());
+		landTypes = Objects.requireNonNull(settings.getLandTypes());
 		blockRegistry = Objects.requireNonNull(settings.getBlockRegistry());
 		
 		biomeHolder = Objects.requireNonNull(settings.getBiomeHolder());

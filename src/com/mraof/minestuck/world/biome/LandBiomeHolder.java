@@ -1,6 +1,6 @@
 package com.mraof.minestuck.world.biome;
 
-import com.mraof.minestuck.world.lands.LandAspects;
+import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import net.minecraft.world.biome.Biome;
 
@@ -13,14 +13,14 @@ public class LandBiomeHolder
 	public float roughBiomeDepth = MSBiomes.LAND_ROUGH.getDepth(), roughBiomeScale = MSBiomes.LAND_ROUGH.getScale();
 	public float oceanBiomeDepth = MSBiomes.LAND_OCEAN.getDepth(), oceanBiomeScale = MSBiomes.LAND_OCEAN.getScale();
 	
-	private final LandAspects landAspects;
+	private final LandTypePair landTypes;
 	private final LandWrapperBiome normalBiome, oceanBiome, roughBiome;
 	
-	public LandBiomeHolder(LandAspects landAspects, boolean isFake)
+	public LandBiomeHolder(LandTypePair landTypes, boolean isFake)
 	{
-		this.landAspects = landAspects;
-		this.landAspects.terrain.setBiomeSettings(this);
-		this.landAspects.title.setBiomeSettings(this);
+		this.landTypes = landTypes;
+		this.landTypes.terrain.setBiomeSettings(this);
+		this.landTypes.title.setBiomeSettings(this);
 		
 		if(!isFake)
 		{
@@ -35,8 +35,8 @@ public class LandBiomeHolder
 		for(LandWrapperBiome biome : getBiomes())
 		{
 			biome.init(settings);
-			landAspects.terrain.setBiomeGenSettings(biome, settings.getBlockRegistry());
-			landAspects.title.setBiomeGenSettings(biome, settings.getBlockRegistry());
+			landTypes.terrain.setBiomeGenSettings(biome, settings.getBlockRegistry());
+			landTypes.title.setBiomeGenSettings(biome, settings.getBlockRegistry());
 		}
 	}
 	

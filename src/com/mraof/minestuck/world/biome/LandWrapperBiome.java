@@ -28,7 +28,7 @@ public class LandWrapperBiome extends LandBiome
 		StructureBlockRegistry blocks = settings.getBlockRegistry();
 		SurfaceBuilderConfig surfaceConfig = new SurfaceBuilderConfig(blocks.getBlockState("surface"), blocks.getBlockState("upper"), blocks.getBlockState("ocean_surface"));
 		this.surfaceBuilder = new ConfiguredSurfaceBuilder<>(SurfaceBuilder.DEFAULT, surfaceConfig);
-		this.addSpawn(EntityClassification.CREATURE, new SpawnListEntry(settings.getLandAspects().terrain.getConsortType(), 2, 1, 10));
+		this.addSpawn(EntityClassification.CREATURE, new SpawnListEntry(settings.getLandTypes().terrain.getConsortType(), 2, 1, 10));
 		addDefaultStructures(blocks);
 	}
 	

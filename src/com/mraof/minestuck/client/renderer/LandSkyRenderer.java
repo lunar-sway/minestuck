@@ -2,7 +2,7 @@ package com.mraof.minestuck.client.renderer;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
-import com.mraof.minestuck.world.lands.LandAspects;
+import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.LandDimension;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -236,7 +236,7 @@ public class LandSkyRenderer implements IRenderHandler
 		GlStateManager.popMatrix();
 	}
 	
-	public ResourceLocation[] getResourceLocations(LandAspects aspects, Random random)
+	public ResourceLocation[] getResourceLocations(LandTypePair aspects, Random random)
 	{
 		if(aspects == null)
 			return null;

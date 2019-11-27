@@ -20,7 +20,7 @@ import java.util.Random;
 public class LandInfoContainer
 {
 	public final IdentifierHandler.PlayerIdentifier identifier;
-	private final LandAspects.LazyInstance landAspects;
+	private final LandTypePair.LazyInstance landAspects;
 	private final ResourceLocation dimensionName;
 	private final boolean useReverseOrder;
 	private final int terrainNameIndex, titleNameIndex;
@@ -29,21 +29,21 @@ public class LandInfoContainer
 	@Nullable
 	private DimensionType cachedDimension;
 	@Nullable
-	private LandAspects cachedAspects;
+	private LandTypePair cachedAspects;
 	
-	public LandInfoContainer(IdentifierHandler.PlayerIdentifier identifier, LandAspects landAspects, DimensionType dimensionType, Random random)
+	public LandInfoContainer(IdentifierHandler.PlayerIdentifier identifier, LandTypePair landTypes, DimensionType dimensionType, Random random)
 	{
 		this.identifier = Objects.requireNonNull(identifier);
-		cachedAspects = Objects.requireNonNull(landAspects);
-		this.landAspects = landAspects.createLazy();
+		cachedAspects = Objects.requireNonNull(landTypes);
+		this.landAspects = landTypes.createLazy();
 		cachedDimension = Objects.requireNonNull(dimensionType);
 		dimensionName = DimensionType.getKey(dimensionType);
 		useReverseOrder = random.nextBoolean();
-		terrainNameIndex = random.nextInt(landAspects.terrain.getNames().length);
-		titleNameIndex = random.nextInt(landAspects.title.getNames().length);
+		terrainNameIndex = random.nextInt(landTypes.terrain.getNames().length);
+		titleNameIndex = random.nextInt(landTypes.title.getNames().length);
 	}
 	
-	private LandInfoContainer(SkaianetHandler handler, IdentifierHandler.PlayerIdentifier identifier, LandAspects.LazyInstance landAspects, ResourceLocation dimensionType, boolean reverseOrder, int terrainNameIndex, int titleNameIndex)
+	private LandInfoContainer(SkaianetHandler handler, IdentifierHandler.PlayerIdentifier identifier, LandTypePair.LazyInstance landAspects, ResourceLocation dimensionType, boolean reverseOrder, int terrainNameIndex, int titleNameIndex)
 	{
 		this.identifier = identifier;
 		this.landAspects = landAspects;
@@ -57,7 +57,7 @@ public class LandInfoContainer
 	{
 		ITextComponent aspect1 = new TranslationTextComponent("land."+landName1());
 		ITextComponent aspect2 = new TranslationTextComponent("land."+landName2());
-		return new TranslationTextComponent(LandAspects.FORMAT, aspect1, aspect2);
+		return new TranslationTextComponent(LandTypePair.FORMAT, aspect1, aspect2);
 	}
 	
 	public String landName1()
@@ -90,14 +90,14 @@ public class LandInfoContainer
 	 * Because world persistence is loaded alongside world-specific registries, there's not a guarrantee that it is loaded and ready before skaianet is loading data.
 	 * (Though the only thing that might change in the registry would be missing land aspects that may get a dummy lanspect created for them)
 	 */
-	public LandAspects getLandAspects()
+	public LandTypePair getLandAspects()
 	{
 		if(cachedAspects == null)
 			cachedAspects = landAspects.create();
 		return cachedAspects;
 	}
 	
-	public LandAspects.LazyInstance getLazyLandAspects()
+	public LandTypePair.LazyInstance getLazyLandAspects()
 	{
 		return landAspects;
 	}
@@ -144,7 +144,7 @@ public class LandInfoContainer
 	
 	public static LandInfoContainer read(CompoundNBT nbt, SkaianetHandler handler, IdentifierHandler.PlayerIdentifier identifier)
 	{
-		LandAspects.LazyInstance aspects = LandAspects.LazyInstance.read(nbt);
+		LandTypePair.LazyInstance aspects = LandTypePair.LazyInstance.read(nbt);
 		ResourceLocation dimName = new ResourceLocation(nbt.getString("dim_type"));
 		boolean reverse = nbt.getBoolean("reverse_order");
 		int terrainIndex = nbt.getInt("terrain_name_index");

@@ -9,11 +9,9 @@ import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.gen.MSWorldGenTypes;
 
-import com.mraof.minestuck.world.lands.LandAspectRegistry;
-import com.mraof.minestuck.world.lands.LandAspects;
+import com.mraof.minestuck.world.lands.LandTypes;
+import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.gen.LandGenSettings;
-import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
-import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.ListNBT;
@@ -38,22 +36,22 @@ import java.util.function.BiFunction;
 public class LandDimension extends Dimension
 {
 	private LandBiomeHolder biomeHolder;
-	public final LandAspects landAspects;
+	public final LandTypePair landTypes;
 	public float skylightBase;
 	Vec3d skyColor;
 	Vec3d fogColor;
 	Vec3d cloudColor;
 	
-	public LandDimension(World worldIn, DimensionType typeIn, LandAspects aspects)
+	public LandDimension(World worldIn, DimensionType typeIn, LandTypePair aspects)
 	{
 		super(worldIn, typeIn);
 		
 		if(aspects != null)
-			landAspects = aspects;
+			landTypes = aspects;
 		else
 		{
 			Debug.warnf("Creating land dimension %s without land aspects", typeIn);
-			landAspects = new LandAspects(LandAspectRegistry.TERRAIN_NULL, LandAspectRegistry.TITLE_NULL);
+			landTypes = new LandTypePair(LandTypes.TERRAIN_NULL, LandTypes.TITLE_NULL);
 		}
 		
 		doesWaterVaporize = false;
@@ -68,14 +66,14 @@ public class LandDimension extends Dimension
 	
 	private void initLandAspects()
 	{
-		skylightBase = landAspects.terrain.getSkylightBase();
-		skyColor = landAspects.terrain.getSkyColor();
-		fogColor = landAspects.terrain.getFogColor();
-		cloudColor = landAspects.terrain.getCloudColor();
+		skylightBase = landTypes.terrain.getSkylightBase();
+		skyColor = landTypes.terrain.getSkyColor();
+		fogColor = landTypes.terrain.getFogColor();
+		cloudColor = landTypes.terrain.getCloudColor();
 		
-		landAspects.title.prepareWorldProvider(this);
+		landTypes.title.prepareWorldProvider(this);
 		
-		biomeHolder = new LandBiomeHolder(landAspects, false);
+		biomeHolder = new LandBiomeHolder(landTypes, false);
 	}
 	
 	@Override
@@ -98,7 +96,7 @@ public class LandDimension extends Dimension
 	public ChunkGenerator<?> createChunkGenerator()
 	{
 		LandGenSettings settings = MSWorldGenTypes.LANDS.createSettings();
-		settings.setLandAspects(landAspects);
+		settings.setLandTypes(landTypes);
 		settings.setBiomeHolder(biomeHolder);
 		return MSWorldGenTypes.LANDS.create(this.world, MSWorldGenTypes.LAND_BIOMES.create(MSWorldGenTypes.LAND_BIOMES.createSettings().setGenSettings(settings).setSeed(this.getSeed())), settings);
 	}
@@ -300,7 +298,7 @@ public class LandDimension extends Dimension
 	public static class Type extends ModDimension
 	{
 		public boolean useServerData;
-		public Map<ResourceLocation, LandAspects.LazyInstance> dimToLandAspects = new HashMap<>();	//TODO This might not be populated by skaianet before the dimension the player is in is created
+		public Map<ResourceLocation, LandTypePair.LazyInstance> dimToLandAspects = new HashMap<>();	//TODO This might not be populated by skaianet before the dimension the player is in is created
 		//TODO Dimension might actually not be unloaded when switching to/creating a new world
 		@Override
 		public void write(PacketBuffer buffer, boolean network)
@@ -308,7 +306,7 @@ public class LandDimension extends Dimension
 			if(network)
 			{
 				buffer.writeInt(dimToLandAspects.size());
-				for(Map.Entry<ResourceLocation, LandAspects.LazyInstance> entry : dimToLandAspects.entrySet())
+				for(Map.Entry<ResourceLocation, LandTypePair.LazyInstance> entry : dimToLandAspects.entrySet())
 				{
 					buffer.writeResourceLocation(entry.getKey());
 					entry.getValue().write(buffer);
@@ -326,7 +324,7 @@ public class LandDimension extends Dimension
 				for(int i = 0; i < size; i++)
 				{
 					ResourceLocation dimId = buffer.readResourceLocation();
-					LandAspects.LazyInstance landAspects = LandAspects.LazyInstance.read(buffer);
+					LandTypePair.LazyInstance landAspects = LandTypePair.LazyInstance.read(buffer);
 					dimToLandAspects.put(dimId, landAspects);
 				}
 			}
@@ -340,7 +338,7 @@ public class LandDimension extends Dimension
 		
 		private LandDimension createDimension(World world, DimensionType type)
 		{
-			LandAspects.LazyInstance aspects = dimToLandAspects.get(DimensionType.getKey(type));
+			LandTypePair.LazyInstance aspects = dimToLandAspects.get(DimensionType.getKey(type));
 			if(aspects == null)
 				Debug.warn("Trying to create a land world but haven't gotten its land aspects!");
 			return new LandDimension(world, type, aspects == null ? null : aspects.create());

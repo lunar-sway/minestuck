@@ -3,7 +3,6 @@ package com.mraof.minestuck.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mraof.minestuck.world.MSDimensions;
-import com.mraof.minestuck.world.lands.LandAspects;
 import com.mraof.minestuck.world.lands.LandInfoContainer;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;

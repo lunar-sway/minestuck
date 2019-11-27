@@ -3,8 +3,8 @@ package com.mraof.minestuck.world;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.world.lands.LandAspectRegistry;
-import com.mraof.minestuck.world.lands.LandAspects;
+import com.mraof.minestuck.world.lands.LandTypes;
+import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandInfoContainer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
@@ -34,7 +34,7 @@ public class MSDimensions
 		
 	}
 	
-	public static LandAspects getAspects(MinecraftServer server, DimensionType dimension)
+	public static LandTypePair getAspects(MinecraftServer server, DimensionType dimension)
 	{
 		LandInfoContainer info = getLandInfo(server, dimension);
 		if(info != null)
@@ -42,7 +42,7 @@ public class MSDimensions
 		else if(isLandDimension(dimension))
 		{
 			Debug.warnf("Tried to get land aspects for %s, but did not find a container reference! Using defaults instead.");
-			return new LandAspects(LandAspectRegistry.TERRAIN_NULL, LandAspectRegistry.TITLE_NULL);
+			return new LandTypePair(LandTypes.TERRAIN_NULL, LandTypes.TITLE_NULL);
 		} else return null;
 	}
 	

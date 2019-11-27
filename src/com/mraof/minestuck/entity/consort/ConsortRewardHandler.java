@@ -24,7 +24,7 @@ public class ConsortRewardHandler
 {
 	private static final Map<ItemStack, PriceVariation> prices = Maps.newHashMap();
 	
-	public static void registerMinestuckPrices()
+	public static void registerMinestuckPrices()	//TODO could ideally be exported to json format
 	{
 		
 		ConsortRewardHandler.registerPrice(new ItemStack(ONION), 9, 15);

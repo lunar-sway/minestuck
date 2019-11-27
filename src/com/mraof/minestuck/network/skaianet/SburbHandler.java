@@ -13,11 +13,11 @@ import com.mraof.minestuck.network.TitleSelectPacket;
 import com.mraof.minestuck.tracker.PlayerTracker;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import com.mraof.minestuck.world.lands.LandAspectRegistry;
-import com.mraof.minestuck.world.lands.LandAspects;
+import com.mraof.minestuck.world.lands.LandTypes;
+import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandInfoContainer;
-import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
-import com.mraof.minestuck.world.lands.title.TitleLandAspect;
+import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
+import com.mraof.minestuck.world.lands.title.TitleLandType;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -550,13 +550,13 @@ public class SburbHandler
 		return count;
 	}
 	
-	private static LandAspects genLandAspects(MinecraftServer mcServer, SburbConnection connection)
+	private static LandTypePair genLandAspects(MinecraftServer mcServer, SburbConnection connection)
 	{
-		LandAspectRegistry aspectGen = new LandAspectRegistry(mcServer.getWorld(DimensionType.OVERWORLD).getSeed()^connection.getClientIdentifier().hashCode());
+		LandTypes aspectGen = new LandTypes(mcServer.getWorld(DimensionType.OVERWORLD).getSeed()^connection.getClientIdentifier().hashCode());
 		Session session = SessionHandler.get(mcServer).getPlayerSession(connection.getClientIdentifier());
 		Title title = PlayerSavedData.get(mcServer).getTitle(connection.getClientIdentifier());
-		TitleLandAspect titleAspect = null;
-		TerrainLandAspect terrainAspect = null;
+		TitleLandType titleAspect = null;
+		TerrainLandType terrainAspect = null;
 		
 		if(session.predefinedPlayers.containsKey(connection.getClientIdentifier()))
 		{
@@ -568,13 +568,13 @@ public class SburbHandler
 		}
 		
 		boolean frogs = false;
-		ArrayList<TerrainLandAspect> usedTerrainAspects = new ArrayList<>();
-		ArrayList<TitleLandAspect> usedTitleAspects = new ArrayList<>();
+		ArrayList<TerrainLandType> usedTerrainAspects = new ArrayList<>();
+		ArrayList<TitleLandType> usedTitleAspects = new ArrayList<>();
 		for(SburbConnection c : session.connections)
 			if(c != connection && c.clientHomeLand != null)
 			{
-				LandAspects aspects = c.clientHomeLand.getLandAspects();
-				if(aspects.title == LandAspectRegistry.FROGS)
+				LandTypePair aspects = c.clientHomeLand.getLandAspects();
+				if(aspects.title == LandTypes.FROGS)
 					frogs = true;
 				usedTitleAspects.add(aspects.title);
 				usedTerrainAspects.add(aspects.terrain);
@@ -586,7 +586,7 @@ public class SburbHandler
 			if(data.landTitle != null)
 			{
 				usedTitleAspects.add(data.landTitle);
-				if(data.landTitle == LandAspectRegistry.FROGS)
+				if(data.landTitle == LandTypes.FROGS)
 					frogs = true;
 			}
 		}
@@ -596,7 +596,7 @@ public class SburbHandler
 		if(terrainAspect == null)
 			terrainAspect = aspectGen.getTerrainAspect(titleAspect, usedTerrainAspects);
 		
-		return new LandAspects(terrainAspect, titleAspect);
+		return new LandTypePair(terrainAspect, titleAspect);
 	}
 	
 	public static GristType getUnderlingType(UnderlingEntity entity)
@@ -656,6 +656,7 @@ public class SburbHandler
 			list.add(new SpawnListEntry(MSEntityTypes.LICH, lichWeight, 1, Math.max(1, lichWeight/2)));
 		if(giclopsWeight > 0 && !MinestuckConfig.disableGiclops.get())
 			list.add(new SpawnListEntry(MSEntityTypes.GICLOPS, giclopsWeight, 1, Math.max(1, giclopsWeight/2)));
+		//TODO Add hook for addons to add more underlings
 		
 		difficultyList[difficulty] = list;
 		
@@ -672,8 +673,8 @@ public class SburbHandler
 		PlayerIdentifier identifier = c.getClientIdentifier();
 		
 		generateTitle(mcServer.getWorld(DimensionType.OVERWORLD), c.getClientIdentifier());
-		LandAspects aspects = genLandAspects(mcServer, c);		//This is where the Land dimension is actually registered, but it also needs the player's Title to be determined.
-		DimensionType type = LandAspectRegistry.createLandType(mcServer, identifier, aspects);
+		LandTypePair aspects = genLandAspects(mcServer, c);		//This is where the Land dimension is actually registered, but it also needs the player's Title to be determined.
+		DimensionType type = LandTypes.createLandType(mcServer, identifier, aspects);
 		return new LandInfoContainer(identifier, aspects, type, new Random());	//TODO Handle random better
 	}
 	

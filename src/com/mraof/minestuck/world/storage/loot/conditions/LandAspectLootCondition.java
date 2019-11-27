@@ -8,12 +8,12 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSyntaxException;
 import com.mraof.minestuck.world.MSDimensions;
-import com.mraof.minestuck.world.lands.ILandAspect;
-import com.mraof.minestuck.world.lands.LandAspectRegistry;
-import com.mraof.minestuck.world.lands.LandAspects;
+import com.mraof.minestuck.world.lands.ILandType;
+import com.mraof.minestuck.world.lands.LandTypes;
+import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.LandDimension;
-import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
-import com.mraof.minestuck.world.lands.title.TitleLandAspect;
+import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
+import com.mraof.minestuck.world.lands.title.TitleLandType;
 
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
@@ -31,12 +31,12 @@ public class LandAspectLootCondition implements ILootCondition
 	
 	private final Set<ResourceLocation> terrainGroups;
 	private final Set<ResourceLocation> titleGroups;
-	private final Set<TerrainLandAspect> terrainAspects;
-	private final Set<TitleLandAspect> titleAspects;
+	private final Set<TerrainLandType> terrainAspects;
+	private final Set<TitleLandType> titleAspects;
 	private final boolean inverted;
 	
 	private LandAspectLootCondition(Set<ResourceLocation> terrainGroups, Set<ResourceLocation> titleGroups,
-									Set<TerrainLandAspect> terrainAspects, Set<TitleLandAspect> titleAspects, boolean inverted)
+									Set<TerrainLandType> terrainAspects, Set<TitleLandType> titleAspects, boolean inverted)
 	{
 		this.terrainGroups = terrainGroups;
 		this.titleGroups = titleGroups;
@@ -52,7 +52,7 @@ public class LandAspectLootCondition implements ILootCondition
 		
 		if(world != null && MSDimensions.isLandDimension(world.getDimension().getType()))
 		{
-			LandAspects aspects = ((LandDimension) world.dimension).landAspects;
+			LandTypePair aspects = ((LandDimension) world.dimension).landTypes;
 			
 			if(terrainAspects.contains(aspects.terrain) || titleAspects.contains(aspects.title)
 					|| terrainGroups.contains(aspects.terrain.getGroup()) || titleGroups.contains(aspects.title.getGroup()))
@@ -84,17 +84,17 @@ public class LandAspectLootCondition implements ILootCondition
 		{
 			Set<ResourceLocation> terrainGroups = deserializeSet(json, "terrain_group", ResourceLocation::new);
 			Set<ResourceLocation> titleGroups = deserializeSet(json, "title_group", ResourceLocation::new);
-			Set<TerrainLandAspect> terrainAspects = deserializeSet(json, "terrain_aspect", s -> LandAspectRegistry.TERRAIN_REGISTRY.getValue(new ResourceLocation(s)));
-			Set<TitleLandAspect> titleAspects = deserializeSet(json, "title_aspect", s -> LandAspectRegistry.TITLE_REGISTRY.getValue(new ResourceLocation(s)));
+			Set<TerrainLandType> terrainAspects = deserializeSet(json, "terrain_aspect", s -> LandTypes.TERRAIN_REGISTRY.getValue(new ResourceLocation(s)));
+			Set<TitleLandType> titleAspects = deserializeSet(json, "title_aspect", s -> LandTypes.TITLE_REGISTRY.getValue(new ResourceLocation(s)));
 			boolean inverted = JSONUtils.getBoolean(json, "inverse", false);
 			return new LandAspectLootCondition(terrainGroups, titleGroups, terrainAspects, titleAspects, inverted);
 		}
 		
-		private static ILandAspect getAspect(String aspectName)
+		private static ILandType getAspect(String aspectName)
 		{
-			ILandAspect aspect = LandAspectRegistry.TERRAIN_REGISTRY.getValue(ResourceLocation.tryCreate(aspectName));
+			ILandType aspect = LandTypes.TERRAIN_REGISTRY.getValue(ResourceLocation.tryCreate(aspectName));
 			if(aspect == null)
-				aspect = LandAspectRegistry.TITLE_REGISTRY.getValue(ResourceLocation.tryCreate(aspectName));
+				aspect = LandTypes.TITLE_REGISTRY.getValue(ResourceLocation.tryCreate(aspectName));
 			if(aspect == null)
 				throw new JsonSyntaxException("\"" + aspectName + "\" is not a valid land aspect.");
 			return aspect;

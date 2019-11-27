@@ -7,9 +7,9 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.MSDimensions;
-import com.mraof.minestuck.world.lands.LandAspects;
-import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
-import com.mraof.minestuck.world.lands.title.TitleLandAspect;
+import com.mraof.minestuck.world.lands.LandTypePair;
+import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
+import com.mraof.minestuck.world.lands.title.TitleLandType;
 import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -24,7 +24,7 @@ import java.util.*;
 import static com.mraof.minestuck.entity.consort.MessageType.*;
 import static com.mraof.minestuck.world.storage.loot.MSLootTables.CONSORT_FOOD_STOCK;
 import static com.mraof.minestuck.world.storage.loot.MSLootTables.CONSORT_GENERAL_STOCK;
-import static com.mraof.minestuck.world.lands.LandAspectRegistry.*;
+import static com.mraof.minestuck.world.lands.LandTypes.*;
 
 /**
  * Handles message registry, message selection and contains the main message
@@ -40,7 +40,7 @@ public class ConsortDialogue
 	/**
 	 * Make sure to call after land registry
 	 */
-	public static void init()
+	public static void init()	//TODO Could likely be exported to a json format
 	{
 		// Wind
 		addMessage("dad_wind").landTitle(WIND);
@@ -429,27 +429,27 @@ public class ConsortDialogue
 		return msg;
 	}
 	
-	public static TitleLandAspect[] allExceptSpecific(TitleLandAspect... aspects)
+	public static TitleLandType[] allExceptSpecific(TitleLandType... aspects)
 	{
-		Set<TitleLandAspect> set = new HashSet<>(TITLE_REGISTRY.getValues());
-		for(TitleLandAspect exceptedAspect : aspects)
+		Set<TitleLandType> set = new HashSet<>(TITLE_REGISTRY.getValues());
+		for(TitleLandType exceptedAspect : aspects)
 			set.remove(exceptedAspect);
 		
-		return set.toArray(new TitleLandAspect[0]);
+		return set.toArray(new TitleLandType[0]);
 	}
 	
-	public static TitleLandAspect[] allExcept(TitleLandAspect... aspects)
+	public static TitleLandType[] allExcept(TitleLandType... aspects)
 	{
-		Set<TitleLandAspect> set = new HashSet<>(TITLE_REGISTRY.getValues());
-		for(TitleLandAspect exceptedAspect : aspects)
+		Set<TitleLandType> set = new HashSet<>(TITLE_REGISTRY.getValues());
+		for(TitleLandType exceptedAspect : aspects)
 			set.removeIf(aspect -> aspect.getGroup().equals(exceptedAspect.getGroup()));
 		
-		return set.toArray(new TitleLandAspect[0]);
+		return set.toArray(new TitleLandType[0]);
 	}
 	
 	public static DialogueWrapper getRandomMessage(ConsortEntity consort, ServerPlayerEntity player)
 	{
-		LandAspects aspects = MSDimensions.getAspects(player.getServer(), consort.homeDimension);
+		LandTypePair aspects = MSDimensions.getAspects(player.getServer(), consort.homeDimension);
 		
 		List<DialogueWrapper> list = new ArrayList<>();
 		
@@ -499,8 +499,8 @@ public class ConsortDialogue
 		
 		private Set<ResourceLocation> aspect1Requirement;
 		private Set<ResourceLocation> aspect2Requirement;
-		private Set<TerrainLandAspect> aspect1RequirementS;
-		private Set<TitleLandAspect> aspect2RequirementS;
+		private Set<TerrainLandType> aspect1RequirementS;
+		private Set<TitleLandType> aspect2RequirementS;
 		private EnumSet<EnumConsort> consortRequirement;
 		private EnumSet<MerchantType> merchantRequirement;
 		private ConsortRequirement additionalRequirement;
@@ -511,13 +511,13 @@ public class ConsortDialogue
 			return this;
 		}
 		
-		public DialogueWrapper landTerrain(TerrainLandAspect... aspects)
+		public DialogueWrapper landTerrain(TerrainLandType... aspects)
 		{
 			if(isAnyNull(aspects))
 				Debug.warnf("Land aspect is null for consort message %s, this is probably not intended", messageStart.getString());
 			reqLand = true;
 			aspect1Requirement = Sets.newHashSet();
-			for(TerrainLandAspect aspect : aspects)
+			for(TerrainLandType aspect : aspects)
 			{
 				if(aspect != null)
 					aspect1Requirement.add(aspect.getGroup());
@@ -526,7 +526,7 @@ public class ConsortDialogue
 			return this;
 		}
 		
-		public DialogueWrapper landTerrainSpecific(TerrainLandAspect... aspects)
+		public DialogueWrapper landTerrainSpecific(TerrainLandType... aspects)
 		{
 			
 			if(isAnyNull(aspects))
@@ -536,19 +536,19 @@ public class ConsortDialogue
 			return this;
 		}
 		
-		public DialogueWrapper landTitle(TitleLandAspect... aspects)
+		public DialogueWrapper landTitle(TitleLandType... aspects)
 		{
 			if(isAnyNull(aspects))
 				Debug.warnf("Land aspect is null for consort message %s, this is probably not intended", messageStart.getString());
 			reqLand = true;
 			aspect2Requirement = Sets.newHashSet();
-			for(TitleLandAspect aspect : aspects)
+			for(TitleLandType aspect : aspects)
 				if(aspect != null)
 					aspect2Requirement.add(aspect.getGroup());
 			return this;
 		}
 		
-		public DialogueWrapper landTitleSpecific(TitleLandAspect... aspects)
+		public DialogueWrapper landTitleSpecific(TitleLandType... aspects)
 		{
 			if(isAnyNull(aspects))
 				Debug.warnf("Land aspect is null for consort message %s, this is probably not intended", messageStart.getString());

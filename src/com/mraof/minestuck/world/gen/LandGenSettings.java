@@ -2,23 +2,21 @@ package com.mraof.minestuck.world.gen;
 
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.gen.feature.structure.GateStructure;
-import com.mraof.minestuck.world.lands.LandAspects;
+import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import net.minecraft.world.gen.GenerationSettings;
 
-import java.util.Random;
-
 public class LandGenSettings extends GenerationSettings
 {
-	private LandAspects landAspects;
+	private LandTypePair landTypes;
 	private StructureBlockRegistry blockRegistry;
 	private LandBiomeHolder biomeHolder;
 	private GateStructure.PieceFactory gatePiece;
 	public float oceanChance = 1/3F, roughChance = 1/5F;
 	
-	public LandAspects getLandAspects()
+	public LandTypePair getLandTypes()
 	{
-		return landAspects;
+		return landTypes;
 	}
 	
 	public StructureBlockRegistry getBlockRegistry()
@@ -31,18 +29,18 @@ public class LandGenSettings extends GenerationSettings
 		return biomeHolder;
 	}
 	
-	public void setLandAspects(LandAspects landAspects)
+	public void setLandTypes(LandTypePair landTypes)
 	{
-		this.landAspects = landAspects;
+		this.landTypes = landTypes;
 		
 		blockRegistry = new StructureBlockRegistry();
-		landAspects.terrain.registerBlocks(blockRegistry);
-		landAspects.title.registerBlocks(blockRegistry);
+		landTypes.terrain.registerBlocks(blockRegistry);
+		landTypes.title.registerBlocks(blockRegistry);
 		setDefaultBlock(blockRegistry.getBlockState("ground"));
 		setDefaultFluid(blockRegistry.getBlockState("ocean"));
 		
-		landAspects.terrain.setGenSettings(this);
-		landAspects.title.setGenSettings(this);
+		landTypes.terrain.setGenSettings(this);
+		landTypes.title.setGenSettings(this);
 	}
 	
 	public void setBiomeHolder(LandBiomeHolder biomeHolder)

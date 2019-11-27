@@ -152,7 +152,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 		super.onDeathUpdate();
 		if(this.deathTime == 20 && !this.world.isRemote)
 		{
-			GristSet grist = this.getGristSpoils();
+			GristSet grist = this.getGristSpoils();	//TODO Grist drop event
 			if(grist == null)
 				return;
 			if(fromSpawner)
