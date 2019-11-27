@@ -1,14 +1,11 @@
 package com.mraof.minestuck.entity.item;
 
-import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
-import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
-import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.MSEntityTypes;
+import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.tracker.PlayerTracker;
-import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.util.IdentifierHandler;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
@@ -25,7 +22,7 @@ import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 public class GristEntity extends Entity implements IEntityAdditionalSpawnData
-{
+{	//TODO Perhaps use a data manager for grist type in the same way as the underling entity?
 	public int cycle;
 
 	public int gristAge = 0;
@@ -33,7 +30,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	private int gristHealth = 5;
 	//Type of grist
 	private GristType gristType = GristType.BUILD;
-	private int gristValue = 1;
+	private long gristValue = 1;
 
 	private PlayerEntity closestPlayer;
 
@@ -196,8 +193,8 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	{
 		compound.putShort("Health", (short)this.gristHealth);
 		compound.putShort("Age", (short)this.gristAge);
-		compound.putShort("Value", (short)this.gristValue);
-		compound.putString("Type", GristType.REGISTRY.getKey(gristType).toString());
+		compound.putLong("Value", (short)this.gristValue);
+		compound.putString("Type", gristType.getRegistryName().toString());
 	}
 	
 	@Override
@@ -206,9 +203,9 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		this.gristHealth = compound.getShort("Health") & 255;
 		this.gristAge = compound.getShort("Age");
 		if(compound.contains("Value", 99))
-			this.gristValue = compound.getShort("Value");
+			this.gristValue = compound.getLong("Value");
 		if(compound.contains("Type", 8))
-			this.gristType = GristType.getTypeFromString(compound.getString("Type"));
+			this.gristType = GristTypes.getTypeFromString(compound.getString("Type"));
 	}
 	
 	/**
@@ -255,12 +252,6 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		return new GristAmount(gristType, gristValue);
 	}
 	
-	public static int typeInt(GristType type)
-	{
-		return type == null ? -1 : type.getId();
-	
-	}
-	
 	@Override
 	public EntitySize getSize(Pose poseIn)
 	{
@@ -274,25 +265,15 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	public void writeSpawnData(PacketBuffer buffer)
 	{
-		if(typeInt(this.gristType) < 0)
-		{
-			this.remove();
-		}
-		buffer.writeInt(typeInt(this.gristType));
-		buffer.writeInt(this.gristValue);
+		buffer.writeRegistryId(gristType);
+		buffer.writeLong(gristValue);
 	}
 	
 	@Override
 	public void readSpawnData(PacketBuffer data)
 	{
-		int typeOffset = data.readInt();
-		if(typeOffset < 0)
-		{
-			this.remove();
-			return;
-		}
-		this.gristType = GristType.REGISTRY.getValue(typeOffset);
-		this.gristValue = data.readInt();
+		gristType = data.readRegistryIdSafe(GristType.class);
+		gristValue = data.readLong();
 	}
 	
 	@Override

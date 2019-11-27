@@ -3,7 +3,7 @@ package com.mraof.minestuck.entity;
 import java.util.Random;
 
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.util.ModSoundEvents;
+import com.mraof.minestuck.util.MSSoundEvents;
 
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.controller.JumpController;
@@ -190,7 +190,7 @@ public class FrogEntity extends CreatureEntity
 
 		if (d0 > 0.0D)
 		{
-			double d1 = func_213296_b(this.getMotion());
+			double d1 = horizontalMag(this.getMotion());
 
 			if (d1 < 0.01D)
 			{
@@ -343,19 +343,19 @@ public class FrogEntity extends CreatureEntity
 	@Override
 	protected SoundEvent getAmbientSound()
 	{
-		return ModSoundEvents.ENTITY_FROG_AMBIENT;
+		return MSSoundEvents.ENTITY_FROG_AMBIENT;
 	}
 	
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
 	{
-		return ModSoundEvents.ENTITY_FROG_HURT;
+		return MSSoundEvents.ENTITY_FROG_HURT;
 	}
 	
 	@Override
 	protected SoundEvent getDeathSound()
 	{
-		return ModSoundEvents.ENTITY_FROG_DEATH;
+		return MSSoundEvents.ENTITY_FROG_DEATH;
 	}
 	
 	protected SoundEvent getJumpSound()

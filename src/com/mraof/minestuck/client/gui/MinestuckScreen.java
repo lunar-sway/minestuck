@@ -3,6 +3,7 @@ package com.mraof.minestuck.client.gui;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -10,9 +11,10 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -41,7 +43,7 @@ public abstract class MinestuckScreen extends Screen
 		GristType tooltipType = null;
 		GristSet clientGrist = PlayerSavedData.getClientGrist();
 
-		List<GristType> types = new ArrayList<>(GristType.REGISTRY.getValues());
+		List<GristType> types = new ArrayList<>(GristTypes.REGISTRY.getValues());
 		Collections.sort(types);
 		types = types.stream().skip(page * rows * columns).limit(rows * columns).collect(Collectors.toList());
 
@@ -76,7 +78,7 @@ public abstract class MinestuckScreen extends Screen
 		{
 			if (showName)
 			{
-				renderTooltip(Collections.singletonList(new TranslationTextComponent("grist.format", tooltipType.getDisplayName()).getFormattedText()), xcor, ycor, font);
+				renderTooltip(Collections.singletonList(tooltipType.getNameWithSuffix().getFormattedText()), xcor, ycor, font);
 
 			}
 			else

@@ -3,7 +3,7 @@
   "display": {
     "icon": {
       "item": "minestuck:cruxite_apple",
-      "nbt": "{color:22527}"
+      "nbt": "{color:10542335}"
     },
     "title": {
       "translate": "advancements.minestuck.entry.title"

@@ -7,9 +7,10 @@ import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
+import com.mraof.minestuck.world.MSDimensions;
+import com.mraof.minestuck.world.lands.LandInfoContainer;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import com.mraof.minestuck.util.Title;
-import com.mraof.minestuck.world.lands.LandDimension;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.SimpleNamedContainerProvider;
 import net.minecraft.item.ItemStack;
@@ -37,6 +38,8 @@ import java.util.UUID;
  */
 public abstract class MessageType
 {
+	public static final String MISSING_ITEM = "consort.missing_item";
+	
 	public abstract String getString();
 	
 	public abstract ITextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier);
@@ -47,11 +50,7 @@ public abstract class MessageType
 	private static ITextComponent createMessage(ConsortEntity consort, ServerPlayerEntity player, String unlocalizedMessage,
 												String[] args, boolean consortPrefix)
 	{
-		String s = consort.getConsortType().getName();
-		if(s == null)
-		{
-			s = "generic";
-		}
+		String s = consort.getType().getTranslationKey();
 		
 		Object[] obj = new Object[args.length];
 		SburbConnection c = SburbHandler.getConnectionForDimension(player.getServer(), consort.homeDimension);
@@ -70,17 +69,10 @@ public abstract class MessageType
 			} else if(args[i].equals("landName"))
 			{
 				World world = consort.getServer().getWorld(consort.homeDimension);
-				if(world != null && consort.world.getDimension() instanceof LandDimension)
+				LandInfoContainer landInfo = MSDimensions.getLandInfo(consort.getServer(), consort.homeDimension);
+				if(landInfo != null)
 				{
-					/*ChunkProviderLands chunkProvider = (ChunkProviderLands) world.getDimension().createChunkGenerator();TODO
-					ITextComponent aspect1 = new TranslationTextComponent(
-							"land." + chunkProvider.aspect1.getNames()[chunkProvider.nameIndex1]);
-					ITextComponent aspect2 = new TranslationTextComponent(
-							"land." + chunkProvider.aspect2.getNames()[chunkProvider.nameIndex2]);
-					if(chunkProvider.nameOrder)
-						obj[i] = new TranslationTextComponent("land.format", aspect1, aspect2);
-					else
-						obj[i] = new TranslationTextComponent("land.format", aspect2, aspect1);*/
+					obj[i] = landInfo.landAsTextComponent();
 				} else
 					obj[i] = "Land name";
 			} else if(args[i].equals("playerTitleLand"))
@@ -103,16 +95,16 @@ public abstract class MessageType
 					obj[i] = "Player aspect";
 			} else if(args[i].equals("consortSound"))
 			{
-				obj[i] = new TranslationTextComponent("consort.sound." + s);
+				obj[i] = new TranslationTextComponent(s + ".sound");
 			} else if(args[i].equals("consortSound2"))
 			{
-				obj[i] = new TranslationTextComponent("consort.sound2." + s);
+				obj[i] = new TranslationTextComponent(s + ".sound.2");
 			} else if(args[i].equals("consortType"))
 			{
-				obj[i] = new TranslationTextComponent("entity." + s + ".name");
+				obj[i] = new TranslationTextComponent(s);
 			} else if(args[i].equals("consortTypes"))
 			{
-				obj[i] = new TranslationTextComponent("entity." + s + ".plural.name");
+				obj[i] = new TranslationTextComponent(s + ".plural");
 			} else if(args[i].equals("playerTitle"))
 			{
 				PlayerIdentifier identifier = IdentifierHandler.encode(player);
@@ -123,9 +115,7 @@ public abstract class MessageType
 			} else if(args[i].equals("denizen"))
 			{
 				if(title != null)
-					obj[i] = new TranslationTextComponent("denizen."
-							+ PlayerSavedData.get(player.server).getData(c.getClientIdentifier()).title.getHeroAspect().toString()
-							+ ".name");
+					obj[i] = new TranslationTextComponent("denizen." + title.getHeroAspect().getTranslationKey());
 				else
 					obj[i] = "Denizen";
 			} else if(args[i].startsWith("nbtItem:"))
@@ -133,7 +123,7 @@ public abstract class MessageType
 				CompoundNBT nbt = consort.getMessageTagForPlayer(player);
 				ItemStack stack = ItemStack.read(nbt.getCompound(args[i].substring(8)));
 				if(!stack.isEmpty())
-					obj[i] = new TranslationTextComponent(stack.getTranslationKey() + ".name");
+					obj[i] = new TranslationTextComponent(stack.getTranslationKey());
 				else obj[i] = "Item";
 			}
 		}
@@ -142,7 +132,7 @@ public abstract class MessageType
 		if(consortPrefix)
 		{
 			message.getStyle().setColor(consort.getConsortType().getColor());
-			TranslationTextComponent entity = new TranslationTextComponent("entity." + s + ".name");
+			TranslationTextComponent entity = new TranslationTextComponent(s);
 			
 			return new TranslationTextComponent("chat.type.text", entity, message);
 		} else
@@ -1109,7 +1099,7 @@ public abstract class MessageType
 			} else
 			{
 				player.sendMessage(
-						createMessage(consort, player, "missingItem", new String[] { "nbtItem:" + itemData }, false).setStyle(new Style().setColor(TextFormatting.RED)));
+						createMessage(consort, player, MISSING_ITEM, new String[] { "nbtItem:" + itemData }, false).setStyle(new Style().setColor(TextFormatting.RED)));
 				return null;
 			}
 		}

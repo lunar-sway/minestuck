@@ -1,7 +1,6 @@
 package com.mraof.minestuck.world;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.world.lands.LandDimension;
 import net.minecraftforge.common.ModDimension;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -15,7 +14,7 @@ import javax.annotation.Nonnull;
 public class MSDimensionTypes
 {
 	
-	public static final ModDimension LANDS = getNull();
+	public static final LandDimension.Type LANDS = getNull();
 	public static final ModDimension SKAIA = getNull();
 	
 	@Nonnull

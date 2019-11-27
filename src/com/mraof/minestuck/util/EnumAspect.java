@@ -13,7 +13,7 @@ import java.util.Random;
  * The <code>toString()</code> method is overridden and returns a better cased version of the aspect name.
  * @author kirderf1
  */
-public enum EnumAspect
+public enum EnumAspect	//TODO This could potentially be changed to a registry. However note difficulties with the title land aspect registry
 {
 	BLOOD,BREATH,DOOM,HEART,HOPE,LIFE,LIGHT,MIND,RAGE,SPACE,TIME,VOID;
 	
@@ -89,7 +89,7 @@ public enum EnumAspect
 	@Deprecated
 	public String getDisplayName()
 	{
-		return I18n.format("title." + this.toString());
+		return I18n.format(getTranslationKey());
 	}
 	
 	/**
@@ -99,6 +99,11 @@ public enum EnumAspect
 	 */
 	public ITextComponent asTextComponent()
 	{
-		return new TranslationTextComponent("title." + this.toString());
+		return new TranslationTextComponent(getTranslationKey());
+	}
+	
+	public String getTranslationKey()
+	{
+		return "title.aspect." + this.toString();
 	}
 }

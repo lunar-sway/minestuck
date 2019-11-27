@@ -157,7 +157,7 @@ public class EndTreeFeature extends AbstractTreeFeature<NoFeatureConfig>
 		{
 			if(distance <= EndLeavesBlock.LEAF_SUSTAIN_DISTANCE)
 			{
-				setLogState(changedBlocks, world, curr, MSBlocks.END_LEAVES.getDefaultState().with(EndLeavesBlock.DISTANCE, distance), boundsIn);
+				setLogState(changedBlocks, world, curr, LEAF.with(EndLeavesBlock.DISTANCE, distance), boundsIn);
 				leaves(changedBlocks, world, curr.south(), boundsIn, distance + 1);
 				leaves(changedBlocks, world, curr.north(), boundsIn, distance + 1);
 				leaves(changedBlocks, world, curr.up(), boundsIn, distance + 1);

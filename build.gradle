@@ -19,11 +19,6 @@ repositories {
         url = 'http://dvs1.progwml6.com/files/maven/'
     }
     maven {
-        //CraftTweaker
-        name = 'blamejared'
-        url = 'http://maven.blamejared.com'
-    }
-    maven {
         // location of a maven mirror for JEI files, as a fallback
         name = 'ModMaven'
         url = 'modmaven.k-4u.nl'
@@ -37,7 +32,7 @@ archivesBaseName = 'Minestuck'
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 minecraft {
-    mappings channel: 'snapshot', version: '20190912-1.14.3'
+    mappings channel: 'snapshot', version: '20191127-1.14.3'
 
     accessTransformer = file('src/META-INF/accesstransformer.cfg')
 
@@ -95,14 +90,13 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.4-28.1.1'
+    minecraft 'net.minecraftforge:forge:1.14.4-28.1.96'
 
     def mc_version = "1.14.4"
     def jei_version = "6.0.0.11"
 	// http://dvs1.progwml6.com/files/maven
     compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
-    //deobf "CraftTweaker2:CraftTweaker2-API:4.1.6.457"
 }
 
 sourceSets {
@@ -115,19 +109,3 @@ sourceSets {
         }
     }
 }
-
-/*processResources
-{
-    // replace stuff in mcmod.info, nothing else
-    //from(sourceSets.main.resources.srcDirs) {
-    //    include 'mcmod.info'
-
-        // replace version and mcversion
-    //    expand 'version':project.version, 'mcversion':project.minecraft.version
-    //}
-        
-    // copy everything else, thats not the mcmod.info
-    //from(sourceSets.main.resources.srcDirs) {
-    //    exclude 'mcmod.info'
-    //}
-}*/

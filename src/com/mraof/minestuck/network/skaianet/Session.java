@@ -136,15 +136,16 @@ public class Session
 	 * @param nbt An CompoundNBT to read from.
 	 * @return This.
 	 */
-	Session read(CompoundNBT nbt)
+	static Session read(CompoundNBT nbt, SkaianetHandler handler)
 	{
+		Session s = new Session();
 		if(nbt.contains("name", 8))
-			name = nbt.getString("name");
-		else name = null;
+			s.name = nbt.getString("name");
+		else s.name = null;
 		
 		ListNBT list = nbt.getList("connections", 10);
 		for(int i = 0; i < list.size(); i++)
-			connections.add(new SburbConnection().read(list.getCompound(i)));
+			s.connections.add(SburbConnection.read(list.getCompound(i), handler));
 		
 		if(nbt.contains("predefinedPlayers", 9))	//If it is a tag list
 		{
@@ -152,7 +153,7 @@ public class Session
 			for(int i = 0; i < list.size(); i++)
 			{
 				CompoundNBT compound = list.getCompound(i);
-				predefinedPlayers.put(IdentifierHandler.load(compound, "player"), new PredefineData().read(compound));
+				s.predefinedPlayers.put(IdentifierHandler.load(compound, "player"), new PredefineData().read(compound));
 			}
 		} else
 		{	//Support for saves from older minestuck versions
@@ -161,14 +162,14 @@ public class Session
 			{
 				CompoundNBT compound = new CompoundNBT();
 				compound.putString("player", player);
-				predefinedPlayers.put(IdentifierHandler.load(compound, "player"), new PredefineData().read(predefineTag.getCompound(player)));
+				s.predefinedPlayers.put(IdentifierHandler.load(compound, "player"), new PredefineData().read(predefineTag.getCompound(player)));
 			}
 		}
 		
-		locked = nbt.getBoolean("locked");
+		s.locked = nbt.getBoolean("locked");
 		
-		checkIfCompleted(MinestuckConfig.globalSession.get());
-		return this;
+		s.checkIfCompleted(MinestuckConfig.globalSession.get());
+		return s;
 	}
 	
 	public boolean isCustom()

@@ -5,10 +5,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.ExtraJSONUtils;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class GristSet
 {
 
-	private final Map<GristType, Integer> gristTypes;
+	private final Map<GristType, Long> gristTypes;
 
 	/**
 	 * Creates a blank set of grist values, used in setting up the Grist Registry.
@@ -27,12 +27,12 @@ public class GristSet
 		this.gristTypes = new TreeMap<>();
 	}
 
-	private GristSet(Map<GristType, Integer> map)
+	private GristSet(Map<GristType, Long> map)
 	{
 		this.gristTypes = map;
 	}
 	
-	public static GristSet immutable(ImmutableMap<GristType, Integer> map)	//Hopefully this doesn't break sorting
+	public static GristSet immutable(ImmutableMap<GristType, Long> map)	//Hopefully this doesn't break sorting
 	{
 		return new GristSet(map);
 	}
@@ -47,7 +47,7 @@ public class GristSet
 	/**
 	 * Creates a set of grist values with one grist/amount pair. used in setting up the Grist Registry.
 	 */
-	public GristSet(GristType type, int amount)
+	public GristSet(GristType type, long amount)
 	{
 		this();
 		this.gristTypes.put(type, amount);
@@ -56,7 +56,7 @@ public class GristSet
 	/**
 	 * Creates a set of grist values with multiple grist/amount pairs. used in setting up the Grist Registry.
 	 */
-	public GristSet(GristType[] type, int[] amount)
+	public GristSet(GristType[] type, long[] amount)
 	{
 		this();
 
@@ -78,15 +78,15 @@ public class GristSet
 	/**
 	 * Gets the amount of grist, given a type of grist.
 	 */
-	public int getGrist(GristType type)
+	public long getGrist(GristType type)
 	{
-		return this.gristTypes.getOrDefault(type, 0);
+		return this.gristTypes.getOrDefault(type, 0L);
 	}
 	
 	/**
 	 * @return a value estimate for this grist set
 	 */
-	public float getValue()
+	public float getValue()	//TODO potentially duplicate code here, in GristHelper.getGristValue and in AlchemyRecipes.onAlchemizedItem
 	{
 		float sum = 0;
 		for(GristAmount amount : getArray())
@@ -97,7 +97,7 @@ public class GristSet
 	/**
 	 * Sets the amount of grist, given a type of grist and the new amount.
 	 */
-	public GristSet setGrist(GristType type, int amount)
+	public GristSet setGrist(GristType type, long amount)
 	{
 		if(type != null)
 			gristTypes.put(type, amount);
@@ -107,7 +107,7 @@ public class GristSet
 	/**
 	 * Adds an amount of grist to a GristSet, given a grist type and amount.
 	 */
-	public GristSet addGrist(GristType type, int amount)
+	public GristSet addGrist(GristType type, long amount)
 	{
 		if (amount == 0)
 		{
@@ -123,7 +123,7 @@ public class GristSet
 	/**
 	 * Returns a Hashtable with grist->amount pairs.
 	 */
-	public Map<GristType, Integer> getMap()
+	public Map<GristType, Long> getMap()
 	{
 		return this.gristTypes;
 	}
@@ -131,9 +131,9 @@ public class GristSet
 	/**
 	 * Returns a ArrayList containing GristAmount objects representing the set.
 	 */
-	public ArrayList<GristAmount> getArray()
+	public List<GristAmount> getArray()
 	{
-		return new ArrayList<>(this.gristTypes.entrySet().stream().map((entry) -> new GristAmount(entry.getKey(), entry.getValue())).collect(Collectors.toList()));
+		return this.gristTypes.entrySet().stream().map((entry) -> new GristAmount(entry.getKey(), entry.getValue())).collect(Collectors.toList());
 	}
 
 	/**
@@ -172,7 +172,7 @@ public class GristSet
 		this.gristTypes.forEach((type, amount) -> {
 			if (amount > 0)
 			{
-				this.gristTypes.put(type, roundDown ? (int) (amount * scale) : Math.max(Math.round(amount * scale), 1));
+				this.gristTypes.put(type, roundDown ? (long) (amount * scale) : Math.max(Math.round(amount * scale), 1));
 			}
 		});
 
@@ -194,7 +194,7 @@ public class GristSet
 		build.append("gristSet:[");
 
 		boolean first = true;
-		for (Map.Entry<GristType, Integer> entry : gristTypes.entrySet())
+		for (Map.Entry<GristType, Long> entry : gristTypes.entrySet())
 		{
 			if (!first)
 				build.append(',');
@@ -214,7 +214,7 @@ public class GristSet
 	public JsonElement serialize()
 	{
 		JsonObject json = new JsonObject();
-		for(Map.Entry<GristType, Integer> entry : gristTypes.entrySet())
+		for(Map.Entry<GristType, Long> entry : gristTypes.entrySet())
 		{
 			ResourceLocation id = entry.getKey().getRegistryName();
 			if(id == null)
@@ -233,10 +233,10 @@ public class GristSet
 		for(Map.Entry<String, JsonElement> entry : json.entrySet())
 		{
 			ResourceLocation gristId = new ResourceLocation(entry.getKey());
-			GristType type = GristType.REGISTRY.getValue(gristId);
+			GristType type = GristTypes.REGISTRY.getValue(gristId);
 			if(type == null)
 				throw new JsonParseException("'"+entry.getKey()+"' did not match an existing grist type!");
-			int amount = entry.getValue().getAsInt();
+			long amount = ExtraJSONUtils.getLong(entry.getValue(), entry.getKey());
 			set.addGrist(type, amount);
 		}
 		

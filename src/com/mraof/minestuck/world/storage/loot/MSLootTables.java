@@ -4,6 +4,7 @@ import com.mraof.minestuck.world.storage.loot.conditions.ConsortLootCondition;
 import com.mraof.minestuck.world.storage.loot.conditions.LandAspectLootCondition;
 import com.mraof.minestuck.world.storage.loot.functions.SetBoondollarCount;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.storage.loot.LootEntryManager;
 import net.minecraft.world.storage.loot.conditions.LootConditionManager;
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 
@@ -14,10 +15,11 @@ public class MSLootTables
 	public static final ResourceLocation CONSORT_FOOD_STOCK = new ResourceLocation("minestuck", "gameplay/consort_food");
 	public static final ResourceLocation CONSORT_GENERAL_STOCK = new ResourceLocation("minestuck", "gameplay/consort_general");
 	
-	public static void registerLootClasses()
+	public static void registerLootClasses()	//TODO consider if this should be called earlier (so we don't have to call it in MinestuckData)
 	{
 		LootConditionManager.registerCondition(new LandAspectLootCondition.Serializer());
 		LootConditionManager.registerCondition(new ConsortLootCondition.Serializer());
 		LootFunctionManager.registerFunction(new SetBoondollarCount.Serializer());
+		LootEntryManager.func_216194_a(new LandTableLootEntry.SerializerImpl());
 	}
 }

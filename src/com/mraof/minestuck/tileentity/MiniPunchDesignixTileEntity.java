@@ -17,6 +17,7 @@ import javax.annotation.Nullable;
 
 public class MiniPunchDesignixTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
 {
+	public static final String TITLE = "container.minestuck.mini_punch_designix";
 	public static final RunType TYPE = RunType.BUTTON;
 	
 	public MiniPunchDesignixTileEntity()
@@ -102,7 +103,7 @@ public class MiniPunchDesignixTileEntity extends MachineProcessTileEntity implem
 	@Override
 	public ITextComponent getDisplayName()
 	{
-		return new TranslationTextComponent("container.mini_punch_designix");
+		return new TranslationTextComponent(TITLE);
 	}
 	
 	@Override

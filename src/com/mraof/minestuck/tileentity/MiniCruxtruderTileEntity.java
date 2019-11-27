@@ -18,6 +18,7 @@ import javax.annotation.Nullable;
 
 public class MiniCruxtruderTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
 {
+	public static final String TITLE = "container.minestuck.mini_cruxtruder";
 	public static final RunType TYPE = RunType.AUTOMATIC;
 	public int color = -1;
 	
@@ -48,7 +49,7 @@ public class MiniCruxtruderTileEntity extends MachineProcessTileEntity implement
 	public boolean contentsValid()
 	{
 		ItemStack stack1 = this.inv.get(1);
-		return (!world.isBlockPowered(this.getPos()) && !this.inv.get(0).isEmpty() && (stack1.isEmpty() || stack1.getCount() < stack1.getMaxStackSize() && ColorCollector.getColorFromStack(stack1, -1) == this.color + 1));
+		return (!world.isBlockPowered(this.getPos()) && !this.inv.get(0).isEmpty() && (stack1.isEmpty() || stack1.getCount() < stack1.getMaxStackSize() && ColorCollector.getColorFromStack(stack1) == this.color));
 	}
 	
 	@Override
@@ -57,7 +58,7 @@ public class MiniCruxtruderTileEntity extends MachineProcessTileEntity implement
 		// Process the Raw Cruxite
 		
 		if (this.inv.get(1).isEmpty())
-			setInventorySlotContents(1, ColorCollector.setColor(new ItemStack(MSBlocks.CRUXITE_DOWEL), color + 1));	//TODO Sort out color storage
+			setInventorySlotContents(1, ColorCollector.setColor(new ItemStack(MSBlocks.CRUXITE_DOWEL), color));
 		else this.inv.get(1).grow(1);
 		decrStackSize(0, 1);
 	}
@@ -79,7 +80,7 @@ public class MiniCruxtruderTileEntity extends MachineProcessTileEntity implement
 	@Override
 	public ITextComponent getDisplayName()
 	{
-		return new TranslationTextComponent("container.mini_cruxtruder");
+		return new TranslationTextComponent(TITLE);
 	}
 	
 	@Override

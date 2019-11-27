@@ -21,7 +21,7 @@ import java.util.Map;
 
 public class MiniPunchDesignixBlock extends MachineProcessBlock
 {
-	public static final Map<Direction, VoxelShape> SHAPE = createRotatedShapes(0, 0, 0, 16, 16, 10);
+	public static final Map<Direction, VoxelShape> SHAPE = MSBlockShapes.SMALL_PUNCH_DESIGNIX.createRotatedShapes();
 	
 	public MiniPunchDesignixBlock(Properties properties)
 	{

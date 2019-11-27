@@ -16,6 +16,7 @@ import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.OreHandler;
 import com.mraof.minestuck.world.gen.feature.MSStructureProcessorTypes;
+import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.item.ItemStack;
@@ -28,6 +29,7 @@ public class CommonProxy
 		MSCriteriaTriggers.register();
 		MSStructureProcessorTypes.call();
 		MSEntityTypes.registerPlacements();
+		MSFillerBlockTypes.init();
 		
 		//register ore generation
 		OreHandler oreHandler = new OreHandler();

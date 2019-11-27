@@ -7,7 +7,7 @@ import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.item.block.*;
 import com.mraof.minestuck.item.foods.*;
 import com.mraof.minestuck.item.weapon.*;
-import com.mraof.minestuck.util.ModSoundEvents;
+import com.mraof.minestuck.util.MSSoundEvents;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -194,11 +194,10 @@ public class MSItems
 	public static Item GAMEGRL_MAGAZINE;
 	public static Item CREW_POSTER;
 	public static Item SBAHJ_POSTER;
-	public static Item FAKE_ARMS;
 	//Music disks
-	public static Item RECORD_EMISSARY_OF_DANCE;
-	public static Item RECORD_DANCE_STAB;
-	public static Item RECORD_RETRO_BATTLE;
+	public static Item MUSIC_DISC_EMISSARY_OF_DANCE;
+	public static Item MUSIC_DISC_DANCE_STAB_DANCE;
+	public static Item MUSIC_DISC_RETRO_BATTLE;
 	
 	public static void registerItems(IForgeRegistry<Item> registry)
 	{
@@ -354,13 +353,11 @@ public class MSItems
 		registerItemBlock(registry, PETRIFIED_POPPY, MSItemGroup.LANDS);
 		registerItemBlock(registry, STRAWBERRY, MSItemGroup.LANDS);
 		
-		registerItemBlock(registry, LAYERED_SAND, MSItemGroup.LANDS);
-		registerItemBlock(registry, LAYERED_RED_SAND, MSItemGroup.LANDS);
 		registerItemBlock(registry, GLOWY_GOOP, MSItemGroup.LANDS);
 		registerItemBlock(registry, COAGULATED_BLOOD, MSItemGroup.LANDS);
 		registerItemBlock(registry, VEIN, MSItemGroup.LANDS);
 		registerItemBlock(registry, VEIN_CORNER, MSItemGroup.LANDS);
-		registerItemBlock(registry, VEIN_CORNER_INVERTED, MSItemGroup.LANDS);
+		registerItemBlock(registry, INVERTED_VEIN_CORNER, MSItemGroup.LANDS);
 		
 		registerItemBlock(registry, COARSE_STONE_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, SHADE_BRICK_STAIRS, MSItemGroup.LANDS);
@@ -450,7 +447,7 @@ public class MSItems
 		registry.register(BEEF_SWORD = new ConsumableWeaponItem(MSItemTypes.MEAT_TIER, 2, -2.4F, 5.0F, 3, 0.8F, 75, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("beef_sword"));
 		registry.register(IRRADIATED_STEAK_SWORD = new ConsumableWeaponItem(MSItemTypes.MEAT_TIER, 2, -2.4F, 5.0F, 4, 0.4F, 25, new Item.Properties().defaultMaxDamage(150).group(MSItemGroup.WEAPONS)).setPotionEffect(new EffectInstance(Effects.WITHER, 100, 1), 0.9F).setRegistryName("irradiated_steak_sword"));
 		registry.register(KATANA = new WeaponItem(ItemTier.IRON, 3, -2.4F, 15.0F, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("katana"));
-		registry.register(UNBREAKABLE_KATANA = new WeaponItem(MSItemTypes.RUBY_TIER, 3, -2.4F, 15.0F, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("unbreakable_katana"));	//Not actually unbreakable
+		registry.register(UNBREAKABLE_KATANA = new WeaponItem(MSItemTypes.RUBY_TIER, 3, -2.4F, 15.0F, new Item.Properties().defaultMaxDamage(-1).group(MSItemGroup.WEAPONS)).setRegistryName("unbreakable_katana"));	//Actually unbreakable
 		registry.register(FIRE_POKER = new FireWeaponItem(ItemTier.IRON, 4, -2.4F, 15.0F,  30, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("fire_poker"));
 		registry.register(HOT_HANDLE = new FireWeaponItem(ItemTier.IRON, 3, -2.4F, 15.0F, 10, new Item.Properties().defaultMaxDamage(350).group(MSItemGroup.WEAPONS)).setRegistryName("too_hot_to_handle"));
 		registry.register(CALEDSCRATCH = new WeaponItem(MSItemTypes.RUBY_TIER, 2, -2.4F, 15.0F, new Item.Properties().defaultMaxDamage(1561).group(MSItemGroup.WEAPONS)).setRegistryName("caledscratch"));
@@ -632,9 +629,9 @@ public class MSItems
 		//registry.register(FAKE_ARMS = new Item(new Item.Properties().maxStackSize(1)).setRegistryName("fake_arms"));
 		
 		//Music disks
-		registry.register(RECORD_EMISSARY_OF_DANCE = new ModMusicDiscItem(13, ModSoundEvents.MUSIC_DISC_EMISSARY_OF_DANCE, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("record_emissary"));
-		registry.register(RECORD_DANCE_STAB = new ModMusicDiscItem(13, ModSoundEvents.MUSIC_DISC_DANCE_STAB_DANCE, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("record_dance_stab"));
-		registry.register(RECORD_RETRO_BATTLE = new ModMusicDiscItem(13, ModSoundEvents.MUSIC_DISC_RETRO_BATTLE_THEME, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("record_retro_battle"));
+		registry.register(MUSIC_DISC_EMISSARY_OF_DANCE = new ModMusicDiscItem(13, MSSoundEvents.MUSIC_DISC_EMISSARY_OF_DANCE, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_emissary_of_dance"));
+		registry.register(MUSIC_DISC_DANCE_STAB_DANCE = new ModMusicDiscItem(13, MSSoundEvents.MUSIC_DISC_DANCE_STAB_DANCE, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_dance_stab_dance"));
+		registry.register(MUSIC_DISC_RETRO_BATTLE = new ModMusicDiscItem(13, MSSoundEvents.MUSIC_DISC_RETRO_BATTLE_THEME, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_retro_battle"));
 		
 		WeaponItem.addToolMaterial(ToolType.PICKAXE, Arrays.asList(Material.IRON, Material.ANVIL, Material.ROCK));
 		WeaponItem.addToolMaterial(ToolType.AXE, Arrays.asList(Material.WOOD, Material.PLANTS, Material.TALL_PLANTS));

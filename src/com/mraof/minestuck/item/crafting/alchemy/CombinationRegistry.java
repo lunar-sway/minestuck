@@ -1,18 +1,19 @@
 package com.mraof.minestuck.item.crafting.alchemy;
 
-import java.util.Arrays;
-import java.util.Hashtable;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
 import com.mraof.minestuck.block.MSBlocks;
-
 import com.mraof.minestuck.util.Debug;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.IItemProvider;
+
+import javax.annotation.Nonnull;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class CombinationRegistry {
 	private static Hashtable<List<Object>, ItemStack> combRecipes = new Hashtable<>();
@@ -82,9 +83,6 @@ public class CombinationRegistry {
 	{
 		if(input == null)
 			throw new IllegalArgumentException("Input is null");
-		if(input instanceof String)
-			if(AlchemyRecipes.getItems(input).isEmpty())
-				throw new IllegalArgumentException("No oredict item found for \""+input+"\"");
 	}
 	
 	/**
@@ -98,13 +96,13 @@ public class CombinationRegistry {
 		
 		if((item = getCombination(input1.getItem(), input2.getItem(), mode)).isEmpty())
 		{
-			Tag<Item>[] itemTags2 = getTags(input2);
+			Collection<Tag<Item>> itemTags2 = getTags(input2);
 			
 			for(Tag<Item> str2 : itemTags2)
 				if(!(item = getCombination(input1.getItem(), str2, mode)).isEmpty())
 					return item;
 			
-			Tag<Item>[] itemTags1 = getTags(input1);
+			Collection<Tag<Item>> itemTags1 = getTags(input1);
 			for(Tag<Item> str1 : itemTags1)
 				if(!(item = getCombination(str1, input2.getItem(), mode)).isEmpty())
 					return item;
@@ -144,13 +142,9 @@ public class CombinationRegistry {
 		return item;
 	}
 	
-	protected static Tag<Item>[] getTags(@Nonnull ItemStack stack)
+	protected static Collection<Tag<Item>> getTags(@Nonnull ItemStack stack)
 	{
-		/*int[] itemIDs = OreDictionary.getOreIDs(stack);
-		String[] itemNames = new String[itemIDs.length];
-		for(int i = 0; i < itemIDs.length; i++)
-			itemNames[i] = OreDictionary.getOreName(itemIDs[i]);*/
-		return null;	//TODO Figure out tags
+		return ItemTags.getCollection().getOwningTags(stack.getItem()).stream().map(ItemTags.getCollection()::get).collect(Collectors.toSet());
 	}
 	
 	public static Hashtable<List<Object>, ItemStack> getAllConversions()

@@ -1,7 +1,6 @@
 package com.mraof.minestuck.world.biome;
 
-import com.mraof.minestuck.world.lands.gen.LandGenSettings;
-import net.minecraft.world.WorldType;
+import com.mraof.minestuck.world.gen.LandGenSettings;
 import net.minecraft.world.gen.LazyAreaLayerContext;
 import net.minecraft.world.gen.area.IAreaFactory;
 import net.minecraft.world.gen.area.LazyArea;

@@ -18,6 +18,9 @@ import net.minecraftforge.fml.client.config.GuiButtonExt;
  */
 public abstract class MachineScreen<T extends MachineContainer> extends ContainerScreen<T>
 {
+	public static final String GO = "minestuck.button.go";
+	public static final String STOP = "minestuck.button.stop";
+	
 	protected final MachineProcessTileEntity.RunType runType;
 	protected GoButton goButton;
 	
@@ -38,7 +41,7 @@ public abstract class MachineScreen<T extends MachineContainer> extends Containe
 			GoButtonPacket packet = new GoButtonPacket(true, mode && !container.overrideStop());
 			MSPacketHandler.sendToServer(packet);
 			
-			goButton.setMessage(I18n.format(mode && !container.overrideStop() ? "gui.buttonStop" : "gui.buttonGo"));
+			goButton.setMessage(I18n.format(mode && !container.overrideStop() ? STOP : GO));
 			return true;
 		}
 		return super.keyPressed(keyCode, scanCode, i);
@@ -91,7 +94,7 @@ public abstract class MachineScreen<T extends MachineContainer> extends Containe
 					GoButtonPacket packet = new GoButtonPacket(true, false);
 					MSPacketHandler.sendToServer(packet);
 					
-					goButton.setMessage(I18n.format("gui.buttonGo"));
+					goButton.setMessage(I18n.format(GO));
 				}
 			} else if(mouseKey == 1 && runType == MachineProcessTileEntity.RunType.BUTTON_OVERRIDE)
 			{
@@ -99,7 +102,7 @@ public abstract class MachineScreen<T extends MachineContainer> extends Containe
 				GoButtonPacket packet = new GoButtonPacket(true, !container.overrideStop());
 				MSPacketHandler.sendToServer(packet);
 				
-				goButton.setMessage(I18n.format(container.overrideStop() ? "gui.buttonStop" : "gui.buttonGo"));
+				goButton.setMessage(I18n.format(container.overrideStop() ? STOP : GO));
 			}
 		}
 	}

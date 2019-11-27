@@ -1,7 +1,7 @@
 package com.mraof.minestuck.world.biome;
 
-import com.mraof.minestuck.world.lands.LandAspects;
-import com.mraof.minestuck.world.lands.gen.LandGenSettings;
+import com.mraof.minestuck.world.lands.LandTypePair;
+import com.mraof.minestuck.world.gen.LandGenSettings;
 import net.minecraft.world.biome.Biome;
 
 public class LandBiomeHolder
@@ -13,14 +13,14 @@ public class LandBiomeHolder
 	public float roughBiomeDepth = MSBiomes.LAND_ROUGH.getDepth(), roughBiomeScale = MSBiomes.LAND_ROUGH.getScale();
 	public float oceanBiomeDepth = MSBiomes.LAND_OCEAN.getDepth(), oceanBiomeScale = MSBiomes.LAND_OCEAN.getScale();
 	
-	private final LandAspects landAspects;
+	private final LandTypePair landTypes;
 	private final LandWrapperBiome normalBiome, oceanBiome, roughBiome;
 	
-	public LandBiomeHolder(LandAspects landAspects, boolean isFake)
+	public LandBiomeHolder(LandTypePair landTypes, boolean isFake)
 	{
-		this.landAspects = landAspects;
-		this.landAspects.aspectTerrain.setBiomeSettings(this);
-		this.landAspects.aspectTitle.setBiomeSettings(this);
+		this.landTypes = landTypes;
+		this.landTypes.terrain.setBiomeSettings(this);
+		this.landTypes.title.setBiomeSettings(this);
 		
 		if(!isFake)
 		{
@@ -32,23 +32,27 @@ public class LandBiomeHolder
 	
 	public void initBiomesWith(LandGenSettings settings)
 	{
-		LandWrapperBiome[] biomes = {normalBiome, roughBiome, oceanBiome};
-		for(LandWrapperBiome biome : biomes)
+		for(LandWrapperBiome biome : getBiomes())
 		{
 			biome.init(settings);
-			landAspects.aspectTerrain.setBiomeGenSettings(biome, settings.getBlockRegistry());
-			landAspects.aspectTitle.setBiomeGenSettings(biome, settings.getBlockRegistry());
+			landTypes.terrain.setBiomeGenSettings(biome, settings.getBlockRegistry());
+			landTypes.title.setBiomeGenSettings(biome, settings.getBlockRegistry());
 		}
 	}
 	
-	public LandWrapperBiome localBiomeFrom(Biome biome) {
-		LandWrapperBiome[] biomes = {normalBiome, roughBiome, oceanBiome};
-		for(LandWrapperBiome wrapperBiome : biomes)
+	public LandWrapperBiome localBiomeFrom(Biome biome)
+	{
+		for(LandWrapperBiome wrapperBiome : getBiomes())
 		{
 			if(wrapperBiome.staticBiome == biome)
 				return wrapperBiome;
 		}
 		
 		return normalBiome;
+	}
+	
+	public LandWrapperBiome[] getBiomes()
+	{
+		return new LandWrapperBiome[]{normalBiome, roughBiome, oceanBiome};
 	}
 }

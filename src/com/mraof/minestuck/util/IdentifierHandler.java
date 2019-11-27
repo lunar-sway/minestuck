@@ -1,14 +1,6 @@
 package com.mraof.minestuck.util;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.UUID;
-
-import com.google.common.collect.Lists;
 import com.mraof.minestuck.MinestuckConfig;
-
-import net.minecraft.command.CommandException;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.*;
@@ -16,13 +8,20 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerList;
 import net.minecraftforge.common.UsernameCache;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Used to encode/decode player usernames, to handle uses with LAN.
  * This file is to now only be used serverside.
  * @author kirderf1
  */
-public class IdentifierHandler {
+public class IdentifierHandler	//TODO Probably needs a redesign. Do we even need the option to identify players by username? If we change to only use uuids, how do we define special identifiers such as .null or .fake? If we get rid of the host player reference, is there still a point to having a different representation client-side?
+{
 	
 	public static String host;	//This basically stores server.getServerOwner(), but for all players to access
 	public static final PlayerIdentifier nullIdentifier = new PlayerIdentifier(".null");
@@ -89,9 +88,9 @@ public class IdentifierHandler {
 				return id;
 		if(MinestuckConfig.useUUID.get() != identifier.useUUID)
 		{
-			/*EntityPlayer player = identifier.getPlayer();
-			if(player != null) TODO
-				return encode(player);*/
+			ServerPlayerEntity player = identifier.getPlayer(ServerLifecycleHooks.getCurrentServer());
+			if(player != null)
+				return encode(player);
 		}
 		identifier.id = nextIdentifierId;
 		nextIdentifierId++;

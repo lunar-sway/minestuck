@@ -64,8 +64,8 @@ public class GristWidgetScreen extends MachineScreen<GristWidgetContainer>
 			String costText = GuiUtil.addSuffix(cost)+"£("+GuiUtil.addSuffix(has)+")";
 			font.drawString(costText, xSize - 9 - font.getStringWidth(costText), ySize - 96 + 3, cost > has ? 0xFF0000 : 0x00FF00);
 			
-			List<String> tooltip = GuiUtil.getGristboardTooltip(set, mouseX - this.guiLeft, mouseY - this.guiTop, 9, 45, font);
-			if (tooltip != null)
+			List<String> tooltip = GuiUtil.getGristboardTooltip(set, GuiUtil.GristboardMode.GRIST_WIDGET, mouseX - this.guiLeft, mouseY - this.guiTop, 9, 45, font);
+			if(!tooltip.isEmpty())
 				this.renderTooltip(tooltip, mouseX - this.guiLeft, mouseY - this.guiTop, font);
 			else if(mouseY - guiTop >= ySize - 96 + 3 && mouseY - guiTop < ySize - 96 + 3 + font.FONT_HEIGHT)
 			{

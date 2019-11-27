@@ -7,9 +7,9 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.MSDimensions;
-import com.mraof.minestuck.world.lands.LandAspects;
-import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
-import com.mraof.minestuck.world.lands.title.TitleLandAspect;
+import com.mraof.minestuck.world.lands.LandTypePair;
+import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
+import com.mraof.minestuck.world.lands.title.TitleLandType;
 import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -24,7 +24,7 @@ import java.util.*;
 import static com.mraof.minestuck.entity.consort.MessageType.*;
 import static com.mraof.minestuck.world.storage.loot.MSLootTables.CONSORT_FOOD_STOCK;
 import static com.mraof.minestuck.world.storage.loot.MSLootTables.CONSORT_GENERAL_STOCK;
-import static com.mraof.minestuck.world.lands.LandAspectRegistry.*;
+import static com.mraof.minestuck.world.lands.LandTypes.*;
 
 /**
  * Handles message registry, message selection and contains the main message
@@ -40,11 +40,11 @@ public class ConsortDialogue
 	/**
 	 * Make sure to call after land registry
 	 */
-	public static void init()
+	public static void init()	//TODO Could likely be exported to a json format
 	{
 		// Wind
 		addMessage("dad_wind").landTitle(WIND);
-		addMessage(new ChainMessage(new SingleMessage("pyre1"), new SingleMessage("pyre2"))).landTitle(WIND).consort(EnumConsort.SALAMANDER, EnumConsort.TURTLE);
+		addMessage(new ChainMessage(new SingleMessage("pyre.1"), new SingleMessage("pyre.2"))).landTitle(WIND).consort(EnumConsort.SALAMANDER, EnumConsort.TURTLE);
 		addMessage("koolaid").landTitle(PULSE).consort(EnumConsort.SALAMANDER, EnumConsort.TURTLE);
 		addMessage("murder_rain").landTitle(PULSE);
 		addMessage("swimming").landTitle(PULSE).consort(EnumConsort.IGUANA, EnumConsort.TURTLE);
@@ -54,7 +54,7 @@ public class ConsortDialogue
 		addMessage("skeleton_horse").landTitle(THUNDER);
 		addMessage("blue_moon").landTitle(THUNDER).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
 		addMessage("lightning_strike").landTitle(THUNDER).consort(EnumConsort.TURTLE);
-		addMessage(new ChainMessage(new SingleMessage("reckoning1"), new SingleMessage("reckoning2"), new SingleMessage("reckoning3", "consort_type"))).landTitle(THUNDER);
+		addMessage(new ChainMessage(new SingleMessage("reckoning.1"), new SingleMessage("reckoning.2"), new SingleMessage("reckoning.3", "consort_type"))).landTitle(THUNDER);
 		addMessage(new ChainMessage(new SingleMessage("thunder_death.1"), new SingleMessage("thunder_death.2"))).landTitle(THUNDER).landTerrain(WOOD);
 		addMessage("hardcore").landTitle(THUNDER).landTerrain(HEAT);
 		addMessage(new ChainMessage(new SingleMessage("thunder_throw.1"), new SingleMessage("thunder_throw.2"))).landTitle(THUNDER).consort(EnumConsort.TURTLE, EnumConsort.SALAMANDER);
@@ -98,9 +98,9 @@ public class ConsortDialogue
 		//Frogs
 		addMessage("frog_creation").landTitle(FROGS);
 		addMessage("frog_imitation").landTitle(FROGS);
-		addMessage(new ChainMessage(new SingleMessage("frog_variants1"), new SingleMessage("frog_variants2", "land_name"))).landTitle(FROGS);
+		addMessage(new ChainMessage(new SingleMessage("frog_variants.1"), new SingleMessage("frog_variants.2", "land_name"))).landTitle(FROGS);
 		addMessage("frog_hatred").landTitle(FROGS);
-		addMessage(new ChainMessage(new SingleMessage("grasshopper_fishing1"), new SingleMessage("grasshopper_fishing2"))).landTitle(FROGS).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
+		addMessage(new ChainMessage(new SingleMessage("grasshopper_fishing.1"), new SingleMessage("grasshopper_fishing.2"))).landTitle(FROGS).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
 		addMessage("gay_frogs").landTitle(FROGS).landTerrainSpecific(RAINBOW);
 		
 		//Buckets
@@ -158,7 +158,7 @@ public class ConsortDialogue
 		addMessage("yellow_better").landTerrainSpecific(SAND, SANDSTONE);
 		
 		//Frost
-		addMessage(new ChainMessage(new SingleMessage("frozen1"), new DescriptionMessage("frozen2"))).landTerrain(FROST);
+		addMessage(new ChainMessage(new SingleMessage("frozen.1"), new DescriptionMessage("frozen.2"))).landTerrain(FROST);
 		addMessage(new ChoiceMessage(new SingleMessage("fur_coat"), new SingleMessage[]{new SingleMessage("fur_coat.pay"), new SingleMessage("fur_coat.ignore")},
 				new MessageType[]{new PurchaseMessage(MSLootTables.CONSORT_JUNK_REWARD, 100, new ChainMessage(1, new SingleMessage("fur_coat.grattitude"), new SingleMessage("thank_you"))),
 						new SingleMessage("fur_coat.death")})).landTerrain(FROST);
@@ -169,8 +169,8 @@ public class ConsortDialogue
 		addMessage("really_likes_trees").landTerrain(FOREST);
 		
 		//Fungi
-		addMessage(new ChainMessage(new SingleMessage("mycelium1"), new SingleMessage("mycelium2"))).landTerrain(FUNGI);
-		addMessage(new ChainMessage(new SingleMessage("adaptation1"), new SingleMessage("adaptation2"))).landTerrain(FUNGI);
+		addMessage(new ChainMessage(new SingleMessage("mycelium.1"), new SingleMessage("mycelium.2"))).landTerrain(FUNGI);
+		addMessage(new ChainMessage(new SingleMessage("adaptation.1"), new SingleMessage("adaptation.2"))).landTerrain(FUNGI);
 		addMessage("mushroom_curse", "denizen").landTerrain(FUNGI);
 		addMessage("jacket").landTerrain(FUNGI);
 		addMessage("mildew").landTerrain(FUNGI);
@@ -229,23 +229,23 @@ public class ConsortDialogue
 		
 		MessageType raps = new RandomMessage("rap_battles", RandomKeepResult.KEEP_CONSORT,
 				new DelayMessage(new int[] {17, 17, 30},
-					new SingleMessage("rap_battle.A1"), new SingleMessage("rap_battle.A2"),
-					new SingleMessage("rap_battle.A3"), new SingleMessage("rap_battle.A4")
+					new SingleMessage("rap_battle.a1"), new SingleMessage("rap_battle.a2"),
+					new SingleMessage("rap_battle.a3"), new SingleMessage("rap_battle.a4")
 				), new DelayMessage(new int[] {25},
-					new SingleMessage("rap_battle.B1"),new SingleMessage("rap_battle.B2"),
-					new SingleMessage("rap_battle.B3"),new SingleMessage("rap_battle.B4")
+					new SingleMessage("rap_battle.b1"),new SingleMessage("rap_battle.b2"),
+					new SingleMessage("rap_battle.b3"),new SingleMessage("rap_battle.b4")
 				), new DelayMessage(new int[] {17},
-					new SingleMessage("rap_battle.C1"),new SingleMessage("rap_battle.C2"),
-					new SingleMessage("rap_battle.C3", "consort_sound"), new SingleMessage("rap_battle.C4")
+					new SingleMessage("rap_battle.c1"),new SingleMessage("rap_battle.c2"),
+					new SingleMessage("rap_battle.c3", "consort_sound"), new SingleMessage("rap_battle.c4")
 				), new DelayMessage(new int[] {25, 20, 30},
-					new SingleMessage("rap_battle.D1"),new SingleMessage("rap_battle.D2"),
-					new SingleMessage("rap_battle.D3"),new SingleMessage("rap_battle.D4")
+					new SingleMessage("rap_battle.d1"),new SingleMessage("rap_battle.d2"),
+					new SingleMessage("rap_battle.d3"),new SingleMessage("rap_battle.d4")
 				), new DelayMessage(new int[] {17, 20, 30},
-					new SingleMessage("rap_battle.E1"),new SingleMessage("rap_battle.E2"),
-					new SingleMessage("rap_battle.E3"),new SingleMessage("rap_battle.E4")
+					new SingleMessage("rap_battle.e1"),new SingleMessage("rap_battle.e2"),
+					new SingleMessage("rap_battle.e3"),new SingleMessage("rap_battle.e4")
 				), new DelayMessage(new int[] {25},
-					new SingleMessage("rap_battle.F1"),new SingleMessage("rap_battle.F2"),
-					new SingleMessage("rap_battle.F3"),new SingleMessage("rap_battle.F4")));
+					new SingleMessage("rap_battle.f1"),new SingleMessage("rap_battle.f2"),
+					new SingleMessage("rap_battle.f3"),new SingleMessage("rap_battle.f4")));
 		addMessage(new ChoiceMessage(false, new SingleMessage("rap_battle"),
 				new SingleMessage[]
 				{
@@ -326,7 +326,7 @@ public class ConsortDialogue
 								new SingleMessage[]
 								{
 										new SingleMessage("shady_offer.deny_again"),
-										new SingleMessage("shady_offer.buy2")
+										new SingleMessage("shady_offer.buy_2")
 								},
 								new MessageType[]
 								{
@@ -397,7 +397,7 @@ public class ConsortDialogue
 		addMessage(new MerchantGuiMessage(new SingleMessage("blood_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(PULSE);
 		addMessage(new MerchantGuiMessage(new SingleMessage("life_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(RABBITS);
 		addMessage(new MerchantGuiMessage(new SingleMessage("doom_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(THUNDER);
-		//addMessage(new MerchantGuiMessage(new SingleMessage("frog_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(LandAspectRegistry.frogAspect);
+		addMessage(new MerchantGuiMessage(new SingleMessage("frog_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(FROGS);
 		addMessage(new MerchantGuiMessage(new SingleMessage("space_general_Shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(FROGS);
 		addMessage(new MerchantGuiMessage(new SingleMessage("time_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(CLOCKWORK);
 		addMessage(new MerchantGuiMessage(new SingleMessage("mind_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(THOUGHT);
@@ -429,27 +429,27 @@ public class ConsortDialogue
 		return msg;
 	}
 	
-	public static TitleLandAspect[] allExceptSpecific(TitleLandAspect... aspects)
+	public static TitleLandType[] allExceptSpecific(TitleLandType... aspects)
 	{
-		Set<TitleLandAspect> set = new HashSet<>(TITLE_REGISTRY.getValues());
-		for(TitleLandAspect exceptedAspect : aspects)
+		Set<TitleLandType> set = new HashSet<>(TITLE_REGISTRY.getValues());
+		for(TitleLandType exceptedAspect : aspects)
 			set.remove(exceptedAspect);
 		
-		return set.toArray(new TitleLandAspect[0]);
+		return set.toArray(new TitleLandType[0]);
 	}
 	
-	public static TitleLandAspect[] allExcept(TitleLandAspect... aspects)
+	public static TitleLandType[] allExcept(TitleLandType... aspects)
 	{
-		Set<TitleLandAspect> set = new HashSet<>(TITLE_REGISTRY.getValues());
-		for(TitleLandAspect exceptedAspect : aspects)
+		Set<TitleLandType> set = new HashSet<>(TITLE_REGISTRY.getValues());
+		for(TitleLandType exceptedAspect : aspects)
 			set.removeIf(aspect -> aspect.getGroup().equals(exceptedAspect.getGroup()));
 		
-		return set.toArray(new TitleLandAspect[0]);
+		return set.toArray(new TitleLandType[0]);
 	}
 	
 	public static DialogueWrapper getRandomMessage(ConsortEntity consort, ServerPlayerEntity player)
 	{
-		LandAspects aspects = MSDimensions.getAspects(player.getServer(), consort.homeDimension);
+		LandTypePair aspects = MSDimensions.getAspects(player.getServer(), consort.homeDimension);
 		
 		List<DialogueWrapper> list = new ArrayList<>();
 		
@@ -459,13 +459,13 @@ public class ConsortDialogue
 				continue;
 			if(message.consortRequirement != null && !message.consortRequirement.contains(consort.getConsortType()))
 				continue;
-			if(message.aspect1Requirement != null && aspects != null && !message.aspect1Requirement.contains(aspects.aspectTerrain.getGroup()))
+			if(message.aspect1Requirement != null && aspects != null && !message.aspect1Requirement.contains(aspects.terrain.getGroup()))
 				continue;
-			if(message.aspect2Requirement != null && aspects != null && !message.aspect2Requirement.contains(aspects.aspectTitle.getGroup()))
+			if(message.aspect2Requirement != null && aspects != null && !message.aspect2Requirement.contains(aspects.title.getGroup()))
 				continue;
-			if(message.aspect1RequirementS != null && aspects != null && !message.aspect1RequirementS.contains(aspects.aspectTerrain))
+			if(message.aspect1RequirementS != null && aspects != null && !message.aspect1RequirementS.contains(aspects.terrain))
 				continue;
-			if(message.aspect2RequirementS != null && aspects != null && !message.aspect2RequirementS.contains(aspects.aspectTitle))
+			if(message.aspect2RequirementS != null && aspects != null && !message.aspect2RequirementS.contains(aspects.title))
 				continue;
 			if(message.merchantRequirement == null && consort.merchantType != EnumConsort.MerchantType.NONE
 					|| message.merchantRequirement != null && !message.merchantRequirement.contains(consort.merchantType))
@@ -499,8 +499,8 @@ public class ConsortDialogue
 		
 		private Set<ResourceLocation> aspect1Requirement;
 		private Set<ResourceLocation> aspect2Requirement;
-		private Set<TerrainLandAspect> aspect1RequirementS;
-		private Set<TitleLandAspect> aspect2RequirementS;
+		private Set<TerrainLandType> aspect1RequirementS;
+		private Set<TitleLandType> aspect2RequirementS;
 		private EnumSet<EnumConsort> consortRequirement;
 		private EnumSet<MerchantType> merchantRequirement;
 		private ConsortRequirement additionalRequirement;
@@ -511,13 +511,13 @@ public class ConsortDialogue
 			return this;
 		}
 		
-		public DialogueWrapper landTerrain(TerrainLandAspect... aspects)
+		public DialogueWrapper landTerrain(TerrainLandType... aspects)
 		{
 			if(isAnyNull(aspects))
 				Debug.warnf("Land aspect is null for consort message %s, this is probably not intended", messageStart.getString());
 			reqLand = true;
 			aspect1Requirement = Sets.newHashSet();
-			for(TerrainLandAspect aspect : aspects)
+			for(TerrainLandType aspect : aspects)
 			{
 				if(aspect != null)
 					aspect1Requirement.add(aspect.getGroup());
@@ -526,7 +526,7 @@ public class ConsortDialogue
 			return this;
 		}
 		
-		public DialogueWrapper landTerrainSpecific(TerrainLandAspect... aspects)
+		public DialogueWrapper landTerrainSpecific(TerrainLandType... aspects)
 		{
 			
 			if(isAnyNull(aspects))
@@ -536,19 +536,19 @@ public class ConsortDialogue
 			return this;
 		}
 		
-		public DialogueWrapper landTitle(TitleLandAspect... aspects)
+		public DialogueWrapper landTitle(TitleLandType... aspects)
 		{
 			if(isAnyNull(aspects))
 				Debug.warnf("Land aspect is null for consort message %s, this is probably not intended", messageStart.getString());
 			reqLand = true;
 			aspect2Requirement = Sets.newHashSet();
-			for(TitleLandAspect aspect : aspects)
+			for(TitleLandType aspect : aspects)
 				if(aspect != null)
 					aspect2Requirement.add(aspect.getGroup());
 			return this;
 		}
 		
-		public DialogueWrapper landTitleSpecific(TitleLandAspect... aspects)
+		public DialogueWrapper landTitleSpecific(TitleLandType... aspects)
 		{
 			if(isAnyNull(aspects))
 				Debug.warnf("Land aspect is null for consort message %s, this is probably not intended", messageStart.getString());

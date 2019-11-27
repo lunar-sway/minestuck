@@ -5,6 +5,7 @@ import static com.mraof.minestuck.MinestuckConfig.artifactRange;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 import com.mraof.minestuck.MinestuckConfig;
@@ -41,11 +42,14 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.Chunk.CreateEntityType;
 import net.minecraft.world.chunk.ChunkSection;
+import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 
 public abstract class CruxiteArtifactItem extends Item
 {
+	//TODO item classes should not be a container for non-final fields such as these. The functionality of this class need to be restructured!
+	//Eventually we'd want cruxite artifacts of kinds other than items, so it's a good idea to move this to a more general class.
 	private int xDiff;
 	private int yDiff;
 	private int zDiff;
@@ -82,15 +86,15 @@ public abstract class CruxiteArtifactItem extends Item
 					
 					if(c != null && c.hasEntered())
 					{
-						World newWorld = player.getServer().getWorld(c.getClientDimension());
-						if(newWorld == null)
+						ServerWorld landWorld = Objects.requireNonNull(player.getServer()).getWorld(c.getClientDimension());
+						if(landWorld == null)
 						{
 							return;
 						}
 						
 						//Teleports the player to their home in the Medium, without any bells or whistles.
-						BlockPos pos = newWorld.getDimension().getSpawnPoint();
-						//Teleport.teleportEntity(player, c.getClientDimension(), null, pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F);TODO
+						BlockPos pos = landWorld.getDimension().getSpawnPoint();
+						Teleport.teleportEntity(player, landWorld, pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F, player.rotationYaw, player.rotationPitch);
 						
 						return;
 					}
@@ -105,14 +109,22 @@ public abstract class CruxiteArtifactItem extends Item
 					}
 					else
 					{
-						if(this.prepareDestination(player.getPosition(), player, (ServerWorld) player.world))
+						ServerWorld oldWorld = (ServerWorld) player.world;
+						ServerWorld newWorld = Objects.requireNonNull(player.getServer()).getWorld(landDimension);
+						if(newWorld == null)
 						{
-							if(player.changeDimension(landDimension) != null)//TODO
-							{
+							return;
+						}
+						
+						if(this.prepareDestination(player.getPosition(), player, oldWorld))
+						{
+							if(Teleport.teleportEntity(player, newWorld) != null)
+							{	//TODO Beware that the player is teleported BEFORE blocks are moved over. This causes problems because we're setting blocks without the "send to client" in order to save time
+								finalizeDestination(player, oldWorld, newWorld);
 								SkaianetHandler.get(player.world).onEntry(identifier);
 							} else
 							{
-								player.sendMessage(new StringTextComponent("Entry failed!"));
+								player.sendMessage(new StringTextComponent("Entry failed. Unable to teleport you!"));
 							}
 						}
 					}
@@ -124,12 +136,6 @@ public abstract class CruxiteArtifactItem extends Item
 			player.sendMessage(new StringTextComponent("[Minestuck] Something went wrong during entry. "+ (player.getName().getString().equals(IdentifierHandler.host)?"Check the console for the error message.":"Notify the server owner about this.")).setStyle(new Style().setColor(TextFormatting.RED)));
 		}
 	}
-	
-	/*@Override
-	public void placeEntity(World world, Entity entity, float yaw)
-	{
-		finalizeDestination(entity, (ServerWorld) entity.world, (ServerWorld) world);
-	}*/
 	
 	public boolean prepareDestination(BlockPos origin, ServerPlayerEntity player, ServerWorld worldserver0)
 	{
@@ -233,17 +239,17 @@ public abstract class CruxiteArtifactItem extends Item
 			//Some blocks like this (confirmed for torches, rails, and glowystone) will break themselves if they update without their anchor.
 			Debug.debug("Moving blocks...");
 			HashSet<BlockMove> blockMoves2 = new HashSet<>();
-			/*for(BlockMove move : blockMoves)	//TODO
+			for(BlockMove move : blockMoves)
 			{
 				if(move.update)
-					move.copy(worldserver1.getChunk(move.dest));
+					move.copy(worldserver1, worldserver1.getChunk(move.dest));
 				else
 					blockMoves2.add(move);
 			}
 			for(BlockMove move : blockMoves2)
 			{
-				move.copy(worldserver1.getChunk(move.dest));
-			}*/
+				move.copy(worldserver1, worldserver1.getChunk(move.dest));
+			}
 			blockMoves2.clear();
 			
 			Debug.debug("Teleporting entities...");
@@ -263,7 +269,7 @@ public abstract class CruxiteArtifactItem extends Item
 							ServerEditHandler.reset(ServerEditHandler.getData((PlayerEntity) e));
 						else
 						{
-							//e.changeDimension(worldserver1.getDimension().getType(), new PositionTeleporter(e.posX + xDiff, e.posY + yDiff, e.posZ + zDiff)); TODO
+							Teleport.teleportEntity(e, worldserver1, e.posX + xDiff, e.posY + yDiff, e.posZ + zDiff);
 						}
 						//These entities should no longer be in the world, and this list is later used for entities that *should* remain.
 						iterator.remove();
@@ -337,8 +343,8 @@ public abstract class CruxiteArtifactItem extends Item
 			Debug.debug("Placing gates...");
 			
 			GateHandler.findGatePlacement(worldserver1);
-			placeGate(1, new BlockPos(x + xDiff, GateHandler.gateHeight1, z + zDiff), worldserver1);
-			placeGate(2, new BlockPos(x + xDiff, GateHandler.gateHeight2, z + zDiff), worldserver1);
+			placeGate(GateHandler.Type.GATE_1, new BlockPos(x + xDiff, GateHandler.gateHeight1, z + zDiff), worldserver1);
+			placeGate(GateHandler.Type.GATE_2, new BlockPos(x + xDiff, GateHandler.gateHeight2, z + zDiff), worldserver1);
 			
 			ServerEventHandler.tickTasks.add(new PostEntryTask(worldserver1.getDimension().getType(), x + xDiff, y + yDiff, z + zDiff, artifactRange.get(), (byte) 0));
 			
@@ -365,7 +371,7 @@ public abstract class CruxiteArtifactItem extends Item
 				String name = worldserver0.getBlockState(pos).getBlock().getRegistryName().toString();
 				try {
 					worldserver0.removeTileEntity(pos);
-					//worldserver0.removeBlock(pos); TODO
+					worldserver0.removeBlock(pos, true);
 				} catch (NullPointerException e) {
 					Logger.getGlobal().warning("Null Pointer Exception encountered when removing " + name + ". "
 							+ "Notify the mod author that the block should make a null check on its tile entity when broken.");
@@ -401,19 +407,16 @@ public abstract class CruxiteArtifactItem extends Item
 		return true;
 	}
 	
-	private static void copyBlockDirect(Chunk cSrc, Chunk cDst, int xSrc, int ySrc, int zSrc, int xDst, int yDst, int zDst)
+	private static void copyBlockDirect(IChunk cSrc, IChunk cDst, int xSrc, int ySrc, int zSrc, int xDst, int yDst, int zDst)
 	{
 		ChunkSection blockStorageSrc = getBlockStorage(cSrc, ySrc >> 4);
 		ChunkSection blockStorageDst = getBlockStorage(cDst, yDst >> 4);
 		xSrc &= 15; ySrc &= 15; zSrc &= 15; xDst &= 15; yDst &= 15; zDst &= 15;
 		
 		blockStorageDst.setBlockState(xDst, yDst, zDst, blockStorageSrc.getBlockState(xSrc, ySrc, zSrc));
-		/*blockStorageDst.setBlockLight(xDst, yDst, zDst, blockStorageSrc.getBlockLight(xSrc, ySrc, zSrc));TODO Is this needed anymore
-		if(blockStorageSrc.getSkyLight() != null)
-			blockStorageDst.setSkyLight(xDst, yDst, zDst, blockStorageSrc.getSkyLight(xSrc, ySrc, zSrc));*/
 	}
 	
-	private static ChunkSection getBlockStorage(Chunk c, int y)
+	private static ChunkSection getBlockStorage(IChunk c, int y)
 	{
 		ChunkSection section = c.getSections()[y];
 		if(section == Chunk.EMPTY_SECTION)
@@ -447,14 +450,14 @@ public abstract class CruxiteArtifactItem extends Item
 		return maxY;
 	}
 	
-	private static void placeGate(int gateCount, BlockPos pos, ServerWorld world)
+	private static void placeGate(GateHandler.Type gateType, BlockPos pos, ServerWorld world)
 	{
 		for(int i = 0; i < 9; i++)
 			if(i == 4)
 			{
 				world.setBlockState(pos, MSBlocks.GATE.getDefaultState().cycle(GateBlock.MAIN), 0);
 				GateTileEntity tileEntity = (GateTileEntity) world.getTileEntity(pos);
-				tileEntity.gateCount = gateCount;
+				tileEntity.gateType = gateType;
 			}
 			else world.setBlockState(pos.add((i % 3) - 1, 0, i/3 - 1), MSBlocks.GATE.getDefaultState(), 0);
 	}
@@ -476,7 +479,7 @@ public abstract class CruxiteArtifactItem extends Item
 			update = u;
 		}
 		
-		void copy(Chunk chunkTo)
+		void copy(ServerWorld world, IChunk chunkTo)
 		{
 			if(chunkTo.getBlockState(dest).getBlock() == Blocks.BEDROCK)
 			{
@@ -488,10 +491,11 @@ public abstract class CruxiteArtifactItem extends Item
 				chunkTo.setBlockState(dest, block, true);
 			} else if(block == Blocks.AIR.getDefaultState())
 			{
-				chunkTo.getWorld().setBlockState(dest, block, 0);
+				world.setBlockState(dest, block, 0);
 			} else
 			{
 				CruxiteArtifactItem.copyBlockDirect(chunkFrom, chunkTo, source.getX(), source.getY(), source.getZ(), dest.getX(), dest.getY(), dest.getZ());
+				world.getChunkProvider().getLightManager().checkBlock(dest);
 			}
 			
 			TileEntity tileEntity = chunkFrom.getTileEntity(source, CreateEntityType.CHECK);
@@ -507,7 +511,7 @@ public abstract class CruxiteArtifactItem extends Item
 					chunkTo.addTileEntity(dest, te1);
 				else Debug.warnf("Unable to create a new tile entity %s when teleporting blocks to the medium!", tileEntity.getType().getRegistryName());
 				if(tileEntity instanceof ComputerTileEntity)
-					SkaianetHandler.get(chunkTo.getWorld()).movingComputer((ComputerTileEntity) tileEntity, (ComputerTileEntity) te1);
+					SkaianetHandler.get(world).movingComputer((ComputerTileEntity) tileEntity, (ComputerTileEntity) te1);
 			}
 		}
 	}

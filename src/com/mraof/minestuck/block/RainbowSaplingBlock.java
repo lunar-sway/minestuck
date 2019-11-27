@@ -91,7 +91,7 @@ public class RainbowSaplingBlock extends BushBlock implements IGrowable
 	public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
 	{
 		BlockState soil = worldIn.getBlockState(pos.down());
-		if(soil.getBlock() == Blocks.GRASS)
+		if(soil.getBlock() == Blocks.GRASS_BLOCK)
 		{
 			state = state.with(GREEN, true);
 		} else if(soil.getBlock() == Blocks.BLUE_WOOL)
@@ -206,7 +206,7 @@ public class RainbowSaplingBlock extends BushBlock implements IGrowable
 	@Override
 	protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos)
 	{
-		return BlockTags.WOOL.contains(state.getBlock()) || state.getBlock() == Blocks.GRASS || super.isValidGround(state, worldIn, pos);
+		return BlockTags.WOOL.contains(state.getBlock()) || super.isValidGround(state, worldIn, pos);
 	}
 	
 	private void generateTree(World worldIn, BlockPos pos, BlockState state, Random rand)

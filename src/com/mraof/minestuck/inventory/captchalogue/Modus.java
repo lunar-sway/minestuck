@@ -60,6 +60,6 @@ public abstract class Modus
 	
 	public ITextComponent getName()
 	{
-		return type.getStack().getDisplayName();
+		return new ItemStack(type.getItem()).getDisplayName();
 	}
 }

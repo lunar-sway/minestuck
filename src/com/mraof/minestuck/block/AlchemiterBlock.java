@@ -3,6 +3,7 @@ package com.mraof.minestuck.block;
 import com.mraof.minestuck.block.multiblock.MachineMultiblock;
 import com.mraof.minestuck.tileentity.AlchemiterTileEntity;
 
+import com.mraof.minestuck.util.CustomVoxelShape;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,6 +24,10 @@ import java.util.Map;
 public class AlchemiterBlock extends MultiMachineBlock
 {
 	public static final Map<Direction, VoxelShape> FULL_BLOCK_SHAPE = createRotatedShapes(0, 0, 0, 16, 16, 16);
+	public static final Map<Direction, VoxelShape> CORNER_SHAPE = createRotatedShapes(MSBlockShapes.ALCHEMITER_CORNER);
+	public static final Map<Direction, VoxelShape> LEFT_SIDE_SHAPE = createRotatedShapes(MSBlockShapes.ALCHEMITER_LEFT_SIDE);
+	public static final Map<Direction, VoxelShape> RIGHT_SIDE_SHAPE = createRotatedShapes(MSBlockShapes.ALCHEMITER_RIGHT_SIDE);
+	public static final Map<Direction, VoxelShape> TOTEM_CORNER_SHAPE = createRotatedShapes(MSBlockShapes.ALCHEMITER_TOTEM_CORNER);
 	public static final Map<Direction, VoxelShape> TOTEM_PAD_SHAPE = createRotatedShapes(8, 0, 2, 14, 16, 16);
 	public static final Map<Direction, VoxelShape> LOWER_ROD_SHAPE = createRotatedShapes(10, 0, 2, 14, 16, 16);
 	public static final Map<Direction, VoxelShape> UPPER_ROD_SHAPE = createRotatedShapes(7, 0, 2, 14, 10, 16);
@@ -31,10 +36,10 @@ public class AlchemiterBlock extends MultiMachineBlock
 	protected final boolean recursive, corner;
 	protected final BlockPos mainPos;
 	
-	public AlchemiterBlock(MachineMultiblock machine, Map<Direction, VoxelShape> shape, boolean recursive, boolean corner, BlockPos mainPos, Properties properties)
+	public AlchemiterBlock(MachineMultiblock machine, CustomVoxelShape shape, boolean recursive, boolean corner, BlockPos mainPos, Properties properties)
 	{
 		super(machine, properties);
-		this.shape = shape;
+		this.shape = shape.createRotatedShapes();
 		this.recursive = recursive;
 		this.corner = corner;
 		this.mainPos = mainPos;
@@ -111,7 +116,7 @@ public class AlchemiterBlock extends MultiMachineBlock
 	{
 		public static final EnumProperty<EnumDowelType> DOWEL = MSProperties.DOWEL_OR_NONE;
 		
-		public Pad(MachineMultiblock machine, Map<Direction, VoxelShape> shape, Properties properties)
+		public Pad(MachineMultiblock machine, CustomVoxelShape shape, Properties properties)
 		{
 			super(machine, shape, false, false, new BlockPos(0, 0, 0), properties);
 		}

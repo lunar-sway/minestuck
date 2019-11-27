@@ -3,8 +3,6 @@ package com.mraof.minestuck.world.lands.structure;
 import java.util.List;
 import java.util.Random;
 
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

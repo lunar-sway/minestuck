@@ -113,7 +113,7 @@ public class ClientEditHandler {
 			return;
 		}
 		
-		for(Entry<GristType, Integer> entry : cost.getMap().entrySet())
+		for(Entry<GristType, Long> entry : cost.getMap().entrySet())
 		{
 			GristType grist = entry.getKey();
 			TextFormatting color = entry.getValue() <= have.getGrist(grist) ? TextFormatting.GREEN : TextFormatting.RED;
@@ -198,7 +198,7 @@ public class ClientEditHandler {
 					{
 						if(cost.getArray().indexOf(grist) != 0)
 							str.append(", ");
-						str.append(grist.getAmount()+" "+grist.getType().getDisplayName());
+						str.append(grist.getAmount()).append(" ").append(grist.getType().getDisplayName());
 					}
 					event.getPlayer().sendMessage(new TranslationTextComponent("grist.missing",str.toString()));
 				}

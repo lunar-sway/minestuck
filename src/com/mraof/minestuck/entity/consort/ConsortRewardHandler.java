@@ -24,7 +24,7 @@ public class ConsortRewardHandler
 {
 	private static final Map<ItemStack, PriceVariation> prices = Maps.newHashMap();
 	
-	public static void registerMinestuckPrices()
+	public static void registerMinestuckPrices()	//TODO could ideally be exported to json format
 	{
 		
 		ConsortRewardHandler.registerPrice(new ItemStack(ONION), 9, 15);
@@ -85,9 +85,9 @@ public class ConsortRewardHandler
 		ConsortRewardHandler.registerPrice(new ItemStack(THRESH_DVD), 350, 400);
 		ConsortRewardHandler.registerPrice(new ItemStack(CREW_POSTER), 350, 400);
 		ConsortRewardHandler.registerPrice(new ItemStack(SBAHJ_POSTER), 350, 400);
-		ConsortRewardHandler.registerPrice(new ItemStack(RECORD_EMISSARY_OF_DANCE), 1000, 1000);
-		ConsortRewardHandler.registerPrice(new ItemStack(RECORD_DANCE_STAB), 1000, 1000);
-		ConsortRewardHandler.registerPrice(new ItemStack(RECORD_RETRO_BATTLE), 1000, 1000);
+		ConsortRewardHandler.registerPrice(new ItemStack(MUSIC_DISC_EMISSARY_OF_DANCE), 1000, 1000);
+		ConsortRewardHandler.registerPrice(new ItemStack(MUSIC_DISC_DANCE_STAB_DANCE), 1000, 1000);
+		ConsortRewardHandler.registerPrice(new ItemStack(MUSIC_DISC_RETRO_BATTLE), 1000, 1000);
 		ConsortRewardHandler.registerPrice(new ItemStack(CRUMPLY_HAT), 80, 100);
 		ConsortRewardHandler.registerPrice(new ItemStack(GRIMOIRE), 666, 666);
 		ConsortRewardHandler.registerPrice(new ItemStack(POGO_CLUB), 900, 1200);

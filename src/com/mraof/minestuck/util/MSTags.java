@@ -66,6 +66,7 @@ public class MSTags
 		public static final Tag<Item> LAPIS_ORES = tag("ores/lapis");
 		public static final Tag<Item> DIAMOND_ORES = tag("ores/diamond");
 		public static final Tag<Item> CRUXITE_STORAGE_BLOCKS = tag("storage_blocks/cruxite");
+		public static final Tag<Item> GRIST_CANDY = tag("grist_candy");
 		
 		private static Tag<Item> tag(String name)
 		{

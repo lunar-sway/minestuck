@@ -2,8 +2,8 @@ package com.mraof.minestuck.client.renderer;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
-import com.mraof.minestuck.world.lands.LandAspects;
-import com.mraof.minestuck.world.lands.LandDimension;
+import com.mraof.minestuck.world.lands.LandTypePair;
+import com.mraof.minestuck.world.LandDimension;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.RenderHelper;
@@ -236,14 +236,14 @@ public class LandSkyRenderer implements IRenderHandler
 		GlStateManager.popMatrix();
 	}
 	
-	public ResourceLocation[] getResourceLocations(LandAspects aspects, Random random)
+	public ResourceLocation[] getResourceLocations(LandTypePair aspects, Random random)
 	{
 		if(aspects == null)
 			return null;
 		
 		int index = random.nextInt(3);
-		ResourceLocation terrainName = Objects.requireNonNull(aspects.aspectTerrain.getRegistryName());
-		ResourceLocation titleName = Objects.requireNonNull(aspects.aspectTitle.getRegistryName());
+		ResourceLocation terrainName = Objects.requireNonNull(aspects.terrain.getRegistryName());
+		ResourceLocation titleName = Objects.requireNonNull(aspects.title.getRegistryName());
 		ResourceLocation terrain = new ResourceLocation(terrainName.getNamespace(), "textures/environment/planets/planet_"+terrainName.getPath()+"_"+index+".png");
 		ResourceLocation title = new ResourceLocation(titleName.getNamespace(), "textures/environment/overlays/overlay_"+titleName.getPath()+"_"+index+".png");
 		return new ResourceLocation[] {terrain, title};

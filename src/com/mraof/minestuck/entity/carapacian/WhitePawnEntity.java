@@ -11,12 +11,6 @@ public class WhitePawnEntity extends PawnEntity
 	}
 	
 	@Override
-	public String getTexture() 
-	{
-		return "textures/entity/prospitian_pawn.png";
-	}
-
-	@Override
 	public EnumEntityKingdom getKingdom()
 	{
 		return EnumEntityKingdom.PROSPITIAN;

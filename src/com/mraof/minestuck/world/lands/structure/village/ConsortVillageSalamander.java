@@ -1,7 +1,6 @@
 package com.mraof.minestuck.world.lands.structure.village;
 
 import com.mraof.minestuck.entity.consort.EnumConsort;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import net.minecraft.world.World;
 
 import java.util.List;

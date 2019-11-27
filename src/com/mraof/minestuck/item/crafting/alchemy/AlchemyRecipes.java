@@ -1,9 +1,10 @@
 package com.mraof.minestuck.item.crafting.alchemy;
 
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.item.CruxiteArtifactItem;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.modSupport.*;
-import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -17,12 +18,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.mraof.minestuck.MinestuckConfig.oreMultiplier;
 import static com.mraof.minestuck.block.MSBlocks.*;
 import static com.mraof.minestuck.item.MSItems.*;
-import static com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry.Mode.*;
+import static com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry.Mode.MODE_AND;
+import static com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry.Mode.MODE_OR;
 
 public class AlchemyRecipes
 {
@@ -36,6 +39,7 @@ public class AlchemyRecipes
 	
 	public static void registerVanillaRecipes()
 	{
+		/*
 		//Set up Alchemiter recipes
 		//Blocks
 		AlchemyCostRegistry.addGristConversion(Blocks.DEAD_BUSH, new GristSet(new GristType[] {GristType.AMBER, GristType.SULFUR}, new int[] {2, 1}));
@@ -176,14 +180,14 @@ public class AlchemyRecipes
 		//Ores
 		if(oreMultiplier.get() != 0)
 		{
-			/*AlchemyCostRegistry.addGristConversion("oreCoal", new GristSet(new GristType[] {GristType.BUILD, GristType.TAR}, new int[] {4, 8*oreMultiplier}));	TODO Block tags
+			/*AlchemyCostRegistry.addGristConversion("oreCoal", new GristSet(new GristType[] {GristType.BUILD, GristType.TAR}, new int[] {4, 8*oreMultiplier}));
 			AlchemyCostRegistry.addGristConversion("oreIron", new GristSet(new GristType[] {GristType.BUILD, GristType.RUST}, new int[] {4, 9*oreMultiplier}));
 			AlchemyCostRegistry.addGristConversion("oreGold", new GristSet(new GristType[] {GristType.BUILD, GristType.GOLD}, new int[] {4, 9*oreMultiplier}));
 			AlchemyCostRegistry.addGristConversion("oreRedstone", new GristSet(new GristType[] {GristType.GARNET, GristType.BUILD}, new int[] {16*oreMultiplier, 4}));
 			AlchemyCostRegistry.addGristConversion("oreLapis", new GristSet(new GristType[] {GristType.AMETHYST, GristType.BUILD}, new int[] {16*oreMultiplier, 4}));
 			AlchemyCostRegistry.addGristConversion("oreDiamond", new GristSet(new GristType[] {GristType.DIAMOND, GristType.BUILD}, new int[] {18*oreMultiplier, 4}));
 			AlchemyCostRegistry.addGristConversion("oreEmerald", new GristSet(new GristType[] {GristType.RUBY, GristType.DIAMOND, GristType.BUILD}, new int[] {9*oreMultiplier, 9*oreMultiplier, 4}));
-			AlchemyCostRegistry.addGristConversion("oreQuartz", new GristSet(new GristType[] {GristType.QUARTZ, GristType.MARBLE, GristType.BUILD}, new int[] {8*oreMultiplier, 2*oreMultiplier, 2}));*/
+			AlchemyCostRegistry.addGristConversion("oreQuartz", new GristSet(new GristType[] {GristType.QUARTZ, GristType.MARBLE, GristType.BUILD}, new int[] {8*oreMultiplier, 2*oreMultiplier, 2}));*//*
 		}
 		AlchemyCostRegistry.addGristConversion(Items.COAL, new GristSet(new GristType[] {GristType.TAR}, new int[] {8}));
 		AlchemyCostRegistry.addGristConversion(Items.CHARCOAL, new GristSet(new GristType[] {GristType.TAR, GristType.AMBER}, new int[] {6, 2}));
@@ -239,7 +243,7 @@ public class AlchemyRecipes
 		AlchemyCostRegistry.addGristConversion(Items.COOKED_MUTTON, new GristSet(new GristType[] {GristType.IODINE, GristType.TAR}, new int[] {10, 1}));
 		AlchemyCostRegistry.addGristConversion(Items.COOKED_RABBIT, new GristSet(new GristType[] {GristType.IODINE, GristType.TAR}, new int[] {8, 1}));
 		AlchemyCostRegistry.addGristConversion(Items.ENCHANTED_GOLDEN_APPLE, new GristSet(new GristType[] {GristType.AMBER, GristType.GOLD, GristType.URANIUM}, new int[] {4, 150, 10}));
-		
+		*/
 		//Potions
 		/*GristRegistry.addGristConversion(Items.POTIONITEM, 1, 0), true, new GristSet(new GristType[] {GristType.BUILD, GristType.COBALT}, new int[] {1, 4}));	//water
 		GristRegistry.addGristConversion(Items.POTIONITEM, 1, 8192), true, new GristSet(new GristType[] {GristType.BUILD, GristType.COBALT}, new int[] {1, 4}));	//mundane
@@ -301,9 +305,9 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(woodItems[7][2], woodItems[6][3], MODE_OR, new ItemStack(woodItems[8][4]));
 		
 		CombinationRegistry.addCombination(ItemTags.WOODEN_DOORS, Items.IRON_INGOT, MODE_AND, new ItemStack(Blocks.IRON_DOOR));
-		//CombinationRegistry.addCombination("fenceWood", Blocks.NETHER_BRICKS, MODE_AND, new ItemStack(Blocks.NETHER_BRICK_FENCE));
+		CombinationRegistry.addCombination(ItemTags.WOODEN_FENCES, Blocks.NETHER_BRICKS, MODE_AND, new ItemStack(Blocks.NETHER_BRICK_FENCE));
 		CombinationRegistry.addCombination(ItemTags.WOODEN_STAIRS, Blocks.NETHER_BRICKS, MODE_AND, new ItemStack(Blocks.NETHER_BRICK_STAIRS));
-		//CombinationRegistry.addCombination("fenceWood", Items.NETHER_BRICK, MODE_AND, new ItemStack(Blocks.NETHER_BRICK_FENCE));
+		CombinationRegistry.addCombination(ItemTags.WOODEN_FENCES, Items.NETHER_BRICK, MODE_AND, new ItemStack(Blocks.NETHER_BRICK_FENCE));
 		CombinationRegistry.addCombination(ItemTags.WOODEN_STAIRS, Items.NETHER_BRICK, MODE_AND, new ItemStack(Blocks.NETHER_BRICK_STAIRS));
 		//CombinationRegistry.addCombination("doorWood", "slabWood", MODE_AND, Blocks.TRAPDOOR)); TODO Add trapdoors to the contraption above
 		CombinationRegistry.addCombination(ItemTags.LOGS, Items.COAL, MODE_AND, new ItemStack(Items.CHARCOAL));
@@ -430,7 +434,7 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(ItemTags.SAND, Blocks.GRASS, MODE_AND, new ItemStack(Blocks.CACTUS));
 		CombinationRegistry.addCombination(ItemTags.SAPLINGS, ItemTags.SAND, MODE_AND, new ItemStack(Blocks.DEAD_BUSH));
 		CombinationRegistry.addCombination(Items.ENDER_PEARL, Blocks.CHEST, MODE_AND, new ItemStack(Blocks.ENDER_CHEST));
-		CombinationRegistry.addCombination(Blocks.GLASS, Blocks.SNOW, MODE_AND, new ItemStack(Blocks.ICE));
+		CombinationRegistry.addCombination(Blocks.GLASS, Blocks.SNOW_BLOCK, MODE_AND, new ItemStack(Blocks.ICE));
 		CombinationRegistry.addCombination(Blocks.SPONGE, Items.WATER_BUCKET, MODE_AND, new ItemStack(Blocks.WET_SPONGE));
 		CombinationRegistry.addCombination(Items.BLAZE_POWDER, Items.GUNPOWDER, MODE_OR, new ItemStack(Items.FIRE_CHARGE));
 		CombinationRegistry.addCombination(Blocks.SAND, Blocks.STONE_BRICK_STAIRS, MODE_OR, new ItemStack(Blocks.SANDSTONE_STAIRS));
@@ -442,7 +446,7 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(Blocks.SMOOTH_SANDSTONE, Items.RED_DYE, MODE_AND, new ItemStack(Blocks.SMOOTH_RED_SANDSTONE));
 		CombinationRegistry.addCombination(Blocks.SANDSTONE_STAIRS, Items.RED_DYE, MODE_AND, new ItemStack(Blocks.RED_SANDSTONE_STAIRS));
 		CombinationRegistry.addCombination(ItemTags.PLANKS, Items.BOOK, MODE_OR, new ItemStack(Blocks.BOOKSHELF));
-		//CombinationRegistry.addCombination("record", Blocks.NOTE_BLOCK, MODE_AND, new ItemStack(Blocks.JUKEBOX));
+		CombinationRegistry.addCombination(ItemTags.MUSIC_DISCS, Blocks.NOTE_BLOCK, MODE_AND, new ItemStack(Blocks.JUKEBOX));
 		CombinationRegistry.addCombination(Items.STICK, Blocks.VINE, MODE_AND, new ItemStack(Blocks.LADDER));
 		CombinationRegistry.addCombination(ItemTags.LEAVES, Blocks.LADDER, MODE_OR, new ItemStack(Blocks.VINE));
 		CombinationRegistry.addCombination(Items.PRISMARINE_SHARD, Blocks.COBBLESTONE, MODE_AND, new ItemStack(Blocks.PRISMARINE));
@@ -490,6 +494,7 @@ public class AlchemyRecipes
 	
 	public static void registerMinestuckRecipes()
 	{
+		/*
 		//add grist conversions
 		AlchemyCostRegistry.addGristConversion(BLUE_DIRT, new GristSet(new GristType[] {GristType.BUILD, GristType.SHALE}, new int[] {1, 1}));
 		AlchemyCostRegistry.addGristConversion(THOUGHT_DIRT, new GristSet(new GristType[] {GristType.BUILD, GristType.CAULK}, new int[] {1, 1}));
@@ -575,13 +580,11 @@ public class AlchemyRecipes
 		AlchemyCostRegistry.addGristConversion(SET_MODUS_CARD, new GristSet(new GristType[] {GristType.BUILD, GristType.MERCURY}, new int[] {350, 29}));
 		AlchemyCostRegistry.addGristConversion(IRON_BOAT, new GristSet(GristType.RUST, 30));
 		AlchemyCostRegistry.addGristConversion(GOLD_BOAT, new GristSet(GristType.GOLD, 30));
-		AlchemyCostRegistry.addGristConversion(LAYERED_SAND, new GristSet(GristType.BUILD, 1));
-		AlchemyCostRegistry.addGristConversion(LAYERED_RED_SAND, new GristSet(GristType.BUILD, 1));
 		/*registerContainerlessCost(new ItemStack(minestuckBucket, 1, 0), new GristSet(new GristType[] {GristType.TAR, GristType.SHALE}, new int[] {8, 8})); TODO Fluids
 		registerContainerlessCost(new ItemStack(minestuckBucket, 1, 1), new GristSet(new GristType[] {GristType.GARNET, GristType.IODINE}, new int[] {8, 8}));
 		registerContainerlessCost(new ItemStack(minestuckBucket, 1, 2), new GristSet(new GristType[] {GristType.AMETHYST, GristType.CHALK}, new int[] {8, 8}));
 		registerContainerlessCost(new ItemStack(minestuckBucket, 1, 3), new GristSet(new GristType[] {GristType.AMETHYST, GristType.CHALK, GristType.GARNET, GristType.AMBER}, new int[] {4, 4, 4, 4}));
-		registerContainerlessCost(new ItemStack(minestuckBucket, 1, 4), new GristSet(new GristType[] {GristType.MERCURY, GristType.URANIUM}, new int[] {8, 8}));*/
+		registerContainerlessCost(new ItemStack(minestuckBucket, 1, 4), new GristSet(new GristType[] {GristType.MERCURY, GristType.URANIUM}, new int[] {8, 8}));*//*
 		registerContainerlessCost(OBSIDIAN_BUCKET, new GristSet(new GristType[] {GristType.COBALT, GristType.TAR, GristType.BUILD}, new int[] {8, 16, 4}));
 		AlchemyCostRegistry.addGristConversion(GLOWING_MUSHROOM, new GristSet(new GristType[] {GristType.BUILD, GristType.SHALE, GristType.MERCURY}, new int[] {5, 3, 2}));
 		AlchemyCostRegistry.addGristConversion(GLOWING_LOG, new GristSet(new GristType[] {GristType.BUILD, GristType.AMBER, GristType.MERCURY}, new int[] {8, 4, 4}));
@@ -689,9 +692,9 @@ public class AlchemyRecipes
 		GristRegistry.addGristConversion(new ItemStack(shopPoster, 1, 1), new GristSet(new GristType[] {GristType.BUILD, GristType.IODINE}, new int[] {9, 3}));
 		GristRegistry.addGristConversion(new ItemStack(shopPoster, 1, 2), new GristSet(new GristType[] {GristType.BUILD, GristType.CHALK, GristType.CAULK}, new int[] {8, 2, 2}));
 		GristRegistry.addGristConversion(new ItemStack(shopPoster, 1, 3), new GristSet(new GristType[] {GristType.BUILD, GristType.RUST, GristType.AMBER}, new int[] {7, 3, 2}));
-		GristRegistry.addGristConversion(new ItemStack(shopPoster, 1, 4), new GristSet(new GristType[] {GristType.BUILD, GristType.IODINE, GristType.CHALK}, new int[] {9, 2, 1}));*/
+		GristRegistry.addGristConversion(new ItemStack(shopPoster, 1, 4), new GristSet(new GristType[] {GristType.BUILD, GristType.IODINE, G/ristType.CHALK}, new int[] {9, 2, 1}));*//*
 		AlchemyCostRegistry.addGristConversion(VEIN, new GristSet(new GristType[] {GristType.GARNET, GristType.IODINE}, new int[] {12, 8}));
-		
+		*/
 		//add Designix and Lathe combinations
 		
 		//swords
@@ -710,7 +713,7 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(Items.IRON_SWORD, CHESSBOARD, MODE_AND, new ItemStack(REGISWORD));
 		CombinationRegistry.addCombination(KATANA, CHESSBOARD, MODE_AND, new ItemStack(REGISWORD));
 		CombinationRegistry.addCombination(Items.IRON_SWORD, Blocks.IRON_BLOCK, MODE_AND, new ItemStack(CLAYMORE));
-		CombinationRegistry.addCombination(KATANA, Blocks.OBSIDIAN, MODE_AND, new ItemStack(UNBREAKABLE_KATANA));
+		CombinationRegistry.addCombination(KATANA, Blocks.BEDROCK, MODE_AND, new ItemStack(UNBREAKABLE_KATANA));
 		CombinationRegistry.addCombination(HOT_HANDLE, Blocks.LAPIS_BLOCK, MODE_OR, new ItemStack(COBALT_SABRE));
 		CombinationRegistry.addCombination(CALEDSCRATCH, FROG, MODE_AND, new ItemStack(SCARLET_RIBBITAR));
 		CombinationRegistry.addCombination(Blocks.BEACON, Items.DIAMOND_SWORD, MODE_AND, new ItemStack(SHATTER_BEACON));
@@ -807,8 +810,6 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(ItemTags.BOATS, Blocks.GOLD_BLOCK, MODE_AND, new ItemStack(GOLD_BOAT));
 		CombinationRegistry.addCombination(Blocks.DIRT, Items.LAPIS_LAZULI, MODE_OR, new ItemStack(BLUE_DIRT));
 		CombinationRegistry.addCombination(Blocks.DIRT, Items.LIME_DYE, MODE_OR, new ItemStack(THOUGHT_DIRT));
-		CombinationRegistry.addCombination(Blocks.SAND, Blocks.SNOW, MODE_OR, new ItemStack(LAYERED_SAND));
-		CombinationRegistry.addCombination(Blocks.RED_SAND, Blocks.SNOW, MODE_OR, new ItemStack(LAYERED_RED_SAND));
 		CombinationRegistry.addCombination(Items.WATER_BUCKET, Items.LAVA_BUCKET, MODE_OR, new ItemStack(OBSIDIAN_BUCKET));	//water_bucket && lava bucket could make a bucket with liquid obsidian? (from a mod that adds liquid obsidian)
 		CombinationRegistry.addCombination(Items.BUCKET, Blocks.OBSIDIAN, MODE_AND, new ItemStack(OBSIDIAN_BUCKET));	//bucket || obsidian could make a bucket made out of obsidian
 		CombinationRegistry.addCombination(Blocks.BROWN_MUSHROOM, Items.GLOWSTONE_DUST, MODE_OR, new ItemStack(GLOWING_MUSHROOM));
@@ -892,7 +893,7 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(Blocks.COARSE_DIRT, Blocks.END_STONE, MODE_OR, new ItemStack(COARSE_END_STONE));
 		CombinationRegistry.addCombination(Blocks.GRASS_BLOCK, Blocks.END_STONE, MODE_OR, new ItemStack(END_GRASS));
 		CombinationRegistry.addCombination(Blocks.MYCELIUM, Blocks.END_STONE, MODE_OR, new ItemStack(END_GRASS));
-		CombinationRegistry.addCombination(END_GRASS, Blocks.DIRT, MODE_OR, new ItemStack(Blocks.GRASS));
+		CombinationRegistry.addCombination(END_GRASS, Blocks.DIRT, MODE_OR, new ItemStack(Blocks.GRASS_BLOCK));
 		CombinationRegistry.addCombination(Blocks.OAK_LOG, Blocks.VINE, MODE_AND, new ItemStack(VINE_LOG));
 		CombinationRegistry.addCombination(VINE_LOG, Blocks.DANDELION, MODE_OR, new ItemStack(FLOWERY_VINE_LOG));
 		CombinationRegistry.addCombination(VINE_LOG, Blocks.POPPY, MODE_OR, new ItemStack(FLOWERY_VINE_LOG));
@@ -1011,12 +1012,6 @@ public class AlchemyRecipes
 			Debug.logger.warn("Exception while getting things for mod \"IronChest\".", e);
 		}*/
 		
-		
-		//registerRecipes(new Minegicka3Support(), "minegicka3", false);
-		//registerRecipes(new NeverSayNetherSupport(), "nsn", false);
-		//registerRecipes(new ExtraUtilitiesSupport(), "extrautils2", false);
-		//registerRecipes(new TinkersConstructSupport(), "TConstruct", false);
-		
 	}
 	
 	public static void registerAutomaticRecipes()
@@ -1046,13 +1041,11 @@ public class AlchemyRecipes
 		}
 		
 		autogrist.execute();
-		
-		//registerRecipes(new Minegicka3Support(), "minegicka3", true);
 	}
 	
 	public static void onAlchemizedItem(ItemStack stack, ServerPlayerEntity player)
 	{
-		//if(!(stack.getItem() instanceof CruxiteArtifactItem)) TODO
+		if(!(stack.getItem() instanceof CruxiteArtifactItem))
 		{
 			Echeladder e = PlayerSavedData.getData(player).echeladder;
 			e.checkBonus(Echeladder.ALCHEMY_BONUS_OFFSET);
@@ -1062,9 +1055,9 @@ public class AlchemyRecipes
 		if(set != null) //The only time the grist set should be null here is if it was a captchalogue card that was alchemized
 		{
 			double value = 0;
-			for(GristType type : GristType.values())
+			for(GristType type : GristTypes.values())	//TODO potentially duplicate code here, in GristHelper.getGristValue and in GristSet.getValue
 			{
-				int v = set.getGrist(type);
+				long v = set.getGrist(type);
 				float f = type == GristType.BUILD || type == GristType.ARTIFACT ? 0.5F : type == GristType.ZILLIUM ? 20 : type.getPower();
 				if(v > 0)
 					value += f*v/2;
@@ -1078,13 +1071,6 @@ public class AlchemyRecipes
 		}
 	}
 	
-	@Nonnull
-	public static ItemStack getFirstOreItem(String name)
-	{
-		//if(OreDictionary.getOres(name).isEmpty())
-			return ItemStack.EMPTY;
-		//else return OreDictionary.getOres(name).get(0);
-	}
 	/**
 	 * Given a punched card or a carved dowel, returns a new item that represents the encoded data.
 	 * 
@@ -1248,36 +1234,5 @@ public class AlchemyRecipes
 		
 		
 		return stack;
-	}
-	
-	private static void registerRecipes(ModSupport modSupport, String modname, boolean dynamic)
-	{
-		try
-		{
-			/*if(ModLoader.isModLoaded(modname))
-			{
-				if(dynamic)
-					modSupport.registerDynamicRecipes();
-				else modSupport.registerRecipes();
-			}*/
-		}
-		catch(Exception e)
-		{
-			Debug.logger.error("Exception while creating"+(dynamic?" dynamic":"")+" recipes for mod \""+modname+"\":", e);
-		}
-	}
-	
-	public static List<ItemStack> getItems(Object item)
-	{
-		if(item instanceof ItemStack)
-			return Arrays.asList((ItemStack)item);
-		if(item instanceof Item)
-			return Arrays.asList(new ItemStack((Item) item));
-		else
-		{
-			//List<ItemStack> list = OreDictionary.getOres((String) item);
-			//return list; TODO Item tags
-			return null;
-		}
 	}
 }

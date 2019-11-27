@@ -2,9 +2,9 @@ package com.mraof.minestuck.world.gen.feature;
 
 import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.types.DynamicOps;
-import com.mraof.minestuck.world.lands.LandDimension;
-import com.mraof.minestuck.world.lands.gen.LandGenSettings;
-import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.LandDimension;
+import com.mraof.minestuck.world.gen.LandGenSettings;
+import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;

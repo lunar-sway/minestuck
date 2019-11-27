@@ -2,6 +2,7 @@ package com.mraof.minestuck.block;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import com.mraof.minestuck.util.CustomVoxelShape;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.PushReaction;
@@ -44,7 +45,7 @@ public abstract class MachineBlock extends Block
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context)
 	{
-		return getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
+		return getDefaultState().with(FACING, context.getPlacementHorizontalFacing());
 	}
 	
 	//Should probably find an utility class for the functions below
@@ -67,6 +68,11 @@ public abstract class MachineBlock extends Block
 				break;
 		}
 		return rotation;
+	}
+	
+	public static Map<Direction, VoxelShape> createRotatedShapes(CustomVoxelShape shape)
+	{
+		return Maps.newEnumMap(ImmutableMap.of(Direction.NORTH, shape.create(Direction.NORTH), Direction.SOUTH, shape.create(Direction.SOUTH), Direction.WEST, shape.create(Direction.WEST), Direction.EAST, shape.create(Direction.EAST)));
 	}
 	
 	public static Map<Direction, VoxelShape> createRotatedShapes(double x1, double y1, double z1, double x2, double y2, double z2)

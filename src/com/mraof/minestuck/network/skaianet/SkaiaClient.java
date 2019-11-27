@@ -9,7 +9,6 @@ import com.mraof.minestuck.network.SkaianetInfoPacket;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.dimension.DimensionType;
 
 import java.util.*;
@@ -19,7 +18,7 @@ public class SkaiaClient
 	
 	//Variables
 	private static Map<Integer, Map<Integer, String>> openServers = new HashMap<>();
-	private static List<SburbConnection> connections = new ArrayList<>();
+	private static List<ReducedConnection> connections = new ArrayList<>();
 	private static Map<Integer, Boolean> serverWaiting = new HashMap<>();
 	private static Map<Integer, Boolean> resumingClient = new HashMap<>();
 	/**
@@ -60,7 +59,7 @@ public class SkaiaClient
 	//Getters used by the computer
 	public static int getAssociatedPartner(int playerId, boolean isClient)
 	{
-		for(SburbConnection c : connections)
+		for(ReducedConnection c : connections)
 			if(c.isMain)
 				if(isClient && c.clientId == playerId)
 					return c.serverId;
@@ -76,9 +75,9 @@ public class SkaiaClient
 	
 	public static boolean enteredMedium(int player)
 	{
-		for(SburbConnection c : connections)
+		for(ReducedConnection c : connections)
 			if(c.isMain && c.clientId == player)
-				return c.hasEntered();
+				return c.hasEntered;
 		return false;
 	}
 	
@@ -101,7 +100,7 @@ public class SkaiaClient
 	{
 		if(playerId != SkaiaClient.playerId)
 			return false;
-		for(SburbConnection c : connections)
+		for(ReducedConnection c : connections)
 			if(playerId == c.clientId)
 				return false;
 		return true;
@@ -109,9 +108,9 @@ public class SkaiaClient
 	
 	//Methods called from the actionPerformed method in the gui.
 	
-	public static SburbConnection getClientConnection(int client)
+	public static ReducedConnection getClientConnection(int client)
 	{
-		for(SburbConnection c : connections)
+		for(ReducedConnection c : connections)
 			if(c.isActive && c.clientId == client)
 				return c;
 		return null;
@@ -127,25 +126,6 @@ public class SkaiaClient
 	{
 		SburbConnectClosedPacket packet = new SburbConnectClosedPacket(te.ownerId, otherPlayer, isClient);
 		MSPacketHandler.sendToServer(packet);
-	}
-	
-	//Methods used by the SkaianetInfoPacket.
-	public static SburbConnection getConnectionFromBuffer(PacketBuffer buffer)
-	{
-		SburbConnection c = new SburbConnection();
-		
-		c.isMain = buffer.readBoolean();
-		if(c.isMain)
-		{
-			c.isActive = buffer.readBoolean();
-			c.hasEntered = buffer.readBoolean();
-		}
-		c.clientId = buffer.readInt();
-		c.clientName = buffer.readString(16);
-		c.serverId = buffer.readInt();
-		c.serverName = buffer.readString(16);
-		
-		return c;
 	}
 	
 	public static void consumePacket(SkaianetInfoPacket data)
@@ -174,7 +154,7 @@ public class SkaiaClient
 		serverWaiting.put(data.playerId, data.isServerResuming);
 		
 		connections.removeIf(c -> c.clientId == data.playerId || c.serverId == data.playerId);
-		connections.addAll(data.connections);
+		connections.addAll(data.connectionsTo);
 		
 		Screen gui = Minecraft.getInstance().currentScreen;
 		if(gui instanceof ComputerScreen)

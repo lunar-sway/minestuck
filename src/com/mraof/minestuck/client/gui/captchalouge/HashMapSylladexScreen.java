@@ -13,6 +13,8 @@ import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 public class HashMapSylladexScreen extends SylladexScreen
 {
+	public static final String EJECT_BY_CHAT_ON = "minestuck.eject_by_chat.on";
+	public static final String EJECT_BY_CHAT_OFF = "minestuck.eject_by_chat.off";
 	
 	private HashMapModus modus;
 	protected Button guiButton;
@@ -38,7 +40,7 @@ public class HashMapSylladexScreen extends SylladexScreen
 		guiButton.x = (width - GUI_WIDTH)/2 + 15;
 		guiButton.y = (height - GUI_HEIGHT)/2 + 175;
 		boolean active = MinestuckConfig.clientHashmapChat == 0 ? modus.ejectByChat : MinestuckConfig.clientHashmapChat == 1;
-		guiButton.setMessage(I18n.format(active ? "gui.ejectByChat.on" : "gui.ejectByChat.off"));
+		guiButton.setMessage(I18n.format(active ? EJECT_BY_CHAT_ON : EJECT_BY_CHAT_OFF));
 		guiButton.active = MinestuckConfig.clientHashmapChat == 0;
 		super.render(xcor, ycor, f);
 	}

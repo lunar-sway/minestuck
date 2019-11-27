@@ -26,7 +26,7 @@ public class BlockColorCruxite implements IBlockColor
 		
 		if(!dowel.isEmpty())
 		{
-			int color = dowel.hasTag() && dowel.getTag().contains("color") ? ColorCollector.getColor(dowel.getTag().getInt("color") - 1) : 0x99D9EA;
+			int color = dowel.hasTag() && dowel.getTag().contains("color") ? ColorCollector.getColor(dowel.getTag().getInt("color")) : ColorCollector.DEFAULT_COLOR;
 			return handleColorTint(color, tintIndex);
 		}
 		return -1;

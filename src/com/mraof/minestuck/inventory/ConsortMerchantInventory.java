@@ -19,6 +19,8 @@ import java.util.List;
 
 public class ConsortMerchantInventory implements IInventory
 {
+	public static final String CANT_AFFORD = "consort.cant_afford";
+	
 	private final NonNullList<ItemStack> inv = NonNullList.withSize(9, ItemStack.EMPTY);
 	private EnumConsort consortType;
 	private EnumConsort.MerchantType merchantType;
@@ -70,7 +72,7 @@ public class ConsortMerchantInventory implements IInventory
 			int amountPurchased = (int) Math.min(prices[index] != 0 ? playerData.boondollars / prices[index] : Integer.MAX_VALUE, all ? stack.getCount() : 1);
 			if (amountPurchased == 0)
 			{
-				player.sendMessage(new TranslationTextComponent("consort.cantAfford"));
+				player.sendMessage(new TranslationTextComponent(CANT_AFFORD));
 			} else
 			{
 				PlayerSavedData.addBoondollars(player, -(amountPurchased * prices[index]));

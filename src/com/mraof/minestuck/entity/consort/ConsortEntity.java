@@ -32,7 +32,7 @@ import net.minecraft.world.dimension.DimensionType;
 import javax.annotation.Nullable;
 
 public abstract class ConsortEntity extends MinestuckEntity implements IContainerProvider
-{
+{	//I'd get rid of the seemingly pointless subclasses, but as of writing, entity renderers are registered to entity classes instead of entity types.
 	
 	ConsortDialogue.DialogueWrapper message;
 	int messageTicksLeft;

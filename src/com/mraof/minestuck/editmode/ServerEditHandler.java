@@ -307,7 +307,7 @@ public class ServerEditHandler
 						{
 							if(cost.getArray().indexOf(grist) != 0)
 								str.append(", ");
-							str.append(grist.getAmount()+" "+grist.getType().getDisplayName());
+							str.append(grist.getAmount()).append(" ").append(grist.getType().getDisplayName());
 						}
 						event.getPlayer().sendMessage(new TranslationTextComponent("grist.missing",str.toString()));
 					}

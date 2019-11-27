@@ -22,8 +22,8 @@ public class GristCostRecipeBuilder
 {
 	private final ResourceLocation defaultName;
 	private final Ingredient ingredient;
-	private ImmutableMap.Builder<GristType, Integer> costBuilder = ImmutableMap.builder();
-	private Integer wildcard = null;
+	private ImmutableMap.Builder<GristType, Long> costBuilder = ImmutableMap.builder();
+	private Long wildcard = null;
 	private Integer priority = null;
 	
 	public static GristCostRecipeBuilder of(Tag<Item> tag)
@@ -52,7 +52,7 @@ public class GristCostRecipeBuilder
 		this.ingredient = ingredient;
 	}
 	
-	public GristCostRecipeBuilder grist(GristType type, int amount)
+	public GristCostRecipeBuilder grist(GristType type, long amount)
 	{
 		if(costBuilder == null)
 			throw new IllegalStateException("Can't add a grist cost to recipe if the recipe is set to a special type!");
@@ -66,7 +66,7 @@ public class GristCostRecipeBuilder
 		return this;
 	}
 	
-	public GristCostRecipeBuilder wildcard(int wildcardCost)
+	public GristCostRecipeBuilder wildcard(long wildcardCost)
 	{
 		wildcard = wildcardCost;
 		costBuilder = null;
@@ -101,10 +101,10 @@ public class GristCostRecipeBuilder
 		public final ResourceLocation id;
 		public final Ingredient ingredient;
 		public final GristSet cost;
-		public final Integer wildcard;
+		public final Long wildcard;
 		public final Integer priority;
 		
-		public Result(ResourceLocation id, Ingredient ingredient, GristSet cost, Integer wildcard, Integer priority)
+		public Result(ResourceLocation id, Ingredient ingredient, GristSet cost, Long wildcard, Integer priority)
 		{
 			this.id = id;
 			this.ingredient = ingredient;

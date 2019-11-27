@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minestuck:pink_stone_planks_stairs"
+          "name": "minestuck:pink_stone_brick_stairs"
         }
       ],
       "conditions": [

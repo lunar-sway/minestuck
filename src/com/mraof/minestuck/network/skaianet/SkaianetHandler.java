@@ -1,6 +1,5 @@
 package com.mraof.minestuck.network.skaianet;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.editmode.EditData;
@@ -15,22 +14,21 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.util.Location;
-import com.mraof.minestuck.world.MSDimensions;
+import com.mraof.minestuck.world.MSDimensionTypes;
+import com.mraof.minestuck.world.lands.LandInfoContainer;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.OpEntry;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.DimensionSavedDataManager;
-import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -42,9 +40,14 @@ import java.util.Map.Entry;
  * This class also handles the main saving and loading.
  * @author kirderf1
  */
-public class SkaianetHandler extends WorldSavedData
-{	//TODO This class need a thorough look through to make sure that markDirty() is called when it should (otherwise there may be hard to notice data-loss bugs)
-	private static final String DATA_NAME = Minestuck.MOD_ID+"_skaianet";
+public class SkaianetHandler
+{
+	public static final String PRIVATE_COMPUTER = "minestuck.private_computer";
+	public static final String CLOSED_SERVER = "minestuck.closed_server_message";
+	public static final String STOP_RESUME = "minestuck.stop_resume_message";
+	public static final String CLOSED = "minestuck.closed_message";
+	
+	private static SkaianetHandler INSTANCE;
 	
 	Map<PlayerIdentifier, ComputerData> serversOpen = new TreeMap<>();
 	private Map<PlayerIdentifier, ComputerData> resumingClients = new HashMap<>();
@@ -53,19 +56,20 @@ public class SkaianetHandler extends WorldSavedData
 	private Map<PlayerIdentifier, PlayerIdentifier[]> infoToSend = new HashMap<>();	//Key: player, value: data to send to player
 	private List<ComputerData> movingComputers = new ArrayList<>();
 	SessionHandler sessionHandler = new SessionHandler(this);
+	/**
+	 * Changes to this map must also be done to {@link MSDimensionTypes#LANDS#dimToLandAspects}
+	 */
+	private final Map<ResourceLocation, LandInfoContainer> typeToInfoContainer = new HashMap<>();
 	
 	/**
 	 * Chains of lands to be used by the skybox render
 	 */
 	private List<List<Integer>> landChains = new LinkedList<>();
 	
-	final MinecraftServer mcServer;
+	MinecraftServer mcServer;
 	
-	private SkaianetHandler(MinecraftServer mcServer)
-	{
-		super(DATA_NAME);
-		this.mcServer = mcServer;
-	}
+	private SkaianetHandler()
+	{}
 	
 	/**
 	 * @param client The client player to search for
@@ -82,7 +86,7 @@ public class SkaianetHandler extends WorldSavedData
 	public PlayerIdentifier getAssociatedPartner(PlayerIdentifier player, boolean isClient)
 	{
 		for(SburbConnection c : connections)
-			if(c.isMain)
+			if(c.isMain())
 				if(isClient && c.getClientIdentifier().equals(player))
 					return c.getServerIdentifier().equals(IdentifierHandler.nullIdentifier) ? null : c.getServerIdentifier();
 				else if(!isClient && c.getServerIdentifier().equals(player))
@@ -95,7 +99,7 @@ public class SkaianetHandler extends WorldSavedData
 		if(player.equals(IdentifierHandler.nullIdentifier))
 			return null;
 		for(SburbConnection c : connections)
-			if(c.isMain)
+			if(c.isMain())
 				if(isClient ? (c.getClientIdentifier().equals(player))
 						: c.getServerIdentifier().equals(player))
 					return c;
@@ -105,10 +109,10 @@ public class SkaianetHandler extends WorldSavedData
 	public boolean giveItems(PlayerIdentifier player)
 	{
 		SburbConnection c = getActiveConnection(player);
-		if(c != null && !c.isMain && getAssociatedPartner(c.getClientIdentifier(), true) == null
+		if(c != null && !c.isMain() && getAssociatedPartner(c.getClientIdentifier(), true) == null
 				&& getAssociatedPartner(c.getServerIdentifier(), false) == null)
 		{
-			c.isMain = true;
+			c.setIsMain();
 			SburbHandler.onFirstItemGiven(c);
 			updatePlayer(c.getClientIdentifier());
 			updatePlayer(c.getServerIdentifier());
@@ -150,7 +154,7 @@ public class SkaianetHandler extends WorldSavedData
 				else
 				{
 					te.getData(1).putBoolean("isOpen", true);
-					serversOpen.put(player.owner, player);
+					serversOpen.put(player.getOwner(), player);
 				}
 			}
 			else if(otherPlayer != null && getAssociatedPartner(player.owner, false).equals(otherPlayer))	//Wants to resume
@@ -160,7 +164,7 @@ public class SkaianetHandler extends WorldSavedData
 				else	//Client is not currently trying to resume
 				{
 					te.getData(1).putBoolean("isOpen", true);
-					resumingServers.put(player.owner, player);
+					resumingServers.put(player.getOwner(), player);
 				}
 			}
 			else return;
@@ -178,7 +182,7 @@ public class SkaianetHandler extends WorldSavedData
 				else	//If server isn't open
 				{
 					te.getData(0).putBoolean("isResuming", true);
-					resumingClients.put(player.owner, player);
+					resumingClients.put(player.getOwner(), player);
 				}
 			}
 			else if(serversOpen.containsKey(otherPlayer))	//If the server is open.
@@ -200,7 +204,7 @@ public class SkaianetHandler extends WorldSavedData
 				if(te != null)
 				{
 					te.getData(0).putBoolean("isResuming", false);
-					te.latestmessage.put(0, "computer.messageResumeStop");
+					te.latestmessage.put(0, STOP_RESUME);
 					te.markBlockForUpdate();
 				}
 			} else if(serversOpen.containsKey(player))
@@ -211,7 +215,7 @@ public class SkaianetHandler extends WorldSavedData
 				if(te != null)
 				{
 					te.getData(1).putBoolean("isOpen", false);
-					te.latestmessage.put(1, "computer.messageClosedServer");
+					te.latestmessage.put(1, CLOSED_SERVER);
 					te.markBlockForUpdate();
 				}
 			} else if(resumingServers.containsKey(player))
@@ -222,7 +226,7 @@ public class SkaianetHandler extends WorldSavedData
 				if(te != null)
 				{
 					te.getData(1).putBoolean("isOpen", false);
-					te.latestmessage.put(1, "computer.messageResumeStop");
+					te.latestmessage.put(1, STOP_RESUME);
 					te.markBlockForUpdate();
 				}
 			} else Debug.warn("[SKAIANET] Got disconnect request but server is not open! "+player);
@@ -238,32 +242,32 @@ public class SkaianetHandler extends WorldSavedData
 					if(cc != null)
 					{
 						cc.getData(0).putBoolean("connectedToServer", false);
-						cc.latestmessage.put(0, "computer.messageClosed");
+						cc.latestmessage.put(0, CLOSED);
 						cc.markBlockForUpdate();
 					}
 					if(sc != null)
 					{
 						sc.getData(1).putString("connectedClient", "");
-						sc.latestmessage.put(1, "computer.messageClosed");
+						sc.latestmessage.put(1, CLOSED);
 						sc.markBlockForUpdate();
 					}
 					sessionHandler.onConnectionClosed(c, true);
 					ServerEditHandler.onDisconnect(c);
-					if(c.isMain)
+					if(c.isMain())
 						c.isActive = false;	//That's everything that is neccesary.
 					else connections.remove(c);
 					
-					ConnectionCreatedEvent.ConnectionType type = !c.isMain && getMainConnection(c.getClientIdentifier(), true) != null
+					ConnectionCreatedEvent.ConnectionType type = !c.isMain() && getMainConnection(c.getClientIdentifier(), true) != null
 							? ConnectionCreatedEvent.ConnectionType.SECONDARY : ConnectionCreatedEvent.ConnectionType.REGULAR;
 					MinecraftForge.EVENT_BUS.post(new ConnectionClosedEvent(c, sessionHandler.getPlayerSession(c.getClientIdentifier()), type));
 				} else if(getAssociatedPartner(player, isClient).equals(otherPlayer))
 				{
 					if(movingComputers.contains(isClient?resumingClients.get(player):resumingServers.get(player)))
 						return;
-					ComputerTileEntity te = getComputer(mcServer, (isClient?resumingClients.remove(player):resumingServers.remove(player)).getLocation());
+					ComputerTileEntity te = getComputer(mcServer, (isClient?resumingClients:resumingServers).remove(player).getLocation());
 					if(te != null)
 					{
-						te.latestmessage.put(isClient?0:1, "computer.messageResumeStop");
+						te.latestmessage.put(isClient?0:1, STOP_RESUME);
 						te.markBlockForUpdate();
 					}
 				}
@@ -289,7 +293,7 @@ public class SkaianetHandler extends WorldSavedData
 			c = getConnection(player.owner, otherPlayer);
 			if(c == null)
 			{
-				c = new SburbConnection();
+				c = new SburbConnection(this);
 				connections.add(c);
 				newConnection = true;
 			}
@@ -380,7 +384,7 @@ public class SkaianetHandler extends WorldSavedData
 		OpEntry opsEntry = player.getServer().getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
 		if(MinestuckConfig.privateComputers.get() && !p0.equals(p1) && !(opsEntry != null && opsEntry.getPermissionLevel() >= 2))
 		{
-			player.sendMessage(new StringTextComponent("[Minestuck] ").setStyle(new Style().setColor(TextFormatting.RED)).appendSibling(new TranslationTextComponent("message.privateComputerMessage")));
+			player.sendMessage(new StringTextComponent("[Minestuck] ").setStyle(new Style().setColor(TextFormatting.RED)).appendSibling(new TranslationTextComponent(PRIVATE_COMPUTER)));
 			return;
 		}
 		int i = 0;
@@ -408,14 +412,14 @@ public class SkaianetHandler extends WorldSavedData
 		updatePlayer(p0);
 	}
 	
-	@Override
-	public void read(CompoundNBT nbt)
+	private void read(CompoundNBT nbt)
 	{
+		MSDimensionTypes.LANDS.dimToLandAspects.clear();
 		SburbHandler.titleSelectionMap.clear();
 		ListNBT list = nbt.getList("sessions", 10);
 		for(int i = 0; i < list.size(); i++)
 		{
-			Session session = new Session().read(list.getCompound(i));
+			Session session = Session.read(list.getCompound(i), this);
 			sessionHandler.sessions.add(session);
 			connections.addAll(session.connections);
 			
@@ -444,10 +448,18 @@ public class SkaianetHandler extends WorldSavedData
 		sessionHandler.onLoad();
 		
 		updateLandChain();
+		
+		for(SburbConnection c : connections)
+		{
+			if(c.clientHomeLand != null)
+			{
+				typeToInfoContainer.put(c.clientHomeLand.getDimensionName(), c.clientHomeLand);
+				MSDimensionTypes.LANDS.dimToLandAspects.put(c.clientHomeLand.getDimensionName(), c.clientHomeLand.getLazyLandAspects());
+			}
+		}
 	}
 	
-	@Override
-	public CompoundNBT write(CompoundNBT compound)
+	private CompoundNBT write(CompoundNBT compound)
 	{
 		//checkData();
 		ListNBT list = new ListNBT();
@@ -483,21 +495,21 @@ public class SkaianetHandler extends WorldSavedData
 		Set<Integer> checked = new HashSet<>();
 		for(SburbConnection c : connections)
 		{
-			if(c.isMain() && c.hasEntered() && !checked.contains(c.clientHomeLand.getId()))
+			if(c.isMain() && c.hasEntered() && !checked.contains(c.getClientDimension().getId()))
 			{
 				LinkedList<Integer> chain = new LinkedList<>();
-				chain.add(c.clientHomeLand.getId());
-				checked.add(c.clientHomeLand.getId());
+				chain.add(c.getClientDimension().getId());
+				checked.add(c.getClientDimension().getId());
 				SburbConnection cIter = c;
 				while(true)
 				{
 					cIter = getMainConnection(cIter.getClientIdentifier(), false);
 					if(cIter != null && cIter.hasEntered())
 					{
-						if(!checked.contains(cIter.clientHomeLand.getId()))
+						if(!checked.contains(cIter.getClientDimension().getId()))
 						{
-							chain.addLast(cIter.clientHomeLand.getId());
-							checked.add(cIter.clientHomeLand.getId());
+							chain.addLast(cIter.getClientDimension().getId());
+							checked.add(cIter.getClientDimension().getId());
 						} else break;
 					} else
 					{
@@ -509,10 +521,10 @@ public class SkaianetHandler extends WorldSavedData
 				while(true)
 				{
 					cIter = getMainConnection(cIter.getServerIdentifier(), true);
-					if(cIter != null && cIter.hasEntered() && !checked.contains(cIter.clientHomeLand.getId()))
+					if(cIter != null && cIter.hasEntered() && !checked.contains(cIter.getClientDimension().getId()))
 					{
-						chain.addFirst(cIter.clientHomeLand.getId());
-						checked.add(cIter.clientHomeLand.getId());
+						chain.addFirst(cIter.getClientDimension().getId());
+						checked.add(cIter.getClientDimension().getId());
 					} else
 					{
 						break;
@@ -621,7 +633,7 @@ public class SkaianetHandler extends WorldSavedData
 						|| !c.getServerIdentifier().equals(sc.owner) || !cc.getData(0).getBoolean("connectedToServer"))
 				{
 					Debug.warnf("[SKAIANET] Invalid computer in connection between %s and %s.", c.getClientIdentifier(), c.getServerIdentifier());
-					if(!c.isMain)
+					if(!c.isMain())
 						iter2.remove();
 					else c.isActive = false;
 					sessionHandler.onConnectionClosed(c, true);
@@ -630,37 +642,12 @@ public class SkaianetHandler extends WorldSavedData
 					if(cc != null)
 					{
 						cc.getData(0).putBoolean("connectedToServer", false);
-						cc.latestmessage.put(0, "computer.messageClosed");
+						cc.latestmessage.put(0, CLOSED);
 						cc.markBlockForUpdate();
 					} else if(sc != null)
 					{
-						sc.latestmessage.put(1, "computer.messageClosed");
+						sc.latestmessage.put(1, CLOSED);
 						sc.markBlockForUpdate();
-					}
-				}
-				if(cc != null && c.hasEntered() && !MSDimensions.isLandDimension(c.clientHomeLand))
-					c.clientHomeLand = c.client.getDimension();
-			}
-			if(c.hasEntered() && !MSDimensions.isLandDimension(c.clientHomeLand))
-			{
-				ServerPlayerEntity player = c.getClientIdentifier().getPlayer(mcServer);
-				if(player != null)
-				{
-					c.clientHomeLand = player.dimension;
-					if(!MSDimensions.isLandDimension(c.clientHomeLand))
-					{
-						iter2.remove();
-						sessionHandler.onConnectionClosed(c, false);
-						if(c.isActive)
-						{
-							ComputerTileEntity cc = getComputer(mcServer, c.client.location), sc = getComputer(mcServer, c.server.location);
-							cc.getData(0).putBoolean("connectedToServer", false);
-							cc.latestmessage.put(0, "computer.messageClosed");
-							cc.markBlockForUpdate();
-							sc.getData(1).putString("connectedClient", "");
-							sc.latestmessage.put(1, "computer.messageClosed");
-							sc.markBlockForUpdate();
-						}
 					}
 				}
 			}
@@ -733,9 +720,9 @@ public class SkaianetHandler extends WorldSavedData
 			if(c == null)
 			{
 				Debug.infof("Player %s entered without connection. Creating connection... ", target.getUsername());
-				c = new SburbConnection();
+				c = new SburbConnection(this);
 				c.isActive = false;
-				c.isMain = true;
+				c.setIsMain();
 				c.clientIdentifier = target;
 				c.serverIdentifier = IdentifierHandler.nullIdentifier;
 				String s = sessionHandler.onConnectionCreated(c);
@@ -769,16 +756,20 @@ public class SkaianetHandler extends WorldSavedData
 			}
 			else giveItems(target);
 		}
-		else if(c.clientHomeLand != null)
-			return c.clientHomeLand;
+		else if(c.getClientDimension() != null)
+			return c.getClientDimension();
 		
 		c.clientHomeLand = SburbHandler.enterMedium(mcServer, c);
 		if(c.clientHomeLand == null)
 		{
 			Debug.errorf("Could not create a land for player %s.", target.getUsername());
+		} else
+		{
+			typeToInfoContainer.put(c.clientHomeLand.getDimensionName(), c.clientHomeLand);
+			MSDimensionTypes.LANDS.dimToLandAspects.put(c.clientHomeLand.getDimensionName(), c.clientHomeLand.getLazyLandAspects());
 		}
 		
-		return c.clientHomeLand;
+		return c.getClientDimension();
 	}
 	
 	public void onEntry(PlayerIdentifier target)
@@ -804,9 +795,9 @@ public class SkaianetHandler extends WorldSavedData
 	{
 		for(SburbConnection c : connections)
 		{
-			for(int i = 0; i < c.givenItemList.length; i++)
-				c.givenItemList[i] = false;
+			Arrays.fill(c.givenItemList, false);
 			c.unregisteredItems = new ListNBT();
+			
 			EditData data = ServerEditHandler.getData(c);
 			if(data != null)
 			{
@@ -842,6 +833,10 @@ public class SkaianetHandler extends WorldSavedData
 		movingComputers.clear();
 	}
 	
+	public LandInfoContainer landInfoForDimension(DimensionType type)
+	{
+		return typeToInfoContainer.get(DimensionType.getKey(type));
+	}
 	
 	public static SkaianetHandler get(World world)
 	{
@@ -853,19 +848,34 @@ public class SkaianetHandler extends WorldSavedData
 	
 	public static SkaianetHandler get(MinecraftServer server)
 	{
-		ServerWorld world = server.getWorld(DimensionType.OVERWORLD);
-		if(world.isRemote)
-			throw new IllegalStateException("Should not attempt to get saved data on the client side!");
-		
-		DimensionSavedDataManager storage = world.getSavedData();
-		SkaianetHandler instance = storage.get(() -> new SkaianetHandler(world.getServer()), DATA_NAME);
-		
-		if(instance == null)	//There is no save data
+		if(INSTANCE == null)
+			INSTANCE = new SkaianetHandler();
+		INSTANCE.mcServer = server;
+		return INSTANCE;
+	}
+	
+	/**
+	 * Must be called when a server closes to avoid data carrying over between worlds.
+	 * Should only be called by minestuck itself.
+	 */
+	public static void init(CompoundNBT nbt)
+	{
+		if(nbt != null)
 		{
-			instance = new SkaianetHandler(world.getServer());
-			storage.set(instance);
-		}
-		
-		return instance;
+			INSTANCE = new SkaianetHandler();
+			INSTANCE.read(nbt);
+		} else INSTANCE = null;
+	}
+	
+	public static CompoundNBT write()
+	{
+		if(INSTANCE == null)
+			return null;
+		else return INSTANCE.write(new CompoundNBT());
+	}
+	
+	public static void clear()
+	{
+		INSTANCE = null;
 	}
 }
