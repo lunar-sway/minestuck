@@ -88,13 +88,13 @@ public class LandTypes
 	public static void onRegistryNewRegistry(final RegistryEvent.NewRegistry event)
 	{
 		TERRAIN_REGISTRY = new RegistryBuilder<TerrainLandType>()
-				.setName(new ResourceLocation(Minestuck.MOD_ID, "terrain_land_aspect"))
+				.setName(new ResourceLocation(Minestuck.MOD_ID, "terrain_land_type"))
 				.setType(TerrainLandType.class)
 				.addCallback(TerrainCallbacks.INSTANCE)
 				.create();
 		terrainGroupMap = TERRAIN_REGISTRY.getSlaveMap(TERRAIN_GROUP, Map.class);
 		TITLE_REGISTRY = new RegistryBuilder<TitleLandType>()
-				.setName(new ResourceLocation(Minestuck.MOD_ID, "title_land_aspect"))
+				.setName(new ResourceLocation(Minestuck.MOD_ID, "title_land_type"))
 				.setType(TitleLandType.class)
 				.addCallback(TitleCallbacks.INSTANCE)
 				.create();
