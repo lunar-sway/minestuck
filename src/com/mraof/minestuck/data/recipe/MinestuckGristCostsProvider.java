@@ -32,7 +32,6 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(Items.DIRT).grist(GristType.BUILD, 2).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.GRASS_BLOCK).grist(GristType.BUILD, 2).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.PODZOL).grist(GristType.BUILD, 2).buildFor(recipeSaver, Minestuck.MOD_ID);
-		GristCostRecipeBuilder.of(Items.MYCELIUM).grist(GristType.BUILD, 2).buildFor(recipeSaver, Minestuck.MOD_ID);
 		
 		GristCostRecipeBuilder.of(ItemTags.LOGS).grist(GristType.BUILD, 8).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(ItemTags.LEAVES).grist(GristType.BUILD, 1).buildFor(recipeSaver, Minestuck.MOD_ID);

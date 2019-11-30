@@ -18,7 +18,9 @@
   "criteria": {
     "imp_dungeon": {
       "trigger": "minecraft:location",
-      "conditions": {}
+      "conditions": {
+        "feature": "imp_dungeon"
+      }
     }
   },
   "requirements": [

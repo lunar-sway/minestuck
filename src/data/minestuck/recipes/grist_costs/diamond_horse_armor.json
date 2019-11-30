@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:diamond_horse_armor"
+  },
+  "grist_cost": {
+    "minestuck:diamond": 80
+  }
+}
