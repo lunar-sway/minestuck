@@ -7,6 +7,7 @@ import net.minecraft.nbt.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerList;
 import net.minecraftforge.common.UsernameCache;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
@@ -72,7 +73,7 @@ public class IdentifierHandler	//TODO Probably needs a redesign. Do we even need
 	
 	public static boolean hasIdentifier(CompoundNBT nbt, String key)
 	{
-		return nbt.contains(key, 8) || nbt.contains(key + "Most", 4) && nbt.contains(key + "Least", 4);
+		return nbt.contains(key, Constants.NBT.TAG_STRING) || nbt.contains(key + "Most", Constants.NBT.TAG_LONG) && nbt.contains(key + "Least", Constants.NBT.TAG_LONG);
 	}
 	
 	public static PlayerIdentifier load(INBT nbt, String key)
@@ -237,7 +238,7 @@ public class IdentifierHandler	//TODO Probably needs a redesign. Do we even need
 			else
 			{
 				CompoundNBT compound = (CompoundNBT) nbt;
-				if(compound.contains(key, 8))
+				if(compound.contains(key, Constants.NBT.TAG_STRING))
 				{
 					username = compound.getString(key);
 					useUUID = false;

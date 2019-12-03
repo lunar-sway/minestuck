@@ -1,6 +1,7 @@
 package com.mraof.minestuck.util;
 
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +72,7 @@ public class ColorCollector
 	
 	public static int getColorFromStack(ItemStack stack)
 	{
-		if(stack.hasTag() && stack.getTag().contains("color", 99))
+		if(stack.hasTag() && stack.getTag().contains("color", Constants.NBT.TAG_ANY_NUMERIC))
 			return stack.getTag().getInt("color");
 		else return DEFAULT_COLOR;
 	}

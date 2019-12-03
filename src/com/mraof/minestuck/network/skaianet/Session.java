@@ -5,6 +5,7 @@ import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.*;
 
@@ -139,17 +140,17 @@ public class Session
 	static Session read(CompoundNBT nbt, SkaianetHandler handler)
 	{
 		Session s = new Session();
-		if(nbt.contains("name", 8))
+		if(nbt.contains("name", Constants.NBT.TAG_STRING))
 			s.name = nbt.getString("name");
 		else s.name = null;
 		
-		ListNBT list = nbt.getList("connections", 10);
+		ListNBT list = nbt.getList("connections", Constants.NBT.TAG_COMPOUND);
 		for(int i = 0; i < list.size(); i++)
 			s.connections.add(SburbConnection.read(list.getCompound(i), handler));
 		
-		if(nbt.contains("predefinedPlayers", 9))	//If it is a tag list
+		if(nbt.contains("predefinedPlayers", Constants.NBT.TAG_LIST))	//If it is a tag list
 		{
-			list = nbt.getList("predefinedPlayers", 10);
+			list = nbt.getList("predefinedPlayers", Constants.NBT.TAG_COMPOUND);
 			for(int i = 0; i < list.size(); i++)
 			{
 				CompoundNBT compound = list.getCompound(i);

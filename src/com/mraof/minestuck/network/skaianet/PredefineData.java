@@ -8,6 +8,7 @@ import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.util.Constants;
 
 class PredefineData
 {
@@ -17,11 +18,11 @@ class PredefineData
 	
 	PredefineData read(CompoundNBT nbt)
 	{
-		if(nbt.contains("titleAspect", 99))
+		if(nbt.contains("titleAspect", Constants.NBT.TAG_ANY_NUMERIC))
 			title = new Title(EnumClass.values()[nbt.getByte("titleClass")], EnumAspect.values()[nbt.getByte("titleAspect")]);
-		if(nbt.contains("landTerrain", 8))
+		if(nbt.contains("landTerrain", Constants.NBT.TAG_STRING))
 			landTerrain = LandTypes.TERRAIN_REGISTRY.getValue(ResourceLocation.tryCreate(nbt.getString("landTerrain")));
-		if(nbt.contains("landTitle", 8))
+		if(nbt.contains("landTitle", Constants.NBT.TAG_STRING))
 			landTitle = LandTypes.TITLE_REGISTRY.getValue(ResourceLocation.tryCreate(nbt.getString("landTitle")));
 		
 		return this;

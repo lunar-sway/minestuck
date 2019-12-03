@@ -32,6 +32,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
@@ -54,10 +56,10 @@ import java.util.*;
 public class ServerEditHandler
 {
 	
-	public static final ArrayList<String> commands = new ArrayList<>(Arrays.asList(new String[]{"effect", "gamemode", "defaultgamemode", "enchant", "xp", "tp", "spreadplayers", "kill", "clear", "spawnpoint", "setworldspawn", "give"}));
+	public static final ArrayList<String> commands = new ArrayList<>(Arrays.asList("effect", "gamemode", "defaultgamemode", "enchant", "xp", "tp", "spreadplayers", "kill", "clear", "spawnpoint", "setworldspawn", "give"));
 	public static final ServerEditHandler instance = new ServerEditHandler();
 	
-	static List<EditData> list = new ArrayList<>();
+	private static List<EditData> list = new ArrayList<>();
 	
 	/**
 	 * Called both when any player logged out and when a player pressed the exit button.
@@ -624,12 +626,12 @@ public class ServerEditHandler
 		nbt.put("editmodeRecover", nbtList);
 	}
 	
-	public static void loadData(CompoundNBT nbt)
+	public static void loadData(CompoundNBT nbt)	//TODO This is unused
 	{
 		recoverData.clear();
-		if(nbt != null && nbt.contains("editmodeRecover", 9))
+		if(nbt != null && nbt.contains("editmodeRecover", Constants.NBT.TAG_LIST))
 		{
-			ListNBT nbtList = nbt.getList("editmodeRecover", 10);
+			ListNBT nbtList = nbt.getList("editmodeRecover", Constants.NBT.TAG_COMPOUND);
 			for(int i = 0; i < nbtList.size(); i++)
 				recoverData.add(nbtList.getCompound(i));
 		}
@@ -647,8 +649,9 @@ public class ServerEditHandler
 				DimensionType type = DimensionType.byName(new ResourceLocation(nbt.getString("dim")));
 				if(type == null)
 					throw new IllegalStateException("Unable to restore editmode player for "+player.getName()+"! Could not read dimension "+nbt.getString("dim")+".");
-				//else if(player.dimension != type && player.changeDimension(type, (world, entity, yaw) -> {}) == null) //TODO
-				//	throw new IllegalStateException("Was not able to restore editmode player for "+player.getName()+"! Likely caused by mod collision.");
+				ServerWorld world = DimensionManager.getWorld(player.server, type, true, true);
+				if(player.dimension != type && (world == null || Teleport.teleportEntity(player, world) == null))
+					throw new IllegalStateException("Was not able to restore editmode player for "+player.getName()+"! Unable to teleport player to "+type.getRegistryName());
 				
 				player.connection.setPlayerLocation(nbt.getDouble("x"), nbt.getDouble("y"), nbt.getDouble("z"), nbt.getFloat("rotYaw"), nbt.getFloat("rotPitch"));
 				player.setGameType(GameType.getByID(nbt.getInt("gamemode")));
@@ -658,7 +661,7 @@ public class ServerEditHandler
 				
 				player.setHealth(nbt.getFloat("health"));
 				player.getFoodStats().read(nbt.getCompound("food"));
-				player.inventory.read(nbt.getList("inv", 10));
+				player.inventory.read(nbt.getList("inv", Constants.NBT.TAG_COMPOUND));
 				
 				iter.remove();
 				

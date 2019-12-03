@@ -17,6 +17,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -202,9 +203,9 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	{
 		this.gristHealth = compound.getShort("Health") & 255;
 		this.gristAge = compound.getShort("Age");
-		if(compound.contains("Value", 99))
+		if(compound.contains("Value", Constants.NBT.TAG_ANY_NUMERIC))
 			this.gristValue = compound.getLong("Value");
-		if(compound.contains("Type", 8))
+		if(compound.contains("Type", Constants.NBT.TAG_STRING))
 			this.gristType = GristTypes.getTypeFromString(compound.getString("Type"));
 	}
 	

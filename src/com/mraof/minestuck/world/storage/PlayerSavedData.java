@@ -22,6 +22,7 @@ import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.DimensionSavedDataManager;
 import net.minecraft.world.storage.WorldSavedData;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -137,7 +138,7 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 	@Override
 	public void read(CompoundNBT nbt)
 	{
-		ListNBT list = nbt.getList("playerData", 10);
+		ListNBT list = nbt.getList("playerData", Constants.NBT.TAG_COMPOUND);
 		for (int i = 0; i < list.size(); i++)
 		{
 			CompoundNBT dataCompound = list.getCompound(i);
@@ -218,13 +219,11 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 		
 		private void readFromNBT(CompoundNBT nbt, MinecraftServer mcServer)
 		{
-			if (nbt.contains("username"))
-				this.player = IdentifierHandler.load(nbt, "username");    //For compability with saves from older minestuck versions
-			else this.player = IdentifierHandler.load(nbt, "player");
+			this.player = IdentifierHandler.load(nbt, "player");
 			if (nbt.contains("grist"))
 			{
-				this.gristCache = new GristSet();
-				ListNBT gristTags = nbt.getList("grist", 10);
+				this.gristCache = new GristSet();	//TODO reading grist set should happen in the grist set class
+				ListNBT gristTags = nbt.getList("grist", Constants.NBT.TAG_COMPOUND);
 				for(int i = 0; i <  gristTags.size(); i++)
 				{
 					CompoundNBT gristTag = gristTags.getCompound(i);
@@ -234,7 +233,7 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 				}
 			}
 			if (nbt.contains("titleClass"))
-				this.title = new Title(EnumClass.getClassFromInt(nbt.getByte("titleClass")), EnumAspect.getAspectFromInt(nbt.getByte("titleAspect")));
+				this.title = new Title(EnumClass.getClassFromInt(nbt.getByte("titleClass")), EnumAspect.getAspectFromInt(nbt.getByte("titleAspect")));	//TODO Should be read in the title class
 			if (nbt.contains("modus"))
 			{
 				this.modus = CaptchaDeckHandler.readFromNBT(nbt.getCompound("modus"), false);
@@ -268,7 +267,7 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 			}
 			if (this.title != null)
 			{
-				nbt.putByte("titleClass", (byte) this.title.getHeroClass().ordinal());
+				nbt.putByte("titleClass", (byte) this.title.getHeroClass().ordinal());	//TODO Should be written in the title object
 				nbt.putByte("titleAspect", (byte) this.title.getHeroAspect().ordinal());
 			}
 			if (this.modus != null)
@@ -281,7 +280,5 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 			echeladder.saveEcheladder(nbt);
 			return nbt;
 		}
-
 	}
-	
 }

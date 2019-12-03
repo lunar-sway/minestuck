@@ -8,6 +8,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -152,7 +153,7 @@ public class LandInfoContainer
 		
 		LandInfoContainer info = new LandInfoContainer(handler, identifier, aspects, dimName, reverse, terrainIndex, titleIndex);
 		
-		if(nbt.contains("gate_x", 99))
+		if(nbt.contains("gate_x", Constants.NBT.TAG_ANY_NUMERIC))
 		{
 			info.gatePos = new BlockPos(nbt.getInt("gate_x"), nbt.getInt("gate_y"), nbt.getInt("gate_z"));
 		}

@@ -15,6 +15,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
@@ -1120,7 +1121,7 @@ public class AlchemyRecipes
 	
 	public static boolean hasDecodedItem(ItemStack item)
 	{
-		return item.hasTag() && item.getTag().contains("contentID", 8);
+		return item.hasTag() && item.getTag().contains("contentID", Constants.NBT.TAG_STRING);
 	}
 	
 	/**

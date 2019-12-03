@@ -31,6 +31,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -416,7 +417,7 @@ public class SkaianetHandler
 	{
 		MSDimensionTypes.LANDS.dimToLandTypes.clear();
 		SburbHandler.titleSelectionMap.clear();
-		ListNBT list = nbt.getList("sessions", 10);
+		ListNBT list = nbt.getList("sessions", Constants.NBT.TAG_COMPOUND);
 		for(int i = 0; i < list.size(); i++)
 		{
 			Session session = Session.read(list.getCompound(i), this);
@@ -435,7 +436,7 @@ public class SkaianetHandler
 		Map<PlayerIdentifier, ComputerData>[] maps = new Map[]{serversOpen, resumingClients, resumingServers};
 		for(int e = 0; e < 3; e++)
 		{
-			list = nbt.getList(s[e], 10);
+			list = nbt.getList(s[e], Constants.NBT.TAG_COMPOUND);
 			for(int i = 0; i < list.size(); i++)
 			{
 				CompoundNBT cmp = list.getCompound(i);

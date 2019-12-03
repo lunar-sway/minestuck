@@ -17,6 +17,7 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -317,7 +318,7 @@ public class DeployList
 		if(clientDeployList == null)
 			clientDeployList = new ArrayList<>();
 		else clientDeployList.clear();
-		ListNBT list = nbt.getList("l", 10);
+		ListNBT list = nbt.getList("l", Constants.NBT.TAG_COMPOUND);
 		for(int i = 0; i < list.size(); i++)
 		{
 			CompoundNBT tag = list.getCompound(i);
@@ -325,17 +326,17 @@ public class DeployList
 			entry.item = ItemStack.read(tag);
 			entry.index = tag.getInt("i");
 			entry.cost1 = new GristSet();
-			for (INBT nbtBase : tag.getList("primary", 10))
+			for (INBT nbtBase : tag.getList("primary", Constants.NBT.TAG_COMPOUND))
 			{
 				CompoundNBT gristTag = (CompoundNBT) nbtBase;
 				GristType type = GristTypes.getTypeFromString(gristTag.getString("id"));
 				if(type != null)
 					entry.cost1.setGrist(type, gristTag.getInt("amount"));
 			}
-			if(tag.contains("secondary", 9))
+			if(tag.contains("secondary", Constants.NBT.TAG_LIST))
 			{
 				entry.cost2 = new GristSet();
-				for(INBT nbtBase : tag.getList("secondary", 10))
+				for(INBT nbtBase : tag.getList("secondary", Constants.NBT.TAG_COMPOUND))
 				{
 					CompoundNBT gristTag = (CompoundNBT) nbtBase;
 					GristType type = GristTypes.getTypeFromString(gristTag.getString("id"));

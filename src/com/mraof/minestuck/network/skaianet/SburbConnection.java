@@ -11,6 +11,7 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.StringNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.Arrays;
 
@@ -156,16 +157,16 @@ public class SburbConnection
 	{
 		SburbConnection c = new SburbConnection(handler);
 		c.isMain = nbt.getBoolean("IsMain");
-		if(nbt.contains("Inventory"))
-			c.inventory = nbt.getList("Inventory", 10);
+		if(nbt.contains("Inventory", Constants.NBT.TAG_LIST))
+			c.inventory = nbt.getList("Inventory", Constants.NBT.TAG_COMPOUND);
 		if(c.isMain)
 		{
 			c.isActive = nbt.getBoolean("IsActive");
 			c.hasEntered = nbt.getBoolean("HasEntered");
 			
-			if(nbt.contains("CanSplit"))
+			if(nbt.contains("CanSplit", Constants.NBT.TAG_ANY_NUMERIC))
 				c.canSplit = nbt.getBoolean("CanSplit");
-			ListNBT list = nbt.getList("GivenItems", 8);
+			ListNBT list = nbt.getList("GivenItems", Constants.NBT.TAG_STRING);
 			for(int i = 0; i < list.size(); i++)
 			{
 				String name = list.getString(i);
@@ -185,7 +186,7 @@ public class SburbConnection
 			c.clientIdentifier = IdentifierHandler.load(nbt, "Client");
 			c.serverIdentifier = IdentifierHandler.load(nbt, "Server");
 		}
-		if(nbt.contains("ClientLand"))
+		if(nbt.contains("ClientLand", Constants.NBT.TAG_COMPOUND))
 		{
 			c.clientHomeLand = LandInfoContainer.read(nbt.getCompound("ClientLand"), handler, c.getClientIdentifier());	//TODO add robustness in the case that the dimension type no longer exists?
 		}

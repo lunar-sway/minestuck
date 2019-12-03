@@ -4,6 +4,7 @@ import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.storage.SaveHandler;
 import net.minecraft.world.storage.WorldInfo;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.WorldPersistenceHooks;
 
 /**
@@ -31,7 +32,7 @@ public class MSWorldPersistenceHook implements WorldPersistenceHooks.WorldPersis
 	@Override
 	public void readData(SaveHandler handler, WorldInfo info, CompoundNBT tag)
 	{
-		if(tag.contains("skaianet", 10))
+		if(tag.contains("skaianet", Constants.NBT.TAG_COMPOUND))
 			SkaianetHandler.init(tag.getCompound("skaianet"));
 	}
 }

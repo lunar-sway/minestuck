@@ -14,6 +14,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.network.NetworkHooks;
 
@@ -198,7 +199,7 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 	{
 		this.health = compound.getShort("health") & 255;
 		this.age = compound.getShort("age");
-		if(compound.contains("amount", 99))
+		if(compound.contains("amount", Constants.NBT.TAG_ANY_NUMERIC))
 			this.healAmount = compound.getShort("amount");
 	}
 

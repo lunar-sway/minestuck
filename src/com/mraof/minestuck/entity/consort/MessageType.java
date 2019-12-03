@@ -24,6 +24,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootParameterSets;
 import net.minecraft.world.storage.loot.LootParameters;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import java.util.ArrayList;
@@ -580,7 +581,7 @@ public abstract class MessageType
 		public ITextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier)
 		{
 			CompoundNBT nbt = consort.getMessageTagForPlayer(player);
-			if(!repeat && nbt.contains(this.getString(), 99))
+			if(!repeat && nbt.contains(this.getString(), Constants.NBT.TAG_ANY_NUMERIC))
 			{
 				int index = nbt.getInt(this.getString());
 				if(index >= 0 && index < options.length)
@@ -676,7 +677,7 @@ public abstract class MessageType
 				{
 					message = results[index];
 					
-					if(!repeat && (!nbt.contains(this.getString(), 99) || nbt.getInt(this.getString()) != index))
+					if(!repeat && (!nbt.contains(this.getString(), Constants.NBT.TAG_ANY_NUMERIC) || nbt.getInt(this.getString()) != index))
 						return null;
 					
 					return message.getFromChain(consort, player, addTo(chainIdentifier, message.getString()), fromChain);

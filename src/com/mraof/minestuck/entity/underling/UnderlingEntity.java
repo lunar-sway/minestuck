@@ -34,6 +34,7 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -248,14 +249,14 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	@Override
 	public void readAdditional(CompoundNBT compound)
 	{
-		if(compound.contains("Type", 8))
+		if(compound.contains("Type", Constants.NBT.TAG_STRING))
 			applyGristType(GristTypes.getTypeFromString(compound.getString("Type")), false);
 		else applyGristType(SburbHandler.getUnderlingType(this), true);
 		super.readAdditional(compound);
 		
 		fromSpawner = compound.getBoolean("Spawned");
 		
-		if(compound.contains("HomePos", 10))
+		if(compound.contains("HomePos", Constants.NBT.TAG_COMPOUND))
 		{
 			CompoundNBT nbt = compound.getCompound("HomePos");
 			BlockPos pos = new BlockPos(nbt.getInt("HomeX"), nbt.getInt("HomeY"), nbt.getInt("homeZ"));

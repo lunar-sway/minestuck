@@ -19,6 +19,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 import java.util.ArrayList;
@@ -336,13 +337,13 @@ public class DataCheckerScreen extends Screen
 			if(data == null || data.isEmpty())
 				return;
 			
-			ListNBT sessionList = data.getList("sessions", 10);
+			ListNBT sessionList = data.getList("sessions", Constants.NBT.TAG_COMPOUND);
 			int nameIndex = 1;
 			for(int i = 0; i < sessionList.size(); i++)
 			{
 				CompoundNBT sessionTag = sessionList.getCompound(i);
 				SessionComponent session = new SessionComponent(this, sessionTag, data);
-				if(sessionTag.contains("name", 8))
+				if(sessionTag.contains("name", Constants.NBT.TAG_STRING))
 					session.name = sessionTag.getString("name");
 				else
 				{
@@ -391,7 +392,7 @@ public class DataCheckerScreen extends Screen
 		{
 			this.parent = parent;
 			HashSet<String> playerSet = new HashSet<>();
-			ListNBT connectionList = sessionTag.getList("connections", 10);
+			ListNBT connectionList = sessionTag.getList("connections", Constants.NBT.TAG_COMPOUND);
 			for(int i = 0; i < connectionList.size(); i++)
 			{
 				ConnectionComponent connection = new ConnectionComponent(this, connectionList.getCompound(i), dataTag);

@@ -28,6 +28,7 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 
@@ -199,10 +200,10 @@ public abstract class ConsortEntity extends MinestuckEntity implements IContaine
 	{
 		super.readAdditional(compound);
 		
-		if(compound.contains("Dialogue", 8))
+		if(compound.contains("Dialogue", Constants.NBT.TAG_STRING))
 		{
 			message = ConsortDialogue.getMessageFromString(compound.getString("Dialogue"));
-			if(compound.contains("MessageTicks", 99))
+			if(compound.contains("MessageTicks", Constants.NBT.TAG_ANY_NUMERIC))
 				messageTicksLeft = compound.getInt("MessageTicks");
 			else messageTicksLeft = 24000;	//Used to make summoning with a specific message slightly easier
 			messageData = compound.getCompound("MessageData");
@@ -210,16 +211,16 @@ public abstract class ConsortEntity extends MinestuckEntity implements IContaine
 		
 		merchantType = EnumConsort.MerchantType.values()[MathHelper.clamp(compound.getInt("Type"), 0, EnumConsort.MerchantType.values().length - 1)];
 		
-		if(compound.contains("HomeDim", 99))
+		if(compound.contains("HomeDim", Constants.NBT.TAG_STRING))
 			homeDimension = DimensionType.byName(new ResourceLocation(compound.getString("HomeDim")));
 		else homeDimension = this.world.getDimension().getType();
 		
-		if(merchantType != EnumConsort.MerchantType.NONE && compound.contains("Stock", 9))
+		if(merchantType != EnumConsort.MerchantType.NONE && compound.contains("Stock", Constants.NBT.TAG_LIST))
 		{
-			stocks = new ConsortMerchantInventory(this, compound.getList("Stock", 10));
+			stocks = new ConsortMerchantInventory(this, compound.getList("Stock", Constants.NBT.TAG_COMPOUND));
 		}
 		
-		if(compound.contains("HomePos", 10))
+		if(compound.contains("HomePos", Constants.NBT.TAG_COMPOUND))
 		{
 			CompoundNBT nbt = compound.getCompound("HomePos");
 			BlockPos pos = new BlockPos(nbt.getInt("HomeX"), nbt.getInt("HomeY"), nbt.getInt("HomeZ"));
@@ -275,7 +276,7 @@ public abstract class ConsortEntity extends MinestuckEntity implements IContaine
 	
 	public CompoundNBT getMessageTagForPlayer(PlayerEntity player)
 	{
-		if(!messageData.contains(player.getCachedUniqueIdString(), 10))
+		if(!messageData.contains(player.getCachedUniqueIdString(), Constants.NBT.TAG_COMPOUND))
 			messageData.put(player.getCachedUniqueIdString(), new CompoundNBT());
 		return messageData.getCompound(player.getCachedUniqueIdString());
 	}
