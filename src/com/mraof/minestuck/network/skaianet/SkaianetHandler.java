@@ -414,7 +414,7 @@ public class SkaianetHandler
 	
 	private void read(CompoundNBT nbt)
 	{
-		MSDimensionTypes.LANDS.dimToLandAspects.clear();
+		MSDimensionTypes.LANDS.dimToLandTypes.clear();
 		SburbHandler.titleSelectionMap.clear();
 		ListNBT list = nbt.getList("sessions", 10);
 		for(int i = 0; i < list.size(); i++)
@@ -454,7 +454,7 @@ public class SkaianetHandler
 			if(c.clientHomeLand != null)
 			{
 				typeToInfoContainer.put(c.clientHomeLand.getDimensionName(), c.clientHomeLand);
-				MSDimensionTypes.LANDS.dimToLandAspects.put(c.clientHomeLand.getDimensionName(), c.clientHomeLand.getLazyLandAspects());
+				MSDimensionTypes.LANDS.dimToLandTypes.put(c.clientHomeLand.getDimensionName(), c.clientHomeLand.getLazyLandAspects());
 			}
 		}
 	}
@@ -766,7 +766,7 @@ public class SkaianetHandler
 		} else
 		{
 			typeToInfoContainer.put(c.clientHomeLand.getDimensionName(), c.clientHomeLand);
-			MSDimensionTypes.LANDS.dimToLandAspects.put(c.clientHomeLand.getDimensionName(), c.clientHomeLand.getLazyLandAspects());
+			MSDimensionTypes.LANDS.dimToLandTypes.put(c.clientHomeLand.getDimensionName(), c.clientHomeLand.getLazyLandAspects());
 		}
 		
 		return c.getClientDimension();

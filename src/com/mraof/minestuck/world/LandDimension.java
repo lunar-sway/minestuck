@@ -298,15 +298,15 @@ public class LandDimension extends Dimension
 	public static class Type extends ModDimension
 	{
 		public boolean useServerData;
-		public Map<ResourceLocation, LandTypePair.LazyInstance> dimToLandAspects = new HashMap<>();	//TODO This might not be populated by skaianet before the dimension the player is in is created
+		public Map<ResourceLocation, LandTypePair.LazyInstance> dimToLandTypes = new HashMap<>();	//TODO This might not be populated by skaianet before the dimension the player is in is created
 		//TODO Dimension might actually not be unloaded when switching to/creating a new world
 		@Override
 		public void write(PacketBuffer buffer, boolean network)
 		{
 			if(network)
 			{
-				buffer.writeInt(dimToLandAspects.size());
-				for(Map.Entry<ResourceLocation, LandTypePair.LazyInstance> entry : dimToLandAspects.entrySet())
+				buffer.writeInt(dimToLandTypes.size());
+				for(Map.Entry<ResourceLocation, LandTypePair.LazyInstance> entry : dimToLandTypes.entrySet())
 				{
 					buffer.writeResourceLocation(entry.getKey());
 					entry.getValue().write(buffer);
@@ -319,13 +319,13 @@ public class LandDimension extends Dimension
 		{
 			if(network)
 			{
-				dimToLandAspects.clear();
+				dimToLandTypes.clear();
 				int size = buffer.readInt();
 				for(int i = 0; i < size; i++)
 				{
 					ResourceLocation dimId = buffer.readResourceLocation();
 					LandTypePair.LazyInstance landAspects = LandTypePair.LazyInstance.read(buffer);
-					dimToLandAspects.put(dimId, landAspects);
+					dimToLandTypes.put(dimId, landAspects);
 				}
 			}
 		}
@@ -338,7 +338,7 @@ public class LandDimension extends Dimension
 		
 		private LandDimension createDimension(World world, DimensionType type)
 		{
-			LandTypePair.LazyInstance aspects = dimToLandAspects.get(DimensionType.getKey(type));
+			LandTypePair.LazyInstance aspects = dimToLandTypes.get(DimensionType.getKey(type));
 			if(aspects == null)
 				Debug.warn("Trying to create a land world but haven't gotten its land aspects!");
 			return new LandDimension(world, type, aspects == null ? null : aspects.create());
