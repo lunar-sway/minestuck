@@ -1,4 +1,4 @@
-package com.mraof.minestuck.world.gen.feature;
+package com.mraof.minestuck.world.gen.feature.tree;
 
 import com.mojang.datafixers.Dynamic;
 import net.minecraft.block.BlockState;

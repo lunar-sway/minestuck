@@ -25,7 +25,7 @@ public class LandTableLootEntry extends LootEntry
 	private final ResourceLocation table;
 	private final String poolName;
 	
-	public LandTableLootEntry(ResourceLocation table, String pool, ILootCondition[] conditions)
+	private LandTableLootEntry(ResourceLocation table, String pool, ILootCondition[] conditions)
 	{
 		super(conditions);
 		this.table = table;

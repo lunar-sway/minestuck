@@ -1,14 +1,9 @@
-package com.mraof.minestuck.world.gen.feature;
-
-import java.util.Random;
-import java.util.Set;
-import java.util.function.Function;
+package com.mraof.minestuck.world.gen.feature.tree;
 
 import com.mojang.datafixers.Dynamic;
 import com.mraof.minestuck.block.DoubleLogBlock;
 import com.mraof.minestuck.block.EndLeavesBlock;
 import com.mraof.minestuck.block.MSBlocks;
-
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Direction;
@@ -17,6 +12,10 @@ import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.gen.IWorldGenerationReader;
 import net.minecraft.world.gen.feature.AbstractTreeFeature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
+
+import java.util.Random;
+import java.util.Set;
+import java.util.function.Function;
 
 public class EndTreeFeature extends AbstractTreeFeature<NoFeatureConfig>
 {

@@ -6,10 +6,14 @@ import net.minecraft.world.gen.feature.template.IStructureProcessorType;
 
 public class MSStructureProcessorTypes
 {
-	static final IStructureProcessorType BLOCK_REGISTRY = register("block_registry", dynamic -> StructureBlockRegistryProcessor.INSTANCE);
+	static IStructureProcessorType BLOCK_REGISTRY;
 	
-	public static void call()
+	/**
+	 * Should only be called by {@link com.mraof.minestuck.world.gen.feature.MSFeatures} on feature registry.
+	 */
+	static void init()
 	{
+		BLOCK_REGISTRY = register("block_registry", dynamic -> StructureBlockRegistryProcessor.INSTANCE);
 	}
 	
 	private static IStructureProcessorType register(String name, IStructureProcessorType type)

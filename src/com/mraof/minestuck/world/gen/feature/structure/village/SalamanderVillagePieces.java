@@ -1,39 +1,50 @@
-package com.mraof.minestuck.world.lands.structure.village;
+package com.mraof.minestuck.world.gen.feature.structure.village;
 
 import com.mraof.minestuck.entity.consort.EnumConsort;
-import net.minecraft.world.World;
+import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
+import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.WallTorchBlock;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.state.properties.DoorHingeSide;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.gen.feature.structure.StructurePiece;
+import net.minecraft.world.gen.feature.template.TemplateManager;
 
 import java.util.List;
 import java.util.Random;
 
-public class ConsortVillageSalamander
+public class SalamanderVillagePieces
 {
-	/*public static class RuinedTowerMushroomCenter extends ConsortVillageCenter.VillageCenter
+	public static class RuinedTowerMushroomCenter extends ConsortVillageCenter.VillageCenter
 	{
-		public RuinedTowerMushroomCenter()
+		public RuinedTowerMushroomCenter(List<ConsortVillagePieces.PieceWeight> pieceWeightList, int x, int z, Random rand)
 		{
-			super();
-		}
-		
-		public RuinedTowerMushroomCenter(List<ConsortVillageComponents.PieceWeight> pieceWeightList, int x, int z, Random rand)
-		{
-			super(pieceWeightList);
-			this.setCoordBaseMode(EnumFacing.Plane.HORIZONTAL.random(rand));
+			super(MSStructurePieces.MUSHROOM_TOWER_CENTER, pieceWeightList, 0, 0);
+			this.setCoordBaseMode(Direction.Plane.HORIZONTAL.random(rand));
 			
-			this.boundingBox = new StructureBoundingBox(x, 64, z, x + 9 - 1, 80, z + 9 - 1);
+			this.boundingBox = new MutableBoundingBox(x, 64, z, x + 9 - 1, 80, z + 9 - 1);
 		}
 		
-		@Override
-		public void buildComponent(StructureComponent componentIn, List<StructureComponent> listIn, Random rand)
+		public RuinedTowerMushroomCenter(TemplateManager templates, CompoundNBT nbt)
 		{
-			ConsortVillageComponents.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, boundingBox.minX + 4, boundingBox.minY, boundingBox.maxZ + 1, EnumFacing.SOUTH);
-			ConsortVillageComponents.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, boundingBox.minX - 1, boundingBox.minY, boundingBox.minZ + 4, EnumFacing.WEST);
-			ConsortVillageComponents.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, boundingBox.minX + 4, boundingBox.minY, boundingBox.minZ - 1, EnumFacing.NORTH);
-			ConsortVillageComponents.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, boundingBox.maxX + 1, boundingBox.minY, boundingBox.minZ + 4, EnumFacing.EAST);
+			super(MSStructurePieces.MUSHROOM_TOWER_CENTER, nbt, 0);
 		}
 		
 		@Override
-		public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn)
+		public void buildComponent(StructurePiece componentIn, List<StructurePiece> listIn, Random rand)
+		{
+			ConsortVillagePieces.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, boundingBox.minX + 4, boundingBox.minY, boundingBox.maxZ + 1, Direction.SOUTH);
+			ConsortVillagePieces.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, boundingBox.minX - 1, boundingBox.minY, boundingBox.minZ + 4, Direction.WEST);
+			ConsortVillagePieces.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, boundingBox.minX + 4, boundingBox.minY, boundingBox.minZ - 1, Direction.NORTH);
+			ConsortVillagePieces.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, boundingBox.maxX + 1, boundingBox.minY, boundingBox.minZ + 4, Direction.EAST);
+		}
+		
+		@Override
+		public boolean addComponentParts(IWorld worldIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
 		{
 			if (this.averageGroundLvl < 0)
 			{
@@ -47,16 +58,16 @@ public class ConsortVillageSalamander
 				this.boundingBox.offset(0, this.averageGroundLvl - this.boundingBox.minY - 1, 0);
 			}
 			
-			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
-			IBlockState primary = provider.blockRegistry.getBlockState("structure_primary");
-			IBlockState stairsN = provider.blockRegistry.getStairs("structure_primary_stairs", EnumFacing.NORTH, false);
-			IBlockState stairsE = provider.blockRegistry.getStairs("structure_primary_stairs", EnumFacing.EAST, false);
-			IBlockState stairsS = provider.blockRegistry.getStairs("structure_primary_stairs", EnumFacing.SOUTH, false);
-			IBlockState stairsW = provider.blockRegistry.getStairs("structure_primary_stairs", EnumFacing.WEST, false);
-			IBlockState secondary = provider.blockRegistry.getBlockState("structure_secondary");
-			IBlockState ground = provider.blockRegistry.getBlockState("surface");
-			IBlockState mushroom1 = provider.blockRegistry.getBlockState("mushroom_1");
-			IBlockState mushroom2 = provider.blockRegistry.getBlockState("mushroom_2");
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(worldIn.getChunkProvider().getChunkGenerator().getSettings());
+			BlockState primary = blocks.getBlockState("structure_primary");
+			BlockState stairsN = blocks.getStairs("structure_primary_stairs", Direction.NORTH, false);
+			BlockState stairsE = blocks.getStairs("structure_primary_stairs", Direction.EAST, false);
+			BlockState stairsS = blocks.getStairs("structure_primary_stairs", Direction.SOUTH, false);
+			BlockState stairsW = blocks.getStairs("structure_primary_stairs", Direction.WEST, false);
+			BlockState secondary = blocks.getBlockState("structure_secondary");
+			BlockState ground = blocks.getBlockState("surface");
+			BlockState mushroom1 = blocks.getBlockState("mushroom_1");
+			BlockState mushroom2 = blocks.getBlockState("mushroom_2");
 			
 			this.fillWithAir(worldIn, structureBoundingBoxIn, 3, 1, 2, 5, 7, 6);
 			this.fillWithAir(worldIn, structureBoundingBoxIn, 2, 1, 3, 2, 7, 5);
@@ -169,28 +180,28 @@ public class ConsortVillageSalamander
 		}
 	}
 	
-	public static class PipeHouse1 extends ConsortVillageComponents.ConsortVillagePiece
+	public static class PipeHouse1 extends ConsortVillagePieces.ConsortVillagePiece
 	{
-		public PipeHouse1()
+		public PipeHouse1(ConsortVillageCenter.VillageCenter start, Random rand, MutableBoundingBox boundingBox, Direction facing)
 		{
-			spawns = new boolean[2];
-		}
-		
-		public PipeHouse1(ConsortVillageCenter.VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
-		{
-			this();
+			super(MSStructurePieces.PIPE_HOUSE_1, 0, 2);
 			this.setCoordBaseMode(facing);
 			this.boundingBox = boundingBox;
 		}
 		
-		public static PipeHouse1 createPiece(ConsortVillageCenter.VillageCenter start, List<StructureComponent> componentList, Random rand, int x, int y, int z, EnumFacing facing)
+		public PipeHouse1(TemplateManager templates, CompoundNBT nbt)
 		{
-			StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 6, 5, 7, facing);
-			return StructureComponent.findIntersecting(componentList, structureboundingbox) == null ? new PipeHouse1(start, rand, structureboundingbox, facing) : null;
+			super(MSStructurePieces.PIPE_HOUSE_1, nbt, 2);
+		}
+		
+		public static PipeHouse1 createPiece(ConsortVillageCenter.VillageCenter start, List<StructurePiece> componentList, Random rand, int x, int y, int z, Direction facing)
+		{
+			MutableBoundingBox structureboundingbox = MutableBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 6, 5, 7, facing);
+			return StructurePiece.findIntersecting(componentList, structureboundingbox) == null ? new PipeHouse1(start, rand, structureboundingbox, facing) : null;
 		}
 		
 		@Override
-		public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn)
+		public boolean addComponentParts(IWorld worldIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
 		{
 			if (this.averageGroundLvl < 0)
 			{
@@ -204,11 +215,11 @@ public class ConsortVillageSalamander
 				this.boundingBox.offset(0, this.averageGroundLvl - this.boundingBox.minY - 1, 0);
 			}
 			
-			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
-			IBlockState wallBlock = provider.blockRegistry.getBlockState("structure_primary");
-			IBlockState floorBlock = provider.blockRegistry.getBlockState("salamander_floor");
-			IBlockState doorBlock = provider.blockRegistry.getBlockState("village_door");
-			IBlockState torch = provider.blockRegistry.getBlockState("torch");
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(worldIn.getChunkProvider().getChunkGenerator().getSettings());
+			BlockState wallBlock = blocks.getBlockState("structure_primary");
+			BlockState floorBlock = blocks.getBlockState("salamander_floor");
+			BlockState doorBlock = blocks.getBlockState("village_door");
+			BlockState torch = blocks.getBlockState("wall_torch");
 			
 			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 2, 4, 5, 5);
 			this.clearFront(worldIn, structureBoundingBoxIn, 1, 4, 1, 0);
@@ -224,9 +235,9 @@ public class ConsortVillageSalamander
 			this.setBlockState(worldIn, wallBlock, 5, 2, 2, structureBoundingBoxIn);
 			this.setBlockState(worldIn, wallBlock, 5, 2, 5, structureBoundingBoxIn);
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 5,3,2,5,5, 5, wallBlock, wallBlock, false);
-			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 3, 1, 1, EnumFacing.SOUTH, (BlockDoor) doorBlock.getBlock());
+			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 3, 1, 1, Direction.SOUTH, doorBlock.getBlock(), DoorHingeSide.LEFT);
 			
-			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.EAST), 1, 3, 4, structureBoundingBoxIn);
+			setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.EAST), 1, 3, 4, structureBoundingBoxIn);
 			
 			if(!spawns[0])
 				spawns[0] = spawnConsort(2, 1, 3, structureBoundingBoxIn, worldIn);
@@ -236,28 +247,28 @@ public class ConsortVillageSalamander
 		}
 	}
 	
-	public static class HighPipeHouse1 extends ConsortVillageComponents.ConsortVillagePiece
+	public static class HighPipeHouse1 extends ConsortVillagePieces.ConsortVillagePiece
 	{
-		public HighPipeHouse1()
+		public HighPipeHouse1(ConsortVillageCenter.VillageCenter start, Random rand, MutableBoundingBox boundingBox, Direction facing)
 		{
-			spawns = new boolean[3];
-		}
-		
-		public HighPipeHouse1(ConsortVillageCenter.VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
-		{
-			this();
+			super(MSStructurePieces.HIGH_PIPE_HOUSE_1, 0, 3);
 			this.setCoordBaseMode(facing);
 			this.boundingBox = boundingBox;
 		}
 		
-		public static HighPipeHouse1 createPiece(ConsortVillageCenter.VillageCenter start, List<StructureComponent> componentList, Random rand, int x, int y, int z, EnumFacing facing)
+		public HighPipeHouse1(TemplateManager templates, CompoundNBT nbt)
 		{
-			StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 7, 13, 8, facing);
-			return StructureComponent.findIntersecting(componentList, structureboundingbox) == null ? new HighPipeHouse1(start, rand, structureboundingbox, facing) : null;
+			super(MSStructurePieces.HIGH_PIPE_HOUSE_1, nbt, 3);
+		}
+		
+		public static HighPipeHouse1 createPiece(ConsortVillageCenter.VillageCenter start, List<StructurePiece> componentList, Random rand, int x, int y, int z, Direction facing)
+		{
+			MutableBoundingBox structureboundingbox = MutableBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 7, 13, 8, facing);
+			return StructurePiece.findIntersecting(componentList, structureboundingbox) == null ? new HighPipeHouse1(start, rand, structureboundingbox, facing) : null;
 		}
 		
 		@Override
-		public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn)
+		public boolean addComponentParts(IWorld worldIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
 		{
 			if (this.averageGroundLvl < 0)
 			{
@@ -271,11 +282,11 @@ public class ConsortVillageSalamander
 				this.boundingBox.offset(0, this.averageGroundLvl - this.boundingBox.minY - 1, 0);
 			}
 			
-			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
-			IBlockState wallBlock = provider.blockRegistry.getBlockState("structure_primary");
-			IBlockState floorBlock = provider.blockRegistry.getBlockState("salamander_floor");
-			IBlockState doorBlock = provider.blockRegistry.getBlockState("village_door");
-			IBlockState torch = provider.blockRegistry.getBlockState("torch");
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(worldIn.getChunkProvider().getChunkGenerator().getSettings());
+			BlockState wallBlock = blocks.getBlockState("structure_primary");
+			BlockState floorBlock = blocks.getBlockState("salamander_floor");
+			BlockState doorBlock = blocks.getBlockState("village_door");
+			BlockState torch = blocks.getBlockState("wall_torch");
 			
 			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 2, 5, 13, 6);
 			this.clearFront(worldIn, structureBoundingBoxIn, 1, 5, 1, 0);
@@ -297,7 +308,7 @@ public class ConsortVillageSalamander
 			this.setBlockState(worldIn, wallBlock, 3, 5, 7, structureBoundingBoxIn);
 			this.setBlockState(worldIn, wallBlock, 3, 7, 7, structureBoundingBoxIn);
 			this.setBlockState(worldIn, wallBlock, 3, 9, 7, structureBoundingBoxIn);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3,11,7,3,13, 7, wallBlock, wallBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3,11,7,3,-13, 7, wallBlock, wallBlock, false);
 			
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0,3,2,0,13, 3, wallBlock, wallBlock, false);
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0,3,5,0,13, 6, wallBlock, wallBlock, false);
@@ -323,9 +334,9 @@ public class ConsortVillageSalamander
 			this.setBlockState(worldIn, wallBlock, 6, 2, 6, structureBoundingBoxIn);
 			this.fillWithAir(worldIn, structureBoundingBoxIn, 6, 2, 3, 6, 2, 5);
 			
-			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 3, 1, 1, EnumFacing.SOUTH, (BlockDoor) doorBlock.getBlock());
-			this.setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.NORTH), 3, 3, 6, structureBoundingBoxIn);
-			this.setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.SOUTH), 3, 7, 2, structureBoundingBoxIn);
+			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 3, 1, 1, Direction.SOUTH, doorBlock.getBlock(), DoorHingeSide.LEFT);
+			this.setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.NORTH), 3, 3, 6, structureBoundingBoxIn);
+			this.setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.SOUTH), 3, 7, 2, structureBoundingBoxIn);
 			
 			if(!spawns[0])
 				spawns[0] = this.spawnConsort(2, 1, 4,structureBoundingBoxIn, worldIn);
@@ -338,28 +349,28 @@ public class ConsortVillageSalamander
 		}
 	}
 	
-	public static class SmallTowerStore extends ConsortVillageComponents.ConsortVillagePiece
+	public static class SmallTowerStore extends ConsortVillagePieces.ConsortVillagePiece
 	{
-		public SmallTowerStore()
+		public SmallTowerStore(ConsortVillageCenter.VillageCenter start, Random rand, MutableBoundingBox boundingBox, Direction facing)
 		{
-			spawns = new boolean[1];
-		}
-		
-		public SmallTowerStore(ConsortVillageCenter.VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
-		{
-			this();
+			super(MSStructurePieces.SMALL_TOWER_STORE, 0, 1);
 			setCoordBaseMode(facing);
 			this.boundingBox = boundingBox;
 		}
 		
-		public static SmallTowerStore createPiece(ConsortVillageCenter.VillageCenter start, List<StructureComponent> componentList, Random rand, int x, int y, int z, EnumFacing facing)
+		public SmallTowerStore(TemplateManager templates, CompoundNBT nbt)
 		{
-			StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 7, 10, 8, facing);
-			return StructureComponent.findIntersecting(componentList, structureboundingbox) == null ? new SmallTowerStore(start, rand, structureboundingbox, facing) : null;
+			super(MSStructurePieces.SMALL_TOWER_STORE, nbt, 1);
+		}
+		
+		public static SmallTowerStore createPiece(ConsortVillageCenter.VillageCenter start, List<StructurePiece> componentList, Random rand, int x, int y, int z, Direction facing)
+		{
+			MutableBoundingBox boundingBox = MutableBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 7, 10, 8, facing);
+			return StructurePiece.findIntersecting(componentList, boundingBox) == null ? new SmallTowerStore(start, rand, boundingBox, facing) : null;
 		}
 		
 		@Override
-		public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn)
+		public boolean addComponentParts(IWorld worldIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
 		{
 			if (this.averageGroundLvl < 0)
 			{
@@ -373,11 +384,11 @@ public class ConsortVillageSalamander
 				this.boundingBox.offset(0, this.averageGroundLvl - this.boundingBox.minY - 1, 0);
 			}
 			
-			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
-			IBlockState wallBlock = provider.blockRegistry.getBlockState("structure_primary");
-			IBlockState floorBlock = provider.blockRegistry.getBlockState("structure_secondary");
-			IBlockState doorBlock = provider.blockRegistry.getBlockState("village_door");
-			IBlockState torch = provider.blockRegistry.getBlockState("torch");
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(worldIn.getChunkProvider().getChunkGenerator().getSettings());
+			BlockState wallBlock = blocks.getBlockState("structure_primary");
+			BlockState floorBlock = blocks.getBlockState("structure_secondary");
+			BlockState doorBlock = blocks.getBlockState("village_door");
+			BlockState torch = blocks.getBlockState("wall_torch");
 			
 			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 2, 5, 9, 6);
 			this.clearFront(worldIn, structureBoundingBoxIn, 1, 5, 1, 0);
@@ -431,15 +442,15 @@ public class ConsortVillageSalamander
 			this.setBlockState(worldIn, floorBlock, 0, 6, 3, structureBoundingBoxIn);
 			this.setBlockState(worldIn, floorBlock, 1, 7, 2, structureBoundingBoxIn);
 			
-			this.setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.NORTH), 1, 3, 5, structureBoundingBoxIn);
-			this.setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.NORTH), 5, 3, 5, structureBoundingBoxIn);
+			this.setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.NORTH), 1, 3, 5, structureBoundingBoxIn);
+			this.setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.NORTH), 5, 3, 5, structureBoundingBoxIn);
 			
-			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 3, 1, 1, EnumFacing.SOUTH, (BlockDoor) doorBlock.getBlock());
+			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 3, 1, 1, Direction.SOUTH, doorBlock.getBlock(), DoorHingeSide.LEFT);
 			
 			if(!spawns[0])
 				spawns[0] = spawnConsort(3, 1, 5,structureBoundingBoxIn, worldIn, EnumConsort.getRandomMerchant(randomIn), 1);
 			
 			return true;
 		}
-	}*/
+	}
 }

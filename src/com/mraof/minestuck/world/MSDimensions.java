@@ -3,9 +3,9 @@ package com.mraof.minestuck.world;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.world.lands.LandTypes;
-import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandInfoContainer;
+import com.mraof.minestuck.world.lands.LandTypePair;
+import com.mraof.minestuck.world.lands.LandTypes;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.dimension.DimensionType;
@@ -30,8 +30,6 @@ public class MSDimensions
 	{
 		//register dimensions
 		skaiaDimension = DimensionManager.registerOrGetDimension(SKAIA_ID, MSDimensionTypes.SKAIA, null, true);
-		
-		
 	}
 	
 	public static LandTypePair getAspects(MinecraftServer server, DimensionType dimension)
@@ -58,6 +56,6 @@ public class MSDimensions
 	
 	public static boolean isSkaia(DimensionType dimension)
 	{
-		return dimension == skaiaDimension;
+		return dimension != null && dimension.getModType() == MSDimensionTypes.SKAIA;
 	}
 }

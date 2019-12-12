@@ -1,8 +1,6 @@
 package com.mraof.minestuck.block;
 
-import java.util.Random;
-
-import com.mraof.minestuck.world.gen.feature.RainbowTree;
+import com.mraof.minestuck.world.gen.feature.tree.RainbowTree;
 import net.minecraft.block.*;
 import net.minecraft.block.trees.Tree;
 import net.minecraft.entity.player.PlayerEntity;
@@ -18,6 +16,8 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 public class RainbowSaplingBlock extends BushBlock implements IGrowable
 {

@@ -2,10 +2,13 @@ package com.mraof.minestuck.world.gen.feature;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.world.gen.feature.structure.ConsortVillageStructure;
 import com.mraof.minestuck.world.gen.feature.structure.GateStructure;
 import com.mraof.minestuck.world.gen.feature.structure.ImpDungeonStructure;
 import com.mraof.minestuck.world.gen.feature.structure.SmallRuinStructure;
+import com.mraof.minestuck.world.gen.feature.structure.village.ConsortVillageStructure;
+import com.mraof.minestuck.world.gen.feature.tree.EndTreeFeature;
+import com.mraof.minestuck.world.gen.feature.tree.LeaflessTreeFeature;
+import com.mraof.minestuck.world.gen.feature.tree.RainbowTreeFeature;
 import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraftforge.event.RegistryEvent;
@@ -89,5 +92,6 @@ public final class MSFeatures
 		registry.register(new TowerFeature(NoFeatureConfig::deserialize).setRegistryName("tower"));
 		
 		MSStructurePieces.init();
+		MSStructureProcessorTypes.init();
 	}
 }

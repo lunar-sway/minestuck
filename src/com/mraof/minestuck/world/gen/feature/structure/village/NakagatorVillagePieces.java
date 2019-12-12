@@ -1,39 +1,50 @@
-package com.mraof.minestuck.world.lands.structure.village;
+package com.mraof.minestuck.world.gen.feature.structure.village;
 
 import com.mraof.minestuck.entity.consort.EnumConsort;
-import net.minecraft.world.World;
+import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
+import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import net.minecraft.block.*;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.state.properties.DoorHingeSide;
+import net.minecraft.state.properties.SlabType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.gen.feature.structure.StructurePiece;
+import net.minecraft.world.gen.feature.template.TemplateManager;
 
 import java.util.List;
 import java.util.Random;
 
-public class ConsortVillageNakagator
+public class NakagatorVillagePieces
 {
-	/*public static class RadioTowerCenter extends ConsortVillageCenter.VillageCenter
+	public static class RadioTowerCenter extends ConsortVillageCenter.VillageCenter
 	{
-		public RadioTowerCenter()
+		public RadioTowerCenter(List<ConsortVillagePieces.PieceWeight> pieceWeightList, int x, int z, Random rand)
 		{
-			super();
-		}
-		
-		public RadioTowerCenter(List<ConsortVillageComponents.PieceWeight> pieceWeightList, int x, int z, Random rand)
-		{
-			super(pieceWeightList);
-			this.setCoordBaseMode(EnumFacing.Plane.HORIZONTAL.random(rand));
+			super(MSStructurePieces.RADIO_TOWER_CENTER, pieceWeightList, 0, 0);
+			this.setCoordBaseMode(Direction.Plane.HORIZONTAL.random(rand));
 			
-			this.boundingBox = new StructureBoundingBox(x, 64, z, x + 8 - 1, 90, z + 8 - 1);
+			this.boundingBox = new MutableBoundingBox(x, 64, z, x + 8 - 1, 90, z + 8 - 1);
 		}
 		
-		@Override
-		public void buildComponent(StructureComponent componentIn, List<StructureComponent> listIn, Random rand)
+		public RadioTowerCenter(TemplateManager templates, CompoundNBT nbt)
 		{
-			ConsortVillageComponents.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, boundingBox.minX + 3, boundingBox.minY, boundingBox.maxZ + 1, EnumFacing.SOUTH);
-			ConsortVillageComponents.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, boundingBox.minX - 1, boundingBox.minY, boundingBox.minZ + 3, EnumFacing.WEST);
-			ConsortVillageComponents.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, boundingBox.minX + 3, boundingBox.minY, boundingBox.minZ - 1, EnumFacing.NORTH);
-			ConsortVillageComponents.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, boundingBox.maxX + 1, boundingBox.minY, boundingBox.minZ + 3, EnumFacing.EAST);
+			super(MSStructurePieces.TURTLE_WELL_CENTER, nbt, 0);
 		}
 		
 		@Override
-		public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn)
+		public void buildComponent(StructurePiece componentIn, List<StructurePiece> listIn, Random rand)
+		{
+			ConsortVillagePieces.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, boundingBox.minX + 3, boundingBox.minY, boundingBox.maxZ + 1, Direction.SOUTH);
+			ConsortVillagePieces.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, boundingBox.minX - 1, boundingBox.minY, boundingBox.minZ + 3, Direction.WEST);
+			ConsortVillagePieces.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, boundingBox.minX + 3, boundingBox.minY, boundingBox.minZ - 1, Direction.NORTH);
+			ConsortVillagePieces.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, boundingBox.maxX + 1, boundingBox.minY, boundingBox.minZ + 3, Direction.EAST);
+		}
+		
+		@Override
+		public boolean addComponentParts(IWorld worldIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
 		{
 			if (this.averageGroundLvl < 0)
 			{
@@ -47,13 +58,13 @@ public class ConsortVillageNakagator
 				this.boundingBox.offset(0, this.averageGroundLvl - this.boundingBox.minY - 1, 0);
 			}
 			
-			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
-			IBlockState secondary = provider.blockRegistry.getBlockState("structure_secondary");
-			IBlockState secondaryDecor = provider.blockRegistry.getBlockState("structure_secondary_decorative");
-			IBlockState fence = provider.blockRegistry.getBlockState("village_fence");
-			IBlockState topBlock = Blocks.QUARTZ_BLOCK.getDefaultState();
-			IBlockState topSlab0 = Blocks.STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.QUARTZ);
-			IBlockState topSlab1 = Blocks.STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.QUARTZ).withProperty(BlockStoneSlab.HALF, BlockStoneSlab.EnumBlockHalf.TOP);
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(worldIn.getChunkProvider().getChunkGenerator().getSettings());
+			BlockState secondary = blocks.getBlockState("structure_secondary");
+			BlockState secondaryDecor = blocks.getBlockState("structure_secondary_decorative");
+			BlockState fence = blocks.getBlockState("village_fence");
+			BlockState topBlock = Blocks.QUARTZ_BLOCK.getDefaultState();
+			BlockState topSlab0 = Blocks.QUARTZ_SLAB.getDefaultState();
+			BlockState topSlab1 = Blocks.QUARTZ_SLAB.getDefaultState().with(SlabBlock.TYPE, SlabType.TOP);
 			
 			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 1, 6, 6, 6);
 			this.fillWithAir(worldIn, structureBoundingBoxIn, 3, 1, 0, 4, 2, 0);
@@ -165,28 +176,28 @@ public class ConsortVillageNakagator
 		}
 	}
 	
-	public static class HighNakHousing1 extends ConsortVillageComponents.ConsortVillagePiece
+	public static class HighNakHousing1 extends ConsortVillagePieces.ConsortVillagePiece
 	{
-		public HighNakHousing1()
+		public HighNakHousing1(ConsortVillageCenter.VillageCenter start, Random rand, MutableBoundingBox boundingBox, Direction facing)
 		{
-			spawns = new boolean[3];
-		}
-		
-		public HighNakHousing1(ConsortVillageCenter.VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
-		{
-			this();
+			super(MSStructurePieces.HIGH_NAK_HOUSING_1, 0, 3);
 			setCoordBaseMode(facing);
 			this.boundingBox = boundingBox;
 		}
 		
-		public static HighNakHousing1 createPiece(ConsortVillageCenter.VillageCenter start, List<StructureComponent> componentList, Random rand, int x, int y, int z, EnumFacing facing)
+		public HighNakHousing1(TemplateManager templates, CompoundNBT nbt)
 		{
-			StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 8, 13, 9, facing);
-			return StructureComponent.findIntersecting(componentList, structureboundingbox) == null ? new HighNakHousing1(start, rand, structureboundingbox, facing) : null;
+			super(MSStructurePieces.HIGH_NAK_HOUSING_1, nbt, 3);
+		}
+		
+		public static HighNakHousing1 createPiece(ConsortVillageCenter.VillageCenter start, List<StructurePiece> componentList, Random rand, int x, int y, int z, Direction facing)
+		{
+			MutableBoundingBox structureboundingbox = MutableBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 8, 13, 9, facing);
+			return StructurePiece.findIntersecting(componentList, structureboundingbox) == null ? new HighNakHousing1(start, rand, structureboundingbox, facing) : null;
 		}
 		
 		@Override
-		public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn)
+		public boolean addComponentParts(IWorld worldIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
 		{
 			if (averageGroundLvl < 0)
 			{
@@ -200,13 +211,14 @@ public class ConsortVillageNakagator
 				boundingBox.offset(0, averageGroundLvl - boundingBox.minY - 1, 0);
 			}
 			
-			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
-			IBlockState buildBlock = provider.blockRegistry.getBlockState("structure_primary");
-			IBlockState stairs1 = provider.blockRegistry.getStairs("structure_primary_stairs", EnumFacing.SOUTH, false);
-			IBlockState stairs2 = provider.blockRegistry.getStairs("structure_primary_stairs", EnumFacing.NORTH, false);
-			IBlockState doorBlock = provider.blockRegistry.getBlockState("village_door");
-			IBlockState floorBlock = provider.blockRegistry.getBlockState("structure_secondary");
-			IBlockState torch = provider.blockRegistry.getBlockState("torch");
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(worldIn.getChunkProvider().getChunkGenerator().getSettings());
+			BlockState buildBlock = blocks.getBlockState("structure_primary");
+			BlockState stairs1 = blocks.getStairs("structure_primary_stairs", Direction.SOUTH, false);
+			BlockState stairs2 = blocks.getStairs("structure_primary_stairs", Direction.NORTH, false);
+			BlockState doorBlock = blocks.getBlockState("village_door");
+			BlockState floorBlock = blocks.getBlockState("structure_secondary");
+			BlockState torch = blocks.getBlockState("torch");
+			BlockState wallTorch = blocks.getBlockState("wall_torch");
 			
 			//Floor
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, -1, 1, 7, 0, 8, floorBlock, floorBlock, false);
@@ -224,8 +236,8 @@ public class ConsortVillageNakagator
 			
 			//First floor clear, doors, windows and furnishing
 			fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 2, 6, 3, 7);
-			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 3, 1, 1, EnumFacing.SOUTH, (BlockDoor) doorBlock.getBlock(), BlockDoor.EnumHingePosition.RIGHT);
-			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 4, 1, 1, EnumFacing.SOUTH, (BlockDoor) doorBlock.getBlock());
+			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 3, 1, 1, Direction.SOUTH, doorBlock.getBlock(), DoorHingeSide.RIGHT);
+			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 4, 1, 1, Direction.SOUTH, doorBlock.getBlock(), DoorHingeSide.LEFT);
 			setBlockState(worldIn, Blocks.AIR.getDefaultState(), 0, 2, 3, structureBoundingBoxIn);
 			setBlockState(worldIn, Blocks.AIR.getDefaultState(), 0, 2, 5, structureBoundingBoxIn);
 			setBlockState(worldIn, Blocks.AIR.getDefaultState(), 3, 2, 8, structureBoundingBoxIn);
@@ -272,9 +284,9 @@ public class ConsortVillageNakagator
 			setBlockState(worldIn, Blocks.AIR.getDefaultState(), 7, 10, 6, structureBoundingBoxIn);
 			
 			//Torches
-			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.EAST), 1, 2, 4, structureBoundingBoxIn);
-			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.NORTH), 4, 2, 7, structureBoundingBoxIn);
-			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.EAST), 2, 6, 4, structureBoundingBoxIn);
+			setBlockState(worldIn, wallTorch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.EAST), 1, 2, 4, structureBoundingBoxIn);
+			setBlockState(worldIn, wallTorch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.NORTH), 4, 2, 7, structureBoundingBoxIn);
+			setBlockState(worldIn, wallTorch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.EAST), 2, 6, 4, structureBoundingBoxIn);
 			setBlockState(worldIn, torch, 4, 9, 5, structureBoundingBoxIn);
 			
 			//Consorts
@@ -289,28 +301,28 @@ public class ConsortVillageNakagator
 		}
 	}
 	
-	public static class HighNakMarket1 extends ConsortVillageComponents.ConsortVillagePiece
+	public static class HighNakMarket1 extends ConsortVillagePieces.ConsortVillagePiece
 	{
-		public HighNakMarket1()
+		public HighNakMarket1(ConsortVillageCenter.VillageCenter start, Random rand, MutableBoundingBox boundingBox, Direction facing)
 		{
-			spawns = new boolean[3];
-		}
-		
-		public HighNakMarket1(ConsortVillageCenter.VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
-		{
-			this();
+			super(MSStructurePieces.HIGH_NAK_MARKET, 0, 3);
 			setCoordBaseMode(facing);
 			this.boundingBox = boundingBox;
 		}
 		
-		public static HighNakMarket1 createPiece(ConsortVillageCenter.VillageCenter start, List<StructureComponent> componentList, Random rand, int x, int y, int z, EnumFacing facing)
+		public HighNakMarket1(TemplateManager templates, CompoundNBT nbt)
 		{
-			StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 12, 14, 10, facing);
-			return StructureComponent.findIntersecting(componentList, structureboundingbox) == null ? new HighNakMarket1(start, rand, structureboundingbox, facing) : null;
+			super(MSStructurePieces.HIGH_NAK_MARKET, nbt, 3);
+		}
+		
+		public static HighNakMarket1 createPiece(ConsortVillageCenter.VillageCenter start, List<StructurePiece> componentList, Random rand, int x, int y, int z, Direction facing)
+		{
+			MutableBoundingBox structureboundingbox = MutableBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 12, 14, 10, facing);
+			return StructurePiece.findIntersecting(componentList, structureboundingbox) == null ? new HighNakMarket1(start, rand, structureboundingbox, facing) : null;
 		}
 		
 		@Override
-		public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn)
+		public boolean addComponentParts(IWorld worldIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
 		{
 			if (averageGroundLvl < 0)
 			{
@@ -324,14 +336,14 @@ public class ConsortVillageNakagator
 				boundingBox.offset(0, averageGroundLvl - boundingBox.minY - 1, 0);
 			}
 			
-			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
-			IBlockState buildBlock = provider.blockRegistry.getBlockState("structure_primary");
-			IBlockState stairs1 = provider.blockRegistry.getStairs("structure_primary_stairs", EnumFacing.NORTH, false);
-			IBlockState stairs2 = provider.blockRegistry.getStairs("structure_primary_stairs", EnumFacing.SOUTH, false);
-			IBlockState doorBlock = provider.blockRegistry.getBlockState("village_door");
-			IBlockState floorBlock = provider.blockRegistry.getBlockState("structure_secondary");
-			IBlockState fence = provider.blockRegistry.getBlockState("village_fence");
-			IBlockState torch = provider.blockRegistry.getBlockState("torch");
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(worldIn.getChunkProvider().getChunkGenerator().getSettings());
+			BlockState buildBlock = blocks.getBlockState("structure_primary");
+			BlockState stairs1 = blocks.getStairs("structure_primary_stairs", Direction.NORTH, false);
+			BlockState stairs2 = blocks.getStairs("structure_primary_stairs", Direction.SOUTH, false);
+			BlockState doorBlock = blocks.getBlockState("village_door");
+			BlockState floorBlock = blocks.getBlockState("structure_secondary");
+			BlockState fence = blocks.getBlockState("village_fence");
+			BlockState torch = blocks.getBlockState("wall_torch");
 			
 			//Floor
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, -1, 1, 8, 0, 6, floorBlock, floorBlock, false);
@@ -358,9 +370,9 @@ public class ConsortVillageNakagator
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 5, 1, 8, 5, 1, fence, fence, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 9, 4, 8, 9, 4, buildBlock, buildBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 9, 1, 8, 9, 1, fence, fence, false);
-			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 9, 5, 2, EnumFacing.WEST, (BlockDoor) doorBlock.getBlock());
-			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 2, 5, 2, EnumFacing.EAST, (BlockDoor) doorBlock.getBlock());
-			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 9, 9, 2, EnumFacing.WEST, (BlockDoor) doorBlock.getBlock());
+			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 9, 5, 2, Direction.WEST, doorBlock.getBlock(), DoorHingeSide.LEFT);
+			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 2, 5, 2, Direction.EAST, doorBlock.getBlock(), DoorHingeSide.LEFT);
+			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 9, 9, 2, Direction.WEST, doorBlock.getBlock(), DoorHingeSide.LEFT);
 			
 			//Stairs 1
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 10, 4, 1, 11, 4, 4, buildBlock, buildBlock, false);
@@ -400,12 +412,12 @@ public class ConsortVillageNakagator
 			setBlockState(worldIn, fence, 10, 9, 1, structureBoundingBoxIn);
 			
 			//Torches
-			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.EAST), 3, 2, 3, structureBoundingBoxIn);
-			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.WEST), 8, 2, 3, structureBoundingBoxIn);
-			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.EAST), 3, 6, 3, structureBoundingBoxIn);
-			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.WEST), 8, 6, 3, structureBoundingBoxIn);
-			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.EAST), 3, 10, 3, structureBoundingBoxIn);
-			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.WEST), 8, 10, 3, structureBoundingBoxIn);
+			setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.EAST), 3, 2, 3, structureBoundingBoxIn);
+			setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.WEST), 8, 2, 3, structureBoundingBoxIn);
+			setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.EAST), 3, 6, 3, structureBoundingBoxIn);
+			setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.WEST), 8, 6, 3, structureBoundingBoxIn);
+			setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.EAST), 3, 10, 3, structureBoundingBoxIn);
+			setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.WEST), 8, 10, 3, structureBoundingBoxIn);
 			
 			if(!spawns[0])
 				spawns[0] = spawnConsort(5, 1, 5, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD, 1);
@@ -418,28 +430,28 @@ public class ConsortVillageNakagator
 		}
 	}
 	
-	public static class HighNakInn1 extends ConsortVillageComponents.ConsortVillagePiece
+	public static class HighNakInn1 extends ConsortVillagePieces.ConsortVillagePiece
 	{
-		public HighNakInn1()
+		public HighNakInn1(ConsortVillageCenter.VillageCenter start, Random rand, MutableBoundingBox boundingBox, Direction facing)
 		{
-			spawns = new boolean[3];
-		}
-		
-		public HighNakInn1(ConsortVillageCenter.VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
-		{
-			this();
+			super(MSStructurePieces.HIGH_NAK_INN, 0, 3);
 			setCoordBaseMode(facing);
 			this.boundingBox = boundingBox;
 		}
 		
-		public static HighNakInn1 createPiece(ConsortVillageCenter.VillageCenter start, List<StructureComponent> componentList, Random rand, int x, int y, int z, EnumFacing facing)
+		public HighNakInn1(TemplateManager templates, CompoundNBT nbt)
 		{
-			StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 12, 20, 11, facing);
-			return StructureComponent.findIntersecting(componentList, structureboundingbox) == null ? new HighNakInn1(start, rand, structureboundingbox, facing) : null;
+			super(MSStructurePieces.HIGH_NAK_INN, nbt, 3);
+		}
+		
+		public static HighNakInn1 createPiece(ConsortVillageCenter.VillageCenter start, List<StructurePiece> componentList, Random rand, int x, int y, int z, Direction facing)
+		{
+			MutableBoundingBox structureboundingbox = MutableBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 12, 20, 11, facing);
+			return StructurePiece.findIntersecting(componentList, structureboundingbox) == null ? new HighNakInn1(start, rand, structureboundingbox, facing) : null;
 		}
 		
 		@Override
-		public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn)
+		public boolean addComponentParts(IWorld worldIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
 		{
 			if (averageGroundLvl < 0)
 			{
@@ -453,17 +465,17 @@ public class ConsortVillageNakagator
 				boundingBox.offset(0, averageGroundLvl - boundingBox.minY - 1, 0);
 			}
 			
-			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
-			IBlockState buildBlock = provider.blockRegistry.getBlockState("structure_primary");
-			IBlockState stairs1 = provider.blockRegistry.getStairs("structure_primary_stairs", EnumFacing.NORTH, false);
-			IBlockState stairs2 = provider.blockRegistry.getStairs("structure_primary_stairs", EnumFacing.SOUTH, false);
-			IBlockState stairs3 = provider.blockRegistry.getStairs("structure_primary_stairs", EnumFacing.WEST, false);
-			IBlockState stairs = provider.blockRegistry.getStairs("structure_secondary_stairs", EnumFacing.SOUTH, false);
-			IBlockState doorBlock = provider.blockRegistry.getBlockState("village_door");
-			IBlockState floorBlock = provider.blockRegistry.getBlockState("structure_secondary");
-			IBlockState fence = provider.blockRegistry.getBlockState("village_fence");
-			IBlockState torch = provider.blockRegistry.getBlockState("torch");
-			IBlockState carpet = provider.blockRegistry.getBlockState("carpet");
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(worldIn.getChunkProvider().getChunkGenerator().getSettings());
+			BlockState buildBlock = blocks.getBlockState("structure_primary");
+			BlockState stairs1 = blocks.getStairs("structure_primary_stairs", Direction.NORTH, false);
+			BlockState stairs2 = blocks.getStairs("structure_primary_stairs", Direction.SOUTH, false);
+			BlockState stairs3 = blocks.getStairs("structure_primary_stairs", Direction.WEST, false);
+			BlockState stairs = blocks.getStairs("structure_secondary_stairs", Direction.SOUTH, false);
+			BlockState doorBlock = blocks.getBlockState("village_door");
+			BlockState floorBlock = blocks.getBlockState("structure_secondary");
+			BlockState fence = blocks.getBlockState("village_fence");
+			BlockState torch = blocks.getBlockState("wall_torch");
+			BlockState carpet = blocks.getBlockState("carpet");
 			
 			//Floor
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, -1, 3, 8, 2, 7, floorBlock, floorBlock, false);
@@ -497,12 +509,12 @@ public class ConsortVillageNakagator
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 7, 5, 8, 7, 5, buildBlock, buildBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 7, 1, 8, 7, 1, fence, fence, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 11, 4, 8, 11, 4, buildBlock, buildBlock, false);
-			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 9, 7, 2, EnumFacing.WEST, (BlockDoor) doorBlock.getBlock());
-			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 2, 7, 2, EnumFacing.EAST, (BlockDoor) doorBlock.getBlock());
-			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 5, 11, 8, EnumFacing.NORTH, (BlockDoor) doorBlock.getBlock());
-			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 6, 11, 8, EnumFacing.NORTH, (BlockDoor) doorBlock.getBlock(), BlockDoor.EnumHingePosition.RIGHT);
-			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 5, 15, 3, EnumFacing.SOUTH, (BlockDoor) doorBlock.getBlock(), BlockDoor.EnumHingePosition.RIGHT);
-			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 6, 15, 3, EnumFacing.SOUTH, (BlockDoor) doorBlock.getBlock());
+			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 9, 7, 2, Direction.WEST, doorBlock.getBlock(), DoorHingeSide.LEFT);
+			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 2, 7, 2, Direction.EAST, doorBlock.getBlock(), DoorHingeSide.LEFT);
+			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 5, 11, 8, Direction.NORTH, doorBlock.getBlock(), DoorHingeSide.LEFT);
+			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 6, 11, 8, Direction.NORTH, doorBlock.getBlock(), DoorHingeSide.RIGHT);
+			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 5, 15, 3, Direction.SOUTH, doorBlock.getBlock(), DoorHingeSide.RIGHT);
+			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 6, 15, 3, Direction.SOUTH, doorBlock.getBlock(), DoorHingeSide.LEFT);
 			
 			//Stairs 1
 			fillWithAir(worldIn, structureBoundingBoxIn, 10, 1, 1, 11, 5, 10);
@@ -586,25 +598,25 @@ public class ConsortVillageNakagator
 			
 			//Inn decoration
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 15, 4, 7, 15, 7, carpet, carpet, false);
-			setBlockState(worldIn, Blocks.FURNACE.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.WEST), 8, 15, 7, structureBoundingBoxIn);
+			setBlockState(worldIn, Blocks.FURNACE.getDefaultState().with(FurnaceBlock.FACING, Direction.WEST), 8, 15, 7, structureBoundingBoxIn);
 			setBlockState(worldIn, Blocks.CRAFTING_TABLE.getDefaultState(), 8, 15, 6, structureBoundingBoxIn);
-			setBlockState(worldIn, Blocks.CHEST.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.WEST), 8, 15, 5, structureBoundingBoxIn);
-			setBlockState(worldIn, Blocks.CHEST.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.WEST), 8, 15, 4, structureBoundingBoxIn);
-			generateBed(worldIn, structureBoundingBoxIn, randomIn, 3, 15, 6, EnumFacing.SOUTH, Blocks.BED.getDefaultState());
+			setBlockState(worldIn, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, Direction.WEST), 8, 15, 5, structureBoundingBoxIn);
+			setBlockState(worldIn, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, Direction.WEST), 8, 15, 4, structureBoundingBoxIn);
+			generateBed(worldIn, structureBoundingBoxIn, randomIn, 3, 15, 6, Direction.SOUTH, Blocks.RED_BED.getDefaultState());
 			
 			//Torches
-			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.EAST), 3, 4, 2, structureBoundingBoxIn);
-			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.WEST), 8, 4, 2, structureBoundingBoxIn);
-			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.EAST), 3, 8, 3, structureBoundingBoxIn);
-			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.WEST), 8, 8, 3, structureBoundingBoxIn);
-			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.NORTH), 3, 13, 7, structureBoundingBoxIn);
-			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.NORTH), 8, 13, 7, structureBoundingBoxIn);
-			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.SOUTH), 3, 13, 2, structureBoundingBoxIn);
-			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.SOUTH), 8, 13, 2, structureBoundingBoxIn);
-			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.NORTH), 3, 17, 7, structureBoundingBoxIn);
-			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.NORTH), 8, 17, 7, structureBoundingBoxIn);
-			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.SOUTH), 3, 17, 4, structureBoundingBoxIn);
-			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.SOUTH), 8, 17, 4, structureBoundingBoxIn);
+			setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.EAST), 3, 4, 2, structureBoundingBoxIn);
+			setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.WEST), 8, 4, 2, structureBoundingBoxIn);
+			setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.EAST), 3, 8, 3, structureBoundingBoxIn);
+			setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.WEST), 8, 8, 3, structureBoundingBoxIn);
+			setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.NORTH), 3, 13, 7, structureBoundingBoxIn);
+			setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.NORTH), 8, 13, 7, structureBoundingBoxIn);
+			setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.SOUTH), 3, 13, 2, structureBoundingBoxIn);
+			setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.SOUTH), 8, 13, 2, structureBoundingBoxIn);
+			setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.NORTH), 3, 17, 7, structureBoundingBoxIn);
+			setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.NORTH), 8, 17, 7, structureBoundingBoxIn);
+			setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.SOUTH), 3, 17, 4, structureBoundingBoxIn);
+			setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.SOUTH), 8, 17, 4, structureBoundingBoxIn);
 			
 			if(!spawns[0])
 				spawns[0] = spawnConsort(5, 3, 5, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD, 1);
@@ -615,5 +627,5 @@ public class ConsortVillageNakagator
 			
 			return true;
 		}
-	}*/
+	}
 }

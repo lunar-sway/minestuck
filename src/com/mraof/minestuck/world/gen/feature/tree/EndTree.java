@@ -1,4 +1,4 @@
-package com.mraof.minestuck.world.gen.feature;
+package com.mraof.minestuck.world.gen.feature.tree;
 
 import net.minecraft.block.trees.Tree;
 import net.minecraft.world.gen.feature.AbstractTreeFeature;

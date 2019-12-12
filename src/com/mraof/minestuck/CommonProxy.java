@@ -1,7 +1,6 @@
 package com.mraof.minestuck;
 
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.MSEntityTypes;
@@ -9,13 +8,13 @@ import com.mraof.minestuck.entity.consort.ConsortDialogue;
 import com.mraof.minestuck.entity.consort.ConsortRewardHandler;
 import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.tracker.PlayerTracker;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.OreHandler;
-import com.mraof.minestuck.world.gen.feature.MSStructureProcessorTypes;
 import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 import com.mraof.minestuck.world.storage.loot.MSLootTables;
@@ -27,7 +26,6 @@ public class CommonProxy
 	public static void init()
 	{
 		MSCriteriaTriggers.register();
-		MSStructureProcessorTypes.call();
 		MSEntityTypes.registerPlacements();
 		MSFillerBlockTypes.init();
 		

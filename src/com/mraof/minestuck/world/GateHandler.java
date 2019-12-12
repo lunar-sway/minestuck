@@ -38,7 +38,6 @@ public class GateHandler
 		{
 			BlockPos pos = getGatePos(player.server, Type.LAND_GATE, dim);
 			Random rand = player.world.rand;
-			BlockPos spawn = player.world.getDimension().getSpawnPoint();
 			if(pos != null)
 				do
 				{

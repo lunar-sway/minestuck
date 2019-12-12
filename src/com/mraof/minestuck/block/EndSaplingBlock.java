@@ -1,8 +1,6 @@
 package com.mraof.minestuck.block;
 
-import java.util.Random;
-
-import com.mraof.minestuck.world.gen.feature.EndTree;
+import com.mraof.minestuck.world.gen.feature.tree.EndTree;
 import net.minecraft.block.*;
 import net.minecraft.block.trees.Tree;
 import net.minecraft.state.BooleanProperty;
@@ -12,6 +10,8 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 public class EndSaplingBlock extends BushBlock implements IGrowable
 {

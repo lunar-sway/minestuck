@@ -1,53 +1,57 @@
-package com.mraof.minestuck.world.lands.structure.village;
+package com.mraof.minestuck.world.gen.feature.structure.village;
 
 import com.mraof.minestuck.entity.consort.EnumConsort;
-import net.minecraft.util.Rotation;
-import net.minecraft.world.World;
+import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
+import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.WallTorchBlock;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.gen.feature.structure.StructurePiece;
+import net.minecraft.world.gen.feature.template.TemplateManager;
 
 import java.util.List;
 import java.util.Random;
 
-public class ConsortVillageIguana
+public class IguanaVillagePieces
 {
-	/*public static class SmallTent1 extends ConsortVillageComponents.ConsortVillagePiece
+	public static class SmallTent1 extends ConsortVillagePieces.ConsortVillagePiece
 	{
 		private int woolType = 1;
 		
-		public SmallTent1()
+		SmallTent1(ConsortVillageCenter.VillageCenter start, Random rand, MutableBoundingBox boundingBox, Direction facing)
 		{
-			spawns = new boolean[1];
-		}
-		
-		public SmallTent1(ConsortVillageCenter.VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
-		{
-			this();
+			super(MSStructurePieces.SMALL_VILLAGE_TENT_1, 0, 1);
 			setCoordBaseMode(facing);
 			this.boundingBox = boundingBox;
 			woolType = 1 + rand.nextInt(3);
 		}
 		
-		public static SmallTent1 createPiece(ConsortVillageCenter.VillageCenter start, List<StructureComponent> componentList, Random rand, int x, int y, int z, EnumFacing facing)
+		public SmallTent1(TemplateManager templates, CompoundNBT nbt)
 		{
-			StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 9, 6, 6, facing);
-			return StructureComponent.findIntersecting(componentList, structureboundingbox) == null ? new SmallTent1(start, rand, structureboundingbox, facing) : null;
+			super(MSStructurePieces.SMALL_VILLAGE_TENT_1, nbt, 1);
+			this.woolType = nbt.getInt("Wool");
+		}
+		
+		public static SmallTent1 createPiece(ConsortVillageCenter.VillageCenter start, List<StructurePiece> componentList, Random rand, int x, int y, int z, Direction facing)
+		{
+			MutableBoundingBox structureboundingbox = MutableBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 9, 6, 6, facing);
+			return StructurePiece.findIntersecting(componentList, structureboundingbox) == null ? new SmallTent1(start, rand, structureboundingbox, facing) : null;
 		}
 		
 		@Override
-		protected void writeStructureToNBT(NBTTagCompound tagCompound)
+		protected void readAdditional(CompoundNBT tagCompound)
 		{
-			super.writeStructureToNBT(tagCompound);
-			tagCompound.setInteger("Wool", woolType);
+			super.readAdditional(tagCompound);
+			tagCompound.putInt("Wool", woolType);
 		}
 		
 		@Override
-		protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_)
-		{
-			super.readStructureFromNBT(tagCompound, p_143011_2_);
-			this.woolType = tagCompound.getInteger("Wool");
-		}
-		
-		@Override
-		public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn)
+		public boolean addComponentParts(IWorld worldIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
 		{
 			if (averageGroundLvl < 0)
 			{
@@ -61,11 +65,11 @@ public class ConsortVillageIguana
 				boundingBox.offset(0, averageGroundLvl - boundingBox.minY - 1, 0);
 			}
 			
-			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
-			IBlockState fence = provider.blockRegistry.getBlockState("village_fence");
-			IBlockState surface = provider.blockRegistry.getBlockState("surface");
-			IBlockState dirt = Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.COARSE_DIRT);
-			IBlockState wool = provider.blockRegistry.getBlockState("structure_wool_"+woolType);
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(worldIn.getChunkProvider().getChunkGenerator().getSettings());
+			BlockState fence = blocks.getBlockState("village_fence");
+			BlockState surface = blocks.getBlockState("surface");
+			BlockState dirt = Blocks.COARSE_DIRT.getDefaultState();
+			BlockState wool = blocks.getBlockState("structure_wool_"+woolType);
 			
 			//Floor
 			fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 1, 7, 6, 5);
@@ -97,45 +101,39 @@ public class ConsortVillageIguana
 		}
 	}
 	
-	public static class LargeTent1 extends ConsortVillageComponents.ConsortVillagePiece
+	public static class LargeTent1 extends ConsortVillagePieces.ConsortVillagePiece
 	{
 		private int woolType = 1;
 		
-		public LargeTent1()
+		LargeTent1(ConsortVillageCenter.VillageCenter start, Random rand, MutableBoundingBox boundingBox, Direction facing)
 		{
-			spawns = new boolean[4];
-		}
-		
-		public LargeTent1(ConsortVillageCenter.VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
-		{
-			this();
-			this.setCoordBaseMode(facing);
+			super(MSStructurePieces.LARGE_VILLAGE_TENT_1, 0, 4);
+			setCoordBaseMode(facing);
 			this.boundingBox = boundingBox;
 			woolType = 1 + rand.nextInt(3);
 		}
 		
-		public static LargeTent1 createPiece(ConsortVillageCenter.VillageCenter start, List<StructureComponent> componentList, Random rand, int x, int y, int z, EnumFacing facing)
+		public LargeTent1(TemplateManager templates, CompoundNBT nbt)
 		{
-			StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 12, 8, 16, facing);
-			return StructureComponent.findIntersecting(componentList, structureboundingbox) == null ? new LargeTent1(start, rand, structureboundingbox, facing) : null;
+			super(MSStructurePieces.LARGE_VILLAGE_TENT_1, nbt, 4);
+			this.woolType = nbt.getInt("Wool");
+		}
+		
+		public static LargeTent1 createPiece(ConsortVillageCenter.VillageCenter start, List<StructurePiece> componentList, Random rand, int x, int y, int z, Direction facing)
+		{
+			MutableBoundingBox structureboundingbox = MutableBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 12, 8, 16, facing);
+			return StructurePiece.findIntersecting(componentList, structureboundingbox) == null ? new LargeTent1(start, rand, structureboundingbox, facing) : null;
 		}
 		
 		@Override
-		protected void writeStructureToNBT(NBTTagCompound tagCompound)
+		protected void readAdditional(CompoundNBT tagCompound)
 		{
-			super.writeStructureToNBT(tagCompound);
-			tagCompound.setInteger("Wool", woolType);
+			super.readAdditional(tagCompound);
+			tagCompound.putInt("Wool", woolType);
 		}
 		
 		@Override
-		protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_)
-		{
-			super.readStructureFromNBT(tagCompound, p_143011_2_);
-			woolType = tagCompound.getInteger("Wool");
-		}
-		
-		@Override
-		public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn)
+		public boolean addComponentParts(IWorld worldIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
 		{
 			if (this.averageGroundLvl < 0)
 			{
@@ -149,13 +147,13 @@ public class ConsortVillageIguana
 				this.boundingBox.offset(0, this.averageGroundLvl - this.boundingBox.minY - 1, 0);
 			}
 			
-			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
-			IBlockState fence = provider.blockRegistry.getBlockState("village_fence");
-			IBlockState planks = provider.blockRegistry.getBlockState("structure_planks");
-			IBlockState surface = provider.blockRegistry.getBlockState("surface");
-			IBlockState dirt = Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.COARSE_DIRT);
-			IBlockState wool = provider.blockRegistry.getBlockState("structure_wool_"+woolType);
-			IBlockState torch = provider.blockRegistry.getBlockState("torch");
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(worldIn.getChunkProvider().getChunkGenerator().getSettings());
+			BlockState fence = blocks.getBlockState("village_fence");
+			BlockState planks = blocks.getBlockState("structure_planks");
+			BlockState surface = blocks.getBlockState("surface");
+			BlockState dirt = Blocks.COARSE_DIRT.getDefaultState();
+			BlockState wool = blocks.getBlockState("structure_wool_"+woolType);
+			BlockState torch = blocks.getBlockState("wall_torch");
 			
 			//Floor
 			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 1, 10, 6, 15);
@@ -211,10 +209,10 @@ public class ConsortVillageIguana
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 1, 3, 1, 1, 13, planks, planks, false);
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 10, 1, 3, 10, 1, 13, planks, planks, false);
 			
-			this.setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.EAST), 1, 3, 5, structureBoundingBoxIn);
-			this.setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.EAST), 1, 3, 11, structureBoundingBoxIn);
-			this.setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.WEST), 10, 3, 5, structureBoundingBoxIn);
-			this.setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.WEST), 10, 3, 11, structureBoundingBoxIn);
+			this.setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.EAST), 1, 3, 5, structureBoundingBoxIn);
+			this.setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.EAST), 1, 3, 11, structureBoundingBoxIn);
+			this.setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.WEST), 10, 3, 5, structureBoundingBoxIn);
+			this.setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.WEST), 10, 3, 11, structureBoundingBoxIn);
 			
 			if(!spawns[0])
 				spawns[0] = spawnConsort(2, 1, 5, structureBoundingBoxIn, worldIn);
@@ -229,45 +227,39 @@ public class ConsortVillageIguana
 		}
 	}
 	
-	public static class SmallTentStore extends ConsortVillageComponents.ConsortVillagePiece
+	public static class SmallTentStore extends ConsortVillagePieces.ConsortVillagePiece
 	{
 		private int woolType = 1;
 		
-		public SmallTentStore()
+		SmallTentStore(ConsortVillageCenter.VillageCenter start, Random rand, MutableBoundingBox boundingBox, Direction facing)
 		{
-			spawns = new boolean[1];
-		}
-		
-		public SmallTentStore(ConsortVillageCenter.VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
-		{
-			this();
-			this.setCoordBaseMode(facing);
+			super(MSStructurePieces.SMALL_TENT_STORE, 0, 1);
+			setCoordBaseMode(facing);
 			this.boundingBox = boundingBox;
 			woolType = 1 + rand.nextInt(3);
 		}
 		
-		public static SmallTentStore createPiece(ConsortVillageCenter.VillageCenter start, List<StructureComponent> componentList, Random rand, int x, int y, int z, EnumFacing facing)
+		public SmallTentStore(TemplateManager templates, CompoundNBT nbt)
 		{
-			StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 7, 7, 7, facing);
-			return StructureComponent.findIntersecting(componentList, structureboundingbox) == null ? new SmallTentStore(start, rand, structureboundingbox, facing) : null;
+			super(MSStructurePieces.SMALL_TENT_STORE, nbt, 1);
+			this.woolType = nbt.getInt("Wool");
+		}
+		
+		public static SmallTentStore createPiece(ConsortVillageCenter.VillageCenter start, List<StructurePiece> componentList, Random rand, int x, int y, int z, Direction facing)
+		{
+			MutableBoundingBox structureboundingbox = MutableBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 7, 7, 7, facing);
+			return StructurePiece.findIntersecting(componentList, structureboundingbox) == null ? new SmallTentStore(start, rand, structureboundingbox, facing) : null;
 		}
 		
 		@Override
-		protected void writeStructureToNBT(NBTTagCompound tagCompound)
+		protected void readAdditional(CompoundNBT tagCompound)
 		{
-			super.writeStructureToNBT(tagCompound);
-			tagCompound.setInteger("Wool", this.woolType);
+			super.readAdditional(tagCompound);
+			tagCompound.putInt("Wool", this.woolType);
 		}
 		
 		@Override
-		protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_)
-		{
-			super.readStructureFromNBT(tagCompound, p_143011_2_);
-			this.woolType = tagCompound.getInteger("Wool");
-		}
-		
-		@Override
-		public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn)
+		public boolean addComponentParts(IWorld worldIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
 		{
 			if (this.averageGroundLvl < 0)
 			{
@@ -281,14 +273,14 @@ public class ConsortVillageIguana
 				this.boundingBox.offset(0, this.averageGroundLvl - this.boundingBox.minY - 1, 0);
 			}
 			
-			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
-			IBlockState fence = provider.blockRegistry.getBlockState("village_fence");
-			IBlockState planks = provider.blockRegistry.getBlockState("structure_planks");
-			IBlockState plankSlab = provider.blockRegistry.getBlockState("structure_planks_slab");
-			IBlockState surface = provider.blockRegistry.getBlockState("surface");
-			IBlockState dirt = Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.COARSE_DIRT);
-			IBlockState wool = provider.blockRegistry.getBlockState("structure_wool_"+woolType);
-			IBlockState torch = provider.blockRegistry.getBlockState("torch");
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(worldIn.getChunkProvider().getChunkGenerator().getSettings());
+			BlockState fence = blocks.getBlockState("village_fence");
+			BlockState planks = blocks.getBlockState("structure_planks");
+			BlockState plankSlab = blocks.getBlockState("structure_planks_slab");
+			BlockState surface = blocks.getBlockState("surface");
+			BlockState dirt = Blocks.COARSE_DIRT.getDefaultState();
+			BlockState wool = blocks.getBlockState("structure_wool_"+woolType);
+			BlockState torch = blocks.getBlockState("wall_torch");
 			
 			//Floor
 			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 1, 5, 5, 5);
@@ -324,13 +316,13 @@ public class ConsortVillageIguana
 			setBlockState(worldIn, wool, 3, 6, 3, structureBoundingBoxIn);
 			setBlockState(worldIn, wool, 3, 5, 4, structureBoundingBoxIn);
 			
-			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.EAST), 1, 2, 4, structureBoundingBoxIn);
-			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.WEST), 5, 2, 4, structureBoundingBoxIn);
+			setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.EAST), 1, 2, 4, structureBoundingBoxIn);
+			setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.WEST), 5, 2, 4, structureBoundingBoxIn);
 			
 			if(!spawns[0])
 				spawns[0] = spawnConsort(3, 2, 2, structureBoundingBoxIn, worldIn, EnumConsort.getRandomMerchant(randomIn), 1);
 			
 			return true;
 		}
-	}*/
+	}
 }

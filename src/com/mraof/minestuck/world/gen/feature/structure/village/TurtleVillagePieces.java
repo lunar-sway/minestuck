@@ -1,40 +1,51 @@
-package com.mraof.minestuck.world.lands.structure.village;
+package com.mraof.minestuck.world.gen.feature.structure.village;
 
 import com.mraof.minestuck.entity.consort.EnumConsort;
+import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
+import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.state.properties.DoorHingeSide;
+import net.minecraft.util.Direction;
 import net.minecraft.util.Rotation;
-import net.minecraft.world.World;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.gen.feature.structure.StructurePiece;
+import net.minecraft.world.gen.feature.template.TemplateManager;
 
 import java.util.List;
 import java.util.Random;
 
-public class ConsortVillageTurtle
+public class TurtleVillagePieces
 {
-	/*public static class TurtleWellCenter extends ConsortVillageCenter.VillageCenter
+	public static class TurtleWellCenter extends ConsortVillageCenter.VillageCenter
 	{
-		public TurtleWellCenter()
+		public TurtleWellCenter(List<ConsortVillagePieces.PieceWeight> pieceWeightList, int x, int z, Random rand)
 		{
-			super();
-		}
-		
-		public TurtleWellCenter(List<ConsortVillageComponents.PieceWeight> pieceWeightList, int x, int z, Random rand)
-		{
-			super(pieceWeightList);
-			this.setCoordBaseMode(EnumFacing.Plane.HORIZONTAL.random(rand));
+			super(MSStructurePieces.TURTLE_WELL_CENTER, pieceWeightList, 0, 0);
+			this.setCoordBaseMode(Direction.Plane.HORIZONTAL.random(rand));
 			
-			this.boundingBox = new StructureBoundingBox(x, 60, z, x + 8 - 1, 70, z + 8 - 1);
+			this.boundingBox = new MutableBoundingBox(x, 60, z, x + 8 - 1, 70, z + 8 - 1);
 		}
 		
-		@Override
-		public void buildComponent(StructureComponent componentIn, List<StructureComponent> listIn, Random rand)
+		public TurtleWellCenter(TemplateManager templates, CompoundNBT nbt)
 		{
-			ConsortVillageComponents.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, boundingBox.minX + 3, boundingBox.minY, boundingBox.maxZ + 1, EnumFacing.SOUTH);
-			ConsortVillageComponents.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, boundingBox.minX - 1, boundingBox.minY, boundingBox.minZ + 3, EnumFacing.WEST);
-			ConsortVillageComponents.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, boundingBox.minX + 3, boundingBox.minY, boundingBox.minZ - 1, EnumFacing.NORTH);
-			ConsortVillageComponents.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, boundingBox.maxX + 1, boundingBox.minY, boundingBox.minZ + 3, EnumFacing.EAST);
+			super(MSStructurePieces.TURTLE_WELL_CENTER, nbt, 0);
 		}
 		
 		@Override
-		public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn)
+		public void buildComponent(StructurePiece componentIn, List<StructurePiece> listIn, Random rand)
+		{
+			ConsortVillagePieces.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, boundingBox.minX + 3, boundingBox.minY, boundingBox.maxZ + 1, Direction.SOUTH);
+			ConsortVillagePieces.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, boundingBox.minX - 1, boundingBox.minY, boundingBox.minZ + 3, Direction.WEST);
+			ConsortVillagePieces.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, boundingBox.minX + 3, boundingBox.minY, boundingBox.minZ - 1, Direction.NORTH);
+			ConsortVillagePieces.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, boundingBox.maxX + 1, boundingBox.minY, boundingBox.minZ + 3, Direction.EAST);
+		}
+		
+		@Override
+		public boolean addComponentParts(IWorld worldIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
 		{
 			if (this.averageGroundLvl < 0)
 			{
@@ -48,14 +59,14 @@ public class ConsortVillageTurtle
 				this.boundingBox.offset(0, this.averageGroundLvl - this.boundingBox.minY - 5, 0);
 			}
 			
-			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
-			IBlockState primary = provider.blockRegistry.getBlockState("structure_primary");
-			IBlockState secondary = provider.blockRegistry.getBlockState("structure_secondary");
-			IBlockState fluid = provider.blockRegistry.getBlockState("ocean");
-			IBlockState stairsN = provider.blockRegistry.getStairs("structure_primary_stairs", EnumFacing.NORTH, false);
-			IBlockState stairsE = provider.blockRegistry.getStairs("structure_primary_stairs", EnumFacing.EAST, false);
-			IBlockState stairsS = provider.blockRegistry.getStairs("structure_primary_stairs", EnumFacing.SOUTH, false);
-			IBlockState stairsW = provider.blockRegistry.getStairs("structure_primary_stairs", EnumFacing.WEST, false);
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(worldIn.getChunkProvider().getChunkGenerator().getSettings());
+			BlockState primary = blocks.getBlockState("structure_primary");
+			BlockState secondary = blocks.getBlockState("structure_secondary");
+			BlockState fluid = blocks.getBlockState("ocean");
+			BlockState stairsN = blocks.getStairs("structure_primary_stairs", Direction.NORTH, false);
+			BlockState stairsE = blocks.getStairs("structure_primary_stairs", Direction.EAST, false);
+			BlockState stairsS = blocks.getStairs("structure_primary_stairs", Direction.SOUTH, false);
+			BlockState stairsW = blocks.getStairs("structure_primary_stairs", Direction.WEST, false);
 			
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 4, 0, 2, 4, 0, primary, primary, false);
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 4, 1, 0, 4, 2, primary, primary, false);
@@ -116,28 +127,28 @@ public class ConsortVillageTurtle
 		
 	}
 	
-	public static class LoweredShellHouse1 extends ConsortVillageComponents.ConsortVillagePiece
+	public static class ShellHouse1 extends ConsortVillagePieces.ConsortVillagePiece
 	{
-		public LoweredShellHouse1()
+		ShellHouse1(ConsortVillageCenter.VillageCenter start, Random rand, MutableBoundingBox boundingBox, Direction facing)
 		{
-			spawns = new boolean[2];
-		}
-		
-		public LoweredShellHouse1(ConsortVillageCenter.VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
-		{
-			this();
-			this.setCoordBaseMode(facing);
+			super(MSStructurePieces.SHELL_HOUSE_1, 0, 2);
+			setCoordBaseMode(facing);
 			this.boundingBox = boundingBox;
 		}
 		
-		public static LoweredShellHouse1 createPiece(ConsortVillageCenter.VillageCenter start, List<StructureComponent> componentList, Random rand, int x, int y, int z, EnumFacing facing)
+		public ShellHouse1(TemplateManager templates, CompoundNBT nbt)
 		{
-			StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, -2, 0, 8, 5, 9, facing);
-			return StructureComponent.findIntersecting(componentList, structureboundingbox) == null ? new LoweredShellHouse1(start, rand, structureboundingbox, facing) : null;
+			super(MSStructurePieces.SHELL_HOUSE_1, nbt, 2);
+		}
+		
+		public static ShellHouse1 createPiece(ConsortVillageCenter.VillageCenter start, List<StructurePiece> componentList, Random rand, int x, int y, int z, Direction facing)
+		{
+			MutableBoundingBox structureboundingbox = MutableBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, -2, 0, 8, 5, 9, facing);
+			return StructurePiece.findIntersecting(componentList, structureboundingbox) == null ? new ShellHouse1(start, rand, structureboundingbox, facing) : null;
 		}
 		
 		@Override
-		public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn)
+		public boolean addComponentParts(IWorld worldIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
 		{
 			if (this.averageGroundLvl < 0)
 			{
@@ -151,9 +162,9 @@ public class ConsortVillageTurtle
 				this.boundingBox.offset(0, this.averageGroundLvl - this.boundingBox.minY - 3, 0);
 			}
 			
-			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
-			IBlockState buildBlock = provider.blockRegistry.getBlockState("structure_primary");
-			IBlockState lightBlock = provider.blockRegistry.getBlockState("light_block");
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(worldIn.getChunkProvider().getChunkGenerator().getSettings());
+			BlockState buildBlock = blocks.getBlockState("structure_primary");
+			BlockState lightBlock = blocks.getBlockState("light_block");
 			
 			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 2, 6, 4, 7);
 			this.fillWithAir(worldIn, structureBoundingBoxIn, 3, 3, 1, 4, 4, 1);
@@ -190,28 +201,28 @@ public class ConsortVillageTurtle
 		}
 	}
 	
-	public static class TurtleMarketBuilding1 extends ConsortVillageComponents.ConsortVillagePiece
+	public static class TurtleMarket1 extends ConsortVillagePieces.ConsortVillagePiece
 	{
-		public TurtleMarketBuilding1()
+		TurtleMarket1(ConsortVillageCenter.VillageCenter start, Random rand, MutableBoundingBox boundingBox, Direction facing)
 		{
-			spawns = new boolean[2];
-		}
-		
-		public TurtleMarketBuilding1(ConsortVillageCenter.VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
-		{
-			this();
+			super(MSStructurePieces.TURTLE_MARKET_1, 0, 2);
 			setCoordBaseMode(facing);
 			this.boundingBox = boundingBox;
 		}
 		
-		public static TurtleMarketBuilding1 createPiece(ConsortVillageCenter.VillageCenter start, List<StructureComponent> componentList, Random rand, int x, int y, int z, EnumFacing facing)
+		public TurtleMarket1(TemplateManager templates, CompoundNBT nbt)
 		{
-			StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 14, 7, 19, facing);
-			return StructureComponent.findIntersecting(componentList, structureboundingbox) == null ? new TurtleMarketBuilding1(start, rand, structureboundingbox, facing) : null;
+			super(MSStructurePieces.TURTLE_MARKET_1, nbt, 2);
+		}
+		
+		public static TurtleMarket1 createPiece(ConsortVillageCenter.VillageCenter start, List<StructurePiece> componentList, Random rand, int x, int y, int z, Direction facing)
+		{
+			MutableBoundingBox structureboundingbox = MutableBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 14, 7, 19, facing);
+			return StructurePiece.findIntersecting(componentList, structureboundingbox) == null ? new TurtleMarket1(start, rand, structureboundingbox, facing) : null;
 		}
 		
 		@Override
-		public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn)
+		public boolean addComponentParts(IWorld worldIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
 		{
 			if (this.averageGroundLvl < 0)
 			{
@@ -225,12 +236,12 @@ public class ConsortVillageTurtle
 				this.boundingBox.offset(0, this.averageGroundLvl - this.boundingBox.minY - 1, 0);
 			}
 			
-			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
-			IBlockState primaryBlock = provider.blockRegistry.getBlockState("structure_primary");
-			IBlockState primaryDecorBlock = provider.blockRegistry.getBlockState("structure_primary_decorative");
-			IBlockState secondaryBlock = provider.blockRegistry.getBlockState("structure_secondary");
-			IBlockState lightBlock = provider.blockRegistry.getBlockState("light_block");
-			IBlockState glassBlock = provider.blockRegistry.getBlockState("glass");
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(worldIn.getChunkProvider().getChunkGenerator().getSettings());
+			BlockState primaryBlock = blocks.getBlockState("structure_primary");
+			BlockState primaryDecorBlock = blocks.getBlockState("structure_primary_decorative");
+			BlockState secondaryBlock = blocks.getBlockState("structure_secondary");
+			BlockState lightBlock = blocks.getBlockState("light_block");
+			BlockState glassBlock = blocks.getBlockState("glass");
 			
 			this.fillWithAir(worldIn, structureBoundingBoxIn, 6, 1, 1, 7, 3, 3);
 			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 4, 12, 4, 13);
@@ -300,28 +311,28 @@ public class ConsortVillageTurtle
 		}
 	}
 	
-	public static class TurtleTemple1 extends ConsortVillageComponents.ConsortVillagePiece
+	public static class TurtleTemple1 extends ConsortVillagePieces.ConsortVillagePiece
 	{
-		public TurtleTemple1()
+		TurtleTemple1(ConsortVillageCenter.VillageCenter start, Random rand, MutableBoundingBox boundingBox, Direction facing)
 		{
-			spawns = new boolean[3];
-		}
-		
-		public TurtleTemple1(ConsortVillageCenter.VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
-		{
-			this();
-			this.setCoordBaseMode(facing);
+			super(MSStructurePieces.TURTLE_TEMPLE_1, 0, 2);
+			setCoordBaseMode(facing);
 			this.boundingBox = boundingBox;
 		}
 		
-		public static TurtleTemple1 createPiece(ConsortVillageCenter.VillageCenter start, List<StructureComponent> componentList, Random rand, int x, int y, int z, EnumFacing facing)
+		public TurtleTemple1(TemplateManager templates, CompoundNBT nbt)
 		{
-			StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, -1, 0, 11, 6, 14, facing);
-			return StructureComponent.findIntersecting(componentList, structureboundingbox) == null ? new TurtleTemple1(start, rand, structureboundingbox, facing) : null;
+			super(MSStructurePieces.TURTLE_TEMPLE_1, nbt, 2);
+		}
+		
+		public static TurtleTemple1 createPiece(ConsortVillageCenter.VillageCenter start, List<StructurePiece> componentList, Random rand, int x, int y, int z, Direction facing)
+		{
+			MutableBoundingBox structureboundingbox = MutableBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, -1, 0, 11, 6, 14, facing);
+			return StructurePiece.findIntersecting(componentList, structureboundingbox) == null ? new TurtleTemple1(start, rand, structureboundingbox, facing) : null;
 		}
 		
 		@Override
-		public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn)
+		public boolean addComponentParts(IWorld worldIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
 		{
 			if (this.averageGroundLvl < 0)
 			{
@@ -335,12 +346,12 @@ public class ConsortVillageTurtle
 				this.boundingBox.offset(0, this.averageGroundLvl - this.boundingBox.minY - 1, 0);
 			}
 			
-			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
-			IBlockState primaryBlock = provider.blockRegistry.getBlockState("structure_primary");
-			IBlockState secondaryBlock = provider.blockRegistry.getBlockState("structure_secondary");
-			IBlockState lightBlock = provider.blockRegistry.getBlockState("light_block");
-			IBlockState glassBlock1 = provider.blockRegistry.getBlockState("stained_glass_1");
-			IBlockState glassBlock2 = provider.blockRegistry.getBlockState("stained_glass_2");
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(worldIn.getChunkProvider().getChunkGenerator().getSettings());
+			BlockState primaryBlock = blocks.getBlockState("structure_primary");
+			BlockState secondaryBlock = blocks.getBlockState("structure_secondary");
+			BlockState lightBlock = blocks.getBlockState("light_block");
+			BlockState glassBlock1 = blocks.getBlockState("stained_glass_1");
+			BlockState glassBlock2 = blocks.getBlockState("stained_glass_2");
 			
 			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 2, 9, 5, 4);
 			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 5, 9, 4, 6);
@@ -404,10 +415,10 @@ public class ConsortVillageTurtle
 			this.setBlockState(worldIn, glassBlock2, 10, 2, 6, structureBoundingBoxIn);
 			this.setBlockState(worldIn, glassBlock1, 10, 3, 6, structureBoundingBoxIn);
 			
-			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 5, 1, 1, EnumFacing.SOUTH, Blocks.IRON_DOOR);
+			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 5, 1, 1, Direction.SOUTH, Blocks.IRON_DOOR, DoorHingeSide.LEFT);
 			
 			setBlockState(worldIn, Blocks.STONE_BUTTON.getDefaultState(), 6, 1, 0, structureBoundingBoxIn);
-			setBlockState(worldIn, Blocks.STONE_BUTTON.getDefaultState().withRotation(Rotation.CLOCKWISE_180), 4, 1, 2, structureBoundingBoxIn);
+			setBlockState(worldIn, Blocks.STONE_BUTTON.getDefaultState().rotate(Rotation.CLOCKWISE_180), 4, 1, 2, structureBoundingBoxIn);
 			
 			if(!spawns[0])
 				spawns[0] = spawnConsort(4, 0, 10, structureBoundingBoxIn, worldIn);
@@ -418,5 +429,5 @@ public class ConsortVillageTurtle
 			
 			return true;
 		}
-	}*/
+	}
 }
