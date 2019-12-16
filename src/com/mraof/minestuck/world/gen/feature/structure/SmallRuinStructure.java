@@ -1,6 +1,7 @@
 package com.mraof.minestuck.world.gen.feature.structure;
 
 import com.mojang.datafixers.Dynamic;
+import com.mraof.minestuck.Minestuck;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
@@ -34,7 +35,7 @@ public class SmallRuinStructure extends ScatteredStructure<NoFeatureConfig>
 	@Override
 	public String getStructureName()
 	{
-		return "small_ruin";
+		return Minestuck.MOD_ID + ":small_ruin";
 	}
 	
 	@Override

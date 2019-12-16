@@ -11,7 +11,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.world.dimension.DimensionType;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SkaiaClient
 {
@@ -138,7 +141,7 @@ public class SkaiaClient
 				List<DimensionType> dimList = new ArrayList<>();
 				for(int i : list)
 				{
-					DimensionType type = DimensionType.getById(i);
+					DimensionType type = i == 0 ? null : DimensionType.getById(i);	//Note: 0 is used to signal an open end of a land chain
 					dimList.add(type);
 					landChainMap.put(type, dimList);
 				}

@@ -1,6 +1,7 @@
 package com.mraof.minestuck.world.gen.feature.structure.village;
 
 import com.mojang.datafixers.Dynamic;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.lands.LandTypePair;
@@ -76,7 +77,7 @@ public class ConsortVillageStructure extends Structure<NoFeatureConfig>	//TODO I
 	@Override
 	public String getStructureName()
 	{
-		return "consort_village";
+		return Minestuck.MOD_ID + ":consort_village";
 	}
 	
 	@Override

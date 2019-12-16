@@ -18,6 +18,7 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
 
@@ -34,6 +35,7 @@ public class GateBlock extends Block
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 	{
 		return SHAPE;
@@ -46,6 +48,7 @@ public class GateBlock extends Block
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public BlockRenderType getRenderType(BlockState state)
 	{
 		return BlockRenderType.INVISIBLE;
@@ -71,6 +74,7 @@ public class GateBlock extends Block
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn)
 	{
 		if(entityIn instanceof ServerPlayerEntity && !entityIn.isPassenger() && !entityIn.isBeingRidden())
@@ -92,7 +96,7 @@ public class GateBlock extends Block
 				}
 				TileEntity te = worldIn.getTileEntity(mainPos);
 				if(te instanceof GateTileEntity)
-					((GateTileEntity) te).teleportEntity(worldIn, (ServerPlayerEntity) entityIn, this);
+					((GateTileEntity) te).teleportEntity((ServerWorld) worldIn, (ServerPlayerEntity) entityIn, this);
 			} else worldIn.removeBlock(pos, false);
 		}
 	}
@@ -147,6 +151,7 @@ public class GateBlock extends Block
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
 	{
 		super.onReplaced(state, worldIn, pos, newState, isMoving);
@@ -161,6 +166,7 @@ public class GateBlock extends Block
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
 		if(!this.isValid(pos, worldIn, state))

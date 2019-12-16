@@ -1,23 +1,24 @@
 package com.mraof.minestuck.world.gen.feature.structure;
 
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.HugeMushroomBlock;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
 import java.util.Random;
 
 public class GateMushroomPiece extends GatePiece
 {
-	public GateMushroomPiece(Random random, int minX, int minZ)
+	public GateMushroomPiece(ChunkGenerator<?> generator, Random random, int minX, int minZ)
 	{
-		super(MSStructurePieces.GATE_MUSHROOM, random, minX, 64, minZ, 11, 25, 11);
+		super(MSStructurePieces.GATE_MUSHROOM, generator, random, minX, minZ, 11, 25, 11, 0);
 	}
 	
 	public GateMushroomPiece(TemplateManager templates, CompoundNBT nbt)
@@ -32,11 +33,14 @@ public class GateMushroomPiece extends GatePiece
 	}
 	
 	@Override
+	protected BlockPos getRelativeGatePos()
+	{
+		return new BlockPos(5, 24, 5);
+	}
+	
+	@Override
 	public boolean addComponentParts(IWorld worldIn, Random randomIn, MutableBoundingBox boundingBoxIn, ChunkPos chunkPosIn)
 	{
-		if(!isInsideBounds(worldIn, boundingBoxIn, 0))
-			return false;
-		
 		BlockState stem = Blocks.MUSHROOM_STEM.getDefaultState().with(HugeMushroomBlock.DOWN, false);
 		BlockState mushroom = Blocks.BROWN_MUSHROOM_BLOCK.getDefaultState().with(HugeMushroomBlock.UP, false).with(HugeMushroomBlock.DOWN, false);
 		
@@ -52,7 +56,7 @@ public class GateMushroomPiece extends GatePiece
 		fillWithBlocks(worldIn, boundingBoxIn, 3, 20, 9, 7, 20, 9, mushroom, mushroom, false);
 		fillWithBlocks(worldIn, boundingBoxIn, 4, 20, 10, 6, 20, 10, mushroom, mushroom, false);
 		
-		placeGate(worldIn, boundingBoxIn, 5, 24, 5);
+		super.addComponentParts(worldIn, randomIn, boundingBoxIn, chunkPosIn);
 		
 		return true;
 	}

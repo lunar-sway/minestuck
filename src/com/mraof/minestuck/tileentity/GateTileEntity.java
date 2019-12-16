@@ -13,11 +13,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 public class GateTileEntity extends TileEntity
 {
-	
+	//Only used client-side
 	public int color;
 	
 	public GateHandler.Type gateType;
@@ -27,7 +27,7 @@ public class GateTileEntity extends TileEntity
 		super(MSTileEntityTypes.GATE);
 	}
 	
-	public void teleportEntity(World world, ServerPlayerEntity player, Block block)
+	public void teleportEntity(ServerWorld world, ServerPlayerEntity player, Block block)
 	{
 		if(block == MSBlocks.RETURN_NODE)
 		{
@@ -36,10 +36,9 @@ public class GateTileEntity extends TileEntity
 			player.timeUntilPortal = player.getPortalCooldown();
 			player.setMotion(Vec3d.ZERO);
 			player.fallDistance = 0;
-			//player.addStat(MinestuckAchievementHandler.returnNode);
 		} else
 		{
-			GateHandler.teleport(gateType, world.getDimension().getType(), player);
+			GateHandler.teleport(gateType, world, player);
 		}
 	}
 	
