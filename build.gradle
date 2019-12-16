@@ -32,7 +32,7 @@ archivesBaseName = 'Minestuck'
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 minecraft {
-    mappings channel: 'snapshot', version: '20191127-1.14.3'
+    mappings channel: 'snapshot', version: '20191216-1.14.3'
 
     accessTransformer = file('src/META-INF/accesstransformer.cfg')
 
@@ -47,6 +47,14 @@ minecraft {
 
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
+
+            // It seems to default to Minestuck_main, but is not set because it's actually called Minestuck.main?
+            ideaModule project.getName() +  '.main'
+
+            // Add an uuid arg if you have specified it in a relevant gradle.properties file. NOTE: Do not use the gradle.properties file in the project! (because that one is supposed to be shared among all devs) Create one in your "gradle user home" instead.
+            if (project.hasProperty('mc_uuid')) {
+                args '--uuid', project.getProperty('mc_uuid')
+            }
 
             mods {
                 minestuck {
@@ -63,6 +71,9 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
+            // It seems to default to Minestuck_main, but is not set because it's actually called Minestuck.main?
+            ideaModule project.getName() +  '.main'
+
             mods {
                 minestuck {
                     source sourceSets.main
@@ -78,6 +89,9 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
+            // It seems to default to Minestuck_main, but is not set because it's actually called Minestuck.main?
+            ideaModule project.getName() +  '.main'
+
             args '--mod', 'minestuck', '--all', '--output', file('src/generated/resources/')
 
             mods {
@@ -90,7 +104,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.4-28.1.96'
+    minecraft 'net.minecraftforge:forge:1.14.4-28.1.107'
 
     def mc_version = "1.14.4"
     def jei_version = "6.0.0.11"
@@ -101,6 +115,7 @@ dependencies {
 
 sourceSets {
     main {
+        //TODO refactor and seperate code and resources like in other projects after merging together a lot of active branches
         java {
             srcDir 'src'
         }

@@ -1,7 +1,6 @@
 package com.mraof.minestuck.world.biome;
 
 import com.google.common.collect.Sets;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
@@ -39,7 +38,7 @@ public class LandBiomeProvider extends BiomeProvider
 	}
 	
 	@Override
-	public Biome func_222366_b(int x, int z)
+	public Biome getBiomeAtFactorFour(int x, int z)
 	{
 		return genLevelLayer.func_215738_a(x, z);
 	}
@@ -59,9 +58,9 @@ public class LandBiomeProvider extends BiomeProvider
 		int maxZ = centerZ + sideLength >> 2;
 		int sizeX = maxX - minX + 1;
 		int sizeZ = maxZ - minZ + 1;
-		Set<Biome> set = Sets.newHashSet();
-		Collections.addAll(set, genLevelLayer.generateBiomes(minX, minZ, sizeX, sizeZ));
-		return set;
+		Set<Biome> biomes = Sets.newHashSet();
+		Collections.addAll(biomes, genLevelLayer.generateBiomes(minX, minZ, sizeX, sizeZ));
+		return biomes;
 	}
 	
 	@Nullable
@@ -74,7 +73,7 @@ public class LandBiomeProvider extends BiomeProvider
 		int maxZ = z + range >> 2;
 		int sizeX = maxX - minX + 1;
 		int sizeZ = maxZ - minZ + 1;
-		Biome[] abiome = genLevelLayer.generateBiomes(minX, minZ, sizeX, sizeZ);
+		Biome[] generatedBiomes = genLevelLayer.generateBiomes(minX, minZ, sizeX, sizeZ);
 		BlockPos pos = null;
 		int matches = 0;
 		
@@ -82,7 +81,7 @@ public class LandBiomeProvider extends BiomeProvider
 		{
 			int posX = minX + index % sizeX << 2;
 			int posZ = minZ + index / sizeX << 2;
-			if (biomes.contains(abiome[index]))
+			if (biomes.contains(generatedBiomes[index]))
 			{
 				if (pos == null || random.nextInt(matches + 1) == 0)
 					pos = new BlockPos(posX, 0, posZ);

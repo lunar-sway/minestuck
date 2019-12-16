@@ -2,7 +2,8 @@ package com.mraof.minestuck.world.gen;
 
 import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.provider.BiomeProvider;
-import net.minecraft.world.gen.*;
+import net.minecraft.world.gen.NoiseChunkGenerator;
+import net.minecraft.world.gen.OctavesNoiseGenerator;
 
 public class SkaiaChunkGenerator extends NoiseChunkGenerator<SkaiaGenSettings>
 {
@@ -16,9 +17,9 @@ public class SkaiaChunkGenerator extends NoiseChunkGenerator<SkaiaGenSettings>
 	}
 	
 	@Override
-	protected double[] func_222549_a(int columnX, int columnZ)
+	protected double[] getBiomeNoiseColumn(int columnX, int columnZ)
 	{
-		double depth = this.depthNoise.func_215462_a(columnX * 200, 10.0D, columnZ * 200, 1.0D, 0.0D, true) / 12000.0D + 1.0D;
+		double depth = this.depthNoise.getValue(columnX * 200, 10.0D, columnZ * 200, 1.0D, 0.0D, true) / 12000.0D + 1.0D;
 		
 		return new double[]{depth, 0.1};
 	}
@@ -45,7 +46,7 @@ public class SkaiaChunkGenerator extends NoiseChunkGenerator<SkaiaGenSettings>
 	 * @param columnZ the z index of the noise column
 	 */
 	@Override
-	protected void func_222548_a(double[] noiseColumn, int columnX, int columnZ)
+	protected void fillNoiseColumn(double[] noiseColumn, int columnX, int columnZ)
 	{
 		double horizontal = 684.412D;
 		double vertical = 684.412D;

@@ -1,8 +1,8 @@
 package com.mraof.minestuck.world.gen;
 
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
-import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -10,7 +10,9 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.provider.BiomeProvider;
 import net.minecraft.world.chunk.IChunk;
-import net.minecraft.world.gen.*;
+import net.minecraft.world.gen.Heightmap;
+import net.minecraft.world.gen.NoiseChunkGenerator;
+import net.minecraft.world.gen.WorldGenRegion;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
 
@@ -44,16 +46,16 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 	}
 	
 	@Override
-	protected double[] func_222549_a(int columnX, int columnZ)
+	protected double[] getBiomeNoiseColumn(int columnX, int columnZ)
 	{
-		float baseDepth = biomeHolder.localBiomeFrom(biomeProvider.func_222366_b(columnX, columnZ)).getDepth();
+		float baseDepth = biomeHolder.localBiomeFrom(biomeProvider.getBiomeAtFactorFour(columnX, columnZ)).getDepth();
 		
 		float depthSum = 0, scaleSum = 0, weightSum = 0;
 		for(int x = -2; x <= 2; x++)
 		{
 			for(int z = -2; z <= 2; z++)
 			{
-				Biome biome = biomeHolder.localBiomeFrom(biomeProvider.func_222366_b(columnX + x, columnZ + z));
+				Biome biome = biomeHolder.localBiomeFrom(biomeProvider.getBiomeAtFactorFour(columnX + x, columnZ + z));
 				float weight = biomeWeight[(x + 2)*5 + z + 2] / (biome.getDepth() + 2);
 				if(biome.getDepth() > baseDepth)
 					weight /= 2;
@@ -80,7 +82,7 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 	}
 	
 	@Override
-	protected void func_222548_a(double[] noiseColumn, int columnX, int columnZ)
+	protected void fillNoiseColumn(double[] noiseColumn, int columnX, int columnZ)
 	{
 		double horizontal = 684.412D;
 		double vertical = 684.412D;
