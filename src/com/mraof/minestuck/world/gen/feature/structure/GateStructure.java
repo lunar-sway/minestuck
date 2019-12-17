@@ -97,13 +97,18 @@ public class GateStructure extends Structure<NoFeatureConfig>
 			
 			BlockPos pos = chunkGenerator.getBiomeProvider().findBiomePosition((posX << 4) + 8, (posZ << 4) + 8, 96, Collections.singletonList(MSBiomes.LAND_NORMAL), worldRand);
 			
-			if(pos != null && chunkGenerator.getBiomeProvider().getBiomesInSquare(pos.getX(), pos.getZ(), 32).stream().allMatch(biome -> biome == MSBiomes.LAND_NORMAL))
+			if(pos != null && chunkGenerator.getBiomeProvider().getBiomesInSquare(pos.getX(), pos.getZ(), 16).stream().allMatch(biome -> biome == MSBiomes.LAND_NORMAL))
 				return new ChunkPos(pos.getX() >> 4, pos.getZ() >> 4);
 		}
 		
 		int posX = (int) Math.round(Math.cos(angle) * radius);
 		int posZ = (int) Math.round(Math.sin(angle) * radius);
 		Debug.warn("Did not come across a decent location for land gates. Placing it without regard to any biomes.");
+		
+		BlockPos pos = chunkGenerator.getBiomeProvider().findBiomePosition((posX << 4) + 8, (posZ << 4) + 8, 96, Collections.singletonList(MSBiomes.LAND_NORMAL), worldRand);
+		
+		if(pos != null)
+			return new ChunkPos(pos.getX() >> 4, pos.getZ() >> 4);
 		return new ChunkPos(posX, posZ);
 	}
 	
