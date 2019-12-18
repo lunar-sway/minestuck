@@ -4,12 +4,11 @@ import com.mojang.datafixers.Dynamic;
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.structure.Structure;
+import net.minecraft.world.gen.feature.structure.ScatteredStructure;
 
-import java.util.Random;
 import java.util.function.Function;
 
-public class ImpDungeonStructure extends Structure<NoFeatureConfig>	//TODO Implement this
+public class ImpDungeonStructure extends ScatteredStructure<NoFeatureConfig>
 {
 	public ImpDungeonStructure(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactory)
 	{
@@ -17,15 +16,15 @@ public class ImpDungeonStructure extends Structure<NoFeatureConfig>	//TODO Imple
 	}
 	
 	@Override
-	public boolean hasStartAt(ChunkGenerator<?> chunkGenerator, Random random, int chunkX, int chunkZ)
+	protected int getSeedModifier()
 	{
-		return false;
+		return 34527185;
 	}
 	
 	@Override
 	public IStartFactory getStartFactory()
 	{
-		return null;
+		return ImpDungeonStart::new;
 	}
 	
 	@Override
@@ -37,6 +36,18 @@ public class ImpDungeonStructure extends Structure<NoFeatureConfig>	//TODO Imple
 	@Override
 	public int getSize()
 	{
-		return 0;
+		return 5;
+	}
+	
+	@Override
+	protected int getBiomeFeatureDistance(ChunkGenerator<?> chunkGenerator)
+	{
+		return 16;
+	}
+	
+	@Override
+	protected int getBiomeFeatureSeparation(ChunkGenerator<?> chunkGenerator)
+	{
+		return 4;
 	}
 }

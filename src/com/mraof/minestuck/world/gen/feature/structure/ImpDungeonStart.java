@@ -1,76 +1,90 @@
-package com.mraof.minestuck.world.lands.structure;
+package com.mraof.minestuck.world.gen.feature.structure;
+
+import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
+import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.WallTorchBlock;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Rotation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.Heightmap;
+import net.minecraft.world.gen.feature.structure.Structure;
+import net.minecraft.world.gen.feature.structure.StructurePiece;
+import net.minecraft.world.gen.feature.structure.StructureStart;
+import net.minecraft.world.gen.feature.template.TemplateManager;
 
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
-public class ImpDungeonStart //extends StructureStart
+public class ImpDungeonStart extends StructureStart
 {
-	
-	public ImpDungeonStart()
-	{}
-	/*
-	public ImpDungeonStart(ChunkProviderLands provider, World world, Random rand, int chunkX, int chunkZ)
+	public ImpDungeonStart(Structure<?> structureIn, int chunkX, int chunkZ, Biome biomeIn, MutableBoundingBox boundsIn, int referenceIn, long seed)
 	{
-		super(chunkX, chunkZ);
-		
-		components.add(new EntryComponent(provider, chunkX, chunkZ, rand, components));
-		updateBoundingBox();
-		
-		//TODO add an appropriate gate check
+		super(structureIn, chunkX, chunkZ, biomeIn, boundsIn, referenceIn, seed);
 	}
 	
-	public static class EntryComponent extends StructureComponent
+	@Override
+	public void init(ChunkGenerator<?> generator, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn)
+	{
+		EntryPiece piece = new EntryPiece(chunkX, chunkZ, rand, components);
+		components.add(piece);
+		piece.buildComponent(piece, components, rand);
+		recalculateStructureSize();
+	}
+	
+	public static class EntryPiece extends StructurePiece
 	{
 		protected boolean definedHeight = false;
 		protected int compoHeight;
 		
-		public EntryComponent()
-		{}
-		
-		public EntryComponent(ChunkProviderLands provider, int chunkX, int chunkZ, Random rand, List<StructureComponent> componentList)
+		public EntryPiece(int chunkX, int chunkZ, Random rand, List<StructurePiece> componentList)
 		{
+			super(MSStructurePieces.IMP_ENTRY, 0);
 			int x = chunkX*16 + rand.nextInt(16);
 			int z = chunkZ*16 + rand.nextInt(16);
-			setCoordBaseMode(EnumFacing.Plane.HORIZONTAL.random(rand));
-			int xWidth = getCoordBaseMode().getAxis().equals(EnumFacing.Axis.X) ? 11 : 6;
-			int zWidth = getCoordBaseMode().getAxis().equals(EnumFacing.Axis.Z) ? 11 : 6;
-			this.boundingBox = new StructureBoundingBox(x, 64, z, x + xWidth - 1, 67, z + zWidth - 1);
+			setCoordBaseMode(Direction.Plane.HORIZONTAL.random(rand));
+			int xWidth = getCoordBaseMode().getAxis().equals(Direction.Axis.X) ? 11 : 6;
+			int zWidth = getCoordBaseMode().getAxis().equals(Direction.Axis.Z) ? 11 : 6;
+			this.boundingBox = new MutableBoundingBox(x, 64, z, x + xWidth - 1, 67, z + zWidth - 1);
 			
-			ImpDungeonComponents.EntryCorridor corridor = new ImpDungeonComponents.EntryCorridor(this.getCoordBaseMode(), x, z, rand, componentList);
+			//TODO Add component pieces through buildComponent() rather than the constructor.
+			ImpDungeonPieces.EntryCorridor corridor = new ImpDungeonPieces.EntryCorridor(this.getCoordBaseMode(), x, z, rand, componentList);
 			compoHeight = corridor.getBoundingBox().maxY - 1;
 			componentList.add(corridor);
 		}
 		
-		@Override
-		protected void writeStructureToNBT(NBTTagCompound tagCompound)
+		public EntryPiece(TemplateManager templates, CompoundNBT nbt)
 		{
-			tagCompound.setBoolean("definedHeight", definedHeight);
-			tagCompound.setInteger("compoHeight", compoHeight);
+			super(MSStructurePieces.IMP_ENTRY, nbt);
+			definedHeight = nbt.getBoolean("definedHeight");
+			compoHeight = nbt.getInt("compoHeight");
 		}
 		
 		@Override
-		protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager templates)
+		protected void readAdditional(CompoundNBT tagCompound)
 		{
-			definedHeight = tagCompound.getBoolean("definedHeight");
-			compoHeight = tagCompound.getInteger("compoHeight");
+			tagCompound.putBoolean("definedHeight", definedHeight);
+			tagCompound.putInt("compoHeight", compoHeight);
 		}
 		
 		@Override
-		public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn)
+		public boolean addComponentParts(IWorld worldIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
 		{
 			checkHeight(worldIn, structureBoundingBoxIn);
 			
-			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(worldIn.getChunkProvider().getChunkGenerator().getSettings());
 			
-			IBlockState wallBlock = provider.blockRegistry.getBlockState("structure_primary");
-			IBlockState wallDecor = provider.blockRegistry.getBlockState("structure_primary_decorative");
-			IBlockState floorBlock = provider.blockRegistry.getBlockState("structure_secondary");
-			IBlockState floorStairs = provider.blockRegistry.getBlockState("structure_secondary_stairs").withRotation(Rotation.CLOCKWISE_180);
-			IBlockState torch = provider.blockRegistry.getBlockState("torch");
+			BlockState wallBlock = blocks.getBlockState("structure_primary");
+			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
+			BlockState floorBlock = blocks.getBlockState("structure_secondary");
+			BlockState floorStairs = blocks.getBlockState("structure_secondary_stairs").rotate(Rotation.CLOCKWISE_180);
+			BlockState torch = blocks.getBlockState("wall_torch");
 			
 			for(int x = 1; x < 5; x++)
 				buildFloorTile(floorBlock, x, 0, worldIn, randomIn, structureBoundingBoxIn);
@@ -127,13 +141,13 @@ public class ImpDungeonStart //extends StructureStart
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, compoHeight - boundingBox.minY, 9, 4, -6, 9, wallBlock, wallBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, compoHeight - boundingBox.minY, 8, 4, -7, 8, wallBlock, wallBlock, false);
 			
-			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.EAST), 2, -3, 8, structureBoundingBoxIn);
-			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.WEST), 3, -3, 8, structureBoundingBoxIn);
+			setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.EAST), 2, -3, 8, structureBoundingBoxIn);
+			setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.WEST), 3, -3, 8, structureBoundingBoxIn);
 			
 			return true;
 		}
 		
-		protected void checkHeight(World worldIn, StructureBoundingBox bb)
+		protected void checkHeight(IWorld worldIn, MutableBoundingBox bb)
 		{
 			if(definedHeight)
 				return;
@@ -146,7 +160,7 @@ public class ImpDungeonStart //extends StructureStart
 					if(!bb.isVecInside(new BlockPos(x, 64, z)))
 						continue;
 					
-					int y = Math.max(62, worldIn.getTopSolidOrLiquidBlock(new BlockPos(x, 0, z)).getY());
+					int y = Math.max(62, worldIn.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, new BlockPos(x, 0, z)).getY());
 					height += y;
 					i++;
 				}
@@ -156,7 +170,7 @@ public class ImpDungeonStart //extends StructureStart
 			definedHeight = true;
 		}
 		
-		protected void buildWall(IBlockState block, int x, int z, World world, Random rand, StructureBoundingBox boundingBox, int minY)
+		protected void buildWall(BlockState block, int x, int z, IWorld world, Random rand, MutableBoundingBox boundingBox, int minY)
 		{
 			float f = 0.5F + z*0.2F;
 			for(int y = 1; y < 4; y++)
@@ -170,7 +184,7 @@ public class ImpDungeonStart //extends StructureStart
 			}
 		}
 		
-		protected void buildFloorTile(IBlockState block, int x, int z, World world, Random rand, StructureBoundingBox boundingBox)
+		protected void buildFloorTile(BlockState block, int x, int z, IWorld world, Random rand, MutableBoundingBox boundingBox)
 		{
 			int y = 0;
 			
@@ -180,5 +194,5 @@ public class ImpDungeonStart //extends StructureStart
 				y--;
 			} while(this.boundingBox.minY + y >= 0 && !this.getBlockStateFromPos(world, x, y, z, boundingBox).getMaterial().isSolid());
 		}
-	}*/
+	}
 }

@@ -40,9 +40,14 @@ public class LandWrapperBiome extends LandBiome
 			addStructure(MSFeatures.SMALL_RUIN, IFeatureConfig.NO_FEATURE_CONFIG);
 			addStructure(MSFeatures.CONSORT_VILLAGE, IFeatureConfig.NO_FEATURE_CONFIG);
 		}
+		if(staticBiome == MSBiomes.LAND_NORMAL || staticBiome == MSBiomes.LAND_ROUGH)
+		{
+			addStructure(MSFeatures.IMP_DUNGEON, IFeatureConfig.NO_FEATURE_CONFIG);
+		}
 		
 		addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, createDecoratedFeature(MSFeatures.LAND_GATE, IFeatureConfig.NO_FEATURE_CONFIG, Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
 		addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, createDecoratedFeature(MSFeatures.SMALL_RUIN, IFeatureConfig.NO_FEATURE_CONFIG, Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
+		addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, createDecoratedFeature(MSFeatures.IMP_DUNGEON, IFeatureConfig.NO_FEATURE_CONFIG, Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
 		addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, createDecoratedFeature(MSFeatures.CONSORT_VILLAGE, IFeatureConfig.NO_FEATURE_CONFIG, Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
 	}
 	

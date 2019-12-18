@@ -1,9 +1,7 @@
 package com.mraof.minestuck.world.gen.feature;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.world.gen.feature.structure.GateMushroomPiece;
-import com.mraof.minestuck.world.gen.feature.structure.GatePillarPiece;
-import com.mraof.minestuck.world.gen.feature.structure.SmallRuinPiece;
+import com.mraof.minestuck.world.gen.feature.structure.*;
 import com.mraof.minestuck.world.gen.feature.structure.village.*;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
@@ -13,6 +11,12 @@ public final class MSStructurePieces
 	public static IStructurePieceType GATE_PILLAR;
 	public static IStructurePieceType GATE_MUSHROOM;
 	public static IStructurePieceType SMALL_RUIN;
+	
+	public static IStructurePieceType IMP_ENTRY, IMP_ENTRY_CORRIDOR;
+	public static IStructurePieceType IMP_STRAIGHT_CORRIDOR, IMP_CROSS_CORRIDOR, IMP_TURN_CORRIDOR;
+	public static IStructurePieceType IMP_RETURN_ROOM, IMP_ALT_RETURN_ROOM;
+	public static IStructurePieceType IMP_SPAWNER_ROOM, IMP_SPAWNER_CORRIDOR, IMP_LARGE_SPAWNER_CORRIDOR;
+	public static IStructurePieceType IMP_BOOKCASE_ROOM, IMP_OGRE_CORRIDOR;
 	
 	public static IStructurePieceType VILLAGE_PATH;
 	public static IStructurePieceType MARKET_CENTER;
@@ -34,6 +38,19 @@ public final class MSStructurePieces
 		GATE_PILLAR = register(GatePillarPiece::new, Minestuck.MOD_ID+":gate_pillar");
 		GATE_MUSHROOM = register(GateMushroomPiece::new, Minestuck.MOD_ID+":gate_mushroom");
 		SMALL_RUIN = register(SmallRuinPiece::new, Minestuck.MOD_ID+":small_ruin");
+		
+		IMP_ENTRY = register(ImpDungeonStart.EntryPiece::new, Minestuck.MOD_ID+":imp_entry");
+		IMP_ENTRY_CORRIDOR = register(ImpDungeonPieces.EntryCorridor::new, Minestuck.MOD_ID+":imp_entry_corridor");
+		IMP_STRAIGHT_CORRIDOR = register(ImpDungeonPieces.StraightCorridor::new, Minestuck.MOD_ID+":imp_straight_corridor");
+		IMP_CROSS_CORRIDOR = register(ImpDungeonPieces.CrossCorridor::new, Minestuck.MOD_ID+":imp_cross_corridor");
+		IMP_TURN_CORRIDOR = register(ImpDungeonPieces.TurnCorridor::new, Minestuck.MOD_ID+":imp_turn_corridor");
+		IMP_RETURN_ROOM = register(ImpDungeonPieces.ReturnRoom::new, Minestuck.MOD_ID+":imp_return_room");
+		IMP_ALT_RETURN_ROOM = register(ImpDungeonPieces.ReturnRoomAlt::new, Minestuck.MOD_ID+":imp_alt_return_room");
+		IMP_SPAWNER_ROOM = register(ImpDungeonPieces.SpawnerRoom::new, Minestuck.MOD_ID+":imp_spawner_room");
+		IMP_SPAWNER_CORRIDOR = register(ImpDungeonPieces.SpawnerCorridor::new, Minestuck.MOD_ID+":imp_spawner_corridor");
+		IMP_LARGE_SPAWNER_CORRIDOR = register(ImpDungeonPieces.LargeSpawnerCorridor::new, Minestuck.MOD_ID+":imp_large_spawner_corridor");
+		IMP_BOOKCASE_ROOM = register(ImpDungeonPieces.BookcaseRoom::new, Minestuck.MOD_ID+":imp_bookcase_room");
+		IMP_OGRE_CORRIDOR = register(ImpDungeonPieces.OgreCorridor::new, Minestuck.MOD_ID+":imp_ogre_corridor");
 		
 		VILLAGE_PATH = register(ConsortVillagePieces.VillagePath::new, Minestuck.MOD_ID+":village_path");
 		MARKET_CENTER = register(ConsortVillageCenter.VillageMarketCenter::new, Minestuck.MOD_ID+":market_center");
