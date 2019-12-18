@@ -3,7 +3,6 @@ package com.mraof.minestuck.item.crafting.alchemy;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.CruxiteArtifactItem;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.Blocks;
@@ -1017,6 +1016,7 @@ public class AlchemyRecipes
 	
 	public static void registerAutomaticRecipes()
 	{
+		/*
 		AutoGristGenerator autogrist = new AutoGristGenerator();
 		autogrist.prepare();
 		
@@ -1041,10 +1041,10 @@ public class AlchemyRecipes
 			AlchemyCostRegistry.addGristConversion(item, cost);
 		}
 		
-		autogrist.execute();
+		autogrist.execute();*/
 	}
 	
-	public static void onAlchemizedItem(ItemStack stack, ServerPlayerEntity player)
+	public static void onAlchemizedItem(ItemStack stack, ServerPlayerEntity player)	//TODO Make an alchemize event instead
 	{
 		if(!(stack.getItem() instanceof CruxiteArtifactItem))
 		{
@@ -1052,7 +1052,7 @@ public class AlchemyRecipes
 			e.checkBonus(Echeladder.ALCHEMY_BONUS_OFFSET);
 		}
 		
-		GristSet set = AlchemyCostRegistry.getGristConversion(stack);
+		GristSet set = GristCostRecipe.findCostForItem(stack, null, false, player.getEntityWorld());
 		if(set != null) //The only time the grist set should be null here is if it was a captchalogue card that was alchemized
 		{
 			double value = 0;

@@ -1,13 +1,11 @@
 package com.mraof.minestuck.item.crafting.alchemy;
 
-import com.google.common.collect.Lists;
-import com.mraof.minestuck.util.Debug;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.Ingredient;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * Adds all the recipes that are based on the existing vanilla crafting registries, like grist conversions of items composed of other things.
@@ -19,7 +17,7 @@ public class AutoGristGenerator
 	private HashSet<Item> lookedOver;
 	private int returned = 0;
 	
-	
+	/*
 	public void prepare()
 	{
 		recipeList = new HashMap<>();
@@ -187,5 +185,5 @@ public class AutoGristGenerator
 					cost.setGrist(amount.getType(), Math.max(0, cost.getGrist(amount.getType()) - amount.getAmount()));
 		}
 		return cost;
-	}
+	}*/
 }

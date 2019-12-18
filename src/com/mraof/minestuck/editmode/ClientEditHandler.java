@@ -1,9 +1,8 @@
 package com.mraof.minestuck.editmode;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
-import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.network.ClientEditPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.world.MSDimensions;
@@ -19,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.*;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
@@ -91,11 +91,11 @@ public class ClientEditHandler {
 		
 		GristSet have = PlayerSavedData.getClientGrist();
 		
-		addToolTip(event.getItemStack(), event.getToolTip(), have, givenItems);
+		addToolTip(event.getItemStack(), event.getToolTip(), have, givenItems, event.getEntity().world);
 		
 	}
 	
-	static void addToolTip(ItemStack stack, List<ITextComponent> toolTip, GristSet have, boolean[] givenItems)
+	static void addToolTip(ItemStack stack, List<ITextComponent> toolTip, GristSet have, boolean[] givenItems, World world)
 	{
 		
 		GristSet cost;
@@ -103,9 +103,7 @@ public class ClientEditHandler {
 		if(deployEntry != null)
 			cost = givenItems[deployEntry.getIndex()]
 					? deployEntry.getSecondaryCost() : deployEntry.getPrimaryCost();
-		else if(stack.getItem().equals(MSItems.CAPTCHA_CARD))
-			cost = new GristSet();
-		else cost = AlchemyCostRegistry.getGristConversion(stack);
+		else cost = GristCostRecipe.findCostForItem(stack, null, false, world);
 		
 		if(cost == null)
 		{
@@ -189,7 +187,7 @@ public class ClientEditHandler {
 				if(givenItems[entry.getIndex()])
 					cost = entry.getSecondaryCost();
 				else cost = entry.getPrimaryCost();
-			else cost = AlchemyCostRegistry.getGristConversion(stack);
+			else cost = GristCostRecipe.findCostForItem(stack, null, false, event.getWorld());
 			if(!GristHelper.canAfford(PlayerSavedData.getClientGrist(), cost)) {
 				StringBuilder str = new StringBuilder();
 				if(cost != null)
@@ -216,7 +214,7 @@ public class ClientEditHandler {
 		{
 			BlockState block = event.getWorld().getBlockState(event.getPos());
 			if(block.getBlockHardness(event.getWorld(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
-					|| PlayerSavedData.getClientGrist().getGrist(GristType.BUILD) <= 0)
+					|| PlayerSavedData.getClientGrist().getGrist(GristTypes.BUILD) <= 0)
 				event.setCanceled(true);
 		}
 	}

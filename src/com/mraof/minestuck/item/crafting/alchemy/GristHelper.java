@@ -123,14 +123,14 @@ public class GristHelper {
 		return PlayerSavedData.get(world).getGristSet(player).getGrist(type);
 	}
 	
-	public static boolean canAfford(@Nonnull ItemStack stack)
+	public static boolean canAfford(World world, @Nonnull ItemStack stack)
 	{
-		return canAfford(PlayerSavedData.getClientGrist(), AlchemyCostRegistry.getGristConversion(stack));
+		return canAfford(PlayerSavedData.getClientGrist(), GristCostRecipe.findCostForItem(stack, null, false, world));
 	}
 	
 	public static boolean canAfford(World world, PlayerIdentifier player, @Nonnull ItemStack stack)
 	{
-		return canAfford(PlayerSavedData.get(world.getServer()).getGristSet(player), AlchemyCostRegistry.getGristConversion(stack));
+		return canAfford(PlayerSavedData.get(world.getServer()).getGristSet(player), GristCostRecipe.findCostForItem(stack, null, false, world));
 	}
 	
 	public static boolean canAfford(GristSet base, GristSet cost) {
@@ -232,5 +232,4 @@ public class GristHelper {
 		
 		notify(server, IdentifierHandler.encode(ed.getEditor()), type, difference, action);
 	}
-	
 }

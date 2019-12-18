@@ -42,12 +42,6 @@ public class Minestuck
 	public static final String MOD_NAME = "Minestuck";
 	public static final String MOD_ID = "minestuck";
 	
-	/**
-	 * True if the minecraft application is server-sided, or if there is an integrated server running
-	 */
-	@Deprecated
-	public static volatile boolean isServerRunning;
-	
 	public Minestuck()
 	{
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
@@ -96,13 +90,11 @@ public class Minestuck
 	@SubscribeEvent
 	public void serverAboutToStart(FMLServerAboutToStartEvent event)
 	{
-		isServerRunning = true;
 	}
 	
 	@SubscribeEvent
 	public void serverClosed(FMLServerStoppedEvent event)
 	{
-		isServerRunning = false;
 		PlayerTracker.dataCheckerPermission.clear();
 		IdentifierHandler.clear();
 		SkaianetHandler.init(null);

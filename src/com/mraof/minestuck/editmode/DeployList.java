@@ -31,18 +31,18 @@ import java.util.function.BiFunction;
  * @author kirderf1
  */
 public class DeployList
-{
+{//TODO Seperate client and server fields into two different classes (to make it easier to not use server-sided stuff client side)
 	
 	private static final ArrayList<DeployEntry> list = new ArrayList<>();
 	
 	public static void registerItems()
 	{
 		
-		registerItem("cruxtruder", new ItemStack(MSBlocks.CRUXTRUDER), new GristSet(), new GristSet(GristType.BUILD, 100), 0);
-		registerItem("totem_lathe", new ItemStack(MSBlocks.TOTEM_LATHE), new GristSet(), new GristSet(GristType.BUILD, 100), 0);
+		registerItem("cruxtruder", new ItemStack(MSBlocks.CRUXTRUDER), new GristSet(), new GristSet(GristTypes.BUILD, 100), 0);
+		registerItem("totem_lathe", new ItemStack(MSBlocks.TOTEM_LATHE), new GristSet(), new GristSet(GristTypes.BUILD, 100), 0);
 		registerItem("artifact_card", new GristSet(), null, 0, connection -> !connection.hasEntered(),
 				(connection, world) -> AlchemyRecipes.createCard(SburbHandler.getEntryItem(world, connection), true));
-		registerItem("alchemiter", new ItemStack(MSBlocks.ALCHEMITER), new GristSet(), new GristSet(GristType.BUILD, 100), 0);
+		registerItem("alchemiter", new ItemStack(MSBlocks.ALCHEMITER), new GristSet(), new GristSet(GristTypes.BUILD, 100), 0);
 		registerItem("punch_designix", 0,null, (connection, world) -> new ItemStack(MSBlocks.PUNCH_DESIGNIX),
 				(isPrimary, connection) -> new GristSet(SburbHandler.getPrimaryGristType(connection.getClientIdentifier()), 4));
 		/*registerItem("jumper_block_extension", new ItemStack(MinestuckBlocks.jumperBlockExtension[0]), new GristSet(GristType.Build, 1000), 1);
@@ -161,23 +161,23 @@ public class DeployList
 		return list.size();
 	}
 	
-	public static void applyConfigValues(boolean[] booleans)
+	public static void applyConfigValues(boolean[] booleans)	//TODO Replacement idea: Always register all items during init, but allow adding a config condition (as a lambda), and build a collection of all available entries at server start.  (Just baking it into the condition might be fine too)
 	{
 		if(booleans[0] != containsEntry("card_punched_card"))
 		{
 			if(booleans[0])
-				registerItem("card_punched_card", AlchemyRecipes.createCard(new ItemStack(MSItems.CAPTCHA_CARD), true), new GristSet(GristType.BUILD, 25), null, 0);
+				registerItem("card_punched_card", AlchemyRecipes.createCard(new ItemStack(MSItems.CAPTCHA_CARD), true), new GristSet(GristTypes.BUILD, 25), null, 0);
 			else removeEntry("card_punched_card");
 		}
 		if(booleans[1] != containsEntry("portable_cruxtruder"))
 		{
 			if(booleans[1])
 			{
-				registerItem("portable_cruxtruder", new GristSet(GristType.BUILD, 200), 1, null,
+				registerItem("portable_cruxtruder", new GristSet(GristTypes.BUILD, 200), 1, null,
 						(connection, world) -> MiniCruxtruderItem.getCruxtruderWithColor(PlayerSavedData.get(world.getServer()).getData(connection.getClientIdentifier()).color));
-				registerItem("portable_punch_designix", new ItemStack(MSBlocks.MINI_PUNCH_DESIGNIX), new GristSet(GristType.BUILD, 200), 1);
-				registerItem("portable_totem_lathe", new ItemStack(MSBlocks.MINI_TOTEM_LATHE), new GristSet(GristType.BUILD, 200), 1);
-				registerItem("portable_alchemiter", new ItemStack(MSBlocks.MINI_ALCHEMITER), new GristSet(GristType.BUILD, 300), 1);
+				registerItem("portable_punch_designix", new ItemStack(MSBlocks.MINI_PUNCH_DESIGNIX), new GristSet(GristTypes.BUILD, 200), 1);
+				registerItem("portable_totem_lathe", new ItemStack(MSBlocks.MINI_TOTEM_LATHE), new GristSet(GristTypes.BUILD, 200), 1);
+				registerItem("portable_alchemiter", new ItemStack(MSBlocks.MINI_ALCHEMITER), new GristSet(GristTypes.BUILD, 300), 1);
 			} else
 			{
 				removeEntry("portable_cruxtruder");

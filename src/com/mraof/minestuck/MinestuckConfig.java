@@ -1,26 +1,21 @@
 package com.mraof.minestuck;
 
+import com.electronwill.nightconfig.core.file.CommentedFileConfig;
+import com.electronwill.nightconfig.core.io.WritingMode;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.OpEntry;
 import net.minecraft.world.GameType;
 import net.minecraft.world.dimension.DimensionType;
-
-import com.electronwill.nightconfig.core.file.CommentedFileConfig;
-import com.electronwill.nightconfig.core.io.WritingMode;
-import com.mraof.minestuck.Minestuck;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.ForgeConfigSpec;
-
-import javax.security.auth.login.Configuration;
-
-import static net.minecraftforge.common.ForgeConfigSpec.*;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static net.minecraftforge.common.ForgeConfigSpec.*;
 
 public class MinestuckConfig
 {
@@ -101,7 +96,7 @@ public class MinestuckConfig
 	public static BooleanValue giveItems;
 	public static BooleanValue showGristChanges;
 	public static BooleanValue gristRefund;
-	public static boolean[] deployConfigurations = new boolean[2];
+	public static boolean[] deployConfigurations = new boolean[2];	//TODO Reimplement this (Call DeployList.applyConfigValues(deployConfigurations); at an appropriate time)
 	public static BooleanValue deployCard;
 	public static BooleanValue portableMachines;
 	

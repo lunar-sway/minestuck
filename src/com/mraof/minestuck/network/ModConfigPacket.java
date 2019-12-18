@@ -1,8 +1,6 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.editmode.DeployList;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -131,10 +129,6 @@ public class ModConfigPacket	//TODO It might be that configs are synced already.
 			//ContainerHandler.clientWindowIdStart = windowIdStart;
 			MinestuckConfig.clientHardMode = hardMode;
 			
-			if(!Minestuck.isServerRunning)
-			{
-				DeployList.applyConfigValues(deployValues);
-			}
 		} else
 		{
 			MinestuckConfig.clientAlchemiterStacks = alchemiterStacks;

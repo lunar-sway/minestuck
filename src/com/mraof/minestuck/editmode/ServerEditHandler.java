@@ -1,15 +1,16 @@
 package com.mraof.minestuck.editmode;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.entity.DecoyEntity;
+import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ServerEditPacket;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.PlayerTracker;
-import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
+import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.*;
@@ -17,7 +18,9 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.*;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.DamageSource;
@@ -98,12 +101,11 @@ public class ServerEditHandler
 		ServerPlayerEntity player = data.player;
 		player.closeScreen();
 		DecoyEntity decoy = data.decoy;
-		if(player.dimension != decoy.dimension)
-			//if(!Teleport.teleportEntity(player, decoy.dimension, null))	TODO
-			{
-				list.add(data);
-				throw new IllegalStateException("Was not able to reset editmode player for "+player.getName()+"! Likely caused by mod collision.");
-			}
+		if(Teleport.teleportEntity(player, (ServerWorld) decoy.getEntityWorld(), decoy.posX, decoy.posY, decoy.posZ, decoy.rotationYaw, decoy.rotationPitch) == null)
+		{
+			list.add(data);
+			throw new IllegalStateException("Was not able to reset editmode player for "+player.getName()+"! Likely caused by mod collision.");
+		}
 		
 		data.connection.useCoordinates = true;
 		data.connection.posX = player.posX;
@@ -111,7 +113,6 @@ public class ServerEditHandler
 		
 		player.setGameType(decoy.gameType);
 		
-		player.connection.setPlayerLocation(decoy.posX, decoy.posY, decoy.posZ, decoy.rotationYaw, decoy.rotationPitch);
 		player.abilities.read(decoy.capabilities);
 		player.sendPlayerAbilities();
 		player.fallDistance = 0;
@@ -131,8 +132,11 @@ public class ServerEditHandler
 	
 	public static void newServerEditor(ServerPlayerEntity player, PlayerIdentifier computerOwner, PlayerIdentifier computerTarget)
 	{
-		if(player.getRidingEntity() == null)
-			return;	//Don't want to bother making the decoy able to ride anything right now.
+		if(player.isPassenger())
+		{
+			player.sendMessage(new StringTextComponent("You may not activate editmode while riding something"));
+			return;    //Don't want to bother making the decoy able to ride anything right now.
+		}
 		SburbConnection c = SkaianetHandler.get(player.getServer()).getActiveConnection(computerTarget);
 		if(c != null && c.getServerIdentifier().equals(computerOwner) && getData(c) == null && getData(player) == null)
 		{
@@ -177,8 +181,8 @@ public class ServerEditHandler
 			posZ = c.centerZ + 0.5;
 		}
 		
-		//if(player.changeDimension(world.getDimension().getType(), new PositionTeleporter(posX, posY, posZ)) == null) TODO
-		//	return false;
+		if(Teleport.teleportEntity(player, world, posX, posY, posZ) == null)
+			return false;
 		
 		player.closeScreen();
 		player.inventory.clear();
@@ -359,7 +363,7 @@ public class ServerEditHandler
 			{
 				BlockState block = event.getWorld().getBlockState(event.getPos());
 				ItemStack stack = block.getBlock().getPickBlock(block, null, event.getWorld(), event.getPos(), event.getPlayer());
-				GristSet set = AlchemyCostRegistry.getGristConversion(stack);
+				GristSet set = GristCostRecipe.findCostForItem(stack, null, false, event.getWorld());
 				if(set != null && !set.isEmpty())
 					GristHelper.increase(event.getWorld(), data.connection.getClientIdentifier(), set);
 			}
@@ -402,7 +406,7 @@ public class ServerEditHandler
 					player.inventory.mainInventory.set(player.inventory.currentItem, ItemStack.EMPTY);
 				} else
 				{
-					GristHelper.decrease(player.world, data.connection.getClientIdentifier(), AlchemyCostRegistry.getGristConversion(stack));
+					GristHelper.decrease(player.world, data.connection.getClientIdentifier(), GristCostRecipe.findCostForItem(stack, null, false, player.getEntityWorld()));
 					PlayerTracker.updateGristCache(player.server, data.connection.getClientIdentifier());
 				}
 			}
@@ -467,7 +471,7 @@ public class ServerEditHandler
 			ItemStack stack = player.inventory.mainInventory.get(i);
 			if(stack.isEmpty())
 				continue;
-			if(AlchemyCostRegistry.getGristConversion(stack) == null || !isBlockItem(stack.getItem()))
+			if(GristCostRecipe.findCostForItem(stack, null, false, player.getEntityWorld()) == null || !isBlockItem(stack.getItem()))
 			{
 				listSearch :
 				{
