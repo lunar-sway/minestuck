@@ -129,11 +129,11 @@ public class MSBlocks
 	public static BlockAlchemiterUpgrades[] alchemiterUpgrades = BlockAlchemiterUpgrades.createBlocks();*/
 	
 	//Misc Machines
-	public static final Block COMPUTER_ON = getNull(), COMPUTER_OFF = getNull();	//TODO Each computer should be one block, but with a property for if they are on/off
-	public static final Block LAPTOP_ON = getNull(), LAPTOP_OFF = getNull();
-	public static final Block CROCKERTOP_ON = getNull(), CROCKERTOP_OFF = getNull();
-	public static final Block HUBTOP_ON = getNull(), HUBTOP_OFF = getNull();
-	public static final Block LUNCHTOP_ON = getNull(), LUNCHTOP_OFF = getNull();
+	public static final Block COMPUTER = getNull();
+	public static final Block LAPTOP = getNull();
+	public static final Block CROCKERTOP = getNull();
+	public static final Block HUBTOP = getNull();
+	public static final Block LUNCHTOP = getNull();
 	public static final Block TRANSPORTALIZER = getNull();
 	public static final Block GRIST_WIDGET = getNull();
 	public static final Block URANIUM_COOKER = getNull();
@@ -169,71 +169,6 @@ public class MSBlocks
 	
 	public static final FlowingFluidBlock OIL = getNull(), BLOOD = getNull(), BRAIN_JUICE = getNull();
 	public static final FlowingFluidBlock WATER_COLORS = getNull(), ENDER = getNull(), LIGHT_WATER = getNull();
-	//TODO Look more into fluids
-	/*public static Fluid fluidOil = createFluid("oil", new ResourceLocation("minestuck", "blocks/oil_still"), new ResourceLocation("minestuck", "blocks/oil_flowing"), "tile.oil");
-	public static Fluid fluidBlood = createFluid("blood", new ResourceLocation("minestuck", "blocks/blood_still"), new ResourceLocation("minestuck", "blocks/blood_flowing"), "tile.blood");
-	public static Fluid fluidBrainJuice = createFluid("brain_juice", new ResourceLocation("minestuck", "blocks/brain_juice_still"), new ResourceLocation("minestuck", "blocks/brain_juice_flowing"), "tile.brainJuice");
-	public static Fluid fluidWatercolors = createFluid("watercolors", new ResourceLocation("minestuck", "blocks/watercolors_still"), new ResourceLocation("minestuck", "blocks/watercolors_flowing"), "tile.watercolors");
-	public static Fluid fluidEnder = createFluid("ender", new ResourceLocation("minestuck", "blocks/ender_still"), new ResourceLocation("minestuck", "blocks/ender_flowing"), "tile.ender");
-	public static Fluid fluidLightWater = createFluid("light_water", new ResourceLocation("minestuck", "blocks/light_water_still"), new ResourceLocation("minestuck", "blocks/light_water_flowing"), "tile.lightWater");
-	
-	public static Block blockOil = new BlockFluidClassic(fluidOil, Material.WATER){
-		@SideOnly (Side.CLIENT)
-		@Override
-		public Vec3d getFogColor(World world, BlockPos pos, IBlockState state, Entity entity, Vec3d originalColor, float partialTicks)
-		{
-			return new Vec3d(0.0, 0.0, 0.0);
-		}
-	}.setUnlocalizedName("oil").setLightOpacity(2);
-	
-	public static Block blockBlood = new BlockFluidClassic(fluidBlood, Material.WATER){
-		@SideOnly (Side.CLIENT)
-		@Override
-		public Vec3d getFogColor(World world, BlockPos pos, IBlockState state, Entity entity, Vec3d originalColor, float partialTicks)
-		{
-			return new Vec3d(0.8, 0.0, 0.0);
-		}
-	}.setUnlocalizedName("blood").setLightOpacity(1);
-	
-	public static Block blockBrainJuice = new BlockFluidClassic(fluidBrainJuice, Material.WATER){
-		@SideOnly (Side.CLIENT)
-		@Override
-		public Vec3d getFogColor(World world, BlockPos pos, IBlockState state, Entity entity, Vec3d originalColor, float partialTicks)
-		{
-			return new Vec3d(0.55, 0.25, 0.7);
-		}
-	}.setUnlocalizedName("brainJuice").setLightOpacity(1);
-	
-	public static Block blockWatercolors = new BlockFluidClassic(fluidWatercolors, Material.WATER){
-		@SideOnly (Side.CLIENT)
-		@Override
-		public Vec3d getFogColor(World world, BlockPos pos, IBlockState state, Entity entity, Vec3d originalColor, float partialTicks)
-		{
-			Vec3d newColor = new Vec3d(0.0, 20.0, 30.0);
-			newColor = newColor.rotateYaw((float) (entity.posX / 2.0));
-			newColor = newColor.rotatePitch((float) (entity.posZ / 2.0));
-			newColor = newColor.rotateYaw((float) (entity.posY));
-			newColor = newColor.normalize();
-			newColor = new Vec3d(newColor.x % 1.0, newColor.y % 1.0, newColor.z % 1.0);
-			
-			return newColor;
-		}
-	}.setUnlocalizedName("watercolors").setLightOpacity(1);
-	
-	public static Block blockEnder = new BlockFluidEnder(fluidEnder, Material.WATER).setUnlocalizedName("ender").setLightOpacity(1);
-	
-	public static Block blockLightWater = new BlockFluidClassic(fluidLightWater, Material.WATER){
-		@SideOnly (Side.CLIENT)
-		@Override
-		public Vec3d getFogColor(World world, BlockPos pos, IBlockState state, Entity entity, Vec3d originalColor, float partialTicks)
-		{
-			return new Vec3d(0.2, 0.3, 1.0);
-		}
-	}.setUnlocalizedName("lightWater").setLightOpacity(1);
-	
-	public static Block[] liquidGrists;
-	public static Fluid[] gristFluids;*/
-	
 	
 	@Nonnull
 	@SuppressWarnings("ConstantConditions")
@@ -453,16 +388,11 @@ public class MSBlocks
 		registry.register(alchemiterUpgrades[2].setRegistryName("alchemiter_upgrade3"));
 		registry.register(alchemiterUpgrades[3].setRegistryName("alchemiter_upgrade4"));
 		*/
-		Block computer = register(registry, new ComputerOffBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(4.0F), () -> MSBlocks.COMPUTER_ON, ComputerOffBlock.COMPUTER_SHAPE, ComputerOffBlock.COMPUTER_COLLISION_SHAPE).setRegistryName("computer_off"));
-		registry.register(new ComputerOnBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(4.0F).lootFrom(computer), ComputerOffBlock.COMPUTER_SHAPE, ComputerOffBlock.COMPUTER_COLLISION_SHAPE, () -> COMPUTER_OFF.asItem()).setRegistryName("computer_on"));
-		computer = register(registry, new ComputerOffBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(4.0F), () -> MSBlocks.LAPTOP_ON, ComputerOffBlock.LAPTOP_SHAPE, ComputerOffBlock.LAPTOP_COLLISION_SHAPE).setRegistryName("laptop_off"));
-		registry.register(new ComputerOnBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(4.0F).lootFrom(computer), ComputerOffBlock.LAPTOP_SHAPE, ComputerOffBlock.LAPTOP_COLLISION_SHAPE, () -> LAPTOP_OFF.asItem()).setRegistryName("laptop_on"));
-		computer = register(registry, new ComputerOffBlock(Block.Properties.create(Material.IRON, MaterialColor.RED).hardnessAndResistance(4.0F), () -> MSBlocks.CROCKERTOP_ON, ComputerOffBlock.LAPTOP_SHAPE, ComputerOffBlock.LAPTOP_COLLISION_SHAPE).setRegistryName("crockertop_off"));
-		registry.register(new ComputerOnBlock(Block.Properties.create(Material.IRON, MaterialColor.RED).hardnessAndResistance(4.0F).lootFrom(computer), ComputerOffBlock.LAPTOP_SHAPE, ComputerOffBlock.LAPTOP_COLLISION_SHAPE, () -> CROCKERTOP_OFF.asItem()).setRegistryName("crockertop_on"));
-		computer = register(registry, new ComputerOffBlock(Block.Properties.create(Material.IRON, MaterialColor.GREEN).hardnessAndResistance(4.0F), () -> MSBlocks.HUBTOP_ON, ComputerOffBlock.LAPTOP_SHAPE, ComputerOffBlock.LAPTOP_COLLISION_SHAPE).setRegistryName("hubtop_off"));
-		registry.register(new ComputerOnBlock(Block.Properties.create(Material.IRON, MaterialColor.GREEN).hardnessAndResistance(4.0F).lootFrom(computer), ComputerOffBlock.LAPTOP_SHAPE, ComputerOffBlock.LAPTOP_COLLISION_SHAPE, () -> HUBTOP_OFF.asItem()).setRegistryName("hubtop_on"));
-		computer = register(registry, new ComputerOffBlock(Block.Properties.create(Material.IRON, MaterialColor.RED).hardnessAndResistance(4.0F), () -> MSBlocks.LUNCHTOP_ON, ComputerOffBlock.LUNCHTOP_SHAPE, ComputerOffBlock.LUNCHTOP_SHAPE).setRegistryName("lunchtop_off"));
-		registry.register(new ComputerOnBlock(Block.Properties.create(Material.IRON, MaterialColor.RED).hardnessAndResistance(4.0F).lootFrom(computer), ComputerOffBlock.LUNCHTOP_SHAPE, ComputerOffBlock.LUNCHTOP_SHAPE, () -> LUNCHTOP_OFF.asItem()).setRegistryName("lunchtop_on"));
+		registry.register(new ComputerBlock(ComputerBlock.COMPUTER_SHAPE, ComputerBlock.COMPUTER_COLLISION_SHAPE, Block.Properties.create(Material.IRON).hardnessAndResistance(4.0F)).setRegistryName("computer"));
+		registry.register(new ComputerBlock(ComputerBlock.LAPTOP_SHAPE, ComputerBlock.LAPTOP_COLLISION_SHAPE, Block.Properties.create(Material.IRON).hardnessAndResistance(4.0F)).setRegistryName("laptop"));
+		registry.register(new ComputerBlock(ComputerBlock.LAPTOP_SHAPE, ComputerBlock.LAPTOP_COLLISION_SHAPE, Block.Properties.create(Material.IRON, MaterialColor.RED).hardnessAndResistance(4.0F)).setRegistryName("crockertop"));
+		registry.register(new ComputerBlock(ComputerBlock.LAPTOP_SHAPE, ComputerBlock.LAPTOP_COLLISION_SHAPE, Block.Properties.create(Material.IRON, MaterialColor.GREEN).hardnessAndResistance(4.0F)).setRegistryName("hubtop"));
+		registry.register(new ComputerBlock(ComputerBlock.LUNCHTOP_SHAPE, ComputerBlock.LUNCHTOP_SHAPE, Block.Properties.create(Material.IRON, MaterialColor.RED).hardnessAndResistance(4.0F)).setRegistryName("lunchtop"));
 		registry.register(new TransportalizerBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("transportalizer"));
 		registry.register(new GristWidgetBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("grist_widget"));
 		registry.register(new UraniumCookerBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("uranium_cooker"));

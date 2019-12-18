@@ -792,7 +792,7 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(CROCKER_SPOON, CAPTCHA_CARD, MODE_OR, new ItemStack(GRIST_WIDGET));
 		CombinationRegistry.addCombination(CROCKER_FORK, CAPTCHA_CARD, MODE_OR, new ItemStack(GRIST_WIDGET));
 		CombinationRegistry.addCombination(Items.ENDER_PEARL, Blocks.IRON_BLOCK, MODE_AND, new ItemStack(TRANSPORTALIZER));
-		CombinationRegistry.addCombination(CAPTCHA_CARD, MSBlocks.COMPUTER_OFF, MODE_AND, new ItemStack(CAPTCHAROID_CAMERA));
+		CombinationRegistry.addCombination(CAPTCHA_CARD, MSBlocks.COMPUTER, MODE_AND, new ItemStack(CAPTCHAROID_CAMERA));
 		CombinationRegistry.addCombination(CAPTCHA_CARD, Items.ENDER_EYE, MODE_OR, new ItemStack(CAPTCHAROID_CAMERA));
 		
 		CombinationRegistry.addCombination(STACK_MODUS_CARD, QUEUE_MODUS_CARD, MODE_AND, new ItemStack(QUEUESTACK_MODUS_CARD));

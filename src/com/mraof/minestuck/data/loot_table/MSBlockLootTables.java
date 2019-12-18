@@ -219,11 +219,11 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(MINI_ALCHEMITER);
 		registerDropSelfLootTable(MINI_PUNCH_DESIGNIX);
 		
-		registerDropSelfLootTable(COMPUTER_OFF);
-		registerDropSelfLootTable(LAPTOP_OFF);
-		registerDropSelfLootTable(CROCKERTOP_OFF);
-		registerDropSelfLootTable(HUBTOP_OFF);
-		registerDropSelfLootTable(LUNCHTOP_OFF);
+		registerDropSelfLootTable(COMPUTER);
+		registerDropSelfLootTable(LAPTOP);
+		registerDropSelfLootTable(CROCKERTOP);
+		registerDropSelfLootTable(HUBTOP);
+		registerDropSelfLootTable(LUNCHTOP);
 		registerDropSelfLootTable(TRANSPORTALIZER);
 		registerDropSelfLootTable(GRIST_WIDGET);
 		registerDropSelfLootTable(URANIUM_COOKER);

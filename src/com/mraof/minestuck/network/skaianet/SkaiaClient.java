@@ -121,7 +121,7 @@ public class SkaiaClient
 	
 	public static void sendConnectRequest(ComputerTileEntity te, int otherPlayer, boolean isClient)	//Used for both connect, open server and resume
 	{
-		SburbConnectPacket packet = new SburbConnectPacket(ComputerData.createData(te), otherPlayer, isClient);
+		SburbConnectPacket packet = new SburbConnectPacket(te.getPos(), otherPlayer, isClient);
 		MSPacketHandler.sendToServer(packet);
 	}
 	

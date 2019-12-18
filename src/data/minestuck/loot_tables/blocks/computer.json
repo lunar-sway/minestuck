@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minestuck:hubtop_off"
+          "name": "minestuck:computer"
         }
       ],
       "conditions": [

@@ -1,12 +1,12 @@
 package com.mraof.minestuck.util;
 
-import java.util.ArrayList;
-
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.network.ClientEditPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.skaianet.*;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
+
+import java.util.ArrayList;
 
 public class SburbServer extends ButtonListProgram
 {
@@ -54,16 +54,23 @@ public class SburbServer extends ButtonListProgram
 	
 	@Override
 	public void onButtonPressed(ComputerTileEntity te, String buttonName, Object[] data) {
-		if(buttonName.equals(EDIT_BUTTON) || buttonName.equals(GIVE_BUTTON))
+		switch(buttonName)
 		{
-			ClientEditPacket packet = ClientEditPacket.activate(te.ownerId, te.getData(getId()).getInt("connectedClient"));
-			MSPacketHandler.sendToServer(packet);
-		} else if(buttonName.equals(RESUME_BUTTON))
-			SkaiaClient.sendConnectRequest(te, SkaiaClient.getAssociatedPartner(te.ownerId, false), false);
-		else if(buttonName.equals(OPEN_BUTTON))
-			SkaiaClient.sendConnectRequest(te, -1, false);
-		else if(buttonName.equals(CLOSE_BUTTON))
-			SkaiaClient.sendCloseRequest(te, te.getData(getId()).getBoolean("isOpen")?-1:te.getData(getId()).getInt("connectedClient"), false);
+			case EDIT_BUTTON:
+			case GIVE_BUTTON:
+				ClientEditPacket packet = ClientEditPacket.activate(te.ownerId, te.getData(getId()).getInt("connectedClient"));
+				MSPacketHandler.sendToServer(packet);
+				break;
+			case RESUME_BUTTON:
+				SkaiaClient.sendConnectRequest(te, SkaiaClient.getAssociatedPartner(te.ownerId, false), false);
+				break;
+			case OPEN_BUTTON:
+				SkaiaClient.sendConnectRequest(te, -1, false);
+				break;
+			case CLOSE_BUTTON:
+				SkaiaClient.sendCloseRequest(te, te.getData(getId()).getBoolean("isOpen") ? -1 : te.getData(getId()).getInt("connectedClient"), false);
+				break;
+		}
 	}
 	
 	@Override

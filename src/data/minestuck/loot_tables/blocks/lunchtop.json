@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minestuck:computer_off"
+          "name": "minestuck:lunchtop"
         }
       ],
       "conditions": [

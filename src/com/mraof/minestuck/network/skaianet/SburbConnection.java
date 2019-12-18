@@ -1,10 +1,8 @@
 package com.mraof.minestuck.network.skaianet;
 
 import com.mraof.minestuck.editmode.DeployList;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandInfoContainer;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -62,14 +60,14 @@ public class SburbConnection
 	public PlayerIdentifier getClientIdentifier()
 	{
 		if(clientIdentifier == null)
-			return client.owner;
+			return client.getOwner();
 		else return clientIdentifier;
 	}
 	
 	public PlayerIdentifier getServerIdentifier()
 	{
 		if(serverIdentifier == null)
-			return server.owner;
+			return server.getOwner();
 		else return serverIdentifier;
 	}
 	
@@ -178,8 +176,8 @@ public class SburbConnection
 		}
 		if(c.isActive)
 		{
-			c.client = new ComputerData().read(nbt.getCompound("Client"));
-			c.server = new ComputerData().read(nbt.getCompound("Server"));
+			c.client = new ComputerData(nbt.getCompound("Client"));
+			c.server = new ComputerData(nbt.getCompound("Server"));
 		}
 		else
 		{

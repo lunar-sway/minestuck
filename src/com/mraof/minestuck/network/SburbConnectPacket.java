@@ -4,11 +4,13 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.skaianet.ComputerData;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
+import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.util.Location;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.management.OpEntry;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -17,34 +19,31 @@ import java.util.function.Supplier;
 public class SburbConnectPacket
 {
 	
-	private final ComputerData player;
+	private final BlockPos computer;
 	private final int otherPlayer;
 	private final boolean isClient;
 	
-	public SburbConnectPacket(ComputerData player, int otherPlayer, boolean isClient)
+	public SburbConnectPacket(BlockPos computer, int otherPlayer, boolean isClient)
 	{
-		this.player = player;
+		this.computer = computer;
 		this.otherPlayer = otherPlayer;
 		this.isClient = isClient;
 	}
 	
 	public void encode(PacketBuffer buffer)
 	{
-		buffer.writeInt(player.getOwnerId());
-		player.getLocation().toBuffer(buffer);
+		buffer.writeBlockPos(computer);
 		buffer.writeInt(otherPlayer);
 		buffer.writeBoolean(isClient);
 	}
 	
 	public static SburbConnectPacket decode(PacketBuffer buffer)
 	{
-		IdentifierHandler.PlayerIdentifier identifier = IdentifierHandler.getById(buffer.readInt());
-		
-		ComputerData player = new ComputerData(identifier, Location.fromBuffer(buffer));
+		BlockPos computer = buffer.readBlockPos();
 		int otherPlayer = buffer.readInt();
 		boolean isClient = buffer.readBoolean();
 		
-		return new SburbConnectPacket(player, otherPlayer, isClient);
+		return new SburbConnectPacket(computer, otherPlayer, isClient);
 	}
 	
 	public void consume(Supplier<NetworkEvent.Context> ctx)
@@ -57,8 +56,16 @@ public class SburbConnectPacket
 	
 	public void execute(ServerPlayerEntity player)
 	{
-		OpEntry opsEntry = player.getServer().getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
-		if((!MinestuckConfig.privateComputers.get() || IdentifierHandler.encode(player) == this.player.getOwner() || opsEntry != null && opsEntry.getPermissionLevel() >= 2) && ServerEditHandler.getData(player) == null)
-			SkaianetHandler.get(player.world).requestConnection(this.player, otherPlayer != -1 ? IdentifierHandler.getById(otherPlayer) : null, isClient);
+		if(player.world.isAreaLoaded(computer, 0))
+		{
+			TileEntity te = player.world.getTileEntity(computer);
+			if(te instanceof ComputerTileEntity)
+			{
+				ComputerData data = ComputerData.createData((ComputerTileEntity) te);
+				OpEntry opsEntry = player.getServer().getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
+				if((!MinestuckConfig.privateComputers.get() || IdentifierHandler.encode(player) == data.getOwner() || opsEntry != null && opsEntry.getPermissionLevel() >= 2) && ServerEditHandler.getData(player) == null)
+					SkaianetHandler.get(player.world).requestConnection(data, otherPlayer != -1 ? IdentifierHandler.getById(otherPlayer) : null, isClient);
+			}
+		}
 	}
 }

@@ -8,40 +8,35 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.dimension.DimensionType;
 
+import javax.annotation.Nonnull;
+import java.util.Objects;
+
 public class ComputerData
 {
-	Location location;
-	PlayerIdentifier owner;
-	//Client only
-	private int ownerId;
+	//TODO Is this needed anymore?
+	
+	@Nonnull
+	private final Location location;
+	@Nonnull
+	private final PlayerIdentifier owner;
 	
 	public static ComputerData createData(ComputerTileEntity te)
 	{
-		if(!te.getWorld().isRemote)
+		if(!Objects.requireNonNull(te.getWorld()).isRemote)
 			return new ComputerData(te.owner, new Location(te.getPos(), te.getWorld().dimension.getType()));
-		else return new ComputerData(te.ownerId, new Location(te.getPos(), te.getWorld().dimension.getType()));
-	}
-	
-	private ComputerData(int ownerId, Location location)
-	{
-		this.ownerId = ownerId;
-		this.location = location;
+		else throw new IllegalStateException("Should not call createData() from client side");
 	}
 	
 	public ComputerData(PlayerIdentifier owner, Location location)
 	{
-		this.owner = owner;
-		this.location = location;
+		this.owner = Objects.requireNonNull(owner);
+		this.location = Objects.requireNonNull(location);
 	}
 	
-	ComputerData()
-	{}
-	
-	ComputerData read(CompoundNBT nbt)
+	ComputerData(CompoundNBT nbt)
 	{
 		owner = IdentifierHandler.load(nbt, "name");
-		location = Location.fromNBT(nbt);
-		return this;
+		location = Objects.requireNonNull(Location.fromNBT(nbt), "Unable to load computer location.");
 	}
 	
 	CompoundNBT write()
@@ -55,7 +50,6 @@ public class ComputerData
 	public BlockPos getPos() {return location.pos;}
 	public DimensionType getDimension() {return location.dim;}
 	public PlayerIdentifier getOwner() {return owner;}
-	public int getOwnerId() {return ownerId;}
 	
 	@Override
 	public boolean equals(Object obj)
@@ -68,4 +62,9 @@ public class ComputerData
 		return false;
 	}
 	
+	@Override
+	public int hashCode()
+	{
+		return Objects.hash(location, owner);
+	}
 }

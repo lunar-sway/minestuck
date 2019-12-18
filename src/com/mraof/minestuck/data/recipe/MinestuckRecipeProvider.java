@@ -87,7 +87,7 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		ShapedRecipeBuilder.shapedRecipe(MSBlocks.DEAD_PLANKS_SLAB, 6).key('#', MSBlocks.DEAD_PLANKS).patternLine("###").setGroup("wooden_slab").addCriterion("has_planks", hasItem(MSBlocks.DEAD_PLANKS)).build(recipeBuilder);
 		ShapedRecipeBuilder.shapedRecipe(MSBlocks.TREATED_PLANKS_SLAB, 6).key('#', MSBlocks.TREATED_PLANKS).patternLine("###").setGroup("wooden_slab").addCriterion("has_planks", hasItem(MSBlocks.TREATED_PLANKS)).build(recipeBuilder);
 		
-		ShapedRecipeBuilder.shapedRecipe(MSBlocks.COMPUTER_OFF).key('e', MSItems.ENERGY_CORE).key('i', Tags.Items.INGOTS_IRON).patternLine("iii").patternLine("iei").patternLine("iii").addCriterion("has_energy_core", hasItem(MSItems.ENERGY_CORE)).build(recipeBuilder);
+		ShapedRecipeBuilder.shapedRecipe(MSBlocks.COMPUTER).key('e', MSItems.ENERGY_CORE).key('i', Tags.Items.INGOTS_IRON).patternLine("iii").patternLine("iei").patternLine("iii").addCriterion("has_energy_core", hasItem(MSItems.ENERGY_CORE)).build(recipeBuilder);
 		ShapedRecipeBuilder.shapedRecipe(MSBlocks.URANIUM_COOKER).key('e', MSItems.ENERGY_CORE).key('i', Tags.Items.INGOTS_IRON).key('F', Blocks.FURNACE).patternLine("iii").patternLine("iFi").patternLine("iei").addCriterion("has_energy_core", hasItem(MSItems.ENERGY_CORE)).build(recipeBuilder);
 		
 		ShapelessRecipeBuilder.shapelessRecipe(Blocks.SPRUCE_PLANKS).addIngredient(MSBlocks.WOODEN_CACTUS).setGroup("planks").addCriterion("has_cactus", hasItem(MSBlocks.WOODEN_CACTUS)).build(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "spruce_planks_from_wooden_cactus"));

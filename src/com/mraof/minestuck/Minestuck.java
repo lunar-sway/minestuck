@@ -36,8 +36,6 @@ import java.util.Random;
 
 import static com.mraof.minestuck.Minestuck.MOD_ID;
 
-//import com.mraof.minestuck.config.MinestuckConfig;
-
 @Mod(MOD_ID)
 public class Minestuck
 {
@@ -55,7 +53,6 @@ public class Minestuck
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::postSetup);
-		//ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.GUIFACTORY, () -> GuiHandler::provideGuiContainer);
 		
 		MinestuckConfig.loadConfig(MinestuckConfig.client_config, FMLPaths.CONFIGDIR.get().resolve("minestuck-client.toml").toString());
 		MinestuckConfig.loadConfig(MinestuckConfig.server_config, FMLPaths.CONFIGDIR.get().resolve("minestuck.toml").toString());

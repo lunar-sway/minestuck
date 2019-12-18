@@ -1,6 +1,7 @@
 package com.mraof.minestuck.network.skaianet;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import net.minecraft.nbt.CompoundNBT;
@@ -146,7 +147,15 @@ public class Session
 		
 		ListNBT list = nbt.getList("connections", Constants.NBT.TAG_COMPOUND);
 		for(int i = 0; i < list.size(); i++)
-			s.connections.add(SburbConnection.read(list.getCompound(i), handler));
+		{
+			try
+			{
+				s.connections.add(SburbConnection.read(list.getCompound(i), handler));
+			} catch(Exception e)
+			{
+				Debug.logger.error("Unable to read sburb connection from tag "+list.getCompound(i)+". Forced to skip connection.", e);
+			}
+		}
 		
 		if(nbt.contains("predefinedPlayers", Constants.NBT.TAG_LIST))	//If it is a tag list
 		{

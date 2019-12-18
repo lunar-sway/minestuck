@@ -1,10 +1,10 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
-import com.mraof.minestuck.util.Location;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -20,10 +20,10 @@ import java.util.function.Supplier;
  */
 public class ClearMessagePacket
 {
-	Location computer;
+	BlockPos computer;
 	int program;
 	
-	public ClearMessagePacket(Location computer, int program)
+	public ClearMessagePacket(BlockPos computer, int program)
 	{
 		this.computer = computer;
 		this.program = program;
@@ -31,13 +31,13 @@ public class ClearMessagePacket
 	
 	public void encode(PacketBuffer buffer)
 	{
-		computer.toBuffer(buffer);
+		buffer.writeBlockPos(computer);
 		buffer.writeInt(program);
 	}
 	
 	public static ClearMessagePacket decode(PacketBuffer buffer)
 	{
-		Location computer = Location.fromBuffer(buffer);
+		BlockPos computer = buffer.readBlockPos();
 		int program = buffer.readInt();
 		
 		return new ClearMessagePacket(computer, program);
@@ -54,14 +54,15 @@ public class ClearMessagePacket
 	public void execute(ServerPlayerEntity player)
 	{
 	
-		if(player.getEntityWorld().dimension.getType() == computer.dim && player.getEntityWorld().isAreaLoaded(computer.pos, 0))
+		if(player.getEntityWorld().isAreaLoaded(computer, 0))
 		{
-			ComputerTileEntity te = SkaianetHandler.getComputer(player.getServer(), computer);
-			
-			if(te != null)
+			TileEntity te = player.getEntityWorld().getTileEntity(computer);
+			if(te instanceof ComputerTileEntity)
 			{
-				te.latestmessage.put(program, "");
-				te.markBlockForUpdate();
+				ComputerTileEntity computerTE = (ComputerTileEntity) te;
+				
+				computerTE.latestmessage.put(program, "");
+				computerTE.markBlockForUpdate();
 			}
 		}
 	}

@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minestuck:crockertop_off"
+          "name": "minestuck:hubtop"
         }
       ],
       "conditions": [

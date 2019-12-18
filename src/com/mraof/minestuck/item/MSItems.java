@@ -5,13 +5,13 @@ import com.mraof.minestuck.entity.item.MetalBoatEntity;
 import com.mraof.minestuck.entity.item.SbahjPosterEntity;
 import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.item.block.*;
-import com.mraof.minestuck.item.foods.*;
+import com.mraof.minestuck.item.foods.DrinkableItem;
+import com.mraof.minestuck.item.foods.SurpriseEmbryoItem;
+import com.mraof.minestuck.item.foods.UnknowableEggItem;
 import com.mraof.minestuck.item.weapon.*;
 import com.mraof.minestuck.util.MSSoundEvents;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.item.Items;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.potion.EffectInstance;
@@ -19,9 +19,9 @@ import net.minecraft.potion.Effects;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.registries.IForgeRegistry;
 
-import static com.mraof.minestuck.block.MSBlocks.*;
-
 import java.util.Arrays;
+
+import static com.mraof.minestuck.block.MSBlocks.*;
 
 /**
  * This class contains all non-ItemBlock items that minestuck adds,
@@ -391,11 +391,11 @@ public class MSItems
 		/*registerItemBlock(registry, new ItemBlock(holopad));
 		registerItemBlock(registry, new ItemJumperBlock(jumperBlockExtension[0]));*/
 		
-		registerItemBlock(registry, COMPUTER_OFF, MSItemGroup.MAIN);
-		registerItemBlock(registry, LAPTOP_OFF, MSItemGroup.MAIN);
-		registerItemBlock(registry, CROCKERTOP_OFF, MSItemGroup.MAIN);
-		registerItemBlock(registry, HUBTOP_OFF, MSItemGroup.MAIN);
-		registerItemBlock(registry, LUNCHTOP_OFF, MSItemGroup.MAIN);
+		registerItemBlock(registry, COMPUTER, MSItemGroup.MAIN);
+		registerItemBlock(registry, LAPTOP, MSItemGroup.MAIN);
+		registerItemBlock(registry, CROCKERTOP, MSItemGroup.MAIN);
+		registerItemBlock(registry, HUBTOP, MSItemGroup.MAIN);
+		registerItemBlock(registry, LUNCHTOP, MSItemGroup.MAIN);
 		registerItemBlock(registry, new TransportalizerItem(TRANSPORTALIZER, new Item.Properties().group(MSItemGroup.MAIN)));
 		registerItemBlock(registry, GRIST_WIDGET, MSItemGroup.MAIN);
 		registerItemBlock(registry, URANIUM_COOKER, MSItemGroup.MAIN);

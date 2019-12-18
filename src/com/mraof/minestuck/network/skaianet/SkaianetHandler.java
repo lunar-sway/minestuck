@@ -79,7 +79,7 @@ public class SkaianetHandler
 	public SburbConnection getActiveConnection(PlayerIdentifier client)
 	{
 		for(SburbConnection c : connections)
-			if(c.isActive && c.client.owner.equals(client))
+			if(c.isActive && c.client.getOwner().equals(client))
 				return c;
 		return null;
 	}
@@ -146,19 +146,19 @@ public class SkaianetHandler
 			return;
 		if(!isClient)	//Is server
 		{
-			if(serversOpen.containsKey(player.owner) || resumingServers.containsKey(player.owner))
+			if(serversOpen.containsKey(player.getOwner()) || resumingServers.containsKey(player.getOwner()))
 				return;
 			if(otherPlayer == null)	//Wants to open
 			{
-				if(resumingClients.containsKey(getAssociatedPartner(player.owner, false)))
-					connectTo(player, false, getAssociatedPartner(player.owner, false), resumingClients);
+				if(resumingClients.containsKey(getAssociatedPartner(player.getOwner(), false)))
+					connectTo(player, false, getAssociatedPartner(player.getOwner(), false), resumingClients);
 				else
 				{
 					te.getData(1).putBoolean("isOpen", true);
 					serversOpen.put(player.getOwner(), player);
 				}
 			}
-			else if(otherPlayer != null && getAssociatedPartner(player.owner, false).equals(otherPlayer))	//Wants to resume
+			else if(otherPlayer != null && getAssociatedPartner(player.getOwner(), false).equals(otherPlayer))	//Wants to resume
 			{
 				if(resumingClients.containsKey(otherPlayer))	//The client is already waiting
 					connectTo(player, false, otherPlayer, resumingClients);
@@ -171,9 +171,9 @@ public class SkaianetHandler
 			else return;
 		} else	//Is client
 		{
-			if(getActiveConnection(player.owner) != null || resumingClients.containsKey(player.owner))
+			if(getActiveConnection(player.getOwner()) != null || resumingClients.containsKey(player.getOwner()))
 				return;
-			PlayerIdentifier p = getAssociatedPartner(player.owner, true);
+			PlayerIdentifier p = getAssociatedPartner(player.getOwner(), true);
 			if(p != null && (otherPlayer == null || p.equals(otherPlayer)))	//If trying to connect to the associated partner
 			{
 				if(resumingServers.containsKey(p))	//If server is "resuming".
@@ -201,7 +201,7 @@ public class SkaianetHandler
 			{
 				if(movingComputers.contains(resumingClients.get(player)))
 					return;
-				ComputerTileEntity te = getComputer(mcServer, resumingClients.remove(player).location);
+				ComputerTileEntity te = getComputer(mcServer, resumingClients.remove(player).getLocation());
 				if(te != null)
 				{
 					te.getData(0).putBoolean("isResuming", false);
@@ -279,7 +279,7 @@ public class SkaianetHandler
 	
 	private void connectTo(ComputerData player, boolean isClient, PlayerIdentifier otherPlayer, Map<PlayerIdentifier, ComputerData> map)
 	{
-		ComputerTileEntity c1 = getComputer(mcServer, player.location), c2 = getComputer(mcServer, map.get(otherPlayer).location);
+		ComputerTileEntity c1 = getComputer(mcServer, player.getLocation()), c2 = getComputer(mcServer, map.get(otherPlayer).getLocation());
 		if(c2 == null)
 		{
 			map.remove(otherPlayer);	//Invalid, should not be in the list
@@ -291,7 +291,7 @@ public class SkaianetHandler
 		boolean newConnection = false;	//True if new, false if resuming.
 		if(isClient)
 		{
-			c = getConnection(player.owner, otherPlayer);
+			c = getConnection(player.getOwner(), otherPlayer);
 			if(c == null)
 			{
 				c = new SburbConnection(this);
@@ -303,7 +303,7 @@ public class SkaianetHandler
 			c.isActive = true;
 		} else
 		{
-			c = getConnection(otherPlayer, player.owner);
+			c = getConnection(otherPlayer, player.getOwner());
 			if(c == null)
 				return;	//A server should only be able to resume
 			c.client = map.remove(otherPlayer);
@@ -338,10 +338,10 @@ public class SkaianetHandler
 				{
 					Debug.warnf("SessionHandler denied connection between %s and %s, reason: %s", c.getClientIdentifier().getUsername(), c.getServerIdentifier().getUsername(), s);
 					connections.remove(c);
-					ComputerTileEntity cte = getComputer(mcServer, c.client.location);
+					ComputerTileEntity cte = getComputer(mcServer, c.client.getLocation());
 					if(cte != null)
 						cte.latestmessage.put(0, s);
-					map.put(c.server.owner, c.server);
+					map.put(c.server.getOwner(), c.server);
 					return;
 				
 				}
@@ -363,7 +363,7 @@ public class SkaianetHandler
 		} else type = ConnectionCreatedEvent.ConnectionType.RESUME;
 		
 		c1.connected(otherPlayer, isClient);
-		c2.connected(player.owner, !isClient);
+		c2.connected(player.getOwner(), !isClient);
 		if(c1 != c2)
 			c2.markBlockForUpdate();
 		
@@ -440,9 +440,8 @@ public class SkaianetHandler
 			for(int i = 0; i < list.size(); i++)
 			{
 				CompoundNBT cmp = list.getCompound(i);
-				ComputerData c = new ComputerData();
-				c.read(cmp);
-				maps[e].put(c.owner, c);
+				ComputerData c = new ComputerData(cmp);
+				maps[e].put(c.getOwner(), c);
 			}
 		}
 		
@@ -607,8 +606,8 @@ public class SkaianetHandler
 			while(i.hasNext())
 			{
 				ComputerData data = i.next();
-				ComputerTileEntity computer = getComputer(mcServer, data.location);
-				if(computer == null || data.getDimension() == DimensionType.THE_NETHER || !computer.owner.equals(data.owner)
+				ComputerTileEntity computer = getComputer(mcServer, data.getLocation());
+				if(computer == null || data.getDimension() == DimensionType.THE_NETHER || !computer.owner.equals(data.getOwner())
 						|| !(i == iter1[1] && computer.getData(0).getBoolean("isResuming")
 								|| i != iter1[1] && computer.getData(1).getBoolean("isOpen")))
 				{
@@ -629,7 +628,7 @@ public class SkaianetHandler
 			}
 			if(c.isActive)
 			{
-				ComputerTileEntity cc = getComputer(mcServer, c.client.location), sc = getComputer(mcServer, c.server.location);
+				ComputerTileEntity cc = getComputer(mcServer, c.client.getLocation()), sc = getComputer(mcServer, c.server.getLocation());
 				if(cc == null || sc == null || c.client.getDimension() == DimensionType.THE_NETHER || c.server.getDimension() == DimensionType.THE_NETHER || !c.getClientIdentifier().equals(cc.owner)
 						|| !c.getServerIdentifier().equals(sc.owner) || !cc.getData(0).getBoolean("connectedToServer"))
 				{
@@ -819,12 +818,12 @@ public class SkaianetHandler
 				c.server = dataNew;
 		}
 		
-		if(resumingClients.containsKey(dataOld.owner) && resumingClients.get(dataOld.owner).equals(dataOld))
-			resumingClients.put(dataOld.owner, dataNew);	//Used to be map.replace until someone had a NoSuchMethodError
-		if(resumingServers.containsKey(dataOld.owner) && resumingServers.get(dataOld.owner).equals(dataOld))
-			resumingServers.put(dataOld.owner, dataNew);
-		if(serversOpen.containsKey(dataOld.owner) && serversOpen.get(dataOld.owner).equals(dataOld))
-			serversOpen.put(dataOld.owner, dataNew);
+		if(resumingClients.containsKey(dataOld.getOwner()) && resumingClients.get(dataOld.getOwner()).equals(dataOld))
+			resumingClients.put(dataOld.getOwner(), dataNew);	//Used to be map.replace until someone had a NoSuchMethodError
+		if(resumingServers.containsKey(dataOld.getOwner()) && resumingServers.get(dataOld.getOwner()).equals(dataOld))
+			resumingServers.put(dataOld.getOwner(), dataNew);
+		if(serversOpen.containsKey(dataOld.getOwner()) && serversOpen.get(dataOld.getOwner()).equals(dataOld))
+			serversOpen.put(dataOld.getOwner(), dataNew);
 		
 		movingComputers.add(dataNew);
 	}
