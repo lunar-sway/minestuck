@@ -139,8 +139,8 @@ public class SburbConnection
 		}
 		if(isActive)
 		{
-			nbt.put("Client", client.write());
-			nbt.put("Server", server.write());
+			nbt.put("Client", client.write(new CompoundNBT()));
+			nbt.put("Server", server.write(new CompoundNBT()));
 		}
 		else
 		{

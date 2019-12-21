@@ -10,10 +10,9 @@ import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
 
 import javax.annotation.Nullable;
 import java.util.EnumMap;
@@ -45,7 +44,7 @@ public abstract class MachineBlock extends Block
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context)
 	{
-		return getDefaultState().with(FACING, context.getPlacementHorizontalFacing());
+		return getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());	//Should face the player
 	}
 	
 	//Should probably find an utility class for the functions below

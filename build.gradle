@@ -56,6 +56,11 @@ minecraft {
                 args '--uuid', project.getProperty('mc_uuid')
             }
 
+            // Add an username arg if you have specified it in a relevant gradle.properties file. Note that specifying a uuid and a non-matching username (or no username specified) may cause single-player worlds to freeze up when exiting the world.
+            if (project.hasProperty('mc_username')) {
+                args '--username', project.getProperty('mc_username')
+            }
+
             mods {
                 minestuck {
                     source sourceSets.main

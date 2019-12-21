@@ -39,11 +39,11 @@ public class ComputerData
 		location = Objects.requireNonNull(Location.fromNBT(nbt), "Unable to load computer location.");
 	}
 	
-	CompoundNBT write()
+	CompoundNBT write(CompoundNBT nbt)
 	{
-		CompoundNBT c = new CompoundNBT();
-		owner.saveToNBT(c, "name");
-		return c;
+		owner.saveToNBT(nbt, "name");
+		location.toNBT(nbt);
+		return nbt;
 	}
 	
 	public Location getLocation() {return location;}

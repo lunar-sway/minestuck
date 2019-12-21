@@ -476,7 +476,7 @@ public class SkaianetHandler
 		{
 			list = new ListNBT();
 			for(ComputerData c:maps[i].values())
-				list.add(c.write());
+				list.add(c.write(new CompoundNBT()));
 			compound.put(s[i], list);
 		}
 		
