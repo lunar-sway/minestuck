@@ -150,7 +150,7 @@ public class Session
 		{
 			try
 			{
-				s.connections.add(SburbConnection.read(list.getCompound(i), handler));
+				s.connections.add(new SburbConnection(list.getCompound(i), handler));
 			} catch(Exception e)
 			{
 				Debug.logger.error("Unable to read sburb connection from tag "+list.getCompound(i)+". Forced to skip connection.", e);

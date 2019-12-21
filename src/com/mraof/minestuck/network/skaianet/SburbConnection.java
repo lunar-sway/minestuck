@@ -1,13 +1,18 @@
 package com.mraof.minestuck.network.skaianet;
 
+import com.mojang.datafixers.Dynamic;
 import com.mraof.minestuck.editmode.DeployList;
+import com.mraof.minestuck.tileentity.ComputerTileEntity;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.lands.LandInfoContainer;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.NBTDynamicOps;
 import net.minecraft.nbt.StringNBT;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.math.GlobalPos;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.util.Constants;
 
@@ -17,20 +22,20 @@ public class SburbConnection
 {
 	final SkaianetHandler handler;
 	
-	ComputerData client;
 	/**
 	 * Identifier for the client player. Beware that this might be null if connection.client isn't null
 	 * It is recommended to use connection.getClientName() instead if possible
 	 */
-	PlayerIdentifier clientIdentifier;
-	ComputerData server;
+	final PlayerIdentifier clientIdentifier;
 	/**
 	 * Identifier for the server player. Beware that this might be null if connection.server isn't null
 	 * It is recommended to use connection.getServerName() instead if possible
 	 */
 	PlayerIdentifier serverIdentifier;
+	GlobalPos clientComputer;	//TODO Abstraction that works with multiple representations of computers
+	GlobalPos serverComputer;
 	
-	boolean isActive;
+	private boolean isActive;
 	private boolean isMain;
 	boolean hasEntered;
 	boolean canSplit;
@@ -50,35 +55,146 @@ public class SburbConnection
 	public double posX, posZ;
 	public boolean useCoordinates;
 	
-	SburbConnection(SkaianetHandler handler)
+	SburbConnection(PlayerIdentifier client, PlayerIdentifier server, SkaianetHandler handler)
 	{
+		clientIdentifier = client;
+		serverIdentifier = server;
 		this.handler = handler;
 		this.canSplit = true;
-		this.isActive = true;
+	}
+	
+	SburbConnection(CompoundNBT nbt, SkaianetHandler handler)
+	{
+		this.handler = handler;
+		isMain = nbt.getBoolean("IsMain");
+		if(nbt.contains("Inventory", Constants.NBT.TAG_LIST))
+			inventory = nbt.getList("Inventory", Constants.NBT.TAG_COMPOUND);
+		if(isMain)
+		{
+			isActive = nbt.getBoolean("IsActive");
+			hasEntered = nbt.getBoolean("HasEntered");
+			
+			if(nbt.contains("CanSplit", Constants.NBT.TAG_ANY_NUMERIC))
+				canSplit = nbt.getBoolean("CanSplit");
+			ListNBT list = nbt.getList("GivenItems", Constants.NBT.TAG_STRING);
+			for(int i = 0; i < list.size(); i++)
+			{
+				String name = list.getString(i);
+				int ordinal = DeployList.getOrdinal(name);
+				if(ordinal == -1)
+					unregisteredItems.add(new StringNBT(name));
+				else givenItemList[ordinal] = true;
+			}
+		}
+		clientIdentifier = IdentifierHandler.load(nbt, "client");
+		serverIdentifier = IdentifierHandler.load(nbt, "server");
+		if(isActive)
+		{
+			try
+			{
+				clientComputer = GlobalPos.deserialize(new Dynamic<>(NBTDynamicOps.INSTANCE, nbt.getCompound("client_pos")));
+				serverComputer = GlobalPos.deserialize(new Dynamic<>(NBTDynamicOps.INSTANCE, nbt.getCompound("server_pos")));
+			} catch(Exception e)
+			{
+				Debug.logger.error("Unable to read computer position for sburb connection between "+ clientIdentifier.getUsername()+" and "+serverIdentifier.getUsername()+", setting connection to be inactive. Cause: ", e);
+				isActive = false;
+			}
+		}
+		if(nbt.contains("ClientLand", Constants.NBT.TAG_COMPOUND))
+		{
+			clientHomeLand = LandInfoContainer.read(nbt.getCompound("ClientLand"), handler, getClientIdentifier());	//TODO add robustness in the case that the dimension type no longer exists?
+		}
+		artifactType = nbt.getInt("artifact");
+	}
+	
+	
+	CompoundNBT write()
+	{
+		CompoundNBT nbt = new CompoundNBT();
+		nbt.putBoolean("IsMain", isMain);
+		if(inventory != null)
+			nbt.put("Inventory", inventory);
+		if(isMain)
+		{
+			nbt.putBoolean("IsActive", isActive);
+			nbt.putBoolean("HasEntered", hasEntered);
+			nbt.putBoolean("CanSplit", canSplit);
+			ListNBT list = unregisteredItems.copy();
+			String[] deployNames = DeployList.getNameList();
+			for(int i = 0; i < givenItemList.length; i++)
+			{
+				if(givenItemList[i])
+					list.add(new StringNBT(deployNames[i]));
+			}
+			
+			nbt.put("GivenItems", list);
+			if(clientHomeLand != null)
+			{
+				nbt.put("ClientLand", clientHomeLand.write(new CompoundNBT()));
+			}
+		}
+		
+		getClientIdentifier().saveToNBT(nbt, "client");
+		getServerIdentifier().saveToNBT(nbt, "server");
+		
+		if(isActive)
+		{
+			nbt.put("client_pos", clientComputer.serialize(NBTDynamicOps.INSTANCE));
+			nbt.put("server_pos", serverComputer.serialize(NBTDynamicOps.INSTANCE));
+		}
+		
+		nbt.putInt("artifact", artifactType);
+		return nbt;
+	}
+	
+	void setActive(GlobalPos client, GlobalPos server)
+	{
+		clientComputer = client;
+		serverComputer = server;
+		isActive = true;
+	}
+	
+	void close()
+	{
+		clientComputer = null;
+		serverComputer = null;
+		isActive = false;
 	}
 	
 	public PlayerIdentifier getClientIdentifier()
 	{
-		if(clientIdentifier == null)
-			return client.getOwner();
-		else return clientIdentifier;
+		return clientIdentifier;
 	}
 	
 	public PlayerIdentifier getServerIdentifier()
 	{
-		if(serverIdentifier == null)
-			return server.getOwner();
-		else return serverIdentifier;
+		return serverIdentifier;
 	}
 	
-	public ComputerData getClientData() {return client;}
-	public ComputerData getServerData() {return server;}
+	public GlobalPos getClientComputer()
+	{
+		return clientComputer;
+	}
+	
+	public boolean isClient(ComputerTileEntity computer)
+	{
+		return isActive && getClientIdentifier().equals(computer.owner) && clientComputer.getDimension() == computer.getWorld().getDimension().getType() && clientComputer.getPos().equals(computer.getPos());
+	}
+	
+	public boolean isServer(ComputerTileEntity computer)
+	{
+		return isActive && getServerIdentifier().equals(computer.owner) && serverComputer.getDimension() == computer.getWorld().getDimension().getType() && serverComputer.getPos().equals(computer.getPos());
+	}
 	
 	public boolean hasEntered()
 	{
 		return hasEntered;
 	}
 	public boolean isMain(){return isMain;}
+	public boolean isActive()
+	{
+		return isActive;
+	}
 	void setIsMain()
 	{
 		if(!isMain)
@@ -110,86 +226,5 @@ public class SburbConnection
 		buffer.writeString(getClientIdentifier().getUsername(), 16);
 		buffer.writeInt(getServerIdentifier().getId());
 		buffer.writeString(getServerIdentifier().getUsername(), 16);
-	}
-
-	CompoundNBT write()
-	{
-		CompoundNBT nbt = new CompoundNBT();
-		nbt.putBoolean("IsMain", isMain);
-		if(inventory != null)
-			nbt.put("Inventory", inventory);
-		if(isMain)
-		{
-			nbt.putBoolean("IsActive", isActive);
-			nbt.putBoolean("HasEntered", hasEntered);
-			nbt.putBoolean("CanSplit", canSplit);
-			ListNBT list = unregisteredItems.copy();
-			String[] deployNames = DeployList.getNameList();
-			for(int i = 0; i < givenItemList.length; i++)
-			{
-				if(givenItemList[i])
-					list.add(new StringNBT(deployNames[i]));
-			}
-			
-			nbt.put("GivenItems", list);
-			if(clientHomeLand != null)
-			{
-				nbt.put("ClientLand", clientHomeLand.write(new CompoundNBT()));
-			}
-		}
-		if(isActive)
-		{
-			nbt.put("Client", client.write(new CompoundNBT()));
-			nbt.put("Server", server.write(new CompoundNBT()));
-		}
-		else
-		{
-			getClientIdentifier().saveToNBT(nbt, "Client");
-			getServerIdentifier().saveToNBT(nbt, "Server");
-		}
-		nbt.putInt("Artifact", artifactType);
-		return nbt;
-	}
-	
-	static SburbConnection read(CompoundNBT nbt, SkaianetHandler handler)
-	{
-		SburbConnection c = new SburbConnection(handler);
-		c.isMain = nbt.getBoolean("IsMain");
-		if(nbt.contains("Inventory", Constants.NBT.TAG_LIST))
-			c.inventory = nbt.getList("Inventory", Constants.NBT.TAG_COMPOUND);
-		if(c.isMain)
-		{
-			c.isActive = nbt.getBoolean("IsActive");
-			c.hasEntered = nbt.getBoolean("HasEntered");
-			
-			if(nbt.contains("CanSplit", Constants.NBT.TAG_ANY_NUMERIC))
-				c.canSplit = nbt.getBoolean("CanSplit");
-			ListNBT list = nbt.getList("GivenItems", Constants.NBT.TAG_STRING);
-			for(int i = 0; i < list.size(); i++)
-			{
-				String name = list.getString(i);
-				int ordinal = DeployList.getOrdinal(name);
-				if(ordinal == -1)
-					c.unregisteredItems.add(new StringNBT(name));
-				else c.givenItemList[ordinal] = true;
-			}
-		}
-		if(c.isActive)
-		{
-			c.client = new ComputerData(nbt.getCompound("Client"));
-			c.server = new ComputerData(nbt.getCompound("Server"));
-		}
-		else
-		{
-			c.clientIdentifier = IdentifierHandler.load(nbt, "Client");
-			c.serverIdentifier = IdentifierHandler.load(nbt, "Server");
-		}
-		if(nbt.contains("ClientLand", Constants.NBT.TAG_COMPOUND))
-		{
-			c.clientHomeLand = LandInfoContainer.read(nbt.getCompound("ClientLand"), handler, c.getClientIdentifier());	//TODO add robustness in the case that the dimension type no longer exists?
-		}
-		c.artifactType = nbt.getInt("Artifact");
-		
-		return c;
 	}
 }

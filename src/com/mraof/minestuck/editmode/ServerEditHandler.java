@@ -145,8 +145,8 @@ public class ServerEditHandler
 			EditData data = new EditData(decoy, player, c);
 			if(!c.hasEntered())
 			{
-				c.centerX = c.getClientData().getPos().getX();
-				c.centerZ = c.getClientData().getPos().getZ();
+				c.centerX = c.getClientComputer().getPos().getX();
+				c.centerZ = c.getClientComputer().getPos().getZ();
 			}
 			if(!setPlayerStats(player, c))
 			{
@@ -167,7 +167,7 @@ public class ServerEditHandler
 	{
 		
 		double posX, posY = 0, posZ;
-		ServerWorld world = player.getServer().getWorld(c.hasEntered() ? c.getClientDimension() : c.getClientData().getDimension());
+		ServerWorld world = player.getServer().getWorld(c.hasEntered() ? c.getClientDimension() : c.getClientComputer().getDimension());
 		
 		if(c.useCoordinates)
 		{

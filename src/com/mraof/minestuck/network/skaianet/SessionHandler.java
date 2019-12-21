@@ -4,8 +4,8 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
 import com.mraof.minestuck.util.Title;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
@@ -340,7 +340,7 @@ public class SessionHandler
 			if(skaianetHandler.getAssociatedPartner(connection.getClientIdentifier(), false) != null)
 			{
 				SburbConnection c = skaianetHandler.getMainConnection(connection.getClientIdentifier(), false);
-				if(c.isActive)
+				if(c.isActive())
 					skaianetHandler.closeConnection(c.getClientIdentifier(), c.getServerIdentifier(), true);
 				switch(MinestuckConfig.escapeFailureMode) {
 				case 0:
@@ -578,7 +578,7 @@ public class SessionHandler
 	/**
 	 * Creates data to be used for the data checker
 	 */
-	public CompoundNBT createDataTag()
+	public CompoundNBT createDataTag()	//TODO Should be done in the individual classes
 	{
 		CompoundNBT nbt = new CompoundNBT();
 		ListNBT sessionList = new ListNBT();
@@ -598,7 +598,7 @@ public class SessionHandler
 				if(!c.getServerIdentifier().equals(IdentifierHandler.nullIdentifier))
 					connectionTag.putString("server", c.getServerIdentifier().getUsername());
 				connectionTag.putBoolean("isMain", c.isMain());
-				connectionTag.putBoolean("isActive", c.isActive);
+				connectionTag.putBoolean("isActive", c.isActive());
 				if(c.isMain())
 				{
 					if(c.clientHomeLand != null)
