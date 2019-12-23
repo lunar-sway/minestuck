@@ -69,7 +69,7 @@ public class ConsortItemTrigger implements ICriterionTrigger<ConsortItemTrigger.
 	{
 		String table = json.has("table") ? JSONUtils.getString(json, "table") : null;
 		ItemPredicate item = ItemPredicate.deserialize(json.get("item"));
-		EnumConsort.MerchantType type = json.has("type") ? EnumConsort.MerchantType.getFromString(JSONUtils.getString(json, "type")) : null;
+		EnumConsort.MerchantType type = json.has("type") ? EnumConsort.MerchantType.getFromName(JSONUtils.getString(json, "type")) : null;
 		return new Instance(table, item, type);
 	}
 	

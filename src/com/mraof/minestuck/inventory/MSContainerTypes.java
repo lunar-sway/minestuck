@@ -45,6 +45,6 @@ public class MSContainerTypes
 		registry.register(new ContainerType<>((IContainerFactory<UraniumCookerContainer>) UraniumCookerContainer::new).setRegistryName("uranium_cooker"));
 		registry.register(new ContainerType<>(CaptchaDeckContainer::new).setRegistryName("captcha_deck"));
 		registry.register(new ContainerType<>(EditmodeContainer::new).setRegistryName("edit_mode"));
-		registry.register(new ContainerType<>(ConsortMerchantContainer::new).setRegistryName("consort_merchant"));
+		registry.register(new ContainerType<>((IContainerFactory<ConsortMerchantContainer>) ConsortMerchantContainer::load).setRegistryName("consort_merchant"));
 	}
 }

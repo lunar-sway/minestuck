@@ -1,7 +1,5 @@
 package com.mraof.minestuck.entity.consort;
 
-import java.util.Iterator;
-
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.entity.MinestuckEntity;
 import com.mraof.minestuck.entity.consort.MessageType.SingleMessage;
@@ -18,6 +16,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerProvider;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -31,6 +30,7 @@ import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
+import java.util.Iterator;
 
 public abstract class ConsortEntity extends MinestuckEntity implements IContainerProvider
 {	//I'd get rid of the seemingly pointless subclasses, but as of writing, entity renderers are registered to entity classes instead of entity types.
@@ -286,7 +286,12 @@ public abstract class ConsortEntity extends MinestuckEntity implements IContaine
 	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
 	{
 		if(this.stocks != null)
-			return new ConsortMerchantContainer(windowId, playerInventory, stocks);
+			return new ConsortMerchantContainer(windowId, playerInventory, stocks, getConsortType(), merchantType, stocks.getPrices());
 		else return null;
+	}
+	
+	protected void writeShopContainerBuffer(PacketBuffer buffer)
+	{
+		ConsortMerchantContainer.write(buffer, this, stocks.getPrices());
 	}
 }

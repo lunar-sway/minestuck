@@ -1,10 +1,9 @@
 package com.mraof.minestuck.inventory;
 
 import com.mraof.minestuck.entity.consort.ConsortEntity;
-import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
 import com.mraof.minestuck.util.Pair;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -15,6 +14,7 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TranslationTextComponent;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class ConsortMerchantInventory implements IInventory
@@ -22,16 +22,12 @@ public class ConsortMerchantInventory implements IInventory
 	public static final String CANT_AFFORD = "consort.cant_afford";
 	
 	private final NonNullList<ItemStack> inv = NonNullList.withSize(9, ItemStack.EMPTY);
-	private EnumConsort consortType;
-	private EnumConsort.MerchantType merchantType;
 	final int[] prices = new int[9];
 	private ConsortEntity consort;
 	
 	public ConsortMerchantInventory(ConsortEntity consort, ListNBT list)
 	{
 		this.consort = consort;
-		consortType = consort.getConsortType();
-		merchantType = consort.merchantType;
 		
 		for(int i = 0; i < list.size() && i < 9; i++)
 		{
@@ -50,8 +46,6 @@ public class ConsortMerchantInventory implements IInventory
 	public ConsortMerchantInventory(ConsortEntity consort, List<Pair<ItemStack, Integer>> stocks)
 	{
 		this.consort = consort;
-		consortType = consort.getConsortType();
-		merchantType = consort.merchantType;
 		
 		for (int i = 0; i < stocks.size(); i++)
 		{
@@ -103,16 +97,6 @@ public class ConsortMerchantInventory implements IInventory
 		return list;
 	}
 	
-	public EnumConsort getConsortType()
-	{
-		return consortType;
-	}
-	
-	public EnumConsort.MerchantType getMerchantType()
-	{
-		return merchantType;
-	}
-	
 	@Override
 	public int getSizeInventory()
 	{
@@ -149,9 +133,7 @@ public class ConsortMerchantInventory implements IInventory
 	
 	@Override
 	public void setInventorySlotContents(int index, ItemStack stack)
-	{
-		inv.set(index, stack);
-	}
+	{}
 	
 	@Override
 	public int getInventoryStackLimit()
@@ -222,5 +204,10 @@ public class ConsortMerchantInventory implements IInventory
 		inv.clear();
 		for(int i = 0; i < 9; i++)
 			prices[i] = 0;
+	}
+	
+	public int[] getPrices()
+	{
+		return Arrays.copyOf(prices, 9);
 	}
 }

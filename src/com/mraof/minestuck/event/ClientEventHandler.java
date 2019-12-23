@@ -69,7 +69,7 @@ public class ClientEventHandler
 			{
 				String unlocalized = stack.getTranslationKey();
 				
-				EnumConsort type = ((ConsortMerchantContainer)event.getPlayer().openContainer).inventory.getConsortType();
+				EnumConsort type = ((ConsortMerchantContainer)event.getPlayer().openContainer).getConsortType();
 				String arg1 = I18n.format(type.getConsortType().getTranslationKey());
 				
 				String name = "store."+unlocalized;

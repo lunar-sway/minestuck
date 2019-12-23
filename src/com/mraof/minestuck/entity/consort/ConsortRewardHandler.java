@@ -6,6 +6,7 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Pair;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootParameterSets;
@@ -244,7 +245,7 @@ public class ConsortRewardHandler
 	
 	public static List<Pair<ItemStack, Integer>> generateStock(ResourceLocation lootTable, ConsortEntity consort, Random rand)
 	{
-		LootContext.Builder contextBuilder = new LootContext.Builder((ServerWorld) consort.world).withParameter(LootParameters.THIS_ENTITY, consort);
+		LootContext.Builder contextBuilder = new LootContext.Builder((ServerWorld) consort.world).withParameter(LootParameters.THIS_ENTITY, consort).withParameter(LootParameters.POSITION, new BlockPos(consort));
 		List<ItemStack> itemStacks = consort.getServer().getLootTableManager().getLootTableFromLocation(lootTable).generate(contextBuilder.build(LootParameterSets.GIFT));
 		List<Pair<ItemStack, Integer>> itemPriceList = new ArrayList<>();
 		stackLoop:

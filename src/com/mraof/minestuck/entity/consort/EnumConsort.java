@@ -53,6 +53,14 @@ public enum EnumConsort	//TODO Could ideally be changed into a registry.
 		else return MerchantType.GENERAL;
 	}
 	
+	public static EnumConsort getFromName(String str)
+	{
+		for(EnumConsort type : EnumConsort.values())
+			if(type.getName().equals(str))
+				return type;
+		throw new IllegalArgumentException("Invalid consort type " + str);
+	}
+	
 	public enum MerchantType
 	{
 		NONE,
@@ -60,7 +68,13 @@ public enum EnumConsort	//TODO Could ideally be changed into a registry.
 		FOOD,
 		GENERAL,
 		;
-		public static MerchantType getFromString(String str)
+		
+		public String getName()
+		{
+			return name().toLowerCase();
+		}
+		
+		public static MerchantType getFromName(String str)
 		{
 			for(MerchantType type : MerchantType.values())
 				if(type.name().toLowerCase().equals(str))

@@ -308,7 +308,7 @@ public class SalamanderVillagePieces
 			this.setBlockState(worldIn, wallBlock, 3, 5, 7, structureBoundingBoxIn);
 			this.setBlockState(worldIn, wallBlock, 3, 7, 7, structureBoundingBoxIn);
 			this.setBlockState(worldIn, wallBlock, 3, 9, 7, structureBoundingBoxIn);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3,11,7,3,-13, 7, wallBlock, wallBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3,11,7,3,13, 7, wallBlock, wallBlock, false);
 			
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0,3,2,0,13, 3, wallBlock, wallBlock, false);
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0,3,5,0,13, 6, wallBlock, wallBlock, false);

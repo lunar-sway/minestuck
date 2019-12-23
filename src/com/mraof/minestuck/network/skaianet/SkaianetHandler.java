@@ -445,7 +445,7 @@ public class SkaianetHandler
 		
 		sessionHandler.onLoad();
 		
-		updateLandChain();
+		//updateLandChain();	TODO Had to be commented out due to getting the client dimension. What should be done instead? How about a cache?
 		
 		for(SburbConnection c : connections)
 		{
