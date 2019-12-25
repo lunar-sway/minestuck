@@ -6,7 +6,7 @@ import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import com.mraof.minestuck.world.lands.LandInfoContainer;
+import com.mraof.minestuck.world.lands.LandInfo;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.NBTDynamicOps;
@@ -39,7 +39,7 @@ public class SburbConnection
 	private boolean isMain;
 	boolean hasEntered;
 	boolean canSplit;
-	LandInfoContainer clientHomeLand;
+	LandInfo clientHomeLand;
 	int artifactType;
 	/**
 	 * If the client will have frog breeding as quest, the array will be extended and the new positions will hold the gear.
@@ -102,7 +102,7 @@ public class SburbConnection
 		}
 		if(nbt.contains("ClientLand", Constants.NBT.TAG_COMPOUND))
 		{
-			clientHomeLand = LandInfoContainer.read(nbt.getCompound("ClientLand"), handler, getClientIdentifier());	//TODO add robustness in the case that the dimension type no longer exists?
+			clientHomeLand = LandInfo.read(nbt.getCompound("ClientLand"), handler, getClientIdentifier());	//TODO add robustness in the case that the dimension type no longer exists?
 		}
 		artifactType = nbt.getInt("artifact");
 	}

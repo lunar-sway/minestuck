@@ -8,7 +8,7 @@ import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.world.MSDimensions;
-import com.mraof.minestuck.world.lands.LandInfoContainer;
+import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.SimpleNamedContainerProvider;
@@ -69,7 +69,7 @@ public abstract class MessageType
 			} else if(args[i].equals("landName"))
 			{
 				World world = consort.getServer().getWorld(consort.homeDimension);
-				LandInfoContainer landInfo = MSDimensions.getLandInfo(consort.getServer(), consort.homeDimension);
+				LandInfo landInfo = MSDimensions.getLandInfo(consort.getServer(), consort.homeDimension);
 				if(landInfo != null)
 				{
 					obj[i] = landInfo.landAsTextComponent();

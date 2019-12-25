@@ -15,7 +15,7 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.MSDimensionTypes;
-import com.mraof.minestuck.world.lands.LandInfoContainer;
+import com.mraof.minestuck.world.lands.LandInfo;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -62,7 +62,7 @@ public class SkaianetHandler
 	/**
 	 * Changes to this map must also be done to {@link MSDimensionTypes#LANDS#dimToLandAspects}
 	 */
-	private final Map<ResourceLocation, LandInfoContainer> typeToInfoContainer = new HashMap<>();
+	private final Map<ResourceLocation, LandInfo> typeToInfoContainer = new HashMap<>();
 	
 	/**
 	 * Chains of lands to be used by the skybox render
@@ -833,7 +833,7 @@ public class SkaianetHandler
 		movingComputers.clear();
 	}
 	
-	public LandInfoContainer landInfoForDimension(DimensionType type)
+	public LandInfo landInfoForDimension(DimensionType type)
 	{
 		return typeToInfoContainer.get(DimensionType.getKey(type));
 	}
@@ -848,6 +848,7 @@ public class SkaianetHandler
 	
 	public static SkaianetHandler get(MinecraftServer server)
 	{
+		Objects.requireNonNull(server);
 		if(INSTANCE == null)
 			INSTANCE = new SkaianetHandler();
 		INSTANCE.mcServer = server;

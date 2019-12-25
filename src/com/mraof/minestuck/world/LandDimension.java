@@ -7,11 +7,11 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
-import com.mraof.minestuck.world.gen.MSWorldGenTypes;
-
-import com.mraof.minestuck.world.lands.LandTypes;
-import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.gen.LandGenSettings;
+import com.mraof.minestuck.world.gen.MSWorldGenTypes;
+import com.mraof.minestuck.world.lands.LandInfo;
+import com.mraof.minestuck.world.lands.LandTypePair;
+import com.mraof.minestuck.world.lands.LandTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.ListNBT;
@@ -20,11 +20,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.GameType;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.dimension.Dimension;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ModDimension;
 
@@ -114,16 +116,34 @@ public class LandDimension extends Dimension
 	
 	@Nullable
 	@Override
-	public BlockPos findSpawn(ChunkPos p_206920_1_, boolean checkValid)
+	public BlockPos findSpawn(ChunkPos chunkPos, boolean checkValid)
 	{
-		return null;
+		return findSpawn(chunkPos.getXStart(), chunkPos.getZStart(), checkValid);
 	}
 	
 	@Nullable
 	@Override
-	public BlockPos findSpawn(int p_206921_1_, int p_206921_2_, boolean checkValid)
+	public BlockPos findSpawn(int posX, int posZ, boolean checkValid)
 	{
-		return null;
+		BlockPos pos = getSpawnPoint();
+		
+		boolean isAdventure = world.getWorldInfo().getGameType() == GameType.ADVENTURE;
+		int spawnFuzz = 12;	//TODO spawn explicitly within the entry area
+		int spawnFuzzHalf = spawnFuzz / 2;
+		
+		if (!isAdventure)
+		{
+			pos = pos.add(this.world.rand.nextInt(spawnFuzz) - spawnFuzzHalf,
+					0, this.world.rand.nextInt(spawnFuzz) - spawnFuzzHalf);
+			
+			int y = world.getChunk(pos).getTopBlockY(Heightmap.Type.MOTION_BLOCKING, pos.getX() & 15, pos.getZ() & 15);
+			if(y < 0)
+				return null;
+			
+			pos = pos.up(y - pos.getY());
+		}
+		
+		return pos;
 	}
 	
 	@Override
@@ -150,35 +170,19 @@ public class LandDimension extends Dimension
 	@Override
 	public BlockPos getSpawnPoint() 
 	{
-		BlockPos spawn = new BlockPos(0, 0,0 );
-		if(spawn != null)
-			return spawn;
+		if(world.isRemote)
+			return super.getSpawnPoint();
 		else
 		{
-			Debug.errorf("Couldn't get special spawnpoint for dimension %d. This should not happen.", this.getDimension());
-			return super.getSpawnPoint();
+			LandInfo info = MSDimensions.getLandInfo(world);
+			if(info != null)
+				return info.getSpawn();
+			else
+			{
+				return new BlockPos(0, 127, 0);
+			}
 		}
 	}
-	/*
-	@Override
-	public BlockPos getRandomizedSpawnPoint()
-	{
-		createChunkGenerator();
-		BlockPos coordinates = getSpawnPoint();
-		
-		boolean isAdventure = world.getWorldInfo().getGameType() == GameType.ADVENTURE;
-		int spawnFuzz = 12;	//TODO respect changed value of MinestuckConfig.artifactRange
-		int spawnFuzzHalf = spawnFuzz / 2;
-		
-		if (!isAdventure)
-		{
-			coordinates = coordinates.add(this.world.rand.nextInt(spawnFuzz) - spawnFuzzHalf,
-					0, this.world.rand.nextInt(spawnFuzz) - spawnFuzzHalf);
-			coordinates = this.world.getTopSolidOrLiquidBlock(coordinates);
-		}
-		
-		return coordinates;
-	}*/
 	
 	@Override
 	public DimensionType getRespawnDimension(ServerPlayerEntity player)

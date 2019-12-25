@@ -13,9 +13,9 @@ import com.mraof.minestuck.network.TitleSelectPacket;
 import com.mraof.minestuck.tracker.PlayerTracker;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import com.mraof.minestuck.world.lands.LandTypes;
+import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.LandTypePair;
-import com.mraof.minestuck.world.lands.LandInfoContainer;
+import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
@@ -668,14 +668,14 @@ public class SburbHandler
 		
 	}
 	
-	static LandInfoContainer enterMedium(MinecraftServer mcServer, SburbConnection c)
+	static LandInfo enterMedium(MinecraftServer mcServer, SburbConnection c)
 	{
 		PlayerIdentifier identifier = c.getClientIdentifier();
 		
 		generateTitle(mcServer.getWorld(DimensionType.OVERWORLD), c.getClientIdentifier());
 		LandTypePair aspects = genLandAspects(mcServer, c);		//This is where the Land dimension is actually registered, but it also needs the player's Title to be determined.
 		DimensionType type = LandTypes.createLandType(mcServer, identifier, aspects);
-		return new LandInfoContainer(identifier, aspects, type, new Random());	//TODO Handle random better
+		return new LandInfo(identifier, aspects, type, new Random());	//TODO Handle random better
 	}
 	
 	static void onGameEntered(MinecraftServer server, SburbConnection c)

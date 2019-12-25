@@ -29,6 +29,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
@@ -348,6 +349,8 @@ public abstract class CruxiteArtifactItem extends Item
 			placeGate(GateHandler.Type.GATE_2, new BlockPos(x + xDiff, GateHandler.gateHeight2, z + zDiff), worldserver1);
 			
 			ServerEventHandler.tickTasks.add(new PostEntryTask(worldserver1.getDimension().getType(), x + xDiff, y + yDiff, z + zDiff, artifactRange.get(), (byte) 0));
+			
+			MSDimensions.getLandInfo(worldserver1).setSpawn(MathHelper.floor(player.posY));
 			
 			Debug.info("Entry finished");
 		}

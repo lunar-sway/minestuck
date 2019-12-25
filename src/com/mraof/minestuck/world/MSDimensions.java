@@ -3,11 +3,12 @@ package com.mraof.minestuck.world;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.world.lands.LandInfoContainer;
+import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.event.world.RegisterDimensionsEvent;
@@ -34,7 +35,7 @@ public class MSDimensions
 	
 	public static LandTypePair getAspects(MinecraftServer server, DimensionType dimension)
 	{
-		LandInfoContainer info = getLandInfo(server, dimension);
+		LandInfo info = getLandInfo(server, dimension);
 		if(info != null)
 			return info.getLandAspects();
 		else if(isLandDimension(dimension))
@@ -44,7 +45,12 @@ public class MSDimensions
 		} else return null;
 	}
 	
-	public static LandInfoContainer getLandInfo(MinecraftServer server, DimensionType dimension)
+	public static LandInfo getLandInfo(World world)
+	{
+		return getLandInfo(world.getServer(), world.getDimension().getType());
+	}
+	
+	public static LandInfo getLandInfo(MinecraftServer server, DimensionType dimension)
 	{
 		return SkaianetHandler.get(server).landInfoForDimension(dimension);
 	}

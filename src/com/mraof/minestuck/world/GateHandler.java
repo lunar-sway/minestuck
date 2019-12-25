@@ -8,7 +8,7 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
-import com.mraof.minestuck.world.lands.LandInfoContainer;
+import com.mraof.minestuck.world.lands.LandInfo;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
@@ -61,7 +61,7 @@ public class GateHandler
 	{
 		if(type == Type.LAND_GATE)
 		{
-			LandInfoContainer info = MSDimensions.getLandInfo(server, dim);
+			LandInfo info = MSDimensions.getLandInfo(server, dim);
 			if(info == null)
 			{
 				Debug.errorf("Tried to set gate position for dimension %s but did not get any land info", dim);

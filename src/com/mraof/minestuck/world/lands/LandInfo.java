@@ -18,7 +18,7 @@ import java.util.Random;
  * Container for land dimension information between info being loaded,
  * and the dimensions actually being registered.
  */
-public class LandInfoContainer
+public class LandInfo
 {
 	public final IdentifierHandler.PlayerIdentifier identifier;
 	private final LandTypePair.LazyInstance landAspects;
@@ -27,12 +27,13 @@ public class LandInfoContainer
 	private final int terrainNameIndex, titleNameIndex;
 	@Nullable
 	private BlockPos gatePos = null;
+	private int spawnY = -1;
 	@Nullable
 	private DimensionType cachedDimension;
 	@Nullable
 	private LandTypePair cachedAspects;
 	
-	public LandInfoContainer(IdentifierHandler.PlayerIdentifier identifier, LandTypePair landTypes, DimensionType dimensionType, Random random)
+	public LandInfo(IdentifierHandler.PlayerIdentifier identifier, LandTypePair landTypes, DimensionType dimensionType, Random random)
 	{
 		this.identifier = Objects.requireNonNull(identifier);
 		cachedAspects = Objects.requireNonNull(landTypes);
@@ -44,7 +45,7 @@ public class LandInfoContainer
 		titleNameIndex = random.nextInt(landTypes.title.getNames().length);
 	}
 	
-	private LandInfoContainer(SkaianetHandler handler, IdentifierHandler.PlayerIdentifier identifier, LandTypePair.LazyInstance landAspects, ResourceLocation dimensionType, boolean reverseOrder, int terrainNameIndex, int titleNameIndex)
+	private LandInfo(SkaianetHandler handler, IdentifierHandler.PlayerIdentifier identifier, LandTypePair.LazyInstance landAspects, ResourceLocation dimensionType, boolean reverseOrder, int terrainNameIndex, int titleNameIndex)
 	{
 		this.identifier = identifier;
 		this.landAspects = landAspects;
@@ -124,6 +125,18 @@ public class LandInfoContainer
 		return dimensionName;
 	}
 	
+	public BlockPos getSpawn()
+	{
+		return spawnY == -1 ? new BlockPos(0, 127, 0) : new BlockPos(0, spawnY, 0);
+	}
+	
+	public void setSpawn(int y)
+	{
+		if(spawnY == -1)
+			spawnY = y;
+		else throw new IllegalStateException("Has already set spawn for dimension " + dimensionName);
+	}
+	
 	/**
 	 * Saves the info container to nbt, except for the identifier
 	 */
@@ -140,10 +153,12 @@ public class LandInfoContainer
 			nbt.putInt("gate_y", gatePos.getY());
 			nbt.putInt("gate_z", gatePos.getZ());
 		}
+		nbt.putInt("spawn_y", spawnY);
+		
 		return nbt;
 	}
 	
-	public static LandInfoContainer read(CompoundNBT nbt, SkaianetHandler handler, IdentifierHandler.PlayerIdentifier identifier)
+	public static LandInfo read(CompoundNBT nbt, SkaianetHandler handler, IdentifierHandler.PlayerIdentifier identifier)
 	{
 		LandTypePair.LazyInstance aspects = LandTypePair.LazyInstance.read(nbt);
 		ResourceLocation dimName = new ResourceLocation(nbt.getString("dim_type"));
@@ -151,12 +166,13 @@ public class LandInfoContainer
 		int terrainIndex = nbt.getInt("terrain_name_index");
 		int titleIndex = nbt.getInt("title_name_index");
 		
-		LandInfoContainer info = new LandInfoContainer(handler, identifier, aspects, dimName, reverse, terrainIndex, titleIndex);
+		LandInfo info = new LandInfo(handler, identifier, aspects, dimName, reverse, terrainIndex, titleIndex);
 		
 		if(nbt.contains("gate_x", Constants.NBT.TAG_ANY_NUMERIC))
 		{
 			info.gatePos = new BlockPos(nbt.getInt("gate_x"), nbt.getInt("gate_y"), nbt.getInt("gate_z"));
 		}
+		info.spawnY = nbt.getInt("spawn_y");
 		
 		return info;
 	}

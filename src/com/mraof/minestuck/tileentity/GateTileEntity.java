@@ -31,9 +31,8 @@ public class GateTileEntity extends TileEntity
 	{
 		if(block == MSBlocks.RETURN_NODE)
 		{
-			//TODO Fix land spawn
-			BlockPos pos = world.getSpawnPoint();
-			PositionTeleporter.moveEntity(player, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+			BlockPos pos = world.getDimension().findSpawn(0, 0, false);
+			PositionTeleporter.moveEntity(player, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
 			player.timeUntilPortal = player.getPortalCooldown();
 			player.setMotion(Vec3d.ZERO);
 			player.fallDistance = 0;

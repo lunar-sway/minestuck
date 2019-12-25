@@ -3,7 +3,7 @@ package com.mraof.minestuck.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mraof.minestuck.world.MSDimensions;
-import com.mraof.minestuck.world.lands.LandInfoContainer;
+import com.mraof.minestuck.world.lands.LandInfo;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -26,7 +26,7 @@ public class CommandCheckLand
 		
 		if(MSDimensions.isLandDimension(player.dimension))
 		{
-			LandInfoContainer info = MSDimensions.getLandInfo(player.server, player.dimension);
+			LandInfo info = MSDimensions.getLandInfo(player.world);
 			ITextComponent toSend = new TranslationTextComponent(CHECK, info.landAsTextComponent());
 			source.sendFeedback(toSend, false);
 		}
