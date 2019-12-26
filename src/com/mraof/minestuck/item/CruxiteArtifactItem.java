@@ -33,6 +33,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.Chunk.CreateEntityType;
@@ -411,13 +412,17 @@ public abstract class CruxiteArtifactItem extends Item
 		return true;
 	}
 	
-	private static void copyBlockDirect(IChunk cSrc, IChunk cDst, int xSrc, int ySrc, int zSrc, int xDst, int yDst, int zDst)
+	private static void copyBlockDirect(IWorld world, IChunk cSrc, IChunk cDst, int xSrc, int ySrc, int zSrc, int xDst, int yDst, int zDst)
 	{
+		BlockPos dest = new BlockPos(xDst, yDst, zDst);
 		ChunkSection blockStorageSrc = getBlockStorage(cSrc, ySrc >> 4);
 		ChunkSection blockStorageDst = getBlockStorage(cDst, yDst >> 4);
 		xSrc &= 15; ySrc &= 15; zSrc &= 15; xDst &= 15; yDst &= 15; zDst &= 15;
 		
+		boolean isEmpty = blockStorageDst.isEmpty();
 		blockStorageDst.setBlockState(xDst, yDst, zDst, blockStorageSrc.getBlockState(xSrc, ySrc, zSrc));
+		if(isEmpty != blockStorageDst.isEmpty())
+			world.getChunkProvider().getLightManager().func_215567_a(dest, blockStorageDst.isEmpty());	//I assume this adds or removes a light storage section here depending on if it is needed (because a section with just air doesn't have to be regarded)
 	}
 	
 	private static ChunkSection getBlockStorage(IChunk c, int y)
@@ -498,8 +503,7 @@ public abstract class CruxiteArtifactItem extends Item
 				world.setBlockState(dest, block, 0);
 			} else
 			{
-				CruxiteArtifactItem.copyBlockDirect(chunkFrom, chunkTo, source.getX(), source.getY(), source.getZ(), dest.getX(), dest.getY(), dest.getZ());
-				world.getChunkProvider().getLightManager().checkBlock(dest);
+				CruxiteArtifactItem.copyBlockDirect(world, chunkFrom, chunkTo, source.getX(), source.getY(), source.getZ(), dest.getX(), dest.getY(), dest.getZ());
 			}
 			
 			TileEntity tileEntity = chunkFrom.getTileEntity(source, CreateEntityType.CHECK);

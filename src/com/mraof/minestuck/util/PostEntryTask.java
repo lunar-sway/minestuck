@@ -1,10 +1,13 @@
 package com.mraof.minestuck.util;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
 
 import static com.mraof.minestuck.MinestuckConfig.artifactRange;
@@ -114,7 +117,14 @@ public class PostEntryTask
 		{
 			if(blockUpdate)
 				world.notifyNeighborsOfStateChange(pos, world.getBlockState(pos).getBlock());
-			//world.lightcheckLight(pos);
+			world.getChunkProvider().getLightManager().checkBlock(pos);
+			IChunk chunk = world.getChunk(pos);
+			BlockState state = chunk.getBlockState(pos);
+			int x = pos.getX() & 15, y = pos.getY(), z = pos.getZ() & 15;
+			chunk.getHeightmap(Heightmap.Type.MOTION_BLOCKING).update(x, y, z, state);
+			chunk.getHeightmap(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES).update(x, y, z, state);
+			chunk.getHeightmap(Heightmap.Type.OCEAN_FLOOR).update(x, y, z, state);
+			chunk.getHeightmap(Heightmap.Type.WORLD_SURFACE).update(x, y, z, state);
 			index++;
 		}
 		return i + 1;
