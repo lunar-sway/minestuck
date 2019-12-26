@@ -315,14 +315,14 @@ public class TurtleVillagePieces
 	{
 		TurtleTemple1(ConsortVillageCenter.VillageCenter start, Random rand, MutableBoundingBox boundingBox, Direction facing)
 		{
-			super(MSStructurePieces.TURTLE_TEMPLE_1, 0, 2);
+			super(MSStructurePieces.TURTLE_TEMPLE_1, 0, 3);
 			setCoordBaseMode(facing);
 			this.boundingBox = boundingBox;
 		}
 		
 		public TurtleTemple1(TemplateManager templates, CompoundNBT nbt)
 		{
-			super(MSStructurePieces.TURTLE_TEMPLE_1, nbt, 2);
+			super(MSStructurePieces.TURTLE_TEMPLE_1, nbt, 3);
 		}
 		
 		public static TurtleTemple1 createPiece(ConsortVillageCenter.VillageCenter start, List<StructurePiece> componentList, Random rand, int x, int y, int z, Direction facing)
