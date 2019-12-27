@@ -110,6 +110,8 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 				biomeHolder.localBiomeFrom(biomes[z*16 + x]).buildSurface(sharedRandom, chunkIn, x + xOffset, z + zOffset, y, 0, getSettings().getDefaultBlock(), getSettings().getDefaultFluid(), getSeaLevel(),  world.getSeed());
 			}
 		}
+		
+		this.makeBedrock(chunkIn, sharedRandom);
 	}
 	
 	@Override
