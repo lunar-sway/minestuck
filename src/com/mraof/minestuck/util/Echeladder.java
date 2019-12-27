@@ -15,7 +15,6 @@ import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 
@@ -42,7 +41,7 @@ public class Echeladder
 		PlayerSavedData.getData(player).getEcheladder().increaseProgress(progress);
 	}
 	
-	private final MinecraftServer mcServer;
+	private final PlayerSavedData savedData;
 	private final PlayerIdentifier identifier;
 	private int rung;
 	private int progress;
@@ -50,10 +49,10 @@ public class Echeladder
 	private boolean[] underlingBonuses = new boolean[UNDERLING_BONUSES.length];
 	private boolean[] alchemyBonuses = new boolean[ALCHEMY_BONUSES.length];
 	
-	public Echeladder(PlayerIdentifier identifier, MinecraftServer server)
+	public Echeladder(PlayerSavedData savedData, PlayerIdentifier identifier)
 	{
+		this.savedData = savedData;
 		this.identifier = identifier;
-		mcServer = server;
 	}
 	
 	private int getRungProgressReq()
@@ -63,7 +62,7 @@ public class Echeladder
 	
 	public void increaseProgress(int exp)
 	{
-		SburbConnection c = SkaianetHandler.get(mcServer).getMainConnection(identifier, true);
+		SburbConnection c = SkaianetHandler.get(savedData.mcServer).getMainConnection(identifier, true);
 		int topRung = c != null && c.hasEntered() ? RUNG_COUNT - 1 : MinestuckConfig.preEntryRungLimit.get();
 		int expReq = getRungProgressReq();
 		if(rung >= topRung || exp < expReq*MIN_PROGRESS_MODIFIER)
@@ -78,7 +77,7 @@ public class Echeladder
 			while(progress + exp >= expReq)
 			{
 				rung++;
-				PlayerSavedData.get(mcServer).getData(identifier).boondollars += BOONDOLLARS[Math.min(rung, BOONDOLLARS.length - 1)];
+				PlayerSavedData.get(savedData.mcServer).getData(identifier).boondollars += BOONDOLLARS[Math.min(rung, BOONDOLLARS.length - 1)];
 				exp -= (expReq - progress);
 				progress = 0;
 				expReq = getRungProgressReq();
@@ -86,17 +85,19 @@ public class Echeladder
 					break increasment;
 				if(rung > prevRung + 1)
 					exp = (int) (exp/1.5);
+				savedData.markDirty();
 				Debug.debugf("Increased rung to %s, remaining exp is %s", rung, exp);
 			}
 			if(exp >= expReq/50)
 			{
 				progress += exp;
+				savedData.markDirty();
 				Debug.debugf("Added remainder exp to progress, which is now at %s", progress);
 			} else Debug.debugf("Remaining exp %s is below the threshold of 1/50 out of the exp requirement, which is %s, and will therefore be ignored", exp, expReq/50);
 		}
 		
 		Debug.debugf("Finished echeladder climbing for %s at %s with progress %s", identifier.getUsername(), rung, progress);
-		ServerPlayerEntity player = identifier.getPlayer(mcServer);
+		ServerPlayerEntity player = identifier.getPlayer(savedData.mcServer);
 		if(player != null)
 		{
 			PlayerTracker.updateEcheladder(player, false);
@@ -114,10 +115,12 @@ public class Echeladder
 		if(type >= UNDERLING_BONUS_OFFSET && type < UNDERLING_BONUS_OFFSET + underlingBonuses.length && !underlingBonuses[type - UNDERLING_BONUS_OFFSET])
 		{
 			underlingBonuses[type - UNDERLING_BONUS_OFFSET] = true;
+			savedData.markDirty();
 			increaseProgress(UNDERLING_BONUSES[type - UNDERLING_BONUS_OFFSET]);
 		} else if(type >= ALCHEMY_BONUS_OFFSET && type < ALCHEMY_BONUS_OFFSET + alchemyBonuses.length && !alchemyBonuses[type - ALCHEMY_BONUS_OFFSET])
 		{
 			alchemyBonuses[type - ALCHEMY_BONUS_OFFSET] = true;
+			savedData.markDirty();
 			increaseProgress(ALCHEMY_BONUSES[type - ALCHEMY_BONUS_OFFSET]);
 		}
 	}
@@ -212,7 +215,11 @@ public class Echeladder
 	
 	public void setByCommand(int rung, double progress)
 	{
-		this.rung = MathHelper.clamp(rung, 0, RUNG_COUNT - 1);	//Can never be too careful
+		int prevRung = this.rung;
+		int prevProgress = this.progress;
+		
+		this.rung = MathHelper.clamp(rung, 0, RUNG_COUNT - 1);
+		
 		if(rung != RUNG_COUNT - 1)
 		{
 			this.progress = (int) (getRungProgressReq()*progress);
@@ -220,12 +227,16 @@ public class Echeladder
 				this.progress--;
 		} else this.progress = 0;
 		
-		ServerPlayerEntity player = identifier.getPlayer(mcServer);
-		if(player != null)
+		if(prevProgress != this.progress || prevRung != this.rung)
 		{
-			PlayerTracker.updateEcheladder(player, true);
-			updateEcheladderBonuses(player);
+			savedData.markDirty();
+			ServerPlayerEntity player = identifier.getPlayer(savedData.mcServer);
+			if(player != null && (MinestuckConfig.echeladderProgress.get() || prevRung != this.rung))
+			{
+				PlayerTracker.updateEcheladder(player, true);
+				if(prevRung != this.rung)
+					updateEcheladderBonuses(player);
+			}
 		}
 	}
-	
 }

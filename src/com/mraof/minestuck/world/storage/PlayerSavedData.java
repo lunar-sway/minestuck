@@ -37,8 +37,8 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 	static GristSet playerGrist;
 	static GristSet targetGrist;
 	
-	Map<PlayerIdentifier, PlayerData> dataMap = new HashMap<>();
-	private final MinecraftServer mcServer;
+	private final Map<PlayerIdentifier, PlayerData> dataMap = new HashMap<>();
+	public final MinecraftServer mcServer;
 	
 	private PlayerSavedData(MinecraftServer server)
 	{
@@ -217,7 +217,7 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 		{
 			this.savedData = savedData;
 			this.player = player;
-			echeladder = new Echeladder(player, mcServer);
+			echeladder = new Echeladder(savedData, player);
 		}
 		
 		private PlayerData(PlayerSavedData savedData, CompoundNBT nbt, MinecraftServer mcServer)
@@ -241,7 +241,7 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 			boondollars = nbt.getLong("boondollars");
 			effectToggle = nbt.getBoolean("effectToggle");
 			
-			echeladder = new Echeladder(player, mcServer);
+			echeladder = new Echeladder(savedData, player);
 			echeladder.loadEcheladder(nbt);
 		}
 
