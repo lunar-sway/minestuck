@@ -157,7 +157,7 @@ public class ServerEventHandler
 	@SubscribeEvent(priority=EventPriority.LOW, receiveCanceled=false)
 	public void onServerChat(ServerChatEvent event)
 	{
-		Modus modus = PlayerSavedData.getData(event.getPlayer()).modus;
+		Modus modus = PlayerSavedData.getData(event.getPlayer()).getModus();
 		if(modus instanceof HashMapModus)
 			((HashMapModus) modus).onChatMessage(event.getPlayer(), event.getMessage());
 	}

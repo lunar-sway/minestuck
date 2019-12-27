@@ -14,7 +14,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CCloseWindowPacket;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckContainer>
@@ -78,7 +77,7 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckCon
 			if(!(stack.getItem() instanceof CaptchaCardItem))
 			{
 				ModusType<?> type = ModusTypes.getTypeFromItem(stack.getItem());
-				Modus newModus = type.create(LogicalSide.CLIENT);
+				Modus newModus = type.createClientSide();
 				if(newModus != null && CaptchaDeckHandler.clientSideModus != null && newModus.getClass() != CaptchaDeckHandler.clientSideModus.getClass() && !newModus.canSwitchFrom(CaptchaDeckHandler.clientSideModus))
 				{
 					minecraft.currentScreen = new ConfirmScreen(this::onConfirm, new TranslationTextComponent("gui.emptySylladex1"), new TranslationTextComponent("gui.emptySylladex2"))

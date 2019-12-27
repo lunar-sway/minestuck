@@ -5,6 +5,7 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -25,9 +26,9 @@ public class HashMapModus extends Modus
 	protected boolean changed;
 	protected NonNullList<ItemStack> items;
 	
-	public HashMapModus(ModusType<? extends HashMapModus> type, LogicalSide side)
+	public HashMapModus(ModusType<? extends HashMapModus> type, PlayerSavedData savedData, LogicalSide side)
 	{
-		super(type, side);
+		super(type, savedData, side);
 	}
 	
 	@Override
@@ -102,11 +103,13 @@ public class HashMapModus extends Modus
 					&& otherItem.getCount() + item.getCount() <= otherItem.getMaxStackSize())
 			{
 				otherItem.grow(item.getCount());
+				markDirty();
 				return true;
 			} else CaptchaDeckHandler.launchItem(player, list.get(index));
 		}
 		
 		list.set(index, item);
+		markDirty();
 		
 		if(ejectByChat && MinestuckConfig.hashmapChatModusSetting != 2 || MinestuckConfig.hashmapChatModusSetting == 1)
 			player.sendMessage(new TranslationTextComponent(MESSAGE, item.getTextComponent(), getSize(), index));
@@ -144,6 +147,7 @@ public class HashMapModus extends Modus
 			return false;
 		
 		list.add(ItemStack.EMPTY);
+		markDirty();
 		return true;
 	}
 	
@@ -165,6 +169,7 @@ public class HashMapModus extends Modus
 				{
 					CaptchaDeckHandler.launchAnyItem(player, list.get(i));
 					list.set(i, ItemStack.EMPTY);
+					markDirty();
 				}
 			return ItemStack.EMPTY;
 		}
@@ -176,12 +181,14 @@ public class HashMapModus extends Modus
 		if(asCard)
 		{
 			list.remove(id);
+			markDirty();
 			if(item.isEmpty())
 				return new ItemStack(MSItems.CAPTCHA_CARD);
 			else return AlchemyRecipes.createCard(item, false);
 		} else
 		{
 			list.set(id, ItemStack.EMPTY);
+			markDirty();
 			return item;
 		}
 	}
@@ -201,7 +208,11 @@ public class HashMapModus extends Modus
 	@Override
 	public void setValue(ServerPlayerEntity player, byte type, int value)
 	{
-		ejectByChat = value > 0;
+		if(ejectByChat != value > 0)
+		{
+			ejectByChat = value > 0;
+			markDirty();
+		}
 	}
 	
 	public void onChatMessage(ServerPlayerEntity player, String str)

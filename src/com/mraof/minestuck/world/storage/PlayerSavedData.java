@@ -45,11 +45,6 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 		mcServer = server;
 	}
 	
-	public static PlayerSavedData get()
-	{
-		return get();
-	}
-	
 	public static PlayerSavedData get(World world)
 	{
 		MinecraftServer server = world.getServer();

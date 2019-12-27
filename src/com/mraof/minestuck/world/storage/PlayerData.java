@@ -12,18 +12,20 @@ import net.minecraftforge.common.util.Constants;
 
 import java.util.Objects;
 
-public class PlayerData
+public final class PlayerData
 {
 	final IdentifierHandler.PlayerIdentifier player;
 	
 	private final PlayerSavedData savedData;
+	
 	private final Echeladder echeladder;
+	
+	private boolean givenModus;
+	private Modus modus;
 	
 	private Title title;
 	
 	public GristSet gristCache;
-	public Modus modus;
-	public boolean givenModus;
 	public int color = ColorCollector.DEFAULT_COLOR;
 	public long boondollars;
 	public boolean effectToggle;
@@ -47,7 +49,7 @@ public class PlayerData
 			this.title = new Title(EnumClass.getClassFromInt(nbt.getByte("titleClass")), EnumAspect.getAspectFromInt(nbt.getByte("titleAspect")));	//TODO Should be read in the title class
 		if (nbt.contains("modus"))
 		{
-			this.modus = CaptchaDeckHandler.readFromNBT(nbt.getCompound("modus"), false);
+			this.modus = CaptchaDeckHandler.readFromNBT(nbt.getCompound("modus"), savedData);
 			givenModus = true;
 		}
 		else givenModus = nbt.getBoolean("givenModus");
@@ -92,6 +94,33 @@ public class PlayerData
 	public Echeladder getEcheladder()
 	{
 		return echeladder;
+	}
+	
+	public Modus getModus()
+	{
+		return modus;
+	}
+	
+	public void setModus(Modus modus)
+	{
+		if(this.modus != modus)
+		{
+			this.modus = modus;
+			if(modus != null)
+				setGivenModus();
+			markDirty();
+		}
+	}
+	
+	private void setGivenModus()
+	{
+		givenModus = true;
+		markDirty();
+	}
+	
+	public boolean hasGivenModus()
+	{
+		return givenModus;
 	}
 	
 	public Title getTitle()

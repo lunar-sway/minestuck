@@ -3,6 +3,7 @@ package com.mraof.minestuck.inventory.captchalogue;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -21,9 +22,9 @@ public class SetModus extends Modus
 	protected boolean changed;
 	protected NonNullList<ItemStack> items;
 	
-	public SetModus(ModusType<? extends SetModus> type, LogicalSide side)
+	public SetModus(ModusType<? extends SetModus> type, PlayerSavedData savedData, LogicalSide side)
 	{
-		super(type, side);
+		super(type, savedData, side);
 	}
 	
 	@Override
@@ -98,6 +99,7 @@ public class SetModus extends Modus
 			CaptchaDeckHandler.launchItem(player, stack);
 		}
 		list.add(item);
+		markDirty();
 		
 		return true;
 	}
@@ -136,6 +138,7 @@ public class SetModus extends Modus
 			return false;
 		
 		size++;
+		markDirty();
 		
 		return true;
 	}
@@ -148,6 +151,7 @@ public class SetModus extends Modus
 			if(list.size() < size)
 			{
 				size--;
+				markDirty();
 				return new ItemStack(MSItems.CAPTCHA_CARD);
 			} else return ItemStack.EMPTY;
 		}
@@ -160,6 +164,7 @@ public class SetModus extends Modus
 			for(ItemStack item : list)
 				CaptchaDeckHandler.launchAnyItem(player, item);
 			list.clear();
+			markDirty();
 			return ItemStack.EMPTY;
 		}
 		
@@ -167,12 +172,15 @@ public class SetModus extends Modus
 			return ItemStack.EMPTY;
 		
 		ItemStack item = list.remove(id);
+		markDirty();
 		
 		if(asCard)
 		{
 			size--;
+			markDirty();
 			item = AlchemyRecipes.createCard(item, false);
 		}
+		
 		return item;
 	}
 	

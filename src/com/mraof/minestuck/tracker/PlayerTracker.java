@@ -67,10 +67,10 @@ public class PlayerTracker
 		
 		data.getData(identifier).getEcheladder().updateEcheladderBonuses(player);
 		
-		if(CaptchaDeckHandler.getModus(player) == null && MinestuckConfig.defaultModusTypes.length > 0 && !PlayerSavedData.getData(player).givenModus)
+		if(CaptchaDeckHandler.getModus(player) == null && MinestuckConfig.defaultModusTypes.length > 0 && !PlayerSavedData.getData(player).hasGivenModus())
 		{
 			int index = player.world.rand.nextInt(MinestuckConfig.defaultModusTypes.length);
-			Modus modus = CaptchaDeckHandler.createModus(new ResourceLocation(MinestuckConfig.defaultModusTypes[index]), LogicalSide.SERVER);
+			Modus modus = CaptchaDeckHandler.createServerModus(new ResourceLocation(MinestuckConfig.defaultModusTypes[index]), PlayerSavedData.get(player.server));
 			if(modus != null)
 			{
 				modus.initModus(player, null, MinestuckConfig.initialModusSize.get());

@@ -20,7 +20,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.LogicalSide;
 
 import java.util.Random;
 
@@ -33,10 +32,16 @@ public class CaptchaDeckHandler
 	
 	public static Modus clientSideModus;
 	
-	public static Modus createModus(ResourceLocation name, LogicalSide side)
+	public static Modus createClientModus(ResourceLocation name)
 	{
 		ModusType<?> type = ModusTypes.REGISTRY.getValue(name);
-		return type != null ? type.create(side) : null;
+		return type != null ? type.createClientSide() : null;
+	}
+	
+	public static Modus createServerModus(ResourceLocation name, PlayerSavedData savedData)
+	{
+		ModusType<?> type = ModusTypes.REGISTRY.getValue(name);
+		return type != null ? type.createServerSide(savedData) : null;
 	}
 	
 	public static void launchItem(ServerPlayerEntity player, ItemStack item)
@@ -76,9 +81,8 @@ public class CaptchaDeckHandler
 			if(modus == null)
 			{
 				PlayerData data = PlayerSavedData.getData(player);
-				modus = type.create(LogicalSide.SERVER);	//TODO Let the modus be created with the stack for settings
-				modus.initModus(player, null, data.givenModus ? 0 : MinestuckConfig.initialModusSize.get());
-				data.givenModus = true;
+				modus = type.createServerSide(PlayerSavedData.get(player.server));	//TODO Let the modus be created with the stack for settings
+				modus.initModus(player, null, data.hasGivenModus() ? 0 : MinestuckConfig.initialModusSize.get());
 				setModus(player, modus);
 				container.inventory.setInventorySlotContents(0, ItemStack.EMPTY);
 			}
@@ -88,7 +92,7 @@ public class CaptchaDeckHandler
 				ModusType<?> oldType = oldModus.getType();
 				if(type.equals(oldType))
 					return;
-				modus = type.create(LogicalSide.SERVER);	//TODO See the above
+				modus = type.createServerSide(PlayerSavedData.get(player.server));	//TODO See the above
 				if(modus.canSwitchFrom(oldModus))
 					modus.initModus(player, oldModus.getItems(), oldModus.getSize());
 				else
@@ -391,8 +395,9 @@ public class CaptchaDeckHandler
 		} else return null;
 	}
 	
-	public static Modus readFromNBT(CompoundNBT nbt, boolean clientSide)
+	public static Modus readFromNBT(CompoundNBT nbt, PlayerSavedData savedData)
 	{
+		boolean clientSide = savedData == null;
 		if(nbt == null)
 			return null;
 		Modus modus;
@@ -402,7 +407,7 @@ public class CaptchaDeckHandler
 			modus = clientSideModus;
 		else
 		{
-			modus = createModus(name, clientSide ? LogicalSide.CLIENT : LogicalSide.SERVER);
+			modus = clientSide ? createClientModus(name) : createServerModus(name, savedData);
 			if(modus == null)
 			{
 				Debug.warnf("Failed to load modus from nbt with the name \"%s\"", name.toString());
@@ -415,15 +420,12 @@ public class CaptchaDeckHandler
 	
 	public static Modus getModus(ServerPlayerEntity player)
 	{
-		return PlayerSavedData.getData(player).modus;
+		return PlayerSavedData.getData(player).getModus();
 	}
 	
 	public static void setModus(ServerPlayerEntity player, Modus modus)
 	{
-		PlayerSavedData.getData(player).modus = modus;
-		if(modus != null)
-			PlayerSavedData.getData(player).givenModus = true;
-		PlayerSavedData.get(player.world).markDirty();
+		PlayerSavedData.getData(player).setModus(modus);
 	}
 	
 	private static boolean canMergeItemStacks(ItemStack stack1, ItemStack stack2)
