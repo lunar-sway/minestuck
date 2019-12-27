@@ -65,7 +65,7 @@ public class PlayerTracker
 			firstTime = true;
 		}
 		
-		data.getData(identifier).echeladder.updateEcheladderBonuses(player);
+		data.getData(identifier).getEcheladder().updateEcheladderBonuses(player);
 		
 		if(CaptchaDeckHandler.getModus(player) == null && MinestuckConfig.defaultModusTypes.length > 0 && !PlayerSavedData.getData(player).givenModus)
 		{
@@ -132,7 +132,7 @@ public class PlayerTracker
 	@SubscribeEvent
 	public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) 
 	{
-		PlayerSavedData.getData((ServerPlayerEntity) event.getPlayer()).echeladder.updateEcheladderBonuses(event.getPlayer());
+		PlayerSavedData.getData((ServerPlayerEntity) event.getPlayer()).getEcheladder().updateEcheladderBonuses(event.getPlayer());
 	}
 	
 	public static Set<String> dataCheckerPermission = new HashSet<>();
@@ -190,7 +190,7 @@ public class PlayerTracker
 	
 	public static void updateEcheladder(ServerPlayerEntity player, boolean jump)
 	{
-		Echeladder echeladder = PlayerSavedData.getData(player).echeladder;
+		Echeladder echeladder = PlayerSavedData.getData(player).getEcheladder();
 		PlayerDataPacket packet = PlayerDataPacket.echeladder(echeladder.getRung(), MinestuckConfig.echeladderProgress.get() ? echeladder.getProgress() : 0F, jump);
 		MSPacketHandler.sendToPlayer(packet, player);
 	}

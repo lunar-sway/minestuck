@@ -39,7 +39,7 @@ public class Echeladder
 	
 	public static void increaseProgress(ServerPlayerEntity player, int progress)
 	{
-		PlayerSavedData.getData(player).echeladder.increaseProgress(progress);
+		PlayerSavedData.getData(player).getEcheladder().increaseProgress(progress);
 	}
 	
 	private final MinecraftServer mcServer;

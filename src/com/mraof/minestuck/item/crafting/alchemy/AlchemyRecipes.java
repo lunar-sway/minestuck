@@ -1048,7 +1048,7 @@ public class AlchemyRecipes
 	{
 		if(!(stack.getItem() instanceof CruxiteArtifactItem))
 		{
-			Echeladder e = PlayerSavedData.getData(player).echeladder;
+			Echeladder e = PlayerSavedData.getData(player).getEcheladder();
 			e.checkBonus(Echeladder.ALCHEMY_BONUS_OFFSET);
 		}
 		
@@ -1064,7 +1064,7 @@ public class AlchemyRecipes
 					value += f*v/2;
 			}
 			
-			Echeladder e = PlayerSavedData.getData(player).echeladder;
+			Echeladder e = PlayerSavedData.getData(player).getEcheladder();
 			if(value >= 50)
 				e.checkBonus((byte) (Echeladder.ALCHEMY_BONUS_OFFSET + 1));
 			if(value >= 500)

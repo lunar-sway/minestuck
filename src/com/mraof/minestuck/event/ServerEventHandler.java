@@ -113,7 +113,7 @@ public class ServerEventHandler
 				ServerPlayerEntity player = (ServerPlayerEntity) event.getSource().getTrueSource();
 				if (event.getEntityLiving() instanceof UnderlingEntity)
 				{    //Increase damage to underling
-					double modifier = PlayerSavedData.getData(player).echeladder.getUnderlingDamageModifier();
+					double modifier = PlayerSavedData.getData(player).getEcheladder().getUnderlingDamageModifier();
 					event.setAmount((float) (event.getAmount() * modifier));
 				}
 				boolean critical = cachedCooledAttackStrength > 0.9 && player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder() && !player.isInWater() && !player.isPotionActive(Effects.BLINDNESS) && !player.isPassenger() && !player.isBeingRidden();
@@ -130,7 +130,7 @@ public class ServerEventHandler
 			else if (event.getEntityLiving() instanceof ServerPlayerEntity && event.getSource().getTrueSource() instanceof UnderlingEntity)
 			{    //Decrease damage to player
 				ServerPlayerEntity player = (ServerPlayerEntity) event.getEntityLiving();
-					double modifier = PlayerSavedData.getData(player).echeladder.getUnderlingProtectionModifier();
+					double modifier = PlayerSavedData.getData(player).getEcheladder().getUnderlingProtectionModifier();
 					event.setAmount((float) (event.getAmount() * modifier));
 			}
 		}
@@ -150,7 +150,7 @@ public class ServerEventHandler
 	{
 		SburbHandler.stopEntry((ServerPlayerEntity) event.getPlayer());
 		
-		PlayerSavedData.getData((ServerPlayerEntity) event.getPlayer()).echeladder.resendAttributes(event.getPlayer());
+		PlayerSavedData.getData((ServerPlayerEntity) event.getPlayer()).getEcheladder().resendAttributes(event.getPlayer());
 	}
 	
 	@SubscribeEvent(priority=EventPriority.LOW, receiveCanceled=false)
@@ -189,7 +189,7 @@ public class ServerEventHandler
 			SburbConnection c = SkaianetHandler.get(event.player.getServer()).getMainConnection(identifier, true);
 			if(c == null || !c.hasEntered() || !MinestuckConfig.aspectEffects.get() || !PlayerSavedData.get(event.player.getServer()).getEffectToggle(identifier))
 				return;
-			int rung = PlayerSavedData.getData((ServerPlayerEntity) event.player).echeladder.getRung();
+			int rung = PlayerSavedData.getData((ServerPlayerEntity) event.player).getEcheladder().getRung();
 			EnumAspect aspect = PlayerSavedData.get(event.player.getServer()).getTitle(identifier).getHeroAspect();
 			int potionLevel = (int) (aspectStrength[aspect.ordinal()] * rung); //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
 			

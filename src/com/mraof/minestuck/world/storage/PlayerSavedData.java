@@ -140,8 +140,7 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 		for (int i = 0; i < list.size(); i++)
 		{
 			CompoundNBT dataCompound = list.getCompound(i);
-			PlayerData data = new PlayerData();
-			data.readFromNBT(dataCompound, mcServer);
+			PlayerData data = new PlayerData(this, dataCompound, mcServer);
 			dataMap.put(data.player, data);
 		}
 	}
@@ -162,9 +161,7 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 	{
 		if (!dataMap.containsKey(player))
 		{
-			PlayerData data = new PlayerData();
-			data.player = player;
-			data.echeladder = new Echeladder(player, mcServer);
+			PlayerData data = new PlayerData(this, player, mcServer);
 			dataMap.put(player, data);
 		}
 		return dataMap.get(player);
@@ -205,20 +202,27 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 	
 	public static class PlayerData
 	{
-		public PlayerIdentifier player;
+		private final PlayerSavedData savedData;
+		private final PlayerIdentifier player;
 		public Title title;
 		public GristSet gristCache;
 		public Modus modus;
 		public boolean givenModus;
 		public int color = ColorCollector.DEFAULT_COLOR;
 		public long boondollars;
-		public Echeladder echeladder;
-		public boolean effectToggle = true;
+		private final Echeladder echeladder;
+		public boolean effectToggle;
 		
-		
-		
-		private void readFromNBT(CompoundNBT nbt, MinecraftServer mcServer)
+		private PlayerData(PlayerSavedData savedData, PlayerIdentifier player, MinecraftServer mcServer)
 		{
+			this.savedData = savedData;
+			this.player = player;
+			echeladder = new Echeladder(player, mcServer);
+		}
+		
+		private PlayerData(PlayerSavedData savedData, CompoundNBT nbt, MinecraftServer mcServer)
+		{
+			this.savedData = savedData;
 			this.player = IdentifierHandler.load(nbt, "player");
 			if (nbt.contains("grist_cache"))
 			{
@@ -263,6 +267,11 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 			
 			echeladder.saveEcheladder(nbt);
 			return nbt;
+		}
+		
+		public Echeladder getEcheladder()
+		{
+			return echeladder;
 		}
 	}
 }
