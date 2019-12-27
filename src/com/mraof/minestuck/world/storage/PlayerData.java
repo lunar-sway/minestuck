@@ -10,7 +10,10 @@ import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.PlayerDataPacket;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.tracker.PlayerTracker;
-import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.util.ColorCollector;
+import com.mraof.minestuck.util.Echeladder;
+import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.util.Title;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -59,8 +62,7 @@ public final class PlayerData
 		{
 			this.gristCache = GristSet.read(nbt.getList("grist_cache", Constants.NBT.TAG_COMPOUND));
 		}
-		if (nbt.contains("titleClass"))
-			this.title = new Title(EnumClass.getClassFromInt(nbt.getByte("titleClass")), EnumAspect.getAspectFromInt(nbt.getByte("titleAspect")));	//TODO Should be read in the title class
+		title = Title.tryRead(nbt, "title");
 		if (nbt.contains("modus"))
 		{
 			this.modus = CaptchaDeckHandler.readFromNBT(nbt.getCompound("modus"), savedData);
@@ -82,15 +84,10 @@ public final class PlayerData
 	{
 		CompoundNBT nbt = new CompoundNBT();
 		identifier.saveToNBT(nbt, "player");
-		if (this.gristCache != null)
-		{
+		if(gristCache != null)
 			nbt.put("grist_cache", gristCache.write(new ListNBT()));
-		}
-		if (this.title != null)
-		{
-			nbt.putByte("titleClass", (byte) this.title.getHeroClass().ordinal());	//TODO Should be written in the title object
-			nbt.putByte("titleAspect", (byte) this.title.getHeroAspect().ordinal());
-		}
+		if(title != null)
+			title.write(nbt, "title");
 		if (this.modus != null)
 			nbt.put("modus", CaptchaDeckHandler.writeToNBT(modus));
 		else nbt.putBoolean("givenModus", givenModus);

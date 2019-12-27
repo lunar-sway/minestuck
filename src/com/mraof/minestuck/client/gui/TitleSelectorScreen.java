@@ -9,7 +9,6 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 
@@ -104,7 +103,7 @@ public class TitleSelectorScreen extends Screen
 	
 	private void select()
 	{
-		MSPacketHandler.sendToServer(new TitleSelectPacket(currentClass, currentAspect));
+		MSPacketHandler.sendToServer(new TitleSelectPacket(new Title(currentClass, currentAspect)));
 		sendPacket = false;
 		minecraft.displayGuiScreen(null);
 	}

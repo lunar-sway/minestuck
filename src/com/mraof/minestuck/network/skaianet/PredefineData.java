@@ -1,7 +1,5 @@
 package com.mraof.minestuck.network.skaianet;
 
-import com.mraof.minestuck.util.EnumAspect;
-import com.mraof.minestuck.util.EnumClass;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
@@ -18,8 +16,7 @@ class PredefineData
 	
 	PredefineData read(CompoundNBT nbt)
 	{
-		if(nbt.contains("titleAspect", Constants.NBT.TAG_ANY_NUMERIC))
-			title = new Title(EnumClass.values()[nbt.getByte("titleClass")], EnumAspect.values()[nbt.getByte("titleAspect")]);
+		title = Title.tryRead(nbt, "title");
 		if(nbt.contains("landTerrain", Constants.NBT.TAG_STRING))
 			landTerrain = LandTypes.TERRAIN_REGISTRY.getValue(ResourceLocation.tryCreate(nbt.getString("landTerrain")));
 		if(nbt.contains("landTitle", Constants.NBT.TAG_STRING))
@@ -32,10 +29,7 @@ class PredefineData
 	{
 		CompoundNBT nbt = new CompoundNBT();
 		if(title != null)
-		{
-			nbt.putByte("titleClass", (byte) title.getHeroClass().ordinal());
-			nbt.putByte("titleAspect", (byte) title.getHeroAspect().ordinal());
-		}
+			title.write(nbt, "title");
 		if(landTerrain != null)
 			nbt.putString("landTerrain", landTerrain.getRegistryName().toString());
 		if(landTitle != null)

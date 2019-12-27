@@ -750,14 +750,14 @@ public class SburbHandler
 				for(SburbConnection c : s.connections)
 					if(title.equals(PlayerSavedData.getData(c.getClientIdentifier(), player.server).getTitle()))
 					{	//Title is already used
-						TitleSelectPacket packet = new TitleSelectPacket(title.getHeroClass(), title.getHeroAspect());
+						TitleSelectPacket packet = new TitleSelectPacket(title);
 						MSPacketHandler.sendToPlayer(packet, player);
 						return;
 					}
 				for(PredefineData data : s.predefinedPlayers.values())
 					if(title.equals(data.title))
 					{
-						TitleSelectPacket packet = new TitleSelectPacket(title.getHeroClass(), title.getHeroAspect());
+						TitleSelectPacket packet = new TitleSelectPacket(title);
 						MSPacketHandler.sendToPlayer(packet, player);
 						return;
 					}
