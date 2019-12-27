@@ -16,7 +16,6 @@ import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.OreHandler;
 import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
-import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
@@ -33,11 +32,7 @@ public class CommonProxy
 		OreHandler oreHandler = new OreHandler();
 		//GameRegistry.registerWorldGenerator(oreHandler, 0);
 		
-		//register GUI handler
-		//NetworkRegistry.INSTANCE.registerGuiHandler(Minestuck.instance, new GuiHandler());
-		
 		//Register event handlers
-		MinecraftForge.EVENT_BUS.register(new MinestuckSaveHandler());
 		MinecraftForge.EVENT_BUS.register(ServerEditHandler.instance);
 		MinecraftForge.EVENT_BUS.register(PlayerTracker.instance);
 		MinecraftForge.EVENT_BUS.register(ServerEventHandler.instance);
@@ -45,12 +40,6 @@ public class CommonProxy
 		
 		//register channel handler
 		MSPacketHandler.setupChannel();
-		
-		//Register structures
-		//MapGenStructureIO.registerStructure(StructureCastleStart.class, "SkaiaCastle");
-		//StructureCastlePieces.registerComponents();
-		//MapGenLandStructure.registerStructures();
-		//ConsortVillageComponents.registerComponents();
 		
 		//register grist costs and combination recipes
 		AlchemyRecipes.registerVanillaRecipes();

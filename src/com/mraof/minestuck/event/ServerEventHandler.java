@@ -9,8 +9,10 @@ import com.mraof.minestuck.item.weapon.PotionWeaponItem;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.*;
-
+import com.mraof.minestuck.util.Echeladder;
+import com.mraof.minestuck.util.EnumAspect;
+import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.world.storage.MSExtraData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.monster.*;
@@ -18,6 +20,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.dimension.DimensionType;
@@ -33,10 +36,6 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import static com.mraof.minestuck.util.EnumAspect.HOPE;
 
 public class ServerEventHandler
@@ -45,8 +44,6 @@ public class ServerEventHandler
 	public static final ServerEventHandler instance = new ServerEventHandler();
 	
 	public static long lastDay;
-	
-	public static List<PostEntryTask> tickTasks = new ArrayList<>();
 	
 	static Effect[] aspectEffects = {Effects.ABSORPTION, Effects.SPEED, Effects.RESISTANCE, Effects.ABSORPTION, Effects.FIRE_RESISTANCE, Effects.REGENERATION, Effects.LUCK, Effects.NIGHT_VISION, Effects.STRENGTH, Effects.JUMP_BOOST, Effects.HASTE, Effects.INVISIBILITY }; //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
 	// Increase the starting rungs
@@ -68,10 +65,9 @@ public class ServerEventHandler
 				}
 			}
 			
-			Iterator<PostEntryTask> iter = tickTasks.iterator();
-			while(iter.hasNext())
-				if(iter.next().onTick(event.world.getServer()))
-					iter.remove();
+			MinecraftServer server = event.world.getServer();
+			if(server != null)
+				MSExtraData.get(server).executeEntryTasks(server);
 		}
 	}
 	

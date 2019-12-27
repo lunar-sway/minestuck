@@ -2,6 +2,7 @@ package com.mraof.minestuck.world.storage;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.editmode.EditData;
+import com.mraof.minestuck.util.PostEntryTask;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
@@ -34,6 +35,9 @@ public class MSExtraData extends WorldSavedData
 	private final Map<UUID, EditData.PlayerRecovery> editPlayerRecovery = new HashMap<>();
 	private final List<EditData.ConnectionRecovery> editConnectionRecovery = new ArrayList<>();
 	
+	
+	private final List<PostEntryTask> postEntryTasks = new ArrayList<>();
+	
 	private MSExtraData()
 	{
 		super(DATA_NAME);
@@ -44,6 +48,9 @@ public class MSExtraData extends WorldSavedData
 	{
 		activeEditData.clear();
 		editPlayerRecovery.clear();
+		editConnectionRecovery.clear();
+		
+		postEntryTasks.clear();
 		
 		ListNBT editRecoveryList = nbt.getList("editmode_recovery", Constants.NBT.TAG_COMPOUND);
 		for(int i = 0; i < editRecoveryList.size(); i++)
@@ -55,6 +62,13 @@ public class MSExtraData extends WorldSavedData
 			if(recovery != null)
 				editConnectionRecovery.add(recovery);
 		}
+		
+		ListNBT entryTaskList = nbt.getList("entry_tasks", Constants.NBT.TAG_COMPOUND);
+		for(int i = 0; i < entryTaskList.size(); i++)
+		{
+			CompoundNBT tag = entryTaskList.getCompound(i);
+			postEntryTasks.add(new PostEntryTask(tag));
+		}
 	}
 	
 	@Override
@@ -65,6 +79,11 @@ public class MSExtraData extends WorldSavedData
 		editRecoveryList.addAll(activeEditData.stream().map(MSExtraData::writeRecovery).collect(Collectors.toList()));
 		
 		compound.put("editmode_recovery", editRecoveryList);
+		
+		ListNBT entryTaskList = new ListNBT();
+		entryTaskList.addAll(postEntryTasks.stream().map(PostEntryTask::write).collect(Collectors.toList()));
+		
+		compound.put("entry_tasks", entryTaskList);
 		
 		return compound;
 	}
@@ -156,6 +175,24 @@ public class MSExtraData extends WorldSavedData
 			editConnectionRecovery.clear();
 			markDirty();
 		}
+	}
+	
+	public void addPostEntryTask(PostEntryTask task)
+	{
+		postEntryTasks.add(task);
+		markDirty();
+	}
+	
+	public void executeEntryTasks(MinecraftServer server)
+	{
+		for(PostEntryTask task : postEntryTasks)
+		{
+			if(task.onTick(server))
+				markDirty();
+		}
+		
+		if(postEntryTasks.removeIf(PostEntryTask::isDone))
+			markDirty();
 	}
 	
 	@Override

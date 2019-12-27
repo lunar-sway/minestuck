@@ -3,7 +3,6 @@ package com.mraof.minestuck.util;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.dimension.DimensionType;
@@ -44,16 +43,16 @@ public class PostEntryTask
 	
 	public PostEntryTask(CompoundNBT nbt)
 	{
-		this(DimensionType.byName(ResourceLocation.tryCreate(nbt.getString("dimension"))), nbt.getInt("x"), nbt.getInt("y"), nbt.getInt("z"), nbt.getInt("entrySize"), nbt.getByte("entryType"));
+		this(MSNBTUtil.tryReadDimensionType(nbt, "dimension"), nbt.getInt("x"), nbt.getInt("y"), nbt.getInt("z"), nbt.getInt("entrySize"), nbt.getByte("entryType"));
 		this.index = nbt.getInt("index");
 		if(dimension == null)
 			Debug.warnf("Unable to load dimension type by name %s!", nbt.getString("dimension"));
 	}
 	
-	public CompoundNBT toNBTTagCompound()
+	public CompoundNBT write()
 	{
 		CompoundNBT nbt = new CompoundNBT();
-		nbt.putString("dimension", dimension.getRegistryName().toString());
+		MSNBTUtil.tryWriteDimensionType(nbt, "dimension", dimension);
 		nbt.putInt("x", x);
 		nbt.putInt("y", y);
 		nbt.putInt("z", z);
@@ -66,11 +65,15 @@ public class PostEntryTask
 	
 	public boolean onTick(MinecraftServer server)
 	{
-		ServerWorld world = server.getWorld(dimension);
+		if(isDone())
+			return false;
+		
+		ServerWorld world = dimension != null ? server.getWorld(dimension) : null;
 		
 		if(world == null)
 		{
 			Debug.errorf("Couldn't find world for dimension %d when performing post entry preparations! Cancelling task.", dimension);
+			setDone();
 			return true;
 		}
 		
@@ -104,11 +107,22 @@ public class PostEntryTask
 			}
 			
 			Debug.infof("Completed entry block updates for dimension %s.", dimension.getRegistryName());
+			setDone();
 			return true;
 		}
 		
 		Debug.debugf("Updated %d blocks this tick.", index - preIndex);
-		return false;
+		return index != preIndex;
+	}
+	
+	public boolean isDone()
+	{
+		return index == -1;
+	}
+	
+	private void setDone()
+	{
+		index = -1;
 	}
 	
 	private int updateBlock(BlockPos pos, ServerWorld world, int i, boolean blockUpdate)
