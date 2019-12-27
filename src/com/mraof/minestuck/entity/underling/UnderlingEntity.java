@@ -127,7 +127,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 			return type;
 		} else Debug.warnf("Unable to read underling grist type from string %s.", dataManager.get(GRIST_TYPE));
 		
-		return GristType.ARTIFACT;
+		return GristTypes.ARTIFACT;
 	}
 	
 	//used when getting how much grist should be dropped on death
@@ -232,7 +232,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	public void writeAdditional(CompoundNBT compound)
 	{
 		super.writeAdditional(compound);
-		compound.putString("Type", getGristType().getRegistryName().toString());
+		getGristType().write(compound, "Type");
 		compound.putBoolean("Spawned", fromSpawner);
 		if(detachHome())
 		{
@@ -250,7 +250,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	public void readAdditional(CompoundNBT compound)
 	{
 		if(compound.contains("Type", Constants.NBT.TAG_STRING))
-			applyGristType(GristTypes.getTypeFromString(compound.getString("Type")), false);
+			applyGristType(GristType.read(compound, "Type", GristTypes.ARTIFACT), false);
 		else applyGristType(SburbHandler.getUnderlingType(this), true);
 		super.readAdditional(compound);
 		

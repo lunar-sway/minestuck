@@ -49,8 +49,8 @@ public class GristTypes
 		return null;
 	}
 	
-	
-	public static GristType getTypeFromString(String string)
+	@SuppressWarnings("unused")	//Should be used by commands
+	public static GristType getTypeForCommand(String string)
 	{
 		if (!string.contains(":"))
 		{

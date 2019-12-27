@@ -3,7 +3,10 @@ package com.mraof.minestuck.entity.item;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.item.crafting.alchemy.*;
+import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
+import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.tracker.PlayerTracker;
 import com.mraof.minestuck.util.IdentifierHandler;
 import net.minecraft.block.material.Material;
@@ -206,7 +209,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		if(compound.contains("Value", Constants.NBT.TAG_ANY_NUMERIC))
 			this.gristValue = compound.getLong("Value");
 		if(compound.contains("Type", Constants.NBT.TAG_STRING))
-			this.gristType = GristTypes.getTypeFromString(compound.getString("Type"));
+			this.gristType = GristType.read(compound, "Type");
 	}
 	
 	/**

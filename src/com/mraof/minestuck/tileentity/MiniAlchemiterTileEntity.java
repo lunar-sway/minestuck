@@ -144,11 +144,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 	{
 		super.read(compound);
 		
-		this.wildcardGrist = GristTypes.getTypeFromString(compound.getString("gristType"));
-		if(this.wildcardGrist == null)
-		{
-			this.wildcardGrist = GristType.BUILD;
-		}
+		this.wildcardGrist = GristType.read(compound, "gristType");
 		
 		if(IdentifierHandler.hasIdentifier(compound, "owner"))
 			owner = IdentifierHandler.load(compound, "owner");

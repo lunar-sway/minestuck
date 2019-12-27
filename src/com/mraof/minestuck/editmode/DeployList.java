@@ -5,14 +5,12 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.block.MiniCruxtruderItem;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
@@ -280,30 +278,10 @@ public class DeployList
 				CompoundNBT tag = new CompoundNBT();
 				stack.write(tag);
 				tag.putInt("i", i);
-				ListNBT listPrimary = new ListNBT();
-				for (GristType type : GristTypes.values())	//TODO This should be written in the grist set instead
-				{
-					if(primary.getGrist(type) == 0)
-						continue;
-					CompoundNBT gristTag = new CompoundNBT();
-					gristTag.putString("id", String.valueOf(type.getRegistryName()));
-					gristTag.putLong("amount", primary.getGrist(type));
-					listPrimary.add(gristTag);
-				}
-				tag.put("primary", listPrimary);
+				tag.put("primary", primary.write(new ListNBT()));
 				if(secondary != null)
 				{
-					ListNBT listSecondary = new ListNBT();
-					for(GristType type : GristTypes.values())
-					{
-						if(secondary.getGrist(type) == 0)
-							continue;
-						CompoundNBT gristTag = new CompoundNBT();
-						gristTag.putString("id", String.valueOf(type.getRegistryName()));
-						gristTag.putLong("amount", secondary.getGrist(type));
-						listSecondary.add(gristTag);
-					}
-					tag.put("secondary", listSecondary);
+					tag.put("secondary", secondary.write(new ListNBT()));
 				}
 				tagList.add(tag);
 			}
@@ -325,24 +303,10 @@ public class DeployList
 			ClientDeployEntry entry = new ClientDeployEntry();
 			entry.item = ItemStack.read(tag);
 			entry.index = tag.getInt("i");
-			entry.cost1 = new GristSet();
-			for (INBT nbtBase : tag.getList("primary", Constants.NBT.TAG_COMPOUND))
-			{
-				CompoundNBT gristTag = (CompoundNBT) nbtBase;
-				GristType type = GristTypes.getTypeFromString(gristTag.getString("id"));
-				if(type != null)
-					entry.cost1.setGrist(type, gristTag.getInt("amount"));
-			}
+			entry.cost1 = GristSet.read(tag.getList("primary", Constants.NBT.TAG_COMPOUND));
 			if(tag.contains("secondary", Constants.NBT.TAG_LIST))
 			{
-				entry.cost2 = new GristSet();
-				for(INBT nbtBase : tag.getList("secondary", Constants.NBT.TAG_COMPOUND))
-				{
-					CompoundNBT gristTag = (CompoundNBT) nbtBase;
-					GristType type = GristTypes.getTypeFromString(gristTag.getString("id"));
-					if(type != null)
-						entry.cost2.setGrist(type, gristTag.getInt("amount"));
-				}
+				entry.cost2 = GristSet.read(tag.getList("secondary", Constants.NBT.TAG_COMPOUND));
 			} else entry.cost2 = null;
 			clientDeployList.add(entry);
 		}

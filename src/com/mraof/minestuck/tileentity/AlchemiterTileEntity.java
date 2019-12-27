@@ -271,14 +271,10 @@ public class AlchemiterTileEntity extends TileEntity
 	public void read(CompoundNBT compound)
 	{
 		super.read(compound);
-
-		if(compound.contains("gristType"))
-			this.wildcardGrist = GristTypes.getTypeFromString(compound.getString("gristType"));
-		if(this.wildcardGrist == null)
-		{
-			this.wildcardGrist = GristType.BUILD;
-		}
 		
+		wildcardGrist = GristType.read(compound, "gristType");
+		
+		/*
 		this.upgraded = compound.getBoolean("upgraded");
 		
 		if(upgraded)
@@ -288,6 +284,7 @@ public class AlchemiterTileEntity extends TileEntity
 				setUpgrade(ItemStack.read(compound.getCompound("upgrade" + i)), i);
 			}
 		}
+		*/
 		
 		broken = compound.getBoolean("broken");
 		

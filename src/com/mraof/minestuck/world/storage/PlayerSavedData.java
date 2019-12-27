@@ -5,8 +5,6 @@ import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
-import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.network.GristCachePacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.PlayerDataPacket;
@@ -217,20 +215,14 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 		public Echeladder echeladder;
 		public boolean effectToggle = true;
 		
+		
+		
 		private void readFromNBT(CompoundNBT nbt, MinecraftServer mcServer)
 		{
 			this.player = IdentifierHandler.load(nbt, "player");
-			if (nbt.contains("grist"))
+			if (nbt.contains("grist_cache"))
 			{
-				this.gristCache = new GristSet();	//TODO reading grist set should happen in the grist set class
-				ListNBT gristTags = nbt.getList("grist", Constants.NBT.TAG_COMPOUND);
-				for(int i = 0; i <  gristTags.size(); i++)
-				{
-					CompoundNBT gristTag = gristTags.getCompound(i);
-					GristType type = GristTypes.getTypeFromString(gristTag.getString("id"));
-					if(type != null)
-						this.gristCache.setGrist(type, gristTag.getInt("amount"));
-				}
+				this.gristCache = GristSet.read(nbt.getList("grist_cache", Constants.NBT.TAG_COMPOUND));
 			}
 			if (nbt.contains("titleClass"))
 				this.title = new Title(EnumClass.getClassFromInt(nbt.getByte("titleClass")), EnumAspect.getAspectFromInt(nbt.getByte("titleAspect")));	//TODO Should be read in the title class
@@ -255,15 +247,7 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 			player.saveToNBT(nbt, "player");
 			if (this.gristCache != null)
 			{
-				ListNBT list = new ListNBT();
-				for (GristType type : GristTypes.values())	//TODO Should be written to nbt in GristSet
-				{
-					CompoundNBT gristTag = new CompoundNBT();
-					gristTag.putString("id", String.valueOf(type.getRegistryName()));
-					gristTag.putLong("amount", this.gristCache.getGrist(type));
-					list.add(gristTag);
-				}
-				nbt.put("grist", list);
+				nbt.put("grist_cache", gristCache.write(new ListNBT()));
 			}
 			if (this.title != null)
 			{

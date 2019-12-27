@@ -3,6 +3,7 @@ package com.mraof.minestuck.util;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.common.util.Constants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,6 +31,8 @@ public class MSNBTUtil
 	 */
 	public static ResourceLocation tryReadResourceLocation(CompoundNBT nbt, String key)
 	{
+		if(!nbt.contains(key, Constants.NBT.TAG_STRING))
+			return null;
 		ResourceLocation resourceLocation = ResourceLocation.tryCreate(nbt.getString(key));
 		if(resourceLocation == null)
 			LOGGER.warn("Unable to read resource location from string {}.", nbt.getString(key));

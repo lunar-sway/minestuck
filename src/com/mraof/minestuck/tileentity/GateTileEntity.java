@@ -32,6 +32,8 @@ public class GateTileEntity extends TileEntity
 		if(block == MSBlocks.RETURN_NODE)
 		{
 			BlockPos pos = world.getDimension().findSpawn(0, 0, false);
+			if(pos == null)
+				return;
 			PositionTeleporter.moveEntity(player, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
 			player.timeUntilPortal = player.getPortalCooldown();
 			player.setMotion(Vec3d.ZERO);

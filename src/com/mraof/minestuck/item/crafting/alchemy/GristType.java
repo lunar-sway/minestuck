@@ -1,7 +1,9 @@
 package com.mraof.minestuck.item.crafting.alchemy;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.util.MSNBTUtil;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
@@ -9,12 +11,16 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.registries.ForgeRegistry;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.minecraftforge.registries.ObjectHolder;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 
 @ObjectHolder(Minestuck.MOD_ID)
 public class GristType extends ForgeRegistryEntry<GristType> implements Comparable<GristType>
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	public static String FORMAT = "grist.format";	//TODO Readd final once the ObjectHolder use has been sorted out
 	
 	private static final ResourceLocation DUMMY_ICON_LOCATION = new ResourceLocation(Minestuck.MOD_ID, "textures/grist/dummy.png");
@@ -190,6 +196,32 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 	public int compareTo(GristType gristType)
 	{
 		return this.getId() - gristType.getId();
+	}
+	
+	public final void write(CompoundNBT nbt, String key)
+	{
+		ResourceLocation name = this.getRegistryName();
+		if(name == null)
+			LOGGER.error("Trying to save grist type {} that is lacking a registry name!", this);
+		else MSNBTUtil.writeResourceLocation(nbt, key, name);
+	}
+	
+	public static GristType read(CompoundNBT nbt, String key)
+	{
+		return read(nbt, key, GristTypes.BUILD);
+	}
+	
+	public static GristType read(CompoundNBT nbt, String key, GristType fallback)
+	{
+		ResourceLocation name = MSNBTUtil.tryReadResourceLocation(nbt, key);
+		if(name != null)
+		{
+			GristType type = GristTypes.REGISTRY.getValue(name);
+			if(type != null)
+				return type;
+			else LOGGER.warn("Couldn't find grist type by name {}  while reading from nbt. Will fall back to {} instead.", name, fallback);
+		}
+		return fallback;
 	}
 	
 	static class DummyType extends GristType

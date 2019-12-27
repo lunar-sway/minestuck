@@ -6,6 +6,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.ExtraJSONUtils;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 
@@ -258,5 +260,20 @@ public class GristSet
 			amounts[i] = GristAmount.read(buffer);
 		
 		return new GristSet(amounts);
+	}
+	
+	public ListNBT write(ListNBT list)
+	{
+		getArray().forEach(gristAmount -> list.add(gristAmount.write(new CompoundNBT(), null)));
+		return list;
+	}
+	
+	public static GristSet read(ListNBT list)
+	{
+		GristSet set = new GristSet();
+		for(int i = 0; i < list.size(); i++)
+			set.addGrist(GristAmount.read(list.getCompound(i), null));
+		
+		return set;
 	}
 }
