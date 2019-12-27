@@ -141,6 +141,7 @@ public class CaptchaDeckHandler
 		}
 	}
 	
+	//TODO Spotted duplicate code in this and the following function. Refactor the part that makes sense to refactor
 	public static void captchalogueItem(ServerPlayerEntity player)
 	{
 		ItemStack stack = player.getHeldItemMainhand();
@@ -148,7 +149,7 @@ public class CaptchaDeckHandler
 		
 		if(stack.getItem() == MSItems.BOONDOLLARS)
 		{
-			PlayerSavedData.addBoondollars(player, BoondollarsItem.getCount(stack));
+			PlayerSavedData.getData(player).addBoondollars(BoondollarsItem.getCount(stack));
 			stack.setCount(0);
 			return;
 		}
@@ -204,7 +205,7 @@ public class CaptchaDeckHandler
 
 			if(stack.getItem() == MSItems.BOONDOLLARS)
 			{
-				PlayerSavedData.addBoondollars(player, BoondollarsItem.getCount(stack));
+				PlayerSavedData.getData(player).addBoondollars(BoondollarsItem.getCount(stack));
 				stack.setCount(0);
 				return;
 			}
@@ -253,7 +254,7 @@ public class CaptchaDeckHandler
 
 			if(stack.getItem() == MSItems.BOONDOLLARS)
 			{
-				PlayerSavedData.addBoondollars(player, BoondollarsItem.getCount(stack));
+				PlayerSavedData.getData(player).addBoondollars(BoondollarsItem.getCount(stack));
 				stack.setCount(0);
 				return;
 			}

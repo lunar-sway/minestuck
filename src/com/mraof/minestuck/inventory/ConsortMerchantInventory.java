@@ -64,13 +64,13 @@ public class ConsortMerchantInventory implements IInventory
 			if (stack.isEmpty())
 				return;
 			PlayerData playerData = PlayerSavedData.getData(player);
-			int amountPurchased = (int) Math.min(prices[index] != 0 ? playerData.boondollars / prices[index] : Integer.MAX_VALUE, all ? stack.getCount() : 1);
+			int amountPurchased = (int) Math.min(prices[index] != 0 ? playerData.getBoondollars() / prices[index] : Integer.MAX_VALUE, all ? stack.getCount() : 1);
 			if (amountPurchased == 0)
 			{
 				player.sendMessage(new TranslationTextComponent(CANT_AFFORD));
 			} else
 			{
-				PlayerSavedData.addBoondollars(player, -(amountPurchased * prices[index]));
+				playerData.takeBoondollars(amountPurchased * prices[index]);
 				ItemStack items = stack.split(amountPurchased);
 				
 				if (!player.addItemStackToInventory(items))

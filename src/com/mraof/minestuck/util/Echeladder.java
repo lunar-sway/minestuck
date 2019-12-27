@@ -70,21 +70,22 @@ public class Echeladder
 		int prevRung = rung;
 		int prevExp = exp;
 		Debug.debugf("Adding %s exp to player %s's echeladder (previously at rung %s progress %s)", exp, identifier.getUsername(), rung, progress);
+		long boondollarsGained = 0;
 		
-		increasment:
+		increment:
 		{
 			while(progress + exp >= expReq)
 			{
 				rung++;
-				savedData.getData(identifier).boondollars += BOONDOLLARS[Math.min(rung, BOONDOLLARS.length - 1)];
+				boondollarsGained += BOONDOLLARS[Math.min(rung, BOONDOLLARS.length - 1)];
 				exp -= (expReq - progress);
 				progress = 0;
+				savedData.markDirty();
 				expReq = getRungProgressReq();
 				if(rung >= topRung)
-					break increasment;
+					break increment;
 				if(rung > prevRung + 1)
 					exp = (int) (exp/1.5);
-				savedData.markDirty();
 				Debug.debugf("Increased rung to %s, remaining exp is %s", rung, exp);
 			}
 			if(exp >= expReq/50)
@@ -95,6 +96,8 @@ public class Echeladder
 			} else Debug.debugf("Remaining exp %s is below the threshold of 1/50 out of the exp requirement, which is %s, and will therefore be ignored", exp, expReq/50);
 		}
 		
+		savedData.getData(identifier).addBoondollars(boondollarsGained);
+		
 		Debug.debugf("Finished echeladder climbing for %s at %s with progress %s", identifier.getUsername(), rung, progress);
 		ServerPlayerEntity player = identifier.getPlayer(savedData.mcServer);
 		if(player != null)
@@ -103,7 +106,6 @@ public class Echeladder
 			if(rung != prevRung)
 			{
 				updateEcheladderBonuses(player);
-				MSPacketHandler.sendToPlayer(PlayerDataPacket.boondollars(savedData.getData(identifier).boondollars), player);
 				player.world.playSound(null, player.posX, player.posY, player.posZ, MSSoundEvents.EVENT_ECHELADDER_INCREASE, SoundCategory.AMBIENT, 1F, 1F);
 			}
 		}

@@ -14,7 +14,6 @@ import com.mraof.minestuck.util.*;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
 import org.apache.logging.log4j.LogManager;
@@ -34,16 +33,16 @@ public final class PlayerData
 	
 	private boolean givenModus;
 	private Modus modus;
+	private long boondollars;
 	
 	private Title title;
 	
 	public GristSet gristCache;
-	public long boondollars;
 	public boolean effectToggle;
 	
 	private boolean hasLoggedIn;
 	
-	PlayerData(PlayerSavedData savedData, IdentifierHandler.PlayerIdentifier player, MinecraftServer mcServer)
+	PlayerData(PlayerSavedData savedData, IdentifierHandler.PlayerIdentifier player)
 	{
 		this.savedData = savedData;
 		this.identifier = player;
@@ -52,7 +51,7 @@ public final class PlayerData
 		hasLoggedIn = false;
 	}
 	
-	PlayerData(PlayerSavedData savedData, CompoundNBT nbt, MinecraftServer mcServer)
+	PlayerData(PlayerSavedData savedData, CompoundNBT nbt)
 	{
 		this.savedData = savedData;
 		this.identifier = IdentifierHandler.load(nbt, "player");
@@ -125,12 +124,7 @@ public final class PlayerData
 			this.color = color;
 			markDirty();
 			
-			ServerPlayerEntity playerEntity = identifier.getPlayer(savedData.mcServer);
-			if(playerEntity != null)
-			{
-				PlayerDataPacket packet = PlayerDataPacket.color(this.color);
-				MSPacketHandler.sendToPlayer(packet, playerEntity);
-			}
+			sendColor(identifier.getPlayer(savedData.mcServer), false);
 		}
 	}
 	
@@ -150,15 +144,70 @@ public final class PlayerData
 		}
 	}
 	
+	public boolean hasGivenModus()
+	{
+		return givenModus;
+	}
+	
 	private void setGivenModus()
 	{
 		givenModus = true;
 		markDirty();
 	}
 	
-	public boolean hasGivenModus()
+	public long getBoondollars()
 	{
-		return givenModus;
+		return boondollars;
+	}
+	
+	public void addBoondollars(long amount)
+	{
+		if(amount < 0)
+			throw new IllegalArgumentException("Boondollar amount may not be negative.");
+		else if(amount > 0)
+		{
+			boondollars += amount;
+			markDirty();
+			sendBoondollars(identifier.getPlayer(savedData.mcServer));
+		}
+	}
+	
+	public void takeBoondollars(long amount)
+	{
+		if(amount < 0)
+			throw new IllegalArgumentException("Boondollar amount may not be negative.");
+		else if(amount > 0)
+		{
+			if(boondollars - amount < 0)
+				throw new IllegalStateException("Can't go to negative boondollars");
+			
+			boondollars -= amount;
+			markDirty();
+			sendBoondollars(identifier.getPlayer(savedData.mcServer));
+		}
+	}
+	
+	public boolean tryTakeBoondollars(long amount)
+	{
+		if(getBoondollars() - amount < 0)
+			return false;
+		else
+		{
+			takeBoondollars(amount);
+			return true;
+		}
+	}
+	
+	public void setBoondollars(long amount)
+	{
+		if(amount < 0)
+			throw new IllegalArgumentException("Boondollar amount may not be negative.");
+		else if(amount != boondollars)
+		{
+			boondollars = amount;
+			markDirty();
+			sendBoondollars(identifier.getPlayer(savedData.mcServer));
+		}
 	}
 	
 	public Title getTitle()
@@ -197,20 +246,34 @@ public final class PlayerData
 			MSPacketHandler.sendToPlayer(CaptchaDeckPacket.data(CaptchaDeckHandler.writeToNBT(modus)), player);
 		}
 		
+		echeladder.sendDataPacket(player, true);
+		sendColor(player, !hasLoggedIn);
+		sendBoondollars(player);
 		PlayerTracker.updateGristCache(player.getServer(), identifier);
 		sendTitle(player);
-		echeladder.sendDataPacket(player, true);
-		MSPacketHandler.sendToPlayer(PlayerDataPacket.boondollars(PlayerSavedData.getData(player).boondollars), player);
 		
-		if(hasLoggedIn && !player.isSpectator())
+		hasLoggedIn = true;
+	}
+	
+	private void sendColor(ServerPlayerEntity player, boolean firstTime)
+	{
+		if(player == null)
+			return;
+		if(firstTime && !player.isSpectator())
 			MSPacketHandler.sendToPlayer(PlayerDataPacket.color(), player);
 		else
 		{
-			PlayerDataPacket packet = PlayerDataPacket.color(PlayerSavedData.getData(player).getColor());
+			PlayerDataPacket packet = PlayerDataPacket.color(getColor());
 			MSPacketHandler.sendToPlayer(packet, player);
 		}
-		
-		hasLoggedIn = true;
+	}
+	
+	private void sendBoondollars(ServerPlayerEntity player)
+	{
+		if(player == null)
+			return;
+		PlayerDataPacket packet = PlayerDataPacket.boondollars(getBoondollars());
+		MSPacketHandler.sendToPlayer(packet, player);
 	}
 	
 	private void sendTitle(ServerPlayerEntity player)

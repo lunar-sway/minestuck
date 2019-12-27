@@ -861,12 +861,7 @@ public abstract class MessageType
 			if(!repeat && nbt.getBoolean(nbtName))
 				return message.getMessage(consort, player, chainIdentifier);
 			
-			if(!PlayerSavedData.addBoondollars(player, -cost))
-			{
-				player.sendMessage(createMessage(consort, player, "cantAfford", new String[0], false));
-				
-				return null;
-			} else
+			if(PlayerSavedData.getData(player).tryTakeBoondollars(cost))
 			{
 				if(!repeat)
 					nbt.putBoolean(nbtName, true);
@@ -876,10 +871,15 @@ public abstract class MessageType
 						.generate(contextBuilder.build(LootParameterSets.GIFT)))
 				{
 					player.entityDropItem(itemstack, 0.0F);
-					MSCriteriaTriggers.CONSORT_ITEM.trigger((ServerPlayerEntity) player, item.toString(), itemstack, consort);
+					MSCriteriaTriggers.CONSORT_ITEM.trigger(player, item.toString(), itemstack, consort);
 				}
 				
 				return message.getMessage(consort, player, chainIdentifier);
+			} else
+			{
+				player.sendMessage(createMessage(consort, player, "cantAfford", new String[0], false));
+				
+				return null;
 			}
 		}
 		
@@ -1093,7 +1093,7 @@ public abstract class MessageType
 			{
 				if(boondollars != 0)
 				{
-					PlayerSavedData.addBoondollars(player, boondollars);
+					PlayerSavedData.getData(player).addBoondollars(boondollars);
 				}
 				nbt.putBoolean(this.getString(), true);
 				return next.getMessage(consort, player, chainIdentifier);

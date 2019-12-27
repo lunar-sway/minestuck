@@ -110,7 +110,7 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 		if(world.isBlockPowered(this.getPos()))
 			return false;
 		int i = getGristWidgetBoondollarValue();
-		return owner != null && i != 0 && i <= PlayerSavedData.getData(owner, world).boondollars;
+		return owner != null && i != 0 && i <= PlayerSavedData.getData(owner, world).getBoondollars();
 	}
 
 	@Override
@@ -118,7 +118,7 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 	{
 		GristSet gristSet = getGristWidgetResult();
 		
-		if(!PlayerSavedData.get(world).addBoondollars(owner, -getGristWidgetBoondollarValue()))
+		if(!PlayerSavedData.getData(owner, world).tryTakeBoondollars(getGristWidgetBoondollarValue()))
 		{
 			Debug.warnf("Failed to remove boondollars for a grist widget from %s's porkhollow", owner.getUsername());
 			return;

@@ -4,8 +4,6 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.network.GristCachePacket;
-import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.network.PlayerDataPacket;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.util.Title;
@@ -92,13 +90,7 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 	{
 		return getData(player).gristCache;
 	}
-
-	public void setGrist(PlayerIdentifier player, GristSet set)
-	{
-		getData(player).gristCache = set;
-		markDirty();
-	}
-
+	
 	public boolean getEffectToggle(PlayerIdentifier player)
 	{
 		return getData(player).effectToggle;
@@ -129,7 +121,7 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 		for (int i = 0; i < list.size(); i++)
 		{
 			CompoundNBT dataCompound = list.getCompound(i);
-			PlayerData data = new PlayerData(this, dataCompound, mcServer);
+			PlayerData data = new PlayerData(this, dataCompound);
 			dataMap.put(data.identifier, data);
 		}
 	}
@@ -153,7 +145,7 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 	{
 		if (!dataMap.containsKey(player))
 		{
-			PlayerData data = new PlayerData(this, player, mcServer);
+			PlayerData data = new PlayerData(this, player);
 			dataMap.put(player, data);
 			markDirty();
 		}
@@ -165,31 +157,5 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 		if (player.world.isRemote)
 			return getClientGrist();
 		else return get(player.getServer()).getGristSet(IdentifierHandler.encode(player));
-	}
-	
-	public static boolean addBoondollars(ServerPlayerEntity player, long boons)
-	{
-		PlayerData data = getData(player);
-		if(data.boondollars + boons < 0)
-			return false;
-		data.boondollars += boons;
-		get(player.server).markDirty();
-		
-		MSPacketHandler.sendToPlayer(PlayerDataPacket.boondollars(data.boondollars), player);
-		return true;
-	}
-	
-	public boolean addBoondollars(PlayerIdentifier id, long boons)
-	{
-		PlayerData data = getData(id);
-		if(data.boondollars + boons < 0)
-			return false;
-		data.boondollars += boons;
-		markDirty();
-		
-		ServerPlayerEntity player = id.getPlayer(mcServer);
-		if(player != null)
-			MSPacketHandler.sendToPlayer(PlayerDataPacket.boondollars(data.boondollars), player);
-		return true;
 	}
 }
