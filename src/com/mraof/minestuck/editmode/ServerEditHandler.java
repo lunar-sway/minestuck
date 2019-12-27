@@ -7,7 +7,6 @@ import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ServerEditPacket;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.tracker.PlayerTracker;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.util.Teleport;
@@ -219,10 +218,9 @@ public class ServerEditHandler
 				int i = DeployList.getOrdinal(entry.getName());
 				GristSet cost = data.connection.givenItems()[i]
 						? entry.getSecondaryGristCost(data.connection) : entry.getPrimaryGristCost(data.connection);
-				if(GristHelper.canAfford(PlayerSavedData.get(event.getEntity().getServer()).getGristSet(data.connection.getClientIdentifier()), cost))
+				if(GristHelper.canAfford(PlayerSavedData.getData(data.connection.getClientIdentifier(), event.getPlayer().world).getGristCache(), cost))
 				{
 					GristHelper.decrease(event.getPlayer().world, data.connection.getClientIdentifier(), cost);
-					PlayerTracker.updateGristCache(event.getPlayer().getServer(), data.connection.getClientIdentifier());
 					data.connection.givenItems()[i] = true;
 					if(!data.connection.isMain())
 						SkaianetHandler.get(event.getPlayer().getServer()).giveItems(data.connection.getClientIdentifier());
@@ -274,14 +272,14 @@ public class ServerEditHandler
 			{
 				GristSet cost = data.connection.givenItems()[DeployList.getOrdinal(entry.getName())]
 						? entry.getSecondaryGristCost(data.connection) : entry.getPrimaryGristCost(data.connection);
-				if(!GristHelper.canAfford(PlayerSavedData.get(event.getEntity().getServer()).getGristSet(data.connection.getClientIdentifier()), cost))
+				if(!GristHelper.canAfford(event.getWorld(), data.connection.getClientIdentifier(), cost))
 				{
 					StringBuilder str = new StringBuilder();
 					if(cost != null)
 					{
-						for(GristAmount grist : cost.getArray())
+						for(GristAmount grist : cost.getAmounts())
 						{
-							if(cost.getArray().indexOf(grist) != 0)
+							if(cost.getAmounts().indexOf(grist) != 0)
 								str.append(", ");
 							str.append(grist.getAmount()).append(" ").append(grist.getType().getDisplayName());
 						}
@@ -290,7 +288,7 @@ public class ServerEditHandler
 					event.setCanceled(true);
 				}
 			}
-			else if(!isBlockItem(stack.getItem()) || !GristHelper.canAfford(event.getEntity().world, data.connection.getClientIdentifier(), stack))
+			else if(!isBlockItem(stack.getItem()) || !GristHelper.canAfford(event.getWorld(), data.connection.getClientIdentifier(), GristCostRecipe.findCostForItem(stack, null, false, event.getWorld())))
 			{
 				event.setCanceled(true);
 			}
@@ -307,7 +305,7 @@ public class ServerEditHandler
 			EditData data = getData(event.getPlayer());
 			BlockState block = event.getWorld().getBlockState(event.getPos());
 			if(block.getBlockHardness(event.getWorld(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
-					|| (GristHelper.getGrist(event.getEntity().world, data.connection.getClientIdentifier(), GristType.BUILD) <= 0 && !MinestuckConfig.gristRefund.get()))
+					|| (GristHelper.getGrist(event.getEntity().world, data.connection.getClientIdentifier(), GristTypes.BUILD) <= 0 && !MinestuckConfig.gristRefund.get()))
 				event.setCanceled(true);
 		}
 	}
@@ -337,7 +335,6 @@ public class ServerEditHandler
 				if(set != null && !set.isEmpty())
 					GristHelper.increase(event.getWorld(), data.connection.getClientIdentifier(), set);
 			}
-			PlayerTracker.updateGristCache(event.getEntity().getServer(), data.connection.getClientIdentifier());
 		}
 	}
 	
@@ -371,13 +368,11 @@ public class ServerEditHandler
 					if(!cost.isEmpty())
 					{
 						GristHelper.decrease(player.world, c.getClientIdentifier(), cost);
-						PlayerTracker.updateGristCache(player.server, data.connection.getClientIdentifier());
 					}
 					player.inventory.mainInventory.set(player.inventory.currentItem, ItemStack.EMPTY);
 				} else
 				{
 					GristHelper.decrease(player.world, data.connection.getClientIdentifier(), GristCostRecipe.findCostForItem(stack, null, false, player.getEntityWorld()));
-					PlayerTracker.updateGristCache(player.server, data.connection.getClientIdentifier());
 				}
 			}
 		}

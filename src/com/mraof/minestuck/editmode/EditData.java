@@ -70,7 +70,7 @@ public class EditData
 	
 	public void sendGristCacheToEditor()
 	{
-		GristSet cache = PlayerSavedData.getData(connection.getClientIdentifier(), getEditor().server).gristCache;
+		GristSet cache = PlayerSavedData.getData(connection.getClientIdentifier(), getEditor().server).getGristCache();
 		ServerPlayerEntity editor = getEditor();
 		GristCachePacket packet = new GristCachePacket(cache, true);
 		MSPacketHandler.sendToPlayer(packet, editor);

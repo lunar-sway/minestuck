@@ -7,7 +7,6 @@ import com.mraof.minestuck.network.GristCachePacket;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.util.Title;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -22,7 +21,7 @@ import net.minecraftforge.common.util.Constants;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PlayerSavedData extends WorldSavedData	//TODO This class need a thorough look through to make sure that markDirty() is called when it should (otherwise there may be hard to notice data-loss bugs)
+public class PlayerSavedData extends WorldSavedData
 {
 	private static final String DATA_NAME = Minestuck.MOD_ID+"_player_data";
 	//TODO Put client data in its own class
@@ -85,11 +84,6 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 	{
 		return ClientEditHandler.isActive() ? targetGrist : playerGrist;
 	}
-
-	public GristSet getGristSet(PlayerIdentifier player)
-	{
-		return getData(player).gristCache;
-	}
 	
 	@Override
 	public CompoundNBT write(CompoundNBT compound)
@@ -138,12 +132,5 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 			markDirty();
 		}
 		return dataMap.get(player);
-	}
-
-	public static GristSet getGristSet(PlayerEntity player)
-	{
-		if (player.world.isRemote)
-			return getClientGrist();
-		else return get(player.getServer()).getGristSet(IdentifierHandler.encode(player));
 	}
 }

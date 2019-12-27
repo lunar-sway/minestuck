@@ -7,12 +7,10 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.*;
-import com.mraof.minestuck.tracker.PlayerTracker;
 import com.mraof.minestuck.util.AlchemiterUpgrades;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;
@@ -397,7 +395,7 @@ public class AlchemiterTileEntity extends TileEntity
 		//get the grist cost
 		GristSet cost = getGristCost(quantity);
 		
-		boolean canAfford = GristHelper.canAfford(PlayerSavedData.getGristSet(player), cost);
+		boolean canAfford = GristHelper.canAfford(player, cost);
 		
 		if(canAfford)
 		{
@@ -423,7 +421,6 @@ public class AlchemiterTileEntity extends TileEntity
 			
 			PlayerIdentifier pid = IdentifierHandler.encode(player);
 			GristHelper.decrease(world, pid, cost);
-			PlayerTracker.updateGristCache(world.getServer(), pid);
 		}
 	}
 	

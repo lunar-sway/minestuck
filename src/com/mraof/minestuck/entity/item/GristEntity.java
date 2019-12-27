@@ -7,7 +7,6 @@ import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
 import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
-import com.mraof.minestuck.tracker.PlayerTracker;
 import com.mraof.minestuck.util.IdentifierHandler;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.*;
@@ -233,11 +232,8 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 			throw new IllegalStateException("Grist entities shouldn't be consumed client-side.");
 		if(sound)
 			this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.1F, 0.5F * ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.8F));
-		if(GristHelper.increase(world, identifier, new GristSet(gristType, gristValue)))
-		{
-			PlayerTracker.updateGristCache(this.getServer(), identifier);
-			this.remove();
-		}
+		GristHelper.increase(world, identifier, new GristSet(gristType, gristValue));
+		this.remove();
 	}
 	
 	@Override

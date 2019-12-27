@@ -1,15 +1,21 @@
 package com.mraof.minestuck.world.storage;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.editmode.EditData;
+import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
+import com.mraof.minestuck.item.crafting.alchemy.ImmutableGristSet;
+import com.mraof.minestuck.item.crafting.alchemy.NonNegativeGristSet;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
+import com.mraof.minestuck.network.GristCachePacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.PlayerDataPacket;
+import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
-import com.mraof.minestuck.tracker.PlayerTracker;
+import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.ColorCollector;
 import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.IdentifierHandler;
@@ -37,11 +43,10 @@ public final class PlayerData
 	private boolean givenModus;
 	private Modus modus;
 	private long boondollars;
+	private ImmutableGristSet gristCache;	//This is immutable in order to control where it can be changed
 	
 	private Title title;
 	private boolean effectToggle;
-	
-	public GristSet gristCache;
 	
 	private boolean hasLoggedIn;
 	
@@ -50,7 +55,7 @@ public final class PlayerData
 		this.savedData = savedData;
 		this.identifier = player;
 		echeladder = new Echeladder(savedData, player);
-		gristCache = new GristSet(GristTypes.BUILD, 20);
+		gristCache = new ImmutableGristSet(GristTypes.BUILD, 20);
 		hasLoggedIn = false;
 	}
 	
@@ -58,24 +63,23 @@ public final class PlayerData
 	{
 		this.savedData = savedData;
 		this.identifier = IdentifierHandler.load(nbt, "player");
-		if (nbt.contains("grist_cache"))
-		{
-			this.gristCache = GristSet.read(nbt.getList("grist_cache", Constants.NBT.TAG_COMPOUND));
-		}
-		title = Title.tryRead(nbt, "title");
+		
+		echeladder = new Echeladder(savedData, identifier);
+		echeladder.loadEcheladder(nbt);
+		if (nbt.contains("color"))
+			this.color = nbt.getInt("color");
+		
 		if (nbt.contains("modus"))
 		{
 			this.modus = CaptchaDeckHandler.readFromNBT(nbt.getCompound("modus"), savedData);
 			givenModus = true;
 		}
-		else givenModus = nbt.getBoolean("givenModus");
-		if (nbt.contains("color"))
-			this.color = nbt.getInt("color");
+		else givenModus = nbt.getBoolean("given_modus");
 		boondollars = nbt.getLong("boondollars");
-		effectToggle = nbt.getBoolean("effectToggle");
+		gristCache = NonNegativeGristSet.read(nbt.getList("grist_cache", Constants.NBT.TAG_COMPOUND)).asImmutable();
 		
-		echeladder = new Echeladder(savedData, identifier);
-		echeladder.loadEcheladder(nbt);
+		title = Title.tryRead(nbt, "title");
+		effectToggle = nbt.getBoolean("effect_toggle");
 		
 		hasLoggedIn = true;
 	}
@@ -84,18 +88,19 @@ public final class PlayerData
 	{
 		CompoundNBT nbt = new CompoundNBT();
 		identifier.saveToNBT(nbt, "player");
-		if(gristCache != null)
-			nbt.put("grist_cache", gristCache.write(new ListNBT()));
-		if(title != null)
-			title.write(nbt, "title");
+		echeladder.saveEcheladder(nbt);
+		nbt.putInt("color", color);
+		
 		if (this.modus != null)
 			nbt.put("modus", CaptchaDeckHandler.writeToNBT(modus));
-		else nbt.putBoolean("givenModus", givenModus);
-		nbt.putInt("color", this.color);
+		else nbt.putBoolean("given_modus", givenModus);
 		nbt.putLong("boondollars", boondollars);
-		nbt.putBoolean("effectToggle", effectToggle);
+		nbt.put("grist_cache", gristCache.write(new ListNBT()));
 		
-		echeladder.saveEcheladder(nbt);
+		if(title != null)
+			title.write(nbt, "title");
+		nbt.putBoolean("effect_toggle", effectToggle);
+		
 		return nbt;
 	}
 	
@@ -121,7 +126,7 @@ public final class PlayerData
 			this.color = color;
 			markDirty();
 			
-			sendColor(identifier.getPlayer(savedData.mcServer), false);
+			sendColor(getPlayer(), false);
 		}
 	}
 	
@@ -165,7 +170,7 @@ public final class PlayerData
 		{
 			boondollars += amount;
 			markDirty();
-			sendBoondollars(identifier.getPlayer(savedData.mcServer));
+			sendBoondollars(getPlayer());
 		}
 	}
 	
@@ -180,7 +185,7 @@ public final class PlayerData
 			
 			boondollars -= amount;
 			markDirty();
-			sendBoondollars(identifier.getPlayer(savedData.mcServer));
+			sendBoondollars(getPlayer());
 		}
 	}
 	
@@ -203,8 +208,20 @@ public final class PlayerData
 		{
 			boondollars = amount;
 			markDirty();
-			sendBoondollars(identifier.getPlayer(savedData.mcServer));
+			sendBoondollars(getPlayer());
 		}
+	}
+	
+	public ImmutableGristSet getGristCache()
+	{
+		return gristCache;
+	}
+	
+	public void setGristCache(NonNegativeGristSet cache)
+	{
+		gristCache = cache.asImmutable();
+		markDirty();
+		updateGristCache(getPlayer());
 	}
 	
 	public Title getTitle()
@@ -218,7 +235,7 @@ public final class PlayerData
 		{
 			title = Objects.requireNonNull(newTitle);
 			markDirty();
-			sendTitle(identifier.getPlayer(savedData.mcServer));
+			sendTitle(getPlayer());
 		} else throw new IllegalStateException("Can't set title for player "+ identifier.getUsername()+" because they already have one");
 	}
 	
@@ -260,7 +277,7 @@ public final class PlayerData
 		echeladder.sendDataPacket(player, true);
 		sendColor(player, !hasLoggedIn);
 		sendBoondollars(player);
-		PlayerTracker.updateGristCache(player.getServer(), identifier);
+		updateGristCache(player);
 		sendTitle(player);
 		
 		hasLoggedIn = true;
@@ -287,6 +304,29 @@ public final class PlayerData
 		MSPacketHandler.sendToPlayer(packet, player);
 	}
 	
+	private void updateGristCache(ServerPlayerEntity player)
+	{
+		GristSet gristSet = getGristCache();
+		
+		//Send to the player
+		if(player != null)
+		{
+			GristCachePacket packet = new GristCachePacket(gristSet, false);
+			MSPacketHandler.sendToPlayer(packet, player);
+		}
+		
+		//Also send to the editing player, if there is any
+		SburbConnection c = SkaianetHandler.get(savedData.mcServer).getActiveConnection(identifier);
+		if(c != null)
+		{
+			EditData data = ServerEditHandler.getData(savedData.mcServer, c);
+			if(data != null)
+			{
+				data.sendGristCacheToEditor();
+			}
+		}
+	}
+	
 	private void sendTitle(ServerPlayerEntity player)
 	{
 		Title newTitle = getTitle();
@@ -294,5 +334,10 @@ public final class PlayerData
 			return;
 		PlayerDataPacket packet = PlayerDataPacket.title(newTitle);
 		MSPacketHandler.sendToPlayer(packet, player);
+	}
+	
+	private ServerPlayerEntity getPlayer()
+	{
+		return identifier.getPlayer(savedData.mcServer);
 	}
 }

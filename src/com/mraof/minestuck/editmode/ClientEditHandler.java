@@ -32,7 +32,6 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.List;
-import java.util.Map.Entry;
 
 public class ClientEditHandler {
 	
@@ -111,11 +110,11 @@ public class ClientEditHandler {
 			return;
 		}
 		
-		for(Entry<GristType, Long> entry : cost.getMap().entrySet())
+		for(GristAmount amount : cost.getAmounts())
 		{
-			GristType grist = entry.getKey();
-			TextFormatting color = entry.getValue() <= have.getGrist(grist) ? TextFormatting.GREEN : TextFormatting.RED;
-			toolTip.add(new StringTextComponent(entry.getValue()+" ").appendSibling(grist.getDisplayName()).appendText(" ("+have.getGrist(grist) + ")").setStyle(new Style().setColor(color)));
+			GristType grist = amount.getType();
+			TextFormatting color = amount.getAmount() <= have.getGrist(grist) ? TextFormatting.GREEN : TextFormatting.RED;
+			toolTip.add(new StringTextComponent(amount.getAmount()+" ").appendSibling(grist.getDisplayName()).appendText(" ("+have.getGrist(grist) + ")").setStyle(new Style().setColor(color)));
 		}
 		if(cost.isEmpty())
 			toolTip.add(new TranslationTextComponent("gui.free").setStyle(new Style().setColor(TextFormatting.GREEN)));
@@ -192,9 +191,9 @@ public class ClientEditHandler {
 				StringBuilder str = new StringBuilder();
 				if(cost != null)
 				{
-					for(GristAmount grist : cost.getArray())
+					for(GristAmount grist : cost.getAmounts())
 					{
-						if(cost.getArray().indexOf(grist) != 0)
+						if(cost.getAmounts().indexOf(grist) != 0)
 							str.append(", ");
 						str.append(grist.getAmount()).append(" ").append(grist.getType().getDisplayName());
 					}

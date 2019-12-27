@@ -5,7 +5,10 @@ import com.mraof.minestuck.block.GristWidgetBlock;
 import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.inventory.GristWidgetContainer;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.alchemy.*;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
+import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
@@ -21,7 +24,6 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import java.util.Map.Entry;
 
 public class GristWidgetTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
 {
@@ -124,15 +126,13 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 			return;
 		}
 		
-		for(Entry<GristType, Long> entry : gristSet.getMap().entrySet())
+		for(GristAmount amount : gristSet.getAmounts())
 		{
-			long grist = entry.getValue();
-			while(true)
+			long grist = amount.getAmount();
+			while(grist > 0)
 			{
-				if(grist == 0)
-					break;
-				GristAmount gristAmount = new GristAmount(entry.getKey(),
-						grist <= 3 ? grist : (world.rand.nextInt((int) Math.min(Integer.MAX_VALUE, grist)) + 1));	//TODO is there a better way?
+				GristAmount gristAmount = new GristAmount(amount.getType(),
+						grist <= 3 ? grist : (world.rand.nextInt((int) Math.min(Integer.MAX_VALUE, grist)) + 1));    //TODO is there a better way?
 				GristEntity entity = new GristEntity(world,
 						this.pos.getX()
 								+ 0.5 /* this.width - this.width / 2 */,

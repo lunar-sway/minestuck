@@ -1,14 +1,14 @@
 package com.mraof.minestuck.client.util;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.AbstractGui;
-import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 
@@ -48,7 +48,7 @@ public class GuiUtil
 		}
 		
 		GristSet playerGrist = PlayerSavedData.getClientGrist();
-		Iterator<GristAmount> it = grist.getArray().iterator();
+		Iterator<GristAmount> it = grist.getAmounts().iterator();
 		if(!MinestuckConfig.alchemyIcons.get())
 		{
 			int place = 0;
@@ -135,7 +135,7 @@ public class GuiUtil
 		if(!MinestuckConfig.alchemyIcons.get())
 		{
 			int place = 0;
-			for(GristAmount entry : grist.getArray())
+			for(GristAmount entry : grist.getAmounts())
 			{
 				int row = place % 3;
 				int col = place / 3;
@@ -164,7 +164,7 @@ public class GuiUtil
 		} else
 		{
 			int index = 0;
-			for(GristAmount entry : grist.getArray())
+			for(GristAmount entry : grist.getAmounts())
 			{
 				GristType type = entry.getType();
 				long need = entry.getAmount();

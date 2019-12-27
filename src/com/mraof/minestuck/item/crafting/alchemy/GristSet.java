@@ -1,6 +1,5 @@
 package com.mraof.minestuck.item.crafting.alchemy;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
@@ -26,26 +25,14 @@ public class GristSet
 	 */
 	public GristSet()
 	{
-		this.gristTypes = new TreeMap<>();
+		this(new TreeMap<>());
 	}
-
-	private GristSet(Map<GristType, Long> map)
+	
+	protected GristSet(Map<GristType, Long> map)
 	{
 		this.gristTypes = map;
 	}
 	
-	public static GristSet immutable(ImmutableMap<GristType, Long> map)	//Hopefully this doesn't break sorting
-	{
-		return new GristSet(map);
-	}
-	
-	public GristSet asImmutable()
-	{
-		if(gristTypes instanceof ImmutableMap)
-			return this;
-		else return immutable(ImmutableMap.copyOf(this.gristTypes));
-	}
-
 	/**
 	 * Creates a set of grist values with one grist/amount pair. used in setting up the Grist Registry.
 	 */
@@ -76,7 +63,18 @@ public class GristSet
 			this.gristTypes.put(amount.getType(), amount.getAmount());
 		}
 	}
-
+	
+	public GristSet(GristSet set)
+	{
+		this();
+		gristTypes.putAll(set.gristTypes);
+	}
+	
+	public ImmutableGristSet asImmutable()
+	{
+		return new ImmutableGristSet(this);
+	}
+	
 	/**
 	 * Gets the amount of grist, given a type of grist.
 	 */
@@ -91,7 +89,7 @@ public class GristSet
 	public float getValue()	//TODO potentially duplicate code here, in GristHelper.getGristValue and in AlchemyRecipes.onAlchemizedItem
 	{
 		float sum = 0;
-		for(GristAmount amount : getArray())
+		for(GristAmount amount : getAmounts())
 			sum += amount.getValue();
 		return sum;
 	}
@@ -102,7 +100,16 @@ public class GristSet
 	public GristSet setGrist(GristType type, long amount)
 	{
 		if(type != null)
-			gristTypes.put(type, amount);
+		{
+			if (amount == 0)
+			{
+				this.gristTypes.remove(type);
+			}
+			else
+			{
+				gristTypes.put(type, amount);
+			}
+		}
 		return this;
 	}
 
@@ -111,11 +118,7 @@ public class GristSet
 	 */
 	public GristSet addGrist(GristType type, long amount)
 	{
-		if (amount == 0)
-		{
-			this.gristTypes.remove(type);
-		}
-		else
+		if(type != null)
 		{
 			this.gristTypes.compute(type, (key, value) -> value == null ? amount : value + amount);
 		}
@@ -125,7 +128,7 @@ public class GristSet
 	/**
 	 * Returns a Hashtable with grist->amount pairs.
 	 */
-	public Map<GristType, Long> getMap()
+	protected Map<GristType, Long> getMap()
 	{
 		return this.gristTypes;
 	}
@@ -133,7 +136,7 @@ public class GristSet
 	/**
 	 * Returns a ArrayList containing GristAmount objects representing the set.
 	 */
-	public List<GristAmount> getArray()
+	public List<GristAmount> getAmounts()
 	{
 		return this.gristTypes.entrySet().stream().map((entry) -> new GristAmount(entry.getKey(), entry.getValue())).collect(Collectors.toList());
 	}
@@ -143,7 +146,7 @@ public class GristSet
 	 */
 	public GristSet addGrist(GristSet set)
 	{
-		for (GristAmount grist : set.getArray())
+		for (GristAmount grist : set.getAmounts())
 		{
 			this.addGrist(grist);
 		}
@@ -170,7 +173,6 @@ public class GristSet
 	 */
 	public GristSet scale(float scale, boolean roundDown)
 	{
-
 		this.gristTypes.forEach((type, amount) -> {
 			if (amount > 0)
 			{
@@ -247,7 +249,7 @@ public class GristSet
 	
 	public void write(PacketBuffer buffer)
 	{
-		List<GristAmount> amounts = getArray();
+		List<GristAmount> amounts = getAmounts();
 		buffer.writeInt(amounts.size());
 		amounts.forEach(gristAmount -> gristAmount.write(buffer));
 	}
@@ -264,7 +266,7 @@ public class GristSet
 	
 	public ListNBT write(ListNBT list)
 	{
-		getArray().forEach(gristAmount -> list.add(gristAmount.write(new CompoundNBT(), null)));
+		getAmounts().forEach(gristAmount -> list.add(gristAmount.write(new CompoundNBT(), null)));
 		return list;
 	}
 	

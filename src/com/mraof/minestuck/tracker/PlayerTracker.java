@@ -1,18 +1,13 @@
 package com.mraof.minestuck.tracker;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.editmode.EditData;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
-import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.network.GristCachePacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ModConfigPacket;
-import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.util.UpdateChecker;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandInfo;
@@ -23,7 +18,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -35,7 +29,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public class PlayerTracker	//TODO Move some packet-sending code to PlayerData
+public class PlayerTracker
 {
 	public static final String LAND_ENTRY = "minestuck.land_entry";
 	
@@ -110,35 +104,6 @@ public class PlayerTracker	//TODO Move some packet-sending code to PlayerData
 		return false;
 	}
 	
-	/**
-	 * Uses an "encoded" username as parameter.
-	 */
-	public static void updateGristCache(MinecraftServer server, PlayerIdentifier player)
-	{
-		GristSet gristSet = PlayerSavedData.get(server.getWorld(DimensionType.OVERWORLD)).getGristSet(player);
-		
-		//Send to the player
-		ServerPlayerEntity playerMP = player.getPlayer(server);
-		if(playerMP != null)
-		{
-			GristCachePacket packet = new GristCachePacket(gristSet, false);
-			MSPacketHandler.sendToPlayer(packet, playerMP);
-		}
-		
-		//Also send to the editing player, if there is any
-		SburbConnection c = SkaianetHandler.get(server).getActiveConnection(player);
-		if(c != null)
-		{
-			EditData data = ServerEditHandler.getData(server, c);
-			if(data != null)
-			{
-				ServerPlayerEntity editor = data.getEditor();
-				GristCachePacket packet = new GristCachePacket(gristSet, true);
-				MSPacketHandler.sendToPlayer(packet, editor);
-			}
-		}
-	}
-
 	public static void sendConfigPacket(ServerPlayerEntity player, boolean mode)
 	{
 		ModConfigPacket packet;

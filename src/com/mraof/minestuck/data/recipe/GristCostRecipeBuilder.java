@@ -3,9 +3,9 @@ package com.mraof.minestuck.data.recipe;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
-import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.item.crafting.alchemy.ImmutableGristSet;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -93,7 +93,7 @@ public class GristCostRecipeBuilder
 	
 	public void build(Consumer<IFinishedRecipe> recipeSaver, ResourceLocation id)
 	{
-		recipeSaver.accept(new Result(new ResourceLocation(id.getNamespace(), "grist_costs/"+id.getPath()), ingredient, costBuilder != null ? GristSet.immutable(costBuilder.build()) : null, wildcard, priority));
+		recipeSaver.accept(new Result(new ResourceLocation(id.getNamespace(), "grist_costs/"+id.getPath()), ingredient, costBuilder != null ? new ImmutableGristSet(costBuilder) : null, wildcard, priority));
 	}
 	
 	public static class Result implements IFinishedRecipe

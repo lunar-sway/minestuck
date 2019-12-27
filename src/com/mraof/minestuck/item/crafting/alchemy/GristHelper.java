@@ -8,20 +8,16 @@ import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
+import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Random;
 
 public class GristHelper {
 	private static Random random = new Random();
@@ -116,21 +112,20 @@ public class GristHelper {
 	
 	/**
 	 * A shortened statement to obtain a certain grist count.
-	 * Uses the encoded version of the username!
 	 */
 	public static long getGrist(World world, PlayerIdentifier player, GristType type)
 	{
-		return PlayerSavedData.get(world).getGristSet(player).getGrist(type);
+		return PlayerSavedData.getData(player, world).getGristCache().getGrist(type);
 	}
 	
-	public static boolean canAfford(World world, @Nonnull ItemStack stack)
+	public static boolean canAfford(ServerPlayerEntity player, GristSet cost)
 	{
-		return canAfford(PlayerSavedData.getClientGrist(), GristCostRecipe.findCostForItem(stack, null, false, world));
+		return canAfford(PlayerSavedData.getData(player).getGristCache(), cost);
 	}
 	
-	public static boolean canAfford(World world, PlayerIdentifier player, @Nonnull ItemStack stack)
+	public static boolean canAfford(World world, PlayerIdentifier player, GristSet cost)
 	{
-		return canAfford(PlayerSavedData.get(world.getServer()).getGristSet(player), GristCostRecipe.findCostForItem(stack, null, false, world));
+		return canAfford(PlayerSavedData.getData(player, world).getGristCache(), cost);
 	}
 	
 	public static boolean canAfford(GristSet base, GristSet cost) {
@@ -156,21 +151,7 @@ public class GristHelper {
 	 */
 	public static void decrease(World world, PlayerIdentifier player, GristSet set)
 	{
-		Map<GristType, Long> reqs = set.getMap();
-		if (reqs != null) {
-			for (Entry<GristType, Long> pairs : reqs.entrySet())
-			{
-				setGrist(world, player, pairs.getKey(), getGrist(world, player, pairs.getKey()) - pairs.getValue());
-				notifyEditPlayer(world.getServer(), player, pairs.getKey().getDisplayName(), pairs.getValue(), "spent");
-			}
-		}
-	}
-	
-	public static void setGrist(World world, PlayerIdentifier player, GristType type, long i)
-	{
-		PlayerSavedData data = PlayerSavedData.get(world.getServer());
-		data.getGristSet(player).setGrist(type, i);
-		data.markDirty();
+		increase(world, player, set.copy().scale(-1));
 	}
 	
 	/**
@@ -188,20 +169,15 @@ public class GristHelper {
 		return i;
 	}
 	
-	public static boolean increase(World world, PlayerIdentifier player, GristSet set)
+	public static void increase(World world, PlayerIdentifier player, GristSet set)
 	{
-		if(player == null || set == null)
-			return false;
-		Map<GristType, Long> reqs = set.getMap();
-		if (reqs != null)
-		{
-			for (Entry<GristType, Long> pairs : reqs.entrySet())
-			{
-				setGrist(world, player, pairs.getKey(), getGrist(world, player, pairs.getKey()) + pairs.getValue());
-				notify(world.getServer(), player, pairs.getKey().getDisplayName(), pairs.getValue(), "gained");
-			}
-		}
-		return true;
+		Objects.requireNonNull(world);
+		Objects.requireNonNull(player);
+		Objects.requireNonNull(set);
+		PlayerData data = PlayerSavedData.getData(player, world);
+		NonNegativeGristSet newCache = new NonNegativeGristSet(data.getGristCache());
+		newCache.addGrist(set);
+		data.setGristCache(newCache);
 	}
 	
 	private static void notify(MinecraftServer server, PlayerIdentifier player, ITextComponent type, long difference, String action)

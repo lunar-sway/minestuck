@@ -7,7 +7,10 @@ import com.mraof.minestuck.util.ExtraJSONUtils;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.*;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
@@ -206,7 +209,7 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 	
 	public static class Simple extends GristCostRecipe
 	{
-		public final GristSet cost;
+		public final ImmutableGristSet cost;
 		private JeiGristCost jeiCost;
 		
 		public Simple(ResourceLocation id, Ingredient ingredient, GristSet cost, Integer priority)
