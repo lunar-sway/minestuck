@@ -6,12 +6,10 @@ import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.weapon.PotionWeaponItem;
-import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.EnumAspect;
-import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
@@ -186,17 +184,15 @@ public class ServerEventHandler
 	{
 		if(!event.player.world.isRemote)
 		{
-			IdentifierHandler.PlayerIdentifier identifier = IdentifierHandler.encode(event.player);
-			SburbConnection c = SkaianetHandler.get(event.player.getServer()).getMainConnection(identifier, true);
-			if(c == null || !c.hasEntered() || !MinestuckConfig.aspectEffects.get() || !PlayerSavedData.get(event.player.getServer()).getEffectToggle(identifier))
+			PlayerData data = PlayerSavedData.getData((ServerPlayerEntity) event.player);
+			if(data.getTitle() == null || !MinestuckConfig.aspectEffects.get() || !data.effectToggle())
 				return;
 			//TODO Should migrate to Title and/or EnumAspect
-			PlayerData data = PlayerSavedData.getData((ServerPlayerEntity) event.player);
 			int rung = data.getEcheladder().getRung();
 			EnumAspect aspect = data.getTitle().getHeroAspect();
 			int potionLevel = (int) (aspectStrength[aspect.ordinal()] * rung); //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
 			
-			if(event.player.getEntityWorld().getGameTime() % 380 == identifier.hashCode() % 380)
+			if(event.player.getEntityWorld().getGameTime() % 380 == event.player.getGameProfile().getId().hashCode() % 380)
 			{
 				if(rung > 18 && aspect == HOPE)
 				{

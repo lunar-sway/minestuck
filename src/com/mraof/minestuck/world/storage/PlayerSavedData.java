@@ -91,18 +91,6 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 		return getData(player).gristCache;
 	}
 	
-	public boolean getEffectToggle(PlayerIdentifier player)
-	{
-		return getData(player).effectToggle;
-	}
-	
-	public void setEffectToggle(PlayerIdentifier player, boolean toggle)
-	{
-		getData(player).effectToggle = toggle;
-		markDirty();
-	}
-	
-	
 	@Override
 	public CompoundNBT write(CompoundNBT compound)
 	{

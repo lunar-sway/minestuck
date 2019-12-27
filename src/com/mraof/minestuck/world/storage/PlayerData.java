@@ -39,9 +39,9 @@ public final class PlayerData
 	private long boondollars;
 	
 	private Title title;
+	private boolean effectToggle;
 	
 	public GristSet gristCache;
-	public boolean effectToggle;
 	
 	private boolean hasLoggedIn;
 	
@@ -220,6 +220,20 @@ public final class PlayerData
 			markDirty();
 			sendTitle(identifier.getPlayer(savedData.mcServer));
 		} else throw new IllegalStateException("Can't set title for player "+ identifier.getUsername()+" because they already have one");
+	}
+	
+	public boolean effectToggle()
+	{
+		return effectToggle;
+	}
+	
+	public void effectToggle(boolean toggle)
+	{
+		if(effectToggle != toggle)
+		{
+			effectToggle = toggle;
+			markDirty();
+		}
 	}
 	
 	public void onPlayerLoggedIn(ServerPlayerEntity player)

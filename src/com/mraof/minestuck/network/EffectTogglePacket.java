@@ -1,6 +1,6 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
@@ -34,9 +34,9 @@ public class EffectTogglePacket
 	
 	public void execute(ServerPlayerEntity player)
 	{
-		IdentifierHandler.PlayerIdentifier handler = IdentifierHandler.encode(player);
-		PlayerSavedData.get(player.world).setEffectToggle(handler, !PlayerSavedData.get(player.world).getEffectToggle(handler));
-		if(PlayerSavedData.getData(handler, player.server).effectToggle)
+		PlayerData data = PlayerSavedData.getData(player);
+		data.effectToggle(!data.effectToggle());
+		if(data.effectToggle())
 		{
 			player.sendStatusMessage(new TranslationTextComponent(ON), true);
 		} else
