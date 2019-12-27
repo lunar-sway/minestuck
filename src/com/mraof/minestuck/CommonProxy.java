@@ -16,7 +16,6 @@ import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.OreHandler;
 import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
-import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -51,9 +50,6 @@ public class CommonProxy
 
 		//register consort shop prices
 		ConsortRewardHandler.registerMinestuckPrices();
-		
-		//Register loot functionality objects
-		MSLootTables.registerLootClasses();
 		
 		MSBiomes.init();
 		ConsortDialogue.init();

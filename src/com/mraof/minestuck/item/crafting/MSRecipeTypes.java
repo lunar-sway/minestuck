@@ -2,10 +2,10 @@ package com.mraof.minestuck.item.crafting;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
+import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.item.crafting.CookingRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.SpecialRecipeSerializer;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -41,5 +41,7 @@ public class MSRecipeTypes
 		registry.register(new CookingRecipeSerializer<>(IrradiatingRecipe::new, 20).setRegistryName("irradiating"));
 		registry.register(new IrradiatingFallbackRecipe.Serializer().setRegistryName("irradiating_fallback"));
 		registry.register(new GristCostRecipe.Serializer().setRegistryName("grist_cost"));
+		
+		MSLootTables.registerLootSerializers();	//Needs to be called somewhere, preferably during a registry event, and this is close enough
 	}
 }
