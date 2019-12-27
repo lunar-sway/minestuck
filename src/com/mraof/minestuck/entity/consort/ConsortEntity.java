@@ -5,6 +5,7 @@ import com.mraof.minestuck.entity.MinestuckEntity;
 import com.mraof.minestuck.entity.consort.MessageType.SingleMessage;
 import com.mraof.minestuck.inventory.ConsortMerchantContainer;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
+import com.mraof.minestuck.util.MSNBTUtil;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
@@ -18,7 +19,6 @@ import net.minecraft.inventory.container.IContainerProvider;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
@@ -176,7 +176,7 @@ public abstract class ConsortEntity extends MinestuckEntity implements IContaine
 		}
 		
 		compound.putInt("Type", merchantType.ordinal());
-		compound.putString("HomeDim", homeDimension.getRegistryName().toString());
+		MSNBTUtil.tryWriteDimensionType(compound, "HomeDim", homeDimension);
 		
 		if(merchantType != EnumConsort.MerchantType.NONE && stocks != null)
 			compound.put("Stock", stocks.writeToNBT());
@@ -212,8 +212,9 @@ public abstract class ConsortEntity extends MinestuckEntity implements IContaine
 		merchantType = EnumConsort.MerchantType.values()[MathHelper.clamp(compound.getInt("Type"), 0, EnumConsort.MerchantType.values().length - 1)];
 		
 		if(compound.contains("HomeDim", Constants.NBT.TAG_STRING))
-			homeDimension = DimensionType.byName(new ResourceLocation(compound.getString("HomeDim")));
-		else homeDimension = this.world.getDimension().getType();
+			homeDimension = MSNBTUtil.tryReadDimensionType(compound, "HomeDim");
+		if(homeDimension == null)
+			homeDimension = this.world.getDimension().getType();
 		
 		if(merchantType != EnumConsort.MerchantType.NONE && compound.contains("Stock", Constants.NBT.TAG_LIST))
 		{

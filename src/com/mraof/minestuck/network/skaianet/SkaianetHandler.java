@@ -99,7 +99,7 @@ public class SkaianetHandler
 	
 	public SburbConnection getMainConnection(PlayerIdentifier player, boolean isClient)
 	{
-		if(player.equals(IdentifierHandler.nullIdentifier))
+		if(player == null || player.equals(IdentifierHandler.nullIdentifier))
 			return null;
 		for(SburbConnection c : connections)
 			if(c.isMain())
