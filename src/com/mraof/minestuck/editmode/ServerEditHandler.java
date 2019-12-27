@@ -12,6 +12,7 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.MSDimensions;
+import com.mraof.minestuck.world.storage.MSExtraData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -21,22 +22,17 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.GameType;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
@@ -49,7 +45,10 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Main class to handle the server side of edit mode.
@@ -62,8 +61,6 @@ public class ServerEditHandler
 	public static final ArrayList<String> commands = new ArrayList<>(Arrays.asList("effect", "gamemode", "defaultgamemode", "enchant", "xp", "tp", "spreadplayers", "kill", "clear", "spawnpoint", "setworldspawn", "give"));
 	public static final ServerEditHandler instance = new ServerEditHandler();
 	
-	private static List<EditData> list = new ArrayList<>();
-	
 	/**
 	 * Called both when any player logged out and when a player pressed the exit button.
 	 * @param player
@@ -74,9 +71,9 @@ public class ServerEditHandler
 			reset(getData(player));
 	}
 	
-	public static void onDisconnect(SburbConnection c)
+	public static void onDisconnect(MinecraftServer server, SburbConnection c)
 	{
-		reset(getData(c));
+		reset(getData(server, c));
 		c.useCoordinates = false;
 	}
 	
@@ -89,42 +86,24 @@ public class ServerEditHandler
 	 * Called when the server stops editing the clients house.
 	 * @param damageSource If the process was cancelled by the decoy taking damage, this parameter will be the damage source. Else null.
 	 * @param damage If the damageSource isn't null, this is the damage taken, else this parameter is ignored.
-	 * @param data editdata to identify the editmode session
+	 * @param editData editdata to identify the editmode session
 	 */
-	public static void reset(DamageSource damageSource, float damage, EditData data)
+	public static void reset(DamageSource damageSource, float damage, EditData editData)
 	{
-		if(data == null)
+		if(editData == null)
 			return;
 		
-		list.remove(data);
+		ServerPlayerEntity player = editData.getEditor();
 		
-		ServerPlayerEntity player = data.player;
-		player.closeScreen();
-		DecoyEntity decoy = data.decoy;
-		if(Teleport.teleportEntity(player, (ServerWorld) decoy.getEntityWorld(), decoy.posX, decoy.posY, decoy.posZ, decoy.rotationYaw, decoy.rotationPitch) == null)
-		{
-			list.add(data);
-			throw new IllegalStateException("Was not able to reset editmode player for "+player.getName()+"! Likely caused by mod collision.");
-		}
+		editData.recover();
 		
-		data.connection.useCoordinates = true;
-		data.connection.posX = player.posX;
-		data.connection.posZ = player.posZ;
-		
-		player.setGameType(decoy.gameType);
-		
-		player.abilities.read(decoy.capabilities);
-		player.sendPlayerAbilities();
-		player.fallDistance = 0;
-		player.setHealth(decoy.getHealth());
-		player.getFoodStats().read(decoy.getFoodStatsNBT());
-		data.connection.inventory = player.inventory.write(new ListNBT());
-		player.inventory.copyInventory(decoy.inventory);
-		
-		decoy.markedForDespawn = true;
+		MSExtraData data = MSExtraData.get(player.world);
+		data.removeEditData(editData);
 		
 		ServerEditPacket packet = ServerEditPacket.exit();
 		MSPacketHandler.sendToPlayer(packet, player);
+		
+		editData.getDecoy().markedForDespawn = true;
 		
 		if(damageSource != null && damageSource.getImmediateSource() != player)
 			player.attackEntityFrom(damageSource, damage);
@@ -138,7 +117,7 @@ public class ServerEditHandler
 			return;    //Don't want to bother making the decoy able to ride anything right now.
 		}
 		SburbConnection c = SkaianetHandler.get(player.getServer()).getActiveConnection(computerTarget);
-		if(c != null && c.getServerIdentifier().equals(computerOwner) && getData(c) == null && getData(player) == null)
+		if(c != null && c.getServerIdentifier().equals(computerOwner) && getData(player.server, c) == null && getData(player) == null)
 		{
 			Debug.info("Activating edit mode on player \""+player.getName()+"\", target player: \""+computerTarget+"\".");
 			DecoyEntity decoy = new DecoyEntity((ServerWorld) player.world, player);
@@ -156,7 +135,7 @@ public class ServerEditHandler
 			if(c.inventory != null)
 				player.inventory.read(c.inventory);
 			decoy.world.addEntity(decoy);
-			list.add(data);
+			MSExtraData.get(player.world).addEditData(data);
 			ServerEditPacket packet = ServerEditPacket.activate(computerTarget.getUsername(), c.centerX, c.centerZ, c.givenItems(), DeployList.getDeployListTag(player.getServer(), c));
 			MSPacketHandler.sendToPlayer(packet, player);
 			PlayerTracker.updateGristCache(player.getServer(), c.getClientIdentifier());
@@ -195,25 +174,16 @@ public class ServerEditHandler
 	
 	public static EditData getData(PlayerEntity editor)
 	{
-		for(EditData data : list)
-			if(data.player == editor)
-				return data;
-		return null;
+		return MSExtraData.get(editor.world).findEditData(editData -> editData.getEditor() == editor);
 	}
 	
-	public static EditData getData(SburbConnection c)
+	public static EditData getData(MinecraftServer server, SburbConnection c)
 	{
-		for(EditData data : list)
-			if(data.connection.getClientIdentifier().equals(c.getClientIdentifier()) && data.connection.getServerIdentifier().equals(c.getServerIdentifier()))
-				return data;
-		return null;
+		return MSExtraData.get(server).findEditData(editData -> editData.connection.getClientIdentifier().equals(c.getClientIdentifier()) && editData.connection.getServerIdentifier().equals(c.getServerIdentifier()));
 	}
 	
 	public static EditData getData(DecoyEntity decoy) {
-		for(EditData data : list)
-			if(data.decoy == decoy)
-				return data;
-		return null;
+		return MSExtraData.get(decoy.getEntityWorld()).findEditData(editData -> editData.getDecoy() == decoy);
 	}
 	
 	@SubscribeEvent
@@ -503,10 +473,9 @@ public class ServerEditHandler
 			player.getServer().getPlayerList().sendInventory(player);
 	}
 	
-	public static void onServerStopping()
-	{	
-		for(EditData data : new ArrayList<>(list))
-			reset(data);
+	public static void onServerStopping(MinecraftServer server)
+	{
+		MSExtraData.get(server).forEachAndClear(ServerEditHandler::reset);
 	}
 	
 	/*@SubscribeEvent(priority=EventPriority.LOWEST, receiveCanceled=false) TODO Do something about command security
@@ -594,83 +563,11 @@ public class ServerEditHandler
 			stack.setTag(null);
 	}
 	
-	private static List<CompoundNBT> recoverData = new ArrayList<CompoundNBT>();
-	
-	public static void saveData(CompoundNBT nbt)
-	{
-		ListNBT nbtList = new ListNBT();
-		for(CompoundNBT recoverEntry : recoverData)
-			nbtList.add(recoverEntry);
-		
-		for(EditData data : list)
-		{
-			CompoundNBT nbtTag = new CompoundNBT();
-			UUID id = data.player.getGameProfile().getId();
-			nbtTag.putLong("UUID1", id.getLeastSignificantBits());
-			nbtTag.putLong("UUID2", id.getMostSignificantBits());
-			
-			nbtTag.putString("dim", data.decoy.dimension.getRegistryName().toString());
-			nbtTag.putDouble("x", data.decoy.posX);
-			nbtTag.putDouble("y", data.decoy.posY);
-			nbtTag.putDouble("z", data.decoy.posZ);
-			nbtTag.putFloat("rotYaw", data.decoy.rotationYaw);
-			nbtTag.putFloat("rotPitch", data.decoy.rotationPitch);
-			
-			nbtTag.putInt("gamemode", data.decoy.gameType.getID());
-			nbtTag.put("capabilities", data.decoy.capabilities);
-			nbtTag.putFloat("health", data.decoy.getHealth());
-			nbtTag.put("food", data.decoy.getFoodStatsNBT());
-			nbtTag.put("inv", data.decoy.inventory.write(new ListNBT()));
-			
-			data.connection.inventory = data.player.inventory.write(new ListNBT());
-			
-			nbtList.add(nbtTag);
-		}
-		
-		nbt.put("editmodeRecover", nbtList);
-	}
-	
-	public static void loadData(CompoundNBT nbt)	//TODO This is unused
-	{
-		recoverData.clear();
-		if(nbt != null && nbt.contains("editmodeRecover", Constants.NBT.TAG_LIST))
-		{
-			ListNBT nbtList = nbt.getList("editmodeRecover", Constants.NBT.TAG_COMPOUND);
-			for(int i = 0; i < nbtList.size(); i++)
-				recoverData.add(nbtList.getCompound(i));
-		}
-	}
-	
 	public static void onPlayerLoggedIn(ServerPlayerEntity player)
 	{
 		UUID id = player.getGameProfile().getId();
-		Iterator<CompoundNBT> iter = recoverData.iterator();
-		while(iter.hasNext())
-		{
-			CompoundNBT nbt = iter.next();
-			if(id.getLeastSignificantBits() == nbt.getLong("UUID1") && id.getMostSignificantBits() == nbt.getLong("UUID2"))
-			{	//Recover player
-				DimensionType type = DimensionType.byName(new ResourceLocation(nbt.getString("dim")));
-				if(type == null)
-					throw new IllegalStateException("Unable to restore editmode player for "+player.getName()+"! Could not read dimension "+nbt.getString("dim")+".");
-				ServerWorld world = DimensionManager.getWorld(player.server, type, true, true);
-				if(player.dimension != type && (world == null || Teleport.teleportEntity(player, world) == null))
-					throw new IllegalStateException("Was not able to restore editmode player for "+player.getName()+"! Unable to teleport player to "+type.getRegistryName());
-				
-				player.connection.setPlayerLocation(nbt.getDouble("x"), nbt.getDouble("y"), nbt.getDouble("z"), nbt.getFloat("rotYaw"), nbt.getFloat("rotPitch"));
-				player.setGameType(GameType.getByID(nbt.getInt("gamemode")));
-				player.abilities.read(nbt.getCompound("capabilities"));
-				player.sendPlayerAbilities();
-				player.fallDistance = 0;
-				
-				player.setHealth(nbt.getFloat("health"));
-				player.getFoodStats().read(nbt.getCompound("food"));
-				player.inventory.read(nbt.getList("inv", Constants.NBT.TAG_COMPOUND));
-				
-				iter.remove();
-				
-				return;
-			}
-		}
+		EditData.PlayerRecovery recovery = MSExtraData.get(player.world).removePlayerRecovery(id);
+		if(recovery != null)
+			recovery.recover(player, false);
 	}
 }

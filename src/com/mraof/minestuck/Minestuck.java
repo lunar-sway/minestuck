@@ -13,6 +13,7 @@ import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.PlayerTracker;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.world.storage.MSExtraData;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.world.dimension.DimensionType;
@@ -25,10 +26,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
-import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
-import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
-import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
+import net.minecraftforge.fml.event.server.*;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 
@@ -129,9 +127,16 @@ public class Minestuck
 	}
 	
 	@SubscribeEvent
+	public void serverStarted(FMLServerStartedEvent event)
+	{
+		SkaianetHandler skaianet = SkaianetHandler.get(event.getServer());
+		MSExtraData.get(event.getServer()).recoverConnections(recovery -> recovery.recover(skaianet.getActiveConnection(recovery.getClientPlayer())));
+	}
+	
+	@SubscribeEvent
 	public void serverStopping(FMLServerStoppingEvent event)
 	{
-		ServerEditHandler.onServerStopping();
+		ServerEditHandler.onServerStopping(event.getServer());
 	}
 	
 	@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)

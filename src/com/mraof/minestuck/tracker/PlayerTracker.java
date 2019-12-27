@@ -1,6 +1,7 @@
 package com.mraof.minestuck.tracker;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.editmode.EditData;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
@@ -153,7 +154,7 @@ public class PlayerTracker
 	{
 		GristSet gristSet = PlayerSavedData.get(server.getWorld(DimensionType.OVERWORLD)).getGristSet(player);
 		
-		//The player
+		//Send to the player
 		ServerPlayerEntity playerMP = player.getPlayer(server);
 		if(playerMP != null)
 		{
@@ -161,13 +162,17 @@ public class PlayerTracker
 			MSPacketHandler.sendToPlayer(packet, playerMP);
 		}
 		
-		//The editing player, if there is any.
+		//Also send to the editing player, if there is any
 		SburbConnection c = SkaianetHandler.get(server).getActiveConnection(player);
-		if(c != null && ServerEditHandler.getData(c) != null)
+		if(c != null)
 		{
-			ServerPlayerEntity editor = ServerEditHandler.getData(c).getEditor();
-			GristCachePacket packet = new GristCachePacket(gristSet, true);
-			MSPacketHandler.sendToPlayer(packet, editor);
+			EditData data = ServerEditHandler.getData(server, c);
+			if(data != null)
+			{
+				ServerPlayerEntity editor = data.getEditor();
+				GristCachePacket packet = new GristCachePacket(gristSet, true);
+				MSPacketHandler.sendToPlayer(packet, editor);
+			}
 		}
 	}
 	

@@ -226,7 +226,7 @@ public class GristHelper {
 		if(sc == null)
 			return;
 		
-		EditData ed = ServerEditHandler.getData(sc);
+		EditData ed = ServerEditHandler.getData(server, sc);
 		if(ed == null)
 			return;
 		

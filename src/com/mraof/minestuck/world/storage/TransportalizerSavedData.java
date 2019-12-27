@@ -103,7 +103,6 @@ public class TransportalizerSavedData extends WorldSavedData
 		return unusedId;
 	}
 	
-	
 	public static TransportalizerSavedData get(World world)
 	{
 		MinecraftServer server = world.getServer();

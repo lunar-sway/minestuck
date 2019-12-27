@@ -30,8 +30,6 @@ public class MinestuckSaveHandler extends WorldSavedData    //TODO https://mcfor
 			NBTTagCompound nbt = new NBTTagCompound();
 			
 			ServerEditHandler.saveData(nbt);    //Keep this before skaianet
-			MinestuckDimensionHandler.saveData(nbt);
-			MinestuckPlayerData.writeToNBT(nbt);
 			
 			
 			NBTTagList list = new NBTTagList();
@@ -45,8 +43,6 @@ public class MinestuckSaveHandler extends WorldSavedData    //TODO https://mcfor
 	public void onWorldLoad(WorldEvent.Load event)
 	{
 				ServerEditHandler.loadData(nbt);
-				MinestuckDimensionHandler.loadData(nbt);
-				MinestuckPlayerData.readFromNBT(nbt);
 				
 				ServerEventHandler.tickTasks.clear();
 				if(nbt.hasKey("tickTasks", 9))

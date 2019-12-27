@@ -255,7 +255,7 @@ public class SkaianetHandler
 						sc.markBlockForUpdate();
 					}
 					sessionHandler.onConnectionClosed(c, true);
-					ServerEditHandler.onDisconnect(c);
+					ServerEditHandler.onDisconnect(mcServer, c);
 					if(c.isMain())
 						c.close();
 					else connections.remove(c);
@@ -640,7 +640,7 @@ public class SkaianetHandler
 						iter2.remove();
 					else c.close();
 					sessionHandler.onConnectionClosed(c, true);
-					ServerEditHandler.onDisconnect(c);
+					ServerEditHandler.onDisconnect(mcServer, c);
 					
 					if(cc != null)
 					{
@@ -795,7 +795,7 @@ public class SkaianetHandler
 			Arrays.fill(c.givenItemList, false);
 			c.unregisteredItems = new ListNBT();
 			
-			EditData data = ServerEditHandler.getData(c);
+			EditData data = ServerEditHandler.getData(mcServer, c);
 			if(data != null)
 			{
 				ServerEditPacket packet = ServerEditPacket.givenItems(c.givenItemList);
