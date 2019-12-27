@@ -4,9 +4,9 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.inventory.GristWidgetContainer;
-import com.mraof.minestuck.tileentity.GristWidgetTileEntity;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
+import com.mraof.minestuck.tileentity.GristWidgetTileEntity;
+import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -60,7 +60,7 @@ public class GristWidgetScreen extends MachineScreen<GristWidgetContainer>
 			GuiUtil.drawGristBoard(set, GuiUtil.GristboardMode.GRIST_WIDGET, 9, 45, font);
 			
 			int cost = GristWidgetTileEntity.getGristWidgetBoondollarValue(set);
-			long has = PlayerSavedData.boondollars;
+			long has = ClientPlayerData.boondollars;
 			String costText = GuiUtil.addSuffix(cost)+"£("+GuiUtil.addSuffix(has)+")";
 			font.drawString(costText, xSize - 9 - font.getStringWidth(costText), ySize - 96 + 3, cost > has ? 0xFF0000 : 0x00FF00);
 			

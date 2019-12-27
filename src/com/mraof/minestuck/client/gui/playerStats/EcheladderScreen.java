@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.gui.playerStats;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.util.Echeladder;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
+import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -59,10 +59,10 @@ public class EcheladderScreen extends PlayerStatsScreen
 	public void init()
 	{
 		super.init();
-		scrollIndex = MathHelper.clamp((PlayerSavedData.rung - 8)*14, 0, MAX_SCROLL);
+		scrollIndex = MathHelper.clamp((ClientPlayerData.rung - 8)*14, 0, MAX_SCROLL);
 		animatedRung = Math.max(animatedRung, lastRung);	//If you gain a rung while the gui is open, the animated rung might get higher than the lastRung. Otherwise they're always the same value.
 		fromRung = lastRung;
-		lastRung = PlayerSavedData.rung;
+		lastRung = ClientPlayerData.rung;
 	}
 	
 	@Override
@@ -75,11 +75,11 @@ public class EcheladderScreen extends PlayerStatsScreen
 		if(animationCycle == 0)
 		{
 			currentRung = animatedRung;
-			if(animatedRung < PlayerSavedData.rung)
+			if(animatedRung < ClientPlayerData.rung)
 			{
-				animatedRungs = PlayerSavedData.rung - animatedRung;
+				animatedRungs = ClientPlayerData.rung - animatedRung;
 				animationCycle = timeBeforeAnimation + getTicksForRungAnimation(animatedRungs)*MinestuckConfig.echeladderAnimation;
-				animatedRung = PlayerSavedData.rung;
+				animatedRung = ClientPlayerData.rung;
 			}
 		} else
 		{
@@ -139,7 +139,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 					bg = backgrounds[rung];
 				else if(textColors.length > rung)
 					bg = ~textColors[rung];
-				fill(xOffset + 90, y + 10, xOffset + 90 + (int)(146* PlayerSavedData.rungProgress), y + 12, bg);
+				fill(xOffset + 90, y + 10, xOffset + 90 + (int)(146* ClientPlayerData.rungProgress), y + 12, bg);
 			} else rand.nextInt(0xFFFFFF);
 			
 			String s = I18n.hasKey("echeladder.rung"+rung) ? I18n.format("echeladder.rung"+rung) : "Rung "+(rung+1);
@@ -172,7 +172,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 		mc.fontRenderer.drawString(String.valueOf(health), xOffset + 26, yOffset + 93, 0x0094FF);
 		
 		mc.fontRenderer.drawString("=", xOffset + 25, yOffset + 12, 0x404040);	//Should this be black, or the same blue as the numbers?
-		mc.fontRenderer.drawString(String.valueOf(PlayerSavedData.boondollars), xOffset + 27 + mc.fontRenderer.getStringWidth("="), yOffset + 12, 0x0094FF);
+		mc.fontRenderer.drawString(String.valueOf(ClientPlayerData.boondollars), xOffset + 27 + mc.fontRenderer.getStringWidth("="), yOffset + 12, 0x0094FF);
 		
 		mc.fontRenderer.drawString(I18n.format(CACHE), xOffset + 24, yOffset + 138, 0x404040);
 		mc.fontRenderer.drawString("Unlimited", xOffset + 26, yOffset + 147, 0x0094FF);

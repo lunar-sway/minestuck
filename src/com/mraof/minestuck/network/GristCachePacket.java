@@ -1,7 +1,7 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
+import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.network.PacketBuffer;
 
 public class GristCachePacket implements PlayToClientPacket
@@ -31,6 +31,6 @@ public class GristCachePacket implements PlayToClientPacket
 	@Override
 	public void execute()
 	{
-		PlayerSavedData.onPacketRecived(this);
+		ClientPlayerData.onPacketRecived(this);
 	}
 }

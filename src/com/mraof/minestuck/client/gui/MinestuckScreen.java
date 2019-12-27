@@ -4,7 +4,7 @@ import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
+import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
@@ -41,7 +41,7 @@ public abstract class MinestuckScreen extends Screen
 		//Show the name of the grist instead of the count if displaying a tooltip
 		boolean showName = false;
 		GristType tooltipType = null;
-		GristSet clientGrist = PlayerSavedData.getClientGrist();
+		GristSet clientGrist = ClientPlayerData.getClientGrist();
 
 		List<GristType> types = new ArrayList<>(GristTypes.REGISTRY.getValues());
 		Collections.sort(types);

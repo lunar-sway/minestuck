@@ -5,7 +5,7 @@ import com.mraof.minestuck.util.ColorCollector;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.util.EnumClass;
 import com.mraof.minestuck.util.Title;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
+import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -128,12 +128,12 @@ public class PlayerDataPacket implements PlayToClientPacket	//TODO Probably heal
 			else ColorCollector.playerColor = i1;
 		} else if(type == TITLE)
 		{
-			PlayerSavedData.title = new Title(EnumClass.getClassFromInt(i1), EnumAspect.getAspectFromInt(i2));
+			ClientPlayerData.title = new Title(EnumClass.getClassFromInt(i1), EnumAspect.getAspectFromInt(i2));
 		} else if(type == ECHELADDER)
 		{
-			int prev = PlayerSavedData.rung;
-			PlayerSavedData.rung = i1;
-			PlayerSavedData.rungProgress = f;
+			int prev = ClientPlayerData.rung;
+			ClientPlayerData.rung = i1;
+			ClientPlayerData.rungProgress = f;
 			if(!b)
 				for(prev++; prev <= i1; prev++)
 				{
@@ -143,7 +143,7 @@ public class PlayerDataPacket implements PlayToClientPacket	//TODO Probably heal
 			else EcheladderScreen.animatedRung = EcheladderScreen.lastRung = i1;
 		} else if(type == BOONDOLLAR)
 		{
-			PlayerSavedData.boondollars = l;
+			ClientPlayerData.boondollars = l;
 		}
 	}
 }

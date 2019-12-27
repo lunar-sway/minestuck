@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.gui;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.inventory.ConsortMerchantContainer;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
+import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
@@ -44,7 +44,7 @@ public class ConsortShopScreen extends ContainerScreen<ConsortMerchantContainer>
 		this.minecraft.getTextureManager().bindTexture(PlayerStatsScreen.icons);
 		this.blit(x + 5, y + 7, 238, 16, 18, 18);
 		
-		font.drawString(String.valueOf(PlayerSavedData.boondollars), x + 25, y + 12, 0x0094FF);
+		font.drawString(String.valueOf(ClientPlayerData.boondollars), x + 25, y + 12, 0x0094FF);
 		
 		for (int i = 0; i < 9; i++)
 		{

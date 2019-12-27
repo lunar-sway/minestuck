@@ -5,7 +5,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
+import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
@@ -47,7 +47,7 @@ public class GuiUtil
 			return;
 		}
 		
-		GristSet playerGrist = PlayerSavedData.getClientGrist();
+		GristSet playerGrist = ClientPlayerData.getClientGrist();
 		Iterator<GristAmount> it = grist.getAmounts().iterator();
 		if(!MinestuckConfig.alchemyIcons.get())
 		{
@@ -131,7 +131,7 @@ public class GuiUtil
 		mouseX -= boardX;
 		mouseY -= boardY;
 		
-		GristSet playerGrist = PlayerSavedData.getClientGrist();
+		GristSet playerGrist = ClientPlayerData.getClientGrist();
 		if(!MinestuckConfig.alchemyIcons.get())
 		{
 			int place = 0;

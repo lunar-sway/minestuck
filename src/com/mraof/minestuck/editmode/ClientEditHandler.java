@@ -6,7 +6,7 @@ import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.network.ClientEditPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.world.MSDimensions;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
+import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -88,7 +88,7 @@ public class ClientEditHandler {
 		if(!isActive())
 			return;
 		
-		GristSet have = PlayerSavedData.getClientGrist();
+		GristSet have = ClientPlayerData.getClientGrist();
 		
 		addToolTip(event.getItemStack(), event.getToolTip(), have, givenItems, event.getEntity().world);
 		
@@ -142,7 +142,7 @@ public class ClientEditHandler {
 			DeployList.ClientDeployEntry entry = DeployList.getEntryClient(stack);
 			if(entry != null)
 			{
-				if(!ServerEditHandler.isBlockItem(stack.getItem()) && GristHelper.canAfford(PlayerSavedData.getClientGrist(), givenItems[entry.getIndex()]
+				if(!ServerEditHandler.isBlockItem(stack.getItem()) && GristHelper.canAfford(ClientPlayerData.getClientGrist(), givenItems[entry.getIndex()]
 						? entry.getSecondaryCost() : entry.getPrimaryCost()))
 					givenItems[entry.getIndex()] = true;
 				else event.setCanceled(true);
@@ -187,7 +187,7 @@ public class ClientEditHandler {
 					cost = entry.getSecondaryCost();
 				else cost = entry.getPrimaryCost();
 			else cost = GristCostRecipe.findCostForItem(stack, null, false, event.getWorld());
-			if(!GristHelper.canAfford(PlayerSavedData.getClientGrist(), cost)) {
+			if(!GristHelper.canAfford(ClientPlayerData.getClientGrist(), cost)) {
 				StringBuilder str = new StringBuilder();
 				if(cost != null)
 				{
@@ -213,7 +213,7 @@ public class ClientEditHandler {
 		{
 			BlockState block = event.getWorld().getBlockState(event.getPos());
 			if(block.getBlockHardness(event.getWorld(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
-					|| PlayerSavedData.getClientGrist().getGrist(GristTypes.BUILD) <= 0)
+					|| ClientPlayerData.getClientGrist().getGrist(GristTypes.BUILD) <= 0)
 				event.setCanceled(true);
 		}
 	}
