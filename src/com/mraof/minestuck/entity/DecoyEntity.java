@@ -4,10 +4,7 @@ import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.util.Debug;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
 import net.minecraft.client.renderer.texture.DownloadingTexture;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -103,7 +100,7 @@ public class DecoyEntity extends MobEntity
 	@Override
 	public EntitySize getSize(Pose poseIn)
 	{
-		return this.player.getSize(poseIn);
+		return EntityType.PLAYER.getSize();
 	}
 	
 	private void initInventory(ServerPlayerEntity player)

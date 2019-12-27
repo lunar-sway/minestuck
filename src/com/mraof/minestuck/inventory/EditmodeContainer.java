@@ -132,7 +132,6 @@ public class EditmodeContainer extends Container
 		{
 			itemList.add(this.items.size() <= i + scroll*2? ItemStack.EMPTY:this.items.get(i + scroll*2));
 			this.inventory.setInventorySlotContents(i, itemList.get(i));
-			this.items.set(i, itemList.get(i));
 		}
 		
 		EditmodeInventoryPacket packet = EditmodeInventoryPacket.update(itemList, scroll > 0, scroll*2 + 14 < items.size());
