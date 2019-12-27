@@ -4,15 +4,12 @@ import com.mraof.minestuck.editmode.ClientEditHandler;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.function.Supplier;
 
-public class ServerEditPacket
+public class ServerEditPacket implements PlayToClientPacket
 {
 	
 	String target;
@@ -115,14 +112,7 @@ public class ServerEditPacket
 		return packet;
 	}
 	
-	public void consume(Supplier<NetworkEvent.Context> ctx)
-	{
-		if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT)
-			ctx.get().enqueueWork(this::execute);
-		
-		ctx.get().setPacketHandled(true);
-	}
-	
+	@Override
 	public void execute()
 	{
 		ClientEditHandler.onClientPackage(target, centerX, centerZ, givenItems, deployTags);

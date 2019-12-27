@@ -11,12 +11,8 @@ import net.minecraft.server.management.OpEntry;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.GlobalPos;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
 
-import java.util.function.Supplier;
-
-public class SburbConnectPacket
+public class SburbConnectPacket implements PlayToServerPacket
 {
 	
 	private final BlockPos computer;
@@ -46,14 +42,7 @@ public class SburbConnectPacket
 		return new SburbConnectPacket(computer, otherPlayer, isClient);
 	}
 	
-	public void consume(Supplier<NetworkEvent.Context> ctx)
-	{
-		if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER)
-			ctx.get().enqueueWork(() -> this.execute(ctx.get().getSender()));
-		
-		ctx.get().setPacketHandled(true);
-	}
-	
+	@Override
 	public void execute(ServerPlayerEntity player)
 	{
 		if(player.world.isAreaLoaded(computer, 0))

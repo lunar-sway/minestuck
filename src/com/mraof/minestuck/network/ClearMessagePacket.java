@@ -5,10 +5,6 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
-
-import java.util.function.Supplier;
 
 /**
  * This packet tells the server to clear the message for the
@@ -18,7 +14,7 @@ import java.util.function.Supplier;
  * @author kirderf1
  *
  */
-public class ClearMessagePacket
+public class ClearMessagePacket implements PlayToServerPacket
 {
 	BlockPos computer;
 	int program;
@@ -43,14 +39,7 @@ public class ClearMessagePacket
 		return new ClearMessagePacket(computer, program);
 	}
 	
-	public void consume(Supplier<NetworkEvent.Context> ctx)
-	{
-		if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER)
-			ctx.get().enqueueWork(() -> this.execute(ctx.get().getSender()));
-		
-		ctx.get().setPacketHandled(true);
-	}
-	
+	@Override
 	public void execute(ServerPlayerEntity player)
 	{
 	

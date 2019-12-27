@@ -9,12 +9,8 @@ import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
 
-import java.util.function.Supplier;
-
-public class PlayerDataPacket	//TODO Probably healthier if this is several different packets
+public class PlayerDataPacket implements PlayToClientPacket	//TODO Probably healthier if this is several different packets
 {
 	private static final byte COLOR = 0, TITLE = 1, ECHELADDER = 2, BOONDOLLAR = 3;
 	private static final int NO_COLOR = -2;	//Can be removed if we remove -1 as a default color when colors are made to hexes
@@ -119,14 +115,7 @@ public class PlayerDataPacket	//TODO Probably healthier if this is several diffe
 		return packet;
 	}
 	
-	public void consume(Supplier<NetworkEvent.Context> ctx)
-	{
-		if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT)
-			ctx.get().enqueueWork(this::execute);
-		
-		ctx.get().setPacketHandled(true);
-	}
-	
+	@Override
 	public void execute()
 	{
 		if(type == COLOR)

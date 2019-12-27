@@ -5,12 +5,8 @@ import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.util.Title;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
 
-import java.util.function.Supplier;
-
-public class TitleSelectPacket
+public class TitleSelectPacket implements PlayToBothPacket
 {
 	private final Title title;
 	
@@ -41,21 +37,13 @@ public class TitleSelectPacket
 		} else return new TitleSelectPacket();
 	}
 	
-	public void consume(Supplier<NetworkEvent.Context> ctx)
-	{
-		if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER)
-			ctx.get().enqueueWork(() -> this.execute(ctx.get().getSender()));
-		else if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT)
-			ctx.get().enqueueWork(this::execute);
-		
-		ctx.get().setPacketHandled(true);
-	}
-	
+	@Override
 	public void execute()
 	{
 		MSScreenFactories.displayTitleSelectScreen(title);
 	}
 	
+	@Override
 	public void execute(ServerPlayerEntity player)
 	{
 		SburbHandler.titleSelected(player, title);

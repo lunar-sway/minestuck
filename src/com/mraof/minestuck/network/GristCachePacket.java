@@ -1,16 +1,10 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
 
-import java.util.Map;
-import java.util.function.Supplier;
-
-public class GristCachePacket
+public class GristCachePacket implements PlayToClientPacket
 {
 	public final GristSet gristCache;
 	public final boolean isEditmode;
@@ -34,15 +28,8 @@ public class GristCachePacket
 		return new GristCachePacket(gristCache, isEditmode);
 	}
 	
-	public void consume(Supplier<NetworkEvent.Context> ctx)
-	{
-		if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT)
-			ctx.get().enqueueWork(this::execute);
-		
-		ctx.get().setPacketHandled(true);
-	}
-	
-	private void execute()
+	@Override
+	public void execute()
 	{
 		PlayerSavedData.onPacketRecived(this);
 	}

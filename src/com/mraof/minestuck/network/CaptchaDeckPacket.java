@@ -10,15 +10,12 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.function.Supplier;
 
-public class CaptchaDeckPacket
+public class CaptchaDeckPacket implements PlayToBothPacket
 {
 	
 	private static final byte DATA = 0;
@@ -162,16 +159,7 @@ public class CaptchaDeckPacket
 		return packet;
 	}
 	
-	public void consume(Supplier<NetworkEvent.Context> ctx)
-	{
-		if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER)
-			ctx.get().enqueueWork(() -> this.execute(ctx.get().getSender()));
-		else if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT)
-			ctx.get().enqueueWork(this::execute);
-		
-		ctx.get().setPacketHandled(true);
-	}
-	
+	@Override
 	public void execute()
 	{
 		if(this.type == DATA)
@@ -183,6 +171,7 @@ public class CaptchaDeckPacket
 		}
 	}
 	
+	@Override
 	public void execute(ServerPlayerEntity player)
 	{
 		if(ServerEditHandler.getData(player) != null)

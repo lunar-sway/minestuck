@@ -5,12 +5,8 @@ import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
 
-import java.util.function.Supplier;
-
-public class EffectTogglePacket
+public class EffectTogglePacket implements PlayToServerPacket
 {
 	public static final String ON = "minestuck.aspect_effects.on";
 	public static final String OFF = "minestuck.aspect_effects.off";
@@ -24,14 +20,7 @@ public class EffectTogglePacket
 		return new EffectTogglePacket();
 	}
 	
-	public void consume(Supplier<NetworkEvent.Context> ctx)
-	{
-		if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER)
-			ctx.get().enqueueWork(() -> this.execute(ctx.get().getSender()));
-		
-		ctx.get().setPacketHandled(true);
-	}
-	
+	@Override
 	public void execute(ServerPlayerEntity player)
 	{
 		PlayerData data = PlayerSavedData.getData(player);

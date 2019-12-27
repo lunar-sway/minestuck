@@ -8,7 +8,7 @@ import net.minecraftforge.fml.network.NetworkEvent;
 import java.util.Arrays;
 import java.util.function.Supplier;
 
-public class ModConfigPacket	//TODO It might be that configs are synced already. Check if this packet actually is needed for the typical config options
+public class ModConfigPacket implements PlayToClientPacket	//TODO It might be that configs are synced already. Check if this packet actually is needed for the typical config options
 {
 	
 	boolean mode;
@@ -119,6 +119,7 @@ public class ModConfigPacket	//TODO It might be that configs are synced already.
 		ctx.get().setPacketHandled(true);
 	}
 	
+	@Override
 	public void execute()
 	{
 		if(mode)

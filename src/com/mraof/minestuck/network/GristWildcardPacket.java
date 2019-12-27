@@ -1,20 +1,17 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.tileentity.AlchemiterTileEntity;
 import com.mraof.minestuck.tileentity.MiniAlchemiterTileEntity;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.Objects;
-import java.util.function.Supplier;
 
-public class GristWildcardPacket
+public class GristWildcardPacket implements PlayToServerPacket
 {
 	
 	private final GristType gristType;
@@ -40,14 +37,7 @@ public class GristWildcardPacket
 		return new GristWildcardPacket(pos, gristType);
 	}
 	
-	public void consume(Supplier<NetworkEvent.Context> ctx)
-	{
-		if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER)
-			ctx.get().enqueueWork(() -> this.execute(ctx.get().getSender()));
-		
-		ctx.get().setPacketHandled(true);
-	}
-	
+	@Override
 	public void execute(ServerPlayerEntity player)
 	{
 		if(player != null && player.getEntityWorld().isAreaLoaded(pos, 0))
