@@ -1,11 +1,15 @@
 package com.mraof.minestuck.editmode;
 
 import com.mraof.minestuck.entity.DecoyEntity;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.network.GristCachePacket;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.util.MSNBTUtil;
 import com.mraof.minestuck.util.Teleport;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -62,6 +66,14 @@ public class EditData
 	public DecoyEntity getDecoy()
 	{
 		return decoy;
+	}
+	
+	public void sendGristCacheToEditor()
+	{
+		GristSet cache = PlayerSavedData.getData(connection.getClientIdentifier(), getEditor().server).gristCache;
+		ServerPlayerEntity editor = getEditor();
+		GristCachePacket packet = new GristCachePacket(cache, true);
+		MSPacketHandler.sendToPlayer(packet, editor);
 	}
 	
 	public CompoundNBT writeRecoveryData()
@@ -158,15 +170,15 @@ public class EditData
 			DimensionType dim = dimension;
 			if(dim == null)
 			{
-				LOGGER.warn("Couldn't load original dimension for player {}. Defaulting to overworld.", player.getName().getUnformattedComponentText());
+				LOGGER.warn("Couldn't load original dimension for player {}. Defaulting to overworld.", player.getGameProfile().getName());
 				dim = DimensionType.OVERWORLD;
 			}
 			ServerWorld world = DimensionManager.getWorld(player.server, dim, true, true);
 			if(player.dimension != dim && (world == null || Teleport.teleportEntity(player, world) == null))
 			{
 				if(throwException)
-					throw new IllegalStateException("Unable to teleport editmode player "+player.getName().getUnformattedComponentText()+" to their original dimension with world: " + world);
-				else LOGGER.warn("Unable to teleport editmode player {} to their original dimension with world: {}", player.getName().getUnformattedComponentText(), world);
+					throw new IllegalStateException("Unable to teleport editmode player "+player.getGameProfile().getName()+" to their original dimension with world: " + world);
+				else LOGGER.warn("Unable to teleport editmode player {} to their original dimension with world: {}", player.getGameProfile().getName(), world);
 			}
 			player.connection.setPlayerLocation(posX, posY, posZ, rotationYaw, rotationPitch);
 			player.setGameType(gameType);
@@ -225,7 +237,7 @@ public class EditData
 					connection.posX = editPlayer.posX;
 					connection.posZ = editPlayer.posZ;
 				}
-			} else LOGGER.warn("Unable to perform editmode recovery for the connection for client player {}. Got null connection.", clientPlayer);
+			} else LOGGER.warn("Unable to perform editmode recovery for the connection for client player {}. Got null connection.", clientPlayer.getUsername());
 		}
 	}
 }

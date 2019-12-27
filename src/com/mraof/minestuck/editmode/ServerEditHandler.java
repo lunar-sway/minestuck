@@ -138,7 +138,7 @@ public class ServerEditHandler
 			MSExtraData.get(player.world).addEditData(data);
 			ServerEditPacket packet = ServerEditPacket.activate(computerTarget.getUsername(), c.centerX, c.centerZ, c.givenItems(), DeployList.getDeployListTag(player.getServer(), c));
 			MSPacketHandler.sendToPlayer(packet, player);
-			PlayerTracker.updateGristCache(player.getServer(), c.getClientIdentifier());
+			data.sendGristCacheToEditor();
 		}
 	}
 	

@@ -5,7 +5,6 @@ import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.PlayerDataPacket;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.tracker.PlayerTracker;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -100,7 +99,7 @@ public class Echeladder
 		ServerPlayerEntity player = identifier.getPlayer(savedData.mcServer);
 		if(player != null)
 		{
-			PlayerTracker.updateEcheladder(player, false);
+			sendDataPacket(player, false);
 			if(rung != prevRung)
 			{
 				updateEcheladderBonuses(player);
@@ -145,7 +144,7 @@ public class Echeladder
 		return getUnderlingProtectionModifier(rung);
 	}
 	
-	public void updateEcheladderBonuses(PlayerEntity player)
+	public void updateEcheladderBonuses(ServerPlayerEntity player)
 	{
 		int healthBonus = healthBoost(rung);
 		double damageBonus = attackBonus(rung);
@@ -233,10 +232,18 @@ public class Echeladder
 			ServerPlayerEntity player = identifier.getPlayer(savedData.mcServer);
 			if(player != null && (MinestuckConfig.echeladderProgress.get() || prevRung != this.rung))
 			{
-				PlayerTracker.updateEcheladder(player, true);
+				sendDataPacket(player, true);
 				if(prevRung != this.rung)
 					updateEcheladderBonuses(player);
 			}
 		}
+	}
+	
+	
+	public void sendDataPacket(ServerPlayerEntity player, boolean jump)
+	{
+		Echeladder echeladder = PlayerSavedData.getData(player).getEcheladder();
+		PlayerDataPacket packet = PlayerDataPacket.echeladder(echeladder.getRung(), MinestuckConfig.echeladderProgress.get() ? echeladder.getProgress() : 0F, jump);
+		MSPacketHandler.sendToPlayer(packet, player);
 	}
 }

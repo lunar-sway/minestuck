@@ -130,7 +130,7 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 		{
 			CompoundNBT dataCompound = list.getCompound(i);
 			PlayerData data = new PlayerData(this, dataCompound, mcServer);
-			dataMap.put(data.player, data);
+			dataMap.put(data.identifier, data);
 		}
 	}
 

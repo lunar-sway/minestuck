@@ -18,6 +18,7 @@ import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
+import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -44,15 +45,6 @@ public class SburbHandler
 	
 	private static Title produceTitle(World world, PlayerIdentifier player)
 	{
-		Title currentTitle = PlayerSavedData.getData(player, world).getTitle();
-		if(currentTitle != null)
-		{
-			if(!MinestuckConfig.playerSelectedTitle.get())
-				Debug.warnf("Trying to generate a title for %s when a title is already assigned!", player.getUsername());
-			
-			return currentTitle;
-		}
-		
 		Session session = SessionHandler.get(world).getPlayerSession(player);
 		if(session == null)
 			if(MinestuckConfig.playerSelectedTitle.get())
@@ -158,10 +150,15 @@ public class SburbHandler
 	
 	private static void generateTitle(World world, PlayerIdentifier player)
 	{
-		Title title = produceTitle(world, player);
-		if(title == null)
-			return;
-		PlayerSavedData.getData(player, world).setTitle(title);	//TODO This might be incorrect considering the first return statement in produceTitle()
+		PlayerData data = PlayerSavedData.getData(player, world);
+		if(data.getTitle() == null)
+		{
+			Title title = produceTitle(world, player);
+			if(title == null)
+				return;
+			PlayerSavedData.getData(player, world).setTitle(title);
+		} else if(!MinestuckConfig.playerSelectedTitle.get())
+			Debug.warnf("Trying to generate a title for %s when a title is already assigned!", player.getUsername());
 	}
 	
 	/*public static void managePredefinedSession(MinecraftServer server, ICommandSender sender, ICommand command, String sessionName, String[] playerNames, boolean finish) throws CommandException

@@ -4,21 +4,22 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.editmode.EditData;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
-import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
-import com.mraof.minestuck.network.*;
+import com.mraof.minestuck.network.GristCachePacket;
+import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.ModConfigPacket;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
+import com.mraof.minestuck.util.UpdateChecker;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -32,6 +33,7 @@ import net.minecraftforge.fml.LogicalSide;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 public class PlayerTracker	//TODO Move some packet-sending code to PlayerData
 {
@@ -49,54 +51,15 @@ public class PlayerTracker	//TODO Move some packet-sending code to PlayerData
 			IdentifierHandler.host = event.getPlayer().getName().getUnformattedComponentText();
 		
 		IdentifierHandler.playerLoggedIn(player);
-		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		
 		sendConfigPacket(player, true);
 		sendConfigPacket(player, false);
 		
 		SkaianetHandler.get(player.server).playerConnected(player);
-		PlayerSavedData data = PlayerSavedData.get(player.server);
 		
-		boolean firstTime = false;
-		if(data.getGristSet(identifier) == null)
-		{
-			Debug.debugf("Grist set is null for player %s. Handling it as first time in this world.", player.getName());
-			data.setGrist(identifier, new GristSet(GristType.BUILD, 20));
-			firstTime = true;
-		}
+		PlayerSavedData.getData(player).onPlayerLoggedIn(player);
 		
-		data.getData(identifier).getEcheladder().updateEcheladderBonuses(player);
-		
-		if(CaptchaDeckHandler.getModus(player) == null && MinestuckConfig.defaultModusTypes.length > 0 && !PlayerSavedData.getData(player).hasGivenModus())
-		{
-			int index = player.world.rand.nextInt(MinestuckConfig.defaultModusTypes.length);
-			Modus modus = CaptchaDeckHandler.createServerModus(new ResourceLocation(MinestuckConfig.defaultModusTypes[index]), PlayerSavedData.get(player.server));
-			if(modus != null)
-			{
-				modus.initModus(player, null, MinestuckConfig.initialModusSize.get());
-				CaptchaDeckHandler.setModus(player, modus);
-			} else Debug.warnf("Couldn't create a modus by the name %s.", MinestuckConfig.defaultModusTypes[index]);
-		}
-		
-		if(CaptchaDeckHandler.getModus(player) != null)
-		{
-			Modus modus = CaptchaDeckHandler.getModus(player);
-			MSPacketHandler.sendToPlayer(CaptchaDeckPacket.data(CaptchaDeckHandler.writeToNBT(modus)), player);
-		}
-		
-		updateGristCache(player.getServer(), identifier);
-		updateTitle(player);
-		updateEcheladder(player, true);
-		MSPacketHandler.sendToPlayer(PlayerDataPacket.boondollars(PlayerSavedData.getData(player).boondollars), player);
 		ServerEditHandler.onPlayerLoggedIn(player);
-		
-		if(firstTime && !player.isSpectator())
-			MSPacketHandler.sendToPlayer(PlayerDataPacket.color(), player);
-		else
-		{
-			PlayerDataPacket packet = PlayerDataPacket.color(PlayerSavedData.getData(player).getColor());
-			MSPacketHandler.sendToPlayer(packet, player);
-		}
 		
 		if(UpdateChecker.outOfDate)
 			player.sendMessage(new StringTextComponent("New version of Minestuck: " + UpdateChecker.latestVersion + "\nChanges: " + UpdateChecker.updateChanges));
@@ -106,7 +69,7 @@ public class PlayerTracker	//TODO Move some packet-sending code to PlayerData
 	public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event)
 	{
 		ServerEditHandler.onPlayerExit(event.getPlayer());
-		dataCheckerPermission.remove(event.getPlayer().getName().getUnformattedComponentText());
+		dataCheckerPermission.remove(event.getPlayer().getGameProfile().getId());
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
@@ -132,16 +95,16 @@ public class PlayerTracker	//TODO Move some packet-sending code to PlayerData
 	@SubscribeEvent
 	public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) 
 	{
-		PlayerSavedData.getData((ServerPlayerEntity) event.getPlayer()).getEcheladder().updateEcheladderBonuses(event.getPlayer());
+		PlayerSavedData.getData((ServerPlayerEntity) event.getPlayer()).getEcheladder().updateEcheladderBonuses((ServerPlayerEntity) event.getPlayer());
 	}
 	
-	public static Set<String> dataCheckerPermission = new HashSet<>();
+	public static Set<UUID> dataCheckerPermission = new HashSet<>();
 	
 	private static boolean shouldUpdateConfigurations(ServerPlayerEntity player)
 	{
 		//TODO check for changed configs and change setRequiresWorldRestart status for those config options
 		boolean permission = MinestuckConfig.getDataCheckerPermissionFor(player);
-		if(permission != dataCheckerPermission.contains(player.getName().getUnformattedComponentText()))
+		if(permission != dataCheckerPermission.contains(player.getGameProfile().getId()))
 			return true;
 		
 		return false;
@@ -175,25 +138,6 @@ public class PlayerTracker	//TODO Move some packet-sending code to PlayerData
 			}
 		}
 	}
-	
-	public static void updateTitle(ServerPlayerEntity player)
-	{
-		if(player == null)
-			return;
-		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		Title newTitle = PlayerSavedData.getData(identifier, player.server).getTitle();
-		if(newTitle == null)
-			return;
-		PlayerDataPacket packet = PlayerDataPacket.title(newTitle.getHeroClass(), newTitle.getHeroAspect());
-		MSPacketHandler.sendToPlayer(packet, player);
-	}
-	
-	public static void updateEcheladder(ServerPlayerEntity player, boolean jump)
-	{
-		Echeladder echeladder = PlayerSavedData.getData(player).getEcheladder();
-		PlayerDataPacket packet = PlayerDataPacket.echeladder(echeladder.getRung(), MinestuckConfig.echeladderProgress.get() ? echeladder.getProgress() : 0F, jump);
-		MSPacketHandler.sendToPlayer(packet, player);
-	}
 
 	public static void sendConfigPacket(ServerPlayerEntity player, boolean mode)
 	{
@@ -205,8 +149,8 @@ public class PlayerTracker	//TODO Move some packet-sending code to PlayerData
 			boolean permission = MinestuckConfig.getDataCheckerPermissionFor(player);
 			packet = new ModConfigPacket(permission);
 			if(permission)
-				dataCheckerPermission.add(player.getName().getUnformattedComponentText());
-			else dataCheckerPermission.remove(player.getName().getUnformattedComponentText());
+				dataCheckerPermission.add(player.getGameProfile().getId());
+			else dataCheckerPermission.remove(player.getGameProfile().getId());
 		}
 		MSPacketHandler.sendToPlayer(packet, player);
 	}

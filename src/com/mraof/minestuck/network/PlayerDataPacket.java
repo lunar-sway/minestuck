@@ -1,7 +1,10 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.client.gui.playerStats.EcheladderScreen;
-import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.util.ColorCollector;
+import com.mraof.minestuck.util.EnumAspect;
+import com.mraof.minestuck.util.EnumClass;
+import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
@@ -37,12 +40,12 @@ public class PlayerDataPacket	//TODO Probably healthier if this is several diffe
 		return packet;
 	}
 	
-	public static PlayerDataPacket title(EnumClass enumClass, EnumAspect enumAspect)
+	public static PlayerDataPacket title(Title title)
 	{
 		PlayerDataPacket packet = new PlayerDataPacket();
 		packet.type = TITLE;
-		packet.i1 = EnumClass.getIntFromClass(enumClass);
-		packet.i2 = EnumAspect.getIntFromAspect(enumAspect);
+		packet.i1 = EnumClass.getIntFromClass(title.getHeroClass());
+		packet.i2 = EnumAspect.getIntFromAspect(title.getHeroAspect());
 		
 		return packet;
 	}
