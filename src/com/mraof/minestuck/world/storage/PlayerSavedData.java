@@ -138,6 +138,16 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 	{
 		return get(player.server).getData(IdentifierHandler.encode(player));
 	}
+	
+	public static PlayerData getData(PlayerIdentifier player, World world)
+	{
+		return get(world).getData(player);
+	}
+	
+	public static PlayerData getData(PlayerIdentifier player, MinecraftServer server)
+	{
+		return get(server).getData(player);
+	}
 
 	public PlayerData getData(PlayerIdentifier player)
 	{

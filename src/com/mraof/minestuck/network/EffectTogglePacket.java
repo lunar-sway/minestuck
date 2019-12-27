@@ -36,7 +36,7 @@ public class EffectTogglePacket
 	{
 		IdentifierHandler.PlayerIdentifier handler = IdentifierHandler.encode(player);
 		PlayerSavedData.get(player.world).setEffectToggle(handler, !PlayerSavedData.get(player.world).getEffectToggle(handler));
-		if(PlayerSavedData.get(player.world).getData(handler).effectToggle)
+		if(PlayerSavedData.getData(handler, player.server).effectToggle)
 		{
 			player.sendStatusMessage(new TranslationTextComponent(ON), true);
 		} else

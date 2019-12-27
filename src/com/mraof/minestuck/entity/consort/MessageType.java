@@ -54,7 +54,7 @@ public abstract class MessageType
 		
 		Object[] obj = new Object[args.length];
 		SburbConnection c = SburbHandler.getConnectionForDimension(player.getServer(), consort.homeDimension);
-		Title worldTitle = c == null ? null : PlayerSavedData.get(player.server).getData(c.getClientIdentifier()).getTitle();
+		Title worldTitle = c == null ? null : PlayerSavedData.getData(c.getClientIdentifier(), player.server).getTitle();
 		for(int i = 0; i < args.length; i++)
 		{
 			if(args[i].equals("playerNameLand"))
@@ -108,7 +108,7 @@ public abstract class MessageType
 			} else if(args[i].equals("playerTitle"))
 			{
 				PlayerIdentifier identifier = IdentifierHandler.encode(player);
-				Title playerTitle = PlayerSavedData.get(player.server).getData(identifier).getTitle();
+				Title playerTitle = PlayerSavedData.getData(identifier, player.server).getTitle();
 				if(playerTitle != null)
 					obj[i] = playerTitle.asTextComponent();
 				else

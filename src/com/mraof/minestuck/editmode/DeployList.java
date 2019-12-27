@@ -172,7 +172,7 @@ public class DeployList
 			if(booleans[1])
 			{
 				registerItem("portable_cruxtruder", new GristSet(GristTypes.BUILD, 200), 1, null,
-						(connection, world) -> MiniCruxtruderItem.getCruxtruderWithColor(PlayerSavedData.get(world.getServer()).getData(connection.getClientIdentifier()).color));
+						(connection, world) -> MiniCruxtruderItem.getCruxtruderWithColor(PlayerSavedData.getData(connection.getClientIdentifier(), world).getColor()));
 				registerItem("portable_punch_designix", new ItemStack(MSBlocks.MINI_PUNCH_DESIGNIX), new GristSet(GristTypes.BUILD, 200), 1);
 				registerItem("portable_totem_lathe", new ItemStack(MSBlocks.MINI_TOTEM_LATHE), new GristSet(GristTypes.BUILD, 200), 1);
 				registerItem("portable_alchemiter", new ItemStack(MSBlocks.MINI_ALCHEMITER), new GristSet(GristTypes.BUILD, 300), 1);

@@ -1,12 +1,13 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.block.GristWidgetBlock;
 import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.inventory.GristWidgetContainer;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.item.crafting.alchemy.*;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -109,7 +110,7 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 		if(world.isBlockPowered(this.getPos()))
 			return false;
 		int i = getGristWidgetBoondollarValue();
-		return owner != null && i != 0 && i <= PlayerSavedData.get(world).getData(owner).boondollars;
+		return owner != null && i != 0 && i <= PlayerSavedData.getData(owner, world).boondollars;
 	}
 
 	@Override

@@ -77,7 +77,7 @@ public class Echeladder
 			while(progress + exp >= expReq)
 			{
 				rung++;
-				PlayerSavedData.get(savedData.mcServer).getData(identifier).boondollars += BOONDOLLARS[Math.min(rung, BOONDOLLARS.length - 1)];
+				savedData.getData(identifier).boondollars += BOONDOLLARS[Math.min(rung, BOONDOLLARS.length - 1)];
 				exp -= (expReq - progress);
 				progress = 0;
 				expReq = getRungProgressReq();
@@ -104,7 +104,7 @@ public class Echeladder
 			if(rung != prevRung)
 			{
 				updateEcheladderBonuses(player);
-				MSPacketHandler.sendToPlayer(PlayerDataPacket.boondollars(PlayerSavedData.get(player.server).getData(identifier).boondollars), player);
+				MSPacketHandler.sendToPlayer(PlayerDataPacket.boondollars(savedData.getData(identifier).boondollars), player);
 				player.world.playSound(null, player.posX, player.posY, player.posZ, MSSoundEvents.EVENT_ECHELADDER_INCREASE, SoundCategory.AMBIENT, 1F, 1F);
 			}
 		}

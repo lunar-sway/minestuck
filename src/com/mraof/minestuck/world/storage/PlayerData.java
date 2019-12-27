@@ -3,8 +3,12 @@ package com.mraof.minestuck.world.storage;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.PlayerDataPacket;
+import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.tracker.PlayerTracker;
 import com.mraof.minestuck.util.*;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
@@ -19,6 +23,7 @@ public final class PlayerData
 	private final PlayerSavedData savedData;
 	
 	private final Echeladder echeladder;
+	private int color = ColorCollector.DEFAULT_COLOR;
 	
 	private boolean givenModus;
 	private Modus modus;
@@ -26,7 +31,6 @@ public final class PlayerData
 	private Title title;
 	
 	public GristSet gristCache;
-	public int color = ColorCollector.DEFAULT_COLOR;
 	public long boondollars;
 	public boolean effectToggle;
 	
@@ -94,6 +98,27 @@ public final class PlayerData
 	public Echeladder getEcheladder()
 	{
 		return echeladder;
+	}
+	
+	public int getColor()
+	{
+		return color;
+	}
+	
+	public void trySetColor(int color)
+	{
+		if(SburbHandler.canSelectColor(player, savedData.mcServer) && this.color != color)
+		{
+			this.color = color;
+			markDirty();
+			
+			ServerPlayerEntity playerEntity = player.getPlayer(savedData.mcServer);
+			if(playerEntity != null)
+			{
+				PlayerDataPacket packet = PlayerDataPacket.color(this.color);
+				MSPacketHandler.sendToPlayer(packet, playerEntity);
+			}
+		}
 	}
 	
 	public Modus getModus()

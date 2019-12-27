@@ -44,7 +44,7 @@ public class SburbHandler
 	
 	private static Title produceTitle(World world, PlayerIdentifier player)
 	{
-		Title currentTitle = PlayerSavedData.get(world).getData(player).getTitle();
+		Title currentTitle = PlayerSavedData.getData(player, world).getTitle();
 		if(currentTitle != null)
 		{
 			if(!MinestuckConfig.playerSelectedTitle.get())
@@ -81,7 +81,7 @@ public class SburbHandler
 			for(SburbConnection c : session.connections)
 				if(!c.getClientIdentifier().equals(player))
 				{
-					Title playerTitle = PlayerSavedData.get(world).getData(c.getClientIdentifier()).getTitle();
+					Title playerTitle = PlayerSavedData.getData(c.getClientIdentifier(), world).getTitle();
 					if(playerTitle != null)
 					{
 						usedTitles.add(playerTitle);
@@ -161,7 +161,7 @@ public class SburbHandler
 		Title title = produceTitle(world, player);
 		if(title == null)
 			return;
-		PlayerSavedData.get(world).getData(player).setTitle(title);	//TODO This might be incorrect considering the first return statement in produceTitle()
+		PlayerSavedData.getData(player, world).setTitle(title);	//TODO This might be incorrect considering the first return statement in produceTitle()
 	}
 	
 	/*public static void managePredefinedSession(MinecraftServer server, ICommandSender sender, ICommand command, String sessionName, String[] playerNames, boolean finish) throws CommandException
@@ -487,7 +487,7 @@ public class SburbHandler
 	 */
 	public static ItemStack getEntryItem(World world, SburbConnection c)
 	{
-		int color = PlayerSavedData.get(world).getData(c.getClientIdentifier()).color;
+		int color = PlayerSavedData.getData(c.getClientIdentifier(), world).getColor();
 		Item artifact;
 		if(c == null)
 			artifact = MSItems.CRUXITE_APPLE;
@@ -510,7 +510,7 @@ public class SburbHandler
 	public static int getColorForDimension(World world)
 	{
 		SburbConnection c = getConnectionForDimension(world);
-		return c == null ? ColorCollector.DEFAULT_COLOR : PlayerSavedData.get(world).getData(c.getClientIdentifier()).color;
+		return c == null ? ColorCollector.DEFAULT_COLOR : PlayerSavedData.getData(c.getClientIdentifier(), world).getColor();
 	}
 	
 	public static SburbConnection getConnectionForDimension(World world)
@@ -554,7 +554,7 @@ public class SburbHandler
 	{
 		LandTypes aspectGen = new LandTypes(mcServer.getWorld(DimensionType.OVERWORLD).getSeed()^connection.getClientIdentifier().hashCode());
 		Session session = SessionHandler.get(mcServer).getPlayerSession(connection.getClientIdentifier());
-		Title title = PlayerSavedData.get(mcServer).getData(connection.getClientIdentifier()).getTitle();
+		Title title = PlayerSavedData.getData(connection.getClientIdentifier(), mcServer).getTitle();
 		TitleLandType titleAspect = null;
 		TerrainLandType terrainAspect = null;
 		
@@ -690,11 +690,10 @@ public class SburbHandler
 		}
 	}
 	
-	public static boolean canSelectColor(ServerPlayerEntity player)
+	public static boolean canSelectColor(PlayerIdentifier player, MinecraftServer mcServer)
 	{
-		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		for(SburbConnection c : SkaianetHandler.get(player.server).connections)
-			if(c.getClientIdentifier().equals(identifier))
+		for(SburbConnection c : SkaianetHandler.get(mcServer).connections)
+			if(c.getClientIdentifier().equals(player))
 				return false;
 		return true;
 	}
@@ -722,7 +721,7 @@ public class SburbHandler
 		Session s = SessionHandler.get(player.world).getPlayerSession(identifier);
 		
 		if(s != null && s.predefinedPlayers.containsKey(identifier) && s.predefinedPlayers.get(identifier).title != null
-				|| PlayerSavedData.get(player.world).getData(identifier).getTitle() != null)
+				|| PlayerSavedData.getData(identifier, player.server).getTitle() != null)
 			return true;
 		
 		titleSelectionMap.put(player, new Vec3d(player.posX, player.posY, player.posZ));
@@ -752,7 +751,7 @@ public class SburbHandler
 			else
 			{
 				for(SburbConnection c : s.connections)
-					if(title.equals(PlayerSavedData.get(player.world).getData(c.getClientIdentifier()).getTitle()))
+					if(title.equals(PlayerSavedData.getData(c.getClientIdentifier(), player.server).getTitle()))
 					{	//Title is already used
 						TitleSelectPacket packet = new TitleSelectPacket(title.getHeroClass(), title.getHeroAspect());
 						MSPacketHandler.sendToPlayer(packet, player);
@@ -766,7 +765,7 @@ public class SburbHandler
 						return;
 					}
 				
-				PlayerSavedData.get(player.world).getData(identifier).setTitle(title);
+				PlayerSavedData.getData(identifier, player.server).setTitle(title);
 			}
 			
 			Vec3d pos = titleSelectionMap.remove(player);

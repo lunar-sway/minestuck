@@ -33,7 +33,7 @@ import net.minecraftforge.fml.LogicalSide;
 import java.util.HashSet;
 import java.util.Set;
 
-public class PlayerTracker
+public class PlayerTracker	//TODO Move some packet-sending code to PlayerData
 {
 	public static final String LAND_ENTRY = "minestuck.land_entry";
 	
@@ -54,8 +54,8 @@ public class PlayerTracker
 		sendConfigPacket(player, true);
 		sendConfigPacket(player, false);
 		
-		SkaianetHandler.get(player.world).playerConnected(player);
-		PlayerSavedData data = PlayerSavedData.get(player.world);
+		SkaianetHandler.get(player.server).playerConnected(player);
+		PlayerSavedData data = PlayerSavedData.get(player.server);
 		
 		boolean firstTime = false;
 		if(data.getGristSet(identifier) == null)
@@ -94,7 +94,7 @@ public class PlayerTracker
 			MSPacketHandler.sendToPlayer(PlayerDataPacket.color(), player);
 		else
 		{
-			PlayerDataPacket packet = PlayerDataPacket.color(PlayerSavedData.getData(player).color);
+			PlayerDataPacket packet = PlayerDataPacket.color(PlayerSavedData.getData(player).getColor());
 			MSPacketHandler.sendToPlayer(packet, player);
 		}
 		
@@ -181,7 +181,7 @@ public class PlayerTracker
 		if(player == null)
 			return;
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		Title newTitle = PlayerSavedData.get(player.world).getData(identifier).getTitle();
+		Title newTitle = PlayerSavedData.getData(identifier, player.server).getTitle();
 		if(newTitle == null)
 			return;
 		PlayerDataPacket packet = PlayerDataPacket.title(newTitle.getHeroClass(), newTitle.getHeroAspect());

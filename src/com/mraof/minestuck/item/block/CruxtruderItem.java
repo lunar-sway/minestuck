@@ -12,8 +12,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
@@ -131,8 +131,8 @@ public class CruxtruderItem extends BlockItem
 				int color;
 				EditData editData = ServerEditHandler.getData(player);
 				if(editData != null)
-					color = PlayerSavedData.get(world).getData(editData.getTarget()).color;
-				else color = PlayerSavedData.getData((ServerPlayerEntity) player).color;
+					color = PlayerSavedData.getData(editData.getTarget(), world).getColor();
+				else color = PlayerSavedData.getData((ServerPlayerEntity) player).getColor();
 				
 				((CruxtruderTileEntity) te).setColor(color);
 			} else Debug.warnf("Placed cruxtruder, but can't find tile entity. Instead found %s.", te);

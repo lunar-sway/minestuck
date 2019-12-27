@@ -606,7 +606,7 @@ public class SessionHandler
 						connectionTag.putString("clientDim", c.getClientDimension().getRegistryName().toString());
 						connectionTag.putString("aspect1", c.clientHomeLand.landName1());
 						connectionTag.putString("aspect2", c.clientHomeLand.landName2());
-						Title title = PlayerSavedData.get(skaianetHandler.mcServer).getData(c.getClientIdentifier()).getTitle();
+						Title title = PlayerSavedData.getData(c.getClientIdentifier(), skaianetHandler.mcServer).getTitle();
 						connectionTag.putByte("class", title == null ? -1 : (byte) title.getHeroClass().ordinal());
 						connectionTag.putByte("aspect", title == null ? -1 : (byte) title.getHeroAspect().ordinal());
 					} else if(session.predefinedPlayers.containsKey(c.getClientIdentifier()))
