@@ -54,7 +54,7 @@ public abstract class MessageType
 		
 		Object[] obj = new Object[args.length];
 		SburbConnection c = SburbHandler.getConnectionForDimension(player.getServer(), consort.homeDimension);
-		Title title = c == null ? null : PlayerSavedData.get(player.server).getTitle(c.getClientIdentifier());
+		Title worldTitle = c == null ? null : PlayerSavedData.get(player.server).getData(c.getClientIdentifier()).getTitle();
 		for(int i = 0; i < args.length; i++)
 		{
 			if(args[i].equals("playerNameLand"))
@@ -77,20 +77,20 @@ public abstract class MessageType
 					obj[i] = "Land name";
 			} else if(args[i].equals("playerTitleLand"))
 			{
-				if(title != null)
-					obj[i] = title.asTextComponent();
+				if(worldTitle != null)
+					obj[i] = worldTitle.asTextComponent();
 				else
 					obj[i] = "Player title";
 			} else if(args[i].equals("playerClassLand"))
 			{
-				if(title != null)
-					obj[i] = title.getHeroClass().asTextComponent();
+				if(worldTitle != null)
+					obj[i] = worldTitle.getHeroClass().asTextComponent();
 				else
 					obj[i] = "Player class";
 			} else if(args[i].equals("playerAspectLand"))
 			{
-				if(title != null)
-					obj[i] = title.getHeroAspect().asTextComponent();
+				if(worldTitle != null)
+					obj[i] = worldTitle.getHeroAspect().asTextComponent();
 				else
 					obj[i] = "Player aspect";
 			} else if(args[i].equals("consortSound"))
@@ -108,14 +108,15 @@ public abstract class MessageType
 			} else if(args[i].equals("playerTitle"))
 			{
 				PlayerIdentifier identifier = IdentifierHandler.encode(player);
-				if(PlayerSavedData.get(player.server).getTitle(identifier) != null)
-					obj[i] = PlayerSavedData.get(player.server).getTitle(identifier).asTextComponent();
+				Title playerTitle = PlayerSavedData.get(player.server).getData(identifier).getTitle();
+				if(playerTitle != null)
+					obj[i] = playerTitle.asTextComponent();
 				else
 					obj[i] = player.getName();
 			} else if(args[i].equals("denizen"))
 			{
-				if(title != null)
-					obj[i] = new TranslationTextComponent("denizen." + title.getHeroAspect().getTranslationKey());
+				if(worldTitle != null)
+					obj[i] = new TranslationTextComponent("denizen." + worldTitle.getHeroAspect().getTranslationKey());
 				else
 					obj[i] = "Denizen";
 			} else if(args[i].startsWith("nbtItem:"))

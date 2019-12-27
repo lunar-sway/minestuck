@@ -2,14 +2,13 @@ package com.mraof.minestuck.world.storage;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.editmode.ClientEditHandler;
-import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
-import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.network.GristCachePacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.PlayerDataPacket;
-import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
+import com.mraof.minestuck.util.Title;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -28,7 +27,7 @@ import java.util.Map;
 public class PlayerSavedData extends WorldSavedData	//TODO This class need a thorough look through to make sure that markDirty() is called when it should (otherwise there may be hard to notice data-loss bugs)
 {
 	private static final String DATA_NAME = Minestuck.MOD_ID+"_player_data";
-	
+	//TODO Put client data in its own class
 	//Client sided
 	public static Title title;
 	public static int rung;
@@ -105,11 +104,6 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 		markDirty();
 	}
 
-	public Title getTitle(PlayerIdentifier player)
-	{
-		return getData(player).title;
-	}
-	
 	public boolean getEffectToggle(PlayerIdentifier player)
 	{
 		return getData(player).effectToggle;
@@ -145,13 +139,6 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 		}
 	}
 
-	public void setTitle(PlayerIdentifier player, Title newTitle)
-	{
-		if (getData(player).title == null)
-			getData(player).title = newTitle;
-		this.markDirty();
-	}
-
 	public static PlayerData getData(ServerPlayerEntity player)
 	{
 		return get(player.server).getData(IdentifierHandler.encode(player));
@@ -163,6 +150,7 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 		{
 			PlayerData data = new PlayerData(this, player, mcServer);
 			dataMap.put(player, data);
+			markDirty();
 		}
 		return dataMap.get(player);
 	}
@@ -198,80 +186,5 @@ public class PlayerSavedData extends WorldSavedData	//TODO This class need a tho
 		if(player != null)
 			MSPacketHandler.sendToPlayer(PlayerDataPacket.boondollars(data.boondollars), player);
 		return true;
-	}
-	
-	public static class PlayerData
-	{
-		private final PlayerSavedData savedData;
-		private final PlayerIdentifier player;
-		public Title title;
-		public GristSet gristCache;
-		public Modus modus;
-		public boolean givenModus;
-		public int color = ColorCollector.DEFAULT_COLOR;
-		public long boondollars;
-		private final Echeladder echeladder;
-		public boolean effectToggle;
-		
-		private PlayerData(PlayerSavedData savedData, PlayerIdentifier player, MinecraftServer mcServer)
-		{
-			this.savedData = savedData;
-			this.player = player;
-			echeladder = new Echeladder(savedData, player);
-		}
-		
-		private PlayerData(PlayerSavedData savedData, CompoundNBT nbt, MinecraftServer mcServer)
-		{
-			this.savedData = savedData;
-			this.player = IdentifierHandler.load(nbt, "player");
-			if (nbt.contains("grist_cache"))
-			{
-				this.gristCache = GristSet.read(nbt.getList("grist_cache", Constants.NBT.TAG_COMPOUND));
-			}
-			if (nbt.contains("titleClass"))
-				this.title = new Title(EnumClass.getClassFromInt(nbt.getByte("titleClass")), EnumAspect.getAspectFromInt(nbt.getByte("titleAspect")));	//TODO Should be read in the title class
-			if (nbt.contains("modus"))
-			{
-				this.modus = CaptchaDeckHandler.readFromNBT(nbt.getCompound("modus"), false);
-				givenModus = true;
-			}
-			else givenModus = nbt.getBoolean("givenModus");
-			if (nbt.contains("color"))
-				this.color = nbt.getInt("color");
-			boondollars = nbt.getLong("boondollars");
-			effectToggle = nbt.getBoolean("effectToggle");
-			
-			echeladder = new Echeladder(savedData, player);
-			echeladder.loadEcheladder(nbt);
-		}
-
-		private CompoundNBT writeToNBT()
-		{
-			CompoundNBT nbt = new CompoundNBT();
-			player.saveToNBT(nbt, "player");
-			if (this.gristCache != null)
-			{
-				nbt.put("grist_cache", gristCache.write(new ListNBT()));
-			}
-			if (this.title != null)
-			{
-				nbt.putByte("titleClass", (byte) this.title.getHeroClass().ordinal());	//TODO Should be written in the title object
-				nbt.putByte("titleAspect", (byte) this.title.getHeroAspect().ordinal());
-			}
-			if (this.modus != null)
-				nbt.put("modus", CaptchaDeckHandler.writeToNBT(modus));
-			else nbt.putBoolean("givenModus", givenModus);
-			nbt.putInt("color", this.color);
-			nbt.putLong("boondollars", boondollars);
-			nbt.putBoolean("effectToggle", effectToggle);
-			
-			echeladder.saveEcheladder(nbt);
-			return nbt;
-		}
-		
-		public Echeladder getEcheladder()
-		{
-			return echeladder;
-		}
 	}
 }

@@ -8,6 +8,7 @@ import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -74,7 +75,7 @@ public class CaptchaDeckHandler
 		{
 			if(modus == null)
 			{
-				PlayerSavedData.PlayerData data = PlayerSavedData.getData(player);
+				PlayerData data = PlayerSavedData.getData(player);
 				modus = type.create(LogicalSide.SERVER);	//TODO Let the modus be created with the stack for settings
 				modus.initModus(player, null, data.givenModus ? 0 : MinestuckConfig.initialModusSize.get());
 				data.givenModus = true;

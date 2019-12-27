@@ -181,7 +181,7 @@ public class PlayerTracker
 		if(player == null)
 			return;
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		Title newTitle = PlayerSavedData.get(player.world).getTitle(identifier);
+		Title newTitle = PlayerSavedData.get(player.world).getData(identifier).getTitle();
 		if(newTitle == null)
 			return;
 		PlayerDataPacket packet = PlayerDataPacket.title(newTitle.getHeroClass(), newTitle.getHeroAspect());

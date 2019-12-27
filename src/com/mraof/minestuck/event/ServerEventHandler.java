@@ -13,6 +13,7 @@ import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.world.storage.MSExtraData;
+import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.monster.*;
@@ -189,8 +190,10 @@ public class ServerEventHandler
 			SburbConnection c = SkaianetHandler.get(event.player.getServer()).getMainConnection(identifier, true);
 			if(c == null || !c.hasEntered() || !MinestuckConfig.aspectEffects.get() || !PlayerSavedData.get(event.player.getServer()).getEffectToggle(identifier))
 				return;
-			int rung = PlayerSavedData.getData((ServerPlayerEntity) event.player).getEcheladder().getRung();
-			EnumAspect aspect = PlayerSavedData.get(event.player.getServer()).getTitle(identifier).getHeroAspect();
+			//TODO Should migrate to Title and/or EnumAspect
+			PlayerData data = PlayerSavedData.getData((ServerPlayerEntity) event.player);
+			int rung = data.getEcheladder().getRung();
+			EnumAspect aspect = data.getTitle().getHeroAspect();
 			int potionLevel = (int) (aspectStrength[aspect.ordinal()] * rung); //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
 			
 			if(event.player.getEntityWorld().getGameTime() % 380 == identifier.hashCode() % 380)

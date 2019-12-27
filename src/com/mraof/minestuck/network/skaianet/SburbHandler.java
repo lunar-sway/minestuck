@@ -44,12 +44,13 @@ public class SburbHandler
 	
 	private static Title produceTitle(World world, PlayerIdentifier player)
 	{
-		if(PlayerSavedData.get(world).getTitle(player) != null)
+		Title currentTitle = PlayerSavedData.get(world).getData(player).getTitle();
+		if(currentTitle != null)
 		{
 			if(!MinestuckConfig.playerSelectedTitle.get())
 				Debug.warnf("Trying to generate a title for %s when a title is already assigned!", player.getUsername());
 			
-			return PlayerSavedData.get(world).getTitle(player);
+			return currentTitle;
 		}
 		
 		Session session = SessionHandler.get(world).getPlayerSession(player);
@@ -80,7 +81,7 @@ public class SburbHandler
 			for(SburbConnection c : session.connections)
 				if(!c.getClientIdentifier().equals(player))
 				{
-					Title playerTitle = PlayerSavedData.get(world).getTitle(c.getClientIdentifier());
+					Title playerTitle = PlayerSavedData.get(world).getData(c.getClientIdentifier()).getTitle();
 					if(playerTitle != null)
 					{
 						usedTitles.add(playerTitle);
@@ -160,8 +161,7 @@ public class SburbHandler
 		Title title = produceTitle(world, player);
 		if(title == null)
 			return;
-		PlayerSavedData.get(world).setTitle(player, title);
-		PlayerTracker.updateTitle(player.getPlayer(world.getServer()));
+		PlayerSavedData.get(world).getData(player).setTitle(title);	//TODO This might be incorrect considering the first return statement in produceTitle()
 	}
 	
 	/*public static void managePredefinedSession(MinecraftServer server, ICommandSender sender, ICommand command, String sessionName, String[] playerNames, boolean finish) throws CommandException
@@ -554,7 +554,7 @@ public class SburbHandler
 	{
 		LandTypes aspectGen = new LandTypes(mcServer.getWorld(DimensionType.OVERWORLD).getSeed()^connection.getClientIdentifier().hashCode());
 		Session session = SessionHandler.get(mcServer).getPlayerSession(connection.getClientIdentifier());
-		Title title = PlayerSavedData.get(mcServer).getTitle(connection.getClientIdentifier());
+		Title title = PlayerSavedData.get(mcServer).getData(connection.getClientIdentifier()).getTitle();
 		TitleLandType titleAspect = null;
 		TerrainLandType terrainAspect = null;
 		
@@ -722,7 +722,7 @@ public class SburbHandler
 		Session s = SessionHandler.get(player.world).getPlayerSession(identifier);
 		
 		if(s != null && s.predefinedPlayers.containsKey(identifier) && s.predefinedPlayers.get(identifier).title != null
-				|| PlayerSavedData.get(player.world).getTitle(identifier) != null)
+				|| PlayerSavedData.get(player.world).getData(identifier).getTitle() != null)
 			return true;
 		
 		titleSelectionMap.put(player, new Vec3d(player.posX, player.posY, player.posZ));
@@ -752,7 +752,7 @@ public class SburbHandler
 			else
 			{
 				for(SburbConnection c : s.connections)
-					if(title.equals(PlayerSavedData.get(player.world).getTitle(c.getClientIdentifier())))
+					if(title.equals(PlayerSavedData.get(player.world).getData(c.getClientIdentifier()).getTitle()))
 					{	//Title is already used
 						TitleSelectPacket packet = new TitleSelectPacket(title.getHeroClass(), title.getHeroAspect());
 						MSPacketHandler.sendToPlayer(packet, player);
@@ -766,8 +766,7 @@ public class SburbHandler
 						return;
 					}
 				
-				PlayerSavedData.get(player.world).setTitle(identifier, title);
-				PlayerTracker.updateTitle(player);
+				PlayerSavedData.get(player.world).getData(identifier).setTitle(title);
 			}
 			
 			Vec3d pos = titleSelectionMap.remove(player);
