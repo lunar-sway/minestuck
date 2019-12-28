@@ -413,8 +413,6 @@ public class SkaianetHandler
 	
 	private void read(CompoundNBT nbt)
 	{
-		MSDimensionTypes.LANDS.dimToLandTypes.clear();
-		SburbHandler.titleSelectionMap.clear();
 		ListNBT list = nbt.getList("sessions", Constants.NBT.TAG_COMPOUND);
 		for(int i = 0; i < list.size(); i++)
 		{
@@ -856,8 +854,8 @@ public class SkaianetHandler
 	}
 	
 	/**
-	 * Must be called when a server closes to avoid data carrying over between worlds.
-	 * Should only be called by minestuck itself.
+	 * Called when reading skaianet persistence data.
+	 * Should only be called by minestuck itself (specifically {@link com.mraof.minestuck.MSWorldPersistenceHook}).
 	 */
 	public static void init(CompoundNBT nbt)
 	{
@@ -865,7 +863,7 @@ public class SkaianetHandler
 		{
 			INSTANCE = new SkaianetHandler();
 			INSTANCE.read(nbt);
-		} else INSTANCE = null;
+		}
 	}
 	
 	public static CompoundNBT write()
@@ -875,8 +873,13 @@ public class SkaianetHandler
 		else return INSTANCE.write(new CompoundNBT());
 	}
 	
+	/**
+	 * Clears data connected to skaianet. Should only be called on a ServerStopped event by minestuck itself.
+	 */
 	public static void clear()
 	{
 		INSTANCE = null;
+		MSDimensionTypes.LANDS.dimToLandTypes.clear();
+		SburbHandler.titleSelectionMap.clear();
 	}
 }

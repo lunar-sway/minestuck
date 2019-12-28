@@ -14,7 +14,6 @@ import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -268,24 +267,6 @@ public class LandDimension extends Dimension
 		return world;
 	}
 	
-	//@Override TODO Is this actually needed?
-	public void onPlayerAdded(ServerPlayerEntity player)
-	{
-		int centerX = ((int)player.posX) >> 4;
-		int centerZ = ((int)player.posZ) >> 4;
-		for(int x = centerX - 1; x <= centerX + 1; x++)
-			for(int z = centerZ - 1; z <= centerZ + 1; z++)
-				this.world.getChunkProvider().getChunk(x, z, true);
-	}
-	
-	public BlockPos findAndMarkNextStructure(ServerPlayerEntity player, String type, ListNBT tags)
-	{
-		if(type.equalsIgnoreCase("village"))
-			//return chunkProvider.villageHandler.findAndMarkNextVillage(player, type, tags);
-		Debug.warnf("Couldn't identify %s", type);
-		return null;
-	}
-	
 	public void mergeFogColor(Vec3d fogColor, float strength)
 	{
 		double d1 = (this.fogColor.x + fogColor.x*strength)/(1 + strength);
@@ -302,7 +283,7 @@ public class LandDimension extends Dimension
 	public static class Type extends ModDimension
 	{
 		public boolean useServerData;
-		public Map<ResourceLocation, LandTypePair.LazyInstance> dimToLandTypes = new HashMap<>();	//TODO This might not be populated by skaianet before the dimension the player is in is created
+		public Map<ResourceLocation, LandTypePair.LazyInstance> dimToLandTypes = new HashMap<>();
 		//TODO Dimension might actually not be unloaded when switching to/creating a new world
 		@Override
 		public void write(PacketBuffer buffer, boolean network)

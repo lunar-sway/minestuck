@@ -142,7 +142,7 @@ public class GateHandler
 	{
 		GATE_1(false, world -> new BlockPos(0, gateHeight1, 0), GateHandler::findPosNearLandGate),
 		GATE_2(true, world -> new BlockPos(0, gateHeight2, 0), GateHandler::findClientLandGate),
-		LAND_GATE(true, GateHandler::getSavedLandGate, GateHandler::findServerSecondGate);	//TODO Because this gate pos getter might not be stable across versions, the result should be cached in the land data
+		LAND_GATE(true, GateHandler::getSavedLandGate, GateHandler::findServerSecondGate);
 		
 		private final boolean isDestinationGate;
 		private final Function<ServerWorld, BlockPos> locationFinder;

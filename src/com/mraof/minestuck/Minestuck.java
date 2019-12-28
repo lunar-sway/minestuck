@@ -92,15 +92,6 @@ public class Minestuck
 	}
 	
 	@SubscribeEvent
-	public void serverClosed(FMLServerStoppedEvent event)
-	{
-		PlayerTracker.dataCheckerPermission.clear();
-		IdentifierHandler.clear();
-		SkaianetHandler.init(null);
-		MSFeatures.LAND_GATE.clearCache();
-	}
-	
-	@SubscribeEvent
 	public void serverStarting(FMLServerStartingEvent event)
 	{
 		
@@ -139,6 +130,15 @@ public class Minestuck
 	public void serverStopping(FMLServerStoppingEvent event)
 	{
 		ServerEditHandler.onServerStopping(event.getServer());
+	}
+	
+	@SubscribeEvent
+	public void serverStopped(FMLServerStoppedEvent event)
+	{
+		PlayerTracker.dataCheckerPermission.clear();
+		IdentifierHandler.clear();
+		SkaianetHandler.clear();
+		MSFeatures.LAND_GATE.clearCache();
 	}
 	
 	@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
