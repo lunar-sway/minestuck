@@ -58,7 +58,7 @@ public final class MSStructurePieces
 		CACTUS_PYRAMID_CENTER = register(ConsortVillageCenter.CactusPyramidCenter::new, Minestuck.MOD_ID+":cactus_pyramid_center");
 		MUSHROOM_TOWER_CENTER = register(SalamanderVillagePieces.RuinedTowerMushroomCenter::new, Minestuck.MOD_ID+":mushroom_tower_center");
 		TURTLE_WELL_CENTER = register(TurtleVillagePieces.TurtleWellCenter::new, Minestuck.MOD_ID+":turtle_well_center");
-		RADIO_TOWER_CENTER = register(NakagatorVillagePieces.RadioTowerCenter::new, Minestuck.MOD_ID+":turtle_well_center");
+		RADIO_TOWER_CENTER = register(NakagatorVillagePieces.RadioTowerCenter::new, Minestuck.MOD_ID+":radio_tower_center");
 		PIPE_HOUSE_1 = register(SalamanderVillagePieces.PipeHouse1::new, Minestuck.MOD_ID+":pipe_house_1");
 		HIGH_PIPE_HOUSE_1 = register(SalamanderVillagePieces.HighPipeHouse1::new, Minestuck.MOD_ID+":high_pipe_house_1");
 		SMALL_TOWER_STORE = register(SalamanderVillagePieces.SmallTowerStore::new, Minestuck.MOD_ID+":small_tower_store");
