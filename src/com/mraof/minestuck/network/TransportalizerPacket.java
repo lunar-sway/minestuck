@@ -17,6 +17,7 @@ public class TransportalizerPacket implements PlayToServerPacket
 		this.destId = destId;
 	}
 	
+	@Override
 	public void encode(PacketBuffer buffer)
 	{
 		buffer.writeBlockPos(pos);

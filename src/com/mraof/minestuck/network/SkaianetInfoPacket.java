@@ -50,6 +50,7 @@ public class SkaianetInfoPacket implements PlayToBothPacket
 		return packet;
 	}
 	
+	@Override
 	public void encode(PacketBuffer buffer)
 	{
 		if(landChains != null) //Land chain data

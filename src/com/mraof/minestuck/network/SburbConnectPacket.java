@@ -26,6 +26,7 @@ public class SburbConnectPacket implements PlayToServerPacket
 		this.isClient = isClient;
 	}
 	
+	@Override
 	public void encode(PacketBuffer buffer)
 	{
 		buffer.writeBlockPos(computer);

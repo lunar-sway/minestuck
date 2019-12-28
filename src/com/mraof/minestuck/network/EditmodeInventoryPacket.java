@@ -34,6 +34,7 @@ public class EditmodeInventoryPacket implements PlayToBothPacket
 		return packet;
 	}
 	
+	@Override
 	public void encode(PacketBuffer buffer)
 	{
 		buffer.writeBoolean(b1);

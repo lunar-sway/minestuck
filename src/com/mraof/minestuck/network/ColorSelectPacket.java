@@ -14,6 +14,7 @@ public class ColorSelectPacket implements PlayToServerPacket
 		this.colorIndex = colorIndex;
 	}
 	
+	@Override
 	public void encode(PacketBuffer buffer)
 	{
 		buffer.writeInt(colorIndex);

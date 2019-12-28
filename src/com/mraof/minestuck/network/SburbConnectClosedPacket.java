@@ -22,6 +22,7 @@ public class SburbConnectClosedPacket implements PlayToServerPacket
 		this.isClient = isClient;
 	}
 	
+	@Override
 	public void encode(PacketBuffer buffer)
 	{
 		buffer.writeInt(player);

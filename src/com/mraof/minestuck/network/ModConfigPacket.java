@@ -57,6 +57,7 @@ public class ModConfigPacket implements PlayToClientPacket	//TODO It might be th
 		preEntryEcheladder = MinestuckConfig.preEntryRungLimit.get() <= 0;
 	}
 	
+	@Override
 	public void encode(PacketBuffer buffer)
 	{
 		buffer.writeBoolean(mode);

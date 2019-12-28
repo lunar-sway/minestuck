@@ -9,10 +9,7 @@ import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.item.crafting.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.item.crafting.alchemy.NonNegativeGristSet;
-import com.mraof.minestuck.network.CaptchaDeckPacket;
-import com.mraof.minestuck.network.GristCachePacket;
-import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.network.PlayerDataPacket;
+import com.mraof.minestuck.network.*;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
@@ -288,10 +285,10 @@ public final class PlayerData
 		if(player == null)
 			return;
 		if(firstTime && !player.isSpectator())
-			MSPacketHandler.sendToPlayer(PlayerDataPacket.color(), player);
+			MSPacketHandler.sendToPlayer(ColorDataPacket.selector(), player);
 		else
 		{
-			PlayerDataPacket packet = PlayerDataPacket.color(getColor());
+			ColorDataPacket packet = ColorDataPacket.data(getColor());
 			MSPacketHandler.sendToPlayer(packet, player);
 		}
 	}
@@ -300,7 +297,7 @@ public final class PlayerData
 	{
 		if(player == null)
 			return;
-		PlayerDataPacket packet = PlayerDataPacket.boondollars(getBoondollars());
+		BoondollarDataPacket packet = BoondollarDataPacket.create(getBoondollars());
 		MSPacketHandler.sendToPlayer(packet, player);
 	}
 	
@@ -332,7 +329,7 @@ public final class PlayerData
 		Title newTitle = getTitle();
 		if(newTitle == null || player == null)
 			return;
-		PlayerDataPacket packet = PlayerDataPacket.title(newTitle);
+		TitleDataPacket packet = TitleDataPacket.create(newTitle);
 		MSPacketHandler.sendToPlayer(packet, player);
 	}
 	

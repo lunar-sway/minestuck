@@ -40,6 +40,7 @@ public class ServerEditPacket implements PlayToClientPacket
 		return packet;
 	}
 	
+	@Override
 	public void encode(PacketBuffer buffer)
 	{
 		if(target != null)

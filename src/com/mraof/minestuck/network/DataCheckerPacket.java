@@ -41,6 +41,7 @@ public class DataCheckerPacket implements PlayToBothPacket
 		return packet;
 	}
 	
+	@Override
 	public void encode(PacketBuffer buffer)
 	{
 		buffer.writeInt(packetIndex);

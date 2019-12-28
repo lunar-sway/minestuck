@@ -17,6 +17,7 @@ public class AlchemiterPacket implements PlayToServerPacket
 		this.quantity = quantity;
 	}
 	
+	@Override
 	public void encode(PacketBuffer buffer)
 	{
 		buffer.writeBlockPos(pos);

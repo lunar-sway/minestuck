@@ -16,6 +16,7 @@ public class GoButtonPacket implements PlayToServerPacket
 		this.overrideStop = overrideStop;
 	}
 	
+	@Override
 	public void encode(PacketBuffer buffer)
 	{
 		buffer.writeBoolean(newMode);

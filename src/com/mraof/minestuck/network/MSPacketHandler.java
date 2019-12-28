@@ -2,10 +2,16 @@ package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
+
+import java.util.function.BiConsumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class MSPacketHandler
 {
@@ -15,26 +21,41 @@ public class MSPacketHandler
 	
 	public static void setupChannel()
 	{
-		INSTANCE.registerMessage(0, ModConfigPacket.class, ModConfigPacket::encode, ModConfigPacket::decode, PlayToClientPacket::consume);
-		INSTANCE.registerMessage(1, PlayerDataPacket.class, PlayerDataPacket::encode, PlayerDataPacket::decode, PlayToClientPacket::consume);
-		INSTANCE.registerMessage(2, CaptchaDeckPacket.class, CaptchaDeckPacket::encode, CaptchaDeckPacket::decode, PlayToBothPacket::consume);
-		INSTANCE.registerMessage(3, GristCachePacket.class, GristCachePacket::encode, GristCachePacket::decode, PlayToClientPacket::consume);
-		INSTANCE.registerMessage(4, ColorSelectPacket.class, ColorSelectPacket::encode, ColorSelectPacket::decode, PlayToServerPacket::consume);
-		INSTANCE.registerMessage(5, TitleSelectPacket.class, TitleSelectPacket::encode, TitleSelectPacket::decode, PlayToBothPacket::consume);
-		INSTANCE.registerMessage(6, SburbConnectPacket.class, SburbConnectPacket::encode, SburbConnectPacket::decode, PlayToServerPacket::consume);
-		INSTANCE.registerMessage(7, SburbConnectClosedPacket.class, SburbConnectClosedPacket::encode, SburbConnectClosedPacket::decode, PlayToServerPacket::consume);
-		INSTANCE.registerMessage(8, ClearMessagePacket.class, ClearMessagePacket::encode, ClearMessagePacket::decode, PlayToServerPacket::consume);
-		INSTANCE.registerMessage(9, SkaianetInfoPacket.class, SkaianetInfoPacket::encode, SkaianetInfoPacket::decode, PlayToBothPacket::consume);
-		INSTANCE.registerMessage(10, DataCheckerPacket.class, DataCheckerPacket::encode, DataCheckerPacket::decode, PlayToBothPacket::consume);
-		INSTANCE.registerMessage(11, ClientEditPacket.class, ClientEditPacket::encode, ClientEditPacket::decode, PlayToServerPacket::consume);
-		INSTANCE.registerMessage(12, ServerEditPacket.class, ServerEditPacket::encode, ServerEditPacket::decode, PlayToClientPacket::consume);
-		INSTANCE.registerMessage(13, MiscContainerPacket.class, MiscContainerPacket::encode, MiscContainerPacket::decode, PlayToServerPacket::consume);
-		INSTANCE.registerMessage(14, EditmodeInventoryPacket.class, EditmodeInventoryPacket::encode, EditmodeInventoryPacket::decode, PlayToBothPacket::consume);
-		INSTANCE.registerMessage(15, GoButtonPacket.class, GoButtonPacket::encode, GoButtonPacket::decode, PlayToServerPacket::consume);
-		INSTANCE.registerMessage(16, AlchemiterPacket.class, AlchemiterPacket::encode, AlchemiterPacket::decode, PlayToServerPacket::consume);
-		INSTANCE.registerMessage(17, GristWildcardPacket.class, GristWildcardPacket::encode, GristWildcardPacket::decode, PlayToServerPacket::consume);
-		INSTANCE.registerMessage(18, TransportalizerPacket.class, TransportalizerPacket::encode, TransportalizerPacket::decode, PlayToServerPacket::consume);
-		INSTANCE.registerMessage(19, EffectTogglePacket.class, EffectTogglePacket::encode, EffectTogglePacket::decode, PlayToServerPacket::consume);
+		nextIndex = 0;
+		registerMessage(ModConfigPacket.class, ModConfigPacket::decode);
+		registerMessage(EcheladderDataPacket.class, EcheladderDataPacket::decode);
+		registerMessage(ColorDataPacket.class, ColorDataPacket::decode);
+		registerMessage(CaptchaDeckPacket.class, CaptchaDeckPacket::decode);
+		registerMessage(BoondollarDataPacket.class, BoondollarDataPacket::decode);
+		registerMessage(GristCachePacket.class, GristCachePacket::decode);
+		registerMessage(TitleDataPacket.class, TitleDataPacket::decode);
+		registerMessage(ColorSelectPacket.class, ColorSelectPacket::decode);
+		registerMessage(TitleSelectPacket.class, TitleSelectPacket::decode);
+		registerMessage(SburbConnectPacket.class, SburbConnectPacket::decode);
+		registerMessage(SburbConnectClosedPacket.class, SburbConnectClosedPacket::decode);
+		registerMessage(ClearMessagePacket.class, ClearMessagePacket::decode);
+		registerMessage(SkaianetInfoPacket.class, SkaianetInfoPacket::decode);
+		registerMessage(DataCheckerPacket.class, DataCheckerPacket::decode);
+		registerMessage(ClientEditPacket.class, ClientEditPacket::decode);
+		registerMessage(ServerEditPacket.class, ServerEditPacket::decode);
+		registerMessage(MiscContainerPacket.class, MiscContainerPacket::decode);
+		registerMessage(EditmodeInventoryPacket.class, EditmodeInventoryPacket::decode);
+		registerMessage(GoButtonPacket.class, GoButtonPacket::decode);
+		registerMessage(AlchemiterPacket.class, AlchemiterPacket::decode);
+		registerMessage(GristWildcardPacket.class, GristWildcardPacket::decode);
+		registerMessage(TransportalizerPacket.class, TransportalizerPacket::decode);
+		registerMessage(EffectTogglePacket.class, EffectTogglePacket::decode);
+	}
+	
+	private static int nextIndex;
+	private static <MSG extends StandardPacket> void registerMessage(Class<MSG> messageType, Function<PacketBuffer, MSG> decoder)
+	{
+		registerMessage(messageType, StandardPacket::encode, decoder, StandardPacket::consume);
+	}
+	
+	private static <MSG> void registerMessage(Class<MSG> messageType, BiConsumer<MSG, PacketBuffer> encoder, Function<PacketBuffer, MSG> decoder, BiConsumer<MSG, Supplier<NetworkEvent.Context>> messageConsumer)
+	{
+		INSTANCE.registerMessage(nextIndex++, messageType, encoder, decoder, messageConsumer);
 	}
 	
 	public static <MSG> void sendToPlayer(MSG message, ServerPlayerEntity player)

@@ -11,6 +11,7 @@ public class EffectTogglePacket implements PlayToServerPacket
 	public static final String ON = "minestuck.aspect_effects.on";
 	public static final String OFF = "minestuck.aspect_effects.off";
 	
+	@Override
 	public void encode(PacketBuffer buffer)
 	{
 	}

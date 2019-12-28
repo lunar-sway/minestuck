@@ -23,6 +23,7 @@ public class GristWildcardPacket implements PlayToServerPacket
 		this.pos = Objects.requireNonNull(pos);
 	}
 	
+	@Override
 	public void encode(PacketBuffer buffer)
 	{
 		buffer.writeRegistryId(gristType);

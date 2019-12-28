@@ -91,6 +91,7 @@ public class CaptchaDeckPacket implements PlayToBothPacket
 		return packet;
 	}
 	
+	@Override
 	public void encode(PacketBuffer buffer)
 	{
 		buffer.writeByte(type);	//Packet type

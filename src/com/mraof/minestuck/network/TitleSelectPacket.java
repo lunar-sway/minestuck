@@ -20,6 +20,7 @@ public class TitleSelectPacket implements PlayToBothPacket
 		this.title = title;
 	}
 	
+	@Override
 	public void encode(PacketBuffer buffer)
 	{
 		if(title != null)

@@ -6,8 +6,9 @@ import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public interface PlayToServerPacket
+public interface PlayToServerPacket extends StandardPacket
 {
+	@Override
 	default void consume(Supplier<NetworkEvent.Context> ctx)
 	{
 		if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER)

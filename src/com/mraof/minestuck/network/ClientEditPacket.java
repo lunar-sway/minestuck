@@ -30,6 +30,7 @@ public class ClientEditPacket implements PlayToServerPacket
 		return packet;
 	}
 	
+	@Override
 	public void encode(PacketBuffer buffer)
 	{
 		if(user != -1)

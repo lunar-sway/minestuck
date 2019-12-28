@@ -1,8 +1,8 @@
 package com.mraof.minestuck.util;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.network.EcheladderDataPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.network.PlayerDataPacket;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
@@ -245,7 +245,7 @@ public class Echeladder
 	public void sendDataPacket(ServerPlayerEntity player, boolean jump)
 	{
 		Echeladder echeladder = PlayerSavedData.getData(player).getEcheladder();
-		PlayerDataPacket packet = PlayerDataPacket.echeladder(echeladder.getRung(), MinestuckConfig.echeladderProgress.get() ? echeladder.getProgress() : 0F, jump);
+		EcheladderDataPacket packet = EcheladderDataPacket.create(echeladder.getRung(), MinestuckConfig.echeladderProgress.get() ? echeladder.getProgress() : 0F, !jump);
 		MSPacketHandler.sendToPlayer(packet, player);
 	}
 }

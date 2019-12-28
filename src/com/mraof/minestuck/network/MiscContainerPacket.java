@@ -16,6 +16,7 @@ public class MiscContainerPacket implements PlayToServerPacket
 		this.i = i;
 	}
 	
+	@Override
 	public void encode(PacketBuffer buffer)
 	{
 		buffer.writeInt(i);

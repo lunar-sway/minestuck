@@ -25,6 +25,7 @@ public class ClearMessagePacket implements PlayToServerPacket
 		this.program = program;
 	}
 	
+	@Override
 	public void encode(PacketBuffer buffer)
 	{
 		buffer.writeBlockPos(computer);
