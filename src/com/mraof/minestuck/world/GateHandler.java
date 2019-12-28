@@ -90,7 +90,11 @@ public class GateHandler
 				BlockPos placement = pos.add(x, 0, z);
 				
 				if(world.getBiomeBody(placement) == MSBiomes.LAND_NORMAL)
-					return GlobalPos.of(world.getDimension().getType(), world.getHeight(Heightmap.Type.MOTION_BLOCKING, placement));
+				{
+					//TODO Can and has placed the player into a lava ocean. Fix this (Also for other hazards)
+					int y = world.getChunk(placement).getTopBlockY(Heightmap.Type.MOTION_BLOCKING, placement.getX(), placement.getZ());
+					return GlobalPos.of(world.getDimension().getType(), new BlockPos(placement.getX(), y + 1, placement.getZ()));
+				}
 			}
 		else
 			Debug.errorf("Unexpected error: Couldn't find position for land gate for dimension %d.", world.getDimension().getType());
