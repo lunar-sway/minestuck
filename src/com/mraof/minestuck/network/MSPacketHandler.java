@@ -22,13 +22,16 @@ public class MSPacketHandler
 	public static void setupChannel()
 	{
 		nextIndex = 0;
+		
 		registerMessage(ModConfigPacket.class, ModConfigPacket::decode);
 		registerMessage(EcheladderDataPacket.class, EcheladderDataPacket::decode);
 		registerMessage(ColorDataPacket.class, ColorDataPacket::decode);
-		registerMessage(CaptchaDeckPacket.class, CaptchaDeckPacket::decode);
+		registerMessage(ModusDataPacket.class, ModusDataPacket::decode);
 		registerMessage(BoondollarDataPacket.class, BoondollarDataPacket::decode);
 		registerMessage(GristCachePacket.class, GristCachePacket::decode);
 		registerMessage(TitleDataPacket.class, TitleDataPacket::decode);
+		
+		registerMessage(CaptchaDeckPacket.class, CaptchaDeckPacket::decode);
 		registerMessage(ColorSelectPacket.class, ColorSelectPacket::decode);
 		registerMessage(TitleSelectPacket.class, TitleSelectPacket::decode);
 		registerMessage(SburbConnectPacket.class, SburbConnectPacket::decode);

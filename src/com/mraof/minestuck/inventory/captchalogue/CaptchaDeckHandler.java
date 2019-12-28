@@ -5,8 +5,8 @@ import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
-import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.ModusDataPacket;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
@@ -136,7 +136,7 @@ public class CaptchaDeckHandler
 		
 		if(modus != null)
 		{
-			CaptchaDeckPacket packet = CaptchaDeckPacket.data(writeToNBT(modus));
+			ModusDataPacket packet = ModusDataPacket.create(writeToNBT(modus));
 			MSPacketHandler.sendToPlayer(packet, player);
 		}
 	}
@@ -187,7 +187,7 @@ public class CaptchaDeckHandler
 					player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
 				else stack.shrink(1);
 			}
-			CaptchaDeckPacket packet = CaptchaDeckPacket.data(writeToNBT(modus));
+			ModusDataPacket packet = ModusDataPacket.create(writeToNBT(modus));
 			MSPacketHandler.sendToPlayer(packet, player);
 		}
 		
@@ -244,7 +244,7 @@ public class CaptchaDeckHandler
 						player.inventory.setInventorySlotContents(hotbarIndex, ItemStack.EMPTY);
 					} else stack.shrink(1);
 				}
-				CaptchaDeckPacket packet = CaptchaDeckPacket.data(writeToNBT(modus));
+				ModusDataPacket packet = ModusDataPacket.create(writeToNBT(modus));
 				MSPacketHandler.sendToPlayer(packet, player);
 			}
 		}
@@ -293,7 +293,7 @@ public class CaptchaDeckHandler
 						slot.putStack(ItemStack.EMPTY);
 					} else stack.shrink(1);
 				}
-				CaptchaDeckPacket packet = CaptchaDeckPacket.data(writeToNBT(modus));
+				ModusDataPacket packet = ModusDataPacket.create(writeToNBT(modus));
 				MSPacketHandler.sendToPlayer(packet, player);
 			}
 		}
@@ -337,7 +337,7 @@ public class CaptchaDeckHandler
 					launchAnyItem(player, stack);
 			}
 		}
-		CaptchaDeckPacket packet = CaptchaDeckPacket.data(writeToNBT(modus));
+		ModusDataPacket packet = ModusDataPacket.create(writeToNBT(modus));
 		MSPacketHandler.sendToPlayer(packet, player);
 	}
 	
@@ -378,7 +378,7 @@ public class CaptchaDeckHandler
 			setModus(player, null);
 		} else modus.initModus(player, null, size);
 		
-		CaptchaDeckPacket packet = CaptchaDeckPacket.data(writeToNBT(getModus(player)));
+		ModusDataPacket packet = ModusDataPacket.create(writeToNBT(modus));
 		MSPacketHandler.sendToPlayer(packet, player);
 	}
 	

@@ -1,29 +1,21 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckContainer;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
-import com.mraof.minestuck.util.Debug;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.network.PacketBuffer;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
-public class CaptchaDeckPacket implements PlayToBothPacket
+public class CaptchaDeckPacket implements PlayToServerPacket
 {
 	
-	private static final byte DATA = 0;
-	private static final byte MODUS = 1;
-	private static final byte CAPTCHALOGUE = 2;
-	private static final byte GET = 3;
-	private static final byte MODUS_PARAM = 4;
-	private static final byte CAPTCHALOGUE_INV = 5;
+	private static final byte MODUS = 0;
+	private static final byte CAPTCHALOGUE = 1;
+	private static final byte GET = 2;
+	private static final byte MODUS_PARAM = 3;
+	private static final byte CAPTCHALOGUE_INV = 4;
 	
 	public byte type;
 	
@@ -36,15 +28,6 @@ public class CaptchaDeckPacket implements PlayToBothPacket
 	public int value;
 	
 	public int slotIndex;
-	
-	public static CaptchaDeckPacket data(CompoundNBT nbt)
-	{
-		CaptchaDeckPacket packet = new CaptchaDeckPacket();
-		packet.type = DATA;
-		packet.nbt = nbt;
-		
-		return packet;
-	}
 	
 	public static CaptchaDeckPacket modus()
 	{
@@ -95,19 +78,7 @@ public class CaptchaDeckPacket implements PlayToBothPacket
 	public void encode(PacketBuffer buffer)
 	{
 		buffer.writeByte(type);	//Packet type
-		if(type == DATA)	//Generic data from server side
-		{
-			try
-			{
-				ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-				CompressedStreamTools.writeCompressed(nbt, bytes);
-				buffer.writeBytes(bytes.toByteArray());
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
-		} else if(type == GET)	//Take item from modus
+		if(type == GET)	//Take item from modus
 		{
 			buffer.writeInt(itemIndex);
 			buffer.writeBoolean(asCard);
@@ -128,20 +99,7 @@ public class CaptchaDeckPacket implements PlayToBothPacket
 		
 		if(buffer.readableBytes() > 0)
 		{
-			if(packet.type == DATA)
-			{
-				byte[] bytes = new byte[buffer.readableBytes()];
-				buffer.readBytes(bytes);
-				try
-				{
-					packet.nbt = CompressedStreamTools.readCompressed(new ByteArrayInputStream(bytes));
-				}
-				catch(IOException e)
-				{
-					e.printStackTrace();
-				}
-			}
-			else if(packet.type == GET)
+			if(packet.type == GET)
 			{
 				packet.itemIndex = buffer.readInt();
 				packet.asCard = buffer.readBoolean();
@@ -158,18 +116,6 @@ public class CaptchaDeckPacket implements PlayToBothPacket
 		}
 		
 		return packet;
-	}
-	
-	@Override
-	public void execute()
-	{
-		if(this.type == DATA)
-		{
-			CaptchaDeckHandler.clientSideModus = CaptchaDeckHandler.readFromNBT(nbt, null);
-			if(CaptchaDeckHandler.clientSideModus != null)
-				MSScreenFactories.updateSylladexScreen();
-			else Debug.debug("Player lost their modus after update packet");
-		}
 	}
 	
 	@Override

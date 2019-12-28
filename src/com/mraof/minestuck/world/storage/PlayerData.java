@@ -268,7 +268,7 @@ public final class PlayerData
 		if(getModus() != null)
 		{
 			Modus modus = getModus();
-			MSPacketHandler.sendToPlayer(CaptchaDeckPacket.data(CaptchaDeckHandler.writeToNBT(modus)), player);
+			MSPacketHandler.sendToPlayer(ModusDataPacket.create(CaptchaDeckHandler.writeToNBT(modus)), player);
 		}
 		
 		echeladder.sendDataPacket(player, true);
