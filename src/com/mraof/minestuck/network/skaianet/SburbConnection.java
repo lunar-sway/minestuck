@@ -6,7 +6,9 @@ import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
+import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.world.lands.LandInfo;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.NBTDynamicOps;
@@ -17,6 +19,8 @@ import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.util.Constants;
 
 import java.util.Arrays;
+import java.util.Map;
+import java.util.Set;
 
 public class SburbConnection
 {
@@ -210,7 +214,7 @@ public class SburbConnection
 	{
 		return clientHomeLand == null ? null : clientHomeLand.getDimensionType();
 	}
-	public boolean[] givenItems(){return Arrays.copyOf(givenItemList, givenItemList.length);}	//TODO Add way of setting given items that also calls skaianetHandler.markDirty()
+	public boolean[] givenItems(){return Arrays.copyOf(givenItemList, givenItemList.length);}
 	
 	/**
 	 * Writes the connection info needed client-side to a network buffer. Must match with {@link ReducedConnection#read}.
@@ -226,5 +230,69 @@ public class SburbConnection
 		buffer.writeString(getClientIdentifier().getUsername(), 16);
 		buffer.writeInt(getServerIdentifier().getId());
 		buffer.writeString(getServerIdentifier().getUsername(), 16);
+	}
+	
+	CompoundNBT createDataTag(Set<PlayerIdentifier> playerSet, Map<PlayerIdentifier, PredefineData> predefinedPlayers)
+	{
+		if(isMain())
+			playerSet.add(getClientIdentifier());
+		CompoundNBT connectionTag = new CompoundNBT();
+		connectionTag.putString("client", getClientIdentifier().getUsername());
+		connectionTag.putString("clientId", getClientIdentifier().getString());
+		if(!getServerIdentifier().equals(IdentifierHandler.nullIdentifier))
+			connectionTag.putString("server", getServerIdentifier().getUsername());
+		connectionTag.putBoolean("isMain", isMain());
+		connectionTag.putBoolean("isActive", isActive());
+		if(isMain())
+		{
+			if(clientHomeLand != null)
+			{
+				connectionTag.putString("clientDim", getClientDimension().getRegistryName().toString());
+				connectionTag.putString("aspect1", clientHomeLand.landName1());
+				connectionTag.putString("aspect2", clientHomeLand.landName2());
+				Title title = PlayerSavedData.getData(getClientIdentifier(), handler.mcServer).getTitle();
+				connectionTag.putByte("class", title == null ? -1 : (byte) title.getHeroClass().ordinal());
+				connectionTag.putByte("aspect", title == null ? -1 : (byte) title.getHeroAspect().ordinal());
+			} else if(predefinedPlayers.containsKey(getClientIdentifier()))
+			{
+				PredefineData data = predefinedPlayers.get(getClientIdentifier());
+				
+				if(data.title != null)
+				{
+					connectionTag.putByte("class", (byte) data.title.getHeroClass().ordinal());
+					connectionTag.putByte("aspect", (byte) data.title.getHeroAspect().ordinal());
+				}
+				
+				if(data.landTerrain != null)
+					connectionTag.putString("aspectTerrain", data.landTerrain.getRegistryName().toString());
+				if(data.landTitle != null)
+					connectionTag.putString("aspectTitle", data.landTitle.getRegistryName().toString());
+			}
+		}
+		return connectionTag;
+	}
+	
+	static CompoundNBT cratePredefineDataTag(PlayerIdentifier identifier, PredefineData data)
+	{
+		CompoundNBT connectionTag = new CompoundNBT();
+		
+		connectionTag.putString("client", identifier.getUsername());
+		connectionTag.putString("clientId", identifier.getString());
+		connectionTag.putBoolean("isMain", true);
+		connectionTag.putBoolean("isActive", false);
+		connectionTag.putInt("clientDim", 0);
+		
+		if(data.title != null)
+		{
+			connectionTag.putByte("class", (byte) data.title.getHeroClass().ordinal());
+			connectionTag.putByte("aspect", (byte) data.title.getHeroAspect().ordinal());
+		}
+		
+		if(data.landTerrain != null)
+			connectionTag.putString("aspectTerrain", data.landTerrain.getRegistryName().toString());
+		if(data.landTitle != null)
+			connectionTag.putString("aspectTitle", data.landTitle.getRegistryName().toString());
+		
+		return connectionTag;
 	}
 }

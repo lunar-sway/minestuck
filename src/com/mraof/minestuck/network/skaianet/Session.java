@@ -186,4 +186,28 @@ public class Session
 	{
 		return name != null;
 	}
+	
+	CompoundNBT createDataTag()
+	{
+		ListNBT connectionList = new ListNBT();
+		Set<PlayerIdentifier> playerSet = new HashSet<>();
+		for(SburbConnection c : connections)
+		{
+			connectionList.add(c.createDataTag(playerSet, predefinedPlayers));
+		}
+		
+		for(Map.Entry<PlayerIdentifier, PredefineData> entry : predefinedPlayers.entrySet())
+		{
+			if(playerSet.contains(entry.getKey()))
+				continue;
+			
+			connectionList.add(SburbConnection.cratePredefineDataTag(entry.getKey(), entry.getValue()));
+		}
+		
+		CompoundNBT sessionTag = new CompoundNBT();
+		if(name != null)
+			sessionTag.putString("name", name);
+		sessionTag.put("connections", connectionList);
+		return sessionTag;
+	}
 }

@@ -4,8 +4,6 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import com.mraof.minestuck.util.Title;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
@@ -42,9 +40,9 @@ public class SessionHandler
 	/**
 	 * An array list of the current worlds sessions.
 	 */
-	List<Session> sessions = new ArrayList<>();	//TODO Objectify in the same manner as skaianet, perhaps?
+	List<Session> sessions = new ArrayList<>();
 	Map<String, Session> sessionsByName = new HashMap<>();
-	SkaianetHandler skaianetHandler;
+	final SkaianetHandler skaianetHandler;
 	
 	SessionHandler(SkaianetHandler skaianetHandler)
 	{
@@ -578,90 +576,14 @@ public class SessionHandler
 	/**
 	 * Creates data to be used for the data checker
 	 */
-	public CompoundNBT createDataTag()	//TODO Should be done in the individual classes
+	public CompoundNBT createDataTag()
 	{
 		CompoundNBT nbt = new CompoundNBT();
 		ListNBT sessionList = new ListNBT();
 		nbt.put("sessions", sessionList);
-		for(int i = 0; i < sessions.size(); i++)
+		for(Session session : sessions)
 		{
-			Session session = sessions.get(i);
-			ListNBT connectionList = new ListNBT();
-			Set<PlayerIdentifier> playerSet = new HashSet<>();
-			for(SburbConnection c :session.connections)
-			{
-				if(c.isMain())
-					playerSet.add(c.getClientIdentifier());
-				CompoundNBT connectionTag = new CompoundNBT();
-				connectionTag.putString("client", c.getClientIdentifier().getUsername());
-				connectionTag.putString("clientId", c.getClientIdentifier().getString());
-				if(!c.getServerIdentifier().equals(IdentifierHandler.nullIdentifier))
-					connectionTag.putString("server", c.getServerIdentifier().getUsername());
-				connectionTag.putBoolean("isMain", c.isMain());
-				connectionTag.putBoolean("isActive", c.isActive());
-				if(c.isMain())
-				{
-					if(c.clientHomeLand != null)
-					{
-						connectionTag.putString("clientDim", c.getClientDimension().getRegistryName().toString());
-						connectionTag.putString("aspect1", c.clientHomeLand.landName1());
-						connectionTag.putString("aspect2", c.clientHomeLand.landName2());
-						Title title = PlayerSavedData.getData(c.getClientIdentifier(), skaianetHandler.mcServer).getTitle();
-						connectionTag.putByte("class", title == null ? -1 : (byte) title.getHeroClass().ordinal());
-						connectionTag.putByte("aspect", title == null ? -1 : (byte) title.getHeroAspect().ordinal());
-					} else if(session.predefinedPlayers.containsKey(c.getClientIdentifier()))
-					{
-						PredefineData data = session.predefinedPlayers.get(c.getClientIdentifier());
-						
-						if(data.title != null)
-						{
-							connectionTag.putByte("class", (byte) data.title.getHeroClass().ordinal());
-							connectionTag.putByte("aspect", (byte) data.title.getHeroAspect().ordinal());
-						}
-						
-						if(data.landTerrain != null)
-							connectionTag.putString("aspectTerrain", data.landTerrain.getRegistryName().toString());
-						if(data.landTitle != null)
-							connectionTag.putString("aspectTitle", data.landTitle.getRegistryName().toString());
-					}
-				}
-				connectionList.add(connectionTag);
-			}
-			
-			for(Map.Entry<PlayerIdentifier, PredefineData> entry : session.predefinedPlayers.entrySet())
-			{
-				if(playerSet.contains(entry.getKey()))
-					continue;
-				
-				CompoundNBT connectionTag = new CompoundNBT();
-				
-				connectionTag.putString("client", entry.getKey().getUsername());
-				connectionTag.putString("clientId", entry.getKey().getString());
-				connectionTag.putBoolean("isMain", true);
-				connectionTag.putBoolean("isActive", false);
-				connectionTag.putInt("clientDim", 0);
-				
-				PredefineData data = entry.getValue();
-				
-				if(data.title != null)
-				{
-					connectionTag.putByte("class", (byte) data.title.getHeroClass().ordinal());
-					connectionTag.putByte("aspect", (byte) data.title.getHeroAspect().ordinal());
-				}
-				
-				if(data.landTerrain != null)
-					connectionTag.putString("aspectTerrain", data.landTerrain.getRegistryName().toString());
-				if(data.landTitle != null)
-					connectionTag.putString("aspectTitle", data.landTitle.getRegistryName().toString());
-				
-				connectionList.add(connectionTag);
-			}
-			
-			CompoundNBT sessionTag = new CompoundNBT();
-			if(session.name != null)
-				sessionTag.putString("name", session.name);
-			sessionTag.put("connections", connectionList);
-			sessionList.add(sessionTag);
+			sessionList.add(session.createDataTag());
 		}
 		return nbt;
 	}
