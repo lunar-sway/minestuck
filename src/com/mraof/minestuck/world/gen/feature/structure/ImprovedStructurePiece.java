@@ -1,5 +1,7 @@
 package com.mraof.minestuck.world.gen.feature.structure;
 
+import com.mraof.minestuck.block.GateBlock;
+import com.mraof.minestuck.block.MSBlocks;
 import net.minecraft.block.BedBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -43,6 +45,28 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 		state = state.with(BedBlock.HORIZONTAL_FACING, direction);
 		setBlockState(worldIn, state, x, y, z, sbb);
 		setBlockState(worldIn, state.with(BedBlock.PART, BedPart.HEAD), x + direction.getXOffset(), y, z + direction.getZOffset(), sbb);
+	}
+	
+	protected void placeReturnNode(IWorld world, MutableBoundingBox boundingBox, int x, int y, int z)
+	{
+		int posX = getXWithOffset(x, z), posY = getYWithOffset(y), posZ = getZWithOffset(x, z);
+		
+		if(getCoordBaseMode() == Direction.NORTH || getCoordBaseMode() == Direction.WEST)
+			posX--;
+		if(getCoordBaseMode() == Direction.NORTH || getCoordBaseMode() == Direction.EAST)
+			posZ--;
+		BlockPos nodePos = new BlockPos(posX, posY, posZ);
+		
+		for(int i = 0; i < 4; i++)
+		{
+			BlockPos pos = nodePos.add(i % 2, 0, i/2);
+			if(boundingBox.isVecInside(pos))
+			{
+				if(i == 3)
+					world.setBlockState(pos, MSBlocks.RETURN_NODE.getDefaultState().cycle(GateBlock.MAIN), 2);
+				else world.setBlockState(pos, MSBlocks.RETURN_NODE.getDefaultState(), 2);
+			}
+		}
 	}
 	
 	protected int getAverageGroundLevel(IWorld worldIn, MutableBoundingBox structurebb)

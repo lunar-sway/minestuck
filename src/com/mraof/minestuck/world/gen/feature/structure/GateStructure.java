@@ -38,8 +38,6 @@ public class GateStructure extends Structure<NoFeatureConfig>
 	@Override
 	protected ChunkPos getStartPositionForPosition(ChunkGenerator<?> chunkGenerator, Random random, int x, int z, int spacingOffsetsX, int spacingOffsetsZ)
 	{
-		//TODO: The seed might be the same for all dimensions. Check that.
-		// Idea: Make the LandDimension combine the seed with something based on the land dimension.
 		DimensionType type = chunkGenerator instanceof LandChunkGenerator ? ((LandChunkGenerator) chunkGenerator).getDimensionType() : null;
 		return findGatePosition(type, chunkGenerator);
 	}

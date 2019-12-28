@@ -1,7 +1,5 @@
 package com.mraof.minestuck.world.gen.feature.structure;
 
-import com.mraof.minestuck.block.GateBlock;
-import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.underling.OgreEntity;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
@@ -593,31 +591,9 @@ public class ImpDungeonPieces
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 5, 4, 4, 10, 5, wallBlock, wallBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 10, 4, 3, 10, 5, light, light, false);
 			
-			placeReturnNode(worldIn, structureBoundingBoxIn);
+			placeReturnNode(worldIn, structureBoundingBoxIn, 2, 1, 4);
 			
 			return true;
-		}
-		
-		private void placeReturnNode(IWorld world, MutableBoundingBox boundingBox)
-		{
-			int x = getXWithOffset(2, 4), y = getYWithOffset(1), z = getZWithOffset(2, 4);
-			
-			if(getCoordBaseMode() == Direction.NORTH || getCoordBaseMode() == Direction.WEST)
-				x--;
-			if(getCoordBaseMode() == Direction.NORTH || getCoordBaseMode() == Direction.EAST)
-				z--;
-			BlockPos nodePos = new BlockPos(x, y, z);
-			
-			for(int i = 0; i < 4; i++)
-			{
-				BlockPos pos = nodePos.add(i % 2, 0, i/2);
-				if(boundingBox.isVecInside(pos))
-				{
-					if(i == 3)
-						world.setBlockState(pos, MSBlocks.RETURN_NODE.getDefaultState().cycle(GateBlock.MAIN), 2);
-					else world.setBlockState(pos, MSBlocks.RETURN_NODE.getDefaultState(), 2);
-				}
-			}
 		}
 	}
 	
@@ -692,32 +668,9 @@ public class ImpDungeonPieces
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 6, 5, 1, 6, 6, light, light, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 6, 5, 6, 6, 6, light, light, false);
 			
-			placeReturnNode(worldIn, structureBoundingBoxIn);
+			placeReturnNode(worldIn, structureBoundingBoxIn, 3, 1, 7);
 			
 			return true;
-		}
-		
-		//TODO Duplicate code!
-		private void placeReturnNode(IWorld world, MutableBoundingBox boundingBox)
-		{
-			int x = getXWithOffset(3, 7), y = getYWithOffset(1), z = getZWithOffset(3, 7);
-			
-			if(getCoordBaseMode() == Direction.NORTH || getCoordBaseMode() == Direction.WEST)
-				x--;
-			if(getCoordBaseMode() == Direction.NORTH || getCoordBaseMode() == Direction.EAST)
-				z--;
-			BlockPos nodePos = new BlockPos(x, y, z);
-			
-			for(int i = 0; i < 4; i++)
-			{
-				BlockPos pos = nodePos.add(i % 2, 0, i/2);
-				if(boundingBox.isVecInside(pos))
-				{
-					if(i == 3)
-						world.setBlockState(pos, MSBlocks.RETURN_NODE.getDefaultState().cycle(GateBlock.MAIN), 2);
-					else world.setBlockState(pos, MSBlocks.RETURN_NODE.getDefaultState(), 2);
-				}
-			}
 		}
 	}
 	public static class SpawnerRoom extends ImpDungeonPiece
