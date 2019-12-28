@@ -9,15 +9,12 @@ import com.mraof.minestuck.item.weapon.PotionWeaponItem;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Echeladder;
-import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.SoundCategory;
@@ -35,18 +32,12 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import static com.mraof.minestuck.util.EnumAspect.HOPE;
-
 public class ServerEventHandler
 {
 	
 	public static final ServerEventHandler instance = new ServerEventHandler();
 	
 	public static long lastDay;
-	
-	static Effect[] aspectEffects = {Effects.ABSORPTION, Effects.SPEED, Effects.RESISTANCE, Effects.ABSORPTION, Effects.FIRE_RESISTANCE, Effects.REGENERATION, Effects.LUCK, Effects.NIGHT_VISION, Effects.STRENGTH, Effects.JUMP_BOOST, Effects.HASTE, Effects.INVISIBILITY }; //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
-	// Increase the starting rungs
-	static float[] aspectStrength = new float[] {1.0F/14, 1.0F/15, 1.0F/28, 1.0F/14, 1.0F/18, 1.0F/20, 1.0F/10, 1.0F/12, 1.0F/25, 1.0F/10, 1.0F/13, 1.0F/12}; //Absorption, Speed, Resistance, Saturation, Fire Resistance, Regeneration, Luck, Night Vision, Strength, Jump Boost, Haste, Invisibility
 	
 	@SubscribeEvent
 	public void onWorldTick(TickEvent.WorldTickEvent event)
@@ -180,30 +171,13 @@ public class ServerEventHandler
 	}
 	
 	@SubscribeEvent
-	public void aspectPotionEffect(TickEvent.PlayerTickEvent event)
+	public void onPlayerTickEvent(TickEvent.PlayerTickEvent event)
 	{
 		if(!event.player.world.isRemote)
 		{
 			PlayerData data = PlayerSavedData.getData((ServerPlayerEntity) event.player);
-			if(data.getTitle() == null || !MinestuckConfig.aspectEffects.get() || !data.effectToggle())
-				return;
-			//TODO Should migrate to Title and/or EnumAspect
-			int rung = data.getEcheladder().getRung();
-			EnumAspect aspect = data.getTitle().getHeroAspect();
-			int potionLevel = (int) (aspectStrength[aspect.ordinal()] * rung); //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
-			
-			if(event.player.getEntityWorld().getGameTime() % 380 == event.player.getGameProfile().getId().hashCode() % 380)
-			{
-				if(rung > 18 && aspect == HOPE)
-				{
-					event.player.addPotionEffect(new EffectInstance(Effects.WATER_BREATHING, 600, 0));
-				}
-				
-				if(potionLevel > 0)
-				{
-					event.player.addPotionEffect(new EffectInstance(aspectEffects[aspect.ordinal()], 600, potionLevel - 1));
-				}
-			}
+			if(data.getTitle() != null)
+				data.getTitle().handleAspectEffects((ServerPlayerEntity) event.player);
 		}
 	}
 }
