@@ -1,6 +1,7 @@
-package com.mraof.minestuck.world.biome;
+package com.mraof.minestuck.world.biome.gen;
 
 import com.google.common.collect.Sets;
+import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;

@@ -1,5 +1,6 @@
-package com.mraof.minestuck.world.biome;
+package com.mraof.minestuck.world.biome.gen;
 
+import com.mraof.minestuck.world.biome.MSBiomes;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.gen.INoiseRandom;
