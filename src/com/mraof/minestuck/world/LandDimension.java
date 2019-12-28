@@ -77,6 +77,14 @@ public class LandDimension extends Dimension
 		biomeHolder = new LandBiomeHolder(landTypes, false);
 	}
 	
+	private static final long GENERIC_BIG_PRIME = 661231563202688713L;
+	
+	@Override
+	public long getSeed()
+	{
+		return super.getSeed() + getType().getId()*GENERIC_BIG_PRIME;
+	}
+	
 	@Override
 	public float getSunBrightness(float partialTicks)
 	{
@@ -156,15 +164,6 @@ public class LandDimension extends Dimension
 	{
 		return false;
 	}
-	
-	/*public String getDimensionName()
-	{
-		if (chunkProvider == null || chunkProvider.aspect1 == null || chunkProvider.aspect2 == null) {
-			return "Land";
-		} else {
-			return "Land of " + chunkProvider.aspect1.getPrimaryName() + " and " + chunkProvider.aspect2.getPrimaryName();
-		}
-	}*/
 	
 	@Override
 	public BlockPos getSpawnPoint() 
