@@ -7,8 +7,8 @@ import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.biome.MSBiomes;
-import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.LandGenSettings;
+import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.Blocks;
@@ -103,7 +103,7 @@ public class RainLandType extends TerrainLandType
 			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(MSFeatures.LEAFLESS_TREE, new BushConfig(MSBlocks.DEAD_LOG.getDefaultState()), Placement.CHANCE_TOP_SOLID_HEIGHTMAP, new ChanceConfig(4)));
 		}
 		
-		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.DISK, new SphereReplaceConfig(MSBlocks.POLISHED_PINK_STONE.getDefaultState(), 2, 1, Lists.newArrayList(blocks.getBlockState("ground"))), Placement.COUNT_TOP_SOLID, new FrequencyConfig(2)));
+		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.DISK, new SphereReplaceConfig(MSBlocks.POLISHED_PINK_STONE.getDefaultState(), 4, 1, Lists.newArrayList(blocks.getBlockState("ground"))), Placement.COUNT_TOP_SOLID, new FrequencyConfig(2)));
 		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(blocks.getGroundType(), MSBlocks.PINK_STONE_COAL_ORE.getDefaultState(), 17), Placement.COUNT_RANGE, new CountRangeConfig(13, 0, 0, 64)));
 		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(blocks.getGroundType(), MSBlocks.PINK_STONE_LAPIS_ORE.getDefaultState(), 7), Placement.COUNT_RANGE, new CountRangeConfig(4, 0, 0, 24)));
 		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(blocks.getGroundType(), MSBlocks.PINK_STONE_GOLD_ORE.getDefaultState(), 9), Placement.COUNT_RANGE, new CountRangeConfig(4, 0, 0, 32)));
