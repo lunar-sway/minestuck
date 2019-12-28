@@ -78,7 +78,7 @@ public class ClientEditHandler {
 		}
 		if(deployList != null)
 		{
-			DeployList.loadClientDeployList(deployList);
+			ClientDeployList.load(deployList);
 		}
 	}
 	
@@ -98,7 +98,7 @@ public class ClientEditHandler {
 	{
 		
 		GristSet cost;
-		DeployList.ClientDeployEntry deployEntry = DeployList.getEntryClient(stack);
+		ClientDeployList.Entry deployEntry = ClientDeployList.getEntry(stack);
 		if(deployEntry != null)
 			cost = givenItems[deployEntry.getIndex()]
 					? deployEntry.getSecondaryCost() : deployEntry.getPrimaryCost();
@@ -139,7 +139,7 @@ public class ClientEditHandler {
 		{
 			PlayerInventory inventory = event.getPlayer().inventory;
 			ItemStack stack = event.getEntityItem().getItem();
-			DeployList.ClientDeployEntry entry = DeployList.getEntryClient(stack);
+			ClientDeployList.Entry entry = ClientDeployList.getEntry(stack);
 			if(entry != null)
 			{
 				if(!ServerEditHandler.isBlockItem(stack.getItem()) && GristHelper.canAfford(ClientPlayerData.getClientGrist(), givenItems[entry.getIndex()]
@@ -181,7 +181,7 @@ public class ClientEditHandler {
 			}
 			
 			GristSet cost;
-			DeployList.ClientDeployEntry entry = DeployList.getEntryClient(stack);
+			ClientDeployList.Entry entry = ClientDeployList.getEntry(stack);
 			if(entry != null)
 				if(givenItems[entry.getIndex()])
 					cost = entry.getSecondaryCost();
@@ -233,7 +233,7 @@ public class ClientEditHandler {
 		if(event.getWorld().isRemote && isActive() && event.getPlayer().equals(Minecraft.getInstance().player)
 				&& event.getUseItem() == Event.Result.ALLOW) {
 			ItemStack stack = event.getPlayer().getHeldItemMainhand();
-			DeployList.ClientDeployEntry entry = DeployList.getEntryClient(stack);
+			ClientDeployList.Entry entry = ClientDeployList.getEntry(stack);
 			if(entry != null)
 				givenItems[entry.getIndex()] = true;
 		}

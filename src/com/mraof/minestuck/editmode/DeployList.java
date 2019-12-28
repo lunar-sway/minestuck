@@ -15,7 +15,6 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
-import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -29,7 +28,7 @@ import java.util.function.BiFunction;
  * @author kirderf1
  */
 public class DeployList
-{//TODO Seperate client and server fields into two different classes (to make it easier to not use server-sided stuff client side)
+{
 	
 	private static final ArrayList<DeployEntry> list = new ArrayList<>();
 	
@@ -108,7 +107,7 @@ public class DeployList
 	}
 	
 	@Nonnull
-	private static ItemStack cleanStack(ItemStack stack)
+	static ItemStack cleanStack(ItemStack stack)
 	{
 		if(stack.isEmpty())
 			return ItemStack.EMPTY;
@@ -287,62 +286,5 @@ public class DeployList
 			}
 		}
 		return nbt;
-	}
-	
-	//Clientside
-	
-	static void loadClientDeployList(CompoundNBT nbt)
-	{
-		if(clientDeployList == null)
-			clientDeployList = new ArrayList<>();
-		else clientDeployList.clear();
-		ListNBT list = nbt.getList("l", Constants.NBT.TAG_COMPOUND);
-		for(int i = 0; i < list.size(); i++)
-		{
-			CompoundNBT tag = list.getCompound(i);
-			ClientDeployEntry entry = new ClientDeployEntry();
-			entry.item = ItemStack.read(tag);
-			entry.index = tag.getInt("i");
-			entry.cost1 = GristSet.read(tag.getList("primary", Constants.NBT.TAG_COMPOUND));
-			if(tag.contains("secondary", Constants.NBT.TAG_LIST))
-			{
-				entry.cost2 = GristSet.read(tag.getList("secondary", Constants.NBT.TAG_COMPOUND));
-			} else entry.cost2 = null;
-			clientDeployList.add(entry);
-		}
-	}
-	
-	private static List<ClientDeployEntry> clientDeployList;
-	
-	public static ClientDeployEntry getEntryClient(ItemStack stack)
-	{
-		stack = cleanStack(stack);
-		for(ClientDeployEntry entry : clientDeployList)
-			if(ItemStack.areItemStacksEqual(entry.item, stack))
-				return entry;
-		return null;
-	}
-	
-	public static class ClientDeployEntry
-	{
-		private ItemStack item;
-		private GristSet cost1;
-		private GristSet cost2;
-		private int index;
-		
-		public GristSet getPrimaryCost()
-		{
-			return cost1;
-		}
-		
-		public GristSet getSecondaryCost()
-		{
-			return cost2;
-		}
-		
-		public int getIndex()
-		{
-			return index;
-		}
 	}
 }
