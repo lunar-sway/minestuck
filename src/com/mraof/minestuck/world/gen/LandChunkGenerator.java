@@ -10,6 +10,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.provider.BiomeProvider;
 import net.minecraft.world.chunk.IChunk;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.NoiseChunkGenerator;
 import net.minecraft.world.gen.WorldGenRegion;
@@ -143,5 +144,10 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 	public <C extends IFeatureConfig> C getStructureConfig(Biome biomeIn, Structure<C> structureIn)
 	{
 		return biomeHolder.localBiomeFrom(biomeIn).getStructureConfig(structureIn);
+	}
+	
+	public DimensionType getDimensionType()
+	{
+		return world.getDimension().getType();
 	}
 }

@@ -13,6 +13,7 @@ import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.PlayerTracker;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -96,6 +97,7 @@ public class Minestuck
 		PlayerTracker.dataCheckerPermission.clear();
 		IdentifierHandler.clear();
 		SkaianetHandler.init(null);
+		MSFeatures.LAND_GATE.clearCache();
 	}
 	
 	@SubscribeEvent

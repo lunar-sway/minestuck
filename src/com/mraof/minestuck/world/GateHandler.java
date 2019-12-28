@@ -11,7 +11,6 @@ import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.lands.LandInfo;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.GlobalPos;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -56,27 +55,21 @@ public class GateHandler
 		}
 	}
 	
-	@Deprecated
-	public static void setDefiniteGatePos(MinecraftServer server, Type type, DimensionType dim, BlockPos newPos)
+	private static BlockPos getSavedLandGate(ServerWorld world)
 	{
-		if(type == Type.LAND_GATE)
+		LandInfo info = MSDimensions.getLandInfo(world);
+		if(info != null)
 		{
-			LandInfo info = MSDimensions.getLandInfo(server, dim);
-			if(info == null)
-			{
-				Debug.errorf("Tried to set gate position for dimension %s but did not get any land info", dim);
-				return;
-			}
-			BlockPos oldPos = info.getGatePos();
-			if(oldPos != null && oldPos.getY() != -1)
-			{
-				Debug.error("Trying to set position for a gate that should already be generated!");
-				return;
-			}
-			
-			info.setGatePos(newPos);
+			if(info.getGatePos() != null)
+				return info.getGatePos();
 		}
-		else Debug.error("Trying to set position for a gate that should already be generated/doesn't exist!");
+		
+		BlockPos gatePos = MSFeatures.LAND_GATE.findLandGatePos(world);
+		
+		if(info != null)
+			info.setGatePos(gatePos);
+		
+		return gatePos;
 	}
 	
 	private static GlobalPos findPosNearLandGate(ServerWorld world)
@@ -149,7 +142,7 @@ public class GateHandler
 	{
 		GATE_1(false, world -> new BlockPos(0, gateHeight1, 0), GateHandler::findPosNearLandGate),
 		GATE_2(true, world -> new BlockPos(0, gateHeight2, 0), GateHandler::findClientLandGate),
-		LAND_GATE(true, MSFeatures.LAND_GATE::findLandGatePos, GateHandler::findServerSecondGate);	//TODO Because this gate pos getter might not be stable across versions, the result should be cached in the land data
+		LAND_GATE(true, GateHandler::getSavedLandGate, GateHandler::findServerSecondGate);	//TODO Because this gate pos getter might not be stable across versions, the result should be cached in the land data
 		
 		private final boolean isDestinationGate;
 		private final Function<ServerWorld, BlockPos> locationFinder;
