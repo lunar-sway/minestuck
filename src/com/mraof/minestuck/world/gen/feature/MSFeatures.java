@@ -32,6 +32,7 @@ public final class MSFeatures
 	public static final Feature<NoFeatureConfig> END_TREE =	 getNull();
 	public static final Feature<BushConfig> LEAFLESS_TREE = getNull();
 	
+	public static final Feature<NoFeatureConfig> RETURN_NODE = getNull();
 	public static final Feature<NoFeatureConfig> FIRE_FIELD = getNull();
 	public static final Feature<ProbabilityConfig> CAKE = getNull();
 	public static final Feature<BushConfig> PILLAR = getNull();
@@ -72,6 +73,7 @@ public final class MSFeatures
 		registry.register(new EndTreeFeature(NoFeatureConfig::deserialize, false).setRegistryName("end_tree"));
 		registry.register(new LeaflessTreeFeature(BushConfig::deserialize).setRegistryName("leafless_tree"));
 		
+		registry.register(new ReturnNodeFeature(NoFeatureConfig::deserialize).setRegistryName("return_node"));
 		registry.register(new FireFieldFeature(NoFeatureConfig::deserialize).setRegistryName("fire_field"));
 		registry.register(new CakeFeature(ProbabilityConfig::deserialize).setRegistryName("cake"));
 		registry.register(new PillarFeature(BushConfig::deserialize, false).setRegistryName("pillar"));

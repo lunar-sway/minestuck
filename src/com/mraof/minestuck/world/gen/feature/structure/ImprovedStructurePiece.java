@@ -1,7 +1,6 @@
 package com.mraof.minestuck.world.gen.feature.structure;
 
-import com.mraof.minestuck.block.GateBlock;
-import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.block.ReturnNodeBlock;
 import net.minecraft.block.BedBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -55,18 +54,8 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 			posX--;
 		if(getCoordBaseMode() == Direction.NORTH || getCoordBaseMode() == Direction.EAST)
 			posZ--;
-		BlockPos nodePos = new BlockPos(posX, posY, posZ);
 		
-		for(int i = 0; i < 4; i++)
-		{
-			BlockPos pos = nodePos.add(i % 2, 0, i/2);
-			if(boundingBox.isVecInside(pos))
-			{
-				if(i == 3)
-					world.setBlockState(pos, MSBlocks.RETURN_NODE.getDefaultState().cycle(GateBlock.MAIN), 2);
-				else world.setBlockState(pos, MSBlocks.RETURN_NODE.getDefaultState(), 2);
-			}
-		}
+		ReturnNodeBlock.placeReturnNode(world, new BlockPos(posX, posY, posZ), boundingBox);
 	}
 	
 	protected int getAverageGroundLevel(IWorld worldIn, MutableBoundingBox structurebb)

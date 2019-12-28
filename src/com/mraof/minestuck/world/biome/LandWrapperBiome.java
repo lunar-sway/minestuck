@@ -7,6 +7,7 @@ import net.minecraft.entity.EntityClassification;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.gen.placement.ChanceConfig;
 import net.minecraft.world.gen.placement.IPlacementConfig;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraft.world.gen.surfacebuilders.ConfiguredSurfaceBuilder;
@@ -29,6 +30,9 @@ public class LandWrapperBiome extends LandBiome
 		SurfaceBuilderConfig surfaceConfig = new SurfaceBuilderConfig(blocks.getBlockState("surface"), blocks.getBlockState("upper"), blocks.getBlockState("ocean_surface"));
 		this.surfaceBuilder = new ConfiguredSurfaceBuilder<>(SurfaceBuilder.DEFAULT, surfaceConfig);
 		this.addSpawn(EntityClassification.CREATURE, new SpawnListEntry(settings.getLandTypes().terrain.getConsortType(), 2, 1, 10));
+		
+		if(staticBiome != MSBiomes.LAND_OCEAN)
+			addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, createDecoratedFeature(MSFeatures.RETURN_NODE, IFeatureConfig.NO_FEATURE_CONFIG, Placement.CHANCE_HEIGHTMAP, new ChanceConfig(128)));
 		addDefaultStructures(blocks);
 	}
 	

@@ -2,7 +2,11 @@ package com.mraof.minestuck.block;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 public class ReturnNodeBlock extends GateBlock
 {
@@ -49,5 +53,19 @@ public class ReturnNodeBlock extends GateBlock
 			for(int z = -1; z <= 0; z++)
 				if(world.getBlockState(pos.add(x, 0, z)).getBlock() == this)
 					world.removeBlock(pos.add(x, 0, z), false);
+	}
+	
+	public static void placeReturnNode(IWorld world, BlockPos nodePos, @Nullable MutableBoundingBox boundingBox)
+	{
+		for(int i = 0; i < 4; i++)
+		{
+			BlockPos pos = nodePos.add(i % 2, 0, i/2);
+			if(boundingBox == null || boundingBox.isVecInside(pos))
+			{
+				if(i == 3)
+					world.setBlockState(pos, MSBlocks.RETURN_NODE.getDefaultState().cycle(GateBlock.MAIN), 2);
+				else world.setBlockState(pos, MSBlocks.RETURN_NODE.getDefaultState(), 2);
+			}
+		}
 	}
 }
