@@ -4,6 +4,7 @@ import com.mraof.minestuck.entity.DecoyEntity;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.network.GristCachePacket;
 import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.ServerEditPacket;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
@@ -74,6 +75,12 @@ public class EditData
 		ServerPlayerEntity editor = getEditor();
 		GristCachePacket packet = new GristCachePacket(cache, true);
 		MSPacketHandler.sendToPlayer(packet, editor);
+	}
+	
+	public void sendGivenItemsToEditor()
+	{
+		ServerEditPacket packet = ServerEditPacket.givenItems(connection.givenItems());
+		MSPacketHandler.sendToPlayer(packet, getEditor());
 	}
 	
 	public CompoundNBT writeRecoveryData()

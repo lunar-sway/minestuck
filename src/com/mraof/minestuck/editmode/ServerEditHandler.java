@@ -1,7 +1,9 @@
 package com.mraof.minestuck.editmode;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.DecoyEntity;
+import com.mraof.minestuck.event.ConnectionClosedEvent;
 import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ServerEditPacket;
@@ -43,6 +45,7 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,6 +57,7 @@ import java.util.UUID;
  * Also contains some methods used on both sides.
  * @author kirderf1
  */
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class ServerEditHandler
 {
 	
@@ -62,7 +66,6 @@ public class ServerEditHandler
 	
 	/**
 	 * Called both when any player logged out and when a player pressed the exit button.
-	 * @param player
 	 */
 	public static void onPlayerExit(PlayerEntity player)
 	{
@@ -70,10 +73,11 @@ public class ServerEditHandler
 			reset(getData(player));
 	}
 	
-	public static void onDisconnect(MinecraftServer server, SburbConnection c)
+	@SubscribeEvent
+	public static void onDisconnect(ConnectionClosedEvent event)
 	{
-		reset(getData(server, c));
-		c.useCoordinates = false;
+		reset(getData(event.getMinecraftServer(), event.getConnection()));
+		event.getConnection().useCoordinates = false;
 	}
 	
 	public static void reset(EditData data)
@@ -186,7 +190,7 @@ public class ServerEditHandler
 	}
 	
 	@SubscribeEvent
-	public void tickEnd(TickEvent.PlayerTickEvent event) {
+	public static void tickEnd(TickEvent.PlayerTickEvent event) {
 		if(event.phase != TickEvent.Phase.END || event.side == LogicalSide.CLIENT)
 			return;
 		ServerPlayerEntity player = (ServerPlayerEntity) event.player;
@@ -205,7 +209,7 @@ public class ServerEditHandler
 	}
 	
 	@SubscribeEvent
-	public void onTossEvent(ItemTossEvent event)
+	public static void onTossEvent(ItemTossEvent event)
 	{
 		PlayerInventory inventory = event.getPlayer().inventory;
 		if(!event.getEntity().world.isRemote && getData(event.getPlayer()) != null)
@@ -298,7 +302,7 @@ public class ServerEditHandler
 	}
 	
 	@SubscribeEvent(priority=EventPriority.NORMAL)
-	public void onLeftClickBlockControl(PlayerInteractEvent.LeftClickBlock event)
+	public static void onLeftClickBlockControl(PlayerInteractEvent.LeftClickBlock event)
 	{
 		if(!event.getWorld().isRemote && getData(event.getPlayer()) != null)
 		{
@@ -311,7 +315,7 @@ public class ServerEditHandler
 	}
 	
 	@SubscribeEvent(priority=EventPriority.NORMAL)
-	public void onItemUseControl(PlayerInteractEvent.RightClickItem event)
+	public static void onItemUseControl(PlayerInteractEvent.RightClickItem event)
 	{
 		if(!event.getWorld().isRemote && getData(event.getPlayer()) != null)
 		{
@@ -320,7 +324,7 @@ public class ServerEditHandler
 	}
 	
 	@SubscribeEvent(priority=EventPriority.LOWEST)
-	public void onBlockBreak(PlayerInteractEvent.LeftClickBlock event)
+	public static void onBlockBreak(PlayerInteractEvent.LeftClickBlock event)
 	{
 		if(!event.getEntity().world.isRemote && getData(event.getPlayer()) != null)
 		{
@@ -339,7 +343,7 @@ public class ServerEditHandler
 	}
 	
 	@SubscribeEvent(priority=EventPriority.LOW)
-	public void onBlockPlaced(BlockEvent.EntityPlaceEvent event)
+	public static void onBlockPlaced(BlockEvent.EntityPlaceEvent event)
 	{
 		if(event.getEntity() instanceof ServerPlayerEntity)
 		{
@@ -349,8 +353,7 @@ public class ServerEditHandler
 				EditData data = getData(player);
 				if(event.isCanceled())    //If the event was cancelled server side and not client side, notify the client.
 				{
-					ServerEditPacket packet = ServerEditPacket.givenItems(data.connection.givenItems());
-					MSPacketHandler.sendToPlayer(packet, player);
+					data.sendGivenItemsToEditor();
 					return;
 				}
 				
@@ -379,7 +382,7 @@ public class ServerEditHandler
 	}
 	
 	@SubscribeEvent(priority=EventPriority.NORMAL)
-	public void onAttackEvent(AttackEntityEvent event)
+	public static void onAttackEvent(AttackEntityEvent event)
 	{
 		if(!event.getEntity().world.isRemote && getData(event.getPlayer()) != null)
 			event.setCanceled(true);
@@ -474,7 +477,7 @@ public class ServerEditHandler
 	}
 	
 	/*@SubscribeEvent(priority=EventPriority.LOWEST, receiveCanceled=false) TODO Do something about command security
-	public void onCommandEvent(CommandEvent event)
+	public static void onCommandEvent(CommandEvent event)
 	{
 		if(list.isEmpty())
 			return;
@@ -539,7 +542,7 @@ public class ServerEditHandler
 	}*/
 	
 	@SubscribeEvent
-	public void onEntityTeleport(EntityTravelToDimensionEvent event)
+	public static void onEntityTeleport(EntityTravelToDimensionEvent event)
 	{
 		if(event.getEntity() instanceof ServerPlayerEntity && getData((ServerPlayerEntity) event.getEntity()) != null)
 		{

@@ -8,7 +8,6 @@ import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.event.ConnectionClosedEvent;
 import com.mraof.minestuck.event.ConnectionCreatedEvent;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.network.ServerEditPacket;
 import com.mraof.minestuck.network.SkaianetInfoPacket;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.util.Debug;
@@ -255,14 +254,14 @@ public class SkaianetHandler
 						sc.markBlockForUpdate();
 					}
 					sessionHandler.onConnectionClosed(c, true);
-					ServerEditHandler.onDisconnect(mcServer, c);
+					
 					if(c.isMain())
 						c.close();
 					else connections.remove(c);
 					
 					ConnectionCreatedEvent.ConnectionType type = !c.isMain() && getMainConnection(c.getClientIdentifier(), true) != null
 							? ConnectionCreatedEvent.ConnectionType.SECONDARY : ConnectionCreatedEvent.ConnectionType.REGULAR;
-					MinecraftForge.EVENT_BUS.post(new ConnectionClosedEvent(c, sessionHandler.getPlayerSession(c.getClientIdentifier()), type));
+					MinecraftForge.EVENT_BUS.post(new ConnectionClosedEvent(mcServer, c, sessionHandler.getPlayerSession(c.getClientIdentifier()), type));
 				} else if(getAssociatedPartner(player, isClient).equals(otherPlayer))
 				{
 					if(movingComputers.contains(isClient?resumingClients.get(player):resumingServers.get(player)))
@@ -365,7 +364,7 @@ public class SkaianetHandler
 		if(c1 != c2)
 			c2.markBlockForUpdate();
 		
-		MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(c, sessionHandler.getPlayerSession(c.getClientIdentifier()), type, joinType));
+		MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, c, sessionHandler.getPlayerSession(c.getClientIdentifier()), type, joinType));
 		if(updateLandChain)
 			sendLandChainUpdate();
 	}
@@ -638,7 +637,6 @@ public class SkaianetHandler
 						iter2.remove();
 					else c.close();
 					sessionHandler.onConnectionClosed(c, true);
-					ServerEditHandler.onDisconnect(mcServer, c);
 					
 					if(cc != null)
 					{
@@ -650,6 +648,10 @@ public class SkaianetHandler
 						sc.latestmessage.put(1, CLOSED);
 						sc.markBlockForUpdate();
 					}
+					
+					ConnectionCreatedEvent.ConnectionType type = !c.isMain() && getMainConnection(c.getClientIdentifier(), true) != null
+							? ConnectionCreatedEvent.ConnectionType.SECONDARY : ConnectionCreatedEvent.ConnectionType.REGULAR;
+					MinecraftForge.EVENT_BUS.post(new ConnectionClosedEvent(mcServer, c, sessionHandler.getPlayerSession(c.getClientIdentifier()), type));
 				}
 			}
 		}
@@ -795,10 +797,7 @@ public class SkaianetHandler
 			
 			EditData data = ServerEditHandler.getData(mcServer, c);
 			if(data != null)
-			{
-				ServerEditPacket packet = ServerEditPacket.givenItems(c.givenItemList);
-				MSPacketHandler.sendToPlayer(packet, data.getEditor());
-			}
+				data.sendGivenItemsToEditor();
 		}
 	}
 	
