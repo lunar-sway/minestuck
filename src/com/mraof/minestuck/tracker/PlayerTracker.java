@@ -39,7 +39,7 @@ public class PlayerTracker
 	public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
 	{
 		ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
-		Debug.debug(player.getName()+" joined the game. Sending packets.");
+		Debug.debug(player.getGameProfile().getName()+" joined the game. Sending packets.");
 		MinecraftServer server = player.getServer();
 		if(!server.isDedicatedServer() && IdentifierHandler.host == null)
 			IdentifierHandler.host = event.getPlayer().getName().getUnformattedComponentText();

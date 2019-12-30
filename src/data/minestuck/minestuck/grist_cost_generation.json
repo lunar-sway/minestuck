@@ -1,0 +1,18 @@
+[
+    {
+        "type": "recipe",
+        "value": "minestuck:apple_cake"
+    },
+    {
+        "type": "recipe_serializer",
+        "value": "minecraft:crafting_shapeless"
+    },
+    {
+        "type": "recipe_type",
+        "value": "minecraft:blasting"
+    },
+    {
+        "type": "recipe_type",
+        "value": "minecraft:stonecutting"
+    }
+]

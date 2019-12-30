@@ -9,6 +9,7 @@ import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.GristCostGenerator;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.PlayerTracker;
 import com.mraof.minestuck.util.Debug;
@@ -89,6 +90,7 @@ public class Minestuck
 	@SubscribeEvent
 	public void serverAboutToStart(FMLServerAboutToStartEvent event)
 	{
+		event.getServer().getResourceManager().addReloadListener(new GristCostGenerator(event.getServer().getRecipeManager()));
 	}
 	
 	@SubscribeEvent

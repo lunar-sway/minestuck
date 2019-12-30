@@ -55,10 +55,10 @@ public class NonMirroredRecipe extends ShapedRecipe
 
     public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>>  implements IRecipeSerializer<NonMirroredRecipe>
     {
-        private static final ResourceLocation NAME = new ResourceLocation("minestuck", "non_mirrored");
         @Override
         public NonMirroredRecipe read(ResourceLocation recipeId, JsonObject json) {
             ShapedRecipe recipe = IRecipeSerializer.CRAFTING_SHAPED.read(recipeId, json);
+            
             return new NonMirroredRecipe(recipe.getId(), recipe.getGroup(), recipe.getRecipeWidth(), recipe.getRecipeHeight(), recipe.getIngredients(), recipe.getRecipeOutput());
         }
         @Override
