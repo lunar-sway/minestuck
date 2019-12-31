@@ -32,7 +32,7 @@ archivesBaseName = 'Minestuck'
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 minecraft {
-    mappings channel: 'snapshot', version: '20191216-1.14.3'
+    mappings channel: 'snapshot', version: project.getProperty('mc_mappings_version')
 
     accessTransformer = file('src/META-INF/accesstransformer.cfg')
 
@@ -109,13 +109,11 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.4-28.1.107'
+    minecraft "net.minecraftforge:forge:${project.getProperty('mc_forge_version')}"
 
-    def mc_version = "1.14.4"
-    def jei_version = "6.0.0.11"
 	// http://dvs1.progwml6.com/files/maven
-    compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-${project.getProperty('mc_jei_version')}:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-${project.getProperty('mc_jei_version')}")
 }
 
 sourceSets {
