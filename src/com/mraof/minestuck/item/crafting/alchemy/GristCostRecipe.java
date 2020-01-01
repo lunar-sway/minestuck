@@ -7,10 +7,7 @@ import com.mraof.minestuck.util.ExtraJSONUtils;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.*;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
@@ -32,7 +29,12 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 	
 	public static Optional<GristCostRecipe> findRecipeForItem(ItemStack input, World world)
 	{
-		return world.getRecipeManager().getRecipes(MSRecipeTypes.GRIST_COST_TYPE, new Inventory(input), world).stream().max(Comparator.comparingInt(GristCostRecipe::getPriority));
+		return findRecipeForItem(input, world, world.getRecipeManager());
+	}
+	
+	public static Optional<GristCostRecipe> findRecipeForItem(ItemStack input, World world, RecipeManager recipeManager)
+	{
+		return recipeManager.getRecipes(MSRecipeTypes.GRIST_COST_TYPE, new Inventory(input), world).stream().max(Comparator.comparingInt(GristCostRecipe::getPriority));
 	}
 	
 	public final ResourceLocation id;
@@ -185,6 +187,7 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 		}
 	}
 	
+	//TODO Use different serializers instead of the same
 	public static class Unavailable extends GristCostRecipe
 	{
 		public Unavailable(ResourceLocation id, Ingredient ingredient, Integer priority)
