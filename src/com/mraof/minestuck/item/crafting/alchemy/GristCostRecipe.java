@@ -3,7 +3,6 @@ package com.mraof.minestuck.item.crafting.alchemy;
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.jei.JeiGristCost;
-import com.mraof.minestuck.util.ExtraJSONUtils;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -129,154 +128,37 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 		return cost;
 	}
 	
-	//Implementation classes below
-	
-	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<GristCostRecipe>
+	//Helper class for implementing serializer classes
+	public abstract static class AbstractSerializer<T extends GristCostRecipe> extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<T>
 	{
 		@Override
-		public GristCostRecipe read(ResourceLocation recipeId, JsonObject json)
+		public T read(ResourceLocation recipeId, JsonObject json)
 		{
 			Ingredient ingredient = Ingredient.deserialize(json.get("ingredient"));
 			Integer priority = json.has("priority") ? JSONUtils.getInt(json, "priority") : null;
-			if(json.has("grist_cost"))
-			{
-				if(json.get("grist_cost").isJsonPrimitive())
-				{
-					long wildcardCost = ExtraJSONUtils.getLong(json, "grist_cost");
-					return new Wildcard(recipeId, ingredient, wildcardCost, priority);
-				} else
-				{
-					GristSet set = GristSet.deserialize(json.getAsJsonObject("grist_cost"));
-					return new Simple(recipeId, ingredient, set, priority);
-				}
-			} else return new Unavailable(recipeId, ingredient, priority);
+			
+			return read(recipeId, json, ingredient, priority);
 		}
+		
+		protected abstract T read(ResourceLocation recipeId, JsonObject json, Ingredient ingredient, Integer priority);
 		
 		@Nullable
 		@Override
-		public GristCostRecipe read(ResourceLocation recipeId, PacketBuffer buffer)
+		public T read(ResourceLocation recipeId, PacketBuffer buffer)
 		{
 			Ingredient ingredient = Ingredient.read(buffer);
 			int priority = buffer.readInt();
-			byte type = buffer.readByte();
-			switch(type)
-			{
-				case 0:
-					return new Simple(recipeId, ingredient, GristSet.read(buffer), priority);
-				case 1:
-					return new Wildcard(recipeId, ingredient, buffer.readLong(), priority);
-				default:
-					return new Unavailable(recipeId, ingredient, priority);
-			}
+			
+			return read(recipeId, buffer, ingredient, priority);
 		}
 		
+		protected abstract T read(ResourceLocation recipeId, PacketBuffer buffer, Ingredient ingredient, int priority);
+		
 		@Override
-		public void write(PacketBuffer buffer, GristCostRecipe recipe)
+		public void write(PacketBuffer buffer, T recipe)
 		{
 			recipe.ingredient.write(buffer);
 			buffer.writeInt(recipe.getPriority());
-			if(recipe instanceof Simple)
-			{
-				buffer.writeByte(0);
-				((Simple) recipe).cost.write(buffer);
-			} else if(recipe instanceof Wildcard)
-			{
-				buffer.writeByte(1);
-				buffer.writeLong(((Wildcard) recipe).wildcardCost);
-			} else buffer.writeByte(-1);
-		}
-	}
-	
-	//TODO Use different serializers instead of the same
-	public static class Unavailable extends GristCostRecipe
-	{
-		public Unavailable(ResourceLocation id, Ingredient ingredient, Integer priority)
-		{
-			super(id, ingredient, priority);
-		}
-		
-		@Override
-		public GristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown)
-		{
-			return null;
-		}
-		
-		
-		@Override
-		public IRecipeSerializer<?> getSerializer()
-		{
-			return MSRecipeTypes.GRIST_COST;
-		}
-		
-	}
-	
-	public static class Simple extends GristCostRecipe
-	{
-		public final ImmutableGristSet cost;
-		private JeiGristCost jeiCost;
-		
-		public Simple(ResourceLocation id, Ingredient ingredient, GristSet cost, Integer priority)
-		{
-			super(id, ingredient, priority);
-			this.cost = cost.asImmutable();
-		}
-		
-		@Override
-		public GristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown)
-		{
-			return GristCostRecipe.scaleToCountAndDurability(cost.copy(), input, shouldRoundDown).asImmutable();
-		}
-		
-		@Override
-		public JeiGristCost getJeiCost()
-		{
-			if(jeiCost == null)
-				jeiCost = new JeiGristCost.Set(cost);
-			return jeiCost;
-		}
-		
-		@Override
-		public IRecipeSerializer<?> getSerializer()
-		{
-			return MSRecipeTypes.GRIST_COST;
-		}
-	}
-	
-	public static class Wildcard extends GristCostRecipe
-	{
-		public final long wildcardCost;
-		private JeiGristCost jeiCost;
-		
-		public Wildcard(ResourceLocation id, Ingredient ingredient, long wildcardCost, Integer priority)
-		{
-			super(id, ingredient, priority);
-			this.wildcardCost = wildcardCost;
-		}
-		
-		@Override
-		public GristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown)
-		{
-			return wildcardType != null ? scaleToCountAndDurability(new GristSet(wildcardType, wildcardCost), input, shouldRoundDown).asImmutable() : null;
-		}
-		
-		@Override
-		public boolean canPickWildcard()
-		{
-			return true;
-		}
-		
-		@Override
-		public JeiGristCost getJeiCost()
-		{
-			if(jeiCost == null)
-				jeiCost = new JeiGristCost.Wildcard(wildcardCost);
-			return jeiCost;
-		}
-		
-		@Override
-		public IRecipeSerializer<?> getSerializer()
-		{
-			return MSRecipeTypes.GRIST_COST;
 		}
 	}
 }

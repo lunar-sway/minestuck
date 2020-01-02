@@ -1,5 +1,6 @@
 package com.mraof.minestuck.tracker;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
@@ -24,19 +25,19 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.common.Mod;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class PlayerTracker
 {
 	public static final String LAND_ENTRY = "minestuck.land_entry";
 	
-	public static PlayerTracker instance = new PlayerTracker();
-	
 	@SubscribeEvent
-	public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
+	public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
 	{
 		ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
 		Debug.debug(player.getGameProfile().getName()+" joined the game. Sending packets.");
@@ -60,14 +61,14 @@ public class PlayerTracker
 	}
 	
 	@SubscribeEvent(priority = EventPriority.HIGH)	//Editmode players need to be reset before nei handles the event
-	public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event)
+	public static void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event)
 	{
 		ServerEditHandler.onPlayerExit(event.getPlayer());
 		dataCheckerPermission.remove(event.getPlayer().getGameProfile().getId());
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
-	public void onPlayerDrops(LivingDropsEvent event)
+	public static void onPlayerDrops(LivingDropsEvent event)
 	{
 		if(!event.getEntity().world.isRemote && event.getEntity() instanceof ServerPlayerEntity)
 		{
@@ -76,7 +77,7 @@ public class PlayerTracker
 	}
 	
 	@SubscribeEvent
-	public void onPlayerTick(TickEvent.PlayerTickEvent event)
+	public static void onPlayerTick(TickEvent.PlayerTickEvent event)
 	{
 		if(event.side == LogicalSide.SERVER && event.phase == TickEvent.Phase.END && event.player instanceof ServerPlayerEntity)
 		{
@@ -87,7 +88,7 @@ public class PlayerTracker
 	}
 	
 	@SubscribeEvent
-	public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) 
+	public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event)
 	{
 		PlayerSavedData.getData((ServerPlayerEntity) event.getPlayer()).getEcheladder().updateEcheladderBonuses((ServerPlayerEntity) event.getPlayer());
 	}
