@@ -90,7 +90,7 @@ public class Minestuck
 	@SubscribeEvent
 	public void serverAboutToStart(FMLServerAboutToStartEvent event)
 	{
-		event.getServer().getResourceManager().addReloadListener(new GristCostGenerator(event.getServer().getRecipeManager()));
+		event.getServer().getResourceManager().addReloadListener(new GristCostGenerator(event.getServer()));
 	}
 	
 	@SubscribeEvent

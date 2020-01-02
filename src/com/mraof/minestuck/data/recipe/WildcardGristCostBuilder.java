@@ -1,11 +1,7 @@
 package com.mraof.minestuck.data.recipe;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
-import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
-import com.mraof.minestuck.item.crafting.alchemy.ImmutableGristSet;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -18,46 +14,46 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-public class GristCostRecipeBuilder
+public class WildcardGristCostBuilder
 {
 	private final ResourceLocation defaultName;
 	private final Ingredient ingredient;
-	private final ImmutableMap.Builder<GristType, Long> costBuilder = ImmutableMap.builder();
+	private long cost = 0;
 	private Integer priority = null;
 	
-	public static GristCostRecipeBuilder of(Tag<Item> tag)
+	public static WildcardGristCostBuilder of(Tag<Item> tag)
 	{
-		return new GristCostRecipeBuilder(new ResourceLocation(tag.getId().getNamespace(), tag.getId().getPath()+"_tag"), Ingredient.fromTag(tag));
+		return new WildcardGristCostBuilder(new ResourceLocation(tag.getId().getNamespace(), tag.getId().getPath()+"_tag"), Ingredient.fromTag(tag));
 	}
 	
-	public static GristCostRecipeBuilder of(IItemProvider item)
+	public static WildcardGristCostBuilder of(IItemProvider item)
 	{
-		return new GristCostRecipeBuilder(item.asItem().getRegistryName(), Ingredient.fromItems(item));
+		return new WildcardGristCostBuilder(item.asItem().getRegistryName(), Ingredient.fromItems(item));
 	}
 	
-	public static GristCostRecipeBuilder of(Ingredient ingredient)
+	public static WildcardGristCostBuilder of(Ingredient ingredient)
 	{
-		return new GristCostRecipeBuilder(ingredient);
+		return new WildcardGristCostBuilder(ingredient);
 	}
 	
-	protected GristCostRecipeBuilder(Ingredient ingredient)
+	protected WildcardGristCostBuilder(Ingredient ingredient)
 	{
 		this(null, ingredient);
 	}
 	
-	protected GristCostRecipeBuilder(ResourceLocation defaultName, Ingredient ingredient)
+	protected WildcardGristCostBuilder(ResourceLocation defaultName, Ingredient ingredient)
 	{
 		this.defaultName = defaultName;
 		this.ingredient = ingredient;
 	}
 	
-	public GristCostRecipeBuilder grist(GristType type, long amount)
+	public WildcardGristCostBuilder cost(long wildcardCost)
 	{
-		costBuilder.put(type, amount);
+		cost = wildcardCost;
 		return this;
 	}
 	
-	public GristCostRecipeBuilder priority(int priority)
+	public WildcardGristCostBuilder priority(int priority)
 	{
 		this.priority = priority;
 		return this;
@@ -77,17 +73,19 @@ public class GristCostRecipeBuilder
 	
 	public void build(Consumer<IFinishedRecipe> recipeSaver, ResourceLocation id)
 	{
-		recipeSaver.accept(new Result(new ResourceLocation(id.getNamespace(), "grist_costs/"+id.getPath()), ingredient, new ImmutableGristSet(costBuilder), priority));
+		if(this.cost == 0)
+			throw new IllegalStateException("Must set the wildcard cost before building!");
+		recipeSaver.accept(new Result(new ResourceLocation(id.getNamespace(), "grist_costs/"+id.getPath()), ingredient, cost, priority));
 	}
 	
 	public static class Result implements IFinishedRecipe
 	{
 		public final ResourceLocation id;
 		public final Ingredient ingredient;
-		public final GristSet cost;
+		public final long cost;
 		public final Integer priority;
 		
-		public Result(ResourceLocation id, Ingredient ingredient, GristSet cost, Integer priority)
+		public Result(ResourceLocation id, Ingredient ingredient, long cost, Integer priority)
 		{
 			this.id = id;
 			this.ingredient = ingredient;
@@ -99,7 +97,7 @@ public class GristCostRecipeBuilder
 		public void serialize(JsonObject jsonObject)
 		{
 			jsonObject.add("ingredient", ingredient.serialize());
-			jsonObject.add("grist_cost", cost.serialize());
+			jsonObject.addProperty("grist_cost", cost);
 			if(priority != null)
 				jsonObject.addProperty("priority", priority);
 		}
@@ -113,7 +111,7 @@ public class GristCostRecipeBuilder
 		@Override
 		public IRecipeSerializer<?> getSerializer()
 		{
-			return MSRecipeTypes.GRIST_COST;
+			return MSRecipeTypes.WILDCARD_GRIST_COST;
 		}
 		
 		@Nullable
