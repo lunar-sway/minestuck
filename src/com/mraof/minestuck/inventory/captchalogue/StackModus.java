@@ -1,8 +1,9 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -22,9 +23,9 @@ public class StackModus extends Modus
 	protected boolean changed;
 	protected NonNullList<ItemStack> items;
 	
-	public StackModus(ModusType<? extends StackModus> type, LogicalSide side)
+	public StackModus(ModusType<? extends StackModus> type, PlayerSavedData savedData, LogicalSide side)
 	{
-		super(type, side);
+		super(type, savedData, side);
 	}
 	
 	@Override
@@ -87,10 +88,13 @@ public class StackModus extends Modus
 				&& firstItem.getCount() + item.getCount() <= firstItem.getMaxStackSize())
 			firstItem.grow(item.getCount());
 		else if(list.size() < size)
-			list.addFirst(item);
-		else
 		{
 			list.addFirst(item);
+			markDirty();
+		} else
+		{
+			list.addFirst(item);
+			markDirty();
 			CaptchaDeckHandler.launchItem(player, list.removeLast());
 		}
 		
@@ -127,10 +131,11 @@ public class StackModus extends Modus
 	@Override
 	public boolean increaseSize(ServerPlayerEntity player)
 	{
-		if(MinestuckConfig.modusMaxSize > 0 && size >= MinestuckConfig.modusMaxSize)
+		if(MinestuckConfig.modusMaxSize.get() > 0 && size >= MinestuckConfig.modusMaxSize.get())
 			return false;
 		
 		size++;
+		markDirty();
 		
 		return true;
 	}
@@ -143,7 +148,8 @@ public class StackModus extends Modus
 			if(list.size() < size)
 			{
 				size--;
-				return new ItemStack(MinestuckItems.CAPTCHA_CARD);
+				markDirty();
+				return new ItemStack(MSItems.CAPTCHA_CARD);
 			} else return ItemStack.EMPTY;
 		}
 		
@@ -155,15 +161,21 @@ public class StackModus extends Modus
 			for(ItemStack item : list)
 				CaptchaDeckHandler.launchAnyItem(player, item);
 			list.clear();
+			markDirty();
 			return ItemStack.EMPTY;
 		}
 		
 		if(asCard)
 		{
 			size--;
+			markDirty();
 			return AlchemyRecipes.createCard(list.removeFirst(), false);
 		}
-		else return list.removeFirst();
+		else
+		{
+			markDirty();
+			return list.removeFirst();
+		}
 	}
 
 	@Override

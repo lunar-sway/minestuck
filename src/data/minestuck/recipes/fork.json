@@ -1,17 +1,16 @@
 {
-  "type": "crafting_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
-    "X X",
-    " X ",
-    " X "
+    "S S",
+    " S ",
+    " S "
   ],
   "key": {
-    "X": {
-      "item": "minecraft:stone"
+    "S": {
+      "tag": "forge:stone"
     }
   },
   "result": {
-    "item": "minestuck:fork",
-    "count": 1
+    "item": "minestuck:fork"
   }
 }

@@ -10,16 +10,18 @@ import net.minecraft.util.Direction;
 
 public class DoubleLogBlock extends FlammableLogBlock
 {
-	public static final EnumProperty<Direction.Axis> AXIS_2 = MinestuckProperties.AXIS_2;
+	public static final EnumProperty<Direction.Axis> AXIS_2 = MSProperties.AXIS_2;
 	
 	public DoubleLogBlock(MaterialColor axisColor, Properties properties)
 	{
 		super(axisColor, properties);
+		setDefaultState(getStateContainer().getBaseState().with(AXIS, Direction.Axis.Y).with(AXIS_2, Direction.Axis.Y));
 	}
 	
 	public DoubleLogBlock(MaterialColor axisColor, int flammability, int encouragement, Properties properties)
 	{
 		super(axisColor, flammability, encouragement, properties);
+		setDefaultState(getStateContainer().getBaseState().with(AXIS, Direction.Axis.Y).with(AXIS_2, Direction.Axis.Y));
 	}
 	
 	@Override

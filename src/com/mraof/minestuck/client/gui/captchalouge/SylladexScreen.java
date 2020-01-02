@@ -2,10 +2,10 @@ package com.mraof.minestuck.client.gui.captchalouge;
 
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
-import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
+import com.mraof.minestuck.client.settings.MSKeyHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.network.MSPacketHandler;
 import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
@@ -15,7 +15,6 @@ import net.minecraft.client.util.InputMappings;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
@@ -24,6 +23,11 @@ import java.util.ArrayList;
 
 public abstract class SylladexScreen extends Screen
 {
+	public static final String TITLE = "minestuck.sylladex";
+	public static final String EMPTY_SYLLADEX_1 = "minestuck.empty_sylladex.1";
+	public static final String EMPTY_SYLLADEX_2 = "minestuck.empty_sylladex.2";
+	public static final String EMPTY_SYLLADEX_BUTTON = "minestuck.empty_sylladex.button";
+	
 	protected static final ResourceLocation sylladexFrame = new ResourceLocation("minestuck", "textures/gui/sylladex_frame.png");
 	protected static final ResourceLocation cardTexture = new ResourceLocation("minestuck", "textures/gui/icons.png");
 	protected static final int GUI_WIDTH = 256, GUI_HEIGHT= 202;
@@ -52,13 +56,13 @@ public abstract class SylladexScreen extends Screen
 	
 	public SylladexScreen()
 	{
-		super(new StringTextComponent("Sylladex"));
+		super(new TranslationTextComponent(TITLE));
 	}
 	
 	@Override
 	public void init()
 	{
-		emptySylladex = new GuiButtonExt((width - GUI_WIDTH)/2 + 140, (height - GUI_HEIGHT)/2 + 175, 100, 20, I18n.format("gui.emptySylladexButton"), button -> emptySylladex());
+		emptySylladex = new GuiButtonExt((width - GUI_WIDTH)/2 + 140, (height - GUI_HEIGHT)/2 + 175, 100, 20, I18n.format(EMPTY_SYLLADEX_BUTTON), button -> emptySylladex());
 		addButton(emptySylladex);
 		updateContent();
 	}
@@ -123,7 +127,7 @@ public abstract class SylladexScreen extends Screen
 		minecraft.getTextureManager().bindTexture(sylladexFrame);
 		blit(xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		
-		font.drawString(I18n.format("gui.sylladex"), xOffset + 15, yOffset + 5, 0x404040);
+		font.drawString(getTitle().getFormattedText(), xOffset + 15, yOffset + 5, 0x404040);
 		
 		String str = CaptchaDeckHandler.clientSideModus.getName().getFormattedText();
 		font.drawString(str, xOffset + GUI_WIDTH - font.getStringWidth(str) - 16, yOffset + 5, 0x404040);
@@ -206,14 +210,14 @@ public abstract class SylladexScreen extends Screen
 	
 	private void emptySylladex()
 	{
-		minecraft.currentScreen = new ConfirmScreen(this::onEmptyConfirm, new TranslationTextComponent("gui.emptySylladex1"), new TranslationTextComponent("gui.emptySylladex2"));
+		minecraft.currentScreen = new ConfirmScreen(this::onEmptyConfirm, new TranslationTextComponent(EMPTY_SYLLADEX_1), new TranslationTextComponent(EMPTY_SYLLADEX_2));
 		minecraft.currentScreen.init(minecraft, width, height);
 	}
 	
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int i)
 	{
-		if(MinestuckKeyHandler.instance.sylladexKey.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode)))
+		if(MSKeyHandler.instance.sylladexKey.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode)))
 		{
 			minecraft.displayGuiScreen(null);
 			return true;
@@ -252,7 +256,7 @@ public abstract class SylladexScreen extends Screen
 	public void onEmptyConfirm(boolean result)
 	{
 		if(result)
-			MinestuckPacketHandler.sendToServer(CaptchaDeckPacket.get(CaptchaDeckHandler.EMPTY_SYLLADEX, false));
+			MSPacketHandler.sendToServer(CaptchaDeckPacket.get(CaptchaDeckHandler.EMPTY_SYLLADEX, false));
 		minecraft.currentScreen = this;
 	}
 	
@@ -346,7 +350,7 @@ public abstract class SylladexScreen extends Screen
 			if(toSend != -1)
 			{
 				CaptchaDeckPacket packet = CaptchaDeckPacket.get(toSend, mouseButton != 0);
-				MinestuckPacketHandler.sendToServer(packet);
+				MSPacketHandler.sendToServer(packet);
 			}
 		}
 

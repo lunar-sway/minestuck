@@ -1,13 +1,12 @@
 package com.mraof.minestuck.editmode;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.network.ClientEditPacket;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
-import com.mraof.minestuck.world.MinestuckDimensions;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
+import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.world.MSDimensions;
+import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -19,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.*;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
@@ -32,7 +32,6 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.List;
-import java.util.Map.Entry;
 
 public class ClientEditHandler {
 	
@@ -56,7 +55,7 @@ public class ClientEditHandler {
 	public static void onKeyPressed()
 	{
 		ClientEditPacket packet = ClientEditPacket.exit();
-		MinestuckPacketHandler.sendToServer(packet);
+		MSPacketHandler.sendToServer(packet);
 	}
 	
 	public static void onClientPackage(String target, int posX, int posZ, boolean[] items, CompoundNBT deployList)
@@ -79,7 +78,7 @@ public class ClientEditHandler {
 		}
 		if(deployList != null)
 		{
-			DeployList.loadClientDeployList(deployList);
+			ClientDeployList.load(deployList);
 		}
 	}
 	
@@ -89,23 +88,21 @@ public class ClientEditHandler {
 		if(!isActive())
 			return;
 		
-		GristSet have = PlayerSavedData.getClientGrist();
+		GristSet have = ClientPlayerData.getClientGrist();
 		
-		addToolTip(event.getItemStack(), event.getToolTip(), have, givenItems);
+		addToolTip(event.getItemStack(), event.getToolTip(), have, givenItems, event.getEntity().world);
 		
 	}
 	
-	static void addToolTip(ItemStack stack, List<ITextComponent> toolTip, GristSet have, boolean[] givenItems)
+	static void addToolTip(ItemStack stack, List<ITextComponent> toolTip, GristSet have, boolean[] givenItems, World world)
 	{
 		
 		GristSet cost;
-		DeployList.ClientDeployEntry deployEntry = DeployList.getEntryClient(stack);
+		ClientDeployList.Entry deployEntry = ClientDeployList.getEntry(stack);
 		if(deployEntry != null)
 			cost = givenItems[deployEntry.getIndex()]
 					? deployEntry.getSecondaryCost() : deployEntry.getPrimaryCost();
-		else if(stack.getItem().equals(MinestuckItems.CAPTCHA_CARD))
-			cost = new GristSet();
-		else cost = AlchemyCostRegistry.getGristConversion(stack);
+		else cost = GristCostRecipe.findCostForItem(stack, null, false, world);
 		
 		if(cost == null)
 		{
@@ -113,11 +110,11 @@ public class ClientEditHandler {
 			return;
 		}
 		
-		for(Entry<GristType, Integer> entry : cost.getMap().entrySet())
+		for(GristAmount amount : cost.getAmounts())
 		{
-			GristType grist = entry.getKey();
-			TextFormatting color = entry.getValue() <= have.getGrist(grist) ? TextFormatting.GREEN : TextFormatting.RED;
-			toolTip.add(new StringTextComponent(entry.getValue()+" ").appendSibling(grist.getDisplayName()).appendText(" ("+have.getGrist(grist) + ")").setStyle(new Style().setColor(color)));
+			GristType grist = amount.getType();
+			TextFormatting color = amount.getAmount() <= have.getGrist(grist) ? TextFormatting.GREEN : TextFormatting.RED;
+			toolTip.add(new StringTextComponent(amount.getAmount()+" ").appendSibling(grist.getDisplayName()).appendText(" ("+have.getGrist(grist) + ")").setStyle(new Style().setColor(color)));
 		}
 		if(cost.isEmpty())
 			toolTip.add(new TranslationTextComponent("gui.free").setStyle(new Style().setColor(TextFormatting.GREEN)));
@@ -129,7 +126,7 @@ public class ClientEditHandler {
 			return;
 		PlayerEntity player = event.player;
 		
-		double range = MinestuckDimensions.isLandDimension(player.dimension) ? MinestuckConfig.clientLandEditRange : MinestuckConfig.clientOverworldEditRange;
+		double range = MSDimensions.isLandDimension(player.dimension) ? MinestuckConfig.clientLandEditRange : MinestuckConfig.clientOverworldEditRange;
 		
 		ServerEditHandler.updatePosition(player, range, centerX, centerZ);
 		
@@ -142,10 +139,10 @@ public class ClientEditHandler {
 		{
 			PlayerInventory inventory = event.getPlayer().inventory;
 			ItemStack stack = event.getEntityItem().getItem();
-			DeployList.ClientDeployEntry entry = DeployList.getEntryClient(stack);
+			ClientDeployList.Entry entry = ClientDeployList.getEntry(stack);
 			if(entry != null)
 			{
-				if(!ServerEditHandler.isBlockItem(stack.getItem()) && GristHelper.canAfford(PlayerSavedData.getClientGrist(), givenItems[entry.getIndex()]
+				if(!ServerEditHandler.isBlockItem(stack.getItem()) && GristHelper.canAfford(ClientPlayerData.getClientGrist(), givenItems[entry.getIndex()]
 						? entry.getSecondaryCost() : entry.getPrimaryCost()))
 					givenItems[entry.getIndex()] = true;
 				else event.setCanceled(true);
@@ -184,21 +181,21 @@ public class ClientEditHandler {
 			}
 			
 			GristSet cost;
-			DeployList.ClientDeployEntry entry = DeployList.getEntryClient(stack);
+			ClientDeployList.Entry entry = ClientDeployList.getEntry(stack);
 			if(entry != null)
 				if(givenItems[entry.getIndex()])
 					cost = entry.getSecondaryCost();
 				else cost = entry.getPrimaryCost();
-			else cost = AlchemyCostRegistry.getGristConversion(stack);
-			if(!GristHelper.canAfford(PlayerSavedData.getClientGrist(), cost)) {
+			else cost = GristCostRecipe.findCostForItem(stack, null, false, event.getWorld());
+			if(!GristHelper.canAfford(ClientPlayerData.getClientGrist(), cost)) {
 				StringBuilder str = new StringBuilder();
 				if(cost != null)
 				{
-					for(GristAmount grist : cost.getArray())
+					for(GristAmount grist : cost.getAmounts())
 					{
-						if(cost.getArray().indexOf(grist) != 0)
+						if(cost.getAmounts().indexOf(grist) != 0)
 							str.append(", ");
-						str.append(grist.getAmount()+" "+grist.getType().getDisplayName());
+						str.append(grist.getAmount()).append(" ").append(grist.getType().getDisplayName());
 					}
 					event.getPlayer().sendMessage(new TranslationTextComponent("grist.missing",str.toString()));
 				}
@@ -216,7 +213,7 @@ public class ClientEditHandler {
 		{
 			BlockState block = event.getWorld().getBlockState(event.getPos());
 			if(block.getBlockHardness(event.getWorld(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
-					|| PlayerSavedData.getClientGrist().getGrist(GristType.BUILD) <= 0)
+					|| ClientPlayerData.getClientGrist().getGrist(GristTypes.BUILD) <= 0)
 				event.setCanceled(true);
 		}
 	}
@@ -236,7 +233,7 @@ public class ClientEditHandler {
 		if(event.getWorld().isRemote && isActive() && event.getPlayer().equals(Minecraft.getInstance().player)
 				&& event.getUseItem() == Event.Result.ALLOW) {
 			ItemStack stack = event.getPlayer().getHeldItemMainhand();
-			DeployList.ClientDeployEntry entry = DeployList.getEntryClient(stack);
+			ClientDeployList.Entry entry = ClientDeployList.getEntry(stack);
 			if(entry != null)
 				givenItems[entry.getIndex()] = true;
 		}

@@ -1,8 +1,9 @@
 {
   "type": "minecraft:crafting_shapeless",
+  "group": "planks",
   "ingredients": [
     {
-      "item": "minestuck:frost_log"
+      "tag": "minestuck:logs/frost"
     }
   ],
   "result": {

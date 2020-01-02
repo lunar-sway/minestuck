@@ -2,10 +2,10 @@ package com.mraof.minestuck.tileentity;
 
 
 import com.mraof.minestuck.block.TotemLatheBlock;
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.alchemy.AlchemyRecipes;
-import com.mraof.minestuck.alchemy.CombinationRegistry;
+import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry;
 
 import com.mraof.minestuck.util.ColorCollector;
 import com.mraof.minestuck.util.Debug;
@@ -33,7 +33,7 @@ public class TotemLatheTileEntity extends TileEntity
 	
 	public TotemLatheTileEntity()
 	{
-		super(ModTileEntityTypes.TOTEM_LATHE);
+		super(MSTileEntityTypes.TOTEM_LATHE);
 	}
 	
 	//data checking
@@ -42,7 +42,7 @@ public class TotemLatheTileEntity extends TileEntity
 		if(!card2.isEmpty())
 			throw new IllegalStateException("Cannot set first card with the second card!");
 		
-		if(stack.getItem() == MinestuckItems.CAPTCHA_CARD || stack.isEmpty())
+		if(stack.getItem() == MSItems.CAPTCHA_CARD || stack.isEmpty())
 		{
 			card1 = stack;
 			if(world != null)
@@ -67,7 +67,7 @@ public class TotemLatheTileEntity extends TileEntity
 		if(card1.isEmpty())
 			throw new IllegalStateException("Cannot set second card without the first card!");
 		
-		if(stack.getItem() == MinestuckItems.CAPTCHA_CARD || stack.isEmpty())
+		if(stack.getItem() == MSItems.CAPTCHA_CARD || stack.isEmpty())
 		{
 			card2 = stack;
 			if(world != null)
@@ -105,12 +105,12 @@ public class TotemLatheTileEntity extends TileEntity
 		BlockState state = world.getBlockState(pos);
 		if(stack.isEmpty())
 		{
-			if(state.equals(MinestuckBlocks.TOTEM_LATHE.DOWEL_ROD.getDefaultState().with(TotemLatheBlock.FACING, facing)))
+			if(state.equals(MSBlocks.TOTEM_LATHE.DOWEL_ROD.getDefaultState().with(TotemLatheBlock.FACING, facing)))
 				world.removeBlock(pos, false);
 			return true;
-		} else if (stack.getItem() == MinestuckBlocks.CRUXITE_DOWEL.asItem())
+		} else if (stack.getItem() == MSBlocks.CRUXITE_DOWEL.asItem())
 		{
-			if(state.equals(MinestuckBlocks.TOTEM_LATHE.DOWEL_ROD.getDefaultState().with(TotemLatheBlock.FACING, facing)))
+			if(state.equals(MSBlocks.TOTEM_LATHE.DOWEL_ROD.getDefaultState().with(TotemLatheBlock.FACING, facing)))
 			{
 				TileEntity te = world.getTileEntity(pos);
 				if(!(te instanceof ItemStackTileEntity))
@@ -124,7 +124,7 @@ public class TotemLatheTileEntity extends TileEntity
 				return true;
 			} else if(state.isAir(world, pos))
 			{
-				world.setBlockState(pos, MinestuckBlocks.TOTEM_LATHE.DOWEL_ROD.getDefaultState().with(TotemLatheBlock.FACING, facing));
+				world.setBlockState(pos, MSBlocks.TOTEM_LATHE.DOWEL_ROD.getDefaultState().with(TotemLatheBlock.FACING, facing));
 				TileEntity te = world.getTileEntity(pos);
 				if(!(te instanceof ItemStackTileEntity))
 				{
@@ -142,7 +142,7 @@ public class TotemLatheTileEntity extends TileEntity
 	public ItemStack getDowel()
 	{
 		BlockPos pos = getPos().up().offset(getFacing().rotateYCCW(), 2);
-		if(world.getBlockState(pos).equals(MinestuckBlocks.TOTEM_LATHE.DOWEL_ROD.getDefaultState().with(TotemLatheBlock.FACING, getFacing())))
+		if(world.getBlockState(pos).equals(MSBlocks.TOTEM_LATHE.DOWEL_ROD.getDefaultState().with(TotemLatheBlock.FACING, getFacing())))
 		{
 			TileEntity te = world.getTileEntity(pos);
 			if(te instanceof ItemStackTileEntity)
@@ -177,7 +177,7 @@ public class TotemLatheTileEntity extends TileEntity
 						dropItem(false, getPos(), card2);
 					else player.container.detectAndSendChanges();
 					setCard2(ItemStack.EMPTY);
-				} else if(working && heldStack.getItem() == MinestuckItems.CAPTCHA_CARD)
+				} else if(working && heldStack.getItem() == MSItems.CAPTCHA_CARD)
 				{
 					setCard2(heldStack.split(1));
 				} else
@@ -189,19 +189,19 @@ public class TotemLatheTileEntity extends TileEntity
 					else player.container.detectAndSendChanges();
 					setCard1(ItemStack.EMPTY);
 				}
-			} else if(working && heldStack.getItem() == MinestuckItems.CAPTCHA_CARD)
+			} else if(working && heldStack.getItem() == MSItems.CAPTCHA_CARD)
 			{
 				setCard1(heldStack.split(1));
 			}
 		}
 		
 		//if they have clicked the dowel block
-		if(clickedState.getBlock() == MinestuckBlocks.TOTEM_LATHE.ROD || clickedState.getBlock() == MinestuckBlocks.TOTEM_LATHE.DOWEL_ROD)
+		if(clickedState.getBlock() == MSBlocks.TOTEM_LATHE.ROD || clickedState.getBlock() == MSBlocks.TOTEM_LATHE.DOWEL_ROD)
 		{
 			ItemStack dowel = getDowel();
 			if (dowel.isEmpty())
 			{
-				if(working && heldStack.getItem() == MinestuckBlocks.CRUXITE_DOWEL.asItem())
+				if(working && heldStack.getItem() == MSBlocks.CRUXITE_DOWEL.asItem())
 				{
 					ItemStack copy = heldStack.copy();
 					copy.setCount(1);
@@ -223,7 +223,7 @@ public class TotemLatheTileEntity extends TileEntity
 		}
 		
 		//if they have clicked on the lever
-		if(working && clickedState.getBlock() == MinestuckBlocks.TOTEM_LATHE.CARVER)
+		if(working && clickedState.getBlock() == MSBlocks.TOTEM_LATHE.CARVER)
 		{
 			//carve the dowel.
 			processContents();
@@ -252,17 +252,17 @@ public class TotemLatheTileEntity extends TileEntity
 		Direction facing = getFacing();
 		
 		if(	//!world.getBlockState(getPos()).equals(MinestuckBlocks.TOTEM_LATHE.CARD_SLOT.getDefaultState().with(BlockTotemLathe.FACING, facing)) ||
-			!world.getBlockState(getPos().offset(facing.rotateYCCW(),1)).equals(MinestuckBlocks.TOTEM_LATHE.BOTTOM_LEFT.getDefaultState().with(TotemLatheBlock.FACING, facing)) ||
-			!world.getBlockState(getPos().offset(facing.rotateYCCW(),2)).equals(MinestuckBlocks.TOTEM_LATHE.BOTTOM_RIGHT.getDefaultState().with(TotemLatheBlock.FACING, facing)) ||
-			!world.getBlockState(getPos().offset(facing.rotateYCCW(),3)).equals(MinestuckBlocks.TOTEM_LATHE.BOTTOM_CORNER.getDefaultState().with(TotemLatheBlock.FACING, facing)) ||
+			!world.getBlockState(getPos().offset(facing.rotateYCCW(),1)).equals(MSBlocks.TOTEM_LATHE.BOTTOM_LEFT.getDefaultState().with(TotemLatheBlock.FACING, facing)) ||
+			!world.getBlockState(getPos().offset(facing.rotateYCCW(),2)).equals(MSBlocks.TOTEM_LATHE.BOTTOM_RIGHT.getDefaultState().with(TotemLatheBlock.FACING, facing)) ||
+			!world.getBlockState(getPos().offset(facing.rotateYCCW(),3)).equals(MSBlocks.TOTEM_LATHE.BOTTOM_CORNER.getDefaultState().with(TotemLatheBlock.FACING, facing)) ||
 			
-			!world.getBlockState(getPos().up()).equals(MinestuckBlocks.TOTEM_LATHE.MIDDLE.getDefaultState().with(TotemLatheBlock.FACING, facing)) ||
-			!world.getBlockState(getPos().up().offset(facing.rotateYCCW(),1)).equals(MinestuckBlocks.TOTEM_LATHE.ROD.getDefaultState().with(TotemLatheBlock.FACING, facing)) ||
-			!world.getBlockState(getPos().up().offset(facing.rotateYCCW(),3)).equals(MinestuckBlocks.TOTEM_LATHE.WHEEL.getDefaultState().with(TotemLatheBlock.FACING, facing)) ||
+			!world.getBlockState(getPos().up()).equals(MSBlocks.TOTEM_LATHE.MIDDLE.getDefaultState().with(TotemLatheBlock.FACING, facing)) ||
+			!world.getBlockState(getPos().up().offset(facing.rotateYCCW(),1)).equals(MSBlocks.TOTEM_LATHE.ROD.getDefaultState().with(TotemLatheBlock.FACING, facing)) ||
+			!world.getBlockState(getPos().up().offset(facing.rotateYCCW(),3)).equals(MSBlocks.TOTEM_LATHE.WHEEL.getDefaultState().with(TotemLatheBlock.FACING, facing)) ||
 			
-			!world.getBlockState(getPos().up(2)).equals(MinestuckBlocks.TOTEM_LATHE.TOP_CORNER.getDefaultState().with(TotemLatheBlock.FACING, facing)) ||
-			!world.getBlockState(getPos().up(2).offset(facing.rotateYCCW(),1)).equals(MinestuckBlocks.TOTEM_LATHE.TOP.getDefaultState().with(TotemLatheBlock.FACING, facing)) ||
-			!world.getBlockState(getPos().up(2).offset(facing.rotateYCCW(),2)).equals(MinestuckBlocks.TOTEM_LATHE.CARVER.getDefaultState().with(TotemLatheBlock.FACING, facing)))
+			!world.getBlockState(getPos().up(2)).equals(MSBlocks.TOTEM_LATHE.TOP_CORNER.getDefaultState().with(TotemLatheBlock.FACING, facing)) ||
+			!world.getBlockState(getPos().up(2).offset(facing.rotateYCCW(),1)).equals(MSBlocks.TOTEM_LATHE.TOP.getDefaultState().with(TotemLatheBlock.FACING, facing)) ||
+			!world.getBlockState(getPos().up(2).offset(facing.rotateYCCW(),2)).equals(MSBlocks.TOTEM_LATHE.CARVER.getDefaultState().with(TotemLatheBlock.FACING, facing)))
 		{
 			setBroken();
 		}
@@ -331,20 +331,20 @@ public class TotemLatheTileEntity extends TileEntity
 		{
 			if(!card1.isEmpty() && !card2.isEmpty())
 				if(!card1.hasTag() || !card1.getTag().getBoolean("punched") || !card2.hasTag() || !card2.getTag().getBoolean("punched"))
-					output = new ItemStack(MinestuckBlocks.GENERIC_OBJECT);
+					output = new ItemStack(MSBlocks.GENERIC_OBJECT);
 				else output = CombinationRegistry.getCombination(AlchemyRecipes.getDecodedItem(card1), AlchemyRecipes.getDecodedItem(card2), CombinationRegistry.Mode.MODE_AND);
 			else
 			{
 				ItemStack input = card1.isEmpty() ? card2 : card1;
 				if(!input.hasTag() || !input.getTag().getBoolean("punched"))
-					output = new ItemStack(MinestuckBlocks.GENERIC_OBJECT);
+					output = new ItemStack(MSBlocks.GENERIC_OBJECT);
 				else output = AlchemyRecipes.getDecodedItem(input);
 			}
 			
 			if(!output.isEmpty())
 			{
-				ItemStack outputDowel = output.getItem().equals(MinestuckBlocks.GENERIC_OBJECT.asItem()) ? new ItemStack(MinestuckBlocks.CRUXITE_DOWEL) : AlchemyRecipes.createEncodedItem(output, false);
-				ColorCollector.setColor(outputDowel, ColorCollector.getColorFromStack(dowel, -1));
+				ItemStack outputDowel = output.getItem().equals(MSBlocks.GENERIC_OBJECT.asItem()) ? new ItemStack(MSBlocks.CRUXITE_DOWEL) : AlchemyRecipes.createEncodedItem(output, false);
+				ColorCollector.setColor(outputDowel, ColorCollector.getColorFromStack(dowel));
 				
 				setDowel(outputDowel);
 				success = true;

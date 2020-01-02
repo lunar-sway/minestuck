@@ -1,21 +1,7 @@
 package com.mraof.minestuck.command;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mraof.minestuck.alchemy.GristAmount;
-import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.GristType;
-import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
-import com.mraof.minestuck.util.*;
-import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import net.minecraft.command.*;
-import net.minecraft.command.arguments.EntityArgument;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.BlockPos;
-
-import java.util.Collections;
-import java.util.List;
 
 public class CommandGrist
 {

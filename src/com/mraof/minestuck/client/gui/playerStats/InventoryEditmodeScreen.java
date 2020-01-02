@@ -6,16 +6,18 @@ import java.time.Month;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.inventory.EditmodeContainer;
 import com.mraof.minestuck.network.EditmodeInventoryPacket;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.network.MSPacketHandler;
 
 import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 public class InventoryEditmodeScreen extends PlayerStatsContainerScreen
 {
+	public static final String TITLE = "minestuck.deploy_list";
 
 	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/gui_inv_editmode.png");
 	private static final ResourceLocation icons = new ResourceLocation("minestuck", "textures/gui/icons.png");
@@ -26,7 +28,7 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen
 	
 	public InventoryEditmodeScreen(int windowId, PlayerInventory playerInventory)
 	{
-		super(new EditmodeContainer(windowId, playerInventory), playerInventory, new StringTextComponent("Editmode"));
+		super(new EditmodeContainer(windowId, playerInventory), playerInventory, new TranslationTextComponent(TITLE));
 		guiWidth = 176;
 		guiHeight = 98;
 	}
@@ -70,7 +72,7 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen
 			}
 			if(packet != null)
 			{
-				MinestuckPacketHandler.INSTANCE.sendToServer(packet);
+				MSPacketHandler.INSTANCE.sendToServer(packet);
 				return true;
 			}
 		}

@@ -1,6 +1,6 @@
 package com.mraof.minestuck.tileentity;
 
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.util.PositionTeleporter;
 import com.mraof.minestuck.world.GateHandler;
@@ -13,33 +13,34 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 public class GateTileEntity extends TileEntity
 {
+	//Only used client-side
+	public int color;
 	
-	public int colorIndex;
-	
-	public int gateCount;
+	public GateHandler.Type gateType;
 	
 	public GateTileEntity()
 	{
-		super(ModTileEntityTypes.GATE);
+		super(MSTileEntityTypes.GATE);
 	}
 	
-	public void teleportEntity(World world, ServerPlayerEntity player, Block block)
+	public void teleportEntity(ServerWorld world, ServerPlayerEntity player, Block block)
 	{
-		if(block == MinestuckBlocks.RETURN_NODE)
+		if(block == MSBlocks.RETURN_NODE)
 		{
-			BlockPos pos = world.getSpawnPoint();
-			PositionTeleporter.moveEntity(player, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+			BlockPos pos = world.getDimension().findSpawn(0, 0, false);
+			if(pos == null)
+				return;
+			PositionTeleporter.moveEntity(player, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
 			player.timeUntilPortal = player.getPortalCooldown();
 			player.setMotion(Vec3d.ZERO);
 			player.fallDistance = 0;
-			//player.addStat(MinestuckAchievementHandler.returnNode);
 		} else
 		{
-			GateHandler.teleport(gateCount, world.getDimension().getType(), player);
+			GateHandler.teleport(gateType, world, player);
 		}
 	}
 	
@@ -53,16 +54,16 @@ public class GateTileEntity extends TileEntity
 	public void read(CompoundNBT compound)
 	{
 		super.read(compound);
-		if(compound.contains("gateCount"))
-			this.gateCount = compound.getInt("gateCount");
+		if(compound.contains("gate_type"))
+			this.gateType = GateHandler.Type.fromString(compound.getString("gate_type"));
 	}
 	
 	@Override
 	public CompoundNBT write(CompoundNBT compound)
 	{
 		super.write(compound);
-		if(this.gateCount != 0)
-			compound.putInt("gateCount", gateCount);
+		if(this.gateType != null)
+			compound.putString("gate_type", gateType.toString());
 		return compound;
 	}
 	
@@ -85,7 +86,7 @@ public class GateTileEntity extends TileEntity
 	@Override
 	public void handleUpdateTag(CompoundNBT tag)
 	{
-		this.colorIndex = tag.getInt("color");
+		this.color = tag.getInt("color");
 	}
 	
 	@Override
@@ -96,7 +97,7 @@ public class GateTileEntity extends TileEntity
 	
 	public boolean isGate()
 	{
-		return this.world != null ? this.world.getBlockState(this.getPos()).getBlock() != MinestuckBlocks.RETURN_NODE : this.gateCount != 0;
+		return this.world != null ? this.world.getBlockState(this.getPos()).getBlock() != MSBlocks.RETURN_NODE : this.gateType != null;
 	}
 	
 	@Override

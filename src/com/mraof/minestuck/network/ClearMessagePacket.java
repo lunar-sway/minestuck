@@ -1,14 +1,10 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
-import com.mraof.minestuck.util.Location;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
-
-import java.util.function.Supplier;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 
 /**
  * This packet tells the server to clear the message for the
@@ -18,50 +14,45 @@ import java.util.function.Supplier;
  * @author kirderf1
  *
  */
-public class ClearMessagePacket
+public class ClearMessagePacket implements PlayToServerPacket
 {
-	Location computer;
+	BlockPos computer;
 	int program;
 	
-	public ClearMessagePacket(Location computer, int program)
+	public ClearMessagePacket(BlockPos computer, int program)
 	{
 		this.computer = computer;
 		this.program = program;
 	}
 	
+	@Override
 	public void encode(PacketBuffer buffer)
 	{
-		computer.toBuffer(buffer);
+		buffer.writeBlockPos(computer);
 		buffer.writeInt(program);
 	}
 	
 	public static ClearMessagePacket decode(PacketBuffer buffer)
 	{
-		Location computer = Location.fromBuffer(buffer);
+		BlockPos computer = buffer.readBlockPos();
 		int program = buffer.readInt();
 		
 		return new ClearMessagePacket(computer, program);
 	}
 	
-	public void consume(Supplier<NetworkEvent.Context> ctx)
-	{
-		if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER)
-			ctx.get().enqueueWork(() -> this.execute(ctx.get().getSender()));
-		
-		ctx.get().setPacketHandled(true);
-	}
-	
+	@Override
 	public void execute(ServerPlayerEntity player)
 	{
 	
-		if(player.getEntityWorld().dimension.getType() == computer.dim && player.getEntityWorld().isAreaLoaded(computer.pos, 0))
+		if(player.getEntityWorld().isAreaLoaded(computer, 0))
 		{
-			ComputerTileEntity te = SkaianetHandler.getComputer(player.getServer(), computer);
-			
-			if(te != null)
+			TileEntity te = player.getEntityWorld().getTileEntity(computer);
+			if(te instanceof ComputerTileEntity)
 			{
-				te.latestmessage.put(program, "");
-				te.markBlockForUpdate();
+				ComputerTileEntity computerTE = (ComputerTileEntity) te;
+				
+				computerTE.latestmessage.put(program, "");
+				computerTE.markBlockForUpdate();
 			}
 		}
 	}

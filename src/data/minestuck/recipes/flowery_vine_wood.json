@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "bark",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "minestuck:flowery_vine_log"
+    }
+  },
+  "result": {
+    "item": "minestuck:flowery_vine_wood",
+    "count": 3
+  }
+}

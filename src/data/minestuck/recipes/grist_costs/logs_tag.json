@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "tag": "minecraft:logs"
+  },
+  "grist_cost": {
+    "minestuck:build": 8
+  }
+}

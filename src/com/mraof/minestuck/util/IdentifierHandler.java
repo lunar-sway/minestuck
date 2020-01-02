@@ -1,28 +1,28 @@
 package com.mraof.minestuck.util;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.UUID;
-
-import com.google.common.collect.Lists;
 import com.mraof.minestuck.MinestuckConfig;
-
-import net.minecraft.command.CommandException;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerList;
 import net.minecraftforge.common.UsernameCache;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Used to encode/decode player usernames, to handle uses with LAN.
  * This file is to now only be used serverside.
  * @author kirderf1
  */
-public class IdentifierHandler {
+public class IdentifierHandler	//TODO Probably needs a redesign. Do we even need the option to identify players by username? If we change to only use uuids, how do we define special identifiers such as .null or .fake? If we get rid of the host player reference, is there still a point to having a different representation client-side?
+{
 	
 	public static String host;	//This basically stores server.getServerOwner(), but for all players to access
 	public static final PlayerIdentifier nullIdentifier = new PlayerIdentifier(".null");
@@ -62,7 +62,7 @@ public class IdentifierHandler {
 			if(identifier.appliesTo(player))
 				return identifier;
 		PlayerIdentifier identifier;
-		if(MinestuckConfig.useUUID)
+		if(MinestuckConfig.useUUID.get())
 			identifier = new PlayerIdentifier(player.getGameProfile().getId());
 		else identifier = new PlayerIdentifier(usernameEncode(player.getName().getString()));
 		identifier.id = nextIdentifierId;
@@ -73,7 +73,7 @@ public class IdentifierHandler {
 	
 	public static boolean hasIdentifier(CompoundNBT nbt, String key)
 	{
-		return nbt.contains(key, 8) || nbt.contains(key + "Most", 4) && nbt.contains(key + "Least", 4);
+		return nbt.contains(key, Constants.NBT.TAG_STRING) || nbt.contains(key + "Most", Constants.NBT.TAG_LONG) && nbt.contains(key + "Least", Constants.NBT.TAG_LONG);
 	}
 	
 	public static PlayerIdentifier load(INBT nbt, String key)
@@ -82,16 +82,16 @@ public class IdentifierHandler {
 		if(".null".equals(identifier.username))
 			return nullIdentifier;
 		
-		List<PlayerIdentifier> list = MinestuckConfig.useUUID == identifier.useUUID ? identifierList : identifiersToChange;
+		List<PlayerIdentifier> list = MinestuckConfig.useUUID.get() == identifier.useUUID ? identifierList : identifiersToChange;
 		
 		for(PlayerIdentifier id : list)
 			if(id.equals(identifier))
 				return id;
-		if(MinestuckConfig.useUUID != identifier.useUUID)
+		if(MinestuckConfig.useUUID.get() != identifier.useUUID)
 		{
-			/*EntityPlayer player = identifier.getPlayer();
-			if(player != null) TODO
-				return encode(player);*/
+			ServerPlayerEntity player = identifier.getPlayer(ServerLifecycleHooks.getCurrentServer());
+			if(player != null)
+				return encode(player);
 		}
 		identifier.id = nextIdentifierId;
 		nextIdentifierId++;
@@ -108,7 +108,7 @@ public class IdentifierHandler {
 			
 			if(identifier.appliesTo(player))
 			{
-				identifier.useUUID = MinestuckConfig.useUUID;
+				identifier.useUUID = MinestuckConfig.useUUID.get();
 				if(identifier.useUUID)
 					identifier.uuid = player.getGameProfile().getId();
 				else identifier.username = usernameEncode(player.getName().getString());
@@ -238,7 +238,7 @@ public class IdentifierHandler {
 			else
 			{
 				CompoundNBT compound = (CompoundNBT) nbt;
-				if(compound.contains(key, 8))
+				if(compound.contains(key, Constants.NBT.TAG_STRING))
 				{
 					username = compound.getString(key);
 					useUUID = false;

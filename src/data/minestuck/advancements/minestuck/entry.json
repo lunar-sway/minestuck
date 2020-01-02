@@ -1,19 +1,29 @@
 {
-    "display": {
-        "icon": {
-            "item": "minestuck:cruxite_apple"
-        },
-        "title": {
-            "translate": "advancements.minestuck.enter_medium.title"
-        },
-        "description": {
-            "translate": "advancements.minestuck.enter_medium.description"
-        }
+  "parent": "minestuck:minestuck/connect",
+  "display": {
+    "icon": {
+      "item": "minestuck:cruxite_apple",
+      "nbt": "{color:10542335}"
     },
-    "parent": "minestuck:minestuck/connect",
-    "criteria": {
-        "use_artifact": {
-            "trigger": "minestuck:cruxite_artifact"
-        }
+    "title": {
+      "translate": "advancements.minestuck.entry.title"
+    },
+    "description": {
+      "translate": "advancements.minestuck.entry.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "use_artifact": {
+      "trigger": "minestuck:cruxite_artifact"
     }
+  },
+  "requirements": [
+    [
+      "use_artifact"
+    ]
+  ]
 }

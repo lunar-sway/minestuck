@@ -1,19 +1,19 @@
 package com.mraof.minestuck.inventory;
 
-import com.mraof.minestuck.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.inventory.slot.InputSlot;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.tileentity.GristWidgetTileEntity;
+import com.mraof.minestuck.item.MSItems;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
+import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nonnull;
 
@@ -25,26 +25,26 @@ public class GristWidgetContainer extends MachineContainer
 	
 	private final IInventory widgetInventory;
 	
-	public GristWidgetContainer(int windowId, PlayerInventory playerInventory)
+	public GristWidgetContainer(int windowId, PlayerInventory playerInventory, PacketBuffer buffer)
 	{
-		this(ModContainerTypes.GRIST_WIDGET, windowId, playerInventory, new Inventory(1), new IntArray(3));
+		this(MSContainerTypes.GRIST_WIDGET, windowId, playerInventory, new Inventory(1), new IntArray(3), buffer.readBlockPos());
 	}
 	
-	public GristWidgetContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters)
+	public GristWidgetContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, BlockPos machinePos)
 	{
-		this(ModContainerTypes.GRIST_WIDGET, windowId, playerInventory, inventory, parameters);
+		this(MSContainerTypes.GRIST_WIDGET, windowId, playerInventory, inventory, parameters, machinePos);
 	}
 	
-	public GristWidgetContainer(ContainerType<? extends GristWidgetContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters)
+	public GristWidgetContainer(ContainerType<? extends GristWidgetContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, BlockPos machinePos)
 	{
-		super(type, windowId, parameters);
+		super(type, windowId, parameters, machinePos);
 		
 		assertInventorySize(inventory, 1);
 		this.widgetInventory = inventory;
 		
 		//the Slot constructor takes the IInventory and the slot number in that it binds to
 		//and the x-y coordinates it resides on-screen
-		addSlot(new InputSlot(inventory, 0, gristWidgetInputX, gristWidgetInputY, MinestuckItems.CAPTCHA_CARD)
+		addSlot(new InputSlot(inventory, 0, gristWidgetInputX, gristWidgetInputY, MSItems.CAPTCHA_CARD)
 		{
 			@Override
 			public boolean isItemValid(ItemStack stack)

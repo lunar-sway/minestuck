@@ -1,10 +1,10 @@
 package com.mraof.minestuck.jei;
-/*
-import com.mraof.minestuck.alchemy.GristAmount;
+
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.util.ITooltipFlag;
@@ -18,14 +18,16 @@ import java.util.List;
 public class GristIngredientRenderer implements IIngredientRenderer<GristAmount>
 {
 	@Override
-	public void render(Minecraft minecraft, int xPosition, int yPosition, @Nullable GristAmount ingredient)
+	public void render(int xPosition, int yPosition, @Nullable GristAmount ingredient)
 	{
+		if(ingredient == null)
+			return;
 		GlStateManager.enableBlend();
-		GlStateManager.enableAlpha();
-		GlStateManager.color(1, 1, 1, 1);
+		GlStateManager.enableAlphaTest();
+		GlStateManager.color4f(1, 1, 1, 1);
 		
 		ResourceLocation icon = ingredient.getType().getIcon();
-		minecraft.getTextureManager().bindTexture(new ResourceLocation(icon.getResourceDomain(), "textures/grist/" + icon.getResourcePath() + ".png"));
+		Minecraft.getInstance().getTextureManager().bindTexture(icon);
 		
 		float scale = (float) 1 / 16;
 		
@@ -42,16 +44,16 @@ public class GristIngredientRenderer implements IIngredientRenderer<GristAmount>
 		render.pos(xPosition, yPosition, 0D).tex((iconU) * scale, (iconV) * scale).endVertex();
 		Tessellator.getInstance().draw();
 		
-		GlStateManager.disableAlpha();
+		GlStateManager.disableAlphaTest();
 		GlStateManager.disableBlend();
 	}
 	
 	@Override
-	public List<String> getTooltip(Minecraft minecraft, GristAmount ingredient, ITooltipFlag tooltipFlag)
+	public List<String> getTooltip(GristAmount ingredient, ITooltipFlag tooltipFlag)
 	{
 		List<String> list = new ArrayList<>();
-		list.add(ingredient.getType().getDisplayName());
-		list.add(TextFormatting.DARK_GRAY+ingredient.getType().getRegistryName().toString());
+		list.add(ingredient.getType().getDisplayName().getFormattedText());
+		list.add(TextFormatting.DARK_GRAY+""+ingredient.getType().getRegistryName());
 		return list;
 	}
-}*/
+}

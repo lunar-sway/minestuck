@@ -9,8 +9,6 @@ import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootParameters;
 import net.minecraft.world.storage.loot.conditions.ILootCondition;
 
-import java.util.Random;
-
 public class ConsortLootCondition implements ILootCondition
 {
 	private final EnumConsort[] consorts;
@@ -29,6 +27,11 @@ public class ConsortLootCondition implements ILootCondition
 				if(type.isConsort(entity))
 					return true;
 		return false;
+	}
+	
+	public static IBuilder builder(EnumConsort... consorts)
+	{
+		return () -> new ConsortLootCondition(consorts);
 	}
 	
 	public static class Serializer extends ILootCondition.AbstractSerializer<ConsortLootCondition>

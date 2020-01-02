@@ -1,7 +1,6 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.client.gui.ComputerScreen;
-import com.mraof.minestuck.network.skaianet.ComputerData;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.ComputerProgram;
@@ -23,7 +22,7 @@ public class ComputerTileEntity extends TileEntity
 {
 	public ComputerTileEntity()
 	{
-		super(ModTileEntityTypes.COMPUTER);
+		super(MSTileEntityTypes.COMPUTER);
 	}
 	
 	/**
@@ -113,7 +112,7 @@ public class ComputerTileEntity extends TileEntity
 			tagCompound.putInt("ownerId", owner.getId());
 		if(hasProgram(1))
 		{
-			SburbConnection c = SkaianetHandler.get(getWorld()).getServerConnection(ComputerData.createData(this));
+			SburbConnection c = SkaianetHandler.get(getWorld()).getServerConnection(this);
 			if(c != null)
 				tagCompound.getCompound("programData").getCompound("program_1").putInt("connectedClient", c.getClientIdentifier().getId());
 		}

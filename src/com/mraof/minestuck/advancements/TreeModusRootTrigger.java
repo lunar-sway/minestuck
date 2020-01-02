@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.advancements.ICriterionTrigger;
@@ -15,6 +16,7 @@ import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class TreeModusRootTrigger implements ICriterionTrigger<TreeModusRootTrigger.Instance>
@@ -78,12 +80,26 @@ public class TreeModusRootTrigger implements ICriterionTrigger<TreeModusRootTrig
 		public Instance(MinMaxBounds.IntBound count)
 		{
 			super(ID);
-			this.count = count;
+			this.count = Objects.requireNonNull(count);
+		}
+		
+		public static Instance count(MinMaxBounds.IntBound count)
+		{
+			return new Instance(count);
 		}
 		
 		public boolean test(int count)
 		{
 			return this.count.test(count);
+		}
+		
+		@Override
+		public JsonElement serialize()
+		{
+			JsonObject json = new JsonObject();
+			json.add("count", count.serialize());
+			
+			return json;
 		}
 	}
 	

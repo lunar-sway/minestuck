@@ -18,6 +18,7 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
 
@@ -25,7 +26,7 @@ public class GateBlock extends Block
 {
 	
 	protected static final VoxelShape SHAPE = Block.makeCuboidShape(0.0D, 7.0D, 0.0D, 16.0D, 9.0D, 16.0D);
-	public static BooleanProperty MAIN = MinestuckProperties.MAIN;
+	public static BooleanProperty MAIN = MSProperties.MAIN;
 	
 	public GateBlock(Properties properties)
 	{
@@ -34,6 +35,7 @@ public class GateBlock extends Block
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 	{
 		return SHAPE;
@@ -46,6 +48,7 @@ public class GateBlock extends Block
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public BlockRenderType getRenderType(BlockState state)
 	{
 		return BlockRenderType.INVISIBLE;
@@ -71,6 +74,7 @@ public class GateBlock extends Block
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn)
 	{
 		if(entityIn instanceof ServerPlayerEntity && !entityIn.isPassenger() && !entityIn.isBeingRidden())
@@ -78,7 +82,7 @@ public class GateBlock extends Block
 			BlockPos mainPos = pos;
 			if(!state.get(MAIN))
 			{
-				if(this != MinestuckBlocks.GATE)
+				if(this != MSBlocks.GATE)
 					mainPos = this.findMainComponent(pos, worldIn);
 				else return;
 			}
@@ -92,7 +96,7 @@ public class GateBlock extends Block
 				}
 				TileEntity te = worldIn.getTileEntity(mainPos);
 				if(te instanceof GateTileEntity)
-					((GateTileEntity) te).teleportEntity(worldIn, (ServerPlayerEntity) entityIn, this);
+					((GateTileEntity) te).teleportEntity((ServerWorld) worldIn, (ServerPlayerEntity) entityIn, this);
 			} else worldIn.removeBlock(pos, false);
 		}
 	}
@@ -147,6 +151,7 @@ public class GateBlock extends Block
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
 	{
 		super.onReplaced(state, worldIn, pos, newState, isMoving);
@@ -161,6 +166,7 @@ public class GateBlock extends Block
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
 		if(!this.isValid(pos, worldIn, state))
@@ -178,7 +184,7 @@ public class GateBlock extends Block
 	@Override
 	public float getExplosionResistance(BlockState state, IWorldReader world, BlockPos pos, @Nullable Entity exploder, Explosion explosion)
 	{
-		if(this instanceof ReturnNodeBlock || MinestuckConfig.canBreakGates)
+		if(this instanceof ReturnNodeBlock || MinestuckConfig.canBreakGates.get())
 			return super.getExplosionResistance(state, world, pos, exploder, explosion);
 		else return 3600000.0F;
 	}

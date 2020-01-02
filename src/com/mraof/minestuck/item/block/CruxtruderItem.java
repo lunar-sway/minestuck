@@ -1,7 +1,7 @@
 package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.block.CruxtruderBlock;
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.editmode.EditData;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.tileentity.CruxtruderTileEntity;
@@ -12,8 +12,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
@@ -113,17 +113,17 @@ public class CruxtruderItem extends BlockItem
 					break;
 			}
 			
-			world.setBlockState(pos.south(0).up(0).east(0), MinestuckBlocks.CRUXTRUDER.CORNER.getDefaultState().with(CruxtruderBlock.FACING, Direction.NORTH));
-			world.setBlockState(pos.south(0).up(0).east(1), MinestuckBlocks.CRUXTRUDER.SIDE.getDefaultState().with(CruxtruderBlock.FACING, Direction.NORTH));
-			world.setBlockState(pos.south(0).up(0).east(2), MinestuckBlocks.CRUXTRUDER.CORNER.getDefaultState().with(CruxtruderBlock.FACING, Direction.EAST));
-			world.setBlockState(pos.south(1).up(0).east(2), MinestuckBlocks.CRUXTRUDER.SIDE.getDefaultState().with(CruxtruderBlock.FACING, Direction.EAST));
-			world.setBlockState(pos.south(2).up(0).east(2), MinestuckBlocks.CRUXTRUDER.CORNER.getDefaultState().with(CruxtruderBlock.FACING, Direction.SOUTH));
-			world.setBlockState(pos.south(2).up(0).east(1), MinestuckBlocks.CRUXTRUDER.SIDE.getDefaultState().with(CruxtruderBlock.FACING, Direction.SOUTH));
-			world.setBlockState(pos.south(2).up(0).east(0), MinestuckBlocks.CRUXTRUDER.CORNER.getDefaultState().with(CruxtruderBlock.FACING, Direction.WEST));
-			world.setBlockState(pos.south(1).up(0).east(0), MinestuckBlocks.CRUXTRUDER.SIDE.getDefaultState().with(CruxtruderBlock.FACING, Direction.WEST));
-			world.setBlockState(pos.south(1).up(0).east(1), MinestuckBlocks.CRUXTRUDER.CENTER.getDefaultState().with(CruxtruderBlock.FACING, facing));
-			world.setBlockState(pos.south(1).up(1).east(1), MinestuckBlocks.CRUXTRUDER.TUBE.getDefaultState().with(CruxtruderBlock.FACING, facing));
-			world.setBlockState(pos.south().up(2).east(), MinestuckBlocks.CRUXTRUDER_LID.getDefaultState());
+			world.setBlockState(pos.south(0).up(0).east(0), MSBlocks.CRUXTRUDER.CORNER.getDefaultState().with(CruxtruderBlock.FACING, Direction.NORTH));
+			world.setBlockState(pos.south(0).up(0).east(1), MSBlocks.CRUXTRUDER.SIDE.getDefaultState().with(CruxtruderBlock.FACING, Direction.NORTH));
+			world.setBlockState(pos.south(0).up(0).east(2), MSBlocks.CRUXTRUDER.CORNER.getDefaultState().with(CruxtruderBlock.FACING, Direction.EAST));
+			world.setBlockState(pos.south(1).up(0).east(2), MSBlocks.CRUXTRUDER.SIDE.getDefaultState().with(CruxtruderBlock.FACING, Direction.EAST));
+			world.setBlockState(pos.south(2).up(0).east(2), MSBlocks.CRUXTRUDER.CORNER.getDefaultState().with(CruxtruderBlock.FACING, Direction.SOUTH));
+			world.setBlockState(pos.south(2).up(0).east(1), MSBlocks.CRUXTRUDER.SIDE.getDefaultState().with(CruxtruderBlock.FACING, Direction.SOUTH));
+			world.setBlockState(pos.south(2).up(0).east(0), MSBlocks.CRUXTRUDER.CORNER.getDefaultState().with(CruxtruderBlock.FACING, Direction.WEST));
+			world.setBlockState(pos.south(1).up(0).east(0), MSBlocks.CRUXTRUDER.SIDE.getDefaultState().with(CruxtruderBlock.FACING, Direction.WEST));
+			world.setBlockState(pos.south(1).up(0).east(1), MSBlocks.CRUXTRUDER.CENTER.getDefaultState().with(CruxtruderBlock.FACING, facing));
+			world.setBlockState(pos.south(1).up(1).east(1), MSBlocks.CRUXTRUDER.TUBE.getDefaultState().with(CruxtruderBlock.FACING, facing));
+			world.setBlockState(pos.south().up(2).east(), MSBlocks.CRUXTRUDER_LID.getDefaultState());
 			
 			TileEntity te = world.getTileEntity(pos.add( 1, 1, 1));
 			if(te instanceof CruxtruderTileEntity)
@@ -131,8 +131,8 @@ public class CruxtruderItem extends BlockItem
 				int color;
 				EditData editData = ServerEditHandler.getData(player);
 				if(editData != null)
-					color = PlayerSavedData.get(world).getData(editData.getTarget()).color;
-				else color = PlayerSavedData.getData((ServerPlayerEntity) player).color;
+					color = PlayerSavedData.getData(editData.getTarget(), world).getColor();
+				else color = PlayerSavedData.getData((ServerPlayerEntity) player).getColor();
 				
 				((CruxtruderTileEntity) te).setColor(color);
 			} else Debug.warnf("Placed cruxtruder, but can't find tile entity. Instead found %s.", te);

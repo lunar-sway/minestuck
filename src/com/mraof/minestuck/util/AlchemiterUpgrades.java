@@ -1,15 +1,6 @@
 package com.mraof.minestuck.util;
 
 
-import java.util.Arrays;
-
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.util.Debug;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IStringSerializable;
-
 public class AlchemiterUpgrades
 {
 	/*protected String upgradeName;

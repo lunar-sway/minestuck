@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:cast_iron_stairs"
+    ]
+  },
+  "criteria": {
+    "has_cast_iron": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:cast_iron"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:cast_iron_stairs"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_cast_iron",
+      "has_the_recipe"
+    ]
+  ]
+}

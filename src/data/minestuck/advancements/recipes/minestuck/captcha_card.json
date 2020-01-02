@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:captcha_card"
+    ]
+  },
+  "criteria": {
+    "has_raw_cruxite": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:raw_cruxite"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:captcha_card"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_raw_cruxite",
+      "has_the_recipe"
+    ]
+  ]
+}

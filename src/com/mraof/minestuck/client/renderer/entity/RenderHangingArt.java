@@ -20,6 +20,7 @@ public class RenderHangingArt<T extends HangingArtEntity> extends EntityRenderer
 	public RenderHangingArt(EntityRendererManager renderManagerIn, String artPath)
 	{
 		super(renderManagerIn);
+		//TODO use resource location to specify namespace (so that addons can use this)
 		ART_TEXTURE = new ResourceLocation("minestuck:textures/painting/" + artPath + ".png");
 	}
 	

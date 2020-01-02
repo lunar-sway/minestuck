@@ -1,13 +1,12 @@
 package com.mraof.minestuck.entity.consort;
 
-import java.util.Iterator;
-
-import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
-import com.mraof.minestuck.entity.EntityMinestuck;
+import com.mraof.minestuck.advancements.MSCriteriaTriggers;
+import com.mraof.minestuck.entity.MinestuckEntity;
 import com.mraof.minestuck.entity.consort.MessageType.SingleMessage;
 import com.mraof.minestuck.inventory.ConsortMerchantContainer;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
-import com.mraof.minestuck.world.MinestuckDimensions;
+import com.mraof.minestuck.util.MSNBTUtil;
+import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.SpawnReason;
@@ -18,8 +17,8 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerProvider;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
@@ -28,11 +27,13 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
+import java.util.Iterator;
 
-public abstract class ConsortEntity extends EntityMinestuck implements IContainerProvider
-{
+public abstract class ConsortEntity extends MinestuckEntity implements IContainerProvider
+{	//I'd get rid of the seemingly pointless subclasses, but as of writing, entity renderers are registered to entity classes instead of entity types.
 	
 	ConsortDialogue.DialogueWrapper message;
 	int messageTicksLeft;
@@ -94,7 +95,7 @@ public abstract class ConsortEntity extends EntityMinestuck implements IContaine
 					player.sendMessage(text);
 					onSendMessage(serverPlayer, text, this);
 				}
-				MinestuckCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, message.getString(), this);
+				MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, message.getString(), this);
 			}
 			
 			return true;
@@ -138,7 +139,7 @@ public abstract class ConsortEntity extends EntityMinestuck implements IContaine
 			updatingMessage.onTickUpdate(this);
 		}
 		
-		if(MinestuckDimensions.isSkaia(dimension))
+		if(MSDimensions.isSkaia(dimension))
 			visitedSkaia = true;
 		
 		if(eventTimer > 0)
@@ -175,7 +176,7 @@ public abstract class ConsortEntity extends EntityMinestuck implements IContaine
 		}
 		
 		compound.putInt("Type", merchantType.ordinal());
-		compound.putString("HomeDim", homeDimension.getRegistryName().toString());
+		MSNBTUtil.tryWriteDimensionType(compound, "HomeDim", homeDimension);
 		
 		if(merchantType != EnumConsort.MerchantType.NONE && stocks != null)
 			compound.put("Stock", stocks.writeToNBT());
@@ -199,10 +200,10 @@ public abstract class ConsortEntity extends EntityMinestuck implements IContaine
 	{
 		super.readAdditional(compound);
 		
-		if(compound.contains("Dialogue", 8))
+		if(compound.contains("Dialogue", Constants.NBT.TAG_STRING))
 		{
 			message = ConsortDialogue.getMessageFromString(compound.getString("Dialogue"));
-			if(compound.contains("MessageTicks", 99))
+			if(compound.contains("MessageTicks", Constants.NBT.TAG_ANY_NUMERIC))
 				messageTicksLeft = compound.getInt("MessageTicks");
 			else messageTicksLeft = 24000;	//Used to make summoning with a specific message slightly easier
 			messageData = compound.getCompound("MessageData");
@@ -210,16 +211,17 @@ public abstract class ConsortEntity extends EntityMinestuck implements IContaine
 		
 		merchantType = EnumConsort.MerchantType.values()[MathHelper.clamp(compound.getInt("Type"), 0, EnumConsort.MerchantType.values().length - 1)];
 		
-		if(compound.contains("HomeDim", 99))
-			homeDimension = DimensionType.byName(new ResourceLocation(compound.getString("HomeDim")));
-		else homeDimension = this.world.getDimension().getType();
+		if(compound.contains("HomeDim", Constants.NBT.TAG_STRING))
+			homeDimension = MSNBTUtil.tryReadDimensionType(compound, "HomeDim");
+		if(homeDimension == null)
+			homeDimension = this.world.getDimension().getType();
 		
-		if(merchantType != EnumConsort.MerchantType.NONE && compound.contains("Stock", 9))
+		if(merchantType != EnumConsort.MerchantType.NONE && compound.contains("Stock", Constants.NBT.TAG_LIST))
 		{
-			stocks = new ConsortMerchantInventory(this, compound.getList("Stock", 10));
+			stocks = new ConsortMerchantInventory(this, compound.getList("Stock", Constants.NBT.TAG_COMPOUND));
 		}
 		
-		if(compound.contains("HomePos", 10))
+		if(compound.contains("HomePos", Constants.NBT.TAG_COMPOUND))
 		{
 			CompoundNBT nbt = compound.getCompound("HomePos");
 			BlockPos pos = new BlockPos(nbt.getInt("HomeX"), nbt.getInt("HomeY"), nbt.getInt("HomeZ"));
@@ -275,7 +277,7 @@ public abstract class ConsortEntity extends EntityMinestuck implements IContaine
 	
 	public CompoundNBT getMessageTagForPlayer(PlayerEntity player)
 	{
-		if(!messageData.contains(player.getCachedUniqueIdString(), 10))
+		if(!messageData.contains(player.getCachedUniqueIdString(), Constants.NBT.TAG_COMPOUND))
 			messageData.put(player.getCachedUniqueIdString(), new CompoundNBT());
 		return messageData.getCompound(player.getCachedUniqueIdString());
 	}
@@ -285,7 +287,12 @@ public abstract class ConsortEntity extends EntityMinestuck implements IContaine
 	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
 	{
 		if(this.stocks != null)
-			return new ConsortMerchantContainer(windowId, playerInventory, stocks);
+			return new ConsortMerchantContainer(windowId, playerInventory, stocks, getConsortType(), merchantType, stocks.getPrices());
 		else return null;
+	}
+	
+	protected void writeShopContainerBuffer(PacketBuffer buffer)
+	{
+		ConsortMerchantContainer.write(buffer, this, stocks.getPrices());
 	}
 }

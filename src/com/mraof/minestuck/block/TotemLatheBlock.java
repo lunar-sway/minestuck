@@ -4,6 +4,7 @@ import com.mraof.minestuck.block.multiblock.MachineMultiblock;
 import com.mraof.minestuck.tileentity.ItemStackTileEntity;
 import com.mraof.minestuck.tileentity.TotemLatheTileEntity;
 
+import com.mraof.minestuck.util.CustomVoxelShape;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -40,10 +41,10 @@ public class TotemLatheBlock extends MultiMachineBlock
 	protected final Map<Direction, VoxelShape> shape;
 	protected final BlockPos mainPos;
 	
-	public TotemLatheBlock(MachineMultiblock machine, Map<Direction, VoxelShape> shape, BlockPos mainPos, Properties properties)
+	public TotemLatheBlock(MachineMultiblock machine, CustomVoxelShape shape, BlockPos mainPos, Properties properties)
 	{
 		super(machine, properties);
-		this.shape = shape;
+		this.shape = shape.createRotatedShapes();
 		this.mainPos = mainPos;
 	}
 	
@@ -104,9 +105,9 @@ public class TotemLatheBlock extends MultiMachineBlock
 	
 	public static class Rod extends TotemLatheBlock
 	{
-		public static final BooleanProperty ACTIVE = MinestuckProperties.ACTIVE;
+		public static final BooleanProperty ACTIVE = MSProperties.ACTIVE;
 		
-		public Rod(MachineMultiblock machine, Map<Direction, VoxelShape> shape, BlockPos mainPos, Properties properties)
+		public Rod(MachineMultiblock machine, CustomVoxelShape shape, BlockPos mainPos, Properties properties)
 		{
 			super(machine, shape, mainPos, properties);
 		}
@@ -121,9 +122,9 @@ public class TotemLatheBlock extends MultiMachineBlock
 	
 	public static class DowelRod extends TotemLatheBlock
 	{
-		public static final EnumProperty<EnumDowelType> DOWEL = MinestuckProperties.DOWEL;
+		public static final EnumProperty<EnumDowelType> DOWEL = MSProperties.DOWEL;
 		
-		public DowelRod(MachineMultiblock machine, Map<Direction, VoxelShape> shape, BlockPos mainPos, Properties properties)
+		public DowelRod(MachineMultiblock machine, CustomVoxelShape shape, BlockPos mainPos, Properties properties)
 		{
 			super(machine, shape, mainPos, properties);
 		}
@@ -157,9 +158,9 @@ public class TotemLatheBlock extends MultiMachineBlock
 	
 	public static class Slot extends TotemLatheBlock
 	{
-		public static final IntegerProperty COUNT = MinestuckProperties.COUNT_0_2;
+		public static final IntegerProperty COUNT = MSProperties.COUNT_0_2;
 		
-		public Slot(MachineMultiblock machine, Map<Direction, VoxelShape> shape, Properties properties)
+		public Slot(MachineMultiblock machine, CustomVoxelShape shape, Properties properties)
 		{
 			super(machine, shape, new BlockPos(0, 0, 0), properties);
 		}

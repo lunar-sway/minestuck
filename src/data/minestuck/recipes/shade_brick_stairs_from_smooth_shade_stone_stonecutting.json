@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "minestuck:smooth_shade_stone"
+  },
+  "result": "minestuck:shade_brick_stairs",
+  "count": 1
+}

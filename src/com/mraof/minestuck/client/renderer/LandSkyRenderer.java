@@ -1,10 +1,11 @@
 package com.mraof.minestuck.client.renderer;
 
-import ca.weblite.objc.Client;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
-import com.mraof.minestuck.world.lands.LandAspects;
-import com.mraof.minestuck.world.lands.LandDimension;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.world.MSDimensionTypes;
+import com.mraof.minestuck.world.lands.LandTypePair;
+import com.mraof.minestuck.world.LandDimension;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.RenderHelper;
@@ -18,6 +19,7 @@ import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.client.IRenderHandler;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class LandSkyRenderer implements IRenderHandler
@@ -59,10 +61,10 @@ public class LandSkyRenderer implements IRenderHandler
 		{
 			for (int l = -384; l <= 384; l += 64)
 			{
-				bufferbuilder.pos((double)k, (double)16, (double)l).endVertex();
-				bufferbuilder.pos((double)k + 64, (double)16, (double)l).endVertex();
-				bufferbuilder.pos((double)k + 64, (double)16, (double)(l + 64)).endVertex();
-				bufferbuilder.pos((double)k, (double)16, (double)(l + 64)).endVertex();
+				bufferbuilder.pos(k, 16, l).endVertex();
+				bufferbuilder.pos((double)k + 64, 16, l).endVertex();
+				bufferbuilder.pos((double)k + 64, 16, l + 64).endVertex();
+				bufferbuilder.pos(k, 16, l + 64).endVertex();
 			}
 		}
 		tessellator.draw();
@@ -72,7 +74,6 @@ public class LandSkyRenderer implements IRenderHandler
 		GlStateManager.enableBlend();
 		GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 		RenderHelper.disableStandardItemLighting();
-		//
 		
 		GlStateManager.enableTexture();
 		GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
@@ -80,10 +81,10 @@ public class LandSkyRenderer implements IRenderHandler
 		float skaiaSize = 20.0F;
 		mc.getTextureManager().bindTexture(SKAIA_TEXTURE);
 		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-		bufferbuilder.pos((double)(-skaiaSize), 100.0D, (double)(-skaiaSize)).tex(0.0D, 0.0D).endVertex();
-		bufferbuilder.pos((double)skaiaSize, 100.0D, (double)(-skaiaSize)).tex(1.0D, 0.0D).endVertex();
-		bufferbuilder.pos((double)skaiaSize, 100.0D, (double)skaiaSize).tex(1.0D, 1.0D).endVertex();
-		bufferbuilder.pos((double)(-skaiaSize), 100.0D, (double)skaiaSize).tex(0.0D, 1.0D).endVertex();
+		bufferbuilder.pos(-skaiaSize, 100.0D, -skaiaSize).tex(0.0D, 0.0D).endVertex();
+		bufferbuilder.pos(skaiaSize, 100.0D, -skaiaSize).tex(1.0D, 0.0D).endVertex();
+		bufferbuilder.pos(skaiaSize, 100.0D, skaiaSize).tex(1.0D, 1.0D).endVertex();
+		bufferbuilder.pos(-skaiaSize, 100.0D, skaiaSize).tex(0.0D, 1.0D).endVertex();
 		tessellator.draw();
 		GlStateManager.disableTexture();
 		
@@ -114,14 +115,14 @@ public class LandSkyRenderer implements IRenderHandler
 		GlStateManager.translatef(0.0F, -((float)(d3 - 16.0D)), 0.0F);
 		bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
 		
-		for (int k = -384; k <= 384; k += 64)
+		for(int k = -384; k <= 384; k += 64)
 		{
-			for (int l = -384; l <= 384; l += 64)
+			for(int l = -384; l <= 384; l += 64)
 			{
-				bufferbuilder.pos((double)k + 64, (double)-16, (double)l).endVertex();
-				bufferbuilder.pos((double)k, (double)-16, (double)l).endVertex();
-				bufferbuilder.pos((double)k, (double)-16, (double)(l + 64)).endVertex();
-				bufferbuilder.pos((double)k + 64, (double)-16, (double)(l + 64)).endVertex();
+				bufferbuilder.pos((double)k + 64, -16, l).endVertex();
+				bufferbuilder.pos(k, -16, l).endVertex();
+				bufferbuilder.pos(k, -16, l + 64).endVertex();
+				bufferbuilder.pos((double)k + 64, -16, l + 64).endVertex();
 			}
 		}
 		tessellator.draw();
@@ -133,18 +134,18 @@ public class LandSkyRenderer implements IRenderHandler
 	private void drawVeil(float partialTicks, ClientWorld world)
 	{
 		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder bufferbuilder = tessellator.getBuffer();
+		BufferBuilder buffer = tessellator.getBuffer();
 		Random random = new Random(10842L);
 		
-		bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
+		buffer.begin(7, DefaultVertexFormats.POSITION);
 		
-		for (int i = 0; i < 1500; ++i)
+		for(int count = 0; count < 1500; count++)
 		{
 			float spreadFactor = 0.1F;
-			double x = (double)(random.nextFloat() * 2.0F - 1.0F);
-			double y = (double)(random.nextFloat() * 2.0F - 1.0F);
+			double x = random.nextFloat() * 2.0 - 1.0;
+			double y = random.nextFloat() * 2.0 - 1.0;
 			double z = (double)(random.nextFloat() - random.nextFloat())*spreadFactor;
-			double d3 = (double)(0.15F + random.nextFloat() * 0.1F);
+			double size = 0.15 + random.nextFloat() * 0.1;
 			double l = x * x + y * y + z * z;
 			
 			if (l < 1.0D && l > 0.01D && Math.abs(z/spreadFactor) < 0.4F)
@@ -153,9 +154,9 @@ public class LandSkyRenderer implements IRenderHandler
 				x = x * l;
 				y = y * l;
 				z = z * l;
-				double d5 = x * 100.0D;
-				double d6 = y * 100.0D;
-				double d7 = z * 100.0D;
+				double drawnX = x * 100.0D;
+				double drawnY = y * 100.0D;
+				double drawnZ = z * 100.0D;
 				double d8 = Math.atan2(x, z);
 				double d9 = Math.sin(d8);
 				double d10 = Math.cos(d8);
@@ -166,26 +167,24 @@ public class LandSkyRenderer implements IRenderHandler
 				double d15 = Math.sin(d14);
 				double d16 = Math.cos(d14);
 				
-				for (int j = 0; j < 4; ++j)
+				for(int vertex = 0; vertex < 4; vertex++)
 				{
-					double d17 = 0.0D;
-					double d18 = (double)((j & 2) - 1) * d3;
-					double d19 = (double)((j + 1 & 2) - 1) * d3;
-					double d20 = 0.0D;
+					double d18 = (double)((vertex & 2) - 1) * size;
+					double d19 = (double)((vertex + 1 & 2) - 1) * size;
 					double d21 = d18 * d16 - d19 * d15;
 					double d22 = d19 * d16 + d18 * d15;
-					double d23 = d21 * d12 + 0.0D * d13;
-					double d24 = 0.0D * d12 - d21 * d13;
-					double d25 = d24 * d9 - d22 * d10;
-					double d26 = d22 * d9 + d24 * d10;
-					bufferbuilder.pos(d5 + d25, d6 + d23, d7 + d26).endVertex();
+					double d24 = - d21 * d13;
+					double vertexX = d24 * d9 - d22 * d10;
+					double vertexY = d21 * d12;
+					double vertexZ = d22 * d9 + d24 * d10;
+					buffer.pos(drawnX + vertexX, drawnY + vertexY, drawnZ + vertexZ).endVertex();
 				}
 			}
 		}
 		tessellator.draw();
 	}
 	
-	public void drawLands(Minecraft mc, DimensionType dim)
+	private void drawLands(Minecraft mc, DimensionType dim)
 	{
 		List<DimensionType> list = SkaiaClient.getLandChain(dim);
 		if(list == null)
@@ -198,13 +197,16 @@ public class LandSkyRenderer implements IRenderHandler
 			if(type != null)
 			{
 				Random random = new Random(mc.world.getSeed() + type.getId());
-				//drawLand(mc, getResourceLocations(MinestuckDimensionHandler.getAspects(type), random), (i / (float) list.size()), random);
+				LandTypePair.LazyInstance landTypes = MSDimensionTypes.LANDS.dimToLandTypes.get(type.getRegistryName());
+				if(landTypes == null)
+					Debug.warnf("Missing land types for dimension %s!", type.getRegistryName());
+				else drawLand(mc, getResourceLocations(landTypes.create(), random), (i / (float) list.size()), random);
 			}
 		}
 		GlStateManager.disableTexture();
 	}
 	
-	public void drawLand(Minecraft mc, ResourceLocation[] textures, float pos, Random random)
+	private void drawLand(Minecraft mc, ResourceLocation[] textures, float pos, Random random)
 	{
 		if(pos == 0.5F || textures == null)
 			return;
@@ -221,29 +223,31 @@ public class LandSkyRenderer implements IRenderHandler
 		float planetSize = 4.0F*scale;
 		mc.getTextureManager().bindTexture(textures[0]);
 		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-		bufferbuilder.pos((double)(-planetSize), 100.0D, (double)(-planetSize)).tex(0.0D, 0.0D).endVertex();
-		bufferbuilder.pos((double)planetSize, 100.0D, (double)(-planetSize)).tex(1.0D, 0.0D).endVertex();
-		bufferbuilder.pos((double)planetSize, 100.0D, (double)planetSize).tex(1.0D, 1.0D).endVertex();
-		bufferbuilder.pos((double)(-planetSize), 100.0D, (double)planetSize).tex(0.0D, 1.0D).endVertex();
+		bufferbuilder.pos(-planetSize, 100.0D, -planetSize).tex(0.0D, 0.0D).endVertex();
+		bufferbuilder.pos(planetSize, 100.0D, -planetSize).tex(1.0D, 0.0D).endVertex();
+		bufferbuilder.pos(planetSize, 100.0D, planetSize).tex(1.0D, 1.0D).endVertex();
+		bufferbuilder.pos(-planetSize, 100.0D, planetSize).tex(0.0D, 1.0D).endVertex();
 		tessellator.draw();
 		mc.getTextureManager().bindTexture(textures[1]);
 		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-		bufferbuilder.pos((double)(-planetSize), 100.0D, (double)(-planetSize)).tex(0.0D, 0.0D).endVertex();
-		bufferbuilder.pos((double)planetSize, 100.0D, (double)(-planetSize)).tex(1.0D, 0.0D).endVertex();
-		bufferbuilder.pos((double)planetSize, 100.0D, (double)planetSize).tex(1.0D, 1.0D).endVertex();
-		bufferbuilder.pos((double)(-planetSize), 100.0D, (double)planetSize).tex(0.0D, 1.0D).endVertex();
+		bufferbuilder.pos(-planetSize, 100.0D, -planetSize).tex(0.0D, 0.0D).endVertex();
+		bufferbuilder.pos(planetSize, 100.0D, -planetSize).tex(1.0D, 0.0D).endVertex();
+		bufferbuilder.pos(planetSize, 100.0D, planetSize).tex(1.0D, 1.0D).endVertex();
+		bufferbuilder.pos(-planetSize, 100.0D, planetSize).tex(0.0D, 1.0D).endVertex();
 		tessellator.draw();
 		GlStateManager.popMatrix();
 	}
 	
-	public ResourceLocation[] getResourceLocations(LandAspects aspects, Random random)
+	private ResourceLocation[] getResourceLocations(LandTypePair aspects, Random random)
 	{
 		if(aspects == null)
 			return null;
 		
 		int index = random.nextInt(3);
-		ResourceLocation terrain = new ResourceLocation("minestuck", "textures/environment/planets/planet_"+aspects.aspectTerrain.getPrimaryName()+"_"+index+".png");
-		ResourceLocation title = new ResourceLocation("minestuck", "textures/environment/overlays/overlay_"+aspects.aspectTitle.getPrimaryName()+"_"+index+".png");
+		ResourceLocation terrainName = Objects.requireNonNull(aspects.terrain.getRegistryName());
+		ResourceLocation titleName = Objects.requireNonNull(aspects.title.getRegistryName());
+		ResourceLocation terrain = new ResourceLocation(terrainName.getNamespace(), "textures/environment/planets/planet_"+terrainName.getPath()+"_"+index+".png");
+		ResourceLocation title = new ResourceLocation(titleName.getNamespace(), "textures/environment/overlays/overlay_"+titleName.getPath()+"_"+index+".png");
 		return new ResourceLocation[] {terrain, title};
 	}
 }

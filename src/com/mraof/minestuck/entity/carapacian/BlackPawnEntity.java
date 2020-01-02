@@ -9,13 +9,7 @@ public class BlackPawnEntity extends PawnEntity
 	{
 		super(type, world);
 	}
-
-	@Override
-	public String getTexture() 
-	{
-		return "textures/entity/dersite_pawn.png";
-	}
-
+	
 	@Override
 	public EnumEntityKingdom getKingdom()
 	{

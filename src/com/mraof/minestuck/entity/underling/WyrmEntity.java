@@ -1,8 +1,8 @@
 package com.mraof.minestuck.entity.underling;
 
 import com.mraof.minestuck.entity.IEntityMultiPart;
-import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.DamageSource;
@@ -18,12 +18,6 @@ public class WyrmEntity extends UnderlingEntity implements IEntityMultiPart
 	public WyrmEntity(EntityType<? extends WyrmEntity> type, World world)
 	{
 		super(type, world);
-	}
-	
-	@Override
-	protected String getUnderlingName()
-	{
-		return "wyrm";
 	}
 	
 	@Override
@@ -56,7 +50,7 @@ public class WyrmEntity extends UnderlingEntity implements IEntityMultiPart
 	@Override
 	public GristSet getGristSpoils()
 	{
-		return GristHelper.getRandomDrop(type, 87);
+		return GristHelper.getRandomDrop(getGristType(), 87);
 	}
 
 	@Override

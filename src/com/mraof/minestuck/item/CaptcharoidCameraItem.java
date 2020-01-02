@@ -2,7 +2,7 @@ package com.mraof.minestuck.item;
 
 import java.util.List;
 
-import com.mraof.minestuck.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemFrameEntity;
@@ -32,7 +32,7 @@ public class CaptcharoidCameraItem extends Item
 		BlockPos pos = context.getPos();
 		PlayerEntity player = context.getPlayer();
 		Direction facing = context.getFace();
-		Boolean inside = context.func_221533_k();
+		Boolean inside = context.isInside();
 
 		//pos.offset(facing).offset(facing.rotateY()).up(), pos.offset(facing.getOpposite()).offset(facing.rotateYCCW()).down()
 		if(!worldIn.isRemote) 

@@ -11,7 +11,7 @@ public class TileEntityAlchemiterUpgrade extends TileEntity implements ITickable
 	
 	public TileEntityAlchemiterUpgrade(AlchemiterUpgrades upg) 
 	{
-		super(ModTileEntityTypes.ALCHEMITER_UPGRADE);
+		super(MSTileEntityTypes.ALCHEMITER_UPGRADE);
 		//setUpgrade(upg);
 	}
 	

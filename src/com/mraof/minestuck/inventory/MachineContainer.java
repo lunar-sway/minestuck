@@ -3,15 +3,20 @@ package com.mraof.minestuck.inventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.util.IIntArray;
+import net.minecraft.util.math.BlockPos;
+
+import java.util.Objects;
 
 public abstract class MachineContainer extends Container
 {
 	
 	private final IIntArray parameters;
+	public final BlockPos machinePos;
 	
-	public MachineContainer(ContainerType<?> type, int id, IIntArray parameters)
+	public MachineContainer(ContainerType<?> type, int id, IIntArray parameters, BlockPos machinePos)
 	{
 		super(type, id);
+		this.machinePos = Objects.requireNonNull(machinePos);
 		
 		assertIntArraySize(parameters, 3);
 		this.parameters = parameters;

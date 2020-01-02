@@ -1,9 +1,9 @@
 package com.mraof.minestuck.inventory;
 
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.inventory.slot.InputSlot;
 import com.mraof.minestuck.inventory.slot.OutputSlot;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.MSItems;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
@@ -11,8 +11,10 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
+import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nonnull;
 
@@ -29,26 +31,26 @@ public class MiniTotemLatheContainer extends MachineContainer
 	
 	private final IInventory totemLatheInventory;
 	
-	public MiniTotemLatheContainer(int windowId, PlayerInventory playerInventory)
+	public MiniTotemLatheContainer(int windowId, PlayerInventory playerInventory, PacketBuffer buffer)
 	{
-		this(ModContainerTypes.MINI_TOTEM_LATHE, windowId, playerInventory, new Inventory(4), new IntArray(3));
+		this(MSContainerTypes.MINI_TOTEM_LATHE, windowId, playerInventory, new Inventory(4), new IntArray(3), buffer.readBlockPos());
 	}
 	
-	public MiniTotemLatheContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters)
+	public MiniTotemLatheContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, BlockPos machinePos)
 	{
-		this(ModContainerTypes.MINI_TOTEM_LATHE, windowId, playerInventory, inventory, parameters);
+		this(MSContainerTypes.MINI_TOTEM_LATHE, windowId, playerInventory, inventory, parameters, machinePos);
 	}
 	
-	public MiniTotemLatheContainer(ContainerType<? extends MiniTotemLatheContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters)
+	public MiniTotemLatheContainer(ContainerType<? extends MiniTotemLatheContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, BlockPos machinePos)
 	{
-		super(type, windowId, parameters);
+		super(type, windowId, parameters, machinePos);
 		
 		assertInventorySize(inventory, 4);
 		this.totemLatheInventory = inventory;
 		
-		addSlot(new InputSlot(inventory, 0, CARD_1_X, CARD_1_Y, MinestuckItems.CAPTCHA_CARD));
-		addSlot(new InputSlot(inventory, 1, CARD_2_X, CARD_2_Y, MinestuckItems.CAPTCHA_CARD));
-		addSlot(new InputSlot(inventory, 2, DOWEL_X, DOWEL_Y, MinestuckBlocks.CRUXITE_DOWEL.asItem()));
+		addSlot(new InputSlot(inventory, 0, CARD_1_X, CARD_1_Y, MSItems.CAPTCHA_CARD));
+		addSlot(new InputSlot(inventory, 1, CARD_2_X, CARD_2_Y, MSItems.CAPTCHA_CARD));
+		addSlot(new InputSlot(inventory, 2, DOWEL_X, DOWEL_Y, MSBlocks.CRUXITE_DOWEL.asItem()));
 		addSlot(new OutputSlot(inventory, 3, OUTPUT_X, OUTPUT_Y));
 		
 		bindPlayerInventory(playerInventory);
@@ -92,9 +94,9 @@ public class MiniTotemLatheContainer extends MachineContainer
 			} else if(slotNumber > 3)
 			{
 				//if it's an inventory slot with valid contents
-				if(itemstackOrig.getItem() == MinestuckItems.CAPTCHA_CARD)
+				if(itemstackOrig.getItem() == MSItems.CAPTCHA_CARD)
 					result = mergeItemStack(itemstackOrig, 0, 2, false);
-				else if(itemstackOrig.getItem() == MinestuckBlocks.CRUXITE_DOWEL.asItem())
+				else if(itemstackOrig.getItem() == MSBlocks.CRUXITE_DOWEL.asItem())
 					result = mergeItemStack(itemstackOrig, 2, 3, false);
 			}
 			

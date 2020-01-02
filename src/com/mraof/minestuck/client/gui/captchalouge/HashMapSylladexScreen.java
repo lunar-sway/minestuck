@@ -4,7 +4,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.network.MSPacketHandler;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -13,6 +13,8 @@ import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 public class HashMapSylladexScreen extends SylladexScreen
 {
+	public static final String EJECT_BY_CHAT_ON = "minestuck.eject_by_chat.on";
+	public static final String EJECT_BY_CHAT_OFF = "minestuck.eject_by_chat.off";
 	
 	private HashMapModus modus;
 	protected Button guiButton;
@@ -38,7 +40,7 @@ public class HashMapSylladexScreen extends SylladexScreen
 		guiButton.x = (width - GUI_WIDTH)/2 + 15;
 		guiButton.y = (height - GUI_HEIGHT)/2 + 175;
 		boolean active = MinestuckConfig.clientHashmapChat == 0 ? modus.ejectByChat : MinestuckConfig.clientHashmapChat == 1;
-		guiButton.setMessage(I18n.format(active ? "gui.ejectByChat.on" : "gui.ejectByChat.off"));
+		guiButton.setMessage(I18n.format(active ? EJECT_BY_CHAT_ON : EJECT_BY_CHAT_OFF));
 		guiButton.active = MinestuckConfig.clientHashmapChat == 0;
 		super.render(xcor, ycor, f);
 	}
@@ -62,7 +64,7 @@ public class HashMapSylladexScreen extends SylladexScreen
 					if(this.item != null && mouseButton == 1)
 					{
 						CaptchaDeckPacket packet = CaptchaDeckPacket.get(this.index, true);
-						MinestuckPacketHandler.sendToServer(packet);
+						MSPacketHandler.sendToServer(packet);
 					} else super.onClick(mouseButton);
 				}
 			});
@@ -104,7 +106,7 @@ public class HashMapSylladexScreen extends SylladexScreen
 		if(MinestuckConfig.clientHashmapChat == 0)
 		{
 			modus.ejectByChat = !modus.ejectByChat;
-			MinestuckPacketHandler.sendToServer(CaptchaDeckPacket.modusParam((byte) 0, modus.ejectByChat ? 1 : 0));
+			MSPacketHandler.sendToServer(CaptchaDeckPacket.modusParam((byte) 0, modus.ejectByChat ? 1 : 0));
 		}
 	}
 }

@@ -1,24 +1,34 @@
 package com.mraof.minestuck.util;
 
-import java.util.ArrayList;
-
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.network.ClientEditPacket;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
-import com.mraof.minestuck.network.skaianet.ComputerData;
+import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.skaianet.ReducedConnection;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 
+import java.util.ArrayList;
+
 public class SburbServer extends ButtonListProgram
 {
+	public static final String NAME = "minestuck.server_program";
+	public static final String CLOSE_BUTTON = SburbClient.CLOSE_BUTTON;
+	public static final String EDIT_BUTTON = "minestuck.edit_button";
+	public static final String GIVE_BUTTON = "minestuck.give_button";
+	public static final String OPEN_BUTTON = "minestuck.open_button";
+	public static final String RESUME_BUTTON = SburbClient.RESUME_BUTTON;
+	public static final String CONNECT = SburbClient.CONNECT;
+	public static final String OFFLINE = "minestuck.offline_message";
+	public static final String SERVER_ACTIVE = "minestuck.server_active_message";
+	public static final String RESUME_SERVER = "minestuck.resume_server_message";
 	
 	@Override
 	public ArrayList<UnlocalizedString> getStringList(ComputerTileEntity te)
 	{
 		int clientId = te.getData(1).contains("connectedClient")?te.getData(1).getInt("connectedClient"):-1;
-		SburbConnection connection = clientId != -1 ? SkaiaClient.getClientConnection(clientId) : null;
+		ReducedConnection connection = clientId != -1 ? SkaiaClient.getClientConnection(clientId) : null;
 		if(connection != null && connection.getServerId() != te.ownerId)
 			connection = null;
 		
@@ -26,49 +36,56 @@ public class SburbServer extends ButtonListProgram
 		String displayPlayer= connection==null?"UNDEFINED":connection.getClientDisplayName();
 		if (connection != null)
 		{
-			list.add(new UnlocalizedString("computer.messageConnect", displayPlayer));
-			list.add(new UnlocalizedString("computer.buttonClose"));
-			list.add(new UnlocalizedString(MinestuckConfig.clientGiveItems ? "computer.buttonGive" : "computer.buttonEdit"));
+			list.add(new UnlocalizedString(CONNECT, displayPlayer));
+			list.add(new UnlocalizedString(CLOSE_BUTTON));
+			list.add(new UnlocalizedString(MinestuckConfig.clientGiveItems ? GIVE_BUTTON : EDIT_BUTTON));
 		} else if (te.getData(getId()).getBoolean("isOpen"))
 		{
-			list.add(new UnlocalizedString("computer.messageResumeServer"));
-			list.add(new UnlocalizedString("computer.buttonClose"));
+			list.add(new UnlocalizedString(RESUME_SERVER));
+			list.add(new UnlocalizedString(CLOSE_BUTTON));
 		} else if(SkaiaClient.isActive(te.ownerId, false))
-			list.add(new UnlocalizedString("computer.messageServerActive"));
+			list.add(new UnlocalizedString(SERVER_ACTIVE));
 		else
 		{
-			list.add(new UnlocalizedString("computer.messageOffline"));
-			list.add(new UnlocalizedString("computer.buttonOpen"));
+			list.add(new UnlocalizedString(OFFLINE));
+			list.add(new UnlocalizedString(OPEN_BUTTON));
 			if(SkaiaClient.getAssociatedPartner(te.ownerId, false) != -1)
-				list.add(new UnlocalizedString("computer.buttonResume"));
+				list.add(new UnlocalizedString(RESUME_BUTTON));
 		}
 		return list;
 	}
 	
 	@Override
 	public void onButtonPressed(ComputerTileEntity te, String buttonName, Object[] data) {
-		if(buttonName.equals("computer.buttonEdit") || buttonName.equals("computer.buttonGive"))
+		switch(buttonName)
 		{
-			ClientEditPacket packet = ClientEditPacket.activate(te.ownerId, te.getData(getId()).getInt("connectedClient"));
-			MinestuckPacketHandler.sendToServer(packet);
-		} else if(buttonName.equals("computer.buttonResume"))
-			SkaiaClient.sendConnectRequest(te, SkaiaClient.getAssociatedPartner(te.ownerId, false), false);
-		else if(buttonName.equals("computer.buttonOpen"))
-			SkaiaClient.sendConnectRequest(te, -1, false);
-		else if(buttonName.equals("computer.buttonClose"))
-			SkaiaClient.sendCloseRequest(te, te.getData(getId()).getBoolean("isOpen")?-1:te.getData(getId()).getInt("connectedClient"), false);
+			case EDIT_BUTTON:
+			case GIVE_BUTTON:
+				ClientEditPacket packet = ClientEditPacket.activate(te.ownerId, te.getData(getId()).getInt("connectedClient"));
+				MSPacketHandler.sendToServer(packet);
+				break;
+			case RESUME_BUTTON:
+				SkaiaClient.sendConnectRequest(te, SkaiaClient.getAssociatedPartner(te.ownerId, false), false);
+				break;
+			case OPEN_BUTTON:
+				SkaiaClient.sendConnectRequest(te, -1, false);
+				break;
+			case CLOSE_BUTTON:
+				SkaiaClient.sendCloseRequest(te, te.getData(getId()).getBoolean("isOpen") ? -1 : te.getData(getId()).getInt("connectedClient"), false);
+				break;
+		}
 	}
 	
 	@Override
 	public String getName()
 	{
-		return "computer.programServer";
+		return NAME;
 	}
 	
 	@Override
 	public void onClosed(ComputerTileEntity te)
 	{
-		SburbConnection c = SkaianetHandler.get(te.getWorld()).getServerConnection(ComputerData.createData(te));
+		SburbConnection c = SkaianetHandler.get(te.getWorld()).getServerConnection(te);
 		if(c != null)
 			SkaianetHandler.get(te.getWorld()).closeConnection(te.owner, c.getClientIdentifier(), false);
 		else if(te.getData(1).getBoolean("isOpen"))

@@ -1,17 +1,19 @@
 package com.mraof.minestuck.entity.underling;
 
-import com.mraof.minestuck.alchemy.GristAmount;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.entity.EntityListFilter;
-import com.mraof.minestuck.entity.EntityMinestuck;
-import com.mraof.minestuck.entity.ModEntityTypes;
+import com.mraof.minestuck.entity.MinestuckEntity;
 import com.mraof.minestuck.entity.ai.HurtByTargetAlliedGoal;
 import com.mraof.minestuck.entity.ai.NearestAttackableTargetWithHeightGoal;
 import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.entity.item.VitalityGelEntity;
+import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
-import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.Echeladder;
+import com.mraof.minestuck.util.MSTags;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.ItemEntity;
@@ -20,7 +22,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -30,21 +34,20 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.common.util.Constants;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
-public abstract class UnderlingEntity extends EntityMinestuck implements IEntityAdditionalSpawnData, IMob
+public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 {
-	protected static EntityListFilter underlingSelector = new EntityListFilter(Arrays.asList(ModEntityTypes.IMP, ModEntityTypes.OGRE, ModEntityTypes.BASILISK, ModEntityTypes.LICH, ModEntityTypes.GICLOPS, ModEntityTypes.WYRM));
-	protected EntityListFilter attackEntitySelector;
-	//The type of the underling
-	protected GristType type;
-	public boolean fromSpawner;
+	private static final DataParameter<String> GRIST_TYPE = EntityDataManager.createKey(UnderlingEntity.class, DataSerializers.STRING);
+	protected EntityListFilter attackEntitySelector;	//TODO this filter isn't being saved. F1X PLZ
+	protected boolean fromSpawner;
 	public boolean dropCandy;
 	
 	private static final float maxSharedProgress = 2;	//The multiplier for the maximum amount progress that can be gathered from each enemy with the group fight bonus
@@ -68,7 +71,7 @@ public abstract class UnderlingEntity extends EntityMinestuck implements IEntity
 		goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 8.0F));
 		goalSelector.addGoal(7, new LookRandomlyGoal(this));
 		
-		targetSelector.addGoal(1, new HurtByTargetAlliedGoal(this, underlingSelector));
+		targetSelector.addGoal(1, new HurtByTargetAlliedGoal(this, entity -> MSTags.EntityTypes.UNDERLINGS.contains(entity.getType())));
 		targetSelector.addGoal(2, new NearestAttackableTargetWithHeightGoal(this, LivingEntity.class, 128.0F, 2, true, false, attackEntitySelector));
 	}
 	
@@ -78,19 +81,53 @@ public abstract class UnderlingEntity extends EntityMinestuck implements IEntity
 		super.registerAttributes();
 		this.getAttributes().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
 		
-		this.getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue((double)(this.getKnockbackResistance()));
+		this.getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(this.getKnockbackResistance());
 		this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(this.getWanderSpeed());
+	}
+	
+	@Override
+	protected void registerData()
+	{
+		super.registerData();
+		dataManager.register(GRIST_TYPE, String.valueOf(GristType.ARTIFACT.getRegistryName()));
 	}
 	
 	protected void applyGristType(GristType type, boolean fullHeal)
 	{
-		this.type = type;
-		if(this.type.getRarity() == 0)	//Utility grist type
-			this.type = SburbHandler.getUnderlingType(this);
-		this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(this.getMaximumHealth());
-		this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(this.getAttackDamage());
+		if(type.getRarity() == 0)	//Utility grist type
+			throw new IllegalArgumentException("Can't set underling grist type to "+type.getRegistryName());
+		dataManager.set(GRIST_TYPE, String.valueOf(type.getRegistryName()));
+		
+		onGristTypeUpdated(type);
 		if(fullHeal)
 			this.setHealth(this.getMaxHealth());
+	}
+	
+	@Override
+	public void notifyDataManagerChange(DataParameter<?> parameter)
+	{
+		if(parameter == GRIST_TYPE)
+			onGristTypeUpdated(getGristType());
+	}
+	
+	protected void onGristTypeUpdated(GristType type)
+	{
+		clearTexture();
+		this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(this.getMaximumHealth());
+		this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(this.getAttackDamage());
+	}
+	
+	@Nonnull
+	public GristType getGristType()
+	{
+		GristType type = GristTypes.REGISTRY.getValue(ResourceLocation.tryCreate(dataManager.get(GRIST_TYPE)));
+		
+		if(type != null)
+		{
+			return type;
+		} else Debug.warnf("Unable to read underling grist type from string %s.", dataManager.get(GRIST_TYPE));
+		
+		return GristTypes.ARTIFACT;
 	}
 	
 	//used when getting how much grist should be dropped on death
@@ -104,13 +141,10 @@ public abstract class UnderlingEntity extends EntityMinestuck implements IEntity
 	
 	protected abstract int getVitalityGel();
 	
-	protected abstract String getUnderlingName();
-	
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn)
 	{
-		boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
-		return flag;
+		return entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
 	}
 	
 	@Override
@@ -119,22 +153,22 @@ public abstract class UnderlingEntity extends EntityMinestuck implements IEntity
 		super.onDeathUpdate();
 		if(this.deathTime == 20 && !this.world.isRemote)
 		{
-			GristSet grist = this.getGristSpoils();
+			GristSet grist = this.getGristSpoils();	//TODO Grist drop event
 			if(grist == null)
 				return;
 			if(fromSpawner)
-				grist.scaleGrist(0.5F);
+				grist.scale(0.5F, false);
 			
 			if(!dropCandy)
 			{
-				for(GristAmount gristType : grist.getArray())
+				for(GristAmount gristType : grist.getAmounts())
 					this.world.addEntity(new GristEntity(world, randX(), this.posY, randZ(), gristType));
 			} else
 			{
-				for(GristAmount gristType : grist.getArray())
+				for(GristAmount gristType : grist.getAmounts())
 				{
-					int candy = (gristType.getAmount() + 2)/4;
-					int gristAmount = gristType.getAmount() - candy*2;
+					int candy = (int) Math.min(64, (gristType.getAmount() + 2)/4);
+					long gristAmount = gristType.getAmount() - candy*2;
 					ItemStack candyItem = gristType.getType().getCandyItem();
 					candyItem.setCount(candy);
 					if(candy > 0)
@@ -160,25 +194,20 @@ public abstract class UnderlingEntity extends EntityMinestuck implements IEntity
 	}
 	
 	@Override
-	public String getTexture() 
+	protected ResourceLocation createTexture()
 	{
-		return null;
-	}
-	
-	@Override
-	public ResourceLocation getTextureResource()
-	{
-		if(textureResource == null)
-			textureResource = type.getUnderlingTexture(this.getUnderlingName());
-		return textureResource;
+		ResourceLocation underlingName = Objects.requireNonNull(getType().getRegistryName(), () -> "Getting texture for entity without a registry name! "+this);
+		ResourceLocation gristName = getGristType().getEffectiveName();
+		
+		return new ResourceLocation(underlingName.getNamespace(), String.format("textures/entity/underlings/%s/%s_%s.png", gristName.getNamespace(), gristName.getPath(), underlingName.getPath()));
 	}
 	
 	@Override
 	public ITextComponent getName()
 	{
-		if(type != null)
-			return new TranslationTextComponent("entity.minestuck." + getUnderlingName() + ".type", type.getDisplayName());
-		else return new TranslationTextComponent("entity.minestuck." + getUnderlingName() + ".name");
+		if(getCustomName() == null)
+			return new TranslationTextComponent(getType().getTranslationKey() + ".type", getGristType().getDisplayName());
+		else return super.getName();
 	}
 	
 	@Override
@@ -193,7 +222,7 @@ public abstract class UnderlingEntity extends EntityMinestuck implements IEntity
 
 	public void addEnemy(EntityType<?> enemyType)
 	{
-		if(!attackEntitySelector.entityList.contains(enemyType) && !underlingSelector.entityList.contains(enemyType))
+		if(!attackEntitySelector.entityList.contains(enemyType) && !MSTags.EntityTypes.UNDERLINGS.contains(enemyType))
 		{
 			attackEntitySelector.entityList.add(enemyType);
 		}
@@ -203,7 +232,7 @@ public abstract class UnderlingEntity extends EntityMinestuck implements IEntity
 	public void writeAdditional(CompoundNBT compound)
 	{
 		super.writeAdditional(compound);
-		compound.putString("Type", type.getRegistryName().toString());
+		getGristType().write(compound, "Type");
 		compound.putBoolean("Spawned", fromSpawner);
 		if(detachHome())
 		{
@@ -220,14 +249,14 @@ public abstract class UnderlingEntity extends EntityMinestuck implements IEntity
 	@Override
 	public void readAdditional(CompoundNBT compound)
 	{
-		if(compound.contains("Type", 8))
-			applyGristType(GristType.getTypeFromString(compound.getString("Type")), false);
+		if(compound.contains("Type", Constants.NBT.TAG_STRING))
+			applyGristType(GristType.read(compound, "Type", GristTypes.ARTIFACT), false);
 		else applyGristType(SburbHandler.getUnderlingType(this), true);
 		super.readAdditional(compound);
 		
 		fromSpawner = compound.getBoolean("Spawned");
 		
-		if(compound.contains("HomePos", 10))
+		if(compound.contains("HomePos", Constants.NBT.TAG_COMPOUND))
 		{
 			CompoundNBT nbt = compound.getCompound("HomePos");
 			BlockPos pos = new BlockPos(nbt.getInt("HomeX"), nbt.getInt("HomeY"), nbt.getInt("homeZ"));
@@ -241,40 +270,20 @@ public abstract class UnderlingEntity extends EntityMinestuck implements IEntity
 		return this.world.getDifficulty() != Difficulty.PEACEFUL && super.canSpawn(worldIn, spawnReasonIn);
 	}
 	
-	@Override
-	public void writeSpawnData(PacketBuffer buffer)
-	{
-		buffer.writeInt(type.getId());
-	}
-	
-	@Override
-	public void readSpawnData(PacketBuffer additionalData)
-	{
-		applyGristType(GristType.REGISTRY.getValue(additionalData.readInt()), false);
-		this.textureResource = null;
-	}
-	
 	@Nullable
 	@Override
 	public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag)
 	{
 		if(!(spawnDataIn instanceof UnderlingData))
 		{
-			if(this.type == null)
-				applyGristType(SburbHandler.getUnderlingType(this), true);
-			spawnDataIn = new UnderlingData(this.type);
+			applyGristType(SburbHandler.getUnderlingType(this), true);
+			spawnDataIn = new UnderlingData(getGristType());
 		} else
 		{
 			applyGristType(((UnderlingData)spawnDataIn).type, true);
 		}
 		
 		return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
-	}
-	
-	@Override
-	public boolean canDespawn(double distanceToClosestPlayer)
-	{
-		return !this.detachHome();
 	}
 	
 	public void onEntityDamaged(DamageSource source, float amount)
@@ -305,7 +314,7 @@ public abstract class UnderlingEntity extends EntityMinestuck implements IEntity
 		
 		int maxProgress = (int) (progress*maxSharedProgress);
 		damageMap.remove(null);
-		ServerPlayerEntity[] playerList = damageMap.keySet().toArray(new ServerPlayerEntity[damageMap.size()]);
+		ServerPlayerEntity[] playerList = damageMap.keySet().toArray(new ServerPlayerEntity[0]);
 		double[] modifiers = new double[playerList.length];
 		double totalModifier = 0;
 		
@@ -316,7 +325,7 @@ public abstract class UnderlingEntity extends EntityMinestuck implements IEntity
 			totalModifier += modifiers[i];
 		}
 		
-		Debug.debugf("%s players are splitting on %s progress from %s", playerList.length, progress, getUnderlingName());
+		Debug.infof("%s players are splitting on %s progress from %s", playerList.length, progress, getType().getRegistryName());
 		if(totalModifier > maxSharedProgress)
 			for(int i = 0; i < playerList.length; i++)
 				Echeladder.increaseProgress(playerList[i], (int) (maxProgress*modifiers[i]/totalModifier));

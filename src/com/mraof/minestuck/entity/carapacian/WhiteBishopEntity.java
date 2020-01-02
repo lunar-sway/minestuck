@@ -12,12 +12,6 @@ public class WhiteBishopEntity extends BishopEntity
 	}
 	
 	@Override
-	public String getTexture() 
-	{
-		return "textures/entity/prospitian_bishop.png";
-	}
-
-	@Override
 	public EnumEntityKingdom getKingdom()
 	{
 		return EnumEntityKingdom.PROSPITIAN;

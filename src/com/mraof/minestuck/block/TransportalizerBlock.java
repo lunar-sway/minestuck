@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.client.gui.ModScreenFactories;
+import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
@@ -8,6 +8,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -20,7 +21,7 @@ import javax.annotation.Nullable;
 
 public class TransportalizerBlock extends MachineBlock
 {
-	public static final VoxelShape SHAPE = Block.makeCuboidShape(0, 0, 0, 16, 8, 16);
+	public static final VoxelShape SHAPE = MSBlockShapes.TRANSPORTALIZER.create(Direction.NORTH);
 	
 	public TransportalizerBlock(Properties properties)
 	{
@@ -74,7 +75,7 @@ public class TransportalizerBlock extends MachineBlock
 		}
 
 		if(worldIn.isRemote)
-			ModScreenFactories.displayTransportalizerScreen(tileEntity);
+			MSScreenFactories.displayTransportalizerScreen(tileEntity);
 
 		return true;
 	}

@@ -2,7 +2,7 @@ package com.mraof.minestuck.world.gen;
 
 import com.mojang.datafixers.Dynamic;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.block.MSBlocks;
 import net.minecraft.block.BlockState;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.IChunk;
@@ -20,10 +20,10 @@ import java.util.function.Function;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class SkaiaSurfaceBuilder extends SurfaceBuilder<SurfaceBuilderConfig>
 {
-	public final SurfaceBuilderConfig WHITE_CHESS_CONFIG = new SurfaceBuilderConfig(MinestuckBlocks.WHITE_CHESS_DIRT.getDefaultState(), MinestuckBlocks.WHITE_CHESS_DIRT.getDefaultState(), MinestuckBlocks.WHITE_CHESS_DIRT.getDefaultState());
-	public final SurfaceBuilderConfig LIGHT_GRAY_CHESS_CONFIG = new SurfaceBuilderConfig(MinestuckBlocks.LIGHT_GRAY_CHESS_DIRT.getDefaultState(), MinestuckBlocks.LIGHT_GRAY_CHESS_DIRT.getDefaultState(), MinestuckBlocks.LIGHT_GRAY_CHESS_DIRT.getDefaultState());
-	public final SurfaceBuilderConfig DARK_GRAY_CHESS_CONFIG = new SurfaceBuilderConfig(MinestuckBlocks.DARK_GRAY_CHESS_DIRT.getDefaultState(), MinestuckBlocks.DARK_GRAY_CHESS_DIRT.getDefaultState(), MinestuckBlocks.DARK_GRAY_CHESS_DIRT.getDefaultState());
-	public final SurfaceBuilderConfig BLACK_CHESS_CONFIG = new SurfaceBuilderConfig(MinestuckBlocks.BLACK_CHESS_DIRT.getDefaultState(), MinestuckBlocks.BLACK_CHESS_DIRT.getDefaultState(), MinestuckBlocks.BLACK_CHESS_DIRT.getDefaultState());
+	public final SurfaceBuilderConfig WHITE_CHESS_CONFIG = new SurfaceBuilderConfig(MSBlocks.WHITE_CHESS_DIRT.getDefaultState(), MSBlocks.WHITE_CHESS_DIRT.getDefaultState(), MSBlocks.WHITE_CHESS_DIRT.getDefaultState());
+	public final SurfaceBuilderConfig LIGHT_GRAY_CHESS_CONFIG = new SurfaceBuilderConfig(MSBlocks.LIGHT_GRAY_CHESS_DIRT.getDefaultState(), MSBlocks.LIGHT_GRAY_CHESS_DIRT.getDefaultState(), MSBlocks.LIGHT_GRAY_CHESS_DIRT.getDefaultState());
+	public final SurfaceBuilderConfig DARK_GRAY_CHESS_CONFIG = new SurfaceBuilderConfig(MSBlocks.DARK_GRAY_CHESS_DIRT.getDefaultState(), MSBlocks.DARK_GRAY_CHESS_DIRT.getDefaultState(), MSBlocks.DARK_GRAY_CHESS_DIRT.getDefaultState());
+	public final SurfaceBuilderConfig BLACK_CHESS_CONFIG = new SurfaceBuilderConfig(MSBlocks.BLACK_CHESS_DIRT.getDefaultState(), MSBlocks.BLACK_CHESS_DIRT.getDefaultState(), MSBlocks.BLACK_CHESS_DIRT.getDefaultState());
 	
 	@ObjectHolder(Minestuck.MOD_ID+":skaia")
 	public static final SkaiaSurfaceBuilder SKAIA = getNull();

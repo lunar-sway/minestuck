@@ -1,7 +1,8 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.LogicalSide;
@@ -9,9 +10,9 @@ import net.minecraftforge.fml.LogicalSide;
 public class QueueStackModus extends StackModus
 {
 	
-	public QueueStackModus(ModusType<? extends QueueStackModus> type, LogicalSide side)
+	public QueueStackModus(ModusType<? extends QueueStackModus> type, PlayerSavedData savedData, LogicalSide side)
 	{
-		super(type, side);
+		super(type, savedData, side);
 	}
 	
 	@Override
@@ -22,7 +23,8 @@ public class QueueStackModus extends StackModus
 			if(list.size() < size)
 			{
 				size--;
-				return new ItemStack(MinestuckItems.CAPTCHA_CARD);
+				markDirty();
+				return new ItemStack(MSItems.CAPTCHA_CARD);
 			} else return ItemStack.EMPTY;
 		}
 		
@@ -34,14 +36,20 @@ public class QueueStackModus extends StackModus
 			for(ItemStack item : list)
 				CaptchaDeckHandler.launchAnyItem(player, item);
 			list.clear();
+			markDirty();
 			return ItemStack.EMPTY;
 		}
 		
 		if(asCard)
 		{
 			size--;
+			markDirty();
 			return AlchemyRecipes.createCard(id == 0 ? list.removeFirst() : list.removeLast(), false);
 		}
-		else return id == 0 ? list.removeFirst() : list.removeLast();
+		else
+		{
+			markDirty();
+			return id == 0 ? list.removeFirst() : list.removeLast();
+		}
 	}
 }

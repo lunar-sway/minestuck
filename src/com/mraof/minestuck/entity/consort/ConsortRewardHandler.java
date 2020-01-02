@@ -1,11 +1,12 @@
 package com.mraof.minestuck.entity.consort;
 
 import com.google.common.collect.Maps;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Pair;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootParameterSets;
@@ -16,15 +17,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import static com.mraof.minestuck.block.MinestuckBlocks.*;
-import static com.mraof.minestuck.item.MinestuckItems.*;
+import static com.mraof.minestuck.block.MSBlocks.*;
+import static com.mraof.minestuck.item.MSItems.*;
 import static net.minecraft.item.Items.*;
 
 public class ConsortRewardHandler
 {
 	private static final Map<ItemStack, PriceVariation> prices = Maps.newHashMap();
 	
-	public static void registerMinestuckPrices()
+	public static void registerMinestuckPrices()	//TODO could ideally be exported to json format
 	{
 		
 		ConsortRewardHandler.registerPrice(new ItemStack(ONION), 9, 15);
@@ -81,13 +82,13 @@ public class ConsortRewardHandler
 		
 		ConsortRewardHandler.registerPrice(new ItemStack(CARVING_TOOL), 60, 90);
 		ConsortRewardHandler.registerPrice(new ItemStack(MINI_FROG_STATUE), 200, 250);
-		ConsortRewardHandler.registerPrice(new ItemStack(MinestuckItems.STONE_SLAB), 20, 30);
+		ConsortRewardHandler.registerPrice(new ItemStack(MSItems.STONE_SLAB), 20, 30);
 		ConsortRewardHandler.registerPrice(new ItemStack(THRESH_DVD), 350, 400);
 		ConsortRewardHandler.registerPrice(new ItemStack(CREW_POSTER), 350, 400);
 		ConsortRewardHandler.registerPrice(new ItemStack(SBAHJ_POSTER), 350, 400);
-		ConsortRewardHandler.registerPrice(new ItemStack(RECORD_EMISSARY_OF_DANCE), 1000, 1000);
-		ConsortRewardHandler.registerPrice(new ItemStack(RECORD_DANCE_STAB), 1000, 1000);
-		ConsortRewardHandler.registerPrice(new ItemStack(RECORD_RETRO_BATTLE), 1000, 1000);
+		ConsortRewardHandler.registerPrice(new ItemStack(MUSIC_DISC_EMISSARY_OF_DANCE), 1000, 1000);
+		ConsortRewardHandler.registerPrice(new ItemStack(MUSIC_DISC_DANCE_STAB_DANCE), 1000, 1000);
+		ConsortRewardHandler.registerPrice(new ItemStack(MUSIC_DISC_RETRO_BATTLE), 1000, 1000);
 		ConsortRewardHandler.registerPrice(new ItemStack(CRUMPLY_HAT), 80, 100);
 		ConsortRewardHandler.registerPrice(new ItemStack(GRIMOIRE), 666, 666);
 		ConsortRewardHandler.registerPrice(new ItemStack(POGO_CLUB), 900, 1200);
@@ -244,7 +245,7 @@ public class ConsortRewardHandler
 	
 	public static List<Pair<ItemStack, Integer>> generateStock(ResourceLocation lootTable, ConsortEntity consort, Random rand)
 	{
-		LootContext.Builder contextBuilder = new LootContext.Builder((ServerWorld) consort.world).withParameter(LootParameters.THIS_ENTITY, consort);
+		LootContext.Builder contextBuilder = new LootContext.Builder((ServerWorld) consort.world).withParameter(LootParameters.THIS_ENTITY, consort).withParameter(LootParameters.POSITION, new BlockPos(consort));
 		List<ItemStack> itemStacks = consort.getServer().getLootTableManager().getLootTableFromLocation(lootTable).generate(contextBuilder.build(LootParameterSets.GIFT));
 		List<Pair<ItemStack, Integer>> itemPriceList = new ArrayList<>();
 		stackLoop:

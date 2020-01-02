@@ -149,9 +149,8 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 				if(entityplayer.abilities.isCreativeMode)
 					return;
 			}
-			//TODO
 			
-				this.entityDropItem(this.getStackDropped(), 0.0F);
+			this.entityDropItem(this.getStackDropped());
 		}
 			
 	}

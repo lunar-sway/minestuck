@@ -4,8 +4,8 @@ import java.util.EnumSet;
 import java.util.Set;
 
 import com.mraof.minestuck.entity.FrogEntity;
-import com.mraof.minestuck.entity.ModEntityTypes;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.entity.MSEntityTypes;
+import com.mraof.minestuck.item.MSItems;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
@@ -29,7 +29,7 @@ public class ShopPosterEntity extends HangingArtEntity<ShopPosterEntity.ShopArt>
 	
 	public ShopPosterEntity(World worldIn, BlockPos pos, Direction direction, ItemStack stack, int meta)
 	{
-		super(ModEntityTypes.SHOP_POSTER, worldIn, pos, direction, stack, meta, false);
+		super(MSEntityTypes.SHOP_POSTER, worldIn, pos, direction, stack, meta, false);
 		setPosterType(meta);
 	}
 	
@@ -56,7 +56,7 @@ public class ShopPosterEntity extends HangingArtEntity<ShopPosterEntity.ShopArt>
 	@Override
 	public ItemStack getStackDropped()
 	{
-		return new ItemStack(MinestuckItems.SHOP_POSTER);//, 1, getPosterType()); TODO poster subtypes
+		return new ItemStack(MSItems.SHOP_POSTER);//, 1, getPosterType()); TODO poster subtypes
 	}
 	
 	private void setPosterType(int i)

@@ -1,6 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.TitleSelectPacket;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.util.EnumClass;
@@ -9,11 +9,15 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 public class TitleSelectorScreen extends Screen
 {
+	public static final String TITLE = "minestuck.title_selector";
+	public static final String SELECT_TITLE = "minestuck.select_title";
+	public static final String USED_TITLE = "minestuck.select_title.used";
+	
 	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/title_selector.png");
 	private static final int guiWidth = 186, guiHeight = 157;
 	
@@ -27,7 +31,7 @@ public class TitleSelectorScreen extends Screen
 	
 	TitleSelectorScreen(Title title)
 	{
-		super(new StringTextComponent("Title Selector"));
+		super(new TranslationTextComponent(TITLE));
 		previous = title;
 	}
 	
@@ -71,11 +75,11 @@ public class TitleSelectorScreen extends Screen
 		this.minecraft.getTextureManager().bindTexture(guiBackground);
 		this.blit(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
-		String message = previous == null ? I18n.format("gui.selectTitle") : I18n.format("gui.selectTitle.used", previous.getTitleName());
-		font.drawString(message, (this.width / 2) - font.getStringWidth(message) / 2, yOffset + 12, 0x404040);
+		String message = previous == null ? I18n.format(SELECT_TITLE) : I18n.format(USED_TITLE, previous.asTextComponent().getFormattedText());
+		font.drawString(message, (this.width / 2F) - font.getStringWidth(message) / 2F, yOffset + 12, 0x404040);
 		
-		message = I18n.format("title.format", "", "");
-		font.drawString(message, (this.width / 2) - font.getStringWidth(message) / 2, yOffset + 56 - font.FONT_HEIGHT/2, 0x404040);
+		message = I18n.format(Title.FORMAT, "", "");
+		font.drawString(message, (this.width / 2F) - font.getStringWidth(message) / 2F, yOffset + 56 - font.FONT_HEIGHT/2F, 0x404040);
 		
 		super.render(mouseX, mouseY, partialTicks);
 		
@@ -99,7 +103,7 @@ public class TitleSelectorScreen extends Screen
 	
 	private void select()
 	{
-		MinestuckPacketHandler.sendToServer(new TitleSelectPacket(currentClass, currentAspect));
+		MSPacketHandler.sendToServer(new TitleSelectPacket(new Title(currentClass, currentAspect)));
 		sendPacket = false;
 		minecraft.displayGuiScreen(null);
 	}
@@ -108,7 +112,7 @@ public class TitleSelectorScreen extends Screen
 	public void onClose()
 	{
 		if(sendPacket)
-			MinestuckPacketHandler.sendToServer(new TitleSelectPacket());
+			MSPacketHandler.sendToServer(new TitleSelectPacket());
 	}
 	
 }

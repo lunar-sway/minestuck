@@ -1,23 +1,31 @@
 {
-    "display": {
-        "icon": {
-            "item": "minestuck:stone",
-            "data": 4
-        },
-        "title": {
-            "translate": "advancements.minestuck.find_dungeon.title"
-        },
-        "description": {
-            "translate": "advancements.minestuck.find_dungeon.description"
-        }
+  "parent": "minestuck:minestuck/return_node",
+  "display": {
+    "icon": {
+      "item": "minestuck:frost_bricks"
     },
-    "parent": "minestuck:minestuck/return_node",
-    "criteria": {
-        "imp_dungeon": {
-            "trigger": "minecraft:location",
-            "conditions": {
-                "feature": "MinestuckImpDungeon"
-            }
-        }
+    "title": {
+      "translate": "advancements.minestuck.dungeon.title"
+    },
+    "description": {
+      "translate": "advancements.minestuck.dungeon.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "imp_dungeon": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "feature": "minestuck:imp_dungeon"
+      }
     }
+  },
+  "requirements": [
+    [
+      "imp_dungeon"
+    ]
+  ]
 }

@@ -2,8 +2,8 @@ package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.CruxiteDowelBlock;
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.item.MSItems;
 
 import com.mraof.minestuck.util.ColorCollector;
 import net.minecraft.block.BlockState;
@@ -23,7 +23,7 @@ public class CruxtruderTileEntity extends TileEntity
 	
 	public CruxtruderTileEntity()
 	{
-		super(ModTileEntityTypes.CRUXTRUDER);
+		super(MSTileEntityTypes.CRUXTRUDER);
 	}
 	
 	public int getColor()
@@ -51,12 +51,12 @@ public class CruxtruderTileEntity extends TileEntity
 		{
 			BlockPos pos = getPos().up();
 			BlockState state = getWorld().getBlockState(pos);
-			if(top && MinestuckConfig.cruxtruderIntake && state.isAir(getWorld(), pos) && material < 64 && material > -1)
+			if(top && MinestuckConfig.cruxtruderIntake.get() && state.isAir(getWorld(), pos) && material < 64 && material > -1)
 			{
 				ItemStack stack = player.getHeldItemMainhand();
-				if(stack.getItem() != MinestuckItems.RAW_CRUXITE)
+				if(stack.getItem() != MSItems.RAW_CRUXITE)
 					stack = player.getHeldItemOffhand();
-				if(stack.getItem() == MinestuckItems.RAW_CRUXITE)
+				if(stack.getItem() == MSItems.RAW_CRUXITE)
 				{
 					int count = 1;
 					if(player.isSneaking())	//Doesn't actually work just yet
@@ -66,20 +66,20 @@ public class CruxtruderTileEntity extends TileEntity
 				}
 			} else if(!top)
 			{
-				if(state.getBlock() == MinestuckBlocks.CRUXITE_DOWEL)
+				if(state.getBlock() == MSBlocks.CRUXITE_DOWEL)
 				{
 					CruxiteDowelBlock.dropDowel(getWorld(), pos);
 				} else if(state.isAir(getWorld(), pos))
 				{
-					if(MinestuckConfig.cruxtruderIntake && material == 0)
+					if(MinestuckConfig.cruxtruderIntake.get() && material == 0)
 					{
 						world.playEvent(1001, pos, 0);
 					} else
 					{
-						world.setBlockState(pos, MinestuckBlocks.CRUXITE_DOWEL.getDefaultState().with(CruxiteDowelBlock.DOWEL_TYPE, CruxiteDowelBlock.Type.CRUXTRUDER));
+						world.setBlockState(pos, MSBlocks.CRUXITE_DOWEL.getDefaultState().with(CruxiteDowelBlock.DOWEL_TYPE, CruxiteDowelBlock.Type.CRUXTRUDER));
 						TileEntity te = world.getTileEntity(pos);
 						if(te instanceof ItemStackTileEntity)
-							ColorCollector.setColor(((ItemStackTileEntity) te).getStack(), color + 1);
+							ColorCollector.setColor(((ItemStackTileEntity) te).getStack(), color);
 						if(material > 0)
 							material--;
 					}

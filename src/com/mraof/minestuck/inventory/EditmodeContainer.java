@@ -3,7 +3,7 @@ package com.mraof.minestuck.inventory;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.EditmodeInventoryPacket;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import net.minecraft.entity.player.PlayerEntity;
@@ -30,7 +30,7 @@ public class EditmodeContainer extends Container
 	
 	public EditmodeContainer(int windowId, PlayerInventory playerInventory)
 	{
-		super(ModContainerTypes.EDITMODE, windowId);
+		super(MSContainerTypes.EDIT_MODE, windowId);
 		this.player = playerInventory.player;
 		addSlots();
 		if(player instanceof ServerPlayerEntity)
@@ -132,11 +132,10 @@ public class EditmodeContainer extends Container
 		{
 			itemList.add(this.items.size() <= i + scroll*2? ItemStack.EMPTY:this.items.get(i + scroll*2));
 			this.inventory.setInventorySlotContents(i, itemList.get(i));
-			this.items.set(i, itemList.get(i));
 		}
 		
 		EditmodeInventoryPacket packet = EditmodeInventoryPacket.update(itemList, scroll > 0, scroll*2 + 14 < items.size());
-		MinestuckPacketHandler.sendToPlayer(packet, (ServerPlayerEntity) player);
+		MSPacketHandler.sendToPlayer(packet, (ServerPlayerEntity) player);
 	}
 	
 	private static class ToolbarSlot extends Slot

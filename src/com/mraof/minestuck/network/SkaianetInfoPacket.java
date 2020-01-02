@@ -1,26 +1,25 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.network.skaianet.ReducedConnection;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.IdentifierHandler;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
 
-public class SkaianetInfoPacket
+public class SkaianetInfoPacket implements PlayToBothPacket
 {
 	public int playerId;
 	public boolean isClientResuming, isServerResuming;
 	public Map<Integer, String> openServers;
-	public List<SburbConnection> connections;
+	public List<SburbConnection> connectionsFrom;
+	public List<ReducedConnection> connectionsTo;
 	public List<List<Integer>> landChains;
 	
 	public static SkaianetInfoPacket landChains(List<List<Integer>> landChains)
@@ -38,7 +37,7 @@ public class SkaianetInfoPacket
 		packet.isClientResuming = isClientResuming;
 		packet.isServerResuming = isServerResuming;
 		packet.openServers = openServers;
-		packet.connections = connections;
+		packet.connectionsFrom = connections;
 		
 		return packet;
 	}
@@ -51,6 +50,7 @@ public class SkaianetInfoPacket
 		return packet;
 	}
 	
+	@Override
 	public void encode(PacketBuffer buffer)
 	{
 		if(landChains != null) //Land chain data
@@ -67,7 +67,7 @@ public class SkaianetInfoPacket
 			buffer.writeBoolean(false);
 			buffer.writeInt(playerId);
 			
-			if(connections != null)
+			if(connectionsFrom != null)
 			{
 				
 				buffer.writeBoolean(isClientResuming);
@@ -80,7 +80,7 @@ public class SkaianetInfoPacket
 					buffer.writeString(entry.getValue(), 16);
 				}
 				
-				for(SburbConnection connection : connections)
+				for(SburbConnection connection : connectionsFrom)
 					connection.toBuffer(buffer);
 			}
 		}
@@ -112,23 +112,13 @@ public class SkaianetInfoPacket
 				packet.openServers = new HashMap<>();
 				for(int i = 0; i < size; i++)
 					packet.openServers.put(buffer.readInt(), buffer.readString(16));
-				packet.connections = new ArrayList<>();
+				packet.connectionsTo = new ArrayList<>();
 				while(buffer.readableBytes() > 0)
-					packet.connections.add(SkaiaClient.getConnectionFromBuffer(buffer));
+					packet.connectionsTo.add(ReducedConnection.read(buffer));
 			}
 		}
 		
 		return packet;
-	}
-	
-	public void consume(Supplier<NetworkEvent.Context> ctx)
-	{
-		if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER)
-			ctx.get().enqueueWork(() -> this.execute(ctx.get().getSender()));
-		else if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT)
-			ctx.get().enqueueWork(this::execute);
-		
-		ctx.get().setPacketHandled(true);
 	}
 	
 	public void execute()

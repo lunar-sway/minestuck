@@ -17,7 +17,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
@@ -67,12 +66,12 @@ public class FrogItem extends Item
 
 					if(nbt.contains("EyeType"))for(int i = 0; i <= FrogEntity.maxEyes(); i++)
 					{
-						if(eyeType == i)tooltip.add(new TranslationTextComponent("item.minestuck.frog.eyes"+i));
+						if(eyeType == i)tooltip.add(new TranslationTextComponent(getTranslationKey() + ".eyes"+i));
 					}
 
 					if(nbt.contains("EyeType"))for(int i = 1; i <= FrogEntity.maxBelly(); i++)
 					{
-						if(bellyType == i)tooltip.add(new TranslationTextComponent("item.minestuck.frog.belly"+i));
+						if(bellyType == i)tooltip.add(new TranslationTextComponent(getTranslationKey() + ".belly"+i));
 					}
 
 			}
@@ -80,8 +79,8 @@ public class FrogItem extends Item
 			{
 				switch(type)
 				{
-					case 4: tooltip.add(new TranslationTextComponent("item.minestuck.frog.type4")); break;
-					case 6: tooltip.add(new TranslationTextComponent("item.minestuck.frog.type6")); break;
+					case 4: tooltip.add(new TranslationTextComponent(getTranslationKey() + ".desc.4")); break;
+					case 6: tooltip.add(new TranslationTextComponent(getTranslationKey() + ".desc.6")); break;
 				}
 			}
 
@@ -91,15 +90,15 @@ public class FrogItem extends Item
 
 				if(nbt.contains("Size"))
 				{
-					if(size <= 0.4f) 	tooltip.add(new TranslationTextComponent("item.minestuck.frog.size0"));
-					else if(size <= 0.8f) tooltip.add(new TranslationTextComponent("item.minestuck.frog.size1"));
-					else if(size <= 1.4f) tooltip.add(new TranslationTextComponent("item.minestuck.frog.size2"));
-					else if(size <= 2f) tooltip.add(new TranslationTextComponent("item.minestuck.frog.size3"));
-					else				tooltip.add(new TranslationTextComponent("item.minestuck.frog.size4"));
+					if(size <= 0.4f) 	tooltip.add(new TranslationTextComponent(getTranslationKey() + ".size.0"));
+					else if(size <= 0.8f) tooltip.add(new TranslationTextComponent(getTranslationKey() + ".size.1"));
+					else if(size <= 1.4f) tooltip.add(new TranslationTextComponent(getTranslationKey() + ".size.2"));
+					else if(size <= 2f) tooltip.add(new TranslationTextComponent(getTranslationKey() + ".size.3"));
+					else				tooltip.add(new TranslationTextComponent(getTranslationKey() + ".size.4"));
 				}
 			}
 		}
-		else tooltip.add(new TranslationTextComponent("item.minestuck.frog.random"));
+		else tooltip.add(new TranslationTextComponent(getTranslationKey() + ".random"));
 	}
 
 	@Override
@@ -107,7 +106,7 @@ public class FrogItem extends Item
 	{
 		int type = !stack.hasTag() ? 0 : stack.getTag().getInt("Type");
 
-		return new TranslationTextComponent("item.minestuck.frog."+type);
+		return new TranslationTextComponent(getTranslationKey() + ".type."+type);
 
 	}
 

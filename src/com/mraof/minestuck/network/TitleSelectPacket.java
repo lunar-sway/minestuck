@@ -1,41 +1,31 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.client.gui.ModScreenFactories;
+import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
-import com.mraof.minestuck.util.EnumAspect;
-import com.mraof.minestuck.util.EnumClass;
 import com.mraof.minestuck.util.Title;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
 
-import java.util.function.Supplier;
-
-public class TitleSelectPacket
+public class TitleSelectPacket implements PlayToBothPacket
 {
-	private final EnumClass enumClass;
-	private final EnumAspect enumAspect;
+	private final Title title;
 	
 	public TitleSelectPacket()
 	{
-		enumClass = null;
-		enumAspect = null;
+		title = null;
 	}
 	
-	public TitleSelectPacket(EnumClass enumClass, EnumAspect enumAspect)
+	public TitleSelectPacket(Title title)
 	{
-		this.enumClass = enumClass;
-		this.enumAspect = enumAspect;
+		this.title = title;
 	}
 	
+	@Override
 	public void encode(PacketBuffer buffer)
 	{
-		if(enumClass != null && enumAspect != null)
+		if(title != null)
 		{
-			buffer.writeInt(EnumClass.getIntFromClass(enumClass));
-			buffer.writeInt(EnumAspect.getIntFromAspect(enumAspect));
+			title.write(buffer);
 		}
 	}
 	
@@ -43,39 +33,20 @@ public class TitleSelectPacket
 	{
 		if(buffer.readableBytes() > 0)
 		{
-			int classInt = buffer.readInt();
-			int aspectInt = buffer.readInt();
-			return new TitleSelectPacket(EnumClass.getClassFromInt(classInt), EnumAspect.getAspectFromInt(aspectInt));
+			Title title = Title.read(buffer);
+			return new TitleSelectPacket(title);
 		} else return new TitleSelectPacket();
 	}
 	
-	public void consume(Supplier<NetworkEvent.Context> ctx)
-	{
-		if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER)
-			ctx.get().enqueueWork(() -> this.execute(ctx.get().getSender()));
-		else if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT)
-			ctx.get().enqueueWork(this::execute);
-		
-		ctx.get().setPacketHandled(true);
-	}
-	
+	@Override
 	public void execute()
 	{
-		Title title;
-		if(enumClass != null && enumAspect != null)
-			title = new Title(enumClass, enumAspect);
-		else title = null;
-		
-		ModScreenFactories.displayTitleSelectScreen(title);
+		MSScreenFactories.displayTitleSelectScreen(title);
 	}
 	
+	@Override
 	public void execute(ServerPlayerEntity player)
 	{
-		Title title;
-		if(enumClass != null && enumAspect != null)
-			title = new Title(enumClass, enumAspect);
-		else title = null;
-		
 		SburbHandler.titleSelected(player, title);
 	}
 }

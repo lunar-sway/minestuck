@@ -1,8 +1,6 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.editmode.DeployList;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -10,14 +8,13 @@ import net.minecraftforge.fml.network.NetworkEvent;
 import java.util.Arrays;
 import java.util.function.Supplier;
 
-public class ModConfigPacket
+public class ModConfigPacket implements PlayToClientPacket	//TODO It might be that configs are synced already. Check if this packet actually is needed for the typical config options
 {
 	
 	boolean mode;
 	
 	int overWorldEditRange;
 	int landEditRange;
-	int cardCost;
 	int alchemiterStacks;
 	int windowIdStart;
 	byte treeModusSetting;
@@ -36,10 +33,10 @@ public class ModConfigPacket
 	public ModConfigPacket()
 	{
 		mode = true;
-		overWorldEditRange = MinestuckConfig.overworldEditRange;
-		landEditRange = MinestuckConfig.landEditRange;
+		overWorldEditRange = MinestuckConfig.overworldEditRange.get();
+		landEditRange = MinestuckConfig.landEditRange.get();
 		//windowIdStart = ContainerHandler.windowIdStart;
-		giveItems = MinestuckConfig.giveItems;
+		giveItems = MinestuckConfig.giveItems.get();
 		hardMode = MinestuckConfig.hardMode;
 		
 		deployValues = Arrays.copyOf(MinestuckConfig.deployConfigurations, MinestuckConfig.deployConfigurations.length);
@@ -52,15 +49,15 @@ public class ModConfigPacket
 	public ModConfigPacket(boolean dataChecker)
 	{
 		mode = false;
-		cardCost = MinestuckConfig.cardCost;
-		alchemiterStacks = MinestuckConfig.alchemiterMaxStacks;
-		disableGristWidget = MinestuckConfig.disableGristWidget;
+		alchemiterStacks = MinestuckConfig.alchemiterMaxStacks.get();
+		disableGristWidget = MinestuckConfig.disableGristWidget.get();
 		treeModusSetting = MinestuckConfig.treeModusSetting;
 		hashmapModusSetting = MinestuckConfig.hashmapChatModusSetting;
 		this.dataChecker = dataChecker;
-		preEntryEcheladder = MinestuckConfig.preEntryRungLimit <= 0;
+		preEntryEcheladder = MinestuckConfig.preEntryRungLimit.get() <= 0;
 	}
 	
+	@Override
 	public void encode(PacketBuffer buffer)
 	{
 		buffer.writeBoolean(mode);
@@ -76,7 +73,6 @@ public class ModConfigPacket
 				buffer.writeBoolean(deployValues[i]);
 		} else
 		{
-			buffer.writeInt(cardCost);
 			buffer.writeInt(alchemiterStacks);
 			buffer.writeBoolean(disableGristWidget);
 			buffer.writeByte(treeModusSetting);
@@ -105,7 +101,6 @@ public class ModConfigPacket
 				packet.deployValues[i] = buffer.readBoolean();
 		} else
 		{
-			packet.cardCost = buffer.readInt();
 			packet.alchemiterStacks = buffer.readInt();
 			packet.disableGristWidget = buffer.readBoolean();
 			packet.treeModusSetting = buffer.readByte();
@@ -125,6 +120,7 @@ public class ModConfigPacket
 		ctx.get().setPacketHandled(true);
 	}
 	
+	@Override
 	public void execute()
 	{
 		if(mode)
@@ -135,13 +131,8 @@ public class ModConfigPacket
 			//ContainerHandler.clientWindowIdStart = windowIdStart;
 			MinestuckConfig.clientHardMode = hardMode;
 			
-			if(!Minestuck.isServerRunning)
-			{
-				DeployList.applyConfigValues(deployValues);
-			}
 		} else
 		{
-			MinestuckConfig.clientCardCost = cardCost;
 			MinestuckConfig.clientAlchemiterStacks = alchemiterStacks;
 			MinestuckConfig.clientDisableGristWidget = disableGristWidget;
 			MinestuckConfig.clientTreeAutobalance = treeModusSetting;

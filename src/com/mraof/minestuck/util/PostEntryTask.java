@@ -1,10 +1,12 @@
 package com.mraof.minestuck.util;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
 
 import static com.mraof.minestuck.MinestuckConfig.artifactRange;
@@ -41,16 +43,16 @@ public class PostEntryTask
 	
 	public PostEntryTask(CompoundNBT nbt)
 	{
-		this(DimensionType.byName(ResourceLocation.tryCreate(nbt.getString("dimension"))), nbt.getInt("x"), nbt.getInt("y"), nbt.getInt("z"), nbt.getInt("entrySize"), nbt.getByte("entryType"));
+		this(MSNBTUtil.tryReadDimensionType(nbt, "dimension"), nbt.getInt("x"), nbt.getInt("y"), nbt.getInt("z"), nbt.getInt("entrySize"), nbt.getByte("entryType"));
 		this.index = nbt.getInt("index");
 		if(dimension == null)
 			Debug.warnf("Unable to load dimension type by name %s!", nbt.getString("dimension"));
 	}
 	
-	public CompoundNBT toNBTTagCompound()
+	public CompoundNBT write()
 	{
 		CompoundNBT nbt = new CompoundNBT();
-		nbt.putString("dimension", dimension.getRegistryName().toString());
+		MSNBTUtil.tryWriteDimensionType(nbt, "dimension", dimension);
 		nbt.putInt("x", x);
 		nbt.putInt("y", y);
 		nbt.putInt("z", z);
@@ -63,11 +65,15 @@ public class PostEntryTask
 	
 	public boolean onTick(MinecraftServer server)
 	{
-		ServerWorld world = server.getWorld(dimension);
+		if(isDone())
+			return false;
+		
+		ServerWorld world = dimension != null ? server.getWorld(dimension) : null;
 		
 		if(world == null)
 		{
 			Debug.errorf("Couldn't find world for dimension %d when performing post entry preparations! Cancelling task.", dimension);
+			setDone();
 			return true;
 		}
 		
@@ -83,7 +89,7 @@ public class PostEntryTask
 					int zWidth = (int) Math.sqrt(entrySize * entrySize - (blockX - x) * (blockX - x));
 					for(int blockZ = z - zWidth; blockZ <= z + zWidth; blockZ++)
 					{
-						int height = (int) Math.sqrt(artifactRange * artifactRange - (((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2));
+						int height = (int) Math.sqrt(artifactRange.get() * artifactRange.get() - (((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2));
 						if(blockX == x - entrySize || blockX == x + entrySize || blockZ == z - zWidth || blockZ == z + zWidth)
 							for(int blockY = y - height; blockY <= Math.min(128, y + height); blockY++)
 								i = updateBlock(new BlockPos(blockX, blockY, blockZ), world, i, true);
@@ -101,11 +107,22 @@ public class PostEntryTask
 			}
 			
 			Debug.infof("Completed entry block updates for dimension %s.", dimension.getRegistryName());
+			setDone();
 			return true;
 		}
 		
 		Debug.debugf("Updated %d blocks this tick.", index - preIndex);
-		return false;
+		return index != preIndex;
+	}
+	
+	public boolean isDone()
+	{
+		return index == -1;
+	}
+	
+	private void setDone()
+	{
+		index = -1;
 	}
 	
 	private int updateBlock(BlockPos pos, ServerWorld world, int i, boolean blockUpdate)
@@ -114,7 +131,14 @@ public class PostEntryTask
 		{
 			if(blockUpdate)
 				world.notifyNeighborsOfStateChange(pos, world.getBlockState(pos).getBlock());
-			//world.lightcheckLight(pos);
+			world.getChunkProvider().getLightManager().checkBlock(pos);
+			IChunk chunk = world.getChunk(pos);
+			BlockState state = chunk.getBlockState(pos);
+			int x = pos.getX() & 15, y = pos.getY(), z = pos.getZ() & 15;
+			chunk.getHeightmap(Heightmap.Type.MOTION_BLOCKING).update(x, y, z, state);
+			chunk.getHeightmap(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES).update(x, y, z, state);
+			chunk.getHeightmap(Heightmap.Type.OCEAN_FLOOR).update(x, y, z, state);
+			chunk.getHeightmap(Heightmap.Type.WORLD_SURFACE).update(x, y, z, state);
 			index++;
 		}
 		return i + 1;

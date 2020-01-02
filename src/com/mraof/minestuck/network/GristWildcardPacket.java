@@ -1,55 +1,47 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.tileentity.AlchemiterTileEntity;
 import com.mraof.minestuck.tileentity.MiniAlchemiterTileEntity;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.alchemy.GristType;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
 
-import java.util.function.Supplier;
+import java.util.Objects;
 
-public class GristWildcardPacket
+public class GristWildcardPacket implements PlayToServerPacket
 {
 	
-	private final BlockPos pos;
 	private final GristType gristType;
+	private final BlockPos pos;
 	
 	public GristWildcardPacket(BlockPos pos, GristType gristType)
 	{
-		this.pos = pos;	//TODO Pos can now be null. If it is, check if the players container is instance of MiniAlchemiterContainer
-		this.gristType = gristType;
+		this.gristType = Objects.requireNonNull(gristType);
+		this.pos = Objects.requireNonNull(pos);
 	}
 	
+	@Override
 	public void encode(PacketBuffer buffer)
 	{
+		buffer.writeRegistryId(gristType);
 		buffer.writeBlockPos(pos);
-		buffer.writeInt(GristType.REGISTRY.getID(gristType));
 	}
 	
 	public static GristWildcardPacket decode(PacketBuffer buffer)
 	{
+		GristType gristType = buffer.readRegistryIdSafe(GristType.class);
 		BlockPos pos = buffer.readBlockPos();
-		GristType gristType = GristType.REGISTRY.getValue(buffer.readInt());
 		
 		return new GristWildcardPacket(pos, gristType);
 	}
 	
-	public void consume(Supplier<NetworkEvent.Context> ctx)
-	{
-		if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER)
-			ctx.get().enqueueWork(() -> this.execute(ctx.get().getSender()));
-		
-		ctx.get().setPacketHandled(true);
-	}
-	
+	@Override
 	public void execute(ServerPlayerEntity player)
 	{
-		if(player.getEntityWorld().isAreaLoaded(pos, 0))
+		if(player != null && player.getEntityWorld().isAreaLoaded(pos, 0))
 		{
 			TileEntity te = player.getEntityWorld().getTileEntity(pos);
 			if(te instanceof MiniAlchemiterTileEntity)

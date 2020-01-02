@@ -1,6 +1,7 @@
 package com.mraof.minestuck.util;
 
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +12,8 @@ import java.util.List;
  */
 public class ColorCollector
 {
+	public static final int DEFAULT_COLOR = 0xA0DCFF;
 	private static List<Integer> colors;
-//	protected static boolean customColor;
 	
 	//client only
 	public static int playerColor;
@@ -49,7 +50,7 @@ public class ColorCollector
 	public static int getColor(int index)
 	{
 		if(index < 0 || index >= colors.size())
-			index = 0;
+			return DEFAULT_COLOR;
 		return colors.get(index);
 	}
 	
@@ -58,16 +59,21 @@ public class ColorCollector
 		return colors.size();
 	}
 	
+	public static ItemStack setDefaultColor(ItemStack stack)
+	{
+		return setColor(stack, DEFAULT_COLOR);
+	}
+	
 	public static ItemStack setColor(ItemStack stack, int color)
 	{
 		stack.getOrCreateTag().putInt("color", color);
 		return stack;
 	}
 	
-	public static int getColorFromStack(ItemStack stack, int defaultColor)
+	public static int getColorFromStack(ItemStack stack)
 	{
-		if(stack.hasTag() && stack.getTag().contains("color", 99))
+		if(stack.hasTag() && stack.getTag().contains("color", Constants.NBT.TAG_ANY_NUMERIC))
 			return stack.getTag().getInt("color");
-		else return defaultColor;
+		else return DEFAULT_COLOR;
 	}
 }

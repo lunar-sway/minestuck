@@ -1,6 +1,5 @@
 {
-  "type": "crafting_shaped",
-  "group": "minestuck:stairs",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "#  ",
     "## ",

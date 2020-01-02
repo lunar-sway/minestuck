@@ -4,8 +4,8 @@ import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.IdentifierHandler;
 
-import com.mraof.minestuck.world.biome.ModBiomes;
-import com.mraof.minestuck.world.gen.ModWorldGenTypes;
+import com.mraof.minestuck.world.biome.MSBiomes;
+import com.mraof.minestuck.world.gen.MSWorldGenTypes;
 import com.mraof.minestuck.world.gen.SkaiaGenSettings;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
@@ -33,10 +33,10 @@ public class SkaiaDimension extends Dimension
 	@Override
 	public ChunkGenerator<?> createChunkGenerator()
 	{
-		SkaiaGenSettings settings = ModWorldGenTypes.SKAIA.createSettings();
+		SkaiaGenSettings settings = MSWorldGenTypes.SKAIA.createSettings();
 		settings.setDefaultBlock(Blocks.STONE.getDefaultState());
 		settings.setDefaultFluid(Blocks.AIR.getDefaultState());
-		return ModWorldGenTypes.SKAIA.create(this.world, BiomeProviderType.FIXED.create(BiomeProviderType.FIXED.createSettings().setBiome(ModBiomes.SKAIA)), settings);
+		return MSWorldGenTypes.SKAIA.create(this.world, BiomeProviderType.FIXED.create(BiomeProviderType.FIXED.createSettings().setBiome(MSBiomes.SKAIA)), settings);
 	}
 	
 	@Override

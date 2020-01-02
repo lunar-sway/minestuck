@@ -1,19 +1,18 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.block.AlchemiterBlock;
 import com.mraof.minestuck.block.EnumDowelType;
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.client.gui.ModScreenFactories;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
-import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.client.gui.MSScreenFactories;
+import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.crafting.alchemy.*;
+import com.mraof.minestuck.util.AlchemiterUpgrades;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -41,12 +40,12 @@ public class AlchemiterTileEntity extends TileEntity
 	
 	public AlchemiterTileEntity()
 	{
-		super(ModTileEntityTypes.ALCHEMITER);
+		super(MSTileEntityTypes.ALCHEMITER);
 	}
 	
 	public void setDowel(ItemStack newDowel)
 	{
-		if(newDowel.getItem() == MinestuckBlocks.CRUXITE_DOWEL.asItem() || newDowel.isEmpty())
+		if(newDowel.getItem() == MSBlocks.CRUXITE_DOWEL.asItem() || newDowel.isEmpty())
 		{
 			dowel = newDowel;
 			if(world != null)
@@ -78,7 +77,7 @@ public class AlchemiterTileEntity extends TileEntity
 		else return AlchemyRecipes.createCard(new ItemStack(AlchemyRecipes.getDecodedItem(dowel).getItem(), 1), false);
 		}
 		else */if (!AlchemyRecipes.hasDecodedItem(dowel))
-			return new ItemStack(MinestuckBlocks.GENERIC_OBJECT);
+			return new ItemStack(MSBlocks.GENERIC_OBJECT);
 		else return AlchemyRecipes.getDecodedItem(dowel);
 	}
 	
@@ -193,7 +192,7 @@ public class AlchemiterTileEntity extends TileEntity
 	{
 		if(!dowel.isEmpty())
 		{
-			InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(MinestuckItems.RAW_CRUXITE, 1));
+			InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(MSItems.RAW_CRUXITE, 1));
 			setDowel(ItemStack.EMPTY);
 		}
 	}
@@ -233,25 +232,25 @@ public class AlchemiterTileEntity extends TileEntity
 		Direction x = direction.rotateYCCW();
 		Direction z = direction.getOpposite();
 		BlockPos pos = getPos().down();
-		if(!world.getBlockState(pos.up(3)).equals(MinestuckBlocks.ALCHEMITER.UPPER_ROD.getDefaultState().with(AlchemiterBlock.FACING, direction)) ||
-				!world.getBlockState(pos.up(2)).equals(MinestuckBlocks.ALCHEMITER.LOWER_ROD.getDefaultState().with(AlchemiterBlock.FACING, direction)) ||
+		if(!world.getBlockState(pos.up(3)).equals(MSBlocks.ALCHEMITER.UPPER_ROD.getDefaultState().with(AlchemiterBlock.FACING, direction)) ||
+				!world.getBlockState(pos.up(2)).equals(MSBlocks.ALCHEMITER.LOWER_ROD.getDefaultState().with(AlchemiterBlock.FACING, direction)) ||
 				//!world.getBlockState(pos.up()).equals(MinestuckBlocks.ALCHEMITER.TOTEM_PAD.getDefaultState().with(BlockAlchemiter.FACING, direction)) ||
-				!world.getBlockState(pos).equals(MinestuckBlocks.ALCHEMITER.TOTEM_CORNER.getDefaultState().with(AlchemiterBlock.FACING, direction)) ||
-				!world.getBlockState(pos.offset(x)).equals(MinestuckBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, direction)) ||
-				!world.getBlockState(pos.offset(x, 2)).equals(MinestuckBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, direction)) ||
-				!world.getBlockState(pos.offset(z).offset(x)).equals(MinestuckBlocks.ALCHEMITER.CENTER.getDefaultState().with(AlchemiterBlock.FACING, direction)) ||
-				!world.getBlockState(pos.offset(x, 3)).equals(MinestuckBlocks.ALCHEMITER.CORNER.getDefaultState().with(AlchemiterBlock.FACING, direction.rotateYCCW())) ||
-				!world.getBlockState(pos.offset(z).offset(x, 3)).equals(MinestuckBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, direction.rotateYCCW())) ||
-				!world.getBlockState(pos.offset(z, 2).offset(x, 3)).equals(MinestuckBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, direction.rotateYCCW())) ||
-				!world.getBlockState(pos.offset(z).offset(x, 2)).equals(MinestuckBlocks.ALCHEMITER.CENTER.getDefaultState().with(AlchemiterBlock.FACING, direction.rotateYCCW())) ||
-				!world.getBlockState(pos.offset(z, 3).offset(x, 3)).equals(MinestuckBlocks.ALCHEMITER.CORNER.getDefaultState().with(AlchemiterBlock.FACING, direction.getOpposite())) ||
-				!world.getBlockState(pos.offset(z, 3).offset(x, 2)).equals(MinestuckBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, direction.getOpposite())) ||
-				!world.getBlockState(pos.offset(z, 3).offset(x, 1)).equals(MinestuckBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, direction.getOpposite())) ||
-				!world.getBlockState(pos.offset(z, 2).offset(x, 2)).equals(MinestuckBlocks.ALCHEMITER.CENTER.getDefaultState().with(AlchemiterBlock.FACING, direction.getOpposite())) ||
-				!world.getBlockState(pos.offset(z, 3)).equals(MinestuckBlocks.ALCHEMITER.CORNER.getDefaultState().with(AlchemiterBlock.FACING, direction.rotateY())) ||
-				!world.getBlockState(pos.offset(z, 2)).equals(MinestuckBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, direction.rotateY())) ||
-				!world.getBlockState(pos.offset(z)).equals(MinestuckBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, direction.rotateY())) ||
-				!world.getBlockState(pos.offset(z, 2).offset(x, 1)).equals(MinestuckBlocks.ALCHEMITER.CENTER.getDefaultState().with(AlchemiterBlock.FACING, direction.rotateY())))
+				!world.getBlockState(pos).equals(MSBlocks.ALCHEMITER.TOTEM_CORNER.getDefaultState().with(AlchemiterBlock.FACING, direction)) ||
+				!world.getBlockState(pos.offset(x)).equals(MSBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, direction)) ||
+				!world.getBlockState(pos.offset(x, 2)).equals(MSBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, direction)) ||
+				!world.getBlockState(pos.offset(z).offset(x)).equals(MSBlocks.ALCHEMITER.CENTER.getDefaultState().with(AlchemiterBlock.FACING, direction)) ||
+				!world.getBlockState(pos.offset(x, 3)).equals(MSBlocks.ALCHEMITER.CORNER.getDefaultState().with(AlchemiterBlock.FACING, direction.rotateYCCW())) ||
+				!world.getBlockState(pos.offset(z).offset(x, 3)).equals(MSBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, direction.rotateYCCW())) ||
+				!world.getBlockState(pos.offset(z, 2).offset(x, 3)).equals(MSBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, direction.rotateYCCW())) ||
+				!world.getBlockState(pos.offset(z).offset(x, 2)).equals(MSBlocks.ALCHEMITER.CENTER.getDefaultState().with(AlchemiterBlock.FACING, direction.rotateYCCW())) ||
+				!world.getBlockState(pos.offset(z, 3).offset(x, 3)).equals(MSBlocks.ALCHEMITER.CORNER.getDefaultState().with(AlchemiterBlock.FACING, direction.getOpposite())) ||
+				!world.getBlockState(pos.offset(z, 3).offset(x, 2)).equals(MSBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, direction.getOpposite())) ||
+				!world.getBlockState(pos.offset(z, 3).offset(x, 1)).equals(MSBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, direction.getOpposite())) ||
+				!world.getBlockState(pos.offset(z, 2).offset(x, 2)).equals(MSBlocks.ALCHEMITER.CENTER.getDefaultState().with(AlchemiterBlock.FACING, direction.getOpposite())) ||
+				!world.getBlockState(pos.offset(z, 3)).equals(MSBlocks.ALCHEMITER.CORNER.getDefaultState().with(AlchemiterBlock.FACING, direction.rotateY())) ||
+				!world.getBlockState(pos.offset(z, 2)).equals(MSBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, direction.rotateY())) ||
+				!world.getBlockState(pos.offset(z)).equals(MSBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, direction.rotateY())) ||
+				!world.getBlockState(pos.offset(z, 2).offset(x, 1)).equals(MSBlocks.ALCHEMITER.CENTER.getDefaultState().with(AlchemiterBlock.FACING, direction.rotateY())))
 			
 		{
 			breakMachine();
@@ -270,14 +269,10 @@ public class AlchemiterTileEntity extends TileEntity
 	public void read(CompoundNBT compound)
 	{
 		super.read(compound);
-
-		if(compound.contains("gristType"))
-			this.wildcardGrist = GristType.getTypeFromString(compound.getString("gristType"));
-		if(this.wildcardGrist == null)
-		{
-			this.wildcardGrist = GristType.BUILD;
-		}
 		
+		wildcardGrist = GristType.read(compound, "gristType");
+		
+		/*
 		this.upgraded = compound.getBoolean("upgraded");
 		
 		if(upgraded)
@@ -287,6 +282,7 @@ public class AlchemiterTileEntity extends TileEntity
 				setUpgrade(ItemStack.read(compound.getCompound("upgrade" + i)), i);
 			}
 		}
+		*/
 		
 		broken = compound.getBoolean("broken");
 		
@@ -338,13 +334,13 @@ public class AlchemiterTileEntity extends TileEntity
 	{
 		if(worldIn.isRemote)
 		{
-			if(state.getBlock() == MinestuckBlocks.ALCHEMITER.CENTER || state.getBlock() == MinestuckBlocks.ALCHEMITER.CORNER || state.getBlock() == MinestuckBlocks.ALCHEMITER.LEFT_SIDE
-					|| state.getBlock() == MinestuckBlocks.ALCHEMITER.RIGHT_SIDE || state.getBlock() == MinestuckBlocks.ALCHEMITER.TOTEM_CORNER)
+			if(state.getBlock() == MSBlocks.ALCHEMITER.CENTER || state.getBlock() == MSBlocks.ALCHEMITER.CORNER || state.getBlock() == MSBlocks.ALCHEMITER.LEFT_SIDE
+					|| state.getBlock() == MSBlocks.ALCHEMITER.RIGHT_SIDE || state.getBlock() == MSBlocks.ALCHEMITER.TOTEM_CORNER)
 			{
 				BlockPos mainPos = pos;
 				if(!isBroken())
 				{
-					ModScreenFactories.displayAlchemiterScreen(this);
+					MSScreenFactories.displayAlchemiterScreen(this);
 				}
 			}
 			return;
@@ -362,7 +358,7 @@ public class AlchemiterTileEntity extends TileEntity
 	{
 		if (isUseable(clickedState))
 		{
-			if(clickedState.getBlock() == MinestuckBlocks.ALCHEMITER.TOTEM_PAD)
+			if(clickedState.getBlock() == MSBlocks.ALCHEMITER.TOTEM_PAD)
 			{
 				if (!dowel.isEmpty())
 				{    //Remove dowel from pad
@@ -376,7 +372,7 @@ public class AlchemiterTileEntity extends TileEntity
 				} else
 				{
 					ItemStack heldStack = player.getHeldItemMainhand();
-					if (!heldStack.isEmpty() && heldStack.getItem() == MinestuckBlocks.CRUXITE_DOWEL.asItem())
+					if (!heldStack.isEmpty() && heldStack.getItem() == MSBlocks.CRUXITE_DOWEL.asItem())
 						setDowel(heldStack.split(1));    //Put a dowel on the pad
 				}
 			}
@@ -387,7 +383,7 @@ public class AlchemiterTileEntity extends TileEntity
 	{
 		ItemStack newItem = getOutput();
 		//Clamp quantity
-		quantity = Math.min(newItem.getMaxStackSize() * MinestuckConfig.alchemiterMaxStacks, Math.max(1, quantity));
+		quantity = Math.min(newItem.getMaxStackSize() * MinestuckConfig.alchemiterMaxStacks.get(), Math.max(1, quantity));
 		
 		Direction facing = world.getBlockState(pos).get(AlchemiterBlock.FACING);
 		//get the position to spawn the item
@@ -399,7 +395,7 @@ public class AlchemiterTileEntity extends TileEntity
 		//get the grist cost
 		GristSet cost = getGristCost(quantity);
 		
-		boolean canAfford = GristHelper.canAfford(PlayerSavedData.getGristSet(player), cost);
+		boolean canAfford = GristHelper.canAfford(player, cost);
 		
 		if(canAfford)
 		{
@@ -425,7 +421,6 @@ public class AlchemiterTileEntity extends TileEntity
 			
 			PlayerIdentifier pid = IdentifierHandler.encode(player);
 			GristHelper.decrease(world, pid, cost);
-			MinestuckPlayerTracker.updateGristCache(world.getServer(), pid);
 		}
 	}
 	
@@ -436,23 +431,12 @@ public class AlchemiterTileEntity extends TileEntity
 		ItemStack stack = getOutput();
 		//if(hasUpgrade(AlchemiterUpgrades.captchaCard))
 		//	stack = AlchemyRecipes.getDecodedItem(getOutput());
-		boolean useSelectedType;
-		if(dowel.isEmpty())
+		if(dowel.isEmpty() || world == null)
 			return null;
 		
+		stack.setCount(quantity);
 		//get the grist cost of stack
-		set = AlchemyCostRegistry.getGristConversion(stack);
-
-		//if the item is a captcha card do other stuff
-		useSelectedType = stack.getItem() == MinestuckItems.CAPTCHA_CARD;
-		if (useSelectedType)
-			set = new GristSet(getWildcardGrist(), !world.isRemote ? MinestuckConfig.cardCost : MinestuckConfig.clientCardCost);
-		
-		if (set != null)
-		{
-			//multiply cost by quantity
-			set.scaleGrist(quantity);
-		}
+		set = GristCostRecipe.findCostForItem(stack, getWildcardGrist(), false, world);
 		
 		return set;
 	}

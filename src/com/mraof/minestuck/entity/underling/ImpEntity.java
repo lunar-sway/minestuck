@@ -1,10 +1,11 @@
 package com.mraof.minestuck.entity.underling;
 
-import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.entity.ai.AttackOnCollideWithRateGoal;
-import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.util.Echeladder;
+import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -21,15 +22,9 @@ public class ImpEntity extends UnderlingEntity
 	}
 	
 	@Override
-	protected String getUnderlingName()
-	{
-		return "imp";
-	}
-	
-	@Override
 	public GristSet getGristSpoils()
 	{
-		return GristHelper.getRandomDrop(type, 1);
+		return GristHelper.getRandomDrop(getGristType(), 1);
 	}
 	
 	@Override
@@ -42,17 +37,17 @@ public class ImpEntity extends UnderlingEntity
 	
 	protected SoundEvent getAmbientSound()
 	{
-		return ModSoundEvents.ENTITY_IMP_AMBIENT;
+		return MSSoundEvents.ENTITY_IMP_AMBIENT;
 	}
 	
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
 	{
-		return ModSoundEvents.ENTITY_IMP_HURT;
+		return MSSoundEvents.ENTITY_IMP_HURT;
 	}
 	
 	protected SoundEvent getDeathSound()
 	{
-		return ModSoundEvents.ENTITY_IMP_DEATH;
+		return MSSoundEvents.ENTITY_IMP_DEATH;
 	}
 	
 	@Override
@@ -63,7 +58,7 @@ public class ImpEntity extends UnderlingEntity
 	@Override
 	protected float getMaximumHealth() 
 	{
-		return type != null ? 8*type.getPower() + 6 : 1;
+		return 8 * getGristType().getPower() + 6;
 	}
 	
 	@Override
@@ -75,7 +70,7 @@ public class ImpEntity extends UnderlingEntity
 	@Override
 	protected double getAttackDamage()
 	{
-		return Math.ceil(this.type.getPower() + 1);
+		return Math.ceil(getGristType().getPower() + 1);
 	}
 	
 	@Override
@@ -85,9 +80,9 @@ public class ImpEntity extends UnderlingEntity
 	}
 	
 	@Override
-	protected void applyGristType(GristType type, boolean fullHeal)
+	protected void onGristTypeUpdated(GristType type)
 	{
-		super.applyGristType(type, fullHeal);
+		super.onGristTypeUpdated(type);
 		this.experienceValue = (int) (3 * type.getPower() + 1);
 	}
 	
@@ -96,12 +91,12 @@ public class ImpEntity extends UnderlingEntity
 	{
 		super.onDeath(cause);
 		Entity entity = cause.getTrueSource();
-		if(this.dead && !this.world.isRemote && type != null)
+		if(this.dead && !this.world.isRemote)
 		{
-			computePlayerProgress((int) (2 + 3*type.getPower()));
+			computePlayerProgress((int) (2 + 3* getGristType().getPower()));
 			if(entity instanceof ServerPlayerEntity)
 			{
-				Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) entity).echeladder;
+				Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder();
 				ladder.checkBonus(Echeladder.UNDERLING_BONUS_OFFSET);
 			}
 		}

@@ -1,10 +1,11 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.network.CaptchaDeckPacket;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
-import com.mraof.minestuck.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.ModusDataPacket;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -16,6 +17,7 @@ import java.util.Iterator;
 
 public class HashMapModus extends Modus
 {
+	public static final String MESSAGE = "minestuck.hash_map";
 	
 	protected NonNullList<ItemStack> list;
 	public boolean ejectByChat = true;
@@ -24,9 +26,9 @@ public class HashMapModus extends Modus
 	protected boolean changed;
 	protected NonNullList<ItemStack> items;
 	
-	public HashMapModus(ModusType<? extends HashMapModus> type, LogicalSide side)
+	public HashMapModus(ModusType<? extends HashMapModus> type, PlayerSavedData savedData, LogicalSide side)
 	{
-		super(type, side);
+		super(type, savedData, side);
 	}
 	
 	@Override
@@ -87,19 +89,10 @@ public class HashMapModus extends Modus
 		if(list.size() == 0 || item.isEmpty())
 			return false;
 		
-		//TODO use registry names when 1.13 comes out
+		String itemName = item.getItem().getRegistryName().getPath().replace('_', ' ');
 		
-		String unloc = item.getTranslationKey();
-		unloc = unloc.substring(unloc.indexOf('.')+1, unloc.length());
-
-		if(unloc.indexOf('.') != -1)
-		{
-			String adj = unloc.substring(unloc.indexOf('.')+1, unloc.length());
-			unloc = adj + " " + unloc.substring(0, unloc.indexOf('.'));
-		}
+		int index = ((item.hasDisplayName()) ? item.getDisplayName() : itemName).hashCode() % list.size();	//TODO Perhaps use a custom hashcode function that behaves more like the one in comic
 		
-		int index = ((item.hasDisplayName()) ? item.getDisplayName() : unloc).hashCode() % list.size();
-				
 		if(index < 0)
 			index += list.size();
 		
@@ -110,14 +103,16 @@ public class HashMapModus extends Modus
 					&& otherItem.getCount() + item.getCount() <= otherItem.getMaxStackSize())
 			{
 				otherItem.grow(item.getCount());
+				markDirty();
 				return true;
 			} else CaptchaDeckHandler.launchItem(player, list.get(index));
 		}
 		
 		list.set(index, item);
+		markDirty();
 		
 		if(ejectByChat && MinestuckConfig.hashmapChatModusSetting != 2 || MinestuckConfig.hashmapChatModusSetting == 1)
-			player.sendMessage(new TranslationTextComponent("message.hash_map", item.getTextComponent(), getSize(), index));
+			player.sendMessage(new TranslationTextComponent(MESSAGE, item.getTextComponent(), getSize(), index));
 		
 		return true;
 	}
@@ -148,10 +143,11 @@ public class HashMapModus extends Modus
 	@Override
 	public boolean increaseSize(ServerPlayerEntity player)
 	{
-		if(MinestuckConfig.modusMaxSize > 0 && list.size() >= MinestuckConfig.modusMaxSize)
+		if(MinestuckConfig.modusMaxSize.get() > 0 && list.size() >= MinestuckConfig.modusMaxSize.get())
 			return false;
 		
 		list.add(ItemStack.EMPTY);
+		markDirty();
 		return true;
 	}
 	
@@ -173,6 +169,7 @@ public class HashMapModus extends Modus
 				{
 					CaptchaDeckHandler.launchAnyItem(player, list.get(i));
 					list.set(i, ItemStack.EMPTY);
+					markDirty();
 				}
 			return ItemStack.EMPTY;
 		}
@@ -184,12 +181,14 @@ public class HashMapModus extends Modus
 		if(asCard)
 		{
 			list.remove(id);
+			markDirty();
 			if(item.isEmpty())
-				return new ItemStack(MinestuckItems.CAPTCHA_CARD);
+				return new ItemStack(MSItems.CAPTCHA_CARD);
 			else return AlchemyRecipes.createCard(item, false);
 		} else
 		{
 			list.set(id, ItemStack.EMPTY);
+			markDirty();
 			return item;
 		}
 	}
@@ -209,7 +208,11 @@ public class HashMapModus extends Modus
 	@Override
 	public void setValue(ServerPlayerEntity player, byte type, int value)
 	{
-		ejectByChat = value > 0;
+		if(ejectByChat != value > 0)
+		{
+			ejectByChat = value > 0;
+			markDirty();
+		}
 	}
 	
 	public void onChatMessage(ServerPlayerEntity player, String str)
@@ -243,8 +246,8 @@ public class HashMapModus extends Modus
 		if(number.length() > 0)
 			handleNumber(player, number.toString());
 		
-		CaptchaDeckPacket packet = CaptchaDeckPacket.data(CaptchaDeckHandler.writeToNBT(this));
-		MinestuckPacketHandler.sendToPlayer(packet, player);
+		ModusDataPacket packet = ModusDataPacket.create(CaptchaDeckHandler.writeToNBT(this));
+		MSPacketHandler.sendToPlayer(packet, player);
 		
 	}
 	

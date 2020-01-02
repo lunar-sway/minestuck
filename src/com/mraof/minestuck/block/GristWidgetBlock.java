@@ -24,9 +24,9 @@ import java.util.Map;
 
 public class GristWidgetBlock extends MachineProcessBlock
 {
-	public static final Map<Direction, VoxelShape> SHAPE = createRotatedShapes(2, 0, 5, 14, 2, 12);
+	public static final Map<Direction, VoxelShape> SHAPE = MSBlockShapes.GRIST_WIDGET.createRotatedShapes();
 	
-	public static final BooleanProperty HAS_CARD = MinestuckProperties.HAS_CARD;
+	public static final BooleanProperty HAS_CARD = MSProperties.HAS_CARD;
 	
 	public GristWidgetBlock(Properties properties)
 	{

@@ -1,20 +1,19 @@
 {
-  "type": "crafting_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
-    " ##",
-    "#I ",
-    " I "
+    " ii",
+    "is ",
+    " s "
   ],
   "key": {
-    "#": {
-      "item": "minecraft:iron_ingot"
+    "i": {
+      "tag": "forge:ingots/iron"
     },
-    "I": {
+    "s": {
       "tag": "forge:rods/wooden"
     }
   },
   "result": {
-    "item": "minestuck:claw_hammer",
-    "count": 1
+    "item": "minestuck:claw_hammer"
   }
 }

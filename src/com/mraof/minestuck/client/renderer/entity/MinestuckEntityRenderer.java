@@ -5,9 +5,9 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.util.ResourceLocation;
 
-import com.mraof.minestuck.entity.EntityMinestuck;
+import com.mraof.minestuck.entity.MinestuckEntity;
 
-public class MinestuckEntityRenderer<T extends EntityMinestuck, M extends EntityModel<T>> extends MobRenderer<T, M>
+public class MinestuckEntityRenderer<T extends MinestuckEntity, M extends EntityModel<T>> extends MobRenderer<T, M>
 {
 	
 	public MinestuckEntityRenderer(EntityRendererManager manager, M par1ModelBase, float par2)

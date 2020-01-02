@@ -1,18 +1,20 @@
 package com.mraof.minestuck.event;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.ColorSelectorScreen;
 import com.mraof.minestuck.entity.consort.EnumConsort;
+import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.inventory.ConsortMerchantContainer;
 import com.mraof.minestuck.util.ColorCollector;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.PotionItem;
-import net.minecraft.potion.PotionUtils;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -49,7 +51,7 @@ public class ClientEventHandler
 			if(ColorCollector.displaySelectionGui && Minecraft.getInstance().currentScreen == null)
 			{
 				ColorCollector.displaySelectionGui = false;
-				if(MinestuckConfig.loginColorSelector)
+				if(MinestuckConfig.loginColorSelector.get())
 					Minecraft.getInstance().displayGuiScreen(new ColorSelectorScreen(true));
 			}
 			
@@ -66,37 +68,35 @@ public class ClientEventHandler
 					&& event.getPlayer().openContainer.getInventory().contains(stack))
 			{
 				String unlocalized = stack.getTranslationKey();
-				if(stack.getItem() instanceof PotionItem)
-					unlocalized = PotionUtils.getPotionFromItem(stack).getNamePrefixed("potion.");
 				
-				EnumConsort type = ((ConsortMerchantContainer)event.getPlayer().openContainer).inventory.getConsortType();
-				String arg1 = I18n.format("entity.minestuck." + type.getName() + ".name");
+				EnumConsort type = ((ConsortMerchantContainer)event.getPlayer().openContainer).getConsortType();
+				String arg1 = I18n.format(type.getConsortType().getTranslationKey());
 				
-				String name = "store."+unlocalized+".name";
+				String name = "store."+unlocalized;
 				String tooltip = "store."+unlocalized+".tooltip";
 				event.getToolTip().clear();
 				if(I18n.hasKey(name))
 					event.getToolTip().add(new TranslationTextComponent(name, arg1));
 				else event.getToolTip().add(stack.getDisplayName());
 				if(I18n.hasKey(tooltip))
-					event.getToolTip().add(new TranslationTextComponent(tooltip, arg1));
+					event.getToolTip().add(new TranslationTextComponent(tooltip, arg1).setStyle(new Style().setColor(TextFormatting.GRAY)));
 			} else if(stack.getItem().getRegistryName().getNamespace().equals(Minestuck.MOD_ID))
 			{
 				String name = stack.getTranslationKey() + ".tooltip";
 				if(I18n.hasKey(name))
-					event.getToolTip().add(1, new TranslationTextComponent(name));
+					event.getToolTip().add(1, new TranslationTextComponent(name).setStyle(new Style().setColor(TextFormatting.GRAY)));
 			}
 		}
 	}
-	/*
+	
 	@SubscribeEvent
 	public void onFogRender(EntityViewRenderEvent.FogDensity event)
 	{
-		if (event.getState().getBlock() == MinestuckBlocks.blockEnder)
+		if (event.getInfo().getFluidState().getFluid() == MSFluids.ENDER.get())
 		{
 			event.setCanceled(true);
 			event.setDensity(Float.MAX_VALUE);
-			GlStateManager.setFog(GlStateManager.FogMode.EXP);
+			GlStateManager.fogMode(GlStateManager.FogMode.EXP);
 		}
-	}*/
+	}
 }

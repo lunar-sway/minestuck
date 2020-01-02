@@ -1,6 +1,6 @@
 package com.mraof.minestuck.entity.consort;
 
-import com.mraof.minestuck.util.ModSoundEvents;
+import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
@@ -16,22 +16,16 @@ public class IguanaEntity extends ConsortEntity
 	
 	protected SoundEvent getAmbientSound()
 	{
-		return ModSoundEvents.ENTITY_IGUANA_AMBIENT;
+		return MSSoundEvents.ENTITY_IGUANA_AMBIENT;
 	}
 	
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-		return ModSoundEvents.ENTITY_IGUANA_HURT;
+		return MSSoundEvents.ENTITY_IGUANA_HURT;
 	}
 	
 	protected SoundEvent getDeathSound()
 	{
-		return ModSoundEvents.ENTITY_IGUANA_DEATH;
-	}
-	
-	@Override
-	public String getTexture()
-	{
-		return "textures/entity/iguana.png";
+		return MSSoundEvents.ENTITY_IGUANA_DEATH;
 	}
 	
 	@Override

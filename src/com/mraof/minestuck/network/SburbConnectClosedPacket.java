@@ -7,12 +7,8 @@ import com.mraof.minestuck.util.IdentifierHandler;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.management.OpEntry;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
 
-import java.util.function.Supplier;
-
-public class SburbConnectClosedPacket
+public class SburbConnectClosedPacket implements PlayToServerPacket
 {
 	
 	public int player;
@@ -26,6 +22,7 @@ public class SburbConnectClosedPacket
 		this.isClient = isClient;
 	}
 	
+	@Override
 	public void encode(PacketBuffer buffer)
 	{
 		buffer.writeInt(player);
@@ -42,18 +39,11 @@ public class SburbConnectClosedPacket
 		return new SburbConnectClosedPacket(player, otherPlayer, isClient);
 	}
 	
-	public void consume(Supplier<NetworkEvent.Context> ctx)
-	{
-		if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER)
-			ctx.get().enqueueWork(() -> this.execute(ctx.get().getSender()));
-		
-		ctx.get().setPacketHandled(true);
-	}
-	
+	@Override
 	public void execute(ServerPlayerEntity player)
 	{
 		OpEntry opsEntry = player.getServer().getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
-		if((!MinestuckConfig.privateComputers || IdentifierHandler.encode(player).getId() == this.player || opsEntry != null && opsEntry.getPermissionLevel() >= 2) && ServerEditHandler.getData(player) == null)
+		if((!MinestuckConfig.privateComputers.get() || IdentifierHandler.encode(player).getId() == this.player || opsEntry != null && opsEntry.getPermissionLevel() >= 2) && ServerEditHandler.getData(player) == null)
 			SkaianetHandler.get(player.world).closeConnection(IdentifierHandler.getById(this.player), otherPlayer != -1 ? IdentifierHandler.getById(this.otherPlayer) : null, isClient);
 	}
 }

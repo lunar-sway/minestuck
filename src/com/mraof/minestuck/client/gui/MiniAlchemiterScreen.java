@@ -1,14 +1,13 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.AlchemyCostRegistry;
-import com.mraof.minestuck.alchemy.AlchemyRecipes;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.inventory.MiniAlchemiterContainer;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.tileentity.MiniAlchemiterTileEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
@@ -16,6 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 
 import java.util.List;
+import java.util.Optional;
 
 public class MiniAlchemiterScreen extends MachineScreen<MiniAlchemiterContainer>
 {
@@ -62,18 +62,17 @@ public class MiniAlchemiterScreen extends MachineScreen<MiniAlchemiterContainer>
 			//Render grist requirements
 			ItemStack stack;
 			if(!AlchemyRecipes.hasDecodedItem(container.getSlot(0).getStack()))
-				stack = new ItemStack(MinestuckBlocks.GENERIC_OBJECT);
+				stack = new ItemStack(MSBlocks.GENERIC_OBJECT);
 			else stack = AlchemyRecipes.getDecodedItem(container.getSlot(0).getStack());
-
-			GristSet set = AlchemyCostRegistry.getGristConversion(stack);
-			boolean useWildcard = stack.getItem() == MinestuckItems.CAPTCHA_CARD;
-			if (useWildcard)
-				set = new GristSet(container.getWildcardType(), MinestuckConfig.clientCardCost);
+			
+			Optional<GristCostRecipe> recipe = GristCostRecipe.findRecipeForItem(stack, minecraft.world);
+			GristSet set = recipe.map(recipe1 -> recipe1.getGristCost(stack, container.getWildcardType(), false)).orElse(null);
+			boolean useWildcard = recipe.map(GristCostRecipe::canPickWildcard).orElse(false);
 			
 			GuiUtil.drawGristBoard(set, useWildcard ? GuiUtil.GristboardMode.ALCHEMITER_SELECT : GuiUtil.GristboardMode.ALCHEMITER, 9, 45, font);
 
-			List<String> tooltip = GuiUtil.getGristboardTooltip(set, mouseX - this.guiLeft, mouseY - this.guiTop, 9, 45, font);
-			if (tooltip != null)
+			List<String> tooltip = GuiUtil.getGristboardTooltip(set, useWildcard ? GuiUtil.GristboardMode.ALCHEMITER_SELECT : GuiUtil.GristboardMode.ALCHEMITER, mouseX - this.guiLeft, mouseY - this.guiTop, 9, 45, font);
+			if(!tooltip.isEmpty())
 				this.renderTooltip(tooltip, mouseX - this.guiLeft, mouseY - this.guiTop, font);
 
 		}
@@ -110,7 +109,7 @@ public class MiniAlchemiterScreen extends MachineScreen<MiniAlchemiterContainer>
 	public boolean mouseClicked(double par1, double par2, int par3)
 	{
 		boolean b = super.mouseClicked(par1, par2, par3);
-		if (par3 == 0 && minecraft.player.inventory.getItemStack().isEmpty() && AlchemyRecipes.getDecodedItem(container.getSlot(0).getStack()).getItem() == MinestuckItems.CAPTCHA_CARD
+		if (par3 == 0 && minecraft.player.inventory.getItemStack().isEmpty() && AlchemyRecipes.getDecodedItem(container.getSlot(0).getStack()).getItem() == MSItems.CAPTCHA_CARD
 				&& par1 >= guiLeft + 9 && par1 < guiLeft + 167 && par2 >= guiTop + 45 && par2 < guiTop + 70)
 		{
 			minecraft.currentScreen = new GristSelectorScreen(this);

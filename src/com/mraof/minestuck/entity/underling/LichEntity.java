@@ -1,10 +1,11 @@
 package com.mraof.minestuck.entity.underling;
 
-import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.entity.ai.AttackOnCollideWithRateGoal;
-import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.util.Echeladder;
+import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -22,12 +23,6 @@ public class LichEntity extends UnderlingEntity
 	}
 	
 	@Override
-	protected String getUnderlingName()
-	{
-		return "lich";
-	}
-	
-	@Override
 	protected void registerGoals()
 	{
 		super.registerGoals();
@@ -37,23 +32,23 @@ public class LichEntity extends UnderlingEntity
 	
 	protected SoundEvent getAmbientSound()
 	{
-		return ModSoundEvents.ENTITY_LICH_AMBIENT;
+		return MSSoundEvents.ENTITY_LICH_AMBIENT;
 	}
 	
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
 	{
-		return ModSoundEvents.ENTITY_LICH_HURT;
+		return MSSoundEvents.ENTITY_LICH_HURT;
 	}
 	
 	protected SoundEvent getDeathSound()
 	{
-		return ModSoundEvents.ENTITY_LICH_DEATH;
+		return MSSoundEvents.ENTITY_LICH_DEATH;
 	}
 	
 	@Override
 	public GristSet getGristSpoils()
 	{
-		return GristHelper.getRandomDrop(type, 8);
+		return GristHelper.getRandomDrop(getGristType(), 8);
 	}
 	
 	@Override
@@ -65,7 +60,7 @@ public class LichEntity extends UnderlingEntity
 	@Override
 	protected float getMaximumHealth() 
 	{
-		return type != null ? 30*type.getPower() + 175 : 1;
+		return 30 * getGristType().getPower() + 175;
 	}
 	
 	@Override
@@ -77,7 +72,7 @@ public class LichEntity extends UnderlingEntity
 	@Override
 	protected double getAttackDamage()
 	{
-		return Math.ceil(this.type.getPower()*3.4 + 8);
+		return Math.ceil(getGristType().getPower()*3.4 + 8);
 	}
 	
 	@Override
@@ -87,9 +82,9 @@ public class LichEntity extends UnderlingEntity
 	}
 	
 	@Override
-	protected void applyGristType(GristType type, boolean fullHeal)
+	protected void onGristTypeUpdated(GristType type)
 	{
-		super.applyGristType(type, fullHeal);
+		super.onGristTypeUpdated(type);
 		this.experienceValue = (int) (6.5 * type.getPower() + 4);
 	}
 	
@@ -98,12 +93,12 @@ public class LichEntity extends UnderlingEntity
 	{
 		super.onDeath(cause);
 		Entity entity = cause.getTrueSource();
-		if(this.dead && !this.world.isRemote && type != null)
+		if(this.dead && !this.world.isRemote)
 		{
-			computePlayerProgress((int) (300*type.getPower() + 650));
+			computePlayerProgress((int) (300* getGristType().getPower() + 650));
 			if(entity instanceof ServerPlayerEntity)
 			{
-				Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) entity).echeladder;
+				Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder();
 				ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 3));
 			}
 		}

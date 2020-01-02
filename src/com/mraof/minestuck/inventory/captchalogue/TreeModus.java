@@ -1,11 +1,12 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.network.CaptchaDeckPacket;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
-import com.mraof.minestuck.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.advancements.MSCriteriaTriggers;
+import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.ModusDataPacket;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -23,9 +24,9 @@ public class TreeModus extends Modus
 	public int size;
 	public boolean autoBalance = true;
 	
-	public TreeModus(ModusType<? extends TreeModus> type, LogicalSide side)
+	public TreeModus(ModusType<? extends TreeModus> type, PlayerSavedData savedData, LogicalSide side)
 	{
-		super(type, side);
+		super(type, savedData, side);
 	}
 	
 	@Override
@@ -88,6 +89,7 @@ public class TreeModus extends Modus
 		if(node == null)
 			node = new TreeNode(item);
 		else node.addNode(new TreeNode(item));
+		markDirty();
 		autoBalance();
 		return true;
 	}
@@ -112,10 +114,11 @@ public class TreeModus extends Modus
 	@Override
 	public boolean increaseSize(ServerPlayerEntity player)
 	{
-		if(MinestuckConfig.modusMaxSize > 0 && size >= MinestuckConfig.modusMaxSize)
+		if(MinestuckConfig.modusMaxSize.get() > 0 && size >= MinestuckConfig.modusMaxSize.get())
 			return false;
 		
 		size++;
+		markDirty();
 		return true;
 	}
 	
@@ -127,7 +130,8 @@ public class TreeModus extends Modus
 			if(size <= 0 && (node == null || size > node.getSize()))
 				return ItemStack.EMPTY;
 			size--;
-			return new ItemStack(MinestuckItems.CAPTCHA_CARD);
+			markDirty();
+			return new ItemStack(MSItems.CAPTCHA_CARD);
 		}
 		if(node == null)
 			return ItemStack.EMPTY;
@@ -135,15 +139,17 @@ public class TreeModus extends Modus
 		{
 			ArrayList<ItemStack> list = node.removeItems(0);
 			node = null;
+			markDirty();
 			for(ItemStack stack : list)
 				CaptchaDeckHandler.launchAnyItem(player, stack);
 			return ItemStack.EMPTY;
 		}
 		
 		if(id == 0)
-			MinestuckCriteriaTriggers.TREE_MODUS_ROOT.trigger(player, node.getSize());
+			MSCriteriaTriggers.TREE_MODUS_ROOT.trigger(player, node.getSize());
 		
 		ArrayList<ItemStack> list = node.removeItems(id);
+		markDirty();
 		if(list.isEmpty())
 			return ItemStack.EMPTY;
 		ItemStack stack = list.get(0);
@@ -152,6 +158,7 @@ public class TreeModus extends Modus
 		if(asCard)
 		{
 			size--;
+			markDirty();
 			stack = AlchemyRecipes.createCard(stack, false);
 		}
 		if(id == 0)
@@ -175,13 +182,17 @@ public class TreeModus extends Modus
 	@Override
 	public void setValue(ServerPlayerEntity player, byte type, int value)
 	{
-		autoBalance = value > 0;
-		if(autoBalance)
+		if(autoBalance != value > 0)
 		{
-			TreeNode node = this.node;
-			autoBalance();
-			if(node != this.node)
-				MinestuckPacketHandler.sendToPlayer(CaptchaDeckPacket.data(CaptchaDeckHandler.writeToNBT(this)), player);
+			autoBalance = value > 0;
+			markDirty();
+			if(autoBalance)
+			{
+				TreeNode node = this.node;
+				autoBalance();
+				if(node != this.node)
+					MSPacketHandler.sendToPlayer(ModusDataPacket.create(CaptchaDeckHandler.writeToNBT(this)), player);
+			}
 		}
 	}
 	
@@ -198,6 +209,7 @@ public class TreeModus extends Modus
 			List<ItemStack> list = node.getItems();
 			
 			node = createNode(list);
+			markDirty();
 		}
 	}
 	

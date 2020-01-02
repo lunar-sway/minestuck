@@ -5,12 +5,8 @@ import com.mraof.minestuck.inventory.EditmodeContainer;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckContainer;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
 
-import java.util.function.Supplier;
-
-public class MiscContainerPacket
+public class MiscContainerPacket implements PlayToServerPacket
 {
 	
 	int i;
@@ -20,6 +16,7 @@ public class MiscContainerPacket
 		this.i = i;
 	}
 	
+	@Override
 	public void encode(PacketBuffer buffer)
 	{
 		buffer.writeInt(i);
@@ -32,14 +29,7 @@ public class MiscContainerPacket
 		return new MiscContainerPacket(i);
 	}
 	
-	public void consume(Supplier<NetworkEvent.Context> ctx)
-	{
-		if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER)
-			ctx.get().enqueueWork(() -> this.execute(ctx.get().getSender()));
-		
-		ctx.get().setPacketHandled(true);
-	}
-	
+	@Override
 	public void execute(ServerPlayerEntity player)
 	{
 		if(ServerEditHandler.getData(player) == null)

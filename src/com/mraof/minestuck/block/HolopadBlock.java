@@ -31,7 +31,7 @@ public class HolopadBlock extends MachineBlock
 	protected static final AxisAlignedBB HOLOPAD_TOP_AABB = new AxisAlignedBB(3/16F, 6/16F, 2.6/16F, 13/16F, 7/16F, 12.6/16F);
 	protected static final AxisAlignedBB HOLOPAD_CARDSLOT_AABB = new AxisAlignedBB(4/16F, 0F, 13.8/16F, 12/16F, 10.1/16F, 15.94/16F);
 	
-	public static final BooleanProperty HAS_CARD = MinestuckProperties.HAS_CARD;
+	public static final BooleanProperty HAS_CARD = MSProperties.HAS_CARD;
 	
 	static
 	{

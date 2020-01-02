@@ -1,10 +1,12 @@
 package com.mraof.minestuck.network.skaianet;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.*;
 
@@ -136,23 +138,32 @@ public class Session
 	 * @param nbt An CompoundNBT to read from.
 	 * @return This.
 	 */
-	Session read(CompoundNBT nbt)
+	static Session read(CompoundNBT nbt, SkaianetHandler handler)
 	{
-		if(nbt.contains("name", 8))
-			name = nbt.getString("name");
-		else name = null;
+		Session s = new Session();
+		if(nbt.contains("name", Constants.NBT.TAG_STRING))
+			s.name = nbt.getString("name");
+		else s.name = null;
 		
-		ListNBT list = nbt.getList("connections", 10);
+		ListNBT list = nbt.getList("connections", Constants.NBT.TAG_COMPOUND);
 		for(int i = 0; i < list.size(); i++)
-			connections.add(new SburbConnection().read(list.getCompound(i)));
-		
-		if(nbt.contains("predefinedPlayers", 9))	//If it is a tag list
 		{
-			list = nbt.getList("predefinedPlayers", 10);
+			try
+			{
+				s.connections.add(new SburbConnection(list.getCompound(i), handler));
+			} catch(Exception e)
+			{
+				Debug.logger.error("Unable to read sburb connection from tag "+list.getCompound(i)+". Forced to skip connection.", e);
+			}
+		}
+		
+		if(nbt.contains("predefinedPlayers", Constants.NBT.TAG_LIST))	//If it is a tag list
+		{
+			list = nbt.getList("predefinedPlayers", Constants.NBT.TAG_COMPOUND);
 			for(int i = 0; i < list.size(); i++)
 			{
 				CompoundNBT compound = list.getCompound(i);
-				predefinedPlayers.put(IdentifierHandler.load(compound, "player"), new PredefineData().read(compound));
+				s.predefinedPlayers.put(IdentifierHandler.load(compound, "player"), new PredefineData().read(compound));
 			}
 		} else
 		{	//Support for saves from older minestuck versions
@@ -161,18 +172,42 @@ public class Session
 			{
 				CompoundNBT compound = new CompoundNBT();
 				compound.putString("player", player);
-				predefinedPlayers.put(IdentifierHandler.load(compound, "player"), new PredefineData().read(predefineTag.getCompound(player)));
+				s.predefinedPlayers.put(IdentifierHandler.load(compound, "player"), new PredefineData().read(predefineTag.getCompound(player)));
 			}
 		}
 		
-		locked = nbt.getBoolean("locked");
+		s.locked = nbt.getBoolean("locked");
 		
-		checkIfCompleted(MinestuckConfig.globalSession);
-		return this;
+		s.checkIfCompleted(MinestuckConfig.globalSession.get());
+		return s;
 	}
 	
 	public boolean isCustom()
 	{
 		return name != null;
+	}
+	
+	CompoundNBT createDataTag()
+	{
+		ListNBT connectionList = new ListNBT();
+		Set<PlayerIdentifier> playerSet = new HashSet<>();
+		for(SburbConnection c : connections)
+		{
+			connectionList.add(c.createDataTag(playerSet, predefinedPlayers));
+		}
+		
+		for(Map.Entry<PlayerIdentifier, PredefineData> entry : predefinedPlayers.entrySet())
+		{
+			if(playerSet.contains(entry.getKey()))
+				continue;
+			
+			connectionList.add(SburbConnection.cratePredefineDataTag(entry.getKey(), entry.getValue()));
+		}
+		
+		CompoundNBT sessionTag = new CompoundNBT();
+		if(name != null)
+			sessionTag.putString("name", name);
+		sessionTag.put("connections", connectionList);
+		return sessionTag;
 	}
 }

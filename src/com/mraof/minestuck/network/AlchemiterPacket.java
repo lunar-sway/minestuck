@@ -5,12 +5,8 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
 
-import java.util.function.Supplier;
-
-public class AlchemiterPacket
+public class AlchemiterPacket implements PlayToServerPacket
 {
 	public BlockPos pos;
 	public int quantity;
@@ -21,6 +17,7 @@ public class AlchemiterPacket
 		this.quantity = quantity;
 	}
 	
+	@Override
 	public void encode(PacketBuffer buffer)
 	{
 		buffer.writeBlockPos(pos);
@@ -35,14 +32,7 @@ public class AlchemiterPacket
 		return new AlchemiterPacket(pos, quantity);
 	}
 	
-	public void consume(Supplier<NetworkEvent.Context> ctx)
-	{
-		if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER)
-			ctx.get().enqueueWork(() -> this.execute(ctx.get().getSender()));
-		
-		ctx.get().setPacketHandled(true);
-	}
-	
+	@Override
 	public void execute(ServerPlayerEntity player)
 	{
 		if(player.getEntityWorld().isAreaLoaded(pos, 0))

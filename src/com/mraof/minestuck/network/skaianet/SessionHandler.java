@@ -4,10 +4,6 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
-import com.mraof.minestuck.util.Title;
-import com.mraof.minestuck.world.MinestuckDimensions;
-import com.mraof.minestuck.world.lands.LandAspects;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
@@ -21,6 +17,11 @@ import java.util.*;
  */
 public class SessionHandler
 {
+	public static final String CONNECT_FAILED = "minestuck.connect_failed_message";
+	public static final String SINGLE_SESSION_FULL = "minestuck.single_session_full_message";
+	public static final String CLIENT_SESSION_FULL = "minestuck.client_session_full_message";
+	public static final String SERVER_SESSION_FULL = "minestuck.server_session_full_message";
+	public static final String BOTH_SESSIONS_FULL = "minestuck.both_sessions_full_message";
 	
 	static final String GLOBAL_SESSION_NAME = "global";
 	
@@ -39,9 +40,9 @@ public class SessionHandler
 	/**
 	 * An array list of the current worlds sessions.
 	 */
-	List<Session> sessions = new ArrayList<>();	//TODO Objectify in the same manner as skaianet, perhaps?
+	List<Session> sessions = new ArrayList<>();
 	Map<String, Session> sessionsByName = new HashMap<>();
-	SkaianetHandler skaianetHandler;
+	final SkaianetHandler skaianetHandler;
 	
 	SessionHandler(SkaianetHandler skaianetHandler)
 	{
@@ -50,8 +51,8 @@ public class SessionHandler
 	
 	void onLoad()
 	{
-		singleSession = MinestuckConfig.globalSession;
-		if(!MinestuckConfig.globalSession) {
+		singleSession = MinestuckConfig.globalSession.get();
+		if(!MinestuckConfig.globalSession.get()) {
 			split();
 		} else
 		{
@@ -163,7 +164,6 @@ public class SessionHandler
 				cs.name = ss.name;
 				sessionsByName.put(cs.name, cs);
 			}
-			
 		}
 		return s;
 	}
@@ -171,9 +171,9 @@ public class SessionHandler
 	private static String canMerge(Session s0, Session s1)
 	{
 		if(s0.isCustom() && s1.isCustom() || s0.locked || s1.locked)
-			return "computer.messageConnectFail";
+			return CONNECT_FAILED;
 		if(MinestuckConfig.forceMaxSize && s0.getPlayerList().size()+s1.getPlayerList().size()>maxSize)
-			return "session.bothSessionsFull";
+			return BOTH_SESSIONS_FULL;
 		return null;
 	}
 	
@@ -184,7 +184,7 @@ public class SessionHandler
 	 */
 	void split()
 	{
-		if(MinestuckConfig.globalSession || sessions.size() != 1)
+		if(MinestuckConfig.globalSession.get() || sessions.size() != 1)
 			return;
 		
 		Session s = sessions.get(0);
@@ -261,7 +261,7 @@ public class SessionHandler
 					break;
 				}
 		
-		return cClient != null && sClient == sServer && (MinestuckConfig.allowSecondaryConnections || cClient == cServer)	//Reconnect within session
+		return cClient != null && sClient == sServer && (MinestuckConfig.allowSecondaryConnections.get() || cClient == cServer)	//Reconnect within session
 				|| cClient == null && !serverActive && !(sClient != null && sClient.locked) && !(sServer != null && sServer.locked);	//Connect with a new player and potentially create a main connection
 	}
 	
@@ -271,7 +271,7 @@ public class SessionHandler
 	String onConnectionCreated(SburbConnection connection)
 	{
 		if(!canConnect(connection.getClientIdentifier(), connection.getServerIdentifier()))
-			return "computer.messageConnectFailed";
+			return CONNECT_FAILED;
 		if(singleSession)
 		{
 			if(sessions.size() == 0)
@@ -285,7 +285,7 @@ public class SessionHandler
 			
 			int i = (sessions.get(0).containsPlayer(connection.getClientIdentifier())?0:1)+(connection.getServerIdentifier().equals(IdentifierHandler.nullIdentifier) || sessions.get(0).containsPlayer(connection.getServerIdentifier())?0:1);
 			if(MinestuckConfig.forceMaxSize && sessions.get(0).getPlayerList().size()+i > maxSize)
-				return "computer.singleSessionFull";
+				return SINGLE_SESSION_FULL;
 			else
 			{
 				sessions.get(0).connections.add(connection);
@@ -303,7 +303,7 @@ public class SessionHandler
 			} else if(sClient == null || sServer == null)
 			{
 				if((sClient == null?sServer:sClient).locked || MinestuckConfig.forceMaxSize && !connection.getServerIdentifier().equals(IdentifierHandler.nullIdentifier) && (sClient == null?sServer:sClient).getPlayerList().size()+1 > maxSize)
-					return "computer."+(sClient == null?"server":"client")+"SessionFull";
+					return sClient == null ? SERVER_SESSION_FULL : CLIENT_SESSION_FULL;
 				(sClient == null?sServer:sClient).connections.add(connection);
 				return null;
 			} else
@@ -326,7 +326,7 @@ public class SessionHandler
 	{
 		Session s = getPlayerSession(connection.getClientIdentifier());
 		
-		if(!connection.isMain)
+		if(!connection.isMain())
 		{
 			s.connections.remove(connection);
 			if(!singleSession)
@@ -338,7 +338,7 @@ public class SessionHandler
 			if(skaianetHandler.getAssociatedPartner(connection.getClientIdentifier(), false) != null)
 			{
 				SburbConnection c = skaianetHandler.getMainConnection(connection.getClientIdentifier(), false);
-				if(c.isActive)
+				if(c.isActive())
 					skaianetHandler.closeConnection(c.getClientIdentifier(), c.getServerIdentifier(), true);
 				switch(MinestuckConfig.escapeFailureMode) {
 				case 0:
@@ -581,98 +581,9 @@ public class SessionHandler
 		CompoundNBT nbt = new CompoundNBT();
 		ListNBT sessionList = new ListNBT();
 		nbt.put("sessions", sessionList);
-		for(int i = 0; i < sessions.size(); i++)
+		for(Session session : sessions)
 		{
-			Session session = sessions.get(i);
-			ListNBT connectionList = new ListNBT();
-			Set<PlayerIdentifier> playerSet = new HashSet<>();
-			for(SburbConnection c :session.connections)
-			{
-				if(c.isMain)
-					playerSet.add(c.getClientIdentifier());
-				CompoundNBT connectionTag = new CompoundNBT();
-				connectionTag.putString("client", c.getClientIdentifier().getUsername());
-				connectionTag.putString("clientId", c.getClientIdentifier().getString());
-				if(!c.getServerIdentifier().equals(IdentifierHandler.nullIdentifier))
-					connectionTag.putString("server", c.getServerIdentifier().getUsername());
-				connectionTag.putBoolean("isMain", c.isMain);
-				connectionTag.putBoolean("isActive", c.isActive);
-				if(c.isMain)
-				{
-					if(c.clientHomeLand != null)
-					{
-						connectionTag.putString("clientDim", c.clientHomeLand.getRegistryName().toString());
-						LandAspects aspects = MinestuckDimensions.getAspects(skaianetHandler.mcServer, c.clientHomeLand);
-						/*IChunkGenerator chunkGen = skaianetHandler.mcServer.getWorld(c.clientHomeLand).getDimension().createChunkGenerator();
-						if(chunkGen instanceof ChunkProviderLands)
-						{
-							ChunkProviderLands landChunkGen = (ChunkProviderLands) chunkGen;
-							if(landChunkGen.nameOrder)
-							{*/
-								connectionTag.putString("aspect1", aspects.aspectTerrain.getNames()[0]);	//TODO add name order and name index back
-								connectionTag.putString("aspect2", aspects.aspectTitle.getNames()[0]);
-							/*} else
-							{
-								connectionTag.putString("aspect1", aspects.aspectTitle.getNames()[landChunkGen.nameIndex2]);
-								connectionTag.putString("aspect2", aspects.aspectTerrain.getNames()[landChunkGen.nameIndex1]);
-							}
-						}*/
-						Title title = PlayerSavedData.get(skaianetHandler.mcServer).getTitle(c.getClientIdentifier());
-						connectionTag.putByte("class", title == null ? -1 : (byte) title.getHeroClass().ordinal());
-						connectionTag.putByte("aspect", title == null ? -1 : (byte) title.getHeroAspect().ordinal());
-					} else if(session.predefinedPlayers.containsKey(c.getClientIdentifier()))
-					{
-						PredefineData data = session.predefinedPlayers.get(c.getClientIdentifier());
-						
-						if(data.title != null)
-						{
-							connectionTag.putByte("class", (byte) data.title.getHeroClass().ordinal());
-							connectionTag.putByte("aspect", (byte) data.title.getHeroAspect().ordinal());
-						}
-						
-						if(data.landTerrain != null)
-							connectionTag.putString("aspectTerrain", data.landTerrain.getPrimaryName());
-						if(data.landTitle != null)
-							connectionTag.putString("aspectTitle", data.landTitle.getPrimaryName());
-					}
-				}
-				connectionList.add(connectionTag);
-			}
-			
-			for(Map.Entry<PlayerIdentifier, PredefineData> entry : session.predefinedPlayers.entrySet())
-			{
-				if(playerSet.contains(entry.getKey()))
-					continue;
-				
-				CompoundNBT connectionTag = new CompoundNBT();
-				
-				connectionTag.putString("client", entry.getKey().getUsername());
-				connectionTag.putString("clientId", entry.getKey().getString());
-				connectionTag.putBoolean("isMain", true);
-				connectionTag.putBoolean("isActive", false);
-				connectionTag.putInt("clientDim", 0);
-				
-				PredefineData data = entry.getValue();
-				
-				if(data.title != null)
-				{
-					connectionTag.putByte("class", (byte) data.title.getHeroClass().ordinal());
-					connectionTag.putByte("aspect", (byte) data.title.getHeroAspect().ordinal());
-				}
-				
-				if(data.landTerrain != null)
-					connectionTag.putString("aspectTerrain", data.landTerrain.getPrimaryName());
-				if(data.landTitle != null)
-					connectionTag.putString("aspectTitle", data.landTitle.getPrimaryName());
-				
-				connectionList.add(connectionTag);
-			}
-			
-			CompoundNBT sessionTag = new CompoundNBT();
-			if(session.name != null)
-				sessionTag.putString("name", session.name);
-			sessionTag.put("connections", connectionList);
-			sessionList.add(sessionTag);
+			sessionList.add(session.createDataTag());
 		}
 		return nbt;
 	}

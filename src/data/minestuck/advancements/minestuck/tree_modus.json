@@ -1,23 +1,33 @@
 {
-    "display": {
-        "icon": {
-            "item": "minestuck:modus_card",
-            "data": 3
-        },
-        "title": {
-            "translate": "advancements.minestuck.tree_modus.title"
-        },
-        "description": {
-            "translate": "advancements.minestuck.tree_modus.description"
-        }
+  "parent": "minestuck:minestuck/new_modus",
+  "display": {
+    "icon": {
+      "item": "minestuck:tree_modus_card"
     },
-    "parent": "minestuck:minestuck/new_modus",
-    "criteria": {
-        "tree_root": {
-            "trigger": "minestuck:tree_modus_root",
-            "count": {
-                "min": 16
-            }
+    "title": {
+      "translate": "advancements.minestuck.tree_modus.title"
+    },
+    "description": {
+      "translate": "advancements.minestuck.tree_modus.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "tree_root": {
+      "trigger": "minestuck:tree_modus_root",
+      "conditions": {
+        "count": {
+          "min": 16
         }
+      }
     }
+  },
+  "requirements": [
+    [
+      "tree_root"
+    ]
+  ]
 }

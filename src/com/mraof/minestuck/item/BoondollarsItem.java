@@ -13,6 +13,7 @@ import net.minecraft.util.*;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -30,7 +31,7 @@ public class BoondollarsItem extends Item	//TODO Add custom crafting recipe that
 	{
 		if(!worldIn.isRemote)
 		{
-			PlayerSavedData.addBoondollars((ServerPlayerEntity) playerIn, getCount(playerIn.getHeldItem(handIn)));
+			PlayerSavedData.getData((ServerPlayerEntity) playerIn).addBoondollars(getCount(playerIn.getHeldItem(handIn)));
 		}
 		return new ActionResult<>(ActionResultType.SUCCESS, ItemStack.EMPTY);
 	}
@@ -51,13 +52,13 @@ public class BoondollarsItem extends Item	//TODO Add custom crafting recipe that
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
 	{
-		int amount = getCount(stack);
+		long amount = getCount(stack);
 		tooltip.add(new TranslationTextComponent("item.minestuck.boondollars.amount", amount));
 	}
 	
-	public static int getCount(ItemStack stack)
+	public static long getCount(ItemStack stack)
 	{
-		if(!stack.hasTag() || !stack.getTag().contains("value", 99))
+		if(!stack.hasTag() || !stack.getTag().contains("value", Constants.NBT.TAG_ANY_NUMERIC))
 			return 1;
 		else return stack.getTag().getInt("value");
 	}

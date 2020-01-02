@@ -1,5 +1,5 @@
 {
-  "type": "crafting_shapeless",
+  "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
       "item": "minecraft:bowl"
@@ -9,7 +9,6 @@
     }
   ],
   "result": {
-    "item": "minestuck:salad",
-    "count": 1
+    "item": "minestuck:salad"
   }
 }

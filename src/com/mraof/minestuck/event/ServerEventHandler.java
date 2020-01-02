@@ -1,23 +1,22 @@
 package com.mraof.minestuck.event;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.weapon.PotionWeaponItem;
-import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.*;
-
+import com.mraof.minestuck.util.Echeladder;
+import com.mraof.minestuck.world.storage.MSExtraData;
+import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.dimension.DimensionType;
@@ -33,24 +32,12 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import static com.mraof.minestuck.util.EnumAspect.HOPE;
-
 public class ServerEventHandler
 {
 	
 	public static final ServerEventHandler instance = new ServerEventHandler();
 	
 	public static long lastDay;
-	
-	public static List<PostEntryTask> tickTasks = new ArrayList<>();
-	
-	static Effect[] aspectEffects = {Effects.ABSORPTION, Effects.SPEED, Effects.RESISTANCE, Effects.ABSORPTION, Effects.FIRE_RESISTANCE, Effects.REGENERATION, Effects.LUCK, Effects.NIGHT_VISION, Effects.STRENGTH, Effects.JUMP_BOOST, Effects.HASTE, Effects.INVISIBILITY }; //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
-	// Increase the starting rungs
-	static float[] aspectStrength = new float[] {1.0F/14, 1.0F/15, 1.0F/28, 1.0F/14, 1.0F/18, 1.0F/20, 1.0F/10, 1.0F/12, 1.0F/25, 1.0F/10, 1.0F/13, 1.0F/12}; //Absorption, Speed, Resistance, Saturation, Fire Resistance, Regeneration, Luck, Night Vision, Strength, Jump Boost, Haste, Invisibility
 	
 	@SubscribeEvent
 	public void onWorldTick(TickEvent.WorldTickEvent event)
@@ -68,10 +55,9 @@ public class ServerEventHandler
 				}
 			}
 			
-			Iterator<PostEntryTask> iter = tickTasks.iterator();
-			while(iter.hasNext())
-				if(iter.next().onTick(event.world.getServer()))
-					iter.remove();
+			MinecraftServer server = event.world.getServer();
+			if(server != null)
+				MSExtraData.get(server).executeEntryTasks(server);
 		}
 	}
 	
@@ -117,7 +103,7 @@ public class ServerEventHandler
 				ServerPlayerEntity player = (ServerPlayerEntity) event.getSource().getTrueSource();
 				if (event.getEntityLiving() instanceof UnderlingEntity)
 				{    //Increase damage to underling
-					double modifier = PlayerSavedData.getData(player).echeladder.getUnderlingDamageModifier();
+					double modifier = PlayerSavedData.getData(player).getEcheladder().getUnderlingDamageModifier();
 					event.setAmount((float) (event.getAmount() * modifier));
 				}
 				boolean critical = cachedCooledAttackStrength > 0.9 && player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder() && !player.isInWater() && !player.isPotionActive(Effects.BLINDNESS) && !player.isPassenger() && !player.isBeingRidden();
@@ -134,7 +120,7 @@ public class ServerEventHandler
 			else if (event.getEntityLiving() instanceof ServerPlayerEntity && event.getSource().getTrueSource() instanceof UnderlingEntity)
 			{    //Decrease damage to player
 				ServerPlayerEntity player = (ServerPlayerEntity) event.getEntityLiving();
-					double modifier = PlayerSavedData.getData(player).echeladder.getUnderlingProtectionModifier();
+					double modifier = PlayerSavedData.getData(player).getEcheladder().getUnderlingProtectionModifier();
 					event.setAmount((float) (event.getAmount() * modifier));
 			}
 		}
@@ -154,13 +140,13 @@ public class ServerEventHandler
 	{
 		SburbHandler.stopEntry((ServerPlayerEntity) event.getPlayer());
 		
-		PlayerSavedData.getData((ServerPlayerEntity) event.getPlayer()).echeladder.resendAttributes(event.getPlayer());
+		PlayerSavedData.getData((ServerPlayerEntity) event.getPlayer()).getEcheladder().resendAttributes(event.getPlayer());
 	}
 	
 	@SubscribeEvent(priority=EventPriority.LOW, receiveCanceled=false)
 	public void onServerChat(ServerChatEvent event)
 	{
-		Modus modus = PlayerSavedData.getData(event.getPlayer()).modus;
+		Modus modus = PlayerSavedData.getData(event.getPlayer()).getModus();
 		if(modus instanceof HashMapModus)
 			((HashMapModus) modus).onChatMessage(event.getPlayer(), event.getMessage());
 	}
@@ -169,7 +155,7 @@ public class ServerEventHandler
 	@SubscribeEvent
 	public void onPlayerUseHoe(UseHoeEvent event)
 	{
-		if(event.getContext().getWorld().getBlockState(event.getContext().getPos()).getBlock() == MinestuckBlocks.COARSE_END_STONE)
+		if(event.getContext().getWorld().getBlockState(event.getContext().getPos()).getBlock() == MSBlocks.COARSE_END_STONE)
 		{
 			event.getContext().getWorld().setBlockState(event.getContext().getPos(), Blocks.END_STONE.getDefaultState());
 			event.getContext().getWorld().playSound(null, event.getContext().getPos(), SoundEvents.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0F, 	1.0F);
@@ -180,35 +166,18 @@ public class ServerEventHandler
 	@SubscribeEvent
 	public void onGetItemBurnTime(FurnaceFuelBurnTimeEvent event)
 	{
-		if(event.getItemStack().getItem() == MinestuckBlocks.TREATED_PLANKS.asItem())
+		if(event.getItemStack().getItem() == MSBlocks.TREATED_PLANKS.asItem())
 			event.setBurnTime(50);	//Do not set this number to 0.
 	}
 	
 	@SubscribeEvent
-	public void aspectPotionEffect(TickEvent.PlayerTickEvent event)
+	public void onPlayerTickEvent(TickEvent.PlayerTickEvent event)
 	{
 		if(!event.player.world.isRemote)
 		{
-			IdentifierHandler.PlayerIdentifier identifier = IdentifierHandler.encode(event.player);
-			SburbConnection c = SkaianetHandler.get(event.player.getServer()).getMainConnection(identifier, true);
-			if(c == null || !c.hasEntered() || !MinestuckConfig.aspectEffects || !PlayerSavedData.get(event.player.getServer()).getEffectToggle(identifier))
-				return;
-			int rung = PlayerSavedData.getData((ServerPlayerEntity) event.player).echeladder.getRung();
-			EnumAspect aspect = PlayerSavedData.get(event.player.getServer()).getTitle(identifier).getHeroAspect();
-			int potionLevel = (int) (aspectStrength[aspect.ordinal()] * rung); //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
-			
-			if(event.player.getEntityWorld().getGameTime() % 380 == identifier.hashCode() % 380)
-			{
-				if(rung > 18 && aspect == HOPE)
-				{
-					event.player.addPotionEffect(new EffectInstance(Effects.WATER_BREATHING, 600, 0));
-				}
-				
-				if(potionLevel > 0)
-				{
-					event.player.addPotionEffect(new EffectInstance(aspectEffects[aspect.ordinal()], 600, potionLevel - 1));
-				}
-			}
+			PlayerData data = PlayerSavedData.getData((ServerPlayerEntity) event.player);
+			if(data.getTitle() != null)
+				data.getTitle().handleAspectEffects((ServerPlayerEntity) event.player);
 		}
 	}
 }

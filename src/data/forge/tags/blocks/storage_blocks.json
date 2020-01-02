@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "#minestuck:storage_blocks/cruxite",
+    "#forge:storage_blocks/uranium"
+  ]
+}

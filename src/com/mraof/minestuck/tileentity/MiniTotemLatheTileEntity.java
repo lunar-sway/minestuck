@@ -1,10 +1,10 @@
 package com.mraof.minestuck.tileentity;
 
-import com.mraof.minestuck.alchemy.AlchemyRecipes;
-import com.mraof.minestuck.alchemy.CombinationRegistry;
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.inventory.MiniTotemLatheContainer;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.ColorCollector;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -19,11 +19,12 @@ import javax.annotation.Nullable;
 
 public class MiniTotemLatheTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
 {
+	public static final String TITLE = "container.minestuck.mini_totem_lathe";
 	public static final RunType TYPE = RunType.BUTTON;
 	
 	public MiniTotemLatheTileEntity()
 	{
-		super(ModTileEntityTypes.MINI_TOTEM_LATHE);
+		super(MSTileEntityTypes.MINI_TOTEM_LATHE);
 	}
 	
 	@Override
@@ -41,14 +42,14 @@ public class MiniTotemLatheTileEntity extends MachineProcessTileEntity implement
 	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack)
 	{
-		return (index == 0 || index == 1) && stack.getItem() == MinestuckItems.CAPTCHA_CARD || index == 2 && stack.getItem() == MinestuckBlocks.CRUXITE_DOWEL.asItem();
+		return (index == 0 || index == 1) && stack.getItem() == MSItems.CAPTCHA_CARD || index == 2 && stack.getItem() == MSBlocks.CRUXITE_DOWEL.asItem();
 	}
 	
 	@Override
 	public boolean contentsValid()
 	{
 		if ((!inv.get(0).isEmpty() || !inv.get(1).isEmpty()) && !inv.get(2).isEmpty() && !(inv.get(2).hasTag() && inv.get(2).getTag().contains("contentID"))
-				&& (inv.get(3).isEmpty() || inv.get(3).getCount() < inv.get(3).getMaxStackSize() && ColorCollector.getColorFromStack(inv.get(3), -1) == ColorCollector.getColorFromStack(inv.get(2), -1)))
+				&& (inv.get(3).isEmpty() || inv.get(3).getCount() < inv.get(3).getMaxStackSize() && ColorCollector.getColorFromStack(inv.get(3)) == ColorCollector.getColorFromStack(inv.get(2))))
 		{
 			if (!inv.get(0).isEmpty() && !inv.get(1).isEmpty())
 			{
@@ -83,20 +84,20 @@ public class MiniTotemLatheTileEntity extends MachineProcessTileEntity implement
 		ItemStack output;
 		if (!inv.get(0).isEmpty() && !inv.get(1).isEmpty())
 			if (!inv.get(0).hasTag() || !inv.get(0).getTag().getBoolean("punched") || !inv.get(1).hasTag() || !inv.get(1).getTag().getBoolean("punched"))
-				output = new ItemStack(MinestuckBlocks.GENERIC_OBJECT);
+				output = new ItemStack(MSBlocks.GENERIC_OBJECT);
 			else
 				output = CombinationRegistry.getCombination(AlchemyRecipes.getDecodedItem(inv.get(0)), AlchemyRecipes.getDecodedItem(inv.get(1)), CombinationRegistry.Mode.MODE_AND);
 		else
 		{
 			ItemStack input = inv.get(0).isEmpty() ? inv.get(1) : inv.get(0);
 			if (!input.hasTag() || !input.getTag().getBoolean("punched"))
-				output = new ItemStack(MinestuckBlocks.GENERIC_OBJECT);
+				output = new ItemStack(MSBlocks.GENERIC_OBJECT);
 			else output = AlchemyRecipes.getDecodedItem(input);
 		}
 		
-		ItemStack outputDowel = output.getItem().equals(MinestuckBlocks.GENERIC_OBJECT.asItem())
-				? new ItemStack(MinestuckBlocks.CRUXITE_DOWEL) : AlchemyRecipes.createEncodedItem(output, false);
-		ColorCollector.setColor(outputDowel, ColorCollector.getColorFromStack(inv.get(2), -1));	//Setting color
+		ItemStack outputDowel = output.getItem().equals(MSBlocks.GENERIC_OBJECT.asItem())
+				? new ItemStack(MSBlocks.CRUXITE_DOWEL) : AlchemyRecipes.createEncodedItem(output, false);
+		ColorCollector.setColor(outputDowel, ColorCollector.getColorFromStack(inv.get(2)));	//Setting color
 		
 		setInventorySlotContents(3, outputDowel);
 		decrStackSize(2, 1);
@@ -113,7 +114,7 @@ public class MiniTotemLatheTileEntity extends MachineProcessTileEntity implement
 	@Override
 	public ITextComponent getDisplayName()
 	{
-		return new TranslationTextComponent("container.mini_totem_lathe");
+		return new TranslationTextComponent(TITLE);
 	}
 	
 	@Override
@@ -138,6 +139,6 @@ public class MiniTotemLatheTileEntity extends MachineProcessTileEntity implement
 	@Override
 	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerIn)
 	{
-		return new MiniTotemLatheContainer(windowId, playerInventory, this, parameters);
+		return new MiniTotemLatheContainer(windowId, playerInventory, this, parameters, pos);
 	}
 }

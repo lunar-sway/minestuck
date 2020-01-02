@@ -1,27 +1,26 @@
 package com.mraof.minestuck.network.skaianet;
 
-import com.mraof.minestuck.util.EnumAspect;
-import com.mraof.minestuck.util.EnumClass;
 import com.mraof.minestuck.util.Title;
-import com.mraof.minestuck.world.lands.LandAspectRegistry;
-import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
-import com.mraof.minestuck.world.lands.title.TitleLandAspect;
+import com.mraof.minestuck.world.lands.LandTypes;
+import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
+import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.util.Constants;
 
 class PredefineData
 {
 	Title title;
-	TerrainLandAspect landTerrain;
-	TitleLandAspect landTitle;
+	TerrainLandType landTerrain;
+	TitleLandType landTitle;
 	
 	PredefineData read(CompoundNBT nbt)
 	{
-		if(nbt.contains("titleAspect", 99))
-			title = new Title(EnumClass.values()[nbt.getByte("titleClass")], EnumAspect.values()[nbt.getByte("titleAspect")]);
-		if(nbt.contains("landTerrain", 8))
-			landTerrain = LandAspectRegistry.fromNameTerrain(nbt.getString("landTerrain"));
-		if(nbt.contains("landTitle", 8))
-			landTitle = LandAspectRegistry.fromNameTitle(nbt.getString("landTitle"));
+		title = Title.tryRead(nbt, "title");
+		if(nbt.contains("landTerrain", Constants.NBT.TAG_STRING))
+			landTerrain = LandTypes.TERRAIN_REGISTRY.getValue(ResourceLocation.tryCreate(nbt.getString("landTerrain")));
+		if(nbt.contains("landTitle", Constants.NBT.TAG_STRING))
+			landTitle = LandTypes.TITLE_REGISTRY.getValue(ResourceLocation.tryCreate(nbt.getString("landTitle")));
 		
 		return this;
 	}
@@ -30,14 +29,11 @@ class PredefineData
 	{
 		CompoundNBT nbt = new CompoundNBT();
 		if(title != null)
-		{
-			nbt.putByte("titleClass", (byte) title.getHeroClass().ordinal());
-			nbt.putByte("titleAspect", (byte) title.getHeroAspect().ordinal());
-		}
+			title.write(nbt, "title");
 		if(landTerrain != null)
-			nbt.putString("landTerrain", landTerrain.getPrimaryName());
+			nbt.putString("landTerrain", landTerrain.getRegistryName().toString());
 		if(landTitle != null)
-			nbt.putString("landTitle", landTitle.getPrimaryName());
+			nbt.putString("landTitle", landTitle.getRegistryName().toString());
 		
 		return nbt;
 	}

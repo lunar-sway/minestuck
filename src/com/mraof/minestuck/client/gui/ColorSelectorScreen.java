@@ -1,7 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ColorSelectPacket;
 import com.mraof.minestuck.util.ColorCollector;
 import net.minecraft.client.gui.screen.Screen;
@@ -14,17 +14,27 @@ import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 public class ColorSelectorScreen extends Screen
 {
+	public static final String TITLE = "minestuck.color_selector";
+	public static final String SELECT_COLOR = "minestuck.select_color";
+	public static final String COLOR_SELECTED = "minestuck.color_selected";
+	public static final String DEFAULT_COLOR_SELECTED = "minestuck.default_color_selected";
 	
 	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/color_selector.png");
 	private static final int guiWidth = 176, guiHeight = 157;
-	private int selectedColor;
+	private int selectedIndex = -1;
 	private boolean firstTime;
 	
 	public ColorSelectorScreen(boolean firstTime)
 	{
-		super(new StringTextComponent("Color Selector"));
+		super(new TranslationTextComponent(TITLE));
 		this.firstTime = firstTime;
-		selectedColor = ColorCollector.playerColor;
+		for(int i = 0; i < ColorCollector.getColorSize(); i++)
+		{
+			if(ColorCollector.getColor(i) == ColorCollector.playerColor)
+			{
+				selectedIndex = i;
+			}
+		}
 	}
 	
 	@Override
@@ -46,8 +56,8 @@ public class ColorSelectorScreen extends Screen
 		this.minecraft.getTextureManager().bindTexture(guiBackground);
 		this.blit(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
-		String cacheMessage = I18n.format("gui.selectColor");
-		minecraft.fontRenderer.drawString(cacheMessage, (this.width / 2) - font.getStringWidth(cacheMessage) / 2, yOffset + 12, 0x404040);
+		String cacheMessage = I18n.format(SELECT_COLOR);
+		minecraft.fontRenderer.drawString(cacheMessage, (this.width / 2F) - font.getStringWidth(cacheMessage) / 2F, yOffset + 12, 0x404040);
 		
 		for(int i = 0; i < 4; i++)
 		{
@@ -72,13 +82,13 @@ public class ColorSelectorScreen extends Screen
 		
 		super.render(mouseX, mouseY, partialTicks);
 		
-		if(selectedColor != -1)
+		if(selectedIndex != -1)
 		{
-			int x = 19 + (selectedColor % 4)*34;
-			int y = 30 + (selectedColor/4)*18;
-			if(selectedColor >= 4)
+			int x = 19 + (selectedIndex % 4)*34;
+			int y = 30 + (selectedIndex /4)*18;
+			if(selectedIndex >= 4)
 				y += 3;
-			if(selectedColor >= 8)
+			if(selectedIndex >= 8)
 				y += 3;
 			GlStateManager.color3f(1F, 1F, 1F);
 			this.minecraft.getTextureManager().bindTexture(guiBackground);
@@ -106,7 +116,7 @@ public class ColorSelectorScreen extends Screen
 					if(mouseX >= xPos && mouseX < xPos + 32 && mouseY >= yPos && mouseY < yPos + 16)
 					{
 						int index = y*4 + x;
-						selectedColor = index != selectedColor ? index : -1;
+						selectedIndex = index != selectedIndex ? index : -1;
 						return true;
 					}
 				}
@@ -116,8 +126,8 @@ public class ColorSelectorScreen extends Screen
 	
 	public void selectColor()
 	{
-		MinestuckPacketHandler.sendToServer(new ColorSelectPacket(this.selectedColor));
-		ColorCollector.playerColor = selectedColor;
+		MSPacketHandler.sendToServer(new ColorSelectPacket(selectedIndex));
+		ColorCollector.playerColor = ColorCollector.getColor(selectedIndex);
 		this.minecraft.displayGuiScreen(null);
 	}
 	
@@ -127,9 +137,9 @@ public class ColorSelectorScreen extends Screen
 		if(firstTime && minecraft != null && minecraft.player != null)
 		{
 			ITextComponent message;
-			if(ColorCollector.playerColor == -1)
-				message = new TranslationTextComponent("message.selectDefaultColor");
-			else message = new TranslationTextComponent("message.selectColor");
+			if(ColorCollector.playerColor == ColorCollector.DEFAULT_COLOR)
+				message = new TranslationTextComponent(DEFAULT_COLOR_SELECTED);
+			else message = new TranslationTextComponent(COLOR_SELECTED);
 			this.minecraft.player.sendMessage(new StringTextComponent("[Minestuck] ").appendSibling(message));
 		}
 	}

@@ -1,14 +1,15 @@
 package com.mraof.minestuck.entity.underling;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.entity.EntityBigPart;
 import com.mraof.minestuck.entity.IBigEntity;
 import com.mraof.minestuck.entity.PartGroup;
 import com.mraof.minestuck.entity.ai.AttackOnCollideWithRateGoal;
-import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.util.Echeladder;
+import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -38,12 +39,6 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	}
 	
 	@Override
-	protected String getUnderlingName()
-	{
-		return "giclops";
-	}
-	
-	@Override
 	protected void registerGoals()
 	{
 		super.registerGoals();
@@ -54,23 +49,23 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	
 	protected SoundEvent getAmbientSound()
 	{
-		return ModSoundEvents.ENTITY_GICLOPS_AMBIENT;
+		return MSSoundEvents.ENTITY_GICLOPS_AMBIENT;
 	}
 	
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
 	{
-		return ModSoundEvents.ENTITY_GICLOPS_HURT;
+		return MSSoundEvents.ENTITY_GICLOPS_HURT;
 	}
 	
 	protected SoundEvent getDeathSound()
 	{
-		return ModSoundEvents.ENTITY_GICLOPS_DEATH;
+		return MSSoundEvents.ENTITY_GICLOPS_DEATH;
 	}
 	
 	@Override
 	public GristSet getGristSpoils()
 	{
-		return GristHelper.getRandomDrop(type, 10);
+		return GristHelper.getRandomDrop(getGristType(), 10);
 	}
 
 	@Override
@@ -88,7 +83,7 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	@Override
 	protected double getAttackDamage()
 	{
-		return this.type.getPower()*4.5 + 10;
+		return getGristType().getPower()*4.5 + 10;
 	}
 	
 	@Override
@@ -98,9 +93,9 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	}
 	
 	@Override
-	protected void applyGristType(GristType type, boolean fullHeal)
+	protected void onGristTypeUpdated(GristType type)
 	{
-		super.applyGristType(type, fullHeal);
+		super.onGristTypeUpdated(type);
 		this.experienceValue = (int) (7 * type.getPower() + 5);
 	}
 	
@@ -112,9 +107,9 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	}
 	
 	@Override
-	protected float getMaximumHealth() 
+	protected float getMaximumHealth()
 	{
-		return type != null ? 46*type.getPower() + 210 : 1;
+		return 46 * getGristType().getPower() + 210;
 	}
 	
 	@Override
@@ -122,7 +117,7 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	{
 		super.baseTick();
 		partGroup.updatePositions();
-		if(!world.isRemote && MinestuckConfig.disableGiclops)
+		if(!world.isRemote && MinestuckConfig.disableGiclops.get())
 			this.remove();
 	}
 	
@@ -154,13 +149,12 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	{
 		super.onDeath(cause);
 		Entity entity = cause.getTrueSource();
-		if(this.dead && !this.world.isRemote && type != null)
+		if(this.dead && !this.world.isRemote)
 		{
-			computePlayerProgress((int) (500*type.getPower() + 1000));
-			if(entity != null && entity instanceof ServerPlayerEntity)
+			computePlayerProgress((int) (500* getGristType().getPower() + 1000));
+			if(entity instanceof ServerPlayerEntity)
 			{
-				//((EntityPlayerMP) entity).addStat(MinestuckAchievementHandler.killGiclops);
-				Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) entity).echeladder;
+				Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder();
 				ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 4));
 			}
 		}

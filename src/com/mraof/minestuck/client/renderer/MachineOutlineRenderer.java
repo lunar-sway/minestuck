@@ -1,7 +1,7 @@
 package com.mraof.minestuck.client.renderer;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.block.AlchemiterItem;
 import com.mraof.minestuck.item.block.CruxtruderItem;
 import com.mraof.minestuck.item.block.PunchDesignixItem;
@@ -44,10 +44,10 @@ public class MachineOutlineRenderer
 
 		if(stack.isEmpty())
 			return false;
-		if(stack.getItem() == MinestuckBlocks.PUNCH_DESIGNIX.asItem()
-				|| stack.getItem() == MinestuckBlocks.TOTEM_LATHE.asItem()
-				|| stack.getItem() == MinestuckBlocks.CRUXTRUDER.asItem()
-				|| stack.getItem() == MinestuckBlocks.ALCHEMITER.asItem())
+		if(stack.getItem() == MSBlocks.PUNCH_DESIGNIX.asItem()
+				|| stack.getItem() == MSBlocks.TOTEM_LATHE.asItem()
+				|| stack.getItem() == MSBlocks.CRUXTRUDER.asItem()
+				|| stack.getItem() == MSBlocks.ALCHEMITER.asItem())
 				//||stack.getItem()==Item.getItemFromBlock(MinestuckBlocks.jumperBlockExtension[0]))
 		{
 			BlockPos pos = rayTraceResult.getPos();
@@ -76,7 +76,7 @@ public class MachineOutlineRenderer
 			GlStateManager.disableTexture();
 			GlStateManager.depthMask(false);	//GL stuff was copied from the standard mouseover bounding box drawing, which is likely why the alpha isn't working
 			
-			if(stack.getItem() == MinestuckBlocks.PUNCH_DESIGNIX.asItem())
+			if(stack.getItem() == MSBlocks.PUNCH_DESIGNIX.asItem())
 			{
 				if (placedFacing.getXOffset() > 0 && hitZ >= 0.5F || placedFacing.getXOffset() < 0 && hitZ < 0.5F
 						|| placedFacing.getZOffset() > 0 && hitX < 0.5F || placedFacing.getZOffset() < 0 && hitX >= 0.5F)
@@ -88,7 +88,7 @@ public class MachineOutlineRenderer
 				
 				boundingBox = new AxisAlignedBB(0, 0, 0, (r ? 2 : 1), 2, (r ? 1 : 2)).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
 				placeable = PunchDesignixItem.canPlaceAt(context, placementPos, placedFacing);
-			} else if(stack.getItem() == MinestuckBlocks.TOTEM_LATHE.asItem())
+			} else if(stack.getItem() == MSBlocks.TOTEM_LATHE.asItem())
 			{
 				pos = pos.offset(placedFacing.rotateY());
 				
@@ -102,7 +102,7 @@ public class MachineOutlineRenderer
 				
 				boundingBox = new AxisAlignedBB(0, 0, 0, (r ? 4 : 1), 3, (r ? 1 : 4)).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
 				placeable = TotemLatheItem.canPlaceAt(context, placementPos, placedFacing);
-			} else if(stack.getItem() == MinestuckBlocks.CRUXTRUDER.asItem())
+			} else if(stack.getItem() == MSBlocks.CRUXTRUDER.asItem())
 			{
 				BlockPos placementPos = pos.offset(placedFacing.rotateY());
 				pos = pos.offset(placedFacing.getOpposite()).add(-1, 0, -1);

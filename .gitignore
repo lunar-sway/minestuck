@@ -1,13 +1,9 @@
-/assets/forge/
-/download
 /build
 /bin
-/gradle.properties
 .idea
 .gradle
 .classpath
 .project
-.settings/org.eclipse.jdt.core.prefs
 /eclipse
 *~
 *.launch
@@ -15,3 +11,4 @@
 /out
 *.iml
 /.settings
+/src/generated

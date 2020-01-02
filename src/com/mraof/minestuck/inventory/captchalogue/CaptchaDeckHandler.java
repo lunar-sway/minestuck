@@ -1,15 +1,15 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
+import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.item.BoondollarsItem;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.network.CaptchaDeckPacket;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
-import com.mraof.minestuck.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.ModusDataPacket;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -20,7 +20,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.LogicalSide;
 
 import java.util.Random;
 
@@ -33,15 +32,21 @@ public class CaptchaDeckHandler
 	
 	public static Modus clientSideModus;
 	
-	public static Modus createModus(ResourceLocation name, LogicalSide side)
+	public static Modus createClientModus(ResourceLocation name)
 	{
 		ModusType<?> type = ModusTypes.REGISTRY.getValue(name);
-		return type != null ? type.create(side) : null;
+		return type != null ? type.createClientSide() : null;
+	}
+	
+	public static Modus createServerModus(ResourceLocation name, PlayerSavedData savedData)
+	{
+		ModusType<?> type = ModusTypes.REGISTRY.getValue(name);
+		return type != null ? type.createServerSide(savedData) : null;
 	}
 	
 	public static void launchItem(ServerPlayerEntity player, ItemStack item)
 	{
-		if(item.getItem().equals(MinestuckItems.CAPTCHA_CARD) && !AlchemyRecipes.hasDecodedItem(item))
+		if(item.getItem().equals(MSItems.CAPTCHA_CARD) && !AlchemyRecipes.hasDecodedItem(item))
 			while(item.getCount() > 0)
 			{
 				if(getModus(player).increaseSize(player))
@@ -75,10 +80,9 @@ public class CaptchaDeckHandler
 		{
 			if(modus == null)
 			{
-				PlayerSavedData.PlayerData data = PlayerSavedData.getData(player);
-				modus = type.create(LogicalSide.SERVER);
-				modus.initModus(player, null, data.givenModus ? 0 : MinestuckConfig.initialModusSize);
-				data.givenModus = true;
+				PlayerData data = PlayerSavedData.getData(player);
+				modus = type.createServerSide(PlayerSavedData.get(player.server));	//TODO Let the modus be created with the stack for settings
+				modus.initModus(player, null, data.hasGivenModus() ? 0 : MinestuckConfig.initialModusSize.get());
 				setModus(player, modus);
 				container.inventory.setInventorySlotContents(0, ItemStack.EMPTY);
 			}
@@ -88,7 +92,7 @@ public class CaptchaDeckHandler
 				ModusType<?> oldType = oldModus.getType();
 				if(type.equals(oldType))
 					return;
-				modus = type.create(LogicalSide.SERVER);
+				modus = type.createServerSide(PlayerSavedData.get(player.server));	//TODO See the above
 				if(modus.canSwitchFrom(oldModus))
 					modus.initModus(player, oldModus.getItems(), oldModus.getSize());
 				else
@@ -100,12 +104,12 @@ public class CaptchaDeckHandler
 				}
 				
 				setModus(player, modus);
-				container.inventory.setInventorySlotContents(0, oldType.getStack().copy());
+				container.inventory.setInventorySlotContents(0, new ItemStack(oldType.getItem()));	//TODO Get the stack from the modus to let the modus save stuff to the stack
 			}
 			
-			MinestuckCriteriaTriggers.CHANGE_MODUS.trigger(player, modus);
+			MSCriteriaTriggers.CHANGE_MODUS.trigger(player, modus);
 		}
-		else if(stack.getItem().equals(MinestuckItems.CAPTCHA_CARD) && !AlchemyRecipes.isPunchedCard(stack)
+		else if(stack.getItem().equals(MSItems.CAPTCHA_CARD) && !AlchemyRecipes.isPunchedCard(stack)
 				&& modus != null)
 		{
 			ItemStack content = AlchemyRecipes.getDecodedItem(stack, true);
@@ -122,7 +126,7 @@ public class CaptchaDeckHandler
 					ItemStack toPut = content.copy();
 					if(!modus.putItemStack(player, toPut))
 						launchItem(player, toPut);
-					else MinestuckCriteriaTriggers.CAPTCHALOGUE.trigger(player, modus, toPut);
+					else MSCriteriaTriggers.CAPTCHALOGUE.trigger(player, modus, toPut);
 				}
 			
 			if(failed == 0)
@@ -132,19 +136,20 @@ public class CaptchaDeckHandler
 		
 		if(modus != null)
 		{
-			CaptchaDeckPacket packet = CaptchaDeckPacket.data(writeToNBT(modus));
-			MinestuckPacketHandler.sendToPlayer(packet, player);
+			ModusDataPacket packet = ModusDataPacket.create(writeToNBT(modus));
+			MSPacketHandler.sendToPlayer(packet, player);
 		}
 	}
 	
+	//TODO Spotted duplicate code in this and the following function. Refactor the part that makes sense to refactor
 	public static void captchalogueItem(ServerPlayerEntity player)
 	{
 		ItemStack stack = player.getHeldItemMainhand();
 		Modus modus = getModus(player);
 		
-		if(stack.getItem() == MinestuckItems.BOONDOLLARS)
+		if(stack.getItem() == MSItems.BOONDOLLARS)
 		{
-			PlayerSavedData.addBoondollars(player, BoondollarsItem.getCount(stack));
+			PlayerSavedData.getData(player).addBoondollars(BoondollarsItem.getCount(stack));
 			stack.setCount(0);
 			return;
 		}
@@ -152,7 +157,7 @@ public class CaptchaDeckHandler
 		if(modus != null && !stack.isEmpty())
 		{
 			boolean card1 = false, card2 = true;
-			if(stack.getItem() == MinestuckItems.CAPTCHA_CARD && AlchemyRecipes.hasDecodedItem(stack)
+			if(stack.getItem() == MSItems.CAPTCHA_CARD && AlchemyRecipes.hasDecodedItem(stack)
 					&& !AlchemyRecipes.isPunchedCard(stack))
 			{
 				ItemStack newStack = AlchemyRecipes.getDecodedItem(stack, true);
@@ -165,9 +170,9 @@ public class CaptchaDeckHandler
 			}
 			if(modus.putItemStack(player, stack))
 			{
-				MinestuckCriteriaTriggers.CAPTCHALOGUE.trigger(player, modus, stack);
+				MSCriteriaTriggers.CAPTCHALOGUE.trigger(player, modus, stack);
 				if(!card2)
-					launchAnyItem(player, new ItemStack(MinestuckItems.CAPTCHA_CARD, 1));
+					launchAnyItem(player, new ItemStack(MSItems.CAPTCHA_CARD, 1));
 				
 				stack = player.getHeldItemMainhand();
 				if(card1 && stack.getCount() > 1)
@@ -182,8 +187,8 @@ public class CaptchaDeckHandler
 					player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
 				else stack.shrink(1);
 			}
-			CaptchaDeckPacket packet = CaptchaDeckPacket.data(writeToNBT(modus));
-			MinestuckPacketHandler.sendToPlayer(packet, player);
+			ModusDataPacket packet = ModusDataPacket.create(writeToNBT(modus));
+			MSPacketHandler.sendToPlayer(packet, player);
 		}
 		
 	}
@@ -198,9 +203,9 @@ public class CaptchaDeckHandler
 			
 			stack = player.inventory.mainInventory.get(hotbarIndex);
 
-			if(stack.getItem() == MinestuckItems.BOONDOLLARS)
+			if(stack.getItem() == MSItems.BOONDOLLARS)
 			{
-				PlayerSavedData.addBoondollars(player, BoondollarsItem.getCount(stack));
+				PlayerSavedData.getData(player).addBoondollars(BoondollarsItem.getCount(stack));
 				stack.setCount(0);
 				return;
 			}
@@ -208,7 +213,7 @@ public class CaptchaDeckHandler
 			if(modus != null && !stack.isEmpty())
 			{
 				boolean card1 = false, card2 = true;
-				if(stack.getItem() == MinestuckItems.CAPTCHA_CARD && AlchemyRecipes.hasDecodedItem(stack)
+				if(stack.getItem() == MSItems.CAPTCHA_CARD && AlchemyRecipes.hasDecodedItem(stack)
 						&& !AlchemyRecipes.isPunchedCard(stack))
 				{
 					ItemStack newStack = AlchemyRecipes.getDecodedItem(stack, true);
@@ -221,9 +226,9 @@ public class CaptchaDeckHandler
 				}
 				if(modus.putItemStack(player, stack))
 				{
-					MinestuckCriteriaTriggers.CAPTCHALOGUE.trigger(player, modus, stack);
+					MSCriteriaTriggers.CAPTCHALOGUE.trigger(player, modus, stack);
 					if(!card2)
-						launchAnyItem(player, new ItemStack(MinestuckItems.CAPTCHA_CARD, 1));
+						launchAnyItem(player, new ItemStack(MSItems.CAPTCHA_CARD, 1));
 					stack = player.inventory.mainInventory.get(hotbarIndex);
 					if(card1 && stack.getCount() > 1)
 						stack.shrink(1);
@@ -239,17 +244,17 @@ public class CaptchaDeckHandler
 						player.inventory.setInventorySlotContents(hotbarIndex, ItemStack.EMPTY);
 					} else stack.shrink(1);
 				}
-				CaptchaDeckPacket packet = CaptchaDeckPacket.data(writeToNBT(modus));
-				MinestuckPacketHandler.sendToPlayer(packet, player);
+				ModusDataPacket packet = ModusDataPacket.create(writeToNBT(modus));
+				MSPacketHandler.sendToPlayer(packet, player);
 			}
 		}
 		else {
 			Slot slot = player.openContainer.getSlot(slotIndex);
 			stack = slot.getStack();
 
-			if(stack.getItem() == MinestuckItems.BOONDOLLARS)
+			if(stack.getItem() == MSItems.BOONDOLLARS)
 			{
-				PlayerSavedData.addBoondollars(player, BoondollarsItem.getCount(stack));
+				PlayerSavedData.getData(player).addBoondollars(BoondollarsItem.getCount(stack));
 				stack.setCount(0);
 				return;
 			}
@@ -257,7 +262,7 @@ public class CaptchaDeckHandler
 			if(modus != null && !stack.isEmpty())
 			{
 				boolean card1 = false, card2 = true;
-				if(stack.getItem() == MinestuckItems.CAPTCHA_CARD && AlchemyRecipes.hasDecodedItem(stack)
+				if(stack.getItem() == MSItems.CAPTCHA_CARD && AlchemyRecipes.hasDecodedItem(stack)
 						&& !AlchemyRecipes.isPunchedCard(stack))
 				{
 					ItemStack newStack = AlchemyRecipes.getDecodedItem(stack, true);
@@ -270,9 +275,9 @@ public class CaptchaDeckHandler
 				}
 				if(modus.putItemStack(player, stack))
 				{
-					MinestuckCriteriaTriggers.CAPTCHALOGUE.trigger(player, modus, stack);
+					MSCriteriaTriggers.CAPTCHALOGUE.trigger(player, modus, stack);
 					if(!card2)
-						launchAnyItem(player, new ItemStack(MinestuckItems.CAPTCHA_CARD, 1));
+						launchAnyItem(player, new ItemStack(MSItems.CAPTCHA_CARD, 1));
 					stack = slot.getStack();
 					if(card1 && stack.getCount() > 1)
 						stack.shrink(1);
@@ -288,8 +293,8 @@ public class CaptchaDeckHandler
 						slot.putStack(ItemStack.EMPTY);
 					} else stack.shrink(1);
 				}
-				CaptchaDeckPacket packet = CaptchaDeckPacket.data(writeToNBT(modus));
-				MinestuckPacketHandler.sendToPlayer(packet, player);
+				ModusDataPacket packet = ModusDataPacket.create(writeToNBT(modus));
+				MSPacketHandler.sendToPlayer(packet, player);
 			}
 		}
 	}
@@ -332,8 +337,8 @@ public class CaptchaDeckHandler
 					launchAnyItem(player, stack);
 			}
 		}
-		CaptchaDeckPacket packet = CaptchaDeckPacket.data(writeToNBT(modus));
-		MinestuckPacketHandler.sendToPlayer(packet, player);
+		ModusDataPacket packet = ModusDataPacket.create(writeToNBT(modus));
+		MSPacketHandler.sendToPlayer(packet, player);
 	}
 	
 	public static void dropSylladex(ServerPlayerEntity player)
@@ -345,9 +350,9 @@ public class CaptchaDeckHandler
 		
 		NonNullList<ItemStack> stacks = modus.getItems();
 		int size = modus.getSize();
-		int cardsToKeep = MinestuckConfig.sylladexDropMode == 2 ? 0 : MinestuckConfig.initialModusSize;
+		int cardsToKeep = MinestuckConfig.sylladexDropMode == 2 ? 0 : MinestuckConfig.initialModusSize.get();
 		
-		if(!MinestuckConfig.dropItemsInCards || MinestuckConfig.sylladexDropMode == 0)
+		if(!MinestuckConfig.dropItemsInCards.get() || MinestuckConfig.sylladexDropMode == 0)
 		{
 			for(ItemStack stack : stacks)
 				if(!stack.isEmpty())
@@ -362,19 +367,19 @@ public class CaptchaDeckHandler
 						size--;
 					} else player.dropItem(stack, true, false);
 		
-		int stackLimit = MinestuckItems.CAPTCHA_CARD.getItemStackLimit(new ItemStack(MinestuckItems.CAPTCHA_CARD));
+		int stackLimit = MSItems.CAPTCHA_CARD.getItemStackLimit(new ItemStack(MSItems.CAPTCHA_CARD));
 		if(MinestuckConfig.sylladexDropMode >= 1)
 			for(; size > cardsToKeep; size = Math.max(size - stackLimit, cardsToKeep))
-				player.dropItem(new ItemStack(MinestuckItems.CAPTCHA_CARD, Math.min(stackLimit, size - cardsToKeep)), true, false);
+				player.dropItem(new ItemStack(MSItems.CAPTCHA_CARD, Math.min(stackLimit, size - cardsToKeep)), true, false);
 		
 		if(MinestuckConfig.sylladexDropMode == 2)
 		{
-			player.dropItem(modus.getType().getStack().copy(), true, false);	//TODO Add a method to the modus to get the itemstack instead
+			player.dropItem(new ItemStack(modus.getType().getItem()), true, false);	//TODO Add a method to the modus to get the itemstack instead
 			setModus(player, null);
 		} else modus.initModus(player, null, size);
 		
-		CaptchaDeckPacket packet = CaptchaDeckPacket.data(writeToNBT(getModus(player)));
-		MinestuckPacketHandler.sendToPlayer(packet, player);
+		ModusDataPacket packet = ModusDataPacket.create(writeToNBT(modus));
+		MSPacketHandler.sendToPlayer(packet, player);
 	}
 	
 	public static CompoundNBT writeToNBT(Modus modus)
@@ -391,8 +396,9 @@ public class CaptchaDeckHandler
 		} else return null;
 	}
 	
-	public static Modus readFromNBT(CompoundNBT nbt, boolean clientSide)
+	public static Modus readFromNBT(CompoundNBT nbt, PlayerSavedData savedData)
 	{
+		boolean clientSide = savedData == null;
 		if(nbt == null)
 			return null;
 		Modus modus;
@@ -402,7 +408,7 @@ public class CaptchaDeckHandler
 			modus = clientSideModus;
 		else
 		{
-			modus = createModus(name, clientSide ? LogicalSide.CLIENT : LogicalSide.SERVER);
+			modus = clientSide ? createClientModus(name) : createServerModus(name, savedData);
 			if(modus == null)
 			{
 				Debug.warnf("Failed to load modus from nbt with the name \"%s\"", name.toString());
@@ -415,15 +421,12 @@ public class CaptchaDeckHandler
 	
 	public static Modus getModus(ServerPlayerEntity player)
 	{
-		return PlayerSavedData.getData(player).modus;
+		return PlayerSavedData.getData(player).getModus();
 	}
 	
 	public static void setModus(ServerPlayerEntity player, Modus modus)
 	{
-		PlayerSavedData.getData(player).modus = modus;
-		if(modus != null)
-			PlayerSavedData.getData(player).givenModus = true;
-		PlayerSavedData.get(player.world).markDirty();
+		PlayerSavedData.getData(player).setModus(modus);
 	}
 	
 	private static boolean canMergeItemStacks(ItemStack stack1, ItemStack stack2)

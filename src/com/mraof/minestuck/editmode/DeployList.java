@@ -1,29 +1,26 @@
 package com.mraof.minestuck.editmode;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.function.BiFunction;
-
-import javax.annotation.Nonnull;
-
-import com.mraof.minestuck.alchemy.AlchemyRecipes;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.block.MiniCruxtruderItem;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.item.ItemStack;
-
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.item.MinestuckItems;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.function.BiFunction;
 
 /**
  * This class will be used to keep track of all deployable
@@ -38,12 +35,12 @@ public class DeployList
 	public static void registerItems()
 	{
 		
-		registerItem("cruxtruder", new ItemStack(MinestuckBlocks.CRUXTRUDER), new GristSet(), new GristSet(GristType.BUILD, 100), 0);
-		registerItem("totem_lathe", new ItemStack(MinestuckBlocks.TOTEM_LATHE), new GristSet(), new GristSet(GristType.BUILD, 100), 0);
+		registerItem("cruxtruder", new ItemStack(MSBlocks.CRUXTRUDER), new GristSet(), new GristSet(GristTypes.BUILD, 100), 0);
+		registerItem("totem_lathe", new ItemStack(MSBlocks.TOTEM_LATHE), new GristSet(), new GristSet(GristTypes.BUILD, 100), 0);
 		registerItem("artifact_card", new GristSet(), null, 0, connection -> !connection.hasEntered(),
 				(connection, world) -> AlchemyRecipes.createCard(SburbHandler.getEntryItem(world, connection), true));
-		registerItem("alchemiter", new ItemStack(MinestuckBlocks.ALCHEMITER), new GristSet(), new GristSet(GristType.BUILD, 100), 0);
-		registerItem("punch_designix", 0,null, (connection, world) -> new ItemStack(MinestuckBlocks.PUNCH_DESIGNIX),
+		registerItem("alchemiter", new ItemStack(MSBlocks.ALCHEMITER), new GristSet(), new GristSet(GristTypes.BUILD, 100), 0);
+		registerItem("punch_designix", 0,null, (connection, world) -> new ItemStack(MSBlocks.PUNCH_DESIGNIX),
 				(isPrimary, connection) -> new GristSet(SburbHandler.getPrimaryGristType(connection.getClientIdentifier()), 4));
 		/*registerItem("jumper_block_extension", new ItemStack(MinestuckBlocks.jumperBlockExtension[0]), new GristSet(GristType.Build, 1000), 1);
 		registerItem("punch_card_shunt", new ItemStack(MinestuckItems.shunt), new GristSet(GristType.Build, 100), 1);
@@ -110,7 +107,7 @@ public class DeployList
 	}
 	
 	@Nonnull
-	private static ItemStack cleanStack(ItemStack stack)
+	static ItemStack cleanStack(ItemStack stack)
 	{
 		if(stack.isEmpty())
 			return ItemStack.EMPTY;
@@ -161,23 +158,23 @@ public class DeployList
 		return list.size();
 	}
 	
-	public static void applyConfigValues(boolean[] booleans)
+	public static void applyConfigValues(boolean[] booleans)	//TODO Replacement idea: Always register all items during init, but allow adding a config condition (as a lambda), and build a collection of all available entries at server start.  (Just baking it into the condition might be fine too)
 	{
 		if(booleans[0] != containsEntry("card_punched_card"))
 		{
 			if(booleans[0])
-				registerItem("card_punched_card", AlchemyRecipes.createCard(new ItemStack(MinestuckItems.CAPTCHA_CARD), true), new GristSet(GristType.BUILD, 25), null, 0);
+				registerItem("card_punched_card", AlchemyRecipes.createCard(new ItemStack(MSItems.CAPTCHA_CARD), true), new GristSet(GristTypes.BUILD, 25), null, 0);
 			else removeEntry("card_punched_card");
 		}
-		if(booleans[1] != containsEntry("portable_cruxtuder"))
+		if(booleans[1] != containsEntry("portable_cruxtruder"))
 		{
 			if(booleans[1])
 			{
-				registerItem("portable_cruxtruder", new GristSet(GristType.BUILD, 200), 1, null,
-						(connection, world) -> MiniCruxtruderItem.getCruxtruderWithColor(PlayerSavedData.get(world.getServer()).getData(connection.getClientIdentifier()).color));
-				registerItem("portable_punch_designix", new ItemStack(MinestuckBlocks.MINI_PUNCH_DESIGNIX), new GristSet(GristType.BUILD, 200), 1);
-				registerItem("portable_totem_lathe", new ItemStack(MinestuckBlocks.MINI_TOTEM_LATHE), new GristSet(GristType.BUILD, 200), 1);
-				registerItem("portable_alchemiter", new ItemStack(MinestuckBlocks.MINI_ALCHEMITER), new GristSet(GristType.BUILD, 300), 1);
+				registerItem("portable_cruxtruder", new GristSet(GristTypes.BUILD, 200), 1, null,
+						(connection, world) -> MiniCruxtruderItem.getCruxtruderWithColor(PlayerSavedData.getData(connection.getClientIdentifier(), world).getColor()));
+				registerItem("portable_punch_designix", new ItemStack(MSBlocks.MINI_PUNCH_DESIGNIX), new GristSet(GristTypes.BUILD, 200), 1);
+				registerItem("portable_totem_lathe", new ItemStack(MSBlocks.MINI_TOTEM_LATHE), new GristSet(GristTypes.BUILD, 200), 1);
+				registerItem("portable_alchemiter", new ItemStack(MSBlocks.MINI_ALCHEMITER), new GristSet(GristTypes.BUILD, 300), 1);
 			} else
 			{
 				removeEntry("portable_cruxtruder");
@@ -280,105 +277,14 @@ public class DeployList
 				CompoundNBT tag = new CompoundNBT();
 				stack.write(tag);
 				tag.putInt("i", i);
-				ListNBT listPrimary = new ListNBT();
-				for (GristType type : GristType.values())
-				{
-					if(primary.getGrist(type) == 0)
-						continue;
-					CompoundNBT gristTag = new CompoundNBT();
-					gristTag.putString("id", String.valueOf(type.getRegistryName()));
-					gristTag.putInt("amount", primary.getGrist(type));
-					listPrimary.add(gristTag);
-				}
-				tag.put("primary", listPrimary);
+				tag.put("primary", primary.write(new ListNBT()));
 				if(secondary != null)
 				{
-					ListNBT listSecondary = new ListNBT();
-					for(GristType type : GristType.values())
-					{
-						if(secondary.getGrist(type) == 0)
-							continue;
-						CompoundNBT gristTag = new CompoundNBT();
-						gristTag.putString("id", String.valueOf(type.getRegistryName()));
-						gristTag.putInt("amount", secondary.getGrist(type));
-						listSecondary.add(gristTag);
-					}
-					tag.put("secondary", listSecondary);
+					tag.put("secondary", secondary.write(new ListNBT()));
 				}
 				tagList.add(tag);
 			}
 		}
 		return nbt;
-	}
-	
-	//Clientside
-	
-	static void loadClientDeployList(CompoundNBT nbt)
-	{
-		if(clientDeployList == null)
-			clientDeployList = new ArrayList<>();
-		else clientDeployList.clear();
-		ListNBT list = nbt.getList("l", 10);
-		for(int i = 0; i < list.size(); i++)
-		{
-			CompoundNBT tag = list.getCompound(i);
-			ClientDeployEntry entry = new ClientDeployEntry();
-			entry.item = ItemStack.read(tag);
-			entry.index = tag.getInt("i");
-			entry.cost1 = new GristSet();
-			for (INBT nbtBase : tag.getList("primary", 10))
-			{
-				CompoundNBT gristTag = (CompoundNBT) nbtBase;
-				GristType type = GristType.getTypeFromString(gristTag.getString("id"));
-				if(type != null)
-					entry.cost1.setGrist(type, gristTag.getInt("amount"));
-			}
-			if(tag.contains("secondary", 9))
-			{
-				entry.cost2 = new GristSet();
-				for(INBT nbtBase : tag.getList("secondary", 10))
-				{
-					CompoundNBT gristTag = (CompoundNBT) nbtBase;
-					GristType type = GristType.getTypeFromString(gristTag.getString("id"));
-					if(type != null)
-						entry.cost2.setGrist(type, gristTag.getInt("amount"));
-				}
-			} else entry.cost2 = null;
-			clientDeployList.add(entry);
-		}
-	}
-	
-	private static List<ClientDeployEntry> clientDeployList;
-	
-	public static ClientDeployEntry getEntryClient(ItemStack stack)
-	{
-		stack = cleanStack(stack);
-		for(ClientDeployEntry entry : clientDeployList)
-			if(ItemStack.areItemStacksEqual(entry.item, stack))
-				return entry;
-		return null;
-	}
-	
-	public static class ClientDeployEntry
-	{
-		private ItemStack item;
-		private GristSet cost1;
-		private GristSet cost2;
-		private int index;
-		
-		public GristSet getPrimaryCost()
-		{
-			return cost1;
-		}
-		
-		public GristSet getSecondaryCost()
-		{
-			return cost2;
-		}
-		
-		public int getIndex()
-		{
-			return index;
-		}
 	}
 }

@@ -1,9 +1,9 @@
 package com.mraof.minestuck.tileentity;
 
-import com.mraof.minestuck.alchemy.AlchemyRecipes;
-import com.mraof.minestuck.alchemy.CombinationRegistry;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry;
 import com.mraof.minestuck.inventory.MiniPunchDesignixContainer;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.MSItems;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -17,11 +17,12 @@ import javax.annotation.Nullable;
 
 public class MiniPunchDesignixTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
 {
+	public static final String TITLE = "container.minestuck.mini_punch_designix";
 	public static final RunType TYPE = RunType.BUTTON;
 	
 	public MiniPunchDesignixTileEntity()
 	{
-		super(ModTileEntityTypes.MINI_PUNCH_DESIGNIX);
+		super(MSTileEntityTypes.MINI_PUNCH_DESIGNIX);
 	}
 	
 	@Override
@@ -39,7 +40,7 @@ public class MiniPunchDesignixTileEntity extends MachineProcessTileEntity implem
 	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack)
 	{
-		return index == 0 || index == 1 && stack.getItem() == MinestuckItems.CAPTCHA_CARD;
+		return index == 0 || index == 1 && stack.getItem() == MSItems.CAPTCHA_CARD;
 	}
 	
 	@Override
@@ -102,7 +103,7 @@ public class MiniPunchDesignixTileEntity extends MachineProcessTileEntity implem
 	@Override
 	public ITextComponent getDisplayName()
 	{
-		return new TranslationTextComponent("container.mini_punch_designix");
+		return new TranslationTextComponent(TITLE);
 	}
 	
 	@Override
@@ -127,6 +128,6 @@ public class MiniPunchDesignixTileEntity extends MachineProcessTileEntity implem
 	@Override
 	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
 	{
-		return new MiniPunchDesignixContainer(windowId, playerInventory, this, parameters);
+		return new MiniPunchDesignixContainer(windowId, playerInventory, this, parameters, pos);
 	}
 }

@@ -1,11 +1,12 @@
 package com.mraof.minestuck.entity.underling;
 
-import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.entity.IEntityMultiPart;
 import com.mraof.minestuck.entity.ai.AttackOnCollideWithRateGoal;
-import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.util.Echeladder;
+import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -16,19 +17,13 @@ import net.minecraft.world.World;
 
 public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 {
-	UnderlingPartEntity tail;
+	private UnderlingPartEntity tail;
 	
 	public BasiliskEntity(EntityType<? extends BasiliskEntity> type, World world)
 	{
 		super(type, world);
 		tail = new UnderlingPartEntity(this, 0, 3F, 2F);
 		world.addEntity(tail);
-	}
-	
-	@Override
-	protected String getUnderlingName()
-	{
-		return "basilisk";
 	}
 	
 	@Override
@@ -42,29 +37,29 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	
 	protected SoundEvent getAmbientSound()
 	{
-		return ModSoundEvents.ENTITY_BASILISK_AMBIENT;
+		return MSSoundEvents.ENTITY_BASILISK_AMBIENT;
 	}
 	
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
 	{
-		return ModSoundEvents.ENTITY_BASILISK_HURT;
+		return MSSoundEvents.ENTITY_BASILISK_HURT;
 	}
 	
 	protected SoundEvent getDeathSound()
 	{
-		return ModSoundEvents.ENTITY_BASILISK_DEATH;
+		return MSSoundEvents.ENTITY_BASILISK_DEATH;
 	}
 	
 	@Override
 	public GristSet getGristSpoils()
 	{
-		return GristHelper.getRandomDrop(type, 6);
+		return GristHelper.getRandomDrop(getGristType(), 6);
 	}
 	
 	@Override
 	protected float getMaximumHealth() 
 	{
-		return type != null ? 20 * type.getPower() + 85 : 1;
+		return 20 * getGristType().getPower() + 85;
 	}
 
 	@Override
@@ -82,7 +77,7 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	@Override
 	protected double getAttackDamage()
 	{
-		return this.type.getPower()*2.7 + 6;
+		return getGristType().getPower()*2.7 + 6;
 	}
 	
 	@Override
@@ -92,9 +87,9 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	}
 	
 	@Override
-	protected void applyGristType(GristType type, boolean fullHeal)
+	protected void onGristTypeUpdated(GristType type)
 	{
-		super.applyGristType(type, fullHeal);
+		super.onGristTypeUpdated(type);
 		this.experienceValue = (int) (6 * type.getPower() + 4);
 	}
 	
@@ -114,9 +109,7 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	@Override
 	public boolean attackEntityFromPart(Entity entityPart, DamageSource source, float damage) 
 	{
-		boolean flag = this.attackEntityFrom(source, damage);
-		
-		return flag;
+		return this.attackEntityFrom(source, damage);
 	}
 	
 	@Override
@@ -160,12 +153,12 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	{
 		super.onDeath(cause);
 		Entity entity = cause.getTrueSource();
-		if(this.dead && !this.world.isRemote && type != null)
+		if(this.dead && !this.world.isRemote)
 		{
-			computePlayerProgress((int) (100*type.getPower() + 160));
+			computePlayerProgress((int) (100* getGristType().getPower() + 160));
 			if(entity instanceof ServerPlayerEntity)
 			{
-				Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) entity).echeladder;
+				Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder();
 				ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 2));
 			}
 		}

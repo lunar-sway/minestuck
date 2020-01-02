@@ -6,14 +6,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
-public class EditmodeInventoryPacket
+public class EditmodeInventoryPacket implements PlayToBothPacket
 {
 	
 	public boolean b1, b2;
@@ -37,6 +34,7 @@ public class EditmodeInventoryPacket
 		return packet;
 	}
 	
+	@Override
 	public void encode(PacketBuffer buffer)
 	{
 		buffer.writeBoolean(b1);
@@ -65,16 +63,7 @@ public class EditmodeInventoryPacket
 		return packet;
 	}
 	
-	public void consume(Supplier<NetworkEvent.Context> ctx)
-	{
-		if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER)
-			ctx.get().enqueueWork(() -> this.execute(ctx.get().getSender()));
-		else if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT)
-			ctx.get().enqueueWork(this::execute);
-		
-		ctx.get().setPacketHandled(true);
-	}
-	
+	@Override
 	public void execute()
 	{
 		if(Minecraft.getInstance().currentScreen instanceof InventoryEditmodeScreen)
@@ -89,6 +78,7 @@ public class EditmodeInventoryPacket
 		}
 	}
 	
+	@Override
 	public void execute(ServerPlayerEntity player)
 	{
 		if(player.openContainer instanceof EditmodeContainer)

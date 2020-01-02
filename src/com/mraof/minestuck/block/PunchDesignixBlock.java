@@ -2,6 +2,7 @@ package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.block.multiblock.MachineMultiblock;
 import com.mraof.minestuck.tileentity.PunchDesignixTileEntity;
+import com.mraof.minestuck.util.CustomVoxelShape;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -32,10 +33,10 @@ public class PunchDesignixBlock extends MultiMachineBlock
 	protected final Map<Direction, VoxelShape> shape;
 	protected final BlockPos mainPos;
 	
-	public PunchDesignixBlock(MachineMultiblock machine, Map<Direction, VoxelShape> shape, BlockPos pos, Properties properties)
+	public PunchDesignixBlock(MachineMultiblock machine, CustomVoxelShape shape, BlockPos pos, Properties properties)
 	{
 		super(machine, properties);
-		this.shape = shape;
+		this.shape = shape.createRotatedShapes();
 		this.mainPos = pos;
 	}
 	
@@ -100,9 +101,9 @@ public class PunchDesignixBlock extends MultiMachineBlock
 	
 	public static class Slot extends PunchDesignixBlock
 	{
-		public static final BooleanProperty HAS_CARD = MinestuckProperties.HAS_CARD;
+		public static final BooleanProperty HAS_CARD = MSProperties.HAS_CARD;
 		
-		public Slot(MachineMultiblock machine, Map<Direction, VoxelShape> shape, Properties properties)
+		public Slot(MachineMultiblock machine, CustomVoxelShape shape, Properties properties)
 		{
 			super(machine, shape, new BlockPos(0, 0, 0), properties);
 			setDefaultState(this.stateContainer.getBaseState().with(HAS_CARD, false));

@@ -1,6 +1,6 @@
 package com.mraof.minestuck.item.block;
 
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.tileentity.MiniCruxtruderTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -35,7 +35,7 @@ public class MiniCruxtruderItem extends BlockItem
 	
 	public static ItemStack getCruxtruderWithColor(int color)
 	{
-		ItemStack stack = new ItemStack(MinestuckBlocks.MINI_CRUXTRUDER);
+		ItemStack stack = new ItemStack(MSBlocks.MINI_CRUXTRUDER);
 		stack.setTag(new CompoundNBT());
 		stack.getTag().putInt("color", color);
 		return stack;

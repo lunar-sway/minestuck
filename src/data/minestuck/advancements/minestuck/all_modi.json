@@ -1,83 +1,100 @@
 {
-    "display": {
-        "icon": {
-            "item": "minestuck:modus_card",
-            "data": 2
-        },
-        "title": {
-            "translate": "advancements.minestuck.all_modi.title"
-        },
-        "description": {
-            "translate": "advancements.minestuck.all_modi.description"
-        }
+  "parent": "minestuck:minestuck/new_modus",
+  "display": {
+    "icon": {
+      "item": "minestuck:queuestack_modus_card"
     },
-    "parent": "minestuck:minestuck/new_modus",
-    "criteria": {
-        "stack": {
-            "trigger": "minecraft:inventory_changed",
-            "conditions": {
-                "items": [
-                    {
-                        "item": "minestuck:modus_card",
-                        "data": 0
-                    }
-                ]
-            }
-        },
-        "queue": {
-            "trigger": "minecraft:inventory_changed",
-            "conditions": {
-                "items": [
-                    {
-                        "item": "minestuck:modus_card",
-                        "data": 1
-                    }
-                ]
-            }
-        },
-        "queuestack": {
-            "trigger": "minecraft:inventory_changed",
-            "conditions": {
-                "items": [
-                    {
-                        "item": "minestuck:modus_card",
-                        "data": 2
-                    }
-                ]
-            }
-        },
-        "tree": {
-            "trigger": "minecraft:inventory_changed",
-            "conditions": {
-                "items": [
-                    {
-                        "item": "minestuck:modus_card",
-                        "data": 3
-                    }
-                ]
-            }
-        },
-        "hashmap": {
-            "trigger": "minecraft:inventory_changed",
-            "conditions": {
-                "items": [
-                    {
-                        "item": "minestuck:modus_card",
-                        "data": 4
-                    }
-                ]
-            }
-        },
-        "set": {
-            "trigger": "minecraft:inventory_changed",
-            "conditions": {
-                "items": [
-                    {
-                        "item": "minestuck:modus_card",
-                        "data": 5
-                    }
-                ]
-            }
-        }
+    "title": {
+      "translate": "advancements.minestuck.all_modi.title"
+    },
+    "description": {
+      "translate": "advancements.minestuck.all_modi.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "stack": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:stack_modus_card"
+          }
+        ]
+      }
+    },
+    "queue": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:queue_modus_card"
+          }
+        ]
+      }
+    },
+    "queue_stack": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:queuestack_modus_card"
+          }
+        ]
+      }
+    },
+    "tree": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:tree_modus_card"
+          }
+        ]
+      }
+    },
+    "hash_map": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:hashmap_modus_card"
+          }
+        ]
+      }
+    },
+    "set": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:set_modus_card"
+          }
+        ]
+      }
     }
+  },
+  "requirements": [
+    [
+      "stack"
+    ],
+    [
+      "queue"
+    ],
+    [
+      "queue_stack"
+    ],
+    [
+      "tree"
+    ],
+    [
+      "hash_map"
+    ],
+    [
+      "set"
+    ]
+  ]
 }

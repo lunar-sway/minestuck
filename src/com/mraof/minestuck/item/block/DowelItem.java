@@ -3,7 +3,7 @@ package com.mraof.minestuck.item.block;
 import com.mraof.minestuck.block.CruxiteDowelBlock;
 import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.tileentity.ItemStackTileEntity;
-import com.mraof.minestuck.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
@@ -17,6 +17,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -50,11 +52,11 @@ public class DowelItem extends BlockItem
 			
 			if (ForgeRegistries.ITEMS.containsKey(new ResourceLocation(contentID.getString())))
 			{
-				tooltip.add(new StringTextComponent("(").appendSibling(AlchemyRecipes.getDecodedItem(stack).getDisplayName()).appendText(")"));
+				tooltip.add(new StringTextComponent("(").appendSibling(AlchemyRecipes.getDecodedItem(stack).getDisplayName()).appendText(")").setStyle(new Style().setColor(TextFormatting.GRAY)));
 			}
 			else
 			{
-				tooltip.add(new StringTextComponent("(").appendSibling(new StringTextComponent("item.captchaCard.invalid")).appendText(")"));
+				tooltip.add(new StringTextComponent("(").appendSibling(new StringTextComponent("item.captchaCard.invalid")).appendText(")").setStyle(new Style().setColor(TextFormatting.GRAY)));
 			}
 		}
 	}

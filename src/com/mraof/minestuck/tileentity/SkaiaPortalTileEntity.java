@@ -1,16 +1,16 @@
 package com.mraof.minestuck.tileentity;
 
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.Location;
-
-import com.mraof.minestuck.world.MinestuckDimensions;
+import com.mojang.datafixers.Dynamic;
+import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.util.Teleport;
+import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.NBTDynamicOps;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.GlobalPos;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.Heightmap;
@@ -19,71 +19,62 @@ import net.minecraftforge.common.DimensionManager;
 
 public class SkaiaPortalTileEntity extends TileEntity //implements ITeleporter
 {
-	public Location destination = new Location();
+	public GlobalPos destination = GlobalPos.of(DimensionType.OVERWORLD, new BlockPos(0, -1, 0));
 	
 	public SkaiaPortalTileEntity()
 	{
-		super(ModTileEntityTypes.SKAIA_PORTAL);
+		super(MSTileEntityTypes.SKAIA_PORTAL);
 	}
 	
 	@Override
 	public void setWorld(World worldIn)
 	{
 		super.setWorld(worldIn);
-		if(destination.dim == worldIn.getDimension().getType())
-			destination.dim = worldIn.getDimension().getType() == MinestuckDimensions.skaiaDimension ? DimensionType.OVERWORLD : MinestuckDimensions.skaiaDimension;
+		if(destination.getDimension() == worldIn.getDimension().getType())
+			destination = GlobalPos.of(worldIn.getDimension().getType() == MSDimensions.skaiaDimension ? DimensionType.OVERWORLD : MSDimensions.skaiaDimension, destination.getPos());
 	}
 	
 	@Override
 	public void read(CompoundNBT compound)
 	{
 		super.read(compound);
-		destination.pos = new BlockPos(compound.getInt("destX"), compound.getInt("destY"), compound.getInt("destZ"));
-		destination.dim = DimensionType.byName(ResourceLocation.tryCreate(compound.getString("destDim")));
-		if(destination.dim == null)
-			destination.dim = MinestuckDimensions.skaiaDimension;
+		destination = GlobalPos.deserialize(new Dynamic<>(NBTDynamicOps.INSTANCE, compound.getCompound("dest")));
 	}
 	
 	@Override
 	public CompoundNBT write(CompoundNBT compound)
 	{
 		super.write(compound);
-		ResourceLocation dimName = this.destination.dim.getRegistryName();
+		compound.put("dest", destination.serialize(NBTDynamicOps.INSTANCE));
 		
-		if(dimName != null)
-			compound.putString("destDim", dimName.toString());
-		else Debug.warnf("Couldn't get dimension name for dimension %s!", destination.dim);
-		compound.putInt("destX", destination.pos.getX());
-		compound.putInt("destY", destination.pos.getY());
-		compound.putInt("destZ", destination.pos.getZ());
 		return compound;
 	}
 	
 	public void teleportEntity(Entity entity)
 	{
-		if(destination.dim != this.world.getDimension().getType() && destination.dim != null)
+		if(destination.getDimension() != this.world.getDimension().getType())
 		{
-			if(destination.pos.getY() < 0)
+			if(destination.getPos().getY() < 0)
 			{
-				ServerWorld world = DimensionManager.getWorld(entity.getServer(), destination.dim, true, true);
+				ServerWorld world = DimensionManager.getWorld(entity.getServer(), destination.getDimension(), true, true);
 				if(world == null)
 					return;
-				destination.pos = world.getHeight(Heightmap.Type.WORLD_SURFACE, new BlockPos(entity)).up(5);
+				destination = GlobalPos.of(destination.getDimension(), world.getHeight(Heightmap.Type.WORLD_SURFACE, new BlockPos(entity)).up(5));
 			}
-			entity = entity.changeDimension(destination.dim);//, this);
+			entity = Teleport.teleportEntity(entity, DimensionManager.getWorld(entity.getServer(), destination.getDimension(), true, true), pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+			if(entity != null)
+				placeDestPlatform(entity.world);
 		}
 		if(entity != null)
 			entity.timeUntilPortal = entity.getPortalCooldown();
 	}
 	
-	//@Override
-	public void placeEntity(World world, Entity entity, float yaw)
+	private void placeDestPlatform(World world)
 	{
 		double x = pos.getX();
 		double y = pos.getY();
 		double z = pos.getZ();
-		entity.setPosition(x, y, z);
-		Block[] blocks = {MinestuckBlocks.BLACK_CHESS_DIRT, MinestuckBlocks.LIGHT_GRAY_CHESS_DIRT, MinestuckBlocks.WHITE_CHESS_DIRT, MinestuckBlocks.DARK_GRAY_CHESS_DIRT};
+		Block[] blocks = {MSBlocks.BLACK_CHESS_DIRT, MSBlocks.LIGHT_GRAY_CHESS_DIRT, MSBlocks.WHITE_CHESS_DIRT, MSBlocks.DARK_GRAY_CHESS_DIRT};
 		for(int blockX = (int) x - 2; blockX < x + 2; blockX++)
 		{
 			for(int blockZ = (int) z - 2; blockZ < z + 2; blockZ++)

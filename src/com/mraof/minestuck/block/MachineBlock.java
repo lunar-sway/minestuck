@@ -2,6 +2,7 @@ package com.mraof.minestuck.block;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import com.mraof.minestuck.util.CustomVoxelShape;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.PushReaction;
@@ -9,10 +10,9 @@ import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
 
 import javax.annotation.Nullable;
 import java.util.EnumMap;
@@ -44,7 +44,7 @@ public abstract class MachineBlock extends Block
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context)
 	{
-		return getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
+		return getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());	//Should face the player
 	}
 	
 	//Should probably find an utility class for the functions below
@@ -67,6 +67,11 @@ public abstract class MachineBlock extends Block
 				break;
 		}
 		return rotation;
+	}
+	
+	public static Map<Direction, VoxelShape> createRotatedShapes(CustomVoxelShape shape)
+	{
+		return Maps.newEnumMap(ImmutableMap.of(Direction.NORTH, shape.create(Direction.NORTH), Direction.SOUTH, shape.create(Direction.SOUTH), Direction.WEST, shape.create(Direction.WEST), Direction.EAST, shape.create(Direction.EAST)));
 	}
 	
 	public static Map<Direction, VoxelShape> createRotatedShapes(double x1, double y1, double z1, double x2, double y2, double z2)

@@ -1,7 +1,7 @@
 package com.mraof.minestuck.entity.item;
 
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.entity.ModEntityTypes;
+import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.entity.MSEntityTypes;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -25,7 +25,7 @@ public class HologramEntity extends Entity
 	
 	public HologramEntity(World worldIn, ItemStack item)
 	{
-		this(ModEntityTypes.HOLOGRAM, worldIn, item);
+		this(MSEntityTypes.HOLOGRAM, worldIn, item);
 	}
 	
 	public HologramEntity(EntityType<? extends HologramEntity> type, World worldIn, ItemStack item)
@@ -37,7 +37,7 @@ public class HologramEntity extends Entity
 
 	public HologramEntity(EntityType<? extends HologramEntity> type, World worldIn)
 	{
-		this(type, worldIn, new ItemStack(MinestuckBlocks.GENERIC_OBJECT));
+		this(type, worldIn, new ItemStack(MSBlocks.GENERIC_OBJECT));
 	}
 	
 	public void onUpdate()
@@ -61,7 +61,7 @@ public class HologramEntity extends Entity
 	@Override
 	protected void registerData()
 	{
-		this.dataManager.register(ITEM, new ItemStack(MinestuckBlocks.GENERIC_OBJECT));
+		this.dataManager.register(ITEM, new ItemStack(MSBlocks.GENERIC_OBJECT));
 	}
 	
 	@Override

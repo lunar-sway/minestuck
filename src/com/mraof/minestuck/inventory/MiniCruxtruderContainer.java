@@ -2,7 +2,7 @@ package com.mraof.minestuck.inventory;
 
 import com.mraof.minestuck.inventory.slot.InputSlot;
 import com.mraof.minestuck.inventory.slot.OutputSlot;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.MSItems;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
@@ -10,8 +10,10 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
+import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nonnull;
 
@@ -25,24 +27,24 @@ public class MiniCruxtruderContainer extends MachineContainer
 	
 	private final IInventory cruxtruderInventory;
 	
-	public MiniCruxtruderContainer(int windowId, PlayerInventory inventoryPlayer)
+	public MiniCruxtruderContainer(int windowId, PlayerInventory inventoryPlayer, PacketBuffer buffer)
 	{
-		this(ModContainerTypes.MINI_CRUXTRUDER, windowId, inventoryPlayer, new Inventory(2), new IntArray(3));
+		this(MSContainerTypes.MINI_CRUXTRUDER, windowId, inventoryPlayer, new Inventory(2), new IntArray(3), buffer.readBlockPos());
 	}
 	
-	public MiniCruxtruderContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters)
+	public MiniCruxtruderContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, BlockPos machinePos)
 	{
-		this(ModContainerTypes.MINI_CRUXTRUDER, windowId, playerInventory, inventory, parameters);
+		this(MSContainerTypes.MINI_CRUXTRUDER, windowId, playerInventory, inventory, parameters, machinePos);
 	}
 	
-	public MiniCruxtruderContainer(ContainerType<? extends MiniCruxtruderContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters)
+	public MiniCruxtruderContainer(ContainerType<? extends MiniCruxtruderContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, BlockPos machinePos)
 	{
-		super(type, windowId, parameters);
+		super(type, windowId, parameters, machinePos);
 		
 		assertInventorySize(inventory, 2);
 		this.cruxtruderInventory = inventory;
 		
-		addSlot(new InputSlot(inventory, 0, INPUT_X, INPUT_Y, MinestuckItems.RAW_CRUXITE));
+		addSlot(new InputSlot(inventory, 0, INPUT_X, INPUT_Y, MSItems.RAW_CRUXITE));
 		addSlot(new OutputSlot(inventory, 1, OUTPUT_X, OUTPUT_Y));
 		
 		bindPlayerInventory(playerInventory);
@@ -88,7 +90,7 @@ public class MiniCruxtruderContainer extends MachineContainer
 			{
 				//if it's an inventory slot with valid contents
 				//Debug.print("item ID of " + itemstackOrig.itemID + ". Expected " + Minestuck.rawCruxite.itemID);
-				if(itemstackOrig.getItem() == MinestuckItems.RAW_CRUXITE)
+				if(itemstackOrig.getItem() == MSItems.RAW_CRUXITE)
 				{
 					//Debug.print("Transferring...");
 					result = mergeItemStack(itemstackOrig, 0, 1, false);

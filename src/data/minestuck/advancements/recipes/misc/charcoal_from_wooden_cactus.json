@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:charcoal_from_wooden_cactus"
+    ]
+  },
+  "criteria": {
+    "has_wooden_cactus": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:wooden_cactus"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:charcoal_from_wooden_cactus"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_wooden_cactus",
+      "has_the_recipe"
+    ]
+  ]
+}

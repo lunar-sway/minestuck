@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:soul_sand"
+  },
+  "grist_cost": {
+    "minestuck:build": 2,
+    "minestuck:sulfur": 5,
+    "minestuck:caulk": 3
+  }
+}

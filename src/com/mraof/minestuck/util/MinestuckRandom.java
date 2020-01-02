@@ -1,10 +1,9 @@
 package com.mraof.minestuck.util;
 
+import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
+
 import java.util.HashMap;
 import java.util.Random;
-
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 
 /**
  * A singleton wrapper for java.Util.Random
@@ -13,31 +12,15 @@ import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
  * @author BenjaminK
  *
  */
-public abstract class MinestuckRandom	
+public abstract class MinestuckRandom	//TODO This is not good because it carries over between worlds, and is generally not predictable based on world seed. A different solution is needed
 {
-	private static java.util.Random rand;
 	private static HashMap<PlayerIdentifier, Random> playerRandMap = new HashMap<PlayerIdentifier, Random>();
 	
-	public static Random getRandom()
-	{
-		if(rand==null)
-		{
-			if(Minestuck.worldSeed!=0L)
-			{
-				rand = new java.util.Random(Minestuck.worldSeed);
-			} else
-			{
-				rand = new java.util.Random();
-			}
-		}
-		return rand;
-	}
-	
-	public static java.util.Random getPlayerSpecificRandom(PlayerIdentifier p)
+	public static java.util.Random getPlayerSpecificRandom(PlayerIdentifier p, long worldSeed)
 	{
 		if(!playerRandMap.containsKey(p))
 		{
-			playerRandMap.put(p, new java.util.Random(Minestuck.worldSeed ^ p.hashCode()));
+			playerRandMap.put(p, new java.util.Random(worldSeed ^ p.hashCode()));
 		}
 		return playerRandMap.get(p);
 	}

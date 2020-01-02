@@ -1,10 +1,11 @@
 package com.mraof.minestuck.entity.underling;
 
-import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.entity.ai.AttackOnCollideWithRateGoal;
-import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.util.Echeladder;
+import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -23,12 +24,6 @@ public class OgreEntity extends UnderlingEntity
 	}
 	
 	@Override
-	protected String getUnderlingName()
-	{
-		return "ogre";
-	}
-	
-	@Override
 	protected void registerGoals()
 	{
 		super.registerGoals();
@@ -39,23 +34,23 @@ public class OgreEntity extends UnderlingEntity
 	
 	protected SoundEvent getAmbientSound()
 	{
-		return ModSoundEvents.ENTITY_OGRE_AMBIENT;
+		return MSSoundEvents.ENTITY_OGRE_AMBIENT;
 	}
 	
 	protected SoundEvent getDeathSound()
 	{
-		return ModSoundEvents.ENTITY_OGRE_DEATH;
+		return MSSoundEvents.ENTITY_OGRE_DEATH;
 	}	
 	
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
 	{
-		return ModSoundEvents.ENTITY_OGRE_HURT;
+		return MSSoundEvents.ENTITY_OGRE_HURT;
 	}
 	
 	@Override
 	public GristSet getGristSpoils()
 	{
-		return GristHelper.getRandomDrop(type, 4);
+		return GristHelper.getRandomDrop(getGristType(), 4);
 	}
 	
 	@Override
@@ -67,7 +62,7 @@ public class OgreEntity extends UnderlingEntity
 	@Override
 	protected float getMaximumHealth() 
 	{
-		return type != null ? 13F * type.getPower() + 50 : 1;
+		return 13F * getGristType().getPower() + 50;
 	}
 	
 	@Override
@@ -79,7 +74,7 @@ public class OgreEntity extends UnderlingEntity
 	@Override
 	protected double getAttackDamage()
 	{
-		return this.type.getPower() * 2.1 + 6;
+		return getGristType().getPower() * 2.1 + 6;
 	}
 	
 	@Override
@@ -89,9 +84,9 @@ public class OgreEntity extends UnderlingEntity
 	}
 	
 	@Override
-	protected void applyGristType(GristType type, boolean fullHeal)
+	protected void onGristTypeUpdated(GristType type)
 	{
-		super.applyGristType(type, fullHeal);
+		super.onGristTypeUpdated(type);
 		this.experienceValue = (int) (5 * type.getPower() + 4);
 	}
 	
@@ -100,13 +95,12 @@ public class OgreEntity extends UnderlingEntity
 	{
 		super.onDeath(cause);
 		Entity entity = cause.getTrueSource();
-		if(this.dead && !this.world.isRemote && type != null)
+		if(this.dead && !this.world.isRemote)
 		{
-			computePlayerProgress((int) (40*type.getPower() + 50));
+			computePlayerProgress((int) (40* getGristType().getPower() + 50));
 			if(entity instanceof ServerPlayerEntity)
 			{
-				//((EntityPlayerMP) entity).addStat(MinestuckAchievementHandler.killOgre);
-				Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) entity).echeladder;
+				Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder();
 				ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 1));
 			}
 		}

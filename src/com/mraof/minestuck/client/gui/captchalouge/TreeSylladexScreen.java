@@ -5,13 +5,15 @@ import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.inventory.captchalogue.TreeModus;
 import com.mraof.minestuck.inventory.captchalogue.TreeModus.TreeNode;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.network.MSPacketHandler;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 public class TreeSylladexScreen extends SylladexScreen
 {
+	public static final String AUTOBALANCE_ON = "minestuck.autobalance.on";
+	public static final String AUTOBALANCE_OFF = "minestuck.autobalance.off";
 	
 	protected TreeModus modus;
 	protected int maxDepth;
@@ -39,7 +41,7 @@ public class TreeSylladexScreen extends SylladexScreen
 		guiButton.x = (width - GUI_WIDTH)/2 + 15;
 		guiButton.y = (height - GUI_HEIGHT)/2 + 175;
 		boolean autobalance = MinestuckConfig.clientTreeAutobalance == 0 ? modus.autoBalance : MinestuckConfig.clientTreeAutobalance == 1;
-		guiButton.setMessage(I18n.format(autobalance ? "gui.autobalance.on" : "gui.autobalance.off"));
+		guiButton.setMessage(I18n.format(autobalance ? AUTOBALANCE_ON : AUTOBALANCE_OFF));
 		guiButton.active = MinestuckConfig.clientTreeAutobalance == 0;
 		super.render(xcor, ycor, f);
 	}
@@ -94,7 +96,7 @@ public class TreeSylladexScreen extends SylladexScreen
 		if(MinestuckConfig.clientTreeAutobalance == 0)
 		{
 			modus.autoBalance = !modus.autoBalance;
-			MinestuckPacketHandler.sendToServer(CaptchaDeckPacket.modusParam((byte) 0, modus.autoBalance ? 1 : 0));
+			MSPacketHandler.sendToServer(CaptchaDeckPacket.modusParam((byte) 0, modus.autoBalance ? 1 : 0));
 		}
 	}
 	

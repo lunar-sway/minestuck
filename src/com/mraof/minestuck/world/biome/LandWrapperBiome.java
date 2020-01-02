@@ -1,9 +1,15 @@
 package com.mraof.minestuck.world.biome;
 
-import com.mraof.minestuck.world.lands.gen.LandGenSettings;
-import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.LandGenSettings;
+import com.mraof.minestuck.world.gen.feature.MSFeatures;
+import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.gen.placement.ChanceConfig;
+import net.minecraft.world.gen.placement.IPlacementConfig;
+import net.minecraft.world.gen.placement.Placement;
 import net.minecraft.world.gen.surfacebuilders.ConfiguredSurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilders.SurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilders.SurfaceBuilderConfig;
@@ -20,9 +26,38 @@ public class LandWrapperBiome extends LandBiome
 	
 	public void init(LandGenSettings settings)
 	{
-		StructureBlockRegistry registry = settings.getBlockRegistry();
-		SurfaceBuilderConfig surfaceConfig = new SurfaceBuilderConfig(registry.getBlockState("surface"), registry.getBlockState("upper"), registry.getBlockState("ocean_surface"));
+		StructureBlockRegistry blocks = settings.getBlockRegistry();
+		SurfaceBuilderConfig surfaceConfig = new SurfaceBuilderConfig(blocks.getBlockState("surface"), blocks.getBlockState("upper"), blocks.getBlockState("ocean_surface"));
 		this.surfaceBuilder = new ConfiguredSurfaceBuilder<>(SurfaceBuilder.DEFAULT, surfaceConfig);
-		this.addSpawn(EntityClassification.CREATURE, new SpawnListEntry(settings.getLandAspects().aspectTerrain.getConsortType(), 2, 1, 10));
+		this.addSpawn(EntityClassification.CREATURE, new SpawnListEntry(settings.getLandTypes().terrain.getConsortType(), 2, 1, 10));
+		
+		if(staticBiome != MSBiomes.LAND_OCEAN)
+			addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, createDecoratedFeature(MSFeatures.RETURN_NODE, IFeatureConfig.NO_FEATURE_CONFIG, Placement.CHANCE_HEIGHTMAP, new ChanceConfig(128)));
+		addDefaultStructures(blocks);
+	}
+	
+	private void addDefaultStructures(StructureBlockRegistry blocks)
+	{
+		addStructure(MSFeatures.LAND_GATE, IFeatureConfig.NO_FEATURE_CONFIG);
+		if(staticBiome == MSBiomes.LAND_NORMAL)
+		{
+			addStructure(MSFeatures.SMALL_RUIN, IFeatureConfig.NO_FEATURE_CONFIG);
+			addStructure(MSFeatures.CONSORT_VILLAGE, IFeatureConfig.NO_FEATURE_CONFIG);
+		}
+		if(staticBiome == MSBiomes.LAND_NORMAL || staticBiome == MSBiomes.LAND_ROUGH)
+		{
+			addStructure(MSFeatures.IMP_DUNGEON, IFeatureConfig.NO_FEATURE_CONFIG);
+		}
+		
+		addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, createDecoratedFeature(MSFeatures.LAND_GATE, IFeatureConfig.NO_FEATURE_CONFIG, Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
+		addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, createDecoratedFeature(MSFeatures.SMALL_RUIN, IFeatureConfig.NO_FEATURE_CONFIG, Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
+		addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, createDecoratedFeature(MSFeatures.IMP_DUNGEON, IFeatureConfig.NO_FEATURE_CONFIG, Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
+		addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, createDecoratedFeature(MSFeatures.CONSORT_VILLAGE, IFeatureConfig.NO_FEATURE_CONFIG, Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
+	}
+	
+	@Override
+	public void addSpawn(EntityClassification classification, SpawnListEntry entry)
+	{
+		super.addSpawn(classification, entry);
 	}
 }

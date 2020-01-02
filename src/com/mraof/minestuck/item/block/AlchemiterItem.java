@@ -1,7 +1,7 @@
 package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.block.AlchemiterBlock;
-import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.block.MSBlocks;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -103,26 +103,26 @@ public class AlchemiterItem extends BlockItem
 					|| facing == Direction.NORTH && context.getHitVec().x < 0.5F || facing == Direction.SOUTH && context.getHitVec().x >= 0.5F)
 				pos = pos.offset(facing.rotateYCCW());
 			
-			world.setBlockState(pos.offset(facing,3).offset(facing.rotateY(),3).up(0), MinestuckBlocks.ALCHEMITER.TOTEM_CORNER.getDefaultState().with(AlchemiterBlock.FACING, facing));
-			world.setBlockState(pos.offset(facing,3).offset(facing.rotateY(),3).up(1), MinestuckBlocks.ALCHEMITER.TOTEM_PAD.getDefaultState().with(AlchemiterBlock.FACING, facing));
-			world.setBlockState(pos.offset(facing,3).offset(facing.rotateY(),3).up(2), MinestuckBlocks.ALCHEMITER.LOWER_ROD.getDefaultState().with(AlchemiterBlock.FACING, facing));
-			world.setBlockState(pos.offset(facing,3).offset(facing.rotateY(),3).up(3), MinestuckBlocks.ALCHEMITER.UPPER_ROD.getDefaultState().with(AlchemiterBlock.FACING, facing));
+			world.setBlockState(pos.offset(facing,3).offset(facing.rotateY(),3).up(0), MSBlocks.ALCHEMITER.TOTEM_CORNER.getDefaultState().with(AlchemiterBlock.FACING, facing));
+			world.setBlockState(pos.offset(facing,3).offset(facing.rotateY(),3).up(1), MSBlocks.ALCHEMITER.TOTEM_PAD.getDefaultState().with(AlchemiterBlock.FACING, facing));
+			world.setBlockState(pos.offset(facing,3).offset(facing.rotateY(),3).up(2), MSBlocks.ALCHEMITER.LOWER_ROD.getDefaultState().with(AlchemiterBlock.FACING, facing));
+			world.setBlockState(pos.offset(facing,3).offset(facing.rotateY(),3).up(3), MSBlocks.ALCHEMITER.UPPER_ROD.getDefaultState().with(AlchemiterBlock.FACING, facing));
 			
-			world.setBlockState(pos.offset(facing,0).offset(facing.rotateY(),0), MinestuckBlocks.ALCHEMITER.CORNER.getDefaultState().with(AlchemiterBlock.FACING, facing.getOpposite()));
-			world.setBlockState(pos.offset(facing,0).offset(facing.rotateY(),1), MinestuckBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, facing.getOpposite()));
-			world.setBlockState(pos.offset(facing,0).offset(facing.rotateY(),2), MinestuckBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, facing.getOpposite()));
-			world.setBlockState(pos.offset(facing,1).offset(facing.rotateY(),1), MinestuckBlocks.ALCHEMITER.CENTER.getDefaultState().with(AlchemiterBlock.FACING, facing.getOpposite()));
-			world.setBlockState(pos.offset(facing,0).offset(facing.rotateY(),3), MinestuckBlocks.ALCHEMITER.CORNER.getDefaultState().with(AlchemiterBlock.FACING, facing.rotateY()));
-			world.setBlockState(pos.offset(facing,1).offset(facing.rotateY(),2), MinestuckBlocks.ALCHEMITER.CENTER.getDefaultState().with(AlchemiterBlock.FACING, facing.rotateY()));
-			world.setBlockState(pos.offset(facing,1).offset(facing.rotateY(),3), MinestuckBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, facing.rotateY()));
-			world.setBlockState(pos.offset(facing,2).offset(facing.rotateY(),3), MinestuckBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, facing.rotateY()));
-			world.setBlockState(pos.offset(facing,1).offset(facing.rotateY(),0), MinestuckBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, facing.rotateYCCW()));
-			world.setBlockState(pos.offset(facing,2).offset(facing.rotateY(),0), MinestuckBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, facing.rotateYCCW()));
-			world.setBlockState(pos.offset(facing,2).offset(facing.rotateY(),1), MinestuckBlocks.ALCHEMITER.CENTER.getDefaultState().with(AlchemiterBlock.FACING, facing.rotateYCCW()));
-			world.setBlockState(pos.offset(facing,3).offset(facing.rotateY(),0), MinestuckBlocks.ALCHEMITER.CORNER.getDefaultState().with(AlchemiterBlock.FACING, facing.rotateYCCW()));
-			world.setBlockState(pos.offset(facing,2).offset(facing.rotateY(),2), MinestuckBlocks.ALCHEMITER.CENTER.getDefaultState().with(AlchemiterBlock.FACING, facing));
-			world.setBlockState(pos.offset(facing,3).offset(facing.rotateY(),1), MinestuckBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, facing));
-			world.setBlockState(pos.offset(facing,3).offset(facing.rotateY(),2), MinestuckBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, facing));
+			world.setBlockState(pos.offset(facing,0).offset(facing.rotateY(),0), MSBlocks.ALCHEMITER.CORNER.getDefaultState().with(AlchemiterBlock.FACING, facing.getOpposite()));
+			world.setBlockState(pos.offset(facing,0).offset(facing.rotateY(),1), MSBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, facing.getOpposite()));
+			world.setBlockState(pos.offset(facing,0).offset(facing.rotateY(),2), MSBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, facing.getOpposite()));
+			world.setBlockState(pos.offset(facing,1).offset(facing.rotateY(),1), MSBlocks.ALCHEMITER.CENTER.getDefaultState().with(AlchemiterBlock.FACING, facing.getOpposite()));
+			world.setBlockState(pos.offset(facing,0).offset(facing.rotateY(),3), MSBlocks.ALCHEMITER.CORNER.getDefaultState().with(AlchemiterBlock.FACING, facing.rotateY()));
+			world.setBlockState(pos.offset(facing,1).offset(facing.rotateY(),2), MSBlocks.ALCHEMITER.CENTER.getDefaultState().with(AlchemiterBlock.FACING, facing.rotateY()));
+			world.setBlockState(pos.offset(facing,1).offset(facing.rotateY(),3), MSBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, facing.rotateY()));
+			world.setBlockState(pos.offset(facing,2).offset(facing.rotateY(),3), MSBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, facing.rotateY()));
+			world.setBlockState(pos.offset(facing,1).offset(facing.rotateY(),0), MSBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, facing.rotateYCCW()));
+			world.setBlockState(pos.offset(facing,2).offset(facing.rotateY(),0), MSBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, facing.rotateYCCW()));
+			world.setBlockState(pos.offset(facing,2).offset(facing.rotateY(),1), MSBlocks.ALCHEMITER.CENTER.getDefaultState().with(AlchemiterBlock.FACING, facing.rotateYCCW()));
+			world.setBlockState(pos.offset(facing,3).offset(facing.rotateY(),0), MSBlocks.ALCHEMITER.CORNER.getDefaultState().with(AlchemiterBlock.FACING, facing.rotateYCCW()));
+			world.setBlockState(pos.offset(facing,2).offset(facing.rotateY(),2), MSBlocks.ALCHEMITER.CENTER.getDefaultState().with(AlchemiterBlock.FACING, facing));
+			world.setBlockState(pos.offset(facing,3).offset(facing.rotateY(),1), MSBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, facing));
+			world.setBlockState(pos.offset(facing,3).offset(facing.rotateY(),2), MSBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, facing));
 			
 			if(player instanceof ServerPlayerEntity)
 				CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayerEntity) player, pos, context.getItem());

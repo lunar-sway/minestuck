@@ -1,17 +1,16 @@
 {
-  "type": "crafting_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
-    "XXX",
-    "XXX",
-    "XXX"
+    "###",
+    "###",
+    "###"
   ],
   "key": {
-    "X": {
+    "#": {
       "item": "minecraft:sugar"
     }
   },
   "result": {
-    "item": "minestuck:sugar_cube",
-    "count": 1
+    "item": "minestuck:sugar_cube"
   }
 }

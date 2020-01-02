@@ -4,16 +4,14 @@ import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.util.Debug;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
 import net.minecraft.client.renderer.texture.DownloadingTexture;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -26,6 +24,7 @@ import net.minecraft.world.GameType;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 public class DecoyEntity extends MobEntity
 {
@@ -54,7 +53,7 @@ public class DecoyEntity extends MobEntity
 	
 	public DecoyEntity(World world)
 	{
-		super(ModEntityTypes.PLAYER_DECOY, world);
+		super(MSEntityTypes.PLAYER_DECOY, world);
 		inventory = new PlayerInventory(null);
 		if(!world.isRemote)	//If not spawned the way it should
 			markedForDespawn = true;
@@ -62,11 +61,11 @@ public class DecoyEntity extends MobEntity
 	
 	public DecoyEntity(ServerWorld world, ServerPlayerEntity player)
 	{
-		super(ModEntityTypes.PLAYER_DECOY, world);
+		super(MSEntityTypes.PLAYER_DECOY, world);
 		this.setBoundingBox(player.getBoundingBox());
 		this.player = new DecoyPlayer(world, this, player);
-		for(String key : player.getEntityData().keySet())
-			this.player.getEntityData().put(key, player.getEntityData().get(key).copy());
+		for(String key : player.getPersistentData().keySet())
+			this.player.getPersistentData().put(key, player.getPersistentData().get(key).copy());
 		this.posX = player.posX;
 		originX = posX;
 		this.chunkCoordX = player.chunkCoordX;
@@ -101,7 +100,7 @@ public class DecoyEntity extends MobEntity
 	@Override
 	public EntitySize getSize(Pose poseIn)
 	{
-		return this.player.getSize(poseIn);
+		return EntityType.PLAYER.getSize();
 	}
 	
 	private void initInventory(ServerPlayerEntity player)
@@ -166,6 +165,12 @@ public class DecoyEntity extends MobEntity
 			downloadImageSkin = AbstractClientPlayerEntity.getDownloadImageSkin(locationSkin, username);
 			//downloadImageCape = AbstractClientPlayer.getDownloadImageCape(locationCape, username);
 		}
+	}
+	
+	@Override
+	public IPacket<?> createSpawnPacket()
+	{
+		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 	
 	public DownloadingTexture getTextureSkin()

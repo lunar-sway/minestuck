@@ -2,9 +2,9 @@ package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
+import com.mraof.minestuck.client.settings.MSKeyHandler;
 import com.mraof.minestuck.network.DataCheckerPacket;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.util.EnumClass;
 import net.minecraft.client.Minecraft;
@@ -19,6 +19,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 import java.util.ArrayList;
@@ -65,7 +66,7 @@ public class DataCheckerScreen extends Screen
 		refreshButton = addButton(new Button(xOffset + GUI_WIDTH - 45, yOffset + 5, 18, 18, "", button -> refresh()));
 		
 		if(activeComponent == null)
-			MinestuckPacketHandler.sendToServer(DataCheckerPacket.request());
+			MSPacketHandler.sendToServer(DataCheckerPacket.request());
 		
 		componentChanged();
 	}
@@ -212,7 +213,7 @@ public class DataCheckerScreen extends Screen
 	
 	private void refresh()
 	{
-		MinestuckPacketHandler.sendToServer(DataCheckerPacket.request());
+		MSPacketHandler.sendToServer(DataCheckerPacket.request());
 		activeComponent = null;
 		componentChanged();
 	}
@@ -251,7 +252,7 @@ public class DataCheckerScreen extends Screen
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int i)
 	{
-		if(MinestuckKeyHandler.instance.statKey.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode)))
+		if(MSKeyHandler.instance.statKey.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode)))
 		{
 			minecraft.displayGuiScreen(null);
 			return true;
@@ -336,13 +337,13 @@ public class DataCheckerScreen extends Screen
 			if(data == null || data.isEmpty())
 				return;
 			
-			ListNBT sessionList = data.getList("sessions", 10);
+			ListNBT sessionList = data.getList("sessions", Constants.NBT.TAG_COMPOUND);
 			int nameIndex = 1;
 			for(int i = 0; i < sessionList.size(); i++)
 			{
 				CompoundNBT sessionTag = sessionList.getCompound(i);
 				SessionComponent session = new SessionComponent(this, sessionTag, data);
-				if(sessionTag.contains("name", 8))
+				if(sessionTag.contains("name", Constants.NBT.TAG_STRING))
 					session.name = sessionTag.getString("name");
 				else
 				{
@@ -391,7 +392,7 @@ public class DataCheckerScreen extends Screen
 		{
 			this.parent = parent;
 			HashSet<String> playerSet = new HashSet<>();
-			ListNBT connectionList = sessionTag.getList("connections", 10);
+			ListNBT connectionList = sessionTag.getList("connections", Constants.NBT.TAG_COMPOUND);
 			for(int i = 0; i < connectionList.size(); i++)
 			{
 				ConnectionComponent connection = new ConnectionComponent(this, connectionList.getCompound(i), dataTag);

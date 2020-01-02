@@ -24,7 +24,7 @@ public class CustomOreBlock extends OreBlock
 	}
 	
 	@Override
-	protected int func_220281_a(Random random)
+	protected int getExperience(Random random)
 	{
 		return MathHelper.nextInt(random, minExp, maxExp);
 	}
@@ -32,38 +32,38 @@ public class CustomOreBlock extends OreBlock
 	public static BlockState getCruxiteState(BlockState ground)
 	{
 		if(ground.getBlock() == Blocks.STONE)
-			return MinestuckBlocks.STONE_CRUXITE_ORE.getDefaultState();
+			return MSBlocks.STONE_CRUXITE_ORE.getDefaultState();
 		else if(ground.getBlock() == Blocks.NETHERRACK)
-			return MinestuckBlocks.NETHERRACK_CRUXITE_ORE.getDefaultState();
+			return MSBlocks.NETHERRACK_CRUXITE_ORE.getDefaultState();
 		else if(ground.getBlock() == Blocks.COBBLESTONE)
-			return MinestuckBlocks.COBBLESTONE_CRUXITE_ORE.getDefaultState();
+			return MSBlocks.COBBLESTONE_CRUXITE_ORE.getDefaultState();
 		else if(ground.getBlock() == Blocks.SANDSTONE)
-			return MinestuckBlocks.SANDSTONE_CRUXITE_ORE.getDefaultState();
+			return MSBlocks.SANDSTONE_CRUXITE_ORE.getDefaultState();
 		else if(ground.getBlock() == Blocks.RED_SANDSTONE)
-			return MinestuckBlocks.RED_SANDSTONE_CRUXITE_ORE.getDefaultState();
+			return MSBlocks.RED_SANDSTONE_CRUXITE_ORE.getDefaultState();
 		else if(ground.getBlock() == Blocks.END_STONE)
-			return MinestuckBlocks.END_STONE_CRUXITE_ORE.getDefaultState();
-		else if(ground.getBlock() == MinestuckBlocks.PINK_STONE)
-			return MinestuckBlocks.PINK_STONE_CRUXITE_ORE.getDefaultState();
-		return MinestuckBlocks.STONE_CRUXITE_ORE.getDefaultState();
+			return MSBlocks.END_STONE_CRUXITE_ORE.getDefaultState();
+		else if(ground.getBlock() == MSBlocks.PINK_STONE)
+			return MSBlocks.PINK_STONE_CRUXITE_ORE.getDefaultState();
+		return MSBlocks.STONE_CRUXITE_ORE.getDefaultState();
 	}
 	
 	public static BlockState getUraniumState(BlockState ground)
 	{
 		if(ground.getBlock() == Blocks.STONE)
-			return MinestuckBlocks.STONE_URANIUM_ORE.getDefaultState();
+			return MSBlocks.STONE_URANIUM_ORE.getDefaultState();
 		else if(ground.getBlock() == Blocks.NETHERRACK)
-			return MinestuckBlocks.NETHERRACK_URANIUM_ORE.getDefaultState();
+			return MSBlocks.NETHERRACK_URANIUM_ORE.getDefaultState();
 		else if(ground.getBlock() == Blocks.COBBLESTONE)
-			return MinestuckBlocks.COBBLESTONE_URANIUM_ORE.getDefaultState();
+			return MSBlocks.COBBLESTONE_URANIUM_ORE.getDefaultState();
 		else if(ground.getBlock() == Blocks.SANDSTONE)
-			return MinestuckBlocks.SANDSTONE_URANIUM_ORE.getDefaultState();
+			return MSBlocks.SANDSTONE_URANIUM_ORE.getDefaultState();
 		else if(ground.getBlock() == Blocks.RED_SANDSTONE)
-			return MinestuckBlocks.RED_SANDSTONE_URANIUM_ORE.getDefaultState();
+			return MSBlocks.RED_SANDSTONE_URANIUM_ORE.getDefaultState();
 		else if(ground.getBlock() == Blocks.END_STONE)
-			return MinestuckBlocks.END_STONE_URANIUM_ORE.getDefaultState();
-		else if(ground.getBlock() == MinestuckBlocks.PINK_STONE)
-			return MinestuckBlocks.PINK_STONE_URANIUM_ORE.getDefaultState();
-		return MinestuckBlocks.STONE_URANIUM_ORE.getDefaultState();
+			return MSBlocks.END_STONE_URANIUM_ORE.getDefaultState();
+		else if(ground.getBlock() == MSBlocks.PINK_STONE)
+			return MSBlocks.PINK_STONE_URANIUM_ORE.getDefaultState();
+		return MSBlocks.STONE_URANIUM_ORE.getDefaultState();
 	}
 }

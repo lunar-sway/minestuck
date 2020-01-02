@@ -1,11 +1,11 @@
 package com.mraof.minestuck.tileentity;
 
-import com.mraof.minestuck.advancements.MinestuckCriteriaTriggers;
+import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.block.PunchDesignixBlock;
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.alchemy.AlchemyRecipes;
-import com.mraof.minestuck.alchemy.CombinationRegistry;
+import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry;
 import com.mraof.minestuck.util.Debug;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -31,12 +31,12 @@ public class PunchDesignixTileEntity extends TileEntity
 	
 	public PunchDesignixTileEntity()
 	{
-		super(ModTileEntityTypes.PUNCH_DESIGNIX);
+		super(MSTileEntityTypes.PUNCH_DESIGNIX);
 	}
 	
 	public void setCard(ItemStack card)
 	{
-		if (card.getItem() == MinestuckItems.CAPTCHA_CARD || card.isEmpty())
+		if (card.getItem() == MSItems.CAPTCHA_CARD || card.isEmpty())
 		{
 			this.card = card;
 			if(world != null && !world.isRemote)
@@ -58,7 +58,7 @@ public class PunchDesignixTileEntity extends TileEntity
 	public void onRightClick(ServerPlayerEntity player, BlockState clickedState)
 	{
 		Block part = clickedState.getBlock();
-		if (part == MinestuckBlocks.PUNCH_DESIGNIX.SLOT && !getCard().isEmpty())
+		if (part == MSBlocks.PUNCH_DESIGNIX.SLOT && !getCard().isEmpty())
 		{    //Remove card from punch slot
 			if (player.getHeldItemMainhand().isEmpty())
 				player.setHeldItem(Hand.MAIN_HAND, getCard());
@@ -73,17 +73,17 @@ public class PunchDesignixTileEntity extends TileEntity
 		if (isUseable(clickedState))
 		{
 			ItemStack heldStack = player.getHeldItemMainhand();
-			if (part == MinestuckBlocks.PUNCH_DESIGNIX.SLOT && getCard().isEmpty())
+			if (part == MSBlocks.PUNCH_DESIGNIX.SLOT && getCard().isEmpty())
 			{
-				if (!heldStack.isEmpty() && heldStack.getItem() == MinestuckItems.CAPTCHA_CARD)
+				if (!heldStack.isEmpty() && heldStack.getItem() == MSItems.CAPTCHA_CARD)
 					setCard(heldStack.split(1));    //Insert card into the punch slot
 				
-			} else if (part == MinestuckBlocks.PUNCH_DESIGNIX.KEYBOARD || part == MinestuckBlocks.PUNCH_DESIGNIX.RIGHT_LEG)
+			} else if (part == MSBlocks.PUNCH_DESIGNIX.KEYBOARD || part == MSBlocks.PUNCH_DESIGNIX.RIGHT_LEG)
 			{
-				if (heldStack.isEmpty() || heldStack.getItem() != MinestuckItems.CAPTCHA_CARD)
+				if (heldStack.isEmpty() || heldStack.getItem() != MSItems.CAPTCHA_CARD)
 					return;    //Not a valid item in hand
 				
-				if (!getCard().isEmpty() && getCard().getItem() == MinestuckItems.CAPTCHA_CARD &&
+				if (!getCard().isEmpty() && getCard().getItem() == MSItems.CAPTCHA_CARD &&
 						heldStack.hasTag() && heldStack.getTag().contains("contentID"))
 				{
 					ItemStack output = AlchemyRecipes.getDecodedItem(heldStack);
@@ -94,14 +94,14 @@ public class PunchDesignixTileEntity extends TileEntity
 							output = CombinationRegistry.getCombination(output, AlchemyRecipes.getDecodedItem(getCard()), CombinationRegistry.Mode.MODE_OR);
 							if(!output.isEmpty())
 							{
-								MinestuckCriteriaTriggers.PUNCH_DESIGNIX.trigger(player, AlchemyRecipes.getDecodedItem(heldStack), AlchemyRecipes.getDecodedItem(getCard()), output);
+								MSCriteriaTriggers.PUNCH_DESIGNIX.trigger(player, AlchemyRecipes.getDecodedItem(heldStack), AlchemyRecipes.getDecodedItem(getCard()), output);
 								setCard(AlchemyRecipes.createCard(output, true));
 								effects(true);
 								return;
 							}
 						} else    //Just punch the card regularly
 						{
-							MinestuckCriteriaTriggers.PUNCH_DESIGNIX.trigger(player, output, ItemStack.EMPTY, output);
+							MSCriteriaTriggers.PUNCH_DESIGNIX.trigger(player, output, ItemStack.EMPTY, output);
 							setCard(AlchemyRecipes.createCard(output, true));
 							effects(true);
 							
@@ -147,9 +147,9 @@ public class PunchDesignixTileEntity extends TileEntity
 		BlockState currentState = world.getBlockState(getPos());
 		Direction facing = currentState.get(FACING);
 		Direction hOffset = facing.rotateYCCW();
-		if (!world.getBlockState(getPos().offset(hOffset)).equals(MinestuckBlocks.PUNCH_DESIGNIX.KEYBOARD.getDefaultState().with(FACING, facing)) ||
-				!world.getBlockState(getPos().down()).equals(MinestuckBlocks.PUNCH_DESIGNIX.LEFT_LEG.getDefaultState().with(FACING, facing)) ||
-				!world.getBlockState(getPos().down().offset(hOffset)).equals(MinestuckBlocks.PUNCH_DESIGNIX.RIGHT_LEG.getDefaultState().with(FACING, facing)))
+		if (!world.getBlockState(getPos().offset(hOffset)).equals(MSBlocks.PUNCH_DESIGNIX.KEYBOARD.getDefaultState().with(FACING, facing)) ||
+				!world.getBlockState(getPos().down()).equals(MSBlocks.PUNCH_DESIGNIX.LEFT_LEG.getDefaultState().with(FACING, facing)) ||
+				!world.getBlockState(getPos().down().offset(hOffset)).equals(MSBlocks.PUNCH_DESIGNIX.RIGHT_LEG.getDefaultState().with(FACING, facing)))
 		{
 			broken = true;
 		}

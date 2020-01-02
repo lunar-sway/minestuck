@@ -3,11 +3,11 @@ package com.mraof.minestuck.client.gui.playerStats;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.util.Echeladder;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
+import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -17,6 +17,14 @@ import java.util.Random;
  */
 public class EcheladderScreen extends PlayerStatsScreen
 {
+	public static final String TITLE = "minestuck.echeladder";
+	public static final String ATTACK = "minestuck.echeladder.attack";
+	public static final String HEALTH = "minestuck.echeladder.health";
+	public static final String CACHE = "minestuck.echeladder.cache";
+	public static final String DAMAGE_UNDERLING = "minestuck.echeladder.damage_underling";
+	public static final String DAMAGE_UNDERLING_INCREASE = "minestuck.echeladder.damage_underling.increase";
+	public static final String PROTECTION_UNDERLING = "minestuck.echeladder.protection_underling";
+	public static final String PROTECTION_UNDERLING_INCREASE = "minestuck.echeladder.protection_underling.increase";
 	
 	private static final ResourceLocation guiEcheladder = new ResourceLocation("minestuck", "textures/gui/echeladder.png");
 	private static final ResourceLocation potionIcons = new ResourceLocation("textures/gui/container/inventory.png");
@@ -42,7 +50,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 	
 	public EcheladderScreen()
 	{
-		super(new StringTextComponent("Echeladder"));
+		super(new TranslationTextComponent(TITLE));
 		guiWidth = 250;
 		guiHeight = 202;
 	}
@@ -51,10 +59,10 @@ public class EcheladderScreen extends PlayerStatsScreen
 	public void init()
 	{
 		super.init();
-		scrollIndex = MathHelper.clamp((PlayerSavedData.rung - 8)*14, 0, MAX_SCROLL);
+		scrollIndex = MathHelper.clamp((ClientPlayerData.rung - 8)*14, 0, MAX_SCROLL);
 		animatedRung = Math.max(animatedRung, lastRung);	//If you gain a rung while the gui is open, the animated rung might get higher than the lastRung. Otherwise they're always the same value.
 		fromRung = lastRung;
-		lastRung = PlayerSavedData.rung;
+		lastRung = ClientPlayerData.rung;
 	}
 	
 	@Override
@@ -67,11 +75,11 @@ public class EcheladderScreen extends PlayerStatsScreen
 		if(animationCycle == 0)
 		{
 			currentRung = animatedRung;
-			if(animatedRung < PlayerSavedData.rung)
+			if(animatedRung < ClientPlayerData.rung)
 			{
-				animatedRungs = PlayerSavedData.rung - animatedRung;
+				animatedRungs = ClientPlayerData.rung - animatedRung;
 				animationCycle = timeBeforeAnimation + getTicksForRungAnimation(animatedRungs)*MinestuckConfig.echeladderAnimation;
-				animatedRung = PlayerSavedData.rung;
+				animatedRung = ClientPlayerData.rung;
 			}
 		} else
 		{
@@ -131,7 +139,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 					bg = backgrounds[rung];
 				else if(textColors.length > rung)
 					bg = ~textColors[rung];
-				fill(xOffset + 90, y + 10, xOffset + 90 + (int)(146* PlayerSavedData.rungProgress), y + 12, bg);
+				fill(xOffset + 90, y + 10, xOffset + 90 + (int)(146* ClientPlayerData.rungProgress), y + 12, bg);
 			} else rand.nextInt(0xFFFFFF);
 			
 			String s = I18n.hasKey("echeladder.rung"+rung) ? I18n.format("echeladder.rung"+rung) : "Rung "+(rung+1);
@@ -152,21 +160,21 @@ public class EcheladderScreen extends PlayerStatsScreen
 		this.blit(xOffset + 6, yOffset + 139, 48, 64, 16, 16);
 		this.blit(xOffset + 5, yOffset + 7, 238, 16, 18, 18);
 		
-		String msg = I18n.format("gui.echeladder.name");
-		mc.fontRenderer.drawString(msg, xOffset + 168 - mc.fontRenderer.getStringWidth(msg)/2, yOffset + 12, 0x404040);
+		String msg = title.getFormattedText();
+		mc.fontRenderer.drawString(msg, xOffset + 168 - mc.fontRenderer.getStringWidth(msg)/2F, yOffset + 12, 0x404040);
 		
 		int attack = (int) Math.round(100*(1 + Echeladder.attackBonus(currentRung)));
-		mc.fontRenderer.drawString(I18n.format("gui.echeladder.attack.name"), xOffset + 24, yOffset + 30, 0x404040);
+		mc.fontRenderer.drawString(I18n.format(ATTACK), xOffset + 24, yOffset + 30, 0x404040);
 		mc.fontRenderer.drawString(attack+"%", xOffset + 26, yOffset + 39, 0x0094FF);
 		
 		double health = mc.player.getMaxHealth()/2;	//10 + Echeladder.healthBoost(currentRung)/2.0;
-		mc.fontRenderer.drawString(I18n.format("gui.echeladder.health.name"), xOffset + 24, yOffset + 84, 0x404040);
+		mc.fontRenderer.drawString(I18n.format(HEALTH), xOffset + 24, yOffset + 84, 0x404040);
 		mc.fontRenderer.drawString(String.valueOf(health), xOffset + 26, yOffset + 93, 0x0094FF);
 		
 		mc.fontRenderer.drawString("=", xOffset + 25, yOffset + 12, 0x404040);	//Should this be black, or the same blue as the numbers?
-		mc.fontRenderer.drawString(String.valueOf(PlayerSavedData.boondollars), xOffset + 27 + mc.fontRenderer.getStringWidth("="), yOffset + 12, 0x0094FF);
+		mc.fontRenderer.drawString(String.valueOf(ClientPlayerData.boondollars), xOffset + 27 + mc.fontRenderer.getStringWidth("="), yOffset + 12, 0x0094FF);
 		
-		mc.fontRenderer.drawString(I18n.format("gui.echeladder.cache.name"), xOffset + 24, yOffset + 138, 0x404040);
+		mc.fontRenderer.drawString(I18n.format(CACHE), xOffset + 24, yOffset + 138, 0x404040);
 		mc.fontRenderer.drawString("Unlimited", xOffset + 26, yOffset + 147, 0x0094FF);
 		
 		String tooltip = null;
@@ -192,7 +200,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 				{
 					int diff = (int) Math.round(100*Echeladder.attackBonus(rung)*Echeladder.getUnderlingDamageModifier(rung));
 					diff -= Math.round(100*Echeladder.attackBonus(rung - 1)*Echeladder.getUnderlingDamageModifier(rung - 1));
-					tooltip = I18n.format("gui.echeladder.damageUnderling.increase", diff);
+					tooltip = I18n.format(DAMAGE_UNDERLING_INCREASE, diff);
 				}
 				
 				double d = (Echeladder.healthBoost(rung) - Echeladder.healthBoost(rung - 1))/2D;
@@ -205,7 +213,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 				{
 					int diff = (int) Math.round(1000*Echeladder.getUnderlingProtectionModifier(rung - 1));
 					diff -= Math.round(1000*Echeladder.getUnderlingProtectionModifier(rung));
-					tooltip = I18n.format("gui.echeladder.protectionUnderling.increase", diff/10D);
+					tooltip = I18n.format(PROTECTION_UNDERLING_INCREASE, diff/10D);
 				}
 			}
 		}
@@ -215,9 +223,9 @@ public class EcheladderScreen extends PlayerStatsScreen
 		if(tooltip != null)
 			renderTooltip(Arrays.asList(tooltip), mouseX, mouseY);
 		else if(mouseY >= yOffset + 39 && mouseY < yOffset + 39 + mc.fontRenderer.FONT_HEIGHT && mouseX >= xOffset + 26 && mouseX < xOffset + 26 + mc.fontRenderer.getStringWidth(attack+"%"))
-			renderTooltip(Arrays.asList(I18n.format("gui.echeladder.damageUnderling"), Math.round(attack*Echeladder.getUnderlingDamageModifier(currentRung)) + "%"), mouseX, mouseY);
+			renderTooltip(Arrays.asList(I18n.format(DAMAGE_UNDERLING), Math.round(attack*Echeladder.getUnderlingDamageModifier(currentRung)) + "%"), mouseX, mouseY);
 		else if(mouseY >= yOffset + 93 && mouseY < yOffset + 93 + mc.fontRenderer.FONT_HEIGHT && mouseX >= xOffset + 26 && mouseX < xOffset + 26 + mc.fontRenderer.getStringWidth(String.valueOf(health)))
-			renderTooltip(Arrays.asList(I18n.format("gui.echeladder.protectionUnderling"), String.format("%.1f", 100*Echeladder.getUnderlingProtectionModifier(currentRung))+"%"), mouseX, mouseY);
+			renderTooltip(Arrays.asList(I18n.format(PROTECTION_UNDERLING), String.format("%.1f", 100*Echeladder.getUnderlingProtectionModifier(currentRung))+"%"), mouseX, mouseY);
 	}
 	
 	private void updateScrollAndAnimation(int xcor, int ycor)

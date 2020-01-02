@@ -1,20 +1,19 @@
 {
-  "type": "crafting_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
-    "#",
-    "I",
-    "I"
+    "b",
+    "s",
+    "s"
   ],
   "key": {
-    "#": {
-      "item": "minecraft:bowl"
-    },
-    "I": {
+    "s": {
       "tag": "forge:rods/wooden"
+    },
+    "b": {
+      "item": "minecraft:bowl"
     }
   },
   "result": {
-    "item": "minestuck:wooden_spoon",
-    "count": 1
+    "item": "minestuck:wooden_spoon"
   }
 }

@@ -1,15 +1,16 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.network.GristWildcardPacket;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
-import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.network.MSPacketHandler;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 import java.util.ArrayList;
@@ -19,7 +20,8 @@ import java.util.stream.Collectors;
 
 public class GristSelectorScreen extends MinestuckScreen
 {
-
+	public static final String TITLE = "minestuck.grist_selector";
+	public static final String SELECT_GRIST = "minestuck.select_grist";
 	private static final ResourceLocation guiGristcache = new ResourceLocation("minestuck", "textures/gui/grist_cache.png");
 
 	private static final int guiWidth = 226, guiHeight = 190;
@@ -31,13 +33,13 @@ public class GristSelectorScreen extends MinestuckScreen
 
 	protected GristSelectorScreen(MiniAlchemiterScreen screen)
 	{
-		super(new StringTextComponent("Grist selector"));
+		super(new TranslationTextComponent(TITLE));
 		this.otherScreen = screen;
 	}
 
 	public GristSelectorScreen(AlchemiterScreen screen)
 	{
-		super(new StringTextComponent("Grist selector"));
+		super(new TranslationTextComponent(TITLE));
 		this.otherScreen = screen;
 	}
 
@@ -53,7 +55,7 @@ public class GristSelectorScreen extends MinestuckScreen
 		int yOffset = (height - guiHeight) / 2;
 		this.previousButton = new GuiButtonExt((this.width) + 8, yOffset + 8, 16, 16, "<", button -> prevPage());
 		this.nextButton = new GuiButtonExt(xOffset + guiWidth - 24, yOffset + 8, 16, 16, ">", button -> nextPage());
-		if(GristType.REGISTRY.getValues().size() > rows * columns)
+		if(GristTypes.REGISTRY.getValues().size() > rows * columns)
 		{
 			this.addButton(this.nextButton);
 		}
@@ -72,8 +74,8 @@ public class GristSelectorScreen extends MinestuckScreen
 		this.minecraft.getTextureManager().bindTexture(guiGristcache);
 		this.blit(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 
-		String cacheMessage = I18n.format("gui.selectGrist");
-		minecraft.fontRenderer.drawString(cacheMessage, (this.width / 2) - minecraft.fontRenderer.getStringWidth(cacheMessage) / 2, yOffset + 12, 0x404040);
+		String cacheMessage = I18n.format(SELECT_GRIST);
+		minecraft.fontRenderer.drawString(cacheMessage, (this.width / 2F) - minecraft.fontRenderer.getStringWidth(cacheMessage) / 2F, yOffset + 12, 0x404040);
 		super.render(mouseX, mouseY, partialTicks);
 
 		GlStateManager.color3f(1, 1, 1);
@@ -100,7 +102,7 @@ public class GristSelectorScreen extends MinestuckScreen
 			int xOffset = (width - guiWidth) / 2;
 			int yOffset = (height - guiHeight) / 2;
 
-			List<GristType> types = new ArrayList<>(GristType.REGISTRY.getValues());
+			List<GristType> types = new ArrayList<>(GristTypes.REGISTRY.getValues());
 			Collections.sort(types);
 			types = types.stream().skip(page * rows * columns).limit(rows * columns).collect(Collectors.toList());
 
@@ -116,12 +118,14 @@ public class GristSelectorScreen extends MinestuckScreen
 					BlockPos pos;
 					if(otherScreen instanceof AlchemiterScreen)
 						pos = ((AlchemiterScreen) otherScreen).getAlchemiter().getPos();
-					else pos = null;
+					else if(otherScreen instanceof MiniAlchemiterScreen)
+						pos = ((MiniAlchemiterScreen) otherScreen).getContainer().machinePos;
+					else break;
 					otherScreen.width = this.width;
 					otherScreen.height = this.height;
 					minecraft.currentScreen = otherScreen;
 					GristWildcardPacket packet = new GristWildcardPacket(pos, type);
-					MinestuckPacketHandler.INSTANCE.sendToServer(packet);
+					MSPacketHandler.INSTANCE.sendToServer(packet);
 					break;
 				}
 				offset++;
@@ -159,7 +163,7 @@ public class GristSelectorScreen extends MinestuckScreen
 	
 	private void nextPage()
 	{
-		int maxPage = (GristType.REGISTRY.getValues().size() - 1) / (rows * columns);
+		int maxPage = (GristTypes.REGISTRY.getValues().size() - 1) / (rows * columns);
 		if(page < maxPage)
 		{
 			page++;

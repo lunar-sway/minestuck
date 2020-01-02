@@ -1,20 +1,19 @@
 {
-  "type": "crafting_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
-    "CUC",
-    "UCU",
-    "CUC"
+    "cuc",
+    "ucu",
+    "cuc"
   ],
   "key": {
-    "U": {
-      "item": "minestuck:raw_uranium"
+    "u": {
+      "tag": "forge:chunks/uranium"
     },
-    "C": {
+    "c": {
       "item": "minestuck:raw_cruxite"
     }
   },
   "result": {
-    "item": "minestuck:energy_core",
-    "count": 1
+    "item": "minestuck:energy_core"
   }
 }

@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
@@ -13,6 +14,7 @@ import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.advancements.PlayerAdvancements;
 import net.minecraft.advancements.criterion.CriterionInstance;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
@@ -63,14 +65,7 @@ public class ChangeModusTrigger implements ICriterionTrigger<ChangeModusTrigger.
 	@Override
 	public Instance deserializeInstance(JsonObject json, JsonDeserializationContext context)
 	{
-		ModusType<?> modusType = null;
-		if(json.has("modus"))
-		{
-			String modusName = json.get("modus").getAsString();
-			modusType = ModusTypes.REGISTRY.getValue(new ResourceLocation(modusName));
-			if(modusType == null)
-				throw new IllegalArgumentException("Invalid modus "+modusName);
-		}
+		ModusType<?> modusType = json.has("modus") ? ModusTypes.REGISTRY.getValue(new ResourceLocation(JSONUtils.getString(json, "modus"))) : null;
 		return new Instance(modusType);
 	}
 	
@@ -90,9 +85,28 @@ public class ChangeModusTrigger implements ICriterionTrigger<ChangeModusTrigger.
 			this.modusType = modusType;
 		}
 		
+		public static Instance any()
+		{
+			return new Instance(null);
+		}
+		
+		public static Instance to(ModusType<?> type)
+		{
+			return new Instance(type);
+		}
+		
 		public boolean test(ModusType<?> modusType)
 		{
 			return this.modusType == null || this.modusType.equals(modusType);
+		}
+		
+		@Override
+		public JsonElement serialize()
+		{
+			JsonObject json = new JsonObject();
+			if(modusType != null)
+				json.addProperty("modus", modusType.getRegistryName().toString());
+			return json;
 		}
 	}
 	

@@ -1,6 +1,6 @@
 package com.mraof.minestuck.world.biome;
 
-import com.mraof.minestuck.world.lands.LandDimension;
+import com.mraof.minestuck.world.LandDimension;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.biome.Biome;

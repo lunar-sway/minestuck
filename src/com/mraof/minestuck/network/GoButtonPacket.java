@@ -1,14 +1,10 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.inventory.*;
-import net.minecraft.entity.player.PlayerEntity;
+import com.mraof.minestuck.inventory.MachineContainer;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
 
-import java.util.function.Supplier;
-
-public class GoButtonPacket
+public class GoButtonPacket implements PlayToServerPacket
 {
 	
 	public boolean newMode;
@@ -20,6 +16,7 @@ public class GoButtonPacket
 		this.overrideStop = overrideStop;
 	}
 	
+	@Override
 	public void encode(PacketBuffer buffer)
 	{
 		buffer.writeBoolean(newMode);
@@ -34,15 +31,8 @@ public class GoButtonPacket
 		return new GoButtonPacket(newMode, overrideStop);
 	}
 	
-	public void consume(Supplier<NetworkEvent.Context> ctx)
-	{
-		if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER)
-			ctx.get().enqueueWork(() -> this.execute(ctx.get().getSender()));
-		
-		ctx.get().setPacketHandled(true);
-	}
-	
-	public void execute(PlayerEntity player)
+	@Override
+	public void execute(ServerPlayerEntity player)
 	{
 		if(player.openContainer instanceof MachineContainer)
 		{

@@ -5,6 +5,7 @@ import net.minecraft.block.BushBlock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.common.PlantType;
 
 import java.util.Random;
 
@@ -50,9 +51,15 @@ public class GlowingMushroomBlock extends BushBlock
 		}
 	}
 	
+	@Override
+	public PlantType getPlantType(IBlockReader world, BlockPos pos)
+	{
+		return PlantType.Cave;
+	}
+	
 	public boolean canSpread(World world, BlockPos pos, BlockState state)
 	{
 		BlockState soil = world.getBlockState(pos.down());
-		return soil.getBlock().equals(MinestuckBlocks.BLUE_DIRT);
+		return soil.getBlock().equals(MSBlocks.BLUE_DIRT);
 	}
 }

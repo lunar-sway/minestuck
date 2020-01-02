@@ -1,8 +1,8 @@
 package com.mraof.minestuck.block;
 
-import java.util.Random;
-
+import com.mraof.minestuck.world.gen.feature.tree.RainbowTree;
 import net.minecraft.block.*;
+import net.minecraft.block.trees.Tree;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -17,12 +17,16 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
+import java.util.Random;
+
 public class RainbowSaplingBlock extends BushBlock implements IGrowable
 {
-	public static final BooleanProperty RED = MinestuckProperties.RED;
-	public static final BooleanProperty GREEN = MinestuckProperties.GREEN;
-	public static final BooleanProperty BLUE = MinestuckProperties.BLUE;
+	public static final BooleanProperty RED = MSProperties.RED;
+	public static final BooleanProperty GREEN = MSProperties.GREEN;
+	public static final BooleanProperty BLUE = MSProperties.BLUE;
 	protected static final VoxelShape SHAPE = Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
+	
+	private final Tree tree = new RainbowTree();
 	
 	protected RainbowSaplingBlock(Properties properties)
 	{
@@ -87,7 +91,7 @@ public class RainbowSaplingBlock extends BushBlock implements IGrowable
 	public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
 	{
 		BlockState soil = worldIn.getBlockState(pos.down());
-		if(soil.getBlock() == Blocks.GRASS)
+		if(soil.getBlock() == Blocks.GRASS_BLOCK)
 		{
 			state = state.with(GREEN, true);
 		} else if(soil.getBlock() == Blocks.BLUE_WOOL)
@@ -202,14 +206,13 @@ public class RainbowSaplingBlock extends BushBlock implements IGrowable
 	@Override
 	protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos)
 	{
-		return BlockTags.WOOL.contains(state.getBlock()) || state.getBlock() == Blocks.GRASS || state.getBlock() == Blocks.DIRT || state.getBlock() == Blocks.FARMLAND;
+		return BlockTags.WOOL.contains(state.getBlock()) || super.isValidGround(state, worldIn, pos);
 	}
 	
-	private static void generateTree(World worldIn, BlockPos pos, BlockState state, Random rand)
+	private void generateTree(World worldIn, BlockPos pos, BlockState state, Random rand)
 	{
 		if(!net.minecraftforge.event.ForgeEventFactory.saplingGrowTree(worldIn, rand, pos))
 			return;
-		//AbstractTree tree = new RainbowTree(true);
-		//tree.spawn(worldIn, pos, state, rand);
+		tree.spawn(worldIn, pos, state, rand);
 	}
 }

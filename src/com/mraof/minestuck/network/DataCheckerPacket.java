@@ -7,15 +7,12 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.function.Supplier;
 
-public class DataCheckerPacket
+public class DataCheckerPacket implements PlayToBothPacket
 {
 	
 	public static int index = 0;
@@ -44,6 +41,7 @@ public class DataCheckerPacket
 		return packet;
 	}
 	
+	@Override
 	public void encode(PacketBuffer buffer)
 	{
 		buffer.writeInt(packetIndex);
@@ -84,28 +82,20 @@ public class DataCheckerPacket
 		return packet;
 	}
 	
-	public void consume(Supplier<NetworkEvent.Context> ctx)
-	{
-		if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER)
-			ctx.get().enqueueWork(() -> this.execute(ctx.get().getSender()));
-		else if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT)
-			ctx.get().enqueueWork(this::execute);
-		
-		ctx.get().setPacketHandled(true);
-	}
-	
+	@Override
 	public void execute()
 	{
 		if(packetIndex == index)
 			DataCheckerScreen.activeComponent = new DataCheckerScreen.MainComponent(nbtData);
 	}
 	
+	@Override
 	public void execute(ServerPlayerEntity player)
 	{
 		if(MinestuckConfig.getDataCheckerPermissionFor(player))
 		{
 			CompoundNBT data = SessionHandler.get(player.world).createDataTag();
-			MinestuckPacketHandler.sendToPlayer(DataCheckerPacket.data(packetIndex, data), player);
+			MSPacketHandler.sendToPlayer(DataCheckerPacket.data(packetIndex, data), player);
 		}
 	}
 }
