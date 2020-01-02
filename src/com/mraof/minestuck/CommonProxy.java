@@ -2,22 +2,21 @@ package com.mraof.minestuck;
 
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.editmode.DeployList;
-import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortDialogue;
 import com.mraof.minestuck.entity.consort.ConsortRewardHandler;
-import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
-import com.mraof.minestuck.tracker.PlayerTracker;
-import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.util.ComputerProgram;
+import com.mraof.minestuck.util.KindAbstratusList;
+import com.mraof.minestuck.util.SburbClient;
+import com.mraof.minestuck.util.SburbServer;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.OreHandler;
 import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
 
 public class CommonProxy
 {
@@ -31,12 +30,6 @@ public class CommonProxy
 		OreHandler oreHandler = new OreHandler();
 		//GameRegistry.registerWorldGenerator(oreHandler, 0);
 		
-		//Register event handlers
-		MinecraftForge.EVENT_BUS.register(ServerEditHandler.instance);
-		MinecraftForge.EVENT_BUS.register(PlayerTracker.instance);
-		MinecraftForge.EVENT_BUS.register(ServerEventHandler.instance);
-		
-		
 		//register channel handler
 		MSPacketHandler.setupChannel();
 		
@@ -44,9 +37,6 @@ public class CommonProxy
 		AlchemyRecipes.registerVanillaRecipes();
 		AlchemyRecipes.registerMinestuckRecipes();
 		AlchemyRecipes.registerModRecipes();
-		
-		//register smelting recipes
-		CraftingRecipes.registerSmelting();
 
 		//register consort shop prices
 		ConsortRewardHandler.registerMinestuckPrices();

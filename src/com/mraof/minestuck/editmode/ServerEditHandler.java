@@ -62,7 +62,6 @@ public class ServerEditHandler
 {
 	
 	public static final ArrayList<String> commands = new ArrayList<>(Arrays.asList("effect", "gamemode", "defaultgamemode", "enchant", "xp", "tp", "spreadplayers", "kill", "clear", "spawnpoint", "setworldspawn", "give"));
-	public static final ServerEditHandler instance = new ServerEditHandler();
 	
 	/**
 	 * Called both when any player logged out and when a player pressed the exit button.
@@ -246,14 +245,14 @@ public class ServerEditHandler
 	}
 	
 	@SubscribeEvent
-	public void onItemPickupEvent(EntityItemPickupEvent event)
+	public static void onItemPickupEvent(EntityItemPickupEvent event)
 	{
 		if(!event.getEntity().world.isRemote && getData(event.getPlayer()) != null)
 			event.setCanceled(true);
 	}
 	
 	@SubscribeEvent(priority=EventPriority.NORMAL)
-	public void onRightClickBlockControl(PlayerInteractEvent.RightClickBlock event)
+	public static void onRightClickBlockControl(PlayerInteractEvent.RightClickBlock event)
 	{
 		if(!event.getWorld().isRemote && getData(event.getPlayer()) != null)
 		{

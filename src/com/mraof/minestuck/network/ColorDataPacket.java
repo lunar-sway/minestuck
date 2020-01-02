@@ -3,7 +3,7 @@ package com.mraof.minestuck.network;
 import com.mraof.minestuck.util.ColorCollector;
 import net.minecraft.network.PacketBuffer;
 
-public class ColorDataPacket implements PlayToClientPacket	//TODO Probably healthier if this is several different packets
+public class ColorDataPacket implements PlayToClientPacket
 {
 	private static final int NO_COLOR = -2;    //Can be removed if we remove -1 as a default color when colors are made to hexes
 	

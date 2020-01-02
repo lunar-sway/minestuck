@@ -1,5 +1,6 @@
 package com.mraof.minestuck.event;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
@@ -31,16 +32,15 @@ import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class ServerEventHandler
 {
-	
-	public static final ServerEventHandler instance = new ServerEventHandler();
-	
 	public static long lastDay;
 	
 	@SubscribeEvent
-	public void onWorldTick(TickEvent.WorldTickEvent event)
+	public static void onWorldTick(TickEvent.WorldTickEvent event)
 	{
 		if(event.phase == TickEvent.Phase.END)
 		{
@@ -62,7 +62,7 @@ public class ServerEventHandler
 	}
 	
 	@SubscribeEvent(priority=EventPriority.LOWEST, receiveCanceled=false)
-	public void onEntityDeath(LivingDeathEvent event)
+	public static void onEntityDeath(LivingDeathEvent event)
 	{
 		if(event.getEntity() instanceof IMob && event.getSource().getTrueSource() instanceof ServerPlayerEntity)
 		{
@@ -85,16 +85,16 @@ public class ServerEventHandler
 	}
 
 	//Gets reset after AttackEntityEvent but before LivingHurtEvent, but is used in determining if it's a critical hit
-	private float cachedCooledAttackStrength = 0;
+	private static float cachedCooledAttackStrength = 0;
 
 	@SubscribeEvent
-	public void onPlayerAttack(AttackEntityEvent event)
+	public static void onPlayerAttack(AttackEntityEvent event)
 	{
 		cachedCooledAttackStrength = event.getPlayer().getCooledAttackStrength(0.5F);
 	}
 
 	@SubscribeEvent(priority=EventPriority.NORMAL)
-	public void onEntityAttack(LivingHurtEvent event)
+	public static void onEntityAttack(LivingHurtEvent event)
 	{
 		if(event.getSource().getTrueSource() != null)
 		{
@@ -127,7 +127,7 @@ public class ServerEventHandler
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
-	public void onEntityDamage(LivingHurtEvent event)
+	public static void onEntityDamage(LivingHurtEvent event)
 	{
 		if(event.getEntityLiving() instanceof UnderlingEntity)
 		{
@@ -136,7 +136,7 @@ public class ServerEventHandler
 	}
 	
 	@SubscribeEvent
-	public void playerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event)
+	public static void playerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event)
 	{
 		SburbHandler.stopEntry((ServerPlayerEntity) event.getPlayer());
 		
@@ -144,7 +144,7 @@ public class ServerEventHandler
 	}
 	
 	@SubscribeEvent(priority=EventPriority.LOW, receiveCanceled=false)
-	public void onServerChat(ServerChatEvent event)
+	public static void onServerChat(ServerChatEvent event)
 	{
 		Modus modus = PlayerSavedData.getData(event.getPlayer()).getModus();
 		if(modus instanceof HashMapModus)
@@ -153,7 +153,7 @@ public class ServerEventHandler
 	
 	//This functionality uses an event to maintain compatibility with mod items having hoe functionality but not extending ItemHoe, like TiCon mattocks.
 	@SubscribeEvent
-	public void onPlayerUseHoe(UseHoeEvent event)
+	public static void onPlayerUseHoe(UseHoeEvent event)
 	{
 		if(event.getContext().getWorld().getBlockState(event.getContext().getPos()).getBlock() == MSBlocks.COARSE_END_STONE)
 		{
@@ -164,14 +164,14 @@ public class ServerEventHandler
 	}
 	
 	@SubscribeEvent
-	public void onGetItemBurnTime(FurnaceFuelBurnTimeEvent event)
+	public static void onGetItemBurnTime(FurnaceFuelBurnTimeEvent event)
 	{
 		if(event.getItemStack().getItem() == MSBlocks.TREATED_PLANKS.asItem())
 			event.setBurnTime(50);	//Do not set this number to 0.
 	}
 	
 	@SubscribeEvent
-	public void onPlayerTickEvent(TickEvent.PlayerTickEvent event)
+	public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event)
 	{
 		if(!event.player.world.isRemote)
 		{
