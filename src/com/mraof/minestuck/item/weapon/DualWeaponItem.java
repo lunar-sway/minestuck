@@ -36,7 +36,8 @@ public class DualWeaponItem extends WeaponItem
 		ItemStack itemStackIn = playerIn.getHeldItem(handIn);
 		if(playerIn.isSneaking())
 		{
-			ItemStack newItem = new ItemStack(otherItem, itemStackIn.getCount(), itemStackIn.getTag());
+			ItemStack newItem = new ItemStack(otherItem, itemStackIn.getCount());
+			newItem.setTag(itemStackIn.getTag());
 			
 			return new ActionResult<>(ActionResultType.SUCCESS, newItem);
 		}
