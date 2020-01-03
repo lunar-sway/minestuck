@@ -89,7 +89,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	protected void registerData()
 	{
 		super.registerData();
-		dataManager.register(GRIST_TYPE, String.valueOf(GristType.ARTIFACT.getRegistryName()));
+		dataManager.register(GRIST_TYPE, String.valueOf(GristTypes.ARTIFACT.getRegistryName()));
 	}
 	
 	protected void applyGristType(GristType type, boolean fullHeal)

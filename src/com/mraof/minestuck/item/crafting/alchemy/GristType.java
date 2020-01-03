@@ -1,7 +1,9 @@
 package com.mraof.minestuck.item.crafting.alchemy;
 
+import com.google.common.collect.ImmutableList;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.MSNBTUtil;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
@@ -14,82 +16,33 @@ import net.minecraftforge.registries.ObjectHolder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 @ObjectHolder(Minestuck.MOD_ID)
 public class GristType extends ForgeRegistryEntry<GristType> implements Comparable<GristType>
 {
 	private static final Logger LOGGER = LogManager.getLogger();
-	
-	public static String FORMAT = "grist.format";	//TODO Readd final once the ObjectHolder use has been sorted out
-	
 	private static final ResourceLocation DUMMY_ICON_LOCATION = new ResourceLocation(Minestuck.MOD_ID, "textures/grist/dummy.png");
 	
-	@Deprecated	//These references are being moved to GristTypes
-	public static final GristType BUILD = getNull();
-	@Deprecated
-	public static final GristType AMBER = getNull();
-	@Deprecated
-	public static final GristType CAULK = getNull();
-	@Deprecated
-	public static final GristType CHALK = getNull();
-	@Deprecated
-	public static final GristType IODINE = getNull();
-	@Deprecated
-	public static final GristType SHALE = getNull();
-	@Deprecated
-	public static final GristType TAR = getNull();
-	@Deprecated
-	public static final GristType COBALT = getNull();
-	@Deprecated
-	public static final GristType MARBLE = getNull();
-	@Deprecated
-	public static final GristType MERCURY = getNull();
-	@Deprecated
-	public static final GristType QUARTZ = getNull();
-	@Deprecated
-	public static final GristType SULFUR = getNull();
-	@Deprecated
-	public static final GristType AMETHYST = getNull();
-	@Deprecated
-	public static final GristType GARNET = getNull();
-	@Deprecated
-	public static final GristType RUBY = getNull();
-	@Deprecated
-	public static final GristType RUST = getNull();
-	@Deprecated
-	public static final GristType DIAMOND = getNull();
-	@Deprecated
-	public static final GristType GOLD = getNull();
-	@Deprecated
-	public static final GristType URANIUM = getNull();
-	@Deprecated
-	public static final GristType ARTIFACT = getNull();
-	@Deprecated
-	public static final GristType ZILLIUM = getNull();
-	
-	@Nonnull
-	@SuppressWarnings("ConstantConditions")
-	private static <T> T getNull()
-	{
-		return null;
-	}
+	public static final String FORMAT = "grist.format";
 	
 	private final float rarity;
 	private final float value;
-	private ItemStack candyItem = ItemStack.EMPTY;
+	private final ItemStack candyItem;
+	private final List<Supplier<GristType>> secondaryTypes;
 	private String translationKey;
 	private ResourceLocation icon;
 	
-	public GristType(float rarity)
+	public GristType(Properties properties)
 	{
-		this(rarity, 2);
-	}
-	
-	public GristType(float rarity, float value)
-	{
-		this.rarity = rarity;
-		this.value = value;
+		rarity = properties.rarity;
+		value = properties.value;
+		candyItem = properties.candyItem;
+		secondaryTypes = ImmutableList.copyOf(properties.secondaryGristTypes);
 	}
 	
 	public ITextComponent getNameWithSuffix()
@@ -156,13 +109,12 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 	
 	public ItemStack getCandyItem()
 	{
-		return candyItem == null ? null : candyItem.copy();
+		return candyItem.copy();
 	}
 	
-	public GristType setCandyItem(ItemStack stack)	//TODO Put this in the constructor instead
+	public List<GristType> getSecondaryTypes()
 	{
-		candyItem = stack;
-		return this;
+		return secondaryTypes.stream().map(Supplier::get).collect(Collectors.toList());
 	}
 	
 	public int getId()
@@ -228,7 +180,7 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 	{
 		DummyType()
 		{
-			super(0.3F, 3);
+			super(new Properties(0.3F, 3));
 		}
 		
 		@Override
@@ -241,6 +193,41 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 		public ResourceLocation getEffectiveName()
 		{
 			return new ResourceLocation(Minestuck.MOD_ID, "dummy");
+		}
+	}
+	
+	public static class Properties
+	{
+		private final float rarity, value;
+		private ItemStack candyItem = ItemStack.EMPTY;
+		private List<Supplier<GristType>> secondaryGristTypes = new ArrayList<>();
+		
+		public Properties(float rarity)
+		{
+			this(rarity, 2);
+		}
+		
+		public Properties(float rarity, float value)
+		{
+			this.rarity = rarity;
+			this.value = value;
+		}
+		
+		public Properties candy(Item item)
+		{
+			return candy(new ItemStack(item));
+		}
+		
+		public Properties candy(ItemStack stack)
+		{
+			candyItem = Objects.requireNonNull(stack);
+			return this;
+		}
+		
+		public Properties secondary(Supplier<GristType> type)
+		{
+			secondaryGristTypes.add(type);
+			return this;
 		}
 	}
 }

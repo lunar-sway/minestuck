@@ -17,6 +17,7 @@ import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.item.MSItemGroup;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.network.EffectTogglePacket;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
@@ -36,7 +37,7 @@ import net.minecraft.potion.Potions;
 
 public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 {
-	public MinestuckEnUsLanguageProvider(DataGenerator gen)
+	MinestuckEnUsLanguageProvider(DataGenerator gen)
 	{
 		super(gen, Minestuck.MOD_ID, "en_us");
 	}
@@ -715,27 +716,27 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSEntityTypes.SHOP_POSTER, "Shop Sign");
 		add(MSEntityTypes.HOLOGRAM, "Hologram");
 		
-		add(GristType.BUILD, "Build");
-		add(GristType.AMBER, "Amber");
-		add(GristType.CAULK, "Caulk");
-		add(GristType.CHALK, "Chalk");
-		add(GristType.IODINE, "Iodine");
-		add(GristType.SHALE, "Shale");
-		add(GristType.TAR, "Tar");
-		add(GristType.COBALT, "Cobalt");
-		add(GristType.MARBLE, "Marble");
-		add(GristType.MERCURY, "Mercury");
-		add(GristType.QUARTZ, "Quartz");
-		add(GristType.SULFUR, "Sulfur");
-		add(GristType.AMETHYST, "Amethyst");
-		add(GristType.GARNET, "Garnet");
-		add(GristType.RUBY, "Ruby");
-		add(GristType.RUST, "Rust");
-		add(GristType.DIAMOND, "Diamond");
-		add(GristType.GOLD, "Gold");
-		add(GristType.URANIUM, "Uranium");
-		add(GristType.ARTIFACT, "Artifact");
-		add(GristType.ZILLIUM, "Zillium");
+		add(GristTypes.BUILD, "Build");
+		add(GristTypes.AMBER, "Amber");
+		add(GristTypes.CAULK, "Caulk");
+		add(GristTypes.CHALK, "Chalk");
+		add(GristTypes.IODINE, "Iodine");
+		add(GristTypes.SHALE, "Shale");
+		add(GristTypes.TAR, "Tar");
+		add(GristTypes.COBALT, "Cobalt");
+		add(GristTypes.MARBLE, "Marble");
+		add(GristTypes.MERCURY, "Mercury");
+		add(GristTypes.QUARTZ, "Quartz");
+		add(GristTypes.SULFUR, "Sulfur");
+		add(GristTypes.AMETHYST, "Amethyst");
+		add(GristTypes.GARNET, "Garnet");
+		add(GristTypes.RUBY, "Ruby");
+		add(GristTypes.RUST, "Rust");
+		add(GristTypes.DIAMOND, "Diamond");
+		add(GristTypes.GOLD, "Gold");
+		add(GristTypes.URANIUM, "Uranium");
+		add(GristTypes.ARTIFACT, "Artifact");
+		add(GristTypes.ZILLIUM, "Zillium");
 		add(GristType.FORMAT, "%s Grist");
 		add("grist.missing", "You do not have enough grist for that. You need: %s");
 		

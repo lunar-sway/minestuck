@@ -112,7 +112,7 @@ public class MiniAlchemiterContainer extends MachineContainer
 	{
 		GristType type = ((ForgeRegistry<GristType>) GristTypes.REGISTRY).getValue(wildcardHolder.get());	//TODO this is not ideal. Find a better way
 		if(type == null)
-			type = GristType.BUILD;
+			type = GristTypes.BUILD;
 		return type;
 	}
 }

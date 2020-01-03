@@ -329,7 +329,7 @@ public class ServerEditHandler
 		{
 			EditData data = getData(event.getPlayer());
 			if(!MinestuckConfig.gristRefund.get())
-				GristHelper.decrease(event.getWorld(), data.connection.getClientIdentifier(), new GristSet(GristType.BUILD, 1));
+				GristHelper.decrease(event.getWorld(), data.connection.getClientIdentifier(), new GristSet(GristTypes.BUILD, 1));
 			else
 			{
 				BlockState block = event.getWorld().getBlockState(event.getPos());

@@ -3,10 +3,7 @@ package com.mraof.minestuck.entity.item;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
-import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
-import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.util.IdentifierHandler;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.*;
@@ -32,7 +29,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 
 	private int gristHealth = 5;
 	//Type of grist
-	private GristType gristType = GristType.BUILD;
+	private GristType gristType = GristTypes.BUILD;
 	private long gristValue = 1;
 
 	private PlayerEntity closestPlayer;

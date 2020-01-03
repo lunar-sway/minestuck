@@ -38,14 +38,14 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 		{
 			GristType type = ((ForgeRegistry<GristType>) GristTypes.REGISTRY).getValue(id);	//TODO Not ideal. Find a better solution
 			if(type == null)
-				type = GristType.BUILD;
+				type = GristTypes.BUILD;
 			setWildcardGrist(type);
 		}
 	};
 	
 	private int ticks_since_update = 0;
 	public IdentifierHandler.PlayerIdentifier owner;
-	private GristType wildcardGrist = GristType.BUILD;
+	private GristType wildcardGrist = GristTypes.BUILD;
 	
 	public MiniAlchemiterTileEntity()
 	{

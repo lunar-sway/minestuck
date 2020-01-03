@@ -8,6 +8,7 @@ import com.mraof.minestuck.item.CruxiteArtifactItem;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.TitleSelectPacket;
 import com.mraof.minestuck.tracker.PlayerTracker;
@@ -501,7 +502,7 @@ public class SburbHandler
 	public static GristType getPrimaryGristType(PlayerIdentifier player)
 	{
 		
-		return GristType.SHALE;
+		return GristTypes.SHALE;
 	}
 	
 	public static int getColorForDimension(World world)

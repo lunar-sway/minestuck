@@ -16,56 +16,15 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.Random;
 
 public class GristHelper {
 	private static Random random = new Random();
 	private static final boolean SHOULD_OUTPUT_GRIST_CHANGES = MinestuckConfig.showGristChanges.get();
-	
-	public static HashMap<GristType, ArrayList<GristType>> secondaryGristMap;	//TODO Consider if these instead should be defined when grist types are registered
-
-	static
-	{
-		secondaryGristMap = new HashMap<>();
-		for(GristType type : GristTypes.values())
-			secondaryGristMap.put(type, new ArrayList<>());
-		secondaryGristMap.get(GristType.AMBER).add(GristType.RUST);
-		secondaryGristMap.get(GristType.AMBER).add(GristType.SULFUR);
-		secondaryGristMap.get(GristType.AMETHYST).add(GristType.QUARTZ);
-		secondaryGristMap.get(GristType.AMETHYST).add(GristType.GARNET);
-		secondaryGristMap.get(GristType.CAULK).add(GristType.IODINE);
-		secondaryGristMap.get(GristType.CAULK).add(GristType.CHALK);
-		secondaryGristMap.get(GristType.CHALK).add(GristType.SHALE);
-		secondaryGristMap.get(GristType.CHALK).add(GristType.MARBLE);
-		secondaryGristMap.get(GristType.COBALT).add(GristType.RUBY);
-		secondaryGristMap.get(GristType.COBALT).add(GristType.AMETHYST);
-		secondaryGristMap.get(GristType.GARNET).add(GristType.RUBY);
-		secondaryGristMap.get(GristType.GARNET).add(GristType.GOLD);
-		secondaryGristMap.get(GristType.IODINE).add(GristType.AMBER);
-		secondaryGristMap.get(GristType.IODINE).add(GristType.CHALK);
-		secondaryGristMap.get(GristType.MARBLE).add(GristType.CAULK);
-		secondaryGristMap.get(GristType.MARBLE).add(GristType.AMETHYST);
-		secondaryGristMap.get(GristType.MERCURY).add(GristType.COBALT);
-		secondaryGristMap.get(GristType.MERCURY).add(GristType.RUST);
-		secondaryGristMap.get(GristType.QUARTZ).add(GristType.MARBLE);
-		secondaryGristMap.get(GristType.QUARTZ).add(GristType.URANIUM);
-		secondaryGristMap.get(GristType.RUBY).add(GristType.QUARTZ);
-		secondaryGristMap.get(GristType.RUBY).add(GristType.DIAMOND);
-		secondaryGristMap.get(GristType.RUST).add(GristType.SHALE);
-		secondaryGristMap.get(GristType.RUST).add(GristType.GARNET);
-		secondaryGristMap.get(GristType.SHALE).add(GristType.MERCURY);
-		secondaryGristMap.get(GristType.SHALE).add(GristType.TAR);
-		secondaryGristMap.get(GristType.SULFUR).add(GristType.IODINE);
-		secondaryGristMap.get(GristType.SULFUR).add(GristType.TAR);
-		secondaryGristMap.get(GristType.TAR).add(GristType.AMBER);
-		secondaryGristMap.get(GristType.TAR).add(GristType.COBALT);
-		
-		secondaryGristMap.get(GristType.URANIUM).add(GristType.DIAMOND);
-		secondaryGristMap.get(GristType.DIAMOND).add(GristType.GOLD);
-		secondaryGristMap.get(GristType.GOLD).add(GristType.URANIUM);
-	}
-
 	
 	/**
 	 * Returns a random grist type. Used for creating randomly aligned underlings.
@@ -74,8 +33,8 @@ public class GristHelper {
 	{
 		while (true)
 		{
-			GristType randGrist = GristType.MARBLE;//GristType.values().get(random.nextInt(GristType.values().size()));
-			if (randGrist.getRarity() > random.nextFloat() && randGrist != GristType.ARTIFACT)
+			GristType randGrist = GristTypes.MARBLE;//GristType.values().get(random.nextInt(GristType.values().size()));
+			if (randGrist.getRarity() > random.nextFloat() && randGrist != GristTypes.ARTIFACT)
 				return randGrist;
 		}
 	}
@@ -85,8 +44,9 @@ public class GristHelper {
 	 */
 	public static GristType getSecondaryGrist(GristType primary)
 	{
-		if(secondaryGristMap.get(primary).size() != 0 && random.nextInt(secondaryGristMap.get(primary).size() * 2) != 0)
-			return secondaryGristMap.get(primary).get(random.nextInt(secondaryGristMap.get(primary).size()));
+		List<GristType> secondaryTypes = primary.getSecondaryTypes();
+		if(secondaryTypes.size() > 0)
+			return secondaryTypes.get(random.nextInt(secondaryTypes.size()));
 		else return primary;
 	}
 
@@ -103,7 +63,7 @@ public class GristHelper {
 		}
 		
 		GristSet set = new GristSet();
-		set.addGrist(GristType.BUILD, (int)(2*multiplier + random.nextDouble()*18*multiplier));
+		set.addGrist(GristTypes.BUILD, (int)(2*multiplier + random.nextDouble()*18*multiplier));
 		set.addGrist(primary, (int)(1*multiplier + random.nextDouble()*9*multiplier));
 		set.addGrist(getSecondaryGrist(primary), (int)(0.5*multiplier + random.nextDouble()*4*multiplier));
 		return set;

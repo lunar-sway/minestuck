@@ -30,7 +30,7 @@ import net.minecraft.world.World;
 public class AlchemiterTileEntity extends TileEntity
 {
 	
-	protected GristType wildcardGrist = GristType.BUILD;
+	protected GristType wildcardGrist = GristTypes.BUILD;
 	protected boolean broken = false;
 	protected ItemStack dowel = ItemStack.EMPTY;
 	protected ItemStack upgradeItem[] = {ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY,ItemStack.EMPTY,ItemStack.EMPTY};

@@ -5,7 +5,7 @@ import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.util.ColorCollector;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
@@ -95,7 +95,7 @@ public class GristCostRecipeCategory implements IRecipeCategory<GristCostRecipe>
 		if(recipe.getJeiCost().getType() == JeiGristCost.Type.GRIST_SET)
 			GuiUtil.drawGristBoard(recipe.getJeiCost().getGristSet(), GuiUtil.GristboardMode.ALCHEMITER, 1, 30, Minecraft.getInstance().fontRenderer);
 		else if(recipe.getJeiCost().getType() == JeiGristCost.Type.WILDCARD)
-			GuiUtil.drawGristBoard(new GristSet(GristType.BUILD, recipe.getJeiCost().getWildcardAmount()), GuiUtil.GristboardMode.JEI_WILDCARD, 1, 30, Minecraft.getInstance().fontRenderer);
+			GuiUtil.drawGristBoard(new GristSet(GristTypes.BUILD, recipe.getJeiCost().getWildcardAmount()), GuiUtil.GristboardMode.JEI_WILDCARD, 1, 30, Minecraft.getInstance().fontRenderer);
 	}
 	
 	@Override
@@ -104,7 +104,7 @@ public class GristCostRecipeCategory implements IRecipeCategory<GristCostRecipe>
 		if(recipe.getJeiCost().getType() == JeiGristCost.Type.GRIST_SET)
 			return GuiUtil.getGristboardTooltip(recipe.getJeiCost().getGristSet(), GuiUtil.GristboardMode.ALCHEMITER, mouseX, mouseY, 1, 30, Minecraft.getInstance().fontRenderer);
 		else if(recipe.getJeiCost().getType() == JeiGristCost.Type.WILDCARD)
-			return GuiUtil.getGristboardTooltip(new GristSet(GristType.BUILD, recipe.getJeiCost().getWildcardAmount()), GuiUtil.GristboardMode.JEI_WILDCARD, mouseX, mouseY, 1, 30, Minecraft.getInstance().fontRenderer);
+			return GuiUtil.getGristboardTooltip(new GristSet(GristTypes.BUILD, recipe.getJeiCost().getWildcardAmount()), GuiUtil.GristboardMode.JEI_WILDCARD, mouseX, mouseY, 1, 30, Minecraft.getInstance().fontRenderer);
 		return IRecipeCategory.super.getTooltipStrings(recipe, mouseX, mouseY);
 	}
 }

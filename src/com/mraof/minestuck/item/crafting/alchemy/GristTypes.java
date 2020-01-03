@@ -2,7 +2,6 @@ package com.mraof.minestuck.item.crafting.alchemy;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.MSItems;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -78,27 +77,27 @@ public class GristTypes
 	public static void registerGrist(final RegistryEvent.Register<GristType> event)
 	{
 		event.getRegistry().registerAll(
-				new GristType(0.0F, 1).setCandyItem(new ItemStack(MSItems.BUILD_GUSHERS)).setRegistryName("build"),
-				new GristType(0.5F, 1.5F).setCandyItem(new ItemStack(MSItems.AMBER_GUMMY_WORM)).setRegistryName("amber"),
-				new GristType(0.5F, 1.5F).setCandyItem(new ItemStack(MSItems.CAULK_PRETZEL)).setRegistryName("caulk"),
-				new GristType(0.5F, 1.5F).setCandyItem(new ItemStack(MSItems.CHALK_CANDY_CIGARETTE)).setRegistryName("chalk"),
-				new GristType(0.5F, 1.5F).setCandyItem(new ItemStack(MSItems.IODINE_LICORICE)).setRegistryName("iodine"),
-				new GristType(0.5F, 1.5F).setCandyItem(new ItemStack(MSItems.SHALE_PEEP)).setRegistryName("shale"),
-				new GristType(0.5F, 1.5F).setCandyItem(new ItemStack(MSItems.TAR_LICORICE)).setRegistryName("tar"),
-				new GristType(0.4F, 2).setCandyItem(new ItemStack(MSItems.COBALT_GUM)).setRegistryName("cobalt"),
-				new GristType(0.4F, 2).setCandyItem(new ItemStack(MSItems.MARBLE_JAWBREAKER)).setRegistryName("marble"),
-				new GristType(0.4F, 2).setCandyItem(new ItemStack(MSItems.MERCURY_SIXLETS)).setRegistryName("mercury"),
-				new GristType(0.4F, 2).setCandyItem(new ItemStack(MSItems.QUARTZ_JELLY_BEAN)).setRegistryName("quartz"),
-				new GristType(0.4F, 2).setCandyItem(new ItemStack(MSItems.SULFUR_CANDY_APPLE)).setRegistryName("sulfur"),
-				new GristType(0.3F, 3).setCandyItem(new ItemStack(MSItems.AMETHYST_HARD_CANDY)).setRegistryName("amethyst"),
-				new GristType(0.3F, 3).setCandyItem(new ItemStack(MSItems.GARNET_TWIX)).setRegistryName("garnet"),
-				new GristType(0.3F, 3).setCandyItem(new ItemStack(MSItems.RUBY_LOLLIPOP)).setRegistryName("ruby"),
-				new GristType(0.3F, 3).setCandyItem(new ItemStack(MSItems.RUST_GUMMY_EYE)).setRegistryName("rust"),
-				new GristType(0.2F, 5).setCandyItem(new ItemStack(MSItems.DIAMOND_MINT)).setRegistryName("diamond"),
-				new GristType(0.2F, 5).setCandyItem(new ItemStack(MSItems.GOLD_CANDY_RIBBON)).setRegistryName("gold"),
-				new GristType(0.2F, 5).setCandyItem(new ItemStack(MSItems.URANIUM_GUMMY_BEAR)).setRegistryName("uranium"),
-				new GristType(0.1F, 1).setCandyItem(new ItemStack(MSItems.ARTIFACT_WARHEAD)).setRegistryName("artifact"),
-				new GristType(0.0F, 10).setCandyItem(new ItemStack(MSItems.ZILLIUM_SKITTLES)).setRegistryName("zillium")
+				new GristType(new GristType.Properties(0.0F, 1).candy(MSItems.BUILD_GUSHERS)).setRegistryName("build"),
+				new GristType(new GristType.Properties(0.5F, 1.5F).candy(MSItems.AMBER_GUMMY_WORM).secondary(() -> RUST).secondary(() -> SULFUR)).setRegistryName("amber"),
+				new GristType(new GristType.Properties(0.5F, 1.5F).candy(MSItems.CAULK_PRETZEL).secondary(() -> IODINE).secondary(() -> CHALK)).setRegistryName("caulk"),
+				new GristType(new GristType.Properties(0.5F, 1.5F).candy(MSItems.CHALK_CANDY_CIGARETTE).secondary(() -> SHALE).secondary(() -> MARBLE)).setRegistryName("chalk"),
+				new GristType(new GristType.Properties(0.5F, 1.5F).candy(MSItems.IODINE_LICORICE).secondary(() -> AMBER).secondary(() -> CHALK)).setRegistryName("iodine"),
+				new GristType(new GristType.Properties(0.5F, 1.5F).candy(MSItems.SHALE_PEEP).secondary(() -> MERCURY).secondary(() -> TAR)).setRegistryName("shale"),
+				new GristType(new GristType.Properties(0.5F, 1.5F).candy(MSItems.TAR_LICORICE).secondary(() -> AMBER).secondary(() -> COBALT)).setRegistryName("tar"),
+				new GristType(new GristType.Properties(0.4F, 2).candy(MSItems.COBALT_GUM).secondary(() -> RUBY).secondary(() -> AMETHYST)).setRegistryName("cobalt"),
+				new GristType(new GristType.Properties(0.4F, 2).candy(MSItems.MARBLE_JAWBREAKER).secondary(() -> CAULK).secondary(() -> AMETHYST)).setRegistryName("marble"),
+				new GristType(new GristType.Properties(0.4F, 2).candy(MSItems.MERCURY_SIXLETS).secondary(() -> COBALT).secondary(() -> RUST)).setRegistryName("mercury"),
+				new GristType(new GristType.Properties(0.4F, 2).candy(MSItems.QUARTZ_JELLY_BEAN).secondary(() -> MARBLE).secondary(() -> URANIUM)).setRegistryName("quartz"),
+				new GristType(new GristType.Properties(0.4F, 2).candy(MSItems.SULFUR_CANDY_APPLE).secondary(() -> IODINE).secondary(() -> TAR)).setRegistryName("sulfur"),
+				new GristType(new GristType.Properties(0.3F, 3).candy(MSItems.AMETHYST_HARD_CANDY).secondary(() -> QUARTZ).secondary(() -> GARNET)).setRegistryName("amethyst"),
+				new GristType(new GristType.Properties(0.3F, 3).candy(MSItems.GARNET_TWIX).secondary(() -> RUBY).secondary(() -> GOLD)).setRegistryName("garnet"),
+				new GristType(new GristType.Properties(0.3F, 3).candy(MSItems.RUBY_LOLLIPOP).secondary(() -> QUARTZ).secondary(() -> DIAMOND)).setRegistryName("ruby"),
+				new GristType(new GristType.Properties(0.3F, 3).candy(MSItems.RUST_GUMMY_EYE).secondary(() -> SHALE).secondary(() -> GARNET)).setRegistryName("rust"),
+				new GristType(new GristType.Properties(0.2F, 5).candy(MSItems.DIAMOND_MINT).secondary(() -> GOLD)).setRegistryName("diamond"),
+				new GristType(new GristType.Properties(0.2F, 5).candy(MSItems.GOLD_CANDY_RIBBON).secondary(() -> URANIUM)).setRegistryName("gold"),
+				new GristType(new GristType.Properties(0.2F, 5).candy(MSItems.URANIUM_GUMMY_BEAR).secondary(() -> DIAMOND)).setRegistryName("uranium"),
+				new GristType(new GristType.Properties(0.1F, 1).candy(MSItems.ARTIFACT_WARHEAD)).setRegistryName("artifact"),
+				new GristType(new GristType.Properties(0.0F, 10).candy(MSItems.ZILLIUM_SKITTLES)).setRegistryName("zillium")
 		);
 	}
 	
