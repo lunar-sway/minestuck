@@ -34,8 +34,6 @@ public class MSItemTypes
 	
 	public static final IArmorMaterial PRISMARINE_ARMOR = new ModArmorMaterial("minestuck:prismarine", 20, new int[]{3, 7, 6, 2}, 15, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0F, () -> Ingredient.fromItems(Items.PRISMARINE_SHARD));
 	
-	//public static final ToolType SICKLE_TOOL = ToolType.get("sickle");
-	
 	//Base Tools
 	public static final MSToolType SICKLE_TOOL = new MSToolType(ToolType.get("sickle"), Material.WEB, Material.LEAVES, Material.PLANTS, Material.TALL_PLANTS).addEnchantments(EnchantmentType.WEAPON);
 	public static final MSToolType PICKAXE_TOOL = new MSToolType(ToolType.PICKAXE, Material.IRON, Material.ANVIL, Material.ROCK).addEnchantments(EnchantmentType.DIGGER);

@@ -633,13 +633,6 @@ public class MSItems
 		registry.register(MUSIC_DISC_DANCE_STAB_DANCE = new ModMusicDiscItem(13, MSSoundEvents.MUSIC_DISC_DANCE_STAB_DANCE, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_dance_stab_dance"));
 		registry.register(MUSIC_DISC_RETRO_BATTLE = new ModMusicDiscItem(13, MSSoundEvents.MUSIC_DISC_RETRO_BATTLE_THEME, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_retro_battle"));
 		
-		//WeaponItem.addToolMaterial(ToolType.PICKAXE, Arrays.asList(Material.IRON, Material.ANVIL, Material.ROCK));
-		//WeaponItem.addToolMaterial(ToolType.AXE, Arrays.asList(Material.WOOD, Material.PLANTS, Material.TALL_PLANTS));
-		//WeaponItem.addToolMaterial(ToolType.SHOVEL, Arrays.asList(Material.SNOW, Material.SNOW_BLOCK, Material.CLAY, Material.ORGANIC, Material.EARTH, Material.SAND));
-		//WeaponItem.addToolMaterial("sword", Arrays.asList(Material.WEB));
-		//WeaponItem.addToolMaterial(MSItemTypes.SICKLE_TOOL, Arrays.asList(Material.WEB, Material.LEAVES, Material.PLANTS, Material.TALL_PLANTS));
-		
-		
 	}
 	
 	private static Item registerItemBlock(IForgeRegistry<Item> registry, Block block)
