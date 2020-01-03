@@ -425,20 +425,20 @@ public class MSItems
 		registerItemBlock(registry, GLOWYSTONE_DUST, MSItemGroup.MAIN);
 		
 		//hammers
-		registry.register(CLAW_HAMMER = new WeaponItem(ItemTier.IRON, 2, -2.4F, 1.0F, new Item.Properties().defaultMaxDamage(131).addToolType(ToolType.PICKAXE, 0).group(MSItemGroup.WEAPONS)).setRegistryName("claw_hammer"));
-		registry.register(SLEDGE_HAMMER = new WeaponItem(ItemTier.IRON, 4, -2.8F, 4.0F, new Item.Properties().addToolType(ToolType.PICKAXE, 2).group(MSItemGroup.WEAPONS)).setRegistryName("sledge_hammer"));
-		registry.register(BLACKSMITH_HAMMER = new WeaponItem(ItemTier.IRON, 5, -2.8F, 3.5F, new Item.Properties().defaultMaxDamage(450).addToolType(ToolType.PICKAXE, 2).group(MSItemGroup.WEAPONS)).setRegistryName("blacksmith_hammer"));
-		registry.register(POGO_HAMMER = new PogoWeaponItem(MSItemTypes.POGO_TIER, 5, -2.8F, 2.0F, 0.7, new Item.Properties().addToolType(ToolType.PICKAXE, 1).group(MSItemGroup.WEAPONS)).setRegistryName("pogo_hammer"));
-		registry.register(TELESCOPIC_SASSACRUSHER = new WeaponItem(MSItemTypes.BOOK_TIER, 8, -2.9F, 5.0F, new Item.Properties().defaultMaxDamage(1024).addToolType(ToolType.PICKAXE, 2).group(MSItemGroup.WEAPONS)).setRegistryName("telescopic_sassacrusher"));
-		registry.register(REGI_HAMMER = new WeaponItem(MSItemTypes.REGI_TIER, 3, -2.4F, 8.0F, new Item.Properties().addToolType(ToolType.PICKAXE, 2).group(MSItemGroup.WEAPONS)).setRegistryName("regi_hammer"));
-		registry.register(FEAR_NO_ANVIL = new PotionWeaponItem(MSItemTypes.RUBY_TIER, 6, -2.8F, 7.0F, new EffectInstance(Effects.SLOWNESS, 100, 3), new Item.Properties().addToolType(ToolType.PICKAXE, 3).group(MSItemGroup.WEAPONS)).setRegistryName("fear_no_anvil"));
-		registry.register(MELT_MASHER = new FireWeaponItem(MSItemTypes.RUBY_TIER, 6, -2.8F, 12.0F, 25, new Item.Properties().defaultMaxDamage(1413).addToolType(ToolType.PICKAXE, 4).group(MSItemGroup.WEAPONS)).setRegistryName("melt_masher"));
-		registry.register(Q_E_HAMMER_AXE = new PogoFarmineItem(MSItemTypes.RUBY_TIER, 5, -2.8F, 9.0F, Integer.MAX_VALUE, 200, 0.7, new Item.Properties().defaultMaxDamage(6114).addToolType(ToolType.PICKAXE, 3).addToolType(ToolType.SHOVEL, 1).addToolType(ToolType.AXE, 2).group(MSItemGroup.WEAPONS)).setRegistryName("estrogen_empowered_everything_eradicator"));
+		registry.register(CLAW_HAMMER = new WeaponItem(ItemTier.IRON, 2, -2.4F, 1.0F, new Item.Properties().defaultMaxDamage(131).group(MSItemGroup.WEAPONS)).setTool(MSItemTypes.HAMMER_TOOL).setRegistryName("claw_hammer"));
+		registry.register(SLEDGE_HAMMER = new WeaponItem(ItemTier.IRON, 4, -2.8F, 4.0F, new Item.Properties().group(MSItemGroup.WEAPONS)).setTool(MSItemTypes.HAMMER_TOOL).setRegistryName("sledge_hammer"));
+		registry.register(BLACKSMITH_HAMMER = new WeaponItem(ItemTier.IRON, 5, -2.8F, 3.5F, new Item.Properties().defaultMaxDamage(450).group(MSItemGroup.WEAPONS)).setTool(MSItemTypes.HAMMER_TOOL).setRegistryName("blacksmith_hammer"));
+		registry.register(POGO_HAMMER = new PogoWeaponItem(MSItemTypes.POGO_TIER, 5, -2.8F, 2.0F, 0.7, new Item.Properties().group(MSItemGroup.WEAPONS)).setTool(MSItemTypes.HAMMER_TOOL).setRegistryName("pogo_hammer"));
+		registry.register(TELESCOPIC_SASSACRUSHER = new WeaponItem(MSItemTypes.BOOK_TIER, 8, -2.9F, 5.0F, new Item.Properties().defaultMaxDamage(1024).group(MSItemGroup.WEAPONS)).setTool(MSItemTypes.HAMMER_TOOL).setRegistryName("telescopic_sassacrusher"));
+		registry.register(REGI_HAMMER = new WeaponItem(MSItemTypes.REGI_TIER, 3, -2.4F, 8.0F, new Item.Properties().group(MSItemGroup.WEAPONS)).setTool(MSItemTypes.HAMMER_TOOL).setRegistryName("regi_hammer"));
+		registry.register(FEAR_NO_ANVIL = new PotionWeaponItem(MSItemTypes.RUBY_TIER, 6, -2.8F, 7.0F, new EffectInstance(Effects.SLOWNESS, 100, 3), new Item.Properties().group(MSItemGroup.WEAPONS)).setTool(MSItemTypes.HAMMER_TOOL).setRegistryName("fear_no_anvil"));
+		registry.register(MELT_MASHER = new FireWeaponItem(MSItemTypes.RUBY_TIER, 6, -2.8F, 12.0F, 25, new Item.Properties().defaultMaxDamage(1413).group(MSItemGroup.WEAPONS)).setTool(MSItemTypes.HAMMER_TOOL).setRegistryName("melt_masher"));
+		registry.register(Q_E_HAMMER_AXE = new PogoFarmineItem(MSItemTypes.RUBY_TIER, 5, -2.8F, 9.0F, Integer.MAX_VALUE, 200, 0.7, new Item.Properties().defaultMaxDamage(6114).group(MSItemGroup.WEAPONS)).setTool(MSItemTypes.MULTI_TOOL).setRegistryName("estrogen_empowered_everything_eradicator"));
 		registry.register(D_D_E_HAMMER_AXE = new SbahjEEEEItem(MSItemTypes.RUBY_TIER, 5, -2.8F, 9.1F, 0.2, new Item.Properties().defaultMaxDamage(6114).group(MSItemGroup.WEAPONS)).setRegistryName("eeeeeeeeeeee"));
-		registry.register(ZILLYHOO_HAMMER = new WeaponItem(MSItemTypes.ZILLYHOO_TIER, 6, -2.8F, 15.0F, new Item.Properties().addToolType(ToolType.PICKAXE, 4).group(MSItemGroup.WEAPONS)).setRegistryName("zillyhoo_hammer"));
-		registry.register(POPAMATIC_VRILLYHOO = new RandomWeaponItem(MSItemTypes.ZILLYHOO_TIER, 3, -2.8F, 15.0F, new Item.Properties().addToolType(ToolType.PICKAXE, 4).group(MSItemGroup.WEAPONS)).setRegistryName("popamatic_vrillyhoo"));
-		registry.register(SCARLET_ZILLYHOO = new FireWeaponItem(MSItemTypes.RUBY_TIER, 6, -2.8F, 4.0F, 50, new Item.Properties().addToolType(ToolType.PICKAXE, 3)).setRegistryName("scarlet_zillyhoo"));
-		registry.register(MWRTHWL = new WeaponItem(MSItemTypes.RUBY_TIER, 6, -2.8F, 4.0F, new Item.Properties().addToolType(ToolType.PICKAXE, 3)).setRegistryName("mwrthwl"));
+		registry.register(ZILLYHOO_HAMMER = new WeaponItem(MSItemTypes.ZILLYHOO_TIER, 6, -2.8F, 15.0F, new Item.Properties().group(MSItemGroup.WEAPONS)).setTool(MSItemTypes.HAMMER_TOOL).setRegistryName("zillyhoo_hammer"));
+		registry.register(POPAMATIC_VRILLYHOO = new RandomWeaponItem(MSItemTypes.ZILLYHOO_TIER, 3, -2.8F, 15.0F, new Item.Properties().group(MSItemGroup.WEAPONS)).setTool(MSItemTypes.HAMMER_TOOL).setRegistryName("popamatic_vrillyhoo"));
+		registry.register(SCARLET_ZILLYHOO = new FireWeaponItem(MSItemTypes.RUBY_TIER, 6, -2.8F, 4.0F, 50, new Item.Properties()).setTool(MSItemTypes.HAMMER_TOOL).setRegistryName("scarlet_zillyhoo"));
+		registry.register(MWRTHWL = new WeaponItem(MSItemTypes.RUBY_TIER, 6, -2.8F, 4.0F, new Item.Properties()).setTool(MSItemTypes.HAMMER_TOOL).setRegistryName("mwrthwl"));
 		
 		//blades
 		registry.register(SORD = new SordItem(MSItemTypes.SBAHJ_TIER, 3, -2.4F, 1.0F, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("sord"));
@@ -468,10 +468,10 @@ public class MSItems
 		registry.register(BATTLEAXE = new WeaponItem(ItemTier.IRON, 8, -3.0F, 3.0F, new Item.Properties().defaultMaxDamage(600).group(MSItemGroup.WEAPONS).addToolType(ToolType.AXE, 2)).setRegistryName("battleaxe"));
 		registry.register(BLACKSMITH_BANE = new WeaponItem(ItemTier.STONE, 8, -3.0F, 6.0F, new Item.Properties().defaultMaxDamage(413).group(MSItemGroup.WEAPONS).addToolType(ToolType.AXE, 2)).setRegistryName("blacksmith_bane"));
 		registry.register(SCRAXE = new WeaponItem(ItemTier.IRON, 8, -3.0F, 7.0F, new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS).addToolType(ToolType.AXE, 2)).setRegistryName("scraxe"));
-		registry.register(Q_P_HAMMER_AXE = new PogoFarmineItem(MSItemTypes.POGO_TIER, 6, -3.0F, 2.0F, Integer.MAX_VALUE, 50, 0.6, new Item.Properties().defaultMaxDamage(800).group(MSItemGroup.WEAPONS).addToolType(ToolType.AXE, 2).addToolType(ToolType.PICKAXE, 1)).setRegistryName("piston_powered_pogo_axehammer"));
+		registry.register(Q_P_HAMMER_AXE = new PogoFarmineItem(MSItemTypes.POGO_TIER, 6, -3.0F, 2.0F, Integer.MAX_VALUE, 50, 0.6, new Item.Properties().defaultMaxDamage(800).group(MSItemGroup.WEAPONS)).setTool(MSItemTypes.AXE_HAMMER_TOOL).setRegistryName("piston_powered_pogo_axehammer"));
 		registry.register(RUBY_CROAK = new WeaponItem(MSItemTypes.RUBY_TIER, 7, -3.0F, 8.0F, new Item.Properties().group(MSItemGroup.WEAPONS).addToolType(ToolType.AXE, 3)).setRegistryName("ruby_croak"));
 		registry.register(HEPHAESTUS_LUMBER = new FireWeaponItem(MSItemTypes.RUBY_TIER, 7, -3.0F, 9.0F, 30, new Item.Properties().defaultMaxDamage(3000).group(MSItemGroup.WEAPONS).addToolType(ToolType.AXE, 3)).setRegistryName("hephaestus_lumberjack"));
-		registry.register(Q_F_HAMMER_AXE = new PogoFarmineItem(MSItemTypes.URANIUM_TIER, 7, -3.0F, 5.0F, Integer.MAX_VALUE, 100, 0.7, new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS).addToolType(ToolType.PICKAXE, 2).addToolType(ToolType.AXE, 3)).setRegistryName("fission_focused_fault_feller"));
+		registry.register(Q_F_HAMMER_AXE = new PogoFarmineItem(MSItemTypes.URANIUM_TIER, 7, -3.0F, 5.0F, Integer.MAX_VALUE, 100, 0.7, new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS)).setTool(MSItemTypes.AXE_HAMMER_TOOL).setRegistryName("fission_focused_fault_feller"));
 		
 		//Dice
 		registry.register(DICE = new WeaponItem(ItemTier.STONE, 5, -3.0F, 1.0F, new Item.Properties().defaultMaxDamage(51).group(MSItemGroup.WEAPONS)).setRegistryName("dice"));
@@ -480,13 +480,13 @@ public class MSItems
 		registry.register(CAT_CLAWS_DRAWN  = new DualWeaponItem(ItemTier.IRON, 2, -1.5F, 10.0F, new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS)).setRegistryName("cat_claws_drawn"));
 		registry.register(CAT_CLAWS_SHEATHED  = new DualWeaponItem(ItemTier.IRON, -1, -1.0F, 10.0F, (DualWeaponItem) CAT_CLAWS_DRAWN, new Item.Properties().defaultMaxDamage(500)).setRegistryName("cat_claws_sheathed"));
 		//sickles
-		registry.register(SICKLE = new WeaponItem(ItemTier.IRON, 2, -2.4F, 1.5F, new Item.Properties().group(MSItemGroup.WEAPONS).addToolType(MSItemTypes.SICKLE_TOOL, 0)).setRegistryName("sickle"));
-		registry.register(HOMES_SMELL_YA_LATER = new WeaponItem(ItemTier.IRON, 3, -2.4F, 3.0F, new Item.Properties().defaultMaxDamage(400).group(MSItemGroup.WEAPONS).addToolType(MSItemTypes.SICKLE_TOOL, 0)).setRegistryName("homes_smell_ya_later"));
-		registry.register(FUDGE_SICKLE = new ConsumableWeaponItem(MSItemTypes.CANDY_TIER, 5, -2.4F, 1.0F, 7, 0.6F, new Item.Properties().group(MSItemGroup.WEAPONS).addToolType(MSItemTypes.SICKLE_TOOL, 0)).setRegistryName("fudgesickle"));
-		registry.register(REGI_SICKLE = new WeaponItem(MSItemTypes.REGI_TIER, 3, -2.4F, 4.0F, new Item.Properties().group(MSItemGroup.WEAPONS).addToolType(MSItemTypes.SICKLE_TOOL, 0)).setRegistryName("regisickle"));
-		registry.register(CLAW_SICKLE = new WeaponItem(MSItemTypes.RUBY_TIER, 3, -2.4F, 4.0F, new Item.Properties().group(MSItemGroup.WEAPONS).addToolType(MSItemTypes.SICKLE_TOOL, 0)).setRegistryName("claw_sickle"));
-		registry.register(CLAW_OF_NRUBYIGLITH = new HorrorterrorWeaponItem(MSItemTypes.HORRORTERROR_TIER, 5, -2.4F, 4.0F, new Item.Properties().group(MSItemGroup.WEAPONS).addToolType(MSItemTypes.SICKLE_TOOL, 0)).setRegistryName("claw_of_nrubyiglith"));
-		registry.register(CANDY_SICKLE = new CandyWeaponItem(MSItemTypes.CANDY_TIER, 6, -2.4F, 2.5F, new Item.Properties().defaultMaxDamage(96).group(MSItemGroup.WEAPONS).addToolType(MSItemTypes.SICKLE_TOOL, 0)).setRegistryName("candy_sickle"));
+		registry.register(SICKLE = new WeaponItem(ItemTier.IRON, 2, -2.4F, 1.5F, new Item.Properties().group(MSItemGroup.WEAPONS)).setTool(MSItemTypes.SICKLE_TOOL).setRegistryName("sickle"));
+		registry.register(HOMES_SMELL_YA_LATER = new WeaponItem(ItemTier.IRON, 3, -2.4F, 3.0F, new Item.Properties().defaultMaxDamage(400).group(MSItemGroup.WEAPONS)).setTool(MSItemTypes.SICKLE_TOOL).setRegistryName("homes_smell_ya_later"));
+		registry.register(FUDGE_SICKLE = new ConsumableWeaponItem(MSItemTypes.CANDY_TIER, 5, -2.4F, 1.0F, 7, 0.6F, new Item.Properties().group(MSItemGroup.WEAPONS)).setTool(MSItemTypes.SICKLE_TOOL).setRegistryName("fudgesickle"));
+		registry.register(REGI_SICKLE = new WeaponItem(MSItemTypes.REGI_TIER, 3, -2.4F, 4.0F, new Item.Properties().group(MSItemGroup.WEAPONS)).setTool(MSItemTypes.SICKLE_TOOL).setRegistryName("regisickle"));
+		registry.register(CLAW_SICKLE = new WeaponItem(MSItemTypes.RUBY_TIER, 3, -2.4F, 4.0F, new Item.Properties().group(MSItemGroup.WEAPONS)).setTool(MSItemTypes.SICKLE_TOOL).setRegistryName("claw_sickle"));
+		registry.register(CLAW_OF_NRUBYIGLITH = new HorrorterrorWeaponItem(MSItemTypes.HORRORTERROR_TIER, 5, -2.4F, 4.0F, new Item.Properties().group(MSItemGroup.WEAPONS)).setTool(MSItemTypes.SICKLE_TOOL).setRegistryName("claw_of_nrubyiglith"));
+		registry.register(CANDY_SICKLE = new CandyWeaponItem(MSItemTypes.CANDY_TIER, 6, -2.4F, 2.5F, new Item.Properties().defaultMaxDamage(96).group(MSItemGroup.WEAPONS)).setTool(MSItemTypes.SICKLE_TOOL).setRegistryName("candy_sickle"));
 		
 		//clubs
 		registry.register(DEUCE_CLUB = new WeaponItem(ItemTier.WOOD, 3, -2.2F, 2.0F, new Item.Properties().defaultMaxDamage(1024).group(MSItemGroup.WEAPONS)).setRegistryName("deuce_club"));
@@ -633,11 +633,13 @@ public class MSItems
 		registry.register(MUSIC_DISC_DANCE_STAB_DANCE = new ModMusicDiscItem(13, MSSoundEvents.MUSIC_DISC_DANCE_STAB_DANCE, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_dance_stab_dance"));
 		registry.register(MUSIC_DISC_RETRO_BATTLE = new ModMusicDiscItem(13, MSSoundEvents.MUSIC_DISC_RETRO_BATTLE_THEME, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_retro_battle"));
 		
-		WeaponItem.addToolMaterial(ToolType.PICKAXE, Arrays.asList(Material.IRON, Material.ANVIL, Material.ROCK));
-		WeaponItem.addToolMaterial(ToolType.AXE, Arrays.asList(Material.WOOD, Material.PLANTS, Material.TALL_PLANTS));
-		WeaponItem.addToolMaterial(ToolType.SHOVEL, Arrays.asList(Material.SNOW, Material.SNOW_BLOCK, Material.CLAY, Material.ORGANIC, Material.EARTH, Material.SAND));
+		//WeaponItem.addToolMaterial(ToolType.PICKAXE, Arrays.asList(Material.IRON, Material.ANVIL, Material.ROCK));
+		//WeaponItem.addToolMaterial(ToolType.AXE, Arrays.asList(Material.WOOD, Material.PLANTS, Material.TALL_PLANTS));
+		//WeaponItem.addToolMaterial(ToolType.SHOVEL, Arrays.asList(Material.SNOW, Material.SNOW_BLOCK, Material.CLAY, Material.ORGANIC, Material.EARTH, Material.SAND));
 		//WeaponItem.addToolMaterial("sword", Arrays.asList(Material.WEB));
-		WeaponItem.addToolMaterial(MSItemTypes.SICKLE_TOOL, Arrays.asList(Material.WEB, Material.LEAVES, Material.PLANTS, Material.TALL_PLANTS));
+		//WeaponItem.addToolMaterial(MSItemTypes.SICKLE_TOOL, Arrays.asList(Material.WEB, Material.LEAVES, Material.PLANTS, Material.TALL_PLANTS));
+		
+		
 	}
 	
 	private static Item registerItemBlock(IForgeRegistry<Item> registry, Block block)
