@@ -41,6 +41,8 @@ public class WindLandType extends TitleLandType
 		properties.mergeFogColor(new Vec3d(0.1, 0.2, 0.8), 0.3F);
 		if(properties.rainType == Biome.RainType.NONE)
 			properties.rainType = Biome.RainType.RAIN;
+		if(properties.forceRain == LandProperties.ForceType.OFF)
+			properties.forceRain = LandProperties.ForceType.DEFAULT;
 		
 		properties.normalBiomeScale *= 0.6;
 		properties.roughBiomeScale *= 0.6;

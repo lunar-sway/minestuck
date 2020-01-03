@@ -14,6 +14,7 @@ public class LandProperties
 	
 	public Biome.Category category = Biome.Category.NONE;
 	public Biome.RainType rainType = Biome.RainType.NONE;
+	public ForceType forceRain = ForceType.OFF, forceThunder = ForceType.OFF;	//TODO Make private and set up setters that'd prevent combinations that doesn't make sense, + also setting forceRain + rainType at the same time
 	public float temperature = 0.7F, downfall = 0.5F;
 	public float normalBiomeDepth = MSBiomes.LAND_NORMAL.getDepth(), normalBiomeScale = MSBiomes.LAND_NORMAL.getScale();
 	public float roughBiomeDepth = MSBiomes.LAND_ROUGH.getDepth(), roughBiomeScale = MSBiomes.LAND_ROUGH.getScale();
@@ -54,5 +55,12 @@ public class LandProperties
 	public Vec3d getCloudColor()
 	{
 		return cloudColor;
+	}
+	
+	public enum ForceType
+	{
+		ON,
+		DEFAULT,
+		OFF
 	}
 }

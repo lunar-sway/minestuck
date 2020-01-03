@@ -59,6 +59,8 @@ public class ShadeLandType extends TerrainLandType
 	public void setProperties(LandProperties properties)
 	{
 		properties.category = Biome.Category.MUSHROOM;
+		properties.rainType = Biome.RainType.RAIN;
+		properties.forceRain = LandProperties.ForceType.DEFAULT;
 	}
 	
 	@Override

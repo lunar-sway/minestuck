@@ -70,6 +70,7 @@ public class FungiLandType extends TerrainLandType
 	{
 		properties.category = Biome.Category.MUSHROOM;
 		properties.rainType = Biome.RainType.RAIN;
+		properties.forceRain = LandProperties.ForceType.ON;
 	}
 	
 	@Override

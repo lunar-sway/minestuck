@@ -233,7 +233,7 @@ public abstract class CruxiteArtifactItem extends Item
 			int y = origin.getY();
 			int z = origin.getZ();
 			
-			Debug.debug("Loading spawn chunks...");
+			Debug.debug("Loading spawn chunks...");	//TODO This part takes suspiciously long time. Make sure it is done right
 			for(int chunkX = ((x + xDiff - artifactRange.get()) >> 4) - 1; chunkX <= ((x + xDiff + artifactRange.get()) >> 4) + 2; chunkX++)		//Prevent anything generating on the piece that we move
 				for(int chunkZ = ((z + zDiff - artifactRange.get()) >> 4) - 1; chunkZ <= ((z + zDiff + artifactRange.get()) >> 4) + 2; chunkZ++)	//from the overworld.
 					worldserver1.getChunkProvider().getChunk(chunkX, chunkZ, true);

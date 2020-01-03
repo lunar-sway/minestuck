@@ -210,7 +210,13 @@ public class LandDimension extends Dimension
 		return true;
 	}
 	
-	/*
+	@Override
+	public void updateWeather(Runnable defaultLogic)
+	{
+		super.updateWeather(defaultLogic);
+		forceWeatherCheck();
+	}
+	
 	@Override
 	public void calculateInitialWeather()
 	{
@@ -218,25 +224,18 @@ public class LandDimension extends Dimension
 		forceWeatherCheck();
 	}
 	
-	@Override
-	public void updateWeather()
-	{
-		super.updateWeather();
-		forceWeatherCheck();
-	}*/
-	/*
 	private void forceWeatherCheck()
 	{
-		if(chunkProvider.weatherType == -1)
+		if(properties.forceRain == LandProperties.ForceType.OFF)
 			world.rainingStrength = 0.0F;
-		else if((chunkProvider.weatherType & 5) != 0)
+		else if(properties.forceRain == LandProperties.ForceType.ON)
 			world.rainingStrength = 1.0F;
 		
-		if(chunkProvider.weatherType == -1 || (chunkProvider.weatherType & 6) == 0)
+		if(properties.forceThunder == LandProperties.ForceType.OFF)
 			world.thunderingStrength = 0.0F;
-		else if((chunkProvider.weatherType & 4) != 0)
+		else if(properties.forceThunder == LandProperties.ForceType.ON)
 			world.thunderingStrength = 1.0F;
-	}*/
+	}
 	
 	@Override
 	public Vec3d getSkyColor(BlockPos cameraPos, float partialTicks)
