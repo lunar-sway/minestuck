@@ -86,9 +86,9 @@ public class GristSet
 	/**
 	 * @return a value estimate for this grist set
 	 */
-	public float getValue()	//TODO potentially duplicate code here, in GristHelper.getGristValue and in AlchemyRecipes.onAlchemizedItem
+	public double getValue()
 	{
-		float sum = 0;
+		double sum = 0;
 		for(GristAmount amount : getAmounts())
 			sum += amount.getValue();
 		return sum;

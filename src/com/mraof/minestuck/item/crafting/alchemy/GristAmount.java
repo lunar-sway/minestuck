@@ -32,7 +32,7 @@ public class GristAmount
 	/**
 	 * @return a value estimate for this grist amount
 	 */
-	public float getValue()
+	public double getValue()
 	{
 		return type.getValue()*amount;
 	}

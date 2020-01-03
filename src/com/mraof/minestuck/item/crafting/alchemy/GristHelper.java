@@ -154,21 +154,6 @@ public class GristHelper {
 		increase(world, player, set.copy().scale(-1));
 	}
 	
-	/**
-	 * This method will probably be used somewhere in the future.
-	 */
-	public static long getGristValue(GristSet set) {	//TODO potentially duplicate code here, in GristSet.getValue and in AlchemyRecipes.onAlchemizedItem
-		long i = 0;
-		for(GristType type : GristTypes.values()) {
-			if(type.equals(GristType.BUILD))
-				i += set.getGrist(type);
-			else if(type.getRarity() == 0.0F)
-				i += set.getGrist(type)*15;
-			else i += set.getGrist(type)*type.getPower();
-		}
-		return i;
-	}
-	
 	public static void increase(World world, PlayerIdentifier player, GristSet set)
 	{
 		Objects.requireNonNull(world);

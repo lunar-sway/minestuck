@@ -1055,14 +1055,7 @@ public class AlchemyRecipes
 		GristSet set = GristCostRecipe.findCostForItem(stack, null, false, player.getEntityWorld());
 		if(set != null) //The only time the grist set should be null here is if it was a captchalogue card that was alchemized
 		{
-			double value = 0;
-			for(GristType type : GristTypes.values())	//TODO potentially duplicate code here, in GristHelper.getGristValue and in GristSet.getValue
-			{
-				long v = set.getGrist(type);
-				float f = type == GristType.BUILD || type == GristType.ARTIFACT ? 0.5F : type == GristType.ZILLIUM ? 20 : type.getPower();
-				if(v > 0)
-					value += f*v/2;
-			}
+			double value = set.getValue();
 			
 			Echeladder e = PlayerSavedData.getData(player).getEcheladder();
 			if(value >= 50)

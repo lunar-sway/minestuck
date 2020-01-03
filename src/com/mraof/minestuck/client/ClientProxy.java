@@ -78,8 +78,5 @@ public class ClientProxy extends CommonProxy
 		MinecraftForge.EVENT_BUS.register(ClientEditHandler.instance);
 		MinecraftForge.EVENT_BUS.register(new MinestuckConfig());
 		MinecraftForge.EVENT_BUS.register(MachineOutlineRenderer.class);
-		//System.out.println("Adding onItemColors listener");
-		//MinecraftForge.EVENT_BUS.register(ColorHandler.class);
 	}
-	
 }
