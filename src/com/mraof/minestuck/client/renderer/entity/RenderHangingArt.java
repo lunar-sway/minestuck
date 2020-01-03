@@ -13,15 +13,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
-public class RenderHangingArt<T extends HangingArtEntity> extends EntityRenderer<T>
+public class RenderHangingArt<T extends HangingArtEntity<?>> extends EntityRenderer<T>
 {
 	private final ResourceLocation ART_TEXTURE;
 
-	public RenderHangingArt(EntityRendererManager renderManagerIn, String artPath)
+	public RenderHangingArt(EntityRendererManager renderManagerIn, ResourceLocation artPath)
 	{
 		super(renderManagerIn);
-		//TODO use resource location to specify namespace (so that addons can use this)
-		ART_TEXTURE = new ResourceLocation("minestuck:textures/painting/" + artPath + ".png");
+		ART_TEXTURE = new ResourceLocation(artPath.getNamespace(), "textures/painting/" + artPath.getPath() + ".png");
 	}
 	
 	@Override
@@ -79,32 +78,32 @@ public class RenderHangingArt<T extends HangingArtEntity> extends EntityRenderer
 				float f21 = (float)(textureV + height - blockV * 16) / 256.0F;
 				float f22 = (float)(textureV + height - (blockV + 1) * 16) / 256.0F;
 				Tessellator tessellator = Tessellator.getInstance();
-				BufferBuilder vertexbuffer = tessellator.getBuffer();
-				vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_NORMAL);
-				vertexbuffer.pos((double)upperU, (double)lowerV, -0.5D).tex((double)f20, (double)f21).normal(0.0F, 0.0F, -1.0F).endVertex();
-				vertexbuffer.pos((double)lowerU, (double)lowerV, -0.5D).tex((double)f19, (double)f21).normal(0.0F, 0.0F, -1.0F).endVertex();
-				vertexbuffer.pos((double)lowerU, (double)upperV, -0.5D).tex((double)f19, (double)f22).normal(0.0F, 0.0F, -1.0F).endVertex();
-				vertexbuffer.pos((double)upperU, (double)upperV, -0.5D).tex((double)f20, (double)f22).normal(0.0F, 0.0F, -1.0F).endVertex();
-				vertexbuffer.pos((double)upperU, (double)upperV, 0.5D).tex(0.75D, 0.0D).normal(0.0F, 0.0F, 1.0F).endVertex();
-				vertexbuffer.pos((double)lowerU, (double)upperV, 0.5D).tex(0.8125D, 0.0D).normal(0.0F, 0.0F, 1.0F).endVertex();
-				vertexbuffer.pos((double)lowerU, (double)lowerV, 0.5D).tex(0.8125D, 0.0625D).normal(0.0F, 0.0F, 1.0F).endVertex();
-				vertexbuffer.pos((double)upperU, (double)lowerV, 0.5D).tex(0.75D, 0.0625D).normal(0.0F, 0.0F, 1.0F).endVertex();
-				vertexbuffer.pos((double)upperU, (double)upperV, -0.5D).tex(0.75D, 0.001953125D).normal(0.0F, 1.0F, 0.0F).endVertex();
-				vertexbuffer.pos((double)lowerU, (double)upperV, -0.5D).tex(0.8125D, 0.001953125D).normal(0.0F, 1.0F, 0.0F).endVertex();
-				vertexbuffer.pos((double)lowerU, (double)upperV, 0.5D).tex(0.8125D, 0.001953125D).normal(0.0F, 1.0F, 0.0F).endVertex();
-				vertexbuffer.pos((double)upperU, (double)upperV, 0.5D).tex(0.75D, 0.001953125D).normal(0.0F, 1.0F, 0.0F).endVertex();
-				vertexbuffer.pos((double)upperU, (double)lowerV, 0.5D).tex(0.75D, 0.001953125D).normal(0.0F, -1.0F, 0.0F).endVertex();
-				vertexbuffer.pos((double)lowerU, (double)lowerV, 0.5D).tex(0.8125D, 0.001953125D).normal(0.0F, -1.0F, 0.0F).endVertex();
-				vertexbuffer.pos((double)lowerU, (double)lowerV, -0.5D).tex(0.8125D, 0.001953125D).normal(0.0F, -1.0F, 0.0F).endVertex();
-				vertexbuffer.pos((double)upperU, (double)lowerV, -0.5D).tex(0.75D, 0.001953125D).normal(0.0F, -1.0F, 0.0F).endVertex();
-				vertexbuffer.pos((double)upperU, (double)upperV, 0.5D).tex(0.751953125D, 0.0D).normal(-1.0F, 0.0F, 0.0F).endVertex();
-				vertexbuffer.pos((double)upperU, (double)lowerV, 0.5D).tex(0.751953125D, 0.0625D).normal(-1.0F, 0.0F, 0.0F).endVertex();
-				vertexbuffer.pos((double)upperU, (double)lowerV, -0.5D).tex(0.751953125D, 0.0625D).normal(-1.0F, 0.0F, 0.0F).endVertex();
-				vertexbuffer.pos((double)upperU, (double)upperV, -0.5D).tex(0.751953125D, 0.0D).normal(-1.0F, 0.0F, 0.0F).endVertex();
-				vertexbuffer.pos((double)lowerU, (double)upperV, -0.5D).tex(0.751953125D, 0.0D).normal(1.0F, 0.0F, 0.0F).endVertex();
-				vertexbuffer.pos((double)lowerU, (double)lowerV, -0.5D).tex(0.751953125D, 0.0625D).normal(1.0F, 0.0F, 0.0F).endVertex();
-				vertexbuffer.pos((double)lowerU, (double)lowerV, 0.5D).tex(0.751953125D, 0.0625D).normal(1.0F, 0.0F, 0.0F).endVertex();
-				vertexbuffer.pos((double)lowerU, (double)upperV, 0.5D).tex(0.751953125D, 0.0D).normal(1.0F, 0.0F, 0.0F).endVertex();
+				BufferBuilder buffer = tessellator.getBuffer();
+				buffer.begin(7, DefaultVertexFormats.POSITION_TEX_NORMAL);
+				buffer.pos(upperU, lowerV, -0.5D).tex(f20, f21).normal(0.0F, 0.0F, -1.0F).endVertex();
+				buffer.pos(lowerU, lowerV, -0.5D).tex(f19, f21).normal(0.0F, 0.0F, -1.0F).endVertex();
+				buffer.pos(lowerU, upperV, -0.5D).tex(f19, f22).normal(0.0F, 0.0F, -1.0F).endVertex();
+				buffer.pos(upperU, upperV, -0.5D).tex(f20, f22).normal(0.0F, 0.0F, -1.0F).endVertex();
+				buffer.pos(upperU, upperV, 0.5D).tex(0.75D, 0.0D).normal(0.0F, 0.0F, 1.0F).endVertex();
+				buffer.pos(lowerU, upperV, 0.5D).tex(0.8125D, 0.0D).normal(0.0F, 0.0F, 1.0F).endVertex();
+				buffer.pos(lowerU, lowerV, 0.5D).tex(0.8125D, 0.0625D).normal(0.0F, 0.0F, 1.0F).endVertex();
+				buffer.pos(upperU, lowerV, 0.5D).tex(0.75D, 0.0625D).normal(0.0F, 0.0F, 1.0F).endVertex();
+				buffer.pos(upperU, upperV, -0.5D).tex(0.75D, 0.001953125D).normal(0.0F, 1.0F, 0.0F).endVertex();
+				buffer.pos(lowerU, upperV, -0.5D).tex(0.8125D, 0.001953125D).normal(0.0F, 1.0F, 0.0F).endVertex();
+				buffer.pos(lowerU, upperV, 0.5D).tex(0.8125D, 0.001953125D).normal(0.0F, 1.0F, 0.0F).endVertex();
+				buffer.pos(upperU, upperV, 0.5D).tex(0.75D, 0.001953125D).normal(0.0F, 1.0F, 0.0F).endVertex();
+				buffer.pos(upperU, lowerV, 0.5D).tex(0.75D, 0.001953125D).normal(0.0F, -1.0F, 0.0F).endVertex();
+				buffer.pos(lowerU, lowerV, 0.5D).tex(0.8125D, 0.001953125D).normal(0.0F, -1.0F, 0.0F).endVertex();
+				buffer.pos(lowerU, lowerV, -0.5D).tex(0.8125D, 0.001953125D).normal(0.0F, -1.0F, 0.0F).endVertex();
+				buffer.pos(upperU, lowerV, -0.5D).tex(0.75D, 0.001953125D).normal(0.0F, -1.0F, 0.0F).endVertex();
+				buffer.pos(upperU, upperV, 0.5D).tex(0.751953125D, 0.0D).normal(-1.0F, 0.0F, 0.0F).endVertex();
+				buffer.pos(upperU, lowerV, 0.5D).tex(0.751953125D, 0.0625D).normal(-1.0F, 0.0F, 0.0F).endVertex();
+				buffer.pos(upperU, lowerV, -0.5D).tex(0.751953125D, 0.0625D).normal(-1.0F, 0.0F, 0.0F).endVertex();
+				buffer.pos(upperU, upperV, -0.5D).tex(0.751953125D, 0.0D).normal(-1.0F, 0.0F, 0.0F).endVertex();
+				buffer.pos(lowerU, upperV, -0.5D).tex(0.751953125D, 0.0D).normal(1.0F, 0.0F, 0.0F).endVertex();
+				buffer.pos(lowerU, lowerV, -0.5D).tex(0.751953125D, 0.0625D).normal(1.0F, 0.0F, 0.0F).endVertex();
+				buffer.pos(lowerU, lowerV, 0.5D).tex(0.751953125D, 0.0625D).normal(1.0F, 0.0F, 0.0F).endVertex();
+				buffer.pos(lowerU, upperV, 0.5D).tex(0.751953125D, 0.0D).normal(1.0F, 0.0F, 0.0F).endVertex();
 				tessellator.draw();
 			}
 		}
