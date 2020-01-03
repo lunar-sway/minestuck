@@ -69,7 +69,7 @@ public class LandDimension extends Dimension
 		
 		properties.load(landTypes);
 		
-		biomeHolder = new LandBiomeHolder(properties, landTypes, false);
+		biomeHolder = new LandBiomeHolder(properties, landTypes);
 	}
 	
 	private static final long GENERIC_BIG_PRIME = 661231563202688713L;

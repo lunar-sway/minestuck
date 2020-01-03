@@ -4,13 +4,13 @@ import com.google.common.collect.Lists;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
-import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.math.Vec3d;
@@ -73,15 +73,15 @@ public class RainLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void setBiomeSettings(LandBiomeHolder settings)
+	public void setProperties(LandProperties properties)
 	{
-		settings.category = Biome.Category.BEACH;	//I guess?
-		settings.downfall = 0.9F;
-		settings.temperature = 0.5F;
+		properties.category = Biome.Category.BEACH;	//I guess?
+		properties.downfall = 0.9F;
+		properties.temperature = 0.5F;
 		
-		settings.oceanBiomeScale += 0.1;
-		settings.roughBiomeScale += 0.1;
-		settings.roughBiomeDepth -= 0.2;
+		properties.oceanBiomeScale += 0.1;
+		properties.roughBiomeScale += 0.1;
+		properties.roughBiomeDepth -= 0.2;
 	}
 	
 	@Override
@@ -91,7 +91,7 @@ public class RainLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
+	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{
 		if(biome.staticBiome == MSBiomes.LAND_NORMAL)
 		{

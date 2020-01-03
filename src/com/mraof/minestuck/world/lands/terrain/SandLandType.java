@@ -6,14 +6,14 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
-import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.biome.MSBiomes;
-import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.LandGenSettings;
+import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
-import net.minecraft.block.*;
+import com.mraof.minestuck.world.lands.LandProperties;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
@@ -94,11 +94,11 @@ public class SandLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void setBiomeSettings(LandBiomeHolder settings)
+	public void setProperties(LandProperties properties)
 	{
-		settings.category = Biome.Category.DESERT;
-		settings.downfall = 0.0F;
-		settings.temperature = 2.0F;
+		properties.category = Biome.Category.DESERT;
+		properties.downfall = 0.0F;
+		properties.temperature = 2.0F;
 	}
 	
 	@Override
@@ -108,7 +108,7 @@ public class SandLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
+	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{
 		if(type == Variant.LUSH_DESERTS)
 		{
