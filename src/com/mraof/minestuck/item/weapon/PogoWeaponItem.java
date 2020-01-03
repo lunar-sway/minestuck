@@ -20,9 +20,9 @@ public class PogoWeaponItem extends WeaponItem
 {
 	private double pogoMotion;
 	
-	public PogoWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, double pogoMotion, Properties builder)
+	public PogoWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, double pogoMotion, MSToolType toolType, Properties builder)
 	{
-		super(tier, attackDamageIn, attackSpeedIn, efficiency, builder);
+		super(tier, attackDamageIn, attackSpeedIn, efficiency, toolType, builder);
 		this.pogoMotion = pogoMotion;
 	}
 	

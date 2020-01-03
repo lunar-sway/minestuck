@@ -11,9 +11,9 @@ import net.minecraft.item.ItemStack;
 public class SordItem extends WeaponItem
 {
 	
-	public SordItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, Properties builder)
+	public SordItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, MSToolType toolType, Properties builder)
 	{
-		super(tier, attackDamageIn, attackSpeedIn, efficiency, builder);
+		super(tier, attackDamageIn, attackSpeedIn, efficiency, toolType, builder);
 	}
 	
 	@Override

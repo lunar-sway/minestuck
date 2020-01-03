@@ -12,9 +12,9 @@ import java.util.List;
 
 public class MSToolType
 {
-	protected List<Material> harvestMaterials = new ArrayList<>();
-	protected List<Enchantment> enchantments = new ArrayList<>();
-	protected List<ToolType> toolType = new ArrayList<>();
+	private final List<Material> harvestMaterials = new ArrayList<>();
+	private final List<Enchantment> enchantments = new ArrayList<>();
+	private final List<ToolType> toolType = new ArrayList<>();
 	
 	public MSToolType(ToolType toolType, Material... materials)
 	{
@@ -27,6 +27,8 @@ public class MSToolType
 		for(Material mat : materials)
 			harvestMaterials.add(mat);
 	}
+	
+	public MSToolType() {}
 	
 	public MSToolType(MSToolType... classCombo)
 	{

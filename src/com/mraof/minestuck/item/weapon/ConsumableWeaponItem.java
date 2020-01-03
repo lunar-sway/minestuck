@@ -22,17 +22,17 @@ public class ConsumableWeaponItem extends WeaponItem
 	private EffectInstance potionId;
 	private float potionEffectProbability;
 	
-	public ConsumableWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, int healAmount, float saturationModifier, int damageTaken, Properties builder)
+	public ConsumableWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, int healAmount, float saturationModifier, int damageTaken, MSToolType toolType, Properties builder)
 	{
-		super(tier, attackDamageIn, attackSpeedIn, efficiency, builder);
+		super(tier, attackDamageIn, attackSpeedIn, efficiency, toolType, builder);
 		this.healAmount = healAmount;
 		this.saturationModifier = saturationModifier;
 		this.damageTaken = damageTaken;
 	}
 	
-	public ConsumableWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, int healAmount, float saturationModifier, Properties builder)
+	public ConsumableWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, int healAmount, float saturationModifier, MSToolType toolType, Properties builder)
 	{
-		this(tier, attackDamageIn, attackSpeedIn, efficiency, healAmount, saturationModifier, 50, builder);
+		this(tier, attackDamageIn, attackSpeedIn, efficiency, healAmount, saturationModifier, 50, toolType, builder);
 	}
 	
 	@Override

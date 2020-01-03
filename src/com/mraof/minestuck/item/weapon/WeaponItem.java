@@ -7,6 +7,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
@@ -15,24 +16,20 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 
-//TODO add system for Minestuck weapons that can replace enchantments
+import javax.annotation.Nullable;
+
 public class WeaponItem extends SwordItem //To allow weapons to have the sweep effect
 {
-	private float efficiency;
+	private final float efficiency;
 	//private static final HashMap<ToolType, Set<Material>> toolMaterials = new HashMap<>();
 	
-	private MSToolType toolType;
+	private final MSToolType toolType;
 	
-	public WeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, Properties builder)
+	public WeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, MSToolType toolType, Properties builder)
 	{
 		super(tier, attackDamageIn, attackSpeedIn, builder);
-		this.efficiency = efficiency;
-	}
-	
-	public WeaponItem setTool(MSToolType toolType)
-	{
 		this.toolType = toolType;
-		return this;
+		this.efficiency = efficiency;
 	}
 	
 	@Override
@@ -57,7 +54,7 @@ public class WeaponItem extends SwordItem //To allow weapons to have the sweep e
 		itemTools.addAll(getToolTypes(new ItemStack(this)));
 		itemTools.addAll(toolType.getToolTypes());
 		int blockHarvestLevel = blockIn.getHarvestLevel();
-		int toolHarvestLevel = toolHarvestLevel = getTier().getHarvestLevel();
+		int toolHarvestLevel = getTier().getHarvestLevel();
 		
         if(itemTools.contains(blockTool))
         {
@@ -83,22 +80,39 @@ public class WeaponItem extends SwordItem //To allow weapons to have the sweep e
 	{
 		if (state.getBlockHardness(worldIn, pos) != 0.0F)
 		{
-			int dmg = 2;
+			int damage = 2;
 			
 			if(getToolTypes(stack).contains(state.getHarvestTool()))
-				dmg = 1;
+				damage = 1;
 			else if(toolType != null)
 			{
 				if(toolType.getHarvestMaterials().contains(state.getMaterial()) || toolType.getToolTypes().contains(state.getHarvestTool()))
-					dmg = 1;
+					damage = 1;
 			}
 			
-			stack.damageItem(dmg, entityLiving, (p_220044_0_) -> {
-				p_220044_0_.sendBreakAnimation(EquipmentSlotType.MAINHAND);
+			stack.damageItem(damage, entityLiving, (onBroken) -> {
+				onBroken.sendBreakAnimation(EquipmentSlotType.MAINHAND);
 			});
 		}
 		
 		return true;
+	}
+	
+	@Override
+	public int getHarvestLevel(ItemStack stack, ToolType tool, @Nullable PlayerEntity player, @Nullable BlockState blockState)
+	{
+		int harvestLevel = super.getHarvestLevel(stack, tool, player, blockState);
+		if(super.getToolTypes(stack).contains(tool) && harvestLevel == -1)
+			return harvestLevel;
+		return getTier().getHarvestLevel();
+	}
+	
+	@Override
+	public Set<ToolType> getToolTypes(ItemStack stack)
+	{
+		Set<ToolType> types = super.getToolTypes(stack);
+		types.addAll(toolType.getToolTypes());
+		return types;
 	}
 	
 	@Override

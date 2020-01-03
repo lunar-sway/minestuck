@@ -14,14 +14,14 @@ public class DualWeaponItem extends WeaponItem
 {
 	protected Item otherItem;
 	
-	public DualWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, Properties builder)
+	public DualWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, MSToolType toolType, Properties builder)
 	{
-		this(tier, attackDamageIn, attackSpeedIn, efficiency, null, builder);
+		this(tier, attackDamageIn, attackSpeedIn, efficiency, null, toolType, builder);
 	}
 	
-	public DualWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, DualWeaponItem otherItem, Properties builder)
+	public DualWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, DualWeaponItem otherItem, MSToolType toolType, Properties builder)
 	{
-		super(tier, attackDamageIn, attackSpeedIn, efficiency, builder);
+		super(tier, attackDamageIn, attackSpeedIn, efficiency, toolType, builder);
 		if(otherItem != null)
 		{
 			this.otherItem = otherItem;

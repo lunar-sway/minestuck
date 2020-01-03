@@ -43,9 +43,9 @@ public class FarmineItem extends WeaponItem
 	private HashSet<Block> farMineForbiddenBlocks = new HashSet<>();
 	private HashMap<Block, HashSet<Block>> farMineEquivalencies = new HashMap<>();
 	
-	public FarmineItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, int radius, int terminus, Properties builder)
+	public FarmineItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, int radius, int terminus, MSToolType toolType, Properties builder)
 	{
-		super(tier, attackDamageIn, attackSpeedIn, efficiency, builder);
+		super(tier, attackDamageIn, attackSpeedIn, efficiency, toolType, builder);
 		redefineLimiters(radius, terminus);
 		initializeFarMineLists();
 	}
