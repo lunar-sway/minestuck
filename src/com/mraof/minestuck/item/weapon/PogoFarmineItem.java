@@ -10,9 +10,9 @@ public class PogoFarmineItem extends FarmineItem
 {
 	private double pogoMotion;
 	
-	public PogoFarmineItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, int radius, int terminus, double pogoMotion, Properties builder)
+	public PogoFarmineItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, int radius, int terminus, double pogoMotion, MSToolType toolType, Properties builder)
 	{
-		super(tier, attackDamageIn, attackSpeedIn, efficiency, radius, terminus, builder);
+		super(tier, attackDamageIn, attackSpeedIn, efficiency, radius, terminus, toolType, builder);
 		this.pogoMotion = pogoMotion;
 	}
 	

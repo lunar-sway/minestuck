@@ -9,9 +9,9 @@ import net.minecraft.util.SoundCategory;
 public class SbahjEEEEItem extends PogoWeaponItem
 {
 	
-	public SbahjEEEEItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, double pogoMotion, Properties builder)
+	public SbahjEEEEItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, double pogoMotion, MSToolType toolType, Properties builder)
 	{
-		super(tier, attackDamageIn, attackSpeedIn, efficiency, pogoMotion, builder);
+		super(tier, attackDamageIn, attackSpeedIn, efficiency, pogoMotion, toolType, builder);
 	}
 	
 	@Override

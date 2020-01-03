@@ -11,9 +11,9 @@ public class FireWeaponItem extends WeaponItem
 {
 	private final int duration;
 	
-	public FireWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, int duration, Properties builder)
+	public FireWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, int duration, MSToolType toolType, Properties builder)
 	{
-		super(tier, attackDamageIn, attackSpeedIn, efficiency, builder);
+		super(tier, attackDamageIn, attackSpeedIn, efficiency, toolType, builder);
 		this.duration = duration;
 	}
 

@@ -15,9 +15,9 @@ import net.minecraft.util.text.TextFormatting;
 public class HorrorterrorWeaponItem extends WeaponItem
 {
 	
-	public HorrorterrorWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, Properties builder)
+	public HorrorterrorWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, MSToolType toolType, Properties builder)
 	{
-		super(tier, attackDamageIn, attackSpeedIn, efficiency, builder);
+		super(tier, attackDamageIn, attackSpeedIn, efficiency, toolType, builder);
 	}
 	
 	@Override

@@ -13,14 +13,14 @@ public class PotionWeaponItem extends WeaponItem
     private final EffectInstance effect;
     private final boolean onCritical;
 	
-	public PotionWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, EffectInstance effect, Properties builder)
+	public PotionWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, EffectInstance effect, MSToolType toolType, Properties builder)
 	{
-		this(tier, attackDamageIn, attackSpeedIn, efficiency, effect ,true, builder);
+		this(tier, attackDamageIn, attackSpeedIn, efficiency, effect ,true, toolType, builder);
 	}
  
-	public PotionWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, EffectInstance effect, boolean potionEffectOnCriticalHit, Properties builder)
+	public PotionWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, EffectInstance effect, boolean potionEffectOnCriticalHit, MSToolType toolType, Properties builder)
 	{
-		super(tier, attackDamageIn, attackSpeedIn, efficiency, builder);
+		super(tier, attackDamageIn, attackSpeedIn, efficiency, toolType, builder);
 		this.effect = effect;
 		this.onCritical = potionEffectOnCriticalHit;
 	}

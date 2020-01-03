@@ -1,6 +1,10 @@
 package com.mraof.minestuck.item;
 
+import com.mraof.minestuck.item.weapon.MSToolType;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.material.Material;
+import net.minecraft.enchantment.EnchantmentType;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.Items;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -30,7 +34,26 @@ public class MSItemTypes
 	
 	public static final IArmorMaterial PRISMARINE_ARMOR = new ModArmorMaterial("minestuck:prismarine", 20, new int[]{3, 7, 6, 2}, 15, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0F, () -> Ingredient.fromItems(Items.PRISMARINE_SHARD));
 	
-	public static final ToolType SICKLE_TOOL = ToolType.get("sickle");
+	//Base Tools
+	public static final MSToolType SICKLE_TOOL = new MSToolType(ToolType.get("sickle"), Material.WEB, Material.LEAVES, Material.PLANTS, Material.TALL_PLANTS).addEnchantments(EnchantmentType.WEAPON);
+	public static final MSToolType CLAWS_TOOL = new MSToolType(ToolType.get("claw"), Material.TALL_PLANTS, Material.PLANTS, Material.WEB).addEnchantments(EnchantmentType.WEAPON);
+	public static final MSToolType PICKAXE_TOOL = new MSToolType(ToolType.PICKAXE, Material.IRON, Material.ANVIL, Material.ROCK).addEnchantments(EnchantmentType.DIGGER);
+	public static final MSToolType HAMMER_TOOL = new MSToolType(PICKAXE_TOOL).addEnchantments(EnchantmentType.WEAPON).addToolType(ToolType.get("hammer"));
+	public static final MSToolType AXE_TOOL = new MSToolType(ToolType.AXE, Material.WOOD, Material.PLANTS, Material.TALL_PLANTS).addEnchantments(EnchantmentType.DIGGER, EnchantmentType.WEAPON);
+	public static final MSToolType SHOVEL_TOOL = new MSToolType(ToolType.SHOVEL, Material.SNOW, Material.SNOW_BLOCK, Material.CLAY, Material.ORGANIC, Material.EARTH, Material.SAND).addEnchantments(EnchantmentType.DIGGER);
+	public static final MSToolType SWORD_TOOL = new MSToolType(ToolType.get("sword"), Material.WEB).addEnchantments(EnchantmentType.WEAPON);
+	public static final MSToolType MISC_TOOL = new MSToolType().addEnchantments(EnchantmentType.WEAPON);
+	public static final MSToolType NONE = new MSToolType();
+	
+	//Combo Tools
+	public static final MSToolType AXE_PICK_TOOL = new MSToolType(PICKAXE_TOOL, AXE_TOOL);
+	public static final MSToolType AXE_HAMMER_TOOL = new MSToolType(AXE_TOOL, HAMMER_TOOL);
+	public static final MSToolType SHOVEL_PICK_TOOL = new MSToolType(PICKAXE_TOOL, SHOVEL_TOOL);
+	public static final MSToolType SHOVEL_AXE_TOOL = new MSToolType(AXE_TOOL, SHOVEL_TOOL);
+	public static final MSToolType MULTI_TOOL = new MSToolType(PICKAXE_TOOL, AXE_TOOL, SHOVEL_TOOL);
+	
+	//Unimplemented
+	public static final MSToolType GAUNTLET_TOOL = new MSToolType(ToolType.get("gauntlet"), Material.GLASS, Material.ICE, Material.PACKED_ICE).addEnchantments(EnchantmentType.WEAPON).addEnchantments(Enchantments.SILK_TOUCH).addToolType(ToolType.get("fist"));
 	
 	private static class ModItemTier implements IItemTier
 	{
