@@ -110,8 +110,9 @@ public class WeaponItem extends SwordItem //To allow weapons to have the sweep e
 	@Override
 	public Set<ToolType> getToolTypes(ItemStack stack)
 	{
-		Set<ToolType> types = super.getToolTypes(stack);
+		Set<ToolType> types = new HashSet<>();
 		types.addAll(toolType.getToolTypes());
+		types.addAll(super.getToolTypes(stack));
 		return types;
 	}
 	

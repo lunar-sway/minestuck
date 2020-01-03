@@ -7,14 +7,15 @@ import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.util.registry.Registry;
 import net.minecraftforge.common.ToolType;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class MSToolType
 {
-	private final List<Material> harvestMaterials = new ArrayList<>();
-	private final List<Enchantment> enchantments = new ArrayList<>();
-	private final List<ToolType> toolType = new ArrayList<>();
+	private final Set<Material> harvestMaterials = new HashSet<>();
+	private final Set<Enchantment> enchantments = new HashSet<>();
+	private final Set<ToolType> toolType = new HashSet<>();
 	
 	public MSToolType(ToolType toolType, Material... materials)
 	{
@@ -83,7 +84,7 @@ public class MSToolType
 		return this;
 	}
 	
-	public List<ToolType> getToolTypes() {return toolType;}
-	public List<Material> getHarvestMaterials() {return harvestMaterials;}
-	public List<Enchantment> getEnchantments() {return enchantments;}
+	public Set<ToolType> getToolTypes() {return toolType;}
+	public Set<Material> getHarvestMaterials() {return harvestMaterials;}
+	public Set<Enchantment> getEnchantments() {return enchantments;}
 }
