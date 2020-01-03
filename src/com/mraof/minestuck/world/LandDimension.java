@@ -10,6 +10,7 @@ import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.MSWorldGenTypes;
 import com.mraof.minestuck.world.lands.LandInfo;
+import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import net.minecraft.entity.player.PlayerEntity;
@@ -37,11 +38,8 @@ import java.util.function.BiFunction;
 public class LandDimension extends Dimension
 {
 	private LandBiomeHolder biomeHolder;
+	private LandProperties properties;
 	public final LandTypePair landTypes;
-	public float skylightBase;
-	Vec3d skyColor;
-	Vec3d fogColor;
-	Vec3d cloudColor;
 	
 	public LandDimension(World worldIn, DimensionType typeIn, LandTypePair aspects)
 	{
@@ -67,14 +65,11 @@ public class LandDimension extends Dimension
 	
 	private void initLandAspects()
 	{
-		skylightBase = landTypes.terrain.getSkylightBase();
-		skyColor = landTypes.terrain.getSkyColor();
-		fogColor = landTypes.terrain.getFogColor();
-		cloudColor = landTypes.terrain.getCloudColor();
+		properties = new LandProperties(landTypes.terrain);
 		
-		landTypes.title.prepareWorldProvider(this);
+		properties.load(landTypes);
 		
-		biomeHolder = new LandBiomeHolder(landTypes, false);
+		biomeHolder = new LandBiomeHolder(properties, landTypes, false);
 	}
 	
 	private static final long GENERIC_BIG_PRIME = 661231563202688713L;
@@ -88,7 +83,7 @@ public class LandDimension extends Dimension
 	@Override
 	public float getSunBrightness(float partialTicks)
 	{
-		float skylight = skylightBase;
+		float skylight = properties.skylightBase;
 		skylight = (float)((double)skylight * (1.0D - (double)(world.getRainStrength(partialTicks) * 5.0F) / 16.0D));
 		skylight = (float)((double)skylight * (1.0D - (double)(world.getThunderStrength(partialTicks) * 5.0F) / 16.0D));
 		return skylight*0.8F + 0.2F;
@@ -97,7 +92,7 @@ public class LandDimension extends Dimension
 	@Override
 	public float getStarBrightness(float par1)
 	{
-		float f = 1 - skylightBase;
+		float f = 1 - properties.skylightBase;
 		return f * f * 0.5F;
 	}
 	
@@ -246,37 +241,24 @@ public class LandDimension extends Dimension
 	@Override
 	public Vec3d getSkyColor(BlockPos cameraPos, float partialTicks)
 	{
-		return skyColor;
+		return properties.getSkyColor();
 	}
 	
 	@Override
 	public Vec3d getFogColor(float par1, float par2)
 	{
-		return getFogColor();
+		return properties.getFogColor();
 	}
 	
 	@Override
 	public Vec3d getCloudColor(float partialTicks)
 	{
-		return cloudColor;
+		return properties.getCloudColor();
 	}
 	
 	public World getWorld()
 	{
 		return world;
-	}
-	
-	public void mergeFogColor(Vec3d fogColor, float strength)
-	{
-		double d1 = (this.fogColor.x + fogColor.x*strength)/(1 + strength);
-		double d2 = (this.fogColor.y + fogColor.y*strength)/(1 + strength);
-		double d3 = (this.fogColor.z + fogColor.z*strength)/(1 + strength);
-		this.fogColor = new Vec3d(d1, d2, d3);
-	}
-	
-	public Vec3d getFogColor()
-	{
-		return this.fogColor;
 	}
 	
 	public static class Type extends ModDimension

@@ -98,7 +98,7 @@ public class Minestuck
 	{
 		
 		//if(!event.getServer().isDedicatedServer() && Minestuck.class.getAnnotation(Mod.class).version().startsWith("@")) TODO Find an alternative to detect dev environment
-			event.getServer().setOnlineMode(false);	//Makes it possible to use LAN in a development environment
+			//event.getServer().setOnlineMode(false);	//Makes it possible to use LAN in a development environment
 		
 		if(!event.getServer().isServerInOnlineMode() && MinestuckConfig.useUUID.get())
 			Debug.warn("Because uuids might not be consistent in an offline environment, it is not recommended to use uuids for minestuck. You should disable uuidIdentification in the minestuck config.");

@@ -1,7 +1,6 @@
 package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.util.EnumAspect;
-import com.mraof.minestuck.world.LandDimension;
 import com.mraof.minestuck.world.lands.ILandType;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import net.minecraft.util.ResourceLocation;
@@ -61,7 +60,4 @@ public abstract class TitleLandType extends ForgeRegistryEntry<TitleLandType> im
 	{
 		return aspectType;
 	}
-	
-	public void prepareWorldProvider(LandDimension worldProvider)
-	{}
 }

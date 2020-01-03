@@ -3,10 +3,10 @@ package com.mraof.minestuck.world.lands.title;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
-import com.mraof.minestuck.world.gen.feature.MSFeatures;
-import com.mraof.minestuck.world.LandDimension;
 import com.mraof.minestuck.world.biome.MSBiomes;
+import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -44,14 +44,14 @@ public class LightLandType extends TitleLandType
 	}
 	
 	@Override
-	public void prepareWorldProvider(LandDimension worldProvider)
+	public void setProperties(LandProperties properties)
 	{
-		worldProvider.skylightBase = 1.0F;
-		worldProvider.mergeFogColor(new Vec3d(1, 1, 0.8), 0.5F);
+		properties.skylightBase = 1.0F;
+		properties.mergeFogColor(new Vec3d(1, 1, 0.8), 0.5F);
 	}
 	
 	@Override
-	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blockRegistry)
+	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blockRegistry)
 	{
 		BlockState lightBlock = blockRegistry.getBlockState("light_block");
 		if(biome.staticBiome == MSBiomes.LAND_ROUGH)

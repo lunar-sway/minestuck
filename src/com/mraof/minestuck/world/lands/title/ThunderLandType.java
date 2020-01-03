@@ -1,11 +1,9 @@
 package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.util.EnumAspect;
-import com.mraof.minestuck.world.biome.LandBiomeHolder;
-import com.mraof.minestuck.world.lands.LandTypePair;
-import com.mraof.minestuck.world.LandDimension;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.Vec3d;
@@ -37,16 +35,11 @@ public class ThunderLandType extends TitleLandType
 	}
 	
 	@Override
-	public void prepareWorldProvider(LandDimension worldProvider)
+	public void setProperties(LandProperties properties)
 	{
-		worldProvider.mergeFogColor(new Vec3d(0.1, 0.1, 0.2), 0.5F);
-	}
-	
-	@Override
-	public void setBiomeSettings(LandBiomeHolder settings)
-	{
-		settings.rainType = Biome.RainType.RAIN; //TODO Add feature to make an eternal thunderstorm
-		settings.downfall += 0.1F;
+		properties.mergeFogColor(new Vec3d(0.1, 0.1, 0.2), 0.5F);
+		properties.rainType = Biome.RainType.RAIN; //TODO Add feature to make an eternal thunderstorm
+		properties.downfall += 0.1F;
 	}
 	
 	@Override
@@ -58,7 +51,8 @@ public class ThunderLandType extends TitleLandType
 	@Override
 	public boolean isAspectCompatible(TerrainLandType aspect)
 	{
-		LandBiomeHolder biomeSettings = new LandBiomeHolder(new LandTypePair(aspect, this), true);
-		return biomeSettings.rainType != Biome.RainType.SNOW;
+		LandProperties properties = new LandProperties(aspect);
+		aspect.setProperties(properties);
+		return properties.rainType != Biome.RainType.SNOW;
 	}
 }

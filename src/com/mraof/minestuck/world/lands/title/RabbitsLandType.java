@@ -35,7 +35,7 @@ public class RabbitsLandType extends TitleLandType
 	}
 	
 	@Override
-	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
+	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{
 		if(biome.staticBiome == MSBiomes.LAND_NORMAL)
 			biome.addSpawn(EntityClassification.CREATURE, new Biome.SpawnListEntry(EntityType.RABBIT, 5, 2, 5));

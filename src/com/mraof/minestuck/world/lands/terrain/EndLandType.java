@@ -3,13 +3,12 @@ package com.mraof.minestuck.world.lands.terrain;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
-import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
-
+import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.entity.EntityType;
@@ -64,15 +63,15 @@ public class EndLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void setBiomeSettings(LandBiomeHolder settings)
+	public void setProperties(LandProperties properties)
 	{
-		settings.category = Biome.Category.THEEND;
-		settings.downfall = 0.0F;
-		settings.temperature = 1.2F;
+		properties.category = Biome.Category.THEEND;
+		properties.downfall = 0.0F;
+		properties.temperature = 1.2F;
 	}
 	
 	@Override
-	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
+	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{
 		if(biome.staticBiome == MSBiomes.LAND_NORMAL)
 		{

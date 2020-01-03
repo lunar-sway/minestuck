@@ -35,7 +35,7 @@ public class BucketsLandType extends TitleLandType    //Yes, buckets
 	}
 	
 	@Override
-	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
+	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{
 		if(biome.staticBiome != MSBiomes.LAND_OCEAN)
 		{

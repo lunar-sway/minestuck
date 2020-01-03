@@ -3,8 +3,8 @@ package com.mraof.minestuck.world.lands.title;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
-import com.mraof.minestuck.world.LandDimension;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
@@ -43,14 +43,14 @@ public class MonstersLandType extends TitleLandType
 	}
 	
 	@Override
-	public void prepareWorldProvider(LandDimension worldProvider)
+	public void setProperties(LandProperties properties)
 	{
-		worldProvider.skylightBase = Math.min(1/4F, worldProvider.skylightBase);
-		worldProvider.mergeFogColor(new Vec3d(0.1, 0, 0), 0.5F);
+		properties.skylightBase = Math.min(1/4F, properties.skylightBase);
+		properties.mergeFogColor(new Vec3d(0.1, 0, 0), 0.5F);
 	}
 	
 	@Override
-	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blockRegistry)
+	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blockRegistry)
 	{
 		if(this.type == Variant.MONSTERS)
 		{

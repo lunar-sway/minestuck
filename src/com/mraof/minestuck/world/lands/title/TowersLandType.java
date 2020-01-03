@@ -37,7 +37,7 @@ public class TowersLandType extends TitleLandType
 	}
 	
 	@Override
-	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blockRegistry)
+	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blockRegistry)
 	{
 		if(biome.staticBiome != MSBiomes.LAND_OCEAN)
 		{

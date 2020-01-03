@@ -1,13 +1,12 @@
 package com.mraof.minestuck.world.lands;
 
-import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
-public interface ILandType<A extends ILandType> extends IForgeRegistryEntry<A>
+public interface ILandType<A extends ILandType<?>> extends IForgeRegistryEntry<A>
 {
 	/**
 	 * Returns a list of strings used in giving a land a random name.
@@ -20,12 +19,12 @@ public interface ILandType<A extends ILandType> extends IForgeRegistryEntry<A>
 	
 	void registerBlocks(StructureBlockRegistry blocks);
 	
-	default void setBiomeSettings(LandBiomeHolder settings)
+	default void setProperties(LandProperties properties)
 	{}
 	
 	default void setGenSettings(LandGenSettings settings)
 	{}
 	
-	default void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
+	default void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{}
 }

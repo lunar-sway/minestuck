@@ -4,11 +4,10 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
-import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
-
+import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
@@ -75,14 +74,14 @@ public class ForestLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void setBiomeSettings(LandBiomeHolder settings)
+	public void setProperties(LandProperties properties)
 	{
-		settings.category = this.type == Variant.TAIGA ? Biome.Category.TAIGA : Biome.Category.FOREST;
-		settings.downfall = 0.8F;
+		properties.category = this.type == Variant.TAIGA ? Biome.Category.TAIGA : Biome.Category.FOREST;
+		properties.downfall = 0.8F;
 	}
 	
 	@Override
-	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
+	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{
 		if(biome.staticBiome == MSBiomes.LAND_NORMAL)
 		{

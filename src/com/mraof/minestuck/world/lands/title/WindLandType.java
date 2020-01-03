@@ -1,11 +1,10 @@
 package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.util.EnumAspect;
-import com.mraof.minestuck.world.biome.LandBiomeHolder;
-import com.mraof.minestuck.world.LandDimension;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome;
@@ -37,24 +36,19 @@ public class WindLandType extends TitleLandType
 	}
 	
 	@Override
-	public void prepareWorldProvider(LandDimension worldProvider)
+	public void setProperties(LandProperties properties)
 	{
-		worldProvider.mergeFogColor(new Vec3d(0.1, 0.2, 0.8), 0.3F);
-	}
-	
-	@Override
-	public void setBiomeSettings(LandBiomeHolder settings)
-	{
-		if(settings.rainType == Biome.RainType.NONE)
-			settings.rainType = Biome.RainType.RAIN;
+		properties.mergeFogColor(new Vec3d(0.1, 0.2, 0.8), 0.3F);
+		if(properties.rainType == Biome.RainType.NONE)
+			properties.rainType = Biome.RainType.RAIN;
 		
-		settings.normalBiomeScale *= 0.6;
-		settings.roughBiomeScale *= 0.6;
-		settings.roughBiomeDepth = (settings.roughBiomeDepth + settings.normalBiomeDepth)/2;
+		properties.normalBiomeScale *= 0.6;
+		properties.roughBiomeScale *= 0.6;
+		properties.roughBiomeDepth = (properties.roughBiomeDepth + properties.normalBiomeDepth)/2;
 	}
 	
 	@Override
-	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
+	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{
 		biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(MSFeatures.ROCK_SPIKE, IFeatureConfig.NO_FEATURE_CONFIG, Placement.CHANCE_HEIGHTMAP, new ChanceConfig(50)));
 	}

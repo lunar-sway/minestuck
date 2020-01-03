@@ -4,10 +4,10 @@ import com.google.common.collect.Lists;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
-import com.mraof.minestuck.world.LandDimension;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
@@ -47,9 +47,9 @@ public class PulseLandType extends TitleLandType
 	}
 	
 	@Override
-	public void prepareWorldProvider(LandDimension worldProvider)
+	public void setProperties(LandProperties properties)
 	{
-		worldProvider.mergeFogColor(new Vec3d(0.8, 0, 0), 0.8F);
+		properties.mergeFogColor(new Vec3d(0.8, 0, 0), 0.8F);
 	}
 	
 	@Override
@@ -59,7 +59,7 @@ public class PulseLandType extends TitleLandType
 	}
 	
 	@Override
-	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
+	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{
 		if(biome.staticBiome == MSBiomes.LAND_ROUGH)
 		{

@@ -4,8 +4,8 @@ import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
-import com.mraof.minestuck.world.LandDimension;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome;
@@ -38,7 +38,13 @@ public class ClockworkLandType extends TitleLandType
 	}
 	
 	@Override
-	public void setBiomeGenSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
+	public void setProperties(LandProperties properties)
+	{
+		properties.mergeFogColor(new Vec3d(0.5, 0.5, 0.5), 0.5F);
+	}
+	
+	@Override
+	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{
 		if(biome.staticBiome == MSBiomes.LAND_ROUGH)
 		{
@@ -55,11 +61,5 @@ public class ClockworkLandType extends TitleLandType
 		{
 			biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, Biome.createDecoratedFeature(MSFeatures.FLOOR_COG, IFeatureConfig.NO_FEATURE_CONFIG, Placement.CHANCE_PASSTHROUGH, new ChanceConfig(20)));
 		}
-	}
-	
-	@Override
-	public void prepareWorldProvider(LandDimension worldProvider)
-	{
-		worldProvider.mergeFogColor(new Vec3d(0.5, 0.5, 0.5), 0.5F);
 	}
 }
