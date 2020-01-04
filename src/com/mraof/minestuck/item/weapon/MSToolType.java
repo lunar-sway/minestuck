@@ -4,9 +4,10 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
-import net.minecraft.util.registry.Registry;
 import net.minecraftforge.common.ToolType;
+import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -25,8 +26,7 @@ public class MSToolType
 	
 	public MSToolType(Material... materials)
 	{
-		for(Material mat : materials)
-			harvestMaterials.add(mat);
+		harvestMaterials.addAll(Arrays.asList(materials));
 	}
 	
 	public MSToolType() {}
@@ -55,15 +55,14 @@ public class MSToolType
 	
 	public MSToolType addToolType(ToolType... toolType)
 	{
-		for(ToolType type : toolType)
-			this.toolType.add(type);
+		this.toolType.addAll(Arrays.asList(toolType));
 		return this;
 	}
 	
+	//TODO Tool types WILL be created before mod enchantments are created and registered. We should use suppliers instead
 	public MSToolType addEnchantments(Enchantment... enchantments)
 	{
-		for(Enchantment ench : enchantments)
-			this.enchantments.add(ench);
+		this.enchantments.addAll(Arrays.asList(enchantments));
 		return this;
 	}
 	
@@ -77,14 +76,15 @@ public class MSToolType
 	{
 		for(EnchantmentType type : enchantmentTypes)
 		{
-			Registry.ENCHANTMENT.forEach(enchantment ->
-			{if(enchantment.type.equals(type)) addEnchantments(enchantment);});
+			ForgeRegistries.ENCHANTMENTS.forEach(enchantment ->
+			{if(enchantment.type == type) addEnchantments(enchantment);});
 		}
 		
 		return this;
 	}
 	
 	public Set<ToolType> getToolTypes() {return toolType;}
+	//TODO How about functions that checks if a material/enchantment is valid, rather than make the whole lists accessible?
 	public Set<Material> getHarvestMaterials() {return harvestMaterials;}
 	public Set<Enchantment> getEnchantments() {return enchantments;}
 }
