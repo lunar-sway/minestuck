@@ -60,7 +60,7 @@ public class PartGroup
             part.setPosition(parent.posX + position.x, parent.posY + position.y, parent.posZ + position.z);
             part.setPartId(parts.size());
             parts.add(part);
-            world.addEntity(part);
+            //world.addEntity(part); TODO Not safe to add entities to world on creation. A different solution is needed
         }
     }
 
