@@ -1,12 +1,13 @@
 package com.mraof.minestuck.item.crafting.alchemy;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.item.CruxiteArtifactItem;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -15,11 +16,11 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
-import java.util.HashMap;
-import java.util.Map;
 
 import static com.mraof.minestuck.MinestuckConfig.oreMultiplier;
 import static com.mraof.minestuck.block.MSBlocks.*;
@@ -27,15 +28,9 @@ import static com.mraof.minestuck.item.MSItems.*;
 import static com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry.Mode.MODE_AND;
 import static com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry.Mode.MODE_OR;
 
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class AlchemyRecipes
 {
-	private static Map<Item, GristSet> containerlessCosts = new HashMap<>();
-	
-	public static void registerContainerlessCost(Item item, GristSet cost)
-	{
-		if(containerlessCosts != null)
-			containerlessCosts.put(item, cost);
-	}
 	
 	public static void registerVanillaRecipes()
 	{
@@ -1044,25 +1039,22 @@ public class AlchemyRecipes
 		autogrist.execute();*/
 	}
 	
-	public static void onAlchemizedItem(ItemStack stack, ServerPlayerEntity player)	//TODO Make an alchemize event instead
+	@SubscribeEvent
+	public static void onAlchemizedItem(AlchemyEvent event)
 	{
-		if(!(stack.getItem() instanceof CruxiteArtifactItem))
-		{
-			Echeladder e = PlayerSavedData.getData(player).getEcheladder();
-			e.checkBonus(Echeladder.ALCHEMY_BONUS_OFFSET);
-		}
+		Echeladder e = PlayerSavedData.getData(event.getPlayer(), event.getWorld()).getEcheladder();
 		
-		GristSet set = GristCostRecipe.findCostForItem(stack, null, false, player.getEntityWorld());
-		if(set != null) //The only time the grist set should be null here is if it was a captchalogue card that was alchemized
+		if(!(event.getItemResult().getItem() instanceof CruxiteArtifactItem))
 		{
-			double value = set.getValue();
-			
-			Echeladder e = PlayerSavedData.getData(player).getEcheladder();
+			e.checkBonus(Echeladder.ALCHEMY_BONUS_OFFSET);
+			GristSet cost = event.getCost();
+			double value = cost.getValue();
 			if(value >= 50)
 				e.checkBonus((byte) (Echeladder.ALCHEMY_BONUS_OFFSET + 1));
 			if(value >= 500)
 				e.checkBonus((byte) (Echeladder.ALCHEMY_BONUS_OFFSET + 2));
 		}
+		
 	}
 	
 	/**

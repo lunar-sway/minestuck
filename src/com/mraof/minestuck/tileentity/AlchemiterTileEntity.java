@@ -5,6 +5,7 @@ import com.mraof.minestuck.block.AlchemiterBlock;
 import com.mraof.minestuck.block.EnumDowelType;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
+import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.util.AlchemiterUpgrades;
@@ -26,6 +27,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 
 public class AlchemiterTileEntity extends TileEntity
 {
@@ -399,6 +401,7 @@ public class AlchemiterTileEntity extends TileEntity
 		
 		if(canAfford)
 		{
+			
 			while(quantity > 0)
 			{
 				ItemStack stack = newItem.copy();
@@ -417,10 +420,11 @@ public class AlchemiterTileEntity extends TileEntity
 				world.addEntity(item);
 			}
 			
-			AlchemyRecipes.onAlchemizedItem(newItem, player);
-			
 			PlayerIdentifier pid = IdentifierHandler.encode(player);
 			GristHelper.decrease(world, pid, cost);
+			
+			AlchemyEvent event = new AlchemyEvent(pid, this, getDowel(), newItem, cost);
+			MinecraftForge.EVENT_BUS.post(event);
 		}
 	}
 	

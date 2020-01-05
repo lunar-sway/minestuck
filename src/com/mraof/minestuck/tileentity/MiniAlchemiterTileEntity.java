@@ -1,12 +1,12 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.inventory.MiniAlchemiterContainer;
 import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.util.IdentifierHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
@@ -15,6 +15,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.IntReferenceHolder;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.registries.ForgeRegistry;
 
 import javax.annotation.Nullable;
@@ -103,6 +104,8 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 		if (newItem.isEmpty())
 			newItem = new ItemStack(MSBlocks.GENERIC_OBJECT);
 		
+		GristSet cost = GristCostRecipe.findCostForItem(newItem, wildcardGrist, false, world);
+		
 		if (inv.get(OUTPUT).isEmpty())
 		{
 			setInventorySlotContents(1, newItem);
@@ -112,12 +115,10 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 			this.inv.get(OUTPUT).grow(1);
 		}
 		
-		ServerPlayerEntity player = owner.getPlayer(world.getServer());
-		if (player != null)
-			AlchemyRecipes.onAlchemizedItem(newItem, player);
-		
-		GristSet cost = GristCostRecipe.findCostForItem(newItem, wildcardGrist, false, world);
 		GristHelper.decrease(world, owner, cost);
+		
+		AlchemyEvent event = new AlchemyEvent(owner, this, this.inv.get(INPUT), newItem, cost);
+		MinecraftForge.EVENT_BUS.post(event);
 	}
 	
 	// We're going to want to trigger a block update every 20 ticks to have comparators pull data from the Alchemiter.
