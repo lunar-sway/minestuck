@@ -4,6 +4,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 
 import java.util.Objects;
+import java.util.function.Supplier;
 
 /**
  * Container for a GristType + integer combination that might be useful when iterating through a GristSet.
@@ -12,6 +13,11 @@ public class GristAmount
 {
 	private final GristType type;
 	private final long amount;
+	
+	public GristAmount(Supplier<GristType> type, long amount)
+	{
+		this(type.get(), amount);
+	}
 	
 	public GristAmount(GristType type, long amount)
 	{

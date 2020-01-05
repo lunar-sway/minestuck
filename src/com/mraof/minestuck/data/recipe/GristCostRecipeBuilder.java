@@ -17,6 +17,7 @@ import net.minecraft.util.ResourceLocation;
 import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class GristCostRecipeBuilder
 {
@@ -49,6 +50,11 @@ public class GristCostRecipeBuilder
 	{
 		this.defaultName = defaultName;
 		this.ingredient = ingredient;
+	}
+	
+	public GristCostRecipeBuilder grist(Supplier<GristType> type, long amount)
+	{
+		return grist(type.get(), amount);
 	}
 	
 	public GristCostRecipeBuilder grist(GristType type, long amount)

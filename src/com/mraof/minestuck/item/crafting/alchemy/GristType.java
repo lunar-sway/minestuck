@@ -12,7 +12,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.registries.ForgeRegistry;
 import net.minecraftforge.registries.ForgeRegistryEntry;
-import net.minecraftforge.registries.ObjectHolder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,7 +21,6 @@ import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-@ObjectHolder(Minestuck.MOD_ID)
 public class GristType extends ForgeRegistryEntry<GristType> implements Comparable<GristType>
 {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -55,7 +53,7 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 		return new TranslationTextComponent(getTranslationKey());
 	}
 	/**
-	 * Returns the grist's full unlocalized name.
+	 * Returns the grist's translation key
 	 */
 	public String getTranslationKey()
 	{

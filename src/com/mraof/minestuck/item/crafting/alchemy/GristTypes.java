@@ -2,6 +2,7 @@ package com.mraof.minestuck.item.crafting.alchemy;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.util.Debug;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -66,6 +67,7 @@ public class GristTypes
 	@SubscribeEvent
 	public static void onRegistryNewRegistry(final RegistryEvent.NewRegistry event)
 	{
+		Debug.info("New registry!");
 		REGISTRY = new RegistryBuilder<GristType>()
 				.setName(new ResourceLocation(Minestuck.MOD_ID, "grist"))
 				.setType(GristType.class)

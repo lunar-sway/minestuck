@@ -8,7 +8,6 @@ import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.item.crafting.alchemy.GristCostGenerator;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.PlayerTracker;
@@ -27,7 +26,6 @@ import net.minecraftforge.fml.WorldPersistenceHooks;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.event.server.*;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
@@ -46,7 +44,6 @@ public class Minestuck
 	{
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::postSetup);
 		
 		MinestuckConfig.loadConfig(MinestuckConfig.client_config, FMLPaths.CONFIGDIR.get().resolve("minestuck-client.toml").toString());
 		MinestuckConfig.loadConfig(MinestuckConfig.server_config, FMLPaths.CONFIGDIR.get().resolve("minestuck.toml").toString());
@@ -57,12 +54,12 @@ public class Minestuck
 		
 		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		
+		Debug.info("Register deferred register!");
 		MSFluids.FLUIDS.register(eventBus);
 	}
 	
 	private void setup(final FMLCommonSetupEvent event)
 	{
-		//isClientRunning = event.getSide().isClient();
 		
 		//MinestuckConfig.loadConfigFile(event.getSuggestedConfigurationFile(), event.getSide());
 		
@@ -77,14 +74,6 @@ public class Minestuck
 		ClientProxy.init();
 		MinecraftForge.EVENT_BUS.register(ClientProxy.class);
 		MinestuckConfig.setClientValues();
-	}
-	
-	public void postSetup(FMLLoadCompleteEvent event)
-	{
-		/*if(Loader.isModLoaded("crafttweaker"))
-			CraftTweakerSupport.applyRecipes();*/
-		
-		AlchemyRecipes.registerAutomaticRecipes();
 	}
 
 	@SubscribeEvent
