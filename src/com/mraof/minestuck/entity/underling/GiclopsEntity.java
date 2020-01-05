@@ -65,7 +65,7 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	@Override
 	public GristSet getGristSpoils()
 	{
-		return GristHelper.getRandomDrop(getGristType(), 10);
+		return GristHelper.generateUnderlingGristDrops(this, damageMap, 10);
 	}
 
 	@Override

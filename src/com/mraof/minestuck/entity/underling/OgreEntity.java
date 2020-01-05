@@ -50,7 +50,7 @@ public class OgreEntity extends UnderlingEntity
 	@Override
 	public GristSet getGristSpoils()
 	{
-		return GristHelper.getRandomDrop(getGristType(), 4);
+		return GristHelper.generateUnderlingGristDrops(this, damageMap, 4);
 	}
 	
 	@Override

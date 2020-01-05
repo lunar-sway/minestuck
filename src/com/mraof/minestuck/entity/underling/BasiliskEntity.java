@@ -53,7 +53,7 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	@Override
 	public GristSet getGristSpoils()
 	{
-		return GristHelper.getRandomDrop(getGristType(), 6);
+		return GristHelper.generateUnderlingGristDrops(this, damageMap, 6);
 	}
 	
 	@Override

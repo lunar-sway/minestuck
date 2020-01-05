@@ -24,7 +24,7 @@ public class ImpEntity extends UnderlingEntity
 	@Override
 	public GristSet getGristSpoils()
 	{
-		return GristHelper.getRandomDrop(getGristType(), 1);
+		return GristHelper.generateUnderlingGristDrops(this, damageMap, 1);
 	}
 	
 	@Override

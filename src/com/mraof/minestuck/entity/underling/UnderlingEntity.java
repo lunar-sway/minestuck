@@ -13,6 +13,7 @@ import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Echeladder;
+import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
@@ -52,7 +53,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	
 	private static final float maxSharedProgress = 2;	//The multiplier for the maximum amount progress that can be gathered from each enemy with the group fight bonus
 	
-	protected Map<ServerPlayerEntity, Double> damageMap = new HashMap<>();	//Map that stores how much damage each player did to this to this underling. Null is used for environmental or other non-player damage
+	protected Map<IdentifierHandler.PlayerIdentifier, Double> damageMap = new HashMap<>();	//Map that stores how much damage each player did to this to this underling. Null is used for environmental or other non-player damage
 	
 	public UnderlingEntity(EntityType<? extends UnderlingEntity> type, World world)
 	{
@@ -153,7 +154,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 		super.onDeathUpdate();
 		if(this.deathTime == 20 && !this.world.isRemote)
 		{
-			GristSet grist = this.getGristSpoils();	//TODO Grist drop event
+			GristSet grist = this.getGristSpoils();
 			if(grist == null)
 				return;
 			if(fromSpawner)
@@ -288,9 +289,9 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	
 	public void onEntityDamaged(DamageSource source, float amount)
 	{
-		ServerPlayerEntity player = null;
+		IdentifierHandler.PlayerIdentifier player = null;
 		if(source.getTrueSource() instanceof ServerPlayerEntity)
-			player = (ServerPlayerEntity) source.getTrueSource();
+			player = IdentifierHandler.encode((ServerPlayerEntity) source.getTrueSource());
 		if(damageMap.containsKey(player))
 			damageMap.put(player, damageMap.get(player) + amount);
 		else damageMap.put(player, (double) amount);
@@ -314,7 +315,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 		
 		int maxProgress = (int) (progress*maxSharedProgress);
 		damageMap.remove(null);
-		ServerPlayerEntity[] playerList = damageMap.keySet().toArray(new ServerPlayerEntity[0]);
+		IdentifierHandler.PlayerIdentifier[] playerList = damageMap.keySet().toArray(new IdentifierHandler.PlayerIdentifier[0]);
 		double[] modifiers = new double[playerList.length];
 		double totalModifier = 0;
 		
@@ -328,10 +329,10 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 		Debug.infof("%s players are splitting on %s progress from %s", playerList.length, progress, getType().getRegistryName());
 		if(totalModifier > maxSharedProgress)
 			for(int i = 0; i < playerList.length; i++)
-				Echeladder.increaseProgress(playerList[i], (int) (maxProgress*modifiers[i]/totalModifier));
+				Echeladder.increaseProgress(playerList[i], world, (int) (maxProgress*modifiers[i]/totalModifier));
 		else
 			for(int i = 0; i < playerList.length; i++)
-				Echeladder.increaseProgress(playerList[i], (int) (progress*modifiers[i]));
+				Echeladder.increaseProgress(playerList[i], world, (int) (progress*modifiers[i]));
 	}
 	
 	protected static class UnderlingData implements ILivingEntityData
