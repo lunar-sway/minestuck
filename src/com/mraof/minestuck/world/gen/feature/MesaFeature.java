@@ -5,6 +5,7 @@ import com.mraof.minestuck.util.CoordPair;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationSettings;
@@ -71,6 +72,7 @@ public class MesaFeature extends Feature<NoFeatureConfig>
 	//TODO: Figure out how this code even works, make it more readable (and possibly more efficient), and make the same changes to RockDecorator.generateRock()
 	private BlockPos generateMesa(BlockPos rockPos, int height, float plateauSize, IWorld world, Random random, boolean isAlt, BlockState groundBlock)
 	{
+		MutableBoundingBox boundingBox = new MutableBoundingBox(rockPos.getX() - 8, rockPos.getZ() - 8, rockPos.getX() + 7, rockPos.getZ() + 7);	//Extra solution to prevent the code to run indefinitely
 		float xSlope = random.nextFloat(), zSlope = random.nextFloat();
 		
 		Map<CoordPair, Integer> heightMap = new HashMap<>();
@@ -97,6 +99,8 @@ public class MesaFeature extends Feature<NoFeatureConfig>
 				stomps = true;
 				break;
 			}*/
+			if(!boundingBox.isVecInside(pos))
+				continue;
 			
 			if(random.nextFloat()*xSlope < plateauSize)
 				toProcess.add(pos.west());
@@ -132,7 +136,7 @@ public class MesaFeature extends Feature<NoFeatureConfig>
 				continue;
 			}
 			
-			if(!checkCoord(entry.pos, heightMap))
+			if(!boundingBox.isVecInside(new BlockPos(entry.pos.x, 64, entry.pos.z)) || !checkCoord(entry.pos, heightMap))
 				continue;
 			if(random.nextFloat() < entry.spreadChance)
 			{
