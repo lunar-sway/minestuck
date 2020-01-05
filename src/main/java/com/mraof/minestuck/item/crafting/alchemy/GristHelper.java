@@ -18,11 +18,8 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Objects;
-import java.util.Random;
 
 public class GristHelper
 {
@@ -33,12 +30,25 @@ public class GristHelper
 	 */
 	public static GristType getPrimaryGrist()
 	{
-		while (true)
+		float totalWeight = 0;
+		List<GristType> typeList = new ArrayList<>();
+		for(GristType type : GristTypes.values())
 		{
-			GristType randGrist = GristTypes.MARBLE;//GristType.values().get(random.nextInt(GristType.values().size()));
-			if (randGrist.getRarity() > random.nextFloat() && randGrist != GristTypes.ARTIFACT)
-				return randGrist;
+			if(type.getRarity() > 0 && type != GristTypes.ARTIFACT)
+			{
+				typeList.add(type);
+				totalWeight += type.getRarity();
+			}
 		}
+		
+		float weight = random.nextFloat()*totalWeight;
+		for(GristType type : typeList)
+		{
+			weight -= type.getRarity();
+			if(weight < 0)
+				return type;
+		}
+		throw new IllegalStateException("Should never get here.");
 	}
 	
 	/**
