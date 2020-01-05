@@ -11,4 +11,4 @@
 /out
 *.iml
 /.settings
-/src/generated/resources/.cache
+/src/main/generated/resources/.cache/
