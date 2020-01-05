@@ -17,6 +17,7 @@ import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.util.SharedConstants;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -88,14 +89,9 @@ public class Minestuck
 	@SubscribeEvent
 	public void serverStarting(FMLServerStartingEvent event)
 	{
-		
+		Debug.info(SharedConstants.developmentMode);
 		//if(!event.getServer().isDedicatedServer() && Minestuck.class.getAnnotation(Mod.class).version().startsWith("@")) TODO Find an alternative to detect dev environment
 			//event.getServer().setOnlineMode(false);	//Makes it possible to use LAN in a development environment
-		
-		if(!event.getServer().isServerInOnlineMode() && MinestuckConfig.useUUID.get())
-			Debug.warn("Because uuids might not be consistent in an offline environment, it is not recommended to use uuids for minestuck. You should disable uuidIdentification in the minestuck config.");
-		if(event.getServer().isServerInOnlineMode() && !MinestuckConfig.useUUID.get())
-			Debug.warn("Because users may change their usernames, it is normally recommended to use uuids for minestuck. You should enable uuidIdentification in the minestuck config.");
 		
 		CommandCheckLand.register(event.getCommandDispatcher());
 		CommandGrist.register(event.getCommandDispatcher());

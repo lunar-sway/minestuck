@@ -1,6 +1,5 @@
 package com.mraof.minestuck.util;
 
-import com.mraof.minestuck.MinestuckConfig;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.*;
@@ -61,10 +60,7 @@ public class IdentifierHandler	//TODO Probably needs a redesign. Do we even need
 		for(PlayerIdentifier identifier : identifierList)
 			if(identifier.appliesTo(player))
 				return identifier;
-		PlayerIdentifier identifier;
-		if(MinestuckConfig.useUUID.get())
-			identifier = new PlayerIdentifier(player.getGameProfile().getId());
-		else identifier = new PlayerIdentifier(usernameEncode(player.getName().getString()));
+		PlayerIdentifier identifier = new PlayerIdentifier(player.getGameProfile().getId());
 		identifier.id = nextIdentifierId;
 		nextIdentifierId++;
 		identifierList.add(identifier);
@@ -82,12 +78,12 @@ public class IdentifierHandler	//TODO Probably needs a redesign. Do we even need
 		if(".null".equals(identifier.username))
 			return nullIdentifier;
 		
-		List<PlayerIdentifier> list = MinestuckConfig.useUUID.get() == identifier.useUUID ? identifierList : identifiersToChange;
+		List<PlayerIdentifier> list = identifier.useUUID ? identifierList : identifiersToChange;
 		
 		for(PlayerIdentifier id : list)
 			if(id.equals(identifier))
 				return id;
-		if(MinestuckConfig.useUUID.get() != identifier.useUUID)
+		if(!identifier.useUUID)
 		{
 			ServerPlayerEntity player = identifier.getPlayer(ServerLifecycleHooks.getCurrentServer());
 			if(player != null)
@@ -108,10 +104,8 @@ public class IdentifierHandler	//TODO Probably needs a redesign. Do we even need
 			
 			if(identifier.appliesTo(player))
 			{
-				identifier.useUUID = MinestuckConfig.useUUID.get();
-				if(identifier.useUUID)
-					identifier.uuid = player.getGameProfile().getId();
-				else identifier.username = usernameEncode(player.getName().getString());
+				identifier.useUUID = true;
+				identifier.uuid = player.getGameProfile().getId();
 				
 				identifierList.add(identifier);
 				iter.remove();

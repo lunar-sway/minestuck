@@ -81,7 +81,6 @@ public class MinestuckConfig
 	public static BooleanValue privateComputers;
 	public static BooleanValue globalSession;
 	public static BooleanValue allowSecondaryConnections;	//TODO make open server not an option after having a main connection (for when this is set to false)
-	public static BooleanValue useUUID;
 	public static BooleanValue skaianetCheck;
 	public static byte dataCheckerPermission = 4;
 	public static ConfigValue<String> cfg_dataCheckerPermission;
@@ -180,8 +179,6 @@ public class MinestuckConfig
 				.define("computer.globalSession",false);
 		allowSecondaryConnections = server_builder.comment("Set this to true to allow so-called 'secondary connections' to be created.")
 				.define("computer.secondaryConnections", true);
-		useUUID = server_builder.comment("If this is set to true, minestuck will use uuids to refer to players in the saved data. On false it will instead use the old method based on usernames.")
-				.define("computer.useUUID", true);
 		skaianetCheck = server_builder.comment("If enabled, will during certain moments perform a check on all connections and computers that are in use. Recommended to turn off if there is a need to improve performance, however skaianet-related bugs might appear when done so.")
 				.define("computer.skaianetCheck",true);
 		cfg_dataCheckerPermission = server_builder.comment("Determines who's allowed to access the data checker. \"none\": No one is allowed. \"ops\": only those with a command permission of level 2 or more may access the data ckecker. (for single player, that would be if cheats are turned on) \"gamemode\": Only players with the creative or spectator gamemode may view the data checker. \"opsAndGamemode\": Combination of \"ops\" and \"gamemode\". \"anyone\": No access restrictions are used.")
