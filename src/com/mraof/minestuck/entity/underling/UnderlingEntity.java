@@ -10,7 +10,7 @@ import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
-import com.mraof.minestuck.network.skaianet.SburbHandler;
+import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.IdentifierHandler;

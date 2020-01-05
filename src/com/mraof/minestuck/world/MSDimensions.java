@@ -1,7 +1,7 @@
 package com.mraof.minestuck.world;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.network.skaianet.SkaianetHandler;
+import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.LandTypePair;

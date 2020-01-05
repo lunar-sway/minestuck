@@ -1,7 +1,7 @@
 package com.mraof.minestuck.event;
 
-import com.mraof.minestuck.network.skaianet.SburbConnection;
-import com.mraof.minestuck.network.skaianet.Session;
+import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.Session;
 import net.minecraft.server.MinecraftServer;
 
 public class ConnectionClosedEvent extends SburbEvent

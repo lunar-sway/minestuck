@@ -1,4 +1,4 @@
-package com.mraof.minestuck.network.skaianet;
+package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.world.lands.LandTypes;

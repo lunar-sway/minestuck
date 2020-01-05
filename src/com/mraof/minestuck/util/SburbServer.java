@@ -3,10 +3,10 @@ package com.mraof.minestuck.util;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.network.ClientEditPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.network.skaianet.ReducedConnection;
-import com.mraof.minestuck.network.skaianet.SburbConnection;
-import com.mraof.minestuck.network.skaianet.SkaiaClient;
-import com.mraof.minestuck.network.skaianet.SkaianetHandler;
+import com.mraof.minestuck.skaianet.ReducedConnection;
+import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.SkaiaClient;
+import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 
 import java.util.ArrayList;

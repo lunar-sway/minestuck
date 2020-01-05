@@ -9,7 +9,7 @@ import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.GristCostGenerator;
-import com.mraof.minestuck.network.skaianet.SkaianetHandler;
+import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.PlayerTracker;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;

@@ -5,7 +5,7 @@ import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.network.GristCachePacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ServerEditPacket;
-import com.mraof.minestuck.network.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.util.MSNBTUtil;

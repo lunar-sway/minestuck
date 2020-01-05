@@ -1,7 +1,7 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.client.gui.MSScreenFactories;
-import com.mraof.minestuck.network.skaianet.SburbHandler;
+import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.util.Title;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;

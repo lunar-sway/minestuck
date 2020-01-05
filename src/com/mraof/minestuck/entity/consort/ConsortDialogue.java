@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 import com.mraof.minestuck.entity.consort.EnumConsort.MerchantType;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.network.skaianet.SburbHandler;
+import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandTypePair;

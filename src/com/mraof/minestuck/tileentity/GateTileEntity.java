@@ -1,7 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.network.skaianet.SburbHandler;
+import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.util.PositionTeleporter;
 import com.mraof.minestuck.world.GateHandler;
 import net.minecraft.block.Block;

@@ -7,7 +7,7 @@ import com.mraof.minestuck.client.settings.MSKeyHandler;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.MiscContainerPacket;
-import com.mraof.minestuck.network.skaianet.SkaiaClient;
+import com.mraof.minestuck.skaianet.SkaiaClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.gui.screen.Screen;

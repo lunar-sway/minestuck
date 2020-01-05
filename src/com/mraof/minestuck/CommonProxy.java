@@ -8,7 +8,7 @@ import com.mraof.minestuck.entity.consort.ConsortRewardHandler;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.network.skaianet.SessionHandler;
+import com.mraof.minestuck.skaianet.SessionHandler;
 import com.mraof.minestuck.util.ComputerProgram;
 import com.mraof.minestuck.util.KindAbstratusList;
 import com.mraof.minestuck.util.SburbClient;

@@ -5,7 +5,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen.*;
 import com.mraof.minestuck.client.settings.MSKeyHandler;
 import com.mraof.minestuck.editmode.ClientEditHandler;
-import com.mraof.minestuck.network.skaianet.SkaiaClient;
+import com.mraof.minestuck.skaianet.SkaiaClient;
 import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.resources.I18n;

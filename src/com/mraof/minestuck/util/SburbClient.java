@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import com.mraof.minestuck.client.gui.ColorSelectorScreen;
-import com.mraof.minestuck.network.skaianet.ReducedConnection;
+import com.mraof.minestuck.skaianet.ReducedConnection;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundNBT;
 
-import com.mraof.minestuck.network.skaianet.SkaiaClient;
-import com.mraof.minestuck.network.skaianet.SkaianetHandler;
+import com.mraof.minestuck.skaianet.SkaiaClient;
+import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 
 public class SburbClient extends ButtonListProgram

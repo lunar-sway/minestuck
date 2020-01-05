@@ -1,4 +1,4 @@
-package com.mraof.minestuck.network.skaianet;
+package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.util.Debug;

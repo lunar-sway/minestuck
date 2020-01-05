@@ -1,6 +1,6 @@
 package com.mraof.minestuck;
 
-import com.mraof.minestuck.network.skaianet.SkaianetHandler;
+import com.mraof.minestuck.skaianet.SkaianetHandler;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.storage.SaveHandler;
 import net.minecraft.world.storage.WorldInfo;

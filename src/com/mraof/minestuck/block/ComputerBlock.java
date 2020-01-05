@@ -1,7 +1,7 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.client.gui.MSScreenFactories;
-import com.mraof.minestuck.network.skaianet.SkaiaClient;
+import com.mraof.minestuck.skaianet.SkaiaClient;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.util.ComputerProgram;
 import com.mraof.minestuck.util.IdentifierHandler;

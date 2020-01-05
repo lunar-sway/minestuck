@@ -1,4 +1,4 @@
-package com.mraof.minestuck.network.skaianet;
+package com.mraof.minestuck.skaianet;
 
 import net.minecraft.network.PacketBuffer;
 
