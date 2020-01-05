@@ -3,7 +3,7 @@ package com.mraof.minestuck.skaianet;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
+import com.mraof.minestuck.util.PlayerIdentifier;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
@@ -283,7 +283,7 @@ public class SessionHandler
 				sessionsByName.put(session.name, session);
 			}
 			
-			int i = (sessions.get(0).containsPlayer(connection.getClientIdentifier())?0:1)+(connection.getServerIdentifier().equals(IdentifierHandler.nullIdentifier) || sessions.get(0).containsPlayer(connection.getServerIdentifier())?0:1);
+			int i = (sessions.get(0).containsPlayer(connection.getClientIdentifier())?0:1)+(connection.getServerIdentifier().equals(IdentifierHandler.NULL_IDENTIFIER) || sessions.get(0).containsPlayer(connection.getServerIdentifier())?0:1);
 			if(MinestuckConfig.forceMaxSize && sessions.get(0).getPlayerList().size()+i > maxSize)
 				return SINGLE_SESSION_FULL;
 			else
@@ -302,7 +302,7 @@ public class SessionHandler
 				return null;
 			} else if(sClient == null || sServer == null)
 			{
-				if((sClient == null?sServer:sClient).locked || MinestuckConfig.forceMaxSize && !connection.getServerIdentifier().equals(IdentifierHandler.nullIdentifier) && (sClient == null?sServer:sClient).getPlayerList().size()+1 > maxSize)
+				if((sClient == null?sServer:sClient).locked || MinestuckConfig.forceMaxSize && !connection.getServerIdentifier().equals(IdentifierHandler.NULL_IDENTIFIER) && (sClient == null?sServer:sClient).getPlayerList().size()+1 > maxSize)
 					return sClient == null ? SERVER_SESSION_FULL : CLIENT_SESSION_FULL;
 				(sClient == null?sServer:sClient).connections.add(connection);
 				return null;
@@ -345,7 +345,7 @@ public class SessionHandler
 					c.serverIdentifier = connection.getServerIdentifier();
 					break;
 				case 1:
-					c.serverIdentifier = IdentifierHandler.nullIdentifier;
+					c.serverIdentifier = IdentifierHandler.NULL_IDENTIFIER;
 					break;
 				}
 			}

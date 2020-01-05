@@ -10,10 +10,7 @@ import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.tileentity.GateTileEntity;
 import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.util.PostEntryTask;
-import com.mraof.minestuck.util.Teleport;
+import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.MSExtraData;
@@ -76,7 +73,7 @@ public abstract class CruxiteArtifactItem extends Item
 				if(!SburbHandler.shouldEnterNow(player))
 					return;
 				
-				IdentifierHandler.PlayerIdentifier identifier = IdentifierHandler.encode(player);
+				PlayerIdentifier identifier = IdentifierHandler.encode(player);
 				SburbConnection c = SkaianetHandler.get(player.world).getMainConnection(identifier, true);
 				
 				//Only performs Entry if you have no connection, haven't Entered, or you're not in a Land and additional Entries are permitted.
@@ -137,7 +134,7 @@ public abstract class CruxiteArtifactItem extends Item
 		} catch(Exception e)
 		{
 			Debug.logger.error("Exception when "+player.getName()+" tried to enter their land.", e);
-			player.sendMessage(new StringTextComponent("[Minestuck] Something went wrong during entry. "+ (player.getName().getString().equals(IdentifierHandler.host)?"Check the console for the error message.":"Notify the server owner about this.")).setStyle(new Style().setColor(TextFormatting.RED)));
+			player.sendMessage(new StringTextComponent("[Minestuck] Something went wrong during entry. "+ (player.getServer().isDedicatedServer()?"Check the console for the error message.":"Notify the server owner about this.")).setStyle(new Style().setColor(TextFormatting.RED)));
 		}
 	}
 	

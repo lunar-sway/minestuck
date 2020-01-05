@@ -1,7 +1,5 @@
 package com.mraof.minestuck.util;
 
-import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-
 import java.util.HashMap;
 import java.util.Random;
 

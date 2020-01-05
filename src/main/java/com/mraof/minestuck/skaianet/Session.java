@@ -3,7 +3,7 @@ package com.mraof.minestuck.skaianet;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
+import com.mraof.minestuck.util.PlayerIdentifier;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraftforge.common.util.Constants;
@@ -80,7 +80,7 @@ public class Session
 	 */
 	public boolean containsPlayer(PlayerIdentifier player)
 	{
-		if(player.equals(IdentifierHandler.nullIdentifier))
+		if(player.equals(IdentifierHandler.NULL_IDENTIFIER))
 			return false;
 		if(predefinedPlayers.containsKey(player))
 			return true;
@@ -100,7 +100,7 @@ public class Session
 		for(SburbConnection c : this.connections)
 		{
 			list.add(c.getClientIdentifier());
-			if(!c.getServerIdentifier().equals(IdentifierHandler.nullIdentifier))
+			if(!c.getServerIdentifier().equals(IdentifierHandler.NULL_IDENTIFIER))
 				list.add(c.getServerIdentifier());
 		}
 		list.addAll(predefinedPlayers.keySet());

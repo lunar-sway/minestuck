@@ -5,7 +5,7 @@ import com.google.common.collect.Maps;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.EnumAspect;
-import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.util.PlayerIdentifier;
 import com.mraof.minestuck.world.MSDimensionTypes;
 import com.mraof.minestuck.world.lands.terrain.*;
 import com.mraof.minestuck.world.lands.title.*;
@@ -251,7 +251,7 @@ public class LandTypes
 	 * @param aspects Land aspects that the land should have
 	 * @return Returns the dimension of the newly created land.
 	 */
-	public static DimensionType createLandType(MinecraftServer server, IdentifierHandler.PlayerIdentifier player, LandTypePair aspects)
+	public static DimensionType createLandType(MinecraftServer server, PlayerIdentifier player, LandTypePair aspects)
 	{
 		String base = "minestuck:land_"+player.getUsername().toLowerCase();
 		ResourceLocation dimensionName;

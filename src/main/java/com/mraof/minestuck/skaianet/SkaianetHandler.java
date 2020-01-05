@@ -12,7 +12,7 @@ import com.mraof.minestuck.network.SkaianetInfoPacket;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
+import com.mraof.minestuck.util.PlayerIdentifier;
 import com.mraof.minestuck.world.MSDimensionTypes;
 import com.mraof.minestuck.world.lands.LandInfo;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -90,7 +90,7 @@ public class SkaianetHandler
 		for(SburbConnection c : connections)
 			if(c.isMain())
 				if(isClient && c.getClientIdentifier().equals(player))
-					return c.getServerIdentifier().equals(IdentifierHandler.nullIdentifier) ? null : c.getServerIdentifier();
+					return c.getServerIdentifier().equals(IdentifierHandler.NULL_IDENTIFIER) ? null : c.getServerIdentifier();
 				else if(!isClient && c.getServerIdentifier().equals(player))
 					return c.getClientIdentifier();
 		return null;
@@ -98,7 +98,7 @@ public class SkaianetHandler
 	
 	public SburbConnection getMainConnection(PlayerIdentifier player, boolean isClient)
 	{
-		if(player == null || player.equals(IdentifierHandler.nullIdentifier))
+		if(player == null || player.equals(IdentifierHandler.NULL_IDENTIFIER))
 			return null;
 		for(SburbConnection c : connections)
 			if(c.isMain())
@@ -320,7 +320,7 @@ public class SkaianetHandler
 		if(newConnection)
 		{
 			SburbConnection conn = getMainConnection(c.getClientIdentifier(), true);
-			if(conn != null && conn.getServerIdentifier().equals(IdentifierHandler.nullIdentifier) && getMainConnection(c.getServerIdentifier(), false) == null)
+			if(conn != null && conn.getServerIdentifier().equals(IdentifierHandler.NULL_IDENTIFIER) && getMainConnection(c.getServerIdentifier(), false) == null)
 			{
 				connections.remove(c);
 				conn.serverIdentifier = c.getServerIdentifier();
@@ -720,7 +720,7 @@ public class SkaianetHandler
 			if(c == null)
 			{
 				Debug.infof("Player %s entered without connection. Creating connection... ", target.getUsername());
-				c = new SburbConnection(target, IdentifierHandler.nullIdentifier, this);
+				c = new SburbConnection(target, IdentifierHandler.NULL_IDENTIFIER, this);
 				c.setIsMain();
 				String s = sessionHandler.onConnectionCreated(c);
 				if(s == null)

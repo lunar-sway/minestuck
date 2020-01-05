@@ -13,10 +13,7 @@ import com.mraof.minestuck.network.*;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.ColorCollector;
-import com.mraof.minestuck.util.Echeladder;
-import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.util.Title;
+import com.mraof.minestuck.util.*;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -31,7 +28,7 @@ public final class PlayerData
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	final IdentifierHandler.PlayerIdentifier identifier;
+	final PlayerIdentifier identifier;
 	
 	private final PlayerSavedData savedData;
 	private final Echeladder echeladder;
@@ -47,7 +44,7 @@ public final class PlayerData
 	
 	private boolean hasLoggedIn;
 	
-	PlayerData(PlayerSavedData savedData, IdentifierHandler.PlayerIdentifier player)
+	PlayerData(PlayerSavedData savedData, PlayerIdentifier player)
 	{
 		this.savedData = savedData;
 		this.identifier = player;

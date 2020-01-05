@@ -8,14 +8,12 @@ import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ModConfigPacket;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.UpdateChecker;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -41,11 +39,6 @@ public class PlayerTracker
 	{
 		ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
 		Debug.debug(player.getGameProfile().getName()+" joined the game. Sending packets.");
-		MinecraftServer server = player.getServer();
-		if(!server.isDedicatedServer() && IdentifierHandler.host == null)
-			IdentifierHandler.host = event.getPlayer().getName().getUnformattedComponentText();
-		
-		IdentifierHandler.playerLoggedIn(player);
 		
 		sendConfigPacket(player, true);
 		sendConfigPacket(player, false);

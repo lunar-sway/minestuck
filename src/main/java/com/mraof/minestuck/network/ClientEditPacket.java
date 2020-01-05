@@ -6,6 +6,7 @@ import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.util.PlayerIdentifier;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
@@ -62,16 +63,16 @@ public class ClientEditPacket implements PlayToServerPacket
 				ServerEditHandler.onPlayerExit(player);
 			else if(!MinestuckConfig.privateComputers.get() || IdentifierHandler.encode(player).getId() == this.user || opsEntry != null && opsEntry.getPermissionLevel() >= 2)
 			{
-				IdentifierHandler.PlayerIdentifier user = IdentifierHandler.getById(this.user);
-				IdentifierHandler.PlayerIdentifier target = IdentifierHandler.getById(this.target);
+				PlayerIdentifier user = IdentifierHandler.getById(this.user);
+				PlayerIdentifier target = IdentifierHandler.getById(this.target);
 				if(user != null && target != null)
 					ServerEditHandler.newServerEditor(player, user, target);
 			}
 			return;
 		}
 		
-		IdentifierHandler.PlayerIdentifier user = IdentifierHandler.getById(this.user);
-		IdentifierHandler.PlayerIdentifier target = IdentifierHandler.getById(this.target);
+		PlayerIdentifier user = IdentifierHandler.getById(this.user);
+		PlayerIdentifier target = IdentifierHandler.getById(this.target);
 		if(user != null && target != null)
 		{
 			ServerPlayerEntity targetPlayer = target.getPlayer(player.getServer());

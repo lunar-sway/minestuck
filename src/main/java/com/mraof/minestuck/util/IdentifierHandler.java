@@ -2,17 +2,16 @@ package com.mraof.minestuck.util;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.*;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerList;
 import net.minecraftforge.common.UsernameCache;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -20,49 +19,23 @@ import java.util.UUID;
  * This file is to now only be used serverside.
  * @author kirderf1
  */
-public class IdentifierHandler	//TODO Probably needs a redesign. Do we even need the option to identify players by username? If we change to only use uuids, how do we define special identifiers such as .null or .fake? If we get rid of the host player reference, is there still a point to having a different representation client-side?
+public class IdentifierHandler
 {
-	
-	public static String host;	//This basically stores server.getServerOwner(), but for all players to access
-	public static final PlayerIdentifier nullIdentifier = new PlayerIdentifier(".null");
+	public static final PlayerIdentifier NULL_IDENTIFIER = new NullIdentifier();
 	
 	private static List<PlayerIdentifier> identifierList = new ArrayList<>();
-	private static List<PlayerIdentifier> identifiersToChange = new ArrayList<>();
 	private static int nextIdentifierId;
 	private static int fakePlayerIndex = 0;
 	
-	/**
-	 * Used to convert a player username to a stored version.
-	 */
-	private static String usernameEncode(String username) {
-		
-		if(username.equals(host))
-			return ".client";
-		else return username;
-	}
-	
-	/**
-	 * Used to decode an username for display. Actually only does something if the username equals ".client".
-	 * Returns "SP Character" if the world is moved to a server where there isn't a direct player that is the host.
-	 */
-	private static String usernameDecode(String username)
-	{
-		if(username.equals(".client"))
-			return host==null?"Unknown Player":host;
-		else return username;
-	}
-	
 	public static PlayerIdentifier encode(PlayerEntity player)
 	{
-		if(player instanceof FakePlayer || player.getName() == null)
+		if(player instanceof FakePlayer || player.getGameProfile() == null)
 			return null;
 		
 		for(PlayerIdentifier identifier : identifierList)
 			if(identifier.appliesTo(player))
 				return identifier;
-		PlayerIdentifier identifier = new PlayerIdentifier(player.getGameProfile().getId());
-		identifier.id = nextIdentifierId;
-		nextIdentifierId++;
+		PlayerIdentifier identifier = new UUIDIdentifier(nextIdentifierId++, player.getGameProfile().getId());
 		identifierList.add(identifier);
 		return identifier;
 	}
@@ -72,54 +45,36 @@ public class IdentifierHandler	//TODO Probably needs a redesign. Do we even need
 		return nbt.contains(key, Constants.NBT.TAG_STRING) || nbt.contains(key + "Most", Constants.NBT.TAG_LONG) && nbt.contains(key + "Least", Constants.NBT.TAG_LONG);
 	}
 	
-	public static PlayerIdentifier load(INBT nbt, String key)
+	public static PlayerIdentifier load(CompoundNBT nbt, String key)
 	{
-		PlayerIdentifier identifier = new PlayerIdentifier(nbt, key);
-		if(".null".equals(identifier.username))
-			return nullIdentifier;
+		PlayerIdentifier identifier;
+		String type = nbt.getString(key);
+		switch(type)
+		{
+			case "null":
+				return NULL_IDENTIFIER;
+			case "uuid":
+				identifier = new UUIDIdentifier(nextIdentifierId, nbt.getUniqueId(key));
+				break;
+			case "fake":
+				identifier = new FakeIdentifier(nextIdentifierId, nbt.getInt(key+"count"));
+				break;
+			default: throw new IllegalArgumentException("Can't parse identifier type "+type);
+		}
 		
-		List<PlayerIdentifier> list = identifier.useUUID ? identifierList : identifiersToChange;
-		
-		for(PlayerIdentifier id : list)
+		for(PlayerIdentifier id : identifierList)
 			if(id.equals(identifier))
 				return id;
-		if(!identifier.useUUID)
-		{
-			ServerPlayerEntity player = identifier.getPlayer(ServerLifecycleHooks.getCurrentServer());
-			if(player != null)
-				return encode(player);
-		}
-		identifier.id = nextIdentifierId;
+		
 		nextIdentifierId++;
-		list.add(identifier);
+		identifierList.add(identifier);
 		return identifier;
-	}
-	
-	public static void playerLoggedIn(ServerPlayerEntity player)
-	{
-		Iterator<PlayerIdentifier> iter = identifiersToChange.iterator();
-		while(iter.hasNext())
-		{
-			PlayerIdentifier identifier = iter.next();
-			
-			if(identifier.appliesTo(player))
-			{
-				identifier.useUUID = true;
-				identifier.uuid = player.getGameProfile().getId();
-				
-				identifierList.add(identifier);
-				iter.remove();
-			}
-		}
 	}
 	
 	public static PlayerIdentifier getById(int id)
 	{
 		for(PlayerIdentifier identifier : identifierList)
-			if(identifier.id == id)
-				return identifier;
-		for(PlayerIdentifier identifier : identifiersToChange)
-			if(identifier.id == id)
+			if(identifier.getId() == id)
 				return identifier;
 		return null;
 	}
@@ -169,160 +124,67 @@ public class IdentifierHandler	//TODO Probably needs a redesign. Do we even need
 	
 	public static PlayerIdentifier createNewFakeIdentifier()
 	{
-		index: while(true)
+		PlayerIdentifier identifier;
+		do
 		{
-			for(PlayerIdentifier identifier : identifierList)
-			{
-				if(!identifier.useUUID && identifier.username.equals(".fake" + fakePlayerIndex))
-				{
-					fakePlayerIndex++;
-					continue index;
-				}
-			}
-			PlayerIdentifier identifier = new PlayerIdentifier(".fake" + fakePlayerIndex);
-			identifier.id = nextIdentifierId;
-			nextIdentifierId++;
-			identifierList.add(identifier);
-			fakePlayerIndex++;
-			return identifier;
-		}
+			identifier = new FakeIdentifier(nextIdentifierId, fakePlayerIndex++);
+		} while(identifierList.contains(identifier));
+		
+		nextIdentifierId++;
+		identifierList.add(identifier);
+		return identifier;
 	}
 	
 	public static void clear()
 	{
 		identifierList.clear();
-		identifiersToChange.clear();
 		nextIdentifierId = 0;
-		host = null;
+		fakePlayerIndex = 0;
 	}
 	
-	public static class PlayerIdentifier implements Comparable
+	private static class UUIDIdentifier extends PlayerIdentifier
 	{
-		private boolean useUUID;
 		private UUID uuid;
-		private String username;
 		
-		private int id = -1;
-		
-		private PlayerIdentifier(UUID id)
+		private UUIDIdentifier(int id, UUID uuid)
 		{
-			uuid = id;
-			useUUID = true;
-		}
-		
-		private PlayerIdentifier(String name)
-		{
-			username = name;
-			useUUID = false;
-		}
-		
-		private PlayerIdentifier(INBT nbt, String key)
-		{
-			if(nbt instanceof StringNBT)
-			{
-				username = nbt.getString();
-				useUUID = false;
-			} else if(nbt instanceof ListNBT)
-			{
-				long most = ((LongNBT)((ListNBT) nbt).get(0)).getLong();
-				long least = ((LongNBT)((ListNBT) nbt).get(1)).getLong();
-				uuid = new UUID(most, least);
-				useUUID = true;
-			}
-			else
-			{
-				CompoundNBT compound = (CompoundNBT) nbt;
-				if(compound.contains(key, Constants.NBT.TAG_STRING))
-				{
-					username = compound.getString(key);
-					useUUID = false;
-				} else
-				{
-					long most = compound.getLong(key+"Most");
-					long least = compound.getLong(key+"Least");
-					uuid = new UUID(most, least);
-					useUUID = true;
-				}
-			}
-		}
-		
-		public ListNBT saveToNBT(ListNBT nbt, String key)
-		{
-			if(this.useUUID)
-			{
-				ListNBT list = new ListNBT();
-				list.add(new LongNBT(uuid.getMostSignificantBits()));
-				list.add(new LongNBT(uuid.getLeastSignificantBits()));
-				nbt.add(list);
-			} else nbt.add(new StringNBT(username));
-			return nbt;
-		}
-		
-		public CompoundNBT saveToNBT(CompoundNBT nbt, String key)
-		{
-			if(this.useUUID)
-			{
-				nbt.putLong(key+"Most", uuid.getMostSignificantBits());
-				nbt.putLong(key+"Least", uuid.getLeastSignificantBits());
-			} else nbt.putString(key, username);
-			return nbt;
-		}
-		
-		public boolean appliesTo(PlayerEntity player)
-		{
-			if(this.useUUID)
-				return player.getGameProfile().getId().equals(uuid);
-			else return usernameEncode(player.getName().getString()).equals(username);
+			super(id);
+			this.uuid = uuid;
 		}
 		
 		@Override
-		public boolean equals(Object obj)
+		public boolean appliesTo(PlayerEntity player)
 		{
-			if(obj instanceof PlayerIdentifier)
-			{
-				PlayerIdentifier id = (PlayerIdentifier) obj;
-				if(this.useUUID == id.useUUID)
-					if(useUUID)
-						return this.uuid.equals(id.uuid);
-					else return this.username.equals(id.username);
-			}
-			return false;
+			return player.getGameProfile().getId().equals(uuid);
 		}
 		
+		@Override
 		public String getUsername()
 		{
-			if(this.useUUID)
-				return UsernameCache.containsUUID(uuid) ? UsernameCache.getLastKnownUsername(uuid) : "Unknown ("+getId()+")";
-			else return usernameDecode(username);
+			return UsernameCache.containsUUID(uuid) ? UsernameCache.getLastKnownUsername(uuid) : "Unknown ("+getId()+")";
 		}
 		
+		@Override
 		public ServerPlayerEntity getPlayer(MinecraftServer server)
 		{
 			PlayerList list = server == null ? null : server.getPlayerList();
 			if(list == null)
 				return null;
-			if(this.useUUID)
-				return list.getPlayerByUUID(uuid);
-			else return list.getPlayerByUsername(usernameDecode(username));
-		}
-		
-		/**
-		 * @return Id to be used for client-server communication without having to keep the client updated with all needed identifiers
-		 */
-		public int getId()
-		{
-			return id;
-		}
-		
-		public String getString()
-		{
-			return useUUID ? uuid.toString() : username;
+			return list.getPlayerByUUID(uuid);
 		}
 		
 		@Override
-		public int compareTo(Object arg0)
+		public String getCommandString()
 		{
-			return this.getString().compareTo(((PlayerIdentifier) arg0).getString());
+			return uuid.toString();
+		}
+		
+		@Override
+		public CompoundNBT saveToNBT(CompoundNBT nbt, String key)
+		{
+			nbt.putString(key, "uuid");
+			nbt.putUniqueId(key, uuid);
+			return nbt;
 		}
 		
 		@Override
@@ -332,10 +194,115 @@ public class IdentifierHandler	//TODO Probably needs a redesign. Do we even need
 		}
 		
 		@Override
-		public int hashCode()
+		public boolean equals(Object o)
 		{
-			return useUUID ? uuid.hashCode() : username.hashCode();
+			if(this == o) return true;
+			if(o == null || getClass() != o.getClass()) return false;
+			UUIDIdentifier that = (UUIDIdentifier) o;
+			return Objects.equals(uuid, that.uuid);
 		}
 		
+		@Override
+		public int hashCode()
+		{
+			return Objects.hash(uuid);
+		}
+	}
+	
+	private static class NullIdentifier extends PlayerIdentifier
+	{
+		public NullIdentifier()
+		{
+			super(-1);
+		}
+		
+		@Override
+		public boolean appliesTo(PlayerEntity player)
+		{
+			return false;
+		}
+		
+		@Override
+		public String getUsername()
+		{
+			return "Invalid Player";
+		}
+		
+		@Override
+		public ServerPlayerEntity getPlayer(MinecraftServer server)
+		{
+			return null;
+		}
+		
+		@Override
+		public String getCommandString()
+		{
+			return "null";
+		}
+		
+		@Override
+		public CompoundNBT saveToNBT(CompoundNBT nbt, String key)
+		{
+			nbt.putString(key, "null");
+			return nbt;
+		}
+	}
+	
+	private static class FakeIdentifier extends PlayerIdentifier
+	{
+		private final int count;
+		
+		public FakeIdentifier(int id, int count)
+		{
+			super(id);
+			this.count = count;
+		}
+		
+		@Override
+		public boolean appliesTo(PlayerEntity player)
+		{
+			return false;
+		}
+		
+		@Override
+		public String getUsername()
+		{
+			return "Fake player "+count;
+		}
+		
+		@Override
+		public ServerPlayerEntity getPlayer(MinecraftServer server)
+		{
+			return null;
+		}
+		
+		@Override
+		public String getCommandString()
+		{
+			return "fake"+count;
+		}
+		
+		@Override
+		public CompoundNBT saveToNBT(CompoundNBT nbt, String key)
+		{
+			nbt.putString(key, "fake");
+			nbt.putInt(key+"_count", count);
+			return nbt;
+		}
+		
+		@Override
+		public boolean equals(Object o)
+		{
+			if(this == o) return true;
+			if(o == null || getClass() != o.getClass()) return false;
+			FakeIdentifier that = (FakeIdentifier) o;
+			return count == that.count;
+		}
+		
+		@Override
+		public int hashCode()
+		{
+			return Objects.hash(count);
+		}
 	}
 }

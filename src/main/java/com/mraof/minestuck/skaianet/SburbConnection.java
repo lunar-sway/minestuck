@@ -5,7 +5,7 @@ import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
+import com.mraof.minestuck.util.PlayerIdentifier;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
@@ -238,8 +238,8 @@ public class SburbConnection
 			playerSet.add(getClientIdentifier());
 		CompoundNBT connectionTag = new CompoundNBT();
 		connectionTag.putString("client", getClientIdentifier().getUsername());
-		connectionTag.putString("clientId", getClientIdentifier().getString());
-		if(!getServerIdentifier().equals(IdentifierHandler.nullIdentifier))
+		connectionTag.putString("clientId", getClientIdentifier().getCommandString());
+		if(!getServerIdentifier().equals(IdentifierHandler.NULL_IDENTIFIER))
 			connectionTag.putString("server", getServerIdentifier().getUsername());
 		connectionTag.putBoolean("isMain", isMain());
 		connectionTag.putBoolean("isActive", isActive());
@@ -277,7 +277,7 @@ public class SburbConnection
 		CompoundNBT connectionTag = new CompoundNBT();
 		
 		connectionTag.putString("client", identifier.getUsername());
-		connectionTag.putString("clientId", identifier.getString());
+		connectionTag.putString("clientId", identifier.getCommandString());
 		connectionTag.putBoolean("isMain", true);
 		connectionTag.putBoolean("isActive", false);
 		connectionTag.putInt("clientDim", 0);

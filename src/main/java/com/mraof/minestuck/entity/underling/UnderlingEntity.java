@@ -11,10 +11,7 @@ import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.skaianet.SburbHandler;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.Echeladder;
-import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.util.MSTags;
+import com.mraof.minestuck.util.*;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.ItemEntity;
@@ -53,7 +50,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	
 	private static final float maxSharedProgress = 2;	//The multiplier for the maximum amount progress that can be gathered from each enemy with the group fight bonus
 	
-	protected Map<IdentifierHandler.PlayerIdentifier, Double> damageMap = new HashMap<>();	//Map that stores how much damage each player did to this to this underling. Null is used for environmental or other non-player damage
+	protected Map<PlayerIdentifier, Double> damageMap = new HashMap<>();	//Map that stores how much damage each player did to this to this underling. Null is used for environmental or other non-player damage
 	
 	public UnderlingEntity(EntityType<? extends UnderlingEntity> type, World world)
 	{
@@ -289,7 +286,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	
 	public void onEntityDamaged(DamageSource source, float amount)
 	{
-		IdentifierHandler.PlayerIdentifier player = null;
+		PlayerIdentifier player = null;
 		if(source.getTrueSource() instanceof ServerPlayerEntity)
 			player = IdentifierHandler.encode((ServerPlayerEntity) source.getTrueSource());
 		if(damageMap.containsKey(player))
@@ -315,7 +312,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 		
 		int maxProgress = (int) (progress*maxSharedProgress);
 		damageMap.remove(null);
-		IdentifierHandler.PlayerIdentifier[] playerList = damageMap.keySet().toArray(new IdentifierHandler.PlayerIdentifier[0]);
+		PlayerIdentifier[] playerList = damageMap.keySet().toArray(new PlayerIdentifier[0]);
 		double[] modifiers = new double[playerList.length];
 		double totalModifier = 0;
 		

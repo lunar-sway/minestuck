@@ -5,6 +5,7 @@ import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.inventory.MiniAlchemiterContainer;
 import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.util.PlayerIdentifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -45,7 +46,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 	};
 	
 	private int ticks_since_update = 0;
-	public IdentifierHandler.PlayerIdentifier owner;
+	public PlayerIdentifier owner;
 	private GristType wildcardGrist = GristTypes.BUILD;
 	
 	public MiniAlchemiterTileEntity()

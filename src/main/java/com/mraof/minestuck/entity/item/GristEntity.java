@@ -5,6 +5,7 @@ import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.util.PlayerIdentifier;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
@@ -223,7 +224,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		}
 	}
 	
-	public void consumeGrist(IdentifierHandler.PlayerIdentifier identifier, boolean sound)
+	public void consumeGrist(PlayerIdentifier identifier, boolean sound)
 	{
 		if(this.world.isRemote)
 			throw new IllegalStateException("Grist entities shouldn't be consumed client-side.");

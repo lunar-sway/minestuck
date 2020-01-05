@@ -1,7 +1,7 @@
 package com.mraof.minestuck.world.lands;
 
 import com.mraof.minestuck.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.util.PlayerIdentifier;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -20,7 +20,7 @@ import java.util.Random;
  */
 public class LandInfo
 {
-	public final IdentifierHandler.PlayerIdentifier identifier;
+	public final PlayerIdentifier identifier;
 	private final LandTypePair.LazyInstance landAspects;
 	private final ResourceLocation dimensionName;
 	private final boolean useReverseOrder;
@@ -33,7 +33,7 @@ public class LandInfo
 	@Nullable
 	private LandTypePair cachedAspects;
 	
-	public LandInfo(IdentifierHandler.PlayerIdentifier identifier, LandTypePair landTypes, DimensionType dimensionType, Random random)
+	public LandInfo(PlayerIdentifier identifier, LandTypePair landTypes, DimensionType dimensionType, Random random)
 	{
 		this.identifier = Objects.requireNonNull(identifier);
 		cachedAspects = Objects.requireNonNull(landTypes);
@@ -45,7 +45,7 @@ public class LandInfo
 		titleNameIndex = random.nextInt(landTypes.title.getNames().length);
 	}
 	
-	private LandInfo(SkaianetHandler handler, IdentifierHandler.PlayerIdentifier identifier, LandTypePair.LazyInstance landAspects, ResourceLocation dimensionType, boolean reverseOrder, int terrainNameIndex, int titleNameIndex)
+	private LandInfo(SkaianetHandler handler, PlayerIdentifier identifier, LandTypePair.LazyInstance landAspects, ResourceLocation dimensionType, boolean reverseOrder, int terrainNameIndex, int titleNameIndex)
 	{
 		this.identifier = identifier;
 		this.landAspects = landAspects;
@@ -158,7 +158,7 @@ public class LandInfo
 		return nbt;
 	}
 	
-	public static LandInfo read(CompoundNBT nbt, SkaianetHandler handler, IdentifierHandler.PlayerIdentifier identifier)
+	public static LandInfo read(CompoundNBT nbt, SkaianetHandler handler, PlayerIdentifier identifier)
 	{
 		LandTypePair.LazyInstance aspects = LandTypePair.LazyInstance.read(nbt);
 		ResourceLocation dimName = new ResourceLocation(nbt.getString("dim_type"));

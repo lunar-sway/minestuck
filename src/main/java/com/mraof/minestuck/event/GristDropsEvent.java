@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
-import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.util.PlayerIdentifier;
 import net.minecraft.entity.EntityType;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.Cancelable;
@@ -16,13 +16,13 @@ import java.util.Map;
 public class GristDropsEvent extends LivingEvent
 {
 	private final UnderlingEntity underling;
-	private final Map<IdentifierHandler.PlayerIdentifier, Double> damageMap;
+	private final Map<PlayerIdentifier, Double> damageMap;
 	private final GristSet originalDrops;
 	private final GristType primaryType, bonusType;
 	private final double originalMultiplier;
 	private GristSet newDrops;
 	
-	public GristDropsEvent(UnderlingEntity underling, Map<IdentifierHandler.PlayerIdentifier, Double> damageMap, GristSet originalDrops, GristType primaryType, GristType bonusType, double multiplier)
+	public GristDropsEvent(UnderlingEntity underling, Map<PlayerIdentifier, Double> damageMap, GristSet originalDrops, GristType primaryType, GristType bonusType, double multiplier)
 	{
 		super(underling);
 		this.underling = underling;
@@ -44,7 +44,7 @@ public class GristDropsEvent extends LivingEvent
 		return underling.getType();
 	}
 	
-	public Map<IdentifierHandler.PlayerIdentifier, Double> getDamageMap()
+	public Map<PlayerIdentifier, Double> getDamageMap()
 	{
 		return damageMap;
 	}

@@ -9,6 +9,7 @@ import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.util.PlayerIdentifier;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -28,7 +29,7 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 	public static final String TITLE = "container.minestuck.grist_widget";
 	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
 	
-	public IdentifierHandler.PlayerIdentifier owner;
+	public PlayerIdentifier owner;
 	boolean hasItem;
 	
 	public GristWidgetTileEntity()
