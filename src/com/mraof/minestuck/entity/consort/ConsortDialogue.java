@@ -22,9 +22,9 @@ import net.minecraft.util.text.ITextComponent;
 import java.util.*;
 
 import static com.mraof.minestuck.entity.consort.MessageType.*;
+import static com.mraof.minestuck.world.lands.LandTypes.*;
 import static com.mraof.minestuck.world.storage.loot.MSLootTables.CONSORT_FOOD_STOCK;
 import static com.mraof.minestuck.world.storage.loot.MSLootTables.CONSORT_GENERAL_STOCK;
-import static com.mraof.minestuck.world.lands.LandTypes.*;
 
 /**
  * Handles message registry, message selection and contains the main message
@@ -45,6 +45,8 @@ public class ConsortDialogue
 		// Wind
 		addMessage("dad_wind").landTitle(WIND);
 		addMessage(new ChainMessage(new SingleMessage("pyre.1"), new SingleMessage("pyre.2"))).landTitle(WIND).consort(EnumConsort.SALAMANDER, EnumConsort.TURTLE);
+		
+		// Pulse
 		addMessage("koolaid").landTitle(PULSE).consort(EnumConsort.SALAMANDER, EnumConsort.TURTLE);
 		addMessage("murder_rain").landTitle(PULSE);
 		addMessage("swimming").landTitle(PULSE).consort(EnumConsort.IGUANA, EnumConsort.TURTLE);
@@ -88,6 +90,7 @@ public class ConsortDialogue
 		addMessage("mystery_recipe").landTitle(CAKE).consort(EnumConsort.TURTLE, EnumConsort.NAKAGATOR);
 		addMessage("cake_regen").landTitle(CAKE).consort(EnumConsort.TURTLE, EnumConsort.SALAMANDER);
 		addMessage("cake_recipe").landTitle(CAKE).consort(EnumConsort.IGUANA, EnumConsort.SALAMANDER);
+		addMessage("fire_cakes").landTerrain(HEAT).landTitle(CAKE);
 		addMessage("frosting").landTitle(CAKE).landTerrain(FROST);
 		
 		//Clockwork
@@ -140,6 +143,8 @@ public class ConsortDialogue
 				new SingleMessage[]{new SingleMessage("mushroom_pizza.on"), new SingleMessage("mushroom_pizza.off")},
 				new MessageType[]{new SingleMessage("mushroom_pizza.on.consort_reply"), new SingleMessage("mushroom_pizza.off.consort_reply")})).landTerrain(SHADE);
 		addMessage("fire_hazard").landTerrain(SHADE).landTitle(allExcept(THUNDER));
+		
+		//Heat
 		addMessage("getting_hot").landTerrain(HEAT);
 		addMessage("step_into_fire").landTerrain(HEAT);
 		addMessage("lava_crickets").landTerrain(HEAT);
@@ -219,13 +224,11 @@ public class ConsortDialogue
 		addMessage("ring_fishing").consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
 		addMessage("frog_walk").consort(EnumConsort.TURTLE);
 		addMessage("delicious_hair").consort(EnumConsort.IGUANA);
-		//		addMessage("village"); Did not work as intended
 		addMessage("lazy_king").landTerrain(SHADE);
 		addMessage("music_invention").consort(EnumConsort.NAKAGATOR, EnumConsort.SALAMANDER);
 		addMessage("wyrm").consort(EnumConsort.TURTLE, EnumConsort.IGUANA);
 		addMessage(new ConditionedMessage((consort, player) -> SburbHandler.hasEntered(player),
 				new SingleMessage("heroic_stench"), new SingleMessage("leech_stench"))).reqLand();
-		addMessage(new SingleMessage("fire_cakes")).landTerrain(HEAT).landTitle(CAKE);
 		
 		MessageType raps = new RandomMessage("rap_battles", RandomKeepResult.KEEP_CONSORT,
 				new DelayMessage(new int[] {17, 17, 30},

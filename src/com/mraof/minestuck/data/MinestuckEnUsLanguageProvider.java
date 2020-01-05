@@ -1019,13 +1019,16 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("thank_you", "Thank you!");
 		addDialogue("dots", "...");
 		addDialogue("sadface", ":(");
+		//Wind
 		addDialogue("dad_wind", "My dad was blown away in one of the recent wind storms.");
 		addDialogue("pyre.1", "If only I was faster than the wind! That would be fun!");
 		addDialogue("pyre.2", "Actually, nevermind. I would be burned on a pyre for being a witch due to our primal society.");
+		//Pulse
 		addDialogue("koolaid", "Some people say the oceans of blood are actually kool-aid. I'm too scared to taste it for myself.");
 		addDialogue("murder_rain", "You don't want to know what it's like to be outside when it rains. You can't tell who's a murderer or who forgot an umbrella!");
 		addDialogue("swimming", "If you're looking for a good land to swim in, it's definitely not this one.");
 		addDialogue("blood_surprise", "OH GOD IS THAT BLOOD oh wait nevermind.");
+		//Thunder
 		addDialogue("skeleton_horse", "Some people say at night, skeletons riding skeleton horses come through the town.");
 		addDialogue("blue_moon", "Every once in a blue moon, lightning strikes and burns down the village. We have to rebuild it!");
 		addDialogue("reckoning.1", "Those darn doomsayers, preaching about the Apocalypse and The Reckoning and such!");
@@ -1037,6 +1040,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("hardcore", "This land is HARDCORE! There's lava and lightning wherever you go!");
 		addDialogue("thunder_throw.1", "Nemesis has been throwing thunder for generations, not stopping for even a moment.");
 		addDialogue("thunder_throw.2", "They are even doing it in their sleep. Can you believe that?");
+		//Rabbits
 		addDialogue("bunny_birthday", "Our daughter wants a bunny for her birthday, even though she caught six in the past three hours.");
 		addDialogue("rabbit_eating", "One time our village ran out of food and we tried eating rabbits. It was a dark period in our village history.");
 		addDialogue("edgy_life_hatred", "This place is just so full of life! I despise it.");
@@ -1046,23 +1050,29 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("rabbit.food.2a", "There's not really much food to be found in this desolate place.");
 		addDialogue("rabbit.food.3a", "Except maybe cacti, but would rabbits eat something that prickly?");
 		addDialogue("rabbit.food.2b", "I mean, there's not really much else than mushrooms around here.");
+		//Monsters
 		addDialogue("pet_zombie", "I've heard moaning coming from our son's bedroom. I found out he's keeping a pet zombie in there! Tamed it n' everything!");
 		addDialogue("spider_raid", "A few giant spiders raided our village last night, taking all of our bugs! Those monsters...");
 		addDialogue("monstersona", "What's your monster-sona? Mine is a zombie.");
+		//Towers
 		addDialogue("bug_treasure", "Legends say underneath the tower to the north is a Captain Lizardtail's buried treasure! Literal tons of bugs, they say!");
 		addDialogue("tower_gone", "That tower over there was built by my great grandpa Fjorgenheimer! You can tell by how its about to fall apa- oh it fell apart.");
 		addDialogue("no_tower_treasure", "I feel ripped off. I was born in a land full of magical towers but none of them have treasure!");
+		//Thought
 		addDialogue("glass_books", "Our smartest villager read all the books in the library and now knows how to make glass jars! He's a gift from the big frog above!");
 		addDialogue("book_food", "We ate all the books in the nearby college ruins. It turns out thousand-year-old leather doesn't make the best dinner.");
 		addDialogue("to_eat", "To eat, or not to eat, that is the question.");
+		//Cake
 		addDialogue("mystery_recipe", "All of the villagers here are trying to crack the mystery of how to make the frosted bread we see all day on our walks.");
 		addDialogue("cake_regen", "I heard all the cakes magically regenerate if you don't completely eat them! That's completely stupid!");
 		addDialogue("cake_recipe", "Let's see, the recipe calls for 5 tbsp. of sugar, 2 tbsp. vanilla, 1 large grasshopper... what are you looking at?");
 		addDialogue("fire_cakes", "If you're not careful, anything can set you on fire here, even the cakes!");
 		addDialogue("frosting", "When we start talking about cakes, the others start mentioning frosting. I'm not sure I get what they're talking about!");
+		//Clockwork
 		addDialogue("gear_technology", "Legends say the giant gears were used for technology no consort has ever seen before. That's absurd! It's obviously food!");
 		addDialogue("evil_gears", "My neighbor says the gears are evil! He also said that swords are used for combat, so he's probably insane.");
 		addDialogue("ticking", "The ticking keeps me up all night. It keeps us all up all night. Save us.");
+		//Frogs
 		addDialogue("frog_creation", "We are thankful for all the frogs that They gave to us when the universe was created. They, of course, is the genesis frog. I feel bad for the fool who has to make another!");
 		addDialogue("frog_imitation", "Ribbit, ribbit! I'm a frog! I don't care what you say!");
 		addDialogue("frog_variants.1", "Most people believe there aren't that many types of frogs. 4740, maybe? Anything beyond that would be proposterous.");
@@ -1071,11 +1081,13 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("grasshopper_fishing1", "My brother found a magic grasshopper while fishing recently!");
 		addDialogue("grasshopper_fishing2", "Usually all we find are rings!");
 		addDialogue("gay_frogs", "The frogs around here are all so gay! Look at them happily hopping about!");
+		//Buckets
 		addDialogue("lewd_buckets", "Some may call our land lewd, but the buckets are just so fun to swim in!");
 		addDialogue("water_buckets", "The buckets are a great source of water, as long as you pick the ones with water...");
 		addDialogue("warm_buckets", "Did you know that some buckets provide warmth? I tend to curl up next to one from time to time.");
 		addDialogue("oil_buckets.1", "Did you know that the buckets sometimes hold something other than oil?");
 		addDialogue("oil_buckets.2", "In some cases, they even contain something drinkable!");
+		//Light
 		addDialogue("blindness", "God, it's bright. Half of our village is blind. It's beginning to become a serious problem.");
 		addDialogue("doctors_inside", "Our best village doctors found that staying outside in the blinding light for too long is not good for us. Most of us stay inside all our lives. It's sad.");
 		addDialogue("staring", "Are you staring at me? No, really! I can't see because I'm blind.");
@@ -1086,17 +1098,20 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("glimmering_snow", "Isn't it wonderful how much the snow is glimmering in the light?");
 		addDialogue("glimmering_sand", "Isn't it wonderful how much the sand is glimmering in the light?");
 		addDialogue("light_pillars", "Those light pillars... they somehow make me think of the legend of the wyrm.");
+		//Silence
 		addDialogue("murder_silence", "This is a great place for murder. No one will hear you scream.");
 		addDialogue("silent_underlings", "This place is so quiet and peaceful. Too bad we can't hear underlings about to kill us.");
 		addDialogue("listening.1", "Shhh, they can hear you...");
 		addDialogue("listening.2", "Just kidding, no one can hear you! The land itself muffles your words!");
 		addDialogue("calmness", "The sense of calmness in the air, it's kind of unnerving!");
+		//Towers
 		addDialogue("climb_high", "Climb up high and you'll be up for a great view!");
 		addDialogue("height_fear.towers.1", "I'd climb up one of those towers and look at the view, but I am scared of heights.");
 		addDialogue("height_fear.towers.2", "I mean, what if I slipped and fell off the stairs?");
 		addDialogue("height_fear.rock.1", "I'd climb up one of those rocks and look at the view, but I am scared of heights.");
 		addDialogue("height_fear.rock.2", "I mean what if I fell down and landed on my back?");
 		addDialogue("height_fear.panic", "AAH, I am scared of heights!");
+		//Shade
 		addDialogue("mush_farm.1", "Someone's gotta be farmin' all these goddamn fuckin' mushrooms, pain in the ass through truly it be.");
 		addDialogue("mush_farm.2", "So that's what I'm doing.");
 		addDialogue("mush_farm.3", "Standing around here.");
@@ -1112,20 +1127,15 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("mushroom_pizza.off.reply", "I leave them off!");
 		addDialogue("mushroom_pizza.off.consort_reply", "You are a despicable person.");
 		addDialogue("fire_hazard", "Our land is a fire waiting to happen! Hopefully there isn't any lightning!");
+		//Heat
 		addDialogue("getting_hot", "Is it getting hot in here or is it just me?");
 		addDialogue("lava_crickets", "Have you ever had a lava-roasted cricket? The lava really brings out the cricket juices.");
 		addDialogue("step_into_fire", "You'd better watch where you're going. Wouldn't want you to step right into some fire.");
+		//Wood
 		addDialogue("wood_treatments", "We figured out how to treat the wood to make it less flammable. I hope we didn't miss a spot.");
 		addDialogue("splinters.1", "Be careful not to walk barefoot here, you could get a splinter!");
 		addDialogue("splinters.2", "Some of our kind have died due to the amount of splinters they received while on a walk.");
-		addDialogue("mildew", "Ah, the mildew on the grass in the morning makes the landscape so pretty!");
-		addDialogue("mycelium.1", "Frog, don't you love the feeling of mycelium on your toes?");
-		addDialogue("mycelium.2", "No? Is that just me?");
-		addDialogue("adaptation.1", "At first, no one liked the mushrooms when our planet was cursed with the Dank.");
-		addDialogue("adaptation.2", "Those who refused to adapt to the new food source Perished, obviously.");
-		addDialogue("jacket", "It's so damp and cold! I wish I had a jacket!");
-		addDialogue("mushroom_curse", "Curse %s! And curse all their mushrooms, too! I miss eating crickets instead of all these mushrooms!");
-		addDialogue("fungus_destroyer", "According to legends of old, the %s will come one day and get the evil %s to clear up all this fungus!");
+		//Sand & Sandstone
 		addDialogue("sand_surfing", "Sand-surfing is my new favorite sport! Too bad you can't really move, though.");
 		addDialogue("camel", "Want to buy a used camel? Only 2000 boondollars.");
 		addDialogue("camel.yes", "Why not? Seems like a good price for a camel!");
@@ -1139,6 +1149,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("sandless.2", "I'm kidding, I made that up on the spot. I had no other dialogue.");
 		addDialogue("red_better", "Red is much better than yellow, don't you think?");
 		addDialogue("yellow_better", "In our village, we have tales of monsters that are atttracted to red. That's why everything is yellow!");
+		//Frost
 		addDialogue("frozen.1", "My neighbors were complaining the other night about the snow.");
 		addDialogue("frozen.2", "Personally, the cold never really bothered me anyways.");
 		addDialogue("frozen.2.desc", "You hear a faint \"ba-dum tss\" in the distance.");
@@ -1154,6 +1165,16 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("rockfu", "Here in %s, we practice rock-fu! Learn the way of the rock to CRUSH your enemies into a fine rock powder!");
 		addDialogue("all_trees", "Jokes on the losers in other lands, we have ALL the trees! All of them!");
 		addDialogue("really_likes_trees", "Do you like trees? I really like trees. I am one with the tree. Trees. TREES. TREEEES!");
+		//Fungi
+		addDialogue("mildew", "Ah, the mildew on the grass in the morning makes the landscape so pretty!");
+		addDialogue("mycelium.1", "Frog, don't you love the feeling of mycelium on your toes?");
+		addDialogue("mycelium.2", "No? Is that just me?");
+		addDialogue("adaptation.1", "At first, no one liked the mushrooms when our planet was cursed with the Dank.");
+		addDialogue("adaptation.2", "Those who refused to adapt to the new food source Perished, obviously.");
+		addDialogue("jacket", "It's so damp and cold! I wish I had a jacket!");
+		addDialogue("mushroom_curse", "Curse %s! And curse all their mushrooms, too! I miss eating crickets instead of all these mushrooms!");
+		addDialogue("fungus_destroyer", "According to legends of old, the %s will come one day and get the evil %s to clear up all this fungus!");
+		//Rainbow
 		addDialogue("generic_green", "Have you ever noticed rainbow wood looks green from a distance? I wonder if green is somehow more generic than other colors.");
 		addDialogue("overwhelming_colors", "Even for us turtles, this place is too bright. All the light and colors around here can be really overwhelming!");
 		addDialogue("saw_rainbow", "I saw a rainbow yesterday! Normally I see way more than that.");
@@ -1178,17 +1199,20 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("types_of_colors.16", "When mixing red and blue to get magenta, the blue overpowers the red and you get purple. You have to mix the purple with not just red, but pink to get magenta.");
 		addDialogue("types_of_colors.17", "Dye is weird like that.");
 		addDialogue("types_of_colors.18", "...what, you're still listening to me? Wow. No one's ever listened to the whole thing before. Would you like to hear it again?");
+		//End
 		addDialogue("at_the_end", "This may be the start of our conversation, but now we're at the end.");
 		addDialogue("chorus_fruit", "Never eat fruit. Last time I tried it, I blacked out and came to somewhere else! Stick to bugs like a normal person!");
 		addDialogue("end_grass", "The grass in this place just keeps growing everywhere! I don't even know how it takes root in the stone like that.");
 		addDialogue("grass_curse", "Rumors say that %s got mad one day and cursed the world with all this grass everywhere. It gets into our homes!");
 		addDialogue("useless_pogo", "I once found this piece of junk that launched me upward when I hit the ground with it. It really hurt when I came back down, and I didn't get anywhere!");
 		addDialogue("useless_elytra", "One time, I saw a guy with some weird wing-looking things on his back. He could glide with them, but without being able to stay in the air, what's the point?");
+		//Rain
 		addDialogue("empty_ocean", "Our oceans used to be filled with life! Now they're all barren, thanks to %s.");
 		addDialogue("forbidden_snack", "Contrary to popular belief, chalk is not safe for consumption... but how can I resist its allure?");
 		addDialogue("cotton_candy", "Have you ever considered eating a rain cloud? Yum! Maybe it tastes like cotton candy...");
 		addDialogue("monsters_below", "Do you know what lies deep beneath the ocean waters? Scary to think about!");
 		addDialogue("keep_swimming", "Just keep swimming, just keep swimming! Yay, swimming!");
+		//flora
 		addDialogue("battle_site", "This land was the site of a battle ages and ages and ages ago.");
 		addDialogue("blood_oceans", "The giant creatures who warred here long ago shed so much blood that, even now, the oceans are red with it.");
 		addDialogue("giant_swords", "My grandpa told me that the giant swords everywhere were dropped by giants locked in combat ages ago.");
@@ -1200,39 +1224,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("spices.1", "A good chef cooks with the spices found throughout the land.");
 		addDialogue("spices.2", "Other chefs are envious that they don’t live in %s.");
 		addDialogue("sharp_slide", "Don’t use the sharp sides of giant swords as slides. May her beautiful soul rest in pieces.");
-		addDialogue("zazzerpan", "Old wizard Zazzerpan would be turning in his grave if he saw the horrors that walk these lands. Those giclopes sure are terrifying!");
-		addDialogue("texas_history", "The place was %s, the year, was 20XX.");
-		addDialogue("cant_see", "We spent a lot of time making this shop looks really nice, we may have overdone it though, I can barely see over this counter.");
-		addDialogue("naked", "Special offer on shell polish, dear custom- wait a minute, where's your shell? Are you naked?");
-		addDialogue("vines", "Please don't climb on the vines outside, I won't be able to reach you and it'll be really upsetting to watch me fruitlessly try.");
-		addDialogue("skaia_rocket", "My house may be kind of in the ground, but my dreams are taller than any Giclops! One day I'm gonna fly a rocket to Skaia and prove that we're not all so timid.");
-		addDialogue("advertisement", "Been to the shop? They've got the best %s in the area!");
-		addDialogue("disks", "I used to be an adventurer like you, then I never got the disks.");
-		addDialogue("whoops", "Beware the man who speaks in hands, wait...wrong game.");
-		addDialogue("fourth_wall", "Maybe you should do something more productive than talking to NPCs.");
-		addDialogue("hats", "I like crumpled hats, they're comfy and easy to wear!");
-		addDialogue("cult.1", "We would love to invite you, %s, to our secret wizards cult.");
-		addDialogue("cult.2", "Meet me by dawn with mercury, salt, and sulfur to begin the initiation.");
-		addDialogue("wwizard", "Secret wizards? Th-there are no secret wizards! Wh-what're you speaking of, o-outlandish traveller?");
-		addDialogue("stock_market", "I bought a bunch of stocks on the market... Now I'm broke...");
-		addDialogue("college.1", "Please, I need to pay for my children to attend college...");
-		addDialogue("college.2", "Wow, you have so many boondollars! I'll never make that much in my short, amphibious lifetime.");
-		addDialogue("unknown.1", "They are coming...");
-		addDialogue("unknown.2", "Huh? 'Who the fuck is They'? What kind of question is that?! I don't know! Who the fuck are you?");
-		addDialogue("identity", "I heard that the true name of the %s is %s. Isn't that cool?");
-		addDialogue("peppy_offer", "Hey there! I've got a wonderful item here for just 1000 boondollars? How about it kid?");
-		addDialogue("peppy_offer.desc", "This consort is way too nice to ever scam you! Surely you can trust them?");
-		addDialogue("peppy_offer.buy", "Buy \"Wonderful item\" [Pay 1000 boondollars]");
-		addDialogue("peppy_offer.buy.reply", "Sure! Why not?");
-		addDialogue("peppy_offer.item", "Here you are!");
-		addDialogue("peppy_offer.deny", "Do not buy from cheery salesman.");
-		addDialogue("peppy_offer.deny.reply", "No thanks! I'm short on cash.");
-		addDialogue("peppy_offer.next", "Oh! No worries! How about I sell it to you for just 500 boondollars instead??");
-		addDialogue("peppy_offer.deny_again", "Still do not buy from cheery salesman.");
-		addDialogue("peppy_offer.deny_again.reply", "I'm sorry, I meant *really* short on cash...");
-		addDialogue("peppy_offer.buy_2", "Buy that cheap item! [pay 500 boondollars]");
-		addDialogue("peppy_offer.buy_2.reply", "Sure! I'd be glad to!");
-		addDialogue("peppy_offer.purchase", "Thank you for your money!");
+		
 		addDialogue("denizen_mention", "It's a wonderful day. Hopefully some monster underneath the planet's surface doesn't eat us all!");
 		addDialogue("floating_island", "I heard a floating island just appeared somewhere near here recently and falling chunks destroyed a village underneath it!");
 		addDialogue("ring_fishing", "My brother found a magic ring while fishing recently!");
@@ -1281,6 +1273,130 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("rap_battle_concede", "Let the poor guy think they won.");
 		addDialogue("rap_battle_concede.reply", "... wow. I'm just... not going to try to go against something like that.");
 		addDialogue("rap_battle_concede.final", "%s, yes! I am the greatest rapper ever!");
+		
+		addDialogue("await_hero", "Here, in the %s, we %s worship the %s. We wait and hope for the day that they awaken.");
+		addDialogue("watchSkaia", "Sometimes, I look up in the sky to see Skaia and wish I could visit there some day...");
+		addDialogue("at_skaia.1", "OH MY %s! I'M ACTUALLY ON SKAIA!");
+		addDialogue("at_skaia.2", "Oh my...! I'm actually on skaia!");
+		addDialogue("visited_skaia", "You know, I have actually visited skaia at one point!");
+		addDialogue("zazzerpan", "Old wizard Zazzerpan would be turning in his grave if he saw the horrors that walk these lands. Those giclopes sure are terrifying!");
+		addDialogue("texas_history", "The place was %s, the year, was 20XX.");
+		addDialogue("disks", "I used to be an adventurer like you, then I never got the disks.");
+		addDialogue("whoops", "Beware the man who speaks in hands, wait...wrong game.");
+		addDialogue("fourth_wall", "Maybe you should do something more productive than talking to NPCs.");
+		addDialogue("hats", "I like crumpled hats, they're comfy and easy to wear!");
+		addDialogue("wwizard", "Secret wizards? Th-there are no secret wizards! Wh-what're you speaking of, o-outlandish traveller?");
+		addDialogue("stock_market", "I bought a bunch of stocks on the market... Now I'm broke...");
+		addDialogue("identity", "I heard that the true name of the %s is %s. Isn't that cool?");
+		addDialogue("college.1", "Please, I need to pay for my children to attend college...");
+		addDialogue("college.2", "Wow, you have so many boondollars! I'll never make that much in my short, amphibious lifetime.");
+		addDialogue("unknown.1", "They are coming...");
+		addDialogue("unknown.2", "Huh? 'Who the fuck is They'? What kind of question is that?! I don't know! Who the fuck are you?");
+		addDialogue("cult.1", "We would love to invite you, %s, to our secret wizards cult.");
+		addDialogue("cult.2", "Meet me by dawn with mercury, salt, and sulfur to begin the initiation.");
+		addDialogue("peppy_offer", "Hey there! I've got a wonderful item here for just 1000 boondollars? How about it kid?");
+		addDialogue("peppy_offer.desc", "This consort is way too nice to ever scam you! Surely you can trust them?");
+		addDialogue("peppy_offer.buy", "Buy \"Wonderful item\" [Pay 1000 boondollars]");
+		addDialogue("peppy_offer.buy.reply", "Sure! Why not?");
+		addDialogue("peppy_offer.item", "Here you are!");
+		addDialogue("peppy_offer.deny", "Do not buy from cheery salesman.");
+		addDialogue("peppy_offer.deny.reply", "No thanks! I'm short on cash.");
+		addDialogue("peppy_offer.next", "Oh! No worries! How about I sell it to you for just 500 boondollars instead??");
+		addDialogue("peppy_offer.deny_again", "Still do not buy from cheery salesman.");
+		addDialogue("peppy_offer.deny_again.reply", "I'm sorry, I meant *really* short on cash...");
+		addDialogue("peppy_offer.buy_2", "Buy that cheap item! [pay 500 boondollars]");
+		addDialogue("peppy_offer.buy_2.reply", "Sure! I'd be glad to!");
+		addDialogue("peppy_offer.purchase", "Thank you for your money!");
+		addDialogue("title_presence", "I sense the presence of the %s. Tell me if you see them, ok?");
+		addDialogue("title_presence.iam", "Present yourself as the %s.");
+		addDialogue("title_presence.iam.reply", "I am the %s.");
+		addDialogue("title_presence.iamAnswer", "OH MY %s");
+		addDialogue("title_presence.agree", "\"Agree\" to do that.");
+		addDialogue("title_presence.agree.reply", "Hehe, ok I will.");
+		addDialogue("shady_offer", "Hey kid... I'll give you something special for 1000 boondollars...");
+		addDialogue("shady_offer.desc", "This consort seems pretty shady. You're not sure whether or not to trust them...");
+		addDialogue("shady_offer.buy", "Buy \"Something special\" [Pay 1000 boondollars]");
+		addDialogue("shady_offer.buy.reply", "Ok... Sure??");
+		addDialogue("shady_offer.item", "Here, kid.");
+		addDialogue("shady_offer.deny", "Do not buy from the shadowy dealer.");
+		addDialogue("shady_offer.deny.reply", "Uh, no thanks...");
+		addDialogue("shady_offer.next", "You're missin' out kiddo. %s it. I'll sell you this thing for 500 boondollars.");
+		addDialogue("shady_offer.deny_again", "It may be a deception, do not buy the \"thing\"!");
+		addDialogue("shady_offer.deny_again.reply", "I said no already.");
+		addDialogue("shady_offer.buy_2", "buy it already! [Pay 500 boondollars]");
+		addDialogue("shady_offer.buy_2.reply", " Sure! Fine! Ok! Jeez...");
+		addDialogue("shady_offer.purchase", "Thanks for your cash.");
+		
+		addDialogue("denizen", "%s has been sleeping for a thousand years. I shudder at the thought of their return.");
+		addDialogue("denizen.what", "What?");
+		addDialogue("denizen.what.reply", "The... what?");
+		addDialogue("denizen.explain", "The Denizen is the One that Slumbers in our very soil. It is eternally waiting for the %s to awaken it. Then they will be given The Choice, and their victory will be determined by what they choose.");
+		addDialogue("denizen.ask_alignment", "Ask if the denizens are bad or not.");
+		addDialogue("denizen.ask_alignment.reply", "Were these 'denizens' bad?");
+		addDialogue("denizen.alignment", "How am I supposed to know if they were good or bad? There's more to a living being than just black and white!");
+		
+		addDialogue("hungry", "I'm hungry. Have any bugs? Maybe a chocolate chip cookie? Mmm.");
+		addDialogue("hungry.ask_food", "A %s! Could I have some?");
+		addDialogue("hungry.accept", "Yes");
+		addDialogue("hungry.accept.reply", "Sure, here.");
+		addDialogue("hungry.deny", "No");
+		addDialogue("hungry.deny.reply", "I don't really want to give this away.");
+		addDialogue("hungry.thanks", "Thank you! I will remember your kindness for the rest of my short life.");
+		addDialogue("hungry.starving", "But I am starving here! What if I paid you 10 boondollars for it?");
+		addDialogue("hungry.agree", "Sure");
+		addDialogue("hungry.agree.reply", "Sure, I can agree to that.");
+		addDialogue("hungry.too_cheap", "Too Cheap");
+		addDialogue("hungry.too_cheap.reply", "I won't let it go that cheap.");
+		addDialogue("hungry.finally", "Finally!");
+		addDialogue("hungry.finally.desc", "You are given 10 boondollars for the %s.");
+		addDialogue("hungry.end", "Fine. I will just go and find a real food store.");
+		
+		addDialogue("breath_food_shop", "It's hard to catch our food with the Breeze carrying them away and whatnot!");
+		addDialogue("blood_food_shop", "Hope you like red meat!");
+		addDialogue("life_food_shop", "Rabbit stew! Mmmm!");
+		addDialogue("doom_food_shop", "Lightning-smoked meat really adds to the flavor!");
+		addDialogue("frog_food_shop", "Frog legs are good but eating them is heresy! Buy some of our food instead!");
+		addDialogue("buckets_food_shop", "Ever soaked your grist candies in the liquids the buckets contain? It really enhances the taste!");
+		addDialogue("time_food_shop", "Tick Tock, time's a-wasting! Eat something or leave!");
+		addDialogue("thyme_food_shop", "Take your mind off of the limited time we have left alive with food!");
+		addDialogue("mind_food_shop", "I'm selling recipes I made from a nearby library's cookbook. Buy some!");
+		addDialogue("heart_food_shop", "Who needs cake when you have crickets!");
+		addDialogue("light_food_shop", "Crickets are nocturnal so our species' main food source is hard to find here. Oh well!");
+		addDialogue("void_food_shop", "This place used to be filled with the sounds of crickets until we captured them all for food!");
+		addDialogue("rage_food_shop", "You're not you when you're hungry. Buy a snickers!");
+		addDialogue("hope_food_shop", "I HOPE you're hungry!");
+		addDialogue("hope_food_shop.desc", "You hear a faint ba-dum tss in the distance.");
+		addDialogue("space_food_shop", "We would never eat frogs here in the %s! Grasshoppers, though...");
+		addDialogue("food_shop", "You hungry? I bet you are! Why else would you be talking to me?");
+		addDialogue("fast_food", "Welcome to MacCricket's, what would you like?");
+		addDialogue("grocery_store", "Thank you for choosing Stop and Hop, this village's #1 one grocer!");
+		addDialogue("tasty_welcome", "Welcome. I hope you find something tasty among our wares.");
+		
+		addDialogue("breath_general_shop", "The breeze has brought me many fine wares.");
+		addDialogue("blood_general_shop", "I accept payment in blood. And boondollars. I also take checks.");
+		addDialogue("life_general_shop", "Twenty years selling losers hats and shit really takes the life out of you.");
+		addDialogue("doom_general_shop", "With my prices, my competitors are doomed!");
+		addDialogue("space_general_shop", "Get your frog merchandise here! Limited time only! ....Just kidding, I'm always here.");
+		addDialogue("buckets_general_shop", "Here's a witty one-liner tying in buckets and general stores!");
+		addDialogue("time_general_shop", "Future me has told me that some sucker would buy tons of \"goods\" from me... will that sucker be you?");
+		
+		addDialogue("mind_general_shop", "Books have taught us how to sell as much useless crap as possible, want some?");
+		addDialogue("heart_general_shop", "Don't buy goods here. Cake is our specialty, not general goods. Very low quality.");
+		addDialogue("light_general_shop", "You may be blind but I'm sure you can see our prices are fantastic!");
+		addDialogue("void_general_shop", "This land may be silent but our prices will make you SCREAM!... with joy, of course!");
+		addDialogue("rage_general_shop", "Other store's prices are INFURIATING! Our prices, however, will soothe that frustration!");
+		addDialogue("hope_general_shop", "I got the goods; they're all recently raided from a nearby tower!");
+		addDialogue("general_shop", "We have generic goods for generic people!");
+		addDialogue("got_the_goods", "You want the goods? We got the goods.");
+		addDialogue("rising_shop", "We have top tier goods for a top tier god!");
+		addDialogue("boring_shop", "Looking for something that won't catch your eye? You've come to the right place!");
+		
+		//TODO Here are some unimplemented dialogue
+		addDialogue("cant_see", "We spent a lot of time making this shop looks really nice, we may have overdone it though, I can barely see over this counter.");
+		addDialogue("naked", "Special offer on shell polish, dear custom- wait a minute, where's your shell? Are you naked?");
+		addDialogue("vines", "Please don't climb on the vines outside, I won't be able to reach you and it'll be really upsetting to watch me fruitlessly try.");
+		addDialogue("skaia_rocket", "My house may be kind of in the ground, but my dreams are taller than any Giclops! One day I'm gonna fly a rocket to Skaia and prove that we're not all so timid.");
+		addDialogue("advertisement", "Been to the shop? They've got the best %s in the area!");
 		
 		addSubtitles("warhorn", "Warhorn sounds");
 		addSubtitles("whispers", "Spooky Whispers");

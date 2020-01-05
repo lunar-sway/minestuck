@@ -125,6 +125,7 @@ sourceSets {
         }
         resources {
             srcDir 'src'
+            srcDir 'src/generated/resources'
         }
     }
 }
