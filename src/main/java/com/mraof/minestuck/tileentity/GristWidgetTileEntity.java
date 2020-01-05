@@ -2,11 +2,9 @@ package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.GristWidgetBlock;
-import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.inventory.GristWidgetContainer;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
-import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
 import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.util.Debug;
@@ -126,25 +124,8 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 			return;
 		}
 		
-		for(GristAmount amount : gristSet.getAmounts())
-		{
-			long grist = amount.getAmount();
-			while(grist > 0)
-			{
-				GristAmount gristAmount = new GristAmount(amount.getType(),
-						grist <= 3 ? grist : (world.rand.nextInt((int) Math.min(Integer.MAX_VALUE, grist)) + 1));    //TODO is there a better way?
-				GristEntity entity = new GristEntity(world,
-						this.pos.getX()
-								+ 0.5 /* this.width - this.width / 2 */,
-						this.pos.getY() + 1, this.pos.getZ()
-						+ 0.5 /* this.width - this.width / 2 */,
-						gristAmount);
-				entity.setMotion(entity.getMotion().mul(0.5, 0.5, 0.5));
-				world.addEntity(entity);
-				//Create grist entity of gristAmount
-				grist -= gristAmount.getAmount();
-			}
-		}
+		gristSet.spawnGristEntities(world, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, world.rand, entity -> entity.setMotion(entity.getMotion().mul(0.5, 0.5, 0.5)));
+		
 		this.decrStackSize(0, 1);
 	}
 	
