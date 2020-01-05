@@ -18,10 +18,12 @@ import com.mraof.minestuck.world.storage.MSExtraData;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.WorldPersistenceHooks;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -53,6 +55,7 @@ public class Minestuck
 		MinecraftForge.EVENT_BUS.register(this);
 		
 		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+		DistExecutor.runWhenOn(Dist.CLIENT, () -> ClientProxy::registerEarly);
 		
 		Debug.info("Register deferred register!");
 		MSFluids.FLUIDS.register(eventBus);

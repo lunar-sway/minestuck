@@ -1,6 +1,5 @@
 package com.mraof.minestuck.client;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.client.renderer.BlockColorCruxite;
 import com.mraof.minestuck.item.FrogItem;
@@ -13,9 +12,7 @@ import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ColorHandler
 {
     @SubscribeEvent

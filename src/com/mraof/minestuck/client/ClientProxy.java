@@ -31,9 +31,15 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 public class ClientProxy extends CommonProxy
 {
+	public static void registerEarly()
+	{
+		FMLJavaModLoadingContext.get().getModEventBus().register(ColorHandler.class);
+	}
+	
 	private static void registerRenderers()
 	{
 		ClientRegistry.bindTileEntitySpecialRenderer(SkaiaPortalTileEntity.class, new SkaiaPortalRenderer());
