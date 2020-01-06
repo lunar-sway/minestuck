@@ -51,7 +51,7 @@ public class SkaianetHandler
 	
 	private static SkaianetHandler INSTANCE;
 	
-	Map<PlayerIdentifier, GlobalPos> serversOpen = new TreeMap<>();
+	Map<PlayerIdentifier, GlobalPos> serversOpen = new HashMap<>();
 	private Map<PlayerIdentifier, GlobalPos> resumingClients = new HashMap<>();
 	private Map<PlayerIdentifier, GlobalPos> resumingServers = new HashMap<>();
 	List<SburbConnection> connections = new ArrayList<>();

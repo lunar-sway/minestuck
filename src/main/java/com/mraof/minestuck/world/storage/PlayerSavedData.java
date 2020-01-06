@@ -13,12 +13,15 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.DimensionSavedDataManager;
 import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.common.util.Constants;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class PlayerSavedData extends WorldSavedData
 {
+	private static final Logger LOGGER = LogManager.getLogger();
 	private static final String DATA_NAME = Minestuck.MOD_ID+"_player_data";
 	
 	private final Map<PlayerIdentifier, PlayerData> dataMap = new HashMap<>();
@@ -72,8 +75,14 @@ public class PlayerSavedData extends WorldSavedData
 		for (int i = 0; i < list.size(); i++)
 		{
 			CompoundNBT dataCompound = list.getCompound(i);
-			PlayerData data = new PlayerData(this, dataCompound);
-			dataMap.put(data.identifier, data);
+			try
+			{
+				PlayerData data = new PlayerData(this, dataCompound);
+				dataMap.put(data.identifier, data);
+			} catch(Exception e)
+			{
+				LOGGER.error("Got exception when loading minestuck player data instance:", e);
+			}
 		}
 	}
 

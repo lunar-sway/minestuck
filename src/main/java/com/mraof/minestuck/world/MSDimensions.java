@@ -40,7 +40,7 @@ public class MSDimensions
 			return info.getLandAspects();
 		else if(isLandDimension(dimension))
 		{
-			Debug.warnf("Tried to get land aspects for %s, but did not find a container reference! Using defaults instead.");
+			Debug.warnf("Tried to get land aspects for %s, but did not find a container reference! Using defaults instead.", dimension.getRegistryName());
 			return new LandTypePair(LandTypes.TERRAIN_NULL, LandTypes.TITLE_NULL);
 		} else return null;
 	}

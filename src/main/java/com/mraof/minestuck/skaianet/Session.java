@@ -153,7 +153,7 @@ public class Session
 				s.connections.add(new SburbConnection(list.getCompound(i), handler));
 			} catch(Exception e)
 			{
-				Debug.logger.error("Unable to read sburb connection from tag "+list.getCompound(i)+". Forced to skip connection.", e);
+				Debug.logger.error("Unable to read sburb connection from tag "+list.getCompound(i)+". Forced to skip connection. Caused by:", e);
 			}
 		}
 		
