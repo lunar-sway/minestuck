@@ -46,6 +46,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -470,9 +471,10 @@ public class ServerEditHandler
 			player.getServer().getPlayerList().sendInventory(player);
 	}
 	
-	public static void onServerStopping(MinecraftServer server)
+	@SubscribeEvent
+	public static void onServerStopping(FMLServerStoppingEvent event)
 	{
-		MSExtraData.get(server).forEachAndClear(ServerEditHandler::reset);
+		MSExtraData.get(event.getServer()).forEachAndClear(ServerEditHandler::reset);
 	}
 	
 	/*@SubscribeEvent(priority=EventPriority.LOWEST, receiveCanceled=false) TODO Do something about command security

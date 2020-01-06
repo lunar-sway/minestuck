@@ -106,7 +106,7 @@ public class SburbConnection
 		}
 		if(nbt.contains("ClientLand", Constants.NBT.TAG_COMPOUND))
 		{
-			clientHomeLand = LandInfo.read(nbt.getCompound("ClientLand"), handler, getClientIdentifier());	//TODO add robustness in the case that the dimension type no longer exists?
+			clientHomeLand = LandInfo.read(nbt.getCompound("ClientLand"), handler, getClientIdentifier());
 		}
 		artifactType = nbt.getInt("artifact");
 	}

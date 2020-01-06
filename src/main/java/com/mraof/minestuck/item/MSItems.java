@@ -1,5 +1,6 @@
 package com.mraof.minestuck.item;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.item.CrewPosterEntity;
 import com.mraof.minestuck.entity.item.MetalBoatEntity;
 import com.mraof.minestuck.entity.item.SbahjPosterEntity;
@@ -15,6 +16,9 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import static com.mraof.minestuck.block.MSBlocks.*;
@@ -23,6 +27,7 @@ import static com.mraof.minestuck.block.MSBlocks.*;
  * This class contains all non-ItemBlock items that minestuck adds,
  * and is responsible for initializing and registering these.
  */
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class MSItems
 {
 	
@@ -195,8 +200,11 @@ public class MSItems
 	public static Item MUSIC_DISC_DANCE_STAB_DANCE;
 	public static Item MUSIC_DISC_RETRO_BATTLE;
 	
-	public static void registerItems(IForgeRegistry<Item> registry)
+	@SubscribeEvent
+	public static void registerItems(final RegistryEvent.Register<Item> event)
 	{
+		IForgeRegistry<Item> registry = event.getRegistry();
+		
 		registerItemBlock(registry, BLACK_CHESS_DIRT, MSItemGroup.MAIN);
 		registerItemBlock(registry, WHITE_CHESS_DIRT, MSItemGroup.MAIN);
 		registerItemBlock(registry, DARK_GRAY_CHESS_DIRT, MSItemGroup.MAIN);

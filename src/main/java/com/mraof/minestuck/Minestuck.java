@@ -1,13 +1,10 @@
 package com.mraof.minestuck;
 
-import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.command.*;
-import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
-import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.GristCostGenerator;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.PlayerTracker;
@@ -15,13 +12,10 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.storage.MSExtraData;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
 import net.minecraft.util.SharedConstants;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
@@ -29,7 +23,10 @@ import net.minecraftforge.fml.WorldPersistenceHooks;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.server.*;
+import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 
@@ -58,7 +55,6 @@ public class Minestuck
 		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		DistExecutor.runWhenOn(Dist.CLIENT, () -> ClientProxy::registerEarly);
 		
-		Debug.info("Register deferred register!");
 		MSFluids.FLUIDS.register(eventBus);
 	}
 	
@@ -117,33 +113,11 @@ public class Minestuck
 	}
 	
 	@SubscribeEvent
-	public void serverStopping(FMLServerStoppingEvent event)
-	{
-		ServerEditHandler.onServerStopping(event.getServer());
-	}
-	
-	@SubscribeEvent
 	public void serverStopped(FMLServerStoppedEvent event)
 	{
 		PlayerTracker.dataCheckerPermission.clear();
 		IdentifierHandler.clear();
 		SkaianetHandler.clear();
 		MSFeatures.LAND_GATE.clearCache();
-	}
-	
-	@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
-	public static class RegistryEvents
-	{
-		@SubscribeEvent
-		public static void onBlockRegistry(final RegistryEvent.Register<Block> event)
-		{
-			MSBlocks.registerBlocks(event.getRegistry());
-		}
-		
-		@SubscribeEvent
-		public static void onItemRegistry(final RegistryEvent.Register<Item> event)
-		{
-			MSItems.registerItems(event.getRegistry());
-		}
 	}
 }
