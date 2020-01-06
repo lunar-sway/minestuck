@@ -66,7 +66,8 @@ public class LightLandType extends TitleLandType
 	@Override
 	public boolean isAspectCompatible(TerrainLandType aspect)
 	{
-		return aspect.getSkylightBase() >= 1/2F;	//TODO Add no thunder as condition
+		LandProperties properties = new LandProperties(aspect);
+		aspect.setProperties(properties);
+		return aspect.getSkylightBase() >= 1/2F && properties.forceThunder == LandProperties.ForceType.OFF;
 	}
-	
 }
