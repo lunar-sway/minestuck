@@ -46,6 +46,7 @@ public class LandTypes
 	public static final TerrainLandType FUNGI = getNull();
 	public static final TerrainLandType HEAT = getNull();
 	public static final TerrainLandType ROCK = getNull();
+	public static final TerrainLandType PETRIFICATION = getNull();
 	public static final TerrainLandType SAND = getNull();
 	public static final TerrainLandType RED_SAND = getNull();
 	public static final TerrainLandType LUSH_DESERTS = getNull();

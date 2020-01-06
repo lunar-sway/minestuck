@@ -7,7 +7,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 8,
+          "weight": 10,
           "quality": -1,
           "functions": [
             {
@@ -18,14 +18,8 @@
               }
             }
           ],
-          "name": "minestuck:sickle"
-        }
-      ]
-    },
-    {
-      "name": "supplies",
-      "rolls": 1,
-      "entries": [
+          "name": "minestuck:cane"
+        },
         {
           "type": "minecraft:item",
           "weight": 10,
@@ -39,7 +33,56 @@
               }
             }
           ],
-          "name": "minecraft:shears"
+          "name": "minestuck:deuce_club"
+        }
+      ]
+    },
+    {
+      "name": "supplies",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.75,
+                "max": 1.0
+              }
+            }
+          ],
+          "name": "minecraft:stone_axe"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "quality": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.75,
+                "max": 1.0
+              }
+            }
+          ],
+          "name": "minecraft:iron_axe"
+        },
+        {
+          "type": "minecraft:item",
+          "quality": 2,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.75,
+                "max": 1.0
+              }
+            }
+          ],
+          "name": "minecraft:diamond_axe"
         }
       ]
     },
@@ -49,168 +92,26 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 3,
+          "weight": 5,
           "quality": -1,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 4.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minecraft:dandelion"
+          "name": "minecraft:oak_sapling"
         },
         {
           "type": "minecraft:item",
-          "weight": 3,
+          "weight": 5,
           "quality": -1,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 4.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minecraft:poppy"
+          "name": "minecraft:spruce_sapling"
         },
         {
           "type": "minecraft:item",
-          "weight": 3,
+          "weight": 5,
           "quality": -1,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 4.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minecraft:blue_orchid"
+          "name": "minecraft:birch_sapling"
         },
         {
           "type": "minecraft:item",
-          "weight": 3,
+          "weight": 5,
           "quality": -1,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 4.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minecraft:allium"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 3,
-          "quality": -1,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 4.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minecraft:azure_bluet"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 3,
-          "quality": -1,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 4.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minecraft:red_tulip"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 3,
-          "quality": -1,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 4.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minecraft:orange_tulip"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 3,
-          "quality": -1,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 4.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minecraft:white_tulip"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 3,
-          "quality": -1,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 4.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minecraft:pink_tulip"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 3,
-          "quality": -1,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 4.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minecraft:oxeye_daisy"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 6,
-          "quality": -2,
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -221,12 +122,12 @@
               }
             }
           ],
-          "name": "minecraft:sunflower"
+          "name": "minecraft:oak_log"
         },
         {
           "type": "minecraft:item",
-          "weight": 6,
-          "quality": -2,
+          "weight": 5,
+          "quality": -1,
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -237,12 +138,12 @@
               }
             }
           ],
-          "name": "minecraft:lilac"
+          "name": "minecraft:spruce_log"
         },
         {
           "type": "minecraft:item",
-          "weight": 6,
-          "quality": -2,
+          "weight": 5,
+          "quality": -1,
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -253,12 +154,12 @@
               }
             }
           ],
-          "name": "minecraft:rose_bush"
+          "name": "minecraft:birch_log"
         },
         {
           "type": "minecraft:item",
-          "weight": 6,
-          "quality": -2,
+          "weight": 5,
+          "quality": -1,
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -269,11 +170,43 @@
               }
             }
           ],
-          "name": "minecraft:peony"
+          "name": "minecraft:jungle_log"
         },
         {
           "type": "minecraft:item",
-          "weight": 11,
+          "weight": 5,
+          "quality": -1,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 3.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minecraft:acacia_log"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "quality": -1,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 3.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minecraft:dark_oak_log"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 3,
           "quality": -2,
           "functions": [
             {
@@ -285,37 +218,55 @@
               }
             }
           ],
-          "name": "minecraft:fern"
+          "name": "minecraft:oak_planks"
         },
         {
           "type": "minecraft:item",
-          "weight": 9,
+          "weight": 3,
+          "quality": -2,
           "functions": [
             {
               "function": "minecraft:set_count",
               "count": {
-                "min": 8.0,
-                "max": 24.0,
+                "min": 1.0,
+                "max": 5.0,
                 "type": "minecraft:uniform"
               }
             }
           ],
-          "name": "minestuck:flowery_mossy_cobblestone"
+          "name": "minecraft:spruce_planks"
         },
         {
           "type": "minecraft:item",
-          "weight": 9,
+          "weight": 3,
+          "quality": -2,
           "functions": [
             {
               "function": "minecraft:set_count",
               "count": {
-                "min": 8.0,
-                "max": 24.0,
+                "min": 1.0,
+                "max": 5.0,
                 "type": "minecraft:uniform"
               }
             }
           ],
-          "name": "minecraft:mossy_cobblestone"
+          "name": "minecraft:birch_planks"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "quality": -2,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 2.0,
+                "max": 15.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minecraft:oak_leaves"
         }
       ]
     }
