@@ -323,7 +323,9 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 			totalModifier += modifiers[i];
 		}
 		
-		Debug.infof("%s players are splitting on %s progress from %s", playerList.length, progress, getType().getRegistryName());
+		if(playerList.length > 0)
+			Debug.debugf("%s players are splitting on %s progress from %s", playerList.length, progress, getType().getRegistryName());
+		
 		if(totalModifier > maxSharedProgress)
 			for(int i = 0; i < playerList.length; i++)
 				Echeladder.increaseProgress(playerList[i], world, (int) (maxProgress*modifiers[i]/totalModifier));
