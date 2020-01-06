@@ -11,8 +11,8 @@ import net.minecraft.world.gen.placement.ChanceConfig;
 import net.minecraft.world.gen.placement.IPlacementConfig;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraft.world.gen.surfacebuilders.ConfiguredSurfaceBuilder;
+import net.minecraft.world.gen.surfacebuilders.ISurfaceBuilderConfig;
 import net.minecraft.world.gen.surfacebuilders.SurfaceBuilder;
-import net.minecraft.world.gen.surfacebuilders.SurfaceBuilderConfig;
 
 public class LandWrapperBiome extends LandBiome
 {
@@ -27,13 +27,17 @@ public class LandWrapperBiome extends LandBiome
 	public void init(LandGenSettings settings)
 	{
 		StructureBlockRegistry blocks = settings.getBlockRegistry();
-		SurfaceBuilderConfig surfaceConfig = new SurfaceBuilderConfig(blocks.getBlockState("surface"), blocks.getBlockState("upper"), blocks.getBlockState("ocean_surface"));
-		this.surfaceBuilder = new ConfiguredSurfaceBuilder<>(SurfaceBuilder.DEFAULT, surfaceConfig);
+		this.surfaceBuilder = new ConfiguredSurfaceBuilder<>(SurfaceBuilder.DEFAULT, blocks.getSurfaceBuilderConfig());
 		this.addSpawn(EntityClassification.CREATURE, new SpawnListEntry(settings.getLandTypes().terrain.getConsortType(), 2, 1, 10));
 		
 		if(staticBiome != MSBiomes.LAND_OCEAN)
 			addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, createDecoratedFeature(MSFeatures.RETURN_NODE, IFeatureConfig.NO_FEATURE_CONFIG, Placement.CHANCE_HEIGHTMAP, new ChanceConfig(128)));
 		addDefaultStructures(blocks);
+	}
+	
+	public <SC extends ISurfaceBuilderConfig> void setSurfaceBuilder(SurfaceBuilder<SC> builder, SC config)
+	{
+		this.surfaceBuilder = new ConfiguredSurfaceBuilder<>(builder, config);
 	}
 	
 	private void addDefaultStructures(StructureBlockRegistry blocks)

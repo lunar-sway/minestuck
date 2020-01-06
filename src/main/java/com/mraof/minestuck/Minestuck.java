@@ -10,6 +10,7 @@ import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.PlayerTracker;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.world.gen.MSSurfaceBuilders;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import net.minecraft.util.SharedConstants;
@@ -52,10 +53,11 @@ public class Minestuck
 		
 		MinecraftForge.EVENT_BUS.register(this);
 		
-		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		DistExecutor.runWhenOn(Dist.CLIENT, () -> ClientProxy::registerEarly);
 		
+		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		MSFluids.FLUIDS.register(eventBus);
+		MSSurfaceBuilders.REGISTER.register(eventBus);
 	}
 	
 	private void setup(final FMLCommonSetupEvent event)

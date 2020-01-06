@@ -8,6 +8,7 @@ import net.minecraft.state.properties.Half;
 import net.minecraft.util.Direction;
 import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
+import net.minecraft.world.gen.surfacebuilders.SurfaceBuilderConfig;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -209,6 +210,11 @@ public final class StructureBlockRegistry
 				newState = with(state, newState, property);
 			return newState;
 		} else return state;
+	}
+	
+	public SurfaceBuilderConfig getSurfaceBuilderConfig()
+	{
+		return new SurfaceBuilderConfig(getBlockState("surface"), getBlockState("upper"), getBlockState("ocean_surface"));
 	}
 	
 	private static <T extends Comparable<T>> BlockState with(BlockState fromState, BlockState toState, IProperty<T> property)

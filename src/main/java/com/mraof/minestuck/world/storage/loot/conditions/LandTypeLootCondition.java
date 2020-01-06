@@ -2,9 +2,7 @@ package com.mraof.minestuck.world.storage.loot.conditions;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.gson.*;
-import com.mraof.minestuck.world.LandDimension;
 import com.mraof.minestuck.world.MSDimensions;
-import com.mraof.minestuck.world.lands.ILandType;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
@@ -20,22 +18,22 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 
-public class LandAspectLootCondition implements ILootCondition
+public class LandTypeLootCondition implements ILootCondition
 {
 	
 	private final Set<ResourceLocation> terrainGroups;
 	private final Set<ResourceLocation> titleGroups;
-	private final Set<TerrainLandType> terrainAspects;
-	private final Set<TitleLandType> titleAspects;
+	private final Set<TerrainLandType> terrainTypes;
+	private final Set<TitleLandType> titleTypes;
 	private final boolean inverted;
 	
-	private LandAspectLootCondition(Set<ResourceLocation> terrainGroups, Set<ResourceLocation> titleGroups,
-									Set<TerrainLandType> terrainAspects, Set<TitleLandType> titleAspects, boolean inverted)
+	private LandTypeLootCondition(Set<ResourceLocation> terrainGroups, Set<ResourceLocation> titleGroups,
+								  Set<TerrainLandType> terrainTypes, Set<TitleLandType> titleTypes, boolean inverted)
 	{
 		this.terrainGroups = terrainGroups;
 		this.titleGroups = titleGroups;
-		this.terrainAspects = terrainAspects;
-		this.titleAspects = titleAspects;
+		this.terrainTypes = terrainTypes;
+		this.titleTypes = titleTypes;
 		this.inverted = inverted;
 	}
 	
@@ -46,54 +44,43 @@ public class LandAspectLootCondition implements ILootCondition
 		
 		if(world != null && MSDimensions.isLandDimension(world.getDimension().getType()))
 		{
-			LandTypePair aspects = ((LandDimension) world.dimension).landTypes;
+			LandTypePair aspects = MSDimensions.getAspects(world.getServer(), world.getDimension().getType());
 			
-			if(terrainAspects.contains(aspects.terrain) || titleAspects.contains(aspects.title)
-					|| terrainGroups.contains(aspects.terrain.getGroup()) || titleGroups.contains(aspects.title.getGroup()))
+			if(aspects != null && (terrainTypes.contains(aspects.terrain) || titleTypes.contains(aspects.title)
+					|| terrainGroups.contains(aspects.terrain.getGroup()) || titleGroups.contains(aspects.title.getGroup())))
 					return !inverted;
 		}
 		
 		return inverted;
 	}
 	
-	public static class Serializer extends ILootCondition.AbstractSerializer<LandAspectLootCondition>
+	public static class Serializer extends ILootCondition.AbstractSerializer<LandTypeLootCondition>
 	{
 		public Serializer()
 		{
-			super(new ResourceLocation("minestuck", "land_aspect"), LandAspectLootCondition.class);
+			super(new ResourceLocation("minestuck", "land_aspect"), LandTypeLootCondition.class);
 		}
 		
 		@Override
-		public void serialize(JsonObject json, LandAspectLootCondition value, JsonSerializationContext context)
+		public void serialize(JsonObject json, LandTypeLootCondition value, JsonSerializationContext context)
 		{
 			serializeSet(json, "terrain_group", value.terrainGroups, ResourceLocation::toString);
 			serializeSet(json, "title_group", value.titleGroups, ResourceLocation::toString);
-			serializeSet(json, "terrain_aspect", value.terrainAspects, aspect -> aspect.getRegistryName().toString());
-			serializeSet(json, "title_aspect", value.titleAspects, aspect -> aspect.getRegistryName().toString());
+			serializeSet(json, "terrain_type", value.terrainTypes, type -> type.getRegistryName().toString());
+			serializeSet(json, "title_type", value.titleTypes, type -> type.getRegistryName().toString());
 			
 			json.addProperty("inverse", value.inverted);
 		}
 		@Override
-		public LandAspectLootCondition deserialize(JsonObject json, JsonDeserializationContext context)
+		public LandTypeLootCondition deserialize(JsonObject json, JsonDeserializationContext context)
 		{
 			Set<ResourceLocation> terrainGroups = deserializeSet(json, "terrain_group", ResourceLocation::new);
 			Set<ResourceLocation> titleGroups = deserializeSet(json, "title_group", ResourceLocation::new);
-			Set<TerrainLandType> terrainAspects = deserializeSet(json, "terrain_aspect", s -> LandTypes.TERRAIN_REGISTRY.getValue(new ResourceLocation(s)));
-			Set<TitleLandType> titleAspects = deserializeSet(json, "title_aspect", s -> LandTypes.TITLE_REGISTRY.getValue(new ResourceLocation(s)));
+			Set<TerrainLandType> terrainTypes = deserializeSet(json, "terrain_type", s -> LandTypes.TERRAIN_REGISTRY.getValue(new ResourceLocation(s)));
+			Set<TitleLandType> titleTypes = deserializeSet(json, "title_type", s -> LandTypes.TITLE_REGISTRY.getValue(new ResourceLocation(s)));
 			boolean inverted = JSONUtils.getBoolean(json, "inverse", false);
-			return new LandAspectLootCondition(terrainGroups, titleGroups, terrainAspects, titleAspects, inverted);
+			return new LandTypeLootCondition(terrainGroups, titleGroups, terrainTypes, titleTypes, inverted);
 		}
-		
-		private static ILandType getAspect(String aspectName)
-		{
-			ILandType aspect = LandTypes.TERRAIN_REGISTRY.getValue(ResourceLocation.tryCreate(aspectName));
-			if(aspect == null)
-				aspect = LandTypes.TITLE_REGISTRY.getValue(ResourceLocation.tryCreate(aspectName));
-			if(aspect == null)
-				throw new JsonSyntaxException("\"" + aspectName + "\" is not a valid land aspect.");
-			return aspect;
-		}
-		
 	}
 	
 	private static <T> void serializeSet(JsonObject json, String name, Set<T> set, Function<T, String> toString)
