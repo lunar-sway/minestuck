@@ -9,6 +9,7 @@ import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.RecipeProvider;
 import net.minecraft.item.Items;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
 
 import java.util.function.Consumer;
@@ -23,6 +24,8 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 	@Override
 	protected void registerRecipes(Consumer<IFinishedRecipe> recipeSaver)
 	{
+		GeneratedGristCostBuilder.create().build(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "generated"));
+		
 		//Blocks
 		GristCostRecipeBuilder.of(Tags.Items.STONE).grist(GristTypes.BUILD, 2).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Tags.Items.COBBLESTONE).grist(GristTypes.BUILD, 2).buildFor(recipeSaver, Minestuck.MOD_ID);

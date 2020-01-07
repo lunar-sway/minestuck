@@ -71,7 +71,7 @@ public class GristCostRecipeCategory implements IRecipeCategory<GristCostRecipe>
 	@Override
 	public void setIngredients(GristCostRecipe recipe, IIngredients ingredients)
 	{
-		ingredients.setOutputLists(VanillaTypes.ITEM, Collections.singletonList(Arrays.asList(recipe.ingredient.getMatchingStacks())));
+		ingredients.setOutputLists(VanillaTypes.ITEM, Collections.singletonList(recipe.getIngredients().stream().flatMap(ingredient -> Arrays.stream(ingredient.getMatchingStacks())).collect(Collectors.toList())));
 		if(recipe.getJeiCost().getType() == JeiGristCost.Type.GRIST_SET)
 			ingredients.setInputs(MinestuckJeiPlugin.GRIST, recipe.getJeiCost().getGristSet().getAmounts());
 		//TODO Wildcard grist cost

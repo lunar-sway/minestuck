@@ -9,6 +9,7 @@ import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 
 public class WildcardGristCost extends GristCostRecipe
 {
@@ -22,7 +23,7 @@ public class WildcardGristCost extends GristCostRecipe
 	}
 	
 	@Override
-	public GristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown)
+	public GristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown, World world)
 	{
 		return wildcardType != null ? scaleToCountAndDurability(new GristSet(wildcardType, wildcardCost), input, shouldRoundDown).asImmutable() : null;
 	}

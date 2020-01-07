@@ -66,7 +66,7 @@ public class MiniAlchemiterScreen extends MachineScreen<MiniAlchemiterContainer>
 			else stack = AlchemyRecipes.getDecodedItem(container.getSlot(0).getStack());
 			
 			Optional<GristCostRecipe> recipe = GristCostRecipe.findRecipeForItem(stack, minecraft.world);
-			GristSet set = recipe.map(recipe1 -> recipe1.getGristCost(stack, container.getWildcardType(), false)).orElse(null);
+			GristSet set = recipe.map(recipe1 -> recipe1.getGristCost(stack, container.getWildcardType(), false, minecraft.world)).orElse(null);
 			boolean useWildcard = recipe.map(GristCostRecipe::canPickWildcard).orElse(false);
 			
 			GuiUtil.drawGristBoard(set, useWildcard ? GuiUtil.GristboardMode.ALCHEMITER_SELECT : GuiUtil.GristboardMode.ALCHEMITER, 9, 45, font);

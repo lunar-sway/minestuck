@@ -8,6 +8,7 @@ import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 
 public class GristCost extends GristCostRecipe
 {
@@ -21,7 +22,7 @@ public class GristCost extends GristCostRecipe
 	}
 	
 	@Override
-	public GristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown)
+	public GristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown, World world)
 	{
 		return scaleToCountAndDurability(cost.copy(), input, shouldRoundDown).asImmutable();
 	}

@@ -5,7 +5,6 @@ import com.mraof.minestuck.command.*;
 import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
-import com.mraof.minestuck.item.crafting.alchemy.GristCostGenerator;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.PlayerTracker;
 import com.mraof.minestuck.util.Debug;
@@ -24,7 +23,6 @@ import net.minecraftforge.fml.WorldPersistenceHooks;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
@@ -76,12 +74,6 @@ public class Minestuck
 		ClientProxy.init();
 		MinecraftForge.EVENT_BUS.register(ClientProxy.class);
 		MinestuckConfig.setClientValues();
-	}
-
-	@SubscribeEvent
-	public void serverAboutToStart(FMLServerAboutToStartEvent event)
-	{
-		event.getServer().getResourceManager().addReloadListener(new GristCostGenerator(event.getServer()));
 	}
 	
 	@SubscribeEvent

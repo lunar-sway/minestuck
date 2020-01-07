@@ -4,10 +4,12 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.mojang.datafixers.util.Pair;
+import com.mraof.minestuck.Minestuck;
 import net.minecraft.client.resources.ReloadListener;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.*;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.profiler.IProfiler;
 import net.minecraft.resources.IResource;
 import net.minecraft.resources.IResourceManager;
@@ -15,6 +17,10 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
+import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
@@ -28,18 +34,80 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.SourceEntry>>
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	private static final Gson GSON = (new GsonBuilder()).registerTypeAdapter(SourceEntry.class, (JsonDeserializer<SourceEntry>) GristCostGenerator::deserializeSourceEntry).registerTypeAdapter(Source.class, (JsonDeserializer<Source>) GristCostGenerator::deserializeSource).create();
 	
-	private final MinecraftServer server;
-	private Map<Item, GristSet> generatedCosts = Collections.emptyMap();	//TODO grist cost recipe that queries the results here
+	private static GristCostGenerator instance;
 	
-	public GristCostGenerator(MinecraftServer server)
+	private final MinecraftServer server;
+	private Map<Item, GristSet> generatedCosts = Collections.emptyMap();
+	
+	private GristCostGenerator(MinecraftServer server)
 	{
 		this.server = server;
+	}
+	
+	private GristCostGenerator(Map<Item, GristSet> generatedCosts)
+	{
+		server = null;
+		this.generatedCosts = generatedCosts;
+	}
+	
+	@SubscribeEvent
+	public static void serverAboutToStart(FMLServerAboutToStartEvent event)
+	{
+		if(instance != null)
+			throw new IllegalStateException("A server has started without the old one stopping. This is unexpected behaviour");
+		instance = new GristCostGenerator(event.getServer());
+		event.getServer().getResourceManager().addReloadListener(instance);
+	}
+	
+	@SubscribeEvent
+	public static void serverStopped(FMLServerStoppedEvent event)
+	{
+		instance = null;
+	}
+	
+	static GristCostGenerator getInstance()
+	{
+		if(instance != null)
+			return instance;
+		else throw new IllegalStateException("Illegal call to grist cost generator");
+	}
+	
+	GristSet getGristCost(Item item)
+	{
+		return generatedCosts.get(item);
+	}
+	
+	static void write(PacketBuffer buffer)
+	{
+		if(instance == null)
+			throw new IllegalStateException("Instance has not been created yet!");	//Sadly we can't go via getInstance() since the server instance isn't properly available at that time.
+		
+		buffer.writeInt(instance.generatedCosts.size());
+		for(Map.Entry<Item, GristSet> entry : instance.generatedCosts.entrySet())
+		{
+			buffer.writeVarInt(Item.getIdFromItem(entry.getKey()));
+			entry.getValue().write(buffer);
+		}
+	}
+	
+	public static GristCostGenerator read(PacketBuffer buffer)
+	{
+		int size = buffer.readInt();
+		ImmutableMap.Builder<Item, GristSet> builder = new ImmutableMap.Builder<>();
+		for(int i = 0; i < size; i++)
+		{
+			Item item = Item.getItemById(buffer.readVarInt());
+			GristSet cost = GristSet.read(buffer);
+			builder.put(item, cost);
+		}
+		return new GristCostGenerator(builder.build());
 	}
 	
 	@Override
@@ -119,8 +187,10 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 	@Override
 	protected void apply(List<SourceEntry> sources, IResourceManager resourceManagerIn, IProfiler profilerIn)
 	{
+		Objects.requireNonNull(server, "Server was null while generating grist costs");
+		
 		RecipeManager recipeManager = server.getRecipeManager();
-		if(!server.isOnExecutionThread() || (sources.size() != 0 &&  recipeManager.getRecipes().size() == 0))
+		if(!server.isOnExecutionThread() || (sources.size() != 0 && recipeManager.getRecipes().size() == 0))
 		{
 			throw new IllegalStateException("Grist cost generator is supposed to be executed on server thread after initializing. The failure of this assertion is not good!");
 		}
@@ -136,12 +206,13 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 		}
 		
 		this.generatedCosts = ImmutableMap.copyOf(process.generatedCosts);
+		LOGGER.info("Generated {} grist conversions from marked recipes.", generatedCosts.size());
 	}
 	
 	private Map<Item, List<Pair<IRecipe<?>, RecipeInterpreter>>> prepareRecipeMap(List<SourceEntry> sources, RecipeManager recipeManager)
 	{
 		//TODO
-		// Should return a mutable map for fast lookup of item -> recipes + recipe-interpreter
+		// Should return a map for fast lookup of item -> recipes + recipe-interpreter
 		// Each recipe should only occur once
 		// Each item may refer to several recipes if there are recipes for them,
 		// but each recipe should only have one recipe-interpreter depending on which source is the dominant source.
@@ -198,7 +269,7 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 				process.hasDoneGristCostLookup.add(item);
 				if(recipe.isPresent())
 				{
-					GristSet cost = recipe.get().getGristCost(new ItemStack(item), GristTypes.BUILD, false);
+					GristSet cost = recipe.get().getGristCost(new ItemStack(item), GristTypes.BUILD, false, null);
 					process.gristCostLookup.put(item, cost);
 					return cost;
 				}
@@ -226,7 +297,7 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 		private final Map<Item, GristSet> gristCostLookup = new HashMap<>();
 		private final Set<Item> itemsInProcess = new HashSet<>();
 		
-		public GeneratorProcess(RecipeManager recipeManager, Map<Item, List<Pair<IRecipe<?>, RecipeInterpreter>>> lookupMap)
+		GeneratorProcess(RecipeManager recipeManager, Map<Item, List<Pair<IRecipe<?>, RecipeInterpreter>>> lookupMap)
 		{
 			this.recipeManager = recipeManager;
 			this.lookupMap = lookupMap;

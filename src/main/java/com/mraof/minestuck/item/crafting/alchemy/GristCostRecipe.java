@@ -23,7 +23,7 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 	
 	public static GristSet findCostForItem(ItemStack input, GristType type, boolean shouldRoundDown, World world)
 	{
-		return findRecipeForItem(input, world).map(recipe -> recipe.getGristCost(input, type, shouldRoundDown)).orElse(null);
+		return findRecipeForItem(input, world).map(recipe -> recipe.getGristCost(input, type, shouldRoundDown, world)).orElse(null);
 	}
 	
 	public static Optional<GristCostRecipe> findRecipeForItem(ItemStack input, World world)
@@ -37,9 +37,9 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 	}
 	
 	public final ResourceLocation id;
-	public final Ingredient ingredient;
+	protected final Ingredient ingredient;
 	@Nullable
-	public final Integer priority;
+	protected final Integer priority;
 	
 	public GristCostRecipe(ResourceLocation id, Ingredient ingredient, Integer priority)
 	{
@@ -97,7 +97,7 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 		else return priority;
 	}
 	
-	public abstract GristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown);
+	public abstract GristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown, @Nullable World world);
 	
 	public boolean canPickWildcard()
 	{
