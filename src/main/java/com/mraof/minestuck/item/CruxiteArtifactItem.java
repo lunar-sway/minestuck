@@ -50,7 +50,7 @@ import static com.mraof.minestuck.MinestuckConfig.artifactRange;
 public abstract class CruxiteArtifactItem extends Item
 {
 	//TODO item classes should not be a container for non-final fields such as these. The functionality of this class need to be restructured!
-	//Eventually we'd want cruxite artifacts of kinds other than items, so it's a good idea to move this to a more general class.
+	// Eventually we'd want cruxite artifacts of kinds other than items, so it's a good idea to move this to a more general class.
 	private int xDiff;
 	private int yDiff;
 	private int zDiff;
@@ -100,9 +100,6 @@ public abstract class CruxiteArtifactItem extends Item
 						return;
 					}
 					
-					//Teleportation code is now called from enterMedium(), which is called from createLand.
-					//createLand will return -1 if Entry fails for any reason, including the teleporter being null or returning false in prepareDestination().
-					//Whatever the problem is, relevant information should be printed to the console.
 					DimensionType landDimension = SkaianetHandler.get(player.world).prepareEntry(identifier);
 					if(landDimension == null)
 					{
@@ -119,8 +116,9 @@ public abstract class CruxiteArtifactItem extends Item
 						
 						if(this.prepareDestination(player.getPosition(), player, oldWorld))
 						{
+							moveBlocks(oldWorld, newWorld);
 							if(Teleport.teleportEntity(player, newWorld) != null)
-							{	//TODO Beware that the player is teleported BEFORE blocks are moved over. This causes problems because we're setting blocks without the "send to client" in order to save time
+							{
 								finalizeDestination(player, oldWorld, newWorld);
 								SkaianetHandler.get(player.world).onEntry(identifier);
 							} else
@@ -168,7 +166,7 @@ public abstract class CruxiteArtifactItem extends Item
 			{
 				Chunk c = worldserver0.getChunk(blockX >> 4, blockZ >> 4);
 				
-				int height = (int) Math.sqrt(artifactRange.get() * artifactRange.get() - (((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2));
+				int height = (int) Math.sqrt(artifactRange.get() * artifactRange.get() - (((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2F));
 				
 				int blockY;
 				for(blockY = Math.max(0, y - height); blockY <= Math.min(topY, y + height); blockY++)
@@ -222,6 +220,27 @@ public abstract class CruxiteArtifactItem extends Item
 		return true;
 	}
 	
+	public void moveBlocks(ServerWorld worldserver0, ServerWorld worldserver1)
+	{
+		//This is split into two sections because moves that require block updates should happen after the ones that don't.
+		//This helps to ensure that "anchored" blocks like torches still have the blocks they are anchored to when they update.
+		//Some blocks like this (confirmed for torches, rails, and glowystone) will break themselves if they update without their anchor.
+		Debug.debug("Moving blocks...");
+		HashSet<BlockMove> blockMoves2 = new HashSet<>();
+		for(BlockMove move : blockMoves)
+		{
+			if(move.update)
+				move.copy(worldserver1, worldserver1.getChunk(move.dest));
+			else
+				blockMoves2.add(move);
+		}
+		for(BlockMove move : blockMoves2)
+		{
+			move.copy(worldserver1, worldserver1.getChunk(move.dest));
+		}
+		blockMoves2.clear();
+	}
+	
 	public void finalizeDestination(Entity player, ServerWorld worldserver0, ServerWorld worldserver1)
 	{
 		if(player instanceof ServerPlayerEntity)
@@ -229,29 +248,6 @@ public abstract class CruxiteArtifactItem extends Item
 			int x = origin.getX();
 			int y = origin.getY();
 			int z = origin.getZ();
-			
-			Debug.debug("Loading spawn chunks...");	//TODO This part takes suspiciously long time. Make sure it is done right
-			for(int chunkX = ((x + xDiff - artifactRange.get()) >> 4) - 1; chunkX <= ((x + xDiff + artifactRange.get()) >> 4) + 2; chunkX++)		//Prevent anything generating on the piece that we move
-				for(int chunkZ = ((z + zDiff - artifactRange.get()) >> 4) - 1; chunkZ <= ((z + zDiff + artifactRange.get()) >> 4) + 2; chunkZ++)	//from the overworld.
-					worldserver1.getChunkProvider().getChunk(chunkX, chunkZ, true);
-			
-			//This is split into two sections because moves that require block updates should happen after the ones that don't.
-			//This helps to ensure that "anchored" blocks like torches still have the blocks they are anchored to when they update.
-			//Some blocks like this (confirmed for torches, rails, and glowystone) will break themselves if they update without their anchor.
-			Debug.debug("Moving blocks...");
-			HashSet<BlockMove> blockMoves2 = new HashSet<>();
-			for(BlockMove move : blockMoves)
-			{
-				if(move.update)
-					move.copy(worldserver1, worldserver1.getChunk(move.dest));
-				else
-					blockMoves2.add(move);
-			}
-			for(BlockMove move : blockMoves2)
-			{
-				move.copy(worldserver1, worldserver1.getChunk(move.dest));
-			}
-			blockMoves2.clear();
 			
 			Debug.debug("Teleporting entities...");
 			//The fudge here is to ensure that the AABB will always contain every entity meant to be moved.
@@ -292,6 +288,7 @@ public abstract class CruxiteArtifactItem extends Item
 				}
 			}
 			
+			Debug.debug("Removing original blocks");
 			for(BlockMove move : blockMoves)
 			{
 				removeTileEntity(worldserver0, move.source, creative);	//Tile entities need special treatment
