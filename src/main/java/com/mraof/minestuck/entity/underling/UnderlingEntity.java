@@ -36,10 +36,7 @@ import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 {
@@ -262,10 +259,9 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 		}
 	}
 	
-	@Override
-	public boolean canSpawn(IWorld worldIn, SpawnReason spawnReasonIn)
+	public static boolean canSpawnOnAndNotPeaceful(EntityType<? extends MobEntity> type, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn)
 	{
-		return this.world.getDifficulty() != Difficulty.PEACEFUL && super.canSpawn(worldIn, spawnReasonIn);
+		return worldIn.getDifficulty() != Difficulty.PEACEFUL && canSpawnOn(type, worldIn, reason, pos, randomIn);
 	}
 	
 	@Nullable
