@@ -15,7 +15,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 
 public abstract class GristCostRecipe implements IRecipe<IInventory>
@@ -104,9 +106,9 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 		return false;
 	}
 	
-	public JeiGristCost getJeiCost()
+	public List<JeiGristCost> getJeiCosts()
 	{
-		return null;
+		return Collections.emptyList();
 	}
 	
 	private static int priorityFromIngredient(Ingredient ingredient)

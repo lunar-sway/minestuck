@@ -10,10 +10,13 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
+import java.util.Collections;
+import java.util.List;
+
 public class GristCost extends GristCostRecipe
 {
 	public final ImmutableGristSet cost;
-	private JeiGristCost jeiCost;
+	private List<JeiGristCost> jeiCost;
 	
 	public GristCost(ResourceLocation id, Ingredient ingredient, GristSet cost, Integer priority)
 	{
@@ -28,10 +31,10 @@ public class GristCost extends GristCostRecipe
 	}
 	
 	@Override
-	public JeiGristCost getJeiCost()
+	public List<JeiGristCost> getJeiCosts()
 	{
 		if(jeiCost == null)
-			jeiCost = new JeiGristCost.Set(cost);
+			jeiCost = Collections.singletonList(new JeiGristCost.Set(ingredient, cost));
 		return jeiCost;
 	}
 	

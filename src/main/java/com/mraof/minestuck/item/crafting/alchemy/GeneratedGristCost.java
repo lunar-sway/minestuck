@@ -2,6 +2,7 @@ package com.mraof.minestuck.item.crafting.alchemy;
 
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
+import com.mraof.minestuck.jei.JeiGristCost;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -13,9 +14,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
+import java.util.List;
+
 public class GeneratedGristCost extends GristCostRecipe
 {
-	private GristCostGenerator generator;
+	private final GristCostGenerator generator;
+	private List<JeiGristCost> jeiCosts;
 	
 	private GeneratedGristCost(ResourceLocation id, GristCostGenerator generator)
 	{
@@ -53,6 +57,18 @@ public class GeneratedGristCost extends GristCostRecipe
 	}
 	
 	@Override
+	public List<JeiGristCost> getJeiCosts()
+	{
+		if(jeiCosts == null)
+		{
+			if(generator != null)
+				jeiCosts = generator.createJeiCosts();
+			else jeiCosts = GristCostGenerator.getInstance().createJeiCosts();
+		}
+		return jeiCosts;
+	}
+	
+	@Override
 	public IRecipeSerializer<?> getSerializer()
 	{
 		return MSRecipeTypes.GENERATED_GRIST_COST;
@@ -81,7 +97,7 @@ public class GeneratedGristCost extends GristCostRecipe
 		@Override
 		public void write(PacketBuffer buffer, GeneratedGristCost recipe)
 		{
-			GristCostGenerator.write(buffer);
+			GristCostGenerator.getInstance().write(buffer);
 		}
 	}
 }

@@ -5,6 +5,7 @@ import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.mojang.datafixers.util.Pair;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.jei.JeiGristCost;
 import net.minecraft.client.resources.ReloadListener;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -40,6 +41,10 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	private static final Gson GSON = (new GsonBuilder()).registerTypeAdapter(SourceEntry.class, (JsonDeserializer<SourceEntry>) GristCostGenerator::deserializeSourceEntry).registerTypeAdapter(Source.class, (JsonDeserializer<Source>) GristCostGenerator::deserializeSource).create();
+	
+	//TODO Add boolean constants to help see which items need/don't need manual grist costs:
+	// Log ingredients without grist costs if they don't map to any recipes
+	// Both check item recipes and look up grist cost for item, and if it could get grist costs from both, log it
 	
 	private static GristCostGenerator instance;
 	
@@ -84,11 +89,8 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 		return generatedCosts.get(item);
 	}
 	
-	static void write(PacketBuffer buffer)
+	void write(PacketBuffer buffer)
 	{
-		if(instance == null)
-			throw new IllegalStateException("Instance has not been created yet!");	//Sadly we can't go via getInstance() since the server instance isn't properly available at that time.
-		
 		buffer.writeInt(instance.generatedCosts.size());
 		for(Map.Entry<Item, GristSet> entry : instance.generatedCosts.entrySet())
 		{
@@ -97,7 +99,7 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 		}
 	}
 	
-	public static GristCostGenerator read(PacketBuffer buffer)
+	static GristCostGenerator read(PacketBuffer buffer)
 	{
 		int size = buffer.readInt();
 		ImmutableMap.Builder<Item, GristSet> builder = new ImmutableMap.Builder<>();
@@ -108,6 +110,14 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 			builder.put(item, cost);
 		}
 		return new GristCostGenerator(builder.build());
+	}
+	
+	List<JeiGristCost> createJeiCosts()
+	{
+		List<JeiGristCost> costs = new ArrayList<>();
+		for(Map.Entry<Item, GristSet> entries : generatedCosts.entrySet())
+			costs.add(new JeiGristCost.Set(Ingredient.fromItems(entries.getKey()), entries.getValue()));
+		return costs;
 	}
 	
 	@Override

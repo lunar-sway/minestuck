@@ -11,10 +11,13 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
+import java.util.Collections;
+import java.util.List;
+
 public class WildcardGristCost extends GristCostRecipe
 {
-	public final long wildcardCost;
-	private JeiGristCost jeiCost;
+	private final long wildcardCost;
+	private List<JeiGristCost> jeiCost;
 	
 	public WildcardGristCost(ResourceLocation id, Ingredient ingredient, long wildcardCost, Integer priority)
 	{
@@ -35,10 +38,10 @@ public class WildcardGristCost extends GristCostRecipe
 	}
 	
 	@Override
-	public JeiGristCost getJeiCost()
+	public List<JeiGristCost> getJeiCosts()
 	{
 		if(jeiCost == null)
-			jeiCost = new JeiGristCost.Wildcard(wildcardCost);
+			jeiCost = Collections.singletonList(new JeiGristCost.Wildcard(ingredient, wildcardCost));
 		return jeiCost;
 	}
 	

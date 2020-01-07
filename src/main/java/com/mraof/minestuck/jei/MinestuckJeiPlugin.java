@@ -29,7 +29,7 @@ public class MinestuckJeiPlugin implements IModPlugin
 	
 	public static final IIngredientType<GristAmount> GRIST = () -> GristAmount.class;
 	
-	GristCostRecipeCategory alchemiterCategory;
+	private GristCostRecipeCategory alchemiterCategory;
 	//TotemLatheRecipeCategory totemLatheCategory;
 	//DesignixRecipeCategory designixCategory;
 	
@@ -67,7 +67,7 @@ public class MinestuckJeiPlugin implements IModPlugin
 	@Override
 	public void registerRecipes(IRecipeRegistration registration)
 	{
-		registration.addRecipes(Minecraft.getInstance().world.getRecipeManager().getRecipes().stream().filter(recipe -> recipe.getType() == MSRecipeTypes.GRIST_COST_TYPE && ((GristCostRecipe) recipe).getJeiCost() != null).collect(Collectors.toList()), GRIST_COST_ID);
+		registration.addRecipes(Minecraft.getInstance().world.getRecipeManager().getRecipes().stream().filter(recipe -> recipe.getType() == MSRecipeTypes.GRIST_COST_TYPE).flatMap(recipe -> ((GristCostRecipe) recipe).getJeiCosts().stream()).collect(Collectors.toList()), GRIST_COST_ID);
 	}
 	
 	/*
