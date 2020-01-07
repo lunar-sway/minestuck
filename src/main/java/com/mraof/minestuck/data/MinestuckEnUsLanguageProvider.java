@@ -863,9 +863,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addLand(FrostLandType.ICE, "Ice");
 		addLand(FrostLandType.SNOW, "Snow");
 		addLand(HeatLandType.HEAT, "Heat");
-		addLand(HeatLandType.FLAME, "Flame");
+		addLand(HeatLandType.FLAME, "Flames");
 		addLand(HeatLandType.FIRE, "Fire");
-		addLand(RockLandType.ROCK, "Rock");
+		addLand(RockLandType.ROCK, "Rocks");
 		addLand(RockLandType.STONE, "Stone");
 		addLand(RockLandType.ORE, "Ore");
 		addLand(RockLandType.PETRIFICATION, "Petrification");
@@ -882,7 +882,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addLand(FloraLandType.FLORA, "Flora");
 		addLand(FloraLandType.FLOWERS, "Flowers");
 		addLand(FloraLandType.THORNS, "Thorns");
-		addLand(RainbowLandType.RAINBOW, "Rainbow");
+		addLand(RainbowLandType.RAINBOW, "Rainbows");
 		addLand(RainbowLandType.COLORS, "Colors");
 		addLand(RainLandType.RAIN, "Rain");
 		addLand(RainLandType.ISLANDS, "Islands");
