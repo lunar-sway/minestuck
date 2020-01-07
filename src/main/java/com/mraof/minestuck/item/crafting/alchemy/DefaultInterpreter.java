@@ -1,5 +1,7 @@
 package com.mraof.minestuck.item.crafting.alchemy;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 
@@ -21,5 +23,20 @@ public class DefaultInterpreter implements GristCostGenerator.RecipeInterpreter
 			else totalCost.addGrist(ingredientCost);
 		}
 		return totalCost;
+	}
+	
+	public static class Serializer extends InterpreterSerializer<DefaultInterpreter>
+	{
+		@Override
+		protected GristCostGenerator.RecipeInterpreter read(JsonElement json)
+		{
+			return INSTANCE;
+		}
+		
+		@Override
+		protected JsonElement write(DefaultInterpreter interpreter)
+		{
+			return JsonNull.INSTANCE;
+		}
 	}
 }

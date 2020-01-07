@@ -165,9 +165,15 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 	
 	private static SourceEntry deserializeSourceEntry(JsonElement json, Type typeOfT, JsonDeserializationContext context)
 	{
-		Source source = GSON.getAdapter(Source.class).fromJsonTree(json);
-		//TODO Implement recipe interpreter serializer registry (similar to recipe serializers)
-		return new SourceEntry(source, DefaultInterpreter.INSTANCE);
+		JsonObject obj = json.getAsJsonObject();
+		Source source = GSON.getAdapter(Source.class).fromJsonTree(obj);
+		ResourceLocation name = new ResourceLocation(JSONUtils.getString(obj, "interpreter_type"));
+		InterpreterSerializer<?> serializer = InterpreterSerializer.REGISTRY.getValue(name);
+		if(serializer == null)
+		{
+			LOGGER.error("No interpreter serializer by name {}. Using default interpreter instead.", name);
+			return new SourceEntry(source, DefaultInterpreter.INSTANCE);
+		} else return new SourceEntry(source, serializer.read(obj.get("interpreter")));
 	}
 	
 	private static Source deserializeSource(JsonElement json, Type typeOfT, JsonDeserializationContext context)
