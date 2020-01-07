@@ -57,16 +57,16 @@ public abstract class MessageType
 		Title worldTitle = c == null ? null : PlayerSavedData.getData(c.getClientIdentifier(), player.server).getTitle();
 		for(int i = 0; i < args.length; i++)
 		{
-			if(args[i].equals("playerNameLand"))
+			if(args[i].equals("player_name_land"))	//TODO How about extendable objects or enums instead of type strings for args?
 			{
 				if(c != null)
 					obj[i] = c.getClientIdentifier().getUsername();
 				else
 					obj[i] = "Player name";
-			} else if(args[i].equals("playerName"))
+			} else if(args[i].equals("player_name"))
 			{
 				obj[i] = player.getName();
-			} else if(args[i].equals("landName"))
+			} else if(args[i].equals("land_name"))
 			{
 				World world = consort.getServer().getWorld(consort.homeDimension);
 				LandInfo landInfo = MSDimensions.getLandInfo(consort.getServer(), consort.homeDimension);
@@ -75,37 +75,37 @@ public abstract class MessageType
 					obj[i] = landInfo.landAsTextComponent();
 				} else
 					obj[i] = "Land name";
-			} else if(args[i].equals("playerTitleLand"))
+			} else if(args[i].equals("player_title_land"))
 			{
 				if(worldTitle != null)
 					obj[i] = worldTitle.asTextComponent();
 				else
 					obj[i] = "Player title";
-			} else if(args[i].equals("playerClassLand"))
+			} else if(args[i].equals("player_class_land"))
 			{
 				if(worldTitle != null)
 					obj[i] = worldTitle.getHeroClass().asTextComponent();
 				else
 					obj[i] = "Player class";
-			} else if(args[i].equals("playerAspectLand"))
+			} else if(args[i].equals("player_aspect_land"))
 			{
 				if(worldTitle != null)
 					obj[i] = worldTitle.getHeroAspect().asTextComponent();
 				else
 					obj[i] = "Player aspect";
-			} else if(args[i].equals("consortSound"))
+			} else if(args[i].equals("consort_sound"))
 			{
 				obj[i] = new TranslationTextComponent(s + ".sound");
-			} else if(args[i].equals("consortSound2"))
+			} else if(args[i].equals("consort_sound_2"))
 			{
 				obj[i] = new TranslationTextComponent(s + ".sound.2");
-			} else if(args[i].equals("consortType"))
+			} else if(args[i].equals("consort_type"))
 			{
 				obj[i] = new TranslationTextComponent(s);
-			} else if(args[i].equals("consortTypes"))
+			} else if(args[i].equals("consort_types"))
 			{
 				obj[i] = new TranslationTextComponent(s + ".plural");
-			} else if(args[i].equals("playerTitle"))
+			} else if(args[i].equals("player_title"))
 			{
 				PlayerIdentifier identifier = IdentifierHandler.encode(player);
 				Title playerTitle = PlayerSavedData.getData(identifier, player.server).getTitle();
@@ -119,10 +119,10 @@ public abstract class MessageType
 					obj[i] = new TranslationTextComponent("denizen." + worldTitle.getHeroAspect().getTranslationKey());
 				else
 					obj[i] = "Denizen";
-			} else if(args[i].startsWith("nbtItem:"))
+			} else if(args[i].startsWith("nbt_item:"))
 			{
 				CompoundNBT nbt = consort.getMessageTagForPlayer(player);
-				ItemStack stack = ItemStack.read(nbt.getCompound(args[i].substring(8)));
+				ItemStack stack = ItemStack.read(nbt.getCompound(args[i].substring(9)));
 				if(!stack.isEmpty())
 					obj[i] = new TranslationTextComponent(stack.getTranslationKey());
 				else obj[i] = "Item";

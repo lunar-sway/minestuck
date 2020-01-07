@@ -169,7 +169,7 @@ public class ConsortDialogue
 						new SingleMessage("fur_coat.death")})).landTerrain(FROST);
 		addMessage("tent_protection").landTerrain(FROST).consortReq(ConsortEntity::detachHome);
 		addMessage("all_ores").landTerrain(ROCK);
-		addMessage("rockfu", "landName").landTerrain(ROCK);
+		addMessage("rockfu", "land_name").landTerrain(ROCK);
 		addMessage("all_trees").landTerrain(FOREST);
 		addMessage("really_likes_trees").landTerrain(FOREST);
 		
@@ -179,7 +179,7 @@ public class ConsortDialogue
 		addMessage("mushroom_curse", "denizen").landTerrain(FUNGI);
 		addMessage("jacket").landTerrain(FUNGI);
 		addMessage("mildew").landTerrain(FUNGI);
-		addMessage("fungus_destroyer", "playerTitle", "denizen").landTerrain(FUNGI);
+		addMessage("fungus_destroyer", "player_title", "denizen").landTerrain(FUNGI);
 		
 		//Rainbow Terrain
 		addMessage("generic_green").landTerrain(RAINBOW);
@@ -278,7 +278,7 @@ public class ConsortDialogue
 		addMessage("await_hero", "land_name", "consort_types", "player_title_land").reqLand();
 		addMessage(new ConditionedMessage("skaia", (ConsortEntity consort, ServerPlayerEntity player) -> !consort.visitedSkaia, new SingleMessage("watch_skaia"),
 				new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> MSDimensions.isSkaia(consort.dimension),
-						new SingleMessage("at_skaia.1", "consort_sound2"), new SingleMessage("visited_skaia")))).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA, EnumConsort.NAKAGATOR).reqLand();
+						new SingleMessage("at_skaia.1", "consort_sound_2"), new SingleMessage("visited_skaia")))).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA, EnumConsort.NAKAGATOR).reqLand();
 		addMessage(new ConditionedMessage("skaia_turtle", (ConsortEntity consort, ServerPlayerEntity player) -> !consort.visitedSkaia, new SingleMessage("watch_skaia"),
 				new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> MSDimensions.isSkaia(consort.dimension),
 						new SingleMessage("at_skaia.2"), new SingleMessage("visited_skaia")))).consort(EnumConsort.TURTLE).reqLand();
@@ -294,7 +294,7 @@ public class ConsortDialogue
 		addMessage(new SingleMessage("identity", "player_title_land", "player_name_land")).consort(EnumConsort.SALAMANDER).reqLand();
 		addMessage(new ChainMessage(0, new SingleMessage("college.1"), new SingleMessage("college.2")));
 		addMessage(new ChainMessage(1, new SingleMessage("unknown.1"), new SingleMessage("unknown.2"))).consort(EnumConsort.TURTLE);
-		addMessage(new ChainMessage(1, new SingleMessage("cult.1", "playerTitle"), new SingleMessage("cult.2"))).consort(EnumConsort.TURTLE, EnumConsort.SALAMANDER);
+		addMessage(new ChainMessage(1, new SingleMessage("cult.1", "player_title"), new SingleMessage("cult.2"))).consort(EnumConsort.TURTLE, EnumConsort.SALAMANDER);
 
 		addMessage(new ChoiceMessage(new DescriptionMessage("peppy_offer"),
 				new SingleMessage[] { new SingleMessage("peppy_offer.buy"), new SingleMessage("peppy_offer.deny") },
@@ -310,7 +310,7 @@ public class ConsortDialogue
 
 		addMessage(new ChoiceMessage(true, new SingleMessage("title_presence", "player_title"),
 				new SingleMessage[] { new SingleMessage("title_presence.iam", "player_title"), new SingleMessage("title_presence.agree") },
-				new MessageType[] { new SingleMessage("title_presence.iam_answer", "consort_sound2"), new SingleMessage("thanks") })).consort(EnumConsort.IGUANA, EnumConsort.SALAMANDER).reqLand();
+				new MessageType[] { new SingleMessage("title_presence.iam_answer", "consort_sound_2"), new SingleMessage("thanks") })).consort(EnumConsort.IGUANA, EnumConsort.SALAMANDER).reqLand();
 		
 		addMessage(new ChoiceMessage(new DescriptionMessage("shady_offer"),
 				new SingleMessage[]
@@ -369,7 +369,7 @@ public class ConsortDialogue
 												new SingleMessage[] { new SingleMessage("hungry.agree"),
 														new SingleMessage("hungry.too_cheap") },
 												new MessageType[] { new GiveItemMessage("hungry.sell_item", "hungry2.item", 10,
-														new ChainMessage(1, new DescriptionMessage("hungry.finally", "nbtItem:hungry2.item"),
+														new ChainMessage(1, new DescriptionMessage("hungry.finally", "nbt_item:hungry2.item"),
 																new SingleMessage("hungry.finally"))),
 														new SingleMessage("hungry.end") }) }))).consort(EnumConsort.SALAMANDER, EnumConsort.NAKAGATOR);
 		
