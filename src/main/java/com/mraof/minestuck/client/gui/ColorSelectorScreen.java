@@ -124,7 +124,7 @@ public class ColorSelectorScreen extends Screen
 		return super.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 	
-	public void selectColor()
+	private void selectColor()
 	{
 		MSPacketHandler.sendToServer(new ColorSelectPacket(selectedIndex));
 		ColorCollector.playerColor = ColorCollector.getColor(selectedIndex);
@@ -132,7 +132,7 @@ public class ColorSelectorScreen extends Screen
 	}
 	
 	@Override
-	public void onClose()
+	public void removed()
 	{
 		if(firstTime && minecraft != null && minecraft.player != null)
 		{
