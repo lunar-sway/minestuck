@@ -35,7 +35,7 @@ public abstract class InterpreterSerializer<T extends GristCostGenerator.RecipeI
 		event.getRegistry().register(new DefaultInterpreter.Serializer().setRegistryName("default"));
 	}
 	
-	protected abstract GristCostGenerator.RecipeInterpreter read(JsonElement json);
+	public abstract GristCostGenerator.RecipeInterpreter read(JsonElement json);
 	
-	protected abstract JsonElement write(T interpreter);
+	public abstract JsonElement write(T interpreter);
 }

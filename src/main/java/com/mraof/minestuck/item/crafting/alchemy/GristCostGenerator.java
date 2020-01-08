@@ -407,5 +407,7 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 	public interface RecipeInterpreter
 	{
 		GristSet generateCost(IRecipe<?> recipes, Function<Ingredient, GristSet> ingredientInterpreter);
+		
+		InterpreterSerializer<?> getSerializer();
 	}
 }

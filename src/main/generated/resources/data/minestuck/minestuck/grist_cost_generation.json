@@ -1,0 +1,30 @@
+[
+  {
+    "source": {
+      "type": "recipe_serializer",
+      "value": "minecraft:crafting_shaped"
+    },
+    "interpreter_type": "minestuck:default"
+  },
+  {
+    "source": {
+      "type": "recipe_serializer",
+      "value": "minecraft:crafting_shapeless"
+    },
+    "interpreter_type": "minestuck:default"
+  },
+  {
+    "source": {
+      "type": "recipe_serializer",
+      "value": "minestuck:non_mirrored"
+    },
+    "interpreter_type": "minestuck:default"
+  },
+  {
+    "source": {
+      "type": "recipe_type",
+      "value": "stonecutting"
+    },
+    "interpreter_type": "minestuck:default"
+  }
+]

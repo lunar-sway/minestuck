@@ -17,6 +17,7 @@ import java.util.function.Supplier;
 /**
  * This is made to also be useful for mods other than minestuck. If you're making a plugin, this class can be rather helpful!
  */
+@SuppressWarnings({"unused", "WeakerAccess"})
 public abstract class MinestuckLanguageProvider extends LanguageProvider
 {
 	private final String modid;
