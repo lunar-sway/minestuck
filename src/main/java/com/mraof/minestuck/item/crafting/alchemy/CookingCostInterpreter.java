@@ -12,7 +12,7 @@ import java.util.function.Function;
 
 public class CookingCostInterpreter extends DefaultInterpreter
 {
-	private static final int standardCookingTime = 200;
+	private static final int STANDARD_COOKING_TIME = 200;
 	
 	@ObjectHolder("minestuck:cooking")
 	public static final InterpreterSerializer<CookingCostInterpreter> SERIALIZER = null;
@@ -32,7 +32,7 @@ public class CookingCostInterpreter extends DefaultInterpreter
 		if(cost != null && recipe instanceof AbstractCookingRecipe)
 		{
 			float cookTime = ((AbstractCookingRecipe) recipe).getCookTime();
-			cost.addGrist(fuelCost.copy().scale(cookTime/standardCookingTime, false));
+			cost.addGrist(fuelCost.copy().scale(cookTime/ STANDARD_COOKING_TIME, false));
 		}
 		
 		return cost;

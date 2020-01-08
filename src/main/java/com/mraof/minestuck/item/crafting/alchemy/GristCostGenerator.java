@@ -41,9 +41,8 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 	
 	private static final Gson GSON = (new GsonBuilder()).registerTypeAdapter(SourceEntry.class, (JsonDeserializer<SourceEntry>) GristCostGenerator::deserializeSourceEntry).create();
 	
-	//TODO Add boolean constants to help see which items need/don't need manual grist costs:
-	// Log ingredients without grist costs if they don't map to any recipes
-	// Both check item recipes and look up grist cost for item, and if it could get grist costs from both, log it
+	private static final boolean LOG_ITEMS_WITHOUT_RECIPES = false;
+	private static final boolean LOG_ITEMS_WITH_RECIPE_AND_COST = false;
 	
 	private static GristCostGenerator instance;
 	
@@ -240,14 +239,24 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 	
 	private GristSet costFromRecipes(GeneratorProcess process, Item item)
 	{
-		GristSet minCost = null;
-		for(Pair<IRecipe<?>, RecipeInterpreter> recipePair : process.lookupMap.getOrDefault(item, Collections.emptyList()))
+		List<Pair<IRecipe<?>, RecipeInterpreter>> recipes = process.lookupMap.getOrDefault(item, Collections.emptyList());
+		
+		if(!recipes.isEmpty())
 		{
-			GristSet cost = costForRecipe(process, recipePair, item);
-			if(cost != null && (minCost == null || cost.getValue() < minCost.getValue()))
-				minCost = cost;
+			GristSet minCost = null;
+			for(Pair<IRecipe<?>, RecipeInterpreter> recipePair : recipes)
+			{
+				GristSet cost = costForRecipe(process, recipePair, item);
+				if(cost != null && (minCost == null || cost.getValue() < minCost.getValue()))
+					minCost = cost;
+			}
+			return minCost;
+		} else
+		{
+			if(LOG_ITEMS_WITHOUT_RECIPES && process.gristCostLookup.isEmpty())
+				LOGGER.info("Item {} was looked up, but it did not have any recipes.", item.getRegistryName());
+			return null;
 		}
-		return minCost;
 	}
 	
 	private GristSet costForRecipe(GeneratorProcess process, Pair<IRecipe<?>, RecipeInterpreter> recipePair, Item item)
@@ -287,12 +296,19 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 				{
 					GristSet cost = recipe.get().getGristCost(new ItemStack(item), GristTypes.BUILD, false, null);
 					process.gristCostLookup.put(item, cost);
+					checkRecipeLogging(process, item, cost);
+					
 					return cost;
 				}
 			} else
 			{
 				if(process.hasDoneGristCostLookup.contains(item))
-					return process.gristCostLookup.get(item);
+				{
+					GristSet cost = process.gristCostLookup.get(item);
+					checkRecipeLogging(process, item, cost);
+					
+					return cost;
+				}
 			}
 			
 			//If it doesn't already have a cost from elsewhere, find cost from its recipes
@@ -302,6 +318,19 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 			return cost;
 		}
 		return null;
+	}
+	
+	private void checkRecipeLogging(GeneratorProcess process, Item item, GristSet cost)
+	{
+		if(LOG_ITEMS_WITH_RECIPE_AND_COST && process.itemsInProcess.isEmpty())	//No items in process if this is during the primary lookup
+		{
+			process.itemsInProcess.add(item);
+			GristSet generatedCost = costFromRecipes(process, item);
+			process.itemsInProcess.remove(item);
+			
+			if(generatedCost != null)
+				LOGGER.info("Found item {} with grist cost recipe that is also valid for grist cost generation. Recipe cost: {}, generated cost: {}", item.getRegistryName(), cost, generatedCost);
+		}
 	}
 	
 	static class GeneratorProcess
