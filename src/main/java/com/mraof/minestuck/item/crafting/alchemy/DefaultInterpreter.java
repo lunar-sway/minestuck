@@ -27,19 +27,22 @@ public class DefaultInterpreter implements RecipeInterpreter
 	}
 	
 	@Override
-	public GristSet generateCost(IRecipe<?> recipes, Item item, Function<Ingredient, GristSet> ingredientInterpreter)
+	public GristSet generateCost(IRecipe<?> recipe, Item item, Function<Ingredient, GristSet> ingredientInterpreter)
 	{
-		if(recipes.isDynamic())
+		if(recipe.isDynamic())
 			return null;
 		
 		GristSet totalCost = new GristSet();
-		for(Ingredient ingredient : recipes.getIngredients())
+		for(Ingredient ingredient : recipe.getIngredients())
 		{
 			GristSet ingredientCost = ingredientInterpreter.apply(ingredient);
 			if(ingredientCost == null)
 				return null;
 			else totalCost.addGrist(ingredientCost);
 		}
+		
+		totalCost.scale(1F/recipe.getRecipeOutput().getCount(), true);
+		
 		return totalCost;
 	}
 	
