@@ -243,13 +243,15 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 		
 		if(!recipes.isEmpty())
 		{
+			process.itemsInProcess.add(item);
 			GristSet minCost = null;
 			for(Pair<IRecipe<?>, RecipeInterpreter> recipePair : recipes)
 			{
-				GristSet cost = costForRecipe(process, recipePair, item);
+				GristSet cost = costForRecipe(process, recipePair.getFirst(), recipePair.getSecond(), item);
 				if(cost != null && (minCost == null || cost.getValue() < minCost.getValue()))
 					minCost = cost;
 			}
+			process.itemsInProcess.remove(item);
 			return minCost;
 		} else
 		{
@@ -259,9 +261,16 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 		}
 	}
 	
-	private GristSet costForRecipe(GeneratorProcess process, Pair<IRecipe<?>, RecipeInterpreter> recipePair, Item item)
+	private GristSet costForRecipe(GeneratorProcess process, IRecipe<?> recipe, RecipeInterpreter interpreter, Item item)
 	{
-		return recipePair.getSecond().generateCost(recipePair.getFirst(), item, ingredient -> costForIngredient(process, ingredient));
+		try
+		{
+			return interpreter.generateCost(recipe, item, ingredient -> costForIngredient(process, ingredient));
+		} catch(Exception e)
+		{
+			LOGGER.error("Got exception while getting cost for recipe {}", recipe.getId(), e);
+			return null;
+		}
 	}
 	
 	private GristSet costForIngredient(GeneratorProcess process, Ingredient ingredient)
@@ -312,10 +321,7 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 			}
 			
 			//If it doesn't already have a cost from elsewhere, find cost from its recipes
-			process.itemsInProcess.add(item);
-			GristSet cost = costFromRecipes(process, item);
-			process.itemsInProcess.remove(item);
-			return cost;
+			return costFromRecipes(process, item);
 		}
 		return null;
 	}
@@ -324,9 +330,7 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 	{
 		if(LOG_ITEMS_WITH_RECIPE_AND_COST && process.itemsInProcess.isEmpty())	//No items in process if this is during the primary lookup
 		{
-			process.itemsInProcess.add(item);
 			GristSet generatedCost = costFromRecipes(process, item);
-			process.itemsInProcess.remove(item);
 			
 			if(generatedCost != null)
 				LOGGER.info("Found item {} with grist cost recipe that is also valid for grist cost generation. Recipe cost: {}, generated cost: {}", item.getRegistryName(), cost, generatedCost);
