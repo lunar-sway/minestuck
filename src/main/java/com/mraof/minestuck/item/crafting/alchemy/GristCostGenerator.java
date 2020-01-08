@@ -39,7 +39,7 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private static final Gson GSON = (new GsonBuilder()).registerTypeAdapter(SourceEntry.class, (JsonDeserializer<SourceEntry>) GristCostGenerator::deserializeSourceEntry).registerTypeAdapter(Source.class, (JsonDeserializer<Source>) GristCostGenerator::deserializeSource).create();
+	private static final Gson GSON = (new GsonBuilder()).registerTypeAdapter(SourceEntry.class, (JsonDeserializer<SourceEntry>) GristCostGenerator::deserializeSourceEntry).create();
 	
 	//TODO Add boolean constants to help see which items need/don't need manual grist costs:
 	// Log ingredients without grist costs if they don't map to any recipes
@@ -164,10 +164,13 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 	
 	private static SourceEntry deserializeSourceEntry(JsonElement json, Type typeOfT, JsonDeserializationContext context)
 	{
-		JsonObject obj = json.getAsJsonObject();
-		Source source = GSON.getAdapter(Source.class).fromJsonTree(obj);
+		JsonObject obj = JSONUtils.getJsonObject(json, "source entry");
+		
+		Source source = deserializeSource(obj);
+		
 		ResourceLocation name = new ResourceLocation(JSONUtils.getString(obj, "interpreter_type"));
 		InterpreterSerializer<?> serializer = InterpreterSerializer.REGISTRY.getValue(name);
+		
 		if(serializer == null)
 		{
 			LOGGER.error("No interpreter serializer by name {}. Using default interpreter instead.", name);
@@ -175,24 +178,22 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 		} else return new SourceEntry(source, serializer.read(obj.get("interpreter")));
 	}
 	
-	private static Source deserializeSource(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+	private static Source deserializeSource(JsonObject json)
 	{
-		JsonObject jsonObj = JSONUtils.getJsonObject(json, "source");
-		
-		String type = JSONUtils.getString(jsonObj, "type");
+		String type = JSONUtils.getString(json, "source_type");
 		switch(type)
 		{
 			case "recipe":
-				ResourceLocation recipe = new ResourceLocation(JSONUtils.getString(jsonObj, "value"));
+				ResourceLocation recipe = new ResourceLocation(JSONUtils.getString(json, "source"));
 				return new RecipeSource(recipe);
 			case "recipe_serializer":
-				ResourceLocation serializerName = new ResourceLocation(JSONUtils.getString(jsonObj, "value"));
+				ResourceLocation serializerName = new ResourceLocation(JSONUtils.getString(json, "source"));
 				IRecipeSerializer<?> recipeSerializer = ForgeRegistries.RECIPE_SERIALIZERS.getValue(serializerName);
 				if(recipeSerializer == null)
 					throw new JsonParseException("No recipe type by name " + serializerName);
 				return new RecipeSerializerSource(recipeSerializer);
 			case "recipe_type":
-				ResourceLocation typeName = new ResourceLocation(JSONUtils.getString(jsonObj, "value"));
+				ResourceLocation typeName = new ResourceLocation(JSONUtils.getString(json, "source"));
 				IRecipeType<?> recipeType = Registry.RECIPE_TYPE.getValue(typeName).orElseThrow(() -> new JsonParseException("No recipe type by name " + typeName));
 				return new RecipeTypeSource(recipeType);
 		}

@@ -80,33 +80,31 @@ public class GeneratedGristCostConfigProvider implements IDataProvider
 	
 	protected void recipe(ResourceLocation location, RecipeInterpreter interpreter)
 	{
-		JsonObject source = new JsonObject();
-		source.addProperty("type", "recipe");
-		source.addProperty("value", location.toString());
-		addEntry(source, interpreter);
+		JsonObject entry = new JsonObject();
+		entry.addProperty("source_type", "recipe");
+		entry.addProperty("source", location.toString());
+		addEntry(entry, interpreter);
 	}
 	
 	protected void serializer(IRecipeSerializer<?> serializer, RecipeInterpreter interpreter)
 	{
-		JsonObject source = new JsonObject();
-		source.addProperty("type", "recipe_serializer");
-		source.addProperty("value", serializer.getRegistryName().toString());
-		addEntry(source, interpreter);
+		JsonObject entry = new JsonObject();
+		entry.addProperty("source_type", "recipe_serializer");
+		entry.addProperty("source", serializer.getRegistryName().toString());
+		addEntry(entry, interpreter);
 	}
 	
 	protected void type(IRecipeType<?> type, RecipeInterpreter interpreter)
 	{
-		JsonObject source = new JsonObject();
-		source.addProperty("type", "recipe_type");
-		source.addProperty("value", type.toString());
-		addEntry(source, interpreter);
+		JsonObject entry = new JsonObject();
+		entry.addProperty("source_type", "recipe_type");
+		entry.addProperty("source", type.toString());
+		addEntry(entry, interpreter);
 	}
 	
 	@SuppressWarnings("unchecked")
-	private <T extends RecipeInterpreter> void addEntry(JsonObject source, T interpreter)
+	private <T extends RecipeInterpreter> void addEntry(JsonObject entry, T interpreter)
 	{
-		JsonObject entry = new JsonObject();
-		entry.add("source", source);
 		ResourceLocation type = Objects.requireNonNull(interpreter.getSerializer().getRegistryName());
 		entry.addProperty("interpreter_type", type.toString());
 		entry.add("interpreter", ((InterpreterSerializer<T>) interpreter.getSerializer()).write(interpreter));
