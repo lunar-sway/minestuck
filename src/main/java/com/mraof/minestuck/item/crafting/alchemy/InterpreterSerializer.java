@@ -13,7 +13,7 @@ import net.minecraftforge.registries.RegistryBuilder;
 
 @ObjectHolder(Minestuck.MOD_ID)
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public abstract class InterpreterSerializer<T extends GristCostGenerator.RecipeInterpreter> extends ForgeRegistryEntry<InterpreterSerializer<?>>
+public abstract class InterpreterSerializer<T extends RecipeInterpreter> extends ForgeRegistryEntry<InterpreterSerializer<?>>
 {
 	public static IForgeRegistry<InterpreterSerializer<?>> REGISTRY;
 	
@@ -35,7 +35,7 @@ public abstract class InterpreterSerializer<T extends GristCostGenerator.RecipeI
 		event.getRegistry().register(new DefaultInterpreter.Serializer().setRegistryName("default"));
 	}
 	
-	public abstract GristCostGenerator.RecipeInterpreter read(JsonElement json);
+	public abstract T read(JsonElement json);
 	
 	public abstract JsonElement write(T interpreter);
 }

@@ -32,7 +32,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -229,7 +228,7 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 	{
 		//TODO
 		// Should return a map for fast lookup of item -> recipes + recipe-interpreter
-		// Each recipe should only occur once
+		// Each recipe should only occur once for each item returned by interpreter.getOutputItems(recipe)
 		// Each item may refer to several recipes if there are recipes for them,
 		// but each recipe should only have one recipe-interpreter depending on which source is the dominant source.
 		// The dominant source should be the most specific source (fewest recipes provided by that source).
@@ -243,16 +242,16 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 		GristSet minCost = null;
 		for(Pair<IRecipe<?>, RecipeInterpreter> recipePair : process.lookupMap.getOrDefault(item, Collections.emptyList()))
 		{
-			GristSet cost = costForRecipe(process, recipePair);
+			GristSet cost = costForRecipe(process, recipePair, item);
 			if(cost != null && (minCost == null || cost.getValue() < minCost.getValue()))
 				minCost = cost;
 		}
 		return minCost;
 	}
 	
-	private GristSet costForRecipe(GeneratorProcess process, Pair<IRecipe<?>, RecipeInterpreter> recipePair)
+	private GristSet costForRecipe(GeneratorProcess process, Pair<IRecipe<?>, RecipeInterpreter> recipePair, Item item)
 	{
-		return recipePair.getSecond().generateCost(recipePair.getFirst(), ingredient -> costForIngredient(process, ingredient));
+		return recipePair.getSecond().generateCost(recipePair.getFirst(), item, ingredient -> costForIngredient(process, ingredient));
 	}
 	
 	private GristSet costForIngredient(GeneratorProcess process, Ingredient ingredient)
@@ -349,7 +348,7 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 		@Override
 		public List<IRecipe<?>> findRecipes(RecipeManager recipeManager)
 		{
-			Optional<? extends IRecipe<?>> recipe = recipeManager.getRecipe(this.recipe).filter(iRecipe -> !iRecipe.isDynamic());
+			Optional<? extends IRecipe<?>> recipe = recipeManager.getRecipe(this.recipe);
 			return recipe.<List<IRecipe<?>>>map(Collections::singletonList).orElse(Collections.emptyList());
 		}
 		
@@ -372,7 +371,7 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 		@Override
 		public List<IRecipe<?>> findRecipes(RecipeManager recipeManager)
 		{
-			return recipeManager.getRecipes().stream().filter(iRecipe -> iRecipe.getSerializer() == serializer).filter(iRecipe -> !iRecipe.isDynamic()).collect(Collectors.toList());
+			return recipeManager.getRecipes().stream().filter(iRecipe -> iRecipe.getSerializer() == serializer).collect(Collectors.toList());
 		}
 		
 		@Override
@@ -394,7 +393,7 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 		@Override
 		public List<IRecipe<?>> findRecipes(RecipeManager recipeManager)
 		{
-			return recipeManager.getRecipes().stream().filter(iRecipe -> iRecipe.getType() == recipeType).filter(iRecipe -> !iRecipe.isDynamic()).collect(Collectors.toList());
+			return recipeManager.getRecipes().stream().filter(iRecipe -> iRecipe.getType() == recipeType).collect(Collectors.toList());
 		}
 		
 		@Override
@@ -402,12 +401,5 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 		{
 			return "recipe_source[type="+recipeType+"]";
 		}
-	}
-	
-	public interface RecipeInterpreter
-	{
-		GristSet generateCost(IRecipe<?> recipes, Function<Ingredient, GristSet> ingredientInterpreter);
-		
-		InterpreterSerializer<?> getSerializer();
 	}
 }
