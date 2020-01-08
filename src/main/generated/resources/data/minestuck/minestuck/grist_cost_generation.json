@@ -26,5 +26,25 @@
       "value": "stonecutting"
     },
     "interpreter_type": "minestuck:default"
+  },
+  {
+    "source": {
+      "type": "recipe_type",
+      "value": "smelting"
+    },
+    "interpreter_type": "minestuck:cooking",
+    "interpreter": {
+      "minestuck:tar": 1
+    }
+  },
+  {
+    "source": {
+      "type": "recipe_type",
+      "value": "minestuck:irradiating"
+    },
+    "interpreter_type": "minestuck:cooking",
+    "interpreter": {
+      "minestuck:uranium": 1
+    }
   }
 ]

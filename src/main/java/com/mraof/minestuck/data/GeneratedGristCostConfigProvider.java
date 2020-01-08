@@ -6,9 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
-import com.mraof.minestuck.item.crafting.alchemy.DefaultInterpreter;
-import com.mraof.minestuck.item.crafting.alchemy.GristCostGenerator;
-import com.mraof.minestuck.item.crafting.alchemy.InterpreterSerializer;
+import com.mraof.minestuck.item.crafting.alchemy.*;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DirectoryCache;
 import net.minecraft.data.IDataProvider;
@@ -42,6 +40,8 @@ public class GeneratedGristCostConfigProvider implements IDataProvider
 		serializer(IRecipeSerializer.CRAFTING_SHAPELESS);
 		serializer(MSRecipeTypes.NON_MIRRORED);
 		type(IRecipeType.STONECUTTING);
+		type(IRecipeType.SMELTING, new CookingCostInterpreter(new GristSet(GristTypes.TAR, 1)));
+		type(MSRecipeTypes.IRRADIATING_TYPE, new CookingCostInterpreter(new GristSet(GristTypes.URANIUM, 1)));
 	}
 	
 	@Override
@@ -78,7 +78,7 @@ public class GeneratedGristCostConfigProvider implements IDataProvider
 		type(type, DefaultInterpreter.INSTANCE);
 	}
 	
-	protected void recipe(ResourceLocation location, GristCostGenerator.RecipeInterpreter interpreter)
+	protected void recipe(ResourceLocation location, RecipeInterpreter interpreter)
 	{
 		JsonObject source = new JsonObject();
 		source.addProperty("type", "recipe");
@@ -86,7 +86,7 @@ public class GeneratedGristCostConfigProvider implements IDataProvider
 		addEntry(source, interpreter);
 	}
 	
-	protected void serializer(IRecipeSerializer<?> serializer, GristCostGenerator.RecipeInterpreter interpreter)
+	protected void serializer(IRecipeSerializer<?> serializer, RecipeInterpreter interpreter)
 	{
 		JsonObject source = new JsonObject();
 		source.addProperty("type", "recipe_serializer");
@@ -94,7 +94,7 @@ public class GeneratedGristCostConfigProvider implements IDataProvider
 		addEntry(source, interpreter);
 	}
 	
-	protected void type(IRecipeType<?> type, GristCostGenerator.RecipeInterpreter interpreter)
+	protected void type(IRecipeType<?> type, RecipeInterpreter interpreter)
 	{
 		JsonObject source = new JsonObject();
 		source.addProperty("type", "recipe_type");
@@ -103,7 +103,7 @@ public class GeneratedGristCostConfigProvider implements IDataProvider
 	}
 	
 	@SuppressWarnings("unchecked")
-	private <T extends GristCostGenerator.RecipeInterpreter> void addEntry(JsonObject source, T interpreter)
+	private <T extends RecipeInterpreter> void addEntry(JsonObject source, T interpreter)
 	{
 		JsonObject entry = new JsonObject();
 		entry.add("source", source);

@@ -33,6 +33,7 @@ public abstract class InterpreterSerializer<T extends RecipeInterpreter> extends
 	public static void registerSerializers(final RegistryEvent.Register<InterpreterSerializer<?>> event)
 	{
 		event.getRegistry().register(new DefaultInterpreter.Serializer().setRegistryName("default"));
+		event.getRegistry().register(new CookingCostInterpreter.Serializer().setRegistryName("cooking"));
 	}
 	
 	public abstract T read(JsonElement json);
