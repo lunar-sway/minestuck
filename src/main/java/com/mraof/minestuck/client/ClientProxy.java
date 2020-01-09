@@ -1,6 +1,5 @@
 package com.mraof.minestuck.client;
 
-import com.mraof.minestuck.CommonProxy;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.model.*;
 import com.mraof.minestuck.client.renderer.entity.*;
@@ -27,7 +26,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
-public class ClientProxy extends CommonProxy
+public class ClientProxy
 {
 	private static void registerRenderers()
 	{

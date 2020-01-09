@@ -4,12 +4,16 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
+import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.weapon.PotionWeaponItem;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Echeladder;
+import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
@@ -18,6 +22,7 @@ import net.minecraft.entity.monster.*;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.potion.Effects;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.SharedConstants;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.dimension.DimensionType;
@@ -33,11 +38,34 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
+
+import java.util.Random;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class ServerEventHandler
 {
 	public static long lastDay;
+	
+	@SubscribeEvent
+	public void serverStarting(FMLServerStartingEvent event)
+	{
+		Debug.info(SharedConstants.developmentMode);
+		//if(!event.getServer().isDedicatedServer() && Minestuck.class.getAnnotation(Mod.class).version().startsWith("@")) TODO Find an alternative to detect dev environment
+		//event.getServer().setOnlineMode(false);	//Makes it possible to use LAN in a development environment
+		
+		lastDay = event.getServer().getWorld(DimensionType.OVERWORLD).getGameTime() / 24000L;
+		CaptchaDeckHandler.rand = new Random();
+	}
+	
+	@SubscribeEvent
+	public void serverStopped(FMLServerStoppedEvent event)
+	{
+		IdentifierHandler.clear();
+		SkaianetHandler.clear();
+		MSFeatures.LAND_GATE.clearCache();
+	}
 	
 	@SubscribeEvent
 	public static void onWorldTick(TickEvent.WorldTickEvent event)

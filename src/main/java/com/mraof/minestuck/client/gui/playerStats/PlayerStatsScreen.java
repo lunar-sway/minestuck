@@ -287,7 +287,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int i)
 	{
-		if(MSKeyHandler.instance.statKey.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode)))
+		if(MSKeyHandler.statKey.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode)))
 		{
 			mc.displayGuiScreen(null);
 			return true;

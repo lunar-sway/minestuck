@@ -216,7 +216,7 @@ public abstract class SylladexScreen extends Screen
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int i)
 	{
-		if(MSKeyHandler.instance.sylladexKey.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode)))
+		if(MSKeyHandler.sylladexKey.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode)))
 		{
 			minecraft.displayGuiScreen(null);
 			return true;

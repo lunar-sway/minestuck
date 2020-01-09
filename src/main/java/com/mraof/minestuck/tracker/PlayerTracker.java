@@ -8,14 +8,12 @@ import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ModConfigPacket;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.UpdateChecker;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
@@ -24,6 +22,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -47,8 +46,6 @@ public class PlayerTracker
 		
 		PlayerSavedData.getData(player).onPlayerLoggedIn(player);
 		
-		if(UpdateChecker.outOfDate)
-			player.sendMessage(new StringTextComponent("New version of Minestuck: " + UpdateChecker.latestVersion + "\nChanges: " + UpdateChecker.updateChanges));
 	}
 	
 	@SubscribeEvent(priority = EventPriority.HIGH)	//Editmode players need to be reset before nei handles the event
@@ -82,6 +79,12 @@ public class PlayerTracker
 	public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event)
 	{
 		PlayerSavedData.getData((ServerPlayerEntity) event.getPlayer()).getEcheladder().updateEcheladderBonuses((ServerPlayerEntity) event.getPlayer());
+	}
+	
+	@SubscribeEvent
+	public static void serverStopped(FMLServerStoppedEvent event)
+	{
+		dataCheckerPermission.clear();
 	}
 	
 	public static Set<UUID> dataCheckerPermission = new HashSet<>();
