@@ -11,19 +11,15 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.world.gen.MSSurfaceBuilders;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
-import com.mraof.minestuck.world.storage.MSExtraData;
 import net.minecraft.util.SharedConstants;
 import net.minecraft.world.dimension.DimensionType;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.WorldPersistenceHooks;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -50,8 +46,6 @@ public class Minestuck
 		WorldPersistenceHooks.addHook(new MSWorldPersistenceHook());
 		
 		MinecraftForge.EVENT_BUS.register(this);
-		
-		DistExecutor.runWhenOn(Dist.CLIENT, () -> ClientProxy::registerEarly);
 		
 		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		MSFluids.FLUIDS.register(eventBus);
@@ -97,13 +91,6 @@ public class Minestuck
 		
 		ServerEventHandler.lastDay = event.getServer().getWorld(DimensionType.OVERWORLD).getGameTime() / 24000L;
 		CaptchaDeckHandler.rand = new Random();
-	}
-	
-	@SubscribeEvent
-	public void serverStarted(FMLServerStartedEvent event)
-	{
-		SkaianetHandler skaianet = SkaianetHandler.get(event.getServer());
-		MSExtraData.get(event.getServer()).recoverConnections(recovery -> recovery.recover(skaianet.getActiveConnection(recovery.getClientPlayer())));
 	}
 	
 	@SubscribeEvent

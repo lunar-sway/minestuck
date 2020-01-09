@@ -47,8 +47,6 @@ public class PlayerTracker
 		
 		PlayerSavedData.getData(player).onPlayerLoggedIn(player);
 		
-		ServerEditHandler.onPlayerLoggedIn(player);
-		
 		if(UpdateChecker.outOfDate)
 			player.sendMessage(new StringTextComponent("New version of Minestuck: " + UpdateChecker.latestVersion + "\nChanges: " + UpdateChecker.updateChanges));
 	}

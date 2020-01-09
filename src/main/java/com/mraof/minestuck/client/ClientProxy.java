@@ -1,16 +1,13 @@
 package com.mraof.minestuck.client;
 
 import com.mraof.minestuck.CommonProxy;
-import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.model.*;
-import com.mraof.minestuck.client.renderer.MachineOutlineRenderer;
 import com.mraof.minestuck.client.renderer.entity.*;
 import com.mraof.minestuck.client.renderer.entity.frog.FrogRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.GateRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.SkaiaPortalRenderer;
 import com.mraof.minestuck.client.settings.MSKeyHandler;
-import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.entity.DecoyEntity;
 import com.mraof.minestuck.entity.EntityBigPart;
 import com.mraof.minestuck.entity.FrogEntity;
@@ -23,23 +20,15 @@ import com.mraof.minestuck.entity.consort.SalamanderEntity;
 import com.mraof.minestuck.entity.consort.TurtleEntity;
 import com.mraof.minestuck.entity.item.*;
 import com.mraof.minestuck.entity.underling.*;
-import com.mraof.minestuck.event.ClientEventHandler;
 import com.mraof.minestuck.tileentity.GateTileEntity;
 import com.mraof.minestuck.tileentity.SkaiaPortalTileEntity;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 public class ClientProxy extends CommonProxy
 {
-	public static void registerEarly()
-	{
-		FMLJavaModLoadingContext.get().getModEventBus().register(ColorHandler.class);
-	}
-	
 	private static void registerRenderers()
 	{
 		ClientRegistry.bindTileEntitySpecialRenderer(SkaiaPortalTileEntity.class, new SkaiaPortalRenderer());
@@ -77,12 +66,8 @@ public class ClientProxy extends CommonProxy
 		RenderingRegistry.registerEntityRenderingHandler(SbahjPosterEntity.class, manager -> new RenderHangingArt<>(manager, new ResourceLocation("minestuck:sbahj_poster")));
 		RenderingRegistry.registerEntityRenderingHandler(ShopPosterEntity.class, manager -> new RenderHangingArt<>(manager, new ResourceLocation("minestuck:shop_poster")));
 
-		MSKeyHandler.instance.registerKeys();
-		MinecraftForge.EVENT_BUS.register(MSKeyHandler.instance);
-		MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
-
-		MinecraftForge.EVENT_BUS.register(ClientEditHandler.instance);
-		MinecraftForge.EVENT_BUS.register(new MinestuckConfig());
-		MinecraftForge.EVENT_BUS.register(MachineOutlineRenderer.class);
+		MSKeyHandler.registerKeys();
+		
+		//MinecraftForge.EVENT_BUS.register(new MinestuckConfig()); Does not currently use any events to reload config
 	}
 }

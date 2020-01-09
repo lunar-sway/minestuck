@@ -1,6 +1,7 @@
 package com.mraof.minestuck.client.renderer;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.block.AlchemiterItem;
 import com.mraof.minestuck.item.block.CruxtruderItem;
@@ -16,9 +17,12 @@ import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.*;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class MachineOutlineRenderer
 {
 	

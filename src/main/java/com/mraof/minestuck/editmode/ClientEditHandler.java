@@ -1,5 +1,6 @@
 package com.mraof.minestuck.editmode;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.item.crafting.alchemy.*;
@@ -19,6 +20,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.*;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
@@ -30,10 +32,13 @@ import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 import java.util.List;
 
-public class ClientEditHandler {
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+public class ClientEditHandler
+{
 	
 	public final static ClientEditHandler instance = new ClientEditHandler();
 	
@@ -83,7 +88,7 @@ public class ClientEditHandler {
 	}
 	
 	@SubscribeEvent
-	public void addToolTip(ItemTooltipEvent event)
+	public static void addToolTip(ItemTooltipEvent event)
 	{
 		if(!isActive())
 			return;
@@ -121,7 +126,8 @@ public class ClientEditHandler {
 	}
 	
 	@SubscribeEvent
-	public void tickEnd(TickEvent.PlayerTickEvent event) {
+	public static void tickEnd(TickEvent.PlayerTickEvent event)
+	{
 		if(event.phase != TickEvent.Phase.END || event.player != Minecraft.getInstance().player || !isActive())
 			return;
 		PlayerEntity player = event.player;
@@ -133,7 +139,7 @@ public class ClientEditHandler {
 	}
 	
 	@SubscribeEvent
-	public void onTossEvent(ItemTossEvent event)
+	public static void onTossEvent(ItemTossEvent event)
 	{
 		if(event.getEntity().world.isRemote && event.getPlayer().isUser() && isActive())
 		{
@@ -159,13 +165,13 @@ public class ClientEditHandler {
 	}
 	
 	@SubscribeEvent
-	public void onItemPickupEvent(EntityItemPickupEvent event) {
+	public static void onItemPickupEvent(EntityItemPickupEvent event) {
 		if(event.getEntity().world.isRemote && isActive() && event.getPlayer().equals(Minecraft.getInstance().player))
 			event.setCanceled(true);
 	}
 	
 	@SubscribeEvent(priority = EventPriority.NORMAL)
-	public void onRightClickEvent(PlayerInteractEvent.RightClickBlock event)
+	public static void onRightClickEvent(PlayerInteractEvent.RightClickBlock event)
 	{
 		if(event.getWorld().isRemote && event.getPlayer().isUser() && isActive())
 		{
@@ -207,7 +213,7 @@ public class ClientEditHandler {
 	}
 	
 	@SubscribeEvent(priority=EventPriority.NORMAL)
-	public void onLeftClickEvent(PlayerInteractEvent.LeftClickBlock event)
+	public static void onLeftClickEvent(PlayerInteractEvent.LeftClickBlock event)
 	{
 		if(event.getWorld().isRemote && event.getPlayer().isUser() && isActive())
 		{
@@ -219,7 +225,7 @@ public class ClientEditHandler {
 	}
 	
 	@SubscribeEvent(priority=EventPriority.NORMAL)
-	public void onRightClickAir(PlayerInteractEvent.RightClickItem event)
+	public static void onRightClickAir(PlayerInteractEvent.RightClickItem event)
 	{
 		if(event.getWorld().isRemote && event.getPlayer().isUser() && isActive())
 		{
@@ -228,7 +234,7 @@ public class ClientEditHandler {
 	}
 	
 	@SubscribeEvent(priority=EventPriority.LOWEST,receiveCanceled=false)
-	public void onBlockPlaced(PlayerInteractEvent.RightClickBlock event)
+	public static void onBlockPlaced(PlayerInteractEvent.RightClickBlock event)
 	{
 		if(event.getWorld().isRemote && isActive() && event.getPlayer().equals(Minecraft.getInstance().player)
 				&& event.getUseItem() == Event.Result.ALLOW) {
@@ -240,21 +246,21 @@ public class ClientEditHandler {
 	}
 	
 	@SubscribeEvent
-	public void onAttackEvent(AttackEntityEvent event)
+	public static void onAttackEvent(AttackEntityEvent event)
 	{
 		if(event.getEntity().world.isRemote && event.getPlayer().isUser() && isActive())
 			event.setCanceled(true);
 	}
 	
 	@SubscribeEvent
-	public void onWorldUnload(WorldEvent.Unload event)
+	public static void onWorldUnload(WorldEvent.Unload event)
 	{
 		if(event.getWorld().isRemote())
 			activated = false;
 	}
 	
 	@SubscribeEvent(priority=EventPriority.HIGH)
-	public void onGuiOpened(GuiOpenEvent event)
+	public static void onGuiOpened(GuiOpenEvent event)
 	{
 		if(isActive() && event.getGui() instanceof DisplayEffectsScreen<?>)
 		{
@@ -263,5 +269,4 @@ public class ClientEditHandler {
 				PlayerStatsScreen.openGui(true);
 		}
 	}
-	
 }

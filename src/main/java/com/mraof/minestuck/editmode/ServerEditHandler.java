@@ -39,6 +39,7 @@ import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.Event;
@@ -46,6 +47,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 
 import java.util.ArrayList;
@@ -562,11 +564,20 @@ public class ServerEditHandler
 			stack.setTag(null);
 	}
 	
-	public static void onPlayerLoggedIn(ServerPlayerEntity player)
+	@SubscribeEvent
+	public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event)
 	{
+		ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
 		UUID id = player.getGameProfile().getId();
 		EditData.PlayerRecovery recovery = MSExtraData.get(player.world).removePlayerRecovery(id);
 		if(recovery != null)
 			recovery.recover(player, false);
+	}
+	
+	@SubscribeEvent
+	public void serverStarted(FMLServerStartedEvent event)
+	{
+		SkaianetHandler skaianet = SkaianetHandler.get(event.getServer());
+		MSExtraData.get(event.getServer()).recoverConnections(recovery -> recovery.recover(skaianet.getActiveConnection(recovery.getClientPlayer())));
 	}
 }

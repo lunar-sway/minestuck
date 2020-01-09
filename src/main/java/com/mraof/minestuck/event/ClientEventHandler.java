@@ -14,20 +14,23 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 /**
  * Used to track mixed client sided events.
  */
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ClientEventHandler
 {
 	
 	/*@SubscribeEvent TODO Find new event or similar here
-	public void onConnectedToServer(ClientConnectedToServerEvent event)	//Reset all static client-side data here
+	public static void onConnectedToServer(ClientConnectedToServerEvent event)	//Reset all static client-side data here
 	{
 		GuiPlayerStats.normalTab = GuiPlayerStats.NormalGuiType.CAPTCHA_DECK;
 		GuiPlayerStats.editmodeTab = GuiPlayerStats.EditmodeGuiType.DEPLOY_LIST;
@@ -44,7 +47,7 @@ public class ClientEventHandler
 	}*/
 	
 	@SubscribeEvent
-	public void onClientTick(TickEvent.ClientTickEvent event)
+	public static void onClientTick(TickEvent.ClientTickEvent event)
 	{
 		if(event.phase == TickEvent.Phase.END)
 		{
@@ -59,7 +62,7 @@ public class ClientEventHandler
 	}
 	
 	@SubscribeEvent(priority=EventPriority.HIGHEST)
-	public void addCustomTooltip(ItemTooltipEvent event)
+	public static void addCustomTooltip(ItemTooltipEvent event)
 	{
 		//Add config check
 		{
@@ -90,7 +93,7 @@ public class ClientEventHandler
 	}
 	
 	@SubscribeEvent
-	public void onFogRender(EntityViewRenderEvent.FogDensity event)
+	public static void onFogRender(EntityViewRenderEvent.FogDensity event)
 	{
 		if (event.getInfo().getFluidState().getFluid() == MSFluids.ENDER.get())
 		{
