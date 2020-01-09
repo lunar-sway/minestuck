@@ -50,7 +50,15 @@ public class ItemStackTileEntity extends TileEntity
 	@Override
 	public CompoundNBT getUpdateTag()
 	{
-		return write(new CompoundNBT());
+		CompoundNBT nbt = new CompoundNBT();
+		nbt.put("stack", stack.write(new CompoundNBT()));
+		return nbt;
+	}
+	
+	@Override
+	public void handleUpdateTag(CompoundNBT tag)
+	{
+		stack = ItemStack.read(tag.getCompound("stack"));
 	}
 	
 	@Nullable

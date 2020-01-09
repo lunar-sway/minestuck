@@ -14,8 +14,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
@@ -303,22 +301,6 @@ public class TotemLatheTileEntity extends TileEntity
 		compound.put("card1", card1.write(new CompoundNBT()));
 		compound.put("card2", card2.write(new CompoundNBT()));
 		return compound;
-	}
-	@Override
-	public CompoundNBT getUpdateTag()
-	{
-		return write(new CompoundNBT());
-	}
-	@Override
-	public SUpdateTileEntityPacket getUpdatePacket()
-	{
-		return new SUpdateTileEntityPacket(this.pos, 0, getUpdateTag());
-	}
-	
-	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
-	{
-		handleUpdateTag(pkt.getNbtCompound());
 	}
 	
 	public void processContents()

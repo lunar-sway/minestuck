@@ -59,6 +59,8 @@ public class SkaiaPortalTileEntity extends TileEntity //implements ITeleporter
 				ServerWorld world = DimensionManager.getWorld(entity.getServer(), destination.getDimension(), true, true);
 				if(world == null)
 					return;
+				//TODO gets world height on a chunk that doesn't exist
+				// However doesn't matter a lot since the position isn't used yet
 				destination = GlobalPos.of(destination.getDimension(), world.getHeight(Heightmap.Type.WORLD_SURFACE, new BlockPos(entity)).up(5));
 			}
 			entity = Teleport.teleportEntity(entity, DimensionManager.getWorld(entity.getServer(), destination.getDimension(), true, true), pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);

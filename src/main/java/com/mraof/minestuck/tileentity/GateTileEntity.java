@@ -70,7 +70,7 @@ public class GateTileEntity extends TileEntity
 	@Override
 	public CompoundNBT getUpdateTag()
 	{
-		CompoundNBT nbt = super.getUpdateTag();
+		CompoundNBT nbt = new CompoundNBT();
 		nbt.putInt("color", SburbHandler.getColorForDimension(world));
 		return nbt;
 	}
@@ -78,9 +78,7 @@ public class GateTileEntity extends TileEntity
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket()
 	{
-		CompoundNBT nbt = new CompoundNBT();
-		nbt.putInt("color", SburbHandler.getColorForDimension(world));
-		return new SUpdateTileEntityPacket(this.pos, 0, nbt);
+		return new SUpdateTileEntityPacket(this.pos, 0, getUpdateTag());
 	}
 	
 	@Override

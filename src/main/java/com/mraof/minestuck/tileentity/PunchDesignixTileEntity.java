@@ -13,8 +13,6 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
@@ -191,28 +189,5 @@ public class PunchDesignixTileEntity extends TileEntity
 		compound.putBoolean("broken", this.broken);
 		compound.put("card", getCard().write(new CompoundNBT()));
 		return compound;
-	}
-	
-	@Override
-	public CompoundNBT getUpdateTag()
-	{
-		CompoundNBT nbt;
-		nbt = super.getUpdateTag();
-		nbt.put("card", getCard().write(new CompoundNBT()));
-		return nbt;
-	}
-	
-	@Override
-	public SUpdateTileEntityPacket getUpdatePacket()
-	{
-		SUpdateTileEntityPacket packet;
-		packet = new SUpdateTileEntityPacket(this.pos, 0, getUpdateTag());
-		return packet;
-	}
-	
-	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
-	{
-		handleUpdateTag(pkt.getNbtCompound());
 	}
 }
