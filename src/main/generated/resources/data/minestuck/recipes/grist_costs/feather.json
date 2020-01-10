@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:feather"
+  },
+  "grist_cost": {
+    "minestuck:chalk": 4
+  }
+}

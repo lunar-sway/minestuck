@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:nether_star"
+  },
+  "grist_cost": {
+    "minestuck:uranium": 344,
+    "minestuck:tar": 135,
+    "minestuck:diamond": 92
+  }
+}

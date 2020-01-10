@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:magenta_dye"
+  },
+  "grist_cost": {
+    "minestuck:amethyst": 1,
+    "minestuck:garnet": 3
+  }
+}

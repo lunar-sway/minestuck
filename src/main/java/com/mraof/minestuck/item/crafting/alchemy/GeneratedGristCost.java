@@ -57,7 +57,7 @@ public class GeneratedGristCost extends GristCostRecipe
 	}
 	
 	@Override
-	public List<JeiGristCost> getJeiCosts()
+	public List<JeiGristCost> getJeiCosts(World world)
 	{
 		if(jeiCosts == null)
 		{

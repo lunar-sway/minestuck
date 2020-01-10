@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:gray_dye"
+  },
+  "grist_cost": {
+    "minestuck:tar": 3,
+    "minestuck:chalk": 1
+  }
+}

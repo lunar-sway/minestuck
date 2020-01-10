@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:experience_bottle"
+  },
+  "grist_cost": {
+    "minestuck:uranium": 16,
+    "minestuck:quartz": 3,
+    "minestuck:diamond": 4,
+    "minestuck:ruby": 6
+  }
+}

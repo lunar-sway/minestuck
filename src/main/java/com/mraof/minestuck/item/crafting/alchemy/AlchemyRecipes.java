@@ -35,113 +35,7 @@ public class AlchemyRecipes
 	public static void registerVanillaRecipes()
 	{
 		/*
-		//Set up Alchemiter recipes
-		//Blocks
-		AlchemyCostRegistry.addGristConversion(Blocks.DEAD_BUSH, new GristSet(new GristType[] {GristType.AMBER, GristType.SULFUR}, new int[] {2, 1}));
-		AlchemyCostRegistry.addGristConversion(Blocks.DRAGON_EGG, new GristSet(new GristType[] {GristType.URANIUM, GristType.TAR, GristType.ZILLIUM}, new int[] {800, 800, 10}));
-		AlchemyCostRegistry.addGristConversion(Blocks.END_STONE, new GristSet(new GristType[] {GristType.CAULK, GristType.BUILD}, new int[] {3, 4}));
-		AlchemyCostRegistry.addGristConversion(Blocks.GLASS, new GristSet(new GristType[] {GristType.BUILD}, new int[] {1}));
-		AlchemyCostRegistry.addGristConversion(Blocks.GRASS_BLOCK, new GristSet(new GristType[] {GristType.BUILD}, new int[] {2}));
-		AlchemyCostRegistry.addGristConversion(Blocks.ICE, new GristSet(new GristType[] {GristType.COBALT}, new int[] {2}));
-		AlchemyCostRegistry.addGristConversion(Blocks.MELON, new GristSet(new GristType[] {GristType.AMBER, GristType.CHALK, GristType.BUILD}, new int[] {8, 8, 2}));
-		AlchemyCostRegistry.addGristConversion(Blocks.MYCELIUM, new GristSet(new GristType[] {GristType.IODINE, GristType.RUBY, GristType.BUILD}, new int[] {2, 2, 2}));
-		AlchemyCostRegistry.addGristConversion(Blocks.NETHERRACK, new GristSet(new GristType[] {GristType.BUILD, GristType.TAR}, new int[] {2, 1}));
-		AlchemyCostRegistry.addGristConversion(Blocks.OBSIDIAN, new GristSet(new GristType[] {GristType.COBALT, GristType.TAR, GristType.BUILD}, new int[] {8, 16, 6}));
-		AlchemyCostRegistry.addGristConversion(Blocks.PUMPKIN, new GristSet(new GristType[] {GristType.AMBER, GristType.CAULK}, new int[] {12, 6}));
-		AlchemyCostRegistry.addGristConversion(Blocks.SNOW_BLOCK, new GristSet(new GristType[] {GristType.COBALT, GristType.BUILD}, new int[] {5, 3}));
-		AlchemyCostRegistry.addGristConversion(Blocks.SNOW, new GristSet(new GristType[] {GristType.COBALT}, new int[] {2}));
-		AlchemyCostRegistry.addGristConversion(Blocks.SOUL_SAND, new GristSet(new GristType[] {GristType.SULFUR, GristType.CAULK, GristType.BUILD}, new int[] {5, 3, 2}));
-		AlchemyCostRegistry.addGristConversion(Blocks.SPONGE, new GristSet(new GristType[] {GristType.AMBER, GristType.SULFUR}, new int[] {20, 30}));
-		AlchemyCostRegistry.addGristConversion(Blocks.WET_SPONGE, new GristSet(new GristType[] {GristType.AMBER, GristType.SULFUR, GristType.COBALT}, new int[] {20, 30, 10}));
-		AlchemyCostRegistry.addGristConversion(Blocks.CRACKED_STONE_BRICKS, new GristSet(new GristType[] {GristType.BUILD}, new int[] {2}));
-		AlchemyCostRegistry.addGristConversion(Blocks.STONE_BRICK_STAIRS, new GristSet(new GristType[] {GristType.BUILD}, new int[] {3}));
-		AlchemyCostRegistry.addGristConversion(Blocks.SANDSTONE_STAIRS, new GristSet(new GristType[] {GristType.BUILD}, new int[] {6}));
-		AlchemyCostRegistry.addGristConversion(Blocks.COBWEB, new GristSet(new GristType[] {GristType.CHALK}, new int[] {18}));
-		AlchemyCostRegistry.addGristConversion(Blocks.WHITE_WOOL, new GristSet(new GristType[] {GristType.CHALK}, new int[] {6}));
-		AlchemyCostRegistry.addGristConversion(Blocks.ORANGE_WOOL, new GristSet(new GristType[] {GristType.CHALK, GristType.GARNET, GristType.AMBER}, new int[] {6, 1, 1}));
-		AlchemyCostRegistry.addGristConversion(Blocks.PURPLE_WOOL, new GristSet(new GristType[] {GristType.CHALK, GristType.AMETHYST, GristType.GARNET}, new int[] {6, 1, 1}));
-		AlchemyCostRegistry.addGristConversion(Blocks.BLUE_WOOL, new GristSet(new GristType[] {GristType.CHALK, GristType.AMETHYST}, new int[] {6, 2}));
-		AlchemyCostRegistry.addGristConversion(Blocks.BROWN_WOOL, new GristSet(new GristType[] {GristType.CHALK, GristType.IODINE}, new int[] {6, 2}));
-		AlchemyCostRegistry.addGristConversion(Blocks.GREEN_WOOL, new GristSet(new GristType[] {GristType.CHALK, GristType.AMBER}, new int[] {6, 2}));
-		AlchemyCostRegistry.addGristConversion(Blocks.RED_WOOL, new GristSet(new GristType[] {GristType.CHALK, GristType.GARNET}, new int[] {6, 2}));
-		AlchemyCostRegistry.addGristConversion(Blocks.BLACK_WOOL, new GristSet(new GristType[] {GristType.CHALK, GristType.TAR}, new int[] {6, 2}));
-		AlchemyCostRegistry.addGristConversion(Blocks.MAGENTA_WOOL, new GristSet(new GristType[] {GristType.CHALK, GristType.AMETHYST, GristType.GARNET}, new int[] {6, 1, 2}));
-		AlchemyCostRegistry.addGristConversion(Blocks.LIGHT_BLUE_WOOL, new GristSet(new GristType[] {GristType.CHALK, GristType.AMETHYST}, new int[] {8, 1}));
-		AlchemyCostRegistry.addGristConversion(Blocks.YELLOW_WOOL, new GristSet(new GristType[] {GristType.CHALK, GristType.AMBER}, new int[] {6, 2}));
-		AlchemyCostRegistry.addGristConversion(Blocks.LIME_WOOL, new GristSet(new GristType[] {GristType.CHALK, GristType.AMBER}, new int[] {6, 2}));
-		AlchemyCostRegistry.addGristConversion(Blocks.PINK_WOOL, new GristSet(new GristType[] {GristType.CHALK, GristType.GARNET}, new int[] {6, 1}));
-		AlchemyCostRegistry.addGristConversion(Blocks.GRAY_WOOL, new GristSet(new GristType[] {GristType.CHALK, GristType.TAR}, new int[] {6, 1}));
-		AlchemyCostRegistry.addGristConversion(Blocks.LIGHT_GRAY_WOOL, new GristSet(new GristType[] {GristType.CHALK, GristType.TAR}, new int[] {6, 1}));
-		AlchemyCostRegistry.addGristConversion(Blocks.CYAN_WOOL, new GristSet(new GristType[] {GristType.CHALK, GristType.AMETHYST, GristType.AMBER}, new int[] {6, 1, 1}));
-		AlchemyCostRegistry.addGristConversion(Blocks.PACKED_ICE, new GristSet(new GristType[] {GristType.BUILD, GristType.COBALT}, new int[] {10, 6}));
-		AlchemyCostRegistry.addGristConversion(Blocks.TORCH, new GristSet(GristType.BUILD, 2));
-		AlchemyCostRegistry.addGristConversion(Blocks.PRISMARINE, new GristSet(new GristType[] {GristType.COBALT, GristType.BUILD}, new int[] {7, 12}));
-		AlchemyCostRegistry.addGristConversion(Blocks.PRISMARINE_BRICKS, new GristSet(new GristType[] {GristType.COBALT, GristType.BUILD}, new int[] {12, 18}));
-		AlchemyCostRegistry.addGristConversion(Blocks.DARK_PRISMARINE, new GristSet(new GristType[] {GristType.COBALT, GristType.TAR, GristType.BUILD}, new int[] {10, 2, 18}));
-		AlchemyCostRegistry.addGristConversion(Blocks.SEA_LANTERN, new GristSet(new GristType[] {GristType.COBALT, GristType.DIAMOND, GristType.AMETHYST}, new int[] {32, 6, 12}));
-		AlchemyCostRegistry.addGristConversion(Blocks.SANDSTONE, new GristSet(GristType.BUILD, 4));
-		AlchemyCostRegistry.addGristConversion(Blocks.RED_SANDSTONE, new GristSet(GristType.BUILD, 4));
-		AlchemyCostRegistry.addGristConversion(ItemTags.PLANKS, new GristSet(GristType.BUILD, 2));
-		AlchemyCostRegistry.addGristConversion(Blocks.CHORUS_FLOWER, new GristSet(new GristType[] {GristType.BUILD, GristType.AMETHYST, GristType.SHALE}, new int[] {26, 23, 10}));
-		AlchemyCostRegistry.addGristConversion(Blocks.PURPUR_PILLAR, new GristSet(new GristType[] {GristType.AMETHYST, GristType.SHALE}, new int[] {2, 4}));
-		
 		//Items
-		AlchemyCostRegistry.addGristConversion(Items.BLAZE_ROD, new GristSet(new GristType[] {GristType.TAR, GristType.URANIUM}, new int[] {20, 2}));
-		AlchemyCostRegistry.addGristConversion(Items.BONE, new GristSet(new GristType[] {GristType.CHALK}, new int[] {6}));
-		AlchemyCostRegistry.addGristConversion(Items.BRICK, new GristSet(new GristType[] {GristType.SHALE, GristType.TAR}, new int[] {3, 1}));
-		AlchemyCostRegistry.addGristConversion(Items.CHAINMAIL_BOOTS, new GristSet(new GristType[] {GristType.RUST, GristType.MERCURY}, new int[] {16, 8}));
-		AlchemyCostRegistry.addGristConversion(Items.CHAINMAIL_CHESTPLATE, new GristSet(new GristType[] {GristType.RUST, GristType.MERCURY}, new int[] {32, 16}));
-		AlchemyCostRegistry.addGristConversion(Items.CHAINMAIL_HELMET, new GristSet(new GristType[] {GristType.RUST, GristType.MERCURY}, new int[] {20, 10}));
-		AlchemyCostRegistry.addGristConversion(Items.CHAINMAIL_LEGGINGS, new GristSet(new GristType[] {GristType.RUST, GristType.MERCURY}, new int[] {28, 14}));
-		AlchemyCostRegistry.addGristConversion(Items.CLAY_BALL, new GristSet(new GristType[] {GristType.SHALE}, new int[] {3}));
-		AlchemyCostRegistry.addGristConversion(Items.DIAMOND_HORSE_ARMOR, new GristSet(new GristType[] {GristType.DIAMOND}, new int[] {80}));
-		AlchemyCostRegistry.addGristConversion(Items.INK_SAC, new GristSet(new GristType[] {GristType.TAR}, new int[] {4}));
-		AlchemyCostRegistry.addGristConversion(Items.RED_DYE, new GristSet(new GristType[] {GristType.GARNET}, new int[] {4}));
-		AlchemyCostRegistry.addGristConversion(Items.LIME_DYE, new GristSet(new GristType[] {GristType.AMBER}, new int[] {3}));
-		AlchemyCostRegistry.addGristConversion(Items.YELLOW_DYE, new GristSet(new GristType[] {GristType.AMBER}, new int[] {4}));
-		AlchemyCostRegistry.addGristConversion(Items.LIGHT_BLUE_DYE, new GristSet(new GristType[] {GristType.AMETHYST, GristType.CHALK}, new int[] {2, 2}));
-		AlchemyCostRegistry.addGristConversion(Items.MAGENTA_DYE, new GristSet(new GristType[] {GristType.AMETHYST, GristType.GARNET}, new int[] {1, 3}));
-		AlchemyCostRegistry.addGristConversion(Items.ORANGE_DYE, new GristSet(new GristType[] {GristType.GARNET, GristType.AMBER}, new int[] {2, 2}));
-		AlchemyCostRegistry.addGristConversion(Items.GREEN_DYE, new GristSet(new GristType[] {GristType.AMBER, GristType.IODINE}, new int[] {3, 1}));
-		AlchemyCostRegistry.addGristConversion(Items.COCOA_BEANS, new GristSet(new GristType[] {GristType.IODINE, GristType.AMBER}, new int[] {3, 1}));
-		AlchemyCostRegistry.addGristConversion(Items.LAPIS_LAZULI, new GristSet(new GristType[] {GristType.AMETHYST}, new int[] {4}));
-		AlchemyCostRegistry.addGristConversion(Items.PURPLE_DYE, new GristSet(new GristType[] {GristType.AMETHYST, GristType.GARNET}, new int[] {2, 2}));
-		AlchemyCostRegistry.addGristConversion(Items.CYAN_DYE, new GristSet(new GristType[] {GristType.AMETHYST, GristType.AMBER, GristType.IODINE}, new int[] {2, 2, 1}));
-		AlchemyCostRegistry.addGristConversion(Items.LIGHT_GRAY_DYE, new GristSet(new GristType[] {GristType.TAR, GristType.CHALK}, new int[] {1, 3}));
-		AlchemyCostRegistry.addGristConversion(Items.GRAY_DYE, new GristSet(new GristType[] {GristType.TAR, GristType.CHALK}, new int[] {3, 1}));
-		AlchemyCostRegistry.addGristConversion(Items.PINK_DYE, new GristSet(new GristType[] {GristType.GARNET, GristType.CHALK}, new int[] {2, 2}));
-		AlchemyCostRegistry.addGristConversion(Items.ENCHANTED_BOOK, new GristSet(new GristType[] {GristType.URANIUM, GristType.QUARTZ, GristType.DIAMOND, GristType.RUBY, GristType.CHALK, GristType.IODINE}, new int[] {8, 1, 4, 4, 16, 2}));
-		AlchemyCostRegistry.addGristConversion(Items.ENDER_PEARL, new GristSet(new GristType[] {GristType.URANIUM, GristType.DIAMOND, GristType.MERCURY}, new int[] {13, 5, 8}));
-		AlchemyCostRegistry.addGristConversion(Items.EXPERIENCE_BOTTLE, new GristSet(new GristType[] {GristType.URANIUM, GristType.QUARTZ, GristType.DIAMOND, GristType.RUBY}, new int[] {16, 3, 4, 6}));
-		AlchemyCostRegistry.addGristConversion(Items.FEATHER, new GristSet(new GristType[] {GristType.CHALK}, new int[] {4}));
-		AlchemyCostRegistry.addGristConversion(Items.FIREWORK_STAR, new GristSet(new GristType[] {GristType.SULFUR, GristType.CHALK}, new int[] {4, 2}));
-		AlchemyCostRegistry.addGristConversion(Items.FIREWORK_ROCKET, new GristSet(new GristType[] {GristType.SULFUR, GristType.CHALK}, new int[] {4, 5}));
-		AlchemyCostRegistry.addGristConversion(Items.FLINT, new GristSet(new GristType[] {GristType.BUILD}, new int[] {4}));
-		AlchemyCostRegistry.addGristConversion(Items.GHAST_TEAR, new GristSet(new GristType[] {GristType.COBALT, GristType.CHALK}, new int[] {10, 19}));
-		AlchemyCostRegistry.addGristConversion(Items.GLOWSTONE_DUST, new GristSet(new GristType[] {GristType.TAR, GristType.CHALK}, new int[] {4, 6}));
-		AlchemyCostRegistry.addGristConversion(Items.GOLDEN_HORSE_ARMOR, new GristSet(new GristType[] {GristType.GOLD}, new int[] {40}));
-		AlchemyCostRegistry.addGristConversion(Items.GUNPOWDER, new GristSet(new GristType[] {GristType.SULFUR, GristType.CHALK}, new int[] {3, 2}));
-		AlchemyCostRegistry.addGristConversion(Items.IRON_HORSE_ARMOR, new GristSet(new GristType[] {GristType.RUST}, new int[] {40}));
-		registerContainerlessCost(Items.LAVA_BUCKET, new GristSet(new GristType[] {GristType.TAR}, new int[] {16}));
-		AlchemyCostRegistry.addGristConversion(Items.LEATHER, new GristSet(new GristType[] {GristType.IODINE, GristType.CHALK}, new int[] {3, 3}));
-		AlchemyCostRegistry.addGristConversion(Items.MAP, new GristSet(new GristType[] {GristType.RUST, GristType.CHALK, GristType.GARNET}, new int[] {32, 10, 2}));
-		registerContainerlessCost(Items.MILK_BUCKET, new GristSet(new GristType[] {GristType.CHALK}, new int[] {8}));
-		AlchemyCostRegistry.addGristConversion(Items.NAME_TAG, new GristSet(new GristType[] {GristType.BUILD, GristType.CAULK, GristType.AMBER, GristType.CHALK}, new int[] {4, 10, 12, 8}));
-		AlchemyCostRegistry.addGristConversion(Items.NETHER_STAR, new GristSet(new GristType[] {GristType.URANIUM, GristType.TAR, GristType.DIAMOND}, new int[] {344, 135, 92}));
-		AlchemyCostRegistry.addGristConversion(Items.NETHER_WART, new GristSet(new GristType[] {GristType.IODINE, GristType.TAR}, new int[] {3, 5}));
-		AlchemyCostRegistry.addGristConversion(Items.NETHER_BRICK, new GristSet(new GristType[] {GristType.BUILD, GristType.TAR}, new int[] {1, 2}));
-		AlchemyCostRegistry.addGristConversion(Items.MUSIC_DISC_11, new GristSet(new GristType[] {GristType.BUILD, GristType.CAULK, GristType.TAR, GristType.MERCURY}, new int[] {10, 5, 2, 2}));
-		AlchemyCostRegistry.addGristConversion(Items.MUSIC_DISC_13, new GristSet(new GristType[] {GristType.BUILD, GristType.CAULK, GristType.AMBER, GristType.CHALK}, new int[] {15, 8, 5, 5}));
-		AlchemyCostRegistry.addGristConversion(Items.MUSIC_DISC_BLOCKS, new GristSet(new GristType[] {GristType.BUILD, GristType.CAULK, GristType.RUBY, GristType.RUST}, new int[] {15, 8, 5, 5}));
-		AlchemyCostRegistry.addGristConversion(Items.MUSIC_DISC_CAT, new GristSet(new GristType[] {GristType.BUILD, GristType.CAULK, GristType.URANIUM, GristType.SHALE}, new int[] {15, 8, 2, 5}));
-		AlchemyCostRegistry.addGristConversion(Items.MUSIC_DISC_CHIRP, new GristSet(new GristType[] {GristType.BUILD, GristType.CAULK, GristType.RUBY, GristType.GARNET}, new int[] {15, 8, 5, 5}));
-		AlchemyCostRegistry.addGristConversion(Items.MUSIC_DISC_FAR, new GristSet(new GristType[] {GristType.BUILD, GristType.CAULK, GristType.URANIUM, GristType.SULFUR}, new int[] {15, 8, 2, 5}));
-		AlchemyCostRegistry.addGristConversion(Items.MUSIC_DISC_MALL, new GristSet(new GristType[] {GristType.BUILD, GristType.CAULK, GristType.AMETHYST, GristType.TAR}, new int[] {15, 8, 5, 5}));
-		AlchemyCostRegistry.addGristConversion(Items.MUSIC_DISC_MELLOHI, new GristSet(new GristType[] {GristType.BUILD, GristType.CAULK, GristType.MARBLE, GristType.SHALE}, new int[] {15, 8, 5, 5}));
-		AlchemyCostRegistry.addGristConversion(Items.MUSIC_DISC_STAL, new GristSet(new GristType[] {GristType.BUILD, GristType.CAULK, GristType.TAR, GristType.MERCURY}, new int[] {15, 8, 5, 5}));
-		AlchemyCostRegistry.addGristConversion(Items.MUSIC_DISC_STRAD, new GristSet(new GristType[] {GristType.BUILD, GristType.CAULK, GristType.CHALK, GristType.QUARTZ}, new int[] {15, 8, 5, 5}));
-		AlchemyCostRegistry.addGristConversion(Items.MUSIC_DISC_WAIT, new GristSet(new GristType[] {GristType.BUILD, GristType.CAULK, GristType.COBALT, GristType.QUARTZ}, new int[] {15, 8, 5, 5}));
-		AlchemyCostRegistry.addGristConversion(Items.MUSIC_DISC_WARD, new GristSet(new GristType[] {GristType.BUILD, GristType.CAULK, GristType.IODINE, GristType.GOLD}, new int[] {15, 8, 5, 2}));
 		AlchemyCostRegistry.addGristConversion(Items.REDSTONE, new GristSet(new GristType[] {GristType.GARNET}, new int[] {4}));
 		AlchemyCostRegistry.addGristConversion(Blocks.SUGAR_CANE, new GristSet(new GristType[] {GristType.AMBER, GristType.IODINE}, new int[] {3, 2}));
 		AlchemyCostRegistry.addGristConversion(Items.ROTTEN_FLESH, new GristSet(new GristType[] {GristType.RUST, GristType.IODINE}, new int[] {1, 1}));
@@ -157,7 +51,6 @@ public class AlchemyRecipes
 		AlchemyCostRegistry.addGristConversion(Items.SPIDER_EYE, new GristSet(new GristType[] {GristType.AMBER, GristType.IODINE}, new int[] {6, 2}));
 		AlchemyCostRegistry.addGristConversion(Items.STRING, new GristSet(new GristType[] {GristType.CHALK}, new int[] {2}));
 		AlchemyCostRegistry.addGristConversion(Items.SUGAR, new GristSet(new GristType[] {GristType.IODINE, GristType.AMBER}, new int[] {2, 3}));
-		registerContainerlessCost(Items.WATER_BUCKET, new GristSet(new GristType[] {GristType.COBALT}, new int[] {4}));
 		AlchemyCostRegistry.addGristConversion(Items.WHEAT, new GristSet(new GristType[] {GristType.IODINE}, new int[] {2}));
 		AlchemyCostRegistry.addGristConversion(Items.WHEAT_SEEDS, new GristSet(new GristType[] {GristType.AMBER, GristType.IODINE}, new int[] {1, 1}));
 		AlchemyCostRegistry.addGristConversion(Items.WRITABLE_BOOK, new GristSet(new GristType[] {GristType.CHALK, GristType.IODINE}, new int[] {16, 2}));
@@ -239,24 +132,6 @@ public class AlchemyRecipes
 		AlchemyCostRegistry.addGristConversion(Items.COOKED_RABBIT, new GristSet(new GristType[] {GristType.IODINE, GristType.TAR}, new int[] {8, 1}));
 		AlchemyCostRegistry.addGristConversion(Items.ENCHANTED_GOLDEN_APPLE, new GristSet(new GristType[] {GristType.AMBER, GristType.GOLD, GristType.URANIUM}, new int[] {4, 150, 10}));
 		*/
-		//Potions
-		/*GristRegistry.addGristConversion(Items.POTIONITEM, 1, 0), true, new GristSet(new GristType[] {GristType.BUILD, GristType.COBALT}, new int[] {1, 4}));	//water
-		GristRegistry.addGristConversion(Items.POTIONITEM, 1, 8192), true, new GristSet(new GristType[] {GristType.BUILD, GristType.COBALT}, new int[] {1, 4}));	//mundane
-		GristRegistry.addGristConversion(Items.POTIONITEM, 1, 64), true, new GristSet(new GristType[] {GristType.BUILD, GristType.COBALT, GristType.GARNET}, new int[] {1, 4, 1}));	//mundane from using redstone
-		GristRegistry.addGristConversion(Items.POTIONITEM, 1, 16), true, new GristSet(new GristType[] {GristType.BUILD, GristType.COBALT, GristType.IODINE, GristType.TAR}, new int[] {1, 4, 1, 2}));	//awkward
-		GristRegistry.addGristConversion(Items.POTIONITEM, 1, 32), true, new GristSet(new GristType[] {GristType.BUILD, GristType.COBALT, GristType.TAR, GristType.CHALK}, new int[] {1, 4, 1, 2}));	//thick
-		GristRegistry.addGristConversion(Items.POTIONITEM, 1, 8200), true, new GristSet(new GristType[] {GristType.BUILD, GristType.COBALT, GristType.AMBER, GristType.IODINE}, new int[] {1, 4, 3, 2}));	//weakness
-		GristRegistry.addGristConversion(Items.POTIONITEM, 1, 8193), true, new GristSet(new GristType[] {GristType.BUILD, GristType.COBALT, GristType.IODINE, GristType.TAR, GristType.CHALK}, new int[] {1, 8, 1, 2, 5}));	//regen*/
-		//TODO Continue with potion grist costs
-		/*GristRegistry.addGristConversion(Items.potionitem, 1, 10), true, new GristSet(new GristType[] {GristType.BUILD, GristType.COBALT, GristType.IODINE, GristType.AMBER, GristType.TAR}, new int[] {1, 4, 8, 6, 2}));	//slowness
-		GristRegistry.addGristConversion(Items.potionitem, 1, 12), true, new GristSet(new GristType[] {GristType.BUILD, GristType.COBALT, GristType.GOLD, GristType.AMBER, GristType.IODINE, GristType.TAR, GristType.CHALK}, new int[] {1, 4, 16, 7, 4, 2, 1}));	//harming
-		GristRegistry.addGristConversion(Items.potionitem, 1, 14), true, new GristSet(new GristType[] {GristType.BUILD, GristType.COBALT, GristType.AMBER, GristType.CHALK, GristType.GOLD, GristType.IODINE, GristType.TAR}, new int[] {1, 4, 9, 1, 16, 4, 2}));	//invisibility
-		GristRegistry.addGristConversion(Items.potionitem, 1, 2), true, new GristSet(new GristType[] {GristType.BUILD, GristType.COBALT, GristType.IODINE}, new int[] {1, 4, 4}));	//speed
-		GristRegistry.addGristConversion(Items.potionitem, 1, 3), true, new GristSet(new GristType[] {GristType.BUILD, GristType.COBALT, GristType.TAR, GristType.URANIUM, GristType.CAULK}, new int[] {1, 4, 8, 1, 8}));	//fire resistance
-		GristRegistry.addGristConversion(Items.potionitem, 1, 4), true, new GristSet(new GristType[] {GristType.BUILD, GristType.COBALT, GristType.AMBER, GristType.IODINE}, new int[] {1, 4, 4, 2}));	//poison
-		GristRegistry.addGristConversion(Items.potionitem, 1, 5), true, new GristSet(new GristType[] {GristType.BUILD, GristType.COBALT, GristType.GOLD, GristType.AMBER, GristType.CHALK}, new int[] {1, 4, 16, 1, 1}));	//healing
-		GristRegistry.addGristConversion(Items.potionitem, 1, 6), true, new GristSet(new GristType[] {GristType.BUILD, GristType.COBALT, GristType.AMBER, GristType.CHALK, GristType.GOLD}, new int[] {1, 4, 3, 1, 16}));	//night vision
-		GristRegistry.addGristConversion(Items.potionitem, 1, 9), true, new GristSet(new GristType[] {GristType.BUILD, GristType.TAR, GristType.URANIUM}, new int[] {1, 8, 1}));	//strength*/
 		
 		//Set up Punch Designix recipes
 		

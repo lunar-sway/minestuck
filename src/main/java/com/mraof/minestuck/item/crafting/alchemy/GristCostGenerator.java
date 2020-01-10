@@ -303,7 +303,8 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 				process.hasDoneGristCostLookup.add(item);
 				if(recipe.isPresent())
 				{
-					GristSet cost = recipe.get().getGristCost(new ItemStack(item), GristTypes.BUILD, false, null);
+					//Recursion here might cause some unwanted null recipes, but I suppose recursion here is difficult to work with as is
+					GristSet cost = recipe.get().getLookupCost(new ItemStack(item), stack -> costForItem(process, stack.getItem()));
 					process.gristCostLookup.put(item, cost);
 					checkRecipeLogging(process, item, cost);
 					

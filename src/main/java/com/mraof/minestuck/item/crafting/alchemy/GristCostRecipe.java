@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 public abstract class GristCostRecipe implements IRecipe<IInventory>
 {
@@ -101,12 +102,17 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 	
 	public abstract GristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown, @Nullable World world);
 	
+	protected GristSet getLookupCost(ItemStack input, Function<ItemStack, GristSet> costLookup)
+	{
+		return getGristCost(input, GristTypes.BUILD, false, null);
+	}
+	
 	public boolean canPickWildcard()
 	{
 		return false;
 	}
 	
-	public List<JeiGristCost> getJeiCosts()
+	public List<JeiGristCost> getJeiCosts(World world)
 	{
 		return Collections.emptyList();
 	}
@@ -118,6 +124,10 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 	
 	public static GristSet scaleToCountAndDurability(GristSet cost, ItemStack stack, boolean shouldRoundDown)
 	{
+		if(cost == null)
+			return null;
+		
+		cost = cost.copy();
 		if (stack.getCount() != 1)
 			cost.scale(stack.getCount());
 		
@@ -127,7 +137,7 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 			cost.scale(multiplier, shouldRoundDown);
 		}
 		
-		return cost;
+		return cost.asImmutable();
 	}
 	
 	//Helper class for implementing serializer classes

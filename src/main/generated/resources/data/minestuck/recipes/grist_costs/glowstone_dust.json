@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:glowstone_dust"
+  },
+  "grist_cost": {
+    "minestuck:tar": 4,
+    "minestuck:chalk": 6
+  }
+}

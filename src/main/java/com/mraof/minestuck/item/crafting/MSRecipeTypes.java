@@ -25,6 +25,7 @@ public class MSRecipeTypes
 	public static final CookingRecipeSerializer<IrradiatingRecipe> IRRADIATING = getNull();
 	public static final IRecipeSerializer<IrradiatingFallbackRecipe> IRRADIATING_FALLBACK = getNull();
 	public static final IRecipeSerializer<GristCost> GRIST_COST = getNull();
+	public static final IRecipeSerializer<GristCost> CONTAINER_GRIST_COST = getNull();
 	public static final IRecipeSerializer<GristCostRecipe> WILDCARD_GRIST_COST = getNull();
 	public static final IRecipeSerializer<UnavailableGristCost> UNAVAILABLE_GRIST_COST = getNull();
 	public static final IRecipeSerializer<GeneratedGristCost> GENERATED_GRIST_COST = getNull();
@@ -47,6 +48,7 @@ public class MSRecipeTypes
 		registry.register(new CookingRecipeSerializer<>(IrradiatingRecipe::new, 20).setRegistryName("irradiating"));
 		registry.register(new IrradiatingFallbackRecipe.Serializer().setRegistryName("irradiating_fallback"));
 		registry.register(new GristCost.Serializer().setRegistryName("grist_cost"));
+		registry.register(new ContainerGristCost.Serializer().setRegistryName("container_grist_cost"));
 		registry.register(new WildcardGristCost.Serializer().setRegistryName("wildcard_grist_cost"));
 		registry.register(new UnavailableGristCost.Serializer().setRegistryName("unavailable_grist_cost"));
 		registry.register(new GeneratedGristCost.Serializer().setRegistryName("generated_grist_cost"));

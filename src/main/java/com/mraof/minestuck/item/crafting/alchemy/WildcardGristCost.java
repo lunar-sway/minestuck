@@ -28,7 +28,7 @@ public class WildcardGristCost extends GristCostRecipe
 	@Override
 	public GristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown, World world)
 	{
-		return wildcardType != null ? scaleToCountAndDurability(new GristSet(wildcardType, wildcardCost), input, shouldRoundDown).asImmutable() : null;
+		return wildcardType != null ? scaleToCountAndDurability(new GristSet(wildcardType, wildcardCost), input, shouldRoundDown) : null;
 	}
 	
 	@Override
@@ -38,7 +38,7 @@ public class WildcardGristCost extends GristCostRecipe
 	}
 	
 	@Override
-	public List<JeiGristCost> getJeiCosts()
+	public List<JeiGristCost> getJeiCosts(World world)
 	{
 		if(jeiCost == null)
 			jeiCost = Collections.singletonList(new JeiGristCost.Wildcard(ingredient, wildcardCost));

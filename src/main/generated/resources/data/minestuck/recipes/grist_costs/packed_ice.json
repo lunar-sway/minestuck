@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:packed_ice"
+  },
+  "grist_cost": {
+    "minestuck:build": 10,
+    "minestuck:cobalt": 6
+  }
+}
