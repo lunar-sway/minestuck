@@ -8,7 +8,6 @@ import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.projectile.FireballEntity;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
@@ -17,13 +16,18 @@ import net.minecraft.world.World;
 
 public abstract class BishopEntity extends CarapacianEntity implements IRangedAttackMob, IMob
 {
-	private AttackByDistanceGoal attackByDistanceGoal = new AttackByDistanceGoal(this, 0.25F, 30, 64.0F);
 	int burnTime;
 
 	public BishopEntity(EntityType<? extends BishopEntity> type, World par1World)
 	{
 		super(type, par1World);
 		this.experienceValue = 3;
+	}
+	
+	@Override
+	protected void registerGoals()
+	{
+		this.goalSelector.addGoal(4, new AttackByDistanceGoal(this, 0.25F, 30, 64.0F));
 	}
 	
 	@Override
@@ -84,29 +88,10 @@ public abstract class BishopEntity extends CarapacianEntity implements IRangedAt
 	{
 		int damage = this.getAttackStrength(par1Entity);
 		int knockback = 6;
-		par1Entity.addVelocity((double)(-MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F) * (float)knockback * 0.5F), 0.1D, (double)(MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F) * (float)knockback * 0.5F));
+		par1Entity.addVelocity(-MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F) * (float)knockback * 0.5F, 0.1D, (double)(MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F) * (float)knockback * 0.5F));
 		return par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this), damage);
 	}
 	
-	@Override
-	protected void setCombatTask() 
-	{
-		if(attackByDistanceGoal == null)
-			attackByDistanceGoal = new AttackByDistanceGoal(this, 0.25F, 30, 64.0F);
-		this.goalSelector.removeGoal(this.attackByDistanceGoal);
-		this.goalSelector.addGoal(4, this.attackByDistanceGoal);
-	}
-	
-	@Override
-	public void setItemStackToSlot(EquipmentSlotType slotIn, ItemStack stack)
-	{
-		super.setItemStackToSlot(slotIn, stack);
-		
-		if (!this.world.isRemote && slotIn == EquipmentSlotType.MAINHAND)
-		{
-			this.setCombatTask();
-		}
-	}
 	@Override
 	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2) 
 	{

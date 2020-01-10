@@ -34,7 +34,11 @@ public abstract class CarapacianEntity extends MinestuckEntity
 		allyTypes = new ArrayList<>();
 		setEnemies();
 		setAllies();
-		
+	}
+	
+	@Override
+	protected void registerGoals()
+	{
 		this.goalSelector.addGoal(1, new SwimGoal(this));
 		//this.goalSelector.addGoal(4, new EntityAIMoveToBattle(this));
 		this.targetSelector.addGoal(1, new HurtByTargetAlliedGoal(this, this.getKingdom() == EnumEntityKingdom.PROSPITIAN ? PROSPITIAN_SELECTOR : DERSITE_SELECTOR));
@@ -42,39 +46,9 @@ public abstract class CarapacianEntity extends MinestuckEntity
 		this.goalSelector.addGoal(5, new WaterAvoidingRandomWalkingGoal(this, this.getWanderSpeed()));
 		this.goalSelector.addGoal(6, new LookRandomlyGoal(this));
 		this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 8.0F));
-		
-		if (world != null && !world.isRemote)
-		{
-			this.setCombatTask();
-		}
 	}
 	
-	protected abstract void setCombatTask();
-
-	public abstract float getWanderSpeed();
-
-	public void setEnemies()
-	{
-		attackEntitySelector = new EntityListFilter(enemyTypes);
-		switch(this.getKingdom())
-		{
-			case PROSPITIAN:
-				enemyTypes.addAll(MSTags.EntityTypes.DERSITE_CARAPACIANS.getAllElements());
-				break;
-			case DERSITE:
-				enemyTypes.addAll(MSTags.EntityTypes.PROSPITIAN_CARAPACIANS.getAllElements());
-		}
-	}
-	public void addEnemy(EntityType<?> enemyType)
-	{
-		if(canAttack(enemyType) && !enemyTypes.contains(enemyType))
-		{
-			enemyTypes.add(enemyType);
-			this.setEnemies();
-			this.setCombatTask();
-		}
-	}
-	public void setAllies() 
+	private void setAllies()
 	{
 		switch(this.getKingdom())
 		{
@@ -85,6 +59,30 @@ public abstract class CarapacianEntity extends MinestuckEntity
 				allyTypes.addAll(MSTags.EntityTypes.DERSITE_CARAPACIANS.getAllElements());
 		}
 	}
+	
+	private void setEnemies()
+	{
+		attackEntitySelector = new EntityListFilter(enemyTypes);
+		switch(this.getKingdom())
+		{
+			case PROSPITIAN:
+				enemyTypes.addAll(MSTags.EntityTypes.DERSITE_CARAPACIANS.getAllElements());	//TODO Should refer to tags directly. Entities will otherwise need to be reconstructed for resource reload changes to take place
+				break;
+			case DERSITE:
+				enemyTypes.addAll(MSTags.EntityTypes.PROSPITIAN_CARAPACIANS.getAllElements());
+		}
+	}
+	
+	public abstract float getWanderSpeed();
+	
+	public void addEnemy(EntityType<?> enemyType)
+	{
+		if(canAttack(enemyType) && !enemyTypes.contains(enemyType))
+		{
+			enemyTypes.add(enemyType);
+		}
+	}
+	
 	@Override
 	public void setAttackTarget(LivingEntity entity)
 	{

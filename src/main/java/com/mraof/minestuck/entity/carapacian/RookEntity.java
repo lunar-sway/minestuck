@@ -9,14 +9,18 @@ import net.minecraft.world.World;
 
 public abstract class RookEntity extends CarapacianEntity implements IMob
 {
-	private MeleeAttackGoal entityAIAttackOnCollide = new MeleeAttackGoal(this, .5F, false);
-
 	public RookEntity(EntityType<? extends RookEntity> type, World world)
 	{
 		super(type, world);
 		this.experienceValue = 10;
 	}
-
+	
+	@Override
+	protected void registerGoals()
+	{
+		this.goalSelector.addGoal(4, new MeleeAttackGoal(this, .4F, false));
+	}
+	
 	@Override
 	public float getMaximumHealth()
 	{
@@ -50,14 +54,4 @@ public abstract class RookEntity extends CarapacianEntity implements IMob
 //			this.attackEntityAsMob(entity);
 //		}
 //	}
-
-	@Override
-	public void setCombatTask()
-	{
-		if(this.entityAIAttackOnCollide == null)
-			entityAIAttackOnCollide = new MeleeAttackGoal(this, .4F, false);
-		this.goalSelector.removeGoal(this.entityAIAttackOnCollide);
-		this.goalSelector.addGoal(4, this.entityAIAttackOnCollide);
-	}
-
 }
