@@ -13,7 +13,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import java.time.LocalDate;
 import java.time.Month;
 
-public class InventoryEditmodeScreen extends PlayerStatsContainerScreen
+public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<EditmodeContainer>
 {
 	public static final String TITLE = "minestuck.deploy_list";
 

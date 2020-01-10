@@ -34,10 +34,10 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 	public enum NormalGuiType
 	{
 		
-		CAPTCHA_DECK(CaptchaDeckScreen::new, "gui.captcha_deck.name", false),
-		STRIFE_SPECIBUS(StrifeSpecibusScreen::new, "gui.strife_specibus.name", false),
-		ECHELADDER(EcheladderScreen::new, "gui.echeladder.name", true),
-		GRIST_CACHE(GristCacheScreen::new, "gui.grist_cache.name", true);
+		CAPTCHA_DECK(CaptchaDeckScreen::new, CaptchaDeckScreen.TITLE, false),
+		STRIFE_SPECIBUS(StrifeSpecibusScreen::new, StrifeSpecibusScreen.TITLE, false),
+		ECHELADDER(EcheladderScreen::new, EcheladderScreen.TITLE, true),
+		GRIST_CACHE(GristCacheScreen::new, GristCacheScreen.TITLE, true);
 		
 		final Supplier<? extends Screen> factory;
 		final BiFunction<Integer, PlayerInventory, ? extends ContainerScreen<?>> factory2;
@@ -84,9 +84,9 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 	
 	public enum EditmodeGuiType
 	{
-		DEPLOY_LIST(InventoryEditmodeScreen::new, "gui.deployList.name"),
+		DEPLOY_LIST(InventoryEditmodeScreen::new, InventoryEditmodeScreen.TITLE),
 //		BLOCK_LIST(GuiInventoryEditmode.class, "gui.blockList.name", true, false),
-		GRIST_CACHE(GristCacheScreen::new, "gui.gristCache.name");
+		GRIST_CACHE(GristCacheScreen::new, GristCacheScreen.TITLE);
 		
 		final Supplier<? extends Screen> factory;
 		final BiFunction<Integer, PlayerInventory, ? extends ContainerScreen<?>> factory2;

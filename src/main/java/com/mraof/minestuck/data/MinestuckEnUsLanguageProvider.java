@@ -46,9 +46,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 	protected void addTranslations()
 	{
 		add(MSBlocks.BLACK_CHESS_DIRT, "Black Chess Tile");
-		add(MSBlocks.WHITE_CHESS_DIRT, "Black Chess Tile");
-		add(MSBlocks.DARK_GRAY_CHESS_DIRT, "Black Chess Tile");
-		add(MSBlocks.LIGHT_GRAY_CHESS_DIRT, "Black Chess Tile");
+		add(MSBlocks.WHITE_CHESS_DIRT, "White Chess Tile");
+		add(MSBlocks.DARK_GRAY_CHESS_DIRT, "Dark Gray Chess Tile");
+		add(MSBlocks.LIGHT_GRAY_CHESS_DIRT, "Light Gray Chess Tile");
 		add(MSBlocks.SKAIA_PORTAL, "Skaia Portal");
 		add(MSBlocks.STONE_CRUXITE_ORE, "Cruxite Ore");
 		add(MSBlocks.COBBLESTONE_CRUXITE_ORE, "Cruxite Ore");
