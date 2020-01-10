@@ -265,7 +265,7 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 	{
 		try
 		{
-			return interpreter.generateCost(recipe, item, ingredient -> costForIngredient(process, ingredient));
+			return interpreter.generateCost(recipe, item, (ingredient, removeContainer) -> costForIngredient(process, ingredient, removeContainer));
 		} catch(Exception e)
 		{
 			LOGGER.error("Got exception while getting cost for recipe {}", recipe.getId(), e);
@@ -273,7 +273,7 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 		}
 	}
 	
-	private GristSet costForIngredient(GeneratorProcess process, Ingredient ingredient)
+	private GristSet costForIngredient(GeneratorProcess process, Ingredient ingredient, boolean removeContainerCost)
 	{
 		GristSet minCost = null;
 		for(ItemStack stack : ingredient.getMatchingStacks())
@@ -281,11 +281,28 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 			if(ingredient.test(new ItemStack(stack.getItem())))
 			{
 				GristSet cost = costForItem(process, stack.getItem());
+				
+				if(removeContainerCost && cost != null)
+					cost = removeContainerCost(process, stack, cost);
+				
 				if(cost != null && (minCost == null || cost.getValue() < minCost.getValue()))
 					minCost = cost;
 			}
 		}
 		return minCost;
+	}
+	
+	private GristSet removeContainerCost(GeneratorProcess process, ItemStack stack, GristSet cost)
+	{
+		ItemStack container = stack.getContainerItem();
+		if(!container.isEmpty())
+		{
+			GristSet containerCost = costForItem(process, container.getItem());
+			if(containerCost != null)
+				return containerCost.copy().scale(-1).addGrist(cost);
+			else return null;
+		}
+		return cost;
 	}
 	
 	private GristSet costForItem(GeneratorProcess process, Item item)
@@ -369,6 +386,11 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 	public interface Source
 	{
 		List<IRecipe<?>> findRecipes(RecipeManager recipeManager);
+	}
+	
+	public interface IngredientLookup
+	{
+		GristSet lookup(Ingredient ingredient, boolean removeContainerCost);
 	}
 	
 	private static class RecipeSource implements Source

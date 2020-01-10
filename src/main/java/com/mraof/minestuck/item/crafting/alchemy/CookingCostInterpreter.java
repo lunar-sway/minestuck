@@ -4,11 +4,8 @@ import com.google.gson.JsonElement;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.AbstractCookingRecipe;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.JSONUtils;
 import net.minecraftforge.registries.ObjectHolder;
-
-import java.util.function.Function;
 
 public class CookingCostInterpreter extends DefaultInterpreter
 {
@@ -25,7 +22,7 @@ public class CookingCostInterpreter extends DefaultInterpreter
 	}
 	
 	@Override
-	public GristSet generateCost(IRecipe<?> recipe, Item item, Function<Ingredient, GristSet> ingredientInterpreter)
+	public GristSet generateCost(IRecipe<?> recipe, Item item, GristCostGenerator.IngredientLookup ingredientInterpreter)
 	{
 		GristSet cost = super.generateCost(recipe, item, ingredientInterpreter);
 		

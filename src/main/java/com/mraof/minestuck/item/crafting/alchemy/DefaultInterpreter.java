@@ -10,7 +10,6 @@ import net.minecraftforge.registries.ObjectHolder;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Function;
 
 public class DefaultInterpreter implements RecipeInterpreter
 {
@@ -18,6 +17,8 @@ public class DefaultInterpreter implements RecipeInterpreter
 	
 	@ObjectHolder("minestuck:default")
 	public static final InterpreterSerializer<DefaultInterpreter> SERIALIZER = null;
+	
+	//TODO interpreter (perhaps setting) that makes the interpreter not remove container cost for ingredient
 	
 	@Override
 	public List<Item> getOutputItems(IRecipe<?> recipe)
@@ -27,7 +28,7 @@ public class DefaultInterpreter implements RecipeInterpreter
 	}
 	
 	@Override
-	public GristSet generateCost(IRecipe<?> recipe, Item item, Function<Ingredient, GristSet> ingredientInterpreter)
+	public GristSet generateCost(IRecipe<?> recipe, Item item, GristCostGenerator.IngredientLookup ingredientInterpreter)
 	{
 		if(recipe.isDynamic())
 			return null;
@@ -35,7 +36,7 @@ public class DefaultInterpreter implements RecipeInterpreter
 		GristSet totalCost = new GristSet();
 		for(Ingredient ingredient : recipe.getIngredients())
 		{
-			GristSet ingredientCost = ingredientInterpreter.apply(ingredient);
+			GristSet ingredientCost = ingredientInterpreter.lookup(ingredient, true);
 			if(ingredientCost == null)
 				return null;
 			else totalCost.addGrist(ingredientCost);
