@@ -78,6 +78,24 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		getBuilder(DUSTS).add(MSBlocks.GLOWYSTONE_DUST.asItem());
 		getBuilder(RODS).add(UP_STICK);
 		getBuilder(ExtraForgeTags.Items.URANIUM_CHUNKS).add(RAW_URANIUM);
+		getBuilder(ExtraForgeTags.Items.COPPER_ORES);
+		getBuilder(ExtraForgeTags.Items.TIN_ORES);
+		getBuilder(ExtraForgeTags.Items.SILVER_ORES);
+		getBuilder(ExtraForgeTags.Items.LEAD_ORES);
+		getBuilder(ExtraForgeTags.Items.NICKEL_ORES);
+		getBuilder(ExtraForgeTags.Items.ALUMINIUM_ORES);
+		getBuilder(ExtraForgeTags.Items.COBALT_ORES);
+		getBuilder(ExtraForgeTags.Items.ARDITE_ORES);
+		getBuilder(ExtraForgeTags.Items.COPPER_INGOTS);
+		getBuilder(ExtraForgeTags.Items.TIN_INGOTS);
+		getBuilder(ExtraForgeTags.Items.SILVER_INGOTS);
+		getBuilder(ExtraForgeTags.Items.LEAD_INGOTS);
+		getBuilder(ExtraForgeTags.Items.NICKEL_INGOTS);
+		getBuilder(ExtraForgeTags.Items.INVAR_INGOTS);
+		getBuilder(ExtraForgeTags.Items.ALUMINIUM_INGOTS);
+		getBuilder(ExtraForgeTags.Items.COBALT_INGOTS);
+		getBuilder(ExtraForgeTags.Items.ARDITE_INGOTS);
+		getBuilder(ExtraForgeTags.Items.RED_ALLOY_INGOTS);
 		
 		getBuilder(GRIST_CANDY).add(BUILD_GUSHERS, AMBER_GUMMY_WORM, CAULK_PRETZEL, CHALK_CANDY_CIGARETTE, IODINE_LICORICE, SHALE_PEEP, TAR_LICORICE, COBALT_GUM, MARBLE_JAWBREAKER, MERCURY_SIXLETS, QUARTZ_JELLY_BEAN, SULFUR_CANDY_APPLE, AMETHYST_HARD_CANDY, GARNET_TWIX, RUBY_LOLLIPOP, RUST_GUMMY_EYE, DIAMOND_MINT, GOLD_CANDY_RIBBON, URANIUM_GUMMY_BEAR, ARTIFACT_WARHEAD, ZILLIUM_SKITTLES);
 		getBuilder(MSTags.Items.FAYGO).add(MSItems.FAYGO, FAYGO_CANDY_APPLE, FAYGO_COLA, FAYGO_COTTON_CANDY, FAYGO_CREME, FAYGO_GRAPE, FAYGO_MOON_MIST, FAYGO_PEACH, FAYGO_REDPOP);
