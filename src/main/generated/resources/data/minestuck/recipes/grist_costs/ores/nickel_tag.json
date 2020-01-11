@@ -1,5 +1,5 @@
 {
-  "type": "minestuck:container_grist_cost",
+  "type": "minestuck:grist_cost",
   "ingredient": {
     "tag": "forge:ores/nickel"
   },
