@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:strawberry_chunk"
+  },
+  "grist_cost": {
+    "minestuck:amber": 2,
+    "minestuck:build": 1,
+    "minestuck:ruby": 2
+  }
+}

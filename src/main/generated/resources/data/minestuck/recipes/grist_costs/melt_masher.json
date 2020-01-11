@@ -1,0 +1,15 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:melt_masher"
+  },
+  "grist_cost": {
+    "minestuck:build": 1000,
+    "minestuck:tar": 400,
+    "minestuck:garnet": 200,
+    "minestuck:diamond": 340,
+    "minestuck:gold": 100,
+    "minestuck:ruby": 150,
+    "minestuck:sulfur": 450
+  }
+}

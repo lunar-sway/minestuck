@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:container_grist_cost",
+  "ingredient": {
+    "item": "minestuck:blood_bucket"
+  },
+  "grist_cost": {
+    "minestuck:garnet": 8,
+    "minestuck:iodine": 8
+  }
+}

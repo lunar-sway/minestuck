@@ -359,7 +359,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.SCARLET_RIBBITAR, "Scarlet Ribbitar");
 		add(MSItems.DOGG_MACHETE, "Snoop Dogg Snow Cone Machete");
 		add(MSItems.COBALT_SABRE, "Cobalt Cobeam Coblade");
-		add(MSItems.QUAMTUM_SABRE, "Quantum Sabre");
+		add(MSItems.QUANTUM_SABRE, "Quantum Sabre");
 		add(MSItems.SHATTER_BEACON, "ShatterBeacon");
 		add(MSItems.BATLEACKS, "batleacks!!");
 		addTooltip(MSItems.BATLEACKS, "A shitty axe. Not much more to it.");

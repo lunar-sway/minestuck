@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:quantum_sabre"
+  },
+  "grist_cost": {
+    "minestuck:build": 413,
+    "minestuck:uranium": 11
+  }
+}

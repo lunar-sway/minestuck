@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:cobalt_sabre"
+  },
+  "grist_cost": {
+    "minestuck:build": 1300,
+    "minestuck:uranium": 90,
+    "minestuck:cobalt": 175,
+    "minestuck:diamond": 30
+  }
+}

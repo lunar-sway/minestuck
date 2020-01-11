@@ -65,7 +65,7 @@ public class MSItems
 	public static Item SCARLET_RIBBITAR;
 	public static Item DOGG_MACHETE;
 	public static Item COBALT_SABRE;
-	public static Item QUAMTUM_SABRE;
+	public static Item QUANTUM_SABRE;
 	public static Item SHATTER_BEACON;
 	//axes
 	public static Item BATLEACKS;
@@ -463,7 +463,7 @@ public class MSItems
 		registry.register(SCARLET_RIBBITAR = new WeaponItem(MSItemTypes.RUBY_TIER, 3, -2.4F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("scarlet_ribbitar"));
 		registry.register(DOGG_MACHETE = new WeaponItem(MSItemTypes.RUBY_TIER, 1, -2.4F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().defaultMaxDamage(1000).group(MSItemGroup.WEAPONS)).setRegistryName("dogg_machete"));
 		registry.register(COBALT_SABRE = new FireWeaponItem(ItemTier.GOLD, 7, -2.4F, 15.0F, 30, MSItemTypes.SWORD_TOOL, new Item.Properties().defaultMaxDamage(300).group(MSItemGroup.WEAPONS)).setRegistryName("cobalt_sabre"));
-		registry.register(QUAMTUM_SABRE = new PotionWeaponItem(MSItemTypes.URANIUM_TIER, 4, -2.4F, 15.0F, new EffectInstance(Effects.WITHER, 100, 1), MSItemTypes.SWORD_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("quantum_sabre"));
+		registry.register(QUANTUM_SABRE = new PotionWeaponItem(MSItemTypes.URANIUM_TIER, 4, -2.4F, 15.0F, new EffectInstance(Effects.WITHER, 100, 1), MSItemTypes.SWORD_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("quantum_sabre"));
 		registry.register(SHATTER_BEACON = new WeaponItem(MSItemTypes.RUBY_TIER, 6, -2.4F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().defaultMaxDamage(1850).group(MSItemGroup.WEAPONS)).setRegistryName("shatter_beacon"));
 		
 		//axes

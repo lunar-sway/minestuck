@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:chiseled_cast_iron"
+  },
+  "grist_cost": {
+    "minestuck:build": 3,
+    "minestuck:rust": 2
+  }
+}

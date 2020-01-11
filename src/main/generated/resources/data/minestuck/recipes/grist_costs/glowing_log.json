@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:glowing_log"
+  },
+  "grist_cost": {
+    "minestuck:build": 8,
+    "minestuck:amber": 4,
+    "minestuck:mercury": 4
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:cruxite_apple"
+  },
+  "grist_cost": {}
+}

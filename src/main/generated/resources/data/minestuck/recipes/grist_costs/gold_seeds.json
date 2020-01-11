@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:gold_seeds"
+  },
+  "grist_cost": {
+    "minestuck:gold": 3
+  }
+}

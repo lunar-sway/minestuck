@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:glowing_planks"
+  },
+  "grist_cost": {
+    "minestuck:build": 2,
+    "minestuck:amber": 1,
+    "minestuck:mercury": 1
+  }
+}

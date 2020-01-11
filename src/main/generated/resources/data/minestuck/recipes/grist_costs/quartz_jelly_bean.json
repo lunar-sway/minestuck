@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:quartz_jelly_bean"
+  },
+  "grist_cost": {
+    "minestuck:quartz": 3
+  }
+}

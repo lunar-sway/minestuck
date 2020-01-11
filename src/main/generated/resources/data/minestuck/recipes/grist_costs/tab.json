@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:tab"
+  },
+  "grist_cost": {
+    "minestuck:cobalt": 1,
+    "minestuck:iodine": 1
+  }
+}

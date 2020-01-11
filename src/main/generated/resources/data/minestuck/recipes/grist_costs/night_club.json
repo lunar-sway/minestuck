@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:night_club"
+  },
+  "grist_cost": {
+    "minestuck:tar": 28,
+    "minestuck:shale": 19,
+    "minestuck:cobalt": 6
+  }
+}

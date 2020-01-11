@@ -1,0 +1,7 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:batleacks"
+  },
+  "grist_cost": {}
+}

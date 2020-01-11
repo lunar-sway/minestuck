@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:coarse_end_stone"
+  },
+  "grist_cost": {
+    "minestuck:build": 4,
+    "minestuck:caulk": 3
+  }
+}

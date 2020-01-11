@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:crumply_hat"
+  },
+  "grist_cost": {
+    "minestuck:build": 20
+  }
+}

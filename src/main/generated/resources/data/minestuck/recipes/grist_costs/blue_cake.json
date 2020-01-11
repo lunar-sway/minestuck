@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:blue_cake"
+  },
+  "grist_cost": {
+    "minestuck:shale": 24,
+    "minestuck:mercury": 6,
+    "minestuck:cobalt": 5,
+    "minestuck:diamond": 1
+  }
+}

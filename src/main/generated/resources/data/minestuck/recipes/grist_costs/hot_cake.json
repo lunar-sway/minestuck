@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:hot_cake"
+  },
+  "grist_cost": {
+    "minestuck:sulfur": 17,
+    "minestuck:iodine": 10
+  }
+}

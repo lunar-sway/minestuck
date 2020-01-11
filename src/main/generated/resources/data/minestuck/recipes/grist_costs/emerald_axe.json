@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:emerald_axe"
+  },
+  "grist_cost": {
+    "minestuck:amber": 40,
+    "minestuck:diamond": 73,
+    "minestuck:ruby": 70
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:beef_sword"
+  },
+  "grist_cost": {
+    "minestuck:iodine": 55
+  }
+}

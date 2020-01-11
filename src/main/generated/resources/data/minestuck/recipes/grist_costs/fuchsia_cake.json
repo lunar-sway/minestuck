@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:fuchsia_cake"
+  },
+  "grist_cost": {
+    "minestuck:amethyst": 85,
+    "minestuck:garnet": 54,
+    "minestuck:iodine": 40
+  }
+}
