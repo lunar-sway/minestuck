@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:enchanted_golden_apple"
+  },
+  "grist_cost": {
+    "minestuck:amber": 4,
+    "minestuck:gold": 150,
+    "minestuck:uranium": 10
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:creeper_head"
+  },
+  "grist_cost": {
+    "minestuck:sulfur": 10,
+    "minestuck:chalk": 18
+  }
+}

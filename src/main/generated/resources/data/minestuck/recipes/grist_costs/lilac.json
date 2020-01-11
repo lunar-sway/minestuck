@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:lilac"
+  },
+  "grist_cost": {
+    "minestuck:amethyst": 2,
+    "minestuck:garnet": 5,
+    "minestuck:iodine": 2
+  }
+}

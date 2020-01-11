@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:vine"
+  },
+  "grist_cost": {
+    "minestuck:build": 2,
+    "minestuck:amber": 1
+  }
+}

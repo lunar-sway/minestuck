@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:large_fern"
+  },
+  "grist_cost": {
+    "minestuck:amber": 2
+  }
+}

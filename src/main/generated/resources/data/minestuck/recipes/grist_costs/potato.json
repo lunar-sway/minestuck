@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:potato"
+  },
+  "grist_cost": {
+    "minestuck:amber": 4
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:oxeye_daisy"
+  },
+  "grist_cost": {
+    "minestuck:tar": 1,
+    "minestuck:chalk": 3,
+    "minestuck:iodine": 1
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:porkchop"
+  },
+  "grist_cost": {
+    "minestuck:iodine": 10
+  }
+}

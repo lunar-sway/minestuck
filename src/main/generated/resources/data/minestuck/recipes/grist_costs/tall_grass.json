@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:tall_grass"
+  },
+  "grist_cost": {
+    "minestuck:amber": 2
+  }
+}

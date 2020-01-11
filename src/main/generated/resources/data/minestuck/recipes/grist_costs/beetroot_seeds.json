@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:beetroot_seeds"
+  },
+  "grist_cost": {
+    "minestuck:rust": 2,
+    "minestuck:iodine": 2
+  }
+}

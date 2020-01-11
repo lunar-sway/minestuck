@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:white_tulip"
+  },
+  "grist_cost": {
+    "minestuck:amethyst": 2,
+    "minestuck:chalk": 2,
+    "minestuck:iodine": 1
+  }
+}

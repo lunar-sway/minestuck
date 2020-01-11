@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:dragon_breath"
+  },
+  "grist_cost": {
+    "minestuck:ruby": 4,
+    "minestuck:sulfur": 13
+  }
+}

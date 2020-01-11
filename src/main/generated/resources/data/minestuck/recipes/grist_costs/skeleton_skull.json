@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:skeleton_skull"
+  },
+  "grist_cost": {
+    "minestuck:chalk": 28
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:coal"
+  },
+  "grist_cost": {
+    "minestuck:tar": 8
+  }
+}

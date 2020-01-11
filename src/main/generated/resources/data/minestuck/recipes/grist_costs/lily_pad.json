@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:lily_pad"
+  },
+  "grist_cost": {
+    "minestuck:amber": 4,
+    "minestuck:iodine": 1
+  }
+}

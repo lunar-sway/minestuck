@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:wheat_seeds"
+  },
+  "grist_cost": {
+    "minestuck:amber": 1,
+    "minestuck:iodine": 1
+  }
+}

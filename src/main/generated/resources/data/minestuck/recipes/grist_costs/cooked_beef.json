@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:cooked_beef"
+  },
+  "grist_cost": {
+    "minestuck:iodine": 12,
+    "minestuck:tar": 1
+  }
+}
