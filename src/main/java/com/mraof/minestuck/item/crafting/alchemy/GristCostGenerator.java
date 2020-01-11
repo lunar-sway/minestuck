@@ -41,8 +41,8 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 	
 	private static final Gson GSON = (new GsonBuilder()).registerTypeAdapter(SourceEntry.class, (JsonDeserializer<SourceEntry>) GristCostGenerator::deserializeSourceEntry).create();
 	
-	private static final boolean LOG_ITEMS_WITHOUT_RECIPES = false;
-	private static final boolean LOG_ITEMS_WITH_RECIPE_AND_COST = false;
+	private static final boolean LOG_ITEMS_WITHOUT_RECIPES = true;
+	private static final boolean LOG_ITEMS_WITH_RECIPE_AND_COST = true;
 	
 	private static GristCostGenerator instance;
 	
@@ -114,7 +114,10 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 	{
 		List<JeiGristCost> costs = new ArrayList<>();
 		for(Map.Entry<Item, GristSet> entries : generatedCosts.entrySet())
-			costs.add(new JeiGristCost.Set(Ingredient.fromItems(entries.getKey()), entries.getValue()));
+		{
+			if(entries.getValue() != null)
+				costs.add(new JeiGristCost.Set(Ingredient.fromItems(entries.getKey()), entries.getValue()));
+		}
 		return costs;
 	}
 	
@@ -217,24 +220,54 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 		{
 			GristSet cost = costForItem(process, item);
 			if(!process.gristCostLookup.containsKey(item))
+			{
+				//TODO Clean cost of entries with 0, set it to null if it is empty (no free cookies for you). Also log these events so that the costs of base ingredients can be modified accordingly
 				process.generatedCosts.put(item, cost);
+			}
 		}
 		
-		this.generatedCosts = ImmutableMap.copyOf(process.generatedCosts);
+		this.generatedCosts = Collections.unmodifiableMap(process.generatedCosts);
 		LOGGER.info("Generated {} grist conversions from marked recipes.", generatedCosts.size());
 	}
 	
+	/**
+	 * Should return a map for fast lookup of item -> recipes + recipe-interpreter
+	 * Each recipe should only occur once for each item returned by interpreter.getOutputItems(recipe)
+	 * Each item may refer to several recipes if there are recipes for them,
+	 * but each recipe should only have one recipe-interpreter depending on which source is the dominant source.
+	 * The dominant source should be the most specific source (fewest recipes provided by that source).
+	 * If there are equally dominant sources, we won't bother to make a distinction and will instead pick whichever is more convenient implementation-wise.
+	 */
 	private Map<Item, List<Pair<IRecipe<?>, RecipeInterpreter>>> prepareRecipeMap(List<SourceEntry> sources, RecipeManager recipeManager)
 	{
-		//TODO
-		// Should return a map for fast lookup of item -> recipes + recipe-interpreter
-		// Each recipe should only occur once for each item returned by interpreter.getOutputItems(recipe)
-		// Each item may refer to several recipes if there are recipes for them,
-		// but each recipe should only have one recipe-interpreter depending on which source is the dominant source.
-		// The dominant source should be the most specific source (fewest recipes provided by that source).
-		// If there are equally dominant sources, we won't bother to make a distinction and will instead pick whichever is more convenient implementation-wise.
+		//Step 1: sort recipe interpreters paired with their recipes in the order depending on the number of recipes in the list
+		List<Pair<List<IRecipe<?>>, RecipeInterpreter>> recipeLists = new ArrayList<>(sources.size());
+		for(SourceEntry entry : sources)
+		{
+			List<IRecipe<?>> recipes = entry.source.findRecipes(recipeManager);
+			recipeLists.add(new Pair<>(recipes, entry.interpreter));
+		}
+		recipeLists.sort(Comparator.comparingInt(pair -> -pair.getFirst().size()));
 		
-		return Collections.emptyMap();
+		//Step 2: Map recipes to interpreters such that each recipe only has one interpreter
+		Map<IRecipe<?>, RecipeInterpreter> recipeMap = new HashMap<>();
+		for(Pair<List<IRecipe<?>>, RecipeInterpreter> pair : recipeLists)
+		{
+			for(IRecipe<?> recipe : pair.getFirst())
+				recipeMap.put(recipe, pair.getSecond());
+		}
+		
+		//Step 3: Take items from interpreter.getOutputItems() and map item -> recipe interpreter pair
+		Map<Item, List<Pair<IRecipe<?>, RecipeInterpreter>>> itemLookupMap = new HashMap<>();
+		for(Map.Entry<IRecipe<?>, RecipeInterpreter> entry : recipeMap.entrySet())
+		{
+			for(Item item : entry.getValue().getOutputItems(entry.getKey()))
+			{
+				itemLookupMap.computeIfAbsent(item, item1 -> new ArrayList<>()).add(new Pair<>(entry.getKey(), entry.getValue()));
+			}
+		}
+		
+		return itemLookupMap;
 	}
 	
 	private GristSet costFromRecipes(GeneratorProcess process, Item item)
@@ -255,7 +288,7 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 			return minCost;
 		} else
 		{
-			if(LOG_ITEMS_WITHOUT_RECIPES && process.gristCostLookup.isEmpty())
+			if(LOG_ITEMS_WITHOUT_RECIPES && !process.gristCostLookup.containsKey(item))
 				LOGGER.info("Item {} was looked up, but it did not have any recipes.", item.getRegistryName());
 			return null;
 		}

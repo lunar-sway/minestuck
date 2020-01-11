@@ -3,5 +3,7 @@
   "ingredient": {
     "item": "minestuck:batleacks"
   },
-  "grist_cost": {}
+  "grist_cost": {
+    "minestuck:build": 0
+  }
 }

@@ -3,5 +3,7 @@
   "ingredient": {
     "item": "minestuck:sord"
   },
-  "grist_cost": {}
+  "grist_cost": {
+    "minestuck:build": 0
+  }
 }
