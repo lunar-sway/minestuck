@@ -68,6 +68,7 @@ public class MSTags
 		public static final Tag<Item> CRUXITE_STORAGE_BLOCKS = tag("storage_blocks/cruxite");
 		public static final Tag<Item> GRIST_CANDY = tag("grist_candy");
 		public static final Tag<Item> FAYGO = tag("faygo");
+		public static final Tag<Item> MODUS_CARD = tag("modus_card");
 		
 		private static Tag<Item> tag(String name)
 		{

@@ -6,6 +6,7 @@ import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.item.CruxiteArtifactItem;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.Echeladder;
+import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
@@ -15,6 +16,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -255,7 +257,7 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(Blocks.COBBLESTONE, Items.LAVA_BUCKET, MODE_AND, new ItemStack(Blocks.NETHERRACK));
 		CombinationRegistry.addCombination(Items.EMERALD, Items.COAL, MODE_AND, new ItemStack(Items.DIAMOND));
 		CombinationRegistry.addCombination(Items.EMERALD, Items.LAPIS_LAZULI, MODE_AND, new ItemStack(Items.DIAMOND));
-		//CombinationRegistry.addCombination((Items.POTIONITEM, 1, 0), Items.ENCHANTED_BOOK, MODE_OR, new ItemStack(Items.EXPERIENCE_BOTTLE));
+		CombinationRegistry.addCombination(Items.POTION, Items.ENCHANTED_BOOK, MODE_OR, new ItemStack(Items.EXPERIENCE_BOTTLE));
 		CombinationRegistry.addCombination(Items.GLASS_BOTTLE, Items.ENCHANTED_BOOK, MODE_OR, new ItemStack(Items.EXPERIENCE_BOTTLE));
 		CombinationRegistry.addCombination(Items.QUARTZ, Items.WATER_BUCKET, MODE_OR, new ItemStack(Items.PRISMARINE_CRYSTALS));
 		CombinationRegistry.addCombination(Items.QUARTZ, Items.WATER_BUCKET, MODE_AND, new ItemStack(Items.PRISMARINE_SHARD));
@@ -294,7 +296,7 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(Items.IRON_AXE, Blocks.PISTON, MODE_AND, new ItemStack(COPSE_CRUSHER));
 		CombinationRegistry.addCombination(Items.IRON_AXE, Blocks.IRON_BLOCK, MODE_AND, new ItemStack(BATTLEAXE));
 		CombinationRegistry.addCombination(Items.WOODEN_AXE, Blocks.ANVIL, MODE_AND, new ItemStack(BLACKSMITH_BANE));
-		//CombinationRegistry.addCombination("record", Items.IRON_AXE, MODE_AND, new ItemStack(SCRAXE));
+		CombinationRegistry.addCombination(ItemTags.MUSIC_DISCS, Items.IRON_AXE, MODE_AND, new ItemStack(SCRAXE));
 		CombinationRegistry.addCombination(COPSE_CRUSHER, POGO_HAMMER, MODE_AND, new ItemStack(Q_P_HAMMER_AXE));
 		CombinationRegistry.addCombination(Q_P_HAMMER_AXE, ENERGY_CORE, MODE_AND, new ItemStack(Q_F_HAMMER_AXE));
 		CombinationRegistry.addCombination(Items.GOLDEN_AXE, Items.LAVA_BUCKET, MODE_AND, new ItemStack(HEPHAESTUS_LUMBER));
@@ -365,11 +367,11 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(CAPTCHA_CARD, Items.ENDER_EYE, MODE_OR, new ItemStack(CAPTCHAROID_CAMERA));
 		
 		CombinationRegistry.addCombination(STACK_MODUS_CARD, QUEUE_MODUS_CARD, MODE_AND, new ItemStack(QUEUESTACK_MODUS_CARD));
-		/*CombinationRegistry.addCombination(Items.STICK, modusCard, MODE_OR, new ItemStack(TREE_MODUS_CARD)); TODO
-		CombinationRegistry.addCombination(ItemTags.SAPLINGS, modusCard, MODE_OR, new ItemStack(TREE_MODUS_CARD));
-		CombinationRegistry.addCombination(ItemTags.LEAVES, modusCard, MODE_OR, new ItemStack(TREE_MODUS_CARD));	//Not planks and logs though. Too little branch-related.
-		CombinationRegistry.addCombination(modusCard, COMPUTER_OFF, MODE_AND, new ItemStack(HASHMAP_MODUS_CARD));
-		CombinationRegistry.addCombination(modusCard, Items.ITEM_FRAME, MODE_AND, new ItemStack(SET_MODUS_CARD));*/
+		CombinationRegistry.addCombination(MSTags.Items.MODUS_CARD, Items.STICK, MODE_OR, new ItemStack(TREE_MODUS_CARD));
+		CombinationRegistry.addCombination(MSTags.Items.MODUS_CARD, ItemTags.SAPLINGS, MODE_OR, new ItemStack(TREE_MODUS_CARD));
+		CombinationRegistry.addCombination(MSTags.Items.MODUS_CARD, ItemTags.LEAVES, MODE_OR, new ItemStack(TREE_MODUS_CARD));	//Not planks and logs though. Too little branch-related.
+		CombinationRegistry.addCombination(MSTags.Items.MODUS_CARD, COMPUTER, MODE_AND, new ItemStack(HASHMAP_MODUS_CARD));
+		CombinationRegistry.addCombination(MSTags.Items.MODUS_CARD, Items.ITEM_FRAME, MODE_AND, new ItemStack(SET_MODUS_CARD));
 		CombinationRegistry.addCombination(Blocks.IRON_BARS, Items.LEATHER, MODE_AND, new ItemStack(CAT_CLAWS_SHEATHED));
 		CombinationRegistry.addCombination(Items.WHEAT_SEEDS, Items.GOLD_NUGGET, MODE_AND, new ItemStack(GOLD_SEEDS));
 		CombinationRegistry.addCombination(Items.WHEAT_SEEDS, Items.GOLD_INGOT, MODE_AND, new ItemStack(GOLD_SEEDS));
@@ -434,8 +436,7 @@ public class AlchemyRecipes
 		
 		CombinationRegistry.addCombination(ItemTags.BUTTONS, Blocks.TNT, MODE_OR, new ItemStack(PRIMED_TNT));
 		CombinationRegistry.addCombination(Blocks.TNT, Blocks.REDSTONE_TORCH, MODE_OR, new ItemStack(UNSTABLE_TNT));
-		//CombinationRegistry.addCombination(Blocks.TNT, Items.POTIONITEM, 1, 8236, MODE_OR, true, true, new ItemStack(INSTANT_TNT));	//Instant damage potions
-		//CombinationRegistry.addCombination(Blocks.TNT, Items.POTIONITEM, 1, 8268, MODE_OR, true, true, new ItemStack(INSTANT_TNT));
+		CombinationRegistry.addCombination(Blocks.TNT, Items.REDSTONE, MODE_OR, new ItemStack(INSTANT_TNT));
 		CombinationRegistry.addCombination(Blocks.TNT, Blocks.STONE_BUTTON, MODE_AND, new ItemStack(STONE_EXPLOSIVE_BUTTON));
 		CombinationRegistry.addCombination(INSTANT_TNT, Blocks.STONE_BUTTON, MODE_AND, new ItemStack(STONE_EXPLOSIVE_BUTTON));
 		CombinationRegistry.addCombination(ItemTags.WOODEN_BUTTONS, Blocks.TNT, MODE_AND, new ItemStack(WOODEN_EXPLOSIVE_BUTTON));
@@ -447,13 +448,12 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(Blocks.STONE_BRICK_STAIRS, BLUE_DIRT, MODE_OR, new ItemStack(SHADE_BRICK_STAIRS));
 		CombinationRegistry.addCombination(Blocks.STONE_BRICKS, Items.LAPIS_LAZULI, MODE_OR, new ItemStack(SHADE_BRICKS));
 		CombinationRegistry.addCombination(Blocks.STONE_BRICK_STAIRS, Items.LAPIS_LAZULI, MODE_OR, new ItemStack(SHADE_BRICK_STAIRS));
-		for(int i = 0; i <= 6; i+=2)	//Stone and polished stone
-		{
-			/*CombinationRegistry.addCombination(Blocks.STONE, 1, i, BLUE_DIRT, MODE_OR, new ItemStack(SMOOTH_SHADE_STONE));
-			CombinationRegistry.addCombination(Blocks.STONE, 1, i, Items.LAPIS_LAZULI, MODE_OR, new ItemStack(SMOOTH_SHADE_STONE));
-			CombinationRegistry.addCombination(Blocks.STONE, 1, i, Blocks.ICE, MODE_AND, new ItemStack(FROST_TILE));
-			CombinationRegistry.addCombination(Blocks.STONE, 1, i, Blocks.PACKED_ICE, MODE_AND, new ItemStack(FROST_TILE));*/
-		}
+		
+		CombinationRegistry.addCombination(Tags.Items.STONE, BLUE_DIRT, MODE_OR, new ItemStack(SMOOTH_SHADE_STONE));
+		CombinationRegistry.addCombination(Tags.Items.STONE, Items.LAPIS_LAZULI, MODE_OR, new ItemStack(SMOOTH_SHADE_STONE));
+		CombinationRegistry.addCombination(Tags.Items.STONE, Blocks.ICE, MODE_AND, new ItemStack(FROST_TILE));
+		CombinationRegistry.addCombination(Tags.Items.STONE, Blocks.PACKED_ICE, MODE_AND, new ItemStack(FROST_TILE));
+		
 		CombinationRegistry.addCombination(Blocks.STONE_BRICKS, Blocks.ICE, MODE_AND, new ItemStack(FROST_BRICKS));
 		CombinationRegistry.addCombination(Blocks.STONE_BRICKS, Blocks.PACKED_ICE, MODE_AND, new ItemStack(FROST_BRICKS));
 		CombinationRegistry.addCombination(Blocks.CHISELED_STONE_BRICKS, Blocks.ICE, MODE_AND, new ItemStack(CHISELED_FROST_BRICKS));
@@ -511,17 +511,16 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(RAW_URANIUM, Items.COOKED_BEEF, MODE_OR, new ItemStack(IRRADIATED_STEAK));
 		CombinationRegistry.addCombination(UP_STICK, ENERGY_CORE, MODE_AND, new ItemStack(QUANTUM_SABRE));
 		
-		//CombinationRegistry.addCombination(new ItemStack(Items.POTIONITEM, 1, 0), new ItemStack(Items.SUGAR), MODE_OR, false, false, new ItemStack(beverage, 1, 0));		//Tab
-		//CombinationRegistry.addCombination(new ItemStack(Items.POTIONITEM, 1, 0), new ItemStack(Items.DYE, 1, 14), MODE_OR, false, true, new ItemStack(beverage, 1, 1));	//Orange F
-		//CombinationRegistry.addCombination(new ItemStack(beverage, 1, 1), new ItemStack(Items.APPLE), MODE_OR, true, false, new ItemStack(beverage, 1, 2));				//CandyApple F
-		//CombinationRegistry.addCombination(new ItemStack(beverage, 1, 1), new ItemStack(beverage, 1, 0), MODE_OR, true, true, new ItemStack(beverage, 1, 3));				//Cola F
-		//CombinationRegistry.addCombination(new ItemStack(beverage, 1, 1), new ItemStack(Blocks.WOOL, 1, 3), MODE_OR, true, true, new ItemStack(beverage, 1, 4));			//Cotton Candy F
-		//CombinationRegistry.addCombination(new ItemStack(beverage, 1, 1), new ItemStack(Items.MILK_BUCKET), MODE_OR, true, false, new ItemStack(beverage, 1, 5));			//Creme F
-		//CombinationRegistry.addCombination(new ItemStack(beverage, 1, 1), new ItemStack(Items.CHORUS_FRUIT), MODE_OR, true, false, new ItemStack(beverage, 1, 6));		//Grape F
-		//CombinationRegistry.addCombination(new ItemStack(beverage, 1, 1), new ItemStack(Items.DYE, 1, 10), MODE_OR, true, true, new ItemStack(beverage, 1, 7));			//Moonmist F
-		//CombinationRegistry.addCombination(new ItemStack(beverage, 1, 2), new ItemStack(Items.DYE, 1, 9), MODE_AND, true, true, new ItemStack(beverage, 1, 8));			//Peach F
-		//CombinationRegistry.addCombination(new ItemStack(beverage, 1, 1), new ItemStack(Blocks.TNT), MODE_OR, true, false, new ItemStack(beverage, 1, 9));				//Redpop F
-		
+		CombinationRegistry.addCombination(Items.POTION, Items.SUGAR, MODE_OR, new ItemStack(TAB));
+		CombinationRegistry.addCombination(Items.POTION, Items.ORANGE_DYE, MODE_OR, new ItemStack(FAYGO));
+		CombinationRegistry.addCombination(FAYGO, Items.APPLE, MODE_OR, new ItemStack(FAYGO_CANDY_APPLE));
+		CombinationRegistry.addCombination(FAYGO, TAB, MODE_OR, new ItemStack(FAYGO_COLA));
+		CombinationRegistry.addCombination(FAYGO, Items.LIGHT_BLUE_WOOL, MODE_OR, new ItemStack(FAYGO_COTTON_CANDY));
+		CombinationRegistry.addCombination(FAYGO, Items.MILK_BUCKET, MODE_OR, new ItemStack(FAYGO_CREME));
+		CombinationRegistry.addCombination(FAYGO, Items.CHORUS_FRUIT, MODE_OR, new ItemStack(FAYGO_GRAPE));
+		CombinationRegistry.addCombination(FAYGO, Items.LIME_DYE, MODE_OR, new ItemStack(FAYGO_MOON_MIST));
+		CombinationRegistry.addCombination(FAYGO_CANDY_APPLE, Items.PINK_DYE, MODE_AND, new ItemStack(FAYGO_PEACH));
+		CombinationRegistry.addCombination(FAYGO, Items.TNT, MODE_OR, new ItemStack(FAYGO_REDPOP));
 	}
 	
 	public static void registerModRecipes() 
@@ -567,51 +566,6 @@ public class AlchemyRecipes
 			AlchemyCostRegistry.addGristConversion("oreCobalt", new GristSet(new GristType[] {GristType.COBALT, GristType.BUILD}, new int[] {18*oreMultiplier, 4}));
 			AlchemyCostRegistry.addGristConversion("oreArdite", new GristSet(new GristType[] {GristType.GARNET, GristType.SULFUR, GristType.BUILD}, new int[] {12*oreMultiplier, 8*oreMultiplier, 4}));
 		}*/
-		
-		/*try
-		{
-			if(Loader.isModLoaded("IronChest"))
-			{
-				Block ironChest = ((Block) (Class.forName("cpw.mods.ironchest.IronChest").getField("ironChestBlock").get(null)));
-				AlchemyCostRegistry.addGristConversion(ironChest, 0, new GristSet(new GristType[] {GristType.BUILD, GristType.RUST}, new int[] {16, 128}));
-				CombinationRegistry.addCombination(new ItemStack(Blocks.CHEST), new ItemStack(Items.IRON_INGOT), MODE_AND, new ItemStack(ironChest, 1, 0));
-			}
-		}
-		catch(Exception e) 
-		{
-			Debug.logger.warn("Exception while getting things for mod \"IronChest\".", e);
-		}*/
-		
-	}
-	
-	public static void registerAutomaticRecipes()
-	{
-		/*
-		AutoGristGenerator autogrist = new AutoGristGenerator();
-		autogrist.prepare();
-		
-		//Register container costs such as for filled buckets
-		for(Map.Entry<Item, GristSet> entry : containerlessCosts.entrySet())
-		{
-			Item item = entry.getKey();
-			if(AlchemyCostRegistry.getGristConversion(item) != null)
-				continue;
-			Item container = item.getContainerItem();	//TODO
-			GristSet cost = entry.getValue();
-			if(container != Items.AIR)
-			{
-				GristSet containerCost = autogrist.lookupCostForItem(container);
-				if(containerCost == null)
-				{
-					Debug.warnf("Can't generate a cost for %s: %s does not have a cost.", new ItemStack(item).getDisplayName(), new ItemStack(container).getDisplayName());
-					continue;
-				} else cost.addGrist(containerCost);
-			}
-			
-			AlchemyCostRegistry.addGristConversion(item, cost);
-		}
-		
-		autogrist.execute();*/
 	}
 	
 	@SubscribeEvent
