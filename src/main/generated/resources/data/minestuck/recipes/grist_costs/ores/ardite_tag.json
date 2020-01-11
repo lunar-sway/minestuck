@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:container_grist_cost",
+  "ingredient": {
+    "tag": "forge:ores/ardite"
+  },
+  "grist_cost": {
+    "minestuck:build": 4,
+    "minestuck:garnet": 12,
+    "minestuck:sulfur": 8
+  }
+}

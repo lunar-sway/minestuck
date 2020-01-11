@@ -36,7 +36,6 @@ public class CommonProxy
 		//register grist costs and combination recipes
 		AlchemyRecipes.registerVanillaRecipes();
 		AlchemyRecipes.registerMinestuckRecipes();
-		AlchemyRecipes.registerModRecipes();
 
 		//register consort shop prices
 		ConsortRewardHandler.registerMinestuckPrices();

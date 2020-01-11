@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:container_grist_cost",
+  "ingredient": {
+    "tag": "forge:ores/silver"
+  },
+  "grist_cost": {
+    "minestuck:build": 4,
+    "minestuck:rust": 12,
+    "minestuck:mercury": 8
+  }
+}

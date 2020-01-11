@@ -523,51 +523,6 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(FAYGO, Items.TNT, MODE_OR, new ItemStack(FAYGO_REDPOP));
 	}
 	
-	public static void registerModRecipes() 
-	{
-		/*TODO Item Tags
-		AlchemyCostRegistry.addGristConversion("ingotCopper", new GristSet(new GristType[] {GristType.RUST, GristType.COBALT}, new int[] {16, 3}));
-		AlchemyCostRegistry.addGristConversion("ingotTin", new GristSet(new GristType[] {GristType.RUST, GristType.CAULK}, new int[] {12, 8}));
-		AlchemyCostRegistry.addGristConversion("ingotSilver", new GristSet(new GristType[] {GristType.RUST, GristType.MERCURY}, new int[] {12, 8}));
-		AlchemyCostRegistry.addGristConversion("ingotLead", new GristSet(new GristType[] {GristType.RUST, GristType.COBALT, GristType.SHALE}, new int[] {12, 4, 4}));
-		AlchemyCostRegistry.addGristConversion("ingotNickel", new GristSet(new GristType[] {GristType.RUST, GristType.SULFUR}, new int[] {12, 8}));
-		AlchemyCostRegistry.addGristConversion("ingotInvar", new GristSet(new GristType[] {GristType.RUST, GristType.SULFUR}, new int[] {12, 5}));
-		AlchemyCostRegistry.addGristConversion("ingotAluminium", new GristSet(new GristType[] {GristType.RUST, GristType.CHALK}, new int[] {12, 6}));
-		
-		AlchemyCostRegistry.addGristConversion("ingotCobalt", new GristSet(new GristType[] {GristType.COBALT}, new int[] {18}));
-		AlchemyCostRegistry.addGristConversion("ingoTardite", new GristSet(new GristType[] {GristType.GARNET, GristType.SULFUR}, new int[] {12, 8}));
-		AlchemyCostRegistry.addGristConversion("ingotRedAlloy", new GristSet(new GristType[] {GristType.RUST, GristType.GARNET}, new int[] {18, 32}));
-		
-		if(oreMultiplier != 0)
-		{
-			AlchemyCostRegistry.addGristConversion("oreCopper", new GristSet(new GristType[]{GristType.RUST, GristType.COBALT, GristType.BUILD}, new int[]{16*oreMultiplier, 3*oreMultiplier, 4}));
-			AlchemyCostRegistry.addGristConversion("oreTin", new GristSet(new GristType[]{GristType.RUST, GristType.CAULK, GristType.BUILD}, new int[]{12*oreMultiplier, 8*oreMultiplier, 4}));
-			AlchemyCostRegistry.addGristConversion("oreSilver", new GristSet(new GristType[]{GristType.RUST, GristType.MERCURY, GristType.BUILD}, new int[]{12*oreMultiplier, 8*oreMultiplier, 4}));
-			AlchemyCostRegistry.addGristConversion("oreLead", new GristSet(new GristType[]{GristType.RUST, GristType.COBALT, GristType.SHALE, GristType.BUILD}, new int[]{12*oreMultiplier, 4*oreMultiplier, 4*oreMultiplier, 4}));
-			AlchemyCostRegistry.addGristConversion("oreNickel", new GristSet(new GristType[]{GristType.RUST, GristType.SULFUR, GristType.BUILD}, new int[]{12*oreMultiplier, 8*oreMultiplier, 4}));
-			AlchemyCostRegistry.addGristConversion("oreAluminium", new GristSet(new GristType[]{GristType.RUST, GristType.CHALK, GristType.BUILD}, new int[]{12*oreMultiplier, 6*oreMultiplier, 4}));
-			
-			AlchemyCostRegistry.addGristConversion("oreCobalt", new GristSet(new GristType[] {GristType.COBALT, GristType.BUILD}, new int[] {18*oreMultiplier, 4}));
-			AlchemyCostRegistry.addGristConversion("oreArdite", new GristSet(new GristType[] {GristType.GARNET, GristType.SULFUR, GristType.BUILD}, new int[] {12*oreMultiplier, 8*oreMultiplier, 4}));
-		}
-		
-		if(!OreDictionary.getOres("ingotRedAlloy").isEmpty())
-			CombinationRegistry.addCombination(new ItemStack(Items.IRON_INGOT), new ItemStack(Items.REDSTONE), MODE_OR, OreDictionary.getOres("ingotRedAlloy").get(0));
-		
-		if(oreMultiplier != 0)
-		{
-			AlchemyCostRegistry.addGristConversion("oreCopper", new GristSet(new GristType[] {GristType.RUST, GristType.COBALT, GristType.BUILD}, new int[] {16*oreMultiplier, 3*oreMultiplier, 4}));
-			AlchemyCostRegistry.addGristConversion("oreTin", new GristSet(new GristType[] {GristType.RUST, GristType.CAULK, GristType.BUILD}, new int[] {12*oreMultiplier, 8*oreMultiplier, 4}));
-			AlchemyCostRegistry.addGristConversion("oreSilver", new GristSet(new GristType[] {GristType.RUST, GristType.MERCURY, GristType.BUILD}, new int[] {12*oreMultiplier, 8*oreMultiplier, 4}));
-			AlchemyCostRegistry.addGristConversion("oreLead", new GristSet(new GristType[] {GristType.RUST, GristType.COBALT, GristType.SHALE, GristType.BUILD}, new int[] {12*oreMultiplier, 4*oreMultiplier, 4*oreMultiplier, 4}));
-			AlchemyCostRegistry.addGristConversion("oreNickel", new GristSet(new GristType[] {GristType.RUST, GristType.SULFUR, GristType.BUILD}, new int[] {12*oreMultiplier, 8*oreMultiplier, 4}));
-			AlchemyCostRegistry.addGristConversion("oreAluminium", new GristSet(new GristType[] {GristType.RUST, GristType.CHALK, GristType.BUILD}, new int[] {12*oreMultiplier, 6*oreMultiplier, 4}));
-			
-			AlchemyCostRegistry.addGristConversion("oreCobalt", new GristSet(new GristType[] {GristType.COBALT, GristType.BUILD}, new int[] {18*oreMultiplier, 4}));
-			AlchemyCostRegistry.addGristConversion("oreArdite", new GristSet(new GristType[] {GristType.GARNET, GristType.SULFUR, GristType.BUILD}, new int[] {12*oreMultiplier, 8*oreMultiplier, 4}));
-		}*/
-	}
-	
 	@SubscribeEvent
 	public static void onAlchemizedItem(AlchemyEvent event)
 	{

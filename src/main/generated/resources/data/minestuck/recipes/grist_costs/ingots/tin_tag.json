@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:container_grist_cost",
+  "ingredient": {
+    "tag": "forge:ingots/tin"
+  },
+  "grist_cost": {
+    "minestuck:rust": 12,
+    "minestuck:caulk": 8
+  }
+}

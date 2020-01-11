@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:container_grist_cost",
+  "ingredient": {
+    "tag": "forge:ingots/lead"
+  },
+  "grist_cost": {
+    "minestuck:rust": 12,
+    "minestuck:cobalt": 4,
+    "minestuck:shale": 4
+  }
+}
