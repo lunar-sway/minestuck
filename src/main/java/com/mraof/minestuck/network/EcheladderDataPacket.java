@@ -1,6 +1,7 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.client.gui.playerStats.EcheladderScreen;
+import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
@@ -47,11 +48,11 @@ public class EcheladderDataPacket implements PlayToClientPacket
 		int prev = ClientPlayerData.rung;
 		ClientPlayerData.rung = rung;
 		ClientPlayerData.rungProgress = progress;
-		if(!sendMessage)
+		if(sendMessage)
 			for(prev++; prev <= rung; prev++)
 			{
-				TranslationTextComponent rung = new TranslationTextComponent("echeladder.rung" + prev);
-				Minecraft.getInstance().player.sendMessage(new TranslationTextComponent("You reached rung %s!", rung));    //TODO Translation key
+				TranslationTextComponent rung = new TranslationTextComponent(Echeladder.translationKey(prev));
+				Minecraft.getInstance().player.sendMessage(new TranslationTextComponent(Echeladder.NEW_RUNG, rung));
 			}
 		else EcheladderScreen.animatedRung = EcheladderScreen.lastRung = rung;
 	}

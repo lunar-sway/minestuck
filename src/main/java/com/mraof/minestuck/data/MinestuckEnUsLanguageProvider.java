@@ -18,6 +18,7 @@ import com.mraof.minestuck.item.MSItemGroup;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
+import com.mraof.minestuck.jei.JeiGristCost;
 import com.mraof.minestuck.network.EffectTogglePacket;
 import com.mraof.minestuck.skaianet.SessionHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
@@ -781,6 +782,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDenizen(EnumAspect.VOID, "Nyx");
 		add(Title.FORMAT, "%1$s of %2$s");
 		
+		add(Echeladder.NEW_RUNG, "You reached rung %s!");
 		addRung(0, "Greentike");
 		addRung(1, "Sir Dies-a-lot");
 		addRung(2, "Soil Architect");
@@ -1005,6 +1007,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		
 		add(CommandCheckLand.CHECK, "You are currently in %s.");
 		add(CommandCheckLand.FAIL, "You are currently not in a land dimension.");
+		
+		add(JeiGristCost.GRIST_COSTS, "Grist Costs");
 		
 		add(MSKeyHandler.CATEGORY, "Minestuck");
 		add(MSKeyHandler.STATS_GUI, "View General Minestuck Gui");

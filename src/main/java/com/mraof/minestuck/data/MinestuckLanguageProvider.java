@@ -1,6 +1,7 @@
 package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.util.EnumClass;
 import net.minecraft.block.Block;
@@ -126,7 +127,7 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	}
 	protected void addRung(int rung, String value)
 	{
-		add("echeladder.rung." + rung, value);
+		add(Echeladder.translationKey(rung), value);
 	}
 	protected void addAdvancement(String key, String title, String description)
 	{

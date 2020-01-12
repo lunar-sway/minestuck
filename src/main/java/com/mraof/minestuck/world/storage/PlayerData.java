@@ -268,7 +268,7 @@ public final class PlayerData
 			MSPacketHandler.sendToPlayer(ModusDataPacket.create(CaptchaDeckHandler.writeToNBT(modus)), player);
 		}
 		
-		echeladder.sendDataPacket(player, true);
+		echeladder.sendDataPacket(player, false);
 		sendColor(player, !hasLoggedIn);
 		sendBoondollars(player);
 		updateGristCache(player);

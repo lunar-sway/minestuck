@@ -7,6 +7,8 @@ import java.util.Objects;
 
 public abstract class JeiGristCost
 {
+	public static final String GRIST_COSTS = "minestuck.jei.grist_costs";
+	
 	private final Ingredient ingredient;
 	
 	public JeiGristCost(Ingredient ingredient)

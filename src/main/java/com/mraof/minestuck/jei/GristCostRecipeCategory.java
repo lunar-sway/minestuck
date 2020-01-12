@@ -52,7 +52,7 @@ public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 	@Override
 	public String getTitle()
 	{
-		return I18n.format("tile.sburbMachine.alchemiter.name");
+		return I18n.format(JeiGristCost.GRIST_COSTS);
 	}
 
 	@Override

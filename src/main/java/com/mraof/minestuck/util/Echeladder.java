@@ -23,6 +23,8 @@ import java.util.UUID;
 public class Echeladder
 {
 	
+	public static final String NEW_RUNG = "echeladder.new_rung";
+	
 	public static final int RUNG_COUNT = 50;
 	public static final byte UNDERLING_BONUS_OFFSET = 0;
 	public static final byte ALCHEMY_BONUS_OFFSET = 15;
@@ -107,7 +109,7 @@ public class Echeladder
 		ServerPlayerEntity player = identifier.getPlayer(savedData.mcServer);
 		if(player != null)
 		{
-			sendDataPacket(player, false);
+			sendDataPacket(player, true);
 			if(rung != prevRung)
 			{
 				updateEcheladderBonuses(player);
@@ -239,18 +241,22 @@ public class Echeladder
 			ServerPlayerEntity player = identifier.getPlayer(savedData.mcServer);
 			if(player != null && (MinestuckConfig.echeladderProgress.get() || prevRung != this.rung))
 			{
-				sendDataPacket(player, true);
+				sendDataPacket(player, false);
 				if(prevRung != this.rung)
 					updateEcheladderBonuses(player);
 			}
 		}
 	}
 	
-	
-	public void sendDataPacket(ServerPlayerEntity player, boolean jump)
+	public void sendDataPacket(ServerPlayerEntity player, boolean sendMessage)
 	{
 		Echeladder echeladder = PlayerSavedData.getData(player).getEcheladder();
-		EcheladderDataPacket packet = EcheladderDataPacket.create(echeladder.getRung(), MinestuckConfig.echeladderProgress.get() ? echeladder.getProgress() : 0F, !jump);
+		EcheladderDataPacket packet = EcheladderDataPacket.create(echeladder.getRung(), MinestuckConfig.echeladderProgress.get() ? echeladder.getProgress() : 0F, sendMessage);
 		MSPacketHandler.sendToPlayer(packet, player);
+	}
+	
+	public static String translationKey(int rung)
+	{
+		return "echeladder.rung." + rung;
 	}
 }
