@@ -12,16 +12,14 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class GristSet
 {
+	public static final GristSet EMPTY = new GristSet(Collections.emptyMap());
 
 	private final Map<GristType, Long> gristTypes;
 

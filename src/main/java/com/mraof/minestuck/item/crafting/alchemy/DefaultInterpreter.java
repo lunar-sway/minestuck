@@ -42,7 +42,7 @@ public class DefaultInterpreter implements RecipeInterpreter
 			else totalCost.addGrist(ingredientCost);
 		}
 		
-		totalCost.scale(1F/recipe.getRecipeOutput().getCount(), true);
+		totalCost.scale(1F/recipe.getRecipeOutput().getCount(), false);	//Do not round down because it's better to have something cost a little to much than it possibly costing nothing
 		
 		return totalCost;
 	}

@@ -289,7 +289,7 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 		} else
 		{
 			if(LOG_ITEMS_WITHOUT_RECIPES && !process.gristCostLookup.containsKey(item))
-				LOGGER.info("Item {} was looked up, but it did not have any recipes.", item.getRegistryName());
+				LOGGER.info("Item {} was looked up, but it did not have any grist costs or recipes.", item.getRegistryName());
 			return null;
 		}
 	}
@@ -308,6 +308,9 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 	
 	private GristSet costForIngredient(GeneratorProcess process, Ingredient ingredient, boolean removeContainerCost)
 	{
+		if(ingredient.test(ItemStack.EMPTY))
+			return GristSet.EMPTY;
+		
 		GristSet minCost = null;
 		for(ItemStack stack : ingredient.getMatchingStacks())
 		{
@@ -362,7 +365,7 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 				}
 			} else
 			{
-				if(process.hasDoneGristCostLookup.contains(item))
+				if(process.gristCostLookup.containsKey(item))
 				{
 					GristSet cost = process.gristCostLookup.get(item);
 					checkRecipeLogging(process, item, cost);
