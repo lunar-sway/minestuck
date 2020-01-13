@@ -19,6 +19,11 @@ import org.apache.logging.log4j.Logger;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Stores all instances of {@link PlayerData}.
+ * This class is for server-side use only.
+ * @author kirderf1
+ */
 public class PlayerSavedData extends WorldSavedData
 {
 	private static final Logger LOGGER = LogManager.getLogger();

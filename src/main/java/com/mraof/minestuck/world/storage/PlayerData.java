@@ -24,6 +24,11 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Objects;
 
+/**
+ * Stores and sends any data connected to a specific player.
+ * This class is for server-side use only.
+ * @author kirderf1
+ */
 public final class PlayerData
 {
 	private static final Logger LOGGER = LogManager.getLogger();

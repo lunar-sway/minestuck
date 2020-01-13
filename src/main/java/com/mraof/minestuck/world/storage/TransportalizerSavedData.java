@@ -2,7 +2,6 @@ package com.mraof.minestuck.world.storage;
 
 import com.mojang.datafixers.Dynamic;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.util.Debug;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.NBTDynamicOps;
@@ -13,16 +12,22 @@ import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.DimensionSavedDataManager;
 import net.minecraft.world.storage.WorldSavedData;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+/**
+ * Keeps track of all transportalizer codes and the locations that they are linked to.
+ */
 public class TransportalizerSavedData extends WorldSavedData
 {
+	private static final Logger LOGGER = LogManager.getLogger();
 	private static final String DATA_NAME = Minestuck.MOD_ID+"_transportalizers";
 	
-	private HashMap<String, GlobalPos> locations;
+	private final HashMap<String, GlobalPos> locations;
 	
 	private TransportalizerSavedData()
 	{
@@ -33,16 +38,18 @@ public class TransportalizerSavedData extends WorldSavedData
 	@Override
 	public void read(CompoundNBT nbt)
 	{
-		locations = new HashMap<>();
+		locations.clear();
 		for(String id : nbt.keySet())
 		{
-			INBT locationTag = nbt.get(id);
-			GlobalPos location = GlobalPos.deserialize(new Dynamic<>(NBTDynamicOps.INSTANCE, locationTag));
-			
-			if(location != null)
+			try
 			{
+				INBT locationTag = nbt.get(id);
+				GlobalPos location = GlobalPos.deserialize(new Dynamic<>(NBTDynamicOps.INSTANCE, locationTag));
 				locations.put(id, location);
-			} else Debug.warnf("Could not load transportalizer %s due to unreadable location. This transportalizer will be ignored.", id);
+			} catch(IllegalArgumentException e)
+			{
+				LOGGER.error("Could not load transportalizer {} due to unreadable location. This transportalizer will be ignored.", id);
+			}
 		}
 	}
 	
@@ -55,9 +62,7 @@ public class TransportalizerSavedData extends WorldSavedData
 			
 			INBT locationTag = location.serialize(NBTDynamicOps.INSTANCE);
 			
-			if(locationTag != null)
-				compound.put(entry.getKey(), locationTag);
-			else Debug.warnf("Couldn't save the location of transportalizer %s!", entry.getKey());
+			compound.put(entry.getKey(), locationTag);
 		}
 		
 		return compound;
