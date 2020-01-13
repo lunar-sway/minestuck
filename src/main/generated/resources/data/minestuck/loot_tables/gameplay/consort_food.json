@@ -75,7 +75,6 @@
         },
         {
           "type": "minecraft:tag",
-          "weight": 15,
           "functions": [
             {
               "function": "minecraft:set_count",

@@ -84,7 +84,6 @@
         },
         {
           "type": "minecraft:tag",
-          "weight": 8,
           "name": "minestuck:faygo",
           "expand": true
         }
@@ -96,7 +95,6 @@
       "entries": [
         {
           "type": "minecraft:tag",
-          "weight": 10,
           "quality": -3,
           "functions": [
             {

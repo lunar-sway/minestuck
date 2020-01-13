@@ -321,7 +321,7 @@ public class MSGiftLootTables implements Consumer<BiConsumer<ResourceLocation, L
 						.addEntry(ItemLootEntry.builder(Items.PUMPKIN_PIE).weight(3).acceptFunction(SetCount.builder(RandomValueRange.of(1, 2))))
 						.addEntry(ItemLootEntry.builder(Items.GOLDEN_APPLE).weight(1))
 						.addEntry(ItemLootEntry.builder(MSItems.CANDY_CORN).weight(1).acceptFunction(SetCount.builder(RandomValueRange.of(1, 4))))
-						.addEntry(TagLootEntry.func_216176_b(MSTags.Items.GRIST_CANDY).weight(15).acceptFunction(SetCount.builder(RandomValueRange.of(1, 4))))));
+						.addEntry(TagLootEntry.func_216176_b(MSTags.Items.GRIST_CANDY).weight(1).acceptFunction(SetCount.builder(RandomValueRange.of(1, 4))))));
 		
 		//Iguana
 		lootProcessor.accept(locationFor(LandTypes.FOREST, MSLootTables.CONSORT_FOOD_STOCK), LootTable.builder()

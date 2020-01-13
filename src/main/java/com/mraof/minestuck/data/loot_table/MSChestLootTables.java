@@ -299,9 +299,9 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.addEntry(ItemLootEntry.builder(Items.LEATHER_HELMET).weight(2).quality(0).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F))))
 						.addEntry(ItemLootEntry.builder(Items.LEATHER_LEGGINGS).weight(2).quality(0).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F))))
 						.addEntry(ItemLootEntry.builder(Items.LEATHER_BOOTS).weight(2).quality(0).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F))))
-						.addEntry(TagLootEntry.func_216176_b(MSTags.Items.FAYGO).weight(8).quality(0)))
+						.addEntry(TagLootEntry.func_216176_b(MSTags.Items.FAYGO).weight(1).quality(0)))
 				.addLootPool(LootPool.builder().name(MISC_POOL).rolls(ConstantRange.of(1))
-						.addEntry(TagLootEntry.func_216176_b(Tags.Items.DYES).weight(10).quality(-3).acceptFunction(SetCount.builder(RandomValueRange.of(1, 8))))
+						.addEntry(TagLootEntry.func_216176_b(Tags.Items.DYES).weight(1).quality(-3).acceptFunction(SetCount.builder(RandomValueRange.of(1, 8))))
 						.addEntry(ItemLootEntry.builder(Items.WHITE_WOOL).weight(3).quality(-1).acceptFunction(SetCount.builder(RandomValueRange.of(8, 16))))
 						.addEntry(ItemLootEntry.builder(Items.GLASS).weight(3).quality(-1).acceptFunction(SetCount.builder(RandomValueRange.of(8, 16))))
 						.addEntry(ItemLootEntry.builder(Items.TERRACOTTA).weight(2).quality(1).acceptFunction(SetCount.builder(RandomValueRange.of(8, 16))))));
