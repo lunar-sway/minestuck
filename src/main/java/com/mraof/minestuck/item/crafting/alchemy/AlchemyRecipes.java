@@ -24,7 +24,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 
-import static com.mraof.minestuck.MinestuckConfig.oreMultiplier;
 import static com.mraof.minestuck.block.MSBlocks.*;
 import static com.mraof.minestuck.item.MSItems.*;
 import static com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry.Mode.MODE_AND;
@@ -112,7 +111,6 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(Items.QUARTZ, Blocks.STONE, MODE_OR, new ItemStack(Blocks.QUARTZ_BLOCK));
 		CombinationRegistry.addCombination(Items.REDSTONE, Blocks.STONE, MODE_OR, new ItemStack(Blocks.REDSTONE_BLOCK));
 		
-		if(oreMultiplier.get() != 0)
 		{
 			CombinationRegistry.addCombination(Items.COAL, Blocks.STONE, MODE_AND, new ItemStack(Blocks.COAL_ORE));
 			CombinationRegistry.addCombination(Items.DIAMOND, Blocks.STONE, MODE_AND, new ItemStack(Blocks.DIAMOND_ORE));
@@ -404,7 +402,6 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(SURPRISE_EMBRYO, GRIMOIRE, MODE_OR, new ItemStack(UNKNOWABLE_EGG));
 		CombinationRegistry.addCombination(Blocks.NOTE_BLOCK, GRIMOIRE, MODE_AND, new ItemStack(LONG_FORGOTTEN_WARHORN));
 		
-		if(oreMultiplier.get() != 0)
 		{
 			CombinationRegistry.addCombination(Items.COAL, Blocks.NETHERRACK, MODE_AND, new ItemStack(NETHERRACK_COAL_ORE));
 			CombinationRegistry.addCombination(Items.IRON_INGOT, Blocks.END_STONE, MODE_AND, new ItemStack(END_STONE_IRON_ORE));

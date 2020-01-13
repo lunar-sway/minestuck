@@ -12,6 +12,7 @@ import com.mraof.minestuck.util.Title;
 public class ClientPlayerData
 {
 	public static Title title;
+	public static boolean echeladderAvailable;
 	public static int rung;
 	public static float rungProgress;
 	public static long boondollars;

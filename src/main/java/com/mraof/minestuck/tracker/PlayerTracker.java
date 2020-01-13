@@ -5,7 +5,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.network.ModConfigPacket;
+import com.mraof.minestuck.network.DataCheckerPermissionPacket;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.MSDimensions;
@@ -39,8 +39,7 @@ public class PlayerTracker
 		ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
 		Debug.debug(player.getGameProfile().getName()+" joined the game. Sending packets.");
 		
-		sendConfigPacket(player, true);
-		sendConfigPacket(player, false);
+		sendConfigPacket(player);
 		
 		SkaianetHandler.get(player.server).playerConnected(player);
 		
@@ -71,7 +70,7 @@ public class PlayerTracker
 		{
 			ServerPlayerEntity player = (ServerPlayerEntity) event.player;
 			if(shouldUpdateConfigurations(player))
-				sendConfigPacket(player, false);
+				sendConfigPacket(player);
 		}
 	}
 	
@@ -91,27 +90,18 @@ public class PlayerTracker
 	
 	private static boolean shouldUpdateConfigurations(ServerPlayerEntity player)
 	{
-		//TODO check for changed configs and change setRequiresWorldRestart status for those config options
 		boolean permission = MinestuckConfig.getDataCheckerPermissionFor(player);
-		if(permission != dataCheckerPermission.contains(player.getGameProfile().getId()))
-			return true;
-		
-		return false;
+		return permission != dataCheckerPermission.contains(player.getGameProfile().getId());
 	}
 	
-	public static void sendConfigPacket(ServerPlayerEntity player, boolean mode)
+	public static void sendConfigPacket(ServerPlayerEntity player)
 	{
-		ModConfigPacket packet;
-		if(mode)
-			packet = new ModConfigPacket();
-		else
-		{
-			boolean permission = MinestuckConfig.getDataCheckerPermissionFor(player);
-			packet = new ModConfigPacket(permission);
-			if(permission)
-				dataCheckerPermission.add(player.getGameProfile().getId());
-			else dataCheckerPermission.remove(player.getGameProfile().getId());
-		}
+		DataCheckerPermissionPacket packet;
+		boolean permission = MinestuckConfig.getDataCheckerPermissionFor(player);
+		if(permission)
+			dataCheckerPermission.add(player.getGameProfile().getId());
+		else dataCheckerPermission.remove(player.getGameProfile().getId());
+		packet = new DataCheckerPermissionPacket(permission);
 		MSPacketHandler.sendToPlayer(packet, player);
 	}
 	

@@ -122,7 +122,7 @@ public class AlchemiterScreen extends Screen
 	{
 		//the amount the button changes the amount
 		int result = itemQuantity + change;
-		int maxCount = Math.min(999, alchemiter.getOutput().getMaxStackSize() * MinestuckConfig.clientAlchemiterStacks);
+		int maxCount = Math.min(999, alchemiter.getOutput().getMaxStackSize() * MinestuckConfig.alchemiterMaxStacks.get());
 			//custom modulo function
 			if(result > maxCount)
 			{

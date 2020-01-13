@@ -8,6 +8,7 @@ import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.MiscContainerPacket;
 import com.mraof.minestuck.skaianet.SkaiaClient;
+import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.gui.screen.Screen;
@@ -76,7 +77,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 		public boolean reqMedium()
 		{
 			if(this == ECHELADDER)
-				return MinestuckConfig.preEntryEcheladder;
+				return !ClientPlayerData.echeladderAvailable;
 			else return this.reqMedium;
 		}
 		

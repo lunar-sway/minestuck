@@ -32,13 +32,13 @@ public class SburbServer extends ButtonListProgram
 		if(connection != null && connection.getServerId() != te.ownerId)
 			connection = null;
 		
-		ArrayList<UnlocalizedString> list = new ArrayList<UnlocalizedString>();
+		ArrayList<UnlocalizedString> list = new ArrayList<>();
 		String displayPlayer= connection==null?"UNDEFINED":connection.getClientDisplayName();
 		if (connection != null)
 		{
 			list.add(new UnlocalizedString(CONNECT, displayPlayer));
 			list.add(new UnlocalizedString(CLOSE_BUTTON));
-			list.add(new UnlocalizedString(MinestuckConfig.clientGiveItems ? GIVE_BUTTON : EDIT_BUTTON));
+			list.add(new UnlocalizedString(MinestuckConfig.giveItems.get() ? GIVE_BUTTON : EDIT_BUTTON));
 		} else if (te.getData(getId()).getBoolean("isOpen"))
 		{
 			list.add(new UnlocalizedString(RESUME_SERVER));
@@ -48,7 +48,8 @@ public class SburbServer extends ButtonListProgram
 		else
 		{
 			list.add(new UnlocalizedString(OFFLINE));
-			list.add(new UnlocalizedString(OPEN_BUTTON));
+			if(MinestuckConfig.allowSecondaryConnections.get() || SkaiaClient.getAssociatedPartner(te.ownerId, false) == -1)
+				list.add(new UnlocalizedString(OPEN_BUTTON));
 			if(SkaiaClient.getAssociatedPartner(te.ownerId, false) != -1)
 				list.add(new UnlocalizedString(RESUME_BUTTON));
 		}

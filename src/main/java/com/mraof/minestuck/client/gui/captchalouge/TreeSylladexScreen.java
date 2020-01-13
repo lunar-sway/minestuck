@@ -40,9 +40,9 @@ public class TreeSylladexScreen extends SylladexScreen
 	{
 		guiButton.x = (width - GUI_WIDTH)/2 + 15;
 		guiButton.y = (height - GUI_HEIGHT)/2 + 175;
-		boolean autobalance = MinestuckConfig.clientTreeAutobalance == 0 ? modus.autoBalance : MinestuckConfig.clientTreeAutobalance == 1;
+		boolean autobalance = MinestuckConfig.treeModusSetting == 0 ? modus.autoBalance : MinestuckConfig.treeModusSetting == 1;
 		guiButton.setMessage(I18n.format(autobalance ? AUTOBALANCE_ON : AUTOBALANCE_OFF));
-		guiButton.active = MinestuckConfig.clientTreeAutobalance == 0;
+		guiButton.active = MinestuckConfig.treeModusSetting == 0;
 		super.render(xcor, ycor, f);
 	}
 	
@@ -93,7 +93,7 @@ public class TreeSylladexScreen extends SylladexScreen
 	
 	private void changeSetting()
 	{
-		if(MinestuckConfig.clientTreeAutobalance == 0)
+		if(MinestuckConfig.treeModusSetting == 0)
 		{
 			modus.autoBalance = !modus.autoBalance;
 			MSPacketHandler.sendToServer(CaptchaDeckPacket.modusParam((byte) 0, modus.autoBalance ? 1 : 0));

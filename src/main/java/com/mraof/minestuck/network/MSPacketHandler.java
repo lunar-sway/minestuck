@@ -23,7 +23,7 @@ public class MSPacketHandler
 	{
 		nextIndex = 0;
 		
-		registerMessage(ModConfigPacket.class, ModConfigPacket::decode);
+		registerMessage(DataCheckerPermissionPacket.class, DataCheckerPermissionPacket::decode);
 		registerMessage(EcheladderDataPacket.class, EcheladderDataPacket::decode);
 		registerMessage(ColorDataPacket.class, ColorDataPacket::decode);
 		registerMessage(ModusDataPacket.class, ModusDataPacket::decode);

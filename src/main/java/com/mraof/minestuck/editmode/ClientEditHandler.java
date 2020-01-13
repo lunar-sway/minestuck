@@ -132,7 +132,7 @@ public class ClientEditHandler
 			return;
 		PlayerEntity player = event.player;
 		
-		double range = MSDimensions.isLandDimension(player.dimension) ? MinestuckConfig.clientLandEditRange : MinestuckConfig.clientOverworldEditRange;
+		double range = MSDimensions.isLandDimension(player.dimension) ? MinestuckConfig.landEditRange.get() : MinestuckConfig.overworldEditRange.get();
 		
 		ServerEditHandler.updatePosition(player, range, centerX, centerZ);
 		

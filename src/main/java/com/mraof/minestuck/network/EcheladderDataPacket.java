@@ -12,17 +12,24 @@ public class EcheladderDataPacket implements PlayToClientPacket
 	private final int rung;
 	private final float progress;
 	private final boolean sendMessage;
+	private final boolean available;
 	
-	private EcheladderDataPacket(int rung, float progress, boolean sendMessage)
+	private EcheladderDataPacket(int rung, float progress, boolean sendMessage, boolean available)
 	{
 		this.rung = rung;
 		this.progress = progress;
 		this.sendMessage = sendMessage;
+		this.available = available;
 	}
 	
 	public static EcheladderDataPacket create(int rung, float progress, boolean sendMessage)
 	{
-		return new EcheladderDataPacket(rung, progress, sendMessage);
+		return new EcheladderDataPacket(rung, progress, sendMessage, true);
+	}
+	
+	public static EcheladderDataPacket init(int rung, float progress, boolean available)
+	{
+		return new EcheladderDataPacket(rung, progress, false, available);
 	}
 	
 	@Override
@@ -31,6 +38,7 @@ public class EcheladderDataPacket implements PlayToClientPacket
 		buffer.writeInt(rung);
 		buffer.writeFloat(progress);
 		buffer.writeBoolean(sendMessage);
+		buffer.writeBoolean(available);
 	}
 	
 	public static EcheladderDataPacket decode(PacketBuffer buffer)
@@ -48,6 +56,7 @@ public class EcheladderDataPacket implements PlayToClientPacket
 		int prev = ClientPlayerData.rung;
 		ClientPlayerData.rung = rung;
 		ClientPlayerData.rungProgress = progress;
+		ClientPlayerData.echeladderAvailable = available;
 		if(sendMessage)
 			for(prev++; prev <= rung; prev++)
 			{

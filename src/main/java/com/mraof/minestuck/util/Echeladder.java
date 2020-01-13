@@ -248,10 +248,15 @@ public class Echeladder
 		}
 	}
 	
+	public void sendInitialPacket(ServerPlayerEntity player)
+	{
+		EcheladderDataPacket packet = EcheladderDataPacket.init(getRung(), MinestuckConfig.echeladderProgress.get() ? getProgress() : 0F, MinestuckConfig.preEntryRungLimit.get() > 0);
+		MSPacketHandler.sendToPlayer(packet, player);
+	}
+	
 	public void sendDataPacket(ServerPlayerEntity player, boolean sendMessage)
 	{
-		Echeladder echeladder = PlayerSavedData.getData(player).getEcheladder();
-		EcheladderDataPacket packet = EcheladderDataPacket.create(echeladder.getRung(), MinestuckConfig.echeladderProgress.get() ? echeladder.getProgress() : 0F, sendMessage);
+		EcheladderDataPacket packet = EcheladderDataPacket.create(getRung(), MinestuckConfig.echeladderProgress.get() ? getProgress() : 0F, sendMessage);
 		MSPacketHandler.sendToPlayer(packet, player);
 	}
 	
