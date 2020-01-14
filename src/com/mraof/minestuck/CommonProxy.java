@@ -14,7 +14,6 @@ import com.mraof.minestuck.util.KindAbstratusList;
 import com.mraof.minestuck.util.SburbClient;
 import com.mraof.minestuck.util.SburbServer;
 import com.mraof.minestuck.world.biome.MSBiomes;
-import com.mraof.minestuck.world.gen.OreHandler;
 import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
 import net.minecraft.item.ItemStack;
 
@@ -25,10 +24,6 @@ public class CommonProxy
 		MSCriteriaTriggers.register();
 		MSEntityTypes.registerPlacements();
 		MSFillerBlockTypes.init();
-		
-		//register ore generation
-		OreHandler oreHandler = new OreHandler();
-		//GameRegistry.registerWorldGenerator(oreHandler, 0);
 		
 		//register channel handler
 		MSPacketHandler.setupChannel();
