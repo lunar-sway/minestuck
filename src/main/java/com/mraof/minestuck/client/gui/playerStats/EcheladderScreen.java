@@ -70,6 +70,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 	{
 		updateScrollAndAnimation(mouseX, mouseY);
 		
+		int speedFactor = MinestuckConfig.echeladderAnimation.get().getSpeed();
 		int currentRung;
 		boolean showLastRung = true;
 		if(animationCycle == 0)
@@ -78,26 +79,26 @@ public class EcheladderScreen extends PlayerStatsScreen
 			if(animatedRung < ClientPlayerData.rung)
 			{
 				animatedRungs = ClientPlayerData.rung - animatedRung;
-				animationCycle = timeBeforeAnimation + getTicksForRungAnimation(animatedRungs)*MinestuckConfig.echeladderAnimation;
+				animationCycle = timeBeforeAnimation + getTicksForRungAnimation(animatedRungs)*speedFactor;
 				animatedRung = ClientPlayerData.rung;
 			}
 		} else
 		{
-			int rungTicks = getTicksForRungAnimation(animatedRungs)*MinestuckConfig.echeladderAnimation;
+			int rungTicks = getTicksForRungAnimation(animatedRungs)*speedFactor;
 			if(animationCycle - rungTicks >= 0)	//Awaiting animation start
 				currentRung = animatedRung - animatedRungs;
 			else
 			{
 				if(animatedRungs < 5)	//The animation type where the rungs flicker in
 				{
-					int rung = (animationCycle/MinestuckConfig.echeladderAnimation + timeBeforeNext)/(timeForRung + timeBeforeNext);
+					int rung = (animationCycle/speedFactor + timeBeforeNext)/(timeForRung + timeBeforeNext);
 					currentRung = animatedRung - rung;
-					if((animationCycle/MinestuckConfig.echeladderAnimation + timeBeforeNext)%(timeForRung + timeBeforeNext) >= timeBeforeNext)
-						showLastRung = (animationCycle/MinestuckConfig.echeladderAnimation + timeBeforeNext)%(timeForRung + timeBeforeNext) - timeBeforeNext >= timeForRung/2;
+					if((animationCycle/speedFactor + timeBeforeNext)%(timeForRung + timeBeforeNext) >= timeBeforeNext)
+						showLastRung = (animationCycle/speedFactor + timeBeforeNext)%(timeForRung + timeBeforeNext) - timeBeforeNext >= timeForRung/2;
 				} else	//The animation type where the animation just goes through all rungs
 				{
 					currentRung = animatedRung;
-					int rung = animationCycle*animatedRungs/(timeForShowOnly*MinestuckConfig.echeladderAnimation) + 1;
+					int rung = animationCycle*animatedRungs/(timeForShowOnly*speedFactor) + 1;
 					currentRung = animatedRung - rung;
 				}
 			}
@@ -237,7 +238,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 		}
 		
 		if(animationCycle > 0)
-			if(MinestuckConfig.echeladderAnimation != 0)
+			if(MinestuckConfig.echeladderAnimation.get() != MinestuckConfig.AnimationSpeed.NOTHING)
 				animationCycle--;
 			else animationCycle = 0;
 	}

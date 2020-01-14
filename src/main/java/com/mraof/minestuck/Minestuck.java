@@ -49,6 +49,5 @@ public class Minestuck
 	private void clientSetup(final FMLClientSetupEvent event)
 	{
 		ClientProxy.init();
-		MinestuckConfig.setClientValues();
 	}
 }

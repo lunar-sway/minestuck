@@ -116,9 +116,7 @@ public class MinestuckConfig
 	public static int uraniumStratumMax = 30;
 	
 	//            Client	(Anything that is only needed for clients (only needed client-side))
-	public static byte echeladderAnimation;
-	public static ConfigValue<String> cfg_echeladderAnimation;
-	public static BooleanValue oldItemModels;
+	public static EnumValue<AnimationSpeed> echeladderAnimation;
 	public static BooleanValue loginColorSelector;
 	public static boolean dataCheckerAccess;
 	public static BooleanValue alchemyIcons;
@@ -217,34 +215,18 @@ public class MinestuckConfig
 		disableGiclops = SERVER_BUILDER.comment("Right now, the giclops pathfinding is currently causing huge amounts of lag due to their size. This option is a short-term solution that will disable giclops spawning and remove all existing giclopes.")
 				.define("medium.disableGiclops",true);
 		
-		CLIENT_BUILDER.comment("Client Side");
-		oldItemModels = CLIENT_BUILDER.comment("Set this to true to have back all old 2D item models.")
-				.define("client.oldItemModels", false);
+		CLIENT_BUILDER.push("client");
 		alchemyIcons = CLIENT_BUILDER.comment("Set this to true to replace grist names in alchemiter/grist widget with the grist icon.")
-				.define("client.alchemyIcons", true);
+				.define("alchemy_icons", true);
 		loginColorSelector = CLIENT_BUILDER.comment("Determines if the color selector should be displayed when entering a save file for the first time.")
-				.define("client.loginColorSelector", true);
-		cfg_echeladderAnimation = CLIENT_BUILDER.comment("Allows control of standard speed for the echeladder rung \"animation\", or if it should have one in the first place.")
+				.define("login_color_selector", true);
+		echeladderAnimation = CLIENT_BUILDER.comment("Allows control of standard speed for the echeladder rung \"animation\", or if it should have one in the first place.")
 				.comment("Range: [\"nothing\", \"slow\", \"normal\", \"fast\"]")
-				.define("client.echeladderAnimation", "normal");
+				.defineEnum("echeladder_animation", AnimationSpeed.NORMAL);
+		CLIENT_BUILDER.pop();
 		
 		CLIENT_CONFIG = CLIENT_BUILDER.build();
 		SERVER_CONFIG = SERVER_BUILDER.build();
-	}
-	
-	public static void setClientValues()
-	{
-		String ea = cfg_echeladderAnimation.get().toLowerCase();
-		switch(ea)
-		{
-			case "nothing": echeladderAnimation = 0;
-				break;
-			case "slow": echeladderAnimation = 4;
-				break;
-			case "fast": echeladderAnimation = 1;
-				break;
-			default: echeladderAnimation = 2;
-		}
 	}
 	
 	public static void setConfigVariables()
@@ -329,5 +311,25 @@ public class MinestuckConfig
 		GAMEMODE,
 		OPS_OR_GAMEMODE,
 		ANYONE
+	}
+	
+	public enum AnimationSpeed
+	{
+		NOTHING(0),
+		SLOW(1),
+		NORMAL(2),
+		FAST(4);
+		
+		private final int factor;
+		
+		AnimationSpeed(int factor)
+		{
+			this.factor = factor;
+		}
+		
+		public int getSpeed()
+		{
+			return factor;
+		}
 	}
 }
