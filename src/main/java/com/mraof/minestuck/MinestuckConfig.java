@@ -2,6 +2,7 @@ package com.mraof.minestuck;
 
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
+import com.mraof.minestuck.editmode.EditData;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
@@ -87,8 +88,7 @@ public class MinestuckConfig
 	public static BooleanValue privateComputers;
 	public static BooleanValue globalSession;
 	public static BooleanValue skaianetCheck;
-	public static byte dataCheckerPermission = 4;
-	public static ConfigValue<String> cfg_dataCheckerPermission;
+	public static EnumValue<PermissionType> dataCheckerPermission;
 	/**
 	 * 0: Make the player's new server player his/her old server player's server player
 	 * 1: The player that lost his/her server player will have an idle main connection until someone without a client player connects to him/her.
@@ -143,34 +143,34 @@ public class MinestuckConfig
 		
 		
 		SERVER_BUILDER.push("sylladex");
-		dropItemsInCards = SERVER_BUILDER.comment("When sylladexes are droppable, this option determines if items should be dropped inside of cards or items and cards as different stacks.")
+		dropItemsInCards = SERVER_BUILDER.comment("When sylladices may drop items and cards at the same time, this option determines if items should be dropped inside of cards or items and cards as different stacks.")
 				.define("drop_items_in_cards", true);
-		initialModusSize = SERVER_BUILDER.comment("The initial ammount of captchalogue cards in your sylladex.")
+		initialModusSize = SERVER_BUILDER.comment("The initial amount of captchalogue cards in your sylladex.")
 				.defineInRange("initial_modus_size", 5, 0, Integer.MAX_VALUE);
 		startingModusTypes = SERVER_BUILDER.comment("An array with the possible modus types to be assigned. Written with mod-id and modus name, for example \"minestuck:queue_stack\" or \"minestuck:hashmap\"")
 				.define("starting_modus_types", new ArrayList<>(Arrays.asList("minestuck:stack","minestuck:queue")));
 		modusMaxSize = SERVER_BUILDER.comment("The max size on a modus. Ignored if the value is 0.")
-				.defineInRange("modusMaxSize", 0, 0, Integer.MAX_VALUE);
+				.defineInRange("modus_max_size", 0, 0, Integer.MAX_VALUE);
 		treeModusSetting = SERVER_BUILDER.comment("This determines if auto-balance should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.")
 				.defineEnum("tree_modus_setting", AvailableOptions.BOTH);
 		hashmapChatModusSetting = SERVER_BUILDER.comment("This determines if hashmap chat ejection should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.")
 				.defineEnum("hashmap_modus_setting", AvailableOptions.BOTH);
-		sylladexDropMode = SERVER_BUILDER.comment("Determines which items from the modus that are dropped on death. \"items\": Only the items are dropped. \"cardsAndItems\": Both items and cards are dropped. (So that you have at most initial_modus_size amount of cards) \"all\": Everything is dropped, even the modus.")
+		sylladexDropMode = SERVER_BUILDER.comment("Determines which items from the modus that are dropped on death. \"items\": Only the items are dropped. \"cards_and_items\": Both items and cards are dropped. (So that you have at most initial_modus_size amount of cards) \"all\": Everything is dropped, even the modus.")
 				.defineEnum("drop_mode", DropMode.CARDS_AND_ITEMS);
 		SERVER_BUILDER.pop();
 		
-		SERVER_BUILDER.comment("Computer");
+		SERVER_BUILDER.push("computer");
 		privateComputers = SERVER_BUILDER.comment("True if computers should only be able to be used by the owner.")
-				.define("computer.privateComputers", true);
+				.define("private_computers", true);
 		globalSession = SERVER_BUILDER.comment("Whenether all connetions should be put into a single session or not.")
-				.define("computer.globalSession",false);
+				.define("global_session",false);
 		allowSecondaryConnections = SERVER_BUILDER.comment("Set this to true to allow so-called 'secondary connections' to be created.")
-				.define("computer.secondaryConnections", true);
+				.define("secondary_connections", true);
 		skaianetCheck = SERVER_BUILDER.comment("If enabled, will during certain moments perform a check on all connections and computers that are in use. Recommended to turn off if there is a need to improve performance, however skaianet-related bugs might appear when done so.")
-				.define("computer.skaianetCheck",true);
-		cfg_dataCheckerPermission = SERVER_BUILDER.comment("Determines who's allowed to access the data checker. \"none\": No one is allowed. \"ops\": only those with a command permission of level 2 or more may access the data ckecker. (for single player, that would be if cheats are turned on) \"gamemode\": Only players with the creative or spectator gamemode may view the data checker. \"opsAndGamemode\": Combination of \"ops\" and \"gamemode\". \"anyone\": No access restrictions are used.")
-				.define("computer.dataCheckerPermission", "opsAndGamemode");
-		
+				.define("skaianet_check",true);
+		dataCheckerPermission = SERVER_BUILDER.comment("Determines who's allowed to access the data checker. \"none\": No one is allowed. \"ops\": only those with a command permission of level 2 or more may access the data ckecker. (for single player, that would be if cheats are turned on) \"gamemode\": Only players with the creative or spectator gamemode may view the data checker. \"ops_or_gamemode\": Both ops and players in creative or spectator mode may view the data checker. \"anyone\": No access restrictions are used.")
+				.defineEnum("data_checker_permission", PermissionType.OPS_OR_GAMEMODE);
+		SERVER_BUILDER.pop();
 		
 		SERVER_BUILDER.comment("Edit Mode");
 		giveItems = SERVER_BUILDER.comment("Setting this to true replaces editmode with the old Give Items button.")
@@ -253,17 +253,8 @@ public class MinestuckConfig
 		forbiddenDimensionsTpz = new DimensionType[fdt.size()];
 		for(int i = 0; i < fdt.size(); i++)
 			forbiddenDimensionsTpz[i] = DimensionType.getById(fdt.get(i));
-		
-		String dcp = cfg_dataCheckerPermission.get().toLowerCase();
-		switch(dcp)
-		{
-			case "none": dataCheckerPermission = 0;
-			case "ops": dataCheckerPermission = 1;
-			case "gamemode": dataCheckerPermission = 2;
-			case "anyone": dataCheckerPermission = 4;
-			default: dataCheckerPermission = 3;
-		}
 	}
+	
 	public static void loadConfig(ForgeConfigSpec config, Path path)
 	{
 		final CommentedFileConfig file = CommentedFileConfig.builder(path).sync().autosave().writingMode(WritingMode.REPLACE).build();
@@ -273,28 +264,36 @@ public class MinestuckConfig
 	
 	public static boolean getDataCheckerPermissionFor(ServerPlayerEntity player)
 	{
-		if((dataCheckerPermission & 3) != 0)
+		switch(dataCheckerPermission.get())
 		{
-			if((dataCheckerPermission & 1) != 0)
-			{
-				MinecraftServer server = player.getServer();
-				if (server.getPlayerList().canSendCommands(player.getGameProfile()))
-				{
-					OpEntry userlistopsentry = server.getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
-					if((userlistopsentry != null ? userlistopsentry.getPermissionLevel() : server.getOpPermissionLevel()) >= 2)
-						return true;
-				}
-			}
-			if((dataCheckerPermission & 2) != 0)
-			{
-				GameType gameType = player.interactionManager.getGameType();
-				if(ServerEditHandler.getData(player) != null)
-					gameType = ServerEditHandler.getData(player).getDecoy().gameType;
-				if(!gameType.isSurvivalOrAdventure())
-					return true;
-			}
-			return false;
-		} else return dataCheckerPermission != 0;
+			case ANYONE: return true;
+			case OPS: return hasOp(player);
+			case GAMEMODE: return hasGamemodePermission(player);
+			case OPS_OR_GAMEMODE: return hasOp(player) || hasGamemodePermission(player);
+			case NONE: default: return false;
+		}
+	}
+	
+	private static boolean hasGamemodePermission(ServerPlayerEntity player)
+	{
+		GameType gameType = player.interactionManager.getGameType();
+		
+		EditData data = ServerEditHandler.getData(player);
+		if(data != null)
+			gameType = data.getDecoy().gameType;
+		
+		return !gameType.isSurvivalOrAdventure();
+	}
+	
+	private static boolean hasOp(ServerPlayerEntity player)
+	{
+		MinecraftServer server = player.getServer();
+		if(server != null && server.getPlayerList().canSendCommands(player.getGameProfile()))
+		{
+			OpEntry entry = server.getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
+			return (entry != null ? entry.getPermissionLevel() : server.getOpPermissionLevel()) >= 2;
+		}
+		return false;
 	}
 	
 	/**
@@ -321,5 +320,14 @@ public class MinestuckConfig
 		BOTH,
 		ON,
 		OFF
+	}
+	
+	public enum PermissionType
+	{
+		NONE,
+		OPS,
+		GAMEMODE,
+		OPS_OR_GAMEMODE,
+		ANYONE
 	}
 }
