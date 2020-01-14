@@ -70,13 +70,7 @@ public class MinestuckConfig
 	public static String[] defaultModusTypes = new String[0];
 	public static ConfigValue<List<String>> cfg_defaultModusTypes;
 	public static IntValue modusMaxSize;
-	/**
-	 * TODO Use enum
-	 * An option related to dropping the sylladex on death
-	 * If 0: only captchalouged items are dropped. If 1: Both captchalouged items and cards are dropped. If 2: All items, including the actual modus.
-	 */
-	public static byte sylladexDropMode;
-	public static ConfigValue<String> cfg_sylladexDropMode;
+	public static EnumValue<DropMode> sylladexDropMode;
 	
 	//Mechanics
 	public static boolean forceMaxSize = true;
@@ -151,24 +145,22 @@ public class MinestuckConfig
 				.define("mechanics.playerSelectedTitle", false);
 		
 		
-		SERVER_BUILDER.comment("Sylladex");
-		//specialCardRenderer = server_builder.comment("Whenether to use the special render for cards or not.").define("sylladex.specialCardRenderer", false);
+		SERVER_BUILDER.push("sylladex");
 		dropItemsInCards = SERVER_BUILDER.comment("When sylladexes are droppable, this option determines if items should be dropped inside of cards or items and cards as different stacks.")
-				.define("sylladex.dropItemsInCards", true);
-		//cardResolution = server_builder.comment("The resolution of the item inside of a card. The width/height is computed by '8*2^x', where 'x' is this config value.").defineInRange("sylladex.cardResolution", 1, 0 ,5);
+				.define("dropItemsInCards", true);
 		initialModusSize = SERVER_BUILDER.comment("The initial ammount of captchalogue cards in your sylladex.")
-				.defineInRange("sylladex.initialModusSize", 5, 0, Integer.MAX_VALUE);
+				.defineInRange("initialModusSize", 5, 0, Integer.MAX_VALUE);
 		cfg_defaultModusTypes = SERVER_BUILDER.comment("An array with the possible modus types to be assigned. Written with mod-id and modus name, for example \"minestuck:queue_stack\" or \"minestuck:hashmap\"")
-				.define("sylladex.defaultModusTypes", new ArrayList<>(Arrays.asList("minestuck:stack","minestuck:queue")));
+				.define("defaultModusTypes", new ArrayList<>(Arrays.asList("minestuck:stack","minestuck:queue")));
 		modusMaxSize = SERVER_BUILDER.comment("The max size on a modus. Ignored if the value is 0.")
-				.defineInRange("sylladex.modusMaxSize", 0, 0, Integer.MAX_VALUE);
+				.defineInRange("modusMaxSize", 0, 0, Integer.MAX_VALUE);
 		cfg_treeModusSetting = SERVER_BUILDER.comment("This determines if auto-balance should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.")
-				.define("sylladex.treeModusSetting", "both");
+				.define("treeModusSetting", "both");
 		cfg_hashmapChatModusSetting = SERVER_BUILDER.comment("This determines if hashmap chat ejection should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.")
-				.define("sylladex.forceEjectByChat", "both");
-		cfg_sylladexDropMode = SERVER_BUILDER.comment("Determines which items from the modus that are dropped on death. \"items\": Only the items are dropped. \"cardsAndItems\": Both items and cards are dropped. (So that you have at most initialModusSize amount of cards) \"all\": Everything is dropped, even the modus.")
-				.define("sylladex.sylladexDropMode", "cardsAndItems");
-		
+				.define("forceEjectByChat", "both");
+		sylladexDropMode = SERVER_BUILDER.comment("Determines which items from the modus that are dropped on death. \"items\": Only the items are dropped. \"cardsAndItems\": Both items and cards are dropped. (So that you have at most initial_modus_size amount of cards) \"all\": Everything is dropped, even the modus.")
+				.defineEnum("drop_mode", DropMode.CARDS_AND_ITEMS);
+		SERVER_BUILDER.pop();
 		
 		SERVER_BUILDER.comment("Computer");
 		privateComputers = SERVER_BUILDER.comment("True if computers should only be able to be used by the owner.")
@@ -288,15 +280,6 @@ public class MinestuckConfig
 				break;
 			default: hashmapChatModusSetting = 0;
 		}
-		String sdm = cfg_sylladexDropMode.get().toLowerCase();
-		switch(sdm)
-		{
-			case "all": sylladexDropMode = 2;
-				break;
-			case "items": sylladexDropMode = 0;
-				break;
-			default: sylladexDropMode = 1;
-		}
 		
 		String dcp = cfg_dataCheckerPermission.get().toLowerCase();
 		switch(dcp)
@@ -340,5 +323,23 @@ public class MinestuckConfig
 			return false;
 		} else return dataCheckerPermission != 0;
 	}
+	
+	/**
+	 * To determine how much of the sylladex that is dropped on player death (when keepInventory is turned off)
+	 */
+	public enum DropMode
+	{
+		/**
+		 * Only captchalogued items are dropped.
+		 */
+		ITEMS,
+		/**
+		 * Both captchalogued items and cards are dropped. (So that you have at most initialModusSize amount of cards)
+		 */
+		CARDS_AND_ITEMS,
+		/**
+		 * Everything is dropped, even the modus card.
+		 */
+		ALL
+	}
 }
-

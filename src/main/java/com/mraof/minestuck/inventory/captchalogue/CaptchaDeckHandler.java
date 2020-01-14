@@ -350,29 +350,33 @@ public class CaptchaDeckHandler
 		
 		NonNullList<ItemStack> stacks = modus.getItems();
 		int size = modus.getSize();
-		int cardsToKeep = MinestuckConfig.sylladexDropMode == 2 ? 0 : MinestuckConfig.initialModusSize.get();
-		
-		if(!MinestuckConfig.dropItemsInCards.get() || MinestuckConfig.sylladexDropMode == 0)
+		int cardsToKeep;
+		switch(MinestuckConfig.sylladexDropMode.get())
 		{
-			for(ItemStack stack : stacks)
-				if(!stack.isEmpty())
-					player.dropItem(stack, true, false);
-		} else
-			for(ItemStack stack : stacks)
-				if(!stack.isEmpty())
-					if(size > cardsToKeep)
-					{
-						ItemStack card = AlchemyRecipes.createCard(stack, false);
-						player.dropItem(card, true, false);
-						size--;
-					} else player.dropItem(stack, true, false);
+			case ITEMS:
+				cardsToKeep = size;
+				break;
+			case CARDS_AND_ITEMS:
+				cardsToKeep = MinestuckConfig.initialModusSize.get();
+				break;
+			case ALL: default:
+				cardsToKeep = 0;
+		}
 		
-		int stackLimit = MSItems.CAPTCHA_CARD.getItemStackLimit(new ItemStack(MSItems.CAPTCHA_CARD));
-		if(MinestuckConfig.sylladexDropMode >= 1)
-			for(; size > cardsToKeep; size = Math.max(size - stackLimit, cardsToKeep))
-				player.dropItem(new ItemStack(MSItems.CAPTCHA_CARD, Math.min(stackLimit, size - cardsToKeep)), true, false);
+		for(ItemStack stack : stacks)
+			if(!stack.isEmpty())
+				if(size > cardsToKeep && MinestuckConfig.dropItemsInCards.get())
+				{
+					ItemStack card = AlchemyRecipes.createCard(stack, false);
+					player.dropItem(card, true, false);
+					size--;
+				} else player.dropItem(stack, true, false);
 		
-		if(MinestuckConfig.sylladexDropMode == 2)
+		int stackLimit = new ItemStack(MSItems.CAPTCHA_CARD).getMaxStackSize();
+		for(; size > cardsToKeep; size = Math.max(size - stackLimit, cardsToKeep))
+			player.dropItem(new ItemStack(MSItems.CAPTCHA_CARD, Math.min(stackLimit, size - cardsToKeep)), true, false);
+		
+		if(MinestuckConfig.sylladexDropMode.get() == MinestuckConfig.DropMode.ALL)
 		{
 			player.dropItem(new ItemStack(modus.getType().getItem()), true, false);	//TODO Add a method to the modus to get the itemstack instead
 			setModus(player, null);
