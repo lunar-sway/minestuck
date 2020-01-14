@@ -31,10 +31,8 @@ public class MinestuckConfig
 	public static IntValue alchemiterMaxStacks;
 	
 	//Sylladex
-	public static byte treeModusSetting;
-	public static ConfigValue<String> cfg_treeModusSetting;
-	public static byte hashmapChatModusSetting;
-	public static ConfigValue<String> cfg_hashmapChatModusSetting;
+	public static EnumValue<AvailableOptions> treeModusSetting;
+	public static EnumValue<AvailableOptions> hashmapChatModusSetting;
 	
 	//Mechanics
 	public static boolean hardMode = false; //Not fully fleshed out yet
@@ -154,10 +152,10 @@ public class MinestuckConfig
 				.define("defaultModusTypes", new ArrayList<>(Arrays.asList("minestuck:stack","minestuck:queue")));
 		modusMaxSize = SERVER_BUILDER.comment("The max size on a modus. Ignored if the value is 0.")
 				.defineInRange("modusMaxSize", 0, 0, Integer.MAX_VALUE);
-		cfg_treeModusSetting = SERVER_BUILDER.comment("This determines if auto-balance should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.")
-				.define("treeModusSetting", "both");
-		cfg_hashmapChatModusSetting = SERVER_BUILDER.comment("This determines if hashmap chat ejection should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.")
-				.define("forceEjectByChat", "both");
+		treeModusSetting = SERVER_BUILDER.comment("This determines if auto-balance should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.")
+				.defineEnum("tree_modus_setting", AvailableOptions.BOTH);
+		hashmapChatModusSetting = SERVER_BUILDER.comment("This determines if hashmap chat ejection should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.")
+				.defineEnum("hashmap_modus_setting", AvailableOptions.BOTH);
 		sylladexDropMode = SERVER_BUILDER.comment("Determines which items from the modus that are dropped on death. \"items\": Only the items are dropped. \"cardsAndItems\": Both items and cards are dropped. (So that you have at most initial_modus_size amount of cards) \"all\": Everything is dropped, even the modus.")
 				.defineEnum("drop_mode", DropMode.CARDS_AND_ITEMS);
 		SERVER_BUILDER.pop();
@@ -262,25 +260,6 @@ public class MinestuckConfig
 		for(int i = 0; i < dmt.size(); i++)
 			defaultModusTypes[i] = dmt.get(i);
 		
-		String tms = cfg_treeModusSetting.get().toLowerCase();
-		switch(tms)
-		{
-			case "on": treeModusSetting = 1;
-				break;
-			case "off": treeModusSetting = 2;
-				break;
-			default: treeModusSetting = 0;
-		}
-		String hms = cfg_hashmapChatModusSetting.get().toLowerCase();
-		switch(tms)
-		{
-			case "on": hashmapChatModusSetting = 1;
-				break;
-			case "off": hashmapChatModusSetting = 2;
-				break;
-			default: hashmapChatModusSetting = 0;
-		}
-		
 		String dcp = cfg_dataCheckerPermission.get().toLowerCase();
 		switch(dcp)
 		{
@@ -341,5 +320,12 @@ public class MinestuckConfig
 		 * Everything is dropped, even the modus card.
 		 */
 		ALL
+	}
+	
+	public enum AvailableOptions
+	{
+		BOTH,
+		ON,
+		OFF
 	}
 }

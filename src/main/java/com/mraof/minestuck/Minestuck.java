@@ -43,10 +43,6 @@ public class Minestuck
 	
 	private void setup(final FMLCommonSetupEvent event)
 	{
-		
-		//MinestuckConfig.loadConfigFile(event.getSuggestedConfigurationFile(), event.getSide());
-		
-		MinestuckConfig.setConfigVariables();
 		CommonProxy.init();
 	}
 	

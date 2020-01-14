@@ -39,9 +39,9 @@ public class HashMapSylladexScreen extends SylladexScreen
 	{
 		guiButton.x = (width - GUI_WIDTH)/2 + 15;
 		guiButton.y = (height - GUI_HEIGHT)/2 + 175;
-		boolean active = MinestuckConfig.hashmapChatModusSetting == 0 ? modus.ejectByChat : MinestuckConfig.hashmapChatModusSetting == 1;
+		boolean active = MinestuckConfig.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH ? modus.ejectByChat : MinestuckConfig.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.ON;
 		guiButton.setMessage(I18n.format(active ? EJECT_BY_CHAT_ON : EJECT_BY_CHAT_OFF));
-		guiButton.active = MinestuckConfig.hashmapChatModusSetting == 0;
+		guiButton.active = MinestuckConfig.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH;
 		super.render(xcor, ycor, f);
 	}
 	
@@ -103,7 +103,7 @@ public class HashMapSylladexScreen extends SylladexScreen
 	
 	private void changeSetting()
 	{
-		if(MinestuckConfig.hashmapChatModusSetting == 0)
+		if(MinestuckConfig.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH)
 		{
 			modus.ejectByChat = !modus.ejectByChat;
 			MSPacketHandler.sendToServer(CaptchaDeckPacket.modusParam((byte) 0, modus.ejectByChat ? 1 : 0));

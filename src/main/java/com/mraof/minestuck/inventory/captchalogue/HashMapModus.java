@@ -111,7 +111,7 @@ public class HashMapModus extends Modus
 		list.set(index, item);
 		markDirty();
 		
-		if(ejectByChat && MinestuckConfig.hashmapChatModusSetting != 2 || MinestuckConfig.hashmapChatModusSetting == 1)
+		if(ejectByChat && MinestuckConfig.hashmapChatModusSetting.get() != MinestuckConfig.AvailableOptions.OFF || MinestuckConfig.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.ON)
 			player.sendMessage(new TranslationTextComponent(MESSAGE, item.getTextComponent(), getSize(), index));
 		
 		return true;
@@ -217,7 +217,7 @@ public class HashMapModus extends Modus
 	
 	public void onChatMessage(ServerPlayerEntity player, String str)
 	{
-		if(!ejectByChat && MinestuckConfig.hashmapChatModusSetting != 1 || MinestuckConfig.hashmapChatModusSetting == 2)
+		if(!ejectByChat && MinestuckConfig.hashmapChatModusSetting.get() != MinestuckConfig.AvailableOptions.ON || MinestuckConfig.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.OFF)
 			return;
 		
 		boolean isPrevLetter = false;

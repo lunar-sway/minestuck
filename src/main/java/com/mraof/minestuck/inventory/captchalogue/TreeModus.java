@@ -198,7 +198,7 @@ public class TreeModus extends Modus
 	
 	protected void autoBalance()
 	{
-		if(!autoBalance && MinestuckConfig.treeModusSetting != 1 || MinestuckConfig.treeModusSetting == 2)
+		if(!autoBalance && MinestuckConfig.treeModusSetting.get() != MinestuckConfig.AvailableOptions.ON || MinestuckConfig.treeModusSetting.get() == MinestuckConfig.AvailableOptions.OFF)
 			return;
 		
 		int minDepth = getDepth(node, true);
