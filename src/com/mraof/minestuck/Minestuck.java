@@ -31,7 +31,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.event.server.*;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
-
+import com.mraof.minestuck.world.gen.OreGeneration;
 import java.util.Random;
 
 import static com.mraof.minestuck.Minestuck.MOD_ID;
@@ -67,9 +67,9 @@ public class Minestuck
 		//MinestuckConfig.loadConfigFile(event.getSuggestedConfigurationFile(), event.getSide());
 		
 		//(new UpdateChecker()).start();
-		
 		MinestuckConfig.setConfigVariables();
 		CommonProxy.init();
+		OreGeneration.setupOverworldOreGeneration();
 	}
 	
 	private void clientSetup(final FMLClientSetupEvent event)
