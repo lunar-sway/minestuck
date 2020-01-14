@@ -22,6 +22,7 @@ import net.minecraftforge.common.util.Constants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -152,8 +153,11 @@ public final class PlayerData
 	
 	private void setGivenModus()
 	{
-		givenModus = true;
-		markDirty();
+		if(!givenModus)
+		{
+			givenModus = true;
+			markDirty();
+		}
 	}
 	
 	public long getBoondollars()
@@ -252,20 +256,38 @@ public final class PlayerData
 		}
 	}
 	
+	private void tryGiveStartingModus(ServerPlayerEntity player)
+	{
+		List<String> startingTypes = MinestuckConfig.startingModusTypes.get();
+		if(!startingTypes.isEmpty())
+		{
+			String type = startingTypes.get(player.world.rand.nextInt(startingTypes.size()));
+			if(type.isEmpty())
+			{
+				setGivenModus();
+				return;
+			}
+			ResourceLocation name = ResourceLocation.tryCreate(type);
+			if(name == null)
+				LOGGER.error("Unable to parse starting modus type {} as a resource location!", type);
+			else
+			{
+				Modus modus = CaptchaDeckHandler.createServerModus(name, savedData);
+				if(modus != null)
+				{
+					modus.initModus(player, null, MinestuckConfig.initialModusSize.get());
+					setModus(modus);
+				} else LOGGER.warn("Couldn't create a starting modus type by name {}.", type);
+			}
+		}
+	}
+	
 	public void onPlayerLoggedIn(ServerPlayerEntity player)
 	{
 		getEcheladder().updateEcheladderBonuses(player);
 		
-		if(getModus() == null && MinestuckConfig.defaultModusTypes.length > 0 && !hasGivenModus())
-		{
-			int index = player.world.rand.nextInt(MinestuckConfig.defaultModusTypes.length);
-			Modus modus = CaptchaDeckHandler.createServerModus(new ResourceLocation(MinestuckConfig.defaultModusTypes[index]), savedData);
-			if(modus != null)
-			{
-				modus.initModus(player, null, MinestuckConfig.initialModusSize.get());
-				CaptchaDeckHandler.setModus(player, modus);
-			} else LOGGER.warn("Couldn't create a modus by name {}.", MinestuckConfig.defaultModusTypes[index]);
-		}
+		if(getModus() == null && !hasGivenModus())
+			tryGiveStartingModus(player);
 		
 		if(getModus() != null)
 		{

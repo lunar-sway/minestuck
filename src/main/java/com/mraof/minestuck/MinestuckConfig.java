@@ -65,8 +65,7 @@ public class MinestuckConfig
 	//Sylladex
 	public static BooleanValue dropItemsInCards;
 	public static IntValue initialModusSize;
-	public static String[] defaultModusTypes = new String[0];
-	public static ConfigValue<List<String>> cfg_defaultModusTypes;
+	public static ConfigValue<List<String>> startingModusTypes;
 	public static IntValue modusMaxSize;
 	public static EnumValue<DropMode> sylladexDropMode;
 	
@@ -145,11 +144,11 @@ public class MinestuckConfig
 		
 		SERVER_BUILDER.push("sylladex");
 		dropItemsInCards = SERVER_BUILDER.comment("When sylladexes are droppable, this option determines if items should be dropped inside of cards or items and cards as different stacks.")
-				.define("dropItemsInCards", true);
+				.define("drop_items_in_cards", true);
 		initialModusSize = SERVER_BUILDER.comment("The initial ammount of captchalogue cards in your sylladex.")
-				.defineInRange("initialModusSize", 5, 0, Integer.MAX_VALUE);
-		cfg_defaultModusTypes = SERVER_BUILDER.comment("An array with the possible modus types to be assigned. Written with mod-id and modus name, for example \"minestuck:queue_stack\" or \"minestuck:hashmap\"")
-				.define("defaultModusTypes", new ArrayList<>(Arrays.asList("minestuck:stack","minestuck:queue")));
+				.defineInRange("initial_modus_size", 5, 0, Integer.MAX_VALUE);
+		startingModusTypes = SERVER_BUILDER.comment("An array with the possible modus types to be assigned. Written with mod-id and modus name, for example \"minestuck:queue_stack\" or \"minestuck:hashmap\"")
+				.define("starting_modus_types", new ArrayList<>(Arrays.asList("minestuck:stack","minestuck:queue")));
 		modusMaxSize = SERVER_BUILDER.comment("The max size on a modus. Ignored if the value is 0.")
 				.defineInRange("modusMaxSize", 0, 0, Integer.MAX_VALUE);
 		treeModusSetting = SERVER_BUILDER.comment("This determines if auto-balance should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.")
@@ -254,11 +253,6 @@ public class MinestuckConfig
 		forbiddenDimensionsTpz = new DimensionType[fdt.size()];
 		for(int i = 0; i < fdt.size(); i++)
 			forbiddenDimensionsTpz[i] = DimensionType.getById(fdt.get(i));
-		
-		List<String> dmt = cfg_defaultModusTypes.get();
-		defaultModusTypes = new String[dmt.size()];
-		for(int i = 0; i < dmt.size(); i++)
-			defaultModusTypes[i] = dmt.get(i);
 		
 		String dcp = cfg_dataCheckerPermission.get().toLowerCase();
 		switch(dcp)
