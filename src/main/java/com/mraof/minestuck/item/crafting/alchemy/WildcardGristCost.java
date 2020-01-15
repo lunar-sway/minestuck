@@ -17,7 +17,6 @@ import java.util.List;
 public class WildcardGristCost extends GristCostRecipe
 {
 	private final long wildcardCost;
-	private List<JeiGristCost> jeiCost;
 	
 	public WildcardGristCost(ResourceLocation id, Ingredient ingredient, long wildcardCost, Integer priority)
 	{
@@ -40,9 +39,7 @@ public class WildcardGristCost extends GristCostRecipe
 	@Override
 	public List<JeiGristCost> getJeiCosts(World world)
 	{
-		if(jeiCost == null)
-			jeiCost = Collections.singletonList(new JeiGristCost.Wildcard(ingredient, wildcardCost));
-		return jeiCost;
+		return Collections.singletonList(new JeiGristCost.Wildcard(ingredient, wildcardCost));
 	}
 	
 	@Override

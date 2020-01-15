@@ -19,7 +19,6 @@ import java.util.List;
 public class GeneratedGristCost extends GristCostRecipe
 {
 	private final GristCostGenerator generator;
-	private List<JeiGristCost> jeiCosts;
 	
 	private GeneratedGristCost(ResourceLocation id, GristCostGenerator generator)
 	{
@@ -59,13 +58,9 @@ public class GeneratedGristCost extends GristCostRecipe
 	@Override
 	public List<JeiGristCost> getJeiCosts(World world)
 	{
-		if(jeiCosts == null)
-		{
-			if(generator != null)
-				jeiCosts = generator.createJeiCosts();
-			else jeiCosts = GristCostGenerator.getInstance().createJeiCosts();
-		}
-		return jeiCosts;
+		if(generator != null)
+			return generator.createJeiCosts();
+		else return GristCostGenerator.getInstance().createJeiCosts();
 	}
 	
 	@Override

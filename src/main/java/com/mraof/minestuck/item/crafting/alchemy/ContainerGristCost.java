@@ -25,7 +25,6 @@ public class ContainerGristCost extends GristCostRecipe
 	
 	private final ImmutableGristSet addedCost;
 	private ImmutableGristSet cachedCost;
-	private List<JeiGristCost> jeiCost;
 	//Is false when it should use cachedCost, and true when it should calculate it from the container cost.
 	// Solves the scenario of recursion from looking up the cost, by causing the recursion to terminate with a null cost returned.
 	private boolean shouldFindCost = true;
@@ -51,14 +50,10 @@ public class ContainerGristCost extends GristCostRecipe
 	@Override
 	public List<JeiGristCost> getJeiCosts(World world)
 	{
-		if(jeiCost == null)
-		{
-			GristSet cost = findGristCost(world);
-			if(cost != null)
-				jeiCost = Collections.singletonList(new JeiGristCost.Set(ingredient, cost));
-			else jeiCost = Collections.emptyList();
-		}
-		return jeiCost;
+		GristSet cost = findGristCost(world);
+		if(cost != null)
+			return Collections.singletonList(new JeiGristCost.Set(ingredient, cost));
+		else return Collections.emptyList();
 	}
 	
 	private GristSet findGristCost(World world)

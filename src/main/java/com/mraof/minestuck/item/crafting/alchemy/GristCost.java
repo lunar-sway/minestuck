@@ -16,7 +16,6 @@ import java.util.List;
 public class GristCost extends GristCostRecipe
 {
 	private final ImmutableGristSet cost;
-	private List<JeiGristCost> jeiCost;
 	
 	public GristCost(ResourceLocation id, Ingredient ingredient, GristSet cost, Integer priority)
 	{
@@ -33,9 +32,7 @@ public class GristCost extends GristCostRecipe
 	@Override
 	public List<JeiGristCost> getJeiCosts(World world)
 	{
-		if(jeiCost == null)
-			jeiCost = Collections.singletonList(new JeiGristCost.Set(ingredient, cost));
-		return jeiCost;
+		return Collections.singletonList(new JeiGristCost.Set(ingredient, cost));
 	}
 	
 	@Override
