@@ -226,7 +226,10 @@ public class GristCostGenerator extends ReloadListener<List<GristCostGenerator.S
 			}
 		}
 		
-		this.generatedCosts = Collections.unmodifiableMap(process.generatedCosts);
+		//Clean out null grist costs
+		process.generatedCosts.entrySet().removeIf(entry -> entry.getValue() == null);
+		
+		this.generatedCosts = ImmutableMap.copyOf(process.generatedCosts);
 		LOGGER.info("Generated {} grist conversions from marked recipes.", generatedCosts.size());
 	}
 	
