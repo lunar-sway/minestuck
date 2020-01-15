@@ -11,7 +11,6 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLPaths;
 
 import static com.mraof.minestuck.Minestuck.MOD_ID;
 
@@ -30,9 +29,6 @@ public class Minestuck
 		
 		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, MinestuckConfig.CLIENT_CONFIG);
 		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, MinestuckConfig.SERVER_CONFIG);
-		
-		MinestuckConfig.loadConfig(MinestuckConfig.CLIENT_CONFIG, FMLPaths.CONFIGDIR.get().resolve("minestuck-client.toml"));
-		MinestuckConfig.loadConfig(MinestuckConfig.SERVER_CONFIG, FMLPaths.CONFIGDIR.get().resolve("minestuck-server.toml"));
 		
 		WorldPersistenceHooks.addHook(new MSWorldPersistenceHook());
 		

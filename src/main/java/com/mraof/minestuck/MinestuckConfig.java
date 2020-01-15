@@ -1,7 +1,5 @@
 package com.mraof.minestuck;
 
-import com.electronwill.nightconfig.core.file.CommentedFileConfig;
-import com.electronwill.nightconfig.core.io.WritingMode;
 import com.mraof.minestuck.editmode.EditData;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -10,7 +8,6 @@ import net.minecraft.server.management.OpEntry;
 import net.minecraft.world.GameType;
 import net.minecraftforge.common.ForgeConfigSpec;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -141,32 +138,32 @@ public class MinestuckConfig
 		
 		SERVER_BUILDER.push("sylladex");
 		dropItemsInCards = SERVER_BUILDER.comment("When sylladices may drop items and cards at the same time, this option determines if items should be dropped inside of cards or items and cards as different stacks.")
-				.define("drop_items_in_cards", true);
+				.define("dropItemsInCards", true);
 		initialModusSize = SERVER_BUILDER.comment("The initial amount of captchalogue cards in your sylladex.")
-				.defineInRange("initial_modus_size", 5, 0, Integer.MAX_VALUE);
+				.defineInRange("initialModusSize", 5, 0, Integer.MAX_VALUE);
 		startingModusTypes = SERVER_BUILDER.comment("An array with the possible modus types to be assigned. Written with mod-id and modus name, for example \"minestuck:queue_stack\" or \"minestuck:hashmap\"")
-				.define("starting_modus_types", new ArrayList<>(Arrays.asList("minestuck:stack","minestuck:queue")));
+				.define("startingModusTypes", new ArrayList<>(Arrays.asList("minestuck:stack","minestuck:queue")));
 		modusMaxSize = SERVER_BUILDER.comment("The max size on a modus. Ignored if the value is 0.")
-				.defineInRange("modus_max_size", 0, 0, Integer.MAX_VALUE);
+				.defineInRange("modusMaxSize", 0, 0, Integer.MAX_VALUE);
 		treeModusSetting = SERVER_BUILDER.comment("This determines if auto-balance should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.")
-				.defineEnum("tree_modus_setting", AvailableOptions.BOTH);
+				.defineEnum("treeModusSetting", AvailableOptions.BOTH);
 		hashmapChatModusSetting = SERVER_BUILDER.comment("This determines if hashmap chat ejection should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.")
-				.defineEnum("hashmap_modus_setting", AvailableOptions.BOTH);
+				.defineEnum("hashmapModusSetting", AvailableOptions.BOTH);
 		sylladexDropMode = SERVER_BUILDER.comment("Determines which items from the modus that are dropped on death. \"items\": Only the items are dropped. \"cards_and_items\": Both items and cards are dropped. (So that you have at most initial_modus_size amount of cards) \"all\": Everything is dropped, even the modus.")
-				.defineEnum("drop_mode", DropMode.CARDS_AND_ITEMS);
+				.defineEnum("dropMode", DropMode.CARDS_AND_ITEMS);
 		SERVER_BUILDER.pop();
 		
 		SERVER_BUILDER.push("computer");
 		privateComputers = SERVER_BUILDER.comment("True if computers should only be able to be used by the owner.")
-				.define("private_computers", true);
+				.define("privateComputers", true);
 		globalSession = SERVER_BUILDER.comment("Whenether all connetions should be put into a single session or not.")
-				.define("global_session",false);
+				.define("globalSession",false);
 		allowSecondaryConnections = SERVER_BUILDER.comment("Set this to true to allow so-called 'secondary connections' to be created.")
-				.define("secondary_connections", true);
+				.define("secondaryConnections", true);
 		skaianetCheck = SERVER_BUILDER.comment("If enabled, will during certain moments perform a check on all connections and computers that are in use. Recommended to turn off if there is a need to improve performance, however skaianet-related bugs might appear when done so.")
-				.define("skaianet_check",true);
+				.define("skaianetCheck",true);
 		dataCheckerPermission = SERVER_BUILDER.comment("Determines who's allowed to access the data checker. \"none\": No one is allowed. \"ops\": only those with a command permission of level 2 or more may access the data ckecker. (for single player, that would be if cheats are turned on) \"gamemode\": Only players with the creative or spectator gamemode may view the data checker. \"ops_or_gamemode\": Both ops and players in creative or spectator mode may view the data checker. \"anyone\": No access restrictions are used.")
-				.defineEnum("data_checker_permission", PermissionType.OPS_OR_GAMEMODE);
+				.defineEnum("dataCheckerPermission", PermissionType.OPS_OR_GAMEMODE);
 		SERVER_BUILDER.pop();
 		
 		SERVER_BUILDER.comment("Edit Mode");
@@ -188,15 +185,15 @@ public class MinestuckConfig
 		
 		SERVER_BUILDER.push("machines");
 		disableGristWidget = SERVER_BUILDER.comment("Disable Grist Widget")
-				.define("disable_grist_widget",false);
+				.define("disableGristWidget",false);
 		cruxtruderIntake = SERVER_BUILDER.comment("If enabled, the regular cruxtruder will require raw cruxite to function, which is inserted through the pipe.")
-				.define("cruxtruder_intake",false);
+				.define("cruxtruderIntake",false);
 		alchemiterMaxStacks = SERVER_BUILDER.comment("The number of stacks that can be alchemized at the same time with the alchemiter.")
-				.defineInRange("alchemiter_max_stacks",16,0,999);
+				.defineInRange("alchemiterMaxStacks",16,0,999);
 		forbiddenDimensionTypesTpz = SERVER_BUILDER.comment("A list of dimension types that you cannot travel to or from using transportalizers.")
-				.define("forbidden_dimension_types_tpz", new ArrayList<>());
+				.define("forbiddenDimensionTypesTpz", new ArrayList<>());
 		forbiddenModDimensionsTpz = SERVER_BUILDER.comment("A list of mod dimensions that you cannot travel to or from using transportalizers.")
-				.define("forbidden_mod_dimensions_tpz", new ArrayList<>());
+				.define("forbiddenModDimensionsTpz", new ArrayList<>());
 		SERVER_BUILDER.pop();
 		
 		SERVER_BUILDER.comment("Entry");
@@ -219,22 +216,15 @@ public class MinestuckConfig
 		
 		CLIENT_BUILDER.push("client");
 		alchemyIcons = CLIENT_BUILDER.comment("Set this to true to replace grist names in alchemiter/grist widget with the grist icon.")
-				.define("alchemy_icons", true);
+				.define("alchemyIcons", true);
 		loginColorSelector = CLIENT_BUILDER.comment("Determines if the color selector should be displayed when entering a save file for the first time.")
-				.define("login_color_selector", true);
+				.define("loginColorSelector", true);
 		echeladderAnimation = CLIENT_BUILDER.comment("Allows control of standard speed for the echeladder rung \"animation\", or if it should have one in the first place.")
-				.defineEnum("echeladder_animation", AnimationSpeed.NORMAL);
+				.defineEnum("echeladderAnimation", AnimationSpeed.NORMAL);
 		CLIENT_BUILDER.pop();
 		
 		CLIENT_CONFIG = CLIENT_BUILDER.build();
 		SERVER_CONFIG = SERVER_BUILDER.build();
-	}
-	
-	public static void loadConfig(ForgeConfigSpec config, Path path)
-	{
-		final CommentedFileConfig file = CommentedFileConfig.builder(path).sync().autosave().writingMode(WritingMode.REPLACE).build();
-		file.load();
-		config.setConfig(file);
 	}
 	
 	public static boolean getDataCheckerPermissionFor(ServerPlayerEntity player)
