@@ -43,7 +43,7 @@ public class ContainerGristCost extends GristCostRecipe
 	}
 	
 	@Override
-	protected GristSet getLookupCost(ItemStack input, Function<ItemStack, GristSet> costLookup)
+	public GristSet getLookupCost(ItemStack input, Function<ItemStack, GristSet> costLookup)
 	{
 		return scaleToCountAndDurability(findGristCost(costLookup), input, false);
 	}
