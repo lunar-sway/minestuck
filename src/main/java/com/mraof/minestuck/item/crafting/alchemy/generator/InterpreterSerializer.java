@@ -1,4 +1,4 @@
-package com.mraof.minestuck.item.crafting.alchemy;
+package com.mraof.minestuck.item.crafting.alchemy.generator;
 
 import com.google.gson.JsonElement;
 import com.mraof.minestuck.Minestuck;

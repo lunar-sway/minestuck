@@ -1,7 +1,10 @@
-package com.mraof.minestuck.item.crafting.alchemy;
+package com.mraof.minestuck.item.crafting.alchemy.generator;
 
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
+import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.jei.JeiGristCost;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;

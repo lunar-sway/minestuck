@@ -1,10 +1,12 @@
-package com.mraof.minestuck.item.crafting.alchemy;
+package com.mraof.minestuck.item.crafting.alchemy.generator;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.mojang.datafixers.util.Pair;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.jei.JeiGristCost;
 import net.minecraft.client.resources.ReloadListener;
 import net.minecraft.item.Item;

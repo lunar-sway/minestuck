@@ -2,6 +2,8 @@ package com.mraof.minestuck.item.crafting;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.crafting.alchemy.*;
+import com.mraof.minestuck.item.crafting.alchemy.generator.ContainerGristCost;
+import com.mraof.minestuck.item.crafting.alchemy.generator.GeneratedGristCost;
 import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.item.crafting.CookingRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeSerializer;

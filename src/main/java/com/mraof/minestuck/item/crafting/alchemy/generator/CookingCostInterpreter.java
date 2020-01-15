@@ -1,6 +1,7 @@
-package com.mraof.minestuck.item.crafting.alchemy;
+package com.mraof.minestuck.item.crafting.alchemy.generator;
 
 import com.google.gson.JsonElement;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.AbstractCookingRecipe;
 import net.minecraft.item.crafting.IRecipe;

@@ -102,7 +102,7 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 	
 	public abstract GristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown, @Nullable World world);
 	
-	protected GristSet getLookupCost(ItemStack input, Function<ItemStack, GristSet> costLookup)
+	public GristSet getLookupCost(ItemStack input, Function<ItemStack, GristSet> costLookup)
 	{
 		return getGristCost(input, GristTypes.BUILD, false, null);
 	}
