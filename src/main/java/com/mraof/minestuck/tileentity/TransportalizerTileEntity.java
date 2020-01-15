@@ -12,10 +12,13 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.GlobalPos;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
+
+import java.util.List;
 
 public class TransportalizerTileEntity extends TileEntity implements ITickableTileEntity//, ITeleporter
 {
@@ -98,14 +101,20 @@ public class TransportalizerTileEntity extends TileEntity implements ITickableTi
 			
 			if(!destTransportalizer.getEnabled()) { return; } // Fail silently to make it look as though the player entered an ID that doesn't map to a transportalizer.
 			
-			for(DimensionType id : MinestuckConfig.forbiddenDimensionsTpz)
-				if(this.world.getDimension().getType() == id || location.getDimension() == id)
-				{
-					entity.timeUntilPortal = entity.getPortalCooldown();
-					if(entity instanceof ServerPlayerEntity)
-						entity.sendMessage(new TranslationTextComponent(this.world.getDimension().getType() == id ?FORBIDDEN:FORBIDDEN_DESTINATION));
-					return;
-				}
+			if(isDimensionForbidden(world.getDimension().getType()))
+			{
+				entity.timeUntilPortal = entity.getPortalCooldown();
+				if(entity instanceof ServerPlayerEntity)
+					entity.sendMessage(new TranslationTextComponent(FORBIDDEN));
+				return;
+			}
+			if(isDimensionForbidden(location.getDimension()))
+			{
+				entity.timeUntilPortal = entity.getPortalCooldown();
+				if(entity instanceof ServerPlayerEntity)
+					entity.sendMessage(new TranslationTextComponent(FORBIDDEN_DESTINATION));
+				return;
+			}
 			
 			BlockState block0 = this.world.getBlockState(this.pos.up());
 			BlockState block1 = this.world.getBlockState(this.pos.up(2));
@@ -130,6 +139,14 @@ public class TransportalizerTileEntity extends TileEntity implements ITickableTi
 			if(entity != null)
 				entity.timeUntilPortal = entity.getPortalCooldown();
 		}
+	}
+	
+	private static boolean isDimensionForbidden(DimensionType dim)
+	{
+		List<String> forbiddenTypes = MinestuckConfig.forbiddenDimensionTypesTpz.get();
+		List<String> forbiddenDims = MinestuckConfig.forbiddenModDimensionsTpz.get();
+		ResourceLocation modDim = dim.getModType() != null ? dim.getModType().getRegistryName() : null;
+		return forbiddenTypes.contains(String.valueOf(dim.getRegistryName())) || forbiddenDims.contains(String.valueOf(modDim));
 	}
 	
 	public String getId()

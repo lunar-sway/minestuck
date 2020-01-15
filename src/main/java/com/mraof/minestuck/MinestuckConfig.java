@@ -8,7 +8,6 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.OpEntry;
 import net.minecraft.world.GameType;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.nio.file.Path;
@@ -52,8 +51,8 @@ public class MinestuckConfig
 	//            Common	(Anything that is needed for both dedicated server and client, but doesn't need to be synced to clients (needed server-side))
 	//Machines
 	public static BooleanValue cruxtruderIntake;
-	public static DimensionType[] forbiddenDimensionsTpz = new DimensionType[0];
-	public static ConfigValue<List<Integer>> cfg_forbiddenDimensionsTpz;
+	public static ConfigValue<List<String>> forbiddenDimensionTypesTpz;
+	public static ConfigValue<List<String>> forbiddenModDimensionsTpz;
 	
 	//Medium
 	public static BooleanValue canBreakGates;
@@ -187,15 +186,18 @@ public class MinestuckConfig
 				.defineInRange("editMode.landEditRange", 30, 1, Integer.MAX_VALUE);
 		
 		
-		SERVER_BUILDER.comment("Machines");
+		SERVER_BUILDER.push("machines");
 		disableGristWidget = SERVER_BUILDER.comment("Disable Grist Widget")
-				.define("machines.disableGristWidget",false);
+				.define("disable_grist_widget",false);
 		cruxtruderIntake = SERVER_BUILDER.comment("If enabled, the regular cruxtruder will require raw cruxite to function, which is inserted through the pipe.")
-				.define("machines.cruxtruderIntake",false);
+				.define("cruxtruder_intake",false);
 		alchemiterMaxStacks = SERVER_BUILDER.comment("The number of stacks that can be alchemized at the same time with the alchemiter.")
-				.defineInRange("machines.alchemiterMaxStacks",16,0,999);
-		cfg_forbiddenDimensionsTpz = SERVER_BUILDER.comment("A list of dimension id's that you cannot travel to or from using transportalizers.")
-				.define("machines.forbiddenDimensionsTpz", new ArrayList<>());
+				.defineInRange("alchemiter_max_stacks",16,0,999);
+		forbiddenDimensionTypesTpz = SERVER_BUILDER.comment("A list of dimension types that you cannot travel to or from using transportalizers.")
+				.define("forbidden_dimension_types_tpz", new ArrayList<>());
+		forbiddenModDimensionsTpz = SERVER_BUILDER.comment("A list of mod dimensions that you cannot travel to or from using transportalizers.")
+				.define("forbidden_mod_dimensions_tpz", new ArrayList<>());
+		SERVER_BUILDER.pop();
 		
 		SERVER_BUILDER.comment("Entry");
 		entryCrater = SERVER_BUILDER.comment("Disable this to prevent craters from people entering the medium.")
@@ -221,20 +223,11 @@ public class MinestuckConfig
 		loginColorSelector = CLIENT_BUILDER.comment("Determines if the color selector should be displayed when entering a save file for the first time.")
 				.define("login_color_selector", true);
 		echeladderAnimation = CLIENT_BUILDER.comment("Allows control of standard speed for the echeladder rung \"animation\", or if it should have one in the first place.")
-				.comment("Range: [\"nothing\", \"slow\", \"normal\", \"fast\"]")
 				.defineEnum("echeladder_animation", AnimationSpeed.NORMAL);
 		CLIENT_BUILDER.pop();
 		
 		CLIENT_CONFIG = CLIENT_BUILDER.build();
 		SERVER_CONFIG = SERVER_BUILDER.build();
-	}
-	
-	public static void setConfigVariables()
-	{
-		List<Integer> fdt = cfg_forbiddenDimensionsTpz.get();
-		forbiddenDimensionsTpz = new DimensionType[fdt.size()];
-		for(int i = 0; i < fdt.size(); i++)
-			forbiddenDimensionsTpz[i] = DimensionType.getById(fdt.get(i));
 	}
 	
 	public static void loadConfig(ForgeConfigSpec config, Path path)
