@@ -67,7 +67,7 @@ public class TagSourceGristCost extends GeneratedGristCost
 		protected TagSourceGristCost read(ResourceLocation recipeId, JsonObject json, Ingredient ingredient, Integer priority)
 		{
 			GristSet cost = GristSet.deserialize(JSONUtils.getJsonObject(json, "grist_cost"));
-			float multiplier = JSONUtils.getFloat(json, "multiplier");
+			float multiplier = json.has("multiplier") ? JSONUtils.getFloat(json, "multiplier") : 1;
 			ResourceLocation resourcelocation = new ResourceLocation(JSONUtils.getString(json, "source"));
 			Tag<Item> tag = ItemTags.getCollection().get(resourcelocation);
 			return new TagSourceGristCost(recipeId, ingredient, tag, multiplier, cost, priority);
