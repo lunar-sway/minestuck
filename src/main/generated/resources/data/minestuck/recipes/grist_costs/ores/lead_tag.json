@@ -1,12 +1,10 @@
 {
-  "type": "minestuck:grist_cost",
+  "type": "minestuck:tag_source_grist_cost",
   "ingredient": {
     "tag": "forge:ores/lead"
   },
   "grist_cost": {
-    "minestuck:build": 4,
-    "minestuck:rust": 12,
-    "minestuck:cobalt": 4,
-    "minestuck:shale": 4
-  }
+    "minestuck:build": 4
+  },
+  "source": "forge:ingots/lead"
 }
