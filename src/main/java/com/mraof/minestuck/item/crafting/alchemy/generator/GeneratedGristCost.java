@@ -9,6 +9,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
@@ -22,9 +23,16 @@ public abstract class GeneratedGristCost extends GristCostRecipe implements Gene
 	private ImmutableGristSet cachedCost = null;
 	private boolean hasGeneratedCost = false;
 	
-	public GeneratedGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority)
+	protected GeneratedGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority)
 	{
 		super(id, ingredient, priority);
+	}
+	
+	protected GeneratedGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, GristSet cost)
+	{
+		super(id, ingredient, priority);
+		cachedCost = cost.asImmutable();
+		hasGeneratedCost = true;
 	}
 	
 	@Override
@@ -75,4 +83,34 @@ public abstract class GeneratedGristCost extends GristCostRecipe implements Gene
 	}
 	
 	protected abstract GristSet generateCost(GenerationContext context);
+	
+	protected final GristSet getCachedCost()
+	{
+		return cachedCost;
+	}
+	
+	public static abstract class GeneratedCostSerializer<T extends GeneratedGristCost> extends AbstractSerializer<T>
+	{
+		@Override
+		protected T read(ResourceLocation recipeId, PacketBuffer buffer, Ingredient ingredient, int priority)
+		{
+			boolean hasCost = buffer.readBoolean();
+			GristSet cost = hasCost ? GristSet.read(buffer) : null;
+			
+			return create(recipeId, buffer, ingredient, priority, cost);
+		}
+		
+		@Override
+		public void write(PacketBuffer buffer, T recipe)
+		{
+			super.write(buffer, recipe);
+			if(recipe.getCachedCost() != null)
+			{
+				buffer.writeBoolean(true);
+				recipe.getCachedCost().write(buffer);
+			} else buffer.writeBoolean(false);
+		}
+		
+		protected abstract T create(ResourceLocation recipeId, PacketBuffer buffer, Ingredient ingredient, int priority, GristSet cost);
+	}
 }

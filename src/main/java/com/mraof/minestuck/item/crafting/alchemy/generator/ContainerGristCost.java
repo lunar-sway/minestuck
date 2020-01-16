@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,6 +25,12 @@ public class ContainerGristCost extends GeneratedGristCost
 	{
 		super(id, ingredient, priority);
 		this.addedCost = addedCost.asImmutable();
+	}
+	
+	private ContainerGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, GristSet cost)
+	{
+		super(id, ingredient, priority, cost);
+		this.addedCost = null;
 	}
 	
 	@Override
@@ -55,27 +62,19 @@ public class ContainerGristCost extends GeneratedGristCost
 		return MSRecipeTypes.CONTAINER_GRIST_COST;
 	}
 	
-	public static class Serializer extends AbstractSerializer<ContainerGristCost>
+	public static class Serializer extends GeneratedCostSerializer<ContainerGristCost>
 	{
 		@Override
 		protected ContainerGristCost read(ResourceLocation recipeId, JsonObject json, Ingredient ingredient, Integer priority)
 		{
-			GristSet cost = GristSet.deserialize(json.getAsJsonObject("grist_cost"));
+			GristSet cost = GristSet.deserialize(JSONUtils.getJsonObject(json, "grist_cost"));
 			return new ContainerGristCost(recipeId, ingredient, cost, priority);
 		}
 		
 		@Override
-		protected ContainerGristCost read(ResourceLocation recipeId, PacketBuffer buffer, Ingredient ingredient, int priority)
+		protected ContainerGristCost create(ResourceLocation recipeId, PacketBuffer buffer, Ingredient ingredient, int priority, GristSet cost)
 		{
-			GristSet cost = GristSet.read(buffer);
-			return new ContainerGristCost(recipeId, ingredient, cost, priority);
-		}
-		
-		@Override
-		public void write(PacketBuffer buffer, ContainerGristCost recipe)
-		{
-			super.write(buffer, recipe);
-			recipe.addedCost.write(buffer);
+			return new ContainerGristCost(recipeId, ingredient, priority, cost);
 		}
 	}
 }
