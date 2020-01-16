@@ -16,8 +16,6 @@ import javax.annotation.Nullable;
 
 public class ContainerGristCost extends GeneratedGristCost
 {
-	//Note to self: Having a recipe that looks up and uses other recipes is kinda difficult in that there are often special cases where things can go wrong.
-	// Perhaps an extension to the grist cost generator should be made that incorporates this kind of recipe.
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	private final ImmutableGristSet addedCost;
