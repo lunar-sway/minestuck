@@ -10,7 +10,7 @@ public interface RecipeInterpreter
 {
 	List<Item> getOutputItems(IRecipe<?> recipe);
 	
-	GristSet generateCost(IRecipe<?> recipe, Item output, GristCostGenerator.IngredientLookup ingredientInterpreter);
+	GristSet generateCost(IRecipe<?> recipe, Item output, RecipeGeneratedCostHandler.IngredientLookup ingredientInterpreter);
 	
 	InterpreterSerializer<?> getSerializer();
 }

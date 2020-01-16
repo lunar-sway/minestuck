@@ -17,39 +17,49 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.function.BiConsumer;
 
-public class GeneratedGristCost extends GristCostRecipe
+public class RecipeGeneratedGristCost extends GristCostRecipe
 {
-	private final GristCostGenerator generator;
+	private RecipeGeneratedCostHandler handler;
 	
-	private GeneratedGristCost(ResourceLocation id, GristCostGenerator generator)
+	private RecipeGeneratedGristCost(ResourceLocation id, RecipeGeneratedCostHandler handler)
 	{
 		super(id, null, 0);
-		this.generator = generator;
+		this.handler = handler;
+	}
+	
+	void setHandler(RecipeGeneratedCostHandler handler)
+	{
+		this.handler = handler;
 	}
 	
 	@Override
 	public GristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown, World world)
 	{
-		if(world != null)
-		{
-			return getCost(input.getItem());
-		}
-		return null;
+		return getCost(input.getItem());
 	}
 	
 	@Override
 	public boolean matches(IInventory inv, World worldIn)
 	{
-		return worldIn != null && getCost(inv.getStackInSlot(0).getItem()) != null;
+		return getCost(inv.getStackInSlot(0).getItem()) != null;
 	}
 	
 	private GristSet getCost(Item item)
 	{
-		if(generator != null)	//We are client side and this recipe has a local cache
-			return generator.getGristCost(item);
-		else return GristCostGenerator.getInstance().getGristCost(item);
+		if(handler != null)
+			return handler.getGristCost(item);
+		else return null;
+	}
+	
+	@Override
+	public void addCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer)
+	{
+		if(handler != null)
+			handler.addAsProvider(consumer);
 	}
 	
 	@Override
@@ -61,15 +71,15 @@ public class GeneratedGristCost extends GristCostRecipe
 	@Override
 	public List<JeiGristCost> getJeiCosts(World world)
 	{
-		if(generator != null)
-			return generator.createJeiCosts();
-		else return GristCostGenerator.getInstance().createJeiCosts();
+		if(handler != null)
+			return handler.createJeiCosts();
+		else return Collections.emptyList();
 	}
 	
 	@Override
 	public IRecipeSerializer<?> getSerializer()
 	{
-		return MSRecipeTypes.GENERATED_GRIST_COST;
+		return MSRecipeTypes.RECIPE_GRIST_COST;
 	}
 	
 	@Override
@@ -78,24 +88,25 @@ public class GeneratedGristCost extends GristCostRecipe
 		return true;
 	}
 	
-	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<GeneratedGristCost>
+	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<RecipeGeneratedGristCost>
 	{
 		@Override
-		public GeneratedGristCost read(ResourceLocation recipeId, JsonObject json)
+		public RecipeGeneratedGristCost read(ResourceLocation recipeId, JsonObject json)
 		{
-			return new GeneratedGristCost(recipeId, null);
+			return new RecipeGeneratedGristCost(recipeId, null);
 		}
 		
 		@Override
-		public GeneratedGristCost read(ResourceLocation recipeId, PacketBuffer buffer)
+		public RecipeGeneratedGristCost read(ResourceLocation recipeId, PacketBuffer buffer)
 		{
-			return new GeneratedGristCost(recipeId, GristCostGenerator.read(buffer));
+			return new RecipeGeneratedGristCost(recipeId, RecipeGeneratedCostHandler.read(buffer));
 		}
 		
 		@Override
-		public void write(PacketBuffer buffer, GeneratedGristCost recipe)
+		public void write(PacketBuffer buffer, RecipeGeneratedGristCost recipe)
 		{
-			GristCostGenerator.getInstance().write(buffer);
+			if(recipe.handler != null)
+				recipe.handler.write(buffer);
 		}
 	}
 }

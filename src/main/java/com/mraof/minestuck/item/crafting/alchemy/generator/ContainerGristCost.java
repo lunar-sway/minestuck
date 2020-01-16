@@ -2,8 +2,13 @@ package com.mraof.minestuck.item.crafting.alchemy.generator;
 
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
-import com.mraof.minestuck.item.crafting.alchemy.*;
+import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.item.crafting.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.jei.JeiGristCost;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
@@ -15,9 +20,10 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-public class ContainerGristCost extends GristCostRecipe
+public class ContainerGristCost extends GristCostRecipe implements GeneratedCostProvider
 {
 	//Note to self: Having a recipe that looks up and uses other recipes is kinda difficult in that there are often special cases where things can go wrong.
 	// Perhaps an extension to the grist cost generator should be made that incorporates this kind of recipe.
@@ -25,10 +31,8 @@ public class ContainerGristCost extends GristCostRecipe
 	
 	
 	private final ImmutableGristSet addedCost;
-	private ImmutableGristSet cachedCost;
-	//Is false when it should use cachedCost, and true when it should calculate it from the container cost.
-	// Solves the scenario of recursion from looking up the cost, by causing the recursion to terminate with a null cost returned.
-	private boolean shouldFindCost = true;
+	private ImmutableGristSet cachedCost = null;
+	private boolean hasGeneratedCost = false;
 	
 	public ContainerGristCost(ResourceLocation id, Ingredient ingredient, GristSet addedCost, Integer priority)
 	{
@@ -39,51 +43,67 @@ public class ContainerGristCost extends GristCostRecipe
 	@Override
 	public GristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown, World world)
 	{
-		return scaleToCountAndDurability(findGristCost(world), input, shouldRoundDown);
+		return scaleToCountAndDurability(cachedCost, input, shouldRoundDown);
 	}
 	
 	@Override
-	public GristSet getLookupCost(ItemStack input, Function<ItemStack, GristSet> costLookup)
+	public boolean matches(IInventory inv, World worldIn)
 	{
-		return scaleToCountAndDurability(findGristCost(costLookup), input, false);
+		return cachedCost != null && super.matches(inv, worldIn);
+	}
+	
+	@Override
+	public void addCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer)
+	{
+		for(ItemStack stack : ingredient.getMatchingStacks())
+			consumer.accept(stack.getItem(), this);
 	}
 	
 	@Override
 	public List<JeiGristCost> getJeiCosts(World world)
 	{
-		GristSet cost = findGristCost(world);
-		if(cost != null)
-			return Collections.singletonList(new JeiGristCost.Set(ingredient, cost));
+		if(cachedCost != null)
+			return Collections.singletonList(new JeiGristCost.Set(ingredient, cachedCost));
 		else return Collections.emptyList();
 	}
 	
-	private GristSet findGristCost(World world)
+	@Override
+	public GristCostResult generate(Item item, GristCostResult lastCost, boolean primary, Function<Item, GristSet> itemLookup)
 	{
-		return findGristCost(stack -> GristCostRecipe.findCostForItem(stack, GristTypes.BUILD, false, world));
+		if(lastCost != null)
+			return lastCost;
+		else if(hasGeneratedCost)
+			return GristCostResult.ofOrNull(cachedCost);
+		else
+		{
+			GristSet cost = findGristCost(itemLookup);
+			if(primary)
+			{
+				hasGeneratedCost = true;
+				if(cost != null)
+					cachedCost = cost.asImmutable();
+			}
+			return GristCostResult.ofOrNull(cost);
+		}
 	}
 	
-	private GristSet findGristCost(Function<ItemStack, GristSet> costLookup)
+	private GristSet findGristCost(Function<Item, GristSet> itemLookup)
 	{
-		if(shouldFindCost)
+		ItemStack container = ingredient.getMatchingStacks().length > 0 ? ingredient.getMatchingStacks()[0].getContainerItem() : ItemStack.EMPTY;
+		if(!container.isEmpty())
 		{
-			ItemStack container = ingredient.getMatchingStacks().length > 0 ? ingredient.getMatchingStacks()[0].getContainerItem() : ItemStack.EMPTY;
-			if(!container.isEmpty())
+			GristSet cost = itemLookup.apply(container.getItem());
+			if(cost != null)
 			{
-				shouldFindCost = false;
-				GristSet cost = costLookup.apply(container);
-				if(cost != null)
-				{
-					cachedCost = cost.copy().addGrist(addedCost).asImmutable();
-				} else
-				{
-					LOGGER.warn("Got null grist cost when looking up container item {} for container grist cost {}. No grist cost is set for this recipe.", container.getItem().getRegistryName(), id);
-					cachedCost = null;
-				}
+				return cost.copy().addGrist(addedCost);
 			} else
 			{
-				LOGGER.warn("No container item found for ingredient to container grist cost {}. Assuming that the container cost is zero.", id);
-				cachedCost = addedCost;
+				LOGGER.warn("Got null grist cost when looking up container item {} for container grist cost {}. No grist cost is set for this recipe.", container.getItem().getRegistryName(), id);
 			}
+		} else
+		{
+			LOGGER.warn("No container item found for ingredient to container grist cost {}. Assuming that the container cost is zero.", id);
+			return addedCost;
 		}
 		
 		return cachedCost;

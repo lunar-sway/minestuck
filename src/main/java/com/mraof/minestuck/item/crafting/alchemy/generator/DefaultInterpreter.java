@@ -29,7 +29,7 @@ public class DefaultInterpreter implements RecipeInterpreter
 	}
 	
 	@Override
-	public GristSet generateCost(IRecipe<?> recipe, Item item, GristCostGenerator.IngredientLookup ingredientInterpreter)
+	public GristSet generateCost(IRecipe<?> recipe, Item item, RecipeGeneratedCostHandler.IngredientLookup ingredientInterpreter)
 	{
 		if(recipe.isDynamic())
 			return null;

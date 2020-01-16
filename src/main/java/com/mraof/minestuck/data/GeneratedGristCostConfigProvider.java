@@ -6,11 +6,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
-import com.mraof.minestuck.item.crafting.alchemy.*;
-import com.mraof.minestuck.item.crafting.alchemy.generator.CookingCostInterpreter;
-import com.mraof.minestuck.item.crafting.alchemy.generator.DefaultInterpreter;
-import com.mraof.minestuck.item.crafting.alchemy.generator.InterpreterSerializer;
-import com.mraof.minestuck.item.crafting.alchemy.generator.RecipeInterpreter;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
+import com.mraof.minestuck.item.crafting.alchemy.generator.*;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DirectoryCache;
 import net.minecraft.data.IDataProvider;
@@ -55,7 +53,7 @@ public class GeneratedGristCostConfigProvider implements IDataProvider
 		
 		Path outputFolder = generator.getOutputFolder();
 		
-		Path jsonPath = outputFolder.resolve("data/" + modid + "/minestuck/grist_cost_generation.json");
+		Path jsonPath = outputFolder.resolve("data/" + modid + "/" + RecipeGeneratedCostHandler.PATH);
 		
 		JsonElement json = serialize();
 		IDataProvider.save(GSON, cache, json, jsonPath);

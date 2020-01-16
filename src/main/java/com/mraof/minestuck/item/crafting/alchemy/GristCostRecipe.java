@@ -2,9 +2,12 @@ package com.mraof.minestuck.item.crafting.alchemy;
 
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
+import com.mraof.minestuck.item.crafting.alchemy.generator.GeneratedCostProvider;
+import com.mraof.minestuck.item.crafting.alchemy.generator.GristCostResult;
 import com.mraof.minestuck.jei.JeiGristCost;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.*;
 import net.minecraft.network.PacketBuffer;
@@ -19,6 +22,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 public abstract class GristCostRecipe implements IRecipe<IInventory>
@@ -102,14 +106,27 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 	
 	public abstract GristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown, @Nullable World world);
 	
-	public GristSet getLookupCost(ItemStack input, Function<ItemStack, GristSet> costLookup)
-	{
-		return getGristCost(input, GristTypes.BUILD, false, null);
-	}
-	
 	public boolean canPickWildcard()
 	{
 		return false;
+	}
+	
+	public void addCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer)
+	{
+		GeneratedCostProvider provider = new DefaultProvider();
+		for(ItemStack stack : ingredient.getMatchingStacks())
+			consumer.accept(stack.getItem(), provider);
+	}
+	
+	private class DefaultProvider implements GeneratedCostProvider
+	{
+		@Override
+		public GristCostResult generate(Item item, GristCostResult lastCost, boolean primary, Function<Item, GristSet> itemLookup)
+		{
+			if(lastCost == null && ingredient.test(new ItemStack(item)))
+				return new GristCostResult(getGristCost(new ItemStack(item), GristTypes.BUILD, false, null));
+			else return null;
+		}
 	}
 	
 	public List<JeiGristCost> getJeiCosts(World world)
