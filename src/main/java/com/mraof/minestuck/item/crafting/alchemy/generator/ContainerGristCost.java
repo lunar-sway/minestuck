@@ -21,7 +21,6 @@ import org.apache.logging.log4j.Logger;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.BiConsumer;
-import java.util.function.Function;
 
 public class ContainerGristCost extends GristCostRecipe implements GeneratedCostProvider
 {
@@ -68,16 +67,16 @@ public class ContainerGristCost extends GristCostRecipe implements GeneratedCost
 	}
 	
 	@Override
-	public GristCostResult generate(Item item, GristCostResult lastCost, boolean primary, Function<Item, GristSet> itemLookup)
+	public GristCostResult generate(Item item, GristCostResult lastCost, GenerationContext context)
 	{
 		if(lastCost != null)
 			return lastCost;
-		else if(hasGeneratedCost)
+		else if(context.shouldUseCache() && hasGeneratedCost)
 			return GristCostResult.ofOrNull(cachedCost);
 		else
 		{
-			GristSet cost = findGristCost(itemLookup);
-			if(primary)
+			GristSet cost = generateCost(context);
+			if(context.isPrimary())
 			{
 				hasGeneratedCost = true;
 				if(cost != null)
@@ -87,12 +86,12 @@ public class ContainerGristCost extends GristCostRecipe implements GeneratedCost
 		}
 	}
 	
-	private GristSet findGristCost(Function<Item, GristSet> itemLookup)
+	private GristSet generateCost(GenerationContext context)
 	{
 		ItemStack container = ingredient.getMatchingStacks().length > 0 ? ingredient.getMatchingStacks()[0].getContainerItem() : ItemStack.EMPTY;
 		if(!container.isEmpty())
 		{
-			GristSet cost = itemLookup.apply(container.getItem());
+			GristSet cost = context.lookupCostFor(container);
 			if(cost != null)
 			{
 				return cost.copy().addGrist(addedCost);

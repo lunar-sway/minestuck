@@ -11,7 +11,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.*;
-import java.util.function.Function;
 
 class RecipeGeneratedCostProcess
 {
@@ -41,28 +40,28 @@ class RecipeGeneratedCostProcess
 		return lookupMap.keySet();
 	}
 	
-	GristCostResult generateCost(Item item, GristCostResult lastCost, boolean primary, Function<Item, GristSet> itemLookup)
+	GristCostResult generateCost(Item item, GristCostResult lastCost, GenerationContext context)
 	{
 		if(lastCost != null)
 		{
-			if(primary)
-				checkRecipeLogging(item, lastCost.getCost(), itemLookup);
+			if(context.isPrimary())
+				checkRecipeLogging(item, lastCost.getCost(), context);
 			return lastCost;
 		} else if(generatedCosts.containsKey(item))
 		{
 			return GristCostResult.ofOrNull(generatedCosts.get(item));
 		} else
 		{
-			GristSet result = costFromRecipes(item, true, itemLookup);
+			GristSet result = costFromRecipes(item, true, context);
 			//TODO Clean cost of entries with 0, set it to null if it is empty (no free cookies for you). Also log these events so that the costs of base ingredients can be modified accordingly
 			
-			if(primary)
+			if(context.isPrimary())
 				generatedCosts.put(item, result);
 			return GristCostResult.ofOrNull(result);
 		}
 	}
 	
-	private GristSet costFromRecipes(Item item, boolean isCostNull, Function<Item, GristSet> itemLookup)
+	private GristSet costFromRecipes(Item item, boolean isCostNull, GenerationContext context)
 	{
 		List<Pair<IRecipe<?>, RecipeInterpreter>> recipes = lookupMap.getOrDefault(item, Collections.emptyList());
 		
@@ -71,7 +70,7 @@ class RecipeGeneratedCostProcess
 			GristSet minCost = null;
 			for(Pair<IRecipe<?>, RecipeInterpreter> recipePair : recipes)
 			{
-				GristSet cost = costForRecipe(recipePair.getFirst(), recipePair.getSecond(), item, itemLookup);
+				GristSet cost = costForRecipe(recipePair.getFirst(), recipePair.getSecond(), item, context);
 				if(cost != null && (minCost == null || cost.getValue() < minCost.getValue()))
 					minCost = cost;
 			}
@@ -84,11 +83,11 @@ class RecipeGeneratedCostProcess
 		}
 	}
 	
-	private GristSet costForRecipe(IRecipe<?> recipe, RecipeInterpreter interpreter, Item item, Function<Item, GristSet> itemLookup)
+	private GristSet costForRecipe(IRecipe<?> recipe, RecipeInterpreter interpreter, Item item, GenerationContext context)
 	{
 		try
 		{
-			return interpreter.generateCost(recipe, item, (ingredient, removeContainer) -> costForIngredient(ingredient, removeContainer, itemLookup));
+			return interpreter.generateCost(recipe, item, (ingredient, removeContainer) -> costForIngredient(ingredient, removeContainer, context));
 		} catch(Exception e)
 		{
 			LOGGER.error("Got exception while getting cost for recipe {}", recipe.getId(), e);
@@ -96,7 +95,7 @@ class RecipeGeneratedCostProcess
 		}
 	}
 	
-	private GristSet costForIngredient(Ingredient ingredient, boolean removeContainerCost, Function<Item, GristSet> itemLookup)
+	private GristSet costForIngredient(Ingredient ingredient, boolean removeContainerCost, GenerationContext context)
 	{
 		if(ingredient.test(ItemStack.EMPTY))
 			return GristSet.EMPTY;
@@ -106,10 +105,10 @@ class RecipeGeneratedCostProcess
 		{
 			if(ingredient.test(new ItemStack(stack.getItem())))
 			{
-				GristSet cost = itemLookup.apply(stack.getItem());
+				GristSet cost = context.lookupCostFor(stack.getItem());
 				
 				if(removeContainerCost && cost != null)
-					cost = removeContainerCost(stack, cost, itemLookup);
+					cost = removeContainerCost(stack, cost, context);
 				
 				if(cost != null && (minCost == null || cost.getValue() < minCost.getValue()))
 					minCost = cost;
@@ -118,12 +117,12 @@ class RecipeGeneratedCostProcess
 		return minCost;
 	}
 	
-	private GristSet removeContainerCost(ItemStack stack, GristSet cost, Function<Item, GristSet> itemLookup)
+	private GristSet removeContainerCost(ItemStack stack, GristSet cost, GenerationContext context)
 	{
 		ItemStack container = stack.getContainerItem();
 		if(!container.isEmpty())
 		{
-			GristSet containerCost = itemLookup.apply(container.getItem());
+			GristSet containerCost = context.lookupCostFor(container);
 			if(containerCost != null)
 				return containerCost.copy().scale(-1).addGrist(cost);
 			else return null;
@@ -131,11 +130,11 @@ class RecipeGeneratedCostProcess
 		return cost;
 	}
 	
-	private void checkRecipeLogging(Item item, GristSet cost, Function<Item, GristSet> itemLookup)
+	private void checkRecipeLogging(Item item, GristSet cost, GenerationContext context)
 	{
 		if(LOG_ITEMS_WITH_RECIPE_AND_COST)
 		{
-			GristSet generatedCost = costFromRecipes(item, false, itemLookup);
+			GristSet generatedCost = context.withoutCache(() -> costFromRecipes(item, false, context));
 			
 			if(generatedCost != null)
 				LOGGER.info("Found item {} with grist cost recipe that is also valid for grist cost generation. Recipe cost: {}, generated cost: {}", item.getRegistryName(), cost, generatedCost);

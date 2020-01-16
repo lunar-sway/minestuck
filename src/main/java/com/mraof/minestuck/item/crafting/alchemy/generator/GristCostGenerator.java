@@ -60,10 +60,11 @@ public final class GristCostGenerator extends ReloadListener<Void>
 			});
 		}
 		
+		GenerationContext context = new GenerationContext((item1, context1) -> lookupCost(item1, process, context1));
 		//Iterate through items
 		for(Item item : process.providersByItem.keySet())
 		{
-			lookupCost(item, process, true);
+			lookupCost(item, process, context);
 		}
 		
 		for(GeneratedCostProvider provider : process.providers)
@@ -78,7 +79,7 @@ public final class GristCostGenerator extends ReloadListener<Void>
 		}
 	}
 	
-	private GristSet lookupCost(Item item, GeneratorProcess process, boolean primary)
+	private GristSet lookupCost(Item item, GeneratorProcess process, GenerationContext context)
 	{
 		GristCostResult cost = null;
 		if(!process.itemsInProcess.contains(item))
@@ -88,14 +89,14 @@ public final class GristCostGenerator extends ReloadListener<Void>
 			{
 				try
 				{
-					cost = provider.generate(item, cost, primary, otherItem -> lookupCost(otherItem, process, false));
+					cost = provider.generate(item, cost, context);
 				} catch(Exception e)
 				{
 					LOGGER.error("Got exception from generated cost provider {} while generating for item {}:", provider, item, e);
 				}
 			}
 			process.itemsInProcess.remove(item);
-		} else LOGGER.debug("Got recursive call from generating grist cost for {}.", item);
+		} //else LOGGER.debug("Got recursive call from generating grist cost for {}.", item);
 		
 		return cost != null ? cost.getCost() : null;
 	}
