@@ -2,91 +2,34 @@ package com.mraof.minestuck.item.crafting.alchemy.generator;
 
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
-import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.ImmutableGristSet;
-import com.mraof.minestuck.jei.JeiGristCost;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.function.BiConsumer;
+import javax.annotation.Nullable;
 
-public class ContainerGristCost extends GristCostRecipe implements GeneratedCostProvider
+public class ContainerGristCost extends GeneratedGristCost
 {
 	//Note to self: Having a recipe that looks up and uses other recipes is kinda difficult in that there are often special cases where things can go wrong.
 	// Perhaps an extension to the grist cost generator should be made that incorporates this kind of recipe.
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	
 	private final ImmutableGristSet addedCost;
-	private ImmutableGristSet cachedCost = null;
-	private boolean hasGeneratedCost = false;
 	
-	public ContainerGristCost(ResourceLocation id, Ingredient ingredient, GristSet addedCost, Integer priority)
+	public ContainerGristCost(ResourceLocation id, Ingredient ingredient, GristSet addedCost, @Nullable Integer priority)
 	{
 		super(id, ingredient, priority);
 		this.addedCost = addedCost.asImmutable();
 	}
 	
 	@Override
-	public GristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown, World world)
-	{
-		return scaleToCountAndDurability(cachedCost, input, shouldRoundDown);
-	}
-	
-	@Override
-	public boolean matches(IInventory inv, World worldIn)
-	{
-		return cachedCost != null && super.matches(inv, worldIn);
-	}
-	
-	@Override
-	public void addCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer)
-	{
-		for(ItemStack stack : ingredient.getMatchingStacks())
-			consumer.accept(stack.getItem(), this);
-	}
-	
-	@Override
-	public List<JeiGristCost> getJeiCosts(World world)
-	{
-		if(cachedCost != null)
-			return Collections.singletonList(new JeiGristCost.Set(ingredient, cachedCost));
-		else return Collections.emptyList();
-	}
-	
-	@Override
-	public GristCostResult generate(Item item, GristCostResult lastCost, GenerationContext context)
-	{
-		if(lastCost != null)
-			return lastCost;
-		else if(context.shouldUseCache() && hasGeneratedCost)
-			return GristCostResult.ofOrNull(cachedCost);
-		else
-		{
-			GristSet cost = generateCost(context);
-			if(context.isPrimary())
-			{
-				hasGeneratedCost = true;
-				if(cost != null)
-					cachedCost = cost.asImmutable();
-			}
-			return GristCostResult.ofOrNull(cost);
-		}
-	}
-	
-	private GristSet generateCost(GenerationContext context)
+	protected GristSet generateCost(GenerationContext context)
 	{
 		ItemStack container = ingredient.getMatchingStacks().length > 0 ? ingredient.getMatchingStacks()[0].getContainerItem() : ItemStack.EMPTY;
 		if(!container.isEmpty())
@@ -105,7 +48,7 @@ public class ContainerGristCost extends GristCostRecipe implements GeneratedCost
 			return addedCost;
 		}
 		
-		return cachedCost;
+		return null;
 	}
 	
 	@Override
