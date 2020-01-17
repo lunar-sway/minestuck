@@ -1,5 +1,6 @@
 package com.mraof.minestuck.editmode;
 
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.block.MiniCruxtruderItem;
@@ -13,12 +14,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.common.ForgeConfigSpec;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.function.BiFunction;
 
@@ -29,6 +31,7 @@ import java.util.function.BiFunction;
  */
 public class DeployList
 {
+	public static final IAvailabilityCondition HAS_NOT_ENTERED = connection -> !connection.hasEntered();
 	
 	private static final ArrayList<DeployEntry> list = new ArrayList<>();
 	
@@ -37,14 +40,21 @@ public class DeployList
 		
 		registerItem("cruxtruder", new ItemStack(MSBlocks.CRUXTRUDER), new GristSet(), new GristSet(GristTypes.BUILD, 100), 0);
 		registerItem("totem_lathe", new ItemStack(MSBlocks.TOTEM_LATHE), new GristSet(), new GristSet(GristTypes.BUILD, 100), 0);
-		registerItem("artifact_card", new GristSet(), null, 0, connection -> !connection.hasEntered(),
+		registerItem("artifact_card", new GristSet(), null, 0, HAS_NOT_ENTERED,
 				(connection, world) -> AlchemyRecipes.createCard(SburbHandler.getEntryItem(world, connection), true));
 		registerItem("alchemiter", new ItemStack(MSBlocks.ALCHEMITER), new GristSet(), new GristSet(GristTypes.BUILD, 100), 0);
-		registerItem("punch_designix", 0,null, (connection, world) -> new ItemStack(MSBlocks.PUNCH_DESIGNIX),
+		registerItem("punch_designix", 0,null, item(MSBlocks.PUNCH_DESIGNIX),
 				(isPrimary, connection) -> new GristSet(SburbHandler.getPrimaryGristType(connection.getClientIdentifier()), 4));
+		registerItem("portable_cruxtruder", new GristSet(GristTypes.BUILD, 200), 1, config(MinestuckConfig.portableMachines),
+				(connection, world) -> MiniCruxtruderItem.getCruxtruderWithColor(PlayerSavedData.getData(connection.getClientIdentifier(), world).getColor()));
+		registerItem("portable_punch_designix", new GristSet(GristTypes.BUILD, 200), 1, config(MinestuckConfig.portableMachines), item(MSBlocks.MINI_PUNCH_DESIGNIX));
+		registerItem("portable_totem_lathe", new GristSet(GristTypes.BUILD, 200), 1, config(MinestuckConfig.portableMachines), item(MSBlocks.MINI_TOTEM_LATHE));
+		registerItem("portable_alchemiter", new GristSet(GristTypes.BUILD, 300), 1, config(MinestuckConfig.portableMachines), item(MSBlocks.MINI_ALCHEMITER));
 		/*registerItem("jumper_block_extension", new ItemStack(MinestuckBlocks.jumperBlockExtension[0]), new GristSet(GristType.Build, 1000), 1);
 		registerItem("punch_card_shunt", new ItemStack(MinestuckItems.shunt), new GristSet(GristType.Build, 100), 1);
 		registerItem("holopad", new ItemStack(MinestuckBlocks.holopad), new GristSet(GristType.Build, 10000), 2);*/
+		registerItem("card_punched_card", new GristSet(GristTypes.BUILD, 25), null, 0, config(MinestuckConfig.deployCard), (sburbConnection, world) -> AlchemyRecipes.createCard(new ItemStack(MSItems.CAPTCHA_CARD), true));
+		
 	}
 	
 	public static void registerItem(String name, ItemStack stack, GristSet cost, int tier)
@@ -82,17 +92,6 @@ public class DeployList
 		if(containsEntry(name))
 			throw new IllegalStateException("Item stack already added to the deploy list: "+name);
 		list.add(new DeployEntry(name, tier, condition, item, grist));
-	}
-	
-	public static void removeEntry(String name)
-	{
-		Iterator<DeployEntry> iterator = list.iterator();
-		while(iterator.hasNext())
-			if(iterator.next().name.equals(name))
-			{
-				iterator.remove();
-				return;
-			}
 	}
 	
 	public static List<DeployEntry> getItemList(MinecraftServer server, SburbConnection c)
@@ -156,33 +155,6 @@ public class DeployList
 	public static int getEntryCount()
 	{
 		return list.size();
-	}
-	
-	public static void applyConfigValues(boolean[] booleans)	//TODO Replacement idea: Always register all items during init, but allow adding a config condition (as a lambda), and build a collection of all available entries at server start.  (Just baking it into the condition might be fine too)
-	{
-		if(booleans[0] != containsEntry("card_punched_card"))
-		{
-			if(booleans[0])
-				registerItem("card_punched_card", AlchemyRecipes.createCard(new ItemStack(MSItems.CAPTCHA_CARD), true), new GristSet(GristTypes.BUILD, 25), null, 0);
-			else removeEntry("card_punched_card");
-		}
-		if(booleans[1] != containsEntry("portable_cruxtruder"))
-		{
-			if(booleans[1])
-			{
-				registerItem("portable_cruxtruder", new GristSet(GristTypes.BUILD, 200), 1, null,
-						(connection, world) -> MiniCruxtruderItem.getCruxtruderWithColor(PlayerSavedData.getData(connection.getClientIdentifier(), world).getColor()));
-				registerItem("portable_punch_designix", new ItemStack(MSBlocks.MINI_PUNCH_DESIGNIX), new GristSet(GristTypes.BUILD, 200), 1);
-				registerItem("portable_totem_lathe", new ItemStack(MSBlocks.MINI_TOTEM_LATHE), new GristSet(GristTypes.BUILD, 200), 1);
-				registerItem("portable_alchemiter", new ItemStack(MSBlocks.MINI_ALCHEMITER), new GristSet(GristTypes.BUILD, 300), 1);
-			} else
-			{
-				removeEntry("portable_cruxtruder");
-				removeEntry("portable_totem_lathe");
-				removeEntry("portable_alchemiter");
-				removeEntry("portable_punch_designix");
-			}
-		}
 	}
 	
 	public static DeployEntry getEntryForName(String name)
@@ -260,6 +232,17 @@ public class DeployList
 	{
 		boolean test(SburbConnection connection);
 	}
+	
+	public static IAvailabilityCondition config(ForgeConfigSpec.BooleanValue config)
+	{
+		return connection -> config.get();
+	}
+	
+	public static BiFunction<SburbConnection, World, ItemStack> item(IItemProvider item)
+	{
+		return (sburbConnection, world) -> new ItemStack(item);
+	}
+	
 	static CompoundNBT getDeployListTag(MinecraftServer server, SburbConnection c)
 	{
 		CompoundNBT nbt = new CompoundNBT();

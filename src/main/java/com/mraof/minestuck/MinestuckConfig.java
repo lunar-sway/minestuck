@@ -41,7 +41,6 @@ public class MinestuckConfig
 	public static IntValue overworldEditRange;
 	public static IntValue landEditRange;
 	public static BooleanValue giveItems;
-	public static boolean[] deployConfigurations = new boolean[2];	//TODO Reimplement this (Call DeployList.applyConfigValues(deployConfigurations); at an appropriate time)
 	public static BooleanValue deployCard;
 	public static BooleanValue portableMachines;
 	
