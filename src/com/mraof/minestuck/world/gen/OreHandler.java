@@ -1,6 +1,6 @@
 package com.mraof.minestuck.world.gen;
 
-/*import static com.mraof.minestuck.MinestuckConfig.baseCruxiteVeinSize;
+import static com.mraof.minestuck.MinestuckConfig.baseCruxiteVeinSize;
 import static com.mraof.minestuck.MinestuckConfig.baseUraniumVeinSize;
 import static com.mraof.minestuck.MinestuckConfig.bonusCruxiteVeinSize;
 import static com.mraof.minestuck.MinestuckConfig.bonusUraniumVeinSize;
@@ -28,10 +28,10 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.AbstractChunkProvider;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraftforge.fml.common.IWorldGenerator;
-*/
-public class OreHandler
+
+public class OreHandler implements IWorldGenerator
 {
-	/*@Override
+	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, ChunkGenerator chunkGenerator, AbstractChunkProvider chunkProvider)
 	{
 		if(world.getDimension().isSurfaceWorld() && (generateCruxiteOre.get() || chunkGenerator instanceof LandChunkGenerator) && !disableCruxite)
@@ -81,5 +81,6 @@ public class OreHandler
 				if(state.equals(input))
 					return true;
 			return false;
-		}*/
+		}
+	}
 }

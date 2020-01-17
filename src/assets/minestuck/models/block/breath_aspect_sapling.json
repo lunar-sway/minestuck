@@ -1,6 +1,0 @@
-{
-    "parent": "block/cross",
-    "textures": {
-        "cross": "minestuck:block/breath_aspect_sapling"
-    }
-}

@@ -1,6 +1,0 @@
-{
-    "parent": "block/cross",
-    "textures": {
-        "cross": "minestuck:block/petrified_poppy"
-    }
-}

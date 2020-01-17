@@ -8,9 +8,10 @@ buildscript {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
     }
 }
-
-//apply plugin: 'forge'
 apply plugin: 'net.minecraftforge.gradle'
+// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+apply plugin: 'eclipse'
+apply plugin: 'maven-publish'
 
 repositories {
     maven {
@@ -34,7 +35,7 @@ sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = co
 minecraft {
     mappings channel: 'snapshot', version: project.getProperty('mc_mappings_version')
 
-    accessTransformer = file('src/META-INF/accesstransformer.cfg')
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     // Default run configurations.
     // These can be tweaked, removed, or duplicated as needed.
@@ -97,10 +98,10 @@ minecraft {
             // It seems to default to Minestuck_main, but is not set because it's actually called Minestuck.main?
             ideaModule project.getName() +  '.main'
 
-            args '--mod', 'minestuck', '--all', '--output', file('src/generated/resources/')
+            args '--mod', 'minestuck', '--all', '--output', file('src/main/generated/resources/'), '--existing', sourceSets.main.resources.srcDirs[0]
 
             mods {
-                examplemod {
+                minestuck {
                     source sourceSets.main
                 }
             }
@@ -116,14 +117,43 @@ dependencies {
     runtimeOnly fg.deobf("mezz.jei:jei-${project.getProperty('mc_jei_version')}")
 }
 
-sourceSets {
-    main {
-        //TODO refactor and seperate code and resources like in other projects after merging together a lot of active branches
-        java {
-            srcDir 'src'
+sourceSets.main.resources {
+    srcDir 'src/main/generated/resources'
+}
+
+// Example for how to get properties into the manifest for reading by the runtime..
+jar {
+    manifest {
+        attributes([
+                "Specification-Title": "minestuck",
+                "Specification-Vendor": "Minestuck Dev Team",
+                "Specification-Version": "1", // We are version 1 of ourselves
+                "Implementation-Title": project.name,
+                "Implementation-Version": "${version}",
+                "Implementation-Vendor" :"Minestuck Dev Team",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+}
+
+// Example configuration to allow publishing using the maven-publish task
+// we define a custom artifact that is sourced from the reobfJar output task
+// and then declare that to be published
+// Note you'll need to add a repository here
+def reobfFile = file("$buildDir/reobfJar/output.jar")
+def reobfArtifact = artifacts.add('default', reobfFile) {
+    type 'jar'
+    builtBy 'reobfJar'
+}
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact reobfArtifact
         }
-        resources {
-            srcDir 'src'
+    }
+    repositories {
+        maven {
+            url "file:///${project.projectDir}/mcmodsrepo"
         }
     }
 }

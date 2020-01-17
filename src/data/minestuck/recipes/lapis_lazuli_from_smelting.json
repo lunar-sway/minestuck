@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:smelting",
-  "ingredient": {
-    "tag": "minestuck:ores/lapis"
-  },
-  "result": "minecraft:lapis_lazuli",
-  "experience": 0.2,
-  "cookingtime": 200
-}

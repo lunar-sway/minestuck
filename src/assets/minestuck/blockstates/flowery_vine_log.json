@@ -1,7 +1,0 @@
-{
-    "variants": {
-        "axis=y": { "model": "minestuck:block/flowery_vine_log" },
-        "axis=z": { "model": "minestuck:block/flowery_vine_log", "x": 90 },
-        "axis=x": { "model": "minestuck:block/flowery_vine_log", "x": 90, "y": 90 }
-    }
-}

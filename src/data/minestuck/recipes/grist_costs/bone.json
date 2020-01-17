@@ -1,9 +1,0 @@
-{
-  "type": "minestuck:grist_cost",
-  "ingredient": {
-    "item": "minecraft:bone"
-  },
-  "grist_cost": {
-    "minestuck:chalk": 6
-  }
-}

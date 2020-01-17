@@ -1,8 +1,0 @@
-{
-    "parent": "block/stairs",
-    "textures": {
-        "bottom": "minestuck:block/chalk_bricks",
-        "top": "minestuck:block/chalk_bricks",
-        "side": "minestuck:block/chalk_bricks"
-    }
-}

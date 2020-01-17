@@ -1,7 +1,0 @@
-{
-    "variants": {
-        "type=bottom": { "model": "minestuck:block/pink_stone_brick_slab" },
-        "type=top":    { "model": "minestuck:block/pink_stone_brick_slab_top" },
-        "type=double": { "model": "minestuck:block/pink_stone_bricks" }
-    }
-}

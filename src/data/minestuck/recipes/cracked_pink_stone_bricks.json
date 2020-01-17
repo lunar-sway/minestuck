@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:smelting",
-  "ingredient": {
-    "item": "minestuck:pink_stone_bricks"
-  },
-  "result": "minestuck:cracked_pink_stone_bricks",
-  "experience": 0.1,
-  "cookingtime": 200
-}

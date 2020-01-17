@@ -1,7 +1,0 @@
-{
-    "parent": "block/cube_column",
-    "textures": {
-        "end": "minestuck:block/petrified_log",
-        "side": "minestuck:block/petrified_log"
-    }
-}

@@ -1,7 +1,0 @@
-{
-    "parent": "block/cube_column",
-    "textures": {
-        "end": "minestuck:block/mind_aspect_log_top",
-        "side": "minestuck:block/mind_aspect_log"
-    }
-}

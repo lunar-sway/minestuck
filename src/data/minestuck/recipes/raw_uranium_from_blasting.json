@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:blasting",
-  "ingredient": {
-    "tag": "minestuck:ores/uranium"
-  },
-  "result": "minestuck:raw_uranium",
-  "experience": 0.2,
-  "cookingtime": 100
-}

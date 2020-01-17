@@ -1,8 +1,0 @@
-{
-    "parent": "block/outer_stairs",
-    "textures": {
-        "bottom": "minestuck:block/end_planks",
-        "top": "minestuck:block/end_planks",
-        "side": "minestuck:block/end_planks"
-    }
-}

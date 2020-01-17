@@ -1,8 +1,0 @@
-{
-    "variants": {
-        "facing=north": { "model": "minestuck:block/totem_lathe_carver" },
-        "facing=east":  { "model": "minestuck:block/totem_lathe_carver", "y": 90 },
-        "facing=south": { "model": "minestuck:block/totem_lathe_carver", "y": 180 },
-        "facing=west":  { "model": "minestuck:block/totem_lathe_carver", "y": 270 }
-    }
-}

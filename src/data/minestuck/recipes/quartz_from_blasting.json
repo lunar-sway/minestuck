@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:blasting",
-  "ingredient": {
-    "tag": "minestuck:ores/quartz"
-  },
-  "result": "minecraft:quartz",
-  "experience": 0.2,
-  "cookingtime": 100
-}

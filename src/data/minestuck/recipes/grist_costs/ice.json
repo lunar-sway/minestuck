@@ -1,9 +1,0 @@
-{
-  "type": "minestuck:grist_cost",
-  "ingredient": {
-    "item": "minecraft:ice"
-  },
-  "grist_cost": {
-    "minestuck:cobalt": 2
-  }
-}

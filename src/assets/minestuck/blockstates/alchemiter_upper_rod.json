@@ -1,8 +1,0 @@
-{
-    "variants": {
-        "facing=north": { "model": "minestuck:block/alchemiter_upper_rod" },
-        "facing=east":  { "model": "minestuck:block/alchemiter_upper_rod", "y": 90 },
-        "facing=south": { "model": "minestuck:block/alchemiter_upper_rod", "y": 180 },
-        "facing=west":  { "model": "minestuck:block/alchemiter_upper_rod", "y": 270 }
-    }
-}

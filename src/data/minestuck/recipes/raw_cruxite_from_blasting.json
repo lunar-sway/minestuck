@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:blasting",
-  "ingredient": {
-    "tag": "minestuck:ores/cruxite"
-  },
-  "result": "minestuck:raw_cruxite",
-  "experience": 0.2,
-  "cookingtime": 100
-}

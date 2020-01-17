@@ -1,9 +1,0 @@
-{
-    "variants": {
-        "": [
-            { "model": "minestuck:block/blooming_cactus0" },
-            { "model": "minestuck:block/blooming_cactus1" },
-            { "model": "minestuck:block/blooming_cactus2" }
-        ]
-    }
-}

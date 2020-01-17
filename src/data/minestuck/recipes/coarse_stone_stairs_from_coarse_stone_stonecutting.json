@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "minestuck:coarse_stone"
-  },
-  "result": "minestuck:coarse_stone_stairs",
-  "count": 1
-}
