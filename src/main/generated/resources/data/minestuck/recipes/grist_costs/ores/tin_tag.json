@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "tag": "forge:ores/tin"
+  },
+  "grist_cost": {
+    "minestuck:build": 4,
+    "minestuck:rust": 12,
+    "minestuck:caulk": 8
+  }
+}

@@ -1,0 +1,12 @@
+{
+    "variants": {
+        "blue=false,green=false,red=false": { "model": "minestuck:block/rainbow_sapling" },
+        "blue=false,green=false,red=true":  { "model": "minestuck:block/rainbow_sapling_r" },
+        "blue=true,green=false,red=false":  { "model": "minestuck:block/rainbow_sapling_b" },
+        "blue=false,green=true,red=false":  { "model": "minestuck:block/rainbow_sapling_g" },
+        "blue=true,green=false,red=true":   { "model": "minestuck:block/rainbow_sapling_rb" },
+        "blue=false,green=true,red=true":   { "model": "minestuck:block/rainbow_sapling_rg" },
+        "blue=true,green=true,red=false":   { "model": "minestuck:block/rainbow_sapling_gb" },
+        "blue=true,green=true,red=true":    { "model": "minestuck:block/rainbow_sapling_rgb" }
+    }
+}

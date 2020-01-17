@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:rotten_flesh"
+  },
+  "grist_cost": {
+    "minestuck:rust": 1,
+    "minestuck:iodine": 1
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:gamebro_magazine"
+  },
+  "grist_cost": {
+    "minestuck:chalk": 3,
+    "minestuck:garnet": 2
+  }
+}

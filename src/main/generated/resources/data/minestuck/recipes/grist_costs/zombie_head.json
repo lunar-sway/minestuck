@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:zombie_head"
+  },
+  "grist_cost": {
+    "minestuck:rust": 5,
+    "minestuck:chalk": 20
+  }
+}

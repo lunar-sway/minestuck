@@ -1,0 +1,29 @@
+{
+  "parent": "minestuck:minestuck/alchemy",
+  "display": {
+    "icon": {
+      "item": "minestuck:hashmap_modus_card"
+    },
+    "title": {
+      "translate": "advancements.minestuck.new_modus.title"
+    },
+    "description": {
+      "translate": "advancements.minestuck.new_modus.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "change_modus_type": {
+      "trigger": "minestuck:change_modus",
+      "conditions": {}
+    }
+  },
+  "requirements": [
+    [
+      "change_modus_type"
+    ]
+  ]
+}

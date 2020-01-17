@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:elytra"
+  },
+  "grist_cost": {
+    "minestuck:diamond": 51,
+    "minestuck:sulfur": 38,
+    "minestuck:caulk": 65
+  }
+}

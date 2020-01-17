@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:slime_ball"
+  },
+  "grist_cost": {
+    "minestuck:caulk": 8
+  }
+}

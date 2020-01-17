@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:chalk_candy_cigarette"
+  },
+  "grist_cost": {
+    "minestuck:chalk": 3
+  }
+}

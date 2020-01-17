@@ -1,0 +1,9 @@
+{
+    "parent": "block/cube_bottom_top",
+    "textures": {
+        "particle": "minestuck:block/machine/alchemiter/center_top",
+        "bottom": "minestuck:block/machine/alchemiter/down_center",
+        "top": "minestuck:block/machine/alchemiter/center_top",
+        "side": "minestuck:block/machine/alchemiter/inside"
+    }
+}

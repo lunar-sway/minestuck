@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:wooden_explosive_button"
+  },
+  "grist_cost": {
+    "minestuck:build": 7,
+    "minestuck:chalk": 5,
+    "minestuck:sulfur": 8
+  }
+}

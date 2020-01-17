@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:spider_eye"
+  },
+  "grist_cost": {
+    "minestuck:amber": 6,
+    "minestuck:iodine": 2
+  }
+}

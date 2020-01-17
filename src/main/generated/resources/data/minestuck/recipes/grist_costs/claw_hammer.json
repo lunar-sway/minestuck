@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:claw_hammer"
+  },
+  "grist_cost": {
+    "minestuck:build": 8
+  }
+}

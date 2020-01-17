@@ -1,0 +1,38 @@
+[
+  {
+    "source_type": "recipe_serializer",
+    "source": "minecraft:crafting_shaped",
+    "interpreter_type": "minestuck:default"
+  },
+  {
+    "source_type": "recipe_serializer",
+    "source": "minecraft:crafting_shapeless",
+    "interpreter_type": "minestuck:default"
+  },
+  {
+    "source_type": "recipe_serializer",
+    "source": "minestuck:non_mirrored",
+    "interpreter_type": "minestuck:default"
+  },
+  {
+    "source_type": "recipe_type",
+    "source": "stonecutting",
+    "interpreter_type": "minestuck:default"
+  },
+  {
+    "source_type": "recipe_type",
+    "source": "smelting",
+    "interpreter_type": "minestuck:cooking",
+    "interpreter": {
+      "minestuck:tar": 1
+    }
+  },
+  {
+    "source_type": "recipe_type",
+    "source": "minestuck:irradiating",
+    "interpreter_type": "minestuck:cooking",
+    "interpreter": {
+      "minestuck:uranium": 1
+    }
+  }
+]

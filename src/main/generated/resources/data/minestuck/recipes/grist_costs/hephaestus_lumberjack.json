@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:hephaestus_lumberjack"
+  },
+  "grist_cost": {
+    "minestuck:build": 625,
+    "minestuck:gold": 49,
+    "minestuck:ruby": 36
+  }
+}

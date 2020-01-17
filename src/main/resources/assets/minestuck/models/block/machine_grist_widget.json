@@ -1,0 +1,21 @@
+{
+    "textures": {
+        "particle": "minestuck:items/grist_widget",
+        "texture1": "minestuck:blocks/grist_widget_1",
+        "texture2": "minestuck:blocks/grist_widget_2"
+    },
+    "elements": [
+        {
+            "from": [ 0, 0, 4 ],
+            "to": [ 16, 4, 12 ],
+            "faces": {
+                "down":  { "uv": [ 0,  8, 16, 16 ], "texture": "#texture2", "cullface": "down" },
+                "up":    { "uv": [ 0,  0, 16,  8 ], "texture": "#texture1" },
+                "south": { "uv": [ 0,  8, 16, 12 ], "texture": "#texture1" },
+                "east":  { "uv": [ 0,  0,  8,  4 ], "texture": "#texture2", "cullface": "east" },
+                "north": { "uv": [ 0,  4, 16,  8 ], "texture": "#texture2" },
+                "west":  { "uv": [ 0, 12,  8, 16 ], "texture": "#texture1", "cullface": "west" }
+            }
+        }
+    ]
+}

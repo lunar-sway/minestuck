@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:orange_tulip"
+  },
+  "grist_cost": {
+    "minestuck:garnet": 2,
+    "minestuck:amber": 2,
+    "minestuck:iodine": 1
+  }
+}

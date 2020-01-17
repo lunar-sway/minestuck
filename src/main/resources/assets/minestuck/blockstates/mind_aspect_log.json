@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "axis=y": { "model": "minestuck:block/mind_aspect_log" },
+        "axis=z": { "model": "minestuck:block/mind_aspect_log", "x": 90 },
+        "axis=x": { "model": "minestuck:block/mind_aspect_log", "x": 90, "y": 90 }
+    }
+}

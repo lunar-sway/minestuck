@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:red_cake"
+  },
+  "grist_cost": {
+    "minestuck:rust": 20,
+    "minestuck:chalk": 9,
+    "minestuck:iodine": 6,
+    "minestuck:garnet": 1
+  }
+}

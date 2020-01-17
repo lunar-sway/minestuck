@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:gift",
+  "pools": [
+    {
+      "name": "item",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 3,
+          "name": "minestuck:iron_cane"
+        }
+      ]
+    },
+    {
+      "name": "block",
+      "rolls": 1,
+      "entries": []
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:chessboard"
+  },
+  "grist_cost": {
+    "minestuck:shale": 25,
+    "minestuck:marble": 25
+  }
+}

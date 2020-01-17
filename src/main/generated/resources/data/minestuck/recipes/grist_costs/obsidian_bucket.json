@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:container_grist_cost",
+  "ingredient": {
+    "item": "minestuck:obsidian_bucket"
+  },
+  "grist_cost": {
+    "minestuck:build": 4,
+    "minestuck:cobalt": 8,
+    "minestuck:tar": 16
+  }
+}

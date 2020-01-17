@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:sulfur_candy_apple"
+  },
+  "grist_cost": {
+    "minestuck:sulfur": 3
+  }
+}

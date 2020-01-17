@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:mercury_sixlets"
+  },
+  "grist_cost": {
+    "minestuck:mercury": 3
+  }
+}

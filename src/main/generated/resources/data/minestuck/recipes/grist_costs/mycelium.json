@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:mycelium"
+  },
+  "grist_cost": {
+    "minestuck:iodine": 2,
+    "minestuck:ruby": 2,
+    "minestuck:build": 2
+  }
+}

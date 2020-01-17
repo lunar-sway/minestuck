@@ -1,0 +1,30 @@
+package com.mraof.minestuck.command;
+
+import com.mojang.brigadier.CommandDispatcher;
+import com.mraof.minestuck.Minestuck;
+import net.minecraft.command.CommandSource;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
+public class MSCommands
+{
+	@SubscribeEvent
+	public static void serverStarting(FMLServerStartingEvent event)
+	{
+		CommandDispatcher<CommandSource> dispatcher = event.getCommandDispatcher();
+		
+		CommandCheckLand.register(dispatcher);
+		CommandGrist.register(dispatcher);
+		CommandGristSend.register(dispatcher);
+		CommandTransportalizer.register(dispatcher);
+		CommandSburbSession.register(dispatcher);
+		CommandSburbServer.register(dispatcher);
+		CommandSetRung.register(dispatcher);
+		CommandConsortReply.register(dispatcher);
+		CommandToStructure.register(dispatcher);
+		CommandPorkhollow.register(dispatcher);
+		CommandLandDebug.register(dispatcher);
+	}
+}

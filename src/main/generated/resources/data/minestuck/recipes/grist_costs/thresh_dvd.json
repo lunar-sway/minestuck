@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:thresh_dvd"
+  },
+  "grist_cost": {
+    "minestuck:iodine": 3,
+    "minestuck:amethyst": 2
+  }
+}

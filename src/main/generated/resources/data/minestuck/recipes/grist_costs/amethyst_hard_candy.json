@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:amethyst_hard_candy"
+  },
+  "grist_cost": {
+    "minestuck:amethyst": 3
+  }
+}

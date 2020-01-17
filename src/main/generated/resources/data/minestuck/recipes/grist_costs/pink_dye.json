@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:pink_dye"
+  },
+  "grist_cost": {
+    "minestuck:garnet": 2,
+    "minestuck:chalk": 2
+  }
+}

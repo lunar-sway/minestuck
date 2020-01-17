@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:blue_orchid"
+  },
+  "grist_cost": {
+    "minestuck:amethyst": 2,
+    "minestuck:chalk": 2,
+    "minestuck:iodine": 1
+  }
+}

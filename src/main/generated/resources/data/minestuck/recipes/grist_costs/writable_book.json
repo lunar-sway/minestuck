@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:writable_book"
+  },
+  "grist_cost": {
+    "minestuck:chalk": 16,
+    "minestuck:iodine": 2
+  }
+}

@@ -1,0 +1,46 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "minestuck:item/frog_skin",
+        "layer1": "minestuck:item/frog_eyes",
+        "layer2": "minestuck:item/frog_belly"
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "minestuck:type": 1
+            },
+            "model": "minestuck:item/regular_frog"
+        },
+        {
+            "predicate": {
+                "minestuck:type": 2
+            },
+            "model": "minestuck:item/ruby_frog"
+        },
+        {
+            "predicate": {
+                "minestuck:type": 3
+            },
+            "model": "minestuck:item/frog_statue"
+        },
+        {
+            "predicate": {
+                "minestuck:type": 4
+            },
+            "model": "minestuck:item/null_frog"
+        },
+        {
+            "predicate": {
+                "minestuck:type": 5
+            },
+            "model": "minestuck:item/golden_frog"
+        },
+        {
+            "predicate": {
+                "minestuck:type": 6
+            },
+            "model": "minestuck:item/frog_susan"
+        }
+    ]
+}

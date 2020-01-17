@@ -1,0 +1,26 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "minestuck:item/blank_captcha_card"
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "minestuck:content": 1
+            },
+            "model": "minestuck:item/full_captcha_card"
+        },
+        {
+            "predicate": {
+                "minestuck:ghost": 1
+            },
+            "model": "minestuck:item/ghost_captcha_card"
+        },
+        {
+            "predicate": {
+                "minestuck:punched": 1
+            },
+            "model": "minestuck:item/punched_captcha_card"
+        }
+    ]
+}

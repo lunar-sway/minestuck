@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:build_gushers"
+  },
+  "grist_cost": {
+    "minestuck:build": 3
+  }
+}

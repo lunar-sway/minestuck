@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:cone_of_flies"
+  },
+  "grist_cost": {
+    "minestuck:build": 2,
+    "minestuck:amber": 2
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:blooming_cactus"
+  },
+  "grist_cost": {
+    "minestuck:amber": 1,
+    "minestuck:iodine": 1
+  }
+}

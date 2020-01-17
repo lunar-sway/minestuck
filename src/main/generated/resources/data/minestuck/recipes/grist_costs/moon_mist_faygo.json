@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:moon_mist_faygo"
+  },
+  "grist_cost": {
+    "minestuck:cobalt": 1,
+    "minestuck:amber": 1
+  }
+}

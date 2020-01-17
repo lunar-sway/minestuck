@@ -1,0 +1,42 @@
+{
+  "type": "minecraft:gift",
+  "pools": [
+    {
+      "name": "main",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 4,
+          "name": "minestuck:beef_sword"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 3.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minestuck:redpop_faygo"
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minestuck:consort",
+          "consort": "nakagator"
+        }
+      ]
+    },
+    {
+      "name": "special",
+      "rolls": 1,
+      "entries": []
+    }
+  ]
+}

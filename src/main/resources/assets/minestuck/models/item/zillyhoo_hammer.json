@@ -1,0 +1,7 @@
+{
+    "parent": "builtin/generated",
+    "textures": {
+        "layer0": "minestuck:item/zillyhoo_hammer"
+    }
+}
+

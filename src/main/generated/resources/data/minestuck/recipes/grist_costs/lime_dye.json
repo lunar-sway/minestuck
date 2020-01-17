@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:lime_dye"
+  },
+  "grist_cost": {
+    "minestuck:amber": 3
+  }
+}

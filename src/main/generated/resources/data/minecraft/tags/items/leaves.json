@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "minestuck:frost_leaves",
+    "minestuck:rainbow_leaves",
+    "minestuck:end_leaves",
+    "#minestuck:leaves/aspect"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:frost_planks"
+  },
+  "grist_cost": {
+    "minestuck:build": 1
+  }
+}

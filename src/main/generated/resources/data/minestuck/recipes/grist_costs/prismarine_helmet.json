@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:prismarine_helmet"
+  },
+  "grist_cost": {
+    "minestuck:build": 75,
+    "minestuck:cobalt": 30,
+    "minestuck:marble": 15
+  }
+}

@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "": [
+            { "model": "block/tnt" },
+            { "model": "block/tnt", "y": 90 },
+            { "model": "block/tnt", "y": 180 },
+            { "model": "block/tnt", "y": 270 }
+        ]
+    }
+}

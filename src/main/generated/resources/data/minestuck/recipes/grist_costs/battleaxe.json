@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:battleaxe"
+  },
+  "grist_cost": {
+    "minestuck:build": 400,
+    "minestuck:rust": 240
+  }
+}

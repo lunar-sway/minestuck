@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "planks",
+  "ingredients": [
+    {
+      "tag": "minestuck:logs/dead"
+    }
+  ],
+  "result": {
+    "item": "minestuck:dead_planks",
+    "count": 4
+  }
+}

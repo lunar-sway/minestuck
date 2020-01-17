@@ -1,0 +1,23 @@
+{
+	"variants": {
+		"facing=south,part=captcha_card": { "model":"minestuck:alchemiter_upgrade_captcha_card" },
+        "facing=south,part=gristwidget":    { "model":"minestuck:alchemiter_upgrade_gristwidget", "y":180 },
+        "facing=south,part=dropper":        { "model":"minestuck:alchemiter_upgrade_dropper" },
+        "facing=south,part=boondollar": { "model":"minestuck:alchemiter_upgrade_boondollar" },
+        
+        "facing=west,part=captcha_card":   { "model":"minestuck:alchemiter_upgrade_captcha_card", "y":90  },
+        "facing=west,part=gristwidget":    { "model":"minestuck:alchemiter_upgrade_gristwidget", "y":270 },
+        "facing=west,part=dropper":        { "model":"minestuck:alchemiter_upgrade_dropper", "y":90 },
+        "facing=west,part=boondollar": { "model":"minestuck:alchemiter_upgrade_boondollar", "y":90 },
+        
+        "facing=north,part=captcha_card":   { "model":"minestuck:alchemiter_upgrade_captcha_card", "y":180  },
+        "facing=north,part=gristwidget":    { "model":"minestuck:alchemiter_upgrade_gristwidget", "y":0 },
+        "facing=north,part=dropper":        { "model":"minestuck:alchemiter_upgrade_dropper", "y":180 },
+        "facing=north,part=boondollar": { "model":"minestuck:alchemiter_upgrade_boondollar", "y":180 },
+        
+        "facing=east,part=captcha_card":   { "model":"minestuck:alchemiter_upgrade_captcha_card", "y":270  },
+        "facing=east,part=gristwidget":    { "model":"minestuck:alchemiter_upgrade_gristwidget", "y":90 },
+        "facing=east,part=dropper":        { "model":"minestuck:alchemiter_upgrade_dropper", "y":270 },
+        "facing=east,part=boondollar": { "model":"minestuck:alchemiter_upgrade_boondollar", "y":270 }
+	}
+}

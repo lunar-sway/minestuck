@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:map"
+  },
+  "grist_cost": {
+    "minestuck:rust": 32,
+    "minestuck:chalk": 10,
+    "minestuck:garnet": 2
+  }
+}

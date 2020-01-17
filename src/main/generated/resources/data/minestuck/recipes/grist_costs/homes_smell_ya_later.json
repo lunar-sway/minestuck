@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:homes_smell_ya_later"
+  },
+  "grist_cost": {
+    "minestuck:build": 34,
+    "minestuck:amber": 19,
+    "minestuck:amethyst": 10
+  }
+}

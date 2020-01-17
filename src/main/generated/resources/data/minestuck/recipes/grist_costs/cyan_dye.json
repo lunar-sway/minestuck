@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:cyan_dye"
+  },
+  "grist_cost": {
+    "minestuck:amethyst": 2,
+    "minestuck:amber": 2,
+    "minestuck:iodine": 1
+  }
+}

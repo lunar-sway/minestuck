@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "minestuck:stack_modus_card",
+    "minestuck:queue_modus_card",
+    "minestuck:queuestack_modus_card",
+    "minestuck:tree_modus_card",
+    "minestuck:hashmap_modus_card",
+    "minestuck:set_modus_card"
+  ]
+}

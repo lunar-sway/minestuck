@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "minestuck:block/blender" },
+        "facing=east":  { "model": "minestuck:block/blender", "y": 90 },
+        "facing=south": { "model": "minestuck:block/blender", "y": 180 },
+        "facing=west":  { "model": "minestuck:block/blender", "y": 270 }
+    }
+}

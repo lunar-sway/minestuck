@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:golden_horse_armor"
+  },
+  "grist_cost": {
+    "minestuck:gold": 40
+  }
+}

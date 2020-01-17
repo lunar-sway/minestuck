@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "tag": "forge:ingots/ardite"
+  },
+  "grist_cost": {
+    "minestuck:garnet": 12,
+    "minestuck:sulfur": 8
+  }
+}

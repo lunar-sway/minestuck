@@ -1,0 +1,46 @@
+{
+  "type": "minecraft:gift",
+  "pools": [
+    {
+      "name": "item",
+      "rolls": 1,
+      "entries": []
+    },
+    {
+      "name": "block",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 6,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 5.0,
+                "max": 10.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minestuck:sugar_cube"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 3.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minestuck:fuchsia_cake"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:cold_cake"
+  },
+  "grist_cost": {
+    "minestuck:cobalt": 15,
+    "minestuck:marble": 12
+  }
+}

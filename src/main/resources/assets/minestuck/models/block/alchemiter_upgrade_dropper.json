@@ -1,0 +1,52 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"1": "minestuck:machines/alchemiter/upgrades/inside",
+		"4": "minestuck:machines/alchemiter/corner_base_side",
+		"5": "minestuck:machines/alchemiter/upgrades/dropper_side",
+		"6": "minestuck:machines/alchemiter/upgrades/down_side",
+		"7": "minestuck:machines/alchemiter/upgrades/base_top",
+		"8": "minestuck:machines/alchemiter/upgrades/dropper_front",
+		"9": "minestuck:machines/alchemiter/upgrades/top",
+		"particle": "minestuck:machines/alchemiter/side"
+	},
+	"elements": [
+		{
+			"name": "base",
+			"from": [0, 0, 4],
+			"to": [16, 8, 16],
+			"faces": {
+				"north": {"uv": [0, 8, 16, 16], "texture": "#particle"},
+				"east": {"uv": [4, 8, 16, 16], "texture": "#4"},
+				"south": {"uv": [0, 8, 16, 16], "texture": "#1"},
+				"west": {"uv": [4, 8, 16, 16], "texture": "#4"},
+				"up": {"uv": [16, 0, 0, 12], "texture": "#7"},
+				"down": {"uv": [16, 4, 0, 16], "texture": "#6"}
+			}
+		},
+		{
+			"from": [1, 1, 1],
+			"to": [15, 15, 13],
+			"faces": {
+				"north": {"uv": [1, 1, 15, 15], "texture": "#8"},
+				"east": {"uv": [3, 1, 15, 15], "texture": "#5"},
+				"south": {"uv": [1, 1, 15, 15], "texture": "#5"},
+				"west": {"uv": [1, 1, 13, 15], "texture": "#5"},
+				"up": {"uv": [1, 1, 15, 13], "texture": "#9"},
+				"down": {"uv": [0, 2, 16, 16], "texture": "#6"}
+			}
+		},
+		{
+			"from": [1, 8, 13],
+			"to": [15, 15, 15],
+			"faces": {
+				"north": {"uv": [0, 0, 14, 7], "texture": "#missing"},
+				"east": {"uv": [14, 0, 16, 7], "texture": "#particle"},
+				"south": {"uv": [1, 0, 15, 7], "texture": "#particle"},
+				"west": {"uv": [0, 0, 2, 7], "texture": "#particle"},
+				"up": {"uv": [1, 13, 15, 15], "texture": "#9"},
+				"down": {"uv": [0, 0, 14, 2], "texture": "#missing"}
+			}
+		}
+	]
+}

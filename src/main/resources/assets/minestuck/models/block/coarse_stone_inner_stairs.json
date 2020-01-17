@@ -1,0 +1,8 @@
+{
+    "parent": "block/inner_stairs",
+    "textures": {
+        "bottom": "minestuck:block/coarse_stone",
+        "top": "minestuck:block/coarse_stone",
+        "side": "minestuck:block/coarse_stone"
+    }
+}

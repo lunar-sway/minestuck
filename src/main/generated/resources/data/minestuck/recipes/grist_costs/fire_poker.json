@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:fire_poker"
+  },
+  "grist_cost": {
+    "minestuck:amber": 41,
+    "minestuck:ruby": 14,
+    "minestuck:sulfur": 38,
+    "minestuck:gold": 3
+  }
+}

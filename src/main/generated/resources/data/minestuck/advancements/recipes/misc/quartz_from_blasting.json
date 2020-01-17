@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:quartz_from_blasting"
+    ]
+  },
+  "criteria": {
+    "has_quartz_ore": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "minestuck:ores/quartz"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:quartz_from_blasting"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_quartz_ore",
+      "has_the_recipe"
+    ]
+  ]
+}

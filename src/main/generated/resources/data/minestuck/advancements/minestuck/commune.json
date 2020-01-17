@@ -1,0 +1,38 @@
+{
+  "parent": "minestuck:minestuck/entry",
+  "display": {
+    "icon": {
+      "item": "minestuck:stone_slab"
+    },
+    "title": {
+      "translate": "advancements.minestuck.commune.title"
+    },
+    "description": {
+      "translate": "advancements.minestuck.commune.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "talk_to_consort": {
+      "trigger": "minestuck:consort_talk",
+      "conditions": {}
+    },
+    "visit_village": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "feature": "minestuck:consort_village"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "talk_to_consort"
+    ],
+    [
+      "visit_village"
+    ]
+  ]
+}

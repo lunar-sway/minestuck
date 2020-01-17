@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:dark_prismarine"
+  },
+  "grist_cost": {
+    "minestuck:cobalt": 10,
+    "minestuck:tar": 2,
+    "minestuck:build": 18
+  }
+}

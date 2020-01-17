@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "": [
+            { "model": "minestuck:block/glowing_mushroom0", "weight": 2 },
+            { "model": "minestuck:block/glowing_mushroom1", "weight": 3 },
+            { "model": "minestuck:block/glowing_mushroom2", "weight": 2 },
+            { "model": "minestuck:block/glowing_mushroom3", "weight": 1 }
+        ]
+    }
+}

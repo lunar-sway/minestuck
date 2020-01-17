@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:creme_soda_faygo"
+  },
+  "grist_cost": {
+    "minestuck:cobalt": 1,
+    "minestuck:chalk": 1
+  }
+}
