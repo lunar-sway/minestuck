@@ -18,7 +18,7 @@ import java.util.List;
 
 public class GuiUtil
 {
-	public static final String NOT_ALCHEMIZABLE = "minsetuck.not_alchemizable";
+	public static final String NOT_ALCHEMIZABLE = "minestuck.not_alchemizable";
 	public static final String FREE = "minestuck.free";
 	
 	public enum GristboardMode
