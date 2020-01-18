@@ -223,11 +223,10 @@ public class ServerEditHandler
 		{
 			EditData data = getData(event.getPlayer());
 			ItemStack stack = event.getEntityItem().getItem();
-			DeployList.DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getEntity().world);
+			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getEntity().world);
 			if(entry != null && !isBlockItem(stack.getItem()))
 			{
-				GristSet cost = data.connection.hasGivenItem(entry)
-						? entry.getSecondaryGristCost(data.connection) : entry.getPrimaryGristCost(data.connection);
+				GristSet cost = entry.getCurrentCost(data.connection);
 				if(GristHelper.canAfford(PlayerSavedData.getData(data.connection.getClientIdentifier(), event.getPlayer().world).getGristCache(), cost))
 				{
 					GristHelper.decrease(event.getPlayer().world, data.connection.getClientIdentifier(), cost);
@@ -258,6 +257,7 @@ public class ServerEditHandler
 			event.setCanceled(true);
 	}
 	
+	//TODO Slightly unsafe with this approach to check, and then execute in a different event listener. It is probably better to try first, and then reset if we tried and the event got cancelled.
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public static void onRightClickBlockControl(PlayerInteractEvent.RightClickBlock event)
 	{
@@ -277,11 +277,10 @@ public class ServerEditHandler
 			
 			cleanStackNBT(stack, data.connection, event.getWorld());
 			
-			DeployList.DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getEntity().world);
+			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getEntity().world);
 			if(entry != null)
 			{
-				GristSet cost = data.connection.hasGivenItem(entry)
-						? entry.getSecondaryGristCost(data.connection) : entry.getPrimaryGristCost(data.connection);
+				GristSet cost = entry.getCurrentCost(data.connection);
 				if(!GristHelper.canAfford(event.getWorld(), data.connection.getClientIdentifier(), cost))
 				{
 					StringBuilder str = new StringBuilder();
@@ -365,11 +364,10 @@ public class ServerEditHandler
 				
 				ItemStack stack = player.getHeldItemMainhand();	//TODO Make sure offhand isn't used in editmode?
 				SburbConnection c = data.connection;
-				DeployList.DeployEntry entry = DeployList.getEntryForItem(stack, c, player.world);
+				DeployEntry entry = DeployList.getEntryForItem(stack, c, player.world);
 				if(entry != null)
 				{
-					GristSet cost = c.hasGivenItem(entry)
-							? entry.getSecondaryGristCost(c) : entry.getPrimaryGristCost(c);
+					GristSet cost = entry.getCurrentCost(c);
 					c.setHasGivenItem(entry);
 					if(!c.isMain())
 						SkaianetHandler.get(player.server).giveItems(c.getClientIdentifier());
@@ -433,8 +431,8 @@ public class ServerEditHandler
 	
 	public static void updateInventory(ServerPlayerEntity player, SburbConnection connection)
 	{
-		List<DeployList.DeployEntry> deployList = DeployList.getItemList(player.getServer(), connection);
-		deployList.removeIf(entry -> connection.hasGivenItem(entry) && entry.getSecondaryGristCost(connection) == null);
+		List<DeployEntry> deployList = DeployList.getItemList(player.getServer(), connection);
+		deployList.removeIf(entry -> entry.getCurrentCost(connection) == null);
 		List<ItemStack> itemList = new ArrayList<>();
 		deployList.forEach(deployEntry -> itemList.add(deployEntry.getItemStack(connection, player.world)));
 		

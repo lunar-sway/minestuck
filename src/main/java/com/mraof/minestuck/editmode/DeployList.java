@@ -29,7 +29,7 @@ import java.util.function.BiFunction;
  * items accessible by the server.
  * @author kirderf1
  */
-public class DeployList
+public final class DeployList
 {
 	public static final IAvailabilityCondition HAS_NOT_ENTERED = connection -> !connection.hasEntered();
 	
@@ -99,7 +99,7 @@ public class DeployList
 		int tier = SburbHandler.availableTier(server, c.getClientIdentifier());
 		ArrayList<DeployEntry> itemList = new ArrayList<>();
 		for(DeployEntry entry : list)
-			if(entry.tier <= tier && (entry.condition == null || entry.condition.test(c)))
+			if(entry.isAvailable(c, tier))
 				itemList.add(entry);
 		
 		return itemList;
@@ -127,23 +127,6 @@ public class DeployList
 		return getEntryForItem(stack, c, world) != null;
 	}
 	
-	public static int getOrdinal(String name)
-	{
-		for(int i = 0; i < list.size(); i++)
-			if(list.get(i).name.equals(name))
-				return i;
-		return -1;
-	}
-	
-	public static int getOrdinal(ItemStack stack, SburbConnection c, World world)
-	{
-		stack = cleanStack(stack);
-		for(int i = 0; i < list.size(); i++)
-			if(ItemStack.areItemStacksEqual(list.get(i).item.apply(c, world), stack))
-				return i;
-		return -1;
-	}
-	
 	public static String[] getNameList()
 	{
 		String[] str = new String[list.size()];
@@ -152,15 +135,10 @@ public class DeployList
 		return str;
 	}
 	
-	public static int getEntryCount()
-	{
-		return list.size();
-	}
-	
 	public static DeployEntry getEntryForName(String name)
 	{
 		for(DeployEntry entry : list)
-			if(entry.name.equals(name))
+			if(entry.getName().equals(name))
 				return entry;
 		return null;
 	}
@@ -169,63 +147,9 @@ public class DeployList
 	{
 		stack = cleanStack(stack);
 		for(DeployEntry entry : list)
-			if(ItemStack.areItemStacksEqual(stack, entry.item.apply(c, world)))
+			if(ItemStack.areItemStacksEqual(stack, entry.getItemStack(c, world)))
 				return entry;
 		return null;
-	}
-	
-	public static class DeployEntry
-	{
-		private String name;
-		
-		private int tier;
-		private IAvailabilityCondition condition;
-		private BiFunction<SburbConnection, World, ItemStack> item;
-		private BiFunction<Boolean, SburbConnection, GristSet> grist;
-		
-		private DeployEntry(String name, int tier, IAvailabilityCondition condition, BiFunction<SburbConnection, World, ItemStack> item, BiFunction<Boolean, SburbConnection, GristSet> grist)
-		{
-			this.name  = name;
-			this.tier = tier;
-			this.condition = condition;
-			this.item = item;
-			this.grist = grist;
-		}
-		
-		public String getName()
-		{
-			return name;
-		}
-		
-		public int getTier()
-		{
-			return tier;
-		}
-		
-		public boolean isAvailable(SburbConnection c, int tier)
-		{
-			return (condition == null || condition.test(c)) && this.tier <= tier;
-		}
-		
-		public int getOrdinal()
-		{
-			return list.indexOf(this);
-		}
-		
-		public ItemStack getItemStack(SburbConnection c, World world)
-		{
-			return item.apply(c, world).copy();
-		}
-		
-		public GristSet getPrimaryGristCost(SburbConnection c)
-		{
-			return grist.apply(true, c);
-		}
-		
-		public GristSet getSecondaryGristCost(SburbConnection c)
-		{
-			return grist.apply(false, c);
-		}
 	}
 	
 	public interface IAvailabilityCondition

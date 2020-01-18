@@ -1,6 +1,7 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.editmode.DeployEntry;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.skaianet.SburbConnection;
@@ -85,7 +86,7 @@ public class ClientEditPacket implements PlayToServerPacket
 				if(c == null || c.getServerIdentifier() != user || !(c.isMain() || SkaianetHandler.get(player.world).giveItems(target)))
 					return;
 				
-				for(DeployList.DeployEntry entry : DeployList.getItemList(player.getServer(), c))
+				for(DeployEntry entry : DeployList.getItemList(player.getServer(), c))
 				{
 					if(!c.hasGivenItem(entry))
 					{

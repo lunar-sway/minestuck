@@ -1,7 +1,7 @@
 package com.mraof.minestuck.skaianet;
 
 import com.mojang.datafixers.Dynamic;
-import com.mraof.minestuck.editmode.DeployList;
+import com.mraof.minestuck.editmode.DeployEntry;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
@@ -160,9 +160,9 @@ public class SburbConnection
 	}
 	
 	public PlayerIdentifier getServerIdentifier()
-	{
-		return serverIdentifier;
-	}
+{
+	return serverIdentifier;
+}
 	
 	public GlobalPos getClientComputer()
 	{
@@ -206,8 +206,8 @@ public class SburbConnection
 	
 	@Deprecated
 	public boolean hasGivenItem(String item) { return givenItemList.contains(item); }
-	public boolean hasGivenItem(DeployList.DeployEntry item) { return givenItemList.contains(item.getName()); }
-	public void setHasGivenItem(DeployList.DeployEntry item) { givenItemList.add(item.getName()); }
+	public boolean hasGivenItem(DeployEntry item) { return givenItemList.contains(item.getName()); }
+	public void setHasGivenItem(DeployEntry item) { givenItemList.add(item.getName()); }
 	void resetGivenItems() { givenItemList.clear(); }
 	
 	/**
