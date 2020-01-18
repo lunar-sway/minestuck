@@ -3,6 +3,7 @@ package com.mraof.minestuck.skaianet;
 import com.mojang.datafixers.Dynamic;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
+import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.EditData;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.event.ConnectionClosedEvent;
@@ -798,6 +799,7 @@ public class SkaianetHandler
 			if(data != null)
 				data.sendGivenItemsToEditor();
 		}
+		DeployList.onConditionsUpdated(mcServer);
 	}
 	
 	public void movingComputer(ComputerTileEntity oldTE, ComputerTileEntity newTE)

@@ -1,5 +1,6 @@
 package com.mraof.minestuck;
 
+import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.EditData;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -7,6 +8,10 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.OpEntry;
 import net.minecraft.world.GameType;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,6 +19,7 @@ import java.util.List;
 
 import static net.minecraftforge.common.ForgeConfigSpec.*;
 
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class MinestuckConfig
 {
 	public static final ForgeConfigSpec CLIENT_CONFIG;
@@ -224,6 +230,14 @@ public class MinestuckConfig
 		
 		CLIENT_CONFIG = CLIENT_BUILDER.build();
 		SERVER_CONFIG = SERVER_BUILDER.build();
+	}
+	
+	@SubscribeEvent
+	public static void onReload(final ModConfig.ConfigReloading event)
+	{
+		MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+		if(server != null && server.isOnExecutionThread())	//TODO Check if this will be true after server start. If not, use a static boolean together with a tick event instead
+			DeployList.onConditionsUpdated(server);
 	}
 	
 	public static boolean getDataCheckerPermissionFor(ServerPlayerEntity player)

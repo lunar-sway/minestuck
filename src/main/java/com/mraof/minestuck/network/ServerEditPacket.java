@@ -14,7 +14,6 @@ public class ServerEditPacket implements PlayToClientPacket
 	
 	String target;
 	int centerX, centerZ;
-	boolean[] givenItems;
 	CompoundNBT deployTags;
 	
 	public static ServerEditPacket exit()
@@ -22,20 +21,19 @@ public class ServerEditPacket implements PlayToClientPacket
 		return new ServerEditPacket();
 	}
 	
-	public static ServerEditPacket givenItems(boolean[] givenItems)
+	public static ServerEditPacket givenItems(CompoundNBT deployTags)
 	{
 		ServerEditPacket packet = new ServerEditPacket();
-		packet.givenItems = givenItems;
+		packet.deployTags = deployTags;
 		return packet;
 	}
 	
-	public static ServerEditPacket activate(String target, int centerX, int centerZ, boolean[] givenItems, CompoundNBT deployTags)
+	public static ServerEditPacket activate(String target, int centerX, int centerZ, CompoundNBT deployTags)
 	{
 		ServerEditPacket packet = new ServerEditPacket();
 		packet.target = target;
 		packet.centerX = centerX;
 		packet.centerZ = centerZ;
-		packet.givenItems = givenItems;
 		packet.deployTags = deployTags;
 		return packet;
 	}
@@ -49,27 +47,20 @@ public class ServerEditPacket implements PlayToClientPacket
 			buffer.writeString(target, 16);
 			buffer.writeInt(centerX);
 			buffer.writeInt(centerZ);
-		} else if(givenItems != null)
+		} else if(deployTags != null)
 			buffer.writeBoolean(false);
 		else return;
 		
-		if(givenItems != null)
+		if(deployTags != null)
 		{
-			buffer.writeInt(givenItems.length);
-			for(boolean b : givenItems)
-				buffer.writeBoolean(b);
-			
-			if(deployTags != null)
+			try
 			{
-				try
-				{
-					ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-					CompressedStreamTools.writeCompressed(deployTags, bytes);
-					buffer.writeBytes(bytes.toByteArray());
-				} catch(IOException e)
-				{
-					e.printStackTrace();
-				}
+				ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+				CompressedStreamTools.writeCompressed(deployTags, bytes);
+				buffer.writeBytes(bytes.toByteArray());
+			} catch(IOException e)
+			{
+				e.printStackTrace();
 			}
 		}
 	}
@@ -88,24 +79,14 @@ public class ServerEditPacket implements PlayToClientPacket
 			
 			if(buffer.readableBytes() > 0)
 			{
-				packet.givenItems = new boolean[buffer.readInt()];
-				for(int i = 0; i < packet.givenItems.length; i++)
+				byte[] bytes = new byte[buffer.readableBytes()];
+				buffer.readBytes(bytes);
+				try
 				{
-					packet.givenItems[i] = buffer.readBoolean();
-				}
-				
-				if(buffer.readableBytes() > 0)
+					packet.deployTags = CompressedStreamTools.readCompressed(new ByteArrayInputStream(bytes));
+				} catch(IOException e)
 				{
-					byte[] bytes = new byte[buffer.readableBytes()];
-					buffer.readBytes(bytes);
-					try
-					{
-						packet.deployTags = CompressedStreamTools.readCompressed(new ByteArrayInputStream(bytes));
-					}
-					catch(IOException e)
-					{
-						e.printStackTrace();
-					}
+					e.printStackTrace();
 				}
 			}
 		}
@@ -116,6 +97,6 @@ public class ServerEditPacket implements PlayToClientPacket
 	@Override
 	public void execute()
 	{
-		ClientEditHandler.onClientPackage(target, centerX, centerZ, givenItems, deployTags);
+		ClientEditHandler.onClientPackage(target, centerX, centerZ, deployTags);
 	}
 }

@@ -2,6 +2,8 @@ package com.mraof.minestuck.skaianet;
 
 import com.mojang.datafixers.Dynamic;
 import com.mraof.minestuck.editmode.DeployEntry;
+import com.mraof.minestuck.editmode.EditData;
+import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
@@ -207,7 +209,15 @@ public class SburbConnection
 	@Deprecated
 	public boolean hasGivenItem(String item) { return givenItemList.contains(item); }
 	public boolean hasGivenItem(DeployEntry item) { return givenItemList.contains(item.getName()); }
-	public void setHasGivenItem(DeployEntry item) { givenItemList.add(item.getName()); }
+	public void setHasGivenItem(DeployEntry item)
+	{
+		if(givenItemList.add(item.getName()))
+		{
+			EditData data = ServerEditHandler.getData(handler.mcServer, this);
+			if(data != null)
+				data.sendGivenItemsToEditor();
+		}
+	}
 	void resetGivenItems() { givenItemList.clear(); }
 	
 	/**

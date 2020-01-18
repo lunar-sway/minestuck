@@ -9,7 +9,7 @@ import net.minecraftforge.common.util.Constants;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClientDeployList
+public final class ClientDeployList
 {
 	static void load(CompoundNBT nbt)
 	{
@@ -23,11 +23,9 @@ public class ClientDeployList
 			Entry entry = new Entry();
 			entry.item = ItemStack.read(tag);
 			entry.index = tag.getInt("i");
-			entry.cost1 = GristSet.read(tag.getList("primary", Constants.NBT.TAG_COMPOUND));
-			if(tag.contains("secondary", Constants.NBT.TAG_LIST))
-			{
-				entry.cost2 = GristSet.read(tag.getList("secondary", Constants.NBT.TAG_COMPOUND));
-			} else entry.cost2 = null;
+			
+			entry.cost = GristSet.read(tag.getList("cost", Constants.NBT.TAG_COMPOUND));
+			
 			entryList.add(entry);
 		}
 	}
@@ -46,20 +44,15 @@ public class ClientDeployList
 	public static class Entry
 	{
 		private ItemStack item;
-		private GristSet cost1;
-		private GristSet cost2;
+		private GristSet cost;
 		private int index;
 		
-		public GristSet getPrimaryCost()
+		public GristSet getCost()
 		{
-			return cost1;
+			return cost;
 		}
 		
-		public GristSet getSecondaryCost()
-		{
-			return cost2;
-		}
-		
+		@Deprecated
 		public int getIndex()
 		{
 			return index;

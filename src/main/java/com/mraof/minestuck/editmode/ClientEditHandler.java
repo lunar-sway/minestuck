@@ -37,12 +37,10 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.List;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
-public class ClientEditHandler
+public final class ClientEditHandler
 {
 	
 	public final static ClientEditHandler instance = new ClientEditHandler();
-	
-	static boolean[] givenItems;
 	
 	static boolean activated;
 	
@@ -63,20 +61,17 @@ public class ClientEditHandler
 		MSPacketHandler.sendToServer(packet);
 	}
 	
-	public static void onClientPackage(String target, int posX, int posZ, boolean[] items, CompoundNBT deployList)
+	public static void onClientPackage(String target, int posX, int posZ, CompoundNBT deployList)
 	{
 		Minecraft mc = Minecraft.getInstance();
 		ClientPlayerEntity player = mc.player;
 		if(target != null) {	//Enable edit mode
 			activated = true;
-			givenItems = items;
 			centerX = posX;
 			centerZ = posZ;
 			client = target;
-		} else if(items != null) {
-			givenItems = items;
 		}
-		else	//Disable edit mode
+		else if(deployList == null)	//Disable edit mode
 		{
 			player.fallDistance = 0;
 			activated = false;
@@ -95,18 +90,17 @@ public class ClientEditHandler
 		
 		GristSet have = ClientPlayerData.getClientGrist();
 		
-		addToolTip(event.getItemStack(), event.getToolTip(), have, givenItems, event.getEntity().world);
+		addToolTip(event.getItemStack(), event.getToolTip(), have, event.getEntity().world);
 		
 	}
 	
-	static void addToolTip(ItemStack stack, List<ITextComponent> toolTip, GristSet have, boolean[] givenItems, World world)
+	static void addToolTip(ItemStack stack, List<ITextComponent> toolTip, GristSet have, World world)
 	{
 		
 		GristSet cost;
 		ClientDeployList.Entry deployEntry = ClientDeployList.getEntry(stack);
 		if(deployEntry != null)
-			cost = givenItems[deployEntry.getIndex()]
-					? deployEntry.getSecondaryCost() : deployEntry.getPrimaryCost();
+			cost = deployEntry.getCost();
 		else cost = GristCostRecipe.findCostForItem(stack, null, false, world);
 		
 		if(cost == null)
@@ -148,11 +142,8 @@ public class ClientEditHandler
 			ClientDeployList.Entry entry = ClientDeployList.getEntry(stack);
 			if(entry != null)
 			{
-				if(!ServerEditHandler.isBlockItem(stack.getItem()) && GristHelper.canAfford(ClientPlayerData.getClientGrist(), givenItems[entry.getIndex()]
-						? entry.getSecondaryCost() : entry.getPrimaryCost()))
-					givenItems[entry.getIndex()] = true;
-				else event.setCanceled(true);
-				
+				if(ServerEditHandler.isBlockItem(stack.getItem()) || !GristHelper.canAfford(ClientPlayerData.getClientGrist(), entry.getCost()))
+					event.setCanceled(true);
 			}
 			if(event.isCanceled())
 			{
@@ -189,9 +180,7 @@ public class ClientEditHandler
 			GristSet cost;
 			ClientDeployList.Entry entry = ClientDeployList.getEntry(stack);
 			if(entry != null)
-				if(givenItems[entry.getIndex()])
-					cost = entry.getSecondaryCost();
-				else cost = entry.getPrimaryCost();
+				cost = entry.getCost();
 			else cost = GristCostRecipe.findCostForItem(stack, null, false, event.getWorld());
 			if(!GristHelper.canAfford(ClientPlayerData.getClientGrist(), cost)) {
 				StringBuilder str = new StringBuilder();
@@ -230,18 +219,6 @@ public class ClientEditHandler
 		if(event.getWorld().isRemote && event.getPlayer().isUser() && isActive())
 		{
 			event.setCanceled(true);
-		}
-	}
-	
-	@SubscribeEvent(priority=EventPriority.LOWEST,receiveCanceled=false)
-	public static void onBlockPlaced(PlayerInteractEvent.RightClickBlock event)
-	{
-		if(event.getWorld().isRemote && isActive() && event.getPlayer().equals(Minecraft.getInstance().player)
-				&& event.getUseItem() == Event.Result.ALLOW) {
-			ItemStack stack = event.getPlayer().getHeldItemMainhand();
-			ClientDeployList.Entry entry = ClientDeployList.getEntry(stack);
-			if(entry != null)
-				givenItems[entry.getIndex()] = true;
 		}
 	}
 	

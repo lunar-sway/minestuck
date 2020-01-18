@@ -79,12 +79,8 @@ public class EditData
 	
 	public void sendGivenItemsToEditor()
 	{
-		String[] nameList = DeployList.getNameList();
-		boolean[] givenItems = new boolean[nameList.length];
-		for(int i = 0; i < nameList.length; i++)
-			givenItems[i] = connection.hasGivenItem(nameList[i]);
 		
-		ServerEditPacket packet = ServerEditPacket.givenItems(givenItems);	//TODO The client shouldn't need to know givenItems, only the grist cost. Remake it so that is true.
+		ServerEditPacket packet = ServerEditPacket.givenItems(DeployList.getDeployListTag(player.server, connection));
 		MSPacketHandler.sendToPlayer(packet, getEditor());
 	}
 	

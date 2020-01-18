@@ -148,11 +148,16 @@ public class MSExtraData extends WorldSavedData
 			markDirty();
 	}
 	
+	public void forEach(Consumer<EditData> consumer)
+	{
+		activeEditData.forEach(consumer);
+	}
+	
 	public void forEachAndClear(Consumer<EditData> consumer)
 	{
 		if(!activeEditData.isEmpty())
 		{
-			activeEditData.forEach(consumer);
+			forEach(consumer);
 			activeEditData.clear();
 			markDirty();
 		}

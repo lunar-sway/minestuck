@@ -61,7 +61,7 @@ import java.util.UUID;
  * @author kirderf1
  */
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
-public class ServerEditHandler
+public final class ServerEditHandler
 {
 	
 	public static final ArrayList<String> commands = new ArrayList<>(Arrays.asList("effect", "gamemode", "defaultgamemode", "enchant", "xp", "tp", "spreadplayers", "kill", "clear", "spawnpoint", "setworldspawn", "give"));
@@ -142,11 +142,7 @@ public class ServerEditHandler
 			decoy.world.addEntity(decoy);
 			MSExtraData.get(player.world).addEditData(data);
 			
-			String[] nameList = DeployList.getNameList();
-			boolean[] givenItems = new boolean[nameList.length];
-			for(int i = 0; i < nameList.length; i++)
-				givenItems[i] = c.hasGivenItem(nameList[i]);
-			ServerEditPacket packet = ServerEditPacket.activate(computerTarget.getUsername(), c.centerX, c.centerZ, givenItems, DeployList.getDeployListTag(player.getServer(), c));
+			ServerEditPacket packet = ServerEditPacket.activate(computerTarget.getUsername(), c.centerX, c.centerZ, DeployList.getDeployListTag(player.getServer(), c));
 			MSPacketHandler.sendToPlayer(packet, player);
 			data.sendGristCacheToEditor();
 		}

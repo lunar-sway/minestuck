@@ -9,6 +9,7 @@ import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
+import com.mraof.minestuck.world.storage.MSExtraData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -127,14 +128,6 @@ public final class DeployList
 		return getEntryForItem(stack, c, world) != null;
 	}
 	
-	public static String[] getNameList()
-	{
-		String[] str = new String[list.size()];
-		for(int i = 0; i < list.size(); i++)
-			str[i] = list.get(i).getName();
-		return str;
-	}
-	
 	public static DeployEntry getEntryForName(String name)
 	{
 		for(DeployEntry entry : list)
@@ -152,6 +145,7 @@ public final class DeployList
 		return null;
 	}
 	
+	
 	public interface IAvailabilityCondition
 	{
 		boolean test(SburbConnection connection);
@@ -167,6 +161,7 @@ public final class DeployList
 		return (sburbConnection, world) -> new ItemStack(item);
 	}
 	
+	
 	static CompoundNBT getDeployListTag(MinecraftServer server, SburbConnection c)
 	{
 		CompoundNBT nbt = new CompoundNBT();
@@ -176,22 +171,16 @@ public final class DeployList
 		for(int i = 0; i < list.size(); i++)
 		{
 			DeployEntry entry = list.get(i);
-			if(entry.isAvailable(c, tier))
-			{
-				ItemStack stack = entry.getItemStack(c, server.getWorld(DimensionType.OVERWORLD));
-				GristSet primary = entry.getPrimaryGristCost(c);
-				GristSet secondary = entry.getSecondaryGristCost(c);
-				CompoundNBT tag = new CompoundNBT();
-				stack.write(tag);
-				tag.putInt("i", i);
-				tag.put("primary", primary.write(new ListNBT()));
-				if(secondary != null)
-				{
-					tag.put("secondary", secondary.write(new ListNBT()));
-				}
-				tagList.add(tag);
-			}
+			entry.tryAddDeployTag(c, server.getWorld(DimensionType.OVERWORLD), tier, tagList, i);
 		}
 		return nbt;
+	}
+	
+	/**
+	 * Should be called any time that the conditions of deploy list entries might have changed for players.
+	 */
+	public static void onConditionsUpdated(MinecraftServer server)
+	{
+		MSExtraData.get(server).forEach(EditData::sendGivenItemsToEditor);
 	}
 }
