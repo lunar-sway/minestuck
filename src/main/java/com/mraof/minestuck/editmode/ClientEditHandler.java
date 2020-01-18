@@ -3,6 +3,7 @@ package com.mraof.minestuck.editmode;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
+import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.network.ClientEditPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
@@ -39,9 +40,6 @@ import java.util.List;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public final class ClientEditHandler
 {
-	
-	public final static ClientEditHandler instance = new ClientEditHandler();
-	
 	static boolean activated;
 	
 	static int centerX, centerZ;
@@ -94,18 +92,20 @@ public final class ClientEditHandler
 		
 	}
 	
-	static void addToolTip(ItemStack stack, List<ITextComponent> toolTip, GristSet have, World world)
+	private static GristSet itemCost(ItemStack stack, World world)
 	{
-		
-		GristSet cost;
 		ClientDeployList.Entry deployEntry = ClientDeployList.getEntry(stack);
 		if(deployEntry != null)
-			cost = deployEntry.getCost();
-		else cost = GristCostRecipe.findCostForItem(stack, null, false, world);
+			return deployEntry.getCost();
+		else return GristCostRecipe.findCostForItem(stack, null, false, world);
+	}
+	
+	private static void addToolTip(ItemStack stack, List<ITextComponent> toolTip, GristSet have, World world)
+	{
+		GristSet cost = itemCost(stack, world);
 		
 		if(cost == null)
 		{
-			toolTip.add(new TranslationTextComponent("gui.notAvailable").setStyle(new Style().setColor(TextFormatting.RED)));
 			return;
 		}
 		
@@ -116,7 +116,7 @@ public final class ClientEditHandler
 			toolTip.add(new StringTextComponent(amount.getAmount()+" ").appendSibling(grist.getDisplayName()).appendText(" ("+have.getGrist(grist) + ")").setStyle(new Style().setColor(color)));
 		}
 		if(cost.isEmpty())
-			toolTip.add(new TranslationTextComponent("gui.free").setStyle(new Style().setColor(TextFormatting.GREEN)));
+			toolTip.add(new TranslationTextComponent(GuiUtil.FREE).setStyle(new Style().setColor(TextFormatting.GREEN)));
 	}
 	
 	@SubscribeEvent
@@ -177,22 +177,12 @@ public final class ClientEditHandler
 				return;
 			}
 			
-			GristSet cost;
-			ClientDeployList.Entry entry = ClientDeployList.getEntry(stack);
-			if(entry != null)
-				cost = entry.getCost();
-			else cost = GristCostRecipe.findCostForItem(stack, null, false, event.getWorld());
-			if(!GristHelper.canAfford(ClientPlayerData.getClientGrist(), cost)) {
-				StringBuilder str = new StringBuilder();
+			GristSet cost = itemCost(stack, event.getWorld());
+			if(!GristHelper.canAfford(ClientPlayerData.getClientGrist(), cost))
+			{
 				if(cost != null)
 				{
-					for(GristAmount grist : cost.getAmounts())
-					{
-						if(cost.getAmounts().indexOf(grist) != 0)
-							str.append(", ");
-						str.append(grist.getAmount()).append(" ").append(grist.getType().getDisplayName());
-					}
-					event.getPlayer().sendMessage(new TranslationTextComponent("grist.missing",str.toString()));
+					event.getPlayer().sendMessage(cost.createMissingMessage());
 				}
 				event.setCanceled(true);
 			}

@@ -10,6 +10,8 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import java.util.*;
@@ -19,6 +21,8 @@ import java.util.stream.Collectors;
 
 public class GristSet
 {
+	public static final String MISSING_MESSAGE = "grist.missing";
+	
 	public static final GristSet EMPTY = new GristSet(Collections.emptyMap());
 
 	private final Map<GristType, Long> gristTypes;
@@ -227,7 +231,22 @@ public class GristSet
 		build.append(']');
 		return build.toString();
 	}
-
+	
+	public ITextComponent createMissingMessage()
+	{
+		StringBuilder str = new StringBuilder();
+		boolean first = true;
+		for(GristAmount grist : getAmounts())
+		{
+			if(!first)
+				str.append(", ");
+			first = false;
+			str.append(grist.getAmount()).append(" ").append(grist.getType().getDisplayName());
+		}
+		return new TranslationTextComponent(MISSING_MESSAGE, str.toString());
+	}
+	
+	
 	public GristSet copy()
 	{
 		return new GristSet(new TreeMap<>(gristTypes));
