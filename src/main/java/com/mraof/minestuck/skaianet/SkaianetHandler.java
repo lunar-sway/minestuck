@@ -792,8 +792,7 @@ public class SkaianetHandler
 	{
 		for(SburbConnection c : connections)
 		{
-			Arrays.fill(c.givenItemList, false);
-			c.unregisteredItems = new ListNBT();
+			c.resetGivenItems();
 			
 			EditData data = ServerEditHandler.getData(mcServer, c);
 			if(data != null)

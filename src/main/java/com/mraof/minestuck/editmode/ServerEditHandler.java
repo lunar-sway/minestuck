@@ -141,7 +141,12 @@ public class ServerEditHandler
 				player.inventory.read(c.inventory);
 			decoy.world.addEntity(decoy);
 			MSExtraData.get(player.world).addEditData(data);
-			ServerEditPacket packet = ServerEditPacket.activate(computerTarget.getUsername(), c.centerX, c.centerZ, c.givenItems(), DeployList.getDeployListTag(player.getServer(), c));
+			
+			String[] nameList = DeployList.getNameList();
+			boolean[] givenItems = new boolean[nameList.length];
+			for(int i = 0; i < nameList.length; i++)
+				givenItems[i] = c.hasGivenItem(nameList[i]);
+			ServerEditPacket packet = ServerEditPacket.activate(computerTarget.getUsername(), c.centerX, c.centerZ, givenItems, DeployList.getDeployListTag(player.getServer(), c));
 			MSPacketHandler.sendToPlayer(packet, player);
 			data.sendGristCacheToEditor();
 		}
@@ -204,7 +209,7 @@ public class ServerEditHandler
 		SburbConnection c = data.connection;
 		int range = MSDimensions.isLandDimension(player.dimension) ? MinestuckConfig.landEditRange.get() : MinestuckConfig.overworldEditRange.get();
 		
-		updateInventory(player, c.givenItems(), c);
+		updateInventory(player, c);
 		updatePosition(player, range, c.centerX, c.centerZ);
 		
 		player.timeUntilPortal = player.getPortalCooldown();
@@ -221,13 +226,12 @@ public class ServerEditHandler
 			DeployList.DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getEntity().world);
 			if(entry != null && !isBlockItem(stack.getItem()))
 			{
-				int i = DeployList.getOrdinal(entry.getName());
-				GristSet cost = data.connection.givenItems()[i]
+				GristSet cost = data.connection.hasGivenItem(entry)
 						? entry.getSecondaryGristCost(data.connection) : entry.getPrimaryGristCost(data.connection);
 				if(GristHelper.canAfford(PlayerSavedData.getData(data.connection.getClientIdentifier(), event.getPlayer().world).getGristCache(), cost))
 				{
 					GristHelper.decrease(event.getPlayer().world, data.connection.getClientIdentifier(), cost);
-					data.connection.givenItems()[i] = true;
+					data.connection.setHasGivenItem(entry);
 					if(!data.connection.isMain())
 						SkaianetHandler.get(event.getPlayer().getServer()).giveItems(data.connection.getClientIdentifier());
 				}
@@ -276,7 +280,7 @@ public class ServerEditHandler
 			DeployList.DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getEntity().world);
 			if(entry != null)
 			{
-				GristSet cost = data.connection.givenItems()[DeployList.getOrdinal(entry.getName())]
+				GristSet cost = data.connection.hasGivenItem(entry)
 						? entry.getSecondaryGristCost(data.connection) : entry.getPrimaryGristCost(data.connection);
 				if(!GristHelper.canAfford(event.getWorld(), data.connection.getClientIdentifier(), cost))
 				{
@@ -364,10 +368,9 @@ public class ServerEditHandler
 				DeployList.DeployEntry entry = DeployList.getEntryForItem(stack, c, player.world);
 				if(entry != null)
 				{
-					int index = DeployList.getOrdinal(entry.getName());
-					GristSet cost = c.givenItems()[index]
+					GristSet cost = c.hasGivenItem(entry)
 							? entry.getSecondaryGristCost(c) : entry.getPrimaryGristCost(c);
-					c.givenItems()[index] = true;
+					c.setHasGivenItem(entry);
 					if(!c.isMain())
 						SkaianetHandler.get(player.server).giveItems(c.getClientIdentifier());
 					if(!cost.isEmpty())
@@ -428,10 +431,10 @@ public class ServerEditHandler
 		}
 	}
 	
-	public static void updateInventory(ServerPlayerEntity player, boolean[] givenItems, SburbConnection connection)
+	public static void updateInventory(ServerPlayerEntity player, SburbConnection connection)
 	{
 		List<DeployList.DeployEntry> deployList = DeployList.getItemList(player.getServer(), connection);
-		deployList.removeIf(entry -> givenItems[DeployList.getOrdinal(entry.getName())] && entry.getSecondaryGristCost(connection) == null);
+		deployList.removeIf(entry -> connection.hasGivenItem(entry) && entry.getSecondaryGristCost(connection) == null);
 		List<ItemStack> itemList = new ArrayList<>();
 		deployList.forEach(deployEntry -> itemList.add(deployEntry.getItemStack(connection, player.world)));
 		

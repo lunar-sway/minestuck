@@ -56,7 +56,9 @@ public class ClientEditPacket implements PlayToServerPacket
 	@Override
 	public void execute(ServerPlayerEntity player)
 	{
-		OpEntry opsEntry = player == null ? null : player.getServer().getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
+		if(player == null || player.getServer() == null)
+			return;
+		OpEntry opsEntry = player.getServer().getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
 		if(!MinestuckConfig.giveItems.get())
 		{
 			if(user == -1)
@@ -85,11 +87,11 @@ public class ClientEditPacket implements PlayToServerPacket
 				
 				for(DeployList.DeployEntry entry : DeployList.getItemList(player.getServer(), c))
 				{
-					if(!c.givenItems()[entry.getOrdinal()])
+					if(!c.hasGivenItem(entry))
 					{
 						ItemStack item = entry.getItemStack(c, player.world);
-						if(!targetPlayer.inventory.hasItemStack(item))
-							c.givenItems()[entry.getOrdinal()] = targetPlayer.inventory.addItemStackToInventory(item);
+						if(!targetPlayer.inventory.hasItemStack(item) && targetPlayer.inventory.addItemStackToInventory(item))
+							c.setHasGivenItem(entry);
 					}
 				}
 				player.getServer().getPlayerList().sendInventory(targetPlayer);
