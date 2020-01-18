@@ -4,7 +4,10 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.DecoyEntity;
 import com.mraof.minestuck.event.ConnectionClosedEvent;
-import com.mraof.minestuck.item.crafting.alchemy.*;
+import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
+import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ServerEditPacket;
 import com.mraof.minestuck.skaianet.SburbConnection;
@@ -29,7 +32,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.GameType;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.Heightmap;
@@ -279,17 +281,8 @@ public final class ServerEditHandler
 				GristSet cost = entry.getCurrentCost(data.connection);
 				if(!GristHelper.canAfford(event.getWorld(), data.connection.getClientIdentifier(), cost))
 				{
-					StringBuilder str = new StringBuilder();
 					if(cost != null)
-					{
-						for(GristAmount grist : cost.getAmounts())
-						{
-							if(cost.getAmounts().indexOf(grist) != 0)
-								str.append(", ");
-							str.append(grist.getAmount()).append(" ").append(grist.getType().getDisplayName());
-						}
-						event.getPlayer().sendMessage(new TranslationTextComponent("grist.missing",str.toString()));
-					}
+						event.getPlayer().sendMessage(cost.createMissingMessage());
 					event.setCanceled(true);
 				}
 			}
@@ -470,12 +463,6 @@ public final class ServerEditHandler
 			player.getServer().getPlayerList().sendInventory(player);
 	}
 	
-	@SubscribeEvent
-	public static void onServerStopping(FMLServerStoppingEvent event)
-	{
-		MSExtraData.get(event.getServer()).forEachAndClear(ServerEditHandler::reset);
-	}
-	
 	/*@SubscribeEvent(priority=EventPriority.LOWEST, receiveCanceled=false) TODO Do something about command security
 	public static void onCommandEvent(CommandEvent event)
 	{
@@ -572,7 +559,13 @@ public final class ServerEditHandler
 	}
 	
 	@SubscribeEvent
-	public void serverStarted(FMLServerStartedEvent event)
+	public static void onServerStopping(FMLServerStoppingEvent event)
+	{
+		MSExtraData.get(event.getServer()).forEachAndClear(ServerEditHandler::reset);
+	}
+	
+	@SubscribeEvent
+	public static void serverStarted(FMLServerStartedEvent event)
 	{
 		SkaianetHandler skaianet = SkaianetHandler.get(event.getServer());
 		MSExtraData.get(event.getServer()).recoverConnections(recovery -> recovery.recover(skaianet.getActiveConnection(recovery.getClientPlayer())));
