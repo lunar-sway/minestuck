@@ -4,7 +4,6 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
-import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.weapon.PotionWeaponItem;
@@ -41,8 +40,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
 
-import java.util.Random;
-
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class ServerEventHandler
 {
@@ -56,7 +53,6 @@ public class ServerEventHandler
 		//event.getServer().setOnlineMode(false);	//Makes it possible to use LAN in a development environment
 		
 		lastDay = event.getServer().getWorld(DimensionType.OVERWORLD).getGameTime() / 24000L;
-		CaptchaDeckHandler.rand = new Random();
 	}
 	
 	@SubscribeEvent

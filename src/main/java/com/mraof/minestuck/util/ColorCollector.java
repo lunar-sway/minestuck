@@ -15,10 +15,6 @@ public class ColorCollector
 	public static final int DEFAULT_COLOR = 0xA0DCFF;
 	private static List<Integer> colors;
 	
-	//client only
-	public static int playerColor;
-	public static boolean displaySelectionGui;
-	
 	static
 	{
 		colors = new ArrayList<>();

@@ -7,7 +7,7 @@ import com.mraof.minestuck.client.gui.ColorSelectorScreen;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.inventory.ConsortMerchantContainer;
-import com.mraof.minestuck.util.ColorCollector;
+import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -28,32 +28,14 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ClientEventHandler
 {
-	
-	/*@SubscribeEvent TODO Find new event or similar here
-	public static void onConnectedToServer(ClientConnectedToServerEvent event)	//Reset all static client-side data here
-	{
-		GuiPlayerStats.normalTab = GuiPlayerStats.NormalGuiType.CAPTCHA_DECK;
-		GuiPlayerStats.editmodeTab = GuiPlayerStats.EditmodeGuiType.DEPLOY_LIST;
-		ContainerEditmode.clientScroll = 0;
-		CaptchaDeckHandler.clientSideModus = null;
-		MinestuckPlayerData.title = null;
-		MinestuckPlayerData.rung = -1;
-		ColorCollector.playerColor = -1;
-		ColorCollector.displaySelectionGui = false;
-		GuiDataChecker.activeComponent = null;
-		GuiEcheladder.lastRung = -1;
-		GuiEcheladder.animatedRung = 0;
-		SkaiaClient.clear();
-	}*/
-	
 	@SubscribeEvent
 	public static void onClientTick(TickEvent.ClientTickEvent event)
 	{
 		if(event.phase == TickEvent.Phase.END)
 		{
-			if(ColorCollector.displaySelectionGui && Minecraft.getInstance().currentScreen == null)
+			if(ClientPlayerData.displaySelectionGui && Minecraft.getInstance().currentScreen == null)
 			{
-				ColorCollector.displaySelectionGui = false;
+				ClientPlayerData.displaySelectionGui = false;
 				if(MinestuckConfig.loginColorSelector.get())
 					Minecraft.getInstance().displayGuiScreen(new ColorSelectorScreen(true));
 			}

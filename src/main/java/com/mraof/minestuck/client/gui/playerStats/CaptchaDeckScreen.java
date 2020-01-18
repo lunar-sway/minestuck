@@ -2,10 +2,14 @@ package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.gui.captchalouge.SylladexScreen;
-import com.mraof.minestuck.inventory.captchalogue.*;
+import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckContainer;
+import com.mraof.minestuck.inventory.captchalogue.Modus;
+import com.mraof.minestuck.inventory.captchalogue.ModusType;
+import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
@@ -41,14 +45,14 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckCon
 		sylladexMap = new GuiButtonExt(xOffset + 6, yOffset + 31, 60, 18, I18n.format(SYLLADEX), button -> sylladex());
 		addButton(modusButton);
 		addButton(sylladexMap);
-		sylladexMap.active = CaptchaDeckHandler.clientSideModus != null;
+		sylladexMap.active = ClientPlayerData.clientSideModus != null;
 		modusButton.active = !container.inventory.getStackInSlot(0).isEmpty();
 	}
 	
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int xcor, int ycor)
 	{
-		sylladexMap.active = CaptchaDeckHandler.clientSideModus != null;
+		sylladexMap.active = ClientPlayerData.clientSideModus != null;
 		modusButton.active = !container.inventory.getStackInSlot(0).isEmpty();
 		
 		drawTabs();
@@ -78,8 +82,9 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckCon
 			{
 				ModusType<?> type = ModusTypes.getTypeFromItem(stack.getItem());
 				Modus newModus = type.createClientSide();
-				if(newModus != null && CaptchaDeckHandler.clientSideModus != null && newModus.getClass() != CaptchaDeckHandler.clientSideModus.getClass() && !newModus.canSwitchFrom(CaptchaDeckHandler.clientSideModus))
+				if(newModus != null && ClientPlayerData.clientSideModus != null && newModus.getClass() != ClientPlayerData.clientSideModus.getClass() && !newModus.canSwitchFrom(ClientPlayerData.clientSideModus))
 				{
+					//TODO Translation keys that are also used in the data generator
 					minecraft.currentScreen = new ConfirmScreen(this::onConfirm, new TranslationTextComponent("gui.emptySylladex1"), new TranslationTextComponent("gui.emptySylladex2"))
 					{
 						@Override
@@ -99,11 +104,11 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckCon
 	
 	private void sylladex()
 	{
-		if( CaptchaDeckHandler.clientSideModus != null)
+		if( ClientPlayerData.clientSideModus != null)
 		{
 			minecraft.player.connection.sendPacket(new CCloseWindowPacket(minecraft.player.openContainer.windowId));
 			minecraft.player.inventory.setItemStack(ItemStack.EMPTY);
-			MSScreenFactories.displaySylladexScreen(CaptchaDeckHandler.clientSideModus);
+			MSScreenFactories.displaySylladexScreen(ClientPlayerData.clientSideModus);
 			minecraft.player.openContainer = minecraft.player.container;
 		}
 	}

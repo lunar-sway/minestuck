@@ -8,6 +8,7 @@ import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ModusDataPacket;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.world.storage.ClientPlayerData;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.item.ItemEntity;
@@ -21,16 +22,10 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 
-import java.util.Random;
-
 public class CaptchaDeckHandler
 {
 	public static final int EMPTY_SYLLADEX = -1;
 	public static final int EMPTY_CARD = -2;
-	
-	public static Random rand;
-	
-	public static Modus clientSideModus;
 	
 	public static Modus createClientModus(ResourceLocation name)
 	{
@@ -60,7 +55,7 @@ public class CaptchaDeckHandler
 	public static void launchAnyItem(PlayerEntity player, ItemStack item)
 	{
 		ItemEntity entity = new ItemEntity(player.world, player.posX, player.posY+1, player.posZ, item);
-		entity.setMotion(rand.nextDouble() - 0.5, entity.getMotion().y, rand.nextDouble() - 0.5);
+		entity.setMotion(player.world.rand.nextDouble() - 0.5, entity.getMotion().y, player.world.rand.nextDouble() - 0.5);
 		entity.setDefaultPickupDelay();
 		player.world.addEntity(entity);
 	}
@@ -408,8 +403,8 @@ public class CaptchaDeckHandler
 		Modus modus;
 		ResourceLocation name = new ResourceLocation(nbt.getString("type"));
 		
-		if(clientSide && clientSideModus != null && name.equals(clientSideModus.getType().getRegistryName()))
-			modus = clientSideModus;
+		if(clientSide && ClientPlayerData.clientSideModus != null && name.equals(ClientPlayerData.clientSideModus.getType().getRegistryName()))
+			modus = ClientPlayerData.clientSideModus;
 		else
 		{
 			modus = clientSide ? createClientModus(name) : createServerModus(name, savedData);
