@@ -25,7 +25,6 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 
@@ -68,23 +67,13 @@ public class ComputerBlock extends MachineBlock
 	@SuppressWarnings("deprecation")
 	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
-		//TODO This function probably need to be cleaned up
 		ItemStack heldItem = player.getHeldItem(handIn);
 		if(state.get(STATE) == State.OFF)
 		{
 			if(player.isSneaking() || !Direction.UP.equals(hit.getFace()) || !heldItem.isEmpty() && ComputerProgram.getProgramID(heldItem) == -2)
 				return false;
 			
-			if(!worldIn.isRemote)
-			{
-				BlockState newState = state.with(STATE, State.ON);
-				worldIn.setBlockState(pos, newState, 2);
-				
-				TileEntity te = worldIn.getTileEntity(pos);
-				if(te instanceof ComputerTileEntity)
-					((ComputerTileEntity) te).owner = IdentifierHandler.encode(player);
-				newState.onBlockActivated(worldIn, player, handIn, hit);
-			}
+			turnOn(state, worldIn, pos, player, handIn, hit);
 			
 			return true;
 		} else
@@ -96,28 +85,48 @@ public class ComputerBlock extends MachineBlock
 				return false;
 			}
 			
-			int id = ComputerProgram.getProgramID(player.getHeldItem(handIn));
-			if(id != -2 && !tileEntity.hasProgram(id) && tileEntity.installedPrograms.size() < 2 && !tileEntity.hasProgram(-1))
-			{
-				if(worldIn.isRemote)
-					return true;
-				player.setHeldItem(handIn, ItemStack.EMPTY);
-				if(id == -1)
-				{
-					tileEntity.closeAll();
-					worldIn.setBlockState(pos, state.with(STATE, State.BROKEN), 2);
-				}
-				else tileEntity.installedPrograms.put(id, true);
-				tileEntity.markDirty();
-				worldIn.notifyBlockUpdate(pos, state, state, 3);
+			if(insertDisk(tileEntity, state, worldIn, pos, player, handIn))
 				return true;
-			}
 			
 			if(worldIn.isRemote && SkaiaClient.requestData(tileEntity))
 				MSScreenFactories.displayComputerScreen(tileEntity);
 			
 			return true;
 		}
+	}
+	
+	private void turnOn(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+	{
+		if(!worldIn.isRemote)
+		{
+			BlockState newState = state.with(STATE, State.ON);
+			worldIn.setBlockState(pos, newState, 2);
+			
+			TileEntity te = worldIn.getTileEntity(pos);
+			if(te instanceof ComputerTileEntity)
+				((ComputerTileEntity) te).owner = IdentifierHandler.encode(player);
+			newState.onBlockActivated(worldIn, player, handIn, hit);
+		}
+	}
+	
+	private boolean insertDisk(ComputerTileEntity tileEntity, BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn)
+	{
+		int id = ComputerProgram.getProgramID(player.getHeldItem(handIn));
+		if(id != -2 && !tileEntity.hasProgram(id) && tileEntity.installedPrograms.size() < 2 && !tileEntity.hasProgram(-1))
+		{
+			if(worldIn.isRemote)
+				return true;
+			player.setHeldItem(handIn, ItemStack.EMPTY);
+			if(id == -1)
+			{
+				tileEntity.closeAll();
+				worldIn.setBlockState(pos, state.with(STATE, State.BROKEN), 2);
+			}
+			else tileEntity.installedPrograms.put(id, true);
+			tileEntity.markDirty();
+			worldIn.notifyBlockUpdate(pos, state, state, 3);
+			return true;
+		} else return false;
 	}
 	
 	@Override
@@ -153,10 +162,8 @@ public class ComputerBlock extends MachineBlock
 		te.closeAll();
 		float factor = 0.05F;
 		
-		Iterator<Map.Entry<Integer, Boolean>> it = te.installedPrograms.entrySet().iterator();
-		while(it.hasNext())
+		for(Map.Entry<Integer, Boolean> pairs : te.installedPrograms.entrySet())
 		{
-			Map.Entry<Integer, Boolean> pairs = it.next();
 			if(!pairs.getValue())
 				continue;
 			int program = pairs.getKey();
