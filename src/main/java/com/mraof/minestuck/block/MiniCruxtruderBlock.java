@@ -29,12 +29,14 @@ public class MiniCruxtruderBlock extends MachineProcessBlock
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 	{
 		return SHAPE.get(state.get(FACING));
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
 		TileEntity tileEntity = worldIn.getTileEntity(pos);
@@ -72,6 +74,6 @@ public class MiniCruxtruderBlock extends MachineProcessBlock
 	@Override
 	public TileEntity createTileEntity(BlockState state, IBlockReader world)
 	{
-		return new CruxtruderTileEntity();
+		return new MiniCruxtruderTileEntity();
 	}
 }

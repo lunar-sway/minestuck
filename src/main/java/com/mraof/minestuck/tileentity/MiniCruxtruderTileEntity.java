@@ -20,7 +20,7 @@ public class MiniCruxtruderTileEntity extends MachineProcessTileEntity implement
 {
 	public static final String TITLE = "container.minestuck.mini_cruxtruder";
 	public static final RunType TYPE = RunType.AUTOMATIC;
-	public int color = -1;
+	public int color = ColorCollector.DEFAULT_COLOR;
 	
 	public MiniCruxtruderTileEntity()
 	{
