@@ -27,7 +27,7 @@ public class RecipeGeneratedGristCost extends GristCostRecipe
 	
 	private RecipeGeneratedGristCost(ResourceLocation id, RecipeGeneratedCostHandler handler)
 	{
-		super(id, null, Integer.MIN_VALUE);
+		super(id, null, -999999);	//Do not use Integer.MIN_VALUE as priority due to the risk of causing an underflow/overflow
 		this.handler = handler;
 	}
 	

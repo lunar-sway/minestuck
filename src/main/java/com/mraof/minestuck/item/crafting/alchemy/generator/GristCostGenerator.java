@@ -85,7 +85,8 @@ public final class GristCostGenerator extends ReloadListener<Void>
 		if(!process.itemsInProcess.contains(item))
 		{
 			process.itemsInProcess.add(item);
-			for(GeneratedCostProvider provider : process.providersByItem.getOrDefault(item, Collections.emptyList()))
+			List<GeneratedCostProvider> providers = process.providersByItem.getOrDefault(item, Collections.emptyList());
+			for(GeneratedCostProvider provider : providers)
 			{
 				try
 				{

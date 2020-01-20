@@ -45,11 +45,13 @@ public class ContainerGristCost extends GeneratedGristCost
 				return cost.copy().addGrist(addedCost);
 			} else
 			{
-				LOGGER.warn("Got null grist cost when looking up container item {} for container grist cost {}. No grist cost is set for this recipe.", container.getItem().getRegistryName(), id);
+				if(context.isPrimary())
+					LOGGER.warn("Got null grist cost when looking up container item {} for container grist cost {}. No grist cost is set for this recipe.", container.getItem().getRegistryName(), id);
 			}
 		} else
 		{
-			LOGGER.warn("No container item found for ingredient to container grist cost {}. Assuming that the container cost is zero.", id);
+			if(context.isPrimary())
+				LOGGER.warn("No container item found for ingredient to container grist cost {}. Assuming that the container cost is zero.", id);
 			return addedCost;
 		}
 		
