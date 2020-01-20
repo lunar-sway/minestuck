@@ -1,6 +1,5 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.tileentity.CruxtruderTileEntity;
 import com.mraof.minestuck.tileentity.MiniCruxtruderTileEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -49,20 +48,6 @@ public class MiniCruxtruderBlock extends MachineProcessBlock
 		}
 		return true;
 	}
-	
-	/*TODO
-	@Override
-	public void getDrops(IBlockState state, NonNullList<ItemStack> drops, World world, BlockPos pos, int fortune)
-	{
-		TileEntity tileEntity = world.getTileEntity(pos);
-		int color = -1;
-		if(tileEntity instanceof TileEntityMiniCruxtruder)
-			color = ((TileEntityMiniCruxtruder) tileEntity).color;
-		
-		ItemStack stack = new ItemStack(this);
-		stack.getOrCreateTag().putInt("dowel_color", color);
-		drops.add(stack);
-	}*/
 	
 	@Override
 	public boolean hasTileEntity(BlockState state)

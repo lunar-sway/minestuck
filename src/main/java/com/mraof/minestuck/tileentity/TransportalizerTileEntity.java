@@ -12,15 +12,19 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.INameable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.GlobalPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
-public class TransportalizerTileEntity extends TileEntity implements ITickableTileEntity//, ITeleporter
+public class TransportalizerTileEntity extends TileEntity implements ITickableTileEntity, INameable
 {
 	public static final String DISABLED = "minestuck.transportalizer.disabled";
 	public static final String BLOCKED = "minestuck.transportalizer.blocked";
@@ -156,12 +160,15 @@ public class TransportalizerTileEntity extends TileEntity implements ITickableTi
 	
 	public void setId(String id)
 	{
-		GlobalPos location = GlobalPos.of(world.dimension.getType(), pos);
-		if(active && !this.id.isEmpty())
-			TransportalizerSavedData.get(world).remove(this.id, location);
-		
-		this.id = id;
-		active = TransportalizerSavedData.get(world).set(id, location);
+		if(world != null && !world.isRemote)
+		{
+			GlobalPos location = GlobalPos.of(world.dimension.getType(), pos);
+			if(active && !this.id.isEmpty())
+				TransportalizerSavedData.get(world).remove(this.id, location);
+			
+			this.id = id;
+			active = TransportalizerSavedData.get(world).set(id, location);
+		}
 	}
 	
 	public String getDestId()
@@ -191,7 +198,26 @@ public class TransportalizerTileEntity extends TileEntity implements ITickableTi
 		this.markDirty();
 		world.notifyBlockUpdate(pos, state, state, 0);
 	}
-
+	
+	@Override
+	public ITextComponent getName()
+	{
+		return new StringTextComponent("Transportalizer");
+	}
+	
+	@Override
+	public ITextComponent getDisplayName()
+	{
+		return hasCustomName() ? getCustomName() : getName();
+	}
+	
+	@Nullable
+	@Override
+	public ITextComponent getCustomName()
+	{
+		return id.isEmpty() ? null : new StringTextComponent(id);
+	}
+	
 	@Override
 	public void read(CompoundNBT compound)
 	{
