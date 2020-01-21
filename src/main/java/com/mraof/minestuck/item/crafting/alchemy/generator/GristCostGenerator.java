@@ -5,7 +5,6 @@ import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import net.minecraft.client.resources.ReloadListener;
 import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.profiler.IProfiler;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.server.MinecraftServer;
@@ -51,9 +50,9 @@ public final class GristCostGenerator extends ReloadListener<Void>
 		
 		//Collect providers
 		Stream<GristCostRecipe> stream = server.getRecipeManager().getRecipes().stream().filter(recipe -> recipe instanceof GristCostRecipe).map(recipe -> (GristCostRecipe) recipe);
-		for(IRecipe<?> recipe : stream.sorted(Comparator.comparingInt(value -> -value.getPriority())).collect(Collectors.toList()))
+		for(GristCostRecipe recipe : stream.sorted(Comparator.comparingInt(value -> -value.getPriority())).collect(Collectors.toList()))
 		{
-			((GristCostRecipe) recipe).addCostProvider((item, provider) ->
+			recipe.addCostProvider((item, provider) ->
 			{
 				process.providersByItem.computeIfAbsent(item, i -> new ArrayList<>()).add(provider);
 				process.providers.add(provider);
