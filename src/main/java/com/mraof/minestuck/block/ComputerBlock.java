@@ -20,7 +20,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
@@ -31,29 +30,20 @@ import java.util.Random;
 public class ComputerBlock extends MachineBlock
 {
 	public static final Map<Direction, VoxelShape> COMPUTER_SHAPE = createRotatedShapes(1, 0, 1, 15, 2, 15);
-	public static final Map<Direction, VoxelShape> LAPTOP_SHAPE = createRotatedShapes(1, 0, 4, 15, 1, 12);
+	public static final Map<Direction, VoxelShape> LAPTOP_CLOSED_SHAPE = MSBlockShapes.LAPTOP_CLOSED.createRotatedShapes();
+	public static final Map<Direction, VoxelShape> LAPTOP_OPEN_SHAPE = MSBlockShapes.LAPTOP_OPEN.createRotatedShapes();
 	public static final Map<Direction, VoxelShape> LUNCHTOP_SHAPE = createRotatedShapes(5, 0, 5, 11, 4, 10);
-	public static final Map<Direction, VoxelShape> COMPUTER_COLLISION_SHAPE;
-	public static final Map<Direction, VoxelShape> LAPTOP_COLLISION_SHAPE;
 	
 	public static final EnumProperty<State> STATE = MSProperties.COMPUTER_STATE;
 	
-	static
-	{
-		COMPUTER_COLLISION_SHAPE = createRotatedShapes(0, 0, 6, 16, 13, 8);
-		COMPUTER_COLLISION_SHAPE.replaceAll((enumFacing, shape) -> VoxelShapes.or(shape, COMPUTER_SHAPE.get(enumFacing)));
-		LAPTOP_COLLISION_SHAPE = createRotatedShapes(0, 0, 12, 16, 10, 13);
-		LAPTOP_COLLISION_SHAPE.replaceAll((enumFacing, shape) -> VoxelShapes.or(shape, LAPTOP_SHAPE.get(enumFacing)));
-	}
+	public final Map<Direction, VoxelShape> shapeOn, shapeOff;
 	
-	public final Map<Direction, VoxelShape> shape, collisionShape;
-	
-	public ComputerBlock(Map<Direction, VoxelShape> shape, Map<Direction, VoxelShape> collisionShape, Properties properties)
+	public ComputerBlock(Map<Direction, VoxelShape> shapeOn, Map<Direction, VoxelShape> shapeOff, Properties properties)
 	{
 		super(properties);
 		setDefaultState(getDefaultState().with(STATE, State.OFF));
-		this.shape = shape;
-		this.collisionShape = collisionShape;
+		this.shapeOn = shapeOn;
+		this.shapeOff = shapeOff;
 	}
 	
 	@Override
@@ -190,15 +180,11 @@ public class ComputerBlock extends MachineBlock
 	@SuppressWarnings("deprecation")
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 	{
-		return shape.get(state.get(FACING));
+		if(state.get(STATE) == State.OFF)
+			return shapeOff.get(state.get(FACING));
+		else return shapeOn.get(state.get(FACING));
 	}
 	
-	@Override
-	@SuppressWarnings("deprecation")
-	public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
-	{
-		return collisionShape.get(state.get(FACING));
-	}
 	
 	public enum State implements IStringSerializable
 	{
