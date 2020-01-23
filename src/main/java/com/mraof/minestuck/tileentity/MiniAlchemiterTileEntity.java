@@ -21,7 +21,7 @@ import net.minecraftforge.registries.ForgeRegistry;
 
 import javax.annotation.Nullable;
 
-public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
+public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implements INamedContainerProvider, IOwnable
 {
 	public static final String TITLE = "container.minestuck.mini_alchemiter";
 	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
@@ -46,7 +46,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 	};
 	
 	private int ticks_since_update = 0;
-	public PlayerIdentifier owner;
+	private PlayerIdentifier owner;
 	private GristType wildcardGrist = GristTypes.BUILD;
 	
 	public MiniAlchemiterTileEntity()
@@ -231,5 +231,17 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 			this.wildcardGrist = wildcardGrist;
 			markDirty();
 		}
+	}
+	
+	@Override
+	public void setOwner(PlayerIdentifier identifier)
+	{
+		this.owner = identifier;
+	}
+	
+	@Override
+	public PlayerIdentifier getOwner()
+	{
+		return owner;
 	}
 }

@@ -1,10 +1,13 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.tileentity.MiniCruxtruderTileEntity;
+import com.mraof.minestuck.tileentity.IOwnable;
+import com.mraof.minestuck.util.IdentifierHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -17,36 +20,46 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.Map;
+import java.util.function.Supplier;
 
-public class MiniCruxtruderBlock extends MachineProcessBlock
+public class SmallMachineBlock extends MachineProcessBlock
 {
-	public static final Map<Direction, VoxelShape> SHAPE = MSBlockShapes.SMALL_CRUXTRUDER.createRotatedShapes();
+	private final Map<Direction, VoxelShape> shape;
+	private final Supplier<TileEntityType<?>> tileType;
 	
-	public MiniCruxtruderBlock(Properties properties)
+	public SmallMachineBlock(Map<Direction, VoxelShape> shape, Supplier<TileEntityType<?>> tileType, Properties properties)
 	{
 		super(properties);
+		this.shape = shape;
+		this.tileType = tileType;
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 	{
-		return SHAPE.get(state.get(FACING));
+		return shape.get(state.get(FACING));
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
 	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
-		if(!(tileEntity instanceof MiniCruxtruderTileEntity) || player.isSneaking())
-			return false;
-		
-		if(!worldIn.isRemote)
+		if(!player.isSneaking())
 		{
-			NetworkHooks.openGui((ServerPlayerEntity) player, (MiniCruxtruderTileEntity) tileEntity, pos);
-		}
-		return true;
+			if(!worldIn.isRemote)
+			{
+				TileEntity tileEntity = worldIn.getTileEntity(pos);
+				if(tileEntity != null && tileEntity.getType() == this.tileType.get())
+				{
+					if(tileEntity instanceof IOwnable)
+						((IOwnable) tileEntity).setOwner(IdentifierHandler.encode(player));
+					if(tileEntity instanceof INamedContainerProvider)
+						NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
+				}
+			}
+			return true;
+		} else return false;
 	}
 	
 	@Override
@@ -59,6 +72,6 @@ public class MiniCruxtruderBlock extends MachineProcessBlock
 	@Override
 	public TileEntity createTileEntity(BlockState state, IBlockReader world)
 	{
-		return new MiniCruxtruderTileEntity();
+		return tileType.get().create();
 	}
 }
