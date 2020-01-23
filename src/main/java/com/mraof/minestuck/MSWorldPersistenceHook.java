@@ -25,7 +25,7 @@ public class MSWorldPersistenceHook implements WorldPersistenceHooks.WorldPersis
 		CompoundNBT data = new CompoundNBT();
 		CompoundNBT skaianetData = SkaianetHandler.write();
 		if(skaianetData != null)
-			data.put("skaianet", SkaianetHandler.write());
+			data.put("skaianet", skaianetData);
 		return data;
 	}
 	
