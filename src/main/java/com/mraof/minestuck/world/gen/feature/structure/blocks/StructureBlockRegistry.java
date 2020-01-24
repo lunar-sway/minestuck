@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.gen.feature.structure.blocks;
 
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import net.minecraft.block.*;
 import net.minecraft.state.IProperty;
@@ -67,6 +68,8 @@ public final class StructureBlockRegistry
 	
 	static
 	{
+		registerBlock("cruxite_ore", MSBlocks.STONE_CRUXITE_ORE.getDefaultState());
+		registerBlock("uranium_ore", MSBlocks.STONE_URANIUM_ORE.getDefaultState());
 		registerBlock("ground", Blocks.STONE.getDefaultState());
 		registerBlock("upper", "ground", Blocks.DIRT);
 		registerBlock("surface", "upper", Blocks.GRASS_BLOCK);

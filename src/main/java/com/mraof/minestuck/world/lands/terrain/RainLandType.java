@@ -65,6 +65,9 @@ public class RainLandType extends TerrainLandType
 		registry.setBlockState("bush", Blocks.DEAD_BUSH.getDefaultState());
 		registry.setBlockState("structure_wool_1", Blocks.YELLOW_WOOL.getDefaultState());
 		registry.setBlockState("structure_wool_3", Blocks.MAGENTA_WOOL.getDefaultState());
+		registry.setBlockState("cruxite_ore", MSBlocks.PINK_STONE_CRUXITE_ORE.getDefaultState());
+		registry.setBlockState("uranium_ore", MSBlocks.PINK_STONE_URANIUM_ORE.getDefaultState());
+
 	}
 	
 	@Override
@@ -102,7 +105,6 @@ public class RainLandType extends TerrainLandType
 		{
 			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(MSFeatures.LEAFLESS_TREE, new BushConfig(MSBlocks.DEAD_LOG.getDefaultState()), Placement.CHANCE_TOP_SOLID_HEIGHTMAP, new ChanceConfig(4)));
 		}
-		
 		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.DISK, new SphereReplaceConfig(MSBlocks.POLISHED_PINK_STONE.getDefaultState(), 4, 1, Lists.newArrayList(blocks.getBlockState("ground"))), Placement.COUNT_TOP_SOLID, new FrequencyConfig(2)));
 		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(blocks.getGroundType(), MSBlocks.PINK_STONE_COAL_ORE.getDefaultState(), 17), Placement.COUNT_RANGE, new CountRangeConfig(13, 0, 0, 64)));
 		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(blocks.getGroundType(), MSBlocks.PINK_STONE_LAPIS_ORE.getDefaultState(), 7), Placement.COUNT_RANGE, new CountRangeConfig(4, 0, 0, 24)));
