@@ -35,6 +35,7 @@ public abstract class MachineBlock extends Block
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public PushReaction getPushReaction(BlockState state)
 	{
 		return PushReaction.BLOCK;

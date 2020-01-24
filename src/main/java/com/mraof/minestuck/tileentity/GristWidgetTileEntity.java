@@ -24,12 +24,12 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class GristWidgetTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
+public class GristWidgetTileEntity extends MachineProcessTileEntity implements INamedContainerProvider, IOwnable
 {
 	public static final String TITLE = "container.minestuck.grist_widget";
 	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
 	
-	public PlayerIdentifier owner;
+	private PlayerIdentifier owner;
 	boolean hasItem;
 	
 	public GristWidgetTileEntity()
@@ -179,6 +179,18 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
 	{
 		return new GristWidgetContainer(windowId, playerInventory, this, parameters, pos);
+	}
+	
+	@Override
+	public void setOwner(PlayerIdentifier identifier)
+	{
+		this.owner = identifier;
+	}
+	
+	@Override
+	public PlayerIdentifier getOwner()
+	{
+		return owner;
 	}
 	
 	public void resendState()
