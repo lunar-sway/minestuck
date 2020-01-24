@@ -33,7 +33,6 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.function.BiConsumer;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -223,9 +222,9 @@ public class RecipeGeneratedCostHandler extends ReloadListener<List<RecipeGenera
 	}
 	
 	@Override
-	public GristCostResult generate(Item item, GristCostResult lastCost, boolean primary, Function<Item, GristSet> itemLookup)
+	public GristCostResult generate(Item item, GristCostResult lastCost, GenerationContext context)
 	{
-		return process.generateCost(item, lastCost, primary, itemLookup);
+		return process.generateCost(item, lastCost, context);
 	}
 	
 	@Override

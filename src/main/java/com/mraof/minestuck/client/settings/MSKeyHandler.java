@@ -4,10 +4,10 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.editmode.ClientEditHandler;
-import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.EffectTogglePacket;
 import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.screen.inventory.CreativeScreen;
@@ -81,8 +81,8 @@ public class MSKeyHandler
 		
 		while(sylladexKey.isPressed())
 		{
-			if(CaptchaDeckHandler.clientSideModus != null)
-				MSScreenFactories.displaySylladexScreen(CaptchaDeckHandler.clientSideModus);
+			if(ClientPlayerData.clientSideModus != null)
+				MSScreenFactories.displaySylladexScreen(ClientPlayerData.clientSideModus);
 		}
 	}
 	

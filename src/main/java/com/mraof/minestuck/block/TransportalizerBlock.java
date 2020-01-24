@@ -78,39 +78,4 @@ public class TransportalizerBlock extends MachineBlock
 
 		return true;
 	}
-	
-	/*TODO
-	@Override
-	public void harvestBlock(World worldIn, PlayerEntity player, BlockPos pos, BlockState state, @Nullable TileEntity te, ItemStack stack)
-	{
-		player.addStat(StatList.BLOCK_MINED.get(this));
-		player.addExhaustion(0.005F);
-		
-		if (EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, stack) > 0)
-		{
-			NonNullList<ItemStack> items = NonNullList.create();
-			ItemStack itemstack = this.getSilkTouchDrop(state);
-			
-			if (!itemstack.isEmpty())
-			{
-				if(te instanceof TileEntityTransportalizer)
-					itemstack.setDisplayName(new TextComponentString(((TileEntityTransportalizer) te).getId()));
-				
-				items.add(itemstack);
-			}
-			
-			net.minecraftforge.event.ForgeEventFactory.fireBlockHarvesting(items, worldIn, pos, state, 0, 1.0f, true, player);
-			for (ItemStack item : items)
-			{
-				spawnAsEntity(worldIn, pos, item);
-			}
-		}
-		else
-		{
-			harvesters.set(player);
-			int i = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, stack);
-			state.dropBlockAsItem(worldIn, pos, i);
-			harvesters.set(null);
-		}
-	}*/
 }

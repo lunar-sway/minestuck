@@ -4,7 +4,10 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.DecoyEntity;
 import com.mraof.minestuck.event.ConnectionClosedEvent;
-import com.mraof.minestuck.item.crafting.alchemy.*;
+import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
+import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ServerEditPacket;
 import com.mraof.minestuck.skaianet.SburbConnection;
@@ -29,7 +32,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.GameType;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.Heightmap;
@@ -61,7 +63,7 @@ import java.util.UUID;
  * @author kirderf1
  */
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
-public class ServerEditHandler
+public final class ServerEditHandler
 {
 	
 	public static final ArrayList<String> commands = new ArrayList<>(Arrays.asList("effect", "gamemode", "defaultgamemode", "enchant", "xp", "tp", "spreadplayers", "kill", "clear", "spawnpoint", "setworldspawn", "give"));
@@ -141,7 +143,8 @@ public class ServerEditHandler
 				player.inventory.read(c.inventory);
 			decoy.world.addEntity(decoy);
 			MSExtraData.get(player.world).addEditData(data);
-			ServerEditPacket packet = ServerEditPacket.activate(computerTarget.getUsername(), c.centerX, c.centerZ, c.givenItems(), DeployList.getDeployListTag(player.getServer(), c));
+			
+			ServerEditPacket packet = ServerEditPacket.activate(computerTarget.getUsername(), c.centerX, c.centerZ, DeployList.getDeployListTag(player.getServer(), c));
 			MSPacketHandler.sendToPlayer(packet, player);
 			data.sendGristCacheToEditor();
 		}
@@ -204,7 +207,7 @@ public class ServerEditHandler
 		SburbConnection c = data.connection;
 		int range = MSDimensions.isLandDimension(player.dimension) ? MinestuckConfig.landEditRange.get() : MinestuckConfig.overworldEditRange.get();
 		
-		updateInventory(player, c.givenItems(), c);
+		updateInventory(player, c);
 		updatePosition(player, range, c.centerX, c.centerZ);
 		
 		player.timeUntilPortal = player.getPortalCooldown();
@@ -218,16 +221,14 @@ public class ServerEditHandler
 		{
 			EditData data = getData(event.getPlayer());
 			ItemStack stack = event.getEntityItem().getItem();
-			DeployList.DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getEntity().world);
+			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getEntity().world);
 			if(entry != null && !isBlockItem(stack.getItem()))
 			{
-				int i = DeployList.getOrdinal(entry.getName());
-				GristSet cost = data.connection.givenItems()[i]
-						? entry.getSecondaryGristCost(data.connection) : entry.getPrimaryGristCost(data.connection);
+				GristSet cost = entry.getCurrentCost(data.connection);
 				if(GristHelper.canAfford(PlayerSavedData.getData(data.connection.getClientIdentifier(), event.getPlayer().world).getGristCache(), cost))
 				{
 					GristHelper.decrease(event.getPlayer().world, data.connection.getClientIdentifier(), cost);
-					data.connection.givenItems()[i] = true;
+					data.connection.setHasGivenItem(entry);
 					if(!data.connection.isMain())
 						SkaianetHandler.get(event.getPlayer().getServer()).giveItems(data.connection.getClientIdentifier());
 				}
@@ -254,6 +255,7 @@ public class ServerEditHandler
 			event.setCanceled(true);
 	}
 	
+	//TODO Slightly unsafe with this approach to check, and then execute in a different event listener. It is probably better to try first, and then reset if we tried and the event got cancelled.
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public static void onRightClickBlockControl(PlayerInteractEvent.RightClickBlock event)
 	{
@@ -273,24 +275,14 @@ public class ServerEditHandler
 			
 			cleanStackNBT(stack, data.connection, event.getWorld());
 			
-			DeployList.DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getEntity().world);
+			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getEntity().world);
 			if(entry != null)
 			{
-				GristSet cost = data.connection.givenItems()[DeployList.getOrdinal(entry.getName())]
-						? entry.getSecondaryGristCost(data.connection) : entry.getPrimaryGristCost(data.connection);
+				GristSet cost = entry.getCurrentCost(data.connection);
 				if(!GristHelper.canAfford(event.getWorld(), data.connection.getClientIdentifier(), cost))
 				{
-					StringBuilder str = new StringBuilder();
 					if(cost != null)
-					{
-						for(GristAmount grist : cost.getAmounts())
-						{
-							if(cost.getAmounts().indexOf(grist) != 0)
-								str.append(", ");
-							str.append(grist.getAmount()).append(" ").append(grist.getType().getDisplayName());
-						}
-						event.getPlayer().sendMessage(new TranslationTextComponent("grist.missing",str.toString()));
-					}
+						event.getPlayer().sendMessage(cost.createMissingMessage());
 					event.setCanceled(true);
 				}
 			}
@@ -361,13 +353,11 @@ public class ServerEditHandler
 				
 				ItemStack stack = player.getHeldItemMainhand();	//TODO Make sure offhand isn't used in editmode?
 				SburbConnection c = data.connection;
-				DeployList.DeployEntry entry = DeployList.getEntryForItem(stack, c, player.world);
+				DeployEntry entry = DeployList.getEntryForItem(stack, c, player.world);
 				if(entry != null)
 				{
-					int index = DeployList.getOrdinal(entry.getName());
-					GristSet cost = c.givenItems()[index]
-							? entry.getSecondaryGristCost(c) : entry.getPrimaryGristCost(c);
-					c.givenItems()[index] = true;
+					GristSet cost = entry.getCurrentCost(c);
+					c.setHasGivenItem(entry);
 					if(!c.isMain())
 						SkaianetHandler.get(player.server).giveItems(c.getClientIdentifier());
 					if(!cost.isEmpty())
@@ -428,10 +418,10 @@ public class ServerEditHandler
 		}
 	}
 	
-	public static void updateInventory(ServerPlayerEntity player, boolean[] givenItems, SburbConnection connection)
+	public static void updateInventory(ServerPlayerEntity player, SburbConnection connection)
 	{
-		List<DeployList.DeployEntry> deployList = DeployList.getItemList(player.getServer(), connection);
-		deployList.removeIf(entry -> givenItems[DeployList.getOrdinal(entry.getName())] && entry.getSecondaryGristCost(connection) == null);
+		List<DeployEntry> deployList = DeployList.getItemList(player.getServer(), connection);
+		deployList.removeIf(entry -> entry.getCurrentCost(connection) == null);
 		List<ItemStack> itemList = new ArrayList<>();
 		deployList.forEach(deployEntry -> itemList.add(deployEntry.getItemStack(connection, player.world)));
 		
@@ -471,12 +461,6 @@ public class ServerEditHandler
 		
 		if(inventoryChanged)
 			player.getServer().getPlayerList().sendInventory(player);
-	}
-	
-	@SubscribeEvent
-	public static void onServerStopping(FMLServerStoppingEvent event)
-	{
-		MSExtraData.get(event.getServer()).forEachAndClear(ServerEditHandler::reset);
 	}
 	
 	/*@SubscribeEvent(priority=EventPriority.LOWEST, receiveCanceled=false) TODO Do something about command security
@@ -575,7 +559,13 @@ public class ServerEditHandler
 	}
 	
 	@SubscribeEvent
-	public void serverStarted(FMLServerStartedEvent event)
+	public static void onServerStopping(FMLServerStoppingEvent event)
+	{
+		MSExtraData.get(event.getServer()).forEachAndClear(ServerEditHandler::reset);
+	}
+	
+	@SubscribeEvent
+	public static void serverStarted(FMLServerStartedEvent event)
 	{
 		SkaianetHandler skaianet = SkaianetHandler.get(event.getServer());
 		MSExtraData.get(event.getServer()).recoverConnections(recovery -> recovery.recover(skaianet.getActiveConnection(recovery.getClientPlayer())));

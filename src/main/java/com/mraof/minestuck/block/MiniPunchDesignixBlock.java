@@ -1,7 +1,6 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.tileentity.MiniPunchDesignixTileEntity;
-import com.mraof.minestuck.tileentity.PunchDesignixTileEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -58,6 +57,6 @@ public class MiniPunchDesignixBlock extends MachineProcessBlock
 	@Override
 	public TileEntity createTileEntity(BlockState state, IBlockReader world)
 	{
-		return new PunchDesignixTileEntity();
+		return new MiniPunchDesignixTileEntity();
 	}
 }

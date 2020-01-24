@@ -1,6 +1,7 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.editmode.DeployEntry;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.skaianet.SburbConnection;
@@ -56,7 +57,9 @@ public class ClientEditPacket implements PlayToServerPacket
 	@Override
 	public void execute(ServerPlayerEntity player)
 	{
-		OpEntry opsEntry = player == null ? null : player.getServer().getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
+		if(player == null || player.getServer() == null)
+			return;
+		OpEntry opsEntry = player.getServer().getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
 		if(!MinestuckConfig.giveItems.get())
 		{
 			if(user == -1)
@@ -83,13 +86,13 @@ public class ClientEditPacket implements PlayToServerPacket
 				if(c == null || c.getServerIdentifier() != user || !(c.isMain() || SkaianetHandler.get(player.world).giveItems(target)))
 					return;
 				
-				for(DeployList.DeployEntry entry : DeployList.getItemList(player.getServer(), c))
+				for(DeployEntry entry : DeployList.getItemList(player.getServer(), c))
 				{
-					if(!c.givenItems()[entry.getOrdinal()])
+					if(!c.hasGivenItem(entry))
 					{
 						ItemStack item = entry.getItemStack(c, player.world);
-						if(!targetPlayer.inventory.hasItemStack(item))
-							c.givenItems()[entry.getOrdinal()] = targetPlayer.inventory.addItemStackToInventory(item);
+						if(!targetPlayer.inventory.hasItemStack(item) && targetPlayer.inventory.addItemStackToInventory(item))
+							c.setHasGivenItem(entry);
 					}
 				}
 				player.getServer().getPlayerList().sendInventory(targetPlayer);

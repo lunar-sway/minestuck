@@ -5,8 +5,8 @@
       "rolls": 1,
       "entries": [
         {
-          "type": "minecraft:item",
-          "name": "minestuck:cruxite_dowel"
+          "type": "minecraft:dynamic",
+          "name": "minestuck:item"
         }
       ],
       "conditions": [

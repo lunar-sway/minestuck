@@ -1,5 +1,6 @@
 package com.mraof.minestuck;
 
+import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.EditData;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -7,6 +8,10 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.OpEntry;
 import net.minecraft.world.GameType;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,36 +19,26 @@ import java.util.List;
 
 import static net.minecraftforge.common.ForgeConfigSpec.*;
 
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class MinestuckConfig
 {
-	public static final ForgeConfigSpec CLIENT_CONFIG;
-	public static final ForgeConfigSpec SERVER_CONFIG;
-	
-	private static final ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
-	private static final ForgeConfigSpec.Builder SERVER_BUILDER = new ForgeConfigSpec.Builder();
+	static final ForgeConfigSpec CLIENT_CONFIG;
+	static final ForgeConfigSpec SERVER_CONFIG;
+	static final ForgeConfigSpec COMMON_CONFIG;
 	
 	//            Server	(Anything that need to be synced to the players. Is stored in a per-world config (need to be shared between server-side and client-side))
-	//Machines
+	//Misc
 	public static BooleanValue disableGristWidget;
 	public static IntValue alchemiterMaxStacks;
-	
-	//Sylladex
 	public static EnumValue<AvailableOptions> treeModusSetting;
 	public static EnumValue<AvailableOptions> hashmapChatModusSetting;
-	
-	//Mechanics
-	public static boolean hardMode = false; //Not fully fleshed out yet
-	
-	//Computer
 	public static BooleanValue allowSecondaryConnections;
+	public static boolean hardMode = false; //Not fully fleshed out yet
 	
 	//Edit Mode
 	public static IntValue overworldEditRange;
 	public static IntValue landEditRange;
 	public static BooleanValue giveItems;
-	public static boolean[] deployConfigurations = new boolean[2];	//TODO Reimplement this (Call DeployList.applyConfigValues(deployConfigurations); at an appropriate time)
-	public static BooleanValue deployCard;
-	public static BooleanValue portableMachines;
 	
 	//            Common	(Anything that is needed for both dedicated server and client, but doesn't need to be synced to clients (needed server-side))
 	//Machines
@@ -95,6 +90,8 @@ public class MinestuckConfig
 	//Edit Mode
 	public static BooleanValue showGristChanges;
 	public static BooleanValue gristRefund;
+	public static BooleanValue deployCard;
+	public static BooleanValue portableMachines;
 	
 	//Secret configuration options
 	public static boolean secretConfig = false;
@@ -119,101 +116,113 @@ public class MinestuckConfig
 	
 	static
 	{
-		SERVER_BUILDER.comment("Ores");
-		generateCruxiteOre = SERVER_BUILDER.comment("If cruxite ore should be generated in the overworld.")
-				.define("ores.generateCruxiteOre",true);
-		generateUraniumOre = SERVER_BUILDER.comment("If uranium ore should be generated in the overworld.")
-				.define("ores.generateUraniumOre",true);
-		
-		SERVER_BUILDER.comment("Mechanics");
-		echeladderProgress = SERVER_BUILDER.comment("If this is true, players will be able to see their progress towards the next rung. This is server side and will only be active in multiplayer if the server/Lan host has it activated.")
-				.define("mechanics.echeladderProgress", false);
-		preEntryRungLimit = SERVER_BUILDER.comment("The highest rung you can get before entering medium. Note that the first rung is indexed as 0, the second as 1 and so on.")
-				.defineInRange("mechanics.preEntryRungLimit", 6, 0, 49);
-		aspectEffects = SERVER_BUILDER.comment("If this is true, players will gain certain potion effects once they reach a certain rung based on their aspect.")
-				.define("mechanics.aspectEffects", true);
-		playerSelectedTitle = SERVER_BUILDER.comment("Enable this to let players select their own title. They will however not be able to select the Lord or Muse as class.")
-				.define("mechanics.playerSelectedTitle", false);
-		
-		
-		SERVER_BUILDER.push("sylladex");
-		dropItemsInCards = SERVER_BUILDER.comment("When sylladices may drop items and cards at the same time, this option determines if items should be dropped inside of cards or items and cards as different stacks.")
-				.define("dropItemsInCards", true);
-		initialModusSize = SERVER_BUILDER.comment("The initial amount of captchalogue cards in your sylladex.")
-				.defineInRange("initialModusSize", 5, 0, Integer.MAX_VALUE);
-		startingModusTypes = SERVER_BUILDER.comment("An array with the possible modus types to be assigned. Written with mod-id and modus name, for example \"minestuck:queue_stack\" or \"minestuck:hashmap\"")
-				.define("startingModusTypes", new ArrayList<>(Arrays.asList("minestuck:stack","minestuck:queue")));
-		modusMaxSize = SERVER_BUILDER.comment("The max size on a modus. Ignored if the value is 0.")
-				.defineInRange("modusMaxSize", 0, 0, Integer.MAX_VALUE);
+		ForgeConfigSpec.Builder SERVER_BUILDER = new ForgeConfigSpec.Builder();
+		SERVER_BUILDER.push("misc");
+		disableGristWidget = SERVER_BUILDER.comment("Disable Grist Widget")
+				.define("disableGristWidget",false);
+		alchemiterMaxStacks = SERVER_BUILDER.comment("The number of stacks that can be alchemized at the same time with the alchemiter.")
+				.defineInRange("alchemiterMaxStacks",16,0,999);
 		treeModusSetting = SERVER_BUILDER.comment("This determines if auto-balance should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.")
 				.defineEnum("treeModusSetting", AvailableOptions.BOTH);
 		hashmapChatModusSetting = SERVER_BUILDER.comment("This determines if hashmap chat ejection should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.")
 				.defineEnum("hashmapModusSetting", AvailableOptions.BOTH);
-		sylladexDropMode = SERVER_BUILDER.comment("Determines which items from the modus that are dropped on death. \"items\": Only the items are dropped. \"cards_and_items\": Both items and cards are dropped. (So that you have at most initial_modus_size amount of cards) \"all\": Everything is dropped, even the modus.")
-				.defineEnum("dropMode", DropMode.CARDS_AND_ITEMS);
-		SERVER_BUILDER.pop();
-		
-		SERVER_BUILDER.push("computer");
-		privateComputers = SERVER_BUILDER.comment("True if computers should only be able to be used by the owner.")
-				.define("privateComputers", true);
-		globalSession = SERVER_BUILDER.comment("Whenether all connetions should be put into a single session or not.")
-				.define("globalSession",false);
 		allowSecondaryConnections = SERVER_BUILDER.comment("Set this to true to allow so-called 'secondary connections' to be created.")
 				.define("secondaryConnections", true);
-		skaianetCheck = SERVER_BUILDER.comment("If enabled, will during certain moments perform a check on all connections and computers that are in use. Recommended to turn off if there is a need to improve performance, however skaianet-related bugs might appear when done so.")
-				.define("skaianetCheck",true);
-		dataCheckerPermission = SERVER_BUILDER.comment("Determines who's allowed to access the data checker. \"none\": No one is allowed. \"ops\": only those with a command permission of level 2 or more may access the data ckecker. (for single player, that would be if cheats are turned on) \"gamemode\": Only players with the creative or spectator gamemode may view the data checker. \"ops_or_gamemode\": Both ops and players in creative or spectator mode may view the data checker. \"anyone\": No access restrictions are used.")
-				.defineEnum("dataCheckerPermission", PermissionType.OPS_OR_GAMEMODE);
 		SERVER_BUILDER.pop();
 		
-		SERVER_BUILDER.comment("Edit Mode");
+		SERVER_BUILDER.push("editMode");
 		giveItems = SERVER_BUILDER.comment("Setting this to true replaces editmode with the old Give Items button.")
-				.define("editMode.giveItems", false);
-		showGristChanges = SERVER_BUILDER.comment("If this is true, grist change messages will appear.")
-				.define("editMode.showGristChanges",true);
-		gristRefund = SERVER_BUILDER.comment("Enable this and players will get a (full) grist refund from breaking blocks in editmode.")
-				.define("editMode.gristRefund", false);
-		deployCard = SERVER_BUILDER.comment("Determines if a card with a captcha card punched on it should be added to the deploy list.")
-				.define("editMode.deployCard",false);
-		portableMachines = SERVER_BUILDER.comment("Determines if the small portable machines should be included in the deploy list.")
-				.define("editMode.portableMachines", false);
+				.define("giveItems", false);
 		overworldEditRange = SERVER_BUILDER.comment("A number that determines how far away from the computer an editmode player may be before entry.")
-				.defineInRange("editMode.overworldEditRange", 15, 1, Integer.MAX_VALUE);
+				.defineInRange("overworldEditRange", 15, 1, Integer.MAX_VALUE);
 		landEditRange = SERVER_BUILDER.comment("A number that determines how far away from the center of the brought land that an editmode player may be after entry.")
-				.defineInRange("editMode.landEditRange", 30, 1, Integer.MAX_VALUE);
-		
-		
-		SERVER_BUILDER.push("machines");
-		disableGristWidget = SERVER_BUILDER.comment("Disable Grist Widget")
-				.define("disableGristWidget",false);
-		cruxtruderIntake = SERVER_BUILDER.comment("If enabled, the regular cruxtruder will require raw cruxite to function, which is inserted through the pipe.")
-				.define("cruxtruderIntake",false);
-		alchemiterMaxStacks = SERVER_BUILDER.comment("The number of stacks that can be alchemized at the same time with the alchemiter.")
-				.defineInRange("alchemiterMaxStacks",16,0,999);
-		forbiddenDimensionTypesTpz = SERVER_BUILDER.comment("A list of dimension types that you cannot travel to or from using transportalizers.")
-				.define("forbiddenDimensionTypesTpz", new ArrayList<>());
-		forbiddenModDimensionsTpz = SERVER_BUILDER.comment("A list of mod dimensions that you cannot travel to or from using transportalizers.")
-				.define("forbiddenModDimensionsTpz", new ArrayList<>());
+				.defineInRange("landEditRange", 30, 1, Integer.MAX_VALUE);
 		SERVER_BUILDER.pop();
 		
-		SERVER_BUILDER.comment("Entry");
-		entryCrater = SERVER_BUILDER.comment("Disable this to prevent craters from people entering the medium.")
-				.define("entry.entryCrater",true);
-		adaptEntryBlockHeight = SERVER_BUILDER.comment("Adapt the transferred height to make the top non-air block to be placed at y:128. Makes entry take slightly longer.")
-				.define("entry.adaptEntryBlockHeight",true);
-		stopSecondEntry = SERVER_BUILDER.comment("If this is true, players may only use an artifact once, even if they end up in the overworld again.")
-				.define("entry.stopSecondEntry",false);
-		needComputer = SERVER_BUILDER.comment("If this is true, players need to have a computer nearby to Enter")
-				.define("entry.needComputer", false);
-		artifactRange = SERVER_BUILDER.comment("Radius of the land brought into the medium.")
-				.defineInRange("entry.artifactRange",30,0,Integer.MAX_VALUE);
+		ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
+		COMMON_BUILDER.push("ores");
+		generateCruxiteOre = COMMON_BUILDER.comment("If cruxite ore should be generated in the overworld.")
+				.define("generateCruxiteOre",true);
+		generateUraniumOre = COMMON_BUILDER.comment("If uranium ore should be generated in the overworld.")
+				.define("generateUraniumOre",true);
+		COMMON_BUILDER.pop();
 		
-		SERVER_BUILDER.comment("The Medium");
-		canBreakGates = SERVER_BUILDER.comment("Lets gates be destroyed by explosions. Turning this off will make gates use the same explosion resistance as bedrock.")
-				.define("medium.canBreakGates",true);
-		disableGiclops = SERVER_BUILDER.comment("Right now, the giclops pathfinding is currently causing huge amounts of lag due to their size. This option is a short-term solution that will disable giclops spawning and remove all existing giclopes.")
-				.define("medium.disableGiclops",true);
+		COMMON_BUILDER.push("mechanics");
+		echeladderProgress = COMMON_BUILDER.comment("If this is true, players will be able to see their progress towards the next rung. This is server side and will only be active in multiplayer if the server/Lan host has it activated.")
+				.define("echeladderProgress", false);
+		preEntryRungLimit = COMMON_BUILDER.comment("The highest rung you can get before entering medium. Note that the first rung is indexed as 0, the second as 1 and so on.")
+				.defineInRange("preEntryRungLimit", 6, 0, 49);
+		aspectEffects = COMMON_BUILDER.comment("If this is true, players will gain certain potion effects once they reach a certain rung based on their aspect.")
+				.define("aspectEffects", true);
+		playerSelectedTitle = COMMON_BUILDER.comment("Enable this to let players select their own title. They will however not be able to select the Lord or Muse as class.")
+				.define("playerSelectedTitle", false);
+		COMMON_BUILDER.pop();
 		
+		COMMON_BUILDER.push("sylladex");
+		dropItemsInCards = COMMON_BUILDER.comment("When sylladices may drop items and cards at the same time, this option determines if items should be dropped inside of cards or items and cards as different stacks.")
+				.define("dropItemsInCards", true);
+		initialModusSize = COMMON_BUILDER.comment("The initial amount of captchalogue cards in your sylladex.")
+				.defineInRange("initialModusSize", 5, 0, Integer.MAX_VALUE);
+		startingModusTypes = COMMON_BUILDER.comment("An array with the possible modus types to be assigned. Written with mod-id and modus name, for example \"minestuck:queue_stack\" or \"minestuck:hashmap\"")
+				.define("startingModusTypes", new ArrayList<>(Arrays.asList("minestuck:stack","minestuck:queue")));
+		modusMaxSize = COMMON_BUILDER.comment("The max size on a modus. Ignored if the value is 0.")
+				.defineInRange("modusMaxSize", 0, 0, Integer.MAX_VALUE);
+		sylladexDropMode = COMMON_BUILDER.comment("Determines which items from the modus that are dropped on death. \"items\": Only the items are dropped. \"cards_and_items\": Both items and cards are dropped. (So that you have at most initial_modus_size amount of cards) \"all\": Everything is dropped, even the modus.")
+				.defineEnum("dropMode", DropMode.CARDS_AND_ITEMS);
+		COMMON_BUILDER.pop();
+		
+		COMMON_BUILDER.push("computer");
+		privateComputers = COMMON_BUILDER.comment("True if computers should only be able to be used by the owner.")
+				.define("privateComputers", true);
+		globalSession = COMMON_BUILDER.comment("Whenether all connetions should be put into a single session or not.")
+				.define("globalSession",false);
+		skaianetCheck = COMMON_BUILDER.comment("If enabled, will during certain moments perform a check on all connections and computers that are in use. Recommended to turn off if there is a need to improve performance, however skaianet-related bugs might appear when done so.")
+				.define("skaianetCheck",true);
+		dataCheckerPermission = COMMON_BUILDER.comment("Determines who's allowed to access the data checker. \"none\": No one is allowed. \"ops\": only those with a command permission of level 2 or more may access the data ckecker. (for single player, that would be if cheats are turned on) \"gamemode\": Only players with the creative or spectator gamemode may view the data checker. \"ops_or_gamemode\": Both ops and players in creative or spectator mode may view the data checker. \"anyone\": No access restrictions are used.")
+				.defineEnum("dataCheckerPermission", PermissionType.OPS_OR_GAMEMODE);
+		COMMON_BUILDER.pop();
+		
+		COMMON_BUILDER.push("editMode");
+		showGristChanges = COMMON_BUILDER.comment("If this is true, grist change messages will appear.")
+				.define("showGristChanges",true);
+		gristRefund = COMMON_BUILDER.comment("Enable this and players will get a (full) grist refund from breaking blocks in editmode.")
+				.define("gristRefund", false);
+		deployCard = COMMON_BUILDER.comment("Determines if a card with a captcha card punched on it should be added to the deploy list.")
+				.define("deployCard",false);
+		portableMachines = COMMON_BUILDER.comment("Determines if the small portable machines should be included in the deploy list.")
+				.define("portableMachines", false);
+		COMMON_BUILDER.pop();
+		
+		COMMON_BUILDER.push("machines");
+		cruxtruderIntake = COMMON_BUILDER.comment("If enabled, the regular cruxtruder will require raw cruxite to function, which is inserted through the pipe.")
+				.define("cruxtruderIntake",false);
+		forbiddenDimensionTypesTpz = COMMON_BUILDER.comment("A list of dimension types that you cannot travel to or from using transportalizers.")
+				.define("forbiddenDimensionTypesTpz", new ArrayList<>());
+		forbiddenModDimensionsTpz = COMMON_BUILDER.comment("A list of mod dimensions that you cannot travel to or from using transportalizers.")
+				.define("forbiddenModDimensionsTpz", new ArrayList<>());
+		COMMON_BUILDER.pop();
+		
+		COMMON_BUILDER.push("entry");
+		entryCrater = COMMON_BUILDER.comment("Disable this to prevent craters from people entering the medium.")
+				.define("entryCrater",true);
+		adaptEntryBlockHeight = COMMON_BUILDER.comment("Adapt the transferred height to make the top non-air block to be placed at y:128. Makes entry take slightly longer.")
+				.define("adaptEntryBlockHeight",true);
+		stopSecondEntry = COMMON_BUILDER.comment("If this is true, players may only use an artifact once, even if they end up in the overworld again.")
+				.define("stopSecondEntry",false);
+		needComputer = COMMON_BUILDER.comment("If this is true, players need to have a computer nearby to Enter")
+				.define("needComputer", false);
+		artifactRange = COMMON_BUILDER.comment("Radius of the land brought into the medium.")
+				.defineInRange("artifactRange",30,0,Integer.MAX_VALUE);
+		COMMON_BUILDER.pop();
+		
+		COMMON_BUILDER.push("medium");
+		canBreakGates = COMMON_BUILDER.comment("Lets gates be destroyed by explosions. Turning this off will make gates use the same explosion resistance as bedrock.")
+				.define("canBreakGates",true);
+		disableGiclops = COMMON_BUILDER.comment("Right now, the giclops pathfinding is currently causing huge amounts of lag due to their size. This option is a short-term solution that will disable giclops spawning and remove all existing giclopes.")
+				.define("disableGiclops",true);
+		COMMON_BUILDER.pop();
+		
+		ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
 		CLIENT_BUILDER.push("client");
 		alchemyIcons = CLIENT_BUILDER.comment("Set this to true to replace grist names in alchemiter/grist widget with the grist icon.")
 				.define("alchemyIcons", true);
@@ -225,6 +234,15 @@ public class MinestuckConfig
 		
 		CLIENT_CONFIG = CLIENT_BUILDER.build();
 		SERVER_CONFIG = SERVER_BUILDER.build();
+		COMMON_CONFIG = COMMON_BUILDER.build();
+	}
+	
+	@SubscribeEvent
+	public static void onReload(final ModConfig.ConfigReloading event)
+	{
+		MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+		if(server != null && server.isOnExecutionThread())	//TODO Check if this will be true after server start. If not, use a static boolean together with a tick event instead
+			DeployList.onConditionsUpdated(server);
 	}
 	
 	public static boolean getDataCheckerPermissionFor(ServerPlayerEntity player)

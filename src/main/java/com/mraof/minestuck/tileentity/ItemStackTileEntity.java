@@ -1,16 +1,20 @@
 package com.mraof.minestuck.tileentity;
 
+import com.mraof.minestuck.Minestuck;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
 
 public class ItemStackTileEntity extends TileEntity
 {
+	public static final ResourceLocation ITEM_DYNAMIC = new ResourceLocation(Minestuck.MOD_ID, "item");
+	
 	public ItemStackTileEntity()
 	{
 		super(MSTileEntityTypes.ITEM_STACK);

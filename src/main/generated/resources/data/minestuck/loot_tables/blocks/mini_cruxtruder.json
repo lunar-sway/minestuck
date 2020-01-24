@@ -6,6 +6,19 @@
       "entries": [
         {
           "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:copy_nbt",
+              "source": "block_entity",
+              "ops": [
+                {
+                  "source": "color",
+                  "target": "color",
+                  "op": "replace"
+                }
+              ]
+            }
+          ],
           "name": "minestuck:mini_cruxtruder"
         }
       ],

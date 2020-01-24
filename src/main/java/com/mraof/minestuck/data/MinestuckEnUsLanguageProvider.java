@@ -16,6 +16,7 @@ import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.item.MSItemGroup;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.jei.JeiGristCost;
@@ -739,7 +740,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(GristTypes.ARTIFACT, "Artifact");
 		add(GristTypes.ZILLIUM, "Zillium");
 		add(GristType.FORMAT, "%s Grist");
-		add("grist.missing", "You do not have enough grist for that. You need: %s");
+		add(GristSet.MISSING_MESSAGE, "You do not have enough grist for that. You need: %s");
 		
 		add(EnumClass.BARD, "Bard");
 		add(EnumClass.HEIR, "Heir");

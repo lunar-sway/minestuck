@@ -3,6 +3,7 @@ package com.mraof.minestuck.item.crafting.alchemy;
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.item.crafting.alchemy.generator.GeneratedCostProvider;
+import com.mraof.minestuck.item.crafting.alchemy.generator.GenerationContext;
 import com.mraof.minestuck.item.crafting.alchemy.generator.GristCostResult;
 import com.mraof.minestuck.jei.JeiGristCost;
 import net.minecraft.inventory.IInventory;
@@ -23,7 +24,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
-import java.util.function.Function;
 
 public abstract class GristCostRecipe implements IRecipe<IInventory>
 {
@@ -48,7 +48,7 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 	@Nullable
 	protected final Integer priority;
 	
-	public GristCostRecipe(ResourceLocation id, Ingredient ingredient, Integer priority)
+	public GristCostRecipe(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority)
 	{
 		this.id = id;
 		this.ingredient = ingredient;
@@ -121,7 +121,7 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 	private class DefaultProvider implements GeneratedCostProvider
 	{
 		@Override
-		public GristCostResult generate(Item item, GristCostResult lastCost, boolean primary, Function<Item, GristSet> itemLookup)
+		public GristCostResult generate(Item item, GristCostResult lastCost, GenerationContext context)
 		{
 			if(lastCost == null && ingredient.test(new ItemStack(item)))
 				return new GristCostResult(getGristCost(new ItemStack(item), GristTypes.BUILD, false, null));

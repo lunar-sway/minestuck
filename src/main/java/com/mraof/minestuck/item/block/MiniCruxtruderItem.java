@@ -11,6 +11,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.LogManager;
 
 import javax.annotation.Nullable;
 
@@ -29,6 +30,7 @@ public class MiniCruxtruderItem extends BlockItem
 			TileEntity te = world.getTileEntity(pos);
 			if(te instanceof MiniCruxtruderTileEntity)
 				((MiniCruxtruderTileEntity) te).color = stack.getTag().getInt("color");
+			else LogManager.getLogger().warn("Placed miniature cruxtruder, but no appropriate tile entity was created. Instead found {}.", te);
 		}
 		return true;
 	}

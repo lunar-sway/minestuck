@@ -79,7 +79,8 @@ public class EditData
 	
 	public void sendGivenItemsToEditor()
 	{
-		ServerEditPacket packet = ServerEditPacket.givenItems(connection.givenItems());
+		
+		ServerEditPacket packet = ServerEditPacket.givenItems(DeployList.getDeployListTag(player.server, connection));
 		MSPacketHandler.sendToPlayer(packet, getEditor());
 	}
 	

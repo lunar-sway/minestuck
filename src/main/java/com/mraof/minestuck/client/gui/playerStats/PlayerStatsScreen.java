@@ -1,10 +1,12 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.MinestuckScreen;
 import com.mraof.minestuck.client.settings.MSKeyHandler;
 import com.mraof.minestuck.editmode.ClientEditHandler;
+import com.mraof.minestuck.inventory.EditmodeContainer;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.MiscContainerPacket;
 import com.mraof.minestuck.skaianet.SkaiaClient;
@@ -22,11 +24,16 @@ import net.minecraft.network.play.client.CCloseWindowPacket;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 import java.util.Arrays;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public abstract class PlayerStatsScreen extends MinestuckScreen
 {
 	
@@ -294,5 +301,16 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 			return true;
 		}
 		else return super.keyPressed(keyCode, scanCode, i);
+	}
+	
+	@SubscribeEvent
+	public static void onPlayerLoggedIn(ClientPlayerNetworkEvent.LoggedInEvent event)
+	{
+		normalTab = NormalGuiType.CAPTCHA_DECK;
+		editmodeTab = EditmodeGuiType.DEPLOY_LIST;
+		EditmodeContainer.clientScroll = 0;
+		DataCheckerScreen.activeComponent = null;
+		EcheladderScreen.lastRung = -1;
+		EcheladderScreen.animatedRung = 0;
 	}
 }

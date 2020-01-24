@@ -1,7 +1,9 @@
 package com.mraof.minestuck.skaianet;
 
 import com.mojang.datafixers.Dynamic;
-import com.mraof.minestuck.editmode.DeployList;
+import com.mraof.minestuck.editmode.DeployEntry;
+import com.mraof.minestuck.editmode.EditData;
+import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
@@ -18,7 +20,7 @@ import net.minecraft.util.math.GlobalPos;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.util.Constants;
 
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -45,11 +47,8 @@ public class SburbConnection
 	boolean canSplit;
 	LandInfo clientHomeLand;
 	int artifactType;
-	/**
-	 * If the client will have frog breeding as quest, the array will be extended and the new positions will hold the gear.
-	 */
-	boolean[] givenItemList = new boolean[DeployList.getEntryCount()];
-	ListNBT unregisteredItems = new ListNBT();
+	
+	private final Set<String> givenItemList = new HashSet<>();
 	
 	//Only used by the edit handler
 	public int centerX, centerZ;	//TODO No longer needed as it is either computer pos or the land dim spawn location. Should be functions instead
@@ -83,11 +82,7 @@ public class SburbConnection
 			ListNBT list = nbt.getList("GivenItems", Constants.NBT.TAG_STRING);
 			for(int i = 0; i < list.size(); i++)
 			{
-				String name = list.getString(i);
-				int ordinal = DeployList.getOrdinal(name);
-				if(ordinal == -1)
-					unregisteredItems.add(new StringNBT(name));
-				else givenItemList[ordinal] = true;
+				givenItemList.add(list.getString(i));
 			}
 		}
 		clientIdentifier = IdentifierHandler.load(nbt, "client");
@@ -123,13 +118,9 @@ public class SburbConnection
 			nbt.putBoolean("IsActive", isActive);
 			nbt.putBoolean("HasEntered", hasEntered);
 			nbt.putBoolean("CanSplit", canSplit);
-			ListNBT list = unregisteredItems.copy();
-			String[] deployNames = DeployList.getNameList();
-			for(int i = 0; i < givenItemList.length; i++)
-			{
-				if(givenItemList[i])
-					list.add(new StringNBT(deployNames[i]));
-			}
+			ListNBT list = new ListNBT();
+			for(String name : givenItemList)
+				list.add(new StringNBT(name));
 			
 			nbt.put("GivenItems", list);
 			if(clientHomeLand != null)
@@ -171,9 +162,9 @@ public class SburbConnection
 	}
 	
 	public PlayerIdentifier getServerIdentifier()
-	{
-		return serverIdentifier;
-	}
+{
+	return serverIdentifier;
+}
 	
 	public GlobalPos getClientComputer()
 	{
@@ -214,7 +205,20 @@ public class SburbConnection
 	{
 		return clientHomeLand == null ? null : clientHomeLand.getDimensionType();
 	}
-	public boolean[] givenItems(){return Arrays.copyOf(givenItemList, givenItemList.length);}
+	
+	@Deprecated
+	public boolean hasGivenItem(String item) { return givenItemList.contains(item); }
+	public boolean hasGivenItem(DeployEntry item) { return givenItemList.contains(item.getName()); }
+	public void setHasGivenItem(DeployEntry item)
+	{
+		if(givenItemList.add(item.getName()))
+		{
+			EditData data = ServerEditHandler.getData(handler.mcServer, this);
+			if(data != null)
+				data.sendGivenItemsToEditor();
+		}
+	}
+	void resetGivenItems() { givenItemList.clear(); }
 	
 	/**
 	 * Writes the connection info needed client-side to a network buffer. Must match with {@link ReducedConnection#read}.

@@ -1,11 +1,10 @@
 {
-  "type": "minestuck:grist_cost",
+  "type": "minestuck:tag_source_grist_cost",
   "ingredient": {
     "tag": "forge:ores/nickel"
   },
   "grist_cost": {
-    "minestuck:build": 4,
-    "minestuck:rust": 12,
-    "minestuck:sulfur": 8
-  }
+    "minestuck:build": 4
+  },
+  "source": "forge:ingots/nickel"
 }

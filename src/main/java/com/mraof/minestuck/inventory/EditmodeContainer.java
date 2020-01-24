@@ -1,5 +1,6 @@
 package com.mraof.minestuck.inventory;
 
+import com.mraof.minestuck.editmode.DeployEntry;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.EditmodeInventoryPacket;
@@ -95,9 +96,8 @@ public class EditmodeContainer extends Container
 		ArrayList<ItemStack> tools = new ArrayList<>();
 		//Fill list with harvestTool items when implemented
 		
-		List<DeployList.DeployEntry> deployItems = DeployList.getItemList(player.getServer(), c);
-		deployItems.removeIf(deployEntry -> c.givenItems()[DeployList.getOrdinal(deployEntry.getName())] &&
-				deployEntry.getSecondaryGristCost(c) == null);
+		List<DeployEntry> deployItems = DeployList.getItemList(player.getServer(), c);
+		deployItems.removeIf(deployEntry -> deployEntry.getCurrentCost(c) == null);
 		
 		for(int i = 0; i < Math.max(tools.size(), deployItems.size()); i++)
 		{

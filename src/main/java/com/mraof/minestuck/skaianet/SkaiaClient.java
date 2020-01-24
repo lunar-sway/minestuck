@@ -1,5 +1,6 @@
 package com.mraof.minestuck.skaianet;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.ComputerScreen;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.network.MSPacketHandler;
@@ -10,12 +11,17 @@ import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class SkaiaClient
 {
 	
@@ -31,7 +37,8 @@ public class SkaiaClient
 	private static ComputerTileEntity te = null;
 	public static int playerId;	//The id that this player is expected to have.
 	
-	public static void clear()
+	@SubscribeEvent
+	public static void onLoggedIn(ClientPlayerNetworkEvent.LoggedInEvent event)
 	{
 		openServers.clear();
 		connections.clear();

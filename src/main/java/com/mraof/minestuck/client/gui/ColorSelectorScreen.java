@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.network.ColorSelectPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.util.ColorCollector;
+import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
@@ -30,7 +31,7 @@ public class ColorSelectorScreen extends Screen
 		this.firstTime = firstTime;
 		for(int i = 0; i < ColorCollector.getColorSize(); i++)
 		{
-			if(ColorCollector.getColor(i) == ColorCollector.playerColor)
+			if(ColorCollector.getColor(i) == ClientPlayerData.playerColor)
 			{
 				selectedIndex = i;
 			}
@@ -127,7 +128,7 @@ public class ColorSelectorScreen extends Screen
 	private void selectColor()
 	{
 		MSPacketHandler.sendToServer(new ColorSelectPacket(selectedIndex));
-		ColorCollector.playerColor = ColorCollector.getColor(selectedIndex);
+		ClientPlayerData.playerColor = ColorCollector.getColor(selectedIndex);
 		this.minecraft.displayGuiScreen(null);
 	}
 	
@@ -137,7 +138,7 @@ public class ColorSelectorScreen extends Screen
 		if(firstTime && minecraft != null && minecraft.player != null)
 		{
 			ITextComponent message;
-			if(ColorCollector.playerColor == ColorCollector.DEFAULT_COLOR)
+			if(ClientPlayerData.playerColor == ColorCollector.DEFAULT_COLOR)
 				message = new TranslationTextComponent(DEFAULT_COLOR_SELECTED);
 			else message = new TranslationTextComponent(COLOR_SELECTED);
 			this.minecraft.player.sendMessage(new StringTextComponent("[Minestuck] ").appendSibling(message));
