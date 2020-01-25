@@ -101,7 +101,7 @@ public class UraniumCookerTileEntity extends MachineProcessTileEntity implements
 		ItemStack fuel = this.inv.get(1);
 		ItemStack input = this.inv.get(0);
 		ItemStack output = irradiate();
-		return ExtraForgeTags.Items.URANIUM_CHUNKS.contains(fuel.getItem()) && !input.isEmpty() && !output.isEmpty();
+		return ExtraForgeTags.Items.URANIUM_CHUNKS.contains(fuel.getItem()) || !input.isEmpty() && !output.isEmpty();
 	}
 	
 	private ItemStack irradiate()	//TODO Handle the recipe and make sure to use its exp/cooking time
@@ -122,7 +122,7 @@ public class UraniumCookerTileEntity extends MachineProcessTileEntity implements
 	@Override
 	public void processContents()
 	{
-		if(getFuel() <= getMaxFuel() - 32 && ExtraForgeTags.Items.URANIUM_CHUNKS.contains(inv.get(0).getItem()))
+		if(getFuel() <= getMaxFuel() - 32 && ExtraForgeTags.Items.URANIUM_CHUNKS.contains(inv.get(1).getItem()))
 		{    //Refill fuel
 			fuel += 32;
 			this.decrStackSize(1, 1);
