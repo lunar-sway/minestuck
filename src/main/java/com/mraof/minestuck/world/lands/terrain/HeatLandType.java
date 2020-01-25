@@ -19,6 +19,8 @@ import net.minecraft.world.gen.placement.CountRangeConfig;
 import net.minecraft.world.gen.placement.FrequencyConfig;
 import net.minecraft.world.gen.placement.Placement;
 
+import static com.mraof.minestuck.MinestuckConfig.*;
+
 public class HeatLandType extends TerrainLandType
 {
 	public static final String HEAT = "minestuck.heat";
@@ -50,6 +52,8 @@ public class HeatLandType extends TerrainLandType
 		registry.setBlockState("village_fence", Blocks.NETHER_BRICK_FENCE.getDefaultState());
 		registry.setBlockState("structure_wool_1", Blocks.YELLOW_WOOL.getDefaultState());
 		registry.setBlockState("structure_wool_3", Blocks.PURPLE_WOOL.getDefaultState());
+		registry.setBlockState("cruxite_ore", MSBlocks.NETHERRACK_CRUXITE_ORE.getDefaultState());
+		registry.setBlockState("uranium_ore", MSBlocks.NETHERRACK_URANIUM_ORE.getDefaultState());
 	}
 	
 	@Override
@@ -85,7 +89,6 @@ public class HeatLandType extends TerrainLandType
 			
 			biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.DISK, new SphereReplaceConfig(Blocks.SOUL_SAND.getDefaultState(), 7, 2, Lists.newArrayList(blocks.getBlockState("surface"), blocks.getBlockState("upper"))), Placement.COUNT_TOP_SOLID, new FrequencyConfig(15)));
 		}
-		
 		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(blocks.getGroundType(), Blocks.GRAVEL.getDefaultState(), 33), Placement.COUNT_RANGE, new CountRangeConfig(8, 0, 0, 256)));
 		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(blocks.getGroundType(), MSBlocks.NETHERRACK_COAL_ORE.getDefaultState(), 17), Placement.COUNT_RANGE, new CountRangeConfig(26, 0, 0, 128)));
 		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(blocks.getGroundType(), Blocks.NETHER_QUARTZ_ORE.getDefaultState(), 8), Placement.COUNT_RANGE, new CountRangeConfig(13, 0, 0, 64)));
