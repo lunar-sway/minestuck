@@ -26,6 +26,11 @@ public class MultiblockItem extends BlockItem
 		this.multiblock = multiblock;
 	}
 	
+	public MachineMultiblock getMultiblock()
+	{
+		return multiblock;
+	}
+	
 	@Override
 	public ActionResultType tryPlace(BlockItemUseContext context)
 	{
@@ -72,7 +77,7 @@ public class MultiblockItem extends BlockItem
 	
 	public boolean canPlaceAt(BlockItemUseContext context, BlockPos pos, Direction facing)
 	{
-		MutableBoundingBox boundingBox = multiblock.getBoundingBox();
+		MutableBoundingBox boundingBox = multiblock.getBoundingBox(MSRotationUtil.fromDirection(facing));
 		for(int x = boundingBox.minX; x <= boundingBox.maxX; x++)
 		{
 			for(int z = boundingBox.minZ; z <= boundingBox.maxZ; z++)

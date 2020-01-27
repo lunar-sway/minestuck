@@ -3,7 +3,9 @@ package com.mraof.minestuck.client.renderer;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.client.util.GuiUtil;
+import com.mraof.minestuck.item.block.MultiblockItem;
+import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
@@ -22,7 +24,6 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class MachineOutlineRenderer
 {
-	
 	@SubscribeEvent
 	public static void renderWorld(RenderWorldLastEvent event)
 	{
@@ -51,6 +52,7 @@ public class MachineOutlineRenderer
 				|| stack.getItem() == MSBlocks.ALCHEMITER.asItem())
 				//||stack.getItem()==Item.getItemFromBlock(MinestuckBlocks.jumperBlockExtension[0]))
 		{
+			MultiblockItem item = (MultiblockItem) stack.getItem();
 			BlockPos pos = rayTraceResult.getPos();
 			BlockItemUseContext context = new BlockItemUseContext(new ItemUseContext(player, hand, rayTraceResult));
 
@@ -77,18 +79,17 @@ public class MachineOutlineRenderer
 			GlStateManager.disableTexture();
 			GlStateManager.depthMask(false);	//GL stuff was copied from the standard mouseover bounding box drawing, which is likely why the alpha isn't working
 			
+			placeable = item.canPlaceAt(context, pos, placedFacing);
+			
 			if(stack.getItem() == MSBlocks.PUNCH_DESIGNIX.asItem())
 			{
 				if (placedFacing.getXOffset() > 0 && hitZ >= 0.5F || placedFacing.getXOffset() < 0 && hitZ < 0.5F
 						|| placedFacing.getZOffset() > 0 && hitX < 0.5F || placedFacing.getZOffset() < 0 && hitX >= 0.5F)
 					pos = pos.offset(placedFacing.rotateY());
 				
-				BlockPos placementPos = pos;
 				if (placedFacing == Direction.EAST || placedFacing == Direction.NORTH)
 					pos = pos.offset(placedFacing.rotateYCCW());    //The bounding box is symmetrical, so doing this gets rid of some rendering cases
 				
-				boundingBox = new AxisAlignedBB(0, 0, 0, (r ? 2 : 1), 2, (r ? 1 : 2)).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
-				placeable = MSItems.PUNCH_DESIGNIX.canPlaceAt(context, placementPos, placedFacing);
 			} else if(stack.getItem() == MSBlocks.TOTEM_LATHE.asItem())
 			{
 				pos = pos.offset(placedFacing.rotateY());
@@ -97,19 +98,13 @@ public class MachineOutlineRenderer
 						|| placedFacing.getZOffset() > 0 && hitX < 0.5F || placedFacing.getZOffset() < 0 && hitX >= 0.5F)
 					pos = pos.offset(placedFacing.rotateY());
 				
-				BlockPos placementPos = pos;
 				if (placedFacing == Direction.EAST || placedFacing == Direction.NORTH)
 					pos = pos.offset(placedFacing.rotateYCCW(), 3);    //The bounding box is symmetrical, so doing this gets rid of some rendering cases
 				
-				boundingBox = new AxisAlignedBB(0, 0, 0, (r ? 4 : 1), 3, (r ? 1 : 4)).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
-				placeable = MSItems.TOTEM_LATHE.canPlaceAt(context, placementPos, placedFacing);
 			} else if(stack.getItem() == MSBlocks.CRUXTRUDER.asItem())
 			{
-				BlockPos placementPos = pos.offset(placedFacing.rotateY());
 				pos = pos.offset(placedFacing.getOpposite()).add(-1, 0, -1);
 				
-				boundingBox = new AxisAlignedBB(0,0,0, 3, 3, 3).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
-				placeable = MSItems.CRUXTRUDER.canPlaceAt(context, placementPos, placedFacing);
 			} /*else if(MinestuckBlocks.jumperBlockExtension[0].asItem())
 			{
 				pos = pos.offset(placedFacing.rotateY());
@@ -144,15 +139,14 @@ public class MachineOutlineRenderer
 				if(placedFacing == Direction.EAST || placedFacing == Direction.SOUTH)
 					pos = pos.offset(placedFacing.getOpposite(), 3);
 				
-				boundingBox = new AxisAlignedBB(0, 0, 0, 4, 4, 4).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
-				placeable = MSItems.ALCHEMITER.canPlaceAt(context, placementPos, placedFacing);
-				
 				int xOffset = - placedFacing.getXOffset() - placedFacing.rotateY().getXOffset();
 				int zOffset = - placedFacing.getZOffset() - placedFacing.rotateY().getZOffset();
 				//If you don't want the extra details to the alchemiter outline, comment out the following two lines
 				WorldRenderer.drawSelectionBoundingBox(new AxisAlignedBB(3*xOffset + 1F/4F,1,3*zOffset + 1F/4F, 3*xOffset + 3F/4F, 4, 3*zOffset + 3F/4F).offset(placementPos).offset(-d1, -d2, -d3).shrink(0.002), placeable ? 0 : 1, placeable ? 1 : 0, 0, 0.5F);
 				WorldRenderer.drawSelectionBoundingBox(new AxisAlignedBB(0,0,0, 4, 1, 4).offset(pos).offset(-d1, -d2, -d3).shrink(0.002), placeable ? 0 : 1, placeable ? 1 : 0, 0, 0.5F);
 			}
+			
+			boundingBox = GuiUtil.fromBoundingBox(item.getMultiblock().getBoundingBox(MSRotationUtil.fromDirection(placedFacing))).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
 			
 			WorldRenderer.drawSelectionBoundingBox(boundingBox, placeable ? 0 : 1, placeable ? 1 : 0, 0, 0.5F);
 			GlStateManager.depthMask(true);

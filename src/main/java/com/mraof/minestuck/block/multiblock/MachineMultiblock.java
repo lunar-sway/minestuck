@@ -83,10 +83,10 @@ public abstract class MachineMultiblock implements IItemProvider    //An abstrac
 		return false;
 	}
 	
-	public MutableBoundingBox getBoundingBox()
+	public MutableBoundingBox getBoundingBox(Rotation rotation)
 	{
 		MutableBoundingBox bb = new MutableBoundingBox();
-		blockEntries.forEach(entry -> bb.expandTo(new MutableBoundingBox(entry.pos, entry.pos)));
+		blockEntries.forEach(entry -> bb.expandTo(new MutableBoundingBox(entry.pos.rotate(rotation), entry.pos.rotate(rotation))));
 		return bb;
 	}
 	

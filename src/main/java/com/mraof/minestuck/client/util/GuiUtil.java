@@ -11,6 +11,8 @@ import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.MutableBoundingBox;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -228,5 +230,10 @@ public class GuiUtil
 		else if(n < 10000000)
 			return (n/1000) + "K";
 		else return (n/1000000) + "M";
+	}
+	
+	public static AxisAlignedBB fromBoundingBox(MutableBoundingBox boundingBox)
+	{
+		return new AxisAlignedBB(boundingBox.minX, boundingBox.minY, boundingBox.minZ, boundingBox.maxX + 1, boundingBox.maxY + 1, boundingBox.maxZ + 1);
 	}
 }
