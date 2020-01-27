@@ -104,11 +104,7 @@ public class MultiblockItem extends BlockItem
 		{
 			Direction facing = context.getPlacementHorizontalFacing();
 			
-			pos = pos.offset(facing.rotateYCCW());
-			
-			if(facing == Direction.WEST && context.getHitVec().z >= 0.5F || facing == Direction.EAST && context.getHitVec().z < 0.5F
-					|| facing == Direction.NORTH && context.getHitVec().x < 0.5F || facing == Direction.SOUTH && context.getHitVec().x >= 0.5F)
-				pos = pos.offset(facing.rotateYCCW());
+			pos = getPlacementPos(pos, facing, context.getHitVec().x, context.getHitVec().z);
 			
 			multiblock.placeWithRotation(world, pos, MSRotationUtil.fromDirection(facing));
 			
@@ -116,5 +112,16 @@ public class MultiblockItem extends BlockItem
 				CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayerEntity) player, pos, context.getItem());
 		}
 		return true;
+	}
+	
+	public BlockPos getPlacementPos(BlockPos pos, Direction direction, double hitX, double hitZ)
+	{
+		MutableBoundingBox bb = multiblock.getBoundingBox(MSRotationUtil.fromDirection(direction));
+		
+		if(direction.getAxis() == Direction.Axis.X)
+			return pos.south((int) ((bb.maxZ - bb.minZ)*direction.rotateY().getZOffset()/2D - hitZ));
+		else if(direction.getAxis() == Direction.Axis.Z)
+			return pos.east((int) ((bb.maxX - bb.minX)*direction.rotateY().getXOffset()/2D - hitX));
+		else throw new IllegalArgumentException("Direction should be horizontal");
 	}
 }

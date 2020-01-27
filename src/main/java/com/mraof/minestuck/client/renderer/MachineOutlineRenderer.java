@@ -2,8 +2,8 @@ package com.mraof.minestuck.client.renderer;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.client.util.GuiUtil;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.block.MultiblockItem;
 import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.block.BlockState;
@@ -46,10 +46,7 @@ public class MachineOutlineRenderer
 
 		if(stack.isEmpty())
 			return false;
-		if(stack.getItem() == MSBlocks.PUNCH_DESIGNIX.asItem()
-				|| stack.getItem() == MSBlocks.TOTEM_LATHE.asItem()
-				|| stack.getItem() == MSBlocks.CRUXTRUDER.asItem()
-				|| stack.getItem() == MSBlocks.ALCHEMITER.asItem())
+		if(stack.getItem() instanceof MultiblockItem)
 				//||stack.getItem()==Item.getItemFromBlock(MinestuckBlocks.jumperBlockExtension[0]))
 		{
 			MultiblockItem item = (MultiblockItem) stack.getItem();
@@ -81,31 +78,10 @@ public class MachineOutlineRenderer
 			
 			placeable = item.canPlaceAt(context, pos, placedFacing);
 			
-			if(stack.getItem() == MSBlocks.PUNCH_DESIGNIX.asItem())
-			{
-				if (placedFacing.getXOffset() > 0 && hitZ >= 0.5F || placedFacing.getXOffset() < 0 && hitZ < 0.5F
-						|| placedFacing.getZOffset() > 0 && hitX < 0.5F || placedFacing.getZOffset() < 0 && hitX >= 0.5F)
-					pos = pos.offset(placedFacing.rotateY());
-				
-				if (placedFacing == Direction.EAST || placedFacing == Direction.NORTH)
-					pos = pos.offset(placedFacing.rotateYCCW());    //The bounding box is symmetrical, so doing this gets rid of some rendering cases
-				
-			} else if(stack.getItem() == MSBlocks.TOTEM_LATHE.asItem())
-			{
-				pos = pos.offset(placedFacing.rotateY());
-				
-				if (placedFacing.getXOffset() > 0 && hitZ >= 0.5F || placedFacing.getXOffset() < 0 && hitZ < 0.5F
-						|| placedFacing.getZOffset() > 0 && hitX < 0.5F || placedFacing.getZOffset() < 0 && hitX >= 0.5F)
-					pos = pos.offset(placedFacing.rotateY());
-				
-				if (placedFacing == Direction.EAST || placedFacing == Direction.NORTH)
-					pos = pos.offset(placedFacing.rotateYCCW(), 3);    //The bounding box is symmetrical, so doing this gets rid of some rendering cases
-				
-			} else if(stack.getItem() == MSBlocks.CRUXTRUDER.asItem())
-			{
-				pos = pos.offset(placedFacing.getOpposite()).add(-1, 0, -1);
-				
-			} /*else if(MinestuckBlocks.jumperBlockExtension[0].asItem())
+			BlockPos placementPos = pos;
+			pos = item.getPlacementPos(pos, placedFacing, hitX, hitZ);
+			
+			/*else if(MinestuckBlocks.jumperBlockExtension[0].asItem())
 			{
 				pos = pos.offset(placedFacing.rotateY());
 				
@@ -125,19 +101,9 @@ public class MachineOutlineRenderer
 				
 				boundingBox = new AxisAlignedBB(0, 0, 0, (r ? 5 : 4), 1, (r ? 4 : 5)).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
 				placeable = false;//JumperBlockItem.checkOutline(stack, player, player.world, placementPos, placedFacing);
-			} */else	//Alchemiter
+			} */
+			if(item == MSItems.ALCHEMITER)//Alchemiter
 			{
-				pos = pos.offset(placedFacing.rotateY());
-				
-				if (placedFacing.getXOffset() > 0 && hitZ >= 0.5F || placedFacing.getXOffset() < 0 && hitZ < 0.5F
-						|| placedFacing.getZOffset() > 0 && hitX < 0.5F || placedFacing.getZOffset() < 0 && hitX >= 0.5F)
-					pos = pos.offset(placedFacing.rotateY());
-				
-				BlockPos placementPos = pos;
-				if (placedFacing == Direction.EAST || placedFacing == Direction.NORTH)
-					pos = pos.offset(placedFacing.rotateYCCW(), 3);
-				if(placedFacing == Direction.EAST || placedFacing == Direction.SOUTH)
-					pos = pos.offset(placedFacing.getOpposite(), 3);
 				
 				int xOffset = - placedFacing.getXOffset() - placedFacing.rotateY().getXOffset();
 				int zOffset = - placedFacing.getZOffset() - placedFacing.rotateY().getZOffset();
