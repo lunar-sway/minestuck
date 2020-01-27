@@ -1,10 +1,9 @@
 package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.block.AlchemiterBlock;
-import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.block.multiblock.MachineMultiblock;
 import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -14,14 +13,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.World;
 
-public class AlchemiterItem extends BlockItem
+public class MultiblockItem extends BlockItem
 {
+	private final MachineMultiblock multiblock;
 	
-	public AlchemiterItem(Block blockIn, Properties builder)
+	public MultiblockItem(MachineMultiblock multiblock, Properties properties)
 	{
-		super(blockIn, builder);
+		super(multiblock.getMainBlock(), properties);
+		this.multiblock = multiblock;
 	}
 	
 	@Override
@@ -30,7 +32,6 @@ public class AlchemiterItem extends BlockItem
 		World world = context.getWorld();
 		Direction sideFace = context.getFace();
 		BlockPos pos = context.getPos();
-		PlayerEntity player = context.getPlayer();
 		if (world.isRemote)
 		{
 			return ActionResultType.SUCCESS;
@@ -69,16 +70,16 @@ public class AlchemiterItem extends BlockItem
 		}
 	}
 	
-
-	public static boolean canPlaceAt(BlockItemUseContext context, BlockPos pos, Direction facing)
+	public boolean canPlaceAt(BlockItemUseContext context, BlockPos pos, Direction facing)
 	{
-		for(int x = 0; x < 4; x++)
+		MutableBoundingBox boundingBox = multiblock.getBoundingBox();
+		for(int x = boundingBox.minX; x <= boundingBox.maxX; x++)
 		{
-			for(int z = 0; z < 4; z++)
+			for(int z = boundingBox.minZ; z <= boundingBox.maxZ; z++)
 			{
 				if(!context.getPlayer().canPlayerEdit(pos.offset(facing.rotateY(), x).offset(facing, z), Direction.UP, context.getItem()))
 					return false;
-				for(int y = 0; y < 4; y++)
+				for(int y = boundingBox.minY; y <= boundingBox.maxY; y++)
 				{
 					if(!context.getWorld().getBlockState(pos.offset(facing, z).offset(facing.rotateY(), x).up(y)).isReplaceable(context))
 						return false;
@@ -104,7 +105,7 @@ public class AlchemiterItem extends BlockItem
 					|| facing == Direction.NORTH && context.getHitVec().x < 0.5F || facing == Direction.SOUTH && context.getHitVec().x >= 0.5F)
 				pos = pos.offset(facing.rotateYCCW());
 			
-			MSBlocks.ALCHEMITER.placeWithRotation(world, pos, MSRotationUtil.fromDirection(facing));
+			multiblock.placeWithRotation(world, pos, MSRotationUtil.fromDirection(facing));
 			
 			if(player instanceof ServerPlayerEntity)
 				CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayerEntity) player, pos, context.getItem());

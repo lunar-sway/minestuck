@@ -3,10 +3,7 @@ package com.mraof.minestuck.client.renderer;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.item.block.AlchemiterItem;
-import com.mraof.minestuck.item.block.CruxtruderItem;
-import com.mraof.minestuck.item.block.PunchDesignixItem;
-import com.mraof.minestuck.item.block.TotemLatheItem;
+import com.mraof.minestuck.item.MSItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
@@ -91,7 +88,7 @@ public class MachineOutlineRenderer
 					pos = pos.offset(placedFacing.rotateYCCW());    //The bounding box is symmetrical, so doing this gets rid of some rendering cases
 				
 				boundingBox = new AxisAlignedBB(0, 0, 0, (r ? 2 : 1), 2, (r ? 1 : 2)).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
-				placeable = PunchDesignixItem.canPlaceAt(context, placementPos, placedFacing);
+				placeable = MSItems.PUNCH_DESIGNIX.canPlaceAt(context, placementPos, placedFacing);
 			} else if(stack.getItem() == MSBlocks.TOTEM_LATHE.asItem())
 			{
 				pos = pos.offset(placedFacing.rotateY());
@@ -105,14 +102,14 @@ public class MachineOutlineRenderer
 					pos = pos.offset(placedFacing.rotateYCCW(), 3);    //The bounding box is symmetrical, so doing this gets rid of some rendering cases
 				
 				boundingBox = new AxisAlignedBB(0, 0, 0, (r ? 4 : 1), 3, (r ? 1 : 4)).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
-				placeable = TotemLatheItem.canPlaceAt(context, placementPos, placedFacing);
+				placeable = MSItems.TOTEM_LATHE.canPlaceAt(context, placementPos, placedFacing);
 			} else if(stack.getItem() == MSBlocks.CRUXTRUDER.asItem())
 			{
 				BlockPos placementPos = pos.offset(placedFacing.rotateY());
 				pos = pos.offset(placedFacing.getOpposite()).add(-1, 0, -1);
 				
 				boundingBox = new AxisAlignedBB(0,0,0, 3, 3, 3).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
-				placeable = CruxtruderItem.canPlaceAt(context, placementPos, placedFacing);
+				placeable = MSItems.CRUXTRUDER.canPlaceAt(context, placementPos, placedFacing);
 			} /*else if(MinestuckBlocks.jumperBlockExtension[0].asItem())
 			{
 				pos = pos.offset(placedFacing.rotateY());
@@ -148,7 +145,7 @@ public class MachineOutlineRenderer
 					pos = pos.offset(placedFacing.getOpposite(), 3);
 				
 				boundingBox = new AxisAlignedBB(0, 0, 0, 4, 4, 4).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
-				placeable = AlchemiterItem.canPlaceAt(context, placementPos, placedFacing);
+				placeable = MSItems.ALCHEMITER.canPlaceAt(context, placementPos, placedFacing);
 				
 				int xOffset = - placedFacing.getXOffset() - placedFacing.rotateY().getXOffset();
 				int zOffset = - placedFacing.getZOffset() - placedFacing.rotateY().getZOffset();

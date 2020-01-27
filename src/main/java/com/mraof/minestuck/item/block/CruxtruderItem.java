@@ -1,136 +1,45 @@
 package com.mraof.minestuck.item.block;
 
-import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.block.multiblock.MachineMultiblock;
 import com.mraof.minestuck.editmode.EditData;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.tileentity.CruxtruderTileEntity;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.MSRotationUtil;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class CruxtruderItem extends BlockItem
+import javax.annotation.Nullable;
+
+public class CruxtruderItem extends MultiblockItem
 {
-	//TODO Must be looked over along with the other large machine items
-	public CruxtruderItem(Block blockIn, Properties builder)
+	public CruxtruderItem(MachineMultiblock multiblock, Properties properties)
 	{
-		super(blockIn, builder);
+		super(multiblock, properties);
 	}
 	
 	@Override
-	public ActionResultType tryPlace(BlockItemUseContext context)
+	protected boolean onBlockPlaced(BlockPos pos, World world, @Nullable PlayerEntity player, ItemStack stack, BlockState state)
 	{
-		World world = context.getWorld();
-		Direction facing = context.getFace();
-		BlockPos pos = context.getPos();
-		PlayerEntity player = context.getPlayer();
-		if(world.isRemote)
+		if(player == null)
+			return false;
+		TileEntity te = world.getTileEntity(pos.add( 1, 1, 1));
+		if(te instanceof CruxtruderTileEntity)
 		{
-			return ActionResultType.SUCCESS;
-		} else if(facing != Direction.UP)
-		{
-			return ActionResultType.FAIL;
-		} else
-		{
-			BlockState block = world.getBlockState(pos);
-			boolean flag = block.isReplaceable(context);
+			int color;
+			EditData editData = ServerEditHandler.getData(player);
+			if(editData != null)
+				color = PlayerSavedData.getData(editData.getTarget(), world).getColor();
+			else color = PlayerSavedData.getData((ServerPlayerEntity) player).getColor();
 			
-			if (!flag)
-			{
-				pos = pos.up();
-			}
-			
-			Direction placedFacing = context.getPlacementHorizontalFacing().getOpposite();
-			ItemStack itemstack = context.getItem();
-			
-			pos = pos.offset(placedFacing.rotateY());
-			
-			if(!itemstack.isEmpty())
-			{
-				if(!canPlaceAt(context, pos, placedFacing))
-					return ActionResultType.FAIL;
-				
-				BlockState state = this.getBlock().getDefaultState();
-				this.placeBlock(context, state);
-				return ActionResultType.SUCCESS;
-			}
-			return ActionResultType.FAIL;
-		}
-	}
-	
-	public static boolean canPlaceAt(BlockItemUseContext context, BlockPos pos, Direction facing)
-	{
-		for(int x = 0; x < 3; x++)
-		{
-			for(int z = 0; z < 3; z++)
-			{
-				if(!context.getPlayer().canPlayerEdit(pos.offset(facing.rotateYCCW(), x).offset(facing.getOpposite(), z), Direction.UP, context.getItem()))
-					return false;
-				for(int y = 0; y < 3; y++)
-				{
-					if(!context.getWorld().getBlockState(pos.offset(facing.getOpposite(), z).offset(facing.rotateYCCW(), x).up(y)).isReplaceable(context))
-						return false;
-				}
-			}
-		}
-		return true;
-	}
-	
-	@Override
-	protected boolean placeBlock(BlockItemUseContext context, BlockState newState)
-	{
-		BlockPos pos = context.getPos();
-		World world = context.getWorld();
-		PlayerEntity player = context.getPlayer();
-		if(!world.isRemote)
-		{
-			Direction facing = context.getPlacementHorizontalFacing().getOpposite();
-			switch (facing)
-			{
-				case EAST:
-					pos = pos.north(1).west(2);
-					break;
-				case NORTH:
-					pos = pos.west(1);
-					break;
-				case SOUTH:
-					pos = pos.north(2).west(1);
-					break;
-				case WEST:
-					pos = pos.north(1);
-					break;
-			}
-			
-			MSBlocks.CRUXTRUDER.placeWithRotation(world, pos, MSRotationUtil.fromDirection(facing));
-			
-			TileEntity te = world.getTileEntity(pos.add( 1, 1, 1));
-			if(te instanceof CruxtruderTileEntity)
-			{
-				int color;
-				EditData editData = ServerEditHandler.getData(player);
-				if(editData != null)
-					color = PlayerSavedData.getData(editData.getTarget(), world).getColor();
-				else color = PlayerSavedData.getData((ServerPlayerEntity) player).getColor();
-				
-				((CruxtruderTileEntity) te).setColor(color);
-			} else Debug.warnf("Placed cruxtruder, but can't find tile entity. Instead found %s.", te);
-			
-			if(player instanceof ServerPlayerEntity)
-				CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayerEntity) player, pos, context.getItem());
-		}
-		
-		return true;
+			((CruxtruderTileEntity) te).setColor(color);
+			return true;
+		} else Debug.warnf("Placed cruxtruder, but can't find tile entity. Instead found %s.", te);
+		return false;
 	}
 }

@@ -9,6 +9,7 @@ import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -80,6 +81,13 @@ public abstract class MachineMultiblock implements IItemProvider    //An abstrac
 			if(!entry.matchesWithRotation(world, pos, rotation))
 				return true;
 		return false;
+	}
+	
+	public MutableBoundingBox getBoundingBox()
+	{
+		MutableBoundingBox bb = new MutableBoundingBox();
+		blockEntries.forEach(entry -> bb.expandTo(new MutableBoundingBox(entry.pos, entry.pos)));
+		return bb;
 	}
 	
 	public void registerBlocks(IForgeRegistry<Block> registry)

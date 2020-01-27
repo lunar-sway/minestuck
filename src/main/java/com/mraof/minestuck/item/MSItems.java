@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.item.CrewPosterEntity;
 import com.mraof.minestuck.entity.item.MetalBoatEntity;
 import com.mraof.minestuck.entity.item.SbahjPosterEntity;
@@ -20,6 +21,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.ObjectHolder;
 
 import static com.mraof.minestuck.block.MSBlocks.*;
 
@@ -27,9 +29,15 @@ import static com.mraof.minestuck.block.MSBlocks.*;
  * This class contains all non-ItemBlock items that minestuck adds,
  * and is responsible for initializing and registering these.
  */
+@ObjectHolder(Minestuck.MOD_ID)
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class MSItems
 {
+	
+	public static final MultiblockItem CRUXTRUDER = null;
+	public static final MultiblockItem TOTEM_LATHE = null;
+	public static final MultiblockItem ALCHEMITER = null;
+	public static final MultiblockItem PUNCH_DESIGNIX = null;
 	
 	//hammers
 	public static Item CLAW_HAMMER;
@@ -383,11 +391,11 @@ public class MSItems
 		registerItemBlock(registry, DEAD_PLANKS_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, TREATED_PLANKS_SLAB, MSItemGroup.LANDS);
 		
-		registry.register(new CruxtruderItem(CRUXTRUDER.getMainBlock(), new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("cruxtruder"));
+		registry.register(new CruxtruderItem(MSBlocks.CRUXTRUDER, new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("cruxtruder"));
 		registerItemBlock(registry, CRUXTRUDER_LID, MSItemGroup.MAIN);
-		registry.register(new TotemLatheItem(TOTEM_LATHE.getMainBlock(), new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("totem_lathe"));
-		registry.register(new AlchemiterItem(ALCHEMITER.getMainBlock(), new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("alchemiter"));
-		registry.register(new PunchDesignixItem(PUNCH_DESIGNIX.getMainBlock(), new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("punch_designix"));
+		registry.register(new MultiblockItem(MSBlocks.TOTEM_LATHE, new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("totem_lathe"));
+		registry.register(new MultiblockItem(MSBlocks.ALCHEMITER, new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("alchemiter"));
+		registry.register(new MultiblockItem(MSBlocks.PUNCH_DESIGNIX, new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("punch_designix"));
 		registerItemBlock(registry, new MiniCruxtruderItem(MINI_CRUXTRUDER, new Item.Properties().group(MSItemGroup.MAIN)));
 		registerItemBlock(registry, MINI_TOTEM_LATHE, MSItemGroup.MAIN);
 		registerItemBlock(registry, MINI_ALCHEMITER, MSItemGroup.MAIN);
