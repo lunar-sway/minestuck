@@ -119,9 +119,9 @@ public class MultiblockItem extends BlockItem
 		MutableBoundingBox bb = multiblock.getBoundingBox(MSRotationUtil.fromDirection(direction));
 		
 		if(direction.getAxis() == Direction.Axis.X)
-			return pos.south((int) ((bb.maxZ - bb.minZ)*direction.rotateY().getZOffset()/2D - hitZ));
+			return pos.south((int) Math.floor(hitZ - (bb.maxZ - bb.minZ)*direction.rotateY().getZOffset()/2D));
 		else if(direction.getAxis() == Direction.Axis.Z)
-			return pos.east((int) ((bb.maxX - bb.minX)*direction.rotateY().getXOffset()/2D - hitX));
+			return pos.east((int) Math.floor(hitX - (bb.maxX - bb.minX)*direction.rotateY().getXOffset()/2D));
 		else throw new IllegalArgumentException("Direction should be horizontal");
 	}
 }

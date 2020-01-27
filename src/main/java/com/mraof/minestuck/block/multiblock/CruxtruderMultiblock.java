@@ -30,6 +30,7 @@ public class CruxtruderMultiblock extends MachineMultiblock
 		registerPlacement(new BlockPos(0, 0, 1), applyDirection(SIDE, Direction.WEST));
 		registerPlacement(new BlockPos(1, 0, 1), applyDirection(CENTER, Direction.NORTH));
 		registerPlacement(new BlockPos(1, 1, 1), applyDirection(TUBE, Direction.NORTH));
-		registerPlacement(new BlockPos(1, 2, 1), MSBlocks.CRUXTRUDER_LID::getDefaultState, (state1, state2) -> true);
+		//noinspection Convert2MethodRef
+		registerPlacement(new BlockPos(1, 2, 1), () -> MSBlocks.CRUXTRUDER_LID.getDefaultState(), (state1, state2) -> true);
 	}
 }

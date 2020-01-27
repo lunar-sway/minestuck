@@ -123,7 +123,7 @@ public class MSBlocks
 	public static CruxtruderMultiblock CRUXTRUDER = new CruxtruderMultiblock(Minestuck.MOD_ID);
 	public static TotemLatheMultiblock TOTEM_LATHE = new TotemLatheMultiblock(Minestuck.MOD_ID);
 	public static AlchemiterMultiblock ALCHEMITER = new AlchemiterMultiblock(Minestuck.MOD_ID);
-	public static PunchDesignixMultiblock PUNCH_DESIGNIX;
+	public static PunchDesignixMultiblock PUNCH_DESIGNIX = new PunchDesignixMultiblock(Minestuck.MOD_ID);
 	public static final Block MINI_CRUXTRUDER = getNull();
 	public static final Block MINI_TOTEM_LATHE = getNull();
 	public static final Block MINI_ALCHEMITER = getNull();
