@@ -2,6 +2,7 @@ package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.TotemLatheBlock;
+import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -99,16 +100,7 @@ public class TotemLatheItem extends BlockItem
 					|| facing == Direction.SOUTH && context.getHitVec().x < 0.5F || facing == Direction.NORTH && context.getHitVec().x >= 0.5F)
 				pos = pos.offset(facing.rotateY());
 			
-			world.setBlockState(pos, MSBlocks.TOTEM_LATHE.CARD_SLOT.getDefaultState().with(TotemLatheBlock.FACING, facing));
-			world.setBlockState(pos.offset(facing.rotateYCCW(),1), MSBlocks.TOTEM_LATHE.BOTTOM_LEFT.getDefaultState().with(TotemLatheBlock.FACING, facing));
-			world.setBlockState(pos.offset(facing.rotateYCCW(),2), MSBlocks.TOTEM_LATHE.BOTTOM_RIGHT.getDefaultState().with(TotemLatheBlock.FACING, facing));
-			world.setBlockState(pos.offset(facing.rotateYCCW(),3), MSBlocks.TOTEM_LATHE.BOTTOM_CORNER.getDefaultState().with(TotemLatheBlock.FACING, facing));
-			world.setBlockState(pos.up(1), MSBlocks.TOTEM_LATHE.MIDDLE.getDefaultState().with(TotemLatheBlock.FACING, facing));
-			world.setBlockState(pos.offset(facing.rotateYCCW(),1).up(1), MSBlocks.TOTEM_LATHE.ROD.getDefaultState().with(TotemLatheBlock.FACING, facing));
-			world.setBlockState(pos.offset(facing.rotateYCCW(),3).up(1), MSBlocks.TOTEM_LATHE.WHEEL.getDefaultState().with(TotemLatheBlock.FACING, facing));
-			world.setBlockState(pos.up(2), MSBlocks.TOTEM_LATHE.TOP_CORNER.getDefaultState().with(TotemLatheBlock.FACING, facing));
-			world.setBlockState(pos.offset(facing.rotateYCCW(),1).up(2), MSBlocks.TOTEM_LATHE.TOP.getDefaultState().with(TotemLatheBlock.FACING, facing));
-			world.setBlockState(pos.offset(facing.rotateYCCW(),2).up(2), MSBlocks.TOTEM_LATHE.CARVER.getDefaultState().with(TotemLatheBlock.FACING, facing));
+			MSBlocks.TOTEM_LATHE.placeWithRotation(world, pos, MSRotationUtil.fromDirection(facing));
 			
 			if(player instanceof ServerPlayerEntity)
 				CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayerEntity) player, pos, context.getItem());

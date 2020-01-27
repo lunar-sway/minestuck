@@ -3,29 +3,25 @@ package com.mraof.minestuck.block.multiblock;
 import com.mraof.minestuck.block.PunchDesignixBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.fml.RegistryObject;
 
 import static com.mraof.minestuck.block.MSBlockShapes.*;
 
-
 public class PunchDesignixMultiblock extends MachineMultiblock
 {
-	public Block LEFT_LEG, RIGHT_LEG, SLOT, KEYBOARD;
-
-	@Override
-	public Block getMainBlock()
+	public final RegistryObject<Block> LEFT_LEG = register("punch_designix_left_leg", () -> new PunchDesignixBlock(this, PUNCH_DESIGNIX_BOTTOM_LEFT, new BlockPos(0, 1, 0), Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F).noDrops()));
+	public final RegistryObject<Block> RIGHT_LEG = register("punch_designix_right_leg", () -> new PunchDesignixBlock(this, PUNCH_DESIGNIX_BOTTOM_RIGHT, new BlockPos(1, 1, 0), Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F).noDrops()));
+	public final RegistryObject<Block> SLOT = register("punch_designix_slot", () -> new PunchDesignixBlock.Slot(this, PUNCH_DESIGNIX_TOP_LEFT, Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F).noDrops()));
+	public final RegistryObject<Block> KEYBOARD = register("punch_designix_keyboard", () -> new PunchDesignixBlock(this, PUNCH_DESIGNIX_TOP_RIGHT, new BlockPos(1, 0, 0), Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F).noDrops()));
+	
+	public PunchDesignixMultiblock(String modId)
 	{
-		return SLOT;
-	}
-
-	@Override
-	public void registerBlocks(IForgeRegistry<Block> registry)
-	{
-		registry.register(LEFT_LEG = new PunchDesignixBlock(this, PUNCH_DESIGNIX_BOTTOM_LEFT, new BlockPos(0, 1, 0), Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F).noDrops()).setRegistryName("punch_designix_left_leg"));
-		registry.register(RIGHT_LEG = new PunchDesignixBlock(this, PUNCH_DESIGNIX_BOTTOM_RIGHT, new BlockPos(1, 1, 0), Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F).noDrops()).setRegistryName("punch_designix_right_leg"));
-		registry.register(SLOT = new PunchDesignixBlock.Slot(this, PUNCH_DESIGNIX_TOP_LEFT, Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F).noDrops()).setRegistryName("punch_designix_slot"));
-		registry.register(KEYBOARD = new PunchDesignixBlock(this, PUNCH_DESIGNIX_TOP_RIGHT, new BlockPos(1, 0, 0), Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F).noDrops()).setRegistryName("punch_designix_keyboard"));
-
+		super(modId);
+		registerPlacement(new BlockPos(0, 0, 0), applyDirection(RIGHT_LEG, Direction.NORTH));
+		registerPlacement(new BlockPos(1, 0, 0), applyDirection(LEFT_LEG, Direction.NORTH));
+		registerPlacement(new BlockPos(0, 1, 0), applyDirection(KEYBOARD, Direction.NORTH));
+		registerPlacement(new BlockPos(1, 1, 0), applyDirection(SLOT, Direction.NORTH));
 	}
 }

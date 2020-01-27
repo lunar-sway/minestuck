@@ -7,6 +7,7 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -56,7 +57,7 @@ public class PunchDesignixTileEntity extends TileEntity
 	public void onRightClick(ServerPlayerEntity player, BlockState clickedState)
 	{
 		Block part = clickedState.getBlock();
-		if (part == MSBlocks.PUNCH_DESIGNIX.SLOT && !getCard().isEmpty())
+		if (part == MSBlocks.PUNCH_DESIGNIX.SLOT.get() && !getCard().isEmpty())
 		{    //Remove card from punch slot
 			if (player.getHeldItemMainhand().isEmpty())
 				player.setHeldItem(Hand.MAIN_HAND, getCard());
@@ -71,12 +72,12 @@ public class PunchDesignixTileEntity extends TileEntity
 		if (isUseable(clickedState))
 		{
 			ItemStack heldStack = player.getHeldItemMainhand();
-			if (part == MSBlocks.PUNCH_DESIGNIX.SLOT && getCard().isEmpty())
+			if (part == MSBlocks.PUNCH_DESIGNIX.SLOT.get() && getCard().isEmpty())
 			{
 				if (!heldStack.isEmpty() && heldStack.getItem() == MSItems.CAPTCHA_CARD)
 					setCard(heldStack.split(1));    //Insert card into the punch slot
 				
-			} else if (part == MSBlocks.PUNCH_DESIGNIX.KEYBOARD || part == MSBlocks.PUNCH_DESIGNIX.RIGHT_LEG)
+			} else if (part == MSBlocks.PUNCH_DESIGNIX.KEYBOARD.get() || part == MSBlocks.PUNCH_DESIGNIX.RIGHT_LEG.get())
 			{
 				if (heldStack.isEmpty() || heldStack.getItem() != MSItems.CAPTCHA_CARD)
 					return;    //Not a valid item in hand
@@ -144,13 +145,10 @@ public class PunchDesignixTileEntity extends TileEntity
 		
 		BlockState currentState = world.getBlockState(getPos());
 		Direction facing = currentState.get(FACING);
-		Direction hOffset = facing.rotateYCCW();
-		if (!world.getBlockState(getPos().offset(hOffset)).equals(MSBlocks.PUNCH_DESIGNIX.KEYBOARD.getDefaultState().with(FACING, facing)) ||
-				!world.getBlockState(getPos().down()).equals(MSBlocks.PUNCH_DESIGNIX.LEFT_LEG.getDefaultState().with(FACING, facing)) ||
-				!world.getBlockState(getPos().down().offset(hOffset)).equals(MSBlocks.PUNCH_DESIGNIX.RIGHT_LEG.getDefaultState().with(FACING, facing)))
-		{
+		BlockPos zeroPos = getPos().down().offset(facing.rotateYCCW());
+		
+		if(MSBlocks.PUNCH_DESIGNIX.isInvalid(world, zeroPos, MSRotationUtil.fromDirection(facing)))
 			broken = true;
-		}
 	}
 	
 	public void dropItem(boolean inBlock)

@@ -8,6 +8,7 @@ import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry;
 import com.mraof.minestuck.util.ColorCollector;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -102,12 +103,12 @@ public class TotemLatheTileEntity extends TileEntity
 		BlockState state = world.getBlockState(pos);
 		if(stack.isEmpty())
 		{
-			if(state.equals(MSBlocks.TOTEM_LATHE.DOWEL_ROD.getDefaultState().with(TotemLatheBlock.FACING, facing)))
+			if(state.equals(MSBlocks.TOTEM_LATHE.DOWEL_ROD.get().getDefaultState().with(TotemLatheBlock.FACING, facing)))
 				world.removeBlock(pos, false);
 			return true;
 		} else if (stack.getItem() == MSBlocks.CRUXITE_DOWEL.asItem())
 		{
-			if(state.equals(MSBlocks.TOTEM_LATHE.DOWEL_ROD.getDefaultState().with(TotemLatheBlock.FACING, facing)))
+			if(state.equals(MSBlocks.TOTEM_LATHE.DOWEL_ROD.get().getDefaultState().with(TotemLatheBlock.FACING, facing)))
 			{
 				TileEntity te = world.getTileEntity(pos);
 				if(!(te instanceof ItemStackTileEntity))
@@ -121,7 +122,7 @@ public class TotemLatheTileEntity extends TileEntity
 				return true;
 			} else if(state.isAir(world, pos))
 			{
-				world.setBlockState(pos, MSBlocks.TOTEM_LATHE.DOWEL_ROD.getDefaultState().with(TotemLatheBlock.FACING, facing));
+				world.setBlockState(pos, MSBlocks.TOTEM_LATHE.DOWEL_ROD.get().getDefaultState().with(TotemLatheBlock.FACING, facing));
 				TileEntity te = world.getTileEntity(pos);
 				if(!(te instanceof ItemStackTileEntity))
 				{
@@ -139,7 +140,7 @@ public class TotemLatheTileEntity extends TileEntity
 	public ItemStack getDowel()
 	{
 		BlockPos pos = getPos().up().offset(getFacing().rotateYCCW(), 2);
-		if(world.getBlockState(pos).equals(MSBlocks.TOTEM_LATHE.DOWEL_ROD.getDefaultState().with(TotemLatheBlock.FACING, getFacing())))
+		if(world.getBlockState(pos).equals(MSBlocks.TOTEM_LATHE.DOWEL_ROD.get().getDefaultState().with(TotemLatheBlock.FACING, getFacing())))
 		{
 			TileEntity te = world.getTileEntity(pos);
 			if(te instanceof ItemStackTileEntity)
@@ -193,7 +194,7 @@ public class TotemLatheTileEntity extends TileEntity
 		}
 		
 		//if they have clicked the dowel block
-		if(clickedState.getBlock() == MSBlocks.TOTEM_LATHE.ROD || clickedState.getBlock() == MSBlocks.TOTEM_LATHE.DOWEL_ROD)
+		if(clickedState.getBlock() == MSBlocks.TOTEM_LATHE.ROD.get() || clickedState.getBlock() == MSBlocks.TOTEM_LATHE.DOWEL_ROD.get())
 		{
 			ItemStack dowel = getDowel();
 			if (dowel.isEmpty())
@@ -220,7 +221,7 @@ public class TotemLatheTileEntity extends TileEntity
 		}
 		
 		//if they have clicked on the lever
-		if(working && clickedState.getBlock() == MSBlocks.TOTEM_LATHE.CARVER)
+		if(working && clickedState.getBlock() == MSBlocks.TOTEM_LATHE.CARVER.get())
 		{
 			//carve the dowel.
 			processContents();
@@ -248,22 +249,8 @@ public class TotemLatheTileEntity extends TileEntity
 			return;
 		Direction facing = getFacing();
 		
-		if(	//!world.getBlockState(getPos()).equals(MinestuckBlocks.TOTEM_LATHE.CARD_SLOT.getDefaultState().with(BlockTotemLathe.FACING, facing)) ||
-			!world.getBlockState(getPos().offset(facing.rotateYCCW(),1)).equals(MSBlocks.TOTEM_LATHE.BOTTOM_LEFT.getDefaultState().with(TotemLatheBlock.FACING, facing)) ||
-			!world.getBlockState(getPos().offset(facing.rotateYCCW(),2)).equals(MSBlocks.TOTEM_LATHE.BOTTOM_RIGHT.getDefaultState().with(TotemLatheBlock.FACING, facing)) ||
-			!world.getBlockState(getPos().offset(facing.rotateYCCW(),3)).equals(MSBlocks.TOTEM_LATHE.BOTTOM_CORNER.getDefaultState().with(TotemLatheBlock.FACING, facing)) ||
-			
-			!world.getBlockState(getPos().up()).equals(MSBlocks.TOTEM_LATHE.MIDDLE.getDefaultState().with(TotemLatheBlock.FACING, facing)) ||
-			!world.getBlockState(getPos().up().offset(facing.rotateYCCW(),1)).equals(MSBlocks.TOTEM_LATHE.ROD.getDefaultState().with(TotemLatheBlock.FACING, facing)) ||
-			!world.getBlockState(getPos().up().offset(facing.rotateYCCW(),3)).equals(MSBlocks.TOTEM_LATHE.WHEEL.getDefaultState().with(TotemLatheBlock.FACING, facing)) ||
-			
-			!world.getBlockState(getPos().up(2)).equals(MSBlocks.TOTEM_LATHE.TOP_CORNER.getDefaultState().with(TotemLatheBlock.FACING, facing)) ||
-			!world.getBlockState(getPos().up(2).offset(facing.rotateYCCW(),1)).equals(MSBlocks.TOTEM_LATHE.TOP.getDefaultState().with(TotemLatheBlock.FACING, facing)) ||
-			!world.getBlockState(getPos().up(2).offset(facing.rotateYCCW(),2)).equals(MSBlocks.TOTEM_LATHE.CARVER.getDefaultState().with(TotemLatheBlock.FACING, facing)))
-		{
+		if(!MSBlocks.TOTEM_LATHE.isInvalid(world, pos, MSRotationUtil.fromDirection(facing)))
 			setBroken();
-		}
-		
 	}
 	
 	private void dropItem(boolean inBlock, BlockPos pos, ItemStack stack)

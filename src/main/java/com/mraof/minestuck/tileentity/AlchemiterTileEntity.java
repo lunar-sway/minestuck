@@ -8,10 +8,7 @@ import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.*;
-import com.mraof.minestuck.util.AlchemiterUpgrades;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.util.PlayerIdentifier;
+import com.mraof.minestuck.util.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;
@@ -230,36 +227,13 @@ public class AlchemiterTileEntity extends TileEntity
 		if(this.broken || world == null)
 			return;
 		
-		Direction direction = world.getBlockState(this.getPos()).get(AlchemiterBlock.FACING);
+		Direction direction = getFacing();
 		Direction x = direction.rotateYCCW();
 		Direction z = direction.getOpposite();
-		BlockPos pos = getPos().down();
-		if(!world.getBlockState(pos.up(3)).equals(MSBlocks.ALCHEMITER.UPPER_ROD.getDefaultState().with(AlchemiterBlock.FACING, direction)) ||
-				!world.getBlockState(pos.up(2)).equals(MSBlocks.ALCHEMITER.LOWER_ROD.getDefaultState().with(AlchemiterBlock.FACING, direction)) ||
-				//!world.getBlockState(pos.up()).equals(MinestuckBlocks.ALCHEMITER.TOTEM_PAD.getDefaultState().with(BlockAlchemiter.FACING, direction)) ||
-				!world.getBlockState(pos).equals(MSBlocks.ALCHEMITER.TOTEM_CORNER.getDefaultState().with(AlchemiterBlock.FACING, direction)) ||
-				!world.getBlockState(pos.offset(x)).equals(MSBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, direction)) ||
-				!world.getBlockState(pos.offset(x, 2)).equals(MSBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, direction)) ||
-				!world.getBlockState(pos.offset(z).offset(x)).equals(MSBlocks.ALCHEMITER.CENTER.getDefaultState().with(AlchemiterBlock.FACING, direction)) ||
-				!world.getBlockState(pos.offset(x, 3)).equals(MSBlocks.ALCHEMITER.CORNER.getDefaultState().with(AlchemiterBlock.FACING, direction.rotateYCCW())) ||
-				!world.getBlockState(pos.offset(z).offset(x, 3)).equals(MSBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, direction.rotateYCCW())) ||
-				!world.getBlockState(pos.offset(z, 2).offset(x, 3)).equals(MSBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, direction.rotateYCCW())) ||
-				!world.getBlockState(pos.offset(z).offset(x, 2)).equals(MSBlocks.ALCHEMITER.CENTER.getDefaultState().with(AlchemiterBlock.FACING, direction.rotateYCCW())) ||
-				!world.getBlockState(pos.offset(z, 3).offset(x, 3)).equals(MSBlocks.ALCHEMITER.CORNER.getDefaultState().with(AlchemiterBlock.FACING, direction.getOpposite())) ||
-				!world.getBlockState(pos.offset(z, 3).offset(x, 2)).equals(MSBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, direction.getOpposite())) ||
-				!world.getBlockState(pos.offset(z, 3).offset(x, 1)).equals(MSBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, direction.getOpposite())) ||
-				!world.getBlockState(pos.offset(z, 2).offset(x, 2)).equals(MSBlocks.ALCHEMITER.CENTER.getDefaultState().with(AlchemiterBlock.FACING, direction.getOpposite())) ||
-				!world.getBlockState(pos.offset(z, 3)).equals(MSBlocks.ALCHEMITER.CORNER.getDefaultState().with(AlchemiterBlock.FACING, direction.rotateY())) ||
-				!world.getBlockState(pos.offset(z, 2)).equals(MSBlocks.ALCHEMITER.LEFT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, direction.rotateY())) ||
-				!world.getBlockState(pos.offset(z)).equals(MSBlocks.ALCHEMITER.RIGHT_SIDE.getDefaultState().with(AlchemiterBlock.FACING, direction.rotateY())) ||
-				!world.getBlockState(pos.offset(z, 2).offset(x, 1)).equals(MSBlocks.ALCHEMITER.CENTER.getDefaultState().with(AlchemiterBlock.FACING, direction.rotateY())))
-			
-		{
-			breakMachine();
-			return;
-		}
+		BlockPos pos = getPos().down().offset(x, 3).offset(z, 3);
 		
-		return;
+		if(MSBlocks.ALCHEMITER.isInvalid(world, pos, MSRotationUtil.fromDirection(direction)))
+			breakMachine();
 	}
 	
 	public Direction getFacing()
@@ -336,8 +310,8 @@ public class AlchemiterTileEntity extends TileEntity
 	{
 		if(worldIn.isRemote)
 		{
-			if(state.getBlock() == MSBlocks.ALCHEMITER.CENTER || state.getBlock() == MSBlocks.ALCHEMITER.CORNER || state.getBlock() == MSBlocks.ALCHEMITER.LEFT_SIDE
-					|| state.getBlock() == MSBlocks.ALCHEMITER.RIGHT_SIDE || state.getBlock() == MSBlocks.ALCHEMITER.TOTEM_CORNER)
+			if(state.getBlock() == MSBlocks.ALCHEMITER.CENTER.get() || state.getBlock() == MSBlocks.ALCHEMITER.CORNER.get() || state.getBlock() == MSBlocks.ALCHEMITER.LEFT_SIDE.get()
+					|| state.getBlock() == MSBlocks.ALCHEMITER.RIGHT_SIDE.get() || state.getBlock() == MSBlocks.ALCHEMITER.TOTEM_CORNER.get())
 			{
 				BlockPos mainPos = pos;
 				if(!isBroken())
@@ -360,7 +334,7 @@ public class AlchemiterTileEntity extends TileEntity
 	{
 		if (isUseable(clickedState))
 		{
-			if(clickedState.getBlock() == MSBlocks.ALCHEMITER.TOTEM_PAD)
+			if(clickedState.getBlock() == MSBlocks.ALCHEMITER.TOTEM_PAD.get())
 			{
 				if (!dowel.isEmpty())
 				{    //Remove dowel from pad
