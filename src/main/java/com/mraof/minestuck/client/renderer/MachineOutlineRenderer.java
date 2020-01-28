@@ -83,32 +83,10 @@ public class MachineOutlineRenderer
 			
 			pos = item.getPlacementPos(pos, placedFacing, hitX, hitZ);
 			
-			/*else if(MinestuckBlocks.jumperBlockExtension[0].asItem())
-			{
-				pos = pos.offset(placedFacing.rotateY());
-				
-				if (placedFacing.getXOffset() > 0 && hitZ >= 0.5F || placedFacing.getXOffset() < 0 && hitZ < 0.5F
-						|| placedFacing.getZOffset() > 0 && hitX < 0.5F || placedFacing.getZOffset() < 0 && hitX >= 0.5F)
-					pos = pos.offset(placedFacing.rotateY());
-				
-				BlockPos placementPos = pos;
-				if(placedFacing == Direction.WEST)
-					pos = pos.offset(placedFacing, 0);
-				if (placedFacing == Direction.SOUTH)
-					pos = pos.offset(placedFacing.getOpposite(), 3);    
-				if (placedFacing == Direction.EAST)
-					pos = pos.offset(placedFacing.getOpposite(), 3).offset(placedFacing.rotateYCCW(), 4);    
-				if(placedFacing == Direction.NORTH)
-					pos = pos.offset(placedFacing.rotateYCCW(), 4);
-				
-				boundingBox = new AxisAlignedBB(0, 0, 0, (r ? 5 : 4), 1, (r ? 4 : 5)).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
-				placeable = false;//JumperBlockItem.checkOutline(stack, player, player.world, placementPos, placedFacing);
-			} */
 			if(item == MSItems.ALCHEMITER)//Alchemiter
 			{
-				BlockPos rod1 = new BlockPos(3.25F, 1, 3.25F), rod2 = new BlockPos(3.75F, 4, 3.75F);
-				AxisAlignedBB rod = new AxisAlignedBB(rod1.rotate(rotation), rod2.rotate(rotation)).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
-				AxisAlignedBB pad = new AxisAlignedBB(BlockPos.ZERO, new BlockPos(4, 1, 4).rotate(rotation)).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
+				AxisAlignedBB rod = GuiUtil.rotateAround(new AxisAlignedBB(3.25, 1, 3.25, 3.75, 4, 3.75), 0.5, 0.5, rotation).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
+				AxisAlignedBB pad = GuiUtil.rotateAround(new AxisAlignedBB(0, 0, 0, 4, 1, 4), 0.5, 0.5, rotation).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
 				//If you don't want the extra details to the alchemiter outline, comment out the following two lines
 				WorldRenderer.drawSelectionBoundingBox(rod, placeable ? 0 : 1, placeable ? 1 : 0, 0, 0.5F);
 				WorldRenderer.drawSelectionBoundingBox(pad, placeable ? 0 : 1, placeable ? 1 : 0, 0, 0.5F);

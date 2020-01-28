@@ -11,6 +11,7 @@ import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MutableBoundingBox;
 
@@ -235,5 +236,17 @@ public class GuiUtil
 	public static AxisAlignedBB fromBoundingBox(MutableBoundingBox boundingBox)
 	{
 		return new AxisAlignedBB(boundingBox.minX, boundingBox.minY, boundingBox.minZ, boundingBox.maxX + 1, boundingBox.maxY + 1, boundingBox.maxZ + 1);
+	}
+	
+	public static AxisAlignedBB rotateAround(AxisAlignedBB boundingBox, double x, double z, Rotation rotation)
+	{
+		switch(rotation)
+		{
+			case NONE: return boundingBox;
+			case CLOCKWISE_90: return new AxisAlignedBB(x + z - boundingBox.maxZ, boundingBox.minY, z - x + boundingBox.minX, x + z - boundingBox.minZ, boundingBox.maxY, z - x + boundingBox.maxX);
+			case CLOCKWISE_180: return new AxisAlignedBB(x + x - boundingBox.maxX, boundingBox.minY, z + z - boundingBox.maxZ, x + x - boundingBox.minX, boundingBox.maxY, z + z - boundingBox.minZ);
+			case COUNTERCLOCKWISE_90: return new AxisAlignedBB(x - z + boundingBox.minZ, boundingBox.minY, z + x - boundingBox.maxX, x - z + boundingBox.maxZ, boundingBox.maxY, z + x - boundingBox.minX);
+			default: throw new IllegalArgumentException("Invalid rotation");
+		}
 	}
 }
