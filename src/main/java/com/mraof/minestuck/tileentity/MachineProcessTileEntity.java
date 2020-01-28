@@ -139,7 +139,6 @@ public abstract class MachineProcessTileEntity extends TileEntity implements ISi
 			this.progress = 0;
 			this.ready = getOverrideStop();
 			processContents();
-			world.notifyBlockUpdate(pos, state, state, 3);
 		}
 	}
 
