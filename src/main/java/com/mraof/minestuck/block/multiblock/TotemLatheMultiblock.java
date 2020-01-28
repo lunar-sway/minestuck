@@ -26,15 +26,15 @@ public class TotemLatheMultiblock extends MachineMultiblock
 	public TotemLatheMultiblock(String modId)
 	{
 		super(modId);
-		registerPlacement(new BlockPos(0, 0, 0), applyDirection(CARD_SLOT, Direction.NORTH));
-		registerPlacement(new BlockPos(-1, 0, 0), applyDirection(BOTTOM_LEFT, Direction.NORTH));
-		registerPlacement(new BlockPos(-2, 0, 0), applyDirection(BOTTOM_RIGHT, Direction.NORTH));
-		registerPlacement(new BlockPos(-3, 0, 0), applyDirection(BOTTOM_CORNER, Direction.NORTH));
-		registerPlacement(new BlockPos(0, 1, 0), applyDirection(MIDDLE, Direction.NORTH));
-		registerPlacement(new BlockPos(-1, 1, 0), applyDirection(ROD, Direction.NORTH));
-		registerPlacement(new BlockPos(-3, 1, 0), applyDirection(WHEEL, Direction.NORTH));
-		registerPlacement(new BlockPos(0, 2, 0), applyDirection(TOP_CORNER, Direction.NORTH));
-		registerPlacement(new BlockPos(-1, 2, 0), applyDirection(TOP, Direction.NORTH));
-		registerPlacement(new BlockPos(-2, 2, 0), applyDirection(CARVER, Direction.NORTH));
+		registerPlacement(new BlockPos(3, 0, 0), applyDirection(CARD_SLOT, Direction.NORTH));
+		registerPlacement(new BlockPos(2, 0, 0), applyDirection(BOTTOM_LEFT, Direction.NORTH));
+		registerPlacement(new BlockPos(1, 0, 0), applyDirection(BOTTOM_RIGHT, Direction.NORTH));
+		registerPlacement(new BlockPos(0, 0, 0), applyDirection(BOTTOM_CORNER, Direction.NORTH));
+		registerPlacement(new BlockPos(3, 1, 0), applyDirection(MIDDLE, Direction.NORTH));
+		registerPlacement(new BlockPos(2, 1, 0), applyDirection(ROD, Direction.NORTH));
+		registerPlacement(new BlockPos(0, 1, 0), applyDirection(WHEEL, Direction.NORTH));
+		registerPlacement(new BlockPos(3, 2, 0), applyDirection(TOP_CORNER, Direction.NORTH));
+		registerPlacement(new BlockPos(2, 2, 0), applyDirection(TOP, Direction.NORTH));
+		registerPlacement(new BlockPos(1, 2, 0), applyDirection(CARVER, Direction.NORTH));
 	}
 }
