@@ -102,9 +102,10 @@ public class MultiblockItem extends BlockItem
 		PlayerEntity player = context.getPlayer();
 		if(!world.isRemote)
 		{
-			Direction facing = context.getPlacementHorizontalFacing();
+			Direction facing = context.getPlacementHorizontalFacing().getOpposite();
 			
-			pos = getPlacementPos(pos, facing, context.getHitVec().x, context.getHitVec().z);
+			double hitX = context.getHitVec().x - pos.getX(), hitZ = context.getHitVec().z - pos.getZ();
+			pos = getPlacementPos(pos, facing, hitX, hitZ);
 			
 			multiblock.placeWithRotation(world, pos, MSRotationUtil.fromDirection(facing));
 			

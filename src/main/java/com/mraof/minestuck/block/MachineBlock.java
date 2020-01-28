@@ -11,6 +11,7 @@ import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.shapes.VoxelShape;
 
@@ -48,26 +49,18 @@ public abstract class MachineBlock extends Block
 		return getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());	//Should face the player
 	}
 	
-	//Should probably find an utility class for the functions below
-	public static Rotation rotationFromDirection(Direction direction)
+	@Override
+	@SuppressWarnings("deprecation")
+	public BlockState rotate(BlockState state, Rotation rotation)
 	{
-		Rotation rotation;
-		switch(direction)
-		{
-			case EAST:
-				rotation = Rotation.CLOCKWISE_90;
-				break;
-			case SOUTH:
-				rotation = Rotation.CLOCKWISE_180;
-				break;
-			case WEST:
-				rotation = Rotation.COUNTERCLOCKWISE_90;
-				break;
-			default:
-				rotation = Rotation.NONE;
-				break;
-		}
-		return rotation;
+		return state.with(FACING, rotation.rotate(state.get(FACING)));
+	}
+	
+	@Override
+	@SuppressWarnings("deprecation")
+	public BlockState mirror(BlockState state, Mirror mirrorIn)
+	{
+		return state.rotate(mirrorIn.toRotation(state.get(FACING)));
 	}
 	
 	public static Map<Direction, VoxelShape> createRotatedShapes(CustomVoxelShape shape)

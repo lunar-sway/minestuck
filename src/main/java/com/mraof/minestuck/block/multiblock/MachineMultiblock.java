@@ -118,19 +118,30 @@ public abstract class MachineMultiblock implements IItemProvider    //An abstrac
 			this.pos = pos;
 		}
 		
-		private void placeWithRotation(IWorld world, BlockPos pos, Rotation rotation)
+		private BlockState getRotatedState(Rotation rotation)
 		{
 			BlockState state = stateSupplier.get();
 			if(state != null)
-				world.setBlockState(pos.add(this.pos.rotate(rotation)), state.rotate(rotation), 11);
+				state = state.rotate(rotation);
+			return state;
+		}
+		
+		private void placeWithRotation(IWorld world, BlockPos pos, Rotation rotation)
+		{
+			BlockState state = getRotatedState(rotation);
+			if(state != null)
+				world.setBlockState(pos.add(this.pos.rotate(rotation)), state, 3);
 		}
 		
 		private boolean matchesWithRotation(IWorld world, BlockPos pos, Rotation rotation)
 		{
-			BlockState state = stateSupplier.get();
+			BlockState machineState = getRotatedState(rotation);
+			
 			if(stateValidator != null)
-				return stateValidator.test(state, world.getBlockState(pos.add(this.pos.rotate(rotation))));
-			else return true;
+			{
+				BlockState worldState = world.getBlockState(pos.add(this.pos.rotate(rotation)));
+				return stateValidator.test(machineState, worldState);
+			} else return true;
 		}
 	}
 	

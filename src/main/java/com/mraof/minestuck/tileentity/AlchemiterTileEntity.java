@@ -232,7 +232,7 @@ public class AlchemiterTileEntity extends TileEntity
 		Direction z = direction.getOpposite();
 		BlockPos pos = getPos().down().offset(x, 3).offset(z, 3);
 		
-		if(MSBlocks.ALCHEMITER.isInvalid(world, pos, MSRotationUtil.fromDirection(direction)))
+		if(MSBlocks.ALCHEMITER.isInvalid(world, pos, MSRotationUtil.fromDirection(direction.rotateYCCW())))
 			breakMachine();
 	}
 	
