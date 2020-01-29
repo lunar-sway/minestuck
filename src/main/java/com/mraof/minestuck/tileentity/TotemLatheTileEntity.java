@@ -8,6 +8,7 @@ import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry;
 import com.mraof.minestuck.util.ColorCollector;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.WorldEventUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -18,7 +19,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
 
@@ -324,12 +324,6 @@ public class TotemLatheTileEntity extends TileEntity
 	private void effects(boolean success)
 	{
 		BlockPos pos = getPos().up().offset(getFacing().rotateYCCW(), 2);
-		world.playEvent(success ? Constants.WorldEvents.DISPENSER_DISPENSE_SOUND : Constants.WorldEvents.DISPENSER_FAIL_SOUND, pos, 0);
-		if (success)
-		{
-			Direction direction = getFacing();
-			int i = direction.getXOffset() + 1 + (direction.getZOffset() + 1) * 3;
-			world.playEvent(Constants.WorldEvents.DISPENSER_SMOKE, pos, i);
-		}
+		WorldEventUtil.dispenserEffect(getWorld(), pos, getFacing(), success);
 	}
 }

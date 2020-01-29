@@ -7,6 +7,7 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.WorldEventUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -17,7 +18,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
 
@@ -115,13 +115,7 @@ public class PunchDesignixTileEntity extends TileEntity
 	
 	private void effects(boolean success)
 	{
-		world.playEvent(success ? Constants.WorldEvents.DISPENSER_DISPENSE_SOUND : Constants.WorldEvents.DISPENSER_FAIL_SOUND, pos, 0);
-		if (success)
-		{
-			Direction direction = getBlockState().get(FACING);
-			int i = direction.getXOffset() + 1 + (direction.getZOffset() + 1) * 3;
-			world.playEvent(Constants.WorldEvents.DISPENSER_SMOKE, pos, i);
-		}
+		WorldEventUtil.dispenserEffect(getWorld(), getPos(), getBlockState().get(FACING), success);
 	}
 	
 	private boolean isUseable(BlockState state)
