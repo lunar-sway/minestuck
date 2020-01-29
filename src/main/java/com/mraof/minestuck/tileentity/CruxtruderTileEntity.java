@@ -12,7 +12,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
-public class CruxtruderTileEntity extends TileEntity
+public class CruxtruderTileEntity extends TileEntity	//TODO check if it is broken
 {
 	private int color = -1;
 	private boolean broken = false;

@@ -15,10 +15,9 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -32,7 +31,7 @@ public abstract class MachineMultiblock implements IItemProvider    //An abstrac
 	
 	private final String modId;
 	private final Map<RegistryObject<Block>, Supplier<? extends Block>> registryEntries = new LinkedHashMap<>();
-	private final List<Entry> blockEntries = new ArrayList<>();
+	private final List<PlacementEntry> blockEntries = new ArrayList<>();
 	
 	protected MachineMultiblock(String modId)
 	{
@@ -49,15 +48,17 @@ public abstract class MachineMultiblock implements IItemProvider    //An abstrac
 		return obj;
 	}
 	
-	protected void registerPlacement(BlockPos pos, Supplier<BlockState> stateSupplier)
+	protected PlacementEntry registerPlacement(BlockPos pos, Supplier<BlockState> stateSupplier)
 	{
-		registerPlacement(pos, stateSupplier, DEFAULT_PREDICATE);
+		return registerPlacement(pos, stateSupplier, DEFAULT_PREDICATE);
 	}
 	
-	protected void registerPlacement(BlockPos pos, Supplier<BlockState> stateSupplier, BiPredicate<BlockState, BlockState> stateValidator)
+	protected PlacementEntry registerPlacement(BlockPos pos, Supplier<BlockState> stateSupplier, BiPredicate<BlockState, BlockState> stateValidator)
 	{
 		//TODO add check to prevent duplicate positions
-		blockEntries.add(new Entry(stateSupplier, stateValidator, pos));
+		PlacementEntry entry = new PlacementEntry(stateSupplier, stateValidator, pos);
+		blockEntries.add(entry);
+		return entry;
 	}
 	
 	public Block getMainBlock()
@@ -75,12 +76,20 @@ public abstract class MachineMultiblock implements IItemProvider    //An abstrac
 		blockEntries.forEach(entry -> entry.placeWithRotation(world, pos, rotation));
 	}
 	
-	public boolean isInvalid(IWorld world, BlockPos pos, Rotation rotation)
+	private boolean isInvalid(IWorld world, BlockPos pos, Rotation rotation)
 	{
-		for(Entry entry : blockEntries)
+		for(PlacementEntry entry : blockEntries)
 			if(!entry.matchesWithRotation(world, pos, rotation))
 				return true;
 		return false;
+	}
+	
+	protected boolean isInvalidFromPlacement(IWorld world, BlockPos pos, PlacementEntry entry)
+	{
+		BlockState worldState = world.getBlockState(pos);
+		Rotation rotation = entry.findRotation(worldState);
+		BlockPos zeroPos = entry.getZeroPos(pos, rotation);
+		return isInvalid(world, zeroPos, rotation);
 	}
 	
 	public MutableBoundingBox getBoundingBox(Rotation rotation)
@@ -105,15 +114,17 @@ public abstract class MachineMultiblock implements IItemProvider    //An abstrac
 		return getMainBlock().asItem();
 	}
 	
-	private static class Entry
+	protected static class PlacementEntry
 	{
+		@Nonnull
 		private final Supplier<BlockState> stateSupplier;
+		@Nullable
 		private final BiPredicate<BlockState, BlockState> stateValidator;
 		private final BlockPos pos;
 		
-		private Entry(Supplier<BlockState> stateSupplier, BiPredicate<BlockState, BlockState> stateValidator, BlockPos pos)
+		private PlacementEntry(Supplier<BlockState> stateSupplier, @Nullable BiPredicate<BlockState, BlockState> stateValidator, BlockPos pos)
 		{
-			this.stateSupplier = stateSupplier;
+			this.stateSupplier = Objects.requireNonNull(stateSupplier);
 			this.stateValidator = stateValidator;
 			this.pos = pos;
 		}
@@ -142,6 +153,36 @@ public abstract class MachineMultiblock implements IItemProvider    //An abstrac
 				BlockState worldState = world.getBlockState(pos.add(this.pos.rotate(rotation)));
 				return stateValidator.test(machineState, worldState);
 			} else return true;
+		}
+		
+		public BlockPos getZeroPos(BlockPos pos, BlockState rotatedState)
+		{
+			return getZeroPos(pos, findRotation(rotatedState));
+		}
+		
+		public BlockPos getPos(BlockPos pos, Rotation rotation)
+		{
+			return pos.add(this.pos.rotate(rotation));
+		}
+		
+		public BlockPos getZeroPos(BlockPos pos, Rotation rotation)
+		{
+			return pos.subtract(this.pos.rotate(rotation));
+		}
+		
+		private Rotation findRotation(BlockState rotatedState)
+		{
+			BlockState defaultState = stateSupplier.get();
+			if(defaultState != null)
+			{
+				if(stateValidator != null)
+				{
+					for(Rotation rotation : Rotation.values())
+						if(stateValidator.test(defaultState.rotate(rotation), rotatedState))
+							return rotation;
+				} else return Rotation.NONE;
+			}
+			throw new IllegalArgumentException("No valid rotation found to match state "+rotatedState+" with "+defaultState);
 		}
 	}
 	

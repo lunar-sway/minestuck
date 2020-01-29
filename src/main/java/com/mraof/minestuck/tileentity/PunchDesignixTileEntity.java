@@ -7,7 +7,6 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -143,11 +142,7 @@ public class PunchDesignixTileEntity extends TileEntity
 		if (broken || world == null)
 			return;
 		
-		BlockState currentState = world.getBlockState(getPos());
-		Direction facing = currentState.get(FACING);
-		BlockPos zeroPos = getPos().down().offset(facing.rotateYCCW());
-		
-		if(MSBlocks.PUNCH_DESIGNIX.isInvalid(world, zeroPos, MSRotationUtil.fromDirection(facing)))
+		if(MSBlocks.PUNCH_DESIGNIX.isInvalidFromSlot(world, getPos()))
 			broken = true;
 	}
 	

@@ -8,7 +8,6 @@ import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry;
 import com.mraof.minestuck.util.ColorCollector;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -247,9 +246,8 @@ public class TotemLatheTileEntity extends TileEntity
 	{
 		if(isBroken())
 			return;
-		Direction facing = getFacing();
 		
-		if(!MSBlocks.TOTEM_LATHE.isInvalid(world, pos, MSRotationUtil.fromDirection(facing)))
+		if(MSBlocks.TOTEM_LATHE.isInvalidFromSlot(world, getPos()))
 			setBroken();
 	}
 	

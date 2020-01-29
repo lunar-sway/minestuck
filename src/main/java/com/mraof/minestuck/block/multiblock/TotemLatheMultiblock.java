@@ -5,6 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 import net.minecraftforge.fml.RegistryObject;
 
 import static com.mraof.minestuck.block.MSBlockShapes.*;
@@ -23,10 +24,12 @@ public class TotemLatheMultiblock extends MachineMultiblock
 	public final RegistryObject<Block> TOP = register("totem_lathe_top", () -> new TotemLatheBlock(this, TOTEM_LATHE_TOP_MIDDLE, new BlockPos(1, -2, 0), Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F).noDrops()));
 	public final RegistryObject<Block> CARVER = register("totem_lathe_carver", () -> new TotemLatheBlock(this, TOTEM_LATHE_CARVER, new BlockPos(2, -2, 0), Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F).noDrops()));
 	
+	private final PlacementEntry slotPlacement;
+	
 	public TotemLatheMultiblock(String modId)
 	{
 		super(modId);
-		registerPlacement(new BlockPos(3, 0, 0), applyDirection(CARD_SLOT, Direction.NORTH));
+		slotPlacement = registerPlacement(new BlockPos(3, 0, 0), applyDirection(CARD_SLOT, Direction.NORTH));
 		registerPlacement(new BlockPos(2, 0, 0), applyDirection(BOTTOM_LEFT, Direction.NORTH));
 		registerPlacement(new BlockPos(1, 0, 0), applyDirection(BOTTOM_RIGHT, Direction.NORTH));
 		registerPlacement(new BlockPos(0, 0, 0), applyDirection(BOTTOM_CORNER, Direction.NORTH));
@@ -36,5 +39,10 @@ public class TotemLatheMultiblock extends MachineMultiblock
 		registerPlacement(new BlockPos(3, 2, 0), applyDirection(TOP_CORNER, Direction.NORTH));
 		registerPlacement(new BlockPos(2, 2, 0), applyDirection(TOP, Direction.NORTH));
 		registerPlacement(new BlockPos(1, 2, 0), applyDirection(CARVER, Direction.NORTH));
+	}
+	
+	public boolean isInvalidFromSlot(IWorld world, BlockPos pos)
+	{
+		return isInvalidFromPlacement(world, pos, slotPlacement);
 	}
 }

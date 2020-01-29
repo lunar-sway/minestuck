@@ -8,7 +8,10 @@ import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.*;
-import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.util.AlchemiterUpgrades;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.util.PlayerIdentifier;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;
@@ -227,12 +230,7 @@ public class AlchemiterTileEntity extends TileEntity
 		if(this.broken || world == null)
 			return;
 		
-		Direction direction = getFacing();
-		Direction x = direction.rotateYCCW();
-		Direction z = direction.getOpposite();
-		BlockPos pos = getPos().down().offset(x, 3).offset(z, 3);
-		
-		if(MSBlocks.ALCHEMITER.isInvalid(world, pos, MSRotationUtil.fromDirection(direction.rotateYCCW())))
+		if(MSBlocks.ALCHEMITER.isInvalidFromPad(world, pos))
 			breakMachine();
 	}
 	

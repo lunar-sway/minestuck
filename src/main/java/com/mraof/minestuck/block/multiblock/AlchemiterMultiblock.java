@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 import net.minecraftforge.fml.RegistryObject;
 
 public class AlchemiterMultiblock extends MachineMultiblock
@@ -18,6 +19,8 @@ public class AlchemiterMultiblock extends MachineMultiblock
 	public final RegistryObject<Block> TOTEM_PAD = register("alchemiter_totem_pad", () -> new AlchemiterBlock.Pad(this, MSBlockShapes.ALCHEMITER_TOTEM_PAD, Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F).noDrops()));
 	public final RegistryObject<Block> LOWER_ROD = register("alchemiter_lower_rod", () -> new AlchemiterBlock(this, MSBlockShapes.ALCHEMITER_LOWER_ROD, false, false, new BlockPos(0, -1, 0), Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F).noDrops()));
 	public final RegistryObject<Block> UPPER_ROD = register("alchemiter_upper_rod", () -> new AlchemiterBlock(this, MSBlockShapes.ALCHEMITER_UPPER_ROD, false, false, new BlockPos(0, -2, 0), Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F).noDrops()));
+	
+	private final PlacementEntry totemPadPos;
 	
 	public AlchemiterMultiblock(String modId)
 	{
@@ -42,8 +45,13 @@ public class AlchemiterMultiblock extends MachineMultiblock
 		registerPlacement(new BlockPos(3, 0, 2), applyDirection(LEFT_SIDE, Direction.EAST));
 		registerPlacement(new BlockPos(3, 0, 1), applyDirection(RIGHT_SIDE, Direction.EAST));
 		registerPlacement(new BlockPos(2, 0, 2), applyDirection(CENTER, Direction.EAST));
-		registerPlacement(new BlockPos(3, 1, 3), applyDirection(TOTEM_PAD, Direction.EAST));
+		totemPadPos = registerPlacement(new BlockPos(3, 1, 3), applyDirection(TOTEM_PAD, Direction.EAST));
 		registerPlacement(new BlockPos(3, 2, 3), applyDirection(LOWER_ROD, Direction.EAST));
 		registerPlacement(new BlockPos(3, 3, 3), applyDirection(UPPER_ROD, Direction.EAST));
+	}
+	
+	public boolean isInvalidFromPad(IWorld world, BlockPos pos)
+	{
+		return isInvalidFromPlacement(world, pos, totemPadPos);
 	}
 }
