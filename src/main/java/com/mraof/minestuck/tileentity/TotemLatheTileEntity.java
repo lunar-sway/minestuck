@@ -161,70 +161,76 @@ public class TotemLatheTileEntity extends TileEntity
 	{
 		boolean working = isUseable(clickedState);
 		
-		ItemStack heldStack = player.getHeldItemMainhand();
-		//if they have clicked on the part that holds the chapta cards.
+		//if they have clicked on the part that holds the captcha cards
 		if(clickedState.getBlock() instanceof TotemLatheBlock.Slot)
-		{
-			if(!card1.isEmpty())
-			{
-				if(!card2.isEmpty())
-				{
-					if(player.getHeldItemMainhand().isEmpty())
-						player.setHeldItem(Hand.MAIN_HAND, card2);
-					else if(!player.inventory.addItemStackToInventory(card2))
-						dropItem(false, getPos(), card2);
-					else player.container.detectAndSendChanges();
-					setCard2(ItemStack.EMPTY);
-				} else if(working && heldStack.getItem() == MSItems.CAPTCHA_CARD)
-				{
-					setCard2(heldStack.split(1));
-				} else
-				{
-					if(player.getHeldItemMainhand().isEmpty())
-						player.setHeldItem(Hand.MAIN_HAND, card1);
-					else if(!player.inventory.addItemStackToInventory(card1))
-						dropItem(false, getPos(), card1);
-					else player.container.detectAndSendChanges();
-					setCard1(ItemStack.EMPTY);
-				}
-			} else if(working && heldStack.getItem() == MSItems.CAPTCHA_CARD)
-			{
-				setCard1(heldStack.split(1));
-			}
-		}
+			handleSlotClick(player, working);
 		
 		//if they have clicked the dowel block
 		if(clickedState.getBlock() == MSBlocks.TOTEM_LATHE.ROD.get() || clickedState.getBlock() == MSBlocks.TOTEM_LATHE.DOWEL_ROD.get())
-		{
-			ItemStack dowel = getDowel();
-			if (dowel.isEmpty())
-			{
-				if(working && heldStack.getItem() == MSBlocks.CRUXITE_DOWEL.asItem())
-				{
-					ItemStack copy = heldStack.copy();
-					copy.setCount(1);
-					if(setDowel(copy))
-					{
-						heldStack.shrink(1);
-						
-					}
-				}
-			} else
-			{
-				if(player.getHeldItemMainhand().isEmpty())
-					player.setHeldItem(Hand.MAIN_HAND, dowel);
-				else if(!player.inventory.addItemStackToInventory(dowel))
-					dropItem(true, getPos().up().offset(getFacing().rotateYCCW(), 2), dowel);
-				else player.container.detectAndSendChanges();
-				setDowel(ItemStack.EMPTY);
-			}
-		}
+			handleDowelClick(player, working);
 		
 		//if they have clicked on the lever
 		if(working && clickedState.getBlock() == MSBlocks.TOTEM_LATHE.CARVER.get())
 		{
 			//carve the dowel.
 			processContents();
+		}
+	}
+	
+	private void handleSlotClick(PlayerEntity player, boolean isWorking)
+	{
+		ItemStack heldStack = player.getHeldItemMainhand();
+		if(!card1.isEmpty())
+		{
+			if(!card2.isEmpty())
+			{
+				if(player.getHeldItemMainhand().isEmpty())
+					player.setHeldItem(Hand.MAIN_HAND, card2);
+				else if(!player.inventory.addItemStackToInventory(card2))
+					dropItem(false, getPos(), card2);
+				else player.container.detectAndSendChanges();
+				setCard2(ItemStack.EMPTY);
+			} else if(isWorking && heldStack.getItem() == MSItems.CAPTCHA_CARD)
+			{
+				setCard2(heldStack.split(1));
+			} else
+			{
+				if(player.getHeldItemMainhand().isEmpty())
+					player.setHeldItem(Hand.MAIN_HAND, card1);
+				else if(!player.inventory.addItemStackToInventory(card1))
+					dropItem(false, getPos(), card1);
+				else player.container.detectAndSendChanges();
+				setCard1(ItemStack.EMPTY);
+			}
+		} else if(isWorking && heldStack.getItem() == MSItems.CAPTCHA_CARD)
+		{
+			setCard1(heldStack.split(1));
+		}
+	}
+	
+	private void handleDowelClick(PlayerEntity player, boolean isWorking)
+	{
+		ItemStack heldStack = player.getHeldItemMainhand();
+		ItemStack dowel = getDowel();
+		if (dowel.isEmpty())
+		{
+			if(isWorking && heldStack.getItem() == MSBlocks.CRUXITE_DOWEL.asItem())
+			{
+				ItemStack copy = heldStack.copy();
+				copy.setCount(1);
+				if(setDowel(copy))
+				{
+					heldStack.shrink(1);
+				}
+			}
+		} else
+		{
+			if(player.getHeldItemMainhand().isEmpty())
+				player.setHeldItem(Hand.MAIN_HAND, dowel);
+			else if(!player.inventory.addItemStackToInventory(dowel))
+				dropItem(true, getPos().up().offset(getFacing().rotateYCCW(), 2), dowel);
+			else player.container.detectAndSendChanges();
+			setDowel(ItemStack.EMPTY);
 		}
 	}
 	
@@ -294,16 +300,16 @@ public class TotemLatheTileEntity extends TileEntity
 		ItemStack dowel = getDowel();
 		ItemStack output;
 		boolean success = false;
-		if(!dowel.isEmpty() && !AlchemyRecipes.hasDecodedItem(dowel) &&  (!card1.isEmpty() || !card2.isEmpty()))
+		if(!dowel.isEmpty() && !AlchemyRecipes.hasDecodedItem(dowel) && (!card1.isEmpty() || !card2.isEmpty()))
 		{
 			if(!card1.isEmpty() && !card2.isEmpty())
-				if(!card1.hasTag() || !card1.getTag().getBoolean("punched") || !card2.hasTag() || !card2.getTag().getBoolean("punched"))
+				if(!AlchemyRecipes.isPunchedCard(card1) || !AlchemyRecipes.isPunchedCard(card2))
 					output = new ItemStack(MSBlocks.GENERIC_OBJECT);
 				else output = CombinationRegistry.getCombination(AlchemyRecipes.getDecodedItem(card1), AlchemyRecipes.getDecodedItem(card2), CombinationRegistry.Mode.MODE_AND);
 			else
 			{
 				ItemStack input = card1.isEmpty() ? card2 : card1;
-				if(!input.hasTag() || !input.getTag().getBoolean("punched"))
+				if(!AlchemyRecipes.isPunchedCard(input))
 					output = new ItemStack(MSBlocks.GENERIC_OBJECT);
 				else output = AlchemyRecipes.getDecodedItem(input);
 			}
