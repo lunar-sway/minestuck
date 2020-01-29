@@ -55,12 +55,7 @@ public class AlchemiterTileEntity extends TileEntity
 				BlockState state = world.getBlockState(pos);
 				if(state.has(AlchemiterBlock.Pad.DOWEL))	//If not, then the machine has likely been destroyed; don't bother doing anything about it
 				{
-					if(newDowel.isEmpty())
-						state = state.with(AlchemiterBlock.Pad.DOWEL, EnumDowelType.NONE);
-					else if(AlchemyRecipes.hasDecodedItem(newDowel))
-						state = state.with(AlchemiterBlock.Pad.DOWEL, EnumDowelType.CARVED_DOWEL);
-					else state = state.with(AlchemiterBlock.Pad.DOWEL, EnumDowelType.DOWEL);
-					
+					state = state.with(AlchemiterBlock.Pad.DOWEL, EnumDowelType.getForDowel(newDowel));
 					world.setBlockState(pos, state, 2);
 				}
 			}
