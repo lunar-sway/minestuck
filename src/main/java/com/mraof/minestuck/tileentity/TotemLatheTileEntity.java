@@ -26,57 +26,70 @@ public class TotemLatheTileEntity extends TileEntity
 {
 	private boolean broken = false;
 	//two cards so that we can preform the && alchemy operation
-	protected ItemStack card1 = ItemStack.EMPTY;
-	protected ItemStack card2 = ItemStack.EMPTY;
+	private ItemStack card1 = ItemStack.EMPTY;
+	private ItemStack card2 = ItemStack.EMPTY;
 	
 	public TotemLatheTileEntity()
 	{
 		super(MSTileEntityTypes.TOTEM_LATHE);
 	}
 	
-	//data checking
-	public void setCard1(ItemStack stack)
+	private boolean tryAddCard(ItemStack stack)
+	{
+		if(!isBroken() && stack.getItem() == MSItems.CAPTCHA_CARD)
+		{
+			if(card1.isEmpty())
+				card1 = stack;
+			else if(card2.isEmpty())
+				card2 = stack;
+			else return false;
+			
+			updateState();
+			return true;
+		}
+		return false;
+	}
+	
+	private ItemStack tryTakeCard()
+	{
+		ItemStack card = ItemStack.EMPTY;
+		if(!card2.isEmpty())
+		{
+			card = card2;
+			card2 = ItemStack.EMPTY;
+		} else if(!card1.isEmpty())
+		{
+			card = card1;
+			card1 = ItemStack.EMPTY;
+		}
+		if(!card.isEmpty())
+			updateState();
+		return card;
+	}
+	
+	private void updateState()
+	{
+		int worldCount = getBlockState().get(TotemLatheBlock.Slot.COUNT);
+		int actualCount = getActualCardCount();
+		if(worldCount != actualCount)
+		{
+			world.setBlockState(pos, getBlockState().with(TotemLatheBlock.Slot.COUNT, actualCount));
+		}
+	}
+	
+	private int getActualCardCount()
 	{
 		if(!card2.isEmpty())
-			throw new IllegalStateException("Cannot set first card with the second card!");
-		
-		if(stack.getItem() == MSItems.CAPTCHA_CARD || stack.isEmpty())
-		{
-			card1 = stack;
-			if(world != null)
-			{
-				BlockState state = world.getBlockState(pos);
-				if(!card1.isEmpty())
-					state = state.with(TotemLatheBlock.Slot.COUNT, 1);
-				else state = state.with(TotemLatheBlock.Slot.COUNT, 0);
-				world.setBlockState(pos, state, 2);
-			}
-		}
+			return 2;
+		else if(!card1.isEmpty())
+			return 1;
+		else return 0;
 	}
 	
 	@Nonnull
 	public ItemStack getCard1()
 	{
 		return card1;
-	}
-	
-	public void setCard2(ItemStack stack)
-	{
-		if(card1.isEmpty())
-			throw new IllegalStateException("Cannot set second card without the first card!");
-		
-		if(stack.getItem() == MSItems.CAPTCHA_CARD || stack.isEmpty())
-		{
-			card2 = stack;
-			if(world != null)
-			{
-				BlockState state = world.getBlockState(pos);
-				if(!card2.isEmpty())
-					state = state.with(TotemLatheBlock.Slot.COUNT, 2);
-				else state = state.with(TotemLatheBlock.Slot.COUNT, 1);
-				world.setBlockState(pos, state, 2);
-			}
-		}
 	}
 	
 	public ItemStack getCard2()
@@ -180,31 +193,21 @@ public class TotemLatheTileEntity extends TileEntity
 	private void handleSlotClick(PlayerEntity player, boolean isWorking)
 	{
 		ItemStack heldStack = player.getHeldItemMainhand();
-		if(!card1.isEmpty())
+		ItemStack card = heldStack.copy().split(1);
+		if(tryAddCard(card))
 		{
-			if(!card2.isEmpty())
+			heldStack.shrink(1);
+		} else
+		{
+			card = tryTakeCard();
+			if(!card.isEmpty())
 			{
 				if(player.getHeldItemMainhand().isEmpty())
-					player.setHeldItem(Hand.MAIN_HAND, card2);
-				else if(!player.inventory.addItemStackToInventory(card2))
-					dropItem(false, getPos(), card2);
+					player.setHeldItem(Hand.MAIN_HAND, card);
+				else if(!player.inventory.addItemStackToInventory(card))
+					dropItem(false, getPos(), card);
 				else player.container.detectAndSendChanges();
-				setCard2(ItemStack.EMPTY);
-			} else if(isWorking && heldStack.getItem() == MSItems.CAPTCHA_CARD)
-			{
-				setCard2(heldStack.split(1));
-			} else
-			{
-				if(player.getHeldItemMainhand().isEmpty())
-					player.setHeldItem(Hand.MAIN_HAND, card1);
-				else if(!player.inventory.addItemStackToInventory(card1))
-					dropItem(false, getPos(), card1);
-				else player.container.detectAndSendChanges();
-				setCard1(ItemStack.EMPTY);
 			}
-		} else if(isWorking && heldStack.getItem() == MSItems.CAPTCHA_CARD)
-		{
-			setCard1(heldStack.split(1));
 		}
 	}
 	
