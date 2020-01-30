@@ -9,7 +9,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -36,7 +35,6 @@ public class MultiblockItem extends BlockItem
 	{
 		World world = context.getWorld();
 		Direction sideFace = context.getFace();
-		BlockPos pos = context.getPos();
 		if (world.isRemote)
 		{
 			return ActionResultType.SUCCESS;
@@ -45,33 +43,15 @@ public class MultiblockItem extends BlockItem
 			return ActionResultType.FAIL;
 		} else
 		{
-			BlockState block = world.getBlockState(pos);
-			boolean flag = block.isReplaceable(context);
+			Direction facing = context.getPlacementHorizontalFacing().getOpposite();
+			BlockPos pos = getPlacementPos(context);
 			
-			if (!flag)
-			{
-				pos = pos.up();
-			}
+			if(!canPlaceAt(context, pos, facing))
+				return ActionResultType.FAIL;
 			
-			Direction facing = context.getPlacementHorizontalFacing();
-			ItemStack itemstack = context.getItem();
-			
-			pos = pos.offset(facing.rotateYCCW());
-			
-			if(facing == Direction.WEST && context.getHitVec().z >= 0.5F || facing == Direction.EAST && context.getHitVec().z < 0.5F
-					|| facing == Direction.NORTH && context.getHitVec().x < 0.5F || facing == Direction.SOUTH && context.getHitVec().x >= 0.5F)
-				pos = pos.offset(facing.rotateYCCW());
-			
-			if (!itemstack.isEmpty())
-			{
-				if(!canPlaceAt(context, pos, facing))
-					return ActionResultType.FAIL;
-				
-				BlockState state = getBlock().getDefaultState().with(AlchemiterBlock.FACING, facing);
-				this.placeBlock(context, state);
-				return ActionResultType.SUCCESS;
-			}
-			return ActionResultType.FAIL;
+			BlockState state = getBlock().getDefaultState().with(AlchemiterBlock.FACING, facing);
+			this.placeBlock(context, state);
+			return ActionResultType.SUCCESS;
 		}
 	}
 	
@@ -82,11 +62,11 @@ public class MultiblockItem extends BlockItem
 		{
 			for(int z = boundingBox.minZ; z <= boundingBox.maxZ; z++)
 			{
-				if(!context.getPlayer().canPlayerEdit(pos.offset(facing.rotateY(), x).offset(facing, z), Direction.UP, context.getItem()))
+				if(!context.getPlayer().canPlayerEdit(pos.add(x, 0, z), Direction.UP, context.getItem()))
 					return false;
 				for(int y = boundingBox.minY; y <= boundingBox.maxY; y++)
 				{
-					if(!context.getWorld().getBlockState(pos.offset(facing, z).offset(facing.rotateY(), x).up(y)).isReplaceable(context))
+					if(!context.getWorld().getBlockState(pos.add(x, y, z)).isReplaceable(context))
 						return false;
 				}
 			}
@@ -97,22 +77,30 @@ public class MultiblockItem extends BlockItem
 	@Override
 	protected boolean placeBlock(BlockItemUseContext context, BlockState newState)
 	{
-		BlockPos pos = context.getPos();
 		World world = context.getWorld();
-		PlayerEntity player = context.getPlayer();
 		if(!world.isRemote)
 		{
-			Direction facing = context.getPlacementHorizontalFacing().getOpposite();
+			BlockPos pos = getPlacementPos(context);
 			
-			double hitX = context.getHitVec().x - pos.getX(), hitZ = context.getHitVec().z - pos.getZ();
-			pos = getPlacementPos(pos, facing, hitX, hitZ);
+			multiblock.placeWithRotation(world, pos, MSRotationUtil.fromDirection(context.getPlacementHorizontalFacing().getOpposite()));
 			
-			multiblock.placeWithRotation(world, pos, MSRotationUtil.fromDirection(facing));
-			
+			PlayerEntity player = context.getPlayer();
 			if(player instanceof ServerPlayerEntity)
 				CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayerEntity) player, pos, context.getItem());
 		}
 		return true;
+	}
+	
+	private BlockPos getPlacementPos(BlockItemUseContext context)
+	{
+		BlockPos pos = context.getPos();
+		if(!context.getWorld().getBlockState(pos).isReplaceable(context))
+		{
+			pos = pos.up();
+		}
+		Direction facing = context.getPlacementHorizontalFacing().getOpposite();
+		
+		return getPlacementPos(pos, facing, context.getHitVec().x - pos.getX(), context.getHitVec().z - pos.getZ());
 	}
 	
 	public BlockPos getPlacementPos(BlockPos pos, Direction direction, double hitX, double hitZ)

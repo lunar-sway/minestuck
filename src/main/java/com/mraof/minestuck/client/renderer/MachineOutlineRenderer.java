@@ -79,9 +79,9 @@ public class MachineOutlineRenderer
 			GlStateManager.disableTexture();
 			GlStateManager.depthMask(false);	//GL stuff was copied from the standard mouseover bounding box drawing, which is likely why the alpha isn't working
 			
-			placeable = item.canPlaceAt(context, pos, placedFacing);
-			
 			pos = item.getPlacementPos(pos, placedFacing, hitX, hitZ);
+			
+			placeable = item.canPlaceAt(context, pos, placedFacing);
 			
 			if(item == MSItems.ALCHEMITER)//Alchemiter
 			{
