@@ -1,6 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.util.ColorCollector;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -11,7 +12,7 @@ import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
 
-public class ItemStackTileEntity extends TileEntity
+public class ItemStackTileEntity extends TileEntity implements IColored
 {
 	public static final ResourceLocation ITEM_DYNAMIC = new ResourceLocation(Minestuck.MOD_ID, "item");
 	
@@ -34,6 +35,12 @@ public class ItemStackTileEntity extends TileEntity
 			this.stack = stack;
 			markDirty();
 		}
+	}
+	
+	@Override
+	public int getColor()
+	{
+		return ColorCollector.getColorFromStack(stack);
 	}
 	
 	@Override

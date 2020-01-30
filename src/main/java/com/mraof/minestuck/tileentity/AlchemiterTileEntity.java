@@ -8,10 +8,7 @@ import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.*;
-import com.mraof.minestuck.util.AlchemiterUpgrades;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.util.PlayerIdentifier;
+import com.mraof.minestuck.util.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;
@@ -28,8 +25,9 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.Constants;
 
-public class AlchemiterTileEntity extends TileEntity
+public class AlchemiterTileEntity extends TileEntity implements IColored
 {
 	
 	protected GristType wildcardGrist = GristTypes.BUILD;
@@ -50,6 +48,7 @@ public class AlchemiterTileEntity extends TileEntity
 		if(newDowel.getItem() == MSBlocks.CRUXITE_DOWEL.asItem() || newDowel.isEmpty())
 		{
 			dowel = newDowel;
+			markDirty();
 			if(world != null)
 			{
 				BlockState state = world.getBlockState(pos);
@@ -59,13 +58,18 @@ public class AlchemiterTileEntity extends TileEntity
 					world.setBlockState(pos, state, 2);
 				}
 			}
-			markDirty();
 		}
 	}
 	
 	public ItemStack getDowel()
 	{
 		return dowel;
+	}
+	
+	@Override
+	public int getColor()
+	{
+		return ColorCollector.getColorFromStack(dowel);
 	}
 	
 	public ItemStack getOutput()
@@ -258,8 +262,13 @@ public class AlchemiterTileEntity extends TileEntity
 		
 		broken = compound.getBoolean("broken");
 		
+		ItemStack oldDowel = dowel;
 		if(compound.contains("dowel"))
 			dowel = ItemStack.read(compound.getCompound("dowel"));
+		
+		//This a slight hack to force a rerender (since it at the time of writing normally happens before we get the update packet). This should not be done normally
+		if(world != null && world.isRemote && !ItemStack.areItemStacksEqual(oldDowel, dowel))
+			world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), Constants.BlockFlags.RERENDER_MAIN_THREAD);
 	}
 	
 	@Override
