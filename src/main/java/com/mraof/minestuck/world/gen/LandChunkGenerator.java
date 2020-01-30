@@ -1,6 +1,6 @@
 package com.mraof.minestuck.world.gen;
 
-import com.mraof.minestuck.skaianet.SburbHandler;
+import com.mraof.minestuck.skaianet.UnderlingController;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandTypePair;
@@ -125,7 +125,7 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 		if(creatureType == EntityClassification.MONSTER)	//Combine biome spawn with underling spawn
 		{
 			List<Biome.SpawnListEntry> list = new ArrayList<>(super.getPossibleCreatures(creatureType, pos));
-			list.addAll(SburbHandler.getUnderlingList(pos, world.getWorld()));
+			list.addAll(UnderlingController.getUnderlingList(pos, world.getWorld()));
 			return list;
 		}
 		return super.getPossibleCreatures(creatureType, pos);
