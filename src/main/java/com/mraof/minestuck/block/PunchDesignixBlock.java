@@ -67,22 +67,13 @@ public class PunchDesignixBlock extends MultiMachineBlock
 			if(te instanceof PunchDesignixTileEntity)
 			{
 				PunchDesignixTileEntity designix = (PunchDesignixTileEntity) te;
-				designix.broken = true;
+				designix.breakMachine();
 				if(hasTileEntity(state))
 					designix.dropItem(true);
 			}
 			
 			super.onReplaced(state, worldIn, pos, newState, isMoving);
 		}
-	}
-	
-	@Override
-	@SuppressWarnings("deprecation")
-	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
-	{
-		TileEntity te = worldIn.getTileEntity(pos);
-		if(te instanceof PunchDesignixTileEntity)
-			((PunchDesignixTileEntity) te).checkStates();
 	}
 	
     /**

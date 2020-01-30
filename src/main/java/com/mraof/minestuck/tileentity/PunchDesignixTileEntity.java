@@ -42,6 +42,12 @@ public class PunchDesignixTileEntity extends TileEntity
 		}
 	}
 	
+	public void breakMachine()
+	{
+		broken = true;
+		markDirty();
+	}
+	
 	private void updateState()
 	{
 		if(world != null && !world.isRemote)
