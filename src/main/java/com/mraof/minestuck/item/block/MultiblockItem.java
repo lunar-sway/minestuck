@@ -51,6 +51,7 @@ public class MultiblockItem extends BlockItem
 			
 			BlockState state = getBlock().getDefaultState().with(AlchemiterBlock.FACING, facing);
 			this.placeBlock(context, state);
+			onBlockPlaced(pos, world, context.getPlayer(), context.getItem(), state);
 			return ActionResultType.SUCCESS;
 		}
 	}

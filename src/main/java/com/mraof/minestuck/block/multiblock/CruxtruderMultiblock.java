@@ -5,6 +5,7 @@ import com.mraof.minestuck.block.MSBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.RegistryObject;
 
@@ -14,8 +15,10 @@ public class CruxtruderMultiblock extends MachineMultiblock
 {
 	public final RegistryObject<Block> CORNER = register("cruxtruder_corner", () -> new CruxtruderBlock(this, CRUXTRUDER_BASE_CORNER, false, new BlockPos(1, 1, 1), Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F).noDrops()));
 	public final RegistryObject<Block> SIDE = register("cruxtruder_side", () -> new CruxtruderBlock(this, CRUXTRUDER_BASE_SIDE, false, new BlockPos(0, 1, 1), Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F).noDrops()));
-	public final RegistryObject<Block> CENTER = register("cruxtruder_center", () -> new CruxtruderBlock(this, CRUXTRUDER_CENTER, true, new BlockPos(0, 1, 0), Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F).noDrops()));
-	public final RegistryObject<Block> TUBE = register("cruxtruder_tube", () -> new CruxtruderBlock(this, CRUXTRUDER_TUBE, false, new BlockPos(0, 0, 0), Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F).noDrops()));
+	public final RegistryObject<Block> CENTER = register("cruxtruder_center", () -> new CruxtruderBlock(this, CRUXTRUDER_CENTER, false, new BlockPos(0, 1, 0), Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F).noDrops()));
+	public final RegistryObject<Block> TUBE = register("cruxtruder_tube", () -> new CruxtruderBlock(this, CRUXTRUDER_TUBE, true, new BlockPos(0, 0, 0), Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F).noDrops()));
+	
+	private final PlacementEntry tubePlacement;
 	
 	public CruxtruderMultiblock(String modId)
 	{
@@ -29,8 +32,13 @@ public class CruxtruderMultiblock extends MachineMultiblock
 		registerPlacement(new BlockPos(0, 0, 2), applyDirection(CORNER, Direction.WEST));
 		registerPlacement(new BlockPos(0, 0, 1), applyDirection(SIDE, Direction.WEST));
 		registerPlacement(new BlockPos(1, 0, 1), applyDirection(CENTER, Direction.NORTH));
-		registerPlacement(new BlockPos(1, 1, 1), applyDirection(TUBE, Direction.NORTH));
+		tubePlacement = registerPlacement(new BlockPos(1, 1, 1), applyDirection(TUBE, Direction.NORTH));
 		//noinspection Convert2MethodRef
 		registerPlacement(new BlockPos(1, 2, 1), () -> MSBlocks.CRUXTRUDER_LID.getDefaultState(), (state1, state2) -> true);
+	}
+	
+	public BlockPos getTilePos(BlockPos placementPos, Rotation rotation)
+	{
+		return tubePlacement.getPos(placementPos, rotation);
 	}
 }
