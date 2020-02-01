@@ -119,11 +119,11 @@ public class MSBlocks
 	//Misc Functional Land Blocks
 	
 	//Sburb Machines
-	public static CruxtruderMultiblock CRUXTRUDER;	//TODO Figure out how the multiblocks should fit in with objectholders
 	public static final Block CRUXTRUDER_LID = getNull();
-	public static TotemLatheMultiblock TOTEM_LATHE;
-	public static AlchemiterMultiblock ALCHEMITER;
-	public static PunchDesignixMultiblock PUNCH_DESIGNIX;
+	public static CruxtruderMultiblock CRUXTRUDER = new CruxtruderMultiblock(Minestuck.MOD_ID);
+	public static TotemLatheMultiblock TOTEM_LATHE = new TotemLatheMultiblock(Minestuck.MOD_ID);
+	public static AlchemiterMultiblock ALCHEMITER = new AlchemiterMultiblock(Minestuck.MOD_ID);
+	public static PunchDesignixMultiblock PUNCH_DESIGNIX = new PunchDesignixMultiblock(Minestuck.MOD_ID);
 	public static final Block MINI_CRUXTRUDER = getNull();
 	public static final Block MINI_TOTEM_LATHE = getNull();
 	public static final Block MINI_ALCHEMITER = getNull();
@@ -369,14 +369,10 @@ public class MSBlocks
 		registry.register(new GateBlock(Block.Properties.create(Material.PORTAL).doesNotBlockMovement().hardnessAndResistance(-1.0F, 25.0F).sound(SoundType.GLASS).lightValue(11).noDrops()).setRegistryName("gate"));
 		registry.register(new ReturnNodeBlock(Block.Properties.create(Material.PORTAL).doesNotBlockMovement().hardnessAndResistance(-1.0F, 10.0F).sound(SoundType.GLASS).lightValue(11).noDrops()).setRegistryName("return_node"));
 		
-		CRUXTRUDER = new CruxtruderMultiblock();
 		CRUXTRUDER.registerBlocks(registry);
 		registry.register(new CruxtruderLidBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(1.0F)).setRegistryName("cruxtruder_lid"));
-		TOTEM_LATHE = new TotemLatheMultiblock();
 		TOTEM_LATHE.registerBlocks(registry);
-		ALCHEMITER = new AlchemiterMultiblock();
 		ALCHEMITER.registerBlocks(registry);
-		PUNCH_DESIGNIX = new PunchDesignixMultiblock();
 		PUNCH_DESIGNIX.registerBlocks(registry);
 		registry.register(new SmallMachineBlock(MSBlockShapes.SMALL_CRUXTRUDER.createRotatedShapes(), () -> MSTileEntityTypes.MINI_CRUXTRUDER, Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("mini_cruxtruder"));
 		registry.register(new SmallMachineBlock(MSBlockShapes.SMALL_TOTEM_LATHE.createRotatedShapes(), () -> MSTileEntityTypes.MINI_TOTEM_LATHE, Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("mini_totem_lathe"));

@@ -2,11 +2,8 @@ package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
-import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.item.CruxiteArtifactItem;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.network.MSPacketHandler;
@@ -25,18 +22,15 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome.SpawnListEntry;
 import net.minecraft.world.dimension.DimensionType;
 
 import java.util.*;
 
 /**
  * A class for managing sburb-related stuff from outside this package that is dependent on connections and sessions.
- * For example: Titles, land aspects, underling grist types, entry items etc.
+ * For example: Titles, land aspects, entry items etc.
  * @author kirderf1
  */
 public class SburbHandler
@@ -594,70 +588,6 @@ public class SburbHandler
 			terrainAspect = aspectGen.getTerrainAspect(titleAspect, usedTerrainAspects);
 		
 		return new LandTypePair(terrainAspect, titleAspect);
-	}
-	
-	public static GristType getUnderlingType(UnderlingEntity entity)
-	{
-		return GristHelper.getPrimaryGrist();
-	}
-	
-	private static List<SpawnListEntry>[] difficultyList = new ArrayList[31];
-	
-	public static List<SpawnListEntry> getUnderlingList(BlockPos pos, World world)
-	{
-		
-		BlockPos spawn = world.getSpawnPoint();
-		
-		int difficulty = (int) Math.round(Math.sqrt(new Vec3i(pos.getX() >> 4, 0, pos.getZ() >> 4).distanceSq(new Vec3i(spawn.getX() >> 4, 0, spawn.getZ() >> 4))));
-		
-		difficulty = Math.min(30, difficulty/3);
-		
-		if(difficultyList[difficulty] != null)
-			return difficultyList[difficulty];
-		
-		ArrayList<SpawnListEntry> list = new ArrayList<SpawnListEntry>();
-		
-		int impWeight, ogreWeight = 0, basiliskWeight = 0, lichWeight = 0, giclopsWeight = 0;
-		
-		if(difficulty < 8)
-			impWeight = difficulty + 1;
-		else
-		{
-			impWeight = 8 - (difficulty - 8)/3;
-			if(difficulty < 20)
-				ogreWeight = (difficulty - 5)/3;
-			else ogreWeight = 5 - (difficulty - 20)/3;
-			
-			if(difficulty >= 16)
-			{
-				if(difficulty < 26)
-					basiliskWeight = (difficulty - 14)/2;
-				else basiliskWeight = 6;
-				if(difficulty < 28)
-					lichWeight = (difficulty - 12)/3;
-				else lichWeight = 6;
-				if(difficulty >= 20)
-					if(difficulty < 30)
-						giclopsWeight = (difficulty - 17)/3;
-					else giclopsWeight = 5;
-			}
-		}
-		
-		if(impWeight > 0)
-			list.add(new SpawnListEntry(MSEntityTypes.IMP, impWeight, Math.max(1, (int)(impWeight/2.5)), Math.max(3, impWeight)));
-		if(ogreWeight > 0)
-			list.add(new SpawnListEntry(MSEntityTypes.OGRE, ogreWeight, ogreWeight >= 5 ? 2 : 1, Math.max(1, ogreWeight/2)));
-		if(basiliskWeight > 0)
-			list.add(new SpawnListEntry(MSEntityTypes.BASILISK, basiliskWeight, 1, Math.max(1, basiliskWeight/2)));
-		if(lichWeight > 0)
-			list.add(new SpawnListEntry(MSEntityTypes.LICH, lichWeight, 1, Math.max(1, lichWeight/2)));
-		if(giclopsWeight > 0 && !MinestuckConfig.disableGiclops.get())
-			list.add(new SpawnListEntry(MSEntityTypes.GICLOPS, giclopsWeight, 1, Math.max(1, giclopsWeight/2)));
-		//TODO Add hook for addons to add more underlings
-		
-		difficultyList[difficulty] = list;
-		
-		return list;
 	}
 	
 	static void onFirstItemGiven(SburbConnection connection)

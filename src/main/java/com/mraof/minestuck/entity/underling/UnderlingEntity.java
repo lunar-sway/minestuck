@@ -10,7 +10,7 @@ import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
-import com.mraof.minestuck.skaianet.SburbHandler;
+import com.mraof.minestuck.skaianet.UnderlingController;
 import com.mraof.minestuck.util.*;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
@@ -246,7 +246,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	{
 		if(compound.contains("Type", Constants.NBT.TAG_STRING))
 			applyGristType(GristType.read(compound, "Type", GristTypes.ARTIFACT), false);
-		else applyGristType(SburbHandler.getUnderlingType(this), true);
+		else applyGristType(UnderlingController.getUnderlingType(this), true);
 		super.readAdditional(compound);
 		
 		fromSpawner = compound.getBoolean("Spawned");
@@ -270,7 +270,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	{
 		if(!(spawnDataIn instanceof UnderlingData))
 		{
-			applyGristType(SburbHandler.getUnderlingType(this), true);
+			applyGristType(UnderlingController.getUnderlingType(this), true);
 			spawnDataIn = new UnderlingData(getGristType());
 		} else
 		{

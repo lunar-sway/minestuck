@@ -15,6 +15,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.List;
 
@@ -149,7 +150,7 @@ public class CustomBoatItem extends Item
 		@Override
 		protected void playDispenseSound(IBlockSource source)
 		{
-			source.getWorld().playEvent(1000, source.getBlockPos(), 0);
+			source.getWorld().playEvent(Constants.WorldEvents.DISPENSER_DISPENSE_SOUND, source.getBlockPos(), 0);
 		}
 	}
 	

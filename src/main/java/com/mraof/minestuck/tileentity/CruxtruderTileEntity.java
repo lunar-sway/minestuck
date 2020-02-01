@@ -11,8 +11,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.util.Constants;
 
-public class CruxtruderTileEntity extends TileEntity
+public class CruxtruderTileEntity extends TileEntity	//TODO check if it is broken
 {
 	private int color = -1;
 	private boolean broken = false;
@@ -70,7 +71,7 @@ public class CruxtruderTileEntity extends TileEntity
 				{
 					if(MinestuckConfig.cruxtruderIntake.get() && material == 0)
 					{
-						world.playEvent(1001, pos, 0);
+						world.playEvent(Constants.WorldEvents.DISPENSER_FAIL_SOUND, pos, 0);
 					} else
 					{
 						world.setBlockState(pos, MSBlocks.CRUXITE_DOWEL.getDefaultState().with(CruxiteDowelBlock.DOWEL_TYPE, CruxiteDowelBlock.Type.CRUXTRUDER));

@@ -7,6 +7,7 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.WorldEventUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -24,8 +25,8 @@ import static com.mraof.minestuck.block.MachineBlock.FACING;
 
 public class PunchDesignixTileEntity extends TileEntity
 {
-	public boolean broken = false;
-	protected ItemStack card = ItemStack.EMPTY;
+	private boolean broken = false;
+	private ItemStack card = ItemStack.EMPTY;
 	
 	public PunchDesignixTileEntity()
 	{
@@ -37,13 +38,24 @@ public class PunchDesignixTileEntity extends TileEntity
 		if (card.getItem() == MSItems.CAPTCHA_CARD || card.isEmpty())
 		{
 			this.card = card;
-			if(world != null && !world.isRemote)
-			{
-				BlockState state = world.getBlockState(pos);
-				boolean hasCard = !card.isEmpty();
-				if(state.has(PunchDesignixBlock.Slot.HAS_CARD) && hasCard != state.get(PunchDesignixBlock.Slot.HAS_CARD))
-					world.setBlockState(pos, state.with(PunchDesignixBlock.Slot.HAS_CARD, hasCard), 2);
-			}
+			updateState();
+		}
+	}
+	
+	public void breakMachine()
+	{
+		broken = true;
+		markDirty();
+	}
+	
+	private void updateState()
+	{
+		if(world != null && !world.isRemote)
+		{
+			BlockState state = world.getBlockState(pos);
+			boolean hasCard = !card.isEmpty();
+			if(state.has(PunchDesignixBlock.Slot.HAS_CARD) && hasCard != state.get(PunchDesignixBlock.Slot.HAS_CARD))
+				world.setBlockState(pos, state.with(PunchDesignixBlock.Slot.HAS_CARD, hasCard), 2);
 		}
 	}
 	
@@ -55,9 +67,22 @@ public class PunchDesignixTileEntity extends TileEntity
 	
 	public void onRightClick(ServerPlayerEntity player, BlockState clickedState)
 	{
+		validateMachine();
+		
 		Block part = clickedState.getBlock();
-		if (part == MSBlocks.PUNCH_DESIGNIX.SLOT && !getCard().isEmpty())
-		{    //Remove card from punch slot
+		if (part instanceof PunchDesignixBlock.Slot)
+		{
+			handleSlotClick(player);
+		} else if(isUsable(clickedState) && (part == MSBlocks.PUNCH_DESIGNIX.KEYBOARD.get() || part == MSBlocks.PUNCH_DESIGNIX.RIGHT_LEG.get()))
+		{
+			handleKeyboardClick(player);
+		}
+	}
+	
+	private void handleSlotClick(ServerPlayerEntity player)
+	{
+		if(!getCard().isEmpty())
+		{
 			if (player.getHeldItemMainhand().isEmpty())
 				player.setHeldItem(Hand.MAIN_HAND, getCard());
 			else if (!player.inventory.addItemStackToInventory(getCard()))
@@ -65,92 +90,61 @@ public class PunchDesignixTileEntity extends TileEntity
 			else player.container.detectAndSendChanges();
 			
 			setCard(ItemStack.EMPTY);
-			return;
-		}
-		
-		if (isUseable(clickedState))
+		} else if(!broken)
 		{
 			ItemStack heldStack = player.getHeldItemMainhand();
-			if (part == MSBlocks.PUNCH_DESIGNIX.SLOT && getCard().isEmpty())
+			if(!heldStack.isEmpty() && heldStack.getItem() == MSItems.CAPTCHA_CARD)
+				setCard(heldStack.split(1));    //Insert card into the punch slot
+		}
+	}
+	
+	private void handleKeyboardClick(ServerPlayerEntity player)
+	{
+		ItemStack heldStack = player.getHeldItemMainhand();
+		if(heldStack.getItem() != MSItems.CAPTCHA_CARD)
+			return;    //Not a valid item in hand
+		
+		if(getCard().getItem() == MSItems.CAPTCHA_CARD)
+		{
+			ItemStack input1 = AlchemyRecipes.getDecodedItem(heldStack);
+			if(!input1.isEmpty())
 			{
-				if (!heldStack.isEmpty() && heldStack.getItem() == MSItems.CAPTCHA_CARD)
-					setCard(heldStack.split(1));    //Insert card into the punch slot
-				
-			} else if (part == MSBlocks.PUNCH_DESIGNIX.KEYBOARD || part == MSBlocks.PUNCH_DESIGNIX.RIGHT_LEG)
-			{
-				if (heldStack.isEmpty() || heldStack.getItem() != MSItems.CAPTCHA_CARD)
-					return;    //Not a valid item in hand
-				
-				if (!getCard().isEmpty() && getCard().getItem() == MSItems.CAPTCHA_CARD &&
-						heldStack.hasTag() && heldStack.getTag().contains("contentID"))
+				ItemStack output;
+				ItemStack input2 = AlchemyRecipes.isPunchedCard(getCard()) ? AlchemyRecipes.getDecodedItem(getCard()) : ItemStack.EMPTY;
+				if(!input2.isEmpty())	//|| combination
 				{
-					ItemStack output = AlchemyRecipes.getDecodedItem(heldStack);
-					if (!output.isEmpty())
-					{
-						if(AlchemyRecipes.isPunchedCard(getCard()))
-						{    //|| combination
-							output = CombinationRegistry.getCombination(output, AlchemyRecipes.getDecodedItem(getCard()), CombinationRegistry.Mode.MODE_OR);
-							if(!output.isEmpty())
-							{
-								MSCriteriaTriggers.PUNCH_DESIGNIX.trigger(player, AlchemyRecipes.getDecodedItem(heldStack), AlchemyRecipes.getDecodedItem(getCard()), output);
-								setCard(AlchemyRecipes.createCard(output, true));
-								effects(true);
-								return;
-							}
-						} else    //Just punch the card regularly
-						{
-							MSCriteriaTriggers.PUNCH_DESIGNIX.trigger(player, output, ItemStack.EMPTY, output);
-							setCard(AlchemyRecipes.createCard(output, true));
-							effects(true);
-							
-							return;
-						}
-					}
+					output = CombinationRegistry.getCombination(input1, input2, CombinationRegistry.Mode.MODE_OR);
+				} else output = input1;
+				
+				if(!output.isEmpty())
+				{
+					MSCriteriaTriggers.PUNCH_DESIGNIX.trigger(player, input1, input2, output);
+					setCard(AlchemyRecipes.createCard(output, true));
+					effects(true);
+					return;
 				}
-				effects(false);
 			}
 		}
+		effects(false);
 	}
 	
 	private void effects(boolean success)
 	{
-		world.playEvent(success ? 1000 : 1001, pos, 0);
-		if (success)
-		{
-			Direction direction = getBlockState().get(FACING);
-			int i = direction.getXOffset() + 1 + (direction.getZOffset() + 1) * 3;
-			world.playEvent(2000, pos, i);
-		}
+		WorldEventUtil.dispenserEffect(getWorld(), getPos(), getBlockState().get(FACING), success);
 	}
 	
-	private boolean isUseable(BlockState state)
+	private boolean isUsable(BlockState state)
 	{
-		BlockState currentState = getWorld().getBlockState(getPos());
-		if(!broken)
-		{
-			checkStates();
-			if(broken)
-				Debug.warnf("Failed to notice a block being broken or misplaced at the punch designix at %s", getPos());
-		}
-		if(!state.get(FACING).equals(currentState.get(FACING)))
-			return false;
-		return !broken;
+		return !broken && state.get(FACING).equals(getBlockState().get(FACING));
 	}
 	
-	public void checkStates()
+	private void validateMachine()
 	{
 		if (broken || world == null)
 			return;
 		
-		BlockState currentState = world.getBlockState(getPos());
-		Direction facing = currentState.get(FACING);
-		Direction hOffset = facing.rotateYCCW();
-		if (!world.getBlockState(getPos().offset(hOffset)).equals(MSBlocks.PUNCH_DESIGNIX.KEYBOARD.getDefaultState().with(FACING, facing)) ||
-				!world.getBlockState(getPos().down()).equals(MSBlocks.PUNCH_DESIGNIX.LEFT_LEG.getDefaultState().with(FACING, facing)) ||
-				!world.getBlockState(getPos().down().offset(hOffset)).equals(MSBlocks.PUNCH_DESIGNIX.RIGHT_LEG.getDefaultState().with(FACING, facing)))
-		{
+		if(MSBlocks.PUNCH_DESIGNIX.isInvalidFromSlot(world, getPos()))
 			broken = true;
-		}
 	}
 	
 	public void dropItem(boolean inBlock)
