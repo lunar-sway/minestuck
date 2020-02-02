@@ -12,6 +12,7 @@ import com.mraof.minestuck.tileentity.AlchemiterTileEntity;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 
@@ -37,27 +38,18 @@ public class AlchemiterScreen extends Screen
 		return alchemiter;
 	}
 	
-	Button alchemize;
-	
-	Button hundredsUp;
-	Button tensUp;
-	Button onesUp;
-	Button hundredsDown;
-	Button tensDown;
-	Button onesDown;
-	
 	@Override
 	protected void init()
 	{
-		alchemize = new GuiButtonExt((width-100)/2,(height-guiHeight)/2+110, 100, 20, "ALCHEMIZE", button -> alchemize());
+		Button alchemize = new GuiButtonExt((width - 100) / 2, (height - guiHeight) / 2 + 110, 100, 20, "ALCHEMIZE", button -> alchemize());
 		
-		hundredsUp = new GuiButtonExt((width-guiWidth)/2+52,(height-guiHeight)/2+10,18,18,"^", button -> changeAmount(100));
-		tensUp = new GuiButtonExt((width-guiWidth)/2+31,(height-guiHeight)/2+10,18,18,"^", button -> changeAmount(10));
-		onesUp = new GuiButtonExt((width-guiWidth)/2+10,(height-guiHeight)/2+10,18,18,"^", button -> changeAmount(1));
-		hundredsDown = new GuiButtonExt((width-guiWidth)/2+52,(height-guiHeight)/2+74,18,18,"v", button -> changeAmount(-100));
-		tensDown =new GuiButtonExt((width-guiWidth)/2+31,(height-guiHeight)/2+74,18,18,"v", button -> changeAmount(-10));
-		onesDown = new GuiButtonExt((width-guiWidth)/2+10,(height-guiHeight)/2+74,18,18,"v", button -> changeAmount(-1));
-
+		Button hundredsUp = new GuiButtonExt((width - guiWidth) / 2 + 10, (height - guiHeight) / 2 + 10, 18, 18, "^", button -> changeAmount(100));
+		Button tensUp = new GuiButtonExt((width - guiWidth) / 2 + 31, (height - guiHeight) / 2 + 10, 18, 18, "^", button -> changeAmount(10));
+		Button onesUp = new GuiButtonExt((width - guiWidth) / 2 + 52, (height - guiHeight) / 2 + 10, 18, 18, "^", button -> changeAmount(1));
+		Button hundredsDown = new GuiButtonExt((width - guiWidth) / 2 + 10, (height - guiHeight) / 2 + 74, 18, 18, "v", button -> changeAmount(-100));
+		Button tensDown = new GuiButtonExt((width - guiWidth) / 2 + 31, (height - guiHeight) / 2 + 74, 18, 18, "v", button -> changeAmount(-10));
+		Button onesDown = new GuiButtonExt((width - guiWidth) / 2 + 52, (height - guiHeight) / 2 + 74, 18, 18, "v", button -> changeAmount(-1));
+		
 		addButton(alchemize);
 		GristSet cost = alchemiter.getGristCost(1);
 		//don't add the buttons if the item is free or unalchemizeable
@@ -86,9 +78,9 @@ public class AlchemiterScreen extends Screen
 		this.minecraft.getTextureManager().bindTexture(guiBackground);
 		this.blit(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
-		font.drawString(Integer.toString(((int) (itemQuantity / Math.pow(10, 2)) % 10)), (width - guiWidth) / 2 + 15, (height - guiHeight) / 2 + 46, 16777215);
-		font.drawString(Integer.toString(((int) (itemQuantity / Math.pow(10, 1)) % 10)), (width - guiWidth) / 2 + 36, (height - guiHeight) / 2 + 46, 16777215);
-		font.drawString(Integer.toString(((int) (itemQuantity / Math.pow(10, 0)) % 10)), (width - guiWidth) / 2 + 57, (height - guiHeight) / 2 + 46, 16777215);
+		font.drawString(Integer.toString(((int) (itemQuantity / Math.pow(10, 2)) % 10)), (width - guiWidth) / 2F + 15, (height - guiHeight) / 2F + 46, 16777215);
+		font.drawString(Integer.toString(((int) (itemQuantity / Math.pow(10, 1)) % 10)), (width - guiWidth) / 2F + 36, (height - guiHeight) / 2F + 46, 16777215);
+		font.drawString(Integer.toString(((int) (itemQuantity / Math.pow(10, 0)) % 10)), (width - guiWidth) / 2F + 57, (height - guiHeight) / 2F + 46, 16777215);
 		
 		//Render grist requirements
 		
@@ -123,21 +115,8 @@ public class AlchemiterScreen extends Screen
 		//the amount the button changes the amount
 		int result = itemQuantity + change;
 		int maxCount = Math.min(999, alchemiter.getOutput().getMaxStackSize() * MinestuckConfig.alchemiterMaxStacks.get());
-			//custom modulo function
-			if(result > maxCount)
-			{
-				result = itemQuantity - (maxCount / change) * change;
-				//because it's only a problem about half the time
-				if(result <= 0)
-					result += change;
-			} else if(result <= 0)
-			{
-				result = itemQuantity + (maxCount / change) * change;
-				//because it's only a problem about half the time
-				if(result > maxCount)
-					itemQuantity += change;
-			}
-		itemQuantity = result;
+		
+		itemQuantity = MathHelper.clamp(result, 1, maxCount);
 	}
 	
 	@Override
@@ -145,7 +124,7 @@ public class AlchemiterScreen extends Screen
 	{
 		if(mouseButton == 0 && minecraft.player.inventory.getItemStack().isEmpty()
 				&& alchemiter.getDowel() != null && AlchemyRecipes.getDecodedItem(alchemiter.getDowel()).getItem() == MSItems.CAPTCHA_CARD
-				&& mouseX >= (width-guiWidth)/2 +80  && mouseX < (width-guiWidth)/2 + 150 && mouseY >= (height-guiHeight)/2 + 8 && mouseY < (height-guiHeight)/2 + 93)
+				&& mouseX >= (width-guiWidth)/2F +80  && mouseX < (width-guiWidth)/2F + 150 && mouseY >= (height-guiHeight)/2F + 8 && mouseY < (height-guiHeight)/2F + 93)
 		{
 			minecraft.currentScreen = new GristSelectorScreen(this);
 			minecraft.currentScreen.init(minecraft, width, height);
