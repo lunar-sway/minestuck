@@ -28,7 +28,6 @@ public class Minestuck
 		
 		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, MinestuckConfig.CLIENT_CONFIG);
 		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, MinestuckConfig.SERVER_CONFIG);
-		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, MinestuckConfig.COMMON_CONFIG);
 		
 		WorldPersistenceHooks.addHook(new MSWorldPersistenceHook());
 		
