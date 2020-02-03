@@ -1,8 +1,8 @@
 package com.mraof.minestuck.item.crafting.alchemy;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.editmode.EditData;
-import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.computer.editmode.EditData;
+import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.GristDropsEvent;
 import com.mraof.minestuck.skaianet.SburbConnection;

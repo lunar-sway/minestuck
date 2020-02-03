@@ -1,7 +1,7 @@
 package com.mraof.minestuck;
 
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
-import com.mraof.minestuck.editmode.DeployList;
+import com.mraof.minestuck.computer.editmode.DeployList;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortDialogue;
 import com.mraof.minestuck.entity.consort.ConsortRewardHandler;

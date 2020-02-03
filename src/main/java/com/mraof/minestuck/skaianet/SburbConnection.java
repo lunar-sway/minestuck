@@ -1,9 +1,9 @@
 package com.mraof.minestuck.skaianet;
 
 import com.mojang.datafixers.Dynamic;
-import com.mraof.minestuck.editmode.DeployEntry;
-import com.mraof.minestuck.editmode.EditData;
-import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.computer.editmode.DeployEntry;
+import com.mraof.minestuck.computer.editmode.EditData;
+import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.player.IdentifierHandler;

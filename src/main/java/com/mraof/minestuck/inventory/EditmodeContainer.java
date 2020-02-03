@@ -1,8 +1,8 @@
 package com.mraof.minestuck.inventory;
 
-import com.mraof.minestuck.editmode.DeployEntry;
-import com.mraof.minestuck.editmode.DeployList;
-import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.computer.editmode.DeployEntry;
+import com.mraof.minestuck.computer.editmode.DeployList;
+import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.EditmodeInventoryPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.skaianet.SburbConnection;

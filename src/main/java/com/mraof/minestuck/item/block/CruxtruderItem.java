@@ -1,8 +1,8 @@
 package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.block.multiblock.CruxtruderMultiblock;
-import com.mraof.minestuck.editmode.EditData;
-import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.computer.editmode.EditData;
+import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.tileentity.CruxtruderTileEntity;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MSRotationUtil;

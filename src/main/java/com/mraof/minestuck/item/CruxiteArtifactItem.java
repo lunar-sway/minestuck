@@ -3,7 +3,7 @@ package com.mraof.minestuck.item;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.GateBlock;
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;

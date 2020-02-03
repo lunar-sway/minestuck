@@ -1,7 +1,7 @@
 package com.mraof.minestuck.world.storage;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.editmode.ClientEditHandler;
+import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.network.GristCachePacket;

@@ -1,6 +1,6 @@
 package com.mraof.minestuck;
 
-import com.mraof.minestuck.editmode.DeployList;
+import com.mraof.minestuck.computer.editmode.DeployList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

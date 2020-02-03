@@ -1,7 +1,7 @@
 package com.mraof.minestuck.entity.item;
 
-import com.mraof.minestuck.editmode.ClientEditHandler;
-import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.computer.editmode.ClientEditHandler;
+import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.*;
