@@ -4,6 +4,8 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.GateBlock;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;

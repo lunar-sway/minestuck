@@ -1,4 +1,4 @@
-package com.mraof.minestuck.util;
+package com.mraof.minestuck.computer;
 
 import com.mraof.minestuck.client.gui.ComputerScreen;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;

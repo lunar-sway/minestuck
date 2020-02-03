@@ -1,4 +1,4 @@
-package com.mraof.minestuck.util;
+package com.mraof.minestuck.player;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.ITextComponent;

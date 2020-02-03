@@ -1,9 +1,9 @@
 package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
-import com.mraof.minestuck.util.Echeladder;
-import com.mraof.minestuck.util.EnumAspect;
-import com.mraof.minestuck.util.EnumClass;
+import com.mraof.minestuck.player.Echeladder;
+import com.mraof.minestuck.player.EnumAspect;
+import com.mraof.minestuck.player.EnumClass;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.entity.EntityType;

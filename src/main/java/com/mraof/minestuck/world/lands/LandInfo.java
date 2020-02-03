@@ -1,7 +1,7 @@
 package com.mraof.minestuck.world.lands;
 
 import com.mraof.minestuck.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.PlayerIdentifier;
+import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;

@@ -1,6 +1,6 @@
 package com.mraof.minestuck.tileentity;
 
-import com.mraof.minestuck.util.PlayerIdentifier;
+import com.mraof.minestuck.player.PlayerIdentifier;
 
 public interface IOwnable
 {

@@ -1,7 +1,7 @@
 package com.mraof.minestuck.event;
 
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.util.PlayerIdentifier;
+import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;

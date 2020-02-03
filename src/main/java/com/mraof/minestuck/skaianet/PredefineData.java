@@ -1,6 +1,6 @@
 package com.mraof.minestuck.skaianet;
 
-import com.mraof.minestuck.util.Title;
+import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;

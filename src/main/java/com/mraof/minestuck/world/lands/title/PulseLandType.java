@@ -2,7 +2,7 @@ package com.mraof.minestuck.world.lands.title;
 
 import com.google.common.collect.Lists;
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.util.EnumAspect;
+import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.LandGenSettings;

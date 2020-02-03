@@ -1,10 +1,12 @@
-package com.mraof.minestuck.util;
+package com.mraof.minestuck.player;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.network.EcheladderDataPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeMap;

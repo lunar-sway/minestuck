@@ -1,4 +1,4 @@
-package com.mraof.minestuck.util;
+package com.mraof.minestuck.player;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.world.storage.PlayerData;
@@ -15,7 +15,7 @@ import net.minecraftforge.common.util.Constants;
 
 import java.util.Objects;
 
-import static com.mraof.minestuck.util.EnumAspect.HOPE;
+import static com.mraof.minestuck.player.EnumAspect.HOPE;
 
 public final class Title
 {

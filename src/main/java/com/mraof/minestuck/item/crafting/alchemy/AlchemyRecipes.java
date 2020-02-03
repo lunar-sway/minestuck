@@ -5,7 +5,7 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.item.CruxiteArtifactItem;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.util.Echeladder;
+import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.Blocks;

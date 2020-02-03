@@ -13,7 +13,7 @@ import com.mraof.minestuck.network.ServerEditPacket;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.PlayerIdentifier;
+import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.MSExtraData;
