@@ -1,13 +1,13 @@
 package com.mraof.minestuck.item.crafting.alchemy.generator;
 
 import com.google.common.collect.ImmutableMap;
-import com.mojang.datafixers.util.Pair;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -68,7 +68,7 @@ class RecipeGeneratedCostProcess
 			GristSet minCost = null;
 			for(Pair<IRecipe<?>, RecipeInterpreter> recipePair : recipes)
 			{
-				GristSet cost = costForRecipe(recipePair.getFirst(), recipePair.getSecond(), item, context);
+				GristSet cost = costForRecipe(recipePair.getLeft(), recipePair.getRight(), item, context);
 				if(cost != null && (minCost == null || cost.getValue() < minCost.getValue()))
 					minCost = cost;
 			}

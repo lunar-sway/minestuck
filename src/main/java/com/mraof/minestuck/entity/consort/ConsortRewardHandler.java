@@ -3,7 +3,6 @@ package com.mraof.minestuck.entity.consort;
 import com.google.common.collect.Maps;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.Pair;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -11,6 +10,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootParameterSets;
 import net.minecraft.world.storage.loot.LootParameters;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -253,16 +253,16 @@ public class ConsortRewardHandler
 		{
 			for (Pair<ItemStack, Integer> pair : itemPriceList)
 			{
-				if (ItemStack.areItemsEqual(pair.object1, stack) && ItemStack.areItemStackTagsEqual(pair.object1, stack))
+				if (ItemStack.areItemsEqual(pair.getKey(), stack) && ItemStack.areItemStackTagsEqual(pair.getKey(), stack))
 				{
-					pair.object1.grow(stack.getCount());
+					pair.getKey().grow(stack.getCount());
 					continue stackLoop;
 				}
 			}
 			
 			int price = getPrice(stack, rand);
 			if (price >= 0 && itemPriceList.size() < 9)
-				itemPriceList.add(new Pair<>(stack, price));
+				itemPriceList.add(Pair.of(stack, price));
 			if (price < 0)
 				Debug.warn("Couldn't find a boondollar price for " + stack);
 		}

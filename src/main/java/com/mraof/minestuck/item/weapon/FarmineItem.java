@@ -1,7 +1,6 @@
 package com.mraof.minestuck.item.weapon;
 
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.util.Pair;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -15,6 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -108,11 +108,11 @@ public class FarmineItem extends WeaponItem
 			if (farMineForbiddenBlocks.contains(block)
 					|| getDestroySpeed(stack, blockState) < getEfficiency())
 			{
-				candidates.add(new Pair<>(pos, 1));
+				candidates.add(Pair.of(pos, 1));
 			}
 			else	//Otherwise, farmine normally
 			{
-				candidates.add(new Pair<>(pos, radius));
+				candidates.add(Pair.of(pos, radius));
 			}
 		}
 		
@@ -124,8 +124,8 @@ public class FarmineItem extends WeaponItem
 
 		while (!candidates.isEmpty())
 		{
-			BlockPos curr = candidates.peek().object1;
-			int rad = candidates.poll().object2;
+			BlockPos curr = candidates.peek().getLeft();
+			int rad = candidates.poll().getRight();
 			if (!blocksToBreak.contains(curr))
 			{
 				blocksToBreak.add(curr);
@@ -146,7 +146,7 @@ public class FarmineItem extends WeaponItem
 								Block newBlock = newState.getBlock();
 								if (	equals.contains(newBlock) || newBlock.equals(block))
 								{
-									candidates.add(new Pair<>(newBlockPos, rad - 1));
+									candidates.add(Pair.of(newBlockPos, rad - 1));
 								}
 							}
 						}
@@ -207,15 +207,15 @@ public class FarmineItem extends WeaponItem
 	 */
 	
 	//This returns a larger-to-smaller comparison of the paired objects, assuming they are integers.
-	private class PairedIntComparator implements Comparator<Pair<BlockPos, Integer>>
+	private static class PairedIntComparator implements Comparator<Pair<BlockPos, Integer>>
 	{
 		@Override
 		public int compare(Pair<BlockPos, Integer> x, Pair<BlockPos, Integer> y)
 		{
-			if (x == null || y == null || x.object2 == null || y.object2 == null)
+			if (x == null || y == null || x.getRight() == null || y.getRight() == null)
 				return 0;
 			
-			return y.object2 - x.object2;
+			return y.getRight() - x.getRight();
 		}
 	}
 	
@@ -228,7 +228,7 @@ public class FarmineItem extends WeaponItem
 	 */
 	public boolean isEquivalent(Block a, Block b)
 	{
-		HashSet e = farMineEquivalencies.get(a);
+		HashSet<Block> e = farMineEquivalencies.get(a);
 		return e != null && e.contains(b);
 	}
 	
