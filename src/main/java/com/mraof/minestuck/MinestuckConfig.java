@@ -12,6 +12,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,6 +23,32 @@ import static net.minecraftforge.common.ForgeConfigSpec.*;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class MinestuckConfig
 {
+	//Uses the singleton design pattern, much like the forge config
+	public static class Common
+	{
+		public final BooleanValue logIngredientItemsWithoutCosts;
+		public final BooleanValue logItemsWithRecipeAndCost;
+		
+		private Common(ForgeConfigSpec.Builder builder)
+		{
+			builder.push("logging");
+			logIngredientItemsWithoutCosts = builder.comment("Makes the recipe-generated grist cost process log any items that are used as recipe ingredients, but is neither the output of a different recipe, or has a grist cost. Useful for finding items that probably need manual grist costs.")
+					.define("logIngredientItemsWithoutCosts", false);
+			logItemsWithRecipeAndCost = builder.comment("Makes the recipe-generated grist cost process log any items that has a grist cost, but which could also be provided as a recipe generated cost. Useful for finding items that probably do not need manual grist costs.")
+					.define("logItemsWithRecipeAndCost", false);
+			builder.pop();
+		}
+	}
+	
+	static final ForgeConfigSpec commonConfigSpec;
+	public static final Common COMMON;
+	static
+	{
+		Pair<Common, ForgeConfigSpec> pair = new ForgeConfigSpec.Builder().configure(Common::new);
+		COMMON = pair.getLeft();
+		commonConfigSpec = pair.getRight();
+	}
+	
 	static final ForgeConfigSpec CLIENT_CONFIG;
 	static final ForgeConfigSpec SERVER_CONFIG;
 	

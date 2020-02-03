@@ -2,6 +2,7 @@ package com.mraof.minestuck.item.crafting.alchemy.generator;
 
 import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.util.Pair;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -15,9 +16,6 @@ import java.util.*;
 class RecipeGeneratedCostProcess
 {
 	private static final Logger LOGGER = LogManager.getLogger();
-	
-	private static final boolean LOG_ITEMS_WITHOUT_RECIPES = true;
-	private static final boolean LOG_ITEMS_WITH_RECIPE_AND_COST = true;
 	
 	private final Map<Item, List<Pair<IRecipe<?>, RecipeInterpreter>>> lookupMap;
 	private final Map<Item, GristSet> generatedCosts = new HashMap<>();
@@ -77,7 +75,7 @@ class RecipeGeneratedCostProcess
 			return minCost;
 		} else
 		{
-			if(LOG_ITEMS_WITHOUT_RECIPES && isCostNull)
+			if(MinestuckConfig.COMMON.logIngredientItemsWithoutCosts.get() && isCostNull)
 				LOGGER.info("Item {} was looked up, but it did not have any grist costs or recipes.", item.getRegistryName());
 			return null;
 		}
@@ -132,7 +130,7 @@ class RecipeGeneratedCostProcess
 	
 	private void checkRecipeLogging(Item item, GristSet cost, GenerationContext context)
 	{
-		if(LOG_ITEMS_WITH_RECIPE_AND_COST)
+		if(MinestuckConfig.COMMON.logItemsWithRecipeAndCost.get())
 		{
 			GristSet generatedCost = context.withoutCache(() -> costFromRecipes(item, false, context));
 			
