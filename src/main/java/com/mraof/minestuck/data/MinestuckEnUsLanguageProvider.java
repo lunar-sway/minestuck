@@ -28,9 +28,9 @@ import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.SessionHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.*;
-import com.mraof.minestuck.tracker.PlayerTracker;
 import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.biome.MSBiomes;
+import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.terrain.*;
 import com.mraof.minestuck.world.lands.title.*;
@@ -893,7 +893,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addLand(MonstersLandType.MONSTERS, "Monsters");
 		addLand(TowersLandType.TOWERS, "Towers");
 		add(LandTypePair.FORMAT, "Land of %s and %s");
-		add(PlayerTracker.LAND_ENTRY, "Welcome to %s.");
+		add(LandInfo.LAND_ENTRY, "Welcome to %s.");
 		
 		addStrife(KindAbstratusList.SWORD, "Bladekind");
 		addStrife(KindAbstratusList.BOW, "Bowkind");

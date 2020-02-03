@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.storage;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.editmode.EditData;
 import com.mraof.minestuck.editmode.ServerEditHandler;
@@ -17,12 +18,15 @@ import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.util.ColorCollector;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,9 +38,17 @@ import java.util.Objects;
  * This class is for server-side use only.
  * @author kirderf1
  */
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class PlayerData
 {
 	private static final Logger LOGGER = LogManager.getLogger();
+	
+	@SubscribeEvent
+	public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
+	{
+		ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
+		PlayerSavedData.getData(player).onPlayerLoggedIn(player);
+	}
 	
 	final PlayerIdentifier identifier;
 	

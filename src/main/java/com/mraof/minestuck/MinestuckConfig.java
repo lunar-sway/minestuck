@@ -1,12 +1,7 @@
 package com.mraof.minestuck;
 
 import com.mraof.minestuck.editmode.DeployList;
-import com.mraof.minestuck.editmode.EditData;
-import com.mraof.minestuck.editmode.ServerEditHandler;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.management.OpEntry;
-import net.minecraft.world.GameType;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -254,40 +249,6 @@ public class MinestuckConfig
 		MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
 		if(server != null && server.isOnExecutionThread())	//TODO Check if this will be true after server start. If not, use a static boolean together with a tick event instead
 			DeployList.onConditionsUpdated(server);
-	}
-	
-	public static boolean getDataCheckerPermissionFor(ServerPlayerEntity player)
-	{
-		switch(dataCheckerPermission.get())
-		{
-			case ANYONE: return true;
-			case OPS: return hasOp(player);
-			case GAMEMODE: return hasGamemodePermission(player);
-			case OPS_OR_GAMEMODE: return hasOp(player) || hasGamemodePermission(player);
-			case NONE: default: return false;
-		}
-	}
-	
-	private static boolean hasGamemodePermission(ServerPlayerEntity player)
-	{
-		GameType gameType = player.interactionManager.getGameType();
-		
-		EditData data = ServerEditHandler.getData(player);
-		if(data != null)
-			gameType = data.getDecoy().gameType;
-		
-		return !gameType.isSurvivalOrAdventure();
-	}
-	
-	private static boolean hasOp(ServerPlayerEntity player)
-	{
-		MinecraftServer server = player.getServer();
-		if(server != null && server.getPlayerList().canSendCommands(player.getGameProfile()))
-		{
-			OpEntry entry = server.getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
-			return (entry != null ? entry.getPermissionLevel() : server.getOpPermissionLevel()) >= 2;
-		}
-		return false;
 	}
 	
 	/**

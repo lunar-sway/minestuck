@@ -1,5 +1,6 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.item.BoondollarsItem;
@@ -21,11 +22,25 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.event.entity.living.LivingDropsEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CaptchaDeckHandler
 {
 	public static final int EMPTY_SYLLADEX = -1;
 	public static final int EMPTY_CARD = -2;
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
+	public static void onPlayerDrops(LivingDropsEvent event)
+	{
+		if(!event.getEntity().world.isRemote && event.getEntity() instanceof ServerPlayerEntity)
+		{
+			dropSylladex((ServerPlayerEntity) event.getEntity());
+		}
+	}
 	
 	public static Modus createClientModus(ResourceLocation name)
 	{
@@ -336,7 +351,7 @@ public class CaptchaDeckHandler
 		MSPacketHandler.sendToPlayer(packet, player);
 	}
 	
-	public static void dropSylladex(ServerPlayerEntity player)
+	private static void dropSylladex(ServerPlayerEntity player)
 	{
 		Modus modus = getModus(player);
 		

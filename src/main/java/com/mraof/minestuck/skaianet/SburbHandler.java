@@ -9,8 +9,9 @@ import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.TitleSelectPacket;
 import com.mraof.minestuck.player.*;
-import com.mraof.minestuck.tracker.PlayerTracker;
-import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.util.ColorCollector;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.MinestuckRandom;
 import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
@@ -614,7 +615,7 @@ public class SburbHandler
 		if(player != null)
 		{
 			MSCriteriaTriggers.CRUXITE_ARTIFACT.trigger(player);
-			PlayerTracker.sendLandEntryMessage(player);
+			c.clientHomeLand.sendLandEntryMessage(player);
 		}
 	}
 	

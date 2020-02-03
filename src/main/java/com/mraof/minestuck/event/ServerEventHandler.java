@@ -7,11 +7,11 @@ import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.weapon.PotionWeaponItem;
+import com.mraof.minestuck.player.Echeladder;
+import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.player.Echeladder;
-import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import com.mraof.minestuck.world.storage.PlayerData;
@@ -46,7 +46,7 @@ public class ServerEventHandler
 	public static long lastDay;
 	
 	@SubscribeEvent
-	public void serverStarting(FMLServerStartingEvent event)
+	public static void serverStarting(FMLServerStartingEvent event)
 	{
 		Debug.info(SharedConstants.developmentMode);
 		//if(!event.getServer().isDedicatedServer() && Minestuck.class.getAnnotation(Mod.class).version().startsWith("@")) TODO Find an alternative to detect dev environment
@@ -56,7 +56,7 @@ public class ServerEventHandler
 	}
 	
 	@SubscribeEvent
-	public void serverStopped(FMLServerStoppedEvent event)
+	public static void serverStopped(FMLServerStoppedEvent event)
 	{
 		IdentifierHandler.clear();
 		SkaianetHandler.clear();
@@ -204,4 +204,14 @@ public class ServerEventHandler
 				data.getTitle().handleAspectEffects((ServerPlayerEntity) event.player);
 		}
 	}
+	
+	
+	@SubscribeEvent
+	public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
+	{
+		ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
+		
+		SkaianetHandler.get(player.server).playerConnected(player);
+	}
+	
 }

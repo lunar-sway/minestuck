@@ -1,5 +1,6 @@
 package com.mraof.minestuck.player;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.network.EcheladderDataPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
@@ -18,10 +19,14 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 import java.util.Set;
 import java.util.UUID;
 
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class Echeladder
 {
 	
@@ -47,6 +52,12 @@ public class Echeladder
 	public static void increaseProgress(ServerPlayerEntity player, int progress)
 	{
 		PlayerSavedData.getData(player).getEcheladder().increaseProgress(progress);
+	}
+	
+	@SubscribeEvent
+	public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event)
+	{
+		PlayerSavedData.getData((ServerPlayerEntity) event.getPlayer()).getEcheladder().updateEcheladderBonuses((ServerPlayerEntity) event.getPlayer());
 	}
 	
 	private final PlayerSavedData savedData;
