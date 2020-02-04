@@ -1,6 +1,6 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.util.ColorCollector;
+import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
@@ -30,6 +30,6 @@ public class ColorSelectPacket implements PlayToServerPacket
 	@Override
 	public void execute(ServerPlayerEntity player)
 	{
-		PlayerSavedData.getData(player).trySetColor(ColorCollector.getColor(colorIndex));
+		PlayerSavedData.getData(player).trySetColor(ColorHandler.getColor(colorIndex));
 	}
 }

@@ -18,7 +18,7 @@ import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.ColorCollector;
+import com.mraof.minestuck.util.ColorHandler;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -54,7 +54,7 @@ public final class PlayerData
 	
 	private final PlayerSavedData savedData;
 	private final Echeladder echeladder;
-	private int color = ColorCollector.DEFAULT_COLOR;
+	private int color = ColorHandler.DEFAULT_COLOR;
 	
 	private boolean givenModus;
 	private Modus modus;

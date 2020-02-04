@@ -1,7 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.util.ColorCollector;
+import com.mraof.minestuck.util.ColorHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -40,7 +40,7 @@ public class ItemStackTileEntity extends TileEntity implements IColored
 	@Override
 	public int getColor()
 	{
-		return ColorCollector.getColorFromStack(stack);
+		return ColorHandler.getColorFromStack(stack);
 	}
 	
 	@Override

@@ -5,7 +5,7 @@ import com.mraof.minestuck.inventory.MiniTotemLatheContainer;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry;
-import com.mraof.minestuck.util.ColorCollector;
+import com.mraof.minestuck.util.ColorHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -49,7 +49,7 @@ public class MiniTotemLatheTileEntity extends MachineProcessTileEntity implement
 	public boolean contentsValid()
 	{
 		if ((!inv.get(0).isEmpty() || !inv.get(1).isEmpty()) && !inv.get(2).isEmpty() && !(inv.get(2).hasTag() && inv.get(2).getTag().contains("contentID"))
-				&& (inv.get(3).isEmpty() || inv.get(3).getCount() < inv.get(3).getMaxStackSize() && ColorCollector.getColorFromStack(inv.get(3)) == ColorCollector.getColorFromStack(inv.get(2))))
+				&& (inv.get(3).isEmpty() || inv.get(3).getCount() < inv.get(3).getMaxStackSize() && ColorHandler.getColorFromStack(inv.get(3)) == ColorHandler.getColorFromStack(inv.get(2))))
 		{
 			if (!inv.get(0).isEmpty() && !inv.get(1).isEmpty())
 			{
@@ -97,7 +97,7 @@ public class MiniTotemLatheTileEntity extends MachineProcessTileEntity implement
 		
 		ItemStack outputDowel = output.getItem().equals(MSBlocks.GENERIC_OBJECT.asItem())
 				? new ItemStack(MSBlocks.CRUXITE_DOWEL) : AlchemyRecipes.createEncodedItem(output, false);
-		ColorCollector.setColor(outputDowel, ColorCollector.getColorFromStack(inv.get(2)));	//Setting color
+		ColorHandler.setColor(outputDowel, ColorHandler.getColorFromStack(inv.get(2)));	//Setting color
 		
 		setInventorySlotContents(3, outputDowel);
 		decrStackSize(2, 1);

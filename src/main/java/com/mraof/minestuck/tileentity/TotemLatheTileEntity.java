@@ -6,7 +6,7 @@ import com.mraof.minestuck.block.TotemLatheBlock;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry;
-import com.mraof.minestuck.util.ColorCollector;
+import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.WorldEventUtil;
 import net.minecraft.block.Block;
@@ -320,7 +320,7 @@ public class TotemLatheTileEntity extends TileEntity
 			if(!output.isEmpty())
 			{
 				ItemStack outputDowel = output.getItem().equals(MSBlocks.GENERIC_OBJECT.asItem()) ? new ItemStack(MSBlocks.CRUXITE_DOWEL) : AlchemyRecipes.createEncodedItem(output, false);
-				ColorCollector.setColor(outputDowel, ColorCollector.getColorFromStack(dowel));
+				ColorHandler.setColor(outputDowel, ColorHandler.getColorFromStack(dowel));
 				
 				setDowel(outputDowel);
 				success = true;

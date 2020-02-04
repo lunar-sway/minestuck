@@ -3,7 +3,7 @@ package com.mraof.minestuck.tileentity;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.inventory.MiniCruxtruderContainer;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.util.ColorCollector;
+import com.mraof.minestuck.util.ColorHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -20,7 +20,7 @@ public class MiniCruxtruderTileEntity extends MachineProcessTileEntity implement
 {
 	public static final String TITLE = "container.minestuck.mini_cruxtruder";
 	public static final RunType TYPE = RunType.AUTOMATIC;
-	public int color = ColorCollector.DEFAULT_COLOR;
+	public int color = ColorHandler.DEFAULT_COLOR;
 	
 	public MiniCruxtruderTileEntity()
 	{
@@ -49,7 +49,7 @@ public class MiniCruxtruderTileEntity extends MachineProcessTileEntity implement
 	public boolean contentsValid()
 	{
 		ItemStack stack1 = this.inv.get(1);
-		return (!world.isBlockPowered(this.getPos()) && !this.inv.get(0).isEmpty() && (stack1.isEmpty() || stack1.getCount() < stack1.getMaxStackSize() && ColorCollector.getColorFromStack(stack1) == this.color));
+		return (!world.isBlockPowered(this.getPos()) && !this.inv.get(0).isEmpty() && (stack1.isEmpty() || stack1.getCount() < stack1.getMaxStackSize() && ColorHandler.getColorFromStack(stack1) == this.color));
 	}
 	
 	@Override
@@ -58,7 +58,7 @@ public class MiniCruxtruderTileEntity extends MachineProcessTileEntity implement
 		// Process the Raw Cruxite
 		
 		if (this.inv.get(1).isEmpty())
-			setInventorySlotContents(1, ColorCollector.setColor(new ItemStack(MSBlocks.CRUXITE_DOWEL), color));
+			setInventorySlotContents(1, ColorHandler.setColor(new ItemStack(MSBlocks.CRUXITE_DOWEL), color));
 		else this.inv.get(1).grow(1);
 		decrStackSize(0, 1);
 	}

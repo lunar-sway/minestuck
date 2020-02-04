@@ -5,7 +5,6 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.client.renderer.BlockColorCruxite;
 import com.mraof.minestuck.item.FrogItem;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.util.ColorCollector;
 import net.minecraft.block.StemBlock;
 import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.client.renderer.color.IItemColor;
@@ -24,7 +23,7 @@ public class ColorHandler
     {
         ItemColors itemColors = event.getItemColors();
     
-        itemColors.register((stack, tintIndex) -> BlockColorCruxite.handleColorTint(ColorCollector.getColorFromStack(stack), tintIndex),
+        itemColors.register((stack, tintIndex) -> BlockColorCruxite.handleColorTint(com.mraof.minestuck.util.ColorHandler.getColorFromStack(stack), tintIndex),
                 MSBlocks.CRUXITE_DOWEL, MSItems.CRUXITE_APPLE, MSItems.CRUXITE_POTION);
         itemColors.register(new FrogItemColor(), MSItems.FROG);
     }

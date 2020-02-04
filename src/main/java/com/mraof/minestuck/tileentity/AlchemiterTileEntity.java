@@ -10,7 +10,9 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.util.AlchemiterUpgrades;
+import com.mraof.minestuck.util.ColorHandler;
+import com.mraof.minestuck.util.Debug;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;
@@ -71,7 +73,7 @@ public class AlchemiterTileEntity extends TileEntity implements IColored
 	@Override
 	public int getColor()
 	{
-		return ColorCollector.getColorFromStack(dowel);
+		return ColorHandler.getColorFromStack(dowel);
 	}
 	
 	public ItemStack getOutput()

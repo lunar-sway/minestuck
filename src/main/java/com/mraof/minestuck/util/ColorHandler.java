@@ -1,9 +1,13 @@
 package com.mraof.minestuck.util;
 
+import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.SburbHandler;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.Constants;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -11,10 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Stores the array with colors that the player picks from.
- * Also has two variables related to color selection for clientside.
+ * Stores the array with colors that the player picks from, and provides utility function to handle colors.
  */
-public class ColorCollector
+public class ColorHandler
 {
 	public static final int DEFAULT_COLOR = 0xA0DCFF;
 	private static final List<Pair<Integer, String>> colors;
@@ -83,4 +86,11 @@ public class ColorCollector
 			return stack.getTag().getInt("color");
 		else return DEFAULT_COLOR;
 	}
+	
+	public static int getColorForDimension(ServerWorld world)
+	{
+		SburbConnection c = SburbHandler.getConnectionForDimension(world);
+		return c == null ? ColorHandler.DEFAULT_COLOR : PlayerSavedData.getData(c.getClientIdentifier(), world).getColor();
+	}
+	
 }
