@@ -156,7 +156,7 @@ public class MSGiftLootTables implements Consumer<BiConsumer<ResourceLocation, L
 		
 		lootProcessor.accept(locationFor(LandTypes.SAND, MSLootTables.CONSORT_GENERAL_STOCK), LootTable.builder()
 				.addLootPool(LootPool.builder().name(ITEM_POOL).rolls(ConstantRange.of(1))
-						.addEntry(ItemLootEntry.builder(MSItems.CACTUS_CUTLASS).weight(3))
+						.addEntry(ItemLootEntry.builder(MSItems.CACTACEAE_CUTLASS).weight(3))
 						.addEntry(ItemLootEntry.builder(Items.GOLD_INGOT).weight(7).acceptFunction(SetCount.builder(RandomValueRange.of(5, 10))))
 						.addEntry(ItemLootEntry.builder(Items.LEATHER).weight(8).acceptFunction(SetCount.builder(RandomValueRange.of(2, 5)))))
 				.addLootPool(LootPool.builder().name(BLOCK_POOL).rolls(ConstantRange.of(1))
@@ -166,7 +166,7 @@ public class MSGiftLootTables implements Consumer<BiConsumer<ResourceLocation, L
 						.addEntry(ItemLootEntry.builder(Items.SMOOTH_SANDSTONE).weight(10).acceptFunction(SetCount.builder(RandomValueRange.of(8, 20))))));
 		lootProcessor.accept(locationFor(LandTypes.RED_SAND, MSLootTables.CONSORT_GENERAL_STOCK), LootTable.builder()
 				.addLootPool(LootPool.builder().name(ITEM_POOL).rolls(ConstantRange.of(1))
-						.addEntry(ItemLootEntry.builder(MSItems.CACTUS_CUTLASS).weight(3))
+						.addEntry(ItemLootEntry.builder(MSItems.CACTACEAE_CUTLASS).weight(3))
 						.addEntry(ItemLootEntry.builder(Items.GOLD_INGOT).weight(7).acceptFunction(SetCount.builder(RandomValueRange.of(5, 10))))
 						.addEntry(ItemLootEntry.builder(Items.LEATHER).weight(8).acceptFunction(SetCount.builder(RandomValueRange.of(2, 5)))))
 				.addLootPool(LootPool.builder().name(BLOCK_POOL).rolls(ConstantRange.of(1))
@@ -176,7 +176,7 @@ public class MSGiftLootTables implements Consumer<BiConsumer<ResourceLocation, L
 						.addEntry(ItemLootEntry.builder(Items.SMOOTH_RED_SANDSTONE).weight(10).acceptFunction(SetCount.builder(RandomValueRange.of(8, 20))))));
 		lootProcessor.accept(locationFor(LandTypes.LUSH_DESERTS, MSLootTables.CONSORT_GENERAL_STOCK), LootTable.builder()
 				.addLootPool(LootPool.builder().name(ITEM_POOL).rolls(ConstantRange.of(1))
-						.addEntry(ItemLootEntry.builder(MSItems.CACTUS_CUTLASS).weight(3))
+						.addEntry(ItemLootEntry.builder(MSItems.CACTACEAE_CUTLASS).weight(3))
 						.addEntry(ItemLootEntry.builder(Items.GOLD_INGOT).weight(7).acceptFunction(SetCount.builder(RandomValueRange.of(5, 10))))
 						.addEntry(ItemLootEntry.builder(Items.LEATHER).weight(8).acceptFunction(SetCount.builder(RandomValueRange.of(2, 5)))))
 				.addLootPool(LootPool.builder().name(BLOCK_POOL).rolls(ConstantRange.of(1))
@@ -548,17 +548,17 @@ public class MSGiftLootTables implements Consumer<BiConsumer<ResourceLocation, L
 		
 		lootProcessor.accept(locationFor(LandTypes.WIND, MSLootTables.CONSORT_FOOD_STOCK), LootTable.builder()
 				.addLootPool(LootPool.builder().name(MAIN_POOL).rolls(ConstantRange.of(1))
-						.addEntry(ItemLootEntry.builder(MSItems.FAYGO_COTTON_CANDY).weight(2).acceptFunction(SetCount.builder(RandomValueRange.of(1, 3)))))
+						.addEntry(ItemLootEntry.builder(MSItems.COTTON_CANDY_FAYGO).weight(2).acceptFunction(SetCount.builder(RandomValueRange.of(1, 3)))))
 				.addLootPool(LootPool.builder().name(SPECIAL_POOL).rolls(ConstantRange.of(1))));
 		
 		lootProcessor.accept(locationFor(LandTypes.LIGHT, MSLootTables.CONSORT_FOOD_STOCK), LootTable.builder()
 				.addLootPool(LootPool.builder().name(MAIN_POOL).rolls(ConstantRange.of(1))
-						.addEntry(ItemLootEntry.builder(MSItems.FAYGO).weight(2).acceptFunction(SetCount.builder(RandomValueRange.of(1, 3)))))
+						.addEntry(ItemLootEntry.builder(MSItems.ORANGE_FAYGO).weight(2).acceptFunction(SetCount.builder(RandomValueRange.of(1, 3)))))
 				.addLootPool(LootPool.builder().name(SPECIAL_POOL).rolls(ConstantRange.of(1))));
 		
 		lootProcessor.accept(locationFor(LandTypes.CLOCKWORK, MSLootTables.CONSORT_FOOD_STOCK), LootTable.builder()
 				.addLootPool(LootPool.builder().name(MAIN_POOL).rolls(ConstantRange.of(1))
-						.addEntry(ItemLootEntry.builder(MSItems.FAYGO_CANDY_APPLE).weight(2).acceptFunction(SetCount.builder(RandomValueRange.of(1, 3)))))
+						.addEntry(ItemLootEntry.builder(MSItems.CANDY_APPLE_FAYGO).weight(2).acceptFunction(SetCount.builder(RandomValueRange.of(1, 3)))))
 				.addLootPool(LootPool.builder().name(SPECIAL_POOL).rolls(ConstantRange.of(1))));
 		
 		lootProcessor.accept(locationFor(LandTypes.SILENCE, MSLootTables.CONSORT_FOOD_STOCK), LootTable.builder()
@@ -568,18 +568,18 @@ public class MSGiftLootTables implements Consumer<BiConsumer<ResourceLocation, L
 		
 		lootProcessor.accept(locationFor(LandTypes.THUNDER, MSLootTables.CONSORT_FOOD_STOCK), LootTable.builder()
 				.addLootPool(LootPool.builder().name(MAIN_POOL).rolls(ConstantRange.of(1))
-						.addEntry(ItemLootEntry.builder(MSItems.FAYGO_PEACH).weight(2).acceptFunction(SetCount.builder(RandomValueRange.of(1, 3)))))
+						.addEntry(ItemLootEntry.builder(MSItems.PEACH_FAYGO).weight(2).acceptFunction(SetCount.builder(RandomValueRange.of(1, 3)))))
 				.addLootPool(LootPool.builder().name(SPECIAL_POOL).rolls(ConstantRange.of(1))));
 		
 		lootProcessor.accept(locationFor(LandTypes.PULSE, MSLootTables.CONSORT_FOOD_STOCK), LootTable.builder()
 				.addLootPool(LootPool.builder().name(MAIN_POOL).rolls(ConstantRange.of(1))
 						.addEntry(ItemLootEntry.builder(MSItems.BEEF_SWORD).weight(4)).acceptCondition(ConsortLootCondition.builder(EnumConsort.NAKAGATOR))
-						.addEntry(ItemLootEntry.builder(MSItems.FAYGO_REDPOP).weight(2).acceptFunction(SetCount.builder(RandomValueRange.of(1, 3)))))
+						.addEntry(ItemLootEntry.builder(MSItems.REDPOP_FAYGO).weight(2).acceptFunction(SetCount.builder(RandomValueRange.of(1, 3)))))
 				.addLootPool(LootPool.builder().name(SPECIAL_POOL).rolls(ConstantRange.of(1))));
 		
 		lootProcessor.accept(locationFor(LandTypes.THOUGHT, MSLootTables.CONSORT_FOOD_STOCK), LootTable.builder()
 				.addLootPool(LootPool.builder().name(MAIN_POOL).rolls(ConstantRange.of(1))
-						.addEntry(ItemLootEntry.builder(MSItems.FAYGO_MOON_MIST).weight(2).acceptFunction(SetCount.builder(RandomValueRange.of(1, 3)))))
+						.addEntry(ItemLootEntry.builder(MSItems.MOON_MIST_FAYGO).weight(2).acceptFunction(SetCount.builder(RandomValueRange.of(1, 3)))))
 				.addLootPool(LootPool.builder().name(SPECIAL_POOL).rolls(ConstantRange.of(1))));
 		
 		lootProcessor.accept(locationFor(LandTypes.BUCKETS, MSLootTables.CONSORT_FOOD_STOCK), LootTable.builder()
@@ -599,16 +599,16 @@ public class MSGiftLootTables implements Consumer<BiConsumer<ResourceLocation, L
 		
 		lootProcessor.accept(locationFor(LandTypes.MONSTERS, MSLootTables.CONSORT_FOOD_STOCK), LootTable.builder()
 				.addLootPool(LootPool.builder().name(MAIN_POOL).rolls(ConstantRange.of(1))
-						.addEntry(ItemLootEntry.builder(MSItems.FAYGO_GRAPE).weight(2).acceptFunction(SetCount.builder(RandomValueRange.of(1, 3)))))
+						.addEntry(ItemLootEntry.builder(MSItems.GRAPE_FAYGO).weight(2).acceptFunction(SetCount.builder(RandomValueRange.of(1, 3)))))
 				.addLootPool(LootPool.builder().name(SPECIAL_POOL).rolls(ConstantRange.of(1))));
 		lootProcessor.accept(locationFor(LandTypes.UNDEAD, MSLootTables.CONSORT_FOOD_STOCK), LootTable.builder()
 				.addLootPool(LootPool.builder().name(MAIN_POOL).rolls(ConstantRange.of(1))
-						.addEntry(ItemLootEntry.builder(MSItems.FAYGO_GRAPE).weight(2).acceptFunction(SetCount.builder(RandomValueRange.of(1, 3)))))
+						.addEntry(ItemLootEntry.builder(MSItems.GRAPE_FAYGO).weight(2).acceptFunction(SetCount.builder(RandomValueRange.of(1, 3)))))
 				.addLootPool(LootPool.builder().name(SPECIAL_POOL).rolls(ConstantRange.of(1))));
 		
 		lootProcessor.accept(locationFor(LandTypes.TOWERS, MSLootTables.CONSORT_FOOD_STOCK), LootTable.builder()
 				.addLootPool(LootPool.builder().name(MAIN_POOL).rolls(ConstantRange.of(1))
-						.addEntry(ItemLootEntry.builder(MSItems.FAYGO_CREME).weight(2).acceptFunction(SetCount.builder(RandomValueRange.of(1, 3)))))
+						.addEntry(ItemLootEntry.builder(MSItems.CREME_SODA_FAYGO).weight(2).acceptFunction(SetCount.builder(RandomValueRange.of(1, 3)))))
 				.addLootPool(LootPool.builder().name(SPECIAL_POOL).rolls(ConstantRange.of(1))));
 	}
 	

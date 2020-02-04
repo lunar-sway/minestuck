@@ -268,8 +268,8 @@ public class AlchemyRecipes
 		//add Designix and Lathe combinations
 		
 		//swords
-		CombinationRegistry.addCombination(Items.WOODEN_SWORD, Blocks.CACTUS, MODE_AND, new ItemStack(CACTUS_CUTLASS));
-		CombinationRegistry.addCombination(Items.WOODEN_SWORD, BLOOMING_CACTUS, MODE_AND, new ItemStack(CACTUS_CUTLASS));
+		CombinationRegistry.addCombination(Items.WOODEN_SWORD, Blocks.CACTUS, MODE_AND, new ItemStack(CACTACEAE_CUTLASS));
+		CombinationRegistry.addCombination(Items.WOODEN_SWORD, BLOOMING_CACTUS, MODE_AND, new ItemStack(CACTACEAE_CUTLASS));
 		CombinationRegistry.addCombination(Items.WOODEN_SWORD, Items.COOKED_BEEF, MODE_OR, new ItemStack(STEAK_SWORD));
 		CombinationRegistry.addCombination(Items.WOODEN_SWORD, Items.BEEF, MODE_OR, new ItemStack(BEEF_SWORD));
 		CombinationRegistry.addCombination(Items.WOODEN_SWORD, IRRADIATED_STEAK, MODE_OR, new ItemStack(IRRADIATED_STEAK_SWORD));
@@ -279,12 +279,12 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(Items.STONE_SWORD, Items.ROTTEN_FLESH, MODE_AND, new ItemStack(KATANA));
 		CombinationRegistry.addCombination(Items.IRON_SWORD, Items.ROTTEN_FLESH, MODE_AND, new ItemStack(KATANA));
 		CombinationRegistry.addCombination(Items.IRON_SWORD, Items.BLAZE_ROD, MODE_AND, new ItemStack(FIRE_POKER));
-		CombinationRegistry.addCombination(Items.IRON_SWORD, Items.BLAZE_ROD, MODE_OR, new ItemStack(HOT_HANDLE));
+		CombinationRegistry.addCombination(Items.IRON_SWORD, Items.BLAZE_ROD, MODE_OR, new ItemStack(TOO_HOT_TO_HANDLE));
 		CombinationRegistry.addCombination(Items.IRON_SWORD, CHESSBOARD, MODE_AND, new ItemStack(REGISWORD));
 		CombinationRegistry.addCombination(KATANA, CHESSBOARD, MODE_AND, new ItemStack(REGISWORD));
 		CombinationRegistry.addCombination(Items.IRON_SWORD, Blocks.IRON_BLOCK, MODE_AND, new ItemStack(CLAYMORE));
 		CombinationRegistry.addCombination(KATANA, Blocks.BEDROCK, MODE_AND, new ItemStack(UNBREAKABLE_KATANA));
-		CombinationRegistry.addCombination(HOT_HANDLE, Blocks.LAPIS_BLOCK, MODE_OR, new ItemStack(COBALT_SABRE));
+		CombinationRegistry.addCombination(TOO_HOT_TO_HANDLE, Blocks.LAPIS_BLOCK, MODE_OR, new ItemStack(COBALT_SABRE));
 		CombinationRegistry.addCombination(CALEDSCRATCH, FROG, MODE_AND, new ItemStack(SCARLET_RIBBITAR));
 		CombinationRegistry.addCombination(Blocks.BEACON, Items.DIAMOND_SWORD, MODE_AND, new ItemStack(SHATTER_BEACON));
 		
@@ -295,18 +295,18 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(Items.IRON_AXE, Blocks.IRON_BLOCK, MODE_AND, new ItemStack(BATTLEAXE));
 		CombinationRegistry.addCombination(Items.WOODEN_AXE, Blocks.ANVIL, MODE_AND, new ItemStack(BLACKSMITH_BANE));
 		CombinationRegistry.addCombination(ItemTags.MUSIC_DISCS, Items.IRON_AXE, MODE_AND, new ItemStack(SCRAXE));
-		CombinationRegistry.addCombination(COPSE_CRUSHER, POGO_HAMMER, MODE_AND, new ItemStack(Q_P_HAMMER_AXE));
-		CombinationRegistry.addCombination(Q_P_HAMMER_AXE, ENERGY_CORE, MODE_AND, new ItemStack(Q_F_HAMMER_AXE));
-		CombinationRegistry.addCombination(Items.GOLDEN_AXE, Items.LAVA_BUCKET, MODE_AND, new ItemStack(HEPHAESTUS_LUMBER));
+		CombinationRegistry.addCombination(COPSE_CRUSHER, POGO_HAMMER, MODE_AND, new ItemStack(PISTON_POWERED_POGO_AXEHAMMER));
+		CombinationRegistry.addCombination(PISTON_POWERED_POGO_AXEHAMMER, ENERGY_CORE, MODE_AND, new ItemStack(FISSION_FOCUSED_FAULT_FELLER));
+		CombinationRegistry.addCombination(Items.GOLDEN_AXE, Items.LAVA_BUCKET, MODE_AND, new ItemStack(HEPHAESTUS_LUMBERJACK));
 		CombinationRegistry.addCombination(Items.IRON_AXE, FROG, MODE_AND, new ItemStack(RUBY_CROAK));
 		
 		//sickles
 		CombinationRegistry.addCombination(Items.IRON_HOE, Items.WHEAT, MODE_AND, new ItemStack(SICKLE));
 		CombinationRegistry.addCombination(SICKLE, THRESH_DVD, MODE_OR, new ItemStack(HOMES_SMELL_YA_LATER));
-		CombinationRegistry.addCombination(SICKLE, Items.COCOA_BEANS, MODE_OR, new ItemStack (FUDGE_SICKLE));
-		CombinationRegistry.addCombination(SICKLE, CHESSBOARD, MODE_AND, new ItemStack(REGI_SICKLE));
+		CombinationRegistry.addCombination(SICKLE, Items.COCOA_BEANS, MODE_OR, new ItemStack (FUDGESICKLE));
+		CombinationRegistry.addCombination(SICKLE, CHESSBOARD, MODE_AND, new ItemStack(REGISICKLE));
 		CombinationRegistry.addCombination(SICKLE, CANDY_CORN, MODE_OR, new ItemStack(CANDY_SICKLE));
-		CombinationRegistry.addCombination(FUDGE_SICKLE, Items.SUGAR, MODE_AND, new ItemStack(CANDY_SICKLE));
+		CombinationRegistry.addCombination(FUDGESICKLE, Items.SUGAR, MODE_AND, new ItemStack(CANDY_SICKLE));
 		CombinationRegistry.addCombination(CAT_CLAWS_DRAWN, GRIMOIRE, MODE_AND, new ItemStack(CLAW_OF_NRUBYIGLITH));
 		CombinationRegistry.addCombination(CAT_CLAWS_SHEATHED, GRIMOIRE, MODE_AND, new ItemStack(CLAW_OF_NRUBYIGLITH));
 		
@@ -326,8 +326,8 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(BLACKSMITH_HAMMER, Items.CLOCK, MODE_OR, new ItemStack(FEAR_NO_ANVIL));
 		CombinationRegistry.addCombination(SLEDGE_HAMMER, Items.BOOK, MODE_AND, new ItemStack(TELESCOPIC_SASSACRUSHER));
 		CombinationRegistry.addCombination(FEAR_NO_ANVIL, Items.LAVA_BUCKET, MODE_OR, new ItemStack(MELT_MASHER));
-		CombinationRegistry.addCombination(Q_F_HAMMER_AXE, GAMEGRL_MAGAZINE, MODE_OR, new ItemStack(Q_E_HAMMER_AXE));
-		CombinationRegistry.addCombination(Q_E_HAMMER_AXE, SBAHJ_POSTER, MODE_AND, new ItemStack(D_D_E_HAMMER_AXE));
+		CombinationRegistry.addCombination(FISSION_FOCUSED_FAULT_FELLER, GAMEGRL_MAGAZINE, MODE_OR, new ItemStack(ESTROGEN_EMPOWERED_EVERYTHING_ERADICATOR));
+		CombinationRegistry.addCombination(ESTROGEN_EMPOWERED_EVERYTHING_ERADICATOR, SBAHJ_POSTER, MODE_AND, new ItemStack(EEEEEEEEEEEE));
 		CombinationRegistry.addCombination(ZILLYHOO_HAMMER, FLUORITE_OCTET, MODE_AND, new ItemStack(POPAMATIC_VRILLYHOO));
 		CombinationRegistry.addCombination(ZILLYHOO_HAMMER, FROG, MODE_AND, new ItemStack(SCARLET_ZILLYHOO));
 		
@@ -341,7 +341,7 @@ public class AlchemyRecipes
 		CombinationRegistry.addCombination(Blocks.BROWN_MUSHROOM, Items.STICK, MODE_OR, new ItemStack(PARADISES_PORTABELLO));
 		CombinationRegistry.addCombination(CANE, CHESSBOARD, MODE_AND, new ItemStack(REGI_CANE));
 		CombinationRegistry.addCombination(IRON_CANE, CHESSBOARD, MODE_AND, new ItemStack(REGI_CANE));
-		CombinationRegistry.addCombination(Items.STICK, RAW_URANIUM, MODE_OR, new ItemStack(UP_STICK));
+		CombinationRegistry.addCombination(Items.STICK, RAW_URANIUM, MODE_OR, new ItemStack(URANIUM_POWERED_STICK));
 		
 		//spoons/sporks/forks
 		CombinationRegistry.addCombination(Items.WOODEN_SHOVEL, Items.BOWL, MODE_AND, new ItemStack(WOODEN_SPOON));
@@ -506,18 +506,18 @@ public class AlchemyRecipes
 		//uranium-based non-weapon and uranium cooker recipes
 		CombinationRegistry.addCombination(RAW_CRUXITE, RAW_URANIUM, MODE_AND, new ItemStack(ENERGY_CORE));
 		CombinationRegistry.addCombination(RAW_URANIUM, Items.COOKED_BEEF, MODE_OR, new ItemStack(IRRADIATED_STEAK));
-		CombinationRegistry.addCombination(UP_STICK, ENERGY_CORE, MODE_AND, new ItemStack(QUANTUM_SABRE));
+		CombinationRegistry.addCombination(URANIUM_POWERED_STICK, ENERGY_CORE, MODE_AND, new ItemStack(QUANTUM_SABRE));
 		
 		CombinationRegistry.addCombination(Items.POTION, Items.SUGAR, MODE_OR, new ItemStack(TAB));
-		CombinationRegistry.addCombination(Items.POTION, Items.ORANGE_DYE, MODE_OR, new ItemStack(FAYGO));
-		CombinationRegistry.addCombination(FAYGO, Items.APPLE, MODE_OR, new ItemStack(FAYGO_CANDY_APPLE));
-		CombinationRegistry.addCombination(FAYGO, TAB, MODE_OR, new ItemStack(FAYGO_COLA));
-		CombinationRegistry.addCombination(FAYGO, Items.LIGHT_BLUE_WOOL, MODE_OR, new ItemStack(FAYGO_COTTON_CANDY));
-		CombinationRegistry.addCombination(FAYGO, Items.MILK_BUCKET, MODE_OR, new ItemStack(FAYGO_CREME));
-		CombinationRegistry.addCombination(FAYGO, Items.CHORUS_FRUIT, MODE_OR, new ItemStack(FAYGO_GRAPE));
-		CombinationRegistry.addCombination(FAYGO, Items.LIME_DYE, MODE_OR, new ItemStack(FAYGO_MOON_MIST));
-		CombinationRegistry.addCombination(FAYGO_CANDY_APPLE, Items.PINK_DYE, MODE_AND, new ItemStack(FAYGO_PEACH));
-		CombinationRegistry.addCombination(FAYGO, Items.TNT, MODE_OR, new ItemStack(FAYGO_REDPOP));
+		CombinationRegistry.addCombination(Items.POTION, Items.ORANGE_DYE, MODE_OR, new ItemStack(ORANGE_FAYGO));
+		CombinationRegistry.addCombination(ORANGE_FAYGO, Items.APPLE, MODE_OR, new ItemStack(CANDY_APPLE_FAYGO));
+		CombinationRegistry.addCombination(ORANGE_FAYGO, TAB, MODE_OR, new ItemStack(FAYGO_COLA));
+		CombinationRegistry.addCombination(ORANGE_FAYGO, Items.LIGHT_BLUE_WOOL, MODE_OR, new ItemStack(COTTON_CANDY_FAYGO));
+		CombinationRegistry.addCombination(ORANGE_FAYGO, Items.MILK_BUCKET, MODE_OR, new ItemStack(CREME_SODA_FAYGO));
+		CombinationRegistry.addCombination(ORANGE_FAYGO, Items.CHORUS_FRUIT, MODE_OR, new ItemStack(GRAPE_FAYGO));
+		CombinationRegistry.addCombination(ORANGE_FAYGO, Items.LIME_DYE, MODE_OR, new ItemStack(MOON_MIST_FAYGO));
+		CombinationRegistry.addCombination(CANDY_APPLE_FAYGO, Items.PINK_DYE, MODE_AND, new ItemStack(PEACH_FAYGO));
+		CombinationRegistry.addCombination(ORANGE_FAYGO, Items.TNT, MODE_OR, new ItemStack(REDPOP_FAYGO));
 	}
 	
 	@SubscribeEvent
