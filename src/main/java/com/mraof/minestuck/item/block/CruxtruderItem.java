@@ -4,9 +4,9 @@ import com.mraof.minestuck.block.multiblock.CruxtruderMultiblock;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.tileentity.CruxtruderTileEntity;
+import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MSRotationUtil;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -38,8 +38,8 @@ public class CruxtruderItem extends MultiblockItem
 			int color;
 			EditData editData = ServerEditHandler.getData(player);
 			if(editData != null)
-				color = PlayerSavedData.getData(editData.getTarget(), world).getColor();
-			else color = PlayerSavedData.getData((ServerPlayerEntity) player).getColor();
+				color = ColorHandler.getColorForPlayer(editData.getTarget(), world);
+			else color =  ColorHandler.getColorForPlayer((ServerPlayerEntity) player);
 			
 			((CruxtruderTileEntity) te).setColor(color);
 			return true;

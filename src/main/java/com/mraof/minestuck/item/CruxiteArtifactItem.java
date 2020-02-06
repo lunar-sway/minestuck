@@ -12,7 +12,9 @@ import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.tileentity.GateTileEntity;
 import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
-import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.PostEntryTask;
+import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.MSExtraData;
@@ -49,7 +51,7 @@ import java.util.logging.Logger;
 
 import static com.mraof.minestuck.MinestuckConfig.artifactRange;
 
-public abstract class CruxiteArtifactItem extends Item
+public abstract class CruxiteArtifactItem extends Item implements AlchemizedColored
 {
 	//TODO item classes should not be a container for non-final fields such as these. The functionality of this class need to be restructured!
 	// Eventually we'd want cruxite artifacts of kinds other than items, so it's a good idea to move this to a more general class.

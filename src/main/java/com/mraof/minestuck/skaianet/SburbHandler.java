@@ -481,7 +481,7 @@ public class SburbHandler
 	 */
 	public static ItemStack getEntryItem(World world, SburbConnection c)
 	{
-		int color = PlayerSavedData.getData(c.getClientIdentifier(), world).getColor();
+		int color =  ColorHandler.getColorForPlayer(c.getClientIdentifier(), world);
 		Item artifact;
 		if(c == null)
 			artifact = MSItems.CRUXITE_APPLE;
