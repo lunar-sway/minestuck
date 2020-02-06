@@ -385,6 +385,14 @@ public class AlchemiterTileEntity extends TileEntity implements IColored
 		if(canAfford)
 		{
 			
+			
+			PlayerIdentifier pid = IdentifierHandler.encode(player);
+			GristHelper.decrease(world, pid, cost);
+			
+			AlchemyEvent event = new AlchemyEvent(pid, this, getDowel(), newItem, cost);
+			MinecraftForge.EVENT_BUS.post(event);
+			newItem = event.getItemResult();
+			
 			while(quantity > 0)
 			{
 				ItemStack stack = newItem.copy();
@@ -395,19 +403,14 @@ public class AlchemiterTileEntity extends TileEntity implements IColored
 					stack = AlchemyRecipes.changeEncodeSize(stack, stackCount);
 					quantity -=  Math.min(AlchemyRecipes.getDecodedItem(stack).getMaxStackSize(), quantity);
 				}
-				else*/{
+				else*/
+				{
 					stack.setCount(Math.min(stack.getMaxStackSize(), quantity));
 					quantity -= stack.getCount();
 				}
 				ItemEntity item = new ItemEntity(world, spawnPos.getX(), spawnPos.getY() + 0.5, spawnPos.getZ(), stack);
 				world.addEntity(item);
 			}
-			
-			PlayerIdentifier pid = IdentifierHandler.encode(player);
-			GristHelper.decrease(world, pid, cost);
-			
-			AlchemyEvent event = new AlchemyEvent(pid, this, getDowel(), newItem, cost);
-			MinecraftForge.EVENT_BUS.post(event);
 		}
 	}
 	

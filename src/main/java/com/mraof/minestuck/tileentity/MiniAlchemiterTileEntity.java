@@ -107,6 +107,12 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 		
 		GristSet cost = GristCostRecipe.findCostForItem(newItem, wildcardGrist, false, world);
 		
+		GristHelper.decrease(world, owner, cost);
+		
+		AlchemyEvent event = new AlchemyEvent(owner, this, this.inv.get(INPUT), newItem, cost);
+		MinecraftForge.EVENT_BUS.post(event);
+		newItem = event.getItemResult();
+		
 		if (inv.get(OUTPUT).isEmpty())
 		{
 			setInventorySlotContents(1, newItem);
@@ -115,11 +121,6 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 		{
 			this.inv.get(OUTPUT).grow(1);
 		}
-		
-		GristHelper.decrease(world, owner, cost);
-		
-		AlchemyEvent event = new AlchemyEvent(owner, this, this.inv.get(INPUT), newItem, cost);
-		MinecraftForge.EVENT_BUS.post(event);
 	}
 	
 	// We're going to want to trigger a block update every 20 ticks to have comparators pull data from the Alchemiter.

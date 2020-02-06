@@ -13,7 +13,7 @@ public class AlchemyEvent extends Event
 	private final PlayerIdentifier player;
 	private final TileEntity alchemiter;
 	private final ItemStack dowel;
-	private final ItemStack result;
+	private ItemStack result;
 	private final GristSet cost;
 	
 	public AlchemyEvent(PlayerIdentifier player, TileEntity alchemiter, ItemStack dowel, ItemStack result, GristSet cost)
@@ -51,6 +51,11 @@ public class AlchemyEvent extends Event
 	public ItemStack getItemResult()
 	{
 		return result.copy();
+	}
+	
+	public void setItemResult(ItemStack result)
+	{
+		this.result = result.copy();
 	}
 	
 	public GristSet getCost()
