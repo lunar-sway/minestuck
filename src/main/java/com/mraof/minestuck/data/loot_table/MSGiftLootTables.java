@@ -16,6 +16,7 @@ import net.minecraft.potion.Potions;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.*;
 import net.minecraft.world.storage.loot.functions.SetCount;
+import net.minecraft.world.storage.loot.functions.SetDamage;
 import net.minecraft.world.storage.loot.functions.SetNBT;
 
 import java.util.Objects;
@@ -610,6 +611,41 @@ public class MSGiftLootTables implements Consumer<BiConsumer<ResourceLocation, L
 				.addLootPool(LootPool.builder().name(MAIN_POOL).rolls(ConstantRange.of(1))
 						.addEntry(ItemLootEntry.builder(MSItems.CREME_SODA_FAYGO).weight(2).acceptFunction(SetCount.builder(RandomValueRange.of(1, 3)))))
 				.addLootPool(LootPool.builder().name(SPECIAL_POOL).rolls(ConstantRange.of(1))));
+		
+		
+		lootProcessor.accept(MSLootTables.CONSORT_JUNK_REWARD, LootTable.builder()
+				.addLootPool(LootPool.builder().name("main").rolls(ConstantRange.of(1))
+						.addEntry(ItemLootEntry.builder(Items.OAK_PLANKS).weight(2))
+						.addEntry(ItemLootEntry.builder(Items.SPRUCE_PLANKS).weight(2))
+						.addEntry(ItemLootEntry.builder(Items.BIRCH_PLANKS).weight(2))
+						.addEntry(ItemLootEntry.builder(Items.JUNGLE_PLANKS).weight(2))
+						.addEntry(ItemLootEntry.builder(Items.DARK_OAK_PLANKS).weight(2))
+						.addEntry(ItemLootEntry.builder(Items.ACACIA_PLANKS).weight(2))
+						.addEntry(ItemLootEntry.builder(Items.WOODEN_AXE).weight(5))
+						.addEntry(ItemLootEntry.builder(Items.WOODEN_PICKAXE).weight(5))
+						.addEntry(ItemLootEntry.builder(Items.WOODEN_HOE).weight(5))
+						.addEntry(ItemLootEntry.builder(Items.WOODEN_SHOVEL).weight(5))
+						.addEntry(ItemLootEntry.builder(Items.ROTTEN_FLESH).weight(8))
+						.addEntry(ItemLootEntry.builder(MSBlocks.GENERIC_OBJECT).weight(10))
+						.addEntry(ItemLootEntry.builder(Items.POISONOUS_POTATO).weight(10))
+						.addEntry(ItemLootEntry.builder(Items.RABBIT_HIDE).weight(10))
+						.addEntry(ItemLootEntry.builder(Items.DEAD_BUSH).weight(10))
+						.addEntry(ItemLootEntry.builder(Items.OAK_STAIRS).weight(5))
+						.addEntry(ItemLootEntry.builder(Items.FLOWER_POT).weight(5))
+						.addEntry(ItemLootEntry.builder(Items.BIRCH_BUTTON).weight(5))
+						.addEntry(ItemLootEntry.builder(MSItems.SORD).weight(10))
+						.addEntry(ItemLootEntry.builder(Items.GOLDEN_SHOVEL).weight(3).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.05F, 0.05F))))
+						.addEntry(ItemLootEntry.builder(Items.GOLDEN_AXE).weight(3).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.05F, 0.05F))))
+						.addEntry(ItemLootEntry.builder(Items.GOLDEN_SWORD).weight(3).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.05F, 0.05F))))
+						.addEntry(ItemLootEntry.builder(Items.GOLDEN_PICKAXE).weight(3).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.05F, 0.05F))))
+						.addEntry(ItemLootEntry.builder(MSItems.SBAHJ_POSTER).weight(10))
+						.addEntry(ItemLootEntry.builder(MSItems.CREW_POSTER).weight(10))
+						.addEntry(ItemLootEntry.builder(MSItems.THRESH_DVD).weight(10))
+						.addEntry(ItemLootEntry.builder(MSItems.ONION).weight(5)).acceptCondition(ConsortLootCondition.builder(EnumConsort.NAKAGATOR))
+						.addEntry(ItemLootEntry.builder(MSItems.TAB).weight(5)).acceptCondition(ConsortLootCondition.builder(EnumConsort.SALAMANDER))
+						.addEntry(ItemLootEntry.builder(MSItems.JAR_OF_BUGS).weight(5)).acceptCondition(ConsortLootCondition.builder(EnumConsort.TURTLE))
+						.addEntry(ItemLootEntry.builder(MSItems.GRASSHOPPER).weight(5)).acceptCondition(ConsortLootCondition.builder(EnumConsort.IGUANA))));
+		
 	}
 	
 	private static CompoundNBT waterNBT()
