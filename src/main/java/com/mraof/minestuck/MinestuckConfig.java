@@ -138,7 +138,7 @@ public class MinestuckConfig
 		
 		SERVER_BUILDER.push("mechanics");
 		echeladderProgress = SERVER_BUILDER.comment("If this is true, players will be able to see their progress towards the next rung. This is server side and will only be active in multiplayer if the server/Lan host has it activated.")
-				.define("echeladderProgress", false);
+				.define("echeladderProgress", true);
 		preEntryRungLimit = SERVER_BUILDER.comment("The highest rung you can get before entering medium. Note that the first rung is indexed as 0, the second as 1 and so on.")
 				.defineInRange("preEntryRungLimit", 6, 0, 49);
 		aspectEffects = SERVER_BUILDER.comment("If this is true, players will gain certain potion effects once they reach a certain rung based on their aspect.")
@@ -167,7 +167,7 @@ public class MinestuckConfig
 		SERVER_BUILDER.push("computer");
 		privateComputers = SERVER_BUILDER.comment("True if computers should only be able to be used by the owner.")
 				.define("privateComputers", true);
-		globalSession = SERVER_BUILDER.comment("Whenether all connetions should be put into a single session or not.")
+		globalSession = SERVER_BUILDER.comment("Whenever all sburb connections should be put into a single session or not.")
 				.define("globalSession",false);
 		skaianetCheck = SERVER_BUILDER.comment("If enabled, will during certain moments perform a check on all connections and computers that are in use. Recommended to turn off if there is a need to improve performance, however skaianet-related bugs might appear when done so.")
 				.define("skaianetCheck",true);
@@ -198,7 +198,7 @@ public class MinestuckConfig
 		alchemiterMaxStacks = SERVER_BUILDER.comment("The number of stacks that can be alchemized at the same time with the alchemiter.")
 				.defineInRange("alchemiterMaxStacks",16,0,999);
 		cruxtruderIntake = SERVER_BUILDER.comment("If enabled, the regular cruxtruder will require raw cruxite to function, which is inserted through the pipe.")
-				.define("cruxtruderIntake",false);
+				.define("cruxtruderIntake",true);
 		forbiddenDimensionTypesTpz = SERVER_BUILDER.comment("A list of dimension types that you cannot travel to or from using transportalizers.")
 				.define("forbiddenDimensionTypesTpz", new ArrayList<>());
 		forbiddenModDimensionsTpz = SERVER_BUILDER.comment("A list of mod dimensions that you cannot travel to or from using transportalizers.")
