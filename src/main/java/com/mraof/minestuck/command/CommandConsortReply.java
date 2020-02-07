@@ -15,8 +15,8 @@ public class CommandConsortReply
 {
 	public static void register(CommandDispatcher<CommandSource> dispatcher)
 	{
-		dispatcher.register(Commands.literal("consortreply").then(Commands.argument("id", IntegerArgumentType.integer())).then(Commands.argument("path", StringArgumentType.word()))
-				.executes(context -> execute(context.getSource(), IntegerArgumentType.getInteger(context, "id"), StringArgumentType.getString(context, "path"))));
+		dispatcher.register(Commands.literal("consortreply").then(Commands.argument("id", IntegerArgumentType.integer()).then(Commands.argument("path", StringArgumentType.greedyString())
+				.executes(context -> execute(context.getSource(), IntegerArgumentType.getInteger(context, "id"), StringArgumentType.getString(context, "path"))))));
 	}
 	
 	public static int execute(CommandSource source, int id, String path) throws CommandSyntaxException

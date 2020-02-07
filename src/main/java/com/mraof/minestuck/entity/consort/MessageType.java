@@ -2,11 +2,11 @@ package com.mraof.minestuck.entity.consort;
 
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
-import com.mraof.minestuck.skaianet.SburbConnection;
-import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
@@ -599,7 +599,7 @@ public abstract class MessageType
 				if(question == null)
 					return null;
 				
-				String commandStart = "/consortReply " + consort.getEntityId() + " "
+				String commandStart = "/consortreply " + consort.getEntityId() + " "
 						+ (chainIdentifier.isEmpty() ? "" : chainIdentifier + ":");
 				question.appendText("\n");
 				for(int i = 0; i < options.length; i++)
