@@ -12,12 +12,13 @@ import com.mraof.minestuck.tileentity.MiniAlchemiterTileEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 
 import java.util.List;
 import java.util.Optional;
 
-public class MiniAlchemiterScreen extends MachineScreen<MiniAlchemiterContainer>
+public class MiniAlchemiterScreen extends MachineScreen<MiniAlchemiterContainer> implements Positioned
 {
 	
 	private static final ResourceLocation BACKGROUND = new ResourceLocation("minestuck:textures/gui/alchemiter.png");
@@ -41,6 +42,12 @@ public class MiniAlchemiterScreen extends MachineScreen<MiniAlchemiterContainer>
 		progressHeight = 10;
 		goX = 72;
 		goY = 31;
+	}
+	
+	@Override
+	public BlockPos getPosition()
+	{
+		return getContainer().machinePos;
 	}
 	
 	@Override

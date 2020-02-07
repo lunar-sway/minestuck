@@ -31,10 +31,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
 
-public class AlchemiterTileEntity extends TileEntity implements IColored
+public class AlchemiterTileEntity extends TileEntity implements IColored, GristWildcardHolder
 {
 	
-	protected GristType wildcardGrist = GristTypes.BUILD;
+	private GristType wildcardGrist = GristTypes.BUILD;
 	protected boolean broken = false;
 	protected ItemStack dowel = ItemStack.EMPTY;
 	protected ItemStack upgradeItem[] = {ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY,ItemStack.EMPTY,ItemStack.EMPTY};
@@ -436,12 +436,14 @@ public class AlchemiterTileEntity extends TileEntity implements IColored
 		return wildcardGrist;
 	}
 	
+	@Override
 	public void setWildcardGrist(GristType wildcardGrist)
 	{
 		if(this.wildcardGrist != wildcardGrist)
 		{
 			this.wildcardGrist = wildcardGrist;
 			this.markDirty();
+			
 		}
 	}
 }

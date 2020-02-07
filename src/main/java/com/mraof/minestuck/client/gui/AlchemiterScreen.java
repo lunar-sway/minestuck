@@ -12,13 +12,14 @@ import com.mraof.minestuck.tileentity.AlchemiterTileEntity;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 import java.util.List;
 
-public class AlchemiterScreen extends Screen
+public class AlchemiterScreen extends Screen implements Positioned
 {
 	public static final String TITLE = "minestuck.alchemiter";
 	
@@ -36,6 +37,12 @@ public class AlchemiterScreen extends Screen
 	
 	public AlchemiterTileEntity getAlchemiter() {
 		return alchemiter;
+	}
+	
+	@Override
+	public BlockPos getPosition()
+	{
+		return getAlchemiter().getPos();
 	}
 	
 	@Override

@@ -21,7 +21,7 @@ import net.minecraftforge.registries.ForgeRegistry;
 
 import javax.annotation.Nullable;
 
-public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implements INamedContainerProvider, IOwnable
+public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implements INamedContainerProvider, IOwnable, GristWildcardHolder
 {
 	public static final String TITLE = "container.minestuck.mini_alchemiter";
 	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
@@ -225,6 +225,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 		return wildcardGrist;
 	}
 	
+	@Override
 	public void setWildcardGrist(GristType wildcardGrist)
 	{
 		if(this.wildcardGrist != wildcardGrist)
