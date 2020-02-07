@@ -443,7 +443,8 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 		{
 			this.wildcardGrist = wildcardGrist;
 			this.markDirty();
-			
+			if(world != null && !world.isRemote)
+				world.notifyBlockUpdate(getPos(), getBlockState(), getBlockState(), 0);
 		}
 	}
 }
