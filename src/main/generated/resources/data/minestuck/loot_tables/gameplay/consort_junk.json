@@ -1,0 +1,203 @@
+{
+  "type": "minecraft:gift",
+  "pools": [
+    {
+      "name": "main",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "minecraft:oak_planks"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "minecraft:spruce_planks"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "minecraft:birch_planks"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "minecraft:jungle_planks"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "minecraft:dark_oak_planks"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "minecraft:acacia_planks"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "name": "minecraft:wooden_axe"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "name": "minecraft:wooden_pickaxe"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "name": "minecraft:wooden_hoe"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "name": "minecraft:wooden_shovel"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 8,
+          "name": "minecraft:rotten_flesh"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "name": "minestuck:generic_object"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "name": "minecraft:poisonous_potato"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "name": "minecraft:rabbit_hide"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "name": "minecraft:dead_bush"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "name": "minecraft:oak_stairs"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "name": "minecraft:flower_pot"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "name": "minecraft:birch_button"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "name": "minestuck:sord"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 3,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": 0.05
+            }
+          ],
+          "name": "minecraft:golden_shovel"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 3,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": 0.05
+            }
+          ],
+          "name": "minecraft:golden_axe"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 3,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": 0.05
+            }
+          ],
+          "name": "minecraft:golden_sword"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 3,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": 0.05
+            }
+          ],
+          "name": "minecraft:golden_pickaxe"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "name": "minestuck:sbahj_poster"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "name": "minestuck:crew_poster"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "name": "minestuck:thresh_dvd"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "name": "minestuck:onion"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "name": "minestuck:tab"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "name": "minestuck:jar_of_bugs"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "name": "minestuck:grasshopper"
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minestuck:consort",
+          "consort": "nakagator"
+        },
+        {
+          "condition": "minestuck:consort",
+          "consort": "salamander"
+        },
+        {
+          "condition": "minestuck:consort",
+          "consort": "turtle"
+        },
+        {
+          "condition": "minestuck:consort",
+          "consort": "iguana"
+        }
+      ]
+    }
+  ]
+}

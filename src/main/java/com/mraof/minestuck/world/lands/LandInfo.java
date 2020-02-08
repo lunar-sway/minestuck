@@ -1,7 +1,8 @@
 package com.mraof.minestuck.world.lands;
 
+import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.PlayerIdentifier;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -20,6 +21,8 @@ import java.util.Random;
  */
 public class LandInfo
 {
+	public static final String LAND_ENTRY = "minestuck.land_entry";
+	
 	public final PlayerIdentifier identifier;
 	private final LandTypePair.LazyInstance landAspects;
 	private final ResourceLocation dimensionName;
@@ -175,5 +178,11 @@ public class LandInfo
 		info.spawnY = nbt.getInt("spawn_y");
 		
 		return info;
+	}
+	
+	public void sendLandEntryMessage(ServerPlayerEntity player)
+	{
+		ITextComponent toSend = new TranslationTextComponent(LAND_ENTRY, this.landAsTextComponent());
+		player.sendMessage(toSend);
 	}
 }

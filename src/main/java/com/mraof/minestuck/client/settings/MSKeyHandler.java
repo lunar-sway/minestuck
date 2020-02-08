@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.settings;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
-import com.mraof.minestuck.editmode.ClientEditHandler;
+import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.EffectTogglePacket;
 import com.mraof.minestuck.network.MSPacketHandler;

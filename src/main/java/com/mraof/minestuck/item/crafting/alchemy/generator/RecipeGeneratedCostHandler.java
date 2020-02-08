@@ -3,7 +3,6 @@ package com.mraof.minestuck.item.crafting.alchemy.generator;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
-import com.mojang.datafixers.util.Pair;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.jei.JeiGristCost;
@@ -24,6 +23,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -253,16 +253,16 @@ public class RecipeGeneratedCostHandler extends ReloadListener<List<RecipeGenera
 		for(SourceEntry entry : sources)
 		{
 			List<IRecipe<?>> recipes = entry.source.findRecipes(recipeManager);
-			recipeLists.add(new Pair<>(recipes, entry.interpreter));
+			recipeLists.add(Pair.of(recipes, entry.interpreter));
 		}
-		recipeLists.sort(Comparator.comparingInt(pair -> -pair.getFirst().size()));
+		recipeLists.sort(Comparator.comparingInt(pair -> -pair.getLeft().size()));
 		
 		//Step 2: Map recipes to interpreters such that each recipe only has one interpreter
 		Map<IRecipe<?>, RecipeInterpreter> recipeMap = new HashMap<>();
 		for(Pair<List<IRecipe<?>>, RecipeInterpreter> pair : recipeLists)
 		{
-			for(IRecipe<?> recipe : pair.getFirst())
-				recipeMap.put(recipe, pair.getSecond());
+			for(IRecipe<?> recipe : pair.getLeft())
+				recipeMap.put(recipe, pair.getRight());
 		}
 		
 		//Step 3: Take items from interpreter.getOutputItems() and map item -> recipe interpreter pair
@@ -271,7 +271,7 @@ public class RecipeGeneratedCostHandler extends ReloadListener<List<RecipeGenera
 		{
 			for(Item item : entry.getValue().getOutputItems(entry.getKey()))
 			{
-				itemLookupMap.computeIfAbsent(item, item1 -> new ArrayList<>()).add(new Pair<>(entry.getKey(), entry.getValue()));
+				itemLookupMap.computeIfAbsent(item, item1 -> new ArrayList<>()).add(Pair.of(entry.getKey(), entry.getValue()));
 			}
 		}
 		

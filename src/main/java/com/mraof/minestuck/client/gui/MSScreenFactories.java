@@ -9,7 +9,7 @@ import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import com.mraof.minestuck.tileentity.AlchemiterTileEntity;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
-import com.mraof.minestuck.util.Title;
+import com.mraof.minestuck.player.Title;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.gui.screen.Screen;

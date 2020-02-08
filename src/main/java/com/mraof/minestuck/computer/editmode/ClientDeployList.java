@@ -1,4 +1,4 @@
-package com.mraof.minestuck.editmode;
+package com.mraof.minestuck.computer.editmode;
 
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import net.minecraft.item.ItemStack;

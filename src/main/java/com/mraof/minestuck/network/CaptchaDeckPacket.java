@@ -1,6 +1,6 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckContainer;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import net.minecraft.entity.player.ServerPlayerEntity;

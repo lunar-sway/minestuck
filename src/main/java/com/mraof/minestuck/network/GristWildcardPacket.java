@@ -1,8 +1,7 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
-import com.mraof.minestuck.tileentity.AlchemiterTileEntity;
-import com.mraof.minestuck.tileentity.MiniAlchemiterTileEntity;
+import com.mraof.minestuck.tileentity.GristWildcardHolder;
 import com.mraof.minestuck.util.Debug;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
@@ -44,12 +43,9 @@ public class GristWildcardPacket implements PlayToServerPacket
 		if(player != null && player.getEntityWorld().isAreaLoaded(pos, 0))
 		{
 			TileEntity te = player.getEntityWorld().getTileEntity(pos);
-			if(te instanceof MiniAlchemiterTileEntity)
+			if(te instanceof GristWildcardHolder)
 			{
-				((MiniAlchemiterTileEntity) te).setWildcardGrist(gristType);
-			} else if(te instanceof AlchemiterTileEntity)
-			{
-				((AlchemiterTileEntity) te).setWildcardGrist(gristType);
+				((GristWildcardHolder) te).setWildcardGrist(gristType);
 			} else
 			{
 				Debug.warnf("No tile entity found at %s for packet sent by player %s!", pos, player.getName());

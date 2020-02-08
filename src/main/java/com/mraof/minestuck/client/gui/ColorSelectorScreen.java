@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.gui;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.network.ColorSelectPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.util.ColorCollector;
+import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
@@ -29,9 +29,9 @@ public class ColorSelectorScreen extends Screen
 	{
 		super(new TranslationTextComponent(TITLE));
 		this.firstTime = firstTime;
-		for(int i = 0; i < ColorCollector.getColorSize(); i++)
+		for(int i = 0; i < ColorHandler.getColorSize(); i++)
 		{
-			if(ColorCollector.getColor(i) == ClientPlayerData.playerColor)
+			if(ColorHandler.getColor(i) == ClientPlayerData.playerColor)
 			{
 				selectedIndex = i;
 			}
@@ -68,7 +68,7 @@ public class ColorSelectorScreen extends Screen
 		
 		int index = getColorIndexAtMouse(mouseX, mouseY);
 		if(index != -1)
-			renderTooltip(ColorCollector.getName(index).getFormattedText(), mouseX, mouseY);
+			renderTooltip(ColorHandler.getName(index).getFormattedText(), mouseX, mouseY);
 	}
 	
 	private void renderColorBoxes()
@@ -79,14 +79,14 @@ public class ColorSelectorScreen extends Screen
 		//Beta colors
 		for(int i = 0; i < 4; i++)
 		{
-			int color = ColorCollector.getColor(i) | 0xFF000000;
+			int color = ColorHandler.getColor(i) | 0xFF000000;
 			int x = 21 + 34*i;
 			fill(xOffset + x, yOffset + 32, xOffset + x + 32, yOffset + 48, color);
 		}
 		//Alpha colors
 		for(int i = 0; i < 4; i++)
 		{
-			int color = ColorCollector.getColor(i + 4) | 0xFF000000;
+			int color = ColorHandler.getColor(i + 4) | 0xFF000000;
 			int x = 21 + 34*i;
 			fill(xOffset + x, yOffset + 53, xOffset + x + 32, yOffset + 69, color);
 		}
@@ -94,7 +94,7 @@ public class ColorSelectorScreen extends Screen
 		for(int xIndex = 0; xIndex < 4; xIndex++)
 			for(int yIndex = 0; yIndex < 3; yIndex++)
 			{
-				int color = ColorCollector.getColor(yIndex*4 + xIndex + 8) | 0xFF000000;
+				int color = ColorHandler.getColor(yIndex*4 + xIndex + 8) | 0xFF000000;
 				int x = 21 + 34*xIndex;
 				int y = 74 + 18*yIndex;
 				fill(xOffset + x, yOffset + y, xOffset + x + 32, yOffset + y + 16, color);
@@ -160,7 +160,7 @@ public class ColorSelectorScreen extends Screen
 	private void selectColor()
 	{
 		MSPacketHandler.sendToServer(new ColorSelectPacket(selectedIndex));
-		ClientPlayerData.playerColor = ColorCollector.getColor(selectedIndex);
+		ClientPlayerData.playerColor = ColorHandler.getColor(selectedIndex);
 		this.minecraft.displayGuiScreen(null);
 	}
 	
@@ -170,7 +170,7 @@ public class ColorSelectorScreen extends Screen
 		if(firstTime && minecraft != null && minecraft.player != null)
 		{
 			ITextComponent message;
-			if(ClientPlayerData.playerColor == ColorCollector.DEFAULT_COLOR)
+			if(ClientPlayerData.playerColor == ColorHandler.DEFAULT_COLOR)
 				message = new TranslationTextComponent(DEFAULT_COLOR_SELECTED);
 			else message = new TranslationTextComponent(COLOR_SELECTED);
 			this.minecraft.player.sendMessage(new StringTextComponent("[Minestuck] ").appendSibling(message));

@@ -8,8 +8,10 @@ import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.TitleSelectPacket;
-import com.mraof.minestuck.tracker.PlayerTracker;
-import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.player.*;
+import com.mraof.minestuck.util.ColorHandler;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.MinestuckRandom;
 import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
@@ -25,6 +27,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.server.ServerWorld;
 
 import java.util.*;
 
@@ -478,7 +481,7 @@ public class SburbHandler
 	 */
 	public static ItemStack getEntryItem(World world, SburbConnection c)
 	{
-		int color = PlayerSavedData.getData(c.getClientIdentifier(), world).getColor();
+		int color =  ColorHandler.getColorForPlayer(c.getClientIdentifier(), world);
 		Item artifact;
 		if(c == null)
 			artifact = MSItems.CRUXITE_APPLE;
@@ -489,7 +492,7 @@ public class SburbHandler
 		default: artifact = MSItems.CRUXITE_APPLE;
 		}
 		
-		return ColorCollector.setColor(new ItemStack(artifact), color);
+		return ColorHandler.setColor(new ItemStack(artifact), color);
 	}
 	
 	public static GristType getPrimaryGristType(PlayerIdentifier player)
@@ -498,13 +501,7 @@ public class SburbHandler
 		return GristTypes.SHALE;
 	}
 	
-	public static int getColorForDimension(World world)
-	{
-		SburbConnection c = getConnectionForDimension(world);
-		return c == null ? ColorCollector.DEFAULT_COLOR : PlayerSavedData.getData(c.getClientIdentifier(), world).getColor();
-	}
-	
-	public static SburbConnection getConnectionForDimension(World world)
+	public static SburbConnection getConnectionForDimension(ServerWorld world)
 	{
 		return getConnectionForDimension(world.getServer(), world.getDimension().getType());
 	}
@@ -613,7 +610,7 @@ public class SburbHandler
 		if(player != null)
 		{
 			MSCriteriaTriggers.CRUXITE_ARTIFACT.trigger(player);
-			PlayerTracker.sendLandEntryMessage(player);
+			c.clientHomeLand.sendLandEntryMessage(player);
 		}
 	}
 	

@@ -4,7 +4,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.CruxiteDowelBlock;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.util.ColorCollector;
+import com.mraof.minestuck.util.ColorHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -77,7 +77,7 @@ public class CruxtruderTileEntity extends TileEntity	//TODO check if it is broke
 						world.setBlockState(pos, MSBlocks.CRUXITE_DOWEL.getDefaultState().with(CruxiteDowelBlock.DOWEL_TYPE, CruxiteDowelBlock.Type.CRUXTRUDER));
 						TileEntity te = world.getTileEntity(pos);
 						if(te instanceof ItemStackTileEntity)
-							ColorCollector.setColor(((ItemStackTileEntity) te).getStack(), color);
+							ColorHandler.setColor(((ItemStackTileEntity) te).getStack(), color);
 						if(material > 0)
 							material--;
 					}

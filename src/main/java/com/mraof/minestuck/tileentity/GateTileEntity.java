@@ -1,7 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.skaianet.SburbHandler;
+import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.PositionTeleporter;
 import com.mraof.minestuck.world.GateHandler;
 import net.minecraft.block.Block;
@@ -71,7 +71,7 @@ public class GateTileEntity extends TileEntity
 	public CompoundNBT getUpdateTag()
 	{
 		CompoundNBT nbt = new CompoundNBT();
-		nbt.putInt("color", SburbHandler.getColorForDimension(world));
+		nbt.putInt("color", ColorHandler.getColorForDimension((ServerWorld) world));
 		return nbt;
 	}
 	

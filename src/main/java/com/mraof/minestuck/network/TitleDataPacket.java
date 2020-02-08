@@ -1,6 +1,6 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.util.Title;
+import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.network.PacketBuffer;
 

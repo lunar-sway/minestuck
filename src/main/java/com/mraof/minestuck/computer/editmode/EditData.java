@@ -1,4 +1,4 @@
-package com.mraof.minestuck.editmode;
+package com.mraof.minestuck.computer.editmode;
 
 import com.mraof.minestuck.entity.DecoyEntity;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
@@ -6,9 +6,9 @@ import com.mraof.minestuck.network.GristCachePacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ServerEditPacket;
 import com.mraof.minestuck.skaianet.SburbConnection;
-import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.util.MSNBTUtil;
-import com.mraof.minestuck.util.PlayerIdentifier;
+import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.ServerPlayerEntity;

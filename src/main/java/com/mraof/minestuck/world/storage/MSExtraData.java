@@ -1,7 +1,7 @@
 package com.mraof.minestuck.world.storage;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.editmode.EditData;
+import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.util.PostEntryTask;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;

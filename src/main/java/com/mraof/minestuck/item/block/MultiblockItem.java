@@ -4,16 +4,20 @@ import com.mraof.minestuck.block.AlchemiterBlock;
 import com.mraof.minestuck.block.multiblock.MachineMultiblock;
 import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.Item;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.World;
+
+import java.util.Map;
 
 public class MultiblockItem extends BlockItem
 {
@@ -28,6 +32,18 @@ public class MultiblockItem extends BlockItem
 	public MachineMultiblock getMultiblock()
 	{
 		return multiblock;
+	}
+	
+	@Override
+	public void addToBlockToItemMap(Map<Block, Item> blockToItemMap, Item itemIn)
+	{
+		multiblock.forEachBlock(block -> blockToItemMap.put(block, itemIn));
+	}
+	
+	@Override
+	public void removeFromBlockToItemMap(Map<Block, Item> blockToItemMap, Item itemIn)
+	{
+		multiblock.forEachBlock(block -> blockToItemMap.remove(block));
 	}
 	
 	@Override
@@ -51,6 +67,7 @@ public class MultiblockItem extends BlockItem
 			
 			BlockState state = getBlock().getDefaultState().with(AlchemiterBlock.FACING, facing);
 			this.placeBlock(context, state);
+			onBlockPlaced(pos, world, context.getPlayer(), context.getItem(), state);
 			return ActionResultType.SUCCESS;
 		}
 	}

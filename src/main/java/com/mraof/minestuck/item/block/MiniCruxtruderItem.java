@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.item.AlchemizedColored;
 import com.mraof.minestuck.tileentity.MiniCruxtruderTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -15,7 +16,7 @@ import org.apache.logging.log4j.LogManager;
 
 import javax.annotation.Nullable;
 
-public class MiniCruxtruderItem extends BlockItem
+public class MiniCruxtruderItem extends BlockItem implements AlchemizedColored
 {
 	public MiniCruxtruderItem(Block blockIn, Properties builder)
 	{

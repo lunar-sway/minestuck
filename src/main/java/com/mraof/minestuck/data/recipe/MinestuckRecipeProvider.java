@@ -144,7 +144,7 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		
 		CookingRecipeBuilder.cookingRecipe(Ingredient.fromItems(Items.BEEF), MSItems.IRRADIATED_STEAK, 0.2F, 20, MSRecipeTypes.IRRADIATING).addCriterion("has_beef", hasItem(Items.BEEF)).build(recipeBuilder);
 		CookingRecipeBuilder.cookingRecipe(Ingredient.fromItems(MSItems.BEEF_SWORD), MSItems.IRRADIATED_STEAK_SWORD, 0.35F, 20, MSRecipeTypes.IRRADIATING).addCriterion("has_beef_sword", hasItem(MSItems.BEEF_SWORD)).build(recipeBuilder);
-		CookingRecipeBuilder.cookingRecipe(Ingredient.fromItems(Items.STICK), MSItems.UP_STICK, 0.1F, 100, MSRecipeTypes.IRRADIATING).addCriterion("has_stick", hasItem(Items.STICK)).build(recipeBuilder);
+		CookingRecipeBuilder.cookingRecipe(Ingredient.fromItems(Items.STICK), MSItems.URANIUM_POWERED_STICK, 0.1F, 100, MSRecipeTypes.IRRADIATING).addCriterion("has_stick", hasItem(Items.STICK)).build(recipeBuilder);
 		CookingRecipeBuilder.cookingRecipe(Ingredient.fromItems(Items.MUSHROOM_STEW), Items.SLIME_BALL, 0.1F, 20, MSRecipeTypes.IRRADIATING).addCriterion("has_mushroom_stew", hasItem(Items.MUSHROOM_STEW)).build(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "slimeball_from_irradiating"));
 		IrradiatingFallbackRecipeBuilder.fallback(IRecipeType.SMOKING).build(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "irradiate_smoking_fallback"));
 		

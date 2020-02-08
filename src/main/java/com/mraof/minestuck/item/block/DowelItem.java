@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.block.CruxiteDowelBlock;
+import com.mraof.minestuck.item.AlchemizedColored;
 import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.tileentity.ItemStackTileEntity;
@@ -22,7 +23,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class DowelItem extends BlockItem
+public class DowelItem extends BlockItem implements AlchemizedColored
 {
 	
 	public DowelItem(Block blockIn, Properties builder)

@@ -4,8 +4,8 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.inventory.MiniAlchemiterContainer;
 import com.mraof.minestuck.item.crafting.alchemy.*;
-import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.util.PlayerIdentifier;
+import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -21,7 +21,7 @@ import net.minecraftforge.registries.ForgeRegistry;
 
 import javax.annotation.Nullable;
 
-public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implements INamedContainerProvider, IOwnable
+public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implements INamedContainerProvider, IOwnable, GristWildcardHolder
 {
 	public static final String TITLE = "container.minestuck.mini_alchemiter";
 	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
@@ -107,6 +107,12 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 		
 		GristSet cost = GristCostRecipe.findCostForItem(newItem, wildcardGrist, false, world);
 		
+		GristHelper.decrease(world, owner, cost);
+		
+		AlchemyEvent event = new AlchemyEvent(owner, this, this.inv.get(INPUT), newItem, cost);
+		MinecraftForge.EVENT_BUS.post(event);
+		newItem = event.getItemResult();
+		
 		if (inv.get(OUTPUT).isEmpty())
 		{
 			setInventorySlotContents(1, newItem);
@@ -115,11 +121,6 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 		{
 			this.inv.get(OUTPUT).grow(1);
 		}
-		
-		GristHelper.decrease(world, owner, cost);
-		
-		AlchemyEvent event = new AlchemyEvent(owner, this, this.inv.get(INPUT), newItem, cost);
-		MinecraftForge.EVENT_BUS.post(event);
 	}
 	
 	// We're going to want to trigger a block update every 20 ticks to have comparators pull data from the Alchemiter.
@@ -224,6 +225,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 		return wildcardGrist;
 	}
 	
+	@Override
 	public void setWildcardGrist(GristType wildcardGrist)
 	{
 		if(this.wildcardGrist != wildcardGrist)

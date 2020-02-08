@@ -11,7 +11,7 @@ import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.inventory.captchalogue.ModusType;
 import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.util.ColorCollector;
+import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import net.minecraft.advancements.Advancement;
@@ -63,7 +63,7 @@ public class MSAvancementProvider implements IDataProvider
 	{
 		Advancement root = Advancement.Builder.builder().withDisplay(MSItems.RAW_CRUXITE, new TranslationTextComponent(title(ROOT)), new TranslationTextComponent(desc(ROOT)), new ResourceLocation("minestuck:textures/gui/advancement_bg.png"), FrameType.TASK, false, false, false).withCriterion("raw_cruxite", InventoryChangeTrigger.Instance.forItems(MSItems.RAW_CRUXITE)).register(advancementSaver, Minestuck.MOD_ID+":minestuck/root");
 		Advancement connect = Advancement.Builder.builder().withParent(root).withDisplay(MSItems.CLIENT_DISK, new TranslationTextComponent(title(CONNECT)), new TranslationTextComponent(desc(CONNECT)), null, FrameType.TASK, true, true, false).withCriterion("connection", EventTrigger.Instance.sburbConnection()).register(advancementSaver, Minestuck.MOD_ID+":minestuck/connect");
-		Advancement entry = Advancement.Builder.builder().withParent(connect).withDisplay(ColorCollector.setDefaultColor(new ItemStack(MSItems.CRUXITE_APPLE)), new TranslationTextComponent(title(ENTRY)), new TranslationTextComponent(desc(ENTRY)), null, FrameType.TASK, true, true, false).withCriterion("use_artifact", EventTrigger.Instance.cruxiteArtifact()).register(advancementSaver, Minestuck.MOD_ID+":minestuck/entry");
+		Advancement entry = Advancement.Builder.builder().withParent(connect).withDisplay(ColorHandler.setDefaultColor(new ItemStack(MSItems.CRUXITE_APPLE)), new TranslationTextComponent(title(ENTRY)), new TranslationTextComponent(desc(ENTRY)), null, FrameType.TASK, true, true, false).withCriterion("use_artifact", EventTrigger.Instance.cruxiteArtifact()).register(advancementSaver, Minestuck.MOD_ID+":minestuck/entry");
 		Advancement alchemy = Advancement.Builder.builder().withParent(entry).withDisplay(MSItems.CAPTCHA_CARD, new TranslationTextComponent(title(ALCHEMY)), new TranslationTextComponent(desc(ALCHEMY)), null, FrameType.TASK, true, true, false).withCriterion("use_punch_designix", PunchDesignixTrigger.Instance.any()).register(advancementSaver, Minestuck.MOD_ID+":minestuck/alchemy");
 		Advancement newModus = Advancement.Builder.builder().withParent(alchemy).withDisplay(MSItems.HASHMAP_MODUS_CARD, new TranslationTextComponent(title(NEW_MODUS)), new TranslationTextComponent(desc(NEW_MODUS)), null, FrameType.TASK, true, true, false).withCriterion("change_modus_type", ChangeModusTrigger.Instance.any()).register(advancementSaver, Minestuck.MOD_ID+":minestuck/new_modus");
 		Advancement allModi = changeModusCriteria(Advancement.Builder.builder().withParent(newModus).withDisplay(MSItems.QUEUESTACK_MODUS_CARD, new TranslationTextComponent(title(ALL_MODI)), new TranslationTextComponent(desc(ALL_MODI)), null, FrameType.TASK, true, true, false).withRequirementsStrategy(IRequirementsStrategy.AND)).register(advancementSaver, Minestuck.MOD_ID+":minestuck/all_modi");

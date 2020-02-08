@@ -1,8 +1,8 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import com.mraof.minestuck.util.KindAbstratusList;
-import com.mraof.minestuck.util.KindAbstratusType;
+import com.mraof.minestuck.player.KindAbstratusList;
+import com.mraof.minestuck.player.KindAbstratusType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
 

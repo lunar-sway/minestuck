@@ -1,4 +1,4 @@
-package com.mraof.minestuck.util;
+package com.mraof.minestuck.player;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

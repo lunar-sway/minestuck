@@ -1,6 +1,6 @@
 package com.mraof.minestuck.world.lands.title;
 
-import com.mraof.minestuck.util.EnumAspect;
+import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.world.lands.ILandType;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import net.minecraft.util.ResourceLocation;

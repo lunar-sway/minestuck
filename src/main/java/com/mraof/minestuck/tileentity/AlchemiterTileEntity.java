@@ -8,7 +8,11 @@ import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.*;
-import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.util.AlchemiterUpgrades;
+import com.mraof.minestuck.util.ColorHandler;
+import com.mraof.minestuck.util.Debug;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;
@@ -27,10 +31,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
 
-public class AlchemiterTileEntity extends TileEntity implements IColored
+public class AlchemiterTileEntity extends TileEntity implements IColored, GristWildcardHolder
 {
 	
-	protected GristType wildcardGrist = GristTypes.BUILD;
+	private GristType wildcardGrist = GristTypes.BUILD;
 	protected boolean broken = false;
 	protected ItemStack dowel = ItemStack.EMPTY;
 	protected ItemStack upgradeItem[] = {ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY,ItemStack.EMPTY,ItemStack.EMPTY};
@@ -69,7 +73,7 @@ public class AlchemiterTileEntity extends TileEntity implements IColored
 	@Override
 	public int getColor()
 	{
-		return ColorCollector.getColorFromStack(dowel);
+		return ColorHandler.getColorFromStack(dowel);
 	}
 	
 	public ItemStack getOutput()
@@ -381,6 +385,14 @@ public class AlchemiterTileEntity extends TileEntity implements IColored
 		if(canAfford)
 		{
 			
+			
+			PlayerIdentifier pid = IdentifierHandler.encode(player);
+			GristHelper.decrease(world, pid, cost);
+			
+			AlchemyEvent event = new AlchemyEvent(pid, this, getDowel(), newItem, cost);
+			MinecraftForge.EVENT_BUS.post(event);
+			newItem = event.getItemResult();
+			
 			while(quantity > 0)
 			{
 				ItemStack stack = newItem.copy();
@@ -391,19 +403,14 @@ public class AlchemiterTileEntity extends TileEntity implements IColored
 					stack = AlchemyRecipes.changeEncodeSize(stack, stackCount);
 					quantity -=  Math.min(AlchemyRecipes.getDecodedItem(stack).getMaxStackSize(), quantity);
 				}
-				else*/{
+				else*/
+				{
 					stack.setCount(Math.min(stack.getMaxStackSize(), quantity));
 					quantity -= stack.getCount();
 				}
 				ItemEntity item = new ItemEntity(world, spawnPos.getX(), spawnPos.getY() + 0.5, spawnPos.getZ(), stack);
 				world.addEntity(item);
 			}
-			
-			PlayerIdentifier pid = IdentifierHandler.encode(player);
-			GristHelper.decrease(world, pid, cost);
-			
-			AlchemyEvent event = new AlchemyEvent(pid, this, getDowel(), newItem, cost);
-			MinecraftForge.EVENT_BUS.post(event);
 		}
 	}
 	
@@ -429,12 +436,15 @@ public class AlchemiterTileEntity extends TileEntity implements IColored
 		return wildcardGrist;
 	}
 	
+	@Override
 	public void setWildcardGrist(GristType wildcardGrist)
 	{
 		if(this.wildcardGrist != wildcardGrist)
 		{
 			this.wildcardGrist = wildcardGrist;
 			this.markDirty();
+			if(world != null && !world.isRemote)
+				world.notifyBlockUpdate(getPos(), getBlockState(), getBlockState(), 0);
 		}
 	}
 }

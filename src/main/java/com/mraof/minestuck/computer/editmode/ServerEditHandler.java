@@ -1,4 +1,4 @@
-package com.mraof.minestuck.editmode;
+package com.mraof.minestuck.computer.editmode;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
@@ -10,10 +10,10 @@ import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ServerEditPacket;
+import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.PlayerIdentifier;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.MSExtraData;
@@ -62,7 +62,7 @@ import java.util.UUID;
  * Also contains some methods used on both sides.
  * @author kirderf1
  */
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class ServerEditHandler
 {
 	
@@ -556,6 +556,12 @@ public final class ServerEditHandler
 		EditData.PlayerRecovery recovery = MSExtraData.get(player.world).removePlayerRecovery(id);
 		if(recovery != null)
 			recovery.recover(player, false);
+	}
+	
+	@SubscribeEvent(priority = EventPriority.HIGHEST)	//Editmode players need to be reset before nei handles the event
+	public static void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event)
+	{
+		ServerEditHandler.onPlayerExit(event.getPlayer());
 	}
 	
 	@SubscribeEvent

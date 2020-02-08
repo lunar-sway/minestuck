@@ -5,7 +5,7 @@ import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
-import com.mraof.minestuck.util.ColorCollector;
+import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
@@ -84,7 +84,7 @@ public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 		recipeLayout.getItemStacks().init(1, false, 126, 4);
 		Stream<ItemStack> inputDowels = ingredients.getOutputs(VanillaTypes.ITEM).get(0).stream();
 		inputDowels = inputDowels.map(itemStack -> AlchemyRecipes.createEncodedItem(itemStack, new ItemStack(MSBlocks.CRUXITE_DOWEL)));
-		inputDowels = inputDowels.map(itemStack -> ColorCollector.setColor(itemStack, ClientPlayerData.playerColor));
+		inputDowels = inputDowels.map(itemStack -> ColorHandler.setColor(itemStack, ClientPlayerData.playerColor));
 		recipeLayout.getItemStacks().set(0, inputDowels.collect(Collectors.toList()));
 		recipeLayout.getItemStacks().set(1, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
 	}

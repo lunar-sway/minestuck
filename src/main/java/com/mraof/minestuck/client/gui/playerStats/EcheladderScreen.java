@@ -2,7 +2,7 @@ package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.util.Echeladder;
+import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
