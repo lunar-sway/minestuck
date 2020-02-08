@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "#minestuck:oil",
+    "#minestuck:blood",
+    "#minestuck:brain_juice",
+    "#minestuck:water_colors",
+    "#minestuck:ender",
+    "#minestuck:light_water"
+  ]
+}
