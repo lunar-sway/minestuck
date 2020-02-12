@@ -143,7 +143,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 				fill(xOffset + 90, y + 10, xOffset + 90 + (int)(146* ClientPlayerData.rungProgress), y + 12, bg);
 			} else rand.nextInt(0xFFFFFF);
 			
-			String s = I18n.hasKey("echeladder.rung"+rung) ? I18n.format("echeladder.rung"+rung) : "Rung "+(rung+1);
+			String s = I18n.hasKey("echeladder.rung."+rung) ? I18n.format("echeladder.rung."+rung) : "Rung "+(rung+1);
 			mc.fontRenderer.drawString(s, xOffset+ladderXOffset - mc.fontRenderer.getStringWidth(s) / 2, y + 2, textColor);
 		}
 		GlStateManager.color3f(1,1,1);
