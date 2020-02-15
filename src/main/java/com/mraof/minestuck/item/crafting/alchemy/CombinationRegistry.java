@@ -30,14 +30,28 @@ public class CombinationRegistry {
 			this.str = str;
 		}
 		
-		public String getStr()
+		public String asString()
 		{
 			return str;
 		}
 		
-		public boolean asBool()
+		public boolean asBoolean()
 		{
 			return this == MODE_AND;
+		}
+		
+		public static Mode fromBoolean(boolean b)
+		{
+			return b ? MODE_AND : MODE_OR;
+		}
+		
+		public static Mode fromString(String str)
+		{
+			if(str.equals("&&"))
+				return MODE_AND;
+			else if(str.equals("||"))
+				return MODE_OR;
+			else throw new IllegalArgumentException(str+" is not a valid combination type");
 		}
 	}
 	
@@ -69,7 +83,7 @@ public class CombinationRegistry {
 		} catch(IllegalArgumentException e)
 		{
 			Debug.warnf("[Minestuck] An argument for a combination recipe was found invalid. Reason: "+e.getMessage());
-			Debug.warnf("[Minestuck] The recipe in question: %s %s %s -> %s", input1 instanceof Item ? ((Item) input1).getName() : input1, mode.getStr(), input2 instanceof Item ? ((Item) input2).getName() : input2, output);
+			Debug.warnf("[Minestuck] The recipe in question: %s %s %s -> %s", input1 instanceof Item ? ((Item) input1).getName() : input1, mode.asString(), input2 instanceof Item ? ((Item) input2).getName() : input2, output);
 			return;
 		}
 		
