@@ -1,10 +1,10 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.client.gui.MSScreenFactories;
-import com.mraof.minestuck.skaianet.SkaiaClient;
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.computer.ComputerProgram;
 import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.skaianet.SkaiaClient;
+import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;
@@ -29,7 +29,7 @@ import java.util.Random;
 
 public class ComputerBlock extends MachineBlock
 {
-	public static final Map<Direction, VoxelShape> COMPUTER_SHAPE = createRotatedShapes(1, 0, 1, 15, 2, 15);
+	public static final Map<Direction, VoxelShape> COMPUTER_SHAPE = MSBlockShapes.COMPUTER.createRotatedShapes();
 	public static final Map<Direction, VoxelShape> LAPTOP_CLOSED_SHAPE = MSBlockShapes.LAPTOP_CLOSED.createRotatedShapes();
 	public static final Map<Direction, VoxelShape> LAPTOP_OPEN_SHAPE = MSBlockShapes.LAPTOP_OPEN.createRotatedShapes();
 	public static final Map<Direction, VoxelShape> LUNCHTOP_SHAPE = createRotatedShapes(5, 0, 5, 11, 4, 10);
