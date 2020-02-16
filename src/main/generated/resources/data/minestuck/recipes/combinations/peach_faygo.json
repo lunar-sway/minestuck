@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:candy_apple_faygo"
+  },
+  "input2": {
+    "item": "minecraft:pink_dye"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:peach_faygo"
+  }
+}

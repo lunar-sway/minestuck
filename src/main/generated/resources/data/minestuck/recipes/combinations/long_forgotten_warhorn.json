@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:note_block"
+  },
+  "input2": {
+    "item": "minestuck:grimoire"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:long_forgotten_warhorn"
+  }
+}

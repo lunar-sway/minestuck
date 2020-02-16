@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:quartz"
+  },
+  "input2": {
+    "item": "minecraft:water_bucket"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minecraft:prismarine_shard"
+  }
+}

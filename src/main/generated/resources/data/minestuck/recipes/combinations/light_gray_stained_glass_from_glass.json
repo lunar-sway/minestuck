@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:glass"
+  },
+  "input2": {
+    "tag": "forge:dyes/light_gray"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minecraft:light_gray_stained_glass"
+  }
+}

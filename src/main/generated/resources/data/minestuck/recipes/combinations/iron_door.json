@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "tag": "minecraft:wooden_doors"
+  },
+  "input2": {
+    "item": "minecraft:iron_ingot"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minecraft:iron_door"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:oak_fence"
+  },
+  "input2": {
+    "item": "minecraft:spruce_fence"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:dark_oak_fence"
+  }
+}

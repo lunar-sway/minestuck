@@ -2,7 +2,7 @@ package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.inventory.MiniPunchDesignixContainer;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -48,15 +48,15 @@ public class MiniPunchDesignixTileEntity extends MachineProcessTileEntity implem
 	{
 		if (!this.inv.get(0).isEmpty() && !inv.get(1).isEmpty())
 		{
-			ItemStack output = AlchemyRecipes.getDecodedItemDesignix(inv.get(0));
+			ItemStack output = AlchemyHelper.getDecodedItemDesignix(inv.get(0));
 			if (inv.get(1).hasTag() && inv.get(1).getTag().getBoolean("punched"))
 			{
 				output = CombinationRegistry.getCombination(output,
-						AlchemyRecipes.getDecodedItem(inv.get(1)), CombinationRegistry.Mode.MODE_OR);
+						AlchemyHelper.getDecodedItem(inv.get(1)), CombinationRegistry.Mode.MODE_OR);
 			}
 			if (output.isEmpty())
 				return false;
-			output = AlchemyRecipes.createCard(output, true);
+			output = AlchemyHelper.createCard(output, true);
 			return (inv.get(2).isEmpty() || inv.get(2).getCount() < 16 && ItemStack.areItemStackTagsEqual(inv.get(2), output));
 		}
 		else
@@ -78,13 +78,13 @@ public class MiniPunchDesignixTileEntity extends MachineProcessTileEntity implem
 			return;
 		}
 		
-		ItemStack outputItem = AlchemyRecipes.getDecodedItemDesignix(inv.get(0));
+		ItemStack outputItem = AlchemyHelper.getDecodedItemDesignix(inv.get(0));
 		
 		if(inv.get(1).hasTag() && inv.get(1).getTag().getBoolean("punched"))
-			outputItem = CombinationRegistry.getCombination(outputItem, AlchemyRecipes.getDecodedItem(inv.get(1)), CombinationRegistry.Mode.MODE_OR);
+			outputItem = CombinationRegistry.getCombination(outputItem, AlchemyHelper.getDecodedItem(inv.get(1)), CombinationRegistry.Mode.MODE_OR);
 		
 		//Create card
-		outputItem = AlchemyRecipes.createCard(outputItem, true);
+		outputItem = AlchemyHelper.createCard(outputItem, true);
 		
 		setInventorySlotContents(2, outputItem);
 		if(!(inv.get(0).hasTag() && inv.get(0).getTag().contains("contentID")))

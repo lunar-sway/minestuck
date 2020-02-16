@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:iron_ingot"
+  },
+  "input2": {
+    "item": "minecraft:sandstone"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:sandstone_iron_ore"
+  }
+}

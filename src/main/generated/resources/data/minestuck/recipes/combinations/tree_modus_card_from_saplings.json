@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "tag": "minestuck:modus_card"
+  },
+  "input2": {
+    "tag": "minecraft:saplings"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:tree_modus_card"
+  }
+}

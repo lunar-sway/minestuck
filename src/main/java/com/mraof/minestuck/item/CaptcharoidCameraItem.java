@@ -1,6 +1,6 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemFrameEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -47,7 +47,7 @@ public class CaptcharoidCameraItem extends Item
 				ItemStack item = list.get(0).getDisplayedItem();
 				if(item.isEmpty()) item = new ItemStack(Items.ITEM_FRAME);
 				
-				player.inventory.addItemStackToInventory(AlchemyRecipes.createGhostCard(item));
+				player.inventory.addItemStackToInventory(AlchemyHelper.createGhostCard(item));
 				context.getItem().damageItem(1, player, (playerEntity) -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
 			}
 			else
@@ -55,7 +55,7 @@ public class CaptcharoidCameraItem extends Item
 				BlockState state = worldIn.getBlockState(pos);
 				ItemStack block = state.getPickBlock(new BlockRayTraceResult(context.getHitVec(), facing, pos, inside), worldIn, pos, player);
 				
-				player.inventory.addItemStackToInventory(AlchemyRecipes.createGhostCard(block));
+				player.inventory.addItemStackToInventory(AlchemyHelper.createGhostCard(block));
 				context.getItem().damageItem(1, player,  (playerEntity) -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
 			}
 			return ActionResultType.PASS;

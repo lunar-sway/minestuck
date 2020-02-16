@@ -4,7 +4,7 @@ import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.PunchDesignixBlock;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.WorldEventUtil;
@@ -106,11 +106,11 @@ public class PunchDesignixTileEntity extends TileEntity
 		
 		if(getCard().getItem() == MSItems.CAPTCHA_CARD)
 		{
-			ItemStack input1 = AlchemyRecipes.getDecodedItem(heldStack);
+			ItemStack input1 = AlchemyHelper.getDecodedItem(heldStack);
 			if(!input1.isEmpty())
 			{
 				ItemStack output;
-				ItemStack input2 = AlchemyRecipes.isPunchedCard(getCard()) ? AlchemyRecipes.getDecodedItem(getCard()) : ItemStack.EMPTY;
+				ItemStack input2 = AlchemyHelper.isPunchedCard(getCard()) ? AlchemyHelper.getDecodedItem(getCard()) : ItemStack.EMPTY;
 				if(!input2.isEmpty())	//|| combination
 				{
 					output = CombinationRegistry.getCombination(input1, input2, CombinationRegistry.Mode.MODE_OR);
@@ -119,7 +119,7 @@ public class PunchDesignixTileEntity extends TileEntity
 				if(!output.isEmpty())
 				{
 					MSCriteriaTriggers.PUNCH_DESIGNIX.trigger(player, input1, input2, output);
-					setCard(AlchemyRecipes.createCard(output, true));
+					setCard(AlchemyHelper.createCard(output, true));
 					effects(true);
 					return;
 				}

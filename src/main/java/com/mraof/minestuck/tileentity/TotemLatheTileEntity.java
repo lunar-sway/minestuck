@@ -4,7 +4,7 @@ package com.mraof.minestuck.tileentity;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.TotemLatheBlock;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.Debug;
@@ -303,23 +303,23 @@ public class TotemLatheTileEntity extends TileEntity
 		ItemStack dowel = getDowel();
 		ItemStack output;
 		boolean success = false;
-		if(!dowel.isEmpty() && !AlchemyRecipes.hasDecodedItem(dowel) && (!card1.isEmpty() || !card2.isEmpty()))
+		if(!dowel.isEmpty() && !AlchemyHelper.hasDecodedItem(dowel) && (!card1.isEmpty() || !card2.isEmpty()))
 		{
 			if(!card1.isEmpty() && !card2.isEmpty())
-				if(!AlchemyRecipes.isPunchedCard(card1) || !AlchemyRecipes.isPunchedCard(card2))
+				if(!AlchemyHelper.isPunchedCard(card1) || !AlchemyHelper.isPunchedCard(card2))
 					output = new ItemStack(MSBlocks.GENERIC_OBJECT);
-				else output = CombinationRegistry.getCombination(AlchemyRecipes.getDecodedItem(card1), AlchemyRecipes.getDecodedItem(card2), CombinationRegistry.Mode.MODE_AND);
+				else output = CombinationRegistry.getCombination(AlchemyHelper.getDecodedItem(card1), AlchemyHelper.getDecodedItem(card2), CombinationRegistry.Mode.MODE_AND);
 			else
 			{
 				ItemStack input = card1.isEmpty() ? card2 : card1;
-				if(!AlchemyRecipes.isPunchedCard(input))
+				if(!AlchemyHelper.isPunchedCard(input))
 					output = new ItemStack(MSBlocks.GENERIC_OBJECT);
-				else output = AlchemyRecipes.getDecodedItem(input);
+				else output = AlchemyHelper.getDecodedItem(input);
 			}
 			
 			if(!output.isEmpty())
 			{
-				ItemStack outputDowel = output.getItem().equals(MSBlocks.GENERIC_OBJECT.asItem()) ? new ItemStack(MSBlocks.CRUXITE_DOWEL) : AlchemyRecipes.createEncodedItem(output, false);
+				ItemStack outputDowel = output.getItem().equals(MSBlocks.GENERIC_OBJECT.asItem()) ? new ItemStack(MSBlocks.CRUXITE_DOWEL) : AlchemyHelper.createEncodedItem(output, false);
 				ColorHandler.setColor(outputDowel, ColorHandler.getColorFromStack(dowel));
 				
 				setDowel(outputDowel);

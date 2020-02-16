@@ -2,7 +2,7 @@ package com.mraof.minestuck.tileentity;
 
 
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -37,7 +37,7 @@ public class TileEntityJumperBlock extends TileEntity
 
 	public void setUpgrade(ItemStack stack, int id)
 	{
-		if((stack.getItem() == MSItems.SHUNT && AlchemyRecipes.hasDecodedItem(stack)) || stack.isEmpty())
+		if((stack.getItem() == MSItems.SHUNT && AlchemyHelper.hasDecodedItem(stack)) || stack.isEmpty())
 		{
 			upgrade[id] = stack;
 			if(world != null)
@@ -51,7 +51,7 @@ public class TileEntityJumperBlock extends TileEntity
 	@Nonnull
 	public ItemStack getUpgrade(int id)
 	{
-		return AlchemyRecipes.getDecodedItem(upgrade[id]);
+		return AlchemyHelper.getDecodedItem(upgrade[id]);
 	}
 	
 	public ItemStack getShunt(int id)

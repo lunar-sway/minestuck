@@ -5,7 +5,7 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.inventory.MiniAlchemiterContainer;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.tileentity.MiniAlchemiterTileEntity;
@@ -68,9 +68,9 @@ public class MiniAlchemiterScreen extends MachineScreen<MiniAlchemiterContainer>
 		{
 			//Render grist requirements
 			ItemStack stack;
-			if(!AlchemyRecipes.hasDecodedItem(container.getSlot(0).getStack()))
+			if(!AlchemyHelper.hasDecodedItem(container.getSlot(0).getStack()))
 				stack = new ItemStack(MSBlocks.GENERIC_OBJECT);
-			else stack = AlchemyRecipes.getDecodedItem(container.getSlot(0).getStack());
+			else stack = AlchemyHelper.getDecodedItem(container.getSlot(0).getStack());
 			
 			Optional<GristCostRecipe> recipe = GristCostRecipe.findRecipeForItem(stack, minecraft.world);
 			GristSet set = recipe.map(recipe1 -> recipe1.getGristCost(stack, container.getWildcardType(), false, minecraft.world)).orElse(null);
@@ -116,7 +116,7 @@ public class MiniAlchemiterScreen extends MachineScreen<MiniAlchemiterContainer>
 	public boolean mouseClicked(double par1, double par2, int par3)
 	{
 		boolean b = super.mouseClicked(par1, par2, par3);
-		if (par3 == 0 && minecraft.player.inventory.getItemStack().isEmpty() && AlchemyRecipes.getDecodedItem(container.getSlot(0).getStack()).getItem() == MSItems.CAPTCHA_CARD
+		if (par3 == 0 && minecraft.player.inventory.getItemStack().isEmpty() && AlchemyHelper.getDecodedItem(container.getSlot(0).getStack()).getItem() == MSItems.CAPTCHA_CARD
 				&& par1 >= guiLeft + 9 && par1 < guiLeft + 167 && par2 >= guiTop + 45 && par2 < guiTop + 70)
 		{
 			minecraft.currentScreen = new GristSelectorScreen(this);

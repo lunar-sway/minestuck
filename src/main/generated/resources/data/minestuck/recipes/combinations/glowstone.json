@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:netherrack"
+  },
+  "input2": {
+    "item": "minecraft:glowstone_dust"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minecraft:glowstone"
+  }
+}

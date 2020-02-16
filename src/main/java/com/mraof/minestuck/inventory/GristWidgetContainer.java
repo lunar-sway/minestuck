@@ -2,7 +2,7 @@ package com.mraof.minestuck.inventory;
 
 import com.mraof.minestuck.inventory.slot.InputSlot;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
@@ -49,7 +49,7 @@ public class GristWidgetContainer extends MachineContainer
 			@Override
 			public boolean isItemValid(ItemStack stack)
 			{
-				return super.isItemValid(stack) && AlchemyRecipes.hasDecodedItem(stack) && !AlchemyRecipes.isPunchedCard(stack);
+				return super.isItemValid(stack) && AlchemyHelper.hasDecodedItem(stack) && !AlchemyHelper.isPunchedCard(stack);
 			}
 		});
 		

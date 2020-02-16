@@ -3,7 +3,7 @@ package com.mraof.minestuck.tileentity;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.inventory.MiniTotemLatheContainer;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry;
 import com.mraof.minestuck.util.ColorHandler;
 import net.minecraft.entity.player.PlayerEntity;
@@ -57,14 +57,14 @@ public class MiniTotemLatheTileEntity extends MachineProcessTileEntity implement
 					return inv.get(3).isEmpty() || !(inv.get(3).hasTag() && inv.get(3).getTag().contains("contentID"));
 				else
 				{
-					ItemStack output = CombinationRegistry.getCombination(AlchemyRecipes.getDecodedItem(inv.get(0)), AlchemyRecipes.getDecodedItem(inv.get(1)), CombinationRegistry.Mode.MODE_AND);
-					return !output.isEmpty() && (inv.get(3).isEmpty() || AlchemyRecipes.getDecodedItem(inv.get(3)).isItemEqual(output));
+					ItemStack output = CombinationRegistry.getCombination(AlchemyHelper.getDecodedItem(inv.get(0)), AlchemyHelper.getDecodedItem(inv.get(1)), CombinationRegistry.Mode.MODE_AND);
+					return !output.isEmpty() && (inv.get(3).isEmpty() || AlchemyHelper.getDecodedItem(inv.get(3)).isItemEqual(output));
 				}
 			}
 			else
 			{
 				ItemStack input = inv.get(0).isEmpty() ? inv.get(1) : inv.get(0);
-				return (inv.get(3).isEmpty() || (AlchemyRecipes.getDecodedItem(inv.get(3)).isItemEqual(AlchemyRecipes.getDecodedItem(input))
+				return (inv.get(3).isEmpty() || (AlchemyHelper.getDecodedItem(inv.get(3)).isItemEqual(AlchemyHelper.getDecodedItem(input))
 						|| !(input.hasTag() && input.getTag().getBoolean("punched")) && !(inv.get(3).hasTag() && inv.get(3).getTag().contains("contentID"))));
 			}
 		}
@@ -86,17 +86,17 @@ public class MiniTotemLatheTileEntity extends MachineProcessTileEntity implement
 			if (!inv.get(0).hasTag() || !inv.get(0).getTag().getBoolean("punched") || !inv.get(1).hasTag() || !inv.get(1).getTag().getBoolean("punched"))
 				output = new ItemStack(MSBlocks.GENERIC_OBJECT);
 			else
-				output = CombinationRegistry.getCombination(AlchemyRecipes.getDecodedItem(inv.get(0)), AlchemyRecipes.getDecodedItem(inv.get(1)), CombinationRegistry.Mode.MODE_AND);
+				output = CombinationRegistry.getCombination(AlchemyHelper.getDecodedItem(inv.get(0)), AlchemyHelper.getDecodedItem(inv.get(1)), CombinationRegistry.Mode.MODE_AND);
 		else
 		{
 			ItemStack input = inv.get(0).isEmpty() ? inv.get(1) : inv.get(0);
 			if (!input.hasTag() || !input.getTag().getBoolean("punched"))
 				output = new ItemStack(MSBlocks.GENERIC_OBJECT);
-			else output = AlchemyRecipes.getDecodedItem(input);
+			else output = AlchemyHelper.getDecodedItem(input);
 		}
 		
 		ItemStack outputDowel = output.getItem().equals(MSBlocks.GENERIC_OBJECT.asItem())
-				? new ItemStack(MSBlocks.CRUXITE_DOWEL) : AlchemyRecipes.createEncodedItem(output, false);
+				? new ItemStack(MSBlocks.CRUXITE_DOWEL) : AlchemyHelper.createEncodedItem(output, false);
 		ColorHandler.setColor(outputDowel, ColorHandler.getColorFromStack(inv.get(2)));	//Setting color
 		
 		setInventorySlotContents(3, outputDowel);

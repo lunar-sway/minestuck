@@ -1,12 +1,10 @@
 package com.mraof.minestuck.item.crafting.alchemy;
 
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.util.Debug;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
-import net.minecraft.util.IItemProvider;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
@@ -20,19 +18,19 @@ public class CombinationRegistry {
 	
 	public enum Mode
 	{
-		MODE_AND("&&"),
-		MODE_OR("||");
+		MODE_AND("and"),
+		MODE_OR("or");
 		
-		String str;
+		final String name;
 		
-		Mode(String str)
+		Mode(String name)
 		{
-			this.str = str;
+			this.name = name;
 		}
 		
 		public String asString()
 		{
-			return str;
+			return name;
 		}
 		
 		public boolean asBoolean()
@@ -47,56 +45,12 @@ public class CombinationRegistry {
 		
 		public static Mode fromString(String str)
 		{
-			if(str.equals("&&"))
+			if(str.equals("&&") || str.equalsIgnoreCase("and"))
 				return MODE_AND;
-			else if(str.equals("||"))
+			else if(str.equals("||") || str.equalsIgnoreCase("or"))
 				return MODE_OR;
 			else throw new IllegalArgumentException(str+" is not a valid combination type");
 		}
-	}
-	
-	/**
-	 * Creates an entry for a result of combining the cards of two items. Used in the Punch Designix.
-	 */
-	public static void addCombination(@Nonnull IItemProvider input1, @Nonnull IItemProvider input2, Mode mode, @Nonnull ItemStack output) {
-		addCombinationInternal(input1.asItem(), input2.asItem(), mode, output);
-	}
-	
-	public static void addCombination(Tag<Item> tagInput, IItemProvider input, Mode mode, @Nonnull ItemStack output)
-	{
-		addCombinationInternal(tagInput, input.asItem(), mode, output);
-	}
-	
-	public static void addCombination(Tag<Item> input1, Tag<Item> input2, Mode mode, @Nonnull ItemStack output)
-	{
-		addCombinationInternal(input1, input2, mode, output);
-	}
-	
-	private static void addCombinationInternal(Object input1, Object input2, Mode mode, @Nonnull ItemStack output)
-	{
-		try
-		{
-			checkIsValid(input1);
-			checkIsValid(input2);
-			if(output.isEmpty())
-				throw new IllegalArgumentException("Output is not defined.");
-		} catch(IllegalArgumentException e)
-		{
-			Debug.warnf("[Minestuck] An argument for a combination recipe was found invalid. Reason: "+e.getMessage());
-			Debug.warnf("[Minestuck] The recipe in question: %s %s %s -> %s", input1 instanceof Item ? ((Item) input1).getName() : input1, mode.asString(), input2 instanceof Item ? ((Item) input2).getName() : input2, output);
-			return;
-		}
-		
-		int index = input1.hashCode() - input2.hashCode();
-		if(index > 0)
-			combRecipes.put(Arrays.asList(input1, input2, mode), output);
-		else combRecipes.put(Arrays.asList(input2, input1, mode), output);
-	}
-	
-	private static void checkIsValid(Object input) throws IllegalArgumentException
-	{
-		if(input == null)
-			throw new IllegalArgumentException("Input is null");
 	}
 	
 	/**

@@ -1,7 +1,7 @@
 package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.IItemPropertyGetter;
@@ -18,15 +18,15 @@ import java.util.List;
 
 public class CaptchaCardItem extends Item
 {
-	public static final IItemPropertyGetter CONTENT = (stack, world, holder) -> AlchemyRecipes.hasDecodedItem(stack) ? 1 : 0;
+	public static final IItemPropertyGetter CONTENT = (stack, world, holder) -> AlchemyHelper.hasDecodedItem(stack) ? 1 : 0;
 	public static final ResourceLocation CONTENT_NAME = new ResourceLocation(Minestuck.MOD_ID, "content");
 	
 	public CaptchaCardItem(Properties properties)
 	{
 		super(properties);
 		this.addPropertyOverride(CONTENT_NAME, CONTENT);
-		this.addPropertyOverride(new ResourceLocation(Minestuck.MOD_ID, "punched"), (stack, world, holder) -> AlchemyRecipes.isPunchedCard(stack) ? 1 : 0);
-		this.addPropertyOverride(new ResourceLocation(Minestuck.MOD_ID, "ghost"), (stack, world, holder) -> AlchemyRecipes.isGhostCard(stack) ? 1 : 0);
+		this.addPropertyOverride(new ResourceLocation(Minestuck.MOD_ID, "punched"), (stack, world, holder) -> AlchemyHelper.isPunchedCard(stack) ? 1 : 0);
+		this.addPropertyOverride(new ResourceLocation(Minestuck.MOD_ID, "ghost"), (stack, world, holder) -> AlchemyHelper.isGhostCard(stack) ? 1 : 0);
 	}
 	
 	@Override
@@ -43,7 +43,7 @@ public class CaptchaCardItem extends Item
 		if(this.isInGroup(group))
 		{
 			items.add(new ItemStack(this));
-			items.add(AlchemyRecipes.createCard(new ItemStack(MSItems.CRUXITE_APPLE), true));
+			items.add(AlchemyHelper.createCard(new ItemStack(MSItems.CRUXITE_APPLE), true));
 		}
 	}
 	
@@ -53,7 +53,7 @@ public class CaptchaCardItem extends Item
 		CompoundNBT nbt = playerIn.getHeldItem(handIn).getTag();
 		ItemStack stack = playerIn.getHeldItem(handIn);
 		
-		if(playerIn.isSneaking() && stack.hasTag() && ((AlchemyRecipes.isGhostCard(stack) && !AlchemyRecipes.isPunchedCard(stack)) || !AlchemyRecipes.hasDecodedItem(stack)))
+		if(playerIn.isSneaking() && stack.hasTag() && ((AlchemyHelper.isGhostCard(stack) && !AlchemyHelper.isPunchedCard(stack)) || !AlchemyHelper.hasDecodedItem(stack)))
 		{	//TODO should only remove content tags
 			return new ActionResult<>(ActionResultType.SUCCESS, new ItemStack(playerIn.getHeldItem(handIn).getItem(), playerIn.getHeldItem(handIn).getCount()));
 		}
@@ -64,10 +64,10 @@ public class CaptchaCardItem extends Item
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
 	{
-		if(AlchemyRecipes.hasDecodedItem(stack))
+		if(AlchemyHelper.hasDecodedItem(stack))
 		{
 			CompoundNBT nbt = stack.getTag();
-			ItemStack content = AlchemyRecipes.getDecodedItem(stack);
+			ItemStack content = AlchemyHelper.getDecodedItem(stack);
 			if(!content.isEmpty())
 			{
 				String stackSize = (nbt.getBoolean("punched") || nbt.getInt("contentSize") <= 0) ? "" : nbt.getInt("contentSize") + "x";

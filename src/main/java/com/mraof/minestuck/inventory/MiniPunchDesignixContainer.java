@@ -3,7 +3,7 @@ package com.mraof.minestuck.inventory;
 import com.mraof.minestuck.inventory.slot.InputSlot;
 import com.mraof.minestuck.inventory.slot.OutputSlot;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
@@ -93,7 +93,7 @@ public class MiniPunchDesignixContainer extends MachineContainer
 			} else if(slotNumber > 2)
 			{
 				//if it's an inventory slot with valid contents
-				if(itemstackOrig.getItem() == MSItems.CAPTCHA_CARD && (!AlchemyRecipes.hasDecodedItem(itemstackOrig) || AlchemyRecipes.isPunchedCard(itemstackOrig)))
+				if(itemstackOrig.getItem() == MSItems.CAPTCHA_CARD && (!AlchemyHelper.hasDecodedItem(itemstackOrig) || AlchemyHelper.isPunchedCard(itemstackOrig)))
 					result = mergeItemStack(itemstackOrig, 1, 2, false);
 				else result = mergeItemStack(itemstackOrig, 0, 1, false);
 			}

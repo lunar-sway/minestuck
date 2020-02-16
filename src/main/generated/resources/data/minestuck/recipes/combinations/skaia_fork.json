@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:fork"
+  },
+  "input2": {
+    "item": "minestuck:chessboard"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:skaia_fork"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:redstone"
+  },
+  "input2": {
+    "item": "minecraft:stone"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minecraft:redstone_ore"
+  }
+}

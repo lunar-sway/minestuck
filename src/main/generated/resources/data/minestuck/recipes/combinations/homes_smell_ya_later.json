@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:sickle"
+  },
+  "input2": {
+    "item": "minestuck:thresh_dvd"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:homes_smell_ya_later"
+  }
+}

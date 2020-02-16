@@ -8,7 +8,6 @@ import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
@@ -19,29 +18,12 @@ import net.minecraftforge.registries.ForgeRegistries;
 import javax.annotation.Nonnull;
 
 import static com.mraof.minestuck.block.MSBlocks.CRUXITE_DOWEL;
-import static com.mraof.minestuck.item.MSItems.*;
-import static com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry.Mode.MODE_AND;
-import static com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry.Mode.MODE_OR;
+import static com.mraof.minestuck.item.MSItems.CAPTCHA_CARD;
+import static com.mraof.minestuck.item.MSItems.SHUNT;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class AlchemyRecipes
+public class AlchemyHelper
 {
-	public static void registerMinestuckRecipes()
-	{
-		//add Designix and Lathe combinations
-		
-		CombinationRegistry.addCombination(Items.POTION, Items.SUGAR, MODE_OR, new ItemStack(TAB));
-		CombinationRegistry.addCombination(Items.POTION, Items.ORANGE_DYE, MODE_OR, new ItemStack(ORANGE_FAYGO));
-		CombinationRegistry.addCombination(ORANGE_FAYGO, Items.APPLE, MODE_OR, new ItemStack(CANDY_APPLE_FAYGO));
-		CombinationRegistry.addCombination(ORANGE_FAYGO, TAB, MODE_OR, new ItemStack(FAYGO_COLA));
-		CombinationRegistry.addCombination(ORANGE_FAYGO, Items.LIGHT_BLUE_WOOL, MODE_OR, new ItemStack(COTTON_CANDY_FAYGO));
-		CombinationRegistry.addCombination(ORANGE_FAYGO, Items.MILK_BUCKET, MODE_OR, new ItemStack(CREME_SODA_FAYGO));
-		CombinationRegistry.addCombination(ORANGE_FAYGO, Items.CHORUS_FRUIT, MODE_OR, new ItemStack(GRAPE_FAYGO));
-		CombinationRegistry.addCombination(ORANGE_FAYGO, Items.LIME_DYE, MODE_OR, new ItemStack(MOON_MIST_FAYGO));
-		CombinationRegistry.addCombination(CANDY_APPLE_FAYGO, Items.PINK_DYE, MODE_AND, new ItemStack(PEACH_FAYGO));
-		CombinationRegistry.addCombination(ORANGE_FAYGO, Items.TNT, MODE_OR, new ItemStack(REDPOP_FAYGO));
-	}
-	
 	@SubscribeEvent
 	public static void onAlchemizedItem(AlchemyEvent event)
 	{

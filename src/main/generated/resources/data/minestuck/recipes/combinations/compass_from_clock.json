@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:clock"
+  },
+  "input2": {
+    "item": "minecraft:iron_ingot"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:compass"
+  }
+}

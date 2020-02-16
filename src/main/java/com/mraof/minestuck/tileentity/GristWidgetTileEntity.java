@@ -4,12 +4,12 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.GristWidgetBlock;
 import com.mraof.minestuck.inventory.GristWidgetContainer;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -46,9 +46,9 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 	{
 		if(world == null)
 			return null;
-		ItemStack heldItem = AlchemyRecipes.getDecodedItem(stack, true);
+		ItemStack heldItem = AlchemyHelper.getDecodedItem(stack, true);
 		GristSet gristSet = GristCostRecipe.findCostForItem(heldItem, null, true, world);
-		if(stack.getItem() != MSItems.CAPTCHA_CARD || AlchemyRecipes.isPunchedCard(stack) || gristSet == null)
+		if(stack.getItem() != MSItems.CAPTCHA_CARD || AlchemyHelper.isPunchedCard(stack) || gristSet == null)
 			return null;
 		
 		return gristSet;
@@ -86,7 +86,7 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 		} else
 		{
 			return (!itemstack.getTag().getBoolean("punched") && itemstack.getTag().getInt("contentSize") > 0
-					&& AlchemyRecipes.getDecodedItem(itemstack).getItem() != MSItems.CAPTCHA_CARD);
+					&& AlchemyHelper.getDecodedItem(itemstack).getItem() != MSItems.CAPTCHA_CARD);
 		}
 	}
 	

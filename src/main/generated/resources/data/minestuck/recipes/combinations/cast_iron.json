@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:iron_block"
+  },
+  "input2": {
+    "item": "minecraft:lava_bucket"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:cast_iron"
+  }
+}

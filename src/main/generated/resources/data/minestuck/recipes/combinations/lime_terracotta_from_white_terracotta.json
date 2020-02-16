@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "tag": "forge:dyes/lime"
+  },
+  "input2": {
+    "item": "minecraft:white_terracotta"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:lime_terracotta"
+  }
+}
