@@ -17,10 +17,10 @@ import javax.annotation.Nullable;
 public class CombinationRecipe extends AbstractCombinationRecipe
 {
 	private final Ingredient input1, input2;
-	private final CombinationRegistry.Mode mode;
+	private final CombinationMode mode;
 	private final ItemStack output;
 	
-	public CombinationRecipe(ResourceLocation id, Ingredient input1, Ingredient input2, CombinationRegistry.Mode mode, ItemStack output)
+	public CombinationRecipe(ResourceLocation id, Ingredient input1, Ingredient input2, CombinationMode mode, ItemStack output)
 	{
 		super(id);
 		this.input1 = input1;
@@ -32,7 +32,8 @@ public class CombinationRecipe extends AbstractCombinationRecipe
 	@Override
 	public boolean matches(ItemCombiner inv, World worldIn)
 	{
-		return inv.getMode() == this.mode && (input1.test(inv.getStackInSlot(0)) && input2.test(inv.getStackInSlot(1)) || input2.test(inv.getStackInSlot(0)) && input1.test(inv.getStackInSlot(1)));
+		ItemStack item1 = AlchemyHelper.getDecodedItem(inv.getStackInSlot(0)), item2 = AlchemyHelper.getDecodedItem(inv.getStackInSlot(1));
+		return inv.getMode() == this.mode && (input1.test(item1) && input2.test(item2) || input2.test(item1) && input1.test(item2));
 	}
 	
 	@Override
@@ -60,7 +61,7 @@ public class CombinationRecipe extends AbstractCombinationRecipe
 		{
 			Ingredient input1 = Ingredient.deserialize(json.get("input1"));
 			Ingredient input2 = Ingredient.deserialize(json.get("input2"));
-			CombinationRegistry.Mode mode = CombinationRegistry.Mode.fromString(JSONUtils.getString(json, "mode"));
+			CombinationMode mode = CombinationMode.fromString(JSONUtils.getString(json, "mode"));
 			ItemStack output = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "output"));
 			
 			return new CombinationRecipe(recipeId, input1, input2, mode, output);
@@ -72,7 +73,7 @@ public class CombinationRecipe extends AbstractCombinationRecipe
 		{
 			Ingredient input1 = Ingredient.read(buffer);
 			Ingredient input2 = Ingredient.read(buffer);
-			CombinationRegistry.Mode mode = CombinationRegistry.Mode.fromBoolean(buffer.readBoolean());
+			CombinationMode mode = CombinationMode.fromBoolean(buffer.readBoolean());
 			ItemStack output = buffer.readItemStack();
 			
 			return new CombinationRecipe(recipeId, input1, input2, mode, output);

@@ -3,21 +3,24 @@ package com.mraof.minestuck.tileentity;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.inventory.MiniTotemLatheContainer;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
-import com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry;
+import com.mraof.minestuck.item.crafting.alchemy.CombinationMode;
+import com.mraof.minestuck.item.crafting.alchemy.ItemCombiner;
 import com.mraof.minestuck.util.ColorHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.Direction;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nullable;
 
-public class MiniTotemLatheTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
+public class MiniTotemLatheTileEntity extends MachineProcessTileEntity implements INamedContainerProvider, ItemCombiner
 {
 	public static final String TITLE = "container.minestuck.mini_totem_lathe";
 	public static final RunType TYPE = RunType.BUTTON;
@@ -31,6 +34,12 @@ public class MiniTotemLatheTileEntity extends MachineProcessTileEntity implement
 	public RunType getRunType()
 	{
 		return TYPE;
+	}
+	
+	@Override
+	public CombinationMode getMode()
+	{
+		return CombinationMode.AND;
 	}
 	
 	@Override
@@ -48,26 +57,10 @@ public class MiniTotemLatheTileEntity extends MachineProcessTileEntity implement
 	@Override
 	public boolean contentsValid()
 	{
-		if ((!inv.get(0).isEmpty() || !inv.get(1).isEmpty()) && !inv.get(2).isEmpty() && !(inv.get(2).hasTag() && inv.get(2).getTag().contains("contentID"))
-				&& (inv.get(3).isEmpty() || inv.get(3).getCount() < inv.get(3).getMaxStackSize() && ColorHandler.getColorFromStack(inv.get(3)) == ColorHandler.getColorFromStack(inv.get(2))))
-		{
-			if (!inv.get(0).isEmpty() && !inv.get(1).isEmpty())
-			{
-				if (!inv.get(0).hasTag() || !inv.get(0).getTag().getBoolean("punched") || !inv.get(1).hasTag() || !inv.get(1).getTag().getBoolean("punched"))
-					return inv.get(3).isEmpty() || !(inv.get(3).hasTag() && inv.get(3).getTag().contains("contentID"));
-				else
-				{
-					ItemStack output = CombinationRegistry.getCombination(AlchemyHelper.getDecodedItem(inv.get(0)), AlchemyHelper.getDecodedItem(inv.get(1)), CombinationRegistry.Mode.MODE_AND);
-					return !output.isEmpty() && (inv.get(3).isEmpty() || AlchemyHelper.getDecodedItem(inv.get(3)).isItemEqual(output));
-				}
-			}
-			else
-			{
-				ItemStack input = inv.get(0).isEmpty() ? inv.get(1) : inv.get(0);
-				return (inv.get(3).isEmpty() || (AlchemyHelper.getDecodedItem(inv.get(3)).isItemEqual(AlchemyHelper.getDecodedItem(input))
-						|| !(input.hasTag() && input.getTag().getBoolean("punched")) && !(inv.get(3).hasTag() && inv.get(3).getTag().contains("contentID"))));
-			}
-		}
+		ItemStack output = createResult();
+		
+		if(!output.isEmpty())
+			return inv.get(3).isEmpty() || ItemStack.areItemsEqual(output, inv.get(3)) && ItemStack.areItemStackTagsEqual(output, inv.get(3));
 		else return false;
 	}
 	
@@ -81,26 +74,38 @@ public class MiniTotemLatheTileEntity extends MachineProcessTileEntity implement
 			return;
 		}
 		
+		ItemStack outputDowel = createResult();
+		
+		setInventorySlotContents(3, outputDowel);
+		decrStackSize(2, 1);
+	}
+	
+	private ItemStack createResult()
+	{
+		if(inv.get(0).isEmpty() || inv.get(1).isEmpty() || inv.get(2).isEmpty() || AlchemyHelper.hasDecodedItem(inv.get(2)))
+			return ItemStack.EMPTY;
+		
 		ItemStack output;
 		if (!inv.get(0).isEmpty() && !inv.get(1).isEmpty())
-			if (!inv.get(0).hasTag() || !inv.get(0).getTag().getBoolean("punched") || !inv.get(1).hasTag() || !inv.get(1).getTag().getBoolean("punched"))
+			if (!AlchemyHelper.isPunchedCard(inv.get(0)) || !AlchemyHelper.isPunchedCard(inv.get(1)))
 				output = new ItemStack(MSBlocks.GENERIC_OBJECT);
 			else
-				output = CombinationRegistry.getCombination(AlchemyHelper.getDecodedItem(inv.get(0)), AlchemyHelper.getDecodedItem(inv.get(1)), CombinationRegistry.Mode.MODE_AND);
+				output = world.getRecipeManager().getRecipe(MSRecipeTypes.COMBINATION_TYPE, this, world).map(IRecipe::getRecipeOutput).orElse(ItemStack.EMPTY);
 		else
 		{
 			ItemStack input = inv.get(0).isEmpty() ? inv.get(1) : inv.get(0);
-			if (!input.hasTag() || !input.getTag().getBoolean("punched"))
+			if (!AlchemyHelper.isPunchedCard(input))
 				output = new ItemStack(MSBlocks.GENERIC_OBJECT);
 			else output = AlchemyHelper.getDecodedItem(input);
 		}
 		
+		if(output.isEmpty())
+			return ItemStack.EMPTY;
+		
 		ItemStack outputDowel = output.getItem().equals(MSBlocks.GENERIC_OBJECT.asItem())
 				? new ItemStack(MSBlocks.CRUXITE_DOWEL) : AlchemyHelper.createEncodedItem(output, false);
 		ColorHandler.setColor(outputDowel, ColorHandler.getColorFromStack(inv.get(2)));	//Setting color
-		
-		setInventorySlotContents(3, outputDowel);
-		decrStackSize(2, 1);
+		return outputDowel;
 	}
 	
 	@Override

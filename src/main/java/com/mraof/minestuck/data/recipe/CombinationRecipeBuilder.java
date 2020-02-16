@@ -2,7 +2,7 @@ package com.mraof.minestuck.data.recipe;
 
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
-import com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry;
+import com.mraof.minestuck.item.crafting.alchemy.CombinationMode;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -21,7 +21,7 @@ public class CombinationRecipeBuilder
 {
 	private final ItemStack output;
 	private Ingredient input1, input2;
-	private CombinationRegistry.Mode mode;
+	private CombinationMode mode;
 	private String suffix = "";
 	
 	private CombinationRecipeBuilder(ItemStack output)
@@ -86,15 +86,15 @@ public class CombinationRecipeBuilder
 	
 	public CombinationRecipeBuilder and()
 	{
-		return mode(CombinationRegistry.Mode.MODE_AND);
+		return mode(CombinationMode.AND);
 	}
 	
 	public CombinationRecipeBuilder or()
 	{
-		return mode(CombinationRegistry.Mode.MODE_OR);
+		return mode(CombinationMode.OR);
 	}
 	
-	public CombinationRecipeBuilder mode(CombinationRegistry.Mode mode)
+	public CombinationRecipeBuilder mode(CombinationMode mode)
 	{
 		if(this.mode == null)
 			this.mode = mode;
@@ -124,9 +124,9 @@ public class CombinationRecipeBuilder
 		private final ResourceLocation id;
 		private final ItemStack output;
 		private final Ingredient input1, input2;
-		private final CombinationRegistry.Mode mode;
+		private final CombinationMode mode;
 		
-		public Result(ResourceLocation id, ItemStack output, Ingredient input1, Ingredient input2, CombinationRegistry.Mode mode)
+		public Result(ResourceLocation id, ItemStack output, Ingredient input1, Ingredient input2, CombinationMode mode)
 		{
 			this.id = Objects.requireNonNull(id);
 			this.output = Objects.requireNonNull(output);

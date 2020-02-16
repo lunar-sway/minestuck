@@ -1,0 +1,81 @@
+package com.mraof.minestuck.item.crafting.alchemy;
+
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+
+public class CombinerWrapper implements ItemCombiner
+{
+	private final ItemStack item1, item2;
+	private final CombinationMode mode;
+	
+	public CombinerWrapper(ItemStack item1, ItemStack item2, CombinationMode mode)
+	{
+		this.item1 = item1;
+		this.item2 = item2;
+		this.mode = mode;
+	}
+	
+	@Override
+	public CombinationMode getMode()
+	{
+		return mode;
+	}
+	
+	@Override
+	public int getSizeInventory()
+	{
+		return 2;
+	}
+	
+	@Override
+	public boolean isEmpty()
+	{
+		return item1.isEmpty() && item2.isEmpty();
+	}
+	
+	@Override
+	public ItemStack getStackInSlot(int index)
+	{
+		if(index == 0)
+			return item1.copy();
+		else if(index == 1)
+			return item2.copy();
+		else throw new IndexOutOfBoundsException(String.valueOf(index));
+	}
+	
+	@Override
+	public ItemStack decrStackSize(int index, int count)
+	{
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public ItemStack removeStackFromSlot(int index)
+	{
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public void setInventorySlotContents(int index, ItemStack stack)
+	{
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public void markDirty()
+	{
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public boolean isUsableByPlayer(PlayerEntity player)
+	{
+		return true;
+	}
+	
+	@Override
+	public void clear()
+	{
+		throw new UnsupportedOperationException();
+	}
+}
