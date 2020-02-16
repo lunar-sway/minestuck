@@ -3,6 +3,7 @@ package com.mraof.minestuck.event;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.entity.consort.ConsortDialogue;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
@@ -11,7 +12,6 @@ import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import com.mraof.minestuck.world.storage.PlayerData;
@@ -21,7 +21,6 @@ import net.minecraft.entity.monster.*;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.potion.Effects;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.SharedConstants;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.dimension.DimensionType;
@@ -48,7 +47,7 @@ public class ServerEventHandler
 	@SubscribeEvent
 	public static void serverStarting(FMLServerStartingEvent event)
 	{
-		Debug.info(SharedConstants.developmentMode);
+		ConsortDialogue.serverStarting();
 		//if(!event.getServer().isDedicatedServer() && Minestuck.class.getAnnotation(Mod.class).version().startsWith("@")) TODO Find an alternative to detect dev environment
 		//event.getServer().setOnlineMode(false);	//Makes it possible to use LAN in a development environment
 		

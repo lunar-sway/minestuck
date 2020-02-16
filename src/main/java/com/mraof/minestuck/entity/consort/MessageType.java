@@ -47,6 +47,8 @@ public abstract class MessageType
 	public abstract ITextComponent getFromChain(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier,
 												String fromChain);
 	
+	protected abstract void debugAddAllMessages(List<ITextComponent> list);
+	
 	private static ITextComponent createMessage(ConsortEntity consort, ServerPlayerEntity player, String unlocalizedMessage,
 												String[] args, boolean consortPrefix)
 	{
@@ -188,6 +190,13 @@ public abstract class MessageType
 		{
 			return null;
 		}
+		
+		@Override
+		protected void debugAddAllMessages(List<ITextComponent> list)
+		{
+			//noinspection RedundantCast
+			list.add(new TranslationTextComponent("consort." + unlocalizedMessage, (Object[]) args));
+		}
 	}
 	
 	//This class takes two separate messages and treats them as one.
@@ -198,7 +207,6 @@ public abstract class MessageType
 	{
 		protected MessageType messageOne;
 		protected MessageType messageTwo;
-		protected String[] args;
 		protected String nbtName;
 		protected boolean firstOnce;
 		
@@ -254,6 +262,13 @@ public abstract class MessageType
 			ITextComponent message = messageTwo.getFromChain(consort, player, chainIdentifier, fromChain);
 			return message;
 		}
+		
+		@Override
+		protected void debugAddAllMessages(List<ITextComponent> list)
+		{
+			messageOne.debugAddAllMessages(list);
+			messageTwo.debugAddAllMessages(list);
+		}
 	}
 	
 	/**
@@ -301,6 +316,14 @@ public abstract class MessageType
 		public ITextComponent getFromChain(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier, String fromChain)
 		{
 			return message.getFromChain(consort, player, chainIdentifier, fromChain);
+		}
+		
+		@Override
+		protected void debugAddAllMessages(List<ITextComponent> list)
+		{
+			message.debugAddAllMessages(list);
+			//noinspection RedundantCast
+			list.add(new TranslationTextComponent("consort." + unlocalizedMessage, (Object[]) args));
 		}
 	}
 
@@ -419,6 +442,13 @@ public abstract class MessageType
 				nbt.putInt(this.getString(), index);
 			return text;
 		}
+		
+		@Override
+		protected void debugAddAllMessages(List<ITextComponent> list)
+		{
+			for(MessageType message : messages)
+				message.debugAddAllMessages(list);
+		}
 	}
 	
 	public static class ConditionedMessage extends MessageType
@@ -460,6 +490,13 @@ public abstract class MessageType
 			if (condition.testFor(consort, player))
 				return message1.getFromChain(consort, player, chainIdentifier, fromChain);
 			else return message2.getFromChain(consort, player, chainIdentifier, fromChain);
+		}
+		
+		@Override
+		protected void debugAddAllMessages(List<ITextComponent> list)
+		{
+			message1.debugAddAllMessages(list);
+			message2.debugAddAllMessages(list);
 		}
 		
 		public interface Condition
@@ -528,6 +565,13 @@ public abstract class MessageType
 					return message.getFromChain(consort, player, MessageType.addTo(chainIdentifier, messageName), fromChain);
 			
 			return null;
+		}
+		
+		@Override
+		protected void debugAddAllMessages(List<ITextComponent> list)
+		{
+			for(MessageType message : messages)
+				message.debugAddAllMessages(list);
 		}
 	}
 	
@@ -685,6 +729,20 @@ public abstract class MessageType
 			
 			return null;
 		}
+		
+		@Override
+		protected void debugAddAllMessages(List<ITextComponent> list)
+		{
+			message.debugAddAllMessages(list);
+			for(SingleMessage message : options)
+			{
+				message.debugAddAllMessages(list);
+				//noinspection RedundantCast
+				list.add(new TranslationTextComponent("consort." + message.unlocalizedMessage + ".reply", (Object[]) message.args));
+			}
+			for(MessageType message : results)
+				message.debugAddAllMessages(list);
+		}
 	}
 	
 	/**
@@ -818,6 +876,13 @@ public abstract class MessageType
 			if(!update)
 				consort.updatingMessage = null;
 		}
+		
+		@Override
+		protected void debugAddAllMessages(List<ITextComponent> list)
+		{
+			for(MessageType message : messages)
+				message.debugAddAllMessages(list);
+		}
 	}
 	
 	public static class PurchaseMessage extends MessageType
@@ -887,6 +952,12 @@ public abstract class MessageType
 		public String getString()
 		{
 			return nbtName;
+		}
+		
+		@Override
+		protected void debugAddAllMessages(List<ITextComponent> list)
+		{
+			message.debugAddAllMessages(list);
 		}
 	}
 	
@@ -1030,6 +1101,13 @@ public abstract class MessageType
 					
 			return false;
 		}
+		
+		@Override
+		protected void debugAddAllMessages(List<ITextComponent> list)
+		{
+			conditionedMessage.debugAddAllMessages(list);
+			defaultMessage.debugAddAllMessages(list);
+		}
 	}
 	
 	public static class GiveItemMessage extends MessageType
@@ -1111,6 +1189,12 @@ public abstract class MessageType
 		{
 			return next.getFromChain(consort, player, chainIdentifier, fromChain);
 		}
+		
+		@Override
+		protected void debugAddAllMessages(List<ITextComponent> list)
+		{
+			next.debugAddAllMessages(list);
+		}
 	}
 	
 	public static class MerchantGuiMessage extends MessageType
@@ -1154,6 +1238,12 @@ public abstract class MessageType
 		public ITextComponent getFromChain(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier, String fromChain)
 		{
 			return null;
+		}
+		
+		@Override
+		protected void debugAddAllMessages(List<ITextComponent> list)
+		{
+			initMessage.debugAddAllMessages(list);
 		}
 	}
 }
