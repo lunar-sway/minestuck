@@ -170,7 +170,7 @@ public abstract class MachineMultiblock implements IItemProvider    //An abstrac
 			return pos.subtract(this.pos.rotate(rotation));
 		}
 		
-		private Rotation findRotation(BlockState rotatedState)
+		public Rotation findRotation(BlockState rotatedState)
 		{
 			BlockState defaultState = stateSupplier.get();
 			if(defaultState != null)

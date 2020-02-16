@@ -1,6 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
 
+import com.mraof.minestuck.block.EnumDowelType;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.TotemLatheBlock;
 import com.mraof.minestuck.item.MSItems;
@@ -115,16 +116,17 @@ public class TotemLatheTileEntity extends TileEntity
 		if(world == null)
 			return false;
 		Direction facing = getFacing();
-		BlockPos pos = getPos().up().offset(facing.rotateYCCW(), 2);
+		BlockPos pos = MSBlocks.TOTEM_LATHE.getDowelPos(getPos(), getBlockState());
 		BlockState state = world.getBlockState(pos);
 		if(stack.isEmpty())
 		{
-			if(state.equals(MSBlocks.TOTEM_LATHE.DOWEL_ROD.get().getDefaultState().with(TotemLatheBlock.FACING, facing)))
+			if(isValidDowelRod(state, facing))
 				world.removeBlock(pos, false);
 			return true;
-		} else if (stack.getItem() == MSBlocks.CRUXITE_DOWEL.asItem())
+		} else if(stack.getItem() == MSBlocks.CRUXITE_DOWEL.asItem())
 		{
-			if(state.equals(MSBlocks.TOTEM_LATHE.DOWEL_ROD.get().getDefaultState().with(TotemLatheBlock.FACING, facing)))
+			BlockState newState = MSBlocks.TOTEM_LATHE.DOWEL_ROD.get().getDefaultState().with(TotemLatheBlock.FACING, facing).with(TotemLatheBlock.DowelRod.DOWEL, EnumDowelType.getForDowel(stack));
+			if(isValidDowelRod(state, facing))
 			{
 				TileEntity te = world.getTileEntity(pos);
 				if(!(te instanceof ItemStackTileEntity))
@@ -134,11 +136,13 @@ public class TotemLatheTileEntity extends TileEntity
 				}
 				ItemStackTileEntity teItem = (ItemStackTileEntity) te;
 				teItem.setStack(stack);
-				world.notifyBlockUpdate(pos, state, state, 2);
+				if(!state.equals(newState))
+					world.setBlockState(pos, newState);
+				else world.notifyBlockUpdate(pos, state, state, 2);
 				return true;
 			} else if(state.isAir(world, pos))
 			{
-				world.setBlockState(pos, MSBlocks.TOTEM_LATHE.DOWEL_ROD.get().getDefaultState().with(TotemLatheBlock.FACING, facing));
+				world.setBlockState(pos, newState);
 				TileEntity te = world.getTileEntity(pos);
 				if(!(te instanceof ItemStackTileEntity))
 				{
@@ -153,10 +157,11 @@ public class TotemLatheTileEntity extends TileEntity
 		}
 		return false;
 	}
+	
 	public ItemStack getDowel()
 	{
 		BlockPos pos = getPos().up().offset(getFacing().rotateYCCW(), 2);
-		if(world.getBlockState(pos).equals(MSBlocks.TOTEM_LATHE.DOWEL_ROD.get().getDefaultState().with(TotemLatheBlock.FACING, getFacing())))
+		if(isValidDowelRod(world.getBlockState(pos), getFacing()))
 		{
 			TileEntity te = world.getTileEntity(pos);
 			if(te instanceof ItemStackTileEntity)
@@ -166,6 +171,11 @@ public class TotemLatheTileEntity extends TileEntity
 		}
 		return ItemStack.EMPTY;
 		
+	}
+	
+	private boolean isValidDowelRod(BlockState state, Direction facing)
+	{
+		return state.getBlock() == MSBlocks.TOTEM_LATHE.DOWEL_ROD.get() && state.get(TotemLatheBlock.FACING) == facing;
 	}
 	
 	public Direction getFacing()
