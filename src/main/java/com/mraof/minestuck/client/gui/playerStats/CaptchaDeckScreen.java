@@ -84,8 +84,7 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckCon
 				Modus newModus = type.createClientSide();
 				if(newModus != null && ClientPlayerData.clientSideModus != null && newModus.getClass() != ClientPlayerData.clientSideModus.getClass() && !newModus.canSwitchFrom(ClientPlayerData.clientSideModus))
 				{
-					//TODO Translation keys that are also used in the data generator
-					minecraft.currentScreen = new ConfirmScreen(this::onConfirm, new TranslationTextComponent("gui.emptySylladex1"), new TranslationTextComponent("gui.emptySylladex2"))
+					minecraft.currentScreen = new ConfirmScreen(this::onConfirm, new TranslationTextComponent(SylladexScreen.EMPTY_SYLLADEX_1), new TranslationTextComponent(SylladexScreen.EMPTY_SYLLADEX_2))
 					{
 						@Override
 						public void onClose()
