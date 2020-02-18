@@ -12,6 +12,7 @@ import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.command.CheckLandCommand;
 import com.mraof.minestuck.command.GristSetArgument;
 import com.mraof.minestuck.command.GristTypeArgument;
+import com.mraof.minestuck.command.SendGristCommand;
 import com.mraof.minestuck.computer.ButtonListProgram;
 import com.mraof.minestuck.computer.SburbClient;
 import com.mraof.minestuck.computer.SburbServer;
@@ -21,6 +22,7 @@ import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.item.MSItemGroup;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
@@ -723,6 +725,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(GristTypes.ZILLIUM, "Zillium");
 		add(GristType.FORMAT, "%s Grist");
 		add(GristSet.MISSING_MESSAGE, "You do not have enough grist for that. You need: %s");
+		add(GristSet.GRIST_COMMA, "%s, %s");
+		add(GristAmount.GRIST_AMOUNT, "%s %s");
 		
 		add(EnumClass.BARD, "Bard");
 		add(EnumClass.HEIR, "Heir");
@@ -1010,6 +1014,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		
 		add(CheckLandCommand.CHECK, "You are currently in %s.");
 		add(CheckLandCommand.FAIL, "You are currently not in a land dimension.");
+		add(SendGristCommand.SUCCESS, "Successfully gave grist to %s: %s");
+		add(SendGristCommand.NOT_PERMITTED, "You are not permitted to send grist to %s.");
+		add(SendGristCommand.CANT_AFFORD, "You do not have enough grist to send %s.");
 		add(GristTypeArgument.INVALID, "Invalid grist type %s");
 		add(GristSetArgument.INCOMPLETE, "Incomplete (expected pairs of integers and grist types)");
 		add(GristSetArgument.DUPLICATE, "Duplicate grist type %s");

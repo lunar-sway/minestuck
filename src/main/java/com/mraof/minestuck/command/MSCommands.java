@@ -17,7 +17,7 @@ public class MSCommands
 		
 		CheckLandCommand.register(dispatcher);
 		CommandGrist.register(dispatcher);
-		CommandGristSend.register(dispatcher);
+		SendGristCommand.register(dispatcher);
 		CommandTransportalizer.register(dispatcher);
 		CommandSburbSession.register(dispatcher);
 		CommandSburbServer.register(dispatcher);

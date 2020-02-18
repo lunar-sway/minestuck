@@ -11,6 +11,7 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 public class GristSet
 {
 	public static final String MISSING_MESSAGE = "grist.missing";
+	public static final String GRIST_COMMA = "grist.comma";
 	
 	public static final GristSet EMPTY = new GristSet(Collections.emptyMap());
 
@@ -237,18 +239,23 @@ public class GristSet
 		return build.toString();
 	}
 	
-	public ITextComponent createMissingMessage()
+	public ITextComponent asTextComponent()
 	{
-		StringBuilder str = new StringBuilder();
-		boolean first = true;
+		ITextComponent component = null;
 		for(GristAmount grist : getAmounts())
 		{
-			if(!first)
-				str.append(", ");
-			first = false;
-			str.append(grist.getAmount()).append(" ").append(grist.getType().getDisplayName());
+			if(component == null)
+				component = grist.asTextComponent();
+			else component = new TranslationTextComponent(GRIST_COMMA, component, grist.asTextComponent());
 		}
-		return new TranslationTextComponent(MISSING_MESSAGE, str.toString());
+		if(component != null)
+			return component;
+		else return new StringTextComponent("");
+	}
+	
+	public ITextComponent createMissingMessage()
+	{
+		return new TranslationTextComponent(MISSING_MESSAGE, asTextComponent());
 	}
 	
 	
