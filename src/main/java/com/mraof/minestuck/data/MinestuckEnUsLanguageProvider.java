@@ -9,7 +9,9 @@ import com.mraof.minestuck.client.gui.captchalouge.TreeSylladexScreen;
 import com.mraof.minestuck.client.gui.playerStats.*;
 import com.mraof.minestuck.client.settings.MSKeyHandler;
 import com.mraof.minestuck.client.util.GuiUtil;
-import com.mraof.minestuck.command.CommandCheckLand;
+import com.mraof.minestuck.command.CheckLandCommand;
+import com.mraof.minestuck.command.GristSetArgument;
+import com.mraof.minestuck.command.GristTypeArgument;
 import com.mraof.minestuck.computer.ButtonListProgram;
 import com.mraof.minestuck.computer.SburbClient;
 import com.mraof.minestuck.computer.SburbServer;
@@ -1006,8 +1008,11 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SessionHandler.CLIENT_SESSION_FULL, "Client player's session is full");
 		add(SessionHandler.BOTH_SESSIONS_FULL, "Too many players in total in both player's sessions");
 		
-		add(CommandCheckLand.CHECK, "You are currently in %s.");
-		add(CommandCheckLand.FAIL, "You are currently not in a land dimension.");
+		add(CheckLandCommand.CHECK, "You are currently in %s.");
+		add(CheckLandCommand.FAIL, "You are currently not in a land dimension.");
+		add(GristTypeArgument.INVALID, "Invalid grist type %s");
+		add(GristSetArgument.INCOMPLETE, "Incomplete (expected pairs of integers and grist types)");
+		add(GristSetArgument.DUPLICATE, "Duplicate grist type %s");
 		
 		add(JeiGristCost.GRIST_COSTS, "Grist Costs");
 		

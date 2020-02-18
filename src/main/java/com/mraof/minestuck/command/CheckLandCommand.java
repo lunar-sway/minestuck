@@ -2,6 +2,7 @@ package com.mraof.minestuck.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandInfo;
 import net.minecraft.command.CommandSource;
@@ -10,10 +11,11 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-public class CommandCheckLand
+public class CheckLandCommand
 {
 	public static final String CHECK = "commands.minestuck.check_land";
 	public static final String FAIL = "commands.minestuck.check_land.fail";
+	private static final SimpleCommandExceptionType FAIL_EXCEPTION = new SimpleCommandExceptionType(new TranslationTextComponent(FAIL));
 	
 	public static void register(CommandDispatcher<CommandSource> dispatcher)
 	{
@@ -29,11 +31,11 @@ public class CommandCheckLand
 			LandInfo info = MSDimensions.getLandInfo(player.world);
 			ITextComponent toSend = new TranslationTextComponent(CHECK, info.landAsTextComponent());
 			source.sendFeedback(toSend, false);
+			return 1;
 		}
 		else
 		{
-			source.sendFeedback(new TranslationTextComponent(FAIL), false);
+			throw FAIL_EXCEPTION.create();
 		}
-		return 1;
 	}
 }

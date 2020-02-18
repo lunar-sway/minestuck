@@ -154,7 +154,12 @@ public class GristSet
 	{
 		return this.gristTypes;
 	}
-
+	
+	public boolean hasType(GristType type)
+	{
+		return gristTypes.containsKey(type);
+	}
+	
 	/**
 	 * Returns a ArrayList containing GristAmount objects representing the set.
 	 */

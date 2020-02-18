@@ -11,7 +11,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.math.Vec3d;
 
-public class CommandConsortReply
+public class ConsortReplyCommand
 {
 	public static void register(CommandDispatcher<CommandSource> dispatcher)
 	{
@@ -28,7 +28,8 @@ public class CommandConsortReply
 		{
 			ConsortEntity consort = (ConsortEntity) entity;
 			consort.commandReply(player, path);
+			return 1;
 		}
-		return 1;
+		return 0;
 	}
 }
