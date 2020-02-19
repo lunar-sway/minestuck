@@ -21,7 +21,7 @@ public class MSCommands
 		CommandTransportalizer.register(dispatcher);
 		CommandSburbSession.register(dispatcher);
 		CommandSburbServer.register(dispatcher);
-		CommandSetRung.register(dispatcher);
+		SetRungCommand.register(dispatcher);
 		ConsortReplyCommand.register(dispatcher);
 		CommandToStructure.register(dispatcher);
 		CommandPorkhollow.register(dispatcher);

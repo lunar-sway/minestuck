@@ -1019,6 +1019,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(GristCommand.SUCCESS, "Successfully modified the grist cache for %s.");
 		add(GristCommand.FAILURE, "Failed to modify the grist cache for %s.");
 		add(GristCommand.SET, "Set the grist cache for %s players to %s.");
+		add(SetRungCommand.SUCCESS, "Successfully changed the echeladder of %s players to rung %d with %d%% progress.");
 		add(GristTypeArgument.INVALID, "Invalid grist type %s");
 		add(GristSetArgument.INCOMPLETE, "Incomplete (expected pairs of integers and grist types)");
 		add(GristSetArgument.DUPLICATE, "Duplicate grist type %s");

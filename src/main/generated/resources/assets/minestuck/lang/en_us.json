@@ -287,6 +287,7 @@
   "commands.minestuck.send_grist.cant_afford": "You do not have enough grist to send %s.",
   "commands.minestuck.send_grist.not_permitted": "You are not permitted to send grist to %s.",
   "commands.minestuck.send_grist.success": "Successfully gave grist to %s: %s",
+  "commands.minestuck.set_rung": "Successfully changed the echeladder of %s players to rung %d with %d%% progress.",
   "consort.adaptation.1": "At first, no one liked the mushrooms when our planet was cursed with the Dank.",
   "consort.adaptation.2": "Those who refused to adapt to the new food source Perished, obviously.",
   "consort.advertisement": "Been to the shop? They've got the best %s in the area!",
