@@ -16,7 +16,7 @@ public class MSCommands
 		CommandDispatcher<CommandSource> dispatcher = event.getCommandDispatcher();
 		
 		CheckLandCommand.register(dispatcher);
-		CommandGrist.register(dispatcher);
+		GristCommand.register(dispatcher);
 		SendGristCommand.register(dispatcher);
 		CommandTransportalizer.register(dispatcher);
 		CommandSburbSession.register(dispatcher);
