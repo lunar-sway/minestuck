@@ -24,7 +24,7 @@ public class MSCommands
 		SetRungCommand.register(dispatcher);
 		ConsortReplyCommand.register(dispatcher);
 		CommandToStructure.register(dispatcher);
-		CommandPorkhollow.register(dispatcher);
+		PorkhollowCommand.register(dispatcher);
 		CommandLandDebug.register(dispatcher);
 	}
 }
