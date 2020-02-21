@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:oak_door"
+  },
+  "input2": {
+    "item": "minecraft:oak_slab"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:oak_trapdoor"
+  }
+}

@@ -2,8 +2,11 @@ package com.mraof.minestuck.block.multiblock;
 
 import com.mraof.minestuck.block.TotemLatheBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraftforge.fml.RegistryObject;
@@ -25,6 +28,7 @@ public class TotemLatheMultiblock extends MachineMultiblock
 	public final RegistryObject<Block> CARVER = register("totem_lathe_carver", () -> new TotemLatheBlock(this, TOTEM_LATHE_CARVER, new BlockPos(2, -2, 0), Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F).noDrops()));
 	
 	private final PlacementEntry slotPlacement;
+	private final PlacementEntry dowelPlacement;
 	
 	public TotemLatheMultiblock(String modId)
 	{
@@ -35,6 +39,7 @@ public class TotemLatheMultiblock extends MachineMultiblock
 		registerPlacement(new BlockPos(0, 0, 0), applyDirection(BOTTOM_CORNER, Direction.NORTH));
 		registerPlacement(new BlockPos(3, 1, 0), applyDirection(MIDDLE, Direction.NORTH));
 		registerPlacement(new BlockPos(2, 1, 0), applyDirection(ROD, Direction.NORTH));
+		dowelPlacement = registerPlacement(new BlockPos(1, 1, 0), Blocks.AIR::getDefaultState, (blockState, blockState2) -> true);
 		registerPlacement(new BlockPos(0, 1, 0), applyDirection(WHEEL, Direction.NORTH));
 		registerPlacement(new BlockPos(3, 2, 0), applyDirection(TOP_CORNER, Direction.NORTH));
 		registerPlacement(new BlockPos(2, 2, 0), applyDirection(TOP, Direction.NORTH));
@@ -44,5 +49,11 @@ public class TotemLatheMultiblock extends MachineMultiblock
 	public boolean isInvalidFromSlot(IWorld world, BlockPos pos)
 	{
 		return isInvalidFromPlacement(world, pos, slotPlacement);
+	}
+	
+	public BlockPos getDowelPos(BlockPos tilePos, BlockState slotState)
+	{
+		Rotation rotation = slotPlacement.findRotation(slotState);
+		return dowelPlacement.getPos(slotPlacement.getZeroPos(tilePos, rotation), rotation);
 	}
 }

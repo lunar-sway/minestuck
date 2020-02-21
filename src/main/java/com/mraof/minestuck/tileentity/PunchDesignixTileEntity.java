@@ -4,8 +4,10 @@ import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.PunchDesignixBlock;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
-import com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry;
+import com.mraof.minestuck.item.crafting.MSRecipeTypes;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
+import com.mraof.minestuck.item.crafting.alchemy.CombinationMode;
+import com.mraof.minestuck.item.crafting.alchemy.CombinerWrapper;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.WorldEventUtil;
 import net.minecraft.block.Block;
@@ -13,6 +15,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -106,20 +109,18 @@ public class PunchDesignixTileEntity extends TileEntity
 		
 		if(getCard().getItem() == MSItems.CAPTCHA_CARD)
 		{
-			ItemStack input1 = AlchemyRecipes.getDecodedItem(heldStack);
-			if(!input1.isEmpty())
+			if(AlchemyHelper.hasDecodedItem(heldStack))
 			{
 				ItemStack output;
-				ItemStack input2 = AlchemyRecipes.isPunchedCard(getCard()) ? AlchemyRecipes.getDecodedItem(getCard()) : ItemStack.EMPTY;
-				if(!input2.isEmpty())	//|| combination
+				if(AlchemyHelper.isPunchedCard(getCard()))	//|| combination
 				{
-					output = CombinationRegistry.getCombination(input1, input2, CombinationRegistry.Mode.MODE_OR);
-				} else output = input1;
+					output = world.getRecipeManager().getRecipe(MSRecipeTypes.COMBINATION_TYPE, new CombinerWrapper(heldStack, getCard(), CombinationMode.OR), world).map(IRecipe::getRecipeOutput).orElse(ItemStack.EMPTY);
+				} else output = AlchemyHelper.getDecodedItem(heldStack);
 				
 				if(!output.isEmpty())
 				{
-					MSCriteriaTriggers.PUNCH_DESIGNIX.trigger(player, input1, input2, output);
-					setCard(AlchemyRecipes.createCard(output, true));
+					MSCriteriaTriggers.PUNCH_DESIGNIX.trigger(player, AlchemyHelper.getDecodedItem(heldStack), AlchemyHelper.getDecodedItem(getCard()), output);
+					setCard(AlchemyHelper.createCard(output, true));
 					effects(true);
 					return;
 				}

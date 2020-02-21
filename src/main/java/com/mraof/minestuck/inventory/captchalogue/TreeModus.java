@@ -3,7 +3,7 @@ package com.mraof.minestuck.inventory.captchalogue;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ModusDataPacket;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
@@ -159,7 +159,7 @@ public class TreeModus extends Modus
 		{
 			size--;
 			markDirty();
-			stack = AlchemyRecipes.createCard(stack, false);
+			stack = AlchemyHelper.createCard(stack, false);
 		}
 		if(id == 0)
 			node = null;

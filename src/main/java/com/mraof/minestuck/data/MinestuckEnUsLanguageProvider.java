@@ -9,7 +9,7 @@ import com.mraof.minestuck.client.gui.captchalouge.TreeSylladexScreen;
 import com.mraof.minestuck.client.gui.playerStats.*;
 import com.mraof.minestuck.client.settings.MSKeyHandler;
 import com.mraof.minestuck.client.util.GuiUtil;
-import com.mraof.minestuck.command.CommandCheckLand;
+import com.mraof.minestuck.command.*;
 import com.mraof.minestuck.computer.ButtonListProgram;
 import com.mraof.minestuck.computer.SburbClient;
 import com.mraof.minestuck.computer.SburbServer;
@@ -19,6 +19,7 @@ import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.item.MSItemGroup;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
@@ -721,6 +722,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(GristTypes.ZILLIUM, "Zillium");
 		add(GristType.FORMAT, "%s Grist");
 		add(GristSet.MISSING_MESSAGE, "You do not have enough grist for that. You need: %s");
+		add(GristSet.GRIST_COMMA, "%s, %s");
+		add(GristAmount.GRIST_AMOUNT, "%s %s");
 		
 		add(EnumClass.BARD, "Bard");
 		add(EnumClass.HEIR, "Heir");
@@ -1006,8 +1009,19 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SessionHandler.CLIENT_SESSION_FULL, "Client player's session is full");
 		add(SessionHandler.BOTH_SESSIONS_FULL, "Too many players in total in both player's sessions");
 		
-		add(CommandCheckLand.CHECK, "You are currently in %s.");
-		add(CommandCheckLand.FAIL, "You are currently not in a land dimension.");
+		add(CheckLandCommand.CHECK, "You are currently in %s.");
+		add(CheckLandCommand.FAIL, "You are currently not in a land dimension.");
+		add(SendGristCommand.SUCCESS, "Successfully gave grist to %s: %s");
+		add(SendGristCommand.NOT_PERMITTED, "You are not permitted to send grist to %s.");
+		add(SendGristCommand.CANT_AFFORD, "You do not have enough grist to send %s.");
+		add(GristCommand.GET, "%s has: %s");
+		add(GristCommand.ADD, "Successfully modified the grist cache for %s players.");
+		add(GristCommand.SUCCESS, "Successfully modified the grist cache for %s.");
+		add(GristCommand.FAILURE, "Failed to modify the grist cache for %s.");
+		add(GristCommand.SET, "Set the grist cache for %s players to %s.");
+		add(GristTypeArgument.INVALID, "Invalid grist type %s");
+		add(GristSetArgument.INCOMPLETE, "Incomplete (expected pairs of integers and grist types)");
+		add(GristSetArgument.DUPLICATE, "Duplicate grist type %s");
 		
 		add(JeiGristCost.GRIST_COSTS, "Grist Costs");
 		
@@ -1083,8 +1097,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("frog_variants.1", "Most people believe there aren't that many types of frogs. 4740, maybe? Anything beyond that would be proposterous.");
 		addDialogue("frog_variants.2", "Here in %s, however, we know that there are 9.444731276889531e+22 types of frogs.");
 		addDialogue("frog_hatred", "For whatever reason, residents of Derse HATE frogs! Why would someone hate frogs?");
-		addDialogue("grasshopper_fishing1", "My brother found a magic grasshopper while fishing recently!");
-		addDialogue("grasshopper_fishing2", "Usually all we find are rings!");
+		addDialogue("grasshopper_fishing.1", "My brother found a magic grasshopper while fishing recently!");
+		addDialogue("grasshopper_fishing.2", "Usually all we find are rings!");
 		addDialogue("gay_frogs", "The frogs around here are all so gay! Look at them happily hopping about!");
 		//Buckets
 		addDialogue("lewd_buckets", "Some may call our land lewd, but the buckets are just so fun to swim in!");
@@ -1158,7 +1172,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("frozen.1", "My neighbors were complaining the other night about the snow.");
 		addDialogue("frozen.2", "Personally, the cold never really bothered me anyways.");
 		addDialogue("frozen.2.desc", "You hear a faint \"ba-dum tss\" in the distance.");
-		addDialogue("fur_coat", "Darn! I only need 100 more boondollars for a nice, fur coat! I’m going to freeze!");
+		addDialogue("fur_coat", "Darn! I only need 100 more boondollars for a nice, fur coat! I'm going to freeze!");
 		addDialogue("fur_coat.pay", "Give them the boondollars [Pay 100 boondollars]");
 		addDialogue("fur_coat.pay.reply", "Here you go!");
 		addDialogue("fur_coat.grattitude", "Oh, thank you! Now I won't freeze to death out here! Take this as a token of gratitude!");
@@ -1223,12 +1237,12 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("giant_swords", "My grandpa told me that the giant swords everywhere were dropped by giants locked in combat ages ago.");
 		addDialogue("bloodberries.1", "The strawberries here grow big and red thanks to all the blood in the water supply! The flowers thrive, too!");
 		addDialogue("bloodberries.2", "Strawberry juice is the only thing safe to drink here. If I have any more, I'll scream. Please save us.");
-		addDialogue("immortality_herb.1", "I have a herb that grants immortality! I’m going to eat it right now!");
+		addDialogue("immortality_herb.1", "I have a herb that grants immortality! I'm going to eat it right now!");
 		addDialogue("immortality_herb.2", "However, they are easily confused with an explosion-causing herb...");
-		addDialogue("immortality_herb.3", "I’m taking the risk.");
+		addDialogue("immortality_herb.3", "I'm taking the risk.");
 		addDialogue("spices.1", "A good chef cooks with the spices found throughout the land.");
-		addDialogue("spices.2", "Other chefs are envious that they don’t live in %s.");
-		addDialogue("sharp_slide", "Don’t use the sharp sides of giant swords as slides. May her beautiful soul rest in pieces.");
+		addDialogue("spices.2", "Other chefs are envious that they don't live in %s.");
+		addDialogue("sharp_slide", "Don't use the sharp sides of giant swords as slides. May her beautiful soul rest in pieces.");
 		
 		addDialogue("denizen_mention", "It's a wonderful day. Hopefully some monster underneath the planet's surface doesn't eat us all!");
 		addDialogue("floating_island", "I heard a floating island just appeared somewhere near here recently and falling chunks destroyed a village underneath it!");
@@ -1245,7 +1259,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("rap_battle.accept.reply", "Y! I'll take you on! You can even go first.");
 		addDialogue("rap_battle.deny", "Don't bother with this guy.");
 		addDialogue("rap_battle.deny.reply", "N. Maybe later.");
-		addDialogue("rap_battle.denyAnswer", "Maybe one day I will find a challenger worthy of my greatness....");
+		addDialogue("rap_battle.deny_answer", "Maybe one day I will find a challenger worthy of my greatness....");
 		addDialogue("rap_battle.a1", "I see you carryin' a pick");
 		addDialogue("rap_battle.a2", "You think you minin'? Sick");
 		addDialogue("rap_battle.a3", "But uh...");
@@ -1280,7 +1294,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("rap_battle_concede.final", "%s, yes! I am the greatest rapper ever!");
 		
 		addDialogue("await_hero", "Here, in the %s, we %s worship the %s. We wait and hope for the day that they awaken.");
-		addDialogue("watchSkaia", "Sometimes, I look up in the sky to see Skaia and wish I could visit there some day...");
+		addDialogue("watch_skaia", "Sometimes, I look up in the sky to see Skaia and wish I could visit there some day...");
 		addDialogue("at_skaia.1", "OH MY %s! I'M ACTUALLY ON SKAIA!");
 		addDialogue("at_skaia.2", "Oh my...! I'm actually on skaia!");
 		addDialogue("visited_skaia", "You know, I have actually visited skaia at one point!");
@@ -1315,7 +1329,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("title_presence", "I sense the presence of the %s. Tell me if you see them, ok?");
 		addDialogue("title_presence.iam", "Present yourself as the %s.");
 		addDialogue("title_presence.iam.reply", "I am the %s.");
-		addDialogue("title_presence.iamAnswer", "OH MY %s");
+		addDialogue("title_presence.iam_answer", "OH MY %s");
 		addDialogue("title_presence.agree", "\"Agree\" to do that.");
 		addDialogue("title_presence.agree.reply", "Hehe, ok I will.");
 		addDialogue("shady_offer", "Hey kid... I'll give you something special for 1000 boondollars...");

@@ -1,11 +1,14 @@
 package com.mraof.minestuck.tileentity;
 
 
+import com.mraof.minestuck.block.EnumDowelType;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.TotemLatheBlock;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
-import com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry;
+import com.mraof.minestuck.item.crafting.MSRecipeTypes;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
+import com.mraof.minestuck.item.crafting.alchemy.CombinationMode;
+import com.mraof.minestuck.item.crafting.alchemy.CombinerWrapper;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.WorldEventUtil;
@@ -14,6 +17,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -112,16 +116,17 @@ public class TotemLatheTileEntity extends TileEntity
 		if(world == null)
 			return false;
 		Direction facing = getFacing();
-		BlockPos pos = getPos().up().offset(facing.rotateYCCW(), 2);
+		BlockPos pos = MSBlocks.TOTEM_LATHE.getDowelPos(getPos(), getBlockState());
 		BlockState state = world.getBlockState(pos);
 		if(stack.isEmpty())
 		{
-			if(state.equals(MSBlocks.TOTEM_LATHE.DOWEL_ROD.get().getDefaultState().with(TotemLatheBlock.FACING, facing)))
+			if(isValidDowelRod(state, facing))
 				world.removeBlock(pos, false);
 			return true;
-		} else if (stack.getItem() == MSBlocks.CRUXITE_DOWEL.asItem())
+		} else if(stack.getItem() == MSBlocks.CRUXITE_DOWEL.asItem())
 		{
-			if(state.equals(MSBlocks.TOTEM_LATHE.DOWEL_ROD.get().getDefaultState().with(TotemLatheBlock.FACING, facing)))
+			BlockState newState = MSBlocks.TOTEM_LATHE.DOWEL_ROD.get().getDefaultState().with(TotemLatheBlock.FACING, facing).with(TotemLatheBlock.DowelRod.DOWEL, EnumDowelType.getForDowel(stack));
+			if(isValidDowelRod(state, facing))
 			{
 				TileEntity te = world.getTileEntity(pos);
 				if(!(te instanceof ItemStackTileEntity))
@@ -131,11 +136,13 @@ public class TotemLatheTileEntity extends TileEntity
 				}
 				ItemStackTileEntity teItem = (ItemStackTileEntity) te;
 				teItem.setStack(stack);
-				world.notifyBlockUpdate(pos, state, state, 2);
+				if(!state.equals(newState))
+					world.setBlockState(pos, newState);
+				else world.notifyBlockUpdate(pos, state, state, 2);
 				return true;
 			} else if(state.isAir(world, pos))
 			{
-				world.setBlockState(pos, MSBlocks.TOTEM_LATHE.DOWEL_ROD.get().getDefaultState().with(TotemLatheBlock.FACING, facing));
+				world.setBlockState(pos, newState);
 				TileEntity te = world.getTileEntity(pos);
 				if(!(te instanceof ItemStackTileEntity))
 				{
@@ -150,10 +157,11 @@ public class TotemLatheTileEntity extends TileEntity
 		}
 		return false;
 	}
+	
 	public ItemStack getDowel()
 	{
 		BlockPos pos = getPos().up().offset(getFacing().rotateYCCW(), 2);
-		if(world.getBlockState(pos).equals(MSBlocks.TOTEM_LATHE.DOWEL_ROD.get().getDefaultState().with(TotemLatheBlock.FACING, getFacing())))
+		if(isValidDowelRod(world.getBlockState(pos), getFacing()))
 		{
 			TileEntity te = world.getTileEntity(pos);
 			if(te instanceof ItemStackTileEntity)
@@ -163,6 +171,11 @@ public class TotemLatheTileEntity extends TileEntity
 		}
 		return ItemStack.EMPTY;
 		
+	}
+	
+	private boolean isValidDowelRod(BlockState state, Direction facing)
+	{
+		return state.getBlock() == MSBlocks.TOTEM_LATHE.DOWEL_ROD.get() && state.get(TotemLatheBlock.FACING) == facing;
 	}
 	
 	public Direction getFacing()
@@ -303,23 +316,23 @@ public class TotemLatheTileEntity extends TileEntity
 		ItemStack dowel = getDowel();
 		ItemStack output;
 		boolean success = false;
-		if(!dowel.isEmpty() && !AlchemyRecipes.hasDecodedItem(dowel) && (!card1.isEmpty() || !card2.isEmpty()))
+		if(!dowel.isEmpty() && !AlchemyHelper.hasDecodedItem(dowel) && (!card1.isEmpty() || !card2.isEmpty()))
 		{
 			if(!card1.isEmpty() && !card2.isEmpty())
-				if(!AlchemyRecipes.isPunchedCard(card1) || !AlchemyRecipes.isPunchedCard(card2))
+				if(!AlchemyHelper.isPunchedCard(card1) || !AlchemyHelper.isPunchedCard(card2))
 					output = new ItemStack(MSBlocks.GENERIC_OBJECT);
-				else output = CombinationRegistry.getCombination(AlchemyRecipes.getDecodedItem(card1), AlchemyRecipes.getDecodedItem(card2), CombinationRegistry.Mode.MODE_AND);
+				else output = world.getRecipeManager().getRecipe(MSRecipeTypes.COMBINATION_TYPE, new CombinerWrapper(card1, card2, CombinationMode.AND), world).map(IRecipe::getRecipeOutput).orElse(ItemStack.EMPTY);
 			else
 			{
 				ItemStack input = card1.isEmpty() ? card2 : card1;
-				if(!AlchemyRecipes.isPunchedCard(input))
+				if(!AlchemyHelper.isPunchedCard(input))
 					output = new ItemStack(MSBlocks.GENERIC_OBJECT);
-				else output = AlchemyRecipes.getDecodedItem(input);
+				else output = AlchemyHelper.getDecodedItem(input);
 			}
 			
 			if(!output.isEmpty())
 			{
-				ItemStack outputDowel = output.getItem().equals(MSBlocks.GENERIC_OBJECT.asItem()) ? new ItemStack(MSBlocks.CRUXITE_DOWEL) : AlchemyRecipes.createEncodedItem(output, false);
+				ItemStack outputDowel = output.getItem().equals(MSBlocks.GENERIC_OBJECT.asItem()) ? new ItemStack(MSBlocks.CRUXITE_DOWEL) : AlchemyHelper.createEncodedItem(output, false);
 				ColorHandler.setColor(outputDowel, ColorHandler.getColorFromStack(dowel));
 				
 				setDowel(outputDowel);

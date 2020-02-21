@@ -3,7 +3,7 @@ package com.mraof.minestuck.tileentity;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.item.HologramEntity;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -62,7 +62,7 @@ public class HolopadTileEntity extends TileEntity
 					ItemStack item = new ItemStack(MSBlocks.GENERIC_OBJECT);
 					
 					if (in.hasTag() && in.getTag().contains("contentID"))
-						item = AlchemyRecipes.getDecodedItem(in);
+						item = AlchemyHelper.getDecodedItem(in);
 					
 					spawnHologram(pos, item);
 				}

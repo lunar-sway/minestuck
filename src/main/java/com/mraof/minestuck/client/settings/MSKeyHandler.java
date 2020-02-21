@@ -56,7 +56,7 @@ public class MSKeyHandler
 	}
 	
 	@SubscribeEvent
-	public static void onKeyInput(InputEvent.KeyInputEvent event)	//This is only called during the game, when no gui is active
+	public static void onKeyInput(InputEvent event)	//This is only called during the game, when no gui is active
 	{
 		while(statKey.isPressed())
 		{

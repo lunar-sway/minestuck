@@ -1,7 +1,7 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -44,7 +44,7 @@ public class QueueStackModus extends StackModus
 		{
 			size--;
 			markDirty();
-			return AlchemyRecipes.createCard(id == 0 ? list.removeFirst() : list.removeLast(), false);
+			return AlchemyHelper.createCard(id == 0 ? list.removeFirst() : list.removeLast(), false);
 		}
 		else
 		{

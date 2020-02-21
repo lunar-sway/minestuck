@@ -5,7 +5,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ModusDataPacket;
 import com.mraof.minestuck.util.Debug;
@@ -56,7 +56,7 @@ public class CaptchaDeckHandler
 	
 	public static void launchItem(ServerPlayerEntity player, ItemStack item)
 	{
-		if(item.getItem().equals(MSItems.CAPTCHA_CARD) && !AlchemyRecipes.hasDecodedItem(item))
+		if(item.getItem().equals(MSItems.CAPTCHA_CARD) && !AlchemyHelper.hasDecodedItem(item))
 			while(item.getCount() > 0)
 			{
 				if(getModus(player).increaseSize(player))
@@ -119,10 +119,10 @@ public class CaptchaDeckHandler
 			
 			MSCriteriaTriggers.CHANGE_MODUS.trigger(player, modus);
 		}
-		else if(stack.getItem().equals(MSItems.CAPTCHA_CARD) && !AlchemyRecipes.isPunchedCard(stack)
+		else if(stack.getItem().equals(MSItems.CAPTCHA_CARD) && !AlchemyHelper.isPunchedCard(stack)
 				&& modus != null)
 		{
-			ItemStack content = AlchemyRecipes.getDecodedItem(stack, true);
+			ItemStack content = AlchemyHelper.getDecodedItem(stack, true);
 			
 			System.out.println(content);
 			int failed = 0;
@@ -167,10 +167,10 @@ public class CaptchaDeckHandler
 		if(modus != null && !stack.isEmpty())
 		{
 			boolean card1 = false, card2 = true;
-			if(stack.getItem() == MSItems.CAPTCHA_CARD && AlchemyRecipes.hasDecodedItem(stack)
-					&& !AlchemyRecipes.isPunchedCard(stack))
+			if(stack.getItem() == MSItems.CAPTCHA_CARD && AlchemyHelper.hasDecodedItem(stack)
+					&& !AlchemyHelper.isPunchedCard(stack))
 			{
-				ItemStack newStack = AlchemyRecipes.getDecodedItem(stack, true);
+				ItemStack newStack = AlchemyHelper.getDecodedItem(stack, true);
 				if(!newStack.isEmpty())
 				{
 					card1 = true;
@@ -223,10 +223,10 @@ public class CaptchaDeckHandler
 			if(modus != null && !stack.isEmpty())
 			{
 				boolean card1 = false, card2 = true;
-				if(stack.getItem() == MSItems.CAPTCHA_CARD && AlchemyRecipes.hasDecodedItem(stack)
-						&& !AlchemyRecipes.isPunchedCard(stack))
+				if(stack.getItem() == MSItems.CAPTCHA_CARD && AlchemyHelper.hasDecodedItem(stack)
+						&& !AlchemyHelper.isPunchedCard(stack))
 				{
-					ItemStack newStack = AlchemyRecipes.getDecodedItem(stack, true);
+					ItemStack newStack = AlchemyHelper.getDecodedItem(stack, true);
 					if(!newStack.isEmpty())
 					{
 						card1 = true;
@@ -272,10 +272,10 @@ public class CaptchaDeckHandler
 			if(modus != null && !stack.isEmpty())
 			{
 				boolean card1 = false, card2 = true;
-				if(stack.getItem() == MSItems.CAPTCHA_CARD && AlchemyRecipes.hasDecodedItem(stack)
-						&& !AlchemyRecipes.isPunchedCard(stack))
+				if(stack.getItem() == MSItems.CAPTCHA_CARD && AlchemyHelper.hasDecodedItem(stack)
+						&& !AlchemyHelper.isPunchedCard(stack))
 				{
-					ItemStack newStack = AlchemyRecipes.getDecodedItem(stack, true);
+					ItemStack newStack = AlchemyHelper.getDecodedItem(stack, true);
 					if(!newStack.isEmpty())
 					{
 						card1 = true;
@@ -377,7 +377,7 @@ public class CaptchaDeckHandler
 			if(!stack.isEmpty())
 				if(size > cardsToKeep && MinestuckConfig.dropItemsInCards.get())
 				{
-					ItemStack card = AlchemyRecipes.createCard(stack, false);
+					ItemStack card = AlchemyHelper.createCard(stack, false);
 					player.dropItem(card, true, false);
 					size--;
 				} else player.dropItem(stack, true, false);

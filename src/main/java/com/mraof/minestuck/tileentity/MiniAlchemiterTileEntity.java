@@ -78,7 +78,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 		if(!world.isBlockPowered(this.getPos()) && !this.inv.get(INPUT).isEmpty() && this.owner != null)
 		{
 			//Check owner's cache: Do they have everything they need?
-			ItemStack newItem = AlchemyRecipes.getDecodedItem(this.inv.get(INPUT));
+			ItemStack newItem = AlchemyHelper.getDecodedItem(this.inv.get(INPUT));
 			if(newItem.isEmpty())
 				if(!inv.get(INPUT).hasTag() || !inv.get(INPUT).getTag().contains("contentID"))
 					newItem = new ItemStack(MSBlocks.GENERIC_OBJECT);
@@ -100,7 +100,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 	@Override
 	public void processContents()
 	{
-		ItemStack newItem = AlchemyRecipes.getDecodedItem(this.inv.get(INPUT));
+		ItemStack newItem = AlchemyHelper.getDecodedItem(this.inv.get(INPUT));
 		
 		if (newItem.isEmpty())
 			newItem = new ItemStack(MSBlocks.GENERIC_OBJECT);
@@ -179,7 +179,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 	{
 		if (getStackInSlot(INPUT) != null && owner != null)
 		{
-			ItemStack newItem = AlchemyRecipes.getDecodedItem(getStackInSlot(INPUT));
+			ItemStack newItem = AlchemyHelper.getDecodedItem(getStackInSlot(INPUT));
 			if (newItem.isEmpty())
 				if (!getStackInSlot(INPUT).hasTag() || !getStackInSlot(INPUT).getTag().contains("contentID"))
 					newItem = new ItemStack(MSBlocks.GENERIC_OBJECT);

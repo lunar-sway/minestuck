@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "tag": "minecraft:sand"
+  },
+  "input2": {
+    "item": "minecraft:nether_wart"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:soul_sand"
+  }
+}

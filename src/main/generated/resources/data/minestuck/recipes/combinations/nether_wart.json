@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:red_mushroom"
+  },
+  "input2": {
+    "item": "minecraft:soul_sand"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minecraft:nether_wart"
+  }
+}

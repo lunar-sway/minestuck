@@ -15,14 +15,14 @@ public class MSCommands
 	{
 		CommandDispatcher<CommandSource> dispatcher = event.getCommandDispatcher();
 		
-		CommandCheckLand.register(dispatcher);
-		CommandGrist.register(dispatcher);
-		CommandGristSend.register(dispatcher);
+		CheckLandCommand.register(dispatcher);
+		GristCommand.register(dispatcher);
+		SendGristCommand.register(dispatcher);
 		CommandTransportalizer.register(dispatcher);
 		CommandSburbSession.register(dispatcher);
 		CommandSburbServer.register(dispatcher);
 		CommandSetRung.register(dispatcher);
-		CommandConsortReply.register(dispatcher);
+		ConsortReplyCommand.register(dispatcher);
 		CommandToStructure.register(dispatcher);
 		CommandPorkhollow.register(dispatcher);
 		CommandLandDebug.register(dispatcher);

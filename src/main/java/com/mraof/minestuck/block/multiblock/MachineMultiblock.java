@@ -55,7 +55,10 @@ public abstract class MachineMultiblock implements IItemProvider    //An abstrac
 	
 	protected PlacementEntry registerPlacement(BlockPos pos, Supplier<BlockState> stateSupplier, BiPredicate<BlockState, BlockState> stateValidator)
 	{
-		//TODO add check to prevent duplicate positions
+		for(PlacementEntry entry : blockEntries)
+			if(entry.pos.equals(pos))
+				throw new IllegalArgumentException("Can't add placement for the same position " + pos + " twice.");
+		
 		PlacementEntry entry = new PlacementEntry(stateSupplier, stateValidator, pos);
 		blockEntries.add(entry);
 		return entry;
@@ -170,7 +173,7 @@ public abstract class MachineMultiblock implements IItemProvider    //An abstrac
 			return pos.subtract(this.pos.rotate(rotation));
 		}
 		
-		private Rotation findRotation(BlockState rotatedState)
+		public Rotation findRotation(BlockState rotatedState)
 		{
 			BlockState defaultState = stateSupplier.get();
 			if(defaultState != null)

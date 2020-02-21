@@ -2,20 +2,23 @@ package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.inventory.MiniPunchDesignixContainer;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
-import com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry;
+import com.mraof.minestuck.item.crafting.MSRecipeTypes;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
+import com.mraof.minestuck.item.crafting.alchemy.CombinationMode;
+import com.mraof.minestuck.item.crafting.alchemy.ItemCombiner;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.Direction;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nullable;
 
-public class MiniPunchDesignixTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
+public class MiniPunchDesignixTileEntity extends MachineProcessTileEntity implements INamedContainerProvider, ItemCombiner
 {
 	public static final String TITLE = "container.minestuck.mini_punch_designix";
 	public static final RunType TYPE = RunType.BUTTON;
@@ -38,6 +41,12 @@ public class MiniPunchDesignixTileEntity extends MachineProcessTileEntity implem
 	}
 	
 	@Override
+	public CombinationMode getMode()
+	{
+		return CombinationMode.OR;
+	}
+	
+	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack)
 	{
 		return index == 0 || index == 1 && stack.getItem() == MSItems.CAPTCHA_CARD;
@@ -48,15 +57,10 @@ public class MiniPunchDesignixTileEntity extends MachineProcessTileEntity implem
 	{
 		if (!this.inv.get(0).isEmpty() && !inv.get(1).isEmpty())
 		{
-			ItemStack output = AlchemyRecipes.getDecodedItemDesignix(inv.get(0));
-			if (inv.get(1).hasTag() && inv.get(1).getTag().getBoolean("punched"))
-			{
-				output = CombinationRegistry.getCombination(output,
-						AlchemyRecipes.getDecodedItem(inv.get(1)), CombinationRegistry.Mode.MODE_OR);
-			}
-			if (output.isEmpty())
+			ItemStack output = createResult();
+			if(output.isEmpty())
 				return false;
-			output = AlchemyRecipes.createCard(output, true);
+			
 			return (inv.get(2).isEmpty() || inv.get(2).getCount() < 16 && ItemStack.areItemStackTagsEqual(inv.get(2), output));
 		}
 		else
@@ -68,28 +72,34 @@ public class MiniPunchDesignixTileEntity extends MachineProcessTileEntity implem
 	@Override
 	public void processContents()
 	{
-		//Create a new card, using CombinationRegistry
 		if(!inv.get(2).isEmpty())
 		{
 			decrStackSize(1, 1);
-			if(!(inv.get(0).hasTag() && inv.get(0).getTag().contains("contentID")))
+			if(!AlchemyHelper.hasDecodedItem(inv.get(0)))
 				decrStackSize(0, 1);
 			this.inv.get(2).grow(1);
 			return;
 		}
 		
-		ItemStack outputItem = AlchemyRecipes.getDecodedItemDesignix(inv.get(0));
-		
-		if(inv.get(1).hasTag() && inv.get(1).getTag().getBoolean("punched"))
-			outputItem = CombinationRegistry.getCombination(outputItem, AlchemyRecipes.getDecodedItem(inv.get(1)), CombinationRegistry.Mode.MODE_OR);
-		
-		//Create card
-		outputItem = AlchemyRecipes.createCard(outputItem, true);
+		ItemStack outputItem = createResult();
 		
 		setInventorySlotContents(2, outputItem);
-		if(!(inv.get(0).hasTag() && inv.get(0).getTag().contains("contentID")))
+		if(!AlchemyHelper.hasDecodedItem(inv.get(0)))
 			decrStackSize(0, 1);
 		decrStackSize(1, 1);
+	}
+	
+	private ItemStack createResult()
+	{
+		ItemStack output = AlchemyHelper.getDecodedItemDesignix(inv.get(0));
+		if(!output.isEmpty() && AlchemyHelper.isPunchedCard(inv.get(1)))
+		{
+			output = world.getRecipeManager().getRecipe(MSRecipeTypes.COMBINATION_TYPE, this, world).map(IRecipe::getRecipeOutput).orElse(ItemStack.EMPTY);
+		} else return output;
+		
+		if(!output.isEmpty())
+			return AlchemyHelper.createCard(output, true);
+		else return ItemStack.EMPTY;
 	}
 	
 	@Override

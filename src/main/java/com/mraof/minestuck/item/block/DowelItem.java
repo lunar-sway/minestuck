@@ -3,7 +3,7 @@ package com.mraof.minestuck.item.block;
 import com.mraof.minestuck.block.CruxiteDowelBlock;
 import com.mraof.minestuck.item.AlchemizedColored;
 import com.mraof.minestuck.item.CaptchaCardItem;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.tileentity.ItemStackTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -43,9 +43,9 @@ public class DowelItem extends BlockItem implements AlchemizedColored
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
 	{
-		if(AlchemyRecipes.hasDecodedItem(stack))
+		if(AlchemyHelper.hasDecodedItem(stack))
 		{
-			ItemStack containedStack = AlchemyRecipes.getDecodedItem(stack);
+			ItemStack containedStack = AlchemyHelper.getDecodedItem(stack);
 			
 			if(!containedStack.isEmpty())
 			{
@@ -67,7 +67,7 @@ public class DowelItem extends BlockItem implements AlchemizedColored
 			return null;
 		
 		ItemStack stack = context.getItem();
-		if(AlchemyRecipes.hasDecodedItem(stack))
+		if(AlchemyHelper.hasDecodedItem(stack))
 			state = state.with(CruxiteDowelBlock.DOWEL_TYPE, CruxiteDowelBlock.Type.TOTEM);
 		else
 			state = state.with(CruxiteDowelBlock.DOWEL_TYPE, CruxiteDowelBlock.Type.DOWEL);

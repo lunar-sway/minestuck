@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:spork"
+  },
+  "input2": {
+    "item": "minecraft:gold_ingot"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:golden_spork"
+  }
+}

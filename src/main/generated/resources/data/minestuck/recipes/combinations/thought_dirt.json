@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:dirt"
+  },
+  "input2": {
+    "item": "minecraft:lime_dye"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:thought_dirt"
+  }
+}

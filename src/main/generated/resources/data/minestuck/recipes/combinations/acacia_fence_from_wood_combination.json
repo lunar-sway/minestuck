@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:birch_fence"
+  },
+  "input2": {
+    "item": "minecraft:jungle_fence"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:acacia_fence"
+  }
+}

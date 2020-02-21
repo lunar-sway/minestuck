@@ -11,7 +11,6 @@ import com.mraof.minestuck.entity.consort.ConsortDialogue;
 import com.mraof.minestuck.entity.consort.ConsortRewardHandler;
 import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.KindAbstratusList;
 import com.mraof.minestuck.skaianet.SessionHandler;
@@ -66,10 +65,6 @@ public class Minestuck
 		
 		//register channel handler
 		MSPacketHandler.setupChannel();
-		
-		//register grist costs and combination recipes
-		AlchemyRecipes.registerVanillaRecipes();
-		AlchemyRecipes.registerMinestuckRecipes();
 		
 		//register consort shop prices
 		ConsortRewardHandler.registerMinestuckPrices();

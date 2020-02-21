@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "tag": "minestuck:modus_card"
+  },
+  "input2": {
+    "item": "minecraft:item_frame"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:set_modus_card"
+  }
+}

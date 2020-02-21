@@ -84,9 +84,9 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 			return AlchemyRecipes.createCard(new ItemStack(MinestuckBlocks.GENERIC_OBJECT), false);
 		else return AlchemyRecipes.createCard(new ItemStack(AlchemyRecipes.getDecodedItem(dowel).getItem(), 1), false);
 		}
-		else */if (!AlchemyRecipes.hasDecodedItem(dowel))
+		else */if (!AlchemyHelper.hasDecodedItem(dowel))
 			return new ItemStack(MSBlocks.GENERIC_OBJECT);
-		else return AlchemyRecipes.getDecodedItem(dowel);
+		else return AlchemyHelper.getDecodedItem(dowel);
 	}
 	
 	/**

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:note_block"
+  },
+  "input2": {
+    "item": "minecraft:diamond"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minecraft:jukebox"
+  }
+}

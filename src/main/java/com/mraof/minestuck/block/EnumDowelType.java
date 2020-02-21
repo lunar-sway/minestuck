@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 
@@ -21,7 +21,7 @@ public enum EnumDowelType implements IStringSerializable
 	{
 		if(dowel.isEmpty())
 			return NONE;
-		else if(AlchemyRecipes.hasDecodedItem(dowel))
+		else if(AlchemyHelper.hasDecodedItem(dowel))
 			return CARVED_DOWEL;
 		else return DOWEL;
 	}

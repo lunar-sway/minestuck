@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:coarse_dirt"
+  },
+  "input2": {
+    "item": "minecraft:end_stone"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:coarse_end_stone"
+  }
+}

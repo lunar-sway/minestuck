@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:stone"
+  },
+  "input2": {
+    "tag": "minecraft:logs"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:petrified_log"
+  }
+}

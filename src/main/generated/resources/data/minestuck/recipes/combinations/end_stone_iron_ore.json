@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:iron_ingot"
+  },
+  "input2": {
+    "item": "minecraft:end_stone"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:end_stone_iron_ore"
+  }
+}
