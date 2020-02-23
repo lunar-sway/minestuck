@@ -1023,6 +1023,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(PorkhollowCommand.SEND, "Successfully sent %s boondollars to %s.");
 		add(PorkhollowCommand.TAKE, "Successfully took out %s boondollars from your porkhollow.");
 		add(PorkhollowCommand.INSUFFICIENT, "You do not have enough boondollars to do that.");
+		add(TransportalizerCommand.NOT_FOUND, "Couldn't find transportalizer with ID \"%s\"");
+		add(TransportalizerCommand.FAILURE, "Teleportation failed for %s");
+		add(TransportalizerCommand.FAILURE_RESULT, "Failed the teleport anything.");
+		add(TransportalizerCommand.RESULT, "Successfully teleported %s entities to transportalizer");
 		add(GristTypeArgument.INVALID, "Invalid grist type %s");
 		add(GristSetArgument.INCOMPLETE, "Incomplete (expected pairs of integers and grist types)");
 		add(GristSetArgument.DUPLICATE, "Duplicate grist type %s");
