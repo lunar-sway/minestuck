@@ -20,7 +20,7 @@ public class MSCommands
 		SendGristCommand.register(dispatcher);
 		TransportalizerCommand.register(dispatcher);
 		CommandSburbSession.register(dispatcher);
-		CommandSburbServer.register(dispatcher);
+		SburbConnectionCommand.register(dispatcher);
 		SetRungCommand.register(dispatcher);
 		ConsortReplyCommand.register(dispatcher);
 		PorkhollowCommand.register(dispatcher);

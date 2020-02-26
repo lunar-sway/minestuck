@@ -26,7 +26,7 @@ import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.jei.JeiGristCost;
 import com.mraof.minestuck.network.EffectTogglePacket;
 import com.mraof.minestuck.player.*;
-import com.mraof.minestuck.skaianet.SessionHandler;
+import com.mraof.minestuck.skaianet.MergeResult;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.*;
 import com.mraof.minestuck.world.GateHandler;
@@ -992,7 +992,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SburbClient.RESUME_BUTTON, "Resume connection");
 		add(SburbClient.SELECT_COLOR, "Select a Color");
 		add(SburbClient.CONNECT, "Connected to %s");
-		add(SessionHandler.CONNECT_FAILED, "Connection failed");
 		add(SburbClient.CLIENT_ACTIVE, "Client is already active");
 		add(SkaianetHandler.CLOSED, "Connection closed");
 		add(SkaianetHandler.CLOSED_SERVER, "Server closed");
@@ -1004,10 +1003,14 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SkaianetHandler.STOP_RESUME, "Stopped resuming");
 		add(SburbClient.NAME, "Client");
 		add(SburbServer.NAME, "Server");
-		add(SessionHandler.SINGLE_SESSION_FULL, "Game session is full");
-		add(SessionHandler.SERVER_SESSION_FULL, "Server player's session is full");
-		add(SessionHandler.CLIENT_SESSION_FULL, "Client player's session is full");
-		add(SessionHandler.BOTH_SESSIONS_FULL, "Too many players in total in both player's sessions");
+		add(MergeResult.ABLE, "Able to merge");
+		add(MergeResult.LOCKED, "Either session is locked");
+		add(MergeResult.GLOBAL_SESSION_FULL, "Game session is full");
+		add(MergeResult.CLIENT_SESSION_FULL, "Client player's session is full");
+		add(MergeResult.SERVER_SESSION_FULL, "Server player's session is full");
+		add(MergeResult.MERGED_SESSION_FULL, "Too many players in total in both player's sessions");
+		add(MergeResult.BOTH_CUSTOM, "Can't merge two custom sessions");
+		add(MergeResult.GENERIC_FAIL, "Merge failed");
 		
 		add(CheckLandCommand.CHECK, "You are currently in %s.");
 		add(CheckLandCommand.FAIL, "You are currently not in a land dimension.");
@@ -1027,6 +1030,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(TransportalizerCommand.FAILURE, "Teleportation failed for %s");
 		add(TransportalizerCommand.FAILURE_RESULT, "Failed the teleport anything.");
 		add(TransportalizerCommand.RESULT, "Successfully teleported %s entities to transportalizer");
+		add(SburbConnectionCommand.SUCCESS, "Successfully set %s's server player as %s");
+		add(SburbConnectionCommand.LOCKED, "Their session is locked, and should no longer be modified");
+		add(SburbConnectionCommand.ALREADY_CONNECTED, "Those players have already been connected");
 		add(GristTypeArgument.INVALID, "Invalid grist type %s");
 		add(GristSetArgument.INCOMPLETE, "Incomplete (expected pairs of integers and grist types)");
 		add(GristSetArgument.DUPLICATE, "Duplicate grist type %s");

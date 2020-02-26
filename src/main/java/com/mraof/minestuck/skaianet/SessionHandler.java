@@ -1,12 +1,16 @@
 package com.mraof.minestuck.skaianet;
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.command.SburbConnectionCommand;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.util.Debug;
+import net.minecraft.command.CommandSource;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import java.util.*;
@@ -17,10 +21,15 @@ import java.util.*;
  */
 public class SessionHandler
 {
+	@Deprecated
 	public static final String CONNECT_FAILED = "minestuck.connect_failed_message";
+	@Deprecated
 	public static final String SINGLE_SESSION_FULL = "minestuck.single_session_full_message";
+	@Deprecated
 	public static final String CLIENT_SESSION_FULL = "minestuck.client_session_full_message";
+	@Deprecated
 	public static final String SERVER_SESSION_FULL = "minestuck.server_session_full_message";
+	@Deprecated
 	public static final String BOTH_SESSIONS_FULL = "minestuck.both_sessions_full_message";
 	
 	static final String GLOBAL_SESSION_NAME = "global";
@@ -89,9 +98,6 @@ public class SessionHandler
 			Session s = sessions.remove(i);
 			session.connections.addAll(s.connections);
 			session.predefinedPlayers.putAll(s.predefinedPlayers);	//Used only when merging the global session
-			if(s.skaiaId != 0) session.skaiaId = s.skaiaId;
-			if(s.prospitId != 0) session.prospitId = s.prospitId;
-			if(s.derseId != 0) session.derseId = s.derseId;
 		}
 		session.name = GLOBAL_SESSION_NAME;
 		sessionsByName.clear();
@@ -111,18 +117,8 @@ public class SessionHandler
 				return true;
 		
 		int players = 0;
-		boolean skaiaUsed = false, prospitUsed = false, derseUsed = false;
 		for(Session s : sessions)
 		{
-			if(s.skaiaId != 0)
-				if(skaiaUsed) return false;
-				else skaiaUsed = true;
-			if(s.prospitId != 0)
-				if(prospitUsed) return false;
-				else prospitUsed = true;
-			if(s.derseId != 0)
-				if(derseUsed) return false;
-				else derseUsed = true;
 			if(s.isCustom() || s.locked)
 				return false;
 			players += s.getPlayerList().size();
@@ -145,6 +141,7 @@ public class SessionHandler
 		return null;
 	}
 	
+	@Deprecated
 	String merge(Session cs, Session ss, SburbConnection sb)
 	{
 		String s = canMerge(cs, ss);
@@ -154,9 +151,6 @@ public class SessionHandler
 			if(sb != null)
 				cs.connections.add(sb);
 			cs.connections.addAll(ss.connections);
-			if(cs.skaiaId == 0) cs.skaiaId = ss.skaiaId;
-			if(cs.prospitId == 0) cs.prospitId = ss.prospitId;
-			if(cs.derseId == 0) cs.derseId = ss.derseId;
 			
 			if(ss.isCustom())
 			{
@@ -168,6 +162,7 @@ public class SessionHandler
 		return s;
 	}
 	
+	@Deprecated
 	private static String canMerge(Session s0, Session s1)
 	{
 		if(s0.isCustom() && s1.isCustom() || s0.locked || s1.locked)
@@ -215,9 +210,6 @@ public class SessionHandler
 					s.predefinedPlayers.putAll(session.predefinedPlayers);
 					sessionsByName.put(s.name, s);
 				}
-				s.skaiaId = session.skaiaId;
-				s.prospitId = session.prospitId;
-				s.derseId = session.derseId;
 			}
 			
 			boolean found;
@@ -268,7 +260,7 @@ public class SessionHandler
 	/**
 	 * @return Null if successful or an unlocalized error message describing reason.
 	 */
-	String onConnectionCreated(SburbConnection connection)
+	String onConnectionCreated(SburbConnection connection)	//TODO Modify this to use SessionMerger.getValidMergedSession() in an appropriate way
 	{
 		if(!canConnect(connection.getClientIdentifier(), connection.getServerIdentifier()))
 			return CONNECT_FAILED;
@@ -367,104 +359,93 @@ public class SessionHandler
 		return map;
 	}
 	
-	/*public static void connectByCommand(ICommandSender sender, ICommand command, PlayerIdentifier client, PlayerIdentifier server) throws CommandException
+	public int connectByCommand(CommandSource source, PlayerIdentifier client, PlayerIdentifier server) throws CommandSyntaxException
 	{
-		Session sc = getPlayerSession(client), ss = getPlayerSession(server);
-		
-		if(singleSession)
+		try
 		{
-			int i = (sc == null ? 1:0) + (ss == null ? 1 : 0); 
-			sc = ss = sessions.get(0);
-			if(MinestuckConfig.forceMaxSize && sc.getPlayerList().size() + i > maxSize)
-				throw new CommandException("computer.singleSessionFull");
-		}
-		else
-		{
-			if(sc == null && ss == null)
+			Session target = SessionMerger.getValidMergedSession(this, client, server);
+			if(target.locked)
 			{
-				if(sender.sendCommandFeedback())
-					sender.sendMessage(new TextComponentString("Neither player is part of a session. Creating new session..."));
-				sc = ss = new Session();
-				sessions.add(sc);
-			} else if(sc == null)
-			{
-				if(ss.locked)
-					throw new CommandException("The server session is locked, and can no longer be modified!");
-				if(MinestuckConfig.forceMaxSize && ss.getPlayerList().size() + 1 > maxSize)
-					throw new CommandException("computer.serverSessionFull");
-				sc = ss;
-			} else if(ss == null)
-			{
-				if(sc.locked)
-					throw new CommandException("The client session is locked, and can no longer be modified!");
-				if(MinestuckConfig.forceMaxSize && sc.getPlayerList().size() + 1 > maxSize)
-					throw new CommandException("computer.clientSessionFull");
-				ss = sc;
+				throw SburbConnectionCommand.LOCKED_EXCEPTION.create();
 			}
-		}
-		
-		SburbConnection cc = SkaianetHandler.getMainConnection(client, true), cs = SkaianetHandler.getMainConnection(server, false);
-		
-		if(cc != null && cc == cs)
-			throw new CommandException("Those players are already connected!");
-		
-		if(sc != ss)
+			
+			if(forceConnection(target, client, server))
+			{
+				source.sendFeedback(new TranslationTextComponent(SburbConnectionCommand.SUCCESS, client.getUsername(), server.getUsername()), true);
+				return 1;
+			} else
+			{
+				throw SburbConnectionCommand.CONNECTED_EXCEPTION.create();
+			}
+		} catch(MergeResult.SessionMergeException e)
 		{
-			String merge = merge(sc, ss, null);
-			if(merge != null)
-				throw new CommandException(merge);
+			throw SburbConnectionCommand.MERGE_EXCEPTION.create(e.getResult());
 		}
+	}
+	
+	private boolean forceConnection(Session session, PlayerIdentifier client, PlayerIdentifier server)
+	{
+		SburbConnection cc = skaianetHandler.getMainConnection(client, true), cs = skaianetHandler.getMainConnection(server, false);
+		
+		if(cc != null && cc == cs || session.locked)
+			return false;
 		
 		boolean updateLandChain = false;
 		if(cs != null)
 		{
-			if(cs.isActive)
-				SkaianetHandler.closeConnection(server, cs.getClientIdentifier(), false);
-			cs.serverIdentifier = IdentifierHandler.nullIdentifier;
-			if(sender.sendCommandFeedback())
-				sender.sendMessage(new TextComponentString(server.getUsername()+"'s old client player "+cs.getClientIdentifier().getUsername()+" is now without a server player.").setStyle(new Style().setColor(TextFormatting.YELLOW)));
-			updateLandChain |= cs.enteredGame();
+			if(cs.isActive())
+				skaianetHandler.closeConnection(server, cs.getClientIdentifier(), false);
+			cs.serverIdentifier = IdentifierHandler.NULL_IDENTIFIER;
+			updateLandChain = cs.hasEntered();
 		}
 		
-		if(cc != null && cc.isActive)
-			SkaianetHandler.closeConnection(client, cc.getServerIdentifier(), true);
+		if(cc != null && cc.isActive())
+			skaianetHandler.closeConnection(client, cc.getServerIdentifier(), true);
 		
-		SburbConnection connection = SkaianetHandler.getConnection(client, server);
+		SburbConnection connection = skaianetHandler.getConnection(client, server);
 		if(cc == null)
 		{
 			if(connection != null)
 				cc = connection;
 			else
 			{
-				cc = new SburbConnection();
-				SkaianetHandler.connections.add(cc);
-				cc.clientIdentifier = client;
-				cc.serverIdentifier = server;
-				sc.connections.add(cc);
-				cc.isActive = false;
+				cc = new SburbConnection(client, server, skaianetHandler);
+				skaianetHandler.connections.add(cc);
+				session.connections.add(cc);
 				SburbHandler.onConnectionCreated(cc);
 			}
-			cc.isMain = true;
+			cc.setIsMain();
 		} else
 		{
-			if(connection != null && connection.isActive)
+			if(connection != null && connection.isActive())
 			{
-				SkaianetHandler.connections.remove(connection);
-				sc.connections.remove(connection);
-				cc.client = connection.client;
-				cc.server = connection.server;
-				cc.serverIdentifier = server;
-			} else cc.serverIdentifier = server;
-			updateLandChain |= cc.enteredGame();
+				skaianetHandler.connections.remove(connection);
+				session.connections.remove(connection);
+				cc.setActive(connection.getClientComputer(), connection.getServerComputer());
+			}
+			cc.serverIdentifier = server;
+			updateLandChain |= cc.hasEntered();
 		}
 		
-		SkaianetHandler.updateAll();
+		skaianetHandler.updateAll();
 		if(updateLandChain)
-			SkaianetHandler.sendLandChainUpdate();
+			skaianetHandler.sendLandChainUpdate();
 		
-		CommandBase.notifyCommandListener(sender, command, "commands.sburbServer.success", client.getUsername(), server.getUsername());
+		return true;
 	}
 	
+	void handleSuccessfulMerge(Session s1, Session s2, Session result)
+	{
+		sessions.remove(s1);
+		sessionsByName.remove(s1.name);
+		sessions.remove(s2);
+		sessionsByName.remove(s2.name);
+		sessions.add(result);
+		if(result.isCustom())
+			sessionsByName.put(result.name, result);
+	}
+	
+	/*
 	public static void createDebugLandsChain(List<LandAspects> landspects, EntityPlayer player) throws CommandException
 	{
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);

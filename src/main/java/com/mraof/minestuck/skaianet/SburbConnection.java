@@ -4,11 +4,11 @@ import com.mojang.datafixers.Dynamic;
 import com.mraof.minestuck.computer.editmode.DeployEntry;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.tileentity.ComputerTileEntity;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.nbt.CompoundNBT;
@@ -169,6 +169,10 @@ public class SburbConnection
 	public GlobalPos getClientComputer()
 	{
 		return clientComputer;
+	}
+	public GlobalPos getServerComputer()
+	{
+		return serverComputer;
 	}
 	
 	public boolean isClient(ComputerTileEntity computer)

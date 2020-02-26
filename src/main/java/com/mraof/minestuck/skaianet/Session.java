@@ -1,9 +1,9 @@
 package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.util.Debug;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraftforge.common.util.Constants;
@@ -15,7 +15,7 @@ import java.util.*;
  * SessionHandler is the new class for session interface.
  * @author kirderf1
  */
-public class Session
+public final class Session
 {
 	
 	Map<PlayerIdentifier, PredefineData> predefinedPlayers;
@@ -28,10 +28,36 @@ public class Session
 	boolean completed;
 	boolean locked;
 	
-	//Unused, will later be 0 if not yet generated
-	int skaiaId;
-	int prospitId;
-	int derseId;
+	/**
+	 * If the function throws an exception, this session should no longer be considered valid
+	 */
+	void inheritFrom(Session other) throws MergeResult.SessionMergeException
+	{
+		if(locked)
+			throw MergeResult.LOCKED.exception();
+		else locked = other.locked;
+		
+		if(other.isCustom())
+		{
+			if(!isCustom())
+				name = other.name;
+			else throw MergeResult.BOTH_CUSTOM.exception();
+		}
+		
+		if(other.predefinedPlayers.entrySet().stream().allMatch(entry -> canAdd(entry.getKey(), entry.getValue())))
+			predefinedPlayers.putAll(other.predefinedPlayers);
+		else throw MergeResult.GENERIC_FAIL.exception();
+		
+		connections.addAll(other.connections);
+		
+		if(MinestuckConfig.forceMaxSize && getPlayerList().size() > SessionHandler.maxSize)
+			throw MergeResult.MERGED_SESSION_FULL.exception();
+	}
+	
+	private boolean canAdd(PlayerIdentifier player, PredefineData data)
+	{
+		return true;
+	}
 	
 	/**
 	 * Checks if the variable completed should be true or false.
@@ -127,9 +153,6 @@ public class Session
 			predefineList.add(entry.getKey().saveToNBT(entry.getValue().write(), "player"));
 		nbt.put("predefinedPlayers", predefineList);
 		nbt.putBoolean("locked", locked);
-		//nbt.putInt("skaiaId", skaiaId);
-		//nbt.putInt("derseId", derseId);
-		//nbt.putInt("prospitId", prospitId);
 		return nbt;
 	}
 	
