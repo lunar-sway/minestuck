@@ -10,10 +10,10 @@ import com.mraof.minestuck.event.ConnectionClosedEvent;
 import com.mraof.minestuck.event.ConnectionCreatedEvent;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.SkaianetInfoPacket;
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.tileentity.ComputerTileEntity;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.MSDimensionTypes;
 import com.mraof.minestuck.world.lands.LandInfo;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -331,14 +331,16 @@ public class SkaianetHandler
 				updateLandChain = true;
 			} else
 			{
-				String s = sessionHandler.onConnectionCreated(c);
-				if(s != null)
+				try
 				{
-					Debug.warnf("SessionHandler denied connection between %s and %s, reason: %s", c.getClientIdentifier().getUsername(), c.getServerIdentifier().getUsername(), s);
+					sessionHandler.onConnectionCreated(c);
+				} catch(MergeResult.SessionMergeException e)
+				{
+					Debug.warnf("SessionHandler denied connection between %s and %s, reason: %s", c.getClientIdentifier().getUsername(), c.getServerIdentifier().getUsername(), e.getMessage());
 					connections.remove(c);
 					ComputerTileEntity cte = getComputer(mcServer, c.clientComputer);
 					if(cte != null)
-						cte.latestmessage.put(0, s);
+						cte.latestmessage.put(0, e.getResult().translationKey());
 					map.put(c.serverIdentifier, c.serverComputer);
 					return;
 				
@@ -723,33 +725,35 @@ public class SkaianetHandler
 				Debug.infof("Player %s entered without connection. Creating connection... ", target.getUsername());
 				c = new SburbConnection(target, IdentifierHandler.NULL_IDENTIFIER, this);
 				c.setIsMain();
-				String s = sessionHandler.onConnectionCreated(c);
-				if(s == null)
+				try
 				{
+					sessionHandler.onConnectionCreated(c);
 					SburbHandler.onFirstItemGiven(c);
 					connections.add(c);
-				}
-				else if(sessionHandler.singleSession)
+				} catch(MergeResult.SessionMergeException e)
 				{
-					Debug.warnf("Failed to create connection: %s. Trying again with global session disabled for this world...", s);
-					sessionHandler.singleSession = false;
-					sessionHandler.split();
-					s = sessionHandler.onConnectionCreated(c);
-					if(s == null)
+					if(sessionHandler.singleSession)
 					{
-						SburbHandler.onFirstItemGiven(c);
-						connections.add(c);
+						Debug.warnf("Failed to create connection: %s. Trying again with global session disabled for this world...", e.getMessage());
+						sessionHandler.singleSession = false;
+						sessionHandler.split();
+						try
+						{
+							sessionHandler.onConnectionCreated(c);
+							SburbHandler.onFirstItemGiven(c);
+							connections.add(c);
+						} catch(MergeResult.SessionMergeException f)
+						{
+							sessionHandler.singleSession = true;
+							sessionHandler.mergeAll();
+							Debug.errorf("Couldn't create a connection for %s: %s. Stopping entry.", target.getUsername(), f.getMessage());
+							return null;
+						}
 					} else
 					{
-						sessionHandler.singleSession = true;
-						sessionHandler.mergeAll();
-						Debug.errorf("Couldn't create a connection for %s: %s. Stopping entry.", target.getUsername(), s);
+						Debug.errorf("Couldn't create a connection for %s: %s. Stopping entry.", target.getUsername(), e.getMessage());
 						return null;
 					}
-				} else
-				{
-					Debug.errorf("Couldn't create a connection for %s: %s. Stopping entry.", target.getUsername(), s);
-					return null;
 				}
 			}
 			else giveItems(target);

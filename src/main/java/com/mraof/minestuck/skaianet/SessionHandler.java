@@ -21,17 +21,6 @@ import java.util.*;
  */
 public class SessionHandler
 {
-	@Deprecated
-	public static final String CONNECT_FAILED = "minestuck.connect_failed_message";
-	@Deprecated
-	public static final String SINGLE_SESSION_FULL = "minestuck.single_session_full_message";
-	@Deprecated
-	public static final String CLIENT_SESSION_FULL = "minestuck.client_session_full_message";
-	@Deprecated
-	public static final String SERVER_SESSION_FULL = "minestuck.server_session_full_message";
-	@Deprecated
-	public static final String BOTH_SESSIONS_FULL = "minestuck.both_sessions_full_message";
-	
 	static final String GLOBAL_SESSION_NAME = "global";
 	
 	/**
@@ -51,7 +40,7 @@ public class SessionHandler
 	 */
 	List<Session> sessions = new ArrayList<>();
 	Map<String, Session> sessionsByName = new HashMap<>();
-	final SkaianetHandler skaianetHandler;
+	private final SkaianetHandler skaianetHandler;
 	
 	SessionHandler(SkaianetHandler skaianetHandler)
 	{
@@ -76,54 +65,19 @@ public class SessionHandler
 	 */
 	void mergeAll()
 	{
-		if(sessions.size() == 0 ||!canMergeAll())
+		try
 		{
-			singleSession = sessions.size() == 0;
-			if(!singleSession)
-				Debug.warn("Not allowed to merge all sessions together! Global session temporarily disabled for this time.");
-			else
-			{
-				Session mainSession = new Session();
-				mainSession.name = GLOBAL_SESSION_NAME;
-				sessions.add(mainSession);
-				sessionsByName.put(mainSession.name, mainSession);
-			}
-			
-			return;
-		}
-		
-		Session session = sessions.get(0);
-		for(int i = 1; i < sessions.size(); i++)
+			Session session = SessionMerger.mergedSessionFromAll(this);
+			sessions.clear();
+			sessionsByName.clear();
+			session.name = GLOBAL_SESSION_NAME;
+			sessions.add(session);
+			sessionsByName.put(session.name, session);
+		} catch(MergeResult.SessionMergeException e)
 		{
-			Session s = sessions.remove(i);
-			session.connections.addAll(s.connections);
-			session.predefinedPlayers.putAll(s.predefinedPlayers);	//Used only when merging the global session
+			singleSession = false;
+			Debug.warn("Not able to merge all sessions together! Global session temporarily disabled for this time.");
 		}
-		session.name = GLOBAL_SESSION_NAME;
-		sessionsByName.clear();
-		sessionsByName.put(session.name, session);
-		
-		session.completed = false;
-	}
-	
-	/**
-	 * Checks if it can merge all sessions in the current world into one.
-	 * @return False if all registered players is more than maxSize, or if there exists more
-	 * than one skaia, prospit, or derse dimension.
-	 */
-	private boolean canMergeAll()
-	{
-		if(sessions.size() == 1 && (!sessions.get(0).isCustom() || sessions.get(0).name.equals(GLOBAL_SESSION_NAME)))
-				return true;
-		
-		int players = 0;
-		for(Session s : sessions)
-		{
-			if(s.isCustom() || s.locked)
-				return false;
-			players += s.getPlayerList().size();
-		}
-		return players <= maxSize;
 	}
 	
 	/**
@@ -138,37 +92,6 @@ public class SessionHandler
 		for(Session s : sessions)
 			if(s.containsPlayer(player))
 				return s;
-		return null;
-	}
-	
-	@Deprecated
-	String merge(Session cs, Session ss, SburbConnection sb)
-	{
-		String s = canMerge(cs, ss);
-		if(s == null)
-		{
-			sessions.remove(ss);
-			if(sb != null)
-				cs.connections.add(sb);
-			cs.connections.addAll(ss.connections);
-			
-			if(ss.isCustom())
-			{
-				sessionsByName.remove(ss.name);
-				cs.name = ss.name;
-				sessionsByName.put(cs.name, cs);
-			}
-		}
-		return s;
-	}
-	
-	@Deprecated
-	private static String canMerge(Session s0, Session s1)
-	{
-		if(s0.isCustom() && s1.isCustom() || s0.locked || s1.locked)
-			return CONNECT_FAILED;
-		if(MinestuckConfig.forceMaxSize && s0.getPlayerList().size()+s1.getPlayerList().size()>maxSize)
-			return BOTH_SESSIONS_FULL;
 		return null;
 	}
 	
@@ -257,57 +180,13 @@ public class SessionHandler
 				|| cClient == null && !serverActive && !(sClient != null && sClient.locked) && !(sServer != null && sServer.locked);	//Connect with a new player and potentially create a main connection
 	}
 	
-	/**
-	 * @return Null if successful or an unlocalized error message describing reason.
-	 */
-	String onConnectionCreated(SburbConnection connection)	//TODO Modify this to use SessionMerger.getValidMergedSession() in an appropriate way
+	void onConnectionCreated(SburbConnection connection) throws MergeResult.SessionMergeException
 	{
 		if(!canConnect(connection.getClientIdentifier(), connection.getServerIdentifier()))
-			return CONNECT_FAILED;
-		if(singleSession)
-		{
-			if(sessions.size() == 0)
-			{
-				Debug.error("No session in list when global session should be turned on?");
-				Session session = new Session();
-				session.name = GLOBAL_SESSION_NAME;
-				sessions.add(session);
-				sessionsByName.put(session.name, session);
-			}
-			
-			int i = (sessions.get(0).containsPlayer(connection.getClientIdentifier())?0:1)+(connection.getServerIdentifier().equals(IdentifierHandler.NULL_IDENTIFIER) || sessions.get(0).containsPlayer(connection.getServerIdentifier())?0:1);
-			if(MinestuckConfig.forceMaxSize && sessions.get(0).getPlayerList().size()+i > maxSize)
-				return SINGLE_SESSION_FULL;
-			else
-			{
-				sessions.get(0).connections.add(connection);
-				return null;
-			}
-		} else
-		{
-			Session sClient = getPlayerSession(connection.getClientIdentifier()), sServer = getPlayerSession(connection.getServerIdentifier());
-			if(sClient == null && sServer == null)
-			{
-				Session s = new Session();
-				sessions.add(s);
-				s.connections.add(connection);
-				return null;
-			} else if(sClient == null || sServer == null)
-			{
-				if((sClient == null?sServer:sClient).locked || MinestuckConfig.forceMaxSize && !connection.getServerIdentifier().equals(IdentifierHandler.NULL_IDENTIFIER) && (sClient == null?sServer:sClient).getPlayerList().size()+1 > maxSize)
-					return sClient == null ? SERVER_SESSION_FULL : CLIENT_SESSION_FULL;
-				(sClient == null?sServer:sClient).connections.add(connection);
-				return null;
-			} else
-			{
-				if(sClient == sServer)
-				{
-					sClient.connections.add(connection);
-					return null;
-				}
-				else return merge(sClient, sServer, connection);
-			}
-		}
+			throw MergeResult.GENERIC_FAIL.exception();
+		
+		Session session = SessionMerger.getValidMergedSession(this, connection.getClientIdentifier(), connection.getServerIdentifier());
+		session.connections.add(connection);
 	}
 	
 	/**

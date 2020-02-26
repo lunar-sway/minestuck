@@ -5,7 +5,7 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 
 import java.util.Set;
 
-public class SessionMerger
+class SessionMerger
 {
 	
 	static Session getValidMergedSession(SessionHandler handler, PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
@@ -41,6 +41,15 @@ public class SessionMerger
 		}
 	}
 	
+	static Session mergedSessionFromAll(SessionHandler handler) throws MergeResult.SessionMergeException
+	{
+		Session session = new Session();
+		for(Session other : handler.sessions)
+			session.inheritFrom(other);
+		
+		return session;
+	}
+	
 	private static void verifyCanAdd(Session target, PlayerIdentifier client, PlayerIdentifier server, MergeResult fullSessionResult) throws MergeResult.SessionMergeException
 	{
 		Set<PlayerIdentifier> players = target.getPlayerList();
@@ -49,6 +58,10 @@ public class SessionMerger
 			size++;
 		if(!players.contains(server))
 			size++;
+		
+		if(target.locked && size != players.size())	//If the session is locked and we're trying to add a new player to it
+			throw MergeResult.LOCKED.exception();
+		
 		if(MinestuckConfig.forceMaxSize && size > SessionHandler.maxSize)
 			throw fullSessionResult.exception();
 		
