@@ -91,7 +91,7 @@ public class SkaianetHandler
 		for(SburbConnection c : connections)
 			if(c.isMain())
 				if(isClient && c.getClientIdentifier().equals(player))
-					return c.getServerIdentifier().equals(IdentifierHandler.NULL_IDENTIFIER) ? null : c.getServerIdentifier();
+					return c.hasServerPlayer() ? c.getServerIdentifier() : null;
 				else if(!isClient && c.getServerIdentifier().equals(player))
 					return c.getClientIdentifier();
 		return null;
@@ -321,7 +321,7 @@ public class SkaianetHandler
 		if(newConnection)
 		{
 			SburbConnection conn = getMainConnection(c.getClientIdentifier(), true);
-			if(conn != null && conn.getServerIdentifier().equals(IdentifierHandler.NULL_IDENTIFIER) && getMainConnection(c.getServerIdentifier(), false) == null)
+			if(conn != null && !conn.hasServerPlayer() && getMainConnection(c.getServerIdentifier(), false) == null)
 			{
 				connections.remove(c);
 				conn.serverIdentifier = c.getServerIdentifier();

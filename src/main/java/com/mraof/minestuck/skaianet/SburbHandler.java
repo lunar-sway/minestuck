@@ -36,7 +36,7 @@ import java.util.*;
  * For example: Titles, land aspects, entry items etc.
  * @author kirderf1
  */
-public class SburbHandler
+public final class SburbHandler
 {
 	static Map<PlayerEntity, Vec3d> titleSelectionMap = new HashMap<>();	//TODO Consider making this non-static
 	

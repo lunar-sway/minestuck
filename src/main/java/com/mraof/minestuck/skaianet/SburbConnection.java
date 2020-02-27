@@ -24,7 +24,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class SburbConnection
+public final class SburbConnection
 {
 	final SkaianetHandler handler;
 	
@@ -162,9 +162,19 @@ public class SburbConnection
 	}
 	
 	public PlayerIdentifier getServerIdentifier()
-{
-	return serverIdentifier;
-}
+	{
+		return serverIdentifier;
+	}
+	
+	public boolean hasServerPlayer()
+	{
+		return getServerIdentifier() != IdentifierHandler.NULL_IDENTIFIER;
+	}
+	
+	void removeServerPlayer()
+	{
+		serverIdentifier = IdentifierHandler.NULL_IDENTIFIER;
+	}
 	
 	public GlobalPos getClientComputer()
 	{
@@ -247,7 +257,7 @@ public class SburbConnection
 		CompoundNBT connectionTag = new CompoundNBT();
 		connectionTag.putString("client", getClientIdentifier().getUsername());
 		connectionTag.putString("clientId", getClientIdentifier().getCommandString());
-		if(!getServerIdentifier().equals(IdentifierHandler.NULL_IDENTIFIER))
+		if(hasServerPlayer())
 			connectionTag.putString("server", getServerIdentifier().getUsername());
 		connectionTag.putBoolean("isMain", isMain());
 		connectionTag.putBoolean("isActive", isActive());

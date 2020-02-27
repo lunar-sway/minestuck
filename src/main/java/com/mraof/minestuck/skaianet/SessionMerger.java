@@ -3,9 +3,10 @@ package com.mraof.minestuck.skaianet;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.player.PlayerIdentifier;
 
-import java.util.Set;
+import java.util.*;
+import java.util.function.Consumer;
 
-class SessionMerger
+final class SessionMerger
 {
 	
 	static Session getValidMergedSession(SessionHandler handler, PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
@@ -48,6 +49,69 @@ class SessionMerger
 			session.inheritFrom(other);
 		
 		return session;
+	}
+	
+	static List<Session> splitSession(Session session)
+	{
+		if(session.locked)
+			return Collections.emptyList();
+		
+		Set<SburbConnection> unhandledConnections = new HashSet<>(session.connections);
+		Set<PlayerIdentifier> lockedPlayers = new HashSet<>();
+		for(SburbConnection connection : session.connections)
+		{
+			if(!connection.canSplit)
+			{
+				unhandledConnections.remove(connection);
+				lockedPlayers.add(connection.getClientIdentifier());
+				if(connection.hasServerPlayer())
+					lockedPlayers.add(connection.getServerIdentifier());
+			}
+		}
+		
+		lockedPlayers.addAll(session.predefinedPlayers.keySet());
+		
+		//Clear out all connections connected to players that should stay in the session
+		collectConnectionsWithMembers(unhandledConnections, lockedPlayers, sburbConnection -> {});
+		
+		//Pick out as many session chains that we can from the remaining connections
+		List<Session> sessions = new ArrayList<>();
+		while(!unhandledConnections.isEmpty())
+		{
+			SburbConnection next = unhandledConnections.iterator().next();
+			Set<PlayerIdentifier> players = new HashSet<>();
+			players.add(next.getClientIdentifier());
+			Session newSession = new Session();
+			
+			collectConnectionsWithMembers(unhandledConnections, players, connection -> newSession.connections.add(connection));
+			sessions.add(newSession);
+		}
+		sessions.forEach(session1 -> session.connections.removeAll(session1.connections));
+		
+		return sessions;
+	}
+	
+	private static void collectConnectionsWithMembers(Set<SburbConnection> unhandledConnections, Set<PlayerIdentifier> members, Consumer<SburbConnection> collector)
+	{
+		boolean addedAny;
+		do
+		{
+			 addedAny = false;
+			
+			Iterator<SburbConnection> iterator = unhandledConnections.iterator();
+			 while(iterator.hasNext())
+			 {
+			 	SburbConnection connection = iterator.next();
+			 	if(members.contains(connection.getClientIdentifier()) || members.contains(connection.getServerIdentifier()))
+				{
+					collector.accept(connection);
+					if(members.add(connection.getClientIdentifier()) || connection.hasServerPlayer() && members.add(connection.getServerIdentifier()))
+						addedAny = true;
+					iterator.remove();
+				}
+			 }
+			 
+		} while(addedAny);
 	}
 	
 	private static void verifyCanAdd(Session target, PlayerIdentifier client, PlayerIdentifier server, MergeResult fullSessionResult) throws MergeResult.SessionMergeException

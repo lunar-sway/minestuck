@@ -126,7 +126,7 @@ public final class Session
 		for(SburbConnection c : this.connections)
 		{
 			list.add(c.getClientIdentifier());
-			if(!c.getServerIdentifier().equals(IdentifierHandler.NULL_IDENTIFIER))
+			if(c.hasServerPlayer())
 				list.add(c.getServerIdentifier());
 		}
 		list.addAll(predefinedPlayers.keySet());

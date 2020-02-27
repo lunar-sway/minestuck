@@ -3,7 +3,6 @@ package com.mraof.minestuck.skaianet;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.command.SburbConnectionCommand;
-import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.util.Debug;
 import net.minecraft.command.CommandSource;
@@ -13,7 +12,10 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Handles session related stuff like title generation, consort choosing, and other session management stuff.
@@ -109,51 +111,22 @@ public class SessionHandler
 		split(s);
 	}
 	
-	void split(Session session)
+	private void split(Session session)
 	{
-		if(session.locked)
+		List<Session> sessions = SessionMerger.splitSession(session);
+		sessions.forEach(session1 -> session1.checkIfCompleted(singleSession));
+		this.sessions.addAll(sessions);
+		if(session.connections.isEmpty() && !session.isCustom())
+			this.sessions.remove(session);
+	}
+	
+	private void onConnectionChainBroken(Session session)
+	{
+		if(singleSession)
 			return;
-		
-		sessions.remove(session);
-		if(session.isCustom())
-			sessionsByName.remove(session.name);
-		boolean first = true;
-		while(!session.connections.isEmpty() || first)
-		{
-			Session s = new Session();
-			if(!first)
-			{
-				s.connections.add(session.connections.remove(0));
-				
-			} else
-			{
-				if(session.isCustom() && (!session.name.equals(GLOBAL_SESSION_NAME) || !session.predefinedPlayers.isEmpty()))
-				{
-					s.name = session.name;
-					s.predefinedPlayers.putAll(session.predefinedPlayers);
-					sessionsByName.put(s.name, s);
-				}
-			}
-			
-			boolean found;
-			do {
-				found = false;
-				Iterator<SburbConnection> iter = session.connections.iterator();
-				while(iter.hasNext()){
-					SburbConnection c = iter.next();
-					if(s.containsPlayer(c.getClientIdentifier()) || s.containsPlayer(c.getServerIdentifier()) || first && !c.canSplit)
-					{
-						found = true;
-						iter.remove();
-						s.connections.add(c);
-					}
-				}
-			} while(found);
-			s.checkIfCompleted(singleSession);
-			if(s.connections.size() > 0 || s.isCustom())
-				sessions.add(s);
-			first = false;
-		}
+		if(session.connections.isEmpty() && !session.isCustom())
+			sessions.remove(session);
+		else split(session);
 	}
 	
 	/**
@@ -200,10 +173,7 @@ public class SessionHandler
 		if(!connection.isMain())
 		{
 			s.connections.remove(connection);
-			if(!singleSession)
-				if(s.connections.size() == 0 && !s.isCustom())
-					sessions.remove(s);
-				else split(s);
+			onConnectionChainBroken(s);
 		} else if(!normal) {
 			s.connections.remove(connection);
 			if(skaianetHandler.getAssociatedPartner(connection.getClientIdentifier(), false) != null)
@@ -216,7 +186,7 @@ public class SessionHandler
 					c.serverIdentifier = connection.getServerIdentifier();
 					break;
 				case 1:
-					c.serverIdentifier = IdentifierHandler.NULL_IDENTIFIER;
+					c.removeServerPlayer();
 					break;
 				}
 			}
@@ -274,7 +244,7 @@ public class SessionHandler
 		{
 			if(cs.isActive())
 				skaianetHandler.closeConnection(server, cs.getClientIdentifier(), false);
-			cs.serverIdentifier = IdentifierHandler.NULL_IDENTIFIER;
+			cs.removeServerPlayer();
 			updateLandChain = cs.hasEntered();
 		}
 		
@@ -305,6 +275,8 @@ public class SessionHandler
 			cc.serverIdentifier = server;
 			updateLandChain |= cc.hasEntered();
 		}
+		
+		onConnectionChainBroken(session);
 		
 		skaianetHandler.updateAll();
 		if(updateLandChain)
