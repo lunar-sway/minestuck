@@ -664,10 +664,11 @@ public final class SburbHandler
 		if(MinestuckConfig.playerSelectedTitle.get() && titleSelectionMap.containsKey(player))
 		{
 			PlayerIdentifier identifier = IdentifierHandler.encode(player);
-			Session s = SessionHandler.get(player.world).getPlayerSession(identifier);
+			SessionHandler handler = SessionHandler.get(player.server);
+			Session s = handler.getPlayerSession(identifier);
 			if(s == null)
-				if(SessionHandler.get(player.world).singleSession)
-					s = SessionHandler.get(player.world).sessions.get(0);
+				if(handler.singleSession)
+					s = handler.getGlobalSession();
 				else s = new Session();
 			
 			if(title == null)

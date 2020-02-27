@@ -12,10 +12,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Handles session related stuff like title generation, consort choosing, and other session management stuff.
@@ -23,7 +20,7 @@ import java.util.Map;
  */
 public class SessionHandler
 {
-	static final String GLOBAL_SESSION_NAME = "global";
+	private static final String GLOBAL_SESSION_NAME = "global";
 	
 	/**
 	 * The max numbers of players per session.
@@ -40,7 +37,7 @@ public class SessionHandler
 	/**
 	 * An array list of the current worlds sessions.
 	 */
-	List<Session> sessions = new ArrayList<>();
+	Set<Session> sessions = new HashSet<>();
 	Map<String, Session> sessionsByName = new HashMap<>();
 	private final SkaianetHandler skaianetHandler;
 	
@@ -90,11 +87,18 @@ public class SessionHandler
 	public Session getPlayerSession(PlayerIdentifier player)
 	{
 		if(singleSession)
-			return sessions.get(0);
+			return getGlobalSession();
 		for(Session s : sessions)
 			if(s.containsPlayer(player))
 				return s;
 		return null;
+	}
+	
+	Session getGlobalSession()
+	{
+		if(!singleSession)
+			throw new IllegalStateException("Should not deal with global sessions at this time");
+		return sessionsByName.get(GLOBAL_SESSION_NAME);
 	}
 	
 	/**
@@ -107,7 +111,7 @@ public class SessionHandler
 		if(MinestuckConfig.globalSession.get() || sessions.size() != 1)
 			return;
 		
-		Session s = sessions.get(0);
+		Session s = getGlobalSession();
 		split(s);
 	}
 	

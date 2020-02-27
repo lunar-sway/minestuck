@@ -13,8 +13,8 @@ final class SessionMerger
 	{
 		if(handler.singleSession)
 		{
-			verifyCanAdd(handler.sessions.get(0), client, server, MergeResult.GLOBAL_SESSION_FULL);
-			return handler.sessions.get(0);
+			verifyCanAdd(handler.getGlobalSession(), client, server, MergeResult.GLOBAL_SESSION_FULL);
+			return handler.getGlobalSession();
 		} else
 		{
 			Session cs = handler.getPlayerSession(client), ss = handler.getPlayerSession(server);
