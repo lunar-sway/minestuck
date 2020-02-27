@@ -2,7 +2,6 @@ package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
-import com.mraof.minestuck.item.CruxiteArtifactItem;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
@@ -11,6 +10,7 @@ import com.mraof.minestuck.network.TitleSelectPacket;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.EntryProcess;
 import com.mraof.minestuck.util.MinestuckRandom;
 import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.LandTypePair;
@@ -664,31 +664,27 @@ public final class SburbHandler
 		if(MinestuckConfig.playerSelectedTitle.get() && titleSelectionMap.containsKey(player))
 		{
 			PlayerIdentifier identifier = IdentifierHandler.encode(player);
-			SessionHandler handler = SessionHandler.get(player.server);
-			Session s = handler.getPlayerSession(identifier);
-			if(s == null)
-				if(handler.singleSession)
-					s = handler.getGlobalSession();
-				else s = new Session();
 			
 			if(title == null)
 				generateTitle(player.world, identifier);
 			else
 			{
-				for(SburbConnection c : s.connections)
-					if(title.equals(PlayerSavedData.getData(c.getClientIdentifier(), player.server).getTitle()))
-					{	//Title is already used
-						TitleSelectPacket packet = new TitleSelectPacket(title);
-						MSPacketHandler.sendToPlayer(packet, player);
-						return;
-					}
-				for(PredefineData data : s.predefinedPlayers.values())
-					if(title.equals(data.title))
-					{
-						TitleSelectPacket packet = new TitleSelectPacket(title);
-						MSPacketHandler.sendToPlayer(packet, player);
-						return;
-					}
+				Session s = SessionHandler.get(player.server).getPlayerSession(identifier);
+				if(s != null)
+				{
+					for(SburbConnection c : s.connections)
+						if(title.equals(PlayerSavedData.getData(c.getClientIdentifier(), player.server).getTitle()))
+						{    //Title is already used
+							MSPacketHandler.sendToPlayer(new TitleSelectPacket(title), player);
+							return;
+						}
+					for(PredefineData data : s.predefinedPlayers.values())
+						if(title.equals(data.title))
+						{
+							MSPacketHandler.sendToPlayer(new TitleSelectPacket(title), player);
+							return;
+						}
+				} else Debug.warnf("%s picked a title without being part of a session.", player.getDisplayName());
 				
 				PlayerSavedData.getData(identifier, player.server).setTitle(title);
 			}
@@ -696,7 +692,9 @@ public final class SburbHandler
 			Vec3d pos = titleSelectionMap.remove(player);
 			
 			player.setPosition(pos.x, pos.y, pos.z);
-			((CruxiteArtifactItem) MSItems.CRUXITE_APPLE).onArtifactActivated(player);
+			
+			EntryProcess process = new EntryProcess();
+			process.onArtifactActivated(player);
 			
 		} else Debug.warnf("%s tried to select a title without entering.", player.getName());
 	}
