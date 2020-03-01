@@ -10,6 +10,7 @@ import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.lands.LandInfo;
+import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -22,6 +23,7 @@ import net.minecraftforge.common.util.Constants;
 
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 public final class SburbConnection
@@ -43,9 +45,8 @@ public final class SburbConnection
 	
 	private boolean isActive;
 	private boolean isMain;
-	boolean hasEntered;
 	boolean canSplit;
-	LandInfo clientHomeLand;
+	private LandInfo clientLandInfo;
 	int artifactType;
 	
 	private final Set<String> givenItemList = new HashSet<>();
@@ -75,7 +76,6 @@ public final class SburbConnection
 		if(isMain)
 		{
 			isActive = nbt.getBoolean("IsActive");
-			hasEntered = nbt.getBoolean("HasEntered");
 			
 			if(nbt.contains("CanSplit", Constants.NBT.TAG_ANY_NUMERIC))
 				canSplit = nbt.getBoolean("CanSplit");
@@ -101,7 +101,8 @@ public final class SburbConnection
 		}
 		if(nbt.contains("ClientLand", Constants.NBT.TAG_COMPOUND))
 		{
-			clientHomeLand = LandInfo.read(nbt.getCompound("ClientLand"), handler, getClientIdentifier());
+			clientLandInfo = LandInfo.read(nbt.getCompound("ClientLand"), handler, getClientIdentifier());
+			handler.updateLandMaps(this);
 		}
 		artifactType = nbt.getInt("artifact");
 	}
@@ -116,16 +117,15 @@ public final class SburbConnection
 		if(isMain)
 		{
 			nbt.putBoolean("IsActive", isActive);
-			nbt.putBoolean("HasEntered", hasEntered);
 			nbt.putBoolean("CanSplit", canSplit);
 			ListNBT list = new ListNBT();
 			for(String name : givenItemList)
 				list.add(new StringNBT(name));
 			
 			nbt.put("GivenItems", list);
-			if(clientHomeLand != null)
+			if(clientLandInfo != null)
 			{
-				nbt.put("ClientLand", clientHomeLand.write(new CompoundNBT()));
+				nbt.put("ClientLand", clientLandInfo.write(new CompoundNBT()));
 			}
 		}
 		
@@ -194,11 +194,6 @@ public final class SburbConnection
 	{
 		return isActive && getServerIdentifier().equals(computer.owner) && serverComputer.getDimension() == computer.getWorld().getDimension().getType() && serverComputer.getPos().equals(computer.getPos());
 	}
-	
-	public boolean hasEntered()
-	{
-		return hasEntered;
-	}
 	public boolean isMain(){return isMain;}
 	public boolean isActive()
 	{
@@ -212,14 +207,31 @@ public final class SburbConnection
 		}
 	}
 	
+	public boolean hasEntered()
+	{
+		return clientLandInfo != null;
+	}
 	/**
 	 * @return The land dimension assigned to the client player.
 	 */
 	public DimensionType getClientDimension()
 	{
-		return clientHomeLand == null ? null : clientHomeLand.getDimensionType();
+		return getLandInfo() == null ? null : getLandInfo().getDimensionType();
 	}
-	
+	LandInfo getLandInfo()
+	{
+		return clientLandInfo;
+	}
+	void setLand(LandTypePair landTypes, DimensionType dimension)
+	{
+		if(clientLandInfo != null)
+			throw new IllegalStateException("Can't set land twice");
+		else
+		{
+			clientLandInfo = new LandInfo(clientIdentifier, landTypes, dimension, new Random());	//TODO handle random better
+			handler.updateLandMaps(this);
+		}
+	}
 	@Deprecated
 	public boolean hasGivenItem(String item) { return givenItemList.contains(item); }
 	public boolean hasGivenItem(DeployEntry item) { return givenItemList.contains(item.getName()); }
@@ -234,6 +246,16 @@ public final class SburbConnection
 	}
 	void resetGivenItems() { givenItemList.clear(); }
 	
+	void copyFrom(SburbConnection other)
+	{
+		canSplit = other.canSplit;
+		centerX = other.centerX;
+		centerZ = other.centerZ;
+		clientLandInfo = other.clientLandInfo;
+		artifactType = other.artifactType;
+		if(other.inventory != null)
+			inventory = other.inventory.copy();
+	}
 	/**
 	 * Writes the connection info needed client-side to a network buffer. Must match with {@link ReducedConnection#read}.
 	 */
@@ -242,7 +264,7 @@ public final class SburbConnection
 		buffer.writeBoolean(isMain);
 		if(isMain){
 			buffer.writeBoolean(isActive);
-			buffer.writeBoolean(hasEntered);
+			buffer.writeBoolean(hasEntered());
 		}
 		buffer.writeInt(getClientIdentifier().getId());
 		buffer.writeString(getClientIdentifier().getUsername(), 16);
@@ -263,11 +285,11 @@ public final class SburbConnection
 		connectionTag.putBoolean("isActive", isActive());
 		if(isMain())
 		{
-			if(clientHomeLand != null)
+			if(clientLandInfo != null)
 			{
 				connectionTag.putString("clientDim", getClientDimension().getRegistryName().toString());
-				connectionTag.putString("aspect1", clientHomeLand.landName1());
-				connectionTag.putString("aspect2", clientHomeLand.landName2());
+				connectionTag.putString("aspect1", clientLandInfo.landName1());
+				connectionTag.putString("aspect2", clientLandInfo.landName2());
 				Title title = PlayerSavedData.getData(getClientIdentifier(), handler.mcServer).getTitle();
 				connectionTag.putByte("class", title == null ? -1 : (byte) title.getHeroClass().ordinal());
 				connectionTag.putByte("aspect", title == null ? -1 : (byte) title.getHeroAspect().ordinal());

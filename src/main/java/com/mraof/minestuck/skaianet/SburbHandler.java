@@ -12,7 +12,6 @@ import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.EntryProcess;
 import com.mraof.minestuck.util.MinestuckRandom;
-import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
@@ -559,9 +558,9 @@ public final class SburbHandler
 		ArrayList<TerrainLandType> usedTerrainAspects = new ArrayList<>();
 		ArrayList<TitleLandType> usedTitleAspects = new ArrayList<>();
 		for(SburbConnection c : session.connections)
-			if(c != connection && c.clientHomeLand != null)
+			if(c != connection && c.getLandInfo() != null)
 			{
-				LandTypePair aspects = c.clientHomeLand.getLandAspects();
+				LandTypePair aspects = c.getLandInfo().getLandAspects();
 				if(aspects.title == LandTypes.FROGS)
 					frogs = true;
 				usedTitleAspects.add(aspects.title);
@@ -592,14 +591,14 @@ public final class SburbHandler
 		
 	}
 	
-	static LandInfo enterMedium(MinecraftServer mcServer, SburbConnection c)
+	static void enterMedium(MinecraftServer mcServer, SburbConnection c)
 	{
 		PlayerIdentifier identifier = c.getClientIdentifier();
 		
 		generateTitle(mcServer.getWorld(DimensionType.OVERWORLD), c.getClientIdentifier());
-		LandTypePair aspects = genLandAspects(mcServer, c);		//This is where the Land dimension is actually registered, but it also needs the player's Title to be determined.
-		DimensionType type = LandTypes.createLandType(mcServer, identifier, aspects);
-		return new LandInfo(identifier, aspects, type, new Random());	//TODO Handle random better
+		LandTypePair landTypes = genLandAspects(mcServer, c);		//This is where the Land dimension is actually registered, but it also needs the player's Title to be determined.
+		DimensionType dimType = LandTypes.createLandType(mcServer, identifier, landTypes);
+		c.setLand(landTypes, dimType);
 	}
 	
 	static void onGameEntered(MinecraftServer server, SburbConnection c)
@@ -610,7 +609,7 @@ public final class SburbHandler
 		if(player != null)
 		{
 			MSCriteriaTriggers.CRUXITE_ARTIFACT.trigger(player);
-			c.clientHomeLand.sendLandEntryMessage(player);
+			c.getLandInfo().sendLandEntryMessage(player);
 		}
 	}
 	

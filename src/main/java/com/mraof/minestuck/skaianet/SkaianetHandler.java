@@ -16,6 +16,7 @@ import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.MSDimensionTypes;
 import com.mraof.minestuck.world.lands.LandInfo;
+import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -349,14 +350,7 @@ public class SkaianetHandler
 				
 				if(conn != null)
 				{
-					c.hasEntered = conn.hasEntered;
-					c.canSplit = conn.canSplit;
-					c.centerX = conn.centerX;
-					c.centerZ = conn.centerZ;
-					c.clientHomeLand = conn.clientHomeLand;
-					c.artifactType = conn.artifactType;
-					if(c.inventory != null)
-						c.inventory = conn.inventory.copy();
+					c.copyFrom(conn);
 					type = ConnectionCreatedEvent.ConnectionType.SECONDARY;
 				}
 			}
@@ -370,6 +364,19 @@ public class SkaianetHandler
 		MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, c, sessionHandler.getPlayerSession(c.getClientIdentifier()), type, joinType));
 		if(updateLandChain)
 			sendLandChainUpdate();
+	}
+	
+	SburbConnection makeConnectionWithLand(LandTypePair landTypes, DimensionType dimensionName, PlayerIdentifier client, PlayerIdentifier server, Session session)
+	{
+		SburbConnection c = new SburbConnection(client, server, this);
+		c.setIsMain();
+		c.setLand(landTypes, dimensionName);
+		
+		session.connections.add(c);
+		connections.add(c);
+		SburbHandler.onConnectionCreated(c);
+		
+		return c;
 	}
 	
 	public void requestInfo(ServerPlayerEntity player, PlayerIdentifier p1)
@@ -447,14 +454,6 @@ public class SkaianetHandler
 		
 		//updateLandChain();	TODO Had to be commented out due to getting the client dimension. What should be done instead? How about a cache?
 		
-		for(SburbConnection c : connections)
-		{
-			if(c.clientHomeLand != null)
-			{
-				typeToInfoContainer.put(c.clientHomeLand.getDimensionName(), c.clientHomeLand);
-				MSDimensionTypes.LANDS.dimToLandTypes.put(c.clientHomeLand.getDimensionName(), c.clientHomeLand.getLazyLandAspects());
-			}
-		}
 	}
 	
 	private CompoundNBT write(CompoundNBT compound)
@@ -761,17 +760,15 @@ public class SkaianetHandler
 		else if(c.getClientDimension() != null)
 			return c.getClientDimension();
 		
-		c.clientHomeLand = SburbHandler.enterMedium(mcServer, c);
-		if(c.clientHomeLand == null)
-		{
-			Debug.errorf("Could not create a land for player %s.", target.getUsername());
-		} else
-		{
-			typeToInfoContainer.put(c.clientHomeLand.getDimensionName(), c.clientHomeLand);
-			MSDimensionTypes.LANDS.dimToLandTypes.put(c.clientHomeLand.getDimensionName(), c.clientHomeLand.getLazyLandAspects());
-		}
+		SburbHandler.enterMedium(mcServer, c);
 		
 		return c.getClientDimension();
+	}
+	
+	void updateLandMaps(SburbConnection connection)
+	{
+		typeToInfoContainer.put(connection.getLandInfo().getDimensionName(), connection.getLandInfo());
+		MSDimensionTypes.LANDS.dimToLandTypes.put(connection.getLandInfo().getDimensionName(), connection.getLandInfo().getLazyLandAspects());
 	}
 	
 	public void onEntry(PlayerIdentifier target)
@@ -783,7 +780,6 @@ public class SkaianetHandler
 			return;
 		}
 		
-		c.hasEntered = true;
 		SburbHandler.onGameEntered(mcServer, c);
 		
 		c.centerX = 0;

@@ -1,10 +1,18 @@
 package com.mraof.minestuck.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import net.minecraft.command.CommandSource;
+import net.minecraft.util.text.TranslationTextComponent;
 
-public class CommandLandDebug
+/**
+ * A command that is useful for testing the land skybox as it creates debug lands that is connected to the user
+ */
+public class DebugLandsCommand
 {
+	public static final String MUST_ENTER = "commands.minestuck.debuglands.must_enter";
+	public static final SimpleCommandExceptionType MUST_ENTER_EXCEPTION = new SimpleCommandExceptionType(new TranslationTextComponent(MUST_ENTER));
+	
 	public static void register(CommandDispatcher<CommandSource> dispatcher)
 	{
 	

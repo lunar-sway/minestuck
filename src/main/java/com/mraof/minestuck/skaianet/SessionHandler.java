@@ -2,20 +2,31 @@ package com.mraof.minestuck.skaianet;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.command.DebugLandsCommand;
 import com.mraof.minestuck.command.SburbConnectionCommand;
+import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.world.MSDimensionTypes;
+import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.command.CommandSource;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.common.DimensionManager;
 
 import java.util.*;
 
 /**
- * Handles session related stuff like title generation, consort choosing, and other session management stuff.
+ * An extension to SkaianetHandler with a focus on sessions
  * @author kirderf1
  */
 public class SessionHandler
@@ -300,106 +311,77 @@ public class SessionHandler
 			sessionsByName.put(result.name, result);
 	}
 	
-	/*
-	public static void createDebugLandsChain(List<LandAspects> landspects, EntityPlayer player) throws CommandException
+	public void createDebugLandsChain(List<LandTypePair> landTypes, CommandSource source) throws CommandSyntaxException
 	{
+		ServerPlayerEntity player = source.asPlayer();
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		Session s = getPlayerSession(identifier);
 		if(s != null && s.locked)
-			throw new CommandException("The session is locked, and can no longer be modified!");
+			throw SburbConnectionCommand.LOCKED_EXCEPTION.create();
 		
-		SburbConnection cc = SkaianetHandler.getMainConnection(identifier, true);
-		if(s == null || cc == null || !cc.enteredGame())
-			throw new CommandException("You should enter before using this.");
-		if(cc.isActive)
-			SkaianetHandler.closeConnection(identifier, cc.getServerIdentifier(), true);
+		SburbConnection cc = skaianetHandler.getMainConnection(identifier, true);
+		if(s == null || cc == null || !cc.hasEntered())
+			throw DebugLandsCommand.MUST_ENTER_EXCEPTION.create();
+		if(cc.isActive())
+			skaianetHandler.closeConnection(identifier, cc.getServerIdentifier(), true);
 		
-		SburbConnection cs = SkaianetHandler.getMainConnection(identifier, false);
+		SburbConnection cs = skaianetHandler.getMainConnection(identifier, false);
 		if(cs != null) {
-			if(cs.isActive)
-				SkaianetHandler.closeConnection(identifier, cs.getClientIdentifier(), false);
-			cs.serverIdentifier = IdentifierHandler.nullIdentifier;
-			if(player.sendCommandFeedback())
-				player.sendMessage(new TextComponentString(identifier.getUsername()+"'s old client player "+cs.getClientIdentifier().getUsername()+" is now without a server player.").setStyle(new Style().setColor(TextFormatting.YELLOW)));
+			if(cs.isActive())
+				skaianetHandler.closeConnection(identifier, cs.getClientIdentifier(), false);
+			cs.removeServerPlayer();
+			source.sendFeedback(new StringTextComponent(identifier.getUsername()+"'s old client player "+cs.getClientIdentifier().getUsername()+" is now without a server player.").setStyle(new Style().setColor(TextFormatting.YELLOW)), true);
 		}
 		
 		SburbConnection c = cc;
 		int i = 0;
-		for(; i < landspects.size(); i++)
+		for(; i < landTypes.size(); i++)
 		{
-			LandAspectRegistry.AspectCombination land = landspects.get(i);
+			LandTypePair land = landTypes.get(i);
 			if(land == null)
 				break;
 			PlayerIdentifier fakePlayer = IdentifierHandler.createNewFakeIdentifier();
 			c.serverIdentifier = fakePlayer;
 			
-			c = new SburbConnection();
-			c.clientIdentifier = fakePlayer;
-			c.serverIdentifier = IdentifierHandler.nullIdentifier;
-			c.isActive = false;
-			c.isMain = true;
-			c.enteredGame = true;
-			c.clientHomeLand = createDebugLand(land);
-			
-			s.connections.add(c);
-			SkaianetHandler.connections.add(c);
-			SburbHandler.onConnectionCreated(c);
-			
+			c = skaianetHandler.makeConnectionWithLand(land, createDebugLand(land), fakePlayer, IdentifierHandler.NULL_IDENTIFIER, s);
 		}
 		
-		if(i == landspects.size())
+		if(i == landTypes.size())
 			c.serverIdentifier = identifier;
 		else
 		{
 			PlayerIdentifier lastIdentifier = identifier;
-			for(i = landspects.size() - 1; i >= 0; i++)
+			for(i = landTypes.size() - 1; i >= 0; i++)
 			{
-				LandAspectRegistry.AspectCombination land = landspects.get(i);
+				LandTypePair land = landTypes.get(i);
 				if(land == null)
 					break;
 				PlayerIdentifier fakePlayer = IdentifierHandler.createNewFakeIdentifier();
 				
-				c = new SburbConnection();
-				c.clientIdentifier = fakePlayer;
-				c.serverIdentifier = lastIdentifier;
-				c.isActive = false;
-				c.isMain = true;
-				c.enteredGame = true;
-				c.clientHomeLand = createDebugLand(land);
-				
-				s.connections.add(c);
-				SkaianetHandler.connections.add(c);
-				SburbHandler.onConnectionCreated(c);
+				c = skaianetHandler.makeConnectionWithLand(land, createDebugLand(land), fakePlayer, lastIdentifier, s);
 				
 				lastIdentifier = fakePlayer;
 			}
 		}
 		
-		SkaianetHandler.updateAll();
-		MinestuckPlayerTracker.updateLands();
-		SkaianetHandler.sendLandChainUpdate();
+		skaianetHandler.updateAll();
+		skaianetHandler.sendLandChainUpdate();
 	}
 	
-	private static int createDebugLand(LandAspects landspect) throws CommandException
+	private static DimensionType createDebugLand(LandTypePair landTypes) throws CommandSyntaxException
 	{
-		int landId = MinestuckDimensionHandler.landDimensionIdStart;
-		while (true)
+		String base = "minestuck:debug_land";
+		
+		ResourceLocation landName = new ResourceLocation(base);
+		
+		for(int i = 0; DimensionType.byName(landName) != null; i++)
 		{
-			if (!DimensionManager.isDimensionRegistered(landId))
-			{
-				break;
-			}
-			else
-			{
-				landId++;
-			}
+			landName = new ResourceLocation(base+"_"+i);
 		}
 		
-		MinestuckDimensionHandler.registerLandDimension(landId, landspect);
-		MinestuckDimensionHandler.setSpawn(landId, new BlockPos(0,0,0));
-		return landId;
+		return DimensionManager.registerDimension(landName, MSDimensionTypes.LANDS, null, true);
 	}
-	
+	/*
 	public static List<String> getSessionNames()
 	{
 		List<String> list = Lists.<String>newArrayList();
