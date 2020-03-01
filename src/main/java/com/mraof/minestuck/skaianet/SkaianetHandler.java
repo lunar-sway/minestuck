@@ -45,7 +45,7 @@ import java.util.Map.Entry;
  * This class also handles the main saving and loading.
  * @author kirderf1
  */
-public class SkaianetHandler
+public final class SkaianetHandler
 {
 	public static final String PRIVATE_COMPUTER = "minestuck.private_computer";
 	public static final String CLOSED_SERVER = "minestuck.closed_server_message";
@@ -241,9 +241,9 @@ public class SkaianetHandler
 			{
 				if(c.isActive())
 				{
-					if(movingComputers.contains(isClient ? c.clientComputer : c.serverComputer))
+					if(movingComputers.contains(isClient ? c.getClientComputer() : c.getServerComputer()))
 						return;
-					ComputerTileEntity cc = getComputer(mcServer, c.clientComputer), sc = getComputer(mcServer, c.serverComputer);
+					ComputerTileEntity cc = getComputer(mcServer, c.getClientComputer()), sc = getComputer(mcServer, c.getServerComputer());
 					if(cc != null)
 					{
 						cc.getData(0).putBoolean("connectedToServer", false);
@@ -326,8 +326,8 @@ public class SkaianetHandler
 			if(conn != null && !conn.hasServerPlayer() && getMainConnection(c.getServerIdentifier(), false) == null)
 			{
 				connections.remove(c);
-				conn.serverIdentifier = c.getServerIdentifier();
-				conn.setActive(c.clientComputer, c.serverComputer);
+				conn.setNewServerPlayer(c.getServerIdentifier());
+				conn.setActive(c.getClientComputer(), c.getServerComputer());
 				c = conn;
 				type = ConnectionCreatedEvent.ConnectionType.RESUME;
 				updateLandChain = true;
@@ -340,10 +340,10 @@ public class SkaianetHandler
 				{
 					Debug.warnf("SessionHandler denied connection between %s and %s, reason: %s", c.getClientIdentifier().getUsername(), c.getServerIdentifier().getUsername(), e.getMessage());
 					connections.remove(c);
-					ComputerTileEntity cte = getComputer(mcServer, c.clientComputer);
+					ComputerTileEntity cte = getComputer(mcServer, c.getClientComputer());
 					if(cte != null)
 						cte.latestmessage.put(0, e.getResult().translationKey());
-					map.put(c.serverIdentifier, c.serverComputer);
+					map.put(c.getServerIdentifier(), c.getServerComputer());
 					return;
 				
 				}
@@ -613,8 +613,8 @@ public class SkaianetHandler
 			}
 			if(c.isActive())
 			{
-				ComputerTileEntity cc = getComputer(mcServer, c.clientComputer), sc = getComputer(mcServer, c.serverComputer);
-				if(cc == null || sc == null || c.clientComputer.getDimension() == DimensionType.THE_NETHER || c.serverComputer.getDimension() == DimensionType.THE_NETHER || !c.getClientIdentifier().equals(cc.owner)
+				ComputerTileEntity cc = getComputer(mcServer, c.getClientComputer()), sc = getComputer(mcServer, c.getServerComputer());
+				if(cc == null || sc == null || c.getClientComputer().getDimension() == DimensionType.THE_NETHER || c.getServerComputer().getDimension() == DimensionType.THE_NETHER || !c.getClientIdentifier().equals(cc.owner)
 						|| !c.getServerIdentifier().equals(sc.owner) || !cc.getData(0).getBoolean("connectedToServer"))
 				{
 					Debug.warnf("[SKAIANET] Invalid computer in connection between %s and %s.", c.getClientIdentifier(), c.getServerIdentifier());
@@ -705,7 +705,7 @@ public class SkaianetHandler
 			if(c == null)
 			{
 				Debug.infof("Player %s entered without connection. Creating connection... ", target.getUsername());
-				c = new SburbConnection(target, IdentifierHandler.NULL_IDENTIFIER, this);
+				c = new SburbConnection(target, this);
 				c.setIsMain();
 				try
 				{
@@ -793,10 +793,7 @@ public class SkaianetHandler
 		
 		for(SburbConnection c : connections)
 		{
-			if(c.isClient(oldTE))
-				c.clientComputer = newPos;
-			if(c.isServer(oldTE))
-				c.serverComputer = newPos;
+			c.setActive(c.isClient(oldTE) ? newPos : c.getClientComputer(), c.isServer(oldTE) ? newPos : c.getServerComputer());
 		}
 		
 		if(resumingClients.containsKey(oldTE.owner) && resumingClients.get(oldTE.owner).equals(oldPos))

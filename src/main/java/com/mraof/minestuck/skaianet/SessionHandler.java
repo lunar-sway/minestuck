@@ -30,7 +30,7 @@ import java.util.*;
  * An extension to SkaianetHandler with a focus on sessions
  * @author kirderf1
  */
-public class SessionHandler
+public final class SessionHandler
 {
 	private static final String GLOBAL_SESSION_NAME = "global";
 	
@@ -199,7 +199,8 @@ public class SessionHandler
 					skaianetHandler.closeConnection(c.getClientIdentifier(), c.getServerIdentifier(), true);
 				switch(MinestuckConfig.escapeFailureMode) {
 				case 0:
-					c.serverIdentifier = connection.getServerIdentifier();
+					c.removeServerPlayer();
+					c.setNewServerPlayer(connection.getServerIdentifier());
 					break;
 				case 1:
 					c.removeServerPlayer();
@@ -282,13 +283,14 @@ public class SessionHandler
 			cc.setIsMain();
 		} else
 		{
+			cc.removeServerPlayer();
+			cc.setNewServerPlayer(server);
 			if(connection != null && connection.isActive())
 			{
 				skaianetHandler.connections.remove(connection);
 				session.connections.remove(connection);
 				cc.setActive(connection.getClientComputer(), connection.getServerComputer());
 			}
-			cc.serverIdentifier = server;
 			updateLandChain |= cc.hasEntered();
 		}
 		
@@ -347,6 +349,7 @@ public class SessionHandler
 			source.sendFeedback(new StringTextComponent(identifier.getUsername()+"'s old client player "+cs.getClientIdentifier().getUsername()+" is now without a server player.").setStyle(new Style().setColor(TextFormatting.YELLOW)), true);
 		}
 		
+		cc.removeServerPlayer();
 		SburbConnection c = cc;
 		int i = 0;
 		for(; i < landTypes.size(); i++)
@@ -355,13 +358,13 @@ public class SessionHandler
 			if(land == null)
 				break;
 			PlayerIdentifier fakePlayer = IdentifierHandler.createNewFakeIdentifier();
-			c.serverIdentifier = fakePlayer;
+			c.setNewServerPlayer(fakePlayer);
 			
 			c = skaianetHandler.makeConnectionWithLand(land, createDebugLand(land), fakePlayer, IdentifierHandler.NULL_IDENTIFIER, s);
 		}
 		
 		if(i == landTypes.size())
-			c.serverIdentifier = identifier;
+			c.setNewServerPlayer(identifier);
 		else
 		{
 			PlayerIdentifier lastIdentifier = identifier;

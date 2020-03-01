@@ -28,24 +28,16 @@ import java.util.Set;
 
 public final class SburbConnection
 {
-	final SkaianetHandler handler;
+	private final SkaianetHandler handler;
 	
-	/**
-	 * Identifier for the client player. Beware that this might be null if connection.client isn't null
-	 * It is recommended to use connection.getClientName() instead if possible
-	 */
-	final PlayerIdentifier clientIdentifier;
-	/**
-	 * Identifier for the server player. Beware that this might be null if connection.server isn't null
-	 * It is recommended to use connection.getServerName() instead if possible
-	 */
-	PlayerIdentifier serverIdentifier;
-	GlobalPos clientComputer;	//TODO Abstraction that works with multiple representations of computers
-	GlobalPos serverComputer;
+	private final PlayerIdentifier clientIdentifier;
+	private PlayerIdentifier serverIdentifier;
+	private GlobalPos clientComputer;	//TODO Abstraction that works with multiple representations of computers
+	private GlobalPos serverComputer;
 	
 	private boolean isActive;
 	private boolean isMain;
-	boolean canSplit;
+	boolean canSplit;	//TODO invert and rename to lockedToSession or something like that
 	private LandInfo clientLandInfo;
 	int artifactType;
 	
@@ -58,6 +50,11 @@ public final class SburbConnection
 	//Non-saved variables used by the edit handler
 	public double posX, posZ;
 	public boolean useCoordinates;
+	
+	SburbConnection(PlayerIdentifier client, SkaianetHandler handler)
+	{
+		this(client, IdentifierHandler.NULL_IDENTIFIER, handler);
+	}
 	
 	SburbConnection(PlayerIdentifier client, PlayerIdentifier server, SkaianetHandler handler)
 	{
@@ -174,6 +171,13 @@ public final class SburbConnection
 	void removeServerPlayer()
 	{
 		serverIdentifier = IdentifierHandler.NULL_IDENTIFIER;
+	}
+	
+	void setNewServerPlayer(PlayerIdentifier identifier)
+	{
+		if(hasServerPlayer())
+			throw new IllegalStateException("Connection already has server player");
+		else serverIdentifier = identifier;
 	}
 	
 	public GlobalPos getClientComputer()
