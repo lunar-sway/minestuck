@@ -14,6 +14,7 @@ import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.LazyInstance;
 import com.mraof.minestuck.world.MSDimensionTypes;
 import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.LandTypePair;
@@ -68,7 +69,7 @@ public class SkaianetHandler
 	/**
 	 * Chains of lands to be used by the skybox render
 	 */
-	private List<List<Integer>> landChains = new LinkedList<>();
+	private LazyInstance<List<List<Integer>>> landChains = new LazyInstance<>(this::createLandChains);
 	
 	MinecraftServer mcServer;
 	
@@ -363,7 +364,7 @@ public class SkaianetHandler
 		
 		MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, c, sessionHandler.getPlayerSession(c.getClientIdentifier()), type, joinType));
 		if(updateLandChain)
-			sendLandChainUpdate();
+			reloadLandChains();
 	}
 	
 	SburbConnection makeConnectionWithLand(LandTypePair landTypes, DimensionType dimensionName, PlayerIdentifier client, PlayerIdentifier server, Session session)
@@ -451,9 +452,6 @@ public class SkaianetHandler
 		}
 		
 		sessionHandler.onLoad();
-		
-		//updateLandChain();	TODO Had to be commented out due to getting the client dimension. What should be done instead? How about a cache?
-		
 	}
 	
 	private CompoundNBT write(CompoundNBT compound)
@@ -487,12 +485,12 @@ public class SkaianetHandler
 	
 	public SkaianetInfoPacket createLandChainPacket()
 	{
-		return SkaianetInfoPacket.landChains(landChains);
+		return SkaianetInfoPacket.landChains(landChains.get());
 	}
 	
-	void updateLandChain()
+	private List<List<Integer>> createLandChains()
 	{
-		landChains.clear();
+		List<List<Integer>> landChains = new ArrayList<>();
 		
 		Set<Integer> checked = new HashSet<>();
 		for(SburbConnection c : connections)
@@ -535,11 +533,13 @@ public class SkaianetHandler
 				landChains.add(chain);
 			}
 		}
+		
+		return landChains;
 	}
 	
-	void sendLandChainUpdate()
+	void reloadLandChains()
 	{
-		updateLandChain();
+		landChains.invalidate();
 		SkaianetInfoPacket packet = createLandChainPacket();
 		MSPacketHandler.sendToAll(packet);
 	}
@@ -786,7 +786,7 @@ public class SkaianetHandler
 		c.centerZ = 0;
 		c.useCoordinates = false;
 		updateAll();
-		sendLandChainUpdate();
+		reloadLandChains();
 	}
 	
 	public void resetGivenItems()
