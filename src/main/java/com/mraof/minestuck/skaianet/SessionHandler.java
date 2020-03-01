@@ -22,6 +22,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.*;
 
@@ -48,8 +49,8 @@ public class SessionHandler
 	/**
 	 * An array list of the current worlds sessions.
 	 */
-	Set<Session> sessions = new HashSet<>();
-	Map<String, Session> sessionsByName = new HashMap<>();
+	private final Set<Session> sessions = new HashSet<>();
+	private final Map<String, Session> sessionsByName = new HashMap<>();
 	private final SkaianetHandler skaianetHandler;
 	
 	SessionHandler(SkaianetHandler skaianetHandler)
@@ -77,7 +78,7 @@ public class SessionHandler
 	{
 		try
 		{
-			Session session = SessionMerger.mergedSessionFromAll(this);
+			Session session = SessionMerger.mergedSessionFromAll(sessions);
 			sessions.clear();
 			sessionsByName.clear();
 			session.name = GLOBAL_SESSION_NAME;
@@ -300,6 +301,19 @@ public class SessionHandler
 		return true;
 	}
 	
+	void addNewSession(Session session)
+	{
+		if(sessions.contains(session))
+			throw new IllegalStateException("Session has already been added");
+		else if(sessionsByName.containsKey(session.name))
+			throw new IllegalStateException("Session name is already in use");
+		else
+		{
+			sessions.add(session);
+			sessionsByName.put(session.name, session);
+		}
+	}
+	
 	void handleSuccessfulMerge(Session s1, Session s2, Session result)
 	{
 		sessions.remove(s1);
@@ -390,6 +404,34 @@ public class SessionHandler
 				list.add(session.name);
 		return list;
 	}*/
+	
+	void read(CompoundNBT nbt)
+	{
+		ListNBT list = nbt.getList("sessions", Constants.NBT.TAG_COMPOUND);
+		for(int i = 0; i < list.size(); i++)
+		{
+			Session session = Session.read(list.getCompound(i), skaianetHandler);
+			sessions.add(session);
+			skaianetHandler.connections.addAll(session.connections);
+			
+			if(session.isCustom())
+			{
+				if(sessionsByName.containsKey(session.name))
+					Debug.warnf("A session with a duplicate name has been loaded! (Session '%s') Either a bug or someone messing with the data file.", session.name);
+				sessionsByName.put(session.name, session);
+			}
+		}
+	}
+	
+	void write(CompoundNBT compound)
+	{
+		ListNBT list = new ListNBT();
+		
+		for(Session s : sessions)
+			list.add(s.write());
+		
+		compound.put("sessions", list);
+	}
 	
 	/**
 	 * Creates data to be used for the data checker

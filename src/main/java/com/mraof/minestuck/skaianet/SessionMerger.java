@@ -36,16 +36,16 @@ final class SessionMerger
 			{
 				Session session = new Session();
 				verifyCanAdd(session, client, server, MergeResult.GENERIC_FAIL);
-				handler.sessions.add(session);
+				handler.addNewSession(session);
 				return session;
 			}
 		}
 	}
 	
-	static Session mergedSessionFromAll(SessionHandler handler) throws MergeResult.SessionMergeException
+	static Session mergedSessionFromAll(Set<Session> sessions) throws MergeResult.SessionMergeException
 	{
 		Session session = new Session();
-		for(Session other : handler.sessions)
+		for(Session other : sessions)
 			session.inheritFrom(other);
 		
 		return session;

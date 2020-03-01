@@ -423,26 +423,13 @@ public class SkaianetHandler
 	
 	private void read(CompoundNBT nbt)
 	{
-		ListNBT list = nbt.getList("sessions", Constants.NBT.TAG_COMPOUND);
-		for(int i = 0; i < list.size(); i++)
-		{
-			Session session = Session.read(list.getCompound(i), this);
-			sessionHandler.sessions.add(session);
-			connections.addAll(session.connections);
-			
-			if(session.isCustom())
-			{
-				if(sessionHandler.sessionsByName.containsKey(session.name))
-					Debug.warnf("A session with a duplicate name has been loaded! (Session '%s') Either a bug or someone messing with the data file.", session.name);
-				sessionHandler.sessionsByName.put(session.name, session);
-			}
-		}
+		sessionHandler.read(nbt);
 		
 		String[] s = {"serversOpen", "resumingClients", "resumingServers"};
 		Map<PlayerIdentifier, GlobalPos>[] maps = new Map[]{serversOpen, resumingClients, resumingServers};
 		for(int e = 0; e < 3; e++)
 		{
-			list = nbt.getList(s[e], Constants.NBT.TAG_COMPOUND);
+			ListNBT list = nbt.getList(s[e], Constants.NBT.TAG_COMPOUND);
 			for(int i = 0; i < list.size(); i++)
 			{
 				CompoundNBT cmp = list.getCompound(i);
@@ -457,19 +444,15 @@ public class SkaianetHandler
 	private CompoundNBT write(CompoundNBT compound)
 	{
 		//checkData();
-		ListNBT list = new ListNBT();
 		
-		for(Session s : sessionHandler.sessions)
-			list.add(s.write());
-		
-		compound.put("sessions", list);
+		sessionHandler.write(compound);
 		
 		String[] s = {"serversOpen","resumingClients","resumingServers"};
 		@SuppressWarnings("unchecked")
 		Map<PlayerIdentifier, GlobalPos>[] maps = new Map[]{serversOpen, resumingClients, resumingServers};
 		for(int i = 0; i < 3; i++)
 		{
-			list = new ListNBT();
+			ListNBT list = new ListNBT();
 			for(Entry<PlayerIdentifier, GlobalPos> entry : maps[i].entrySet())
 			{
 				CompoundNBT nbt = new CompoundNBT();
