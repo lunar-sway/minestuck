@@ -298,7 +298,7 @@ public final class SessionHandler
 		
 		skaianetHandler.updateAll();
 		if(updateLandChain)
-			skaianetHandler.reloadLandChains();
+			skaianetHandler.infoTracker.reloadLandChains();
 		
 		return true;
 	}
@@ -382,7 +382,7 @@ public final class SessionHandler
 		}
 		
 		skaianetHandler.updateAll();
-		skaianetHandler.reloadLandChains();
+		skaianetHandler.infoTracker.reloadLandChains();
 	}
 	
 	private static DimensionType createDebugLand(LandTypePair landTypes) throws CommandSyntaxException
