@@ -1,4 +1,4 @@
-package com.mraof.minestuck.command;
+package com.mraof.minestuck.command.argument;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;

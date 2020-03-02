@@ -327,9 +327,8 @@ public final class SessionHandler
 			sessionsByName.put(result.name, result);
 	}
 	
-	public void createDebugLandsChain(List<LandTypePair> landTypes, CommandSource source) throws CommandSyntaxException
+	public void createDebugLandsChain(ServerPlayerEntity player, List<LandTypePair> landTypes, CommandSource source) throws CommandSyntaxException
 	{
-		ServerPlayerEntity player = source.asPlayer();
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		Session s = getPlayerSession(identifier);
 		if(s != null && s.locked)

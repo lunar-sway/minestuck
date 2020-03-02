@@ -10,6 +10,8 @@ import com.mraof.minestuck.client.gui.playerStats.*;
 import com.mraof.minestuck.client.settings.MSKeyHandler;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.command.*;
+import com.mraof.minestuck.command.argument.GristSetArgument;
+import com.mraof.minestuck.command.argument.GristTypeArgument;
 import com.mraof.minestuck.computer.ButtonListProgram;
 import com.mraof.minestuck.computer.SburbClient;
 import com.mraof.minestuck.computer.SburbServer;
