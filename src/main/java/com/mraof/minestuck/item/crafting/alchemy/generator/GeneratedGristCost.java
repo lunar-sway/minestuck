@@ -31,7 +31,7 @@ public abstract class GeneratedGristCost extends GristCostRecipe implements Gene
 	protected GeneratedGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, GristSet cost)
 	{
 		super(id, ingredient, priority);
-		cachedCost = cost.asImmutable();
+		cachedCost = cost != null ? cost.asImmutable() : null;
 		hasGeneratedCost = true;
 	}
 	
