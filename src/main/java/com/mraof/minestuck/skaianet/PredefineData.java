@@ -10,12 +10,14 @@ import net.minecraftforge.common.util.Constants;
 
 class PredefineData
 {
+	boolean lockedToSession;
 	Title title;
 	TerrainLandType landTerrain;
 	TitleLandType landTitle;
 	
 	PredefineData read(CompoundNBT nbt)
 	{
+		lockedToSession = nbt.getBoolean("locked");
 		title = Title.tryRead(nbt, "title");
 		if(nbt.contains("landTerrain", Constants.NBT.TAG_STRING))
 			landTerrain = LandTypes.TERRAIN_REGISTRY.getValue(ResourceLocation.tryCreate(nbt.getString("landTerrain")));
@@ -28,6 +30,7 @@ class PredefineData
 	CompoundNBT write()
 	{
 		CompoundNBT nbt = new CompoundNBT();
+		nbt.putBoolean("locked", lockedToSession);
 		if(title != null)
 			title.write(nbt, "title");
 		if(landTerrain != null)

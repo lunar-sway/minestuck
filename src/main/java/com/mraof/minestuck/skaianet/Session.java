@@ -18,8 +18,8 @@ import java.util.*;
 public final class Session
 {
 	
-	Map<PlayerIdentifier, PredefineData> predefinedPlayers;
-	List<SburbConnection> connections;
+	final Map<PlayerIdentifier, PredefineData> predefinedPlayers;
+	final List<SburbConnection> connections;
 	String name;
 	
 	/**
