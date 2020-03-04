@@ -1,13 +1,77 @@
 package com.mraof.minestuck.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.builder.ArgumentBuilder;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
+import com.mraof.minestuck.command.argument.TitleArgument;
+import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.skaianet.SburbHandler;
+import com.mraof.minestuck.skaianet.SkaianetException;
 import net.minecraft.command.CommandSource;
+import net.minecraft.command.Commands;
+import net.minecraft.command.arguments.EntityArgument;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
-public class CommandSburbSession	//TODO properly localize all messages related to this command
+public class SburbSessionCommand
 {
+	public static final String SET_TITLE = "commands.minestuck.sburbsession.set_title";
+	private static final DynamicCommandExceptionType ANY_FAILURE = new DynamicCommandExceptionType(o -> (ITextComponent) o);
+	
 	public static void register(CommandDispatcher<CommandSource> dispatcher)
 	{
+		dispatcher.register(Commands.literal("sburbsession").then(subCommandTitle()));
+	}
 	
+	private static ArgumentBuilder<CommandSource, ?> subCommandName()
+	{
+		return null;
+	}
+	
+	private static ArgumentBuilder<CommandSource, ?> subCommandAdd()
+	{
+		return null;
+	}
+	
+	private static ArgumentBuilder<CommandSource, ?> subCommandFinish()
+	{
+		return null;
+	}
+	
+	private static ArgumentBuilder<CommandSource, ?> subCommandTitle()
+	{
+		return Commands.literal("title").then(Commands.argument("player", EntityArgument.player()).then(Commands.argument("title", TitleArgument.title())
+				.executes(context -> setTitle(context.getSource(), EntityArgument.getPlayer(context, "player"), TitleArgument.getTitleArgument(context, "title")))));
+	}
+	
+	private static ArgumentBuilder<CommandSource, ?> subCommandTerrainLand()
+	{
+		return null;
+	}
+	
+	private static ArgumentBuilder<CommandSource, ?> subCommandTitleLand()
+	{
+		return null;
+	}
+	
+	private static ArgumentBuilder<CommandSource, ?> subCommandDefine()
+	{
+		return null;
+	}
+	
+	private static int setTitle(CommandSource source, ServerPlayerEntity player, Title title) throws CommandSyntaxException
+	{
+		try
+		{
+			SburbHandler.handlePredefineData(player, data -> data.predefineTitle(title));
+			source.sendFeedback(new TranslationTextComponent(SET_TITLE, player.getDisplayName(), title.asTextComponent()), true);
+			return 1;
+		} catch(SkaianetException e)
+		{
+			throw ANY_FAILURE.create(e.getTextComponent());
+		}
 	}
 	
 	/*@Override

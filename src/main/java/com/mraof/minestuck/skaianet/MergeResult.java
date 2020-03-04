@@ -1,6 +1,6 @@
 package com.mraof.minestuck.skaianet;
 
-public enum MergeResult
+public enum MergeResult	//TODO This isn't used for much else than exceptions. Replace usage with SkaianetException and when relevant factory functions
 {
 	ABLE("able", "Is able to merge"),
 	LOCKED("locked", "Session is locked"),

@@ -133,6 +133,15 @@ public final class Session
 		return list;
 	}
 	
+	public void predefineCall(PlayerIdentifier player, SkaianetException.SkaianetConsumer<PredefineData> consumer) throws SkaianetException
+	{
+		PredefineData data = predefinedPlayers.get(player);
+		if(data == null)
+			data = new PredefineData();
+		consumer.consume(data);
+		predefinedPlayers.put(player, data);
+	}
+	
 	/**
 	 * Writes this session to an nbt tag.
 	 * Note that this will only work as long as <code>SkaianetHandler.connections</code> remains unmodified.

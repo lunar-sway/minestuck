@@ -8,7 +8,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
 
-class PredefineData
+public final class PredefineData
 {
 	boolean lockedToSession;
 	Title title;
@@ -39,5 +39,11 @@ class PredefineData
 			nbt.putString("landTitle", landTitle.getRegistryName().toString());
 		
 		return nbt;
+	}
+	
+	public void predefineTitle(Title title) throws SkaianetException
+	{
+		//TODO Make a call to session that checks for duplicate titles. Also throw exception if title.equals(this.title)
+		this.title = title;
 	}
 }

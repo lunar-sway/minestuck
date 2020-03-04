@@ -157,6 +157,20 @@ public final class SburbHandler
 			Debug.warnf("Trying to generate a title for %s when a title is already assigned!", player.getUsername());
 	}
 	
+	public static void handlePredefineData(ServerPlayerEntity player, SkaianetException.SkaianetConsumer<PredefineData> consumer) throws SkaianetException
+	{
+		PlayerIdentifier identifier = IdentifierHandler.encode(player);
+		Session session = SessionHandler.get(player.server).getPlayerSession(identifier);
+		if(session != null)
+			session.predefineCall(identifier, consumer);
+		else
+		{
+			session = new Session();
+			session.predefineCall(identifier, consumer);
+			SessionHandler.get(player.server).addNewSession(session);
+		}
+	}
+	
 	/*public static void managePredefinedSession(MinecraftServer server, ICommandSender sender, ICommand command, String sessionName, String[] playerNames, boolean finish) throws CommandException
 	{
 		Session session = sessionsByName.get(sessionName);
