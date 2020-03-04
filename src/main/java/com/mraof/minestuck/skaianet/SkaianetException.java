@@ -28,6 +28,7 @@ public class SkaianetException extends Exception
 		return textComponent;
 	}
 	
+	@FunctionalInterface
 	public interface SkaianetConsumer<T>
 	{
 		void consume(T t) throws SkaianetException;

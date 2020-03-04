@@ -46,4 +46,16 @@ public final class PredefineData
 		//TODO Make a call to session that checks for duplicate titles. Also throw exception if title.equals(this.title)
 		this.title = title;
 	}
+	
+	public void predefineTerrainLand(TerrainLandType landType) throws SkaianetException
+	{
+		//TODO Make sure that it is compatible with the title land type
+		this.landTerrain = landType;
+	}
+	
+	public void predefineTitleLand(TitleLandType landType) throws SkaianetException
+	{
+		//TODO Make sure that the potential terrain land type is compatible with this type
+		this.landTitle = landType;
+	}
 }
