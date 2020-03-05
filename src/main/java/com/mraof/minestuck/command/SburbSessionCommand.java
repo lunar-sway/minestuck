@@ -24,11 +24,12 @@ public class SburbSessionCommand
 	public static final String SET_TITLE = "commands.minestuck.sburbsession.set_title";
 	public static final String SET_TERRAIN_LAND = "commands.minestuck.sburbsession.set_terrain_land";
 	public static final String SET_TITLE_LAND = "commands.minestuck.sburbsession.set_title_land";
+	public static final String DEFINE = "commands.minestuck.sburbsession.define";
 	private static final DynamicCommandExceptionType ANY_FAILURE = new DynamicCommandExceptionType(o -> (ITextComponent) o);
 	
 	public static void register(CommandDispatcher<CommandSource> dispatcher)
 	{
-		dispatcher.register(Commands.literal("sburbsession").requires(source -> source.hasPermissionLevel(2)).then(subCommandTitle()).then(subCommandTerrainLand()).then(subCommandTitleLand()));
+		dispatcher.register(Commands.literal("sburbsession").requires(source -> source.hasPermissionLevel(2)).then(subCommandTitle()).then(subCommandTerrainLand()).then(subCommandTitleLand()).then(subCommandDefine()));
 	}
 	
 	private static ArgumentBuilder<CommandSource, ?> subCommandName()
@@ -49,24 +50,26 @@ public class SburbSessionCommand
 	private static ArgumentBuilder<CommandSource, ?> subCommandTitle()
 	{
 		return Commands.literal("title").then(Commands.argument("player", EntityArgument.player()).then(Commands.argument("title", TitleArgument.title())
-				.executes(context -> setTitle(context.getSource(), EntityArgument.getPlayer(context, "player"), TitleArgument.getTitleArgument(context, "title")))));
+				.executes(context -> setTitle(context.getSource(), EntityArgument.getPlayer(context, "player"), TitleArgument.get(context, "title")))));
 	}
 	
 	private static ArgumentBuilder<CommandSource, ?> subCommandTerrainLand()
 	{
 		return Commands.literal("terrain_land").then(Commands.argument("player", EntityArgument.player()).then(Commands.argument("land", TerrainLandTypeArgument.terrainLandType())
-				.executes(context -> setTerrainLand(context.getSource(), EntityArgument.getPlayer(context, "player"), TerrainLandTypeArgument.getTerrainLandArgument(context, "land")))));
+				.executes(context -> setTerrainLand(context.getSource(), EntityArgument.getPlayer(context, "player"), TerrainLandTypeArgument.get(context, "land")))));
 	}
 	
 	private static ArgumentBuilder<CommandSource, ?> subCommandTitleLand()
 	{
 		return Commands.literal("title_land").then(Commands.argument("player", EntityArgument.player()).then(Commands.argument("land", TitleLandTypeArgument.titleLandType())
-				.executes(context -> setTitleLand(context.getSource(), EntityArgument.getPlayer(context, "player"), TitleLandTypeArgument.geTitleLandArgument(context, "land")))));
+				.executes(context -> setTitleLand(context.getSource(), EntityArgument.getPlayer(context, "player"), TitleLandTypeArgument.get(context, "land")))));
 	}
 	
 	private static ArgumentBuilder<CommandSource, ?> subCommandDefine()
 	{
-		return null;
+		return Commands.literal("title").then(Commands.argument("player", EntityArgument.player()).then(Commands.argument("title", TitleArgument.title())
+				.then(Commands.argument("title_land", TitleLandTypeArgument.titleLandType()).then(Commands.argument("terrain_land", TerrainLandTypeArgument.terrainLandType())
+				.executes(context -> define(context.getSource(), EntityArgument.getPlayer(context, "player"), TitleArgument.get(context, "title"), TerrainLandTypeArgument.get(context, "terrain_land"), TitleLandTypeArgument.get(context, "title_land")))))));
 	}
 	
 	private static int setTitle(CommandSource source, ServerPlayerEntity player, Title title) throws CommandSyntaxException
@@ -106,5 +109,15 @@ public class SburbSessionCommand
 		{
 			throw ANY_FAILURE.create(e.getTextComponent());
 		}
+	}
+	
+	private static int define(CommandSource source, ServerPlayerEntity player, Title title, TerrainLandType terrainLand, TitleLandType titleLand) throws CommandSyntaxException
+	{
+		CommandSource silentSource = source.withFeedbackDisabled();
+		setTitle(silentSource, player, title);
+		setTitleLand(silentSource, player, titleLand);
+		setTerrainLand(silentSource, player, terrainLand);
+		source.sendFeedback(new TranslationTextComponent(DEFINE, player.getDisplayName()), true);
+		return 1;
 	}
 }

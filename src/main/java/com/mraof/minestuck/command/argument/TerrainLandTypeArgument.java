@@ -56,7 +56,7 @@ public class TerrainLandTypeArgument implements ArgumentType<TerrainLandType>
 		return EXAMPLES;
 	}
 	
-	public static TerrainLandType getTerrainLandArgument(CommandContext<CommandSource> context, String id)
+	public static TerrainLandType get(CommandContext<CommandSource> context, String id)
 	{
 		return context.getArgument(id, TerrainLandType.class);
 	}

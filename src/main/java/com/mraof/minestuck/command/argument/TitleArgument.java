@@ -33,7 +33,7 @@ public class TitleArgument implements ArgumentType<Title>
 		} else throw PAIR_INCOMPLETE.createWithContext(reader);
 	}
 	
-	public static Title getTitleArgument(CommandContext<CommandSource> context, String id)
+	public static Title get(CommandContext<CommandSource> context, String id)
 	{
 		return context.getArgument(id, Title.class);
 	}

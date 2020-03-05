@@ -56,7 +56,7 @@ public class TitleLandTypeArgument implements ArgumentType<TitleLandType>
 		return EXAMPLES;
 	}
 	
-	public static TitleLandType geTitleLandArgument(CommandContext<CommandSource> context, String id)
+	public static TitleLandType get(CommandContext<CommandSource> context, String id)
 	{
 		return context.getArgument(id, TitleLandType.class);
 	}
