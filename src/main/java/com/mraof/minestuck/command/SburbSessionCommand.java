@@ -76,7 +76,7 @@ public class SburbSessionCommand
 	{
 		try
 		{
-			SburbHandler.handlePredefineData(player, data -> data.predefineTitle(title));
+			SburbHandler.handlePredefineData(player, data -> data.predefineTitle(title, source));
 			source.sendFeedback(new TranslationTextComponent(SET_TITLE, player.getDisplayName(), title.asTextComponent()), true);
 			return 1;
 		} catch(SkaianetException e)
@@ -89,7 +89,7 @@ public class SburbSessionCommand
 	{
 		try
 		{
-			SburbHandler.handlePredefineData(player, data -> data.predefineTerrainLand(landType));
+			SburbHandler.handlePredefineData(player, data -> data.predefineTerrainLand(landType, source));
 			source.sendFeedback(new TranslationTextComponent(SET_TERRAIN_LAND, player.getDisplayName()), true);
 			return 1;
 		} catch(SkaianetException e)
@@ -102,7 +102,7 @@ public class SburbSessionCommand
 	{
 		try
 		{
-			SburbHandler.handlePredefineData(player, data -> data.predefineTitleLand(landType));
+			SburbHandler.handlePredefineData(player, data -> data.predefineTitleLand(landType, source));
 			source.sendFeedback(new TranslationTextComponent(SET_TITLE_LAND, player.getDisplayName()), true);
 			return 1;
 		} catch(SkaianetException e)

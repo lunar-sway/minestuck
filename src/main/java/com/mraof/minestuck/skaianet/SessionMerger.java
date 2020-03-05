@@ -104,7 +104,7 @@ final class SessionMerger
 		//Add locked players from predefined data
 		for(Map.Entry<PlayerIdentifier, PredefineData> entry : session.predefinedPlayers.entrySet())
 		{
-			if(entry.getValue().lockedToSession)
+			if(entry.getValue().isLockedToSession())
 				lockedPlayers.add(entry.getKey());
 		}
 		
@@ -122,7 +122,7 @@ final class SessionMerger
 		players.add(next.getClientIdentifier());
 		Session newSession = new Session();
 		
-		collectConnectionsWithMembers(unhandledConnections, players, connection -> newSession.connections.add(connection));
+		collectConnectionsWithMembers(unhandledConnections, players, newSession.connections::add);
 		for(PlayerIdentifier identifier : players)
 		{
 			if(originalSession.predefinedPlayers.containsKey(identifier))

@@ -55,7 +55,7 @@ public final class SburbHandler
 		if(session.predefinedPlayers.containsKey(player))
 		{
 			PredefineData data = session.predefinedPlayers.get(player);
-			title = data.title;
+			title = data.getTitle();
 		}
 		
 		if(title == null)
@@ -78,8 +78,8 @@ public final class SburbHandler
 				}
 			
 			for(Map.Entry<PlayerIdentifier, PredefineData> entry : session.predefinedPlayers.entrySet())
-				if(!playersEntered.contains(entry.getKey()) && entry.getValue().title != null)
-					usedTitles.add(entry.getValue().title);
+				if(!playersEntered.contains(entry.getKey()) && entry.getValue().getTitle() != null)
+					usedTitles.add(entry.getValue().getTitle());
 			
 			if(usedTitles.size() < 12)	//Focus on getting an unused aspect and an unused class
 			{
@@ -562,10 +562,8 @@ public final class SburbHandler
 		if(session.predefinedPlayers.containsKey(connection.getClientIdentifier()))
 		{
 			PredefineData data = session.predefinedPlayers.get(connection.getClientIdentifier());
-			if(data.landTitle != null)
-				titleAspect = data.landTitle;
-			if(data.landTerrain != null)
-				terrainAspect = data.landTerrain;
+			titleAspect = data.getTitleLandType();
+			terrainAspect = data.getTerrainLandType();
 		}
 		
 		boolean frogs = false;
@@ -582,12 +580,12 @@ public final class SburbHandler
 			}
 		for(PredefineData data : session.predefinedPlayers.values())
 		{
-			if(data.landTerrain != null)
-				usedTerrainAspects.add(data.landTerrain);
-			if(data.landTitle != null)
+			if(data.getTerrainLandType() != null)
+				usedTerrainAspects.add(data.getTerrainLandType());
+			if(data.getTitleLandType() != null)
 			{
-				usedTitleAspects.add(data.landTitle);
-				if(data.landTitle == LandTypes.FROGS)
+				usedTitleAspects.add(data.getTitleLandType());
+				if(data.getTitleLandType() == LandTypes.FROGS)
 					frogs = true;
 			}
 		}
@@ -657,7 +655,7 @@ public final class SburbHandler
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		Session s = SessionHandler.get(player.world).getPlayerSession(identifier);
 		
-		if(s != null && s.predefinedPlayers.containsKey(identifier) && s.predefinedPlayers.get(identifier).title != null
+		if(s != null && s.predefinedPlayers.containsKey(identifier) && s.predefinedPlayers.get(identifier).getTitle() != null
 				|| PlayerSavedData.getData(identifier, player.server).getTitle() != null)
 			return true;
 		
@@ -692,7 +690,7 @@ public final class SburbHandler
 							return;
 						}
 					for(PredefineData data : s.predefinedPlayers.values())
-						if(title.equals(data.title))
+						if(title.equals(data.getTitle()))
 						{
 							MSPacketHandler.sendToPlayer(new TitleSelectPacket(title), player);
 							return;

@@ -7,9 +7,9 @@ public class SkaianetException extends Exception
 {
 	private final ITextComponent textComponent;
 	
-	public SkaianetException(String translationKey)
+	public SkaianetException(String translationKey, Object... args)
 	{
-		this(new TranslationTextComponent(translationKey));
+		this(new TranslationTextComponent(translationKey, args));
 	}
 	
 	public SkaianetException(ITextComponent textComponent)

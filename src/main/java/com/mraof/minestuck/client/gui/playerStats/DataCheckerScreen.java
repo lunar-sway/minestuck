@@ -463,8 +463,8 @@ public class DataCheckerScreen extends Screen
 			if(isMain)
 			{
 				list.add(new TextField("Land dimension: %s", (landDim != 0 ? String.valueOf(landDim) : "Pre-entry")));
-				if(landDim != 0 && connectionTag.contains("aspect1"))
-					list.add(new LocalizedTextField("land.message.format", new TranslationTextComponent("land."+connectionTag.getString("aspect1")), new TranslationTextComponent("land."+connectionTag.getString("aspect2"))));
+				if(landDim != 0 && connectionTag.contains("landType1"))
+					list.add(new LocalizedTextField("land.message.format", new TranslationTextComponent("land."+connectionTag.getString("landType1")), new TranslationTextComponent("land."+connectionTag.getString("landType2"))));
 				if(connectionTag.contains("class"))
 				{
 					byte cl = connectionTag.getByte("class"), as = connectionTag.getByte("aspect");
@@ -473,10 +473,10 @@ public class DataCheckerScreen extends Screen
 					list.add(new LocalizedTextField("title.format", new TranslationTextComponent(titleClass), new TranslationTextComponent(titleAspect)));
 				}
 				
-				if(connectionTag.contains("aspectTitle"))
-					list.add(new TextField("Title aspect: %s", connectionTag.getString("aspectTitle")));
-				if(connectionTag.contains("aspectTerrain"))
-					list.add(new TextField("Terrain aspect: %s", connectionTag.getString("aspectTerrain")));
+				if(connectionTag.contains("titleLandType"))
+					list.add(new TextField("Title land type: %s", connectionTag.getString("titleLandType")));
+				if(connectionTag.contains("terrainLandType"))
+					list.add(new TextField("Terrain land type: %s", connectionTag.getString("terrainLandType")));
 			}
 			list.add(new GristCacheButton(connectionTag.getString("clientId")));
 		}
