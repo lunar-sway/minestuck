@@ -19,7 +19,7 @@ public class MSCommands
 		GristCommand.register(dispatcher);
 		SendGristCommand.register(dispatcher);
 		TransportalizerCommand.register(dispatcher);
-		SburbSessionCommand.register(dispatcher);
+		SburbPredefineCommand.register(dispatcher);
 		SburbConnectionCommand.register(dispatcher);
 		SetRungCommand.register(dispatcher);
 		ConsortReplyCommand.register(dispatcher);

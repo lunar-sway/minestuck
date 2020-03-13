@@ -19,7 +19,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-public class SburbSessionCommand
+public class SburbPredefineCommand
 {
 	public static final String SET_TITLE = "commands.minestuck.sburbpredefine.set_title";
 	public static final String SET_TERRAIN_LAND = "commands.minestuck.sburbpredefine.set_terrain_land";
