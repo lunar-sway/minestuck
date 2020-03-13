@@ -217,6 +217,17 @@ public final class SburbConnection
 	{
 		return clientLandInfo != null;
 	}
+	public Title getClientTitle()
+	{
+		if(hasEntered())
+		{
+			Title title = PlayerSavedData.getData(getClientIdentifier(), handler.mcServer).getTitle();
+			if(title == null)
+				Debug.warnf("Found player %s that has entered, but did not have a title!", getClientIdentifier().getUsername());
+			return title;
+		}
+		return null;
+	}
 	/**
 	 * @return The land dimension assigned to the client player.
 	 */

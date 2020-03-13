@@ -12,16 +12,26 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.util.Constants;
 
+import javax.annotation.Nonnull;
+
 public final class PredefineData
 {
+	public static String TITLE_ALREADY_SET = "minestuck.predefine.title_already_set";
+	public static String TITLE_ALREADY_USED = "minestuck.predefine.title_already_used";
 	public static String RESETTING_TERRAIN_TYPE = "minestuck.predefine.resetting_terrain_type";
 	public static String INCOMPATIBLE_LAND = "minestuck.predefine.incompatible_land";
 	public static String INVALID_LAND_ORDER = "minestuck.predefine.invalid_land_order";
 	
+	private final Session session;
 	private boolean lockedToSession;
 	private Title title;
 	private TerrainLandType terrainLandType;
 	private TitleLandType titleLandType;
+	
+	PredefineData(Session session)
+	{
+		this.session = session;
+	}
 	
 	PredefineData read(CompoundNBT nbt)
 	{
@@ -49,10 +59,14 @@ public final class PredefineData
 		return nbt;
 	}
 	
-	public void predefineTitle(Title title, CommandSource source) throws SkaianetException
+	public void predefineTitle(@Nonnull Title title, CommandSource source) throws SkaianetException
 	{
-		//TODO Make a call to session that checks for duplicate titles. Also throw exception if title.equals(this.title)
-		this.title = title;
+		if(title.equals(this.title))
+			throw new SkaianetException(TITLE_ALREADY_SET, title.asTextComponent());
+		if(session.isTitleUsed(title))
+			throw new SkaianetException(TITLE_ALREADY_USED, title.asTextComponent());
+		else	//TODO Take a look at the title land type and warn if it's not connected to the set land type
+			this.title = title;
 	}
 	
 	public void predefineTerrainLand(TerrainLandType landType, CommandSource source) throws SkaianetException

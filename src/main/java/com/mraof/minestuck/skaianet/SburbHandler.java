@@ -63,23 +63,7 @@ public final class SburbHandler
 			Random rand = MinestuckRandom.getPlayerSpecificRandom(player, world.getSeed());
 			rand.nextInt();	//Avoid using same data as the artifact generation
 			
-			ArrayList<Title> usedTitles = new ArrayList<>();
-			Set<PlayerIdentifier> playersEntered = new HashSet<>();	//Used to avoid duplicates from both connections and predefined data
-			playersEntered.add(player);
-			for(SburbConnection c : session.connections)
-				if(!c.getClientIdentifier().equals(player))
-				{
-					Title playerTitle = PlayerSavedData.getData(c.getClientIdentifier(), world).getTitle();
-					if(playerTitle != null)
-					{
-						usedTitles.add(playerTitle);
-						playersEntered.add(c.getClientIdentifier());
-					}
-				}
-			
-			for(Map.Entry<PlayerIdentifier, PredefineData> entry : session.predefinedPlayers.entrySet())
-				if(!playersEntered.contains(entry.getKey()) && entry.getValue().getTitle() != null)
-					usedTitles.add(entry.getValue().getTitle());
+			Set<Title> usedTitles = session.getUsedTitles();
 			
 			if(usedTitles.size() < 12)	//Focus on getting an unused aspect and an unused class
 			{

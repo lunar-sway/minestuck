@@ -3,16 +3,17 @@ package com.mraof.minestuck.skaianet;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.util.Debug;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraftforge.common.util.Constants;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 /**
- * Was also an interface for the session system, but now just a data structure representing a session.
- * SessionHandler is the new class for session interface.
+ * A data structure that contains all related connections, along with any related data, such as predefine data.
  * @author kirderf1
  */
 public final class Session
@@ -133,11 +134,44 @@ public final class Session
 		return list;
 	}
 	
+	boolean isTitleUsed(@Nonnull Title newTitle)
+	{
+		for(SburbConnection c : connections)
+		{
+			Title title = c.getClientTitle();
+			if(newTitle.equals(title))
+				return true;
+		}
+		
+		for(PredefineData data : predefinedPlayers.values())
+			if(newTitle.equals(data.getTitle()))
+				return true;
+		
+		return false;
+	}
+	
+	Set<Title> getUsedTitles()
+	{
+		Set<Title> titles = new HashSet<>();
+		for(SburbConnection c : connections)
+		{
+			Title title = c.getClientTitle();
+			if(title != null)
+				titles.add(title);
+		}
+		
+		for(PredefineData data : predefinedPlayers.values())
+			if(data.getTitle() != null)
+				titles.add(data.getTitle());
+		
+		return titles;
+	}
+	
 	public void predefineCall(PlayerIdentifier player, SkaianetException.SkaianetConsumer<PredefineData> consumer) throws SkaianetException
 	{
 		PredefineData data = predefinedPlayers.get(player);
 		if(data == null)
-			data = new PredefineData();
+			data = new PredefineData(this);
 		consumer.consume(data);
 		predefinedPlayers.put(player, data);
 	}
@@ -195,7 +229,7 @@ public final class Session
 			for(int i = 0; i < list.size(); i++)
 			{
 				CompoundNBT compound = list.getCompound(i);
-				s.predefinedPlayers.put(IdentifierHandler.load(compound, "player"), new PredefineData().read(compound));
+				s.predefinedPlayers.put(IdentifierHandler.load(compound, "player"), new PredefineData(s).read(compound));
 			}
 		} else
 		{	//Support for saves from older minestuck versions
@@ -204,7 +238,7 @@ public final class Session
 			{
 				CompoundNBT compound = new CompoundNBT();
 				compound.putString("player", player);
-				s.predefinedPlayers.put(IdentifierHandler.load(compound, "player"), new PredefineData().read(predefineTag.getCompound(player)));
+				s.predefinedPlayers.put(IdentifierHandler.load(compound, "player"), new PredefineData(s).read(predefineTag.getCompound(player)));
 			}
 		}
 		
