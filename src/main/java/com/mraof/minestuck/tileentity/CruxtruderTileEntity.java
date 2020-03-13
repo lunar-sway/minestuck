@@ -11,10 +11,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.util.Constants;
 
 public class CruxtruderTileEntity extends TileEntity	//TODO check if it is broken
 {
+	public static final String EMPTY = "block.minestuck.cruxtruder.empty";
+	
 	private int color = -1;
 	private boolean broken = false;
 	private int material = 0;
@@ -72,6 +75,7 @@ public class CruxtruderTileEntity extends TileEntity	//TODO check if it is broke
 					if(MinestuckConfig.cruxtruderIntake.get() && material == 0)
 					{
 						world.playEvent(Constants.WorldEvents.DISPENSER_FAIL_SOUND, pos, 0);
+						player.sendMessage(new TranslationTextComponent(EMPTY));
 					} else
 					{
 						world.setBlockState(pos, MSBlocks.CRUXITE_DOWEL.getDefaultState().with(CruxiteDowelBlock.DOWEL_TYPE, CruxiteDowelBlock.Type.CRUXTRUDER));

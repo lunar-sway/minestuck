@@ -931,6 +931,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SylladexScreen.EMPTY_SYLLADEX_2, "This will empty your sylladex.");
 		add(SylladexScreen.EMPTY_SYLLADEX_BUTTON, "Empty Sylladex");
 		add(AlchemiterScreen.TITLE, "Alchemiter");
+		add(CruxtruderTileEntity.EMPTY, "The cruxtruder gives off an empty click. Perhaps it needs some sort of material to function?");
 		add(MiniCruxtruderTileEntity.TITLE, "Miniature Cruxtruder");
 		add(MiniTotemLatheTileEntity.TITLE, "Miniature Totem Lathe");
 		add(MiniAlchemiterTileEntity.TITLE, "Miniature Alchemiter");
