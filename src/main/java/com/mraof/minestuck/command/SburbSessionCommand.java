@@ -21,15 +21,15 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 public class SburbSessionCommand
 {
-	public static final String SET_TITLE = "commands.minestuck.sburbsession.set_title";
-	public static final String SET_TERRAIN_LAND = "commands.minestuck.sburbsession.set_terrain_land";
-	public static final String SET_TITLE_LAND = "commands.minestuck.sburbsession.set_title_land";
-	public static final String DEFINE = "commands.minestuck.sburbsession.define";
+	public static final String SET_TITLE = "commands.minestuck.sburbpredefine.set_title";
+	public static final String SET_TERRAIN_LAND = "commands.minestuck.sburbpredefine.set_terrain_land";
+	public static final String SET_TITLE_LAND = "commands.minestuck.sburbpredefine.set_title_land";
+	public static final String DEFINE = "commands.minestuck.sburbpredefine.define";
 	private static final DynamicCommandExceptionType ANY_FAILURE = new DynamicCommandExceptionType(o -> (ITextComponent) o);
 	
 	public static void register(CommandDispatcher<CommandSource> dispatcher)
 	{
-		dispatcher.register(Commands.literal("sburbsession").requires(source -> source.hasPermissionLevel(2)).then(subCommandTitle()).then(subCommandTerrainLand()).then(subCommandTitleLand()).then(subCommandDefine()));
+		dispatcher.register(Commands.literal("sburbpredefine").requires(source -> source.hasPermissionLevel(2)).then(subCommandTitle()).then(subCommandTerrainLand()).then(subCommandTitleLand()).then(subCommandDefine()));
 	}
 	
 	private static ArgumentBuilder<CommandSource, ?> subCommandName()
