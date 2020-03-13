@@ -67,7 +67,7 @@ public class SburbPredefineCommand
 	
 	private static ArgumentBuilder<CommandSource, ?> subCommandDefine()
 	{
-		return Commands.literal("title").then(Commands.argument("player", EntityArgument.player()).then(Commands.argument("title", TitleArgument.title())
+		return Commands.literal("define").then(Commands.argument("player", EntityArgument.player()).then(Commands.argument("title", TitleArgument.title())
 				.then(Commands.argument("title_land", TitleLandTypeArgument.titleLandType()).then(Commands.argument("terrain_land", TerrainLandTypeArgument.terrainLandType())
 				.executes(context -> define(context.getSource(), EntityArgument.getPlayer(context, "player"), TitleArgument.get(context, "title"), TerrainLandTypeArgument.get(context, "terrain_land"), TitleLandTypeArgument.get(context, "title_land")))))));
 	}
