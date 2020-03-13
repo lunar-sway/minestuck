@@ -4,25 +4,35 @@ import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
+/**
+ * Acts as a pipeline and state holder for any {@link GeneratedCostProvider} back to {@link GristCostGenerator}.
+ */
 public class GenerationContext
 {
+	//This cache is only meant to help
+	private final HashMap<Item, GristSet> localCache = new HashMap<>();
 	private final BiFunction<Item, GenerationContext, GristSet> itemLookup;
 	private final boolean primary;
-	private boolean shouldUseCache = true;
+	private boolean shouldUseCache;
 	
 	GenerationContext(BiFunction<Item, GenerationContext, GristSet> itemLookup)
 	{
-		this(itemLookup, true, true);
+		this.itemLookup = itemLookup;
+		primary = true;
+		shouldUseCache = true;
 	}
 	
-	private GenerationContext(BiFunction<Item, GenerationContext, GristSet> itemLookup, boolean primary, boolean shouldUseCache)
+	private GenerationContext(GenerationContext parent)
 	{
-		this.itemLookup = itemLookup;
-		this.primary = primary;
-		this.shouldUseCache = shouldUseCache;
+		localCache.putAll(parent.localCache);
+		itemLookup = parent.itemLookup;
+		primary = false;
+		shouldUseCache = parent.shouldUseCache;
 	}
 	
 	public boolean isPrimary()
@@ -37,12 +47,19 @@ public class GenerationContext
 	
 	private GenerationContext nextGeneration()
 	{
-		return isPrimary() ? new GenerationContext(itemLookup, false, shouldUseCache) : this;
+		return new GenerationContext(this);
 	}
 	
 	public GristSet lookupCostFor(Item item)
 	{
-		return itemLookup.apply(item, nextGeneration());
+		if(!localCache.containsKey(item))
+		{
+			GristSet result = itemLookup.apply(item, nextGeneration());
+			
+			localCache.put(item, result);
+			
+			return result;
+		} else return localCache.get(item);
 	}
 	
 	public GristSet lookupCostFor(ItemStack stack)
@@ -57,7 +74,12 @@ public class GenerationContext
 		else
 		{
 			shouldUseCache = false;
+			Map<Item, GristSet> savedCache = new HashMap<>(localCache);
+			localCache.clear();
+			
 			S value = supplier.get();
+			
+			localCache.putAll(savedCache);
 			shouldUseCache = true;
 			return value;
 		}
