@@ -27,6 +27,8 @@ import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -38,6 +40,8 @@ import java.util.Map.Entry;
  */
 public final class SkaianetHandler
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	public static final String PRIVATE_COMPUTER = "minestuck.private_computer";
 	public static final String CLOSED_SERVER = "minestuck.closed_server_message";
 	public static final String STOP_RESUME = "minestuck.stop_resume_message";
@@ -543,8 +547,7 @@ public final class SkaianetHandler
 					if(sessionHandler.singleSession)
 					{
 						Debug.warnf("Failed to create connection: %s. Trying again with global session disabled for this world...", e.getMessage());
-						sessionHandler.singleSession = false;
-						sessionHandler.split();
+						sessionHandler.splitGlobalSession();
 						try
 						{
 							sessionHandler.onConnectionCreated(c);
@@ -667,8 +670,14 @@ public final class SkaianetHandler
 	{
 		if(nbt != null)
 		{
-			INSTANCE = new SkaianetHandler();
-			INSTANCE.read(nbt);
+			try
+			{
+				INSTANCE = new SkaianetHandler();
+				INSTANCE.read(nbt);
+			} catch(Exception e)
+			{
+				LOGGER.error("Caught unhandled exception while loading Skaianet:", e);
+			}
 		}
 	}
 	

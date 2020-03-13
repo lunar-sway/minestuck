@@ -60,10 +60,10 @@ public final class SessionHandler
 	
 	void onLoad()
 	{
-		singleSession = MinestuckConfig.globalSession.get();
-		if(!MinestuckConfig.globalSession.get()) {
-			split();
-		} else
+		singleSession = sessionsByName.containsKey(GLOBAL_SESSION_NAME) && sessions.size() == 1;	//TODO Make this into a saved property instead
+		if(singleSession && !MinestuckConfig.globalSession.get()) {
+			splitGlobalSession();
+		} else if(!singleSession && MinestuckConfig.globalSession.get())
 		{
 			mergeAll();
 		}
@@ -118,13 +118,14 @@ public final class SessionHandler
 	 * Used for the conversion of a global session world to
 	 * a non-global session.
 	 */
-	void split()
+	void splitGlobalSession()
 	{
 		if(MinestuckConfig.globalSession.get() || sessions.size() != 1)
 			return;
 		
 		Session s = getGlobalSession();
 		split(s);
+		singleSession = false;
 	}
 	
 	private void split(Session session)
