@@ -36,6 +36,8 @@ import java.util.function.Supplier;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public abstract class PlayerStatsScreen extends MinestuckScreen
 {
+	//TODO A better way of working with inventory-like guis like these?
+	public static final int WINDOW_ID_START = 105;	//Note that window ids used MUST be a byte. (that's how the window id is serialized in minecraft's packets)
 	
 	public static final ResourceLocation icons = new ResourceLocation("minestuck", "textures/gui/icons.png");
 	
@@ -279,8 +281,8 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 			if(ClientEditHandler.isActive() ? editmodeTab.isContainer : normalTab.isContainer)
 			{
 				int ordinal = (ClientEditHandler.isActive() ? editmodeTab : normalTab).ordinal();
-				int windowId = 200 + ordinal;//ContainerHandler.clientWindowIdStart + ordinal;
-				PlayerStatsContainerScreen containerScreen = (PlayerStatsContainerScreen) (ClientEditHandler.isActive() ? editmodeTab.createGuiInstance(windowId) : normalTab.createGuiInstance(windowId));
+				int windowId = WINDOW_ID_START + ordinal;
+				PlayerStatsContainerScreen<?> containerScreen = (PlayerStatsContainerScreen<?>) (ClientEditHandler.isActive() ? editmodeTab.createGuiInstance(windowId) : normalTab.createGuiInstance(windowId));
 				
 				mc.displayGuiScreen(containerScreen);
 				if(mc.currentScreen == containerScreen)

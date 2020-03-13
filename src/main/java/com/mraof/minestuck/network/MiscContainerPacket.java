@@ -1,5 +1,6 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.inventory.EditmodeContainer;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckContainer;
@@ -34,10 +35,10 @@ public class MiscContainerPacket implements PlayToServerPacket
 	{
 		if(ServerEditHandler.getData(player) == null)
 		{
-			player.openContainer = new CaptchaDeckContainer(200 + i, player.inventory);//ContainerHandler.windowIdStart + i;
+			player.openContainer = new CaptchaDeckContainer(PlayerStatsScreen.WINDOW_ID_START + i, player.inventory);//ContainerHandler.windowIdStart + i;
 		} else
 		{
-			player.openContainer = new EditmodeContainer(200 + i, player.inventory);
+			player.openContainer = new EditmodeContainer(PlayerStatsScreen.WINDOW_ID_START + i, player.inventory);
 		}
 		
 		player.addSelfToInternalCraftingInventory();
