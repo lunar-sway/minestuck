@@ -1,10 +1,12 @@
 package com.mraof.minestuck.item.crafting.alchemy.generator;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import net.minecraft.client.resources.ReloadListener;
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.profiler.IProfiler;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.server.MinecraftServer;
@@ -59,11 +61,10 @@ public final class GristCostGenerator extends ReloadListener<Void>
 			});
 		}
 		
-		GenerationContext context = new GenerationContext((item1, context1) -> lookupCost(item1, process, context1));
 		//Iterate through items
 		for(Item item : process.providersByItem.keySet())
 		{
-			lookupCost(item, process, context);
+			lookupCost(process, new GenerationContext(item, (context1) -> lookupCost(process, context1)));
 		}
 		
 		for(GeneratedCostProvider provider : process.providers)
@@ -78,8 +79,9 @@ public final class GristCostGenerator extends ReloadListener<Void>
 		}
 	}
 	
-	private GristSet lookupCost(Item item, GeneratorProcess process, GenerationContext context)
+	private GristSet lookupCost(GeneratorProcess process, GenerationContext context)
 	{
+		Item item = context.getCurrentItem();
 		GristCostResult cost = null;
 		if(!process.itemsInProcess.contains(item))
 		{

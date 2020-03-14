@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -14,25 +14,32 @@ import java.util.function.Supplier;
  */
 public class GenerationContext
 {
-	//This cache is only meant to help
+	private final Item itemGeneratedFor;
 	private final HashMap<Item, GristSet> localCache = new HashMap<>();
-	private final BiFunction<Item, GenerationContext, GristSet> itemLookup;
+	private final Function<GenerationContext, GristSet> itemLookup;
 	private final boolean primary;
 	private boolean shouldUseCache;
 	
-	GenerationContext(BiFunction<Item, GenerationContext, GristSet> itemLookup)
+	GenerationContext(Item itemGeneratedFor, Function<GenerationContext, GristSet> itemLookup)
 	{
+		this.itemGeneratedFor = itemGeneratedFor;
 		this.itemLookup = itemLookup;
 		primary = true;
 		shouldUseCache = true;
 	}
 	
-	private GenerationContext(GenerationContext parent)
+	private GenerationContext(Item itemGeneratedFor, GenerationContext parent)
 	{
+		this.itemGeneratedFor = itemGeneratedFor;
 		localCache.putAll(parent.localCache);
 		itemLookup = parent.itemLookup;
 		primary = false;
 		shouldUseCache = parent.shouldUseCache;
+	}
+	
+	public Item getCurrentItem()
+	{
+		return itemGeneratedFor;
 	}
 	
 	public boolean isPrimary()
@@ -45,16 +52,16 @@ public class GenerationContext
 		return shouldUseCache;
 	}
 	
-	private GenerationContext nextGeneration()
+	private GenerationContext nextGeneration(Item itemGeneratedFor)
 	{
-		return new GenerationContext(this);
+		return new GenerationContext(itemGeneratedFor, this);
 	}
 	
 	public GristSet lookupCostFor(Item item)
 	{
 		if(!localCache.containsKey(item))
 		{
-			GristSet result = itemLookup.apply(item, nextGeneration());
+			GristSet result = itemLookup.apply(nextGeneration(item));
 			
 			localCache.put(item, result);
 			
