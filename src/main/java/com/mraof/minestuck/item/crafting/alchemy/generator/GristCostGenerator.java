@@ -1,12 +1,10 @@
 package com.mraof.minestuck.item.crafting.alchemy.generator;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import net.minecraft.client.resources.ReloadListener;
 import net.minecraft.item.Item;
-import net.minecraft.item.Items;
 import net.minecraft.profiler.IProfiler;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.server.MinecraftServer;
@@ -83,22 +81,17 @@ public final class GristCostGenerator extends ReloadListener<Void>
 	{
 		Item item = context.getCurrentItem();
 		GristCostResult cost = null;
-		if(!process.itemsInProcess.contains(item))
+		List<GeneratedCostProvider> providers = process.providersByItem.getOrDefault(item, Collections.emptyList());
+		for(GeneratedCostProvider provider : providers)
 		{
-			process.itemsInProcess.add(item);
-			List<GeneratedCostProvider> providers = process.providersByItem.getOrDefault(item, Collections.emptyList());
-			for(GeneratedCostProvider provider : providers)
+			try
 			{
-				try
-				{
-					cost = provider.generate(item, cost, context);
-				} catch(Exception e)
-				{
-					LOGGER.error("Got exception from generated cost provider {} while generating for item {}:", provider, item, e);
-				}
+				cost = provider.generate(item, cost, context);
+			} catch(Exception e)
+			{
+				LOGGER.error("Got exception from generated cost provider {} while generating for item {}:", provider, item, e);
 			}
-			process.itemsInProcess.remove(item);
-		} //else LOGGER.debug("Got recursive call from generating grist cost for {}.", item);
+		}
 		
 		return cost != null ? cost.getCost() : null;
 	}
@@ -107,6 +100,5 @@ public final class GristCostGenerator extends ReloadListener<Void>
 	{
 		private final Map<Item, List<GeneratedCostProvider>> providersByItem = new HashMap<>();
 		private final Set<GeneratedCostProvider> providers = new HashSet<>();
-		private final Set<Item> itemsInProcess = new HashSet<>();
 	}
 }

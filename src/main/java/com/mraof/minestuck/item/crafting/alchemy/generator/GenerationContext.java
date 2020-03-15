@@ -15,6 +15,7 @@ import java.util.function.Supplier;
  */
 public class GenerationContext
 {
+	private final GenerationContext parent;
 	private final Item itemGeneratedFor;
 	private final HashMap<Item, GristSet> localCache = new HashMap<>();
 	private final Function<GenerationContext, GristSet> itemLookup;
@@ -23,6 +24,7 @@ public class GenerationContext
 	
 	GenerationContext(Item itemGeneratedFor, Function<GenerationContext, GristSet> itemLookup)
 	{
+		parent = null;
 		this.itemGeneratedFor = itemGeneratedFor;
 		this.itemLookup = itemLookup;
 		primary = true;
@@ -31,6 +33,7 @@ public class GenerationContext
 	
 	private GenerationContext(Item itemGeneratedFor, GenerationContext parent)
 	{
+		this.parent = parent;
 		this.itemGeneratedFor = itemGeneratedFor;
 		localCache.putAll(parent.localCache);
 		itemLookup = parent.itemLookup;
@@ -41,6 +44,11 @@ public class GenerationContext
 	private GenerationContext nextGeneration(Item itemGeneratedFor)
 	{
 		return new GenerationContext(itemGeneratedFor, this);
+	}
+	
+	private boolean isItemInProcess(Item item)
+	{
+		return item == getCurrentItem() || parent != null && parent.isItemInProcess(item);
 	}
 	
 	
@@ -90,6 +98,9 @@ public class GenerationContext
 	{
 		if(!localCache.containsKey(item))
 		{
+			if(isItemInProcess(item))
+				return null;
+			
 			GristSet result = itemLookup.apply(nextGeneration(item));
 			
 			localCache.put(item, result);
