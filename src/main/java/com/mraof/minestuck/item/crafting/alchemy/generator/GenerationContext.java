@@ -3,6 +3,7 @@ package com.mraof.minestuck.item.crafting.alchemy.generator;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,6 +38,12 @@ public class GenerationContext
 		shouldUseCache = parent.shouldUseCache;
 	}
 	
+	private GenerationContext nextGeneration(Item itemGeneratedFor)
+	{
+		return new GenerationContext(itemGeneratedFor, this);
+	}
+	
+	
 	public Item getCurrentItem()
 	{
 		return itemGeneratedFor;
@@ -52,9 +59,31 @@ public class GenerationContext
 		return shouldUseCache;
 	}
 	
-	private GenerationContext nextGeneration(Item itemGeneratedFor)
+	public GristSet costForIngredient(Ingredient ingredient, boolean removeContainerCost)
 	{
-		return new GenerationContext(itemGeneratedFor, this);
+		if(ingredient.test(ItemStack.EMPTY))
+			return GristSet.EMPTY;
+		
+		GristSet minCost = null;
+		for(ItemStack stack : ingredient.getMatchingStacks())
+		{
+			if(ingredient.test(new ItemStack(stack.getItem())))
+			{
+				GristSet cost;
+				if(removeContainerCost)
+					cost = costWithoutContainer(stack);
+				else cost = lookupCostFor(stack);
+				
+				if(cost != null && (minCost == null || cost.getValue() < minCost.getValue()))
+					minCost = cost;
+			}
+		}
+		return minCost;
+	}
+	
+	public GristSet lookupCostFor(ItemStack stack)
+	{
+		return lookupCostFor(stack.getItem());
 	}
 	
 	public GristSet lookupCostFor(Item item)
@@ -69,9 +98,22 @@ public class GenerationContext
 		} else return localCache.get(item);
 	}
 	
-	public GristSet lookupCostFor(ItemStack stack)
+	public GristSet costWithoutContainer(ItemStack stack)
 	{
-		return lookupCostFor(stack.getItem());
+		GristSet cost = lookupCostFor(stack);
+		
+		if(cost != null)
+		{
+			ItemStack container = stack.getContainerItem();
+			if(!container.isEmpty())
+			{
+				GristSet containerCost = lookupCostFor(container);
+				if(containerCost != null)
+					return containerCost.copy().scale(-1).addGrist(cost);
+				else return null;
+			}
+		}
+		return cost;
 	}
 	
 	public <S> S withoutCache(Supplier<S> supplier)

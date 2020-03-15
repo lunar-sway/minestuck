@@ -290,6 +290,7 @@ public class RecipeGeneratedCostHandler extends ReloadListener<List<RecipeGenera
 		}
 	}
 	
+	@Deprecated
 	public interface IngredientLookup
 	{
 		GristSet lookup(Ingredient ingredient, boolean removeContainerCost);

@@ -4,9 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.Ingredient;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -85,47 +83,12 @@ class RecipeGeneratedCostProcess
 	{
 		try
 		{
-			return interpreter.generateCost(recipe, item, (ingredient, removeContainer) -> costForIngredient(ingredient, removeContainer, context));
+			return interpreter.generateCost(recipe, item, context);
 		} catch(Exception e)
 		{
 			LOGGER.error("Got exception while getting cost for recipe {}", recipe.getId(), e);
 			return null;
 		}
-	}
-	
-	private GristSet costForIngredient(Ingredient ingredient, boolean removeContainerCost, GenerationContext context)
-	{
-		if(ingredient.test(ItemStack.EMPTY))
-			return GristSet.EMPTY;
-		
-		GristSet minCost = null;
-		for(ItemStack stack : ingredient.getMatchingStacks())
-		{
-			if(ingredient.test(new ItemStack(stack.getItem())))
-			{
-				GristSet cost = context.lookupCostFor(stack.getItem());
-				
-				if(removeContainerCost && cost != null)
-					cost = removeContainerCost(stack, cost, context);
-				
-				if(cost != null && (minCost == null || cost.getValue() < minCost.getValue()))
-					minCost = cost;
-			}
-		}
-		return minCost;
-	}
-	
-	private GristSet removeContainerCost(ItemStack stack, GristSet cost, GenerationContext context)
-	{
-		ItemStack container = stack.getContainerItem();
-		if(!container.isEmpty())
-		{
-			GristSet containerCost = context.lookupCostFor(container);
-			if(containerCost != null)
-				return containerCost.copy().scale(-1).addGrist(cost);
-			else return null;
-		}
-		return cost;
 	}
 	
 	private void checkRecipeLogging(Item item, GristSet cost, GenerationContext context)
