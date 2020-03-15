@@ -70,7 +70,7 @@ public class GateTileEntity extends TileEntity
 	@Override
 	public CompoundNBT getUpdateTag()
 	{
-		CompoundNBT nbt = new CompoundNBT();
+		CompoundNBT nbt = super.getUpdateTag();
 		nbt.putInt("color", ColorHandler.getColorForDimension((ServerWorld) world));
 		return nbt;
 	}
