@@ -51,6 +51,11 @@ public class GenerationContext
 		return item == getCurrentItem() || parent != null && parent.isItemInProcess(item);
 	}
 	
+	private boolean testWithGeneratedItems(Ingredient ingredient)
+	{
+		return ingredient.test(new ItemStack(itemGeneratedFor)) || parent != null && parent.testWithGeneratedItems(ingredient);
+	}
+	
 	
 	public Item getCurrentItem()
 	{
@@ -71,6 +76,9 @@ public class GenerationContext
 	{
 		if(ingredient.test(ItemStack.EMPTY))
 			return GristSet.EMPTY;
+		
+		if(testWithGeneratedItems(ingredient))
+			return null;	//If the ingredient tests positive for an item already in generation, prevent recursion and return a null grist cost
 		
 		GristSet minCost = null;
 		for(ItemStack stack : ingredient.getMatchingStacks())
