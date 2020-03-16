@@ -59,6 +59,7 @@ public final class GristCostGenerator extends ReloadListener<Void>
 			});
 		}
 		
+		LOGGER.debug("Starting grist cost generation");
 		//Iterate through items
 		for(Item item : process.providersByItem.keySet())
 		{
@@ -75,6 +76,7 @@ public final class GristCostGenerator extends ReloadListener<Void>
 				LOGGER.error("Got exception while building generated cost provider {}:", provider, e);
 			}
 		}
+		LOGGER.debug("Finished grist cost generation");
 	}
 	
 	private GristSet lookupCost(GeneratorProcess process, GenerationContext context)
