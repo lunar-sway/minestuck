@@ -942,7 +942,7 @@ public abstract class MessageType
 				return message.getMessage(consort, player, chainIdentifier);
 			} else
 			{
-				player.sendMessage(createMessage(consort, player, "cantAfford", new String[0], false));
+				player.sendMessage(createMessage(consort, player, "cant_afford", new String[0], false));
 				
 				return null;
 			}
