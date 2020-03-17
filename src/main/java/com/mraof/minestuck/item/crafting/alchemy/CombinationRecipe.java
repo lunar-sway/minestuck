@@ -2,6 +2,7 @@ package com.mraof.minestuck.item.crafting.alchemy;
 
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
+import com.mraof.minestuck.jei.JeiCombination;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
@@ -13,6 +14,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.List;
 
 public class CombinationRecipe extends AbstractCombinationRecipe
 {
@@ -46,6 +49,12 @@ public class CombinationRecipe extends AbstractCombinationRecipe
 	public ItemStack getRecipeOutput()
 	{
 		return output.copy();
+	}
+	
+	@Override
+	public List<JeiCombination> getJeiCombinations()
+	{
+		return Collections.singletonList(new JeiCombination(input1, input2, output, mode));
 	}
 	
 	@Override
