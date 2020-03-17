@@ -26,9 +26,11 @@ public class TitleArgument implements ArgumentType<Title>
 {
 	private static final List<String> EXAMPLES = Arrays.asList("heir light", "bard void", "lord doom");
 	public static final String INCOMPLETE = "argument.title.incomplete";
-	public static final String INVALID = "argument.title.invalid";
-	public static final SimpleCommandExceptionType PAIR_INCOMPLETE = new SimpleCommandExceptionType(new TranslationTextComponent(INCOMPLETE));
-	public static final DynamicCommandExceptionType INVALID_TYPE = new DynamicCommandExceptionType(o -> new TranslationTextComponent(INVALID, o));
+	public static final String INVALID_CLASS = "argument.title.invalid_class";
+	public static final String INVALID_ASPECT = "argument.title.invalid_aspect";
+	private static final SimpleCommandExceptionType PAIR_INCOMPLETE = new SimpleCommandExceptionType(new TranslationTextComponent(INCOMPLETE));
+	private static final DynamicCommandExceptionType INVALID_CLASS_TYPE = new DynamicCommandExceptionType(o -> new TranslationTextComponent(INVALID_CLASS, o));
+	private static final DynamicCommandExceptionType INVALID_ASPECT_TYPE = new DynamicCommandExceptionType(o -> new TranslationTextComponent(INVALID_ASPECT, o));
 	
 	public static TitleArgument title()
 	{
@@ -44,14 +46,14 @@ public class TitleArgument implements ArgumentType<Title>
 		String className = reader.readUnquotedString();
 		EnumClass c = EnumClass.fromString(className);
 		if(c == null)
-			throw INVALID_TYPE.createWithContext(reader, className);
+			throw INVALID_CLASS_TYPE.createWithContext(reader, className);
 		if(reader.canRead() && reader.peek() == ' ')
 		{
 			reader.skip();
 			String aspectName = reader.readUnquotedString();
 			EnumAspect a = EnumAspect.fromString(aspectName);
 			if(a == null)
-				throw INVALID_TYPE.createWithContext(reader, aspectName);
+				throw INVALID_ASPECT_TYPE.createWithContext(reader, aspectName);
 			return new Title(c, a);
 		} else throw PAIR_INCOMPLETE.createWithContext(reader);
 	}

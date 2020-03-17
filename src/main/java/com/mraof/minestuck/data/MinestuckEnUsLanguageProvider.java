@@ -10,8 +10,7 @@ import com.mraof.minestuck.client.gui.playerStats.*;
 import com.mraof.minestuck.client.settings.MSKeyHandler;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.command.*;
-import com.mraof.minestuck.command.argument.GristSetArgument;
-import com.mraof.minestuck.command.argument.GristTypeArgument;
+import com.mraof.minestuck.command.argument.*;
 import com.mraof.minestuck.computer.ButtonListProgram;
 import com.mraof.minestuck.computer.SburbClient;
 import com.mraof.minestuck.computer.SburbServer;
@@ -29,6 +28,7 @@ import com.mraof.minestuck.jei.JeiGristCost;
 import com.mraof.minestuck.network.EffectTogglePacket;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.MergeResult;
+import com.mraof.minestuck.skaianet.PredefineData;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.*;
 import com.mraof.minestuck.world.GateHandler;
@@ -1036,9 +1036,26 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SburbConnectionCommand.SUCCESS, "Successfully set %s's server player as %s");
 		add(SburbConnectionCommand.LOCKED, "Their session is locked, and should no longer be modified");
 		add(SburbConnectionCommand.ALREADY_CONNECTED, "Those players have already been connected");
+		add(DebugLandsCommand.MUST_ENTER, "You must have entered before you can create debug lands");
+		add(SburbPredefineCommand.SET_TITLE, "Predefined %s's title as %s");
+		add(SburbPredefineCommand.SET_TERRAIN_LAND, "Predefined %s's terrain land type");
+		add(SburbPredefineCommand.SET_TITLE_LAND, "Predefined %s's title land type");
+		add(SburbPredefineCommand.DEFINE, "Predefined full data for %s");
 		add(GristTypeArgument.INVALID, "Invalid grist type %s");
 		add(GristSetArgument.INCOMPLETE, "Incomplete (expected pairs of integers and grist types)");
 		add(GristSetArgument.DUPLICATE, "Duplicate grist type %s");
+		add(TitleArgument.INVALID_CLASS, "Invalid class %s");
+		add(TitleArgument.INVALID_ASPECT, "Invalid aspect %s");
+		add(TitleArgument.INCOMPLETE, "Incomplete (expected a class and an aspect)");
+		add(TitleLandTypeArgument.INVALID, "Invalid title land type %s");
+		add(TerrainLandTypeArgument.INVALID, "Invalid terrain land type %s");
+		add(LandTypePairArgument.INCOMPLETE, "Incomplete (expected two land aspects)");
+		
+		add(PredefineData.TITLE_ALREADY_SET, "That player already has their title set to %s");
+		add(PredefineData.TITLE_ALREADY_USED, "The title %s is already used in that players session");
+		add(PredefineData.RESETTING_TERRAIN_TYPE, "The currently set terrain type %s is not compatible with land type, and will be reset");
+		add(PredefineData.INCOMPATIBLE_LAND, "The currently predefined title land type %s does not allow this terrain type");
+		add(PredefineData.INVALID_LAND_ORDER, "The title land type has to be predefined before the terrain land type");
 		
 		add(JeiGristCost.GRIST_COSTS, "Grist Costs");
 		
@@ -1453,7 +1470,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addEntitySubtitles(MSEntityTypes.FROG, "ambient", "Frog croaks");
 		addEntitySubtitles(MSEntityTypes.FROG, "hurt", "Frog hurts");
 		addEntitySubtitles(MSEntityTypes.FROG, "death", "Frog dies");
-		addEntitySubtitles(MSEntityTypes.IMP, "screech", "Imp screeches");
+		addEntitySubtitles(MSEntityTypes.IMP, "ambient", "Imp screeches");
 		addEntitySubtitles(MSEntityTypes.IMP, "hurt", "Imp hurts");
 		addEntitySubtitles(MSEntityTypes.IMP, "death", "Imp dies");
 		addEntitySubtitles(MSEntityTypes.OGRE, "ambient", "Ogre grunts");

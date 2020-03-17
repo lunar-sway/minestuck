@@ -62,7 +62,7 @@ public final class PredefineData
 	public void predefineTitle(@Nonnull Title title, CommandSource source) throws SkaianetException
 	{
 		if(title.equals(this.title))
-			throw new SkaianetException(TITLE_ALREADY_SET, title.asTextComponent());
+			throw new SkaianetException(TITLE_ALREADY_SET, title.asTextComponent());	//TODO when predefining with define, you wouldn't want this exception to get in the way. Fix this.
 		if(session.isTitleUsed(title))
 			throw new SkaianetException(TITLE_ALREADY_USED, title.asTextComponent());
 		else	//TODO Take a look at the title land type and warn if it's not connected to the set land type

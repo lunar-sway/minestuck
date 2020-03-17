@@ -11,8 +11,8 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 public class LandTypePairArgument implements ArgumentType<LandTypePair>
 {
-	public static final String INCOMPLETE = "argument.grist_set.incomplete";
-	public static final SimpleCommandExceptionType PAIR_INCOMPLETE = new SimpleCommandExceptionType(new TranslationTextComponent(INCOMPLETE));
+	public static final String INCOMPLETE = "argument.land_types.incomplete";
+	private static final SimpleCommandExceptionType PAIR_INCOMPLETE = new SimpleCommandExceptionType(new TranslationTextComponent(INCOMPLETE));
 	
 	private static final TerrainLandTypeArgument TERRAIN_ARGUMENT = TerrainLandTypeArgument.terrainLandType();
 	private static final TitleLandTypeArgument TITLE_ARGUMENT = TitleLandTypeArgument.titleLandType();
