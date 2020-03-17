@@ -40,7 +40,8 @@ public final class SburbConnection
 	private boolean isActive;
 	private boolean isMain;
 	boolean canSplit;	//TODO invert and rename to lockedToSession or something like that
-	private LandInfo clientLandInfo;
+	private boolean hasEntered = false;	//If the player has entered. Is set to true after entry has finished
+	private LandInfo clientLandInfo;	//The land info for this client player. This is initialized in preparation for entry
 	int artifactType;
 	
 	private final Set<String> givenItemList = new HashSet<>();
@@ -102,6 +103,7 @@ public final class SburbConnection
 		{
 			clientLandInfo = LandInfo.read(nbt.getCompound("ClientLand"), handler, getClientIdentifier());
 			handler.updateLandMaps(this);
+			hasEntered = nbt.contains("has_entered") ? nbt.getBoolean("has_entered") : true;
 		}
 		artifactType = nbt.getInt("artifact");
 	}
@@ -125,6 +127,7 @@ public final class SburbConnection
 			if(clientLandInfo != null)
 			{
 				nbt.put("ClientLand", clientLandInfo.write(new CompoundNBT()));
+				nbt.putBoolean("has_entered", hasEntered);
 			}
 		}
 		
@@ -215,7 +218,7 @@ public final class SburbConnection
 	
 	public boolean hasEntered()
 	{
-		return clientLandInfo != null;
+		return hasEntered;
 	}
 	public Title getClientTitle()
 	{
@@ -249,6 +252,14 @@ public final class SburbConnection
 			handler.updateLandMaps(this);
 		}
 	}
+	void setHasEntered()
+	{
+		if(clientLandInfo == null)
+			throw new IllegalStateException("Land has not been initiated, can't have entered now!");
+		if(hasEntered)
+			throw new IllegalStateException("Can't have entered twice");
+		hasEntered = true;
+	}
 	@Deprecated
 	public boolean hasGivenItem(String item) { return givenItemList.contains(item); }
 	public boolean hasGivenItem(DeployEntry item) { return givenItemList.contains(item.getName()); }
@@ -269,6 +280,7 @@ public final class SburbConnection
 		centerX = other.centerX;
 		centerZ = other.centerZ;
 		clientLandInfo = other.clientLandInfo;
+		hasEntered = other.hasEntered;
 		artifactType = other.artifactType;
 		if(other.inventory != null)
 			inventory = other.inventory.copy();

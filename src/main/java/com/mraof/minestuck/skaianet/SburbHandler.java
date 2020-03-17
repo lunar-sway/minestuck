@@ -587,7 +587,7 @@ public final class SburbHandler
 		
 	}
 	
-	static void enterMedium(MinecraftServer mcServer, SburbConnection c)
+	static void prepareEntry(MinecraftServer mcServer, SburbConnection c)
 	{
 		PlayerIdentifier identifier = c.getClientIdentifier();
 		
@@ -597,8 +597,10 @@ public final class SburbHandler
 		c.setLand(landTypes, dimType);
 	}
 	
-	static void onGameEntered(MinecraftServer server, SburbConnection c)
+	static void onEntry(MinecraftServer server, SburbConnection c)
 	{
+		c.setHasEntered();
+		
 		SessionHandler.get(server).getPlayerSession(c.getClientIdentifier()).checkIfCompleted(SessionHandler.get(server).singleSession);
 		
 		ServerPlayerEntity player = c.getClientIdentifier().getPlayer(server);

@@ -572,7 +572,7 @@ public final class SkaianetHandler
 		else if(c.getClientDimension() != null)
 			return c.getClientDimension();
 		
-		SburbHandler.enterMedium(mcServer, c);
+		SburbHandler.prepareEntry(mcServer, c);
 		
 		return c.getClientDimension();
 	}
@@ -583,6 +583,9 @@ public final class SkaianetHandler
 		MSDimensionTypes.LANDS.dimToLandTypes.put(connection.getLandInfo().getDimensionName(), connection.getLandInfo().getLazyLandAspects());
 	}
 	
+	/**
+	 * Called when entry teleportation has successfully finished.
+	 */
 	public void onEntry(PlayerIdentifier target)
 	{
 		SburbConnection c = getMainConnection(target, true);
@@ -592,7 +595,7 @@ public final class SkaianetHandler
 			return;
 		}
 		
-		SburbHandler.onGameEntered(mcServer, c);
+		SburbHandler.onEntry(mcServer, c);
 		
 		c.centerX = 0;
 		c.centerZ = 0;
