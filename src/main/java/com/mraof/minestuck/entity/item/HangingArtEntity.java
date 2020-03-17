@@ -125,13 +125,13 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 	@Override
 	public int getWidthPixels()
 	{
-		return art.getSizeX();
+		return art == null ? 1 : art.getSizeX();
 	}
 	
 	@Override
 	public int getHeightPixels()
 	{
-		return art.getSizeY();
+		return art == null ? 1 : art.getSizeY();
 	}
 	
 	@Override
