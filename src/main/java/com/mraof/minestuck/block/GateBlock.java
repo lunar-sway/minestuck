@@ -18,7 +18,6 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
 
@@ -89,14 +88,9 @@ public class GateBlock extends Block
 			
 			if(mainPos != null)
 			{
-				if(entityIn.timeUntilPortal != 0)
-				{
-					entityIn.timeUntilPortal = entityIn.getPortalCooldown();
-					return;
-				}
 				TileEntity te = worldIn.getTileEntity(mainPos);
 				if(te instanceof GateTileEntity)
-					((GateTileEntity) te).teleportEntity((ServerWorld) worldIn, (ServerPlayerEntity) entityIn, this);
+					((GateTileEntity) te).onCollision();
 			} else worldIn.removeBlock(pos, false);
 		}
 	}

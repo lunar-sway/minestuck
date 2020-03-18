@@ -9,16 +9,20 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.server.ServerWorld;
 
-public class GateTileEntity extends TileEntity
+import java.util.List;
+
+public class GateTileEntity extends TileEntity implements ITickableTileEntity
 {
 	//Only used client-side
 	public int color;
+	private boolean hasCollisions = false;
 	
 	public GateHandler.Type gateType;
 	
@@ -27,7 +31,13 @@ public class GateTileEntity extends TileEntity
 		super(MSTileEntityTypes.GATE);
 	}
 	
-	public void teleportEntity(ServerWorld world, ServerPlayerEntity player, Block block)
+	//When a player collides with a block, they are in the middle of moving, so it would be wiser to wait and teleport any players during world tick instead
+	public void onCollision()
+	{
+		hasCollisions = true;
+	}
+	
+	private void teleportEntity(ServerWorld world, ServerPlayerEntity player, Block block)
 	{
 		if(block == MSBlocks.RETURN_NODE)
 		{
@@ -41,6 +51,27 @@ public class GateTileEntity extends TileEntity
 		} else
 		{
 			GateHandler.teleport(gateType, world, player);
+		}
+	}
+	
+	@Override
+	public void tick()
+	{
+		if(hasCollisions && world instanceof ServerWorld)
+		{
+			AxisAlignedBB boundingBox;
+			if(getBlockState().getBlock() == MSBlocks.RETURN_NODE)
+				boundingBox = new AxisAlignedBB(pos.getX() - 1, pos.getY() + 7D/16, pos.getZ() - 1, pos.getX() + 1, pos.getY() + 9D/16, pos.getZ() + 1);
+			else boundingBox = new AxisAlignedBB(pos.getX(), pos.getY() + 7D/16, pos.getZ(), pos.getX() + 1, pos.getY() + 9D/16, pos.getZ() + 1);
+			
+			List<ServerPlayerEntity> players = world.getEntitiesWithinAABB(ServerPlayerEntity.class, boundingBox, player -> !player.isSpectator() && !player.isPassenger() && !player.isBeingRidden());
+			for(ServerPlayerEntity player : players)
+			{
+				if(player.timeUntilPortal != 0)
+					player.timeUntilPortal = player.getPortalCooldown();
+				else teleportEntity((ServerWorld) world, player, getBlockState().getBlock());
+			}
+			hasCollisions = false;
 		}
 	}
 	
