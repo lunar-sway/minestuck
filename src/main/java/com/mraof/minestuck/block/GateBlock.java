@@ -76,7 +76,7 @@ public class GateBlock extends Block
 	@SuppressWarnings("deprecation")
 	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn)
 	{
-		if(entityIn instanceof ServerPlayerEntity && !entityIn.isPassenger() && !entityIn.isBeingRidden())
+		if(entityIn instanceof ServerPlayerEntity)
 		{
 			BlockPos mainPos = pos;
 			if(!state.get(MAIN))
@@ -90,7 +90,7 @@ public class GateBlock extends Block
 			{
 				TileEntity te = worldIn.getTileEntity(mainPos);
 				if(te instanceof GateTileEntity)
-					((GateTileEntity) te).onCollision();
+					((GateTileEntity) te).onCollision((ServerPlayerEntity) entityIn);
 			} else worldIn.removeBlock(pos, false);
 		}
 	}
