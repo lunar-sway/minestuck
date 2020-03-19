@@ -33,9 +33,10 @@ public class TransportalizerScreen extends Screen
 	public void init()
 	{
 		int yOffset = (this.height / 2) - (guiHeight / 2);
-		this.destinationTextField = new TextFieldWidget(this.font, this.width / 2 - 20, yOffset + 25, 40, 20, this.te.getDestId());
+		this.destinationTextField = new TextFieldWidget(this.font, this.width / 2 - 20, yOffset + 25, 40, 20, "Transportalizer destination code");	//TODO Use translation instead, and maybe look at other text fields for what the text should be
 		this.destinationTextField.setMaxStringLength(4);
-		//this.destinationTextField.setFocused(true);
+		this.destinationTextField.setText(te.getDestId());
+		this.destinationTextField.setFocused2(true);
 		addButton(destinationTextField);
 		
 		addButton(new GuiButtonExt(this.width / 2 - 20, yOffset + 50, 40, 20, I18n.format("gui.done"), button -> finish()));
