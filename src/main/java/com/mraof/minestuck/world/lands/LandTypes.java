@@ -3,9 +3,9 @@ package com.mraof.minestuck.world.lands;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.MSDimensionTypes;
 import com.mraof.minestuck.world.lands.terrain.*;
 import com.mraof.minestuck.world.lands.title.*;
@@ -176,13 +176,13 @@ public class LandTypes
 		TitleLandType landAspect;
 		if(aspectTerrain != null)
 		{
-			landAspect = selectRandomAspect(usedAspects, titleGroupMap, aspect -> aspect.getType() == titleAspect && aspect.isAspectCompatible(aspectTerrain));
+			landAspect = selectRandomAspect(usedAspects, titleGroupMap, aspect -> aspect.getAspect() == titleAspect && aspect.isAspectCompatible(aspectTerrain));
 			if(landAspect == null)
 			{
 				Debug.warnf("Failed to find a title land aspect compatible with land aspect \"%s\". Forced to use a poorly compatible land aspect instead.", aspectTerrain.getRegistryName());
-				landAspect = selectRandomAspect(usedAspects, titleGroupMap, aspect -> aspect.getType() == titleAspect);
+				landAspect = selectRandomAspect(usedAspects, titleGroupMap, aspect -> aspect.getAspect() == titleAspect);
 			}
-		} else landAspect = selectRandomAspect(usedAspects, titleGroupMap, aspect -> aspect.getType() == titleAspect);
+		} else landAspect = selectRandomAspect(usedAspects, titleGroupMap, aspect -> aspect.getAspect() == titleAspect);
 		
 		if(landAspect != null)
 			return landAspect;

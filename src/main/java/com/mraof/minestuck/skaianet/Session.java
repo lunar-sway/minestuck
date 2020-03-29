@@ -152,16 +152,24 @@ public final class Session
 	
 	Set<Title> getUsedTitles()
 	{
+		return getUsedTitles(null);
+	}
+	
+	Set<Title> getUsedTitles(PlayerIdentifier ignore)
+	{
 		Set<Title> titles = new HashSet<>();
 		for(SburbConnection c : connections)
 		{
-			Title title = c.getClientTitle();
-			if(title != null)
-				titles.add(title);
+			if(!c.getClientIdentifier().equals(ignore))
+			{
+				Title title = c.getClientTitle();
+				if(title != null)
+					titles.add(title);
+			}
 		}
 		
 		for(PredefineData data : predefinedPlayers.values())
-			if(data.getTitle() != null)
+			if(!data.getPlayer().equals(ignore) && data.getTitle() != null)
 				titles.add(data.getTitle());
 		
 		return titles;
@@ -170,8 +178,8 @@ public final class Session
 	public void predefineCall(PlayerIdentifier player, SkaianetException.SkaianetConsumer<PredefineData> consumer) throws SkaianetException
 	{
 		PredefineData data = predefinedPlayers.get(player);
-		if(data == null)
-			data = new PredefineData(this);
+		if(data == null)	//TODO Do not create data for players that have entered (and clear predefined data when no longer needed)
+			data = new PredefineData(player, this);
 		consumer.consume(data);
 		predefinedPlayers.put(player, data);
 	}
@@ -229,16 +237,8 @@ public final class Session
 			for(int i = 0; i < list.size(); i++)
 			{
 				CompoundNBT compound = list.getCompound(i);
-				s.predefinedPlayers.put(IdentifierHandler.load(compound, "player"), new PredefineData(s).read(compound));
-			}
-		} else
-		{	//Support for saves from older minestuck versions
-			CompoundNBT predefineTag = nbt.getCompound("predefinedPlayers");
-			for(String player : predefineTag.keySet())
-			{
-				CompoundNBT compound = new CompoundNBT();
-				compound.putString("player", player);
-				s.predefinedPlayers.put(IdentifierHandler.load(compound, "player"), new PredefineData(s).read(predefineTag.getCompound(player)));
+				PlayerIdentifier player = IdentifierHandler.load(compound, "player");
+				s.predefinedPlayers.put(player, new PredefineData(player, s).read(compound));
 			}
 		}
 		

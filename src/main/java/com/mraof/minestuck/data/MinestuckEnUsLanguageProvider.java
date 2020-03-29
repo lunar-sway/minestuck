@@ -27,6 +27,7 @@ import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.jei.JeiGristCost;
 import com.mraof.minestuck.network.EffectTogglePacket;
 import com.mraof.minestuck.player.*;
+import com.mraof.minestuck.skaianet.Generator;
 import com.mraof.minestuck.skaianet.MergeResult;
 import com.mraof.minestuck.skaianet.PredefineData;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
@@ -1014,6 +1015,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MergeResult.MERGED_SESSION_FULL, "Too many players in total in both player's sessions");
 		add(MergeResult.BOTH_CUSTOM, "Can't merge two custom sessions");
 		add(MergeResult.GENERIC_FAIL, "Merge failed");
+		add(Generator.NO_AVAILABLE_TITLES, "No title was available to generate under current circumstances.");
 		
 		add(CheckLandCommand.CHECK, "You are currently in %s.");
 		add(CheckLandCommand.FAIL, "You are currently not in a land dimension.");

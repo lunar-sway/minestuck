@@ -1248,6 +1248,7 @@
   "minestuck.session.merge.locked": "Either session is locked",
   "minestuck.session.merge.merged_session_full": "Too many players in total in both player's sessions",
   "minestuck.session.merge.server_session_full": "Server player's session is full",
+  "minestuck.skaianet.no_available_titles": "No title was available to generate under current circumstances.",
   "minestuck.stop_resume_message": "Stopped resuming",
   "minestuck.strife_specibus": "Strife Specibus",
   "minestuck.sylladex": "Sylladex",
