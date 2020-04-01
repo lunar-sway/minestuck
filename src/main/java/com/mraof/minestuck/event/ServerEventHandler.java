@@ -203,14 +203,4 @@ public class ServerEventHandler
 				data.getTitle().handleAspectEffects((ServerPlayerEntity) event.player);
 		}
 	}
-	
-	
-	@SubscribeEvent
-	public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
-	{
-		ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
-		
-		SkaianetHandler.get(player.server).playerConnected(player);
-	}
-	
 }

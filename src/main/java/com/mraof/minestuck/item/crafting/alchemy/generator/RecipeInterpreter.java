@@ -10,7 +10,16 @@ public interface RecipeInterpreter
 {
 	List<Item> getOutputItems(IRecipe<?> recipe);
 	
-	GristSet generateCost(IRecipe<?> recipe, Item output, RecipeGeneratedCostHandler.IngredientLookup ingredientInterpreter);
+	default GristSet generateCost(IRecipe<?> recipe, Item output, GenerationContext context)
+	{
+		return generateCost(recipe, output, context::costForIngredient);
+	}
+	
+	@Deprecated	//Use the function with the context instead
+	default GristSet generateCost(IRecipe<?> recipe, Item output, RecipeGeneratedCostHandler.IngredientLookup ingredientInterpreter)
+	{
+		return null;
+	}
 	
 	InterpreterSerializer<?> getSerializer();
 }

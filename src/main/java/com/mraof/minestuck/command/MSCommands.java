@@ -18,13 +18,12 @@ public class MSCommands
 		CheckLandCommand.register(dispatcher);
 		GristCommand.register(dispatcher);
 		SendGristCommand.register(dispatcher);
-		CommandTransportalizer.register(dispatcher);
-		CommandSburbSession.register(dispatcher);
-		CommandSburbServer.register(dispatcher);
-		CommandSetRung.register(dispatcher);
+		TransportalizerCommand.register(dispatcher);
+		SburbPredefineCommand.register(dispatcher);
+		SburbConnectionCommand.register(dispatcher);
+		SetRungCommand.register(dispatcher);
 		ConsortReplyCommand.register(dispatcher);
-		CommandToStructure.register(dispatcher);
-		CommandPorkhollow.register(dispatcher);
-		CommandLandDebug.register(dispatcher);
+		PorkhollowCommand.register(dispatcher);
+		DebugLandsCommand.register(dispatcher);
 	}
 }

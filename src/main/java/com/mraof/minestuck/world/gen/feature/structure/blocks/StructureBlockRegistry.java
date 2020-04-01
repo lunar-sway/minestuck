@@ -27,6 +27,7 @@ public final class StructureBlockRegistry
 		registerBlock(name, defaultBlock, Block.class);
 	}
 	
+	//TODO With async modloading, perhaps we should synchronize this in some way?
 	public static void registerBlock(String name, BlockState defaultBlock, Class<? extends Block> extention)
 	{
 		if(defaultBlock == null || name == null)
@@ -66,7 +67,7 @@ public final class StructureBlockRegistry
 		templateBlockMap.put(templateState, name);
 	}
 	
-	static
+	static	//TODO Use public static final Strings as a standard for names to reduce risk of typos
 	{
 		registerBlock("cruxite_ore", MSBlocks.STONE_CRUXITE_ORE.getDefaultState());
 		registerBlock("uranium_ore", MSBlocks.STONE_URANIUM_ORE.getDefaultState());

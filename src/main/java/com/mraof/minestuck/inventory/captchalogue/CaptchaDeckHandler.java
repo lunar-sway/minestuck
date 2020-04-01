@@ -124,7 +124,6 @@ public class CaptchaDeckHandler
 		{
 			ItemStack content = AlchemyHelper.getDecodedItem(stack, true);
 			
-			System.out.println(content);
 			int failed = 0;
 			for(int i = 0; i < stack.getCount(); i++)
 				if(!modus.increaseSize(player))

@@ -1,9 +1,13 @@
 package com.mraof.minestuck.item.crafting.alchemy;
 
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
+import com.mraof.minestuck.jei.JeiCombination;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.util.ResourceLocation;
+
+import java.util.Collections;
+import java.util.List;
 
 public abstract class AbstractCombinationRecipe implements IRecipe<ItemCombiner>
 {
@@ -30,5 +34,10 @@ public abstract class AbstractCombinationRecipe implements IRecipe<ItemCombiner>
 	public IRecipeType<?> getType()
 	{
 		return MSRecipeTypes.COMBINATION_TYPE;
+	}
+	
+	public List<JeiCombination> getJeiCombinations()
+	{
+		return Collections.emptyList();
 	}
 }

@@ -159,8 +159,7 @@ public class HolopadTileEntity extends TileEntity
 	@Override
 	public CompoundNBT getUpdateTag()
 	{
-		CompoundNBT nbt;
-		nbt = super.getUpdateTag();
+		CompoundNBT nbt = super.getUpdateTag();
 		nbt.put("card", card.write(new CompoundNBT()));
 		return nbt;
 	}

@@ -10,6 +10,7 @@ import com.mraof.minestuck.client.gui.playerStats.*;
 import com.mraof.minestuck.client.settings.MSKeyHandler;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.command.*;
+import com.mraof.minestuck.command.argument.*;
 import com.mraof.minestuck.computer.ButtonListProgram;
 import com.mraof.minestuck.computer.SburbClient;
 import com.mraof.minestuck.computer.SburbServer;
@@ -26,7 +27,8 @@ import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.jei.JeiGristCost;
 import com.mraof.minestuck.network.EffectTogglePacket;
 import com.mraof.minestuck.player.*;
-import com.mraof.minestuck.skaianet.SessionHandler;
+import com.mraof.minestuck.skaianet.MergeResult;
+import com.mraof.minestuck.skaianet.PredefineData;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.*;
 import com.mraof.minestuck.world.GateHandler;
@@ -114,7 +116,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.MOSSY_PINK_STONE_BRICKS, "Mossy Pink Stone Bricks");
 		add(MSBlocks.DENSE_CLOUD, "Dense Cloud");
 		add(MSBlocks.BRIGHT_DENSE_CLOUD, "Bright Dense Cloud");
-		add(MSBlocks.SUGAR_CUBE, "Cugar Cube");
+		add(MSBlocks.SUGAR_CUBE, "Sugar Cube");
 		add(MSBlocks.GLOWING_LOG, "Glowing Log");
 		add(MSBlocks.FROST_LOG, "Frost Log");
 		add(MSBlocks.RAINBOW_LOG, "Rainbow Log");
@@ -929,6 +931,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SylladexScreen.EMPTY_SYLLADEX_2, "This will empty your sylladex.");
 		add(SylladexScreen.EMPTY_SYLLADEX_BUTTON, "Empty Sylladex");
 		add(AlchemiterScreen.TITLE, "Alchemiter");
+		add(CruxtruderTileEntity.EMPTY, "The cruxtruder gives off an empty click. Perhaps it needs some sort of material to function?");
 		add(MiniCruxtruderTileEntity.TITLE, "Miniature Cruxtruder");
 		add(MiniTotemLatheTileEntity.TITLE, "Miniature Totem Lathe");
 		add(MiniAlchemiterTileEntity.TITLE, "Miniature Alchemiter");
@@ -992,7 +995,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SburbClient.RESUME_BUTTON, "Resume connection");
 		add(SburbClient.SELECT_COLOR, "Select a Color");
 		add(SburbClient.CONNECT, "Connected to %s");
-		add(SessionHandler.CONNECT_FAILED, "Connection failed");
 		add(SburbClient.CLIENT_ACTIVE, "Client is already active");
 		add(SkaianetHandler.CLOSED, "Connection closed");
 		add(SkaianetHandler.CLOSED_SERVER, "Server closed");
@@ -1004,10 +1006,14 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SkaianetHandler.STOP_RESUME, "Stopped resuming");
 		add(SburbClient.NAME, "Client");
 		add(SburbServer.NAME, "Server");
-		add(SessionHandler.SINGLE_SESSION_FULL, "Game session is full");
-		add(SessionHandler.SERVER_SESSION_FULL, "Server player's session is full");
-		add(SessionHandler.CLIENT_SESSION_FULL, "Client player's session is full");
-		add(SessionHandler.BOTH_SESSIONS_FULL, "Too many players in total in both player's sessions");
+		add(MergeResult.ABLE, "Able to merge");
+		add(MergeResult.LOCKED, "Either session is locked");
+		add(MergeResult.GLOBAL_SESSION_FULL, "Game session is full");
+		add(MergeResult.CLIENT_SESSION_FULL, "Client player's session is full");
+		add(MergeResult.SERVER_SESSION_FULL, "Server player's session is full");
+		add(MergeResult.MERGED_SESSION_FULL, "Too many players in total in both player's sessions");
+		add(MergeResult.BOTH_CUSTOM, "Can't merge two custom sessions");
+		add(MergeResult.GENERIC_FAIL, "Merge failed");
 		
 		add(CheckLandCommand.CHECK, "You are currently in %s.");
 		add(CheckLandCommand.FAIL, "You are currently not in a land dimension.");
@@ -1019,9 +1025,37 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(GristCommand.SUCCESS, "Successfully modified the grist cache for %s.");
 		add(GristCommand.FAILURE, "Failed to modify the grist cache for %s.");
 		add(GristCommand.SET, "Set the grist cache for %s players to %s.");
+		add(SetRungCommand.SUCCESS, "Successfully changed the echeladder of %s players to rung %d with %d%% progress.");
+		add(PorkhollowCommand.SEND, "Successfully sent %s boondollars to %s.");
+		add(PorkhollowCommand.TAKE, "Successfully took out %s boondollars from your porkhollow.");
+		add(PorkhollowCommand.INSUFFICIENT, "You do not have enough boondollars to do that.");
+		add(TransportalizerCommand.NOT_FOUND, "Couldn't find transportalizer with ID \"%s\"");
+		add(TransportalizerCommand.FAILURE, "Teleportation failed for %s");
+		add(TransportalizerCommand.FAILURE_RESULT, "Failed the teleport anything.");
+		add(TransportalizerCommand.RESULT, "Successfully teleported %s entities to transportalizer");
+		add(SburbConnectionCommand.SUCCESS, "Successfully set %s's server player as %s");
+		add(SburbConnectionCommand.LOCKED, "Their session is locked, and should no longer be modified");
+		add(SburbConnectionCommand.ALREADY_CONNECTED, "Those players have already been connected");
+		add(DebugLandsCommand.MUST_ENTER, "You must have entered before you can create debug lands");
+		add(SburbPredefineCommand.SET_TITLE, "Predefined %s's title as %s");
+		add(SburbPredefineCommand.SET_TERRAIN_LAND, "Predefined %s's terrain land type");
+		add(SburbPredefineCommand.SET_TITLE_LAND, "Predefined %s's title land type");
+		add(SburbPredefineCommand.DEFINE, "Predefined full data for %s");
 		add(GristTypeArgument.INVALID, "Invalid grist type %s");
 		add(GristSetArgument.INCOMPLETE, "Incomplete (expected pairs of integers and grist types)");
 		add(GristSetArgument.DUPLICATE, "Duplicate grist type %s");
+		add(TitleArgument.INVALID_CLASS, "Invalid class %s");
+		add(TitleArgument.INVALID_ASPECT, "Invalid aspect %s");
+		add(TitleArgument.INCOMPLETE, "Incomplete (expected a class and an aspect)");
+		add(TitleLandTypeArgument.INVALID, "Invalid title land type %s");
+		add(TerrainLandTypeArgument.INVALID, "Invalid terrain land type %s");
+		add(LandTypePairArgument.INCOMPLETE, "Incomplete (expected two land aspects)");
+		
+		add(PredefineData.TITLE_ALREADY_SET, "That player already has their title set to %s");
+		add(PredefineData.TITLE_ALREADY_USED, "The title %s is already used in that players session");
+		add(PredefineData.RESETTING_TERRAIN_TYPE, "The currently set terrain type %s is not compatible with land type, and will be reset");
+		add(PredefineData.INCOMPATIBLE_LAND, "The currently predefined title land type %s does not allow this terrain type");
+		add(PredefineData.INVALID_LAND_ORDER, "The title land type has to be predefined before the terrain land type");
 		
 		add(JeiGristCost.GRIST_COSTS, "Grist Costs");
 		
@@ -1436,7 +1470,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addEntitySubtitles(MSEntityTypes.FROG, "ambient", "Frog croaks");
 		addEntitySubtitles(MSEntityTypes.FROG, "hurt", "Frog hurts");
 		addEntitySubtitles(MSEntityTypes.FROG, "death", "Frog dies");
-		addEntitySubtitles(MSEntityTypes.IMP, "screech", "Imp screeches");
+		addEntitySubtitles(MSEntityTypes.IMP, "ambient", "Imp screeches");
 		addEntitySubtitles(MSEntityTypes.IMP, "hurt", "Imp hurts");
 		addEntitySubtitles(MSEntityTypes.IMP, "death", "Imp dies");
 		addEntitySubtitles(MSEntityTypes.OGRE, "ambient", "Ogre grunts");

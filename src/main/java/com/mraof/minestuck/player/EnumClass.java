@@ -91,6 +91,16 @@ public enum EnumClass
 		return e.ordinal();
 	}
 	
+	public static EnumClass fromString(String string)
+	{
+		for(EnumClass c : values())
+		{
+			if(c.toString().equalsIgnoreCase(string))
+				return c;
+		}
+		return null;
+	}
+	
 	/**
 	 * Takes the enum name for this title-class and returns a lowercase version.
 	 * Aside from regular use of the method, it is useful for producing

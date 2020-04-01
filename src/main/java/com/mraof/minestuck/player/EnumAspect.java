@@ -79,6 +79,16 @@ public enum EnumAspect	//TODO This could potentially be changed to a registry. H
 		return this.name().toLowerCase();
 	}
 	
+	public static EnumAspect fromString(String string)
+	{
+		for(EnumAspect a : values())
+		{
+			if(a.toString().equalsIgnoreCase(string))
+				return a;
+		}
+		return null;
+	}
+	
 	/**
 	 * Translates and returns the proper name of this title-aspect. Should only be used client-side.
 	 * For usage in messages sent to a player from a server, use <code>asTextComponent()</code>.

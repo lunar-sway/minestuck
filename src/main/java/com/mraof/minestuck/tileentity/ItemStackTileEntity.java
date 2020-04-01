@@ -61,7 +61,7 @@ public class ItemStackTileEntity extends TileEntity implements IColored
 	@Override
 	public CompoundNBT getUpdateTag()
 	{
-		CompoundNBT nbt = new CompoundNBT();
+		CompoundNBT nbt = super.getUpdateTag();
 		nbt.put("stack", stack.write(new CompoundNBT()));
 		return nbt;
 	}

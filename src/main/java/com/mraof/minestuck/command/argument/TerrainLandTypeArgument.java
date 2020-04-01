@@ -1,4 +1,4 @@
-package com.mraof.minestuck.command;
+package com.mraof.minestuck.command.argument;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -7,48 +7,57 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
-import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
+import com.mraof.minestuck.world.lands.LandTypes;
+import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.ISuggestionProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class GristTypeArgument implements ArgumentType<GristType>
+public class TerrainLandTypeArgument implements ArgumentType<TerrainLandType>
 {
-	//TODO Provide examples
+	private static final List<String> EXAMPLES = Arrays.asList("minestuck:frost", "minestuck:shade");
 	
-	public static final String INVALID = "argument.grist_type.invalid";
+	public static final String INVALID = "argument.terrain_land_type.invalid";
 	public static final DynamicCommandExceptionType INVALID_TYPE = new DynamicCommandExceptionType(o -> new TranslationTextComponent(INVALID, o));
 	
-	public static GristTypeArgument gristType()
+	public static TerrainLandTypeArgument terrainLandType()
 	{
-		return new GristTypeArgument();
+		return new TerrainLandTypeArgument();
 	}
 	
 	@Override
-	public GristType parse(StringReader reader) throws CommandSyntaxException
+	public TerrainLandType parse(StringReader reader) throws CommandSyntaxException
 	{
 		int start2 = reader.getCursor();
 		ResourceLocation gristName = ResourceLocation.read(reader);
-		if(!GristTypes.REGISTRY.containsKey(gristName))
+		if(!LandTypes.TERRAIN_REGISTRY.containsKey(gristName))
 		{
 			reader.setCursor(start2);
 			throw INVALID_TYPE.createWithContext(reader, gristName);
 		}
-		return GristTypes.REGISTRY.getValue(gristName);
+		return LandTypes.TERRAIN_REGISTRY.getValue(gristName);
 	}
 	
 	@Override
 	public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder)
 	{
-		return ISuggestionProvider.func_212476_a(GristTypes.values().stream().map(GristType::getRegistryName), builder);
+		return ISuggestionProvider.func_212476_a(LandTypes.TERRAIN_REGISTRY.getValues().stream().map(TerrainLandType::getRegistryName), builder);
 	}
 	
-	public static GristType getGristArgument(CommandContext<CommandSource> context, String id)
+	@Override
+	public Collection<String> getExamples()
 	{
-		return context.getArgument(id, GristType.class);
+		return EXAMPLES;
+	}
+	
+	public static TerrainLandType get(CommandContext<CommandSource> context, String id)
+	{
+		return context.getArgument(id, TerrainLandType.class);
 	}
 }

@@ -14,10 +14,12 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.INameable;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.GlobalPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 
@@ -120,18 +122,15 @@ public class TransportalizerTileEntity extends TileEntity implements ITickableTi
 				return;
 			}
 			
-			BlockState block0 = this.world.getBlockState(this.pos.up());
-			BlockState block1 = this.world.getBlockState(this.pos.up(2));
-			if(block0.getMaterial().blocksMovement() || block1.getMaterial().blocksMovement())
+			if(isBlocked(this.world, this.pos))
 			{
 				entity.timeUntilPortal = entity.getPortalCooldown();
 				if(entity instanceof ServerPlayerEntity)
 					entity.sendMessage(new TranslationTextComponent(BLOCKED));
 				return;
 			}
-			block0 = world.getBlockState(location.getPos().up());
-			block1 = world.getBlockState(location.getPos().up(2));
-			if(block0.getMaterial().blocksMovement() || block1.getMaterial().blocksMovement())
+			
+			if(isBlocked(world, location.getPos()))
 			{
 				entity.timeUntilPortal = entity.getPortalCooldown();
 				if(entity instanceof ServerPlayerEntity)
@@ -143,6 +142,13 @@ public class TransportalizerTileEntity extends TileEntity implements ITickableTi
 			if(entity != null)
 				entity.timeUntilPortal = entity.getPortalCooldown();
 		}
+	}
+	
+	public static boolean isBlocked(World world, BlockPos pos)
+	{
+		BlockState block0 = world.getBlockState(pos.up());
+		BlockState block1 = world.getBlockState(pos.up(2));
+		return block0.getMaterial().blocksMovement() || block1.getMaterial().blocksMovement();
 	}
 	
 	private static boolean isDimensionForbidden(DimensionType dim)

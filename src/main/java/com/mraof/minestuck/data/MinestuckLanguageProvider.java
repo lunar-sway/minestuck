@@ -4,6 +4,7 @@ import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
+import com.mraof.minestuck.skaianet.MergeResult;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.entity.EntityType;
@@ -157,5 +158,9 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	protected void addColor(String key, String value)
 	{
 		add("minestuck.color."+key, value);
+	}
+	protected void add(MergeResult result, String value)
+	{
+		add(result.translationKey(), value);
 	}
 }

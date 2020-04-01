@@ -2,7 +2,6 @@ package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
-import com.mraof.minestuck.item.CruxiteArtifactItem;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
@@ -11,8 +10,8 @@ import com.mraof.minestuck.network.TitleSelectPacket;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.EntryProcess;
 import com.mraof.minestuck.util.MinestuckRandom;
-import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
@@ -36,7 +35,7 @@ import java.util.*;
  * For example: Titles, land aspects, entry items etc.
  * @author kirderf1
  */
-public class SburbHandler
+public final class SburbHandler
 {
 	static Map<PlayerEntity, Vec3d> titleSelectionMap = new HashMap<>();	//TODO Consider making this non-static
 	
@@ -56,7 +55,7 @@ public class SburbHandler
 		if(session.predefinedPlayers.containsKey(player))
 		{
 			PredefineData data = session.predefinedPlayers.get(player);
-			title = data.title;
+			title = data.getTitle();
 		}
 		
 		if(title == null)
@@ -64,23 +63,7 @@ public class SburbHandler
 			Random rand = MinestuckRandom.getPlayerSpecificRandom(player, world.getSeed());
 			rand.nextInt();	//Avoid using same data as the artifact generation
 			
-			ArrayList<Title> usedTitles = new ArrayList<>();
-			Set<PlayerIdentifier> playersEntered = new HashSet<>();	//Used to avoid duplicates from both connections and predefined data
-			playersEntered.add(player);
-			for(SburbConnection c : session.connections)
-				if(!c.getClientIdentifier().equals(player))
-				{
-					Title playerTitle = PlayerSavedData.getData(c.getClientIdentifier(), world).getTitle();
-					if(playerTitle != null)
-					{
-						usedTitles.add(playerTitle);
-						playersEntered.add(c.getClientIdentifier());
-					}
-				}
-			
-			for(Map.Entry<PlayerIdentifier, PredefineData> entry : session.predefinedPlayers.entrySet())
-				if(!playersEntered.contains(entry.getKey()) && entry.getValue().title != null)
-					usedTitles.add(entry.getValue().title);
+			Set<Title> usedTitles = session.getUsedTitles();
 			
 			if(usedTitles.size() < 12)	//Focus on getting an unused aspect and an unused class
 			{
@@ -156,6 +139,20 @@ public class SburbHandler
 			PlayerSavedData.getData(player, world).setTitle(title);
 		} else if(!MinestuckConfig.playerSelectedTitle.get())
 			Debug.warnf("Trying to generate a title for %s when a title is already assigned!", player.getUsername());
+	}
+	
+	public static void handlePredefineData(ServerPlayerEntity player, SkaianetException.SkaianetConsumer<PredefineData> consumer) throws SkaianetException
+	{
+		PlayerIdentifier identifier = IdentifierHandler.encode(player);
+		Session session = SessionHandler.get(player.server).getPlayerSession(identifier);
+		if(session != null)
+			session.predefineCall(identifier, consumer);
+		else
+		{
+			session = new Session();
+			session.predefineCall(identifier, consumer);
+			SessionHandler.get(player.server).addNewSession(session);
+		}
 	}
 	
 	/*public static void managePredefinedSession(MinecraftServer server, ICommandSender sender, ICommand command, String sessionName, String[] playerNames, boolean finish) throws CommandException
@@ -549,19 +546,17 @@ public class SburbHandler
 		if(session.predefinedPlayers.containsKey(connection.getClientIdentifier()))
 		{
 			PredefineData data = session.predefinedPlayers.get(connection.getClientIdentifier());
-			if(data.landTitle != null)
-				titleAspect = data.landTitle;
-			if(data.landTerrain != null)
-				terrainAspect = data.landTerrain;
+			titleAspect = data.getTitleLandType();
+			terrainAspect = data.getTerrainLandType();
 		}
 		
 		boolean frogs = false;
 		ArrayList<TerrainLandType> usedTerrainAspects = new ArrayList<>();
 		ArrayList<TitleLandType> usedTitleAspects = new ArrayList<>();
 		for(SburbConnection c : session.connections)
-			if(c != connection && c.clientHomeLand != null)
+			if(c != connection && c.getLandInfo() != null)
 			{
-				LandTypePair aspects = c.clientHomeLand.getLandAspects();
+				LandTypePair aspects = c.getLandInfo().getLandAspects();
 				if(aspects.title == LandTypes.FROGS)
 					frogs = true;
 				usedTitleAspects.add(aspects.title);
@@ -569,12 +564,12 @@ public class SburbHandler
 			}
 		for(PredefineData data : session.predefinedPlayers.values())
 		{
-			if(data.landTerrain != null)
-				usedTerrainAspects.add(data.landTerrain);
-			if(data.landTitle != null)
+			if(data.getTerrainLandType() != null)
+				usedTerrainAspects.add(data.getTerrainLandType());
+			if(data.getTitleLandType() != null)
 			{
-				usedTitleAspects.add(data.landTitle);
-				if(data.landTitle == LandTypes.FROGS)
+				usedTitleAspects.add(data.getTitleLandType());
+				if(data.getTitleLandType() == LandTypes.FROGS)
 					frogs = true;
 			}
 		}
@@ -592,25 +587,27 @@ public class SburbHandler
 		
 	}
 	
-	static LandInfo enterMedium(MinecraftServer mcServer, SburbConnection c)
+	static void prepareEntry(MinecraftServer mcServer, SburbConnection c)
 	{
 		PlayerIdentifier identifier = c.getClientIdentifier();
 		
 		generateTitle(mcServer.getWorld(DimensionType.OVERWORLD), c.getClientIdentifier());
-		LandTypePair aspects = genLandAspects(mcServer, c);		//This is where the Land dimension is actually registered, but it also needs the player's Title to be determined.
-		DimensionType type = LandTypes.createLandType(mcServer, identifier, aspects);
-		return new LandInfo(identifier, aspects, type, new Random());	//TODO Handle random better
+		LandTypePair landTypes = genLandAspects(mcServer, c);		//This is where the Land dimension is actually registered, but it also needs the player's Title to be determined.
+		DimensionType dimType = LandTypes.createLandType(mcServer, identifier, landTypes);
+		c.setLand(landTypes, dimType);
 	}
 	
-	static void onGameEntered(MinecraftServer server, SburbConnection c)
+	static void onEntry(MinecraftServer server, SburbConnection c)
 	{
+		c.setHasEntered();
+		
 		SessionHandler.get(server).getPlayerSession(c.getClientIdentifier()).checkIfCompleted(SessionHandler.get(server).singleSession);
 		
 		ServerPlayerEntity player = c.getClientIdentifier().getPlayer(server);
 		if(player != null)
 		{
 			MSCriteriaTriggers.CRUXITE_ARTIFACT.trigger(player);
-			c.clientHomeLand.sendLandEntryMessage(player);
+			c.getLandInfo().sendLandEntryMessage(player);
 		}
 	}
 	
@@ -644,7 +641,7 @@ public class SburbHandler
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		Session s = SessionHandler.get(player.world).getPlayerSession(identifier);
 		
-		if(s != null && s.predefinedPlayers.containsKey(identifier) && s.predefinedPlayers.get(identifier).title != null
+		if(s != null && s.predefinedPlayers.containsKey(identifier) && s.predefinedPlayers.get(identifier).getTitle() != null
 				|| PlayerSavedData.getData(identifier, player.server).getTitle() != null)
 			return true;
 		
@@ -664,30 +661,27 @@ public class SburbHandler
 		if(MinestuckConfig.playerSelectedTitle.get() && titleSelectionMap.containsKey(player))
 		{
 			PlayerIdentifier identifier = IdentifierHandler.encode(player);
-			Session s = SessionHandler.get(player.world).getPlayerSession(identifier);
-			if(s == null)
-				if(SessionHandler.get(player.world).singleSession)
-					s = SessionHandler.get(player.world).sessions.get(0);
-				else s = new Session();
 			
 			if(title == null)
 				generateTitle(player.world, identifier);
 			else
 			{
-				for(SburbConnection c : s.connections)
-					if(title.equals(PlayerSavedData.getData(c.getClientIdentifier(), player.server).getTitle()))
-					{	//Title is already used
-						TitleSelectPacket packet = new TitleSelectPacket(title);
-						MSPacketHandler.sendToPlayer(packet, player);
-						return;
-					}
-				for(PredefineData data : s.predefinedPlayers.values())
-					if(title.equals(data.title))
-					{
-						TitleSelectPacket packet = new TitleSelectPacket(title);
-						MSPacketHandler.sendToPlayer(packet, player);
-						return;
-					}
+				Session s = SessionHandler.get(player.server).getPlayerSession(identifier);
+				if(s != null)
+				{
+					for(SburbConnection c : s.connections)
+						if(title.equals(PlayerSavedData.getData(c.getClientIdentifier(), player.server).getTitle()))
+						{    //Title is already used
+							MSPacketHandler.sendToPlayer(new TitleSelectPacket(title), player);
+							return;
+						}
+					for(PredefineData data : s.predefinedPlayers.values())
+						if(title.equals(data.getTitle()))
+						{
+							MSPacketHandler.sendToPlayer(new TitleSelectPacket(title), player);
+							return;
+						}
+				} else Debug.warnf("%s picked a title without being part of a session.", player.getDisplayName());
 				
 				PlayerSavedData.getData(identifier, player.server).setTitle(title);
 			}
@@ -695,7 +689,9 @@ public class SburbHandler
 			Vec3d pos = titleSelectionMap.remove(player);
 			
 			player.setPosition(pos.x, pos.y, pos.z);
-			((CruxiteArtifactItem) MSItems.CRUXITE_APPLE).onArtifactActivated(player);
+			
+			EntryProcess process = new EntryProcess();
+			process.onArtifactActivated(player);
 			
 		} else Debug.warnf("%s tried to select a title without entering.", player.getName());
 	}
