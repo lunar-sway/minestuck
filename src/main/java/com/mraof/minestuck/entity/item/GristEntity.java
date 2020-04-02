@@ -79,7 +79,8 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		if(this.isInvulnerableTo(source))
 		{
 			return false;
-		} else
+		}
+		else
 		{
 			this.markVelocityChanged();
 			this.gristHealth = (int)((float)this.gristHealth - amount);
@@ -230,7 +231,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 			throw new IllegalStateException("Grist entities shouldn't be consumed client-side.");
 		if(sound)
 			this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.1F, 0.5F * ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.8F));
-		GristHelper.notify(world.getServer(), identifier, new GristSet(gristType, gristValue), true);
+		GristHelper.notify(world.getServer(), identifier, new GristSet(gristType, gristValue));
 		GristHelper.increase(world, identifier, new GristSet(gristType, gristValue));
 		this.remove();
 	}

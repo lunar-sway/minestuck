@@ -118,14 +118,12 @@ public class MinestuckConfig
 	public static IntValue overworldEditRange;
 	public static IntValue landEditRange;
 	public static BooleanValue giveItems;
-	public static BooleanValue gristMessagesEditMode;
 	
 	//            Client	(Anything that is only needed for clients (only needed client-side))
 	public static EnumValue<AnimationSpeed> echeladderAnimation;
 	public static BooleanValue loginColorSelector;
 	public static boolean dataCheckerAccess;
 	public static BooleanValue alchemyIcons;
-	public static BooleanValue gristMessages;
 	
 	static
 	{
@@ -188,8 +186,6 @@ public class MinestuckConfig
 				.define("portableMachines", false);
 		giveItems = SERVER_BUILDER.comment("Setting this to true replaces editmode with the old Give Items button.")
 				.define("giveItems", false);
-		gristMessagesEditMode = SERVER_BUILDER.comment("Enables if you want to receive grist messages from placing and destroying blocks in editmode.")
-				.define("gristMessages", true);
 		overworldEditRange = SERVER_BUILDER.comment("A number that determines how far away from the computer an editmode player may be before entry.")
 				.defineInRange("overworldEditRange", 15, 1, Integer.MAX_VALUE);
 		landEditRange = SERVER_BUILDER.comment("A number that determines how far away from the center of the brought land that an editmode player may be after entry.")
@@ -240,8 +236,6 @@ public class MinestuckConfig
 				.define("alchemyIcons", true);
 		loginColorSelector = CLIENT_BUILDER.comment("Determines if the color selector should be displayed when entering a save file for the first time.")
 				.define("loginColorSelector", true);
-		gristMessages = CLIENT_BUILDER.comment("Enables if you want to receive grist messages from killing imps.")
-				.define("gristMessages", true);
 		echeladderAnimation = CLIENT_BUILDER.comment("Allows control of standard speed for the echeladder rung \"animation\", or if it should have one in the first place.")
 				.defineEnum("echeladderAnimation", AnimationSpeed.NORMAL);
 		CLIENT_BUILDER.pop();

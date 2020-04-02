@@ -11,26 +11,22 @@ import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.world.NoteBlockEvent;
 
 import java.util.*;
 import java.util.Map.Entry;
 
-import static com.mraof.minestuck.MinestuckConfig.gristMessages;
-import static com.mraof.minestuck.MinestuckConfig.gristMessagesEditMode;
+import static com.mraof.minestuck.MinestuckConfig.showGristChanges;
 
 public class GristHelper
 {
 	private static Random random = new Random();
-
+	
 	/**
 	 * Returns a random grist type. Used for creating randomly aligned underlings.
 	 */
@@ -38,57 +34,58 @@ public class GristHelper
 	{
 		float totalWeight = 0;
 		List<GristType> typeList = new ArrayList<>();
-		for (GristType type : GristTypes.values())
+		for(GristType type : GristTypes.values())
 		{
-			if (type.getRarity() > 0 && type != GristTypes.ARTIFACT)
+			if(type.getRarity() > 0 && type != GristTypes.ARTIFACT)
 			{
 				typeList.add(type);
 				totalWeight += type.getRarity();
 			}
 		}
-
+		
 		float weight = random.nextFloat() * totalWeight;
-		for (GristType type : typeList)
+		for(GristType type : typeList)
 		{
 			weight -= type.getRarity();
-			if (weight < 0)
+			if(weight < 0)
 				return type;
 		}
 		throw new IllegalStateException("Should never get here.");
 	}
-
+	
 	/**
 	 * Returns a secondary grist type based on primary grist
 	 */
 	public static GristType getSecondaryGrist(GristType primary)
 	{
 		List<GristType> secondaryTypes = primary.getSecondaryTypes();
-		if (secondaryTypes.size() > 0)
+		if(secondaryTypes.size() > 0)
 			return secondaryTypes.get(random.nextInt(secondaryTypes.size()));
 		else return primary;
 	}
-
-
+	
+	
 	/**
 	 * Returns a GristSet representing the drops from an underling, given the underling's type and a static loot multiplier.
 	 */
-	public static GristSet generateUnderlingGristDrops(UnderlingEntity entity, Map<PlayerIdentifier, Double> damageMap, double multiplier) {
+	public static GristSet generateUnderlingGristDrops(UnderlingEntity entity, Map<PlayerIdentifier, Double> damageMap, double multiplier)
+	{
 		GristType primary = entity.getGristType();
 		GristType secondary = getSecondaryGrist(primary);
-
+		
 		GristSet set = new GristSet();
 		set.addGrist(GristTypes.BUILD, (int) (2 * multiplier + random.nextDouble() * 18 * multiplier));
 		set.addGrist(primary, (int) (1 * multiplier + random.nextDouble() * 9 * multiplier));
 		set.addGrist(secondary, (int) (0.5 * multiplier + random.nextDouble() * 4 * multiplier));
-
+		
 		GristDropsEvent event = new GristDropsEvent(entity, damageMap, set, primary, secondary, multiplier);
-		if (MinecraftForge.EVENT_BUS.post(event))
+		if(MinecraftForge.EVENT_BUS.post(event))
 			return null;
-
+		
 		return event.getNewDrops();
-
+		
 	}
-
+	
 	/**
 	 * A shortened statement to obtain a certain grist count.
 	 */
@@ -96,35 +93,39 @@ public class GristHelper
 	{
 		return PlayerSavedData.getData(player, world).getGristCache().getGrist(type);
 	}
-
+	
 	public static boolean canAfford(ServerPlayerEntity player, GristSet cost)
 	{
 		return canAfford(PlayerSavedData.getData(player).getGristCache(), cost);
 	}
-
+	
 	public static boolean canAfford(World world, PlayerIdentifier player, GristSet cost)
 	{
 		return canAfford(PlayerSavedData.getData(player, world).getGristCache(), cost);
 	}
-
+	
 	public static boolean canAfford(GristSet base, GristSet cost)
 	{
-		if (base == null || cost == null) {return false;}
+		if(base == null || cost == null)
+		{
+			return false;
+		}
 		Map<GristType, Long> reqs = cost.getMap();
-		if (reqs != null) {
-			for (Entry<GristType, Long> pairs : reqs.entrySet())
+		if(reqs != null)
+		{
+			for(Entry<GristType, Long> pairs : reqs.entrySet())
 			{
 				GristType type = pairs.getKey();
 				long need = pairs.getValue();
 				long have = base.getGrist(type);
-
-				if (need > have) return false;
+				
+				if(need > have) return false;
 			}
 			return true;
 		}
 		return false;
 	}
-
+	
 	/**
 	 * Uses the encoded version of the username!
 	 */
@@ -132,7 +133,7 @@ public class GristHelper
 	{
 		increase(world, player, set.copy().scale(-1));
 	}
-
+	
 	public static void increase(World world, PlayerIdentifier player, GristSet set)
 	{
 		Objects.requireNonNull(world);
@@ -143,44 +144,39 @@ public class GristHelper
 		newCache.addGrist(set);
 		data.setGristCache(newCache);
 	}
-
-	public static void notify(MinecraftServer server, PlayerIdentifier player, GristSet set, boolean increase)
+	
+	public static void notify(MinecraftServer server, PlayerIdentifier player, GristSet set)
 	{
-		if (gristMessages.get())
+		if(showGristChanges.get())
 		{
 			Map<GristType, Long> reqs = set.getMap();
-			for (Entry<GristType, Long> pairs : reqs.entrySet())
+			for(Entry<GristType, Long> pairs : reqs.entrySet())
 			{
 				ITextComponent type = pairs.getKey().getDisplayName();
 				long difference = pairs.getValue();
-				if (increase)
-				{
-					sendGristMessage(server, player, new TranslationTextComponent("You gained %s %s grist.", difference, type));
-				}
-				else
-				{
-					sendGristMessage(server, player, new TranslationTextComponent("You lost %s %s grist.", difference, type));
-				}
+				sendGristMessage(server, player, new TranslationTextComponent("You gained %s %s grist.", difference, type));
 			}
 		}
 	}
-	public static void notifyEditPlayer(MinecraftServer server, PlayerIdentifier player, GristSet set, boolean increase) {
-		if(gristMessagesEditMode.get())
+	
+	public static void notifyEditPlayer(MinecraftServer server, PlayerIdentifier player, GristSet set, boolean increase)
+	{
+		if(showGristChanges.get())
 		{
 			SburbConnection sc = SkaianetHandler.get(server).getActiveConnection(player);
-			if (sc == null)
+			if(sc == null)
 				return;
-
+			
 			EditData ed = ServerEditHandler.getData(server, sc);
-			if (ed == null)
+			if(ed == null)
 				return;
-
+			
 			Map<GristType, Long> reqs = set.getMap();
-			for (Entry<GristType, Long> pairs : reqs.entrySet())
+			for(Entry<GristType, Long> pairs : reqs.entrySet())
 			{
 				ITextComponent type = pairs.getKey().getDisplayName();
 				long difference = pairs.getValue();
-				if (increase)
+				if(increase)
 				{
 					sendGristMessage(server, IdentifierHandler.encode(ed.getEditor()), new TranslationTextComponent("You have refunded %s of %s's %s grist.", difference, player.getUsername(), type));
 				} else
@@ -190,20 +186,20 @@ public class GristHelper
 			}
 		}
 	}
-
+	
 	private static void sendGristMessage(MinecraftServer server, PlayerIdentifier player, ITextComponent message)
 	{
-		if (MinestuckConfig.showGristChanges.get())
+		if(MinestuckConfig.showGristChanges.get())
 		{
-			if (player != null)
+			if(player != null)
 			{
 				ServerPlayerEntity client = player.getPlayer(server);
-				if (client != null)
+				if(client != null)
 				{
 					client.sendStatusMessage(message, true);
 				}
 			}
 		}
 	}
-
+	
 }
