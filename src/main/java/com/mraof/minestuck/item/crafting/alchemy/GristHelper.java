@@ -189,15 +189,12 @@ public class GristHelper
 	
 	private static void sendGristMessage(MinecraftServer server, PlayerIdentifier player, ITextComponent message)
 	{
-		if(MinestuckConfig.showGristChanges.get())
+		if(player != null)
 		{
-			if(player != null)
+			ServerPlayerEntity client = player.getPlayer(server);
+			if(client != null)
 			{
-				ServerPlayerEntity client = player.getPlayer(server);
-				if(client != null)
-				{
-					client.sendStatusMessage(message, true);
-				}
+				client.sendStatusMessage(message, true);
 			}
 		}
 	}
