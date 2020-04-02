@@ -179,7 +179,7 @@ public class MinestuckConfig
 		showGristChanges = SERVER_BUILDER.comment("If this is true, grist change messages will appear.")
 				.define("showGristChanges",true);
 		gristRefund = SERVER_BUILDER.comment("Enable this and players will get a (full) grist refund from breaking blocks in editmode.")
-				.define("gristRefund", false);
+				.define("gristRefund", true);
 		deployCard = SERVER_BUILDER.comment("Determines if a card with a captcha card punched on it should be added to the deploy list.")
 				.define("deployCard",false);
 		portableMachines = SERVER_BUILDER.comment("Determines if the small portable machines should be included in the deploy list.")

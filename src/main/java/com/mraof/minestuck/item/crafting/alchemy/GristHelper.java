@@ -11,6 +11,7 @@ import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.ITextComponent;
@@ -143,36 +144,33 @@ public class GristHelper
 
 	public static void decreaseAndNotify(World world, PlayerIdentifier player, GristSet set)
 	{
-		increaseAndNotify(world, player, set.copy().scale(-1));
+		decrease(world, player, set.copy());
 
 		Map<GristType, Long> reqs = set.getMap();
-
-		Objects.requireNonNull(reqs);
-		for (Entry<GristType, Long> pairs : reqs.entrySet())
-		{
-			notify(world.getServer(), player, pairs.getKey().getDisplayName(), pairs.getValue(), "spent");
+		for (Entry<GristType, Long> pairs : reqs.entrySet()) {
+			notifyEditPlayer(world.getServer(), player, pairs.getKey().getDisplayName(), pairs.getValue(), "spent");
 		}
 	}
 	
-	public static void increaseAndNotify(World world, PlayerIdentifier player, GristSet set) {
-		Objects.requireNonNull(world);
-		Objects.requireNonNull(player);
-		Objects.requireNonNull(set);
-		PlayerData data = PlayerSavedData.getData(player, world);
-		NonNegativeGristSet newCache = new NonNegativeGristSet(data.getGristCache());
-		newCache.addGrist(set);
-		data.setGristCache(newCache);
+	public static void increaseAndNotify(World world, PlayerIdentifier player, GristSet set, boolean notifyEditMode) {
+		increase(world, player, set.copy());
 
 		Map<GristType, Long> reqs = set.getMap();
-
 		Objects.requireNonNull(reqs);
-		for (Entry<GristType, Long> pairs : reqs.entrySet())
-		{
-			notify(world.getServer(), player, pairs.getKey().getDisplayName(), pairs.getValue(), "gained");
+
+		if(notifyEditMode) {
+			for (Entry<GristType, Long> pairs : reqs.entrySet()) {
+				notifyEditPlayer(world.getServer(), player, pairs.getKey().getDisplayName(), pairs.getValue(), "refunded");
+			}
+		}
+		else {
+			for (Entry<GristType, Long> pairs : reqs.entrySet()) {
+				notify(world.getServer(), player, pairs.getKey().getDisplayName(), pairs.getValue(), "gained", false);
+			}
 		}
 	}
 	
-	private static void notify(MinecraftServer server, PlayerIdentifier player, ITextComponent type, long difference, String action)
+	private static void notify(MinecraftServer server, PlayerIdentifier player, ITextComponent type, long difference, String action, boolean notifyEditPlayer)
 	{
 		if(MinestuckConfig.showGristChanges.get())
 		{
@@ -181,8 +179,14 @@ public class GristHelper
 				ServerPlayerEntity client = player.getPlayer(server);
 				if(client != null)
 				{
-					//"true" sends the message to the action bar (like bed messages), while "false" sends it to the chat.
-					client.sendStatusMessage(new TranslationTextComponent("You %s %s %s grist.",action, difference, type), true);//TODO Translation
+					if(!notifyEditPlayer) {
+						//"true" sends the message to the action bar (like bed messages), while "false" sends it to the chat.
+						client.sendStatusMessage(new TranslationTextComponent("You %s %s %s grist.", action, difference, type), true);//TODO Translation
+					}
+					else {
+						//"true" sends the message to the action bar (like bed messages), while "false" sends it to the chat.
+						client.sendStatusMessage(new TranslationTextComponent("You %s %s of %s's %s grist.", action, difference, player.getUsername(), type), true);
+					}
 				}
 			}
 		}
@@ -198,6 +202,6 @@ public class GristHelper
 		if(ed == null)
 			return;
 		
-		notify(server, IdentifierHandler.encode(ed.getEditor()), type, difference, action);
+		notify(server, IdentifierHandler.encode(ed.getEditor()), type, difference, action, true);
 	}
 }

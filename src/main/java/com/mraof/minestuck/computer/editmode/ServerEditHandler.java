@@ -331,7 +331,7 @@ public final class ServerEditHandler
 				ItemStack stack = block.getBlock().getPickBlock(block, null, event.getWorld(), event.getPos(), event.getPlayer());
 				GristSet set = GristCostRecipe.findCostForItem(stack, null, false, event.getWorld());
 				if(set != null && !set.isEmpty())
-					GristHelper.increaseAndNotify(event.getWorld(), data.connection.getClientIdentifier(), set);
+					GristHelper.increaseAndNotify(event.getWorld(), data.connection.getClientIdentifier(), set, true);
 			}
 		}
 	}
