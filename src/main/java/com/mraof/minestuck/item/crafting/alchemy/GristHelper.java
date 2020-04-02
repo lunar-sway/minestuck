@@ -14,9 +14,11 @@ import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.NoteBlockEvent;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -127,7 +129,7 @@ public class GristHelper
 	{
 		increase(world, player, set.copy().scale(-1));
 	}
-	
+
 	public static void increase(World world, PlayerIdentifier player, GristSet set)
 	{
 		Objects.requireNonNull(world);
@@ -137,6 +139,37 @@ public class GristHelper
 		NonNegativeGristSet newCache = new NonNegativeGristSet(data.getGristCache());
 		newCache.addGrist(set);
 		data.setGristCache(newCache);
+	}
+
+	public static void decreaseAndNotify(World world, PlayerIdentifier player, GristSet set)
+	{
+		increaseAndNotify(world, player, set.copy().scale(-1));
+
+		Map<GristType, Long> reqs = set.getMap();
+
+		Objects.requireNonNull(reqs);
+		for (Entry<GristType, Long> pairs : reqs.entrySet())
+		{
+			notify(world.getServer(), player, pairs.getKey().getDisplayName(), pairs.getValue(), "spent");
+		}
+	}
+	
+	public static void increaseAndNotify(World world, PlayerIdentifier player, GristSet set) {
+		Objects.requireNonNull(world);
+		Objects.requireNonNull(player);
+		Objects.requireNonNull(set);
+		PlayerData data = PlayerSavedData.getData(player, world);
+		NonNegativeGristSet newCache = new NonNegativeGristSet(data.getGristCache());
+		newCache.addGrist(set);
+		data.setGristCache(newCache);
+
+		Map<GristType, Long> reqs = set.getMap();
+
+		Objects.requireNonNull(reqs);
+		for (Entry<GristType, Long> pairs : reqs.entrySet())
+		{
+			notify(world.getServer(), player, pairs.getKey().getDisplayName(), pairs.getValue(), "gained");
+		}
 	}
 	
 	private static void notify(MinecraftServer server, PlayerIdentifier player, ITextComponent type, long difference, String action)
@@ -149,7 +182,7 @@ public class GristHelper
 				if(client != null)
 				{
 					//"true" sends the message to the action bar (like bed messages), while "false" sends it to the chat.
-					client.sendStatusMessage(new TranslationTextComponent("You " + action + " " + difference + " " + type + " grist."), true);//TODO Translation
+					client.sendStatusMessage(new TranslationTextComponent("You %s %s %s grist.",action, difference, type), true);//TODO Translation
 				}
 			}
 		}
