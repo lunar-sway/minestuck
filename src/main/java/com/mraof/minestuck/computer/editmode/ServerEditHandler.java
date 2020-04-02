@@ -227,6 +227,7 @@ public final class ServerEditHandler
 				GristSet cost = entry.getCurrentCost(data.connection);
 				if(GristHelper.canAfford(PlayerSavedData.getData(data.connection.getClientIdentifier(), event.getPlayer().world).getGristCache(), cost))
 				{
+					GristHelper.decrease(event.getPlayer().world, data.connection.getClientIdentifier(), cost);
 					GristHelper.notify(event.getPlayer().world.getServer(), data.connection.getClientIdentifier(), cost, false);
 					data.connection.setHasGivenItem(entry);
 					if(!data.connection.isMain())
@@ -324,7 +325,10 @@ public final class ServerEditHandler
 		{
 			EditData data = getData(event.getPlayer());
 			if(!MinestuckConfig.gristRefund.get())
+			{
 				GristHelper.notifyEditPlayer(event.getWorld().getServer(), data.connection.getClientIdentifier(), new GristSet(GristTypes.BUILD, 1), false);
+				GristHelper.decrease(event.getWorld(), data.connection.getClientIdentifier(), new GristSet(GristTypes.BUILD,1));
+			}
 			else
 			{
 				BlockState block = event.getWorld().getBlockState(event.getPos());
@@ -364,11 +368,13 @@ public final class ServerEditHandler
 					if(!cost.isEmpty())
 					{
 						GristHelper.notifyEditPlayer(player.world.getServer(), c.getClientIdentifier(), cost, false);
+						GristHelper.decrease(player.world, c.getClientIdentifier(), cost);
 					}
 					player.inventory.mainInventory.set(player.inventory.currentItem, ItemStack.EMPTY);
 				} else
 				{
 					GristHelper.notifyEditPlayer(player.world.getServer(), data.connection.getClientIdentifier(), GristCostRecipe.findCostForItem(stack, null, false, player.getEntityWorld()), false);
+					GristHelper.decrease(player.world, data.connection.getClientIdentifier(), GristCostRecipe.findCostForItem(stack, null, false, player.getEntityWorld()));
 				}
 			}
 		}
