@@ -27,24 +27,29 @@ import java.util.Map.Entry;
 import static com.mraof.minestuck.MinestuckConfig.gristMessages;
 import static com.mraof.minestuck.MinestuckConfig.gristMessagesEditMode;
 
-public class GristHelper {
+public class GristHelper
+{
 	private static Random random = new Random();
 
 	/**
 	 * Returns a random grist type. Used for creating randomly aligned underlings.
 	 */
-	public static GristType getPrimaryGrist() {
+	public static GristType getPrimaryGrist()
+	{
 		float totalWeight = 0;
 		List<GristType> typeList = new ArrayList<>();
-		for (GristType type : GristTypes.values()) {
-			if (type.getRarity() > 0 && type != GristTypes.ARTIFACT) {
+		for (GristType type : GristTypes.values())
+		{
+			if (type.getRarity() > 0 && type != GristTypes.ARTIFACT)
+			{
 				typeList.add(type);
 				totalWeight += type.getRarity();
 			}
 		}
 
 		float weight = random.nextFloat() * totalWeight;
-		for (GristType type : typeList) {
+		for (GristType type : typeList)
+		{
 			weight -= type.getRarity();
 			if (weight < 0)
 				return type;
@@ -55,7 +60,8 @@ public class GristHelper {
 	/**
 	 * Returns a secondary grist type based on primary grist
 	 */
-	public static GristType getSecondaryGrist(GristType primary) {
+	public static GristType getSecondaryGrist(GristType primary)
+	{
 		List<GristType> secondaryTypes = primary.getSecondaryTypes();
 		if (secondaryTypes.size() > 0)
 			return secondaryTypes.get(random.nextInt(secondaryTypes.size()));
@@ -86,26 +92,28 @@ public class GristHelper {
 	/**
 	 * A shortened statement to obtain a certain grist count.
 	 */
-	public static long getGrist(World world, PlayerIdentifier player, GristType type) {
+	public static long getGrist(World world, PlayerIdentifier player, GristType type)
+	{
 		return PlayerSavedData.getData(player, world).getGristCache().getGrist(type);
 	}
 
-	public static boolean canAfford(ServerPlayerEntity player, GristSet cost) {
+	public static boolean canAfford(ServerPlayerEntity player, GristSet cost)
+	{
 		return canAfford(PlayerSavedData.getData(player).getGristCache(), cost);
 	}
 
-	public static boolean canAfford(World world, PlayerIdentifier player, GristSet cost) {
+	public static boolean canAfford(World world, PlayerIdentifier player, GristSet cost)
+	{
 		return canAfford(PlayerSavedData.getData(player, world).getGristCache(), cost);
 	}
 
-	public static boolean canAfford(GristSet base, GristSet cost) {
-		if (base == null || cost == null) {
-			return false;
-		}
+	public static boolean canAfford(GristSet base, GristSet cost)
+	{
+		if (base == null || cost == null) {return false;}
 		Map<GristType, Long> reqs = cost.getMap();
-
 		if (reqs != null) {
-			for (Entry<GristType, Long> pairs : reqs.entrySet()) {
+			for (Entry<GristType, Long> pairs : reqs.entrySet())
+			{
 				GristType type = pairs.getKey();
 				long need = pairs.getValue();
 				long have = base.getGrist(type);
@@ -120,11 +128,13 @@ public class GristHelper {
 	/**
 	 * Uses the encoded version of the username!
 	 */
-	public static void decrease(World world, PlayerIdentifier player, GristSet set) {
+	public static void decrease(World world, PlayerIdentifier player, GristSet set)
+	{
 		increase(world, player, set.copy().scale(-1));
 	}
 
-	public static void increase(World world, PlayerIdentifier player, GristSet set) {
+	public static void increase(World world, PlayerIdentifier player, GristSet set)
+	{
 		Objects.requireNonNull(world);
 		Objects.requireNonNull(player);
 		Objects.requireNonNull(set);
@@ -134,24 +144,29 @@ public class GristHelper {
 		data.setGristCache(newCache);
 	}
 
-	public static void notify(MinecraftServer server, PlayerIdentifier player, GristSet set, boolean increase) {
+	public static void notify(MinecraftServer server, PlayerIdentifier player, GristSet set, boolean increase)
+	{
 		if (gristMessages.get())
 		{
 			Map<GristType, Long> reqs = set.getMap();
-			for (Entry<GristType, Long> pairs : reqs.entrySet()) {
+			for (Entry<GristType, Long> pairs : reqs.entrySet())
+			{
 				ITextComponent type = pairs.getKey().getDisplayName();
 				long difference = pairs.getValue();
-				if (increase) {
+				if (increase)
+				{
 					sendGristMessage(server, player, new TranslationTextComponent("You gained %s %s grist.", difference, type));
 				}
-				else {
+				else
+				{
 					sendGristMessage(server, player, new TranslationTextComponent("You lost %s %s grist.", difference, type));
 				}
 			}
 		}
 	}
 	public static void notifyEditPlayer(MinecraftServer server, PlayerIdentifier player, GristSet set, boolean increase) {
-		if(gristMessagesEditMode.get()) {
+		if(gristMessagesEditMode.get())
+		{
 			SburbConnection sc = SkaianetHandler.get(server).getActiveConnection(player);
 			if (sc == null)
 				return;
@@ -161,12 +176,15 @@ public class GristHelper {
 				return;
 
 			Map<GristType, Long> reqs = set.getMap();
-			for (Entry<GristType, Long> pairs : reqs.entrySet()) {
+			for (Entry<GristType, Long> pairs : reqs.entrySet())
+			{
 				ITextComponent type = pairs.getKey().getDisplayName();
 				long difference = pairs.getValue();
-				if (increase) {
+				if (increase)
+				{
 					sendGristMessage(server, IdentifierHandler.encode(ed.getEditor()), new TranslationTextComponent("You have refunded %s of %s's %s grist.", difference, player.getUsername(), type));
-				} else {
+				} else
+				{
 					sendGristMessage(server, IdentifierHandler.encode(ed.getEditor()), new TranslationTextComponent("You have spent %s of %s's %s grist.", difference, player.getUsername(), type));
 				}
 			}
@@ -175,10 +193,13 @@ public class GristHelper {
 
 	private static void sendGristMessage(MinecraftServer server, PlayerIdentifier player, ITextComponent message)
 	{
-		if (MinestuckConfig.showGristChanges.get()) {
-			if (player != null) {
+		if (MinestuckConfig.showGristChanges.get())
+		{
+			if (player != null)
+			{
 				ServerPlayerEntity client = player.getPlayer(server);
-				if (client != null) {
+				if (client != null)
+				{
 					client.sendStatusMessage(message, true);
 				}
 			}
