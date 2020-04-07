@@ -452,6 +452,7 @@ public class FrogEntity extends CreatureEntity
 	@Override
 	public void notifyDataManagerChange(DataParameter<?> key)
 	{
+		recalculateSize();
 		if (FROG_SIZE.equals(key))
 		{
 			this.rotationYaw = this.rotationYawHead;
