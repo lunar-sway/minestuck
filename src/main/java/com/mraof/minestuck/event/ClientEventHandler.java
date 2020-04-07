@@ -3,17 +3,30 @@ package com.mraof.minestuck.event;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.block.FlowingModFluidBlock;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.client.gui.ColorSelectorScreen;
+import com.mraof.minestuck.data.MinestuckFluidTagsProvider;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.inventory.ConsortMerchantContainer;
+import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.Entity;
+import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.IWorldReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.event.TickEvent;
@@ -77,11 +90,30 @@ public class ClientEventHandler
 	@SubscribeEvent
 	public static void onFogRender(EntityViewRenderEvent.FogDensity event)
 	{
-		if (event.getInfo().getFluidState().getFluid() == MSFluids.ENDER.get())
+		if (event.getInfo().getFluidState().getFluid() == MSFluids.ENDER.get() || event.getInfo().getFluidState().getFluid() == MSFluids.FLOWING_ENDER.get())
 		{
 			event.setCanceled(true);
 			event.setDensity(Float.MAX_VALUE);
 			GlStateManager.fogMode(GlStateManager.FogMode.EXP);
+		}
+	}
+	@SubscribeEvent
+	public static void addFogColor(EntityViewRenderEvent.FogColors event)
+	{
+		BlockState state = event.getInfo().getFluidState().getBlockState();
+		IWorldReader world = event.getInfo().getRenderViewEntity().world;
+		BlockPos pos = event.getInfo().getBlockPos();
+		Entity entity = event.getInfo().getRenderViewEntity();
+		Vec3d originalColor = new Vec3d(event.getRed(), event.getGreen(), event.getBlue());
+		float partialTick = (float) (event.getRenderPartialTicks());
+		
+		Vec3d fogColor = event.getInfo().getFluidState().getBlockState().getBlock().getFogColor(state, world, pos, entity, originalColor, partialTick);
+		
+		if(event.getInfo().getFluidState().getBlockState().getBlock().getFogColor(state, world, pos, entity, originalColor, partialTick) != null)
+		{
+			event.setRed((float) fogColor.getX());
+			event.setGreen((float) fogColor.getY());
+			event.setBlue((float) fogColor.getZ());
 		}
 	}
 }
