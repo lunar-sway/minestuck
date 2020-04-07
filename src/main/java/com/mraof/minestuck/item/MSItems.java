@@ -103,6 +103,7 @@ public class MSItems
 	public static final Item CANDY_SICKLE = getNull();
 	//clubs
 	public static final Item DEUCE_CLUB = getNull();
+	public static final Item STALE_BAGUETTE = getNull();
 	public static final Item NIGHT_CLUB = getNull();
 	public static final Item POGO_CLUB = getNull();
 	public static final Item METAL_BAT = getNull();
@@ -205,6 +206,7 @@ public class MSItems
 	public static final Item IRRADIATED_STEAK = getNull();
 	public static final Item SURPRISE_EMBRYO = getNull();
 	public static final Item UNKNOWABLE_EGG = getNull();
+	public static final Item BREADCRUMBS = getNull();
 	
 	//Other Land Items
 	public static final Item GOLDEN_GRASSHOPPER = getNull();
@@ -542,6 +544,7 @@ public class MSItems
 		
 		//clubs
 		registry.register(new WeaponItem(ItemTier.WOOD, 3, -2.2F, 2.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(1024).group(MSItemGroup.WEAPONS)).setRegistryName("deuce_club"));
+		registry.register(new BaguetteWeaponItem(ItemTier.WOOD, 2, -2.2F, 2.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(50).group(MSItemGroup.WEAPONS)).setRegistryName("stale_baguette"));
 		registry.register(new WeaponItem(MSItemTypes.REGI_TIER, 1, -2.2F, 2.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(600).group(MSItemGroup.WEAPONS)).setRegistryName("night_club"));
 		registry.register(new PogoWeaponItem(MSItemTypes.POGO_TIER, 2, -2.2F, 2.0F, 0.5, MSItemTypes.MISC_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("pogo_club"));
 		registry.register(new WeaponItem(ItemTier.IRON, 3, -2.2F, 2.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(750).group(MSItemGroup.WEAPONS)).setRegistryName("metal_bat"));
@@ -648,7 +651,7 @@ public class MSItems
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN).food(MSFoods.IRRADIATED_STEAK)).setRegistryName("irradiated_steak"));
 		registry.register(new SurpriseEmbryoItem(new Item.Properties().group(MSItemGroup.MAIN).food(MSFoods.SURPRISE_EMBRYO)).setRegistryName("surprise_embryo"));
 		registry.register(new UnknowableEggItem(new Item.Properties().maxStackSize(16).group(MSItemGroup.MAIN).food(MSFoods.UNKNOWABLE_EGG)).setRegistryName("unknowable_egg"));
-		
+		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN).food(MSFoods.BREADCRUMBS)).setRegistryName("breadcrumbs"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.LANDS)).setRegistryName("golden_grasshopper"));
 		registry.register(new BugNetItem(new Item.Properties().defaultMaxDamage(64).group(MSItemGroup.LANDS)).setRegistryName("bug_net"));
 		registry.register(new FrogItem(new Item.Properties().maxStackSize(1).group(MSItemGroup.LANDS)).setRegistryName("frog"));

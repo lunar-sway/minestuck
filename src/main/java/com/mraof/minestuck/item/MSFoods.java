@@ -22,6 +22,7 @@ public class MSFoods
     public static final Food IRRADIATED_STEAK = (new Food.Builder()).hunger(4).saturation(0.4F).effect(new EffectInstance(Effects.WITHER, 100, 1), 0.9F).build();
     public static final Food SURPRISE_EMBRYO = (new Food.Builder()).hunger(3).saturation(0.2F).build();
     public static final Food UNKNOWABLE_EGG = (new Food.Builder()).hunger(3).saturation(0.3F).build();
+    public static final Food BREADCRUMBS = (new Food.Builder()).hunger(1).saturation(0.1F).fastToEat().build();
     //Candies
     public static final Food CANDY_CORN = (new Food.Builder()).hunger(2).saturation(0.3F).build();
     public static final Food BUILD_GUSHERS = (new Food.Builder()).hunger(2).saturation(0.0F).build();
