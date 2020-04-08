@@ -24,6 +24,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @ObjectHolder(Minestuck.MOD_ID)
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
@@ -265,6 +266,11 @@ public class LandTypes
 		}
 		
 		return DimensionManager.registerDimension(dimensionName, MSDimensionTypes.LANDS, null, true);
+	}
+	
+	public static Set<TitleLandType> getCompatibleTitleTypes(TerrainLandType terrain)
+	{
+		return TITLE_REGISTRY.getValues().stream().filter(landType -> landType.isAspectCompatible(terrain) && landType.canBePickedAtRandom()).collect(Collectors.toSet());
 	}
 	
 	private static class TerrainCallbacks implements IForgeRegistry.AddCallback<TerrainLandType>, IForgeRegistry.ClearCallback<TerrainLandType>, IForgeRegistry.CreateCallback<TerrainLandType>

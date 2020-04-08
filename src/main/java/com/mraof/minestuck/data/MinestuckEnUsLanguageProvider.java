@@ -1056,8 +1056,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(PredefineData.TITLE_ALREADY_SET, "That player already has their title set to %s");
 		add(PredefineData.TITLE_ALREADY_USED, "The title %s is already used in that players session");
 		add(PredefineData.RESETTING_TERRAIN_TYPE, "The currently set terrain type %s is not compatible with land type, and will be reset");
-		add(PredefineData.INCOMPATIBLE_LAND, "The currently predefined title land type %s does not allow this terrain type");
-		add(PredefineData.INVALID_LAND_ORDER, "The title land type has to be predefined before the terrain land type");
+		add(PredefineData.GENERATED_TITLE, "Generated %s as predefined title");
+		add(PredefineData.CHANGED_TITLE, "Changed predefined title from %s to %s due to a new title land type");
+		add(PredefineData.GENERATED_TITLE_LAND, "Generated %s as predefined title land type");
+		add(PredefineData.CHANGED_TITLE_LAND, "Changed predefined title land type from %s to %s due to a new terrain land type");
 		
 		add(JeiGristCost.GRIST_COSTS, "Grist Costs");
 		
