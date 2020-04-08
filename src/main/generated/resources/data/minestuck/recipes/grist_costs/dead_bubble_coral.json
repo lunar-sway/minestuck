@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:dead_bubble_coral"
+  },
+  "grist_cost": {
+    "minestuck:build": 6
+  }
+}

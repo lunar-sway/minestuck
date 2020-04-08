@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:black_dye"
+  },
+  "grist_cost": {
+    "minestuck:tar": 4
+  }
+}

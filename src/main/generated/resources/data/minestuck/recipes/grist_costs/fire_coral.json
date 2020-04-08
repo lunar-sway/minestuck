@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:fire_coral"
+  },
+  "grist_cost": {
+    "minestuck:cobalt": 2,
+    "minestuck:garnet": 4
+  }
+}
