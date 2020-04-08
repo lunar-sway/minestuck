@@ -3,7 +3,6 @@ package com.mraof.minestuck.data.recipe;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.util.ExtraForgeTags;
@@ -253,7 +252,7 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(Items.DRAGON_HEAD).grist(URANIUM, 25).grist(TAR, 70).grist(ZILLIUM, 1).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.PLAYER_HEAD).grist(ARTIFACT, 10).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.SHULKER_SHELL).grist(BUILD, 2500).grist(DIAMOND, 250).grist(URANIUM, 500).grist(MERCURY, 200).buildFor(recipeSaver, Minestuck.MOD_ID);
-		GristCostRecipeBuilder.of(Items.PHANTOM_MEMBRANE).grist(CAULK, 26).grist(SULFUR, 8).grist(MERCURY, 12);
+		GristCostRecipeBuilder.of(Items.PHANTOM_MEMBRANE).grist(CAULK, 26).grist(SULFUR, 8).grist(MERCURY, 12).buildFor(recipeSaver, Minestuck.MOD_ID);
 		
 		//Nether
 		GristCostRecipeBuilder.of(Items.SOUL_SAND).grist(BUILD, 2).grist(SULFUR, 5).grist(CAULK, 3).buildFor(recipeSaver, Minestuck.MOD_ID);

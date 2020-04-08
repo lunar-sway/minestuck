@@ -6,7 +6,7 @@
   "input2": {
     "item": "minecraft:sand"
   },
-  "mode": "and",
+  "mode": "or",
   "output": {
     "item": "minecraft:light_gray_concrete_powder"
   }
