@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:tropical_fish"
+  },
+  "grist_cost": {
+    "minestuck:caulk": 4,
+    "minestuck:amber": 4,
+    "minestuck:cobalt": 2
+  }
+}

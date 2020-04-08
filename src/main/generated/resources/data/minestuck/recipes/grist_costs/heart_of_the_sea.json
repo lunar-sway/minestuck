@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:heart_of_the_sea"
+  },
+  "grist_cost": {
+    "minestuck:cobalt": 120,
+    "minestuck:diamond": 55,
+    "minestuck:amethyst": 20
+  }
+}
