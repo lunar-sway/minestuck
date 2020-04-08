@@ -43,6 +43,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.potion.Potions;
+import net.minecraft.util.text.TextFormatting;
 
 public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 {
@@ -543,7 +544,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.BUG_NET, "Net");
 		addTooltip(MSItems.BUG_NET, "Perfect for catching bugs and frogs!");
 		add(MSItems.FROG, "Frog");
-		addExtra(MSItems.FROG, "type.random", "Random Frog");
+		addExtra(MSItems.FROG, "random", "Random Frog");
 		addExtra(MSItems.FROG, "type.0", "Frog");
 		addExtra(MSItems.FROG, "type.1", "Totally Normal Frog");
 		addExtra(MSItems.FROG, "type.2", "Ruby Contraband");
@@ -552,13 +553,13 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addExtra(MSItems.FROG, "type.5", "Golden Frog");
 		addExtra(MSItems.FROG, "type.6", "Frog");
 		addExtra(MSItems.FROG, "desc.4", "frog.null.name");
-		addExtra(MSItems.FROG, "desc.6", "§k Susan");
+		addExtra(MSItems.FROG, "desc.6", TextFormatting.OBFUSCATED+"Susan");
 		addExtra(MSItems.FROG, "eyes.0", "Lighter Eyes");
 		addExtra(MSItems.FROG, "eyes.1", "Darker Eyes");
 		addExtra(MSItems.FROG, "eyes.2", "Blank Eyes");
-		addExtra(MSItems.FROG, "belly.0", "Solid-Colored Belly");
-		addExtra(MSItems.FROG, "belly.1", "Spotted Belly");
-		addExtra(MSItems.FROG, "belly.2", "Striped Belly");
+		addExtra(MSItems.FROG, "belly.1", "Solid-Colored Belly");
+		addExtra(MSItems.FROG, "belly.2", "Spotted Belly");
+		addExtra(MSItems.FROG, "belly.3", "Striped Belly");
 		addExtra(MSItems.FROG, "size.0", "Tiny");
 		addExtra(MSItems.FROG, "size.1", "Small");
 		addExtra(MSItems.FROG, "size.2", "Normal Sized");

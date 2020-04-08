@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "tag": "forge:dyes/gray"
+  },
+  "input2": {
+    "item": "minecraft:light_gray_concrete_powder"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:gray_concrete_powder"
+  }
+}

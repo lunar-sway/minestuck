@@ -1,13 +1,13 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "item": "minecraft:prismarine_shard"
+    "item": "minecraft:gravel"
   },
   "input2": {
-    "item": "minestuck:fork"
+    "item": "minecraft:sand"
   },
   "mode": "and",
   "output": {
-    "item": "minecraft:trident"
+    "item": "minecraft:light_gray_concrete_powder"
   }
 }

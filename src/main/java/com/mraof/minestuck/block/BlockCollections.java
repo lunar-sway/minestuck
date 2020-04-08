@@ -101,4 +101,52 @@ public class BlockCollections
 			default: throw new IllegalArgumentException("Got unexpected color: "+color);
 		}
 	}
+	
+	public static Block coloredConcrete(DyeColor color)
+	{
+		switch(color)
+		{
+			case WHITE: return Blocks.WHITE_CONCRETE;
+			case ORANGE: return Blocks.ORANGE_CONCRETE;
+			case MAGENTA: return Blocks.MAGENTA_CONCRETE;
+			case LIGHT_BLUE: return Blocks.LIGHT_BLUE_CONCRETE;
+			case YELLOW: return Blocks.YELLOW_CONCRETE;
+			case LIME: return Blocks.LIME_CONCRETE;
+			case PINK: return Blocks.PINK_CONCRETE;
+			case GRAY: return Blocks.GRAY_CONCRETE;
+			case LIGHT_GRAY: return Blocks.LIGHT_GRAY_CONCRETE;
+			case CYAN: return Blocks.CYAN_CONCRETE;
+			case PURPLE: return Blocks.PURPLE_CONCRETE;
+			case BLUE: return Blocks.BLUE_CONCRETE;
+			case BROWN: return Blocks.BROWN_CONCRETE;
+			case GREEN: return Blocks.GREEN_CONCRETE;
+			case RED: return Blocks.RED_CONCRETE;
+			case BLACK: return Blocks.BLACK_CONCRETE;
+			default: throw new IllegalArgumentException("Got unexpected color: "+color);
+		}
+	}
+	
+	public static Block coloredConcretePowder(DyeColor color)
+	{
+		switch(color)
+		{
+			case WHITE: return Blocks.WHITE_CONCRETE_POWDER;
+			case ORANGE: return Blocks.ORANGE_CONCRETE_POWDER;
+			case MAGENTA: return Blocks.MAGENTA_CONCRETE_POWDER;
+			case LIGHT_BLUE: return Blocks.LIGHT_BLUE_CONCRETE_POWDER;
+			case YELLOW: return Blocks.YELLOW_CONCRETE_POWDER;
+			case LIME: return Blocks.LIME_CONCRETE_POWDER;
+			case PINK: return Blocks.PINK_CONCRETE_POWDER;
+			case GRAY: return Blocks.GRAY_CONCRETE_POWDER;
+			case LIGHT_GRAY: return Blocks.LIGHT_GRAY_CONCRETE_POWDER;
+			case CYAN: return Blocks.CYAN_CONCRETE_POWDER;
+			case PURPLE: return Blocks.PURPLE_CONCRETE_POWDER;
+			case BLUE: return Blocks.BLUE_CONCRETE_POWDER;
+			case BROWN: return Blocks.BROWN_CONCRETE_POWDER;
+			case GREEN: return Blocks.GREEN_CONCRETE_POWDER;
+			case RED: return Blocks.RED_CONCRETE_POWDER;
+			case BLACK: return Blocks.BLACK_CONCRETE_POWDER;
+			default: throw new IllegalArgumentException("Got unexpected color: "+color);
+		}
+	}
 }
