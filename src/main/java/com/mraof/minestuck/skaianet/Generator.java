@@ -4,7 +4,11 @@ import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.world.lands.LandTypes;
+import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
+import com.mraof.minestuck.world.lands.title.TitleLandType;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -74,6 +78,31 @@ public class Generator
 	{
 		Set<EnumClass> usedClasses = usedTitles.stream().map(Title::getHeroClass).collect(Collectors.toSet());
 		return EnumClass.valuesStream().filter(c -> !usedClasses.contains(c)).collect(Collectors.toList());
+	}
+	
+	static TitleLandType generateWeightedTitleLandType(Session session, EnumAspect aspect, @Nullable TerrainLandType terrainType, PlayerIdentifier ignore)
+	{
+		Random random = new Random();
+		LandTypes landGen = new LandTypes(random.nextLong());	//TODO seed based on player and world in a good way
+		
+		List<TitleLandType> usedTypes = session.getUsedTitleLandTypes(ignore);
+		
+		boolean hasFrogs = usedTypes.contains(LandTypes.FROGS);
+		
+		//if(aspect == EnumAspect.SPACE && !hasFrogs)
+		//Maybe force it if we so want?
+		
+		return landGen.getTitleAspect(terrainType, aspect, usedTypes);
+	}
+	
+	static TerrainLandType generateWeightedTerrainLandType(Session session, TitleLandType titleType, PlayerIdentifier ignore)
+	{
+		Random random = new Random();
+		LandTypes landGen = new LandTypes(random.nextLong());	//TODO seed based on player and world in a good way
+		
+		List<TerrainLandType> usedTypes = session.getUsedTerrainLandTypes(ignore);
+		
+		return landGen.getTerrainAspect(titleType, usedTypes);
 	}
 	
 	private static <T> T getRandomFromList(List<T> list, Random random)

@@ -5,6 +5,9 @@ import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.world.lands.LandInfo;
+import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
+import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraftforge.common.util.Constants;
@@ -175,6 +178,55 @@ public final class Session
 		return titles;
 	}
 	
+	List<TitleLandType> getUsedTitleLandTypes()
+	{
+		return getUsedTitleLandTypes(null);
+	}
+	
+	List<TitleLandType> getUsedTitleLandTypes(PlayerIdentifier ignore)
+	{
+		List<TitleLandType> types = new ArrayList<>();
+		for(SburbConnection c : connections)
+		{
+			if(!c.getClientIdentifier().equals(ignore))
+			{
+				LandInfo landInfo = c.getLandInfo();
+				if(landInfo != null)
+					types.add(landInfo.getLandAspects().title);
+			}
+		}
+		
+		for(PredefineData data : predefinedPlayers.values())
+			if(!data.getPlayer().equals(ignore) && data.getTitleLandType() != null)
+				types.add(data.getTitleLandType());
+		
+		return types;
+	}
+	
+	List<TerrainLandType> getUsedTerrainLandTypes()
+	{
+		return getUsedTerrainLandTypes(null);
+	}
+	
+	List<TerrainLandType> getUsedTerrainLandTypes(PlayerIdentifier ignore)
+	{
+		List<TerrainLandType> types = new ArrayList<>();
+		for(SburbConnection c : connections)
+		{
+			if(!c.getClientIdentifier().equals(ignore))
+			{
+				LandInfo landInfo = c.getLandInfo();
+				if(landInfo != null)
+					types.add(landInfo.getLandAspects().terrain);
+			}
+		}
+		
+		for(PredefineData data : predefinedPlayers.values())
+			if(!data.getPlayer().equals(ignore) && data.getTerrainLandType() != null)
+				types.add(data.getTerrainLandType());
+		
+		return types;
+	}
 	public void predefineCall(PlayerIdentifier player, SkaianetException.SkaianetConsumer<PredefineData> consumer) throws SkaianetException
 	{
 		PredefineData data = predefinedPlayers.get(player);

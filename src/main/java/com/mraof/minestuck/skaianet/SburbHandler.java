@@ -31,7 +31,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -486,49 +485,31 @@ public final class SburbHandler
 	
 	private static LandTypePair genLandAspects(MinecraftServer mcServer, SburbConnection connection)
 	{
-		LandTypes aspectGen = new LandTypes(mcServer.getWorld(DimensionType.OVERWORLD).getSeed()^connection.getClientIdentifier().hashCode());
 		Session session = SessionHandler.get(mcServer).getPlayerSession(connection.getClientIdentifier());
 		Title title = PlayerSavedData.getData(connection.getClientIdentifier(), mcServer).getTitle();
-		TitleLandType titleAspect = null;
-		TerrainLandType terrainAspect = null;
+		TitleLandType titleLandType = null;
+		TerrainLandType terrainLandType = null;
 		
 		if(session.predefinedPlayers.containsKey(connection.getClientIdentifier()))
 		{
 			PredefineData data = session.predefinedPlayers.get(connection.getClientIdentifier());
-			titleAspect = data.getTitleLandType();
-			terrainAspect = data.getTerrainLandType();
+			titleLandType = data.getTitleLandType();
+			terrainLandType = data.getTerrainLandType();
 		}
 		
-		boolean frogs = false;
-		ArrayList<TerrainLandType> usedTerrainAspects = new ArrayList<>();
-		ArrayList<TitleLandType> usedTitleAspects = new ArrayList<>();
-		for(SburbConnection c : session.connections)
-			if(c != connection && c.getLandInfo() != null)
-			{
-				LandTypePair aspects = c.getLandInfo().getLandAspects();
-				if(aspects.title == LandTypes.FROGS)
-					frogs = true;
-				usedTitleAspects.add(aspects.title);
-				usedTerrainAspects.add(aspects.terrain);
-			}
-		for(PredefineData data : session.predefinedPlayers.values())
+		if(titleLandType == null)
 		{
-			if(data.getTerrainLandType() != null)
-				usedTerrainAspects.add(data.getTerrainLandType());
-			if(data.getTitleLandType() != null)
+			titleLandType = Generator.generateWeightedTitleLandType(session, title.getHeroAspect(), terrainLandType, connection.getClientIdentifier());
+			if(terrainLandType != null && titleLandType == LandTypes.TITLE_NULL)
 			{
-				usedTitleAspects.add(data.getTitleLandType());
-				if(data.getTitleLandType() == LandTypes.FROGS)
-					frogs = true;
+				Debug.warnf("Failed to find a title land aspect compatible with land aspect \"%s\". Forced to use a poorly compatible land aspect instead.", terrainLandType.getRegistryName());
+				titleLandType = Generator.generateWeightedTitleLandType(session, title.getHeroAspect(), null, connection.getClientIdentifier());
 			}
 		}
+		if(terrainLandType == null)
+			terrainLandType = Generator.generateWeightedTerrainLandType(session, titleLandType, connection.getClientIdentifier());
 		
-		if(titleAspect == null)
-			titleAspect = aspectGen.getTitleAspect(terrainAspect, title.getHeroAspect(), usedTitleAspects);
-		if(terrainAspect == null)
-			terrainAspect = aspectGen.getTerrainAspect(titleAspect, usedTerrainAspects);
-		
-		return new LandTypePair(terrainAspect, titleAspect);
+		return new LandTypePair(terrainLandType, titleLandType);
 	}
 	
 	static void onFirstItemGiven(SburbConnection connection)

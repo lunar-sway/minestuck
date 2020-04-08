@@ -177,11 +177,6 @@ public class LandTypes
 		if(aspectTerrain != null)
 		{
 			landAspect = selectRandomAspect(usedAspects, titleGroupMap, aspect -> aspect.getAspect() == titleAspect && aspect.isAspectCompatible(aspectTerrain));
-			if(landAspect == null)
-			{
-				Debug.warnf("Failed to find a title land aspect compatible with land aspect \"%s\". Forced to use a poorly compatible land aspect instead.", aspectTerrain.getRegistryName());
-				landAspect = selectRandomAspect(usedAspects, titleGroupMap, aspect -> aspect.getAspect() == titleAspect);
-			}
 		} else landAspect = selectRandomAspect(usedAspects, titleGroupMap, aspect -> aspect.getAspect() == titleAspect);
 		
 		if(landAspect != null)
@@ -189,7 +184,7 @@ public class LandTypes
 		else return TITLE_NULL;
 	}
 	
-	private <A extends ILandType> A selectRandomAspect(List<A> usedAspects, Map<ResourceLocation, List<A>> groupMap, Predicate<A> condition)
+	private <A extends ILandType<?>> A selectRandomAspect(List<A> usedAspects, Map<ResourceLocation, List<A>> groupMap, Predicate<A> condition)
 	{
 		List<List<A>> list = Lists.newArrayList();
 		for(List<A> aspects : groupMap.values())
@@ -206,7 +201,7 @@ public class LandTypes
 		return pickOneFromUsage(groupList, usedAspects, Object::equals);
 	}
 	
-	private <A extends ILandType, B> B pickOneFromUsage(List<B> list, List<A> usedAspects, BiPredicate<B, A> matchPredicate)
+	private <A extends ILandType<?>, B> B pickOneFromUsage(List<B> list, List<A> usedAspects, BiPredicate<B, A> matchPredicate)
 	{
 		if(list.isEmpty())
 			return null;
