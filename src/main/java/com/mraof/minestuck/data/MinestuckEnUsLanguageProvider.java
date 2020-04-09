@@ -480,6 +480,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.ROCK_COOKIE, "It's as edible as a rock");
 		addStore(MSItems.ROCK_COOKIE, "Grey-Colored Cookie");
 		addStoreTooltip(MSItems.ROCK_COOKIE, "This here is a true wonder-cookie! Totally! And they are even cheaper than regular cookies!");
+		add(MSItems.WOODEN_CARROT, "Wooden Carrot");
+		addTooltip(MSItems.WOODEN_CARROT, "It's as edible as a plank.");
+		addStoreTooltip(MSItems.WOODEN_CARROT, "You're not sure if this thing is edible but you sure as fuck don't want to try...... probably...");
 		add(MSItems.FUNGAL_SPORE, "Fungal Spore");
 		addTooltip(MSItems.FUNGAL_SPORE, "You must live off the land, and in this land, it means eating this.");
 		addStore(MSItems.FUNGAL_SPORE, "Mushroom Skittles");
