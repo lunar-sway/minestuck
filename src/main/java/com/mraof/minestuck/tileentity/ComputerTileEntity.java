@@ -1,7 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.client.gui.ComputerScreen;
-import com.mraof.minestuck.computer.ComputerProgram;
+import com.mraof.minestuck.computer.ProgramData;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
@@ -36,8 +36,6 @@ public class ComputerTileEntity extends TileEntity
 	public Hashtable<Integer, String> latestmessage = new Hashtable<Integer, String>();
 	public CompoundNBT programData = new CompoundNBT();
 	public int programSelected = -1;
-	
-	public ComputerProgram program;
 	
 	@Override
 	public void read(CompoundNBT compound)
@@ -146,8 +144,8 @@ public class ComputerTileEntity extends TileEntity
 	public void closeAll() 
 	{
 		for(Entry<Integer, Boolean> entry : installedPrograms.entrySet())
-			if(entry.getValue() && entry.getKey() != -1 && ComputerProgram.getProgram(entry.getKey()) != null)
-				ComputerProgram.getProgram(entry.getKey()).onClosed(this);
+			if(entry.getValue() && entry.getKey() != -1)
+				ProgramData.closeProgram(entry.getKey(), this);
 	}
 
 	public void connected(PlayerIdentifier player, boolean isClient)

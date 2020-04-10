@@ -4,9 +4,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.network.ClientEditPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.skaianet.ReducedConnection;
-import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaiaClient;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 
 import java.util.ArrayList;
@@ -81,16 +79,6 @@ public class SburbServer extends ButtonListProgram
 	public String getName()
 	{
 		return NAME;
-	}
-	
-	@Override
-	public void onClosed(ComputerTileEntity te)
-	{
-		SburbConnection c = SkaianetHandler.get(te.getWorld()).getServerConnection(te);
-		if(c != null)
-			SkaianetHandler.get(te.getWorld()).closeConnection(te.owner, c.getClientIdentifier(), false);
-		else if(te.getData(1).getBoolean("isOpen"))
-			SkaianetHandler.get(te.getWorld()).closeConnection(te.owner, null, false);
 	}
 	
 }
