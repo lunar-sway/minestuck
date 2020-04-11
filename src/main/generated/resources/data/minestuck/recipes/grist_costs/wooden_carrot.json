@@ -4,7 +4,8 @@
     "item": "minestuck:wooden_carrot"
   },
   "grist_cost": {
-    "minestuck:build": 2,
-    "minestuck:artifact": 1
+    "minestuck:build": 8,
+    "minestuck:amber": 3,
+    "minestuck:chalk": 1
   }
 }
