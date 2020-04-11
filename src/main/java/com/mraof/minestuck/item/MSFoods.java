@@ -20,7 +20,7 @@ public class MSFoods
     public static final Food FRENCH_FRY = (new Food.Builder()).hunger(1).saturation(0.1F).build();
     public static final Food STRAWBERRY_CHUNK = (new Food.Builder()).hunger(4).saturation(0.5F).build();
     public static final Food IRRADIATED_STEAK = (new Food.Builder()).hunger(4).saturation(0.4F).effect(new EffectInstance(Effects.WITHER, 100, 1), 0.9F).build();
-    public static final Food WOODEN_CARROT = (new Food.Builder()).hunger(0).saturation(0.0F).effect(new EffectInstance(Effects.INSTANT_DAMAGE, 1, 0), 1.0F).effect(new EffectInstance(Effects.INSTANT_DAMAGE, 1, 255), 0.01F).setAlwaysEdible().build();
+    public static final Food WOODEN_CARROT = (new Food.Builder()).hunger(0).saturation(0.0F).effect(new EffectInstance(Effects.INSTANT_DAMAGE, 0, 0), 0.5F).effect(new EffectInstance(Effects.POISON, 100, 0), 1.0F).build();
     public static final Food SURPRISE_EMBRYO = (new Food.Builder()).hunger(3).saturation(0.2F).build();
     public static final Food UNKNOWABLE_EGG = (new Food.Builder()).hunger(3).saturation(0.3F).build();
     //Candies
