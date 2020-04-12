@@ -243,6 +243,7 @@ public class MSBlockLootTables extends BlockLootTables
 		registerLootTable(HOT_CAKE, func_218482_a());
 		registerLootTable(REVERSE_CAKE, func_218482_a());
 		registerLootTable(FUCHSIA_CAKE, func_218482_a());
+		registerLootTable(NEGATIVE_CAKE, func_218482_a());
 		
 		registerDropSelfLootTable(PRIMED_TNT);
 		registerDropSelfLootTable(UNSTABLE_TNT);

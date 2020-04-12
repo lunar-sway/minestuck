@@ -269,6 +269,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addStoreTooltip(MSBlocks.HOT_CAKE, "Did you know that red cakes heal you? I'm 90%% sure that this is one of those cakes.");
 		add(MSBlocks.REVERSE_CAKE, "Reverse Cake");
 		add(MSBlocks.FUCHSIA_CAKE, "Fuchsia Cake");
+		add(MSBlocks.NEGATIVE_CAKE, "Negative Cake");
 		addStore(MSBlocks.FUCHSIA_CAKE, "Fuschia Cake");
 		add(MSBlocks.PRIMED_TNT, "Primed TNT");
 		add(MSBlocks.UNSTABLE_TNT, "Unstable TNT");
