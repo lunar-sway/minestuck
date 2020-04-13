@@ -20,7 +20,7 @@ import java.util.function.Supplier;
 public class MSItemTypes
 {
 	public static final IItemTier EMERALD_TIER = new ModItemTier(3, 1220, 8.0F, 3.0F, 12, () -> Ingredient.fromItems(Items.EMERALD));
-	public static final IItemTier PRISMARINE_TIER = new ModItemTier(2, 300, 4.0F, 3.0F, 10, () -> Ingredient.fromItems(Items.PRISMARINE));
+	public static final IItemTier PRISMARINE_TIER = new ModItemTier(2, 300, 4.0F, 3.0F, 10, () -> Ingredient.fromItems(Items.PRISMARINE_SHARD));
 	public static final IItemTier URANIUM_TIER = new ModItemTier(2, 512, 5.0F, 4.0F, 5, () -> Ingredient.fromItems(MSItems.RAW_URANIUM));
 	public static final IItemTier POGO_TIER = new ModItemTier(1, 400, 2.0F, 2.0F, 8, () -> Ingredient.fromItems(Items.SLIME_BALL));
 	public static final IItemTier BOOK_TIER = new ModItemTier(0, 250, 1.0F, 2.0F, 15, () -> Ingredient.fromItems(Items.BOOK));
