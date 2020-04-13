@@ -210,10 +210,10 @@ public class ServerEventHandler
 	}
 	
 	@SubscribeEvent
-	public void breadStaling(ItemExpireEvent event)
+	public static void breadStaling(ItemExpireEvent event)
 	{
 		ItemEntity e = event.getEntityItem();
-if(e.getItem().getCount() == 1 && (e.getItem().getItem() == Items.BREAD)) {
+		if(e.getItem().getCount() == 1 && (e.getItem().getItem() == Items.BREAD)) {
 			ItemEntity stalebread = new ItemEntity(e.world, e.posX, e.posY, e.posZ, new ItemStack(MSItems.STALE_BAGUETTE));
 			e.world.addEntity(stalebread);
 		}
