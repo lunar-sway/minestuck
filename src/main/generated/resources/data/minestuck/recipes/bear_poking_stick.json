@@ -1,0 +1,21 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "  I",
+    " I ",
+    "L  "
+  ],
+  "key": {
+    "I": {
+      "tag": "forge:rods/wooden"
+    },
+    "L": {
+      "item": "minecraft:leather",
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "minestuck:bear_poking_stick",
+    "count": 1
+  }
+}
