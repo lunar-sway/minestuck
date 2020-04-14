@@ -1,20 +1,19 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    " # ",
-    "#/#",
-    " / "
+    " w ",
+    "wsw",
+    " s "
   ],
   "key": {
-    "#": {
-      "item": "minecraft:black_wool"
-    },
-    "/": {
+    "s": {
       "tag": "forge:rods/wooden"
+    },
+    "w": {
+      "item": "minecraft:black_wool"
     }
   },
   "result": {
-    "item": "minestuck:umbrella",
-    "count": 1
+    "item": "minestuck:umbrella"
   }
 }

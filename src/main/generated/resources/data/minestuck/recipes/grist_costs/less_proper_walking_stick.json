@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:less_proper_walking_stick"
+  },
+  "grist_cost": {
+    "minestuck:build": 500,
+    "minestuck:rust": 120,
+    "minestuck:iodine": 45
+  }
+}

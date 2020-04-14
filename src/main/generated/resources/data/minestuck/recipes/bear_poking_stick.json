@@ -1,20 +1,19 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "  I",
-    " I ",
-    "L  "
+    "  s",
+    " s ",
+    "l  "
   ],
   "key": {
-    "I": {
+    "s": {
       "tag": "forge:rods/wooden"
     },
-    "L": {
-      "item": "minecraft:leather"
+    "l": {
+      "tag": "forge:leather"
     }
   },
   "result": {
-    "item": "minestuck:bear_poking_stick",
-    "count": 1
+    "item": "minestuck:bear_poking_stick"
   }
 }
