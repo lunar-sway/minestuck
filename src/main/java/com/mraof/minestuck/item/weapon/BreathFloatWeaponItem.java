@@ -24,9 +24,9 @@ public class BreathFloatWeaponItem extends WeaponItem
     @Override
     public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected)
     {
-        if(entityIn.world.isRemote && entityIn instanceof ServerPlayerEntity)
+        if(entityIn instanceof ServerPlayerEntity)
         {
-            if (PlayerSavedData.getData((ServerPlayerEntity) entityIn).getTitle().getHeroAspect() == BREATH)
+            if (PlayerSavedData.getData((ServerPlayerEntity) entityIn).getTitle().getHeroAspect() == BREATH && isSelected)
             {
                 ((ServerPlayerEntity) entityIn).addPotionEffect(new EffectInstance(Effects.SLOW_FALLING, 20, 2));
             }
