@@ -114,8 +114,10 @@ public class MSItems
 	public static final Item SPIKED_CLUB = getNull();
 	//canes
 	public static final Item CANE = getNull();
+	public static final Item VAUDEVILLE_HOOK = getNull();
 	public static final Item BEAR_POKING_STICK = getNull();
 	public static final Item UMBRELLA = getNull();
+	public static final Item UPPER_CRUST_CRUST_CANE = getNull();
 	public static final Item IRON_CANE = getNull();
 	public static final Item SPEAR_CANE = getNull();
 	public static final Item PARADISES_PORTABELLO = getNull();
@@ -124,6 +126,7 @@ public class MSItems
 	public static final Item POGO_CANE = getNull();
 	public static final Item CANDY_CANE = getNull();
 	public static final Item SHARP_CANDY_CANE = getNull();
+	public static final Item PRIM_AND_PROPER_WALKING_POLE = getNull();
 	public static final Item LESS_PROPER_WALKING_STICK = getNull();
 	public static final Item LESS_PROPER_WALKING_STICK_SHEATHED = getNull();
 	public static final Item ROCKEFELLERS_WALKING_BLADECANE = getNull();
@@ -569,6 +572,7 @@ public class MSItems
 		
 		//canes
 		registry.register(new WeaponItem(ItemTier.WOOD, 2, -2.0F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(100).group(MSItemGroup.WEAPONS)).setRegistryName("cane"));
+		registry.register(new WeaponItem(ItemTier.WOOD, 2, -2.0F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(150).group(MSItemGroup.WEAPONS)).setRegistryName("vaudeville_hook"));
 		registry.register(new GivePotionEffectWeaponItem(ItemTier.WOOD, 3, -2.0F, 1.0F, Effects.STRENGTH, 140, 1, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(150).group(MSItemGroup.WEAPONS)).setRegistryName("bear_poking_stick"));
 		registry.register(new BreathFloatWeaponItem(ItemTier.WOOD, 2, -2.0F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(350).group(MSItemGroup.WEAPONS)).setRegistryName("umbrella"));
 		registry.register(new BaguetteWeaponItem(MSItemTypes.BAGUETTE_TIER, 3, -2.2F, 2.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(249).group(MSItemGroup.WEAPONS)).setRegistryName("upper_crust_crust_cane"));
