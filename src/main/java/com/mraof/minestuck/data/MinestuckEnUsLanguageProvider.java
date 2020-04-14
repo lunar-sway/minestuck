@@ -43,6 +43,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.potion.Potions;
+import net.minecraft.util.text.TextFormatting;
 
 public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 {
@@ -568,7 +569,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addStoreTooltip(MSItems.CARVING_TOOL, "You gotta BE the marble!");
 		add(MSItems.CRUMPLY_HAT, "Crumply Hat");
 		add(MSItems.STONE_EYEBALLS, "Stone Eyeballs");
-		add(MSItems.STONE_SLAB, "Stone Slab");
+		add(MSItems.STONE_SLAB, "Stone Tablet");
+		addExtra(MSItems.STONE_SLAB, "carved", TextFormatting.GRAY+"Looks like something has been carved into it!");
 		addStoreTooltip(MSItems.STONE_SLAB, "It's pretty rock, but I wouldn't advise rolling on it.");
 		add(MSItems.OIL_BUCKET, "Bucket of Oil");
 		add(MSItems.BLOOD_BUCKET, "Bucket of Blood");

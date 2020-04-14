@@ -655,7 +655,7 @@ public class MSItems
 		registry.register(new Item(new Item.Properties().maxStackSize(1).group(MSItemGroup.LANDS)).setRegistryName("carving_tool"));
 		registry.register(new Item(new Item.Properties().maxStackSize(1).group(MSItemGroup.LANDS)).setRegistryName("crumply_hat"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.LANDS)).setRegistryName("stone_eyeballs"));
-		registry.register(new Item(new Item.Properties().group(MSItemGroup.LANDS)).setRegistryName("stone_slab"));
+		registry.register(new StoneTabletItem(new Item.Properties().group(MSItemGroup.LANDS)).setRegistryName("stone_slab"));
 		//registry.register(new HangingItem((world, pos, facing, stack) -> new EntityShopPoster(world, pos, facing, stack, 0), new Item.Properties().maxStackSize(1).group(ModItemGroup.LANDS)).setRegistryName("shop_poster"));
 		
 		registry.register(new BucketItem(MSFluids.OIL, new Item.Properties().containerItem(Items.BUCKET).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("oil_bucket"));

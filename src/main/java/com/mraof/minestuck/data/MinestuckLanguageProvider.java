@@ -155,6 +155,10 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	{
 		add("subtitles."+type.getTranslationKey()+"."+key, value);
 	}
+	protected void addTabletText()
+	{
+	
+	}
 	protected void addColor(String key, String value)
 	{
 		add("minestuck.color."+key, value);
