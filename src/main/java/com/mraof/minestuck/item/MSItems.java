@@ -108,6 +108,7 @@ public class MSItems
 	public static final Item GLUB_CLUB = getNull();
 	public static final Item NIGHT_CLUB = getNull();
 	public static final Item PRISMARINE_BASHER = getNull();
+	public static final Item CLUB_ZERO = getNull();
 	public static final Item POGO_CLUB = getNull();
 	public static final Item METAL_BAT = getNull();
 	public static final Item SPIKED_CLUB = getNull();
@@ -242,6 +243,7 @@ public class MSItems
 	public static final Item GRIMOIRE = getNull();
 	public static final Item LONG_FORGOTTEN_WARHORN = getNull();
 	public static final Item RAZOR_BLADE = getNull();
+	public static final Item ICE_SHARD = getNull();
 	public static final Item URANIUM_POWERED_STICK = getNull();
 	public static final Item IRON_BOAT = getNull();
 	public static final Item GOLD_BOAT = getNull();
@@ -560,6 +562,7 @@ public class MSItems
 		registry.register(new NoisyWeaponItem(MSItemTypes.MEAT_TIER, 4, -2.2F, 2.0F, SoundEvents.ENTITY_GUARDIAN_FLOP, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(750).group(MSItemGroup.WEAPONS)).setRegistryName("glub_club"));
 		registry.register(new WeaponItem(MSItemTypes.REGI_TIER, 1, -2.2F, 2.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(600).group(MSItemGroup.WEAPONS)).setRegistryName("night_club"));
 		registry.register(new WeaponItem(MSItemTypes.PRISMARINE_TIER, 3, -2.2F, 2.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS)).setRegistryName("prismarine_basher"));
+		registry.register(new FrozenWeaponItem(MSItemTypes.ICE_TIER, 3, -2.2F, 2.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(250).group(MSItemGroup.WEAPONS)).setRegistryName("club_zero"));
 		registry.register(new PogoWeaponItem(MSItemTypes.POGO_TIER, 2, -2.2F, 2.0F, 0.5, MSItemTypes.MISC_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("pogo_club"));
 		registry.register(new WeaponItem(ItemTier.IRON, 3, -2.2F, 2.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(750).group(MSItemGroup.WEAPONS)).setRegistryName("metal_bat"));
 		registry.register(new WeaponItem(ItemTier.WOOD, 5, -2.2F, 2.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS)).setRegistryName("spiked_club"));
@@ -699,6 +702,7 @@ public class MSItems
 		registry.register(new GrimoireItem(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("grimoire"));
 		registry.register(new LongForgottenWarhornItem(new Item.Properties().defaultMaxDamage(100)).setRegistryName("long_forgotten_warhorn"));
 		registry.register(new RazorBladeItem(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("razor_blade"));
+		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("ice_shard"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN).maxStackSize(1)).setRegistryName("uranium_powered_stick"));
 		registry.register(new CustomBoatItem((stack, world, x, y, z) -> new MetalBoatEntity(world, x, y, z, 0), new Item.Properties().group(MSItemGroup.MAIN).maxStackSize(1)).setRegistryName("iron_boat"));
 		registry.register(new CustomBoatItem((stack, world, x, y, z) -> new MetalBoatEntity(world, x, y, z, 1), new Item.Properties().group(MSItemGroup.MAIN).maxStackSize(1)).setRegistryName("gold_boat"));
