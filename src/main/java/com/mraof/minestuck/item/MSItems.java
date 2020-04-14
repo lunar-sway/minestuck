@@ -552,7 +552,7 @@ public class MSItems
 		
 		//clubs
 		registry.register(new WeaponItem(ItemTier.WOOD, 3, -2.2F, 2.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(1024).group(MSItemGroup.WEAPONS)).setRegistryName("deuce_club"));
-		registry.register(new BaguetteWeaponItem(ItemTier.WOOD, 2, -2.2F, 2.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(50).group(MSItemGroup.WEAPONS)).setRegistryName("stale_baguette"));
+		registry.register(new BaguetteWeaponItem(MSItemTypes.BAGUETTE_TIER, 2, -2.2F, 2.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(50).group(MSItemGroup.WEAPONS)).setRegistryName("stale_baguette"));
 		registry.register(new NoisyWeaponItem(MSItemTypes.MEAT_TIER, 4, -2.2F, 2.0F, SoundEvents.ENTITY_GUARDIAN_FLOP, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(750).group(MSItemGroup.WEAPONS)).setRegistryName("glub_club"));
 		registry.register(new WeaponItem(MSItemTypes.REGI_TIER, 1, -2.2F, 2.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(600).group(MSItemGroup.WEAPONS)).setRegistryName("night_club"));
 		registry.register(new WeaponItem(MSItemTypes.PRISMARINE_TIER, 3, -2.2F, 2.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS)).setRegistryName("prismarine_basher"));
@@ -564,6 +564,7 @@ public class MSItems
 		registry.register(new WeaponItem(ItemTier.WOOD, 2, -2.0F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(100).group(MSItemGroup.WEAPONS)).setRegistryName("cane"));
 		registry.register(new GivePotionEffectWeaponItem(ItemTier.WOOD, 3, -2.0F, 1.0F, Effects.STRENGTH, 140, 1, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(150).group(MSItemGroup.WEAPONS)).setRegistryName("bear_poking_stick"));
 		registry.register(new BreathFloatWeaponItem(ItemTier.WOOD, 2, -2.0F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(350).group(MSItemGroup.WEAPONS)).setRegistryName("umbrella"));
+		registry.register(new BaguetteWeaponItem(MSItemTypes.BAGUETTE_TIER, 3, -2.2F, 2.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(249).group(MSItemGroup.WEAPONS)).setRegistryName("upper_crust_crust_cane"));
 		registry.register(new WeaponItem(ItemTier.IRON, 2, -2.0F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(450).group(MSItemGroup.WEAPONS)).setRegistryName("iron_cane"));
 		registry.register(new WeaponItem(ItemTier.IRON, 3, -2.0F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(300).group(MSItemGroup.WEAPONS)).setRegistryName("spear_cane"));
 		registry.register(new WeaponItem(MSItemTypes.CANDY_TIER, 3, -2.0F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(175).group(MSItemGroup.WEAPONS)).setRegistryName("paradises_portabello"));

@@ -31,6 +31,7 @@ public class MSItemTypes
 	public static final IItemTier CACTUS_TIER = new ModItemTier(0, 104, 2.0F, 1.0F, 10, () -> Ingredient.fromItems(Blocks.CACTUS));
 	public static final IItemTier MEAT_TIER = new ModItemTier(0, 175, 1.0F, 0.0F, 5, () -> Ingredient.EMPTY);
 	public static final IItemTier CANDY_TIER = new ModItemTier(0, 450, 2.5F, 0.0F, 15, () -> Ingredient.EMPTY);
+	public static final IItemTier BAGUETTE_TIER = new ModItemTier(0, 450, 2.5F, 0.0F, 10, () -> Ingredient.fromItems(MSItems.BREADCRUMBS));
 	public static final IItemTier HORRORTERROR_TIER = new ModItemTier(3, 1600, 4.0F, 4.0F, 15, () -> Ingredient.EMPTY);
 	
 	public static final IArmorMaterial PRISMARINE_ARMOR = new ModArmorMaterial("minestuck:prismarine", 20, new int[]{3, 7, 6, 2}, 15, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0F, () -> Ingredient.fromItems(Items.PRISMARINE_SHARD));
