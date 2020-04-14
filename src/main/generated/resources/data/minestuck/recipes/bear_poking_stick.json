@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "  I",
     " I ",
@@ -10,8 +10,7 @@
       "tag": "forge:rods/wooden"
     },
     "L": {
-      "item": "minecraft:leather",
-      "data": 0
+      "item": "minecraft:leather"
     }
   },
   "result": {
