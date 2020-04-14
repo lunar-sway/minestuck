@@ -429,8 +429,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.SHARP_CANDY_CANE, "You wouldn't dare put this bladed delight into your gob-hole, so instead you turn it towards your foes.");
 		add(MSItems.PRIM_AND_PROPER_WALKING_POLE, "Prim and Proper Walking Pole");
 		addTooltip(MSItems.PRIM_AND_PROPER_WALKING_POLE, "This cane SCREAMS propriety and 18th century heteronormativity.");
-		add(MSItems.PRIM_AND_PROPER_WALKING_POLE, "Prim and Proper Walking Pole");
-		addTooltip(MSItems.PRIM_AND_PROPER_WALKING_POLE, "This cane SCREAMS propriety and 18th century heteronormativity.");
 		add(MSItems.ROCKEFELLERS_WALKING_BLADECANE, "Rockefeller's Walking Bladecane");
 		addTooltip(MSItems.ROCKEFELLERS_WALKING_BLADECANE, "Now you too can own an oil monopoly! Or at least walk like you do. Your confidence is all that matters in the end, anyway.");
 		add(MSItems.ROCKEFELLERS_WALKING_BLADECANE_SHEATHED, "Rockefeller's Walking Bladecane");
