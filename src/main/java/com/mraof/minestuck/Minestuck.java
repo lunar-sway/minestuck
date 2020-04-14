@@ -2,9 +2,7 @@ package com.mraof.minestuck;
 
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.client.ClientProxy;
-import com.mraof.minestuck.computer.ComputerProgram;
-import com.mraof.minestuck.computer.SburbClient;
-import com.mraof.minestuck.computer.SburbServer;
+import com.mraof.minestuck.computer.ProgramData;
 import com.mraof.minestuck.computer.editmode.DeployList;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortDialogue;
@@ -78,8 +76,8 @@ public class Minestuck
 		
 		ModMusicDiscItem.setup();
 		
-		ComputerProgram.registerProgram(0, SburbClient.class, new ItemStack(MSItems.CLIENT_DISK));	//This idea was kind of bad and should be replaced
-		ComputerProgram.registerProgram(1, SburbServer.class, new ItemStack(MSItems.SERVER_DISK));
+		ProgramData.registerProgram(0, new ItemStack(MSItems.CLIENT_DISK), ProgramData::onClientClosed);	//This idea was kind of bad and should be replaced
+		ProgramData.registerProgram(1, new ItemStack(MSItems.SERVER_DISK), ProgramData::onServerClosed);
 		
 		SessionHandler.maxSize = 144;//acceptTitleCollision?(generateSpecialClasses?168:144):12;
 	}

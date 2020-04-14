@@ -1,8 +1,8 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.computer.ComputerProgram;
+import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.Widget;
@@ -30,6 +30,7 @@ public class ComputerScreen extends Screen
 	
 	public Minecraft mc;
 	public ComputerTileEntity te;
+	private ComputerProgram program;
 	
 	ComputerScreen(Minecraft mc, ComputerTileEntity te)
 	{
@@ -51,13 +52,13 @@ public class ComputerScreen extends Screen
 			this.mc.getTextureManager().bindTexture(guiBsod);
 			int yOffset = (this.height / 2) - (ySize / 2);
 			this.blit((this.width / 2) - (xSize / 2), yOffset, 0, 0, xSize, ySize);
-		} else if(te.program != null)
-			te.program.paintGui(this, te);
+		} else if(program != null)
+			program.paintGui(this, te);
 		else {
 			this.mc.getTextureManager().bindTexture(guiBackground);
 			int yOffset = (this.height / 2) - (ySize / 2);
 			this.blit((this.width / 2) - (xSize / 2), yOffset, 0, 0, xSize, ySize);
-			font.drawString("Insert disk.", (width - xSize) / 2 +15, (height - ySize) / 2 +45, 4210752);
+			font.drawString("Insert disk.", (width - xSize) / 2F +15, (height - ySize) / 2F +45, 4210752);
 		}
 		GlStateManager.disableRescaleNormal();
 		RenderHelper.disableStandardItemLighting();
@@ -82,13 +83,13 @@ public class ComputerScreen extends Screen
 				if(entry.getValue() && (te.programSelected == -1 || te.programSelected > entry.getKey()))
 						te.programSelected = entry.getKey();
 		
-		if(te.programSelected != -1 && (te.program == null || te.program.getId() != te.programSelected))
-			te.program = ComputerProgram.getProgram(te.programSelected);
+		if(te.programSelected != -1 && (program == null || program.getId() != te.programSelected))
+			program = ComputerProgram.getProgram(te.programSelected);
 		
 		programButton = new GuiButtonExt((width - xSize)/2 +95,(height - ySize)/2 +10,70,20, "", button -> changeProgram());
 		addButton(programButton);
 		if(te.programSelected != -1)
-			te.program.onInitGui(this, null);
+			program.onInitGui(this, null);
 		
 		updateGui();
 	}
@@ -103,9 +104,9 @@ public class ComputerScreen extends Screen
 			return;
 		}
 		
-		if(te.program != null) {
-			te.program.onUpdateGui(this);
-			programButton.setMessage(I18n.format(te.program.getName()));
+		if(program != null) {
+			program.onUpdateGui(this);
+			programButton.setMessage(I18n.format(program.getName()));
 		}
 		
 	}
@@ -116,9 +117,10 @@ public class ComputerScreen extends Screen
 			return;
 		
 		te.programSelected = getNextProgram();
-		ComputerProgram program = te.program;
-		te.program = ComputerProgram.getProgram(te.programSelected);
-		te.program.onInitGui(this, program);
+		ComputerProgram prevProgram = program;
+		program = ComputerProgram.getProgram(te.programSelected);
+		if(program != null)
+			program.onInitGui(this, prevProgram);
 		
 		updateGui();
 	}

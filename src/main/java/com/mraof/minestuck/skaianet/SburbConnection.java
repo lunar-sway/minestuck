@@ -323,8 +323,11 @@ public final class SburbConnection
 				connectionTag.putString("landType1", clientLandInfo.landName1());
 				connectionTag.putString("landType2", clientLandInfo.landName2());
 				Title title = PlayerSavedData.getData(getClientIdentifier(), handler.mcServer).getTitle();
-				connectionTag.putByte("class", title == null ? -1 : (byte) title.getHeroClass().ordinal());
-				connectionTag.putByte("aspect", title == null ? -1 : (byte) title.getHeroAspect().ordinal());
+				if(title != null)
+				{
+					connectionTag.putByte("class", (byte) title.getHeroClass().ordinal());
+					connectionTag.putByte("aspect", (byte) title.getHeroAspect().ordinal());
+				}
 			} else if(predefinedPlayers.containsKey(getClientIdentifier()))
 			{
 				PredefineData data = predefinedPlayers.get(getClientIdentifier());

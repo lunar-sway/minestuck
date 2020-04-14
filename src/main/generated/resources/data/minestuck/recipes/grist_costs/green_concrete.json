@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:green_concrete"
+  },
+  "grist_cost": {
+    "minestuck:amber": 1,
+    "minestuck:iodine": 1,
+    "minestuck:build": 3,
+    "minestuck:cobalt": 3
+  }
+}

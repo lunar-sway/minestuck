@@ -1,20 +1,34 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.fluid.IMSFog;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowingFluidBlock;
+import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IWorldReader;
+import net.minecraftforge.client.event.EntityViewRenderEvent;
 
 import java.util.function.Supplier;
 
-public class FlowingWaterColorsBlock extends FlowingFluidBlock
+/**
+ * specifically for implementing fluid blocks that change fluid fog color on movement
+ */
+public class FlowingWaterColorsBlock extends FlowingFluidBlock implements IMSFog
 {
+	private float fogDensity;
+	
 	public FlowingWaterColorsBlock(Supplier<FlowingFluid> fluid, Properties properties)
 	{
+		this(fluid, 0 ,properties);
+	}
+	
+	public FlowingWaterColorsBlock(Supplier<? extends FlowingFluid> fluid, float fogDensity, Properties properties)
+	{
 		super(fluid, properties);
+		this.fogDensity = fogDensity;
 	}
 	
 	@Override
@@ -28,5 +42,17 @@ public class FlowingWaterColorsBlock extends FlowingFluidBlock
 		newColor = new Vec3d(newColor.x % 1.0, newColor.y % 1.0, newColor.z % 1.0);
 		
 		return newColor;
+	}
+	
+	@Override
+	public float getMSFogDensity()
+	{
+		return fogDensity;
+	}
+	
+	@Override
+	public Vec3d getMSFogColor(BlockState state, IWorldReader world, BlockPos pos, Entity entity, Vec3d originalColor, float partialTicks)
+	{
+		return this.getFogColor(state, world, pos, entity, originalColor, partialTicks);
 	}
 }

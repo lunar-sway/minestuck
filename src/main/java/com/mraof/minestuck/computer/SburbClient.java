@@ -3,7 +3,6 @@ package com.mraof.minestuck.computer;
 import com.mraof.minestuck.client.gui.ColorSelectorScreen;
 import com.mraof.minestuck.skaianet.ReducedConnection;
 import com.mraof.minestuck.skaianet.SkaiaClient;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundNBT;
@@ -70,14 +69,4 @@ public class SburbClient extends ButtonListProgram
 	{
 		return NAME;
 	}
-	
-	@Override
-	public void onClosed(ComputerTileEntity te)
-	{
-		if(te.getData(0).getBoolean("connectedToServer") && SkaianetHandler.get(te.getWorld()).getActiveConnection(te.owner) != null)
-			SkaianetHandler.get(te.getWorld()).closeConnection(te.owner, SkaianetHandler.get(te.getWorld()).getActiveConnection(te.owner).getServerIdentifier(), true);
-		else if(te.getData(0).getBoolean("isResuming"))
-			SkaianetHandler.get(te.getWorld()).closeConnection(te.owner, null, true);
-	}
-	
 }

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:reverse_cake"
+  },
+  "input2": {
+    "item": "minestuck:fuchsia_cake"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:negative_cake"
+  }
+}

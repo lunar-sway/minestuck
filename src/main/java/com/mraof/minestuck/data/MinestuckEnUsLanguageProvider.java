@@ -269,6 +269,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addStoreTooltip(MSBlocks.HOT_CAKE, "Did you know that red cakes heal you? I'm 90%% sure that this is one of those cakes.");
 		add(MSBlocks.REVERSE_CAKE, "Reverse Cake");
 		add(MSBlocks.FUCHSIA_CAKE, "Fuchsia Cake");
+		add(MSBlocks.NEGATIVE_CAKE, "Negative Cake");
 		addStore(MSBlocks.FUCHSIA_CAKE, "Fuschia Cake");
 		add(MSBlocks.PRIMED_TNT, "Primed TNT");
 		add(MSBlocks.UNSTABLE_TNT, "Unstable TNT");
@@ -482,6 +483,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.ROCK_COOKIE, "It's as edible as a rock");
 		addStore(MSItems.ROCK_COOKIE, "Grey-Colored Cookie");
 		addStoreTooltip(MSItems.ROCK_COOKIE, "This here is a true wonder-cookie! Totally! And they are even cheaper than regular cookies!");
+		add(MSItems.WOODEN_CARROT, "Wooden Carrot");
+		addTooltip(MSItems.WOODEN_CARROT, "It's as edible as a plank.");
 		add(MSItems.FUNGAL_SPORE, "Fungal Spore");
 		addTooltip(MSItems.FUNGAL_SPORE, "You must live off the land, and in this land, it means eating this.");
 		addStore(MSItems.FUNGAL_SPORE, "Mushroom Skittles");
@@ -544,7 +547,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.BUG_NET, "Net");
 		addTooltip(MSItems.BUG_NET, "Perfect for catching bugs and frogs!");
 		add(MSItems.FROG, "Frog");
-		addExtra(MSItems.FROG, "type.random", "Random Frog");
+		addExtra(MSItems.FROG, "random", "Random Frog");
 		addExtra(MSItems.FROG, "type.0", "Frog");
 		addExtra(MSItems.FROG, "type.1", "Totally Normal Frog");
 		addExtra(MSItems.FROG, "type.2", "Ruby Contraband");
@@ -553,13 +556,13 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addExtra(MSItems.FROG, "type.5", "Golden Frog");
 		addExtra(MSItems.FROG, "type.6", "Frog");
 		addExtra(MSItems.FROG, "desc.4", "frog.null.name");
-		addExtra(MSItems.FROG, "desc.6", "§k Susan");
+		addExtra(MSItems.FROG, "desc.6", TextFormatting.OBFUSCATED+"Susan");
 		addExtra(MSItems.FROG, "eyes.0", "Lighter Eyes");
 		addExtra(MSItems.FROG, "eyes.1", "Darker Eyes");
 		addExtra(MSItems.FROG, "eyes.2", "Blank Eyes");
-		addExtra(MSItems.FROG, "belly.0", "Solid-Colored Belly");
-		addExtra(MSItems.FROG, "belly.1", "Spotted Belly");
-		addExtra(MSItems.FROG, "belly.2", "Striped Belly");
+		addExtra(MSItems.FROG, "belly.1", "Solid-Colored Belly");
+		addExtra(MSItems.FROG, "belly.2", "Spotted Belly");
+		addExtra(MSItems.FROG, "belly.3", "Striped Belly");
 		addExtra(MSItems.FROG, "size.0", "Tiny");
 		addExtra(MSItems.FROG, "size.1", "Small");
 		addExtra(MSItems.FROG, "size.2", "Normal Sized");

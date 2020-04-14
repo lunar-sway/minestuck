@@ -69,12 +69,12 @@ public class FrogItem extends Item
 
 					if(nbt.contains("EyeType"))for(int i = 0; i <= FrogEntity.maxEyes(); i++)
 					{
-						if(eyeType == i)tooltip.add(new TranslationTextComponent(getTranslationKey() + ".eyes"+i));
+						if(eyeType == i)tooltip.add(new TranslationTextComponent(getTranslationKey() + ".eyes."+i));
 					}
 
 					if(nbt.contains("EyeType"))for(int i = 1; i <= FrogEntity.maxBelly(); i++)
 					{
-						if(bellyType == i)tooltip.add(new TranslationTextComponent(getTranslationKey() + ".belly"+i));
+						if(bellyType == i)tooltip.add(new TranslationTextComponent(getTranslationKey() + ".belly."+i));
 					}
 
 			}
@@ -228,7 +228,7 @@ public class FrogItem extends Item
 		{
 			if (CompoundNBT.contains("EyeColor"))
 			{
-				return CompoundNBT.getInt("eyeColor");
+				return CompoundNBT.getInt("EyeColor");
 			}
 		}
 		

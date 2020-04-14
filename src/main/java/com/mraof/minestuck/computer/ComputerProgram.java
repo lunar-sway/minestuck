@@ -2,10 +2,7 @@ package com.mraof.minestuck.computer;
 
 import com.mraof.minestuck.client.gui.ComputerScreen;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 
-import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -16,32 +13,24 @@ import java.util.Map.Entry;
  * @author Kirderf1
  */
 public abstract class ComputerProgram
-{ //This is an unnecessary abstract way of handling programs. Should be replaced
+{ //This is overall a bad way of handling programs. Should be rewritten
 	
 	private static HashMap<Integer, Class<? extends ComputerProgram>> programs = new HashMap<Integer, Class<? extends ComputerProgram>>();
 	
-	private static HashMap<Integer, ItemStack> disks = new HashMap<Integer, ItemStack>();
-	
 	/**
-	 * Registers a program class to the list.
-	 * 
-	 * @param id
-	 *            The program id. If it is already used, the method will throw
-	 *            an IllegalArgumentException.
-	 * @param program
-	 *            The class of the program to be registered.
-	 * @param disk
-	 *            The item that will serve as the disk that installs the
-	 *            program.
+	 * Should only be used client-side
 	 */
-	public static void registerProgram(int id, Class<? extends ComputerProgram> program, ItemStack disk)
+	public static void registerProgramClass(int id, Class<? extends ComputerProgram> program)
 	{
 		if(programs.containsKey(id) || id == -1 || id == -2)
 			throw new IllegalArgumentException("Program id " + id + " is already used!");
 		programs.put(id, program);
-		disks.put(id, disk);
 	}
 	
+	/**
+	 * Creates and returns a new computer program for the given id (or null if there is none)
+	 * Should only be used in a client-side context due to gui sidedness!
+	 */
 	public static ComputerProgram getProgram(int id)
 	{
 		try
@@ -52,32 +41,6 @@ public abstract class ComputerProgram
 			e.printStackTrace();
 		}
 		return null;
-	}
-	
-	/**
-	 * Returns the id of the program. Note that it returns -2 if the item does
-	 * not correspond to any program, as -1 is used for an easter egg.
-	 */
-	public static int getProgramID(ItemStack item)
-	{
-		if(item.isEmpty())
-			return -2;
-		item = item.copy();
-		if(item.getItem().equals(Items.MUSIC_DISC_11))
-			return -1;
-		item.setCount(1);
-		for(int id : disks.keySet())
-			if(disks.get(id).isItemEqual(item))
-				return id;
-		return -2;
-	}
-	
-	@Nonnull
-	public static ItemStack getItem(int id)
-	{
-		if(id == -1)
-			return new ItemStack(Items.MUSIC_DISC_11);
-		return disks.get(id).copy();
 	}
 	
 	public final int getId()
@@ -92,12 +55,6 @@ public abstract class ComputerProgram
 	 * Called when the gui is created or if the player pressed the switch
 	 * program button.
 	 *
-	 * @param buttonList
-	 *            The button list. Note that the list isn't cleared if
-	 *            prevProgram isn't null, so you have to clear it and re-add the
-	 *            program button if you're not going to re-use them. (which you
-	 *            probably won't unless the previous program had a similar
-	 *            layout.)
 	 * @param prevProgram
 	 *            The previous program, or null if the gui was just created.
 	 */
@@ -109,14 +66,6 @@ public abstract class ComputerProgram
 	 * Called when some related data have changed that may affect the program.
 	 */
 	public void onUpdateGui(ComputerScreen gui)
-	{
-	}
-	
-	/**
-	 * Called when something breaks the computer block. (or if the disk is
-	 * ejected when that feature is added)
-	 */
-	public void onClosed(ComputerTileEntity te)
 	{
 	}
 	

@@ -7,6 +7,9 @@ import com.mraof.minestuck.client.renderer.entity.frog.FrogRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.GateRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.SkaiaPortalRenderer;
 import com.mraof.minestuck.client.settings.MSKeyHandler;
+import com.mraof.minestuck.computer.ComputerProgram;
+import com.mraof.minestuck.computer.SburbClient;
+import com.mraof.minestuck.computer.SburbServer;
 import com.mraof.minestuck.entity.DecoyEntity;
 import com.mraof.minestuck.entity.EntityBigPart;
 import com.mraof.minestuck.entity.FrogEntity;
@@ -66,6 +69,9 @@ public class ClientProxy
 		RenderingRegistry.registerEntityRenderingHandler(ShopPosterEntity.class, manager -> new RenderHangingArt<>(manager, new ResourceLocation("minestuck:shop_poster")));
 
 		MSKeyHandler.registerKeys();
+		
+		ComputerProgram.registerProgramClass(0, SburbClient.class);
+		ComputerProgram.registerProgramClass(1, SburbServer.class);
 		
 		//MinecraftForge.EVENT_BUS.register(new MinestuckConfig()); Does not currently use any events to reload config
 	}

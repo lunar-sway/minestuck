@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:totem_of_undying"
+  },
+  "grist_cost": {
+    "minestuck:diamond": 200,
+    "minestuck:uranium": 350,
+    "minestuck:ruby": 90,
+    "minestuck:gold": 90
+  }
+}
