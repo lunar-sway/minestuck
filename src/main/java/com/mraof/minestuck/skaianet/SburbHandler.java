@@ -7,7 +7,10 @@ import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.TitleSelectPacket;
-import com.mraof.minestuck.player.*;
+import com.mraof.minestuck.player.EnumAspect;
+import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.EntryProcess;
@@ -28,7 +31,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * A class for managing sburb-related stuff from outside this package that is dependent on connections and sessions.
@@ -60,69 +65,12 @@ public final class SburbHandler
 		
 		if(title == null)
 		{
-			Random rand = MinestuckRandom.getPlayerSpecificRandom(player, world.getSeed());
-			rand.nextInt();	//Avoid using same data as the artifact generation
-			
-			Set<Title> usedTitles = session.getUsedTitles();
-			
-			if(usedTitles.size() < 12)	//Focus on getting an unused aspect and an unused class
+			try
 			{
-				EnumSet<EnumClass> usedClasses = EnumSet.noneOf(EnumClass.class);
-				EnumSet<EnumAspect> usedAspects = EnumSet.noneOf(EnumAspect.class);
-				for(Title usedTitle : usedTitles)
-				{
-					usedClasses.add(usedTitle.getHeroClass());
-					usedAspects.add(usedTitle.getHeroAspect());
-				}
-				
-				title = new Title(EnumClass.getRandomClass(usedClasses, rand), EnumAspect.getRandomAspect(usedAspects, rand));
-			}
-			else if(usedTitles.size() < 144)	//Focus only on getting an unused title
+				title = Generator.generateTitle(session, EnumAspect.valuesSet(), player);
+			} catch(SkaianetException e)
 			{
-				
-				int[] classFrequency = new int[12];
-				int specialClasses = 0;
-				for(Title usedTitle : usedTitles)
-				{
-					if(usedTitle.getHeroClass().ordinal() < 12)
-						classFrequency[usedTitle.getHeroClass().ordinal()]++;
-					else specialClasses++;
-				}
-				
-				EnumClass titleClass = null;
-				int titleIndex = rand.nextInt(144 - (usedTitles.size() - specialClasses));
-				for(int classIndex = 0; classIndex < 12; classIndex++)
-				{
-					int classChance = 12 - classFrequency[classIndex];
-					if(titleIndex < classChance)
-					{
-						titleClass = EnumClass.getClassFromInt(classIndex);
-						break;
-					}
-					titleIndex -= classChance;
-				}
-				if(titleClass == null)
-					throw new IllegalStateException("Finished for loop without generating a title class. This should not happen and is likely a bug.");
-				
-				EnumSet<EnumAspect> usedAspects = EnumSet.noneOf(EnumAspect.class);
-				for(Title usedTitle : usedTitles)
-					if(usedTitle.getHeroClass() == titleClass)
-						usedAspects.add(usedTitle.getHeroAspect());
-				EnumAspect titleAspect = null;
-				for(EnumAspect aspect : EnumAspect.values())
-					if(!usedAspects.contains(aspect))
-					{
-						if(titleIndex == 0)
-						{
-							titleAspect = aspect;
-							break;
-						}
-						titleIndex--;
-					}
-				if(titleAspect == null)
-					throw new IllegalStateException("Finished for loop without generating a title aspect. This should not happen and is likely a bug.");
-				
-				title = new Title(titleClass, titleAspect);
+				return null;	//TODO handle exception further down the line
 			}
 		}
 		return title;
@@ -537,49 +485,31 @@ public final class SburbHandler
 	
 	private static LandTypePair genLandAspects(MinecraftServer mcServer, SburbConnection connection)
 	{
-		LandTypes aspectGen = new LandTypes(mcServer.getWorld(DimensionType.OVERWORLD).getSeed()^connection.getClientIdentifier().hashCode());
 		Session session = SessionHandler.get(mcServer).getPlayerSession(connection.getClientIdentifier());
 		Title title = PlayerSavedData.getData(connection.getClientIdentifier(), mcServer).getTitle();
-		TitleLandType titleAspect = null;
-		TerrainLandType terrainAspect = null;
+		TitleLandType titleLandType = null;
+		TerrainLandType terrainLandType = null;
 		
 		if(session.predefinedPlayers.containsKey(connection.getClientIdentifier()))
 		{
 			PredefineData data = session.predefinedPlayers.get(connection.getClientIdentifier());
-			titleAspect = data.getTitleLandType();
-			terrainAspect = data.getTerrainLandType();
+			titleLandType = data.getTitleLandType();
+			terrainLandType = data.getTerrainLandType();
 		}
 		
-		boolean frogs = false;
-		ArrayList<TerrainLandType> usedTerrainAspects = new ArrayList<>();
-		ArrayList<TitleLandType> usedTitleAspects = new ArrayList<>();
-		for(SburbConnection c : session.connections)
-			if(c != connection && c.getLandInfo() != null)
-			{
-				LandTypePair aspects = c.getLandInfo().getLandAspects();
-				if(aspects.title == LandTypes.FROGS)
-					frogs = true;
-				usedTitleAspects.add(aspects.title);
-				usedTerrainAspects.add(aspects.terrain);
-			}
-		for(PredefineData data : session.predefinedPlayers.values())
+		if(titleLandType == null)
 		{
-			if(data.getTerrainLandType() != null)
-				usedTerrainAspects.add(data.getTerrainLandType());
-			if(data.getTitleLandType() != null)
+			titleLandType = Generator.generateWeightedTitleLandType(session, title.getHeroAspect(), terrainLandType, connection.getClientIdentifier());
+			if(terrainLandType != null && titleLandType == LandTypes.TITLE_NULL)
 			{
-				usedTitleAspects.add(data.getTitleLandType());
-				if(data.getTitleLandType() == LandTypes.FROGS)
-					frogs = true;
+				Debug.warnf("Failed to find a title land aspect compatible with land aspect \"%s\". Forced to use a poorly compatible land aspect instead.", terrainLandType.getRegistryName());
+				titleLandType = Generator.generateWeightedTitleLandType(session, title.getHeroAspect(), null, connection.getClientIdentifier());
 			}
 		}
+		if(terrainLandType == null)
+			terrainLandType = Generator.generateWeightedTerrainLandType(session, titleLandType, connection.getClientIdentifier());
 		
-		if(titleAspect == null)
-			titleAspect = aspectGen.getTitleAspect(terrainAspect, title.getHeroAspect(), usedTitleAspects);
-		if(terrainAspect == null)
-			terrainAspect = aspectGen.getTerrainAspect(titleAspect, usedTerrainAspects);
-		
-		return new LandTypePair(terrainAspect, titleAspect);
+		return new LandTypePair(terrainLandType, titleLandType);
 	}
 	
 	static void onFirstItemGiven(SburbConnection connection)

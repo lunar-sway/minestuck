@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:negative_cake"
+  },
+  "grist_cost": {
+    "minestuck:caulk": 25,
+    "minestuck:shale": 19,
+    "minestuck:tar": 22
+  }
+}

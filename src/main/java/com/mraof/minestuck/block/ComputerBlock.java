@@ -1,7 +1,7 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.client.gui.MSScreenFactories;
-import com.mraof.minestuck.computer.ComputerProgram;
+import com.mraof.minestuck.computer.ProgramData;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.SkaiaClient;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
@@ -60,7 +60,7 @@ public class ComputerBlock extends MachineBlock
 		ItemStack heldItem = player.getHeldItem(handIn);
 		if(state.get(STATE) == State.OFF)
 		{
-			if(player.isSneaking() || !Direction.UP.equals(hit.getFace()) || !heldItem.isEmpty() && ComputerProgram.getProgramID(heldItem) == -2)
+			if(player.isSneaking() || !Direction.UP.equals(hit.getFace()) || !heldItem.isEmpty() && ProgramData.getProgramID(heldItem) == -2)
 				return false;
 			
 			turnOn(state, worldIn, pos, player, handIn, hit);
@@ -101,7 +101,7 @@ public class ComputerBlock extends MachineBlock
 	
 	private boolean insertDisk(ComputerTileEntity tileEntity, BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn)
 	{
-		int id = ComputerProgram.getProgramID(player.getHeldItem(handIn));
+		int id = ProgramData.getProgramID(player.getHeldItem(handIn));
 		if(id != -2 && !tileEntity.hasProgram(id) && tileEntity.installedPrograms.size() < 2 && !tileEntity.hasProgram(-1))
 		{
 			if(worldIn.isRemote)
@@ -161,7 +161,7 @@ public class ComputerBlock extends MachineBlock
 			float rx = rand.nextFloat() * 0.8F + 0.1F;
 			float ry = rand.nextFloat() * 0.8F + 0.1F;
 			float rz = rand.nextFloat() * 0.8F + 0.1F;
-			ItemEntity entityItem = new ItemEntity(world, x + rx, y + ry, z + rz, ComputerProgram.getItem(program));
+			ItemEntity entityItem = new ItemEntity(world, x + rx, y + ry, z + rz, ProgramData.getItem(program));
 			entityItem.setMotion(rand.nextGaussian() * factor, rand.nextGaussian() * factor + 0.2F, rand.nextGaussian() * factor);
 			world.addEntity(entityItem);
 		}
@@ -170,7 +170,7 @@ public class ComputerBlock extends MachineBlock
 			float rx = rand.nextFloat() * 0.8F + 0.1F;
 			float ry = rand.nextFloat() * 0.8F + 0.1F;
 			float rz = rand.nextFloat() * 0.8F + 0.1F;
-			ItemEntity entityItem = new ItemEntity(world, x + rx, y + ry, z + rz, ComputerProgram.getItem(-1));
+			ItemEntity entityItem = new ItemEntity(world, x + rx, y + ry, z + rz, ProgramData.getItem(-1));
 			entityItem.setMotion(rand.nextGaussian() * factor, rand.nextGaussian() * factor + 0.2F, rand.nextGaussian() * factor);
 			world.addEntity(entityItem);
 		}

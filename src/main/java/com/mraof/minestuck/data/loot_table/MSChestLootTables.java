@@ -446,6 +446,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.addEntry(ItemLootEntry.builder(MSBlocks.HOT_CAKE).weight(5).quality(-2))
 						.addEntry(ItemLootEntry.builder(MSBlocks.BLUE_CAKE).weight(3).quality(1))
 						.addEntry(ItemLootEntry.builder(MSBlocks.RED_CAKE).weight(3).quality(1))
+						.addEntry(ItemLootEntry.builder(MSBlocks.NEGATIVE_CAKE).weight(2).quality(1))
 						.addEntry(ItemLootEntry.builder(Items.COOKIE).weight(5).quality(0).acceptFunction(SetCount.builder(RandomValueRange.of(2, 5))))
 						.addEntry(ItemLootEntry.builder(MSItems.CANDY_CORN).weight(3).quality(0)))
 				.addLootPool(LootPool.builder().name(MISC_POOL).rolls(ConstantRange.of(1))

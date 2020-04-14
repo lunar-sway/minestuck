@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:wither_rose"
+  },
+  "grist_cost": {
+    "minestuck:tar": 6,
+    "minestuck:uranium": 2,
+    "minestuck:iodine": 1
+  }
+}

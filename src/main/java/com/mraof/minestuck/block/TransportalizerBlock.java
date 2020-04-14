@@ -28,6 +28,7 @@ public class TransportalizerBlock extends MachineBlock
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 	{
 		return SHAPE;
@@ -47,23 +48,23 @@ public class TransportalizerBlock extends MachineBlock
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn)
 	{
-		if (!worldIn.isRemote && !entityIn.isPassenger() && !entityIn.isBeingRidden() && entityIn.isNonBoss())
-		{
-			if(entityIn.timeUntilPortal == 0)
-				((TransportalizerTileEntity) worldIn.getTileEntity(pos)).teleport(entityIn);
-			else entityIn.timeUntilPortal = entityIn.getPortalCooldown();
-		}
+		TileEntity tileEntity = worldIn.getTileEntity(pos);
+		if(tileEntity instanceof TransportalizerTileEntity)
+			((TransportalizerTileEntity) tileEntity).onCollision(entityIn);
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public BlockRenderType getRenderType(BlockState state)
 	{
 		return BlockRenderType.MODEL;
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
 		TransportalizerTileEntity tileEntity = (TransportalizerTileEntity) worldIn.getTileEntity(pos);

@@ -5,15 +5,21 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.ColorSelectorScreen;
 import com.mraof.minestuck.entity.consort.EnumConsort;
-import com.mraof.minestuck.fluid.MSFluids;
+import com.mraof.minestuck.fluid.IMSFog;
 import com.mraof.minestuck.inventory.ConsortMerchantContainer;
+import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.IWorldReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.event.TickEvent;
@@ -74,14 +80,44 @@ public class ClientEventHandler
 		}
 	}
 	
+	/**
+	 *Used to change the density on of the Fog overlay
+	 */
 	@SubscribeEvent
 	public static void onFogRender(EntityViewRenderEvent.FogDensity event)
 	{
-		if (event.getInfo().getFluidState().getFluid() == MSFluids.ENDER.get())
+		if (event.getInfo().getFluidState().getBlockState().getBlock() instanceof IMSFog)
 		{
+			IMSFog fog = (IMSFog)event.getInfo().getFluidState().getBlockState().getBlock();
+			float fogDensity = fog.getMSFogDensity();
+			
 			event.setCanceled(true);
-			event.setDensity(Float.MAX_VALUE);
+			event.setDensity(fogDensity);
 			GlStateManager.fogMode(GlStateManager.FogMode.EXP);
+		}
+	}
+	
+	/**
+	 * used to changes colors of the fog overlay
+	 */
+	@SubscribeEvent
+	public static void addFogColor(EntityViewRenderEvent.FogColors event)
+	{
+		BlockState state = event.getInfo().getFluidState().getBlockState();
+		IWorldReader world = event.getInfo().getRenderViewEntity().world;
+		BlockPos pos = event.getInfo().getBlockPos();
+		Entity entity = event.getInfo().getRenderViewEntity();
+		Vec3d originalColor = new Vec3d(event.getRed(), event.getGreen(), event.getBlue());
+		float partialTick = (float) (event.getRenderPartialTicks());
+		
+		if(state.getBlock() instanceof IMSFog)
+		{
+			IMSFog fog = (IMSFog) (state.getBlock());
+			Vec3d fogColor = fog.getMSFogColor(state, world, pos, entity, originalColor, partialTick);
+			
+			event.setRed((float) fogColor.getX());
+			event.setGreen((float) fogColor.getY());
+			event.setBlue((float) fogColor.getZ());
 		}
 	}
 }

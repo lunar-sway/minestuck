@@ -6,6 +6,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.EnumSet;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * An aspect version of <code>EnumClass</code> that works pretty much the same way as the <code>EnumClass</code> except
@@ -115,5 +116,10 @@ public enum EnumAspect	//TODO This could potentially be changed to a registry. H
 	public String getTranslationKey()
 	{
 		return "title.aspect." + this.toString();
+	}
+	
+	public static Set<EnumAspect> valuesSet()
+	{
+		return EnumSet.allOf(EnumAspect.class);
 	}
 }

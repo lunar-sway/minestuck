@@ -101,10 +101,12 @@ public class TotemLatheBlock extends MultiMachineBlock
 	public static class Rod extends TotemLatheBlock
 	{
 		public static final BooleanProperty ACTIVE = MSProperties.ACTIVE;
+		protected final Map<Direction, VoxelShape> activeShape;
 		
-		public Rod(MachineMultiblock machine, CustomVoxelShape shape, BlockPos mainPos, Properties properties)
+		public Rod(MachineMultiblock machine, CustomVoxelShape shape, CustomVoxelShape activeShape, BlockPos mainPos, Properties properties)
 		{
 			super(machine, shape, mainPos, properties);
+			this.activeShape = activeShape.createRotatedShapes();
 		}
 		
 		@Override
@@ -113,15 +115,29 @@ public class TotemLatheBlock extends MultiMachineBlock
 			super.fillStateContainer(builder);
 			builder.add(ACTIVE);
 		}
+		
+		@Override
+		public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
+		{
+			return state.get(ACTIVE) ? activeShape.get(state.get(FACING)) : super.getShape(state, worldIn, pos, context);
+		}
 	}
 	
 	public static class DowelRod extends TotemLatheBlock
 	{
 		public static final EnumProperty<EnumDowelType> DOWEL = MSProperties.DOWEL;
+		protected final Map<Direction, VoxelShape> carvedShape;
 		
-		public DowelRod(MachineMultiblock machine, CustomVoxelShape shape, BlockPos mainPos, Properties properties)
+		public DowelRod(MachineMultiblock machine, CustomVoxelShape shape, CustomVoxelShape carvedShape, BlockPos mainPos, Properties properties)
 		{
 			super(machine, shape, mainPos, properties);
+			this.carvedShape = carvedShape.createRotatedShapes();
+		}
+		
+		@Override
+		public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
+		{
+			return state.get(DOWEL).equals(EnumDowelType.CARVED_DOWEL) ? carvedShape.get(state.get(FACING)) : super.getShape(state, worldIn, pos, context);
 		}
 		
 		@Override

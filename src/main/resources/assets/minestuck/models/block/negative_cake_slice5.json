@@ -1,0 +1,22 @@
+{
+    "textures": {
+        "particle": "minestuck:block/negative_cake_side",
+        "bottom": "minestuck:block/negative_cake_bottom",
+        "top": "minestuck:block/negative_cake_top",
+        "side": "minestuck:block/negative_cake_side",
+        "inside": "minestuck:block/negative_cake_inner"
+    },
+    "elements": [
+        {   "from": [ 11, 0, 1 ],
+            "to": [ 15, 8, 15 ],
+            "faces": {
+                "down":  { "texture": "#bottom", "cullface": "down" },
+                "up":    { "texture": "#top" },
+                "north": { "texture": "#side" },
+                "south": { "texture": "#side" },
+                "west":  { "texture": "#inside" },
+                "east":  { "texture": "#side" }
+            }
+        }
+    ]
+}

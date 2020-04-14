@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:lily_of_the_valley"
+  },
+  "grist_cost": {
+    "minestuck:chalk": 2,
+    "minestuck:iodine": 1
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:salmon"
+  },
+  "grist_cost": {
+    "minestuck:caulk": 4,
+    "minestuck:amber": 4,
+    "minestuck:cobalt": 2
+  }
+}
