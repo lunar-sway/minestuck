@@ -23,10 +23,10 @@ import static com.mraof.minestuck.world.storage.PlayerSavedData.getData;
 
 public class AspectBasedEffectWeaponItem extends WeaponItem
 {
-    private EnumAspect aspect;
-    private Effect effect;
-    private int duration;
-    private int effectTier;
+    private final EnumAspect aspect;
+    private final Effect effect;
+    private final int duration;
+    private final int effectTier;
     
     public AspectBasedEffectWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, EnumAspect aspect, Effect effect, int duration, int effectTier, @Nullable MSToolType toolType, Properties builder)
     {
