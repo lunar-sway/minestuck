@@ -1,9 +1,13 @@
 package com.mraof.minestuck.item.weapon;
 
 import com.mraof.minestuck.player.EnumAspect;
+import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
@@ -15,6 +19,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 
 import static com.mraof.minestuck.player.EnumAspect.BREATH;
+import static com.mraof.minestuck.world.storage.PlayerSavedData.getData;
 
 public class AspectBasedEffectWeaponItem extends WeaponItem
 {
@@ -37,9 +42,12 @@ public class AspectBasedEffectWeaponItem extends WeaponItem
     {
         if(entityIn instanceof ServerPlayerEntity)
         {
-            if (PlayerSavedData.getData((ServerPlayerEntity) entityIn).getTitle().getHeroAspect() == aspect && isSelected)
+            if(PlayerSavedData.getData((ServerPlayerEntity) entityIn).getTitle() != null)
             {
-                ((ServerPlayerEntity) entityIn).addPotionEffect(new EffectInstance(effect, duration, effectTier));
+                if (PlayerSavedData.getData((ServerPlayerEntity) entityIn).getTitle().getHeroAspect() == aspect && isSelected)
+                {
+                    ((ServerPlayerEntity) entityIn).addPotionEffect(new EffectInstance(effect, duration, effectTier));
+                }
             }
         }
     }
