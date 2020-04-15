@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:vaudeville_hook"
+  },
+  "input2": {
+    "item": "minecraft:gold_ingot"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:prim_and_proper_walking_pole"
+  }
+}

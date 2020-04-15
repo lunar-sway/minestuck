@@ -7,6 +7,7 @@ import com.mraof.minestuck.entity.consort.ConsortDialogue;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.weapon.PotionWeaponItem;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.IdentifierHandler;
@@ -17,8 +18,11 @@ import com.mraof.minestuck.world.storage.MSExtraData;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.potion.Effects;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.SoundCategory;
@@ -26,6 +30,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
@@ -201,6 +206,16 @@ public class ServerEventHandler
 			PlayerData data = PlayerSavedData.getData((ServerPlayerEntity) event.player);
 			if(data.getTitle() != null)
 				data.getTitle().handleAspectEffects((ServerPlayerEntity) event.player);
+		}
+	}
+	
+	@SubscribeEvent
+	public static void breadStaling(ItemExpireEvent event)
+	{
+		ItemEntity e = event.getEntityItem();
+		if(e.getItem().getCount() == 1 && (e.getItem().getItem() == Items.BREAD)) {
+			ItemEntity stalebread = new ItemEntity(e.world, e.posX, e.posY, e.posZ, new ItemStack(MSItems.STALE_BAGUETTE));
+			e.world.addEntity(stalebread);
 		}
 	}
 }

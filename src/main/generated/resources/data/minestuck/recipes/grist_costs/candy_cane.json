@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:candy_cane"
+  },
+  "grist_cost": {
+    "minestuck:iodine": 65,
+    "minestuck:chalk": 53,
+    "minestuck:amber": 20
+  }
+}

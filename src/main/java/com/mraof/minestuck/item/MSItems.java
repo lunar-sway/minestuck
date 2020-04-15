@@ -17,6 +17,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.util.SoundEvents;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -26,6 +27,7 @@ import net.minecraftforge.registries.ObjectHolder;
 import javax.annotation.Nonnull;
 
 import static com.mraof.minestuck.block.MSBlocks.*;
+import static com.mraof.minestuck.player.EnumAspect.BREATH;
 
 /**
  * This class contains all non-ItemBlock items that minestuck adds,
@@ -103,18 +105,33 @@ public class MSItems
 	public static final Item CANDY_SICKLE = getNull();
 	//clubs
 	public static final Item DEUCE_CLUB = getNull();
+	public static final Item STALE_BAGUETTE = getNull();
+	public static final Item GLUB_CLUB = getNull();
 	public static final Item NIGHT_CLUB = getNull();
+	public static final Item PRISMARINE_BASHER = getNull();
+	public static final Item CLUB_ZERO = getNull();
 	public static final Item POGO_CLUB = getNull();
 	public static final Item METAL_BAT = getNull();
 	public static final Item SPIKED_CLUB = getNull();
 	//canes
 	public static final Item CANE = getNull();
+	public static final Item VAUDEVILLE_HOOK = getNull();
+	public static final Item BEAR_POKING_STICK = getNull();
+	public static final Item UMBRELLA = getNull();
+	public static final Item UPPER_CRUST_CRUST_CANE = getNull();
 	public static final Item IRON_CANE = getNull();
 	public static final Item SPEAR_CANE = getNull();
 	public static final Item PARADISES_PORTABELLO = getNull();
 	public static final Item REGI_CANE = getNull();
 	public static final Item DRAGON_CANE = getNull();
 	public static final Item POGO_CANE = getNull();
+	public static final Item CANDY_CANE = getNull();
+	public static final Item SHARP_CANDY_CANE = getNull();
+	public static final Item PRIM_AND_PROPER_WALKING_POLE = getNull();
+	public static final Item LESS_PROPER_WALKING_STICK = getNull();
+	public static final Item LESS_PROPER_WALKING_STICK_SHEATHED = getNull();
+	public static final Item ROCKEFELLERS_WALKING_BLADECANE = getNull();
+	public static final Item ROCKEFELLERS_WALKING_BLADECANE_SHEATHED = getNull();
 	//Spoons/forks
 	public static final Item WOODEN_SPOON = getNull();
 	public static final Item SILVER_SPOON = getNull();
@@ -122,6 +139,7 @@ public class MSItems
 	public static final Item CROCKER_FORK = getNull();
 	public static final Item SKAIA_FORK = getNull();
 	public static final Item FORK = getNull();
+	public static final Item TUNING_FORK = getNull();
 	public static final Item SPORK = getNull();
 	public static final Item GOLDEN_SPORK = getNull();
 	//Material tools
@@ -205,6 +223,7 @@ public class MSItems
 	public static final Item IRRADIATED_STEAK = getNull();
 	public static final Item SURPRISE_EMBRYO = getNull();
 	public static final Item UNKNOWABLE_EGG = getNull();
+	public static final Item BREADCRUMBS = getNull();
 	
 	//Other Land Items
 	public static final Item GOLDEN_GRASSHOPPER = getNull();
@@ -228,6 +247,7 @@ public class MSItems
 	public static final Item GRIMOIRE = getNull();
 	public static final Item LONG_FORGOTTEN_WARHORN = getNull();
 	public static final Item RAZOR_BLADE = getNull();
+	public static final Item ICE_SHARD = getNull();
 	public static final Item URANIUM_POWERED_STICK = getNull();
 	public static final Item IRON_BOAT = getNull();
 	public static final Item GOLD_BOAT = getNull();
@@ -531,8 +551,8 @@ public class MSItems
 		registry.register(new WeaponItem(ItemTier.STONE, 5, -3.0F, 1.0F, MSItemTypes.NONE, new Item.Properties().defaultMaxDamage(51).group(MSItemGroup.WEAPONS)).setRegistryName("dice"));
 		registry.register(new WeaponItem(ItemTier.DIAMOND, 12, -3.0F, 1.0F, MSItemTypes.NONE, new Item.Properties().defaultMaxDamage(67).group(MSItemGroup.WEAPONS)).setRegistryName("fluorite_octet"));
 		//misc weapons
-		registry.register(new DualWeaponItem(ItemTier.IRON, 2, -1.5F, 10.0F, MSItemTypes.CLAWS_TOOL, new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS)).setRegistryName("cat_claws_drawn"));
-		registry.register(new DualWeaponItem(ItemTier.IRON, -1, -1.0F, 10.0F, (DualWeaponItem) CAT_CLAWS_DRAWN, MSItemTypes.NONE, new Item.Properties().defaultMaxDamage(500)).setRegistryName("cat_claws_sheathed"));
+		registry.register(new DualWeaponItem(ItemTier.IRON, 2, -1.5F, 10.0F, () -> MSItems.CAT_CLAWS_SHEATHED, MSItemTypes.CLAWS_TOOL, new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS)).setRegistryName("cat_claws_drawn"));
+		registry.register(new DualWeaponItem(ItemTier.IRON, -1, -1.0F, 10.0F, () -> MSItems.CAT_CLAWS_DRAWN, MSItemTypes.NONE, new Item.Properties().defaultMaxDamage(500)).setRegistryName("cat_claws_sheathed"));
 		//sickles
 		registry.register(new WeaponItem(ItemTier.IRON, 2, -2.4F, 1.5F, MSItemTypes.SICKLE_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("sickle"));
 		registry.register(new WeaponItem(ItemTier.IRON, 3, -2.4F, 3.0F, MSItemTypes.SICKLE_TOOL, new Item.Properties().defaultMaxDamage(400).group(MSItemGroup.WEAPONS)).setRegistryName("homes_smell_ya_later"));
@@ -544,26 +564,44 @@ public class MSItems
 		
 		//clubs
 		registry.register(new WeaponItem(ItemTier.WOOD, 3, -2.2F, 2.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(1024).group(MSItemGroup.WEAPONS)).setRegistryName("deuce_club"));
+		registry.register(new BaguetteWeaponItem(MSItemTypes.BAGUETTE_TIER, 3, -2.2F, 2.0F, 3, 0.2F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(50).group(MSItemGroup.WEAPONS)).setRegistryName("stale_baguette"));
+		registry.register(new NoisyWeaponItem(MSItemTypes.MEAT_TIER, 4, -2.2F, 2.0F, () -> SoundEvents.ENTITY_GUARDIAN_FLOP, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(750).group(MSItemGroup.WEAPONS)).setRegistryName("glub_club"));
 		registry.register(new WeaponItem(MSItemTypes.REGI_TIER, 1, -2.2F, 2.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(600).group(MSItemGroup.WEAPONS)).setRegistryName("night_club"));
+		registry.register(new WeaponItem(MSItemTypes.PRISMARINE_TIER, 3, -2.2F, 2.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS)).setRegistryName("prismarine_basher"));
+		registry.register(new FrozenWeaponItem(MSItemTypes.ICE_TIER, 5, -2.2F, 2.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(250).group(MSItemGroup.WEAPONS)).setRegistryName("club_zero"));
 		registry.register(new PogoWeaponItem(MSItemTypes.POGO_TIER, 2, -2.2F, 2.0F, 0.5, MSItemTypes.MISC_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("pogo_club"));
 		registry.register(new WeaponItem(ItemTier.IRON, 3, -2.2F, 2.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(750).group(MSItemGroup.WEAPONS)).setRegistryName("metal_bat"));
 		registry.register(new WeaponItem(ItemTier.WOOD, 5, -2.2F, 2.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS)).setRegistryName("spiked_club"));
 		
 		//canes
 		registry.register(new WeaponItem(ItemTier.WOOD, 2, -2.0F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(100).group(MSItemGroup.WEAPONS)).setRegistryName("cane"));
+		registry.register(new WeaponItem(ItemTier.WOOD, 2, -2.0F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(150).group(MSItemGroup.WEAPONS)).setRegistryName("vaudeville_hook"));
+		registry.register(new GivePotionEffectWeaponItem(ItemTier.WOOD, 3, -2.0F, 1.0F, false, () -> Effects.STRENGTH, 140, 1, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(150).group(MSItemGroup.WEAPONS)).setRegistryName("bear_poking_stick"));
+		registry.register(new AspectBasedEffectWeaponItem(ItemTier.WOOD, 2, -2.0F, 1.0F, BREATH, () -> Effects.SLOW_FALLING, 2, 2, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(350).group(MSItemGroup.WEAPONS)).setRegistryName("umbrella"));
+		registry.register(new BaguetteWeaponItem(MSItemTypes.BAGUETTE_TIER, 3, -2.0F, 2.0F, 4, 0.5F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(249).group(MSItemGroup.WEAPONS)).setRegistryName("upper_crust_crust_cane"));
 		registry.register(new WeaponItem(ItemTier.IRON, 2, -2.0F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(450).group(MSItemGroup.WEAPONS)).setRegistryName("iron_cane"));
 		registry.register(new WeaponItem(ItemTier.IRON, 3, -2.0F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(300).group(MSItemGroup.WEAPONS)).setRegistryName("spear_cane"));
 		registry.register(new WeaponItem(MSItemTypes.CANDY_TIER, 3, -2.0F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(175).group(MSItemGroup.WEAPONS)).setRegistryName("paradises_portabello"));
 		registry.register(new WeaponItem(MSItemTypes.REGI_TIER, 3, -2.0F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("regi_cane"));
 		registry.register(new WeaponItem(MSItemTypes.RUBY_TIER, 3, -2.0F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(300).group(MSItemGroup.WEAPONS)).setRegistryName("dragon_cane"));
 		registry.register(new PogoWeaponItem(MSItemTypes.POGO_TIER, 2, -2.0F, 1.0F, 0.6, MSItemTypes.MISC_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("pogo_cane"));
+		registry.register(new CandyCaneWeaponItem(MSItemTypes.CANDY_TIER, 3, -2.0F, 1.0F, 2, 0.3F, MSItemTypes.MISC_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS).defaultMaxDamage(200)).setRegistryName("candy_cane"));
+		registry.register(new CandyWeaponItem(MSItemTypes.CANDY_TIER, 5, -2.0F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(150).group(MSItemGroup.WEAPONS)).setRegistryName("sharp_candy_cane"));
+		
+		registry.register(new WeaponItem(ItemTier.WOOD, 3, -2.0F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(175).group(MSItemGroup.WEAPONS)).setRegistryName("prim_and_proper_walking_pole"));
+		registry.register(new DualWeaponItem(ItemTier.IRON, 2, -2.0F, 1.0F, () -> MSItems.LESS_PROPER_WALKING_STICK_SHEATHED, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(600).group(MSItemGroup.WEAPONS)).setRegistryName("less_proper_walking_stick"));
+		registry.register(new DualWeaponItem(ItemTier.WOOD, 3, -2.0F, 1.0F, () -> MSItems.LESS_PROPER_WALKING_STICK, MSItemTypes.NONE, new Item.Properties().defaultMaxDamage(600)).setRegistryName("less_proper_walking_stick_sheathed"));
+		registry.register(new DualWeaponItem(ItemTier.IRON, 3, -2.0F, 1.0F, () -> MSItems.ROCKEFELLERS_WALKING_BLADECANE_SHEATHED, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(800).group(MSItemGroup.WEAPONS)).setRegistryName("rockefellers_walking_bladecane"));
+		registry.register(new DualWeaponItem(ItemTier.WOOD, 4, -2.0F, 1.0F, () -> MSItems.ROCKEFELLERS_WALKING_BLADECANE, MSItemTypes.NONE, new Item.Properties().defaultMaxDamage(800)).setRegistryName("rockefellers_walking_bladecane_sheathed"));
+		
 		//Spoons/forks
 		registry.register(new WeaponItem(ItemTier.WOOD, 2, -2.2F, 1.0F, MSItemTypes.SHOVEL_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("wooden_spoon"));
 		registry.register(new WeaponItem(ItemTier.IRON, 1, -2.2F, 1.0F, MSItemTypes.SHOVEL_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("silver_spoon"));
-		registry.register(new DualWeaponItem(MSItemTypes.RUBY_TIER, 0, -2.2F, 1.0F, MSItemTypes.SHOVEL_TOOL, new Item.Properties().defaultMaxDamage(512).group(MSItemGroup.WEAPONS)).setRegistryName("crocker_spoon"));
-		registry.register(new DualWeaponItem(MSItemTypes.RUBY_TIER, 2, -2.6F, 1.0F, (DualWeaponItem) CROCKER_SPOON, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(512)).setRegistryName("crocker_fork"));
+		registry.register(new DualWeaponItem(MSItemTypes.RUBY_TIER, 0, -2.2F, 1.0F, () -> MSItems.CROCKER_FORK, MSItemTypes.SHOVEL_TOOL, new Item.Properties().defaultMaxDamage(512).group(MSItemGroup.WEAPONS)).setRegistryName("crocker_spoon"));
+		registry.register(new DualWeaponItem(MSItemTypes.RUBY_TIER, 2, -2.6F, 1.0F, () -> MSItems.CROCKER_SPOON, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(512)).setRegistryName("crocker_fork"));
 		registry.register(new WeaponItem(MSItemTypes.REGI_TIER, 5, -2.2F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS)).setRegistryName("skaia_fork"));
 		registry.register(new WeaponItem(ItemTier.STONE, 3, -2.2F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("fork"));
+		registry.register(new NoisyWeaponItem(ItemTier.IRON, 3, -2.2F, 1.0F, () -> SoundEvents.BLOCK_NOTE_BLOCK_CHIME, MSItemTypes.MISC_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("tuning_fork"));
 		registry.register(new WeaponItem(ItemTier.STONE, 4, -2.3F, 1.0F, MSItemTypes.SHOVEL_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("spork"));
 		registry.register(new WeaponItem(ItemTier.GOLD, 5, -2.3F, 1.0F, MSItemTypes.SHOVEL_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("golden_spork"));
 
@@ -651,7 +689,7 @@ public class MSItems
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN).food(MSFoods.IRRADIATED_STEAK)).setRegistryName("irradiated_steak"));
 		registry.register(new SurpriseEmbryoItem(new Item.Properties().group(MSItemGroup.MAIN).food(MSFoods.SURPRISE_EMBRYO)).setRegistryName("surprise_embryo"));
 		registry.register(new UnknowableEggItem(new Item.Properties().maxStackSize(16).group(MSItemGroup.MAIN).food(MSFoods.UNKNOWABLE_EGG)).setRegistryName("unknowable_egg"));
-		
+		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN).food(MSFoods.BREADCRUMBS)).setRegistryName("breadcrumbs"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.LANDS)).setRegistryName("golden_grasshopper"));
 		registry.register(new BugNetItem(new Item.Properties().defaultMaxDamage(64).group(MSItemGroup.LANDS)).setRegistryName("bug_net"));
 		registry.register(new FrogItem(new Item.Properties().maxStackSize(1).group(MSItemGroup.LANDS)).setRegistryName("frog"));
@@ -672,6 +710,7 @@ public class MSItems
 		registry.register(new GrimoireItem(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("grimoire"));
 		registry.register(new LongForgottenWarhornItem(new Item.Properties().defaultMaxDamage(100)).setRegistryName("long_forgotten_warhorn"));
 		registry.register(new RazorBladeItem(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("razor_blade"));
+		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("ice_shard"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN).maxStackSize(1)).setRegistryName("uranium_powered_stick"));
 		registry.register(new CustomBoatItem((stack, world, x, y, z) -> new MetalBoatEntity(world, x, y, z, 0), new Item.Properties().group(MSItemGroup.MAIN).maxStackSize(1)).setRegistryName("iron_boat"));
 		registry.register(new CustomBoatItem((stack, world, x, y, z) -> new MetalBoatEntity(world, x, y, z, 1), new Item.Properties().group(MSItemGroup.MAIN).maxStackSize(1)).setRegistryName("gold_boat"));
