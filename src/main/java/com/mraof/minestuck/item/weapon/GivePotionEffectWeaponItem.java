@@ -7,13 +7,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 
+import java.util.function.Supplier;
+
 public class GivePotionEffectWeaponItem extends WeaponItem
 {
-    private final Effect effect;
+    private final Supplier<Effect> effect;
     private final int duration;
     private final int effectTier;
     
-    public GivePotionEffectWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, Effect effect, int duration, int effectTier, MSToolType toolType, Properties builder)
+    public GivePotionEffectWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, Supplier<Effect> effect, int duration, int effectTier, MSToolType toolType, Properties builder)
     {
         super(tier, attackDamageIn, attackSpeedIn, efficiency, toolType, builder);
         this.effect = effect;
@@ -26,7 +28,7 @@ public class GivePotionEffectWeaponItem extends WeaponItem
     {
         if(!(target instanceof PlayerEntity) && !target.world.isRemote)
         {
-            target.addPotionEffect(new EffectInstance(effect, duration, effectTier));
+            target.addPotionEffect(new EffectInstance(effect.get(), duration, effectTier));
         }
         return super.hitEntity(stack, target, player);
     }
