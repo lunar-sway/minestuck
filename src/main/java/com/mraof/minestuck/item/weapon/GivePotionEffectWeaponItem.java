@@ -9,9 +9,9 @@ import net.minecraft.potion.EffectInstance;
 
 public class GivePotionEffectWeaponItem extends WeaponItem
 {
-    private Effect effect;
-    private int duration;
-    private int effectTier;
+    private final Effect effect;
+    private final int duration;
+    private final int effectTier;
     
     public GivePotionEffectWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, Effect effect, int duration, int effectTier, MSToolType toolType, Properties builder)
     {
