@@ -2,6 +2,7 @@ package com.mraof.minestuck.item.weapon;
 
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
@@ -42,9 +43,10 @@ public class AspectBasedEffectWeaponItem extends WeaponItem
     {
         if(entityIn instanceof ServerPlayerEntity)
         {
-            if(PlayerSavedData.getData((ServerPlayerEntity) entityIn).getTitle() != null)
+            Title title = PlayerSavedData.getData((ServerPlayerEntity) entityIn).getTitle();
+            if(title != null)
             {
-                if (PlayerSavedData.getData((ServerPlayerEntity) entityIn).getTitle().getHeroAspect() == aspect && isSelected)
+                if (title.getHeroAspect() == aspect && isSelected)
                 {
                     ((ServerPlayerEntity) entityIn).addPotionEffect(new EffectInstance(effect, duration, effectTier));
                 }
