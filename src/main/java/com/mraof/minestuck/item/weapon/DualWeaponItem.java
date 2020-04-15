@@ -8,7 +8,6 @@ package com.mraof.minestuck.item.weapon;
 		import net.minecraft.util.ActionResultType;
 		import net.minecraft.util.Hand;
 		import net.minecraft.world.World;
-		
 		import java.util.function.Supplier;
 
 public class DualWeaponItem extends WeaponItem
