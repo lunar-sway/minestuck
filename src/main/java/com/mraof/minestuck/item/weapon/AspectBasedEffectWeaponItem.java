@@ -41,12 +41,12 @@ public class AspectBasedEffectWeaponItem extends WeaponItem
     @Override
     public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected)
     {
-        if(entityIn instanceof ServerPlayerEntity)
+        if(isSelected && entityIn instanceof ServerPlayerEntity)
         {
             Title title = PlayerSavedData.getData((ServerPlayerEntity) entityIn).getTitle();
             if(title != null)
             {
-                if (title.getHeroAspect() == aspect && isSelected)
+                if (title.getHeroAspect() == aspect)
                 {
                     ((ServerPlayerEntity) entityIn).addPotionEffect(new EffectInstance(effect, duration, effectTier));
                 }
