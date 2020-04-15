@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:deuce_club"
+  },
+  "input2": {
+    "item": "minecraft:salmon"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:glub_club"
+  }
+}

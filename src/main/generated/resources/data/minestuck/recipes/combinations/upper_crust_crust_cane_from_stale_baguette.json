@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:prim_and_proper_walking_pole"
+  },
+  "input2": {
+    "item": "minestuck:stale_baguette"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:upper_crust_crust_cane"
+  }
+}
