@@ -11,13 +11,15 @@ import java.util.function.Supplier;
 
 public class GivePotionEffectWeaponItem extends WeaponItem
 {
+    private final boolean giveToPlayers;
     private final Supplier<Effect> effect;
     private final int duration;
     private final int effectTier;
     
-    public GivePotionEffectWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, Supplier<Effect> effect, int duration, int effectTier, MSToolType toolType, Properties builder)
+    public GivePotionEffectWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, boolean giveToPlayers, Supplier<Effect> effect, int duration, int effectTier, MSToolType toolType, Properties builder)
     {
         super(tier, attackDamageIn, attackSpeedIn, efficiency, toolType, builder);
+        this.giveToPlayers = giveToPlayers;
         this.effect = effect;
         this.duration = duration;
         this.effectTier = effectTier;
@@ -26,7 +28,7 @@ public class GivePotionEffectWeaponItem extends WeaponItem
     @Override
     public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity player)
     {
-        if(!(target instanceof PlayerEntity) && !target.world.isRemote)
+        if((!(target instanceof PlayerEntity) || giveToPlayers) && !target.world.isRemote)
         {
             target.addPotionEffect(new EffectInstance(effect.get(), duration, effectTier));
         }
