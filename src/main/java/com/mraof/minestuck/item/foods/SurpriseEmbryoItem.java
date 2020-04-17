@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item.foods;
 
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -18,20 +19,21 @@ public class SurpriseEmbryoItem extends Item {
 	{
 		super(properties);
 	}
-
-	protected void onItemUseFinish(ItemStack stack, World world, PlayerEntity player)
+	
+	@Override
+	public ItemStack onItemUseFinish(ItemStack stack, World world, LivingEntity player)
 	{
-		super.onItemUseFinish(stack, world, player);
-		if(!player.world.isRemote)
+		if(player instanceof PlayerEntity && !player.world.isRemote)
 		{
 			Random ran = new Random();
 			ItemStack[] items = new ItemStack[]{new ItemStack(Items.MELON_SLICE), new ItemStack(Items.STICK), new ItemStack(Items.EGG),
 					new ItemStack(Blocks.DIRT), new ItemStack(Blocks.PUMPKIN), new ItemStack(Blocks.COBBLESTONE)};
 			int num = ran.nextInt(items.length);
-			player.inventory.addItemStackToInventory(items[num].copy());
-			ITextComponent message = new TranslationTextComponent("item.surpriseEmbryo.message", items[num].getDisplayName());
+			((PlayerEntity) player).inventory.addItemStackToInventory(items[num].copy());
+			ITextComponent message = new TranslationTextComponent(getTranslationKey() + ".message", items[num].getDisplayName());
 			message.getStyle().setColor(TextFormatting.GOLD);
 			player.sendMessage(message);
 		}
+		return super.onItemUseFinish(stack, world, player);
 	}
 }

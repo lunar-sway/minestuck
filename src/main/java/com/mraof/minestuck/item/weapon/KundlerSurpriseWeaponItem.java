@@ -34,8 +34,8 @@ public class KundlerSurpriseWeaponItem extends WeaponItem
             int num = ran.nextInt(items.length);
             ItemEntity item = new ItemEntity(target.world, target.posX, target.posY, target.posZ, items[num].copy());
             target.world.addEntity(item);
-            
-            ITextComponent message = new TranslationTextComponent("item.surpriseAxe.message", items[num].getDisplayName());
+    
+            ITextComponent message = new TranslationTextComponent(getTranslationKey() + ".message", items[num].getDisplayName());
             message.getStyle().setColor(TextFormatting.GOLD);
             attacker.sendMessage(message);
         }

@@ -56,7 +56,7 @@ public class MelonWeaponItem extends WeaponItem
             
             if(melonOverload && harvestCounter >= 9 && entityLiving instanceof PlayerEntity)
             {
-                ITextComponent message = new TranslationTextComponent("item.melonsbane.message");
+                ITextComponent message = new TranslationTextComponent(getTranslationKey() + ".message");
                 message.getStyle().setColor(TextFormatting.GREEN);
                 message.getStyle().setBold(true);
                 if(!worldIn.isRemote)
