@@ -359,6 +359,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.MELONSBANE, "Melonsbane");
 		addTooltip(MSItems.MELONSBANE, "It seems to be multipurpose; you can commit acts of violence against melons and foes.");
 		addExtra(MSItems.MELONSBANE, "message", "M- M- M- MELON OVERLOAD!!!!!!");
+		add(MSItems.CROP_CHOP, "Crop Chop");
+		addTooltip(MSItems.CROP_CHOP, "Double crop from a single chop. Excellent!");
 		add(MSItems.BATTLEAXE, "Battleaxe");
 		addTooltip(MSItems.BATTLEAXE, "Forget that sissy hatchet stuff, this is an axe made for the battlefield. Chop heads, not wood!");
 		add(MSItems.CANDY_BATTLEAXE, "Candy Battleaxe");
