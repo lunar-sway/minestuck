@@ -94,6 +94,8 @@ public class MSItems
 	public static final Item BLACKSMITH_BANE = getNull();
 	public static final Item REGIAXE = getNull();
 	public static final Item SURPRISE_AXE = getNull();
+	public static final Item SHOCK_AXE = getNull();
+	public static final Item SHOCK_AXE_UNPOWERED = getNull();
 	public static final Item SCRAXE = getNull();
 	public static final Item PISTON_POWERED_POGO_AXEHAMMER = getNull();
 	public static final Item RUBY_CROAK = getNull();
@@ -562,6 +564,8 @@ public class MSItems
 		registry.register(new WeaponItem(ItemTier.STONE, 8, -3.0F, 6.0F, MSItemTypes.AXE_TOOL, new Item.Properties().defaultMaxDamage(413).group(MSItemGroup.WEAPONS)).setRegistryName("blacksmith_bane"));
 		registry.register(new WeaponItem(MSItemTypes.REGI_TIER, 7, -3.0F, 6.0F, MSItemTypes.AXE_TOOL, new Item.Properties().defaultMaxDamage(600).group(MSItemGroup.WEAPONS)).setRegistryName("regiaxe"));
 		registry.register(new KundlerSurpriseWeaponItem(ItemTier.IRON, 8, -3.0F, 6.0F, MSItemTypes.AXE_TOOL, new Item.Properties().defaultMaxDamage(600).group(MSItemGroup.WEAPONS)).setRegistryName("surprise_axe"));
+		registry.register(new ElectricWeaponItem(ItemTier.IRON, 9, -3.0F, 6.0F, () -> SHOCK_AXE_UNPOWERED, MSItemTypes.AXE_TOOL, new Item.Properties().defaultMaxDamage(800).group(MSItemGroup.WEAPONS)).setRegistryName("shock_axe"));
+		registry.register(new DualWeaponItem(ItemTier.IRON, 9, -3.0F, 6.0F, () -> SHOCK_AXE, MSItemTypes.AXE_TOOL, new Item.Properties().defaultMaxDamage(800).group(MSItemGroup.WEAPONS)).setRegistryName("shock_axe_unpowered"));
 		registry.register(new WeaponItem(ItemTier.IRON, 8, -3.0F, 7.0F, MSItemTypes.AXE_TOOL, new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS)).setRegistryName("scraxe"));
 		registry.register(new PogoFarmineItem(MSItemTypes.POGO_TIER, 6, -3.0F, 2.0F, Integer.MAX_VALUE, 50, 0.6, MSItemTypes.AXE_HAMMER_TOOL, new Item.Properties().defaultMaxDamage(800).group(MSItemGroup.WEAPONS)).setRegistryName("piston_powered_pogo_axehammer"));
 		registry.register(new WeaponItem(MSItemTypes.RUBY_TIER, 7, -3.0F, 8.0F, MSItemTypes.AXE_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("ruby_croak"));

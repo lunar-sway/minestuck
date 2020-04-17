@@ -311,6 +311,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.BLACKSMITH_BANE).input(Items.WOODEN_AXE).and().input(Items.ANVIL).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.REGIAXE).input(MSItems.BLACKSMITH_BANE).and().input(MSBlocks.CHESSBOARD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SURPRISE_AXE).input(MSItems.BLACKSMITH_BANE).and().input(MSItems.SURPRISE_EMBRYO).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.SHOCK_AXE).input(MSItems.SURPRISE_AXE).and().input(MSItems.BATTERY).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SCRAXE).input(Items.IRON_AXE).and().input(ItemTags.MUSIC_DISCS).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.PISTON_POWERED_POGO_AXEHAMMER).input(MSItems.COPSE_CRUSHER).and().input(MSItems.POGO_HAMMER).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.FISSION_FOCUSED_FAULT_FELLER).input(MSItems.PISTON_POWERED_POGO_AXEHAMMER).and().input(MSItems.ENERGY_CORE).build(consumer);

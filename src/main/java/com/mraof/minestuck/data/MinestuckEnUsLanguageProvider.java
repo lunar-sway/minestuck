@@ -375,6 +375,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
         add(MSItems.SURPRISE_AXE, "Kundler Surprise Axe");
         addTooltip(MSItems.SURPRISE_AXE, "Who knows what surprises this bad boy has in store!");
 		addExtra(MSItems.SURPRISE_AXE, "message", "WOW! NO WAY! You found a %s from your opponent!");
+		add(MSItems.SHOCK_AXE, "Kundler Shock Axe");
+		addTooltip(MSItems.SHOCK_AXE, "An electric surprise!");
+		add(MSItems.SHOCK_AXE_UNPOWERED, "Kundler Shock Axe");
+		addTooltip(MSItems.SHOCK_AXE_UNPOWERED, "An electric surprise!");
 		add(MSItems.SCRAXE, "Scraxe");
 		add(MSItems.PISTON_POWERED_POGO_AXEHAMMER, "Piston-Powered Pogo Pulverizer");
 		add(MSItems.RUBY_CROAK, "Ruby Croak");
