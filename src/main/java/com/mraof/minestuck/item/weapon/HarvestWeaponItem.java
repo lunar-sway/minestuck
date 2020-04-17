@@ -8,6 +8,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -50,13 +52,18 @@ public class HarvestWeaponItem extends WeaponItem
                 harvestCounter++;
             }
             
-            if(melonOverload && harvestCounter >= 12 && entityLiving instanceof PlayerEntity)
+            if(melonOverload && harvestCounter >= 9 && entityLiving instanceof PlayerEntity)
             {
                 ITextComponent message = new TranslationTextComponent("item.melonsbane.message");
                 message.getStyle().setColor(TextFormatting.GREEN);
                 message.getStyle().setBold(true);
                 if(!worldIn.isRemote)
+                {
                     entityLiving.sendMessage(message);
+                    entityLiving.addPotionEffect(new EffectInstance(Effects.STRENGTH, 200, 3));
+                    entityLiving.addPotionEffect(new EffectInstance(Effects.RESISTANCE, 200, 3));
+                    entityLiving.addPotionEffect(new EffectInstance(Effects.HASTE, 200, 3));
+                }
             }
         }
         return super.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
