@@ -370,6 +370,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.STEEL_EDGE_CANDYCUTTER, "Choco Loco Steeled Cocoa Candycutter");
 		addTooltip(MSItems.STEEL_EDGE_CANDYCUTTER, "All the benefits of the Choco Loco Woodsplitter, now with more bloodshed! Perfect!");
 		add(MSItems.BLACKSMITH_BANE, "Blacksmith's Bane");
+		add(MSItems.REGIAXE, "Regiaxe");
 		add(MSItems.SCRAXE, "Scraxe");
 		add(MSItems.PISTON_POWERED_POGO_AXEHAMMER, "Piston-Powered Pogo Pulverizer");
 		add(MSItems.RUBY_CROAK, "Ruby Croak");
