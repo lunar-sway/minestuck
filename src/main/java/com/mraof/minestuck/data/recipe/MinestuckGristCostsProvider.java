@@ -392,6 +392,7 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.COPSE_CRUSHER).grist(BUILD, 25).grist(RUST, 15).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.BATTLEAXE).grist(BUILD, 400).grist(RUST, 240).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CANDY_BATTLEAXE).grist(IODINE, 314).grist(GOLD, 240).grist(CHALK, 160).grist(AMBER, 98).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.STEEL_EDGE_CANDYCUTTER).grist(BUILD, 500).grist(RUST, 413).grist(IODINE, 212).grist(GOLD, 167).grist(CHALK, 120).grist(AMBER, 43).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.BLACKSMITH_BANE).grist(BUILD, 30).grist(RUST, 15).grist(TAR, 12).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.SCRAXE).grist(BUILD, 139).grist(TAR, 86).grist(RUST, 43).grist(RUBY, 8).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.PISTON_POWERED_POGO_AXEHAMMER).grist(BUILD, 150).grist(SHALE, 64).grist(RUST, 15).build(recipeSaver);
