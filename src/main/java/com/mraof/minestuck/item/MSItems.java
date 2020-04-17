@@ -124,6 +124,7 @@ public class MSItems
 	public static final Item PARADISES_PORTABELLO = getNull();
 	public static final Item REGI_CANE = getNull();
 	public static final Item DRAGON_CANE = getNull();
+	public static final Item DRAGON_CANE_UNSHEATHED = getNull();
 	public static final Item POGO_CANE = getNull();
 	public static final Item CANDY_CANE = getNull();
 	public static final Item SHARP_CANDY_CANE = getNull();
@@ -583,7 +584,6 @@ public class MSItems
 		registry.register(new WeaponItem(ItemTier.IRON, 3, -2.0F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(300).group(MSItemGroup.WEAPONS)).setRegistryName("spear_cane"));
 		registry.register(new WeaponItem(MSItemTypes.CANDY_TIER, 3, -2.0F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(175).group(MSItemGroup.WEAPONS)).setRegistryName("paradises_portabello"));
 		registry.register(new WeaponItem(MSItemTypes.REGI_TIER, 3, -2.0F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("regi_cane"));
-		registry.register(new WeaponItem(MSItemTypes.RUBY_TIER, 3, -2.0F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(300).group(MSItemGroup.WEAPONS)).setRegistryName("dragon_cane"));
 		registry.register(new PogoWeaponItem(MSItemTypes.POGO_TIER, 2, -2.0F, 1.0F, 0.6, MSItemTypes.MISC_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("pogo_cane"));
 		registry.register(new CandyCaneWeaponItem(MSItemTypes.CANDY_TIER, 3, -2.0F, 1.0F, 2, 0.3F, MSItemTypes.MISC_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS).defaultMaxDamage(200)).setRegistryName("candy_cane"));
 		registry.register(new CandyWeaponItem(MSItemTypes.CANDY_TIER, 5, -2.0F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(150).group(MSItemGroup.WEAPONS)).setRegistryName("sharp_candy_cane"));
@@ -593,6 +593,8 @@ public class MSItems
 		registry.register(new DualWeaponItem(ItemTier.WOOD, 3, -2.0F, 1.0F, () -> MSItems.LESS_PROPER_WALKING_STICK, MSItemTypes.NONE, new Item.Properties().defaultMaxDamage(600)).setRegistryName("less_proper_walking_stick_sheathed"));
 		registry.register(new DualWeaponItem(ItemTier.IRON, 3, -2.0F, 1.0F, () -> MSItems.ROCKEFELLERS_WALKING_BLADECANE_SHEATHED, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(800).group(MSItemGroup.WEAPONS)).setRegistryName("rockefellers_walking_bladecane"));
 		registry.register(new DualWeaponItem(ItemTier.WOOD, 4, -2.0F, 1.0F, () -> MSItems.ROCKEFELLERS_WALKING_BLADECANE, MSItemTypes.NONE, new Item.Properties().defaultMaxDamage(800)).setRegistryName("rockefellers_walking_bladecane_sheathed"));
+		registry.register(new DualWeaponItem(MSItemTypes.RUBY_TIER, 3, -2.0F, 1.0F, () -> MSItems.DRAGON_CANE_UNSHEATHED, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(550).group(MSItemGroup.WEAPONS)).setRegistryName("dragon_cane"));
+		registry.register(new DualWeaponItem(MSItemTypes.RUBY_TIER, 3, -2.0F, 1.0F, () -> MSItems.DRAGON_CANE, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(550)).setRegistryName("dragon_cane_unsheathed"));
 		
 		//Spoons/forks
 		registry.register(new WeaponItem(ItemTier.WOOD, 2, -2.2F, 1.0F, MSItemTypes.SHOVEL_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("wooden_spoon"));

@@ -376,6 +376,8 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.LESS_PROPER_WALKING_STICK).input(MSItems.PRIM_AND_PROPER_WALKING_POLE).and().namedInput(MSItems.UNBREAKABLE_KATANA).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.LESS_PROPER_WALKING_STICK).input(MSItems.PRIM_AND_PROPER_WALKING_POLE).and().namedInput(MSItems.IRON_CANE).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.ROCKEFELLERS_WALKING_BLADECANE).input(MSItems.LESS_PROPER_WALKING_STICK).and().input(Items.OBSIDIAN).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.DRAGON_CANE).input(MSItems.ROCKEFELLERS_WALKING_BLADECANE).or().namedInput(Items.DRAGON_BREATH).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.DRAGON_CANE).input(MSItems.ROCKEFELLERS_WALKING_BLADECANE).or().namedInput(Items.DRAGON_HEAD).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.WOODEN_SPOON).input(Items.WOODEN_SHOVEL).and().namedInput(Items.BOWL).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.WOODEN_SPOON).input(Items.WOODEN_SHOVEL).and().namedInput(Items.MUSHROOM_STEW).build(consumer);

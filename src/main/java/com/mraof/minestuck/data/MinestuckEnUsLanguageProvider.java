@@ -424,6 +424,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.REGI_CANE, "A black cane used only by the most elegant among Dersites.");
 		add(MSItems.DRAGON_CANE, "Dragon Cane");
 		addTooltip(MSItems.DRAGON_CANE, "The most Powerful and awe inspiring of canes!");
+		add(MSItems.DRAGON_CANE_UNSHEATHED, "Dragon Cane");
+		addTooltip(MSItems.DRAGON_CANE_UNSHEATHED, "The most Powerful and awe inspiring of canes!");
 		add(MSItems.POGO_CANE, "Pogo Cane");
 		addTooltip(MSItems.POGO_CANE, "Now without leg or hand holds for even more danger!");
 		add(MSItems.CANDY_CANE, "Candy Cane");
