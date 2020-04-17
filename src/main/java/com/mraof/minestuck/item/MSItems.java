@@ -13,6 +13,7 @@ import com.mraof.minestuck.item.foods.UnknowableEggItem;
 import com.mraof.minestuck.item.weapon.*;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.potion.EffectInstance;
@@ -82,6 +83,7 @@ public class MSItems
 	//axes
 	public static final Item BATLEACKS = getNull();
 	public static final Item COPSE_CRUSHER = getNull();
+	public static final Item MELONSBANE = getNull();
 	public static final Item BATTLEAXE = getNull();
 	public static final Item CANDY_BATTLEAXE = getNull();
 	public static final Item CHOCO_LOCO_WOODSPLITTER = getNull();
@@ -543,6 +545,7 @@ public class MSItems
 		//axes
 		registry.register(new SordItem(MSItemTypes.SBAHJ_TIER, 5, -3.5F, 1.0F, MSItemTypes.AXE_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("batleacks"));
 		registry.register(new FarmineItem(ItemTier.STONE, 5, -3.0F, 6.0F, Integer.MAX_VALUE, 20, MSItemTypes.AXE_TOOL, new Item.Properties().defaultMaxDamage(400).group(MSItemGroup.WEAPONS)).setRegistryName("copse_crusher"));
+		registry.register(new HarvestWeaponItem(MSItemTypes.FRUIT_TIER, 7, -3.0F, 3.0F, 0.6F, 20, () -> Items.MELON_SLICE, () -> Blocks.MELON, MSItemTypes.AXE_TOOL, new Item.Properties().defaultMaxDamage(400).group(MSItemGroup.WEAPONS)).setRegistryName("melonsbane"));
 		registry.register(new WeaponItem(ItemTier.IRON, 8, -3.0F, 3.0F, MSItemTypes.AXE_TOOL, new Item.Properties().defaultMaxDamage(600).group(MSItemGroup.WEAPONS)).setRegistryName("battleaxe"));
 		registry.register(new CandyWeaponItem(MSItemTypes.CANDY_TIER, 9, -3.0F, 2.0F, MSItemTypes.AXE_TOOL, new Item.Properties().defaultMaxDamage(111).group(MSItemGroup.WEAPONS)).setRegistryName("candy_battleaxe"));
 		registry.register(new ConsumableWeaponItem(MSItemTypes.CANDY_TIER, 10, -3.0F, 2.0F, 8, 0.4F, MSItemTypes.AXE_TOOL, new Item.Properties().defaultMaxDamage(350).group(MSItemGroup.WEAPONS)).setRegistryName("choco_loco_woodsplitter"));
