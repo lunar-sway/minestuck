@@ -62,9 +62,9 @@ public class MelonWeaponItem extends WeaponItem
                 if(!worldIn.isRemote)
                 {
                     entityLiving.sendMessage(message);
-                    entityLiving.addPotionEffect(new EffectInstance(Effects.STRENGTH, 200, 3));
-                    entityLiving.addPotionEffect(new EffectInstance(Effects.RESISTANCE, 200, 3));
-                    entityLiving.addPotionEffect(new EffectInstance(Effects.HASTE, 200, 3));
+                    entityLiving.addPotionEffect(new EffectInstance(Effects.STRENGTH, 1800, 3));
+                    entityLiving.addPotionEffect(new EffectInstance(Effects.RESISTANCE, 1800, 3));
+                    entityLiving.addPotionEffect(new EffectInstance(Effects.HASTE, 1800, 3));
                 }
                 MSCriteriaTriggers.MELON_OVERLOAD.trigger((ServerPlayerEntity) entityLiving);
             }
