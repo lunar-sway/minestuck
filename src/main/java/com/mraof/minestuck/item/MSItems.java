@@ -86,6 +86,7 @@ public class MSItems
 	public static final Item QUENCH_CRUSHER = getNull();
 	public static final Item MELONSBANE = getNull();
 	public static final Item CROP_CHOP = getNull();
+	public static final Item THE_LAST_STRAW = getNull();
 	public static final Item BATTLEAXE = getNull();
 	public static final Item CANDY_BATTLEAXE = getNull();
 	public static final Item CHOCO_LOCO_WOODSPLITTER = getNull();
@@ -551,6 +552,7 @@ public class MSItems
 		registry.register(new ConsumableWeaponItem(MSItemTypes.FRUIT_TIER, 7, -3.0F, 2.0F, 6, 0.6F, 75, MSItemTypes.AXE_TOOL, new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS)).setRegistryName("quench_crusher"));
 		registry.register(new HarvestWeaponItem(MSItemTypes.FRUIT_TIER, 8, -3.0F, 3.0F, true,0.6F, 20, () -> Items.MELON_SLICE, () -> Blocks.MELON, MSItemTypes.AXE_TOOL, new Item.Properties().defaultMaxDamage(400).group(MSItemGroup.WEAPONS)).setRegistryName("melonsbane"));
 		registry.register(new DoubleHarvestWeaponItem(ItemTier.STONE, 6, -3.0F, 3.0F, MSItemTypes.AXE_TOOL, new Item.Properties().defaultMaxDamage(800).group(MSItemGroup.WEAPONS)).setRegistryName("crop_chop"));
+		registry.register(new DoubleHarvestWeaponItem(ItemTier.STONE, 8, -3.0F, 3.0F, MSItemTypes.AXE_TOOL, new Item.Properties().defaultMaxDamage(950).group(MSItemGroup.WEAPONS)).setRegistryName("the_last_straw"));
 		registry.register(new WeaponItem(ItemTier.IRON, 8, -3.0F, 3.0F, MSItemTypes.AXE_TOOL, new Item.Properties().defaultMaxDamage(600).group(MSItemGroup.WEAPONS)).setRegistryName("battleaxe"));
 		registry.register(new CandyWeaponItem(MSItemTypes.CANDY_TIER, 9, -3.0F, 2.0F, MSItemTypes.AXE_TOOL, new Item.Properties().defaultMaxDamage(111).group(MSItemGroup.WEAPONS)).setRegistryName("candy_battleaxe"));
 		registry.register(new ConsumableWeaponItem(MSItemTypes.CANDY_TIER, 10, -3.0F, 2.0F, 8, 0.4F, MSItemTypes.AXE_TOOL, new Item.Properties().defaultMaxDamage(350).group(MSItemGroup.WEAPONS)).setRegistryName("choco_loco_woodsplitter"));

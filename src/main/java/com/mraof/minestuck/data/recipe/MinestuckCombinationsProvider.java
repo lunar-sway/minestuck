@@ -303,6 +303,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.MELONSBANE).input(MSItems.QUENCH_CRUSHER).or().namedInput(Items.MELON).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CROP_CHOP).input(MSItems.COPSE_CRUSHER).or().namedInput(Items.POTATO).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CROP_CHOP).input(MSItems.COPSE_CRUSHER).or().namedInput(Items.CARROT).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.THE_LAST_STRAW).input(MSItems.CROP_CHOP).and().input(Items.HAY_BLOCK).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.BATTLEAXE).input(Items.IRON_AXE).and().input(Items.IRON_BLOCK).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CANDY_BATTLEAXE).input(MSItems.BATTLEAXE).or().input(MSItems.CANDY_CORN).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CHOCO_LOCO_WOODSPLITTER).input(MSItems.CANDY_BATTLEAXE).or().input(Items.COCOA_BEANS).build(consumer);
