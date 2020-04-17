@@ -372,6 +372,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.STEEL_EDGE_CANDYCUTTER, "All the benefits of the Choco Loco Woodsplitter, now with more bloodshed! Perfect!");
 		add(MSItems.BLACKSMITH_BANE, "Blacksmith's Bane");
 		add(MSItems.REGIAXE, "Regiaxe");
+        add(MSItems.SURPRISE_AXE, "Kundler Surprise Axe");
+        addTooltip(MSItems.SURPRISE_AXE, "Who knows what surprises this bad boy has in store!");
+		addExtra(MSItems.SURPRISE_AXE, "message", "WOW! NO WAY! You found a %s from your opponent!");
 		add(MSItems.SCRAXE, "Scraxe");
 		add(MSItems.PISTON_POWERED_POGO_AXEHAMMER, "Piston-Powered Pogo Pulverizer");
 		add(MSItems.RUBY_CROAK, "Ruby Croak");
