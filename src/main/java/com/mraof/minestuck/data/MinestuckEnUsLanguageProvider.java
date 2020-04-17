@@ -893,6 +893,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addAdvancement(MSAvancementProvider.ALL_MODI, "A Full Set", "Try a new modus type.");
 		addAdvancement(MSAvancementProvider.GOLD_SEEDS, "Gold Farming", "It begins to dawn on you that everything you just did may have been a colossal waste of time.");
 		addAdvancement(MSAvancementProvider.FRENCH_FRY, "Can I Get A, Uh...", "Successfully place and consume an order.");
+		addAdvancement(MSAvancementProvider.MELON_OVERLOAD, "M- M- M- MELON OVERLOAAAAD!", "Become overloaded with melons.");
 		addAdvancement(MSAvancementProvider.TREE_MODUS, "Uprooting", "Remove the root card in a tree modus with a bunch of items.");
 		addAdvancement(MSAvancementProvider.KILL_OGRE, "The Big One", "Kill an ogre.");
 		addAdvancement(MSAvancementProvider.RETURN_NODE, "There's no Place Like Home", "Find a Return Node and jump in to return home.");

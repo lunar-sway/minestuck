@@ -1,10 +1,12 @@
 package com.mraof.minestuck.item.weapon;
 
+import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -20,7 +22,7 @@ import javax.annotation.Nullable;
 import java.util.Random;
 import java.util.function.Supplier;
 
-public class HarvestWeaponItem extends WeaponItem
+public class MelonWeaponItem extends WeaponItem
 {
     private final Supplier<Item> itemDropped;
     private final Supplier<Block> harvestedBlock;
@@ -28,7 +30,7 @@ public class HarvestWeaponItem extends WeaponItem
     private final float percentage;
     private final boolean melonOverload;
     
-    public HarvestWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, boolean melonOverload, float percentage, int maxBonusItems, Supplier<Item> itemDropped, Supplier<Block> harvestedBlock, @Nullable MSToolType toolType, Properties builder)
+    public MelonWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, boolean melonOverload, float percentage, int maxBonusItems, Supplier<Item> itemDropped, Supplier<Block> harvestedBlock, @Nullable MSToolType toolType, Properties builder)
     {
         super(tier, attackDamageIn, attackSpeedIn, efficiency, toolType, builder);
         this.itemDropped = itemDropped;
@@ -64,6 +66,7 @@ public class HarvestWeaponItem extends WeaponItem
                     entityLiving.addPotionEffect(new EffectInstance(Effects.RESISTANCE, 200, 3));
                     entityLiving.addPotionEffect(new EffectInstance(Effects.HASTE, 200, 3));
                 }
+                MSCriteriaTriggers.MELON_OVERLOAD.trigger((ServerPlayerEntity) entityLiving);
             }
         }
         return super.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
