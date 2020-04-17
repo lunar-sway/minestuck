@@ -138,6 +138,21 @@
         },
         {
           "type": "minecraft:item",
+          "weight": 2,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 4.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minestuck:battery"
+        },
+        {
+          "type": "minecraft:item",
           "conditions": [
             {
               "condition": "minestuck:consort",

@@ -1,13 +1,13 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "item": "minestuck:emerald_axe"
+    "item": "minestuck:blacksmith_bane"
   },
   "input2": {
-    "item": "minestuck:frog"
+    "item": "minestuck:chessboard"
   },
   "mode": "and",
   "output": {
-    "item": "minestuck:ruby_croak"
+    "item": "minestuck:regiaxe"
   }
 }

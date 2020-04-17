@@ -1,13 +1,13 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "item": "minestuck:emerald_axe"
+    "item": "minestuck:crop_chop"
   },
   "input2": {
-    "item": "minestuck:frog"
+    "item": "minecraft:hay_block"
   },
   "mode": "and",
   "output": {
-    "item": "minestuck:ruby_croak"
+    "item": "minestuck:the_last_straw"
   }
 }
