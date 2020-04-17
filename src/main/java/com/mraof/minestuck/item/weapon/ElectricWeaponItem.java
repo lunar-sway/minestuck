@@ -44,7 +44,7 @@ public class ElectricWeaponItem extends DualWeaponItem
     @Override
     public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker)
     {
-        if (attacker.getRNG().nextFloat() < .5 && target.getHeldItemMainhand() != null)
+        if (attacker.getRNG().nextFloat() < .05 && target.getHeldItemMainhand() != null)
         {
             ItemEntity item = new ItemEntity(target.world, target.posX, target.posY, target.posZ, target.getHeldItemMainhand().copy());
             item.getItem().setCount(1);
