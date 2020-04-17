@@ -355,6 +355,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addStoreTooltip(MSItems.COPSE_CRUSHER, "Good for crushing trees and your enemies!");
 		add(MSItems.BATTLEAXE, "Battleaxe");
 		addTooltip(MSItems.BATTLEAXE, "Forget that sissy hatchet stuff, this is an axe made for the battlefield. Chop heads, not wood!");
+		add(MSItems.CANDY_BATTLEAXE, "Candy Battleaxe");
+		addTooltip(MSItems.CANDY_BATTLEAXE, "Oh, how glory and honor is sweet!");
 		add(MSItems.BLACKSMITH_BANE, "Blacksmith's Bane");
 		add(MSItems.SCRAXE, "Scraxe");
 		add(MSItems.PISTON_POWERED_POGO_AXEHAMMER, "Piston-Powered Pogo Pulverizer");
