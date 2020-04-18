@@ -236,6 +236,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		MSBlocks.TOTEM_LATHE.forEachBlock(block -> add(block, "Totem Lathe"));
 		MSBlocks.ALCHEMITER.forEachBlock(block -> add(block, "Alchemiter"));
 		MSBlocks.PUNCH_DESIGNIX.forEachBlock(block -> add(block, "Punch Designix"));
+		add(MSBlocks.HOLOPAD, "Holopad");
 		add(MSBlocks.MINI_CRUXTRUDER, "Miniature Cruxtruder");
 		add(MSBlocks.MINI_TOTEM_LATHE, "Miniature Totem Lathe");
 		add(MSBlocks.MINI_ALCHEMITER, "Miniature Alchemiter");
@@ -603,7 +604,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addStoreTooltip(MSItems.CARVING_TOOL, "You gotta BE the marble!");
 		add(MSItems.CRUMPLY_HAT, "Crumply Hat");
 		add(MSItems.STONE_EYEBALLS, "Stone Eyeballs");
-		add(MSItems.STONE_SLAB, "Stone Slab");
+		add(MSItems.STONE_SLAB, "Stone Tablet");
+		addExtra(MSItems.STONE_SLAB, "carved", "Looks like something has been carved into it!");
 		addStoreTooltip(MSItems.STONE_SLAB, "It's pretty rock, but I wouldn't advise rolling on it.");
 		add(MSItems.OIL_BUCKET, "Bucket of Oil");
 		add(MSItems.BLOOD_BUCKET, "Bucket of Blood");

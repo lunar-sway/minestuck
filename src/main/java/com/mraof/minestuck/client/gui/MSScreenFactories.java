@@ -13,6 +13,8 @@ import com.mraof.minestuck.player.Title;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.Hand;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -63,6 +65,11 @@ public class MSScreenFactories
 	public static void displayAlchemiterScreen(AlchemiterTileEntity tileEntity)
 	{
 		Minecraft.getInstance().displayGuiScreen(new AlchemiterScreen(tileEntity));
+	}
+	
+	public static void displayStoneTabletScreen(PlayerEntity playerIn, Hand handIn, String text, boolean canEdit)
+	{
+		Minecraft.getInstance().displayGuiScreen(new StoneTabletScreen(playerIn, handIn, text, canEdit));
 	}
 	
 	public static void displayTitleSelectScreen(Title title)

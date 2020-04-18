@@ -1,7 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
+import com.mraof.minestuck.block.HolopadBlock;
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.entity.item.HologramEntity;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import net.minecraft.block.Block;
@@ -12,18 +12,19 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.List;
 
-public class HolopadTileEntity extends TileEntity
+public class HolopadTileEntity extends TileEntity implements ITickableTileEntity
 {
-
+	
+	public int innerRotation = 0;
 	protected ItemStack card = ItemStack.EMPTY;
 	
 	public HolopadTileEntity()
@@ -33,10 +34,6 @@ public class HolopadTileEntity extends TileEntity
 	
 	public void onRightClick(PlayerEntity player)
 	{
-		if(!world.isRemote)
-		{
-			AxisAlignedBB bb = new AxisAlignedBB(pos);
-		}
 		if(!card.isEmpty())
 		{
 			if (player.getHeldItemMainhand().isEmpty())
@@ -46,8 +43,6 @@ public class HolopadTileEntity extends TileEntity
 			else player.container.detectAndSendChanges();
 			
 			setCard(ItemStack.EMPTY);
-			
-			destroyHologram(pos);
 			return;
 		}
 		else
@@ -63,42 +58,9 @@ public class HolopadTileEntity extends TileEntity
 					
 					if (in.hasTag() && in.getTag().contains("contentID"))
 						item = AlchemyHelper.getDecodedItem(in);
-					
-					spawnHologram(pos, item);
 				}
 					
 				
-			}
-		}
-	}
-	
-	public void spawnHologram(BlockPos pos, ItemStack item)
-	{
-		if(!world.isRemote)
-		{
-			AxisAlignedBB bb = new AxisAlignedBB(pos);
-			
-			boolean bool = world.getEntitiesWithinAABB(HologramEntity.class, bb).isEmpty();
-			
-			if(bool)
-			{
-				HologramEntity holo = new HologramEntity(world, item);
-				holo.setPosition(pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5);
-				world.addEntity(holo);
-			}
-		}
-	}
-	
-	public void destroyHologram(BlockPos pos)
-	{
-		if(!world.isRemote)
-		{
-			AxisAlignedBB bb = new AxisAlignedBB(pos);
-			List<HologramEntity> list = world.getEntitiesWithinAABB(HologramEntity.class, bb);
-			
-			for(HologramEntity holo : list)
-			{
-				holo.remove();
 			}
 		}
 	}
@@ -128,8 +90,7 @@ public class HolopadTileEntity extends TileEntity
 			this.card = card;
 			if(world != null)
 			{
-				BlockState state = world.getBlockState(pos);
-				world.notifyBlockUpdate(pos, state, state, 2);
+				updateState();
 			}
 		}
 	}
@@ -137,6 +98,17 @@ public class HolopadTileEntity extends TileEntity
 	public ItemStack getCard()
 	{
 		return this.card;
+	}
+	
+	public ItemStack getHoloItem()
+	{
+		ItemStack in = getCard();
+		ItemStack item = new ItemStack(MSBlocks.GENERIC_OBJECT);
+		
+		if (in.hasTag() && in.getTag().contains("contentID"))
+			item = AlchemyHelper.getDecodedItem(in);
+		
+		return item;
 	}
 	
 	@Override
@@ -176,5 +148,23 @@ public class HolopadTileEntity extends TileEntity
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
 	{
 		handleUpdateTag(pkt.getNbtCompound());
+	}
+	
+	
+	@Override
+	public void tick()
+	{
+		++innerRotation;
+	}
+	
+	private void updateState()
+	{
+		if(world != null && !world.isRemote)
+		{
+			BlockState state = world.getBlockState(pos);
+			boolean hasCard = !card.isEmpty();
+			if(state.has(HolopadBlock.HAS_CARD) && hasCard != state.get(HolopadBlock.HAS_CARD))
+				world.setBlockState(pos, state.with(HolopadBlock.HAS_CARD, hasCard), 2);
+		}
 	}
 }

@@ -48,6 +48,7 @@ public class MSPacketHandler
 		registerMessage(GristWildcardPacket.class, GristWildcardPacket::decode);
 		registerMessage(TransportalizerPacket.class, TransportalizerPacket::decode);
 		registerMessage(EffectTogglePacket.class, EffectTogglePacket::decode);
+		registerMessage(StoneTabletPacket.class, StoneTabletPacket::decode);
 	}
 	
 	private static int nextIndex;

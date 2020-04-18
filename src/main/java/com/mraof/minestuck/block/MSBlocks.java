@@ -128,7 +128,7 @@ public class MSBlocks
 	public static final Block MINI_TOTEM_LATHE = getNull();
 	public static final Block MINI_ALCHEMITER = getNull();
 	public static final Block MINI_PUNCH_DESIGNIX = getNull();
-	//public static final Block HOLOPAD = getNull();
+	public static final Block HOLOPAD = getNull();
 	/*public static BlockJumperBlock[] jumperBlockExtension = BlockJumperBlock.createBlocks();
 	public static BlockAlchemiterUpgrades[] alchemiterUpgrades = BlockAlchemiterUpgrades.createBlocks();*/
 	
@@ -379,8 +379,9 @@ public class MSBlocks
 		registry.register(new SmallMachineBlock(MSBlockShapes.SMALL_TOTEM_LATHE.createRotatedShapes(), () -> MSTileEntityTypes.MINI_TOTEM_LATHE, Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("mini_totem_lathe"));
 		registry.register(new MiniAlchemiterBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("mini_alchemiter"));
 		registry.register(new SmallMachineBlock(MSBlockShapes.SMALL_PUNCH_DESIGNIX.createRotatedShapes(), () -> MSTileEntityTypes.MINI_PUNCH_DESIGNIX, Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("mini_punch_designix"));
+		registry.register(new HolopadBlock(Block.Properties.create(Material.IRON, MaterialColor.SNOW).hardnessAndResistance(3.0F)).setRegistryName("holopad"));
+		
 		/*
-		registry.register(new BlockHolopad(Block.Properties.create(Material.IRON, MaterialColor.SNOW).hardnessAndResistance(3.0F)).setRegistryName("holopad"));
 		registry.register(jumperBlockExtension[0].setRegistryName("jumper_block_extension"));
 		registry.register(jumperBlockExtension[1].setRegistryName("jumper_block_extension2"));
 		registry.register(jumperBlockExtension[2].setRegistryName("jumper_block_extension3"));
