@@ -8,6 +8,7 @@
 *~
 *.launch
 /run
+/server
 /out
 *.iml
 /.settings

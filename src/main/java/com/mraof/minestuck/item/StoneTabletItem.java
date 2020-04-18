@@ -1,8 +1,7 @@
 package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.client.gui.StoneTabletScreen;
-import net.minecraft.client.Minecraft;
+import com.mraof.minestuck.client.gui.MSScreenFactories;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -45,7 +44,7 @@ public class StoneTabletItem extends Item
 		{
 			boolean canEdit = playerIn.getHeldItem(handIn == Hand.MAIN_HAND ? Hand.OFF_HAND : Hand.MAIN_HAND).isItemEqual(new ItemStack(MSItems.CARVING_TOOL));
 			String text = hasText(stack) ? stack.getTag().getString("text") : "";
-			Minecraft.getInstance().displayGuiScreen(new StoneTabletScreen(playerIn, handIn, text, canEdit));
+			MSScreenFactories.displayStoneTabletScreen(playerIn, handIn, text, canEdit);
 		}
 		
 		return new ActionResult<>(ActionResultType.SUCCESS, stack);

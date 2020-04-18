@@ -1,11 +1,8 @@
 package com.mraof.minestuck.util;
 
-import com.mraof.minestuck.client.gui.StoneTabletScreen;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class StoneTabletUtils
 {

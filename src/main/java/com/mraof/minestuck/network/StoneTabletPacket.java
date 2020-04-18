@@ -32,7 +32,7 @@ public class StoneTabletPacket implements PlayToServerPacket
 	
 	public static StoneTabletPacket decode(PacketBuffer buffer)
 	{
-		return new StoneTabletPacket(buffer.readString(), Hand.values()[buffer.readInt()]);
+		return new StoneTabletPacket(buffer.readString(32767), Hand.values()[buffer.readInt()]);
 	}
 	
 	@Override
