@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:tuning_fork"
+  },
+  "grist_cost": {
+    "minestuck:build": 25,
+    "minestuck:rust": 20
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:stale_baguette"
+  },
+  "grist_cost": {
+    "minestuck:iodine": 15,
+    "minestuck:amber": 11
+  }
+}

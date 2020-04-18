@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:prismarine_basher"
+  },
+  "input2": {
+    "item": "minestuck:ice_shard"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:club_zero"
+  }
+}
