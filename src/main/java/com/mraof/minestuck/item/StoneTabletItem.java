@@ -13,6 +13,7 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
@@ -28,6 +29,15 @@ public class StoneTabletItem extends Item
 	}
 	
 	@Override
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
+	{
+		super.addInformation(stack, worldIn, tooltip, flagIn);
+		
+		if(hasText(stack))
+			tooltip.add(new TranslationTextComponent(getTranslationKey()+".carved").applyTextStyle(TextFormatting.GRAY));
+	}
+	
+	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn)
 	{
 		ItemStack stack = playerIn.getHeldItem(handIn);
@@ -39,15 +49,6 @@ public class StoneTabletItem extends Item
 		}
 		
 		return new ActionResult<>(ActionResultType.SUCCESS, stack);
-	}
-	
-	@Override
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
-	{
-		super.addInformation(stack, worldIn, tooltip, flagIn);
-		
-		if(hasText(stack))
-			tooltip.add(new TranslationTextComponent(getTranslationKey()+".carved"));
 	}
 	
 	public static boolean hasText(ItemStack stack)

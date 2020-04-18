@@ -42,6 +42,7 @@ public class HolopadBlock extends MachineBlock
 	public HolopadBlock(Properties builder)
 	{
 		super(builder);
+		setDefaultState(getDefaultState().with(HAS_CARD, false));
 	}
 	
 	@Override
@@ -55,13 +56,6 @@ public class HolopadBlock extends MachineBlock
 	public TileEntity createTileEntity(BlockState state, IBlockReader world)
 	{
 		return new HolopadTileEntity();
-	}
-	
-	@Nullable
-	@Override
-	public BlockState getStateForPlacement(BlockItemUseContext context)
-	{
-		return super.getStateForPlacement(context).with(HAS_CARD, false);
 	}
 	
 	@Override

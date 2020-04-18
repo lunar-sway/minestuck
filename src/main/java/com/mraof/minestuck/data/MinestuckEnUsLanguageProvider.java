@@ -605,7 +605,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.CRUMPLY_HAT, "Crumply Hat");
 		add(MSItems.STONE_EYEBALLS, "Stone Eyeballs");
 		add(MSItems.STONE_SLAB, "Stone Tablet");
-		addExtra(MSItems.STONE_SLAB, "carved", TextFormatting.GRAY+"Looks like something has been carved into it!");
+		addExtra(MSItems.STONE_SLAB, "carved", "Looks like something has been carved into it!");
 		addStoreTooltip(MSItems.STONE_SLAB, "It's pretty rock, but I wouldn't advise rolling on it.");
 		add(MSItems.OIL_BUCKET, "Bucket of Oil");
 		add(MSItems.BLOOD_BUCKET, "Bucket of Blood");
