@@ -22,7 +22,7 @@ public class DoubleHarvestWeaponItem extends WeaponItem
     @Override
     public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving)
     {
-        if((state.getBlock() instanceof CropsBlock && ((CropsBlock) state.getBlock()).isMaxAge(state)) || state.getBlock() instanceof PumpkinBlock)
+        if((state.getBlock() instanceof CropsBlock && ((CropsBlock) state.getBlock()).isMaxAge(state)))
         {
             CropsBlock.spawnDrops(state,worldIn,pos);
         }

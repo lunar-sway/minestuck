@@ -43,10 +43,10 @@ public class MelonWeaponItem extends WeaponItem
     @Override
     public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving)
     {
-        if(state == harvestedBlock.get().getDefaultState())
+        if(state == harvestedBlock.get().getDefaultState() && !worldIn.isRemote)
         {
             int harvestCounter = 0;
-            for(Float i = entityLiving.getRNG().nextFloat(); i <= percentage || harvestCounter >= maxBonusItems; i = entityLiving.getRNG().nextFloat())
+            for(Float i = entityLiving.getRNG().nextFloat(); i <= percentage && harvestCounter < maxBonusItems; i = entityLiving.getRNG().nextFloat())
             {
                 ItemEntity item = new ItemEntity(worldIn, pos.getX(), pos.getY(), pos.getZ(), itemDropped.get().getDefaultInstance());
                 worldIn.addEntity(item);
@@ -59,13 +59,12 @@ public class MelonWeaponItem extends WeaponItem
                 ITextComponent message = new TranslationTextComponent(getTranslationKey() + ".message");
                 message.getStyle().setColor(TextFormatting.GREEN);
                 message.getStyle().setBold(true);
-                if(!worldIn.isRemote)
-                {
-                    entityLiving.sendMessage(message);
-                    entityLiving.addPotionEffect(new EffectInstance(Effects.STRENGTH, 1800, 3));
-                    entityLiving.addPotionEffect(new EffectInstance(Effects.RESISTANCE, 1800, 3));
-                    entityLiving.addPotionEffect(new EffectInstance(Effects.HASTE, 1800, 3));
-                }
+                entityLiving.sendMessage(message);
+                
+                entityLiving.addPotionEffect(new EffectInstance(Effects.STRENGTH, 1800, 3));
+                entityLiving.addPotionEffect(new EffectInstance(Effects.RESISTANCE, 1800, 3));
+                entityLiving.addPotionEffect(new EffectInstance(Effects.HASTE, 1800, 3));
+                
                 MSCriteriaTriggers.MELON_OVERLOAD.trigger((ServerPlayerEntity) entityLiving);
             }
         }

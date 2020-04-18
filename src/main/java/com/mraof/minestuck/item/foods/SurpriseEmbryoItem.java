@@ -29,7 +29,10 @@ public class SurpriseEmbryoItem extends Item {
 			ItemStack[] items = new ItemStack[]{new ItemStack(Items.MELON_SLICE), new ItemStack(Items.STICK), new ItemStack(Items.EGG),
 					new ItemStack(Blocks.DIRT), new ItemStack(Blocks.PUMPKIN), new ItemStack(Blocks.COBBLESTONE)};
 			int num = ran.nextInt(items.length);
-			((PlayerEntity) player).inventory.addItemStackToInventory(items[num].copy());
+			if(!((PlayerEntity) player).inventory.addItemStackToInventory(items[num].copy()))
+				if(!world.isRemote)
+					((PlayerEntity) player).dropItem(items[num].copy(), false);
+				
 			ITextComponent message = new TranslationTextComponent(getTranslationKey() + ".message", items[num].getDisplayName());
 			message.getStyle().setColor(TextFormatting.GOLD);
 			player.sendMessage(message);
