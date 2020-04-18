@@ -410,8 +410,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.DEUCE_CLUB, "Deuce Club");
 		addTooltip(MSItems.DEUCE_CLUB, "The weakest club in the world");
 		add(MSItems.STALE_BAGUETTE, "Stale Baguette");
-		add(MSItems.GLUB_CLUB, "Deuce Club");
-		addTooltip(MSItems.GLUB_CLUB, "The weakest club in the world");
+		add(MSItems.GLUB_CLUB, "Glub Club");
+		addTooltip(MSItems.GLUB_CLUB, "Ever been smacked with a raw fish?");
 		add(MSItems.NIGHT_CLUB, "Nightclub");
 		addTooltip(MSItems.NIGHT_CLUB, "Wanna go...clubbing?");
 		add(MSItems.PRISMARINE_BASHER, "Prismarine Basher");
