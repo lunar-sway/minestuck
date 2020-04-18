@@ -390,8 +390,18 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		
 		GristCostRecipeBuilder.of(MSItems.BATLEACKS).grist(BUILD, 0).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.COPSE_CRUSHER).grist(BUILD, 25).grist(RUST, 15).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.QUENCH_CRUSHER).grist(BUILD, 125).grist(IODINE, 34).grist(CAULK, 23).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.MELONSBANE).grist(BUILD, 245).grist(IODINE, 67).grist(CAULK, 63).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.CROP_CHOP).grist(BUILD, 130).grist(IODINE, 93).grist(AMBER, 72).grist(GOLD, 45).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.THE_LAST_STRAW).grist(BUILD, 270).grist(GOLD, 124).grist(IODINE, 103).grist(AMBER, 95).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.BATTLEAXE).grist(BUILD, 400).grist(RUST, 240).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.CANDY_BATTLEAXE).grist(IODINE, 314).grist(GOLD, 240).grist(CHALK, 160).grist(AMBER, 98).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.CHOCO_LOCO_WOODSPLITTER).grist(BUILD, 300).grist(IODINE, 265).grist(GOLD, 200).grist(CHALK, 120).grist(AMBER, 41).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.STEEL_EDGE_CANDYCUTTER).grist(BUILD, 500).grist(RUST, 413).grist(IODINE, 212).grist(GOLD, 167).grist(CHALK, 120).grist(AMBER, 43).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.BLACKSMITH_BANE).grist(BUILD, 30).grist(RUST, 15).grist(TAR, 12).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.REGIAXE).grist(AMETHYST, 200).grist(TAR, 146).grist(GOLD, 98).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.SURPRISE_AXE).grist(BUILD, 170).grist(RUST, 80).grist(AMBER, 30).grist(IODINE, 12).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.SHOCK_AXE).grist(BUILD, 275).grist(RUST, 125).grist(GOLD, 121).grist(AMBER, 90).grist(URANIUM, 50).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.SCRAXE).grist(BUILD, 139).grist(TAR, 86).grist(RUST, 43).grist(RUBY, 8).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.PISTON_POWERED_POGO_AXEHAMMER).grist(BUILD, 150).grist(SHALE, 64).grist(RUST, 15).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.RUBY_CROAK).grist(BUILD, 900).grist(GARNET, 103).grist(RUBY, 64).grist(DIAMOND, 16).build(recipeSaver);
@@ -427,6 +437,7 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.PRIM_AND_PROPER_WALKING_POLE).grist(BUILD, 60).grist(IODINE, 54).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.LESS_PROPER_WALKING_STICK).grist(BUILD, 500).grist(RUST, 120).grist(IODINE, 45).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.ROCKEFELLERS_WALKING_BLADECANE).grist(BUILD, 2222).grist(RUST, 222).grist(TAR, 22).grist(DIAMOND, 2).grist(RUBY, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.DRAGON_CANE).grist(BUILD, 1777).grist(RUBY, 777).grist(RUST, 777).grist(CHALK, 277).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSItems.CAPTCHAROID_CAMERA).grist(BUILD, 5000).grist(CAULK, 500).grist(GOLD, 500).grist(MARBLE, 500).grist(MERCURY, 500).grist(SHALE, 500).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.TRANSPORTALIZER).grist(BUILD, 350).grist(AMETHYST, 27).grist(RUST, 36).grist(URANIUM, 18).build(recipeSaver);
@@ -532,6 +543,7 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.GAMEBRO_MAGAZINE).grist(CHALK, 3).grist(GARNET, 2).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.GAMEGRL_MAGAZINE).grist(CHALK, 3).grist(AMBER, 2).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.ICE_SHARD).grist(COBALT, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.BATTERY).grist(GOLD, 4).grist(URANIUM, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CARVING_TOOL).grist(BUILD, 10).grist(RUST, 2).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CRUMPLY_HAT).grist(BUILD, 20).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.MINI_FROG_STATUE).grist(BUILD, 30).build(recipeSaver);

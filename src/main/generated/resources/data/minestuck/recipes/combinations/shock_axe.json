@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:surprise_axe"
+  },
+  "input2": {
+    "item": "minestuck:battery"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:shock_axe"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:dragon_cane"
+  },
+  "grist_cost": {
+    "minestuck:build": 1777,
+    "minestuck:ruby": 777,
+    "minestuck:rust": 777,
+    "minestuck:chalk": 277
+  }
+}
