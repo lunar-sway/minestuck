@@ -49,7 +49,7 @@ public class MSTileEntityTypes	//TODO Use @ObjectHolder or DeferredRegister here
 		//event.getRegistry().register((JUMPER_BLOCK = TileEntityType.Builder.create(TileEntityJumperBlock::new).build(null)).setRegistryName("jumper_block"));
 		//event.getRegistry().register((ALCHEMITER_UPGRADE = TileEntityType.Builder.create(TileEntityAlchemiterUpgrade::new).build(null)).setRegistryName("alchemiter_upgrade"));
 		//event.getRegistry().register((UPGRADE_ALCHEMITER = TileEntityType.Builder.create(TileEntityUpgradedAlchemiter::new).build(null)).setRegistryName("upgrade_alchemiter"));
-		//event.getRegistry().register((HOLOPAD = TileEntityType.Builder.create(HolopadTileEntity::new, MinestuckBlocks.HOLOPAD).build(null)).setRegistryName("holopad"));
+		event.getRegistry().register((HOLOPAD = TileEntityType.Builder.create(HolopadTileEntity::new, MSBlocks.HOLOPAD).build(null)).setRegistryName("holopad"));
 		event.getRegistry().register((SKAIA_PORTAL = TileEntityType.Builder.create(SkaiaPortalTileEntity::new, MSBlocks.SKAIA_PORTAL).build(null)).setRegistryName("skaia_portal"));
 		event.getRegistry().register((GATE = TileEntityType.Builder.create(GateTileEntity::new, MSBlocks.GATE, MSBlocks.RETURN_NODE).build(null)).setRegistryName("gate"));
 	}

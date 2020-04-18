@@ -4,6 +4,7 @@ import com.mraof.minestuck.tileentity.HolopadTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
@@ -56,6 +57,13 @@ public class HolopadBlock extends MachineBlock
 		return new HolopadTileEntity();
 	}
 	
+	@Nullable
+	@Override
+	public BlockState getStateForPlacement(BlockItemUseContext context)
+	{
+		return super.getStateForPlacement(context).with(HAS_CARD, false);
+	}
+	
 	@Override
 	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
@@ -77,7 +85,6 @@ public class HolopadBlock extends MachineBlock
 		if(te != null && !worldIn.isRemote)
 		{
 			te.dropItem(true, worldIn, pos, te.getCard());
-			te.destroyHologram(pos);
 		}
 		
 		super.onBlockHarvested(worldIn, pos, state, player);
@@ -107,4 +114,6 @@ public class HolopadBlock extends MachineBlock
 	{
 		return BlockRenderLayer.CUTOUT_MIPPED;
 	}
+	
+	
 }

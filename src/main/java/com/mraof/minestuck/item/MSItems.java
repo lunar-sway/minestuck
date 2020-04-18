@@ -441,8 +441,8 @@ public class MSItems
 		registerItemBlock(registry, MINI_TOTEM_LATHE, MSItemGroup.MAIN);
 		registerItemBlock(registry, MINI_ALCHEMITER, MSItemGroup.MAIN);
 		registerItemBlock(registry, MINI_PUNCH_DESIGNIX, MSItemGroup.MAIN);
-		/*registerItemBlock(registry, new ItemBlock(holopad));
-		registerItemBlock(registry, new ItemJumperBlock(jumperBlockExtension[0]));*/
+		registerItemBlock(registry, HOLOPAD, MSItemGroup.MAIN);
+		/*registerItemBlock(registry, new ItemJumperBlock(jumperBlockExtension[0]));*/
 		
 		registerItemBlock(registry, COMPUTER, MSItemGroup.MAIN);
 		registerItemBlock(registry, LAPTOP, MSItemGroup.MAIN);
