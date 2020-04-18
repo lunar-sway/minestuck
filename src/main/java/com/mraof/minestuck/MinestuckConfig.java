@@ -222,7 +222,7 @@ public class MinestuckConfig
 		canBreakGates = SERVER_BUILDER.comment("Lets gates be destroyed by explosions. Turning this off will make gates use the same explosion resistance as bedrock.")
 				.define("canBreakGates",true);
 		disableGiclops = SERVER_BUILDER.comment("Right now, the giclops pathfinding is currently causing huge amounts of lag due to their size. This option is a short-term solution that will disable giclops spawning and remove all existing giclopes.")
-				.define("disableGiclops",true);
+				.define("disableGiclops",false);
 		allowSecondaryConnections = SERVER_BUILDER.comment("Set this to true to allow so-called 'secondary connections' to be created.")
 				.define("secondaryConnections", true);
 		SERVER_BUILDER.pop();

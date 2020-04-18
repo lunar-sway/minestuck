@@ -316,6 +316,13 @@ public class MSItems
 		registerItemBlock(registry, CHISELED_PINK_STONE_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, CRACKED_PINK_STONE_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, MOSSY_PINK_STONE_BRICKS, MSItemGroup.LANDS);
+		registerItemBlock(registry, GOLD_BRICKS, MSItemGroup.LANDS);
+		registerItemBlock(registry, BROWN_DUNGEON_BRICKS, MSItemGroup.LANDS);
+		registerItemBlock(registry, BROWN_DUNGEON_COLUMN, MSItemGroup.LANDS);
+		registerItemBlock(registry, BROWN_DUNGEON_TILE, MSItemGroup.LANDS);
+		registerItemBlock(registry, BROWN_DUNGEON_GLYPHS, MSItemGroup.LANDS);
+		registerItemBlock(registry, CALEDFWLCH_PEDESTAL_FULL, MSItemGroup.LANDS);
+		registerItemBlock(registry, CALEDFWLCH_PEDESTAL_EMPTY, MSItemGroup.LANDS);
 		registerItemBlock(registry, POLISHED_PINK_STONE, MSItemGroup.LANDS);
 		registerItemBlock(registry, DENSE_CLOUD, MSItemGroup.LANDS);
 		registerItemBlock(registry, BRIGHT_DENSE_CLOUD, MSItemGroup.LANDS);
@@ -418,6 +425,7 @@ public class MSItems
 		registerItemBlock(registry, MYCELIUM_BRICK_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, CHALK_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, CHALK_BRICK_STAIRS, MSItemGroup.LANDS);
+		registerItemBlock(registry, GOLD_BRICK_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, PINK_STONE_BRICK_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, RAINBOW_PLANKS_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, END_PLANKS_STAIRS, MSItemGroup.LANDS);
@@ -430,6 +438,7 @@ public class MSItems
 		registerItemBlock(registry, END_PLANKS_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, DEAD_PLANKS_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, TREATED_PLANKS_SLAB, MSItemGroup.LANDS);
+		registerItemBlock(registry, BROWN_DUNGEON_TILE_SLAB, MSItemGroup.LANDS);
 		
 		registry.register(new CruxtruderItem(MSBlocks.CRUXTRUDER, new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("cruxtruder"));
 		registerItemBlock(registry, CRUXTRUDER_LID, MSItemGroup.MAIN);

@@ -404,6 +404,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSBlocks.WOODEN_CACTUS).input(Items.CACTUS).or().namedInput(ItemTags.LOGS).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.RAINBOW_SAPLING).input(MSBlocks.RAINBOW_LEAVES).or().input(MSBlocks.RAINBOW_LOG).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.END_SAPLING).input(MSBlocks.END_LEAVES).or().input(MSBlocks.END_LOG).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.GOLD_BRICKS).input(Items.STONE_BRICKS).and().input(Items.GOLD_INGOT).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSBlocks.COARSE_STONE).input(Items.STONE).and().input(Items.GRAVEL).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.CHISELED_COARSE_STONE).input(Items.CHISELED_STONE_BRICKS).and().namedInput(Items.GRAVEL).build(consumer);

@@ -113,6 +113,15 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.PINK_STONE_BRICKS, "Pink Stone Bricks");
 		add(MSBlocks.CHISELED_PINK_STONE_BRICKS, "Chiseled Pink Stone Bricks");
 		add(MSBlocks.CRACKED_PINK_STONE_BRICKS, "Cracked Pink Stone Bricks");
+		add(MSBlocks.GOLD_BRICKS, "Gold Bricks");
+		add(MSBlocks.GOLD_BRICK_STAIRS, "Gold Brick Stairs");
+		add(MSBlocks.BROWN_DUNGEON_BRICKS, "Brown Dungeon Bricks");
+		add(MSBlocks.BROWN_DUNGEON_COLUMN, "Brown Dungeon Column");
+		add(MSBlocks.BROWN_DUNGEON_TILE, "Brown Dungeon Tile");
+		add(MSBlocks.BROWN_DUNGEON_TILE_SLAB, "Brown Dungeon Tile Slab");
+		add(MSBlocks.BROWN_DUNGEON_GLYPHS, "Brown Dungeon Glyphs");
+		add(MSBlocks.CALEDFWLCH_PEDESTAL_FULL, "Caledfwlch Pedestal Full");
+		add(MSBlocks.CALEDFWLCH_PEDESTAL_EMPTY, "Caledfwlch Pedestal Empty");
 		add(MSBlocks.MOSSY_PINK_STONE_BRICKS, "Mossy Pink Stone Bricks");
 		add(MSBlocks.DENSE_CLOUD, "Dense Cloud");
 		add(MSBlocks.BRIGHT_DENSE_CLOUD, "Bright Dense Cloud");

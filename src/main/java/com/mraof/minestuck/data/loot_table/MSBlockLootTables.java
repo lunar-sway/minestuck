@@ -100,6 +100,13 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(CHISELED_PINK_STONE_BRICKS);
 		registerDropSelfLootTable(CRACKED_PINK_STONE_BRICKS);
 		registerDropSelfLootTable(MOSSY_PINK_STONE_BRICKS);
+		registerDropSelfLootTable(GOLD_BRICKS);
+		registerDropSelfLootTable(BROWN_DUNGEON_BRICKS);
+		registerDropSelfLootTable(BROWN_DUNGEON_COLUMN);
+		registerDropSelfLootTable(BROWN_DUNGEON_TILE);
+		registerDropSelfLootTable(BROWN_DUNGEON_GLYPHS);
+		registerDropSelfLootTable(CALEDFWLCH_PEDESTAL_FULL);
+		registerDropSelfLootTable(CALEDFWLCH_PEDESTAL_EMPTY);
 		registerDropSelfLootTable(DENSE_CLOUD);
 		registerDropSelfLootTable(BRIGHT_DENSE_CLOUD);
 		registerDropSelfLootTable(SUGAR_CUBE);
@@ -203,6 +210,7 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(MYCELIUM_BRICK_STAIRS);
 		registerDropSelfLootTable(CHALK_STAIRS);
 		registerDropSelfLootTable(CHALK_BRICK_STAIRS);
+		registerDropSelfLootTable(GOLD_BRICK_STAIRS);
 		registerDropSelfLootTable(PINK_STONE_BRICK_STAIRS);
 		registerDropSelfLootTable(RAINBOW_PLANKS_STAIRS);
 		registerDropSelfLootTable(END_PLANKS_STAIRS);
@@ -215,6 +223,7 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(END_PLANKS_SLAB);
 		registerDropSelfLootTable(DEAD_PLANKS_SLAB);
 		registerDropSelfLootTable(TREATED_PLANKS_SLAB);
+		registerDropSelfLootTable(BROWN_DUNGEON_TILE_SLAB);
 		
 		registerDropSelfLootTable(CRUXTRUDER_LID);
 		registerLootTable(MINI_CRUXTRUDER, MSBlockLootTables::droppingWithColor);

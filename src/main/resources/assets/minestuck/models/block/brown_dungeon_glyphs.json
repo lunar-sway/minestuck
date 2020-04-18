@@ -1,0 +1,8 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "minestuck:block/brown_dungeon_bricks_nak_left",
+    "top": "minestuck:block/brown_dungeon_bricks_lotus",
+    "side": "minestuck:block/brown_dungeon_bricks_nak_right"
+  }
+}
