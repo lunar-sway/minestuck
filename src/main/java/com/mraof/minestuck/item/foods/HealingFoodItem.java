@@ -1,4 +1,4 @@
-package com.mraof.minestuck.item;
+package com.mraof.minestuck.item.foods;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
