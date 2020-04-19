@@ -32,6 +32,7 @@ public class MSItemTypes
 	public static final IItemTier CACTUS_TIER = new ModItemTier(0, 104, 2.0F, 1.0F, 10, () -> Ingredient.fromItems(Blocks.CACTUS));
 	public static final IItemTier MEAT_TIER = new ModItemTier(0, 175, 1.0F, 0.0F, 5, () -> Ingredient.EMPTY);
 	public static final IItemTier CANDY_TIER = new ModItemTier(0, 450, 2.5F, 0.0F, 15, () -> Ingredient.EMPTY);
+	public static final IItemTier FRUIT_TIER = new ModItemTier(0, 450, 2.5F, 0.0F, 10, () -> Ingredient.fromItems(Items.GLISTERING_MELON_SLICE));
 	public static final IItemTier BAGUETTE_TIER = new ModItemTier(0, 450, 2.5F, 0.0F, 10, () -> Ingredient.fromItems(MSItems.BREADCRUMBS));
 	public static final IItemTier HORRORTERROR_TIER = new ModItemTier(3, 1600, 4.0F, 4.0F, 15, () -> Ingredient.EMPTY);
 	

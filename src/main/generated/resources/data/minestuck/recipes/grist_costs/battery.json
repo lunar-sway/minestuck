@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:battery"
+  },
+  "grist_cost": {
+    "minestuck:gold": 4,
+    "minestuck:uranium": 1
+  }
+}

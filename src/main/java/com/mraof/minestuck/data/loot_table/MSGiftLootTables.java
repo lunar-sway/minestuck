@@ -61,6 +61,7 @@ public class MSGiftLootTables implements Consumer<BiConsumer<ResourceLocation, L
 						.addEntry(ItemLootEntry.builder(MSItems.GAMEGRL_MAGAZINE).weight(5).acceptCondition(ConsortLootCondition.builder(EnumConsort.TURTLE, EnumConsort.IGUANA)))
 						.addEntry(ItemLootEntry.builder(MSItems.MUSIC_DISC_EMISSARY_OF_DANCE).weight(1))
 						.addEntry(ItemLootEntry.builder(MSItems.MUSIC_DISC_DANCE_STAB_DANCE).weight(1))
+						.addEntry(ItemLootEntry.builder(MSItems.BATTERY).weight(2).acceptFunction(SetCount.builder(RandomValueRange.of(1,4))))
 						.addEntry(ItemLootEntry.builder(MSItems.GRIMOIRE).weight(1).acceptCondition(ConsortLootCondition.builder(EnumConsort.TURTLE)))
 						.addEntry(ItemLootEntry.builder(MSItems.CRUMPLY_HAT).weight(8).acceptFunction(SetCount.builder(RandomValueRange.of(1, 5))).acceptCondition(ConsortLootCondition.builder(EnumConsort.SALAMANDER))))
 				.addLootPool(LootPool.builder().name(BLOCK_POOL).rolls(ConstantRange.of(2))

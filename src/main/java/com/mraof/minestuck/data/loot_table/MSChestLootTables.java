@@ -60,7 +60,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.addEntry(ItemLootEntry.builder(Items.ENDER_PEARL).weight(2).quality(2))
 						.addEntry(ItemLootEntry.builder(MSItems.GRIMOIRE).weight(1).quality(1))
 						.addEntry(ItemLootEntry.builder(MSBlocks.GENERIC_OBJECT).weight(10).quality(-1))
-						.addEntry(ItemLootEntry.builder(MSBlocks.TRANSPORTALIZER).weight(2).quality(2))
+						.addEntry(ItemLootEntry.builder(MSBlocks.TRANSPORTALIZER).weight(1).quality(2))
 						.addEntry(ItemLootEntry.builder(MSItems.RAW_CRUXITE).weight(15).quality(1).acceptFunction(SetCount.builder(RandomValueRange.of(1, 5))))
 						.addEntry(ItemLootEntry.builder(MSItems.RAW_URANIUM).weight(12).quality(1).acceptFunction(SetCount.builder(RandomValueRange.of(1, 4)))))
 				.addLootPool(LootPool.builder().name("boondollars").rolls(ConstantRange.of(1))

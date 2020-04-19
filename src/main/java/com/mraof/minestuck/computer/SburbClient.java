@@ -45,7 +45,11 @@ public class SburbClient extends ButtonListProgram
 				list.add(new UnlocalizedString(RESUME_BUTTON));
 			for (Map.Entry<Integer, String> entry : SkaiaClient.getAvailableServers(te.ownerId).entrySet())
 				list.add(new UnlocalizedString(CONNECT_BUTTON, entry.getValue(), entry.getKey()));
-		} else list.add(new UnlocalizedString(CLIENT_ACTIVE));
+		} else
+		{
+			list.add(new UnlocalizedString(CLIENT_ACTIVE));
+			list.add(new UnlocalizedString(CLOSE_BUTTON));
+		}
 		if(SkaiaClient.canSelect(te.ownerId))
 			list.add(new UnlocalizedString(SELECT_COLOR));
 		return list;
@@ -59,8 +63,10 @@ public class SburbClient extends ButtonListProgram
 		else if(buttonName.equals(CONNECT_BUTTON))
 			SkaiaClient.sendConnectRequest(te, (Integer) data[1], true);
 		else if(buttonName.equals(CLOSE_BUTTON))
-			SkaiaClient.sendCloseRequest(te, te.getData(getId()).getBoolean("isResuming")?-1:SkaiaClient.getClientConnection(te.ownerId).getServerId(), true);
-		else if(buttonName.equals(SELECT_COLOR))
+		{
+			ReducedConnection c = SkaiaClient.getClientConnection(te.ownerId);
+			SkaiaClient.sendCloseRequest(te, te.getData(getId()).getBoolean("isResuming") || c == null ? -1 : c.getServerId(), true);
+		} else if(buttonName.equals(SELECT_COLOR))
 			Minecraft.getInstance().displayGuiScreen(new ColorSelectorScreen(false));
 	}
 	
