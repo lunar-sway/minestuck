@@ -108,6 +108,8 @@ public class MSItems
 	//misc weapons
 	public static final Item CAT_CLAWS_DRAWN = getNull();
 	public static final Item CAT_CLAWS_SHEATHED = getNull();
+	public static final Item LIPSTICK_CHAINSAW = getNull();
+	public static final Item LIPSTICK = getNull();
 	//sickles
 	public static final Item SICKLE = getNull();
 	public static final Item HOMES_SMELL_YA_LATER = getNull();
@@ -591,6 +593,10 @@ public class MSItems
 		//misc weapons
 		registry.register(new DualWeaponItem(ItemTier.IRON, 2, -1.5F, 10.0F, () -> MSItems.CAT_CLAWS_SHEATHED, MSItemTypes.CLAWS_TOOL, new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS)).setRegistryName("cat_claws_drawn"));
 		registry.register(new DualWeaponItem(ItemTier.IRON, -1, -1.0F, 10.0F, () -> MSItems.CAT_CLAWS_DRAWN, MSItemTypes.NONE, new Item.Properties().defaultMaxDamage(500)).setRegistryName("cat_claws_sheathed"));
+		
+		registry.register(new DualWeaponItem(ItemTier.IRON, 2, -1.5F, 10.0F, () -> MSItems.LIPSTICK, MSItemTypes.AXE_TOOL, new Item.Properties().defaultMaxDamage(250).group(MSItemGroup.WEAPONS)).setRegistryName("lipstick_chainsaw"));
+		registry.register(new DualWeaponItem(ItemTier.WOOD, -1, -0.5F, 10.0F, () -> MSItems.LIPSTICK_CHAINSAW, MSItemTypes.NONE, new Item.Properties().defaultMaxDamage(250)).setRegistryName("lipstick"));
+		
 		//sickles
 		registry.register(new WeaponItem(ItemTier.IRON, 2, -2.4F, 1.5F, MSItemTypes.SICKLE_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("sickle"));
 		registry.register(new WeaponItem(ItemTier.IRON, 3, -2.4F, 3.0F, MSItemTypes.SICKLE_TOOL, new Item.Properties().defaultMaxDamage(400).group(MSItemGroup.WEAPONS)).setRegistryName("homes_smell_ya_later"));

@@ -355,6 +355,8 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		
 		GristCostRecipeBuilder.of(MSItems.CAT_CLAWS_DRAWN).grist(BUILD, 15).grist(RUST, 5).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CAT_CLAWS_SHEATHED).grist(BUILD, 15).grist(RUST, 5).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.LIPSTICK_CHAINSAW).grist(BUILD, 12).grist(MARBLE, 9).grist(SHALE, 16).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.LIPSTICK).grist(BUILD, 12).grist(MARBLE, 9).grist(SHALE, 16).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSItems.CLAW_HAMMER).grist(BUILD, 8).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.SLEDGE_HAMMER).grist(BUILD, 10).grist(SHALE, 4).build(recipeSaver);
