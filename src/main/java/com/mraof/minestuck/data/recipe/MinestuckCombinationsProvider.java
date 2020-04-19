@@ -294,6 +294,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.COBALT_SABRE).input(MSItems.TOO_HOT_TO_HANDLE).or().input(Items.LAPIS_BLOCK).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SCARLET_RIBBITAR).input(MSItems.CALEDSCRATCH).and().input(MSItems.FROG).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SHATTER_BEACON).input(Items.BEACON).and().input(Items.DIAMOND_SWORD).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CALEDFWLCH).input(MSItems.ROYAL_DERINGER).or().input(MSItems.CUEBALL).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.BATLEACKS).namedInput(Items.WOODEN_AXE).and().input(MSItems.SBAHJ_POSTER).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.BATLEACKS).namedInput(Items.STONE_AXE).and().input(MSItems.SBAHJ_POSTER).build(consumer);
@@ -358,6 +359,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.EEEEEEEEEEEE).input(MSItems.ESTROGEN_EMPOWERED_EVERYTHING_ERADICATOR).and().input(MSItems.SBAHJ_POSTER).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.POPAMATIC_VRILLYHOO).input(MSItems.ZILLYHOO_HAMMER).and().input(MSItems.FLUORITE_OCTET).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SCARLET_ZILLYHOO).input(MSItems.ZILLYHOO_HAMMER).and().input(MSItems.FROG).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.MWRTHWL).input(MSItems.REGI_HAMMER).or().input(MSItems.CUEBALL).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.VAUDEVILLE_HOOK).namedInput(MSItems.CANE).and().input(Items.FISHING_ROD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.VAUDEVILLE_HOOK).namedInput(Items.STICK).and().input(Items.FISHING_ROD).build(consumer);
