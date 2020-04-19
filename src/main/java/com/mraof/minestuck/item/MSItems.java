@@ -173,6 +173,9 @@ public class MSItems
 	public static final Item SHUNT = getNull();
 	
 	//Food
+	public static final Item PLHEGM_GUSHERS = getNull();
+	public static final Item SORROW_GUSHERS = getNull();
+	
 	public static final Item BUG_ON_A_STICK = getNull();
 	public static final Item CHOCOLATE_BEETLE = getNull();
 	public static final Item CONE_OF_FLIES = getNull();
@@ -638,6 +641,9 @@ public class MSItems
 		registry.register(new ShuntItem(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("shunt"));
 		
 		//food
+		registry.register(new HealingFoodItem(4F, new Item.Properties().group(MSItemGroup.MAIN).food(MSFoods.PHLEGM_GUSHERS)).setRegistryName("phlegm_gushers"));
+		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN).food(MSFoods.SORROW_GUSHERS)).setRegistryName("sorrow_gushers"));
+		
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN).food(MSFoods.BUG_ON_A_STICK)).setRegistryName("bug_on_a_stick"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.LANDS).food(MSFoods.CHOCOLATE_BEETLE)).setRegistryName("chocolate_beetle"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.LANDS).food(MSFoods.CONE_OF_FLIES)).setRegistryName("cone_of_flies"));
