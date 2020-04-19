@@ -673,6 +673,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addStoreTooltip(MSItems.BATTERY, "This one's tough to crunch into, and the effort's barely even worth it!");
 		add(MSItems.INK_SQUID_PRO_QUO, "Ink of Squid Pro Quo");
 		addTooltip(MSItems.INK_SQUID_PRO_QUO, "For the love of god, don't drink it.");
+		add(MSItems.CUEBALL, "Magic Cueball");
 		add(MSItems.CREW_POSTER, "Midnight Crew Poster");
 		add(MSItems.SBAHJ_POSTER, "Sweet Bro and Hella Jeff Poster");
 		add(MSItems.MUSIC_DISC_EMISSARY_OF_DANCE, "Music Disc");
