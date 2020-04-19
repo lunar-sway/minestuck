@@ -187,7 +187,7 @@ public class MSItems
 	public static final Item SHUNT = getNull();
 	
 	//Food
-	public static final Item PLHEGM_GUSHERS = getNull();
+	public static final Item PHLEGM_GUSHERS = getNull();
 	public static final Item SORROW_GUSHERS = getNull();
 	
 	public static final Item BUG_ON_A_STICK = getNull();
@@ -252,7 +252,7 @@ public class MSItems
 	public static final Item STONE_SLAB = getNull();
 	public static /*final*/ Item SHOP_POSTER = getNull();
 	
-	//Other
+	//Buckets
 	public static final Item OIL_BUCKET = getNull();
 	public static final Item BLOOD_BUCKET = getNull();
 	public static final Item BRAIN_JUICE_BUCKET = getNull();
@@ -260,22 +260,31 @@ public class MSItems
 	public static final Item ENDER_BUCKET = getNull();
 	public static final Item LIGHT_WATER_BUCKET = getNull();
 	public static final Item OBSIDIAN_BUCKET = getNull();
-	public static final Item CAPTCHAROID_CAMERA = getNull();
+	
+	//Alchemy Items
 	public static final Item GRIMOIRE = getNull();
-	public static final Item LONG_FORGOTTEN_WARHORN = getNull();
-	public static final Item RAZOR_BLADE = getNull();
-	public static final Item ICE_SHARD = getNull();
 	public static final Item BATTERY = getNull();
-	public static final Item URANIUM_POWERED_STICK = getNull();
-	public static final Item IRON_BOAT = getNull();
-	public static final Item GOLD_BOAT = getNull();
+	public static final Item BARBASOL = getNull();
+	public static final Item INK_SQUID_PRO_QUO = getNull();
 	public static final Item THRESH_DVD = getNull();
 	public static final Item GAMEBRO_MAGAZINE = getNull();
 	public static final Item GAMEGRL_MAGAZINE = getNull();
 	public static final Item CREW_POSTER = getNull();
 	public static final Item SBAHJ_POSTER = getNull();
+	
+	//Other
+	public static final Item CAPTCHAROID_CAMERA = getNull();
+	public static final Item LONG_FORGOTTEN_WARHORN = getNull();
+	public static final Item RAZOR_BLADE = getNull();
+	public static final Item ICE_SHARD = getNull();
+	
+	//Incredibly Useful Items
+	public static final Item URANIUM_POWERED_STICK = getNull();
+	public static final Item IRON_BOAT = getNull();
+	public static final Item GOLD_BOAT = getNull();
 	public static final Item WOODEN_CARROT = getNull();
-	//Music disks
+	
+	//Music Discs
 	public static final Item MUSIC_DISC_EMISSARY_OF_DANCE = getNull();
 	public static final Item MUSIC_DISC_DANCE_STAB_DANCE = getNull();
 	public static final Item MUSIC_DISC_RETRO_BATTLE = getNull();
@@ -745,6 +754,8 @@ public class MSItems
 		registry.register(new RazorBladeItem(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("razor_blade"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("ice_shard"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("battery"));
+		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("barbasol"));
+		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("ink_squid_pro_quo"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN).maxStackSize(1)).setRegistryName("uranium_powered_stick"));
 		registry.register(new CustomBoatItem((stack, world, x, y, z) -> new MetalBoatEntity(world, x, y, z, 0), new Item.Properties().group(MSItemGroup.MAIN).maxStackSize(1)).setRegistryName("iron_boat"));
 		registry.register(new CustomBoatItem((stack, world, x, y, z) -> new MetalBoatEntity(world, x, y, z, 1), new Item.Properties().group(MSItemGroup.MAIN).maxStackSize(1)).setRegistryName("gold_boat"));

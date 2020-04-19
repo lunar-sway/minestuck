@@ -515,6 +515,11 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.SHUNT, "Punch Card Shunt");
 		addExtra(MSItems.SHUNT, "invalid", "Invalid Item");
 		addExtra(MSItems.SHUNT, "empty", "Empty");
+		add(MSItems.PHLEGM_GUSHERS, "Hellacious Blue Phlegm Aneurysm Gushers");
+		addTooltip(MSItems.PHLEGM_GUSHERS, "These should be convenient, if somewhat unappetizing.");
+		add(MSItems.SORROW_GUSHERS, "Bodacious Black Liquid Sorrow Gushers");
+		addTooltip(MSItems.SORROW_GUSHERS, "These are pure poison.");
+		addStoreTooltip(MSItems.BUG_ON_A_STICK, "Who doesn't like bugs? Someone who haven't had a bug on a stick. That's who.");
 		add(MSItems.BUG_ON_A_STICK, "Bug On a Stick");
 		addStoreTooltip(MSItems.BUG_ON_A_STICK, "Who doesn't like bugs? Someone who haven't had a bug on a stick. That's who.");
 		add(MSItems.CHOCOLATE_BEETLE, "Chocolate Covered Beetle");
@@ -660,9 +665,12 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.GAMEBRO_MAGAZINE, "Game Bro Magazine");
 		add(MSItems.GAMEGRL_MAGAZINE, "Game Grl Magazine");
 		add(MSItems.ICE_SHARD, "Ice Shard");
+		add(MSItems.BARBASOL, "Barbasol");
 		add(MSItems.BATTERY, "Battery");
 		addStore(MSItems.BATTERY, "Death Gusher");
 		addStoreTooltip(MSItems.BATTERY, "This one's tough to crunch into, and the effort's barely even worth it!");
+		add(MSItems.INK_SQUID_PRO_QUO, "Ink of Squid Pro Quo");
+		addTooltip(MSItems.INK_SQUID_PRO_QUO, "For the love of god, don't drink it.");
 		add(MSItems.CREW_POSTER, "Midnight Crew Poster");
 		add(MSItems.SBAHJ_POSTER, "Sweet Bro and Hella Jeff Poster");
 		add(MSItems.MUSIC_DISC_EMISSARY_OF_DANCE, "Music Disc");
