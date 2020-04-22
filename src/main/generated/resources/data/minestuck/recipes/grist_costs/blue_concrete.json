@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:blue_concrete"
+  },
+  "grist_cost": {
+    "minestuck:amethyst": 1,
+    "minestuck:build": 3,
+    "minestuck:cobalt": 3
+  }
+}

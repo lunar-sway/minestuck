@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:cane"
+  },
+  "input2": {
+    "item": "minecraft:black_wool"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:umbrella"
+  }
+}

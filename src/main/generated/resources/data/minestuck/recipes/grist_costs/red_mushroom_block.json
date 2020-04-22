@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:red_mushroom_block"
+  },
+  "grist_cost": {
+    "minestuck:build": 2,
+    "minestuck:iodine": 3,
+    "minestuck:ruby": 2
+  }
+}

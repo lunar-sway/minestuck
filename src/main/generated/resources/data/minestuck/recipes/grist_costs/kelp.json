@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:kelp"
+  },
+  "grist_cost": {
+    "minestuck:iodine": 4,
+    "minestuck:cobalt": 2
+  }
+}

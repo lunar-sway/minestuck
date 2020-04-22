@@ -2,5 +2,13 @@
     "parent": "item/generated",
     "textures": {
         "layer0": "minestuck:item/stone_slab"
-    }
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "minestuck:carved": 1
+            },
+            "model": "minestuck:item/stone_slab_written"
+        }
+    ]
 }

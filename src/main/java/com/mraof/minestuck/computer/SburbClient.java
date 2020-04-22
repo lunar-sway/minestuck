@@ -3,7 +3,6 @@ package com.mraof.minestuck.computer;
 import com.mraof.minestuck.client.gui.ColorSelectorScreen;
 import com.mraof.minestuck.skaianet.ReducedConnection;
 import com.mraof.minestuck.skaianet.SkaiaClient;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundNBT;
@@ -46,7 +45,11 @@ public class SburbClient extends ButtonListProgram
 				list.add(new UnlocalizedString(RESUME_BUTTON));
 			for (Map.Entry<Integer, String> entry : SkaiaClient.getAvailableServers(te.ownerId).entrySet())
 				list.add(new UnlocalizedString(CONNECT_BUTTON, entry.getValue(), entry.getKey()));
-		} else list.add(new UnlocalizedString(CLIENT_ACTIVE));
+		} else
+		{
+			list.add(new UnlocalizedString(CLIENT_ACTIVE));
+			list.add(new UnlocalizedString(CLOSE_BUTTON));
+		}
 		if(SkaiaClient.canSelect(te.ownerId))
 			list.add(new UnlocalizedString(SELECT_COLOR));
 		return list;
@@ -60,8 +63,10 @@ public class SburbClient extends ButtonListProgram
 		else if(buttonName.equals(CONNECT_BUTTON))
 			SkaiaClient.sendConnectRequest(te, (Integer) data[1], true);
 		else if(buttonName.equals(CLOSE_BUTTON))
-			SkaiaClient.sendCloseRequest(te, te.getData(getId()).getBoolean("isResuming")?-1:SkaiaClient.getClientConnection(te.ownerId).getServerId(), true);
-		else if(buttonName.equals(SELECT_COLOR))
+		{
+			ReducedConnection c = SkaiaClient.getClientConnection(te.ownerId);
+			SkaiaClient.sendCloseRequest(te, te.getData(getId()).getBoolean("isResuming") || c == null ? -1 : c.getServerId(), true);
+		} else if(buttonName.equals(SELECT_COLOR))
 			Minecraft.getInstance().displayGuiScreen(new ColorSelectorScreen(false));
 	}
 	
@@ -70,14 +75,4 @@ public class SburbClient extends ButtonListProgram
 	{
 		return NAME;
 	}
-	
-	@Override
-	public void onClosed(ComputerTileEntity te)
-	{
-		if(te.getData(0).getBoolean("connectedToServer") && SkaianetHandler.get(te.getWorld()).getActiveConnection(te.owner) != null)
-			SkaianetHandler.get(te.getWorld()).closeConnection(te.owner, SkaianetHandler.get(te.getWorld()).getActiveConnection(te.owner).getServerIdentifier(), true);
-		else if(te.getData(0).getBoolean("isResuming"))
-			SkaianetHandler.get(te.getWorld()).closeConnection(te.owner, null, true);
-	}
-	
 }

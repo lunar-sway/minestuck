@@ -1,0 +1,14 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:steel_edge_candycutter"
+  },
+  "grist_cost": {
+    "minestuck:build": 500,
+    "minestuck:rust": 413,
+    "minestuck:iodine": 212,
+    "minestuck:gold": 167,
+    "minestuck:chalk": 120,
+    "minestuck:amber": 43
+  }
+}

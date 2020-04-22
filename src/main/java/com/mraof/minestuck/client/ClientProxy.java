@@ -5,8 +5,12 @@ import com.mraof.minestuck.client.model.*;
 import com.mraof.minestuck.client.renderer.entity.*;
 import com.mraof.minestuck.client.renderer.entity.frog.FrogRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.GateRenderer;
+import com.mraof.minestuck.client.renderer.tileentity.HolopadRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.SkaiaPortalRenderer;
 import com.mraof.minestuck.client.settings.MSKeyHandler;
+import com.mraof.minestuck.computer.ComputerProgram;
+import com.mraof.minestuck.computer.SburbClient;
+import com.mraof.minestuck.computer.SburbServer;
 import com.mraof.minestuck.entity.DecoyEntity;
 import com.mraof.minestuck.entity.EntityBigPart;
 import com.mraof.minestuck.entity.FrogEntity;
@@ -20,6 +24,7 @@ import com.mraof.minestuck.entity.consort.TurtleEntity;
 import com.mraof.minestuck.entity.item.*;
 import com.mraof.minestuck.entity.underling.*;
 import com.mraof.minestuck.tileentity.GateTileEntity;
+import com.mraof.minestuck.tileentity.HolopadTileEntity;
 import com.mraof.minestuck.tileentity.SkaiaPortalTileEntity;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.util.ResourceLocation;
@@ -32,6 +37,7 @@ public class ClientProxy
 	{
 		ClientRegistry.bindTileEntitySpecialRenderer(SkaiaPortalTileEntity.class, new SkaiaPortalRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(GateTileEntity.class, new GateRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(HolopadTileEntity.class, new HolopadRenderer());
 //		MinecraftForgeClient.registerItemRenderer(Minestuck.captchaCard, new CardRenderer());
 	}
 	
@@ -66,6 +72,9 @@ public class ClientProxy
 		RenderingRegistry.registerEntityRenderingHandler(ShopPosterEntity.class, manager -> new RenderHangingArt<>(manager, new ResourceLocation("minestuck:shop_poster")));
 
 		MSKeyHandler.registerKeys();
+		
+		ComputerProgram.registerProgramClass(0, SburbClient.class);
+		ComputerProgram.registerProgramClass(1, SburbServer.class);
 		
 		//MinecraftForge.EVENT_BUS.register(new MinestuckConfig()); Does not currently use any events to reload config
 	}

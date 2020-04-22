@@ -307,13 +307,14 @@ public final class SessionHandler
 	void addNewSession(Session session)
 	{
 		if(sessions.contains(session))
-			throw new IllegalStateException("Session has already been added");
-		else if(sessionsByName.containsKey(session.name))
-			throw new IllegalStateException("Session name is already in use");
+			throw new IllegalStateException("Session has already been added: " + session.name);
+		else if(session.isCustom() && sessionsByName.containsKey(session.name))
+			throw new IllegalStateException("Session name is already in use: " + session.name);
 		else
 		{
 			sessions.add(session);
-			sessionsByName.put(session.name, session);
+			if(session.isCustom())
+				sessionsByName.put(session.name, session);
 		}
 	}
 	

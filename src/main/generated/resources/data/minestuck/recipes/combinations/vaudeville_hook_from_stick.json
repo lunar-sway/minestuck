@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:stick"
+  },
+  "input2": {
+    "item": "minecraft:fishing_rod"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:vaudeville_hook"
+  }
+}

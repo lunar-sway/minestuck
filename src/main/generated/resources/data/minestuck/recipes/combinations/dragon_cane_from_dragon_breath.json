@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:rockefellers_walking_bladecane"
+  },
+  "input2": {
+    "item": "minecraft:dragon_breath"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:dragon_cane"
+  }
+}

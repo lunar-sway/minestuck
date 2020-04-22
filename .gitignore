@@ -8,7 +8,9 @@
 *~
 *.launch
 /run
+/server
 /out
 *.iml
 /.settings
 /src/main/generated/resources/.cache/
+/.metadata

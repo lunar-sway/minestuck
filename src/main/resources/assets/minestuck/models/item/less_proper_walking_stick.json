@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "minestuck:item/less_proper_walking_stick"
+  }
+}

@@ -10,10 +10,9 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.INameable;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.GlobalPos;
 import net.minecraft.util.text.ITextComponent;
@@ -26,7 +25,7 @@ import net.minecraft.world.server.ServerWorld;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class TransportalizerTileEntity extends TileEntity implements ITickableTileEntity, INameable
+public class TransportalizerTileEntity extends OnCollisionTeleporterTileEntity<Entity> implements INameable
 {
 	public static final String DISABLED = "minestuck.transportalizer.disabled";
 	public static final String BLOCKED = "minestuck.transportalizer.blocked";
@@ -41,7 +40,7 @@ public class TransportalizerTileEntity extends TileEntity implements ITickableTi
 	
 	public TransportalizerTileEntity()
 	{
-		super(MSTileEntityTypes.TRANSPORTALIZER);
+		super(MSTileEntityTypes.TRANSPORTALIZER, Entity.class);
 	}
 	
 	@Override
@@ -81,9 +80,18 @@ public class TransportalizerTileEntity extends TileEntity implements ITickableTi
 		else {
 			if(!enabled) { setEnabled(true); }
 		}
+		
+		super.tick();
 	}
 	
-	public void teleport(Entity entity)
+	@Override
+	protected AxisAlignedBB getTeleportField()
+	{
+		return new AxisAlignedBB(pos.getX() + 1D/16, pos.getY() + 8D/16, pos.getZ() + 1D/16, pos.getX() + 15D/16, pos.getY() + 1, pos.getZ() + 15D/16);
+	}
+	
+	@Override
+	protected void teleport(Entity entity)
 	{
 		GlobalPos location = TransportalizerSavedData.get(world).get(this.destId);
 		if(!enabled)

@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:brain_coral"
+  },
+  "grist_cost": {
+    "minestuck:cobalt": 2,
+    "minestuck:garnet": 3,
+    "minestuck:chalk": 1
+  }
+}

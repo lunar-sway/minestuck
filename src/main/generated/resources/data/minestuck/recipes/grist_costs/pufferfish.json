@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:pufferfish"
+  },
+  "grist_cost": {
+    "minestuck:iodine": 2,
+    "minestuck:caulk": 4,
+    "minestuck:amber": 6,
+    "minestuck:cobalt": 2
+  }
+}
