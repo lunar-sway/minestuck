@@ -559,6 +559,8 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.PHLEGM_GUSHERS).input(MSItems.BUILD_GUSHERS).and().namedInput(Items.SLIME_BALL).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SORROW_GUSHERS).input(MSItems.PHLEGM_GUSHERS).and().namedInput(MSItems.INK_SQUID_PRO_QUO).build(consumer);
 		
+		CombinationRecipeBuilder.of(MSItems.BARBASOL_BOMB).input(MSItems.BUILD_GUSHERS).and().input(MSItems.BARBASOL).build(consumer);
+		
 		CombinationRecipeBuilder.of(MSItems.ENERGY_CORE).input(MSItems.RAW_CRUXITE).and().input(MSItems.RAW_URANIUM).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.IRRADIATED_STEAK).input(MSItems.RAW_URANIUM).or().input(Items.COOKED_BEEF).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.QUANTUM_SABRE).input(MSItems.URANIUM_POWERED_STICK).and().input(MSItems.ENERGY_CORE).build(consumer);
