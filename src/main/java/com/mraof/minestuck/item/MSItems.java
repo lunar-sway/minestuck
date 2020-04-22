@@ -50,6 +50,7 @@ public class MSItems
 	public static final Item SLEDGE_HAMMER = getNull();
 	public static final Item BLACKSMITH_HAMMER = getNull();
 	public static final Item POGO_HAMMER = getNull();
+	public static final Item WRINKLEFUCKER = getNull();
 	public static final Item TELESCOPIC_SASSACRUSHER = getNull();
 	public static final Item REGIHAMMER = getNull();
 	public static final Item FEAR_NO_ANVIL = getNull();
@@ -535,6 +536,7 @@ public class MSItems
 		registry.register(new WeaponItem(ItemTier.IRON, 4, -2.8F, 4.0F,  MSItemTypes.HAMMER_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("sledge_hammer"));
 		registry.register(new WeaponItem(ItemTier.IRON, 5, -2.8F, 3.5F,  MSItemTypes.HAMMER_TOOL, new Item.Properties().defaultMaxDamage(450).group(MSItemGroup.WEAPONS)).setRegistryName("blacksmith_hammer"));
 		registry.register(new PogoWeaponItem(MSItemTypes.POGO_TIER, 5, -2.8F, 2.0F, 0.7,  MSItemTypes.HAMMER_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("pogo_hammer"));
+		registry.register(new PogoWeaponItem(MSItemTypes.POGO_TIER, 7, -2.8F, 2.0F, 0.4,  MSItemTypes.HAMMER_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("wrinklefucker"));
 		registry.register(new WeaponItem(MSItemTypes.BOOK_TIER, 8, -2.9F, 5.0F,  MSItemTypes.HAMMER_TOOL, new Item.Properties().defaultMaxDamage(1024).group(MSItemGroup.WEAPONS)).setRegistryName("telescopic_sassacrusher"));
 		registry.register(new WeaponItem(MSItemTypes.REGI_TIER, 3, -2.4F, 8.0F,  MSItemTypes.HAMMER_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("regihammer"));
 		registry.register(new PotionWeaponItem(MSItemTypes.RUBY_TIER, 6, -2.8F, 7.0F, new EffectInstance(Effects.SLOWNESS, 100, 3),  MSItemTypes.HAMMER_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("fear_no_anvil"));

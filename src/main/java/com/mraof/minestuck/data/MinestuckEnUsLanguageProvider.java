@@ -297,6 +297,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.BLACKSMITH_HAMMER, "A strong hammer that would commonly be found in a blacksmiths. It can also break blocks");
 		add(MSItems.POGO_HAMMER, "Pogo Hammer");
 		addTooltip(MSItems.POGO_HAMMER, "A slimy hammer with the ability to bounce back your enemies. It can also break blocks");
+		add(MSItems.WRINKLEFUCKER, "Wrinklefucker");
+		addTooltip(MSItems.WRINKLEFUCKER, "Is there anything more iconic?");
 		add(MSItems.TELESCOPIC_SASSACRUSHER, "Telescopic Sassacrusher");
 		addTooltip(MSItems.TELESCOPIC_SASSACRUSHER, "OH ho! The perfect hammer for the dashing young gent who loves a pranksters gambit or a good grist horde!");
 		add(MSItems.REGIHAMMER, "Regihammer");
