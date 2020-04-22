@@ -4,11 +4,9 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.BlockCollections;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.alchemy.CombinationRecipe;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.Minecraft;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.RecipeProvider;
@@ -351,7 +349,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.BLACKSMITH_HAMMER).input(MSItems.SLEDGE_HAMMER).and().namedInput(Items.ANVIL).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.BLACKSMITH_HAMMER).input(MSItems.SLEDGE_HAMMER).and().namedInput(Items.IRON_BLOCK).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.POGO_HAMMER).input(MSItems.SLEDGE_HAMMER).and().input(Items.SLIME_BALL).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.REGI_HAMMER).input(MSItems.CLAW_HAMMER).and().input(MSBlocks.CHESSBOARD).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.REGIHAMMER).input(MSItems.CLAW_HAMMER).and().input(MSBlocks.CHESSBOARD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.FEAR_NO_ANVIL).input(MSItems.BLACKSMITH_HAMMER).or().input(Items.CLOCK).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.TELESCOPIC_SASSACRUSHER).input(MSItems.SLEDGE_HAMMER).and().input(Items.BOOK).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.MELT_MASHER).input(MSItems.FEAR_NO_ANVIL).or().input(Items.LAVA_BUCKET).build(consumer);
@@ -359,7 +357,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.EEEEEEEEEEEE).input(MSItems.ESTROGEN_EMPOWERED_EVERYTHING_ERADICATOR).and().input(MSItems.SBAHJ_POSTER).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.POPAMATIC_VRILLYHOO).input(MSItems.ZILLYHOO_HAMMER).and().input(MSItems.FLUORITE_OCTET).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SCARLET_ZILLYHOO).input(MSItems.ZILLYHOO_HAMMER).and().input(MSItems.FROG).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.MWRTHWL).input(MSItems.REGI_HAMMER).or().input(MSItems.CUEBALL).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.MWRTHWL).input(MSItems.REGIHAMMER).or().input(MSItems.CUEBALL).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.VAUDEVILLE_HOOK).namedInput(MSItems.CANE).and().input(Items.FISHING_ROD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.VAUDEVILLE_HOOK).namedInput(Items.STICK).and().input(Items.FISHING_ROD).build(consumer);
@@ -378,8 +376,8 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.SPEAR_CANE).namedInput(MSItems.IRON_CANE).or().namedInput(MSItems.KATANA).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.PARADISES_PORTABELLO).input(Items.STICK).or().namedInput(Items.RED_MUSHROOM).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.PARADISES_PORTABELLO).input(Items.STICK).or().namedInput(Items.BROWN_MUSHROOM).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.REGI_CANE).namedInput(MSItems.CANE).and().input(MSBlocks.CHESSBOARD).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.REGI_CANE).namedInput(MSItems.IRON_CANE).and().input(MSBlocks.CHESSBOARD).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.REGICANE).namedInput(MSItems.CANE).and().input(MSBlocks.CHESSBOARD).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.REGICANE).namedInput(MSItems.IRON_CANE).and().input(MSBlocks.CHESSBOARD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.URANIUM_POWERED_STICK).input(Items.STICK).or().input(MSItems.RAW_URANIUM).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CANDY_CANE).input(MSItems.VAUDEVILLE_HOOK).and().namedInput(MSItems.CANDY_CORN).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CANDY_CANE).input(MSItems.VAUDEVILLE_HOOK).and().namedInput(MSItems.DIAMOND_MINT).build(consumer);

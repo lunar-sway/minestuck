@@ -51,7 +51,7 @@ public class MSItems
 	public static final Item BLACKSMITH_HAMMER = getNull();
 	public static final Item POGO_HAMMER = getNull();
 	public static final Item TELESCOPIC_SASSACRUSHER = getNull();
-	public static final Item REGI_HAMMER = getNull();
+	public static final Item REGIHAMMER = getNull();
 	public static final Item FEAR_NO_ANVIL = getNull();
 	public static final Item MELT_MASHER = getNull();
 	public static final Item ESTROGEN_EMPOWERED_EVERYTHING_ERADICATOR = getNull();
@@ -137,7 +137,7 @@ public class MSItems
 	public static final Item IRON_CANE = getNull();
 	public static final Item SPEAR_CANE = getNull();
 	public static final Item PARADISES_PORTABELLO = getNull();
-	public static final Item REGI_CANE = getNull();
+	public static final Item REGICANE = getNull();
 	public static final Item DRAGON_CANE = getNull();
 	public static final Item DRAGON_CANE_UNSHEATHED = getNull();
 	public static final Item POGO_CANE = getNull();
@@ -535,7 +535,7 @@ public class MSItems
 		registry.register(new WeaponItem(ItemTier.IRON, 5, -2.8F, 3.5F,  MSItemTypes.HAMMER_TOOL, new Item.Properties().defaultMaxDamage(450).group(MSItemGroup.WEAPONS)).setRegistryName("blacksmith_hammer"));
 		registry.register(new PogoWeaponItem(MSItemTypes.POGO_TIER, 5, -2.8F, 2.0F, 0.7,  MSItemTypes.HAMMER_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("pogo_hammer"));
 		registry.register(new WeaponItem(MSItemTypes.BOOK_TIER, 8, -2.9F, 5.0F,  MSItemTypes.HAMMER_TOOL, new Item.Properties().defaultMaxDamage(1024).group(MSItemGroup.WEAPONS)).setRegistryName("telescopic_sassacrusher"));
-		registry.register(new WeaponItem(MSItemTypes.REGI_TIER, 3, -2.4F, 8.0F,  MSItemTypes.HAMMER_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("regi_hammer"));
+		registry.register(new WeaponItem(MSItemTypes.REGI_TIER, 3, -2.4F, 8.0F,  MSItemTypes.HAMMER_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("regihammer"));
 		registry.register(new PotionWeaponItem(MSItemTypes.RUBY_TIER, 6, -2.8F, 7.0F, new EffectInstance(Effects.SLOWNESS, 100, 3),  MSItemTypes.HAMMER_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("fear_no_anvil"));
 		registry.register(new FireWeaponItem(MSItemTypes.RUBY_TIER, 6, -2.8F, 12.0F, 25,  MSItemTypes.HAMMER_TOOL, new Item.Properties().defaultMaxDamage(1413).group(MSItemGroup.WEAPONS)).setRegistryName("melt_masher"));
 		registry.register(new PogoFarmineItem(MSItemTypes.RUBY_TIER, 5, -2.8F, 9.0F, Integer.MAX_VALUE, 200, 0.7, MSItemTypes.MULTI_TOOL,  new Item.Properties().defaultMaxDamage(6114).group(MSItemGroup.WEAPONS)).setRegistryName("estrogen_empowered_everything_eradicator"));
@@ -628,7 +628,7 @@ public class MSItems
 		registry.register(new WeaponItem(ItemTier.IRON, 2, -2.0F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(450).group(MSItemGroup.WEAPONS)).setRegistryName("iron_cane"));
 		registry.register(new WeaponItem(ItemTier.IRON, 3, -2.0F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(300).group(MSItemGroup.WEAPONS)).setRegistryName("spear_cane"));
 		registry.register(new WeaponItem(MSItemTypes.CANDY_TIER, 3, -2.0F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(175).group(MSItemGroup.WEAPONS)).setRegistryName("paradises_portabello"));
-		registry.register(new WeaponItem(MSItemTypes.REGI_TIER, 3, -2.0F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("regi_cane"));
+		registry.register(new WeaponItem(MSItemTypes.REGI_TIER, 3, -2.0F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("regicane"));
 		registry.register(new PogoWeaponItem(MSItemTypes.POGO_TIER, 2, -2.0F, 1.0F, 0.6, MSItemTypes.MISC_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("pogo_cane"));
 		registry.register(new CandyCaneWeaponItem(MSItemTypes.CANDY_TIER, 3, -2.0F, 1.0F, 2, 0.3F, MSItemTypes.MISC_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS).defaultMaxDamage(200)).setRegistryName("candy_cane"));
 		registry.register(new CandyWeaponItem(MSItemTypes.CANDY_TIER, 5, -2.0F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(150).group(MSItemGroup.WEAPONS)).setRegistryName("sharp_candy_cane"));
