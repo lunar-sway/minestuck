@@ -278,6 +278,7 @@ public class MSItems
 	//Other
 	public static final Item CAPTCHAROID_CAMERA = getNull();
 	public static final Item LONG_FORGOTTEN_WARHORN = getNull();
+	public static final Item BARBASOL_BOMB = getNull();
 	public static final Item RAZOR_BLADE = getNull();
 	public static final Item ICE_SHARD = getNull();
 	
@@ -758,6 +759,7 @@ public class MSItems
 		registry.register(new CaptcharoidCameraItem(new Item.Properties().defaultMaxDamage(64).group(MSItemGroup.MAIN)).setRegistryName("captcharoid_camera"));
 		registry.register(new GrimoireItem(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("grimoire"));
 		registry.register(new LongForgottenWarhornItem(new Item.Properties().defaultMaxDamage(100)).setRegistryName("long_forgotten_warhorn"));
+		registry.register(new BarbasolBombItem(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("barbasol_bomb"));
 		registry.register(new RazorBladeItem(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("razor_blade"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("ice_shard"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("battery"));
