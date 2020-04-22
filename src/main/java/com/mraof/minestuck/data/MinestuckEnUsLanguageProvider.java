@@ -668,6 +668,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.GAMEGRL_MAGAZINE, "Game Grl Magazine");
 		add(MSItems.ICE_SHARD, "Ice Shard");
 		add(MSItems.BARBASOL, "Barbasol");
+		add(MSItems.CLOTHES_IRON, "Clothes Iron");
 		add(MSItems.BATTERY, "Battery");
 		addStore(MSItems.BATTERY, "Death Gusher");
 		addStoreTooltip(MSItems.BATTERY, "This one's tough to crunch into, and the effort's barely even worth it!");

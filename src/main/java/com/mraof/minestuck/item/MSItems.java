@@ -267,6 +267,7 @@ public class MSItems
 	public static final Item GRIMOIRE = getNull();
 	public static final Item BATTERY = getNull();
 	public static final Item BARBASOL = getNull();
+	public static final Item CLOTHES_IRON = getNull();
 	public static final Item INK_SQUID_PRO_QUO = getNull();
 	public static final Item CUEBALL = getNull();
 	public static final Item THRESH_DVD = getNull();
@@ -764,6 +765,7 @@ public class MSItems
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("ice_shard"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("battery"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("barbasol"));
+		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("clothes_iron"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("ink_squid_pro_quo"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("cueball"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN).maxStackSize(1)).setRegistryName("uranium_powered_stick"));
