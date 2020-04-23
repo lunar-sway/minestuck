@@ -107,7 +107,6 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		ShapedRecipeBuilder.shapedRecipe(MSItems.IRON_CANE).key('i', Tags.Items.INGOTS_IRON).key('c', MSItems.CANE).patternLine("  i").patternLine(" c ").patternLine("i  ").addCriterion("has_iron_ingot", hasItem(Tags.Items.INGOTS_IRON)).build(recipeBuilder);
 		ShapedRecipeBuilder.shapedRecipe(MSItems.WOODEN_SPOON).key('s', Tags.Items.RODS_WOODEN).key('b', Items.BOWL).patternLine("b").patternLine("s").patternLine("s").addCriterion("has_stick", hasItem(Tags.Items.RODS_WOODEN)).build(recipeBuilder);
 		ShapedRecipeBuilder.shapedRecipe(MSItems.FORK).key('S', Tags.Items.STONE).patternLine("S S").patternLine(" S ").patternLine(" S ").addCriterion("has_stone", hasItem(Tags.Items.STONE)).build(recipeBuilder);
-		ShapedRecipeBuilder.shapedRecipe(MSItems.LIPSTICK).key('i', Tags.Items.INGOTS_IRON).key('g', Items.GREEN_DYE).patternLine("g").patternLine("i").addCriterion("has_iron_ingot", hasItem(Tags.Items.INGOTS_IRON)).build(recipeBuilder);
 		
 		ShapedRecipeBuilder.shapedRecipe(MSItems.ENERGY_CORE).key('u', ExtraForgeTags.Items.URANIUM_CHUNKS).key('c', MSItems.RAW_CRUXITE).patternLine("cuc").patternLine("ucu").patternLine("cuc").addCriterion("has_raw_uranium", hasItem(MSItems.RAW_URANIUM)).build(recipeBuilder);
 		ShapedRecipeBuilder.shapedRecipe(MSItems.CLIENT_DISK).key('i', Tags.Items.INGOTS_IRON).key('c', MSItems.RAW_CRUXITE).patternLine("c c").patternLine(" i ").patternLine("c c").setGroup("sburb_disk").addCriterion("has_raw_cruxite", hasItem(MSItems.RAW_CRUXITE)).build(recipeBuilder);

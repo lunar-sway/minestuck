@@ -1,13 +1,13 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "item": "minestuck:claw_hammer"
+    "item": "minestuck:sickle"
   },
   "input2": {
-    "item": "minestuck:chessboard"
+    "item": "minecraft:rose_bush"
   },
   "mode": "and",
   "output": {
-    "item": "minestuck:regi_hammer"
+    "item": "minestuck:thorny_subject"
   }
 }

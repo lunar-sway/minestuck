@@ -635,6 +635,7 @@ public class MSGiftLootTables implements Consumer<BiConsumer<ResourceLocation, L
 						.addEntry(ItemLootEntry.builder(Items.FLOWER_POT).weight(5))
 						.addEntry(ItemLootEntry.builder(Items.BIRCH_BUTTON).weight(5))
 						.addEntry(ItemLootEntry.builder(MSItems.SORD).weight(10))
+						.addEntry(ItemLootEntry.builder(MSItems.CROWBAR).weight(3)).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.05F, 0.7F)))
 						.addEntry(ItemLootEntry.builder(Items.GOLDEN_SHOVEL).weight(3).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.05F, 0.05F))))
 						.addEntry(ItemLootEntry.builder(Items.GOLDEN_AXE).weight(3).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.05F, 0.05F))))
 						.addEntry(ItemLootEntry.builder(Items.GOLDEN_SWORD).weight(3).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.05F, 0.05F))))

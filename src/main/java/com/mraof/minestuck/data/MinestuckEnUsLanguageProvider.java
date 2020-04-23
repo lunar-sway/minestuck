@@ -398,6 +398,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.LIPSTICK_CHAINSAW, "Chainsaw");
 		add(MSItems.LIPSTICK, "Jade Lipstick");
 		add(MSItems.SICKLE, "Sickle");
+		add(MSItems.OW_THE_EDGE, "oW THE EDGE");
+		add(MSItems.THORNY_SUBJECT, "A Thorny Subject");
+		add(MSItems.HEMEOREAPER, "Hemeoreaper");
+		addTooltip(MSItems.HEMEOREAPER, "You get the feeling you should hide this away, or maybe paint it a nice gray.");
 		add(MSItems.HOMES_SMELL_YA_LATER, "Homes Smell Ya Later");
 		add(MSItems.FUDGESICKLE, "Fudgesickle");
 		addTooltip(MSItems.FUDGESICKLE, "Whose idea was this?");
@@ -438,6 +442,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.VAUDEVILLE_HOOK, "This is sure to get the audience laughing with the many japes you can pull with this bad boy!");
 		add(MSItems.BEAR_POKING_STICK, "Bear-Poking Stick");
 		addTooltip(MSItems.BEAR_POKING_STICK, "Do not-- and I repeat, DO NOT-- poke the bear!");
+		add(MSItems.CROWBAR, "Crowbar");
 		add(MSItems.UMBRELLA, "Umbrella");
 		addTooltip(MSItems.UMBRELLA, "Shit, let's be Mary Poppins.");
 		add(MSItems.UPPER_CRUST_CRUST_CANE, "Upper Crust Crust Cane");
@@ -525,7 +530,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.PHLEGM_GUSHERS, "These should be convenient, if somewhat unappetizing.");
 		add(MSItems.SORROW_GUSHERS, "Bodacious Black Liquid Sorrow Gushers");
 		addTooltip(MSItems.SORROW_GUSHERS, "These are pure poison.");
-		addStoreTooltip(MSItems.BUG_ON_A_STICK, "Who doesn't like bugs? Someone who haven't had a bug on a stick. That's who.");
 		add(MSItems.BUG_ON_A_STICK, "Bug On a Stick");
 		addStoreTooltip(MSItems.BUG_ON_A_STICK, "Who doesn't like bugs? Someone who haven't had a bug on a stick. That's who.");
 		add(MSItems.CHOCOLATE_BEETLE, "Chocolate Covered Beetle");

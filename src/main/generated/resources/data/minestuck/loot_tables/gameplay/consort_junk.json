@@ -103,6 +103,11 @@
         {
           "type": "minecraft:item",
           "weight": 3,
+          "name": "minestuck:crowbar"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 3,
           "functions": [
             {
               "function": "minecraft:set_damage",
@@ -196,6 +201,15 @@
         {
           "condition": "minestuck:consort",
           "consort": "iguana"
+        }
+      ],
+      "functions": [
+        {
+          "function": "minecraft:set_damage",
+          "damage": {
+            "min": 0.05,
+            "max": 0.7
+          }
         }
       ]
     }

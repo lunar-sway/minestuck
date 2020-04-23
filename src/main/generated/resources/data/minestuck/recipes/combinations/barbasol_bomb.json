@@ -1,13 +1,13 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "item": "minestuck:cane"
+    "item": "minestuck:build_gushers"
   },
   "input2": {
-    "item": "minestuck:chessboard"
+    "item": "minestuck:barbasol"
   },
   "mode": "and",
   "output": {
-    "item": "minestuck:regi_cane"
+    "item": "minestuck:barbasol_bomb"
   }
 }

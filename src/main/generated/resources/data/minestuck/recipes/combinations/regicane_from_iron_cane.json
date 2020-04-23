@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:iron_cane"
+  },
+  "input2": {
+    "item": "minestuck:chessboard"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:regicane"
+  }
+}

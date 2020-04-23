@@ -415,8 +415,12 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		
 		GristCostRecipeBuilder.of(MSItems.REGISICKLE).grist(AMETHYST, 25).grist(TAR, 57).grist(GOLD, 33).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.SICKLE).grist(BUILD, 8).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.THORNY_SUBJECT).grist(BUILD, 96).grist(AMETHYST, 14).grist(RUBY, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.OW_THE_EDGE).grist(ARTIFACT, -25).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.HOMES_SMELL_YA_LATER).grist(BUILD, 34).grist(AMBER, 19).grist(AMETHYST, 10).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.HEMEOREAPER).grist(BUILD, 143).grist(RUST, 66).grist(GARNET, 43).grist(IODINE, 21).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.FUDGESICKLE).grist(IODINE, 23).grist(AMBER, 15).grist(CHALK, 12).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.CLAW_SICKLE).grist(BUILD, 255).grist(IODINE, 103).grist(CHALK, 56).grist(GARNET, 6).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CLAW_OF_NRUBYIGLITH).grist(BUILD, 333).grist(AMETHYST, 80).grist(CHALK, 6).grist(GARNET, 6).grist(SHALE, 6).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CANDY_SICKLE).grist(IODINE, 65).grist(GOLD, 38).grist(CHALK, 53).grist(AMBER, 20).build(recipeSaver);
 		

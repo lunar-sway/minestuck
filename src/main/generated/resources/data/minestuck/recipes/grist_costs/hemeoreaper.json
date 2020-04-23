@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:hemeoreaper"
+  },
+  "grist_cost": {
+    "minestuck:build": 143,
+    "minestuck:rust": 66,
+    "minestuck:garnet": 43,
+    "minestuck:iodine": 21
+  }
+}
