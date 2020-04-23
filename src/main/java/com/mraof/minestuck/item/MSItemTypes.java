@@ -28,6 +28,7 @@ public class MSItemTypes
 	public static final IItemTier RUBY_TIER = new ModItemTier(3, 2000, 10.0F, 4.0F, 16, () -> Ingredient.EMPTY);
 	public static final IItemTier ZILLYHOO_TIER = new ModItemTier(4, 3000, 15.0F, 5.0F, 25, () -> Ingredient.EMPTY);
 	public static final IItemTier SBAHJ_TIER = new ModItemTier(0, 59, 1.0F, -1.0F, 5, () -> Ingredient.EMPTY);
+	public static final IItemTier PAPER_TIER = new ModItemTier(0, 65, 1.0F, 0.0F, 15, () -> Ingredient.fromItems(Items.PAPER));
 	public static final IItemTier ICE_TIER = new ModItemTier(0, 60, 2.0F, 1.0F, 25, () -> Ingredient.fromItems(MSItems.ICE_SHARD));
 	public static final IItemTier CACTUS_TIER = new ModItemTier(0, 104, 2.0F, 1.0F, 10, () -> Ingredient.fromItems(Blocks.CACTUS));
 	public static final IItemTier MEAT_TIER = new ModItemTier(0, 175, 1.0F, 0.0F, 5, () -> Ingredient.EMPTY);
@@ -58,8 +59,8 @@ public class MSItemTypes
 	
 	//Unimplemented
 	public static final MSToolType GAUNTLET_TOOL = new MSToolType(ToolType.get("gauntlet"), Material.GLASS, Material.ICE, Material.PACKED_ICE).addEnchantments(EnchantmentType.WEAPON).addEnchantments(Enchantments.SILK_TOUCH).addToolType(ToolType.get("fist"));
-	
-	private static class ModItemTier implements IItemTier
+    
+    private static class ModItemTier implements IItemTier
 	{
 		private final int harvestLevel;
 		private final int maxUses;

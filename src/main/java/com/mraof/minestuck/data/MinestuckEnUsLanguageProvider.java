@@ -319,6 +319,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.MWRTHWL, "Mwrthwl");
 		add(MSItems.SORD, "Sord.....");
 		addTooltip(MSItems.SORD, "A shitty sword. Not much more too it.");
+		add(MSItems.PAPER_SWORD, "Paper Sword");
+		addTooltip(MSItems.PAPER_SWORD, "None shall be the wiser. It is the perfect crime.");
 		add(MSItems.CACTACEAE_CUTLASS, "Cactaceae Cutlass");
 		addTooltip(MSItems.CACTACEAE_CUTLASS, "A spiny sword made of cactus, you might hurt yourself more on the spines then the blade would your enemies");
 		addStoreTooltip(MSItems.CACTACEAE_CUTLASS, "It's not as quenchy, but if it comes down to it you can always drink the blood of your foes.");

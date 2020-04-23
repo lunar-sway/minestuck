@@ -273,6 +273,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		
 		/////////////////	MINESTUCK	\\\\\\\\\\\\\\\\\
 		
+		CombinationRecipeBuilder.of(MSItems.PAPER_SWORD).input(Items.PAPER).or().input(MSItems.KATANA).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CACTACEAE_CUTLASS).input(Items.WOODEN_SWORD).and().namedInput(Items.CACTUS).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CACTACEAE_CUTLASS).input(Items.WOODEN_SWORD).and().namedInput(MSBlocks.BLOOMING_CACTUS).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.STEAK_SWORD).namedInput(Items.WOODEN_SWORD).or().input(Items.COOKED_BEEF).build(consumer);
@@ -553,6 +554,8 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.FRENCH_FRY).input(Items.POTATO).and().namedInput(Items.STICK).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.FRENCH_FRY).input(Items.POTATO).and().namedInput(Items.BLAZE_ROD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SURPRISE_EMBRYO).input(Items.EGG).and().input(Items.PUMPKIN).build(consumer);
+		
+		CombinationRecipeBuilder.of(MSItems.INK_SQUID_PRO_QUO).input(MSItems.PAPER_SWORD).or().namedInput(Items.INK_SAC).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.PHLEGM_GUSHERS).input(MSItems.BUILD_GUSHERS).and().namedInput(Items.SLIME_BALL).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SORROW_GUSHERS).input(MSItems.PHLEGM_GUSHERS).and().namedInput(MSItems.INK_SQUID_PRO_QUO).build(consumer);

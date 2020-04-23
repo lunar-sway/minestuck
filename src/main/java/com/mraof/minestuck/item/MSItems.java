@@ -63,6 +63,7 @@ public class MSItems
 	public static final Item MWRTHWL = getNull();
 	//blades
 	public static final Item SORD = getNull();
+	public static final Item PAPER_SWORD = getNull();
 	public static final Item CACTACEAE_CUTLASS = getNull();
 	public static final Item STEAK_SWORD = getNull();
 	public static final Item BEEF_SWORD = getNull();
@@ -551,6 +552,7 @@ public class MSItems
 		
 		//blades
 		registry.register(new SordItem(MSItemTypes.SBAHJ_TIER, 3, -2.4F, 1.0F,  MSItemTypes.SWORD_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("sord"));
+		registry.register(new WeaponItem(MSItemTypes.PAPER_TIER, 2, -2.4F, 3.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("paper_sword"));
 		registry.register(new WeaponItem(MSItemTypes.CACTUS_TIER, 3, -2.4F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("cactaceae_cutlass"));	//The sword harvestTool is only used against webs, hence the high efficiency.
 		registry.register(new ConsumableWeaponItem(MSItemTypes.MEAT_TIER, 4, -2.4F, 5.0F, 8, 1F, MSItemTypes.SWORD_TOOL, new Item.Properties().defaultMaxDamage(250).group(MSItemGroup.WEAPONS)).setRegistryName("steak_sword"));
 		registry.register(new ConsumableWeaponItem(MSItemTypes.MEAT_TIER, 2, -2.4F, 5.0F, 3, 0.8F, 75, MSItemTypes.SWORD_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("beef_sword"));
