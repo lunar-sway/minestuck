@@ -669,6 +669,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.GAMEBRO_MAGAZINE, "Game Bro Magazine");
 		add(MSItems.GAMEGRL_MAGAZINE, "Game Grl Magazine");
 		add(MSItems.ICE_SHARD, "Ice Shard");
+		add(MSItems.HORN, "Horn");
+		addTooltip(MSItems.HORN, ":o)");
 		add(MSItems.BARBASOL, "Barbasol");
 		add(MSItems.CLOTHES_IRON, "Clothes Iron");
 		add(MSItems.BATTERY, "Battery");
@@ -1538,6 +1540,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		
 		addSubtitles("warhorn", "Warhorn sounds");
 		addSubtitles("whispers", "Spooky Whispers");
+		addSubtitles("horn", "Horn honks");
 		addSubtitles("screech", "Estrogen-empowered screech");
 		addSubtitles("upcheladder", "Echeladder levels up");
 		
