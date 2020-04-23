@@ -397,6 +397,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.CAT_CLAWS_SHEATHED, "Cat Claws");
 		add(MSItems.LIPSTICK_CHAINSAW, "Chainsaw");
 		add(MSItems.LIPSTICK, "Jade Lipstick");
+		add(MSItems.CIGARETTE_LANCE, "Cigarette Holder Lance");
 		add(MSItems.SICKLE, "Sickle");
 		add(MSItems.OW_THE_EDGE, "oW THE EDGE");
 		add(MSItems.THORNY_SUBJECT, "A Thorny Subject");
