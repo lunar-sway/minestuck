@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smoking",
+  "ingredient": {
+    "item": "minestuck:cake_mix"
+  },
+  "result": "minecraft:cake",
+  "experience": 0.0,
+  "cookingtime": 100
+}

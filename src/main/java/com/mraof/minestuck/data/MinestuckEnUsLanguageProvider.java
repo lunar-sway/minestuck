@@ -693,6 +693,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.ICE_SHARD, "Ice Shard");
 		add(MSItems.HORN, "Horn");
 		addTooltip(MSItems.HORN, ":o)");
+		add(MSItems.CAKE_MIX, "Cake Mix");
 		add(MSItems.BARBASOL, "Barbasol");
 		add(MSItems.CLOTHES_IRON, "Clothes Iron");
 		add(MSItems.BATTERY, "Battery");

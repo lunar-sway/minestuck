@@ -301,6 +301,7 @@ public class MSItems
 	public static final Item RAZOR_BLADE = getNull();
 	public static final Item ICE_SHARD = getNull();
 	public static final Item HORN = getNull();
+	public static final Item CAKE_MIX = getNull();
 	
 	//Incredibly Useful Items
 	public static final Item URANIUM_POWERED_STICK = getNull();
@@ -799,6 +800,7 @@ public class MSItems
 		registry.register(new RazorBladeItem(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("razor_blade"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("ice_shard"));
 		registry.register(new SoundItem(() -> MSSoundEvents.ITEM_HORN_USE, new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("horn"));
+		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("cake_mix"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("battery"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("barbasol"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("clothes_iron"));
