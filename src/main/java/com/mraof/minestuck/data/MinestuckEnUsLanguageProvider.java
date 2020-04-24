@@ -715,6 +715,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.HORN, ":o)");
 		add(MSItems.CAKE_MIX, "Cake Mix");
 		add(MSItems.BARBASOL, "Barbasol");
+		add(MSItems.BARBASOL_BOMB, "Betty Crocker Barbasol Bomb");
 		add(MSItems.CLOTHES_IRON, "Clothes Iron");
 		add(MSItems.BATTERY, "Battery");
 		addStore(MSItems.BATTERY, "Death Gusher");
