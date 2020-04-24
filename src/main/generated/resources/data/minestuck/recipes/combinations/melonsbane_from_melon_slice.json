@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:quench_crusher"
+  },
+  "input2": {
+    "item": "minecraft:melon_slice"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:melonsbane"
+  }
+}

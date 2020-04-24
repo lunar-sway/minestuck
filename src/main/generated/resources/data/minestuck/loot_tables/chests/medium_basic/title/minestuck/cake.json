@@ -82,6 +82,12 @@
         },
         {
           "type": "minecraft:item",
+          "weight": 2,
+          "quality": 1,
+          "name": "minestuck:negative_cake"
+        },
+        {
+          "type": "minecraft:item",
           "weight": 5,
           "functions": [
             {

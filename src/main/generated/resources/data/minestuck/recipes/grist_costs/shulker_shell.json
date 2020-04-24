@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:shulker_shell"
+  },
+  "grist_cost": {
+    "minestuck:build": 2500,
+    "minestuck:diamond": 250,
+    "minestuck:uranium": 500,
+    "minestuck:mercury": 200
+  }
+}

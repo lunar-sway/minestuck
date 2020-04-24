@@ -1,5 +1,7 @@
 package com.mraof.minestuck.skaianet;
 
+import com.mraof.minestuck.player.EnumAspect;
+import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
@@ -13,23 +15,31 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
+import java.util.Collections;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public final class PredefineData
 {
-	public static String TITLE_ALREADY_SET = "minestuck.predefine.title_already_set";
-	public static String TITLE_ALREADY_USED = "minestuck.predefine.title_already_used";
-	public static String RESETTING_TERRAIN_TYPE = "minestuck.predefine.resetting_terrain_type";
-	public static String INCOMPATIBLE_LAND = "minestuck.predefine.incompatible_land";
-	public static String INVALID_LAND_ORDER = "minestuck.predefine.invalid_land_order";
+	public static final String TITLE_ALREADY_SET = "minestuck.predefine.title_already_set";
+	public static final String TITLE_ALREADY_USED = "minestuck.predefine.title_already_used";
+	public static final String RESETTING_TERRAIN_TYPE = "minestuck.predefine.resetting_terrain_type";
+	public static final String GENERATED_TITLE = "minestuck.predefine.generated_title";
+	public static final String CHANGED_TITLE = "minestuck.predefine.changed_title";
+	public static final String GENERATED_TITLE_LAND = "minestuck.predefine.generated_title_land";
+	public static final String CHANGED_TITLE_LAND = "minestuck.predefine.changed_title_land";
 	
+	private final PlayerIdentifier player;
 	private final Session session;
 	private boolean lockedToSession;
 	private Title title;
 	private TerrainLandType terrainLandType;
 	private TitleLandType titleLandType;
 	
-	PredefineData(Session session)
+	PredefineData(PlayerIdentifier player, Session session)
 	{
+		this.player = player;
 		this.session = session;
 	}
 	
@@ -71,16 +81,15 @@ public final class PredefineData
 	
 	public void predefineTerrainLand(TerrainLandType landType, CommandSource source) throws SkaianetException
 	{
-		if(titleLandType == null)
-			throw new SkaianetException(INVALID_LAND_ORDER);
-		else if(!titleLandType.isAspectCompatible(landType))
-			throw new SkaianetException(INCOMPATIBLE_LAND, titleLandType.getRegistryName());
-		else
-			this.terrainLandType = landType;
+		forceVerifyTitleLand(landType, source);
+		
+		this.terrainLandType = landType;
 	}
 	
 	public void predefineTitleLand(TitleLandType landType, CommandSource source) throws SkaianetException
 	{
+		forceVerifyTitle(Collections.singleton(landType), source);
+		
 		if(terrainLandType != null && !landType.isAspectCompatible(terrainLandType))
 		{
 			source.sendFeedback(new TranslationTextComponent(RESETTING_TERRAIN_TYPE, terrainLandType.getRegistryName()).setStyle(new Style().setColor(TextFormatting.YELLOW)), true);
@@ -89,9 +98,64 @@ public final class PredefineData
 		this.titleLandType = landType;
 	}
 	
+	private void forceVerifyTitle(Set<TitleLandType> availableTypes, CommandSource source) throws SkaianetException
+	{
+		Set<EnumAspect> availableAspects = availableTypes.stream().map(TitleLandType::getAspect).filter(Objects::nonNull).collect(Collectors.toSet());
+		if(title == null || !availableAspects.contains(title.getHeroAspect()))
+		{
+			Title previous = title;
+			title = Generator.generateTitle(session, availableAspects, player);
+			
+			if(!availableAspects.contains(title.getHeroAspect()))
+			{
+				terrainLandType = null; titleLandType = null;
+				throw new IllegalStateException("Generated title did not meet requirements!");
+			}
+			
+			if(previous == null)
+				source.sendFeedback(new TranslationTextComponent(GENERATED_TITLE, title.asTextComponent()), true);
+			else source.sendFeedback(new TranslationTextComponent(CHANGED_TITLE, previous.asTextComponent(), title.asTextComponent()).setStyle(new Style().setColor(TextFormatting.YELLOW)), true);
+		}
+	}
+	
+	private void forceVerifyTitleLand(TerrainLandType type, CommandSource source) throws SkaianetException
+	{
+		if(titleLandType == null || !titleLandType.isAspectCompatible(type))
+		{
+			Set<TitleLandType> availableTypes = LandTypes.getCompatibleTitleTypes(type);
+			forceVerifyTitle(availableTypes, source);
+			
+			//title should be assumed to be non-null after this point
+			availableTypes.removeIf(landType -> landType.getAspect() != title.getHeroAspect());
+			if(availableTypes.isEmpty())
+			{
+				terrainLandType = null; titleLandType = null;
+				throw new IllegalStateException("Had no title land types to generate when some were expected.");
+			}
+			
+			TitleLandType previous = titleLandType;
+			titleLandType = Generator.generateWeightedTitleLandType(session, title.getHeroAspect(), type, player);
+			
+			if(!titleLandType.isAspectCompatible(type))
+			{
+				terrainLandType = null;
+				throw new IllegalStateException("Generated title land type did not meet requirements!");
+			}
+			
+			if(previous == null)
+				source.sendFeedback(new TranslationTextComponent(GENERATED_TITLE_LAND, titleLandType.getRegistryName()), true);
+			else source.sendFeedback(new TranslationTextComponent(CHANGED_TITLE_LAND, previous.getRegistryName(), titleLandType.getRegistryName()).setStyle(new Style().setColor(TextFormatting.YELLOW)), true);
+		}
+	}
+	
 	public boolean isLockedToSession()
 	{
 		return lockedToSession;
+	}
+	
+	public PlayerIdentifier getPlayer()
+	{
+		return player;
 	}
 	
 	public Title getTitle()

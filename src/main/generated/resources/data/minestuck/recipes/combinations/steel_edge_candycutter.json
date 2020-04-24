@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:choco_loco_woodsplitter"
+  },
+  "input2": {
+    "item": "minecraft:iron_ingot"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:steel_edge_candycutter"
+  }
+}

@@ -27,6 +27,7 @@ import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.jei.JeiGristCost;
 import com.mraof.minestuck.network.EffectTogglePacket;
 import com.mraof.minestuck.player.*;
+import com.mraof.minestuck.skaianet.Generator;
 import com.mraof.minestuck.skaianet.MergeResult;
 import com.mraof.minestuck.skaianet.PredefineData;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
@@ -42,6 +43,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.potion.Potions;
+import net.minecraft.util.text.TextFormatting;
 
 public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 {
@@ -252,6 +254,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		MSBlocks.TOTEM_LATHE.forEachBlock(block -> add(block, "Totem Lathe"));
 		MSBlocks.ALCHEMITER.forEachBlock(block -> add(block, "Alchemiter"));
 		MSBlocks.PUNCH_DESIGNIX.forEachBlock(block -> add(block, "Punch Designix"));
+		add(MSBlocks.HOLOPAD, "Holopad");
 		add(MSBlocks.MINI_CRUXTRUDER, "Miniature Cruxtruder");
 		add(MSBlocks.MINI_TOTEM_LATHE, "Miniature Totem Lathe");
 		add(MSBlocks.MINI_ALCHEMITER, "Miniature Alchemiter");
@@ -285,6 +288,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addStoreTooltip(MSBlocks.HOT_CAKE, "Did you know that red cakes heal you? I'm 90%% sure that this is one of those cakes.");
 		add(MSBlocks.REVERSE_CAKE, "Reverse Cake");
 		add(MSBlocks.FUCHSIA_CAKE, "Fuchsia Cake");
+		add(MSBlocks.NEGATIVE_CAKE, "Negative Cake");
 		addStore(MSBlocks.FUCHSIA_CAKE, "Fuschia Cake");
 		add(MSBlocks.PRIMED_TNT, "Primed TNT");
 		add(MSBlocks.UNSTABLE_TNT, "Unstable TNT");
@@ -371,9 +375,32 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.BATLEACKS, "A shitty axe. Not much more to it.");
 		add(MSItems.COPSE_CRUSHER, "Coppice Crusher");
 		addStoreTooltip(MSItems.COPSE_CRUSHER, "Good for crushing trees and your enemies!");
+		add(MSItems.QUENCH_CRUSHER, "Quench Crusher");
+		addTooltip(MSItems.QUENCH_CRUSHER, "Quench Crusher... isn't that the opposite of what it does? Shouldn't it be Thirst Quencher? Drought Crusher? Whatever.");
+		addStoreTooltip(MSItems.QUENCH_CRUSHER, "This fruity-flavored axe has been passed down from generation to generation.");
+		add(MSItems.MELONSBANE, "Melonsbane");
+		addTooltip(MSItems.MELONSBANE, "It seems to be multipurpose; you can commit acts of violence against melons and foes.");
+		addExtra(MSItems.MELONSBANE, "message", "M- M- M- MELON OVERLOAD!!!!!!");
+		add(MSItems.CROP_CHOP, "Crop Chop");
+		addTooltip(MSItems.CROP_CHOP, "Double crop from a single chop. Excellent!");
+		add(MSItems.THE_LAST_STRAW, "The Last Straw");
 		add(MSItems.BATTLEAXE, "Battleaxe");
 		addTooltip(MSItems.BATTLEAXE, "Forget that sissy hatchet stuff, this is an axe made for the battlefield. Chop heads, not wood!");
+		add(MSItems.CANDY_BATTLEAXE, "Candy Battleaxe");
+		addTooltip(MSItems.CANDY_BATTLEAXE, "Oh, how glory and honor is sweet!");
+		add(MSItems.CHOCO_LOCO_WOODSPLITTER, "Choco Loco Woodsplitter");
+		addTooltip(MSItems.CHOCO_LOCO_WOODSPLITTER, "Now to match this, you'd just need armor engraved with 'I'm a chocoholic!'");
+		add(MSItems.STEEL_EDGE_CANDYCUTTER, "Choco Loco Steeled Cocoa Candycutter");
+		addTooltip(MSItems.STEEL_EDGE_CANDYCUTTER, "All the benefits of the Choco Loco Woodsplitter, now with more bloodshed! Perfect!");
 		add(MSItems.BLACKSMITH_BANE, "Blacksmith's Bane");
+		add(MSItems.REGIAXE, "Regiaxe");
+        add(MSItems.SURPRISE_AXE, "Kundler Surprise Axe");
+        addTooltip(MSItems.SURPRISE_AXE, "Who knows what surprises this bad boy has in store!");
+		addExtra(MSItems.SURPRISE_AXE, "message", "WOW! NO WAY! You found a %s from your opponent!");
+		add(MSItems.SHOCK_AXE, "Kundler Shock Axe");
+		addTooltip(MSItems.SHOCK_AXE, "An electric surprise!");
+		add(MSItems.SHOCK_AXE_UNPOWERED, "Kundler Shock Axe");
+		addTooltip(MSItems.SHOCK_AXE_UNPOWERED, "An electric surprise!");
 		add(MSItems.SCRAXE, "Scraxe");
 		add(MSItems.PISTON_POWERED_POGO_AXEHAMMER, "Piston-Powered Pogo Pulverizer");
 		add(MSItems.RUBY_CROAK, "Ruby Croak");
@@ -404,8 +431,15 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.CANDY_SICKLE, "Candy Sickle");
 		add(MSItems.DEUCE_CLUB, "Deuce Club");
 		addTooltip(MSItems.DEUCE_CLUB, "The weakest club in the world");
+		add(MSItems.STALE_BAGUETTE, "Stale Baguette");
+		add(MSItems.GLUB_CLUB, "Glub Club");
+		addTooltip(MSItems.GLUB_CLUB, "Ever been smacked with a raw fish?");
 		add(MSItems.NIGHT_CLUB, "Nightclub");
 		addTooltip(MSItems.NIGHT_CLUB, "Wanna go...clubbing?");
+		add(MSItems.PRISMARINE_BASHER, "Prismarine Basher");
+		addTooltip(MSItems.PRISMARINE_BASHER, "Smells like sea salt, unsurprisingly.");
+		add(MSItems.CLUB_ZERO, "Club Zero");
+		addTooltip(MSItems.CLUB_ZERO, "This club is so cold, even just holding it makes your hand numb. But you endure it nonetheless.");
 		add(MSItems.POGO_CLUB, "Pogo Club");
 		addTooltip(MSItems.POGO_CLUB, "Boing! Bounce back your foes with this bouncy weapon!");
 		addStoreTooltip(MSItems.POGO_CLUB, "Strive to touch the sky, and smash a few skulls on the way up!");
@@ -415,6 +449,14 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.SPIKED_CLUB, "About what it sounds like");
 		add(MSItems.CANE, "Cane");
 		addTooltip(MSItems.CANE, "An average walking cane, used by the blind and those with weak knees.");
+		add(MSItems.VAUDEVILLE_HOOK, "Vaudeville Hook");
+		addTooltip(MSItems.VAUDEVILLE_HOOK, "This is sure to get the audience laughing with the many japes you can pull with this bad boy!");
+		add(MSItems.BEAR_POKING_STICK, "Bear-Poking Stick");
+		addTooltip(MSItems.BEAR_POKING_STICK, "Do not-- and I repeat, DO NOT-- poke the bear!");
+		add(MSItems.UMBRELLA, "Umbrella");
+		addTooltip(MSItems.UMBRELLA, "Shit, let's be Mary Poppins.");
+		add(MSItems.UPPER_CRUST_CRUST_CANE, "Upper Crust Crust Cane");
+		addTooltip(MSItems.UPPER_CRUST_CRUST_CANE, "*Now* you're walking like an upper crust!");
 		add(MSItems.IRON_CANE, "Iron-Tipped Cane");
 		addTooltip(MSItems.IRON_CANE, "A regular cane, except that it is tipped with the power of metal!");
 		addStoreTooltip(MSItems.IRON_CANE, "This metal rod is perfect for attracting thunder!");
@@ -427,8 +469,24 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.REGI_CANE, "A black cane used only by the most elegant among Dersites.");
 		add(MSItems.DRAGON_CANE, "Dragon Cane");
 		addTooltip(MSItems.DRAGON_CANE, "The most Powerful and awe inspiring of canes!");
+		add(MSItems.DRAGON_CANE_UNSHEATHED, "Dragon Cane");
+		addTooltip(MSItems.DRAGON_CANE_UNSHEATHED, "The most Powerful and awe inspiring of canes!");
 		add(MSItems.POGO_CANE, "Pogo Cane");
 		addTooltip(MSItems.POGO_CANE, "Now without leg or hand holds for even more danger!");
+		add(MSItems.CANDY_CANE, "Candy Cane");
+		addTooltip(MSItems.CANDY_CANE, "This striped treat never ceases to delight you, both with its flavor and its capacity for murder.");
+		add(MSItems.SHARP_CANDY_CANE, "Sharp Candy Cane");
+		addTooltip(MSItems.SHARP_CANDY_CANE, "You wouldn't dare put this bladed delight into your gob-hole, so instead you turn it towards your foes.");
+		add(MSItems.PRIM_AND_PROPER_WALKING_POLE, "Prim and Proper Walking Pole");
+		addTooltip(MSItems.PRIM_AND_PROPER_WALKING_POLE, "This cane SCREAMS propriety and 18th century heteronormativity.");
+		add(MSItems.ROCKEFELLERS_WALKING_BLADECANE, "Rockefeller's Walking Bladecane");
+		addTooltip(MSItems.ROCKEFELLERS_WALKING_BLADECANE, "Now you too can own an oil monopoly! Or at least walk like you do. Your confidence is all that matters in the end, anyway.");
+		add(MSItems.ROCKEFELLERS_WALKING_BLADECANE_SHEATHED, "Rockefeller's Walking Bladecane");
+		addTooltip(MSItems.ROCKEFELLERS_WALKING_BLADECANE_SHEATHED, "Now you too can own an oil monopoly! Or at least walk like you do. Your confidence is all that matters in the end, anyway.");
+		add(MSItems.LESS_PROPER_WALKING_STICK, "Slightly-Less Proper Stabbing Stick");
+		addTooltip(MSItems.LESS_PROPER_WALKING_STICK, "Fuck propriety, all that matters is that you can kill things!");
+		add(MSItems.LESS_PROPER_WALKING_STICK_SHEATHED, "Slightly-Less Proper Stabbing Stick");
+		addTooltip(MSItems.LESS_PROPER_WALKING_STICK_SHEATHED, "Fuck propriety, all that matters is that you can kill things!");
 		add(MSItems.WOODEN_SPOON, "Wooden Spoon");
 		addTooltip(MSItems.WOODEN_SPOON, "Like the kind you would eat your soup with");
 		add(MSItems.SILVER_SPOON, "Silver Spoon");
@@ -440,6 +498,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.SKAIA_FORK, "Skaia War Fork");
 		addTooltip(MSItems.SKAIA_FORK, "The elegance and grace of skaia, and the ability to poke things of a fork!");
 		add(MSItems.FORK, "Fork");
+		add(MSItems.TUNING_FORK, "Tuning Fork");
+		addTooltip(MSItems.TUNING_FORK, "Does anyone hear a ringing?");
 		add(MSItems.SPORK, "Spork");
 		add(MSItems.GOLDEN_SPORK, "Golden Spork");
 		addTooltip(MSItems.GOLDEN_SPORK, "A spoon and fork with all the awfulness of gold tools? Sign me up!");
@@ -501,6 +561,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.ROCK_COOKIE, "It's as edible as a rock");
 		addStore(MSItems.ROCK_COOKIE, "Grey-Colored Cookie");
 		addStoreTooltip(MSItems.ROCK_COOKIE, "This here is a true wonder-cookie! Totally! And they are even cheaper than regular cookies!");
+		add(MSItems.WOODEN_CARROT, "Wooden Carrot");
+		addTooltip(MSItems.WOODEN_CARROT, "It's as edible as a plank.");
 		add(MSItems.FUNGAL_SPORE, "Fungal Spore");
 		addTooltip(MSItems.FUNGAL_SPORE, "You must live off the land, and in this land, it means eating this.");
 		addStore(MSItems.FUNGAL_SPORE, "Mushroom Skittles");
@@ -563,7 +625,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.BUG_NET, "Net");
 		addTooltip(MSItems.BUG_NET, "Perfect for catching bugs and frogs!");
 		add(MSItems.FROG, "Frog");
-		addExtra(MSItems.FROG, "type.random", "Random Frog");
+		addExtra(MSItems.FROG, "random", "Random Frog");
 		addExtra(MSItems.FROG, "type.0", "Frog");
 		addExtra(MSItems.FROG, "type.1", "Totally Normal Frog");
 		addExtra(MSItems.FROG, "type.2", "Ruby Contraband");
@@ -572,13 +634,13 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addExtra(MSItems.FROG, "type.5", "Golden Frog");
 		addExtra(MSItems.FROG, "type.6", "Frog");
 		addExtra(MSItems.FROG, "desc.4", "frog.null.name");
-		addExtra(MSItems.FROG, "desc.6", "§k Susan");
+		addExtra(MSItems.FROG, "desc.6", TextFormatting.OBFUSCATED+"Susan");
 		addExtra(MSItems.FROG, "eyes.0", "Lighter Eyes");
 		addExtra(MSItems.FROG, "eyes.1", "Darker Eyes");
 		addExtra(MSItems.FROG, "eyes.2", "Blank Eyes");
-		addExtra(MSItems.FROG, "belly.0", "Solid-Colored Belly");
-		addExtra(MSItems.FROG, "belly.1", "Spotted Belly");
-		addExtra(MSItems.FROG, "belly.2", "Striped Belly");
+		addExtra(MSItems.FROG, "belly.1", "Solid-Colored Belly");
+		addExtra(MSItems.FROG, "belly.2", "Spotted Belly");
+		addExtra(MSItems.FROG, "belly.3", "Striped Belly");
 		addExtra(MSItems.FROG, "size.0", "Tiny");
 		addExtra(MSItems.FROG, "size.1", "Small");
 		addExtra(MSItems.FROG, "size.2", "Normal Sized");
@@ -588,7 +650,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addStoreTooltip(MSItems.CARVING_TOOL, "You gotta BE the marble!");
 		add(MSItems.CRUMPLY_HAT, "Crumply Hat");
 		add(MSItems.STONE_EYEBALLS, "Stone Eyeballs");
-		add(MSItems.STONE_SLAB, "Stone Slab");
+		add(MSItems.STONE_SLAB, "Stone Tablet");
+		addExtra(MSItems.STONE_SLAB, "carved", "Looks like something has been carved into it!");
 		addStoreTooltip(MSItems.STONE_SLAB, "It's pretty rock, but I wouldn't advise rolling on it.");
 		add(MSItems.OIL_BUCKET, "Bucket of Oil");
 		add(MSItems.BLOOD_BUCKET, "Bucket of Blood");
@@ -617,6 +680,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.THRESH_DVD, "Thresh Prince DVD");
 		add(MSItems.GAMEBRO_MAGAZINE, "Game Bro Magazine");
 		add(MSItems.GAMEGRL_MAGAZINE, "Game Grl Magazine");
+		add(MSItems.ICE_SHARD, "Ice Shard");
+		add(MSItems.BATTERY, "Battery");
+		addStore(MSItems.BATTERY, "Death Gusher");
+		addStoreTooltip(MSItems.BATTERY, "This one's tough to crunch into, and the effort's barely even worth it!");
 		add(MSItems.CREW_POSTER, "Midnight Crew Poster");
 		add(MSItems.SBAHJ_POSTER, "Sweet Bro and Hella Jeff Poster");
 		add(MSItems.MUSIC_DISC_EMISSARY_OF_DANCE, "Music Disc");
@@ -849,6 +916,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addAdvancement(MSAvancementProvider.ALL_MODI, "A Full Set", "Try a new modus type.");
 		addAdvancement(MSAvancementProvider.GOLD_SEEDS, "Gold Farming", "It begins to dawn on you that everything you just did may have been a colossal waste of time.");
 		addAdvancement(MSAvancementProvider.FRENCH_FRY, "Can I Get A, Uh...", "Successfully place and consume an order.");
+		addAdvancement(MSAvancementProvider.MELON_OVERLOAD, "M- M- M- MELON OVERLOAAAAD!", "Become overloaded with melons.");
 		addAdvancement(MSAvancementProvider.TREE_MODUS, "Uprooting", "Remove the root card in a tree modus with a bunch of items.");
 		addAdvancement(MSAvancementProvider.KILL_OGRE, "The Big One", "Kill an ogre.");
 		addAdvancement(MSAvancementProvider.RETURN_NODE, "There's no Place Like Home", "Find a Return Node and jump in to return home.");
@@ -1035,6 +1103,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MergeResult.MERGED_SESSION_FULL, "Too many players in total in both player's sessions");
 		add(MergeResult.BOTH_CUSTOM, "Can't merge two custom sessions");
 		add(MergeResult.GENERIC_FAIL, "Merge failed");
+		add(Generator.NO_AVAILABLE_TITLES, "No title was available to generate under current circumstances.");
 		
 		add(CheckLandCommand.CHECK, "You are currently in %s.");
 		add(CheckLandCommand.FAIL, "You are currently not in a land dimension.");
@@ -1075,8 +1144,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(PredefineData.TITLE_ALREADY_SET, "That player already has their title set to %s");
 		add(PredefineData.TITLE_ALREADY_USED, "The title %s is already used in that players session");
 		add(PredefineData.RESETTING_TERRAIN_TYPE, "The currently set terrain type %s is not compatible with land type, and will be reset");
-		add(PredefineData.INCOMPATIBLE_LAND, "The currently predefined title land type %s does not allow this terrain type");
-		add(PredefineData.INVALID_LAND_ORDER, "The title land type has to be predefined before the terrain land type");
+		add(PredefineData.GENERATED_TITLE, "Generated %s as predefined title");
+		add(PredefineData.CHANGED_TITLE, "Changed predefined title from %s to %s due to a new title land type");
+		add(PredefineData.GENERATED_TITLE_LAND, "Generated %s as predefined title land type");
+		add(PredefineData.CHANGED_TITLE_LAND, "Changed predefined title land type from %s to %s due to a new terrain land type");
 		
 		add(JeiGristCost.GRIST_COSTS, "Grist Costs");
 		

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:prim_and_proper_walking_pole"
+  },
+  "input2": {
+    "item": "minestuck:katana"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:less_proper_walking_stick"
+  }
+}

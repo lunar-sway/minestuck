@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:umbrella"
+  },
+  "grist_cost": {
+    "minestuck:build": 35,
+    "minestuck:tar": 12,
+    "minestuck:iodine": 7
+  }
+}

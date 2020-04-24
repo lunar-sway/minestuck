@@ -226,6 +226,7 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(TREATED_PLANKS_SLAB);
 		registerDropSelfLootTable(BROWN_DUNGEON_TILE_SLAB);
 		
+		registerDropSelfLootTable(HOLOPAD);
 		registerDropSelfLootTable(CRUXTRUDER_LID);
 		registerLootTable(MINI_CRUXTRUDER, MSBlockLootTables::droppingWithColor);
 		registerDropSelfLootTable(MINI_TOTEM_LATHE);
@@ -253,6 +254,7 @@ public class MSBlockLootTables extends BlockLootTables
 		registerLootTable(HOT_CAKE, func_218482_a());
 		registerLootTable(REVERSE_CAKE, func_218482_a());
 		registerLootTable(FUCHSIA_CAKE, func_218482_a());
+		registerLootTable(NEGATIVE_CAKE, func_218482_a());
 		
 		registerDropSelfLootTable(PRIMED_TNT);
 		registerDropSelfLootTable(UNSTABLE_TNT);

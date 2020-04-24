@@ -90,7 +90,7 @@ public class MSBlockShapes
 public static CustomVoxelShape TOTEM_LATHE_MIDDLE_RIGHT = TOTEM_LATHE_MIDDLE_RIGHT_ACTIVE.merge(new CustomVoxelShape(new double[]{13,4,7,16,10,13}));
 public static CustomVoxelShape TOTEM_LATHE_ROD_LEFT = new CustomVoxelShape(new double[]{8,4,7,16,10,13});
 public static CustomVoxelShape TOTEM_LATHE_ROD_LEFT_ACTIVE = new CustomVoxelShape(new double[]{8,5,8,16,9,12}, new double[]{0,4,7,8,10,13});
-public static CustomVoxelShape TOTEM_LATHE_ROD_RIGHT_BASE = new CustomVoxelShape(new double[]{0,5,8,5,9,12}, new double[]{5,4,7,8,12,13});
+public static CustomVoxelShape TOTEM_LATHE_ROD_RIGHT_BASE = new CustomVoxelShape(new double[]{0,5,8,5,9,12}, new double[]{5,4,7,8,10,13});
 public static CustomVoxelShape TOTEM_LATHE_ROD_RIGHT_CARVED = TOTEM_LATHE_ROD_RIGHT_BASE.merge(new CustomVoxelShape(new double[]{8,5,12,9,9,13}, new double[]{8,9,8,9,10,12}, new double[]{8,5,7,9,9,8}, new double[]{8,4,8,9,5,12}, new double[]{8,5,8,11,9,12}, new double[]{11,5,5,8,5,13/*,8.5,11.5*/}, new double[]{13,5,8,16,9,12}, new double[]{15,9,8,16,10,12}, new double[]{15,5,12,16,9,13}, new double[]{15,4,8,16,5,12}, new double[]{15,5,7,16,9,8}));
 public static CustomVoxelShape TOTEM_LATHE_ROD_RIGHT = TOTEM_LATHE_ROD_RIGHT_BASE.merge(new CustomVoxelShape(new double[]{8,5,12,16,9,13}, new double[]{8,4,8,16,10,12}, new double[]{8,5,7,16,9,8}));
 public static CustomVoxelShape TOTEM_LATHE_TOP_LEFT = new CustomVoxelShape(new double[]{8,0,7,16,7,15}, new double[]{0,0,6,8,12,14}, new double[]{8,7,7,16,12,14}, new double[]{0,12,5,16,16,15}, new double[]{9,3,5,15,9,7});

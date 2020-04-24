@@ -365,7 +365,6 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
           "quality": 2,
           "name": "minestuck:transportalizer"
         },

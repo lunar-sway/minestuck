@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:fork"
+  },
+  "input2": {
+    "item": "minecraft:note_block"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:tuning_fork"
+  }
+}

@@ -56,7 +56,7 @@ public abstract class TitleLandType extends ForgeRegistryEntry<TitleLandType> im
 	}
 	
 	@Nullable
-	public EnumAspect getType()
+	public EnumAspect getAspect()
 	{
 		return aspectType;
 	}

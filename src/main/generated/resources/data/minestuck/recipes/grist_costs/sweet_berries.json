@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:sweet_berries"
+  },
+  "grist_cost": {
+    "minestuck:amber": 3,
+    "minestuck:iodine": 2,
+    "minestuck:shale": 1
+  }
+}

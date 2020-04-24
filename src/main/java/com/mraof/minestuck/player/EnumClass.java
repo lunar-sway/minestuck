@@ -8,6 +8,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.Random;
+import java.util.stream.Stream;
 
 /**
  * This class represents the 14 title-classes that exists in sburb,
@@ -18,8 +19,18 @@ import java.util.Random;
  */
 public enum EnumClass
 {
-	BARD,HEIR,KNIGHT,MAGE,MAID,PAGE,PRINCE,ROGUE,SEER,SYLPH,THIEF,WITCH,
-	LORD,MUSE;	//Special title-classes
+	BARD(true), HEIR(true), KNIGHT(true),
+	MAGE(true), MAID(true), PAGE(true),
+	PRINCE(true), ROGUE(true), SEER(true),
+	SYLPH(true), THIEF(true), WITCH(true),
+	LORD(false), MUSE(false);	//Special title-classes
+	
+	private final boolean usedInGeneration;
+	
+	EnumClass(boolean usedInGeneration)
+	{
+		this.usedInGeneration = usedInGeneration;
+	}
 	
 	/**
 	 * This method generates one of the 12 default title-classes that is not found in the <code>unavailableClasses</code> set.
@@ -28,6 +39,7 @@ public enum EnumClass
 	 * @param rand Random used to select a title-class.
 	 * @return null if <code>unavailableClasses</code> has been filled, else a random <code>EnumClass</code> that isn't in <code>unavailableClasses</code>.
 	 */
+	@Deprecated
 	public static EnumClass getRandomClass(@Nullable EnumSet<EnumClass> unavailableClasses, @Nonnull Random rand)
 	{
 		return getRandomClass(unavailableClasses, rand, false);
@@ -42,6 +54,7 @@ public enum EnumClass
 	 * @param includeSpecial If it should include the two special title-classes.
 	 * @return null if <code>unavailableClasses</code> has been filled, else a random <code>EnumClass</code> that isn't in <code>unavailableClasses</code>.
 	 */
+	@Deprecated
 	public static EnumClass getRandomClass(@Nullable EnumSet<EnumClass> unavailableClasses, @Nonnull Random rand, boolean includeSpecial)
 	{
 		if(unavailableClasses == null)
@@ -139,5 +152,15 @@ public enum EnumClass
 	public String getTranslationKey()
 	{
 		return "title.class." + this.toString();
+	}
+	
+	public boolean isUsedInGeneration()
+	{
+		return usedInGeneration;
+	}
+	
+	public static Stream<EnumClass> valuesStream()
+	{
+		return Stream.of(values()).filter(EnumClass::isUsedInGeneration);
 	}
 }
