@@ -571,6 +571,17 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.CRUMPLY_HAT).grist(BUILD, 20).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.MINI_FROG_STATUE).grist(BUILD, 30).build(recipeSaver);
 		
+		GristCostRecipeBuilder.of(MSItems.SCALEMATE_APPLESCAB).grist(BUILD, 8).grist(RUBY, 8).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.SCALEMATE_BERRYBREATH).grist(BUILD, 8).grist(COBALT, 8).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.SCALEMATE_CINNAMONWHIFF).grist(BUILD, 8).grist(IODINE, 8).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.SCALEMATE_HONEYTONGUE).grist(BUILD, 8).grist(AMBER, 8).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.SCALEMATE_LEMONSNOUT).grist(BUILD, 8).grist(AMBER, 8).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.SCALEMATE_PINESNOUT).grist(BUILD, 8).grist(COBALT, 8).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.SCALEMATE_PUCEFOOT).grist(BUILD, 8).grist(GARNET, 8).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.SCALEMATE_PUMPKINSNUFFLE).grist(BUILD, 8).grist(IODINE, 8).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.SCALEMATE_PYRALSPITE).grist(BUILD, 8).grist(CAULK, 8).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.SCALEMATE_WITNESS).grist(BUILD, 8).grist(URANIUM, 8).build(recipeSaver);
+		
 		GristCostRecipeBuilder.of(MSBlocks.WOODEN_CACTUS).grist(BUILD, 7).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.BLUE_CAKE).grist(SHALE, 24).grist(MERCURY, 6).grist(COBALT, 5).grist(DIAMOND, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.COLD_CAKE).grist(COBALT, 15).grist(MARBLE, 12).build(recipeSaver);

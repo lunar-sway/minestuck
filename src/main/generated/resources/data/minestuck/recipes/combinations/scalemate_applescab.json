@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:white_wool"
+  },
+  "input2": {
+    "item": "minecraft:dragon_breath"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:scalemate_applescab"
+  }
+}

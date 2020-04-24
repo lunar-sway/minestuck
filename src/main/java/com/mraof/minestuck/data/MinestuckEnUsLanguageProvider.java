@@ -695,6 +695,16 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.RAZOR_BLADE, "Only a fool would try to pick this up.");
 		add(MSItems.URANIUM_POWERED_STICK, "Uranium-Powered Stick");
 		addTooltip(MSItems.URANIUM_POWERED_STICK, "Never runs out of uranium!");
+		add(MSItems.SCALEMATE_APPLESCAB, "Officer Applescab");
+		add(MSItems.SCALEMATE_BERRYBREATH, "Inspector Berrybreath");
+		add(MSItems.SCALEMATE_CINNAMONWHIFF, "Officer Cinnamonwhiff");
+		add(MSItems.SCALEMATE_HONEYTONGUE, "Doctor Honeytongue");
+		add(MSItems.SCALEMATE_LEMONSNOUT, "Senator Lemonsnout");
+		add(MSItems.SCALEMATE_PINESNOUT, "Duke Pinesnout");
+		add(MSItems.SCALEMATE_PUCEFOOT, "Professor Pucefoot");
+		add(MSItems.SCALEMATE_PUMPKINSNUFFLE, "Liason Pumpkinsnuffle");
+		add(MSItems.SCALEMATE_PYRALSPITE, "Pyralspite");
+		add(MSItems.SCALEMATE_WITNESS, "The Witness");
 		add(MSItems.IRON_BOAT, "Iron Boat");
 		add(MSItems.GOLD_BOAT, "Golden Boat");
 		add(MSItems.THRESH_DVD, "Thresh Prince DVD");

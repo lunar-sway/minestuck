@@ -316,6 +316,17 @@ public class MSItems
 	public static final Item HORN = getNull();
 	public static final Item CAKE_MIX = getNull();
 	
+	public static final Item SCALEMATE_APPLESCAB = getNull();
+	public static final Item SCALEMATE_BERRYBREATH = getNull();
+	public static final Item SCALEMATE_CINNAMONWHIFF = getNull();
+	public static final Item SCALEMATE_HONEYTONGUE = getNull();
+	public static final Item SCALEMATE_LEMONSNOUT = getNull();
+	public static final Item SCALEMATE_PINESNOUT = getNull();
+	public static final Item SCALEMATE_PUCEFOOT = getNull();
+	public static final Item SCALEMATE_PUMPKINSNUFFLE = getNull();
+	public static final Item SCALEMATE_PYRALSPITE = getNull();
+	public static final Item SCALEMATE_WITNESS = getNull();
+	
 	//Incredibly Useful Items
 	public static final Item URANIUM_POWERED_STICK = getNull();
 	public static final Item IRON_BOAT = getNull();
@@ -832,6 +843,16 @@ public class MSItems
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("ink_squid_pro_quo"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("cueball"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN).maxStackSize(1)).setRegistryName("uranium_powered_stick"));
+		registry.register(new ScalemateItem(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("scalemate_applescab"));
+		registry.register(new ScalemateItem(new Item.Properties()).setRegistryName("scalemate_berrybreath"));
+		registry.register(new ScalemateItem(new Item.Properties()).setRegistryName("scalemate_cinnamonwhiff"));
+		registry.register(new ScalemateItem(new Item.Properties()).setRegistryName("scalemate_honeytongue"));
+		registry.register(new ScalemateItem(new Item.Properties()).setRegistryName("scalemate_lemonsnout"));
+		registry.register(new ScalemateItem(new Item.Properties()).setRegistryName("scalemate_pinesnout"));
+		registry.register(new ScalemateItem(new Item.Properties()).setRegistryName("scalemate_pucefoot"));
+		registry.register(new ScalemateItem(new Item.Properties()).setRegistryName("scalemate_pumpkinsnuffle"));
+		registry.register(new ScalemateItem(new Item.Properties()).setRegistryName("scalemate_pyralspite"));
+		registry.register(new ScalemateItem(new Item.Properties()).setRegistryName("scalemate_witness"));
 		registry.register(new CustomBoatItem((stack, world, x, y, z) -> new MetalBoatEntity(world, x, y, z, 0), new Item.Properties().group(MSItemGroup.MAIN).maxStackSize(1)).setRegistryName("iron_boat"));
 		registry.register(new CustomBoatItem((stack, world, x, y, z) -> new MetalBoatEntity(world, x, y, z, 1), new Item.Properties().group(MSItemGroup.MAIN).maxStackSize(1)).setRegistryName("gold_boat"));
 		registry.register(new Item(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("thresh_dvd"));
