@@ -518,6 +518,16 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.PRISMARINE_CHESTPLATE, "Prismarine Chestplate");
 		add(MSItems.PRISMARINE_LEGGINGS, "Prismarine Leggings");
 		add(MSItems.PRISMARINE_BOOTS, "Prismarine Boots");
+		add(MSItems.IRON_LASS_GLASSES, "Iron Lass Glasses");
+		add(MSItems.IRON_LASS_CHESTPLATE, "Iron Lass Chestplate");
+		add(MSItems.IRON_LASS_SKIRT, "Iron Lass Skirt");
+		add(MSItems.IRON_LASS_SHOES, "Iron Lass Boots");
+		add(MSItems.PROSPIT_SHIRT, "Prospit Shirt");
+		add(MSItems.PROSPIT_PANTS, "Prospit Pants");
+		add(MSItems.PROSPIT_SHOES, "Prospit Shoes");
+		add(MSItems.DERSE_SHIRT, "Derse Shirt");
+		add(MSItems.DERSE_PANTS, "Derse Pants");
+		add(MSItems.DERSE_SHOES, "Derse Shoes");
 		add(MSItems.BOONDOLLARS, "Boondollars");
 		addExtra(MSItems.BOONDOLLARS, "amount", "Amount: %s");
 		add(MSItems.RAW_CRUXITE, "Raw Cruxite");

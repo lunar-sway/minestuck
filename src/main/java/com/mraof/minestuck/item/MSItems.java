@@ -176,17 +176,30 @@ public class MSItems
 	public static final Item TUNING_FORK = getNull();
 	public static final Item SPORK = getNull();
 	public static final Item GOLDEN_SPORK = getNull();
+	
 	//Material tools
 	public static final Item EMERALD_SWORD = getNull();
 	public static final Item EMERALD_AXE = getNull();
 	public static final Item EMERALD_PICKAXE = getNull();
 	public static final Item EMERALD_SHOVEL = getNull();
 	public static final Item EMERALD_HOE = getNull();
+	
 	//Armor
 	public static final Item PRISMARINE_HELMET = getNull();
 	public static final Item PRISMARINE_CHESTPLATE = getNull();
 	public static final Item PRISMARINE_LEGGINGS = getNull();
 	public static final Item PRISMARINE_BOOTS = getNull();
+	public static final Item IRON_LASS_GLASSES = getNull();
+	public static final Item IRON_LASS_CHESTPLATE = getNull();
+	public static final Item IRON_LASS_SKIRT = getNull();
+	public static final Item IRON_LASS_SHOES = getNull();
+	
+	public static final Item PROSPIT_SHIRT = getNull();
+	public static final Item PROSPIT_PANTS = getNull();
+	public static final Item PROSPIT_SHOES = getNull();
+	public static final Item DERSE_SHIRT = getNull();
+	public static final Item DERSE_PANTS = getNull();
+	public static final Item DERSE_SHOES = getNull();
 	
 	//Core Items
 	public static final Item BOONDOLLARS = getNull();
@@ -700,7 +713,19 @@ public class MSItems
 		registry.register(new ArmorItem(MSItemTypes.PRISMARINE_ARMOR, EquipmentSlotType.CHEST, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("prismarine_chestplate"));
 		registry.register(new ArmorItem(MSItemTypes.PRISMARINE_ARMOR, EquipmentSlotType.LEGS, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("prismarine_leggings"));
 		registry.register(new ArmorItem(MSItemTypes.PRISMARINE_ARMOR, EquipmentSlotType.FEET, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("prismarine_boots"));
+		registry.register(new ArmorItem(MSItemTypes.IRON_LASS_ARMOR, EquipmentSlotType.HEAD, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("iron_lass_glasses"));
+		registry.register(new ArmorItem(MSItemTypes.IRON_LASS_ARMOR, EquipmentSlotType.CHEST, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("iron_lass_chestplate"));
+		registry.register(new ArmorItem(MSItemTypes.IRON_LASS_ARMOR, EquipmentSlotType.LEGS, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("iron_lass_skirt"));
+		registry.register(new ArmorItem(MSItemTypes.IRON_LASS_ARMOR, EquipmentSlotType.FEET, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("iron_lass_shoes"));
 		
+		registry.register(new ArmorItem(MSItemTypes.PROSPIT_PAJAMAS, EquipmentSlotType.CHEST, new Item.Properties()).setRegistryName("prospit_shirt"));
+		registry.register(new ArmorItem(MSItemTypes.PROSPIT_PAJAMAS, EquipmentSlotType.LEGS, new Item.Properties()).setRegistryName("prospit_pants"));
+		registry.register(new ArmorItem(MSItemTypes.PROSPIT_PAJAMAS, EquipmentSlotType.FEET, new Item.Properties()).setRegistryName("prospit_shoes"));
+		registry.register(new ArmorItem(MSItemTypes.DERSE_PAJAMAS, EquipmentSlotType.CHEST, new Item.Properties()).setRegistryName("derse_shirt"));
+		registry.register(new ArmorItem(MSItemTypes.DERSE_PAJAMAS, EquipmentSlotType.LEGS, new Item.Properties()).setRegistryName("derse_pants"));
+		registry.register(new ArmorItem(MSItemTypes.DERSE_PAJAMAS, EquipmentSlotType.FEET, new Item.Properties()).setRegistryName("derse_shoes"));
+		
+		//core items
 		registry.register(new BoondollarsItem(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("boondollars"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("raw_cruxite"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("raw_uranium"));

@@ -480,6 +480,10 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.PRISMARINE_CHESTPLATE).grist(BUILD, 120).grist(COBALT, 48).grist(MARBLE, 24).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.PRISMARINE_LEGGINGS).grist(BUILD, 105).grist(COBALT, 42).grist(MARBLE, 21).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.PRISMARINE_BOOTS).grist(BUILD, 60).grist(COBALT, 24).grist(MARBLE, 12).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.IRON_LASS_GLASSES).grist(BUILD, 3500).grist(RUBY, 700).grist(AMBER, 350).grist(URANIUM, 125).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.IRON_LASS_CHESTPLATE).grist(BUILD, 3500).grist(RUBY, 700).grist(AMBER, 350).grist(URANIUM, 125).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.IRON_LASS_SKIRT).grist(BUILD, 3500).grist(RUBY, 700).grist(AMBER, 350).grist(URANIUM, 125).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.IRON_LASS_SHOES).grist(BUILD, 3500).grist(RUBY, 700).grist(AMBER, 350).grist(URANIUM, 125).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSBlocks.GLOWYSTONE_DUST).grist(BUILD, 1).grist(AMBER, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.RAW_CRUXITE).grist(BUILD, 3).build(recipeSaver);

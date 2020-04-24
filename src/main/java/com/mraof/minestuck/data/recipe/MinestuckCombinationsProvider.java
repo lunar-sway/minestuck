@@ -528,6 +528,11 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 				CombinationRecipeBuilder.of(MSItems.PRISMARINE_BOOTS).namedInput(metalBoots[i]).or().namedInput(prismarine).build(consumer);
 			}
 		
+		CombinationRecipeBuilder.of(MSItems.IRON_LASS_GLASSES).namedInput(Items.IRON_HELMET).and().input(MSItems.ENERGY_CORE).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.IRON_LASS_CHESTPLATE).namedInput(Items.IRON_CHESTPLATE).and().input(MSItems.ENERGY_CORE).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.IRON_LASS_SKIRT).namedInput(Items.IRON_LEGGINGS).and().input(MSItems.ENERGY_CORE).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.IRON_LASS_SHOES).namedInput(Items.IRON_BOOTS).and().input(MSItems.ENERGY_CORE).build(consumer);
+		
 		CombinationRecipeBuilder.of(MSBlocks.PRIMED_TNT).input(Items.TNT).or().input(ItemTags.BUTTONS).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.UNSTABLE_TNT).input(Items.TNT).or().input(Items.REDSTONE_TORCH).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.INSTANT_TNT).input(Items.TNT).or().input(Items.REDSTONE).build(consumer);

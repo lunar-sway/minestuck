@@ -38,6 +38,10 @@ public class MSItemTypes
 	public static final IItemTier HORRORTERROR_TIER = new ModItemTier(3, 1600, 4.0F, 4.0F, 15, () -> Ingredient.EMPTY);
 	
 	public static final IArmorMaterial PRISMARINE_ARMOR = new ModArmorMaterial("minestuck:prismarine", 20, new int[]{3, 7, 6, 2}, 15, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0F, () -> Ingredient.fromItems(Items.PRISMARINE_SHARD));
+	public static final IArmorMaterial IRON_LASS_ARMOR = new ModArmorMaterial("minestuck:iron_lass", 50, new int[]{4, 7, 8, 3}, 15, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0F, () -> Ingredient.EMPTY);
+	
+	public static final IArmorMaterial PROSPIT_PAJAMAS = new ModArmorMaterial("minestuck:prospit_pajamas", 10, new int[]{1, 2, 3, 1}, 0, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.0F, () -> Ingredient.EMPTY);
+	public static final IArmorMaterial DERSE_PAJAMAS = new ModArmorMaterial("minestuck:derse_pajamas", 10, new int[]{1, 2, 3, 1}, 0, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.0F, () -> Ingredient.EMPTY);
 	
 	//Base Tools
 	public static final MSToolType SICKLE_TOOL = new MSToolType(ToolType.get("sickle"), Material.WEB, Material.LEAVES, Material.PLANTS, Material.TALL_PLANTS).addEnchantments(EnchantmentType.WEAPON);
