@@ -7,9 +7,9 @@ import com.mraof.minestuck.inventory.ConsortMerchantContainer;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.util.MSNBTUtil;
 import com.mraof.minestuck.world.MSDimensions;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.SpawnReason;
+import com.mraof.minestuck.world.storage.PlayerData;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -18,6 +18,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerProvider;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -88,6 +89,7 @@ public abstract class ConsortEntity extends MinestuckEntity implements IContaine
 					message = ConsortDialogue.getRandomMessage(this, serverPlayer);
 					messageTicksLeft = 24000 + world.rand.nextInt(24000);
 					messageData = new CompoundNBT();
+					PlayerSavedData.getData((ServerPlayerEntity) player).addConsortReputation(1);
 				}
 				ITextComponent text = message.getMessage(this, serverPlayer);	//TODO Make sure to catch any issues here
 				if (text != null)
@@ -250,6 +252,23 @@ public abstract class ConsortEntity extends MinestuckEntity implements IContaine
 		applyAdditionalAITasks();
 		
 		return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+	}
+	
+	@Override
+	public boolean hitByEntity(Entity entityIn)
+	{
+		if(entityIn instanceof ServerPlayerEntity)
+			PlayerSavedData.getData((ServerPlayerEntity) entityIn).addConsortReputation(-5);
+		return super.hitByEntity(entityIn);
+	}
+	
+	@Override
+	public void onDeath(DamageSource cause)
+	{
+		LivingEntity livingEntity = this.getAttackingEntity();
+		if(livingEntity instanceof ServerPlayerEntity)
+			PlayerSavedData.getData((ServerPlayerEntity) livingEntity).addConsortReputation(-100);
+		super.onDeath(cause);
 	}
 	
 	@Override

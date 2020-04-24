@@ -71,6 +71,7 @@ public class ConsortMerchantInventory implements IInventory
 			} else
 			{
 				playerData.takeBoondollars(amountPurchased * prices[index]);
+				playerData.addConsortReputation(5);
 				ItemStack items = stack.split(amountPurchased);
 				
 				if (!player.addItemStackToInventory(items))

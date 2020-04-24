@@ -301,12 +301,12 @@ public class ConsortDialogue
 		addMessage(new ChoiceMessage(new DescriptionMessage("peppy_offer"),
 				new SingleMessage[] { new SingleMessage("peppy_offer.buy"), new SingleMessage("peppy_offer.deny") },
 				new MessageType[] {
-						new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 1000, "purchase",
+						new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 1000, -15, "purchase",
 								new ChainMessage(1, new SingleMessage("peppy_offer.item"), new SingleMessage("peppy_offer.purchase"))),
 						new ChoiceMessage(new SingleMessage("peppy_offer.next"),
 								new SingleMessage[] { new SingleMessage("peppy_offer.deny_again"), new SingleMessage("peppy_offer.buy_2") },
 								new MessageType[] { new SingleMessage("dots"),
-										new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 500, "purchase",
+										new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 500, -35, "purchase",
 												new SingleMessage("peppy_offer.purchase")) }) })).type(MerchantType.SHADY).consort(EnumConsort.NAKAGATOR, EnumConsort.IGUANA);
 
 
@@ -321,7 +321,7 @@ public class ConsortDialogue
 								new SingleMessage("shady_offer.deny")
 						},
 				new MessageType[] {
-						new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 1000, "purchase",
+						new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 1000, -15,"purchase",
 								new ChainMessage(1,
 										new SingleMessage("shady_offer.item"),
 										new SingleMessage("shady_offer.purchase")
@@ -336,7 +336,7 @@ public class ConsortDialogue
 								new MessageType[]
 								{
 										new SingleMessage("dots"),
-										new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 500, "purchase",
+										new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 500, -35, "purchase",
 												new SingleMessage("shady_offer.purchase")
 										)
 								}
@@ -370,7 +370,7 @@ public class ConsortDialogue
 										new ChoiceMessage(new SingleMessage("hungry.starving"),
 												new SingleMessage[] { new SingleMessage("hungry.agree"),
 														new SingleMessage("hungry.too_cheap") },
-												new MessageType[] { new GiveItemMessage("hungry.sell_item", "hungry2.item", 10,
+												new MessageType[] { new GiveItemMessage("hungry.sell_item", "hungry2.item", 10, 15,
 														new ChainMessage(1, new DescriptionMessage("hungry.finally", "nbt_item:hungry2.item"),
 																new SingleMessage("hungry.finally"))),
 														new SingleMessage("hungry.end") }) }))).consort(EnumConsort.SALAMANDER, EnumConsort.NAKAGATOR);

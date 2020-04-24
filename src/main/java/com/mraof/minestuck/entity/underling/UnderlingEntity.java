@@ -16,6 +16,7 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.UnderlingController;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MSTags;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.ItemEntity;
@@ -187,6 +188,16 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 			if(this.rand.nextInt(4) == 0)
 				this.world.addEntity(new VitalityGelEntity(world, randX(), this.posY, randZ(), this.getVitalityGel()));
 		}
+	}
+	
+	@Override
+	public void onDeath(DamageSource cause)
+	{
+		LivingEntity entity = this.getAttackingEntity();
+		if(entity instanceof ServerPlayerEntity)
+			PlayerSavedData.getData((ServerPlayerEntity) entity).addConsortReputation(1);
+		
+		super.onDeath(cause);
 	}
 	
 	private double randX()

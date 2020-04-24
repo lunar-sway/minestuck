@@ -61,6 +61,8 @@ public final class PlayerData
 	private long boondollars;
 	private ImmutableGristSet gristCache;	//This is immutable in order to control where it can be changed
 	
+	private long consortReputation;
+	
 	private Title title;
 	private boolean effectToggle;
 	
@@ -94,6 +96,8 @@ public final class PlayerData
 		boondollars = nbt.getLong("boondollars");
 		gristCache = NonNegativeGristSet.read(nbt.getList("grist_cache", Constants.NBT.TAG_COMPOUND)).asImmutable();
 		
+		consortReputation = nbt.getLong("consort_reputation");
+		
 		title = Title.tryRead(nbt, "title");
 		effectToggle = nbt.getBoolean("effect_toggle");
 		
@@ -112,6 +116,8 @@ public final class PlayerData
 		else nbt.putBoolean("given_modus", givenModus);
 		nbt.putLong("boondollars", boondollars);
 		nbt.put("grist_cache", gristCache.write(new ListNBT()));
+		
+		nbt.putLong("consort_reputation", consortReputation);
 		
 		if(title != null)
 			title.write(nbt, "title");
@@ -231,6 +237,35 @@ public final class PlayerData
 		}
 	}
 	
+	public long getConsortReputation()
+	{
+		return consortReputation;
+	}
+	
+	public void addConsortReputation(long amount)
+	{
+		consortReputation += amount;
+		if(amount > 10000)
+			consortReputation = 10000;
+		if(amount < -10000)
+			consortReputation = -10000;
+		
+		markDirty();
+		sendConsortReputation(getPlayer());
+	}
+	
+	public void setConsortReputation(long amount)
+	{
+		if(amount < -10000 || amount > 10000)
+			throw new IllegalArgumentException("Consort reputation out of bounds; it must be between -10000 and 10000.");
+		else if(amount != consortReputation)
+		{
+			consortReputation = amount;
+			markDirty();
+			sendBoondollars(getPlayer());
+		}
+	}
+	
 	public ImmutableGristSet getGristCache()
 	{
 		return gristCache;
@@ -338,6 +373,14 @@ public final class PlayerData
 		if(player == null)
 			return;
 		BoondollarDataPacket packet = BoondollarDataPacket.create(getBoondollars());
+		MSPacketHandler.sendToPlayer(packet, player);
+	}
+	
+	private void sendConsortReputation(ServerPlayerEntity player)
+	{
+		if(player == null)
+			return;
+		ConsortReputationDataPacket packet = ConsortReputationDataPacket.create(getConsortReputation());
 		MSPacketHandler.sendToPlayer(packet, player);
 	}
 	

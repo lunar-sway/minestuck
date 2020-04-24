@@ -24,6 +24,7 @@ public class ClientPlayerData
 	public static int rung;
 	public static float rungProgress;
 	public static long boondollars;
+	public static long consortReputation;
 	private static GristSet playerGrist;
 	private static GristSet targetGrist;
 	public static int playerColor;

@@ -28,6 +28,7 @@ public class MSPacketHandler
 		registerMessage(ColorDataPacket.class, ColorDataPacket::decode);
 		registerMessage(ModusDataPacket.class, ModusDataPacket::decode);
 		registerMessage(BoondollarDataPacket.class, BoondollarDataPacket::decode);
+		registerMessage(ConsortReputationDataPacket.class, ConsortReputationDataPacket::decode);
 		registerMessage(GristCachePacket.class, GristCachePacket::decode);
 		registerMessage(TitleDataPacket.class, TitleDataPacket::decode);
 		
