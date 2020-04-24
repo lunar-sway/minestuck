@@ -502,7 +502,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.CROCKER_FORK, "Junior Battlemaster's Bowlbuster Poking Solution 50000");
 		addTooltip(MSItems.CROCKER_FORK, "Did something change?");
 		add(MSItems.SKAIA_FORK, "Skaia War Fork");
-		addTooltip(MSItems.SKAIA_FORK, "The elegance and grace of skaia, and the ability to poke things of a fork!");
+		addTooltip(MSItems.SKAIA_FORK, "The elegance and grace of Skaia, and the ability to poke things of a fork!");
 		add(MSItems.FORK, "Fork");
 		add(MSItems.TUNING_FORK, "Tuning Fork");
 		addTooltip(MSItems.TUNING_FORK, "Does anyone hear a ringing?");
@@ -948,21 +948,21 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addRung(49, "Master Of Mods");
 		
 		addAdvancement(MSAvancementProvider.ROOT, "Minestuck", "The Beginning of Something Really Excellent");
-		addAdvancement(MSAvancementProvider.CONNECT, "Connect", "Create a connection with someone.");
-		addAdvancement(MSAvancementProvider.ENTRY, "A New World", "Create, and use the Cruxite Artifact.");
+		addAdvancement(MSAvancementProvider.CONNECT, "Connect", "Create a connection with someone");
+		addAdvancement(MSAvancementProvider.ENTRY, "A New World", "Create, and use the Cruxite Artifact");
 		addAdvancement(MSAvancementProvider.ALCHEMY, "Step Towards Alchemy", "Getting a punch designix is the first step to alchemizing something else!");
-		addAdvancement(MSAvancementProvider.NEW_MODUS, "A New Type of Frustrating", "Equip a new modus.");
-		addAdvancement(MSAvancementProvider.ALL_MODI, "A Full Set", "Try a new modus type.");
-		addAdvancement(MSAvancementProvider.GOLD_SEEDS, "Gold Farming", "It begins to dawn on you that everything you just did may have been a colossal waste of time.");
-		addAdvancement(MSAvancementProvider.FRENCH_FRY, "Can I Get A, Uh...", "Successfully place and consume an order.");
-		addAdvancement(MSAvancementProvider.MELON_OVERLOAD, "M- M- M- MELON OVERLOAAAAD!", "Become overloaded with melons.");
-		addAdvancement(MSAvancementProvider.TREE_MODUS, "Uprooting", "Remove the root card in a tree modus with a bunch of items.");
-		addAdvancement(MSAvancementProvider.KILL_OGRE, "The Big One", "Kill an ogre.");
-		addAdvancement(MSAvancementProvider.RETURN_NODE, "There's no Place Like Home", "Find a Return Node and jump in to return home.");
+		addAdvancement(MSAvancementProvider.NEW_MODUS, "A New Type of Frustrating", "Equip a new modus");
+		addAdvancement(MSAvancementProvider.ALL_MODI, "A Full Set", "Try a new modus type");
+		addAdvancement(MSAvancementProvider.GOLD_SEEDS, "Gold Farming", "It begins to dawn on you that everything you just did may have been a colossal waste of time");
+		addAdvancement(MSAvancementProvider.FRENCH_FRY, "Can I Get A, Uh...", "Successfully place and consume an order");
+		addAdvancement(MSAvancementProvider.MELON_OVERLOAD, "M- M- M- MELON OVERLOAAAAD!", "Become overloaded with melons");
+		addAdvancement(MSAvancementProvider.TREE_MODUS, "Uprooting", "Remove the root card in a tree modus with a bunch of items");
+		addAdvancement(MSAvancementProvider.KILL_OGRE, "The Big One", "Kill an ogre");
+		addAdvancement(MSAvancementProvider.RETURN_NODE, "There's No Place Like Home", "Find a Return Node and jump in to return home");
 		addAdvancement(MSAvancementProvider.DUNGEON, "Dungeon Explorer", "Find a Dungeon to explore!");
-		addAdvancement(MSAvancementProvider.COMMUNE, "Commune", "Visit a village and talk to a consort.");
-		addAdvancement(MSAvancementProvider.BUGS, "Crunchy and High in Protein", "Eat a bug.");
-		addAdvancement(MSAvancementProvider.SHADY_BUYER, "Buyer Beware", "Buy an item from a shady consort.");
+		addAdvancement(MSAvancementProvider.COMMUNE, "Commune", "Visit a village and talk to a consort");
+		addAdvancement(MSAvancementProvider.BUGS, "Crunchy and High in Protein", "Eat a bug");
+		addAdvancement(MSAvancementProvider.SHADY_BUYER, "Buyer Beware", "Buy an item from a shady consort");
 		
 		addLand(FungiLandType.FUNGI, "Fungi");
 		addLand(FungiLandType.DANK, "Dank");
@@ -1235,7 +1235,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("rabbit.food.3a", "Except maybe cacti, but would rabbits eat something that prickly?");
 		addDialogue("rabbit.food.2b", "I mean, there's not really much else than mushrooms around here.");
 		//Monsters
-		addDialogue("pet_zombie", "I've heard moaning coming from our son's bedroom. I found out he's keeping a pet zombie in there! Tamed it n' everything!");
+		addDialogue("pet_zombie", "I've heard moaning coming from our son's bedroom. I found out he's keeping a pet zombie in there! Tamed it and everything!");
 		addDialogue("spider_raid", "A few giant spiders raided our village last night, taking all of our bugs! Those monsters...");
 		addDialogue("monstersona", "What's your monster-sona? Mine is a zombie.");
 		//Towers
@@ -1245,7 +1245,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		//Thought
 		addDialogue("glass_books", "Our smartest villager read all the books in the library and now knows how to make glass jars! He's a gift from the big frog above!");
 		addDialogue("book_food", "We ate all the books in the nearby college ruins. It turns out thousand-year-old leather doesn't make the best dinner.");
-		addDialogue("to_eat", "To eat, or not to eat, that is the question.");
+		addDialogue("to_eat", "To eat or not to eat, that is the question.");
 		//Cake
 		addDialogue("mystery_recipe", "All of the villagers here are trying to crack the mystery of how to make the frosted bread we see all day on our walks.");
 		addDialogue("cake_regen", "I heard all the cakes magically regenerate if you don't completely eat them! That's completely stupid!");
@@ -1461,8 +1461,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("await_hero", "Here, in the %s, we %s worship the %s. We wait and hope for the day that they awaken.");
 		addDialogue("watch_skaia", "Sometimes, I look up in the sky to see Skaia and wish I could visit there some day...");
 		addDialogue("at_skaia.1", "OH MY %s! I'M ACTUALLY ON SKAIA!");
-		addDialogue("at_skaia.2", "Oh my...! I'm actually on skaia!");
-		addDialogue("visited_skaia", "You know, I have actually visited skaia at one point!");
+		addDialogue("at_skaia.2", "Oh my...! I'm actually on Skaia!");
+		addDialogue("visited_skaia", "You know, I have actually visited Skaia at one point!");
 		addDialogue("zazzerpan", "Old wizard Zazzerpan would be turning in his grave if he saw the horrors that walk these lands. Those giclopes sure are terrifying!");
 		addDialogue("texas_history", "The place was %s, the year, was 20XX.");
 		addDialogue("disks", "I used to be an adventurer like you, then I never got the disks.");
