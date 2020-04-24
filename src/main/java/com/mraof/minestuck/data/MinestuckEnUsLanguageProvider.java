@@ -114,6 +114,15 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.CHISELED_PINK_STONE_BRICKS, "Chiseled Pink Stone Bricks");
 		add(MSBlocks.CRACKED_PINK_STONE_BRICKS, "Cracked Pink Stone Bricks");
 		add(MSBlocks.MOSSY_PINK_STONE_BRICKS, "Mossy Pink Stone Bricks");
+		add(MSBlocks.GOLD_BRICKS, "Gold Bricks");
+		add(MSBlocks.GOLD_BRICK_STAIRS, "Gold Brick Stairs");
+		add(MSBlocks.BROWN_DUNGEON_BRICKS, "Brown Dungeon Bricks");
+		add(MSBlocks.BROWN_DUNGEON_COLUMN, "Brown Dungeon Column");
+		add(MSBlocks.BROWN_DUNGEON_TILE, "Brown Dungeon Tile");
+		add(MSBlocks.BROWN_DUNGEON_TILE_SLAB, "Brown Dungeon Tile Slab");
+		add(MSBlocks.BROWN_DUNGEON_GLYPHS, "Brown Dungeon Glyphs");
+		add(MSBlocks.CALEDFWLCH_PEDESTAL_FULL, "Caledfwlch Pedestal Full");
+		add(MSBlocks.CALEDFWLCH_PEDESTAL_EMPTY, "Caledfwlch Pedestal Empty");
 		add(MSBlocks.DENSE_CLOUD, "Dense Cloud");
 		add(MSBlocks.BRIGHT_DENSE_CLOUD, "Bright Dense Cloud");
 		add(MSBlocks.SUGAR_CUBE, "Sugar Cube");
@@ -278,6 +287,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.MINI_FROG_STATUE, "Frog Statue Replica");
 		addStoreTooltip(MSBlocks.MINI_FROG_STATUE, "Some say it's creepy, some say it's cute, others would say it's contraband, so keep it out of sight!");
 		add(MSBlocks.GLOWYSTONE_DUST, "Glowystone Dust");
+		add(MSBlocks.LOOT_CHEST, "Loot Chest");
+		add(MSBlocks.LOOT_CHEST_EMPTY, "Loot Chest Empty");
+		add(MSBlocks.WOODEN_LOOT_CHEST, "Wooden Loot Chest");
 		add(MSBlocks.OIL, "Oil");
 		add(MSBlocks.BLOOD, "Blood");
 		add(MSBlocks.BRAIN_JUICE, "Brain Juice");
