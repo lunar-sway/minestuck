@@ -38,6 +38,13 @@ public class MSBlockShapes
 	public static final CustomVoxelShape BLENDER = BLENDER_BASE.merge(BLENDER_CONTAINER, BLENDER_HANDLE, BLENDER_LID);
 	
 	public static final CustomVoxelShape CHESSBOARD = new CustomVoxelShape(new double[]{0, 0, 0, 16, 1, 16});
+
+	public static final CustomVoxelShape LOOT_CHEST = new CustomVoxelShape(new double[]{0, 0, 0, 16, 9, 15}, new double[]{0, 9, 1, 16, 12, 14}, new double[]{0, 12, 2, 16, 13, 13}, new double[]{0, 13, 4, 16, 14, 11});
+	public static final CustomVoxelShape LOOT_CHEST_EMPTY = new CustomVoxelShape(new double[]{0, 0, 0, 16, 9, 15}, new double[]{0, 9, 1, 16, 12, 14}, new double[]{0, 12, 2, 16, 13, 13}, new double[]{0, 13, 4, 16, 14, 11});
+	public static final CustomVoxelShape WOODEN_LOOT_CHEST = new CustomVoxelShape(new double[]{0, 0, 0, 16, 9, 15}, new double[]{0, 9, 1, 16, 12, 14}, new double[]{0, 12, 2, 16, 13, 13}, new double[]{0, 13, 4, 16, 14, 11});
+
+	public static final CustomVoxelShape CALEDFWLCH_PEDESTAL_EMPTY = new CustomVoxelShape(new double[]{0, 0, 0, 16, 1, 16}, new double[]{1, 1, 1, 15, 2, 15}, new double[]{2, 2, 2, 14, 3, 14}, new double[]{3, 3, 3, 13, 4, 13});
+	public static final CustomVoxelShape CALEDFWLCH_PEDESTAL_FULL = new CustomVoxelShape(new double[]{0, 0, 0, 16, 1, 16}, new double[]{1, 1, 1, 15, 2, 15}, new double[]{2, 2, 2, 14, 3, 14}, new double[]{3, 3, 3, 13, 4, 13}, new double[]{6, 4, 6, 10, 16, 10});
 	
 	public static final CustomVoxelShape LOOT_CHEST = new CustomVoxelShape(new double[]{0, 0, 0, 16, 9, 15}, new double[]{0, 9, 1, 16, 12, 14}, new double[]{0, 12, 2, 16, 13, 13}, new double[]{0, 13, 4, 16, 14, 11});
 	public static final CustomVoxelShape LOOT_CHEST_EMPTY = new CustomVoxelShape(new double[]{0, 0, 0, 16, 9, 15}, new double[]{0, 9, 1, 16, 12, 14}, new double[]{0, 12, 2, 16, 13, 13}, new double[]{0, 13, 4, 16, 14, 11});

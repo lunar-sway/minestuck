@@ -107,6 +107,7 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(BROWN_DUNGEON_GLYPHS);
 		registerDropSelfLootTable(CALEDFWLCH_PEDESTAL_FULL);
 		registerDropSelfLootTable(CALEDFWLCH_PEDESTAL_EMPTY);
+		registerDropSelfLootTable(LOOT_CHEST);
 		registerDropSelfLootTable(DENSE_CLOUD);
 		registerDropSelfLootTable(BRIGHT_DENSE_CLOUD);
 		registerDropSelfLootTable(SUGAR_CUBE);

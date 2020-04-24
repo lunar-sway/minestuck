@@ -1,10 +1,15 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.data.loot_table.MSChestLootTables;
+import com.mraof.minestuck.data.loot_table.MSGiftLootTables;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.tileentity.LootTileEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
+import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.CarvedPumpkinBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -25,6 +30,7 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootTables;
 
 import javax.annotation.Nullable;
 import java.util.Map;

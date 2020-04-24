@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "axis=y": { "model": "minestuck:block/brown_dungeon_column" },
-    "axis=z": { "model": "minestuck:block/brown_dungeon_column", "x": 90 },
-    "axis=x": { "model": "minestuck:block/brown_dungeon_column", "x": 90, "y": 90 }
-  }
+    "variants": {
+        "axis=y": { "model": "minestuck:block/brown_dungeon_column" },
+        "axis=z": { "model": "minestuck:block/brown_dungeon_column", "x": 90 },
+        "axis=x": { "model": "minestuck:block/brown_dungeon_column", "x": 90, "y": 90 }
+    }
 }
