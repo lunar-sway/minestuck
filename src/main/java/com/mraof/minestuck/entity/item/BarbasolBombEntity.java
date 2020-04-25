@@ -30,6 +30,7 @@ public class BarbasolBombEntity extends ProjectileItemEntity implements IRenders
     public BarbasolBombEntity(EntityType<? extends BarbasolBombEntity> type, LivingEntity livingEntityIn, World worldIn)
     {
         super(type, livingEntityIn, worldIn);
+        this.throwerIn = livingEntityIn;
     }
     
     @Override
