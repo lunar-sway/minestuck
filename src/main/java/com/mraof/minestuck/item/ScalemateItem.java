@@ -13,8 +13,6 @@ import net.minecraftforge.common.Tags;
 
 public class ScalemateItem extends Item
 {
-    private Item newItem;
-    
     public ScalemateItem(Properties properties)
     {
         super(properties);
@@ -23,6 +21,7 @@ public class ScalemateItem extends Item
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn)
     {
+        Item newItem;
         Item offhandItem = playerIn.getHeldItemOffhand().getItem();
         ItemStack mainhandItemStack = playerIn.getHeldItem(handIn);
         
