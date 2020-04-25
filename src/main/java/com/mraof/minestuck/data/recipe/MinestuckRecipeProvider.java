@@ -120,6 +120,7 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		ShapelessRecipeBuilder.shapelessRecipe(MSItems.SALAD).addIngredient(Items.BOWL).addIngredient(ItemTags.LEAVES).addCriterion("has_bowl", hasItem(Items.BOWL)).build(recipeBuilder);
 		
 		CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(MSBlocks.PINK_STONE_BRICKS), MSBlocks.CRACKED_PINK_STONE_BRICKS, 0.1F, 200).addCriterion("has_pink_stone_bricks", hasItem(MSBlocks.PINK_STONE_BRICKS)).build(recipeBuilder);
+		CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(MSItems.CAKE_MIX), Blocks.CAKE, 0.0F, 200).addCriterion("has_cake_mix", hasItem(MSItems.CAKE_MIX)).build(recipeBuilder, new ResourceLocation (Minestuck.MOD_ID, "cake_from_mix"));
 		
 		CookingRecipeBuilder.smeltingRecipe(Ingredient.fromTag(MSTags.Items.CRUXITE_ORES), MSItems.RAW_CRUXITE, 0.2F, 200).addCriterion("has_cruxite_ore", hasItem(MSTags.Items.CRUXITE_ORES)).build(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "raw_cruxite_from_smelting"));
 		CookingRecipeBuilder.blastingRecipe(Ingredient.fromTag(MSTags.Items.CRUXITE_ORES), MSItems.RAW_CRUXITE, 0.2F, 100).addCriterion("has_cruxite_ore", hasItem(MSTags.Items.CRUXITE_ORES)).build(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "raw_cruxite_from_blasting"));
@@ -145,7 +146,6 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(MSBlocks.WOODEN_CACTUS), Items.CHARCOAL, 0.15F, 200).addCriterion("has_wooden_cactus", hasItem(MSBlocks.WOODEN_CACTUS)).build(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "charcoal_from_wooden_cactus"));
 		
 		cookingRecipesFor(recipeBuilder, Ingredient.fromItems(MSItems.BEEF_SWORD), MSItems.STEAK_SWORD, 0.5F, "has_beef_sword", hasItem(MSItems.BEEF_SWORD));
-		cookingRecipesFor(recipeBuilder, Ingredient.fromItems(MSItems.CAKE_MIX), Blocks.CAKE, 0.0F, "has_cake_mix", hasItem(MSItems.CAKE_MIX));
 		
 		CookingRecipeBuilder.cookingRecipe(Ingredient.fromItems(Items.BEEF), MSItems.IRRADIATED_STEAK, 0.2F, 20, MSRecipeTypes.IRRADIATING).addCriterion("has_beef", hasItem(Items.BEEF)).build(recipeBuilder);
 		CookingRecipeBuilder.cookingRecipe(Ingredient.fromItems(MSItems.BEEF_SWORD), MSItems.IRRADIATED_STEAK_SWORD, 0.35F, 20, MSRecipeTypes.IRRADIATING).addCriterion("has_beef_sword", hasItem(MSItems.BEEF_SWORD)).build(recipeBuilder);
