@@ -1,7 +1,10 @@
 {
     "variants": {
-        "axis=y": { "model": "minestuck:block/brown_dungeon_column" },
-        "axis=z": { "model": "minestuck:block/brown_dungeon_column", "x": 90 },
-        "axis=x": { "model": "minestuck:block/brown_dungeon_column", "x": 90, "y": 90 }
+        "facing=up":    { "model": "minestuck:block/brown_dungeon_column" },
+        "facing=down":  { "model": "minestuck:block/brown_dungeon_column", "x": 180 },
+        "facing=east":  { "model": "minestuck:block/brown_dungeon_column", "y": 90, "x": 90 },
+        "facing=south": { "model": "minestuck:block/brown_dungeon_column", "y": 180, "x": 90 },
+        "facing=west":  { "model": "minestuck:block/brown_dungeon_column", "y": 270, "x": 90 },
+        "facing=north": { "model": "minestuck:block/brown_dungeon_column", "y": 0, "x": 90 }
     }
 }

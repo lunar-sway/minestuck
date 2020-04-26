@@ -126,7 +126,7 @@ public class MSBlocks
 
 	//Dungeon Special
 	public static final Block CALEDFWLCH_PEDESTAL_FULL = getNull(), CALEDFWLCH_PEDESTAL_EMPTY = getNull();
-	//public static final Block NAKIGATOR_STATUE = getNull();
+	public static final Block NAKAGATOR_STATUE = getNull();
 	public static final Block LOOT_CHEST = getNull();
 	public static final Block LOOT_CHEST_EMPTY = getNull();
 	public static final Block WOODEN_LOOT_CHEST = getNull();
@@ -271,10 +271,10 @@ public class MSBlocks
 		Block goldBricks = register(registry, new Block(Block.Properties.create(Material.ROCK, MaterialColor.YELLOW).hardnessAndResistance(2.0F, 10.0F).harvestTool(ToolType.PICKAXE).lightValue(14).harvestLevel(0)).setRegistryName("gold_bricks"));
 		registry.register(new ModStairsBlock(goldBricks.getDefaultState(), Block.Properties.from(goldBricks)).setRegistryName("gold_brick_stairs"));
 		Block brownDungeon = register(registry, new Block(Block.Properties.create(Material.ROCK, MaterialColor.BROWN).hardnessAndResistance(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("brown_dungeon_bricks"));
-		registry.register(new Block(Block.Properties.create(Material.ROCK, MaterialColor.BROWN).hardnessAndResistance(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("brown_dungeon_column"));
 		registry.register(new Block(Block.Properties.create(Material.ROCK, MaterialColor.BROWN).hardnessAndResistance(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("brown_dungeon_tile"));
 		registry.register(new SlabBlock(Block.Properties.from(brownDungeon)).setRegistryName("brown_dungeon_tile_slab"));
-		registry.register(new Block(Block.Properties.create(Material.ROCK, MaterialColor.BROWN).hardnessAndResistance(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("brown_dungeon_glyphs"));
+		registry.register(new MSHorizontalBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(1.5F).sound(SoundType.STONE)).setRegistryName("brown_dungeon_glyphs"));
+		registry.register(new MSDirectionalBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(1.5F).sound(SoundType.STONE)).setRegistryName("brown_dungeon_column"));
 		
 		registry.register(new FlammableLogBlock(MaterialColor.LIGHT_BLUE, Block.Properties.create(Material.WOOD, MaterialColor.LIGHT_BLUE).hardnessAndResistance(2.0F).harvestTool(ToolType.AXE).lightValue(11).sound(SoundType.WOOD)).setRegistryName("glowing_log"));
 		registry.register(new FlammableLogBlock(MaterialColor.ICE, Block.Properties.create(Material.WOOD, MaterialColor.ICE).hardnessAndResistance(2.0F).harvestTool(ToolType.AXE).sound(SoundType.WOOD)).setRegistryName("frost_log"));
@@ -445,7 +445,7 @@ public class MSBlocks
 		registry.register(new DecorBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F).sound(SoundType.METAL), MSBlockShapes.BLENDER).setRegistryName("blender"));
 		registry.register(new DecorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.5F), MSBlockShapes.CHESSBOARD).setRegistryName("chessboard"));
 		registry.register(new DecorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.5F), MSBlockShapes.FROG_STATUE).setRegistryName("mini_frog_statue"));
-		//registry.register(new DecorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(1.0F).sound(SoundType.STONE), MSBlockShapes.NAKIGATOR_STATUE).setRegistryName("nakigator_statue"));
+		registry.register(new DecorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(1.0F).sound(SoundType.STONE), MSBlockShapes.NAKAGATOR_STATUE).setRegistryName("nakagator_statue"));
 		registry.register(new DecorBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(-1.0F, 25.0F).sound(SoundType.METAL), MSBlockShapes.CALEDFWLCH_PEDESTAL_EMPTY).setRegistryName("caledfwlch_pedestal_empty"));
 		registry.register(new DecorBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(5.0F).sound(SoundType.METAL), MSBlockShapes.LOOT_CHEST_EMPTY).setRegistryName("loot_chest_empty"));
 		registry.register(new GlowystoneWireBlock(Block.Properties.create(Material.MISCELLANEOUS).hardnessAndResistance(0.0F).lightValue(16).doesNotBlockMovement()).setRegistryName("glowystone_dust"));

@@ -39,20 +39,18 @@ public class MSBlockShapes
 	
 	public static final CustomVoxelShape CHESSBOARD = new CustomVoxelShape(new double[]{0, 0, 0, 16, 1, 16});
 
-	public static final CustomVoxelShape LOOT_CHEST = new CustomVoxelShape(new double[]{0, 0, 0, 16, 9, 15}, new double[]{0, 9, 1, 16, 12, 14}, new double[]{0, 12, 2, 16, 13, 13}, new double[]{0, 13, 4, 16, 14, 11});
-	public static final CustomVoxelShape LOOT_CHEST_EMPTY = new CustomVoxelShape(new double[]{0, 0, 0, 16, 9, 15}, new double[]{0, 9, 1, 16, 12, 14}, new double[]{0, 12, 2, 16, 13, 13}, new double[]{0, 13, 4, 16, 14, 11});
-	public static final CustomVoxelShape WOODEN_LOOT_CHEST = new CustomVoxelShape(new double[]{0, 0, 0, 16, 9, 15}, new double[]{0, 9, 1, 16, 12, 14}, new double[]{0, 12, 2, 16, 13, 13}, new double[]{0, 13, 4, 16, 14, 11});
+	public static final CustomVoxelShape NAKAGATOR_STATUE = new CustomVoxelShape(new double[]{-1, 0, -1, 17, 2, 17}, new double[]{4, 2, 4, 12, 24, 12});
+
+	public static final CustomVoxelShape LOOT_CHEST_EMPTY = new CustomVoxelShape(new double[]{0, 0, 1, 16, 9, 16}, new double[]{0, 9, 2, 16, 12, 15}, new double[]{0, 12, 3, 16, 13, 14}, new double[]{0, 13, 5, 16, 14, 12});
 
 	public static final CustomVoxelShape CALEDFWLCH_PEDESTAL_EMPTY = new CustomVoxelShape(new double[]{0, 0, 0, 16, 1, 16}, new double[]{1, 1, 1, 15, 2, 15}, new double[]{2, 2, 2, 14, 3, 14}, new double[]{3, 3, 3, 13, 4, 13});
-	public static final CustomVoxelShape CALEDFWLCH_PEDESTAL_FULL = new CustomVoxelShape(new double[]{0, 0, 0, 16, 1, 16}, new double[]{1, 1, 1, 15, 2, 15}, new double[]{2, 2, 2, 14, 3, 14}, new double[]{3, 3, 3, 13, 4, 13}, new double[]{6, 4, 6, 10, 16, 10});
-	
-	public static final CustomVoxelShape LOOT_CHEST = new CustomVoxelShape(new double[]{0, 0, 0, 16, 9, 15}, new double[]{0, 9, 1, 16, 12, 14}, new double[]{0, 12, 2, 16, 13, 13}, new double[]{0, 13, 4, 16, 14, 11});
-	public static final CustomVoxelShape LOOT_CHEST_EMPTY = new CustomVoxelShape(new double[]{0, 0, 0, 16, 9, 15}, new double[]{0, 9, 1, 16, 12, 14}, new double[]{0, 12, 2, 16, 13, 13}, new double[]{0, 13, 4, 16, 14, 11});
-	public static final CustomVoxelShape WOODEN_LOOT_CHEST = new CustomVoxelShape(new double[]{0, 0, 0, 16, 9, 15}, new double[]{0, 9, 1, 16, 12, 14}, new double[]{0, 12, 2, 16, 13, 13}, new double[]{0, 13, 4, 16, 14, 11});
 
-	public static final CustomVoxelShape CALEDFWLCH_PEDESTAL_EMPTY = new CustomVoxelShape(new double[]{0, 0, 0, 16, 1, 16}, new double[]{1, 1, 1, 15, 2, 15}, new double[]{2, 2, 2, 14, 3, 14}, new double[]{3, 3, 3, 13, 4, 13});
+	//Loot Blocks
+	public static final CustomVoxelShape LOOT_CHEST = new CustomVoxelShape(new double[]{0, 0, 1, 16, 9, 16}, new double[]{0, 9, 2, 16, 12, 15}, new double[]{0, 12, 3, 16, 13, 14}, new double[]{0, 13, 5, 16, 14, 12});
+	public static final CustomVoxelShape WOODEN_LOOT_CHEST = new CustomVoxelShape(new double[]{0, 0, 1, 16, 9, 16}, new double[]{0, 9, 2, 16, 12, 15}, new double[]{0, 12, 3, 16, 13, 14}, new double[]{0, 13, 5, 16, 14, 12});
+
 	public static final CustomVoxelShape CALEDFWLCH_PEDESTAL_FULL = new CustomVoxelShape(new double[]{0, 0, 0, 16, 1, 16}, new double[]{1, 1, 1, 15, 2, 15}, new double[]{2, 2, 2, 14, 3, 14}, new double[]{3, 3, 3, 13, 4, 13}, new double[]{6, 4, 6, 10, 16, 10});
-	
+
 	//Machines
 	public static final CustomVoxelShape ALCHEMITER_CENTER = new CustomVoxelShape(new double[]{0,0,0,16,16,16});
 	public static final CustomVoxelShape ALCHEMITER_CORNER = new CustomVoxelShape(new double[]{0,0,0,16,8,16}, new double[]{0,8,6,10,12,16}, new double[]{0,12,8,8,16,16});

@@ -1,5 +1,8 @@
 {
   "variants": {
-    "": { "model": "minestuck:block/caledfwlch_pedestal_full" }
+    "facing=south": { "model": "minestuck:block/caledfwlch_pedestal_full" },
+    "facing=west":  { "model": "minestuck:block/caledfwlch_pedestal_full", "y": 90 },
+    "facing=north": { "model": "minestuck:block/caledfwlch_pedestal_full", "y": 180 },
+    "facing=east":  { "model": "minestuck:block/caledfwlch_pedestal_full", "y": 270 }
   }
 }
