@@ -301,7 +301,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.WRINKLEFUCKER, "Is there anything more iconic?");
 		add(MSItems.TELESCOPIC_SASSACRUSHER, "Telescopic Sassacrusher");
 		addTooltip(MSItems.TELESCOPIC_SASSACRUSHER, "OH ho! The perfect hammer for the dashing young gent who loves a pranksters gambit or a good grist horde!");
-		add(MSItems.REGIHAMMER, "Regihammer");
+		add(MSItems.REGI_HAMMER, "Regihammer");
 		add(MSItems.FEAR_NO_ANVIL, "Fear No Anvil");
 		addTooltip(MSItems.FEAR_NO_ANVIL, "What's to fear with this around? This uber hammer can break blocks and deal massive damage.");
 		add(MSItems.MELT_MASHER, "Melt-Masher");
@@ -471,8 +471,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.PARADISES_PORTABELLO, "Paradise's Portabello");
 		addTooltip(MSItems.PARADISES_PORTABELLO, "A mushroom which reaches the heavens. Good for whacking people.");
 		addStoreTooltip(MSItems.PARADISES_PORTABELLO, "This mushroom is very tall! We think Our Glorious Speaker blessed us with it as a gift!");
-		add(MSItems.REGICANE, "Regicane");
-		addTooltip(MSItems.REGICANE, "A black cane used only by the most elegant among Dersites.");
+		add(MSItems.REGI_CANE, "Regicane");
+		addTooltip(MSItems.REGI_CANE, "A black cane used only by the most elegant among Dersites.");
 		add(MSItems.DRAGON_CANE, "Dragon Cane");
 		addTooltip(MSItems.DRAGON_CANE, "The most Powerful and awe inspiring of canes!");
 		add(MSItems.DRAGON_CANE_UNSHEATHED, "Dragon Cane");
