@@ -15,8 +15,6 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 public class BarbasolBombEntity extends ProjectileItemEntity implements IRendersAsItem
 {
-    private LivingEntity throwerIn;
-    
     public BarbasolBombEntity(EntityType<? extends BarbasolBombEntity> type, World worldIn)
     {
         super(type, worldIn);
@@ -30,7 +28,6 @@ public class BarbasolBombEntity extends ProjectileItemEntity implements IRenders
     public BarbasolBombEntity(EntityType<? extends BarbasolBombEntity> type, LivingEntity livingEntityIn, World worldIn)
     {
         super(type, livingEntityIn, worldIn);
-        this.throwerIn = livingEntityIn;
     }
     
     @Override
@@ -38,7 +35,7 @@ public class BarbasolBombEntity extends ProjectileItemEntity implements IRenders
     {
         if(!this.world.isRemote)
         {
-            world.createExplosion(throwerIn, result.getHitVec().x, result.getHitVec().y, result.getHitVec().z, 3F, Explosion.Mode.DESTROY);
+            world.createExplosion(null, result.getHitVec().x, result.getHitVec().y, result.getHitVec().z, 3F, Explosion.Mode.DESTROY);
         }
         this.remove();
     }
