@@ -106,6 +106,20 @@
           "functions": [
             {
               "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.05,
+                "max": 0.7
+              }
+            }
+          ],
+          "name": "minestuck:crowbar"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 3,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
               "damage": 0.05
             }
           ],

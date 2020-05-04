@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:cigarette_lance"
+  },
+  "grist_cost": {
+    "minestuck:shale": 44,
+    "minestuck:tar": 65,
+    "minestuck:diamond": 1
+  }
+}

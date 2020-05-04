@@ -4,10 +4,10 @@
     "item": "minestuck:cat_claws_drawn"
   },
   "input2": {
-    "item": "minestuck:grimoire"
+    "item": "minestuck:hemeoreaper"
   },
   "mode": "and",
   "output": {
-    "item": "minestuck:claw_of_nrubyiglith"
+    "item": "minestuck:claw_sickle"
   }
 }

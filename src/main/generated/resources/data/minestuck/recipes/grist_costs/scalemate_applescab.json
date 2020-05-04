@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:scalemate_applescab"
+  },
+  "grist_cost": {
+    "minestuck:build": 8,
+    "minestuck:ruby": 8
+  }
+}

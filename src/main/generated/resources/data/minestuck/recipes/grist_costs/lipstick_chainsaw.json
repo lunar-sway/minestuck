@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:lipstick_chainsaw"
+  },
+  "grist_cost": {
+    "minestuck:build": 12,
+    "minestuck:marble": 9,
+    "minestuck:shale": 16
+  }
+}
