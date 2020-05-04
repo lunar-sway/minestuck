@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:phlegm_gushers"
+  },
+  "grist_cost": {
+    "minestuck:build": 24,
+    "minestuck:shale": 30,
+    "minestuck:mercury": 18
+  }
+}

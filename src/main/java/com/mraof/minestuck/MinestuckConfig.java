@@ -144,7 +144,7 @@ public class MinestuckConfig
 		aspectEffects = SERVER_BUILDER.comment("If this is true, players will gain certain potion effects once they reach a certain rung based on their aspect.")
 				.define("aspectEffects", true);
 		playerSelectedTitle = SERVER_BUILDER.comment("Enable this to let players select their own title. They will however not be able to select the Lord or Muse as class.")
-				.define("playerSelectedTitle", false);
+				.define("playerSelectedTitle", true);
 		SERVER_BUILDER.pop();
 		
 		SERVER_BUILDER.push("sylladex");

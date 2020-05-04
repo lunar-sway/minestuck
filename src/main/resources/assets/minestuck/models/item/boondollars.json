@@ -39,6 +39,18 @@
                 "minestuck:count": 1000
             },
             "model": "minestuck:item/boondollars_6"
+        },
+        {
+            "predicate": {
+                "minestuck:count": 1000000
+            },
+            "model": "minestuck:item/boonbuck"
+        },
+        {
+            "predicate": {
+                "minestuck:count": 1000000000
+            },
+            "model": "minestuck:item/booncase"
         }
     ]
 }

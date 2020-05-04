@@ -50,6 +50,7 @@ public final class MSEntityTypes
 	public static final EntityType<DecoyEntity> PLAYER_DECOY = getNull();
 	
 	public static final EntityType<MetalBoatEntity> METAL_BOAT = getNull();
+	public static final EntityType<BarbasolBombEntity> BARBASOL_BOMB = getNull();
 	public static final EntityType<CrewPosterEntity> MIDNIGHT_CREW_POSTER = getNull();
 	public static final EntityType<SbahjPosterEntity> SBAHJ_POSTER = getNull();
 	public static final EntityType<ShopPosterEntity> SHOP_POSTER = getNull();
@@ -92,6 +93,7 @@ public final class MSEntityTypes
 		register(registry, EntityType.Builder.<DecoyEntity>create(EntityClassification.MISC).setCustomClientFactory((spawnEntity, world) -> new DecoyEntity(world)).disableSerialization().disableSummoning(), "player_decoy");
 		
 		register(registry, EntityType.Builder.<MetalBoatEntity>create(MetalBoatEntity::new, EntityClassification.MISC), "metal_boat");
+		register(registry, EntityType.Builder.<BarbasolBombEntity>create(BarbasolBombEntity::new, EntityClassification.MISC), "barbasol_bomb");
 		register(registry, EntityType.Builder.<CrewPosterEntity>create(CrewPosterEntity::new, EntityClassification.MISC), "midnight_crew_poster");
 		register(registry, EntityType.Builder.<SbahjPosterEntity>create(SbahjPosterEntity::new, EntityClassification.MISC), "sbahj_poster");
 		register(registry, EntityType.Builder.<ShopPosterEntity>create(ShopPosterEntity::new, EntityClassification.MISC), "shop_poster");

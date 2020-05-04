@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:barbasol_bomb"
+  },
+  "grist_cost": {
+    "minestuck:build": 10,
+    "minestuck:shale": 10
+  }
+}

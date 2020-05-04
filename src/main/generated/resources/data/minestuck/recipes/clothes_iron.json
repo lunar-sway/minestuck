@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " rr",
+    "sss",
+    "iii"
+  ],
+  "key": {
+    "s": {
+      "tag": "forge:stone"
+    },
+    "i": {
+      "tag": "forge:ingots/iron"
+    },
+    "r": {
+      "tag": "forge:rods/wooden"
+    }
+  },
+  "result": {
+    "item": "minestuck:clothes_iron"
+  }
+}
