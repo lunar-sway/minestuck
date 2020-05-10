@@ -625,7 +625,12 @@ public final class SkaianetHandler
 		
 		for(SburbConnection c : connections)
 		{
-			c.setActive(c.isClient(oldTE) ? newPos : c.getClientComputer(), c.isServer(oldTE) ? newPos : c.getServerComputer());
+			if(c.isActive())
+			{
+				boolean isClient = c.isClient(oldTE), isServer = c.isServer(oldTE);
+				if(isClient || isServer)	//TODO Change to an "update positions" function in the sburb connection, and add checks to isActive in setActive()
+					c.setActive(isClient ? newPos : c.getClientComputer(), isServer ? newPos : c.getServerComputer());
+			}
 		}
 		
 		if(resumingClients.containsKey(oldTE.owner) && resumingClients.get(oldTE.owner).equals(oldPos))
