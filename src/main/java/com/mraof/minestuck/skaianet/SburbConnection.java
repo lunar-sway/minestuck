@@ -23,10 +23,7 @@ import net.minecraft.util.math.GlobalPos;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.util.Constants;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 public final class SburbConnection
 {
@@ -146,6 +143,8 @@ public final class SburbConnection
 	
 	void setActive(GlobalPos client, GlobalPos server)
 	{
+		Objects.requireNonNull(client);
+		Objects.requireNonNull(server);
 		clientComputer = client;
 		serverComputer = server;
 		isActive = true;
