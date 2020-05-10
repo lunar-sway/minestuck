@@ -5,10 +5,10 @@ import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.network.GristCachePacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ServerEditPacket;
-import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.util.MSNBTUtil;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.util.MSNBTUtil;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -44,6 +44,8 @@ public class EditData
 	final SburbConnection connection;
 	
 	private final ServerPlayerEntity player;
+	
+	private boolean isRecovering;
 	
 	/**
 	 * @return a player identifier for the player at the receiving end of the connection
@@ -108,8 +110,19 @@ public class EditData
 	
 	void recover()
 	{
-		new ConnectionRecovery(this).recover(connection, player);
-		new PlayerRecovery(decoy).recover(player, true);
+		isRecovering = true;
+		try
+		{
+			new ConnectionRecovery(this).recover(connection, player);
+			new PlayerRecovery(decoy).recover(player, true);
+		} finally {
+			isRecovering = false;
+		}
+	}
+	
+	boolean isRecovering()
+	{
+		return isRecovering;
 	}
 	
 	public static class PlayerRecovery
