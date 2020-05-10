@@ -74,6 +74,7 @@ public class ClientProxy
 		RenderingRegistry.registerEntityRenderingHandler(CrewPosterEntity.class, manager -> new RenderHangingArt<>(manager, new ResourceLocation("minestuck:midnight_poster")));
 		RenderingRegistry.registerEntityRenderingHandler(SbahjPosterEntity.class, manager -> new RenderHangingArt<>(manager, new ResourceLocation("minestuck:sbahj_poster")));
 		RenderingRegistry.registerEntityRenderingHandler(ShopPosterEntity.class, manager -> new RenderHangingArt<>(manager, new ResourceLocation("minestuck:shop_poster")));
+		RenderingRegistry.registerEntityRenderingHandler(FurryPosterEntity.class, manager -> new RenderHangingArt<>(manager, new ResourceLocation("minestuck:furry_poster")));
 
 		MSKeyHandler.registerKeys();
 		

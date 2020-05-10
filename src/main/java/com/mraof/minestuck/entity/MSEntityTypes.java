@@ -54,6 +54,7 @@ public final class MSEntityTypes
 	public static final EntityType<CrewPosterEntity> MIDNIGHT_CREW_POSTER = getNull();
 	public static final EntityType<SbahjPosterEntity> SBAHJ_POSTER = getNull();
 	public static final EntityType<ShopPosterEntity> SHOP_POSTER = getNull();
+	public static final EntityType<FurryPosterEntity> FURRY_POSTER = getNull();
 	public static final EntityType<HologramEntity> HOLOGRAM = getNull();
 	
 	@Nonnull
@@ -97,6 +98,7 @@ public final class MSEntityTypes
 		register(registry, EntityType.Builder.<CrewPosterEntity>create(CrewPosterEntity::new, EntityClassification.MISC), "midnight_crew_poster");
 		register(registry, EntityType.Builder.<SbahjPosterEntity>create(SbahjPosterEntity::new, EntityClassification.MISC), "sbahj_poster");
 		register(registry, EntityType.Builder.<ShopPosterEntity>create(ShopPosterEntity::new, EntityClassification.MISC), "shop_poster");
+		register(registry, EntityType.Builder.<FurryPosterEntity>create(FurryPosterEntity::new, EntityClassification.MISC), "furry_poster");
 		register(registry, EntityType.Builder.<HologramEntity>create(HologramEntity::new, EntityClassification.MISC), "hologram");
 	}
 	
