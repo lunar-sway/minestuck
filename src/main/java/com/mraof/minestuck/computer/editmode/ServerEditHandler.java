@@ -102,7 +102,7 @@ public final class ServerEditHandler
 		
 		ServerPlayerEntity player = editData.getEditor();
 		
-		editData.recover();
+		editData.recover();	//TODO handle exception from failed recovery
 		
 		MSExtraData data = MSExtraData.get(player.world);
 		data.removeEditData(editData);
@@ -538,9 +538,12 @@ public final class ServerEditHandler
 	@SubscribeEvent
 	public static void onEntityTeleport(EntityTravelToDimensionEvent event)
 	{
-		if(event.getEntity() instanceof ServerPlayerEntity && getData((ServerPlayerEntity) event.getEntity()) != null)
+		if(event.getEntity() instanceof ServerPlayerEntity)
 		{
-			event.setCanceled(true);
+			EditData data = getData((ServerPlayerEntity) event.getEntity());
+			// Prevent edit player teleportation unless it is recovering to its initial state
+			if(data != null && !data.isRecovering())
+				event.setCanceled(true);
 		}
 	}
 	
