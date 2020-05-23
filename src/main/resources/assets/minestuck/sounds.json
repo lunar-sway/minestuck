@@ -23,6 +23,102 @@
       }
     ]
   },
+  "music_disc.eridan_theme": {
+    "sounds": [
+      {
+        "name": "minestuck:records/eridan_theme",
+        "stream": true
+      }
+    ]
+  },
+  "music_disc.feferi_theme": {
+    "sounds": [
+      {
+        "name": "minestuck:records/feferi_theme",
+        "stream": true
+      }
+    ]
+  },
+  "music_disc.equius_theme": {
+    "sounds": [
+      {
+        "name": "minestuck:records/equius_theme",
+        "stream": true
+      }
+    ]
+  },
+  "music_disc.karkat_theme": {
+    "sounds": [
+      {
+        "name": "minestuck:records/karkat_theme",
+        "stream": true
+      }
+    ]
+  },
+  "music_disc.gamzee_theme": {
+    "sounds": [
+      {
+        "name": "minestuck:records/gamzee_theme",
+        "stream": true
+      }
+    ]
+  },
+  "music_disc.nepeta_theme": {
+    "sounds": [
+      {
+        "name": "minestuck:records/nepeta_theme",
+        "stream": true
+      }
+    ]
+  },
+  "music_disc.aradia_theme": {
+    "sounds": [
+      {
+        "name": "minestuck:records/aradia_theme",
+        "stream": true
+      }
+    ]
+  },
+  "music_disc.sollux_theme": {
+    "sounds": [
+      {
+        "name": "minestuck:records/sollux_theme",
+        "stream": true
+      }
+    ]
+  },
+  "music_disc.terezi_theme": {
+    "sounds": [
+      {
+        "name": "minestuck:records/terezi_theme",
+        "stream": true
+      }
+    ]
+  },
+  "music_disc.vriska_theme": {
+    "sounds": [
+      {
+        "name": "minestuck:records/vriska_theme",
+        "stream": true
+      }
+    ]
+  },
+  "music_disc.tavros_theme": {
+    "sounds": [
+      {
+        "name": "minestuck:records/tavros_theme",
+        "stream": true
+      }
+    ]
+  },
+  "music_disc.kanaya_theme": {
+    "sounds": [
+      {
+        "name": "minestuck:records/kanaya_theme",
+        "stream": true
+      }
+    ]
+  },
   "entity.nakagator.ambient": {
     "category": "friendly",
     "subtitle": "subtitles.entity.minestuck.nakagator.ambient",

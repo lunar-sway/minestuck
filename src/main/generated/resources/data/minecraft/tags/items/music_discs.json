@@ -3,6 +3,18 @@
   "values": [
     "minestuck:music_disc_dance_stab_dance",
     "minestuck:music_disc_emissary_of_dance",
-    "minestuck:music_disc_retro_battle"
+    "minestuck:music_disc_retro_battle",
+    "minestuck:music_disc_tavros_theme",
+    "minestuck:music_disc_eridan_theme",
+    "minestuck:music_disc_feferi_theme",
+    "minestuck:music_disc_equius_theme",
+    "minestuck:music_disc_kanaya_theme",
+    "minestuck:music_disc_karkat_theme",
+    "minestuck:music_disc_gamzee_theme",
+    "minestuck:music_disc_nepeta_theme",
+    "minestuck:music_disc_aradia_theme",
+    "minestuck:music_disc_sollux_theme",
+    "minestuck:music_disc_terezi_theme",
+    "minestuck:music_disc_vriska_theme"
   ]
 }

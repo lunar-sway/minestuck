@@ -19,6 +19,18 @@ public class MSSoundEvents
 	public static final SoundEvent MUSIC_DISC_EMISSARY_OF_DANCE = getNull();
 	public static final SoundEvent MUSIC_DISC_DANCE_STAB_DANCE = getNull();
 	public static final SoundEvent MUSIC_DISC_RETRO_BATTLE_THEME = getNull();
+	public static final SoundEvent MUSIC_DISC_TAVROS_THEME = getNull();
+	public static final SoundEvent MUSIC_DISC_ERIDAN_THEME = getNull();
+	public static final SoundEvent MUSIC_DISC_FEFERI_THEME = getNull();
+	public static final SoundEvent MUSIC_DISC_EQUIUS_THEME = getNull();
+	public static final SoundEvent MUSIC_DISC_KANAYA_THEME = getNull();
+	public static final SoundEvent MUSIC_DISC_KARKAT_THEME = getNull();
+	public static final SoundEvent MUSIC_DISC_GAMZEE_THEME = getNull();
+	public static final SoundEvent MUSIC_DISC_NEPETA_THEME = getNull();
+	public static final SoundEvent MUSIC_DISC_ARADIA_THEME = getNull();
+	public static final SoundEvent MUSIC_DISC_SOLLUX_THEME = getNull();
+	public static final SoundEvent MUSIC_DISC_TEREZI_THEME = getNull();
+	public static final SoundEvent MUSIC_DISC_VRISKA_THEME = getNull();
 	public static final SoundEvent ENTITY_NAKAGATOR_AMBIENT = getNull();
 	public static final SoundEvent ENTITY_NAKAGATOR_HURT = getNull();
 	public static final SoundEvent ENTITY_NAKAGATOR_DEATH = getNull();
@@ -66,6 +78,10 @@ public class MSSoundEvents
 	{
 		List<String> paths = Lists.newArrayList(
 				"music_disc.emissary_of_dance", "music_disc.dance_stab_dance", "music_disc.retro_battle_theme",
+				"music_disc.tavros_theme", "music_disc.eridan_theme", "music_disc.feferi_theme",
+				"music_disc.equius_theme", "music_disc.kanaya_theme", "music_disc.karkat_theme",
+				"music_disc.gamzee_theme", "music_disc.nepeta_theme", "music_disc.aradia_theme",
+				"music_disc.sollux_theme", "music_disc.terezi_theme", "music_disc.vriska_theme",
 				"entity.nakagator.ambient", "entity.nakagator.hurt", "entity.nakagator.death",
 				"entity.iguana.ambient", "entity.iguana.hurt", "entity.iguana.death",
 				"entity.salamander.ambient", "entity.salamander.hurt", "entity.salamander.death",

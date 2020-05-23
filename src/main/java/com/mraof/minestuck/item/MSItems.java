@@ -339,6 +339,18 @@ public class MSItems
 	public static final Item MUSIC_DISC_EMISSARY_OF_DANCE = getNull();
 	public static final Item MUSIC_DISC_DANCE_STAB_DANCE = getNull();
 	public static final Item MUSIC_DISC_RETRO_BATTLE = getNull();
+	public static final Item MUSIC_DISC_TAVROS_THEME = getNull();
+	public static final Item MUSIC_DISC_ERIDAN_THEME = getNull();
+	public static final Item MUSIC_DISC_FEFERI_THEME = getNull();
+	public static final Item MUSIC_DISC_EQUIUS_THEME = getNull();
+	public static final Item MUSIC_DISC_KANAYA_THEME = getNull();
+	public static final Item MUSIC_DISC_KARKAT_THEME = getNull();
+	public static final Item MUSIC_DISC_GAMZEE_THEME = getNull();
+	public static final Item MUSIC_DISC_NEPETA_THEME = getNull();
+	public static final Item MUSIC_DISC_ARADIA_THEME = getNull();
+	public static final Item MUSIC_DISC_SOLLUX_THEME = getNull();
+	public static final Item MUSIC_DISC_TEREZI_THEME = getNull();
+	public static final Item MUSIC_DISC_VRISKA_THEME = getNull();
 	
 	@Nonnull
 	@SuppressWarnings("ConstantConditions")
@@ -869,7 +881,18 @@ public class MSItems
 		registry.register(new ModMusicDiscItem(13, () -> MSSoundEvents.MUSIC_DISC_EMISSARY_OF_DANCE, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_emissary_of_dance"));
 		registry.register(new ModMusicDiscItem(13, () -> MSSoundEvents.MUSIC_DISC_DANCE_STAB_DANCE, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_dance_stab_dance"));
 		registry.register(new ModMusicDiscItem(13, () -> MSSoundEvents.MUSIC_DISC_RETRO_BATTLE_THEME, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_retro_battle"));
-		
+		registry.register(new ModMusicDiscItem(13, () -> MSSoundEvents.MUSIC_DISC_TAVROS_THEME, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_tavros_theme"));
+		registry.register(new ModMusicDiscItem(13, () -> MSSoundEvents.MUSIC_DISC_ERIDAN_THEME, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_eridan_theme"));
+		registry.register(new ModMusicDiscItem(13, () -> MSSoundEvents.MUSIC_DISC_FEFERI_THEME, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_feferi_theme"));
+		registry.register(new ModMusicDiscItem(13, () -> MSSoundEvents.MUSIC_DISC_EQUIUS_THEME, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_equius_theme"));
+		registry.register(new ModMusicDiscItem(13, () -> MSSoundEvents.MUSIC_DISC_KANAYA_THEME, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_kanaya_theme"));
+		registry.register(new ModMusicDiscItem(13, () -> MSSoundEvents.MUSIC_DISC_KARKAT_THEME, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_karkat_theme"));
+		registry.register(new ModMusicDiscItem(13, () -> MSSoundEvents.MUSIC_DISC_GAMZEE_THEME, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_gamzee_theme"));
+		registry.register(new ModMusicDiscItem(13, () -> MSSoundEvents.MUSIC_DISC_NEPETA_THEME, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_nepeta_theme"));
+		registry.register(new ModMusicDiscItem(13, () -> MSSoundEvents.MUSIC_DISC_ARADIA_THEME, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_aradia_theme"));
+		registry.register(new ModMusicDiscItem(13, () -> MSSoundEvents.MUSIC_DISC_SOLLUX_THEME, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_sollux_theme"));
+		registry.register(new ModMusicDiscItem(13, () -> MSSoundEvents.MUSIC_DISC_TEREZI_THEME, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_terezi_theme"));
+		registry.register(new ModMusicDiscItem(13, () -> MSSoundEvents.MUSIC_DISC_VRISKA_THEME, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_vriska_theme"));
 	}
 	
 	private static Item registerItemBlock(IForgeRegistry<Item> registry, Block block)
