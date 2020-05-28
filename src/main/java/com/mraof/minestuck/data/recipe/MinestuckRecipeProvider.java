@@ -186,6 +186,7 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(MSBlocks.POLISHED_PINK_STONE), MSBlocks.PINK_STONE_BRICK_SLAB, 2).addCriterion("has_polished_pink_stone", hasItem(MSBlocks.POLISHED_PINK_STONE)).build(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "pink_stone_brick_slab_from_polished_pink_stone_stonecutting"));
 		SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(MSBlocks.PINK_STONE_BRICKS), MSBlocks.PINK_STONE_BRICK_STAIRS).addCriterion("has_pink_stone_bricks", hasItem(MSBlocks.PINK_STONE_BRICKS)).build(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "pink_stone_brick_stairs_from_pink_stone_bricks_stonecutting"));
 		SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(MSBlocks.PINK_STONE_BRICKS), MSBlocks.PINK_STONE_BRICK_SLAB, 2).addCriterion("has_pink_stone_bricks", hasItem(MSBlocks.PINK_STONE_BRICKS)).build(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "pink_stone_brick_slab_from_pink_stone_bricks_stonecutting"));
+		SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(MSBlocks.GOLD_BRICKS), MSBlocks.GOLD_BRICK_STAIRS).addCriterion("has_gold_bricks", hasItem(MSBlocks.GOLD_BRICKS)).build(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "gold_brick_stairs_from_gold_bricks_stonecutting"));
 	}
 	
 	private void cookingRecipesFor(Consumer<IFinishedRecipe> recipeBuilder, Ingredient input, IItemProvider result, float experience, String criterionName, InventoryChangeTrigger.Instance criterion)

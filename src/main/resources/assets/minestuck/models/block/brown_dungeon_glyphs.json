@@ -1,0 +1,19 @@
+{
+  "parent": "block/cube",
+  "display": {
+    "firstperson_righthand": {
+      "rotation": [ 0, 135, 0 ],
+      "translation": [ 0, 0, 0 ],
+      "scale": [ 0.40, 0.40, 0.40 ]
+    }
+  },
+  "textures": {
+    "particle": "minestuck:block/brown_dungeon_bricks",
+    "down": "minestuck:block/brown_dungeon_bricks",
+    "up": "minestuck:block/brown_dungeon_bricks",
+    "north": "minestuck:block/brown_dungeon_bricks_nak_left",
+    "east": "minestuck:block/brown_dungeon_bricks_nak_left",
+    "south": "minestuck:block/brown_dungeon_bricks_nak_right",
+    "west": "minestuck:block/brown_dungeon_bricks_lotus"
+  }
+}

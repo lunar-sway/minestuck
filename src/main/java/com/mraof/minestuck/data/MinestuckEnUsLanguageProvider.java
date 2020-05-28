@@ -115,6 +115,15 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.PINK_STONE_BRICKS, "Pink Stone Bricks");
 		add(MSBlocks.CHISELED_PINK_STONE_BRICKS, "Chiseled Pink Stone Bricks");
 		add(MSBlocks.CRACKED_PINK_STONE_BRICKS, "Cracked Pink Stone Bricks");
+		add(MSBlocks.GOLD_BRICKS, "Gold Bricks");
+		add(MSBlocks.GOLD_BRICK_STAIRS, "Gold Brick Stairs");
+		add(MSBlocks.BROWN_DUNGEON_BRICKS, "Brown Dungeon Bricks");
+		add(MSBlocks.BROWN_DUNGEON_COLUMN, "Brown Dungeon Column");
+		add(MSBlocks.BROWN_DUNGEON_TILE, "Brown Dungeon Tile");
+		add(MSBlocks.BROWN_DUNGEON_TILE_SLAB, "Brown Dungeon Tile Slab");
+		add(MSBlocks.BROWN_DUNGEON_GLYPHS, "Brown Dungeon Glyphs");
+		add(MSBlocks.CALEDFWLCH_PEDESTAL_FULL, "Caledfwlch Pedestal Full");
+		add(MSBlocks.CALEDFWLCH_PEDESTAL_EMPTY, "Caledfwlch Pedestal Empty");
 		add(MSBlocks.MOSSY_PINK_STONE_BRICKS, "Mossy Pink Stone Bricks");
 		add(MSBlocks.DENSE_CLOUD, "Dense Cloud");
 		add(MSBlocks.BRIGHT_DENSE_CLOUD, "Bright Dense Cloud");
@@ -281,7 +290,12 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.CHESSBOARD, "Chessboard");
 		add(MSBlocks.MINI_FROG_STATUE, "Frog Statue Replica");
 		addStoreTooltip(MSBlocks.MINI_FROG_STATUE, "Some say it's creepy, some say it's cute, others would say it's contraband, so keep it out of sight!");
+		add(MSBlocks.NAKAGATOR_STATUE, "Nakagator Statue");
+		addTooltip(MSBlocks.NAKAGATOR_STATUE, "Something is inscribed around the bottom of the base... it reads: Nak nak nak nak nak nak nak nak nak nak");
 		add(MSBlocks.GLOWYSTONE_DUST, "Glowystone Dust");
+		add(MSBlocks.LOOT_CHEST, "Loot Chest");
+		add(MSBlocks.LOOT_CHEST_EMPTY, "Loot Chest Empty");
+		add(MSBlocks.WOODEN_LOOT_CHEST, "Wooden Loot Chest");
 		add(MSBlocks.OIL, "Oil");
 		add(MSBlocks.BLOOD, "Blood");
 		add(MSBlocks.BRAIN_JUICE, "Brain Juice");
@@ -341,7 +355,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.CALEDSCRATCH, "Caledscratch");
 		addTooltip(MSItems.CALEDSCRATCH, "The chosen weapon of Hephaestus, Guardian of the land of heat and clockwork. They say if you break this blade you incur their godly wrath.");
 		add(MSItems.CALEDFWLCH, "Caledfwlch");
-		addTooltip(MSItems.CALEDFWLCH, "Dumb Welsh Sword. Probably has some chamic destiny.");
+		addTooltip(MSItems.CALEDFWLCH, "Dumb Welsh Sword. Probably has some karmic destiny.");
 		add(MSItems.ROYAL_DERINGER, "Royal Deringer");
 		add(MSItems.CLAYMORE, "Claymore");
 		addTooltip(MSItems.CLAYMORE, "A featherweight amongst greatswords. It's still bloody heavy, though!");

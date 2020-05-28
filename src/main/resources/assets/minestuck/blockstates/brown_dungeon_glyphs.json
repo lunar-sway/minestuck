@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=south": { "model": "minestuck:block/brown_dungeon_glyphs" },
+    "facing=west":  { "model": "minestuck:block/brown_dungeon_glyphs", "y": 90 },
+    "facing=north": { "model": "minestuck:block/brown_dungeon_glyphs", "y": 180 },
+    "facing=east":  { "model": "minestuck:block/brown_dungeon_glyphs", "y": 270 }
+  }
+}

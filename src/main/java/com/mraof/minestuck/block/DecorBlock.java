@@ -50,7 +50,7 @@ public class DecorBlock extends Block
 	{
         return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
     }
-	
+	//
 	@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
 	{

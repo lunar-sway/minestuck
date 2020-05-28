@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "type=bottom": { "model": "minestuck:block/brown_dungeon_tile_slab" },
+    "type=top":    { "model": "minestuck:block/brown_dungeon_tile_slab_top" },
+    "type=double": { "model": "minestuck:block/brown_dungeon_tile" }
+  }
+}
