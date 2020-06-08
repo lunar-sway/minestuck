@@ -1,6 +1,8 @@
 package com.mraof.minestuck.item.weapon;
 
 import net.minecraft.block.Blocks;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.PlayerEntity;
@@ -36,8 +38,7 @@ public class PogoWeaponItem extends WeaponItem
 	
 	private double getPogoMotion(ItemStack stack)
 	{
-//		return 0.5 + EnchantmentHelper.getEnchantmentLevel(Enchantment.efficiency.effectId, stack)*0.1;
-		return pogoMotion;
+		return 0.5 + EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, stack)*0.1;
 	}
 	
 	@Override
