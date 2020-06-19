@@ -70,6 +70,7 @@ public class MSTags
 		public static final Tag<Item> CRUXITE_STORAGE_BLOCKS = tag("storage_blocks/cruxite");
 		public static final Tag<Item> GRIST_CANDY = tag("grist_candy");
 		public static final Tag<Item> FAYGO = tag("faygo");
+		public static final Tag<Item> WOODEN_STATUES = tag("wooden_statues");
 		public static final Tag<Item> MODUS_CARD = tag("modus_card");
 		
 		private static Tag<Item> tag(String name)
@@ -103,6 +104,7 @@ public class MSTags
 		public static final Tag<EntityType<?>> PAWNS = tag("carapacians/pawn");
 		public static final Tag<EntityType<?>> BISHOPS = tag("carapacians/bishop");
 		public static final Tag<EntityType<?>> ROOKS = tag("carapacians/rook");
+		public static final Tag<EntityType<?>> CITIZENS = tag("carapacians/citizen");
 		
 		private static Tag<EntityType<?>> tag(String name)
 		{

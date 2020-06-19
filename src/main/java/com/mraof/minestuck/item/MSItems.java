@@ -28,6 +28,7 @@ import net.minecraftforge.registries.ObjectHolder;
 import javax.annotation.Nonnull;
 
 import static com.mraof.minestuck.block.MSBlocks.*;
+import static com.mraof.minestuck.block.MSBlocks.PURPLE_COLUMN;
 import static com.mraof.minestuck.player.EnumAspect.BREATH;
 
 /**
@@ -101,6 +102,7 @@ public class MSItems
 	public static final Item RUBY_CROAK = getNull();
 	public static final Item HEPHAESTUS_LUMBERJACK = getNull();
 	public static final Item FISSION_FOCUSED_FAULT_FELLER = getNull();
+	public static final Item BISECTOR = getNull();
 	//Dice
 	public static final Item DICE = getNull();
 	public static final Item FLUORITE_OCTET = getNull();
@@ -125,6 +127,8 @@ public class MSItems
 	public static final Item POGO_CLUB = getNull();
 	public static final Item METAL_BAT = getNull();
 	public static final Item SPIKED_CLUB = getNull();
+	public static final Item KINGS_SCEPTER_WHITE = getNull();
+	public static final Item KINGS_SCEPTER_BLACK = getNull();
 	//canes
 	public static final Item CANE = getNull();
 	public static final Item VAUDEVILLE_HOOK = getNull();
@@ -155,6 +159,7 @@ public class MSItems
 	public static final Item TUNING_FORK = getNull();
 	public static final Item SPORK = getNull();
 	public static final Item GOLDEN_SPORK = getNull();
+	public static final Item BIDENT = getNull();
 	//Material tools
 	public static final Item EMERALD_SWORD = getNull();
 	public static final Item EMERALD_AXE = getNull();
@@ -233,6 +238,7 @@ public class MSItems
 	public static final Item MOON_MIST_FAYGO = getNull();
 	public static final Item PEACH_FAYGO = getNull();
 	public static final Item REDPOP_FAYGO = getNull();
+	public static final Item FOOD_CAN = getNull();
 	public static final Item IRRADIATED_STEAK = getNull();
 	public static final Item SURPRISE_EMBRYO = getNull();
 	public static final Item UNKNOWABLE_EGG = getNull();
@@ -259,6 +265,8 @@ public class MSItems
 	public static final Item CAPTCHAROID_CAMERA = getNull();
 	public static final Item GRIMOIRE = getNull();
 	public static final Item LONG_FORGOTTEN_WARHORN = getNull();
+	public static final Item QUEENS_RING_BLACK = getNull();
+	public static final Item QUEENS_RING_WHITE = getNull();
 	public static final Item RAZOR_BLADE = getNull();
 	public static final Item ICE_SHARD = getNull();
 	public static final Item BATTERY = getNull();
@@ -271,6 +279,8 @@ public class MSItems
 	public static final Item CREW_POSTER = getNull();
 	public static final Item SBAHJ_POSTER = getNull();
 	public static final Item WOODEN_CARROT = getNull();
+	public static final Item BI_DYE = getNull();
+
 	//Music disks
 	public static final Item MUSIC_DISC_EMISSARY_OF_DANCE = getNull();
 	public static final Item MUSIC_DISC_DANCE_STAB_DANCE = getNull();
@@ -293,6 +303,25 @@ public class MSItems
 		registerItemBlock(registry, DARK_GRAY_CHESS_DIRT, MSItemGroup.MAIN);
 		registerItemBlock(registry, LIGHT_GRAY_CHESS_DIRT, MSItemGroup.MAIN);
 		registerItemBlock(registry, SKAIA_PORTAL, MSItemGroup.MAIN);
+
+		registerItemBlock(registry, PROSPIT_TRANSPORTALIZER, MSItemGroup.MAIN);
+		registerItemBlock(registry, DERSE_TRANSPORTALIZER, MSItemGroup.MAIN);
+		registerItemBlock(registry, GOLD_BRICKS, MSItemGroup.MAIN);
+		registerItemBlock(registry, GOLD_BRICK_CHISELED, MSItemGroup.MAIN);
+		registerItemBlock(registry, GOLD_COLUMN, MSItemGroup.MAIN);
+		registerItemBlock(registry, GOLD_TILE_LIGHT, MSItemGroup.MAIN);
+		registerItemBlock(registry, GOLD_TILE_DARK, MSItemGroup.MAIN);
+		registerItemBlock(registry, GOLD_TILE_COLORED, MSItemGroup.MAIN);
+		registerItemBlock(registry, PURPLE_BRICKS, MSItemGroup.MAIN);
+		registerItemBlock(registry, PURPLE_BRICK_CHISELED, MSItemGroup.MAIN);
+		registerItemBlock(registry, PURPLE_COLUMN, MSItemGroup.MAIN);
+		registerItemBlock(registry, PURPLE_TILE_LIGHT, MSItemGroup.MAIN);
+		registerItemBlock(registry, PURPLE_TILE_DARK, MSItemGroup.MAIN);
+		registerItemBlock(registry, PURPLE_TILE_COLORED, MSItemGroup.MAIN);
+		registerItemBlock(registry, GOLD_BRICK_STAIRS, MSItemGroup.MAIN);
+		registerItemBlock(registry, GOLD_BRICK_SLAB, MSItemGroup.MAIN);
+		registerItemBlock(registry, PURPLE_BRICK_STAIRS, MSItemGroup.MAIN);
+		registerItemBlock(registry, PURPLE_BRICK_SLAB, MSItemGroup.MAIN);
 		
 		registerItemBlock(registry, STONE_CRUXITE_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, NETHERRACK_CRUXITE_ORE, MSItemGroup.LANDS);
@@ -352,11 +381,13 @@ public class MSItems
 		registerItemBlock(registry, CRACKED_PINK_STONE_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, MOSSY_PINK_STONE_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, POLISHED_PINK_STONE, MSItemGroup.LANDS);
-		registerItemBlock(registry, GOLD_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, BROWN_DUNGEON_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, BROWN_DUNGEON_COLUMN, MSItemGroup.LANDS);
 		registerItemBlock(registry, BROWN_DUNGEON_TILE, MSItemGroup.LANDS);
 		registerItemBlock(registry, BROWN_DUNGEON_GLYPHS, MSItemGroup.LANDS);
+		registerItemBlock(registry, GREEN_DUNGEON_SMOOTH_STONE, MSItemGroup.LANDS);
+		registerItemBlock(registry, GREEN_DUNGEON_TILE, MSItemGroup.LANDS);
+		registerItemBlock(registry, DENIZEN, MSItemGroup.LANDS);
 		registerItemBlock(registry, DENSE_CLOUD, MSItemGroup.LANDS);
 		registerItemBlock(registry, BRIGHT_DENSE_CLOUD, MSItemGroup.LANDS);
 		registerItemBlock(registry, SUGAR_CUBE, MSItemGroup.LANDS);
@@ -452,8 +483,15 @@ public class MSItems
 		registerItemBlock(registry, INVERTED_VEIN_CORNER, MSItemGroup.LANDS);
 
 		registerItemBlock(registry, NAKAGATOR_STATUE, MSItemGroup.LANDS);
-		registerItemBlock(registry, LOOT_CHEST, MSItemGroup.LANDS);
-		registerItemBlock(registry, WOODEN_LOOT_CHEST, MSItemGroup.LANDS);
+		registerItemBlock(registry, IGUANA_STATUE, MSItemGroup.LANDS);
+		registerItemBlock(registry, SALAMANDER_STATUE, MSItemGroup.LANDS);
+		registerItemBlock(registry, TURTLE_STATUE, MSItemGroup.LANDS);
+		registerItemBlock(registry, WOODEN_NAKAGATOR_STATUE, MSItemGroup.LANDS);
+		registerItemBlock(registry, WOODEN_IGUANA_STATUE, MSItemGroup.LANDS);
+		registerItemBlock(registry, WOODEN_SALAMANDER_STATUE, MSItemGroup.LANDS);
+		registerItemBlock(registry, WOODEN_TURTLE_STATUE, MSItemGroup.LANDS);
+		//registerItemBlock(registry, LOOT_CHEST, MSItemGroup.LANDS);
+		//registerItemBlock(registry, WOODEN_LOOT_CHEST, MSItemGroup.LANDS);
 		
 		registerItemBlock(registry, COARSE_STONE_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, SHADE_BRICK_STAIRS, MSItemGroup.LANDS);
@@ -463,7 +501,6 @@ public class MSItems
 		registerItemBlock(registry, CHALK_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, CHALK_BRICK_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, PINK_STONE_BRICK_STAIRS, MSItemGroup.LANDS);
-		registerItemBlock(registry, GOLD_BRICK_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, RAINBOW_PLANKS_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, END_PLANKS_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, DEAD_PLANKS_STAIRS, MSItemGroup.LANDS);
@@ -582,7 +619,8 @@ public class MSItems
 		registry.register(new WeaponItem(MSItemTypes.RUBY_TIER, 7, -3.0F, 8.0F, MSItemTypes.AXE_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("ruby_croak"));
 		registry.register(new FireWeaponItem(MSItemTypes.RUBY_TIER, 7, -3.0F, 9.0F, 30, MSItemTypes.AXE_TOOL, new Item.Properties().defaultMaxDamage(3000).group(MSItemGroup.WEAPONS)).setRegistryName("hephaestus_lumberjack"));
 		registry.register(new PogoFarmineItem(MSItemTypes.URANIUM_TIER, 7, -3.0F, 5.0F, Integer.MAX_VALUE, 100, 0.7, MSItemTypes.AXE_HAMMER_TOOL, new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS)).setRegistryName("fission_focused_fault_feller"));
-		
+		registry.register(new WeaponItem(ItemTier.IRON, 10, -3.6F, 3.0F, MSItemTypes.AXE_TOOL, new Item.Properties().defaultMaxDamage(400).group(MSItemGroup.WEAPONS)).setRegistryName("bisector"));
+
 		//Dice
 		registry.register(new WeaponItem(ItemTier.STONE, 5, -3.0F, 1.0F, MSItemTypes.NONE, new Item.Properties().defaultMaxDamage(51).group(MSItemGroup.WEAPONS)).setRegistryName("dice"));
 		registry.register(new WeaponItem(ItemTier.DIAMOND, 12, -3.0F, 1.0F, MSItemTypes.NONE, new Item.Properties().defaultMaxDamage(67).group(MSItemGroup.WEAPONS)).setRegistryName("fluorite_octet"));
@@ -608,7 +646,9 @@ public class MSItems
 		registry.register(new PogoWeaponItem(MSItemTypes.POGO_TIER, 2, -2.2F, 2.0F, 0.5, MSItemTypes.MISC_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("pogo_club"));
 		registry.register(new WeaponItem(ItemTier.IRON, 3, -2.2F, 2.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(750).group(MSItemGroup.WEAPONS)).setRegistryName("metal_bat"));
 		registry.register(new WeaponItem(ItemTier.WOOD, 5, -2.2F, 2.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS)).setRegistryName("spiked_club"));
-		
+		registry.register(new WeaponItem(MSItemTypes.REGI_TIER, 4, -2.2F, 4.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS)).setRegistryName("kings_scepter_white"));
+		registry.register(new WeaponItem(MSItemTypes.REGI_TIER, 4, -2.2F, 4.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS)).setRegistryName("kings_scepter_black"));
+
 		//canes
 		registry.register(new WeaponItem(ItemTier.WOOD, 2, -2.0F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(100).group(MSItemGroup.WEAPONS)).setRegistryName("cane"));
 		registry.register(new WeaponItem(ItemTier.WOOD, 2, -2.0F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(150).group(MSItemGroup.WEAPONS)).setRegistryName("vaudeville_hook"));
@@ -641,6 +681,7 @@ public class MSItems
 		registry.register(new NoisyWeaponItem(ItemTier.IRON, 3, -2.2F, 1.0F, () -> SoundEvents.BLOCK_NOTE_BLOCK_CHIME, MSItemTypes.MISC_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("tuning_fork"));
 		registry.register(new WeaponItem(ItemTier.STONE, 4, -2.3F, 1.0F, MSItemTypes.SHOVEL_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("spork"));
 		registry.register(new WeaponItem(ItemTier.GOLD, 5, -2.3F, 1.0F, MSItemTypes.SHOVEL_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("golden_spork"));
+		registry.register(new WeaponItem(ItemTier.IRON, 8, -2.9F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("bident"));
 
 		registry.register(new SwordItem(MSItemTypes.EMERALD_TIER, 3, -2.4F, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("emerald_sword"));
 		registry.register(new ModAxeItem(MSItemTypes.EMERALD_TIER, 5, -3.0F, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("emerald_axe"));
@@ -723,6 +764,7 @@ public class MSItems
 		registry.register(new DrinkableItem(new Item.Properties().maxStackSize(16).group(MSItemGroup.MAIN).food(MSFoods.FAYGO_MOON_MIST)).setRegistryName("moon_mist_faygo"));
 		registry.register(new DrinkableItem(new Item.Properties().maxStackSize(16).group(MSItemGroup.MAIN).food(MSFoods.FAYGO_PEACH)).setRegistryName("peach_faygo"));
 		registry.register(new DrinkableItem(new Item.Properties().maxStackSize(16).group(MSItemGroup.MAIN).food(MSFoods.FAYGO_REDPOP)).setRegistryName("redpop_faygo"));
+		registry.register(new DrinkableItem(new Item.Properties().maxStackSize(16).group(MSItemGroup.MAIN).food(MSFoods.FOOD_CAN)).setRegistryName("food_can"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN).food(MSFoods.IRRADIATED_STEAK)).setRegistryName("irradiated_steak"));
 		registry.register(new SurpriseEmbryoItem(new Item.Properties().group(MSItemGroup.MAIN).food(MSFoods.SURPRISE_EMBRYO)).setRegistryName("surprise_embryo"));
 		registry.register(new UnknowableEggItem(new Item.Properties().maxStackSize(16).group(MSItemGroup.MAIN).food(MSFoods.UNKNOWABLE_EGG)).setRegistryName("unknowable_egg"));
@@ -746,6 +788,8 @@ public class MSItems
 		registry.register(new CaptcharoidCameraItem(new Item.Properties().defaultMaxDamage(64).group(MSItemGroup.MAIN)).setRegistryName("captcharoid_camera"));
 		registry.register(new GrimoireItem(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("grimoire"));
 		registry.register(new LongForgottenWarhornItem(new Item.Properties().defaultMaxDamage(100)).setRegistryName("long_forgotten_warhorn"));
+		registry.register(new Item(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("queens_ring_black"));
+		registry.register(new Item(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("queens_ring_white"));
 		registry.register(new RazorBladeItem(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("razor_blade"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("ice_shard"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("battery"));
@@ -758,6 +802,7 @@ public class MSItems
 		registry.register(new HangingItem((world, pos, facing, stack) -> new CrewPosterEntity(world, pos, facing), new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("crew_poster"));
 		registry.register(new HangingItem((world, pos, facing, stack) -> new SbahjPosterEntity(world, pos, facing), new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("sbahj_poster"));
 		//registry.register(new Item(new Item.Properties().maxStackSize(1)).setRegistryName("fake_arms"));
+		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("bi_dye"));
 		
 		//Music disks
 		registry.register(new ModMusicDiscItem(13, () -> MSSoundEvents.MUSIC_DISC_EMISSARY_OF_DANCE, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_emissary_of_dance"));

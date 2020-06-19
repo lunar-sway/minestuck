@@ -44,6 +44,10 @@ public final class MSEntityTypes
 	public static final EntityType<WhiteBishopEntity> PROSPITIAN_BISHOP = getNull();
 	public static final EntityType<BlackRookEntity> DERSITE_ROOK = getNull();
 	public static final EntityType<WhiteRookEntity> PROSPITIAN_ROOK = getNull();
+
+	public static final EntityType<PassiveCarapacianEntity> PROSPITIAN_CITIZEN = getNull();
+	public static final EntityType<PassiveCarapacianEntity> DERSITE_CITIZEN = getNull();
+	public static final EntityType<PassiveCarapacianEntity> DERSITE_FARMER = getNull();
 	
 	public static final EntityType<GristEntity> GRIST = getNull();
 	public static final EntityType<VitalityGelEntity> VITALITY_GEL = getNull();
@@ -86,7 +90,11 @@ public final class MSEntityTypes
 		register(registry, EntityType.Builder.create(WhiteBishopEntity::new, EntityClassification.MONSTER).size(1.9F, 4.1F), "prospitian_bishop");
 		register(registry, EntityType.Builder.create(BlackRookEntity::new, EntityClassification.MONSTER).size(3.5F, 3.5F), "dersite_rook");
 		register(registry, EntityType.Builder.create(WhiteRookEntity::new, EntityClassification.MONSTER).size(3.5F, 3.5F), "prospitian_rook");
-		
+
+		register(registry, EntityType.Builder.create(DersiteCitizenEntity::new, EntityClassification.CREATURE).size(0.6F, 1.5F), "dersite_citizen");
+		register(registry, EntityType.Builder.create(ProspitianCitizenEntity::new, EntityClassification.CREATURE).size(0.6F, 1.5F), "prospitian_citizen");
+		register(registry, EntityType.Builder.create(DersiteFarmerEntity::new, EntityClassification.CREATURE).size(0.6F, 1.5F), "dersite_farmer");
+
 		register(registry, EntityType.Builder.<GristEntity>create(GristEntity::new, EntityClassification.MISC).size(1 / 3F, 1 / 3F).immuneToFire(), "grist");
 		register(registry, EntityType.Builder.<VitalityGelEntity>create(VitalityGelEntity::new, EntityClassification.MISC).size(1 / 4F, 1 / 4F).immuneToFire(), "vitality_gel");
 		register(registry, EntityType.Builder.<DecoyEntity>create(EntityClassification.MISC).setCustomClientFactory((spawnEntity, world) -> new DecoyEntity(world)).disableSerialization().disableSummoning(), "player_decoy");

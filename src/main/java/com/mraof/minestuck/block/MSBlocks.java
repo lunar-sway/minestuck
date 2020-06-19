@@ -31,6 +31,26 @@ public class MSBlocks
 	//Skaia
 	public static final Block BLACK_CHESS_DIRT = getNull(), WHITE_CHESS_DIRT = getNull(), DARK_GRAY_CHESS_DIRT = getNull(), LIGHT_GRAY_CHESS_DIRT = getNull();
 	public static final Block SKAIA_PORTAL = getNull();
+
+	//Kingdoms
+	public static final Block PROSPIT_TRANSPORTALIZER = getNull();
+	public static final Block DERSE_TRANSPORTALIZER = getNull();
+	public static final Block GOLD_BRICKS = getNull();
+	public static final Block GOLD_BRICK_CHISELED = getNull();
+	public static final Block GOLD_BRICK_STAIRS = getNull();
+	public static final Block GOLD_BRICK_SLAB = getNull();
+	public static final Block GOLD_COLUMN = getNull();
+	public static final Block GOLD_TILE_LIGHT = getNull();
+	public static final Block GOLD_TILE_DARK = getNull();
+	public static final Block GOLD_TILE_COLORED = getNull();
+	public static final Block PURPLE_BRICKS = getNull();
+	public static final Block PURPLE_BRICK_CHISELED = getNull();
+	public static final Block PURPLE_BRICK_STAIRS = getNull();
+	public static final Block PURPLE_BRICK_SLAB = getNull();
+	public static final Block PURPLE_COLUMN = getNull();
+	public static final Block PURPLE_TILE_LIGHT = getNull();
+	public static final Block PURPLE_TILE_DARK = getNull();
+	public static final Block PURPLE_TILE_COLORED = getNull();
 	
 	//Ores
 	public static final Block STONE_CRUXITE_ORE = getNull(), NETHERRACK_CRUXITE_ORE = getNull(), COBBLESTONE_CRUXITE_ORE = getNull(), SANDSTONE_CRUXITE_ORE = getNull();
@@ -119,17 +139,26 @@ public class MSBlocks
 	//Misc Functional Land Blocks
 	
 	//Dungeon Blocks
-	public static final Block GOLD_BRICKS = getNull();
-	public static final Block GOLD_BRICK_STAIRS = getNull();
 	public static final Block BROWN_DUNGEON_BRICKS = getNull(), BROWN_DUNGEON_COLUMN = getNull(), BROWN_DUNGEON_GLYPHS = getNull(), BROWN_DUNGEON_TILE = getNull();
 	public static final Block BROWN_DUNGEON_TILE_SLAB = getNull();
+	public static final Block GREEN_DUNGEON_SMOOTH_STONE = getNull();
+	public static final Block GREEN_DUNGEON_TILE = getNull();
+	public static final Block DENIZEN = getNull();
 
 	//Dungeon Special
-	public static final Block CALEDFWLCH_PEDESTAL_FULL = getNull(), CALEDFWLCH_PEDESTAL_EMPTY = getNull();
+	public static final Block CALEDFWLCH_PEDESTAL = getNull(), EMPTY_CALEDFWLCH_PEDESTAL = getNull();
 	public static final Block NAKAGATOR_STATUE = getNull();
+	public static final Block IGUANA_STATUE = getNull();
+	public static final Block SALAMANDER_STATUE = getNull();
+	public static final Block TURTLE_STATUE = getNull();
+	public static final Block WOODEN_NAKAGATOR_STATUE = getNull();
+	public static final Block WOODEN_IGUANA_STATUE = getNull();
+	public static final Block WOODEN_SALAMANDER_STATUE = getNull();
+	public static final Block WOODEN_TURTLE_STATUE = getNull();
 	public static final Block LOOT_CHEST = getNull();
-	public static final Block LOOT_CHEST_EMPTY = getNull();
+	public static final Block EMPTY_LOOT_CHEST = getNull();
 	public static final Block WOODEN_LOOT_CHEST = getNull();
+	//public static final Block EMPTY_WOODEN_LOOT_CHEST = getNull();
 	
 	//Sburb Machines
 	public static final Block CRUXTRUDER_LID = getNull();
@@ -205,6 +234,25 @@ public class MSBlocks
 		registry.register(new Block(Block.Properties.create(Material.EARTH, MaterialColor.GRAY).hardnessAndResistance(0.5F).harvestTool(ToolType.SHOVEL).sound(SoundType.GROUND)).setRegistryName("dark_gray_chess_dirt"));
 		registry.register(new Block(Block.Properties.create(Material.EARTH, MaterialColor.LIGHT_GRAY).hardnessAndResistance(0.5F).harvestTool(ToolType.SHOVEL).sound(SoundType.GROUND)).setRegistryName("light_gray_chess_dirt"));
 		registry.register(new SkaiaPortalBlock(Block.Properties.create(Material.PORTAL, MaterialColor.CYAN).doesNotBlockMovement().lightValue(11).hardnessAndResistance(-1.0F, 3600000.0F).noDrops()).setRegistryName("skaia_portal"));
+
+		registry.register(new ProspitTransportalizerBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(-1.0F)).setRegistryName("prospit_transportalizer"));
+		registry.register(new ProspitTransportalizerBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(-1.0F)).setRegistryName("derse_transportalizer"));
+		Block goldBricks = register(registry, new Block(Block.Properties.create(Material.ROCK, MaterialColor.YELLOW).hardnessAndResistance(6.0F, 9.0F).harvestTool(ToolType.PICKAXE).lightValue(14).harvestLevel(3)).setRegistryName("gold_bricks"));
+		registry.register(new ModStairsBlock(goldBricks.getDefaultState(), Block.Properties.from(goldBricks)).setRegistryName("gold_brick_stairs"));
+		registry.register(new SlabBlock(Block.Properties.from(goldBricks)).setRegistryName("gold_brick_slab"));
+		registry.register(new Block(Block.Properties.from(goldBricks)).setRegistryName("gold_brick_chiseled"));
+		registry.register(new MSDirectionalBlock(Block.Properties.from(goldBricks)).setRegistryName("gold_column"));
+		registry.register(new Block(Block.Properties.from(goldBricks)).setRegistryName("gold_tile_light"));
+		registry.register(new Block(Block.Properties.from(goldBricks)).setRegistryName("gold_tile_dark"));
+		registry.register(new Block(Block.Properties.from(goldBricks)).setRegistryName("gold_tile_colored"));
+		Block purpleBricks = register(registry, new Block(Block.Properties.create(Material.ROCK, MaterialColor.PURPLE).hardnessAndResistance(6.0F, 9.0F).harvestTool(ToolType.PICKAXE).lightValue(12).harvestLevel(3)).setRegistryName("purple_bricks"));
+		registry.register(new ModStairsBlock(purpleBricks.getDefaultState(), Block.Properties.from(purpleBricks)).setRegistryName("purple_brick_stairs"));
+		registry.register(new SlabBlock(Block.Properties.from(purpleBricks)).setRegistryName("purple_brick_slab"));
+		registry.register(new Block(Block.Properties.from(purpleBricks)).setRegistryName("purple_brick_chiseled"));
+		registry.register(new MSDirectionalBlock(Block.Properties.from(purpleBricks)).setRegistryName("purple_column"));
+		registry.register(new Block(Block.Properties.from(purpleBricks)).setRegistryName("purple_tile_light"));
+		registry.register(new Block(Block.Properties.from(purpleBricks)).setRegistryName("purple_tile_dark"));
+		registry.register(new Block(Block.Properties.from(purpleBricks)).setRegistryName("purple_tile_colored"));
 		
 		registry.register(new CustomOreBlock(2, 5, Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("stone_cruxite_ore"));
 		registry.register(new CustomOreBlock(2, 5, Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("netherrack_cruxite_ore"));
@@ -267,15 +315,16 @@ public class MSBlocks
 		registry.register(new Block(Block.Properties.create(Material.GLASS, MaterialColor.YELLOW).hardnessAndResistance(0.5F).sound(SoundType.SNOW)).setRegistryName("dense_cloud"));
 		registry.register(new Block(Block.Properties.create(Material.GLASS, MaterialColor.LIGHT_GRAY).hardnessAndResistance(0.5F).sound(SoundType.SNOW)).setRegistryName("bright_dense_cloud"));
 		registry.register(new Block(Block.Properties.create(Material.SAND, MaterialColor.SNOW).hardnessAndResistance(0.4F).sound(SoundType.SAND)).setRegistryName("sugar_cube"));
-		
-		Block goldBricks = register(registry, new Block(Block.Properties.create(Material.ROCK, MaterialColor.YELLOW).hardnessAndResistance(2.0F, 10.0F).harvestTool(ToolType.PICKAXE).lightValue(14).harvestLevel(0)).setRegistryName("gold_bricks"));
-		registry.register(new ModStairsBlock(goldBricks.getDefaultState(), Block.Properties.from(goldBricks)).setRegistryName("gold_brick_stairs"));
-		Block brownDungeon = register(registry, new Block(Block.Properties.create(Material.ROCK, MaterialColor.BROWN).hardnessAndResistance(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("brown_dungeon_bricks"));
-		registry.register(new Block(Block.Properties.create(Material.ROCK, MaterialColor.BROWN).hardnessAndResistance(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("brown_dungeon_tile"));
+
+		Block brownDungeon = register(registry, new Block(Block.Properties.create(Material.ROCK, MaterialColor.BROWN).hardnessAndResistance(120.0F)).setRegistryName("brown_dungeon_bricks"));
+		registry.register(new Block(Block.Properties.create(Material.ROCK, MaterialColor.BROWN).hardnessAndResistance(120.0F)).setRegistryName("brown_dungeon_tile"));
 		registry.register(new SlabBlock(Block.Properties.from(brownDungeon)).setRegistryName("brown_dungeon_tile_slab"));
-		registry.register(new MSHorizontalBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(1.5F).sound(SoundType.STONE)).setRegistryName("brown_dungeon_glyphs"));
-		registry.register(new MSDirectionalBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(1.5F).sound(SoundType.STONE)).setRegistryName("brown_dungeon_column"));
-		
+		registry.register(new MSHorizontalBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(120.0F).sound(SoundType.STONE)).setRegistryName("brown_dungeon_glyphs"));
+		registry.register(new MSDirectionalBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(120.0F).sound(SoundType.STONE)).setRegistryName("brown_dungeon_column"));
+		registry.register(new Block(Block.Properties.create(Material.ROCK, MaterialColor.GREEN).hardnessAndResistance(120.0F)).setRegistryName("green_dungeon_smooth_stone"));
+		registry.register(new Block(Block.Properties.create(Material.ROCK, MaterialColor.GREEN).hardnessAndResistance(120.0F)).setRegistryName("green_dungeon_tile"));
+		registry.register(new Block(Block.Properties.create(Material.ROCK, MaterialColor.GREEN).hardnessAndResistance(120.0F)).setRegistryName("denizen"));
+
 		registry.register(new FlammableLogBlock(MaterialColor.LIGHT_BLUE, Block.Properties.create(Material.WOOD, MaterialColor.LIGHT_BLUE).hardnessAndResistance(2.0F).harvestTool(ToolType.AXE).lightValue(11).sound(SoundType.WOOD)).setRegistryName("glowing_log"));
 		registry.register(new FlammableLogBlock(MaterialColor.ICE, Block.Properties.create(Material.WOOD, MaterialColor.ICE).hardnessAndResistance(2.0F).harvestTool(ToolType.AXE).sound(SoundType.WOOD)).setRegistryName("frost_log"));
 		registry.register(new FlammableLogBlock(MaterialColor.WOOD, Block.Properties.create(Material.WOOD).hardnessAndResistance(2.0F).harvestTool(ToolType.AXE).sound(SoundType.WOOD)).setRegistryName("rainbow_log"));
@@ -445,14 +494,21 @@ public class MSBlocks
 		registry.register(new DecorBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F).sound(SoundType.METAL), MSBlockShapes.BLENDER).setRegistryName("blender"));
 		registry.register(new DecorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.5F), MSBlockShapes.CHESSBOARD).setRegistryName("chessboard"));
 		registry.register(new DecorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.5F), MSBlockShapes.FROG_STATUE).setRegistryName("mini_frog_statue"));
-		registry.register(new DecorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(1.0F).sound(SoundType.STONE), MSBlockShapes.NAKAGATOR_STATUE).setRegistryName("nakagator_statue"));
-		registry.register(new DecorBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(-1.0F, 25.0F).sound(SoundType.METAL), MSBlockShapes.CALEDFWLCH_PEDESTAL_EMPTY).setRegistryName("caledfwlch_pedestal_empty"));
-		registry.register(new DecorBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(5.0F).sound(SoundType.METAL), MSBlockShapes.LOOT_CHEST_EMPTY).setRegistryName("loot_chest_empty"));
+		registry.register(new DecorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(6.0F).sound(SoundType.STONE), MSBlockShapes.NAKAGATOR_STATUE).setRegistryName("nakagator_statue"));
+		registry.register(new DecorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(6.0F).sound(SoundType.STONE), MSBlockShapes.IGUANA_STATUE).setRegistryName("iguana_statue"));
+		registry.register(new DecorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(6.0F).sound(SoundType.STONE), MSBlockShapes.SALAMANDER_STATUE).setRegistryName("salamander_statue"));
+		registry.register(new DecorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(6.0F).sound(SoundType.STONE), MSBlockShapes.TURTLE_STATUE).setRegistryName("turtle_statue"));
+		registry.register(new DecorBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD), MSBlockShapes.WOODEN_NAKAGATOR_STATUE).setRegistryName("wooden_nakagator_statue"));
+		registry.register(new DecorBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD), MSBlockShapes.WOODEN_IGUANA_STATUE).setRegistryName("wooden_iguana_statue"));
+		registry.register(new DecorBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD), MSBlockShapes.WOODEN_SALAMANDER_STATUE).setRegistryName("wooden_salamander_statue"));
+		registry.register(new DecorBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD), MSBlockShapes.WOODEN_TURTLE_STATUE).setRegistryName("wooden_turtle_statue"));
+		registry.register(new DecorBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(-1.0F, 25.0F).sound(SoundType.METAL), MSBlockShapes.EMPTY_CALEDFWLCH_PEDESTAL).setRegistryName("empty_caledfwlch_pedestal"));
+		registry.register(new DecorBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(5.0F).sound(SoundType.METAL), MSBlockShapes.EMPTY_LOOT_CHEST).setRegistryName("empty_loot_chest"));
 		registry.register(new GlowystoneWireBlock(Block.Properties.create(Material.MISCELLANEOUS).hardnessAndResistance(0.0F).lightValue(16).doesNotBlockMovement()).setRegistryName("glowystone_dust"));
 
 		registry.register(new LootBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(5.0F).sound(SoundType.METAL), MSBlockShapes.LOOT_CHEST).setRegistryName("loot_chest"));
 		registry.register(new LootBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(5.0F).sound(SoundType.METAL), MSBlockShapes.WOODEN_LOOT_CHEST).setRegistryName("wooden_loot_chest"));
-		registry.register(new LootBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(-1.0F, 25.0F).sound(SoundType.METAL), MSBlockShapes.CALEDFWLCH_PEDESTAL_FULL).setRegistryName("caledfwlch_pedestal_full"));
+		registry.register(new LootBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(-1.0F, 25.0F).sound(SoundType.METAL), MSBlockShapes.CALEDFWLCH_PEDESTAL).setRegistryName("caledfwlch_pedestal"));
 		
 		registry.register(new FlowingModFluidBlock(MSFluids.OIL, new Vec3d(0.0, 0.0, 0.0), 0.75f, Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()).setRegistryName("oil"));
 		registry.register(new FlowingModFluidBlock(MSFluids.BLOOD, new Vec3d(0.8, 0.0, 0.0), 0.25f, Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()).setRegistryName("blood"));

@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:wooden_iguana_statue"
+  },
+  "grist_cost": {
+    "minestuck:build": 20
+  }
+}

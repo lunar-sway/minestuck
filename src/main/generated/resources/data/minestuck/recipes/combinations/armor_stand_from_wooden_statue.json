@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "tag": "minestuck:wooden_statues"
+  },
+  "input2": {
+    "item": "minecraft:item_frame"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:armor_stand"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:salamander_statue"
+  },
+  "grist_cost": {
+    "minestuck:shale": 2,
+    "minestuck:build": 20
+  }
+}

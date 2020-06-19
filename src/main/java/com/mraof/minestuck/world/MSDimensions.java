@@ -26,8 +26,12 @@ public class MSDimensions
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final ResourceLocation SKAIA_ID = new ResourceLocation(Minestuck.MOD_ID, "skaia");
+	private static final ResourceLocation PROSPIT_ID = new ResourceLocation(Minestuck.MOD_ID, "prospit");
+	private static final ResourceLocation DERSE_ID = new ResourceLocation(Minestuck.MOD_ID, "derse");
 	
 	public static DimensionType skaiaDimension;
+	public static DimensionType prospitDimension;
+	public static DimensionType derseDimension;
 	
 	/**
 	 * On server init, this function is called to register dimensions.
@@ -38,6 +42,8 @@ public class MSDimensions
 	{
 		//register dimensions
 		skaiaDimension = DimensionManager.registerOrGetDimension(SKAIA_ID, MSDimensionTypes.SKAIA, null, true);
+		prospitDimension = DimensionManager.registerOrGetDimension(PROSPIT_ID, MSDimensionTypes.PROSPIT, null, true);
+		derseDimension = DimensionManager.registerOrGetDimension(DERSE_ID, MSDimensionTypes.DERSE, null, true);
 	}
 	
 	@SubscribeEvent
@@ -87,5 +93,15 @@ public class MSDimensions
 	public static boolean isSkaia(DimensionType dimension)
 	{
 		return dimension != null && dimension.getModType() == MSDimensionTypes.SKAIA;
+	}
+
+	public static boolean isProspit(DimensionType dimension)
+	{
+		return dimension != null && dimension.getModType() == MSDimensionTypes.PROSPIT;
+	}
+
+	public static boolean isDerse(DimensionType dimension)
+	{
+		return dimension != null && dimension.getModType() == MSDimensionTypes.DERSE;
 	}
 }

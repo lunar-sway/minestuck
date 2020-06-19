@@ -40,16 +40,24 @@ public class MSBlockShapes
 	public static final CustomVoxelShape CHESSBOARD = new CustomVoxelShape(new double[]{0, 0, 0, 16, 1, 16});
 
 	public static final CustomVoxelShape NAKAGATOR_STATUE = new CustomVoxelShape(new double[]{-1, 0, -1, 17, 2, 17}, new double[]{4, 2, 4, 12, 24, 12});
+	public static final CustomVoxelShape IGUANA_STATUE = new CustomVoxelShape(new double[]{-1, 0, -1, 17, 2, 17}, new double[]{4, 2, 4, 12, 24, 12});
+	public static final CustomVoxelShape SALAMANDER_STATUE = new CustomVoxelShape(new double[]{-1, 0, -1, 17, 2, 17}, new double[]{4, 2, 4, 12, 24, 12});
+	public static final CustomVoxelShape TURTLE_STATUE = new CustomVoxelShape(new double[]{-1, 0, -1, 17, 2, 17}, new double[]{4, 2, 4, 12, 24, 12});
+	public static final CustomVoxelShape WOODEN_NAKAGATOR_STATUE = new CustomVoxelShape(new double[]{-1, 0, -1, 17, 2, 17}, new double[]{4, 2, 4, 12, 24, 12});
+	public static final CustomVoxelShape WOODEN_IGUANA_STATUE = new CustomVoxelShape(new double[]{-1, 0, -1, 17, 2, 17}, new double[]{4, 2, 4, 12, 24, 12});
+	public static final CustomVoxelShape WOODEN_SALAMANDER_STATUE = new CustomVoxelShape(new double[]{-1, 0, -1, 17, 2, 17}, new double[]{4, 2, 4, 12, 24, 12});
+	public static final CustomVoxelShape WOODEN_TURTLE_STATUE = new CustomVoxelShape(new double[]{-1, 0, -1, 17, 2, 17}, new double[]{4, 2, 4, 12, 24, 12});
 
-	public static final CustomVoxelShape LOOT_CHEST_EMPTY = new CustomVoxelShape(new double[]{0, 0, 1, 16, 9, 16}, new double[]{0, 9, 2, 16, 12, 15}, new double[]{0, 12, 3, 16, 13, 14}, new double[]{0, 13, 5, 16, 14, 12});
+	public static final CustomVoxelShape EMPTY_LOOT_CHEST = new CustomVoxelShape(new double[]{0, 0, 1, 16, 9, 16}, new double[]{0, 9, 2, 16, 12, 15}, new double[]{0, 12, 3, 16, 13, 14}, new double[]{0, 13, 5, 16, 14, 12});
+	//public static final CustomVoxelShape EMPTY_WOODEN_LOOT_CHEST = new CustomVoxelShape(new double[]{0, 0, 1, 16, 9, 16}, new double[]{0, 9, 2, 16, 12, 15}, new double[]{0, 12, 3, 16, 13, 14}, new double[]{0, 13, 5, 16, 14, 12});
 
-	public static final CustomVoxelShape CALEDFWLCH_PEDESTAL_EMPTY = new CustomVoxelShape(new double[]{0, 0, 0, 16, 1, 16}, new double[]{1, 1, 1, 15, 2, 15}, new double[]{2, 2, 2, 14, 3, 14}, new double[]{3, 3, 3, 13, 4, 13});
+	public static final CustomVoxelShape EMPTY_CALEDFWLCH_PEDESTAL = new CustomVoxelShape(new double[]{0, 0, 0, 16, 1, 16}, new double[]{1, 1, 1, 15, 2, 15}, new double[]{2, 2, 2, 14, 3, 14}, new double[]{3, 3, 3, 13, 4, 13});
 
 	//Loot Blocks
 	public static final CustomVoxelShape LOOT_CHEST = new CustomVoxelShape(new double[]{0, 0, 1, 16, 9, 16}, new double[]{0, 9, 2, 16, 12, 15}, new double[]{0, 12, 3, 16, 13, 14}, new double[]{0, 13, 5, 16, 14, 12});
 	public static final CustomVoxelShape WOODEN_LOOT_CHEST = new CustomVoxelShape(new double[]{0, 0, 1, 16, 9, 16}, new double[]{0, 9, 2, 16, 12, 15}, new double[]{0, 12, 3, 16, 13, 14}, new double[]{0, 13, 5, 16, 14, 12});
 
-	public static final CustomVoxelShape CALEDFWLCH_PEDESTAL_FULL = new CustomVoxelShape(new double[]{0, 0, 0, 16, 1, 16}, new double[]{1, 1, 1, 15, 2, 15}, new double[]{2, 2, 2, 14, 3, 14}, new double[]{3, 3, 3, 13, 4, 13}, new double[]{6, 4, 6, 10, 16, 10});
+	public static final CustomVoxelShape CALEDFWLCH_PEDESTAL = new CustomVoxelShape(new double[]{0, 0, 0, 16, 1, 16}, new double[]{1, 1, 1, 15, 2, 15}, new double[]{2, 2, 2, 14, 3, 14}, new double[]{3, 3, 3, 13, 4, 13}, new double[]{6, 4, 6, 10, 16, 10});
 
 	//Machines
 	public static final CustomVoxelShape ALCHEMITER_CENTER = new CustomVoxelShape(new double[]{0,0,0,16,16,16});
@@ -112,6 +120,8 @@ public static CustomVoxelShape PUNCH_DESIGNIX_TOP_RIGHT = PUNCH_DESIGNIX_TOP_RIG
 	
 	//Misc Machines
 	public static CustomVoxelShape TRANSPORTALIZER = new CustomVoxelShape(new double[]{0,0,0,16,6,16}, new double[]{1,6,1,15,8,15});
+	public static CustomVoxelShape PROSPIT_TRANSPORTALIZER = new CustomVoxelShape(new double[]{0,0,0,16,6,16}, new double[]{1,6,1,15,8,15});
+	public static CustomVoxelShape DERSE_TRANSPORTALIZER = new CustomVoxelShape(new double[]{0,0,0,16,6,16}, new double[]{1,6,1,15,8,15});
 	public static CustomVoxelShape GRIST_WIDGET = new CustomVoxelShape(new double[]{6,0,5,10,1.5,11.7}, new double[]{2.5,1,5.3,13.5,2.1,11.15}, new double[]{10,0,5,14,1.75,12}, new double[]{11,0.3,11.2,13,1.3,12.2}, new double[]{2,0,5,6,1.75,11}, new double[]{6,0,5,4,1.75,7}).rotate(Direction.SOUTH);
 	public static CustomVoxelShape COMPUTER = new CustomVoxelShape(/*mouse*/new double[]{0.5,0,2.5,2.5,1,5}, /*keyboard*/new double[]{3.5,0,0.5,15.5,1,7}, /*base*/new double[]{0.5,0,8.5,15.5,3,15.5}, /*stand*/new double[]{3.5,3,11,12,4.5,13}, /*screen*/new double[]{1,4.5,11.5,15,15.5,12.5});
 	public static CustomVoxelShape LAPTOP_CLOSED = new CustomVoxelShape(new double[]{1,0,3,15,2,14}, new double[]{1,0.5,14,15,1.5,14.5});

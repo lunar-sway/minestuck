@@ -24,6 +24,7 @@ public class MinestuckEntityTypeTagsProvider extends EntityTypeTagsProvider
 		getBuilder(PAWNS).add(DERSITE_PAWN, PROSPITIAN_PAWN);
 		getBuilder(BISHOPS).add(DERSITE_BISHOP, PROSPITIAN_BISHOP);
 		getBuilder(ROOKS).add(DERSITE_ROOK, PROSPITIAN_ROOK);
+		getBuilder(CITIZENS).add(DERSITE_CITIZEN, PROSPITIAN_CITIZEN, DERSITE_FARMER);
 	}
 	
 	@Override

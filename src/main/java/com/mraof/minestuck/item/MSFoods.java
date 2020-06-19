@@ -58,4 +58,5 @@ public class MSFoods
     public static final Food FAYGO_MOON_MIST = (new Food.Builder()).hunger(1).saturation(0.0F).setAlwaysEdible().build();
     public static final Food FAYGO_PEACH = (new Food.Builder()).hunger(1).saturation(0.0F).setAlwaysEdible().build();
     public static final Food FAYGO_REDPOP = (new Food.Builder()).hunger(1).saturation(0.0F).setAlwaysEdible().build();
+    public static final Food FOOD_CAN = (new Food.Builder()).hunger(4).saturation(0.6F).setAlwaysEdible().build();
 }

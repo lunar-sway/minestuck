@@ -102,12 +102,11 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(MOSSY_PINK_STONE_BRICKS);
 		registerDropSelfLootTable(GOLD_BRICKS);
 		registerDropSelfLootTable(BROWN_DUNGEON_BRICKS);
-		registerDropSelfLootTable(BROWN_DUNGEON_COLUMN);
 		registerDropSelfLootTable(BROWN_DUNGEON_TILE);
+		registerDropSelfLootTable(BROWN_DUNGEON_COLUMN);
 		registerDropSelfLootTable(BROWN_DUNGEON_GLYPHS);
-		registerDropSelfLootTable(CALEDFWLCH_PEDESTAL_FULL);
-		registerDropSelfLootTable(CALEDFWLCH_PEDESTAL_EMPTY);
-		registerDropSelfLootTable(LOOT_CHEST);
+		registerDropSelfLootTable(GREEN_DUNGEON_SMOOTH_STONE);
+		registerDropSelfLootTable(GREEN_DUNGEON_TILE);
 		registerDropSelfLootTable(DENSE_CLOUD);
 		registerDropSelfLootTable(BRIGHT_DENSE_CLOUD);
 		registerDropSelfLootTable(SUGAR_CUBE);
@@ -265,6 +264,14 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(BLENDER);
 		registerDropSelfLootTable(CHESSBOARD);
 		registerDropSelfLootTable(MINI_FROG_STATUE);
+		registerDropSelfLootTable(NAKAGATOR_STATUE);
+		registerDropSelfLootTable(IGUANA_STATUE);
+		registerDropSelfLootTable(SALAMANDER_STATUE);
+		registerDropSelfLootTable(TURTLE_STATUE);
+		registerDropSelfLootTable(WOODEN_NAKAGATOR_STATUE);
+		registerDropSelfLootTable(WOODEN_IGUANA_STATUE);
+		registerDropSelfLootTable(WOODEN_SALAMANDER_STATUE);
+		registerDropSelfLootTable(WOODEN_TURTLE_STATUE);
 		registerDropSelfLootTable(GLOWYSTONE_DUST);
 	}
 	

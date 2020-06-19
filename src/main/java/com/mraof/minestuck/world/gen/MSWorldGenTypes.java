@@ -17,6 +17,8 @@ import javax.annotation.Nonnull;
 public class MSWorldGenTypes
 {
 	public static final ChunkGeneratorType<SkaiaGenSettings, SkaiaChunkGenerator> SKAIA = getNull();
+	public static final ChunkGeneratorType<ProspitGenSettings, ProspitChunkGenerator> PROSPIT = getNull();
+	public static final ChunkGeneratorType<DerseGenSettings, DerseChunkGenerator> DERSE = getNull();
 	public static final ChunkGeneratorType<LandGenSettings, LandChunkGenerator> LANDS = getNull();
 	
 	@ObjectHolder(Minestuck.MOD_ID+":lands")
@@ -32,6 +34,8 @@ public class MSWorldGenTypes
 	public static void registerChunkGenerators(RegistryEvent.Register<ChunkGeneratorType<?, ?>> event)
 	{
 		event.getRegistry().register(new ChunkGeneratorType<>(SkaiaChunkGenerator::new, false, SkaiaGenSettings::new).setRegistryName("skaia"));
+		event.getRegistry().register(new ChunkGeneratorType<>(ProspitChunkGenerator::new, false, ProspitGenSettings::new).setRegistryName("prospit"));
+		event.getRegistry().register(new ChunkGeneratorType<>(DerseChunkGenerator::new, false, DerseGenSettings::new).setRegistryName("derse"));
 		event.getRegistry().register(new ChunkGeneratorType<>(LandChunkGenerator::new, false, LandGenSettings::new).setRegistryName("lands"));
 	}
 	

@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "minestuck:block/gold_tile_dark"
+  }
+}

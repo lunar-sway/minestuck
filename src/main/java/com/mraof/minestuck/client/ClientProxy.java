@@ -15,6 +15,7 @@ import com.mraof.minestuck.entity.DecoyEntity;
 import com.mraof.minestuck.entity.EntityBigPart;
 import com.mraof.minestuck.entity.FrogEntity;
 import com.mraof.minestuck.entity.carapacian.BishopEntity;
+import com.mraof.minestuck.entity.carapacian.PassiveCarapacianEntity;
 import com.mraof.minestuck.entity.carapacian.PawnEntity;
 import com.mraof.minestuck.entity.carapacian.RookEntity;
 import com.mraof.minestuck.entity.consort.IguanaEntity;
@@ -63,6 +64,7 @@ public class ClientProxy
 		RenderingRegistry.registerEntityRenderingHandler(UnderlingPartEntity.class, manager -> new ShadowRenderer<>(manager, 2.8F));
 		RenderingRegistry.registerEntityRenderingHandler(EntityBigPart.class, manager -> new ShadowRenderer<>(manager, 0F));
 		RenderingRegistry.registerEntityRenderingHandler(PawnEntity.class, manager -> new PawnRenderer(manager, new BipedModel<>(), 0.5F));
+		RenderingRegistry.registerEntityRenderingHandler(PassiveCarapacianEntity.class, manager -> new CitizenRenderer(manager, new BipedModel<>(), 0.5F));
 		RenderingRegistry.registerEntityRenderingHandler(GristEntity.class, GristRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(VitalityGelEntity.class, VitalityGelRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(DecoyEntity.class, DecoyRenderer::new);

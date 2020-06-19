@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "minestuck:block/green_dungeon_smooth_stone"
+  }
+}
