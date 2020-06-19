@@ -6,6 +6,9 @@ import net.minecraft.potion.Effects;
 
 public class MSFoods
 {
+    //gushers
+    public static final Food PHLEGM_GUSHERS = (new Food.Builder()).hunger(2).saturation(0.2F).setAlwaysEdible().build();
+    public static final Food SORROW_GUSHERS = (new Food.Builder()).hunger(0).saturation(0.0F).setAlwaysEdible().effect(new EffectInstance(Effects.INSTANT_DAMAGE, 0, 0), 1.0F).effect(new EffectInstance(Effects.POISON, 200, 2), 1.0F).build();
     //foods
     public static final Food BUG_ON_A_STICK = (new Food.Builder()).hunger(1).saturation(0.1F).build();
     public static final Food CHOCOLATE_BEETLE = (new Food.Builder()).hunger(3).saturation(0.4F).build();

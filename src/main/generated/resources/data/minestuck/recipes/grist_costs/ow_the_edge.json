@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:ow_the_edge"
+  },
+  "grist_cost": {
+    "minestuck:artifact": -25
+  }
+}

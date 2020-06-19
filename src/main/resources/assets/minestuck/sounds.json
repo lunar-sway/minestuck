@@ -253,6 +253,16 @@
       }
     ]
   },
+  "item.horn.use": {
+    "category": "player",
+    "subtitle": "subtitles.minestuck.horn",
+    "sounds": [
+      {
+        "name": "minestuck:random/horn_honk",
+        "stream": false
+      }
+    ]
+  },
   "item.eeeeeeeeeeee.hit": {
     "category": "ambient",
     "subtitle": "subtitles.minestuck.screech",

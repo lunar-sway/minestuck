@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "minestuck:item/ink_squid_pro_quo"
+  }
+}

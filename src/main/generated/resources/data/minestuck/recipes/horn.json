@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  i",
+    " r ",
+    "w  "
+  ],
+  "key": {
+    "w": {
+      "item": "minecraft:white_wool"
+    },
+    "i": {
+      "tag": "forge:ingots/iron"
+    },
+    "r": {
+      "tag": "forge:rods/wooden"
+    }
+  },
+  "result": {
+    "item": "minestuck:horn"
+  }
+}

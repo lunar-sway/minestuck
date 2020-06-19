@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:ink_squid_pro_quo"
+  },
+  "grist_cost": {
+    "minestuck:tar": 8
+  }
+}

@@ -50,10 +50,11 @@ public class MSSoundEvents
 	public static final SoundEvent ENTITY_GICLOPS_DEATH = getNull();
 	public static final SoundEvent ITEM_LONG_FORGOTTEN_WARHORN_USE = getNull();
 	public static final SoundEvent ITEM_GRIMOIRE_USE = getNull();
+	public static final SoundEvent ITEM_HORN_USE = getNull();
 	public static final SoundEvent ITEM_EEEEEEEEEEEE_HIT = getNull();
 	public static final SoundEvent EVENT_ECHELADDER_INCREASE = getNull();
 	public static final SoundEvent BLOCK_LOOTBLOCK_OPEN = getNull();
-	
+
 	@Nonnull
 	@SuppressWarnings("ConstantConditions")
 	private static <T> T getNull()
@@ -76,9 +77,9 @@ public class MSSoundEvents
 				"entity.basilisk.ambient", "entity.basilisk.hurt", "entity.basilisk.death",
 				"entity.lich.ambient", "entity.lich.hurt", "entity.lich.death",
 				"entity.giclops.ambient", "entity.giclops.hurt", "entity.giclops.death",
-				"item.long_forgotten_warhorn.use", "item.grimoire.use", "item.eeeeeeeeeeee.hit",
-				"event.echeladder.increase", "block.lootblock.open");
-		
+				"item.long_forgotten_warhorn.use", "item.grimoire.use",  "item.horn.use",
+				"item.eeeeeeeeeeee.hit", "event.echeladder.increase","block.lootblock.open");
+
 		for(String path : paths)
 		{
 			ResourceLocation location = new ResourceLocation(Minestuck.MOD_ID, path);

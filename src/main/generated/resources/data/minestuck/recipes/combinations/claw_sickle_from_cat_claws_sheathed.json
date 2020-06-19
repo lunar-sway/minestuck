@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:cat_claws_sheathed"
+  },
+  "input2": {
+    "item": "minestuck:hemeoreaper"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:claw_sickle"
+  }
+}
