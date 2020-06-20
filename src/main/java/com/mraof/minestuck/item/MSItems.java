@@ -104,6 +104,7 @@ public class MSItems
 	public static final Item RUBY_CROAK = getNull();
 	public static final Item HEPHAESTUS_LUMBERJACK = getNull();
 	public static final Item FISSION_FOCUSED_FAULT_FELLER = getNull();
+	public static final Item BISECTOR = getNull();
 	//Dice
 	public static final Item DICE = getNull();
 	public static final Item FLUORITE_OCTET = getNull();
@@ -316,10 +317,7 @@ public class MSItems
 
 	//Other
 	public static final Item CAPTCHAROID_CAMERA = getNull();
-	public static final Item LONG_FORGOTTEN_WARHORN = getNull();
 	public static final Item BARBASOL_BOMB = getNull();
-	public static final Item RAZOR_BLADE = getNull();
-	public static final Item ICE_SHARD = getNull();
 	public static final Item HORN = getNull();
 	public static final Item CAKE_MIX = getNull();
 	public static final Item BI_DYE = getNull();
