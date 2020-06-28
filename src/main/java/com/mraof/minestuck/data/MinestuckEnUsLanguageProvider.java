@@ -194,6 +194,18 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.SPACE_ASPECT_SAPLING, "Space Sapling");
 		add(MSBlocks.TIME_ASPECT_SAPLING, "Time Sapling");
 		add(MSBlocks.VOID_ASPECT_SAPLING, "Void Sapling");
+		addTooltip(MSBlocks.BLOOD_ASPECT_SAPLING, "Not yet implemented");
+		addTooltip(MSBlocks.BREATH_ASPECT_SAPLING, "Not yet implemented");
+		addTooltip(MSBlocks.DOOM_ASPECT_SAPLING, "Not yet implemented");
+		addTooltip(MSBlocks.HEART_ASPECT_SAPLING, "Not yet implemented");
+		addTooltip(MSBlocks.HOPE_ASPECT_SAPLING, "Not yet implemented");
+		addTooltip(MSBlocks.LIFE_ASPECT_SAPLING, "Not yet implemented");
+		addTooltip(MSBlocks.LIGHT_ASPECT_SAPLING, "Not yet implemented");
+		addTooltip(MSBlocks.MIND_ASPECT_SAPLING, "Not yet implemented");
+		addTooltip(MSBlocks.RAGE_ASPECT_SAPLING, "Not yet implemented");
+		addTooltip(MSBlocks.SPACE_ASPECT_SAPLING, "Not yet implemented");
+		addTooltip(MSBlocks.TIME_ASPECT_SAPLING, "Not yet implemented");
+		addTooltip(MSBlocks.VOID_ASPECT_SAPLING, "Not yet implemented");
 		add(MSBlocks.GLOWING_MUSHROOM, "Glowing Mushroom");
 		addStoreTooltip(MSBlocks.GLOWING_MUSHROOM, "This mushroom tastes a bit better than any other around here, according to myself!");
 		add(MSBlocks.DESERT_BUSH, "Desert Bush");
