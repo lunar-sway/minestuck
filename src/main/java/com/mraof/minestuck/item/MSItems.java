@@ -767,7 +767,7 @@ public class MSItems
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.LANDS).food(MSFoods.GRASSHOPPER)).setRegistryName("grasshopper"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.LANDS).food(MSFoods.JAR_OF_BUGS)).setRegistryName("jar_of_bugs"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.LANDS).food(MSFoods.ONION)).setRegistryName("onion"));
-		registry.register(new SoupItem(new Item.Properties().group(MSItemGroup.LANDS)).setRegistryName("salad"));
+		registry.register(new SoupItem(new Item.Properties().group(MSItemGroup.LANDS).food(MSFoods.SALAD).maxStackSize(1)).setRegistryName("salad"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.LANDS).food(MSFoods.DESERT_FRUIT)).setRegistryName("desert_fruit"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.LANDS)).setRegistryName("rock_cookie"));	//Not actually food, but let's pretend it is
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.LANDS).food(MSFoods.WOODEN_CARROT)).setRegistryName("wooden_carrot"));

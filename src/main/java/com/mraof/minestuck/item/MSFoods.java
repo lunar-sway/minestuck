@@ -27,6 +27,7 @@ public class MSFoods
     public static final Food SURPRISE_EMBRYO = (new Food.Builder()).hunger(3).saturation(0.2F).build();
     public static final Food UNKNOWABLE_EGG = (new Food.Builder()).hunger(3).saturation(0.3F).build();
     public static final Food BREADCRUMBS = (new Food.Builder()).hunger(1).saturation(0.1F).fastToEat().build();
+    public static final Food SALAD = new Food.Builder().hunger(1).saturation(0.6F).build();
     //Candies
     public static final Food CANDY_CORN = (new Food.Builder()).hunger(2).saturation(0.3F).build();
     public static final Food BUILD_GUSHERS = (new Food.Builder()).hunger(2).saturation(0.0F).build();
