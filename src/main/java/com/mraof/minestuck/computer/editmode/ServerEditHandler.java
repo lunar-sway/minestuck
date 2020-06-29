@@ -97,6 +97,21 @@ public final class ServerEditHandler
 	 */
 	public static void reset(DamageSource damageSource, float damage, EditData editData)
 	{
+		partialReset(damageSource, damage, editData);
+		
+		if(editData == null)
+			return;
+		
+		MSExtraData data = MSExtraData.get(editData.getEditor().world);
+		data.removeEditData(editData);
+	}
+	
+	public static void partialReset(EditData data)
+	{
+		partialReset(null, 0, data);
+	}
+	private static void partialReset(DamageSource damageSource, float damage, EditData editData)
+	{
 		if(editData == null)
 			return;
 		
@@ -104,8 +119,13 @@ public final class ServerEditHandler
 		
 		editData.recover();	//TODO handle exception from failed recovery
 		
-		MSExtraData data = MSExtraData.get(player.world);
-		data.removeEditData(editData);
+		ServerEditPacket packet = ServerEditPacket.exit();
+		MSPacketHandler.sendToPlayer(packet, player);
+		
+		editData.getDecoy().markedForDespawn = true;
+		
+		if(damageSource != null && damageSource.getImmediateSource() != player)
+			player.attackEntityFrom(damageSource, damage);
 	}
 	
 	public static void newServerEditor(ServerPlayerEntity player, PlayerIdentifier computerOwner, PlayerIdentifier computerTarget)
@@ -584,7 +604,7 @@ public final class ServerEditHandler
 	@SubscribeEvent
 	public static void onServerStopping(FMLServerStoppingEvent event)
 	{
-		MSExtraData.get(event.getServer()).forEachAndClear(ServerEditHandler::reset);
+		MSExtraData.get(event.getServer()).forEachAndClear(ServerEditHandler::partialReset);
 	}
 	
 	@SubscribeEvent
