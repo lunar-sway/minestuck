@@ -22,6 +22,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.GameRules;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -36,7 +37,7 @@ public class CaptchaDeckHandler
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public static void onPlayerDrops(LivingDropsEvent event)
 	{
-		if(!event.getEntity().world.isRemote && event.getEntity() instanceof ServerPlayerEntity)
+		if(!event.getEntity().world.isRemote && !event.getEntity().world.getGameRules().getBoolean(GameRules.KEEP_INVENTORY) && event.getEntity() instanceof ServerPlayerEntity)
 		{
 			dropSylladex((ServerPlayerEntity) event.getEntity());
 		}
