@@ -106,14 +106,6 @@ public final class ServerEditHandler
 		
 		MSExtraData data = MSExtraData.get(player.world);
 		data.removeEditData(editData);
-		
-		ServerEditPacket packet = ServerEditPacket.exit();
-		MSPacketHandler.sendToPlayer(packet, player);
-		
-		editData.getDecoy().markedForDespawn = true;
-		
-		if(damageSource != null && damageSource.getImmediateSource() != player)
-			player.attackEntityFrom(damageSource, damage);
 	}
 	
 	public static void newServerEditor(ServerPlayerEntity player, PlayerIdentifier computerOwner, PlayerIdentifier computerTarget)
@@ -178,6 +170,21 @@ public final class ServerEditHandler
 		player.sendPlayerAbilities();
 		
 		return true;
+	}
+	
+	public static void resendEditmodeStatus(ServerPlayerEntity editor)
+	{
+		EditData data = getData(editor);
+		if(data != null)
+		{
+			ServerEditPacket packet = ServerEditPacket.activate(data.connection.getClientIdentifier().getUsername(), data.connection.centerX, data.connection.centerZ, DeployList.getDeployListTag(editor.getServer(), data.connection));
+			MSPacketHandler.sendToPlayer(packet, editor);
+			data.sendGristCacheToEditor();
+		} else
+		{
+			ServerEditPacket packet = ServerEditPacket.exit();
+			MSPacketHandler.sendToPlayer(packet, editor);
+		}
 	}
 	
 	public static EditData getData(PlayerEntity editor)
