@@ -82,7 +82,7 @@ public class MiniTotemLatheTileEntity extends MachineProcessTileEntity implement
 	
 	private ItemStack createResult()
 	{
-		if(inv.get(0).isEmpty() || inv.get(1).isEmpty() || inv.get(2).isEmpty() || AlchemyHelper.hasDecodedItem(inv.get(2)))
+		if(inv.get(0).isEmpty() && inv.get(1).isEmpty() || inv.get(2).isEmpty() || AlchemyHelper.hasDecodedItem(inv.get(2)))
 			return ItemStack.EMPTY;
 		
 		ItemStack output;
