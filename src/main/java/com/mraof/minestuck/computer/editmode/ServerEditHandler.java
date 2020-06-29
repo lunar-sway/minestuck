@@ -51,6 +51,8 @@ import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -65,7 +67,7 @@ import java.util.UUID;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class ServerEditHandler
 {
-	
+	private static final Logger LOGGER = LogManager.getLogger();
 	public static final ArrayList<String> commands = new ArrayList<>(Arrays.asList("effect", "gamemode", "defaultgamemode", "enchant", "xp", "tp", "spreadplayers", "kill", "clear", "spawnpoint", "setworldspawn", "give"));
 	
 	/**
@@ -84,6 +86,21 @@ public final class ServerEditHandler
 		event.getConnection().useCoordinates = false;
 	}
 	
+	@SubscribeEvent
+	public static void onPlayerCloneEvent(PlayerEvent.Clone event)
+	{
+		EditData prevData = getData(event.getOriginal());
+		if(prevData != null && event.getPlayer() instanceof ServerPlayerEntity)
+		{
+			//take measures to prevent editmode data from ending up with an invalid player entity
+			LOGGER.error("Minestuck failed to prevent death or different cloning event for player {}. Applying measure to reduce problems", event.getPlayer().getName().getFormattedText());
+			
+			MSExtraData data = MSExtraData.get(event.getEntity().world);
+			data.removeEditData(prevData);
+			data.addEditData(new EditData(prevData.getDecoy(), (ServerPlayerEntity) event.getPlayer(), prevData.connection));
+		}
+	}
+	
 	public static void reset(EditData data)
 	{
 		reset(null, 0, data);
@@ -93,7 +110,7 @@ public final class ServerEditHandler
 	 * Called when the server stops editing the clients house.
 	 * @param damageSource If the process was cancelled by the decoy taking damage, this parameter will be the damage source. Else null.
 	 * @param damage If the damageSource isn't null, this is the damage taken, else this parameter is ignored.
-	 * @param editData editdata to identify the editmode session
+	 * @param editData edit-data that identifies the editmode session
 	 */
 	public static void reset(DamageSource damageSource, float damage, EditData editData)
 	{
@@ -106,7 +123,7 @@ public final class ServerEditHandler
 		data.removeEditData(editData);
 	}
 	
-	public static void partialReset(EditData data)
+	private static void partialReset(EditData data)
 	{
 		partialReset(null, 0, data);
 	}
@@ -138,7 +155,7 @@ public final class ServerEditHandler
 		SburbConnection c = SkaianetHandler.get(player.getServer()).getActiveConnection(computerTarget);
 		if(c != null && c.getServerIdentifier().equals(computerOwner) && getData(player.server, c) == null && getData(player) == null)
 		{
-			Debug.info("Activating edit mode on player \""+player.getName()+"\", target player: \""+computerTarget+"\".");
+			Debug.info("Activating edit mode on player \""+player.getName().getFormattedText()+"\", target player: \""+computerTarget+"\".");
 			DecoyEntity decoy = new DecoyEntity((ServerWorld) player.world, player);
 			EditData data = new EditData(decoy, player, c);
 			if(!c.hasEntered())
