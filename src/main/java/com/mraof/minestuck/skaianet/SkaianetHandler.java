@@ -51,10 +51,10 @@ public final class SkaianetHandler
 	private static SkaianetHandler INSTANCE;
 	
 	Map<PlayerIdentifier, GlobalPos> serversOpen = new HashMap<>();
-	private Map<PlayerIdentifier, GlobalPos> resumingClients = new HashMap<>();
-	private Map<PlayerIdentifier, GlobalPos> resumingServers = new HashMap<>();
+	private final Map<PlayerIdentifier, GlobalPos> resumingClients = new HashMap<>();
+	private final Map<PlayerIdentifier, GlobalPos> resumingServers = new HashMap<>();
 	List<SburbConnection> connections = new ArrayList<>();
-	private List<GlobalPos> movingComputers = new ArrayList<>();
+	private final List<GlobalPos> movingComputers = new ArrayList<>();
 	final SessionHandler sessionHandler = new SessionHandler(this);
 	final InfoTracker infoTracker = new InfoTracker(this);
 	/**
@@ -139,7 +139,7 @@ public final class SkaianetHandler
 					serversOpen.put(player, computer);
 				}
 			}
-			else if(otherPlayer != null && getAssociatedPartner(player, false).equals(otherPlayer))	//Wants to resume
+			else if(otherPlayer != null && otherPlayer.equals(getAssociatedPartner(player, false)))	//Wants to resume
 			{
 				if(resumingClients.containsKey(otherPlayer))	//The client is already waiting
 					connectTo(player, computer, false, otherPlayer, resumingClients);
@@ -367,20 +367,22 @@ public final class SkaianetHandler
 	{
 		sessionHandler.read(nbt);
 		
-		String[] s = {"serversOpen", "resumingClients", "resumingServers"};
-		Map<PlayerIdentifier, GlobalPos>[] maps = new Map[]{serversOpen, resumingClients, resumingServers};
-		for(int e = 0; e < 3; e++)
-		{
-			ListNBT list = nbt.getList(s[e], Constants.NBT.TAG_COMPOUND);
-			for(int i = 0; i < list.size(); i++)
-			{
-				CompoundNBT cmp = list.getCompound(i);
-				GlobalPos c = GlobalPos.deserialize(new Dynamic<>(NBTDynamicOps.INSTANCE, cmp.get("computer")));
-				maps[e].put(IdentifierHandler.load(cmp, "player"), c);
-			}
-		}
+		readPlayerComputerList(nbt, serversOpen, "serversOpen");
+		readPlayerComputerList(nbt, resumingClients, "resumingClients");
+		readPlayerComputerList(nbt, resumingServers, "resumingServers");
 		
 		sessionHandler.onLoad();
+	}
+	
+	private void readPlayerComputerList(CompoundNBT nbt, Map<PlayerIdentifier, GlobalPos> map, String key)
+	{
+		ListNBT list = nbt.getList(key, Constants.NBT.TAG_COMPOUND);
+		for(int i = 0; i < list.size(); i++)
+		{
+			CompoundNBT cmp = list.getCompound(i);
+			GlobalPos c = GlobalPos.deserialize(new Dynamic<>(NBTDynamicOps.INSTANCE, cmp.get("computer")));
+			map.put(IdentifierHandler.load(cmp, "player"), c);
+		}
 	}
 	
 	private CompoundNBT write(CompoundNBT compound)
