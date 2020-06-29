@@ -12,6 +12,7 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -374,7 +375,7 @@ public class CaptchaDeckHandler
 		}
 		
 		for(ItemStack stack : stacks)
-			if(!stack.isEmpty())
+			if(!stack.isEmpty() && !EnchantmentHelper.hasVanishingCurse(stack))
 				if(size > cardsToKeep && MinestuckConfig.dropItemsInCards.get())
 				{
 					ItemStack card = AlchemyHelper.createCard(stack, false);
