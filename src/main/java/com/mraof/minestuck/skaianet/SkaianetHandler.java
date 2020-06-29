@@ -30,6 +30,7 @@ import net.minecraftforge.common.util.Constants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -78,6 +79,7 @@ public final class SkaianetHandler
 		return null;
 	}
 	
+	@Nullable
 	public PlayerIdentifier getAssociatedPartner(PlayerIdentifier player, boolean isClient)
 	{
 		for(SburbConnection c : connections)
@@ -240,7 +242,7 @@ public final class SkaianetHandler
 					ConnectionCreatedEvent.ConnectionType type = !c.isMain() && getMainConnection(c.getClientIdentifier(), true) != null
 							? ConnectionCreatedEvent.ConnectionType.SECONDARY : ConnectionCreatedEvent.ConnectionType.REGULAR;
 					MinecraftForge.EVENT_BUS.post(new ConnectionClosedEvent(mcServer, c, sessionHandler.getPlayerSession(c.getClientIdentifier()), type));
-				} else if(getAssociatedPartner(player, isClient).equals(otherPlayer))
+				} else if(otherPlayer.equals(getAssociatedPartner(player, isClient)))
 				{
 					if(movingComputers.contains(isClient?resumingClients.get(player):resumingServers.get(player)))
 						return;
