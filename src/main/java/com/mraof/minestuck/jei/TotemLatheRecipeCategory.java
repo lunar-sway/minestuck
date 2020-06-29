@@ -28,7 +28,7 @@ public class TotemLatheRecipeCategory implements IRecipeCategory<JeiCombination>
 
 	TotemLatheRecipeCategory(IGuiHelper guiHelper)
 	{
-		ResourceLocation totemLatheBackground = new ResourceLocation("minestuck:textures/gui/lathe.png");
+		ResourceLocation totemLatheBackground = new ResourceLocation("minestuck:textures/gui/totem_lathe.png");
 		background = guiHelper.createDrawable(totemLatheBackground, 25, 24, 130, 36);
 		icon = guiHelper.createDrawableIngredient(new ItemStack(MSBlocks.TOTEM_LATHE));
 	}
