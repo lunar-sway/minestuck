@@ -2,6 +2,7 @@ package com.mraof.minestuck.inventory;
 
 import com.mraof.minestuck.computer.editmode.DeployEntry;
 import com.mraof.minestuck.computer.editmode.DeployList;
+import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.EditmodeInventoryPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
@@ -23,7 +24,7 @@ import java.util.List;
 public class EditmodeContainer extends Container
 {
 	
-	private PlayerEntity player;
+	private final PlayerEntity player;
 	public Inventory inventory = new Inventory(14);
 	public ArrayList<ItemStack> items  = new ArrayList<>();
 	private int scroll;
@@ -91,8 +92,11 @@ public class EditmodeContainer extends Container
 	
 	private void updateInventory()
 	{
+		EditData editData = ServerEditHandler.getData(player);
+		if(editData == null)
+			throw new IllegalStateException("Creating an editmode inventory container, but the player is not in editmode");
 		ArrayList<ItemStack> itemList = new ArrayList<>();
-		SburbConnection c = SkaianetHandler.get(player.world).getActiveConnection(ServerEditHandler.getData(player).getTarget());
+		SburbConnection c = SkaianetHandler.get(player.world).getActiveConnection(editData.getTarget());
 		ArrayList<ItemStack> tools = new ArrayList<>();
 		//Fill list with harvestTool items when implemented
 		
