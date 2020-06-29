@@ -39,6 +39,8 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
+import net.minecraftforge.event.entity.living.LivingDamageEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -99,6 +101,20 @@ public final class ServerEditHandler
 			data.removeEditData(prevData);
 			data.addEditData(new EditData(prevData.getDecoy(), (ServerPlayerEntity) event.getPlayer(), prevData.connection));
 		}
+	}
+	
+	@SubscribeEvent
+	public static void onLivingDamage(LivingDamageEvent event)
+	{
+		if(event.getEntity() instanceof ServerPlayerEntity && getData((ServerPlayerEntity) event.getEntity()) != null)
+			event.setCanceled(true);
+	}
+	
+	@SubscribeEvent
+	public static void onLivingDeath(LivingDeathEvent event)
+	{
+		if(event.getEntity() instanceof ServerPlayerEntity && getData((ServerPlayerEntity) event.getEntity()) != null)
+			event.setCanceled(true);
 	}
 	
 	public static void reset(EditData data)
