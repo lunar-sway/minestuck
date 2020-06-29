@@ -504,9 +504,9 @@ public class MSItems
 		
 		registerItemBlock(registry, GLOWY_GOOP, MSItemGroup.LANDS);
 		registerItemBlock(registry, COAGULATED_BLOOD, MSItemGroup.LANDS);
-		registerItemBlock(registry, VEIN, MSItemGroup.LANDS);
-		registerItemBlock(registry, VEIN_CORNER, MSItemGroup.LANDS);
-		registerItemBlock(registry, INVERTED_VEIN_CORNER, MSItemGroup.LANDS);
+		registerItemBlock(registry, VEIN);
+		registerItemBlock(registry, VEIN_CORNER);
+		registerItemBlock(registry, INVERTED_VEIN_CORNER);
 		
 		registerItemBlock(registry, COARSE_STONE_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, SHADE_BRICK_STAIRS, MSItemGroup.LANDS);
