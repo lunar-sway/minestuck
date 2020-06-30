@@ -1,14 +1,15 @@
 package com.mraof.minestuck.world;
 
 import com.mraof.minestuck.client.renderer.LandSkyRenderer;
+import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.MSWorldGenTypes;
+import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.LandTypePair;
@@ -39,9 +40,10 @@ public class LandDimension extends Dimension
 {
 	private LandBiomeHolder biomeHolder;
 	private LandProperties properties;
+	private StructureBlockRegistry blocks;
 	public final LandTypePair landTypes;
 	
-	public LandDimension(World worldIn, DimensionType typeIn, LandTypePair aspects)
+	private LandDimension(World worldIn, DimensionType typeIn, LandTypePair aspects)
 	{
 		super(worldIn, typeIn);
 		
@@ -66,10 +68,14 @@ public class LandDimension extends Dimension
 	private void initLandAspects()
 	{
 		properties = new LandProperties(landTypes.terrain);
-		
 		properties.load(landTypes);
 		
+		blocks = new StructureBlockRegistry();
+		landTypes.terrain.registerBlocks(blocks);
+		landTypes.title.registerBlocks(blocks);
+		
 		biomeHolder = new LandBiomeHolder(properties, landTypes);
+		biomeHolder.initBiomesWith(blocks);
 	}
 	
 	private static final long GENERIC_BIG_PRIME = 661231563202688713L;
@@ -102,6 +108,7 @@ public class LandDimension extends Dimension
 		LandGenSettings settings = MSWorldGenTypes.LANDS.createSettings();
 		settings.setLandTypes(landTypes);
 		settings.setBiomeHolder(biomeHolder);
+		settings.setStructureBlocks(blocks);
 		return MSWorldGenTypes.LANDS.create(this.world, MSWorldGenTypes.LAND_BIOMES.create(MSWorldGenTypes.LAND_BIOMES.createSettings().setGenSettings(settings).setSeed(this.getSeed())), settings);
 	}
 	
