@@ -1367,7 +1367,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("mycelium.2", "No? Is that just me?");
 		addDialogue("adaptation.1", "At first, no one liked the mushrooms when our planet was cursed with the Dank.");
 		addDialogue("adaptation.2", "Those who refused to adapt to the new food source Perished, obviously.");
-		addDialogue("jacket", "It's so damp and cold! I wish I had a jacket!");
+		addDialogue("jacket", "It's so damp and cold. I wish I had a jacket!");
 		addDialogue("mushroom_curse", "Curse %s! And curse all their mushrooms, too! I miss eating crickets instead of all these mushrooms!");
 		addDialogue("fungus_destroyer", "According to legends of old, the %s will come one day and get the evil %s to clear up all this fungus!");
 		//Rainbow
