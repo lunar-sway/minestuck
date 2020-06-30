@@ -603,21 +603,12 @@ public final class SburbHandler
 			else
 			{
 				Session s = SessionHandler.get(player.server).getPlayerSession(identifier);
-				if(s != null)
+				if(s != null && s.getUsedTitles(identifier).contains(title))
 				{
-					for(SburbConnection c : s.connections)
-						if(title.equals(PlayerSavedData.getData(c.getClientIdentifier(), player.server).getTitle()))
-						{    //Title is already used
-							MSPacketHandler.sendToPlayer(new TitleSelectPacket(title), player);
-							return;
-						}
-					for(PredefineData data : s.predefinedPlayers.values())
-						if(title.equals(data.getTitle()))
-						{
-							MSPacketHandler.sendToPlayer(new TitleSelectPacket(title), player);
-							return;
-						}
-				} else Debug.warnf("%s picked a title without being part of a session.", player.getDisplayName());
+					// Title is already used in session; inform the player that they can't pick this title
+					MSPacketHandler.sendToPlayer(new TitleSelectPacket(title), player);
+					return;
+				}
 				
 				PlayerSavedData.getData(identifier, player.server).setTitle(title);
 			}
@@ -629,6 +620,6 @@ public final class SburbHandler
 			EntryProcess process = new EntryProcess();
 			process.onArtifactActivated(player);
 			
-		} else Debug.warnf("%s tried to select a title without entering.", player.getName());
+		} else Debug.warnf("%s tried to select a title without entering.", player.getName().getFormattedText());
 	}
 }
