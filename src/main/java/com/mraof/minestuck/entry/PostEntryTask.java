@@ -1,5 +1,7 @@
-package com.mraof.minestuck.util;
+package com.mraof.minestuck.entry;
 
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.MSNBTUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.server.MinecraftServer;
