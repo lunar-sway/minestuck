@@ -16,8 +16,8 @@ public class HashMapSylladexScreen extends SylladexScreen
 	public static final String EJECT_BY_CHAT_ON = "minestuck.eject_by_chat.on";
 	public static final String EJECT_BY_CHAT_OFF = "minestuck.eject_by_chat.off";
 	
-	private HashMapModus modus;
-	protected Button guiButton;
+	private final HashMapModus modus;
+	private Button guiButton;
 	
 	public HashMapSylladexScreen(Modus modus)
 	{
@@ -35,14 +35,14 @@ public class HashMapSylladexScreen extends SylladexScreen
 	}
 	
 	@Override
-	public void render(int xcor, int ycor, float f)
+	public void render(int mouseX, int mouseY, float f)
 	{
 		guiButton.x = (width - GUI_WIDTH)/2 + 15;
 		guiButton.y = (height - GUI_HEIGHT)/2 + 175;
 		boolean active = MinestuckConfig.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH ? modus.ejectByChat : MinestuckConfig.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.ON;
 		guiButton.setMessage(I18n.format(active ? EJECT_BY_CHAT_ON : EJECT_BY_CHAT_OFF));
 		guiButton.active = MinestuckConfig.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH;
-		super.render(xcor, ycor, f);
+		super.render(mouseX, mouseY, f);
 	}
 	
 	@Override
