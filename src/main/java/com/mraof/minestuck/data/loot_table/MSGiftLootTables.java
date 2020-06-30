@@ -647,10 +647,10 @@ public class MSGiftLootTables implements Consumer<BiConsumer<ResourceLocation, L
 						.addEntry(ItemLootEntry.builder(MSItems.SBAHJ_POSTER).weight(10))
 						.addEntry(ItemLootEntry.builder(MSItems.CREW_POSTER).weight(10))
 						.addEntry(ItemLootEntry.builder(MSItems.THRESH_DVD).weight(10))
-						.addEntry(ItemLootEntry.builder(MSItems.ONION).weight(5)).acceptCondition(ConsortLootCondition.builder(EnumConsort.NAKAGATOR))
-						.addEntry(ItemLootEntry.builder(MSItems.TAB).weight(5)).acceptCondition(ConsortLootCondition.builder(EnumConsort.SALAMANDER))
-						.addEntry(ItemLootEntry.builder(MSItems.JAR_OF_BUGS).weight(5)).acceptCondition(ConsortLootCondition.builder(EnumConsort.TURTLE))
-						.addEntry(ItemLootEntry.builder(MSItems.GRASSHOPPER).weight(5)).acceptCondition(ConsortLootCondition.builder(EnumConsort.IGUANA))));
+						.addEntry(ItemLootEntry.builder(MSItems.ONION).weight(5).acceptCondition(ConsortLootCondition.builder(EnumConsort.NAKAGATOR)))
+						.addEntry(ItemLootEntry.builder(MSItems.TAB).weight(5).acceptCondition(ConsortLootCondition.builder(EnumConsort.SALAMANDER)))
+						.addEntry(ItemLootEntry.builder(MSItems.JAR_OF_BUGS).weight(5).acceptCondition(ConsortLootCondition.builder(EnumConsort.TURTLE)))
+						.addEntry(ItemLootEntry.builder(MSItems.GRASSHOPPER).weight(5).acceptCondition(ConsortLootCondition.builder(EnumConsort.IGUANA)))));
 		
 	}
 	

@@ -25,6 +25,8 @@ import net.minecraft.world.storage.loot.LootParameterSets;
 import net.minecraft.world.storage.loot.LootParameters;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.network.NetworkHooks;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +40,8 @@ import java.util.UUID;
  */
 public abstract class MessageType
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	public static final String MISSING_ITEM = "consort.missing_item";
 	
 	public abstract String getString();
@@ -889,24 +893,24 @@ public abstract class MessageType
 	{
 		protected String nbtName;
 		protected boolean repeat;
-		protected ResourceLocation item;
+		protected ResourceLocation lootTableId;
 		protected int cost;
 		protected MessageType message;
 		
-		public PurchaseMessage(ResourceLocation item, int cost, MessageType message)
+		public PurchaseMessage(ResourceLocation lootTableId, int cost, MessageType message)
 		{
-			this(false, item, cost, message.getString(), message);
+			this(false, lootTableId, cost, message.getString(), message);
 		}
 		
 		/**
 		 * Make sure to use this constructor with a unique name, if the message
 		 * is of a type that uses it's own stored data
 		 */
-		public PurchaseMessage(boolean repeat, ResourceLocation item, int cost, String name, MessageType message)
+		public PurchaseMessage(boolean repeat, ResourceLocation lootTableId, int cost, String name, MessageType message)
 		{
 			this.nbtName = name;
 			this.repeat = repeat;
-			this.item = item;
+			this.lootTableId = lootTableId;
 			this.cost = cost;
 			this.message = message;
 		}
@@ -931,12 +935,18 @@ public abstract class MessageType
 				if(!repeat)
 					nbt.putBoolean(nbtName, true);
 				
-				LootContext.Builder contextBuilder = new LootContext.Builder((ServerWorld) consort.world).withRandom(consort.world.rand).withParameter(LootParameters.THIS_ENTITY, consort).withParameter(LootParameters.POSITION, consort.getPosition());
-				for(ItemStack itemstack : consort.getServer().getLootTableManager().getLootTableFromLocation(item)
-						.generate(contextBuilder.build(LootParameterSets.GIFT)))
+				LootContext.Builder contextBuilder = new LootContext.Builder((ServerWorld) consort.world).withRandom(consort.world.rand)
+						.withParameter(LootParameters.THIS_ENTITY, consort).withParameter(LootParameters.POSITION, consort.getPosition());
+				List<ItemStack> loot = consort.getServer().getLootTableManager().getLootTableFromLocation(lootTableId)
+						.generate(contextBuilder.build(LootParameterSets.GIFT));
+				
+				if(loot.isEmpty())
+					LOGGER.warn("Tried to generate loot from {}, but no items were generated!", lootTableId);
+				
+				for(ItemStack itemstack : loot)
 				{
 					player.entityDropItem(itemstack, 0.0F);
-					MSCriteriaTriggers.CONSORT_ITEM.trigger(player, item.toString(), itemstack, consort);
+					MSCriteriaTriggers.CONSORT_ITEM.trigger(player, lootTableId.toString(), itemstack, consort);
 				}
 				
 				return message.getMessage(consort, player, chainIdentifier);
