@@ -36,7 +36,6 @@ public class PogoWeaponItem extends WeaponItem
 	
 	private double getPogoMotion(ItemStack stack)
 	{
-//		return 0.5 + EnchantmentHelper.getEnchantmentLevel(Enchantment.efficiency.effectId, stack)*0.1;
 		return pogoMotion;
 	}
 	
@@ -51,7 +50,7 @@ public class PogoWeaponItem extends WeaponItem
 		if (player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder() && !player.isInWater() && !player.isPassenger())
 		{
 			double knockbackModifier = 1D - target.getAttributes().getAttributeInstance(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getValue();
-			double targetMotionY = Math.max(target.getMotion().y, knockbackModifier * Math.min(pogoMotion* 2, Math.abs(player.getMotion().y) + target.getMotion().y + pogoMotion));
+			double targetMotionY = Math.max(target.getMotion().y, knockbackModifier * Math.min(pogoMotion* 2, Math.abs(player.getMotion().y) + target.getMotion().y + (pogoMotion * ((EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, stack)*0.15)+1))));
 			target.setMotion(target.getMotion().x, targetMotionY, target.getMotion().z);
 			player.setMotion(player.getMotion().x, 0, player.getMotion().z);
 			player.fallDistance = 0;
@@ -65,7 +64,7 @@ public class PogoWeaponItem extends WeaponItem
 			double playerMotionX;
 			double playerMotionY;
 			double playerMotionZ;
-			double velocity = Math.max(player.getMotion().y, Math.min(pogoMotion * 2, Math.abs(player.getMotion().y) + pogoMotion));
+			double velocity = Math.max(player.getMotion().y, Math.min(pogoMotion * 2, Math.abs(player.getMotion().y) + (pogoMotion * ((EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, stack)*0.15)+1))));
 			final float HORIZONTAL_Y = 6f;
 			switch (facing.getAxis())
 			{
