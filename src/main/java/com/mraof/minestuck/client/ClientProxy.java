@@ -23,7 +23,6 @@ import com.mraof.minestuck.entity.consort.SalamanderEntity;
 import com.mraof.minestuck.entity.consort.TurtleEntity;
 import com.mraof.minestuck.entity.item.*;
 import com.mraof.minestuck.entity.underling.*;
-import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.tileentity.GateTileEntity;
 import com.mraof.minestuck.tileentity.HolopadTileEntity;
 import com.mraof.minestuck.tileentity.SkaiaPortalTileEntity;
