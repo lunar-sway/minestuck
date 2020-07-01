@@ -1,4 +1,4 @@
-package com.mraof.minestuck.util;
+package com.mraof.minestuck.entry;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.GateBlock;
@@ -12,6 +12,7 @@ import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.tileentity.GateTileEntity;
 import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
+import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.MSExtraData;
@@ -37,17 +38,24 @@ import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
-import java.util.logging.Logger;
+import java.util.*;
 
 import static com.mraof.minestuck.MinestuckConfig.artifactRange;
 
 public class EntryProcess
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
+	private static final Set<EntryBlockProcessing> blockProcessors = new HashSet<>();
+	
+	public static void addBlockProcessing(EntryBlockProcessing processing)
+	{
+		blockProcessors.add(processing);
+	}
+	
 	private int xDiff;
 	private int yDiff;
 	private int zDiff;
@@ -123,7 +131,7 @@ public class EntryProcess
 			}
 		} catch(Exception e)
 		{
-			Debug.logger.error("Exception when "+player.getName()+" tried to enter their land.", e);
+			LOGGER.error("Exception when {} tried to enter their land.", player.getName().getFormattedText(), e);
 			player.sendMessage(new StringTextComponent("[Minestuck] Something went wrong during entry. "+ (player.getServer().isDedicatedServer()?"Check the console for the error message.":"Notify the server owner about this.")).setStyle(new Style().setColor(TextFormatting.RED)));
 		}
 	}
@@ -133,7 +141,7 @@ public class EntryProcess
 		
 		blockMoves = new HashSet<>();
 		
-		Debug.infof("Starting entry for player %s", player.getName());
+		LOGGER.info("Starting entry for player {}", player.getName().getFormattedText());
 		int x = origin.getX();
 		int y = origin.getY();
 		int z = origin.getZ();
@@ -147,7 +155,7 @@ public class EntryProcess
 		xDiff = 0 - x;
 		zDiff = 0 - z;
 		
-		Debug.debug("Loading block movements...");
+		LOGGER.debug("Loading block movements...");
 		long time = System.currentTimeMillis();
 		int bl = 0;
 		boolean foundComputer = false;
@@ -203,7 +211,7 @@ public class EntryProcess
 			}
 		}
 		
-		if(foundComputer == false && MinestuckConfig.needComputer.get())
+		if(!foundComputer && MinestuckConfig.needComputer.get())
 		{
 			player.sendStatusMessage(new StringTextComponent("There is no computer in range."), false);
 			return false;
@@ -217,7 +225,7 @@ public class EntryProcess
 		//This is split into two sections because moves that require block updates should happen after the ones that don't.
 		//This helps to ensure that "anchored" blocks like torches still have the blocks they are anchored to when they update.
 		//Some blocks like this (confirmed for torches, rails, and glowystone) will break themselves if they update without their anchor.
-		Debug.debug("Moving blocks...");
+		LOGGER.debug("Moving blocks...");
 		HashSet<BlockMove> blockMoves2 = new HashSet<>();
 		for(BlockMove move : blockMoves)
 		{
@@ -241,7 +249,7 @@ public class EntryProcess
 			int y = origin.getY();
 			int z = origin.getZ();
 			
-			Debug.debug("Teleporting entities...");
+			LOGGER.debug("Teleporting entities...");
 			//The fudge here is to ensure that the AABB will always contain every entity meant to be moved.
 			// As entities outside the radius will be excluded from transport anyway, this is fine.
 			AxisAlignedBB entityTeleportBB = player.getBoundingBox().grow(artifactRange.get() + 0.5);
@@ -280,7 +288,7 @@ public class EntryProcess
 				}
 			}
 			
-			Debug.debug("Removing original blocks");
+			LOGGER.debug("Removing original blocks");
 			for(BlockMove move : blockMoves)
 			{
 				removeTileEntity(worldserver0, move.source, creative);	//Tile entities need special treatment
@@ -303,7 +311,7 @@ public class EntryProcess
 			// This is usually caused by "anchored" blocks being updated between the removal of their anchor and their own removal.
 			if(!creative || MinestuckConfig.entryCrater.get())
 			{
-				Debug.debug("Removing entities left in the crater...");
+				LOGGER.debug("Removing entities left in the crater...");
 				List<Entity> removalList = worldserver0.getEntitiesWithinAABBExcludingEntity(player, entityTeleportBB);
 				
 				//We check if the old list contains the entity, because that means it was there before the entities were teleported and blocks removed.
@@ -330,7 +338,7 @@ public class EntryProcess
 				}
 			}
 			
-			Debug.debug("Placing gates...");
+			LOGGER.debug("Placing gates...");
 			
 			placeGate(GateHandler.Type.GATE_1, new BlockPos(x + xDiff, GateHandler.gateHeight1, z + zDiff), worldserver1);
 			placeGate(GateHandler.Type.GATE_2, new BlockPos(x + xDiff, GateHandler.gateHeight2, z + zDiff), worldserver1);
@@ -339,7 +347,7 @@ public class EntryProcess
 			
 			MSDimensions.getLandInfo(worldserver1).setSpawn(MathHelper.floor(player.posY));
 			
-			Debug.info("Entry finished");
+			LOGGER.info("Entry finished");
 		}
 	}
 	
@@ -363,12 +371,8 @@ public class EntryProcess
 				try {
 					worldserver0.removeTileEntity(pos);
 					worldserver0.removeBlock(pos, true);
-				} catch (NullPointerException e) {
-					Logger.getGlobal().warning("Null Pointer Exception encountered when removing " + name + ". "
-							+ "Notify the mod author that the block should make a null check on its tile entity when broken.");
 				} catch (Exception e) {
-					Logger.getGlobal().warning("Unknown Exception encountered when removing " + name + ". "
-							+ "Notify a Minestuck dev of this error.");
+					LOGGER.warn("Exception encountered when removing tile entity " + name + " during entry:", e);
 				}
 			} else
 			{
@@ -424,7 +428,7 @@ public class EntryProcess
 	 */
 	private static int getTopHeight(ServerWorld world, int x, int y, int z)
 	{
-		Debug.debug("Getting maxY..");
+		LOGGER.debug("Getting maxY..");
 		int maxY = y;
 		for(int blockX = x - artifactRange.get(); blockX <= x + artifactRange.get(); blockX++)
 		{
@@ -441,7 +445,7 @@ public class EntryProcess
 			}
 		}
 		
-		Debug.debug("maxY: "+ maxY);
+		LOGGER.debug("maxY: {}", maxY);
 		return maxY;
 	}
 	
@@ -457,13 +461,13 @@ public class EntryProcess
 			else world.setBlockState(pos.add((i % 3) - 1, 0, i/3 - 1), MSBlocks.GATE.getDefaultState(), 0);
 	}
 	
-	private class BlockMove
+	private static class BlockMove
 	{
-		Chunk chunkFrom;
-		BlockPos source;
-		BlockPos dest;
-		private BlockState block = null;
-		private boolean update;
+		private final Chunk chunkFrom;
+		private final BlockPos source;
+		private final BlockPos dest;
+		private final BlockState block;
+		private final boolean update;
 		
 		BlockMove(Chunk c, BlockPos src, BlockPos dst, BlockState b, boolean u)
 		{
@@ -493,6 +497,7 @@ public class EntryProcess
 			}
 			
 			TileEntity tileEntity = chunkFrom.getTileEntity(source, Chunk.CreateEntityType.CHECK);
+			TileEntity newTE = null;
 			if(tileEntity != null)
 			{
 				CompoundNBT nbt = new CompoundNBT();
@@ -500,12 +505,16 @@ public class EntryProcess
 				nbt.putInt("x", dest.getX());
 				nbt.putInt("y", dest.getY());
 				nbt.putInt("z", dest.getZ());
-				TileEntity te1 = TileEntity.create(nbt);
-				if(te1 != null)
-					chunkTo.addTileEntity(dest, te1);
-				else Debug.warnf("Unable to create a new tile entity %s when teleporting blocks to the medium!", tileEntity.getType().getRegistryName());
-				if(tileEntity instanceof ComputerTileEntity)
-					SkaianetHandler.get(world).movingComputer((ComputerTileEntity) tileEntity, (ComputerTileEntity) te1);
+				newTE = TileEntity.create(nbt);
+				if(newTE != null)
+					chunkTo.addTileEntity(dest, newTE);
+				else LOGGER.warn("Unable to create a new tile entity {} when teleporting blocks to the medium!", tileEntity.getType().getRegistryName());
+				
+			}
+			
+			for(EntryBlockProcessing processing : blockProcessors)
+			{
+				processing.copyOver((ServerWorld) chunkFrom.getWorld(), source, world, dest, block, tileEntity, newTE);
 			}
 		}
 	}

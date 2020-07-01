@@ -1,9 +1,8 @@
 package com.mraof.minestuck.entity.item;
 
-import com.google.common.graph.Network;
+import com.mraof.minestuck.client.renderer.entity.RendersAsItem;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.IRendersAsItem;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileItemEntity;
 import net.minecraft.item.Item;
@@ -13,7 +12,7 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BarbasolBombEntity extends ProjectileItemEntity implements IRendersAsItem
+public class BarbasolBombEntity extends ProjectileItemEntity implements RendersAsItem
 {
     public BarbasolBombEntity(EntityType<? extends BarbasolBombEntity> type, World worldIn)
     {

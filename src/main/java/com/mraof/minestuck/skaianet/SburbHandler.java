@@ -2,6 +2,7 @@ package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
+import com.mraof.minestuck.entry.EntryProcess;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
@@ -13,7 +14,6 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.EntryProcess;
 import com.mraof.minestuck.util.MinestuckRandom;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
@@ -499,11 +499,17 @@ public final class SburbHandler
 		
 		if(titleLandType == null)
 		{
-			titleLandType = Generator.generateWeightedTitleLandType(session, title.getHeroAspect(), terrainLandType, connection.getClientIdentifier());
-			if(terrainLandType != null && titleLandType == LandTypes.TITLE_NULL)
+			if(title.getHeroAspect() == EnumAspect.SPACE && !session.getUsedTitleLandTypes().contains(LandTypes.FROGS) &&
+					(terrainLandType == null || LandTypes.FROGS.isAspectCompatible(terrainLandType)))
+				titleLandType = LandTypes.FROGS;
+			else
 			{
-				Debug.warnf("Failed to find a title land aspect compatible with land aspect \"%s\". Forced to use a poorly compatible land aspect instead.", terrainLandType.getRegistryName());
-				titleLandType = Generator.generateWeightedTitleLandType(session, title.getHeroAspect(), null, connection.getClientIdentifier());
+				titleLandType = Generator.generateWeightedTitleLandType(session, title.getHeroAspect(), terrainLandType, connection.getClientIdentifier());
+				if(terrainLandType != null && titleLandType == LandTypes.TITLE_NULL)
+				{
+					Debug.warnf("Failed to find a title land aspect compatible with land aspect \"%s\". Forced to use a poorly compatible land aspect instead.", terrainLandType.getRegistryName());
+					titleLandType = Generator.generateWeightedTitleLandType(session, title.getHeroAspect(), null, connection.getClientIdentifier());
+				}
 			}
 		}
 		if(terrainLandType == null)
@@ -597,21 +603,12 @@ public final class SburbHandler
 			else
 			{
 				Session s = SessionHandler.get(player.server).getPlayerSession(identifier);
-				if(s != null)
+				if(s != null && s.getUsedTitles(identifier).contains(title))
 				{
-					for(SburbConnection c : s.connections)
-						if(title.equals(PlayerSavedData.getData(c.getClientIdentifier(), player.server).getTitle()))
-						{    //Title is already used
-							MSPacketHandler.sendToPlayer(new TitleSelectPacket(title), player);
-							return;
-						}
-					for(PredefineData data : s.predefinedPlayers.values())
-						if(title.equals(data.getTitle()))
-						{
-							MSPacketHandler.sendToPlayer(new TitleSelectPacket(title), player);
-							return;
-						}
-				} else Debug.warnf("%s picked a title without being part of a session.", player.getDisplayName());
+					// Title is already used in session; inform the player that they can't pick this title
+					MSPacketHandler.sendToPlayer(new TitleSelectPacket(title), player);
+					return;
+				}
 				
 				PlayerSavedData.getData(identifier, player.server).setTitle(title);
 			}
@@ -623,6 +620,6 @@ public final class SburbHandler
 			EntryProcess process = new EntryProcess();
 			process.onArtifactActivated(player);
 			
-		} else Debug.warnf("%s tried to select a title without entering.", player.getName());
+		} else Debug.warnf("%s tried to select a title without entering.", player.getName().getFormattedText());
 	}
 }

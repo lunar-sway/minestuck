@@ -47,7 +47,6 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 		blockRegistry = Objects.requireNonNull(settings.getBlockRegistry());
 		
 		biomeHolder = Objects.requireNonNull(settings.getBiomeHolder());
-		biomeHolder.initBiomesWith(settings);
 	}
 	
 	@Override

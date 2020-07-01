@@ -78,7 +78,7 @@ public class PogoWeaponItem extends WeaponItem
 					break;
 				case Y:
 					playerMotionY = velocity * facing.getDirectionVec().getY();
-					player.setMotion(player.getMotion().x, playerMotionY, player.getMotion().y);
+					player.setMotion(player.getMotion().x, playerMotionY, player.getMotion().z);
 					break;
 				case Z:
 					velocity += Math.abs(player.getMotion().z) / 2;

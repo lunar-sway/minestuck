@@ -7,6 +7,9 @@ import com.mraof.minestuck.computer.editmode.DeployList;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortDialogue;
 import com.mraof.minestuck.entity.consort.ConsortRewardHandler;
+import com.mraof.minestuck.entry.ComputerBlockProcess;
+import com.mraof.minestuck.entry.EntryProcess;
+import com.mraof.minestuck.entry.RSEntryBlockProcess;
 import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.ModMusicDiscItem;
@@ -18,6 +21,7 @@ import com.mraof.minestuck.world.gen.MSSurfaceBuilders;
 import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.WorldPersistenceHooks;
 import net.minecraftforge.fml.common.Mod;
@@ -78,6 +82,10 @@ public class Minestuck
 		
 		ProgramData.registerProgram(0, new ItemStack(MSItems.CLIENT_DISK), ProgramData::onClientClosed);	//This idea was kind of bad and should be replaced
 		ProgramData.registerProgram(1, new ItemStack(MSItems.SERVER_DISK), ProgramData::onServerClosed);
+		
+		EntryProcess.addBlockProcessing(new ComputerBlockProcess());
+		if(ModList.get().isLoaded("refinedstorage"))
+			EntryProcess.addBlockProcessing(new RSEntryBlockProcess());
 		
 		SessionHandler.maxSize = 144;//acceptTitleCollision?(generateSpecialClasses?168:144):12;
 	}

@@ -12,24 +12,16 @@ public class MiniTotemLatheScreen extends MachineScreen<MiniTotemLatheContainer>
 	private static final ResourceLocation BACKGROUND = new ResourceLocation("minestuck:textures/gui/totem_lathe.png");
 	private static final ResourceLocation PROGRESS = new ResourceLocation("minestuck:textures/gui/progress/totem_lathe.png");
 	
-	private int progressX;
-	private int progressY;
-	private int progressWidth;
-	private int progressHeight;
-	private int goX;
-	private int goY;
+	private static final int progressX = 81;
+	private static final int progressY = 33;
+	private static final int progressWidth = 44;
+	private static final int progressHeight = 17;
+	private static final int goX = 85;
+	private static final int goY = 53;
 	
 	public MiniTotemLatheScreen(MiniTotemLatheContainer screenContainer, PlayerInventory inv, ITextComponent titleIn)
 	{
 		super(MiniTotemLatheTileEntity.TYPE, screenContainer, inv, titleIn);
-		
-		//sets progress bar information
-		progressX = 81;
-		progressY = 33;
-		progressWidth = 44;
-		progressHeight = 17;
-		goX = 85;
-		goY = 53;
 	}
 	
 	@Override
@@ -62,14 +54,15 @@ public class MiniTotemLatheScreen extends MachineScreen<MiniTotemLatheContainer>
 		//draw progress bar
 		this.minecraft.getTextureManager().bindTexture(PROGRESS);
 		int width = getScaledValue(container.getProgress(), MiniTotemLatheTileEntity.DEFAULT_MAX_PROGRESS, progressWidth);
-		int height = progressHeight;
-		blit(x + progressX, y + progressY, 0, 0, width, height, progressWidth, progressHeight);
+		blit(x + progressX, y + progressY, 0, 0, width, progressHeight, progressWidth, progressHeight);
 	}
 
 	@Override
 	public void init()
 	{
 		super.init();
+		
 		goButton = new GoButton((width - xSize) / 2 + goX, (height - ySize) / 2 + goY, 30, 12, container.overrideStop() ? "STOP" : "GO");
+		addButton(goButton);
 	}
 }

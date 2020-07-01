@@ -12,6 +12,7 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -22,6 +23,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.GameRules;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -36,7 +38,7 @@ public class CaptchaDeckHandler
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public static void onPlayerDrops(LivingDropsEvent event)
 	{
-		if(!event.getEntity().world.isRemote && event.getEntity() instanceof ServerPlayerEntity)
+		if(!event.getEntity().world.isRemote && !event.getEntity().world.getGameRules().getBoolean(GameRules.KEEP_INVENTORY) && event.getEntity() instanceof ServerPlayerEntity)
 		{
 			dropSylladex((ServerPlayerEntity) event.getEntity());
 		}
@@ -373,7 +375,7 @@ public class CaptchaDeckHandler
 		}
 		
 		for(ItemStack stack : stacks)
-			if(!stack.isEmpty())
+			if(!stack.isEmpty() && !EnchantmentHelper.hasVanishingCurse(stack))
 				if(size > cardsToKeep && MinestuckConfig.dropItemsInCards.get())
 				{
 					ItemStack card = AlchemyHelper.createCard(stack, false);

@@ -194,6 +194,18 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.SPACE_ASPECT_SAPLING, "Space Sapling");
 		add(MSBlocks.TIME_ASPECT_SAPLING, "Time Sapling");
 		add(MSBlocks.VOID_ASPECT_SAPLING, "Void Sapling");
+		addTooltip(MSBlocks.BLOOD_ASPECT_SAPLING, "Not yet implemented");
+		addTooltip(MSBlocks.BREATH_ASPECT_SAPLING, "Not yet implemented");
+		addTooltip(MSBlocks.DOOM_ASPECT_SAPLING, "Not yet implemented");
+		addTooltip(MSBlocks.HEART_ASPECT_SAPLING, "Not yet implemented");
+		addTooltip(MSBlocks.HOPE_ASPECT_SAPLING, "Not yet implemented");
+		addTooltip(MSBlocks.LIFE_ASPECT_SAPLING, "Not yet implemented");
+		addTooltip(MSBlocks.LIGHT_ASPECT_SAPLING, "Not yet implemented");
+		addTooltip(MSBlocks.MIND_ASPECT_SAPLING, "Not yet implemented");
+		addTooltip(MSBlocks.RAGE_ASPECT_SAPLING, "Not yet implemented");
+		addTooltip(MSBlocks.SPACE_ASPECT_SAPLING, "Not yet implemented");
+		addTooltip(MSBlocks.TIME_ASPECT_SAPLING, "Not yet implemented");
+		addTooltip(MSBlocks.VOID_ASPECT_SAPLING, "Not yet implemented");
 		add(MSBlocks.GLOWING_MUSHROOM, "Glowing Mushroom");
 		addStoreTooltip(MSBlocks.GLOWING_MUSHROOM, "This mushroom tastes a bit better than any other around here, according to myself!");
 		add(MSBlocks.DESERT_BUSH, "Desert Bush");
@@ -641,6 +653,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addExtra(MSItems.SURPRISE_EMBRYO, "message", "WOW! NO WAY! You found a %s inside your Surprise Embryo!");
 		add(MSItems.UNKNOWABLE_EGG, "The Egg of Unknowable, Horrible Truths");
 		addTooltip(MSItems.UNKNOWABLE_EGG, "This egg somehow knows your name.");
+		add(MSItems.BREADCRUMBS, "Breadcrumbs");
 		add(MSItems.GOLDEN_GRASSHOPPER, "Golden Grasshopper");
 		add(MSItems.BUG_NET, "Net");
 		addTooltip(MSItems.BUG_NET, "Perfect for catching bugs and frogs!");
@@ -1355,7 +1368,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("mycelium.2", "No? Is that just me?");
 		addDialogue("adaptation.1", "At first, no one liked the mushrooms when our planet was cursed with the Dank.");
 		addDialogue("adaptation.2", "Those who refused to adapt to the new food source Perished, obviously.");
-		addDialogue("jacket", "It's so damp and cold! I wish I had a jacket!");
+		addDialogue("jacket", "It's so damp and cold. I wish I had a jacket!");
 		addDialogue("mushroom_curse", "Curse %s! And curse all their mushrooms, too! I miss eating crickets instead of all these mushrooms!");
 		addDialogue("fungus_destroyer", "According to legends of old, the %s will come one day and get the evil %s to clear up all this fungus!");
 		//Rainbow

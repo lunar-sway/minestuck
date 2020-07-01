@@ -1,9 +1,10 @@
 package com.mraof.minestuck.world.biome;
 
-import com.mraof.minestuck.world.gen.LandGenSettings;
+import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import net.minecraft.entity.EntityClassification;
+import net.minecraft.entity.EntityType;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.Feature;
@@ -29,9 +30,8 @@ public class LandWrapperBiome extends LandBiome
 		this.staticBiome = biome;
 	}
 	
-	public void init(LandGenSettings settings)
+	public void init(StructureBlockRegistry blocks, EntityType<? extends ConsortEntity> consortType)
 	{
-		StructureBlockRegistry blocks = settings.getBlockRegistry();
 		if(generateCruxiteOre.get())
 		{
 			addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, createDecoratedFeature(Feature.ORE, new OreFeatureConfig(blocks.getGroundType(), blocks.getBlockState("cruxite_ore"), baseCruxiteVeinSize), Placement.COUNT_RANGE, new CountRangeConfig(cruxiteVeinsPerChunk, cruxiteStratumMin, cruxiteStratumMin, cruxiteStratumMax)));
@@ -40,8 +40,8 @@ public class LandWrapperBiome extends LandBiome
 		{
 			addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, createDecoratedFeature(Feature.ORE, new OreFeatureConfig(blocks.getGroundType(), blocks.getBlockState("uranium_ore"), baseUraniumVeinSize), Placement.COUNT_RANGE, new CountRangeConfig(uraniumVeinsPerChunk, uraniumStratumMin, uraniumStratumMin, uraniumStratumMax)));
 		}
-		this.surfaceBuilder = new ConfiguredSurfaceBuilder<>(SurfaceBuilder.DEFAULT, blocks.getSurfaceBuilderConfig());
-		this.addSpawn(EntityClassification.CREATURE, new SpawnListEntry(settings.getLandTypes().terrain.getConsortType(), 2, 1, 10));
+		setSurfaceBuilder(SurfaceBuilder.DEFAULT, blocks.getSurfaceBuilderConfig());
+		this.addSpawn(EntityClassification.CREATURE, new SpawnListEntry(consortType, 2, 1, 10));
 		
 		if(staticBiome != MSBiomes.LAND_OCEAN)
 			addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, createDecoratedFeature(MSFeatures.RETURN_NODE, IFeatureConfig.NO_FEATURE_CONFIG, Placement.CHANCE_HEIGHTMAP, new ChanceConfig(128)));
