@@ -653,6 +653,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addExtra(MSItems.SURPRISE_EMBRYO, "message", "WOW! NO WAY! You found a %s inside your Surprise Embryo!");
 		add(MSItems.UNKNOWABLE_EGG, "The Egg of Unknowable, Horrible Truths");
 		addTooltip(MSItems.UNKNOWABLE_EGG, "This egg somehow knows your name.");
+		add(MSItems.BREADCRUMBS, "Breadcrumbs");
 		add(MSItems.GOLDEN_GRASSHOPPER, "Golden Grasshopper");
 		add(MSItems.BUG_NET, "Net");
 		addTooltip(MSItems.BUG_NET, "Perfect for catching bugs and frogs!");
