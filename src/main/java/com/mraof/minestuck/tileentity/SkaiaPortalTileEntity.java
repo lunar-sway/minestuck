@@ -8,6 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTDynamicOps;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.GlobalPos;
@@ -16,10 +17,11 @@ import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.util.Constants;
 
 public class SkaiaPortalTileEntity extends TileEntity //implements ITeleporter
 {
-	public GlobalPos destination = GlobalPos.of(DimensionType.OVERWORLD, new BlockPos(0, -1, 0));
+	private GlobalPos destination = GlobalPos.of(DimensionType.OVERWORLD, new BlockPos(0, -1, 0));
 	
 	public SkaiaPortalTileEntity()
 	{
@@ -38,7 +40,8 @@ public class SkaiaPortalTileEntity extends TileEntity //implements ITeleporter
 	public void read(CompoundNBT compound)
 	{
 		super.read(compound);
-		destination = GlobalPos.deserialize(new Dynamic<>(NBTDynamicOps.INSTANCE, compound.getCompound("dest")));
+		if(compound.contains("dest", Constants.NBT.TAG_COMPOUND))
+			destination = GlobalPos.deserialize(new Dynamic<>(NBTDynamicOps.INSTANCE, compound.getCompound("dest")));
 	}
 	
 	@Override
@@ -52,6 +55,10 @@ public class SkaiaPortalTileEntity extends TileEntity //implements ITeleporter
 	
 	public void teleportEntity(Entity entity)
 	{
+		MinecraftServer server = entity.getServer();
+		if(server == null || world == null)
+			return;
+		
 		if(destination.getDimension() != this.world.getDimension().getType())
 		{
 			if(destination.getPos().getY() < 0)

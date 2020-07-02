@@ -349,6 +349,7 @@ public final class SkaianetHandler
 		SburbConnection c = new SburbConnection(client, server, this);
 		c.setIsMain();
 		c.setLand(landTypes, dimensionName);
+		c.setHasEntered();
 		
 		session.connections.add(c);
 		connections.add(c);

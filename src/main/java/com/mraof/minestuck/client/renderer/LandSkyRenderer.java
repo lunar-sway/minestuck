@@ -186,20 +186,20 @@ public class LandSkyRenderer implements IRenderHandler
 	
 	private void drawLands(Minecraft mc, DimensionType dim)
 	{
-		List<DimensionType> list = SkaiaClient.getLandChain(dim);
+		List<ResourceLocation> list = SkaiaClient.getLandChain(dim);
 		if(list == null)
 			return;
-		int index = list.indexOf(dim);
+		int index = list.indexOf(dim.getRegistryName());
 		GlStateManager.enableTexture();
 		for(int i = 1; i < list.size(); i++)
 		{
-			DimensionType type = list.get((index + i)%list.size());
-			if(type != null)
+			ResourceLocation landName = list.get((index + i)%list.size());
+			if(landName != null)
 			{
-				Random random = new Random(mc.world.getSeed() + type.getId());
-				LandTypePair.LazyInstance landTypes = MSDimensionTypes.LANDS.dimToLandTypes.get(type.getRegistryName());
+				Random random = new Random(31*mc.world.getSeed() + landName.hashCode());
+				LandTypePair.LazyInstance landTypes = MSDimensionTypes.LANDS.dimToLandTypes.get(landName);
 				if(landTypes == null)
-					Debug.warnf("Missing land types for dimension %s!", type.getRegistryName());
+					Debug.warnf("Missing land types for dimension %s!", landName);
 				else drawLand(mc, getResourceLocations(landTypes.create(), random), (i / (float) list.size()), random);
 			}
 		}
