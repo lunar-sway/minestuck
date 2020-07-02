@@ -291,7 +291,7 @@ public final class PlayerData
 				Modus modus = CaptchaDeckHandler.createServerModus(name, savedData);
 				if(modus != null)
 				{
-					modus.initModus(player, null, MinestuckConfig.initialModusSize.get());
+					modus.initModus(null, player, null, MinestuckConfig.initialModusSize.get());
 					setModus(modus);
 				} else LOGGER.warn("Couldn't create a starting modus type by name {}.", type);
 			}

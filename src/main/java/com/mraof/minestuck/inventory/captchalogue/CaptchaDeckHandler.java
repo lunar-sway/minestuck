@@ -93,8 +93,8 @@ public class CaptchaDeckHandler
 			if(modus == null)
 			{
 				PlayerData data = PlayerSavedData.getData(player);
-				modus = type.createServerSide(PlayerSavedData.get(player.server));	//TODO Let the modus be created with the stack for settings
-				modus.initModus(player, null, data.hasGivenModus() ? 0 : MinestuckConfig.initialModusSize.get());
+				modus = type.createServerSide(PlayerSavedData.get(player.server));
+				modus.initModus(stack, player, null, data.hasGivenModus() ? 0 : MinestuckConfig.initialModusSize.get());
 				setModus(player, modus);
 				container.inventory.setInventorySlotContents(0, ItemStack.EMPTY);
 			}
@@ -104,15 +104,15 @@ public class CaptchaDeckHandler
 				ModusType<?> oldType = oldModus.getType();
 				if(type.equals(oldType))
 					return;
-				modus = type.createServerSide(PlayerSavedData.get(player.server));	//TODO See the above
+				modus = type.createServerSide(PlayerSavedData.get(player.server));
 				if(modus.canSwitchFrom(oldModus))
-					modus.initModus(player, oldModus.getItems(), oldModus.getSize());
+					modus.initModus(stack, player, oldModus.getItems(), oldModus.getSize());
 				else
 				{
 					for(ItemStack content : oldModus.getItems())
 						if(!content.isEmpty())
 							launchAnyItem(player, content);
-					modus.initModus(player, null, oldModus.getSize());
+					modus.initModus(stack, player, null, oldModus.getSize());
 				}
 				
 				setModus(player, modus);
@@ -389,9 +389,9 @@ public class CaptchaDeckHandler
 		
 		if(MinestuckConfig.sylladexDropMode.get() == MinestuckConfig.DropMode.ALL)
 		{
-			player.dropItem(new ItemStack(modus.getType().getItem()), true, false);	//TODO Add a method to the modus to get the itemstack instead
+			player.dropItem(modus.getModusItem(), true, false);
 			setModus(player, null);
-		} else modus.initModus(player, null, size);
+		} else modus.initModus(null, player, null, size);
 		
 		ModusDataPacket packet = ModusDataPacket.create(writeToNBT(modus));
 		MSPacketHandler.sendToPlayer(packet, player);
