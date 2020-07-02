@@ -57,7 +57,7 @@ public class PogoWeaponItem extends WeaponItem
 		if (player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder() && !player.isInWater() && !player.isPassenger())
 		{
 			double knockbackModifier = 1D - target.getAttributes().getAttributeInstance(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getValue();
-			double targetMotionY = Math.max(target.getMotion().y, knockbackModifier * Math.min(addEfficiencyModifier(pogoMotion, stack)* 2, Math.abs(player.getMotion().y) + target.getMotion().y + pogoMotion));
+			double targetMotionY = Math.max(target.getMotion().y, knockbackModifier * Math.min(pogoMotion* 2, Math.abs(player.getMotion().y) + target.getMotion().y + pogoMotion));
 			target.setMotion(target.getMotion().x, targetMotionY, target.getMotion().z);
 			player.setMotion(player.getMotion().x, 0, player.getMotion().z);
 			player.fallDistance = 0;
