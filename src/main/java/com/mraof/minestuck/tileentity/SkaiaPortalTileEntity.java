@@ -16,10 +16,11 @@ import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.util.Constants;
 
 public class SkaiaPortalTileEntity extends TileEntity //implements ITeleporter
 {
-	public GlobalPos destination = GlobalPos.of(DimensionType.OVERWORLD, new BlockPos(0, -1, 0));
+	private GlobalPos destination = GlobalPos.of(DimensionType.OVERWORLD, new BlockPos(0, -1, 0));
 	
 	public SkaiaPortalTileEntity()
 	{
@@ -38,7 +39,8 @@ public class SkaiaPortalTileEntity extends TileEntity //implements ITeleporter
 	public void read(CompoundNBT compound)
 	{
 		super.read(compound);
-		destination = GlobalPos.deserialize(new Dynamic<>(NBTDynamicOps.INSTANCE, compound.getCompound("dest")));
+		if(compound.contains("dest", Constants.NBT.TAG_COMPOUND))
+			destination = GlobalPos.deserialize(new Dynamic<>(NBTDynamicOps.INSTANCE, compound.getCompound("dest")));
 	}
 	
 	@Override
