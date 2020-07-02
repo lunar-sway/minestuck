@@ -7,10 +7,12 @@ import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.IPacket;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 public class MetalBoatEntity extends BoatEntity implements IEntityAdditionalSpawnData
 {	//TODO vanilla boat functions differently now. This class will probably need to be updated
@@ -186,5 +188,11 @@ public class MetalBoatEntity extends BoatEntity implements IEntityAdditionalSpaw
 	public void readSpawnData(PacketBuffer additionalData)
 	{
 		this.type = additionalData.readByte();
+	}
+	
+	@Override
+	public IPacket<?> createSpawnPacket()
+	{
+		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 }
