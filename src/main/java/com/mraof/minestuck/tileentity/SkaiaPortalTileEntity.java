@@ -8,6 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTDynamicOps;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.GlobalPos;
@@ -54,6 +55,10 @@ public class SkaiaPortalTileEntity extends TileEntity //implements ITeleporter
 	
 	public void teleportEntity(Entity entity)
 	{
+		MinecraftServer server = entity.getServer();
+		if(server == null || world == null)
+			return;
+		
 		if(destination.getDimension() != this.world.getDimension().getType())
 		{
 			if(destination.getPos().getY() < 0)

@@ -68,6 +68,7 @@ public class Teleport
 				entity.setLocationAndAngles(x, y, z, yaw, pitch);
 				entity.setRotationYawHead(yaw);
 				world.func_217460_e(entity);
+				oldEntity.remove(false);
 			}
 		}
 		
