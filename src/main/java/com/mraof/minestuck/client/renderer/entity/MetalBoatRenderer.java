@@ -22,7 +22,7 @@ public class MetalBoatRenderer extends BoatRenderer
 	{
 		MetalBoatEntity boat = (MetalBoatEntity) entity;
 		
-		if(boat.type == 1)
+		if(boat.boatType() == 1)
 			return goldVariant;
 		else return ironVariant;
 	}
