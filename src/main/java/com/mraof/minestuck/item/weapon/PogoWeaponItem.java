@@ -32,8 +32,12 @@ public class PogoWeaponItem extends WeaponItem
 	public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity player)
 	{
 		super.hitEntity(stack, target, player);
-		hitEntity(stack, target, player, addEfficiencyModifier(pogoMotion, stack));
+		hitEntity(stack, target, player, getPogoMotion(stack));
 		return true;
+	}
+
+	private double getPogoMotion(ItemStack stack){
+		return pogoMotion;
 	}
 
 	private static double addEfficiencyModifier(double pogoMotion, ItemStack stack)
@@ -44,15 +48,16 @@ public class PogoWeaponItem extends WeaponItem
 	@Override
 	public ActionResultType onItemUse(ItemUseContext context)
 	{
-		return onItemUse(context.getPlayer(), context.getWorld(), context.getPos(), context.getItem(), context.getFace(), addEfficiencyModifier(pogoMotion, context.getItem()));
+		return onItemUse(context.getPlayer(), context.getWorld(), context.getPos(), context.getItem(), context.getFace(), getPogoMotion(context.getItem()));
 	}
 	
 	public static void hitEntity(ItemStack stack, LivingEntity target, LivingEntity player, double pogoMotion)
 	{
+		pogoMotion = addEfficiencyModifier(pogoMotion, stack);
 		if (player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder() && !player.isInWater() && !player.isPassenger())
 		{
 			double knockbackModifier = 1D - target.getAttributes().getAttributeInstance(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getValue();
-			double targetMotionY = Math.max(target.getMotion().y, knockbackModifier * Math.min(pogoMotion* 2, Math.abs(player.getMotion().y) + target.getMotion().y + addEfficiencyModifier(pogoMotion, stack)));
+			double targetMotionY = Math.max(target.getMotion().y, knockbackModifier * Math.min(addEfficiencyModifier(pogoMotion, stack)* 2, Math.abs(player.getMotion().y) + target.getMotion().y + pogoMotion));
 			target.setMotion(target.getMotion().x, targetMotionY, target.getMotion().z);
 			player.setMotion(player.getMotion().x, 0, player.getMotion().z);
 			player.fallDistance = 0;
@@ -61,12 +66,13 @@ public class PogoWeaponItem extends WeaponItem
 	
 	public static ActionResultType onItemUse(PlayerEntity player, World worldIn, BlockPos pos, ItemStack stack, Direction facing, double pogoMotion)
 	{
+		pogoMotion = addEfficiencyModifier(pogoMotion, stack);
 		if (worldIn.getBlockState(pos).getBlock() != Blocks.AIR)
 		{
 			double playerMotionX;
 			double playerMotionY;
 			double playerMotionZ;
-			double velocity = Math.max(player.getMotion().y, Math.min(pogoMotion * 2, Math.abs(player.getMotion().y) + addEfficiencyModifier(pogoMotion, stack)));
+			double velocity = Math.max(player.getMotion().y, Math.min(pogoMotion * 2, Math.abs(player.getMotion().y) + pogoMotion));
 			final float HORIZONTAL_Y = 6f;
 			switch (facing.getAxis())
 			{
