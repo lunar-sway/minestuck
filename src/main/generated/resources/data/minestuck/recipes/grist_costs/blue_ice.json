@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:blue_ice"
+  },
+  "grist_cost": {
+    "minestuck:build": 45,
+    "minestuck:cobalt": 22,
+    "minestuck:chalk": 2
+  }
+}

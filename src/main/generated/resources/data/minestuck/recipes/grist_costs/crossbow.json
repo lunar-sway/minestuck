@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:crossbow"
+  },
+  "grist_cost": {
+    "minestuck:amber": 30,
+    "minestuck:iodine": 20,
+    "minestuck:chalk": 6,
+    "minestuck:rust": 10
+  }
+}
