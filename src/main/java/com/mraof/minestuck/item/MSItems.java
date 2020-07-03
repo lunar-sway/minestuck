@@ -831,7 +831,7 @@ public class MSItems
 		registry.register(new ObsidianBucketItem(new Item.Properties().maxStackSize(1).containerItem(Items.BUCKET).group(MSItemGroup.MAIN)).setRegistryName("obsidian_bucket"));
 		registry.register(new CaptcharoidCameraItem(new Item.Properties().defaultMaxDamage(64).group(MSItemGroup.MAIN)).setRegistryName("captcharoid_camera"));
 		registry.register(new GrimoireItem(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("grimoire"));
-		registry.register(new LongForgottenWarhornItem(new Item.Properties().defaultMaxDamage(100)).setRegistryName("long_forgotten_warhorn"));
+		registry.register(new LongForgottenWarhornItem(new Item.Properties().defaultMaxDamage(100).group(MSItemGroup.MAIN)).setRegistryName("long_forgotten_warhorn"));
 		registry.register(new BarbasolBombItem(new Item.Properties().maxStackSize(16).group(MSItemGroup.MAIN)).setRegistryName("barbasol_bomb"));
 		registry.register(new RazorBladeItem(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("razor_blade"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("ice_shard"));
