@@ -367,9 +367,8 @@ public class MSItems
 		registerItemBlock(registry, GOLD_BRICKS, MSItemGroup.MAIN);
 		registerItemBlock(registry, GOLD_BRICK_CHISELED, MSItemGroup.MAIN);
 		registerItemBlock(registry, GOLD_COLUMN, MSItemGroup.MAIN);
-		registerItemBlock(registry, GOLD_TILE_LIGHT, MSItemGroup.MAIN);
-		registerItemBlock(registry, GOLD_TILE_DARK, MSItemGroup.MAIN);
-		registerItemBlock(registry, GOLD_TILE_COLORED, MSItemGroup.MAIN);
+		registerItemBlock(registry, GOLD_WALL, MSItemGroup.MAIN);
+		registerItemBlock(registry, GOLD_SPIKE, MSItemGroup.MAIN);
 		registerItemBlock(registry, PURPLE_BRICKS, MSItemGroup.MAIN);
 		registerItemBlock(registry, PURPLE_BRICK_CHISELED, MSItemGroup.MAIN);
 		registerItemBlock(registry, PURPLE_COLUMN, MSItemGroup.MAIN);
@@ -380,6 +379,8 @@ public class MSItems
 		registerItemBlock(registry, GOLD_BRICK_SLAB, MSItemGroup.MAIN);
 		registerItemBlock(registry, PURPLE_BRICK_STAIRS, MSItemGroup.MAIN);
 		registerItemBlock(registry, PURPLE_BRICK_SLAB, MSItemGroup.MAIN);
+		registerItemBlock(registry, PURPLE_WALL, MSItemGroup.MAIN);
+		registerItemBlock(registry, PURPLE_SPIKE, MSItemGroup.MAIN);
 
 		registerItemBlock(registry, STONE_CRUXITE_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, NETHERRACK_CRUXITE_ORE, MSItemGroup.LANDS);

@@ -1,10 +1,10 @@
 {
   "type": "minestuck:grist_cost",
   "ingredient": {
-    "item": "minestuck:gold_tile_light"
+    "item": "minestuck:purple_column"
   },
   "grist_cost": {
     "minestuck:build": 4,
-    "minestuck:gold": 1
+    "minestuck:amethyst": 2
   }
 }

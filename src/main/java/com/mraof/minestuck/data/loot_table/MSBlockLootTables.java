@@ -40,6 +40,29 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(WHITE_CHESS_DIRT);
 		registerDropSelfLootTable(DARK_GRAY_CHESS_DIRT);
 		registerDropSelfLootTable(LIGHT_GRAY_CHESS_DIRT);
+
+		//registerDropSelfLootTable(PROSPIT_TRANSPORTALIZER);
+		//registerDropSelfLootTable(DERSE_TRANSPORTALIZER);
+		registerDropSelfLootTable(GOLD_BRICKS);
+		registerDropSelfLootTable(GOLD_BRICK_CHISELED);
+		registerDropSelfLootTable(GOLD_BRICK_STAIRS);
+		registerDropSelfLootTable(GOLD_BRICK_SLAB);
+		registerDropSelfLootTable(GOLD_COLUMN);
+		registerDropSelfLootTable(GOLD_WALL);
+		registerDropSelfLootTable(GOLD_SPIKE);
+		registerDropSelfLootTable(PURPLE_BRICKS);
+		registerDropSelfLootTable(PURPLE_BRICK_CHISELED);
+		registerDropSelfLootTable(PURPLE_BRICK_STAIRS);
+		registerDropSelfLootTable(PURPLE_BRICK_SLAB);
+		registerDropSelfLootTable(PURPLE_COLUMN);
+		registerDropSelfLootTable(PURPLE_WALL);
+		registerDropSelfLootTable(PURPLE_SPIKE);
+
+		//registerDropSelfLootTable(CALEDFWLCH_PEDESTAL);
+		//registerDropSelfLootTable(EMPTY_CALEDFWLCH_PEDESTAL);
+		//registerDropSelfLootTable(LOOT_CHEST);
+		//registerDropSelfLootTable(EMPTY_LOOT_CHEST);
+		//registerDropSelfLootTable(WOODEN_LOOT_CHEST);
 		
 		registerLootTable(STONE_CRUXITE_ORE, MSBlockLootTables::cruxiteOreDrop);
 		registerLootTable(COBBLESTONE_CRUXITE_ORE, MSBlockLootTables::cruxiteOreDrop);

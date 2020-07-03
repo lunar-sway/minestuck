@@ -53,6 +53,9 @@ public class MSBlockShapes
 
 	public static final CustomVoxelShape EMPTY_CALEDFWLCH_PEDESTAL = new CustomVoxelShape(new double[]{0, 0, 0, 16, 1, 16}, new double[]{1, 1, 1, 15, 2, 15}, new double[]{2, 2, 2, 14, 3, 14}, new double[]{3, 3, 3, 13, 4, 13});
 
+	//Spike Blocks
+	public static final CustomVoxelShape SPIKE = new CustomVoxelShape(new double[]{5, 0, 5, 11, 15, 11});
+
 	//Loot Blocks
 	public static final CustomVoxelShape LOOT_CHEST = new CustomVoxelShape(new double[]{0, 0, 1, 16, 9, 16}, new double[]{0, 9, 2, 16, 12, 15}, new double[]{0, 12, 3, 16, 13, 14}, new double[]{0, 13, 5, 16, 14, 12});
 	public static final CustomVoxelShape WOODEN_LOOT_CHEST = new CustomVoxelShape(new double[]{0, 0, 1, 16, 9, 16}, new double[]{0, 9, 2, 16, 12, 15}, new double[]{0, 12, 3, 16, 13, 14}, new double[]{0, 13, 5, 16, 14, 12});
