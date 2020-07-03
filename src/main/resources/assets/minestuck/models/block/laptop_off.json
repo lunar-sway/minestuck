@@ -3,7 +3,8 @@
 	"credit": "Made with Blockbench",
 	"textures": {
 		"1": "minestuck:block/computer/lapshell",
-		"2": "minestuck:block/computer/screen_off"
+		"2": "minestuck:block/computer/screen_off",
+		"particle": "minestuck:block/computer/gray_keys"
 	},
 	"elements": [
 		{
