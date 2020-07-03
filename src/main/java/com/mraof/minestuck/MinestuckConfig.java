@@ -152,7 +152,7 @@ public class MinestuckConfig
 				.define("dropItemsInCards", true);
 		initialModusSize = SERVER_BUILDER.comment("The initial amount of captchalogue cards in your sylladex.")
 				.defineInRange("initialModusSize", 5, 0, Integer.MAX_VALUE);
-		startingModusTypes = SERVER_BUILDER.comment("An array with the possible modus types to be assigned. Written with mod-id and modus name, for example \"minestuck:queue_stack\" or \"minestuck:hashmap\"")
+		startingModusTypes = SERVER_BUILDER.comment("An array with the possible modus types to be assigned. Written with mod-id and modus name, for example \"minestuck:queue_stack\" or \"minestuck:hash_map\"")
 				.define("startingModusTypes", new ArrayList<>(Arrays.asList("minestuck:stack","minestuck:queue")));
 		modusMaxSize = SERVER_BUILDER.comment("The max size on a modus. Ignored if the value is 0.")
 				.defineInRange("modusMaxSize", 0, 0, Integer.MAX_VALUE);
