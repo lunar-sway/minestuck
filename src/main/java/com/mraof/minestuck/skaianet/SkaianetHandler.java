@@ -50,7 +50,7 @@ public final class SkaianetHandler
 	
 	private static SkaianetHandler INSTANCE;
 	
-	Map<PlayerIdentifier, GlobalPos> serversOpen = new HashMap<>();
+	Map<PlayerIdentifier, GlobalPos> openedServers = new HashMap<>();
 	private final Map<PlayerIdentifier, GlobalPos> resumingClients = new HashMap<>();
 	private final Map<PlayerIdentifier, GlobalPos> resumingServers = new HashMap<>();
 	List<SburbConnection> connections = new ArrayList<>();
@@ -118,60 +118,77 @@ public final class SkaianetHandler
 		return false;
 	}
 	
-	public void requestConnection(PlayerIdentifier player, GlobalPos computer, PlayerIdentifier otherPlayer, boolean isClient)
+	public void requestConnection(PlayerIdentifier player, GlobalPos computerPos, PlayerIdentifier otherPlayer, boolean connectingAsClient)
 	{
-		if(computer.getDimension() == DimensionType.THE_NETHER)
+		if(computerPos.getDimension() == DimensionType.THE_NETHER)
 			return;
-		ComputerTileEntity te = getComputer(mcServer, computer);
+		ComputerTileEntity te = getComputer(mcServer, computerPos);
 		if(te == null)
 			return;
-		if(!isClient)	//Is server
+		
+		boolean success;
+		if(!connectingAsClient)	//Is server
+			success = handleConnectByServer(player, computerPos, te, otherPlayer);
+		else success = handleConnectByClient(player, computerPos, te, otherPlayer);
+		
+		if(success)
 		{
-			if(serversOpen.containsKey(player) || resumingServers.containsKey(player))
-				return;
-			if(otherPlayer == null)	//Wants to open
-			{
-				if(resumingClients.containsKey(getAssociatedPartner(player, false)))
-					connectTo(player, computer, false, getAssociatedPartner(player, false), resumingClients);
-				else
-				{
-					te.getData(1).putBoolean("isOpen", true);
-					serversOpen.put(player, computer);
-				}
-			}
-			else if(otherPlayer != null && otherPlayer.equals(getAssociatedPartner(player, false)))	//Wants to resume
-			{
-				if(resumingClients.containsKey(otherPlayer))	//The client is already waiting
-					connectTo(player, computer, false, otherPlayer, resumingClients);
-				else	//Client is not currently trying to resume
-				{
-					te.getData(1).putBoolean("isOpen", true);
-					resumingServers.put(player, computer);
-				}
-			}
-			else return;
-		} else	//Is client
-		{
-			if(getActiveConnection(player) != null || resumingClients.containsKey(player))
-				return;
-			PlayerIdentifier p = getAssociatedPartner(player, true);
-			if(p != null && (otherPlayer == null || p.equals(otherPlayer)))	//If trying to connect to the associated partner
-			{
-				if(resumingServers.containsKey(p))	//If server is "resuming".
-					connectTo(player, computer, true, p, resumingServers);
-				else if(serversOpen.containsKey(p))	//If server is normally open.
-					connectTo(player, computer, true, p, serversOpen);
-				else	//If server isn't open
-				{
-					te.getData(0).putBoolean("isResuming", true);
-					resumingClients.put(player, computer);
-				}
-			}
-			else if(serversOpen.containsKey(otherPlayer))	//If the server is open.
-				connectTo(player, computer, true, otherPlayer, serversOpen);
+			te.markBlockForUpdate();
+			updateAll();
 		}
-		te.markBlockForUpdate();
-		updateAll();
+	}
+	
+	private boolean handleConnectByClient(PlayerIdentifier player, GlobalPos computerPos, ComputerTileEntity te, PlayerIdentifier otherPlayer)
+	{
+		if(getActiveConnection(player) != null || resumingClients.containsKey(player))
+			return false;
+		PlayerIdentifier p = getAssociatedPartner(player, true);
+		if(p != null && (otherPlayer == null || p.equals(otherPlayer)))	//If trying to connect to the associated partner
+		{
+			if(resumingServers.containsKey(p))	//If server is "resuming".
+				connectTo(player, computerPos, true, p, resumingServers);
+			else if(openedServers.containsKey(p))	//If server is normally open.
+				connectTo(player, computerPos, true, p, openedServers);
+			else	//If server isn't open
+			{
+				te.getData(0).putBoolean("isResuming", true);
+				resumingClients.put(player, computerPos);
+			}
+		}
+		else if(openedServers.containsKey(otherPlayer))	//If the server is open.
+			connectTo(player, computerPos, true, otherPlayer, openedServers);
+		else return false;
+		
+		return true;
+	}
+	
+	private boolean handleConnectByServer(PlayerIdentifier player, GlobalPos computerPos, ComputerTileEntity te, PlayerIdentifier otherPlayer)
+	{
+		if(openedServers.containsKey(player) || resumingServers.containsKey(player))
+			return false;
+		if(otherPlayer == null)	//Wants to open
+		{
+			if(resumingClients.containsKey(getAssociatedPartner(player, false)))
+				connectTo(player, computerPos, false, getAssociatedPartner(player, false), resumingClients);
+			else
+			{
+				te.getData(1).putBoolean("isOpen", true);
+				openedServers.put(player, computerPos);
+			}
+		}
+		else if(otherPlayer.equals(getAssociatedPartner(player, false)))	//Wants to resume
+		{
+			if(resumingClients.containsKey(otherPlayer))	//The client is already waiting
+				connectTo(player, computerPos, false, otherPlayer, resumingClients);
+			else	//Client is not currently trying to resume
+			{
+				te.getData(1).putBoolean("isOpen", true);
+				resumingServers.put(player, computerPos);
+			}
+		}
+		else return false;
+		
+		return true;
 	}
 	
 	public void closeConnection(PlayerIdentifier player, PlayerIdentifier otherPlayer, boolean isClient)
@@ -189,11 +206,11 @@ public final class SkaianetHandler
 					te.latestmessage.put(0, STOP_RESUME);
 					te.markBlockForUpdate();
 				}
-			} else if(serversOpen.containsKey(player))
+			} else if(openedServers.containsKey(player))
 			{
-				if(movingComputers.contains(serversOpen.get(player)))
+				if(movingComputers.contains(openedServers.get(player)))
 					return;
-				ComputerTileEntity te = getComputer(mcServer, serversOpen.remove(player));
+				ComputerTileEntity te = getComputer(mcServer, openedServers.remove(player));
 				if(te != null)
 				{
 					te.getData(1).putBoolean("isOpen", false);
@@ -368,7 +385,7 @@ public final class SkaianetHandler
 	{
 		sessionHandler.read(nbt);
 		
-		readPlayerComputerList(nbt, serversOpen, "serversOpen");
+		readPlayerComputerList(nbt, openedServers, "serversOpen");
 		readPlayerComputerList(nbt, resumingClients, "resumingClients");
 		readPlayerComputerList(nbt, resumingServers, "resumingServers");
 		
@@ -394,7 +411,7 @@ public final class SkaianetHandler
 		
 		String[] s = {"serversOpen","resumingClients","resumingServers"};
 		@SuppressWarnings("unchecked")
-		Map<PlayerIdentifier, GlobalPos>[] maps = new Map[]{serversOpen, resumingClients, resumingServers};
+		Map<PlayerIdentifier, GlobalPos>[] maps = new Map[]{openedServers, resumingClients, resumingServers};
 		for(int i = 0; i < 3; i++)
 		{
 			ListNBT list = new ListNBT();
@@ -423,7 +440,7 @@ public final class SkaianetHandler
 			return;
 		
 		@SuppressWarnings("unchecked")
-		Iterator<Entry<PlayerIdentifier, GlobalPos>>[] iter1 = new Iterator[]{serversOpen.entrySet().iterator(),resumingClients.entrySet().iterator(),resumingServers.entrySet().iterator()};
+		Iterator<Entry<PlayerIdentifier, GlobalPos>>[] iter1 = new Iterator[]{openedServers.entrySet().iterator(),resumingClients.entrySet().iterator(),resumingServers.entrySet().iterator()};
 		
 		for(Iterator<Entry<PlayerIdentifier, GlobalPos>> i : iter1)
 			while(i.hasNext())
@@ -497,7 +514,7 @@ public final class SkaianetHandler
 	
 	boolean hasResumingServer(PlayerIdentifier identifier)
 	{
-		return resumingServers.containsKey(identifier) || serversOpen.containsKey(identifier);
+		return resumingServers.containsKey(identifier) || openedServers.containsKey(identifier);
 	}
 	
 	/**
@@ -642,8 +659,8 @@ public final class SkaianetHandler
 			resumingClients.put(oldTE.owner, newPos);	//Used to be map.replace until someone had a NoSuchMethodError
 		if(resumingServers.containsKey(oldTE.owner) && resumingServers.get(oldTE.owner).equals(oldPos))
 			resumingServers.put(oldTE.owner, newPos);
-		if(serversOpen.containsKey(oldTE.owner) && serversOpen.get(oldTE.owner).equals(oldPos))
-			serversOpen.put(oldTE.owner, newPos);
+		if(openedServers.containsKey(oldTE.owner) && openedServers.get(oldTE.owner).equals(oldPos))
+			openedServers.put(oldTE.owner, newPos);
 		
 		movingComputers.add(newPos);
 	}
