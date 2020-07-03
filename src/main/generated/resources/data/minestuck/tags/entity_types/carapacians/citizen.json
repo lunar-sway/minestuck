@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "minestuck:dersite_citizen",
+    "minestuck:prospitian_citizen",
+    "minestuck:dersite_farmer"
+  ]
+}
