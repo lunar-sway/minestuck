@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:fermented_spider_eye"
+  },
+  "grist_cost": {
+    "minestuck:uranium": 1,
+    "minestuck:rust": 10
+  }
+}

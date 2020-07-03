@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:bucket"
+  },
+  "grist_cost": {
+    "minestuck:garnet": 8
+  }
+}

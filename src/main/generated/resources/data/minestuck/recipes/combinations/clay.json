@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:sand"
+  },
+  "input2": {
+    "item": "minecraft:gravel"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minecraft:clay"
+  }
+}
