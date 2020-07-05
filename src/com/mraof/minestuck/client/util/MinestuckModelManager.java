@@ -250,6 +250,8 @@ public class MinestuckModelManager
 		register(unknowableEgg);
 
 		register(threshDvd);
+		register(gamebroMagazine);
+		register(gamegrlMagazine);
 		register(crewPoster);
 		register(sbahjPoster);
 		

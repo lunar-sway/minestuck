@@ -30,6 +30,9 @@ advancements.minestuck.new_modus.description=Equip a new modus.
 advancements.minestuck.all_modi.title=A Full Set
 advancements.minestuck.all_modi.description=Try a new modus type.
 
+aspectEffects.on=Aspect Effects have been toggled on
+aspectEffects.off=Aspect Effects have been toggled off
+
 commands.checkLand.usage=/checkLand
 commands.grist.usage=/grist [player] <add|set> <gristtype value ...> OR /grist [player] get
 commands.grist.get=%s has:%s
@@ -1002,6 +1005,8 @@ item.morelMushroom.name=Morel Mushroom
 item.morelMushroom.tooltip=A delicacy amongst both humans and consorts.
 item.frenchFry.name=French Fry
 item.threshDvd.name=Thresh Prince DVD
+item.gamebroMagazine.name=Game Bro Magazine
+item.gamegrlMagazine.name=Game Grl Magazine
 item.crewPoster.name=Midnight Crew Poster
 item.sbahjPoster.name=Sweet Bro and Hella Jeff Poster
 item.shopPoster.fraymotifs.name=Fraymotifs Shop Sign
@@ -1082,6 +1087,8 @@ key.categories.minestuck=Minestuck
 key.exitEdit=Exit Edit Mode
 key.statsGui=View General Minestuck Gui
 key.captchalouge=Captchalouge Held Item
+key.aspectEffectToggle=Toggle Aspect Effects
+key.sylladex=Open Sylladex
 
 #Land Terrains
 land.format=Land of %s and %s
@@ -1324,6 +1331,41 @@ strife.dice.name=dicekind
 strife.claw.name=clawkind
 strife.fishing_rod.name=fshngrodkind
 strife.joker.name=jokerkind
+
+subtitle.warhorn=Warhorn sounds
+subtitle.whispers=Spooky whispers
+subtitle.screech=Estrogen-empowered screech
+subtitle.upcheladder=Echeladder levels up
+
+subtitle.nakagatorAmbient=Nakagator naks
+subtitle.nakagatorHurt=Nakagator hurts
+subtitle.nakagatorDeath=Nakagator dies
+subtitle.iguanaAmbient=Iguana thips
+subtitle.iguanaHurt=Iguana hurts
+subtitle.iguanaDeath=Iguana dies
+subtitle.salamanderAmbient=Salamander glubs
+subtitle.salamanderHurt=Salamander hurts
+subtitle.salamanderDeath=Salamander dies
+subtitle.turtleHurt=Turtle hurts
+subtitle.turtleDeath=Turtle dies
+subtitle.frogAmbient=Frog croaks
+subtitle.frogHurt=Frog hurts
+subtitle.frogDeath=Frog dies
+subtitle.impScreech=Imp screeches
+subtitle.impHurt=Imp hurts
+subtitle.impDeath=Imp dies
+subtitle.ogreAmbient=Ogre grunts
+subtitle.ogreHurt=Ogre hurts
+subtitle.ogreDeath=Ogre dies
+subtitle.basiliskAmbient=Basilisk hisses
+subtitle.basiliskHurt=Basilisk hurts
+subtitle.basiliskDeath=Basilisk dies
+subtitle.lichAmbient=Lich whispers
+subtitle.lichHurt=Lich hurts
+subtitle.lichDeath=Lich dies
+subtitle.giclopsAmbient=Giclops wants to eat'cha
+subtitle.giclopsHurt=Giclops hurts
+subtitle.giclopsDeath=Giclops dies
 
 subtitle.warhorn=Warhorn sounds
 subtitle.whispers=Spooky whispers

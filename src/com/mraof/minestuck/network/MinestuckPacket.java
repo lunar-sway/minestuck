@@ -31,6 +31,7 @@ public abstract class MinestuckPacket
 		CAPTCHA(CaptchaDeckPacket.class),
 		SELECTION(SelectionPacket.class),
 		DATA_CHECKER(DataCheckerPacket.class),
+		EFFECT_TOGGLE(EffectTogglePacket.class),
 		PORTFOLIO(SpecibusPacket.class);
 		
 		Class<? extends MinestuckPacket> packetType;

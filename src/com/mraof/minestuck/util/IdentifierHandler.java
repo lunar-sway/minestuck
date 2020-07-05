@@ -21,6 +21,7 @@ import net.minecraft.nbt.NBTTagString;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerList;
 import net.minecraftforge.common.UsernameCache;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 /**
@@ -61,6 +62,9 @@ public class IdentifierHandler {
 	
 	public static PlayerIdentifier encode(EntityPlayer player)
 	{
+		if(player instanceof FakePlayer || player.getName() == null)
+			return null;
+		
 		for(PlayerIdentifier identifier : identifierList)
 			if(identifier.appliesTo(player))
 				return identifier;

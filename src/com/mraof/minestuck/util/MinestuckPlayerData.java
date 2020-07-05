@@ -114,7 +114,17 @@ public class MinestuckPlayerData
 	{
 		return getData(player).title;
 	}
-
+	
+	public static boolean getEffectToggle(PlayerIdentifier player)
+	{
+		return getData(player).effectToggle;
+	}
+	
+	public static void setEffectToggle(PlayerIdentifier player, boolean toggle)
+	{
+		getData(player).effectToggle = toggle;
+	}
+	
 	public static void writeToNBT(NBTTagCompound nbt)
 	{
 		NBTTagList list = new NBTTagList();
@@ -199,6 +209,8 @@ public class MinestuckPlayerData
 		public int color = -1;
 		public long boondollars;
 		public Echeladder echeladder;
+		public boolean effectToggle = true;
+		
 		public ArrayList<StrifeSpecibus> strifePortfolio = new ArrayList<StrifeSpecibus>(Arrays.asList(new StrifeSpecibus(0)));
 		
 		private void readFromNBT(NBTTagCompound nbt)
@@ -258,6 +270,7 @@ public class MinestuckPlayerData
 			if (nbt.hasKey("color"))
 				this.color = nbt.getInteger("color");
 			boondollars = nbt.getLong("boondollars");
+			effectToggle = nbt.getBoolean("effectToggle");
 			
 			if(nbt.hasKey("specibus"))
 			{
@@ -294,9 +307,11 @@ public class MinestuckPlayerData
 			else nbt.setBoolean("givenModus", givenModus);
 			nbt.setInteger("color", this.color);
 			nbt.setLong("boondollars", boondollars);
+			nbt.setBoolean("effectToggle", effectToggle);
+			
 			if(this.strifePortfolio != null)
 			{
-				nbt.setTag("specibus", StrifePortfolioHandler.writeToNBT(strifePortfolio));	
+				nbt.setTag("specibus", StrifePortfolioHandler.writeToNBT(strifePortfolio));
 			}
 			
 			

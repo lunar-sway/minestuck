@@ -2,6 +2,7 @@ package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats.*;
+import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -144,4 +145,11 @@ public abstract class GuiPlayerStatsContainer extends GuiContainer
 		super.mouseClicked(xcor, ycor, mouseButton);
 	}
 	
+	@Override
+	protected void keyTyped(char typedChar, int keyCode) throws IOException
+	{
+		super.keyTyped(typedChar, keyCode);
+		if(MinestuckKeyHandler.instance.statKey.isActiveAndMatches(keyCode))
+			mc.player.closeScreen();
+	}
 }

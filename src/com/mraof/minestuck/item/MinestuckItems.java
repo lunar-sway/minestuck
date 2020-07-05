@@ -77,6 +77,9 @@ import com.mraof.minestuck.block.BlockAspectSapling;
 
 public class MinestuckItems
 {
+	/**
+	 * Use TabMinestuck.instance instead
+	 */
 	@Deprecated
 	public static CreativeTabs tabMinestuck = TabMinestuck.instance;
 
@@ -123,7 +126,7 @@ public class MinestuckItems
 	public static Item doggMachete = new ItemWeapon(1000, 5, -2.4D, 30, "doggMachete").setTool("sword", 0, 15.0F);
 	public static Item cobaltSabre = new ItemFireWeapon(300, 7, -2.4D, 10, "cobaltSabre", 30).setTool("sword", 0, 15.0F);
 	public static Item quantumSabre = new ItemPotionWeapon(toolUranium, 600, 8, -2.4D, 5, "quantumSabre", new PotionEffect(MobEffects.WITHER, 100, 1)).setTool("sword", 0, 15.0F);
-	public static Item shatterBeacon = new ItemPotionWeapon(1850, 10, -2.4D, 35, "shatterBeacon", ItemPotionWeapon.randomPotionEffect(), false).setTool("sword", 0, 15.0f);
+	public static Item shatterBeacon = new ItemPotionWeapon(1850, 10, -2.4D, 35, "shatterBeacon", null, false).setRandomPotionEffect().setTool("sword", 0, 15.0f);
 	//axes
 	public static Item batleacks = new ItemSord(64, 4, -3.5D, 5, "batleacks");
 	public static Item copseCrusher = new ItemFarmine(400, 6.0D, -3.0D, 20, "copseCrusher", Integer.MAX_VALUE, 20).setTool("axe", 2, 6.0F);
@@ -244,6 +247,8 @@ public class MinestuckItems
 	public static Item shunt = new ItemShunt();
 	public static Item captcharoidCamera = new ItemCaptcharoidCamera();
 	public static Item threshDvd = new Item().setUnlocalizedName("threshDvd").setMaxStackSize(1).setCreativeTab(TabMinestuck.instance);
+	public static Item gamebroMagazine = new Item().setUnlocalizedName("gamebroMagazine").setMaxStackSize(1).setCreativeTab(TabMinestuck.instance);
+	public static Item gamegrlMagazine = new Item().setUnlocalizedName("gamegrlMagazine").setMaxStackSize(1).setCreativeTab(TabMinestuck.instance);
 	public static Item crewPoster = new ItemHanging()
 	{
 		@Override
@@ -400,7 +405,7 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemBlock(hotCake)).setMaxStackSize(1);
 		registerItemBlock(registry, new ItemBlock(reverseCake)).setMaxStackSize(1);
 		registerItemBlock(registry, new ItemBlock(fuchsiaCake)).setMaxStackSize(1);
-
+		
 		registerItemBlock(registry, new ItemBlock(floweryMossBrick));
 		registerItemBlock(registry, new ItemBlock(floweryMossStone));
 		registerItemBlock(registry, new ItemBlock(treatedPlanks));
@@ -608,6 +613,8 @@ public class MinestuckItems
 		registry.register(razorBlade.setRegistryName("razor_blade"));
 		registry.register(metalBoat.setRegistryName("metal_boat"));
 		registry.register(threshDvd.setRegistryName("thresh_dvd"));
+		registry.register(gamebroMagazine.setRegistryName("gamebro_magazine"));
+		registry.register(gamegrlMagazine.setRegistryName("gamegrl_magazine"));
 		registry.register(crewPoster.setRegistryName("crew_poster"));
 		registry.register(sbahjPoster.setRegistryName("sbahj_poster"));
 		//registry.register(shopPoster.setRegistryName("shop_poster"));

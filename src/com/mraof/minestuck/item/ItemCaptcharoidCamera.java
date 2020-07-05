@@ -37,13 +37,13 @@ public class ItemCaptcharoidCamera extends Item {
 	@Override
 	protected boolean isInCreativeTab(CreativeTabs targetTab)
 	{
-		return targetTab == CreativeTabs.SEARCH || targetTab == MinestuckItems.tabMinestuck;
+		return targetTab == CreativeTabs.SEARCH || targetTab == TabMinestuck.instance;
 	}
 	
 	@Override
 	public CreativeTabs[] getCreativeTabs()
 	{
-		return new CreativeTabs[] {MinestuckItems.tabMinestuck};
+		return new CreativeTabs[] {TabMinestuck.instance};
 	}
 	
 	@Override
