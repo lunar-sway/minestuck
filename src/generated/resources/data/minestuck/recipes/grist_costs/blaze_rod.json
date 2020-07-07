@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:blaze_rod"
+  },
+  "grist_cost": {
+    "minestuck:tar": 20,
+    "minestuck:uranium": 2
+  }
+}

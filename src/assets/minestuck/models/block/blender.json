@@ -1,15 +1,15 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "minestuck:machines/blender/blender",
-		"1": "minestuck:machines/blender/blender_side",
-		"2": "minestuck:machines/blender/blender_base_bottom",
-		"3": "minestuck:machines/blender/blender_container_bottom",
-		"4": "minestuck:machines/blender/blender_lid_bottom",
-		"5": "minestuck:machines/blender/blender_base_top",
-		"6": "minestuck:machines/blender/blender_lid_top",
-		"7": "minestuck:blocks/brain_juice",
-		"particle": "minestuck:machines/blender/blender"
+		"0": "minestuck:block/machine/blender/blender",
+		"1": "minestuck:block/machine/blender/blender_side",
+		"2": "minestuck:block/machine/blender/blender_base_bottom",
+		"3": "minestuck:block/machine/blender/blender_container_bottom",
+		"4": "minestuck:block/machine/blender/blender_lid_bottom",
+		"5": "minestuck:block/machine/blender/blender_base_top",
+		"6": "minestuck:block/machine/blender/blender_lid_top",
+		"7": "minestuck:block/brain_juice",
+		"particle": "minestuck:block/machine/blender/blender"
 	},
 	"elements": [
 		{

@@ -4,21 +4,25 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
-import com.mraof.minestuck.inventory.captchalouge.Modus;
+import com.mraof.minestuck.inventory.captchalogue.Modus;
+import com.mraof.minestuck.inventory.captchalogue.ModusType;
+import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.advancements.PlayerAdvancements;
-import net.minecraft.advancements.critereon.AbstractCriterionInstance;
-import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.advancements.critereon.MinMaxBounds;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.advancements.criterion.CriterionInstance;
+import net.minecraft.advancements.criterion.ItemPredicate;
+import net.minecraft.advancements.criterion.MinMaxBounds;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class CaptchalogueTrigger implements ICriterionTrigger<CaptchalogueTrigger.Instance>
@@ -65,43 +69,47 @@ public class CaptchalogueTrigger implements ICriterionTrigger<CaptchalogueTrigge
 	@Override
 	public Instance deserializeInstance(JsonObject json, JsonDeserializationContext context)
 	{
-		String modus = null;
-		if(json.has("modus"))
-		{
-			modus = json.get("modus").getAsString();
-			if(!CaptchaDeckHandler.isInRegistry(new ResourceLocation(modus)))
-				throw new IllegalArgumentException("Invalid modus "+modus);
-		}
-		ItemPredicate item = null;
-		if(json.has("item"))
-			item = ItemPredicate.deserialize(json.get("item"));
-		MinMaxBounds count = MinMaxBounds.deserialize(json.get("count"));
+		ModusType<?> modus = json.has("modus") ? ModusTypes.REGISTRY.getValue(new ResourceLocation(JSONUtils.getString(json, "modus"))) : null;
+		ItemPredicate item = json.has("item") ? ItemPredicate.deserialize(json.get("item")) : null;
+		MinMaxBounds.IntBound count = MinMaxBounds.IntBound.fromJson(json.get("count"));
 		return new Instance(modus, item, count);
 	}
 	
-	public void trigger(EntityPlayerMP player, Modus modus, ItemStack item)
+	public void trigger(ServerPlayerEntity player, Modus modus, ItemStack item)
 	{
 		Listeners listeners = listenersMap.get(player.getAdvancements());
 		if(listeners != null)
-			listeners.trigger(CaptchaDeckHandler.getType(modus.getClass()).toString(), item, modus.getNonEmptyCards());
+			listeners.trigger(modus.getType(), item, modus.getNonEmptyCards());
 	}
 	
-	public static class Instance extends AbstractCriterionInstance
+	public static class Instance extends CriterionInstance
 	{
-		private final String modus;
+		private final ModusType<?> modus;
 		private final ItemPredicate item;
-		private final MinMaxBounds count;
-		public Instance(String modus, ItemPredicate item, MinMaxBounds count)
+		private final MinMaxBounds.IntBound count;
+		public Instance(ModusType<?> modus, ItemPredicate item, MinMaxBounds.IntBound count)
 		{
 			super(ID);
 			this.modus = modus;
-			this.item = item;
-			this.count = count;
+			this.item = Objects.requireNonNull(item);
+			this.count = Objects.requireNonNull(count);
 		}
 		
-		public boolean test(String modus, ItemStack item, int count)
+		public boolean test(ModusType<?> modus, ItemStack item, int count)
 		{
-			return (this.modus == null || this.modus.equals(modus)) && (this.item == null || this.item.test(item)) && this.count.test(count);
+			return (this.modus == null || this.modus.equals(modus)) && this.item.test(item) && this.count.test(count);
+		}
+		
+		@Override
+		public JsonElement serialize()
+		{
+			JsonObject json = new JsonObject();
+			if(modus != null)
+				json.addProperty("modus", modus.getRegistryName().toString());
+			json.add("item", item.serialize());
+			json.add("count", count.serialize());
+			
+			return json;
 		}
 	}
 	
@@ -130,7 +138,7 @@ public class CaptchalogueTrigger implements ICriterionTrigger<CaptchalogueTrigge
 			this.listeners.remove(listener);
 		}
 		
-		public void trigger(String modus, ItemStack item, int count)
+		public void trigger(ModusType<?> modus, ItemStack item, int count)
 		{
 			List<Listener<Instance>> list = Lists.newArrayList();
 			for(Listener<Instance> listener : listeners)

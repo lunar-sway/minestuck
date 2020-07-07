@@ -1,0 +1,31 @@
+{
+  "parent": "minestuck:minestuck/entry",
+  "display": {
+    "icon": {
+      "item": "minecraft:red_bed"
+    },
+    "title": {
+      "translate": "advancements.minestuck.return_node.title"
+    },
+    "description": {
+      "translate": "advancements.minestuck.return_node.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "touch_return_node": {
+      "trigger": "minecraft:enter_block",
+      "conditions": {
+        "block": "minestuck:return_node"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "touch_return_node"
+    ]
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "minestuck:rainbow_sapling",
+    "minestuck:end_sapling",
+    "#minestuck:saplings/aspect"
+  ]
+}

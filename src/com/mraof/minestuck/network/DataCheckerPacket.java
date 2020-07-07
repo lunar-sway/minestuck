@@ -1,99 +1,101 @@
 package com.mraof.minestuck.network;
 
-import io.netty.buffer.ByteBuf;
+import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.client.gui.playerStats.DataCheckerScreen;
+import com.mraof.minestuck.skaianet.SessionHandler;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.network.PacketBuffer;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.EnumSet;
 
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.client.gui.playerStats.GuiDataChecker;
-import com.mraof.minestuck.network.skaianet.SessionHandler;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fml.relauncher.Side;
-
-public class DataCheckerPacket extends MinestuckPacket
+public class DataCheckerPacket implements PlayToBothPacket
 {
 	
 	public static int index = 0;
-	public static NBTTagCompound nbtData;
 	
 	/**
 	 * Used to avoid confusion when the client sends several requests during a short period
 	 */
 	public int packetIndex;
+	public CompoundNBT nbtData;
+	
+	public static DataCheckerPacket request()
+	{
+		DataCheckerPacket packet = new DataCheckerPacket();
+		index = (index + 1) % 100;
+		packet.packetIndex = index;
+		
+		return packet;
+	}
+	
+	public static DataCheckerPacket data(int index, CompoundNBT nbtData)
+	{
+		DataCheckerPacket packet = new DataCheckerPacket();
+		packet.packetIndex = index;
+		packet.nbtData = nbtData;
+		
+		return packet;
+	}
 	
 	@Override
-	public MinestuckPacket generatePacket(Object... dat)
+	public void encode(PacketBuffer buffer)
 	{
-		if(dat.length == 0)	//Cient request to server
-			data.writeByte(index = (index + 1) % 100);
-		else
+		buffer.writeInt(packetIndex);
+		if(nbtData != null)
 		{
-			data.writeByte((Integer) dat[0]);
-			
 			try
 			{
 				ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-				CompressedStreamTools.writeCompressed((NBTTagCompound)dat[1], bytes);
-				this.data.writeBytes(bytes.toByteArray());
+				CompressedStreamTools.writeCompressed(nbtData, bytes);
+				buffer.writeBytes(bytes.toByteArray());
 			}
 			catch (IOException e)
 			{
 				e.printStackTrace();
-				return null;
 			}
 		}
-		
-		return this;
 	}
 	
-	@Override
-	public MinestuckPacket consumePacket(ByteBuf data)
+	public static DataCheckerPacket decode(PacketBuffer buffer)
 	{
-		packetIndex = data.readByte();
+		DataCheckerPacket packet = new DataCheckerPacket();
+		packet.packetIndex = buffer.readInt();
 		
-		if(data.readableBytes() > 0)
+		if(buffer.readableBytes() > 0)
 		{
-			byte[] bytes = new byte[data.readableBytes()];
-			data.readBytes(bytes);
+			byte[] bytes = new byte[buffer.readableBytes()];
+			buffer.readBytes(bytes);
 			try
 			{
-				this.nbtData = CompressedStreamTools.readCompressed(new ByteArrayInputStream(bytes));
+				packet.nbtData = CompressedStreamTools.readCompressed(new ByteArrayInputStream(bytes));
 			}
 			catch(IOException e)
 			{
 				e.printStackTrace();
-				return null;
 			}
 		}
 		
-		return this;
+		return packet;
 	}
 	
 	@Override
-	public void execute(EntityPlayer player)
+	public void execute()
 	{
-		if(player.world.isRemote)
+		if(packetIndex == index)
+			DataCheckerScreen.activeComponent = new DataCheckerScreen.MainComponent(nbtData);
+	}
+	
+	@Override
+	public void execute(ServerPlayerEntity player)
+	{
+		if(MinestuckConfig.getDataCheckerPermissionFor(player))
 		{
-			if(packetIndex == index)
-				GuiDataChecker.activeComponent = new GuiDataChecker.MainComponent(nbtData);
-		} else if(player instanceof EntityPlayerMP && MinestuckConfig.getDataCheckerPermissionFor((EntityPlayerMP) player))
-		{
-			NBTTagCompound data = SessionHandler.createDataTag(player.getServer());
-			MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.DATA_CHECKER, packetIndex, data), player);
+			CompoundNBT data = SessionHandler.get(player.world).createDataTag();
+			MSPacketHandler.sendToPlayer(DataCheckerPacket.data(packetIndex, data), player);
 		}
 	}
-	
-	@Override
-	public EnumSet<Side> getSenderSide()
-	{
-		return EnumSet.allOf(Side.class);
-	}
-	
 }

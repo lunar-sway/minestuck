@@ -1,16 +1,17 @@
 package com.mraof.minestuck.event;
 
-import com.mraof.minestuck.network.skaianet.SburbConnection;
-import com.mraof.minestuck.network.skaianet.Session;
+import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.Session;
+import net.minecraft.server.MinecraftServer;
 
 public class ConnectionCreatedEvent extends SburbEvent
 {
 	private final ConnectionType connectionType;
 	private final SessionJoinType sessionJoinType;
 	
-	public ConnectionCreatedEvent(SburbConnection connection, Session session, ConnectionType connectionType, SessionJoinType sessionJoinType)
+	public ConnectionCreatedEvent(MinecraftServer mcServer, SburbConnection connection, Session session, ConnectionType connectionType, SessionJoinType sessionJoinType)
 	{
-		super(connection, session);
+		super(mcServer, connection, session);
 		this.connectionType = connectionType;
 		this.sessionJoinType = sessionJoinType;
 	}

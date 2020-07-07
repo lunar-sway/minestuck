@@ -1,11 +1,12 @@
 package com.mraof.minestuck.client.gui;
 
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.util.text.ITextComponent;
 
-public class GuiPesterchum extends GuiScreen
+public class GuiPesterchum extends Screen
 {
-	public GuiPesterchum()
+	public GuiPesterchum(ITextComponent titleIn)
 	{
-		super();
+		super(titleIn);
 	}
 }

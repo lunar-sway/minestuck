@@ -1,0 +1,6 @@
+{
+    "parent": "minestuck:block/button_special",
+    "textures": {
+        "texture": "minestuck:block/stone_explosive_button"
+    }
+}

@@ -1,59 +1,48 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
-import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayer;
+import com.mraof.minestuck.tileentity.AlchemiterTileEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.relauncher.Side;
 
-import java.util.EnumSet;
-
-public class AlchemiterPacket extends MinestuckPacket
+public class AlchemiterPacket implements PlayToServerPacket
 {
-	
-	public BlockPos tePos;
+	public BlockPos pos;
 	public int quantity;
 	
-	@Override
-	public MinestuckPacket generatePacket(Object... dat)
+	public AlchemiterPacket(BlockPos pos, int quantity)
 	{
-		TileEntity te = ((TileEntity) dat[0]);
-		data.writeInt(te.getPos().getX());
-		data.writeInt(te.getPos().getY());
-		data.writeInt(te.getPos().getZ());
-		data.writeInt((int) dat[1]);
-		
-		return this;
+		this.pos = pos;
+		this.quantity = quantity;
 	}
 	
 	@Override
-	public MinestuckPacket consumePacket(ByteBuf data)
+	public void encode(PacketBuffer buffer)
 	{
-		tePos = new BlockPos(data.readInt(), data.readInt(), data.readInt());
+		buffer.writeBlockPos(pos);
+		buffer.writeInt(quantity);
+	}
+	
+	public static AlchemiterPacket decode(PacketBuffer buffer)
+	{
+		BlockPos pos = buffer.readBlockPos();
+		int quantity = buffer.readInt();
 		
-		quantity = data.readInt();
-		
-		return this;
+		return new AlchemiterPacket(pos, quantity);
 	}
 	
 	@Override
-	public void execute(EntityPlayer player)
+	public void execute(ServerPlayerEntity player)
 	{
-		if(player.getEntityWorld().isBlockLoaded(tePos))
+		if(player.getEntityWorld().isAreaLoaded(pos, 0))
 		{
 			TileEntity te;
-			te = player.getEntityWorld().getTileEntity(tePos);
-			if(te instanceof TileEntityAlchemiter)
+			te = player.getEntityWorld().getTileEntity(pos);
+			if(te instanceof AlchemiterTileEntity)
 			{
-				((TileEntityAlchemiter) te).processContents(quantity, player);
+				((AlchemiterTileEntity) te).processContents(quantity, player);
 			}
 		}
-	}
-	
-	@Override
-	public EnumSet<Side> getSenderSide()
-	{
-		return EnumSet.of(Side.CLIENT);
 	}
 }

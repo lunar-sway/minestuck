@@ -1,6 +1,6 @@
 {
     "parent": "item/handheld",
     "textures": {
-        "layer0": "minestuck:items/paradises_portabello"
+        "layer0": "minestuck:item/paradises_portabello"
     }
 }

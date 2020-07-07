@@ -1,6 +1,6 @@
 {
     "parent": "item/handheld",
     "textures": {
-        "layer0": "minestuck:items/fission_focused_fault_feller"
+        "layer0": "minestuck:item/fission_focused_fault_feller"
     }
 }

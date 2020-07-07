@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:white_wool"
+  },
+  "grist_cost": {
+    "minestuck:chalk": 6
+  }
+}

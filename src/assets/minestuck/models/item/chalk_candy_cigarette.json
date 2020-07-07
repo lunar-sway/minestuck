@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "minestuck:items/chalk_candy_cigarette"
+        "layer0": "minestuck:item/chalk_candy_cigarette"
     }
 }

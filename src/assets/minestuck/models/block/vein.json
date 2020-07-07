@@ -1,7 +1,7 @@
 {
     "parent": "block/cube_column",
     "textures": {
-        "end": "minestuck:blocks/vein_top",
-        "side": "minestuck:blocks/vein_side"
+        "end": "minestuck:block/vein_top",
+        "side": "minestuck:block/vein_side"
     }
 }

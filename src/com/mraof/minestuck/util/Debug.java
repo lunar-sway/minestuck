@@ -1,12 +1,12 @@
 package com.mraof.minestuck.util;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class Debug
 {
 	
-	//public static boolean isDebugMode;
-	public static Logger logger;
+	public static Logger logger = LogManager.getLogger("Minestuck");
 
 	public static void error(Object text)
 	{

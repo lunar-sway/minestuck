@@ -1,8 +1,8 @@
 {
 	"parent": "block/orientable",
 	"textures": {
-		"2": "minestuck:blocks/uranium_cooker",
-		"front": "minestuck:blocks/uranium_cooker"
+		"2": "minestuck:block/uranium_cooker",
+		"front": "minestuck:block/uranium_cooker"
 	},
 	"elements": [
 		{

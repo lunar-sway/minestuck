@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "minestuck:cast_iron"
+  },
+  "result": "minestuck:cast_iron_stairs",
+  "count": 1
+}

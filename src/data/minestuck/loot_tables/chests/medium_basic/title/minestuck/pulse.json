@@ -1,0 +1,58 @@
+{
+    "pools": [
+        {
+            "name": "main",
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "item",
+                    "name": "minecraft:repeater",
+                    "weight": 2,
+                    "quality": 0
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:razor_blade",
+                    "weight": 4,
+                    "quality": -1
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:beef",
+                    "weight": 8,
+                    "quality": 0,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:mutton",
+                    "weight": 8,
+                    "quality": 0,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:blood_bucket",
+                    "weight": 6,
+                    "quality": 0
+                }
+            ]
+        }
+    ]
+}

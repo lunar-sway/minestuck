@@ -1,6 +1,14 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "minestuck:items/strife_card"
-    }
+        "layer0": "minestuck:item/strife_card"
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "minestuck:assigned": 1
+            },
+            "model": "minestuck:item/strife_card_assigned"
+        }
+    ]
 }

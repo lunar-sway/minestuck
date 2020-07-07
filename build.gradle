@@ -1,98 +1,168 @@
 buildscript {
     repositories {
-        //mavenCentral()
+        maven { url = 'https://files.minecraftforge.net/maven' }
         jcenter()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
-        maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
-        }
+        mavenCentral()
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
     }
 }
+apply plugin: 'net.minecraftforge.gradle'
+// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+apply plugin: 'eclipse'
+apply plugin: 'maven-publish'
 
 repositories {
     maven {
-        name = "chickenbones"
-        url = "http://chickenbones.net/maven/"
-    }
-    maven {
-        name = "Progwml6 maven"
-        url = "http://dvs1.progwml6.com/files/maven/"
-    }
-    maven {
-        url = "http://maven.blamejared.com"
+        // location of the maven that hosts JEI files
+        name = 'Progwml6 maven'
+        url = 'http://dvs1.progwml6.com/files/maven/'
     }
     maven {
         // location of a maven mirror for JEI files, as a fallback
-        name = "ModMaven"
-        url = "modmaven.k-4u.nl"
+        name = 'ModMaven'
+        url = 'modmaven.k-4u.nl'
     }
 }
 
-//apply plugin: 'forge'
-apply plugin: 'net.minecraftforge.gradle.forge'
+version = '1.14.4-1.4.' + System.env.BUILD_NUMBER
+group = 'com.mraof.minestuck'
+archivesBaseName = 'Minestuck'
 
-version = "1.12.2-1.4." + System.getenv()['BUILD_NUMBER']
-group= "com.mraof.minestuck"
-archivesBaseName = "Minestuck"
-
-sourceCompatibility = targetCompatibility = "1.8" // Need this here so eclipse task generates correctly.
-compileJava {
-    sourceCompatibility = targetCompatibility = "1.8"
-}
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 minecraft {
-    version = "1.12.2-14.23.4.2705"
-    runDir = "run"
+    mappings channel: 'snapshot', version: project.getProperty('mc_mappings_version')
 
-    mappings = "snapshot_20171003"
+    accessTransformer = file('src/META-INF/accesstransformer.cfg')
 
-    replaceIn "com/mraof/minestuck/Minestuck.java"
-    replace "@VERSION@", project.version
+    // Default run configurations.
+    // These can be tweaked, removed, or duplicated as needed.
+    runs {
+        client {
+            workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+
+            // It seems to default to Minestuck_main, but is not set because it's actually called Minestuck.main?
+            ideaModule project.getName() +  '.main'
+
+            // Add an uuid arg if you have specified it in a relevant gradle.properties file. NOTE: Do not use the gradle.properties file in the project! (because that one is supposed to be shared among all devs) Create one in your "gradle user home" instead.
+            if (project.hasProperty('mc_uuid')) {
+                args '--uuid', project.getProperty('mc_uuid')
+            }
+
+            // Add an username arg if you have specified it in a relevant gradle.properties file. Note that specifying a uuid and a non-matching username (or no username specified) may cause single-player worlds to freeze up when exiting the world.
+            if (project.hasProperty('mc_username')) {
+                args '--username', project.getProperty('mc_username')
+            }
+
+            mods {
+                minestuck {
+                    source sourceSets.main
+                }
+            }
+        }
+        server {
+            workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+
+            // It seems to default to Minestuck_main, but is not set because it's actually called Minestuck.main?
+            ideaModule project.getName() +  '.main'
+
+            mods {
+                minestuck {
+                    source sourceSets.main
+                }
+            }
+        }
+        data {
+            workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+
+            // It seems to default to Minestuck_main, but is not set because it's actually called Minestuck.main?
+            ideaModule project.getName() +  '.main'
+
+            args '--mod', 'minestuck', '--all', '--output', file('src/generated/resources/'), '--existing', sourceSets.main.resources.srcDirs[0]
+
+            mods {
+                examplemod {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
 }
 
 dependencies {
-    def mc_version = "1.12.2"
-    def jei_version = "4.9.1.168"
-    // http://chickenbones.net/maven
-    //compile "codechicken:CodeChickenLib:1.10.2-2.4.3.124:universal"
-    //compile "codechicken:CodeChickenCore:1.10.2-2.3.5.91:universal"
-    //compile "codechicken:NotEnoughItems:1.10.2-2.1.2.163:universal"
+    minecraft "net.minecraftforge:forge:${project.getProperty('mc_forge_version')}"
+
 	// http://dvs1.progwml6.com/files/maven
-    //compile "mezz.jei:jei_1.9.4:3.6.8.225"
-    deobfCompile "mezz.jei:jei_${mc_version}:${jei_version}:api"
-    runtime "mezz.jei:jei_${mc_version}:${jei_version}"
-    deobfCompile "CraftTweaker2:CraftTweaker2-API:4.1.6.457"
+    compileOnly fg.deobf("mezz.jei:jei-${project.getProperty('mc_jei_version')}:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-${project.getProperty('mc_jei_version')}")
 }
 
 sourceSets {
     main {
+        //TODO refactor and seperate code and resources like in other projects after merging together a lot of active branches
         java {
             srcDir 'src'
         }
         resources {
             srcDir 'src'
+            srcDir 'src/generated/resources'
         }
     }
 }
-processResources
-{
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-                
-        // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+
+// Example for how to get properties into the manifest for reading by the runtime..
+jar {
+    manifest {
+        attributes([
+                "Specification-Title": "minestuck",
+                "Specification-Vendor": "Minestuck Dev Team",
+                "Specification-Version": "1", // We are version 1 of ourselves
+                "Implementation-Title": project.name,
+                "Implementation-Version": "${version}",
+                "Implementation-Vendor" :"Minestuck Dev Team",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
     }
-        
-    // copy everything else, thats not the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
+}
+
+// Example configuration to allow publishing using the maven-publish task
+// we define a custom artifact that is sourced from the reobfJar output task
+// and then declare that to be published
+// Note you'll need to add a repository here
+def reobfFile = file("$buildDir/reobfJar/output.jar")
+def reobfArtifact = artifacts.add('default', reobfFile) {
+    type 'jar'
+    builtBy 'reobfJar'
+}
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact reobfArtifact
+        }
+    }
+    repositories {
+        maven {
+            url "file:///${project.projectDir}/mcmodsrepo"
+        }
     }
 }

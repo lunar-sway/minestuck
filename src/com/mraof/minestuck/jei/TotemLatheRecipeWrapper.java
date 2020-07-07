@@ -1,5 +1,5 @@
 package com.mraof.minestuck.jei;
-
+/*
 import com.mraof.minestuck.item.MinestuckItems;
 import net.minecraft.item.ItemStack;
 
@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * Created by mraof on 2017 January 23 at 6:53 AM.
- */
+ * /
 class TotemLatheRecipeWrapper extends PunchCardRecipeWrapper
 {
     private static final List<ItemStack> dowel;
@@ -31,3 +31,4 @@ class TotemLatheRecipeWrapper extends PunchCardRecipeWrapper
         return inputs;
     }
 }
+*/

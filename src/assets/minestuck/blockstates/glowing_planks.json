@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "minestuck:glowing_planks" }
+        "": { "model": "minestuck:block/glowing_planks" }
     }
 }

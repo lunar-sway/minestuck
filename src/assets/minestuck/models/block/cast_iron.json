@@ -1,6 +1,6 @@
 {
     "parent": "block/cube_all",
     "textures": {
-        "all": "minestuck:blocks/cast_iron"
+        "all": "minestuck:block/cast_iron"
     }
 }

@@ -1,6 +1,6 @@
 {
     "parent": "item/handheld",
     "textures": {
-        "layer0": "minestuck:items/regi_hammer"
+        "layer0": "minestuck:item/regi_hammer"
     }
 }

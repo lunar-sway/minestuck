@@ -1,11 +1,11 @@
 {
     "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
     "textures": {
-        "0": "blocks/black-tile",
-        "1": "blocks/white-tile",
-        "2": "blocks/ball-tile",
-        "3": "blocks/ball1-tile",
-        "4": "blocks/hammer1-tile"
+        "0": "block/black-tile",
+        "1": "block/white-tile",
+        "2": "block/ball-tile",
+        "3": "block/ball1-tile",
+        "4": "block/hammer1-tile"
     },
     "elements": [
         {

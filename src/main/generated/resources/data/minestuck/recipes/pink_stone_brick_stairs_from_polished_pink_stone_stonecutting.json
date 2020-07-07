@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "minestuck:polished_pink_stone"
+  },
+  "result": "minestuck:pink_stone_brick_stairs",
+  "count": 1
+}

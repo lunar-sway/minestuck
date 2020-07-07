@@ -1,8 +1,5 @@
 package com.mraof.minestuck.util;
 
-import com.mraof.minestuck.Minestuck;
-import net.minecraftforge.fml.common.Mod;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -18,7 +15,7 @@ import java.net.URLConnection;
 public class UpdateChecker extends Thread
 {
 	public static boolean outOfDate = false;
-	public static String latestVersion = Minestuck.class.getAnnotation(Mod.class).version();
+	public static String latestVersion = "";//Minestuck.class.getAnnotation(Mod.class).version();
 	public static String updateChanges = "";
 	
 	@Override

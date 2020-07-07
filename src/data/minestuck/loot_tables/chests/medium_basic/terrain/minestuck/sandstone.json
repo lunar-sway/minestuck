@@ -1,0 +1,300 @@
+{
+    "pools": [
+        {
+            "name": "main",
+            "rolls": 1,
+            "entries": [
+                {
+                    "entryName": "sandstone_main",
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "sandstone",
+                            "subtypes": false
+                        }
+                    ],
+                    "type": "item",
+                    "name": "minecraft:sandstone",
+                    "weight": 15,
+                    "quality": -2,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 2,
+                                "max": 16
+                            }
+                        }
+                    ]
+                },
+                {
+                    "entryName": "smooth_sandstone_main",
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "sandstone",
+                            "subtypes": false
+                        }
+                    ],
+                    "type": "item",
+                    "name": "minecraft:smooth_sandstone",
+                    "weight": 10,
+                    "quality": -2,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 8
+                            }
+                        }
+                    ]
+                },
+                {
+                    "entryName": "chiseled_sandstone_main",
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "sandstone",
+                            "subtypes": false
+                        }
+                    ],
+                    "type": "item",
+                    "name": "minecraft:chiseled_sandstone",
+                    "weight": 4,
+                    "quality": -2,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 2
+                            }
+                        }
+                    ]
+                },
+                {
+                    "entryName": "red_sandstone_secondary",
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "sandstone",
+                            "subtypes": false
+                        }
+                    ],
+                    "type": "item",
+                    "name": "minecraft:red_sandstone",
+                    "weight": 4,
+                    "quality": -2,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ]
+                },
+                {
+                    "entryName": "sand_main",
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "sandstone",
+                            "subtypes": false
+                        }
+                    ],
+                    "type": "item",
+                    "name": "minecraft:sand",
+                    "weight": 8,
+                    "quality": -2,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 5
+                            }
+                        }
+                    ]
+                },
+                {
+                    "entryName": "red_sandstone_main",
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "sandstone_red",
+                            "subtypes": false
+                        }
+                    ],
+                    "type": "item",
+                    "name": "minecraft:red_sandstone",
+                    "weight": 15,
+                    "quality": -2,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 2,
+                                "max": 16
+                            }
+                        }
+                    ]
+                },
+                {
+                    "entryName": "smooth_red_sandstone_main",
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "sandstone_red",
+                            "subtypes": false
+                        }
+                    ],
+                    "type": "item",
+                    "name": "minecraft:smooth_red_sandstone",
+                    "weight": 10,
+                    "quality": -2,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 8
+                            }
+                        }
+                    ]
+                },
+                {
+                    "entryName": "chiseled_red_sandstone_main",
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "sandstone_red",
+                            "subtypes": false
+                        }
+                    ],
+                    "type": "item",
+                    "name": "minecraft:chiseled_red_sandstone",
+                    "weight": 4,
+                    "quality": -2,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 2
+                            }
+                        }
+                    ]
+                },
+                {
+                    "entryName": "sandstone_secondary",
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "sandstone_red",
+                            "subtypes": false
+                        }
+                    ],
+                    "type": "item",
+                    "name": "minecraft:sandstone",
+                    "weight": 4,
+                    "quality": -2,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ]
+                },
+                {
+                    "entryName": "red_sand_main",
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "sandstone_red",
+                            "subtypes": false
+                        }
+                    ],
+                    "type": "item",
+                    "name": "minecraft:red_sand",
+                    "weight": 8,
+                    "quality": -2,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 5
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:gold_ingot",
+                    "weight": 2,
+                    "quality": 2,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:redstone",
+                    "weight": 5,
+                    "quality": 0,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 7
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:stone_pickaxe",
+                    "weight": 8,
+                    "quality": 0,
+                    "functions": [
+                        {
+                            "function": "set_damage",
+                            "damage": {
+                                "min": 0.75,
+                                "max": 1
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:iron_pickaxe",
+                    "weight": 3,
+                    "quality": 1,
+                    "functions": [
+                        {
+                            "function": "set_damage",
+                            "damage": {
+                                "min": 0.75,
+                                "max": 1
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

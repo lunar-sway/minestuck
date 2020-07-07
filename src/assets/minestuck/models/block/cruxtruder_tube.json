@@ -1,9 +1,9 @@
 {
     "textures": {
-        "particle": "minestuck:machines/cruxtruder/tube",
-        "side": "minestuck:machines/cruxtruder/tube",
-        "up": "minestuck:machines/cruxtruder/top_tube",
-        "wheel": "minestuck:machines/cruxtruder/misc"
+        "particle": "minestuck:block/machine/cruxtruder/tube",
+        "side": "minestuck:block/machine/cruxtruder/tube",
+        "up": "minestuck:block/machine/cruxtruder/top_tube",
+        "wheel": "minestuck:block/machine/cruxtruder/misc"
     },
     "elements": [
         {

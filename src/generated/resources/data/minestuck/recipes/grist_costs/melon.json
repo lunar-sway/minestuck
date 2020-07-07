@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:melon"
+  },
+  "grist_cost": {
+    "minestuck:amber": 8,
+    "minestuck:caulk": 8,
+    "minestuck:build": 2
+  }
+}

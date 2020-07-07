@@ -1,6 +1,6 @@
 {
     "parent": "item/handheld",
     "textures": {
-        "layer0": "minestuck:items/ruby_croak"
+        "layer0": "minestuck:item/ruby_croak"
     }
 }

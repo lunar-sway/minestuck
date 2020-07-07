@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:dead_bush"
+  },
+  "grist_cost": {
+    "minestuck:amber": 2,
+    "minestuck:sulfur": 1
+  }
+}

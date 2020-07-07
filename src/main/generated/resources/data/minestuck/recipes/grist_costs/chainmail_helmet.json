@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:chainmail_helmet"
+  },
+  "grist_cost": {
+    "minestuck:rust": 20,
+    "minestuck:mercury": 10
+  }
+}

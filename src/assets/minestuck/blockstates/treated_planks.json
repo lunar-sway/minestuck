@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "minestuck:treated_planks" }
+        "": { "model": "minestuck:block/treated_planks" }
     }
 }

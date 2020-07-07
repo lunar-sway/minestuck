@@ -1,10 +1,10 @@
 {
 	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
 	"textures": {
-		"0": "minestuck:blocks/white",
-		"3": "minestuck:blocks/bsod",
-		"6": "minestuck:blocks/keys",
-		"particle": "minestuck:blocks/white"
+		"0": "minestuck:block/white",
+		"3": "minestuck:block/bsod",
+		"6": "minestuck:block/keys",
+		"particle": "minestuck:block/white"
 	},
 	"elements": [
 		{
@@ -894,12 +894,7 @@
 				"north": {
 					"uv": [0, 2.1, 16, 13.1],
 					"texture": "#3"
-				},
-				"east": {"uv": [0, 0, 14.4, 8.2], "texture": "#1"},
-				"south": {"uv": [0, 0, 14.4, 8.2], "texture": "#1"},
-				"west": {"uv": [0, 0, 14.4, 8.2], "texture": "#1"},
-				"up": {"uv": [0, 0, 16, 16], "texture": "#1"},
-				"down": {"uv": [0, 0, 14.4, 8.2], "texture": "#1"}
+				}
 			}
 		},
 		{

@@ -1,23 +1,23 @@
 package com.mraof.minestuck.util;
 
-import java.util.ArrayList;
-
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.common.ToolType;
+
+import java.util.ArrayList;
 
 public class KindAbstratusType
 {
 	
-	private String unlocalizedName;
+	private final String unlocalizedName;
 	private boolean selectable = true;
 	
-	private ArrayList<ItemType> items = new ArrayList<ItemType>();
+	private final ArrayList<ItemType> items = new ArrayList<>();
 	
-	public KindAbstratusType(String unlocName) 
+	public KindAbstratusType(String unlocName)
 	{
 		this.unlocalizedName = unlocName;
 	}
@@ -32,7 +32,7 @@ public class KindAbstratusType
 		for(Object i : items)
 		{
 			if(i instanceof Item) addItemId((Item)i);
-			else if(i instanceof String) addToolClass((String)i);
+			else if(i instanceof ToolType) addToolClass((ToolType)i);
 			else if(i.getClass().isAssignableFrom(Item.class)) addItemClass((Class<? extends Item>)i);
 			else Debug.warnf("%s is not a valid item check.", i);
 		}
@@ -41,35 +41,36 @@ public class KindAbstratusType
 	public KindAbstratusType setSelectable(boolean in){selectable = in; return this;}
 	public boolean 			 getSelectable() 		  {return selectable;}
 	
-	public KindAbstratusType addItemClass(Class<? extends Item>... items) 
+	public KindAbstratusType addItemClass(Class<? extends Item>... items)
 	{
 		for(Class<? extends Item> item : items)
 			this.items.add(new ItemClassType(item));
 		return this;
 	}
 	
-	public KindAbstratusType addItemId(Item... items) 
+	public KindAbstratusType addItemId(Item... items)
 	{
 		for(Item item : items)
 			this.items.add(new ItemIdType(item));
 		return this;
 	}
 	
-	public KindAbstratusType addToolClass(String... in) 
+	public KindAbstratusType addToolClass(ToolType... in)
 	{
-		for(String i : in)
+		for(ToolType i : in)
 			items.add(new ItemToolType(i));
 		return this;
 	}
 	
-	public KindAbstratusType includesFist() 
+	public KindAbstratusType includesFist()
 	{
 		items.add(new FistType());
 		return this;
 	}
-	@SideOnly(Side.CLIENT)
-	public String getDisplayName() {
-		return I18n.translateToLocal("strife."+unlocalizedName+".name");
+	
+	public ITextComponent getDisplayName()
+	{
+		return new TranslationTextComponent("strife."+unlocalizedName);
 	}
 	
 	public String getUnlocalizedName() {
@@ -112,30 +113,30 @@ public class KindAbstratusType
 		
 		ItemIdType(Item item)
 		{
-			itemId = Item.REGISTRY.getNameForObject(item);
+			itemId = item.getRegistryName();
 		}
 		
 		@Override
 		boolean partOf(ItemStack item)
 		{
-			return this.itemId.equals(Item.REGISTRY.getNameForObject(item.getItem()));
+			return this.itemId.equals(item.getItem().getRegistryName());
 		}
 	}
 	
 	private static class ItemToolType extends ItemType
 	{
-		final String toolClass;
+		final ToolType toolClass;
 		
-		ItemToolType(String toolClass)
+		ItemToolType(ToolType toolClass)
 		{
 			this.toolClass = toolClass;
 		}
 		
 		@Override
-		boolean partOf(ItemStack item) 
+		boolean partOf(ItemStack item)
 		{
 			
-			return item.getItem().getToolClasses(item).contains(toolClass);
+			return item.getItem().getToolTypes(item).contains(toolClass);
 		}
 		
 	}
@@ -143,7 +144,7 @@ public class KindAbstratusType
 	private static class FistType extends ItemType
 	{
 		@Override
-		boolean partOf(ItemStack item) 
+		boolean partOf(ItemStack item)
 		{
 			return item.isEmpty();
 		}

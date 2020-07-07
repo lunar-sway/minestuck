@@ -1,6 +1,6 @@
 {
     "parent": "item/handheld",
     "textures": {
-        "layer0": "minestuck:items/dragon_cane"
+        "layer0": "minestuck:item/dragon_cane"
     }
 }

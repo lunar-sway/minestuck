@@ -2,9 +2,7 @@ package com.mraof.minestuck.util;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -77,6 +75,8 @@ public enum EnumClass
 	 */
 	public static EnumClass getClassFromInt(int i)
 	{
+		if(i < 0 || i >= EnumClass.values().length)
+			return null;
 		return EnumClass.values()[i];
 	}
 	
@@ -108,11 +108,12 @@ public enum EnumClass
 	 * For usage in messages sent to a player from a server, use <code>asTextComponent()</code>.
 	 * For debugging purposes, use <code>toString()</code> instead.
 	 * @return a translated string of the name.
+	 * @deprecated use {@link #asTextComponent()} instead
 	 */
-	@SideOnly(Side.CLIENT)
+	@Deprecated
 	public String getDisplayName()
 	{
-		return I18n.format("title." + this.toString());
+		return I18n.format(getTranslationKey());
 	}
 	
 	/**
@@ -122,6 +123,11 @@ public enum EnumClass
 	 */
 	public ITextComponent asTextComponent()
 	{
-		return new TextComponentTranslation("title." + this.toString());
+		return new TranslationTextComponent(getTranslationKey());
+	}
+	
+	public String getTranslationKey()
+	{
+		return "title.class." + this.toString();
 	}
 }

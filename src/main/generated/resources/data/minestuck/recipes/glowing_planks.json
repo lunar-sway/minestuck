@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "planks",
+  "ingredients": [
+    {
+      "tag": "minestuck:logs/glowing"
+    }
+  ],
+  "result": {
+    "item": "minestuck:glowing_planks",
+    "count": 4
+  }
+}

@@ -1,126 +1,121 @@
 package com.mraof.minestuck.network;
 
-import io.netty.buffer.ByteBuf;
+import com.mraof.minestuck.editmode.ClientEditHandler;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.network.PacketBuffer;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.EnumSet;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fml.relauncher.Side;
-
-import com.mraof.minestuck.editmode.ClientEditHandler;
-
-public class ServerEditPacket extends MinestuckPacket
+public class ServerEditPacket implements PlayToClientPacket
 {
 	
 	String target;
-	int posX, posZ;
+	int centerX, centerZ;
 	boolean[] givenItems;
-	NBTTagCompound deployTags;
+	CompoundNBT deployTags;
+	
+	public static ServerEditPacket exit()
+	{
+		return new ServerEditPacket();
+	}
+	
+	public static ServerEditPacket givenItems(boolean[] givenItems)
+	{
+		ServerEditPacket packet = new ServerEditPacket();
+		packet.givenItems = givenItems;
+		return packet;
+	}
+	
+	public static ServerEditPacket activate(String target, int centerX, int centerZ, boolean[] givenItems, CompoundNBT deployTags)
+	{
+		ServerEditPacket packet = new ServerEditPacket();
+		packet.target = target;
+		packet.centerX = centerX;
+		packet.centerZ = centerZ;
+		packet.givenItems = givenItems;
+		packet.deployTags = deployTags;
+		return packet;
+	}
 	
 	@Override
-	public MinestuckPacket generatePacket(Object... dat)
+	public void encode(PacketBuffer buffer)
 	{
-		if(dat.length == 0)
+		if(target != null)
 		{
-			return this;
-		}
-		if(dat.length == 1 || dat.length == 2)
+			buffer.writeBoolean(true);
+			buffer.writeString(target, 16);
+			buffer.writeInt(centerX);
+			buffer.writeInt(centerZ);
+		} else if(givenItems != null)
+			buffer.writeBoolean(false);
+		else return;
+		
+		if(givenItems != null)
 		{
-			data.writeBoolean(true);
-			boolean[] booleans = (boolean[]) dat[0];
-			data.writeInt(booleans.length);
-			for(boolean b : booleans)
-				data.writeBoolean(b);
-			if(dat.length == 2)
+			buffer.writeInt(givenItems.length);
+			for(boolean b : givenItems)
+				buffer.writeBoolean(b);
+			
+			if(deployTags != null)
 			{
 				try
 				{
 					ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-					CompressedStreamTools.writeCompressed((NBTTagCompound) dat[1], bytes);
-					data.writeBytes(bytes.toByteArray());
+					CompressedStreamTools.writeCompressed(deployTags, bytes);
+					buffer.writeBytes(bytes.toByteArray());
 				} catch(IOException e)
 				{
 					e.printStackTrace();
-					return null;
 				}
 			}
-			return this;
 		}
-		data.writeBoolean(false);
-		writeString(data,dat[0].toString()+"\n");
-		data.writeInt((Integer)dat[1]);
-		data.writeInt((Integer)dat[2]);
-		boolean[] booleans = (boolean[]) dat[3];
-		data.writeInt(booleans.length);
-		for(boolean b : booleans)
-			data.writeBoolean(b);
-		try
-		{
-			ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-			CompressedStreamTools.writeCompressed((NBTTagCompound) dat[4], bytes);
-			data.writeBytes(bytes.toByteArray());
-		} catch(IOException e)
-		{
-			e.printStackTrace();
-			return null;
-		}
-		
-		return this;
 	}
-
-	@Override
-	public MinestuckPacket consumePacket(ByteBuf data)
+	
+	public static ServerEditPacket decode(PacketBuffer buffer)
 	{
-		if(data.readableBytes() == 0)
-			return this;
-		if(data.readBoolean())
+		ServerEditPacket packet = new ServerEditPacket();
+		if(buffer.readableBytes() > 0)
 		{
-			givenItems = new boolean[data.readableBytes()];
-			for(int i = 0; i < givenItems.length; i++)
+			if(buffer.readBoolean())
 			{
-				givenItems[i] = data.readBoolean();
+				packet.target = buffer.readString(16);
+				packet.centerX = buffer.readInt();
+				packet.centerZ = buffer.readInt();
 			}
-			return this;
-		}
-		target = readLine(data);
-		posX = data.readInt();
-		posZ = data.readInt();
-		givenItems = new boolean[data.readInt()];
-		for(int i = 0; i < givenItems.length; i++)
-		{
-			givenItems[i] = data.readBoolean();
+			
+			if(buffer.readableBytes() > 0)
+			{
+				packet.givenItems = new boolean[buffer.readInt()];
+				for(int i = 0; i < packet.givenItems.length; i++)
+				{
+					packet.givenItems[i] = buffer.readBoolean();
+				}
+				
+				if(buffer.readableBytes() > 0)
+				{
+					byte[] bytes = new byte[buffer.readableBytes()];
+					buffer.readBytes(bytes);
+					try
+					{
+						packet.deployTags = CompressedStreamTools.readCompressed(new ByteArrayInputStream(bytes));
+					}
+					catch(IOException e)
+					{
+						e.printStackTrace();
+					}
+				}
+			}
 		}
 		
-		byte[] bytes = new byte[data.readableBytes()];
-		data.readBytes(bytes);
-		try
-		{
-			deployTags = CompressedStreamTools.readCompressed(new ByteArrayInputStream(bytes));
-		}
-		catch(IOException e)
-		{
-			e.printStackTrace();
-			return null;
-		}
-		
-		return this;
+		return packet;
 	}
-
+	
 	@Override
-	public void execute(EntityPlayer player)
+	public void execute()
 	{
-		ClientEditHandler.onClientPackage(target, posX, posZ, givenItems, deployTags);
+		ClientEditHandler.onClientPackage(target, centerX, centerZ, givenItems, deployTags);
 	}
-
-	@Override
-	public EnumSet<Side> getSenderSide()
-	{
-		return EnumSet.of(Side.SERVER);
-	}
-
 }

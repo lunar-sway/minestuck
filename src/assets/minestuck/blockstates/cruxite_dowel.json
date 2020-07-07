@@ -1,7 +1,7 @@
 {
     "variants": {
-        "type=cruxtruder": { "model": "minestuck:cruxtruder_dowel" },
-        "type=dowel":      { "model": "minestuck:cruxite_dowel" },
-        "type=totem":      { "model": "minestuck:cruxite_totem" }
+        "dowel=cruxtruder": { "model": "minestuck:block/cruxtruder_dowel" },
+        "dowel=dowel":      { "model": "minestuck:block/cruxite_dowel" },
+        "dowel=totem":      { "model": "minestuck:block/cruxite_totem" }
     }
 }

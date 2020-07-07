@@ -1,8 +1,8 @@
 package com.mraof.minestuck.jei;
-
+/*
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import com.mraof.minestuck.util.ColorCollector;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * Created by mraof on 2017 January 23 at 6:50 AM.
- */
+ * /
 public class TotemLatheRecipeCategory implements IRecipeCategory<TotemLatheRecipeWrapper>
 {
 	private IDrawable background;
@@ -86,3 +86,4 @@ public class TotemLatheRecipeCategory implements IRecipeCategory<TotemLatheRecip
 		stackGroup.set(3, outputs);
 	}
 }
+*/

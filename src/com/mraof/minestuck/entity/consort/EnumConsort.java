@@ -1,31 +1,33 @@
 package com.mraof.minestuck.entity.consort;
 
+import com.mraof.minestuck.entity.MSEntityTypes;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.util.text.TextFormatting;
 
 import java.util.Random;
 
-public enum EnumConsort
+public enum EnumConsort	//TODO Could ideally be changed into a registry.
 {
-	SALAMANDER(EntitySalamander.class, "salamander", TextFormatting.YELLOW),
-	TURTLE(EntityTurtle.class, "turtle", TextFormatting.LIGHT_PURPLE),
-	NAKAGATOR(EntityNakagator.class, "nakagator", TextFormatting.RED),
-	IGUANA(EntityIguana.class, "iguana", TextFormatting.AQUA);
+	SALAMANDER(MSEntityTypes.SALAMANDER, "salamander", TextFormatting.YELLOW),
+	TURTLE(MSEntityTypes.TURTLE, "turtle", TextFormatting.LIGHT_PURPLE),
+	NAKAGATOR(MSEntityTypes.NAKAGATOR, "nakagator", TextFormatting.RED),
+	IGUANA(MSEntityTypes.IGUANA, "iguana", TextFormatting.AQUA);
 	
-	private final Class<? extends EntityConsort> consortClass;
+	private final EntityType<? extends ConsortEntity> consortType;
 	private final String name;
 	private final TextFormatting color;
 	
-	EnumConsort(Class<? extends EntityConsort> consort, String name, TextFormatting color)
+	EnumConsort(EntityType<? extends ConsortEntity> consort, String name, TextFormatting color)
 	{
-		consortClass = consort;
+		consortType = consort;
 		this.color = color;
 		this.name = name;
 	}
 	
 	public boolean isConsort(Entity consort)
 	{
-		return consortClass.isInstance(consort);
+		return consortType.equals(consort.getType());
 	}
 	
 	public TextFormatting getColor()
@@ -38,9 +40,9 @@ public enum EnumConsort
 		return name;
 	}
 	
-	public Class<? extends EntityConsort> getConsortClass()
+	public EntityType<? extends ConsortEntity> getConsortType()
 	{
-		return consortClass;
+		return consortType;
 	}
 	
 	public static MerchantType getRandomMerchant(Random rand)
@@ -51,6 +53,14 @@ public enum EnumConsort
 		else return MerchantType.GENERAL;
 	}
 	
+	public static EnumConsort getFromName(String str)
+	{
+		for(EnumConsort type : EnumConsort.values())
+			if(type.getName().equals(str))
+				return type;
+		throw new IllegalArgumentException("Invalid consort type " + str);
+	}
+	
 	public enum MerchantType
 	{
 		NONE,
@@ -58,7 +68,13 @@ public enum EnumConsort
 		FOOD,
 		GENERAL,
 		;
-		public static MerchantType getFromString(String str)
+		
+		public String getName()
+		{
+			return name().toLowerCase();
+		}
+		
+		public static MerchantType getFromName(String str)
 		{
 			for(MerchantType type : MerchantType.values())
 				if(type.name().toLowerCase().equals(str))

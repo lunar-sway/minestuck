@@ -1,8 +1,0 @@
-{
-    "parent": "block/cube_bottom_top",
-    "textures": {
-        "bottom": "minestuck:blocks/gold_ore_sandstone_red_bottom",
-        "top": "minestuck:blocks/gold_ore_sandstone_red_top",
-        "side": "minestuck:blocks/gold_ore_sandstone_red_side"
-    }
-}

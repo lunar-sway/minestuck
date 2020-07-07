@@ -1,152 +1,154 @@
 package com.mraof.minestuck;
 
-import com.mraof.minestuck.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.client.ClientProxy;
-import com.mraof.minestuck.client.gui.MinestuckFontRenderer;
 import com.mraof.minestuck.command.*;
-import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.event.ServerEventHandler;
-import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
-import com.mraof.minestuck.modSupport.crafttweaker.CraftTweakerSupport;
-import com.mraof.minestuck.tileentity.*;
-import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
-import com.mraof.minestuck.util.*;
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.LoaderState;
+import com.mraof.minestuck.fluid.MSFluids;
+import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
+import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.crafting.alchemy.GristCostGenerator;
+import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.tracker.PlayerTracker;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.world.gen.feature.MSFeatures;
+import com.mraof.minestuck.world.storage.MSExtraData;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.WorldPersistenceHooks;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.Mod.Instance;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.*;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.server.*;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.util.Random;
 
 import static com.mraof.minestuck.Minestuck.MOD_ID;
-import static com.mraof.minestuck.Minestuck.MOD_NAME;
 
-@Mod(modid = MOD_ID, name = MOD_NAME, version = "@VERSION@", guiFactory = "com.mraof.minestuck.client.gui.MinestuckGuiFactory", acceptedMinecraftVersions = "[1.12,1.12.2]")
+@Mod(MOD_ID)
 public class Minestuck
 {
 	public static final String MOD_NAME = "Minestuck";
 	public static final String MOD_ID = "minestuck";
 	
-	/**
-	 * True only if the minecraft application is client-sided 
-	 */
-	public static boolean isClientRunning;
-	/**
-	 * True if the minecraft application is server-sided, or if there is an integrated server running
-	 */
-	public static volatile boolean isServerRunning;
-	
-	// The instance of your mod that Forge uses.
-	@Instance("minestuck")
-	public static Minestuck instance;
-	
-	@SidedProxy(clientSide = "com.mraof.minestuck.client.ClientProxy", serverSide = "com.mraof.minestuck.CommonProxy")
-	public static CommonProxy proxy;
-
-	public static long worldSeed = 0;	//TODO proper usage of seed when generating titles, land aspects, and land dimension data
-	
-	@EventHandler
-	public void preInit(FMLPreInitializationEvent event) 
+	public Minestuck()
 	{
-		isClientRunning = event.getSide().isClient();
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
 		
-		Debug.logger = event.getModLog();
+		MinestuckConfig.loadConfig(MinestuckConfig.client_config, FMLPaths.CONFIGDIR.get().resolve("minestuck-client.toml").toString());
+		MinestuckConfig.loadConfig(MinestuckConfig.server_config, FMLPaths.CONFIGDIR.get().resolve("minestuck.toml").toString());
 		
-		MinestuckConfig.loadConfigFile(event.getSuggestedConfigurationFile(), event.getSide());
+		WorldPersistenceHooks.addHook(new MSWorldPersistenceHook());
+		
+		MinecraftForge.EVENT_BUS.register(this);
+		
+		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+		DistExecutor.runWhenOn(Dist.CLIENT, () -> ClientProxy::registerEarly);
+		
+		Debug.info("Register deferred register!");
+		MSFluids.FLUIDS.register(eventBus);
+	}
+	
+	private void setup(final FMLCommonSetupEvent event)
+	{
+		
+		//MinestuckConfig.loadConfigFile(event.getSuggestedConfigurationFile(), event.getSide());
 		
 		//(new UpdateChecker()).start();
 		
-		proxy.preInit();
+		MinestuckConfig.setConfigVariables();
+		CommonProxy.init();
 	}
 	
-	//Fonts
-	public static MinestuckFontRenderer fontSpecibus;
-	
-	@SideOnly(Side.CLIENT)
-	public static void setSpecibusFont(MinestuckFontRenderer font)
+	private void clientSetup(final FMLClientSetupEvent event)
 	{
-		if(fontSpecibus == null && Loader.instance().getLoaderState() == LoaderState.INITIALIZATION
-				&& Loader.instance().activeModContainer().getModId().equals(MOD_ID))
-					fontSpecibus = font;
-	}
-	
-	@EventHandler
-	public void load(FMLInitializationEvent event) 
-	{
-		//Register textures and renders
-		if(isClientRunning)
-		{
-			ClientProxy.registerRenderers();
-		}
-		
-		proxy.init();
+		ClientProxy.init();
+		MinecraftForge.EVENT_BUS.register(ClientProxy.class);
+		MinestuckConfig.setClientValues();
 	}
 
-	@EventHandler
-	public void postInit(FMLPostInitializationEvent event) 
-	{
-		if(Loader.isModLoaded("crafttweaker"))
-			CraftTweakerSupport.applyRecipes();
-		
-		AlchemyRecipes.registerAutomaticRecipes();
-	}
-
-	@EventHandler 
+	@SubscribeEvent
 	public void serverAboutToStart(FMLServerAboutToStartEvent event)
 	{
-		isServerRunning = true;
-		TileEntityTransportalizer.transportalizers.clear();
-		DeployList.applyConfigValues(MinestuckConfig.deployConfigurations);
+		event.getServer().getResourceManager().addReloadListener(new GristCostGenerator(event.getServer()));
 	}
 	
-	@EventHandler
-	public void serverClosed(FMLServerStoppedEvent event)
-	{
-		MinestuckDimensionHandler.unregisterDimensions();
-		isServerRunning = !isClientRunning;
-		MinestuckPlayerTracker.dataCheckerPermission.clear();
-		IdentifierHandler.clear();
-	}
-	
-	@EventHandler
+	@SubscribeEvent
 	public void serverStarting(FMLServerStartingEvent event)
 	{
-		if(!event.getServer().isDedicatedServer() && Minestuck.class.getAnnotation(Mod.class).version().startsWith("@"))
-			event.getServer().setOnlineMode(false);	//Makes it possible to use LAN in a development environment
 		
-		if(!event.getServer().isServerInOnlineMode() && MinestuckConfig.useUUID)
+		//if(!event.getServer().isDedicatedServer() && Minestuck.class.getAnnotation(Mod.class).version().startsWith("@")) TODO Find an alternative to detect dev environment
+			//event.getServer().setOnlineMode(false);	//Makes it possible to use LAN in a development environment
+		
+		if(!event.getServer().isServerInOnlineMode() && MinestuckConfig.useUUID.get())
 			Debug.warn("Because uuids might not be consistent in an offline environment, it is not recommended to use uuids for minestuck. You should disable uuidIdentification in the minestuck config.");
-		if(event.getServer().isServerInOnlineMode() && !MinestuckConfig.useUUID)
+		if(event.getServer().isServerInOnlineMode() && !MinestuckConfig.useUUID.get())
 			Debug.warn("Because users may change their usernames, it is normally recommended to use uuids for minestuck. You should enable uuidIdentification in the minestuck config.");
 		
-		event.registerServerCommand(new CommandCheckLand());
-		event.registerServerCommand(new CommandGrist());
-		event.registerServerCommand(new CommandGristSend());
-		event.registerServerCommand(new CommandTransportalizer());
-		event.registerServerCommand(new CommandSburbSession());
-		event.registerServerCommand(new CommandSburbServer());
-		event.registerServerCommand(new CommandSetRung());
-		event.registerServerCommand(new CommandConsortReply());
-		event.registerServerCommand(new CommandToStructure());
-		event.registerServerCommand(new CommandPorkhollow());
-		event.registerServerCommand(new CommandLandDebug());
-		event.registerServerCommand(new CommandSpecibus());
+		CommandCheckLand.register(event.getCommandDispatcher());
+		CommandGrist.register(event.getCommandDispatcher());
+		CommandGristSend.register(event.getCommandDispatcher());
+		CommandTransportalizer.register(event.getCommandDispatcher());
+		CommandSburbSession.register(event.getCommandDispatcher());
+		CommandSburbServer.register(event.getCommandDispatcher());
+		CommandSetRung.register(event.getCommandDispatcher());
+		CommandConsortReply.register(event.getCommandDispatcher());
+		CommandToStructure.register(event.getCommandDispatcher());
+		CommandPorkhollow.register(event.getCommandDispatcher());
+		CommandLandDebug.register(event.getCommandDispatcher());
+		//event.registerServerCommand(new CommandSpecibus());
 		
-		worldSeed = event.getServer().worlds[0].getSeed();
-		ServerEventHandler.lastDay = event.getServer().worlds[0].getWorldTime() / 24000L;
+		ServerEventHandler.lastDay = event.getServer().getWorld(DimensionType.OVERWORLD).getGameTime() / 24000L;
 		CaptchaDeckHandler.rand = new Random();
 	}
 	
-	@EventHandler
+	@SubscribeEvent
+	public void serverStarted(FMLServerStartedEvent event)
+	{
+		SkaianetHandler skaianet = SkaianetHandler.get(event.getServer());
+		MSExtraData.get(event.getServer()).recoverConnections(recovery -> recovery.recover(skaianet.getActiveConnection(recovery.getClientPlayer())));
+	}
+	
+	@SubscribeEvent
 	public void serverStopping(FMLServerStoppingEvent event)
 	{
-		ServerEditHandler.onServerStopping();
+		ServerEditHandler.onServerStopping(event.getServer());
+	}
+	
+	@SubscribeEvent
+	public void serverStopped(FMLServerStoppedEvent event)
+	{
+		PlayerTracker.dataCheckerPermission.clear();
+		IdentifierHandler.clear();
+		SkaianetHandler.clear();
+		MSFeatures.LAND_GATE.clearCache();
+	}
+	
+	@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
+	public static class RegistryEvents
+	{
+		@SubscribeEvent
+		public static void onBlockRegistry(final RegistryEvent.Register<Block> event)
+		{
+			MSBlocks.registerBlocks(event.getRegistry());
+		}
+		
+		@SubscribeEvent
+		public static void onItemRegistry(final RegistryEvent.Register<Item> event)
+		{
+			MSItems.registerItems(event.getRegistry());
+		}
 	}
 }

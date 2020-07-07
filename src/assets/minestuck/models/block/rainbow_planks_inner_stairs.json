@@ -1,8 +1,8 @@
 {
     "parent": "block/inner_stairs",
     "textures": {
-        "bottom": "minestuck:blocks/rainbow_planks",
-        "top": "minestuck:blocks/rainbow_planks",
-        "side": "minestuck:blocks/rainbow_planks"
+        "bottom": "minestuck:block/rainbow_planks",
+        "top": "minestuck:block/rainbow_planks",
+        "side": "minestuck:block/rainbow_planks"
     }
 }

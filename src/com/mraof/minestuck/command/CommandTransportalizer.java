@@ -1,26 +1,16 @@
 package com.mraof.minestuck.command;
 
-import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.util.Location;
-import com.mraof.minestuck.util.Teleport;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.command.*;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.DimensionManager;
+import com.mojang.brigadier.CommandDispatcher;
+import net.minecraft.command.CommandSource;
 
-import java.util.Collections;
-import java.util.List;
-
-public class CommandTransportalizer extends CommandBase
+public class CommandTransportalizer
 {
+	public static void register(CommandDispatcher<CommandSource> dispatcher)
+	{
 	
-	@Override
+	}
+	
+	/*@Override
 	public String getName()
 	{
 		return "tpz";
@@ -94,5 +84,5 @@ public class CommandTransportalizer extends CommandBase
 	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos)
 	{
 		return args.length == 1 ? IdentifierHandler.getCommandAutocomplete(server, args) : Collections.<String>emptyList();
-	}
+	}*/
 }

@@ -1,0 +1,184 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "name": "item",
+      "rolls": 4,
+      "entries": [
+        {
+          "type": "minestuck:land_table",
+          "name": "minestuck:gameplay/consort_general",
+          "pool": "item"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 5.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minestuck:carving_tool"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 8,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 5.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minestuck:mini_frog_statue"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 5.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minestuck:stone_slab"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 3.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minestuck:thresh_dvd"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 3.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minestuck:crew_poster"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 3.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minestuck:sbahj_poster"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minestuck:consort",
+              "consort": [
+                "salamander",
+                "nakagator"
+              ]
+            }
+          ],
+          "weight": 5,
+          "name": "minestuck:gamebro_magazine"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minestuck:consort",
+              "consort": [
+                "turtle",
+                "iguana"
+              ]
+            }
+          ],
+          "weight": 5,
+          "name": "minestuck:gamegrl_magazine"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:music_disc_emissary_of_dance"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:music_disc_dance_stab_dance"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minestuck:consort",
+              "consort": "turtle"
+            }
+          ],
+          "name": "minestuck:grimoire"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minestuck:consort",
+              "consort": "salamander"
+            }
+          ],
+          "weight": 8,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 5.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minestuck:crumply_hat"
+        }
+      ]
+    },
+    {
+      "name": "block",
+      "rolls": 2,
+      "entries": [
+        {
+          "type": "minestuck:land_table",
+          "name": "minestuck:gameplay/consort_general",
+          "pool": "block"
+        }
+      ]
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "minestuck:items/kundler_surprise_embryo"
+        "layer0": "minestuck:item/kundler_surprise_embryo"
     }
 }

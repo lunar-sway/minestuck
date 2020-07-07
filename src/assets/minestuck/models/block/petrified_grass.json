@@ -1,6 +1,6 @@
 {
     "parent": "block/cross",
     "textures": {
-        "cross": "minestuck:blocks/petrified_grass"
+        "cross": "minestuck:block/petrified_grass"
     }
 }

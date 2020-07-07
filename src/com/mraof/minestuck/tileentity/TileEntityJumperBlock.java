@@ -1,36 +1,11 @@
 package com.mraof.minestuck.tileentity;
 
 
-import com.mraof.minestuck.block.BlockAlchemiter;
-import com.mraof.minestuck.block.BlockAlchemiterUpgrades;
-import com.mraof.minestuck.block.BlockJumperBlock;
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.block.BlockAlchemiter.EnumParts;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.alchemy.AlchemyRecipes;
-import com.mraof.minestuck.alchemy.CombinationRegistry;
-import com.mraof.minestuck.util.AlchemiterUpgrades;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.AlchemiterUpgrades.EnumType;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockAir;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.item.Item;
+import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import scala.actors.threadpool.Arrays;
-import scala.reflect.internal.Trees.Super;
 
 import javax.annotation.Nonnull;
 
@@ -43,6 +18,11 @@ public class TileEntityJumperBlock extends TileEntity
 	private int color = -1;
 	private int latheUpgradeId = -1;
 	
+	public TileEntityJumperBlock()
+	{
+		super(MSTileEntityTypes.JUMPER_BLOCK);
+	}
+	
 	public int getColor()
 	{
 		return color;
@@ -53,18 +33,16 @@ public class TileEntityJumperBlock extends TileEntity
 		color = Color;
 	}
 	
-	//constructor
-	public TileEntityJumperBlock() {}
 	//data checking
 
 	public void setUpgrade(ItemStack stack, int id)
 	{
-		if((stack.getItem() == MinestuckItems.shunt && stack.hasTagCompound() && stack.getTagCompound().hasKey("contentID")) || stack.isEmpty())
+		if((stack.getItem() == MSItems.SHUNT && AlchemyRecipes.hasDecodedItem(stack)) || stack.isEmpty())
 		{
 			upgrade[id] = stack;
 			if(world != null)
 			{
-				IBlockState state = world.getBlockState(pos);
+				BlockState state = world.getBlockState(pos);
 				world.notifyBlockUpdate(pos, state, state, 2);
 			}
 		}
@@ -86,14 +64,14 @@ public class TileEntityJumperBlock extends TileEntity
 		return broken;
 	}
 	
-	public void setBroken()
+	/*public void setBroken()
 	{
 		BlockPos alchemPos = alchemiterMainPos();
 		TileEntity te = world.getTileEntity(alchemPos);
 		if(te instanceof TileEntityAlchemiter)
 		{
 			IBlockState alchemState = world.getBlockState(alchemPos);
-			updateUpgradeBlocks(BlockAlchemiter.getFacing(alchemState), alchemPos, true);
+			updateUpgradeBlocks(alchemState.get(BlockAlchemiter.FACING), alchemPos, true);
 			TileEntityAlchemiter alchemTe = (TileEntityAlchemiter) te;
 			alchemTe.setUpgraded(false, getPos());
 			
@@ -110,7 +88,7 @@ public class TileEntityJumperBlock extends TileEntity
 		if(te instanceof TileEntityAlchemiter)
 		{
 			IBlockState alchemState = world.getBlockState(alchemPos);
-			updateUpgradeBlocks(BlockAlchemiter.getFacing(alchemState), alchemPos, false);
+			updateUpgradeBlocks(alchemState.get(BlockAlchemiter.FACING), alchemPos, false);
 			TileEntityAlchemiter alchemTe = (TileEntityAlchemiter) te;
 			alchemTe.setUpgraded(true, getPos());
 			
@@ -146,7 +124,7 @@ public class TileEntityJumperBlock extends TileEntity
 	
 	public EnumFacing getFacing()
 	{
-		return EnumFacing.getHorizontal(getBlockMetadata()%4);
+		return getBlockState().get(BlockJumperBlock.FACING);
 	}
 	
 	public void onRightClick(EntityPlayer player, IBlockState clickedState, int id)
@@ -299,7 +277,7 @@ public class TileEntityJumperBlock extends TileEntity
 						{
 							/*TODO
 							 * JBE feedback message: "there's not enough space for this upgrade"
-							 */
+							 *//*
 								Debug.warn("there's not enough space for that upgrade");
 								br8k = true;
 								break;
@@ -349,7 +327,7 @@ public class TileEntityJumperBlock extends TileEntity
 						{
 							/*TODO
 							 * JBE feedback message: "there's not enough space for this upgrade"
-							*/
+							*//*
 							Debug.warn("there's not enough space for that upgrade");
 							break;
 						}
@@ -734,5 +712,5 @@ public class TileEntityJumperBlock extends TileEntity
 			int i = direction.getFrontOffsetX() + 1 + (direction.getFrontOffsetZ() + 1) * 3;
 			world.playEvent(2000, pos, i);
 		}
-	}
+	}*/
 }

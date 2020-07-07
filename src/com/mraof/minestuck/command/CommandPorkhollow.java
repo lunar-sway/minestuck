@@ -1,18 +1,16 @@
 package com.mraof.minestuck.command;
 
-import com.mraof.minestuck.item.ItemBoondollars;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.util.MinestuckPlayerData;
-import net.minecraft.command.*;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.text.TextComponentTranslation;
+import com.mojang.brigadier.CommandDispatcher;
+import net.minecraft.command.CommandSource;
 
-public class CommandPorkhollow extends CommandBase    //Much like /gristSend and /land, is a temporary command until a proper feature is in place
+public class CommandPorkhollow    //Much like /gristSend and /land, is a temporary command until a proper feature is in place
 {
-	@Override
+	public static void register(CommandDispatcher<CommandSource> dispatcher)
+	{
+	
+	}
+	
+	/*@Override
 	public String getName()
 	{
 		return "porkhollow";
@@ -51,7 +49,7 @@ public class CommandPorkhollow extends CommandBase    //Much like /gristSend and
 			int amount = parseInt(args[1], 1);
 			if(MinestuckPlayerData.addBoondollars(player, -amount))
 			{
-				ItemStack stack = ItemBoondollars.setCount(new ItemStack(MinestuckItems.boondollars), amount);
+				ItemStack stack = BoondollarsItem.setCount(new ItemStack(MinestuckItems.boondollars), amount);
 				if (!player.addItemStackToInventory(stack))
 				{
 					EntityItem entity = player.dropItem(stack, false);
@@ -74,5 +72,5 @@ public class CommandPorkhollow extends CommandBase    //Much like /gristSend and
 	public boolean checkPermission(MinecraftServer server, ICommandSender sender)
 	{
 		return true;
-	}
+	}*/
 }

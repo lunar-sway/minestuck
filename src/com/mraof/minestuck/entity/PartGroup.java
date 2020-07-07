@@ -1,7 +1,7 @@
 package com.mraof.minestuck.entity;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -15,13 +15,13 @@ import java.util.ArrayList;
  */
 public class PartGroup
 {
-    private ArrayList<Vec3d> positions = new ArrayList<Vec3d>();
-    private ArrayList<Vec3d> sizes = new ArrayList<Vec3d>();
-    public ArrayList<EntityBigPart> parts = new ArrayList<EntityBigPart>();
-    private ArrayList<AxisAlignedBB> boxes = new ArrayList<AxisAlignedBB>();
-    EntityLivingBase parent;
+    private ArrayList<Vec3d> positions = new ArrayList<>();
+    private ArrayList<Vec3d> sizes = new ArrayList<>();
+    public ArrayList<EntityBigPart> parts = new ArrayList<>();
+    private ArrayList<AxisAlignedBB> boxes = new ArrayList<>();
+    LivingEntity parent;
 
-    public PartGroup(EntityLivingBase parent)
+    public PartGroup(LivingEntity parent)
     {
         this.parent = parent;
     }
@@ -31,22 +31,22 @@ public class PartGroup
     public void addBox(double xOffset, double yOffset, double zOffset, double xSize, double ySize, double zSize)
     {
         Vec3d offset = new Vec3d(xOffset, yOffset, zOffset);
-        Vec3d max = offset.addVector(xSize, ySize, zSize);
+        Vec3d max = offset.add(xSize, ySize, zSize);
         //I know AxisAlignedBB has a constructor for two Vec3d but that doesn't work on dedicated servers
         boxes.add(new AxisAlignedBB(offset.x, offset.y, offset.z, max.x, max.y, max.z));
         for(int x = 0; x < xSize; x++)
         {
-            positions.add(offset.addVector(x + 0.5, 0, 0.5));
+            positions.add(offset.add(x + 0.5, 0, 0.5));
             sizes.add(new Vec3d(1, ySize, 1));
-            positions.add(offset.addVector(x + 0.5, 0, zSize - 0.5));
+            positions.add(offset.add(x + 0.5, 0, zSize - 0.5));
             sizes.add(new Vec3d(1, ySize, 1));
         }
 
         for(int z = 1; z < zSize - 1; z++)
         {
-            positions.add(offset.addVector(0.5, 0, z + 0.5));
+            positions.add(offset.add(0.5, 0, z + 0.5));
             sizes.add(new Vec3d(1, ySize + 10, 1));
-            positions.add(offset.addVector(xSize - 0.5, 0, z + 0.5));
+            positions.add(offset.add(xSize - 0.5, 0, z + 0.5));
             sizes.add(new Vec3d(1, ySize + 10, 1));
         }
     }
@@ -55,12 +55,12 @@ public class PartGroup
     {
         for(int i = 0; i < positions.size(); i++)
         {
-            EntityBigPart part = new EntityBigPart(world, this, sizes.get(i));
+            EntityBigPart part = new EntityBigPart(parent.getType(), world, this, (float) sizes.get(i).x, (float) sizes.get(i).y);
             Vec3d position = positions.get(i);
             part.setPosition(parent.posX + position.x, parent.posY + position.y, parent.posZ + position.z);
             part.setPartId(parts.size());
             parts.add(part);
-            world.spawnEntity(part);
+            //world.addEntity(part); TODO Not safe to add entities to world on creation. A different solution is needed
         }
     }
 
@@ -76,19 +76,24 @@ public class PartGroup
             EntityBigPart part = parts.get(i);
             Vec3d position = positions.get(i).rotateYaw(yaw);
             part.setPosition(parent.posX + position.x, parent.posY + position.y, parent.posZ + position.z);
-            part.isDead = parent.isDead;
+            if(parent.removed != part.removed)
+            {
+                if(parent.removed)
+                    part.remove(false);
+                else part.revive();
+            }
         }
     }
 
     public void applyCollision(Entity entity)
     {
-        parent.world.profiler.startSection("partGroupCollision");
+        parent.world.getProfiler().startSection("partGroupCollision");
         float yaw = -parent.renderYawOffset * 3.141592f / 180f;
         boolean positionChanged = false;
         Vec3d position = new Vec3d(entity.posX - parent.posX, entity.posY - parent.posY, entity.posZ - parent.posZ).rotateYaw(yaw);
         for (AxisAlignedBB box : boxes)
         {
-            AxisAlignedBB relativeBox = new AxisAlignedBB(position.x, position.y, position.z, entity.width, entity.height, entity.width);
+            AxisAlignedBB relativeBox = new AxisAlignedBB(position.x, position.y, position.z, entity.getWidth(), entity.getHeight(), entity.getWidth());
             if(box.intersects(relativeBox))
             {
                 positionChanged = true;
@@ -108,10 +113,10 @@ public class PartGroup
             if(positionChanged)
             {
                 position = position.rotateYaw(-yaw);
-                entity.move(MoverType.SELF, position.x + parent.posX, position.y + parent.posY, position.z + parent.posZ);	//TODO change to velocity, or lookup MoverType?
+                entity.move(MoverType.SELF, position.add(parent.getPositionVec()));	//TODO change to velocity, or lookup MoverType?
             }
         }
-        parent.world.profiler.endSection();
+        parent.world.getProfiler().endSection();
     }
 
     boolean attackFrom(DamageSource damageSource, float amount)

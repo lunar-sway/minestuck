@@ -1,62 +1,61 @@
 package com.mraof.minestuck.network;
 
-import io.netty.buffer.ByteBuf;
-
-import java.util.EnumSet;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.server.management.UserListOpsEntry;
-import net.minecraftforge.fml.relauncher.Side;
-
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.editmode.ServerEditHandler;
-import com.mraof.minestuck.network.skaianet.ComputerData;
-import com.mraof.minestuck.network.skaianet.SkaianetHandler;
+import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.util.IdentifierHandler;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.server.management.OpEntry;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.GlobalPos;
 
-public class SburbConnectPacket extends MinestuckPacket
+public class SburbConnectPacket implements PlayToServerPacket
 {
 	
-	ComputerData player;
-	int otherPlayer;
-	boolean isClient;
+	private final BlockPos computer;
+	private final int otherPlayer;
+	private final boolean isClient;
+	
+	public SburbConnectPacket(BlockPos computer, int otherPlayer, boolean isClient)
+	{
+		this.computer = computer;
+		this.otherPlayer = otherPlayer;
+		this.isClient = isClient;
+	}
 	
 	@Override
-	public MinestuckPacket generatePacket(Object... dat) 
+	public void encode(PacketBuffer buffer)
 	{
-		ComputerData compData = (ComputerData)dat[0];
-		data.writeInt(compData.getOwnerId());
-		data.writeInt(compData.getX());
-		data.writeInt(compData.getY());
-		data.writeInt(compData.getZ());
-		data.writeInt(compData.getDimension());
-		data.writeInt((Integer)dat[1]);
-		data.writeBoolean((Boolean)dat[2]);
+		buffer.writeBlockPos(computer);
+		buffer.writeInt(otherPlayer);
+		buffer.writeBoolean(isClient);
+	}
+	
+	public static SburbConnectPacket decode(PacketBuffer buffer)
+	{
+		BlockPos computer = buffer.readBlockPos();
+		int otherPlayer = buffer.readInt();
+		boolean isClient = buffer.readBoolean();
 		
-		return this;
+		return new SburbConnectPacket(computer, otherPlayer, isClient);
 	}
 	
 	@Override
-	public MinestuckPacket consumePacket(ByteBuf data) 
+	public void execute(ServerPlayerEntity player)
 	{
-		player = new ComputerData(IdentifierHandler.getById(data.readInt()), data.readInt(), data.readInt(), data.readInt(), data.readInt());
-		otherPlayer = data.readInt();
-		isClient = data.readBoolean();
-		
-		return this;
-	}
-	
-	@Override
-	public void execute(EntityPlayer player)
-	{
-		UserListOpsEntry opsEntry = player.getServer().getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
-		if((!MinestuckConfig.privateComputers || IdentifierHandler.encode(player) == this.player.getOwner() || opsEntry != null && opsEntry.getPermissionLevel() >= 2) && ServerEditHandler.getData(player) == null)
-			SkaianetHandler.requestConnection(this.player, otherPlayer != -1 ? IdentifierHandler.getById(otherPlayer) : null, isClient);
-	}
-	
-	@Override
-	public EnumSet<Side> getSenderSide()
-	{
-		return EnumSet.of(Side.CLIENT);
+		if(player.world.isAreaLoaded(computer, 0))
+		{
+			TileEntity te = player.world.getTileEntity(computer);
+			if(te instanceof ComputerTileEntity)
+			{
+				ComputerTileEntity computer = (ComputerTileEntity) te;
+				OpEntry opsEntry = player.getServer().getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
+				if((!MinestuckConfig.privateComputers.get() || IdentifierHandler.encode(player) == computer.owner || opsEntry != null && opsEntry.getPermissionLevel() >= 2) && ServerEditHandler.getData(player) == null)
+					SkaianetHandler.get(player.world).requestConnection(computer.owner, GlobalPos.of(computer.getWorld().dimension.getType(), computer.getPos()), otherPlayer != -1 ? IdentifierHandler.getById(otherPlayer) : null, isClient);
+			}
+		}
 	}
 }

@@ -1,7 +1,7 @@
 package com.mraof.minestuck.util;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,17 +12,16 @@ import java.util.List;
  */
 public class ColorCollector
 {
+	public static final int DEFAULT_COLOR = 0xA0DCFF;
 	private static List<Integer> colors;
-//	protected static boolean customColor;
 	
-	@SideOnly(Side.CLIENT)
+	//client only
 	public static int playerColor;
-	@SideOnly(Side.CLIENT)
 	public static boolean displaySelectionGui;
 	
 	static
 	{
-		colors = new ArrayList<Integer>();
+		colors = new ArrayList<>();
 		
 		colors.add(0x0715cd);
 		colors.add(0xb536da);
@@ -51,7 +50,7 @@ public class ColorCollector
 	public static int getColor(int index)
 	{
 		if(index < 0 || index >= colors.size())
-			index = 0;
+			return DEFAULT_COLOR;
 		return colors.get(index);
 	}
 	
@@ -60,4 +59,21 @@ public class ColorCollector
 		return colors.size();
 	}
 	
+	public static ItemStack setDefaultColor(ItemStack stack)
+	{
+		return setColor(stack, DEFAULT_COLOR);
+	}
+	
+	public static ItemStack setColor(ItemStack stack, int color)
+	{
+		stack.getOrCreateTag().putInt("color", color);
+		return stack;
+	}
+	
+	public static int getColorFromStack(ItemStack stack)
+	{
+		if(stack.hasTag() && stack.getTag().contains("color", Constants.NBT.TAG_ANY_NUMERIC))
+			return stack.getTag().getInt("color");
+		else return DEFAULT_COLOR;
+	}
 }

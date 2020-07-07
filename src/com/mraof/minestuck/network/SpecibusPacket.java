@@ -1,31 +1,20 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.inventory.specibus.StrifePortfolioHandler;
+import com.mraof.minestuck.inventory.specibus.StrifeSpecibus;
+import com.mraof.minestuck.world.storage.ClientPlayerData;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.network.PacketBuffer;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.EnumSet;
 
-import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
-import com.mraof.minestuck.inventory.specibus.StrifePortfolioHandler;
-import com.mraof.minestuck.inventory.specibus.StrifeSpecibus;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.util.KindAbstratusList;
-import com.mraof.minestuck.util.MinestuckPlayerData;
-
-import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumHand;
-import net.minecraftforge.fml.relauncher.Side;
-
-public class SpecibusPacket extends MinestuckPacket
+public class SpecibusPacket implements PlayToBothPacket
 {
 
 	public static final byte PORTFOLIO = 0;
@@ -34,157 +23,149 @@ public class SpecibusPacket extends MinestuckPacket
 	public static final byte DECK_ADD = 3;
 	public static final byte DECK_REMOVE = 4;
 	
-	public int itemIndex;
-	public byte type;
-	public NBTTagCompound nbt;
-	public ArrayList<StrifeSpecibus> portfolio;
+	private final byte type;
+	private int itemIndex;
+	private CompoundNBT nbt;
 	private int specibusId;
 	
-	@Override
-	public MinestuckPacket generatePacket(Object... data) 
+	private SpecibusPacket(byte type)
 	{
-		byte type = (Byte) data[0];
-		this.data.writeByte(type);
-		if(data.length > 1)
+		this.type = type;
+	}
+	
+	public static SpecibusPacket sendPortfolioData(CompoundNBT nbt)
+	{
+		SpecibusPacket packet = new SpecibusPacket(PORTFOLIO);
+		packet.nbt = nbt;
+		return packet;
+	}
+	
+	public static SpecibusPacket addSpecibus(CompoundNBT nbt)
+	{
+		SpecibusPacket packet = new SpecibusPacket(SPECIBUS_ADD);
+		packet.nbt = nbt;
+		return packet;
+	}
+	
+	public static SpecibusPacket removeSpecibus(int specibusId)
+	{
+		SpecibusPacket packet = new SpecibusPacket(SPECIBUS_REMOVE);
+		packet.specibusId = specibusId;
+		return packet;
+	}
+	
+	@Override
+	public void encode(PacketBuffer buffer)
+	{
+		buffer.writeByte(type);
+		switch(type)
 		{
-			switch(type)
-			{
-
 			case DECK_REMOVE:
-			{
-				if(data.length > 2) this.data.writeInt((Integer)data[2]);
-				else 				this.data.writeInt(0);
-			}
+				buffer.writeInt(itemIndex);
 			case SPECIBUS_REMOVE:
+				buffer.writeInt(specibusId);
+				break;
+			default:
+			//case PORTFOLIO: case SPECIBUS_ADD:
 			{
-				if(data.length > 1) this.data.writeDouble((Integer)data[1]);
-				else 				this.data.writeDouble(0);
-			}
-			break;
-				default:
-				//case PORTFOLIO: case SPECIBUS_ADD:
+				if(nbt != null)
 				{
 					try
 					{
 						ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-						CompressedStreamTools.writeCompressed((NBTTagCompound)data[1], bytes);
-						this.data.writeBytes(bytes.toByteArray());
+						CompressedStreamTools.writeCompressed(nbt, bytes);
+						buffer.writeBytes(bytes.toByteArray());
+					} catch(IOException e)
+					{
+						throw new IllegalStateException(e);
 					}
-					catch (IOException e)
+				}
+			}
+			break;
+		}
+	}
+	
+	public static SpecibusPacket decode(PacketBuffer buffer)
+	{
+		SpecibusPacket packet = new SpecibusPacket(buffer.readByte());
+		
+		switch(packet.type)
+		{
+			case DECK_REMOVE:
+				packet.itemIndex = buffer.readInt();
+			case SPECIBUS_REMOVE:
+				packet.specibusId = buffer.readInt();
+				break;
+			default:
+				if(buffer.readableBytes() > 0)
+				{
+					byte[] bytes = new byte[buffer.readableBytes()];
+					buffer.readBytes(bytes);
+					try
+					{
+						packet.nbt = CompressedStreamTools.readCompressed(new ByteArrayInputStream(bytes));
+					} catch(IOException e)
 					{
 						e.printStackTrace();
 						return null;
 					}
 				}
 				break;
-			}
 		}
-		return this;
+		return packet;
 	}
-
+	
 	@Override
-	public MinestuckPacket consumePacket(ByteBuf data) 
+	public void execute()
 	{
-		this.type = data.readByte();
-		if(data.readableBytes() > 0)
+		if(type == PORTFOLIO)
 		{
-			switch(type)
-			{
-			case DECK_REMOVE:
-			{
-				this.itemIndex = data.readInt();
-			}
-			case SPECIBUS_REMOVE:
-			{
-				this.specibusId = (int)data.readDouble();
-			}
-			break;
-			default:
-			{
-				byte[] bytes = new byte[data.readableBytes()];
-				data.readBytes(bytes);
-				try
-				{
-					this.nbt = CompressedStreamTools.readCompressed(new ByteArrayInputStream(bytes));
-				}
-				catch(IOException e)
-				{
-					e.printStackTrace();
-					return null;
-				}
-			}
-			break;
-			
-			}
+			ArrayList<StrifeSpecibus> portfolio = StrifePortfolioHandler.createPortfolio(nbt);
+			ClientPlayerData.playerPortfolio = portfolio;
 		}
-		return this;
 	}
-
+	
 	@Override
-	public void execute(EntityPlayer player) 
+	public void execute(ServerPlayerEntity player)
 	{
-		if(player != null && player.world != null && !player.world.isRemote)
+		switch(type)
 		{
-			switch(type)
-			{
 			case PORTFOLIO:
 			{
 				//System.out.println("portfolio");
-				portfolio = StrifePortfolioHandler.createPortfolio(nbt);
-				MinestuckPlayerData.onPacketRecived(this);
-				MinestuckPlayerData.setStrifePortfolio(IdentifierHandler.encode(player), portfolio);
-				MinestuckPlayerData.setClientPortfolio(portfolio);
+				ArrayList<StrifeSpecibus> portfolio = StrifePortfolioHandler.createPortfolio(nbt);
+				//TODO some safety is needed here
+				//MinestuckPlayerData.setStrifePortfolio(IdentifierHandler.encode(player), portfolio);
 			}
 			break;
 			case SPECIBUS_ADD:
 			{
 				//System.out.println("add");
-				ArrayList<StrifeSpecibus> portfolio = MinestuckPlayerData.getStrifePortfolio(IdentifierHandler.encode(player));
+				//TODO safety needed
 				StrifeSpecibus specibus = new StrifeSpecibus(nbt);
-				MinestuckPlayerData.setClientPortfolio(portfolio);
-				MinestuckPlayerData.getStrifePortfolio(IdentifierHandler.encode(player)).add(specibus);
+				PlayerSavedData.getData(player).addSpecibus(specibus);
 			}
 			break;
 			case SPECIBUS_REMOVE:
 				//System.out.println("remove");
-				StrifeSpecibus specibus = StrifePortfolioHandler.getSpecibus((EntityPlayerMP) player, specibusId);
-				MinestuckPlayerData.removeStrifeSpecibus(IdentifierHandler.encode(player), specibusId);
+				StrifeSpecibus specibus = StrifePortfolioHandler.getSpecibus(player, specibusId);
+				//TODO
+				//MinestuckPlayerData.removeStrifeSpecibus(IdentifierHandler.encode(player), specibusId);
 				
-				if(specibus != null)				
-					StrifePortfolioHandler.spawnItem((EntityPlayerMP) player, StrifePortfolioHandler.createSpecibusItem(specibus));
-			break;
+				if(specibus != null)
+					StrifePortfolioHandler.spawnItem(player, StrifePortfolioHandler.createSpecibusItem(specibus));
+				break;
 			case DECK_ADD:
 			{
 				//System.out.println("deck add");
-				StrifePortfolioHandler.addItemToDeck((EntityPlayerMP)player);
+				StrifePortfolioHandler.addItemToDeck(player);
 			}
 			break;
 			case DECK_REMOVE:
 				//System.out.println("deck remove");
-				StrifePortfolioHandler.retrieveItem((EntityPlayerMP) player, specibusId, itemIndex);
-			break;
-			}
+				StrifePortfolioHandler.retrieveItem(player, specibusId, itemIndex);
+				break;
 		}
-		else
-		{
-			switch(type)
-			{
-			case PORTFOLIO:
-			{
-				//System.out.println("null portfolio");
-				portfolio = StrifePortfolioHandler.createPortfolio(nbt);
-				MinestuckPlayerData.setClientPortfolio(portfolio);
-				MinestuckPlayerData.setStrifePortfolio(IdentifierHandler.encode(player), portfolio);
-			}
-			break;
-			}
-		}
-	}
-
-	@Override
-	public EnumSet<Side> getSenderSide() 
-	{
-		return EnumSet.allOf(Side.class);
 	}
 	
 }

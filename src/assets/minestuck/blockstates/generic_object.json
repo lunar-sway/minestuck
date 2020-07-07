@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "minestuck:generic_object" }
+        "": { "model": "minestuck:block/generic_object" }
     }
 }

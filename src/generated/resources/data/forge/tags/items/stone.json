@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "minestuck:coarse_stone",
+    "minestuck:black_stone",
+    "minestuck:coarse_end_stone",
+    "minestuck:pink_stone"
+  ]
+}

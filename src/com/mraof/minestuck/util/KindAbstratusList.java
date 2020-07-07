@@ -1,36 +1,48 @@
 package com.mraof.minestuck.util;
 
+import com.mraof.minestuck.item.MSItems;
 import net.minecraft.item.*;
+import net.minecraftforge.common.ToolType;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mraof.minestuck.item.MinestuckItems;
-
 public class KindAbstratusList {
+	
+	public static final String SWORD = "minestuck.sword";
+	public static final String BOW = "minestuck.bow";
+	public static final String PICKAXE = "minestuck.pickaxe";
+	public static final String AXE = "minestuck.axe";
+	public static final String HOE = "minestuck.hoe";
+	public static final String SHOVEL = "minestuck.shovel";
+	public static final String HAMMER = "minestuck.hammer";
+	public static final String CANE = "minestuck.cane";
+	public static final String CLUB = "minestuck.club";
+	public static final String SICKLE = "minestuck.sickle";
+	public static final String SPORK = "minestuck.spork";
 	
 	static ArrayList<KindAbstratusType> typeList;
 	static ArrayList<String> namesList = new ArrayList<String>();
 	
 	public static final KindAbstratusType blank = new KindAbstratusType("blank").setSelectable(false);
-	public static final KindAbstratusType bladekind = new KindAbstratusType("sword", ItemSword.class, "sword");
-	public static final KindAbstratusType bowkind = new KindAbstratusType("bow", ItemBow.class);
-	public static final KindAbstratusType pickaxekind = new KindAbstratusType("pickaxe", ItemPickaxe.class, "pickaxe");
-	public static final KindAbstratusType axekind = new KindAbstratusType("axe", ItemAxe.class, "axe");
-	public static final KindAbstratusType hoekind = new KindAbstratusType("hoe", ItemHoe.class, "hoe");
-	public static final KindAbstratusType spadekind = new KindAbstratusType("shovel", ItemSpade.class, "shovel");
-	public static final KindAbstratusType hammerkind = new KindAbstratusType("hammer", "hammer");
-	public static final KindAbstratusType canekind = new KindAbstratusType("cane");
-	public static final KindAbstratusType clubkind = new KindAbstratusType("club");
-	public static final KindAbstratusType sicklekind = new KindAbstratusType("sickle", "sickle");
+	public static final KindAbstratusType bladekind = new KindAbstratusType(SWORD, SwordItem.class);
+	public static final KindAbstratusType bowkind = new KindAbstratusType(BOW, BowItem.class);
+	public static final KindAbstratusType pickaxekind = new KindAbstratusType(PICKAXE, PickaxeItem.class, ToolType.PICKAXE);
+	public static final KindAbstratusType axekind = new KindAbstratusType(AXE, AxeItem.class, ToolType.AXE);
+	public static final KindAbstratusType hoekind = new KindAbstratusType(HOE, HoeItem.class);
+	public static final KindAbstratusType spadekind = new KindAbstratusType(SHOVEL, ShovelItem.class, ToolType.SHOVEL);
+	public static final KindAbstratusType hammerkind = new KindAbstratusType(HAMMER);
+	public static final KindAbstratusType canekind = new KindAbstratusType(CANE);
+	public static final KindAbstratusType clubkind = new KindAbstratusType(CLUB);
+	public static final KindAbstratusType sicklekind = new KindAbstratusType(SICKLE);
 	public static final KindAbstratusType spoonkind = new KindAbstratusType("spoon");
 	public static final KindAbstratusType forkkind = new KindAbstratusType("fork");
 	public static final KindAbstratusType fistkind = new KindAbstratusType("fist").includesFist();
-	public static final KindAbstratusType gauntletkind = new KindAbstratusType("gauntlet", "gauntlet");
+	public static final KindAbstratusType gauntletkind = new KindAbstratusType("gauntlet");
 	public static final KindAbstratusType clawkind = new KindAbstratusType("claw");
 	public static final KindAbstratusType dicekind = new KindAbstratusType("dice");
-	public static final KindAbstratusType fshngrodkind = new KindAbstratusType("fishing_rod", ItemFishingRod.class);
-	public static final KindAbstratusType jokerkind = new KindAbstratusType("joker", MinestuckItems.zillyhooHammer, MinestuckItems.zillywairCutlass, MinestuckItems.clawSickle).setSelectable(false);
+	public static final KindAbstratusType fshngrodkind = new KindAbstratusType("fishing_rod", FishingRodItem.class);
+	public static final KindAbstratusType jokerkind = new KindAbstratusType("joker", MSItems.ZILLYHOO_HAMMER, MSItems.ZILLYWAIR_CUTLASS, MSItems.CLAW_SICKLE).setSelectable(false);
 	
 	public static void registerTypes()
 	{

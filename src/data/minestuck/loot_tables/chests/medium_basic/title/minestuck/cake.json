@@ -1,0 +1,130 @@
+{
+    "pools": [
+        {
+            "name": "main",
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "item",
+                    "name": "minecraft:cake",
+                    "weight": 8,
+                    "quality": -1
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:reverse_cake",
+                    "weight": 1,
+                    "quality": 0
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:apple_cake",
+                    "weight": 7,
+                    "quality": -1
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:cold_cake",
+                    "weight": 5,
+                    "quality": -2
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:hot_cake",
+                    "weight": 5,
+                    "quality": -2
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:blue_cake",
+                    "weight": 3,
+                    "quality": 1
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:red_cake",
+                    "weight": 3,
+                    "quality": 1
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:cookie",
+                    "weight": 5,
+                    "quality": 0,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 2,
+                                "max": 5
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:sugar",
+                    "weight": 8,
+                    "quality": -1,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:milk_bucket",
+                    "weight": 5,
+                    "quality": 0
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:silver_spoon",
+                    "weight": 5,
+                    "quality": 0,
+                    "functions": [
+                        {
+                            "function": "set_damage",
+                            "damage": {
+                                "min": 0.75,
+                                "max": 1
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:candy_corn",
+                    "weight": 3,
+                    "quality": 0
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:cocoa_beans",
+                    "weight": 3,
+                    "quality": 0
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:fudgesickle",
+                    "weight": 2,
+                    "quality": 1,
+                    "functions": [
+                        {
+                            "function": "set_damage",
+                            "damage": {
+                                "min": 0.75,
+                                "max": 1
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

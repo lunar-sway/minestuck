@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:steak_sword"
+    ]
+  },
+  "criteria": {
+    "has_beef_sword": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:beef_sword"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:steak_sword"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_beef_sword",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -1,0 +1,300 @@
+{
+    "pools": [
+        {
+            "name": "general",
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/general"
+                }
+            ]
+        },
+        {
+            "name": "aspectbased",
+            "rolls": 2,
+            "entries": [
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "end"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/terrain/minestuck/end",
+                    "weight": 10
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "flora"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/terrain/minestuck/flora",
+                    "weight": 10
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "forest"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/terrain/minestuck/forest",
+                    "weight": 10
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "frost"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/terrain/minestuck/frost",
+                    "weight": 10
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "fungi"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/terrain/minestuck/fungi",
+                    "weight": 10
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "heat"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/terrain/minestuck/heat",
+                    "weight": 10
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "rain"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/terrain/minestuck/rain",
+                    "weight": 10
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "rainbow"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/terrain/minestuck/rainbow",
+                    "weight": 10
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "rock"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/terrain/minestuck/rock",
+                    "weight": 10
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "sand"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/terrain/minestuck/sand",
+                    "weight": 10
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "sandstone"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/terrain/minestuck/sandstone",
+                    "weight": 10
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "shade"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/terrain/minestuck/shade",
+                    "weight": 10
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "wood"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/terrain/minestuck/wood",
+                    "weight": 10
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "cake"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/title/minestuck/cake",
+                    "weight": 7
+                },
+				{
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "frogs"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/title/minestuck/frogs",
+                    "weight": 10
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "clockwork"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/title/minestuck/clockwork",
+                    "weight": 5
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "light"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/title/minestuck/light",
+                    "weight": 5
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "monsters"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/title/minestuck/monsters",
+                    "weight": 5
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "pulse"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/title/minestuck/pulse",
+                    "weight": 5
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "rabbits"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/title/minestuck/rabbits",
+                    "weight": 5
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "silence"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/title/minestuck/silence",
+                    "weight": 1,
+                    "_comment": "Increase the weight when more loot is added"
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "thought"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/title/minestuck/thought",
+                    "weight": 3,
+                    "_comment": "Increase the weight when more loot is added"
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "thunder"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/title/minestuck/thunder",
+                    "weight": 0,
+                    "_comment": "Increase the weight when more loot is added"
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "towers"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/title/minestuck/towers",
+                    "weight": 3,
+                    "_comment": "Increase the weight when more loot is added"
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "wind"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/title/minestuck/wind",
+                    "weight": 1,
+                    "_comment": "Increase the weight when more loot is added"
+                }
+            ]
+        }
+    ]
+}

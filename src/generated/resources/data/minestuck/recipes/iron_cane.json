@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  i",
+    " c ",
+    "i  "
+  ],
+  "key": {
+    "i": {
+      "tag": "forge:ingots/iron"
+    },
+    "c": {
+      "item": "minestuck:cane"
+    }
+  },
+  "result": {
+    "item": "minestuck:iron_cane"
+  }
+}

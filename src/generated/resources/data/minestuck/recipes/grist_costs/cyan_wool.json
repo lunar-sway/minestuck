@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:cyan_wool"
+  },
+  "grist_cost": {
+    "minestuck:chalk": 6,
+    "minestuck:amber": 1,
+    "minestuck:amethyst": 1
+  }
+}

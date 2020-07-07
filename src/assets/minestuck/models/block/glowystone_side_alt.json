@@ -1,8 +1,8 @@
 {
     "ambientocclusion": false,
     "textures": {
-        "particle": "minestuck:blocks/glowystone_dot",
-        "line": "minestuck:blocks/glowystone_line"
+        "particle": "minestuck:block/glowystone_dot",
+        "line": "minestuck:block/glowystone_line"
     },
     "elements": [
         {   "from": [ 0, 0.25, 8 ],

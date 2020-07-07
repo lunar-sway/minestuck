@@ -1,67 +1,45 @@
 package com.mraof.minestuck.network;
 
-import io.netty.buffer.ByteBuf;
+import com.mraof.minestuck.inventory.MachineContainer;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.network.PacketBuffer;
 
-import java.util.EnumSet;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fml.relauncher.Side;
-
-import com.mraof.minestuck.inventory.ContainerCrockerMachine;
-import com.mraof.minestuck.inventory.ContainerSburbMachine;
-import com.mraof.minestuck.tileentity.TileEntityMachine;
-import com.mraof.minestuck.util.Debug;
-
-public class GoButtonPacket extends MinestuckPacket
+public class GoButtonPacket implements PlayToServerPacket
 {
 	
 	public boolean newMode;
 	public boolean overrideStop;
 	
-	@Override
-	public MinestuckPacket generatePacket(Object... dat) 
+	public GoButtonPacket(boolean newMode, boolean overrideStop)
 	{
-		data.writeBoolean((Boolean) dat[0]);
-		data.writeBoolean((Boolean) dat[1]);
-		
-		return this;
+		this.newMode = newMode;
+		this.overrideStop = overrideStop;
 	}
-
+	
 	@Override
-	public MinestuckPacket consumePacket(ByteBuf data) 
+	public void encode(PacketBuffer buffer)
 	{
-		newMode = data.readBoolean();
-		overrideStop = data.readBoolean();
-		
-		return this;
+		buffer.writeBoolean(newMode);
+		buffer.writeBoolean(overrideStop);
 	}
-
-	@Override
-	public void execute(EntityPlayer player)
+	
+	public static GoButtonPacket decode(PacketBuffer buffer)
 	{
-		TileEntityMachine te;
-		if(player.openContainer instanceof ContainerSburbMachine)
-				te = ((ContainerSburbMachine) player.openContainer).tileEntity;
-		else if(player.openContainer instanceof ContainerCrockerMachine)
-			te = ((ContainerCrockerMachine) player.openContainer).tileEntity;
-		else return;
+		boolean newMode = buffer.readBoolean();
+		boolean overrideStop = buffer.readBoolean();
 		
-		if (te == null)
+		return new GoButtonPacket(newMode, overrideStop);
+	}
+	
+	@Override
+	public void execute(ServerPlayerEntity player)
+	{
+		if(player.openContainer instanceof MachineContainer)
 		{
-			System.out.println("Invalid TE in container for player %s");
-			Debug.warnf("Invalid TE in container for player %s!", player.getName());
-		} else
-		{
-			System.out.println("Button pressed. Alchemiter going!");
-			Debug.debug("Button pressed. Alchemiter going!");
-			te.ready = newMode;
-			te.overrideStop = overrideStop;
+			MachineContainer container = (MachineContainer) player.openContainer;
+			System.out.println("Button pressed. Machine going!");
+			container.setReady(newMode);
+			container.setOverrideStop(overrideStop);
 		}
 	}
-
-	@Override
-	public EnumSet<Side> getSenderSide() {
-		return EnumSet.of(Side.CLIENT);
-	}
-
 }

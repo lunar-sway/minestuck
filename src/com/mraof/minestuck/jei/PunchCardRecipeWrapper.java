@@ -1,5 +1,5 @@
 package com.mraof.minestuck.jei;
-
+/*
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.item.ItemStack;
@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * Created by mraof on 2017 January 23 at 4:37 PM.
- */
+ * /
 public abstract class PunchCardRecipeWrapper implements IRecipeWrapper
 {
     private final List<List<ItemStack>> inputs;
@@ -27,3 +27,4 @@ public abstract class PunchCardRecipeWrapper implements IRecipeWrapper
         ingredients.setOutput(ItemStack.class, result);
     }
 }
+*/

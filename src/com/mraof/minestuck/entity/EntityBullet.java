@@ -1,48 +1,26 @@
 package com.mraof.minestuck.entity;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
-
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IProjectile;
-import net.minecraft.entity.MoverType;
-import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.init.Enchantments;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.*;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.network.play.server.SPacketChangeGameState;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntitySelectors;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.particles.ParticleType;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.datafix.DataFixer;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.registries.ForgeRegistries;
 
-public class EntityBullet extends EntityArrow
+public class EntityBullet extends ArrowEntity
 {
+    // TODO this class is in bad need of a cleanup. Nearly all code in this class looks to have been taken directly from the arrow class, which is likely not needed
+    /*
 	private static final Predicate<Entity> BULLET_TARGETS = Predicates.and(EntitySelectors.NOT_SPECTATING, EntitySelectors.IS_ALIVE, new Predicate<Entity>()
     {
         public boolean apply(@Nullable Entity p_apply_1_)
@@ -50,7 +28,8 @@ public class EntityBullet extends EntityArrow
             return p_apply_1_.canBeCollidedWith();
         }
     });
-	protected static final DataParameter<Byte> CRITICAL = EntityDataManager.<Byte>createKey(EntityArrow.class, DataSerializers.BYTE);
+     */
+	protected static final DataParameter<Byte> CRITICAL = EntityDataManager.<Byte>createKey(ArrowEntity.class, DataSerializers.BYTE);
     protected int xTile;
     protected int yTile;
     protected int zTile;
@@ -71,47 +50,42 @@ public class EntityBullet extends EntityArrow
     protected int knockbackStrength;
     
 	protected ItemStack stack;
-	protected EnumParticleTypes critParticles = EnumParticleTypes.CRIT;
+	protected ParticleType<?> critParticles = ParticleTypes.CRIT;
 	protected boolean despawnOnLand = false;
 	protected int fire = 0;
 	protected ResourceLocation texture = new ResourceLocation("minestuck", "textures/entity/projectiles/energy_arrow_blue.png");;
-	
-    public EntityBullet(World worldIn)
+    
+    public EntityBullet(EntityType<? extends EntityBullet> type, World world)
     {
-        super(worldIn);
+        super(type, world);
         this.xTile = -1;
         this.yTile = -1;
         this.zTile = -1;
         this.pickupStatus = PickupStatus.DISALLOWED;
         this.damage = 2.0D;
-        this.setSize(0.5F, 0.5F);
     }
 
     public EntityBullet(World worldIn, double x, double y, double z)
     {
-        this(worldIn);
+        this(MSEntityTypes.BULLET, worldIn);
         this.setPosition(x, y, z);
     }
 
-    public EntityBullet(World worldIn, EntityLivingBase shooter)
+    public EntityBullet(World worldIn, LivingEntity shooter)
     {
         this(worldIn, shooter.posX, shooter.posY + (double)shooter.getEyeHeight() - 0.10000000149011612D, shooter.posZ);
         this.shootingEntity = shooter;
 
-        if (shooter instanceof EntityPlayer)
+        if (shooter instanceof PlayerEntity)
         {
             this.pickupStatus = PickupStatus.ALLOWED;
         }
     }
-    
-    
-    /**
-     * Checks if the entity is in range to render.
-     */
-    @SideOnly(Side.CLIENT)
+    /*
+    @Override
     public boolean isInRangeToRenderDist(double distance)
     {
-        double d0 = this.getEntityBoundingBox().getAverageEdgeLength() * 10.0D;
+        double d0 = this.getBoundingBox().getAverageEdgeLength() * 10.0D;
 
         if (Double.isNaN(d0))
         {
@@ -125,22 +99,20 @@ public class EntityBullet extends EntityArrow
 	
 	/**
      * Similar to setArrowHeading, it's point the throwable entity to a x, y, z direction.
-     */
+     * /
     public void shoot(double x, double y, double z, float velocity, float inaccuracy)
     {
         float f = MathHelper.sqrt(x * x + y * y + z * z);
         x = x / (double)f;
         y = y / (double)f;
         z = z / (double)f;
-        x = x + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
-        y = y + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
-        z = z + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
+        x = x + this.rand.nextGaussian() * 0.0075D * (double)inaccuracy;
+        y = y + this.rand.nextGaussian() * 0.0075D * (double)inaccuracy;
+        z = z + this.rand.nextGaussian() * 0.0075D * (double)inaccuracy;
         x = x * (double)velocity;
         y = y * (double)velocity;
         z = z * (double)velocity;
-        this.motionX = x;
-        this.motionY = y;
-        this.motionZ = z;
+        setMotion(x, y, z);
         float f1 = MathHelper.sqrt(x * x + z * z);
         this.rotationYaw = (float)(MathHelper.atan2(x, z) * (180D / Math.PI));
         this.rotationPitch = (float)(MathHelper.atan2(y, (double)f1) * (180D / Math.PI));
@@ -148,31 +120,18 @@ public class EntityBullet extends EntityArrow
         this.prevRotationPitch = this.rotationPitch;
         this.ticksInGround = 0;
     }
-
+    
     @Override
-    protected void entityInit()
-    {
-        this.dataManager.register(CRITICAL, Byte.valueOf((byte)0));
-    }
-    /**
-     * Set the position and rotation values directly without any clamping.
-     */
-    @SideOnly(Side.CLIENT)
     public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int posRotationIncrements, boolean teleport)
     {
         this.setPosition(x, y, z);
         this.setRotation(yaw, pitch);
     }
 
-    /**
-     * Updates the entity motion clientside, called by packets from the server
-     */
-    @SideOnly(Side.CLIENT)
+    @Override
     public void setVelocity(double x, double y, double z)
     {
-        this.motionX = x;
-        this.motionY = y;
-        this.motionZ = z;
+        setMotion(x, y, z);
 
         if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F)
         {
@@ -188,7 +147,7 @@ public class EntityBullet extends EntityArrow
 
     /**
      * Called when the arrow hits a block or an entity
-     */
+     * /
     protected void onHit(RayTraceResult raytraceResultIn)
     {
         Entity entity = raytraceResultIn.entityHit;
@@ -214,7 +173,7 @@ public class EntityBullet extends EntityArrow
                 damagesource = DamageSource.causeArrowDamage(this, this.shootingEntity);
             }
 
-            if (this.isBurning() && !(entity instanceof EntityEnderman))
+            if (this.isBurning() && !(entity instanceof EndermanEntity))
             {
             	//TODO
                 entity.setFire(fire*5/100);
@@ -222,9 +181,9 @@ public class EntityBullet extends EntityArrow
 
             if (entity.attackEntityFrom(damagesource, (float)i))
             {
-                if (entity instanceof EntityLivingBase)
+                if (entity instanceof LivingEntity)
                 {
-                    EntityLivingBase entitylivingbase = (EntityLivingBase)entity;
+                    LivingEntity entitylivingbase = (LivingEntity)entity;
 
                     if (!this.world.isRemote)
                     {
@@ -241,32 +200,32 @@ public class EntityBullet extends EntityArrow
                         }
                     }
 
-                    if (this.shootingEntity instanceof EntityLivingBase)
+                    if (this.shootingEntity instanceof LivingEntity)
                     {
                         EnchantmentHelper.applyThornEnchantments(entitylivingbase, this.shootingEntity);
-                        EnchantmentHelper.applyArthropodEnchantments((EntityLivingBase)this.shootingEntity, entitylivingbase);
+                        EnchantmentHelper.applyArthropodEnchantments((LivingEntity)this.shootingEntity, entitylivingbase);
                     }
 
                     this.arrowHit(entitylivingbase);
 
-                    if (this.shootingEntity != null && entitylivingbase != this.shootingEntity && entitylivingbase instanceof EntityPlayer && this.shootingEntity instanceof EntityPlayerMP)
+                    if (this.shootingEntity != null && entitylivingbase != this.shootingEntity && entitylivingbase instanceof PlayerEntity && this.shootingEntity instanceof ServerPlayerEntity)
                     {
-                        ((EntityPlayerMP)this.shootingEntity).connection.sendPacket(new SPacketChangeGameState(6, 0.0F));
+                        ((ServerPlayerEntity)this.shootingEntity).connection.sendPacket(new SChangeGameStatePacket(6, 0.0F));
                     }
                 }
 
                 this.playSound(SoundEvents.ENTITY_ARROW_HIT, 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
 
-                if (!(entity instanceof EntityEnderman))
+                if (!(entity instanceof EndermanEntity))
                 {
-                    this.setDead();
+                    this.remove();
                 }
             }
             else
             {
-                this.motionX *= -0.10000000149011612D;
-                this.motionY *= -0.10000000149011612D;
-                this.motionZ *= -0.10000000149011612D;
+                this.motionX *= -0.1D;
+                this.motionY *= -0.1D;
+                this.motionZ *= -0.1D;
                 this.rotationYaw += 180.0F;
                 this.prevRotationYaw += 180.0F;
                 this.ticksInAir = 0;
@@ -278,7 +237,7 @@ public class EntityBullet extends EntityArrow
                         this.entityDropItem(this.getArrowStack(), 0.1F);
                     }
 
-                    this.setDead();
+                    this.remove();
                 }
             }
         }
@@ -310,14 +269,12 @@ public class EntityBullet extends EntityArrow
             }
         }
     }
-
-    /**
-     * Tries to move the entity towards the specified location.
-     */
-    public void move(MoverType type, double x, double y, double z)
+    
+    @Override
+    public void move(MoverType typeIn, Vec3d pos)
     {
-        super.move(type, x, y, z);
-
+        super.move(typeIn, pos);
+        
         if (this.inGround)
         {
             this.xTile = MathHelper.floor(this.posX);
@@ -326,7 +283,7 @@ public class EntityBullet extends EntityArrow
         }
     }
 
-    protected void arrowHit(EntityLivingBase living)
+    protected void arrowHit(LivingEntity living)
     {
     }
 
@@ -334,7 +291,7 @@ public class EntityBullet extends EntityArrow
     protected Entity findEntityOnPath(Vec3d start, Vec3d end)
     {
         Entity entity = null;
-        List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().expand(this.motionX, this.motionY, this.motionZ).grow(1.0D), BULLET_TARGETS);
+        List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this.getBoundingBox().expand(this.motionX, this.motionY, this.motionZ).grow(1.0D), BULLET_TARGETS);
         double d0 = 0.0D;
 
         for (int i = 0; i < list.size(); ++i)
@@ -343,12 +300,12 @@ public class EntityBullet extends EntityArrow
 
             if (entity1 != this.shootingEntity || this.ticksInAir >= 5)
             {
-                AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().grow(0.30000001192092896D);
+                AxisAlignedBB axisalignedbb = entity1.getBoundingBox().grow(0.3D);
                 RayTraceResult raytraceresult = axisalignedbb.calculateIntercept(start, end);
 
                 if (raytraceresult != null)
                 {
-                    double d1 = start.squareDistanceTo(raytraceresult.hitVec);
+                    double d1 = start.squareDistanceTo(raytraceresult.getHitVec());
 
                     if (d1 < d0 || d0 == 0.0D)
                     {
@@ -361,79 +318,61 @@ public class EntityBullet extends EntityArrow
 
         return entity;
     }
+    */
+    @Override
+    public void writeAdditional(CompoundNBT compound)
+    {
+        compound.putInt("xTile", this.xTile);
+        compound.putInt("yTile", this.yTile);
+        compound.putInt("zTile", this.zTile);
+        compound.putShort("life", (short)this.ticksInGround);
+        ResourceLocation resourcelocation = inTile.getRegistryName();
+        compound.putString("inTile", resourcelocation == null ? "" : resourcelocation.toString());
+        compound.putByte("inData", (byte)this.inData);
+        compound.putByte("shake", (byte)this.arrowShake);
+        compound.putByte("inGround", (byte)(this.inGround ? 1 : 0));
+        compound.putByte("pickup", (byte)this.pickupStatus.ordinal());
+        compound.putDouble("damage", this.damage);
+        compound.putBoolean("crit", this.getIsCritical());
+    }
     
-    public static void registerFixesArrow(DataFixer fixer)
+    @Override
+    public void readAdditional(CompoundNBT compound)
     {
-        registerFixesArrow(fixer, "Arrow");
-    }
-
-    /**
-     * (abstract) Protected helper method to write subclass entity data to NBT.
-     */
-    public void writeEntityToNBT(NBTTagCompound compound)
-    {
-        compound.setInteger("xTile", this.xTile);
-        compound.setInteger("yTile", this.yTile);
-        compound.setInteger("zTile", this.zTile);
-        compound.setShort("life", (short)this.ticksInGround);
-        ResourceLocation resourcelocation = Block.REGISTRY.getNameForObject(this.inTile);
-        compound.setString("inTile", resourcelocation == null ? "" : resourcelocation.toString());
-        compound.setByte("inData", (byte)this.inData);
-        compound.setByte("shake", (byte)this.arrowShake);
-        compound.setByte("inGround", (byte)(this.inGround ? 1 : 0));
-        compound.setByte("pickup", (byte)this.pickupStatus.ordinal());
-        compound.setDouble("damage", this.damage);
-        compound.setBoolean("crit", this.getIsCritical());
-    }
-
-    /**
-     * (abstract) Protected helper method to read subclass entity data from NBT.
-     */
-    public void readEntityFromNBT(NBTTagCompound compound)
-    {
-        this.xTile = compound.getInteger("xTile");
-        this.yTile = compound.getInteger("yTile");
-        this.zTile = compound.getInteger("zTile");
+        this.xTile = compound.getInt("xTile");
+        this.yTile = compound.getInt("yTile");
+        this.zTile = compound.getInt("zTile");
         this.ticksInGround = compound.getShort("life");
 
-        if (compound.hasKey("inTile", 8))
-        {
-            this.inTile = Block.getBlockFromName(compound.getString("inTile"));
-        }
-        else
-        {
-            this.inTile = Block.getBlockById(compound.getByte("inTile") & 255);
-        }
+        this.inTile = ForgeRegistries.BLOCKS.getValue(ResourceLocation.tryCreate(compound.getString("inTile")));
 
         this.inData = compound.getByte("inData") & 255;
         this.arrowShake = compound.getByte("shake") & 255;
         this.inGround = compound.getByte("inGround") == 1;
 
-        if (compound.hasKey("damage", 99))
+        if (compound.contains("damage", 99))
         {
             this.damage = compound.getDouble("damage");
         }
 
-        if (compound.hasKey("pickup", 99))
+        if (compound.contains("pickup", 99))
         {
             this.pickupStatus = PickupStatus.getByOrdinal(compound.getByte("pickup"));
         }
-        else if (compound.hasKey("player", 99))
+        else if (compound.contains("player", 99))
         {
             this.pickupStatus = compound.getBoolean("player") ? PickupStatus.ALLOWED : PickupStatus.DISALLOWED;
         }
 
         this.setIsCritical(compound.getBoolean("crit"));
     }
-
-    /**
-     * Called by a player entity when they collide with an entity
-     */
-    public void onCollideWithPlayer(EntityPlayer entityIn)
+    
+    @Override
+    public void onCollideWithPlayer(PlayerEntity entityIn)
     {
         if (!this.world.isRemote && this.inGround && this.arrowShake <= 0)
         {
-            boolean flag = this.pickupStatus == PickupStatus.ALLOWED || this.pickupStatus == PickupStatus.CREATIVE_ONLY && entityIn.capabilities.isCreativeMode;
+            boolean flag = this.pickupStatus == PickupStatus.ALLOWED || this.pickupStatus == PickupStatus.CREATIVE_ONLY && entityIn.abilities.isCreativeMode;
 
             if (this.pickupStatus == PickupStatus.ALLOWED && !entityIn.inventory.addItemStackToInventory(this.getArrowStack()))
             {
@@ -443,7 +382,7 @@ public class EntityBullet extends EntityArrow
             if (flag)
             {
                 entityIn.onItemPickup(this, 1);
-                this.setDead();
+                this.remove();
             }
         }
     }
@@ -483,8 +422,9 @@ public class EntityBullet extends EntityArrow
     {
         return false;
     }
-
-    public float getEyeHeight()
+    
+    @Override
+    protected float getEyeHeight(Pose poseIn, EntitySize sizeIn)
     {
         return 0.0F;
     }
@@ -515,11 +455,11 @@ public class EntityBullet extends EntityArrow
         return (b0 & 1) != 0;
     }
 
-    public void setEnchantmentEffectsFromEntity(EntityLivingBase p_190547_1_, float p_190547_2_)
+    public void setEnchantmentEffectsFromEntity(LivingEntity p_190547_1_, float p_190547_2_)
     {
         int i = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.POWER, p_190547_1_);
         int j = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.PUNCH, p_190547_1_);
-        this.setDamage((double)(p_190547_2_ * 2.0F) + this.rand.nextGaussian() * 0.25D + (double)((float)this.world.getDifficulty().getDifficultyId() * 0.11F));
+        this.setDamage((double)(p_190547_2_ * 2.0F) + this.rand.nextGaussian() * 0.25D + (double)((float)this.world.getDifficulty().getId() * 0.11F));
 
         if (i > 0)
         {

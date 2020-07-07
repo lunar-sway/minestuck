@@ -2,9 +2,7 @@ package com.mraof.minestuck.util;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.EnumSet;
 import java.util.Random;
@@ -15,7 +13,7 @@ import java.util.Random;
  * The <code>toString()</code> method is overridden and returns a better cased version of the aspect name.
  * @author kirderf1
  */
-public enum EnumAspect
+public enum EnumAspect	//TODO This could potentially be changed to a registry. However note difficulties with the title land aspect registry
 {
 	BLOOD,BREATH,DOOM,HEART,HOPE,LIFE,LIGHT,MIND,RAGE,SPACE,TIME,VOID;
 	
@@ -53,6 +51,8 @@ public enum EnumAspect
 	 */
 	public static EnumAspect getAspectFromInt(int i)
 	{
+		if(i < 0 || i >= EnumAspect.values().length)
+			return null;
 		return EnumAspect.values()[i];
 	}
 	
@@ -84,11 +84,12 @@ public enum EnumAspect
 	 * For usage in messages sent to a player from a server, use <code>asTextComponent()</code>.
 	 * For debugging purposes, use <code>toString()</code> instead.
 	 * @return a translated string of the name.
+	 * @deprecated use {@link #asTextComponent()} instead
 	 */
-	@SideOnly(Side.CLIENT)
+	@Deprecated
 	public String getDisplayName()
 	{
-		return I18n.format("title." + this.toString());
+		return I18n.format(getTranslationKey());
 	}
 	
 	/**
@@ -98,6 +99,11 @@ public enum EnumAspect
 	 */
 	public ITextComponent asTextComponent()
 	{
-		return new TextComponentTranslation("title." + this.toString());
+		return new TranslationTextComponent(getTranslationKey());
+	}
+	
+	public String getTranslationKey()
+	{
+		return "title.aspect." + this.toString();
 	}
 }

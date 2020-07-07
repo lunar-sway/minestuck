@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:sugar_cube"
+    ]
+  },
+  "criteria": {
+    "has_at_least_9_sugar": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:sugar",
+            "count": {
+              "min": 9
+            }
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:sugar_cube"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_at_least_9_sugar",
+      "has_the_recipe"
+    ]
+  ]
+}

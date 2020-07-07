@@ -1,63 +1,47 @@
 package com.mraof.minestuck.network;
 
-import io.netty.buffer.ByteBuf;
-
-import java.util.EnumSet;
-
-import net.minecraft.entity.player.EntityPlayer;
+import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.relauncher.Side;
 
-import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
-import com.mraof.minestuck.util.Debug;
-
-public class TransportalizerPacket extends MinestuckPacket
+public class TransportalizerPacket implements PlayToServerPacket
 {
-	int x;
-	int y;
-	int z;
-	int dim;
+	BlockPos pos;
 	String destId;
 	
-	@Override
-	public MinestuckPacket generatePacket(Object... dat)
+	public TransportalizerPacket(BlockPos pos, String destId)
 	{
-		data.writeInt((Integer) dat[0]);
-		data.writeInt((Integer) dat[1]);
-		data.writeInt((Integer) dat[2]);
-		if(dat.length > 0)
-			data.writeBytes(((String) dat[3]).getBytes());
-		return this;
+		this.pos = pos;
+		this.destId = destId;
 	}
-
+	
 	@Override
-	public MinestuckPacket consumePacket(ByteBuf data)
+	public void encode(PacketBuffer buffer)
 	{
-		x = data.readInt();
-		y = data.readInt();
-		z = data.readInt();
-		byte[] destBytes = new byte[4];
-		//data.getBytes(0, destBytes, 0, 4);
-		for(int i = 0; i < 4; i++)
-			destBytes[i] = data.readByte();
-		Debug.debugf("%d, %d, %d, %d", destBytes[0], destBytes[1], destBytes[2], destBytes[3]);
-		destId = new String(destBytes);
-		return this;
+		buffer.writeBlockPos(pos);
+		buffer.writeString(destId, 4);
 	}
-
-	@Override
-	public void execute(EntityPlayer player)
+	
+	public static TransportalizerPacket decode(PacketBuffer buffer)
 	{
-		TileEntityTransportalizer te = (TileEntityTransportalizer) player.world.getTileEntity(new BlockPos(x, y, z));
-		if(te != null)
+		BlockPos pos = buffer.readBlockPos();
+		String destId = buffer.readString(4);
+		
+		return new TransportalizerPacket(pos, destId);
+	}
+	
+	@Override
+	public void execute(ServerPlayerEntity player)
+	{
+		if(player.getEntityWorld().isAreaLoaded(pos, 0))
 		{
-			te.setDestId(destId);
+			TileEntity te = player.world.getTileEntity(pos);
+			if(te instanceof TransportalizerTileEntity)
+			{
+				((TransportalizerTileEntity) te).setDestId(destId);
+			}
 		}
-	}
-
-	@Override
-	public EnumSet<Side> getSenderSide()
-	{
-		return EnumSet.of(Side.CLIENT);
 	}
 }

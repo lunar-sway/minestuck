@@ -1,6 +1,6 @@
 {
     "parent": "item/handheld",
     "textures": {
-        "layer0": "minestuck:items/spoon_silver"
+        "layer0": "minestuck:item/silver_spoon"
     }
 }

@@ -1,42 +1,36 @@
 package com.mraof.minestuck.tileentity;
 
-import java.util.List;
-
-import com.mraof.minestuck.block.BlockAlchemiterUpgrades;
-import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemiterUpgrades;
-
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EntitySelectors;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ITickable;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.World;
-import scala.actors.threadpool.Arrays;
 
-public class TileEntityAlchemiterUpgrade extends TileEntity implements ITickable
+public class TileEntityAlchemiterUpgrade extends TileEntity implements ITickableTileEntity
 {
 	protected AlchemiterUpgrades upgrade;
 	
 	public TileEntityAlchemiterUpgrade(AlchemiterUpgrades upg) 
 	{
-		setUpgrade(upg);
+		super(MSTileEntityTypes.ALCHEMITER_UPGRADE);
+		//setUpgrade(upg);
+	}
+	
+	public TileEntityAlchemiterUpgrade()
+	{
+		this(null);
 	}
 	
 	@Override
-	public void update() 
+	public void tick()
 	{
 		if(world != null && !world.isRemote)
 		{
-			EnumFacing facing = world.getBlockState(pos).getValue(BlockAlchemiterUpgrades.DIRECTION);
+			/*EnumFacing facing = world.getBlockState(pos).getValue(BlockAlchemiterUpgrades.DIRECTION);
 			
 			if(upgrade.equals(AlchemiterUpgrades.hopper))
-				updateHopper(facing);
+				updateHopper(facing);*/
 		}
 	}
-
+	/* TODO Update once the blocks are sorted out
 	private void updateHopper(EnumFacing facing) 
 	{
 		
@@ -81,5 +75,5 @@ public class TileEntityAlchemiterUpgrade extends TileEntity implements ITickable
 	public void setUpgrade(AlchemiterUpgrades upg)
 	{
 		upgrade = upg;
-	}
+	}*/
 }

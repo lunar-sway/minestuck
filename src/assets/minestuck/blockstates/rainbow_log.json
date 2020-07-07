@@ -1,8 +1,7 @@
 {
     "variants": {
-        "axis=y":  { "model": "minestuck:rainbow_log" },
-        "axis=z":   { "model": "minestuck:rainbow_log", "x": 90 },
-        "axis=x":   { "model": "minestuck:rainbow_log", "x": 90, "y": 90 },
-        "axis=none": { "model": "minestuck:rainbow_log_bark" }
+        "axis=y": { "model": "minestuck:block/rainbow_log" },
+        "axis=z": { "model": "minestuck:block/rainbow_log", "x": 90 },
+        "axis=x": { "model": "minestuck:block/rainbow_log", "x": 90, "y": 90 }
     }
 }

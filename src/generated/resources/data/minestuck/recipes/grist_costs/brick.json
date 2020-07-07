@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:brick"
+  },
+  "grist_cost": {
+    "minestuck:shale": 3,
+    "minestuck:tar": 1
+  }
+}

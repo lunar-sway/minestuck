@@ -1,27 +1,19 @@
-package com.mraof.minestuck.block;
+/*package com.mraof.minestuck.block;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.alchemy.AlchemyRecipes;
 //import com.mraof.minestuck.block.BlockJumperBlock.BlockJumperBlock2;
-import com.mraof.minestuck.block.BlockJumperBlock.EnumParts;
 //import com.mraof.minestuck.block.BlockJumperBlock.BlockJumperBlock2;
 //import com.mraof.minestuck.block.BlockJumperBlock.BlockJumperBlock3;
-import com.mraof.minestuck.client.gui.GuiHandler;
-import com.mraof.minestuck.item.TabMinestuck;
-import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
-import com.mraof.minestuck.tileentity.TileEntityHolopad;
 import com.mraof.minestuck.tileentity.TileEntityItemStack;
 import com.mraof.minestuck.tileentity.TileEntityJumperBlock;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -39,9 +31,9 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import com.mraof.minestuck.item.TabMinestuck;
 
-public abstract class BlockJumperBlock extends BlockLargeMachine {
+public abstract class BlockJumperBlock extends BlockMachine
+{
 	public static final PropertyEnum<EnumParts> PART1 = PropertyEnum.create("part", EnumParts.class, EnumParts.TOP_PLUG, EnumParts.BOTTOM_PLUG, EnumParts.TOP_SHUNT, EnumParts.BOTTOM_SHUNT);
 	public static final PropertyEnum<EnumParts> PART2 = PropertyEnum.create("part", EnumParts.class, EnumParts.TOP_CORNER_PLUG, EnumParts.BOTTOM_CORNER_PLUG, EnumParts.BOTTOM_CORNER_SHUNT, EnumParts.TOP_CORNER_SHUNT);
 	public static final PropertyEnum<EnumParts> PART3 = PropertyEnum.create("part", EnumParts.class, EnumParts.BORDER_LEFT, EnumParts.BORDER_SIDE, EnumParts.BORDER_RIGHT, EnumParts.SMALL_CORNER);
@@ -277,7 +269,7 @@ public abstract class BlockJumperBlock extends BlockLargeMachine {
     /**
      *returns the block position of the "Main" block
      *aka the block with the TileEntity for the machine
-     */
+     * /
 	public BlockPos getMainPos(IBlockState state, BlockPos pos, World worldIn)
 	{
 		
@@ -525,7 +517,7 @@ public abstract class BlockJumperBlock extends BlockLargeMachine {
 	 /**
      *returns the block position of the "Main" block
      *aka the block with the TileEntity for the machine
-     */
+     * /
 	
 	
 	@Override
@@ -704,3 +696,4 @@ public abstract class BlockJumperBlock extends BlockLargeMachine {
 	
 
 }
+*/

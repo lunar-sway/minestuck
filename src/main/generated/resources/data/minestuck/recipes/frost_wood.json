@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "bark",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "minestuck:frost_log"
+    }
+  },
+  "result": {
+    "item": "minestuck:frost_wood",
+    "count": 3
+  }
+}

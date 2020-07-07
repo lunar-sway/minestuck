@@ -1,41 +1,37 @@
 package com.mraof.minestuck.network;
 
-import java.util.EnumSet;
+import com.mraof.minestuck.world.storage.PlayerData;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.text.TranslationTextComponent;
 
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.util.MinestuckPlayerData;
-import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-
-import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.fml.relauncher.Side;
-
-public class EffectTogglePacket extends MinestuckPacket
+public class EffectTogglePacket implements PlayToServerPacket
 {
-
+	public static final String ON = "minestuck.aspect_effects.on";
+	public static final String OFF = "minestuck.aspect_effects.off";
+	
 	@Override
-	public MinestuckPacket generatePacket(Object... data) {return this;}
-
-	@Override
-	public MinestuckPacket consumePacket(ByteBuf data) {return this;}
-
-	@Override
-	public void execute(EntityPlayer player) 
+	public void encode(PacketBuffer buffer)
 	{
-		IdentifierHandler.PlayerIdentifier handler = IdentifierHandler.encode(player);
-		MinestuckPlayerData.setEffectToggle(handler, !MinestuckPlayerData.getEffectToggle(handler));
-		if(MinestuckPlayerData.getData(handler).effectToggle)
+	}
+	
+	public static EffectTogglePacket decode(PacketBuffer buffer)
+	{
+		return new EffectTogglePacket();
+	}
+	
+	@Override
+	public void execute(ServerPlayerEntity player)
+	{
+		PlayerData data = PlayerSavedData.getData(player);
+		data.effectToggle(!data.effectToggle());
+		if(data.effectToggle())
 		{
-			player.sendStatusMessage(new TextComponentTranslation("aspectEffects.on"), true);
-		}
-		else {
-			player.sendStatusMessage(new TextComponentTranslation("aspectEffects.off"), true);
+			player.sendStatusMessage(new TranslationTextComponent(ON), true);
+		} else
+		{
+			player.sendStatusMessage(new TranslationTextComponent(OFF), true);
 		}
 	}
-
-	@Override
-	public EnumSet<Side> getSenderSide() {return EnumSet.of(Side.CLIENT);}
-
 }

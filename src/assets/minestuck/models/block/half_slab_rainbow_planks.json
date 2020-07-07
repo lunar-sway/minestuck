@@ -1,8 +1,0 @@
-{
-    "parent": "block/half_slab",
-    "textures": {
-        "bottom": "minestuck:blocks/rainbow_planks",
-        "top": "minestuck:blocks/rainbow_planks",
-        "side": "minestuck:blocks/rainbow_planks"
-    }
-}

@@ -1,100 +1,104 @@
 package com.mraof.minestuck.item;
 
-import java.util.List;
-
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.client.gui.GuiHandler;
+import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.inventory.specibus.StrifePortfolioHandler;
 import com.mraof.minestuck.inventory.specibus.StrifeSpecibus;
 import com.mraof.minestuck.util.KindAbstratusList;
-
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemStrifeCard extends Item
 {
-	public ItemStrifeCard()
+	
+	public ItemStrifeCard(Item.Properties builder)
 	{
-		setUnlocalizedName("strifeCard");
-		setMaxStackSize(1);
-		setCreativeTab(TabMinestuck.instance);
+		super(builder);
+		addPropertyOverride(new ResourceLocation(Minestuck.MOD_ID, "assigned"), (stack, world, entity) -> stack.hasTag() && stack.getTag().contains("abstrata", Constants.NBT.TAG_ANY_NUMERIC) ? 1 : 0);
 	}
 	
 	@Override
-	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) 
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
 	{
-		if(stack.hasTagCompound())
+		if(stack.hasTag())
 		{
-			NBTTagCompound nbt = stack.getTagCompound();
+			CompoundNBT nbt = stack.getTag();
 			
-			if(nbt.hasKey("abstrata"))
+			if(nbt.contains("abstrata", Constants.NBT.TAG_ANY_NUMERIC))
 			{
-				String kind = KindAbstratusList.getTypeList().get(nbt.getInteger("abstrata")).getDisplayName();
-				tooltip.add("("+kind+")");
-				if(nbt.hasKey("items"))
+				ITextComponent kind = KindAbstratusList.getTypeList().get(nbt.getInt("abstrata")).getDisplayName();
+				tooltip.add(new StringTextComponent("(").appendSibling(kind).appendText(")"));
+				if(nbt.contains("items", Constants.NBT.TAG_COMPOUND))
 				{
-					NBTTagCompound items = (NBTTagCompound) nbt.getTag("items");
-					int size = items.getSize();
+					CompoundNBT items = nbt.getCompound("items");
+					int size = items.size();
 					int remaining = size;
 					for(int i = 0; i < Math.min(size,5); i++)
-						if(items.hasKey("slot"+i))
+						if(items.contains("slot"+i, Constants.NBT.TAG_COMPOUND))
 						{
-							ItemStack s = new ItemStack(items.getCompoundTag("slot"+i));
+							ItemStack s = ItemStack.read(items.getCompound("slot"+i));
 							tooltip.add(s.getDisplayName());
 							remaining--;
 						}
 						else break;
-					if(remaining > 0)tooltip.add(String.format(TextFormatting.ITALIC + I18n.translateToLocal("container.shulkerBox.more"), remaining));
+					if(remaining > 0)tooltip.add(new TranslationTextComponent("container.shulkerBox.more", remaining).applyTextStyle(TextFormatting.ITALIC));
 				}
 				
 			}
 			else
 			{
-				tooltip.add("("+I18n.translateToLocal("item.strifeCard.invalid")+")");
+				tooltip.add(new StringTextComponent("(").appendSibling(new TranslationTextComponent("item.strifeCard.invalid")).appendText(")"));
 			}
 		}
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) 
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn)
 	{
 		ItemStack stack = playerIn.getHeldItem(handIn);
 		
-		if(!StrifePortfolioHandler.checkSpecibusLimit(playerIn))
+		if(!worldIn.isRemote && !StrifePortfolioHandler.checkSpecibusLimit((ServerPlayerEntity) playerIn))
 			{
-				playerIn.sendStatusMessage(new TextComponentTranslation("specibus.full"), false);
-				return new ActionResult<ItemStack>(EnumActionResult.FAIL, stack);
+				playerIn.sendStatusMessage(new TranslationTextComponent("specibus.full"), false);
+				return new ActionResult<>(ActionResultType.FAIL, stack);
 			}
 		
-		if(!stack.hasTagCompound())
+		if(!stack.hasTag())
 		{
 			BlockPos pos = playerIn.getPosition();
-			playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.STRIFE_CARD.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
+			MSScreenFactories.displayStrifeCardScreen();
 		}
 		else if(worldIn.isRemote)
 		{
-			NBTTagCompound nbt = stack.getTagCompound();
+			CompoundNBT nbt = stack.getTag();
 			
-			if(nbt.hasKey("abstrata"))
+			if(nbt.contains("abstrata", Constants.NBT.TAG_ANY_NUMERIC))
 			{
-				StrifeSpecibus specibus = new StrifeSpecibus(nbt.getInteger("abstrata"));
-				if(nbt.hasKey("items"))
+				StrifeSpecibus specibus = new StrifeSpecibus(nbt.getInt("abstrata"));
+				if(nbt.contains("items", Constants.NBT.TAG_COMPOUND))
 				{
-					NBTTagCompound items = (NBTTagCompound) nbt.getTag("items");
-					for(int i = 0; i < items.getSize(); i++)
-						if(items.hasKey("slot"+i))
-							specibus.putItemStack(new ItemStack(items.getCompoundTag("slot"+i)));
+					CompoundNBT items = nbt.getCompound("items");
+					for(int i = 0; i < items.size(); i++)
+						if(items.contains("slot"+i, Constants.NBT.TAG_COMPOUND))
+							specibus.putItemStack(ItemStack.read(items.getCompound("slot"+i)));
 						else break;
 				}
 				
@@ -103,11 +107,11 @@ public class ItemStrifeCard extends Item
 			}
 			else
 			{
-				playerIn.sendStatusMessage(new TextComponentTranslation("specibus.corrupted"), false);
-				return new ActionResult<ItemStack>(EnumActionResult.FAIL, stack);
+				playerIn.sendStatusMessage(new TranslationTextComponent("specibus.corrupted"), false);
+				return new ActionResult<>(ActionResultType.FAIL, stack);
 			}
 		}
 
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+		return new ActionResult<>(ActionResultType.SUCCESS, stack);
 	}
 }

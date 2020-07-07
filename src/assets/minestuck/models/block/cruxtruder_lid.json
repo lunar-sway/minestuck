@@ -27,10 +27,10 @@
         }
     },
     "textures": {
-		"particle": "minestuck:machines/cruxtruder/lid_top",
-		"down": "minestuck:machines/cruxtruder/lid",
-		"top": "minestuck:machines/cruxtruder/lid_top",
-        "side": "minestuck:machines/cruxtruder/lid_side"
+		"particle": "minestuck:block/machine/cruxtruder/lid_top",
+		"down": "minestuck:block/machine/cruxtruder/lid",
+		"top": "minestuck:block/machine/cruxtruder/lid_top",
+        "side": "minestuck:block/machine/cruxtruder/lid_side"
     },
     
     "elements": [

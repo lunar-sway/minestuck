@@ -1,9 +1,9 @@
 {
     "variants": {
-        "normal": [
-            { "model": "minestuck:blooming_cactus0", "weight": 1 },
-            { "model": "minestuck:blooming_cactus1", "weight": 1 },
-            { "model": "minestuck:blooming_cactus2", "weight": 1 }
+        "": [
+            { "model": "minestuck:block/blooming_cactus0" },
+            { "model": "minestuck:block/blooming_cactus1" },
+            { "model": "minestuck:block/blooming_cactus2" }
         ]
     }
 }

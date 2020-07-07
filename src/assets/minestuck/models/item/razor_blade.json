@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "minestuck:items/razor_blade"
+        "layer0": "minestuck:item/razor_blade"
     }
 }

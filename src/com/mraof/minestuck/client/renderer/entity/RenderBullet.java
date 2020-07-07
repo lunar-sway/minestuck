@@ -1,17 +1,16 @@
 package com.mraof.minestuck.client.renderer.entity;
 
 import com.mraof.minestuck.entity.EntityBullet;
-
-import net.minecraft.client.renderer.entity.RenderArrow;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.ArrowRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
 
-public class RenderBullet extends RenderArrow<EntityBullet>
+public class RenderBullet extends ArrowRenderer<EntityBullet>
 {
 
 	private static final ResourceLocation ENERGY_ARROW_BLUE = new ResourceLocation("minestuck", "textures/entity/projectiles/energy_arrow_blue.png");
 	
-	public RenderBullet(RenderManager renderManagerIn) 
+	public RenderBullet(EntityRendererManager renderManagerIn)
 	{
 		
 		super(renderManagerIn);

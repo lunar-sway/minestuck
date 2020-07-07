@@ -1,12 +1,12 @@
 {
     "textures": {
-        "particle": "minestuck:machines/cruxtruder/base",
-        "base": "minestuck:machines/cruxtruder/base",
-        "top": "minestuck:machines/cruxtruder/top_side",
-        "screen": "minestuck:machines/cruxtruder/misc",
-        "inside": "minestuck:machines/cruxtruder/inside",
-        "inside_corner": "minestuck:machines/cruxtruder/inside_corner",
-        "down": "minestuck:machines/cruxtruder/down_side"
+        "particle": "minestuck:block/machine/cruxtruder/base",
+        "base": "minestuck:block/machine/cruxtruder/base",
+        "top": "minestuck:block/machine/cruxtruder/top_side",
+        "screen": "minestuck:block/machine/cruxtruder/misc",
+        "inside": "minestuck:block/machine/cruxtruder/inside",
+        "inside_corner": "minestuck:block/machine/cruxtruder/inside_corner",
+        "down": "minestuck:block/machine/cruxtruder/down_side"
     },
     "elements": [
         {

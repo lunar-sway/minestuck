@@ -1,57 +1,37 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.GristType;
-import com.mraof.minestuck.util.MinestuckPlayerData;
-import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fml.relauncher.Side;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.world.storage.ClientPlayerData;
+import net.minecraft.network.PacketBuffer;
 
-import java.util.EnumSet;
-import java.util.Map;
-
-public class GristCachePacket extends MinestuckPacket
+public class GristCachePacket implements PlayToClientPacket
 {
-	public GristSet values;
-	public boolean targetGrist;
-
-	@Override
-	public MinestuckPacket generatePacket(Object... dat)
+	public final GristSet gristCache;
+	public final boolean isEditmode;
+	
+	public GristCachePacket(GristSet gristCache, boolean isEditmode)
 	{
-		GristSet gristSet = (GristSet) dat[0];
-		data.writeInt(gristSet.gristTypes.size());
-		for (Map.Entry<GristType, Integer> entry : gristSet.getMap().entrySet())
-		{
-			data.writeInt(entry.getKey().getId());
-			data.writeInt(entry.getValue());
-		}
-		data.writeBoolean((Boolean) dat[1]);
-		return this;
+		this.gristCache = gristCache;
+		this.isEditmode = isEditmode;
 	}
-
+	
 	@Override
-	public MinestuckPacket consumePacket(ByteBuf data)
+	public void encode(PacketBuffer buffer)
 	{
-		values = new GristSet();
-		int length = data.readInt();
-		for (int i = 0; i < length; i++)
-		{
-			values.setGrist(GristType.REGISTRY.getValue(data.readInt()), data.readInt());
-		}
-		targetGrist = data.readBoolean();
-		return this;
+		gristCache.write(buffer);
+		buffer.writeBoolean(isEditmode);
 	}
-
+	
+	public static GristCachePacket decode(PacketBuffer buffer)
+	{
+		GristSet gristCache = GristSet.read(buffer);
+		boolean isEditmode = buffer.readBoolean();
+		return new GristCachePacket(gristCache, isEditmode);
+	}
+	
 	@Override
-	public void execute(EntityPlayer player)
+	public void execute()
 	{
-		MinestuckPlayerData.onPacketRecived(this);
+		ClientPlayerData.onPacketRecived(this);
 	}
-
-	@Override
-	public EnumSet<Side> getSenderSide()
-	{
-		return EnumSet.of(Side.SERVER);
-	}
-
 }

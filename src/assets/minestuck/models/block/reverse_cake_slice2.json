@@ -1,10 +1,10 @@
 {
     "textures": {
-        "particle": "minestuck:blocks/reverse_cake_side",
-        "bottom": "minestuck:blocks/reverse_cake_bottom",
-        "top": "minestuck:blocks/reverse_cake_top",
-        "side": "minestuck:blocks/reverse_cake_side",
-        "inside": "minestuck:blocks/reverse_cake_inner"
+        "particle": "minestuck:block/reverse_cake_side",
+        "bottom": "minestuck:block/reverse_cake_bottom",
+        "top": "minestuck:block/reverse_cake_top",
+        "side": "minestuck:block/reverse_cake_side",
+        "inside": "minestuck:block/reverse_cake_inner"
     },
     "elements": [
         {   "from": [ 5, 0, 1 ],

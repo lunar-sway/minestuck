@@ -1,31 +1,26 @@
 package com.mraof.minestuck.inventory.specibus;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.util.KindAbstratusList;
 import com.mraof.minestuck.util.KindAbstratusType;
-import com.mraof.minestuck.util.MinestuckPlayerData;
-
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.LogicalSide;
+
+import java.util.LinkedList;
 
 public class StrifeSpecibus 
 {
 	protected LinkedList<ItemStack> list;
 	protected int abstIndex;
-	public Side side = Side.CLIENT;
+	public LogicalSide side = LogicalSide.CLIENT;
 	
-	@SideOnly(Side.CLIENT)
 	protected NonNullList<ItemStack> items;
-	@SideOnly(Side.CLIENT)
 	protected NonNullList<ItemStack> unuseable;
-	@SideOnly(Side.CLIENT)
 	protected KindAbstratusType abstratus;
 	
 	public StrifeSpecibus()
@@ -33,7 +28,7 @@ public class StrifeSpecibus
 		list = new LinkedList<ItemStack>();
 	}
 	
-	public StrifeSpecibus(NBTTagCompound nbt)
+	public StrifeSpecibus(CompoundNBT nbt)
 	{
 		this();
 		readFromNBT(nbt);
@@ -43,7 +38,7 @@ public class StrifeSpecibus
 	{
 		this();
 		abstIndex = abstrataIndex;
-		readFromNBT(writeToNBT(new NBTTagCompound()));
+		readFromNBT(writeToNBT(new CompoundNBT()));
 		//System.out.println("creating a new specibus obj");
 	}
 	
@@ -52,19 +47,19 @@ public class StrifeSpecibus
 		this(KindAbstratusList.getTypeList().indexOf(type));
 	}
 
-	public void initSpecibus(Side side)
+	public void initSpecibus(LogicalSide side)
 	{
 		
 	}
 	
-	public void addToPortfolio(PlayerIdentifier player)
+	public void addToPortfolio(PlayerIdentifier player, World world)
 	{
-		MinestuckPlayerData.getStrifePortfolio(player).add(this);
+		PlayerSavedData.getData(player, world).addSpecibus(this);
 	}
 	
-	public void readFromNBT(NBTTagCompound nbt)
+	public void readFromNBT(CompoundNBT nbt)
 	{
-		abstIndex = nbt.getInteger("abstrata");
+		abstIndex = nbt.getInt("abstrata");
 		list = new LinkedList<ItemStack>();
 		
 		if(side.isClient())
@@ -73,15 +68,15 @@ public class StrifeSpecibus
 			items = NonNullList.<ItemStack>create();
 		}
 		
-		if(nbt.hasKey("items"))
+		if(nbt.contains("items", Constants.NBT.TAG_COMPOUND))
 		{
-			NBTTagCompound itemsNBT = (NBTTagCompound) nbt.getTag("items");
+			CompoundNBT itemsNBT = nbt.getCompound("items");
 			int i = 0;
 			while(true)
 			{
-				if(itemsNBT.hasKey("slot"+i))
+				if(itemsNBT.contains("slot"+i, Constants.NBT.TAG_COMPOUND))
 				{
-					ItemStack stack = new ItemStack(itemsNBT.getCompoundTag("slot"+i));
+					ItemStack stack = ItemStack.read(itemsNBT.getCompound("slot"+i));
 					list.add(stack);
 					if(side.isClient()) items.add(stack);
 				}
@@ -91,20 +86,20 @@ public class StrifeSpecibus
 		}
 	}
 	
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt)
+	public CompoundNBT writeToNBT(CompoundNBT nbt)
 	{
-		NBTTagCompound items = new NBTTagCompound();
+		CompoundNBT items = new CompoundNBT();
 		
-		nbt.setInteger("abstrata", abstIndex);
+		nbt.putInt("abstrata", abstIndex);
 			for(int i = 0; i < list.size(); i++)
 		{
 			if(list.get(i) != null)
 			{
 				ItemStack stack = list.get(i).copy();
-				items.setTag("slot"+i, stack.writeToNBT(new NBTTagCompound()));
+				items.put("slot"+i, stack.write(new CompoundNBT()));
 			}
 		}
-		nbt.setTag("items", items);
+		nbt.put("items", items);
 		
 		return nbt;
 	}

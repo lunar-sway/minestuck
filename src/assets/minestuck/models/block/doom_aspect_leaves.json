@@ -1,0 +1,6 @@
+{
+    "parent": "block/leaves",
+    "textures": {
+        "all": "minestuck:block/doom_aspect_leaves"
+    }
+}

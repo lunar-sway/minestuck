@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "iii",
+    "iei",
+    "iii"
+  ],
+  "key": {
+    "e": {
+      "item": "minestuck:energy_core"
+    },
+    "i": {
+      "tag": "forge:ingots/iron"
+    }
+  },
+  "result": {
+    "item": "minestuck:computer"
+  }
+}

@@ -1,6 +1,6 @@
 {
     "parent": "item/handheld",
     "textures": {
-        "layer0": "minestuck:items/fluorite_octet"
+        "layer0": "minestuck:item/fluorite_octet"
     }
 }

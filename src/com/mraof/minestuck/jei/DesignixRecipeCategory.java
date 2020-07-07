@@ -1,7 +1,7 @@
 package com.mraof.minestuck.jei;
-
+/*
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IGuiItemStackGroup;
@@ -17,7 +17,7 @@ import java.util.List;
 
 /**
  * Created by mraof on 2017 January 23 at 6:50 AM.
- */
+ * /
 public class DesignixRecipeCategory implements IRecipeCategory<DesignixRecipeWrapper>
 {
     private IDrawable background;
@@ -73,3 +73,4 @@ public class DesignixRecipeCategory implements IRecipeCategory<DesignixRecipeWra
         stackGroup.set(2, outputs);
     }
 }
+*/

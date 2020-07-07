@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal":  { "model": "minestuck:end_planks" }
+        "": { "model": "minestuck:block/end_planks" }
     }
 }

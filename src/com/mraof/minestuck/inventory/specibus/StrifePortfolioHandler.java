@@ -1,36 +1,34 @@
 package com.mraof.minestuck.inventory.specibus;
 
+import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
+import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.SpecibusPacket;
+import com.mraof.minestuck.util.KindAbstratusList;
+import com.mraof.minestuck.util.KindAbstratusType;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Hand;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.LogicalSide;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.network.MinestuckChannelHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.SpecibusPacket;
-import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.util.KindAbstratusList;
-import com.mraof.minestuck.util.KindAbstratusType;
-import com.mraof.minestuck.util.MinestuckPlayerData;
-
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.fml.relauncher.Side;
-
 public class StrifePortfolioHandler 
 {
 	//private static String[] metaConvert = {};
-	private static List<KindAbstratusType> abstrataList = KindAbstratusList.getTypeList();
+	private static final List<KindAbstratusType> abstrataList = KindAbstratusList.getTypeList();
 	private static Random rand;
 	
-	public static StrifeSpecibus createSpecibus(int id, Side side)
+	public static StrifeSpecibus createSpecibus(int id, LogicalSide side)
 	{
 		StrifeSpecibus specibus = new StrifeSpecibus(id);
 		specibus.side = side;
@@ -42,23 +40,23 @@ public class StrifePortfolioHandler
 		return abstrataList.get(id);
 	}
 	
-	public static void addSpecibus(EntityPlayer player, StrifeSpecibus specibus) 
+	public static void addSpecibus(PlayerEntity player, StrifeSpecibus specibus)
 	{
-		String typeName = specibus.getAbstratus().getDisplayName();
+		ITextComponent typeName = specibus.getAbstratus().getDisplayName();
 		if(specibus.getAbstratus().equals(abstrataList.get(0)))
-			player.sendStatusMessage(new TextComponentTranslation("specibus.success.blank"), false);						
+			player.sendStatusMessage(new TranslationTextComponent("specibus.success.blank"), false);
 		else
-			player.sendStatusMessage(new TextComponentTranslation("specibus.success", typeName), false);						
-		MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.PORTFOLIO, SpecibusPacket.SPECIBUS_ADD, writeToNBT(specibus));
-		MinestuckChannelHandler.sendToServer(packet);
+			player.sendStatusMessage(new TranslationTextComponent("specibus.success", typeName), false);
+		SpecibusPacket packet = SpecibusPacket.addSpecibus(writeToNBT(specibus));
+		MSPacketHandler.sendToServer(packet);
 	}
 	
-	public static boolean checkSpecibusLimit(EntityPlayer player)
+	public static boolean checkSpecibusLimit(ServerPlayerEntity player)
 	{
-		return MinestuckPlayerData.getStrifePortfolio(IdentifierHandler.encode(player)).size() < 10;
+		return PlayerSavedData.getData(player).getPortfolio().size() < 10;
 	}
 	
-	public static void retrieveItem(EntityPlayerMP player, int specibusIndex, int itemIndex)
+	public static void retrieveItem(ServerPlayerEntity player, int specibusIndex, int itemIndex)
 	{	
 		StrifeSpecibus specibus = getSpecibus(player, specibusIndex);
 		if(specibus == null)
@@ -70,25 +68,25 @@ public class StrifePortfolioHandler
 	
 	public static void retrieveSpecibus(int specibusId)
 	{
-		MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.PORTFOLIO, SpecibusPacket.SPECIBUS_REMOVE, specibusId);
-		MinestuckChannelHandler.sendToServer(packet);
+		SpecibusPacket packet = SpecibusPacket.removeSpecibus(specibusId);
+		MSPacketHandler.sendToServer(packet);
 	}
 	
 	public static ItemStack createSpecibusItem(StrifeSpecibus specibus)
 	{
-		ItemStack stack = new ItemStack(MinestuckItems.strifeCard);
-		if(!specibus.isBlank()) stack.setTagCompound(specibus.writeToNBT(new NBTTagCompound()));
+		ItemStack stack = new ItemStack(MSItems.strifeCard);
+		if(!specibus.isBlank()) stack.setTag(specibus.writeToNBT(new CompoundNBT()));
 		
 		return stack;
 	}
 	
-	public static void spawnItem(EntityPlayerMP player, ItemStack stack)
+	public static void spawnItem(ServerPlayerEntity player, ItemStack stack)
 	{
 		if(!stack.isEmpty())
 		{
 			ItemStack otherStack = player.getHeldItemMainhand();
 			if(otherStack.isEmpty())
-				player.setHeldItem(EnumHand.MAIN_HAND, stack);
+				player.setHeldItem(Hand.MAIN_HAND, stack);
 			else if(canMergeItemStacks(stack, otherStack))
 			{
 				otherStack.grow(stack.getCount());
@@ -109,105 +107,98 @@ public class StrifePortfolioHandler
 					stack.setCount(0);
 					placed = true;
 					player.inventory.markDirty();
-					player.inventoryContainer.detectAndSendChanges();
+					player.container.detectAndSendChanges();
 					break;
 				}
 				if(!placed)
-					launchAnyItem(player, stack);
+					CaptchaDeckHandler.launchAnyItem(player, stack);
 			}
 		}
 	}
 	
-	public static void launchAnyItem(EntityPlayer player, ItemStack item)
-	{
-		EntityItem entity = new EntityItem(player.world, player.posX, player.posY+1, player.posZ, item);
-		entity.motionX = rand.nextDouble() - 0.5;
-		entity.motionZ = rand.nextDouble() - 0.5;
-		entity.setDefaultPickupDelay();
-		player.world.spawnEntity(entity);
-	}
-	
 	private static boolean canMergeItemStacks(ItemStack stack1, ItemStack stack2)
 	{
-		return stack1.getItem() == stack2.getItem() && (!stack1.getHasSubtypes() || stack1.getMetadata() == stack2.getMetadata()) && ItemStack.areItemStackTagsEqual(stack1, stack2)
+		return stack1.getItem() == stack2.getItem() && ItemStack.areItemStackTagsEqual(stack1, stack2)
 				&& stack1.isStackable() && stack1.getCount() + stack2.getCount() < stack1.getMaxStackSize();
 	}
 	
-	public static StrifeSpecibus getSpecibus(EntityPlayerMP player, int specibusIndex)
+	public static StrifeSpecibus getSpecibus(ServerPlayerEntity player, int specibusIndex)
 	{
 		StrifeSpecibus specibus = new StrifeSpecibus(0);
-		if(specibusIndex < MinestuckPlayerData.getStrifePortfolio(IdentifierHandler.encode(player)).size())
-			specibus = MinestuckPlayerData.getStrifePortfolio(IdentifierHandler.encode(player)).get(specibusIndex);
+		List<StrifeSpecibus> portfolio = PlayerSavedData.getData(player).getPortfolio();
+		if(specibusIndex < portfolio.size())
+			specibus = portfolio.get(specibusIndex);
 			else System.out.println("index error!!!!!!!!!");
 		return specibus;
 	}
 	
-	public static void setPortfolio(EntityPlayer player, ArrayList<StrifeSpecibus> portfolio) 
+	public static void setPortfolio(PlayerEntity player, List<StrifeSpecibus> portfolio)
 	{
-		MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.PORTFOLIO, SpecibusPacket.PORTFOLIO, writeToNBT(portfolio));
-		MinestuckChannelHandler.sendToServer(packet);
+		SpecibusPacket packet = SpecibusPacket.sendPortfolioData(writeToNBT(portfolio));
+		MSPacketHandler.sendToServer(packet);
 	}
 	
-	public static NBTTagCompound writeToNBT(StrifeSpecibus specibus)
+	public static CompoundNBT writeToNBT(StrifeSpecibus specibus)
 	{
-		return specibus.writeToNBT(new NBTTagCompound());
+		return specibus.writeToNBT(new CompoundNBT());
 	}
 	
-	public static NBTTagCompound writeToNBT(ArrayList<StrifeSpecibus> portfolio)
+	public static CompoundNBT writeToNBT(List<StrifeSpecibus> portfolio)
 	{
-		NBTTagCompound nbt = new NBTTagCompound();
+		CompoundNBT nbt = new CompoundNBT();
 	
 		int i = 0;
 		for(StrifeSpecibus specibus : portfolio)
 		{
-			nbt.setTag("specibus"+i, specibus.writeToNBT(new NBTTagCompound()));
+			nbt.put("specibus"+i, specibus.writeToNBT(new CompoundNBT()));
 			i++;
 		}
-	
 		
 		return nbt;
 	}
 	
-	public static ArrayList<StrifeSpecibus> createPortfolio(NBTTagCompound nbt)
+	public static ArrayList<StrifeSpecibus> createPortfolio(CompoundNBT nbt)
 	{
-		ArrayList<StrifeSpecibus> portfolio = new ArrayList<StrifeSpecibus>();
-		for(int i = 0; i < nbt.getSize(); i++)
+		ArrayList<StrifeSpecibus> portfolio = new ArrayList<>();
+		for(int i = 0; i < nbt.size(); i++)
 		{
 			String name = "specibus"+i;
 			
-			if(nbt.hasKey(name))
+			if(nbt.contains(name, Constants.NBT.TAG_COMPOUND))
 			{
-				portfolio.add(new StrifeSpecibus(nbt.getCompoundTag(name)));
+				portfolio.add(new StrifeSpecibus(nbt.getCompound(name)));
 			}
 		}
 		return portfolio;
 	}
 
-	public static void addItemToDeck(EntityPlayerMP player) 
+	public static void addItemToDeck(ServerPlayerEntity player)
 	{
-		ItemStack hand = player.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND);
+		ItemStack hand = player.getItemStackFromSlot(EquipmentSlotType.MAINHAND);
 		if(hand.isEmpty())
 				return;
 		if(!player.isSneaking())
 		{
-		ArrayList<StrifeSpecibus> portfolio = MinestuckPlayerData.getStrifePortfolio(IdentifierHandler.encode(player));
-		int i = 0;
-		for(StrifeSpecibus specibus : portfolio)
-		{
-			//specibus.forceItemStack(stack);
-			if(specibus.putItemStack(hand))
+			//TODO modifications to the list are currently not kept,
+			// and modifications to the specibi are not marking the saved data as dirty
+			// This need to be fixed
+			List<StrifeSpecibus> portfolio = PlayerSavedData.getData(player).getPortfolio();
+			int i = 0;
+			for(StrifeSpecibus specibus : portfolio)
 			{
-				//specibus.setAbstratus(KindAbstratusList.getTypeFromName("sword"));
-				portfolio.set(i, specibus);
-				hand.shrink(1);
-				MinestuckPlayerData.setClientPortfolio(portfolio);
-				MinestuckPlayerData.setStrifePortfolio(IdentifierHandler.encode(player), portfolio);
-				return;
+				//specibus.forceItemStack(stack);
+				if(specibus.putItemStack(hand))
+				{
+					//specibus.setAbstratus(KindAbstratusList.getTypeFromName("sword"));
+					portfolio.set(i, specibus);
+					hand.shrink(1);
+					//MinestuckPlayerData.setStrifePortfolio(IdentifierHandler.encode(player), portfolio);
+					return;
+				}
+				i++;
 			}
-			i++;
 		}
-		}
-		CaptchaDeckHandler.captchalougeItem((EntityPlayerMP) player);
+		CaptchaDeckHandler.captchalogueItem((ServerPlayerEntity) player);
 		
 	}
 }

@@ -1,8 +1,0 @@
-{
-    "parent": "block/inner_stairs",
-    "textures": {
-        "bottom": "minestuck:blocks/dead_planks",
-        "top": "minestuck:blocks/dead_planks",
-        "side": "minestuck:blocks/dead_planks"
-    }
-}

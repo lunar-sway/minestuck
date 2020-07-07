@@ -1,88 +1,70 @@
 package com.mraof.minestuck.world.gen;
 
-import static com.mraof.minestuck.MinestuckConfig.baseCruxiteVeinSize;
-import static com.mraof.minestuck.MinestuckConfig.baseUraniumVeinSize;
-import static com.mraof.minestuck.MinestuckConfig.bonusCruxiteVeinSize;
-import static com.mraof.minestuck.MinestuckConfig.bonusUraniumVeinSize;
-import static com.mraof.minestuck.MinestuckConfig.cruxiteStratumMax;
-import static com.mraof.minestuck.MinestuckConfig.cruxiteStratumMin;
-import static com.mraof.minestuck.MinestuckConfig.cruxiteVeinsPerChunk;
-import static com.mraof.minestuck.MinestuckConfig.disableCruxite;
-import static com.mraof.minestuck.MinestuckConfig.disableUranium;
-import static com.mraof.minestuck.MinestuckConfig.generateCruxiteOre;
-import static com.mraof.minestuck.MinestuckConfig.generateUraniumOre;
-import static com.mraof.minestuck.MinestuckConfig.uraniumStratumMax;
-import static com.mraof.minestuck.MinestuckConfig.uraniumStratumMin;
-import static com.mraof.minestuck.MinestuckConfig.uraniumVeinsPerChunk;
-import static com.mraof.minestuck.block.MinestuckBlocks.oreCruxite;
-import static com.mraof.minestuck.block.MinestuckBlocks.oreUranium;
+import com.google.common.base.Predicate;
+import com.mraof.minestuck.block.CustomOreBlock;
+import com.mraof.minestuck.world.LandDimension;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.AbstractChunkProvider;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraftforge.fml.common.IWorldGenerator;
 
 import java.util.Random;
 
-import com.google.common.base.Predicate;
-import com.mraof.minestuck.block.BlockCruxiteOre;
-import com.mraof.minestuck.block.BlockUraniumOre;
-import com.mraof.minestuck.world.WorldProviderLands;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraft.world.gen.IChunkGenerator;
-import net.minecraft.world.gen.feature.WorldGenMinable;
-import net.minecraftforge.fml.common.IWorldGenerator;
+import static com.mraof.minestuck.MinestuckConfig.*;
+import static com.mraof.minestuck.block.MSBlocks.STONE_CRUXITE_ORE;
+import static com.mraof.minestuck.block.MSBlocks.STONE_URANIUM_ORE;
 
 public class OreHandler implements IWorldGenerator
 {
 	@Override
-	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider)
+	public void generate(Random random, int chunkX, int chunkZ, World world, ChunkGenerator chunkGenerator, AbstractChunkProvider chunkProvider)
 	{
-		if(world.provider.isSurfaceWorld() && (generateCruxiteOre || chunkGenerator instanceof ChunkProviderLands) && !disableCruxite)
+		if(world.getDimension().isSurfaceWorld() && (generateCruxiteOre.get() || chunkGenerator instanceof LandChunkGenerator) && !disableCruxite)
 		{
-			this.addOreSpawn(oreCruxite.getDefaultState(), world, random, chunkX * 16, chunkZ * 16, 16, 16,
+			this.addOreSpawn(STONE_CRUXITE_ORE.getDefaultState(), world, random, chunkX * 16, chunkZ * 16, 16, 16,
 					baseCruxiteVeinSize + random.nextInt(bonusCruxiteVeinSize), cruxiteVeinsPerChunk, cruxiteStratumMin, cruxiteStratumMax);
 		}
 		
-		if(world.provider.isSurfaceWorld() && (generateUraniumOre || chunkGenerator instanceof ChunkProviderLands) && !disableUranium)
+		if(world.getDimension().isSurfaceWorld() && (generateUraniumOre.get() || chunkGenerator instanceof LandChunkGenerator) && !disableUranium)
 		{
-			this.addOreSpawn(oreUranium.getDefaultState(), world, random, chunkX * 16, chunkZ * 16, 16, 16,
+			this.addOreSpawn(STONE_URANIUM_ORE.getDefaultState(), world, random, chunkX * 16, chunkZ * 16, 16, 16,
 					baseUraniumVeinSize + random.nextInt(bonusUraniumVeinSize), uraniumVeinsPerChunk, uraniumStratumMin, uraniumStratumMax);
 		}
 	}
 	
-	public void addOreSpawn(IBlockState block, World world, Random random, int blockXPos, int blockZPos, int maxX, int maxZ, int maxVeinSize, int chancesToSpawn, int minY, int maxY)
+	public void addOreSpawn(BlockState block, World world, Random random, int blockXPos, int blockZPos, int maxX, int maxZ, int maxVeinSize, int chancesToSpawn, int minY, int maxY)
 	{
 		//int maxPossY = minY + (maxY - 1);
 		int diffBtwnMinMaxY = maxY - minY;
-		IBlockState groundType = Blocks.STONE.getDefaultState();
-		if(world.provider instanceof WorldProviderLands)
-			groundType = ((ChunkProviderLands) world.provider.createChunkGenerator()).getGroundBlock();
-		if(block.getBlock() == oreCruxite)
-			block = BlockCruxiteOre.getBlockState(groundType);
-		if(block.getBlock() == oreUranium)
-			block = BlockUraniumOre.getBlockState(groundType);
+		BlockState groundType = Blocks.STONE.getDefaultState();
+		if(world.getDimension() instanceof LandDimension)
+			groundType = world.getChunkProvider().getChunkGenerator().getSettings().getDefaultBlock();
+		if(block.getBlock() == STONE_CRUXITE_ORE)
+			block = CustomOreBlock.getCruxiteState(groundType);
+		if(block.getBlock() == STONE_URANIUM_ORE)
+			block = CustomOreBlock.getUraniumState(groundType);
 		for(int x = 0; x < chancesToSpawn; x++)
 		{
 			int posX = blockXPos + random.nextInt(maxX);
 			int posY = minY + random.nextInt(diffBtwnMinMaxY);
-			int posZ = blockZPos + random.nextInt(maxZ);
-			(new WorldGenMinable(block, maxVeinSize, new BlockStatePredicate(groundType))).generate(world, random, new BlockPos(posX, posY, posZ));
+			int posZ = blockZPos + random.nextInt(maxZ);//TODO
+			//(new WorldGenMinable(block, maxVeinSize, new BlockStatePredicate(groundType))).generate(world, random, new BlockPos(posX, posY, posZ));
 		}
 	}
 	
 	public static class BlockStatePredicate implements Predicate
 	{
-		IBlockState[] states;
-		public BlockStatePredicate(IBlockState... blockStates)
+		BlockState[] states;
+		public BlockStatePredicate(BlockState... blockStates)
 		{
 			states = blockStates;
 		}
 		@Override
 		public boolean apply(Object input)
 		{
-			for(IBlockState state : states)
+			for(BlockState state : states)
 				if(state.equals(input))
 					return true;
 			return false;

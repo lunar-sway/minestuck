@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:slimeball_from_irradiating"
+    ]
+  },
+  "criteria": {
+    "has_mushroom_stew": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:mushroom_stew"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:slimeball_from_irradiating"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_mushroom_stew",
+      "has_the_recipe"
+    ]
+  ]
+}

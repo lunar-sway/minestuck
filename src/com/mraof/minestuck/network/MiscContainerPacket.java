@@ -1,51 +1,45 @@
 package com.mraof.minestuck.network;
 
-import io.netty.buffer.ByteBuf;
-
-import java.util.EnumSet;
-
 import com.mraof.minestuck.editmode.ServerEditHandler;
-import com.mraof.minestuck.inventory.ContainerHandler;
+import com.mraof.minestuck.inventory.EditmodeContainer;
+import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckContainer;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.network.PacketBuffer;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.fml.relauncher.Side;
-
-public class MiscContainerPacket extends MinestuckPacket
+public class MiscContainerPacket implements PlayToServerPacket
 {
 	
 	int i;
 	
-	@Override
-	public MinestuckPacket generatePacket(Object... data)
+	public MiscContainerPacket(int i)
 	{
-		this.data.writeInt((Integer) data[0]);
-		return this;
+		this.i = i;
 	}
-
+	
 	@Override
-	public MinestuckPacket consumePacket(ByteBuf data)
+	public void encode(PacketBuffer buffer)
 	{
-		i = data.readInt();
-		return this;
+		buffer.writeInt(i);
 	}
-
-	@Override
-	public void execute(EntityPlayer player)
+	
+	public static MiscContainerPacket decode(PacketBuffer buffer)
 	{
-		if(player instanceof EntityPlayerMP)
+		int i = buffer.readInt();
+		
+		return new MiscContainerPacket(i);
+	}
+	
+	@Override
+	public void execute(ServerPlayerEntity player)
+	{
+		if(ServerEditHandler.getData(player) == null)
 		{
-			EntityPlayerMP playerMP = (EntityPlayerMP) player;
-			playerMP.openContainer = ContainerHandler.getPlayerStatsContainer(playerMP, i, ServerEditHandler.getData(playerMP) != null);
-			playerMP.openContainer.windowId = ContainerHandler.windowIdStart + i;
-			playerMP.addSelfToInternalCraftingInventory();	//Must be placed after setting the window id!!
+			player.openContainer = new CaptchaDeckContainer(200 + i, player.inventory);//ContainerHandler.windowIdStart + i;
+		} else
+		{
+			player.openContainer = new EditmodeContainer(200 + i, player.inventory);
 		}
+		
+		player.addSelfToInternalCraftingInventory();
 	}
-
-	@Override
-	public EnumSet<Side> getSenderSide()
-	{
-		return EnumSet.of(Side.CLIENT);
-	}
-
 }

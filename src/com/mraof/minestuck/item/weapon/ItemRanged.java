@@ -1,5 +1,5 @@
 package com.mraof.minestuck.item.weapon;
-
+/* TODO looks pretty much like a copy of minecraft code. Someone else will have to update/rewrite this class
 import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
 
@@ -36,6 +36,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemRanged extends Item
 {
+	
 	protected int startupTicks;
 	protected Object ammo;
 	protected Class<? extends Entity> projectile;
@@ -231,7 +232,7 @@ public class ItemRanged extends Item
 	
 	/**
      * returns the action that specifies what animation to play when the items is being used
-     */
+     * /
     public EnumAction getItemUseAction(ItemStack stack)
     {
         return EnumAction.BOW;
@@ -301,3 +302,4 @@ public class ItemRanged extends Item
 	public int getMaxItemUseDuration(ItemStack stack) {return startupTicks;}
 	
 }
+*/

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "planks",
+  "ingredients": [
+    {
+      "tag": "minestuck:logs/frost"
+    }
+  ],
+  "result": {
+    "item": "minestuck:frost_planks",
+    "count": 4
+  }
+}

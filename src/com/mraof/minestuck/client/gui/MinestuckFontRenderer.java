@@ -1,20 +1,20 @@
 package com.mraof.minestuck.client.gui;
-
+/*
+import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.GameSettings;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.ResourceLocation;
 
 public class MinestuckFontRenderer extends FontRenderer
 {
-	
+	TODO is this needed?
 	private static int width;
 	private static int height;
 	
 	
 	public MinestuckFontRenderer(GameSettings gameSettingsIn, ResourceLocation location, TextureManager textureManagerIn,
-			boolean unicode, int charWidth, int charHeight) 
+								 boolean unicode, int charWidth, int charHeight)
 	{
 		super(gameSettingsIn, location, textureManagerIn, unicode);
 		width = charWidth;
@@ -27,6 +27,7 @@ public class MinestuckFontRenderer extends FontRenderer
 		this(gameSettingsIn, location, textureManagerIn, unicode, 16, 16);
 	}
 
+	
 	@Override
 	protected float renderUnicodeChar(char ch, boolean italic)
 	{
@@ -62,3 +63,4 @@ public class MinestuckFontRenderer extends FontRenderer
 	}
 	
 }
+*/

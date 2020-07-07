@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:magenta_wool"
+  },
+  "grist_cost": {
+    "minestuck:chalk": 6,
+    "minestuck:garnet": 2,
+    "minestuck:amethyst": 1
+  }
+}

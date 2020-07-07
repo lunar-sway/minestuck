@@ -1,26 +1,17 @@
 package com.mraof.minestuck.command;
 
-import com.mraof.minestuck.alchemy.GristAmount;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.GristType;
-import com.mraof.minestuck.network.skaianet.SburbConnection;
-import com.mraof.minestuck.network.skaianet.SessionHandler;
-import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
-import com.mraof.minestuck.util.*;
-import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import net.minecraft.command.*;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.BlockPos;
+import com.mojang.brigadier.CommandDispatcher;
+import net.minecraft.command.CommandSource;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-public class CommandGristSend extends CommandBase
+public class CommandGristSend
 {
+
+	public static void register(CommandDispatcher<CommandSource> dispatcher)
+	{
 	
+	}
+	//TODO Grist set argument
+	/*
 	@Override
 	public String getName()
 	{
@@ -138,5 +129,5 @@ public class CommandGristSend extends CommandBase
 		{
 			return Collections.emptyList();
 		}
-	}
+	}*/
 }

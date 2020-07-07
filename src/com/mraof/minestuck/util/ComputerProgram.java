@@ -1,17 +1,13 @@
 package com.mraof.minestuck.util;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map.Entry;
+import com.mraof.minestuck.client.gui.ComputerScreen;
+import com.mraof.minestuck.tileentity.ComputerTileEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 
 import javax.annotation.Nonnull;
-
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-
-import com.mraof.minestuck.client.gui.GuiComputer;
-import com.mraof.minestuck.tileentity.TileEntityComputer;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 /**
  * The static interface will probably later be merged with DeployList,
@@ -67,7 +63,7 @@ public abstract class ComputerProgram
 		if(item.isEmpty())
 			return -2;
 		item = item.copy();
-		if(item.getItem().equals(Items.RECORD_11))
+		if(item.getItem().equals(Items.MUSIC_DISC_11))
 			return -1;
 		item.setCount(1);
 		for(int id : disks.keySet())
@@ -80,7 +76,7 @@ public abstract class ComputerProgram
 	public static ItemStack getItem(int id)
 	{
 		if(id == -1)
-			return new ItemStack(Items.RECORD_11);
+			return new ItemStack(Items.MUSIC_DISC_11);
 		return disks.get(id).copy();
 	}
 	
@@ -92,14 +88,10 @@ public abstract class ComputerProgram
 		return -1;
 	}
 	
-	public void onButtonPressed(TileEntityComputer te, GuiButton button)
-	{
-	}
-	
 	/**
 	 * Called when the gui is created or if the player pressed the switch
 	 * program button.
-	 * 
+	 *
 	 * @param buttonList
 	 *            The button list. Note that the list isn't cleared if
 	 *            prevProgram isn't null, so you have to clear it and re-add the
@@ -109,14 +101,14 @@ public abstract class ComputerProgram
 	 * @param prevProgram
 	 *            The previous program, or null if the gui was just created.
 	 */
-	public void onInitGui(GuiComputer gui, List<GuiButton> buttonList, ComputerProgram prevProgram)
+	public void onInitGui(ComputerScreen gui, ComputerProgram prevProgram)
 	{
 	}
 	
 	/**
 	 * Called when some related data have changed that may affect the program.
 	 */
-	public void onUpdateGui(GuiComputer gui, List<GuiButton> buttonList)
+	public void onUpdateGui(ComputerScreen gui)
 	{
 	}
 	
@@ -124,7 +116,7 @@ public abstract class ComputerProgram
 	 * Called when something breaks the computer block. (or if the disk is
 	 * ejected when that feature is added)
 	 */
-	public void onClosed(TileEntityComputer te)
+	public void onClosed(ComputerTileEntity te)
 	{
 	}
 	
@@ -132,7 +124,7 @@ public abstract class ComputerProgram
 	 * Called when the gui is painted. This may not be a good way of doing this,
 	 * but I do not know since I do not know very much about minecraft graphics.
 	 */
-	public abstract void paintGui(GuiComputer gui, TileEntityComputer te);
+	public abstract void paintGui(ComputerScreen gui, ComputerTileEntity te);
 	
 	/**
 	 * Returns an unlocalized string of the name of the program. Used for the

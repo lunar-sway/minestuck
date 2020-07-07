@@ -1,8 +1,0 @@
-{
-    "variants": {
-        "axis=y":    { "model": "minestuck:vine_oak_log" },
-        "axis=z":     { "model": "minestuck:vine_oak_log", "x": 90 },
-        "axis=x":     { "model": "minestuck:vine_oak_log", "x": 90, "y": 90 },
-        "axis=none":   { "model": "minestuck:vine_oak_bark" }
-    }
-}

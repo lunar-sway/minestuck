@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "minestuck:block/alchemiter_right_side" },
+        "facing=east":  { "model": "minestuck:block/alchemiter_right_side", "y": 90 },
+        "facing=south": { "model": "minestuck:block/alchemiter_right_side", "y": 180 },
+        "facing=west":  { "model": "minestuck:block/alchemiter_right_side", "y": 270 }
+    }
+}

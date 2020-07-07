@@ -4,17 +4,19 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.advancements.PlayerAdvancements;
-import net.minecraft.advancements.critereon.AbstractCriterionInstance;
-import net.minecraft.advancements.critereon.MinMaxBounds;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.advancements.criterion.CriterionInstance;
+import net.minecraft.advancements.criterion.MinMaxBounds;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class TreeModusRootTrigger implements ICriterionTrigger<TreeModusRootTrigger.Instance>
@@ -61,29 +63,43 @@ public class TreeModusRootTrigger implements ICriterionTrigger<TreeModusRootTrig
 	@Override
 	public Instance deserializeInstance(JsonObject json, JsonDeserializationContext context)
 	{
-		MinMaxBounds count = MinMaxBounds.deserialize(json.get("count"));
+		MinMaxBounds.IntBound count = MinMaxBounds.IntBound.fromJson(json.get("count"));
 		return new Instance(count);
 	}
 	
-	public void trigger(EntityPlayerMP player, int count)
+	public void trigger(ServerPlayerEntity player, int count)
 	{
 		Listeners listeners = listenersMap.get(player.getAdvancements());
 		if(listeners != null)
 			listeners.trigger(player, count);
 	}
 	
-	public static class Instance extends AbstractCriterionInstance
+	public static class Instance extends CriterionInstance
 	{
-		private final MinMaxBounds count;
-		public Instance(MinMaxBounds count)
+		private final MinMaxBounds.IntBound count;
+		public Instance(MinMaxBounds.IntBound count)
 		{
 			super(ID);
-			this.count = count;
+			this.count = Objects.requireNonNull(count);
+		}
+		
+		public static Instance count(MinMaxBounds.IntBound count)
+		{
+			return new Instance(count);
 		}
 		
 		public boolean test(int count)
 		{
 			return this.count.test(count);
+		}
+		
+		@Override
+		public JsonElement serialize()
+		{
+			JsonObject json = new JsonObject();
+			json.add("count", count.serialize());
+			
+			return json;
 		}
 	}
 	
@@ -112,7 +128,7 @@ public class TreeModusRootTrigger implements ICriterionTrigger<TreeModusRootTrig
 			this.listeners.remove(listener);
 		}
 		
-		public void trigger(EntityPlayerMP player, int count)
+		public void trigger(ServerPlayerEntity player, int count)
 		{
 			List<Listener<Instance>> list = Lists.newArrayList();
 			for(Listener<Instance> listener : listeners)

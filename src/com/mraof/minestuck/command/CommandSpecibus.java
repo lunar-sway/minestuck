@@ -1,8 +1,6 @@
 package com.mraof.minestuck.command;
 
-import java.util.ArrayList;
-import java.util.List;
-
+/*
 import com.mraof.minestuck.inventory.specibus.StrifePortfolioHandler;
 import com.mraof.minestuck.inventory.specibus.StrifeSpecibus;
 import com.mraof.minestuck.util.KindAbstratusList;
@@ -76,3 +74,4 @@ public class CommandSpecibus extends CommandBase
 		}
 	}
 }
+*/

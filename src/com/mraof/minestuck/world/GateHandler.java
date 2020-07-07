@@ -1,239 +1,188 @@
 package com.mraof.minestuck.world;
 
-import com.google.common.collect.Lists;
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.network.skaianet.SburbConnection;
-import com.mraof.minestuck.network.skaianet.SburbHandler;
-import com.mraof.minestuck.network.skaianet.SkaianetHandler;
+import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.SburbHandler;
+import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.Location;
 import com.mraof.minestuck.util.Teleport;
-import com.mraof.minestuck.world.biome.BiomeMinestuck;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import com.mraof.minestuck.world.biome.MSBiomes;
+import com.mraof.minestuck.world.gen.feature.MSFeatures;
+import com.mraof.minestuck.world.lands.LandInfo;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraft.util.math.GlobalPos;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.gen.Heightmap;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.DimensionManager;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
+import java.util.function.Function;
 
 public class GateHandler
 {
+	public static final String DESTROYED = "minestuck.gate_destroyed";
+	public static final String MISSING_LAND = "minestuck.gate_missing_land";
 	
 	public static final int gateHeight1 = 144, gateHeight2 = 192;
 	
-	static Map<Integer, BlockPos> gateData = new HashMap<Integer, BlockPos>();
-	
-	public static void teleport(int gateId, int dim, EntityPlayerMP player)
+	public static void teleport(Type gateType, ServerWorld world, ServerPlayerEntity player)
 	{
-		Location location = null;
 		player.timeUntilPortal = player.getPortalCooldown();	//Basically to avoid message spam when something goes wrong
 		
-		if(gateId == 1)
-		{
-			BlockPos pos = getGatePos(-1, dim);
-			Random rand = player.world.rand;
-			BlockPos spawn = player.world.provider.getSpawnPoint();
-			if(pos != null)
-				do
-				{
-					int radius = 160 + rand.nextInt(60);
-					double d = rand.nextDouble();
-					int i = radius*radius;
-					int x = (int) Math.sqrt(i*d);
-					int z = (int) Math.sqrt(i*(1-d));
-					if(rand.nextBoolean()) x = -x;
-					if(rand.nextBoolean()) z = -z;
-					
-					BlockPos placement = pos.add(x, 0, z);
-					
-					if(player.world.getBiomeForCoordsBody(placement) == BiomeMinestuck.mediumNormal)
-						location = new Location(player.world.getTopSolidOrLiquidBlock(placement), dim);
-					
-				} while(location == null);	//TODO replace with a more friendly version without a chance of freezing the game
-			else Debug.errorf("Unexpected error: Couldn't find position for land gate for dimension %d.", dim);
-			
-		} else if(gateId == 2)
-		{
-			SburbConnection landConnection = SburbHandler.getConnectionForDimension(dim);
-			if(landConnection != null)
-			{
-				SburbConnection clientConnection = SkaianetHandler.getMainConnection(landConnection.getClientIdentifier(), false);
-				
-				if(clientConnection != null && clientConnection.enteredGame() && MinestuckDimensionHandler.isLandDimension(clientConnection.getClientDimension()))
-				{
-					int clientDim = clientConnection.getClientDimension();
-					BlockPos gatePos = getGatePos(-1, clientDim);
-					WorldServer world = player.mcServer.getWorld(clientDim);
-					
-					if(gatePos == null)
-					{
-						findGatePlacement(world);
-						gatePos = getGatePos(-1, clientDim);
-						if(gatePos == null) {Debug.errorf("Unexpected error: Can't initiaize land gate placement for dimension %d!", clientDim); return;}
-					}
-					
-					if(gatePos.getY() == -1)
-					{
-						world.getChunkProvider().provideChunk(gatePos.getX() - 8 >> 4, gatePos.getZ() - 8 >> 4);
-						world.getChunkProvider().provideChunk(gatePos.getX() + 8 >> 4, gatePos.getZ() - 8 >> 4);
-						world.getChunkProvider().provideChunk(gatePos.getX() - 8 >> 4, gatePos.getZ() + 8 >> 4);
-						world.getChunkProvider().provideChunk(gatePos.getX() + 8 >> 4, gatePos.getZ() + 8 >> 4);
-						gatePos = getGatePos(-1, clientDim);
-						if(gatePos.getY() == -1) {Debug.errorf("Unexpected error: Gate didn't generate after loading chunks! Dim: %d, pos: %s", clientDim, gatePos); return;}
-					}
-					
-					location = new Location(gatePos, clientDim);
-				}
-				else player.sendMessage(new TextComponentTranslation("message.gateMissingLand"));
-			} else Debug.errorf("Unexpected error: Can't find connection for dimension %d!", dim);
-		} else if(gateId == -1)
-		{
-			SburbConnection landConnection = SburbHandler.getConnectionForDimension(dim);
-			if(landConnection != null)
-			{
-				SburbConnection serverConnection = SkaianetHandler.getMainConnection(landConnection.getServerIdentifier(), true);
-				
-				if(serverConnection != null && serverConnection.enteredGame() && MinestuckDimensionHandler.isLandDimension(serverConnection.getClientDimension()))	//Last shouldn't be necessary, but just in case something goes wrong elsewhere...
-				{
-					int serverDim = serverConnection.getClientDimension();
-					location = new Location(getGatePos(2, serverDim), serverDim);
-					
-				} else player.sendMessage(new TextComponentTranslation("message.gateMissingLand"));
-				
-			} else Debug.errorf("Unexpected error: Can't find connection for dimension %d!", dim);
-		} else Debug.errorf("Unexpected error: Gate id %d is out of bounds!", gateId);
+		GlobalPos destination = gateType.getDestination(world);
 		
-		if(location != null)
+		if(destination != null)
 		{
-			if(gateId != 1)
+			ServerWorld destinationWorld = DimensionManager.getWorld(player.server, destination.getDimension(), false, true);
+			
+			if(gateType.isDestinationGate)
 			{
-				WorldServer world = player.mcServer.getWorld(location.dim);
+				BlockState block = destinationWorld.getBlockState(destination.getPos());
 				
-				IBlockState block = world.getBlockState(location.pos);
-				
-				if(block.getBlock() != MinestuckBlocks.gate)
+				if(block.getBlock() != MSBlocks.GATE)
 				{
-					Debug.debugf("Can't find destination gate at %s. Probably broken.", location);
-					player.sendMessage(new TextComponentTranslation("message.gateDestroyed"));
+					Debug.debugf("Can't find destination gate at %s. Probably broken.", destination);
+					player.sendMessage(new TranslationTextComponent(DESTROYED));
 					return;
 				}
 			}
 			
-			Teleport.teleportEntity(player, location.dim, null, location.pos);
+			Teleport.teleportEntity(player, destinationWorld, destination.getPos().getX() + 0.5, destination.getPos().getY(), destination.getPos().getZ() + 0.5);
 		}
 	}
 	
-	public static void findGatePlacement(World world)
+	private static BlockPos getSavedLandGate(ServerWorld world)
 	{
-		int dim = world.provider.getDimension();
-		if(MinestuckDimensionHandler.isLandDimension(dim) && !gateData.containsKey(dim))
+		LandInfo info = MSDimensions.getLandInfo(world);
+		if(info != null)
 		{
-			BlockPos spawn = MinestuckDimensionHandler.getSpawn(dim);
-			Random rand = world.setRandomSeed(0, 0, 43839551^world.provider.getDimension());
-			
-			BlockPos gatePos = null;
-			int tries = 0;
-			do
+			if(info.getGatePos() != null)
+				return info.getGatePos();
+		}
+		
+		BlockPos gatePos = MSFeatures.LAND_GATE.findLandGatePos(world);
+		
+		if(info != null)
+			info.setGatePos(gatePos);
+		
+		return gatePos;
+	}
+	
+	private static GlobalPos findPosNearLandGate(ServerWorld world)
+	{
+		BlockPos pos = Type.LAND_GATE.getPosition(world);
+		Random rand = world.rand;
+		if(pos != null)
+			while(true)	//TODO replace with a more friendly version without a chance of freezing the game
 			{
-				int distance = (500 + rand.nextInt(200 + tries));	//The longer time it takes, the larger the area searched
-				distance *= distance;
+				int radius = 160 + rand.nextInt(60);
 				double d = rand.nextDouble();
-				int x = (int) Math.sqrt(distance*d);
-				int z = (int) Math.sqrt(distance*(1-d));
+				int i = radius*radius;
+				int x = (int) Math.sqrt(i*d);
+				int z = (int) Math.sqrt(i*(1-d));
+				if(rand.nextBoolean()) x = -x;
+				if(rand.nextBoolean()) z = -z;
 				
-				BlockPos pos = new BlockPos(spawn.getX() + x, -1, spawn.getZ() + z);
+				BlockPos placement = pos.add(x, 0, z);
 				
-				if(/*!world.getChunkProvider().chunkExists(pos.getX() >> 4, pos.getZ() >> 4) &&*/ world.provider.getBiomeProvider().areBiomesViable(pos.getX(), pos.getZ(), Math.max(20, 50 - tries), Lists.newArrayList(BiomeMinestuck.mediumNormal)))
-					gatePos = pos;
-				
-				tries++;
-			} while(gatePos == null);	//TODO replace with a more friendly version without a chance of freezing the game
-			
-			Debug.infof("Land gate will generate at %d %d in dimension %d.", gatePos.getX(), gatePos.getZ(), dim);
-			gateData.put(dim, gatePos);
-		}
-	}
-	
-	public static BlockPos getGatePos(int gateId, int dim)
-	{
-		if(!MinestuckDimensionHandler.isLandDimension(dim))
-			return null;
-		
-		if(gateId == -1)
-			return gateData.get(dim);
-		else if(gateId == 1 || gateId == 2)
-		{
-			World world = DimensionManager.getWorld(dim);
-			if(world == null) {
-				DimensionManager.initDimension(dim);
-				world = DimensionManager.getWorld(dim);
+				if(world.getBiomeBody(placement) == MSBiomes.LAND_NORMAL)
+				{
+					//TODO Can and has placed the player into a lava ocean. Fix this (Also for other hazards)
+					int y = world.getChunk(placement).getTopBlockY(Heightmap.Type.MOTION_BLOCKING, placement.getX(), placement.getZ());
+					return GlobalPos.of(world.getDimension().getType(), new BlockPos(placement.getX(), y + 1, placement.getZ()));
+				}
 			}
-			
-			BlockPos spawn = world.provider.getSpawnPoint();
-			int y;
-			if(gateId == 1)
-				y = gateHeight1;
-			else y = gateHeight2;
-			return new BlockPos(spawn.getX(), y, spawn.getZ());
-		}
-		
+		else
+			Debug.errorf("Unexpected error: Couldn't find position for land gate for dimension %d.", world.getDimension().getType());
 		return null;
 	}
 	
-	public static void setDefiniteGatePos(int gateId, int dim, BlockPos newPos)
+	private static GlobalPos findClientLandGate(ServerWorld world)
 	{
-		if(gateId == -1)
+		SburbConnection landConnection = SburbHandler.getConnectionForDimension(world.getServer(), world.getDimension().getType());
+		if(landConnection != null)
 		{
-			BlockPos oldPos = gateData.get(dim);
-			if(oldPos.getY() != -1)
-			{
-				Debug.error("Trying to set position for a gate that should already be generated!");
-				return;
-			}
+			SburbConnection clientConnection = SkaianetHandler.get(world.getServer()).getMainConnection(landConnection.getClientIdentifier(), false);
 			
-			gateData.put(dim, newPos);
-		}
-		else Debug.error("Trying to set position for a gate that should already be generated/doesn't exist!");
-	}
-	
-	static void saveData(NBTTagList nbtList)
-	{
-		for(int i = 0; i < nbtList.tagCount(); i++)
-		{
-			NBTTagCompound nbt = nbtList.getCompoundTagAt(i);
-			if(nbt.getString("type").equals("land"))
+			if(clientConnection != null && clientConnection.hasEntered() && MSDimensions.isLandDimension(clientConnection.getClientDimension()))
 			{
-				int dim = nbt.getInteger("dimID");
-				if(gateData.containsKey(dim))
-				{
-					BlockPos gatePos = gateData.get(dim);
-					nbt.setInteger("gateX", gatePos.getX());
-					nbt.setInteger("gateY", gatePos.getY());
-					nbt.setInteger("gateZ", gatePos.getZ());
-				}
+				DimensionType clientDim = clientConnection.getClientDimension();
+				ServerWorld clientWorld = DimensionManager.getWorld(world.getServer(), clientDim, false, true);
+				BlockPos gatePos = Type.LAND_GATE.getPosition(clientWorld);
+				if(gatePos == null)
+				{Debug.errorf("Unexpected error: Can't initialize land gate placement for dimension %d!", clientDim); return null;}
+				
+				return GlobalPos.of(clientDim, gatePos);
 			}
-		}
+			//else player.sendMessage(new TranslationTextComponent(MISSING_LAND));
+		} else
+			Debug.errorf("Unexpected error: Can't find connection for dimension %d!", world.getDimension().getType());
+		return null;
 	}
 	
-	static void loadData(NBTTagList nbtList)
+	private static GlobalPos findServerSecondGate(ServerWorld world)
 	{
-		for(int i = 0; i < nbtList.tagCount(); i++)
+		SburbConnection landConnection = SburbHandler.getConnectionForDimension(world.getServer(), world.getDimension().getType());
+		if(landConnection != null)
 		{
-			NBTTagCompound nbt = nbtList.getCompoundTagAt(i);
-			if(nbt.getString("type").equals("land") && nbt.hasKey("gateX"))
+			SburbConnection serverConnection = SkaianetHandler.get(world.getServer()).getMainConnection(landConnection.getServerIdentifier(), true);
+			
+			if(serverConnection != null && serverConnection.hasEntered() && MSDimensions.isLandDimension(serverConnection.getClientDimension()))	//Last shouldn't be necessary, but just in case something goes wrong elsewhere...
 			{
-				int dim = nbt.getInteger("dimID");
-				BlockPos pos = new BlockPos(nbt.getInteger("gateX"), nbt.getInteger("gateY"), nbt.getInteger("gateZ"));
-				gateData.put(dim, pos);
-			}
-		}
+				DimensionType serverDim = serverConnection.getClientDimension();
+				return GlobalPos.of(serverDim, Type.GATE_2.getPosition(DimensionManager.getWorld(world.getServer(), serverDim, false, true)));
+				
+			}// else player.sendMessage(new TranslationTextComponent(MISSING_LAND));
+			
+		} else Debug.errorf("Unexpected error: Can't find connection for dimension %d!", world.getDimension().getType());
+		return null;
 	}
 	
+	public enum Type
+	{
+		GATE_1(false, world -> new BlockPos(0, gateHeight1, 0), GateHandler::findPosNearLandGate),
+		GATE_2(true, world -> new BlockPos(0, gateHeight2, 0), GateHandler::findClientLandGate),
+		LAND_GATE(true, GateHandler::getSavedLandGate, GateHandler::findServerSecondGate);
+		
+		private final boolean isDestinationGate;
+		private final Function<ServerWorld, BlockPos> locationFinder;
+		private final Function<ServerWorld, GlobalPos> destinationFinder;
+		
+		Type(boolean isDestinationGate, Function<ServerWorld, BlockPos> locationFinder, Function<ServerWorld, GlobalPos> destinationFinder)
+		{
+			this.isDestinationGate = isDestinationGate;
+			this.locationFinder = locationFinder;
+			this.destinationFinder = destinationFinder;
+		}
+		
+		@Override
+		public String toString()
+		{
+			return this.name().toLowerCase();
+		}
+		
+		public static Type fromString(String str)
+		{
+			for(Type type : values())
+			{
+				if(type.toString().equals(str))
+					return type;
+			}
+			return null;
+		}
+		
+		public GlobalPos getDestination(ServerWorld world)
+		{
+			return destinationFinder.apply(world);
+		}
+		
+		public BlockPos getPosition(ServerWorld world)
+		{
+			return locationFinder.apply(world);
+		}
+	}
 }
