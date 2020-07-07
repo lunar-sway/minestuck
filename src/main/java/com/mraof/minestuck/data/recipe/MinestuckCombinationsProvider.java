@@ -171,7 +171,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(Items.BOOK).input(Items.INK_SAC).and().input(Items.PAPER).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.CARTOGRAPHY_TABLE).input(Items.CRAFTING_TABLE).or().input(Items.MAP).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.COBWEB).input(Items.SLIME_BLOCK).or().input(Items.STRING).buildFor(consumer, Minestuck.MOD_ID);
-		CombinationRecipeBuilder.of(Items.TORCH).input(Items.STICK).or().input(Items.FLINT_AND_STEEL).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.TORCH).input(Items.REDSTONE_TORCH).or().input(ItemTags.COALS).buildFor(consumer, Minestuck.MOD_ID);
 		//Plants
 		CombinationRecipeBuilder.of(Items.GRASS_BLOCK).input(Items.DIRT).and().namedInput(Items.GRASS).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.GRASS_BLOCK).input(Items.DIRT).and().namedInput(Items.WHEAT_SEEDS).buildFor(consumer, Minestuck.MOD_ID);
@@ -243,9 +243,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(Items.LEATHER).input(Items.ROTTEN_FLESH).or().input(Items.WATER_BUCKET).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.BEEF).input(Items.ROTTEN_FLESH).or().input(Items.WHEAT).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.CHICKEN).input(Items.ROTTEN_FLESH).or().input(Items.WHEAT_SEEDS).buildFor(consumer, Minestuck.MOD_ID);
-		CombinationRecipeBuilder.of(Items.SWEET_BERRIES).input(Items.WHEAT_SEEDS).or().input(Items.RED_DYE).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.POISONOUS_POTATO).input(Items.POTATO).or().input(Items.PUFFERFISH).buildFor(consumer, Minestuck.MOD_ID);
-		CombinationRecipeBuilder.of(Items.SUSPICIOUS_STEW).input(Items.MUSHROOM_STEW).and().input(Items.ROTTEN_FLESH).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.FERMENTED_SPIDER_EYE).input(Items.SPIDER_EYE).or().input(Items.ROTTEN_FLESH).buildFor(consumer, Minestuck.MOD_ID);
 		//end
 		CombinationRecipeBuilder.of(Items.END_STONE).input(Items.STONE).and().input(Items.ENDER_PEARL).buildFor(consumer, Minestuck.MOD_ID);
@@ -263,12 +261,11 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(Items.SHEARS).input(Items.IRON_INGOT).and().input(Items.GRASS).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.FIRE_CHARGE).input(Items.BLAZE_POWDER).or().input(Items.GUNPOWDER).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.BOW).input(Items.WOODEN_SWORD).or().input(Items.ARROW).buildFor(consumer, Minestuck.MOD_ID);
-		CombinationRecipeBuilder.of(Items.CROSSBOW).input(Items.BOW).and().input(Items.IRON_INGOT).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.CROSSBOW).input(Items.BOW).and().input(Items.STICK).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.FLOWER_POT).input(ItemTags.SMALL_FLOWERS).and().input(Items.BRICK).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.EXPERIENCE_BOTTLE).namedInput(Items.POTION).or().input(Items.ENCHANTED_BOOK).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.EXPERIENCE_BOTTLE).namedInput(Items.GLASS_BOTTLE).or().input(Items.ENCHANTED_BOOK).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.TRIDENT).namedInput(Items.PRISMARINE_SHARD).and().input(MSItems.FORK).buildFor(consumer, Minestuck.MOD_ID);
-		CombinationRecipeBuilder.of(Items.SHIELD).namedInput(Items.IRON_CHESTPLATE).or().input(ItemTags.PLANKS).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.TURTLE_HELMET).namedInput(Items.IRON_HELMET).or().input(Items.SEAGRASS).buildFor(consumer, Minestuck.MOD_ID);
 		//watery stuff
 		CombinationRecipeBuilder.of(Items.BUCKET).input(Items.BOWL).or().namedInput(Items.IRON_INGOT).buildFor(consumer, Minestuck.MOD_ID);
