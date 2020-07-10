@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " ##",
+    "BL#",
+    " B "
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:white_wool"
+    },
+    "B": {
+      "item": "minecraft:bone_meal"
+    },
+    "L": {
+      "item": "minecraft:leather"
+    }
+  },
+  "result": {
+    "item": "minestuck:fancy_glove"
+  }
+}

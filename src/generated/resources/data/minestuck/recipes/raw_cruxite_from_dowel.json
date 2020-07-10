@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:smelting",
-  "ingredient": {
-    "item": "minestuck:cruxite_dowel"
-  },
-  "result": "minestuck:raw_cruxite",
-  "experience": 0.0,
-  "cookingtime": 200
-}

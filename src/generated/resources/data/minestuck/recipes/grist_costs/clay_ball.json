@@ -1,9 +1,0 @@
-{
-  "type": "minestuck:grist_cost",
-  "ingredient": {
-    "item": "minecraft:clay_ball"
-  },
-  "grist_cost": {
-    "minestuck:shale": 3
-  }
-}

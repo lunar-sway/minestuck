@@ -98,10 +98,10 @@ minecraft {
             // It seems to default to Minestuck_main, but is not set because it's actually called Minestuck.main?
             ideaModule project.getName() +  '.main'
 
-            args '--mod', 'minestuck', '--all', '--output', file('src/generated/resources/'), '--existing', sourceSets.main.resources.srcDirs[0]
+            args '--mod', 'minestuck', '--all', '--output', file('src/main/generated/resources/'), '--existing', sourceSets.main.resources.srcDirs[0]
 
             mods {
-                examplemod {
+                minestuck {
                     source sourceSets.main
                 }
             }
@@ -117,17 +117,8 @@ dependencies {
     runtimeOnly fg.deobf("mezz.jei:jei-${project.getProperty('mc_jei_version')}")
 }
 
-sourceSets {
-    main {
-        //TODO refactor and seperate code and resources like in other projects after merging together a lot of active branches
-        java {
-            srcDir 'src'
-        }
-        resources {
-            srcDir 'src'
-            srcDir 'src/generated/resources'
-        }
-    }
+sourceSets.main.resources {
+    srcDir 'src/main/generated/resources'
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
